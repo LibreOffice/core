@@ -103,7 +103,7 @@ void SvxSmartTagsControl::FillMenu()
         const rtl::OUString aSmartTagType = xAction->getSmartTagName( nSmartTagIndex );
         const rtl::OUString aSmartTagCaption = xAction->getSmartTagCaption( nSmartTagIndex, rLocale );
 
-        // no sub-menues if there's only one smart tag type listed:
+        // no sub-menus if there's only one smart tag type listed:
         PopupMenu* pSbMenu = mpMenu;
         if ( 1 < rActionComponentsSequence.getLength() )
         {

@@ -945,7 +945,7 @@ static void ImplDrawFrame( OutputDevice* pDev, Rectangle& rRect,
                     }
                     else
                     {
-                        // flat menues have no shadow border
+                        // flat menus have no shadow border
                         if( !bMenuStyle || !rStyleSettings.GetUseFlatMenues() )
                             ImplDraw2ColorFrame( pDev, rRect,
                                                  rStyleSettings.GetLightColor(),

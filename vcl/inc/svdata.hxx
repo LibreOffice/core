@@ -241,7 +241,7 @@ struct ImplSVWinData
     sal_uInt16                  mnTrackFlags;       // tracking flags
     sal_uInt16                  mnAutoScrollFlags;  // auto scroll flags
     sal_Bool                    mbNoDeactivate;     // sal_True: keine Deactivate durchfuehren
-    sal_Bool                    mbNoSaveFocus;      // sal_True: menues must not save/restore focus
+    sal_Bool                    mbNoSaveFocus;      // sal_True: menus must not save/restore focus
     sal_Bool                    mbNoSaveBackground; // sal_True: save background is unnecessary or even less performant
 };
 

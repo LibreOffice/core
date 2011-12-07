@@ -41,7 +41,7 @@
 #include <impbmp.hxx>
 #include <salgdi.hxx>
 
-// uncomment the following line to have ownerdrawn menues, ie, with bitmaps
+// uncomment the following line to have ownerdrawn menus, ie, with bitmaps
 // however, this is incompatible with OLE inplace editing
 // so it is not activated by default
 //#define OWNERDRAW
@@ -174,12 +174,12 @@ WinSalMenu::~WinSalMenu()
 sal_Bool WinSalMenu::VisibleMenuBar()
 {
     // The Win32 implementation never shows a native
-    // menubar. Thus, native menues are only visible
+    // menubar. Thus, native menus are only visible
     // when the menu is merged with an OLE container.
     // The reason are missing tooltips, ownerdraw
     // issues and accessibility which are better supported
-    // by VCL menues.
-    // Nevertheless, the native menues are always created
+    // by VCL menus.
+    // Nevertheless, the native menus are always created
     // and the application will properly react to all native
     // menu messages.
 

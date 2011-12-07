@@ -747,11 +747,11 @@ sal_Bool DocumentHolder::ShowUI( const uno::Reference< ::com::sun::star::frame::
                 // as long as the LM is invisible and locked an empty tool space will be used on resizing
                 xOwnLM->setDockingAreaAcceptor( xDocAreaAcc );
 
-                // try to merge menues; don't do anything else if it fails
+                // try to merge menus; don't do anything else if it fails
                 if ( MergeMenues_Impl( xOwnLM, xContainerLM, xContainerDP, aContModuleName ) )
                 {
                     // make sure that the container LM does not control the size of the containers window anymore
-                    // this must be done after merging menues as we won't get the container menu otherwise
+                    // this must be done after merging menus as we won't get the container menu otherwise
                     xContainerLM->setDockingAreaAcceptor( uno::Reference < ui::XDockingAreaAcceptor >() );
 
                     // prevent further changes at this LM
