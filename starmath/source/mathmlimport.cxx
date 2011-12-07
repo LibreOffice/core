@@ -95,6 +95,18 @@ using ::rtl::OUStringBuffer;
 
 ////////////////////////////////////////////////////////////
 
+namespace {
+template < typename T >
+T* lcl_popOrZero( ::std::stack<T*> & rStack )
+{
+    if (rStack.empty())
+        return 0;
+    T* pTmp = rStack.top();
+    rStack.pop();
+    return pTmp;
+}
+}
+
 sal_uLong SmXMLImportWrapper::Import(SfxMedium &rMedium)
 {
     sal_uLong nError = ERRCODE_SFX_DOLOADFAILED;
@@ -747,8 +759,7 @@ void SmXMLContext_Helper::ApplyAttrs()
                 aToken.eType = TNBOLD;
             SmStructureNode *pFontNode = static_cast<SmStructureNode *>
                 (new SmFontNode(aToken));
-            pFontNode->SetSubNodes(0,rNodeStack.top());
-            rNodeStack.pop();
+            pFontNode->SetSubNodes(0,lcl_popOrZero(rNodeStack));
             rNodeStack.push(pFontNode);
         }
         if (nIsItalic != -1)
@@ -759,8 +770,7 @@ void SmXMLContext_Helper::ApplyAttrs()
                 aToken.eType = TNITALIC;
             SmStructureNode *pFontNode = static_cast<SmStructureNode *>
                 (new SmFontNode(aToken));
-            pFontNode->SetSubNodes(0,rNodeStack.top());
-            rNodeStack.pop();
+            pFontNode->SetSubNodes(0,lcl_popOrZero(rNodeStack));
             rNodeStack.push(pFontNode);
         }
         if (nFontSize != 0.0)
@@ -781,8 +791,7 @@ void SmXMLContext_Helper::ApplyAttrs()
             else
                 pFontNode->SetSizeParameter(Fraction(nFontSize),FNTSIZ_ABSOLUT);
 
-            pFontNode->SetSubNodes(0,rNodeStack.top());
-            rNodeStack.pop();
+            pFontNode->SetSubNodes(0,lcl_popOrZero(rNodeStack));
             rNodeStack.push(pFontNode);
         }
         if (sFontFamily.getLength())
@@ -801,8 +810,7 @@ void SmXMLContext_Helper::ApplyAttrs()
 
             aToken.aText = sFontFamily;
             SmFontNode *pFontNode = new SmFontNode(aToken);
-            pFontNode->SetSubNodes(0,rNodeStack.top());
-            rNodeStack.pop();
+            pFontNode->SetSubNodes(0,lcl_popOrZero(rNodeStack));
             rNodeStack.push(pFontNode);
         }
         if (sColor.getLength())
@@ -816,8 +824,7 @@ void SmXMLContext_Helper::ApplyAttrs()
             if (aToken.eType != -1)
             {
                 SmFontNode *pFontNode = new SmFontNode(aToken);
-                pFontNode->SetSubNodes(0,rNodeStack.top());
-                rNodeStack.pop();
+                pFontNode->SetSubNodes(0,lcl_popOrZero(rNodeStack));
                 rNodeStack.push(pFontNode);
             }
         }
@@ -991,8 +998,7 @@ void SmXMLPhantomContext_Impl::EndElement()
     SmStructureNode *pPhantom = static_cast<SmStructureNode *>
         (new SmFontNode(aToken));
     SmNodeStack &rNodeStack = GetSmImport().GetNodeStack();
-    pPhantom->SetSubNodes(0,rNodeStack.top());
-    rNodeStack.pop();
+    pPhantom->SetSubNodes(0,lcl_popOrZero(rNodeStack));
     rNodeStack.push(pPhantom);
 }
 
@@ -1482,10 +1488,8 @@ void SmXMLSubContext_Impl::GenericEndElement(SmTokenType eType, SmSubSup eSubSup
     for (sal_uLong i = 1;  i < aSubNodes.size();  i++)
         aSubNodes[i] = NULL;
 
-    aSubNodes[eSubSup+1] = rNodeStack.top();
-    rNodeStack.pop();
-    aSubNodes[0] = rNodeStack.top();
-    rNodeStack.pop();
+    aSubNodes[eSubSup+1] = lcl_popOrZero(rNodeStack);
+    aSubNodes[0] = lcl_popOrZero(rNodeStack);
     pNode->SetSubNodes(aSubNodes);
     rNodeStack.push(pNode);
 }
@@ -1546,12 +1550,9 @@ void SmXMLSubSupContext_Impl::GenericEndElement(SmTokenType eType,
     for (sal_uLong i = 1;  i < aSubNodes.size();  i++)
         aSubNodes[i] = NULL;
 
-    aSubNodes[aSup+1] = rNodeStack.top();
-    rNodeStack.pop();
-    aSubNodes[aSub+1] = rNodeStack.top();
-    rNodeStack.pop();
-    aSubNodes[0] =  rNodeStack.top();
-    rNodeStack.pop();
+    aSubNodes[aSup+1] = lcl_popOrZero(rNodeStack);
+    aSubNodes[aSub+1] = lcl_popOrZero(rNodeStack);
+    aSubNodes[0] =  lcl_popOrZero(rNodeStack);
     pNode->SetSubNodes(aSubNodes);
     rNodeStack.push(pNode);
 }
@@ -1588,8 +1589,7 @@ void SmXMLUnderContext_Impl::HandleAccent()
 
     /*Just one special case for the underline thing*/
     SmNodeStack &rNodeStack = GetSmImport().GetNodeStack();
-    SmNode *pTest = rNodeStack.top();
-    rNodeStack.pop();
+    SmNode *pTest = lcl_popOrZero(rNodeStack);
     SmToken aToken;
     aToken.cMathChar = '\0';
     aToken.nGroup = 0;
@@ -1609,8 +1609,7 @@ void SmXMLUnderContext_Impl::HandleAccent()
     else
         aSubNodes[0] = pTest;
 
-    aSubNodes[1] = rNodeStack.top();
-    rNodeStack.pop();
+    aSubNodes[1] = lcl_popOrZero(rNodeStack);
     pNode->SetSubNodes(aSubNodes);
     pNode->SetScaleMode(SCALE_WIDTH);
     rNodeStack.push(pNode);
@@ -1677,10 +1676,8 @@ void SmXMLOverContext_Impl::HandleAccent()
 
     SmNodeArray aSubNodes;
     aSubNodes.resize(2);
-    aSubNodes[0] = rNodeStack.top();
-    rNodeStack.pop();
-    aSubNodes[1] = rNodeStack.top();
-    rNodeStack.pop();
+    aSubNodes[0] = lcl_popOrZero(rNodeStack);
+    aSubNodes[1] = lcl_popOrZero(rNodeStack);
     pNode->SetSubNodes(aSubNodes);
     pNode->SetScaleMode(SCALE_WIDTH);
     rNodeStack.push(pNode);
@@ -2194,11 +2191,7 @@ void SmXMLDocContext_Impl::EndElement()
     ContextArray.resize(1);
     SmNodeStack &rNodeStack = GetSmImport().GetNodeStack();
 
-    for (sal_uLong i=0;i< 1;i++)
-    {
-        ContextArray[i] = rNodeStack.top();
-        rNodeStack.pop();
-    }
+    ContextArray[0] = lcl_popOrZero(rNodeStack);
 
     SmToken aDummy;
     SmStructureNode *pSNode = new SmLineNode(aDummy);
@@ -2233,10 +2226,8 @@ void SmXMLFracContext_Impl::EndElement()
     aToken.eType = TOVER;
     SmStructureNode *pSNode = new SmBinVerNode(aToken);
     SmNode *pOper = new SmRectangleNode(aToken);
-    SmNode *pSecond = rNodeStack.top();
-    rNodeStack.pop();
-    SmNode *pFirst = rNodeStack.top();
-    rNodeStack.pop();
+    SmNode *pSecond = lcl_popOrZero(rNodeStack);
+    SmNode *pFirst = lcl_popOrZero(rNodeStack);
     pSNode->SetSubNodes(pFirst,pOper,pSecond);
     rNodeStack.push(pSNode);
 }
@@ -2257,10 +2248,8 @@ void SmXMLRootContext_Impl::EndElement()
     SmStructureNode *pSNode = new SmRootNode(aToken);
     SmNode *pOper = new SmRootSymbolNode(aToken);
     SmNodeStack &rNodeStack = GetSmImport().GetNodeStack();
-    SmNode *pIndex = rNodeStack.top();
-    rNodeStack.pop();
-    SmNode *pBase = rNodeStack.top();
-    rNodeStack.pop();
+    SmNode *pIndex = lcl_popOrZero(rNodeStack);
+    SmNode *pBase = lcl_popOrZero(rNodeStack);
     pSNode->SetSubNodes(pIndex,pOper,pBase);
     rNodeStack.push(pSNode);
 }
@@ -2283,8 +2272,7 @@ void SmXMLSqrtContext_Impl::EndElement()
     SmStructureNode *pSNode = new SmRootNode(aToken);
     SmNode *pOper = new SmRootSymbolNode(aToken);
     SmNodeStack &rNodeStack = GetSmImport().GetNodeStack();
-    pSNode->SetSubNodes(0,pOper,rNodeStack.top());
-    rNodeStack.pop();
+    pSNode->SetSubNodes(0,pOper,lcl_popOrZero(rNodeStack));
     rNodeStack.push(pSNode);
 }
 
@@ -2297,7 +2285,7 @@ void SmXMLRowContext_Impl::EndElement()
     if (nSize > 0)
     {
         aRelationArray.resize(nSize);
-        for (sal_uLong j=rNodeStack.size()-nElementCount;j > 0;j--)
+        for (sal_uLong j=nSize;j > 0;j--)
         {
             aRelationArray[j-1] = rNodeStack.top();
             rNodeStack.pop();
@@ -2525,17 +2513,14 @@ void SmXMLMultiScriptsContext_Impl::ProcessSubSupPairs(bool bIsPrescript)
             /*On each loop the base and its sub sup pair becomes the
              base for the next loop to which the next sub sup pair is
              attached, i.e. wheels within wheels*/
-            aSubNodes[0] = aReverseStack.top();
-            aReverseStack.pop();
+            aSubNodes[0] = lcl_popOrZero(aReverseStack);
 
-            SmNode *pScriptNode = aReverseStack.top();
-            aReverseStack.pop();
+            SmNode *pScriptNode = lcl_popOrZero(aReverseStack);
 
             if (pScriptNode && ((pScriptNode->GetToken().eType != TIDENT) ||
                 (pScriptNode->GetToken().aText.Len())))
                 aSubNodes[eSub+1] = pScriptNode;
-            pScriptNode = aReverseStack.top();
-            aReverseStack.pop();
+            pScriptNode = lcl_popOrZero(aReverseStack);
             if (pScriptNode && ((pScriptNode->GetToken().eType != TIDENT) ||
                 (pScriptNode->GetToken().aText.Len())))
                 aSubNodes[eSup+1] = pScriptNode;
@@ -2543,8 +2528,7 @@ void SmXMLMultiScriptsContext_Impl::ProcessSubSupPairs(bool bIsPrescript)
             pNode->SetSubNodes(aSubNodes);
             aReverseStack.push(pNode);
         }
-        rNodeStack.push(aReverseStack.top());
-        aReverseStack.pop();
+        rNodeStack.push(lcl_popOrZero(aReverseStack));
     }
     else
     {
@@ -2569,7 +2553,7 @@ void SmXMLTableContext_Impl::EndElement()
     sal_uInt16 nCols = 0;
 
     SmStructureNode *pArray;
-    for (sal_uLong i=rNodeStack.size()-nElementCount;i > 0;i--)
+    for (sal_uLong i=nRows;i > 0;i--)
     {
         pArray = (SmStructureNode *)rNodeStack.top();
         rNodeStack.pop();

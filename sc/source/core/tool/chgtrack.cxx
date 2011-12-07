@@ -2240,8 +2240,13 @@ void ScChangeTrack::EndBlockModify( sal_uLong nEndAction )
             }
             else
                 delete pBlockModifyMsg;
-            pBlockModifyMsg = aMsgStackTmp.top();   // evtl. Block im Block
-            aMsgStackTmp.pop();
+            if (aMsgStackTmp.empty())
+                pBlockModifyMsg = NULL;
+            else
+            {
+                pBlockModifyMsg = aMsgStackTmp.top();   // evtl. Block im Block
+                aMsgStackTmp.pop();
+            }
         }
         if ( !pBlockModifyMsg )
         {

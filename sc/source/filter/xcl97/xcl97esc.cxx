@@ -346,9 +346,17 @@ void XclEscherEx::EndShape( sal_uInt16 nShapeType, sal_uInt32 nShapeID )
 
     // get next object from stack
     DeleteCurrAppData();
-    pCurrXclObj = aStack.top().first;
-    pCurrAppData = aStack.top().second;
-    aStack.pop();
+    if (aStack.empty())
+    {
+        pCurrXclObj = NULL;
+        pCurrAppData = NULL;
+    }
+    else
+    {
+        pCurrXclObj = aStack.top().first;
+        pCurrAppData = aStack.top().second;
+        aStack.pop();
+    }
     if( nAdditionalText == 3 )
         nAdditionalText = 0;
 }
