@@ -1824,15 +1824,9 @@ void XclImpXFRangeBuffer::SetXF( const ScAddress& rScPos, sal_uInt16 nXFIndex, X
         if( pXF && ((pXF->GetHorAlign() == EXC_XF_HOR_CENTER_AS) || (pXF->GetHorAlign() == EXC_XF_HOR_FILL)) )
         {
             // expand last merged range if this attribute is set repeatedly
-            if ( !maMergeList.empty() )
-            {
-                ScRange* pRange = maMergeList.back();
-                if(  (pRange->aEnd.Row()     == nScRow)
-                  && (pRange->aEnd.Col() + 1 == nScCol)
-                  && (eMode                  == xlXFModeBlank)
-                  )
-                    pRange->aEnd.IncCol();
-            }
+            ScRange* pRange = maMergeList.empty() ? NULL : maMergeList.back();
+            if (pRange && (pRange->aEnd.Row() == nScRow) && (pRange->aEnd.Col() + 1 == nScCol) && (eMode == xlXFModeBlank))
+                pRange->aEnd.IncCol();
             else if( eMode != xlXFModeBlank )   // do not merge empty cells
                 SetMerge( nScCol, nScRow );
         }
