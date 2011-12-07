@@ -2306,7 +2306,13 @@ void ScInterpreter::ScCellExternal()
     SCCOL nCol;
     SCROW nRow;
     SCTAB nTab;
+    aRef.nTab = 0; // -1 for external ref. Plus we don't use this.
     SingleRefToVars(aRef, nCol, nRow, nTab);
+    if (nGlobalError)
+    {
+        PushIllegalParameter();
+        return;
+    }
 
     ScCellKeywordTranslator::transKeyword(aInfoType, ScGlobal::GetLocale(), ocCell);
 
