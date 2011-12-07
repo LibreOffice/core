@@ -822,10 +822,10 @@ namespace svxform
         RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTreeModel::InsertFormComponent" );
         if ( pObject->ISA(SdrObjGroup) )
         {   // rekursiv absteigen
-            const SdrObjList *pChilds = ((SdrObjGroup*)pObject)->GetSubList();
-            for ( sal_uInt16 i=0; i<pChilds->GetObjCount(); ++i )
+            const SdrObjList *pChildren = ((SdrObjGroup*)pObject)->GetSubList();
+            for ( sal_uInt16 i=0; i<pChildren->GetObjCount(); ++i )
             {
-                SdrObject* pCurrent = pChilds->GetObj(i);
+                SdrObject* pCurrent = pChildren->GetObj(i);
                 if (!InsertFormComponent(rHint, pCurrent))
                     return sal_False;
             }

@@ -381,7 +381,7 @@ IMPL_LINK_INLINE_END( SvTreeListBox, CheckButtonClick, SvLBoxButtonData *, pData
 SvLBoxEntry* SvTreeListBox::InsertEntry(
     const XubString& aText,
     SvLBoxEntry* pParent,
-    sal_Bool bChildsOnDemand, sal_uLong nPos,
+    sal_Bool bChildrenOnDemand, sal_uLong nPos,
     void* pUser,
     SvLBoxButtonKind eButtonKind
 )
@@ -398,7 +398,7 @@ SvLBoxEntry* SvTreeListBox::InsertEntry(
     SvLBoxEntry* pEntry = CreateEntry();
     pEntry->SetUserData( pUser );
     InitEntry( pEntry, aText, rDefColBmp, rDefExpBmp, eButtonKind );
-    pEntry->EnableChildsOnDemand( bChildsOnDemand );
+    pEntry->EnableChildrenOnDemand( bChildrenOnDemand );
 
     if( !pParent )
         SvLBox::Insert( pEntry, nPos );
@@ -415,7 +415,7 @@ SvLBoxEntry* SvTreeListBox::InsertEntry(
 
 SvLBoxEntry* SvTreeListBox::InsertEntry( const XubString& aText,
     const Image& aExpEntryBmp, const Image& aCollEntryBmp,
-    SvLBoxEntry* pParent, sal_Bool bChildsOnDemand, sal_uLong nPos, void* pUser,
+    SvLBoxEntry* pParent, sal_Bool bChildrenOnDemand, sal_uLong nPos, void* pUser,
     SvLBoxButtonKind eButtonKind )
 {
     DBG_CHKTHIS(SvTreeListBox,0);
@@ -428,7 +428,7 @@ SvLBoxEntry* SvTreeListBox::InsertEntry( const XubString& aText,
     pEntry->SetUserData( pUser );
     InitEntry( pEntry, aText, aCollEntryBmp, aExpEntryBmp, eButtonKind );
 
-    pEntry->EnableChildsOnDemand( bChildsOnDemand );
+    pEntry->EnableChildrenOnDemand( bChildrenOnDemand );
 
     if( !pParent )
         SvLBox::Insert( pEntry, nPos );
@@ -605,7 +605,7 @@ SvLBoxEntry* SvTreeListBox::CloneEntry( SvLBoxEntry* pSource )
     SvLBoxEntry* pClone = CreateEntry();
     InitEntry( pClone, aStr, aCollEntryBmp, aExpEntryBmp, eButtonKind );
     pClone->SvListEntry::Clone( pSource );
-    pClone->EnableChildsOnDemand( pSource->HasChildsOnDemand() );
+    pClone->EnableChildrenOnDemand( pSource->HasChildrenOnDemand() );
     pClone->SetUserData( pSource->GetUserData() );
 
     return pClone;
@@ -743,10 +743,10 @@ void SvTreeListBox::KeyInput( const KeyEvent& rKEvt )
     nImpFlags &= ~SVLBOX_IS_TRAVELSELECT;
 }
 
-void SvTreeListBox::RequestingChilds( SvLBoxEntry* pParent )
+void SvTreeListBox::RequestingChildren( SvLBoxEntry* pParent )
 {
     DBG_CHKTHIS(SvTreeListBox,0);
-    if( !pParent->HasChilds() )
+    if( !pParent->HasChildren() )
         InsertEntry( String::CreateFromAscii("<dummy>"), pParent, sal_False, LIST_APPEND );
 }
 
@@ -938,9 +938,9 @@ sal_Bool SvTreeListBox::Expand( SvLBoxEntry* pParent )
     sal_Bool bExpanded = sal_False;
     sal_uInt16 nFlags;
 
-    if( pParent->HasChildsOnDemand() )
-        RequestingChilds( pParent );
-    if( pParent->HasChilds() )
+    if( pParent->HasChildrenOnDemand() )
+        RequestingChildren( pParent );
+    if( pParent->HasChildren() )
     {
         nImpFlags |= SVLBOX_IS_EXPANDING;
         if( ExpandingHdl() )
@@ -1020,12 +1020,12 @@ sal_Bool SvTreeListBox::Select( SvLBoxEntry* pEntry, sal_Bool bSelect )
     return bRetVal;
 }
 
-sal_uLong SvTreeListBox::SelectChilds( SvLBoxEntry* pParent, sal_Bool bSelect )
+sal_uLong SvTreeListBox::SelectChildren( SvLBoxEntry* pParent, sal_Bool bSelect )
 {
     DBG_CHKTHIS(SvTreeListBox,0);
     pImp->DestroyAnchor();
     sal_uLong nRet = 0;
-    if( !pParent->HasChilds() )
+    if( !pParent->HasChildren() )
         return 0;
     sal_uInt16 nRefDepth = pModel->GetDepth( pParent );
     SvLBoxEntry* pChild = FirstChild( pParent );
@@ -1687,7 +1687,7 @@ long SvTreeListBox::PaintEntry1(SvLBoxEntry* pEntry,long nLine,sal_uInt16 nTabFl
 
     if( (!(pEntry->GetFlags() & SV_ENTRYFLAG_NO_NODEBMP)) &&
         (nWindowStyle & WB_HASBUTTONS) && pFirstDynamicTab &&
-        ( pEntry->HasChilds() || pEntry->HasChildsOnDemand() ) )
+        ( pEntry->HasChildren() || pEntry->HasChildrenOnDemand() ) )
     {
         // ersten festen Tab suchen, und pruefen ob die Node-Bitmap
         // in ihn hineinragt
@@ -1712,7 +1712,7 @@ long SvTreeListBox::PaintEntry1(SvLBoxEntry* pEntry,long nLine,sal_uInt16 nTabFl
                     pImg = &pImp->GetExpandedNodeBmp( );
                 else
                 {
-                    if( (!pEntry->HasChilds()) && pEntry->HasChildsOnDemand() &&
+                    if( (!pEntry->HasChildren()) && pEntry->HasChildrenOnDemand() &&
                         (!(pEntry->GetFlags() & SV_ENTRYFLAG_HAD_CHILDREN)) &&
                         pImp->GetDontKnowNodeBmp().GetSizePixel().Width() )
                         pImg = &pImp->GetDontKnowNodeBmp( );
@@ -1739,8 +1739,8 @@ long SvTreeListBox::PaintEntry1(SvLBoxEntry* pEntry,long nLine,sal_uInt16 nTabFl
                         aControlValue.setTristateVal( BUTTONVALUE_ON );//expanded node
                     else
                     {
-                        if( (!pEntry->HasChilds() )                              &&
-                              pEntry->HasChildsOnDemand()                        &&
+                        if( (!pEntry->HasChildren() )                              &&
+                              pEntry->HasChildrenOnDemand()                        &&
                              (!(pEntry->GetFlags() & SV_ENTRYFLAG_HAD_CHILDREN)) &&
                             pImp->GetDontKnowNodeBmp().GetSizePixel().Width()
                         )
@@ -2125,12 +2125,12 @@ void SvTreeListBox::Command( const CommandEvent& rCEvt )
 }
 
 
-void SvTreeListBox::RemoveParentKeepChilds( SvLBoxEntry* pParent )
+void SvTreeListBox::RemoveParentKeepChildren( SvLBoxEntry* pParent )
 {
     DBG_CHKTHIS(SvTreeListBox,0);
-    DBG_ASSERT(pParent,"RemoveParentKeepChilds:No Parent");
+    DBG_ASSERT(pParent,"RemoveParentKeepChildren:No Parent");
     SvLBoxEntry* pNewParent = GetParent( pParent );
-    if( pParent->HasChilds())
+    if( pParent->HasChildren())
     {
         SvLBoxEntry* pChild = FirstChild( pParent );
         while( pChild )
@@ -2444,7 +2444,7 @@ void SvTreeListBox::FillAccessibleEntryStateSet( SvLBoxEntry* pEntry, ::utl::Acc
 {
     DBG_ASSERT( pEntry, "SvTreeListBox::FillAccessibleEntryStateSet: invalid entry" );
 
-    if ( pEntry->HasChildsOnDemand() || pEntry->HasChilds() )
+    if ( pEntry->HasChildrenOnDemand() || pEntry->HasChildren() )
     {
         rStateSet.AddState( AccessibleStateType::EXPANDABLE );
         if ( IsExpanded( pEntry ) )

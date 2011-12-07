@@ -120,14 +120,14 @@ DBTreeListBox::~DBTreeListBox()
 SvLBoxEntry* DBTreeListBox::GetEntryPosByName( const String& aName, SvLBoxEntry* pStart, const IEntryFilter* _pFilter ) const
 {
     SvLBoxTreeList* myModel = GetModel();
-    SvTreeEntryList* pChilds = myModel->GetChildList(pStart);
+    SvTreeEntryList* pChildren = myModel->GetChildList(pStart);
     SvLBoxEntry* pEntry = NULL;
-    if ( pChilds )
+    if ( pChildren )
     {
-        size_t nCount = pChilds->size();
+        size_t nCount = pChildren->size();
         for (size_t i = 0; i < nCount; ++i)
         {
-            pEntry = static_cast<SvLBoxEntry*>((*pChilds)[ i ]);
+            pEntry = static_cast<SvLBoxEntry*>((*pChildren)[ i ]);
             SvLBoxString* pItem = (SvLBoxString*)(pEntry->GetFirstItem(SV_ITEM_ID_LBOXSTRING));
             if ( pItem->GetText().Equals(aName) )
             {
@@ -149,7 +149,7 @@ void DBTreeListBox::EnableExpandHandler(SvLBoxEntry* _pEntry)
 }
 
 // -------------------------------------------------------------------------
-void DBTreeListBox::RequestingChilds( SvLBoxEntry* pParent )
+void DBTreeListBox::RequestingChildren( SvLBoxEntry* pParent )
 {
     if (m_aPreExpandHandler.IsSet())
     {
@@ -216,7 +216,7 @@ void DBTreeListBox::MouseButtonDown( const MouseEvent& rMEvt )
 IMPL_LINK(DBTreeListBox, OnResetEntry, SvLBoxEntry*, pEntry)
 {
     // set the flag which allows if the entry can be expanded
-    pEntry->SetFlags( (pEntry->GetFlags() & ~(SV_ENTRYFLAG_NO_NODEBMP | SV_ENTRYFLAG_HAD_CHILDREN)) | SV_ENTRYFLAG_CHILDS_ON_DEMAND );
+    pEntry->SetFlags( (pEntry->GetFlags() & ~(SV_ENTRYFLAG_NO_NODEBMP | SV_ENTRYFLAG_HAD_CHILDREN)) | SV_ENTRYFLAG_CHILDREN_ON_DEMAND );
     // redraw the entry
     GetModel()->InvalidateEntry( pEntry );
     return 0L;

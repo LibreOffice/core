@@ -267,7 +267,7 @@ protected:
 
     /** validates the given index
         @throws ::com::sun::star::lang::IndexOutOfBoundsException
-            if the given index does not denote a valid position in our childs array
+            if the given index does not denote a valid position in our children array
     */
     void implCheckIndex( const sal_Int32 _nIndex ) SAL_THROW( ( ::com::sun::star::lang::IndexOutOfBoundsException ) );
 

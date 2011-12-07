@@ -122,7 +122,7 @@ namespace dbaui
         void            EnableExpandHandler(SvLBoxEntry* _pEntry);
 
         SvLBoxEntry*    GetEntryPosByName( const String& aName, SvLBoxEntry* pStart = NULL, const IEntryFilter* _pFilter = NULL ) const;
-        virtual void    RequestingChilds( SvLBoxEntry* pParent );
+        virtual void    RequestingChildren( SvLBoxEntry* pParent );
         virtual void    SelectHdl();
         virtual void    DeselectHdl();
         // Window

@@ -138,16 +138,16 @@ public class _XAccessibleSelection extends MultiMethodTest {
 
         log.println("ChildCount: " + childCount);
 
-        int usedChilds = childCount;
+        int usedChildren = childCount;
 
         if (childCount > 500) {
             log.println("Restricting to 500");
-            usedChilds = 500;
+            usedChildren = 500;
         }
 
-        if (usedChilds > 0) {
+        if (usedChildren > 0) {
             try {
-                for (int i = 0; i < usedChilds; i++) {
+                for (int i = 0; i < usedChildren; i++) {
                     log.print("Trying to select child with index " + i + ": ");
 
                     if (isSelectable(tEnv.getTestObject(), i)) {
@@ -334,16 +334,16 @@ public class _XAccessibleSelection extends MultiMethodTest {
         if (multiSelection) {
             oObj.selectAllAccessibleChildren();
         } else {
-            int usedChilds = childCount;
+            int usedChildren = childCount;
 
             if (childCount > 500) {
                 log.println("Restricting to 500");
-                usedChilds = 500;
+                usedChildren = 500;
             }
 
-            if (usedChilds > 0) {
+            if (usedChildren > 0) {
                 try {
-                    for (int i = 0; i < usedChilds; i++) {
+                    for (int i = 0; i < usedChildren; i++) {
 
                         if (isSelectable(tEnv.getTestObject(), i)) {
                             log.print("Trying to select child with index "+i+": ");
@@ -366,7 +366,7 @@ public class _XAccessibleSelection extends MultiMethodTest {
         }
 
         int sCount = chkSelectable(tEnv.getTestObject());
-        log.println("Found " + sCount + " selectable Childs");
+        log.println("Found " + sCount + " selectable Children");
 
         int selectedCount = oObj.getSelectedAccessibleChildCount();
         log.println("After selecting all accessible " + selectedCount +

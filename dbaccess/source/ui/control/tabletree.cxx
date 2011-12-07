@@ -398,7 +398,7 @@ void OTableTreeListBox::implEmphasize(SvLBoxEntry* _pEntry, sal_Bool _bChecked, 
 
     // special emphasizing handling for the "all objects" entry
     sal_Bool bAllObjectsEntryAffected = haveVirtualRoot() && (getAllObjectsEntry() == _pEntry);
-    if  (   GetModel()->HasChilds(_pEntry)              // the entry has children
+    if  (   GetModel()->HasChildren(_pEntry)              // the entry has children
         ||  bAllObjectsEntryAffected                    // or it is the "all objects" entry
         )
     {
@@ -416,7 +416,7 @@ void OTableTreeListBox::implEmphasize(SvLBoxEntry* _pEntry, sal_Bool _bChecked, 
         SvLBoxEntry* pChildLoop = FirstChild(_pEntry);
         while (pChildLoop)
         {
-            if (GetModel()->HasChilds(pChildLoop))
+            if (GetModel()->HasChildren(pChildLoop))
                 implEmphasize(pChildLoop, sal_False, sal_True, sal_False);
             pChildLoop = NextSibling(pChildLoop);
         }

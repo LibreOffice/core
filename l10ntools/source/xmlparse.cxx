@@ -79,7 +79,7 @@ XMLParentNode::~XMLParentNode()
 /*****************************************************************************/
 {
     if( pChildList ){
-            RemoveAndDeleteAllChilds();
+            RemoveAndDeleteAllChildren();
             delete pChildList;
             pChildList = NULL;
     }
@@ -117,7 +117,7 @@ XMLParentNode& XMLParentNode::operator=(const XMLParentNode& obj){
     if(this!=&obj){
         XMLChildNode::operator=(obj);
         if( pChildList ){
-            RemoveAndDeleteAllChilds();
+            RemoveAndDeleteAllChildren();
             delete pChildList;
             pChildList = NULL;
         }
@@ -227,7 +227,7 @@ int XMLParentNode::RemoveChild( XMLElement *pRefElement )
 }
 
 /*****************************************************************************/
-void XMLParentNode::RemoveAndDeleteAllChilds(){
+void XMLParentNode::RemoveAndDeleteAllChildren(){
 /*****************************************************************************/
     if ( pChildList ) {
         for ( size_t i = 0; i < pChildList->size(); i++ )

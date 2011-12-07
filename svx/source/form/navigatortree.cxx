@@ -563,7 +563,7 @@ namespace svxform
         while( pCurEntry )
         {
             pCurEntryData = (FmEntryData*)pCurEntry->GetUserData();
-            if( pCurEntryData && pCurEntryData->IsEqualWithoutChilds(pEntryData) )
+            if( pCurEntryData && pCurEntryData->IsEqualWithoutChildren(pEntryData) )
                 return pCurEntry;
 
             pCurEntry = Next( pCurEntry );
@@ -658,7 +658,7 @@ namespace svxform
             Expand( m_pRootEntry );
 
         //////////////////////////////////////////////////////////////////////
-        // Childs einfuegen
+        // Children einfuegen
         FmEntryDataList* pChildList = pEntryData->GetChildList();
         size_t nChildCount = pChildList->size();
         FmEntryData* pChildData;
@@ -914,7 +914,7 @@ namespace svxform
                     m_aDropActionType = DA_SCROLLDOWN;
                     bNeedTrigger = sal_True;
                 } else
-                {   // auf einem Entry mit Childs, der nicht aufgeklappt ist ?
+                {   // auf einem Entry mit Children, der nicht aufgeklappt ist ?
                     SvLBoxEntry* pDropppedOn = GetEntry(aDropPos);
                     if (pDropppedOn && (GetChildCount(pDropppedOn) > 0) && !IsExpanded(pDropppedOn))
                     {
@@ -1964,7 +1964,7 @@ namespace svxform
             // und selektiere diesen (waere irgendwie intuitiver ;)) 2) ich gehe durch alle meine SvLBoxEntries und selektiere
             // genau die, die ich in der SelectList finde
             // 1) braucht O(k*n) (k=Laenge der SelectList, n=Anzahl meiner Entries), plus den Fakt, dass FindEntry nicht den
-            // Pointer auf die UserDaten vergleicht, sondern ein aufwendigeres IsEqualWithoutChilds durchfuehrt
+            // Pointer auf die UserDaten vergleicht, sondern ein aufwendigeres IsEqualWithoutChildren durchfuehrt
             // 2) braucht O(n*log k), dupliziert aber etwas Code (naemlich den aus FindEntry)
             // da das hier eine relativ oft aufgerufenen Stelle sein koennte (bei jeder Aenderung in der Markierung in der View !),
             // nehme ich doch lieber letzteres

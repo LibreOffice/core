@@ -151,7 +151,7 @@ public class StylesWriter
                 writeSection(masterPage);
             }
 
-            writeSectionChilds(officeStyles.getOtherNodes().getNodeArray());
+            writeSectionChildren(officeStyles.getOtherNodes().getNodeArray());
         }
 
         xmlWriter.writeCloseTag();
@@ -238,7 +238,7 @@ public class StylesWriter
             writeSection(style);
         }
 
-        writeSectionChilds(styles.getOtherStyles());
+        writeSectionChildren(styles.getOtherStyles());
     }
 
     private void writeElement(final Element element)
@@ -263,12 +263,12 @@ public class StylesWriter
         }
 
         xmlWriter.writeTag(namespace, type, attrList, XmlWriterSupport.OPEN);
-        writeSectionChilds(section.getNodeArray());
+        writeSectionChildren(section.getNodeArray());
 
         xmlWriter.writeCloseTag();
     }
 
-    private void writeSectionChilds(final Node[] nodes)
+    private void writeSectionChildren(final Node[] nodes)
             throws IOException
     {
         for (int i = 0; i < nodes.length; i++)

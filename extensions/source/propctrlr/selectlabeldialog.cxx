@@ -216,7 +216,7 @@ namespace pcr
                         ++nChildren;
                     }
                     else
-                    {   // oops, no valid childs -> remove the entry
+                    {   // oops, no valid children -> remove the entry
                         m_aControlTree.ModelIsRemoving(pCont);
                         m_aControlTree.GetModel()->Remove(pCont);
                         m_aControlTree.ModelHasRemoved(pCont);

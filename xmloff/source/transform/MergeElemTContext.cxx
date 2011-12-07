@@ -50,7 +50,7 @@ public:
 
     virtual ~XMLParagraphTransformerContext();
 
-    // Create a childs element context. By default, the import's
+    // Create a children element context. By default, the import's
     // CreateContext method is called to create a new default context.
     virtual XMLTransformerContext *CreateChildContext( sal_uInt16 nPrefix,
                                    const ::rtl::OUString& rLocalName,

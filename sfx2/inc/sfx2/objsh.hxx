@@ -507,7 +507,7 @@ public:
 
     virtual sal_uInt16          GetContentCount( sal_uInt16 nIdx1 = INDEX_IGNORE );
 
-    virtual sal_Bool            CanHaveChilds(
+    virtual sal_Bool            CanHaveChildren(
                                         sal_uInt16 nIdx1,
                                         sal_uInt16 nIdx2 = INDEX_IGNORE
                                 );

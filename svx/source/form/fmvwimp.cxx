@@ -299,7 +299,7 @@ void SAL_CALL FormViewPageWindowAdapter::makeVisible( const Reference< XControl 
 }
 
 //------------------------------------------------------------------------
-Reference< XFormController >  getControllerSearchChilds( const Reference< XIndexAccess > & xIndex, const Reference< XTabControllerModel > & xModel)
+Reference< XFormController >  getControllerSearchChildren( const Reference< XIndexAccess > & xIndex, const Reference< XTabControllerModel > & xModel)
 {
     if (xIndex.is() && xIndex->getCount())
     {
@@ -312,7 +312,7 @@ Reference< XFormController >  getControllerSearchChilds( const Reference< XIndex
                 return xController;
             else
             {
-                xController = getControllerSearchChilds(Reference< XIndexAccess > (xController, UNO_QUERY), xModel);
+                xController = getControllerSearchChildren(Reference< XIndexAccess > (xController, UNO_QUERY), xModel);
                 if ( xController.is() )
                     return xController;
             }
@@ -333,7 +333,7 @@ Reference< XFormController >  FormViewPageWindowAdapter::getController( const Re
             return *i;
 
         // the current-round controller isn't the right one. perhaps one of it's children ?
-        Reference< XFormController >  xChildSearch = getControllerSearchChilds(Reference< XIndexAccess > (*i, UNO_QUERY), xModel);
+        Reference< XFormController >  xChildSearch = getControllerSearchChildren(Reference< XIndexAccess > (*i, UNO_QUERY), xModel);
         if (xChildSearch.is())
             return xChildSearch;
     }

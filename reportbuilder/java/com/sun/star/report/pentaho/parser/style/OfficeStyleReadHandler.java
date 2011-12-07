@@ -48,12 +48,12 @@ public class OfficeStyleReadHandler extends ElementReadHandler
 {
 
     private final OfficeStyle officeStyle;
-    private final List childs;
+    private final List children;
 
     public OfficeStyleReadHandler()
     {
         this.officeStyle = new OfficeStyle();
-        this.childs = new ArrayList();
+        this.children = new ArrayList();
     }
 
     /**
@@ -75,7 +75,7 @@ public class OfficeStyleReadHandler extends ElementReadHandler
 //    }
         final StyleDefinitionReadHandler readHandler =
                 new StyleDefinitionReadHandler();
-        childs.add(readHandler);
+        children.add(readHandler);
         return readHandler;
     }
 
@@ -86,9 +86,9 @@ public class OfficeStyleReadHandler extends ElementReadHandler
      */
     protected void doneParsing() throws SAXException
     {
-        for (int i = 0; i < childs.size(); i++)
+        for (int i = 0; i < children.size(); i++)
         {
-            final ElementReadHandler handler = (ElementReadHandler) childs.get(i);
+            final ElementReadHandler handler = (ElementReadHandler) children.get(i);
             officeStyle.addNode(handler.getElement());
         }
     }

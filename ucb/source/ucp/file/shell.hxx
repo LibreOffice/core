@@ -429,7 +429,7 @@ namespace fileaccess {
         std::vector< std::list< ContentEventNotifier* >* >* SAL_CALL
         getContentExchangedEventListeners( const rtl::OUString aOldPrefix,
                                            const rtl::OUString aNewPrefix,
-                                           sal_Bool withChilds );
+                                           sal_Bool withChildren );
 
         std::list< PropertyChangeNotifier* >* SAL_CALL
         getPropertyChangeNotifier( const rtl::OUString& aName );
@@ -473,7 +473,7 @@ namespace fileaccess {
         /********************************************************************************/
 
         void SAL_CALL erasePersistentSet( const rtl::OUString& aUnqPath,
-                                          sal_Bool withChilds = false );
+                                          sal_Bool withChildren = false );
 
         /********************************************************************************/
         /*                       copy persistent propertyset                            */
@@ -482,7 +482,7 @@ namespace fileaccess {
 
         void SAL_CALL copyPersistentSet( const rtl::OUString& srcUnqPath,
                                          const rtl::OUString& dstUnqPath,
-                                         sal_Bool withChilds = false );
+                                         sal_Bool withChildren = false );
 
 
         // Special optimized method for getting the properties of a directoryitem, which

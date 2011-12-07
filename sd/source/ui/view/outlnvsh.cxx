@@ -886,7 +886,7 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
             if( nDepth != nTmpDepth || bPage != pOutl->HasParaFlag( pPara, PARAFLAG_ISPAGE ))
                 bUnique = sal_False;
 
-            if (pOutl->HasChilds(pPara))
+            if (pOutl->HasChildren(pPara))
             {
                 if (!pOutl->IsExpanded(pPara))
                     bDisableExpand = sal_False;
@@ -934,10 +934,10 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
         Paragraph* pPara = pOutl->GetParagraph( nParaPos );
         while (pPara && (bDisableCollapseAll || bDisableExpandAll))
         {
-            if (!pOutl->IsExpanded(pPara) && pOutl->HasChilds(pPara))
+            if (!pOutl->IsExpanded(pPara) && pOutl->HasChildren(pPara))
                 bDisableExpandAll = sal_False;
 
-            if (pOutl->IsExpanded(pPara) && pOutl->HasChilds(pPara))
+            if (pOutl->IsExpanded(pPara) && pOutl->HasChildren(pPara))
                 bDisableCollapseAll = sal_False;
 
             pPara = pOutl->GetParagraph( ++nParaPos );

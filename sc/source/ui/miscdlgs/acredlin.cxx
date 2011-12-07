@@ -850,7 +850,7 @@ void ScAcceptChgDlg::UpdateView()
         if(pParent!=NULL && pScChangeAction->IsDialogParent())
         {
             if(!bFilterFlag)
-                pParent->EnableChildsOnDemand(true);
+                pParent->EnableChildrenOnDemand(true);
             else
             {
                 bool bTestFlag = bHasFilterEntry;
@@ -876,14 +876,14 @@ void ScAcceptChgDlg::UpdateView()
         pParent=pTheView->InsertEntry(
             aStrAllAccepted, static_cast< RedlinData * >(NULL),
             static_cast< SvLBoxEntry * >(NULL));
-        pParent->EnableChildsOnDemand(true);
+        pParent->EnableChildrenOnDemand(true);
     }
     if(nRejectCount>0)
     {
         pParent=pTheView->InsertEntry(
             aStrAllRejected, static_cast< RedlinData * >(NULL),
             static_cast< SvLBoxEntry * >(NULL));
-        pParent->EnableChildsOnDemand(true);
+        pParent->EnableChildrenOnDemand(true);
     }
     pTheView->SetUpdateMode(true);
     SetPointer(Pointer(POINTER_ARROW));
@@ -1191,7 +1191,7 @@ void ScAcceptChgDlg::GetDependents(  const ScChangeAction* pScChangeAction,
                     aActionTable,pScChangeAction->IsMasterDelete());
 }
 
-bool ScAcceptChgDlg::InsertContentChilds(ScChangeActionTable* pActionTable,SvLBoxEntry* pParent)
+bool ScAcceptChgDlg::InsertContentChildren(ScChangeActionTable* pActionTable,SvLBoxEntry* pParent)
 {
     bool bTheTestFlag = true;
     ScRedlinData *pEntryData=(ScRedlinData *)(pParent->GetUserData());
@@ -1293,7 +1293,7 @@ bool ScAcceptChgDlg::InsertAcceptedORejected(SvLBoxEntry* pParent)
     return bTheTestFlag;
 }
 
-bool ScAcceptChgDlg::InsertChilds(ScChangeActionTable* pActionTable,SvLBoxEntry* pParent)
+bool ScAcceptChgDlg::InsertChildren(ScChangeActionTable* pActionTable,SvLBoxEntry* pParent)
 {
     ScChangeTrack* pChanges=pDoc->GetChangeTrack();
     bool bTheTestFlag = true;
@@ -1320,7 +1320,7 @@ bool ScAcceptChgDlg::InsertChilds(ScChangeActionTable* pActionTable,SvLBoxEntry*
     return bTheTestFlag;
 }
 
-bool ScAcceptChgDlg::InsertDeletedChilds(const ScChangeAction* pScChangeAction,
+bool ScAcceptChgDlg::InsertDeletedChildren(const ScChangeAction* pScChangeAction,
                                          ScChangeActionTable* pActionTable,SvLBoxEntry* pParent)
 {
     ScChangeTrack* pChanges=pDoc->GetChangeTrack();
@@ -1370,7 +1370,7 @@ bool ScAcceptChgDlg::Expand(
         {
             case SC_CAT_CONTENT:
             {
-                InsertContentChilds(&aActionTable,pEntry);
+                InsertContentChildren(&aActionTable,pEntry);
                 bTheTestFlag=!bHasFilterEntry;
                 break;
             }
@@ -1378,14 +1378,14 @@ bool ScAcceptChgDlg::Expand(
             case SC_CAT_DELETE_ROWS:
             case SC_CAT_DELETE_TABS:
             {
-                InsertDeletedChilds(pScChangeAction,&aActionTable,pEntry);
+                InsertDeletedChildren(pScChangeAction,&aActionTable,pEntry);
                 bTheTestFlag=!bHasFilterEntry;
                 break;
             }
             default:
             {
                 if(!bFilter)
-                    bTheTestFlag=InsertChilds(&aActionTable,pEntry);
+                    bTheTestFlag=InsertChildren(&aActionTable,pEntry);
                 break;
             }
         }
@@ -1409,10 +1409,10 @@ IMPL_LINK( ScAcceptChgDlg, ExpandingHandle, SvxRedlinTable*, pTable )
             if(pEntryData!=NULL)
                 pScChangeAction=(ScChangeAction*) pEntryData->pData;
 
-            if(pEntry->HasChildsOnDemand())
+            if(pEntry->HasChildrenOnDemand())
             {
                 bool bTheTestFlag = true;
-                pEntry->EnableChildsOnDemand(false);
+                pEntry->EnableChildrenOnDemand(false);
                 pTheView->RemoveEntry(pTheView->FirstChild(pEntry));
 
                 if(pEntryData!=NULL)
@@ -1425,19 +1425,19 @@ IMPL_LINK( ScAcceptChgDlg, ExpandingHandle, SvxRedlinTable*, pTable )
                     {
                         case SC_CAT_CONTENT:
                         {
-                            bTheTestFlag=InsertContentChilds(&aActionTable,pEntry);
+                            bTheTestFlag=InsertContentChildren(&aActionTable,pEntry);
                             break;
                         }
                         case SC_CAT_DELETE_COLS:
                         case SC_CAT_DELETE_ROWS:
                         case SC_CAT_DELETE_TABS:
                         {
-                            bTheTestFlag=InsertDeletedChilds(pScChangeAction,&aActionTable,pEntry);
+                            bTheTestFlag=InsertDeletedChildren(pScChangeAction,&aActionTable,pEntry);
                             break;
                         }
                         default:
                         {
-                            bTheTestFlag=InsertChilds(&aActionTable,pEntry);
+                            bTheTestFlag=InsertChildren(&aActionTable,pEntry);
                             break;
                         }
                     }
@@ -1515,7 +1515,7 @@ void ScAcceptChgDlg::AppendChanges(ScChangeTrack* pChanges,sal_uLong nStartActio
             if(pParent!=NULL && pScChangeAction->IsDialogParent())
             {
                 if(!bFilterFlag)
-                    pParent->EnableChildsOnDemand(true);
+                    pParent->EnableChildrenOnDemand(true);
                 else
                 {
                     bool bTestFlag = bHasFilterEntry;

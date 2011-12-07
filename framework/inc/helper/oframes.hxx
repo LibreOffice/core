@@ -346,7 +346,7 @@ class OFrames   :   private ThreadHelpBase      ,   // Must be the first of base
 
         css::uno::Reference< css::lang::XMultiServiceFactory >      m_xFactory                      ;   /// reference to global servicemanager
         css::uno::WeakReference< css::frame::XFrame >               m_xOwner                        ;   /// reference to owner of this instance (Hold no hard reference!)
-        FrameContainer*                                             m_pFrameContainer               ;   /// with owner shared list to hold all direct childs of an XFramesSupplier
+        FrameContainer*                                             m_pFrameContainer               ;   /// with owner shared list to hold all direct children of an XFramesSupplier
         sal_Bool                                                    m_bRecursiveSearchProtection    ;   /// flag to protect against recursive searches of frames at parents
 
 };      //  class OFrames

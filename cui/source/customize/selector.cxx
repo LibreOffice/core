@@ -303,7 +303,7 @@ namespace
     }
 }
 
-void SvxConfigGroupListBox_Impl::fillScriptList( const Reference< browse::XBrowseNode >& _rxRootNode, SvLBoxEntry* _pParentEntry, bool _bCheapChildsOnDemand )
+void SvxConfigGroupListBox_Impl::fillScriptList( const Reference< browse::XBrowseNode >& _rxRootNode, SvLBoxEntry* _pParentEntry, bool _bCheapChildrenOnDemand )
 {
     OSL_PRECOND( _rxRootNode.is(), "SvxConfigGroupListBox_Impl::fillScriptList: invalid root node!" );
     if ( !_rxRootNode.is() )
@@ -380,13 +380,13 @@ void SvxConfigGroupListBox_Impl::fillScriptList( const Reference< browse::XBrows
                 pNewEntry->SetUserData( pInfo );
                 aArr.Insert( pInfo, aArr.Count() );
 
-                if ( _bCheapChildsOnDemand )
+                if ( _bCheapChildrenOnDemand )
                 {
                     /* i30923 - Would be nice if there was a better
                     * way to determine if a basic lib had children
                     * without having to ask for them (which forces
                     * the library to be loaded */
-                    pNewEntry->EnableChildsOnDemand( sal_True );
+                    pNewEntry->EnableChildrenOnDemand( sal_True );
                 }
                 else
                 {
@@ -399,7 +399,7 @@ void SvxConfigGroupListBox_Impl::fillScriptList( const Reference< browse::XBrows
                     {
                         if ( grandchildren[m]->getType() == browse::BrowseNodeTypes::CONTAINER )
                         {
-                            pNewEntry->EnableChildsOnDemand( sal_True );
+                            pNewEntry->EnableChildrenOnDemand( sal_True );
                             break;
                         }
                     }
@@ -565,7 +565,7 @@ void SvxConfigGroupListBox_Impl::Init()
 
                 SvLBoxEntry *pNewEntry = InsertEntry( aTitle, NULL );
                 pNewEntry->SetUserData( pInfo );
-                pNewEntry->EnableChildsOnDemand( sal_True );
+                pNewEntry->EnableChildrenOnDemand( sal_True );
                 aArr.Insert( pInfo, aArr.Count() );
             }
             else
@@ -899,7 +899,7 @@ sal_Bool SvxConfigGroupListBox_Impl::Expand( SvLBoxEntry* pParent )
     return bRet;
 }
 
-void SvxConfigGroupListBox_Impl::RequestingChilds( SvLBoxEntry *pEntry )
+void SvxConfigGroupListBox_Impl::RequestingChildren( SvLBoxEntry *pEntry )
 {
     SvxGroupInfo_Impl *pInfo = (SvxGroupInfo_Impl*) pEntry->GetUserData();
     pInfo->bWasOpened = sal_True;

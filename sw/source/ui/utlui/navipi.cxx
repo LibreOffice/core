@@ -100,11 +100,11 @@ void SwNavigationPI::CleanEntry( String& rEntry )
 }
 /*------------------------------------------------------------------------
  Beschreibung:  Ausfuehrung der Drag-Operation
-                mit und ohne Childs
+                mit und ohne Children
 ------------------------------------------------------------------------*/
 
 void SwNavigationPI::MoveOutline(sal_uInt16 nSource, sal_uInt16 nTarget,
-                                                    sal_Bool bWithChilds)
+                                                    sal_Bool bWithChildren)
 {
     SwView *pView = GetCreateView();
     SwWrtShell &rSh = pView->GetWrtShell();
@@ -115,18 +115,18 @@ void SwNavigationPI::MoveOutline(sal_uInt16 nSource, sal_uInt16 nTarget,
 
         short nMove = nTarget-nSource; //( nDir<0 ) ? 1 : 0 ;
         rSh.GotoOutline(nSource);
-        if (bWithChilds)
+        if (bWithChildren)
             rSh.MakeOutlineSel(nSource, nSource, sal_True);
         // Die selektierten Children zaehlen bei der Bewegung vorwaerts nicht mit
         sal_uInt16 nLastOutlinePos = rSh.GetOutlinePos(MAXLEVEL);
-        if(bWithChilds && nMove > 1 &&
+        if(bWithChildren && nMove > 1 &&
                 nLastOutlinePos < nTarget)
         {
             if(!rSh.IsCrsrPtAtEnd())
                 rSh.SwapPam();
             nMove -= nLastOutlinePos - nSource;
         }
-        if(!bWithChilds || nMove < 1 || nLastOutlinePos < nTarget )
+        if(!bWithChildren || nMove < 1 || nLastOutlinePos < nTarget )
             rSh.MoveOutlinePara( nMove );
         rSh.ClearMark();
         rSh.GotoOutline( nSource + nMove);
@@ -247,7 +247,7 @@ IMPL_LINK( SwNavigationPI, ToolBoxSelectHdl, ToolBox *, pBox )
 
     //Standard: Unterebenen werden mitgenommen
     // mit Ctrl Unterebenen nicht mitnehmen
-    sal_Bool bOutlineWithChilds  = ( KEY_MOD1 != pBox->GetModifier());
+    sal_Bool bOutlineWithChildren  = ( KEY_MOD1 != pBox->GetModifier());
     int nFuncId = 0;
     sal_Bool bFocusToDoc = sal_False;
     switch (nCurrItemId)
@@ -347,7 +347,7 @@ IMPL_LINK( SwNavigationPI, ToolBoxSelectHdl, ToolBox *, pBox )
             if(IsGlobalMode())
                 aGlobalTree.ExecCommand(nCurrItemId);
             else
-                aContentTree.ExecCommand(nCurrItemId, bOutlineWithChilds);
+                aContentTree.ExecCommand(nCurrItemId, bOutlineWithChildren);
         }
         break;
         case FN_GLOBAL_SWITCH:

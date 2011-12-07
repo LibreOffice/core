@@ -239,19 +239,19 @@ protected:
     Rectangle               aUpperClientArea;
     SfxWorkWindow*          pParent;
     SfxSplitWindow*         pSplit[SFX_SPLITWINDOWS_MAX];
-    SfxChildList_Impl*      pChilds;
+    SfxChildList_Impl*      pChildren;
     SfxChildWindows_Impl*   pChildWins;
     SfxBindings*            pBindings;
     Window*                 pWorkWin;
     SfxShell*               pConfigShell;
     Window*                 pActiveChild;
     sal_uInt16                  nUpdateMode;
-    sal_uInt16                  nChilds;
+    sal_uInt16                  nChildren;
     sal_uInt16                  nOrigMode;
     sal_Bool                    bSorted : 1;
     sal_Bool                    bDockingAllowed : 1;
     sal_Bool                    bInternalDockingAllowed : 1;
-    sal_Bool                    bAllChildsVisible : 1;
+    sal_Bool                    bAllChildrenVisible : 1;
     sal_Bool                    bIsFullScreen : 1;
     sal_Bool                    bShowStatusBar : 1;
     sal_Int32               m_nLock;
@@ -295,15 +295,15 @@ public:
     void                    DataChanged_Impl( const DataChangedEvent& rDCEvt );
     void                    ReleaseChild_Impl( Window& rWindow );
     SfxChild_Impl*          RegisterChild_Impl( Window& rWindow, SfxChildAlignment eAlign, sal_Bool bCanGetFocus=sal_False );
-    void                    ShowChilds_Impl();
-    void                    HideChilds_Impl();
+    void                    ShowChildren_Impl();
+    void                    HideChildren_Impl();
     sal_Bool                    PrepareClose_Impl();
-    virtual void            ArrangeChilds_Impl( sal_Bool bForce = sal_True );
+    virtual void            ArrangeChildren_Impl( sal_Bool bForce = sal_True );
     void                    DeleteControllers_Impl();
     void                    HidePopups_Impl(sal_Bool bHide, sal_Bool bParent=sal_False, sal_uInt16 nId=0);
     void                    ConfigChild_Impl(SfxChildIdentifier,
                                              SfxDockingConfig, sal_uInt16);
-    void                    MakeChildsVisible_Impl( sal_Bool bVis );
+    void                    MakeChildrenVisible_Impl( sal_Bool bVis );
     void                    ArrangeAutoHideWindows( SfxSplitWindow *pSplit );
     sal_Bool                    IsAutoHideMode( const SfxSplitWindow *pSplit );
     void                    EndAutoShow_Impl( Point aPos );
@@ -355,7 +355,7 @@ class SfxFrameWorkWin_Impl : public SfxWorkWindow
     SfxFrame*           pFrame;
 public:
                         SfxFrameWorkWin_Impl( Window* pWin, SfxFrame* pFrm, SfxFrame* pMaster );
-    virtual void        ArrangeChilds_Impl( sal_Bool bForce = sal_True );
+    virtual void        ArrangeChildren_Impl( sal_Bool bForce = sal_True );
     virtual void        UpdateObjectBars_Impl();
     virtual Rectangle   GetTopRect_Impl();
 };

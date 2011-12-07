@@ -198,8 +198,8 @@ struct ImplFrameData
     sal_Bool                mbNeedSysWindow;    // set, when FrameSize <= IMPL_MIN_NEEDSYSWIN
     sal_Bool                mbMinimized;        // set, when FrameSize <= 0
     sal_Bool                mbStartFocusState;  // FocusState, beim abschicken des Events
-    sal_Bool                mbInSysObjFocusHdl; // Innerhalb vom GetFocus-Handler eines SysChilds
-    sal_Bool                mbInSysObjToTopHdl; // Innerhalb vom ToTop-Handler eines SysChilds
+    sal_Bool                mbInSysObjFocusHdl; // Innerhalb vom GetFocus-Handler eines SysChildren
+    sal_Bool                mbInSysObjToTopHdl; // Innerhalb vom ToTop-Handler eines SysChildren
     sal_Bool                mbSysObjFocus;      // Hat ein SysChild den Focus
 
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDragSource > mxDragSource;

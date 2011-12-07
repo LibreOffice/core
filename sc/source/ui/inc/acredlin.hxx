@@ -215,14 +215,14 @@ protected:
                                 ScChangeActionTable& aActionTable,
                                 SvLBoxEntry* pEntry);
 
-    bool            InsertContentChilds(ScChangeActionTable* pActionTable,SvLBoxEntry* pParent);
+    bool            InsertContentChildren(ScChangeActionTable* pActionTable,SvLBoxEntry* pParent);
 
     bool            InsertAcceptedORejected(SvLBoxEntry* pParent);
 
-    bool            InsertDeletedChilds(const ScChangeAction *pChangeAction, ScChangeActionTable* pActionTable,
+    bool            InsertDeletedChildren(const ScChangeAction *pChangeAction, ScChangeActionTable* pActionTable,
                                         SvLBoxEntry* pParent);
 
-    bool            InsertChilds(ScChangeActionTable* pActionTable,SvLBoxEntry* pParent);
+    bool            InsertChildren(ScChangeActionTable* pActionTable,SvLBoxEntry* pParent);
 
     void            AppendChanges(ScChangeTrack* pChanges,sal_uLong nStartAction, sal_uLong nEndAction,
                                     sal_uLong nPos=LIST_APPEND);

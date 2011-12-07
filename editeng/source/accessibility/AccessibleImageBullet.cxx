@@ -136,7 +136,7 @@ namespace accessibility
         DBG_CHKTHIS( AccessibleImageBullet, NULL );
         (void)i;
 
-        throw lang::IndexOutOfBoundsException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("No childs available")),
+        throw lang::IndexOutOfBoundsException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("No children available")),
                                               uno::Reference< uno::XInterface >
                                               ( static_cast< ::cppu::OWeakObject* > (this) ) ); // static_cast: disambiguate hierarchy
     }

@@ -137,10 +137,10 @@ public class SmEditAccessible extends TestCase {
             new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer(){
                 public void fireEvent() {
                     try {
-                        System.out.println("Childs "+con.getAccessibleChildCount());
+                        System.out.println("Children "+con.getAccessibleChildCount());
                         xPS.setPropertyValue("Formula", "sum hat x \n int a \n sum b");
                         shortWait();
-                        System.out.println("Childs "+con.getAccessibleChildCount());
+                        System.out.println("Children "+con.getAccessibleChildCount());
                         xPS.setPropertyValue("Formula", expFormula);
                         shortWait();
                     } catch(com.sun.star.lang.WrappedTargetException e) {

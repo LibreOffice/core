@@ -183,7 +183,7 @@ public:
     FmEntryData*    GetParent() const { return pParent; }
     FmEntryDataList* GetChildList() const { return pChildList; }
 
-    virtual sal_Bool IsEqualWithoutChilds( FmEntryData* pEntryData );
+    virtual sal_Bool IsEqualWithoutChildren( FmEntryData* pEntryData );
     virtual FmEntryData* Clone() = 0;
 
     // note that the interface returned is normalized, i.e. querying the given XInterface of the object
@@ -275,7 +275,7 @@ public:
     const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >& GetFormIface() const { return m_xForm; }
     const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainer >& GetContainer() const { return m_xContainer; }
 
-    virtual sal_Bool IsEqualWithoutChilds( FmEntryData* pEntryData );
+    virtual sal_Bool IsEqualWithoutChildren( FmEntryData* pEntryData );
     virtual FmEntryData* Clone();
 };
 
@@ -299,7 +299,7 @@ public:
     virtual ~FmControlData();
 
     const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent >& GetFormComponent() const { return m_xFormComponent; }
-    virtual sal_Bool IsEqualWithoutChilds( FmEntryData* pEntryData );
+    virtual sal_Bool IsEqualWithoutChildren( FmEntryData* pEntryData );
     virtual FmEntryData* Clone();
 
     void ModelReplaced(

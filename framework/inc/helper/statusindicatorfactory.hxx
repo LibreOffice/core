@@ -179,7 +179,7 @@ class StatusIndicatorFactory : public  css::lang::XTypeProvider
     // member
     private:
 
-        /** stack with all current indicator childs. */
+        /** stack with all current indicator children. */
         IndicatorStack m_aStack;
 
         /** uno service manager to create own needed uno resources. */

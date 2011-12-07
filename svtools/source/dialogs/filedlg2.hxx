@@ -91,7 +91,7 @@ private:
     PushButton*         pHomeBtn;
     PushButton*         pNewDirBtn;
 
-    sal_uInt16              nOwnChilds;
+    sal_uInt16              nOwnChildren;
 
     DirEntry            aPath;          // aktuell angewaehlter Pfad
     sal_uInt16              nDirCount;      // Anzahl der Verzeichnis-

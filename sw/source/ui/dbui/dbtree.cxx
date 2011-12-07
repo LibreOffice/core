@@ -275,15 +275,15 @@ void SwDBTreeList::ShowColumns(sal_Bool bShowCol)
 
         if (sDBName.Len())
         {
-            Select(sDBName, sTableName, sColumnName);   // force RequestingChilds
+            Select(sDBName, sTableName, sColumnName);   // force RequestingChildren
         }
         SetUpdateMode(sal_True);
     }
 }
 
-void  SwDBTreeList::RequestingChilds(SvLBoxEntry* pParent)
+void  SwDBTreeList::RequestingChildren(SvLBoxEntry* pParent)
 {
-    if (!pParent->HasChilds())
+    if (!pParent->HasChildren())
     {
         if (GetParent(pParent)) // column names
         {
@@ -456,8 +456,8 @@ void SwDBTreeList::Select(const String& rDBName, const String& rTableName, const
     {
         if (rDBName == GetEntryText(pParent))
         {
-            if (!pParent->HasChilds())
-                RequestingChilds(pParent);
+            if (!pParent->HasChildren())
+                RequestingChildren(pParent);
             while ((pChild = GetEntry(pParent, nChild++)) != NULL)
             {
                 if (rTableName == GetEntryText(pChild))
@@ -468,8 +468,8 @@ void SwDBTreeList::Select(const String& rDBName, const String& rTableName, const
                     {
                         nChild = 0;
 
-                        if (!pParent->HasChilds())
-                            RequestingChilds(pParent);
+                        if (!pParent->HasChildren())
+                            RequestingChildren(pParent);
 
                         while ((pChild = GetEntry(pParent, nChild++)) != NULL)
                             if (rColumnName == GetEntryText(pChild))

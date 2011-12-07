@@ -351,7 +351,7 @@ void  SfxObjectShell::TriggerHelpPI(sal_uInt16 nIdx1, sal_uInt16 nIdx2)
     }
 }
 
-sal_Bool SfxObjectShell::CanHaveChilds(sal_uInt16 nIdx1, sal_uInt16 nIdx2)
+sal_Bool SfxObjectShell::CanHaveChildren(sal_uInt16 nIdx1, sal_uInt16 nIdx2)
 {
     switch(nIdx1)
     {

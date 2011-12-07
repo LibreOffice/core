@@ -776,7 +776,7 @@ void UnoControlContainer::createPeer( const uno::Reference< awt::XToolkit >& rxT
         // eigenes Peer erzeugen
         UnoControl::createPeer( rxToolkit, rParent );
 
-        // alle Peers der Childs erzeugen
+        // alle Peers der Children erzeugen
         if ( !mbCreatingCompatiblePeer )
         {
             // Evaluate "Step" property

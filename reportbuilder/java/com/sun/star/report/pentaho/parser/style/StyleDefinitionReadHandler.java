@@ -41,7 +41,7 @@ import org.xml.sax.SAXException;
 
 
 /**
- * Reads all childs of a style-definition. This simply copies everything that
+ * Reads all children of a style-definition. This simply copies everything that
  * is contained in the source-file into a generic structure that can be
  * written out later.
  */
@@ -49,12 +49,12 @@ public class StyleDefinitionReadHandler extends ElementReadHandler
 {
 
     private final Section rawSection;
-    private final List childs;
+    private final List children;
 
     public StyleDefinitionReadHandler()
     {
         this.rawSection = new Section();
-        this.childs = new ArrayList();
+        this.children = new ArrayList();
     }
 
     /**
@@ -73,7 +73,7 @@ public class StyleDefinitionReadHandler extends ElementReadHandler
     {
         final StyleDefinitionReadHandler readHandler =
                 new StyleDefinitionReadHandler();
-        childs.add(readHandler);
+        children.add(readHandler);
         return readHandler;
     }
 
@@ -85,9 +85,9 @@ public class StyleDefinitionReadHandler extends ElementReadHandler
     protected void doneParsing()
             throws SAXException
     {
-        for (int i = 0; i < childs.size(); i++)
+        for (int i = 0; i < children.size(); i++)
         {
-            final ElementReadHandler handler = (ElementReadHandler) childs.get(i);
+            final ElementReadHandler handler = (ElementReadHandler) children.get(i);
             rawSection.addNode(handler.getElement());
         }
     }

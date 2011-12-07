@@ -378,8 +378,8 @@ void SfxSplitWindow::SplitResize()
 {
     if ( bPinned )
     {
-        pWorkWin->ArrangeChilds_Impl();
-        pWorkWin->ShowChilds_Impl();
+        pWorkWin->ArrangeChildren_Impl();
+        pWorkWin->ShowChildren_Impl();
     }
     else
         pWorkWin->ArrangeAutoHideWindows( this );
@@ -723,7 +723,7 @@ void SfxSplitWindow::InsertWindow_Impl( SfxDock_Impl* pDock,
             pEmptyWin->Actualize();
             OSL_TRACE( "SfxSplitWindow::InsertWindow_Impl - registering empty Splitwindow" );
             pWorkWin->RegisterChild_Impl( *GetSplitWindow(), eAlign, sal_True )->nVisible = CHILD_VISIBLE;
-            pWorkWin->ArrangeChilds_Impl();
+            pWorkWin->ArrangeChildren_Impl();
             if ( bFadeIn )
                 FadeIn();
         }
@@ -743,12 +743,12 @@ void SfxSplitWindow::InsertWindow_Impl( SfxDock_Impl* pDock,
             }
 #endif
             pWorkWin->RegisterChild_Impl( *GetSplitWindow(), eAlign, sal_True )->nVisible = CHILD_VISIBLE;
-            pWorkWin->ArrangeChilds_Impl();
+            pWorkWin->ArrangeChildren_Impl();
             if ( bFadeIn )
                 FadeIn();
         }
 
-        pWorkWin->ShowChilds_Impl();
+        pWorkWin->ShowChildren_Impl();
     }
 
     if ( bUpdateMode )
@@ -1137,8 +1137,8 @@ void SfxSplitWindow::SetFadeIn_Impl( sal_Bool bOn )
             pEmptyWin->Hide();
             OSL_TRACE( "SfxSplitWindow::SetFadeIn_Impl - registering real Splitwindow" );
             pWorkWin->RegisterChild_Impl( *this, eAlign, sal_True )->nVisible = CHILD_VISIBLE;
-            pWorkWin->ArrangeChilds_Impl();
-            pWorkWin->ShowChilds_Impl();
+            pWorkWin->ArrangeChildren_Impl();
+            pWorkWin->ShowChildren_Impl();
         }
     }
     else
@@ -1154,8 +1154,8 @@ void SfxSplitWindow::SetFadeIn_Impl( sal_Bool bOn )
             pEmptyWin->Actualize();
             OSL_TRACE( "SfxSplitWindow::SetFadeIn_Impl - registering empty Splitwindow" );
             pWorkWin->RegisterChild_Impl( *pEmptyWin, eAlign, sal_True )->nVisible = CHILD_VISIBLE;
-            pWorkWin->ArrangeChilds_Impl();
-            pWorkWin->ShowChilds_Impl();
+            pWorkWin->ArrangeChildren_Impl();
+            pWorkWin->ShowChildren_Impl();
             pWorkWin->ArrangeAutoHideWindows( this );
         }
         else
@@ -1174,17 +1174,17 @@ void SfxSplitWindow::AutoHide()
     {
         // It "floats", thus dock it again
         SetPinned_Impl( sal_True );
-        pWorkWin->ArrangeChilds_Impl();
+        pWorkWin->ArrangeChildren_Impl();
     }
     else
     {
         // In "limbo"
         SetPinned_Impl( sal_False );
-        pWorkWin->ArrangeChilds_Impl();
+        pWorkWin->ArrangeChildren_Impl();
         pWorkWin->ArrangeAutoHideWindows( this );
     }
 
-    pWorkWin->ShowChilds_Impl();
+    pWorkWin->ShowChildren_Impl();
     SaveConfig_Impl();
 }
 

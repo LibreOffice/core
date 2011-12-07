@@ -59,7 +59,7 @@ OTableBorderWindow::OTableBorderWindow(Window* pParent) : Window(pParent,WB_BORD
 
     ImplInitSettings( sal_True, sal_True, sal_True );
     //////////////////////////////////////////////////////////////////////
-    // Childs erzeugen
+    // Children erzeugen
     m_pEditorCtrl   = new OTableEditorCtrl( this);
     m_pFieldDescWin = new OTableFieldDescWin( this );
 
@@ -77,7 +77,7 @@ OTableBorderWindow::OTableBorderWindow(Window* pParent) : Window(pParent,WB_BORD
 OTableBorderWindow::~OTableBorderWindow()
 {
     //////////////////////////////////////////////////////////////////////
-    // Childs zerstoeren
+    // Children zerstoeren
     //  ::dbaui::notifySystemWindow(this,m_pFieldDescWin,::comphelper::mem_fun(&TaskPaneList::RemoveWindow));
     m_pEditorCtrl->Hide();
     m_pFieldDescWin->Hide();

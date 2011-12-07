@@ -776,12 +776,12 @@ void Application::NotifyAllWindows( DataChangedEvent& rDCEvt )
     Window*     pFrame = pSVData->maWinData.mpFirstFrame;
     while ( pFrame )
     {
-        pFrame->NotifyAllChilds( rDCEvt );
+        pFrame->NotifyAllChildren( rDCEvt );
 
         Window* pSysWin = pFrame->mpWindowImpl->mpFrameData->mpFirstOverlap;
         while ( pSysWin )
         {
-            pSysWin->NotifyAllChilds( rDCEvt );
+            pSysWin->NotifyAllChildren( rDCEvt );
             pSysWin = pSysWin->mpWindowImpl->mpNextOverlap;
         }
 

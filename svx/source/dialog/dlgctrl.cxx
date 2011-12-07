@@ -659,7 +659,7 @@ void SvxRectCtl::SetState( CTL_STATE nState )
         ( (SvxTabPage*) GetParent() )->PointChanged( this, eRP );
 }
 
-sal_uInt8 SvxRectCtl::GetNumOfChilds( void ) const
+sal_uInt8 SvxRectCtl::GetNumOfChildren( void ) const
 {
     return ( eCS == CS_ANGLE )? 8 : 9;
 }

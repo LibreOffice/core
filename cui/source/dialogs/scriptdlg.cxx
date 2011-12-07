@@ -423,7 +423,7 @@ SvLBoxEntry * SFTreeListBox::insertEntry(
 }
 SAL_WNODEPRECATED_DECLARATIONS_POP
 
-void SFTreeListBox::RequestingChilds( SvLBoxEntry* pEntry )
+void SFTreeListBox::RequestingChildren( SvLBoxEntry* pEntry )
 {
     SFEntry* userData = 0;
     if ( !pEntry )
@@ -992,7 +992,7 @@ void SvxScriptOrgDialog::createEntry( SvLBoxEntry* pEntry )
         while ( !bValid );
 
         // open up parent node (which ensures it's loaded)
-        aScriptsBox.RequestingChilds( pEntry );
+        aScriptsBox.RequestingChildren( pEntry );
 
         Sequence< Any > args( 1 );
         args[ 0 ] <<= aNewName;
@@ -1044,8 +1044,8 @@ void SvxScriptOrgDialog::createEntry( SvLBoxEntry* pEntry )
             SAL_WNODEPRECATED_DECLARATIONS_POP
 
             // If the Parent is not loaded then set to
-            // loaded, this will prevent RequestingChilds ( called
-            // from vcl via RequestingChilds ) from
+            // loaded, this will prevent RequestingChildren ( called
+            // from vcl via RequestingChildren ) from
             // creating new ( duplicate ) children
             SFEntry* userData = (SFEntry*)pEntry->GetUserData();
             if ( userData &&  !userData->isLoaded() )
@@ -1284,7 +1284,7 @@ void SvxScriptOrgDialog::RestorePreviousSelection()
         }
         if ( !pTmpEntry )
             break;
-        aScriptsBox.RequestingChilds( pEntry );
+        aScriptsBox.RequestingChildren( pEntry );
     }
     aScriptsBox.SetCurEntry( pEntry );
 }

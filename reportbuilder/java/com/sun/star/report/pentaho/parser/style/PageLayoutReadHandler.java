@@ -50,12 +50,12 @@ public class PageLayoutReadHandler extends ElementReadHandler
 {
 
     private final PageLayout pageLayout;
-    private final List childs;
+    private final List children;
 
     public PageLayoutReadHandler()
     {
         this.pageLayout = new PageLayout();
-        this.childs = new ArrayList();
+        this.children = new ArrayList();
     }
 
     /**
@@ -74,7 +74,7 @@ public class PageLayoutReadHandler extends ElementReadHandler
     {
         final StyleDefinitionReadHandler readHandler =
                 new StyleDefinitionReadHandler();
-        childs.add(readHandler);
+        children.add(readHandler);
         return readHandler;
     }
 
@@ -85,9 +85,9 @@ public class PageLayoutReadHandler extends ElementReadHandler
      */
     protected void doneParsing() throws SAXException
     {
-        for (int i = 0; i < childs.size(); i++)
+        for (int i = 0; i < children.size(); i++)
         {
-            final ElementReadHandler handler = (ElementReadHandler) childs.get(i);
+            final ElementReadHandler handler = (ElementReadHandler) children.get(i);
             pageLayout.addNode(handler.getElement());
         }
     }

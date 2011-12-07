@@ -101,7 +101,7 @@ class Node
 
     /** Gets a child with a specific name and of a specific type.
 
-        There may be more childs with the same name.
+        There may be more children with the same name.
 
         @return id_t(0), if no matching child is found.
     */

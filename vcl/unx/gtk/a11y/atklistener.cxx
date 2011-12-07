@@ -170,7 +170,7 @@ void AtkListener::handleChildRemoved(
     }
 
     // FIXME: two problems here:
-    // a) we get child-removed events for objects that are no real childs
+    // a) we get child-removed events for objects that are no real children
     //    in the accessibility hierarchy or have been removed before due to
     //    some child removing batch.
     // b) spi_atk_bridge_signal_listener ignores the given parameters

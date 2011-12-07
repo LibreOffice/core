@@ -317,7 +317,7 @@ void SwSection::ImplSetHiddenFlag(bool const bTmpHidden, bool const bCondition)
                 // wie sieht es mit dem Parent aus, ist der versteckt ?
                 // (eigentlich muesste das vom bHiddenFlag angezeigt werden!)
 
-                // erstmal allen Childs sagen, das sie versteckt sind
+                // erstmal allen Children sagen, das sie versteckt sind
                 SwMsgPoolItem aMsgItem( RES_SECTION_HIDDEN );
                 pFmt->ModifyNotification( &aMsgItem, &aMsgItem );
 
@@ -327,13 +327,13 @@ void SwSection::ImplSetHiddenFlag(bool const bTmpHidden, bool const bCondition)
         }
         else if (m_Data.IsHiddenFlag()) // show Nodes again
         {
-            // alle Frames sichtbar machen ( Childs Sections werden vom
+            // alle Frames sichtbar machen ( Children Sections werden vom
             // MakeFrms beruecksichtigt). Aber nur wenn die ParentSection
             // nichts dagegen hat !
             SwSection* pParentSect = pFmt->GetParentSection();
             if( !pParentSect || !pParentSect->IsHiddenFlag() )
             {
-                // erstmal allen Childs sagen, das der Parent nicht mehr
+                // erstmal allen Children sagen, das der Parent nicht mehr
                 // versteckt ist
                 SwMsgPoolItem aMsgItem( RES_SECTION_NOT_HIDDEN );
                 pFmt->ModifyNotification( &aMsgItem, &aMsgItem );

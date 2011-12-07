@@ -593,7 +593,7 @@ void DlgEdObj::TabIndexChange( const beans::PropertyChangeEvent& evt ) throw (Ru
     if ( pForm )
     {
         // stop listening with all children
-        ::std::vector<DlgEdObj*> aChildList = pForm->GetChilds();
+        ::std::vector<DlgEdObj*> aChildList = pForm->GetChildren();
         ::std::vector<DlgEdObj*>::iterator aIter;
         for ( aIter = aChildList.begin() ; aIter != aChildList.end() ; ++aIter )
         {
@@ -1428,14 +1428,14 @@ void DlgEdForm::SetPropsFromRect()
 
 void DlgEdForm::AddChild( DlgEdObj* pDlgEdObj )
 {
-    pChilds.push_back( pDlgEdObj );
+    pChildren.push_back( pDlgEdObj );
 }
 
 //----------------------------------------------------------------------------
 
 void DlgEdForm::RemoveChild( DlgEdObj* pDlgEdObj )
 {
-    pChilds.erase( ::std::find( pChilds.begin() , pChilds.end() , pDlgEdObj ) );
+    pChildren.erase( ::std::find( pChildren.begin() , pChildren.end() , pDlgEdObj ) );
 }
 
 //----------------------------------------------------------------------------
@@ -1500,7 +1500,7 @@ void DlgEdForm::PositionAndSizeChange( const beans::PropertyChangeEvent& evt )
             bool bAdjustedPageSize = pEditor->AdjustPageSize();
             SetRectFromProps();
             ::std::vector< DlgEdObj* >::iterator aIter;
-            ::std::vector< DlgEdObj* > aChildList = ((DlgEdForm*)this)->GetChilds();
+            ::std::vector< DlgEdObj* > aChildList = ((DlgEdForm*)this)->GetChildren();
 
             if ( bAdjustedPageSize )
             {
@@ -1590,7 +1590,7 @@ void DlgEdForm::UpdateTabIndices()
 {
     // stop listening with all children
     ::std::vector<DlgEdObj*>::iterator aIter;
-    for ( aIter = pChilds.begin() ; aIter != pChilds.end() ; ++aIter )
+    for ( aIter = pChildren.begin() ; aIter != pChildren.end() ; ++aIter )
     {
         (*aIter)->EndListening( sal_False );
     }
@@ -1642,7 +1642,7 @@ void DlgEdForm::UpdateTabIndices()
     }
 
     // start listening with all children
-    for ( aIter = pChilds.begin() ; aIter != pChilds.end() ; ++aIter )
+    for ( aIter = pChildren.begin() ; aIter != pChildren.end() ; ++aIter )
     {
         (*aIter)->StartListening();
     }
@@ -1687,7 +1687,7 @@ void DlgEdForm::UpdateGroups()
     if ( xTabModel.is() )
     {
         // create a global list of controls that belong to the dialog
-        ::std::vector<DlgEdObj*> aChildList = GetChilds();
+        ::std::vector<DlgEdObj*> aChildList = GetChildren();
         sal_uInt32 nSize = aChildList.size();
         Sequence< Reference< awt::XControl > > aSeqControls( nSize );
         for ( sal_uInt32 i = 0; i < nSize; ++i )
@@ -1757,9 +1757,9 @@ void DlgEdForm::NbcMove( const Size& rSize )
     SetPropsFromRect();
     StartListening();
 
-    // set geometry properties of all childs
+    // set geometry properties of all children
     ::std::vector<DlgEdObj*>::iterator aIter;
-    for ( aIter = pChilds.begin() ; aIter != pChilds.end() ; ++aIter )
+    for ( aIter = pChildren.begin() ; aIter != pChildren.end() ; ++aIter )
     {
         (*aIter)->EndListening(sal_False);
         (*aIter)->SetPropsFromRect();
@@ -1781,9 +1781,9 @@ void DlgEdForm::NbcResize(const Point& rRef, const Fraction& xFract, const Fract
     SetPropsFromRect();
     StartListening();
 
-    // set geometry properties of all childs
+    // set geometry properties of all children
     ::std::vector<DlgEdObj*>::iterator aIter;
-    for ( aIter = pChilds.begin() ; aIter != pChilds.end() ; ++aIter )
+    for ( aIter = pChildren.begin() ; aIter != pChildren.end() ; ++aIter )
     {
         (*aIter)->EndListening(sal_False);
         (*aIter)->SetPropsFromRect();

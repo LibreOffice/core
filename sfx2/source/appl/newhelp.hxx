@@ -94,7 +94,7 @@ public:
     ~ContentListBox_Impl();
 
 
-    virtual void    RequestingChilds( SvLBoxEntry* pParent );
+    virtual void    RequestingChildren( SvLBoxEntry* pParent );
     virtual long    Notify( NotifyEvent& rNEvt );
 
     inline void     SetOpenHdl( const Link& rLink ) { SetDoubleClickHdl( rLink ); }

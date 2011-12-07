@@ -271,7 +271,7 @@ void DictionaryList::deleteEntryOnPos( sal_Int32 nPos  )
     SvLBoxEntry* pLBEntry = GetEntryOnPos( nPos );
     DictionaryEntry* pEntry = getEntryOnPos( nPos );
     if( pLBEntry )
-        RemoveParentKeepChilds( pLBEntry );
+        RemoveParentKeepChildren( pLBEntry );
     if( pEntry )
     {
         if( pEntry->m_bNewEntry )
@@ -291,7 +291,7 @@ sal_uIntPtr DictionaryList::deleteEntries( const rtl::OUString& rTerm )
         {
             nPos = nN;
             SvLBoxEntry* pCurLBEntry = GetEntryOnPos( nN );
-            RemoveParentKeepChilds( pCurLBEntry );
+            RemoveParentKeepChildren( pCurLBEntry );
             if( pCurEntry->m_bNewEntry )
                 delete pCurEntry;
             else

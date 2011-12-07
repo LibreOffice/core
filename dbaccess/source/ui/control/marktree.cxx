@@ -117,7 +117,7 @@ void OMarkableTreeListBox::KeyInput( const KeyEvent& rKEvt )
 SvButtonState OMarkableTreeListBox::implDetermineState(SvLBoxEntry* _pEntry)
 {
     SvButtonState eState = GetCheckButtonState(_pEntry);
-    if (!GetModel()->HasChilds(_pEntry))
+    if (!GetModel()->HasChildren(_pEntry))
         // nothing to do in this bottom-up routine if there are no children ...
         return eState;
 #ifdef DBG_UTIL
@@ -202,7 +202,7 @@ void OMarkableTreeListBox::CheckButtonHdl()
 void OMarkableTreeListBox::checkedButton_noBroadcast(SvLBoxEntry* _pEntry)
 {
     SvButtonState eState = GetCheckButtonState( _pEntry);
-    if (GetModel()->HasChilds(_pEntry)) // Falls Kinder, dann diese auch checken
+    if (GetModel()->HasChildren(_pEntry)) // Falls Kinder, dann diese auch checken
     {
         SvLBoxEntry* pChildEntry = GetModel()->Next(_pEntry);
         SvLBoxEntry* pSiblingEntry = GetModel()->NextSibling(_pEntry);
@@ -217,7 +217,7 @@ void OMarkableTreeListBox::checkedButton_noBroadcast(SvLBoxEntry* _pEntry)
     while(pEntry)
     {
         SetCheckButtonState(pEntry,eState);
-        if(GetModel()->HasChilds(pEntry))   // Falls Kinder, dann diese auch checken
+        if(GetModel()->HasChildren(pEntry))   // Falls Kinder, dann diese auch checken
         {
             SvLBoxEntry* pChildEntry = GetModel()->Next(pEntry);
             SvLBoxEntry* pSiblingEntry = GetModel()->NextSibling(pEntry);

@@ -492,7 +492,7 @@ DBG_NAME(OTableSubscriptionPage)
             SvLBoxEntry* pSchema = NULL;
             SvLBoxEntry* pCatalog = NULL;
 
-            if (m_aTablesList.GetCheckButtonState(pEntry) == SV_BUTTON_CHECKED && !m_aTablesList.GetModel()->HasChilds(pEntry))
+            if (m_aTablesList.GetCheckButtonState(pEntry) == SV_BUTTON_CHECKED && !m_aTablesList.GetModel()->HasChildren(pEntry))
             {   // checked and a leaf, which means it's no catalog, no schema, but a real table
                 ::rtl::OUString sCatalog;
                 if(m_aTablesList.GetModel()->HasParent(pEntry))

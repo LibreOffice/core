@@ -968,7 +968,7 @@ BaseContent::setPropertyValues(
                                           rtl_UriEncodeIgnoreEscapes,
                                           RTL_TEXTENCODING_UTF8 );
 
-            m_pMyShell->move( nMyCommandIdentifier,     // move notifies the childs also;
+            m_pMyShell->move( nMyCommandIdentifier,     // move notifies the children also;
                               m_aUncPath,
                               aDstName,
                               NameClash::KEEP );

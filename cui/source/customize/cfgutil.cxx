@@ -642,7 +642,7 @@ void SfxConfigGroupListBox_Impl::Init(const css::uno::Reference< css::lang::XMul
             String aTitle(pImp->m_sDlgMacros);
             SvLBoxEntry *pNewEntry = InsertEntry( aTitle, NULL );
             pNewEntry->SetUserData( pInfo );
-            pNewEntry->EnableChildsOnDemand( sal_True );
+            pNewEntry->EnableChildrenOnDemand( sal_True );
             aArr.Insert( pInfo, aArr.Count() );
         }
         else
@@ -728,7 +728,7 @@ void SfxConfigGroupListBox_Impl::Init(const css::uno::Reference< css::lang::XMul
                                 {
                                     if ( grandchildren[m]->getType() == browse::BrowseNodeTypes::CONTAINER )
                                     {
-                                        pNewEntry->EnableChildsOnDemand( sal_True );
+                                        pNewEntry->EnableChildrenOnDemand( sal_True );
                                         m = grandchildren.getLength();
                                     }
                                 }
@@ -751,7 +751,7 @@ void SfxConfigGroupListBox_Impl::Init(const css::uno::Reference< css::lang::XMul
         SfxGroupInfo_Impl *pInfo = new SfxGroupInfo_Impl( SFX_CFGGROUP_STYLES, 0, 0 ); // TODO last parameter should contain user data
         aArr.Insert( pInfo, aArr.Count() );
         pEntry->SetUserData( pInfo );
-        pEntry->EnableChildsOnDemand( sal_True );
+        pEntry->EnableChildrenOnDemand( sal_True );
     }
 
     MakeVisible( GetEntry( 0,0 ) );
@@ -1063,7 +1063,7 @@ sal_Bool SfxConfigGroupListBox_Impl::Expand( SvLBoxEntry* pParent )
     return bRet;
 }
 
-void SfxConfigGroupListBox_Impl::RequestingChilds( SvLBoxEntry *pEntry )
+void SfxConfigGroupListBox_Impl::RequestingChildren( SvLBoxEntry *pEntry )
 /*  Beschreibung
     Ein Basic oder eine Bibliothek werden ge"offnet
 */
@@ -1148,7 +1148,7 @@ void SfxConfigGroupListBox_Impl::RequestingChilds( SvLBoxEntry *pEntry )
                                     {
                                         if ( grandchildren[m]->getType() == browse::BrowseNodeTypes::CONTAINER )
                                         {
-                                            pNewEntry->EnableChildsOnDemand( sal_True );
+                                            pNewEntry->EnableChildrenOnDemand( sal_True );
                                             m = grandchildren.getLength();
                                         }
                                     }
@@ -1179,7 +1179,7 @@ void SfxConfigGroupListBox_Impl::RequestingChilds( SvLBoxEntry *pEntry )
                     SfxGroupInfo_Impl *pGrpInfo = new SfxGroupInfo_Impl( SFX_CFGGROUP_STYLES, 0, pFamily );
                     aArr.Insert( pGrpInfo, aArr.Count() );
                     pStyleEntry->SetUserData( pGrpInfo );
-                    pStyleEntry->EnableChildsOnDemand( sal_False );
+                    pStyleEntry->EnableChildrenOnDemand( sal_False );
                 }
             }
             break;

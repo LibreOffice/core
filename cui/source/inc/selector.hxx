@@ -162,11 +162,11 @@ private:
     void    fillScriptList(
         const ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode >& _rxRootNode,
         SvLBoxEntry* _pParentEntry,
-        bool _bCheapChildsOnDemand
+        bool _bCheapChildrenOnDemand
     );
 
 protected:
-    virtual void    RequestingChilds( SvLBoxEntry *pEntry);
+    virtual void    RequestingChildren( SvLBoxEntry *pEntry);
     virtual sal_Bool    Expand( SvLBoxEntry* pParent );
     using SvListView::Expand;
 

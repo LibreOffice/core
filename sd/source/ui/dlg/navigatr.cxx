@@ -979,7 +979,7 @@ void SdPageNameControllerItem::StateChanged( sal_uInt16 nSId,
             DBG_ASSERT( pStateItem, "SfxStringItem erwartet");
             String aPageName = pStateItem->GetValue();
 
-            if( !pNavigatorWin->maTlbObjects.HasSelectedChilds( aPageName ) )
+            if( !pNavigatorWin->maTlbObjects.HasSelectedChildren( aPageName ) )
             {
                 if( pNavigatorWin->maTlbObjects.GetSelectionMode() == MULTIPLE_SELECTION )
                 {

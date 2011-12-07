@@ -53,7 +53,7 @@ private:
     using SvTreeListBox::InsertEntry;
     // Avoid ambiguity with new InsertEntry:
     virtual SvLBoxEntry*    InsertEntry( const XubString& rText, SvLBoxEntry* pParent,
-                                         sal_Bool bChildsOnDemand,
+                                         sal_Bool bChildrenOnDemand,
                                          sal_uIntPtr nPos, void* pUserData,
                                          SvLBoxButtonKind eButtonKind );
 

@@ -85,7 +85,7 @@ SvXMLImportContext* SdXMLGroupShapeContext::CreateChildContext( sal_uInt16 nPref
     {
         // call GroupChildContext function at common ShapeImport
         pContext = GetImport().GetShapeImport()->CreateGroupChildContext(
-            GetImport(), nPrefix, rLocalName, xAttrList, mxChilds);
+            GetImport(), nPrefix, rLocalName, xAttrList, mxChildren);
     }
 
     // call parent when no own context was created
@@ -108,9 +108,9 @@ void SdXMLGroupShapeContext::StartElement(const uno::Reference< xml::sax::XAttri
     {
         SetStyle( false );
 
-        mxChilds = uno::Reference< drawing::XShapes >::query( mxShape );
-        if( mxChilds.is() )
-            GetImport().GetShapeImport()->pushGroupForSorting( mxChilds );
+        mxChildren = uno::Reference< drawing::XShapes >::query( mxShape );
+        if( mxChildren.is() )
+            GetImport().GetShapeImport()->pushGroupForSorting( mxChildren );
     }
 
     GetImport().GetShapeImport()->finishShape( mxShape, mxAttrList, mxShapes );
@@ -120,7 +120,7 @@ void SdXMLGroupShapeContext::StartElement(const uno::Reference< xml::sax::XAttri
 
 void SdXMLGroupShapeContext::EndElement()
 {
-    if( mxChilds.is() )
+    if( mxChildren.is() )
         GetImport().GetShapeImport()->popGroupAndSort();
 
     SdXMLShapeContext::EndElement();

@@ -58,9 +58,9 @@ public:
     void            MoveParagraphs( sal_uLong nStart, sal_uLong nDest, sal_uLong nCount );
 
     Paragraph*      GetParent( Paragraph* pParagraph /*, sal_uInt16& rRelPos */ ) const;
-    sal_Bool            HasChilds( Paragraph* pParagraph ) const;
-    sal_Bool            HasHiddenChilds( Paragraph* pParagraph ) const;
-    sal_Bool            HasVisibleChilds( Paragraph* pParagraph ) const;
+    sal_Bool            HasChildren( Paragraph* pParagraph ) const;
+    sal_Bool            HasHiddenChildren( Paragraph* pParagraph ) const;
+    sal_Bool            HasVisibleChildren( Paragraph* pParagraph ) const;
     sal_uLong           GetChildCount( Paragraph* pParagraph ) const;
 
     void            Expand( Paragraph* pParent );

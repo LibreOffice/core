@@ -226,7 +226,7 @@ void Octree::ImplReduce()
     sal_uLong   nRedSum = 0L;
     sal_uLong   nGreenSum = 0L;
     sal_uLong   nBlueSum = 0L;
-    sal_uLong   nChilds = 0L;
+    sal_uLong   nChildren = 0L;
 
     for ( i = OCTREE_BITS - 1; i && !pReduce[i]; i-- ) {}
 
@@ -246,7 +246,7 @@ void Octree::ImplReduce()
 
             pNodeCache->ImplReleaseNode( pNode->pChild[ i ] );
             pNode->pChild[ i ] = NULL;
-            nChilds++;
+            nChildren++;
         }
     }
 
@@ -254,7 +254,7 @@ void Octree::ImplReduce()
     pNode->nRed = nRedSum;
     pNode->nGreen = nGreenSum;
     pNode->nBlue = nBlueSum;
-    nLeafCount -= --nChilds;
+    nLeafCount -= --nChildren;
 }
 
 // ------------------------------------------------------------------------

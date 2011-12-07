@@ -659,8 +659,8 @@ css::uno::Reference< css::lang::XComponent > SAL_CALL Desktop::loadComponentFrom
 
 /*-************************************************************************************************************//**
     @interface  XTasksSupplier
-    @short      get access to create enumerations of ouer taskchilds
-    @descr      Direct childs of desktop are tasks everytime.
+    @short      get access to create enumerations of ouer taskchildren
+    @descr      Direct children of desktop are tasks everytime.
                 Call these method to could create enumerations of it.
 
 But; Don't forget - you will be the owner of returned object and must release it!
@@ -686,11 +686,11 @@ css::uno::Reference< css::container::XEnumerationAccess > SAL_CALL Desktop::getT
 
 /*-************************************************************************************************************//**
     @interface  XTasksSupplier
-    @short      return current active task of ouer direct childs
-    @descr      Desktop childs are tasks only ! If we have an active path from desktop
+    @short      return current active task of ouer direct children
+    @descr      Desktop children are tasks only ! If we have an active path from desktop
                 as top to any frame on bottom, we must have an active direct child. His reference is returned here.
 
-    @attention  a)  Do not confuse it with getCurrentFrame()! The current frame don't must one of ouer direct childs.
+    @attention  a)  Do not confuse it with getCurrentFrame()! The current frame don't must one of ouer direct children.
                     It can be every frame in subtree and must have the focus (Is the last one of an active path!).
                 b)  We don't need any lock here. Our container is threadsafe himself and live, if we live!
 
@@ -796,9 +796,9 @@ void SAL_CALL Desktop::releaseDispatchProviderInterceptor ( const css::uno::Refe
 
 /*-************************************************************************************************************//**
     @interface  XFramesSupplier
-    @short      return access to append or remove childs on desktop
+    @short      return access to append or remove children on desktop
     @descr      We don't implement these interface directly. We use a helper class to do this.
-                If you wish to add or delete childs to/from the container, call these method to get
+                If you wish to add or delete children to/from the container, call these method to get
                 a reference to the helper.
 
     @attention  Helper is threadsafe himself. So we don't need any lock here.
@@ -823,7 +823,7 @@ css::uno::Reference< css::frame::XFrames > SAL_CALL Desktop::getFrames() throw( 
 /*-************************************************************************************************************//**
     @interface  XFramesSupplier
     @short      set/get the current active child frame
-    @descr      It must be a task. Direct childs of desktop are tasks only! No frames are accepted.
+    @descr      It must be a task. Direct children of desktop are tasks only! No frames are accepted.
                 We don't save this information directly in this class. We use ouer container-helper
                 to do that.
 

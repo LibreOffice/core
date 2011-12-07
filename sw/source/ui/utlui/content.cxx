@@ -952,7 +952,7 @@ sal_Int8 SwContentTree::ExecuteDrop( const ExecuteDropEvent& rEvt )
             void* key = lcl_GetOutlineKey(this, pOutlineContent);
             if( !mOutLineNodeMap[key] )
             {
-                while( pEntry->HasChilds() )
+                while( pEntry->HasChildren() )
                 {
                     SvLBoxEntry* pChildEntry = FirstChild( pEntry );
                     while( pChildEntry )
@@ -1162,12 +1162,12 @@ long    SwContentTree::GetTabPos( SvLBoxEntry* pEntry, SvLBoxTab* pTab)
 /***************************************************************************
     Beschreibung:   Inhalte werden erst auf Anforderung in die Box eingefuegt
 ***************************************************************************/
-void  SwContentTree::RequestingChilds( SvLBoxEntry* pParent )
+void  SwContentTree::RequestingChildren( SvLBoxEntry* pParent )
 {
     // ist es ein Inhaltstyp?
     if(lcl_IsContentType(pParent))
     {
-        if(!pParent->HasChilds())
+        if(!pParent->HasChildren())
         {
             OSL_ENSURE(pParent->GetUserData(), "no UserData?");
             SwContentType* pCntType = (SwContentType*)pParent->GetUserData();
@@ -1261,9 +1261,9 @@ sal_Bool  SwContentTree::Expand( SvLBoxEntry* pParent )
                 SwWrtShell* pShell = GetWrtShell();
                 sal_Bool bBool = SvTreeListBox::Expand(pParent);
                 SvLBoxEntry* pChild = Next(pParent);
-                while(pChild && lcl_IsContent(pChild) && pParent->HasChilds())
+                while(pChild && lcl_IsContent(pChild) && pParent->HasChildren())
                 {
-                    if(pChild->HasChilds())
+                    if(pChild->HasChildren())
                     {
                         sal_Int32 nPos = ((SwContent*)pChild->GetUserData())->GetYPos();
                         void* key = (void*)pShell->getIDocumentOutlineNodesAccess()->getOutlineNode( nPos );
@@ -1341,8 +1341,8 @@ IMPL_LINK( SwContentTree, ContentDoubleClickHdl, SwContentTree *, EMPTYARG )
     OSL_ENSURE(pEntry, "no current entry!");
     if(pEntry)
     {
-        if(lcl_IsContentType(pEntry) && !pEntry->HasChilds())
-            RequestingChilds(pEntry);
+        if(lcl_IsContentType(pEntry) && !pEntry->HasChildren())
+            RequestingChildren(pEntry);
         else if(!lcl_IsContentType(pEntry) && (bIsActive || bIsConstant))
         {
             if(bIsConstant)
@@ -1500,7 +1500,7 @@ void SwContentTree::Display( sal_Bool bActive )
                 }
              }
              else
-                 RequestingChilds(pParent);
+                 RequestingChildren(pParent);
             Expand(pParent);
             if( nRootType == CONTENT_TYPE_OUTLINE && bIsActive )
             {
@@ -1890,7 +1890,7 @@ sal_Bool SwContentTree::HasContentChanged()
                     }
 
                 }
-                else if(pEntry->HasChilds())
+                else if(pEntry->HasChildren())
                 {
                     //war der Eintrag einmal aufgeklappt, dann muessen auch
                     // die unsichtbaren Eintraege geprueft werden.
@@ -1933,7 +1933,7 @@ sal_Bool SwContentTree::HasContentChanged()
                     }
                     if(!nChildCount)
                     {
-                        pEntry->EnableChildsOnDemand(sal_False);
+                        pEntry->EnableChildrenOnDemand(sal_False);
                         InvalidateEntry(pEntry);
                     }
 
@@ -2290,7 +2290,7 @@ DragDropMode SwContentTree::NotifyStartDrag(
 
 /***************************************************************************
     Beschreibung :  Nach dem Drag wird der aktuelle Absatz m i t
-                    Childs verschoben
+                    Children verschoben
 ***************************************************************************/
 sal_Bool  SwContentTree::NotifyMoving( SvLBoxEntry*  pTarget,
         SvLBoxEntry*  pEntry, SvLBoxEntry*& , sal_uLong& )
@@ -2329,7 +2329,7 @@ sal_Bool  SwContentTree::NotifyMoving( SvLBoxEntry*  pTarget,
 
 /***************************************************************************
     Beschreibung :  Nach dem Drag wird der aktuelle Absatz o h n e
-                    Childs verschoben
+                    Children verschoben
 ***************************************************************************/
 sal_Bool  SwContentTree::NotifyCopying( SvLBoxEntry*  pTarget,
         SvLBoxEntry*  pEntry, SvLBoxEntry*& , sal_uLong& )

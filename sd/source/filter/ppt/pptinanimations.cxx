@@ -419,7 +419,7 @@ void AnimationImporter::importAnimationContainer( const Atom* pAtom, const Refer
                 importTimeContainer( pAtom, xNode );
                 dump( "</par>\n" );
 
-                // for iteration containers, map target from childs to iteration
+                // for iteration containers, map target from children to iteration
                 Reference< XIterateContainer > xIter( xNode, UNO_QUERY );
                 if( xIter.is() )
                 {

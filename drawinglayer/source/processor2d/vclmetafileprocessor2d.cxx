@@ -2021,7 +2021,7 @@ namespace drawinglayer
                         mpPDFExtOutDevData->BeginStructureElement(rTagElement);
                     }
 
-                    // proccess childs normally
+                    // proccess children normally
                     process(rStructureTagCandidate.getChildren());
 
                     if(mpPDFExtOutDevData &&  bTagUsed)

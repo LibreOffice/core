@@ -240,7 +240,7 @@ private:
     void                NotifyTabsChanged();
 
     inline sal_Bool         IsExpandable() const        // if element at cursor can be expanded in general
-                            { return pCursor->HasChilds() || pCursor->HasChildsOnDemand(); }
+                            { return pCursor->HasChildren() || pCursor->HasChildrenOnDemand(); }
     inline sal_Bool         IsNowExpandable() const     // if element at cursor can be expanded at this moment
                             { return IsExpandable() && !pView->IsExpanded( pCursor ); }
 

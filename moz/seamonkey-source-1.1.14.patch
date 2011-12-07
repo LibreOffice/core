@@ -4601,35 +4601,35 @@
 +    */
 +    //update OUTLOOK_EMAIL_LIST1
 +    ULONG listTag=GetEmailPropertyTag(*(LPMAPIPROP*)&container,OUTLOOK_EMAIL_LIST1) | PT_MV_BINARY;
-+    SBinaryArray oldChilds;
++    SBinaryArray oldChildren;
 +    LPSBinary    bins=NULL;
-+    SBinaryArray newChilds;
++    SBinaryArray newChildren;
 +    LPSPropValue oldChildValue = NULL ;
 +    ULONG valueCount = 0 ;
 +
 +    if (!GetMAPIProperties(aDistlist, &listTag, 1, oldChildValue, valueCount))
 +    {
-+        PRINTF(("Cannot get old childs %08x.\n", mLastError)) ;
++        PRINTF(("Cannot get old children %08x.\n", mLastError)) ;
 +        return FALSE;
 +    }
 +
 +    if (! (oldChildValue->Value.l == MAPI_E_NOT_FOUND))
 +    {
-+        oldChilds = oldChildValue->Value.MVbin;
-+        newChilds.cValues=oldChilds.cValues + 1;
-+        mMAPIAllocateBuffer(sizeof(SBinary) * newChilds.cValues,(void**)& bins);
-+        newChilds.lpbin = bins;
-+        for (ULONG i=0;i<oldChilds.cValues;i++)
++        oldChildren = oldChildValue->Value.MVbin;
++        newChildren.cValues=oldChildren.cValues + 1;
++        mMAPIAllocateBuffer(sizeof(SBinary) * newChildren.cValues,(void**)& bins);
++        newChildren.lpbin = bins;
++        for (ULONG i=0;i<oldChildren.cValues;i++)
 +        {
-+            newChilds.lpbin[i].lpb = oldChilds.lpbin[i].lpb;
-+            newChilds.lpbin[i].cb = oldChilds.lpbin[i].cb;
++            newChildren.lpbin[i].lpb = oldChildren.lpbin[i].lpb;
++            newChildren.lpbin[i].cb = oldChildren.lpbin[i].cb;
 +        }
 +    }
 +    else
 +    {
-+        newChilds.cValues = 1;
-+        mMAPIAllocateBuffer(sizeof(SBinary) * newChilds.cValues,(void**)& bins);
-+        newChilds.lpbin = bins;
++        newChildren.cValues = 1;
++        mMAPIAllocateBuffer(sizeof(SBinary) * newChildren.cValues,(void**)& bins);
++        newChildren.lpbin = bins;
 +    }
 +
 +    nsMapiEntry orgEntryID;
@@ -4639,17 +4639,17 @@
 +    {
 +        return FALSE;
 +    }
-+    newChilds.lpbin[newChilds.cValues-1].lpb = NS_REINTERPRET_CAST(unsigned char *, orgEntryID.mEntryId);
-+    newChilds.lpbin[newChilds.cValues-1].cb  = orgEntryID.mByteCount;
++    newChildren.lpbin[newChildren.cValues-1].lpb = NS_REINTERPRET_CAST(unsigned char *, orgEntryID.mEntryId);
++    newChildren.lpbin[newChildren.cValues-1].cb  = orgEntryID.mByteCount;
 +
-+    SPropValue childs;
-+    childs.ulPropTag = listTag;
-+    childs.Value.MVbin = newChilds;
++    SPropValue children;
++    children.ulPropTag = listTag;
++    children.Value.MVbin = newChildren;
 +
 +    LPSPropProblemArray problems = NULL ;
-+    mLastError = container->SetProps(1, &childs, &problems) ;
++    mLastError = container->SetProps(1, &children, &problems) ;
 +    if (HR_FAILED(mLastError)) {
-+        PRINTF(("Cannot set childs %08x.\n", mLastError)) ;
++        PRINTF(("Cannot set children %08x.\n", mLastError)) ;
 +        return FALSE ;
 +    }
 +
@@ -4657,27 +4657,27 @@
 +    listTag = GetEmailPropertyTag(*(LPMAPIPROP*)&container,OUTLOOK_EMAIL_LIST2) | PT_MV_BINARY;
 +    if (!GetMAPIProperties(aDistlist, &listTag, 1, oldChildValue, valueCount))
 +    {
-+        PRINTF(("Cannot get old childs %08x.\n", mLastError)) ;
++        PRINTF(("Cannot get old children %08x.\n", mLastError)) ;
 +        return FALSE;
 +    }
 +    
 +    if (! (oldChildValue->Value.l == MAPI_E_NOT_FOUND))
 +    {
-+        oldChilds = oldChildValue->Value.MVbin;
-+        newChilds.cValues=oldChilds.cValues + 1;
-+        mMAPIAllocateBuffer(sizeof(SBinary) * newChilds.cValues,(void**)& bins);
-+        newChilds.lpbin = bins;
-+        for (ULONG i=0;i<oldChilds.cValues;i++)
++        oldChildren = oldChildValue->Value.MVbin;
++        newChildren.cValues=oldChildren.cValues + 1;
++        mMAPIAllocateBuffer(sizeof(SBinary) * newChildren.cValues,(void**)& bins);
++        newChildren.lpbin = bins;
++        for (ULONG i=0;i<oldChildren.cValues;i++)
 +        {
-+            newChilds.lpbin[i].lpb = oldChilds.lpbin[i].lpb;
-+            newChilds.lpbin[i].cb = oldChilds.lpbin[i].cb;
++            newChildren.lpbin[i].lpb = oldChildren.lpbin[i].lpb;
++            newChildren.lpbin[i].cb = oldChildren.lpbin[i].cb;
 +        }
 +    }
 +    else
 +    {
-+        newChilds.cValues = 1;
-+        mMAPIAllocateBuffer(sizeof(SBinary) * newChilds.cValues,(void**)& bins);
-+        newChilds.lpbin = bins;
++        newChildren.cValues = 1;
++        mMAPIAllocateBuffer(sizeof(SBinary) * newChildren.cValues,(void**)& bins);
++        newChildren.lpbin = bins;
 +    }
 +
 +    /*
@@ -4688,16 +4688,16 @@
 +    Currently we can only add first kind of address to a outlook distlist.
 +    */
 +    
-+    newChilds.lpbin[newChilds.cValues-1].lpb = NS_REINTERPRET_CAST(unsigned char *, orgEntryID.mEntryId);
-+    newChilds.lpbin[newChilds.cValues-1].cb  = orgEntryID.mByteCount;
++    newChildren.lpbin[newChildren.cValues-1].lpb = NS_REINTERPRET_CAST(unsigned char *, orgEntryID.mEntryId);
++    newChildren.lpbin[newChildren.cValues-1].cb  = orgEntryID.mByteCount;
 +
-+    childs.ulPropTag = listTag;
-+    childs.Value.MVbin = newChilds;
++    children.ulPropTag = listTag;
++    children.Value.MVbin = newChildren;
 +
-+    mLastError = container->SetProps(1, &childs, &problems) ;
++    mLastError = container->SetProps(1, &children, &problems) ;
 +    if (HR_FAILED(mLastError))
 +    {
-+        PRINTF(("Cannot set childs %08x.\n", mLastError)) ;
++        PRINTF(("Cannot set children %08x.\n", mLastError)) ;
 +        return FALSE ;
 +    }
 +
@@ -4737,42 +4737,42 @@
 +    //update OUTLOOK_EMAIL_LIST1
 +    ULONG listTag=GetEmailPropertyTag(*(LPMAPIPROP*)&container,OUTLOOK_EMAIL_LIST1) | PT_MV_BINARY;
 +
-+    SBinaryArray oldChilds;
++    SBinaryArray oldChildren;
 +    LPSBinary    bins=NULL;
-+    SBinaryArray newChilds;
++    SBinaryArray newChildren;
 +    LPSPropValue oldChildValue = NULL ;
 +    ULONG valueCount = 0 ;
 +
-+    newChilds.lpbin=NULL;
++    newChildren.lpbin=NULL;
 +
 +    ULONG lDeleteEntry=0;
 +    ULONG newIndex=0;
 +    ULONG oldIndex=0;
 +    if (!GetMAPIProperties(aDistlist, &listTag, 1, oldChildValue, valueCount))
 +    {
-+        PRINTF(("Cannot get old childs %08x.\n", mLastError)) ;
++        PRINTF(("Cannot get old children %08x.\n", mLastError)) ;
 +        return FALSE;
 +    }
 +    
 +    if (! (oldChildValue->Value.l == MAPI_E_NOT_FOUND))
 +    {
-+        oldChilds = oldChildValue->Value.MVbin;
-+        newChilds.cValues=oldChilds.cValues - 1;
-+        mMAPIAllocateBuffer(sizeof(SBinary) * newChilds.cValues,(void**)& bins);
-+        newChilds.lpbin = bins;
-+        for (oldIndex=0;oldIndex<oldChilds.cValues;oldIndex++)
++        oldChildren = oldChildValue->Value.MVbin;
++        newChildren.cValues=oldChildren.cValues - 1;
++        mMAPIAllocateBuffer(sizeof(SBinary) * newChildren.cValues,(void**)& bins);
++        newChildren.lpbin = bins;
++        for (oldIndex=0;oldIndex<oldChildren.cValues;oldIndex++)
 +        {
-+            if ( oldChilds.lpbin[oldIndex].cb == aNewEntry.mByteCount &&
-+                !memcmp((void*)(oldChilds.lpbin[oldIndex].lpb+4),
++            if ( oldChildren.lpbin[oldIndex].cb == aNewEntry.mByteCount &&
++                !memcmp((void*)(oldChildren.lpbin[oldIndex].lpb+4),
 +                        (void*)(aNewEntry.mEntryId->ab),
-+                        oldChilds.lpbin[oldIndex].cb-4))
++                        oldChildren.lpbin[oldIndex].cb-4))
 +            {
 +                lDeleteEntry=oldIndex;
 +            }
 +            else
 +            {
-+                newChilds.lpbin[newIndex].lpb = oldChilds.lpbin[oldIndex].lpb;
-+                newChilds.lpbin[newIndex].cb = oldChilds.lpbin[oldIndex].cb;
++                newChildren.lpbin[newIndex].lpb = oldChildren.lpbin[oldIndex].lpb;
++                newChildren.lpbin[newIndex].cb = oldChildren.lpbin[oldIndex].cb;
 +                newIndex++;
 +            }
 +        }
@@ -4781,10 +4781,10 @@
 +        return FALSE;
 +
 +
-+    SPropValue childs;
++    SPropValue children;
 +    LPSPropProblemArray problems = NULL ;
 +    
-+    if (newChilds.cValues == 0)
++    if (newChildren.cValues == 0)
 +    {
 +        SPropTagArray delTags;
 +        delTags.cValues = 1;
@@ -4794,13 +4794,13 @@
 +    }
 +    else
 +    {
-+        childs.ulPropTag = listTag;
-+        childs.Value.MVbin = newChilds;
-+        mLastError = container->SetProps(1, &childs, &problems) ;
++        children.ulPropTag = listTag;
++        children.Value.MVbin = newChildren;
++        mLastError = container->SetProps(1, &children, &problems) ;
 +    }
 +
 +    if (HR_FAILED(mLastError)) {
-+        PRINTF(("Cannot set childs %08x.\n", mLastError)) ;
++        PRINTF(("Cannot set children %08x.\n", mLastError)) ;
 +        return FALSE ;
 +    }
 +
@@ -4808,37 +4808,37 @@
 +    listTag = GetEmailPropertyTag(*(LPMAPIPROP*)&container,OUTLOOK_EMAIL_LIST2) | PT_MV_BINARY;
 +    if (!GetMAPIProperties(aDistlist, &listTag, 1, oldChildValue, valueCount))
 +    {
-+        PRINTF(("Cannot get old childs %08x.\n", mLastError)) ;
++        PRINTF(("Cannot get old children %08x.\n", mLastError)) ;
 +        return FALSE;
 +    }
 +
 +    newIndex=0;
 +    if (! (oldChildValue->Value.l == MAPI_E_NOT_FOUND))
 +    {
-+        oldChilds = oldChildValue->Value.MVbin;
-+        newChilds.cValues=oldChilds.cValues - 1;
-+        mMAPIAllocateBuffer(sizeof(SBinary) * newChilds.cValues,(void**)& bins);
-+        newChilds.lpbin = bins;
-+        for (oldIndex=0;oldIndex<oldChilds.cValues;oldIndex++)
++        oldChildren = oldChildValue->Value.MVbin;
++        newChildren.cValues=oldChildren.cValues - 1;
++        mMAPIAllocateBuffer(sizeof(SBinary) * newChildren.cValues,(void**)& bins);
++        newChildren.lpbin = bins;
++        for (oldIndex=0;oldIndex<oldChildren.cValues;oldIndex++)
 +        {
 +            if (oldIndex != lDeleteEntry)
 +            {
-+                newChilds.lpbin[newIndex].lpb = oldChilds.lpbin[oldIndex].lpb;
-+                newChilds.lpbin[newIndex].cb = oldChilds.lpbin[oldIndex].cb;
++                newChildren.lpbin[newIndex].lpb = oldChildren.lpbin[oldIndex].lpb;
++                newChildren.lpbin[newIndex].cb = oldChildren.lpbin[oldIndex].cb;
 +                newIndex++;
 +            }
 +        }
 +    }
 +    else
 +    {
-+        newChilds.cValues = 1;
-+        mMAPIAllocateBuffer(sizeof(SBinary) * newChilds.cValues,(void**)& bins);
-+        newChilds.lpbin = bins;
++        newChildren.cValues = 1;
++        mMAPIAllocateBuffer(sizeof(SBinary) * newChildren.cValues,(void**)& bins);
++        newChildren.lpbin = bins;
 +    }
  
  
 +    
-+    if (newChilds.cValues == 0)
++    if (newChildren.cValues == 0)
 +    {
 +        SPropTagArray delTags;
 +        delTags.cValues = 1;
@@ -4848,12 +4848,12 @@
 +    }
 +    else
 +    {
-+        childs.ulPropTag = listTag;
-+        childs.Value.MVbin = newChilds;
-+        mLastError = container->SetProps(1, &childs, &problems) ;
++        children.ulPropTag = listTag;
++        children.Value.MVbin = newChildren;
++        mLastError = container->SetProps(1, &children, &problems) ;
 +    }
 +    if (HR_FAILED(mLastError)) {
-+        PRINTF(("Cannot set childs %08x.\n", mLastError)) ;
++        PRINTF(("Cannot set children %08x.\n", mLastError)) ;
 +        return FALSE ;
 +    }
 +

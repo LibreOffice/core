@@ -228,12 +228,12 @@ sal_Bool OutlinerView::PostKeyEvent( const KeyEvent& rKEvt, Window* pFrameWin )
                         if( !bSelection &&
                                 aSel.nEndPos == pOwner->pEditEngine->GetTextLen( aSel.nEndPara ) )
                         {
-                            sal_uLong nChilds = pOwner->pParaList->GetChildCount(pPara);
-                            if( nChilds && !pOwner->pParaList->HasVisibleChilds(pPara))
+                            sal_uLong nChildren = pOwner->pParaList->GetChildCount(pPara);
+                            if( nChildren && !pOwner->pParaList->HasVisibleChildren(pPara))
                             {
                                 pOwner->UndoActionStart( OLUNDO_INSERT );
                                 sal_uLong nTemp = aSel.nEndPara;
-                                nTemp += nChilds;
+                                nTemp += nChildren;
                                 nTemp++; // insert above next Non-Child
                                 pOwner->Insert( String(),nTemp,pPara->GetDepth());
                                 // Position the cursor
@@ -351,17 +351,17 @@ sal_Bool OutlinerView::MouseButtonDown( const MouseEvent& rMEvt )
     if ( eTarget == MouseBullet )
     {
         Paragraph* pPara = pOwner->pParaList->GetParagraph( nPara );
-        sal_Bool bHasChilds = (pPara && pOwner->pParaList->HasChilds(pPara));
+        sal_Bool bHasChildren = (pPara && pOwner->pParaList->HasChildren(pPara));
         if( rMEvt.GetClicks() == 1 )
         {
             sal_uLong nEndPara = nPara;
-            if ( bHasChilds && pOwner->pParaList->HasVisibleChilds(pPara) )
+            if ( bHasChildren && pOwner->pParaList->HasVisibleChildren(pPara) )
                 nEndPara += pOwner->pParaList->GetChildCount( pPara );
             // The selection is inverted, so that EditEngine does not scroll
             ESelection aSel((sal_uInt16)nEndPara, 0xffff,(sal_uInt16)nPara, 0 );
             pEditView->SetSelection( aSel );
         }
-        else if( rMEvt.GetClicks() == 2 && bHasChilds )
+        else if( rMEvt.GetClicks() == 2 && bHasChildren )
             ImpToggleExpand( pPara );
 
         aDDStartPosPix = rMEvt.GetPosPixel();
@@ -375,7 +375,7 @@ sal_Bool OutlinerView::MouseButtonDown( const MouseEvent& rMEvt )
         ESelection aSel( pEditView->GetSelection() );
         nPara = aSel.nStartPara;
         Paragraph* pPara = pOwner->pParaList->GetParagraph( nPara );
-        if( (pPara && pOwner->pParaList->HasChilds(pPara)) && pPara->HasFlag(PARAFLAG_ISPAGE) )
+        if( (pPara && pOwner->pParaList->HasChildren(pPara)) && pPara->HasFlag(PARAFLAG_ISPAGE) )
         {
             ImpToggleExpand( pPara );
         }
@@ -406,12 +406,12 @@ void OutlinerView::ImpToggleExpand( Paragraph* pPara )
 
     sal_uInt16 nPara = (sal_uInt16) pOwner->pParaList->GetAbsPos( pPara );
     pEditView->SetSelection( ESelection( nPara, 0, nPara, 0 ) );
-    ImplExpandOrCollaps( nPara, nPara, !pOwner->pParaList->HasVisibleChilds( pPara ) );
+    ImplExpandOrCollaps( nPara, nPara, !pOwner->pParaList->HasVisibleChildren( pPara ) );
     pEditView->ShowCursor();
 }
 
 sal_uLong OutlinerView::Select( Paragraph* pParagraph, sal_Bool bSelect,
-    sal_Bool bWithChilds )
+    sal_Bool bWithChildren )
 {
     DBG_CHKTHIS(OutlinerView,0);
 
@@ -421,7 +421,7 @@ sal_uLong OutlinerView::Select( Paragraph* pParagraph, sal_Bool bSelect,
         nEnd = 0xffff;
 
     sal_uLong nChildCount = 0;
-    if ( bWithChilds )
+    if ( bWithChildren )
         nChildCount = pOwner->pParaList->GetChildCount( pParagraph );
 
     ESelection aSel( (sal_uInt16)nPara, 0,(sal_uInt16)(nPara+nChildCount), nEnd );
@@ -460,7 +460,7 @@ void OutlinerView::SetAttribs( const SfxItemSet& rAttrs )
     pEditView->SetEditEngineUpdateMode( bUpdate );
 }
 
-ParaRange OutlinerView::ImpGetSelectedParagraphs( sal_Bool bIncludeHiddenChilds )
+ParaRange OutlinerView::ImpGetSelectedParagraphs( sal_Bool bIncludeHiddenChildren )
 {
     DBG_CHKTHIS( OutlinerView, 0 );
 
@@ -469,10 +469,10 @@ ParaRange OutlinerView::ImpGetSelectedParagraphs( sal_Bool bIncludeHiddenChilds 
     aParas.Adjust();
 
     // Record the  invisible Children of the last Parents in the selection
-    if ( bIncludeHiddenChilds )
+    if ( bIncludeHiddenChildren )
     {
         Paragraph* pLast = pOwner->pParaList->GetParagraph( aParas.nEndPara );
-        if ( pOwner->pParaList->HasHiddenChilds( pLast ) )
+        if ( pOwner->pParaList->HasHiddenChildren( pLast ) )
             aParas.nEndPara =
                 sal::static_int_cast< sal_uInt16 >(
                     aParas.nEndPara +

@@ -42,7 +42,7 @@
 class SdXMLGroupShapeContext : public SdXMLShapeContext
 {
     // the shape group this group is working on
-    com::sun::star::uno::Reference< com::sun::star::drawing::XShapes > mxChilds;
+    com::sun::star::uno::Reference< com::sun::star::drawing::XShapes > mxChildren;
 
 protected:
     void SetLocalShapesContext(com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rNew)

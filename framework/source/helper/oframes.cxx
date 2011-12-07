@@ -178,7 +178,7 @@ Sequence< css::uno::Reference< XFrame > > SAL_CALL OFrames::queryFrames( sal_Int
         if( m_bRecursiveSearchProtection == sal_False )
         {
             // This class is a helper for services, which must implement XFrames.
-            // His parent and childs are MY parent and childs to.
+            // His parent and children are MY parent and children to.
             // All searchflags are supported by this implementation!
             // If some flags should not be supported - don't call me with this flags!!!
 

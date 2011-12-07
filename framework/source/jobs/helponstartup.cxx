@@ -296,13 +296,13 @@ void SAL_CALL HelpOnStartup::disposing(const css::lang::EventObject& aEvent)
     try
     {
         css::uno::Reference< css::frame::XFramesSupplier >  xHelpRoot  (xHelp                 , css::uno::UNO_QUERY_THROW);
-        css::uno::Reference< css::container::XIndexAccess > xHelpChilds(xHelpRoot->getFrames(), css::uno::UNO_QUERY_THROW);
+        css::uno::Reference< css::container::XIndexAccess > xHelpChildren(xHelpRoot->getFrames(), css::uno::UNO_QUERY_THROW);
 
         css::uno::Reference< css::frame::XFrame >      xHelpChild  ;
         css::uno::Reference< css::frame::XController > xHelpView   ;
         css::uno::Reference< css::frame::XModel >      xHelpContent;
 
-        xHelpChilds->getByIndex(0) >>= xHelpChild;
+        xHelpChildren->getByIndex(0) >>= xHelpChild;
         if (xHelpChild.is())
             xHelpView = xHelpChild->getController();
         if (xHelpView.is())

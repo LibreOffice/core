@@ -311,8 +311,8 @@ private:
     /// pointer to internal representation
     SvxRectCtl*                         mpRepr;
 
-    /// array for all possible childs
-    SvxRectCtlChildAccessibleContext**  mpChilds;
+    /// array for all possible children
+    SvxRectCtlChildAccessibleContext**  mpChildren;
 
     /// client id in the AccessibleEventNotifier queue
     sal_uInt32 mnClientId;

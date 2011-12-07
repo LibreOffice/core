@@ -2715,7 +2715,7 @@ shell::notifyPropertyRemoved( std::list< PropertySetInfoChangeNotifier* >* liste
 std::vector< std::list< ContentEventNotifier* >* >* SAL_CALL
 shell::getContentExchangedEventListeners( const rtl::OUString aOldPrefix,
                                           const rtl::OUString aNewPrefix,
-                                          sal_Bool withChilds )
+                                          sal_Bool withChildren )
 {
 
     std::vector< std::list< ContentEventNotifier* >* >* aVectorOnHeap =
@@ -2730,7 +2730,7 @@ shell::getContentExchangedEventListeners( const rtl::OUString aOldPrefix,
     {
         osl::MutexGuard aGuard( m_aMutex );
 
-        if( ! withChilds )
+        if( ! withChildren )
         {
             aOldName = aOldPrefix;
             aNewName = aNewPrefix;
@@ -2756,7 +2756,7 @@ shell::getContentExchangedEventListeners( const rtl::OUString aOldPrefix,
             std::list< ContentEventNotifier* >* p = new std::list< ContentEventNotifier* >;
             std::list< ContentEventNotifier* >& listeners = *p;
 
-            if( withChilds )
+            if( withChildren )
             {
                 aOldName = oldChildList[j];
                 aNewName = newName( aNewPrefix,aOldPrefix,aOldName );
@@ -2885,7 +2885,7 @@ void SAL_CALL shell::notifyPropertyChanges( std::list< PropertyChangeNotifier* >
 
 void SAL_CALL
 shell::erasePersistentSet( const rtl::OUString& aUnqPath,
-                           sal_Bool withChilds )
+                           sal_Bool withChildren )
 {
     if( ! m_xFileRegistry.is() )
     {
@@ -2895,23 +2895,23 @@ shell::erasePersistentSet( const rtl::OUString& aUnqPath,
 
     uno::Sequence< rtl::OUString > seqNames;
 
-    if( withChilds )
+    if( withChildren )
     {
         uno::Reference< container::XNameAccess > xName( m_xFileRegistry,uno::UNO_QUERY );
         seqNames = xName->getElementNames();
     }
 
-    sal_Int32 count = withChilds ? seqNames.getLength() : 1;
+    sal_Int32 count = withChildren ? seqNames.getLength() : 1;
 
     rtl::OUString
         old_Name = aUnqPath;
 
     for( sal_Int32 j = 0; j < count; ++j )
     {
-        if( withChilds  && ! ( isChild( old_Name,seqNames[j] ) ) )
+        if( withChildren  && ! ( isChild( old_Name,seqNames[j] ) ) )
             continue;
 
-        if( withChilds )
+        if( withChildren )
         {
             old_Name = seqNames[j];
         }
@@ -2948,7 +2948,7 @@ shell::erasePersistentSet( const rtl::OUString& aUnqPath,
 void SAL_CALL
 shell::copyPersistentSet( const rtl::OUString& srcUnqPath,
                           const rtl::OUString& dstUnqPath,
-                          sal_Bool withChilds )
+                          sal_Bool withChildren )
 {
     if( ! m_xFileRegistry.is() )
     {
@@ -2958,13 +2958,13 @@ shell::copyPersistentSet( const rtl::OUString& srcUnqPath,
 
     uno::Sequence< rtl::OUString > seqNames;
 
-    if( withChilds )
+    if( withChildren )
     {
         uno::Reference< container::XNameAccess > xName( m_xFileRegistry,uno::UNO_QUERY );
         seqNames = xName->getElementNames();
     }
 
-    sal_Int32 count = withChilds ? seqNames.getLength() : 1;
+    sal_Int32 count = withChildren ? seqNames.getLength() : 1;
 
     rtl::OUString
         old_Name = srcUnqPath,
@@ -2972,10 +2972,10 @@ shell::copyPersistentSet( const rtl::OUString& srcUnqPath,
 
     for( sal_Int32 j = 0; j < count; ++j )
     {
-        if( withChilds  && ! ( isChild( srcUnqPath,seqNames[j] ) ) )
+        if( withChildren  && ! ( isChild( srcUnqPath,seqNames[j] ) ) )
             continue;
 
-        if( withChilds )
+        if( withChildren )
         {
             old_Name = seqNames[j];
             new_Name = newName( dstUnqPath,srcUnqPath,old_Name );

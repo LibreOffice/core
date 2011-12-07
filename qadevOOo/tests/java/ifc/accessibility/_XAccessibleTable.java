@@ -383,7 +383,7 @@ public class _XAccessibleTable extends MultiMethodTest {
 
     /**
      * If the interface <code>XAccessibleSelection</code> is supported by
-     * the component than selects all accessible childs.
+     * the component than selects all accessible children.
      * Calls the method and checks a returned sequence.
      * Has OK status if a returned sequince is in ascending order.
      * The following method tests are to be executed before:
@@ -432,7 +432,7 @@ public class _XAccessibleTable extends MultiMethodTest {
 
     /**
      * If the interface <code>XAccessibleSelection</code> is supported by
-     * the component than selects all accessible childs.
+     * the component than selects all accessible children.
      * Calls the method and checks a returned sequence.
      * Has OK status if a returned sequince is in ascending order.
      * The following method tests are to be executed before:
@@ -483,7 +483,7 @@ public class _XAccessibleTable extends MultiMethodTest {
     /**
      * Calls the method with invalid indexes.
      * If the interface <code>XAccessibleSelection</code> is supported by
-     * the component than selects all accessible childs.
+     * the component than selects all accessible children.
      * Calls the method for every row and checks returned values.
      * The following method tests are to be executed before:
      * <ul>
@@ -545,7 +545,7 @@ public class _XAccessibleTable extends MultiMethodTest {
     /**
      * Calls the method with invalid indexes.
      * If the interface <code>XAccessibleSelection</code> is supported by
-     * the component than selects all accessible childs.
+     * the component than selects all accessible children.
      * Calls the method for every column and checks returned values.
      * The following method tests are to be executed before:
      * <ul>

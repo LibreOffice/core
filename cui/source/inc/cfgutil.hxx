@@ -182,7 +182,7 @@ class SfxConfigGroupListBox_Impl : public SvTreeListBox
     SfxStylesInfo_Impl* pStylesInfo;
 
 protected:
-    virtual void        RequestingChilds( SvLBoxEntry *pEntry);
+    virtual void        RequestingChildren( SvLBoxEntry *pEntry);
     using SvListView::Expand;
     virtual sal_Bool        Expand( SvLBoxEntry* pParent );
 

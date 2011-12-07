@@ -217,7 +217,7 @@ void TableListFacade::updateTableObjectList( bool _bAllowViews )
 
         m_rTableList.UpdateTableList( m_xConnection, sTables, sViews );
         SvLBoxEntry* pEntry = m_rTableList.First();
-        while( pEntry && m_rTableList.GetModel()->HasChilds( pEntry ) )
+        while( pEntry && m_rTableList.GetModel()->HasChildren( pEntry ) )
         {
             m_rTableList.Expand( pEntry );
             pEntry = m_rTableList.Next( pEntry );
@@ -235,7 +235,7 @@ void TableListFacade::updateTableObjectList( bool _bAllowViews )
 bool TableListFacade::isLeafSelected() const
 {
     SvLBoxEntry* pEntry = m_rTableList.FirstSelected();
-    return pEntry && !m_rTableList.GetModel()->HasChilds( pEntry );
+    return pEntry && !m_rTableList.GetModel()->HasChildren( pEntry );
 }
 
 //==============================================================================
@@ -335,7 +335,7 @@ String QueryListFacade::getSelectedName( String& _out_rAliasName ) const
 bool QueryListFacade::isLeafSelected() const
 {
     SvLBoxEntry* pEntry = m_rQueryList.FirstSelected();
-    return pEntry && !m_rQueryList.GetModel()->HasChilds( pEntry );
+    return pEntry && !m_rQueryList.GetModel()->HasChildren( pEntry );
 }
 
 //==============================================================================

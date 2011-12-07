@@ -279,7 +279,7 @@ void Outliner::SetMaxAutoPaperSize( const Size& rSz )
 sal_Bool Outliner::IsExpanded( Paragraph* pPara ) const
 {
     DBG_CHKTHIS(Outliner,0);
-    return pParaList->HasVisibleChilds( pPara );
+    return pParaList->HasVisibleChildren( pPara );
 }
 
 Paragraph* Outliner::GetParent( Paragraph* pParagraph ) const

@@ -307,22 +307,22 @@ public class FileHelper
         if (!aDirectory.isDirectory())
             throw new java.io.FileNotFoundException("\""+aDirectory.toString()+"\" is not a directory.");
 
-        java.io.File[] lChilds = aDirectory.listFiles();
-        for (int f=0; f<lChilds.length; ++f)
+        java.io.File[] lChildren = aDirectory.listFiles();
+        for (int f=0; f<lChildren.length; ++f)
         {
-            if (lChilds[f].isDirectory())
+            if (lChildren[f].isDirectory())
             {
-                FileHelper.makeDirectoryEmpty(lChilds[f], bFilesOnly);
+                FileHelper.makeDirectoryEmpty(lChildren[f], bFilesOnly);
                 if (!bFilesOnly)
                 {
-                    if (!lChilds[f].delete())
-                        throw new java.io.IOException("\""+lChilds[f].toString()+"\" could not be deleted.");
+                    if (!lChildren[f].delete())
+                        throw new java.io.IOException("\""+lChildren[f].toString()+"\" could not be deleted.");
                 }
             }
             else
             {
-                if (!lChilds[f].delete())
-                    throw new java.io.IOException("\""+lChilds[f].toString()+"\" could not be deleted.");
+                if (!lChildren[f].delete())
+                    throw new java.io.IOException("\""+lChildren[f].toString()+"\" could not be deleted.");
             }
         }
     }

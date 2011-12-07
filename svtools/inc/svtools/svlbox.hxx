@@ -172,10 +172,10 @@ public:
 };
 
 // Flags, die am Model haengen
-#define SV_ENTRYFLAG_CHILDS_ON_DEMAND   0x0001
+#define SV_ENTRYFLAG_CHILDREN_ON_DEMAND   0x0001
 #define SV_ENTRYFLAG_DISABLE_DROP       0x0002
 #define SV_ENTRYFLAG_IN_USE             0x0004
-// wird gesetzt, wenn RequestingChilds keine Childs gestzt hat
+// wird gesetzt, wenn RequestingChildren keine Children gestzt hat
 #define SV_ENTRYFLAG_NO_NODEBMP         0x0008
 // Eintrag hatte oder hat Kinder
 #define SV_ENTRYFLAG_HAD_CHILDREN       0x0010
@@ -208,8 +208,8 @@ public:
     void*       GetUserData() const { return pUserData; }
     void        SetUserData( void* pPtr ) { pUserData = pPtr; }
     virtual void Clone( SvListEntry* pSource );
-    void        EnableChildsOnDemand( sal_Bool bEnable=sal_True );
-    sal_Bool        HasChildsOnDemand() const { return (sal_Bool)((nEntryFlags & SV_ENTRYFLAG_CHILDS_ON_DEMAND)!=0); }
+    void        EnableChildrenOnDemand( sal_Bool bEnable=sal_True );
+    sal_Bool        HasChildrenOnDemand() const { return (sal_Bool)((nEntryFlags & SV_ENTRYFLAG_CHILDREN_ON_DEMAND)!=0); }
     sal_Bool        HasInUseEmphasis() const    { return (sal_Bool)((nEntryFlags & SV_ENTRYFLAG_IN_USE)!=0); }
 
     sal_uInt16      GetFlags() const { return nEntryFlags; }
@@ -307,7 +307,7 @@ protected:
     sal_Bool            CheckDragAndDropMode( SvLBox* pSource, sal_Int8 );
     void            ImplShowTargetEmphasis( SvLBoxEntry* pEntry, sal_Bool bShow);
     void            EnableSelectionAsDropTarget( sal_Bool bEnable = sal_True,
-                                                 sal_Bool bWithChilds = sal_True );
+                                                 sal_Bool bWithChildren = sal_True );
     // standard impl gibt 0 zurueck; muss von abgeleiteten Klassen, die
     // D&D unterstuetzen, ueberladen werden
     using Window::GetDropTarget;
@@ -481,7 +481,7 @@ public:
     virtual sal_Bool    Expand( SvLBoxEntry* pParent );
     virtual sal_Bool    Collapse( SvLBoxEntry* pParent );
     virtual sal_Bool    Select( SvLBoxEntry* pEntry, sal_Bool bSelect=sal_True );
-    virtual sal_uLong   SelectChilds( SvLBoxEntry* pParent, sal_Bool bSelect );
+    virtual sal_uLong   SelectChildren( SvLBoxEntry* pParent, sal_Bool bSelect );
     virtual void    SelectAll( sal_Bool bSelect, sal_Bool bPaint=sal_True );
 
     virtual void    SetCurEntry( SvLBoxEntry* _pEntry ) = 0;
@@ -508,8 +508,8 @@ public:
     SvLBoxItem*     GetHdlItem() const;
 
     // wird aufgerufen, wenn ein Eintrag mit gesetztem
-    // ENTRYFLAG_CHILDS_ON_DEMAND expandiert wird.
-    virtual void RequestingChilds( SvLBoxEntry* pParent );
+    // ENTRYFLAG_CHILDREN_ON_DEMAND expandiert wird.
+    virtual void RequestingChildren( SvLBoxEntry* pParent );
 
     // Drag & Drop
 

@@ -68,7 +68,7 @@ void SdMoveStyleSheetsUndoAction::Undo()
             pPool->Insert((*iter).get());
         }
 
-        // now assign the childs again
+        // now assign the children again
         std::vector< SdStyleSheetVector >::iterator childlistiter( maListOfChildLists.begin() );
         for(SdStyleSheetVector::iterator iter = maStyles.begin(); iter != maStyles.end(); ++iter, ++childlistiter )
         {

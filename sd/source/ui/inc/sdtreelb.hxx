@@ -150,7 +150,7 @@ protected:
     virtual sal_Int8        AcceptDrop( const AcceptDropEvent& rEvt );
     virtual sal_Int8        ExecuteDrop( const ExecuteDropEvent& rEvt );
 
-    virtual void            RequestingChilds( SvLBoxEntry* pParent );
+    virtual void            RequestingChildren( SvLBoxEntry* pParent );
 
     void                    DoDrag();
     void                    OnDragFinished( sal_uInt8 nDropAction );
@@ -203,7 +203,7 @@ public:
     void                    SetShowAllShapes (const bool bShowAllShapes, const bool bFill);
     bool                    GetShowAllShapes (void) const;
     sal_Bool                    IsEqualToDoc( const SdDrawDocument* pInDoc = NULL );
-    sal_Bool                    HasSelectedChilds( const String& rName );
+    sal_Bool                    HasSelectedChildren( const String& rName );
     sal_Bool                    SelectEntry( const String& rName );
     String                  GetSelectEntry();
     List*                   GetSelectEntryList( sal_uInt16 nDepth );

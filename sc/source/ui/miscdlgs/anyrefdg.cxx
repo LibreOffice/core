@@ -114,7 +114,7 @@ void ScFormulaReferenceHelper::enableInput( sal_Bool bEnable )
                         if(pParent)
                         {
                             pParent->EnableInput(bEnable,sal_True /* sal_False */);
-                            if(sal_True /*bChilds*/)
+                            if(sal_True /*bChildren*/)
                                 pViewSh->EnableRefInput(bEnable);
                         }
                     }
@@ -578,7 +578,7 @@ void ScFormulaReferenceHelper::ViewShellChanged(ScTabViewShell* /* pScViewShell 
 
     EnableSpreadsheets();
 }
-void ScFormulaReferenceHelper::EnableSpreadsheets(sal_Bool bFlag, sal_Bool bChilds)
+void ScFormulaReferenceHelper::EnableSpreadsheets(sal_Bool bFlag, sal_Bool bChildren)
 {
     TypeId aType(TYPE(ScDocShell));
     ScDocShell* pDocShell = (ScDocShell*)SfxObjectShell::GetFirst(&aType);
@@ -601,7 +601,7 @@ void ScFormulaReferenceHelper::EnableSpreadsheets(sal_Bool bFlag, sal_Bool bChil
                         if(pParent)
                         {
                             pParent->EnableInput(bFlag,false);
-                            if(bChilds)
+                            if(bChildren)
                                 pViewSh->EnableRefInput(bFlag);
                         }
                     }

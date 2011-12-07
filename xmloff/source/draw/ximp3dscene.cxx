@@ -131,9 +131,9 @@ void SdXML3DSceneShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
     {
         SetStyle();
 
-        mxChilds = uno::Reference< drawing::XShapes >::query( mxShape );
-        if( mxChilds.is() )
-            GetImport().GetShapeImport()->pushGroupForSorting( mxChilds );
+        mxChildren = uno::Reference< drawing::XShapes >::query( mxShape );
+        if( mxChildren.is() )
+            GetImport().GetShapeImport()->pushGroupForSorting( mxChildren );
 
         SetLayer();
 
@@ -172,7 +172,7 @@ void SdXML3DSceneShapeContext::EndElement()
             setSceneAttributes( xPropSet );
         }
 
-        if( mxChilds.is() )
+        if( mxChildren.is() )
             GetImport().GetShapeImport()->popGroupAndSort();
 
         // call parent
@@ -209,7 +209,7 @@ SvXMLImportContext* SdXML3DSceneShapeContext::CreateChildContext( sal_uInt16 nPr
     if(!pContext)
     {
         pContext = GetImport().GetShapeImport()->Create3DSceneChildContext(
-            GetImport(), nPrefix, rLocalName, xAttrList, mxChilds);
+            GetImport(), nPrefix, rLocalName, xAttrList, mxChildren);
         }
 
     // call parent when no own context was created

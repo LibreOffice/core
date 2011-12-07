@@ -499,7 +499,7 @@ namespace basprov
             const ::rtl::OUString* pLibNames = aLibNames.getConstArray();
             aChildNodes.realloc( nLibCount );
             Reference< browse::XBrowseNode >* pChildNodes = aChildNodes.getArray();
-            sal_Int32 childsFound = 0;
+            sal_Int32 childrenFound = 0;
 
             for ( sal_Int32 i = 0 ; i < nLibCount ; ++i )
             {
@@ -516,13 +516,13 @@ namespace basprov
                 }
                 if ( bCreate )
                 {
-                    pChildNodes[childsFound++] = static_cast< browse::XBrowseNode* >( new BasicLibraryNodeImpl(
+                    pChildNodes[childrenFound++] = static_cast< browse::XBrowseNode* >( new BasicLibraryNodeImpl(
                         m_xContext, m_sScriptingContext, pBasicManager, xLibContainer, pLibNames[i], m_bIsAppScriptCtx ) );
                 }
             }
 
-            if ( childsFound != nLibCount )
-                aChildNodes.realloc( childsFound );
+            if ( childrenFound != nLibCount )
+                aChildNodes.realloc( childrenFound );
         }
 
         return aChildNodes;

@@ -54,7 +54,7 @@ class SwDrawView : public FmFormView
 
         @param <_rParentObj>
         input parameter - 'parent' object, for which the maximal order number
-        for its 'childs' will be determined.
+        for its 'children' will be determined.
 
         @param <_pExclChildObj>
         optional input parameter - 'child' object, which will not be considered
@@ -70,9 +70,9 @@ class SwDrawView : public FmFormView
         input parameter - moved object, for which the 'repeated' ones have also
         to be moved.
 
-        @param <_rMovedChildsObjs>
+        @param <_rMovedChildrenObjs>
         input parameter - data collection of moved 'child' objects - the 'repeated'
-        ones of these 'childs' will also been moved.
+        ones of these 'children' will also been moved.
     */
     void _MoveRepeatedObjs( const SwAnchoredObject& _rMovedAnchoredObj,
                             const std::vector<SdrObject*>& _rMovedChildObjs ) const;

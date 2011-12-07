@@ -520,7 +520,7 @@ void SwEditRegionDlg::RecurseList( const SwSectionFmt* pFmt, SvLBoxEntry* pEntry
                 pEntry = aTree.InsertEntry(pSect->GetSectionName(), aImg, aImg);
                 pEntry->SetUserData(pSectRepr);
                 RecurseList( pFmt, pEntry );
-                if (pEntry->HasChilds())
+                if (pEntry->HasChildren())
                     aTree.Expand(pEntry);
                 if (pCurrSect==pSect)
                     aTree.Select(pEntry);
@@ -551,7 +551,7 @@ void SwEditRegionDlg::RecurseList( const SwSectionFmt* pFmt, SvLBoxEntry* pEntry
                         pSect->GetSectionName(), aImage, aImage, pEntry);
                     pNEntry->SetUserData(pSectRepr);
                     RecurseList( aTmpArr[n]->GetFmt(), pNEntry );
-                    if( pNEntry->HasChilds())
+                    if( pNEntry->HasChildren())
                         aTree.Expand(pNEntry);
                     if (pCurrSect==pSect)
                         pSelEntry = pNEntry;

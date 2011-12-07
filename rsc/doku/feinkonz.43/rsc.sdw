@@ -1949,7 +1949,7 @@ MODELESSDIALOG DLG_PROTOTYPE
 	CLOSEABLE	= TRUE;
 
 	// Diese Objekte werden automatisch angezeigt.
-	WinChilds =
+	WinChildren =
 	{
 		PUSHBUTTON
 		{
@@ -1989,7 +1989,7 @@ MODELESSDIALOG DLG_PROTOTYPE
 
 	// Ueber solche Konstruktionen koennen Objekte in der
 	// Resource automatisch angezeigt werden.
-	WinChilds =
+	WinChildren =
 	{
 		MODELESSDIALOG , DLG_PROTOTYPE;
 	};
@@ -3186,7 +3186,7 @@ abgeleiteten Klassen zu lesen.
 		Closeable		= TRUE;
 		App			= TRUE;
 		OutputSize		= TRUE;
-		WinChilds	=
+		WinChildren	=
 		{
 			FText
 			{

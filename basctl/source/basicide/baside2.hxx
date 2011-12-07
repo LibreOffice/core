@@ -225,7 +225,7 @@ public:
     WatchTreeListBox( Window* pParent, WinBits nWinBits );
     ~WatchTreeListBox();
 
-    void            RequestingChilds( SvLBoxEntry * pParent );
+    void            RequestingChildren( SvLBoxEntry * pParent );
     void            UpdateWatches( bool bBasicStopped = false );
 
     using           SvTabListBox::SetTabs;

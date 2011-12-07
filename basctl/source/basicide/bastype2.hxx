@@ -159,7 +159,7 @@ private:
     void            SetEntryBitmaps( SvLBoxEntry * pEntry, const Image& rImage );
 
 protected:
-    virtual void            RequestingChilds( SvLBoxEntry* pParent );
+    virtual void            RequestingChildren( SvLBoxEntry* pParent );
     virtual void            ExpandedHdl();
     virtual SvLBoxEntry*    CloneEntry( SvLBoxEntry* pSource );
     virtual long            ExpandingHdl();

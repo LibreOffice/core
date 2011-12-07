@@ -234,7 +234,7 @@ private:
 
     EDITENG_DLLPRIVATE sal_uLong       ImpCheckMousePos( const Point& rPosPixel, MouseTarget& reTarget);
     EDITENG_DLLPRIVATE void        ImpToggleExpand( Paragraph* pParentPara );
-    EDITENG_DLLPRIVATE ParaRange    ImpGetSelectedParagraphs( sal_Bool bIncludeHiddenChilds );
+    EDITENG_DLLPRIVATE ParaRange    ImpGetSelectedParagraphs( sal_Bool bIncludeHiddenChildren );
 
     EDITENG_DLLPRIVATE Pointer     ImpGetMousePointer( MouseTarget eTarget );
     EDITENG_DLLPRIVATE sal_uInt16      ImpInitPaste( sal_uLong& rStart );
@@ -279,7 +279,7 @@ public:
     // Retruns the number of selected paragraphs
     sal_uLong       Select( Paragraph* pParagraph,
                     sal_Bool bSelect=sal_True,
-                    sal_Bool bWChilds=sal_True);
+                    sal_Bool bWChildren=sal_True);
 
     String      GetSelected() const;
     void        SelectRange( sal_uLong nFirst, sal_uInt16 nCount );
@@ -626,7 +626,7 @@ class EDITENG_DLLPUBLIC Outliner : public SfxBroadcaster
     sal_Bool                    ImplHasBullet( sal_uInt16 nPara ) const;
     Size                    ImplGetBulletSize( sal_uInt16 nPara );
     sal_uInt16              ImplGetNumbering( sal_uInt16 nPara, const SvxNumberFormat* pParaFmt );
-    void                    ImplCalcBulletText( sal_uInt16 nPara, sal_Bool bRecalcLevel, sal_Bool bRecalcChilds );
+    void                    ImplCalcBulletText( sal_uInt16 nPara, sal_Bool bRecalcLevel, sal_Bool bRecalcChildren );
     String                  ImplGetBulletText( sal_uInt16 nPara );
     void                    ImplCheckNumBulletItem( sal_uInt16 nPara );
     void                    ImplInitDepth( sal_uInt16 nPara, sal_Int16 nDepth, sal_Bool bCreateUndo, sal_Bool bUndoAction = sal_False );
@@ -733,7 +733,7 @@ public:
     Paragraph*      GetParagraph( sal_uLong nAbsPos ) const;
 
     sal_Bool            HasParent( Paragraph* pParagraph ) const;
-    sal_Bool            HasChilds( Paragraph* pParagraph ) const;
+    sal_Bool            HasChildren( Paragraph* pParagraph ) const;
     sal_uLong           GetChildCount( Paragraph* pParent ) const;
     sal_Bool            IsExpanded( Paragraph* pPara ) const;
     Paragraph*          GetParent( Paragraph* pParagraph ) const;

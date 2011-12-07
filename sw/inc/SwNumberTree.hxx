@@ -270,7 +270,7 @@ public:
        Invalidate this node and all its descendants.
 
        All iterators holding the last valid node in the according list
-       of childs are set to the end of this list, thereby stating all
+       of children are set to the end of this list, thereby stating all
        children in the list are invalid.
        #i83479# - made public
      */

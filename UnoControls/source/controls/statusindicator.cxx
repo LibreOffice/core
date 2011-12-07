@@ -418,7 +418,7 @@ void SAL_CALL StatusIndicator::setPosSize (
         // calc new layout for controls
         impl_recalcLayout ( WindowEvent(static_cast< OWeakObject* >(this),0,0,nWidth,nHeight,0,0,0,0) ) ;
         // clear background (!)
-        // [Childs was repainted in "recalcLayout" by setPosSize() automaticly!]
+        // [Children were repainted in "recalcLayout" by setPosSize() automaticly!]
         getPeer()->invalidate(2);
         // and repaint the control
         impl_paint ( 0, 0, impl_getGraphicsPeer() ) ;

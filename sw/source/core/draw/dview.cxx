@@ -583,8 +583,8 @@ void SwDrawView::ObjOrderChanged( SdrObject* pObj, sal_uLong nOldPos,
         }
     }
 
-    // On move forward, assure that object is moved before its own childs.
-    // Only Writer fly frames can have childs.
+    // On move forward, assure that object is moved before its own children.
+    // Only Writer fly frames can have children.
     if ( pMovedAnchoredObj->ISA(SwFlyFrm) &&
          bMovedForward && nNewPos < nObjCount - 1 )
     {
@@ -655,7 +655,7 @@ void SwDrawView::ObjOrderChanged( SdrObject* pObj, sal_uLong nOldPos,
     // setup collection of moved 'child' objects to move its 'repeated' objects.
     std::vector< SdrObject* > aMovedChildObjs;
 
-    // move 'childs' accordingly
+    // move 'children' accordingly
     if ( pMovedAnchoredObj->ISA(SwFlyFrm) )
     {
         const SwFlyFrm* pFlyFrm = static_cast<SwFlyFrm*>(pMovedAnchoredObj);

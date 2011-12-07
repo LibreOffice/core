@@ -166,7 +166,7 @@ void SAL_CALL BaseContainerControl::createPeer( const   Reference< XToolkit >&  
         // create own peer
         BaseControl::createPeer( xToolkit, xParent );
 
-        // create peers at all childs
+        // create peers at all children
         Sequence< Reference< XControl > >   seqControlList  = getControls();
         sal_uInt32                          nControls       = seqControlList.getLength();
 

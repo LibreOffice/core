@@ -352,7 +352,7 @@ private:
     double  mfIterateInterval;
 
     /** sorted list of child nodes for XTimeContainer*/
-    ChildList_t             maChilds;
+    ChildList_t             maChildren;
 };
 
 // ====================================================================
@@ -360,7 +360,7 @@ private:
 class TimeContainerEnumeration : public ::cppu::WeakImplHelper1< XEnumeration >
 {
 public:
-    TimeContainerEnumeration( const ChildList_t &rChilds );
+    TimeContainerEnumeration( const ChildList_t &rChildren );
     virtual ~TimeContainerEnumeration();
 
     // Methods
@@ -369,7 +369,7 @@ public:
 
 private:
     /** sorted list of child nodes */
-    ChildList_t             maChilds;
+    ChildList_t             maChildren;
 
     /** current iteration position */
     ChildList_t::iterator   maIter;
@@ -378,10 +378,10 @@ private:
     Mutex                   maMutex;
 };
 
-TimeContainerEnumeration::TimeContainerEnumeration( const ChildList_t &rChilds )
-: maChilds( rChilds )
+TimeContainerEnumeration::TimeContainerEnumeration( const ChildList_t &rChildren )
+: maChildren( rChildren )
 {
-    maIter = maChilds.begin();
+    maIter = maChildren.begin();
 }
 
 TimeContainerEnumeration::~TimeContainerEnumeration()
@@ -393,7 +393,7 @@ sal_Bool SAL_CALL TimeContainerEnumeration::hasMoreElements() throw (RuntimeExce
 {
     Guard< Mutex > aGuard( maMutex );
 
-    return maIter != maChilds.end();
+    return maIter != maChildren.end();
 }
 
 Any SAL_CALL TimeContainerEnumeration::nextElement()
@@ -401,7 +401,7 @@ Any SAL_CALL TimeContainerEnumeration::nextElement()
 {
     Guard< Mutex > aGuard( maMutex );
 
-    if( maIter == maChilds.end() )
+    if( maIter == maChildren.end() )
         throw NoSuchElementException();
 
     return makeAny( (*maIter++) );
@@ -1178,13 +1178,13 @@ Reference< XCloneable > SAL_CALL AnimationNode::createClone() throw (RuntimeExce
     {
         xNewNode = new AnimationNode( *this );
 
-        if( maChilds.size() )
+        if( maChildren.size() )
         {
             Reference< XTimeContainer > xContainer( xNewNode, UNO_QUERY );
             if( xContainer.is() )
             {
-                ChildList_t::iterator aIter( maChilds.begin() );
-                ChildList_t::iterator aEnd( maChilds.end() );
+                ChildList_t::iterator aIter( maChildren.begin() );
+                ChildList_t::iterator aEnd( maChildren.end() );
                 while( aIter != aEnd )
                 {
                     Reference< XCloneable > xCloneable((*aIter++), UNO_QUERY );
@@ -1813,7 +1813,7 @@ Type SAL_CALL AnimationNode::getElementType() throw (RuntimeException)
 sal_Bool SAL_CALL AnimationNode::hasElements() throw (RuntimeException)
 {
     Guard< Mutex > aGuard( maMutex );
-    return !maChilds.empty();
+    return !maChildren.empty();
 }
 
 // --------------------------------------------------------------------
@@ -1824,7 +1824,7 @@ Reference< XEnumeration > SAL_CALL AnimationNode::createEnumeration()
 {
     Guard< Mutex > aGuard( maMutex );
 
-    return new TimeContainerEnumeration( maChilds);
+    return new TimeContainerEnumeration( maChildren);
 }
 
 // --------------------------------------------------------------------
@@ -1839,14 +1839,14 @@ Reference< XAnimationNode > SAL_CALL AnimationNode::insertBefore( const Referenc
     if( !newChild.is() || !refChild.is() )
         throw IllegalArgumentException();
 
-    ChildList_t::iterator before = ::std::find(maChilds.begin(), maChilds.end(), refChild);
-    if( before == maChilds.end() )
+    ChildList_t::iterator before = ::std::find(maChildren.begin(), maChildren.end(), refChild);
+    if( before == maChildren.end() )
         throw NoSuchElementException();
 
-    if( ::std::find(maChilds.begin(), maChilds.end(), newChild) != maChilds.end() )
+    if( ::std::find(maChildren.begin(), maChildren.end(), newChild) != maChildren.end() )
         throw ElementExistException();
 
-    maChilds.insert( before, newChild );
+    maChildren.insert( before, newChild );
 
     Reference< XInterface > xThis( static_cast< OWeakObject * >(this) );
     newChild->setParent( xThis );
@@ -1865,18 +1865,18 @@ Reference< XAnimationNode > SAL_CALL AnimationNode::insertAfter( const Reference
     if( !newChild.is() || !refChild.is() )
         throw IllegalArgumentException();
 
-    ChildList_t::iterator before = ::std::find(maChilds.begin(), maChilds.end(), refChild);
-    if( before == maChilds.end() )
+    ChildList_t::iterator before = ::std::find(maChildren.begin(), maChildren.end(), refChild);
+    if( before == maChildren.end() )
         throw NoSuchElementException();
 
-    if( ::std::find(maChilds.begin(), maChilds.end(), newChild) != maChilds.end() )
+    if( ::std::find(maChildren.begin(), maChildren.end(), newChild) != maChildren.end() )
         throw ElementExistException();
 
     ++before;
-    if( before != maChilds.end() )
-        maChilds.insert( before, newChild );
+    if( before != maChildren.end() )
+        maChildren.insert( before, newChild );
     else
-        maChilds.push_back( newChild );
+        maChildren.push_back( newChild );
 
     Reference< XInterface > xThis( static_cast< OWeakObject * >(this) );
     newChild->setParent( xThis );
@@ -1895,11 +1895,11 @@ Reference< XAnimationNode > SAL_CALL AnimationNode::replaceChild( const Referenc
     if( !newChild.is() || !oldChild.is() )
         throw IllegalArgumentException();
 
-    ChildList_t::iterator replace = ::std::find(maChilds.begin(), maChilds.end(), oldChild);
-    if( replace == maChilds.end() )
+    ChildList_t::iterator replace = ::std::find(maChildren.begin(), maChildren.end(), oldChild);
+    if( replace == maChildren.end() )
         throw NoSuchElementException();
 
-    if( ::std::find(maChilds.begin(), maChilds.end(), newChild) != maChilds.end() )
+    if( ::std::find(maChildren.begin(), maChildren.end(), newChild) != maChildren.end() )
         throw ElementExistException();
 
     Reference< XInterface > xNull( 0 );
@@ -1924,14 +1924,14 @@ Reference< XAnimationNode > SAL_CALL AnimationNode::removeChild( const Reference
     if( !oldChild.is() )
         throw IllegalArgumentException();
 
-    ChildList_t::iterator old = ::std::find(maChilds.begin(), maChilds.end(), oldChild);
-    if( old == maChilds.end() )
+    ChildList_t::iterator old = ::std::find(maChildren.begin(), maChildren.end(), oldChild);
+    if( old == maChildren.end() )
         throw NoSuchElementException();
 
     Reference< XInterface > xNull( 0 );
     oldChild->setParent( xNull );
 
-    maChilds.erase( old );
+    maChildren.erase( old );
 
     return oldChild;
 }
@@ -1947,7 +1947,7 @@ Reference< XAnimationNode > SAL_CALL AnimationNode::appendChild( const Reference
     if( !newChild.is() )
         throw IllegalArgumentException();
 
-    if( ::std::find(maChilds.begin(), maChilds.end(), newChild) != maChilds.end() )
+    if( ::std::find(maChildren.begin(), maChildren.end(), newChild) != maChildren.end() )
         throw ElementExistException();
 
     Reference< XInterface > xThis( static_cast< OWeakObject * >(this) );
@@ -1956,7 +1956,7 @@ Reference< XAnimationNode > SAL_CALL AnimationNode::appendChild( const Reference
     if( xThis == xChild )
         throw IllegalArgumentException();
 
-    maChilds.push_back( newChild );
+    maChildren.push_back( newChild );
 
     newChild->setParent( xThis );
 

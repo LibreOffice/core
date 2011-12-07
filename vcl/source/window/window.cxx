@@ -119,8 +119,8 @@ DBG_NAME( Window )
 
 #define IMPL_PAINT_PAINT            ((sal_uInt16)0x0001)
 #define IMPL_PAINT_PAINTALL         ((sal_uInt16)0x0002)
-#define IMPL_PAINT_PAINTALLCHILDS   ((sal_uInt16)0x0004)
-#define IMPL_PAINT_PAINTCHILDS      ((sal_uInt16)0x0008)
+#define IMPL_PAINT_PAINTALLCHILDREN   ((sal_uInt16)0x0004)
+#define IMPL_PAINT_PAINTCHILDREN      ((sal_uInt16)0x0008)
 #define IMPL_PAINT_ERASE            ((sal_uInt16)0x0010)
 #define IMPL_PAINT_CHECKRTL         ((sal_uInt16)0x0020)
 
@@ -1817,7 +1817,7 @@ sal_Bool Window::ImplSysObjClip( const Region* pOldRegion )
 
 // -----------------------------------------------------------------------
 
-void Window::ImplUpdateSysObjChildsClip()
+void Window::ImplUpdateSysObjChildrenClip()
 {
     if ( mpWindowImpl->mpSysObj && mpWindowImpl->mbInitWinClipRegion )
         ImplSysObjClip( NULL );
@@ -1825,7 +1825,7 @@ void Window::ImplUpdateSysObjChildsClip()
     Window* pWindow = mpWindowImpl->mpFirstChild;
     while ( pWindow )
     {
-        pWindow->ImplUpdateSysObjChildsClip();
+        pWindow->ImplUpdateSysObjChildrenClip();
         pWindow = pWindow->mpWindowImpl->mpNext;
     }
 }
@@ -1834,7 +1834,7 @@ void Window::ImplUpdateSysObjChildsClip()
 
 void Window::ImplUpdateSysObjOverlapsClip()
 {
-    ImplUpdateSysObjChildsClip();
+    ImplUpdateSysObjChildrenClip();
 
     Window* pWindow = mpWindowImpl->mpFirstOverlap;
     while ( pWindow )
@@ -1850,7 +1850,7 @@ void Window::ImplUpdateSysObjClip()
 {
     if ( !ImplIsOverlapWindow() )
     {
-        ImplUpdateSysObjChildsClip();
+        ImplUpdateSysObjChildrenClip();
 
         // siblings should recalculate their clip region
         if ( mpWindowImpl->mbClipSiblings )
@@ -1858,7 +1858,7 @@ void Window::ImplUpdateSysObjClip()
             Window* pWindow = mpWindowImpl->mpNext;
             while ( pWindow )
             {
-                pWindow->ImplUpdateSysObjChildsClip();
+                pWindow->ImplUpdateSysObjChildrenClip();
                 pWindow = pWindow->mpWindowImpl->mpNext;
             }
         }
@@ -1869,7 +1869,7 @@ void Window::ImplUpdateSysObjClip()
 
 // -----------------------------------------------------------------------
 
-sal_Bool Window::ImplSetClipFlagChilds( sal_Bool bSysObjOnlySmaller )
+sal_Bool Window::ImplSetClipFlagChildren( sal_Bool bSysObjOnlySmaller )
 {
     sal_Bool bUpdate = sal_True;
     if ( mpWindowImpl->mpSysObj )
@@ -1884,7 +1884,7 @@ sal_Bool Window::ImplSetClipFlagChilds( sal_Bool bSysObjOnlySmaller )
         Window* pWindow = mpWindowImpl->mpFirstChild;
         while ( pWindow )
         {
-            if ( !pWindow->ImplSetClipFlagChilds( bSysObjOnlySmaller ) )
+            if ( !pWindow->ImplSetClipFlagChildren( bSysObjOnlySmaller ) )
                 bUpdate = sal_False;
             pWindow = pWindow->mpWindowImpl->mpNext;
         }
@@ -1906,7 +1906,7 @@ sal_Bool Window::ImplSetClipFlagChilds( sal_Bool bSysObjOnlySmaller )
     Window* pWindow = mpWindowImpl->mpFirstChild;
     while ( pWindow )
     {
-        if ( !pWindow->ImplSetClipFlagChilds( bSysObjOnlySmaller ) )
+        if ( !pWindow->ImplSetClipFlagChildren( bSysObjOnlySmaller ) )
             bUpdate = sal_False;
         pWindow = pWindow->mpWindowImpl->mpNext;
     }
@@ -1918,7 +1918,7 @@ sal_Bool Window::ImplSetClipFlagChilds( sal_Bool bSysObjOnlySmaller )
 
 sal_Bool Window::ImplSetClipFlagOverlapWindows( sal_Bool bSysObjOnlySmaller )
 {
-    sal_Bool bUpdate = ImplSetClipFlagChilds( bSysObjOnlySmaller );
+    sal_Bool bUpdate = ImplSetClipFlagChildren( bSysObjOnlySmaller );
 
     Window* pWindow = mpWindowImpl->mpFirstOverlap;
     while ( pWindow )
@@ -1937,7 +1937,7 @@ sal_Bool Window::ImplSetClipFlag( sal_Bool bSysObjOnlySmaller )
 {
     if ( !ImplIsOverlapWindow() )
     {
-        sal_Bool bUpdate = ImplSetClipFlagChilds( bSysObjOnlySmaller );
+        sal_Bool bUpdate = ImplSetClipFlagChildren( bSysObjOnlySmaller );
 
         Window* pParent = ImplGetParent();
         if ( pParent &&
@@ -1953,7 +1953,7 @@ sal_Bool Window::ImplSetClipFlag( sal_Bool bSysObjOnlySmaller )
             Window* pWindow = mpWindowImpl->mpNext;
             while ( pWindow )
             {
-                if ( !pWindow->ImplSetClipFlagChilds( bSysObjOnlySmaller ) )
+                if ( !pWindow->ImplSetClipFlagChildren( bSysObjOnlySmaller ) )
                     bUpdate = sal_False;
                 pWindow = pWindow->mpWindowImpl->mpNext;
             }
@@ -2069,7 +2069,7 @@ void Window::ImplClipBoundaries( Region& rRegion, sal_Bool bThis, sal_Bool bOver
 
 // -----------------------------------------------------------------------
 
-sal_Bool Window::ImplClipChilds( Region& rRegion )
+sal_Bool Window::ImplClipChildren( Region& rRegion )
 {
     sal_Bool    bOtherClip = sal_False;
     Window* pWindow = mpWindowImpl->mpFirstChild;
@@ -2094,7 +2094,7 @@ sal_Bool Window::ImplClipChilds( Region& rRegion )
 
 // -----------------------------------------------------------------------
 
-void Window::ImplClipAllChilds( Region& rRegion )
+void Window::ImplClipAllChildren( Region& rRegion )
 {
     Window* pWindow = mpWindowImpl->mpFirstChild;
     while ( pWindow )
@@ -2165,7 +2165,7 @@ void Window::ImplInitWinChildClipRegion()
         else
             *mpWindowImpl->mpChildClipRegion = mpWindowImpl->maWinClipRegion;
 
-        ImplClipChilds( *mpWindowImpl->mpChildClipRegion );
+        ImplClipChildren( *mpWindowImpl->mpChildClipRegion );
     }
 
     mpWindowImpl->mbInitChildRegion = sal_False;
@@ -2249,7 +2249,7 @@ void Window::ImplCalcOverlapRegionOverlaps( const Region& rInterRegion, Region& 
 // -----------------------------------------------------------------------
 
 void Window::ImplCalcOverlapRegion( const Rectangle& rSourceRect, Region& rRegion,
-                                    sal_Bool bChilds, sal_Bool bParent, sal_Bool bSiblings )
+                                    sal_Bool bChildren, sal_Bool bParent, sal_Bool bSiblings )
 {
     Region  aRegion( rSourceRect );
     if ( mpWindowImpl->mbWinRegion )
@@ -2302,8 +2302,7 @@ void Window::ImplCalcOverlapRegion( const Rectangle& rSourceRect, Region& rRegio
         while ( pWindow );
     }
 
-    // Childs
-    if ( bChilds )
+    if ( bChildren )
     {
         pWindow = mpWindowImpl->mpFirstChild;
         while ( pWindow )
@@ -2329,16 +2328,16 @@ void Window::ImplCallPaint( const Region* pRegion, sal_uInt16 nPaintFlags )
 
     mpWindowImpl->mbPaintFrame = sal_False;
 
-    if ( nPaintFlags & IMPL_PAINT_PAINTALLCHILDS )
-        mpWindowImpl->mnPaintFlags |= IMPL_PAINT_PAINT | IMPL_PAINT_PAINTALLCHILDS | (nPaintFlags & IMPL_PAINT_PAINTALL);
-    if ( nPaintFlags & IMPL_PAINT_PAINTCHILDS )
-        mpWindowImpl->mnPaintFlags |= IMPL_PAINT_PAINTCHILDS;
+    if ( nPaintFlags & IMPL_PAINT_PAINTALLCHILDREN )
+        mpWindowImpl->mnPaintFlags |= IMPL_PAINT_PAINT | IMPL_PAINT_PAINTALLCHILDREN | (nPaintFlags & IMPL_PAINT_PAINTALL);
+    if ( nPaintFlags & IMPL_PAINT_PAINTCHILDREN )
+        mpWindowImpl->mnPaintFlags |= IMPL_PAINT_PAINTCHILDREN;
     if ( nPaintFlags & IMPL_PAINT_ERASE )
         mpWindowImpl->mnPaintFlags |= IMPL_PAINT_ERASE;
     if ( nPaintFlags & IMPL_PAINT_CHECKRTL )
         mpWindowImpl->mnPaintFlags |= IMPL_PAINT_CHECKRTL;
     if ( !mpWindowImpl->mpFirstChild )
-        mpWindowImpl->mnPaintFlags &= ~IMPL_PAINT_PAINTALLCHILDS;
+        mpWindowImpl->mnPaintFlags &= ~IMPL_PAINT_PAINTALLCHILDREN;
 
     if ( mpWindowImpl->mbPaintDisabled )
     {
@@ -2371,7 +2370,7 @@ void Window::ImplCallPaint( const Region* pRegion, sal_uInt16 nPaintFlags )
                */
                 mpWindowImpl->maInvalidateRegion.Union( *mpWindowImpl->mpWinData->mpTrackRect );
 
-            if ( mpWindowImpl->mnPaintFlags & IMPL_PAINT_PAINTALLCHILDS )
+            if ( mpWindowImpl->mnPaintFlags & IMPL_PAINT_PAINTALLCHILDREN )
                 pChildRegion = new Region( mpWindowImpl->maInvalidateRegion );
             mpWindowImpl->maInvalidateRegion.Intersect( *pWinChildClipRegion );
         }
@@ -2433,7 +2432,7 @@ void Window::ImplCallPaint( const Region* pRegion, sal_uInt16 nPaintFlags )
     else
         mpWindowImpl->mnPaintFlags = 0;
 
-    if ( nPaintFlags & (IMPL_PAINT_PAINTALLCHILDS | IMPL_PAINT_PAINTCHILDS) )
+    if ( nPaintFlags & (IMPL_PAINT_PAINTALLCHILDREN | IMPL_PAINT_PAINTCHILDREN) )
     {
         // Paint from the bottom child window and frontward.
         Window* pTempWindow = mpWindowImpl->mpLastChild;
@@ -2472,7 +2471,7 @@ void Window::ImplCallOverlapPaint()
     }
 
     // only then ourself
-    if ( mpWindowImpl->mnPaintFlags & (IMPL_PAINT_PAINT | IMPL_PAINT_PAINTCHILDS) )
+    if ( mpWindowImpl->mnPaintFlags & (IMPL_PAINT_PAINT | IMPL_PAINT_PAINTCHILDREN) )
     {
         // - RTL - notify ImplCallPaint to check for re-mirroring (CHECKRTL)
         //         because we were called from the Sal layer
@@ -2521,7 +2520,7 @@ IMPL_LINK( Window, ImplHandleResizeTimerHdl, void*, EMPTYARG )
 
 void Window::ImplInvalidateFrameRegion( const Region* pRegion, sal_uInt16 nFlags )
 {
-    // set PAINTCHILDS for all parent windows till the first OverlapWindow
+    // set PAINTCHILDREN for all parent windows till the first OverlapWindow
     if ( !ImplIsOverlapWindow() )
     {
         Window* pTempWindow = this;
@@ -2529,9 +2528,9 @@ void Window::ImplInvalidateFrameRegion( const Region* pRegion, sal_uInt16 nFlags
         do
         {
             pTempWindow = pTempWindow->ImplGetParent();
-            if ( pTempWindow->mpWindowImpl->mnPaintFlags & IMPL_PAINT_PAINTCHILDS )
+            if ( pTempWindow->mpWindowImpl->mnPaintFlags & IMPL_PAINT_PAINTCHILDREN )
                 break;
-            pTempWindow->mpWindowImpl->mnPaintFlags |= IMPL_PAINT_PAINTCHILDS | nTranspPaint;
+            pTempWindow->mpWindowImpl->mnPaintFlags |= IMPL_PAINT_PAINTCHILDREN | nTranspPaint;
             if( ! pTempWindow->IsPaintTransparent() )
                 nTranspPaint = 0;
         }
@@ -2541,7 +2540,7 @@ void Window::ImplInvalidateFrameRegion( const Region* pRegion, sal_uInt16 nFlags
     // set Paint-Flags
     mpWindowImpl->mnPaintFlags |= IMPL_PAINT_PAINT;
     if ( nFlags & INVALIDATE_CHILDREN )
-        mpWindowImpl->mnPaintFlags |= IMPL_PAINT_PAINTALLCHILDS;
+        mpWindowImpl->mnPaintFlags |= IMPL_PAINT_PAINTALLCHILDREN;
     if ( !(nFlags & INVALIDATE_NOERASE) )
         mpWindowImpl->mnPaintFlags |= IMPL_PAINT_ERASE;
     if ( !pRegion )
@@ -2680,10 +2679,10 @@ void Window::ImplInvalidate( const Region* pRegion, sal_uInt16 nFlags )
             if ( !(nFlags & INVALIDATE_NOCLIPCHILDREN) )
             {
                 if ( nOrgFlags & INVALIDATE_NOCHILDREN )
-                    ImplClipAllChilds( aRegion );
+                    ImplClipAllChildren( aRegion );
                 else
                 {
-                    if ( ImplClipChilds( aRegion ) )
+                    if ( ImplClipChildren( aRegion ) )
                         nFlags |= INVALIDATE_CHILDREN;
                 }
             }
@@ -2700,7 +2699,7 @@ void Window::ImplInvalidate( const Region* pRegion, sal_uInt16 nFlags )
 
 void Window::ImplMoveInvalidateRegion( const Rectangle& rRect,
                                        long nHorzScroll, long nVertScroll,
-                                       sal_Bool bChilds )
+                                       sal_Bool bChildren )
 {
     if ( (mpWindowImpl->mnPaintFlags & (IMPL_PAINT_PAINT | IMPL_PAINT_PAINTALL)) == IMPL_PAINT_PAINT )
     {
@@ -2710,7 +2709,7 @@ void Window::ImplMoveInvalidateRegion( const Rectangle& rRect,
         mpWindowImpl->maInvalidateRegion.Union( aTempRegion );
     }
 
-    if ( bChilds && (mpWindowImpl->mnPaintFlags & IMPL_PAINT_PAINTCHILDS) )
+    if ( bChildren && (mpWindowImpl->mnPaintFlags & IMPL_PAINT_PAINTCHILDREN) )
     {
         Window* pWindow = mpWindowImpl->mpFirstChild;
         while ( pWindow )
@@ -2725,10 +2724,10 @@ void Window::ImplMoveInvalidateRegion( const Rectangle& rRect,
 
 void Window::ImplMoveAllInvalidateRegions( const Rectangle& rRect,
                                            long nHorzScroll, long nVertScroll,
-                                           sal_Bool bChilds )
+                                           sal_Bool bChildren )
 {
     // also shift Paint-Region when paints need processing
-    ImplMoveInvalidateRegion( rRect, nHorzScroll, nVertScroll, bChilds );
+    ImplMoveInvalidateRegion( rRect, nHorzScroll, nVertScroll, bChildren );
     // Paint-Region should be shifted, as drawn by the parents
     if ( !ImplIsOverlapWindow() )
     {
@@ -2737,7 +2736,7 @@ void Window::ImplMoveAllInvalidateRegions( const Rectangle& rRect,
         do
         {
             pPaintAllWindow = pPaintAllWindow->ImplGetParent();
-            if ( pPaintAllWindow->mpWindowImpl->mnPaintFlags & IMPL_PAINT_PAINTALLCHILDS )
+            if ( pPaintAllWindow->mpWindowImpl->mnPaintFlags & IMPL_PAINT_PAINTALLCHILDREN )
             {
                 if ( pPaintAllWindow->mpWindowImpl->mnPaintFlags & IMPL_PAINT_PAINTALL )
                 {
@@ -2753,7 +2752,7 @@ void Window::ImplMoveAllInvalidateRegions( const Rectangle& rRect,
         {
             aPaintAllRegion.Move( nHorzScroll, nVertScroll );
             sal_uInt16 nPaintFlags = 0;
-            if ( bChilds )
+            if ( bChildren )
                 mpWindowImpl->mnPaintFlags |= INVALIDATE_CHILDREN;
             ImplInvalidateFrameRegion( &aPaintAllRegion, nPaintFlags );
         }
@@ -2769,7 +2768,7 @@ void Window::ImplValidateFrameRegion( const Region* pRegion, sal_uInt16 nFlags )
     else
     {
         // when all child windows have to be drawn we need to invalidate them before doing so
-        if ( (mpWindowImpl->mnPaintFlags & IMPL_PAINT_PAINTALLCHILDS) && mpWindowImpl->mpFirstChild )
+        if ( (mpWindowImpl->mnPaintFlags & IMPL_PAINT_PAINTALLCHILDREN) && mpWindowImpl->mpFirstChild )
         {
             Region aChildRegion = mpWindowImpl->maInvalidateRegion;
             if ( mpWindowImpl->mnPaintFlags & IMPL_PAINT_PAINTALL )
@@ -2833,10 +2832,10 @@ void Window::ImplValidate( const Region* pRegion, sal_uInt16 nFlags )
         {
             nFlags &= ~VALIDATE_CHILDREN;
             if ( nOrgFlags & VALIDATE_NOCHILDREN )
-                ImplClipAllChilds( aRegion );
+                ImplClipAllChildren( aRegion );
             else
             {
-                if ( ImplClipChilds( aRegion ) )
+                if ( ImplClipChildren( aRegion ) )
                     nFlags |= VALIDATE_CHILDREN;
             }
         }
@@ -2876,11 +2875,11 @@ void Window::ImplScroll( const Rectangle& rRect,
     }
 
     Region  aInvalidateRegion;
-    sal_Bool    bScrollChilds = (nFlags & SCROLL_CHILDREN) != 0;
+    sal_Bool    bScrollChildren = (nFlags & SCROLL_CHILDREN) != 0;
     sal_Bool    bErase = (nFlags & SCROLL_NOERASE) == 0;
 
     if ( !mpWindowImpl->mpFirstChild )
-        bScrollChilds = sal_False;
+        bScrollChildren = sal_False;
 
     // --- RTL --- check if this window requires special action
     sal_Bool bReMirror = ( ImplIsAntiparallel() );
@@ -2894,11 +2893,11 @@ void Window::ImplScroll( const Rectangle& rRect,
     }
 
     // adapt paint areas
-    ImplMoveAllInvalidateRegions( aRectMirror, nHorzScroll, nVertScroll, bScrollChilds );
+    ImplMoveAllInvalidateRegions( aRectMirror, nHorzScroll, nVertScroll, bScrollChildren );
 
     if ( !(nFlags & SCROLL_NOINVALIDATE) )
     {
-        ImplCalcOverlapRegion( aRectMirror, aInvalidateRegion, !bScrollChilds, sal_True, sal_False );
+        ImplCalcOverlapRegion( aRectMirror, aInvalidateRegion, !bScrollChildren, sal_True, sal_False );
 
         // --- RTL ---
         // if the scrolling on the device is performed in the opposite direction
@@ -2931,12 +2930,12 @@ void Window::ImplScroll( const Rectangle& rRect,
     aRegion.Exclude( aInvalidateRegion );
 
     ImplClipBoundaries( aRegion, sal_False, sal_True );
-    if ( !bScrollChilds )
+    if ( !bScrollChildren )
     {
         if ( nOrgFlags & SCROLL_NOCHILDREN )
-            ImplClipAllChilds( aRegion );
+            ImplClipAllChildren( aRegion );
         else
-            ImplClipChilds( aRegion );
+            ImplClipChildren( aRegion );
     }
     if ( mbClipRegion && (nFlags & SCROLL_USECLIPREGION) )
         aRegion.Intersect( maRegion );
@@ -2984,17 +2983,17 @@ void Window::ImplScroll( const Rectangle& rRect,
         sal_uInt16 nPaintFlags = INVALIDATE_CHILDREN;
         if ( !bErase )
             nPaintFlags |= INVALIDATE_NOERASE;
-        if ( !bScrollChilds )
+        if ( !bScrollChildren )
         {
             if ( nOrgFlags & SCROLL_NOCHILDREN )
-                ImplClipAllChilds( aInvalidateRegion );
+                ImplClipAllChildren( aInvalidateRegion );
             else
-                ImplClipChilds( aInvalidateRegion );
+                ImplClipChildren( aInvalidateRegion );
         }
         ImplInvalidateFrameRegion( &aInvalidateRegion, nPaintFlags );
     }
 
-    if ( bScrollChilds )
+    if ( bScrollChildren )
     {
         Window* pWindow = mpWindowImpl->mpFirstChild;
         while ( pWindow )
@@ -3038,7 +3037,7 @@ void Window::ImplUpdateAll( sal_Bool bOverlapWindows )
         pWindow->ImplCallOverlapPaint();
     else
     {
-        if ( pWindow->mpWindowImpl->mnPaintFlags & (IMPL_PAINT_PAINT | IMPL_PAINT_PAINTCHILDS) )
+        if ( pWindow->mpWindowImpl->mnPaintFlags & (IMPL_PAINT_PAINT | IMPL_PAINT_PAINTCHILDREN) )
             pWindow->ImplCallPaint( NULL, pWindow->mpWindowImpl->mnPaintFlags );
     }
 
@@ -5343,12 +5342,12 @@ void Window::PostStateChanged( StateChangedType nState )
 
 // -----------------------------------------------------------------------
 
-sal_Bool Window::IsLocked( sal_Bool bChilds ) const
+sal_Bool Window::IsLocked( sal_Bool bChildren ) const
 {
     if ( mpWindowImpl->mnLockCount != 0 )
         return sal_True;
 
-    if ( bChilds || mpWindowImpl->mbChildNotify )
+    if ( bChildren || mpWindowImpl->mbChildNotify )
     {
         Window* pChild = mpWindowImpl->mpFirstChild;
         while ( pChild )
@@ -5726,7 +5725,7 @@ void Window::UpdateSettings( const AllSettings& rSettings, sal_Bool bChild )
 
 // -----------------------------------------------------------------------
 
-void Window::NotifyAllChilds( DataChangedEvent& rDCEvt )
+void Window::NotifyAllChildren( DataChangedEvent& rDCEvt )
 {
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
@@ -5735,7 +5734,7 @@ void Window::NotifyAllChilds( DataChangedEvent& rDCEvt )
     Window* pChild = mpWindowImpl->mpFirstChild;
     while ( pChild )
     {
-        pChild->NotifyAllChilds( rDCEvt );
+        pChild->NotifyAllChildren( rDCEvt );
         pChild = pChild->mpWindowImpl->mpNext;
     }
 }
@@ -7379,7 +7378,7 @@ sal_Bool Window::HasPaintEvent() const
         do
         {
             pTempWindow = pTempWindow->ImplGetParent();
-            if ( pTempWindow->mpWindowImpl->mnPaintFlags & (IMPL_PAINT_PAINTCHILDS | IMPL_PAINT_PAINTALLCHILDS) )
+            if ( pTempWindow->mpWindowImpl->mnPaintFlags & (IMPL_PAINT_PAINTCHILDREN | IMPL_PAINT_PAINTALLCHILDREN) )
                 return sal_True;
         }
         while ( !pTempWindow->ImplIsOverlapWindow() );
@@ -7426,11 +7425,11 @@ void Window::Update()
         pWindow = pWindow->ImplGetParent();
     }
     // In order to limit drawing, an update only draws the window which
-    // has PAINTALLCHILDS set
+    // has PAINTALLCHILDREN set
     pWindow = pUpdateWindow;
     do
     {
-        if ( pWindow->mpWindowImpl->mnPaintFlags & IMPL_PAINT_PAINTALLCHILDS )
+        if ( pWindow->mpWindowImpl->mnPaintFlags & IMPL_PAINT_PAINTALLCHILDREN )
             pUpdateWindow = pWindow;
         if ( pWindow->ImplIsOverlapWindow() )
             break;
@@ -7439,7 +7438,7 @@ void Window::Update()
     while ( pWindow );
 
     // if there is something to paint, trigger a Paint
-    if ( pUpdateWindow->mpWindowImpl->mnPaintFlags & (IMPL_PAINT_PAINT | IMPL_PAINT_PAINTCHILDS) )
+    if ( pUpdateWindow->mpWindowImpl->mnPaintFlags & (IMPL_PAINT_PAINT | IMPL_PAINT_PAINTCHILDREN) )
     {
         // trigger an update also for system windows on top of us,
         // otherwise holes would remain

@@ -751,7 +751,7 @@ void Binding::valueModified()
               maValidityListeners.end(),
               ::std::bind2nd( ::std::ptr_fun( lcl_validate ), xSource ) );
 
-    // now distribute MIPs to childs
+    // now distribute MIPs to children
     if( xNode.is() )
         distributeMIP( xNode->getFirstChild() );
 }

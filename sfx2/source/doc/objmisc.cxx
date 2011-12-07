@@ -1075,7 +1075,7 @@ sal_Bool SfxFrame::IsAutoLoadLocked_Impl() const
     if ( !pObjSh || !pObjSh->IsAutoLoadLocked() )
         return sal_False;
 
-    // Its Childs are locked?
+    // Its children are locked?
     for ( sal_uInt16 n = GetChildFrameCount(); n--; )
         if ( !GetChildFrame(n)->IsAutoLoadLocked_Impl() )
             return sal_False;

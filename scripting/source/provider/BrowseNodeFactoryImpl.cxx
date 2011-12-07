@@ -104,12 +104,12 @@ public:
 
         for ( sal_Int32 i = 0; i < m_Nodes.getLength(); i++ )
         {
-            Sequence< Reference < browse::XBrowseNode > > childs;
+            Sequence< Reference < browse::XBrowseNode > > children;
             try
             {
-                childs = m_Nodes[ i ]->getChildNodes();
-                seqs.push_back( childs );
-                numChildren += childs.getLength();
+                children = m_Nodes[ i ]->getChildNodes();
+                seqs.push_back( children );
+                numChildren += children.getLength();
             }
             catch ( Exception& )
             {
@@ -124,10 +124,10 @@ public:
         Sequence< Reference < browse::XBrowseNode > > result( numChildren );
         for ( sal_Int32 index = 0; it != it_end && index < numChildren ; ++it )
         {
-            Sequence< Reference < browse::XBrowseNode > > childs = *it;
-            for ( sal_Int32 j = 0; j < childs.getLength(); j++ )
+            Sequence< Reference < browse::XBrowseNode > > children = *it;
+            for ( sal_Int32 j = 0; j < children.getLength(); j++ )
             {
-                result[ index++ ] = childs[ j ];
+                result[ index++ ] = children[ j ];
             }
         }
         return result;

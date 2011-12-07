@@ -152,7 +152,7 @@ friend class SvListView;
 
 private:
     SvListEntry*        pParent;
-    SvTreeEntryList*    pChilds;
+    SvTreeEntryList*    pChildren;
     sal_uLong           nAbsPos;
     sal_uLong           nListPos;
 
@@ -166,7 +166,7 @@ public:
                         SvListEntry();
                         SvListEntry( const SvListEntry& );
     virtual             ~SvListEntry();
-    sal_Bool            HasChilds() { return (sal_Bool)(pChilds!=0); }
+    sal_Bool            HasChildren() { return (sal_Bool)(pChildren!=0); }
     sal_Bool            HasChildListPos() const
     {
         if( pParent && !(pParent->nListPos & 0x80000000) )
@@ -296,8 +296,8 @@ class SVT_DLLPUBLIC SvTreeList
     void                Collapse( SvListView*,SvListEntry* pParent );
 
     SVT_DLLPRIVATE void SetAbsolutePositions();
-    SVT_DLLPRIVATE      SvTreeEntryList*CloneChilds(
-                            SvTreeEntryList* pChilds,
+    SVT_DLLPRIVATE      SvTreeEntryList*CloneChildren(
+                            SvTreeEntryList* pChildren,
                             SvListEntry* pNewParent,
                             sal_uLong& nCloneCount
                         ) const;
@@ -311,7 +311,7 @@ class SVT_DLLPUBLIC SvTreeList
                             sal_uLong& rPos
                         );
 
-    SVT_DLLPRIVATE void ResortChilds( SvListEntry* pParent );
+    SVT_DLLPRIVATE void ResortChildren( SvListEntry* pParent );
 
 protected:
     SvListEntry*        pRootItem;
@@ -367,7 +367,7 @@ public:
     sal_Bool            Remove( SvListEntry* pEntry );
     void                Clear();
 
-    sal_Bool            HasChilds( SvListEntry* pEntry ) const;
+    sal_Bool            HasChildren( SvListEntry* pEntry ) const;
     sal_Bool            HasParent( SvListEntry* pEntry ) const
     { return (sal_Bool)(pEntry->pParent!=pRootItem); }
 
@@ -594,19 +594,19 @@ inline SvViewData* SvListView::GetViewData( SvListEntry* pEntry ) const
 #endif
 }
 
-inline sal_Bool SvTreeList::HasChilds( SvListEntry* pEntry ) const
+inline sal_Bool SvTreeList::HasChildren( SvListEntry* pEntry ) const
 {
     if ( !pEntry )
         pEntry = pRootItem;
-    return (sal_Bool)(pEntry->pChilds != 0);
+    return (sal_Bool)(pEntry->pChildren != 0);
 }
 
 inline SvListEntry* SvTreeList::GetEntry( SvListEntry* pParent, sal_uLong nPos ) const
 {   if ( !pParent )
         pParent = pRootItem;
     SvListEntry* pRet = 0;
-    if ( pParent->pChilds )
-        pRet = (*pParent->pChilds)[ nPos ];
+    if ( pParent->pChildren )
+        pRet = (*pParent->pChildren)[ nPos ];
     return pRet;
 }
 
@@ -614,7 +614,7 @@ inline SvListEntry* SvTreeList::GetEntry( sal_uLong nRootPos ) const
 {
     SvListEntry* pRet = 0;
     if ( nEntryCount )
-        pRet = (*pRootItem->pChilds)[ nRootPos ];
+        pRet = (*pRootItem->pChildren)[ nRootPos ];
     return pRet;
 }
 
@@ -622,7 +622,7 @@ inline SvTreeEntryList* SvTreeList::GetChildList( SvListEntry* pParent ) const
 {
     if ( !pParent )
         pParent = pRootItem;
-    return pParent->pChilds;
+    return pParent->pChildren;
 }
 
 inline SvListEntry* SvTreeList::GetParent( SvListEntry* pEntry ) const

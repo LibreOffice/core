@@ -108,14 +108,14 @@ public class OfficeStyles extends Element
     private final Map pageStyles;
     private final Map dataStyles;
     private final Map styles;
-    private final List otherChilds;
+    private final List otherChildren;
 
     public OfficeStyles()
     {
         this.styles = new HashMap();
         this.dataStyles = new HashMap();
         this.pageStyles = new HashMap();
-        this.otherChilds = new ArrayList();
+        this.otherChildren = new ArrayList();
     }
 
     public OfficeStyle getStyle(final String family, final String name)
@@ -163,7 +163,7 @@ public class OfficeStyles extends Element
 
     public void addOtherNode(final Element node)
     {
-        otherChilds.add(node);
+        otherChildren.add(node);
     }
 
     public DataStyle[] getAllDataStyles()
@@ -183,7 +183,7 @@ public class OfficeStyles extends Element
 
     public Element[] getOtherStyles()
     {
-        return (Element[]) otherChilds.toArray(new Element[otherChilds.size()]);
+        return (Element[]) otherChildren.toArray(new Element[otherChildren.size()]);
     }
 
     public boolean containsStyle(final String family, final String name)

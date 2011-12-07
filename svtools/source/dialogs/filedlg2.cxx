@@ -258,7 +258,7 @@ void ImpPathDialog::InitControls()
     if (pNewDirBtn)
         pNewDirBtn->SetClickHdl( LINK( this, ImpPathDialog, ClickHdl) );
 
-    nOwnChilds = pDlg->GetChildCount();
+    nOwnChildren = pDlg->GetChildCount();
 }
 
 
@@ -560,9 +560,9 @@ void ImpPathDialog::PreExecute()
     long nMaxWidth = 0;
 
     // Maximale Breite ermitteln
-    sal_uInt16 nChilds = GetPathDialog()->GetChildCount();
+    sal_uInt16 nChildren = GetPathDialog()->GetChildCount();
     sal_uInt16 n;
-    for ( n = nOwnChilds; n < nChilds; n++ )
+    for ( n = nOwnChildren; n < nChildren; n++ )
     {
         Window* pChild = GetPathDialog()->GetChild( n );
         pChild = pChild->GetWindow( WINDOW_CLIENT );
@@ -593,7 +593,7 @@ void ImpPathDialog::PreExecute()
     else
         nMaxWidth = aSize.Width();
 
-    for ( n = nOwnChilds; n < nChilds; n++ )
+    for ( n = nOwnChildren; n < nChildren; n++ )
     {
         Window* pChild = GetPathDialog()->GetChild( n );
         pChild = pChild->GetWindow( WINDOW_CLIENT );
@@ -783,7 +783,7 @@ void ImpFileDialog::InitControls()
 
     GetFileDialog()->SetOutputSizePixel( Size(nButtonStartX+STD_BTN_WIDTH+10, 298-nH) );
 
-    nOwnChilds = GetPathDialog()->GetChildCount();
+    nOwnChildren = GetPathDialog()->GetChildCount();
 
     // Handler setzen
     if (pDriveList)

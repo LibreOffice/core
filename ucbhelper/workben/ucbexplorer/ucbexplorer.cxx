@@ -165,7 +165,7 @@ class UcbExplorerTreeListBox : public SvTreeListBox
 
 private:
     virtual SvLBoxEntry* CreateEntry() const;
-    virtual void         RequestingChilds( SvLBoxEntry* pParent );
+    virtual void         RequestingChildren( SvLBoxEntry* pParent );
 
 public:
     UcbExplorerTreeListBox( ResMgr & rResMgr, Window* pParent, WinBits nWinStyle = 0 );
@@ -570,11 +570,11 @@ SvLBoxEntry* UcbExplorerTreeListBox::CreateEntry() const
 
 //=========================================================================
 // virtual
-void UcbExplorerTreeListBox::RequestingChilds( SvLBoxEntry* pParent )
+void UcbExplorerTreeListBox::RequestingChildren( SvLBoxEntry* pParent )
 {
     UcbExplorerListBoxEntry* pEntry
         = static_cast< UcbExplorerListBoxEntry * >( pParent );
-    if ( !pEntry->HasChilds() )
+    if ( !pEntry->HasChildren() )
     {
         switch ( pEntry->m_eType )
         {

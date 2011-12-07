@@ -359,9 +359,9 @@ css::uno::Reference< css::lang::XComponent > SAL_CALL Frame::loadComponentFromUR
 }
 
 /*-****************************************************************************************************//**
-    @short      return access to append or remove childs on desktop
+    @short      return access to append or remove children on desktop
     @descr      We don't implement these interface directly. We use a helper class to do this.
-                If you wish to add or delete childs to/from the container, call these method to get
+                If you wish to add or delete children to/from the container, call these method to get
                 a reference to the helper.
 
     @seealso    class OFrames
@@ -395,7 +395,7 @@ css::uno::Reference< css::frame::XFrames > SAL_CALL Frame::getFrames() throw( cs
 
 /*-****************************************************************************************************//**
     @short      get the current active child frame
-    @descr      It must be a frameto. Direct childs of a frame are frames only! No task or desktop is accepted.
+    @descr      It must be a frameto. Direct children of a frame are frames only! No task or desktop is accepted.
                 We don't save this information directly in this class. We use ouer container-helper
                 to do that.
 
@@ -424,7 +424,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Frame::getActiveFrame() throw
 
 /*-****************************************************************************************************//**
     @short      set the new active direct child frame
-    @descr      It must be a frame to. Direct childs of frame are frames only! No task or desktop is accepted.
+    @descr      It must be a frame to. Direct children of frame are frames only! No task or desktop is accepted.
                 We don't save this information directly in this class. We use ouer container-helper
                 to do that.
 
@@ -1213,7 +1213,7 @@ void SAL_CALL Frame::deactivate() throw( css::uno::RuntimeException )
     if( eState != E_INACTIVE )
     {
         //_____________________________________________________________________________________________________
-        //  1)  Deactivate all active childs.
+        //  1)  Deactivate all active children.
         if  (
                 ( xActiveChild.is()         ==  sal_True    )   &&
                 ( xActiveChild->isActive()  ==  sal_True    )

@@ -78,8 +78,8 @@ typedef TFrameContainer::iterator                                   TFrameIterat
 typedef TFrameContainer::const_iterator                             TConstFrameIterator ;
 
 /*-************************************************************************************************************//**
-    @short          implement a container to hold childs of frame, task or desktop
-    @descr          Every object of frame, task or desktop hold reference to his childs. These container is used as helper
+    @short          implement a container to hold children of frame, task or desktop
+    @descr          Every object of frame, task or desktop hold reference to his children. These container is used as helper
                     to do this. Some helper-classe like OFrames or OTasksAccess use it to. They hold a pointer to an instance
                     of this class, which is a member of a frame, task or desktop! You can append and remove frames.
                     It's possible to set one of these frames as active or deactive. You could have full index-access to

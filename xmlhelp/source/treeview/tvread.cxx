@@ -60,21 +60,21 @@ namespace treeview {
         TVDom( TVDom* arent = 0 )
             : kind( other ),
               parent( arent ),
-              childs( 0 )
+              children( 0 )
         {
         }
 
         ~TVDom()
         {
-            for( unsigned i = 0; i < childs.size(); ++i )
-                delete childs[i];
+            for( unsigned i = 0; i < children.size(); ++i )
+                delete children[i];
         }
 
 
         TVDom* newChild()
         {
-            childs.push_back( new TVDom( this ) );
-            return childs.back();
+            children.push_back( new TVDom( this ) );
+            return children.back();
         }
 
 
@@ -166,7 +166,7 @@ namespace treeview {
         rtl::OUString  targetURL;
 
         TVDom *parent;
-        std::vector< TVDom* > childs;
+        std::vector< TVDom* > children;
     };
 
 }
@@ -491,9 +491,9 @@ extern "C" void data_handler( void *userData,
 
 TVChildTarget::TVChildTarget( const ConfigData& configData,TVDom* tvDom )
 {
-    Elements.resize( tvDom->childs.size() );
+    Elements.resize( tvDom->children.size() );
     for( unsigned i = 0; i < Elements.size(); ++i )
-        Elements[i] = new TVRead( configData,tvDom->childs[i] );
+        Elements[i] = new TVRead( configData,tvDom->children[i] );
 }
 
 
@@ -541,9 +541,9 @@ TVChildTarget::TVChildTarget( const Reference< XMultiServiceFactory >& xMSF )
 
     // now TVDom holds the relevant information
 
-    Elements.resize( tvDom.childs.size() );
+    Elements.resize( tvDom.children.size() );
     for( unsigned i = 0; i < Elements.size(); ++i )
-        Elements[i] = new TVRead( configData,tvDom.childs[i] );
+        Elements[i] = new TVRead( configData,tvDom.children[i] );
 }
 
 

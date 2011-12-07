@@ -147,7 +147,7 @@ class DlgEdForm: public DlgEdObj
 
 private:
     DlgEditor* pDlgEditor;
-    ::std::vector<DlgEdObj*> pChilds;
+    ::std::vector<DlgEdObj*> pChildren;
 
     mutable ::boost::optional< ::com::sun::star::awt::DeviceInfo >   mpDeviceInfo;
 
@@ -169,7 +169,7 @@ public:
 
     virtual void AddChild( DlgEdObj* pDlgEdObj );
     virtual void RemoveChild( DlgEdObj* pDlgEdObj );
-    virtual ::std::vector<DlgEdObj*> GetChilds() const { return pChilds; }
+    virtual ::std::vector<DlgEdObj*> GetChildren() const { return pChildren; }
 
     virtual void UpdateStep();
 

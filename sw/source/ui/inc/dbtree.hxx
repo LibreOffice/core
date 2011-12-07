@@ -57,7 +57,7 @@ class SW_DLLPUBLIC SwDBTreeList : public SvTreeListBox
     SW_DLLPRIVATE DECL_LINK( DBCompare, SvSortData* );
 
     SW_DLLPRIVATE void          InitTreeList();
-    SW_DLLPRIVATE virtual void  RequestingChilds( SvLBoxEntry* pParent );
+    SW_DLLPRIVATE virtual void  RequestingChildren( SvLBoxEntry* pParent );
 
     SW_DLLPRIVATE virtual sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt );
     SW_DLLPRIVATE virtual void  StartDrag( sal_Int8 nAction, const Point& rPosPixel );

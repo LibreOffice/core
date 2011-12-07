@@ -149,7 +149,7 @@ void TabDialog::ImplPosControls()
         // Positionierung vornehmen
         pTabControl->SetPosPixel( aTabOffset );
 
-        // Alle anderen Childs positionieren
+        // Alle anderen Children positionieren
         sal_Bool bTabCtrl   = sal_False;
         int  nLines     = 0;
         long nX;

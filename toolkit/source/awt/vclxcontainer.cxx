@@ -92,17 +92,17 @@ void VCLXContainer::removeVclContainerListener( const ::com::sun::star::uno::Ref
 {
     SolarMutexGuard aGuard;
 
-    // Bei allen Childs das Container-Interface abfragen...
+    // Bei allen Children das Container-Interface abfragen...
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > > aSeq;
     Window* pWindow = GetWindow();
     if ( pWindow )
     {
-        sal_uInt16 nChilds = pWindow->GetChildCount();
-        if ( nChilds )
+        sal_uInt16 nChildren = pWindow->GetChildCount();
+        if ( nChildren )
         {
-            aSeq = ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > >( nChilds );
+            aSeq = ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > >( nChildren );
             ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > * pChildRefs = aSeq.getArray();
-            for ( sal_uInt16 n = 0; n < nChilds; n++ )
+            for ( sal_uInt16 n = 0; n < nChildren; n++ )
             {
                 Window* pChild = pWindow->GetChild( n );
                 ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >  xWP = pChild->GetComponentInterface( sal_True );

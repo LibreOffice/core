@@ -358,11 +358,11 @@ void ContentListBox_Impl::ClearChildren( SvLBoxEntry* pParent )
 
 // -----------------------------------------------------------------------
 
-void ContentListBox_Impl::RequestingChilds( SvLBoxEntry* pParent )
+void ContentListBox_Impl::RequestingChildren( SvLBoxEntry* pParent )
 {
     try
     {
-        if ( !pParent->HasChilds() )
+        if ( !pParent->HasChildren() )
         {
             if ( pParent->GetUserData() )
             {
@@ -401,7 +401,7 @@ void ContentListBox_Impl::RequestingChilds( SvLBoxEntry* pParent )
     }
     catch( Exception& )
     {
-        OSL_FAIL( "ContentListBox_Impl::RequestingChilds(): unexpected exception" );
+        OSL_FAIL( "ContentListBox_Impl::RequestingChildren(): unexpected exception" );
     }
 }
 

@@ -674,7 +674,7 @@ public class XMLHelper
 
     //___________________________________________
 
-    /** returns a list of childs, which are ELEMENT_NODES and have the right tag name.
+    /** returns a list of children, which are ELEMENT_NODES and have the right tag name.
      *
      *  It analyze the list of all possible child nodes. Only ELEMENT_NODES are candidates.
      *  All other ones will be ignored. Further these element nodes are compared by it's tag
@@ -695,26 +695,26 @@ public class XMLHelper
     {
         // extract first all ELEMENT_NODES of he given parent
         // Such nodes only provide tag names.
-        java.util.Vector lChilds          = XMLHelper.extractChildNodesByType(aNode,org.w3c.dom.Node.ELEMENT_NODE);
-        java.util.Vector lExtractedChilds = new java.util.Vector(lChilds.size());
+        java.util.Vector lChildren          = XMLHelper.extractChildNodesByType(aNode,org.w3c.dom.Node.ELEMENT_NODE);
+        java.util.Vector lExtractedChildren = new java.util.Vector(lChildren.size());
 
         // step over the list and search for the right tags using the specified name
-        java.util.Enumeration en = lChilds.elements();
+        java.util.Enumeration en = lChildren.elements();
         while (en.hasMoreElements())
         {
             org.w3c.dom.Node aChild = (org.w3c.dom.Node)en.nextElement();
             if (aChild.getNodeName().equals(sTag))
-                lExtractedChilds.add(aChild);
+                lExtractedChildren.add(aChild);
         }
 
         // pack(!) and return the list
-        lExtractedChilds.trimToSize();
-        return lExtractedChilds;
+        lExtractedChildren.trimToSize();
+        return lExtractedChildren;
     }
 
     //___________________________________________
 
-    /** returns a list of childs, which supports the right node type.
+    /** returns a list of children, which supports the right node type.
      *
      *  It analyze the list of all possible child nodes. If a node represent the right node type
      *  it is added to the return list. Otherwhise it will be ignored.
@@ -731,23 +731,23 @@ public class XMLHelper
     public static java.util.Vector extractChildNodesByType(org.w3c.dom.Node aNode,
                                                            short            nType)
     {
-        // get list of all possibe childs and reserve enough space for our return list
-        // Attention: A null pointer is not allowed for return! (means lExtractedChilds)
-        org.w3c.dom.NodeList lChilds          = aNode.getChildNodes();
-        int                  c                = lChilds.getLength();
-        java.util.Vector     lExtractedChilds = new java.util.Vector(c);
+        // get list of all possibe children and reserve enough space for our return list
+        // Attention: A null pointer is not allowed for return! (means lExtractedChildren)
+        org.w3c.dom.NodeList lChildren          = aNode.getChildNodes();
+        int                  c                = lChildren.getLength();
+        java.util.Vector     lExtractedChildren = new java.util.Vector(c);
 
-        // step of these childs and select only needed ones
+        // step of these children and select only needed ones
         for (int i=0; i<c; ++i)
         {
-            org.w3c.dom.Node aChild = lChilds.item(i);
+            org.w3c.dom.Node aChild = lChildren.item(i);
             if (aChild.getNodeType() == nType)
-                lExtractedChilds.add(aChild);
+                lExtractedChildren.add(aChild);
         }
 
         // pack(!) and return the list
-        lExtractedChilds.trimToSize();
-        return lExtractedChilds;
+        lExtractedChildren.trimToSize();
+        return lExtractedChildren;
     }
 
     //___________________________________________

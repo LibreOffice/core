@@ -57,7 +57,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::accessibility;
 
 
-#define MAX_NUM_OF_CHILDS   9
+#define MAX_NUM_OF_CHILDREN   9
 #define NOCHILDSELECTED     -1
 
 
@@ -153,10 +153,10 @@ SvxRectCtlAccessibleContext::SvxRectCtlAccessibleContext(
     SvxRectCtlAccessibleContext_Base( m_aMutex ),
     mxParent( rxParent ),
     mpRepr( &rRepr ),
-    mpChilds( NULL ),
+    mpChildren( NULL ),
     mnClientId( 0 ),
     mnSelectedChild( NOCHILDSELECTED ),
-    mbAngleMode( rRepr.GetNumOfChilds() == 8 )
+    mbAngleMode( rRepr.GetNumOfChildren() == 8 )
 {
     DBG_CTOR( SvxRectCtlAccessibleContext, NULL );
 
@@ -176,10 +176,10 @@ SvxRectCtlAccessibleContext::SvxRectCtlAccessibleContext(
         msDescription = SVX_RESSTR( mbAngleMode? RID_SVXSTR_RECTCTL_ACC_ANGL_DESCR : RID_SVXSTR_RECTCTL_ACC_CORN_DESCR );
     }
 
-    mpChilds = new SvxRectCtlChildAccessibleContext*[ MAX_NUM_OF_CHILDS ];
+    mpChildren = new SvxRectCtlChildAccessibleContext*[ MAX_NUM_OF_CHILDREN ];
 
-    SvxRectCtlChildAccessibleContext**  p = mpChilds;
-    for( int i = MAX_NUM_OF_CHILDS ; i ; --i, ++p )
+    SvxRectCtlChildAccessibleContext**  p = mpChildren;
+    for( int i = MAX_NUM_OF_CHILDREN ; i ; --i, ++p )
         *p = NULL;
 }
 
@@ -191,7 +191,7 @@ SvxRectCtlAccessibleContext::~SvxRectCtlAccessibleContext()
     if( IsAlive() )
     {
         osl_incrementInterlockedCount( &m_refCount );
-        dispose();      // set mpRepr = NULL & release all childs
+        dispose();      // set mpRepr = NULL & release all children
     }
 }
 
@@ -278,7 +278,7 @@ sal_Int32 SAL_CALL SvxRectCtlAccessibleContext::getAccessibleChildCount( void ) 
 
     ThrowExceptionIfNotAlive();
 
-    return mpRepr->GetNumOfChilds();
+    return mpRepr->GetNumOfChildren();
 }
 
 Reference< XAccessible > SAL_CALL SvxRectCtlAccessibleContext::getAccessibleChild( sal_Int32 nIndex )
@@ -286,7 +286,7 @@ Reference< XAccessible > SAL_CALL SvxRectCtlAccessibleContext::getAccessibleChil
 {
     checkChildIndex( nIndex );
 
-    Reference< XAccessible >    xChild = mpChilds[ nIndex ];
+    Reference< XAccessible >    xChild = mpChildren[ nIndex ];
     if( !xChild.is() )
     {
         ::SolarMutexGuard aSolarGuard;
@@ -295,7 +295,7 @@ Reference< XAccessible > SAL_CALL SvxRectCtlAccessibleContext::getAccessibleChil
 
         ThrowExceptionIfNotAlive();
 
-        xChild = mpChilds[ nIndex ];
+        xChild = mpChildren[ nIndex ];
 
         if( !xChild.is() )
         {
@@ -311,7 +311,7 @@ Reference< XAccessible > SAL_CALL SvxRectCtlAccessibleContext::getAccessibleChil
 
             SvxRectCtlChildAccessibleContext*   pChild = new SvxRectCtlChildAccessibleContext(
                                                     this, *mpRepr, aName, aDescr, aFocusRect, nIndex );
-            xChild = mpChilds[ nIndex ] = pChild;
+            xChild = mpChildren[ nIndex ] = pChild;
             pChild->acquire();
 
             // set actual state
@@ -640,13 +640,13 @@ void SvxRectCtlAccessibleContext::selectChild( long nNew )
     ::osl::MutexGuard   aGuard( m_aMutex );
     if( nNew != mnSelectedChild )
     {
-        long    nNumOfChilds = getAccessibleChildCount();
-        if( nNew < nNumOfChilds )
+        long    nNumOfChildren = getAccessibleChildCount();
+        if( nNew < nNumOfChildren )
         {   // valid index
             SvxRectCtlChildAccessibleContext*   pChild;
             if( mnSelectedChild != NOCHILDSELECTED )
             {   // deselect old selected child if one is selected
-                pChild = mpChilds[ mnSelectedChild ];
+                pChild = mpChildren[ mnSelectedChild ];
                 if( pChild )
                     pChild->setStateChecked( sal_False );
             }
@@ -656,7 +656,7 @@ void SvxRectCtlAccessibleContext::selectChild( long nNew )
 
             if( nNew != NOCHILDSELECTED )
             {
-                pChild = mpChilds[ nNew ];
+                pChild = mpChildren[ nNew ];
                 if( pChild )
                     pChild->setStateChecked( sal_True );
             }
@@ -718,8 +718,8 @@ void SAL_CALL SvxRectCtlAccessibleContext::disposing()
             ::osl::MutexGuard   aGuard( m_aMutex );
             mpRepr = NULL;      // object dies with representation
 
-            SvxRectCtlChildAccessibleContext**  p = mpChilds;
-            for( int i = MAX_NUM_OF_CHILDS ; i ; --i, ++p )
+            SvxRectCtlChildAccessibleContext**  p = mpChildren;
+            for( int i = MAX_NUM_OF_CHILDREN ; i ; --i, ++p )
             {
                 SvxRectCtlChildAccessibleContext*   pChild = *p;
                 if( pChild )
@@ -730,8 +730,8 @@ void SAL_CALL SvxRectCtlAccessibleContext::disposing()
                 }
             }
 
-            delete[] mpChilds;
-            mpChilds = NULL;
+            delete[] mpChildren;
+            mpChildren = NULL;
         }
 
         {
@@ -825,7 +825,7 @@ SvxRectCtlChildAccessibleContext::~SvxRectCtlChildAccessibleContext()
     if( IsAlive() )
     {
         osl_incrementInterlockedCount( &m_refCount );
-        dispose();      // set mpRepr = NULL & release all childs
+        dispose();      // set mpRepr = NULL & release all children
     }
 }
 

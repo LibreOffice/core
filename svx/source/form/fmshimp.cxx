@@ -2703,7 +2703,7 @@ void FmXFormShell::impl_RemoveElement_nothrow(const Reference< XInterface>& Elem
     if (xSelSupplier.is())
         xSelSupplier->removeSelectionChangeListener(this);
 
-    // remove connection to childs
+    // remove connection to children
     const Reference< XIndexContainer> xContainer(Element, UNO_QUERY);
     if (xContainer.is())
     {

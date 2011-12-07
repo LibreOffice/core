@@ -1718,7 +1718,7 @@ void OStorage_Impl::CloneStreamElement( const ::rtl::OUString& aStreamName,
         // the copy will be created internally
 
         // usual copying is not applicable here, only last flushed version of the
-        // child stream should be used for copiing. Probably the childs m_xPackageStream
+        // child stream should be used for copiing. Probably the children m_xPackageStream
         // can be used as a base of a new stream, that would be copied to result
         // storage. The only problem is that some package streams can be accessed from outside
         // at the same time ( now solwed by wrappers that remember own position ).

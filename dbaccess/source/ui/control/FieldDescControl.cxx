@@ -263,7 +263,7 @@ OFieldDescControl::~OFieldDescControl()
     pLastFocusWindow = NULL;
 
     //////////////////////////////////////////////////////////////////////
-    // Childs zerstoeren
+    // Children zerstoeren
     DeactivateAggregate( tpDefault );
     DeactivateAggregate( tpRequired );
     DeactivateAggregate( tpTextLen );

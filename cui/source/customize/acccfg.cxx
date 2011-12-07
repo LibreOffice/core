@@ -1154,7 +1154,7 @@ IMPL_LINK( SfxAcceleratorConfigPage, SelectHdl, Control*, pListBox )
                     TAccInfo*    pU1 = new TAccInfo(-1, -1, pUserData->m_aKey);
                     SvLBoxEntry* pE1 = aKeyBox.InsertEntry( pUserData->m_aKey.GetName(), 0L, sal_True, LIST_APPEND );
                     pE1->SetUserData(pU1);
-                    pE1->EnableChildsOnDemand( sal_False );
+                    pE1->EnableChildrenOnDemand( sal_False );
                 }
                 pIt = aEntriesBox.Next(pIt);
             }

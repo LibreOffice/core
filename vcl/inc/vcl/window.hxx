@@ -429,10 +429,10 @@ public:
     SAL_DLLPRIVATE Point               ImplOutputToFrame( const Point& rPos );
     SAL_DLLPRIVATE Point               ImplFrameToOutput( const Point& rPos );
     SAL_DLLPRIVATE sal_Bool                ImplSysObjClip( const Region* pOldRegion );
-    SAL_DLLPRIVATE void                ImplUpdateSysObjChildsClip();
+    SAL_DLLPRIVATE void                ImplUpdateSysObjChildrenClip();
     SAL_DLLPRIVATE void                ImplUpdateSysObjOverlapsClip();
     SAL_DLLPRIVATE void                ImplUpdateSysObjClip();
-    SAL_DLLPRIVATE sal_Bool                ImplSetClipFlagChilds( sal_Bool bSysObjOnlySmaller = sal_False );
+    SAL_DLLPRIVATE sal_Bool                ImplSetClipFlagChildren( sal_Bool bSysObjOnlySmaller = sal_False );
     SAL_DLLPRIVATE sal_Bool                ImplSetClipFlagOverlapWindows( sal_Bool bSysObjOnlySmaller = sal_False );
     SAL_DLLPRIVATE sal_Bool                ImplSetClipFlag( sal_Bool bSysObjOnlySmaller = sal_False );
     SAL_DLLPRIVATE void                ImplIntersectWindowClipRegion( Region& rRegion );
@@ -441,8 +441,8 @@ public:
     SAL_DLLPRIVATE void                ImplExcludeOverlapWindows( Region& rRegion );
     SAL_DLLPRIVATE void                ImplExcludeOverlapWindows2( Region& rRegion );
     SAL_DLLPRIVATE void                ImplClipBoundaries( Region& rRegion, sal_Bool bThis, sal_Bool bOverlaps );
-    SAL_DLLPRIVATE sal_Bool                ImplClipChilds( Region& rRegion );
-    SAL_DLLPRIVATE void                ImplClipAllChilds( Region& rRegion );
+    SAL_DLLPRIVATE sal_Bool                ImplClipChildren( Region& rRegion );
+    SAL_DLLPRIVATE void                ImplClipAllChildren( Region& rRegion );
     SAL_DLLPRIVATE void                ImplClipSiblings( Region& rRegion );
     SAL_DLLPRIVATE void                ImplInitWinClipRegion();
     SAL_DLLPRIVATE void                ImplInitWinChildClipRegion();
@@ -451,7 +451,7 @@ public:
     SAL_DLLPRIVATE void                ImplIntersectAndUnionOverlapWindows2( const Region& rInterRegion, Region& rRegion );
     SAL_DLLPRIVATE void                ImplCalcOverlapRegionOverlaps( const Region& rInterRegion, Region& rRegion );
     SAL_DLLPRIVATE void                ImplCalcOverlapRegion( const Rectangle& rSourceRect, Region& rRegion,
-                                               sal_Bool bChilds, sal_Bool bParent, sal_Bool bSiblings );
+                                               sal_Bool bChildren, sal_Bool bParent, sal_Bool bSiblings );
     SAL_DLLPRIVATE void                ImplCallPaint( const Region* pRegion, sal_uInt16 nPaintFlags );
     SAL_DLLPRIVATE void                ImplCallOverlapPaint();
     SAL_DLLPRIVATE void                ImplPostPaint();
@@ -461,8 +461,8 @@ public:
     SAL_DLLPRIVATE void                ImplInvalidate( const Region* rRegion, sal_uInt16 nFlags );
     SAL_DLLPRIVATE void                ImplValidateFrameRegion( const Region* rRegion, sal_uInt16 nFlags );
     SAL_DLLPRIVATE void                ImplValidate( const Region* rRegion, sal_uInt16 nFlags );
-    SAL_DLLPRIVATE void                ImplMoveInvalidateRegion( const Rectangle& rRect, long nHorzScroll, long nVertScroll, sal_Bool bChilds );
-    SAL_DLLPRIVATE void                ImplMoveAllInvalidateRegions( const Rectangle& rRect, long nHorzScroll, long nVertScroll, sal_Bool bChilds );
+    SAL_DLLPRIVATE void                ImplMoveInvalidateRegion( const Rectangle& rRect, long nHorzScroll, long nVertScroll, sal_Bool bChildren );
+    SAL_DLLPRIVATE void                ImplMoveAllInvalidateRegions( const Rectangle& rRect, long nHorzScroll, long nVertScroll, sal_Bool bChildren );
     SAL_DLLPRIVATE void                ImplScroll( const Rectangle& rRect, long nHorzScroll, long nVertScroll, sal_uInt16 nFlags );
     SAL_DLLPRIVATE void                ImplUpdateAll( sal_Bool bOverlapWindows = sal_True );
     SAL_DLLPRIVATE void                ImplUpdateWindowPtr( Window* pWindow );
@@ -490,7 +490,7 @@ public:
      */
     SAL_DLLPRIVATE bool        ImplCheckUIFont( const Font& rFont );
     SAL_DLLPRIVATE void        ImplUpdateGlobalSettings( AllSettings& rSettings, sal_Bool bCallHdl = sal_True );
-    SAL_DLLPRIVATE void        ImplAlignChilds();
+    SAL_DLLPRIVATE void        ImplAlignChildren();
     SAL_DLLPRIVATE void        ImplPosSizeWindow( long nX, long nY, long nWidth, long nHeight, sal_uInt16 nFlags );
     SAL_DLLPRIVATE void        ImplToBottomChild();
     SAL_DLLPRIVATE void        ImplCalcToTop( ImplCalcToTopData* pPrevData );
@@ -628,7 +628,7 @@ public:
 
     void                IncrementLockCount();
     void                DecrementLockCount();
-    sal_Bool                IsLocked( sal_Bool bChilds = sal_False ) const;
+    sal_Bool                IsLocked( sal_Bool bChildren = sal_False ) const;
 
                         // returns the input language used for the last key stroke
                         // may be LANGUAGE_DONTKNOW if not supported by the OS
@@ -693,7 +693,7 @@ public:
     virtual void        SetSettings( const AllSettings& rSettings );
     virtual void        SetSettings( const AllSettings& rSettings, sal_Bool bChild );
     void                UpdateSettings( const AllSettings& rSettings, sal_Bool bChild = sal_False );
-    void                NotifyAllChilds( DataChangedEvent& rDCEvt );
+    void                NotifyAllChildren( DataChangedEvent& rDCEvt );
 
     void                SetPointFont( const Font& rFont );
     Font                GetPointFont() const;

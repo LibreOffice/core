@@ -3953,9 +3953,9 @@ SwEntryBrowseBox::SwEntryBrowseBox(Window* pParent, const ResId& rId,
     xCheckController = new ::svt::CheckBoxCellController(&aCellCheckBox);
 
     //////////////////////////////////////////////////////////////////////
-    // HACK: BrowseBox doesn't invalidate its childs, how it should be.
+    // HACK: BrowseBox doesn't invalidate its children, how it should be.
     // That's why WB_CLIPCHILDREN is reset in order to enforce the
-    // childs' invalidation
+    // children' invalidation
     WinBits aStyle = GetStyle();
     if( aStyle & WB_CLIPCHILDREN )
     {

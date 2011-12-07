@@ -88,7 +88,7 @@ public:
     long            GetLogicTab( sal_uInt16 nTab );
 
     virtual SvLBoxEntry*    InsertEntry( const XubString& rText, SvLBoxEntry* pParent = 0,
-                                         sal_Bool bChildsOnDemand = sal_False,
+                                         sal_Bool bChildrenOnDemand = sal_False,
                                          sal_uLong nPos=LIST_APPEND, void* pUserData = 0,
                                          SvLBoxButtonKind eButtonKind = SvLBoxButtonKind_enabledCheckbox );
 
@@ -96,7 +96,7 @@ public:
                                          const Image& rExpandedEntryBmp,
                                          const Image& rCollapsedEntryBmp,
                                          SvLBoxEntry* pParent = 0,
-                                         sal_Bool bChildsOnDemand = sal_False,
+                                         sal_Bool bChildrenOnDemand = sal_False,
                                          sal_uLong nPos = LIST_APPEND, void* pUserData = 0,
                                          SvLBoxButtonKind eButtonKind = SvLBoxButtonKind_enabledCheckbox );
 

@@ -457,7 +457,7 @@ void SwNumberTreeNode::AddChild( SwNumberTreeNode * pChild,
        Algorithm:
 
        Search first child A that is greater than pChild,
-         A may be the end of childs.
+         A may be the end of children.
        If nDepth > 0 then
        {
           if A is first child then
@@ -833,7 +833,7 @@ bool SwNumberTreeNode::IsFirst() const
 
             // If node isn't the first child, it is the second child and the
             // first child is a phanton. In this case check, if the first phantom
-            // child have only phanton childs
+            // child have only phanton children
             if ( bResult &&
                  this != *(GetParent()->mChildren.begin()) &&
                  !(*(GetParent()->mChildren.begin()))->HasOnlyPhantoms() )

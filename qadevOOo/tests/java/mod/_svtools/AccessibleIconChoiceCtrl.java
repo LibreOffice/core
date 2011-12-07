@@ -127,7 +127,7 @@ public class AccessibleIconChoiceCtrl extends TestCase {
      * <ul>
      *  <li> <code>'EventProducer'</code> for
      *      {@link ifc.accessibility._XAccessibleEventBroadcaster}:
-     *      method <code>fireEvent()</code> selects accessible childs
+     *      method <code>fireEvent()</code> selects accessible children
      *   </li>
      * </ul>
      *

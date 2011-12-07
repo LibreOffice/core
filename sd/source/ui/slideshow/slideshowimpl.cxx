@@ -2579,7 +2579,7 @@ void SlideshowImpl::createSlideList( bool bAll, bool bStartWithActualSlide, cons
 
 typedef sal_uInt16 (*FncGetChildWindowId)();
 
-FncGetChildWindowId aShowChilds[] =
+FncGetChildWindowId aShowChildren[] =
 {
     &AnimationChildWindow::GetChildWindowId,
     &Svx3DChildWindow::GetChildWindowId,
@@ -2608,9 +2608,9 @@ void SlideshowImpl::hideChildWindows()
             if( pViewFrame->GetChildWindow( SID_NAVIGATOR ) != NULL )
                 mnChildMask |= NAVIGATOR_CHILD_MASK;
 
-            for( sal_uLong i = 0, nCount = sizeof( aShowChilds ) / sizeof( FncGetChildWindowId ); i < nCount; i++ )
+            for( sal_uLong i = 0, nCount = sizeof( aShowChildren ) / sizeof( FncGetChildWindowId ); i < nCount; i++ )
             {
-                const sal_uInt16 nId = ( *aShowChilds[ i ] )();
+                const sal_uInt16 nId = ( *aShowChildren[ i ] )();
 
                 if( pViewFrame->GetChildWindow( nId ) )
                 {
@@ -2633,10 +2633,10 @@ void SlideshowImpl::showChildWindows()
         {
             pViewFrame->SetChildWindow( SID_NAVIGATOR, ( mnChildMask & NAVIGATOR_CHILD_MASK ) != 0 );
 
-            for( sal_uLong i = 0, nCount = sizeof( aShowChilds ) / sizeof( FncGetChildWindowId ); i < nCount; i++ )
+            for( sal_uLong i = 0, nCount = sizeof( aShowChildren ) / sizeof( FncGetChildWindowId ); i < nCount; i++ )
             {
                 if( mnChildMask & ( 1 << i ) )
-                    pViewFrame->SetChildWindow( ( *aShowChilds[ i ] )(), sal_True );
+                    pViewFrame->SetChildWindow( ( *aShowChildren[ i ] )(), sal_True );
             }
         }
     }

@@ -659,7 +659,7 @@ void SAL_CALL ProgressMonitor::setPosSize ( sal_Int32 nX, sal_Int32 nY, sal_Int3
         // calc new layout for controls
         impl_recalcLayout () ;
         // clear background (!)
-        // [Childs was repainted in "recalcLayout" by setPosSize() automaticly!]
+        // [Children were repainted in "recalcLayout" by setPosSize() automaticly!]
         getPeer()->invalidate(2);
         // and repaint the control
         impl_paint ( 0, 0, impl_getGraphicsPeer() ) ;

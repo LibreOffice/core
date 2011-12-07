@@ -2142,7 +2142,7 @@ void SbaTableQueryBrowser::implAddDatasource(const String& _rDbName, Image& _rDb
 
         m_pTreeView->getListBox().InsertEntry(
             _rQueryName, _rQueryImage, _rQueryImage, pDatasourceEntry,
-            sal_True /*ChildsOnDemand*/, LIST_APPEND, pQueriesData );
+            sal_True /*ChildrenOnDemand*/, LIST_APPEND, pQueriesData );
     }
 
     // the child for the tables container
@@ -2152,7 +2152,7 @@ void SbaTableQueryBrowser::implAddDatasource(const String& _rDbName, Image& _rDb
 
         m_pTreeView->getListBox().InsertEntry(
             _rTableName, _rTableImage, _rTableImage, pDatasourceEntry,
-            sal_True /*ChildsOnDemand*/, LIST_APPEND, pTablesData );
+            sal_True /*ChildrenOnDemand*/, LIST_APPEND, pTablesData );
     }
 
 }
@@ -2228,7 +2228,7 @@ SvLBoxEntry* SbaTableQueryBrowser::implAppendEntry( SvLBoxEntry* _pParent, const
 //------------------------------------------------------------------------------
 IMPL_LINK(SbaTableQueryBrowser, OnExpandEntry, SvLBoxEntry*, _pParent)
 {
-    if (_pParent->HasChilds())
+    if (_pParent->HasChildren())
         // nothing to to ...
         return 1L;
 

@@ -178,21 +178,21 @@ void ParagraphList::MoveParagraphs( sal_uLong nStart, sal_uLong nDest, sal_uLong
     }
 }
 
-sal_Bool ParagraphList::HasChilds( Paragraph* pParagraph ) const
+sal_Bool ParagraphList::HasChildren( Paragraph* pParagraph ) const
 {
     sal_uLong n = GetAbsPos( pParagraph );
     Paragraph* pNext = GetParagraph( ++n );
     return ( pNext && ( pNext->GetDepth() > pParagraph->GetDepth() ) ) ? sal_True : sal_False;
 }
 
-sal_Bool ParagraphList::HasHiddenChilds( Paragraph* pParagraph ) const
+sal_Bool ParagraphList::HasHiddenChildren( Paragraph* pParagraph ) const
 {
     sal_uLong n = GetAbsPos( pParagraph );
     Paragraph* pNext = GetParagraph( ++n );
     return ( pNext && ( pNext->GetDepth() > pParagraph->GetDepth() ) && !pNext->IsVisible() ) ? sal_True : sal_False;
 }
 
-sal_Bool ParagraphList::HasVisibleChilds( Paragraph* pParagraph ) const
+sal_Bool ParagraphList::HasVisibleChildren( Paragraph* pParagraph ) const
 {
     sal_uLong n = GetAbsPos( pParagraph );
     Paragraph* pNext = GetParagraph( ++n );

@@ -219,7 +219,7 @@ void SfxFrameWindow_Impl::StateChanged( StateChangedType nStateChange )
         DoResize();
         SfxViewFrame* pView = pFrame->GetCurrentViewFrame();
         if ( pView )
-            pView->GetBindings().GetWorkWindow_Impl()->ShowChilds_Impl();
+            pView->GetBindings().GetWorkWindow_Impl()->ShowChildren_Impl();
     }
 
     Window::StateChanged( nStateChange );

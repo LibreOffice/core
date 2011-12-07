@@ -45,19 +45,19 @@ import org.xml.sax.SAXException;
 public class OfficeStylesReadHandler extends ElementReadHandler
 {
 
-    private final List textStyleChilds;
-    private final List dataStyleChilds;
-    private final List otherStyleChilds;
-    private final List pageLayoutChilds;
+    private final List textStyleChildren;
+    private final List dataStyleChildren;
+    private final List otherStyleChildren;
+    private final List pageLayoutChildren;
     private final OfficeStyles officeStyles;
 
     public OfficeStylesReadHandler(final OfficeStyles officeStyles)
     {
         this.officeStyles = officeStyles;
-        this.pageLayoutChilds = new ArrayList();
-        this.dataStyleChilds = new ArrayList();
-        this.textStyleChilds = new ArrayList();
-        this.otherStyleChilds = new ArrayList();
+        this.pageLayoutChildren = new ArrayList();
+        this.dataStyleChildren = new ArrayList();
+        this.textStyleChildren = new ArrayList();
+        this.otherStyleChildren = new ArrayList();
     }
 
     /**
@@ -78,25 +78,25 @@ public class OfficeStylesReadHandler extends ElementReadHandler
             if ("style".equals(tagName))
             {
                 final OfficeStyleReadHandler xrh = new OfficeStyleReadHandler();
-                textStyleChilds.add(xrh);
+                textStyleChildren.add(xrh);
                 return xrh;
             }
             else if ("page-layout".equals(tagName))
             {
                 final PageLayoutReadHandler prh = new PageLayoutReadHandler();
-                pageLayoutChilds.add(prh);
+                pageLayoutChildren.add(prh);
                 return prh;
             }
         }
         else if (OfficeNamespaces.DATASTYLE_NS.equals(uri))
         {
             final DataStyleReadHandler xrh = new DataStyleReadHandler(false);
-            dataStyleChilds.add(xrh);
+            dataStyleChildren.add(xrh);
             return xrh;
         }
 
         final SectionReadHandler genericReadHander = new SectionReadHandler();
-        otherStyleChilds.add(genericReadHander);
+        otherStyleChildren.add(genericReadHander);
         return genericReadHander;
     }
 
@@ -107,31 +107,31 @@ public class OfficeStylesReadHandler extends ElementReadHandler
      */
     protected void doneParsing() throws SAXException
     {
-        for (int i = 0; i < textStyleChilds.size(); i++)
+        for (int i = 0; i < textStyleChildren.size(); i++)
         {
             final OfficeStyleReadHandler handler =
-                    (OfficeStyleReadHandler) textStyleChilds.get(i);
+                    (OfficeStyleReadHandler) textStyleChildren.get(i);
             officeStyles.addStyle(handler.getOfficeStyle());
         }
 
-        for (int i = 0; i < pageLayoutChilds.size(); i++)
+        for (int i = 0; i < pageLayoutChildren.size(); i++)
         {
             final PageLayoutReadHandler handler =
-                    (PageLayoutReadHandler) pageLayoutChilds.get(i);
+                    (PageLayoutReadHandler) pageLayoutChildren.get(i);
             officeStyles.addPageStyle(handler.getPageLayout());
         }
 
-        for (int i = 0; i < dataStyleChilds.size(); i++)
+        for (int i = 0; i < dataStyleChildren.size(); i++)
         {
             final DataStyleReadHandler handler =
-                    (DataStyleReadHandler) dataStyleChilds.get(i);
+                    (DataStyleReadHandler) dataStyleChildren.get(i);
             officeStyles.addDataStyle(handler.getDataStyle());
         }
 
-        for (int i = 0; i < otherStyleChilds.size(); i++)
+        for (int i = 0; i < otherStyleChildren.size(); i++)
         {
             final SectionReadHandler handler =
-                    (SectionReadHandler) otherStyleChilds.get(i);
+                    (SectionReadHandler) otherStyleChildren.get(i);
             officeStyles.addOtherNode((Element) handler.getNode());
         }
     }

@@ -97,7 +97,7 @@ public:
     inline void         SetWindow(Window* _pWindow) { m_pWindow = _pWindow; }
     sal_Bool                DoClose( sal_uInt16 nId );
     void                SetDispatcherLock( sal_Bool bLock );
-    void                EnableSpreadsheets( sal_Bool bFlag = sal_True, sal_Bool bChilds = sal_True );
+    void                EnableSpreadsheets( sal_Bool bFlag = sal_True, sal_Bool bChildren = sal_True );
     void                ViewShellChanged( ScTabViewShell* pScViewShell );
 
     static              void enableInput(sal_Bool _bInput);

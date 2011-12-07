@@ -182,7 +182,7 @@ void SvTabListBox::SetTab( sal_uInt16 nTab,long nValue,MapUnit eMapUnit )
 }
 
 SvLBoxEntry* SvTabListBox::InsertEntry( const XubString& rText, SvLBoxEntry* pParent,
-                                        sal_Bool /*bChildsOnDemand*/,
+                                        sal_Bool /*bChildrenOnDemand*/,
                                         sal_uLong nPos, void* pUserData,
                                         SvLBoxButtonKind )
 {
@@ -193,7 +193,7 @@ SvLBoxEntry* SvTabListBox::InsertEntry( const XubString& rText,
                                         const Image& rExpandedEntryBmp,
                                         const Image& rCollapsedEntryBmp,
                                         SvLBoxEntry* pParent,
-                                        sal_Bool /*bChildsOnDemand*/,
+                                        sal_Bool /*bChildrenOnDemand*/,
                                         sal_uLong nPos, void* pUserData,
                                         SvLBoxButtonKind )
 {

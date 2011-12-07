@@ -202,7 +202,7 @@ public:
     }
 
     virtual SvLBoxEntry*    InsertEntry( const XubString& rText, SvLBoxEntry* pParent = 0,
-                                         sal_Bool bChildsOnDemand = sal_False,
+                                         sal_Bool bChildrenOnDemand = sal_False,
                                          sal_uLong nPos=LIST_APPEND, void* pUserData = 0,
                                          SvLBoxButtonKind eButtonKind = SvLBoxButtonKind_enabledCheckbox );
 
@@ -210,7 +210,7 @@ public:
                                          const Image& rExpandedEntryBmp,
                                          const Image& rCollapsedEntryBmp,
                                          SvLBoxEntry* pParent = 0,
-                                         sal_Bool bChildsOnDemand = sal_False,
+                                         sal_Bool bChildrenOnDemand = sal_False,
                                          sal_uLong nPos = LIST_APPEND, void* pUserData = 0,
                                          SvLBoxButtonKind eButtonKind = SvLBoxButtonKind_enabledCheckbox );
 
@@ -256,7 +256,7 @@ public:
     void            EndEditing( sal_Bool bCancel = sal_False ) { SvLBox::EndEditing( bCancel ); }
     sal_Bool            EditingCanceled() const { return SvLBox::EditingCanceled(); }
 
-    virtual void    RequestingChilds( SvLBoxEntry* pParent );
+    virtual void    RequestingChildren( SvLBoxEntry* pParent );
 
     virtual void    Paint( const Rectangle& rRect );
     virtual void    MouseButtonDown( const MouseEvent& rMEvt );
@@ -326,7 +326,7 @@ public:
     virtual sal_Bool    Expand( SvLBoxEntry* pParent );
     virtual sal_Bool    Collapse( SvLBoxEntry* pParent );
     virtual sal_Bool    Select( SvLBoxEntry* pEntry, sal_Bool bSelect=sal_True );
-    virtual sal_uLong   SelectChilds( SvLBoxEntry* pParent, sal_Bool bSelect );
+    virtual sal_uLong   SelectChildren( SvLBoxEntry* pParent, sal_Bool bSelect );
     virtual void    SelectAll( sal_Bool bSelect, sal_Bool bPaint = sal_True );
     virtual void    SetCurEntry( SvLBoxEntry* _pEntry );
     virtual SvLBoxEntry*
@@ -340,8 +340,8 @@ public:
 
     virtual Region  GetDragRegion() const;
 
-    // Childs des Parents werden Childs des naechstoberen Parents
-    void            RemoveParentKeepChilds( SvLBoxEntry* pParent );
+    // Children des Parents werden Children des naechstoberen Parents
+    void            RemoveParentKeepChildren( SvLBoxEntry* pParent );
 
     DECL_LINK( DefaultCompare, SvSortData* );
     virtual void    ModelNotification( sal_uInt16 nActionId, SvListEntry* pEntry1,

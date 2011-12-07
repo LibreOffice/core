@@ -795,7 +795,7 @@ sal_Bool Outliner::Expand( Paragraph* pPara )
 {
     DBG_CHKTHIS(Outliner,0);
 
-    if ( pParaList->HasHiddenChilds( pPara ) )
+    if ( pParaList->HasHiddenChildren( pPara ) )
     {
         OLUndoExpand* pUndo = 0;
         sal_Bool bUndo = IsUndoEnabled() && !IsInUndo();
@@ -825,7 +825,7 @@ sal_Bool Outliner::Expand( Paragraph* pPara )
 sal_Bool Outliner::Collapse( Paragraph* pPara )
 {
     DBG_CHKTHIS(Outliner,0);
-    if ( pParaList->HasVisibleChilds( pPara ) ) // expanded
+    if ( pParaList->HasVisibleChildren( pPara ) ) // expanded
     {
         OLUndoExpand* pUndo = 0;
         sal_Bool bUndo = sal_False;
@@ -1070,7 +1070,7 @@ void Outliner::PaintBullet( sal_uInt16 nPara, const Point& rStartPos,
         }
 
         // In case of collapsed subparagraphs paint a line before the text.
-        if( pParaList->HasChilds(pPara) && !pParaList->HasVisibleChilds(pPara) &&
+        if( pParaList->HasChildren(pPara) && !pParaList->HasVisibleChildren(pPara) &&
                 !bStrippingPortions && !nOrientation )
         {
             long nWidth = pOutDev->PixelToLogic( Size( 10, 0 ) ).Width();
@@ -1439,10 +1439,10 @@ Paragraph* Outliner::GetParagraph( sal_uLong nAbsPos ) const
     return pParaList->GetParagraph( nAbsPos );
 }
 
-sal_Bool Outliner::HasChilds( Paragraph* pParagraph ) const
+sal_Bool Outliner::HasChildren( Paragraph* pParagraph ) const
 {
     DBG_CHKTHIS(Outliner,0);
-    return pParaList->HasChilds( pParagraph );
+    return pParaList->HasChildren( pParagraph );
 }
 
 sal_Bool Outliner::ImplHasBullet( sal_uInt16 nPara ) const
@@ -1929,7 +1929,7 @@ sal_uInt16 Outliner::ImplGetNumbering( sal_uInt16 nPara, const SvxNumberFormat* 
     return nNumber;
 }
 
-void Outliner::ImplCalcBulletText( sal_uInt16 nPara, sal_Bool bRecalcLevel, sal_Bool bRecalcChilds )
+void Outliner::ImplCalcBulletText( sal_uInt16 nPara, sal_Bool bRecalcLevel, sal_Bool bRecalcChildren )
 {
     DBG_CHKTHIS(Outliner,0);
 
@@ -1966,7 +1966,7 @@ void Outliner::ImplCalcBulletText( sal_uInt16 nPara, sal_Bool bRecalcLevel, sal_
 
             sal_Int16 nDepth = pPara->GetDepth();
             pPara = pParaList->GetParagraph( ++nPara );
-            if ( !bRecalcChilds )
+            if ( !bRecalcChildren )
             {
                 while ( pPara && ( pPara->GetDepth() > nDepth ) )
                     pPara = pParaList->GetParagraph( ++nPara );

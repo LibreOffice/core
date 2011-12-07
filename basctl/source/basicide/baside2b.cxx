@@ -1758,7 +1758,7 @@ void WatchTreeListBox::SetTabs()
     }
 }
 
-void WatchTreeListBox::RequestingChilds( SvLBoxEntry * pParent )
+void WatchTreeListBox::RequestingChildren( SvLBoxEntry * pParent )
 {
     if( !StarBASIC::IsRunning() )
         return;
@@ -2070,12 +2070,12 @@ void implEnableChildren( SvLBoxEntry* pEntry, bool bEnable )
         pEntry->SetFlags(
             (pEntry->GetFlags() &
             ~(SV_ENTRYFLAG_NO_NODEBMP | SV_ENTRYFLAG_HAD_CHILDREN))
-            | SV_ENTRYFLAG_CHILDS_ON_DEMAND );
+            | SV_ENTRYFLAG_CHILDREN_ON_DEMAND );
     }
     else
     {
         pEntry->SetFlags(
-            (pEntry->GetFlags() & ~(SV_ENTRYFLAG_CHILDS_ON_DEMAND)) );
+            (pEntry->GetFlags() & ~(SV_ENTRYFLAG_CHILDREN_ON_DEMAND)) );
     }
 }
 

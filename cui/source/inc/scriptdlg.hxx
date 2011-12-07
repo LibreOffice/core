@@ -86,7 +86,7 @@ private:
 
 protected:
     void                    ExpandTree( SvLBoxEntry* pRootEntry );
-    virtual void            RequestingChilds( SvLBoxEntry* pParent );
+    virtual void            RequestingChildren( SvLBoxEntry* pParent );
     virtual void            ExpandedHdl();
     virtual long            ExpandingHdl();
 public:

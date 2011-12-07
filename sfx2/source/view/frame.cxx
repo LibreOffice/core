@@ -917,8 +917,8 @@ void SfxFrame::Resize()
 
             if ( pWork )
             {
-                pWork->ArrangeChilds_Impl();
-                pWork->ShowChilds_Impl();
+                pWork->ArrangeChildren_Impl();
+                pWork->ShowChildren_Impl();
             }
 
             // problem in presence of UIActive object: when the window is resized, but the toolspace border

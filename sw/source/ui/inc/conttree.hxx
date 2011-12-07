@@ -198,7 +198,7 @@ public:
     DECL_LINK( TimerUpdate, Timer * );
 
     virtual long    GetTabPos( SvLBoxEntry*, SvLBoxTab* );
-    virtual void    RequestingChilds( SvLBoxEntry* pParent );
+    virtual void    RequestingChildren( SvLBoxEntry* pParent );
     virtual void    GetFocus();
     virtual void    KeyInput(const KeyEvent& rKEvt);
 

@@ -44,14 +44,14 @@ class SdXML3DSceneShapeContext : public SdXMLShapeContext, public SdXML3DSceneAt
 {
     // the shape group this group is working on
     // this is the scene at the same time
-    com::sun::star::uno::Reference< com::sun::star::drawing::XShapes > mxChilds;
+    com::sun::star::uno::Reference< com::sun::star::drawing::XShapes > mxChildren;
 
     const SdXMLImport& GetSdImport() const { return (const SdXMLImport&)GetImport(); }
     SdXMLImport& GetSdImport() { return (SdXMLImport&)GetImport(); }
 
 protected:
     void SetLocalShapesContext(com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rNew)
-        { mxChilds = rNew; }
+        { mxChildren = rNew; }
 
 public:
     TYPEINFO();

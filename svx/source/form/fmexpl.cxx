@@ -311,9 +311,9 @@ void FmEntryData::Clear()
 }
 
 //------------------------------------------------------------------------
-sal_Bool FmEntryData::IsEqualWithoutChilds( FmEntryData* pEntryData )
+sal_Bool FmEntryData::IsEqualWithoutChildren( FmEntryData* pEntryData )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmEntryData::IsEqualWithoutChilds" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmEntryData::IsEqualWithoutChildren" );
     if(this == pEntryData)
         return sal_True;
 
@@ -332,7 +332,7 @@ sal_Bool FmEntryData::IsEqualWithoutChilds( FmEntryData* pEntryData )
     if( !pEntryData->GetParent() && !pParent )
         return sal_True;
 
-    if( !pParent->IsEqualWithoutChilds(pEntryData->GetParent()) )
+    if( !pParent->IsEqualWithoutChildren(pEntryData->GetParent()) )
         return sal_False;
 
     return sal_True;
@@ -395,7 +395,7 @@ FmEntryData* FmFormData::Clone()
 }
 
 //------------------------------------------------------------------------
-sal_Bool FmFormData::IsEqualWithoutChilds( FmEntryData* pEntryData )
+sal_Bool FmFormData::IsEqualWithoutChildren( FmEntryData* pEntryData )
 {
     if(this == pEntryData)
         return sal_True;
@@ -405,7 +405,7 @@ sal_Bool FmFormData::IsEqualWithoutChilds( FmEntryData* pEntryData )
     if( (XForm*)m_xForm.get() != (XForm*)pFormData->GetFormIface().get() )
         return sal_False;
 
-    return FmEntryData::IsEqualWithoutChilds( pFormData );
+    return FmEntryData::IsEqualWithoutChildren( pFormData );
 }
 
 
@@ -571,9 +571,9 @@ Image FmControlData::GetImage(const ImageList& ilNavigatorImages) const
 }
 
 //------------------------------------------------------------------------
-sal_Bool FmControlData::IsEqualWithoutChilds( FmEntryData* pEntryData )
+sal_Bool FmControlData::IsEqualWithoutChildren( FmEntryData* pEntryData )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmControlData::IsEqualWithoutChilds" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmControlData::IsEqualWithoutChildren" );
     if(this == pEntryData)
         return sal_True;
 
@@ -584,7 +584,7 @@ sal_Bool FmControlData::IsEqualWithoutChilds( FmEntryData* pEntryData )
     if( (XFormComponent*)m_xFormComponent.get() != (XFormComponent*)pControlData->GetFormComponent().get() )
         return sal_False;
 
-    return FmEntryData::IsEqualWithoutChilds( pControlData );
+    return FmEntryData::IsEqualWithoutChildren( pControlData );
 }
 
 //------------------------------------------------------------------------

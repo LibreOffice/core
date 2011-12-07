@@ -617,13 +617,13 @@ void SvLBoxEntry::Clone( SvListEntry* pSource )
     nEntryFlags = ((SvLBoxEntry*)pSource)->nEntryFlags;
 }
 
-void SvLBoxEntry::EnableChildsOnDemand( sal_Bool bEnable )
+void SvLBoxEntry::EnableChildrenOnDemand( sal_Bool bEnable )
 {
     DBG_CHKTHIS(SvLBoxEntry,0);
     if ( bEnable )
-        nEntryFlags |= SV_ENTRYFLAG_CHILDS_ON_DEMAND;
+        nEntryFlags |= SV_ENTRYFLAG_CHILDREN_ON_DEMAND;
     else
-        nEntryFlags &= (~SV_ENTRYFLAG_CHILDS_ON_DEMAND);
+        nEntryFlags &= (~SV_ENTRYFLAG_CHILDREN_ON_DEMAND);
 }
 
 void SvLBoxEntry::ReplaceItem( SvLBoxItem* pNewItem, sal_uInt16 nPos )
@@ -907,7 +907,7 @@ void SvLBox::NotifyRemoving( SvLBoxEntry* )
 
     Standard-Verhalten:
 
-    1. Target hat keine Childs
+    1. Target hat keine Children
         - Entry wird Sibling des Targets. Entry steht hinter dem
           Target (->Fenster: Unter dem Target)
     2. Target ist ein aufgeklappter Parent
@@ -939,7 +939,7 @@ sal_Bool SvLBox::NotifyMoving(
         rNewChildPos = 0;
         return sal_True;
     }
-    if ( !pTarget->HasChilds() && !pTarget->HasChildsOnDemand() )
+    if ( !pTarget->HasChildren() && !pTarget->HasChildrenOnDemand() )
     {
         // Fall 1
         rpNewParent = GetParent( pTarget );
@@ -976,7 +976,7 @@ sal_Bool SvLBox::NotifyCopying(
         rNewChildPos = 0;
         return sal_True;
     }
-    if ( !pTarget->HasChilds() && !pTarget->HasChildsOnDemand() )
+    if ( !pTarget->HasChildren() && !pTarget->HasChildrenOnDemand() )
     {
         // Fall 1
         rpNewParent = GetParent( pTarget );
@@ -1021,8 +1021,8 @@ sal_Bool SvLBox::CopySelection( SvLBox* pSource, SvLBoxEntry* pTarget )
     SvLBoxEntry* pSourceEntry = pSource->FirstSelected();
     while ( pSourceEntry )
     {
-        // Childs werden automatisch mitkopiert
-        pSource->SelectChilds( pSourceEntry, sal_False );
+        // Children werden automatisch mitkopiert
+        pSource->SelectChildren( pSourceEntry, sal_False );
         aList.push_back( pSourceEntry );
         pSourceEntry = pSource->NextSelected( pSourceEntry );
     }
@@ -1082,8 +1082,8 @@ sal_Bool SvLBox::MoveSelectionCopyFallbackPossible( SvLBox* pSource, SvLBoxEntry
     SvLBoxEntry* pSourceEntry = pSource->FirstSelected();
     while ( pSourceEntry )
     {
-        // Childs werden automatisch mitbewegt
-        pSource->SelectChilds( pSourceEntry, sal_False );
+        // Children werden automatisch mitbewegt
+        pSource->SelectChildren( pSourceEntry, sal_False );
         aList.push_back( pSourceEntry );
         pSourceEntry = pSource->NextSelected( pSourceEntry );
     }
@@ -1143,9 +1143,9 @@ void SvLBox::RemoveSelection()
     while ( pEntry )
     {
         aList.push_back( pEntry );
-        if ( pEntry->HasChilds() )
-            // Remove loescht Childs automatisch
-            SelectChilds( pEntry, sal_False );
+        if ( pEntry->HasChildren() )
+            // Remove loescht Children automatisch
+            SelectChildren( pEntry, sal_False );
         pEntry = NextSelected( pEntry );
     }
     pEntry = (SvLBoxEntry*)aList.First();
@@ -1161,7 +1161,7 @@ SvLBox* SvLBox::GetSourceView() const
     return pDDSource;
 }
 
-void SvLBox::RequestingChilds( SvLBoxEntry*  )
+void SvLBox::RequestingChildren( SvLBoxEntry*  )
 {
     DBG_CHKTHIS(SvLBox,0);
     OSL_FAIL("Child-Request-Hdl not implemented!");
@@ -1236,7 +1236,7 @@ sal_Bool SvLBox::Select( SvLBoxEntry*, sal_Bool  )
     return sal_False;
 }
 
-sal_uLong SvLBox::SelectChilds( SvLBoxEntry* , sal_Bool  )
+sal_uLong SvLBox::SelectChildren( SvLBoxEntry* , sal_Bool  )
 {
     DBG_CHKTHIS(SvLBox,0);
     return 0;
@@ -1365,7 +1365,7 @@ void SvLBox::InitViewData( SvViewData* pData, SvListEntry* pEntry )
 
 
 
-void SvLBox::EnableSelectionAsDropTarget( sal_Bool bEnable, sal_Bool bWithChilds )
+void SvLBox::EnableSelectionAsDropTarget( sal_Bool bEnable, sal_Bool bWithChildren )
 {
     DBG_CHKTHIS(SvLBox,0);
     sal_uInt16 nRefDepth;
@@ -1377,7 +1377,7 @@ void SvLBox::EnableSelectionAsDropTarget( sal_Bool bEnable, sal_Bool bWithChilds
         if ( !bEnable )
         {
             pSelEntry->nEntryFlags |= SV_ENTRYFLAG_DISABLE_DROP;
-            if ( bWithChilds )
+            if ( bWithChildren )
             {
                 nRefDepth = pModel->GetDepth( pSelEntry );
                 pTemp = Next( pSelEntry );
@@ -1391,7 +1391,7 @@ void SvLBox::EnableSelectionAsDropTarget( sal_Bool bEnable, sal_Bool bWithChilds
         else
         {
             pSelEntry->nEntryFlags &= (~SV_ENTRYFLAG_DISABLE_DROP);
-            if ( bWithChilds )
+            if ( bWithChildren )
             {
                 nRefDepth = pModel->GetDepth( pSelEntry );
                 pTemp = Next( pSelEntry );
@@ -1555,7 +1555,7 @@ const void* SvLBox::NextSearchEntry( const void* _pCurrentSearchEntry, String& _
     SvLBoxEntry* pEntry = const_cast< SvLBoxEntry* >( static_cast< const SvLBoxEntry* >( _pCurrentSearchEntry ) );
 
     if  (   (   ( GetChildCount( pEntry ) > 0 )
-            ||  ( pEntry->HasChildsOnDemand() )
+            ||  ( pEntry->HasChildrenOnDemand() )
             )
         &&  !IsExpanded( pEntry )
         )
@@ -1824,12 +1824,12 @@ void SvLBox::StartDrag( sal_Int8, const Point& rPosPixel )
     Update();
     Control::SetUpdateMode( bOldUpdateMode );
 
-    // Selektion & deren Childs im Model als DropTargets sperren
+    // Selektion & deren Children im Model als DropTargets sperren
     // Wichtig: Wenn im DropHandler die Selektion der
     // SourceListBox veraendert wird, muessen vorher die Eintraege
     // als DropTargets wieder freigeschaltet werden:
     // (GetSourceListBox()->EnableSelectionAsDropTarget( sal_True, sal_True );)
-    EnableSelectionAsDropTarget( sal_False, sal_True /* with Childs */ );
+    EnableSelectionAsDropTarget( sal_False, sal_True /* with children */ );
 
     pContainer->StartDrag( this, nDragOptions, GetDragFinishedHdl() );
 }

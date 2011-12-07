@@ -1126,7 +1126,7 @@ void SAL_CALL FormController::setActiveTerm( ::sal_Int32 _ActiveTerm ) throw (In
 sal_Bool SAL_CALL FormController::hasElements(void) throw( RuntimeException )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    return !m_aChilds.empty();
+    return !m_aChildren.empty();
 }
 
 //------------------------------------------------------------------------------
@@ -1149,7 +1149,7 @@ Reference< XEnumeration > SAL_CALL  FormController::createEnumeration(void) thro
 sal_Int32 SAL_CALL FormController::getCount(void) throw( RuntimeException )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    return m_aChilds.size();
+    return m_aChildren.size();
 }
 
 //------------------------------------------------------------------------------
@@ -1157,10 +1157,10 @@ Any SAL_CALL FormController::getByIndex(sal_Int32 Index) throw( IndexOutOfBounds
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if (Index < 0 ||
-        Index >= (sal_Int32)m_aChilds.size())
+        Index >= (sal_Int32)m_aChildren.size())
         throw IndexOutOfBoundsException();
 
-    return makeAny( m_aChilds[ Index ] );
+    return makeAny( m_aChildren[ Index ] );
 }
 
 //  EventListener
@@ -1237,8 +1237,8 @@ void FormController::disposing(void)
     implSetCurrentControl( NULL );
 
     // clean up our children
-    for (FmFormControllers::const_iterator i = m_aChilds.begin();
-        i != m_aChilds.end(); ++i)
+    for (FmFormControllers::const_iterator i = m_aChildren.begin();
+        i != m_aChildren.end(); ++i)
     {
         // search the position of the model within the form
         Reference< XFormComponent >  xForm((*i)->getModel(), UNO_QUERY);
@@ -1258,7 +1258,7 @@ void FormController::disposing(void)
 
         Reference< XComponent > (*i, UNO_QUERY)->dispose();
     }
-    m_aChilds.clear();
+    m_aChildren.clear();
 
     disposeAllFeaturesAndDispatchers();
 
@@ -3059,7 +3059,7 @@ void SAL_CALL FormController::addChildController( const Reference< XFormControll
         throw IllegalArgumentException( ::rtl::OUString(), *this, 1 );
         // TODO: (localized) error message
 
-    m_aChilds.push_back( _ChildController );
+    m_aChildren.push_back( _ChildController );
     _ChildController->setParent( *this );
 
     // search the position of the model within the form
@@ -3529,8 +3529,8 @@ void FormController::setMode(const ::rtl::OUString& Mode) throw( NoSupportExcept
     else
         stopFiltering();
 
-    for (FmFormControllers::const_iterator i = m_aChilds.begin();
-        i != m_aChilds.end(); ++i)
+    for (FmFormControllers::const_iterator i = m_aChildren.begin();
+        i != m_aChildren.end(); ++i)
     {
         Reference< XModeSelector > xMode(*i, UNO_QUERY);
         if ( xMode.is() )

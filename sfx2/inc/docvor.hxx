@@ -73,7 +73,7 @@ protected:
     virtual sal_Bool NotifyCopying(SvLBoxEntry *pSource,
                             SvLBoxEntry* pTarget,
                             SvLBoxEntry *&pNewParent, sal_uIntPtr &);
-    virtual void RequestingChilds( SvLBoxEntry* pParent );
+    virtual void RequestingChildren( SvLBoxEntry* pParent );
     virtual long ExpandingHdl();
     virtual sal_Bool Select( SvLBoxEntry* pEntry, sal_Bool bSelect=sal_True );
 
@@ -125,7 +125,7 @@ private:
     sal_uInt16              GetLevelCount_Impl( SvLBoxEntry* pParent ) const;
 
     SvLBoxEntry*        InsertEntryByBmpType( const XubString& rText, BMPTYPE eBmpType,
-                            SvLBoxEntry* pParent = NULL, sal_Bool bChildsOnDemand = sal_False,
+                            SvLBoxEntry* pParent = NULL, sal_Bool bChildrenOnDemand = sal_False,
                             sal_uIntPtr nPos = LIST_APPEND, void* pUserData = NULL );
 };
 

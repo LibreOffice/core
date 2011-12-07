@@ -328,14 +328,14 @@ sal_Bool SdPageObjsTLB::SelectEntry( const String& rName )
 
 /*************************************************************************
 |*
-|* Gibt zurueck, ob Childs des uebergebenen Strings selektiert sind
+|* Gibt zurueck, ob Children des uebergebenen Strings selektiert sind
 |*
 \************************************************************************/
 
-sal_Bool SdPageObjsTLB::HasSelectedChilds( const String& rName )
+sal_Bool SdPageObjsTLB::HasSelectedChildren( const String& rName )
 {
     sal_Bool bFound  = sal_False;
-    sal_Bool bChilds = sal_False;
+    sal_Bool bChildren = sal_False;
 
     if( rName.Len() )
     {
@@ -351,11 +351,11 @@ sal_Bool SdPageObjsTLB::HasSelectedChilds( const String& rName )
                 sal_Bool bExpanded = IsExpanded( pEntry );
                 long nCount = GetChildSelectionCount( pEntry );
                 if( bExpanded && nCount > 0 )
-                    bChilds = sal_True;
+                    bChildren = sal_True;
             }
         }
     }
-    return( bChilds );
+    return( bChildren );
 }
 
 
@@ -423,7 +423,7 @@ void SdPageObjsTLB::Fill( const SdDrawDocument* pInDoc, sal_Bool bAllPages,
 
 /*************************************************************************
 |*
-|* Es wird nur der erste Eintrag eingefuegt. Childs werden OnDemand erzeugt
+|* Es wird nur der erste Eintrag eingefuegt. Children werden OnDemand erzeugt
 |*
 \************************************************************************/
 
@@ -541,7 +541,7 @@ void SdPageObjsTLB::AddShapeList (
         }
     }
 
-    if( pEntry->HasChilds() )
+    if( pEntry->HasChildren() )
     {
         SetExpandedEntryBmp(
             pEntry,
@@ -699,9 +699,9 @@ List* SdPageObjsTLB::GetSelectEntryList( sal_uInt16 nDepth )
 |*
 \************************************************************************/
 
-void SdPageObjsTLB::RequestingChilds( SvLBoxEntry* pFileEntry )
+void SdPageObjsTLB::RequestingChildren( SvLBoxEntry* pFileEntry )
 {
-    if( !pFileEntry->HasChilds() )
+    if( !pFileEntry->HasChildren() )
     {
         if( GetBookmarkDoc() )
         {
@@ -754,7 +754,7 @@ void SdPageObjsTLB::RequestingChilds( SvLBoxEntry* pFileEntry )
                             }
                         }
                     }
-                    if( pPageEntry->HasChilds() )
+                    if( pPageEntry->HasChildren() )
                     {
                         SetExpandedEntryBmp(  pPageEntry, aImgPageObjs );
                         SetCollapsedEntryBmp( pPageEntry, aImgPageObjs );
@@ -765,7 +765,7 @@ void SdPageObjsTLB::RequestingChilds( SvLBoxEntry* pFileEntry )
         }
     }
     else
-        SvTreeListBox::RequestingChilds( pFileEntry );
+        SvTreeListBox::RequestingChildren( pFileEntry );
 }
 
 /*************************************************************************
@@ -892,7 +892,7 @@ void SdPageObjsTLB::KeyInput( const KeyEvent& rKEvt )
     {
         // Auskommentierter Code aus svtools/source/contnr/svimpbox.cxx
         SvLBoxEntry* pCursor = GetCurEntry();
-        if( pCursor->HasChilds() || pCursor->HasChildsOnDemand() )
+        if( pCursor->HasChildren() || pCursor->HasChildrenOnDemand() )
         {
             if( IsExpanded( pCursor ) )
                 Collapse( pCursor );

@@ -87,7 +87,7 @@ OTableFieldDescWin::~OTableFieldDescWin()
 {
     DBG_DTOR(OTableFieldDescWin,NULL);
     //////////////////////////////////////////////////////////////////////
-    // Childs zerstoeren
+    // Children zerstoeren
     m_pHelpBar->Hide();
     getGenPage()->Hide();
     m_pHeader->Hide();

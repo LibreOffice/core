@@ -50,11 +50,11 @@ using namespace ::com::sun::star;
 typedef std::deque< SvLBoxEntry* > EntryArray;
 
 
-void BasicTreeListBox::RequestingChilds( SvLBoxEntry* pEntry )
+void BasicTreeListBox::RequestingChildren( SvLBoxEntry* pEntry )
 {
     BasicEntryDescriptor aDesc( GetEntryDescriptor( pEntry ) );
     ScriptDocument aDocument( aDesc.GetDocument() );
-    OSL_ENSURE( aDocument.isAlive(), "BasicTreeListBox::RequestingChilds: invalid document!" );
+    OSL_ENSURE( aDocument.isAlive(), "BasicTreeListBox::RequestingChildren: invalid document!" );
     if ( !aDocument.isAlive() )
         return;
 
@@ -124,7 +124,7 @@ void BasicTreeListBox::RequestingChilds( SvLBoxEntry* pEntry )
             }
             else
             {
-                OSL_FAIL( "BasicTreeListBox::RequestingChilds: Error loading library!" );
+                OSL_FAIL( "BasicTreeListBox::RequestingChildren: Error loading library!" );
             }
         }
     }
@@ -137,7 +137,7 @@ void BasicTreeListBox::RequestingChilds( SvLBoxEntry* pEntry )
         ImpCreateLibSubSubEntriesInVBAMode( pEntry, aDocument, aLibName );
     }
     else {
-        OSL_FAIL( "BasicTreeListBox::RequestingChilds: Unknown Type!" );
+        OSL_FAIL( "BasicTreeListBox::RequestingChildren: Unknown Type!" );
     }
 }
 
@@ -146,7 +146,7 @@ void BasicTreeListBox::ExpandedHdl()
     SvLBoxEntry* pEntry = GetHdlEntry();
     DBG_ASSERT( pEntry, "Was wurde zugeklappt?" );
 
-    if ( !IsExpanded( pEntry ) && pEntry->HasChildsOnDemand() )
+    if ( !IsExpanded( pEntry ) && pEntry->HasChildrenOnDemand() )
     {
         SvLBoxEntry* pChild = FirstChild( pEntry );
         while ( pChild )

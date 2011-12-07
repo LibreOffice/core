@@ -33,8 +33,8 @@
 #include "AccessibleDocumentBase.hxx"
 
 class ScPreviewShell;
-class ScNotesChilds;
-class ScShapeChilds;
+class ScNotesChildren;
+class ScShapeChildren;
 class ScAccessiblePreviewTable;
 class ScAccessiblePageHeader;
 
@@ -125,7 +125,7 @@ protected:
         createAccessibleName(void)
         throw (::com::sun::star::uno::RuntimeException);
 
-public: // needed in ScShapeChilds
+public: // needed in ScShapeChildren
     /// Return the object's current bounding box relative to the desktop.
     virtual Rectangle GetBoundingBoxOnScreen(void) const
         throw (::com::sun::star::uno::RuntimeException);
@@ -137,8 +137,8 @@ protected:
 
 private:
     ScPreviewShell* mpViewShell;
-    ScNotesChilds* mpNotesChilds;
-    ScShapeChilds* mpShapeChilds;
+    ScNotesChildren* mpNotesChildren;
+    ScShapeChildren* mpShapeChildren;
     ScAccessiblePreviewTable* mpTable;
     ScAccessiblePageHeader* mpHeader;
     ScAccessiblePageHeader* mpFooter;
@@ -147,8 +147,8 @@ private:
         const com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessibleStateSet>& rxParentStates);
 
-    ScNotesChilds* GetNotesChilds();
-    ScShapeChilds* GetShapeChilds();
+    ScNotesChildren* GetNotesChildren();
+    ScShapeChildren* GetShapeChildren();
 };
 
 

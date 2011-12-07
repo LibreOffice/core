@@ -638,12 +638,12 @@ struct StyleTree_Impl
 {
     String aName;
     String aParent;
-    StyleTreeArr_Impl *pChilds;
+    StyleTreeArr_Impl *pChildren;
     sal_Bool bIsExpanded;
     sal_Bool HasParent() const { return aParent.Len() != 0; }
 
     StyleTree_Impl(const String &rName, const String &rParent):
-        aName(rName), aParent(rParent), pChilds(0), bIsExpanded(0) {}
+        aName(rName), aParent(rParent), pChildren(0), bIsExpanded(0) {}
     ~StyleTree_Impl();
     void Put(StyleTree_Impl* pIns, sal_uIntPtr lPos=ULONG_MAX);
     sal_uIntPtr Count();
@@ -656,26 +656,26 @@ SV_IMPL_PTRARR(StyleTreeArr_Impl, StyleTree_ImplPtr)
 
 sal_uIntPtr StyleTree_Impl::Count()
 {
-    return pChilds ? pChilds->Count() : 0L;
+    return pChildren ? pChildren->Count() : 0L;
 }
 
 //-------------------------------------------------------------------------
 
 StyleTree_Impl::~StyleTree_Impl()
 {
-    delete pChilds;
+    delete pChildren;
 }
 
 //-------------------------------------------------------------------------
 
 void StyleTree_Impl::Put(StyleTree_Impl* pIns, sal_uIntPtr lPos)
 {
-    if ( !pChilds )
-        pChilds = new StyleTreeArr_Impl;
+    if ( !pChildren )
+        pChildren = new StyleTreeArr_Impl;
 
     if ( ULONG_MAX == lPos )
-        lPos = pChilds->Count();
-    pChilds->Insert( pIns, (sal_uInt16)lPos );
+        lPos = pChildren->Count();
+    pChildren->Insert( pIns, (sal_uInt16)lPos );
 }
 
 //-------------------------------------------------------------------------
@@ -703,7 +703,7 @@ StyleTreeArr_Impl &MakeTree_Impl(StyleTreeArr_Impl &rArr)
                     // Paste initial filter
                     sal_uInt16 nPos;
                     for( nPos = 0 ; nPos < pCmp->Count() &&
-                             aSorter.compare((*pCmp->pChilds)[nPos]->aName, pEntry->aName) < 0 ; nPos++)
+                             aSorter.compare((*pCmp->pChildren)[nPos]->aName, pEntry->aName) < 0 ; nPos++)
                     {};
                     pCmp->Put(pEntry,nPos);
                     break;
@@ -743,9 +743,9 @@ SvLBoxEntry* FillBox_Impl(SvTreeListBox *pBox,
                                  SvLBoxEntry* pParent = 0)
 {
     SvLBoxEntry* pNewEntry = pBox->InsertEntry(pEntry->aName, pParent);
-    const sal_uInt16 nCount = pEntry->pChilds? pEntry->pChilds->Count(): 0;
+    const sal_uInt16 nCount = pEntry->pChildren? pEntry->pChildren->Count(): 0;
     for(sal_uInt16 i = 0; i < nCount; ++i)
-        FillBox_Impl(pBox, (*pEntry->pChilds)[i], rEntries, pNewEntry);
+        FillBox_Impl(pBox, (*pEntry->pChildren)[i], rEntries, pNewEntry);
     return pNewEntry;
 }
 
@@ -2069,7 +2069,7 @@ void SfxCommonTemplateDialog_Impl::DeleteHdl(void *)
 
                 if ( pTreeBox )
                 {
-                    pTreeBox->RemoveParentKeepChilds( pTreeBox->FirstSelected() );
+                    pTreeBox->RemoveParentKeepChildren( pTreeBox->FirstSelected() );
                     bDontUpdate = sal_False;
                 }
             }

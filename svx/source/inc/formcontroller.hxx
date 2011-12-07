@@ -175,7 +175,7 @@ namespace svxform
                                     m_aParameterListeners,
                                     m_aFilterListeners;
 
-        FmFormControllers           m_aChilds;
+        FmFormControllers           m_aChildren;
         FilterComponents            m_aFilterComponents;
         FmFilterRows                m_aFilterRows;
 

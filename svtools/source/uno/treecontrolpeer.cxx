@@ -99,7 +99,7 @@ public:
 
     sal_uInt32 insert( SvLBoxEntry* pEntry,SvLBoxEntry* pParent,sal_uLong nPos=LIST_APPEND );
 
-    virtual void    RequestingChilds( SvLBoxEntry* pParent );
+    virtual void    RequestingChildren( SvLBoxEntry* pParent );
 
     virtual sal_Bool    EditingEntry( SvLBoxEntry* pEntry, Selection& );
     virtual sal_Bool    EditedEntry( SvLBoxEntry* pEntry, const XubString& rNewText );
@@ -317,9 +317,9 @@ bool TreeControlPeer::updateEntry( UnoTreeListEntry* pEntry )
             }
         }
 
-        if( (pEntry->mxNode->hasChildrenOnDemand() == sal_True) != (pEntry->HasChildsOnDemand() == sal_True) )
+        if( (pEntry->mxNode->hasChildrenOnDemand() == sal_True) != (pEntry->HasChildrenOnDemand() == sal_True) )
         {
-            pEntry->EnableChildsOnDemand( pEntry->mxNode->hasChildrenOnDemand() ? sal_True : sal_False );
+            pEntry->EnableChildrenOnDemand( pEntry->mxNode->hasChildrenOnDemand() ? sal_True : sal_False );
             bChanged = true;
         }
 
@@ -1582,7 +1582,7 @@ sal_uInt32 UnoTreeListBoxImpl::insert( SvLBoxEntry* pEntry,SvLBoxEntry* pParent,
 
 // --------------------------------------------------------------------
 
-void UnoTreeListBoxImpl::RequestingChilds( SvLBoxEntry* pParent )
+void UnoTreeListBoxImpl::RequestingChildren( SvLBoxEntry* pParent )
 {
     UnoTreeListEntry* pEntry = dynamic_cast< UnoTreeListEntry* >( pParent );
     if( pEntry && pEntry->mxNode.is() && mxPeer.is() )

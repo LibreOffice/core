@@ -903,7 +903,7 @@ sal_uInt16 SwCrsrShell::GetOutlinePos( sal_uInt8 nLevel )
 
 
 sal_Bool SwCrsrShell::MakeOutlineSel( sal_uInt16 nSttPos, sal_uInt16 nEndPos,
-                                    sal_Bool bWithChilds )
+                                    sal_Bool bWithChildren )
 {
     const SwNodes& rNds = GetDoc()->GetNodes();
     const SwOutlineNodes& rOutlNds = rNds.GetOutLineNds();
@@ -924,7 +924,7 @@ sal_Bool SwCrsrShell::MakeOutlineSel( sal_uInt16 nSttPos, sal_uInt16 nEndPos,
     SwNode* pSttNd = rOutlNds[ nSttPos ];
     SwNode* pEndNd = rOutlNds[ nEndPos ];
 
-    if( bWithChilds )
+    if( bWithChildren )
     {
         const int nLevel = pEndNd->GetTxtNode()->GetAttrOutlineLevel()-1;//<-end.zhaojianwei
         for( ++nEndPos; nEndPos < rOutlNds.Count(); ++nEndPos )
@@ -935,7 +935,7 @@ sal_Bool SwCrsrShell::MakeOutlineSel( sal_uInt16 nSttPos, sal_uInt16 nEndPos,
                 break;          // EndPos steht jetzt auf dem naechsten
         }
     }
-    // ohne Childs, dann aber zumindest auf den naechsten
+    // ohne Children, dann aber zumindest auf den naechsten
     else if( ++nEndPos < rOutlNds.Count() )
         pEndNd = rOutlNds[ nEndPos ];
 

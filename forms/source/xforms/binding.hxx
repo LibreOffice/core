@@ -371,7 +371,7 @@ private:
     /// 'clear' this binding - remove all listeners, etc.
     void clear();
 
-    /// distribute MIPs from current node recursively to childs
+    /// distribute MIPs from current node recursively to children
     void distributeMIP( const XNode_t &rxNode );
 
     /// implement get*Namespaces()

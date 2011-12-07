@@ -1149,7 +1149,7 @@ void SAL_CALL SbaXFormAdapter::dispose() throw( RuntimeException )
     m_aDisposeListeners.disposeAndClear(aEvt);
     m_aContainerListeners.disposeAndClear(aEvt);
 
-    // dispose all childs
+    // dispose all children
     for (   ::std::vector< Reference< ::com::sun::star::form::XFormComponent > >::iterator aIter = m_aChildren.begin();
             aIter != m_aChildren.end();
             ++aIter

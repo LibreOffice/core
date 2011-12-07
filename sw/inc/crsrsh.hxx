@@ -625,7 +625,7 @@ public:
     // select the given range of OutlineNodes. Optionally including the children
     // the sal_uInt16s are the positions in OutlineNodes-Array (EditShell)
     sal_Bool MakeOutlineSel( sal_uInt16 nSttPos, sal_uInt16 nEndPos,
-                        sal_Bool bWithChilds = sal_False );
+                        sal_Bool bWithChildren = sal_False );
 
     sal_Bool GotoNextOutline();
     sal_Bool GotoPrevOutline();

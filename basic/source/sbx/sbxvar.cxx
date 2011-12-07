@@ -377,11 +377,11 @@ void SbxVariable::SetParent( SbxObject* p )
     {
         // then this had to be a child of the new parent
         sal_Bool bFound = sal_False;
-        SbxArray *pChilds = p->GetObjects();
-        if ( pChilds )
+        SbxArray *pChildren = p->GetObjects();
+        if ( pChildren )
         {
-            for ( sal_uInt16 nIdx = 0; !bFound && nIdx < pChilds->Count(); ++nIdx )
-                bFound = ( this == pChilds->Get(nIdx) );
+            for ( sal_uInt16 nIdx = 0; !bFound && nIdx < pChildren->Count(); ++nIdx )
+                bFound = ( this == pChildren->Get(nIdx) );
         }
         if ( !bFound )
         {

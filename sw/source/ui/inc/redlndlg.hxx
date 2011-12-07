@@ -80,7 +80,7 @@ class SW_DLLPUBLIC SwRedlineAcceptDlg
 {
     Dialog*                 pParentDlg;
     SwRedlineDataParentArr  aRedlineParents;
-    SwRedlineDataChildArr   aRedlineChilds;
+    SwRedlineDataChildArr   aRedlineChildren;
     SwRedlineDataParentSortArr aUsedSeqNo;
     SvxAcceptChgCtr         aTabPagesCTRL;
     PopupMenu               aPopup;
@@ -116,7 +116,7 @@ class SW_DLLPUBLIC SwRedlineAcceptDlg
     SW_DLLPRIVATE DECL_LINK( CommandHdl,        void* );
 
     SW_DLLPRIVATE sal_uInt16            CalcDiff(sal_uInt16 nStart, sal_Bool bChild);
-    SW_DLLPRIVATE void          InsertChilds(SwRedlineDataParent *pParent, const SwRedline& rRedln, const sal_uInt16 nAutoFmt);
+    SW_DLLPRIVATE void          InsertChildren(SwRedlineDataParent *pParent, const SwRedline& rRedln, const sal_uInt16 nAutoFmt);
     SW_DLLPRIVATE void          InsertParents(sal_uInt16 nStart, sal_uInt16 nEnd = USHRT_MAX);
     SW_DLLPRIVATE void          RemoveParents(sal_uInt16 nStart, sal_uInt16 nEnd);
     SW_DLLPRIVATE void          InitAuthors();

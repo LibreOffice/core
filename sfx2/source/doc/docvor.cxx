@@ -706,9 +706,9 @@ sal_Bool SfxOrganizeListBox_Impl::MoveOrCopyContents(SvLBox *pSourceBox,
             // the general reference point
             while(GetModel()->GetDepth(pParentIter) != nTLevel)
                 pParentIter = GetParent(pParentIter);
-            if(pParentIter->HasChildsOnDemand() &&
-                !GetModel()->HasChilds(pParentIter))
-                RequestingChilds(pParentIter);
+            if(pParentIter->HasChildrenOnDemand() &&
+                !GetModel()->HasChildren(pParentIter))
+                RequestingChildren(pParentIter);
             SvLBoxEntry *pChildIter = 0;
 
             sal_uInt16 i = 0;
@@ -721,16 +721,16 @@ sal_Bool SfxOrganizeListBox_Impl::MoveOrCopyContents(SvLBox *pSourceBox,
                 // If possible, fill in Items onDemand
                 ++i;
                 if(i < 2 && p[i+1] != INDEX_IGNORE &&
-                   pChildIter->HasChildsOnDemand() &&
-                   !GetModel()->HasChilds(pChildIter))
-                    RequestingChilds(pChildIter);
+                   pChildIter->HasChildrenOnDemand() &&
+                   !GetModel()->HasChildren(pChildIter))
+                    RequestingChildren(pChildIter);
                 pParentIter = pChildIter;
             }
             rIdx = p[i];
             pNewParent = pParentIter;
             if(!IsExpanded(pNewParent) &&
-               pNewParent->HasChildsOnDemand() &&
-               !GetModel()->HasChilds(pNewParent))
+               pNewParent->HasChildrenOnDemand() &&
+               !GetModel()->HasChildren(pNewParent))
             {
                 bOk = sal_False;
                 if(!bCopy)
@@ -1132,20 +1132,20 @@ SfxObjectShellRef SfxOrganizeListBox_Impl::GetObjectShell(const Path &rPath)
 
 //-------------------------------------------------------------------------
 
-void SfxOrganizeListBox_Impl::RequestingChilds( SvLBoxEntry* pEntry )
+void SfxOrganizeListBox_Impl::RequestingChildren( SvLBoxEntry* pEntry )
 
 /*  [Description]
 
-    Sent to the Childs of an entry that is going to be inserted.
+    Sent to the children of an entry that is going to be inserted.
     (SV-Handler)
 
     [Parameter]
 
-    SvLBoxEntry* pEntry     the entry whose Childs is requested
+    SvLBoxEntry* pEntry     the entry whose children is requested
 */
 
 {
-    if ( !GetModel()->HasChilds( pEntry ) )
+    if ( !GetModel()->HasChildren( pEntry ) )
     {
         WaitObject aWaitCursor( this );
 
@@ -1175,8 +1175,8 @@ void SfxOrganizeListBox_Impl::RequestingChilds( SvLBoxEntry* pEntry )
                 const sal_uInt16 nCount = aRef->GetContentCount(aPath[nDocLevel+1]);
                 String aText;
                 Bitmap aClosedBmp, aOpenedBmp;
-                const bool bCanHaveChilds =
-                    aRef->CanHaveChilds(aPath[nDocLevel+1],
+                const bool bCanHaveChildren =
+                    aRef->CanHaveChildren(aPath[nDocLevel+1],
                                         aPath[nDocLevel+2]);
                 for(sal_uInt16 i = 0; i < nCount; ++i)
                 {
@@ -1191,7 +1191,7 @@ void SfxOrganizeListBox_Impl::RequestingChilds( SvLBoxEntry* pEntry )
 
                     SvLBoxEntry *pNew = SvTreeListBox::InsertEntry(
                         aText, aOpenedImage, aClosedImage,
-                        pEntry, bCanHaveChilds);
+                        pEntry, bCanHaveChildren);
                     pNew->SetUserData(bDeletable ? &bDeletable : 0);
                 }
             }
@@ -1285,7 +1285,7 @@ SvLBoxEntry* SfxOrganizeListBox_Impl::InsertEntryByBmpType(
     const XubString& rText,
     BMPTYPE eBmpType,
     SvLBoxEntry* pParent,
-    sal_Bool bChildsOnDemand,
+    sal_Bool bChildrenOnDemand,
     sal_uIntPtr nPos,
     void* pUserData
 )
@@ -1310,7 +1310,7 @@ SvLBoxEntry* SfxOrganizeListBox_Impl::InsertEntryByBmpType(
             OSL_FAIL( "SfxOrganizeListBox_Impl::InsertEntryByBmpType(): something forgotten?!" );
     }
 
-    pEntry = SvTreeListBox::InsertEntry( rText, *pExp, *pCol, pParent, bChildsOnDemand, nPos, pUserData );
+    pEntry = SvTreeListBox::InsertEntry( rText, *pExp, *pCol, pParent, bChildrenOnDemand, nPos, pUserData );
 
     return pEntry;
 }

@@ -121,7 +121,7 @@ public:
 
     void                SetState( CTL_STATE nState );
 
-    sal_uInt8               GetNumOfChilds( void ) const;   // returns number of usable radio buttons
+    sal_uInt8               GetNumOfChildren( void ) const;   // returns number of usable radio buttons
 
     Rectangle           CalculateFocusRectangle( void ) const;
     Rectangle           CalculateFocusRectangle( RECT_POINT eRectPoint ) const;

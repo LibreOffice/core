@@ -197,7 +197,7 @@ void SvImpLBox::UpdateContextBmpWidthVectorFromMovedEntry( SvLBoxEntry* pEntry )
     short nMax = Max(nExpWidth, nColWidth);
     UpdateContextBmpWidthVector( pEntry, nMax );
 
-    if( pEntry->HasChilds() ) // recursive call, whether expanded or not
+    if( pEntry->HasChildren() ) // recursive call, whether expanded or not
     {
         SvLBoxEntry* pChild = pView->FirstChild( pEntry );
         DBG_ASSERT( pChild, "The first child is invalid!" );
@@ -996,7 +996,7 @@ void SvImpLBox::MakeVisible( SvLBoxEntry* pEntry, sal_Bool bMoveToTop )
                 }
                 pParent = pView->GetParent( pParent );
             }
-            // Passen Childs der Parents in View oder muessen wir scrollen ?
+            // Passen Children der Parents in View oder muessen wir scrollen ?
             if( IsEntryInView( pEntry ) && !bMoveToTop )
                 return;  // Scrollen nicht noetig -> tschuess
         }
@@ -1041,8 +1041,8 @@ void SvImpLBox::ScrollToAbsPos( long nPos )
 
 void SvImpLBox::DrawNet()
 {
-    if( pView->GetVisibleCount() < 2 && !pStartEntry->HasChildsOnDemand() &&
-        !pStartEntry->HasChilds() )
+    if( pView->GetVisibleCount() < 2 && !pStartEntry->HasChildrenOnDemand() &&
+        !pStartEntry->HasChildren() )
         return;
 
     //for platforms who don't have nets, DrawNativeControl does nothing and return true
@@ -1713,7 +1713,7 @@ void SvImpLBox::RemovingEntry( SvLBoxEntry* pEntry )
     }
 
     if( pEntry == pMostRightEntry || (
-        pEntry->HasChilds() && pView->IsExpanded(pEntry) &&
+        pEntry->HasChildren() && pView->IsExpanded(pEntry) &&
         pTree->IsChild(pEntry, pMostRightEntry)))
     {
         nFlags |= F_REMOVED_RECALC_MOST_RIGHT;
@@ -1741,7 +1741,7 @@ void SvImpLBox::RemovingEntry( SvLBoxEntry* pEntry )
         if( bSimpleTravel )
             pView->Select( pCursor, sal_False );
         ShowCursor( sal_False );    // Focus-Rect weg
-        // NextSibling, weil auch Childs des Cursors geloescht werden
+        // NextSibling, weil auch Children des Cursors geloescht werden
         pTemp = pView->NextSibling( pCursor );
         if( !pTemp )
             pTemp = (SvLBoxEntry*)(pView->PrevVisible( pCursor ));
@@ -1832,7 +1832,7 @@ void SvImpLBox::MovingEntry( SvLBoxEntry* pEntry )
     if( pEntry == pStartEntry )
     {
         SvLBoxEntry* pNew = 0;
-        if( !pEntry->HasChilds() )
+        if( !pEntry->HasChildren() )
         {
             pNew = (SvLBoxEntry*)(pView->NextVisible( pStartEntry ));
             if( !pNew )
@@ -2051,7 +2051,7 @@ sal_Bool SvImpLBox::ButtonUpCheckCtrl( const MouseEvent& rMEvt )
 // sal_False == kein Expand/Collapse-Button getroffen
 sal_Bool SvImpLBox::IsNodeButton( const Point& rPosPixel, SvLBoxEntry* pEntry ) const
 {
-    if( !pEntry->HasChilds() && !pEntry->HasChildsOnDemand() )
+    if( !pEntry->HasChildren() && !pEntry->HasChildrenOnDemand() )
         return sal_False;
 
     SvLBoxTab* pFirstDynamicTab = pView->GetFirstDynamicTab();
@@ -2160,7 +2160,7 @@ void SvImpLBox::MouseButtonDown( const MouseEvent& rMEvt )
 
                 return;
             }
-            if( pEntry->HasChilds() || pEntry->HasChildsOnDemand() )
+            if( pEntry->HasChildren() || pEntry->HasChildrenOnDemand() )
             {
                 if( pView->IsExpanded(pEntry) )
                     pView->Collapse( pEntry );
@@ -2513,7 +2513,7 @@ sal_Bool SvImpLBox::KeyInput( const KeyEvent& rKEvt)
                     SvLBoxEntry* pCur = pTree->Next( pCursor );
                     while( pCur && pTree->GetDepth(pCur) > nRefDepth )
                     {
-                        if( pCur->HasChilds() && !pView->IsExpanded(pCur))
+                        if( pCur->HasChildren() && !pView->IsExpanded(pCur))
                             pView->Expand( pCur );
                         pCur = pTree->Next( pCur );
                     }
@@ -2563,7 +2563,7 @@ sal_Bool SvImpLBox::KeyInput( const KeyEvent& rKEvt)
                         SvLBoxEntry* pCur = pTree->Next( pParentToCollapse );
                         while( pCur && pTree->GetDepth(pCur) > nRefDepth )
                         {
-                            if( pCur->HasChilds() && pView->IsExpanded(pCur) )
+                            if( pCur->HasChildren() && pView->IsExpanded(pCur) )
                                 pView->Collapse( pCur );
                             pCur = pTree->Next( pCur );
                         }
@@ -3439,7 +3439,7 @@ void SvImpLBox::FindMostRight_Impl( SvLBoxEntry* pParent, SvLBoxEntry* pEntryToI
         if( pChild != pEntryToIgnore )
         {
             SetMostRight( pChild );
-            if( pChild->HasChilds() && pView->IsExpanded( pChild ))
+            if( pChild->HasChildren() && pView->IsExpanded( pChild ))
                 FindMostRight_Impl( pChild, pEntryToIgnore );
         }
     }

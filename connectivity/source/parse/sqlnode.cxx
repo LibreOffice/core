@@ -1662,7 +1662,7 @@ sal_Bool OSQLParseNode::operator==(OSQLParseNode& rParseNode) const
     // Parameters are not equal!
     bResult = bResult && !SQL_ISRULE(this, parameter);
 
-    // compare childs
+    // compare children
     for (sal_uInt32 i=0; bResult && i < count(); i++)
         bResult = *getChild(i) == *rParseNode.getChild(i);
 

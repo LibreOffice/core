@@ -245,13 +245,13 @@ void DirectoryTree::fillNode( const Reference< XMutableTreeNode >& xNode )
 // XTreeExpansionListener
 void SAL_CALL DirectoryTree::requestChildNodes( const TreeExpansionEvent& rEvent ) throw (RuntimeException)
 {
-    if( rEvent.Node.is() && rEvent.Node->hasChildsOnDemand() )
+    if( rEvent.Node.is() && rEvent.Node->hasChildrenOnDemand() )
     {
         Reference< XMutableTreeNode > xNode( rEvent.Node, UNO_QUERY );
         if( xNode.is() )
         {
             fillNode( xNode );
-            xNode->setHasChildsOnDemand( sal_False );
+            xNode->setHasChildrenOnDemand( sal_False );
         }
     }
 }
@@ -278,7 +278,7 @@ void SAL_CALL DirectoryTree::treeCollapsed( const TreeExpansionEvent& /*rEvent*/
         {
             while( xNode->getChildCount() )
                 xNode->removeChildByIndex(0);
-            xNode->setHasChildsOnDemand( sal_True );
+            xNode->setHasChildrenOnDemand( sal_True );
         }
     }
 */
