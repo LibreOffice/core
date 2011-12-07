@@ -42,6 +42,8 @@
 #include "com/sun/star/io/XOutputStream.hpp"
 #include "com/sun/star/beans/XMaterialHolder.hpp"
 
+#include <boost/scoped_ptr.hpp>
+
 #include <list>
 #include <vector>
 #include <set>
@@ -65,6 +67,7 @@ namespace vcl
 {
 
 class PDFExtOutDevData;
+class PDFWriterImpl;
 
 struct PDFNote
 {
@@ -81,7 +84,7 @@ class VCL_DLLPUBLIC PDFOutputStream
 
 class VCL_DLLPUBLIC PDFWriter
 {
-    void* pImplementation;
+    boost::scoped_ptr<PDFWriterImpl> pImplementation;
 public:
     // extended line info
     enum CapType { capButt, capRound, capSquare };
