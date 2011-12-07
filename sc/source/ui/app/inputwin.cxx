@@ -1157,7 +1157,6 @@ void ScMultiTextWnd::Resize()
     if(pEditView)
     {
         Size aOutputSize = GetOutputSizePixel();
-        Size aLineSize = Size(0,aTextBoxSize.Height());
         Point aPos1(TEXT_STARTPOS,0);
         Point aPos2(aOutputSize.Width(),aOutputSize.Height());
 
