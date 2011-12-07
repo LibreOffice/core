@@ -162,13 +162,6 @@ SwHeaderFooterWin::SwHeaderFooterWin( SwEditWin* pEditWin, const SwPageFrm* pPag
     // Use pixels for the rest of the drawing
     SetMapMode( MapMode ( MAP_PIXEL ) );
 
-    // Compute the text to show
-    m_sLabel = ResId::toString( SW_RES( STR_HEADER_TITLE ) );
-    if ( !m_bIsHeader )
-        m_sLabel = ResId::toString( SW_RES( STR_FOOTER_TITLE ) );
-    sal_Int32 nPos = m_sLabel.lastIndexOf( rtl::OUString::createFromAscii( "%1" ) );
-    m_sLabel = m_sLabel.replaceAt( nPos, 2, GetPageFrame()->GetPageDesc()->GetName() );
-
     // Create the line control
     basegfx::BColor aColor = SwViewOption::GetHeaderFooterMarkColor().getBColor();
     m_pLine = new SwDashedLine( GetEditWin(), aColor );
@@ -208,6 +201,13 @@ const SwPageFrm* SwHeaderFooterWin::GetPageFrame( )
 
 void SwHeaderFooterWin::SetOffset( Point aOffset, long nXLineStart, long nXLineEnd )
 {
+    // Compute the text to show
+    m_sLabel = ResId::toString( SW_RES( STR_HEADER_TITLE ) );
+    if ( !m_bIsHeader )
+        m_sLabel = ResId::toString( SW_RES( STR_FOOTER_TITLE ) );
+    sal_Int32 nPos = m_sLabel.lastIndexOf( rtl::OUString::createFromAscii( "%1" ) );
+    m_sLabel = m_sLabel.replaceAt( nPos, 2, GetPageFrame()->GetPageDesc()->GetName() );
+
     // Compute the text size and get the box position & size from it
     Rectangle aTextRect;
     GetTextBoundRect( aTextRect, String( m_sLabel ) );
