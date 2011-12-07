@@ -167,8 +167,10 @@ void CustomShapeProperties::pushToPropSet( const ::oox::core::FilterBase& /* rFi
             OSL_TRACE("connector shape: %s (%d)", USS(sConnectorShapeType), mnShapePresetType);
             //const uno::Reference < drawing::XShape > xShape( xPropSet, UNO_QUERY );
             Reference< drawing::XEnhancedCustomShapeDefaulter > xDefaulter( xShape, UNO_QUERY );
-            if( xDefaulter.is() )
+            if( xDefaulter.is() ) {
                 xDefaulter->createCustomShapeDefaults( sConnectorShapeType );
+                aPropertyMap[ PROP_Type ] <<= Any( sConnectorShapeType );
+            }
         }
         else if (maPresetsMap.find(mnShapePresetType) != maPresetsMap.end())
         {
@@ -229,7 +231,10 @@ void CustomShapeProperties::pushToPropSet( const ::oox::core::FilterBase& /* rFi
                     }
                     else if ( aGeoPropSeq[ i ].Name.equals( sType ) )
                     {
-                        aGeoPropSeq[ i ].Value <<= CREATE_OUSTRING( "ooxml-CustomShape" );
+                        if ( sConnectorShapeType.getLength() > 0 )
+                            aGeoPropSeq[ i ].Value <<= sConnectorShapeType;
+                        else
+                            aGeoPropSeq[ i ].Value <<= CREATE_OUSTRING( "ooxml-CustomShape" );
                     }
                 }
             }
