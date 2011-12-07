@@ -90,7 +90,7 @@
 #include <ndole.hxx>
 #include <ndgrf.hxx>
 #include <rolbck.hxx>           // Undo attr
-#include <doctxm.hxx>           // for the directories
+#include <doctxm.hxx>           // for the index stuff
 #include <grfatr.hxx>
 #include <poolfmt.hxx>          // pool template ids
 #include <mvsave.hxx>           // for server functionality
@@ -141,7 +141,7 @@ using ::rtl::OUString;
 
 // Page descriptors
 SV_IMPL_PTRARR(SwPageDescs,SwPageDescPtr);
-// Directories
+// Table Of ...
 SV_IMPL_PTRARR( SwTOXTypes, SwTOXTypePtr )
 // Field types
 SV_IMPL_PTRARR( SwFldTypes, SwFldTypePtr)
@@ -723,7 +723,7 @@ bool SwDoc::SplitNode( const SwPosition &rPos, bool bChkTableStart )
     if (GetIDocumentUndoRedo().DoesUndo())
     {
         GetIDocumentUndoRedo().ClearRedo();
-        // insert from the Undo object (currently only for TextNode)
+        // insert the Undo object (currently only for TextNode)
         if( pNode->IsTxtNode() )
         {
             pUndo = new SwUndoSplitNode( this, rPos, bChkTableStart );
@@ -756,7 +756,7 @@ bool SwDoc::SplitNode( const SwPosition &rPos, bool bChkTableStart )
                     pNd = 0;
                 else
                 {
-                    // Only if the table has line breaks!
+                    // Only if the table has page breaks!
                     const SwFrmFmt* pFrmFmt = pTblNd->GetTable().GetFrmFmt();
                     if( SFX_ITEM_SET != pFrmFmt->GetItemState(RES_PAGEDESC, sal_False) &&
                         SFX_ITEM_SET != pFrmFmt->GetItemState( RES_BREAK, sal_False ) )
@@ -774,7 +774,7 @@ bool SwDoc::SplitNode( const SwPosition &rPos, bool bChkTableStart )
                     ((SwPosition&)rPos).nNode = pTblNd->GetIndex()-1;
                     ((SwPosition&)rPos).nContent.Assign( pTxtNd, 0 );
 
-                    // only add page breaks/templates to the body area
+                    // only add page breaks/styles to the body area
                     if( nPrevPos > GetNodes().GetEndOfExtras().GetIndex() )
                     {
                         SwFrmFmt* pFrmFmt = pTblNd->GetTable().GetFrmFmt();
@@ -1108,9 +1108,11 @@ sal_uInt16 _PostItFld::GetPageNo(
     const std::set< sal_Int32 > &rPossiblePages,
     /* out */ sal_uInt16& rVirtPgNo, /* out */ sal_uInt16& rLineNo )
 {
-    //Problem: If a PostItFld is contained in more than one Node that is represented by more than one layout instance,
+    //Problem: If a PostItFld is contained in a Node that is represented
+    //by more than one layout instance,
     //we have to decide whether it should be printed once or n-times.
-    //Probably only once. For the page number we don't select a random one, but the PostIt's first occurence in the selected area.
+    //Probably only once. For the page number we don't select a random one,
+    //but the PostIt's first occurence in the selected area.
     rVirtPgNo = 0;
     sal_uInt16 nPos = GetCntnt();
     SwIterator<SwTxtFrm,SwTxtNode> aIter( GetFld()->GetTxtNode() );
@@ -1830,7 +1832,7 @@ void SwDoc::ClearSwLayouterEntries()
 void SwDoc::SetModified()
 {
     ClearSwLayouterEntries();
-    // We return the status for the link according to the old and new value of the flags
+    // give the old and new modified state to the link
     //  Bit 0:  -> old state
     //  Bit 1:  -> new state
     long nCall = mbModified ? 3 : 2;
@@ -1849,7 +1851,7 @@ void SwDoc::SetModified()
 
 void SwDoc::ResetModified()
 {
-    // We return the status for the link according to the old and new value of the flags
+    // give the old and new modified state to the link
     //  Bit 0:  -> old state
     //  Bit 1:  -> new state
     long nCall = mbModified ? 1 : 0;

@@ -327,7 +327,7 @@ SwFieldType* SwDoc::GetFldType( sal_uInt16 nResId, const String& rName,
  */
 void SwDoc::UpdateFlds( SfxPoolItem *pNewHt, bool bCloseDB )
 {
-    // Call modify() for every field type,
+    // Call Modify() for every field type,
     // dependent SwTxtFld get notified ...
 
     for( sal_uInt16 i=0; i < pFldTypes->Count(); ++i)
@@ -335,7 +335,7 @@ void SwDoc::UpdateFlds( SfxPoolItem *pNewHt, bool bCloseDB )
         switch( (*pFldTypes)[i]->Which() )
         {
             // Update table fields second to last
-            // Update references at last
+            // Update references last
         case RES_GETREFFLD:
         case RES_TABLEFLD:
         case RES_DBFLD:
@@ -378,7 +378,7 @@ void SwDoc::UpdateFlds( SfxPoolItem *pNewHt, bool bCloseDB )
     if( bCloseDB )
         GetNewDBMgr()->CloseAll();
 
-    // Only evaluate on CompleteUpdate
+    // Only evaluate on full update
     SetModified();
 }
 
@@ -524,7 +524,7 @@ void SwDoc::UpdateTblFlds( SfxPoolItem* pHt )
                     (pFld = (SwTblField*)pFmtFld->GetFld())->GetSubType() ))
                     continue;
 
-                // needs to be recalculated (and is no textual note)
+                // needs to be recalculated
                 if( !pFld->IsValid() )
                 {
                     // table where this field is located
@@ -543,7 +543,7 @@ void SwDoc::UpdateTblFlds( SfxPoolItem* pHt )
                     if( !pCalc )
                         pCalc = new SwCalc( *this );
 
-                    // get the values of all SetExpresion fields, that are valid
+                    // get the values of all SetExpression fields that are valid
                     // until the table
                     SwFrm* pFrm = 0;
                     if( pTblNd->GetIndex() < GetNodes().GetEndOfExtras().GetIndex() )
@@ -608,7 +608,7 @@ void SwDoc::UpdateTblFlds( SfxPoolItem* pHt )
                     if( !pCalc )
                         pCalc = new SwCalc( *this );
 
-                    // get the values of all SetExpresion fields, that are valid
+                    // get the values of all SetExpression fields that are valid
                     // until the table
                     SwFrm* pFrm = 0;
                     if( pTblNd->GetIndex() < GetNodes().GetEndOfExtras().GetIndex() )
@@ -921,11 +921,11 @@ sal_Bool _SetGetExpFld::operator<( const _SetGetExpFld& rFld ) const
         }
     }
 
-    // if it is the same section, then the field is in the same Node
+    // same Section: is the field in the same Node?
     if( pFirst != pNext )
         return pFirst->GetIndex() < pNext->GetIndex();
 
-    // same Node in the Section, then Position in the Node
+    // same Node in the Section, check Position in the Node
     return GetCntPosFromCntnt() < rFld.GetCntPosFromCntnt();
 }
 
@@ -2217,8 +2217,8 @@ void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
     ///         have to be known in order to insert the hide condition as a new
     ///         expression field into the sorted field list (<pFldSortLst>).
     if ( eGetMode == GETFLD_ALL )
-    // Collect the ranges first. Supply all with frames, which are hidden by condition,
-    // so that the contained fields are not sorted.
+    // Collect the sections first. Supply sections that are hidden by condition
+    // with frames so that the contained fields are sorted properly.
     {
         // In order for the frames to be created the right way, they have to be expanded
         // from top to bottom
@@ -2646,7 +2646,8 @@ bool SwDoc::UpdateFld(SwTxtFld * pDstTxtFld, SwField & rSrcFld,
             pDstFmtFld->ModifyNotification( 0, pMsgHnt );
         }
 
-        // The fields we can calculate here are being triggered for an update here explicitily.
+        // The fields we can calculate here are being triggered for an update
+        // here explicitly.
         if( nFldWhich == RES_USERFLD )
             UpdateUsrFlds();
     }

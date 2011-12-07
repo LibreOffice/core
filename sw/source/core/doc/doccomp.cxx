@@ -255,7 +255,7 @@ sal_uLong CompareData::ShowDiffs( const CompareData& rData )
             while( nStt2 < nLen2 && GetChanged( nStt2 )) ++nStt2;
 
             // rData is the original,
-            // this is what should go to the change
+            // "this" recieves the changes
             if( nSav2 != nStt2 && nSav1 != nStt1 )
                 CheckForChangesInLine( rData, nSav1, nStt1, nSav2, nStt2 );
 

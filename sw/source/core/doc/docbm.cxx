@@ -904,8 +904,8 @@ namespace
     //  CntntType --
     //          0x8000 = Bookmark Pos1
     //          0x8001 = Bookmark Pos2
-    //          0x2000 = Paragraph bound frame
-    //          0x2001 = Auto paragraph bound frame, which should be attached
+    //          0x2000 = Paragraph anchored frame
+    //          0x2001 = frame anchored at character, which should be moved
     //          0x1000 = Redline Mark
     //          0x1001 = Redline Point
     //          0x0800 = Crsr from the CrsrShell Mark
@@ -1170,7 +1170,8 @@ void _DelBookmarks(
 
     pDoc->getIDocumentMarkAccess()->deleteMarks(rStt, rEnd, pSaveBkmk, pSttIdx, pEndIdx);
 
-    // Copy all red lines which are in the move area into an array, which holds all position information as offset.
+    // Copy all Redlines which are in the move area into an array
+    // which holds all position information as offset.
     // Assignement happens after moving.
     SwRedlineTbl& rTbl = (SwRedlineTbl&)pDoc->GetRedlineTbl();
     for(sal_uInt16 nCnt = 0; nCnt < rTbl.Count(); ++nCnt )
@@ -1311,7 +1312,7 @@ void _SaveCntntIdx(SwDoc* pDoc,
         }
     }
 
-    // 4. Paragraph bound objects
+    // 4. Paragraph anchored objects
     {
         SwCntntNode *pNode = pDoc->GetNodes()[nNode]->GetCntntNode();
         if( pNode )
