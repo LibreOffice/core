@@ -876,7 +876,8 @@ hr {
 	  border-color: #CCCCCC;
 	  border-spacing: 0;
 	  border-collapse: collapse; 
-	  padding: 4; }
+	  padding: 4;
+	  color: #000000; }
 
 .cell20 { width: 20%; 
 	  border-width: 2px; 
@@ -884,7 +885,8 @@ hr {
 	  border-color: #CCCCCC;
 	  border-spacing: 0;
 	  border-collapse: collapse; 
-	  padding: 4; }
+	  padding: 4;
+	  color: #000000; }
 
 .cell80 { width: 80%;
 	  border-width: 2px; 
@@ -892,7 +894,8 @@ hr {
 	  border-color: #CCCCCC;
 	  border-spacing: 0;
 	  border-collapse: collapse;
-	  padding: 4; }
+	  padding: 4;
+	  color: #000000; }
 
 .cell85 { width: 85%; 
 	  border-width: 2px; 
@@ -900,7 +903,8 @@ hr {
 	  border-color: #CCCCCC;
 	  border-spacing: 0;
 	  border-collapse: collapse; 
-	  padding: 4; }
+	  padding: 4; 
+	  color: #000000;}
 
 .nothing1 { width: 20;
 	   height: 1; }
@@ -941,8 +945,8 @@ hr {
          font-weight: bold; }
 
 .thead { font-weight: bold;
-         background-image:url(../docs/images/bg_table.png);
-	 backgorund-position: middle; }
+         background-color:#18a303;
+         background-position: middle; }
 
 .navigate { border: 0; }
 

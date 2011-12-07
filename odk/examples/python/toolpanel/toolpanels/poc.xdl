@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dlg:window PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "dialog.dtd">
+<dlg:window xmlns:dlg="http://openoffice.org/2000/dialog" xmlns:script="http://openoffice.org/2000/script" dlg:id="MyDialog" dlg:left="192" dlg:top="127" dlg:width="174" dlg:height="147" dlg:closeable="true" dlg:moveable="true" dlg:help-url="customcontrol1" dlg:withtitlebar="false">
+ <script:event script:event-name="on-focus" script:macro-name="vnd.sun.star.script:toolPanelPocBasic.Module1.dialogOnLoad?language=Basic&amp;location=application" script:language="Script"/>
+ <dlg:bulletinboard>
+  <dlg:button dlg:id="CommandButton1" dlg:tab-index="0" dlg:left="6" dlg:top="8" dlg:width="80" dlg:height="30" dlg:value="The button label">
+   <script:event script:event-name="on-performaction" script:macro-name="vnd.sun.star.script:toolPanelPocBasic.Module1.buttonClick?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:button>
+  <dlg:textfield dlg:id="TextInfo" dlg:textarea-vertical-align="top" dlg:tab-index="1" dlg:left="6" dlg:top="48" dlg:width="80" dlg:height="59" dlg:value="a sample text" dlg:multiline="true"/>
+ </dlg:bulletinboard>
+</dlg:window>
