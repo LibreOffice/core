@@ -864,7 +864,7 @@ ScInputBarGroup::ScInputBarGroup(Window* pParent)
       // too bad at the size from 'Settings' for me
       // set button width to scrollbar width then for the moment
       aButton.SetClickHdl	( LINK( this, ScInputBarGroup, ClickHdl ) );
-      aButton.SetSizePixel(Size(GetSettings().GetStyleSettings().GetScrollBarSize(), TBX_WINDOW_HEIGHT) );
+      aButton.SetSizePixel(Size(GetSettings().GetStyleSettings().GetScrollBarSize(), aMultiTextWnd.GetPixelHeightForLines(1)) );
       aButton.Enable();
       aButton.SetSymbol( SYMBOL_SPIN_DOWN  );
       aButton.SetQuickHelpText( ScResId( SCSTR_QHELP_EXPAND_FORMULA ) );
@@ -1123,18 +1123,16 @@ void ScMultiTextWnd::Paint( const Rectangle& rRec )
     }
 }
 
-long ScMultiTextWnd::GetPixelTextHeight()
+
+long ScMultiTextWnd::GetPixelHeightForLines( long nLines )
 {
     long height = ( LogicToPixel(Size(0,GetTextHeight())).Height() );
     // need to figure out why GetTextHeight is not set up when I need it
     // some initialisation timing issue ?
-    return Max ( long( 14 ), height );
-}
-
-
-long ScMultiTextWnd::GetPixelHeightForLines( long nLines )
-{
-    return nLines *  GetPixelTextHeight();
+    height = Max ( long( 14 ), height );
+    // add padding ( for the borders of the window I guess ) otherwise we
+    // chop slightly the top and bottom of whatever is in the inputbox
+    return ( nLines *  height ) + 4;
 }
 
 void ScMultiTextWnd::SetNumLines( long nLines )
@@ -1153,14 +1151,14 @@ void ScMultiTextWnd::Resize()
     // parent/container window
     Size aTextBoxSize  = GetSizePixel();
 
-    aTextBoxSize.Height()=( GetPixelHeightForLines( mnLines ) ) + 8;
+    aTextBoxSize.Height()=( GetPixelHeightForLines( mnLines ) );
+    SetSizePixel(aTextBoxSize);
 
     if(pEditView)
     {
         Size aOutputSize = GetOutputSizePixel();
-        Size aLineSize = Size(0,GetPixelTextHeight());
-        int nDiff = (aOutputSize.Height() - ( mnLines *aLineSize.Height()))/2;
-        Point aPos1(TEXT_STARTPOS,nDiff);
+        Size aLineSize = Size(0,aTextBoxSize.Height());
+        Point aPos1(TEXT_STARTPOS,0);
         Point aPos2(aOutputSize.Width(),aOutputSize.Height());
 
         pEditView->SetOutputArea(
@@ -1170,7 +1168,6 @@ void ScMultiTextWnd::Resize()
     }
 
     SetScrollBarRange();
-    SetSizePixel(aTextBoxSize);
 }
 
 IMPL_LINK(ScMultiTextWnd, ModifyHdl, EENotify*, pNotify)

@@ -176,7 +176,6 @@ public:
     virtual void StopEditEngine( sal_Bool bAll );
     int GetLineCount();
     virtual void Resize();
-    long GetPixelTextHeight();
     long GetPixelHeightForLines( long nLines );
     long GetEditEngTxtHeight();
 
@@ -193,6 +192,7 @@ protected:
     DECL_LINK( NotifyHdl, EENotify* );
     DECL_LINK( ModifyHdl, EENotify* );
 private:
+    long GetPixelTextHeight();
     ScInputBarGroup& mrGroupBar;
     long mnLines;
     long mnLastExpandedLines;
