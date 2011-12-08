@@ -81,17 +81,6 @@ gb_LinkTarget_LDFLAGS := \
 	$(subst -L../lib , ,$(SOLARLIB)) \
 #man ld says: obsolete	-Wl,-multiply_defined,suppress \
 
-# YaccTarget class
-
-define gb_YaccTarget__command
-$(call gb_Output_announce,$(2),$(true),YAC,3)
-$(call gb_Helper_abbreviate_dirs,\
-	mkdir -p $(dir $(3)) && \
-	$(gb_YACC) $(T_YACCFLAGS) --defines=$(4) -o $(3) $(1) )
-
-endef
-
-
 # ObjCxxObject class
 
 define gb_ObjCxxObject__command

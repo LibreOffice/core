@@ -1657,6 +1657,7 @@ ToFile( "DPKG",              "@DPKG@",           "e" );
 ToFile( "PKGMK",             "@PKGMK@",          "e" );
 ToFile( "GNUMAKE",           "@GNUMAKE@",        "e" );
 ToFile( "GNUTAR",            "@GNUTAR@",         "e" );
+ToFile( "ANCIENT_BISON",     "@ANCIENT_BISON@",  "e" );
 ToFile( "UPD",               $UPD,               "e" );
 ToFile( "WORK_STAMP",        $WORK_STAMP,        "e" );
 ToFile( "SOLARVER",          $SOLARVER,          "e" );

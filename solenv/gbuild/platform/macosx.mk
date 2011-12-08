@@ -101,33 +101,6 @@ endif
 
 gb_COMPILERNOOPTFLAGS := -O0
 
-# YaccTarget class
-
-ifeq ($(CPUNAME),POWERPC)
-#
-# PowerPC mac version of bison is ancient. it does not handle well
-# .cxx extension nor does it support --defines=<file>
-# the result is that the header is named <foo>.cxx.h instead of <foo>.hxx
-# so we queue a mv to rename the header accordingly.
-#
-define gb_YaccTarget__command
-$(call gb_Output_announce,$(2),$(true),YAC,3)
-$(call gb_Helper_abbreviate_dirs,\
-	mkdir -p $(dir $(3)) && \
-	$(gb_YACC) $(T_YACCFLAGS) -d -o $(3) $(1) && mv $(3).h $(4) )
-
-endef
-
-else
-define gb_YaccTarget__command
-$(call gb_Output_announce,$(2),$(true),YAC,3)
-$(call gb_Helper_abbreviate_dirs,\
-	mkdir -p $(dir $(3)) && \
-	$(gb_YACC) $(T_YACCFLAGS) --defines=$(4) -o $(3) $(1) )
-
-endef
-endif
-
 # ObjCxxObject class
 
 define gb_ObjCxxObject__command
