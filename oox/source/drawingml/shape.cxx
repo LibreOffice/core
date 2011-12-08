@@ -509,18 +509,6 @@ Reference< XShape > Shape::createAndInsert(
         aFillProperties.pushToPropMap( aShapeProps, rGraphicHelper, mnRotation, nFillPhClr );
         aLineProperties.pushToPropMap( aShapeProps, rGraphicHelper, nLinePhClr );
 
-        // Moved here because the properties like Flip needs to be applied before
-        // applying the rotation property
-        if( bIsCustomShape )
-        {
-            if ( mbFlipH )
-                mpCustomShapePropertiesPtr->setMirroredX( sal_True );
-            if ( mbFlipV )
-                mpCustomShapePropertiesPtr->setMirroredY( sal_True );
-            OSL_TRACE("==cscode== shape name: '%s'", rtl::OUStringToOString(msName, RTL_TEXTENCODING_UTF8 ).getStr());
-            mpCustomShapePropertiesPtr->pushToPropSet( rFilterBase, xSet, mxShape );
-        }
-
         // applying autogrowheight property before setting shape size, because
         // the shape size might be changed if currently autogrowheight is true
         // we must also check that the PropertySet supports the property.
@@ -533,6 +521,16 @@ Reference< XShape > Shape::createAndInsert(
         // do not set properties at a group shape (this causes assertions from svx)
         if( aServiceName != OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.GroupShape")) )
             PropertySet( xSet ).setProperties( aShapeProps );
+
+        if( bIsCustomShape )
+        {
+            if ( mbFlipH )
+                mpCustomShapePropertiesPtr->setMirroredX( sal_True );
+            if ( mbFlipV )
+                mpCustomShapePropertiesPtr->setMirroredY( sal_True );
+            OSL_TRACE("==cscode== shape name: '%s'", rtl::OUStringToOString(msName, RTL_TEXTENCODING_UTF8 ).getStr());
+            mpCustomShapePropertiesPtr->pushToPropSet( rFilterBase, xSet, mxShape );
+        }
 
         // in some cases, we don't have any text body.
         if( getTextBody() )
