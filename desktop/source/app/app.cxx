@@ -29,6 +29,7 @@
 #include "app.hxx"
 #include "desktop.hrc"
 #include "cmdlineargs.hxx"
+#include "cmdlinehelp.hxx"
 #include "dispatchwatcher.hxx"
 #include "configinit.hxx"
 #include "lockfile.hxx"
