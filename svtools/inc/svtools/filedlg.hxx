@@ -78,7 +78,6 @@ private:
     Link                aFilterHdlLink; // Link zum FilterSelect-Handler
 
 public:
-                        FileDialog( Window* pParent, WinBits nWinStyle );
                         ~FileDialog();
 
     virtual void        FileSelect();
@@ -86,11 +85,6 @@ public:
 
     void                SetDefaultExt( const UniString& rExt ) { aDfltExt = rExt; }
     const UniString&        GetDefaultExt() const { return aDfltExt; }
-    void                AddFilter( const UniString& rFilter, const UniString& rType );
-    void                SetCurFilter( const UniString& rFilter );
-    UniString               GetCurFilter() const;
-    sal_uInt16              GetFilterCount() const;
-    UniString               GetFilterName( sal_uInt16 nPos ) const;
     UniString               GetFilterType( sal_uInt16 nPos ) const;
 
     void                SetFileSelectHdl( const Link& rLink ) { aFileHdlLink = rLink; }

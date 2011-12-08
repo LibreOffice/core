@@ -72,33 +72,8 @@ long PathDialog::OK()
         return sal_True;
 }
 
-
-FileDialog::FileDialog( Window* _pParent, WinBits nStyle ) :
-    PathDialog( _pParent, WB_STDMODAL | nStyle )
-{
-    // Dadurch dass hier bei VCL nicht der CTOR mit ResType verwendet wird,
-    // wurde im PathDialog-CTOR leider ein ImpPathDialog angelegt...
-    // So zwar scheisse, aber der Dialog ist eh' nur ein Hack:
-    pImpFileDlg->CreateDialog( this, nStyle, WINDOW_FILEDIALOG, sal_False );
-}
-
 FileDialog::~FileDialog()
 {
-}
-
-void FileDialog::AddFilter( const UniString& rFilter, const UniString& rMask )
-{
-    ((ImpFileDialog*)pImpFileDlg->GetDialog())->AddFilter( rFilter, rMask );
-}
-
-void FileDialog::SetCurFilter( const UniString& rFilter )
-{
-    ((ImpFileDialog*)pImpFileDlg->GetDialog())->SetCurFilter( rFilter );
-}
-
-UniString FileDialog::GetCurFilter() const
-{
-    return ((ImpFileDialog*)pImpFileDlg->GetDialog())->GetCurFilter();
 }
 
 void FileDialog::FileSelect()
@@ -109,16 +84,6 @@ void FileDialog::FileSelect()
 void FileDialog::FilterSelect()
 {
     aFilterHdlLink.Call( this );
-}
-
-sal_uInt16 FileDialog::GetFilterCount() const
-{
-  return ((ImpFileDialog*)pImpFileDlg->GetDialog())->GetFilterCount();
-}
-
-UniString FileDialog::GetFilterName( sal_uInt16 nPos ) const
-{
-  return ((ImpFileDialog*)pImpFileDlg->GetDialog())->GetFilterName( nPos );
 }
 
 UniString FileDialog::GetFilterType( sal_uInt16 nPos ) const
