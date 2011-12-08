@@ -46,6 +46,7 @@ class ScInputHandler;
 class ScAccessibleEditLineTextData;
 struct EENotify;
 class ScRangeList;
+class ScDocument;
 
 //========================================================================
 
@@ -172,6 +173,7 @@ class ScMultiTextWnd : public ScTextWnd
 {
 public:
     ScMultiTextWnd( ScInputBarGroup* pParent );
+    virtual ~ScMultiTextWnd();
     virtual void StartEditEngine();
     virtual void StopEditEngine( sal_Bool bAll );
     int GetLineCount();
@@ -194,6 +196,7 @@ protected:
 private:
     long GetPixelTextHeight();
     ScInputBarGroup& mrGroupBar;
+    const ScDocument* mpAssignedDocument;
     long mnLines;
     long mnLastExpandedLines;
 };

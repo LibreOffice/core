@@ -1094,11 +1094,19 @@ IMPL_LINK( ScInputBarGroup, Impl_ScrollHdl, ScrollBar*, EMPTYARG )
 //                      ScMultiTextWnd
 //========================================================================
 
-ScMultiTextWnd::ScMultiTextWnd( ScInputBarGroup* pParen ) : ScTextWnd( pParen/*, WB_TABSTOP*/ ), mrGroupBar(* pParen )
+ScMultiTextWnd::ScMultiTextWnd( ScInputBarGroup* pParen )
+    :
+        ScTextWnd( pParen/*, WB_TABSTOP*/ ),
+        mrGroupBar(* pParen ),
+        mpAssignedDocument( NULL ),
+        mnLines( 1 ),
+        mnLastExpandedLines( INPUTWIN_MULTILINES )
 {
     nTextStartPos = TEXT_MULTI_STARTPOS;
-    mnLines = 1;
-    mnLastExpandedLines = INPUTWIN_MULTILINES;
+}
+
+ScMultiTextWnd::~ScMultiTextWnd()
+{
 }
 
 int ScMultiTextWnd::GetLineCount()
@@ -1290,6 +1298,24 @@ void ScMultiTextWnd::InitEditEngine(SfxObjectShell* pObjSh)
     if ( pViewSh )
     {
         const ScDocument* pDoc = pViewSh->GetViewData()->GetDocument();
+
+        // fdo#43614 If called from Paint() because pEditEngine==0 it may be
+        // that StopEditEngine() was previously called when opening another
+        // document or switching documents, the Paint() wants to paint the
+        // previous document, but GetActiveViewShell() already returns the
+        // shell of the new document. In that case we'd create an EditEngine
+        // with the wrong item pool that later crashes when the corresponding
+        // document was closed and may lead to other sorts of trouble.
+
+        if (mpAssignedDocument)
+        {
+            if (mpAssignedDocument != pDoc)
+                return;     // Bail out, don't create and remember an
+                            // EditEngine without document pools for this case.
+        }
+        else
+            mpAssignedDocument = pDoc;  // stick with this document
+
         pNew = new ScFieldEditEngine( pDoc->GetEnginePool(), pDoc->GetEditPool() );
     }
     else
