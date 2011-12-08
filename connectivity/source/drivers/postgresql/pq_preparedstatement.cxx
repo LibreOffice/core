@@ -681,7 +681,7 @@ void PreparedStatement::setObjectWithInfo(
     if( com::sun::star::sdbc::DataType::DECIMAL == targetSqlType ||
         com::sun::star::sdbc::DataType::NUMERIC == targetSqlType )
     {
-        double myDouble;
+        double myDouble = 0.0;
         OUString myString;
         if( x >>= myDouble )
         {

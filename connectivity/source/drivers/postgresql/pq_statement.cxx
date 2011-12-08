@@ -448,7 +448,7 @@ static Sequence< ::rtl::OUString > lookupKeys(
         while( enumeration->hasMoreElements() )
         {
             enumeration->nextElement() >>= set;
-            sal_Int32 keyType;
+            sal_Int32 keyType = 0;
             if( (set->getPropertyValue( st.TYPE ) >>= keyType ) &&
                 keyType == com::sun::star::sdbcx::KeyType::PRIMARY )
             {

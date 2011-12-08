@@ -222,7 +222,7 @@ static void appendColumnList(
                 OUString type = sqltype2string( column );
                 if( isAutoIncrement )
                 {
-                    sal_Int32 dataType;
+                    sal_Int32 dataType = 0;
                     column->getPropertyValue( st.TYPE ) >>= dataType;
                     if( com::sun::star::sdbc::DataType::INTEGER == dataType )
                     {
