@@ -34,7 +34,6 @@ $(eval $(call gb_Package_add_file,basic_inc,inc/basic/basmgr.hxx,basic/basmgr.hx
 $(eval $(call gb_Package_add_file,basic_inc,inc/basic/basrdll.hxx,basic/basrdll.hxx))
 $(eval $(call gb_Package_add_file,basic_inc,inc/basic/dispdefs.hxx,basic/dispdefs.hxx))
 $(eval $(call gb_Package_add_file,basic_inc,inc/basic/modsizeexceeded.hxx,basic/modsizeexceeded.hxx))
-$(eval $(call gb_Package_add_file,basic_inc,inc/basic/process.hxx,basic/process.hxx))
 $(eval $(call gb_Package_add_file,basic_inc,inc/basic/sbdef.hxx,basic/sbdef.hxx))
 $(eval $(call gb_Package_add_file,basic_inc,inc/basic/sberrors.hxx,basic/sberrors.hxx))
 $(eval $(call gb_Package_add_file,basic_inc,inc/basic/sbmeth.hxx,basic/sbmeth.hxx))
