@@ -32,6 +32,7 @@ $(eval $(call gb_CppunitTest_CppunitTest,sc_datapilotfieldobj))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,sc_datapilotfieldobj, \
     sc/qa/extras/datapilotfieldobj \
+    sc/qa/extras/xdatapilotfieldgrouping \
 ))
 
 $(eval $(call gb_CppunitTest_add_linked_libs,sc_datapilotfieldobj, \
@@ -128,7 +129,7 @@ $(eval $(call gb_CppunitTest_add_old_components,sc_datapilotfieldobj,\
 $(eval $(call gb_CppunitTest_set_args,sc_datapilotfieldobj,\
     --headless \
     --protector unoexceptionprotector$(gb_Library_DLLEXT) unoexceptionprotector \
-    "-env:CONFIGURATION_LAYERS=xcsxcu:$(call gb_CppunitTarget__make_url,$(OUTDIR)/xml/registry) module:$(call gb_CppunitTarget__make_url,$(OUTDIR)/xml/registry/spool) xcsxcu:$(call gb_CppunitTarget__make_url,$(SRCDIR)/sc/qa/unit/data/registry)" \
+    "-env:CONFIGURATION_LAYERS=xcsxcu:$(call gb_CppunitTarget__make_url,$(OUTDIR)/xml/registry) module:$(call gb_CppunitTarget__make_url,$(OUTDIR)/xml/registry/spool) xcsxcu:$(call gb_CppunitTarget__make_url,$(OUTDIR)/unittest/registry)" \
 ))
     # .../spool is required for the (somewhat strange) filter configuration
 
