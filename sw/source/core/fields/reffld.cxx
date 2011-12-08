@@ -276,10 +276,15 @@ String SwGetRefField::Expand() const
 
 String SwGetRefField::GetFieldName() const
 {
-    String aStr(GetTyp()->GetName());
-    aStr += ' ';
-    aStr += sSetRefName;
-    return aStr;
+    if ( GetTyp()->GetName().Len() > 0 || sSetRefName.Len() > 0 )
+    {
+        String aStr(GetTyp()->GetName());
+        aStr += ' ';
+        aStr += sSetRefName;
+        return aStr;
+    }
+    else
+        return Expand();
 }
 
 // #i81002# - parameter <pFldTxtAttr> added
