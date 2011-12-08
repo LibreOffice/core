@@ -170,6 +170,29 @@ ScMyTables::~ScMyTables()
 {
 }
 
+namespace {
+
+uno::Reference<sheet::XSpreadsheet> getCurrentSheet(const uno::Reference<frame::XModel>& xModel, SCTAB nSheet)
+{
+    uno::Reference<sheet::XSpreadsheet> xSheet;
+    uno::Reference<sheet::XSpreadsheetDocument> xSpreadDoc(xModel, uno::UNO_QUERY);
+    if (!xSpreadDoc.is())
+        return xSheet;
+
+    uno::Reference <sheet::XSpreadsheets> xSheets(xSpreadDoc->getSheets());
+    if (!xSheets.is())
+        return xSheet;
+
+    uno::Reference <container::XIndexAccess> xIndex(xSheets, uno::UNO_QUERY);
+    if (!xIndex.is())
+        return xSheet;
+
+    xSheet.set(xIndex->getByIndex(nSheet), uno::UNO_QUERY);
+    return xSheet;
+}
+
+}
+
 void ScMyTables::NewSheet(const rtl::OUString& sTableName, const rtl::OUString& sStyleName,
                           const ScXMLTabProtectionData& rProtectData)
 {
@@ -192,7 +215,14 @@ void ScMyTables::NewSheet(const rtl::OUString& sTableName, const rtl::OUString& 
             pDoc->SetTabNameOnLoad(nCurrentSheet, sTableName);
 
         rImport.SetTableStyle(sStyleName);
-        SetTableStyle(sStyleName);
+        xCurrentSheet = getCurrentSheet(rImport.GetModel(), nCurrentSheet);
+        if (xCurrentSheet.is())
+        {
+            // We need to set the current cell range here regardless of
+            // presence of style name.
+            xCurrentCellRange.set(xCurrentSheet, uno::UNO_QUERY);
+            SetTableStyle(sStyleName);
+        }
     }
 
     NewTable(1);
@@ -212,37 +242,23 @@ void ScMyTables::SetTableStyle(const rtl::OUString& sStyleName)
         // RTL layout is only remembered, not actually applied, so the shapes can
         // be loaded before mirroring.
 
-        uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( rImport.GetModel(), uno::UNO_QUERY );
-
-        if ( xSpreadDoc.is() )
+        if ( xCurrentSheet.is() )
         {
-            uno::Reference <sheet::XSpreadsheets> xSheets(xSpreadDoc->getSheets());
-            if ( xSheets.is() )
+            xCurrentCellRange.set(xCurrentSheet, uno::UNO_QUERY);
+            uno::Reference <beans::XPropertySet> xProperties(xCurrentSheet, uno::UNO_QUERY);
+            if ( xProperties.is() )
             {
-                uno::Reference <container::XIndexAccess> xIndex( xSheets, uno::UNO_QUERY );
-                if ( xIndex.is() )
+                XMLTableStylesContext *pStyles = (XMLTableStylesContext *)rImport.GetAutoStyles();
+                if ( pStyles )
                 {
-                    xCurrentSheet.set(xIndex->getByIndex(nCurrentSheet), uno::UNO_QUERY);
-                    if ( xCurrentSheet.is() )
+                    XMLTableStyleContext* pStyle = (XMLTableStyleContext *)pStyles->FindStyleChildContext(
+                            XML_STYLE_FAMILY_TABLE_TABLE, sStyleName, true);
+                    if ( pStyle )
                     {
-                        xCurrentCellRange.set(xCurrentSheet, uno::UNO_QUERY);
-                        uno::Reference <beans::XPropertySet> xProperties(xCurrentSheet, uno::UNO_QUERY);
-                        if ( xProperties.is() )
-                        {
-                            XMLTableStylesContext *pStyles = (XMLTableStylesContext *)rImport.GetAutoStyles();
-                            if ( pStyles )
-                            {
-                                XMLTableStyleContext* pStyle = (XMLTableStyleContext *)pStyles->FindStyleChildContext(
-                                        XML_STYLE_FAMILY_TABLE_TABLE, sStyleName, true);
-                                if ( pStyle )
-                                {
-                                    pStyle->FillPropertySet(xProperties);
+                        pStyle->FillPropertySet(xProperties);
 
-                                    ScSheetSaveData* pSheetData = ScModelObj::getImplementation(rImport.GetModel())->GetSheetSaveData();
-                                    pSheetData->AddTableStyle( sStyleName, ScAddress( 0, 0, nCurrentSheet ) );
-                                }
-                            }
-                        }
+                        ScSheetSaveData* pSheetData = ScModelObj::getImplementation(rImport.GetModel())->GetSheetSaveData();
+                        pSheetData->AddTableStyle( sStyleName, ScAddress( 0, 0, nCurrentSheet ) );
                     }
                 }
             }
