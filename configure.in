@@ -3821,6 +3821,24 @@ AC_SUBST(HAVE_GCC_VISIBILITY_FEATURE)
 AC_SUBST(HAVE_GCC_VISIBILITY_BROKEN)
 
 dnl ===================================================================
+dnl gcc DWARF-4 support (smaller debug info)
+dnl ===================================================================
+if test "$GCC" = "yes"; then
+    AC_MSG_CHECKING([whether $CC supports -gdwarf-4])
+    save_CFLAGS=$CFLAGS
+    CFLAGS="$CFLAGS -Werror -gdwarf-4"
+    AC_LINK_IFELSE([AC_LANG_PROGRAM([[]], [[ return 0; ]])],[ HAVE_GCC_DWARF_4=TRUE ],[])
+    CFLAGS=$save_CFLAGS
+    if test "$HAVE_GCC_DWARF_4" = "TRUE"; then
+        AC_MSG_RESULT([yes])
+    else
+        AC_MSG_RESULT([no])
+    fi
+fi
+
+AC_SUBST(HAVE_GCC_DWARF_4)
+
+dnl ===================================================================
 dnl allocator
 dnl ===================================================================
 AC_MSG_CHECKING([which memory allocator to use])
