@@ -67,7 +67,6 @@
 #include <classes/fwlresid.hxx>
 
 #include <classes/resource.hrc>
-#include <dispatch/uieventloghelper.hxx>
 
 #include "helper/mischelper.hxx"
 #include <osl/mutex.hxx>
@@ -185,8 +184,6 @@ void LanguageSelectionMenuController::impl_select(const Reference< XDispatch >& 
     if ( xDispatch.is() )
     {
         Sequence<PropertyValue>      aArgs;
-        if(::comphelper::UiEventsLogger::isEnabled()) //#i88653#
-            UiEventLogHelper( OUString(RTL_CONSTASCII_USTRINGPARAM("LanguageSelectionMenuController"))).log( m_xServiceManager, m_xFrame, aTargetURL, aArgs );
         xDispatch->dispatch( aTargetURL, aArgs );
     }
 }

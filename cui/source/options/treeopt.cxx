@@ -45,7 +45,6 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/oooimprovement/XCoreController.hpp>
 #include <comphelper/configurationhelper.hxx>
 #include <com/sun/star/awt/XDialogProvider.hpp>
 #include <com/sun/star/awt/XDialogProvider2.hpp>
@@ -99,7 +98,6 @@
 #include "optjsearch.hxx"
 #include "connpooloptions.hxx"
 #include "optupdt.hxx"
-#include <optimprove.hxx>
 #include "optchart.hxx"
 #include "optgdlg.hxx"
 #include "optmemory.hxx"
@@ -361,7 +359,6 @@ SfxTabPage* CreateGeneralTabPage( sal_uInt16 nId, Window* pParent, const SfxItem
         case RID_SVXPAGE_OPTIONS_JAVA:              fnCreate = &SvxJavaOptionsPage::Create ; break;
         case RID_SVXPAGE_ONLINEUPDATE:              fnCreate = &SvxOnlineUpdateTabPage::Create; break;
         case RID_OPTPAGE_CHART_DEFCOLORS:           fnCreate = &SvxDefaultColorOptPage::Create; break;
-        case RID_SVXPAGE_IMPROVEMENT:               fnCreate = &SvxImprovementOptionsPage::Create; break;
     }
 
     SfxTabPage* pRet = fnCreate ? (*fnCreate)( pParent, rSet ) : NULL;
@@ -394,7 +391,6 @@ static OptionsMapping_Impl const OptionsMap_Impl[] =
     { "ProductName",        "Java",                 RID_SVXPAGE_OPTIONS_JAVA },
     { "ProductName",        "NetworkIdentity",      RID_SVXPAGE_SSO },
     { "ProductName",        "OnlineUpdate",         RID_SVXPAGE_ONLINEUPDATE },
-    { "ProductName",        "ImprovementProgram",   RID_SVXPAGE_IMPROVEMENT },
     { "LanguageSettings",   NULL,                   SID_LANGUAGE_OPTIONS },
     { "LanguageSettings",   "Languages",            OFA_TP_LANGUAGES  },
     { "LanguageSettings",   "WritingAids",          RID_SFXPAGE_LINGU },
@@ -1823,50 +1819,11 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
                     continue;
                 }
             }
-            // Disable OOoImprovement page if not enabled
-            if( RID_SVXPAGE_IMPROVEMENT == nPageId )
-            {
-                continue;
-            }
             if ( nPageId != RID_SVXPAGE_SSO || isSSOEnabled )
             {
                 AddTabPage( nPageId, sNewTitle, nGroup );
             }
         }
-        do
-        {
-            String sNewTitle = C2U("Improvement Program");
-            {
-                SvxImprovementPage aTempTabPage(this);
-                sNewTitle = aTempTabPage.GetTitleText();
-            }
-            nPageId = RID_SVXPAGE_IMPROVEMENT;
-            if ( lcl_isOptionHidden( nPageId, aOptionsDlgOpt ) )
-                continue;
-            // Disable OOoImprovement page if not enabled
-            {
-                const ::rtl::OUString sService = C2U("com.sun.star.oooimprovement.CoreController");
-                try
-                {
-                    Reference < XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
-                    Reference < ::com::sun::star::oooimprovement::XCoreController > xService( xFactory->createInstance( sService ), UNO_QUERY );
-
-                    if( ! xService.is() )
-                        continue;
-                    if( ! xService->showBuiltinOptionsPage(1))
-                        continue;
-                }
-                catch ( ::com::sun::star::loader::CannotActivateFactoryException& )
-                {
-                    continue;
-                }
-            }
-            if ( nPageId != RID_SVXPAGE_SSO || isSSOEnabled )
-            {
-                AddTabPage( nPageId, sNewTitle, nGroup );
-            }
-        }
-        while (0);
     }
 
     // Load and Save options

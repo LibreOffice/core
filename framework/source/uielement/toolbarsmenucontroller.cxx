@@ -70,7 +70,6 @@
 #include <vcl/window.hxx>
 #include <svtools/menuoptions.hxx>
 #include <unotools/cmdoptions.hxx>
-#include <dispatch/uieventloghelper.hxx>
 #include <rtl/logfile.hxx>
 #include <svtools/miscopt.hxx>
 
@@ -740,8 +739,6 @@ void SAL_CALL ToolbarsMenuController::select( const css::awt::MenuEvent& rEvent 
                     pExecuteInfo->xDispatch     = xDispatch;
                     pExecuteInfo->aTargetURL    = aTargetURL;
                     pExecuteInfo->aArgs         = aArgs;
-                    if(::comphelper::UiEventsLogger::isEnabled()) //#i88653#
-                        UiEventLogHelper(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ToolbarsMenuController"))).log(m_xServiceManager, m_xFrame, aTargetURL, aArgs);
                     Application::PostUserEvent( STATIC_LINK(0, ToolbarsMenuController, ExecuteHdl_Impl), pExecuteInfo );
                 }
             }

@@ -56,8 +56,6 @@
 #include <tools/urlobj.hxx>
 #include <classes/resource.hrc>
 #include <classes/fwkresid.hxx>
-#include <dispatch/uieventloghelper.hxx>
-
 #include <framework/menuconfiguration.hxx>
 #include <uielement/menubarmanager.hxx>
 
@@ -197,8 +195,6 @@ throw ( RuntimeException )
         pExecuteInfo->xDispatch     = xDispatch;
         pExecuteInfo->aTargetURL    = aTargetURL;
         pExecuteInfo->aArgs         = aArgs;
-        if(::comphelper::UiEventsLogger::isEnabled()) //#i88653#
-            UiEventLogHelper(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("GenericToolbarController"))).log( m_xServiceManager, m_xFrame, aTargetURL, aArgs);
         Application::PostUserEvent( STATIC_LINK(0, GenericToolbarController , ExecuteHdl_Impl), pExecuteInfo );
     }
 }

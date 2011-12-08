@@ -62,7 +62,6 @@
 #include <vcl/bitmap.hxx>
 #include <svtools/filter.hxx>
 #include <svtools/miscopt.hxx>
-#include <dispatch/uieventloghelper.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::awt;
@@ -279,8 +278,6 @@ throw (::com::sun::star::uno::RuntimeException)
             aArgs[0].Name   = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "KeyModifier" ));
             aArgs[0].Value  <<= KeyModifier;
 
-            if(::comphelper::UiEventsLogger::isEnabled()) //#i88653#
-                UiEventLogHelper(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ButtonToolbarController"))).log(m_xServiceManager, m_xFrame, aTargetURL, aArgs);
             xDispatch->dispatch( aTargetURL, aArgs );
         }
         catch ( DisposedException& )

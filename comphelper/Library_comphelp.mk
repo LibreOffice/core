@@ -115,7 +115,6 @@ $(eval $(call gb_Library_add_exception_objects,comphelper,\
     comphelper/source/misc/string \
     comphelper/source/misc/synchronousdispatch \
     comphelper/source/misc/types \
-    comphelper/source/misc/uieventslogger \
     comphelper/source/misc/weak \
     comphelper/source/misc/weakeventlistener \
     comphelper/source/officeinstdir/officeinstallationdirectories \

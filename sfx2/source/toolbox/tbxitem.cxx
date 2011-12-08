@@ -101,7 +101,6 @@
 #include <sfx2/module.hxx>
 #include "sfx2/imagemgr.hxx"
 
-#include <comphelper/uieventslogger.hxx>
 #include <com/sun/star/frame/XModuleManager.hpp>
 
 using namespace ::com::sun::star::beans;
@@ -470,28 +469,7 @@ void SfxToolBoxControl::Dispatch( const ::rtl::OUString& aCommand, ::com::sun::s
 
         Reference < XDispatch > xDispatch = xProvider->queryDispatch( aTargetURL, ::rtl::OUString(), 0 );
         if ( xDispatch.is() )
-        {
-            if(::comphelper::UiEventsLogger::isEnabled()) //#i88653#
-            {
-                ::rtl::OUString sAppName;
-                try
-                {
-                    static ::rtl::OUString our_aModuleManagerName(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.ModuleManager"));
-                    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceManager =
-                        ::comphelper::getProcessServiceFactory();
-                    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModuleManager > xModuleManager(
-                        xServiceManager->createInstance(our_aModuleManagerName)
-                        , ::com::sun::star::uno::UNO_QUERY_THROW);
-                    ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame > xFrame(
-                        getFrameInterface(), UNO_QUERY_THROW);
-                    sAppName = xModuleManager->identify(xFrame);
-                } catch(::com::sun::star::uno::Exception&) {}
-                Sequence<PropertyValue> source;
-                ::comphelper::UiEventsLogger::appendDispatchOrigin(source, sAppName, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SfxToolBoxControl")));
-                ::comphelper::UiEventsLogger::logDispatch(aTargetURL, source);
-            }
             xDispatch->dispatch( aTargetURL, aArgs );
-        }
     }
 }
 
@@ -1012,25 +990,6 @@ void SfxToolBoxControl::Select( sal_uInt16 nModifier )
 
 void SfxToolBoxControl::Select( sal_Bool /*bMod1*/ )
 {
-    if(::comphelper::UiEventsLogger::isEnabled()) //#i88653# #i102805#
-    {
-        ::rtl::OUString sAppName;
-        try
-        {
-            static ::rtl::OUString our_aModuleManagerName(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.ModuleManager"));
-            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceManager =
-                ::comphelper::getProcessServiceFactory();
-            ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModuleManager > xModuleManager(
-                xServiceManager->createInstance(our_aModuleManagerName)
-                , ::com::sun::star::uno::UNO_QUERY_THROW);
-            sAppName = xModuleManager->identify(m_xFrame);
-        } catch(::com::sun::star::uno::Exception&) {}
-        Sequence<PropertyValue> vSource;
-        ::comphelper::UiEventsLogger::appendDispatchOrigin(vSource, sAppName, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SfxToolBoxControl")));
-        URL aURL;
-        aURL.Complete = m_aCommandURL;
-        ::comphelper::UiEventsLogger::logDispatch(aURL, vSource);
-    }
     svt::ToolboxController::execute( pImpl->nSelectModifier );
 }
 

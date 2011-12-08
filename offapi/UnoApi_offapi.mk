@@ -143,10 +143,6 @@ $(eval $(call gb_UnoApiTarget_add_idlfiles_nohdl,offapi,offapi/com/sun/star/mail
 $(eval $(call gb_UnoApiTarget_add_idlfiles_nohdl,offapi,offapi/com/sun/star/media,\
 	Manager \
 ))
-$(eval $(call gb_UnoApiTarget_add_idlfiles_nohdl,offapi,offapi/com/sun/star/oooimprovement,\
-	Core \
-	CoreController \
-))
 $(eval $(call gb_UnoApiTarget_add_idlfiles_nohdl,offapi,offapi/com/sun/star/presentation,\
 	SlideShow \
 	TransitionFactory \
@@ -2809,10 +2805,6 @@ $(eval $(call gb_UnoApiTarget_add_idlfiles,offapi,offapi/com/sun/star/office,\
 	XAnnotation \
 	XAnnotationAccess \
 	XAnnotationEnumeration \
-))
-$(eval $(call gb_UnoApiTarget_add_idlfiles,offapi,offapi/com/sun/star/oooimprovement,\
-	XCore \
-	XCoreController \
 ))
 $(eval $(call gb_UnoApiTarget_add_idlfiles,offapi,offapi/com/sun/star/packages,\
 	EncryptionNotAllowedException \

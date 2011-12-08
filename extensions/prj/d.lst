@@ -45,8 +45,6 @@ mkdir: %_DEST%\xml\registry\spool\org\openoffice\Office\Logging
 ..\%__SRC%\misc\dbp.component %_DEST%\xml\dbp.component
 ..\%__SRC%\misc\ldapbe2.component %_DEST%\xml\ldapbe2.component
 ..\%__SRC%\misc\log.component %_DEST%\xml\log.component
-..\%__SRC%\misc\oooimprovecore.component %_DEST%\xml\oooimprovecore.component
-..\%__SRC%\misc\oooimprovement.component %_DEST%\xml\oooimprovement.component
 ..\%__SRC%\misc\pcr.component %_DEST%\xml\pcr.component
 ..\%__SRC%\misc\pl.component %_DEST%\xml\pl.component
 ..\%__SRC%\misc\res.component %_DEST%\xml\res.component

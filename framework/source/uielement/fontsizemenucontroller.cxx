@@ -54,7 +54,6 @@
 #include <vcl/outdev.hxx>
 #include <vcl/print.hxx>
 #include <svtools/ctrltool.hxx>
-#include <dispatch/uieventloghelper.hxx>
 #include <osl/mutex.hxx>
 
 //_________________________________________________________________________________________________________________
@@ -312,8 +311,6 @@ void SAL_CALL FontSizeMenuController::statusChanged( const FeatureStateEvent& Ev
 void FontSizeMenuController::impl_select(const Reference< XDispatch >& _xDispatch,const ::com::sun::star::util::URL& aTargetURL)
 {
     Sequence<PropertyValue>      aArgs;
-    if(::comphelper::UiEventsLogger::isEnabled()) //#i88653#
-        UiEventLogHelper(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FontSizeMenuController"))).log(m_xServiceManager, m_xFrame, aTargetURL, aArgs);
     OSL_ENSURE(_xDispatch.is(),"FontSizeMenuController::impl_select: No dispatch");
     if ( _xDispatch.is() )
         _xDispatch->dispatch( aTargetURL, aArgs );

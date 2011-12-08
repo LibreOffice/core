@@ -1525,8 +1525,6 @@ File gid_File_Lib_Unopkgapp
     Styles = (PACKED);
 End
 
-STD_LIB_FILE( gid_File_Lib_Oooimprovecore , oooimprovecore)
-
 #if defined WNT && !defined _gcc3 && !defined SYSTEM_MOZILLA && !defined WITHOUT_MOZILLA
         // see common_brand.scp gid_Brand_File_Lib_Msvcp80 and
         // gid_Brand_File_Lib_Msvcr80

@@ -57,7 +57,6 @@
 #include <vcl/i18nhelp.hxx>
 #include <tools/urlobj.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <dispatch/uieventloghelper.hxx>
 #include <osl/mutex.hxx>
 
 //_________________________________________________________________________________________________________________
@@ -242,8 +241,6 @@ void SAL_CALL HeaderMenuController::statusChanged( const FeatureStateEvent& Even
 void HeaderMenuController::impl_select(const Reference< XDispatch >& _xDispatch,const ::com::sun::star::util::URL& aTargetURL)
 {
     Sequence<PropertyValue>      aArgs;
-    if(::comphelper::UiEventsLogger::isEnabled()) //#i88653#
-        UiEventLogHelper(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(m_bFooter ? "FooterMenuController" : "HeaderMenuController"))).log(m_xServiceManager, m_xFrame, aTargetURL, aArgs);
     OSL_ENSURE(_xDispatch.is(),"HeaderMenuController::impl_select: No dispatch");
     if ( _xDispatch.is() )
         _xDispatch->dispatch( aTargetURL, aArgs );

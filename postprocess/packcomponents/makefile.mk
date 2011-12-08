@@ -177,7 +177,6 @@ my_components += \
     component/desktop/source/splash/spl \
     dbp \
     log \
-    oooimprovecore \
     pcr \
     res \
     scn \

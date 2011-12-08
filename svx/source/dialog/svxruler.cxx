@@ -39,10 +39,6 @@
 
 #include <svl/smplhint.hxx>
 
-
-
-
-
 #include <svx/dialogs.hrc>
 #include <svx/dialmgr.hxx>
 #include <svx/ruler.hxx>
@@ -55,28 +51,6 @@
 #ifndef RULER_TAB_RTL
 #define RULER_TAB_RTL           ((sal_uInt16)0x0010)
 #endif
-
-#include <comphelper/uieventslogger.hxx>
-
-namespace
-{
-    void lcl_logRulerUse(const ::rtl::OUString& sURL) //#i99729#
-    {
-        using namespace ::com::sun::star;
-        util::URL aTargetURL;
-        aTargetURL.Complete = sURL;
-        aTargetURL.Main = sURL;
-        if(::comphelper::UiEventsLogger::isEnabled()) //#i88653#
-        {
-            ::rtl::OUString sAppName;
-            uno::Sequence<beans::PropertyValue> source;
-            ::comphelper::UiEventsLogger::appendDispatchOrigin(source, sAppName, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SfxRuler")));
-            ::comphelper::UiEventsLogger::logDispatch(aTargetURL, source);
-        }
-    }
-}
-
-
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -2717,7 +2691,6 @@ void SvxRuler::Click()
 */
 
 {
-    lcl_logRulerUse(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".special://SfxRuler/Click")));
     Ruler::Click();
     if( bActive )
     {
@@ -3347,7 +3320,6 @@ long SvxRuler::StartDrag()
 */
 
 {
-    lcl_logRulerUse(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".special://SfxRuler/StartDrag")));
     sal_Bool bContentProtected = pRuler_Imp->aProtectItem.IsCntntProtected();
     if(!bValid)
         return sal_False;
@@ -3464,7 +3436,6 @@ void SvxRuler::EndDrag()
    data to the application.
 */
 {
-    lcl_logRulerUse(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".special://SfxRuler/EndDrag")));
     const sal_Bool bUndo = IsDragCanceled();
     const long lPos = GetDragPos();
     DrawLine_Impl(lTabPos, 6, bHorz);

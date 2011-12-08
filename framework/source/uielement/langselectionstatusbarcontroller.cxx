@@ -64,7 +64,6 @@
 #include <com/sun/star/awt/Command.hpp>
 #include <svl/languageoptions.hxx>
 #include <com/sun/star/linguistic2/XLanguageGuessing.hpp>
-#include <dispatch/uieventloghelper.hxx>
 
 #include "helper/mischelper.hxx"
 
@@ -321,8 +320,6 @@ throw (::com::sun::star::uno::RuntimeException)
         if( xDispatch.is() )
         {
             uno::Sequence< beans::PropertyValue > aPV;
-            if(::comphelper::UiEventsLogger::isEnabled()) //#i88653#
-                UiEventLogHelper( OUString(RTL_CONSTASCII_USTRINGPARAM("ButtonToolbarController"))).log(m_xServiceManager, m_xFrame, aURL, aPV);
             xDispatch->dispatch( aURL, aPV);
         }
     }

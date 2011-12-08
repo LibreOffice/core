@@ -53,7 +53,6 @@
 #include <tools/urlobj.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <vcl/mnemonic.hxx>
-#include <dispatch/uieventloghelper.hxx>
 #include <osl/mutex.hxx>
 
 //_________________________________________________________________________________________________________________
@@ -174,12 +173,6 @@ void SAL_CALL FontMenuController::statusChanged( const FeatureStateEvent& Event 
 void FontMenuController::impl_select(const Reference< XDispatch >& _xDispatch,const ::com::sun::star::util::URL& aTargetURL)
 {
     Sequence<PropertyValue>      aArgs;
-    if(::comphelper::UiEventsLogger::isEnabled()) //#i88653#
-        UiEventLogHelper(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FontMenuController"))).log(
-            m_xServiceManager,
-            m_xFrame,
-            aTargetURL,
-            Sequence<PropertyValue>());
     OSL_ENSURE(_xDispatch.is(),"FontMenuController::impl_select: No dispatch");
     if ( _xDispatch.is() )
         _xDispatch->dispatch( aTargetURL, aArgs );

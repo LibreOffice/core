@@ -93,7 +93,6 @@
 #include "svtools/miscopt.hxx"
 #include <framework/addonmenu.hxx>
 #include <uielement/menubarmerger.hxx>
-#include <dispatch/uieventloghelper.hxx>
 
 // Be careful removing this "bad" construct. There are serious problems
 // with #define STRICT and including windows.h. Changing this needs some
@@ -1119,8 +1118,6 @@ IMPL_LINK( MenuBarManager, Select, Menu *, pMenu )
     if ( xDispatch.is() )
     {
         const sal_uInt32 nRef = Application::ReleaseSolarMutex();
-        if(::comphelper::UiEventsLogger::isEnabled()) //#i88653#
-            UiEventLogHelper(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MenuBarManager"))).log(getServiceFactory(), m_xFrame, aTargetURL, aArgs);
         xDispatch->dispatch( aTargetURL, aArgs );
         Application::AcquireSolarMutex( nRef );
     }

@@ -104,7 +104,6 @@
 #define RID_SVXPAGE_ANGLE                   (RID_SVX_START +  48)
 #define RID_SVXPAGE_SLANT                   (RID_SVX_START +  49)
 #define RID_SVXPAGE_DISTRIBUTE              (RID_SVX_START + 236)
-#define RID_SVXPAGE_IMPROVEMENT             (RID_SVX_START + 302)
 #define RID_SVXPAGE_MACROASSIGN             (RID_SVX_START + 296)
 
 

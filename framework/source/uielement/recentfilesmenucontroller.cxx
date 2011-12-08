@@ -62,7 +62,6 @@
 #undef GradientStyle_RECT
 #include <odma_lib.hxx>
 #endif
-#include <dispatch/uieventloghelper.hxx>
 #include <osl/mutex.hxx>
 
 //_________________________________________________________________________________________________________________
@@ -338,8 +337,6 @@ void RecentFilesMenuController::executeEntry( sal_Int32 nIndex )
         pLoadRecentFile->xDispatch  = xDispatch;
         pLoadRecentFile->aTargetURL = aTargetURL;
         pLoadRecentFile->aArgSeq    = aArgsList;
-        if(::comphelper::UiEventsLogger::isEnabled()) //#i88653#
-            UiEventLogHelper(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RecentFilesMenuController"))).log(m_xServiceManager, m_xFrame, aTargetURL, aArgsList);
         Application::PostUserEvent( STATIC_LINK(0, RecentFilesMenuController, ExecuteHdl_Impl), pLoadRecentFile );
     }
 }

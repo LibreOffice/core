@@ -47,7 +47,6 @@ MY_XCDS = \
     $(MISC)/main.xcd \
     $(MISC)/math.xcd \
     $(MISC)/onlineupdate.xcd \
-    $(MISC)/oooimprovement.xcd \
     $(MISC)/palm.xcd \
     $(MISC)/pocketexcel.xcd \
     $(MISC)/pocketword.xcd \
@@ -359,11 +358,6 @@ MY_DEPS_onlineupdate = main
 MY_FILES_onlineupdate = \
     $(MY_MOD)/org/openoffice/Office/Addons/Addons-onlineupdate.xcu \
     $(MY_MOD)/org/openoffice/Office/Jobs/Jobs-onlineupdate.xcu
-
-MY_DEPS_oooimprovement = main
-MY_FILES_oooimprovement = \
-    $(MY_MOD)/org/openoffice/Office/Jobs/Jobs-oooimprovement.xcu \
-    $(MY_MOD)/org/openoffice/Office/Logging/Logging-oooimprovement.xcu
 .ENDIF
 
 MY_DEPS_palm = main

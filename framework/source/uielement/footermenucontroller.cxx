@@ -57,7 +57,6 @@
 #include <vcl/i18nhelp.hxx>
 #include <tools/urlobj.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <dispatch/uieventloghelper.hxx>
 
 //_________________________________________________________________________________________________________________
 //  Defines

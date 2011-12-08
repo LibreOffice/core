@@ -36,7 +36,6 @@
 #include <cuires.hrc>
 #include <svx/dialogs.hrc>
 #include "numfmt.hxx"
-#include "optimprove.hxx"
 #include "splitcelldlg.hxx"
 #include "gallery.hrc"
 #include "dstribut.hxx"
@@ -1667,14 +1666,6 @@ SfxAbstractDialog* AbstractDialogFactory_Impl::CreateSfxDialog( Window* pParent,
         case RID_SFXPAGE_DBREGISTER :
             pDlg = new DatabaseRegistrationDialog( pParent, rAttr );
             break;
-        case RID_SVXPAGE_IMPROVEMENT :
-        {
-            String help_url;
-            SFX_ITEMSET_ARG( &rAttr, pItem, SfxStringItem, SID_CURRENT_URL, sal_False );
-            if ( pItem )
-                help_url = pItem->GetValue();
-            pDlg = new SvxImprovementDialog( pParent, help_url);
-        }
         default:
             break;
     }

@@ -55,7 +55,6 @@ $(eval $(call gb_Package_add_file,comphelper_inc,inc/comphelper/TypeGeneration.h
 $(eval $(call gb_Package_add_file,comphelper_inc,inc/comphelper/MasterPropertySetInfo.hxx,comphelper/MasterPropertySetInfo.hxx))
 $(eval $(call gb_Package_add_file,comphelper_inc,inc/comphelper/accessiblewrapper.hxx,comphelper/accessiblewrapper.hxx))
 $(eval $(call gb_Package_add_file,comphelper_inc,inc/comphelper/sequence.hxx,comphelper/sequence.hxx))
-$(eval $(call gb_Package_add_file,comphelper_inc,inc/comphelper/uieventslogger.hxx,comphelper/uieventslogger.hxx))
 $(eval $(call gb_Package_add_file,comphelper_inc,inc/comphelper/docpasswordhelper.hxx,comphelper/docpasswordhelper.hxx))
 $(eval $(call gb_Package_add_file,comphelper_inc,inc/comphelper/propertystatecontainer.hxx,comphelper/propertystatecontainer.hxx))
 $(eval $(call gb_Package_add_file,comphelper_inc,inc/comphelper/propertysetinfo.hxx,comphelper/propertysetinfo.hxx))
