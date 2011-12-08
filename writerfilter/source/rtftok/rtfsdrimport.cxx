@@ -249,7 +249,7 @@ void RTFSdrImport::resolve(RTFShape& rShape)
                             aSegments[nIndex].Count = sal_Int32(0);
                             break;
                         default:
-                            OSL_TRACE("%s: unhandled segment '%x' in the path", OSL_THIS_FUNC, nSeg);
+                            SAL_INFO("writerfilter", OSL_THIS_FUNC << ": unhandled segment '" << hex << nSeg << "' in the path");
                             break;
                     }
                     nIndex++;
@@ -269,9 +269,9 @@ void RTFSdrImport::resolve(RTFShape& rShape)
         else if (i->first.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("geoBottom")))
             aViewBox.Height = i->second.toInt32();
         else
-            OSL_TRACE("%s: TODO handle shape property '%s':'%s'", OSL_THIS_FUNC,
-                    OUStringToOString( i->first, RTL_TEXTENCODING_UTF8 ).getStr(),
-                    OUStringToOString( i->second, RTL_TEXTENCODING_UTF8 ).getStr());
+            SAL_INFO("writerfilter", OSL_THIS_FUNC << ": TODO handle shape property '" <<
+                    OUStringToOString( i->first, RTL_TEXTENCODING_UTF8 ).getStr() << "':'" <<
+                    OUStringToOString( i->second, RTL_TEXTENCODING_UTF8 ).getStr() << "'");
     }
 
     if (nType == 75) // picture frame

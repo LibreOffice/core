@@ -54,7 +54,7 @@ RtfFilter::~RtfFilter()
 sal_Bool RtfFilter::filter( const uno::Sequence< beans::PropertyValue >& aDescriptor )
    throw (uno::RuntimeException)
 {
-    OSL_TRACE("%s", OSL_THIS_FUNC);
+    SAL_INFO("writerfilter", OSL_THIS_FUNC);
     if( m_xSrcDoc.is() )
     {
         uno::Reference< lang::XMultiServiceFactory > xMSF(m_xContext->getServiceManager(), uno::UNO_QUERY_THROW);
@@ -102,7 +102,7 @@ sal_Bool RtfFilter::filter( const uno::Sequence< beans::PropertyValue >& aDescri
     catch (const uno::Exception& e)
     {
 #if OSL_DEBUG_LEVEL > 1
-        OSL_TRACE( "Exception caught: %s",
+        SAL_INFO("writerfilter", "Exception caught: " <<
                 rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
 #endif
         (void)e;

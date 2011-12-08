@@ -374,9 +374,9 @@ void RTFDocumentImpl::resolveSubstream(sal_uInt32 nPos, Id nId, OUString& rIgnor
         m_aAuthor = OUString();
     }
     pImpl->seek(nPos);
-    OSL_TRACE("substream start");
+    SAL_INFO("writerfilter", "substream start");
     Mapper().substream(nId, pImpl);
-    OSL_TRACE("substream end");
+    SAL_INFO("writerfilter", "substream end");
     Strm().Seek(nCurrent);
     nPos = 0;
 }
@@ -523,25 +523,25 @@ void RTFDocumentImpl::resolve(Stream & rMapper)
     switch (m_pTokenizer->resolveParse())
     {
         case ERROR_OK:
-            OSL_TRACE("%s: finished without errors", OSL_THIS_FUNC);
+            SAL_INFO("writerfilter", OSL_THIS_FUNC << ": finished without errors");
             break;
         case ERROR_GROUP_UNDER:
-            OSL_TRACE("%s: unmatched '}'", OSL_THIS_FUNC);
+            SAL_INFO("writerfilter", OSL_THIS_FUNC << ": unmatched '}'");
             break;
         case ERROR_GROUP_OVER:
-            OSL_TRACE("%s: unmatched '{'", OSL_THIS_FUNC);
+            SAL_INFO("writerfilter", OSL_THIS_FUNC << ": unmatched '{'");
             throw io::UnexpectedEOFException();
             break;
         case ERROR_EOF:
-            OSL_TRACE("%s: unexpected end of file", OSL_THIS_FUNC);
+            SAL_INFO("writerfilter", OSL_THIS_FUNC << ": unexpected end of file");
             throw io::UnexpectedEOFException();
             break;
         case ERROR_HEX_INVALID:
-            OSL_TRACE("%s: invalid hex char", OSL_THIS_FUNC);
+            SAL_INFO("writerfilter", OSL_THIS_FUNC << ": invalid hex char");
             throw io::WrongFormatException();
             break;
         case ERROR_CHAR_OVER:
-            OSL_TRACE("%s: characters after last '}'", OSL_THIS_FUNC);
+            SAL_INFO("writerfilter", OSL_THIS_FUNC << ": characters after last '}'");
             break;
     }
 }
@@ -736,7 +736,7 @@ int RTFDocumentImpl::resolveChars(char ch)
             m_aStates.top().aLevelNumbers.push_back(sal_Int32(ch));
         return 0;
     }
-    OSL_TRACE("%s: collected '%s'", OSL_THIS_FUNC, aStr.getStr());
+    SAL_INFO("writerfilter", OSL_THIS_FUNC << ": collected '" << aStr.getStr() << "'");
 
     OUString aOUStr(OStringToOUString(aStr, m_aStates.top().nCurrentEncoding));
 
@@ -1227,7 +1227,7 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
             break;
         default:
 #if OSL_DEBUG_LEVEL > 1
-            OSL_TRACE("%s: TODO handle destination '%s'", OSL_THIS_FUNC, lcl_RtfToString(nKeyword));
+            SAL_INFO("writerfilter", OSL_THIS_FUNC << ": TODO handle destination '" << lcl_RtfToString(nKeyword) << "'");
 #endif
             // Make sure we skip destinations (even without \*) till we don't handle them
             m_aStates.top().nDestinationState = DESTINATION_SKIP;
@@ -1412,7 +1412,7 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
             break;
         default:
 #if OSL_DEBUG_LEVEL > 1
-            OSL_TRACE("%s: TODO handle symbol '%s'", OSL_THIS_FUNC, lcl_RtfToString(nKeyword));
+            SAL_INFO("writerfilter", OSL_THIS_FUNC << ": TODO handle symbol '" << lcl_RtfToString(nKeyword) << "'");
 #endif
             aSkip.setParsed(false);
             break;
@@ -1870,7 +1870,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         case RTF_POSXR: m_aStates.top().aFrame.nHoriAlign = NS_ooxml::LN_Value_wordprocessingml_ST_XAlign_right; break;
         default:
 #if OSL_DEBUG_LEVEL > 1
-            OSL_TRACE("%s: TODO handle flag '%s'", OSL_THIS_FUNC, lcl_RtfToString(nKeyword));
+            SAL_INFO("writerfilter", OSL_THIS_FUNC << ": TODO handle flag '" << lcl_RtfToString(nKeyword) << "'");
 #endif
             aSkip.setParsed(false);
             break;
@@ -2515,7 +2515,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             break;
         default:
 #if OSL_DEBUG_LEVEL > 1
-            OSL_TRACE("%s: TODO handle value '%s'", OSL_THIS_FUNC, lcl_RtfToString(nKeyword));
+            SAL_INFO("writerfilter", OSL_THIS_FUNC << ": TODO handle value '" << lcl_RtfToString(nKeyword) << "'");
 #endif
             aSkip.setParsed(false);
             break;
@@ -2614,7 +2614,7 @@ int RTFDocumentImpl::dispatchToggle(RTFKeyword nKeyword, bool bParam, int nParam
             break;
         default:
 #if OSL_DEBUG_LEVEL > 1
-            OSL_TRACE("%s: TODO handle toggle '%s'", OSL_THIS_FUNC, lcl_RtfToString(nKeyword));
+            SAL_INFO("writerfilter", OSL_THIS_FUNC << ": TODO handle toggle '" << lcl_RtfToString(nKeyword) << "'");
 #endif
             aSkip.setParsed(false);
             break;
@@ -2624,7 +2624,7 @@ int RTFDocumentImpl::dispatchToggle(RTFKeyword nKeyword, bool bParam, int nParam
 
 int RTFDocumentImpl::pushState()
 {
-    //OSL_TRACE("%s before push: %d", OSL_THIS_FUNC, m_nGroup);
+    //SAL_INFO("writerfilter", OSL_THIS_FUNC << " before push: " << m_nGroup);
 
     checkUnicode();
     m_nGroupStartPos = Strm().Tell();
@@ -2703,7 +2703,8 @@ void RTFDocumentImpl::resetAttributes()
 
 int RTFDocumentImpl::popState()
 {
-    //OSL_TRACE("%s before pop: m_nGroup %d, dest state: %d", OSL_THIS_FUNC, m_nGroup, m_aStates.top().nDestinationState);
+    //SAL_INFO("writerfilter", OSL_THIS_FUNC << " before pop: m_nGroup " << m_nGroup <<
+    //                         ", dest state: " << m_aStates.top().nDestinationState);
 
     checkUnicode();
     RTFSprms aSprms;

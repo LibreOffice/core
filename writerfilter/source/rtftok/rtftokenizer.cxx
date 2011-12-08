@@ -56,7 +56,7 @@ SvStream& RTFTokenizer::Strm()
 
 int RTFTokenizer::resolveParse()
 {
-    OSL_TRACE("%s", OSL_THIS_FUNC);
+    SAL_INFO( "writerfilter", OSL_THIS_FUNC );
     char ch;
     int ret;
     // for hex chars
@@ -64,12 +64,12 @@ int RTFTokenizer::resolveParse()
 
     while ((Strm() >> ch, !Strm().IsEof()))
     {
-        //OSL_TRACE("%s: parsing character '%c'", OSL_THIS_FUNC, ch);
+        //SAL_INFO("writerfilter", OSL_THIS_FUNC << ": parsing character '" << ch << "'");
         if (m_rImport.getGroup() < 0)
             return ERROR_GROUP_UNDER;
         if (!m_rImport.isEmpty() && m_rImport.getState().nInternalState == INTERNAL_BIN)
         {
-            OSL_TRACE("%s: TODO, binary internal state", OSL_THIS_FUNC);
+            SAL_INFO("writerfilter", OSL_THIS_FUNC << ": TODO, binary internal state");
         }
         else
         {
@@ -110,7 +110,7 @@ int RTFTokenizer::resolveParse()
                     }
                     else
                     {
-                        OSL_TRACE("%s: hex internal state", OSL_THIS_FUNC);
+                        SAL_INFO("writerfilter", OSL_THIS_FUNC << ": hex internal state");
                         b = b << 4;
                         sal_Int8 parsed = asHex(ch);
                         if (parsed == -1)
@@ -226,8 +226,8 @@ int RTFTokenizer::dispatchKeyword(OString& rKeyword, bool bParam, int nParam)
 {
     if (m_rImport.getState().nDestinationState == DESTINATION_SKIP)
         return 0;
-    /*OSL_TRACE("%s: keyword '\\%s' with param? %d param val: '%d'", OSL_THIS_FUNC,
-            rKeyword.getStr(), (bParam ? 1 : 0), (bParam ? nParam : 0));*/
+    /*SAL_INFO("writefilter", OSL_THIS_FUNC << ": keyword '\\" << rKeyword.getStr() <<
+               "' with param? " << (bParam ? 1 : 0) <<" param val: '" << (bParam ? nParam : 0) << "'");*/
     int i, ret;
     for (i = 0; i < nRTFControlWords; i++)
     {
@@ -236,7 +236,7 @@ int RTFTokenizer::dispatchKeyword(OString& rKeyword, bool bParam, int nParam)
     }
     if (i == nRTFControlWords)
     {
-        OSL_TRACE("%s: unknown keyword '\\%s'", OSL_THIS_FUNC, rKeyword.getStr());
+        SAL_INFO("writerfilter", OSL_THIS_FUNC << ": unknown keyword '\\" << rKeyword.getStr() << "'");
         RTFSkipDestination aSkip(m_rImport);
         aSkip.setParsed(false);
         return 0;

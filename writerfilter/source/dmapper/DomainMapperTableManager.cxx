@@ -261,13 +261,13 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                     // Binary filter takes BiDirection into account ( but I have no idea about that here )
                     // or even what it is. But... here's where to handle it if it becomes an issue
                         pPropMap->Insert( PROP_FRM_DIRECTION, false, uno::makeAny( VERT_TOP_RIGHT ));
-                        OSL_TRACE("Have inserted textDirection %d", nIntValue );
+                        SAL_INFO( "writerfilter", "Have inserted textDirection " << nIntValue );
                         break;
                     case 3:  // btLr
                         // We have to fake this text direction
                          pPropMap->Insert( PROP_FRM_DIRECTION, false, uno::makeAny( HORI_LEFT_TOP ));
                          pPropMap->Insert( PROP_CHAR_ROTATION, false, uno::makeAny( sal_Int16( 900 ) ));
-                        OSL_TRACE("Have inserted textDirection %d", nIntValue );
+                        SAL_INFO( "writerfilter", "Have inserted textDirection " << nIntValue );
                         break;
                     case 4: // lrTbV
                         pPropMap->Insert( PROP_FRM_DIRECTION, false, uno::makeAny( HORI_LEFT_TOP ));
