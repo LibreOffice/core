@@ -30,7 +30,6 @@ $(eval $(call gb_Package_Package,basic_inc,$(SRCDIR)/basic/inc))
 
 $(eval $(call gb_Package_add_file,basic_inc,inc/basic/basicdllapi.h,basic/basicdllapi.h))
 $(eval $(call gb_Package_add_file,basic_inc,inc/basic/basicmanagerrepository.hxx,basic/basicmanagerrepository.hxx))
-$(eval $(call gb_Package_add_file,basic_inc,inc/basic/basicrt.hxx,basic/basicrt.hxx))
 $(eval $(call gb_Package_add_file,basic_inc,inc/basic/basmgr.hxx,basic/basmgr.hxx))
 $(eval $(call gb_Package_add_file,basic_inc,inc/basic/basrdll.hxx,basic/basrdll.hxx))
 $(eval $(call gb_Package_add_file,basic_inc,inc/basic/dispdefs.hxx,basic/dispdefs.hxx))
