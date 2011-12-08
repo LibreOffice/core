@@ -124,16 +124,6 @@ define gb_Helper_convert_native
 $(1)
 endef
 
-# YaccTarget class
-
-define gb_YaccTarget__command
-$(call gb_Output_announce,$(2),$(true),YAC,3)
-$(call gb_Helper_abbreviate_dirs,\
-	mkdir -p $(dir $(3)) && \
-	$(gb_YACC) $(T_YACCFLAGS) --defines=$(4) -o $(3) $(1) )
-
-endef
-
 # AsmObject class
 
 gb_AsmObject_get_source = $(1)/$(2).s

@@ -165,17 +165,6 @@ gb_DEBUG_CFLAGS := -ggdb3 -finline-limit=0 -fno-inline -fno-default-inline
 
 gb_COMPILERNOOPTFLAGS := -O0
 
-# YaccTarget class
-
-define gb_YaccTarget__command
-$(call gb_Output_announce,$(2),$(true),YAC,3)
-$(call gb_Helper_abbreviate_dirs,\
-	mkdir -p $(dir $(3)) && \
-	$(gb_YACC) $(T_YACCFLAGS) --defines=$(4) -o $(3) $(1) )
-
-endef
-
-
 # AsmObject class
 
 gb_AsmObject_get_source = $(1)/$(2).s
