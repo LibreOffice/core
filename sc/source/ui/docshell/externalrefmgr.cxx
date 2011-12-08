@@ -286,7 +286,7 @@ bool ScExternalRefCache::Table::isReferenced() const
     return meReferenced != UNREFERENCED;
 }
 
-void ScExternalRefCache::Table::setCell(SCCOL nCol, SCROW nRow, TokenRef pToken, sal_uInt32 nFmtIndex, bool bSetCacheRange)
+void ScExternalRefCache::Table::setCell(SCCOL nCol, SCROW nRow, TokenRef pToken, sal_uLong nFmtIndex, bool bSetCacheRange)
 {
     using ::std::pair;
     RowsDataType::iterator itrRow = maRows.find(nRow);
@@ -713,7 +713,7 @@ void ScExternalRefCache::setRangeNameTokens(sal_uInt16 nFileId, const OUString& 
 }
 
 void ScExternalRefCache::setCellData(sal_uInt16 nFileId, const OUString& rTabName, SCCOL nCol, SCROW nRow,
-                                     TokenRef pToken, sal_uInt32 nFmtIndex)
+                                     TokenRef pToken, sal_uLong nFmtIndex)
 {
     if (!isDocInitialized(nFileId))
         return;
@@ -1643,7 +1643,7 @@ void putCellDataIntoCache(
     // Now, insert the token into cache table but don't cache empty cells.
     if (pToken->GetType() != formula::svEmptyCell)
     {
-        sal_uInt32 nFmtIndex = (pFmt && pFmt->mbIsSet) ? pFmt->mnIndex : 0;
+        sal_uLong nFmtIndex = (pFmt && pFmt->mbIsSet) ? pFmt->mnIndex : 0;
         rRefCache.setCellData(nFileId, rTabName, rCell.Col(), rCell.Row(), pToken, nFmtIndex);
     }
 }
@@ -1946,7 +1946,7 @@ void ScExternalRefManager::insertRefCell(sal_uInt16 nFileId, const ScAddress& rC
         itr->second.insert(static_cast<ScFormulaCell*>(pCell));
 }
 
-void ScExternalRefManager::fillCellFormat(sal_uInt32 nFmtIndex, ScExternalRefCache::CellFormat* pFmt) const
+void ScExternalRefManager::fillCellFormat(sal_uLong nFmtIndex, ScExternalRefCache::CellFormat* pFmt) const
 {
     if (!pFmt)
         return;

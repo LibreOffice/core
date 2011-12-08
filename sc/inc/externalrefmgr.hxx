@@ -107,9 +107,9 @@ public:
 
     struct CellFormat
     {
-        bool        mbIsSet;
-        short       mnType;
-        sal_uInt32  mnIndex;
+        bool      mbIsSet;
+        short     mnType;
+        sal_uLong mnIndex;
 
         explicit CellFormat();
     };
@@ -118,8 +118,8 @@ private:
     /** individual cell within cached external ref table. */
     struct Cell
     {
-        TokenRef    mxToken;
-        sal_uInt32  mnFmtIndex;
+        TokenRef   mxToken;
+        sal_uLong  mnFmtIndex;
     };
     typedef ::boost::unordered_map<SCCOL, Cell>            RowDataType;
     typedef ::boost::unordered_map<SCROW, RowDataType>     RowsDataType;
@@ -160,7 +160,7 @@ public:
          *                       false _only when_ adding a range of cell
          *                       values, for performance reasons.
          */
-        SC_DLLPUBLIC void setCell(SCCOL nCol, SCROW nRow, TokenRef pToken, sal_uInt32 nFmtIndex = 0, bool bSetCacheRange = true);
+        SC_DLLPUBLIC void setCell(SCCOL nCol, SCROW nRow, TokenRef pToken, sal_uLong nFmtIndex = 0, bool bSetCacheRange = true);
         SC_DLLPUBLIC TokenRef getCell(SCCOL nCol, SCROW nRow, sal_uInt32* pnFmtIndex = NULL) const;
         bool hasRow( SCROW nRow ) const;
         /** Set/clear referenced status flag only if current status is not
@@ -242,7 +242,7 @@ public:
     void setRangeNameTokens(sal_uInt16 nFileId, const ::rtl::OUString& rName, TokenArrayRef pArray);
 
     void setCellData(sal_uInt16 nFileId, const ::rtl::OUString& rTabName,
-                     SCCOL nCol, SCROW nRow, TokenRef pToken, sal_uInt32 nFmtIndex);
+                     SCCOL nCol, SCROW nRow, TokenRef pToken, sal_uLong nFmtIndex);
 
     struct SingleRangeData
     {
@@ -681,7 +681,7 @@ private:
 
     void insertRefCell(sal_uInt16 nFileId, const ScAddress& rCell);
 
-    void fillCellFormat(sal_uInt32 nFmtIndex, ScExternalRefCache::CellFormat* pFmt) const;
+    void fillCellFormat(sal_uLong nFmtIndex, ScExternalRefCache::CellFormat* pFmt) const;
 
     ScExternalRefCache::TokenRef getSingleRefTokenFromSrcDoc(
         sal_uInt16 nFileId, const ScDocument* pSrcDoc, const ScAddress& rCell,

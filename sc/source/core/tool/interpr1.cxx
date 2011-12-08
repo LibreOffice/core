@@ -2055,6 +2055,58 @@ inline bool lcl_FormatHasOpenPar( const SvNumberformat* pFormat )
     return pFormat && (pFormat->GetFormatstring().Search( '(' ) != STRING_NOTFOUND);
 }
 
+namespace {
+
+void getFormatString(SvNumberFormatter* pFormatter, sal_uLong nFormat, String& rFmtStr)
+{
+    bool        bAppendPrec = true;
+    sal_uInt16  nPrec, nLeading;
+    bool        bThousand, bIsRed;
+    pFormatter->GetFormatSpecialInfo( nFormat, bThousand, bIsRed, nPrec, nLeading );
+
+    switch( pFormatter->GetType( nFormat ) )
+    {
+        case NUMBERFORMAT_NUMBER:       rFmtStr = (bThousand ? ',' : 'F');  break;
+        case NUMBERFORMAT_CURRENCY:     rFmtStr = 'C';                      break;
+        case NUMBERFORMAT_SCIENTIFIC:   rFmtStr = 'S';                      break;
+        case NUMBERFORMAT_PERCENT:      rFmtStr = 'P';                      break;
+        default:
+        {
+            bAppendPrec = false;
+            switch( pFormatter->GetIndexTableOffset( nFormat ) )
+            {
+                case NF_DATE_SYSTEM_SHORT:
+                case NF_DATE_SYS_DMMMYY:
+                case NF_DATE_SYS_DDMMYY:
+                case NF_DATE_SYS_DDMMYYYY:
+                case NF_DATE_SYS_DMMMYYYY:
+                case NF_DATE_DIN_DMMMYYYY:
+                case NF_DATE_SYS_DMMMMYYYY:
+                case NF_DATE_DIN_DMMMMYYYY: rFmtStr.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "D1" ) );  break;
+                case NF_DATE_SYS_DDMMM:     rFmtStr.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "D2" ) );  break;
+                case NF_DATE_SYS_MMYY:      rFmtStr.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "D3" ) );  break;
+                case NF_DATETIME_SYSTEM_SHORT_HHMM:
+                case NF_DATETIME_SYS_DDMMYYYY_HHMMSS:
+                                            rFmtStr.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "D4" ) );  break;
+                case NF_DATE_DIN_MMDD:      rFmtStr.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "D5" ) );  break;
+                case NF_TIME_HHMMSSAMPM:    rFmtStr.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "D6" ) );  break;
+                case NF_TIME_HHMMAMPM:      rFmtStr.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "D7" ) );  break;
+                case NF_TIME_HHMMSS:        rFmtStr.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "D8" ) );  break;
+                case NF_TIME_HHMM:          rFmtStr.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "D9" ) );  break;
+                default:                    rFmtStr = 'G';
+            }
+        }
+    }
+    if( bAppendPrec )
+        rFmtStr += String::CreateFromInt32( nPrec );
+    const SvNumberformat* pFormat = pFormatter->GetEntry( nFormat );
+    if( lcl_FormatHasNegColor( pFormat ) )
+        rFmtStr += '-';
+    if( lcl_FormatHasOpenPar( pFormat ) )
+        rFmtStr.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "()" ) );
+}
+
+}
 
 void ScInterpreter::ScCell()
 {   // ATTRIBUTE ; [REF]
@@ -2219,51 +2271,7 @@ void ScInterpreter::ScCell()
             {   // specific format code for standard formats
                 String aFuncResult;
                 sal_uLong   nFormat = pDok->GetNumberFormat( aCellPos );
-                bool        bAppendPrec = true;
-                sal_uInt16  nPrec, nLeading;
-                bool        bThousand, bIsRed;
-                pFormatter->GetFormatSpecialInfo( nFormat, bThousand, bIsRed, nPrec, nLeading );
-
-                switch( pFormatter->GetType( nFormat ) )
-                {
-                    case NUMBERFORMAT_NUMBER:       aFuncResult = (bThousand ? ',' : 'F');  break;
-                    case NUMBERFORMAT_CURRENCY:     aFuncResult = 'C';                      break;
-                    case NUMBERFORMAT_SCIENTIFIC:   aFuncResult = 'S';                      break;
-                    case NUMBERFORMAT_PERCENT:      aFuncResult = 'P';                      break;
-                    default:
-                    {
-                        bAppendPrec = false;
-                        switch( pFormatter->GetIndexTableOffset( nFormat ) )
-                        {
-                            case NF_DATE_SYSTEM_SHORT:
-                            case NF_DATE_SYS_DMMMYY:
-                            case NF_DATE_SYS_DDMMYY:
-                            case NF_DATE_SYS_DDMMYYYY:
-                            case NF_DATE_SYS_DMMMYYYY:
-                            case NF_DATE_DIN_DMMMYYYY:
-                            case NF_DATE_SYS_DMMMMYYYY:
-                            case NF_DATE_DIN_DMMMMYYYY: aFuncResult.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "D1" ) );  break;
-                            case NF_DATE_SYS_DDMMM:     aFuncResult.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "D2" ) );  break;
-                            case NF_DATE_SYS_MMYY:      aFuncResult.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "D3" ) );  break;
-                            case NF_DATETIME_SYSTEM_SHORT_HHMM:
-                            case NF_DATETIME_SYS_DDMMYYYY_HHMMSS:
-                                                        aFuncResult.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "D4" ) );  break;
-                            case NF_DATE_DIN_MMDD:      aFuncResult.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "D5" ) );  break;
-                            case NF_TIME_HHMMSSAMPM:    aFuncResult.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "D6" ) );  break;
-                            case NF_TIME_HHMMAMPM:      aFuncResult.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "D7" ) );  break;
-                            case NF_TIME_HHMMSS:        aFuncResult.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "D8" ) );  break;
-                            case NF_TIME_HHMM:          aFuncResult.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "D9" ) );  break;
-                            default:                    aFuncResult = 'G';
-                        }
-                    }
-                }
-                if( bAppendPrec )
-                    aFuncResult += String::CreateFromInt32( nPrec );
-                const SvNumberformat* pFormat = pFormatter->GetEntry( nFormat );
-                if( lcl_FormatHasNegColor( pFormat ) )
-                    aFuncResult += '-';
-                if( lcl_FormatHasOpenPar( pFormat ) )
-                    aFuncResult.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "()" ) );
+                getFormatString(pFormatter, nFormat, aFuncResult);
                 PushString( aFuncResult );
             }
             else if( aInfoType.EqualsAscii( "COLOR" ) )
@@ -2306,20 +2314,124 @@ void ScInterpreter::ScCellExternal()
     SCCOL nCol;
     SCROW nRow;
     SCTAB nTab;
-    aRef.nTab = 0; // -1 for external ref. Plus we don't use this.
+    aRef.nTab = 0; // external ref has a tab index of -1, which SingleRefToVars() don't like.
     SingleRefToVars(aRef, nCol, nRow, nTab);
     if (nGlobalError)
     {
         PushIllegalParameter();
         return;
     }
+    aRef.nTab = -1; // revert the value.
 
     ScCellKeywordTranslator::transKeyword(aInfoType, ScGlobal::GetLocale(), ocCell);
+    ScExternalRefManager* pRefMgr = pDok->GetExternalRefManager();
 
     if (aInfoType.equalsAscii("COL"))
         PushInt(nCol + 1);
     else if (aInfoType.equalsAscii("ROW"))
         PushInt(nRow + 1);
+    else if (aInfoType.equalsAscii("SHEET"))
+    {
+        // For SHEET, No idea what number we should set, but let's always set
+        // 1 if the external sheet exists, no matter what sheet.  Excel does
+        // the same.
+        if (pRefMgr->hasCacheTable(nFileId, aTabName))
+            PushInt(1);
+        else
+            SetError(errNoName);
+    }
+    else if (aInfoType.equalsAscii("ADDRESS"))
+    {
+        // ODF 1.2 says we need to always display address using the ODF A1 grammar.
+        ScTokenArray aArray;
+        aArray.AddExternalSingleReference(nFileId, aTabName, aRef);
+        ScCompiler aComp(pDok, aPos, aArray);
+        aComp.SetGrammar(formula::FormulaGrammar::GRAM_ODFF_A1);
+        String aStr;
+        aComp.CreateStringFromTokenArray(aStr);
+        PushString(aStr);
+    }
+    else if (aInfoType.equalsAscii("FILENAME"))
+    {
+        // 'file URI'#$SheetName
+
+        const rtl::OUString* p = pRefMgr->getExternalFileName(nFileId);
+        if (!p)
+        {
+            // In theory this should never happen...
+            SetError(errNoName);
+            return;
+        }
+
+        rtl::OUStringBuffer aBuf;
+        aBuf.append(sal_Unicode('\''));
+        aBuf.append(*p);
+        aBuf.appendAscii("'#$");
+        aBuf.append(aTabName);
+        PushString(aBuf.makeStringAndClear());
+    }
+    else if (aInfoType.equalsAscii("CONTENTS"))
+    {
+        switch (pToken->GetType())
+        {
+            case svString:
+                PushString(pToken->GetString());
+            break;
+            case svDouble:
+                PushString(rtl::OUString::valueOf(pToken->GetDouble()));
+            break;
+            case svError:
+                PushString(ScGlobal::GetErrorString(pToken->GetError()));
+            break;
+            default:
+                PushString(ScGlobal::GetEmptyString());
+        }
+    }
+    else if (aInfoType.equalsAscii("TYPE"))
+    {
+        sal_Unicode c = 'v';
+        switch (pToken->GetType())
+        {
+            case svString:
+                c = 'l';
+            break;
+            case svEmptyCell:
+                c = 'b';
+            break;
+            default:
+                ;
+        }
+        PushString(rtl::OUString(c));
+    }
+    else if (aInfoType.equalsAscii("FORMAT"))
+    {
+        String aFmtStr;
+        sal_uLong nFmt = aFmt.mbIsSet ? aFmt.mnIndex : 0;
+        getFormatString(pFormatter, nFmt, aFmtStr);
+        PushString(aFmtStr);
+    }
+    else if (aInfoType.equalsAscii("COLOR"))
+    {
+        // 1 = negative values are colored, otherwise 0
+        int nVal = 0;
+        if (aFmt.mbIsSet)
+        {
+            const SvNumberformat* pFormat = pFormatter->GetEntry(aFmt.mnIndex);
+            nVal = lcl_FormatHasNegColor(pFormat) ? 1 : 0;
+        }
+        PushInt(nVal);
+    }
+    else if(aInfoType.equalsAscii("PARENTHESES"))
+    {
+        // 1 = format string contains a '(' character, otherwise 0
+        int nVal = 0;
+        if (aFmt.mbIsSet)
+        {
+            const SvNumberformat* pFormat = pFormatter->GetEntry(aFmt.mnIndex);
+            nVal = lcl_FormatHasOpenPar(pFormat) ? 1 : 0;
+        }
+        PushInt(nVal);
+    }
     else
         PushIllegalParameter();
 }
