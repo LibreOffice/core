@@ -315,11 +315,6 @@ REF( com::sun::star::drawing::XShape ) SAL_CALL EnhancedCustomShapeEngine::rende
                 }
                 pRenderedShape->Shear( pSdrObjCustomShape->GetSnapRect().Center(), nShearWink, nTan, sal_False);
             }
-            if( nRotateAngle )
-            {
-                double a = nRotateAngle * F_PI18000;
-                pRenderedShape->NbcRotate( pSdrObjCustomShape->GetSnapRect().Center(), nRotateAngle, sin( a ), cos( a ) );
-            }
             if ( bFlipV )
             {
                 Point aLeft( aRect.Left(), ( aRect.Top() + aRect.Bottom() ) >> 1 );
@@ -331,6 +326,12 @@ REF( com::sun::star::drawing::XShape ) SAL_CALL EnhancedCustomShapeEngine::rende
                 Point aTop( ( aRect.Left() + aRect.Right() ) >> 1, aRect.Top() );
                 Point aBottom( aTop.X(), aTop.Y() + 1000 );
                 pRenderedShape->NbcMirror( aTop, aBottom );
+            }
+            // Note that the rotation needs be done after flipping
+            if( nRotateAngle )
+            {
+                double a = nRotateAngle * F_PI18000;
+                pRenderedShape->NbcRotate( pSdrObjCustomShape->GetSnapRect().Center(), nRotateAngle, sin( a ), cos( a ) );
             }
             pRenderedShape->NbcSetStyleSheet( pSdrObjCustomShape->GetStyleSheet(), sal_True );
             pRenderedShape->RecalcSnapRect();
