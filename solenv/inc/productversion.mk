@@ -28,5 +28,5 @@
 PRODUCTLIST = libreoffice lodev oxygenoffice
 
 # default values to minimize maintainance effort
-PRODUCTVERSION = 3.5
+PRODUCTVERSION = 3.6
 PRODUCTVERSIONSHORT = 3
