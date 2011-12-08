@@ -206,7 +206,6 @@ public:
     static sal_Bool                 IsInMain();
     static sal_Bool                 IsInExecute();
     static sal_Bool                 IsInModalMode();
-    static sal_uInt16               GetModalModeCount();
 
     static sal_uInt16               GetDispatchLevel();
     static sal_Bool                 AnyInput( sal_uInt16 nType = VCL_INPUT_ANY );
@@ -245,7 +244,6 @@ public:
     static sal_uLong                PostKeyEvent( sal_uLong nEvent, Window *pWin, KeyEvent* pKeyEvent );
     static sal_uLong                PostMouseEvent( sal_uLong nEvent, Window *pWin, MouseEvent* pMouseEvent );
     static void                 RemoveMouseAndKeyEvents( Window *pWin );
-    static sal_Bool                 IsProcessedMouseOrKeyEvent( sal_uLong nEventId );
 
     static sal_uLong                PostUserEvent( const Link& rLink, void* pCaller = NULL );
     static sal_Bool                 PostUserEvent( sal_uLong& rEventId, const Link& rLink, void* pCaller = NULL );
@@ -302,10 +300,7 @@ public:
 
     static sal_Bool                 InsertAccel( Accelerator* pAccel );
     static void                 RemoveAccel( Accelerator* pAccel );
-    static sal_Bool                 CallAccel( const KeyCode& rKeyCode, sal_uInt16 nRepeat = 0 );
 
-    static sal_uLong                AddEventHook( VCLEventHookProc pProc, void* pData = NULL );
-    static void                 RemoveEventHook( sal_uLong nId );
     static long                 CallEventHooks( NotifyEvent& rEvt );
 
     static void                 SetHelp( Help* pHelp = NULL );

@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-
-//#include "svsys.h"
-
 #include "comphelper/processfactory.hxx"
 
 #include "osl/module.h"
@@ -561,13 +558,6 @@ sal_Bool Application::IsInModalMode()
 
 // -----------------------------------------------------------------------
 
-sal_uInt16 Application::GetModalModeCount()
-{
-    return ImplGetSVData()->maAppData.mnModalMode;
-}
-
-// -----------------------------------------------------------------------
-
 sal_uInt16 Application::GetDispatchLevel()
 {
     return ImplGetSVData()->maAppData.mnDispatchLevel;
@@ -1014,24 +1004,6 @@ void Application::RemoveMouseAndKeyEvents( Window* pWin )
 
 // -----------------------------------------------------------------------
 
-sal_Bool Application::IsProcessedMouseOrKeyEvent( sal_uLong nEventId )
-{
-    const SolarMutexGuard aGuard;
-
-    // find event
-    ::std::list< ImplPostEventPair >::iterator aIter( aPostedEventList.begin() );
-
-    while( aIter != aPostedEventList.end() )
-    {
-        if( (*aIter).second->mnEventId == nEventId )
-            return sal_False;
-
-        else
-            ++aIter;
-    }
-    return sal_True;
-}
-
 sal_uLong Application::PostUserEvent( const Link& rLink, void* pCaller )
 {
     sal_uLong nEventId;
@@ -1390,21 +1362,6 @@ void Application::RemoveAccel( Accelerator* pAccel )
 
 // -----------------------------------------------------------------------
 
-sal_Bool Application::CallAccel( const KeyCode& rKeyCode, sal_uInt16 nRepeat )
-{
-    ImplSVData* pSVData = ImplGetSVData();
-
-    if ( pSVData->maAppData.mpAccelMgr )
-    {
-        if ( pSVData->maAppData.mpAccelMgr->IsAccelKey( rKeyCode, nRepeat ) )
-            return sal_True;
-    }
-
-    return sal_False;
-}
-
-// -----------------------------------------------------------------------
-
 void Application::SetHelp( Help* pHelp )
 {
     ImplGetSVData()->maAppData.mpHelp = pHelp;
@@ -1699,46 +1656,6 @@ void ImplFreeEventHookData()
     }
 
     pSVData->maAppData.mpFirstEventHook = NULL;
-}
-
-// -----------------------------------------------------------------------
-
-sal_uIntPtr Application::AddEventHook( VCLEventHookProc pProc, void* pData )
-{
-    ImplSVData*     pSVData = ImplGetSVData();
-    ImplEventHook*  pEventHookData = new ImplEventHook;
-    pEventHookData->mpUserData = pData;
-    pEventHookData->mpProc     = pProc;
-    pEventHookData->mpNext     = pSVData->maAppData.mpFirstEventHook;
-    pSVData->maAppData.mpFirstEventHook = pEventHookData;
-    return (sal_uIntPtr)pEventHookData;
-}
-
-// -----------------------------------------------------------------------
-
-void Application::RemoveEventHook( sal_uIntPtr nId )
-{
-    ImplSVData*     pSVData = ImplGetSVData();
-    ImplEventHook*  pFindEventHookData = (ImplEventHook*)nId;
-    ImplEventHook*  pPrevEventHookData = NULL;
-    ImplEventHook*  pEventHookData = pSVData->maAppData.mpFirstEventHook;
-    while ( pEventHookData )
-    {
-        if ( pEventHookData == pFindEventHookData )
-        {
-            if ( pPrevEventHookData )
-                pPrevEventHookData->mpNext = pFindEventHookData->mpNext;
-            else
-                pSVData->maAppData.mpFirstEventHook = pFindEventHookData->mpNext;
-            delete pFindEventHookData;
-            break;
-        }
-
-        pPrevEventHookData = pEventHookData;
-        pEventHookData = pEventHookData->mpNext;
-    }
-
-    DBG_ASSERT( pEventHookData, "Application::RemoveEventHook() - EventHook is not added" );
 }
 
 // -----------------------------------------------------------------------
