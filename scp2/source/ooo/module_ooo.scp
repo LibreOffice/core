@@ -60,8 +60,19 @@ Module gid_Module_Root_Extension_Dictionary_Af
     MOD_NAME_DESC ( MODULE_EXTENSION_DICTIONARY_AF );
     Files = (gid_File_Extension_Dictionary_Af);
     InstallOrder = "2000";
-    Sortkey = "510";
+    Sortkey = "500";
     Spellcheckerlanguage = "af";
+    PackageInfo = "packinfo_office.txt";
+    ParentID = gid_Module_Dictionaries;
+    Styles = ();
+End
+
+Module gid_Module_Root_Extension_Dictionary_An
+    MOD_NAME_DESC ( MODULE_EXTENSION_DICTIONARY_AN );
+    Files = (gid_File_Extension_Dictionary_An);
+    InstallOrder = "2000";
+    Sortkey = "510";
+    Spellcheckerlanguage = "an";
     PackageInfo = "packinfo_office.txt";
     ParentID = gid_Module_Dictionaries;
     Styles = ();
