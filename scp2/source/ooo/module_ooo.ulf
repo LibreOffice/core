@@ -55,6 +55,12 @@ en-US = "Afrikaans"
 [STR_DESC_MODULE_EXTENSION_DICTIONARY_AF]
 en-US = "Afrikaans spelling dictionary, and hyphenation rules"
 
+[STR_NAME_MODULE_EXTENSION_DICTIONARY_AN]
+en-US = "Aragonese"
+
+[STR_DESC_MODULE_EXTENSION_DICTIONARY_AN]
+en-US = "Aragonese spelling dictionary"
+
 [STR_NAME_MODULE_EXTENSION_DICTIONARY_AR]
 en-US = "Arabic"
 
