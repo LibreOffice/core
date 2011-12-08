@@ -1586,4 +1586,19 @@ void SdOptions::StoreConfig( sal_uLong nOptionsRange )
         SdOptionsPrint::Store();
 }
 
+sal_Int32 SdOptionsMisc::GetDisplay() const
+{
+    Init();
+    return mnDisplay;
+}
+
+void SdOptionsMisc::SetDisplay( sal_Int32 nDisplay )
+{
+    if( mnDisplay != nDisplay )
+    {
+        OptionsChanged();
+        mnDisplay = nDisplay;
+    }
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

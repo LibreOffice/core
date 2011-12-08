@@ -329,8 +329,8 @@ public:
     sal_Bool    IsPreviewChangedEffects() const { Init(); return bPreviewChangedEffects; }
     sal_Bool    IsPreviewTransitions() const { Init(); return bPreviewTransitions; }
 
-    sal_Int32   GetDisplay() const { Init(); return mnDisplay; }
-    void        SetDisplay( sal_Int32 nDisplay = 0 ) { if( mnDisplay != nDisplay ) { OptionsChanged(); mnDisplay = nDisplay; } }
+    sal_Int32   GetDisplay() const;
+    void        SetDisplay( sal_Int32 nDisplay = 0 );
 
     sal_Int32 GetPresentationPenColor() const { Init(); return mnPenColor; }
     void      SetPresentationPenColor( sal_Int32 nPenColor ) { if( mnPenColor != nPenColor ) { OptionsChanged(); mnPenColor = nPenColor; } }
