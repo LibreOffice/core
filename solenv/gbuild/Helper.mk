@@ -165,7 +165,7 @@ gb_StaticLibrary_$(1) += $(2)
 endef
 
 define gb_Helper_execute
-$(call gb_Helper_set_ld_path) $(OUTDIR_FOR_BUILD)/bin/$(1)
+$(gb_Helper_set_ld_path) $(OUTDIR_FOR_BUILD)/bin/$(1)
 endef
 
 # gb_Helper_OUTDIRLIBDIR is set by the platform to the path the dynamic linker need to use
