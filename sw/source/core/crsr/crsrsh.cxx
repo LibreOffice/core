@@ -223,7 +223,7 @@ void SwCrsrShell::StartAction()
         nAktCntnt = pCurCrsr->GetPoint()->nContent.GetIndex();
         nAktNdTyp = rNd.GetNodeType();
         bAktSelection = *pCurCrsr->GetPoint() != *pCurCrsr->GetMark();
-        if( ND_TEXTNODE & nAktNdTyp )
+        if( rNd.IsTxtNode() )
             nLeftFrmPos = SwCallLink::getLayoutFrm( GetLayout(), (SwTxtNode&)rNd, nAktCntnt, sal_True );
         else
             nLeftFrmPos = 0;
