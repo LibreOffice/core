@@ -1,0 +1,13 @@
+
+This extension is a Proof of concept on implementing Toolpanel in Python
+
+- make will create the oxt
+    - provided sdk environnement is set 
+    - alternatively zip the files and name it toolpanel.oxt
+- install it
+- activate Task Panes in menu (check View > Task Pane menu)
+- enjoy !
+
+The events of the controls (Click me button) in the task pane are handled by basic macro code to illustrate that Toolpanel definition and events codes are indepedant. One could use any language to react on events
+
+Then focus only on .py and xml files for the toolpanel activation analysis
