@@ -101,63 +101,6 @@ LibreOffice
 	}
 }
 
-LibreOffice_wJRE
-{
-	Settings
-	{
-		variables
-		{
-			PRODUCTNAME LibreOffice
-			PRODUCTVERSION 3.5
-			PRODUCTEXTENSION 
-			LONG_PRODUCTEXTENSION 
-			SHORT_PRODUCTEXTENSION beta0
-            POSTVERSIONEXTENSION
-            POSTVERSIONEXTENSIONUNIX
-			BRANDPACKAGEVERSION 3.5
-			USERDIRPRODUCTVERSION 3
-			ABOUTBOXPRODUCTVERSION 3.5.0
-			BASEPRODUCTVERSION 3.5
-			UPDATEURL http://update.libreoffice.org/check.php
-			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,javaversion2.dat,userland.txt,version.lst
-			REMOVE_UPGRADE_CODE_FILE upgradecode_remove_ooo.txt
-			ADDSYSTEMINTEGRATION 1
-			EVAL
-			FILEFORMATNAME OpenOffice.org
-			FILEFORMATVERSION 1.0
-			WRITERCOMPATIBILITYVERSIONOOO11 OpenOffice.org 1.1
-			PACKAGEVERSION 3.5.0
-			PACKAGEREVISION {buildid}
-			LICENSENAME LGPL
-			WITHJREPRODUCT 1
-			GLOBALFILEGID gid_File_Lib_Vcl
-			GLOBALPATCHFILEGID gid_File_Txt_Patchfiles
-			SPELLCHECKERFILE spellchecker_selection.txt
-			SETSTATICPATH 1
-			OOODOWNLOADNAME 1
-			XPDINSTALLER 1
-			BETAUPGRADECODE
-			STUBUPGRADECODE {0E7B27B8-D658-4BF9-98D6-EC361582EB4A}
-			CHANGETARGETDIR 1
-			USE_FILEVERSION 1
-			LIBRARYVERSION 9.4.0
-			PATCHCODEFILE ooo_patchcodes.txt
-			JAVAPRODUCT 1
-			RELATIVE_PATHES_IN_DDF 1
-            STARTCENTER_ADDFEATURE_URL http://extensions.libreoffice.org/
-            STARTCENTER_INFO_URL http://www.libreoffice.org/
-            STARTCENTER_TEMPLREP_URL http://templates.libreoffice.org/
-            STARTCENTER_LAYOUT_STYLE 0
-            DICT_REPO_URL http://extensions.libreoffice.org/dictionaries/
-		}
-		active			1
-		compression		5
-		script			setup_osljre
-		downloadname	LibO_{productversion}_{os}_installwjre_{languages}
-		include			{solarenvpath}/{os}/loader2,.,{localpath}/bin,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor}/desktop-integration/{pkgtype},{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarpath}/pck.{minor}/openoffice,{solarpath}/pck.{minor},{solarpath}/xml.{minor}/office/instance,{solarpath}/xml.{minor},../../external/common,{solarenvpath}/{os}/OOo_external
-	}
-}
-
 LibreOffice_Dev
 {
 	Settings

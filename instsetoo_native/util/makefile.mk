@@ -150,8 +150,6 @@ openoffice: $(foreach,i,$(alllangiso) openoffice_$i)
 
 openofficedev: $(foreach,i,$(alllangiso) openofficedev_$i)
 
-openofficewithjre: $(foreach,i,$(alllangiso) openofficewithjre_$i)
-
 ooolanguagepack : $(foreach,i,$(alllangiso) ooolanguagepack_$i)
 
 ooodevlanguagepack: $(foreach,i,$(alllangiso) ooodevlanguagepack_$i)
@@ -205,8 +203,6 @@ openoffice_$(defaultlangiso).archive : $(ADDDEPS)
 
 $(foreach,i,$(alllangiso) openofficedev_$i) : $(ADDDEPS)
 
-$(foreach,i,$(alllangiso) openofficewithjre_$i) : $(ADDDEPS)
-
 $(foreach,i,$(alllangiso) ooolanguagepack_$i) : $(ADDDEPS)
 
 $(foreach,i,$(alllangiso) ooodevlanguagepack_$i) : $(ADDDEPS)
@@ -247,10 +243,6 @@ $(MAKETARGETS){$(PKGFORMAT:^".")} : $(ADDDEPS)
 openoffice_%{$(PKGFORMAT:^".") .archive} :
     $(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p LibreOffice -u $(OUT) -buildid $(BUILD) -msitemplate $(MSIOFFICETEMPLATEDIR) -msilanguage $(COMMONMISC)$/win_ulffiles -format $(@:e:s/.//) $(VERBOSESWITCH)
     $(PERL) -w $(SOLARENV)$/bin$/gen_update_info.pl --buildid $(BUILD) --arch "$(RTL_ARCH)" --os "$(RTL_OS)" --lstfile $(PRJ)$/util$/openoffice.lst --product LibreOffice --languages $(subst,$(@:s/_/ /:1)_, $(@:b)) $(PRJ)$/util$/update.xml > $(MISC)/`date +%Y%m%d_%H%M`_$(RTL_OS)_$(RTL_ARCH)$(@:e).update.xml
-
-$(foreach,i,$(alllangiso) openofficewithjre_$i) : $$@{$(PKGFORMAT:^".")}
-openofficewithjre_%{$(PKGFORMAT:^".")} :
-    $(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p LibreOffice_wJRE -u $(OUT) -buildid $(BUILD) -msitemplate $(MSIOFFICETEMPLATEDIR) -msilanguage $(COMMONMISC)$/win_ulffiles -format $(@:e:s/.//) $(VERBOSESWITCH)
 
 $(foreach,i,$(alllangiso) openofficedev_$i) : $$@{$(PKGFORMAT:^".")}
 openofficedev_%{$(PKGFORMAT:^".")} :
@@ -332,7 +324,7 @@ openoffice:
 
 .IF "$(DISABLE_PYTHON)" != "TRUE"
 .IF "$(LOCALPYFILES)"!=""
-$(foreach,i,$(alllangiso) openoffice_$i{$(PKGFORMAT:^".") .archive} openofficewithjre_$i{$(PKGFORMAT:^".")} openofficedev_$i{$(PKGFORMAT:^".")} sdkoo_$i{$(PKGFORMAT:^".")} lotest_$i{$(PKGFORMAT:^".")} oxygenoffice_$i{$(PKGFORMAT:^".") .archive} oxygenofficewithjre_$i{$(PKGFORMAT:^".")}) updatepack : $(LOCALPYFILES)
+$(foreach,i,$(alllangiso) openoffice_$i{$(PKGFORMAT:^".") .archive} openofficedev_$i{$(PKGFORMAT:^".")} sdkoo_$i{$(PKGFORMAT:^".")} lotest_$i{$(PKGFORMAT:^".")} oxygenoffice_$i{$(PKGFORMAT:^".") .archive} oxygenofficewithjre_$i{$(PKGFORMAT:^".")}) updatepack : $(LOCALPYFILES)
 .ENDIF			# "$(LOCALPYFILES)"!=""
 
 .IF "$(GUI)"!="WNT"
