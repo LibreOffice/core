@@ -228,7 +228,7 @@ ConvDic::ConvDic(
             //! that could be found by the dictionary-list implementation
             // (Note: empty dictionaries are not just empty files!)
             Save();
-            bIsReadonly = IsReadOnly( rMainURL );   // will be sal_False if Save was succesfull
+            bIsReadonly = IsReadOnly( rMainURL );   // will be sal_False if Save was successful
         }
     }
     else

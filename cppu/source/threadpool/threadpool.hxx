@@ -120,7 +120,7 @@ namespace cppu_threadpool {
         void * enter( const ByteSequence &aThreadId, sal_Int64 nDisposeId );
 
         /********
-         * @return true, if queue could be succesfully revoked.
+         * @return true, if queue could be successfully revoked.
          ********/
         sal_Bool revokeQueue( const ByteSequence & aThreadId , sal_Bool bAsynchron );
 

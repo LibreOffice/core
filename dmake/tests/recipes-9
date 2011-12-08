@@ -83,7 +83,7 @@ else
 fi
 
 
-# Test 4 - Ignore a succesfully executed, but failing recipe.
+# Test 4 - Ignore a successfully executed, but failing recipe.
 cat > $file1 <<EOT
 SHELL*:=/bin/sh 
 SHELLFLAGS*:=-ce

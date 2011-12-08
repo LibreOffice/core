@@ -994,7 +994,7 @@ void SwView::Execute(SfxRequest &rReq)
                 bShow = ((const SfxBoolItem*)pItem)->GetValue();
             if((bShow && bInMailMerge) != GetViewFrame()->HasChildWindow(nSlot))
                 GetViewFrame()->ToggleChildWindow(nSlot);
-            //if fields have been succesfully inserted call the "real"
+            //if fields have been successfully inserted call the "real"
             //mail merge dialog
             SwWrtShell &rSh = GetWrtShell();
             if(bInMailMerge && rSh.IsAnyDatabaseFieldInDoc())

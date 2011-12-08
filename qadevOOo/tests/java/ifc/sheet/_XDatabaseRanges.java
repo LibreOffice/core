@@ -84,7 +84,7 @@ public class _XDatabaseRanges extends MultiMethodTest {
     /**
     * Test removes the database range with name that exist exactly and then
     * tries to remove the range with name that doesn't exist exactly. <p>
-    * Has <b> OK </b> status if first range was succesfully removed and
+    * Has <b> OK </b> status if first range was successfully removed and
     * exception was thrown when trying to remove non-existent database range.<p>
     * The following method tests are to be completed successfully before :
     * <ul>

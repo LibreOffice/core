@@ -125,7 +125,7 @@ class FairRWLock : public  IRWLock
         inline virtual void acquireReadAccess()
         {
             // Put call in "SERIALIZE"-queue!
-            // After successful acquiring this mutex we are alone ...
+            // After successfully acquiring this mutex we are alone ...
             ::osl::MutexGuard aSerializeGuard( m_aSerializer );
 
             // ... but we should synchronize us with other reader!
@@ -190,7 +190,7 @@ class FairRWLock : public  IRWLock
             // are registered (not for releasing them!) or writer finished their work!
             // Don't use a guard to do so - because you must hold the mutex till
             // you call releaseWriteAccess()!
-            // After succesfull acquire you have to wait for current working reader.
+            // After successfully acquiring you have to wait for current working reader.
             // Used condition will open by last gone reader object.
             m_aSerializer.acquire();
             m_aWriteCondition.wait();

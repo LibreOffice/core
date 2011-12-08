@@ -82,7 +82,7 @@ public class _XStorable extends MultiMethodTest {
             // else try to obtain location
             requiredMethod("storeAsURL()");
             if (storeUrl != null) {
-                // if stored succesfully - check location
+                // if stored successfully - check location
                 log.println(oObj.getLocation() + "--" + storeUrl);
                 tRes.tested("getLocation()",
                     storeUrl.equals(oObj.getLocation()));
@@ -107,7 +107,7 @@ public class _XStorable extends MultiMethodTest {
     public void _hasLocation() {
         requiredMethod("storeAsURL()");
         if (storeUrl != null) {
-            // if stored succesfully - it should have a location
+            // if stored successfully - it should have a location
             tRes.tested("hasLocation()", oObj.hasLocation());
         } else {
             // if not - it should not

@@ -1210,7 +1210,7 @@ SwTxtNode::InsertItem( SfxPoolItem& rAttr,
     {
         const bool bSuccess( InsertHint( pNew, nMode ) );
         // N.B.: also check that the hint is actually in the hints array,
-        // because hints of certain types may be merged after succesful
+        // because hints of certain types may be merged after successful
         // insertion, and thus destroyed!
         if (!bSuccess || ( USHRT_MAX == m_pSwpHints->GetPos( pNew ) ))
         {

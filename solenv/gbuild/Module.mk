@@ -92,7 +92,7 @@ endif
 
 define gb_Module_BUILDHINT
 
-LibreOffice build succesfully finished.
+LibreOffice build successfully finished.
 
 To install, issue: $(MAKE) install
 Developers might prefer this way: $(MAKE) dev-install -o build

@@ -120,7 +120,7 @@ public:
     // Report a syntax error in IDL input
     void    syntaxError(ParseState state, sal_Int32 lineNumber, const sal_Char* errmsg);
 
-    // Report an unsuccesful coercion attempt
+    // Report an unsuccessful coercion attempt
     void    coercionError(AstExpression *pExpr, ExprType et);
 
     // Report a failed name lookup attempt
