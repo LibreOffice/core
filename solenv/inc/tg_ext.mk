@@ -54,10 +54,13 @@ ABS_PACKAGE_DIR:=$(MAKEDIR)/$(MISC)/build
 BACK_PATH=../../../
 #MUST match with reference (currently MISC)
 MBACK_PATH=../../
-.IF "$(TARFILE_IS_FLAT)" != ""
-fake_root_dir=/$(TARFILE_NAME)
+fake_root_dir=/$(TARFILE_ROOTDIR)
 #MUST match fake_root_dir in directory levels
 fake_back=../
+.IF "$(TARFILE_IS_FLAT)" != ""
+TAR_STRIP_LEVEL=0
+.ELSE
+TAR_STRIP_LEVEL=1
 .ENDIF "$(TARFILE_IS_FLAT)" != ""
 
 TARFILE_LOCATION*=$(BACK_PATH)$(fake_back)download
@@ -106,9 +109,9 @@ clean:
 $(MISC)/%.unpack : $(TARFILE_LOCATION2)/%.tar.bz2
     @-$(RM) $@
 .IF "$(GUI)"=="UNX"
-    @noop $(assign UNPACKCMD := sh -c "bzip2 -cd $(TARFILE_LOCATION)/$(TARFILE_MD5)-$(TARFILE_NAME).tar.bz2 $(TARFILE_FILTER) | $(GNUTAR) --no-same-owner -x$(tar_verbose_switch)f - ")
+    @noop $(assign UNPACKCMD := sh -c "bzip2 -cd $(TARFILE_LOCATION)/$(TARFILE_MD5)-$(TARFILE_NAME).tar.bz2 $(TARFILE_FILTER) | $(GNUTAR) --no-same-owner --strip-components=$(TAR_STRIP_LEVEL) -x$(tar_verbose_switch)f - ")
 .ELSE			# "$(GUI)"=="UNX"
-    @noop $(assign UNPACKCMD := bzip2 -cd $(TARFILE_LOCATION)/$(TARFILE_MD5)-$(TARFILE_NAME).tar.bz2 $(TARFILE_FILTER) | $(GNUTAR) --no-same-owner -x$(tar_verbose_switch)f - )
+    @noop $(assign UNPACKCMD := bzip2 -cd $(TARFILE_LOCATION)/$(TARFILE_MD5)-$(TARFILE_NAME).tar.bz2 $(TARFILE_FILTER) | $(GNUTAR) --no-same-owner --strip-components=$(TAR_STRIP_LEVEL) -x$(tar_verbose_switch)f - )
 .ENDIF			# "$(GUI)"=="UNX"
     @$(TYPE) $(mktmp $(UNPACKCMD)) > $@.$(INPATH)
     @$(RENAME) $@.$(INPATH) $@
@@ -116,28 +119,28 @@ $(MISC)/%.unpack : $(TARFILE_LOCATION2)/%.tar.bz2
 $(MISC)/%.unpack : $(TARFILE_LOCATION2)/%.tar.Z
     @-$(RM) $@
 .IF "$(GUI)"=="UNX"
-    @noop $(assign UNPACKCMD := sh -c "uncompress -c $(TARFILE_LOCATION)/$(TARFILE_MD5)-$(TARFILE_NAME).tar.Z | $(GNUTAR) --no-same-owner -x$(tar_verbose_switch)f - ")
+    @noop $(assign UNPACKCMD := sh -c "uncompress -c $(TARFILE_LOCATION)/$(TARFILE_MD5)-$(TARFILE_NAME).tar.Z | $(GNUTAR) --no-same-owner --strip-components=$(TAR_STRIP_LEVEL) -x$(tar_verbose_switch)f - ")
 .ELSE			# "$(GUI)"=="UNX"
-    @noop $(assign UNPACKCMD := uncompress -c $(TARFILE_LOCATION)/$(TARFILE_MD5)-$(TARFILE_NAME).tar.Z | $(GNUTAR) --no-same-owner -x$(tar_verbose_switch)f - )
+    @noop $(assign UNPACKCMD := uncompress -c $(TARFILE_LOCATION)/$(TARFILE_MD5)-$(TARFILE_NAME).tar.Z | $(GNUTAR) --no-same-owner --strip-components=$(TAR_STRIP_LEVEL) -x$(tar_verbose_switch)f - )
 .ENDIF			# "$(GUI)"=="UNX"
     @$(TYPE) $(mktmp $(UNPACKCMD)) > $@.$(INPATH)
     @$(RENAME) $@.$(INPATH) $@
 
 $(MISC)/%.unpack : $(TARFILE_LOCATION2)/%.tar.gz
     @-$(RM) $@
-    @noop $(assign UNPACKCMD := gzip -d -c $(subst,\,/ $(TARFILE_LOCATION)/$(TARFILE_MD5)-$(TARFILE_NAME).tar.gz) $(TARFILE_FILTER) | $(GNUTAR) --no-same-owner -x$(tar_verbose_switch)f - )
+    @noop $(assign UNPACKCMD := gzip -d -c $(subst,\,/ $(TARFILE_LOCATION)/$(TARFILE_MD5)-$(TARFILE_NAME).tar.gz) $(TARFILE_FILTER) | $(GNUTAR) --no-same-owner --strip-components=$(TAR_STRIP_LEVEL) -x$(tar_verbose_switch)f - )
     @$(TYPE) $(mktmp $(UNPACKCMD)) > $@.$(INPATH)
     @$(RENAME) $@.$(INPATH) $@
 
 $(MISC)/%.unpack : $(TARFILE_LOCATION2)/%.tgz
     @-$(RM) $@
-    @noop $(assign UNPACKCMD := gzip -d -c $(subst,\,/ $(TARFILE_LOCATION)/$(TARFILE_MD5)-$(TARFILE_NAME).tgz) $(TARFILE_FILTER) | $(GNUTAR) --no-same-owner -x$(tar_verbose_switch)f - )
+    @noop $(assign UNPACKCMD := gzip -d -c $(subst,\,/ $(TARFILE_LOCATION)/$(TARFILE_MD5)-$(TARFILE_NAME).tgz) $(TARFILE_FILTER) | $(GNUTAR) --no-same-owner --strip-components=$(TAR_STRIP_LEVEL) -x$(tar_verbose_switch)f - )
     @$(TYPE) $(mktmp $(UNPACKCMD)) > $@.$(INPATH)
     @$(RENAME) $@.$(INPATH) $@
 
 $(MISC)/%.unpack : $(TARFILE_LOCATION2)/%.tar
     @-$(RM) $@
-    @noop $(assign UNPACKCMD := $(GNUTAR) --no-same-owner -x$(tar_verbose_switch)f $(TARFILE_LOCATION)/$(TARFILE_MD5)-$(TARFILE_NAME).tar)
+    @noop $(assign UNPACKCMD := $(GNUTAR) --no-same-owner --strip-components=$(TAR_STRIP_LEVEL) -x$(tar_verbose_switch)f $(TARFILE_LOCATION)/$(TARFILE_MD5)-$(TARFILE_NAME).tar)
     @$(TYPE) $(mktmp $(UNPACKCMD)) > $@.$(INPATH)
     @$(RENAME) $@.$(INPATH) $@
 
@@ -189,9 +192,9 @@ $(PACKAGE_DIR)/$(PATCH_FLAG_FILE) : $(PACKAGE_DIR)/$(ADD_FILES_FLAG_FILE)
     $(COMMAND_ECHO)$(TOUCH) $@
 .ELSE			# "$(PATCH_FILES)"=="none" ||	"$(PATCH_FILES)"==""
 .IF "$(GUI)"=="WNT"
-    $(COMMAND_ECHO)cd $(PACKAGE_DIR) && $(TYPE:s/+//) $(BACK_PATH)$(PATH_IN_MODULE)/{$(PATCH_FILES)} | tr -d "\015" | patch $(PATCHFLAGS) -p2 && $(TOUCH) $(PATCH_FLAG_FILE)
+    $(COMMAND_ECHO)cd $(PACKAGE_DIR) && $(TYPE:s/+//) $(BACK_PATH)$(PATH_IN_MODULE)/{$(PATCH_FILES)} | tr -d "\015" | (cd .$(fake_root_dir) && patch $(PATCHFLAGS) -p3 ) && $(TOUCH) $(PATCH_FLAG_FILE)
 .ELSE           # "$(GUI)"=="WNT"
-    $(COMMAND_ECHO)cd $(PACKAGE_DIR) && $(TYPE) $(BACK_PATH)$(PATH_IN_MODULE)/{$(PATCH_FILES)} | $(GNUPATCH) $(PATCHFLAGS) -p2 && $(TOUCH) $(PATCH_FLAG_FILE)
+    $(COMMAND_ECHO)cd $(PACKAGE_DIR) && $(TYPE) $(BACK_PATH)$(PATH_IN_MODULE)/{$(PATCH_FILES)} | (cd .$(fake_root_dir) && $(GNUPATCH) $(PATCHFLAGS) -p3 ) && $(TOUCH) $(PATCH_FLAG_FILE)
 .ENDIF          # "$(GUI)"=="WNT"
 .ENDIF			# "$(PATCH_FILES)"=="none" ||	"$(PATCH_FILES)"==""
 .IF "$(T_ADDITIONAL_FILES)"!=""
@@ -301,10 +304,10 @@ $(MISC)/$(TARFILE_ROOTDIR).done : $(MISC)/$(TARFILE_MD5)-$(TARFILE_NAME).unpack 
 #.IF "$(my4ver:s/.//:s/,//)" >= "300"
 #	$(COMMAND_ECHO)cd $(MISC) && ( $(TYPE:s/+//) $(BACK_PATH)$(PATH_IN_MODULE)/{$(PATCH_FILES)} | tr -d "\015" | patch $(PATCHFLAGS) -p2 )
 #.ELSE			# "$(my4ver:s/.//:s/,//)" >= "300"
-    $(COMMAND_ECHO)cd $(MISC) && $(TYPE:s/+//) $(MBACK_PATH)$(PATH_IN_MODULE)/{$(PATCH_FILES)} | tr -d "\015" | patch $(PATCHFLAGS) -p2
+    $(COMMAND_ECHO)cd $(MISC) && $(TYPE:s/+//) $(MBACK_PATH)$(PATH_IN_MODULE)/{$(PATCH_FILES)} | tr -d "\015" | (cd .$(fake_root_dir) && patch $(PATCHFLAGS) -p3 )
 #.ENDIF			# "$(my4ver:s/.//:s/,//)" >= "300"
 .ELSE           # "$(GUI)"=="WNT"
-    $(COMMAND_ECHO)cd $(MISC) && $(TYPE) $(MBACK_PATH)$(PATH_IN_MODULE)/{$(PATCH_FILES)} | $(GNUPATCH) $(PATCHFLAGS) -p2
+    $(COMMAND_ECHO)cd $(MISC) && $(TYPE) $(MBACK_PATH)$(PATH_IN_MODULE)/{$(PATCH_FILES)} | ( cd .$(fake_root_dir) && $(GNUPATCH) $(PATCHFLAGS) -p3 )
 .ENDIF          # "$(GUI)"=="WNT"
 .IF "$(CONVERTFILES)"!=""
     $(COMMAND_ECHO)$(CONVERT) dos  $(foreach,i,$(CONVERTFILES) $(MISC)/$(TARFILE_ROOTDIR)/$i)
