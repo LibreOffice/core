@@ -154,8 +154,10 @@ LIBLIST= \
 .ENDIF # .IF "$(GUI)"=="WNT"
 
 
+# On MacOS no include dirs nspr and nss exists in the prebuilt zip, no need to remove them 
+.IF "$(OS)" != "MACOSX" 
 NSS_INCLUDE_LIST= nspr nss
-
+.ENDIF
 
 .IF "$(OS)" == "SOLARIS" 
 .IF "$(CPU)" == "S" #32bit
