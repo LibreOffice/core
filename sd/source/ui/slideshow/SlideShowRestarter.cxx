@@ -58,21 +58,18 @@ SlideShowRestarter::SlideShowRestarter (
 {
 }
 
-
-
-
 SlideShowRestarter::~SlideShowRestarter (void)
 {
 }
 
-
-
-
-void SlideShowRestarter::Restart (void)
+void SlideShowRestarter::Restart (bool bForce)
 {
     // Prevent multiple and concurrently restarts.
     if (mnEventId != 0)
         return;
+
+    if (bForce)
+        mnDisplayCount = 0;
 
     // Remember the current slide in order to restore it after the slide
     // show has been restarted.
@@ -89,9 +86,6 @@ void SlideShowRestarter::Restart (void)
     mnEventId = Application::PostUserEvent(
         LINK(this, SlideShowRestarter, EndPresentation));
 }
-
-
-
 
 sal_Int32 SlideShowRestarter::GetDisplayCount (void)
 {
@@ -110,9 +104,6 @@ sal_Int32 SlideShowRestarter::GetDisplayCount (void)
 
     return xIndexAccess->getCount();
 }
-
-
-
 
 IMPL_LINK(SlideShowRestarter, EndPresentation, void*, EMPTYARG)
 {
@@ -157,9 +148,6 @@ IMPL_LINK(SlideShowRestarter, EndPresentation, void*, EMPTYARG)
     }
     return 0;
 }
-
-
-
 
 void SlideShowRestarter::StartPresentation (void)
 {

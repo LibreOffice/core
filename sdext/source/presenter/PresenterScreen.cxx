@@ -451,6 +451,7 @@ void PresenterScreen::InitializePresenterScreen (void)
                 SetupConfiguration(xContext, xMainPaneId);
 
                 mpPresenterController = new PresenterController(
+                    css::uno::WeakReference<css::lang::XEventListener>(this),
                     xContext,
                     mxController,
                     xSlideShowController,
@@ -476,8 +477,43 @@ void PresenterScreen::InitializePresenterScreen (void)
     }
 }
 
+css::uno::Reference<css::beans::XPropertySet> PresenterScreen::GetDisplayAccess() const
+{
+    Reference<XComponentContext> xContext (mxContextWeak);
+    Reference<lang::XMultiComponentFactory> xFactory (xContext->getServiceManager(), UNO_QUERY_THROW);
+    return Reference<beans::XPropertySet>( xFactory->createInstanceWithContext(A2S("com.sun.star.awt.DisplayAccess"), xContext), UNO_QUERY_THROW);
+}
 
+void PresenterScreen::SwitchMonitors()
+{
+    try {
+        Reference<XPresentationSupplier> xPS ( mxModel, UNO_QUERY_THROW);
+        Reference<XPresentation2> xPresentation(xPS->getPresentation(), UNO_QUERY_THROW);
 
+        sal_Int32 nDefaultDisplay = 0;
+        sal_Int32 nScreen = GetScreenNumber (xPresentation);
+
+        if (nScreen == -1) // only a single display somehow
+            return;
+
+        sal_Int32 nNewScreen = GetPresenterScreenFromScreen (nScreen);
+
+        Reference<beans::XPropertySet> xDisplayProperties = GetDisplayAccess();
+        xDisplayProperties->getPropertyValue(A2S("DefaultDisplay")) >>= nDefaultDisplay;
+
+        if (nNewScreen == nDefaultDisplay)
+            nNewScreen = 0; // screen zero is best == the primary display
+        else
+            nNewScreen++;
+
+        // Set the new presentation display
+        Reference<beans::XPropertySet> xProperties (xPresentation, UNO_QUERY_THROW);
+        uno::Any aDisplay;
+        aDisplay <<= nNewScreen;
+        xProperties->setPropertyValue(A2S("Display"), aDisplay);
+    } catch (const uno::Exception &e) {
+    }
+}
 
 sal_Int32 PresenterScreen::GetScreenNumber (
     const Reference<presentation::XPresentation2>& rxPresentation) const
@@ -496,19 +532,7 @@ sal_Int32 PresenterScreen::GetScreenNumber (
         if ( ! (xProperties->getPropertyValue(A2S("Display")) >>= nDisplayNumber))
             return -1;
 
-        Reference<XComponentContext> xContext (mxContextWeak);
-        if ( ! xContext.is())
-            return -1;
-        Reference<lang::XMultiComponentFactory> xFactory (
-            xContext->getServiceManager(), UNO_QUERY);
-        if ( ! xFactory.is())
-            return -1;
-        Reference<beans::XPropertySet> xDisplayProperties (
-            xFactory->createInstanceWithContext(A2S("com.sun.star.awt.DisplayAccess"),xContext),
-            UNO_QUERY);
-        if  ( ! xDisplayProperties.is())
-            return -1;
-
+        Reference<beans::XPropertySet> xDisplayProperties = GetDisplayAccess();
         if (nDisplayNumber > 0)
         {
             nScreenNumber = nDisplayNumber - 1;
@@ -535,6 +559,7 @@ sal_Int32 PresenterScreen::GetScreenNumber (
             // presentation spans all available screens.  The presenter
             // screen is shown only when a special flag in the configuration
             // is set.
+            Reference<XComponentContext> xContext (mxContextWeak);
             PresenterConfigurationAccess aConfiguration (
                 xContext,
                 OUString(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Office.extension.PresenterScreen/")),
@@ -560,21 +585,12 @@ sal_Int32 PresenterScreen::GetScreenNumber (
 }
 
 
-
-
-Reference<drawing::framework::XResourceId> PresenterScreen::GetMainPaneId (
-    const Reference<presentation::XPresentation2>& rxPresentation) const
+sal_Int32 PresenterScreen::GetPresenterScreenFromScreen( sal_Int32 nPresentationScreen ) const
 {
-    // A negative value means that the presentation spans all available
-    // displays.  That leaves no room for the presenter.
-    const sal_Int32 nScreenNumber(GetScreenNumber(rxPresentation));
-    if (nScreenNumber < 0)
-        return NULL;
-
     // Setup the resource id of the full screen background pane so that
     // it is displayed on another screen than the presentation.
     sal_Int32 nPresenterScreenNumber (1);
-    switch (nScreenNumber)
+    switch (nPresentationScreen)
     {
         case 0:
             nPresenterScreenNumber = 1;
@@ -591,6 +607,20 @@ Reference<drawing::framework::XResourceId> PresenterScreen::GetMainPaneId (
             nPresenterScreenNumber = 0;
             break;
     }
+    return nPresenterScreenNumber;
+}
+
+
+Reference<drawing::framework::XResourceId> PresenterScreen::GetMainPaneId (
+    const Reference<presentation::XPresentation2>& rxPresentation) const
+{
+    // A negative value means that the presentation spans all available
+    // displays.  That leaves no room for the presenter.
+    const sal_Int32 nScreenNumber(GetScreenNumber(rxPresentation));
+    if (nScreenNumber < 0)
+        return NULL;
+
+    sal_Int32 nPresenterScreenNumber = GetPresenterScreenFromScreen (nScreenNumber);
 
     return ResourceId::create(
         Reference<XComponentContext>(mxContextWeak),

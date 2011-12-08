@@ -35,6 +35,7 @@
 #include "PresenterCurrentSlideObserver.hxx"
 #include "PresenterFrameworkObserver.hxx"
 #include "PresenterHelper.hxx"
+#include "PresenterScreen.hxx"
 #include "PresenterNotesView.hxx"
 #include "PresenterPaintManager.hxx"
 #include "PresenterPaneAnimator.hxx"
@@ -102,12 +103,14 @@ PresenterController::InstanceContainer PresenterController::maInstances;
 
 
 PresenterController::PresenterController (
+    const css::uno::WeakReference<css::lang::XEventListener> &rxScreen,
     const Reference<XComponentContext>& rxContext,
     const Reference<frame::XController>& rxController,
     const Reference<presentation::XSlideShowController>& rxSlideShowController,
     const rtl::Reference<PresenterPaneContainer>& rpPaneContainer,
     const Reference<XResourceId>& rxMainPaneId)
     : PresenterControllerInterfaceBase(m_aMutex),
+      mxScreen(rxScreen),
       mxComponentContext(rxContext),
       mxController(rxController),
       mxConfigurationController(),
@@ -1344,6 +1347,19 @@ void PresenterController::ThrowIfDisposed (void) const
                 "PresenterController object has already been disposed")),
             const_cast<uno::XWeak*>(static_cast<const uno::XWeak*>(this)));
     }
+}
+
+void PresenterController::SwitchMonitors (void)
+{
+    Reference<lang::XEventListener> xScreen( mxScreen );
+    if (!xScreen.is())
+        return;
+
+    PresenterScreen *pScreen = dynamic_cast<PresenterScreen *>(xScreen.get());
+    if (!pScreen)
+        return;
+
+    pScreen->SwitchMonitors();
 }
 
 
