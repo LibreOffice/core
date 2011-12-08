@@ -353,7 +353,7 @@
 <StartDayOfWeek>
 <DayID>mon</DayID>
 </StartDayOfWeek>
-<MinimalDaysInFirstWeek>1</MinimalDaysInFirstWeek>
+<MinimalDaysInFirstWeek>4</MinimalDaysInFirstWeek>
 </Calendar>
 </LC_CALENDAR>
 <LC_CURRENCY>
