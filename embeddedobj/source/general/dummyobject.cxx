@@ -81,7 +81,7 @@ void ODummyEmbeddedObject::PostEvent_Impl( const ::rtl::OUString& aEventName,
                 {
                     ((document::XEventListener *)aIt.next())->notifyEvent( aEvent );
                 }
-                catch( uno::RuntimeException& )
+                catch( const uno::RuntimeException& )
                 {
                     aIt.remove();
                 }
@@ -641,7 +641,7 @@ void SAL_CALL ODummyEmbeddedObject::close( sal_Bool bDeliverOwnership )
                 {
                     ((util::XCloseListener*)pIterator.next())->queryClosing( aSource, bDeliverOwnership );
                 }
-                catch( uno::RuntimeException& )
+                catch( const uno::RuntimeException& )
                 {
                     pIterator.remove();
                 }
@@ -659,7 +659,7 @@ void SAL_CALL ODummyEmbeddedObject::close( sal_Bool bDeliverOwnership )
                 {
                     ((util::XCloseListener*)pCloseIterator.next())->notifyClosing( aSource );
                 }
-                catch( uno::RuntimeException& )
+                catch( const uno::RuntimeException& )
                 {
                     pCloseIterator.remove();
                 }

@@ -1956,7 +1956,7 @@ bool SvxBoxItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             uno::Sequence < uno::Any > aSeq;
             uno::Any aNew;
             try { aNew = xConverter->convertTo( rVal, ::getCppuType((const uno::Sequence < uno::Any >*)0) ); }
-            catch (uno::Exception&) {}
+            catch (const uno::Exception&) {}
 
             aNew >>= aSeq;
             if ( aSeq.getLength() == 4 )
@@ -2754,7 +2754,7 @@ bool SvxBoxInfoItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 uno::Any aNew;
                 uno::Sequence < uno::Any > aSeq;
                 try { aNew = xConverter->convertTo( rVal, ::getCppuType((const uno::Sequence < uno::Any >*)0) ); }
-                catch (uno::Exception&) {}
+                catch (const uno::Exception&) {}
 
                 if( (aNew >>= aSeq) && aSeq.getLength() == 4 )
                 {

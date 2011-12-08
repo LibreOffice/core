@@ -84,7 +84,7 @@ sal_Bool ConvertBufferToFormat( void* pBuf,
                 }
             }
         }
-        catch (uno::Exception&)
+        catch (const uno::Exception&)
         {}
     }
 
@@ -119,7 +119,7 @@ void SAL_CALL MainThreadNotificationRequest::notify (const uno::Any& ) throw (un
                     m_pObject->OnIconChanged_Impl();
             }
         }
-        catch( uno::Exception& )
+        catch( const uno::Exception& )
         {
             // ignore all the errors
         }

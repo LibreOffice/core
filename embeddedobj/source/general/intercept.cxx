@@ -159,7 +159,7 @@ Interceptor::dispatch(
             try {
                 m_pDocHolder->GetEmbedObject()->changeState( embed::EmbedStates::RUNNING );
             }
-            catch( uno::Exception& )
+            catch( const uno::Exception& )
             {
             }
         }

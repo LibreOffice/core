@@ -1124,7 +1124,7 @@ uno::Reference< XDictionary > LinguMgr::GetStandard()
                         DictionaryType_POSITIVE,
                         linguistic::GetWritableDictionaryURL( aDicName ) );
         }
-        catch(com::sun::star::uno::Exception &)
+        catch(const com::sun::star::uno::Exception &)
         {
         }
 

@@ -139,9 +139,8 @@ namespace drawinglayer
                 }
             }
         }
-        catch( uno::Exception& e )
+        catch( const uno::Exception& )
         {
-            (void)e;
             OSL_FAIL( "Chart cannot be painted pretty!" );
         }
 

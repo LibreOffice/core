@@ -159,7 +159,7 @@ uno::Reference< io::XInputStream > createTempInpStreamFromStor(
         try
         {
             xStorage->copyToStorage( xTempStorage );
-        } catch( uno::Exception& e )
+        } catch( const uno::Exception& e )
         {
             throw embed::StorageWrappedTargetException(
                         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Can't copy storage!" )),
@@ -173,7 +173,7 @@ uno::Reference< io::XInputStream > createTempInpStreamFromStor(
             if ( xComponent.is() )
                 xComponent->dispose();
         }
-        catch ( uno::Exception& )
+        catch ( const uno::Exception& )
         {
         }
 
@@ -182,7 +182,7 @@ uno::Reference< io::XInputStream > createTempInpStreamFromStor(
             if ( xTempOut.is() )
                 xTempOut->closeOutput();
         }
-        catch ( uno::Exception& )
+        catch ( const uno::Exception& )
         {
         }
 
@@ -253,7 +253,7 @@ static void SetDocToEmbedded( const uno::Reference< frame::XModel > xDocument, c
                 uno::Reference< frame::XModule > xModule( xDocument, uno::UNO_QUERY_THROW );
                 xModule->setIdentifier( aModuleName );
             }
-            catch( uno::Exception& )
+            catch( const uno::Exception& )
             {}
         }
     }
@@ -291,7 +291,7 @@ void OCommonEmbeddedObject::SwitchOwnPersistence( const uno::Reference< embed::X
         if ( xComponent.is() )
             xComponent->dispose();
     }
-    catch ( uno::Exception& )
+    catch ( const uno::Exception& )
     {
     }
 }
@@ -368,7 +368,7 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::InitNewDocument_Impl()
         }
         xModel->attachResource( xModel->getURL(), m_aDocMediaDescriptor );
     }
-    catch( uno::Exception& )
+    catch( const uno::Exception& )
     {
         uno::Reference< util::XCloseable > xCloseable( xDocument, uno::UNO_QUERY );
         if ( xCloseable.is() )
@@ -377,7 +377,7 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::InitNewDocument_Impl()
             {
                 xCloseable->close( sal_True );
             }
-            catch( uno::Exception& )
+            catch( const uno::Exception& )
             {
             }
         }
@@ -440,7 +440,7 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::LoadLink_Impl()
                 }
         }
     }
-    catch( uno::Exception& )
+    catch( const uno::Exception& )
     {
         uno::Reference< util::XCloseable > xCloseable( xDocument, uno::UNO_QUERY );
         if ( xCloseable.is() )
@@ -449,7 +449,7 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::LoadLink_Impl()
             {
                 xCloseable->close( sal_True );
             }
-            catch( uno::Exception& )
+            catch( const uno::Exception& )
             {
             }
         }
@@ -470,7 +470,7 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::LoadLink_Impl()
         try {
             ::comphelper::MimeConfigurationHelper aHelper( m_xFactory );
             aFilterName = aHelper.GetDefaultFilterFromServiceName( GetDocumentServiceName(), nVersion );
-        } catch( uno::Exception& )
+        } catch( const uno::Exception& )
         {}
     }
 
@@ -539,7 +539,7 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::LoadDocumentFromStorag
             uno::Reference< beans::XPropertySet > xTempStreamProps( xTempInpStream, uno::UNO_QUERY_THROW );
             xTempStreamProps->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Uri" )) ) >>= aTempFileURL;
         }
-        catch( uno::Exception& )
+        catch( const uno::Exception& )
         {
         }
 
@@ -566,7 +566,7 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::LoadDocumentFromStorag
         else
             xLoadable->load( aLoadArgs.getPropertyValues() );
     }
-    catch( uno::Exception& )
+    catch( const uno::Exception& )
     {
         uno::Reference< util::XCloseable > xCloseable( xDocument, uno::UNO_QUERY );
         if ( xCloseable.is() )
@@ -575,7 +575,7 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::LoadDocumentFromStorag
             {
                 xCloseable->close( sal_True );
             }
-            catch( uno::Exception& )
+            catch( const uno::Exception& )
             {
                 DBG_UNHANDLED_EXCEPTION();
             }
@@ -632,7 +632,7 @@ uno::Reference< io::XInputStream > OCommonEmbeddedObject::StoreDocumentToTempStr
     {
         xTempOut->closeOutput();
     }
-    catch( uno::Exception& )
+    catch( const uno::Exception& )
     {
         OSL_FAIL( "Looks like stream was closed already" );
     }
@@ -653,13 +653,13 @@ void OCommonEmbeddedObject::SaveObject_Impl()
             if ( xModifiable.is() && !xModifiable->isModified() )
                 return;
         }
-        catch( uno::Exception& )
+        catch( const uno::Exception& )
         {}
 
         try {
             m_xClientSite->saveObject();
         }
-        catch( uno::Exception& )
+        catch( const uno::Exception& )
         {
             OSL_FAIL( "The object was not stored!\n" );
         }
@@ -688,7 +688,7 @@ void OCommonEmbeddedObject::SaveObject_Impl()
 
 
         }
-        catch( uno::Exception& )
+        catch( const uno::Exception& )
         {}
     }
 
@@ -834,7 +834,7 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::CreateDocFromMediaDesc
 
         xLoadable->load( addAsTemplate( aMedDescr ) );
     }
-    catch( uno::Exception& )
+    catch( const uno::Exception& )
     {
         uno::Reference< util::XCloseable > xCloseable( xDocument, uno::UNO_QUERY );
         if ( xCloseable.is() )
@@ -843,7 +843,7 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::CreateDocFromMediaDesc
             {
                 xCloseable->close( sal_True );
             }
-            catch( uno::Exception& )
+            catch( const uno::Exception& )
             {
             }
         }
@@ -867,11 +867,11 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::CreateTempDocFromLink_
     try {
         nStorageFormat = ::comphelper::OStorageHelper::GetXStorageFormat( m_xParentStorage );
     }
-    catch ( beans::IllegalTypeException& )
+    catch ( const beans::IllegalTypeException& )
     {
         // the container just has an unknown type, use current file format
     }
-    catch ( uno::Exception& )
+    catch ( const uno::Exception& )
     {
         OSL_FAIL( "Can not retrieve storage media type!\n" );
     }
@@ -892,11 +892,11 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::CreateTempDocFromLink_
             uno::Reference< beans::XPropertySet > xTempStreamProps( xTempStream, uno::UNO_QUERY_THROW );
             xTempStreamProps->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Uri" )) ) >>= aTempFileURL;
         }
-        catch( uno::Exception& )
+        catch( const uno::Exception& )
         {
         }
 
-        OSL_ENSURE( aTempFileURL.getLength(), "Coudn't retrieve temporary file URL!\n" );
+        OSL_ENSURE( aTempFileURL.getLength(), "Couldn't retrieve temporary file URL!\n" );
 
         aTempMediaDescr[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "URL" ));
         aTempMediaDescr[0].Value <<= aTempFileURL;
@@ -1193,11 +1193,11 @@ void SAL_CALL OCommonEmbeddedObject::storeToEntry( const uno::Reference< embed::
     try {
         nTargetStorageFormat = ::comphelper::OStorageHelper::GetXStorageFormat( xStorage );
     }
-    catch ( beans::IllegalTypeException& )
+    catch ( const beans::IllegalTypeException& )
     {
         // the container just has an unknown type, use current file format
     }
-    catch ( uno::Exception& )
+    catch ( const uno::Exception& )
     {
         OSL_FAIL( "Can not retrieve target storage media type!\n" );
     }
@@ -1206,11 +1206,11 @@ void SAL_CALL OCommonEmbeddedObject::storeToEntry( const uno::Reference< embed::
     {
         nOriginalStorageFormat = ::comphelper::OStorageHelper::GetXStorageFormat( m_xParentStorage );
     }
-    catch ( beans::IllegalTypeException& )
+    catch ( const beans::IllegalTypeException& )
     {
         // the container just has an unknown type, use current file format
     }
-    catch ( uno::Exception& )
+    catch ( const uno::Exception& )
     {
         OSL_FAIL( "Can not retrieve own storage media type!\n" );
     }
@@ -1242,7 +1242,7 @@ void SAL_CALL OCommonEmbeddedObject::storeToEntry( const uno::Reference< embed::
                     xSource->copyElementDirectlyTo( m_aEntryName, xTarget, sEntName );
                     bOptimizationWorks = sal_True;
                 }
-                catch( uno::Exception& )
+                catch( const uno::Exception& )
                 {
                 }
             }
@@ -1324,11 +1324,11 @@ void SAL_CALL OCommonEmbeddedObject::storeAsEntry( const uno::Reference< embed::
     try {
         nTargetStorageFormat = ::comphelper::OStorageHelper::GetXStorageFormat( xStorage );
     }
-    catch ( beans::IllegalTypeException& )
+    catch ( const beans::IllegalTypeException& )
     {
         // the container just has an unknown type, use current file format
     }
-    catch ( uno::Exception& )
+    catch ( const uno::Exception& )
     {
         OSL_FAIL( "Can not retrieve target storage media type!\n" );
     }
@@ -1337,11 +1337,11 @@ void SAL_CALL OCommonEmbeddedObject::storeAsEntry( const uno::Reference< embed::
     {
         nOriginalStorageFormat = ::comphelper::OStorageHelper::GetXStorageFormat( m_xParentStorage );
     }
-    catch ( beans::IllegalTypeException& )
+    catch ( const beans::IllegalTypeException& )
     {
         // the container just has an unknown type, use current file format
     }
-    catch ( uno::Exception& )
+    catch ( const uno::Exception& )
     {
         OSL_FAIL( "Can not retrieve own storage media type!\n" );
     }
@@ -1375,7 +1375,7 @@ void SAL_CALL OCommonEmbeddedObject::storeAsEntry( const uno::Reference< embed::
                     xSource->copyElementDirectlyTo( m_aEntryName, xTarget, sEntName );
                     bOptimizationWorks = sal_True;
                 }
-                catch( uno::Exception& )
+                catch( const uno::Exception& )
                 {
                 }
             }
@@ -1480,7 +1480,7 @@ void SAL_CALL OCommonEmbeddedObject::saveCompleted( sal_Bool bUseNew )
             if ( xComponent.is() )
                 xComponent->dispose();
         }
-        catch ( uno::Exception& )
+        catch ( const uno::Exception& )
         {
         }
     }
@@ -1613,11 +1613,11 @@ void SAL_CALL OCommonEmbeddedObject::storeOwn()
         try {
             nStorageFormat = ::comphelper::OStorageHelper::GetXStorageFormat( m_xParentStorage );
         }
-        catch ( beans::IllegalTypeException& )
+        catch ( const beans::IllegalTypeException& )
         {
             // the container just has an unknown type, use current file format
         }
-        catch ( uno::Exception& )
+        catch ( const uno::Exception& )
         {
             OSL_FAIL( "Can not retrieve storage media type!\n" );
         }
@@ -1774,7 +1774,7 @@ void SAL_CALL OCommonEmbeddedObject::reload(
             if ( xComponent.is() )
                 xComponent->dispose();
         }
-        catch ( uno::Exception& )
+        catch ( const uno::Exception& )
         {
         }
 
@@ -1857,7 +1857,7 @@ void SAL_CALL OCommonEmbeddedObject::breakLink( const uno::Reference< embed::XSt
     {
         xModif->setModified( sal_True );
     }
-    catch( uno::Exception& )
+    catch( const uno::Exception& )
     {}
 
     m_pDocHolder->SetComponent( xDocument, m_bReadOnly );

@@ -2099,15 +2099,15 @@ void SvxAutoCorrectLanguageLists::LoadXMLExceptList_Imp(
                 {
                     xParser->parseStream( aParserInput );
                 }
-                catch( xml::sax::SAXParseException&  )
+                catch( const xml::sax::SAXParseException& )
                 {
                     // re throw ?
                 }
-                catch( xml::sax::SAXException&  )
+                catch( const xml::sax::SAXException& )
                 {
                     // re throw ?
                 }
-                catch( io::IOException& )
+                catch( const io::IOException& )
                 {
                     // re throw ?
                 }
@@ -2226,7 +2226,7 @@ SvxAutocorrWordList* SvxAutoCorrectLanguageLists::LoadAutocorrWordList()
             xParser->parseStream( aParserInput );
         }
     }
-    catch ( uno::Exception& )
+    catch ( const uno::Exception& )
     {
     }
 
@@ -2650,7 +2650,7 @@ sal_Bool SvxAutoCorrectLanguageLists::PutText( const String& rShort,
                 delete pNew;
         }
     }
-    catch ( uno::Exception& )
+    catch ( const uno::Exception& )
     {
     }
 

@@ -82,7 +82,7 @@ void lcl_getFormatter(com::sun::star::uno::Reference<com::sun::star::text::XNumb
             DBG_ASSERT(xRet.is(), "service missing: \"com.sun.star.text.DefaultNumberingProvider\"");
             _xFormatter = Reference<XNumberingFormatter> (xRet, UNO_QUERY);
         }
-        catch(Exception& )
+        catch(const Exception&)
         {
         }
     }
@@ -147,7 +147,7 @@ String  SvxNumberType::GetNumStr( sal_uLong nNo, const Locale& rLocale ) const
                         {
                             aTmpStr = xFormatter->makeNumberingString( aProperties, rLocale );
                         }
-                        catch(Exception&)
+                        catch(const Exception&)
                         {
                         }
                     }
@@ -937,7 +937,7 @@ bool SvxNumBulletItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8
             pNumRule = pNewRule;
             return true;
         }
-        catch(lang::IllegalArgumentException&)
+        catch(const lang::IllegalArgumentException&)
         {
         }
     }

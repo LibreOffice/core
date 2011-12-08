@@ -235,7 +235,7 @@ void SvxReadXML( EditEngine& rEditEngine, SvStream& rStream, const ESelection& r
         }
         while(0);
     }
-    catch( uno::Exception& )
+    catch( const uno::Exception& )
     {
     }
 }

@@ -131,7 +131,7 @@ uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInsta
                 if ( xObj.is() )
                     xNew->setVisualAreaSize( embed::Aspects::MSOLE_CONTENT, xObj->getVisualAreaSize( embed::Aspects::MSOLE_CONTENT ) );
             }
-            catch ( uno::Exception& ) {};
+            catch ( const uno::Exception& ) {}
             break;
         }
     }

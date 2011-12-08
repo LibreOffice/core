@@ -161,7 +161,7 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
             uno::Any aAny = xPropSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "MediaType" ) ));
             aAny >>= aMediaType;
         }
-        catch ( uno::Exception& )
+        catch ( const uno::Exception& )
         {
         }
 
@@ -170,7 +170,7 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
             if ( xComp.is() )
                 xComp->dispose();
         }
-        catch ( uno::Exception& )
+        catch ( const uno::Exception& )
         {
         }
     }
@@ -195,7 +195,7 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
             if ( aMediaType.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "application/vnd.sun.star.oleobject" ) ) ) )
                 aEmbedFactory = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.embed.OLEEmbeddedObjectFactory" ) );
         }
-        catch ( uno::Exception& )
+        catch ( const uno::Exception& )
         {
         }
 
@@ -204,7 +204,7 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
             if ( xComp.is() )
                 xComp->dispose();
         }
-        catch ( uno::Exception& )
+        catch ( const uno::Exception& )
         {
         }
     }

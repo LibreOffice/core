@@ -471,7 +471,7 @@ void SvxWriteXML( EditEngine& rEditEngine, SvStream& rStream, const ESelection& 
         }
         while( 0 );
     }
-    catch( uno::Exception& )
+    catch( const uno::Exception& )
     {
         OSL_FAIL("exception during xml export");
     }

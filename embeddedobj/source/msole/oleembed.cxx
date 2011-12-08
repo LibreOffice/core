@@ -74,12 +74,12 @@ void OleEmbeddedObject::SwitchComponentToRunningState_Impl()
         {
             m_pOleComponent->RunObject();
         }
-        catch( embed::UnreachableStateException& )
+        catch( const embed::UnreachableStateException& )
         {
             GetRidOfComponent();
             throw;
         }
-        catch( embed::WrongStateException& )
+        catch( const embed::WrongStateException& )
         {
             GetRidOfComponent();
             throw;
@@ -144,7 +144,7 @@ void OleEmbeddedObject::MoveListeners()
                         {
                             xWrappedObject->addStateChangeListener( (embed::XStateChangeListener*)pIterator.next() );
                         }
-                        catch( uno::RuntimeException& )
+                        catch( const uno::RuntimeException& )
                         {
                             pIterator.remove();
                         }
@@ -169,7 +169,7 @@ void OleEmbeddedObject::MoveListeners()
                         {
                             xWrappedObject->addEventListener( (document::XEventListener*)pIterator.next() );
                         }
-                        catch( uno::RuntimeException& )
+                        catch( const uno::RuntimeException& )
                         {
                             pIterator.remove();
                         }
@@ -194,7 +194,7 @@ void OleEmbeddedObject::MoveListeners()
                         {
                             xWrappedObject->addCloseListener( (util::XCloseListener*)pIterator.next() );
                         }
-                        catch( uno::RuntimeException& )
+                        catch( const uno::RuntimeException& )
                         {
                             pIterator.remove();
                         }
@@ -373,14 +373,14 @@ sal_Bool OleEmbeddedObject::TryToConvertToOOo()
                 {
                     m_xParentStorage->removeElement( aTmpStreamName );
                 }
-                catch( uno::Exception& )
+                catch( const uno::Exception& )
                 {
                     // the success of the removing is not so important
                 }
             }
         }
     }
-    catch( uno::Exception& )
+    catch( const uno::Exception& )
     {
         // repair the object if necessary
         switch( nStep )
@@ -394,11 +394,11 @@ sal_Bool OleEmbeddedObject::TryToConvertToOOo()
                         m_xParentStorage->removeElement( m_aEntryName );
                     m_xParentStorage->renameElement( aTmpStreamName, m_aEntryName );
                 }
-                catch ( uno::Exception& )
+                catch ( const uno::Exception& )
                 {
                     try {
                         close( sal_True );
-                    } catch( uno::Exception& ) {}
+                    } catch( const uno::Exception& ) {}
 
                     m_xParentStorage->dispose(); // ??? the storage has information loss, it should be closed without commiting!
                     throw uno::RuntimeException(); // the repairing is not possible
@@ -409,11 +409,11 @@ sal_Bool OleEmbeddedObject::TryToConvertToOOo()
                     m_xObjectStream = m_xParentStorage->openStreamElement( m_aEntryName, m_bReadOnly ? embed::ElementModes::READ : embed::ElementModes::READWRITE );
                     m_nObjectState = embed::EmbedStates::LOADED;
                 }
-                catch( uno::Exception& )
+                catch( const uno::Exception& )
                 {
                     try {
                         close( sal_True );
-                    } catch( uno::Exception& ) {}
+                    } catch( const uno::Exception& ) {}
 
                     throw uno::RuntimeException(); // the repairing is not possible
                 }
@@ -424,7 +424,7 @@ sal_Bool OleEmbeddedObject::TryToConvertToOOo()
                 if ( aStorageName.getLength() )
                     try {
                         m_xParentStorage->removeElement( aStorageName );
-                    } catch( uno::Exception& ) { OSL_FAIL( "Can not remove temporary storage!" ); }
+                    } catch( const uno::Exception& ) { OSL_FAIL( "Can not remove temporary storage!" ); }
                 break;
         }
     }
@@ -546,7 +546,7 @@ void SAL_CALL OleEmbeddedObject::changeState( sal_Int32 nNewState )
                             m_pOleComponent->SetExtent( m_aSizeToSet, m_nAspectToSet );
                             m_bHasSizeToSet = sal_False;
                         }
-                        catch( uno::Exception& ) {}
+                        catch( const uno::Exception& ) {}
                         aGuard.reset();
                     }
 

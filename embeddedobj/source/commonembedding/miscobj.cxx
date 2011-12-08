@@ -283,7 +283,7 @@ OCommonEmbeddedObject::~OCommonEmbeddedObject()
                 delete m_pInterfaceContainer;
                 m_pInterfaceContainer = NULL;
             }
-        } catch( uno::Exception& ) {}
+        } catch( const uno::Exception& ) {}
 
         try {
             if ( m_pDocHolder )
@@ -291,13 +291,13 @@ OCommonEmbeddedObject::~OCommonEmbeddedObject()
                 m_pDocHolder->CloseFrame();
                 try {
                     m_pDocHolder->CloseDocument( sal_True, sal_True );
-                } catch ( uno::Exception& ) {}
+                } catch ( const uno::Exception& ) {}
                 m_pDocHolder->FreeOffice();
 
                 m_pDocHolder->release();
                 m_pDocHolder = NULL;
             }
-        } catch( uno::Exception& ) {}
+        } catch( const uno::Exception& ) {}
     }
 }
 
@@ -317,7 +317,7 @@ void OCommonEmbeddedObject::requestPositioning( const awt::Rectangle& aRect )
             try {
                 xInplaceClient->changedPlacement( aRect );
             }
-            catch( uno::Exception& )
+            catch( const uno::Exception& )
             {
                 OSL_FAIL( "Exception on request to resize!\n" );
             }
@@ -348,7 +348,7 @@ void OCommonEmbeddedObject::PostEvent_Impl( const ::rtl::OUString& aEventName,
                 {
                     ((document::XEventListener *)aIt.next())->notifyEvent( aEvent );
                 }
-                catch( uno::RuntimeException& )
+                catch( const uno::RuntimeException& )
                 {
                     aIt.remove();
                 }
@@ -570,7 +570,7 @@ void SAL_CALL OCommonEmbeddedObject::close( sal_Bool bDeliverOwnership )
                 {
                     ((util::XCloseListener*)pIterator.next())->queryClosing( aSource, bDeliverOwnership );
                 }
-                catch( uno::RuntimeException& )
+                catch( const uno::RuntimeException& )
                 {
                     pIterator.remove();
                 }
@@ -588,7 +588,7 @@ void SAL_CALL OCommonEmbeddedObject::close( sal_Bool bDeliverOwnership )
                 {
                     ((util::XCloseListener*)pCloseIterator.next())->notifyClosing( aSource );
                 }
-                catch( uno::RuntimeException& )
+                catch( const uno::RuntimeException& )
                 {
                     pCloseIterator.remove();
                 }
@@ -611,7 +611,7 @@ void SAL_CALL OCommonEmbeddedObject::close( sal_Bool bDeliverOwnership )
         try {
             m_pDocHolder->CloseDocument( bDeliverOwnership, bDeliverOwnership );
         }
-        catch( uno::Exception& )
+        catch( const uno::Exception& )
         {
             if ( bDeliverOwnership )
             {
@@ -640,7 +640,7 @@ void SAL_CALL OCommonEmbeddedObject::close( sal_Bool bDeliverOwnership )
         {
             try {
                 xComp->dispose();
-            } catch ( uno::Exception& ) {}
+            } catch ( const uno::Exception& ) {}
         }
 
         m_xObjectStorage.clear();

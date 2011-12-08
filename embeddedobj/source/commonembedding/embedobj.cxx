@@ -103,10 +103,10 @@ void OCommonEmbeddedObject::Deactivate()
         try {
             xClientSite->saveObject();
         }
-        catch( embed::ObjectSaveVetoException& )
+        catch( const embed::ObjectSaveVetoException& )
         {
         }
-        catch( uno::Exception& e )
+        catch( const uno::Exception& e )
         {
             throw embed::StorageWrappedTargetException(
                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "The client could not store the object!" )),
@@ -144,7 +144,7 @@ void OCommonEmbeddedObject::StateChangeNotification_Impl( sal_Bool bBeforeChange
                     else
                         ((embed::XStateChangeListener*)pIterator.next())->stateChanged( aSource, nOldState, nNewState );
                 }
-                catch( uno::Exception& )
+                catch( const uno::Exception& )
                 {
                     // even if the listener complains ignore it for now
                    }
@@ -329,7 +329,7 @@ void OCommonEmbeddedObject::SwitchStateTo_Impl( sal_Int32 nNextState )
 
                         aModuleName = xManager->identify( xContDoc );
                     }
-                    catch( uno::Exception& )
+                    catch( const uno::Exception& )
                     {}
 
                     // if currently another object is UIactive it will be deactivated; usually this will activate the LM of
@@ -481,7 +481,7 @@ void SAL_CALL OCommonEmbeddedObject::changeState( sal_Int32 nNewState )
 
                 SwitchStateTo_Impl( nNewState );
             }
-            catch( uno::Exception& )
+            catch( const uno::Exception& )
             {
                 if ( nOldState != m_nObjectState )
                     // notify listeners that the object has changed the state
@@ -555,7 +555,7 @@ void SAL_CALL OCommonEmbeddedObject::doVerb( sal_Int32 nVerbID )
     {
         nNewState = ConvertVerbToState_Impl( nVerbID );
     }
-    catch( uno::Exception& )
+    catch( const uno::Exception& )
     {}
 
     if ( nNewState == -1 )

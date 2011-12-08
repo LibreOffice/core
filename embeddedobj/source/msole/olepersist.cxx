@@ -79,7 +79,7 @@ sal_Bool KillFile_Impl( const ::rtl::OUString& aURL, const uno::Reference< lang:
             bRet = sal_True;
         }
     }
-    catch( uno::Exception& )
+    catch( const uno::Exception& )
     {
     }
 
@@ -105,7 +105,7 @@ sal_Bool KillFile_Impl( const ::rtl::OUString& aURL, const uno::Reference< lang:
         uno::Any aUrl = xTempFile->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Uri" ) ));
         aUrl >>= aResult;
     }
-    catch ( uno::Exception& )
+    catch ( const uno::Exception& )
     {
     }
 
@@ -147,22 +147,22 @@ sal_Bool KillFile_Impl( const ::rtl::OUString& aURL, const uno::Reference< lang:
             else
                 throw io::IOException(); // TODO:
         }
-        catch( packages::WrongPasswordException& )
+        catch( const packages::WrongPasswordException& )
         {
                KillFile_Impl( aResult, xFactory );
             throw io::IOException(); //TODO:
         }
-        catch( io::IOException& )
+        catch( const io::IOException& )
         {
                KillFile_Impl( aResult, xFactory );
             throw;
         }
-        catch( uno::RuntimeException& )
+        catch( const uno::RuntimeException& )
         {
                KillFile_Impl( aResult, xFactory );
             throw;
         }
-        catch( uno::Exception& )
+        catch( const uno::Exception& )
         {
                KillFile_Impl( aResult, xFactory );
             aResult = ::rtl::OUString();
@@ -190,11 +190,11 @@ sal_Bool KillFile_Impl( const ::rtl::OUString& aURL, const uno::Reference< lang:
         uno::Any aUrl = xTempFile->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Uri" ) ));
         aUrl >>= aResult;
     }
-    catch( uno::RuntimeException& )
+    catch( const uno::RuntimeException& )
     {
         throw;
     }
-    catch( uno::Exception& )
+    catch( const uno::Exception& )
     {
     }
 
@@ -606,7 +606,7 @@ sal_Bool OleEmbeddedObject::HasVisReplInStream()
 
                     xStream = xTempAccess->openFileRead( m_aTempURL );
                 }
-                catch( uno::Exception& )
+                catch( const uno::Exception& )
                 {}
             }
 
@@ -636,7 +636,7 @@ sal_Bool OleEmbeddedObject::HasVisReplInStream()
                         {
                             bExists = xNameContainer->hasByName( aStreamName );
                         }
-                        catch( uno::Exception& )
+                        catch( const uno::Exception& )
                         {}
                     }
                 }
@@ -673,7 +673,7 @@ uno::Reference< io::XStream > OleEmbeddedObject::TryToRetrieveCachedVisualRepres
                         aArgs ),
                 uno::UNO_QUERY );
         }
-        catch( uno::Exception& )
+        catch( const uno::Exception& )
         {}
 
         if ( xNameContainer.is() )
@@ -692,7 +692,7 @@ uno::Reference< io::XStream > OleEmbeddedObject::TryToRetrieveCachedVisualRepres
                             break;
                     }
                 }
-                catch( uno::Exception& )
+                catch( const uno::Exception& )
                 {}
 
                 if ( nInd == 0 )
@@ -708,7 +708,7 @@ uno::Reference< io::XStream > OleEmbeddedObject::TryToRetrieveCachedVisualRepres
                                 break;
                         }
                     }
-                    catch( uno::Exception& )
+                    catch( const uno::Exception& )
                     {}
                 }
             }
@@ -765,7 +765,7 @@ uno::Reference< io::XStream > OleEmbeddedObject::TryToRetrieveCachedVisualRepres
                                         CreateOleComponentAndLoad_Impl( NULL );
                                         m_aClassID = m_pOleComponent->GetCLSID(); // was not set during consruction
                                     }
-                                    catch( uno::Exception& )
+                                    catch( const uno::Exception& )
                                     {
                                         GetRidOfComponent();
                                     }
@@ -778,7 +778,7 @@ uno::Reference< io::XStream > OleEmbeddedObject::TryToRetrieveCachedVisualRepres
                     }
                 }
             }
-            catch( uno::Exception& )
+            catch( const uno::Exception& )
             {}
         }
     }
@@ -803,7 +803,7 @@ void OleEmbeddedObject::SwitchOwnPersistence( const uno::Reference< embed::XStor
         if ( xComponent.is() )
             xComponent->dispose();
     }
-    catch ( uno::Exception& )
+    catch ( const uno::Exception& )
     {
     }
 
@@ -840,7 +840,7 @@ sal_Bool OleEmbeddedObject::SaveObject_Impl()
             m_xClientSite->saveObject();
             bResult = sal_True;
         }
-        catch( uno::Exception& )
+        catch( const uno::Exception& )
         {
         }
     }
@@ -884,7 +884,7 @@ sal_Bool OleEmbeddedObject::OnShowWindow_Impl( sal_Bool bShow )
             m_xClientSite->visibilityChanged( bShow );
             bResult = sal_True;
         }
-        catch( uno::Exception& )
+        catch( const uno::Exception& )
         {
         }
     }
@@ -1171,7 +1171,7 @@ void OleEmbeddedObject::StoreToLocation_Impl(
                 xSourceOptStor->copyElementDirectlyTo( m_aEntryName, xTargetOptStor, sEntName );
                 bOptimizedCopyingDone = sal_True;
             }
-            catch( uno::Exception& )
+            catch( const uno::Exception& )
             {
             }
         }
@@ -1304,7 +1304,7 @@ void OleEmbeddedObject::StoreToLocation_Impl(
         {
             try {
                 xComp->dispose();
-            } catch( uno::Exception& )
+            } catch( const uno::Exception& )
             {
             }
         }
@@ -1427,7 +1427,7 @@ void SAL_CALL OleEmbeddedObject::setPersistentEntry(
                 CreateOleComponentAndLoad_Impl( NULL );
                 m_aClassID = m_pOleComponent->GetCLSID(); // was not set during consruction
             }
-            catch( uno::Exception& )
+            catch( const uno::Exception& )
             {
                 // TODO/LATER: detect classID of the object if possible
                 // means that the object inprocess server could not be successfuly instantiated
@@ -1647,7 +1647,7 @@ void SAL_CALL OleEmbeddedObject::saveCompleted( sal_Bool bUseNew )
             if ( xComponent.is() )
                 xComponent->dispose();
         }
-        catch ( uno::Exception& )
+        catch ( const uno::Exception& )
         {
         }
     }
@@ -1673,7 +1673,7 @@ void SAL_CALL OleEmbeddedObject::saveCompleted( sal_Bool bUseNew )
             // probably it might need to be done earlier, while the object is in active state
             getVisualAreaSize( embed::Aspects::MSOLE_CONTENT );
         }
-        catch( uno::Exception& )
+        catch( const uno::Exception& )
         {}
     }
 
@@ -1860,7 +1860,7 @@ void SAL_CALL OleEmbeddedObject::storeOwn()
             // probably it might need to be done earlier, while the object is in active state
             getVisualAreaSize( embed::Aspects::MSOLE_CONTENT );
         }
-        catch( uno::Exception& )
+        catch( const uno::Exception& )
         {}
     }
 
@@ -2015,7 +2015,7 @@ void SAL_CALL OleEmbeddedObject::breakLink( const uno::Reference< embed::XStorag
         try {
             pNewOleComponent->InitEmbeddedCopyOfLink( m_pOleComponent );
         }
-        catch ( uno::Exception& )
+        catch ( const uno::Exception& )
         {
             delete pNewOleComponent;
             if ( !m_aTempURL.isEmpty() )
@@ -2027,7 +2027,7 @@ void SAL_CALL OleEmbeddedObject::breakLink( const uno::Reference< embed::XStorag
         try {
             GetRidOfComponent();
         }
-        catch( uno::Exception& )
+        catch( const uno::Exception& )
         {
             delete pNewOleComponent;
             if ( !m_aTempURL.isEmpty() )

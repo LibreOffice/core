@@ -190,7 +190,7 @@ DocumentHolder::DocumentHolder( const uno::Reference< lang::XMultiServiceFactory
         {
             xDesktop->addTerminateListener( this );
         }
-        catch ( uno::Exception& )
+        catch ( const uno::Exception& )
         {
         }
         m_refCount--;
@@ -215,7 +215,7 @@ DocumentHolder::~DocumentHolder()
     {
         try {
             CloseDocument( sal_True, sal_False );
-        } catch( uno::Exception& ) {}
+        } catch( const uno::Exception& ) {}
     }
 
     if ( m_pInterceptor )
@@ -400,7 +400,7 @@ sal_Bool DocumentHolder::SetFrameLMVisibility( const uno::Reference< frame::XFra
             bResult = sal_True;
         }
     }
-    catch( uno::Exception& )
+    catch( const uno::Exception& )
     {}
 
     return bResult;
@@ -569,7 +569,7 @@ uno::Reference< container::XIndexAccess > DocumentHolder::RetrieveOwnMenu_Impl()
                 sal_False );
         }
     }
-    catch( uno::Exception )
+    catch( const uno::Exception& )
     {}
 
     if ( !xResult.is() )
@@ -711,7 +711,7 @@ sal_Bool DocumentHolder::MergeMenues_Impl( const uno::Reference< ::com::sun::sta
                                                                                          uno::UNO_QUERY_THROW );
         bMenuMerged = xMerge->setMergedMenuBar( xMergedMenu );
     }
-    catch( uno::Exception& )
+    catch( const uno::Exception& )
     {}
 
     return bMenuMerged;
@@ -734,7 +734,7 @@ sal_Bool DocumentHolder::ShowUI( const uno::Reference< ::com::sun::star::frame::
             xPropSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" ))) >>= xOwnLM;
             xDocAreaAcc = xContainerLM->getDockingAreaAcceptor();
         }
-        catch( uno::Exception& ){}
+        catch( const uno::Exception& ){}
 
         // make sure that lock state of LM is correct even if an exception is thrown in between
         sal_Bool bUnlock = sal_False;
@@ -776,7 +776,7 @@ sal_Bool DocumentHolder::ShowUI( const uno::Reference< ::com::sun::star::frame::
                     m_xOwnWindow->setFocus();
                 }
             }
-            catch( uno::Exception& )
+            catch( const uno::Exception& )
             {
                 // activation failed; reestablish old state
                 try
@@ -795,7 +795,7 @@ sal_Bool DocumentHolder::ShowUI( const uno::Reference< ::com::sun::star::frame::
                     uno::Reference< ::com::sun::star::frame::XMenuBarMergingAcceptor > xMerge( xOwnLM, uno::UNO_QUERY_THROW );
                     xMerge->removeMergedMenuBar();
                 }
-                catch( uno::Exception& ) {}
+                catch( const uno::Exception& ) {}
 
                 try
                 {
@@ -805,7 +805,7 @@ sal_Bool DocumentHolder::ShowUI( const uno::Reference< ::com::sun::star::frame::
                     if ( bUnlock )
                         xContainerLM->unlock();
                 }
-                catch( uno::Exception& ) {}
+                catch( const uno::Exception& ) {}
             }
         }
     }
@@ -825,7 +825,7 @@ sal_Bool DocumentHolder::HideUI( const uno::Reference< ::com::sun::star::frame::
         try {
             uno::Reference< beans::XPropertySet > xPropSet( m_xFrame, uno::UNO_QUERY_THROW );
             xPropSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" ))) >>= xOwnLM;
-        } catch( uno::Exception& )
+        } catch( const uno::Exception& )
         {}
 
         if ( xOwnLM.is() )
@@ -851,7 +851,7 @@ sal_Bool DocumentHolder::HideUI( const uno::Reference< ::com::sun::star::frame::
                 xContainerLM->doLayout();
                 bResult = sal_True;
             }
-            catch( uno::Exception& )
+            catch( const uno::Exception& )
             {
                 SetFrameLMVisibility( m_xFrame, sal_True );
             }
@@ -904,7 +904,7 @@ uno::Reference< frame::XFrame > DocumentHolder::GetDocFrame()
         try {
             uno::Reference< beans::XPropertySet > xPropSet( m_xFrame, uno::UNO_QUERY_THROW );
             xPropSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" ))) >>= xOwnLM;
-        } catch( uno::Exception& )
+        } catch( const uno::Exception& )
         {}
 
         if ( xOwnLM.is() )
@@ -958,7 +958,7 @@ uno::Reference< frame::XFrame > DocumentHolder::GetDocFrame()
             xHWindow->setVisible( sal_True );
         }
     }
-    catch ( uno::Exception& )
+    catch ( const uno::Exception& )
     {
     }
 
@@ -973,7 +973,7 @@ void DocumentHolder::SetComponent( const uno::Reference< util::XCloseable >& xDo
         // May be should be improved
         try {
             CloseDocument( sal_True, sal_False );
-        } catch( uno::Exception& )
+        } catch( const uno::Exception& )
         {}
     }
 
@@ -1076,7 +1076,7 @@ sal_Bool DocumentHolder::SetExtent( sal_Int64 nAspect, const awt::Size& aSize )
             xDocVis->setVisualAreaSize( nAspect, aSize );
             return sal_True;
         }
-        catch( uno::Exception& )
+        catch( const uno::Exception& )
         {
             // TODO: Error handling
         }
@@ -1096,7 +1096,7 @@ sal_Bool DocumentHolder::GetExtent( sal_Int64 nAspect, awt::Size *pSize )
             *pSize = xDocVis->getVisualAreaSize( nAspect );
             return sal_True;
         }
-        catch( uno::Exception& )
+        catch( const uno::Exception& )
         {
             // TODO: Error handling
         }
@@ -1115,7 +1115,7 @@ sal_Int32 DocumentHolder::GetMapUnit( sal_Int64 nAspect )
         {
             return xDocVis->getMapUnit( nAspect );
         }
-        catch( uno::Exception& )
+        catch( const uno::Exception& )
         {
             // TODO: Error handling
         }
@@ -1314,11 +1314,11 @@ void SAL_CALL DocumentHolder::activated(  ) throw (::com::sun::star::uno::Runtim
             {
                 m_pEmbedObj->changeState( embed::EmbedStates::UI_ACTIVE );
             }
-            catch ( com::sun::star::embed::StateChangeInProgressException& )
+            catch ( const com::sun::star::embed::StateChangeInProgressException& )
             {
                 // must catch this exception because focus is grabbed while UI activation in doVerb()
             }
-            catch ( com::sun::star::uno::Exception& )
+            catch ( const com::sun::star::uno::Exception& )
             {
                 // no outgoing exceptions specified here
             }

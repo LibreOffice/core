@@ -114,7 +114,7 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
             uno::Any aAny = xPropSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "MediaType" )) );
             aAny >>= aMediaType;
         }
-        catch ( uno::Exception& )
+        catch ( const uno::Exception& )
         {
         }
 
@@ -123,7 +123,7 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
             if ( xComp.is() )
                 xComp->dispose();
         }
-        catch ( uno::Exception& )
+        catch ( const uno::Exception& )
         {
         }
         xSubStorage = uno::Reference< embed::XStorage >();

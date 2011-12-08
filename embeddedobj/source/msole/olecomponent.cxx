@@ -471,7 +471,7 @@ OleComponent::~OleComponent()
         m_refCount++;
         try {
             Dispose();
-        } catch( uno::Exception& ) {}
+        } catch( const uno::Exception& ) {}
     }
 
     for ( FormatEtcList::iterator aIter = m_pNativeImpl->m_aFormatsList.begin();
@@ -1465,7 +1465,7 @@ void SAL_CALL OleComponent::close( sal_Bool bDeliverOwnership )
                 {
                     ( (util::XCloseListener* )pIterator.next() )->queryClosing( aSource, bDeliverOwnership );
                 }
-                catch( uno::RuntimeException& )
+                catch( const uno::RuntimeException& )
                 {
                     pIterator.remove();
                 }
@@ -1483,7 +1483,7 @@ void SAL_CALL OleComponent::close( sal_Bool bDeliverOwnership )
                 {
                     ( (util::XCloseListener* )pCloseIterator.next() )->notifyClosing( aSource );
                 }
-                catch( uno::RuntimeException& )
+                catch( const uno::RuntimeException& )
                 {
                     pCloseIterator.remove();
                 }
@@ -1672,7 +1672,7 @@ void SAL_CALL OleComponent::dispose() throw (::com::sun::star::uno::RuntimeExcep
     {
         close( sal_True );
     }
-    catch ( uno::Exception& )
+    catch ( const uno::Exception& )
     {
     }
 }
@@ -1729,7 +1729,7 @@ sal_Int64 SAL_CALL OleComponent::getSomething( const ::com::sun::star::uno::Sequ
                 return (sal_Int64) (IUnknown*) m_pNativeImpl->m_pObj;
         }
     }
-    catch ( uno::Exception& )
+    catch ( const uno::Exception& )
     {
     }
 
@@ -1760,7 +1760,7 @@ void SAL_CALL OleComponent::setModified( sal_Bool bModified )
                     lang::EventObject aEvent( (util::XModifiable*) this );
                     ((util::XModifyListener*)pIterator.next())->modified( aEvent );
                 }
-                catch( uno::RuntimeException& )
+                catch( const uno::RuntimeException& )
                 {
                     pIterator.remove();
                 }

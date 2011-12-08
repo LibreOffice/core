@@ -152,7 +152,7 @@ OleEmbeddedObject::~OleEmbeddedObject()
         m_refCount++; // to avoid crash
         try {
             Dispose();
-        } catch( uno::Exception& ) {}
+        } catch( const uno::Exception& ) {}
     }
 
     if ( m_aTempURL.getLength() )
@@ -180,7 +180,7 @@ void OleEmbeddedObject::MakeEventListenerNotification_Impl( const ::rtl::OUStrin
                 {
                     ((document::XEventListener*)pIterator.next())->notifyEvent( aEvent );
                 }
-                catch( uno::RuntimeException& )
+                catch( const uno::RuntimeException& )
                 {
                 }
             }
@@ -208,7 +208,7 @@ void OleEmbeddedObject::StateChangeNotification_Impl( sal_Bool bBeforeChange, sa
                     {
                         ((embed::XStateChangeListener*)pIterator.next())->changingState( aSource, nOldState, nNewState );
                     }
-                    catch( uno::Exception& )
+                    catch( const uno::Exception& )
                     {
                         // even if the listener complains ignore it for now
                     }
@@ -219,7 +219,7 @@ void OleEmbeddedObject::StateChangeNotification_Impl( sal_Bool bBeforeChange, sa
                     {
                         ((embed::XStateChangeListener*)pIterator.next())->stateChanged( aSource, nOldState, nNewState );
                     }
-                    catch( uno::Exception& )
+                    catch( const uno::Exception& )
                     {
                         // if anything happened it is problem of listener, ignore it
                     }
@@ -243,7 +243,7 @@ void OleEmbeddedObject::GetRidOfComponent()
         {
             m_pOleComponent->close( sal_False );
         }
-        catch( uno::Exception& )
+        catch( const uno::Exception& )
         {
             // TODO: there should be a special listener to wait for component closing
             //       and to notify object, may be object itself can be such a listener
@@ -279,7 +279,7 @@ void OleEmbeddedObject::Dispose()
     if ( m_pOleComponent )
         try {
             GetRidOfComponent();
-        } catch( uno::Exception& )
+        } catch( const uno::Exception& )
         {
             m_bDisposed = true;
             throw; // TODO: there should be a special listener that will close object when
@@ -295,7 +295,7 @@ void OleEmbeddedObject::Dispose()
         {
             try {
                 xComp->dispose();
-            } catch( uno::Exception& ) {}
+            } catch( const uno::Exception& ) {}
         }
         m_xObjectStream = uno::Reference< io::XStream >();
     }
@@ -481,7 +481,7 @@ void SAL_CALL OleEmbeddedObject::close( sal_Bool bDeliverOwnership )
                 {
                     ((util::XCloseListener*)pIterator.next())->queryClosing( aSource, bDeliverOwnership );
                 }
-                catch( uno::RuntimeException& )
+                catch( const uno::RuntimeException& )
                 {
                     pIterator.remove();
                 }
@@ -499,7 +499,7 @@ void SAL_CALL OleEmbeddedObject::close( sal_Bool bDeliverOwnership )
                 {
                     ((util::XCloseListener*)pCloseIterator.next())->notifyClosing( aSource );
                 }
-                catch( uno::RuntimeException& )
+                catch( const uno::RuntimeException& )
                 {
                     pCloseIterator.remove();
                 }
