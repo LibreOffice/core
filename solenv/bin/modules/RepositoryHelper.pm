@@ -91,21 +91,18 @@ sub get_initial_directory
 
 sub search_via_build_lst {
     my $self = shift;
-    my @possible_build_lists = ('gbuild.lst', 'build.lst'); # build lists names
     my $previous_dir = '';
     my $rep_root_candidate = $self->{INITIAL_DIRECTORY};
     do {
-        foreach (@possible_build_lists) {
-            my $test_file;
-            if ($rep_root_candidate eq '/') {
-                $test_file = '/prj/' . $_;
-            } else {
-                $test_file = $rep_root_candidate . '/prj/' . $_;
-            };
-            if (-e $test_file) {
-                $self->{REPOSITORY_ROOT} = File::Basename::dirname($rep_root_candidate);
-                return 1;
-            };
+        my $test_file;
+        if ($rep_root_candidate eq '/') {
+            $test_file = '/prj/build.lst';
+        } else {
+            $test_file = $rep_root_candidate . '/prj/build.lst';
+        };
+        if (-e $test_file) {
+            $self->{REPOSITORY_ROOT} = File::Basename::dirname($rep_root_candidate);
+            return 1;
         };
         $previous_dir = $rep_root_candidate;
         $rep_root_candidate = File::Basename::dirname($rep_root_candidate);
