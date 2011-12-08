@@ -70,7 +70,7 @@ SwCallLink::SwCallLink( SwCrsrShell & rSh )
     nNdTyp = rNd.GetNodeType();
     bHasSelection = ( *pCrsr->GetPoint() != *pCrsr->GetMark() );
 
-    if( ND_TEXTNODE & nNdTyp )
+    if( rNd.IsTxtNode() )
         nLeftFrmPos = SwCallLink::getLayoutFrm( rShell.GetLayout(), (SwTxtNode&)rNd, nCntnt,
                                             !rShell.ActionPend() );
     else
