@@ -169,11 +169,6 @@ const BreakPoint* BreakPointList::at(size_t i) const
     return i < maBreakPoints.size() ? maBreakPoints[ i ] : NULL;
 }
 
-void BreakPointList::push_back(BreakPoint* item)
-{
-    maBreakPoints.push_back( item );
-}
-
 void BreakPointList::clear()
 {
     maBreakPoints.clear();

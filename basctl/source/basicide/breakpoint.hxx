@@ -70,7 +70,6 @@ public:
     size_t size() const;
     BreakPoint* at(size_t i);
     const BreakPoint* at(size_t i) const;
-    void push_back(BreakPoint* item);
     void clear();
     BreakPoint* remove(BreakPoint* ptr);
 };
