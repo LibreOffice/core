@@ -48,7 +48,6 @@ $(eval $(call gb_Package_add_file,basic_inc,inc/basic/sbxmeth.hxx,basic/sbxmeth.
 $(eval $(call gb_Package_add_file,basic_inc,inc/basic/sbxobj.hxx,basic/sbxobj.hxx))
 $(eval $(call gb_Package_add_file,basic_inc,inc/basic/sbxprop.hxx,basic/sbxprop.hxx))
 $(eval $(call gb_Package_add_file,basic_inc,inc/basic/sbxvar.hxx,basic/sbxvar.hxx))
-$(eval $(call gb_Package_add_file,basic_inc,inc/basic/svtmsg.hrc,basic/svtmsg.hrc))
 $(eval $(call gb_Package_add_file,basic_inc,inc/basic/vbahelper.hxx,basic/vbahelper.hxx))
 
 # vim: set noet sw=4 ts=4:
