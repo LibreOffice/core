@@ -62,8 +62,10 @@ public:
 
     /** Restarting the slide show is an asynchronous multi step process
         which is started by calling this method.
+        @param bForce
+           Used to force a re-start, even if the display count is unchanged.
     */
-    void Restart (void);
+    void Restart (bool bForce);
 
 private:
     sal_Int32 mnEventId;

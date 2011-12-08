@@ -97,13 +97,15 @@ namespace {
               mpRestarter(new SlideShowRestarter(rpSlideShow, pViewShellBase))
         {}
 
+        void Restart(bool bForce)
+        {
+            mpRestarter->Restart(bForce);
+        }
 
         virtual void DataChanged (const DataChangedEvent& rEvent)
         {
             if (rEvent.GetType() == DATACHANGED_DISPLAY)
-            {
-                mpRestarter->Restart();
-            }
+                Restart(false);
         }
 
     private:
@@ -555,6 +557,11 @@ void SAL_CALL SlideShow::setPropertyValue( const OUString& aPropertyName, const 
 
             SdOptions* pOptions = SD_MOD()->GetSdOptions(DOCUMENT_TYPE_IMPRESS);
             pOptions->SetDisplay( nDisplay );
+
+            FullScreenWorkWindow *pWin = dynamic_cast<FullScreenWorkWindow *>(GetWorkWindow());
+            if( !pWin )
+                return;
+            pWin->Restart(true);
         }
         break;
     }
@@ -673,6 +680,19 @@ void SAL_CALL SlideShow::start() throw(RuntimeException)
 }
 
 // --------------------------------------------------------------------
+
+WorkWindow *SlideShow::GetWorkWindow()
+{
+    if( !mpFullScreenViewShellBase )
+        return NULL;
+
+    PresentationViewShell* pShell = dynamic_cast<PresentationViewShell*>(mpFullScreenViewShellBase->GetMainViewShell().get());
+
+    if( !pShell || !pShell->GetViewFrame() )
+        return NULL;
+
+    return dynamic_cast<WorkWindow*>(pShell->GetViewFrame()->GetTopFrame().GetWindow().GetParent());
+}
 
 void SAL_CALL SlideShow::end() throw(RuntimeException)
 {

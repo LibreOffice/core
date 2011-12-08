@@ -137,6 +137,9 @@ public:
     */
     void RequestShutdownPresenterScreen (void);
 
+    /** Switch / converse monitors between presenter view and slide output
+     */
+    void SwitchMonitors (void);
 
     // XEventListener
 
@@ -228,7 +231,7 @@ private:
         const double nRight,
         const double nBottom);
 
-    /** Return the screen number on which to display the presenter screen.
+    /** Return the screen number on which to display the presentation itself
         @return
             Returns -1 when the presenter screen can or shall not be
             displayed.
@@ -236,11 +239,17 @@ private:
     sal_Int32 GetScreenNumber (
         const css::uno::Reference<css::presentation::XPresentation2>& rxPresentation) const;
 
+    sal_Int32 GetPresenterScreenFromScreen( sal_Int32 nPresentationScreen ) const;
+
     /** Create a resource id for the full screen background pane so that it
         is displayed on another screen than the full screen presentation.
     */
     css::uno::Reference<css::drawing::framework::XResourceId> GetMainPaneId (
         const css::uno::Reference<css::presentation::XPresentation2>& rxPresentation) const;
+
+    /** Gets the display access property bag
+     */
+    css::uno::Reference<css::beans::XPropertySet> GetDisplayAccess () const;
 };
 
 } }

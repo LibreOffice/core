@@ -63,6 +63,7 @@ class CommandEvent;
 class Rectangle;
 class Window;
 class SfxRequest;
+class WorkWindow;
 
 // TODO: Remove
 #define PAGE_NO_END         65535
@@ -205,6 +206,7 @@ private:
     void ThrowIfDisposed() throw (::com::sun::star::uno::RuntimeException);
 
     void CreateController( ViewShell* pViewSh, ::sd::View* pView, ::Window* pParentWindow );
+    WorkWindow *GetWorkWindow();
 
     // default: disabled copy/assignment
     SlideShow(const SlideShow&);

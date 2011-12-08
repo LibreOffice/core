@@ -70,6 +70,7 @@ class PresenterPaneAnimator;
 class PresenterPaneContainer;
 class PresenterPaneBorderPainter;
 class PresenterTheme;
+class PresenterScreen;
 class PresenterWindowManager;
 
 namespace {
@@ -97,6 +98,7 @@ public:
         const css::uno::Reference<css::frame::XFrame>& rxFrame);
 
     PresenterController (
+        const css::uno::WeakReference<css::lang::XEventListener> &rxScreen,
         const css::uno::Reference<css::uno::XComponentContext>& rxContext,
         const css::uno::Reference<css::frame::XController>& rxController,
         const css::uno::Reference<css::presentation::XSlideShowController>& rxSlideShowController,
@@ -126,6 +128,7 @@ public:
     double GetSlideAspectRatio (void) const;
     void ShowView (const ::rtl::OUString& rsViewURL);
     void HideView (const ::rtl::OUString& rsViewURL);
+    void SwitchMonitors (void);
     void DispatchUnoCommand (const ::rtl::OUString& rsCommand) const;
     css::uno::Reference<css::frame::XDispatch> GetDispatch (
         const css::util::URL& rURL) const;
@@ -211,6 +214,7 @@ private:
     typedef ::std::map<css::uno::Reference<css::frame::XFrame>,rtl::Reference<PresenterController> > InstanceContainer;
     static InstanceContainer maInstances;
 
+    css::uno::WeakReference<css::lang::XEventListener> mxScreen;
     css::uno::Reference<css::uno::XComponentContext> mxComponentContext;
     css::uno::Reference<css::rendering::XSpriteCanvas> mxCanvas;
     css::uno::Reference<css::frame::XController> mxController;
