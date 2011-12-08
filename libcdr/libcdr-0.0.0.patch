@@ -18,3 +18,17 @@
  
  #endif
  
+--- misc/libcdr-0.0.0/src/lib/makefile.mk
++++ misc/build/libcdr-0.0.0/src/lib/makefile.mk
+@@ -28,6 +28,10 @@
+ INCPRE+=$(SOLARVER)$/$(INPATH)$/inc$/libwpg
+ .ENDIF
+ 
++.IF "$(SYSTEM_ZLIB)" != "YES"
++INCPRE+=-I$(SOLARVER)$/$(INPATH)$/inc$/external/zlib
++.ENDIF
++
+ SLOFILES= \
+         $(SLO)$/CDRDocument.obj \
+ 		$(SLO)$/CDRInternalStream.obj \
+
