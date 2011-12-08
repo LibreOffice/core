@@ -43,8 +43,7 @@ distro-pack-install: install
 	$(SRCDIR)/bin/distro-install-file-lists
 
 $(SRCDIR)/src.downloaded: $(SRCDIR)/ooo.lst $(SRCDIR)/download
-	$(if $(filter YES,$(DO_FETCH_TARBALLS)),@$(SRCDIR)/download $(SRCDIR)/ooo.lst)
-	@touch $@
+	$(if $(filter YES,$(DO_FETCH_TARBALLS)),cd $(SRCDIR) && ./download ./ooo.lst && touch $@,touch $@)
 
 fetch: $(SRCDIR)/src.downloaded
 
