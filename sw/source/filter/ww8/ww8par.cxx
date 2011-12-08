@@ -2777,6 +2777,26 @@ namespace
         }
         return nPos;
     }
+
+    sal_Int32 lcl_getWriterScriptType(
+        const uno::Reference<i18n::XBreakIterator>& rBI,
+        const rtl::OUString &rString, sal_Int32 nPos)
+    {
+        sal_Int16 nScript = i18n::ScriptType::WEAK;
+
+        if (rString.isEmpty())
+            return nScript;
+
+        while (nPos >= 0)
+        {
+            nScript = rBI->getScriptType(rString, nPos);
+            if (nScript != i18n::ScriptType::WEAK)
+                break;
+            --nPos;
+        }
+
+        return nScript;
+    }
 }
 
 //In writer we categorize text into CJK, CTL and "Western" for everything else.
@@ -2817,6 +2837,14 @@ void SwWW8ImplReader::emulateMSWordAddTextToParagraph(const rtl::OUString& rAddS
     sal_Int16 nScript = lcl_getScriptType(xBI, rAddString, 0);
     sal_Int32 nLen = rAddString.getLength();
 
+    rtl::OUString sParagraphText;
+    const SwCntntNode *pCntNd = pPaM->GetCntntNode();
+    const SwTxtNode* pNd = pCntNd ? pCntNd->GetTxtNode() : NULL;
+    if (pNd)
+        sParagraphText = pNd->GetTxt();
+    sal_Int32 nParaOffset = sParagraphText.getLength();
+    sParagraphText = sParagraphText + rAddString;
+
     sal_Int32 nPos = 0;
     while (nPos < nLen)
     {
@@ -2853,20 +2881,41 @@ void SwWW8ImplReader::emulateMSWordAddTextToParagraph(const rtl::OUString& rAddS
                     break;
             }
 
-            const SvxFontItem *pSourceFont = (const SvxFontItem*)GetFmtAttr(nForceFromFontId);
+            //Now we know that word would use the nForceFromFontId font for this range
+            //Try and determine what script writer would assign this range to
 
-            for (size_t i = 0; i < SAL_N_ELEMENTS(aIds); ++i)
+            sal_Int32 nWriterScript = lcl_getWriterScriptType(xBI, sParagraphText,
+                nPos + nParaOffset);
+
+            bool bWriterWillUseSameFontAsWordAutomatically = false;
+
+            if (
+                 (nWriterScript == i18n::ScriptType::ASIAN && nForceFromFontId == RES_CHRATR_CJK_FONT) ||
+                 (nWriterScript == i18n::ScriptType::COMPLEX && nForceFromFontId == RES_CHRATR_CTL_FONT) ||
+                 (nWriterScript == i18n::ScriptType::LATIN && nForceFromFontId == RES_CHRATR_FONT)
+               )
             {
-                const SvxFontItem *pDestFont = (const SvxFontItem*)GetFmtAttr(aIds[i]);
-                aForced[i] = aIds[i] != nForceFromFontId && *pSourceFont != *pDestFont;
-                if (aForced[i])
-                {
-                    pOverriddenItems[i] =
-                        (const SvxFontItem*)pCtrlStck->GetStackAttr(*pPaM->GetPoint(), aIds[i]);
+                bWriterWillUseSameFontAsWordAutomatically = true;
+            }
 
-                    SvxFontItem aForceFont(*pSourceFont);
-                    aForceFont.SetWhich(aIds[i]);
-                    pCtrlStck->NewAttr(*pPaM->GetPoint(), aForceFont);
+            //Writer won't use the same font as word, so force the issue
+            if (!bWriterWillUseSameFontAsWordAutomatically)
+            {
+                const SvxFontItem *pSourceFont = (const SvxFontItem*)GetFmtAttr(nForceFromFontId);
+
+                for (size_t i = 0; i < SAL_N_ELEMENTS(aIds); ++i)
+                {
+                    const SvxFontItem *pDestFont = (const SvxFontItem*)GetFmtAttr(aIds[i]);
+                    aForced[i] = aIds[i] != nForceFromFontId && *pSourceFont != *pDestFont;
+                    if (aForced[i])
+                    {
+                        pOverriddenItems[i] =
+                            (const SvxFontItem*)pCtrlStck->GetStackAttr(*pPaM->GetPoint(), aIds[i]);
+
+                        SvxFontItem aForceFont(*pSourceFont);
+                        aForceFont.SetWhich(aIds[i]);
+                        pCtrlStck->NewAttr(*pPaM->GetPoint(), aForceFont);
+                    }
                 }
             }
         }
