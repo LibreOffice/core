@@ -58,6 +58,7 @@ $(eval $(call gb_Library_use_externals,cdrimport,\
 	wpd \
 	wpg \
 	cdr \
+	zlib \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,cdrimport,\

@@ -168,7 +168,7 @@ throw( com::sun::star::uno::RuntimeException )
     WPXSvInputStream input( xInputStream );
 
     if (libcdr::CDRDocument::isSupported(&input))
-        sTypeName = OUString( RTL_CONSTASCII_USTRINGPARAM ( "draw_Visio_Document" ) );
+        sTypeName = OUString( RTL_CONSTASCII_USTRINGPARAM ( "draw_CorelDraw_Document" ) );
 
     if (sTypeName.getLength())
     {

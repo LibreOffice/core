@@ -45,17 +45,17 @@ TARGET=visio
 .IF "$(SYSTEM_LIBWPD)" == "YES"
 INCPRE+=$(WPD_CFLAGS)
 .ELSE
-INCPRE+=$(SOLARVER)$/$(UPD)$/$(INPATH)$/inc$/libwpd
-INCPRE+=$(SOLARVER)$/$(UPD)$/$(INPATH)$/inc$/libwpd-stream
+INCPRE+=$(SOLARVER)$/$(INPATH)$/inc$/libwpd
+INCPRE+=$(SOLARVER)$/$(INPATH)$/inc$/libwpd-stream
 .ENDIF
 .IF "$(SYSTEM_LIBWPG)" == "YES"
 INCPRE+=$(WPG_CFLAGS)
 .ELSE
-INCPRE+=$(SOLARVER)$/$(UPD)$/$(INPATH)$/inc$/libwpg
+INCPRE+=$(SOLARVER)$/$(INPATH)$/inc$/libwpg
 .ENDIF
 
 TARFILE_NAME=libcdr-0.0.0
-TARFILE_MD5=9c9811817dccbd517ff25af8b2e8a86e
+TARFILE_MD5=cc8eb870d6a324d36575420efd856319
 
 BUILD_ACTION=dmake $(MFLAGS) $(CALLMACROS)
 BUILD_DIR=src$/lib
