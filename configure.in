@@ -8563,7 +8563,15 @@ if test "$_os" = "Darwin"; then
     XINERAMA_LINK=dynamic
     AC_MSG_RESULT([yes])
 elif test "$_os" = "Linux" -o "$_os" = "FreeBSD"; then
-    if test -e "$XLIB/libXinerama.so" -a -e "$XLIB/libXinerama.a"; then
+    if test "$x_libraries" = "default_x_libraries"; then
+        XINERAMALIB=`$PKG_CONFIG --variable=libdir xinerama`
+        if test "x$XINERAMALIB" = x; then
+           XINERAMALIB="/usr/lib"
+        fi
+    else
+        XINERAMALIB="$x_libraries"
+    fi
+    if test -e "$XINERAMALIB/libXinerama.so" -a -e "$XINERAMALIB/libXinerama.a"; then
         # we have both versions, let the user decide but use the dynamic one
         # per default
         USE_XINERAMA=YES
@@ -8572,11 +8580,11 @@ elif test "$_os" = "Linux" -o "$_os" = "FreeBSD"; then
         else
             XINERAMA_LINK=static
         fi
-    elif test -e "$XLIB/libXinerama.so" -a ! -e "$XLIB/libXinerama.a"; then
+    elif test -e "$XINERAMALIB/libXinerama.so" -a ! -e "$XINERAMALIB/libXinerama.a"; then
         # we have only the dynamic version
         USE_XINERAMA=YES
         XINERAMA_LINK=dynamic
-    elif test -e "$XLIB/libXinerama.a"; then
+    elif test -e "$XINERAMALIB/libXinerama.a"; then
         # static version
         if echo $host_cpu | grep -E 'i[[3456]]86' 2>/dev/null >/dev/null; then
             USE_XINERAMA=YES
@@ -8594,7 +8602,11 @@ elif test "$_os" = "Linux" -o "$_os" = "FreeBSD"; then
         AC_MSG_RESULT([yes, with $XINERAMA_LINK linking])
         AC_CHECK_HEADER(X11/extensions/Xinerama.h, [],
             [AC_MSG_ERROR(Xinerama header not found.)], [])
-        XINERAMA_EXTRA_LIBS="-L$XLIB -lXext"
+        XEXTLIBS=`$PKG_CONFIG --variable=libs xext`
+        if test "x$XEXTLIB" = x; then
+           XEXTLIBS="-L$XLIB -L$XINERAMALIB -lXext"
+        fi
+        XINERAMA_EXTRA_LIBS="$XEXTLIBS"
         if test "$_os" = "FreeBSD"; then
             XINERAMA_EXTRA_LIBS="$XINERAMA_EXTRA_LIBS -lXt"
         fi
