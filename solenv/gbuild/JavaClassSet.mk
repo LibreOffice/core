@@ -43,7 +43,7 @@ $(call gb_Helper_abbreviate_dirs_native,\
 			$(filter-out $(JARDEPS),$(4))))) && \
 	$(if $(3),$(gb_JavaClassSet_JAVACCOMMAND) \
 		$(gb_JavaClassSet_JAVACDEBUG) \
-		-cp "$(CLASSPATH)$(gb_CLASSPATHSEP)$(call gb_JavaClassSet_get_classdir,$(2))" \
+		-cp "$(T_CP)$(gb_CLASSPATHSEP)$(call gb_JavaClassSet_get_classdir,$(2))" \
 		-d $(call gb_JavaClassSet_get_classdir,$(2)) \
 		@$$RESPONSEFILE &&) \
 	rm -f $$RESPONSEFILE && \
@@ -60,8 +60,8 @@ $(call gb_JavaClassSet_get_clean_target,%) :
 	$(call gb_Helper_abbreviate_dirs,\
 		rm -rf $(dir $(call gb_JavaClassSet_get_target,$*)))
 
-# no initialization of scoped variable CLASSPATH as it is "inherited" from controlling instance (e.g. JUnitTest, Jar)
 # UGLY: cannot use target local variable for REPO because it's needed in prereq
+# No idea what above comment means, and whether still relevant
 define gb_JavaClassSet_JavaClassSet
 $(call gb_JavaClassSet_get_target,$(1)) : JARDEPS :=
 endef
@@ -81,7 +81,7 @@ $(foreach sourcefile,$(2),$(call gb_JavaClassSet_add_sourcefile,$(1),$(sourcefil
 endef
 
 define gb_JavaClassSet_set_classpath
-$(eval $(call gb_JavaClassSet_get_target,$(1)) : CLASSPATH := $(2))
+$(eval $(call gb_JavaClassSet_get_target,$(1)) : T_CP := $(2))
 
 endef
 
@@ -89,13 +89,13 @@ endef
 # build order dependency is a hack to get these prerequisites out of the way in the build command
 define gb_JavaClassSet_add_jar
 $(eval $(call gb_JavaClassSet_get_target,$(1)) : $(2))
-$(eval $(call gb_JavaClassSet_get_target,$(1)) : CLASSPATH := $$(CLASSPATH)$(gb_CLASSPATHSEP)$(strip $(2)))
+$(eval $(call gb_JavaClassSet_get_target,$(1)) : T_CP := $$(T_CP)$(gb_CLASSPATHSEP)$(strip $(2)))
 $(eval $(call gb_JavaClassSet_get_target,$(1)) : JARDEPS += $(2))
 endef
 
 # this does not generate dependency on the jar
 define gb_JavaClassSet_add_system_jar
-$(eval $(call gb_JavaClassSet_get_target,$(1)) : CLASSPATH := $$(CLASSPATH)$(gb_CLASSPATHSEP)$(strip $(2)))
+$(eval $(call gb_JavaClassSet_get_target,$(1)) : T_CP := $$(T_CP)$(gb_CLASSPATHSEP)$(strip $(2)))
 $(eval $(call gb_JavaClassSet_get_target,$(1)) : JARDEPS += $(2))
 endef
 
