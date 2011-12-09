@@ -194,9 +194,9 @@ $(PACKAGE_DIR)/$(PATCH_FLAG_FILE) : $(PACKAGE_DIR)/$(ADD_FILES_FLAG_FILE)
     $(COMMAND_ECHO)$(TOUCH) $@
 .ELSE			# "$(PATCH_FILES)"=="none" ||	"$(PATCH_FILES)"==""
 .IF "$(GUI)"=="WNT"
-    $(COMMAND_ECHO)cd $(PACKAGE_DIR) && $(TYPE:s/+//) $(BACK_PATH)$(PATH_IN_MODULE)/{$(PATCH_FILES)} | tr -d "\015" | (cd .$(fake_root_dir) && patch $(PATCHFLAGS) -p2 ) && $(TOUCH) $(PATCH_FLAG_FILE)
+    $(COMMAND_ECHO)cd $(PACKAGE_DIR) && $(TYPE:s/+//) $(BACK_PATH)$(PATH_IN_MODULE)/{$(PATCH_FILES)} | tr -d "\015" | (cd .$(fake_root_dir) && patch $(PATCHFLAGS) -p3 ) && $(TOUCH) $(PATCH_FLAG_FILE)
 .ELSE           # "$(GUI)"=="WNT"
-    $(COMMAND_ECHO)cd $(PACKAGE_DIR) && $(TYPE) $(BACK_PATH)$(PATH_IN_MODULE)/{$(PATCH_FILES)} | (cd .$(fake_root_dir) && $(GNUPATCH) $(PATCHFLAGS) -p2 ) && $(TOUCH) $(PATCH_FLAG_FILE)
+    $(COMMAND_ECHO)cd $(PACKAGE_DIR) && $(TYPE) $(BACK_PATH)$(PATH_IN_MODULE)/{$(PATCH_FILES)} | (cd .$(fake_root_dir) && $(GNUPATCH) $(PATCHFLAGS) -p3 ) && $(TOUCH) $(PATCH_FLAG_FILE)
 .ENDIF          # "$(GUI)"=="WNT"
 .ENDIF			# "$(PATCH_FILES)"=="none" ||	"$(PATCH_FILES)"==""
 .IF "$(T_ADDITIONAL_FILES)"!=""
@@ -306,10 +306,10 @@ $(MISC)/$(TARFILE_ROOTDIR).done : $(MISC)/$(TARFILE_MD5)-$(TARFILE_NAME).unpack 
 #.IF "$(my4ver:s/.//:s/,//)" >= "300"
 #	$(COMMAND_ECHO)cd $(MISC) && ( $(TYPE:s/+//) $(BACK_PATH)$(PATH_IN_MODULE)/{$(PATCH_FILES)} | tr -d "\015" | patch $(PATCHFLAGS) -p2 )
 #.ELSE			# "$(my4ver:s/.//:s/,//)" >= "300"
-    $(COMMAND_ECHO)cd $(MISC) && $(TYPE:s/+//) $(MBACK_PATH)$(PATH_IN_MODULE)/{$(PATCH_FILES)} | tr -d "\015" | (cd .$(fake_root_dir) && patch $(PATCHFLAGS) -p2 )
+    $(COMMAND_ECHO)cd $(MISC) && $(TYPE:s/+//) $(MBACK_PATH)$(PATH_IN_MODULE)/{$(PATCH_FILES)} | tr -d "\015" | (cd .$(fake_root_dir) && patch $(PATCHFLAGS) -p3 )
 #.ENDIF			# "$(my4ver:s/.//:s/,//)" >= "300"
 .ELSE           # "$(GUI)"=="WNT"
-    $(COMMAND_ECHO)cd $(MISC) && $(TYPE) $(MBACK_PATH)$(PATH_IN_MODULE)/{$(PATCH_FILES)} | ( cd .$(fake_root_dir) && $(GNUPATCH) $(PATCHFLAGS) -p2 )
+    $(COMMAND_ECHO)cd $(MISC) && $(TYPE) $(MBACK_PATH)$(PATH_IN_MODULE)/{$(PATCH_FILES)} | ( cd .$(fake_root_dir) && $(GNUPATCH) $(PATCHFLAGS) -p3 )
 .ENDIF          # "$(GUI)"=="WNT"
 .IF "$(CONVERTFILES)"!=""
     $(COMMAND_ECHO)$(CONVERT) dos  $(foreach,i,$(CONVERTFILES) $(MISC)/$(TARFILE_ROOTDIR)/$i)
