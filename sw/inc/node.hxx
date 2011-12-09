@@ -149,21 +149,14 @@ public:
     inline const SwCntntNode *GetCntntNode() const;
     inline       SwEndNode   *GetEndNode();
     inline const SwEndNode   *GetEndNode() const;
-#ifndef  ICC
-  inline
-#endif
-    SwTxtNode   *GetTxtNode();
-
-#ifndef  ICC
-  inline
-#endif
-    const SwTxtNode   *GetTxtNode() const;
-    inline        SwOLENode   *GetOLENode();
-    inline  const SwOLENode   *GetOLENode() const;
-    inline        SwNoTxtNode *GetNoTxtNode();
-    inline  const SwNoTxtNode *GetNoTxtNode() const;
-    inline        SwGrfNode   *GetGrfNode();
-    inline  const SwGrfNode   *GetGrfNode() const;
+    inline       SwTxtNode   *GetTxtNode();
+    inline const SwTxtNode   *GetTxtNode() const;
+    inline       SwOLENode   *GetOLENode();
+    inline const SwOLENode   *GetOLENode() const;
+    inline       SwNoTxtNode *GetNoTxtNode();
+    inline const SwNoTxtNode *GetNoTxtNode() const;
+    inline       SwGrfNode   *GetGrfNode();
+    inline const SwGrfNode   *GetGrfNode() const;
     inline       SwTableNode *GetTableNode();
     inline const SwTableNode *GetTableNode() const;
     inline       SwSectionNode *GetSectionNode();

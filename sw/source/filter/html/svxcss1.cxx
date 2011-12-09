@@ -674,18 +674,6 @@ SvxCSS1MapEntry::SvxCSS1MapEntry( const String& rKey, const SfxItemSet& rItemSet
     aKey.ToUpperAscii();
 }
 
-#if defined( ICC )
-sal_Bool operator==( const SvxCSS1MapEntry& rE1, const SvxCSS1MapEntry& rE2 )
-{
-    return  rE1.aKey==rE2.aKey;
-}
-
-sal_Bool operator<( const SvxCSS1MapEntry& rE1, const SvxCSS1MapEntry& rE2 )
-{
-    return  rE1.aKey<rE2.aKey;
-}
-#endif
-
 sal_Bool SvxCSS1Parser::StyleParsed( const CSS1Selector * /*pSelector*/,
                                  SfxItemSet& /*rItemSet*/,
                                  SvxCSS1PropertyInfo& /*rPropInfo*/ )

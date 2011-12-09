@@ -196,7 +196,6 @@ public:
                             const SvxCSS1MapEntry& rE2 );
 };
 
-#if !defined( ICC )
 inline sal_Bool operator==( const SvxCSS1MapEntry& rE1, const SvxCSS1MapEntry& rE2 )
 {
     return  rE1.aKey==rE2.aKey;
@@ -206,7 +205,6 @@ inline sal_Bool operator<( const SvxCSS1MapEntry& rE1,  const SvxCSS1MapEntry& r
 {
     return  rE1.aKey<rE2.aKey;
 }
-#endif
 
 // Diese Klasse bereitet den Output des CSS1-Parsers auf,
 // indem die CSS1-Properties in SvxItem(Set)s umgewandelt werden.

@@ -843,18 +843,16 @@ inline SwTxtFmtColl* SwTxtNode::GetTxtColl() const
     return static_cast<SwTxtFmtColl*>(const_cast<SwModify*>(GetRegisteredIn()));
 }
 
-// For IBM-Compiler do not inline this because of 42876
-#ifndef ICC
-// Inline methods from Node.hxx - we know TxtNode only now!!
-inline       SwTxtNode   *SwNode::GetTxtNode()
+// Inline methods from Node.hxx
+inline SwTxtNode *SwNode::GetTxtNode()
 {
      return ND_TEXTNODE == nNodeType ? static_cast<SwTxtNode*>(this) : 0;
 }
-inline const SwTxtNode   *SwNode::GetTxtNode() const
+
+inline const SwTxtNode *SwNode::GetTxtNode() const
 {
      return ND_TEXTNODE == nNodeType ? static_cast<const SwTxtNode*>(this) : 0;
 }
-#endif
 
 inline void
 SwTxtNode::CutText(SwTxtNode * const pDest, const SwIndex & rDestStart,

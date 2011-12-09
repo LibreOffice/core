@@ -156,11 +156,12 @@ public:
 };
 
 
-// Inline methods from Node.hxx - we know TxtNode only here!!
+// Inline methods from Node.hxx
 inline SwOLENode *SwNode::GetOLENode()
 {
      return ND_OLENODE == nNodeType ? (SwOLENode*)this : 0;
 }
+
 inline const SwOLENode *SwNode::GetOLENode() const
 {
      return ND_OLENODE == nNodeType ? (const SwOLENode*)this : 0;

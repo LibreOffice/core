@@ -1955,20 +1955,6 @@ SwOLENodes* SwCntntNode::CreateOLENodesArray( const SwFmtColl& rColl, bool bOnly
     return pNodes;
 }
 
-//FEATURE::CONDCOLL
-// Metoden aus Node.hxx - erst hier ist der TxtNode bekannt !!
-// os: nur fuer ICC, da der zum optimieren zu dumm ist
-#ifdef ICC
-SwTxtNode   *SwNode::GetTxtNode()
-{
-     return ND_TEXTNODE == nNodeType ? (SwTxtNode*)this : 0;
-}
-const SwTxtNode   *SwNode::GetTxtNode() const
-{
-     return ND_TEXTNODE == nNodeType ? (const SwTxtNode*)this : 0;
-}
-#endif
-
 /*
  * Document Interface Access
  */
