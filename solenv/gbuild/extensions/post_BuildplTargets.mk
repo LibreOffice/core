@@ -146,6 +146,9 @@ check: subsequentcheck
 unitcheck: build
 	@true
 
+debugrun:
+	@true
+
 endif # gb_SourceEnvAndRecurse_STAGE=buildpl
     
 ifeq ($(gb_SourceEnvAndRecurse_STAGE),gbuild)
