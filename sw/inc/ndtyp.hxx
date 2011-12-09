@@ -34,18 +34,20 @@
 // IDs for different nodes. The member indicating the type of node is
 // in base class.
 const sal_uInt8 ND_ENDNODE      = 0x01;
-const sal_uInt8 ND_STARTNODE        = 0x02;
-const sal_uInt8 ND_TABLENODE        = 0x06;
-const sal_uInt8 ND_TEXTNODE         = 0x08;
+const sal_uInt8 ND_STARTNODE    = 0x02;
+const sal_uInt8 ND_TABLEDUMMY   = 0x04; //(ND_TABLENODE & ~ND_STARTNODE);
+const sal_uInt8 ND_TEXTNODE     = 0x08;
 const sal_uInt8 ND_GRFNODE      = 0x10;
 const sal_uInt8 ND_OLENODE      = 0x20;
+const sal_uInt8 ND_SECTIONDUMMY = 0x40; //(ND_SECTIONNODE & ~ND_STARTNODE);
 
-const sal_uInt8 ND_CONTENTNODE  = 0x38; // ContentNode (one of the 3 bits).
-const sal_uInt8 ND_NOTXTNODE        = 0x30; // NoTxtNode (one of the 2 bits).
+const sal_uInt8 ND_TABLENODE    = ND_TABLEDUMMY | ND_STARTNODE;
+const sal_uInt8 ND_SECTIONNODE  = ND_SECTIONDUMMY | ND_STARTNODE;
 
-const sal_uInt8 ND_SECTIONNODE   = 0x42;
-// For internal use only!!
-const sal_uInt8 ND_SECTIONDUMMY  = 0x40; //(ND_SECTIONNODE & ~ND_STARTNODE);
+// NoTxtNode (if any of the 2 bits are set).
+const sal_uInt8 ND_NOTXTNODE    = ND_GRFNODE | ND_OLENODE;
+// ContentNode (if any of the 3 bits are set).
+const sal_uInt8 ND_CONTENTNODE  = ND_TEXTNODE | ND_NOTXTNODE;
 
 // Special types of StartNodes that are not derivations but keep
 // "sections" together.
