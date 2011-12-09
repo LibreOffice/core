@@ -491,13 +491,15 @@ SvLBoxEntry* BasicTreeListBox::FindRootEntry( const ScriptDocument& rDocument, L
     return 0;
 }
 
-String CreateMgrAndLibStr( const String& rMgrName, const String& rLibName )
+::rtl::OUString CreateMgrAndLibStr( const ::rtl::OUString& rMgrName, const ::rtl::OUString& rLibName )
 {
-    String aName( '[' );
-    aName += rMgrName;
-    aName += String( RTL_CONSTASCII_USTRINGPARAM( "]." ) );
-    aName += rLibName;
-    return aName;
+    ::rtl::OUStringBuffer aName;
+    aName.append('[');
+    aName.append(rMgrName);
+    aName.append(']');
+    aName.append('.');
+    aName.append(rLibName);
+    return aName.makeStringAndClear();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

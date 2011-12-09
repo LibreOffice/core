@@ -271,7 +271,7 @@ public:
 };
 
 void            CutLines( ::rtl::OUString& rStr, sal_Int32 nStartLine, sal_Int32 nLines, sal_Bool bEraseTrailingEmptyLines = sal_False );
-String          CreateMgrAndLibStr( const String& rMgrName, const String& rLibName );
+::rtl::OUString CreateMgrAndLibStr( const ::rtl::OUString& rMgrName, const ::rtl::OUString& rLibName );
 sal_uLong           CalcLineCount( SvStream& rStream );
 
 bool QueryReplaceMacro( const ::rtl::OUString& rName, Window* pParent = 0 );
