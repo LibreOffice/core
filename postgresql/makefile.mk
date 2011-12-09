@@ -30,17 +30,16 @@ PRJ=.
 PRJNAME=postgresql
 TARGET=so_postgresql
 
-EXT_PROJECT_NAME=postgresql-9.1.1
-MAJOR_VER=9.1
-
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :	settings.mk
 
 # --- Files --------------------------------------------------------
 
-TARFILE_NAME=$(EXT_PROJECT_NAME)
+TARFILE_NAME=postgresql-9.1.1
 TARFILE_MD5=061a9f17323117c9358ed60f33ecff78
+PATCH_FILES=\
+	$(TARFILE_NAME).patch
 
 .IF "$(SYSTEM_POSTGRESQL)" == "YES"
 @all:
@@ -48,7 +47,16 @@ TARFILE_MD5=061a9f17323117c9358ed60f33ecff78
 .ENDIF
 
 
-BUILD_DIR=.
+.IF "$(GUI)$(COM)"=="WNTGCC"
+CONFIGURE_DIR=.
+BUILD_DIR=src
+
+CONFIGURE_ACTION =
+BUILD_ACTION = nmake -f win32.mak
+.ELSE
+CONFIGURE_DIR=.
+BUILD_DIR=src/interfaces/libpq
+
 # TODO:
 # --datarootdir changes where libpq expects internationalisation of its messages
 #               (which we don't install anyway for now...)
@@ -57,18 +65,9 @@ BUILD_DIR=.
 .IF "$(VERBOSE)"==""
 MAKE_SILENT=-s
 .ENDIF
-BUILD_ACTION = \
-            ./configure   --sysconfdir=/etc/postgresql-common \
-			  --datarootdir=/usr/share/ \
-			  --datadir=/usr/share/postgresql/$(MAJOR_VER) \
-			  --bindir=/usr/lib/postgresql/$(MAJOR_VER)/bin \
-			  --libdir=/usr/lib/ \
-			  --includedir=/usr/include/postgresql/ \
-			  --without-readline \
-	 && DESTDIR="$(SRC_ROOT)/$(PRJNAME)/$(INPATH)/" \
-	 && export DESTDIR \
-	 && make $(MAKE_SILENT) -j$(GMAKE_MODULE_PARALLELISM) -C src/interfaces/libpq install \
-	 && ./config/install-sh -c -m 644 src/include/postgres_ext.h "$${{DESTDIR}}/usr/include/postgresql/"
+CONFIGURE_ACTION = ./configure --without-readline
+BUILD_ACTION = make $(MAKE_SILENT) -j$(GMAKE_MODULE_PARALLELISM) all-static-lib
+.ENDIF
 
 # --- Targets ------------------------------------------------------
 
