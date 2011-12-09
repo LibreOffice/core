@@ -32,7 +32,6 @@ $(eval $(call gb_Module_add_targets,basic,\
 	AllLangResTarget_sb \
 	Library_sb \
 	Package_inc \
-	StaticLibrary_sample \
 ))
 
 $(eval $(call gb_Module_add_check_targets,basic,\
