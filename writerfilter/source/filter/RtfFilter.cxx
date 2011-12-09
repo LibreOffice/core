@@ -26,9 +26,8 @@
  *
  ************************************************************************/
 
-#ifndef _CPPUHELPER_IMPLEMENTATIONENTRY_
+#include <rtl/oustringostreaminserter.hxx>
 #include <cppuhelper/implementationentry.hxx>
-#endif
 #include <osl/module.hxx>
 #include <tools/solar.h>
 #include <RtfFilter.hxx>
@@ -101,7 +100,7 @@ sal_Bool RtfFilter::filter( const uno::Sequence< beans::PropertyValue >& aDescri
     }
     catch (const uno::Exception& e)
     {
-        SAL_INFO("writerfilter", "Exception caught: " << e.Message());
+        SAL_INFO("writerfilter", "Exception caught: " << e.Message);
         return sal_False;
     }
 }

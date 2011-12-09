@@ -229,7 +229,6 @@ static writerfilter::Reference<Properties>::Pointer_t lcl_getBookmarkProperties(
     return lcl_getBookmarkProperties(nPos, aStr);
 }
 
-#if OSL_DEBUG_LEVEL > 1
 static const char* lcl_RtfToString(RTFKeyword nKeyword)
 {
     for (int i = 0; i < nRTFControlWords; i++)
@@ -239,7 +238,6 @@ static const char* lcl_RtfToString(RTFKeyword nKeyword)
     }
     return NULL;
 }
-#endif
 
 static util::DateTime lcl_getDateTime(std::stack<RTFParserState>& aStates)
 {
