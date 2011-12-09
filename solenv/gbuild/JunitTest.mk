@@ -47,7 +47,7 @@ $(call gb_JunitTest_get_target,%) :
         rm -rf $(call gb_JunitTest_get_userdir,$*) && \
 		mkdir -p $(call gb_JunitTest_get_userdir,$*) && \
         (DBGSV_ERROR_OUT=shell $(gb_JunitTest_JAVACOMMAND) \
-            -cp "$(CLASSPATH)" \
+            -cp "$(T_CP)" \
             $(DEFS) \
             org.junit.runner.JUnitCore \
             $(CLASSES) > $@.log 2>&1 || \
@@ -69,7 +69,7 @@ $(call gb_JunitTest_get_target,%) :
 	$(CLEAN_CMD)
 
 define gb_JunitTest_JunitTest
-$(call gb_JunitTest_get_target,$(1)) : CLASSPATH := $(value XCLASSPATH)$(gb_CLASSPATHSEP)$(call gb_JavaClassSet_get_classdir,$(call gb_JunitTest_get_classsetname,$(1)))$(gb_CLASSPATHSEP)$(OOO_JUNIT_JAR)$(gb_CLASSPATHSEP)$(OUTDIR)/lib
+$(call gb_JunitTest_get_target,$(1)) : T_CP := $(value XCLASSPATH)$(gb_CLASSPATHSEP)$(call gb_JavaClassSet_get_classdir,$(call gb_JunitTest_get_classsetname,$(1)))$(gb_CLASSPATHSEP)$(OOO_JUNIT_JAR)$(gb_CLASSPATHSEP)$(OUTDIR)/lib
 $(call gb_JunitTest_get_target,$(1)) : CLASSES :=
 $(call gb_JunitTest_JunitTest_platform,$(1))
 
@@ -105,12 +105,12 @@ $(foreach sourcefile,$(2),$(call gb_JunitTest_add_sourcefile,$(1),$(sourcefile))
 endef
 
 define gb_JunitTest_set_classpath
-$(call gb_JunitTest_get_target,$(1)) : CLASSPATH := $(2)
+$(call gb_JunitTest_get_target,$(1)) : T_CP := $(2)
 
 endef
 
 define gb_JunitTest_add_jar
-$(call gb_JunitTest_get_target,$(1)) : CLASSPATH := $$(CLASSPATH)$(gb_CLASSPATHSEP)$(2)
+$(call gb_JunitTest_get_target,$(1)) : T_CP := $$(T_CP)$(gb_CLASSPATHSEP)$(2)
 $(call gb_JunitTest_get_target,$(1)) : $(2)
 
 endef
