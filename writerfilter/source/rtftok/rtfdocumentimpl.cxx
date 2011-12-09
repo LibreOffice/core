@@ -1226,9 +1226,7 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
             m_aStates.top().nDestinationState = DESTINATION_SKIP;
             break;
         default:
-#if OSL_DEBUG_LEVEL > 1
             SAL_INFO("writerfilter", OSL_THIS_FUNC << ": TODO handle destination '" << lcl_RtfToString(nKeyword) << "'");
-#endif
             // Make sure we skip destinations (even without \*) till we don't handle them
             m_aStates.top().nDestinationState = DESTINATION_SKIP;
             aSkip.setParsed(false);
@@ -1411,9 +1409,7 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
             // Nothing to do, dmapper assumes this is the default.
             break;
         default:
-#if OSL_DEBUG_LEVEL > 1
             SAL_INFO("writerfilter", OSL_THIS_FUNC << ": TODO handle symbol '" << lcl_RtfToString(nKeyword) << "'");
-#endif
             aSkip.setParsed(false);
             break;
     }
@@ -1869,9 +1865,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         case RTF_POSXL: m_aStates.top().aFrame.nHoriAlign = NS_ooxml::LN_Value_wordprocessingml_ST_XAlign_left; break;
         case RTF_POSXR: m_aStates.top().aFrame.nHoriAlign = NS_ooxml::LN_Value_wordprocessingml_ST_XAlign_right; break;
         default:
-#if OSL_DEBUG_LEVEL > 1
             SAL_INFO("writerfilter", OSL_THIS_FUNC << ": TODO handle flag '" << lcl_RtfToString(nKeyword) << "'");
-#endif
             aSkip.setParsed(false);
             break;
     }
@@ -2514,9 +2508,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             m_aStates.top().aPicture.eWMetafile = nParam;
             break;
         default:
-#if OSL_DEBUG_LEVEL > 1
             SAL_INFO("writerfilter", OSL_THIS_FUNC << ": TODO handle value '" << lcl_RtfToString(nKeyword) << "'");
-#endif
             aSkip.setParsed(false);
             break;
     }
@@ -2613,9 +2605,7 @@ int RTFDocumentImpl::dispatchToggle(RTFKeyword nKeyword, bool bParam, int nParam
             }
             break;
         default:
-#if OSL_DEBUG_LEVEL > 1
             SAL_INFO("writerfilter", OSL_THIS_FUNC << ": TODO handle toggle '" << lcl_RtfToString(nKeyword) << "'");
-#endif
             aSkip.setParsed(false);
             break;
     }

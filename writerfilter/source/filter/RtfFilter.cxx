@@ -101,11 +101,7 @@ sal_Bool RtfFilter::filter( const uno::Sequence< beans::PropertyValue >& aDescri
     }
     catch (const uno::Exception& e)
     {
-#if OSL_DEBUG_LEVEL > 1
-        SAL_INFO("writerfilter", "Exception caught: " <<
-                rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
-#endif
-        (void)e;
+        SAL_INFO("writerfilter", "Exception caught: " << e.Message());
         return sal_False;
     }
 }
