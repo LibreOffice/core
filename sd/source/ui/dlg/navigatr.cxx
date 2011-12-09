@@ -555,10 +555,11 @@ void SdNavigatorWin::Resize()
         maToolbox.SetOutputSizePixel( aObjSize );
 
         // Umgroessern der TreeLB
-        aObjSize = maTlbObjects.Control::GetOutputSizePixel();
+        aObjSize = maTlbObjects.GetSizePixel();
         aObjSize.Width() += aDiffSize.Width();
-        aObjSize.Height() += aDiffSize.Height();
-        maTlbObjects.SetOutputSizePixel( aObjSize );
+        aObjSize.Height() = maLbDocs.GetPosPixel().Y() + aDiffSize.Height() -
+            maTlbObjects.GetPosPixel().Y() - 4;
+        maTlbObjects.SetSizePixel( aObjSize );
 
         Point aPt( 0, aDiffSize.Height() );
 
