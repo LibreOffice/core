@@ -1,7 +1,7 @@
 mkdir: %_DEST%\inc\postgresql
 
-..\%__SRC%\usr\include\postgresql\libpq-fe.h %_DEST%\inc\postgresql\
-..\%__SRC%\usr\include\postgresql\postgres_ext.h %_DEST%\inc\postgresql\
-..\%__SRC%\usr\lib\libpq.a %_DEST%\lib\libpq.a
-#..\%__SRC%\usr\share\locale\* %_DEST%\ TODO
+..\%__SRC%\misc\build\postgresql-*\src\include\postgres_ext.h %_DEST%\inc\postgresql\
+..\%__SRC%\misc\build\postgresql-*\src\interfaces\libpq\libpq-fe.h %_DEST%\inc\postgresql\
+..\%__SRC%\misc\build\postgresql-*\src\interfaces\libpq\libpq.a %_DEST%\lib\
+..\%__SRC%\lib\*.lib %_DEST%\lib\*.lib
 
