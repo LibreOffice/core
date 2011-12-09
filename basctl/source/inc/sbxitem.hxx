@@ -43,10 +43,10 @@ enum BasicIDEType
 
 class SbxItem : public SfxPoolItem
 {
-    ScriptDocument          m_aDocument;
-    ::rtl::OUString         m_aLibName;
-    ::rtl::OUString         m_aName;
-    ::rtl::OUString         m_aMethodName;
+    const ScriptDocument    m_aDocument;
+    const ::rtl::OUString   m_aLibName;
+    const ::rtl::OUString   m_aName;
+    const ::rtl::OUString   m_aMethodName;
     BasicIDEType            m_nType;
 
 public:
@@ -59,19 +59,10 @@ public:
     virtual int operator==(const SfxPoolItem&) const;
 
     const ScriptDocument& GetDocument() const;
-    void SetDocument(const ScriptDocument& rDocument);
-
     const ::rtl::OUString& GetLibName() const;
-    void SetLibName(const ::rtl::OUString& aLibName);
-
     const ::rtl::OUString& GetName() const;
-    void SetName(const ::rtl::OUString& aName);
-
     const ::rtl::OUString& GetMethodName() const;
-    void SetMethodName(const ::rtl::OUString& aMethodName);
-
     BasicIDEType GetType() const;
-    void SetType(BasicIDEType nType);
 };
 
 #endif

@@ -78,19 +78,9 @@ const ScriptDocument& SbxItem::GetDocument() const
     return m_aDocument;
 }
 
-void SbxItem::SetDocument(const ScriptDocument& rDocument)
-{
-    m_aDocument = rDocument;
-}
-
 const ::rtl::OUString& SbxItem::GetLibName() const
 {
     return m_aLibName;
-}
-
-void SbxItem::SetLibName(const ::rtl::OUString& aLibName)
-{
-    m_aLibName = aLibName;
 }
 
 const ::rtl::OUString& SbxItem::GetName() const
@@ -98,29 +88,14 @@ const ::rtl::OUString& SbxItem::GetName() const
     return m_aName;
 }
 
-void SbxItem::SetName(const ::rtl::OUString& aName)
-{
-    m_aName = aName;
-}
-
 const ::rtl::OUString& SbxItem::GetMethodName() const
 {
     return m_aMethodName;
 }
 
-void SbxItem::SetMethodName(const ::rtl::OUString& aMethodName)
-{
-    m_aMethodName = aMethodName;
-}
-
 BasicIDEType SbxItem::GetType() const
 {
     return m_nType;
-}
-
-void SbxItem::SetType(BasicIDEType nType)
-{
-    m_nType = nType;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
