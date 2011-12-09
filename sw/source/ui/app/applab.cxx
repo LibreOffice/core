@@ -264,10 +264,14 @@ void SwModule::InsertLab(SfxRequest& rReq, sal_Bool bLabel)
 
             aDesc.SetUseOn(nsUseOnPage::PD_ALL);                // Site numbering
 
+            // fix (fdo36874) revised page size calculation
             // Set page size
-            rFmt.SetFmtAttr(SwFmtFrmSize(ATT_FIX_SIZE,
-                                        rItem.lLeft  + rItem.nCols * rItem.lHDist + MINLAY,
-                                        rItem.lUpper + rItem.nRows * rItem.lVDist + MINLAY));
+	    long lPgWidth, lPgHeight;
+	    lPgWidth = (((rItem.lLeft  + (rItem.nCols - 1) * rItem.lHDist + rItem.lWidth + rItem.lLeft) > MINLAY) ?
+		    (rItem.lLeft  + (rItem.nCols - 1) * rItem.lHDist + rItem.lWidth + rItem.lLeft) : MINLAY);
+	    lPgHeight = (((rItem.lUpper + (rItem.nRows - 1) * rItem.lVDist + rItem.lHeight + rItem.lUpper) > MINLAY) ?
+		    (rItem.lUpper + (rItem.nRows - 1) * rItem.lVDist + rItem.lHeight + rItem.lUpper) : MINLAY);
+            rFmt.SetFmtAttr( SwFmtFrmSize( ATT_FIX_SIZE, lPgWidth, lPgHeight ));
 
             // Numbering type
             SvxNumberType aType;
