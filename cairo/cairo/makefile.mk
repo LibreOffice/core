@@ -126,9 +126,9 @@ OUT2INC+=src$/cairo-quartz.h
 .ELSE
 # ----------- Unix ---------------------------------------------------------
 .IF "$(OS)$(COM)"=="LINUXGCC" || "$(OS)$(COM)"=="FREEBSDGCC"
-cairo_LDFLAGS+=-Wl,-rpath,'$$$$ORIGIN:$$$$ORIGIN/../ure-link/lib' -Wl,-z,noexecstack
+cairo_LDFLAGS+=-Wl,-rpath,\$$$$ORIGIN:\$$$$ORIGIN/../ure-link/lib -Wl,-z,noexecstack
 .ELIF "$(OS)$(COM)"=="SOLARISC52"
-cairo_LDFLAGS+=-Wl,-R'$$$$ORIGIN:$$$$ORIGIN/../ure-link/lib'
+cairo_LDFLAGS+=-Wl,-R\$$$$ORIGIN:\$$$$ORIGIN/../ure-link/lib
 .ENDIF  # "$(OS)$(COM)"=="LINUXGCC" || "$(OS)$(COM)"=="FREEBSDGCC"
 
 .IF "$(SYSBASE)"!=""
@@ -206,7 +206,7 @@ cairo_CFLAGS+=-g
 CONFIGURE_FLAGS+= STRIP=" "
 .ENDIF
 
-CONFIGURE_FLAGS+=CFLAGS="-I$(SRC_ROOT)$/$(PRJNAME)$/$(INPATH)$/inc $(cairo_CFLAGS)" LDFLAGS="-L$(SRC_ROOT)$/$(PRJNAME)$/$(INPATH)$/lib $(cairo_LDFLAGS)" CPPFLAGS="$(cairo_CPPFLAGS)"
+CONFIGURE_FLAGS+=CFLAGS="-I$(SRC_ROOT)$/$(PRJNAME)$/$(INPATH)$/inc $(cairo_CFLAGS)" LDFLAGS='-L$(SRC_ROOT)$/$(PRJNAME)$/$(INPATH)$/lib $(cairo_LDFLAGS)' CPPFLAGS="$(cairo_CPPFLAGS)"
 
 .ENDIF
 
