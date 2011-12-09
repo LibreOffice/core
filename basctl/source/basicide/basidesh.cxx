@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-
 // CLOOKS:
 #define _SPIN_HXX
 #define _PRVWIN_HXX
@@ -88,7 +87,7 @@ public:
     {
     }
 
-    void addContainerListener( const ScriptDocument& rScriptDocument, const String& aLibName )
+    void addContainerListener( const ScriptDocument& rScriptDocument, const ::rtl::OUString& aLibName )
     {
         try
         {
@@ -101,7 +100,7 @@ public:
         }
         catch(const uno::Exception& ) {}
     }
-    void removeContainerListener( const ScriptDocument& rScriptDocument, const String& aLibName )
+    void removeContainerListener( const ScriptDocument& rScriptDocument, const ::rtl::OUString& aLibName )
     {
         try
         {
@@ -192,7 +191,7 @@ void BasicIDEShell::Init()
 
     BasicIDEGlobals::GetExtraData()->ShellInCriticalSection() = sal_True;
 
-    SetName( String( RTL_CONSTASCII_USTRINGPARAM( "BasicIDE" ) ) );
+    SetName( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BasicIDE" ) ) );
     SetHelpId( SVX_INTERFACE_BASIDE_VIEWSH );
 
     LibBoxControl::RegisterControl( SID_BASICIDE_LIBSELECTOR );
@@ -217,7 +216,7 @@ void BasicIDEShell::Init()
     InitScrollBars();
     InitTabBar();
 
-    SetCurLib( ScriptDocument::getApplicationScriptDocument(), String::CreateFromAscii( "Standard" ), false, false );
+    SetCurLib( ScriptDocument::getApplicationScriptDocument(), ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Standard")), false, false );
 
     BasicIDEGlobals::ShellCreated(this);
 
@@ -349,7 +348,7 @@ void BasicIDEShell::onDocumentClosed( const ScriptDocument& _rDocument )
         pData->GetLibInfos().RemoveInfoFor( _rDocument );
 
     if ( bSetCurLib )
-        SetCurLib( ScriptDocument::getApplicationScriptDocument(), String::CreateFromAscii( "Standard" ), true, false );
+        SetCurLib( ScriptDocument::getApplicationScriptDocument(), ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Standard")), true, false );
     else if ( bSetCurWindow )
         SetCurWindow( FindApplicationWindow(), sal_True );
 }
@@ -408,9 +407,8 @@ sal_uInt16 BasicIDEShell::PrepareClose( sal_Bool bUI, sal_Bool bForBrowsing )
     {
         if( bUI )
         {
-            String aErrorStr( IDEResId( RID_STR_CANNOTCLOSE ) );
             Window *pParent = &GetViewFrame()->GetWindow();
-            InfoBox( pParent, aErrorStr ).Execute();
+            InfoBox( pParent, ResId::toString(IDEResId(RID_STR_CANNOTCLOSE))).Execute();
         }
         return sal_False;
     }
@@ -422,8 +420,8 @@ sal_uInt16 BasicIDEShell::PrepareClose( sal_Bool bUI, sal_Bool bForBrowsing )
             IDEBaseWindow* pWin = aIDEWindowTable.GetObject( nWin );
             if ( !pWin->CanClose() )
             {
-                if ( m_aCurLibName.Len() && ( pWin->IsDocument( m_aCurDocument ) || pWin->GetLibName() != m_aCurLibName ) )
-                    SetCurLib( ScriptDocument::getApplicationScriptDocument(), String(), false );
+                if ( !m_aCurLibName.isEmpty() && ( pWin->IsDocument( m_aCurDocument ) || pWin->GetLibName() != m_aCurLibName ) )
+                    SetCurLib( ScriptDocument::getApplicationScriptDocument(), ::rtl::OUString(), false );
                 SetCurWindow( pWin, sal_True );
                 bCanClose = sal_False;
             }
@@ -693,7 +691,7 @@ void BasicIDEShell::CheckWindows()
 
 
 
-void BasicIDEShell::RemoveWindows( const ScriptDocument& rDocument, const String& rLibName, sal_Bool bDestroy )
+void BasicIDEShell::RemoveWindows( const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, sal_Bool bDestroy )
 {
     sal_Bool bChangeCurWindow = pCurWin ? sal_False : sal_True;
     for ( sal_uLong nWin = 0; nWin < aIDEWindowTable.Count(); nWin++ )
@@ -718,7 +716,7 @@ void BasicIDEShell::UpdateWindows()
 {
     // remove all windows that may not be displayed
     sal_Bool bChangeCurWindow = pCurWin ? sal_False : sal_True;
-    if ( m_aCurLibName.Len() )
+    if ( !m_aCurLibName.isEmpty() )
     {
         for ( sal_uLong nWin = 0; nWin < aIDEWindowTable.Count(); nWin++ )
         {
@@ -761,9 +759,9 @@ void BasicIDEShell::UpdateWindows()
 
         for ( sal_Int32 i = 0 ; i < nLibCount ; i++ )
         {
-            String aLibName = pLibNames[ i ];
+            ::rtl::OUString aLibName = pLibNames[ i ];
 
-            if ( !m_aCurLibName.Len() || ( *doc == m_aCurDocument && aLibName == m_aCurLibName ) )
+            if ( m_aCurLibName.isEmpty() || ( *doc == m_aCurDocument && aLibName == m_aCurLibName ) )
             {
                 // check, if library is password protected and not verified
                 sal_Bool bProtected = sal_False;
@@ -889,7 +887,7 @@ void BasicIDEShell::RemoveWindow( IDEBaseWindow* pWindow_, sal_Bool bDestroy, sa
             if ( pWindow_->GetDocument().isInVBAMode() )
             {
                 SbModule* pMod = StarBASIC::GetActiveModule();
-                if ( !pMod || ( pMod && ( pMod->GetName() != pWindow_->GetName() ) ) )
+                if ( !pMod || ( pMod && ( !pMod->GetName().Equals(pWindow_->GetName()) ) ) )
                     bStop = false;
             }
             if ( bStop )
@@ -980,7 +978,7 @@ void BasicIDEShell::EnableScrollbars( sal_Bool bEnable )
     }
 }
 
-void BasicIDEShell::SetCurLib( const ScriptDocument& rDocument, String aLibName, bool bUpdateWindows, bool bCheck )
+void BasicIDEShell::SetCurLib( const ScriptDocument& rDocument, ::rtl::OUString aLibName, bool bUpdateWindows, bool bCheck )
 {
     if ( !bCheck || ( rDocument != m_aCurDocument || aLibName != m_aCurLibName ) )
     {
@@ -1012,14 +1010,14 @@ void BasicIDEShell::SetCurLib( const ScriptDocument& rDocument, String aLibName,
     }
 }
 
-void BasicIDEShell::SetCurLibForLocalization( const ScriptDocument& rDocument, String aLibName )
+void BasicIDEShell::SetCurLibForLocalization( const ScriptDocument& rDocument, ::rtl::OUString aLibName )
 {
     // Create LocalizationMgr
     delete m_pCurLocalizationMgr;
     Reference< resource::XStringResourceManager > xStringResourceManager;
     try
     {
-        if( aLibName.Len() )
+        if( !aLibName.isEmpty() )
         {
             Reference< container::XNameContainer > xDialogLib( rDocument.getLibrary( E_DIALOGS, aLibName, sal_True ) );
             xStringResourceManager = LocalizationMgr::getStringResourceFromDialogLibrary( xDialogLib );

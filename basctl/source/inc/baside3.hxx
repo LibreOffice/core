@@ -53,7 +53,7 @@ private:
     DlgEditor*          pEditor;
     SfxUndoManager*     pUndoMgr;
     Link                aOldNotifyUndoActionHdl;
-    String              aCurPath;
+    ::rtl::OUString     aCurPath;
 
 protected:
     virtual void        Paint( const Rectangle& );
@@ -74,7 +74,7 @@ protected:
 
 public:
                         TYPEINFO();
-                        DialogWindow( Window* pParent, const ScriptDocument& rDocument, String aLibName, String aName,
+    DialogWindow( Window* pParent, const ScriptDocument& rDocument, ::rtl::OUString aLibName, ::rtl::OUString aName,
                             const com::sun::star::uno::Reference< com::sun::star::container::XNameContainer >& xDialogModel );
                         DialogWindow( DialogWindow* pCurView ); // never implemented
                         ~DialogWindow();
@@ -86,13 +86,13 @@ public:
     DlgEdModel*         GetModel() const;
     DlgEdPage*          GetPage() const;
     DlgEdView*          GetView() const;
-    sal_Bool                RenameDialog( const String& rNewName );
+    sal_Bool                RenameDialog( const ::rtl::OUString& rNewName );
     void                DisableBrowser();
     void                UpdateBrowser();
     sal_Bool                SaveDialog();
     sal_Bool                ImportDialog();
 
-    virtual String      GetTitle();
+    virtual ::rtl::OUString      GetTitle();
     virtual BasicEntryDescriptor CreateEntryDescriptor();
     virtual void        SetReadOnly( sal_Bool bReadOnly );
     virtual sal_Bool        IsReadOnly();

@@ -67,7 +67,7 @@ typedef Table IDEWindowTable;
 
 namespace BasicIDE
 {
-    bool RemoveDialog( const ScriptDocument& rDocument, const String& rLibName, const String& rDlgName );
+    bool RemoveDialog( const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, const ::rtl::OUString& rDlgName );
 }
 
 class BasicIDEShell :public SfxViewShell
@@ -75,8 +75,8 @@ class BasicIDEShell :public SfxViewShell
 {
 friend class JavaDebuggingListenerImpl;
 friend class LocalizationMgr;
-friend sal_Bool implImportDialog( Window* pWin, const String& rCurPath, const ScriptDocument& rDocument, const String& aLibName );
-friend bool BasicIDE::RemoveDialog( const ScriptDocument& rDocument, const String& rLibName, const String& rDlgName );
+    friend sal_Bool implImportDialog( Window* pWin, const ::rtl::OUString& rCurPath, const ScriptDocument& rDocument, const ::rtl::OUString& aLibName );
+    friend bool BasicIDE::RemoveDialog( const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, const ::rtl::OUString& rDlgName );
 
     ObjectCatalog*      pObjectCatalog;
 
@@ -84,7 +84,7 @@ friend bool BasicIDE::RemoveDialog( const ScriptDocument& rDocument, const Strin
     sal_uInt16              nCurKey;
     IDEBaseWindow*      pCurWin;
     ScriptDocument      m_aCurDocument;
-    String              m_aCurLibName;
+    ::rtl::OUString     m_aCurLibName;
     LocalizationMgr*    m_pCurLocalizationMgr;
 
     ScrollBar           aHScrollBar;
@@ -105,15 +105,15 @@ friend class ContainerListenerImpl;
     void                InitTabBar();
     void                InitScrollBars();
     void                CheckWindows();
-    void                RemoveWindows( const ScriptDocument& rDocument, const String& rLibName, sal_Bool bDestroy );
+    void                RemoveWindows( const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, sal_Bool bDestroy );
     void                UpdateWindows();
     void                ShowObjectDialog( sal_Bool bShow, sal_Bool bCreateOrDestroy );
     void                InvalidateBasicIDESlots();
     void                StoreAllWindowData( sal_Bool bPersistent = sal_True );
     void                SetMDITitle();
     void                EnableScrollbars( sal_Bool bEnable );
-    void                SetCurLib( const ScriptDocument& rDocument, String aLibName, bool bUpdateWindows = true , bool bCheck = true );
-    void                SetCurLibForLocalization( const ScriptDocument& rDocument, String aLibName );
+    void                SetCurLib( const ScriptDocument& rDocument, ::rtl::OUString aLibName, bool bUpdateWindows = true , bool bCheck = true );
+    void                SetCurLibForLocalization( const ScriptDocument& rDocument, ::rtl::OUString aLibName );
 
     void                ImplStartListening( StarBASIC* pBasic );
 
@@ -134,10 +134,10 @@ protected:
     void                RemoveWindow( IDEBaseWindow* pWindow, sal_Bool bDestroy, sal_Bool bAllowChangeCurWindow = sal_True );
     void                ArrangeTabBar();
 
-    ModulWindow*        CreateBasWin( const ScriptDocument& rDocument, const String& rLibName, const String& rModName );
-    DialogWindow*       CreateDlgWin( const ScriptDocument& rDocument, const String& rLibName, const String& rDlgName );
+    ModulWindow*        CreateBasWin( const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, const ::rtl::OUString& rModName );
+    DialogWindow*       CreateDlgWin( const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, const ::rtl::OUString& rDlgName );
 
-    ModulWindow*        FindBasWin( const ScriptDocument& rDocument, const String& rLibName, const String& rModName, sal_Bool bCreateIfNotExist, sal_Bool bFindSuspended = sal_False );
+    ModulWindow*        FindBasWin( const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, const ::rtl::OUString& rModName, sal_Bool bCreateIfNotExist, sal_Bool bFindSuspended = sal_False );
     ModulWindow*        ShowActiveModuleWindow( StarBASIC* pBasic );
 
     virtual void        SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
@@ -175,7 +175,7 @@ public:
     IDEBaseWindow*      GetCurWindow() const    { return pCurWin; }
     const ScriptDocument&
                         GetCurDocument() const { return m_aCurDocument; }
-    const String&       GetCurLibName() const { return m_aCurLibName; }
+    const ::rtl::OUString&       GetCurLibName() const { return m_aCurLibName; }
     ObjectCatalog*      GetObjectCatalog() const    { return pObjectCatalog; }
     LocalizationMgr*    GetCurLocalizationMgr() const { return m_pCurLocalizationMgr; }
 
@@ -211,8 +211,8 @@ public:
 
     ModulWindowLayout*  GetLayoutWindow() const { return pModulLayout; }
 
-    IDEBaseWindow*      FindWindow( const ScriptDocument& rDocument, const String& rLibName = String(), const String& rName = String(), BasicIDEType nType = BASICIDE_TYPE_UNKNOWN, sal_Bool bFindSuspended = sal_False );
-    DialogWindow*       FindDlgWin( const ScriptDocument& rDocument, const String& rLibName, const String& rDlgName, sal_Bool bCreateIfNotExist, sal_Bool bFindSuspended = sal_False );
+    IDEBaseWindow*      FindWindow( const ScriptDocument& rDocument, const ::rtl::OUString& rLibName = ::rtl::OUString(), const ::rtl::OUString& rName = ::rtl::OUString(), BasicIDEType nType = BASICIDE_TYPE_UNKNOWN, sal_Bool bFindSuspended = sal_False );
+    DialogWindow*       FindDlgWin( const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, const ::rtl::OUString& rDlgName, sal_Bool bCreateIfNotExist, sal_Bool bFindSuspended = sal_False );
     IDEBaseWindow*      FindApplicationWindow();
     sal_Bool                NextPage( sal_Bool bPrev = sal_False );
 
@@ -222,8 +222,8 @@ public:
     // For Dialog Drag&Drop in Dialog Organizer
     static void CopyDialogResources(
         ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStreamProvider >& io_xISP,
-        const ScriptDocument& rSourceDoc, const String& rSourceLibName, const ScriptDocument& rDestDoc,
-        const String& rDestLibName, const String& rDlgName );
+        const ScriptDocument& rSourceDoc, const ::rtl::OUString& rSourceLibName, const ScriptDocument& rDestDoc,
+        const ::rtl::OUString& rDestLibName, const ::rtl::OUString& rDlgName );
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >
                         GetCurrentDocument() const;

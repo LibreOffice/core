@@ -55,6 +55,7 @@
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
 #include <com/sun/star/task/XStatusIndicatorFactory.hpp>
+#include <comphelper/string.hxx>
 #include <svl/visitem.hxx>
 #include <svtools/xtextedt.hxx>
 #include <vcl/msgbox.hxx>
@@ -106,8 +107,8 @@ void BasicIDEShell::ExecuteCurrent( SfxRequest& rReq )
         case SID_BASICIDE_DELETECURRENT:
         {
             ScriptDocument aDocument( pCurWin->GetDocument() );
-            String aLibName = pCurWin->GetLibName();
-            String aName = pCurWin->GetName();
+            ::rtl::OUString aLibName = pCurWin->GetLibName();
+            ::rtl::OUString aName = pCurWin->GetName();
 
             if ( pCurWin->ISA( ModulWindow ) )
             {
@@ -178,9 +179,8 @@ void BasicIDEShell::ExecuteCurrent( SfxRequest& rReq )
                         else
                             nFound = ((ModulWindow*)pCurWin)->StartSearchAndReplace( (const SvxSearchItem&)rItem );
 
-                        IDEResId nId( RID_STR_SEARCHREPLACES );
-                        String aReplStr( nId );
-                        aReplStr.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "XX" ) ), String::CreateFromInt32( nFound ) );
+                        ::rtl::OUString aReplStr(ResId::toString(IDEResId(RID_STR_SEARCHREPLACES)));
+                        aReplStr = ::comphelper::string::replace(aReplStr, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("XX")), ::rtl::OUString::valueOf(nFound));
                         InfoBox( pCurWin, aReplStr ).Execute();
                     }
                     else
@@ -200,7 +200,7 @@ void BasicIDEShell::ExecuteCurrent( SfxRequest& rReq )
                                     SfxViewFrame* pViewFrame = GetViewFrame();
                                     SfxChildWindow* pChildWin = pViewFrame ? pViewFrame->GetChildWindow( SID_SEARCH_DLG ) : NULL;
                                     Window* pParent = pChildWin ? pChildWin->GetWindow() : NULL;
-                                    QueryBox aQuery( pParent, WB_YES_NO|WB_DEF_YES, String( IDEResId( RID_STR_SEARCHFROMSTART ) ) );
+                                    QueryBox aQuery(pParent, WB_YES_NO|WB_DEF_YES, ResId::toString(IDEResId(RID_STR_SEARCHFROMSTART)));
                                     if ( aQuery.Execute() == RET_YES )
                                     {
                                         pWin = aIDEWindowTable.First();
@@ -385,9 +385,9 @@ void BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
             ScriptDocument aDocument( ScriptDocument::getDocumentForBasicManager( pBasMgr ) );
 
             StartListening( *pBasMgr, sal_True /* log on only once */ );
-            String aLibName( rInfo.GetLib() );
-            if ( !aLibName.Len() )
-                aLibName = String::CreateFromAscii( "Standard" );
+            ::rtl::OUString aLibName( rInfo.GetLib() );
+            if ( aLibName.isEmpty() )
+                aLibName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Standard"));
             StarBASIC* pBasic = pBasMgr->GetLib( aLibName );
             if ( !pBasic )
             {
@@ -409,7 +409,7 @@ void BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
                 {
                     if ( rInfo.GetModule().Len() || !pBasic->GetModules()->Count() )
                     {
-                        String aModName = rInfo.GetModule();
+                        ::rtl::OUString aModName = rInfo.GetModule();
 
                         ::rtl::OUString sModuleCode;
                         if ( aDocument.createModule( aLibName, aModName, sal_False, sModuleCode ) )
@@ -445,15 +445,15 @@ void BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
             DBG_ASSERT( pWin, "Window nicht im Liste, aber in TabBar ?" );
             if ( pWin )
             {
-                String aNewName( rModName.GetValue() );
-                String aOldName( pWin->GetName() );
+                ::rtl::OUString aNewName( rModName.GetValue() );
+                ::rtl::OUString aOldName( pWin->GetName() );
                 if ( aNewName != aOldName )
                 {
                     bool bRenameOk = false;
                     if ( pWin->IsA( TYPE( ModulWindow ) ) )
                     {
                         ModulWindow* pModWin = (ModulWindow*)pWin;
-                        String aLibName = ( pModWin->GetLibName() );
+                        ::rtl::OUString aLibName = ( pModWin->GetLibName() );
                         ScriptDocument aDocument( pWin->GetDocument() );
 
                         if ( BasicIDE::RenameModule( pModWin, aDocument, aLibName,  aOldName, aNewName ) )
@@ -534,7 +534,7 @@ void BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
             uno::Reference< frame::XModel > xModel( rShellItem.GetValue(), UNO_QUERY );
             ScriptDocument aDocument( xModel.is() ? ScriptDocument( xModel ) : ScriptDocument::getApplicationScriptDocument() );
             const SfxStringItem& rLibNameItem = (const SfxStringItem&)rReq.GetArgs()->Get( SID_BASICIDE_ARG_LIBNAME );
-            String aLibName( rLibNameItem.GetValue() );
+            ::rtl::OUString aLibName( rLibNameItem.GetValue() );
 
             if ( nSlot == SID_BASICIDE_LIBSELECTED )
             {
@@ -569,7 +569,7 @@ void BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
             }
             else if ( nSlot == SID_BASICIDE_LIBREMOVED )
             {
-                if ( !m_aCurLibName.Len() || ( aDocument == m_aCurDocument && aLibName == m_aCurLibName ) )
+                if ( m_aCurLibName.isEmpty() || ( aDocument == m_aCurDocument && aLibName == m_aCurLibName ) )
                 {
                     RemoveWindows( aDocument, aLibName, sal_True );
                     if ( aDocument == m_aCurDocument && aLibName == m_aCurLibName )
@@ -611,9 +611,9 @@ void BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
             DBG_ASSERT( rReq.GetArgs(), "arguments expected" );
             const SbxItem& rSbxItem = (const SbxItem&)rReq.GetArgs()->Get(SID_BASICIDE_ARG_SBX );
             ScriptDocument aDocument( rSbxItem.GetDocument() );
-            String aLibName( rSbxItem.GetLibName() );
-            String aName( rSbxItem.GetName() );
-            if ( !m_aCurLibName.Len() || ( aDocument == m_aCurDocument && aLibName == m_aCurLibName ) )
+            ::rtl::OUString aLibName( rSbxItem.GetLibName() );
+            ::rtl::OUString aName( rSbxItem.GetName() );
+            if ( m_aCurLibName.isEmpty() || ( aDocument == m_aCurDocument && aLibName == m_aCurLibName ) )
             {
                 if ( rSbxItem.GetType() == BASICIDE_TYPE_MODULE )
                     FindBasWin( aDocument, aLibName, aName, sal_True );
@@ -637,8 +637,8 @@ void BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
             DBG_ASSERT( rReq.GetArgs(), "arguments expected" );
             const SbxItem& rSbxItem = (const SbxItem&)rReq.GetArgs()->Get(SID_BASICIDE_ARG_SBX );
             ScriptDocument aDocument( rSbxItem.GetDocument() );
-            String aLibName( rSbxItem.GetLibName() );
-            String aName( rSbxItem.GetName() );
+            ::rtl::OUString aLibName( rSbxItem.GetLibName() );
+            ::rtl::OUString aName( rSbxItem.GetName() );
             SetCurLib( aDocument, aLibName );
             IDEBaseWindow* pWin = 0;
             if ( rSbxItem.GetType() == BASICIDE_TYPE_DIALOG )
@@ -672,8 +672,8 @@ void BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
             SFX_REQUEST_ARG( rReq, pDocumentItem, SfxStringItem, SID_BASICIDE_ARG_DOCUMENT, sal_False );
             if ( pDocumentItem )
             {
-                String sDocumentCaption = pDocumentItem->GetValue();
-                if ( sDocumentCaption.Len() )
+                ::rtl::OUString sDocumentCaption = pDocumentItem->GetValue();
+                if ( !sDocumentCaption.isEmpty() )
                     pDocument.reset( new ScriptDocument( ScriptDocument::getDocumentWithURLOrCaption( sDocumentCaption ) ) );
             }
 
@@ -692,16 +692,16 @@ void BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
             if ( !pLibNameItem )
                 break;
 
-            String aLibName( pLibNameItem->GetValue() );
+            ::rtl::OUString aLibName( pLibNameItem->GetValue() );
             pDocument->loadLibraryIfExists( E_SCRIPTS, aLibName );
             SetCurLib( *pDocument, aLibName );
             SFX_REQUEST_ARG( rReq, pNameItem, SfxStringItem, SID_BASICIDE_ARG_NAME, sal_False );
             if ( pNameItem )
             {
-                String aName( pNameItem->GetValue() );
-                String aModType( String::CreateFromAscii( "Module" ) );
-                String aDlgType( String::CreateFromAscii( "Dialog" ) );
-                String aType( aModType );
+                ::rtl::OUString aName( pNameItem->GetValue() );
+                ::rtl::OUString aModType(RTL_CONSTASCII_USTRINGPARAM("Module"));
+                ::rtl::OUString aDlgType(RTL_CONSTASCII_USTRINGPARAM("Dialog"));
+                ::rtl::OUString aType( aModType );
                 SFX_REQUEST_ARG( rReq, pTypeItem, SfxStringItem, SID_BASICIDE_ARG_TYPE, sal_False );
                 if ( pTypeItem )
                     aType = pTypeItem->GetValue();
@@ -945,8 +945,8 @@ void BasicIDEShell::GetState(SfxItemSet &rSet)
             break;
             case SID_BASICIDE_LIBSELECTOR:
             {
-                String aName;
-                if ( m_aCurLibName.Len() )
+                ::rtl::OUString aName;
+                if ( !m_aCurLibName.isEmpty() )
                 {
                     LibraryLocation eLocation = m_aCurDocument.getLibraryLocation( m_aCurLibName );
                     aName = CreateMgrAndLibStr( m_aCurDocument.getTitle( eLocation ), m_aCurLibName );
@@ -957,7 +957,7 @@ void BasicIDEShell::GetState(SfxItemSet &rSet)
             break;
             case SID_SEARCH_ITEM:
             {
-                String aSelected = GetSelectionText( sal_True );
+                ::rtl::OUString aSelected = GetSelectionText( sal_True );
                 SvxSearchItem& rItem = BasicIDEGlobals::GetExtraData()->GetSearchItem();
                 rItem.SetSearchString( aSelected );
                 rSet.Put( rItem );
@@ -965,8 +965,7 @@ void BasicIDEShell::GetState(SfxItemSet &rSet)
             break;
             case SID_BASICIDE_STAT_DATE:
             {
-                String aDate;
-                aDate = String( RTL_CONSTASCII_USTRINGPARAM( "Datum?!" ) );
+                ::rtl::OUString aDate(RTL_CONSTASCII_USTRINGPARAM("Datum?!"));
                 SfxStringItem aItem( SID_BASICIDE_STAT_DATE, aDate );
                 rSet.Put( aItem );
             }
@@ -994,7 +993,7 @@ void BasicIDEShell::GetState(SfxItemSet &rSet)
             {
                 if ( pCurWin )
                 {
-                    String aTitle = pCurWin->CreateQualifiedName();
+                    ::rtl::OUString aTitle = pCurWin->CreateQualifiedName();
                     SfxStringItem aItem( SID_BASICIDE_STAT_TITLE, aTitle );
                     rSet.Put( aItem );
                 }
@@ -1022,11 +1021,11 @@ void BasicIDEShell::GetState(SfxItemSet &rSet)
 
             case SID_BASICIDE_CURRENT_LANG:
             {
-                if( (pCurWin && pCurWin->IsReadOnly()) || GetCurLibName().Len() == 0 )
+                if( (pCurWin && pCurWin->IsReadOnly()) || GetCurLibName().isEmpty() )
                     rSet.DisableItem( nWh );
                 else
                 {
-                    String aItemStr;
+                    ::rtl::OUString aItemStr;
                     LocalizationMgr* pCurMgr = GetCurLocalizationMgr();
                     if ( pCurMgr->isLibraryLocalized() )
                     {
@@ -1057,7 +1056,7 @@ void BasicIDEShell::GetState(SfxItemSet &rSet)
 
             case SID_BASICIDE_MANAGE_LANG:
             {
-                if( (pCurWin && pCurWin->IsReadOnly()) || GetCurLibName().Len() == 0 )
+                if( (pCurWin && pCurWin->IsReadOnly()) || GetCurLibName().isEmpty() )
                     rSet.DisableItem( nWh );
             }
             break;
@@ -1250,14 +1249,14 @@ IDEBaseWindow* BasicIDEShell::FindApplicationWindow()
     return FindWindow( ScriptDocument::getApplicationScriptDocument() );
 }
 
-IDEBaseWindow* BasicIDEShell::FindWindow( const ScriptDocument& rDocument, const String& rLibName, const String& rName, BasicIDEType nType, sal_Bool bFindSuspended )
+IDEBaseWindow* BasicIDEShell::FindWindow( const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, const ::rtl::OUString& rName, BasicIDEType nType, sal_Bool bFindSuspended )
 {
     IDEBaseWindow* pWin = aIDEWindowTable.First();
     while ( pWin )
     {
         if ( !pWin->IsSuspended() || bFindSuspended )
         {
-            if ( !rLibName.Len() || !rName.Len() || nType == BASICIDE_TYPE_UNKNOWN )
+            if ( rLibName.isEmpty() || rName.isEmpty() || nType == BASICIDE_TYPE_UNKNOWN )
             {
                 // return any non-suspended window
                 return pWin;
@@ -1315,7 +1314,7 @@ long BasicIDEShell::CallBasicBreakHdl( StarBASIC* pBasic )
 
 ModulWindow* BasicIDEShell::ShowActiveModuleWindow( StarBASIC* pBasic )
 {
-    SetCurLib( ScriptDocument::getApplicationScriptDocument(), String(), false );
+    SetCurLib( ScriptDocument::getApplicationScriptDocument(), ::rtl::OUString(), false );
 
     SbModule* pActiveModule = StarBASIC::GetActiveModule();
     SbClassModuleObject* pClassModuleObject = PTR_CAST(SbClassModuleObject,pActiveModule);
@@ -1335,7 +1334,7 @@ ModulWindow* BasicIDEShell::ShowActiveModuleWindow( StarBASIC* pBasic )
             if ( pBasMgr )
             {
                 ScriptDocument aDocument( ScriptDocument::getDocumentForBasicManager( pBasMgr ) );
-                String aLibName = pLib->GetName();
+                ::rtl::OUString aLibName = pLib->GetName();
                 pWin = FindBasWin( aDocument, aLibName, pActiveModule->GetName(), sal_True );
                 DBG_ASSERT( pWin, "Error/Step-Hdl: Fenster wurde nicht erzeugt/gefunden!" );
                 SetCurLib( aDocument, aLibName );
@@ -1433,8 +1432,8 @@ void BasicIDEShell::Deactivate( sal_Bool bMDI )
             IDEBaseWindow* pWin = aIDEWindowTable.GetObject( nWin );
             if ( /* !pWin->IsSuspended() && */ !pWin->CanClose() )
             {
-                if ( m_aCurLibName.Len() && ( pWin->IsDocument( m_aCurDocument ) || pWin->GetLibName() != m_aCurLibName ) )
-                    SetCurLib( ScriptDocument::getApplicationScriptDocument(), String(), false );
+                if ( !m_aCurLibName.isEmpty() && ( pWin->IsDocument( m_aCurDocument ) || pWin->GetLibName() != m_aCurLibName ) )
+                    SetCurLib( ScriptDocument::getApplicationScriptDocument(), ::rtl::OUString(), false );
                 SetCurWindow( pWin, sal_True );
                 break;
             }

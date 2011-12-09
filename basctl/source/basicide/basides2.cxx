@@ -127,33 +127,31 @@ sal_uInt16 BasicIDEShell::SetPrinter( SfxPrinter *pNewPrinter, sal_uInt16 nDiffF
 
 void BasicIDEShell::SetMDITitle()
 {
-    String aTitle;
-
-    if ( m_aCurLibName.Len() )
+    ::rtl::OUStringBuffer aTitleBuf;
+    if ( !m_aCurLibName.isEmpty() )
     {
         LibraryLocation eLocation = m_aCurDocument.getLibraryLocation( m_aCurLibName );
-        aTitle = m_aCurDocument.getTitle( eLocation );
-        aTitle += '.';
-        aTitle += m_aCurLibName;
+        aTitleBuf.append(m_aCurDocument.getTitle(eLocation));
+        aTitleBuf.append('.');
+        aTitleBuf.append(m_aCurLibName);
     }
     else
-    {
-        aTitle = String( IDEResId( RID_STR_ALL ) );
-    }
+        aTitleBuf.append(ResId::toString(IDEResId(RID_STR_ALL)));
 
     ::basctl::DocumentSignature aCurSignature( m_aCurDocument );
     if ( aCurSignature.getScriptingSignatureState() == SIGNATURESTATE_SIGNATURES_OK )
     {
-        aTitle += String::CreateFromAscii( " " );
-        aTitle += String( IDEResId( RID_STR_SIGNED ) );
-        aTitle += String::CreateFromAscii( " " );
+        aTitleBuf.append(' ');
+        aTitleBuf.append(ResId::toString(IDEResId(RID_STR_SIGNED)));
+        aTitleBuf.append(' ');
     }
+    ::rtl::OUString aTitle(aTitleBuf.makeStringAndClear());
 
     SfxViewFrame* pViewFrame = GetViewFrame();
     if ( pViewFrame )
     {
         SfxObjectShell* pShell = pViewFrame->GetObjectShell();
-        if ( pShell && aTitle != pShell->GetTitle( SFX_TITLE_CAPTION ) )
+        if ( pShell && !pShell->GetTitle( SFX_TITLE_CAPTION ).Equals(aTitle) )
         {
             pShell->SetTitle( aTitle );
             pShell->SetModified( sal_False );
@@ -187,22 +185,22 @@ void BasicIDEShell::CreateModulWindowLayout()
     pModulLayout = new ModulWindowLayout( &GetViewFrame()->GetWindow() );
 }
 
-ModulWindow* BasicIDEShell::CreateBasWin( const ScriptDocument& rDocument, const String& rLibName, const String& rModName )
+ModulWindow* BasicIDEShell::CreateBasWin( const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, const ::rtl::OUString& rModName )
 {
     bCreatingWindow = sal_True;
 
     sal_uLong nKey = 0;
     ModulWindow* pWin = 0;
 
-    String aLibName( rLibName );
-    String aModName( rModName );
+    ::rtl::OUString aLibName( rLibName );
+    ::rtl::OUString aModName( rModName );
 
-    if ( !aLibName.Len() )
-        aLibName = String::CreateFromAscii( "Standard" );
+    if ( aLibName.isEmpty() )
+        aLibName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Standard"));
 
     uno::Reference< container::XNameContainer > xLib = rDocument.getOrCreateLibrary( E_SCRIPTS, aLibName );
 
-    if ( !aModName.Len() )
+    if ( aModName.isEmpty() )
         aModName = rDocument.createObjectName( E_SCRIPTS, aLibName );
 
     // maybe there's an suspended one?
@@ -250,7 +248,12 @@ ModulWindow* BasicIDEShell::CreateBasWin( const ScriptDocument& rDocument, const
         ModuleInfoHelper::getObjectName( xLib, rModName, sObjName );
         if( !sObjName.isEmpty() )
         {
-            aModName.AppendAscii(" (").Append(sObjName).AppendAscii(")");
+            ::rtl::OUStringBuffer aModNameBuf(aModName);
+            aModNameBuf.append(' ');
+            aModNameBuf.append('(');
+            aModNameBuf.append(sObjName);
+            aModNameBuf.append(')');
+            aModName = aModNameBuf.makeStringAndClear();
         }
     }
     pTabBar->InsertPage( (sal_uInt16)nKey, aModName );
@@ -263,7 +266,7 @@ ModulWindow* BasicIDEShell::CreateBasWin( const ScriptDocument& rDocument, const
     return pWin;
 }
 
-ModulWindow* BasicIDEShell::FindBasWin( const ScriptDocument& rDocument, const String& rLibName, const String& rModName, sal_Bool bCreateIfNotExist, sal_Bool bFindSuspended )
+ModulWindow* BasicIDEShell::FindBasWin( const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, const ::rtl::OUString& rModName, sal_Bool bCreateIfNotExist, sal_Bool bFindSuspended )
 {
     ModulWindow* pModWin = 0;
     IDEBaseWindow* pWin = aIDEWindowTable.First();
@@ -271,7 +274,7 @@ ModulWindow* BasicIDEShell::FindBasWin( const ScriptDocument& rDocument, const S
     {
         if ( ( !pWin->IsSuspended() || bFindSuspended ) && pWin->IsA( TYPE( ModulWindow ) ) )
         {
-            if ( !rLibName.Len() )
+            if ( rLibName.isEmpty() )
                 pModWin = (ModulWindow*)pWin;
             else if ( pWin->IsDocument( rDocument ) && pWin->GetLibName() == rLibName && pWin->GetName() == rModName )
                 pModWin = (ModulWindow*)pWin;

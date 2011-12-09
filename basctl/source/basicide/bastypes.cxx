@@ -192,28 +192,24 @@ void IDEBaseWindow::UpdateData()
 {
 }
 
-
-String IDEBaseWindow::GetTitle()
+::rtl::OUString IDEBaseWindow::GetTitle()
 {
-    return String();
+    return ::rtl::OUString();
 }
 
-
-
-String IDEBaseWindow::CreateQualifiedName()
+::rtl::OUString IDEBaseWindow::CreateQualifiedName()
 {
-    String aName;
-    if ( m_aLibName.Len() )
+    ::rtl::OUStringBuffer aName;
+    if ( !m_aLibName.isEmpty() )
     {
         LibraryLocation eLocation = m_aDocument.getLibraryLocation( m_aLibName );
-        aName = m_aDocument.getTitle( eLocation );
-        aName += '.';
-        aName += m_aLibName;
-        aName += '.';
-        aName += GetTitle();
+        aName.append(m_aDocument.getTitle(eLocation));
+        aName.append('.');
+        aName.append(m_aLibName);
+        aName.append('.');
+        aName.append(GetTitle());
     }
-
-    return aName;
+    return aName.makeStringAndClear();
 }
 
 void IDEBaseWindow::SetReadOnly( sal_Bool )

@@ -129,8 +129,8 @@ private:
     sal_uInt8           nStatus;
 
     ScriptDocument      m_aDocument;
-    String              m_aLibName;
-    String              m_aName;
+    ::rtl::OUString     m_aLibName;
+    ::rtl::OUString     m_aName;
 
 protected:
     virtual void    DoScroll( ScrollBar* pCurScrollBar );
@@ -161,8 +161,8 @@ public:
     // print page
     virtual void printPage( sal_Int32 nPage, Printer* pPrinter ) = 0;
 
-    virtual String  GetTitle();
-    String          CreateQualifiedName();
+    virtual ::rtl::OUString  GetTitle();
+    ::rtl::OUString          CreateQualifiedName();
     virtual BasicEntryDescriptor CreateEntryDescriptor() = 0;
 
     virtual sal_Bool    IsModified();
@@ -195,10 +195,10 @@ public:
                     GetDocument() const { return m_aDocument; }
     void            SetDocument( const ScriptDocument& rDocument ) { m_aDocument = rDocument; }
     bool            IsDocument( const ScriptDocument& rDocument ) const { return rDocument == m_aDocument; }
-    const String&   GetLibName() const { return m_aLibName; }
-    void            SetLibName( const String& aLibName ) { m_aLibName = aLibName; }
-    const String&   GetName() const { return m_aName; }
-    void            SetName( const String& aName ) { m_aName = aName; }
+    const ::rtl::OUString&   GetLibName() const { return m_aLibName; }
+    void            SetLibName( const ::rtl::OUString& aLibName ) { m_aLibName = aLibName; }
+    const ::rtl::OUString&   GetName() const { return m_aName; }
+    void            SetName( const ::rtl::OUString& aName ) { m_aName = aName; }
 };
 
 class LibInfoKey

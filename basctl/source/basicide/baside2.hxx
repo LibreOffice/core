@@ -324,7 +324,7 @@ private:
     BasicStatus         aStatus;
     SbModuleRef         xModule;
     ModulWindowLayout*  pLayout;
-    String              aCurPath;
+    ::rtl::OUString     aCurPath;
     ::rtl::OUString     m_aModule;
 
     long                BasicErrorHdl( StarBASIC* pBasic );
@@ -349,8 +349,7 @@ protected:
 public:
                     TYPEINFO();
 
-                    ModulWindow( ModulWindowLayout* pParent, const ScriptDocument& rDocument, String aLibName,
-                        String aName, ::rtl::OUString& aModule );
+    ModulWindow( ModulWindowLayout* pParent, const ScriptDocument& rDocument, ::rtl::OUString aLibName, ::rtl::OUString aName, ::rtl::OUString& aModule );
 
                     ~ModulWindow();
 
@@ -363,7 +362,7 @@ public:
     virtual sal_Int32 countPages( Printer* pPrinter );
     // print page
     virtual void printPage( sal_Int32 nPage, Printer* pPrinter );
-    virtual String  GetTitle();
+    virtual ::rtl::OUString  GetTitle();
     virtual BasicEntryDescriptor CreateEntryDescriptor();
     virtual sal_Bool    AllowUndo();
     virtual void    SetReadOnly( sal_Bool bReadOnly );
@@ -375,7 +374,7 @@ public:
 
     SbModule*       GetSbModule() { return xModule; }
     void            SetSbModule( SbModule* pModule ) { xModule = pModule; }
-    String          GetSbModuleName();
+    ::rtl::OUString GetSbModuleName();
 
     sal_Bool            CompileBasic();
     sal_Bool            BasicRun();

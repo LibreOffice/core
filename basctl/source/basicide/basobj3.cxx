@@ -232,7 +232,7 @@ bool RenameDialog( Window* pErrorParent, const ScriptDocument& rDocument, const 
 
 //----------------------------------------------------------------------------
 
-bool RemoveDialog( const ScriptDocument& rDocument, const String& rLibName, const String& rDlgName )
+bool RemoveDialog( const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, const ::rtl::OUString& rDlgName )
 {
     BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
     if ( pIDEShell )

@@ -275,8 +275,8 @@ sal_Bool ExtBasicTreeListBox::NotifyCopying( SvLBoxEntry* pTarget, SvLBoxEntry* 
 
 
 void BasicIDEShell::CopyDialogResources( Reference< io::XInputStreamProvider >& io_xISP,
-    const ScriptDocument& rSourceDoc, const String& rSourceLibName, const ScriptDocument& rDestDoc,
-    const String& rDestLibName, const String& rDlgName )
+                                         const ScriptDocument& rSourceDoc, const ::rtl::OUString& rSourceLibName, const ScriptDocument& rDestDoc,
+                                         const ::rtl::OUString& rDestLibName, const ::rtl::OUString& rDlgName )
 {
     if ( !io_xISP.is() )
         return;
@@ -354,13 +354,13 @@ sal_Bool ExtBasicTreeListBox::NotifyCopyingMoving( SvLBoxEntry* pTarget, SvLBoxE
     // get target shell and target library name
     BasicEntryDescriptor aDestDesc( GetEntryDescriptor( rpNewParent ) );
     const ScriptDocument& rDestDoc( aDestDesc.GetDocument() );
-    String aDestLibName( aDestDesc.GetLibName() );
+    ::rtl::OUString aDestLibName( aDestDesc.GetLibName() );
 
     // get source shell, library name and module/dialog name
     BasicEntryDescriptor aSourceDesc( GetEntryDescriptor( FirstSelected() ) );
     const ScriptDocument rSourceDoc( aSourceDesc.GetDocument() );
-    String aSourceLibName( aSourceDesc.GetLibName() );
-    String aSourceName( aSourceDesc.GetName() );
+    ::rtl::OUString aSourceLibName( aSourceDesc.GetLibName() );
+    ::rtl::OUString aSourceName( aSourceDesc.GetName() );
     BasicEntryType eType( aSourceDesc.GetType() );
 
     // get dispatcher
@@ -889,8 +889,8 @@ void ObjectPage::DeleteCurrent()
     DBG_ASSERT( aDocument.isAlive(), "ObjectPage::DeleteCurrent: no document!" );
     if ( !aDocument.isAlive() )
         return;
-    String aLibName( aDesc.GetLibName() );
-    String aName( aDesc.GetName() );
+    ::rtl::OUString aLibName( aDesc.GetLibName() );
+    ::rtl::OUString aName( aDesc.GetName() );
     BasicEntryType eType( aDesc.GetType() );
 
     if ( ( eType == OBJ_TYPE_MODULE && QueryDelModule( aName, this ) ) ||

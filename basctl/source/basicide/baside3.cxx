@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-
 #define _SDR_NOITEMS
 #define _SDR_NOTOUCH
 #define _SDR_NOTRANSFORM
@@ -59,6 +58,7 @@
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
+#include <comphelper/string.hxx>
 #include <comphelper/processfactory.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/urlobj.hxx>
@@ -83,7 +83,7 @@ DBG_NAME( DialogWindow )
 
 TYPEINIT1( DialogWindow, IDEBaseWindow );
 
-DialogWindow::DialogWindow( Window* pParent, const ScriptDocument& rDocument, String aLibName, String aName,
+DialogWindow::DialogWindow( Window* pParent, const ScriptDocument& rDocument, ::rtl::OUString aLibName, ::rtl::OUString aName,
     const com::sun::star::uno::Reference< com::sun::star::container::XNameContainer >& xDialogModel )
         :IDEBaseWindow( pParent, rDocument, aLibName, aName )
         ,pUndoMgr(NULL)
@@ -104,9 +104,8 @@ DialogWindow::DialogWindow( Window* pParent, const ScriptDocument& rDocument, St
     SetHelpId( HID_BASICIDE_DIALOGWINDOW );
 
     // set readonly mode for readonly libraries
-    ::rtl::OUString aOULibName( aLibName );
     Reference< script::XLibraryContainer2 > xDlgLibContainer( GetDocument().getLibraryContainer( E_DIALOGS ), UNO_QUERY );
-    if ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aOULibName ) && xDlgLibContainer->isLibraryReadOnly( aOULibName ) )
+    if ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aLibName ) && xDlgLibContainer->isLibraryReadOnly( aLibName ) )
         SetReadOnly( sal_True );
 
     if ( rDocument.isDocument() && rDocument.isReadOnly() )
@@ -676,7 +675,7 @@ Reference< container::XNameContainer > DialogWindow::GetDialog() const
     return pEditor->GetDialog();
 }
 
-sal_Bool DialogWindow::RenameDialog( const String& rNewName )
+sal_Bool DialogWindow::RenameDialog( const ::rtl::OUString& rNewName )
 {
     if ( !BasicIDE::RenameDialog( this, GetDocument(), GetLibName(), GetName(), rNewName ) )
         return sal_False;
@@ -729,12 +728,12 @@ sal_Bool DialogWindow::SaveDialog()
     aValue <<= (sal_Bool) sal_True;
     xFPControl->setValue(ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION, 0, aValue);
 
-    if ( aCurPath.Len() )
+    if ( !aCurPath.isEmpty() )
         xFP->setDisplayDirectory ( aCurPath );
 
     xFP->setDefaultName( ::rtl::OUString( GetName() ) );
 
-    String aDialogStr( IDEResId( RID_STR_STDDIALOGNAME ) );
+    ::rtl::OUString aDialogStr(ResId::toString(IDEResId(RID_STR_STDDIALOGNAME)));
     Reference< XFilterManager > xFltMgr(xFP, UNO_QUERY);
     xFltMgr->appendFilter( aDialogStr, String( RTL_CONSTASCII_USTRINGPARAM( "*.xdl" ) ) );
     xFltMgr->appendFilter( String( IDEResId( RID_STR_FILTER_ALLFILES ) ), String( RTL_CONSTASCII_USTRINGPARAM( FILTERMASK_ALL ) ) );
@@ -973,7 +972,7 @@ LanguageMismatchQueryBox::LanguageMismatchQueryBox( Window* pParent,
     SetImage( QueryBox::GetStandardImage() );
 }
 
-sal_Bool implImportDialog( Window* pWin, const String& rCurPath, const ScriptDocument& rDocument, const String& aLibName )
+sal_Bool implImportDialog( Window* pWin, const ::rtl::OUString& rCurPath, const ScriptDocument& rDocument, const ::rtl::OUString& aLibName )
 {
     sal_Bool bDone = sal_False;
 
@@ -993,11 +992,11 @@ sal_Bool implImportDialog( Window* pWin, const String& rCurPath, const ScriptDoc
     aValue <<= (sal_Bool) sal_True;
     xFPControl->setValue(ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION, 0, aValue);
 
-    String aCurPath( rCurPath );
-    if ( aCurPath.Len() )
+    ::rtl::OUString aCurPath( rCurPath );
+    if ( !aCurPath.isEmpty() )
         xFP->setDisplayDirectory ( aCurPath );
 
-    String aDialogStr( IDEResId( RID_STR_STDDIALOGNAME ) );
+    ::rtl::OUString aDialogStr(ResId::toString(IDEResId(RID_STR_STDDIALOGNAME)));
     Reference< XFilterManager > xFltMgr(xFP, UNO_QUERY);
     xFltMgr->appendFilter( aDialogStr, String( RTL_CONSTASCII_USTRINGPARAM( "*.xdl" ) ) );
     xFltMgr->appendFilter( String( IDEResId( RID_STR_FILTER_ALLFILES ) ), String( RTL_CONSTASCII_USTRINGPARAM( FILTERMASK_ALL ) ) );
@@ -1033,7 +1032,7 @@ sal_Bool implImportDialog( Window* pWin, const String& rCurPath, const ScriptDoc
             OSL_VERIFY( xProps->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext")) ) >>= xContext );
             ::xmlscript::importDialogModel( xInput, xDialogModel, xContext, rDocument.isDocument() ? rDocument.getDocument() : Reference< frame::XModel >() );
 
-            String aXmlDlgName;
+            ::rtl::OUString aXmlDlgName;
             Reference< beans::XPropertySet > xDialogModelPropSet( xDialogModel, UNO_QUERY );
             if( xDialogModelPropSet.is() )
             {
@@ -1047,14 +1046,14 @@ sal_Bool implImportDialog( Window* pWin, const String& rCurPath, const ScriptDoc
                 catch(const beans::UnknownPropertyException& )
                 {}
             }
-            bool bValidName = (aXmlDlgName.Len() != 0);
+            bool bValidName = !aXmlDlgName.isEmpty();
             OSL_ASSERT( bValidName );
             if( !bValidName )
                 return bDone;
 
             bool bDialogAlreadyExists = rDocument.hasDialog( aLibName, aXmlDlgName );
 
-            String aNewDlgName = aXmlDlgName;
+            ::rtl::OUString aNewDlgName = aXmlDlgName;
             enum NameClashMode
             {
                 NO_CLASH,
@@ -1064,9 +1063,9 @@ sal_Bool implImportDialog( Window* pWin, const String& rCurPath, const ScriptDoc
             NameClashMode eNameClashMode = NO_CLASH;
             if( bDialogAlreadyExists )
             {
-                String aQueryBoxTitle( IDEResId( RID_STR_DLGIMP_CLASH_TITLE ) );
-                String aQueryBoxText(  IDEResId( RID_STR_DLGIMP_CLASH_TEXT  ) );
-                aQueryBoxText.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "$(ARG1)" ) ), aXmlDlgName );
+                ::rtl::OUString aQueryBoxTitle(ResId::toString(IDEResId(RID_STR_DLGIMP_CLASH_TITLE)));
+                ::rtl::OUString aQueryBoxText(ResId::toString(IDEResId(RID_STR_DLGIMP_CLASH_TEXT)));
+                aQueryBoxText = ::comphelper::string::replace(aQueryBoxText, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("$(ARG1)")), aXmlDlgName);
 
                 NameClashQueryBox aQueryBox( pWin, aQueryBoxTitle, aQueryBoxText );
                 sal_uInt16 nRet = aQueryBox.Execute();
@@ -1128,8 +1127,8 @@ sal_Bool implImportDialog( Window* pWin, const String& rCurPath, const ScriptDoc
             bool bAddDialogLanguagesToLib = false;
             if( nOnlyInImportLanguageCount > 0 )
             {
-                String aQueryBoxTitle( IDEResId( RID_STR_DLGIMP_MISMATCH_TITLE ) );
-                String aQueryBoxText( IDEResId( RID_STR_DLGIMP_MISMATCH_TEXT ) );
+                ::rtl::OUString aQueryBoxTitle(ResId::toString(IDEResId(RID_STR_DLGIMP_MISMATCH_TITLE)));
+                ::rtl::OUString aQueryBoxText(ResId::toString(IDEResId(RID_STR_DLGIMP_MISMATCH_TEXT)));
                 LanguageMismatchQueryBox aQueryBox( pWin, aQueryBoxTitle, aQueryBoxText );
                 sal_uInt16 nRet = aQueryBox.Execute();
                 if( RET_YES == nRet )
@@ -1279,7 +1278,7 @@ sal_Bool DialogWindow::ImportDialog()
     DBG_CHKTHIS( DialogWindow, 0 );
 
     const ScriptDocument& rDocument = GetDocument();
-    String aLibName = GetLibName();
+    ::rtl::OUString aLibName = GetLibName();
     sal_Bool bRet = implImportDialog( this, aCurPath, rDocument, aLibName );
     return bRet;
 }
@@ -1309,7 +1308,7 @@ sal_Bool DialogWindow::IsModified()
     return pUndoMgr;
 }
 
-String DialogWindow::GetTitle()
+::rtl::OUString DialogWindow::GetTitle()
 {
     return GetName();
 }
@@ -1317,8 +1316,8 @@ String DialogWindow::GetTitle()
 BasicEntryDescriptor DialogWindow::CreateEntryDescriptor()
 {
     ScriptDocument aDocument( GetDocument() );
-    String aLibName( GetLibName() );
-    String aLibSubName;
+    ::rtl::OUString aLibName( GetLibName() );
+    ::rtl::OUString aLibSubName;
     LibraryLocation eLocation = aDocument.getLibraryLocation( aLibName );
     return BasicEntryDescriptor( aDocument, eLocation, aLibName, aLibSubName, GetName(), OBJ_TYPE_DIALOG );
 }

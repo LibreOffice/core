@@ -53,22 +53,21 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::io;
 
-
-DialogWindow* BasicIDEShell::CreateDlgWin( const ScriptDocument& rDocument, const String& rLibName, const String& rDlgName )
+DialogWindow* BasicIDEShell::CreateDlgWin( const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, const ::rtl::OUString& rDlgName )
 {
     bCreatingWindow = sal_True;
 
     sal_uLong nKey = 0;
     DialogWindow* pWin = 0;
-    String aLibName( rLibName );
-    String aDlgName( rDlgName );
+    ::rtl::OUString aLibName( rLibName );
+    ::rtl::OUString aDlgName( rDlgName );
 
-    if ( !aLibName.Len() )
-        aLibName = String::CreateFromAscii( "Standard" );
+    if ( aLibName.isEmpty() )
+        aLibName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Standard"));
 
     rDocument.getOrCreateLibrary( E_DIALOGS, aLibName );
 
-    if ( !aDlgName.Len() )
+    if ( aDlgName.isEmpty() )
         aDlgName = rDocument.createObjectName( E_DIALOGS, aLibName );
 
     // maybe there's a suspended one?
@@ -134,7 +133,7 @@ DialogWindow* BasicIDEShell::CreateDlgWin( const ScriptDocument& rDocument, cons
     return pWin;
 }
 
-DialogWindow* BasicIDEShell::FindDlgWin( const ScriptDocument& rDocument, const String& rLibName, const String& rDlgName, sal_Bool bCreateIfNotExist, sal_Bool bFindSuspended )
+DialogWindow* BasicIDEShell::FindDlgWin( const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, const ::rtl::OUString& rDlgName, sal_Bool bCreateIfNotExist, sal_Bool bFindSuspended )
 {
     DialogWindow* pDlgWin = 0;
     IDEBaseWindow* pWin = aIDEWindowTable.First();
@@ -142,7 +141,7 @@ DialogWindow* BasicIDEShell::FindDlgWin( const ScriptDocument& rDocument, const 
     {
         if ( ( !pWin->IsSuspended() || bFindSuspended ) && pWin->IsA( TYPE( DialogWindow ) ) )
         {
-            if ( !rLibName.Len() )
+            if ( rLibName.isEmpty() )
                 pDlgWin = (DialogWindow*)pWin;
             else if ( pWin->IsDocument( rDocument ) && pWin->GetLibName() == rLibName && pWin->GetName() == rDlgName )
                 pDlgWin = (DialogWindow*)pWin;

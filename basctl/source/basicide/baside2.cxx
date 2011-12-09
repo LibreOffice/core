@@ -168,8 +168,8 @@ void lcl_ConvertTabsToSpaces( String& rLine )
     }
 }
 
-ModulWindow::ModulWindow( ModulWindowLayout* pParent, const ScriptDocument& rDocument, String aLibName,
-                          String aName, ::rtl::OUString& aModule )
+ModulWindow::ModulWindow( ModulWindowLayout* pParent, const ScriptDocument& rDocument, ::rtl::OUString aLibName,
+                          ::rtl::OUString aName, ::rtl::OUString& aModule )
         :IDEBaseWindow( pParent, rDocument, aLibName, aName )
         ,aXEditorWindow( this )
         ,m_aModule( aModule )
@@ -304,7 +304,7 @@ sal_Bool ModulWindow::BasicExecute()
     {
         if ( !aDocument.allowMacros() )
         {
-            WarningBox( this, WB_OK, String( IDEResId( RID_STR_CANNOTRUNMACRO ) ) ).Execute();
+            WarningBox( this, WB_OK, ResId::toString( IDEResId( RID_STR_CANNOTRUNMACRO ) ) ).Execute();
             return sal_False;
         }
     }
@@ -436,13 +436,13 @@ sal_Bool ModulWindow::LoadBasic()
                     ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.FilePicker" ) ), aServiceType ), UNO_QUERY );
     }
 
-    if ( aCurPath.Len() )
+    if ( !aCurPath.isEmpty() )
         xFP->setDisplayDirectory ( aCurPath );
 
     Reference< XFilterManager > xFltMgr(xFP, UNO_QUERY);
-    xFltMgr->appendFilter( String( RTL_CONSTASCII_USTRINGPARAM( "BASIC" ) ), String( RTL_CONSTASCII_USTRINGPARAM( "*.bas" ) ) );
-    xFltMgr->appendFilter( String( IDEResId( RID_STR_FILTER_ALLFILES ) ), String( RTL_CONSTASCII_USTRINGPARAM( FILTERMASK_ALL ) ) );
-    xFltMgr->setCurrentFilter( String( RTL_CONSTASCII_USTRINGPARAM( "BASIC" ) ) );
+    xFltMgr->appendFilter( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BASIC" ) ), ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "*.bas" ) ) );
+    xFltMgr->appendFilter( ResId::toString(IDEResId( RID_STR_FILTER_ALLFILES ) ), ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( FILTERMASK_ALL ) ) );
+    xFltMgr->setCurrentFilter( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BASIC" ) ) );
 
     if( xFP->execute() == RET_OK )
     {
@@ -469,7 +469,7 @@ sal_Bool ModulWindow::LoadBasic()
                 bDone = sal_True;
         }
         else
-            ErrorBox( this, WB_OK | WB_DEF_OK, String( IDEResId( RID_STR_COULDNTREAD ) ) ).Execute();
+            ErrorBox( this, WB_OK | WB_DEF_OK, ResId::toString( IDEResId( RID_STR_COULDNTREAD ) ) ).Execute();
     }
     return bDone;
 }
@@ -496,13 +496,13 @@ sal_Bool ModulWindow::SaveBasicSource()
     aValue <<= (sal_Bool) sal_True;
     xFPControl->setValue(ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION, 0, aValue);
 
-    if ( aCurPath.Len() )
+    if ( !aCurPath.isEmpty() )
         xFP->setDisplayDirectory ( aCurPath );
 
     Reference< XFilterManager > xFltMgr(xFP, UNO_QUERY);
-    xFltMgr->appendFilter( String( RTL_CONSTASCII_USTRINGPARAM( "BASIC" ) ), String( RTL_CONSTASCII_USTRINGPARAM( "*.bas" ) ) );
-    xFltMgr->appendFilter( String( IDEResId( RID_STR_FILTER_ALLFILES ) ), String( RTL_CONSTASCII_USTRINGPARAM( FILTERMASK_ALL ) ) );
-    xFltMgr->setCurrentFilter( String( RTL_CONSTASCII_USTRINGPARAM( "BASIC" ) ) );
+    xFltMgr->appendFilter( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BASIC" ) ), ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "*.bas" ) ) );
+    xFltMgr->appendFilter( ResId::toString(IDEResId( RID_STR_FILTER_ALLFILES ) ), ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( FILTERMASK_ALL ) ) );
+    xFltMgr->setCurrentFilter( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BASIC" ) ) );
 
     if( xFP->execute() == RET_OK )
     {
@@ -530,14 +530,13 @@ sal_Bool ModulWindow::SaveBasicSource()
     return bDone;
 }
 
-sal_Bool implImportDialog( Window* pWin, const String& rCurPath, const ScriptDocument& rDocument, const String& aLibName );
+sal_Bool implImportDialog( Window* pWin, const ::rtl::OUString& rCurPath, const ScriptDocument& rDocument, const ::rtl::OUString& aLibName );
 
 sal_Bool ModulWindow::ImportDialog()
 {
     const ScriptDocument& rDocument = GetDocument();
-    String aLibName = GetLibName();
-    sal_Bool bRet = implImportDialog( this, aCurPath, rDocument, aLibName );
-    return bRet;
+    ::rtl::OUString aLibName = GetLibName();
+    return implImportDialog( this, aCurPath, rDocument, aLibName );
 }
 
 sal_Bool ModulWindow::ToggleBreakPoint( sal_uLong nLine )
@@ -667,7 +666,7 @@ long ModulWindow::BasicErrorHdl( StarBASIC * pBasic )
     // ReturnWert: BOOL
     //  FALSE:  cancel
     //  TRUE:   go on....
-    String aErrorText( pBasic->GetErrorText() );
+    ::rtl::OUString aErrorText( pBasic->GetErrorText() );
     sal_uInt16 nErrorLine = pBasic->GetLine() - 1;
     sal_uInt16 nErrCol1 = pBasic->GetCol1();
     sal_uInt16 nErrCol2 = pBasic->GetCol2();
@@ -677,18 +676,17 @@ long ModulWindow::BasicErrorHdl( StarBASIC * pBasic )
     AssertValidEditEngine();
     GetEditView()->SetSelection( TextSelection( TextPaM( nErrorLine, nErrCol1 ), TextPaM( nErrorLine, nErrCol2 ) ) );
 
-    String aErrorTextPrefix;
+    ::rtl::OUStringBuffer aErrorTextPrefixBuf;
     if( pBasic->IsCompilerError() )
-    {
-        aErrorTextPrefix = String( IDEResId( RID_STR_COMPILEERROR ) );
-    }
+        aErrorTextPrefixBuf.append(ResId::toString(IDEResId(RID_STR_COMPILEERROR)));
     else
     {
-        aErrorTextPrefix = String( IDEResId( RID_STR_RUNTIMEERROR ) );
-        aErrorTextPrefix += StarBASIC::GetVBErrorCode( pBasic->GetErrorCode() );
-        aErrorTextPrefix += ' ';
+        aErrorTextPrefixBuf.append(ResId::toString(IDEResId(RID_STR_RUNTIMEERROR)));
+        aErrorTextPrefixBuf.append(StarBASIC::GetVBErrorCode(pBasic->GetErrorCode()));
+        aErrorTextPrefixBuf.append(' ');
         pLayout->GetStackWindow().UpdateCalls();
     }
+    ::rtl::OUString aErrorTextPrefix(aErrorTextPrefixBuf.makeStringAndClear());
     // if other basic, the IDE should try to display the correct module
     sal_Bool bMarkError = ( pBasic == GetBasic() ) ? sal_True : sal_False;
     if ( bMarkError )
@@ -765,12 +763,12 @@ void ModulWindow::BasicAddWatch()
     if ( !GetEditView()->HasSelection() )
     {
         TextPaM aWordStart;
-        String aWord = GetEditEngine()->GetWord( GetEditView()->GetSelection().GetEnd(), &aWordStart );
-        if ( aWord.Len() )
+        ::rtl::OUString aWord = GetEditEngine()->GetWord( GetEditView()->GetSelection().GetEnd(), &aWordStart );
+        if ( !aWord.isEmpty() )
         {
             TextSelection aSel( aWordStart );
             sal_uInt16& rIndex = aSel.GetEnd().GetIndex();
-            rIndex = rIndex + aWord.Len();
+            rIndex = rIndex + aWord.getLength();
             GetEditView()->SetSelection( aSel );
             bAdd = sal_True;
         }
@@ -1187,22 +1185,18 @@ void ModulWindow::GoOnTop()
     BasicIDEGlobals::GetShell()->GetViewFrame()->ToTop();
 }
 
-String ModulWindow::GetSbModuleName()
+::rtl::OUString ModulWindow::GetSbModuleName()
 {
-    String aModuleName;
+    ::rtl::OUString aModuleName;
     if ( XModule().Is() )
         aModuleName = xModule->GetName();
     return aModuleName;
 }
 
-
-
-String ModulWindow::GetTitle()
+::rtl::OUString ModulWindow::GetTitle()
 {
     return GetSbModuleName();
 }
-
-
 
 void ModulWindow::FrameWindowMoved()
 {
