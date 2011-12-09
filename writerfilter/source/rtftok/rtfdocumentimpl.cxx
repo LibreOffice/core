@@ -1274,6 +1274,7 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
             break;
         case RTF_PAR:
             {
+                checkFirstRun();
                 checkNeedPap();
                 if (!m_pCurrentBuffer)
                     parBreak();
