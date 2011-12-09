@@ -2581,7 +2581,7 @@ bool SwDoc::ContainsHiddenChars() const
     for( sal_uLong n = GetNodes().Count(); n; )
     {
         SwNode* pNd = GetNodes()[ --n ];
-        if ( ND_TEXTNODE == pNd->GetNodeType() &&
+        if ( pNd->IsTxtNode() &&
              ((SwTxtNode*)pNd)->HasHiddenCharAttribute( false ) )
             return true;
     }

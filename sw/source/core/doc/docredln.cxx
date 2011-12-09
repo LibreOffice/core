@@ -3251,14 +3251,16 @@ void SwRedline::InvalidateRange()       // das Layout anstossen
 
     SwUpdateAttr aHt( 0, 0, RES_FMT_CHG );
     SwNodes& rNds = GetDoc()->GetNodes();
-    SwNode* pNd;
     for( sal_uLong n = nSttNd; n <= nEndNd; ++n )
-        if( ND_TEXTNODE == ( pNd = rNds[ n ] )->GetNodeType() )
+    {
+        SwNode* pNd = rNds[n];
+        if( pNd->IsTxtNode() )
         {
             aHt.nStart = n == nSttNd ? nSttCnt : 0;
             aHt.nEnd = n == nEndNd ? nEndCnt : ((SwTxtNode*)pNd)->GetTxt().Len();
             ((SwTxtNode*)pNd)->ModifyNotification( &aHt, &aHt );
         }
+    }
 }
 
 /*************************************************************************
