@@ -1038,11 +1038,11 @@ sal_Bool ProgressMonitor::impl_debug_checkParameter (
 ) {
     // Check "rTopic"
     if ( &rTopic        ==  NULL    ) return sal_False ;    // NULL-pointer for reference ???!!!
-    if ( rTopic.getLength ()    <   1       ) return sal_False ;    // ""
+    if ( rTopic.isEmpty()       ) return sal_False ;    // ""
 
     // Check "rText"
     if ( &rText         ==  NULL    ) return sal_False ;    // NULL-pointer for reference ???!!!
-    if ( rText.getLength () <   1       ) return sal_False ;    // ""
+    if ( rText.isEmpty()       ) return sal_False ;    // ""
 
     // "bbeforeProgress" is valid in everyway!
 
@@ -1055,7 +1055,7 @@ sal_Bool ProgressMonitor::impl_debug_checkParameter ( const OUString& rTopic, sa
 {
     // Check "rTopic"
     if ( &rTopic        ==  NULL    ) return sal_False ;    // NULL-pointer for reference ???!!!
-    if ( rTopic.getLength ()    <   1       ) return sal_False ;    // ""
+    if ( rTopic.isEmpty()      ) return sal_False ;    // ""
 
     // "bbeforeProgress" is valid in everyway!
 

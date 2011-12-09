@@ -156,7 +156,7 @@ void VCLXAccessibleBox::ProcessWindowEvent (const VclWindowEvent& rVclWindowEven
                 if ( xText.is() )
                 {
                     ::rtl::OUString sText = xText->getSelectedText();
-                    if ( !sText.getLength() )
+                    if ( sText.isEmpty() )
                         sText = xText->getText();
                     pList->UpdateSelection (sText);
                 }

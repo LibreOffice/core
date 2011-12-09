@@ -607,7 +607,7 @@ awt::FontDescriptor SAL_CALL VCLXAccessibleToolBoxItem::getFontMetrics( const Re
             sRet = m_pToolBox->GetHelpText( m_nItemId );
         else
             sRet = m_pToolBox->GetQuickHelpText( m_nItemId );
-        if ( !sRet.getLength() )
+        if ( sRet.isEmpty() )
             // no help text set, so use item text
             sRet = m_pToolBox->GetItemText( m_nItemId );
     }

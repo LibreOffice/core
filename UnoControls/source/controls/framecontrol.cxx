@@ -203,7 +203,7 @@ void SAL_CALL FrameControl::createPeer( const   Reference< XToolkit >&      xToo
     BaseControl::createPeer( xToolkit, xParentPeer );
     if ( impl_getPeerWindow().is() )
     {
-        if( m_sComponentURL.getLength() > 0 )
+        if( !m_sComponentURL.isEmpty() )
         {
             impl_createFrame( getPeer(), m_sComponentURL, m_seqLoaderArguments );
         }

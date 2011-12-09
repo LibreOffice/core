@@ -274,7 +274,7 @@ bool MediaWindow::executeMediaURLDialog(Window* /* pParent */,
     {
         for( sal_Int32 nIndex = 0; nIndex >= 0; )
         {
-            if( aAllTypes.getLength() )
+            if( !aAllTypes.isEmpty() )
                 aAllTypes += aSeparator;
 
             ( aAllTypes += aWildcard ) += aFilters[ i ].second.getToken( 0, ';', nIndex );
@@ -290,7 +290,7 @@ bool MediaWindow::executeMediaURLDialog(Window* /* pParent */,
 
         for( sal_Int32 nIndex = 0; nIndex >= 0; )
         {
-            if( aTypes.getLength() )
+            if( !aTypes.isEmpty() )
                 aTypes += aSeparator;
 
             ( aTypes += aWildcard ) += aFilters[ i ].second.getToken( 0, ';', nIndex );
@@ -334,10 +334,10 @@ bool MediaWindow::executeMediaURLDialog(Window* /* pParent */,
             }
         }
     }
-    else if( rURL.getLength() )
+    else if( !rURL.isEmpty() )
         rURL = ::rtl::OUString();
 
-    return( rURL.getLength() > 0 );
+    return( !rURL.isEmpty() );
 }
 
 // -------------------------------------------------------------------------

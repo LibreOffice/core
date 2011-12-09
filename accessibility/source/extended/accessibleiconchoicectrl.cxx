@@ -211,7 +211,7 @@ namespace accessibility
         ensureAlive();
 
         ::rtl::OUString sName = getCtrl()->GetAccessibleName();
-        if ( sName.getLength() == 0 )
+        if ( sName.isEmpty() )
             sName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IconChoiceControl" ) );
         return sName;
     }
