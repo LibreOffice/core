@@ -1277,7 +1277,12 @@ public:
 
         if ( pCell )
         {
-            if (pCell->GetCellType() != CELLTYPE_NOTE)
+            if (pCell->GetCellType() == CELLTYPE_FORMULA && pCell->GetErrorCode())
+            {
+                // Error cell is evaluated as string (for now).
+                aCellStr = ScGlobal::GetErrorString(pCell->GetErrorCode());
+            }
+            else if (pCell->GetCellType() != CELLTYPE_NOTE)
             {
                 sal_uLong nFormat = mrTab.GetNumberFormat( static_cast<SCCOL>(rEntry.nField), nRow );
                 ScCellFormat::GetInputString(pCell, nFormat, aCellStr, *mrDoc.GetFormatTable());

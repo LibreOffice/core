@@ -1575,9 +1575,9 @@ void ScColumn::GetFilterEntries(SCROW nStartRow, SCROW nEndRow, TypedScStrCollec
 
     while ( (nIndex < nCount) ? ((nRow=pItems[nIndex].nRow) <= nEndRow) : false )
     {
-        ScBaseCell*          pCell    = pItems[nIndex].pCell;
-        TypedStrData*        pData;
-        sal_uLong                nFormat  = GetNumberFormat( nRow );
+        ScBaseCell* pCell = pItems[nIndex].pCell;
+        TypedStrData* pData = NULL;
+        sal_uLong nFormat = GetNumberFormat( nRow );
 
         ScCellFormat::GetInputString( pCell, nFormat, aString, *pFormatter );
 
@@ -1585,7 +1585,7 @@ void ScColumn::GetFilterEntries(SCROW nStartRow, SCROW nEndRow, TypedScStrCollec
             pData = new TypedStrData( aString );
         else
         {
-            double nValue;
+            double nValue = 0.0;
 
             switch ( pCell->GetCellType() )
             {
@@ -1594,26 +1594,40 @@ void ScColumn::GetFilterEntries(SCROW nStartRow, SCROW nEndRow, TypedScStrCollec
                     break;
 
                 case CELLTYPE_FORMULA:
-                    nValue = ((ScFormulaCell*)pCell)->GetValue();
-                    break;
+                {
+                    ScFormulaCell* pFC = static_cast<ScFormulaCell*>(pCell);
+                    sal_uInt16 nErr = pFC->GetErrCode();
+                    if (nErr)
+                    {
+                        // Error cell is evaluated as string (for now).
+                        String aErr = ScGlobal::GetErrorString(nErr);
+                        if (aErr.Len())
+                            pData = new TypedStrData(aErr);
+                    }
+                    else
+                        nValue = pFC->GetValue();
+                }
+                break;
 
                 default:
-                    nValue = 0.0;
+                    ;
             }
 
-            if (pFormatter)
+            if (!pData)
             {
-                short nType = pFormatter->GetType(nFormat);
-                if ((nType & NUMBERFORMAT_DATE) && !(nType & NUMBERFORMAT_TIME))
+                if (pFormatter)
                 {
-                    // special case for date values.  Disregard the time
-                    // element if the number format is of date type.
-                    nValue = ::rtl::math::approxFloor(nValue);
-                    bHasDates = true;
+                    short nType = pFormatter->GetType(nFormat);
+                    if ((nType & NUMBERFORMAT_DATE) && !(nType & NUMBERFORMAT_TIME))
+                    {
+                        // special case for date values.  Disregard the time
+                        // element if the number format is of date type.
+                        nValue = ::rtl::math::approxFloor(nValue);
+                        bHasDates = true;
+                    }
                 }
+                pData = new TypedStrData( aString, nValue, SC_STRTYPE_VALUE );
             }
-
-            pData = new TypedStrData( aString, nValue, SC_STRTYPE_VALUE );
         }
 
         if ( !rStrings.Insert( pData ) )
