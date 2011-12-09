@@ -47,7 +47,7 @@ PATCH_FILES=\
 .ENDIF
 
 
-.IF "$(GUI)$(COM)"=="WNTGCC"
+.IF "$(GUI)$(COM)"=="WNTMSC"
 CONFIGURE_DIR=.
 BUILD_DIR=src
 
@@ -62,11 +62,8 @@ BUILD_DIR=src/interfaces/libpq
 #               (which we don't install anyway for now...)
 # --sysconfdir: config files. Ideally, we would like that to be "the same as the platform default",
 #               but that's quite some guessing work.
-.IF "$(VERBOSE)"==""
-MAKE_SILENT=-s
-.ENDIF
-CONFIGURE_ACTION = ./configure --without-readline
-BUILD_ACTION = make $(MAKE_SILENT) -j$(GMAKE_MODULE_PARALLELISM) all-static-lib
+CONFIGURE_ACTION = ./configure --without-readline --disable-shared
+BUILD_ACTION = make -j$(GMAKE_MODULE_PARALLELISM)
 .ENDIF
 
 # --- Targets ------------------------------------------------------

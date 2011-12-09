@@ -47,9 +47,9 @@
 -CPP_OBJS=.\Release/
 -!ENDIF
 -
-+OUTDIR=$(OUTDIR)/lib
-+INTDIR=$(OUTDIR)/lib
-+CPP_OBJS=$(OUTDIR)/slo/
++OUTDIR=.
++INTDIR=.
++CPP_OBJS=./
  
 -ALL : config "$(OUTDIR)\$(OUTFILENAME).lib" "$(OUTDIR)\$(OUTFILENAME).dll"
 +ALL : config "$(OUTDIR)\$(OUTFILENAME).lib"
