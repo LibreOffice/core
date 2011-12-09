@@ -54,5 +54,8 @@ localinstall :
     $(RM) -r $(installationtest_instpath)
     $(MKDIRHIER) $(installationtest_instpath)
     ooinstall $(my_linkoo) $(installationtest_instpath)/opt
+.IF "$(DISABLE_LINKOO)" == "TRUE"
+    install-gdb-printers -L
+.END
 cpptest : localinstall
 .END
