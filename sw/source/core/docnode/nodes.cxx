@@ -653,7 +653,7 @@ sal_Bool SwNodes::_MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
                         {
                             // im UndoNodes-Array spendieren wir einen
                             // Platzhalter
-                            new SwNode( aIdx, ND_SECTIONDUMMY );
+                            new SwDummySectionNode( aIdx );
                         }
                         else
                         {
@@ -728,7 +728,7 @@ sal_Bool SwNodes::_MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
                     aIdx -= nInsPos;
                     nInsPos = 0;
                 }
-                new SwNode( aIdx, ND_SECTIONDUMMY );
+                new SwDummySectionNode( aIdx );
                 aRg.aEnd--;
                 aIdx--;
                 break;
@@ -1929,7 +1929,7 @@ void SwNodes::_CopyNodes( const SwNodeRange& rRange,
                 // dann alle Nodes der Tabelle in die akt. Zelle kopieren
                 // fuer den TabellenNode einen DummyNode einfuegen?
                 if( bTblInsDummyNode )
-                    new SwNode( aInsPos, ND_SECTIONDUMMY );
+                    new SwDummySectionNode( aInsPos );
 
                 for( aRg.aStart++; aRg.aStart.GetIndex() <
                     pAktNode->EndOfSectionIndex();
@@ -1937,7 +1937,7 @@ void SwNodes::_CopyNodes( const SwNodeRange& rRange,
                 {
                     // fuer den Box-StartNode einen DummyNode einfuegen?
                     if( bTblInsDummyNode )
-                        new SwNode( aInsPos, ND_SECTIONDUMMY );
+                        new SwDummySectionNode( aInsPos );
 
                     SwStartNode* pSttNd = aRg.aStart.GetNode().GetStartNode();
                     _CopyNodes( SwNodeRange( *pSttNd, + 1,
@@ -1946,12 +1946,12 @@ void SwNodes::_CopyNodes( const SwNodeRange& rRange,
 
                     // fuer den Box-EndNode einen DummyNode einfuegen?
                     if( bTblInsDummyNode )
-                        new SwNode( aInsPos, ND_SECTIONDUMMY );
+                        new SwDummySectionNode( aInsPos );
                     aRg.aStart = *pSttNd->EndOfSectionNode();
                 }
                 // fuer den TabellenEndNode einen DummyNode einfuegen?
                 if( bTblInsDummyNode )
-                    new SwNode( aInsPos, ND_SECTIONDUMMY );
+                    new SwDummySectionNode( aInsPos );
                 aRg.aStart = *pAktNode->EndOfSectionNode();
             }
             else

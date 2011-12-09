@@ -114,7 +114,9 @@ protected:
     SwNode( SwNodes& rNodes, sal_uLong nPos, const sal_uInt8 nNodeId );
 
 public:
-    virtual ~SwNode();
+    // the = 0 forces the class to be an abstract base class, but the dtor can be still called
+    // from subclasses
+    virtual ~SwNode() = 0;
 
 #ifdef DBG_UTIL
     long GetSerial() const { return m_nSerial; }
@@ -387,7 +389,9 @@ class SW_DLLPUBLIC SwCntntNode: public SwModify, public SwNode, public SwIndexRe
 protected:
     SwCntntNode( const SwNodeIndex &rWhere, const sal_uInt8 nNodeType,
                 SwFmtColl *pFmtColl );
-    virtual ~SwCntntNode();
+    // the = 0 forces the class to be an abstract base class, but the dtor can be still called
+    // from subclasses
+    virtual ~SwCntntNode() = 0;
 
     //  Attribute-set for all auto attributes of a CntntNode.
     //  (e.g. TxtNode or NoTxtNode).
@@ -601,6 +605,21 @@ public:
 };
 
 
+//----------------
+// SwDummySectionNode
+//----------------
+
+// This class is internal. And quite frankly I don't know what ND_SECTIONDUMMY is for,
+// the class has been merely created to replace "SwNode( ND_SECTIONDUMMY )", the only case
+// of instantiating SwNode directly. Now SwNode can be an abstract base class.
+class SwDummySectionNode
+    : private SwNode
+{
+private:
+    friend class SwNodes;
+    SwDummySectionNode( const SwNodeIndex &rWhere );
+};
+
 
 inline       SwEndNode   *SwNode::GetEndNode()
 {
@@ -756,6 +775,12 @@ inline const SfxPoolItem& SwCntntNode::GetAttr( sal_uInt16 nWhich,
 {
     return GetSwAttrSet().Get( nWhich, bInParents );
 }
+
+inline SwDummySectionNode::SwDummySectionNode( const SwNodeIndex &rWhere )
+    : SwNode( rWhere, ND_SECTIONDUMMY )
+{
+}
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
