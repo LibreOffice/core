@@ -647,6 +647,30 @@ public:
         @param      offset   the offset.
         @param      ch       a <code>char</code>.
         @return     this string buffer.
+
+        @since LibreOffice 3.6
+     */
+    OUStringBuffer & insert(sal_Int32 offset, char c)
+    {
+        sal_Unicode u = c;
+        return insert( offset, &u, 1 );
+    }
+
+    /**
+        Inserts the string representation of the <code>char</code>
+        argument into this string buffer.
+
+        The second argument is inserted into the contents of this string
+        buffer at the position indicated by <code>offset</code>. The length
+        of this string buffer increases by one.
+        <p>
+        The offset argument must be greater than or equal to
+        <code>0</code>, and less than or equal to the length of this
+        string buffer.
+
+        @param      offset   the offset.
+        @param      ch       a <code>char</code>.
+        @return     this string buffer.
      */
     OUStringBuffer & insert(sal_Int32 offset, sal_Unicode c)
     {
