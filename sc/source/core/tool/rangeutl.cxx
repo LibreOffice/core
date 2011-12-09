@@ -898,8 +898,7 @@ static void lcl_appendCellRangeAddress(
 void ScRangeStringConverter::GetStringFromXMLRangeString( OUString& rString, const OUString& rXMLRange, ScDocument* pDoc )
 {
     FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
-    const OUString aRangeSep = ScCompiler::GetNativeSymbol(ocSep);
-    const sal_Unicode cSep = ' ';
+    const sal_Unicode cSep = ' ', cSepNew = ';';
     const sal_Unicode cQuote = '\'';
 
     OUStringBuffer aRetStr;
@@ -984,7 +983,7 @@ void ScRangeStringConverter::GetStringFromXMLRangeString( OUString& rString, con
             if (bFirst)
                 bFirst = false;
             else
-                aRetStr.append(aRangeSep);
+                aRetStr.append(cSepNew);
 
             lcl_appendCellRangeAddress(aRetStr, pDoc, aCell1, aCell2, aExtInfo1, aExtInfo2);
         }
@@ -1006,7 +1005,7 @@ void ScRangeStringConverter::GetStringFromXMLRangeString( OUString& rString, con
             if (bFirst)
                 bFirst = false;
             else
-                aRetStr.append(aRangeSep);
+                aRetStr.append(cSepNew);
 
             lcl_appendCellAddress(aRetStr, pDoc, aCell, aExtInfo);
         }
