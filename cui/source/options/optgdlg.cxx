@@ -1279,7 +1279,7 @@ OfaLanguagesTabPage::OfaLanguagesTabPage( Window* pParent, const SfxItemSet& rSe
 
     String aUILang(aStr);
     aUILang += String::CreateFromAscii(" - ");
-    aUILang += pLanguageTable->GetString( Application::GetSettings().GetUILanguage() );
+    aUILang += pLanguageTable->GetString( Application::GetSettings().GetUILanguage(), true );
 
     aUserInterfaceLB.InsertEntry(aUILang);
     aUserInterfaceLB.SetEntryData(0, 0);
@@ -1307,7 +1307,7 @@ OfaLanguagesTabPage::OfaLanguagesTabPage( Window* pParent, const SfxItemSet& rSe
             if (aLang != LANGUAGE_DONTKNOW)
             {
                 //sal_uInt16 p = aUserInterfaceLB.InsertLanguage(aLang);
-                String aLangStr( pLanguageTable->GetString( aLang ) );
+                String aLangStr( pLanguageTable->GetString( aLang, true ) );
                 sal_uInt16 p = aUserInterfaceLB.InsertEntry(aLangStr);
                 aUserInterfaceLB.SetEntryData(p, (void*)(i+1));
             }

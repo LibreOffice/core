@@ -43,7 +43,13 @@ public:
     SvtLanguageTable();
     ~SvtLanguageTable();
 
-    const String&   GetString( const LanguageType eType ) const;
+    /**
+        @param bUserInterfaceSelection
+            If TRUE, don't replace an UI-only locale. Only use for
+                     Tools->Options->LanguageSettings->UserInterface listbox.
+            If FALSE, do replace.
+     */
+    const String&   GetString( const LanguageType eType, bool bUserInterfaceSelection = false ) const;
     LanguageType    GetType( const String& rStr ) const;
 
     sal_uInt32      GetEntryCount() const;
