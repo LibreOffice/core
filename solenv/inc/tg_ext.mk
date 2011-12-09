@@ -146,22 +146,22 @@ $(MISC)/%.unpack : $(TARFILE_LOCATION2)/%.tar
 
 $(MISC)/%.unpack : $(TARFILE_LOCATION2)/%.zip
     @-$(RM) $@
-    @noop $(assign UNPACKCMD := cd .. && unzip $(unzip_quiet_switch)  -o $(TARFILE_LOCATION)/$(TARFILE_MD5)-$(TARFILE_NAME).zip)
+    @noop $(assign UNPACKCMD := unzip $(unzip_quiet_switch)  -o $(TARFILE_LOCATION)/$(TARFILE_MD5)-$(TARFILE_NAME).zip)
     @$(TYPE) $(mktmp $(UNPACKCMD)) > $@.$(INPATH)
     @$(RENAME) $@.$(INPATH) $@
 
 $(MISC)/%.unpack : $(TARFILE_LOCATION2)/%.oxt
     @-$(RM) $@
-    @noop $(assign UNPACKCMD := cd .. && unzip $(unzip_quiet_switch)  -o $(TARFILE_LOCATION)/$(TARFILE_MD5)-$(TARFILE_NAME).oxt)
+    @noop $(assign UNPACKCMD := unzip $(unzip_quiet_switch)  -o $(TARFILE_LOCATION)/$(TARFILE_MD5)-$(TARFILE_NAME).oxt)
     @$(TYPE) $(mktmp $(UNPACKCMD)) > $@.$(INPATH)
     @$(RENAME) $@.$(INPATH) $@
 
 $(MISC)/%.unpack : $(TARFILE_LOCATION2)/%.jar
     @-$(RM) $@
 .IF "$(OS)"=="SOLARIS"
-    @noop $(assign UNPACKCMD := cd .. && jar xf $(TARFILE_LOCATION)/$(TARFILE_MD5)-$(TARFILE_NAME).jar)
+    @noop $(assign UNPACKCMD := jar xf $(TARFILE_LOCATION)/$(TARFILE_MD5)-$(TARFILE_NAME).jar)
 .ELSE			# "$(OS)"=="SOLARIS"
-    @noop $(assign UNPACKCMD := cd .. && unzip $(unzip_quiet_switch)  -o $(TARFILE_LOCATION)/$(TARFILE_MD5)-$(TARFILE_NAME).jar)
+    @noop $(assign UNPACKCMD := unzip $(unzip_quiet_switch)  -o $(TARFILE_LOCATION)/$(TARFILE_MD5)-$(TARFILE_NAME).jar)
 .ENDIF			# "$(OS)"=="SOLARIS"
     @$(TYPE) $(mktmp $(UNPACKCMD)) > $@.$(INPATH)
     @$(RENAME) $@.$(INPATH) $@
