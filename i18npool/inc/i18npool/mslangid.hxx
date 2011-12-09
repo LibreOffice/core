@@ -203,8 +203,19 @@ public:
 
     /** Map an obsolete user defined LANGID (see lang.h
         LANGUAGE_OBSOLETE_USER_...) to the new value defined by MS in the
-        meantime. */
-    static LanguageType getReplacementForObsoleteLanguage( LanguageType nLang );
+        meantime.
+
+        Also used to map UI localizations using reserved ISO codes to something
+        "official" but not identical in order to not pollute documents with
+        invalid ISO codes.
+
+        @param bUserInterfaceSelection
+            If TRUE, don't replace such UI-only locale. Only use for
+                     Tools->Options->LanguageSettings->UserInterface listbox.
+            If FALSE, do replace.
+     */
+    static LanguageType getReplacementForObsoleteLanguage( LanguageType nLang,
+            bool bUserInterfaceSelection = false );
 
 
     /** @ATTENTION: these are _ONLY_ to be called by the application's

@@ -379,7 +379,7 @@ sal_Int16 MsLangId::getScriptType( LanguageType nLang )
 
 
 // static
-LanguageType MsLangId::getReplacementForObsoleteLanguage( LanguageType nLang )
+LanguageType MsLangId::getReplacementForObsoleteLanguage( LanguageType nLang, bool bUserInterfaceSelection )
 {
     switch (nLang)
     {
@@ -433,7 +433,8 @@ LanguageType MsLangId::getReplacementForObsoleteLanguage( LanguageType nLang )
          // Do not use ca-XV for document content.
          /* TODO: remove in case we implement BCP47 language tags. */
         case LANGUAGE_USER_CATALAN_VALENCIAN:
-            nLang = LANGUAGE_CATALAN;
+            if (!bUserInterfaceSelection)
+                nLang = LANGUAGE_CATALAN;
             break;
     }
     return nLang;
