@@ -2081,6 +2081,26 @@ SdrHdl* SdrHdlList::RemoveHdl(sal_uIntPtr nNum)
     return pRetval;
 }
 
+void SdrHdlList::RemoveAllByKind(SdrHdlKind eKind)
+{
+    SdrHdl* p = static_cast<SdrHdl*>(aList.Last());
+    while (p)
+    {
+        if (p->GetKind() == eKind)
+        {
+            // If removing an item doesn't invalidate the current position,
+            // then perhaps it's safe to keep calling Prev here.  But then I'm
+            // too lazy to find out & this Container needs to be replaced by
+            // STL anyways... :-P
+            aList.Remove(p);
+            delete p;
+            p = static_cast<SdrHdl*>(aList.Last()); // start from the back again.
+        }
+        else
+            p = static_cast<SdrHdl*>(aList.Prev());
+    }
+}
+
 void SdrHdlList::Clear()
 {
     for (sal_uIntPtr i=0; i<GetHdlCount(); i++)
