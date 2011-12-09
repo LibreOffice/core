@@ -27,21 +27,10 @@
 
 PRJ=.
 
-# distro-specific builds want to link against a particular mysql library
-# then they do not require mysql-devel package at runtime
-# So put mysql-connector-cpp/driver/nativeapi/binding_config.h into separate patch
-# and enable/disable MYSQLCLIENT_STATIC_BINDING according to the used mysql library
-.IF "$(SYSTEM_MYSQL)" == "YES"
-MYSQL_BINDING=static
-.ELSE
-MYSQL_BINDING=dynamic
-.ENDIF
-
 PRJNAME=mysqlcppconn
-EXT_PROJECT_NAME=mysql-connector-c++-1.1.0
-TARGET=so_mysqlcppconn_binding-$(MYSQL_BINDING)
-TARFILE_ROOTDIR=mysql-connector-c++-1.1.0_binding-$(MYSQL_BINDING)
+TARGET=so_mysqlcppconn
 
+EXT_PROJECT_NAME=mysql-connector-c++-1.1.0
 
 # --- Settings -----------------------------------------------------
 
@@ -60,6 +49,16 @@ ADDITIONAL_FILES=\
 CONVERTFILES=\
                 cppconn$/build_config.h
 
+# distro-specific builds want to link against a particular mysql library
+# then they do not require mysql-devel package at runtime
+# So put mysql-connector-cpp/driver/nativeapi/binding_config.h into separate patch
+# and enable/disable MYSQLCLIENT_STATIC_BINDING according to the used mysql library
+.IF "$(SYSTEM_MYSQL)" == "YES"
+MYSQL_BINDING=static
+.ELSE
+MYSQL_BINDING=dynamic
+.ENDIF
+
 PATCH_FILES=\
     $(TARFILE_NAME).patch \
     $(TARFILE_NAME)-mysql-binding-$(MYSQL_BINDING).patch \
@@ -67,11 +66,6 @@ PATCH_FILES=\
 
 BUILD_DIR=driver
 BUILD_ACTION = \
-	    if test -e ../../lastbuild; then LASTBUILD=$$(cat ../../lastbuild); else LASTBUILD='$(MYSQL_BINDING)'; fi && \
-	    if test "$${LASTBUILD}" != "$(MYSQL_BINDING)"; then \
-               rm -f ../$(BACK_PATH)/slo/* ../../so_built_so_mysqlcppconn_binding-$${LASTBUILD}; \
-            fi && \
-            echo "$(MYSQL_BINDING)" > ../../lastbuild && \
             cd nativeapi \
          && $(MAKE) $(MFLAGS) $(CALLMACROS) \
          && cd .. \
@@ -94,9 +88,9 @@ BUILD_ACTION = \
 NORMALIZE_FLAG_FILE=so_normalized_$(TARGET)
 
 $(PACKAGE_DIR)$/$(NORMALIZE_FLAG_FILE) : $(PACKAGE_DIR)$/$(BUILD_FLAG_FILE)
-    @$(GNUCOPY) -r $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/driver$/mysql_driver.h $(INCCOM)
+    @$(GNUCOPY) -r $(PACKAGE_DIR)$/$(EXT_PROJECT_NAME)$/driver$/mysql_driver.h $(INCCOM)
     -@$(MKDIRHIER) $(INCCOM)$/cppconn
-    @$(GNUCOPY) -r $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/cppconn$/* $(INCCOM)$/cppconn
+    @$(GNUCOPY) -r $(PACKAGE_DIR)$/$(EXT_PROJECT_NAME)$/cppconn$/* $(INCCOM)$/cppconn
     @$(TOUCH) $(PACKAGE_DIR)$/$(NORMALIZE_FLAG_FILE)
 
 normalize: $(PACKAGE_DIR)$/$(NORMALIZE_FLAG_FILE)
