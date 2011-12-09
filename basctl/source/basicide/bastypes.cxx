@@ -756,7 +756,7 @@ LibInfoItem* LibInfos::GetInfo( const LibInfoKey& rKey )
     return pItem;
 }
 
-sal_Bool QueryDel( const String& rName, const ResId& rId, Window* pParent )
+bool QueryDel( const String& rName, const ResId& rId, Window* pParent )
 {
     String aQuery( rId );
     String aName( rName );
@@ -764,39 +764,37 @@ sal_Bool QueryDel( const String& rName, const ResId& rId, Window* pParent )
     aName.Insert( '\'', 0 );
     aQuery.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "XX" ) ), aName );
     QueryBox aQueryBox( pParent, WB_YES_NO | WB_DEF_YES, aQuery );
-    if ( aQueryBox.Execute() == RET_YES )
-        return sal_True;
-    return sal_False;
+    return ( aQueryBox.Execute() == RET_YES );
 }
 
-sal_Bool QueryDelMacro( const String& rName, Window* pParent )
+bool QueryDelMacro( const String& rName, Window* pParent )
 {
     return QueryDel( rName, IDEResId( RID_STR_QUERYDELMACRO ), pParent );
 }
 
-sal_Bool QueryReplaceMacro( const String& rName, Window* pParent )
+bool QueryReplaceMacro( const String& rName, Window* pParent )
 {
     return QueryDel( rName, IDEResId( RID_STR_QUERYREPLACEMACRO ), pParent );
 }
 
-sal_Bool QueryDelDialog( const String& rName, Window* pParent )
+bool QueryDelDialog( const String& rName, Window* pParent )
 {
     return QueryDel( rName, IDEResId( RID_STR_QUERYDELDIALOG ), pParent );
 }
 
-sal_Bool QueryDelLib( const String& rName, sal_Bool bRef, Window* pParent )
+bool QueryDelLib( const String& rName, bool bRef, Window* pParent )
 {
     return QueryDel( rName, IDEResId( bRef ? RID_STR_QUERYDELLIBREF : RID_STR_QUERYDELLIB ), pParent );
 }
 
-sal_Bool QueryDelModule( const String& rName, Window* pParent )
+bool QueryDelModule( const String& rName, Window* pParent )
 {
     return QueryDel( rName, IDEResId( RID_STR_QUERYDELMODULE ), pParent );
 }
 
-sal_Bool QueryPassword( const Reference< script::XLibraryContainer >& xLibContainer, const String& rLibName, String& rPassword, sal_Bool bRepeat, sal_Bool bNewTitle )
+bool QueryPassword( const Reference< script::XLibraryContainer >& xLibContainer, const String& rLibName, String& rPassword, bool bRepeat, bool bNewTitle )
 {
-    sal_Bool bOK = sal_False;
+    bool bOK = false;
     sal_uInt16 nRet = 0;
 
     do
