@@ -157,22 +157,6 @@ sub check_system_path
             $installer::globals::epm_path = $$fileref;
         }
     }
-
-    # checking, if upx can be found in path
-
-    if ( $installer::globals::iswindowsbuild ) { $installer::globals::upxfile = "upx.exe"; }
-    else { $installer::globals::upxfile = "upx"; }
-
-    my $upxfilename = $installer::globals::upxfile;
-    my $upxfileref = installer::scriptitems::get_sourcepath_from_filename_and_includepath_classic(\$upxfilename, $patharrayref , 0);
-
-    if (!( $$upxfileref eq "" ))
-    {
-        $installer::globals::upx_in_path = 1;
-        $installer::globals::upxfile = $$upxfileref;
-        installer::logger::print_message( "\tFound: $$upxfileref\n" );
-    }
-
 }
 
 ######################################################################

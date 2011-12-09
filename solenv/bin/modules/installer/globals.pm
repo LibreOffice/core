@@ -199,8 +199,6 @@ BEGIN
     $epm_in_path = 0;
     $epm_path = "";
     $epmoutpath = "";
-    $upx_in_path = 0;
-    $upxfile = "";
     $simple = 0;
     $simpledefaultuserdir = "\$ORIGIN/..";
     $call_epm = 1;

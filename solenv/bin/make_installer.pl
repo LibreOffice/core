@@ -61,7 +61,6 @@ use installer::simplepackage;
 use installer::sorter;
 use installer::strip;
 use installer::substfilenamefiles;
-use installer::upx;
 use installer::systemactions;
 use installer::windows::assembly;
 use installer::windows::binary;
@@ -1201,17 +1200,6 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
         installer::logger::print_message( "... creating inf files ...\n" );
         installer::worker::create_inf_file($filesinproductlanguageresolvedarrayref, $registryitemsinproductlanguageresolvedarrayref, $folderinproductlanguageresolvedarrayref, $folderitemsinproductlanguageresolvedarrayref, $modulesinproductlanguageresolvedarrayref, $languagesarrayref, $languagestringref, $allvariableshashref);
         if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles16c.log", $filesinproductlanguageresolvedarrayref); }
-    }
-
-    ###########################################
-    # Using upx, to decrease file size
-    # Currently only for Windows.
-    ###########################################
-
-    if ( $allvariableshashref->{'UPXPRODUCT'} )
-    {
-        installer::upx::upx_on_libraries($filesinproductlanguageresolvedarrayref, $languagestringref);
-        if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles16d.log", $filesinproductlanguageresolvedarrayref); }
     }
 
     ###########################################################
