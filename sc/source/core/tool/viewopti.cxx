@@ -298,13 +298,13 @@ SfxPoolItem* ScTpViewItem::Clone( SfxItemPool * ) const
 #define SCLAYOUTOPT_GRIDCOLOR       1
 #define SCLAYOUTOPT_PAGEBREAK       2
 #define SCLAYOUTOPT_GUIDE           3
-#define SCLAYOUTOPT_COLROWHDR       6
-#define SCLAYOUTOPT_HORISCROLL      7
-#define SCLAYOUTOPT_VERTSCROLL      8
-#define SCLAYOUTOPT_SHEETTAB        9
-#define SCLAYOUTOPT_OUTLINE         10
-#define SCLAYOUTOPT_GRID_ONCOLOR    11
-#define SCLAYOUTOPT_COUNT           12
+#define SCLAYOUTOPT_COLROWHDR       4
+#define SCLAYOUTOPT_HORISCROLL      5
+#define SCLAYOUTOPT_VERTSCROLL      6
+#define SCLAYOUTOPT_SHEETTAB        7
+#define SCLAYOUTOPT_OUTLINE         8
+#define SCLAYOUTOPT_GRID_ONCOLOR    9
+#define SCLAYOUTOPT_COUNT           10
 
 #define CFGPATH_DISPLAY     "Office.Calc/Content/Display"
 
