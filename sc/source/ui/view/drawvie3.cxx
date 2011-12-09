@@ -87,6 +87,10 @@ void ScDrawView::SetPageAnchored()
 
         if ( pViewData )
             pViewData->GetDocShell()->SetDrawModified();
+
+        // Remove the anchor object.
+        aHdl.RemoveAllByKind(HDL_ANCHOR);
+        aHdl.RemoveAllByKind(HDL_ANCHOR_TR);
     }
 }
 
@@ -108,6 +112,9 @@ void ScDrawView::SetCellAnchored()
 
         if ( pViewData )
             pViewData->GetDocShell()->SetDrawModified();
+
+        // Set the anchor object.
+        AddCustomHdl();
     }
 }
 

@@ -502,6 +502,7 @@ public:
     // also auf dem Heap stehen, da Clear() ein delete macht.
     void    AddHdl(SdrHdl* pHdl, sal_Bool bAtBegin=sal_False);
     SdrHdl* RemoveHdl(sal_uIntPtr nNum);
+    void RemoveAllByKind(SdrHdlKind eKind);
 
     // Zuletzt eingefuegte Handles werden am ehesten getroffen
     // (wenn Handles uebereinander liegen).
