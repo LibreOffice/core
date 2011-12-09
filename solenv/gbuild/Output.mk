@@ -60,8 +60,12 @@ gb_Output_BELL := $(shell echo|awk 'BEGIN { printf "%c", 7 }' -)
 # only enable colorized output if
 # - gb_COLOR is set
 # - we have a known term
+KNOWN_TERM:=Eterm aterm gnome kterm linux putty rxvt rxvt-unicode screen xterm xterm xtermc
+KNOWN_TERM:=$(KNOW_TERM) $(patsubst %,%-color,$(KNOWN_TERM))
+KNOWN_TERM:=$(KNOW_TERM) $(patsubst %-color,%-256color,$(KNOWN_TERM))
+KNOWN_TERM:=$(KNOW_TERM) $(patsubst %-color,%+256color,$(KNOWN_TERM))
 ifneq ($(strip $(gb_COLOR)),)
-ifneq ($(filter $(TERM),Eterm aterm gnome kterm linux rxvt rxvt-unicode screen xterm xterm-color xtermc),)
+ifneq ($(filter $(TERM),$(KNOWN_TERM)),)
 
 gb_Output_COLOR_RESET := $(gb_Output_ESCAPE)[0m
 gb_Output_COLOR_RESETANDESCAPE := $(gb_Output_COLOR_RESET)$(gb_Output_ESCAPE)
@@ -121,7 +125,7 @@ endif
 # - gb_TITLES is set
 # - we have a known term
 ifneq ($(strip $(gb_TITLES)),)
-ifneq ($(filter $(TERM),Eterm aterm gnome kterm rxvt rxvt-unicode screen xterm xterm-color),)
+ifneq ($(filter $(TERM),$(KNOWN_TERM)),)
 define gb_Output_announce_title
 $(info $(gb_Output_ESCAPE)]2;gbuild: $(1)$(gb_Output_BELL)$(gb_Output_ESCAPE)[A)
 endef
