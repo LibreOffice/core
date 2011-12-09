@@ -102,13 +102,13 @@ SHL1VERSIONMAP=$(SOLARENV)$/src$/reg-component.map
 #  as per instructions in libpq documentation.
 #  If it turns out the rest was needed, reenable it.
 .IF "$(SYSTEM_POSTGRESQL)"=="YES"
-.IF "$(GUI)"=="WNT"
-LIBPQ_LINK=libpq.lib #wsock32.lib advapi32.lib
-.ELSE
-LIBPQ_LINK=-lpq #-lcrypt
-.ENDIF
+LIBPQ_LINK=-lpq
 .ELSE #SYSTEM_POSTGRESQL==NO
+.IF "$(GUI)$(COM)"=="WNTMSC"
+LIBPQ_LINK=$(OUTDIR_FOR_BUILD)/lib/libpq.lib ws2_32.lib secur32.lib advapi32.lib shell32.lib
+.ELSE
 LIBPQ_LINK=$(OUTDIR_FOR_BUILD)/lib/libpq.a
+.ENDIF
 POSTGRESQL_INC=-I$(OUTDIR_FOR_BUILD)/inc/postgresql
 POSTGRESQL_LIB=
 .ENDIF
