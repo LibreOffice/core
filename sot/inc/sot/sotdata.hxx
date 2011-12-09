@@ -51,9 +51,6 @@ struct SotData_Impl
     sal_uInt32          nSvObjCount;
     std::list<SotObject*> aObjectList;
     SotFactoryList *    pFactoryList;
-    SotFactory *        pSotObjectFactory;
-    SotFactory *        pSotStorageStreamFactory;
-    SotFactory *        pSotStorageFactory;
     tDataFlavorList*    pDataFlavorList;
     SotData_Impl();
 };
