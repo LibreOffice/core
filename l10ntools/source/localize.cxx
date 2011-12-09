@@ -120,7 +120,6 @@ const char *ModuleList[] = {
     "basic",
     "chart2",
     "connectivity",
-    "crashrep",
     "cui",
     "dbaccess",
     "desktop",
