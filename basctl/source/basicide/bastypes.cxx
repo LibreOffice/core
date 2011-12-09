@@ -38,6 +38,7 @@
 #include <basic/basmgr.hxx>
 #include <com/sun/star/script/ModuleType.hpp>
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
+#include <comphelper/string.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/passwd.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -756,43 +757,43 @@ LibInfoItem* LibInfos::GetInfo( const LibInfoKey& rKey )
     return pItem;
 }
 
-bool QueryDel( const String& rName, const ResId& rId, Window* pParent )
+bool QueryDel( const ::rtl::OUString& rName, const ResId& rId, Window* pParent )
 {
-    String aQuery( rId );
-    String aName( rName );
-    aName += '\'';
-    aName.Insert( '\'', 0 );
-    aQuery.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "XX" ) ), aName );
+    ::rtl::OUString aQuery( ResId::toString(rId) );
+    ::rtl::OUStringBuffer aNameBuf( rName );
+    aNameBuf.append('\'');
+    aNameBuf.insert(0, '\'');
+    aQuery = ::comphelper::string::replace(aQuery, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "XX")), aNameBuf.makeStringAndClear());
     QueryBox aQueryBox( pParent, WB_YES_NO | WB_DEF_YES, aQuery );
     return ( aQueryBox.Execute() == RET_YES );
 }
 
-bool QueryDelMacro( const String& rName, Window* pParent )
+bool QueryDelMacro( const ::rtl::OUString& rName, Window* pParent )
 {
     return QueryDel( rName, IDEResId( RID_STR_QUERYDELMACRO ), pParent );
 }
 
-bool QueryReplaceMacro( const String& rName, Window* pParent )
+bool QueryReplaceMacro( const ::rtl::OUString& rName, Window* pParent )
 {
     return QueryDel( rName, IDEResId( RID_STR_QUERYREPLACEMACRO ), pParent );
 }
 
-bool QueryDelDialog( const String& rName, Window* pParent )
+bool QueryDelDialog( const ::rtl::OUString& rName, Window* pParent )
 {
     return QueryDel( rName, IDEResId( RID_STR_QUERYDELDIALOG ), pParent );
 }
 
-bool QueryDelLib( const String& rName, bool bRef, Window* pParent )
+bool QueryDelLib( const ::rtl::OUString& rName, bool bRef, Window* pParent )
 {
     return QueryDel( rName, IDEResId( bRef ? RID_STR_QUERYDELLIBREF : RID_STR_QUERYDELLIB ), pParent );
 }
 
-bool QueryDelModule( const String& rName, Window* pParent )
+bool QueryDelModule( const ::rtl::OUString& rName, Window* pParent )
 {
     return QueryDel( rName, IDEResId( RID_STR_QUERYDELMODULE ), pParent );
 }
 
-bool QueryPassword( const Reference< script::XLibraryContainer >& xLibContainer, const String& rLibName, String& rPassword, bool bRepeat, bool bNewTitle )
+bool QueryPassword( const Reference< script::XLibraryContainer >& xLibContainer, const ::rtl::OUString& rLibName, ::rtl::OUString& rPassword, bool bRepeat, bool bNewTitle )
 {
     bool bOK = false;
     sal_uInt16 nRet = 0;
@@ -806,8 +807,8 @@ bool QueryPassword( const Reference< script::XLibraryContainer >& xLibContainer,
         // set new title
         if ( bNewTitle )
         {
-            String aTitle( IDEResId( RID_STR_ENTERPASSWORD ) );
-            aTitle.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "XX" ) ), rLibName );
+            ::rtl::OUString aTitle(ResId::toString(IDEResId(RID_STR_ENTERPASSWORD)));
+            aTitle = ::comphelper::string::replace(aTitle, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("XX")), rLibName);
             pDlg->SetText( aTitle );
         }
 
@@ -817,19 +818,18 @@ bool QueryPassword( const Reference< script::XLibraryContainer >& xLibContainer,
         // verify password
         if ( nRet == RET_OK )
         {
-            ::rtl::OUString aOULibName( rLibName );
-            if ( xLibContainer.is() && xLibContainer->hasByName( aOULibName ) )
+            if ( xLibContainer.is() && xLibContainer->hasByName( rLibName ) )
             {
                 Reference< script::XLibraryContainerPassword > xPasswd( xLibContainer, UNO_QUERY );
-                if ( xPasswd.is() && xPasswd->isLibraryPasswordProtected( aOULibName ) && !xPasswd->isLibraryPasswordVerified( aOULibName ) )
+                if ( xPasswd.is() && xPasswd->isLibraryPasswordProtected( rLibName ) && !xPasswd->isLibraryPasswordVerified( rLibName ) )
                 {
                     rPassword = pDlg->GetPassword();
-                    ::rtl::OUString aOUPassword( rPassword );
-                    bOK = xPasswd->verifyLibraryPassword( aOULibName, aOUPassword );
+                    //                    ::rtl::OUString aOUPassword( rPassword );
+                    bOK = xPasswd->verifyLibraryPassword( rLibName, rPassword );
 
                     if ( !bOK )
                     {
-                        ErrorBox aErrorBox( Application::GetDefDialogParent(), WB_OK, String( IDEResId( RID_STR_WRONGPASSWORD ) ) );
+                        ErrorBox aErrorBox( Application::GetDefDialogParent(), WB_OK, ResId::toString( IDEResId( RID_STR_WRONGPASSWORD ) ) );
                         aErrorBox.Execute();
                     }
                 }

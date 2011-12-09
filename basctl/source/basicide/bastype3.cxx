@@ -78,7 +78,7 @@ void BasicTreeListBox::RequestingChildren( SvLBoxEntry* pEntry )
             Reference< script::XLibraryContainerPassword > xPasswd( xModLibContainer, UNO_QUERY );
             if ( xPasswd.is() && xPasswd->isLibraryPasswordProtected( aOULibName ) && !xPasswd->isLibraryPasswordVerified( aOULibName ) )
             {
-                String aPassword;
+                ::rtl::OUString aPassword;
                 bOK = QueryPassword( xModLibContainer, aLibName, aPassword );
             }
         }

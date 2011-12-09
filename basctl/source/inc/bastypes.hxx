@@ -274,12 +274,12 @@ void            CutLines( ::rtl::OUString& rStr, sal_Int32 nStartLine, sal_Int32
 String          CreateMgrAndLibStr( const String& rMgrName, const String& rLibName );
 sal_uLong           CalcLineCount( SvStream& rStream );
 
-bool QueryReplaceMacro( const String& rName, Window* pParent = 0 );
-bool QueryDelMacro( const String& rName, Window* pParent = 0 );
-bool QueryDelDialog( const String& rName, Window* pParent = 0 );
-bool QueryDelModule( const String& rName, Window* pParent = 0 );
-bool QueryDelLib( const String& rName, bool bRef = sal_False, Window* pParent = 0 );
-bool QueryPassword( const ::com::sun::star::uno::Reference< ::com::sun::star::script::XLibraryContainer >& xLibContainer, const String& rLibName, String& rPassword, bool bRepeat = false, bool bNewTitle = false );
+bool QueryReplaceMacro( const ::rtl::OUString& rName, Window* pParent = 0 );
+bool QueryDelMacro( const ::rtl::OUString& rName, Window* pParent = 0 );
+bool QueryDelDialog( const ::rtl::OUString& rName, Window* pParent = 0 );
+bool QueryDelModule( const ::rtl::OUString& rName, Window* pParent = 0 );
+bool QueryDelLib( const ::rtl::OUString& rName, bool bRef = false, Window* pParent = 0 );
+bool QueryPassword( const ::com::sun::star::uno::Reference< ::com::sun::star::script::XLibraryContainer >& xLibContainer, const ::rtl::OUString& rLibName, ::rtl::OUString& rPassword, bool bRepeat = false, bool bNewTitle = false );
 
 class ModuleInfoHelper
 {

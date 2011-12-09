@@ -550,7 +550,7 @@ void BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
                     Reference< script::XLibraryContainerPassword > xPasswd( xModLibContainer, UNO_QUERY );
                     if ( xPasswd.is() && xPasswd->isLibraryPasswordProtected( aLibName ) && !xPasswd->isLibraryPasswordVerified( aLibName ) )
                     {
-                        String aPassword;
+                        ::rtl::OUString aPassword;
                         bOK = QueryPassword( xModLibContainer, aLibName, aPassword );
                     }
                 }

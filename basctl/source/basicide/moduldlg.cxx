@@ -771,7 +771,7 @@ bool ObjectPage::GetSelection( ScriptDocument& rDocument, String& rLibName )
         Reference< script::XLibraryContainerPassword > xPasswd( xModLibContainer, UNO_QUERY );
         if ( xPasswd.is() && xPasswd->isLibraryPasswordProtected( aOULibName ) && !xPasswd->isLibraryPasswordVerified( aOULibName ) )
         {
-            String aPassword;
+            ::rtl::OUString aPassword;
             bOK = QueryPassword( xModLibContainer, rLibName, aPassword );
         }
 

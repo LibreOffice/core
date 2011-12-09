@@ -313,7 +313,7 @@ sal_Bool BasicCheckBox::EditingEntry( SvLBoxEntry* pEntry, Selection& )
         Reference< script::XLibraryContainerPassword > xPasswd( xModLibContainer, UNO_QUERY );
         if ( xPasswd.is() && xPasswd->isLibraryPasswordProtected( aOULibName ) && !xPasswd->isLibraryPasswordVerified( aOULibName ) )
         {
-            String aPassword;
+            ::rtl::OUString aPassword;
             Reference< script::XLibraryContainer > xModLibContainer1( xModLibContainer, UNO_QUERY );
             bOK = QueryPassword( xModLibContainer1, aLibName, aPassword );
         }
@@ -1006,7 +1006,7 @@ void LibPage::InsertLib()
 
                             // check, if the library is password protected
                             sal_Bool bOK = sal_False;
-                            String aPassword;
+                            ::rtl::OUString aPassword;
                             if ( xModLibContImport.is() && xModLibContImport->hasByName( aOULibName ) )
                             {
                                 Reference< script::XLibraryContainerPassword > xPasswd( xModLibContImport, UNO_QUERY );
@@ -1200,7 +1200,7 @@ void LibPage::Export( void )
         Reference< script::XLibraryContainerPassword > xPasswd( xModLibContainer, UNO_QUERY );
         if ( xPasswd.is() && xPasswd->isLibraryPasswordProtected( aOULibName ) && !xPasswd->isLibraryPasswordVerified( aOULibName ) )
         {
-            String aPassword;
+            ::rtl::OUString aPassword;
             Reference< script::XLibraryContainer > xModLibContainer1( xModLibContainer, UNO_QUERY );
             bOK = QueryPassword( xModLibContainer1, aLibName, aPassword );
         }
