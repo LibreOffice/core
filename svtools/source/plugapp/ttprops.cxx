@@ -45,26 +45,4 @@ sal_Bool TTProperties::RequestProperty( sal_uInt16 nRequest )
     return sal_True;
 }
 
-
-sal_Bool TTProperties::GetSlots()
-{
-    RequestProperty( TT_PR_SLOTS );
-    return HasSlots();
-}
-
-sal_uInt16 TTProperties::ExecuteFunction( sal_uInt16 nSID, SfxPoolItem** ppArgs, sal_uInt16 nMode )
-{
-    mnSID = nSID;
-    mppArgs = ppArgs;
-    mnMode = nMode;
-    RequestProperty( TT_PR_DISPATCHER );
-    mppArgs = NULL;
-    return nActualPR;
-}
-
-SvtResId TTProperties::GetSvtResId( sal_uInt16 nId )
-{
-    return SvtResId( nId );
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

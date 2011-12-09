@@ -373,31 +373,4 @@ sal_uIntPtr Time::GetSystemTicks()
 #endif
 }
 
-// -----------------------------------------------------------------------
-
-sal_uIntPtr Time::GetProcessTicks()
-{
-#if defined WNT
-    return (sal_uIntPtr)GetTickCount();
-#else
-    static sal_uIntPtr  nImplTicksPerSecond = 0;
-    static double   dImplTicksPerSecond;
-    static double   dImplTicksULONGMAX;
-    sal_uIntPtr         nTicks = (sal_uIntPtr)clock();
-
-    if ( !nImplTicksPerSecond )
-    {
-        nImplTicksPerSecond = CLOCKS_PER_SEC;
-        dImplTicksPerSecond = nImplTicksPerSecond;
-        dImplTicksULONGMAX  = (double)(sal_uIntPtr)ULONG_MAX;
-    }
-
-    double fTicks = nTicks;
-    fTicks *= 1000;
-    fTicks /= dImplTicksPerSecond;
-    fTicks = fmod (fTicks, dImplTicksULONGMAX);
-    return (sal_uIntPtr)fTicks;
-#endif
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

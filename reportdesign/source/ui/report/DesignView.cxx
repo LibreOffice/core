@@ -90,52 +90,7 @@ public:
         return nRet;
     }
 };
-class OwnSplitWindow : public SplitWindow
-{
-public:
-    OwnSplitWindow(Window* pParent) : SplitWindow(pParent,WB_DIALOGCONTROL){SetBackground( );}
 
-    virtual void        Split()
-    {
-        SplitWindow::Split();
-        setItemSizes();
-    }
-    void setItemSizes()
-    {
-        const long nOutWidth = GetOutputSizePixel().Width();
-        long    nTaskPaneMinSplitSize = static_cast<OTaskWindow*>(GetItemWindow(TASKPANE_ID))->getMinimumWidth();
-        nTaskPaneMinSplitSize = static_cast<long>(nTaskPaneMinSplitSize*100/nOutWidth);
-        if ( !nTaskPaneMinSplitSize )
-            nTaskPaneMinSplitSize = START_SIZE_TASKPANE;
-
-        const long nReportMinSplitSize = static_cast<long>(12000/nOutWidth);
-
-        long nReportSize = GetItemSize( REPORT_ID );
-        long nTaskPaneSize = GetItemSize( TASKPANE_ID );
-
-        sal_Bool        bMod = sal_False;
-        if( nReportSize < nReportMinSplitSize )
-        {
-            nReportSize = nReportMinSplitSize;
-            nTaskPaneSize = 99 - nReportMinSplitSize;
-
-            bMod = sal_True;
-        }
-        else if( nTaskPaneSize < nTaskPaneMinSplitSize )
-        {
-            nTaskPaneSize = nTaskPaneMinSplitSize;
-            nReportSize = 99 - nTaskPaneMinSplitSize;
-
-            bMod = sal_True;
-        }
-
-        if( bMod )
-        {
-            SetItemSize( REPORT_ID, nReportSize );
-            SetItemSize( TASKPANE_ID, nTaskPaneSize );
-        }
-    }
-};
 //==================================================================
 // class ODesignView
 //==================================================================

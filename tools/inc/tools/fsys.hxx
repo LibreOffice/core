@@ -201,7 +201,6 @@ public:
     Time            TimeModified() const { return aTimeModified; }
     Date            DateAccessed() const { return aDateAccessed; }
     Time            TimeAccessed() const { return aTimeAccessed; }
-    sal_Bool            IsYounger( const FileStat& rIsOlder ) const;
 
     static sal_uIntPtr  SetReadOnlyFlag( const DirEntry &rEntry, sal_Bool bRO = sal_True );
     static sal_Bool     GetReadOnlyFlag( const DirEntry &rEntry );

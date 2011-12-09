@@ -274,7 +274,6 @@ private:
 protected:
     virtual void    Resize();
     virtual void    Paint( const Rectangle& rRect );
-    DECL_LINK( ButtonHdl, ImageButton * );
 
 public:
                     StackWindow( Window* pParent );

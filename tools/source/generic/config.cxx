@@ -200,54 +200,6 @@ static sal_Bool ImplSysWriteConfig( const XubString& rFileName,
 
 // -----------------------------------------------------------------------
 
-static String ImplMakeConfigName( const XubString* pFileName,
-                                  const XubString* pPathName )
-{
-    ::rtl::OUString aFileName;
-    ::rtl::OUString aPathName;
-    if ( pFileName )
-    {
-#ifdef UNX
-        aFileName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "." ));
-        aFileName += *pFileName;
-        aFileName += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "rc" ));
-#else
-        aFileName = *pFileName;
-        aFileName += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".ini" ));
-#endif
-    }
-    else
-    {
-#ifdef UNX
-        aFileName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".sversionrc" ));
-#else
-        aFileName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "sversion.ini" ));
-#endif
-    }
-
-    // #88208# in case pPathName is set but empty and pFileName is set
-    // and not empty just return the filename; on the default case
-    // prepend default path as usual
-    if ( pPathName && pPathName->Len() )
-        aPathName = toUncPath( *pPathName );
-    else if( pPathName && pFileName && pFileName->Len() )
-        return aFileName;
-    else
-    {
-        oslSecurity aSec = osl_getCurrentSecurity();
-        osl_getConfigDir( aSec, &aPathName.pData );
-        osl_freeSecurityHandle( aSec );
-    }
-
-    ::rtl::OUString aName( aPathName );
-    aName += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/" ));
-    aName += aFileName;
-
-    return aName;
-}
-
-// -----------------------------------------------------------------------
-
 namespace {
 
 rtl::OString makeOString(const sal_uInt8* p, sal_uInt64 n)
@@ -789,26 +741,6 @@ Config::~Config()
 
     Flush();
     ImplFreeConfigData( mpData );
-}
-
-// -----------------------------------------------------------------------
-
-String Config::GetDefDirectory()
-{
-    ::rtl::OUString aDefConfig;
-    oslSecurity aSec = osl_getCurrentSecurity();
-    osl_getConfigDir( aSec, &aDefConfig.pData );
-    osl_freeSecurityHandle( aSec );
-
-    return aDefConfig;
-}
-
-// -----------------------------------------------------------------------
-
-XubString Config::GetConfigName( const XubString& rPath,
-                                 const XubString& rBaseName )
-{
-    return ImplMakeConfigName( &rBaseName, &rPath );
 }
 
 // -----------------------------------------------------------------------

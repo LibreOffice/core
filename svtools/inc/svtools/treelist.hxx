@@ -372,7 +372,6 @@ public:
     { return (sal_Bool)(pEntry->pParent!=pRootItem); }
 
     sal_Bool            IsChild( SvListEntry* pParent, SvListEntry* pChild ) const;
-    sal_Bool            IsInChildList( SvListEntry* pParent, SvListEntry* pChild) const;
     SvListEntry*        GetEntry( SvListEntry* pParent, sal_uLong nPos ) const;
     SvListEntry*        GetEntry( sal_uLong nRootPos ) const;
     SvListEntry*        GetEntryAtAbsPos( sal_uLong nAbsPos ) const;

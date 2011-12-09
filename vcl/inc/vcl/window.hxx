@@ -938,7 +938,6 @@ public:
 
     void                SetUniqueId( const rtl::OString& );
     const rtl::OString& GetUniqueId() const;
-    const rtl::OString& GetUniqueOrHelpId() const;
 
     Window*             FindWindow( const Point& rPos ) const;
 

@@ -309,8 +309,6 @@ public:
     virtual void    StateChanged( StateChangedType nType );
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 
-    void            ShowTitleButton( sal_uInt16 nButton, sal_Bool bVisible = sal_True );
-
     void            SetPin( sal_Bool bPin );
     sal_Bool            IsPined() const;
 

@@ -1127,14 +1127,6 @@ sal_Bool StarBASIC::Compile( SbModule* pMod )
     return pMod ? pMod->Compile() : sal_False;
 }
 
-sal_Bool StarBASIC::Disassemble( SbModule* pMod, String& rText )
-{
-    rText.Erase();
-    if( pMod )
-        pMod->Disassemble( rText );
-    return sal_Bool( rText.Len() != 0 );
-}
-
 void StarBASIC::Clear()
 {
     while( pModules->Count() )
@@ -1288,19 +1280,6 @@ void StarBASIC::DeInitAllModules( void )
         if( pBasic )
             pBasic->DeInitAllModules();
     }
-}
-
-// #43011 For TestTool, to delete global vars
-void StarBASIC::ClearGlobalVars( void )
-{
-    SbxArrayRef xProps( GetProperties() );
-    sal_uInt16 nPropCount = xProps->Count();
-    for ( sal_uInt16 nProp = 0 ; nProp < nPropCount ; ++nProp )
-    {
-        SbxBase* pVar = xProps->Get( nProp );
-        pVar->Clear();
-    }
-    SetModified( sal_True );
 }
 
 // This implementation at first searches within the runtime library,

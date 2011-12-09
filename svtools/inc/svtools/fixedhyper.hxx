@@ -173,7 +173,6 @@ namespace svt
 
             With ResId or WinBits.
         */
-        FixedHyperlinkImage( Window* pParent, const ResId& rId );
         FixedHyperlinkImage( Window* pParent, WinBits nWinStyle = 0 );
 
         /** dtor

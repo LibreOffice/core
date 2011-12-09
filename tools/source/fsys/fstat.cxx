@@ -98,26 +98,6 @@ FileStat::FileStat( const DirEntry& rDirEntry, FSysAccess nAccess )
 
 /*************************************************************************
 |*
-|*    FileStat::IsYounger()
-|*
-*************************************************************************/
-
-// sal_True  wenn die Instanz j"unger als rIsOlder ist.
-// sal_False wenn die Instanz "alter oder gleich alt wie rIsOlder ist.
-
-sal_Bool FileStat::IsYounger( const FileStat& rIsOlder ) const
-{
-    if ( aDateModified > rIsOlder.aDateModified )
-        return sal_True;
-    if ( ( aDateModified == rIsOlder.aDateModified ) &&
-         ( aTimeModified > rIsOlder.aTimeModified ) )
-        return sal_True;
-
-    return sal_False;
-}
-
-/*************************************************************************
-|*
 |*    FileStat::IsKind()
 |*
 *************************************************************************/

@@ -182,8 +182,6 @@ public:
     void                RemoveItem( sal_uInt16 nId, sal_Bool bHide = sal_True );
     void                Clear();
 
-    void                SetItemBackground( sal_uInt16 nSetId, const Wallpaper& rWallpaper );
-
     void                SplitItem( sal_uInt16 nId, long nNewSize,
                                    sal_Bool bPropSmall = sal_False,
                                    sal_Bool bPropGreat = sal_False );
@@ -201,7 +199,6 @@ public:
     /** Return the current size limits for the specified item.
     */
     long                GetItemSize( sal_uInt16 nId, SplitWindowItemBits nBits ) const;
-    Window*             GetItemWindow( sal_uInt16 nId ) const;
     sal_uInt16              GetSet( sal_uInt16 nId ) const;
     sal_uInt16              GetItemId( Window* pWindow ) const;
     sal_uInt16              GetItemId( const Point& rPos ) const;
@@ -220,13 +217,6 @@ public:
     void                SetMaxSizePixel( long nNewMaxSize ) { mnMaxSize = nNewMaxSize; }
     long                GetMaxSizePixel() const { return mnMaxSize; }
 
-    static Size         CalcWindowSizePixel( const Size& rSize,
-                                             WindowAlign eAlign,
-                                             WinBits nWinStyle,
-                                             sal_Bool bExtra = sal_False );
-    Size                CalcWindowSizePixel( const Size& rSize )
-                            { return CalcWindowSizePixel( rSize, meAlign, mnWinStyle, (mbAutoHide || mbFadeOut) ); }
-
     Size                CalcLayoutSizePixel( const Size& aNewSize );
 
     void                ShowAutoHideButton( sal_Bool bShow = sal_True );
@@ -241,8 +231,6 @@ public:
 
     void                SetAutoHideState( sal_Bool bAutoHide );
     sal_Bool                GetAutoHideState() const { return mbAutoHideIn; }
-
-    Rectangle           GetAutoHideRect() const;
 
     void                SetStartSplitHdl( const Link& rLink ) { maStartSplitHdl = rLink; }
     const Link&         GetStartSplitHdl() const { return maStartSplitHdl; }

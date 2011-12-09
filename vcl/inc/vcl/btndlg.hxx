@@ -97,7 +97,6 @@ public:
     void                AddButton( StandardButtonType eType, sal_uInt16 nId, sal_uInt16 nBtnFlags, long nSepPixel = 0 );
     void                RemoveButton( sal_uInt16 nId );
     void                Clear();
-    sal_uInt16              GetButtonCount() const;
     sal_uInt16              GetButtonId( sal_uInt16 nButton ) const;
     PushButton*         GetPushButton( sal_uInt16 nId ) const;
     void                SetButtonText( sal_uInt16 nId, const XubString& rText );

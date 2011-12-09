@@ -226,10 +226,6 @@ public:
     // XDialogClosedListener methods
     virtual void SAL_CALL   DialogClosed( const ::com::sun::star::ui::dialogs::DialogClosedEvent& _rEvent );
 
-    // retrieves the top-most file picker - i.e. the instance which is currently beeing executed
-    static ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XFilePicker >
-                            GetTopMostFilePicker( );
-
     /** sets help ids for the controls in the dialog
         @param _pControlId
             Pointer to a 0-terminated array of control ids. They must be recruited from the

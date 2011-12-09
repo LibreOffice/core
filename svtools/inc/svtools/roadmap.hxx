@@ -71,10 +71,8 @@ namespace svt
         void            SetRoadmapBitmap( const BitmapEx& maBitmap, sal_Bool _bInvalidate = sal_True );
 
         void            EnableRoadmapItem( ItemId _nItemId, sal_Bool _bEnable, ItemIndex _nStartIndex = 0  );
-        sal_Bool        IsRoadmapItemEnabled( ItemId _nItemId, ItemIndex _nStartIndex = 0 ) const;
 
         void            ChangeRoadmapItemLabel( ItemId _nID, const ::rtl::OUString& sLabel, ItemIndex _nStartIndex = 0 );
-        ::rtl::OUString GetRoadmapItemLabel( ItemId _nID, ItemIndex _nStartIndex = 0 );
         void            ChangeRoadmapItemID( ItemId _nID, ItemId _NewID, ItemIndex _nStartIndex = 0  );
 
         void            SetRoadmapInteractive( sal_Bool _bInteractive );
@@ -85,7 +83,6 @@ namespace svt
 
         ItemIndex       GetItemCount() const;
         ItemId          GetItemID( ItemIndex _nIndex ) const;
-        ItemIndex       GetItemIndex( ItemId _nID ) const;
 
         void            InsertRoadmapItem( ItemIndex _Index, const ::rtl::OUString& _RoadmapItem, ItemId _nUniqueId, sal_Bool _bEnabled = sal_True );
         void            ReplaceRoadmapItem( ItemIndex _Index, const ::rtl::OUString& _RoadmapItem, ItemId _nUniqueId, sal_Bool _bEnabled );

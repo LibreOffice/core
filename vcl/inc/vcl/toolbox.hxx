@@ -428,7 +428,6 @@ public:
     // Used to enable/disable scrolling one page at a time for toolbar
     void                SetPageScroll( sal_Bool b );
 
-    void                SetNextToolBox( const XubString& rStr );
     const XubString&    GetNextToolBox() const { return maNextToolBoxStr; }
 
     sal_uInt16              GetItemCount() const;
@@ -439,7 +438,6 @@ public:
     sal_uInt16              GetItemId( const Point& rPos ) const;
     Rectangle           GetItemRect( sal_uInt16 nItemId ) const;
     Rectangle           GetItemPosRect( sal_uInt16 nPos ) const;
-    Rectangle           GetItemPosDropDownRect( sal_uInt16 nPos ) const;
 
     // retrieves the optimal position to place a popup window for this item (subtoolbar or dropdown)
     Point               GetItemPopupPosition( sal_uInt16 nItemId, const Size& rSize ) const;
@@ -613,7 +611,6 @@ public:
     void                ChangeHighlight( sal_uInt16 nPos );
 
     void SetImageListProvider(vcl::IImageListProvider* _pProvider);
-    ToolBoxLayoutMode GetToolbarLayoutMode();
     void SetToolbarLayoutMode( ToolBoxLayoutMode eLayout );
 };
 

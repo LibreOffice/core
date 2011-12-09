@@ -407,23 +407,6 @@ namespace svt
     }
 
     //---------------------------------------------------------------------
-    RoadmapTypes::ItemIndex ORoadmap::GetItemIndex( ItemId _nID ) const
-    {
-        ItemId nLocID = 0;
-        const HL_Vector& rItems = m_pImpl->getHyperLabels();
-        for (   HL_Vector::const_iterator i = rItems.begin();
-                i < rItems.end();
-                ++i
-            )
-        {
-            nLocID = (*i)->GetID();
-            if ( nLocID == _nID )
-                return ItemIndex( i - rItems.begin() );
-        }
-        return -1;
-    }
-
-    //---------------------------------------------------------------------
     void ORoadmap::InsertRoadmapItem( ItemIndex _Index, const ::rtl::OUString& _RoadmapItem, ItemId _nUniqueId, sal_Bool _bEnabled )
     {
         InsertHyperLabel( _Index, _RoadmapItem, _nUniqueId, _bEnabled );
@@ -445,13 +428,6 @@ namespace svt
     sal_Bool ORoadmap::IsRoadmapComplete( ) const
     {
         return m_pImpl->isComplete();
-    }
-
-    //---------------------------------------------------------------------
-    sal_Bool ORoadmap::IsRoadmapItemEnabled( ItemId _nItemId, ItemIndex _nStartIndex  ) const
-    {
-        const RoadmapItem* _pLabelItem = GetByID( _nItemId, _nStartIndex  );
-        return _pLabelItem ? _pLabelItem->IsEnabled() : sal_False;
     }
 
     //---------------------------------------------------------------------
@@ -479,17 +455,6 @@ namespace svt
                 (*i)->SetPosition( GetPreviousHyperLabel( i - rItems.begin() ) );
             }
         }
-    }
-
-    //---------------------------------------------------------------------
-
-    ::rtl::OUString ORoadmap::GetRoadmapItemLabel( ItemId _nID, ItemIndex _nStartIndex )
-    {
-        RoadmapItem* pItem = GetByID( _nID, _nStartIndex );
-        if ( pItem != NULL )
-            return pItem->GetLabel();
-        else
-            return ::rtl::OUString();
     }
 
     //---------------------------------------------------------------------

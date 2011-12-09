@@ -83,14 +83,8 @@ public:
     virtual void        FileSelect();
     virtual void        FilterSelect();
 
-    void                SetDefaultExt( const UniString& rExt ) { aDfltExt = rExt; }
     const UniString&        GetDefaultExt() const { return aDfltExt; }
     UniString               GetFilterType( sal_uInt16 nPos ) const;
-
-    void                SetFileSelectHdl( const Link& rLink ) { aFileHdlLink = rLink; }
-    const Link&         GetFileSelectHdl() const { return aFileHdlLink; }
-    void                SetFilterSelectHdl( const Link& rLink ) { aFilterHdlLink = rLink; }
-    const Link&         GetFilterSelectHdl() const { return aFilterHdlLink; }
 };
 
 #endif  // _FILEDLG_HXX

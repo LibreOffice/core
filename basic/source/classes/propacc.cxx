@@ -260,12 +260,6 @@ sal_Bool PropertySetInfoImpl::hasPropertyByName(const ::rtl::OUString& Name) thr
 }
 
 
-//============================================================================
-
-SbPropertySetInfo::SbPropertySetInfo()
-{
-}
-
 //----------------------------------------------------------------------------
 
 SbPropertySetInfo::SbPropertySetInfo( const SbPropertyValueArr_Impl &rPropVals )
@@ -305,71 +299,6 @@ sal_Bool SbPropertySetInfo::hasPropertyByName(const ::rtl::OUString& Name)
     throw( RuntimeException )
 {
     return aImpl.hasPropertyByName( Name );
-}
-
-
-//----------------------------------------------------------------------------
-
-SbPropertyContainer::SbPropertyContainer()
-{
-}
-
-//----------------------------------------------------------------------------
-
-SbPropertyContainer::~SbPropertyContainer()
-{
-}
-
-//----------------------------------------------------------------------------
-void SbPropertyContainer::addProperty(const ::rtl::OUString& Name,
-                                      sal_Int16 Attributes,
-                                      const Any& DefaultValue)
-    throw(  PropertyExistException, IllegalTypeException,
-            IllegalArgumentException, RuntimeException )
-{
-    (void)Name;
-    (void)Attributes;
-    (void)DefaultValue;
-}
-
-//----------------------------------------------------------------------------
-void SbPropertyContainer::removeProperty(const ::rtl::OUString& Name)
-    throw( UnknownPropertyException, RuntimeException )
-{
-    (void)Name;
-}
-
-//----------------------------------------------------------------------------
-// XPropertySetInfo
-Sequence< Property > SbPropertyContainer::getProperties(void) throw ()
-{
-    return aImpl.getProperties();
-}
-
-Property SbPropertyContainer::getPropertyByName(const ::rtl::OUString& Name)
-    throw( RuntimeException )
-{
-    return aImpl.getPropertyByName( Name );
-}
-
-sal_Bool SbPropertyContainer::hasPropertyByName(const ::rtl::OUString& Name)
-    throw( RuntimeException )
-{
-    return aImpl.hasPropertyByName( Name );
-}
-
-//----------------------------------------------------------------------------
-
-Sequence< PropertyValue > SbPropertyContainer::getPropertyValues(void)
-{
-    return Sequence<PropertyValue>();
-}
-
-//----------------------------------------------------------------------------
-
-void SbPropertyContainer::setPropertyValues(const Sequence< PropertyValue >& PropertyValues_)
-{
-    (void)PropertyValues_;
 }
 
 //----------------------------------------------------------------------------

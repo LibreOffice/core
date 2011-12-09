@@ -789,21 +789,6 @@ void DockingWindow::DataChanged( const DataChangedEvent& rDCEvt )
 
 // -----------------------------------------------------------------------
 
-void DockingWindow::ShowTitleButton( sal_uInt16 nButton, sal_Bool bVisible )
-{
-    if ( mpFloatWin )
-        mpFloatWin->ShowTitleButton( nButton, bVisible );
-    else
-    {
-        if ( nButton == TITLE_BUTTON_DOCKING )
-            mbDockBtn = bVisible;
-        else /* if ( nButton == TITLE_BUTTON_HIDE ) */
-            mbHideBtn = bVisible;
-    }
-}
-
-// -----------------------------------------------------------------------
-
 void DockingWindow::SetFloatingMode( sal_Bool bFloatMode )
 {
     ImplDockingWindowWrapper *pWrapper = ImplGetDockingManager()->GetDockingWindowWrapper( this );

@@ -522,13 +522,4 @@ void TaskStatusBar::UserDraw( const UserDrawEvent& rUDEvt )
         StatusBar::UserDraw( rUDEvt );
 }
 
-// -----------------------------------------------------------------------
-
-void TaskStatusBar::InsertStatusField( long, sal_uInt16,
-                                       sal_uInt16 nFlags )
-{
-    mnFieldFlags = nFlags;
-    ImplUpdateField( sal_False );
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

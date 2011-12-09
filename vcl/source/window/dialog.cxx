@@ -973,15 +973,6 @@ void Dialog::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal
     pDev->Pop();
 }
 
-
-// =======================================================================
-
-ModelessDialog::ModelessDialog( Window* pParent, WinBits nStyle ) :
-    Dialog( WINDOW_MODELESSDIALOG )
-{
-    ImplInit( pParent, nStyle );
-}
-
 // -----------------------------------------------------------------------
 
 ModelessDialog::ModelessDialog( Window* pParent, const ResId& rResId ) :

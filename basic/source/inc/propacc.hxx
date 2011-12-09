@@ -107,7 +107,6 @@ typedef ::cppu::WeakImplHelper1< NS_BEANS::XPropertySetInfo > SbPropertySetInfoH
 class PropertySetInfoImpl
 {
     friend class SbPropertySetInfo;
-    friend class SbPropertyContainer;
 
     NS_UNO::Sequence< NS_BEANS::Property > _aProps;
 
@@ -130,7 +129,6 @@ class SbPropertySetInfo:    public SbPropertySetInfoHelper
     PropertySetInfoImpl aImpl;
 
 public:
-                            SbPropertySetInfo();
                             SbPropertySetInfo( const SbPropertyValueArr_Impl &rPropVals );
     virtual                 ~SbPropertySetInfo();
 
@@ -141,39 +139,6 @@ public:
         throw( NS_UNO::RuntimeException );
     virtual sal_Bool SAL_CALL hasPropertyByName(const ::rtl::OUString& Name)
         throw( NS_UNO::RuntimeException );
-};
-
-//==========================================================================
-
-typedef ::cppu::WeakImplHelper2< NS_BEANS::XPropertySetInfo, NS_BEANS::XPropertyContainer > SbPropertyContainerHelper;
-
-class SbPropertyContainer: public SbPropertyContainerHelper
-{
-    PropertySetInfoImpl aImpl;
-
-public:
-                            SbPropertyContainer();
-    virtual                 ~SbPropertyContainer();
-
-    // XPropertyContainer
-    virtual void SAL_CALL addProperty(  const ::rtl::OUString& Name,
-                                        sal_Int16 Attributes,
-                                        const NS_UNO::Any& DefaultValue)
-        throw(  NS_BEANS::PropertyExistException, NS_BEANS::IllegalTypeException,
-                NS_LANG::IllegalArgumentException, NS_UNO::RuntimeException );
-    virtual void SAL_CALL removeProperty(const ::rtl::OUString& Name)
-        throw( NS_BEANS::UnknownPropertyException, NS_UNO::RuntimeException );
-
-    // XPropertySetInfo
-    virtual NS_UNO::Sequence< NS_BEANS::Property > SAL_CALL getProperties(void) throw();
-    virtual NS_BEANS::Property SAL_CALL getPropertyByName(const ::rtl::OUString& Name)
-        throw( NS_UNO::RuntimeException );
-    virtual sal_Bool SAL_CALL hasPropertyByName(const ::rtl::OUString& Name)
-        throw( NS_UNO::RuntimeException );
-
-    // XPropertyAccess
-    virtual NS_UNO::Sequence< NS_BEANS::PropertyValue > SAL_CALL getPropertyValues(void);
-    virtual void SAL_CALL setPropertyValues(const NS_UNO::Sequence< NS_BEANS::PropertyValue >& PropertyValues_);
 };
 
 //=========================================================================

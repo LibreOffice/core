@@ -136,14 +136,6 @@ void FixedHyperlink::SetDescription( const String& rNewDescription )
     m_nTextLen = GetCtrlTextWidth( GetText() );
 }
 
-// class FixedHyperlinkImage ---------------------------------------------
-
-FixedHyperlinkImage::FixedHyperlinkImage( Window* pParent, const ResId& rResId ) :
-    FixedImage( pParent, rResId )
-{
-    Initialize();
-}
-
 FixedHyperlinkImage::FixedHyperlinkImage( Window* pParent, WinBits nWinStyle  ) :
     FixedImage( pParent, nWinStyle )
 {

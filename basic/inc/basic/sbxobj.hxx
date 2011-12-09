@@ -72,7 +72,6 @@ public:
     // Default-Property
     SbxProperty* GetDfltProperty();
     void SetDfltProperty( const String& r );
-    void SetDfltProperty( SbxProperty* );
     // Search for an element
     virtual SbxVariable* FindUserData( sal_uInt32 nUserData );
     virtual SbxVariable* Find( const String&, SbxClassType );

@@ -45,7 +45,6 @@ public:
     SbxMethod( const SbxMethod& r );
     ~SbxMethod();
     SbxMethod& operator=( const SbxMethod& r ) { SbxVariable::operator=( r ); return *this; }
-    sal_Bool Run( SbxValues* pValues = NULL );
     virtual SbxClassType GetClass() const;
 };
 

@@ -188,17 +188,14 @@ class SFX2_DLLPUBLIC SfxSingleTabDialog : public SfxModalDialog
 public:
     SfxSingleTabDialog( Window* pParent, const SfxItemSet& rOptionsSet, sal_uInt16 nUniqueId );
     SfxSingleTabDialog( Window* pParent, sal_uInt16 nUniqueId, const SfxItemSet* pInSet = 0 );
-    SfxSingleTabDialog( Window* pParent, sal_uInt16 nUniqueId, const String& rInfoURL );
 
     virtual             ~SfxSingleTabDialog();
 
-    void                SetPage( TabPage* pNewPage );
     void                SetTabPage( SfxTabPage* pTabPage, GetTabPageRanges pRangesFunc = 0 );
     SfxTabPage*         GetTabPage() const { return pImpl->m_pSfxPage; }
 
     OKButton*           GetOKButton() const { return pOKBtn; }
     CancelButton*       GetCancelButton() const { return pCancelBtn; }
-    void                SetInfoLink( const Link& rLink );
 
 private:
     GetTabPageRanges    fnGetRanges;

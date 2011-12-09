@@ -60,8 +60,6 @@ public:
                         ~Config();
 
     const XubString&    GetPathName() const { return maFileName; }
-    static XubString    GetDefDirectory();
-    static XubString    GetConfigName( const XubString& rPath, const XubString& rBaseName );
 
     void SetGroup(const rtl::OString& rGroup);
     const rtl::OString& GetGroup() const { return maGroupName; }

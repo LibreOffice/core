@@ -48,8 +48,17 @@
 SotData_Impl::SotData_Impl()
     : nSvObjCount( 0 )
     , pFactoryList( NULL )
+    , pSotObjectFactory( NULL )
+    , pSotStorageStreamFactory( NULL )
+    , pSotStorageFactory( NULL )
     , pDataFlavorList( NULL )
 {
+}
+
+SotData_Impl::~SotData_Impl()
+{
+    delete pDataFlavorList;
+    delete pFactoryList;
 }
 
 /*************************************************************************
@@ -58,7 +67,6 @@ SotData_Impl::SotData_Impl()
 |*    Beschreibung
 *************************************************************************/
 namespace { struct ImplData : public rtl::Static<SotData_Impl, ImplData> {}; }
-
 SotData_Impl * SOTDATA()
 {
     return &ImplData::get();

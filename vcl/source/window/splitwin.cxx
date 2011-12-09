@@ -2950,46 +2950,6 @@ void SplitWindow::Clear()
 
 // -----------------------------------------------------------------------
 
-void SplitWindow::SetItemBackground( sal_uInt16 nSetId, const Wallpaper& rWallpaper )
-{
-    ImplSplitSet* pSet = ImplFindSet( mpMainSet, nSetId );
-
-    if ( pSet )
-    {
-        sal_Bool bUpdate = sal_True;
-
-        if ( rWallpaper.GetStyle() == WALLPAPER_NULL )
-        {
-            if ( pSet->mpWallpaper )
-            {
-                delete pSet->mpWallpaper;
-                pSet->mpWallpaper = NULL;
-            }
-            else
-                bUpdate = sal_False;
-        }
-        else
-        {
-            // Ab jetzt muss immer invalidiert werden
-            mbInvalidate = sal_True;
-
-            if ( !pSet->mpWallpaper )
-                pSet->mpWallpaper = new Wallpaper( rWallpaper );
-            else
-                *(pSet->mpWallpaper) = rWallpaper;
-        }
-
-        // Beim MainSet koennen wir den Background umsetzen
-        if ( pSet == mpMainSet )
-            ImplInitSettings();
-
-        if ( bUpdate )
-            ImplUpdateSet( pSet );
-    }
-}
-
-// -----------------------------------------------------------------------
-
 void SplitWindow::SplitItem( sal_uInt16 nId, long nNewSize,
                              sal_Bool bPropSmall, sal_Bool bPropGreat )
 {
@@ -3332,19 +3292,6 @@ void SplitWindow::SetItemSizeRange (sal_uInt16 nId, const Range aRange)
 
 // -----------------------------------------------------------------------
 
-Window* SplitWindow::GetItemWindow( sal_uInt16 nId ) const
-{
-    sal_uInt16          nPos;
-    ImplSplitSet*   pSet = ImplFindItem( mpBaseSet, nId, nPos );
-
-    if ( pSet )
-        return pSet->mpItems[nPos].mpWindow;
-    else
-        return NULL;
-}
-
-// -----------------------------------------------------------------------
-
 sal_uInt16 SplitWindow::GetSet( sal_uInt16 nId ) const
 {
     sal_uInt16          nPos;
@@ -3481,40 +3428,6 @@ void SplitWindow::SetAlign( WindowAlign eNewAlign )
 
 // -----------------------------------------------------------------------
 
-Size SplitWindow::CalcWindowSizePixel( const Size& rSize, WindowAlign eAlign,
-                                       WinBits nWinStyle, sal_Bool bExtra )
-{
-    long    nLeft;
-    long    nTop;
-    long    nRight;
-    long    nBottom;
-    Size    aSize = rSize;
-
-    ImplCalcBorder( eAlign, sal_False, nLeft, nTop, nRight, nBottom );
-    aSize.Width()   += nLeft+nRight;
-    aSize.Height()  += nTop+nBottom;
-
-    if ( nWinStyle & WB_SIZEABLE )
-    {
-        if ( (eAlign == WINDOWALIGN_TOP) || (eAlign == WINDOWALIGN_BOTTOM) )
-        {
-            aSize.Height() += SPLITWIN_SPLITSIZE-2;
-            if ( bExtra )
-                aSize.Height() += SPLITWIN_SPLITSIZEEXLN;
-        }
-        else
-        {
-            aSize.Width() += SPLITWIN_SPLITSIZE-2;
-            if ( bExtra )
-                aSize.Width() += SPLITWIN_SPLITSIZEEXLN;
-        }
-    }
-
-    return aSize;
-}
-
-// -----------------------------------------------------------------------
-
 void SplitWindow::ShowAutoHideButton( sal_Bool bShow )
 {
     mbAutoHide = bShow;
@@ -3562,15 +3475,6 @@ long SplitWindow::GetFadeInSize() const
         n = mnLeftBorder+mnRightBorder;
 
     return n+SPLITWIN_SPLITSIZE+SPLITWIN_SPLITSIZEEX-2;
-}
-
-// -----------------------------------------------------------------------
-
-Rectangle SplitWindow::GetAutoHideRect() const
-{
-    Rectangle aRect;
-    ImplGetAutoHideRect( aRect, sal_True );
-    return aRect;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

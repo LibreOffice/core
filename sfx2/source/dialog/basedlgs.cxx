@@ -778,31 +778,6 @@ SfxSingleTabDialog::SfxSingleTabDialog
 
 // -----------------------------------------------------------------------
 
-SfxSingleTabDialog::SfxSingleTabDialog
-(
-    Window* pParent,
-    sal_uInt16 nUniqueId,
-    const String& rInfoURL
-)
-
-/*  [Description]
-
-    Constructor of the general base class for SingleTab-Dialoge;
-    ID for the ini-file is handed over.
-*/
-
-:   SfxModalDialog( pParent, nUniqueId, WinBits( WB_STDMODAL | WB_3DLOOK ) ),
-
-    pOKBtn          ( NULL ),
-    pCancelBtn      ( NULL ),
-    pHelpBtn        ( NULL ),
-    pImpl           ( new SingleTabDlgImpl )
-{
-    pImpl->m_sInfoURL = rInfoURL;
-}
-
-// -----------------------------------------------------------------------
-
 SfxSingleTabDialog::~SfxSingleTabDialog()
 {
     delete pOKBtn;
@@ -813,78 +788,6 @@ SfxSingleTabDialog::~SfxSingleTabDialog()
     delete pImpl->m_pLine;
     delete pImpl->m_pInfoImage;
     delete pImpl;
-}
-
-// -----------------------------------------------------------------------
-
-void SfxSingleTabDialog::SetPage( TabPage* pNewPage )
-{
-    if ( !pImpl->m_pLine )
-        pImpl->m_pLine = new FixedLine( this );
-
-    if ( !pOKBtn )
-    {
-        pOKBtn = new OKButton( this, WB_DEFBUTTON );
-        pOKBtn->SetClickHdl( LINK( this, SfxSingleTabDialog, OKHdl_Impl ) );
-    }
-
-    if ( pImpl->m_sInfoURL.Len() > 0 && !pImpl->m_pInfoImage )
-    {
-        pImpl->m_pInfoImage = new ::svt::FixedHyperlinkImage( this );
-        Image aInfoImage = Image( SfxResId( IMG_INFO ) );
-        Size aImageSize = aInfoImage.GetSizePixel();
-        aImageSize.Width() += 4;
-        aImageSize.Height() += 4;
-        pImpl->m_pInfoImage->SetSizePixel( aImageSize );
-        pImpl->m_pInfoImage->SetImage( aInfoImage );
-        pImpl->m_pInfoImage->SetURL( pImpl->m_sInfoURL );
-        pImpl->m_pInfoImage->SetClickHdl( pImpl->m_aInfoLink );
-    }
-
-    if ( pImpl->m_pTabPage )
-        delete pImpl->m_pTabPage;
-    if ( pImpl->m_pSfxPage )
-        delete pImpl->m_pSfxPage;
-    pImpl->m_pTabPage = pNewPage;
-
-    if ( pImpl->m_pTabPage )
-    {
-        // Adjust size and position.
-        pImpl->m_pTabPage->SetPosPixel( Point() );
-        Size aOutSz( pImpl->m_pTabPage->GetSizePixel() );
-        Size aOffSz = LogicToPixel( Size( RSC_SP_CTRL_X, RSC_SP_CTRL_Y ), MAP_APPFONT );
-        Size aFLSz = LogicToPixel( Size( aOutSz.Width(), RSC_CD_FIXEDLINE_HEIGHT ) );
-        Size aBtnSz = LogicToPixel( Size( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT ), MAP_APPFONT );
-
-        Point aPnt( 0, aOutSz.Height() );
-        pImpl->m_pLine->SetPosSizePixel( aPnt, aFLSz );
-        aPnt.X() = aOutSz.Width() - aOffSz.Width() - aBtnSz.Width();
-        aPnt.Y() +=  aFLSz.Height() + ( aOffSz.Height() / 2 );
-        pOKBtn->SetPosSizePixel( aPnt, aBtnSz );
-
-        if ( pImpl->m_pInfoImage )
-        {
-            aPnt.X() = aOffSz.Width();
-            long nDelta = ( pImpl->m_pInfoImage->GetSizePixel().Height() - aBtnSz.Height() ) / 2;
-            aPnt.Y() -= nDelta;
-            pImpl->m_pInfoImage->SetPosPixel( aPnt );
-            pImpl->m_pInfoImage->Show();
-        }
-
-        aOutSz.Height() += aFLSz.Height() + ( aOffSz.Height() / 2 ) + aBtnSz.Height() + aOffSz.Height();
-        SetOutputSizePixel( aOutSz );
-
-        pImpl->m_pLine->Show();
-        pOKBtn->Show();
-        pImpl->m_pTabPage->Show();
-
-        // Set TabPage text in the Dialog
-        SetText( pImpl->m_pTabPage->GetText() );
-
-        // Dialog recieves the HelpId of TabPage
-        SetHelpId( pImpl->m_pTabPage->GetHelpId() );
-        SetUniqueId( pImpl->m_pTabPage->GetUniqueId() );
-    }
 }
 
 // -----------------------------------------------------------------------
@@ -954,13 +857,6 @@ void SfxSingleTabDialog::SetTabPage( SfxTabPage* pTabPage,
         SetHelpId( pImpl->m_pSfxPage->GetHelpId() );
         SetUniqueId( pImpl->m_pSfxPage->GetUniqueId() );
     }
-}
-
-// -----------------------------------------------------------------------
-
-void SfxSingleTabDialog::SetInfoLink( const Link& rLink )
-{
-    pImpl->m_aInfoLink = rLink;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

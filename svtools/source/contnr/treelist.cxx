@@ -1378,22 +1378,10 @@ void SvTreeList::SetListPositions( SvTreeEntryList* pList )
     }
 }
 
-
 void SvTreeList::InvalidateEntry( SvListEntry* pEntry )
 {
     Broadcast( LISTACTION_INVALIDATE_ENTRY, pEntry );
 }
-
-sal_Bool SvTreeList::IsInChildList( SvListEntry* pParent, SvListEntry* pChild) const
-{
-    if ( !pParent )
-        pParent = pRootItem;
-    sal_Bool bIsChild = sal_False;
-    if ( pParent->pChildren )
-        bIsChild = (sal_Bool)(pParent->pChildren->GetPos(pChild) != ULONG_MAX);
-    return bIsChild;
-}
-
 
 void lcl_CheckList( SvTreeEntryList* pList )
 {

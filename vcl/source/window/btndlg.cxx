@@ -362,11 +362,6 @@ void ButtonDialog::Clear()
     mbFormat = sal_True;
 }
 
-sal_uInt16 ButtonDialog::GetButtonCount() const
-{
-    return (sal_uInt16)maItemList.size();
-}
-
 sal_uInt16 ButtonDialog::GetButtonId( sal_uInt16 nButton ) const
 {
     if ( nButton < maItemList.size() )

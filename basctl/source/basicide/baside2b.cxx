@@ -1542,16 +1542,6 @@ void StackWindow::Resize()
     Invalidate();
 }
 
-
-
-IMPL_LINK_INLINE_START( StackWindow, ButtonHdl, ImageButton *, /*pButton*/ )
-{
-    return 0;
-}
-IMPL_LINK_INLINE_END( StackWindow, ButtonHdl, ImageButton *, pButton )
-
-
-
 void StackWindow::UpdateCalls()
 {
     aTreeListBox.SetUpdateMode( sal_False );

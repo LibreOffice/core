@@ -445,8 +445,6 @@ TYPEINIT1(SbJScriptMethod,SbMethod)
 TYPEINIT1(SbObjModule,SbModule)
 TYPEINIT1(SbUserFormModule,SbObjModule)
 
-typedef std::vector<HighlightPortion> HighlightPortions;
-
 uno::Reference< frame::XModel > getDocumentModel( StarBASIC* pb )
 {
     uno::Reference< frame::XModel > xModel;
@@ -992,12 +990,6 @@ void SbModule::SetSource32( const ::rtl::OUString& r )
         }
     }
     EndDefinitions( sal_True );
-}
-
-void SbModule::SetComment( const String& r )
-{
-    aComment = r;
-    SetModified( sal_True );
 }
 
 SbMethod* SbModule::GetFunctionForLine( sal_uInt16 nLine )

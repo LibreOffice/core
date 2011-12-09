@@ -986,16 +986,6 @@ void ToolBox::SetPageScroll( sal_Bool b )
 
 // -----------------------------------------------------------------------
 
-void ToolBox::SetNextToolBox( const XubString& rStr )
-{
-    sal_Bool bCalcNew = (!maNextToolBoxStr.Len() != !rStr.Len());
-    maNextToolBoxStr = rStr;
-    if ( bCalcNew )
-        ImplInvalidate( sal_True, sal_False );
-}
-
-// -----------------------------------------------------------------------
-
 sal_uInt16 ToolBox::GetItemCount() const
 {
     return (sal_uInt16)mpData->m_aItems.size();
@@ -1156,19 +1146,6 @@ Rectangle ToolBox::GetItemPosRect( sal_uInt16 nPos ) const
 
     if ( nPos < mpData->m_aItems.size() )
         return mpData->m_aItems[nPos].maRect;
-    else
-        return Rectangle();
-}
-
-// -----------------------------------------------------------------------
-
-Rectangle ToolBox::GetItemPosDropDownRect( sal_uInt16 nPos ) const
-{
-    if ( mbCalc || mbFormat )
-        ((ToolBox*)this)->ImplFormat();
-
-    if ( nPos < mpData->m_aItems.size() )
-        return mpData->m_aItems[nPos].GetDropDownRect( mbHorz );
     else
         return Rectangle();
 }

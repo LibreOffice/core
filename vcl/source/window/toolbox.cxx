@@ -6016,11 +6016,6 @@ void ToolBox::ImplDisableFlatButtons()
 #endif
 }
 
-ToolBoxLayoutMode ToolBox::GetToolbarLayoutMode()
-{
-    return meLayoutMode;
-}
-
 void ToolBox::SetToolbarLayoutMode( ToolBoxLayoutMode eLayout )
 {
     if ( meLayoutMode != eLayout )

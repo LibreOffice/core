@@ -957,16 +957,4 @@ sal_Bool SbModule::Compile()
     return bRet;
 }
 
-/**************************************************************************
-*
-*   Syntax-Highlighting
-*
-**************************************************************************/
-
-void StarBASIC::Highlight( const String& rSrc, SbTextPortions& rList )
-{
-    SbiTokenizer aTok( rSrc );
-    aTok.Hilite( rList );
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

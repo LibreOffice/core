@@ -76,18 +76,13 @@ public:
             , nPropertyVersion( 0 )
                     {}
 
-    sal_Bool GetSlots();
-
     /// ExecuteFunction
     sal_uInt16 mnSID;
     SfxPoolItem** mppArgs;
     sal_uInt16 mnMode;
-    sal_uInt16 ExecuteFunction( sal_uInt16 nSID, SfxPoolItem** ppArgs = NULL, sal_uInt16 nMode = 0 );
 
     /// Img
     Bitmap *mpBmp;
-
-    static SvtResId GetSvtResId( sal_uInt16 nId );
 
     sal_uLong nSidOpenUrl;
     sal_uLong nSidFileName;

@@ -131,7 +131,6 @@ class VCL_DLLPUBLIC ModelessDialog : public Dialog
     SAL_DLLPRIVATE         ModelessDialog & operator= (const ModelessDialog &);
 
 public:
-                    ModelessDialog( Window* pParent, WinBits nStyle = WB_STDMODELESS );
                     ModelessDialog( Window* pParent, const ResId& rResId );
 };
 

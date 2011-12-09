@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include <svl/pickerhistory.hxx>
 #include <svl/pickerhistoryaccess.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <vector>
@@ -105,18 +104,6 @@ namespace svt
 
             return xTopMostAlive;
         }
-    }
-
-    //---------------------------------------------------------------------
-    Reference< XInterface > GetTopMostFolderPicker( )
-    {
-        return implGetTopMostPicker( getFolderPickerHistory() );
-    }
-
-    //---------------------------------------------------------------------
-    Reference< XInterface > GetTopMostFilePicker( )
-    {
-        return implGetTopMostPicker( getFilePickerHistory() );
     }
 
     //---------------------------------------------------------------------

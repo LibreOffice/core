@@ -116,7 +116,6 @@ public:
     const String&   GetComment() const            { return aComment; }
     virtual void    SetSource( const String& r );
     void            SetSource32( const ::rtl::OUString& r );
-    void            SetComment( const String& r );
 
     virtual sal_Bool    Compile();
     sal_Bool            Disassemble( String& rText );

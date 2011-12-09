@@ -1336,11 +1336,6 @@ const rtl::OString& Window::GetUniqueId() const
     return mpWindowImpl->maUniqId;
 }
 
-const rtl::OString& Window::GetUniqueOrHelpId() const
-{
-    return mpWindowImpl->maUniqId.getLength() ? mpWindowImpl->maUniqId : mpWindowImpl->maHelpId;
-}
-
 // --------- old inline methods ---------------
 
 Window* Window::ImplGetWindow()

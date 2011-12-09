@@ -115,7 +115,6 @@ public:
 
     static Time     GetUTCOffset();
     static sal_uIntPtr  GetSystemTicks();       // Elapsed time
-    static sal_uIntPtr  GetProcessTicks();      // CPU time
 
     void            ConvertToUTC()       { *this -= Time::GetUTCOffset(); }
     void            ConvertToLocalTime() { *this += Time::GetUTCOffset(); }

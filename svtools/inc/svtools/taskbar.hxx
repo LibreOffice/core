@@ -54,12 +54,6 @@ typedef ::std::vector< ImplTaskSBFldItem* > ImplTaskSBItemList;
 TaskToolBox
 ===========
 
-StartUpdateTask()/UpdateTask()/EndUpdateTask()
-Diese muessen gerufen werden, wenn die Task upgedatet werden muessen.
-Dann muss StartUpdateTask() gerufen werden, dann UpdateTask() fuer alle
-Task's und danach EndUpdateTask() wo dann die TaskButtons entsprechend
-neu angeordnet werden.
-
 ActivateTask()
 Handler der gerufen wird, wenn ein Task aktiviert werden muss.
 
@@ -203,11 +197,6 @@ public:
     virtual void        Command( const CommandEvent& rCEvt );
     virtual void        RequestHelp( const HelpEvent& rHEvt );
 
-    void                StartUpdateTask();
-    void                UpdateTask( const Image& rImage, const String& rText,
-                                    sal_Bool bActive = sal_False );
-    void                EndUpdateTask();
-
     const Point&        GetContextMenuPos() const { return maContextMenuPos; }
     sal_Bool                IsMinActivate() const { return mbMinActivate; }
 
@@ -317,9 +306,6 @@ public:
     virtual void        RequestHelp( const HelpEvent& rHEvt );
     virtual void        UserDraw( const UserDrawEvent& rUDEvt );
 
-    void                InsertStatusField( long nOffset = STATUSBAR_OFFSET,
-                                           sal_uInt16 nPos = STATUSBAR_APPEND,
-                                           sal_uInt16 nFlags = TASKSTATUSFIELD_CLOCK );
     void                RemoveStatusField()
                             { maTimer.Stop(); RemoveItem( TASKSTATUSBAR_STATUSFIELDID ); }
     sal_uInt16              GetFieldFlags() const { return mnFieldFlags; }
@@ -401,56 +387,6 @@ public:
 
     void                    SetTaskResizeHdl( const Link& rLink ) { maTaskResizeHdl = rLink; }
     const Link&             GetTaskResizeHdl() const { return maTaskResizeHdl; }
-};
-
-// -----------------------
-// - WindowArrange-Types -
-// -----------------------
-
-#define WINDOWARRANGE_TILE      1
-#define WINDOWARRANGE_HORZ      2
-#define WINDOWARRANGE_VERT      3
-#define WINDOWARRANGE_CASCADE   4
-
-class ImplWindowArrangeList;
-
-// -----------------------
-// - class WindowArrange -
-// -----------------------
-
-typedef ::std::vector< Window* > WindowList_impl;
-
-class SVT_DLLPUBLIC WindowArrange
-{
-private:
-    WindowList_impl     maWinList;
-
-#ifdef _TASKBAR_CXX
-    SVT_DLLPRIVATE void ImplTile( const Rectangle& rRect );
-    SVT_DLLPRIVATE void ImplHorz( const Rectangle& rRect );
-    SVT_DLLPRIVATE void ImplVert( const Rectangle& rRect );
-    SVT_DLLPRIVATE void ImplCascade( const Rectangle& rRect );
-#endif
-
-public:
-                        WindowArrange();
-                        ~WindowArrange();
-
-    void                AddWindow( Window* pWindow, size_t nPos = size_t(-1) )
-                        {
-                            if ( nPos < maWinList.size() ) {
-                                maWinList.insert( maWinList.begin() + nPos, pWindow );
-                            } else {
-                                maWinList.push_back( pWindow );
-                            }
-                        }
-
-    void                RemoveAllWindows()
-                        {
-                            maWinList.clear();
-                        }
-
-    void                Arrange( sal_uInt16 nType, const Rectangle& rRect );
 };
 
 #endif  // _TASKBAR_HXX

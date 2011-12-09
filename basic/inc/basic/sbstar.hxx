@@ -125,7 +125,6 @@ public:
     SbModule*       MakeModule32( const String& rName, const ::rtl::OUString& rSrc );
     SbModule*       MakeModule32( const String& rName, const com::sun::star::script::ModuleInfo& mInfo, const ::rtl::OUString& rSrc );
     sal_Bool            Compile( SbModule* );
-    sal_Bool            Disassemble( SbModule*, String& rText );
     static void     Stop();
     static void     Error( SbError );
     static void     Error( SbError, const String& rMsg );
@@ -136,8 +135,6 @@ public:
     // #66536 make additional message accessible by RTL function Error
     static String   GetErrorMsg();
     static xub_StrLen GetErl();
-    // Highlighting
-    void            Highlight( const String& rSrc, SbTextPortions& rList );
 
     virtual SbxVariable* Find( const String&, SbxClassType );
     virtual sal_Bool Call( const String&, SbxArray* = NULL );
@@ -149,9 +146,6 @@ public:
     void            InitAllModules( StarBASIC* pBasicNotToInit = NULL );
     void            DeInitAllModules( void );
     void            ClearAllModuleVars( void );
-
-    // #43011 For TestTool; deletes global vars
-    void            ClearGlobalVars( void );
 
     // Calls for error and break handler
     static sal_uInt16   GetLine();

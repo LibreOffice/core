@@ -323,21 +323,6 @@ void SbxObject::SetDfltProperty( const XubString& rName )
     SetModified( sal_True );
 }
 
-void SbxObject::SetDfltProperty( SbxProperty* p )
-{
-    if( p )
-    {
-        sal_uInt16 n;
-        SbxArray* pArray = FindVar( p, n );
-        pArray->Put( p, n );
-        if( p->GetParent() != this )
-            p->SetParent( this );
-        Broadcast( SBX_HINT_OBJECTCHANGED );
-    }
-    pDfltProp = p;
-    SetModified( sal_True );
-}
-
 // Search of a already available variable. If she was located,
 // the index will be set, elsewise will be delivered the Count of the Array.
 // In any case it will be delivered the correct Array.
@@ -902,15 +887,6 @@ SbxMethod::SbxMethod( const SbxMethod& r )
 
 SbxMethod::~SbxMethod()
 {
-}
-
-sal_Bool SbxMethod::Run( SbxValues* pValues )
-{
-    SbxValues aRes;
-    if( !pValues )
-        pValues = &aRes;
-    pValues->eType = SbxVARIANT;
-    return Get( *pValues );
 }
 
 SbxClassType SbxMethod::GetClass() const
