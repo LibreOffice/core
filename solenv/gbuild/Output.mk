@@ -61,9 +61,9 @@ gb_Output_BELL := $(shell echo|awk 'BEGIN { printf "%c", 7 }' -)
 # - gb_COLOR is set
 # - we have a known term
 KNOWN_TERM:=Eterm aterm gnome kterm linux putty rxvt rxvt-unicode screen xterm xterm xtermc
-KNOWN_TERM:=$(KNOW_TERM) $(patsubst %,%-color,$(KNOWN_TERM))
-KNOWN_TERM:=$(KNOW_TERM) $(patsubst %-color,%-256color,$(KNOWN_TERM))
-KNOWN_TERM:=$(KNOW_TERM) $(patsubst %-color,%+256color,$(KNOWN_TERM))
+KNOWN_TERM+=$(patsubst %,%-color,$(KNOWN_TERM))
+KNOWN_TERM+=$(patsubst %-color,%-256color,$(KNOWN_TERM))
+KNOWN_TERM+=$(patsubst %-color,%+256color,$(KNOWN_TERM))
 ifneq ($(strip $(gb_COLOR)),)
 ifneq ($(filter $(TERM),$(KNOWN_TERM)),)
 
