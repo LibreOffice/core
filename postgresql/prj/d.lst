@@ -3,5 +3,5 @@ mkdir: %_DEST%\inc\postgresql
 ..\%__SRC%\misc\build\postgresql-*\src\include\postgres_ext.h %_DEST%\inc\postgresql\
 ..\%__SRC%\misc\build\postgresql-*\src\interfaces\libpq\libpq-fe.h %_DEST%\inc\postgresql\
 ..\%__SRC%\misc\build\postgresql-*\src\interfaces\libpq\libpq.a %_DEST%\lib\
-..\%__SRC%\lib\*.lib %_DEST%\lib\*.lib
+..\%__SRC%\misc\build\postgresql-*\src\interfaces\libpq\libpq.lib %_DEST%\lib\
 
