@@ -60,8 +60,6 @@ $(call gb_JavaClassSet_get_clean_target,%) :
 	$(call gb_Helper_abbreviate_dirs,\
 		rm -rf $(dir $(call gb_JavaClassSet_get_target,$*)))
 
-# UGLY: cannot use target local variable for REPO because it's needed in prereq
-# No idea what above comment means, and whether still relevant
 define gb_JavaClassSet_JavaClassSet
 $(call gb_JavaClassSet_get_target,$(1)) : JARDEPS :=
 endef
