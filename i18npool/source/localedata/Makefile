@@ -48,13 +48,8 @@ localedata_%_invis.cxx : $(realpath $(SRC_ROOT)/i18npool/source/localedata/data)
 endif
 
 saxparser.rdb : saxparser.input
-ifeq ($(OS_FOR_BUILD),WNT)
-	$(gb_XSLTPROC) --nonet --stringparam prefix `cygpath -m $(OUTDIR)/xml/` -o $@ \
-		$(SOLARENV)/bin/packcomponents.xslt saxparser.input
-else
-	$(gb_XSLTPROC) --nonet --stringparam prefix $(OUTDIR)/xml/ -o $@ \
-		$(SOLARENV)/bin/packcomponents.xslt saxparser.input
-endif
+	$(call gb_Helper_abbreviate_dirs_native, $(gb_XSLTPROC) --nonet --stringparam prefix $(OUTDIR)/xml/ -o $@ \
+		$(SOLARENV)/bin/packcomponents.xslt saxparser.input)
 
 saxparser.input :
 	echo '<list><filename>$(my_components)</filename></list>' > $@
