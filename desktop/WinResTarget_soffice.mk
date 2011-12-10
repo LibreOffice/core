@@ -37,6 +37,7 @@ $(eval $(call gb_WinResTarget_set_defs,soffice/src,\
     -DRES_APP_NAME=soffice \
     -DRES_APP_ICON=icons/main_app.ico \
     -DVERVARIANT=$(BUILD) \
+    -DRES_APP_VENDOR="$(OOO_VENDOR)" \
 ))
 
 $(eval $(call gb_WinResTarget_add_dependency,soffice/src,\

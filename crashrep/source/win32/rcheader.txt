@@ -37,8 +37,6 @@
 #define IDC_STATIC		(-1)
 #endif
 
-#define VER_FIRSTYEAR	2003
-
 #include "version.hrc"
 
 #ifdef FONTSIZE
@@ -54,8 +52,8 @@
 // -----------------------------------------------------------------------
 
 VS_VERSION_INFO versioninfo
-	fileversion    VERSION, SUBVERSION, VERVARIANT, VER_COUNT
-	productversion VERSION, SUBVERSION, VERVARIANT, VER_COUNT
+	fileversion    VERSION, SUBVERSION, MICROVERSION, VERVARIANT
+	productversion VERSION, SUBVERSION, MICROVERSION, VERVARIANT
 	fileflagsmask 0x3F
 	fileflags
 #if defined(DEBUG)
@@ -88,5 +86,3 @@ VS_VERSION_INFO versioninfo
 			value "Translation", 0x0409, 1252
 		}
 	}
-
-

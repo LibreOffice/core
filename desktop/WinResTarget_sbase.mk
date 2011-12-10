@@ -37,6 +37,7 @@ $(eval $(call gb_WinResTarget_set_defs,sbase/src,\
     -DRES_APP_NAME=sbase \
     -DRES_APP_ICON=icons/base_app.ico \
     -DVERVARIANT=$(BUILD) \
+    -DRES_APP_VENDOR="$(OOO_VENDOR)" \
 ))
 
 $(eval $(call gb_WinResTarget_add_dependency,sbase/src,\

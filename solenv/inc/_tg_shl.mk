@@ -259,6 +259,7 @@ $(SHL1TARGETN) : \
 .ENDIF			# "$(SHL1ADD_VERINFO)"!=""
     @echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)/$(SHL1DEFAULTRES:b).rc
     @echo $(EMQ)#define ORG_NAME	$(SHL1TARGET)$(DLLPOST) >> $(MISC)/$(SHL1DEFAULTRES:b).rc
+    @echo $(EMQ)#define RES_APP_VENDOR $(OOO_VENDOR) >> $(MISC)/$(SHL1DEFAULTRES:b).rc
     @echo $(EMQ)#define INTERNAL_NAME $(SHL1TARGET:b) >> $(MISC)/$(SHL1DEFAULTRES:b).rc
     @echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC)/$(SHL1DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
@@ -749,6 +750,7 @@ $(SHL2TARGETN) : \
 .ENDIF			# "$(SHL2ADD_VERINFO)"!=""
     @echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)/$(SHL2DEFAULTRES:b).rc
     @echo $(EMQ)#define ORG_NAME	$(SHL2TARGET)$(DLLPOST) >> $(MISC)/$(SHL2DEFAULTRES:b).rc
+    @echo $(EMQ)#define RES_APP_VENDOR $(OOO_VENDOR) >> $(MISC)/$(SHL2DEFAULTRES:b).rc
     @echo $(EMQ)#define INTERNAL_NAME $(SHL2TARGET:b) >> $(MISC)/$(SHL2DEFAULTRES:b).rc
     @echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC)/$(SHL2DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
@@ -1239,6 +1241,7 @@ $(SHL3TARGETN) : \
 .ENDIF			# "$(SHL3ADD_VERINFO)"!=""
     @echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)/$(SHL3DEFAULTRES:b).rc
     @echo $(EMQ)#define ORG_NAME	$(SHL3TARGET)$(DLLPOST) >> $(MISC)/$(SHL3DEFAULTRES:b).rc
+    @echo $(EMQ)#define RES_APP_VENDOR $(OOO_VENDOR) >> $(MISC)/$(SHL3DEFAULTRES:b).rc
     @echo $(EMQ)#define INTERNAL_NAME $(SHL3TARGET:b) >> $(MISC)/$(SHL3DEFAULTRES:b).rc
     @echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC)/$(SHL3DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
@@ -1729,6 +1732,7 @@ $(SHL4TARGETN) : \
 .ENDIF			# "$(SHL4ADD_VERINFO)"!=""
     @echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)/$(SHL4DEFAULTRES:b).rc
     @echo $(EMQ)#define ORG_NAME	$(SHL4TARGET)$(DLLPOST) >> $(MISC)/$(SHL4DEFAULTRES:b).rc
+    @echo $(EMQ)#define RES_APP_VENDOR $(OOO_VENDOR) >> $(MISC)/$(SHL4DEFAULTRES:b).rc
     @echo $(EMQ)#define INTERNAL_NAME $(SHL4TARGET:b) >> $(MISC)/$(SHL4DEFAULTRES:b).rc
     @echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC)/$(SHL4DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
@@ -2219,6 +2223,7 @@ $(SHL5TARGETN) : \
 .ENDIF			# "$(SHL5ADD_VERINFO)"!=""
     @echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)/$(SHL5DEFAULTRES:b).rc
     @echo $(EMQ)#define ORG_NAME	$(SHL5TARGET)$(DLLPOST) >> $(MISC)/$(SHL5DEFAULTRES:b).rc
+    @echo $(EMQ)#define RES_APP_VENDOR $(OOO_VENDOR) >> $(MISC)/$(SHL5DEFAULTRES:b).rc
     @echo $(EMQ)#define INTERNAL_NAME $(SHL5TARGET:b) >> $(MISC)/$(SHL5DEFAULTRES:b).rc
     @echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC)/$(SHL5DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
@@ -2709,6 +2714,7 @@ $(SHL6TARGETN) : \
 .ENDIF			# "$(SHL6ADD_VERINFO)"!=""
     @echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)/$(SHL6DEFAULTRES:b).rc
     @echo $(EMQ)#define ORG_NAME	$(SHL6TARGET)$(DLLPOST) >> $(MISC)/$(SHL6DEFAULTRES:b).rc
+    @echo $(EMQ)#define RES_APP_VENDOR $(OOO_VENDOR) >> $(MISC)/$(SHL6DEFAULTRES:b).rc
     @echo $(EMQ)#define INTERNAL_NAME $(SHL6TARGET:b) >> $(MISC)/$(SHL6DEFAULTRES:b).rc
     @echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC)/$(SHL6DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
@@ -3199,6 +3205,7 @@ $(SHL7TARGETN) : \
 .ENDIF			# "$(SHL7ADD_VERINFO)"!=""
     @echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)/$(SHL7DEFAULTRES:b).rc
     @echo $(EMQ)#define ORG_NAME	$(SHL7TARGET)$(DLLPOST) >> $(MISC)/$(SHL7DEFAULTRES:b).rc
+    @echo $(EMQ)#define RES_APP_VENDOR $(OOO_VENDOR) >> $(MISC)/$(SHL7DEFAULTRES:b).rc
     @echo $(EMQ)#define INTERNAL_NAME $(SHL7TARGET:b) >> $(MISC)/$(SHL7DEFAULTRES:b).rc
     @echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC)/$(SHL7DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
@@ -3689,6 +3696,7 @@ $(SHL8TARGETN) : \
 .ENDIF			# "$(SHL8ADD_VERINFO)"!=""
     @echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)/$(SHL8DEFAULTRES:b).rc
     @echo $(EMQ)#define ORG_NAME	$(SHL8TARGET)$(DLLPOST) >> $(MISC)/$(SHL8DEFAULTRES:b).rc
+    @echo $(EMQ)#define RES_APP_VENDOR $(OOO_VENDOR) >> $(MISC)/$(SHL8DEFAULTRES:b).rc
     @echo $(EMQ)#define INTERNAL_NAME $(SHL8TARGET:b) >> $(MISC)/$(SHL8DEFAULTRES:b).rc
     @echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC)/$(SHL8DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
@@ -4179,6 +4187,7 @@ $(SHL9TARGETN) : \
 .ENDIF			# "$(SHL9ADD_VERINFO)"!=""
     @echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)/$(SHL9DEFAULTRES:b).rc
     @echo $(EMQ)#define ORG_NAME	$(SHL9TARGET)$(DLLPOST) >> $(MISC)/$(SHL9DEFAULTRES:b).rc
+    @echo $(EMQ)#define RES_APP_VENDOR $(OOO_VENDOR) >> $(MISC)/$(SHL9DEFAULTRES:b).rc
     @echo $(EMQ)#define INTERNAL_NAME $(SHL9TARGET:b) >> $(MISC)/$(SHL9DEFAULTRES:b).rc
     @echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC)/$(SHL9DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
@@ -4669,6 +4678,7 @@ $(SHL10TARGETN) : \
 .ENDIF			# "$(SHL10ADD_VERINFO)"!=""
     @echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)/$(SHL10DEFAULTRES:b).rc
     @echo $(EMQ)#define ORG_NAME	$(SHL10TARGET)$(DLLPOST) >> $(MISC)/$(SHL10DEFAULTRES:b).rc
+    @echo $(EMQ)#define RES_APP_VENDOR $(OOO_VENDOR) >> $(MISC)/$(SHL10DEFAULTRES:b).rc
     @echo $(EMQ)#define INTERNAL_NAME $(SHL10TARGET:b) >> $(MISC)/$(SHL10DEFAULTRES:b).rc
     @echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC)/$(SHL10DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""

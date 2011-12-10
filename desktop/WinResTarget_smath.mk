@@ -37,6 +37,7 @@ $(eval $(call gb_WinResTarget_set_defs,smath/src,\
     -DRES_APP_NAME=smath \
     -DRES_APP_ICON=icons/math_app.ico \
     -DVERVARIANT=$(BUILD) \
+    -DRES_APP_VENDOR="$(OOO_VENDOR)" \
 ))
 
 $(eval $(call gb_WinResTarget_add_dependency,smath/src,\

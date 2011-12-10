@@ -37,6 +37,7 @@ $(eval $(call gb_WinResTarget_set_defs,simpress/src,\
     -DRES_APP_NAME=simpress \
     -DRES_APP_ICON=icons/impress_app.ico \
     -DVERVARIANT=$(BUILD) \
+    -DRES_APP_VENDOR="$(OOO_VENDOR)" \
 ))
 
 $(eval $(call gb_WinResTarget_add_dependency,simpress/src,\
