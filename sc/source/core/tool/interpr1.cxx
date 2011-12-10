@@ -4174,6 +4174,20 @@ void ScInterpreter::ScColumns()
                 }
             }
             break;
+            case svExternalSingleRef:
+                PopError();
+                nVal++;
+            break;
+            case svExternalDoubleRef:
+            {
+                sal_uInt16 nFileId;
+                String aTabName;
+                ScComplexRefData aRef;
+                PopExternalDoubleRef( nFileId, aTabName, aRef);
+                nVal += static_cast<sal_uLong>(aRef.Ref2.nTab - aRef.Ref1.nTab + 1) *
+                    static_cast<sal_uLong>(aRef.Ref2.nCol - aRef.Ref1.nCol + 1);
+            }
+            break;
             default:
                 PopError();
                 SetError(errIllegalParameter);
@@ -4218,6 +4232,20 @@ void ScInterpreter::ScRows()
                 }
             }
             break;
+            case svExternalSingleRef:
+                PopError();
+                nVal++;
+            break;
+            case svExternalDoubleRef:
+            {
+                sal_uInt16 nFileId;
+                String aTabName;
+                ScComplexRefData aRef;
+                PopExternalDoubleRef( nFileId, aTabName, aRef);
+                nVal += static_cast<sal_uLong>(aRef.Ref2.nTab - aRef.Ref1.nTab + 1) *
+                    static_cast<sal_uLong>(aRef.Ref2.nRow - aRef.Ref1.nRow + 1);
+            }
+            break;
             default:
                 PopError();
                 SetError(errIllegalParameter);
@@ -4257,6 +4285,19 @@ void ScInterpreter::ScTables()
                 case svMatrix:
                     PopError();
                     nVal++;
+                break;
+                case svExternalSingleRef:
+                    PopError();
+                    nVal++;
+                break;
+                case svExternalDoubleRef:
+                {
+                    sal_uInt16 nFileId;
+                    String aTabName;
+                    ScComplexRefData aRef;
+                    PopExternalDoubleRef( nFileId, aTabName, aRef);
+                    nVal += static_cast<sal_uLong>(aRef.Ref2.nTab - aRef.Ref1.nTab + 1);
+                }
                 break;
                 default:
                     PopError();
