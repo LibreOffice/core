@@ -284,7 +284,7 @@ RscCmdLine::RscCmdLine( int argc, char ** argv, RscError * pEH )
             }
             else if( !rsc_stricmp( (*ppStr) + 1, "lg" ) )
             {
-                m_aOutputFiles.back().aLangName = ByteString();
+                m_aOutputFiles.back().aLangName = rtl::OString();
             }
             else if( !rsc_strnicmp( (*ppStr) + 1, "lg", 2 ) )
             {
@@ -394,10 +394,10 @@ RscCompiler::RscCompiler( RscCmdLine * pLine, RscTypCont * pTypCont )
     pCL = pLine;
     pTC = pTypCont;
 
-    if( pCL->aOutputLst.Len() )
+    if( pCL->aOutputLst.getLength() )
     {
-        if ( NULL == (fListing = fopen( pCL->aOutputLst.GetBuffer(), "w" )) )
-            pTC->pEH->FatalError( ERR_OPENFILE, RscId(), pCL->aOutputLst.GetBuffer() );
+        if ( NULL == (fListing = fopen( pCL->aOutputLst.getStr(), "w" )) )
+            pTC->pEH->FatalError( ERR_OPENFILE, RscId(), pCL->aOutputLst.getStr() );
         pTC->pEH->SetListFile( fListing );
     }
 }
@@ -416,14 +416,14 @@ RscCompiler::~RscCompiler()
 
     if( fExitFile )
         fclose( fExitFile );
-    if( aTmpOutputHxx.Len() )
-        unlink( aTmpOutputHxx.GetBuffer() );
-    if( aTmpOutputCxx.Len() )
-        unlink( aTmpOutputCxx.GetBuffer() );
-    if( aTmpOutputRcCtor.Len() )
-        unlink( aTmpOutputRcCtor.GetBuffer() );
-    if( aTmpOutputSrc.Len() )
-        unlink( aTmpOutputSrc.GetBuffer() );
+    if( aTmpOutputHxx.getLength() )
+        unlink( aTmpOutputHxx.getStr() );
+    if( aTmpOutputCxx.getLength() )
+        unlink( aTmpOutputCxx.getStr() );
+    if( aTmpOutputRcCtor.getLength() )
+        unlink( aTmpOutputRcCtor.getStr() );
+    if( aTmpOutputSrc.getLength() )
+        unlink( aTmpOutputSrc.getStr() );
 }
 
 /*************************************************************************
@@ -510,21 +510,21 @@ ERRTYPE RscCompiler::Start()
 *************************************************************************/
 void RscCompiler::EndCompile()
 {
-    if( pCL->aOutputSrs.Len() && (pCL->nCommands & NOLINK_FLAG) )
+    if( pCL->aOutputSrs.getLength() && (pCL->nCommands & NOLINK_FLAG) )
     {
         pTC->pEH->StdOut( "Writing file ", RscVerbosityVerbose );
-        pTC->pEH->StdOut( pCL->aOutputSrs.GetBuffer(), RscVerbosityVerbose );
+        pTC->pEH->StdOut( pCL->aOutputSrs.getStr(), RscVerbosityVerbose );
         pTC->pEH->StdOut( ".\n", RscVerbosityVerbose );
 
         // kopiere von TMP auf richtigen Namen
-        unlink( pCL->aOutputSrs.GetBuffer() );   // Zieldatei loeschen
+        unlink( pCL->aOutputSrs.getStr() );   // Zieldatei loeschen
         if( !(pCL->nCommands & NOSYNTAX_FLAG) )
         {
             FILE        * foutput;
             RscFile     * pFN;
 
-            if( NULL == (foutput = fopen( pCL->aOutputSrs.GetBuffer(), "w" )) )
-                pTC->pEH->FatalError( ERR_OPENFILE, RscId(), pCL->aOutputSrs.GetBuffer() );
+            if( NULL == (foutput = fopen( pCL->aOutputSrs.getStr(), "w" )) )
+                pTC->pEH->FatalError( ERR_OPENFILE, RscId(), pCL->aOutputSrs.getStr() );
             else
             {
                 // Schreibe Datei
@@ -544,64 +544,64 @@ void RscCompiler::EndCompile()
         };
     }
 
-    if ( aTmpOutputHxx.Len() )
+    if ( aTmpOutputHxx.getLength() )
     {
         pTC->pEH->StdOut( "Writing file ", RscVerbosityVerbose );
-        pTC->pEH->StdOut( pCL->aOutputHxx.GetBuffer(), RscVerbosityVerbose );
+        pTC->pEH->StdOut( pCL->aOutputHxx.getStr(), RscVerbosityVerbose );
         pTC->pEH->StdOut( ".\n", RscVerbosityVerbose );
 
         // kopiere von TMP auf richtigen Namen
-        unlink( pCL->aOutputHxx.GetBuffer() );   // Zieldatei loeschen
+        unlink( pCL->aOutputHxx.getStr() );   // Zieldatei loeschen
         Append( pCL->aOutputHxx, aTmpOutputHxx );
-        unlink( aTmpOutputHxx.GetBuffer() );// TempDatei  loeschen
-        aTmpOutputHxx = ByteString();
+        unlink( aTmpOutputHxx.getStr() );// TempDatei  loeschen
+        aTmpOutputHxx = rtl::OString();
     }
 
-    if( aTmpOutputCxx.Len() )
+    if( aTmpOutputCxx.getLength() )
     {
         pTC->pEH->StdOut( "Writing file ", RscVerbosityVerbose );
-        pTC->pEH->StdOut( pCL->aOutputCxx.GetBuffer(), RscVerbosityVerbose );
+        pTC->pEH->StdOut( pCL->aOutputCxx.getStr(), RscVerbosityVerbose );
         pTC->pEH->StdOut( ".\n", RscVerbosityVerbose );
 
         // kopiere von TMP auf richtigen Namen
-        unlink( pCL->aOutputCxx.GetBuffer() );   // Zieldatei loeschen
+        unlink( pCL->aOutputCxx.getStr() );   // Zieldatei loeschen
         Append( pCL->aOutputCxx, aTmpOutputCxx );
-        unlink( aTmpOutputCxx.GetBuffer() );// TempDatei  loeschen
-        aTmpOutputCxx = ByteString();
+        unlink( aTmpOutputCxx.getStr() );// TempDatei  loeschen
+        aTmpOutputCxx = rtl::OString();
     }
 
-    if( aTmpOutputRcCtor.Len() )
+    if( aTmpOutputRcCtor.getLength() )
     {
         pTC->pEH->StdOut( "Writing file ", RscVerbosityVerbose );
-        pTC->pEH->StdOut( pCL->aOutputRcCtor.GetBuffer(), RscVerbosityVerbose );
+        pTC->pEH->StdOut( pCL->aOutputRcCtor.getStr(), RscVerbosityVerbose );
         pTC->pEH->StdOut( ".\n", RscVerbosityVerbose );
 
         // kopiere von TMP auf richtigen Namen
-        unlink( pCL->aOutputRcCtor.GetBuffer() );   // Zieldatei loeschen
+        unlink( pCL->aOutputRcCtor.getStr() );   // Zieldatei loeschen
         Append( pCL->aOutputRcCtor, aTmpOutputRcCtor );
-        unlink( aTmpOutputRcCtor.GetBuffer() );// TempDatei  loeschen
-        aTmpOutputRcCtor = ByteString();
+        unlink( aTmpOutputRcCtor.getStr() );// TempDatei  loeschen
+        aTmpOutputRcCtor = rtl::OString();
     }
 
-    if( aTmpOutputSrc.Len() )
+    if( aTmpOutputSrc.getLength() )
     {
         // kopiere von TMP auf richtigen Namen
-        unlink( pCL->aOutputSrc.GetBuffer() );   // Zieldatei loeschen
+        unlink( pCL->aOutputSrc.getStr() );   // Zieldatei loeschen
         Append( pCL->aOutputSrc, aTmpOutputSrc );
-        unlink( aTmpOutputSrc.GetBuffer() );// TempDatei  loeschen
-        aTmpOutputSrc = ByteString();
+        unlink( aTmpOutputSrc.getStr() );// TempDatei  loeschen
+        aTmpOutputSrc = rtl::OString();
     }
 
-    if( pCL->aTouchFile.Len() )
+    if( pCL->aTouchFile.getLength() )
     {
-        FILE* fp = fopen( pCL->aTouchFile.GetBuffer(), "w" );
+        FILE* fp = fopen( pCL->aTouchFile.getStr(), "w" );
         if( fp )
         {
             fprintf( fp, "Done\n" );
             fclose( fp );
         }
         else
-            pTC->pEH->FatalError( ERR_OPENFILE, RscId(), pCL->aTouchFile.GetBuffer() );
+            pTC->pEH->FatalError( ERR_OPENFILE, RscId(), pCL->aTouchFile.getStr() );
     }
 }
 
@@ -822,7 +822,7 @@ ERRTYPE RscCompiler::Link()
                 OSL_TRACE("temporary rc file: %s", aRcTmp.getStr());
 
                 OUString sOilDirUrl;
-                if(pCL->aILDir.Len())
+                if(pCL->aILDir.getLength())
                     sOilDirUrl = lcl_getAbsoluteUrl(sPwdUrl, pCL->aILDir);
                 else
                     sOilDirUrl = sTempDirUrl;
@@ -953,11 +953,11 @@ ERRTYPE RscCompiler::Link()
     }
 
     // hxx-Datei schreiben
-    if( pCL->aOutputHxx.Len() && aError.IsOk() )
+    if( pCL->aOutputHxx.getLength() && aError.IsOk() )
     {
         aTmpOutputHxx = ::GetTmpFileName();
-        if ( NULL == (fExitFile = foutput = fopen( aTmpOutputHxx.GetBuffer(), "w" )) )
-            pTC->pEH->FatalError( ERR_OPENFILE, RscId(), aTmpOutputHxx.GetBuffer() );
+        if ( NULL == (fExitFile = foutput = fopen( aTmpOutputHxx.getStr(), "w" )) )
+            pTC->pEH->FatalError( ERR_OPENFILE, RscId(), aTmpOutputHxx.getStr() );
 
         pTC->pEH->StdOut( "Generating .hxx file\n" );
 
@@ -969,11 +969,11 @@ ERRTYPE RscCompiler::Link()
     }
 
     // cxx-Datei schreiben
-    if( pCL->aOutputCxx.Len() && aError.IsOk() )
+    if( pCL->aOutputCxx.getLength() && aError.IsOk() )
     {
         aTmpOutputCxx = ::GetTmpFileName();
-        if ( NULL == (fExitFile = foutput = fopen( aTmpOutputCxx.GetBuffer(), "w" )) )
-            pTC->pEH->FatalError( ERR_OPENFILE, RscId(), aTmpOutputCxx.GetBuffer() );
+        if ( NULL == (fExitFile = foutput = fopen( aTmpOutputCxx.getStr(), "w" )) )
+            pTC->pEH->FatalError( ERR_OPENFILE, RscId(), aTmpOutputCxx.getStr() );
 
         pTC->pEH->StdOut( "Generating .cxx file\n" );
 
@@ -993,11 +993,11 @@ ERRTYPE RscCompiler::Link()
     }
 
     // RcCtor-Datei schreiben
-    if( pCL->aOutputRcCtor.Len() && aError.IsOk() )
+    if( pCL->aOutputRcCtor.getLength() && aError.IsOk() )
     {
         aTmpOutputRcCtor = ::GetTmpFileName();
-        if ( NULL == (fExitFile = foutput = fopen( aTmpOutputRcCtor.GetBuffer(), "w" )) )
-            pTC->pEH->FatalError( ERR_OPENFILE, RscId(), aTmpOutputRcCtor.GetBuffer() );
+        if ( NULL == (fExitFile = foutput = fopen( aTmpOutputRcCtor.getStr(), "w" )) )
+            pTC->pEH->FatalError( ERR_OPENFILE, RscId(), aTmpOutputRcCtor.getStr() );
 
         pTC->pEH->StdOut( "Generating .cxx ressource constructor file\n" );
 
@@ -1009,11 +1009,11 @@ ERRTYPE RscCompiler::Link()
     }
 
     // src-Datei schreiben
-    if( pCL->aOutputSrc.Len() && aError.IsOk() )
+    if( pCL->aOutputSrc.getLength() && aError.IsOk() )
     {
         aTmpOutputSrc = ::GetTmpFileName();
-        if ( NULL == (fExitFile = foutput = fopen( aTmpOutputSrc.GetBuffer(), "w" )) )
-            pTC->pEH->FatalError( ERR_OPENFILE, RscId(), aTmpOutputSrc.GetBuffer() );
+        if ( NULL == (fExitFile = foutput = fopen( aTmpOutputSrc.getStr(), "w" )) )
+            pTC->pEH->FatalError( ERR_OPENFILE, RscId(), aTmpOutputSrc.getStr() );
 
         // Schreibe Datei
         pTC->WriteSrc( foutput, NOFILE_INDEX, RTL_TEXTENCODING_UNICODE );
@@ -1033,15 +1033,14 @@ ERRTYPE RscCompiler::Link()
 /*                                                                  */
 /*  Description :   appends text files                              */
 /********************************************************************/
-void RscCompiler::Append( const ByteString& rOutputSrs,
-                          const ByteString& rTmpFile )
+void RscCompiler::Append( const rtl::OString& rOutputSrs,
+                          const rtl::OString& rTmpFile )
 {
     if( !::Append( rOutputSrs, rTmpFile ) )
     {
-        ByteString aTemp = rOutputSrs;
-        aTemp += " or ";
-        aTemp += rTmpFile;
-        pTC->pEH->FatalError( ERR_OPENFILE, RscId(), aTemp.GetBuffer() );
+        rtl::OStringBuffer aTemp(rOutputSrs);
+        aTemp.append(" or ").append(rTmpFile);
+        pTC->pEH->FatalError( ERR_OPENFILE, RscId(), aTemp.getStr() );
     }
 }
 
@@ -1082,7 +1081,7 @@ bool RscCompiler::GetImageFilePath( const RscCmdLine::OutputFile& rOutputFile,
             const FileStat aFS( aAbsPath.GetFull() );
 
 #if OSL_DEBUG_LEVEL > 1
-            fprintf( stderr, "Searching image: %s\n", ByteString( aRelPath.GetFull(), RTL_TEXTENCODING_ASCII_US ).GetBuffer() );
+            fprintf( stderr, "Searching image: %s\n", rtl::OUStringToOString(aRelPath.GetFull(), RTL_TEXTENCODING_ASCII_US).getStr() );
 #endif
 
             if( aFS.IsKind( FSYS_KIND_FILE ) )

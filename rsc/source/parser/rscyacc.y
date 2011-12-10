@@ -419,7 +419,7 @@ resource_definition
 	}
   | '#' DEFINE RSCDEFINE macro_expression
 	{
-		pTC->pEH->Error( ERR_DOUBLEDEFINE, NULL, RscId(), $3->GetName().GetBuffer() );
+		pTC->pEH->Error( ERR_DOUBLEDEFINE, NULL, RscId(), $3->GetName().getStr() );
 	}
   | '#' INCLUDE STRING
 	{

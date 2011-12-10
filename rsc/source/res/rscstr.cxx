@@ -235,7 +235,7 @@ void RscString::WriteSrc( const RSCINST & rInst, FILE * fOutput,
     if ( ((RscStringInst *)rInst.pData)->aRefId.IsId() )
     {
         fprintf( fOutput, "%s",
-                 ((RscStringInst *)rInst.pData)->aRefId.GetName().GetBuffer() );
+                 ((RscStringInst *)rInst.pData)->aRefId.GetName().getStr() );
     }
     else
     {

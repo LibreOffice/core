@@ -57,9 +57,9 @@ protected:
                             RscTop * pSuperCl = NULL );
 
 public:
-    ByteString      aCallPar1;      // Klassenaufruf ohne Typen bis ResId
-    ByteString      aCallPar2;      // Klassenaufruf ohne Typen ab ResId
-    ByteString      aCallParType;   // Klassenaufruf mit Typen
+    rtl::OString    aCallPar1;      // Klassenaufruf ohne Typen bis ResId
+    rtl::OString    aCallPar2;      // Klassenaufruf ohne Typen ab ResId
+    rtl::OString    aCallParType;   // Klassenaufruf mit Typen
 
             void    SetSuperClass( RscTop * pClass )
                     {
@@ -74,10 +74,10 @@ public:
             sal_Bool    InHierarchy( RscTop * pClass );
             sal_Bool    IsCodeWriteable() const
                     {
-                        return( 0 != aCallParType.Len() );
+                        return( 0 != aCallParType.getLength() );
                     }
-            void    SetCallPar( const ByteString & rPar1, const ByteString & rPar2,
-                                const ByteString & rParType );
+            void    SetCallPar( const rtl::OString& rPar1, const rtl::OString& rPar2,
+                                const rtl::OString& rParType );
             void    SetRefClass( RscTop * pRef ) { pRefClass = pRef; }
             RscTop* GetRefClass() const { return pRefClass; }
     virtual RSCCLASS_TYPE GetClassType() const = 0;

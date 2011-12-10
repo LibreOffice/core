@@ -56,7 +56,7 @@ using ::rtl::OStringBuffer;
 *************************************************************************/
 RscTypCont :: RscTypCont( RscError * pErrHdl,
                           RSCBYTEORDER_TYPE nOrder,
-                          const ByteString & rSearchPath,
+                          const rtl::OString& rSearchPath,
                           sal_uInt32 nFlagsP )
     :
       nSourceCharSet( RTL_TEXTENCODING_UTF8 ),
@@ -328,7 +328,7 @@ sal_uInt32 RscTypCont :: PutSysName( sal_uInt32 nRscTyp, char * pFileName,
         pSysEntry = aSysLst[ i ];
         if( pSysEntry->nKey == 1 )
             bId1 = sal_True;
-        if( !strcmp( pSysEntry->aFileName.GetBuffer(), pFileName ) )
+        if( !strcmp( pSysEntry->aFileName.getStr(), pFileName ) )
             if(  pSysEntry->nRscTyp == nRscTyp
               && pSysEntry->nTyp    == nConst
               && pSysEntry->nRefId  == nId
@@ -832,14 +832,14 @@ ERRTYPE RscTypCont :: WriteHxx( FILE * fOutput, sal_uLong nFileKey )
 |*
 *************************************************************************/
 ERRTYPE RscTypCont::WriteCxx( FILE * fOutput, sal_uLong nFileKey,
-                              const ByteString & rHxxName )
+                              const rtl::OString& rHxxName )
 {
     RscEnumerateRef aEnumRef( this, pRoot, fOutput );
     ERRTYPE         aError;
     fprintf( fOutput, "#include <string.h>\n" );
     WriteInc( fOutput, nFileKey );
-    if( rHxxName.Len() )
-        fprintf( fOutput, "#include \"%s\"\n", rHxxName.GetBuffer() );
+    if( rHxxName.getLength() )
+        fprintf( fOutput, "#include \"%s\"\n", rHxxName.getStr() );
     fprintf( fOutput, "\n\n" );
 
     if( NOFILE_INDEX == nFileKey )

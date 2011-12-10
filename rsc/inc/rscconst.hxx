@@ -95,7 +95,7 @@ public:
 
 class RscNameTable;
 
-sal_uInt32 GetLangId( const ByteString& alang);
+sal_uInt32 GetLangId( const rtl::OString& rLang);
 
 class RscLangEnum : public RscEnum
 {

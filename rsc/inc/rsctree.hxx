@@ -104,14 +104,14 @@ class StringNode : public NameNode
 protected:
     using NameNode::Search;
 
-    ByteString      aName;
+    rtl::OString m_aName;
 
 public:
-                    StringNode(){};
-                    StringNode( const ByteString & rStr ) { aName = rStr; }
+    StringNode() {}
+    StringNode(const rtl::OString& rStr) { m_aName = rStr; }
 
     StringNode*     Search( const char * ) const;
-    ByteString      GetName() const { return aName; }
+    rtl::OString    GetName() const { return m_aName; }
 };
 
 #endif // _RSCTREE_HXX

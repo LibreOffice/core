@@ -816,7 +816,7 @@ void RscBaseCont::ContWriteRcAccess
     else
     {
         fprintf( fOutput, "\t\tSet%s( %s ", pName, pHS->getString( GetId() ).getStr() );
-        fprintf( fOutput, "%s ", aCallPar2.GetBuffer() );
+        fprintf( fOutput, "%s ", aCallPar2.getStr() );
         fprintf( fOutput, "ResId( (RSHEADER_TYPE*)(pResData+nOffset) ) ) );\n" );
         fprintf( fOutput, "\t\tnOffset += GetObjSizeRes( (RSHEADER_TYPE*)(pResData+nOffset) );\n" );
     }

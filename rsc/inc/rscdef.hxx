@@ -105,7 +105,7 @@ public:
 
     static void    SetNames( sal_Bool bSet = sal_True );
     operator         sal_Int32() const;   // Gibt Nummer zurueck
-    ByteString     GetName()  const;   // Gibt den Namen des Defines zurueck
+    rtl::OString GetName()  const;   // Gibt den Namen des Defines zurueck
     sal_Bool    operator <  ( const RscId& rRscId ) const;
     sal_Bool    operator >  ( const RscId& rRscId ) const;
     sal_Bool    operator == ( const RscId& rRscId ) const;
@@ -130,16 +130,16 @@ friend class RscId;
     RscExpression * pExp;       // Ausdruck
 protected:
 
-            RscDefine( sal_uLong lFileKey, const ByteString & rDefName,
+            RscDefine( sal_uLong lFileKey, const rtl::OString& rDefName,
                        sal_Int32 lDefId );
-            RscDefine( sal_uLong lFileKey, const ByteString & rDefName,
+            RscDefine( sal_uLong lFileKey, const rtl::OString& rDefName,
                        RscExpression * pExpression );
             ~RscDefine();
     void    IncRef(){ nRefCount++; }
     sal_uInt32  GetRefCount() const    { return nRefCount; }
     void    DecRef();
     void    DefineToNumber();
-    void    SetName( const ByteString & rNewName ){ aName = rNewName; }
+    void    SetName(const rtl::OString& rNewName) { m_aName = rNewName; }
 
     using StringNode::Search;
 public:
@@ -147,7 +147,7 @@ public:
     sal_uLong       GetFileKey() const { return lFileKey; }
     sal_Bool        Evaluate();
     sal_Int32       GetNumber() const  { return lId;      }
-    ByteString  GetMacro();
+    rtl::OString    GetMacro();
 };
 
 typedef ::std::vector< RscDefine* > RscSubDefList;
@@ -158,9 +158,9 @@ friend class RscFileTab;
 private:
     RscSubDefList   maList;
                 // pExpression wird auf jedenfall Eigentum der Liste
-    RscDefine * New( sal_uLong lFileKey, const ByteString & rDefName,
+    RscDefine * New( sal_uLong lFileKey, const rtl::OString& rDefName,
                      sal_Int32 lDefId, size_t lPos );
-    RscDefine * New( sal_uLong lFileKey, const ByteString & rDefName,
+    RscDefine * New( sal_uLong lFileKey, const rtl::OString& rDefName,
                      RscExpression * pExpression, size_t lPos );
     sal_Bool        Remove();
     size_t      GetPos( RscDefine* item ) {
@@ -184,7 +184,7 @@ public:
                                RscExpType aRE );
                 ~RscExpression();
     sal_Bool        Evaluate( sal_Int32 * pValue );
-    ByteString  GetMacro();
+    rtl::OString GetMacro();
 };
 
 /********************** R S C F I L E ************************************/
@@ -254,9 +254,9 @@ public:
     sal_Bool        TestDef( sal_uLong lFileKey, size_t lPos,
                          const RscExpression * pExpDec );
 
-    RscDefine * NewDef( sal_uLong lKey, const ByteString & rDefName,
+    RscDefine * NewDef( sal_uLong lKey, const rtl::OString& rDefName,
                         sal_Int32 lId, sal_uLong lPos );
-    RscDefine * NewDef( sal_uLong lKey, const ByteString & rDefName,
+    RscDefine * NewDef( sal_uLong lKey, const rtl::OString& rDefName,
                         RscExpression *, sal_uLong lPos );
 
            // Alle Defines die in dieser Datei Definiert sind loeschen

@@ -80,9 +80,9 @@ void RscTypCont::SETCONST( RscConst * pClass, Atom nName, sal_uInt32 nVal )
 typedef boost::unordered_map< rtl::OString, sal_uInt32, rtl::OStringHash > langmap;
 static langmap ULong_Iso_map;
 
-sal_uInt32 GetLangId( const ByteString& aLang )
+sal_uInt32 GetLangId(const rtl::OString &rLang)
 {
-    langmap::iterator pIter = ULong_Iso_map.find( aLang );
+    langmap::iterator pIter = ULong_Iso_map.find( rLang );
     if ( pIter != ULong_Iso_map.end())
         return pIter->second;
     return 0;

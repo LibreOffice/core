@@ -415,8 +415,8 @@ StringNode * StringNode::Search( const char * pSearch ) const{
 *************************************************************************/
 COMPARE StringNode::Compare( const NameNode * pSearch ) const
 {
-    int nCmp = strcmp( aName.GetBuffer(),
-                       ((const StringNode *)pSearch)->aName.GetBuffer() );
+    int nCmp = strcmp( m_aName.getStr(),
+                       ((const StringNode *)pSearch)->m_aName.getStr() );
     if( nCmp < 0 )
         return LESS;
     else if( nCmp > 0 )
@@ -428,7 +428,7 @@ COMPARE StringNode::Compare( const NameNode * pSearch ) const
 COMPARE StringNode::Compare( const void * pSearch ) const
 {
 // pSearch ist ein Zeiger auf const char *
-    int nCmp = strcmp( aName.GetBuffer(), (const char *)pSearch );
+    int nCmp = strcmp( m_aName.getStr(), (const char *)pSearch );
 
     if( nCmp < 0 )
         return LESS;

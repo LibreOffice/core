@@ -63,7 +63,7 @@ struct RscSysEntry
 {
     sal_uInt32      nKey;
     sal_uInt32      nRscTyp;
-    ByteString  aFileName;
+    rtl::OString    aFileName;
     sal_uInt32      nTyp;
     sal_uInt32      nRefId;
 };
@@ -73,15 +73,15 @@ typedef ::std::vector< RscSysEntry* > RscSysList;
 class RscTypCont
 {
     CharSet             nSourceCharSet;
-    sal_uInt32              nMachineId;         // Globaler Maschinentyp
+    sal_uInt32          nMachineId;         // Globaler Maschinentyp
     RSCBYTEORDER_TYPE   nByteOrder;         // Intel oder
-    ByteString          aLanguage;          // output language
+    rtl::OString        aLanguage;          // output language
     std::vector< sal_uInt32 > aLangFallbacks;   // language fallback list (entry 0 is language itself)
-    ByteString          aSearchPath;        // Suchen der Bitmap, Icon, Pointer
-    ByteString          aSysSearchPath;     // aSearchPath plus language specific paths
-    sal_uInt32              nUniqueId;          // eindeutiger Id fuer Systemresourcen
-    sal_uLong               nFilePos;           // Position in der Datei ( MTF )
-    sal_uInt32              nPMId;              // eindeutiger Id fuer PM-Rseourcefile
+    rtl::OString        aSearchPath;        // Suchen der Bitmap, Icon, Pointer
+    rtl::OString        aSysSearchPath;     // aSearchPath plus language specific paths
+    sal_uInt32          nUniqueId;          // eindeutiger Id fuer Systemresourcen
+    sal_uLong           nFilePos;           // Position in der Datei ( MTF )
+    sal_uInt32          nPMId;              // eindeutiger Id fuer PM-Rseourcefile
                                             // muss groesser als RSC_VERSIONCONTROL_ID sein
     RscTop  *           pRoot;              // Zeiger auf die Wurzel vom Typenbaum
     RSCINST             aVersion;           // Versionskontrollinstanz
@@ -301,7 +301,7 @@ public:
     std::map<sal_uInt64, sal_uLong> aIdTranslator; //Ordnet Resourcetypen und Id's einen Id zu
                                        //(unter PM), oder eine Dateiposition (MTF)
 
-    RscTypCont( RscError *, RSCBYTEORDER_TYPE, const ByteString & rSearchPath, sal_uInt32 nFlags );
+    RscTypCont( RscError *, RSCBYTEORDER_TYPE, const rtl::OString& rSearchPath, sal_uInt32 nFlags );
     ~RscTypCont();
 
     Atom AddLanguage( const char* );
@@ -326,9 +326,9 @@ public:
         nSourceCharSet = aCharSet;
         return aOld;
     }
-    void            SetSearchPath( const ByteString & rStr) { aSearchPath = rStr; }
-    ByteString      GetSearchPath() const { return aSearchPath; }
-    void            SetSysSearchPath( const ByteString& rStr ) { aSysSearchPath = rStr; }
+    void            SetSearchPath( const rtl::OString& rStr) { aSearchPath = rStr; }
+    rtl::OString    GetSearchPath() const { return aSearchPath; }
+    void            SetSysSearchPath( const rtl::OString& rStr ) { aSysSearchPath = rStr; }
     void        InsertType( RscTop * pType )
                 {
                     aBaseLst.push_back( pType );
@@ -345,7 +345,7 @@ public:
                           CharSet nCharSet, sal_Bool bName = sal_True );
     ERRTYPE     WriteHxx( FILE * fOutput, sal_uLong nFileKey);
     ERRTYPE     WriteCxx( FILE * fOutput, sal_uLong nFileKey,
-                          const ByteString & rHxxName );
+                          const rtl::OString& rHxxName );
     void        WriteSyntax( FILE * fOutput );
     void        WriteRcCtor( FILE * fOutput );
     sal_uInt32      PutTranslatorKey( sal_uInt64 nKey );

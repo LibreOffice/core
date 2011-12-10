@@ -119,7 +119,7 @@ char* rsc_strdup( const char* pStr )
 |*                      malloc allokiert
 |*
 *************************************************************************/
-ByteString GetTmpFileName()
+rtl::OString GetTmpFileName()
 {
     OUString aTmpURL, aTmpFile;
     osl_createTempFile( NULL, NULL, &aTmpURL.pData );
@@ -135,10 +135,10 @@ ByteString GetTmpFileName()
 /*                                                                  */
 /*  Description :   appends text files                              */
 /********************************************************************/
-sal_Bool Append( FILE * fDest, ByteString aTmpFile )
+sal_Bool Append(FILE * fDest, const rtl::OString &rTmpFile)
 {
 #define MAX_BUF 4096
-    FILE *fSource = fopen( aTmpFile.GetBuffer(), "rb" );
+    FILE *fSource = fopen(rTmpFile.getStr(), "rb");
     if( !fDest || !fSource )
     {
         if( fSource )
@@ -161,11 +161,11 @@ sal_Bool Append( FILE * fDest, ByteString aTmpFile )
     return sal_True;
 }
 
-sal_Bool Append( ByteString aOutputSrs, ByteString aTmpFile )
+sal_Bool Append(const rtl::OString &rOutputSrs, const rtl::OString &rTmpFile)
 {
-    FILE * fDest   = fopen( aOutputSrs.GetBuffer(), "ab" );
+    FILE * fDest = fopen(rOutputSrs.getStr(), "ab");
 
-    sal_Bool bRet = Append( fDest, aTmpFile );
+    sal_Bool bRet = Append(fDest, rTmpFile);
 
     if( fDest )
         fclose( fDest );
@@ -182,10 +182,10 @@ sal_Bool Append( ByteString aOutputSrs, ByteString aTmpFile )
 |*                      pExt, die Extension des Ausgabenamens
 |*
 *************************************************************************/
-ByteString OutputFile ( ByteString aInput, const char * pExt )
+rtl::OString OutputFile(const rtl::OString &rInput, const char * pExt)
 {
-    UniString   aUniInput( aInput, RTL_TEXTENCODING_ASCII_US );
-    DirEntry    aFileName( aUniInput );
+    rtl::OUString aUniInput(rtl::OStringToOUString(rInput, RTL_TEXTENCODING_ASCII_US));
+    DirEntry aFileName(aUniInput);
 
     UniString aExt( pExt, RTL_TEXTENCODING_ASCII_US );
     aFileName.SetExtension( aExt );

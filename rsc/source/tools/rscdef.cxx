@@ -165,7 +165,7 @@ RscId::operator sal_Int32() const
 |*    RscId::GetNames()
 |*
 *************************************************************************/
-ByteString RscId::GetName() const
+rtl::OString RscId::GetName() const
 {
     rtl::OStringBuffer aStr;
 
@@ -186,7 +186,7 @@ ByteString RscId::GetName() const
 |*    RscDefine::RscDefine()
 |*
 *************************************************************************/
-RscDefine::RscDefine( sal_uLong lKey, const ByteString & rDefName, sal_Int32 lDefId )
+RscDefine::RscDefine( sal_uLong lKey, const rtl::OString& rDefName, sal_Int32 lDefId )
     : StringNode( rDefName )
 {
     nRefCount = 0;
@@ -195,7 +195,7 @@ RscDefine::RscDefine( sal_uLong lKey, const ByteString & rDefName, sal_Int32 lDe
     pExp      = NULL;
 }
 
-RscDefine::RscDefine( sal_uLong lKey, const ByteString & rDefName,
+RscDefine::RscDefine( sal_uLong lKey, const rtl::OString& rDefName,
                       RscExpression * pExpression  )
     : StringNode( rDefName )
 {
@@ -270,7 +270,7 @@ RscDefine * RscDefine::Search( const char * pStr ){
 |*    RscDefine::GetMacro()
 |*
 *************************************************************************/
-ByteString RscDefine::GetMacro()
+rtl::OString RscDefine::GetMacro()
 {
     if( pExp )
         return pExp->GetMacro();
@@ -283,7 +283,7 @@ ByteString RscDefine::GetMacro()
 |*    RscDefineList::New()
 |*
 *************************************************************************/
-RscDefine * RscDefineList::New( sal_uLong lFileKey, const ByteString & rDefName,
+RscDefine * RscDefineList::New( sal_uLong lFileKey, const rtl::OString& rDefName,
                                 sal_Int32 lDefId, size_t lPos )
 {
     RscDefine * pDef;
@@ -301,7 +301,7 @@ RscDefine * RscDefineList::New( sal_uLong lFileKey, const ByteString & rDefName,
     return pDef;
 }
 
-RscDefine * RscDefineList::New( sal_uLong lFileKey, const ByteString & rDefName,
+RscDefine * RscDefineList::New( sal_uLong lFileKey, const rtl::OString& rDefName,
                                 RscExpression * pExpression, size_t lPos )
 {
     RscDefine * pDef;
@@ -339,8 +339,8 @@ void RscDefineList::WriteAll( FILE * fOutput )
     for ( size_t i = 0, n = maList.size(); i < n; ++i ) {
         RscDefine* pDefEle = maList[ i ];
         fprintf( fOutput, "#define %s %s\n",
-                 pDefEle->GetName().GetBuffer(),
-                 pDefEle->GetMacro().GetBuffer()
+                 pDefEle->GetName().getStr(),
+                 pDefEle->GetMacro().getStr()
         );
     };
 }
@@ -452,7 +452,7 @@ sal_Bool RscExpression::Evaluate( sal_Int32 * plValue ){
 |*    RscExpression::GetMacro()
 |*
 *************************************************************************/
-ByteString RscExpression::GetMacro()
+rtl::OString RscExpression::GetMacro()
 {
     rtl::OStringBuffer aLeft;
 
@@ -778,7 +778,7 @@ sal_Bool RscFileTab::TestDef( sal_uLong lFileKey, size_t lPos,
 |*    RscFileTab::NewDef()
 |*
 *************************************************************************/
-RscDefine * RscFileTab::NewDef( sal_uLong lFileKey, const ByteString & rDefName,
+RscDefine * RscFileTab::NewDef( sal_uLong lFileKey, const rtl::OString& rDefName,
                                 sal_Int32 lId, sal_uLong lPos )
 {
     RscDefine * pDef = FindDef( rDefName );
@@ -802,7 +802,7 @@ RscDefine * RscFileTab::NewDef( sal_uLong lFileKey, const ByteString & rDefName,
 |*    RscFileTab::NewDef()
 |*
 *************************************************************************/
-RscDefine * RscFileTab::NewDef( sal_uLong lFileKey, const ByteString & rDefName,
+RscDefine * RscFileTab::NewDef( sal_uLong lFileKey, const rtl::OString& rDefName,
                                 RscExpression * pExp, sal_uLong lPos )
 {
     RscDefine * pDef = FindDef( rDefName );

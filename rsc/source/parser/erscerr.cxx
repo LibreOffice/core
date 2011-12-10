@@ -425,7 +425,7 @@ void RscError::ErrorFormat( const ERRTYPE& rError, RscTop * pClass,
                 StdLstErr( ", " );
         }
         if( aId.IsId() )
-            StdLstErr( aId.GetName().GetBuffer() );
+            StdLstErr( aId.GetName().getStr() );
         StdLstErr( "):\n" );
     }
     else

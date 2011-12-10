@@ -58,8 +58,8 @@ RscTop::RscTop( Atom nId, sal_uInt32 nTypIdent, RscTop * pSuperCl )
 |*    RscTop::SetCallPar()
 |*
 *************************************************************************/
-void RscTop::SetCallPar( const ByteString & rPar1, const ByteString & rPar2,
-                         const ByteString & rParType )
+void RscTop::SetCallPar(const rtl::OString& rPar1, const rtl::OString& rPar2,
+    const rtl::OString& rParType)
 {
     aCallPar1 = rPar1;
     aCallPar2 = rPar2;

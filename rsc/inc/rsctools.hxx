@@ -48,10 +48,10 @@ enum RSCBYTEORDER_TYPE { RSC_BIGENDIAN, RSC_LITTLEENDIAN, RSC_SYSTEMENDIAN };
 #define ALIGNED_SIZE( nSize )                               \
             (nSize + sizeof( void * ) -1) / sizeof( void * ) * sizeof( void * )
 /******************* F u n c t i o n   F o r w a r d s *******************/
-ByteString GetTmpFileName();
-sal_Bool Append( ByteString aDestFile, ByteString aSourceFile );
-sal_Bool Append( FILE * fDest, ByteString aSourceFile );
-ByteString OutputFile( ByteString aInput, const char * ext );
+rtl::OString GetTmpFileName();
+sal_Bool Append(const rtl::OString &rDestFile, const rtl::OString &rSourceFile);
+sal_Bool Append(FILE * fDest, rtl::OString &raSourceFile);
+rtl::OString OutputFile(const rtl::OString &rInput, const char * ext);
 char * ResponseFile( RscPtrPtr * ppCmd, char ** ppArgv,
                      sal_uInt32 nArgc );
 void RscExit( sal_uInt32 nExit );

@@ -54,14 +54,14 @@ public:
     rtl::OString        aPath;          // Liste der Pfade
     RSCBYTEORDER_TYPE   nByteOrder;
     unsigned short      nCommands;      // Steuerbits
-    ByteString          aOutputLst;     // Name der List-Ausgabedatei
-    ByteString          aOutputSrs;     // Name der Srs-Ausgabedatei
-    ByteString          aOutputSrc;     // Name der Src-Ausgabedatei
-    ByteString          aOutputRcCtor;  // Name der Ctor-Ausgabedatei
-    ByteString          aOutputCxx;     // Name der Cxx-Ausgabedatei
-    ByteString          aOutputHxx;     // Name der Hxx-Ausgabedatei
-    ByteString          aTouchFile;     // create this file when done in rsc2
-    ByteString          aILDir;
+    rtl::OString        aOutputLst;     // Name der List-Ausgabedatei
+    rtl::OString        aOutputSrs;     // Name der Srs-Ausgabedatei
+    rtl::OString        aOutputSrc;     // Name der Src-Ausgabedatei
+    rtl::OString        aOutputRcCtor;  // Name der Ctor-Ausgabedatei
+    rtl::OString        aOutputCxx;     // Name der Cxx-Ausgabedatei
+    rtl::OString        aOutputHxx;     // Name der Hxx-Ausgabedatei
+    rtl::OString        aTouchFile;     // create this file when done in rsc2
+    rtl::OString        aILDir;
 
     struct OutputFile
     {
@@ -88,13 +88,13 @@ struct WriteRcContext;
 class RscCompiler
 {
 private:
-    ByteString      aTmpOutputHxx;  // Name der TempHxx-Ausgabedatei
-    ByteString      aTmpOutputCxx;  // Name der TempCxx-Ausgabedatei
-    ByteString      aTmpOutputRcCtor; // Name der Temp Ctor-Ausgabedatei
-    ByteString      aTmpOutputSrc;  // Name der TempSrc-Ausgabedatei
+    rtl::OString    aTmpOutputHxx;  // Name der TempHxx-Ausgabedatei
+    rtl::OString    aTmpOutputCxx;  // Name der TempCxx-Ausgabedatei
+    rtl::OString    aTmpOutputRcCtor; // Name der Temp Ctor-Ausgabedatei
+    rtl::OString    aTmpOutputSrc;  // Name der TempSrc-Ausgabedatei
 
     void            CreateResFile( const char * pRc );
-    void            Append( const ByteString& rOutputSrs, const ByteString& rTmpFile );
+    void            Append( const rtl::OString& rOutputSrs, const rtl::OString& rTmpFile );
 
     bool            GetImageFilePath( const RscCmdLine::OutputFile& rOutputFile,
                                        const WriteRcContext& rContext,

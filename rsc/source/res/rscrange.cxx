@@ -558,7 +558,7 @@ ERRTYPE RscIdRange::GetRef( const RSCINST & rInst, RscId * pRscId ){
 void RscIdRange::WriteSrc( const RSCINST & rInst, FILE * fOutput,
                            RscTypCont *, sal_uInt32, const char * )
 {
-    fprintf( fOutput, "%s", ((RscId *)rInst.pData)->GetName().GetBuffer() );
+    fprintf( fOutput, "%s", ((RscId *)rInst.pData)->GetName().getStr() );
 }
 
 /*************************************************************************

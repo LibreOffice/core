@@ -997,7 +997,7 @@ void RscClass::WriteRcAccess
 )
 {
     fprintf( fOutput, "\t\tSet%s( %s ", pName, pHS->getString( GetId() ).getStr() );
-    fprintf( fOutput, "%s ", aCallPar2.GetBuffer() );
+    fprintf( fOutput, "%s ", aCallPar2.getStr() );
     fprintf( fOutput, "ResId( (RSHEADER_TYPE*)(pResData+nOffset) ) ) );\n" );
     fprintf( fOutput, "\t\tnOffset += GetObjSizeRes( (RSHEADER_TYPE*)(pResData+nOffset) );\n" );
 }
@@ -1011,12 +1011,12 @@ void RscClass::WriteRcCtor( FILE * fOutput, RscTypCont * pTC )
         fprintf( fOutput, "%s::%s%s bFreeResource )",
                 pHS->getString( GetId() ).getStr(),
                 pHS->getString( GetId() ).getStr(),
-                aCallParType.GetBuffer() );
+                aCallParType.getStr() );
         if( GetSuperClass() )
         {
             // Superaufruf
             fprintf( fOutput, "\n\t: %s", pHS->getString( GetSuperClass()->GetId() ).getStr() );
-            fprintf( fOutput, "%s", GetSuperClass()->aCallPar1.GetBuffer() );
+            fprintf( fOutput, "%s", GetSuperClass()->aCallPar1.getStr() );
             fprintf( fOutput, " rResId.SetRT2( 0x%lx ) )",
                      sal::static_int_cast< unsigned long >(GetTypId()) );
         }

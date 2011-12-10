@@ -176,9 +176,9 @@ void RscMgr::WriteSrcHeader( const RSCINST & rInst, FILE * fOutput,
 
     fprintf( fOutput, "%s %s",
              pHS->getString( rInst.pClass->GetId() ).getStr(),
-             (rId.GetName()).GetBuffer() );
+             (rId.GetName()).getStr() );
     if( pClassData->aRefId.IsId() )
-        fprintf( fOutput, ",%s", pClassData->aRefId.GetName().GetBuffer() );
+        fprintf( fOutput, ",%s", pClassData->aRefId.GetName().getStr() );
     else
     {
         fprintf( fOutput, "\n" );
@@ -405,7 +405,7 @@ ERRTYPE RscMgr::WriteHxxHeader( const RSCINST & rInst, FILE * fOutput,
             fprintf( fOutput, "%s%s bFreeRes = TRUE )",
                      MakeName( pTC, rInst.pClass,
                                rId.GetName() ).getStr(),
-                     (rInst.pClass->aCallParType).GetBuffer() );
+                     (rInst.pClass->aCallParType).getStr() );
             fprintf( fOutput, ";\n};\n\n" );
         }
     };
@@ -466,11 +466,11 @@ ERRTYPE RscMgr::WriteCxxHeader( const RSCINST & rInst, FILE * fOutput,
         fprintf( fOutput, "%s::%s",
                  MakeName( pTC, rInst.pClass, rId.GetName() ).getStr(),
                  MakeName( pTC, rInst.pClass, rId.GetName() ).getStr() );
-        fprintf( fOutput, "%s", (rInst.pClass->aCallParType).GetBuffer() );
+        fprintf( fOutput, "%s", (rInst.pClass->aCallParType).getStr() );
         if( GetCount( rInst ) )
             fprintf( fOutput, " bFreeRes" );
         fprintf( fOutput, " )\n    : %s", pHS->getString( rInst.pClass->GetId() ).getStr() );
-        fprintf( fOutput, "%s", (rInst.pClass->aCallPar1).GetBuffer() );
+        fprintf( fOutput, "%s", (rInst.pClass->aCallPar1).getStr() );
         fprintf( fOutput, " rResId )" );
 
         aError = RscClass::WriteCxx( rInst, fOutput, pTC, rId );
@@ -514,8 +514,8 @@ ERRTYPE RscMgr::WriteCxx( const RSCINST & rInst, FILE * fOutput,
 {
     fprintf( fOutput, ",\n    a%s",
              MakeName( pTC, rInst.pClass, rId.GetName() ).getStr() );
-    fprintf( fOutput, "%s", (rInst.pClass->aCallPar2).GetBuffer() );
-    fprintf( fOutput, " ResId( %s ) )", (rId.GetName()).GetBuffer() );
+    fprintf( fOutput, "%s", (rInst.pClass->aCallPar2).getStr() );
+    fprintf( fOutput, " ResId( %s ) )", (rId.GetName()).getStr() );
 
     return ERR_OK;
 }
