@@ -1805,27 +1805,11 @@ sub set_msiproductversion
 {
     my ( $allvariables ) = @_;
 
-    my $productversion = $allvariables->{'PRODUCTVERSION'};
-
-    if (( $productversion =~ /^\s*\d+\s*$/ ) && ( $productversion > 255 )) { $productversion = $productversion%256; }
+    my $productversion = $allvariables->{'PACKAGEVERSION'};
 
     if ( $productversion =~ /^\s*(\d+)\.(\d+)\.(\d+)\s*$/ )
     {
-        $productversion = $1 . "\." . $2 . $3 . "\." . $installer::globals::buildid;
-    }
-    elsif  ( $productversion =~ /^\s*(\d+)\.(\d+)\s*$/ )
-    {
-        $productversion = $1 . "\." . $2 . "\." . $installer::globals::buildid;
-    }
-    else
-    {
-        my $productminor = "00";
-        if (( $allvariables->{'PACKAGEVERSION'} ) && ( $allvariables->{'PACKAGEVERSION'} ne "" ))
-        {
-            if ( $allvariables->{'PACKAGEVERSION'} =~ /^\s*(\d+)\.(\d+)\.(\d+)\s*$/ ) { $productminor = $2; }
-        }
-
-        $productversion = $productversion . "\." . $productminor . "\." . $installer::globals::buildid;
+        $productversion = $1 . "\." . $2 . "\." . $3 . "\." . $installer::globals::buildid;
     }
 
     $installer::globals::msiproductversion = $productversion;
