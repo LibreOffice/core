@@ -26,24 +26,22 @@
  *
  ************************************************************************/
 
+#include "basidesh.hrc"
+#include "objdlg.hrc"
 
-#include <ide_pch.hxx>
+#include "basidesh.hxx"
+#include "iderdll.hxx"
+#include "iderdll2.hxx"
+#include "objdlg.hxx"
 
-
-#include <basic/sbx.hxx>
+#include <sfx2/app.hxx>
+#include <sfx2/dispatch.hxx>
+#include <sfx2/request.hxx>
+#include <sfx2/viewfrm.hxx>
+#include <svl/itemset.hxx>
 #include <vcl/msgbox.hxx>
-#include <vcl/cmdevt.hxx>
 #include <vcl/taskpanelist.hxx>
 #include <vcl/sound.hxx>
-#include <objdlg.hrc>
-#include <objdlg.hxx>
-#include <bastypes.hxx>
-#include <basidesh.hrc>
-#include <basidesh.hxx>
-#include <iderdll.hxx>
-#include <iderdll2.hxx>
-#include <sbxitem.hxx>
-
 
 ObjectTreeListBox::ObjectTreeListBox( Window* pParent, const ResId& rRes )
     : BasicTreeListBox( pParent, rRes )
