@@ -63,7 +63,6 @@ typedef void* (*TypeId)();
 
 //-------------------------------------------------------------------------
 
-#define TYPEINIT_AUTOFACTORY(sType) TYPEINIT_FACTORY(sType, new sType)
 #define TYPEINIT(sType) TYPEINIT_FACTORY(sType, 0)
 
 #define SUPERTYPE(sSuper) \
@@ -107,8 +106,6 @@ typedef void* (*TypeId)();
             SUPERTYPE(sSuper2); \
             SUPERTYPE(sSuper3); \
         TYPEINIT_END(sType)
-#define TYPEINIT3_AUTOFACTORY(sType, sSuper1, sSuper2, sSuper3) \
-            TYPEINIT3_FACTORY(sType, sSuper1, sSuper2, sSuper3, new sType)
 #define TYPEINIT3(sType, sSuper1, sSuper2, sSuper3) \
             TYPEINIT3_FACTORY(sType, sSuper1, sSuper2, sSuper3, 0)
 
@@ -119,12 +116,6 @@ typedef void* (*TypeId)();
 
 //-------------------------------------------------------------------------
 // On-Demand-faehige persistent-TypeId Version
-
-#define TYPEINFO_ID(id) \
-        static  TypeId StaticType() { return (TypeId) ( id | 0xF000000L ); } \
-        static  sal_Bool   IsOf( TypeId aSameOrSuperType ); \
-        virtual TypeId Type() const; \
-        virtual sal_Bool   IsA( TypeId aSameOrSuperType ) const
 
 #define TYPEINIT_ID(sType) \
         TypeId sType::Type() const { return StaticType(); } \
