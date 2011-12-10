@@ -2534,14 +2534,11 @@ fi
 # check for fontconfig support
 AC_MSG_CHECKING([whether we need fontconfig])
 if test "z$test_fontconfig" = "zyes"; then
-    ENABLE_FONTCONFIG="TRUE"
     AC_MSG_RESULT([yes])
     PKG_CHECK_MODULES([FONTCONFIG], [fontconfig >= 2.2.0])
 else
-    ENABLE_FONTCONFIG=""
     AC_MSG_RESULT([no])
 fi
-AC_SUBST(ENABLE_FONTCONFIG)
 AC_SUBST(FONTCONFIG_CFLAGS)
 AC_SUBST(FONTCONFIG_LIBS)
 
