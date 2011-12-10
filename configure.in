@@ -263,6 +263,10 @@ linux-androideabi*)
             AC_MSG_ERROR([You need to set the $var environment variable in a cross-compilation for Android. See README.cross for an example.])
         fi
     done
+
+    BUILD_TYPE="$BUILD_TYPE FONTCONFIG FREETYPE"
+    FREETYPE_TARBALL=dbf2caca1d3afd410a29217a9809d397-freetype-2.4.8.tar.bz2
+    FONTCONFIG_TARBALL=77e15a92006ddc2adbb06f840d591c0e-fontconfig-2.8.0.tar.gz
     ;;
 
 *)
@@ -282,6 +286,8 @@ AC_SUBST(OSVERSION)
 AC_SUBST(PTHREAD_CFLAGS)
 AC_SUBST(PTHREAD_LIBS)
 
+AC_SUBST(FREETYPE_TARBALL)
+AC_SUBST(FONTCONFIG_TARBALL)
 
 ###############################################################################
 # Extensions switches --enable/--disable

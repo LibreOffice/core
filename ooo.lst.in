@@ -93,6 +93,8 @@ a8b25a0bf696fd126a08319d88998492-libvisio-0.0.11.tar.bz2
 7c2549f6b0a8bb604e6c4c729ffdcfe6-libcmis-0.1.0.tar.gz
 cc8eb870d6a324d36575420efd856319-libcdr-0.0.0.tar.bz2
 @GOOGLE_DOCS_EXTENSION_PACK@
+@FREETYPE_TARBALL@
+@FONTCONFIG_TARBALL@
 http://dev-www.libreoffice.org/extern
 185d60944ea767075d27247c3162b3bc-unowinreg.dll
 http://ooo.itc.hu/oxygenoffice/download/libreoffice/
@@ -119,4 +121,3 @@ http://ooo.itc.hu/oxygenoffice/download/libreoffice/
 @SUNTEMPLATES_FR_PACK@
 @SUNTEMPLATES_HU_PACK@
 @SUNTEMPLATES_IT_PACK@
-

@@ -1,0 +1,11 @@
+--- misc/build/freetype-2.4.8/builds/unix/configure
++++ misc/build/freetype-2.4.8/builds/unix/configure
+@@ -3619,7 +3619,7 @@
+ 
+ if test "x$GCC" = xyes; then
+   XX_CFLAGS="-Wall"
+-  XX_ANSIFLAGS="-pedantic -ansi"
++  XX_ANSIFLAGS=
+ else
+   case "$host" in
+   *-dec-osf*)
