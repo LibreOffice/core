@@ -1020,8 +1020,14 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
 #define SINGLE_LINE_SPACING 240
             style::LineSpacing aSpacing;
             PropertyMapPtr pTopContext = m_pImpl->GetTopContext();
-            PropertyMap::iterator aLineSpacingIter = pTopContext->find(PropertyDefinition( PROP_PARA_LINE_SPACING, true ) );
-            if( aLineSpacingIter != pTopContext->end())
+            bool bFound = false;
+            PropertyMap::iterator aLineSpacingIter;
+            if (pTopContext)
+            {
+                aLineSpacingIter = pTopContext->find(PropertyDefinition( PROP_PARA_LINE_SPACING, true ) );
+                bFound = aLineSpacingIter != pTopContext->end();
+            }
+            if (bFound)
             {
                 aLineSpacingIter->second >>= aSpacing;
             }
@@ -1053,7 +1059,8 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
                     else // NS_ooxml::LN_Value_wordprocessingml_ST_LineSpacingRule_exact
                         aSpacing.Mode = style::LineSpacingMode::FIX;
             }
-            pTopContext->Insert(PROP_PARA_LINE_SPACING, true, uno::makeAny( aSpacing ));
+            if (pTopContext)
+                pTopContext->Insert(PROP_PARA_LINE_SPACING, true, uno::makeAny( aSpacing ));
         }
         break;
         case NS_ooxml::LN_CT_Ind_start:
