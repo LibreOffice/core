@@ -26,41 +26,33 @@
  *
  ************************************************************************/
 
+#include "baside2.hrc"
+#include "basidesh.hrc"
+#include "moduldlg.hrc"
 
-#include <memory>
-
-#include <ide_pch.hxx>
-#include <vcl/msgbox.hxx>
-
-#include <moduldlg.hrc>
-#include <moduldlg.hxx>
-#include <basidesh.hrc>
-#include <basidesh.hxx>
-#include <bastypes.hxx>
-#include <baside3.hxx>
-#include <basobj.hxx>
-#include <baside2.hrc>
-#include <sbxitem.hxx>
-#include <iderdll.hxx>
-
-#include <com/sun/star/io/XInputStreamProvider.hpp>
-#include <com/sun/star/script/XLibraryContainer2.hpp>
-#include <com/sun/star/script/XLibraryContainerPassword.hpp>
-#include <com/sun/star/resource/XStringResourceManager.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <comphelper/processfactory.hxx>
-#include <xmlscript/xmldlg_imexp.hxx>
-
+#include "moduldlg.hxx"
 #include "localizationmgr.hxx"
-#include <basic/sbx.hxx>
+#include "basidesh.hxx"
+#include "baside3.hxx"
+#include "iderdll.hxx"
+
+#include <basic/basmgr.hxx>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/script/XLibraryContainerPassword.hpp>
+#include <comphelper/processfactory.hxx>
+#include <sfx2/app.hxx>
+#include <sfx2/dispatch.hxx>
+#include <sfx2/request.hxx>
+#include <sfx2/viewfrm.hxx>
+#include <svl/itemset.hxx>
+#include <svl/stritem.hxx>
+#include <vcl/msgbox.hxx>
 #include <tools/diagnose_ex.h>
-#include <boost/scoped_ptr.hpp>
+#include <xmlscript/xmldlg_imexp.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::resource;
-
 
 ExtBasicTreeListBox::ExtBasicTreeListBox( Window* pParent, const ResId& rRes )
     : BasicTreeListBox( pParent, rRes )
