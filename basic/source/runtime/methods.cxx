@@ -189,7 +189,7 @@ String getFullPath( const String& aRelPath )
     INetURLObject aURLObj( aRelPath );
     aFileURL = aURLObj.GetMainURL( INetURLObject::NO_DECODE );
 
-    if( !aFileURL.getLength() )
+    if( aFileURL.isEmpty() )
     {
         File::getFileURLFromSystemPath( aRelPath, aFileURL );
     }
@@ -280,7 +280,7 @@ RTLFUNC(Error)
         if ( bVBA && rPar.Count() > 1 )
         {
             com::sun::star::uno::Reference< ooo::vba::XErrObject > xErrObj( SbxErrObject::getUnoErrObject() );
-            if ( xErrObj.is() && xErrObj->getNumber() == nCode && xErrObj->getDescription().getLength() )
+            if ( xErrObj.is() && xErrObj->getNumber() == nCode && !xErrObj->getDescription().isEmpty() )
                 tmpErrMsg = xErrObj->getDescription();
         }
         rPar.Get( 0 )->PutString( tmpErrMsg );
@@ -655,12 +655,12 @@ RTLFUNC(MkDir)
                         // If aPath is the folder name, not a path, then create the folder under current directory.
                         INetURLObject aTryPathURL( aPath );
                         ::rtl::OUString sPathURL = aTryPathURL.GetMainURL( INetURLObject::NO_DECODE );
-                        if ( !sPathURL.getLength() )
+                        if ( sPathURL.isEmpty() )
                         {
                             File::getFileURLFromSystemPath( aPath, sPathURL );
                         }
                         INetURLObject aPathURL( sPathURL );
-                        if ( !aPathURL.GetPath().getLength() )
+                        if ( aPathURL.GetPath().isEmpty() )
                         {
                             ::rtl::OUString sCurDirURL;
                             SbxArrayRef pPar = new SbxArray;
@@ -673,7 +673,7 @@ RTLFUNC(MkDir)
                             INetURLObject aDirURL( sCurDirURL );
                             aDirURL.Append( aPath );
                             ::rtl::OUString aTmpPath = aDirURL.GetMainURL( INetURLObject::NO_DECODE );
-                            if ( aTmpPath.getLength() > 0 )
+                            if ( !aTmpPath.isEmpty() )
                             {
                                 aPath = aTmpPath;
                             }

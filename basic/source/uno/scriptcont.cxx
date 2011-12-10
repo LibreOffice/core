@@ -305,7 +305,7 @@ Any SAL_CALL SfxScriptLibraryContainer::importLibraryElement
     // TODO: Check language
     // aMod.aLanguage
     // aMod.aName ignored
-    if( aMod.aModuleType.getLength() > 0 )
+    if( !aMod.aModuleType.isEmpty() )
     {
         /*  If in VBA compatibility mode, force creation of the VBA Globals
             object. Each application will create an instance of its own
@@ -473,8 +473,8 @@ void SAL_CALL SfxScriptLibraryContainer::changeLibraryPassword( const OUString& 
     if( OldPassword == NewPassword )
         return;
 
-    sal_Bool bOldPassword = ( OldPassword.getLength() > 0 );
-    sal_Bool bNewPassword = ( NewPassword.getLength() > 0 );
+    sal_Bool bOldPassword = ( !OldPassword.isEmpty() );
+    sal_Bool bNewPassword = ( !NewPassword.isEmpty() );
     sal_Bool bStorage = mxStorage.is() && !pImplLib->mbLink;
 
     if( pImplLib->mbReadOnly || (bOldPassword && !pImplLib->mbPasswordProtected) )
@@ -592,7 +592,7 @@ sal_Bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, 
                         const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage,
                         const ::rtl::OUString& aTargetURL, const Reference< XSimpleFileAccess > xToUseSFI, const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& xHandler )
 {
-    bool bExport = aTargetURL.getLength();
+    bool bExport = !aTargetURL.isEmpty();
 
     BasicManager* pBasicMgr = getBasicManager();
     OSL_ENSURE( pBasicMgr, "SfxScriptLibraryContainer::implStorePasswordLibrary: cannot do this without a BasicManager!" );
@@ -1260,7 +1260,7 @@ bool SfxScriptLibrary::containsValidModule( const Any& aElement )
 {
     OUString sModuleText;
     aElement >>= sModuleText;
-    return ( sModuleText.getLength() > 0 );
+    return ( !sModuleText.isEmpty() );
 }
 
 bool SAL_CALL SfxScriptLibrary::isLibraryElementValid( ::com::sun::star::uno::Any aElement ) const

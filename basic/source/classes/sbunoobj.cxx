@@ -128,7 +128,7 @@ bool SbUnoObject::getDefaultPropName( SbUnoObject* pUnoObj, ::rtl::OUString& sDf
     if ( xDefaultProp.is() )
     {
         sDfltProp = xDefaultProp->getDefaultPropertyName();
-        if ( sDfltProp.getLength() )
+        if ( !sDfltProp.isEmpty() )
             result = true;
     }
     return result;
@@ -344,7 +344,7 @@ void implAppendExceptionMsg( ::rtl::OUStringBuffer& _inout_rBuffer, const Except
     lcl_indent( _inout_rBuffer, _nLevel );
     _inout_rBuffer.appendAscii( "Type: " );
 
-    if ( _rExceptionType.getLength() == 0 )
+    if ( _rExceptionType.isEmpty() )
         _inout_rBuffer.appendAscii( "Unknown" );
     else
         _inout_rBuffer.append( _rExceptionType );
@@ -1572,7 +1572,7 @@ void processAutomationParams( SbxArray* pParams, Sequence< Any >& args, bool bOL
             bBlockConversionToSmallestType );
 
             ::rtl::OUString aParamName = pNames[iSbx];
-            if( aParamName.getLength() )
+            if( !aParamName.isEmpty() )
             {
                 oleautomation::NamedArgument aNamedArgument;
                 aNamedArgument.Name = aParamName;
@@ -1687,7 +1687,7 @@ rtl::OUString Impl_GetInterfaceInfo( const Reference< XInterface >& x, const Ref
     if( pUnoObj )
     {
         aName = pUnoObj->GetClassName();
-        if( !aName.getLength() )
+        if( aName.isEmpty() )
         {
             Any aToInspectObj = pUnoObj->getUnoAny();
             TypeClass eType = aToInspectObj.getValueType().getTypeClass();
@@ -1708,7 +1708,7 @@ rtl::OUString Impl_GetInterfaceInfo( const Reference< XInterface >& x, const Ref
 ::rtl::OUString getDbgObjectName( SbUnoObject* pUnoObj )
 {
     ::rtl::OUString aName = getDbgObjectNameImpl( pUnoObj );
-    if( !aName.getLength() )
+    if( aName.isEmpty() )
         aName += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Unknown"));
 
     ::rtl::OUStringBuffer aRet;
@@ -1787,7 +1787,7 @@ bool checkUnoObjectType( SbUnoObject* pUnoObj, const ::rtl::OUString& rClass )
                 {
                     rtl::OUString sTypeName;
                     xInv->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("$GetTypeName") ) ) >>= sTypeName;
-                    if ( sTypeName.getLength() == 0 || sTypeName.equals(  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("IDispatch") ) ) )
+                    if ( sTypeName.isEmpty() || sTypeName.equals(  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("IDispatch") ) ) )
                         // can't check type, leave it pass
                         result = true;
                     else
@@ -2404,7 +2404,7 @@ SbUnoObject::SbUnoObject( const rtl::OUString& aName_, const Any& aUnoObj_ )
         bFatalError = sal_False;
 
         // insert the real name of the class
-        if( aName_.getLength() == 0 )
+        if( aName_.isEmpty() )
         {
             aClassName_ = aUnoObj_.getValueType().getTypeName();
             bSetClassName = sal_True;
@@ -2655,7 +2655,7 @@ SbxVariable* SbUnoObject::Find( const String& rName, SbxClassType t )
             if( mxExactName.is() )
             {
                 ::rtl::OUString aUExactName = mxExactName->getExactName( aUName );
-                if( aUExactName.getLength() )
+                if( !aUExactName.isEmpty() )
                     aUName = aUExactName;
             }
             if( mxUnoAccess->hasProperty( aUName, PropertyConcept::ALL - PropertyConcept::DANGEROUS ) )
@@ -2731,7 +2731,7 @@ SbxVariable* SbUnoObject::Find( const String& rName, SbxClassType t )
             if( mxExactNameInvocation.is() )
             {
                 ::rtl::OUString aUExactName = mxExactNameInvocation->getExactName( aUName );
-                if( aUExactName.getLength() )
+                if( !aUExactName.isEmpty() )
                     aUName = aUExactName;
             }
 
@@ -3564,13 +3564,13 @@ SbxVariable* SbUnoService::Find( const String& rName, SbxClassType )
                 Reference< XServiceConstructorDescription > xCtor = pCtorSeq[i];
 
                 ::rtl::OUString aName( xCtor->getName() );
-                if( !aName.getLength() )
+                if( aName.isEmpty() )
                 {
                     if( xCtor->isDefaultConstructor() )
                         aName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("create"));
                 }
 
-                if( aName.getLength() )
+                if( !aName.isEmpty() )
                 {
                     // Create and insert SbUnoServiceCtor
                     SbxVariableRef xSbCtorRef = new SbUnoServiceCtor( aName, xCtor );
@@ -4688,7 +4688,7 @@ bool SbModule::createCOMWrapperForIface( Any& o_rRetAny, SbClassModuleObject* pP
         SbxVariable* pVar = pModIfaces->Get( i );
         ::rtl::OUString aIfaceName = pVar->GetName();
 
-        if( aIfaceName.getLength() != 0 )
+        if( !aIfaceName.isEmpty() )
         {
             ::rtl::OUString aPureIfaceName = aIfaceName;
             sal_Int32 indexLastDot = aIfaceName.lastIndexOf('.');

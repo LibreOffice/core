@@ -200,7 +200,7 @@ void ImpPutString( SbxValues* p, const ::rtl::OUString* n )
         case SbxBYREF | SbxSTRING:
         case SbxSTRING:
         case SbxLPSTR:
-            if( n->getLength() )
+            if( !n->isEmpty() )
             {
                 if( !p->pOUString )
                     p->pOUString = new ::rtl::OUString( *n );

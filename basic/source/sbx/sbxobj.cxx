@@ -755,7 +755,7 @@ void SbxObject::Dump( SvStream& rStrm, sal_Bool bFill )
     rtl::OString aClassNameStr(rtl::OUStringToOString(aClassName, RTL_TEXTENCODING_ASCII_US));
     rStrm << "Object( "
           << rtl::OString::valueOf(reinterpret_cast<sal_Int64>(this)).getStr()<< "=='"
-          << ( aNameStr.getLength() ? aNameStr.getStr() : "<unnamed>" ) << "', "
+          << ( aNameStr.isEmpty() ?  "<unnamed>" : aNameStr.getStr() ) << "', "
           << "of class '" << aClassNameStr.getStr() << "', "
           << "counts "
           << rtl::OString::valueOf(static_cast<sal_Int64>(GetRefCount())).getStr()
@@ -765,7 +765,7 @@ void SbxObject::Dump( SvStream& rStrm, sal_Bool bFill )
         rtl::OString aParentNameStr(rtl::OUStringToOString(GetName(), RTL_TEXTENCODING_ASCII_US));
         rStrm << "in parent "
               << rtl::OString::valueOf(reinterpret_cast<sal_Int64>(GetParent())).getStr()
-              << "=='" << ( aParentNameStr.getLength() ? aParentNameStr.getStr() : "<unnamed>" ) << "'";
+              << "=='" << ( aParentNameStr.isEmpty() ? "<unnamed>" : aParentNameStr.getStr()  ) << "'";
     }
     else
         rStrm << "no parent ";
