@@ -46,11 +46,13 @@
 
 class StarBASIC;
 
-
-#define NEWOBJECTMODE_LIB       1
-#define NEWOBJECTMODE_MOD       2
-#define NEWOBJECTMODE_DLG       3
-#define NEWOBJECTMODE_METH      4
+enum NewObjectMode
+{
+    NEWOBJECTMODE_LIB  = 1,
+    NEWOBJECTMODE_MOD  = 2,
+    NEWOBJECTMODE_DLG  = 3,
+    NEWOBJECTMODE_METH = 4
+};
 
 class NewObjectDialog : public ModalDialog
 {
@@ -63,7 +65,7 @@ private:
     DECL_LINK(OkButtonHandler, Button *);
 
 public:
-    NewObjectDialog(Window * pParent, sal_uInt16 nMode, bool bCheckName = false);
+    NewObjectDialog(Window * pParent, NewObjectMode nMode, bool bCheckName = false);
                 ~NewObjectDialog();
 
     String      GetObjectName() const { return aEdit.GetText(); }
@@ -129,7 +131,7 @@ public:
 class BasicCheckBox : public SvTabListBox
 {
 private:
-    sal_uInt16              nMode;
+    NewObjectMode       nMode;
     SvLBoxButtonData*   pCheckButton;
     ScriptDocument      m_aDocument;
     void                Init();
@@ -150,8 +152,8 @@ public:
 
     void            SetDocument( const ScriptDocument& rDocument ) { m_aDocument = rDocument; }
 
-    void            SetMode( sal_uInt16 n );
-    sal_uInt16          GetMode() const         { return nMode; }
+    void            SetMode( NewObjectMode n );
+    NewObjectMode   GetMode() const { return nMode; }
 };
 
 class LibDialog: public ModalDialog

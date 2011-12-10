@@ -163,7 +163,7 @@ BasicCheckBox::BasicCheckBox( Window* pParent, const ResId& rResId )
     :SvTabListBox( pParent, rResId )
     ,m_aDocument( ScriptDocument::getApplicationScriptDocument() )
 {
-    nMode = LIBMODE_MANAGER;
+    nMode = NEWOBJECTMODE_MOD;
     long aTabs_[] = { 1, 12 };  // TabPos needs at least one...
                                 // 12 because of the CheckBox
     SetTabs( aTabs_ );
@@ -201,7 +201,7 @@ void BasicCheckBox::Init()
 
 //----------------------------------------------------------------------------
 
-void BasicCheckBox::SetMode( sal_uInt16 n )
+void BasicCheckBox::SetMode( NewObjectMode n )
 {
     nMode = n;
 
@@ -264,7 +264,7 @@ void BasicCheckBox::InitEntry( SvLBoxEntry* pEntry, const XubString& rTxt, const
 {
     SvTabListBox::InitEntry( pEntry, rTxt, rImg1, rImg2, eButtonKind );
 
-    if ( nMode == LIBMODE_MANAGER )
+    if ( nMode == NEWOBJECTMODE_MOD )
     {
         // initialize all columns with own string class (column 0 == bitmap)
         sal_uInt16 nCount = pEntry->ItemCount();
@@ -281,7 +281,7 @@ void BasicCheckBox::InitEntry( SvLBoxEntry* pEntry, const XubString& rTxt, const
 
 sal_Bool BasicCheckBox::EditingEntry( SvLBoxEntry* pEntry, Selection& )
 {
-    if ( nMode != LIBMODE_MANAGER )
+    if ( nMode != NEWOBJECTMODE_MOD )
         return sal_False;
 
     DBG_ASSERT( pEntry, "Kein Eintrag?" );
@@ -399,7 +399,7 @@ IMPL_LINK(NewObjectDialog, OkButtonHandler, Button *, EMPTYARG)
     return 0;
 }
 
-NewObjectDialog::NewObjectDialog(Window * pParent, sal_uInt16 nMode,
+NewObjectDialog::NewObjectDialog(Window * pParent, NewObjectMode nMode,
                                  bool bCheckName)
     : ModalDialog( pParent, IDEResId( RID_DLG_NEWLIB ) ),
         aText( this, IDEResId( RID_FT_NEWLIB ) ),
@@ -410,21 +410,20 @@ NewObjectDialog::NewObjectDialog(Window * pParent, sal_uInt16 nMode,
     FreeResource();
     aEdit.GrabFocus();
 
-    if ( nMode == NEWOBJECTMODE_LIB )
+    switch (nMode)
     {
+    case NEWOBJECTMODE_LIB:
         SetText( String( IDEResId( RID_STR_NEWLIB ) ) );
-    }
-    else if ( nMode == NEWOBJECTMODE_MOD )
-    {
+        break;
+    case NEWOBJECTMODE_MOD:
         SetText( String( IDEResId( RID_STR_NEWMOD ) ) );
-    }
-    else if ( nMode == NEWOBJECTMODE_METH )
-    {
+        break;
+    case NEWOBJECTMODE_METH:
         SetText( String( IDEResId( RID_STR_NEWMETH ) ) );
-    }
-    else
-    {
+        break;
+    default:
         SetText( String( IDEResId( RID_STR_NEWDLG ) ) );
+        break;
     }
 
     if (bCheckName)
@@ -535,7 +534,7 @@ LibPage::LibPage( Window * pParent )
 
     aBasicsBox.SetSelectHdl( LINK( this, LibPage, BasicSelectHdl ) );
 
-    aLibBox.SetMode( LIBMODE_MANAGER );
+    aLibBox.SetMode( NEWOBJECTMODE_MOD );
     aLibBox.EnableInplaceEditing( sal_True );
     aLibBox.SetStyle( WB_HSCROLL | WB_BORDER | WB_TABSTOP );
     aCloseButton.GrabFocus();
@@ -916,7 +915,7 @@ void LibPage::InsertLib()
                 {
                     pLibDlg = new LibDialog( this );
                     pLibDlg->SetStorageName( aURLObj.getName() );
-                    pLibDlg->GetLibBox().SetMode( LIBMODE_CHOOSER );
+                    pLibDlg->GetLibBox().SetMode( NEWOBJECTMODE_LIB );
                 }
 
                 // libbox entries
