@@ -473,8 +473,8 @@ void SAL_CALL SfxScriptLibraryContainer::changeLibraryPassword( const OUString& 
     if( OldPassword == NewPassword )
         return;
 
-    sal_Bool bOldPassword = ( !OldPassword.isEmpty() );
-    sal_Bool bNewPassword = ( !NewPassword.isEmpty() );
+    sal_Bool bOldPassword = !OldPassword.isEmpty();
+    sal_Bool bNewPassword = !NewPassword.isEmpty();
     sal_Bool bStorage = mxStorage.is() && !pImplLib->mbLink;
 
     if( pImplLib->mbReadOnly || (bOldPassword && !pImplLib->mbPasswordProtected) )

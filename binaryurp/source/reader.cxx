@@ -215,7 +215,7 @@ void Reader::readMessage(Unmarshal & unmarshal) {
     rtl::OUString oid;
     if (newOid) {
         oid = unmarshal.readOid();
-        if (oid.getLength() == 0) {
+        if (oid.isEmpty()) {
             throw css::io::IOException(
                 rtl::OUString(
                     RTL_CONSTASCII_USTRINGPARAM(
@@ -224,7 +224,7 @@ void Reader::readMessage(Unmarshal & unmarshal) {
         }
         lastOid_ = oid;
     } else {
-        if (lastOid_.getLength() == 0) {
+        if (lastOid_.isEmpty()) {
             throw css::uno::RuntimeException(
                 rtl::OUString(
                     RTL_CONSTASCII_USTRINGPARAM(
