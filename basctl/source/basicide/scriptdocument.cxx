@@ -986,9 +986,9 @@ namespace basctl
                 ::rtl::OUString aSearchURL1( RTL_CONSTASCII_USTRINGPARAM( "share/basic" ) );
                 ::rtl::OUString aSearchURL2( RTL_CONSTASCII_USTRINGPARAM( "share/uno_packages" ) );
                 ::rtl::OUString aSearchURL3( RTL_CONSTASCII_USTRINGPARAM( "share/extensions" ) );
-                if( aCanonicalFileURL.indexOf( aSearchURL1 ) != -1 ||
-                    aCanonicalFileURL.indexOf( aSearchURL2 ) != -1 ||
-                    aCanonicalFileURL.indexOf( aSearchURL3 ) != -1 )
+                if( aCanonicalFileURL.indexOf( aSearchURL1 ) >= 0 ||
+                    aCanonicalFileURL.indexOf( aSearchURL2 ) >= 0 ||
+                    aCanonicalFileURL.indexOf( aSearchURL3 ) >= 0 )
                         bIsShared = true;
             }
         }
@@ -1315,7 +1315,7 @@ namespace basctl
         while ( !bValid )
         {
             aObjectName = aBaseName;
-            aObjectName += String::CreateFromInt32( i );
+            aObjectName += ::rtl::OUString::valueOf( i );
 
             if ( aUsedNamesCheck.find( aObjectName ) == aUsedNamesCheck.end() )
                 bValid = sal_True;
@@ -1521,9 +1521,9 @@ namespace basctl
             {
                 switch ( _eType )
                 {
-                case LIBRARY_TYPE_MODULE:   aTitle = String( IDEResId( RID_STR_USERMACROS ) ); break;
-                case LIBRARY_TYPE_DIALOG:   aTitle = String( IDEResId( RID_STR_USERDIALOGS ) ); break;
-                case LIBRARY_TYPE_ALL:      aTitle = String( IDEResId( RID_STR_USERMACROSDIALOGS ) ); break;
+                case LIBRARY_TYPE_MODULE:   aTitle = ResId::toString( IDEResId( RID_STR_USERMACROS ) ); break;
+                case LIBRARY_TYPE_DIALOG:   aTitle = ResId::toString( IDEResId( RID_STR_USERDIALOGS ) ); break;
+                case LIBRARY_TYPE_ALL:      aTitle = ResId::toString( IDEResId( RID_STR_USERMACROSDIALOGS ) ); break;
                 default:
                     break;
             }
@@ -1532,9 +1532,9 @@ namespace basctl
             {
                 switch ( _eType )
                 {
-                case LIBRARY_TYPE_MODULE:   aTitle = String( IDEResId( RID_STR_SHAREMACROS ) ); break;
-                case LIBRARY_TYPE_DIALOG:   aTitle = String( IDEResId( RID_STR_SHAREDIALOGS ) ); break;
-                case LIBRARY_TYPE_ALL:      aTitle = String( IDEResId( RID_STR_SHAREMACROSDIALOGS ) ); break;
+                case LIBRARY_TYPE_MODULE:   aTitle = ResId::toString( IDEResId( RID_STR_SHAREMACROS ) ); break;
+                case LIBRARY_TYPE_DIALOG:   aTitle = ResId::toString( IDEResId( RID_STR_SHAREDIALOGS ) ); break;
+                case LIBRARY_TYPE_ALL:      aTitle = ResId::toString( IDEResId( RID_STR_SHAREMACROSDIALOGS ) ); break;
                 default:
                     break;
                 }
