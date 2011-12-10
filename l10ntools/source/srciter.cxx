@@ -35,15 +35,10 @@
 // class SourceTreeIterator
 //
 
-/*****************************************************************************/
-SourceTreeIterator::SourceTreeIterator(
-    const ByteString &rRootDirectory, const ByteString &rVersion )
-/*****************************************************************************/
-                : bInExecute( sal_False )
+SourceTreeIterator::SourceTreeIterator(const rtl::OString &rRootDirectory)
+    : bInExecute( sal_False )
 {
-    (void) rVersion ;
-
-    rtl::OUString sRootDirectory( rRootDirectory.GetBuffer() , rRootDirectory.Len() , RTL_TEXTENCODING_UTF8 );
+    rtl::OUString sRootDirectory(rtl::OStringToOUString(rRootDirectory, RTL_TEXTENCODING_UTF8));
     aRootDirectory = transex::Directory( sRootDirectory );
 }
 

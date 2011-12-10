@@ -205,7 +205,7 @@ private:
     );
     void WorkOnDirectory( const ByteString &rDirectory );
 public:
-    SourceTreeLocalizer( const ByteString &rRoot, const ByteString &rVersion , bool skip_links );
+    SourceTreeLocalizer(const ByteString &rRoot, bool skip_links);
     ~SourceTreeLocalizer();
 
     void SetLanguageRestriction( const ByteString& rRestrictions )
@@ -216,15 +216,12 @@ public:
     virtual void OnExecuteDirectory( const rtl::OUString &rDirectory );
 };
 
-/*****************************************************************************/
-SourceTreeLocalizer::SourceTreeLocalizer(
-    const ByteString &rRoot, const ByteString &rVersion, bool skip_links )
-/*****************************************************************************/
-                : SourceTreeIterator( rRoot, rVersion ),
-                nMode( LOCALIZE_NONE ),
-                nFileCnt( 0 )
+SourceTreeLocalizer::SourceTreeLocalizer(const ByteString &rRoot, bool skip_links)
+    : SourceTreeIterator(rRoot)
+    , nMode( LOCALIZE_NONE )
+    , nFileCnt( 0 )
 {
-        bSkipLinks  = skip_links ;
+    bSkipLinks  = skip_links ;
 }
 
 /*****************************************************************************/
@@ -594,13 +591,6 @@ int _cdecl main( int argc, char *argv[] )
     else
         return Error();
 
-    ByteString sVersion( Export::GetEnv( "WORK_STAMP" ));
-
-    if ( !sVersion.Len() ) {
-        fprintf( stderr, "ERROR: No environment set!\n" );
-        return 1;
-    }
-
     DirEntry aEntry( String( sFileName , RTL_TEXTENCODING_ASCII_US ));
     aEntry.ToAbs();
     String sFullEntry = aEntry.GetFull();
@@ -610,7 +600,7 @@ int _cdecl main( int argc, char *argv[] )
     string pwd;
     Export::getCurrentDir( pwd );
     cout << "Localizing directory " << pwd << "\n";
-    SourceTreeLocalizer aIter( ByteString( pwd.c_str() ) , sVersion , bSkipLinks );
+    SourceTreeLocalizer aIter( ByteString( pwd.c_str() ) , bSkipLinks );
     aIter.SetLanguageRestriction( sLanguages );
     aIter.Extract( sFileName );
     printf("\n%d files found!\n",aIter.GetFileCnt());

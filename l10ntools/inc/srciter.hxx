@@ -46,7 +46,7 @@ protected:
     bool bSkipLinks;
 
 public:
-    SourceTreeIterator( const ByteString &rRootDirectory, const ByteString &rVersion );
+    SourceTreeIterator(const rtl::OString &rRootDirectory);
     virtual ~SourceTreeIterator();
 
     sal_Bool StartExecute();
