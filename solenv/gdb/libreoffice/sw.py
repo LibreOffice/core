@@ -48,7 +48,7 @@ class SwPaMPrinter(object):
 
     def to_string(self):
         return "%s" % (self.typename)
-        
+
     def children(self):
         point = self.value['m_pPoint'].dereference()
         mark = self.value['m_pMark'].dereference()
@@ -86,18 +86,52 @@ class BigPtrArrayPrinter(object):
             self.block_count = array['nBlock']
             self.block_pos = 0
             self.block = None
+            self.indent = ""
+            self.max_indent = "        "
             self._next_block(False)
             self._check_invariant()
 
         def __iter__(self):
             return self
 
+        def _node_value(self, node):
+            cur_indent = self.indent
+            if str(node.dynamic_type.target()) == "SwTxtNode":
+                # accessing this is completely non-obvious...
+                # also, node.dynamic_cast(node.dynamic_type) is null?
+                value = "    TextNode " + \
+                    str(node.cast(node.dynamic_type).dereference()['m_Text'])
+            elif str(node.dynamic_type.target()) == "SwOLENode":
+                value = "     OLENode "
+            elif str(node.dynamic_type.target()) == "SwGrfNode":
+                value = "     GrfNode "
+            elif str(node.dynamic_type.target()) == "SwSectionNode":
+                value = " SectionNode "
+                self.indent += " "
+            elif str(node.dynamic_type.target()) == "SwTableNode":
+                value = "   TableNode "
+                self.indent += " "
+            elif str(node.dynamic_type.target()) == "SwStartNode":
+                value = "   StartNode "
+                self.indent += " "
+            elif str(node.dynamic_type.target()) == "SwEndNode":
+                value = "     EndNode "
+                self.indent = self.indent[:-1]
+                cur_indent = self.indent
+            elif str(node.dynamic_type.target()) == "SwDummySectionNode":
+                value = "DummySctNode "
+#            return "\n[%s%4d%s] %s %s" % (cur_indent, self.pos, \
+#                                self.max_indent[len(cur_indent):], node, value)
+            return "\n[%4d] %s%s%s %s" % (self.pos, cur_indent, \
+                                node, self.max_indent[len(cur_indent):], value)
+
         def next(self):
             if self.pos == self.count:
                 raise StopIteration()
 
             name = str(self.pos)
-            value = self.block['pData'][self.pos - self.block['nStart']]
+            node = self.block['pData'][self.pos - self.block['nStart']]
+            value =  self._node_value(node)
             if self.pos == self.block['nEnd']:
                 self._next_block()
             self.pos += 1
