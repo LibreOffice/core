@@ -172,7 +172,7 @@ SbMethod* CreateMacro( SbModule* pModule, const String& rMacroName )
 
 //----------------------------------------------------------------------------
 
-bool RenameDialog( Window* pErrorParent, const ScriptDocument& rDocument, const String& rLibName, const String& rOldName, const String& rNewName )
+bool RenameDialog( Window* pErrorParent, const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, const ::rtl::OUString& rOldName, const ::rtl::OUString& rNewName )
     throw(ElementExistException, NoSuchElementException)
 {
     if ( !rDocument.hasDialog( rLibName, rOldName ) )
@@ -183,15 +183,15 @@ bool RenameDialog( Window* pErrorParent, const ScriptDocument& rDocument, const 
 
     if ( rDocument.hasDialog( rLibName, rNewName ) )
     {
-        ErrorBox aError( pErrorParent, WB_OK | WB_DEF_OK, String( IDEResId( RID_STR_SBXNAMEALLREADYUSED2 ) ) );
+        ErrorBox aError( pErrorParent, WB_OK | WB_DEF_OK, ResId::toString( IDEResId( RID_STR_SBXNAMEALLREADYUSED2 ) ) );
         aError.Execute();
         return false;
     }
 
     // #i74440
-    if ( rNewName.Len() == 0 )
+    if ( rNewName.isEmpty() )
     {
-        ErrorBox aError( pErrorParent, WB_OK | WB_DEF_OK, String( IDEResId( RID_STR_BADSBXNAME ) ) );
+        ErrorBox aError( pErrorParent, WB_OK | WB_DEF_OK, ResId::toString( IDEResId( RID_STR_BADSBXNAME ) ) );
         aError.Execute();
         return false;
     }

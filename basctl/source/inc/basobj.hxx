@@ -72,7 +72,7 @@ namespace BasicIDE
     // new methods for modules
 
     ::rtl::OUString     GetModule(
-        const ScriptDocument& rDocument, const String& rLibName, const String& rModName )
+        const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, const ::rtl::OUString& rModName )
         throw( ::com::sun::star::container::NoSuchElementException );
 
     /** renames a module
@@ -81,7 +81,7 @@ namespace BasicIDE
     */
     bool                 RenameModule(
         Window* pErrorParent, const ScriptDocument& rDocument,
-        const String& rLibName, const String& rOldName, const String& rNewName );
+        const ::rtl::OUString& rLibName, const ::rtl::OUString& rOldName, const ::rtl::OUString& rNewName );
 
     // new methods for macros
 
@@ -89,11 +89,11 @@ namespace BasicIDE
         sal_Bool bChooseOnly, const ::rtl::OUString& rMacroDesc );
 
     ::com::sun::star::uno::Sequence< ::rtl::OUString > GetMethodNames(
-        const ScriptDocument& rDocument, const String& rLibName, const String& rModName )
+        const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, const ::rtl::OUString& rModName )
         throw( ::com::sun::star::container::NoSuchElementException );
 
     sal_Bool                    HasMethod(
-        const ScriptDocument& rDocument, const String& rLibName, const String& rModName, const String& rMethName );
+        const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, const ::rtl::OUString& rModName, const ::rtl::OUString& rMethName );
 
     // new methods for dialogs
 
@@ -106,11 +106,11 @@ namespace BasicIDE
         Will show an error message when renaming fails because the new name is already used.
     */
     bool                 RenameDialog(
-        Window* pErrorParent, const ScriptDocument& rDocument, const String& rLibName, const String& rOldName, const String& rNewName )
+        Window* pErrorParent, const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, const ::rtl::OUString& rOldName, const ::rtl::OUString& rNewName )
         throw( ::com::sun::star::container::ElementExistException, ::com::sun::star::container::NoSuchElementException );
 
     bool                 RemoveDialog(
-        const ScriptDocument& rDocument, const String& rLibName, const String& rDlgName );
+        const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, const ::rtl::OUString& rDlgName );
 
     void                MarkDocumentModified( const ScriptDocument& rDocument );
 }

@@ -168,7 +168,7 @@ Sequence< ::rtl::OUString > GetMergedLibraryNames( const Reference< script::XLib
 
 //----------------------------------------------------------------------------
 
-bool RenameModule( Window* pErrorParent, const ScriptDocument& rDocument, const String& rLibName, const String& rOldName, const String& rNewName )
+bool RenameModule( Window* pErrorParent, const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, const ::rtl::OUString& rOldName, const ::rtl::OUString& rNewName )
 {
     if ( !rDocument.hasModule( rLibName, rOldName ) )
     {
@@ -178,15 +178,15 @@ bool RenameModule( Window* pErrorParent, const ScriptDocument& rDocument, const 
 
     if ( rDocument.hasModule( rLibName, rNewName ) )
     {
-        ErrorBox aError( pErrorParent, WB_OK | WB_DEF_OK, String( IDEResId( RID_STR_SBXNAMEALLREADYUSED2 ) ) );
+        ErrorBox aError( pErrorParent, WB_OK | WB_DEF_OK, ResId::toString( IDEResId( RID_STR_SBXNAMEALLREADYUSED2 ) ) );
         aError.Execute();
         return false;
     }
 
     // #i74440
-    if ( rNewName.Len() == 0 )
+    if ( rNewName.isEmpty() )
     {
-        ErrorBox aError( pErrorParent, WB_OK | WB_DEF_OK, String( IDEResId( RID_STR_BADSBXNAME ) ) );
+        ErrorBox aError( pErrorParent, WB_OK | WB_DEF_OK, ResId::toString( IDEResId( RID_STR_BADSBXNAME ) ) );
         aError.Execute();
         return false;
     }
@@ -394,7 +394,7 @@ namespace
 
 //----------------------------------------------------------------------------
 
-Sequence< ::rtl::OUString > GetMethodNames( const ScriptDocument& rDocument, const String& rLibName, const String& rModName )
+Sequence< ::rtl::OUString > GetMethodNames( const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, const ::rtl::OUString& rModName )
     throw(NoSuchElementException )
 {
     Sequence< ::rtl::OUString > aSeqMethods;
@@ -431,7 +431,7 @@ Sequence< ::rtl::OUString > GetMethodNames( const ScriptDocument& rDocument, con
 
 //----------------------------------------------------------------------------
 
-sal_Bool HasMethod( const ScriptDocument& rDocument, const String& rLibName, const String& rModName, const String& rMethName )
+sal_Bool HasMethod( const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, const ::rtl::OUString& rModName, const ::rtl::OUString& rMethName )
 {
     sal_Bool bHasMethod = sal_False;
 
