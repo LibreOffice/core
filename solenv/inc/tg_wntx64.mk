@@ -251,6 +251,7 @@ $(SHL1TARGETN_X64) : \
     @echo $(EMQ)#define ADDITIONAL_VERINFO3 >> $(MISC_X64)/$(SHL1DEFAULTRES_X64:b).rc
 .ENDIF			# "$(SHL1ADD_VERINFO_X64)"!=""
     @echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC_X64)/$(SHL1DEFAULTRES_X64:b).rc
+    @echo $(EMQ)#define RES_APP_VENDOR	$(OOO_VENDOR) >> $(MISC_X64)/$(SHL1DEFAULTRES_X64:b).rc
     @echo $(EMQ)#define ORG_NAME	$(SHL1TARGET_X64)$(DLLPOST) >> $(MISC_X64)/$(SHL1DEFAULTRES_X64:b).rc
     @echo $(EMQ)#define INTERNAL_NAME $(SHL1TARGET_X64:b) >> $(MISC_X64)/$(SHL1DEFAULTRES_X64:b).rc
     @echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC_X64)/$(SHL1DEFAULTRES_X64:b).rc
@@ -395,6 +396,7 @@ $(SHL2TARGETN_X64) : \
     @echo $(EMQ)#define ADDITIONAL_VERINFO3 >> $(MISC_X64)/$(SHL2DEFAULTRES_X64:b).rc
 .ENDIF			# "$(SHL1ADD_VERINFO_X64)"!=""
     @echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC_X64)/$(SHL2DEFAULTRES_X64:b).rc
+    @echo $(EMQ)#define RES_APP_VENDOR 	$(OOO_VENDOR) >> $(MISC_X64)/$(SHL2DEFAULTRES_X64:b).rc
     @echo $(EMQ)#define ORG_NAME	$(SHL2TARGET_X64)$(DLLPOST) >> $(MISC_X64)/$(SHL2DEFAULTRES_X64:b).rc
     @echo $(EMQ)#define INTERNAL_NAME $(SHL1TARGET_X64:b) >> $(MISC_X64)/$(SHL2DEFAULTRES_X64:b).rc
     @echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC_X64)/$(SHL2DEFAULTRES_X64:b).rc

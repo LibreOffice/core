@@ -62,7 +62,7 @@ LibreOffice
 			BASEPRODUCTVERSION 3.6
             PCPFILENAME libreoffice.pcp
 			UPDATEURL http://update.libreoffice.org/check.php
-			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,userland.txt,version.lst
+			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,userland.txt
 			REMOVE_UPGRADE_CODE_FILE upgradecode_remove_ooo.txt
 			ADDSYSTEMINTEGRATION 1
 			EVAL
@@ -126,7 +126,7 @@ LibreOffice_Dev
 			REGISTRYLAYERNAME LayerDev
 			SERVICETAG_URN urn:uuid:1680b00d-e45c-11de-82d6-080020a9ed93
 			UPDATEURL http://update.libreoffice.org/check.php
-			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,javaversion2.dat,userland.txt,version.lst
+			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,javaversion2.dat,userland.txt
 			ADDSYSTEMINTEGRATION 1
 			EVAL
 			FILEFORMATNAME OpenOffice.org
@@ -193,7 +193,7 @@ URE
             STARTCENTER_INFO_URL http://www.libreoffice.org/
             STARTCENTER_TEMPLREP_URL http://templates.libreoffice.org/
             STARTCENTER_LAYOUT_STYLE 0
-            ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,version.lst
+            ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk
 			PACKAGEMAP package_names_ext.txt
             DICT_REPO_URL http://extensions.libreoffice.org/dictionaries/
         }
@@ -407,7 +407,7 @@ OxygenOffice
 			BASEPRODUCTVERSION 3.6
             PCPFILENAME openoffice.pcp
 			UPDATEURL http://update.libreoffice.org/check.php
-			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,userland.txt,version.lst
+			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,userland.txt
 			REMOVE_UPGRADE_CODE_FILE upgradecode_remove_ooo.txt
 			ADDSYSTEMINTEGRATION 1
 			EVAL
@@ -469,7 +469,7 @@ OxygenOffice_wJRE
 			ABOUTBOXPRODUCTVERSION 3.6.0
 			BASEPRODUCTVERSION 3.6
 			UPDATEURL http://update.libreoffice.org/check.php
-			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,javaversion2.dat,userland.txt,version.lst
+			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,javaversion2.dat,userland.txt
 			REMOVE_UPGRADE_CODE_FILE upgradecode_remove_ooo.txt
 			ADDSYSTEMINTEGRATION 1
 			EVAL

@@ -288,6 +288,7 @@ $(SHL$(TNR)TARGETN) : \
 .ENDIF			# "$(SHL$(TNR)ADD_VERINFO)"!=""
     @echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)/$(SHL$(TNR)DEFAULTRES:b).rc
     @echo $(EMQ)#define ORG_NAME	$(SHL$(TNR)TARGET)$(DLLPOST) >> $(MISC)/$(SHL$(TNR)DEFAULTRES:b).rc
+    @echo $(EMQ)#define RES_APP_VENDOR $(OOO_VENDOR) >> $(MISC)/$(SHL$(TNR)DEFAULTRES:b).rc
     @echo $(EMQ)#define INTERNAL_NAME $(SHL$(TNR)TARGET:b) >> $(MISC)/$(SHL$(TNR)DEFAULTRES:b).rc
     @echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC)/$(SHL$(TNR)DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""

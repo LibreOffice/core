@@ -26,33 +26,17 @@
  *************************************************************************/
 
 #include "versionlist.hrc"
+#include <winver.h>
 
-//#define VERVARIANT    0 // never define this one, will be provided by build environment (BUILD_ID)
-
-#define VER_FINAL       0
-
-#ifndef VER_FIRSTYEAR
-#define VER_FIRSTYEAR   VER_YEAR
+#ifndef PPSX
+#define PPSX(s) #s
+#endif
+#ifndef PPS
+#define PPS(s) PPSX(s)
 #endif
 
-#include "verinfo.hrc"
+#define VER_LEVEL VERSION.SUBVERSION.MICROVERSION.VERVARIANT
 
-// -----------------------------------------------------------------------
-//                  language/character set specification table
-// -----------------------------------------------------------------------
+#define VERC(a) Copyright \251 a by
 
-RCD_LANGUAGE rcdata
-{
-    "040904B0",     // USA -> Unicode
-    "040904E4",     // USA -> Windows, Multilingual
-    "04090000",     // USA -> 7-Bit-ASCII
-    0               // end of table
-}
-
-
-// version binary entry
-VS_VERSION_INFO rcdata
-{
-    0xF0, "sw", 0x0F, VER_YEAR, VER_MONTH, VER_DAY,
-    VERSION, SUBVERSION, VERVARIANT, VER_COUNT
-}
+#define S_CRIGHT PPS(VERC(VER_YEARRANGE))
