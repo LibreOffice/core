@@ -986,7 +986,7 @@ namespace pcr
             UpdateUI();
         }
 
-        catch(Exception&)
+        catch(const Exception&)
         {
             OSL_FAIL("OPropertyBrowserController::impl_rebindToInspectee_nothrow: caught an exception !");
         }
@@ -1117,7 +1117,7 @@ namespace pcr
             // be notified when one of our inspectees dies
             impl_toggleInspecteeListening_nothrow( true );
         }
-        catch(Exception&)
+        catch(const Exception&)
         {
             OSL_FAIL("OPropertyBrowserController::doInspection : caught an exception !");
         }
@@ -1367,7 +1367,7 @@ namespace pcr
                 break;
             }
         }
-        catch (Exception&)
+        catch (const Exception&)
         {
             DBG_UNHANDLED_EXCEPTION();
         }
@@ -1430,14 +1430,14 @@ namespace pcr
             // and display it again. This ensures proper formatting
             getPropertyBox().SetPropertyValue( rName, aNormalizedValue, false );
         }
-        catch(PropertyVetoException& eVetoException)
+        catch(const PropertyVetoException& eVetoException)
         {
             InfoBox(m_pView, eVetoException.Message).Execute();
             PropertyHandlerRef handler = impl_getHandlerForProperty_throw( rName );
             Any aNormalizedValue = handler->getPropertyValue( rName );
             getPropertyBox().SetPropertyValue( rName, aNormalizedValue, false );
         }
-        catch(Exception&)
+        catch(const Exception&)
         {
             OSL_FAIL("OPropertyBrowserController::Commit : caught an exception !");
         }

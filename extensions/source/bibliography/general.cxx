@@ -155,7 +155,7 @@ void BibPosListener::cursorMoved(const lang::EventObject& /*aEvent*/) throw( uno
                 uno::Any aVal = xValueAcc->getByName(uTypeMapping);
                 uno::Reference< uno::XInterface >  xInt = *(uno::Reference< uno::XInterface > *)aVal.getValue();
                 uno::Reference< sdb::XColumn >  xCol(xInt, UNO_QUERY);
-                DBG_ASSERT(xCol.is(), "BibPosListener::positioned : invalid column (no sdb::XColumn) !");
+                DBG_ASSERT(xCol.is(), "BibPosListener::cursorMoved : invalid column (no sdb::XColumn) !");
                 if (xCol.is())
                 {
                     nTempVal = xCol->getShort();
@@ -179,10 +179,9 @@ void BibPosListener::cursorMoved(const lang::EventObject& /*aEvent*/) throw( uno
             }
         }
     }
-    catch(Exception& rEx)
+    catch(const Exception&)
     {
-        (void) rEx; // make compiler happy
-        OSL_FAIL("BibPosListener::positioned: something went wrong !");
+        OSL_FAIL("BibPosListener::cursorMoved: something went wrong !");
     }
 }
 

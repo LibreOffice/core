@@ -241,7 +241,7 @@ namespace pcr
                         xRet = xStringResourceResolver;
                     }
                 }
-                catch(UnknownPropertyException&)
+                catch(const UnknownPropertyException&)
                 {
                     // nii
                 }
@@ -301,7 +301,7 @@ namespace pcr
                             pResolvedStrings[i] = aIdStr;
                     }
                 }
-                catch( resource::MissingResourceException & )
+                catch( const resource::MissingResourceException & )
                 {}
                 aPropertyValue <<= aResolvedStrings;
             }
@@ -451,7 +451,7 @@ namespace pcr
                                 }
                             }
                         }
-                        catch( resource::MissingResourceException & )
+                        catch( const resource::MissingResourceException & )
                         {}
 
 
@@ -486,7 +486,7 @@ namespace pcr
                                 {
                                     xStringResourceManager->removeIdForLocale( aPureIdStr, aLocale );
                                 }
-                                catch( resource::MissingResourceException & )
+                                catch( const resource::MissingResourceException & )
                                 {}
                             }
                         }
@@ -1206,7 +1206,7 @@ namespace pcr
                             pControl->SetDefaultValue( nDefault );
                     }
                 }
-                catch (Exception&)
+                catch (const Exception&)
                 {
                     // just ignore it
                 }
@@ -1731,7 +1731,7 @@ namespace pcr
                 {
                     xControl = _rxInspectorUI->getPropertyControl( aAffectedProps[i] );
                 }
-                catch( const UnknownPropertyException& e ) { (void)e; }
+                catch( const UnknownPropertyException& ) {}
                 if ( xControl.is() )
                 {
                     OFormattedNumericControl* pControl = dynamic_cast< OFormattedNumericControl* >( xControl.get() );
@@ -1778,7 +1778,7 @@ namespace pcr
                     {
                         xControl = _rxInspectorUI->getPropertyControl( aFormattedPropertyControls[i] );
                     }
-                    catch( const UnknownPropertyException& e ) { (void)e; }
+                    catch( const UnknownPropertyException& ) {}
                     if ( xControl.is() )
                     {
                         OFormattedNumericControl* pControl = dynamic_cast< OFormattedNumericControl* >( xControl.get() );
@@ -2386,7 +2386,7 @@ namespace pcr
                     _rFieldNames.push_back( *pFields );
             }
         }
-        catch (Exception&)
+        catch (const Exception&)
         {
             OSL_FAIL( "FormComponentPropertyHandler::impl_initFieldList_nothrow: caught an exception!" );
         }
@@ -2500,7 +2500,7 @@ namespace pcr
                 break;
             }
         }
-        catch (Exception&)
+        catch (const Exception&)
         {
             OSL_FAIL("FormComponentPropertyHandler::impl_describeCursorSource_nothrow: caught an exception !");
         }
@@ -2672,9 +2672,9 @@ namespace pcr
             if ( bSuccess )
                 _out_rSelectedClause = _bFilter ? xComposer->getFilter() : xComposer->getOrder();
         }
-        catch (SQLContext& e) { aErrorInfo = e; }
-        catch (SQLWarning& e) { aErrorInfo = e; }
-        catch (SQLException& e) { aErrorInfo = e; }
+        catch (const SQLContext& e) { aErrorInfo = e; }
+        catch (const SQLWarning& e) { aErrorInfo = e; }
+        catch (const SQLException& e) { aErrorInfo = e; }
         catch( const Exception& )
         {
             OSL_FAIL( "FormComponentPropertyHandler::impl_dialogFilterOrSort_nothrow: caught an exception!" );

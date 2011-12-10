@@ -452,7 +452,7 @@ Any SAL_CALL OleConverter_Impl2::createBridge(const Any& modelDepObject,
                 {
                     variantToAny(pVariant, ret);
                 }
-                catch (CannotConvertException & e)
+                catch (const CannotConvertException & e)
                 {
                     throw IllegalArgumentException(
                         e.Message, 0, -1);

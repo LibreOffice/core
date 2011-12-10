@@ -195,7 +195,7 @@ Any SAL_CALL IUnknownWrapper_Impl::invokeGetProperty( const OUString& aPropertyN
         }
         aResult = invokeWithDispIdComTlb( aDescGet, aPropertyName, aParams, aOutParamIndex, aOutParam );
     }
-    catch ( Exception& e )
+    catch ( const Exception& e )
     {
        throw RuntimeException(OUSTR("[automation bridge] unexpected exception in "
                "IUnknownWrapper_Impl::invokeGetProperty ! Message : \n") +
@@ -223,7 +223,7 @@ Any SAL_CALL IUnknownWrapper_Impl::invokePutProperty( const OUString& aPropertyN
         }
         aResult = invokeWithDispIdComTlb( aDescPut, aPropertyName, aParams, aOutParamIndex, aOutParam );
     }
-    catch ( Exception& e )
+    catch ( const Exception& e )
     {
        throw RuntimeException(OUSTR("[automation bridge] unexpected exception in "
                "IUnknownWrapper_Impl::invokePutProperty ! Message : \n") +
@@ -269,23 +269,23 @@ Any SAL_CALL IUnknownWrapper_Impl::invoke( const OUString& aFunctionName,
                                          aOutParam);
         }
     }
-    catch (IllegalArgumentException &)
+    catch (const IllegalArgumentException &)
     {
         throw;
     }
-    catch (CannotConvertException &)
+    catch (const CannotConvertException &)
     {
         throw;
     }
-    catch (InvocationTargetException &)
+    catch (const InvocationTargetException &)
     {
         throw;
     }
-    catch (BridgeRuntimeError & e)
+    catch (const BridgeRuntimeError & e)
     {
          throw RuntimeException(e.message, Reference<XInterface>());
     }
-    catch (Exception & e)
+    catch (const Exception & e)
     {
         throw RuntimeException(OUSTR("[automation bridge] unexpected exception in "
                                      "IUnknownWrapper_Impl::invoke ! Message : \n") +
@@ -447,20 +447,20 @@ void SAL_CALL IUnknownWrapper_Impl::setValue( const OUString& aPropertyName,
             break;
         }
     }
-    catch (CannotConvertException &)
+    catch (const CannotConvertException &)
     {
         throw;
     }
-    catch (UnknownPropertyException &)
+    catch (const UnknownPropertyException &)
     {
         throw;
     }
-    catch (BridgeRuntimeError& e)
+    catch (const BridgeRuntimeError& e)
     {
         throw RuntimeException(
             e.message, Reference<XInterface>());
     }
-    catch (Exception & e)
+    catch (const Exception & e)
     {
         throw RuntimeException(OUSTR("[automation bridge] unexpected exception in "
                                      "IUnknownWrapper_Impl::setValue ! Message : \n") +
@@ -633,16 +633,16 @@ Any SAL_CALL IUnknownWrapper_Impl::getValue( const OUString& aPropertyName )
             break;
         }
     }
-    catch (UnknownPropertyException& )
+    catch ( const UnknownPropertyException& )
     {
         throw;
     }
-    catch (BridgeRuntimeError& e)
+    catch (const BridgeRuntimeError& e)
     {
         throw RuntimeException(
             e.message, Reference<XInterface>());
     }
-    catch (Exception & e)
+    catch (const Exception & e)
     {
         throw RuntimeException(OUSTR("[automation bridge] unexpected exception in "
                                      "IUnknownWrapper_Impl::getValue ! Message : \n") +
@@ -689,11 +689,11 @@ sal_Bool SAL_CALL IUnknownWrapper_Impl::hasMethod( const OUString& aName )
         else
             ret = sal_True;
     }
-    catch (BridgeRuntimeError& e)
+    catch (const BridgeRuntimeError& e)
     {
         throw RuntimeException(e.message, Reference<XInterface>());
     }
-    catch (Exception & e)
+    catch (const Exception & e)
     {
         throw RuntimeException(OUSTR("[automation bridge] unexpected exception in "
                                      "IUnknownWrapper_Impl::hasMethod ! Message : \n") +
@@ -739,11 +739,11 @@ sal_Bool SAL_CALL IUnknownWrapper_Impl::hasProperty( const OUString& aName )
             ret = sal_True;
         }
     }
-    catch (BridgeRuntimeError& e)
+    catch (const BridgeRuntimeError& e)
     {
         throw RuntimeException(e.message, Reference<XInterface>());
     }
-    catch (Exception & e)
+    catch (const Exception & e)
     {
         throw RuntimeException(OUSTR("[automation bridge] unexpected exception in "
                                      "IUnknownWrapper_Impl::hasProperty ! Message : \n") +
@@ -1273,9 +1273,9 @@ void SAL_CALL IUnknownWrapper_Impl::initialize( const Sequence< Any >& aArgument
         // so we should allow to create wrappers for them as well
         pType = getTypeInfo();
     }
-    catch( BridgeRuntimeError& )
+    catch( const BridgeRuntimeError& )
     {}
-    catch( Exception& )
+    catch( const Exception& )
     {}
 
     if ( pType )
@@ -1315,11 +1315,11 @@ void SAL_CALL IUnknownWrapper_Impl::initialize( const Sequence< Any >& aArgument
                     m_sDefaultMember = usName;
             }
         }
-        catch ( BridgeRuntimeError & e )
+        catch ( const BridgeRuntimeError & e )
         {
             throw RuntimeException( e.message, Reference<XInterface>() );
         }
-        catch( Exception& e )
+        catch( const Exception& e )
         {
             throw RuntimeException(
                     OUSTR("[automation bridge] unexpected exception in IUnknownWrapper_Impl::initialiase() error message: \n") + e.Message,

@@ -147,7 +147,7 @@ bool LdapUserProfileBe::readLdapConfiguration(
         getLdapStringParam(xAccess, kUser, definition->mAnonUser);
         getLdapStringParam(xAccess, kPassword, definition->mAnonCredentials);
     }
-    catch (uno::Exception & e)
+    catch (const uno::Exception & e)
     {
         OSL_TRACE("LdapUserProfileBackend: access to configuration data failed: %s",
                 rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );

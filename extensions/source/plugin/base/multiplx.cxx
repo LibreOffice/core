@@ -190,7 +190,7 @@ if( pCont )                                                                 \
             {                                                               \
                 pListener->MethodName( aEvt );                              \
             }                                                               \
-            catch( RuntimeException& )                                  \
+            catch(const RuntimeException&)                                  \
             {                                                               \
                 /* ignore all usr system exceptions from the listener */    \
             }                                                               \

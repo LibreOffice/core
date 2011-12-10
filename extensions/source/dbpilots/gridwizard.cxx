@@ -223,7 +223,7 @@ namespace dbp
                     // insert the column
                     xColumnContainer->insertByName(sColumnName, makeAny(xColumn));
                 }
-                catch(Exception&)
+                catch(const Exception&)
                 {
                     OSL_FAIL( ( ::rtl::OString("OGridWizard::implApplySettings: unexpected exception while creating the grid column for field ")
                             += ::rtl::OString(pFormFieldName->getStr(), pFormFieldName->getLength(), osl_getThreadTextEncoding())

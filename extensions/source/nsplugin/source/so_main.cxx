@@ -347,7 +347,7 @@ Reference< lang::XMultiServiceFactory > SAL_CALL start_office(NSP_PIPE_FD read_f
             debug_fprintf(NSP_LOG_APPEND, "Staroffice already start\n");
             return Reference< lang::XMultiServiceFactory >(xRemoteContext->getServiceManager(), UNO_QUERY);
         }
-        catch ( connection::NoConnectException & )
+        catch ( const connection::NoConnectException & )
         {
         }
 
@@ -411,7 +411,7 @@ Reference< lang::XMultiServiceFactory > SAL_CALL start_office(NSP_PIPE_FD read_f
                     xUrlResolver->resolve( sConnectString ), UNO_QUERY_THROW );
                 return Reference< lang::XMultiServiceFactory >(xRemoteContext->getServiceManager(), UNO_QUERY);
             }
-            catch ( connection::NoConnectException & )
+            catch ( const connection::NoConnectException & )
             {
                 // wait 500 ms, then try to connect again
                 TimeValue tv = { 0 /* secs */, 500000000 /* nanosecs */ };
@@ -421,7 +421,7 @@ Reference< lang::XMultiServiceFactory > SAL_CALL start_office(NSP_PIPE_FD read_f
         debug_fprintf(NSP_LOG_APPEND, "Failed to connect to Staroffice in 2 minutes\n");
         return Reference< lang::XMultiServiceFactory >(NULL);
     }
-    catch ( Exception & e)
+    catch (const Exception & e)
     {
         debug_fprintf(NSP_LOG_APPEND, "unexpected UNO exception caught: ");
         debug_fprintf(NSP_LOG_APPEND, (sal_Char *)e.Message.getStr());

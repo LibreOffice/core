@@ -57,7 +57,7 @@ namespace dbp
             // can't do anything ... no free names
             _rElementsName = sBase;
         }
-        catch(Exception&)
+        catch(const Exception&)
         {
             OSL_FAIL("::dbp::disambiguateName: something went (strangely) wrong!");
         }

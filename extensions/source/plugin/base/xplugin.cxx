@@ -328,7 +328,7 @@ void XPlugin_Impl::handleSpecialArgs()
                 Any aProp = xProp->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "URL" ) ) );
                 aProp >>= aURL;
             }
-            catch( UnknownPropertyException )
+            catch(const UnknownPropertyException &)
             {
             }
         }
@@ -398,7 +398,7 @@ void XPlugin_Impl::handleSpecialArgs()
                 Any aProp = xProp->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "URL" ) ) );
                 aProp >>= aURL;
             }
-            catch( UnknownPropertyException )
+            catch(const UnknownPropertyException &)
             {
             }
         }
@@ -1037,7 +1037,7 @@ void PluginInputStream::load()
                                );
         m_pContent->openStream( static_cast< XOutputStream* >( this ) );
     }
-    catch( com::sun::star::uno::Exception )
+    catch(const com::sun::star::uno::Exception &)
     {
     }
 }

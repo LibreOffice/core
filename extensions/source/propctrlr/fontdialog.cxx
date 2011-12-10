@@ -277,7 +277,7 @@ namespace pcr
             aPropExtractor.invalidateItem(PROPERTY_FONT_RELIEF, CFID_RELIEF, *_pSet);
             aPropExtractor.invalidateItem(PROPERTY_FONT_EMPHASIS_MARK, CFID_EMPHASIS, *_pSet);
         }
-        catch (Exception&)
+        catch (const Exception&)
         {
             OSL_FAIL("ControlCharacterDialog::translatePropertiesToItems: caught an exception!");
         }

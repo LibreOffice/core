@@ -246,7 +246,7 @@ STDMETHODIMP EmbedDocument_Impl::DoVerb(
                 break;
         }
     }
-    catch( uno::Exception& )
+    catch( const uno::Exception& )
     {
         return OLEOBJ_S_CANNOT_DOVERB_NOW;
     }

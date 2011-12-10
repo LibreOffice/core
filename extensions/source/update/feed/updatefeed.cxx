@@ -573,7 +573,7 @@ UpdateInformationProvider::getChildNode(const uno::Reference< xml::dom::XNode >&
     OSL_ASSERT(m_xXPathAPI.is());
     try {
         return m_xXPathAPI->selectSingleNode(rxNode, UNISTRING( "./atom:" ) + rName);
-    } catch (xml::xpath::XPathException &) {
+    } catch (const xml::xpath::XPathException &) {
         // ignore
         return 0;
     }
@@ -617,7 +617,7 @@ UpdateInformationProvider::getUpdateInformationEnumeration(
                     try {
                         xNodeList = m_xXPathAPI->selectNodeList(xDocument.get(),
                             aXPathExpression);
-                    } catch (xml::xpath::XPathException &) {
+                    } catch (const xml::xpath::XPathException &) {
                         // ignore
                     }
 

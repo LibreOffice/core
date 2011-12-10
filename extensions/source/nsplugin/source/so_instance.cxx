@@ -207,7 +207,7 @@ sal_Bool SoPluginInstance::LoadDocument(NSP_HWND hParent)
             if ( xLMProps.is() )
                 xLMProps->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AutomaticToolbars")), uno::makeAny( (sal_Bool)sal_False ) );
         }
-        catch( uno::Exception& )
+        catch( const uno::Exception& )
         {}
 
         // get frames supplier
@@ -345,10 +345,10 @@ sal_Bool SoPluginInstance::LoadDocument(NSP_HWND hParent)
             xProps->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsFullScreen" ) ), uno::makeAny( sal_False ) );
             xPres->start();
         }
-        catch( uno::Exception& )
+        catch( const uno::Exception& )
         {}
     }
-    catch( uno::Exception& e )
+    catch( const uno::Exception& e )
     {
         debug_fprintf(NSP_LOG_APPEND, "Unknown exception while loading document in netscape plugin windows\n");
         OString o = OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US );
@@ -424,7 +424,7 @@ sal_Bool SoPluginInstance::Destroy(void)
                 xCloseable->removeCloseListener( m_xCloseListener );
         }
     }
-    catch( uno::Exception& )
+    catch( const uno::Exception& )
     {}
 
     try
@@ -439,7 +439,7 @@ sal_Bool SoPluginInstance::Destroy(void)
 
         xDocumentCloser->dispose(); // this call should close the document
     }
-    catch( uno::Exception& )
+    catch( const uno::Exception& )
     {
            debug_fprintf(NSP_LOG_APPEND, "print by Nsplugin.exe, could not close the document correctly!\n");
         try

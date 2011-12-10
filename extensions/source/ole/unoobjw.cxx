@@ -297,11 +297,11 @@ STDMETHODIMP InterfaceOleWrapper_Impl::GetIDsOfNames(REFIID /*riid*/,
             }
         }
     }
-    catch(BridgeRuntimeError& )
+    catch(const BridgeRuntimeError&)
     {
         OSL_ASSERT(0);
     }
-    catch(Exception& )
+    catch(const Exception&)
     {
         OSL_ASSERT(0);
     }
@@ -470,7 +470,7 @@ sal_Bool  InterfaceOleWrapper_Impl::getInvocationInfoForCall( DISPID id, Invocat
         try{
             invInfo= inv2->getInfoForName( sMemberName, sal_False);
         }
-        catch( IllegalArgumentException )
+        catch(const IllegalArgumentException&)
         {
             validInfo= sal_False;
         }
@@ -880,12 +880,12 @@ STDMETHODIMP InterfaceOleWrapper_Impl::Invoke(DISPID dispidMember,
         else
             ret = DISP_E_MEMBERNOTFOUND;
     }
-    catch(BridgeRuntimeError& e)
+    catch(const BridgeRuntimeError& e)
     {
         writeExcepinfo(pexcepinfo, e.message);
         ret = DISP_E_EXCEPTION;
     }
-    catch(Exception& e)
+    catch(const Exception& e)
     {
         OUString message= OUSTR("InterfaceOleWrapper_Impl::Invoke : \n") +
                                 e.Message;
@@ -948,17 +948,17 @@ HRESULT InterfaceOleWrapper_Impl::doInvoke( DISPPARAMS * pdispparams, VARIANT * 
         if (pvarResult != NULL)
             anyToVariant(pvarResult, returnValue);
     }
-    catch(IllegalArgumentException & e) //XInvocation::invoke
+    catch(const IllegalArgumentException & e) //XInvocation::invoke
     {
         writeExcepinfo(pexcepinfo, e.Message);
         ret = DISP_E_TYPEMISMATCH;
     }
-    catch(CannotConvertException & e) //XInvocation::invoke
+    catch(const CannotConvertException & e) //XInvocation::invoke
     {
         writeExcepinfo(pexcepinfo, e.Message);
         ret = mapCannotConvertException( e, puArgErr);
     }
-    catch(InvocationTargetException &  e) //XInvocation::invoke
+    catch(const InvocationTargetException &  e) //XInvocation::invoke
     {
         const Any& org = e.TargetException;
         Exception excTarget;
@@ -968,17 +968,17 @@ HRESULT InterfaceOleWrapper_Impl::doInvoke( DISPPARAMS * pdispparams, VARIANT * 
         writeExcepinfo(pexcepinfo, message);
         ret = DISP_E_EXCEPTION;
     }
-    catch(NoSuchMethodException & e) //XInvocation::invoke
+    catch(const NoSuchMethodException & e) //XInvocation::invoke
     {
         writeExcepinfo(pexcepinfo, e.Message);
         ret = DISP_E_MEMBERNOTFOUND;
     }
-    catch(BridgeRuntimeError & e)
+    catch(const BridgeRuntimeError & e)
     {
         writeExcepinfo(pexcepinfo, e.message);
         ret = DISP_E_EXCEPTION;
     }
-    catch(Exception & e)
+    catch(const Exception & e)
     {
         OUString message= OUSTR("InterfaceOleWrapper_Impl::doInvoke : \n") +
                                 e.Message;
@@ -1008,17 +1008,17 @@ HRESULT InterfaceOleWrapper_Impl::doGetProperty( DISPPARAMS * /*pdispparams*/, V
         if (pvarResult)
             anyToVariant(pvarResult, returnValue);
     }
-    catch(UnknownPropertyException e) //XInvocation::getValue
+    catch(const UnknownPropertyException e) //XInvocation::getValue
     {
         writeExcepinfo(pexcepinfo, e.Message);
         ret = DISP_E_MEMBERNOTFOUND;
     }
-    catch(BridgeRuntimeError& e)
+    catch(const BridgeRuntimeError& e)
     {
         writeExcepinfo(pexcepinfo, e.message);
         ret = DISP_E_EXCEPTION;
     }
-    catch(Exception& e)
+    catch(const Exception& e)
     {
         OUString message= OUSTR("InterfaceOleWrapper_Impl::doGetProperty : \n") +
                                 e.Message;
@@ -1043,15 +1043,15 @@ HRESULT InterfaceOleWrapper_Impl::doSetProperty( DISPPARAMS * /*pdispparams*/, V
     {
         m_xInvocation->setValue( name, params.getConstArray()[0]);
     }
-    catch(UnknownPropertyException )
+    catch(const UnknownPropertyException &)
     {
         ret = DISP_E_MEMBERNOTFOUND;
     }
-    catch(CannotConvertException e)
+    catch(const CannotConvertException &e)
     {
         ret= mapCannotConvertException( e, puArgErr);
     }
-    catch(InvocationTargetException e)
+    catch(const InvocationTargetException &e)
     {
         if (pexcepinfo != NULL)
         {
@@ -1177,12 +1177,12 @@ HRESULT InterfaceOleWrapper_Impl::InvokeGeneral( DISPID dispidMember, unsigned s
             }
         }
     }
-    catch(BridgeRuntimeError & e)
+    catch(const BridgeRuntimeError & e)
     {
         writeExcepinfo(pexcepinfo, e.message);
         ret = DISP_E_EXCEPTION;
     }
-    catch(Exception & e)
+    catch(const Exception & e)
     {
         OUString message= OUSTR("InterfaceOleWrapper_Impl::InvokeGeneral : \n") +
                                 e.Message;
@@ -1578,12 +1578,12 @@ STDMETHODIMP  UnoObjectWrapperRemoteOpt::Invoke ( DISPID dispidMember, REFIID /*
                 ret= DISP_E_MEMBERNOTFOUND;
         }
     }
-    catch(BridgeRuntimeError& e)
+    catch(const BridgeRuntimeError& e)
     {
         writeExcepinfo(pexcepinfo, e.message);
         ret = DISP_E_EXCEPTION;
     }
-    catch(Exception& e)
+    catch(const Exception& e)
     {
         OUString message= OUSTR("UnoObjectWrapperRemoteOpt::Invoke : \n") +
             e.Message;
@@ -1609,7 +1609,7 @@ HRESULT UnoObjectWrapperRemoteOpt::methodInvoke( DISPID /*dispidMember*/, DISPPA
 
 
 // The returned HRESULT is only appropriate for IDispatch::Invoke
-static HRESULT mapCannotConvertException( CannotConvertException e, unsigned int * puArgErr)
+static HRESULT mapCannotConvertException(const CannotConvertException &e, unsigned int * puArgErr)
 {
     HRESULT ret;
     sal_Bool bWriteIndex= sal_True;

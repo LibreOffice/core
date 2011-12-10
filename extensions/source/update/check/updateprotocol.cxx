@@ -172,7 +172,7 @@ checkForUpdates(
                 try {
                     xNodeList = xXPath->selectNodeList(xNode, aXPathExpression
                         + UNISTRING("/inst:update/attribute::src"));
-                } catch (css::xml::xpath::XPathException &) {
+                } catch (const css::xml::xpath::XPathException &) {
                     // ignore
                 }
 
@@ -200,7 +200,7 @@ checkForUpdates(
                 try {
                     xNode2 = xXPath->selectSingleNode(xNode, aXPathExpression
                         + UNISTRING("/inst:version/text()"));
-                } catch (css::xml::xpath::XPathException &) {
+                } catch (const css::xml::xpath::XPathException &) {
                     // ignore
                 }
 
@@ -210,7 +210,7 @@ checkForUpdates(
                 try {
                     xNode2 = xXPath->selectSingleNode(xNode, aXPathExpression
                         + UNISTRING("/inst:buildid/text()"));
-                } catch (css::xml::xpath::XPathException &) {
+                } catch (const css::xml::xpath::XPathException &) {
                     // ignore
                 }
 
@@ -223,7 +223,7 @@ checkForUpdates(
                 try {
                     xNodeList = xXPath->selectNodeList(xNode, aXPathExpression
                         + UNISTRING("/inst:relnote"));
-                } catch (css::xml::xpath::XPathException &) {
+                } catch (const css::xml::xpath::XPathException &) {
                     // ignore
                 }
                 imax = xNodeList->getLength();

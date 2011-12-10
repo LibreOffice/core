@@ -406,7 +406,7 @@ sal_Bool BibFrameController_Impl::SaveModified(const Reference< form::runtime::X
                 _xCursor->updateRow();
             bResult = sal_True;
         }
-        catch(Exception&)
+        catch(const Exception&)
         {
             OSL_FAIL("SaveModified: Exception occurred!");
         }
@@ -594,7 +594,7 @@ void BibFrameController_Impl::dispatch(const util::URL& _rURL, const uno::Sequen
                     Reference< XResultSetUpdate >  xUpdateCursor( pDatMan->getForm(), UNO_QUERY );
                     xUpdateCursor->moveToInsertRow();
                 }
-                catch(Exception&)
+                catch(const Exception&)
                 {
                     OSL_FAIL("Exception in last() or moveToInsertRow()");
                 }
@@ -634,7 +634,7 @@ void BibFrameController_Impl::dispatch(const util::URL& _rURL, const uno::Sequen
                     if (bSuccess)
                         xUpdateCursor->deleteRow();
                 }
-                catch(Exception&)
+                catch(const Exception&)
                 {
                     bSuccess = sal_False;
                 }
@@ -654,7 +654,7 @@ void BibFrameController_Impl::dispatch(const util::URL& _rURL, const uno::Sequen
                                 // Datensatz bewegen um Stati neu zu setzen
                                 xCursor->first();
                         }
-                        catch(Exception&)
+                        catch(const Exception&)
                         {
                             OSL_FAIL("DeleteRecord : exception caught !");
                         }

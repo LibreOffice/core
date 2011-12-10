@@ -199,9 +199,8 @@ IMPL_LINK( AsynchronousGetURL, getURL, XPlugin_Impl*, pImpl )
                         aUrl,
                         aTarget );
     }
-    catch( ::com::sun::star::plugin::PluginException& e )
+    catch(const ::com::sun::star::plugin::PluginException&)
     {
-        (void)e;
     }
     pImpl->leavePluginCallback();
     delete this;
@@ -323,7 +322,7 @@ extern "C" {
                     );
             pImpl->leavePluginCallback();
         }
-        catch( ::com::sun::star::plugin::PluginException& e )
+        catch( const ::com::sun::star::plugin::PluginException& e )
         {
             pImpl->leavePluginCallback();
             return e.ErrorCode;
@@ -365,7 +364,7 @@ extern "C" {
                                ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > ( pListener ) );
             pImpl->leavePluginCallback();
         }
-        catch( ::com::sun::star::plugin::PluginException& e )
+        catch( const ::com::sun::star::plugin::PluginException& e )
         {
             pImpl->leavePluginCallback();
             return e.ErrorCode;
@@ -394,7 +393,7 @@ extern "C" {
                          file );
             pImpl->leavePluginCallback();
         }
-        catch( ::com::sun::star::plugin::PluginException& e )
+        catch( const ::com::sun::star::plugin::PluginException& e )
         {
             pImpl->leavePluginCallback();
             return e.ErrorCode;
@@ -479,7 +478,7 @@ extern "C" {
                 displayStatusText( pImpl, ::rtl::OStringToOUString( message, pImpl->getTextEncoding() ) );
             pImpl->leavePluginCallback();
         }
-        catch( ::com::sun::star::plugin::PluginException& )
+        catch( const ::com::sun::star::plugin::PluginException& )
         {
             pImpl->leavePluginCallback();
             return;
@@ -504,7 +503,7 @@ extern "C" {
                     free( pAgent );
                 pAgent = strdup( ::rtl::OUStringToOString( UserAgent, pImpl->getTextEncoding() ).getStr() );
             }
-            catch( ::com::sun::star::plugin::PluginException& )
+            catch( const ::com::sun::star::plugin::PluginException& )
             {
                 pImpl->leavePluginCallback();
             }

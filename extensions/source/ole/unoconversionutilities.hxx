@@ -392,14 +392,14 @@ void UnoConversionUtilities<T>::variantToAny( const VARIANTARG* pArg, Any& rAny,
                                 Any convAny = conv->convertTo(anySeq, ptype);
                                 rAny = convAny;
                             }
-                            catch (IllegalArgumentException& e)
+                            catch (const IllegalArgumentException& e)
                             {
                                 throw BridgeRuntimeError(
                                     OUSTR("[automation bridge]com.sun.star.lang.IllegalArgumentException "
                                           "in UnoConversionUtilities<T>::variantToAny! Message: ") +
                                     e.Message);
                             }
-                            catch (CannotConvertException& e)
+                            catch (const CannotConvertException& e)
                             {
                                 throw BridgeRuntimeError(
                                     OUSTR("[automation bridge]com.sun.star.script.CannotConvertException "
@@ -582,19 +582,19 @@ void UnoConversionUtilities<T>::variantToAny( const VARIANTARG* pArg, Any& rAny,
                       "The provided VARIANT of type\" ") + OUString::valueOf((sal_Int32) var.vt) +
                 OUSTR("\" is unappropriate for conversion!"), Reference<XInterface>(), -1);
     }
-    catch (CannotConvertException &)
+    catch (const CannotConvertException &)
     {
         throw;
     }
-    catch (IllegalArgumentException &)
+    catch (const IllegalArgumentException &)
     {
         throw;
     }
-    catch (BridgeRuntimeError &)
+    catch (const BridgeRuntimeError &)
     {
          throw;
     }
-    catch (Exception & e)
+    catch (const Exception & e)
     {
         throw BridgeRuntimeError(OUSTR("[automation bridge] unexpected exception in "
                                        "UnoConversionUtilities<T>::variantToAny ! Message : \n") +
@@ -666,19 +666,19 @@ void UnoConversionUtilities<T>::anyToVariant(VARIANT* pVariant, const Any& rAny,
             }
         }
     }
-    catch (IllegalArgumentException &)
+    catch (const IllegalArgumentException &)
     {
         throw;
     }
-    catch (CannotConvertException & )
+    catch (const CannotConvertException &)
     {
         throw;
     }
-    catch (BridgeRuntimeError&)
+    catch (const BridgeRuntimeError&)
     {
         throw;
     }
-    catch(Exception & e)
+    catch(const Exception & e)
     {
         throw BridgeRuntimeError(
             OUSTR("[automation bridge]UnoConversionUtilities<T>::anyToVariant \n"
@@ -998,19 +998,19 @@ void UnoConversionUtilities<T>::anyToVariant(VARIANT* pVariant, const Any& rAny)
 
         }
     }
-    catch (CannotConvertException & )
+    catch (const CannotConvertException &)
     {
         throw;
     }
-    catch (IllegalArgumentException & )
+    catch (const IllegalArgumentException &)
     {
         throw;
     }
-    catch(BridgeRuntimeError&)
+    catch(const BridgeRuntimeError&)
     {
         throw;
     }
-    catch(Exception & e)
+    catch(const Exception & e)
     {
         throw BridgeRuntimeError(
             OUSTR("[automation bridge]UnoConversionUtilities<T>::anyToVariant \n"
@@ -1633,19 +1633,19 @@ void UnoConversionUtilities<T>::variantToAny( const VARIANT* pVariant, Any& rAny
             }
         }
     }
-    catch (IllegalArgumentException & )
+    catch (const IllegalArgumentException &)
     {
         throw;
     }
-    catch (CannotConvertException &)
+    catch (const CannotConvertException &)
     {
         throw;
     }
-    catch (BridgeRuntimeError & )
+    catch (const BridgeRuntimeError &)
     {
          throw;
     }
-    catch (Exception & e)
+    catch (const Exception & e)
     {
         throw BridgeRuntimeError(OUSTR("[automation bridge] unexpected exception in "
                                        "UnoConversionUtilities<T>::variantToAny ! Message : \n") +
@@ -1979,11 +1979,11 @@ bool UnoConversionUtilities<T>::convertValueObject( const VARIANTARG *var, Any& 
             throw BridgeRuntimeError(
                 OUSTR("[automation bridge] Conversion of ValueObject failed "));
     }
-    catch (BridgeRuntimeError &)
+    catch (const BridgeRuntimeError &)
     {
          throw;
     }
-    catch (Exception & e)
+    catch (const Exception & e)
     {
         throw BridgeRuntimeError(OUSTR("[automation bridge] unexpected exception in "
                                        "UnoConversionUtilities<T>::convertValueObject ! Message : \n") +
@@ -2120,11 +2120,11 @@ void UnoConversionUtilities<T>::dispatchExObject2Sequence( const VARIANTARG* pva
             throw BridgeRuntimeError(
                 OUSTR("[automation bridge] Conversion of ValueObject failed "));
     }
-    catch (BridgeRuntimeError & )
+    catch (const BridgeRuntimeError &)
     {
         throw;
     }
-    catch (Exception & e)
+    catch (const Exception & e)
     {
         throw BridgeRuntimeError(OUSTR("[automation bridge] unexpected exception in "
                                        "UnoConversionUtilities<T>::convertValueObject ! Message : \n") +

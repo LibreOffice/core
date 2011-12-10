@@ -173,7 +173,7 @@ namespace dbp
             OOptionGroupLayouter aLayouter(getServiceFactory());
             aLayouter.doLayout(getContext(), getSettings());
         }
-        catch(Exception&)
+        catch(const Exception&)
         {
             OSL_FAIL("OGroupBoxWizard::createRadios: caught an exception while creating the radio shapes!");
         }

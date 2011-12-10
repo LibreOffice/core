@@ -114,7 +114,7 @@ uno::Reference< io::XInputStream > createTempXInStreamFromIStream(
                 }
             }
         }
-        catch( uno::Exception& )
+        catch( const uno::Exception& )
         {
         }
     }
@@ -154,7 +154,7 @@ HRESULT copyXTempOutToIStream( uno::Reference< io::XOutputStream > xTempOut, ISt
         try {
             nReadBytes = xTempIn->readBytes( aBuffer, nConstBufferSize );
         }
-        catch( uno::Exception& )
+        catch( const uno::Exception& )
         {
             return E_FAIL;
         }
@@ -430,7 +430,7 @@ STDMETHODIMP EmbedDocument_Impl::InitNew( IStorage *pStg )
                         // xLoadable->load( fillArgsForLoading_Impl( uno::Reference< io::XInputStream >(), nStreamMode ) );
                         hr = S_OK;
                     }
-                    catch( uno::Exception& )
+                    catch( const uno::Exception& )
                     {
                     }
                 }
@@ -566,7 +566,7 @@ STDMETHODIMP EmbedDocument_Impl::Load( IStorage *pStg )
                         hr = m_pDocHolder->SetExtent( &aSizeToSet );
                         // hr = m_pDocHolder->SetVisArea( &aRectToSet );
                     }
-                    catch( uno::Exception& )
+                    catch( const uno::Exception& )
                     {
                     }
                 }
@@ -687,7 +687,7 @@ STDMETHODIMP EmbedDocument_Impl::Save( IStorage *pStgSave, BOOL fSameAsLoad )
                     }
                 }
             }
-            catch( uno::Exception& )
+            catch( const uno::Exception& )
             {
             }
         }
@@ -818,7 +818,7 @@ STDMETHODIMP EmbedDocument_Impl::Load( LPCOLESTR pszFileName, DWORD /*dwMode*/ )
 
                 m_aFileName = ::rtl::OUString( reinterpret_cast<const sal_Unicode*>(pszFileName) );
             }
-            catch( uno::Exception& )
+            catch( const uno::Exception& )
             {
             }
         }
@@ -912,7 +912,7 @@ STDMETHODIMP EmbedDocument_Impl::Save( LPCOLESTR pszFileName, BOOL fRemember )
 
         hr = S_OK;
     }
-    catch( uno::Exception& )
+    catch( const uno::Exception& )
     {
     }
 

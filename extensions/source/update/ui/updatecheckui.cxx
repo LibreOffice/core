@@ -349,7 +349,7 @@ Image UpdateCheckUI::GetBubbleImage( ::rtl::OUString &rURL )
                 }
             }
         }
-        catch( uno::Exception& )
+        catch( const uno::Exception& )
         {
         }
     }

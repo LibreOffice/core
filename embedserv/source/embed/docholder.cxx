@@ -460,7 +460,7 @@ HRESULT DocumentHolder::InPlaceActivate(
 
         m_pIOleIPSite->DiscardUndoState();
     }
-    catch( uno::Exception& )
+    catch( const uno::Exception& )
     {
         hr = ERROR;
     }
@@ -679,7 +679,7 @@ void DocumentHolder::DisconnectFrameDocument( sal_Bool bComplete )
         uno::Reference< util::XModifyBroadcaster > xModifiable( m_xDocument, uno::UNO_QUERY_THROW );
         xModifiable->removeModifyListener( (util::XModifyListener*)this );
     }
-    catch( uno::Exception& )
+    catch( const uno::Exception& )
     {}
 
     try
@@ -688,7 +688,7 @@ void DocumentHolder::DisconnectFrameDocument( sal_Bool bComplete )
             m_xDocument, uno::UNO_QUERY_THROW );
         xBroadcaster->removeCloseListener( (util::XCloseListener*)this );
     }
-    catch( uno::Exception& )
+    catch( const uno::Exception& )
     {}
 
     try
@@ -697,7 +697,7 @@ void DocumentHolder::DisconnectFrameDocument( sal_Bool bComplete )
             m_xFrame, uno::UNO_QUERY_THROW );
         xBroadcaster->removeCloseListener( (util::XCloseListener*)this );
     }
-    catch( uno::Exception& )
+    catch( const uno::Exception& )
     {}
 
     if ( bComplete )
@@ -721,7 +721,7 @@ void DocumentHolder::CloseDocument()
         {
             xCloseable->close( sal_True );
         }
-        catch( uno::Exception& )
+        catch( const uno::Exception& )
         {}
     }
 
@@ -738,7 +738,7 @@ void DocumentHolder::CloseFrame()
             m_xFrame, uno::UNO_QUERY_THROW );
         xBroadcaster->removeCloseListener( (util::XCloseListener*)this );
     }
-    catch( uno::Exception& )
+    catch( const uno::Exception& )
     {}
 
     uno::Reference<util::XCloseable> xCloseable(
@@ -935,7 +935,7 @@ void DocumentHolder::show()
                     uno::Reference< util::XModifyBroadcaster > xModifiable( m_xDocument, uno::UNO_QUERY_THROW );
                     xModifiable->addModifyListener( (util::XModifyListener*)this );
                 }
-                catch( uno::Exception& )
+                catch( const uno::Exception& )
                 {}
             }
 
@@ -943,7 +943,7 @@ void DocumentHolder::show()
                 setTitle(m_aDocumentNamePart);
         }
     }
-    catch( uno::Exception& )
+    catch( const uno::Exception& )
     {
         OSL_FAIL( "Can not show the frame!\n" );
     }
@@ -1144,7 +1144,7 @@ IDispatch* DocumentHolder::GetIDispatch()
                     CoTaskMemFree( pVariant );
                 }
             }
-            catch ( uno::Exception& )
+            catch ( const uno::Exception& )
             {}
         }
     }
@@ -1204,7 +1204,7 @@ HRESULT DocumentHolder::SetExtent( const SIZEL *pSize )
 
                 return S_OK;
             }
-            catch( uno::Exception& )
+            catch( const uno::Exception& )
             {}
         }
     }
@@ -1238,7 +1238,7 @@ HRESULT DocumentHolder::GetExtent( SIZEL *pSize )
 
                 return S_OK;
             }
-            catch( uno::Exception& )
+            catch( const uno::Exception& )
             {}
         }
     }
@@ -1466,7 +1466,7 @@ DocumentHolder::notifyClosing(
             aSource.Source, uno::UNO_QUERY_THROW );
         xEventBroadcaster->removeCloseListener( (util::XCloseListener*)this );
     }
-    catch( uno::Exception& )
+    catch( const uno::Exception& )
     {}
 
     if ( m_xDocument.is() && m_xDocument == aSource.Source )

@@ -563,7 +563,7 @@ Any SAL_CALL FilterAllListenerImpl::approveFiring( const AllEventObject& Event )
                 convertToEventReturn( aRet, aRetType );
             }
         }
-        catch( CannotConvertException& e )
+        catch( const CannotConvertException& e )
         {
             throw InvocationTargetException( OUString(), Reference< XInterface >(), Any(&e, ::getCppuType( (CannotConvertException*)0)) );
         }
@@ -683,7 +683,7 @@ Reference<XEventListener> EventAttacherImpl::attachListenerForTarget(
             {
                 rxMethod->invoke( aObject, args );
             }
-            catch( InvocationTargetException& )
+            catch( const InvocationTargetException& )
             {
                 throw IntrospectionException();
             }
@@ -710,7 +710,7 @@ Reference<XEventListener> EventAttacherImpl::attachListenerForTarget(
             {
                 rxMethod->invoke( aObject, args );
             }
-            catch( InvocationTargetException& )
+            catch( const InvocationTargetException& )
             {
                 throw IntrospectionException();
             }
@@ -860,7 +860,7 @@ void EventAttacherImpl::removeListener
                 {
                     rxMethod->invoke( aObjAny, args );
                 }
-                catch( InvocationTargetException& )
+                catch( const InvocationTargetException& )
                 {
                     throw IntrospectionException();
                 }
@@ -885,7 +885,7 @@ void EventAttacherImpl::removeListener
                 {
                     rxMethod->invoke( aObjAny, args );
                 }
-                catch( InvocationTargetException& )
+                catch( const InvocationTargetException& )
                 {
                     throw IntrospectionException();
                 }

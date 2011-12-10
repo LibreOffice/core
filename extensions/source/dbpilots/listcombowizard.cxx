@@ -218,7 +218,7 @@ namespace dbp
             // the bound field
             getContext().xObjectModel->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DataField")), makeAny(::rtl::OUString(getSettings().sLinkedFormField)));
         }
-        catch(Exception&)
+        catch(const Exception&)
         {
             OSL_FAIL("OListComboWizard::implApplySettings: could not set the property values for the listbox!");
         }
@@ -277,7 +277,7 @@ namespace dbp
                 if (xColumns.is())
                     aColumnNames = xColumns->getElementNames();
             }
-            catch(Exception&)
+            catch(const Exception&)
             {
                 DBG_ASSERT(!_bNeedIt, "OLinkFieldsPage::initializePage: caught an exception while retrieving the columns!");
             }
@@ -349,7 +349,7 @@ namespace dbp
                 aTableNames = xTables->getElementNames();
             fillListBox(m_aSelectTable, aTableNames);
         }
-        catch(Exception&)
+        catch(const Exception&)
         {
             OSL_FAIL("OContentTableSelection::initializePage: could not retrieve the table names!");
         }

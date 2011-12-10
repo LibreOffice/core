@@ -970,7 +970,7 @@ UpdateCheck::install()
             ShutdownThread *pShutdownThread = new ShutdownThread( m_xContext );
             (void) pShutdownThread;
         }
-    } catch(uno::Exception&) {
+    } catch(const uno::Exception&) {
         m_aUpdateHandler->setErrorMessage( m_aUpdateHandler->getDefaultInstErrMsg() );
     }
 }
@@ -1513,7 +1513,7 @@ UpdateCheck::showReleaseNote(const rtl::OUString& rURL) const
 
         if( xShellExecute.is() )
             xShellExecute->execute(rURL, rtl::OUString(), c3s::SystemShellExecuteFlags::DEFAULTS);
-    } catch(c3s::SystemShellExecuteException&) {
+    } catch(const c3s::SystemShellExecuteException&) {
     }
 }
 

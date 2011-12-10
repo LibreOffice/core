@@ -154,7 +154,7 @@ namespace dbp
                     }
             }
         }
-        catch(Exception&)
+        catch(const Exception&)
         {
             OSL_FAIL("OTableSelectionPage::initializePage: caught an exception!");
         }
@@ -189,7 +189,7 @@ namespace dbp
             if (!updateContext())
                 return sal_False;
         }
-        catch(Exception&)
+        catch(const Exception&)
         {
             OSL_FAIL("OTableSelectionPage::commitPage: caught an exception!");
         }
@@ -311,10 +311,10 @@ namespace dbp
                     }
                 }
             }
-            catch(SQLContext& e) { aSQLException <<= e; }
-            catch(SQLWarning& e) { aSQLException <<= e; }
-            catch(SQLException& e) { aSQLException <<= e; }
-            catch (Exception&)
+            catch(const SQLContext& e) { aSQLException <<= e; }
+            catch(const SQLWarning& e) { aSQLException <<= e; }
+            catch(const SQLException& e) { aSQLException <<= e; }
+            catch (const Exception&)
             {
                 OSL_FAIL("OTableSelectionPage::implFillTables: could not fill the table list!");
             }
@@ -343,10 +343,10 @@ namespace dbp
                         aQueryNames = xQueries->getElementNames();
                 }
             }
-            catch(SQLContext& e) { aSQLException <<= e; }
-            catch(SQLWarning& e) { aSQLException <<= e; }
-            catch(SQLException& e) { aSQLException <<= e; }
-            catch (Exception&)
+            catch(const SQLContext& e) { aSQLException <<= e; }
+            catch(const SQLWarning& e) { aSQLException <<= e; }
+            catch(const SQLException& e) { aSQLException <<= e; }
+            catch (const Exception&)
             {
                 OSL_FAIL("OTableSelectionPage::implFillTables: could not fill the table list!");
             }
@@ -363,7 +363,7 @@ namespace dbp
                 if ( xHandler.is() )
                     xHandler->handle(xRequest);
             }
-            catch(Exception&) { }
+            catch(const Exception&) { }
             return;
         }
 
@@ -387,7 +387,7 @@ namespace dbp
             if (m_xDSContext.is())
                 fillListBox(m_aDatasource, m_xDSContext->getElementNames());
         }
-        catch (Exception&)
+        catch (const Exception&)
         {
             OSL_FAIL("OTableSelectionPage::implCollectDatasource: could not collect the data source names!");
         }

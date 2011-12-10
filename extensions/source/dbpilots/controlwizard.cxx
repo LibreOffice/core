@@ -306,7 +306,7 @@ namespace dbp
         {
             getContext().xObjectModel->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ClassId"))) >>= nClassId;
         }
-        catch(Exception&)
+        catch(const Exception&)
         {
             OSL_FAIL("OControlWizard::activate: could not obtain the class id!");
         }
@@ -430,7 +430,7 @@ namespace dbp
             }
             m_aContext.xDrawPage = xPage;
         }
-        catch(Exception&)
+        catch(const Exception&)
         {
             OSL_FAIL("OControlWizard::implDeterminePage: caught an exception!");
         }
@@ -452,7 +452,7 @@ namespace dbp
             m_aContext.xDatasourceContext = Reference< XNameAccess >(xContext, UNO_QUERY);
             DBG_ASSERT(m_aContext.xDatasourceContext.is() || !xContext.is(), "OControlWizard::implGetDSContext: invalid database context (missing the XNameAccess)!");
         }
-        catch(Exception&)
+        catch(const Exception&)
         {
             OSL_FAIL("OControlWizard::implGetDSContext: invalid database context!");
         }
@@ -524,7 +524,7 @@ namespace dbp
             if (getServiceFactory().is())
                 xHandler = Reference< XInteractionHandler >(getServiceFactory()->createInstance(sInteractionHandlerServiceName), UNO_QUERY);
         }
-        catch(Exception&) { }
+        catch(const Exception&) { }
         if (!xHandler.is())
             ShowServiceNotAvailableError(_pWindow, sInteractionHandlerServiceName, sal_True);
         return xHandler;
@@ -642,7 +642,7 @@ namespace dbp
                         xColumns->getByName(*pBegin) >>= xColumn;
                         xColumn->getPropertyValue(s_sFieldTypeProperty) >>= nFieldType;
                     }
-                    catch(Exception&)
+                    catch(const Exception&)
                     {
                         OSL_FAIL("OControlWizard::initContext: unexpected exception while gathering column information!");
                     }
@@ -650,10 +650,10 @@ namespace dbp
                 }
             }
         }
-        catch(SQLContext& e) { aSQLException <<= e; }
-        catch(SQLWarning& e) { aSQLException <<= e; }
-        catch(SQLException& e) { aSQLException <<= e; }
-        catch(Exception&)
+        catch(const SQLContext& e) { aSQLException <<= e; }
+        catch(const SQLWarning& e) { aSQLException <<= e; }
+        catch(const SQLException& e) { aSQLException <<= e; }
+        catch(const Exception&)
         {
             OSL_FAIL("OControlWizard::initContext: could not retrieve the control context (caught an exception)!");
         }
@@ -678,7 +678,7 @@ namespace dbp
             {
                 xHandler->handle(xRequest);
             }
-            catch(Exception&) { }
+            catch(const Exception&) { }
             return sal_False;
         }
 
@@ -706,7 +706,7 @@ namespace dbp
                 );
             }
         }
-        catch(Exception&)
+        catch(const Exception&)
         {
             OSL_FAIL("OControlWizard::commitControlSettings: could not commit the basic control settings!");
         }
@@ -731,7 +731,7 @@ namespace dbp
                 _pSettings->sControlLabel = sControlLabel;
             }
         }
-        catch(Exception&)
+        catch(const Exception&)
         {
             OSL_FAIL("OControlWizard::initControlSettings: could not retrieve the basic control settings!");
         }

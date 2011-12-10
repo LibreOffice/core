@@ -288,8 +288,8 @@ void SAL_CALL StringRepresentation::initialize(const uno::Sequence< uno::Any > &
             if ( !sReturn.getLength() )
                 m_xTypeConverter->convertToSimpleType( _rValue, uno::TypeClass_STRING ) >>= sReturn;
         }
-        catch( script::CannotConvertException& ) { }
-        catch( lang::IllegalArgumentException& ) { }
+        catch( const script::CannotConvertException& ) { }
+        catch( const lang::IllegalArgumentException& ) { }
     }
     return sReturn;
 }
@@ -486,8 +486,8 @@ uno::Any StringRepresentation::convertStringToSimple( const ::rtl::OUString& _rV
             if ( !aReturn.hasValue() )
                 aReturn = m_xTypeConverter->convertToSimpleType( makeAny( _rValue ), _ePropertyType );
         }
-        catch( script::CannotConvertException& ) { }
-        catch( lang::IllegalArgumentException& ) { }
+        catch( const script::CannotConvertException& ) { }
+        catch( const lang::IllegalArgumentException& ) { }
     }
     return aReturn;
 }

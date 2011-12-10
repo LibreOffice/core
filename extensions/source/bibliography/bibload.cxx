@@ -338,7 +338,7 @@ void BibliographyLoader::loadView(const Reference< XFrame > & rFrame, const rtl:
             Any a = xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" )));
             a >>= xLayoutManager;
         }
-        catch ( uno::Exception& )
+        catch ( const uno::Exception& )
         {
         }
     }
