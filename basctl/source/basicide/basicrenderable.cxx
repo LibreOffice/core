@@ -120,7 +120,7 @@ sal_Int32 SAL_CALL BasicRenderable::getRendererCount (
             if( nContent == 1 )
             {
                 rtl::OUString aPageRange( getStringValue( "PageRange" ) );
-                if( aPageRange.getLength() )
+                if( !aPageRange.isEmpty() )
                 {
                     StringRangeEnumerator aRangeEnum( aPageRange, 0, nCount-1 );
                     sal_Int32 nSelCount = aRangeEnum.size();
@@ -179,7 +179,7 @@ void SAL_CALL BasicRenderable::render (
             if( nContent == 1 )
             {
                 rtl::OUString aPageRange( getStringValue( "PageRange" ) );
-                if( aPageRange.getLength() )
+                if( !aPageRange.isEmpty() )
                 {
                     sal_Int32 nPageCount = mpWindow->countPages( pPrinter );
                     StringRangeEnumerator aRangeEnum( aPageRange, 0, nPageCount-1 );

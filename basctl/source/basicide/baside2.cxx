@@ -341,7 +341,7 @@ sal_Bool ModulWindow::BasicExecute()
             if ( !pMethod )
             {
                 // If not in a method then prompt the user
-                return ( BasicIDE::ChooseMacro( uno::Reference< frame::XModel >(), sal_False, rtl::OUString() ).getLength() > 0 ) ? sal_True : sal_False;
+                return ( !BasicIDE::ChooseMacro( uno::Reference< frame::XModel >(), sal_False, rtl::OUString() ).isEmpty() );
             }
             if ( pMethod )
             {

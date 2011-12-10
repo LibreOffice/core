@@ -1332,7 +1332,7 @@ void LibPage::ExportAsPackage( const String& aLibName )
 
         Sequence< ::rtl::OUString > aFiles = xFP->getFiles();
         INetURLObject aURL( aFiles[0] );
-        if( !aURL.getExtension().getLength() )
+        if( aURL.getExtension().isEmpty() )
             aURL.setExtension( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "oxt" ) ) );
 
         ::rtl::OUString aPackageURL( aURL.GetMainURL( INetURLObject::NO_DECODE ) );

@@ -773,7 +773,7 @@ void BasicTreeListBox::GetRootEntryBitmaps( const ScriptDocument& rDocument, Ima
             }
         }
 
-        if ( sFactoryURL.getLength() )
+        if ( !sFactoryURL.isEmpty() )
         {
             rImage = SvFileInformationManager::GetFileImage( INetURLObject( sFactoryURL ), sal_False );
         }
