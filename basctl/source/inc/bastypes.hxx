@@ -140,7 +140,7 @@ protected:
 
 public:
                     TYPEINFO();
-                    IDEBaseWindow( Window* pParent, const ScriptDocument& rDocument, String aLibName, String aName );
+    IDEBaseWindow( Window* pParent, const ScriptDocument& rDocument, ::rtl::OUString aLibName, ::rtl::OUString aName );
     virtual         ~IDEBaseWindow();
 
     void            Init();

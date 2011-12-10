@@ -58,7 +58,7 @@ const char* pRegName = "BasicIDETabBar";
 TYPEINIT0( IDEBaseWindow )
 TYPEINIT1( SbxItem, SfxPoolItem );
 
-IDEBaseWindow::IDEBaseWindow( Window* pParent, const ScriptDocument& rDocument, String aLibName, String aName )
+IDEBaseWindow::IDEBaseWindow( Window* pParent, const ScriptDocument& rDocument, ::rtl::OUString aLibName, ::rtl::OUString aName )
     :Window( pParent, WinBits( WB_3DLOOK ) )
     ,m_aDocument( rDocument )
     ,m_aLibName( aLibName )
@@ -69,8 +69,6 @@ IDEBaseWindow::IDEBaseWindow( Window* pParent, const ScriptDocument& rDocument, 
     pShellVScrollBar = 0;
     nStatus = 0;
 }
-
-
 
 IDEBaseWindow::~IDEBaseWindow()
 {
