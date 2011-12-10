@@ -301,7 +301,7 @@ sal_Bool SwDoc::SelectServerObj( const String& rStr, SwPaM*& rpPam,
 
     const CharClass& rCC = GetAppCharClass();
 
-    // Extension for areas: not only link bookmarks/areas
+    // Extension for sections: not only link bookmarks/sections
     // but also frames (text!), tables, outlines:
     if( STRING_NOTFOUND != nPos )
     {
@@ -356,7 +356,7 @@ sal_Bool SwDoc::SelectServerObj( const String& rStr, SwPaM*& rpPam,
                 rOutlNds.Seek_Entry( pNd, &nTmpPos );
                 rpRange = new SwNodeRange( aPos.nNode, 0, aPos.nNode );
 
-                // look for the area's end, now
+                // look for the section's end, now
                 for( ++nTmpPos;
                         nTmpPos < rOutlNds.Count() &&
                         nLvl < rOutlNds[ nTmpPos ]->GetTxtNode()->

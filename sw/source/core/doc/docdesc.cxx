@@ -212,7 +212,7 @@ void SwDoc::ChgPageDesc( sal_uInt16 i, const SwPageDesc &rChged )
     if( rChged.GetNumType().GetNumberingType() != pDesc->GetNumType().GetNumberingType() )
     {
         pDesc->SetNumType( rChged.GetNumType() );
-        // Notify page number fields, that NumFormat has changed
+        // Notify page number fields that NumFormat has changed
         GetSysFldType( RES_PAGENUMBERFLD )->UpdateFlds();
         GetSysFldType( RES_REFPAGEGETFLD )->UpdateFlds();
 
@@ -251,7 +251,7 @@ void SwDoc::ChgPageDesc( sal_uInt16 i, const SwPageDesc &rChged )
         pDesc->GetLeft().SetFmtAttr( pDesc->GetMaster().GetHeader() );
     }
     else if ( rHead.IsActive() )
-    {   // Left gets it's own header if the Format doesn't alrady have one.
+    {   // Left gets its own header if the Format doesn't alrady have one.
         // If it already has one and it points to the same Section as the
         // Right one, it needs to get an own Header.
         // The content is evidently copied.
@@ -275,8 +275,9 @@ void SwDoc::ChgPageDesc( sal_uInt16 i, const SwPageDesc &rChged )
                 SwFrmFmt *pFmt = new SwFrmFmt( GetAttrPool(), "Header",
                                                 GetDfltFrmFmt() );
                 ::lcl_DescSetAttr( *pRight, *pFmt, sal_False );
-                // The area which the right header attribute is pointing to is copied,
-                // and the Index to the StartNode is set to the left header attribute.
+                // The section which the right header attribute is pointing
+                // is copied, and the Index to the StartNode is set to
+                // the left header attribute.
                 SwNodeIndex aTmp( GetNodes().GetEndOfAutotext() );
                 SwStartNode* pSttNd = GetNodes().MakeEmptySection( aTmp, SwHeaderStartNode );
                 SwNodeRange aRange( aRCnt.GetCntntIdx()->GetNode(), 0,
@@ -311,7 +312,7 @@ void SwDoc::ChgPageDesc( sal_uInt16 i, const SwPageDesc &rChged )
         // Left shares the Header with the Master.
         pDesc->GetLeft().SetFmtAttr( pDesc->GetMaster().GetFooter() );
     else if ( rFoot.IsActive() )
-    {   // Left gets it's own Footer if the Format does not already have one.
+    {   // Left gets its own Footer if the Format does not already have one.
         // If the Format already has a Footer and it points to the same section as the Right one,
         // it needs to get an own one.
         // The content is evidently copied.
@@ -335,8 +336,9 @@ void SwDoc::ChgPageDesc( sal_uInt16 i, const SwPageDesc &rChged )
                 SwFrmFmt *pFmt = new SwFrmFmt( GetAttrPool(), "Footer",
                                                 GetDfltFrmFmt() );
                 ::lcl_DescSetAttr( *pRight, *pFmt, sal_False );
-                // The Area to which the right header attribute is pointing to is being copied
-                // and the Index to the StartNode is set to the left header attribute.
+                // The section to which the right footer attribute is pointing
+                // is copied, and the Index to the StartNode is set to
+                // the left footer attribute.
                 SwNodeIndex aTmp( GetNodes().GetEndOfAutotext() );
                 SwStartNode* pSttNd = GetNodes().MakeEmptySection( aTmp, SwFooterStartNode );
                 SwNodeRange aRange( aRCnt.GetCntntIdx()->GetNode(), 0,
@@ -416,7 +418,7 @@ void SwDoc::ChgPageDesc( sal_uInt16 i, const SwPageDesc &rChged )
 |*
 |*  SwDoc::DelPageDesc()
 |*
-|*  Description: All descriptors who's Follow point to the to-be-deleted
+|*  Description: All descriptors whose Follow point to the to-be-deleted
 |*  have to be adapted.
 |*
 |*************************************************************************/
@@ -672,7 +674,8 @@ void SwDoc::PrtOLENotify( sal_Bool bAll )
     {
         // This doesn't make sense without a Shell and thus without a client, because
         // the communication about size changes is implemented by these components.
-        // Because we don't have a Shell we remember this unfortunate situtaion in the document,
+        // Because we don't have a Shell we remember this unfortunate situation
+        // in the document,
         // which is made up for later on when creating the first Shell.
         mbOLEPrtNotifyPending = sal_True;
         if ( bAll )
