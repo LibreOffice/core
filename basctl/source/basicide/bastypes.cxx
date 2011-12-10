@@ -756,7 +756,7 @@ bool QueryDel( const ::rtl::OUString& rName, const ResId& rId, Window* pParent )
     ::rtl::OUString aQuery( ResId::toString(rId) );
     ::rtl::OUStringBuffer aNameBuf( rName );
     aNameBuf.append('\'');
-    aNameBuf.insert(0, '\'');
+    aNameBuf.insert(sal_Int32(0), sal_Unicode('\''));
     aQuery = ::comphelper::string::replace(aQuery, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "XX")), aNameBuf.makeStringAndClear());
     QueryBox aQueryBox( pParent, WB_YES_NO | WB_DEF_YES, aQuery );
     return ( aQueryBox.Execute() == RET_YES );
