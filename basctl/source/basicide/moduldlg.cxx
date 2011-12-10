@@ -59,8 +59,6 @@ ExtBasicTreeListBox::ExtBasicTreeListBox( Window* pParent, const ResId& rRes )
 {
 }
 
-
-
 ExtBasicTreeListBox::~ExtBasicTreeListBox()
 {
 }
@@ -76,11 +74,11 @@ sal_Bool ExtBasicTreeListBox::EditingEntry( SvLBoxEntry* pEntry, Selection& )
         {
             BasicEntryDescriptor aDesc( GetEntryDescriptor( pEntry ) );
             ScriptDocument aDocument( aDesc.GetDocument() );
-            ::rtl::OUString aOULibName( aDesc.GetLibName() );
+            ::rtl::OUString aLibName( aDesc.GetLibName() );
             Reference< script::XLibraryContainer2 > xModLibContainer( aDocument.getLibraryContainer( E_SCRIPTS ), UNO_QUERY );
             Reference< script::XLibraryContainer2 > xDlgLibContainer( aDocument.getLibraryContainer( E_DIALOGS ), UNO_QUERY );
-            if ( !( ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) && xModLibContainer->isLibraryReadOnly( aOULibName ) ) ||
-                    ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aOULibName ) && xDlgLibContainer->isLibraryReadOnly( aOULibName ) ) ) )
+            if ( !( ( xModLibContainer.is() && xModLibContainer->hasByName( aLibName ) && xModLibContainer->isLibraryReadOnly( aLibName ) ) ||
+                    ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aLibName ) && xDlgLibContainer->isLibraryReadOnly( aLibName ) ) ) )
             {
                 // allow editing only for libraries, which are not readonly
                 bRet = sal_True;
@@ -96,7 +94,7 @@ sal_Bool ExtBasicTreeListBox::EditedEntry( SvLBoxEntry* pEntry, const String& rN
     sal_Bool bValid = BasicIDE::IsValidSbxName( rNewText );
     if ( !bValid )
     {
-        ErrorBox( this, WB_OK | WB_DEF_OK, String( IDEResId( RID_STR_BADSBXNAME ) ) ).Execute();
+        ErrorBox( this, WB_OK | WB_DEF_OK, ResId::toString( IDEResId( RID_STR_BADSBXNAME ) ) ).Execute();
         return sal_False;
     }
 
@@ -110,7 +108,7 @@ sal_Bool ExtBasicTreeListBox::EditedEntry( SvLBoxEntry* pEntry, const String& rN
     DBG_ASSERT( aDocument.isValid(), "ExtBasicTreeListBox::EditedEntry: no document!" );
     if ( !aDocument.isValid() )
         return sal_False;
-    String aLibName( aDesc.GetLibName() );
+    ::rtl::OUString aLibName( aDesc.GetLibName() );
     BasicEntryType eType( aDesc.GetType() );
 
     bool bSuccess = ( eType == OBJ_TYPE_MODULE )
@@ -155,19 +153,19 @@ DragDropMode ExtBasicTreeListBox::NotifyStartDrag( TransferDataContainer&, SvLBo
             nMode_ = SV_DRAGDROP_CTRL_COPY;
             BasicEntryDescriptor aDesc( GetEntryDescriptor( pEntry ) );
             ScriptDocument aDocument( aDesc.GetDocument() );
-            ::rtl::OUString aOULibName( aDesc.GetLibName() );
+            ::rtl::OUString aLibName( aDesc.GetLibName() );
             // allow MOVE mode only for libraries, which are not readonly
             Reference< script::XLibraryContainer2 > xModLibContainer( aDocument.getLibraryContainer( E_SCRIPTS ), UNO_QUERY );
             Reference< script::XLibraryContainer2 > xDlgLibContainer( aDocument.getLibraryContainer( E_DIALOGS ), UNO_QUERY );
-            if ( !( ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) && xModLibContainer->isLibraryReadOnly( aOULibName ) ) ||
-                    ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aOULibName ) && xDlgLibContainer->isLibraryReadOnly( aOULibName ) ) ) )
+            if ( !( ( xModLibContainer.is() && xModLibContainer->hasByName( aLibName ) && xModLibContainer->isLibraryReadOnly( aLibName ) ) ||
+                    ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aLibName ) && xDlgLibContainer->isLibraryReadOnly( aLibName ) ) ) )
             {
                 // Only allow copy for localized libraries
                 bool bAllowMove = true;
-                if ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aOULibName ) )
+                if ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aLibName ) )
                 {
                     // Get StringResourceManager
-                    Reference< container::XNameContainer > xDialogLib( aDocument.getLibrary( E_DIALOGS, aOULibName, sal_True ) );
+                    Reference< container::XNameContainer > xDialogLib( aDocument.getLibrary( E_DIALOGS, aLibName, sal_True ) );
                     Reference< XStringResourceManager > xSourceMgr =
                         LocalizationMgr::getStringResourceFromDialogLibrary( xDialogLib );
                     if( xSourceMgr.is() )
@@ -202,38 +200,37 @@ sal_Bool ExtBasicTreeListBox::NotifyAcceptDrop( SvLBoxEntry* pEntry )
     {
         // get source module/dialog name
         BasicEntryDescriptor aSourceDesc( GetEntryDescriptor( pSelected ) );
-        String aSourceName( aSourceDesc.GetName() );
+        ::rtl::OUString aSourceName( aSourceDesc.GetName() );
         BasicEntryType eSourceType( aSourceDesc.GetType() );
 
         // get target shell and target library name
         BasicEntryDescriptor aDestDesc( GetEntryDescriptor( pEntry ) );
         const ScriptDocument& rDestDoc( aDestDesc.GetDocument() );
-        String aDestLibName( aDestDesc.GetLibName() );
-        ::rtl::OUString aOUDestLibName( aDestLibName );
+        ::rtl::OUString aDestLibName( aDestDesc.GetLibName() );
 
         // check if module library is not loaded, readonly or password protected
         Reference< script::XLibraryContainer2 > xModLibContainer( rDestDoc.getLibraryContainer( E_SCRIPTS ), UNO_QUERY );
-        if ( xModLibContainer.is() && xModLibContainer->hasByName( aOUDestLibName ) )
+        if ( xModLibContainer.is() && xModLibContainer->hasByName( aDestLibName ) )
         {
-            if ( !xModLibContainer->isLibraryLoaded( aOUDestLibName ) )
+            if ( !xModLibContainer->isLibraryLoaded( aDestLibName ) )
                 bValid = sal_False;
 
-            if ( xModLibContainer->isLibraryReadOnly( aOUDestLibName ) )
+            if ( xModLibContainer->isLibraryReadOnly( aDestLibName ) )
                 bValid = sal_False;
 
             Reference< script::XLibraryContainerPassword > xPasswd( xModLibContainer, UNO_QUERY );
-            if ( xPasswd.is() && xPasswd->isLibraryPasswordProtected( aOUDestLibName ) && !xPasswd->isLibraryPasswordVerified( aOUDestLibName ) )
+            if ( xPasswd.is() && xPasswd->isLibraryPasswordProtected( aDestLibName ) && !xPasswd->isLibraryPasswordVerified( aDestLibName ) )
                 bValid = sal_False;
         }
 
         // check if dialog library is not loaded or readonly
         Reference< script::XLibraryContainer2 > xDlgLibContainer( rDestDoc.getLibraryContainer( E_DIALOGS ), UNO_QUERY );
-        if ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aOUDestLibName ) )
+        if ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aDestLibName ) )
         {
-            if ( !xDlgLibContainer->isLibraryLoaded( aOUDestLibName ) )
+            if ( !xDlgLibContainer->isLibraryLoaded( aDestLibName ) )
                 bValid = sal_False;
 
-            if ( xDlgLibContainer->isLibraryReadOnly( aOUDestLibName ) )
+            if ( xDlgLibContainer->isLibraryReadOnly( aDestLibName ) )
                 bValid = sal_False;
         }
 
@@ -248,14 +245,12 @@ sal_Bool ExtBasicTreeListBox::NotifyAcceptDrop( SvLBoxEntry* pEntry )
     return bValid;
 }
 
-
 sal_Bool ExtBasicTreeListBox::NotifyMoving( SvLBoxEntry* pTarget, SvLBoxEntry* pEntry,
                         SvLBoxEntry*& rpNewParent, sal_uLong& rNewChildPos )
 {
     return NotifyCopyingMoving( pTarget, pEntry,
                                     rpNewParent, rNewChildPos, sal_True );
 }
-
 
 sal_Bool ExtBasicTreeListBox::NotifyCopying( SvLBoxEntry* pTarget, SvLBoxEntry* pEntry,
                         SvLBoxEntry*& rpNewParent, sal_uLong& rNewChildPos )
@@ -264,7 +259,6 @@ sal_Bool ExtBasicTreeListBox::NotifyCopying( SvLBoxEntry* pTarget, SvLBoxEntry* 
     return NotifyCopyingMoving( pTarget, pEntry,
                                     rpNewParent, rNewChildPos, sal_False );
 }
-
 
 void BasicIDEShell::CopyDialogResources( Reference< io::XInputStreamProvider >& io_xISP,
                                          const ScriptDocument& rSourceDoc, const ::rtl::OUString& rSourceLibName, const ScriptDocument& rDestDoc,
@@ -614,8 +608,8 @@ void ObjectPage::CheckButtons()
     SvLBoxEntry* pCurEntry = aBasicBox.GetCurEntry();
     BasicEntryDescriptor aDesc( aBasicBox.GetEntryDescriptor( pCurEntry ) );
     ScriptDocument aDocument( aDesc.GetDocument() );
-    ::rtl::OUString aOULibName( aDesc.GetLibName() );
-    String aLibSubName( aDesc.GetLibSubName() );
+    ::rtl::OUString aLibName( aDesc.GetLibName() );
+    ::rtl::OUString aLibSubName( aDesc.GetLibSubName() );
     sal_Bool bVBAEnabled = aDocument.isInVBAMode();
     sal_uInt16 nMode = aBasicBox.GetMode();
 
@@ -637,8 +631,8 @@ void ObjectPage::CheckButtons()
     {
         Reference< script::XLibraryContainer2 > xModLibContainer( aDocument.getLibraryContainer( E_SCRIPTS ), UNO_QUERY );
         Reference< script::XLibraryContainer2 > xDlgLibContainer( aDocument.getLibraryContainer( E_DIALOGS ), UNO_QUERY );
-        if ( ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) && xModLibContainer->isLibraryReadOnly( aOULibName ) ) ||
-             ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aOULibName ) && xDlgLibContainer->isLibraryReadOnly( aOULibName ) ) )
+        if ( ( xModLibContainer.is() && xModLibContainer->hasByName( aLibName ) && xModLibContainer->isLibraryReadOnly( aLibName ) ) ||
+             ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aLibName ) && xDlgLibContainer->isLibraryReadOnly( aLibName ) ) )
         {
             bReadOnly = sal_True;
         }
@@ -657,7 +651,7 @@ void ObjectPage::CheckButtons()
     // enable/disable delete button
     if ( nDepth >= 2 && !bReadOnly && eLocation != LIBRARY_LOCATION_SHARE )
     {
-        if( bVBAEnabled && ( nMode & BROWSEMODE_MODULES ) && ( ( nDepth == 2 ) || aLibSubName.Equals( String( IDEResId( RID_STR_DOCUMENT_OBJECTS ) ) ) ) )
+        if( bVBAEnabled && ( nMode & BROWSEMODE_MODULES ) && ( ( nDepth == 2 ) || aLibSubName == ResId::toString( IDEResId( RID_STR_DOCUMENT_OBJECTS ) ) ) )
             aDelButton.Disable();
         else
         aDelButton.Enable();
@@ -693,12 +687,12 @@ IMPL_LINK( ObjectPage, ButtonHdl, Button *, pButton )
             BasicEntryDescriptor aDesc( aBasicBox.GetEntryDescriptor( pCurEntry ) );
             if ( pDispatcher )
             {
-                String aModName( aDesc.GetName() );
+                ::rtl::OUString aModName( aDesc.GetName() );
                 // extract the module name from the string like "Sheet1 (Example1)"
                 if( aDesc.GetLibSubName() == ResId::toString( IDEResId( RID_STR_DOCUMENT_OBJECTS ) ) )
                 {
-                    sal_uInt16 nIndex = 0;
-                    aModName = aModName.GetToken( 0, ' ', nIndex );
+                    sal_Int32 nIndex = 0;
+                    aModName = aModName.getToken( 0, ' ', nIndex );
                 }
                 SbxItem aSbxItem( SID_BASICIDE_ARG_SBX, aDesc.GetDocument(), aDesc.GetLibName(),
                                   aModName, aBasicBox.ConvertType( aDesc.GetType() ) );
@@ -717,7 +711,7 @@ IMPL_LINK( ObjectPage, ButtonHdl, Button *, pButton )
                     aDocument = pBasicDocumentEntry->GetDocument();
             }
             SfxUsrAnyItem aDocItem( SID_BASICIDE_ARG_DOCUMENT_MODEL, makeAny( aDocument.getDocumentOrNull() ) );
-            String aLibName( aBasicBox.GetEntryText( pCurEntry ) );
+            ::rtl::OUString aLibName( aBasicBox.GetEntryText( pCurEntry ) );
             SfxStringItem aLibNameItem( SID_BASICIDE_ARG_LIBNAME, aLibName );
             if ( pDispatcher )
             {
@@ -755,13 +749,13 @@ bool ObjectPage::GetSelection( ScriptDocument& rDocument, String& rLibName )
 
     // check if the module library is loaded
     sal_Bool bOK = sal_True;
-    ::rtl::OUString aOULibName( rLibName );
+    ::rtl::OUString aLibName( rLibName );
     Reference< script::XLibraryContainer > xModLibContainer( rDocument.getLibraryContainer( E_SCRIPTS  ) );
-    if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) && !xModLibContainer->isLibraryLoaded( aOULibName ) )
+    if ( xModLibContainer.is() && xModLibContainer->hasByName( aLibName ) && !xModLibContainer->isLibraryLoaded( aLibName ) )
     {
         // check password
         Reference< script::XLibraryContainerPassword > xPasswd( xModLibContainer, UNO_QUERY );
-        if ( xPasswd.is() && xPasswd->isLibraryPasswordProtected( aOULibName ) && !xPasswd->isLibraryPasswordVerified( aOULibName ) )
+        if ( xPasswd.is() && xPasswd->isLibraryPasswordProtected( aLibName ) && !xPasswd->isLibraryPasswordVerified( aLibName ) )
         {
             ::rtl::OUString aPassword;
             bOK = QueryPassword( xModLibContainer, rLibName, aPassword );
@@ -769,16 +763,16 @@ bool ObjectPage::GetSelection( ScriptDocument& rDocument, String& rLibName )
 
         // load library
         if ( bOK )
-            xModLibContainer->loadLibrary( aOULibName );
+            xModLibContainer->loadLibrary( aLibName );
     }
 
     // check if the dialog library is loaded
     Reference< script::XLibraryContainer > xDlgLibContainer( rDocument.getLibraryContainer( E_DIALOGS ) );
-    if ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aOULibName ) && !xDlgLibContainer->isLibraryLoaded( aOULibName ) )
+    if ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aLibName ) && !xDlgLibContainer->isLibraryLoaded( aLibName ) )
     {
         // load library
         if ( bOK )
-            xDlgLibContainer->loadLibrary( aOULibName );
+            xDlgLibContainer->loadLibrary( aLibName );
     }
 
     if ( bOK )
