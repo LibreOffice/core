@@ -3145,80 +3145,95 @@ uno::Sequence< ::rtl::OUString > SAL_CALL ScChart2DataSequence::generateLabel(ch
     return aSeq;
 }
 
+namespace {
+
+sal_uLong getDisplayNumberFormat(ScDocument* pDoc, const ScAddress& rPos)
+{
+    sal_uLong nFormat = pDoc->GetNumberFormat(rPos); // original format from cell.
+    SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
+    if (!pFormatter)
+        return nFormat;
+
+    ScBaseCell* pCell = pDoc->GetCell(rPos);
+    if (!pCell || pCell->GetCellType() != CELLTYPE_FORMULA)
+        return nFormat;
+
+    // With formula cell, the format may be inferred from the formula result.
+    return static_cast<ScFormulaCell*>(pCell)->GetStandardFormat(*pFormatter, nFormat);
+}
+
+}
+
 ::sal_Int32 SAL_CALL ScChart2DataSequence::getNumberFormatKeyByIndex( ::sal_Int32 nIndex )
     throw (lang::IndexOutOfBoundsException,
            uno::RuntimeException)
 {
     // index -1 means a heuristic value for the entire sequence
     bool bGetSeriesFormat = (nIndex == -1);
-    sal_Int32 nResult = 0;
 
     SolarMutexGuard aGuard;
     if ( !m_pDocument || !m_pTokens.get())
-        return nResult;
+        return 0;
+
+    // TODO: Handle external references too.
 
     sal_Int32 nCount = 0;
-    bool bFound = false;
-    ScRange* p;
-
-    uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( lcl_GetSpreadSheetDocument( m_pDocument ));
-    if (!xSpreadDoc.is())
-        return nResult;
-
-    uno::Reference<container::XIndexAccess> xIndex( xSpreadDoc->getSheets(), uno::UNO_QUERY );
-    if (!xIndex.is())
-        return nResult;
 
     ScRangeList aRanges;
     ScRefTokenHelper::getRangeListFromTokens(aRanges, *m_pTokens);
-    uno::Reference< table::XCellRange > xSheet;
-    for ( size_t rIndex = 0, nRanges = aRanges.size(); (rIndex < nRanges) && !bFound; ++rIndex )
+    for (size_t i = 0, n = aRanges.size(); i < n; ++i)
     {
-        p = aRanges[ rIndex ];
-        // TODO: use DocIter?
-        table::CellAddress aStart, aEnd;
-        ScUnoConversion::FillApiAddress( aStart, p->aStart );
-        ScUnoConversion::FillApiAddress( aEnd, p->aEnd );
-        for ( sal_Int16 nSheet = aStart.Sheet; nSheet <= aEnd.Sheet && !bFound; ++nSheet)
+        ScRange* p = aRanges[i];
+        for (SCTAB nTab = p->aStart.Tab(); nTab <= p->aEnd.Tab(); ++nTab)
         {
-            xSheet.set(xIndex->getByIndex(nSheet), uno::UNO_QUERY);
-            for ( sal_Int32 nCol = aStart.Column; nCol <= aEnd.Column && !bFound; ++nCol)
+            for (SCCOL nCol = p->aStart.Col(); nCol <= p->aEnd.Col(); ++nCol)
             {
-                for ( sal_Int32 nRow = aStart.Row; nRow <= aEnd.Row && !bFound; ++nRow)
+                if (!m_bIncludeHiddenCells)
                 {
+                    // Skip hidden columns.
+                    SCCOL nLastCol = -1;
+                    bool bColHidden = m_pDocument->ColHidden(nCol, nTab, NULL, &nLastCol);
+                    if (bColHidden)
+                    {
+                        nCol = nLastCol;
+                        continue;
+                    }
+                }
+
+                for (SCROW nRow = p->aStart.Row(); nRow <= p->aEnd.Row(); ++nRow)
+                {
+                    if (!m_bIncludeHiddenCells)
+                    {
+                        // Skip hidden rows.
+                        SCROW nLastRow = -1;
+                        bool bRowHidden = m_pDocument->RowHidden(nRow, nTab, NULL, &nLastRow);
+                        if (bRowHidden)
+                        {
+                            nRow = nLastRow;
+                            continue;
+                        }
+                    }
+
+                    ScAddress aPos(nCol, nRow, nTab);
+
                     if( bGetSeriesFormat )
                     {
                         // TODO: use nicer heuristic
                         // return format of first non-empty cell
-                        uno::Reference< text::XText > xText(
-                            xSheet->getCellByPosition(nCol, nRow), uno::UNO_QUERY);
-                        if (xText.is() && xText->getString().getLength())
-                        {
-                            uno::Reference< beans::XPropertySet > xProp(xText, uno::UNO_QUERY);
-                            if( xProp.is())
-                                xProp->getPropertyValue(
-                                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NumberFormat"))) >>= nResult;
-                            bFound = true;
-                            break;
-                        }
+                        ScBaseCell* pCell = m_pDocument->GetCell(aPos);
+                        if (pCell)
+                            return static_cast<sal_Int32>(getDisplayNumberFormat(m_pDocument, aPos));
                     }
                     else if( nCount == nIndex )
                     {
-                        uno::Reference< beans::XPropertySet > xProp(
-                            xSheet->getCellByPosition(nCol, nRow), uno::UNO_QUERY);
-                        if( xProp.is())
-                            xProp->getPropertyValue(
-                                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NumberFormat"))) >>= nResult;
-                        bFound = true;
-                        break;
+                        return static_cast<sal_Int32>(getDisplayNumberFormat(m_pDocument, aPos));
                     }
                     ++nCount;
                 }
             }
         }
     }
-
-    return nResult;
+    return 0;
 }
 
 // XCloneable ================================================================
