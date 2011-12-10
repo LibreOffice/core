@@ -105,11 +105,14 @@ public:
     void            Sort();
 };
 
-#define BASWIN_OK               0x00
-#define BASWIN_RUNNINGBASIC     0x01
-#define BASWIN_TOBEKILLED       0x02
-#define BASWIN_SUSPENDED        0x04
-#define BASWIN_INRESCHEDULE     0x08
+enum BasicWindowStatus
+{
+    BASWIN_OK           = 0x00,
+    BASWIN_RUNNINGBASIC = 0x01,
+    BASWIN_TOBEKILLED   = 0x02,
+    BASWIN_SUSPENDED    = 0x04,
+    BASWIN_INRESCHEDULE = 0x08
+};
 
 class Printer;
 class BasicEntryDescriptor;
@@ -126,7 +129,7 @@ private:
     ScrollBar*      pShellVScrollBar;
 
     DECL_LINK( ScrollHdl, ScrollBar * );
-    sal_uInt8           nStatus;
+    int nStatus;
 
     ScriptDocument      m_aDocument;
     ::rtl::OUString     m_aLibName;
@@ -173,10 +176,10 @@ public:
     virtual void    SetReadOnly( sal_Bool bReadOnly );
     virtual sal_Bool    IsReadOnly();
 
-    sal_uInt8           GetStatus()             { return nStatus; }
-    void            SetStatus( sal_uInt8 n )        { nStatus = n; }
-    void            AddStatus( sal_uInt8 n )        { nStatus = nStatus | n; }
-    void            ClearStatus( sal_uInt8 n )  { nStatus = nStatus & ~n; }
+    int GetStatus() { return nStatus; }
+    void SetStatus(int n) { nStatus = n; }
+    void AddStatus(int n) { nStatus |= n; }
+    void ClearStatus(int n) { nStatus &= ~n; }
 
     virtual Window* GetLayoutWindow();
 
