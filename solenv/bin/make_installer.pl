@@ -476,6 +476,8 @@ installer::logger::print_message( "... analyzing scpactions ... \n" );
 my $scpactionsinproductarrayref = installer::setupscript::get_all_items_from_script($setupscriptref, "ScpAction");
 if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productscpactions1.log", $scpactionsinproductarrayref); }
 
+# Note: Don't clean away XPD installer stuff before verified whether
+# OxygenOffice still uses it or not, see insesetoo_native/util/openoffice.lst
 if (( ! $allvariableshashref->{'XPDINSTALLER'} ) || ( ! $installer::globals::isxpdplatform ))
 {
     $scpactionsinproductarrayref = installer::scriptitems::remove_Xpdonly_Items($scpactionsinproductarrayref);
