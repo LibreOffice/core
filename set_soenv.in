@@ -45,7 +45,7 @@ my ( $oldoutfile, $outfile, $bootfile, $newline, $comment,
 #-------------------------------------------------
 #
 # Platform independent constant values.
-my ( $CALL_CDECL, $COMMON_OUTDIR,
+my ( $CALL_CDECL,
      $SOLAR_JAVA,
      $UPDATER, $VCL,
      $CC, $CXX);
@@ -166,7 +166,6 @@ chomp( $oldPATH );                  # cut off new line
 # Setting platform independent constant values.
 # NB: Language options now set at 'ToFile' stage.
 $CALL_CDECL           = "TRUE";
-$COMMON_OUTDIR        = "";
 $SOLAR_JAVA           = "@SOLAR_JAVA@";
 $UPDATER              = "YES";
 $VCL                  = "TRUE";
@@ -1434,7 +1433,6 @@ ToFile( "PRODUCTVERSION",    "@PRODUCTVERSION@", "e" );
 ToFile( "WITH_POOR_HELP_LOCALIZATIONS", $WITH_POOR_HELP_LOCALIZATIONS, "e" );
 
 ToFile( "CALL_CDECL",        $CALL_CDECL,        "e" );
-ToFile( "COMMON_OUTDIR",     $COMMON_OUTDIR,     "e" );
 ToFile( "UPDATER",           $UPDATER,           "e" );
 ToFile( "VCL",               $VCL,               "e" );
 if ("@ENABLE_DEBUG@" eq "TRUE") {
