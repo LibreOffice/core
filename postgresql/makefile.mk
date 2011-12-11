@@ -63,7 +63,7 @@ BUILD_DIR=src/interfaces/libpq
 # --sysconfdir: config files. Ideally, we would like that to be "the same as the platform default",
 #               but that's quite some guessing work.
 CONFIGURE_ACTION = ./configure --without-readline --disable-shared
-BUILD_ACTION = make -j$(GMAKE_MODULE_PARALLELISM)
+BUILD_ACTION = make -j$(GMAKE_MODULE_PARALLELISM) all-static-lib
 .ENDIF
 
 # --- Targets ------------------------------------------------------
