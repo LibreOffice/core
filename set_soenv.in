@@ -46,7 +46,7 @@ my ( $oldoutfile, $outfile, $bootfile, $newline, $comment,
 #
 # Platform independent constant values.
 my ( $CALL_CDECL, $COMMON_OUTDIR,
-     $common_build, $NO_REC_RES, $SOLAR_JAVA,
+     $common_build, $SOLAR_JAVA,
      $SOLAR_PLUGIN, $UPDATER, $VCL,
      $CC, $CXX);
 #
@@ -168,7 +168,6 @@ chomp( $oldPATH );                  # cut off new line
 $CALL_CDECL           = "TRUE";
 $COMMON_OUTDIR        = "";
 $common_build         = "";
-$NO_REC_RES           = "TRUE";
 $SOLAR_JAVA           = "@SOLAR_JAVA@";
 $SOLAR_PLUGIN         = "TRUE";
 $UPDATER              = "YES";
@@ -1439,7 +1438,6 @@ ToFile( "WITH_POOR_HELP_LOCALIZATIONS", $WITH_POOR_HELP_LOCALIZATIONS, "e" );
 ToFile( "CALL_CDECL",        $CALL_CDECL,        "e" );
 ToFile( "COMMON_OUTDIR",     $COMMON_OUTDIR,     "e" );
 ToFile( "common_build",      $common_build,      "e" );
-ToFile( "NO_REC_RES",        $NO_REC_RES,        "e" );
 ToFile( "SOLAR_PLUGIN",      $SOLAR_PLUGIN,      "e" );
 ToFile( "UPDATER",           $UPDATER,           "e" );
 ToFile( "VCL",               $VCL,               "e" );
