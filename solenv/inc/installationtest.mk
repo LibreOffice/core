@@ -45,10 +45,10 @@ my_file = file:///
 my_file = file://
 .END
 
-# The following conditional is an approximation of: UPDATER set to YES and
+# The following conditional is an approximation of:
 # SHIPDRIVE set and either SOL_TMP not set or
 # SOLARENV set to a pathname of which SOL_TMP is not a prefix:
-.IF "$(UPDATER)" == "YES" && "$(SHIPDRIVE)" != "" && \
+.IF "$(SHIPDRIVE)" != "" && \
     "$(SOLARENV:s/$(SOL_TMP)//" == "$(SOLARENV)"
 my_instsets = $(shell ls -dt \
     $(SHIPDRIVE)/$(INPATH)/LibreOffice/archive/$(WORK_STAMP)_$(LAST_MINOR)_native_packed-*_$(defaultlangiso).$(BUILD))

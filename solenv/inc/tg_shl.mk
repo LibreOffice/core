@@ -58,13 +58,11 @@ SHL$(TNR)DEF*=$(MISC)/$(SHL$(TNR)TARGET).def
 .ENDIF			# "$(SHL$(TNR)USE_EXPORTS)"==""
 
 EXTRALIBPATHS$(TNR)=$(EXTRALIBPATHS)
-.IF "$(UPDATER)"=="YES"
 .IF "$(SHL$(TNR)NOCHECK)"==""
 .IF "$(SOLAR_STLLIBPATH)"!=""
 EXTRALIBPATHS$(TNR)+=-L$(SOLAR_STLLIBPATH)
 .ENDIF
 .ENDIF				# "$(SHL$(TNR)NOCHECK)"!=""
-.ENDIF
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 #+++++++++++    version object      ++++++++++++++++++++++++++++++++++++++++
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -477,11 +475,9 @@ $(SHL$(TNR)TARGETN) : \
     @echo "Making:   " $(@:f).jnilib
     @macosx-create-bundle $@
 .ENDIF          # "$(SHL$(TNR)CREATEJNILIB)"!=""
-.IF "$(UPDATER)"=="YES"
 .IF "$(SHL$(TNR)NOCHECK)"==""
     $(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS$(TNR)) $(SHL$(TNR)TARGETN)
 .ENDIF				# "$(SHL$(TNR)NOCHECK)"!=""
-.ENDIF
 .ELIF "$(OS)"=="IOS"
     $(COMMAND_ECHO)$(AR) $(LIB$(TNR)FLAGS) $(LIBFLAGS) $@ $(subst,.obj,.o $(SHL$(TNR)OBJS)) $(shell cat /dev/null $(LIB$(TNR)TARGET) $(SHL$(TNR)LIBS) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g)
     $(COMMAND_ECHO)$(RANLIB) $@
@@ -495,7 +491,6 @@ $(SHL$(TNR)TARGETN) : \
     @cat $(MISC)/$(TARGET).$(@:b)_$(TNR).cmd
   .ENDIF
     @+source $(MISC)/$(TARGET).$(@:b)_$(TNR).cmd
-.IF "$(UPDATER)"=="YES"
 .IF "$(SHL$(TNR)NOCHECK)"==""
     $(COMMAND_ECHO)-$(RM) $(SHL$(TNR)TARGETN:d)check_$(SHL$(TNR)TARGETN:f)
     $(COMMAND_ECHO)$(RENAME) $(SHL$(TNR)TARGETN) $(SHL$(TNR)TARGETN:d)check_$(SHL$(TNR)TARGETN:f)
@@ -505,7 +500,6 @@ $(SHL$(TNR)TARGETN) : \
     $(COMMAND_ECHO)$(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS$(TNR)) -- -s $(SHL$(TNR)TARGETN:d)check_$(SHL$(TNR)TARGETN:f)
 .ENDIF
 .ENDIF				# "$(SHL$(TNR)NOCHECK)"!=""
-.ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(OS)"=="MACOSX"
 .IF "$(UNIXVERSIONNAMES)"!="" && "$(OS)"!="IOS" && "$(OS)"!="ANDROID"
     $(COMMAND_ECHO)$(RM) $(LB)/$(SHL$(TNR)TARGETN:b)
@@ -529,10 +523,7 @@ $(SHL$(TNR)TARGETN) : \
 
 .IF "$(SHL$(TNR)IMPLIBN)" != ""
 
-.IF "$(UPDATER)"=="YES"
 USELIB$(TNR)DEPN+=$(SHL$(TNR)LIBS)
-.ELSE
-.ENDIF
 
 .IF "$(USE_DEFFILE)"!=""
 USE_SHL$(TNR)TARGET=$(SHL$(TNR)TARGETN)

@@ -450,7 +450,7 @@ sub check_updatepack
     my $filename = "";
     my $infoline = "";
 
-    if ( $ENV{'UPDATER'} )  # the environment variable UPDATER has to be set
+    # the environment variable UPDATER was always set
     {
         $infoline = "\nEnvironment variable UPDATER set\n";
         push(@installer::globals::globallogfileinfo, $infoline);

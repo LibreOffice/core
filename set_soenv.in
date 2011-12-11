@@ -46,7 +46,7 @@ my ( $oldoutfile, $outfile, $bootfile, $newline, $comment,
 #
 # Platform independent constant values.
 my ( $SOLAR_JAVA,
-     $UPDATER, $VCL,
+     $VCL,
      $CC, $CXX);
 #
 # Platform dependent constant values.
@@ -165,7 +165,6 @@ chomp( $oldPATH );                  # cut off new line
 # Setting platform independent constant values.
 # NB: Language options now set at 'ToFile' stage.
 $SOLAR_JAVA           = "@SOLAR_JAVA@";
-$UPDATER              = "YES";
 $VCL                  = "TRUE";
 $comment              = "#";           # UNIX script comment character
 $TARFILE_LOCATION = "@TARFILE_LOCATION@"; # where to find tarballs with external sources
@@ -1430,7 +1429,6 @@ ToFile( "OOODMAKEMODE",      "YES",              "e" );
 ToFile( "PRODUCTVERSION",    "@PRODUCTVERSION@", "e" );
 ToFile( "WITH_POOR_HELP_LOCALIZATIONS", $WITH_POOR_HELP_LOCALIZATIONS, "e" );
 
-ToFile( "UPDATER",           $UPDATER,           "e" );
 ToFile( "VCL",               $VCL,               "e" );
 if ("@ENABLE_DEBUG@" eq "TRUE") {
 ToFile( "debug",             "true",             "e" );

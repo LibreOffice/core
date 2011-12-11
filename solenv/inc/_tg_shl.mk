@@ -29,13 +29,11 @@ SHL1DEF*=$(MISC)/$(SHL1TARGET).def
 .ENDIF			# "$(SHL1USE_EXPORTS)"==""
 
 EXTRALIBPATHS1=$(EXTRALIBPATHS)
-.IF "$(UPDATER)"=="YES"
 .IF "$(SHL1NOCHECK)"==""
 .IF "$(SOLAR_STLLIBPATH)"!=""
 EXTRALIBPATHS1+=-L$(SOLAR_STLLIBPATH)
 .ENDIF
 .ENDIF				# "$(SHL1NOCHECK)"!=""
-.ENDIF
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 #+++++++++++    version object      ++++++++++++++++++++++++++++++++++++++++
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -448,11 +446,9 @@ $(SHL1TARGETN) : \
     @echo "Making:   " $(@:f).jnilib
     @macosx-create-bundle $@
 .ENDIF          # "$(SHL1CREATEJNILIB)"!=""
-.IF "$(UPDATER)"=="YES"
 .IF "$(SHL1NOCHECK)"==""
     $(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS1) $(SHL1TARGETN)
 .ENDIF				# "$(SHL1NOCHECK)"!=""
-.ENDIF
 .ELIF "$(OS)"=="IOS"
     $(COMMAND_ECHO)$(AR) $(LIB1FLAGS) $(LIBFLAGS) $@ $(subst,.obj,.o $(SHL1OBJS)) $(shell cat /dev/null $(LIB1TARGET) $(SHL1LIBS) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g)
     $(COMMAND_ECHO)$(RANLIB) $@
@@ -466,7 +462,6 @@ $(SHL1TARGETN) : \
     @cat $(MISC)/$(TARGET).$(@:b)_1.cmd
   .ENDIF
     @+source $(MISC)/$(TARGET).$(@:b)_1.cmd
-.IF "$(UPDATER)"=="YES"
 .IF "$(SHL1NOCHECK)"==""
     $(COMMAND_ECHO)-$(RM) $(SHL1TARGETN:d)check_$(SHL1TARGETN:f)
     $(COMMAND_ECHO)$(RENAME) $(SHL1TARGETN) $(SHL1TARGETN:d)check_$(SHL1TARGETN:f)
@@ -476,7 +471,6 @@ $(SHL1TARGETN) : \
     $(COMMAND_ECHO)$(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS1) -- -s $(SHL1TARGETN:d)check_$(SHL1TARGETN:f)
 .ENDIF
 .ENDIF				# "$(SHL1NOCHECK)"!=""
-.ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(OS)"=="MACOSX"
 .IF "$(UNIXVERSIONNAMES)"!="" && "$(OS)"!="IOS" && "$(OS)"!="ANDROID"
     $(COMMAND_ECHO)$(RM) $(LB)/$(SHL1TARGETN:b)
@@ -520,13 +514,11 @@ SHL2DEF*=$(MISC)/$(SHL2TARGET).def
 .ENDIF			# "$(SHL2USE_EXPORTS)"==""
 
 EXTRALIBPATHS2=$(EXTRALIBPATHS)
-.IF "$(UPDATER)"=="YES"
 .IF "$(SHL2NOCHECK)"==""
 .IF "$(SOLAR_STLLIBPATH)"!=""
 EXTRALIBPATHS2+=-L$(SOLAR_STLLIBPATH)
 .ENDIF
 .ENDIF				# "$(SHL2NOCHECK)"!=""
-.ENDIF
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 #+++++++++++    version object      ++++++++++++++++++++++++++++++++++++++++
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -939,11 +931,9 @@ $(SHL2TARGETN) : \
     @echo "Making:   " $(@:f).jnilib
     @macosx-create-bundle $@
 .ENDIF          # "$(SHL2CREATEJNILIB)"!=""
-.IF "$(UPDATER)"=="YES"
 .IF "$(SHL2NOCHECK)"==""
     $(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS2) $(SHL2TARGETN)
 .ENDIF				# "$(SHL2NOCHECK)"!=""
-.ENDIF
 .ELIF "$(OS)"=="IOS"
     $(COMMAND_ECHO)$(AR) $(LIB2FLAGS) $(LIBFLAGS) $@ $(subst,.obj,.o $(SHL2OBJS)) $(shell cat /dev/null $(LIB2TARGET) $(SHL2LIBS) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g)
     $(COMMAND_ECHO)$(RANLIB) $@
@@ -957,7 +947,6 @@ $(SHL2TARGETN) : \
     @cat $(MISC)/$(TARGET).$(@:b)_2.cmd
   .ENDIF
     @+source $(MISC)/$(TARGET).$(@:b)_2.cmd
-.IF "$(UPDATER)"=="YES"
 .IF "$(SHL2NOCHECK)"==""
     $(COMMAND_ECHO)-$(RM) $(SHL2TARGETN:d)check_$(SHL2TARGETN:f)
     $(COMMAND_ECHO)$(RENAME) $(SHL2TARGETN) $(SHL2TARGETN:d)check_$(SHL2TARGETN:f)
@@ -967,7 +956,6 @@ $(SHL2TARGETN) : \
     $(COMMAND_ECHO)$(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS2) -- -s $(SHL2TARGETN:d)check_$(SHL2TARGETN:f)
 .ENDIF
 .ENDIF				# "$(SHL2NOCHECK)"!=""
-.ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(OS)"=="MACOSX"
 .IF "$(UNIXVERSIONNAMES)"!="" && "$(OS)"!="IOS" && "$(OS)"!="ANDROID"
     $(COMMAND_ECHO)$(RM) $(LB)/$(SHL2TARGETN:b)
@@ -1011,13 +999,11 @@ SHL3DEF*=$(MISC)/$(SHL3TARGET).def
 .ENDIF			# "$(SHL3USE_EXPORTS)"==""
 
 EXTRALIBPATHS3=$(EXTRALIBPATHS)
-.IF "$(UPDATER)"=="YES"
 .IF "$(SHL3NOCHECK)"==""
 .IF "$(SOLAR_STLLIBPATH)"!=""
 EXTRALIBPATHS3+=-L$(SOLAR_STLLIBPATH)
 .ENDIF
 .ENDIF				# "$(SHL3NOCHECK)"!=""
-.ENDIF
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 #+++++++++++    version object      ++++++++++++++++++++++++++++++++++++++++
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -1430,11 +1416,9 @@ $(SHL3TARGETN) : \
     @echo "Making:   " $(@:f).jnilib
     @macosx-create-bundle $@
 .ENDIF          # "$(SHL3CREATEJNILIB)"!=""
-.IF "$(UPDATER)"=="YES"
 .IF "$(SHL3NOCHECK)"==""
     $(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS3) $(SHL3TARGETN)
 .ENDIF				# "$(SHL3NOCHECK)"!=""
-.ENDIF
 .ELIF "$(OS)"=="IOS"
     $(COMMAND_ECHO)$(AR) $(LIB3FLAGS) $(LIBFLAGS) $@ $(subst,.obj,.o $(SHL3OBJS)) $(shell cat /dev/null $(LIB3TARGET) $(SHL3LIBS) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g)
     $(COMMAND_ECHO)$(RANLIB) $@
@@ -1448,7 +1432,6 @@ $(SHL3TARGETN) : \
     @cat $(MISC)/$(TARGET).$(@:b)_3.cmd
   .ENDIF
     @+source $(MISC)/$(TARGET).$(@:b)_3.cmd
-.IF "$(UPDATER)"=="YES"
 .IF "$(SHL3NOCHECK)"==""
     $(COMMAND_ECHO)-$(RM) $(SHL3TARGETN:d)check_$(SHL3TARGETN:f)
     $(COMMAND_ECHO)$(RENAME) $(SHL3TARGETN) $(SHL3TARGETN:d)check_$(SHL3TARGETN:f)
@@ -1458,7 +1441,6 @@ $(SHL3TARGETN) : \
     $(COMMAND_ECHO)$(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS3) -- -s $(SHL3TARGETN:d)check_$(SHL3TARGETN:f)
 .ENDIF
 .ENDIF				# "$(SHL3NOCHECK)"!=""
-.ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(OS)"=="MACOSX"
 .IF "$(UNIXVERSIONNAMES)"!="" && "$(OS)"!="IOS" && "$(OS)"!="ANDROID"
     $(COMMAND_ECHO)$(RM) $(LB)/$(SHL3TARGETN:b)
@@ -1502,13 +1484,11 @@ SHL4DEF*=$(MISC)/$(SHL4TARGET).def
 .ENDIF			# "$(SHL4USE_EXPORTS)"==""
 
 EXTRALIBPATHS4=$(EXTRALIBPATHS)
-.IF "$(UPDATER)"=="YES"
 .IF "$(SHL4NOCHECK)"==""
 .IF "$(SOLAR_STLLIBPATH)"!=""
 EXTRALIBPATHS4+=-L$(SOLAR_STLLIBPATH)
 .ENDIF
 .ENDIF				# "$(SHL4NOCHECK)"!=""
-.ENDIF
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 #+++++++++++    version object      ++++++++++++++++++++++++++++++++++++++++
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -1921,11 +1901,9 @@ $(SHL4TARGETN) : \
     @echo "Making:   " $(@:f).jnilib
     @macosx-create-bundle $@
 .ENDIF          # "$(SHL4CREATEJNILIB)"!=""
-.IF "$(UPDATER)"=="YES"
 .IF "$(SHL4NOCHECK)"==""
     $(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS4) $(SHL4TARGETN)
 .ENDIF				# "$(SHL4NOCHECK)"!=""
-.ENDIF
 .ELIF "$(OS)"=="IOS"
     $(COMMAND_ECHO)$(AR) $(LIB4FLAGS) $(LIBFLAGS) $@ $(subst,.obj,.o $(SHL4OBJS)) $(shell cat /dev/null $(LIB4TARGET) $(SHL4LIBS) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g)
     $(COMMAND_ECHO)$(RANLIB) $@
@@ -1939,7 +1917,6 @@ $(SHL4TARGETN) : \
     @cat $(MISC)/$(TARGET).$(@:b)_4.cmd
   .ENDIF
     @+source $(MISC)/$(TARGET).$(@:b)_4.cmd
-.IF "$(UPDATER)"=="YES"
 .IF "$(SHL4NOCHECK)"==""
     $(COMMAND_ECHO)-$(RM) $(SHL4TARGETN:d)check_$(SHL4TARGETN:f)
     $(COMMAND_ECHO)$(RENAME) $(SHL4TARGETN) $(SHL4TARGETN:d)check_$(SHL4TARGETN:f)
@@ -1949,7 +1926,6 @@ $(SHL4TARGETN) : \
     $(COMMAND_ECHO)$(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS4) -- -s $(SHL4TARGETN:d)check_$(SHL4TARGETN:f)
 .ENDIF
 .ENDIF				# "$(SHL4NOCHECK)"!=""
-.ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(OS)"=="MACOSX"
 .IF "$(UNIXVERSIONNAMES)"!="" && "$(OS)"!="IOS" && "$(OS)"!="ANDROID"
     $(COMMAND_ECHO)$(RM) $(LB)/$(SHL4TARGETN:b)
@@ -1993,13 +1969,11 @@ SHL5DEF*=$(MISC)/$(SHL5TARGET).def
 .ENDIF			# "$(SHL5USE_EXPORTS)"==""
 
 EXTRALIBPATHS5=$(EXTRALIBPATHS)
-.IF "$(UPDATER)"=="YES"
 .IF "$(SHL5NOCHECK)"==""
 .IF "$(SOLAR_STLLIBPATH)"!=""
 EXTRALIBPATHS5+=-L$(SOLAR_STLLIBPATH)
 .ENDIF
 .ENDIF				# "$(SHL5NOCHECK)"!=""
-.ENDIF
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 #+++++++++++    version object      ++++++++++++++++++++++++++++++++++++++++
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -2412,11 +2386,9 @@ $(SHL5TARGETN) : \
     @echo "Making:   " $(@:f).jnilib
     @macosx-create-bundle $@
 .ENDIF          # "$(SHL5CREATEJNILIB)"!=""
-.IF "$(UPDATER)"=="YES"
 .IF "$(SHL5NOCHECK)"==""
     $(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS5) $(SHL5TARGETN)
 .ENDIF				# "$(SHL5NOCHECK)"!=""
-.ENDIF
 .ELIF "$(OS)"=="IOS"
     $(COMMAND_ECHO)$(AR) $(LIB5FLAGS) $(LIBFLAGS) $@ $(subst,.obj,.o $(SHL5OBJS)) $(shell cat /dev/null $(LIB5TARGET) $(SHL5LIBS) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g)
     $(COMMAND_ECHO)$(RANLIB) $@
@@ -2430,7 +2402,6 @@ $(SHL5TARGETN) : \
     @cat $(MISC)/$(TARGET).$(@:b)_5.cmd
   .ENDIF
     @+source $(MISC)/$(TARGET).$(@:b)_5.cmd
-.IF "$(UPDATER)"=="YES"
 .IF "$(SHL5NOCHECK)"==""
     $(COMMAND_ECHO)-$(RM) $(SHL5TARGETN:d)check_$(SHL5TARGETN:f)
     $(COMMAND_ECHO)$(RENAME) $(SHL5TARGETN) $(SHL5TARGETN:d)check_$(SHL5TARGETN:f)
@@ -2440,7 +2411,6 @@ $(SHL5TARGETN) : \
     $(COMMAND_ECHO)$(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS5) -- -s $(SHL5TARGETN:d)check_$(SHL5TARGETN:f)
 .ENDIF
 .ENDIF				# "$(SHL5NOCHECK)"!=""
-.ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(OS)"=="MACOSX"
 .IF "$(UNIXVERSIONNAMES)"!="" && "$(OS)"!="IOS" && "$(OS)"!="ANDROID"
     $(COMMAND_ECHO)$(RM) $(LB)/$(SHL5TARGETN:b)
@@ -2484,13 +2454,11 @@ SHL6DEF*=$(MISC)/$(SHL6TARGET).def
 .ENDIF			# "$(SHL6USE_EXPORTS)"==""
 
 EXTRALIBPATHS6=$(EXTRALIBPATHS)
-.IF "$(UPDATER)"=="YES"
 .IF "$(SHL6NOCHECK)"==""
 .IF "$(SOLAR_STLLIBPATH)"!=""
 EXTRALIBPATHS6+=-L$(SOLAR_STLLIBPATH)
 .ENDIF
 .ENDIF				# "$(SHL6NOCHECK)"!=""
-.ENDIF
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 #+++++++++++    version object      ++++++++++++++++++++++++++++++++++++++++
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -2903,11 +2871,9 @@ $(SHL6TARGETN) : \
     @echo "Making:   " $(@:f).jnilib
     @macosx-create-bundle $@
 .ENDIF          # "$(SHL6CREATEJNILIB)"!=""
-.IF "$(UPDATER)"=="YES"
 .IF "$(SHL6NOCHECK)"==""
     $(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS6) $(SHL6TARGETN)
 .ENDIF				# "$(SHL6NOCHECK)"!=""
-.ENDIF
 .ELIF "$(OS)"=="IOS"
     $(COMMAND_ECHO)$(AR) $(LIB6FLAGS) $(LIBFLAGS) $@ $(subst,.obj,.o $(SHL6OBJS)) $(shell cat /dev/null $(LIB6TARGET) $(SHL6LIBS) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g)
     $(COMMAND_ECHO)$(RANLIB) $@
@@ -2921,7 +2887,6 @@ $(SHL6TARGETN) : \
     @cat $(MISC)/$(TARGET).$(@:b)_6.cmd
   .ENDIF
     @+source $(MISC)/$(TARGET).$(@:b)_6.cmd
-.IF "$(UPDATER)"=="YES"
 .IF "$(SHL6NOCHECK)"==""
     $(COMMAND_ECHO)-$(RM) $(SHL6TARGETN:d)check_$(SHL6TARGETN:f)
     $(COMMAND_ECHO)$(RENAME) $(SHL6TARGETN) $(SHL6TARGETN:d)check_$(SHL6TARGETN:f)
@@ -2931,7 +2896,6 @@ $(SHL6TARGETN) : \
     $(COMMAND_ECHO)$(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS6) -- -s $(SHL6TARGETN:d)check_$(SHL6TARGETN:f)
 .ENDIF
 .ENDIF				# "$(SHL6NOCHECK)"!=""
-.ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(OS)"=="MACOSX"
 .IF "$(UNIXVERSIONNAMES)"!="" && "$(OS)"!="IOS" && "$(OS)"!="ANDROID"
     $(COMMAND_ECHO)$(RM) $(LB)/$(SHL6TARGETN:b)
@@ -2975,13 +2939,11 @@ SHL7DEF*=$(MISC)/$(SHL7TARGET).def
 .ENDIF			# "$(SHL7USE_EXPORTS)"==""
 
 EXTRALIBPATHS7=$(EXTRALIBPATHS)
-.IF "$(UPDATER)"=="YES"
 .IF "$(SHL7NOCHECK)"==""
 .IF "$(SOLAR_STLLIBPATH)"!=""
 EXTRALIBPATHS7+=-L$(SOLAR_STLLIBPATH)
 .ENDIF
 .ENDIF				# "$(SHL7NOCHECK)"!=""
-.ENDIF
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 #+++++++++++    version object      ++++++++++++++++++++++++++++++++++++++++
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -3394,11 +3356,9 @@ $(SHL7TARGETN) : \
     @echo "Making:   " $(@:f).jnilib
     @macosx-create-bundle $@
 .ENDIF          # "$(SHL7CREATEJNILIB)"!=""
-.IF "$(UPDATER)"=="YES"
 .IF "$(SHL7NOCHECK)"==""
     $(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS7) $(SHL7TARGETN)
 .ENDIF				# "$(SHL7NOCHECK)"!=""
-.ENDIF
 .ELIF "$(OS)"=="IOS"
     $(COMMAND_ECHO)$(AR) $(LIB7FLAGS) $(LIBFLAGS) $@ $(subst,.obj,.o $(SHL7OBJS)) $(shell cat /dev/null $(LIB7TARGET) $(SHL7LIBS) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g)
     $(COMMAND_ECHO)$(RANLIB) $@
@@ -3412,7 +3372,6 @@ $(SHL7TARGETN) : \
     @cat $(MISC)/$(TARGET).$(@:b)_7.cmd
   .ENDIF
     @+source $(MISC)/$(TARGET).$(@:b)_7.cmd
-.IF "$(UPDATER)"=="YES"
 .IF "$(SHL7NOCHECK)"==""
     $(COMMAND_ECHO)-$(RM) $(SHL7TARGETN:d)check_$(SHL7TARGETN:f)
     $(COMMAND_ECHO)$(RENAME) $(SHL7TARGETN) $(SHL7TARGETN:d)check_$(SHL7TARGETN:f)
@@ -3422,7 +3381,6 @@ $(SHL7TARGETN) : \
     $(COMMAND_ECHO)$(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS7) -- -s $(SHL7TARGETN:d)check_$(SHL7TARGETN:f)
 .ENDIF
 .ENDIF				# "$(SHL7NOCHECK)"!=""
-.ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(OS)"=="MACOSX"
 .IF "$(UNIXVERSIONNAMES)"!="" && "$(OS)"!="IOS" && "$(OS)"!="ANDROID"
     $(COMMAND_ECHO)$(RM) $(LB)/$(SHL7TARGETN:b)
@@ -3466,13 +3424,11 @@ SHL8DEF*=$(MISC)/$(SHL8TARGET).def
 .ENDIF			# "$(SHL8USE_EXPORTS)"==""
 
 EXTRALIBPATHS8=$(EXTRALIBPATHS)
-.IF "$(UPDATER)"=="YES"
 .IF "$(SHL8NOCHECK)"==""
 .IF "$(SOLAR_STLLIBPATH)"!=""
 EXTRALIBPATHS8+=-L$(SOLAR_STLLIBPATH)
 .ENDIF
 .ENDIF				# "$(SHL8NOCHECK)"!=""
-.ENDIF
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 #+++++++++++    version object      ++++++++++++++++++++++++++++++++++++++++
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -3885,11 +3841,9 @@ $(SHL8TARGETN) : \
     @echo "Making:   " $(@:f).jnilib
     @macosx-create-bundle $@
 .ENDIF          # "$(SHL8CREATEJNILIB)"!=""
-.IF "$(UPDATER)"=="YES"
 .IF "$(SHL8NOCHECK)"==""
     $(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS8) $(SHL8TARGETN)
 .ENDIF				# "$(SHL8NOCHECK)"!=""
-.ENDIF
 .ELIF "$(OS)"=="IOS"
     $(COMMAND_ECHO)$(AR) $(LIB8FLAGS) $(LIBFLAGS) $@ $(subst,.obj,.o $(SHL8OBJS)) $(shell cat /dev/null $(LIB8TARGET) $(SHL8LIBS) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g)
     $(COMMAND_ECHO)$(RANLIB) $@
@@ -3903,7 +3857,6 @@ $(SHL8TARGETN) : \
     @cat $(MISC)/$(TARGET).$(@:b)_8.cmd
   .ENDIF
     @+source $(MISC)/$(TARGET).$(@:b)_8.cmd
-.IF "$(UPDATER)"=="YES"
 .IF "$(SHL8NOCHECK)"==""
     $(COMMAND_ECHO)-$(RM) $(SHL8TARGETN:d)check_$(SHL8TARGETN:f)
     $(COMMAND_ECHO)$(RENAME) $(SHL8TARGETN) $(SHL8TARGETN:d)check_$(SHL8TARGETN:f)
@@ -3913,7 +3866,6 @@ $(SHL8TARGETN) : \
     $(COMMAND_ECHO)$(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS8) -- -s $(SHL8TARGETN:d)check_$(SHL8TARGETN:f)
 .ENDIF
 .ENDIF				# "$(SHL8NOCHECK)"!=""
-.ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(OS)"=="MACOSX"
 .IF "$(UNIXVERSIONNAMES)"!="" && "$(OS)"!="IOS" && "$(OS)"!="ANDROID"
     $(COMMAND_ECHO)$(RM) $(LB)/$(SHL8TARGETN:b)
@@ -3957,13 +3909,11 @@ SHL9DEF*=$(MISC)/$(SHL9TARGET).def
 .ENDIF			# "$(SHL9USE_EXPORTS)"==""
 
 EXTRALIBPATHS9=$(EXTRALIBPATHS)
-.IF "$(UPDATER)"=="YES"
 .IF "$(SHL9NOCHECK)"==""
 .IF "$(SOLAR_STLLIBPATH)"!=""
 EXTRALIBPATHS9+=-L$(SOLAR_STLLIBPATH)
 .ENDIF
 .ENDIF				# "$(SHL9NOCHECK)"!=""
-.ENDIF
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 #+++++++++++    version object      ++++++++++++++++++++++++++++++++++++++++
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -4376,11 +4326,9 @@ $(SHL9TARGETN) : \
     @echo "Making:   " $(@:f).jnilib
     @macosx-create-bundle $@
 .ENDIF          # "$(SHL9CREATEJNILIB)"!=""
-.IF "$(UPDATER)"=="YES"
 .IF "$(SHL9NOCHECK)"==""
     $(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS9) $(SHL9TARGETN)
 .ENDIF				# "$(SHL9NOCHECK)"!=""
-.ENDIF
 .ELIF "$(OS)"=="IOS"
     $(COMMAND_ECHO)$(AR) $(LIB9FLAGS) $(LIBFLAGS) $@ $(subst,.obj,.o $(SHL9OBJS)) $(shell cat /dev/null $(LIB9TARGET) $(SHL9LIBS) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g)
     $(COMMAND_ECHO)$(RANLIB) $@
@@ -4394,7 +4342,6 @@ $(SHL9TARGETN) : \
     @cat $(MISC)/$(TARGET).$(@:b)_9.cmd
   .ENDIF
     @+source $(MISC)/$(TARGET).$(@:b)_9.cmd
-.IF "$(UPDATER)"=="YES"
 .IF "$(SHL9NOCHECK)"==""
     $(COMMAND_ECHO)-$(RM) $(SHL9TARGETN:d)check_$(SHL9TARGETN:f)
     $(COMMAND_ECHO)$(RENAME) $(SHL9TARGETN) $(SHL9TARGETN:d)check_$(SHL9TARGETN:f)
@@ -4404,7 +4351,6 @@ $(SHL9TARGETN) : \
     $(COMMAND_ECHO)$(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS9) -- -s $(SHL9TARGETN:d)check_$(SHL9TARGETN:f)
 .ENDIF
 .ENDIF				# "$(SHL9NOCHECK)"!=""
-.ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(OS)"=="MACOSX"
 .IF "$(UNIXVERSIONNAMES)"!="" && "$(OS)"!="IOS" && "$(OS)"!="ANDROID"
     $(COMMAND_ECHO)$(RM) $(LB)/$(SHL9TARGETN:b)
@@ -4448,13 +4394,11 @@ SHL10DEF*=$(MISC)/$(SHL10TARGET).def
 .ENDIF			# "$(SHL10USE_EXPORTS)"==""
 
 EXTRALIBPATHS10=$(EXTRALIBPATHS)
-.IF "$(UPDATER)"=="YES"
 .IF "$(SHL10NOCHECK)"==""
 .IF "$(SOLAR_STLLIBPATH)"!=""
 EXTRALIBPATHS10+=-L$(SOLAR_STLLIBPATH)
 .ENDIF
 .ENDIF				# "$(SHL10NOCHECK)"!=""
-.ENDIF
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 #+++++++++++    version object      ++++++++++++++++++++++++++++++++++++++++
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -4867,11 +4811,9 @@ $(SHL10TARGETN) : \
     @echo "Making:   " $(@:f).jnilib
     @macosx-create-bundle $@
 .ENDIF          # "$(SHL10CREATEJNILIB)"!=""
-.IF "$(UPDATER)"=="YES"
 .IF "$(SHL10NOCHECK)"==""
     $(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS10) $(SHL10TARGETN)
 .ENDIF				# "$(SHL10NOCHECK)"!=""
-.ENDIF
 .ELIF "$(OS)"=="IOS"
     $(COMMAND_ECHO)$(AR) $(LIB10FLAGS) $(LIBFLAGS) $@ $(subst,.obj,.o $(SHL10OBJS)) $(shell cat /dev/null $(LIB10TARGET) $(SHL10LIBS) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g)
     $(COMMAND_ECHO)$(RANLIB) $@
@@ -4885,7 +4827,6 @@ $(SHL10TARGETN) : \
     @cat $(MISC)/$(TARGET).$(@:b)_10.cmd
   .ENDIF
     @+source $(MISC)/$(TARGET).$(@:b)_10.cmd
-.IF "$(UPDATER)"=="YES"
 .IF "$(SHL10NOCHECK)"==""
     $(COMMAND_ECHO)-$(RM) $(SHL10TARGETN:d)check_$(SHL10TARGETN:f)
     $(COMMAND_ECHO)$(RENAME) $(SHL10TARGETN) $(SHL10TARGETN:d)check_$(SHL10TARGETN:f)
@@ -4895,7 +4836,6 @@ $(SHL10TARGETN) : \
     $(COMMAND_ECHO)$(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS10) -- -s $(SHL10TARGETN:d)check_$(SHL10TARGETN:f)
 .ENDIF
 .ENDIF				# "$(SHL10NOCHECK)"!=""
-.ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(OS)"=="MACOSX"
 .IF "$(UNIXVERSIONNAMES)"!="" && "$(OS)"!="IOS" && "$(OS)"!="ANDROID"
     $(COMMAND_ECHO)$(RM) $(LB)/$(SHL10TARGETN:b)
@@ -4912,10 +4852,7 @@ $(SHL10TARGETN) : \
 
 .IF "$(SHL1IMPLIBN)" != ""
 
-.IF "$(UPDATER)"=="YES"
 USELIB1DEPN+=$(SHL1LIBS)
-.ELSE
-.ENDIF
 
 .IF "$(USE_DEFFILE)"!=""
 USE_SHL1TARGET=$(SHL1TARGETN)
@@ -4955,10 +4892,7 @@ $(SHL1IMPLIBN):	\
 
 .IF "$(SHL2IMPLIBN)" != ""
 
-.IF "$(UPDATER)"=="YES"
 USELIB2DEPN+=$(SHL2LIBS)
-.ELSE
-.ENDIF
 
 .IF "$(USE_DEFFILE)"!=""
 USE_SHL2TARGET=$(SHL2TARGETN)
@@ -4998,10 +4932,7 @@ $(SHL2IMPLIBN):	\
 
 .IF "$(SHL3IMPLIBN)" != ""
 
-.IF "$(UPDATER)"=="YES"
 USELIB3DEPN+=$(SHL3LIBS)
-.ELSE
-.ENDIF
 
 .IF "$(USE_DEFFILE)"!=""
 USE_SHL3TARGET=$(SHL3TARGETN)
@@ -5041,10 +4972,7 @@ $(SHL3IMPLIBN):	\
 
 .IF "$(SHL4IMPLIBN)" != ""
 
-.IF "$(UPDATER)"=="YES"
 USELIB4DEPN+=$(SHL4LIBS)
-.ELSE
-.ENDIF
 
 .IF "$(USE_DEFFILE)"!=""
 USE_SHL4TARGET=$(SHL4TARGETN)
@@ -5084,10 +5012,7 @@ $(SHL4IMPLIBN):	\
 
 .IF "$(SHL5IMPLIBN)" != ""
 
-.IF "$(UPDATER)"=="YES"
 USELIB5DEPN+=$(SHL5LIBS)
-.ELSE
-.ENDIF
 
 .IF "$(USE_DEFFILE)"!=""
 USE_SHL5TARGET=$(SHL5TARGETN)
@@ -5127,10 +5052,7 @@ $(SHL5IMPLIBN):	\
 
 .IF "$(SHL6IMPLIBN)" != ""
 
-.IF "$(UPDATER)"=="YES"
 USELIB6DEPN+=$(SHL6LIBS)
-.ELSE
-.ENDIF
 
 .IF "$(USE_DEFFILE)"!=""
 USE_SHL6TARGET=$(SHL6TARGETN)
@@ -5170,10 +5092,7 @@ $(SHL6IMPLIBN):	\
 
 .IF "$(SHL7IMPLIBN)" != ""
 
-.IF "$(UPDATER)"=="YES"
 USELIB7DEPN+=$(SHL7LIBS)
-.ELSE
-.ENDIF
 
 .IF "$(USE_DEFFILE)"!=""
 USE_SHL7TARGET=$(SHL7TARGETN)
@@ -5213,10 +5132,7 @@ $(SHL7IMPLIBN):	\
 
 .IF "$(SHL8IMPLIBN)" != ""
 
-.IF "$(UPDATER)"=="YES"
 USELIB8DEPN+=$(SHL8LIBS)
-.ELSE
-.ENDIF
 
 .IF "$(USE_DEFFILE)"!=""
 USE_SHL8TARGET=$(SHL8TARGETN)
@@ -5256,10 +5172,7 @@ $(SHL8IMPLIBN):	\
 
 .IF "$(SHL9IMPLIBN)" != ""
 
-.IF "$(UPDATER)"=="YES"
 USELIB9DEPN+=$(SHL9LIBS)
-.ELSE
-.ENDIF
 
 .IF "$(USE_DEFFILE)"!=""
 USE_SHL9TARGET=$(SHL9TARGETN)
@@ -5299,10 +5212,7 @@ $(SHL9IMPLIBN):	\
 
 .IF "$(SHL10IMPLIBN)" != ""
 
-.IF "$(UPDATER)"=="YES"
 USELIB10DEPN+=$(SHL10LIBS)
-.ELSE
-.ENDIF
 
 .IF "$(USE_DEFFILE)"!=""
 USE_SHL10TARGET=$(SHL10TARGETN)

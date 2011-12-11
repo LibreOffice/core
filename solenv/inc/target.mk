@@ -1372,7 +1372,6 @@ $(SCP_PRODUCT_TYPE):
     $(TOUCH) $@
 
 .IF "$(COMPVERMK)"!=""
-.IF "$(UPDATER)"!=""
 .IF "$(COMPATH:s!\!/!)"!="$(COMPATH_STORED)"
 COMPVERMK_PHONY:=.PHONY
 .ENDIF			# "$(COMPATH:s!\!/!)"!="$(COMPATH_STORED)"
@@ -1399,7 +1398,6 @@ COMPVTMP:=$(mktmp iii)
 .ENDIF          # "$(CCNUMVER)"!=""
 
 .ENDIF			# "$(COMPVERMK)"!=""
-.ENDIF			# "$(UPDATER)"!=""
 
 .IF "$(JAVAVERMK)"!=""
 .IF "$(JAVALOCATION)"!="$(JAVA_HOME)"

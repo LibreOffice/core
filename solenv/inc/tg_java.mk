@@ -71,10 +71,8 @@ $(JAVATARGET) :	$(JAVAFILES) $(JAVACLASSFILES)
 .ENDIF			# "$(javauno)"!=""
 .ENDIF			# "$(use_jdep)"!=""
 .ENDIF			# "$(JAVARESPONSE)"!=""
-.IF "$(UPDATER)"!=""
 .IF "$(OS)$(CPU)"=="SOLARISS"
     @@-find $(CLASSDIR) -type d -user $(USER) \! -perm -5 -print | xargs chmod a+r $$1
-.ENDIF
 .ENDIF
     @$(TOUCH) $@
 
