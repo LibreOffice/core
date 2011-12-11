@@ -787,13 +787,8 @@ LIB9ARCHIV=
 .IF "$(RESLIB1NAME)" != ""
 .IF "$(RESLIB1NOVERSION)"==""
 .ENDIF			# "$(RESLIB1NOVERSION)"==""
-.IF "$(common_build_reslib)"!=""
-RESLIB1TARGETN=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))/$(RESLIB1NAME)LANGEXT.res
-RSC_MULTI1=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))/rsc_$(RESLIB1NAME)
-.ELSE			# "$(common_build_reslib)"!=""
 RESLIB1TARGETN=$(BIN)/$(RESLIB1NAME)LANGEXT.res
 RSC_MULTI1=$(MISC)/rsc_$(RESLIB1NAME)
-.ENDIF			# "$(common_build_reslib)"!=""
 # change to iso if resmgr is changed
 RESLIB1TARGETN!:=$(foreach,i,$(alllangiso) $(subst,LANGEXT,$i $(RESLIB1TARGETN)))
 .ENDIF
@@ -801,104 +796,64 @@ RESLIB1TARGETN!:=$(foreach,i,$(alllangiso) $(subst,LANGEXT,$i $(RESLIB1TARGETN))
 .IF "$(RESLIB2NAME)" != ""
 .IF "$(RESLIB2NOVERSION)"==""
 .ENDIF			# "$(RESLIB2NOVERSION)"==""
-.IF "$(common_build_reslib)"!=""
-RESLIB2TARGETN=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))/$(RESLIB2NAME)LANGEXT.res
-RSC_MULTI2=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))/rsc_$(RESLIB2NAME)
-.ELSE			# "$(common_build_reslib)"!=""
 RESLIB2TARGETN=$(BIN)/$(RESLIB2NAME)LANGEXT.res
 RSC_MULTI2=$(MISC)/rsc_$(RESLIB2NAME)
-.ENDIF			# "$(common_build_reslib)"!=""
 RESLIB2TARGETN!:=$(foreach,i,$(alllangiso) $(subst,LANGEXT,$i $(RESLIB2TARGETN)))
 .ENDIF
 
 .IF "$(RESLIB3NAME)" != ""
 .IF "$(RESLIB3NOVERSION)"==""
 .ENDIF			# "$(RESLIB3NOVERSION)"==""
-.IF "$(common_build_reslib)"!=""
-RESLIB3TARGETN=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))/$(RESLIB3NAME)LANGEXT.res
-RSC_MULTI3=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))/rsc_$(RESLIB3NAME)
-.ELSE			# "$(common_build_reslib)"!=""
 RESLIB3TARGETN=$(BIN)/$(RESLIB3NAME)LANGEXT.res
 RSC_MULTI3=$(MISC)/rsc_$(RESLIB3NAME)
-.ENDIF			# "$(common_build_reslib)"!=""
 RESLIB3TARGETN!:=$(foreach,i,$(alllangiso) $(subst,LANGEXT,$i $(RESLIB3TARGETN)))
 .ENDIF
 
 .IF "$(RESLIB4NAME)" != ""
 .IF "$(RESLIB4NOVERSION)"==""
 .ENDIF			# "$(RESLIB4NOVERSION)"==""
-.IF "$(common_build_reslib)"!=""
-RESLIB4TARGETN=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))/$(RESLIB4NAME)LANGEXT.res
-RSC_MULTI4=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))/rsc_$(RESLIB4NAME)
-.ELSE			# "$(common_build_reslib)"!=""
 RESLIB4TARGETN=$(BIN)/$(RESLIB4NAME)LANGEXT.res
 RSC_MULTI4=$(MISC)/rsc_$(RESLIB4NAME)
-.ENDIF			# "$(common_build_reslib)"!=""
 RESLIB4TARGETN!:=$(foreach,i,$(alllangiso) $(subst,LANGEXT,$i $(RESLIB4TARGETN)))
 .ENDIF
 
 .IF "$(RESLIB5NAME)" != ""
 .IF "$(RESLIB5NOVERSION)"==""
 .ENDIF			# "$(RESLIB5NOVERSION)"==""
-.IF "$(common_build_reslib)"!=""
-RESLIB5TARGETN=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))/$(RESLIB5NAME)LANGEXT.res
-RSC_MULTI5=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))/rsc_$(RESLIB5NAME)
-.ELSE			# "$(common_build_reslib)"!=""
 RESLIB5TARGETN=$(BIN)/$(RESLIB5NAME)LANGEXT.res
 RSC_MULTI5=$(MISC)/rsc_$(RESLIB5NAME)
-.ENDIF			# "$(common_build_reslib)"!=""
 RESLIB5TARGETN!:=$(foreach,i,$(alllangiso) $(subst,LANGEXT,$i $(RESLIB5TARGETN)))
 .ENDIF
 
 .IF "$(RESLIB6NAME)" != ""
 .IF "$(RESLIB6NOVERSION)"==""
 .ENDIF			# "$(RESLIB6NOVERSION)"==""
-.IF "$(common_build_reslib)"!=""
-RESLIB6TARGETN=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))/$(RESLIB6NAME)LANGEXT.res
-RSC_MULTI6=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))/rsc_$(RESLIB6NAME)
-.ELSE			# "$(common_build_reslib)"!=""
 RESLIB6TARGETN=$(BIN)/$(RESLIB6NAME)LANGEXT.res
 RSC_MULTI6=$(MISC)/rsc_$(RESLIB6NAME)
-.ENDIF			# "$(common_build_reslib)"!=""
 RESLIB6TARGETN!:=$(foreach,i,$(alllangiso) $(subst,LANGEXT,$i $(RESLIB6TARGETN)))
 .ENDIF
 
 .IF "$(RESLIB7NAME)" != ""
 .IF "$(RESLIB7NOVERSION)"==""
 .ENDIF			# "$(RESLIB7NOVERSION)"==""
-.IF "$(common_build_reslib)"!=""
-RESLIB7TARGETN=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))/$(RESLIB7NAME)LANGEXT.res
-RSC_MULTI7=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))/rsc_$(RESLIB7NAME)
-.ELSE			# "$(common_build_reslib)"!=""
 RESLIB7TARGETN=$(BIN)/$(RESLIB7NAME)LANGEXT.res
 RSC_MULTI7=$(MISC)/rsc_$(RESLIB7NAME)
-.ENDIF			# "$(common_build_reslib)"!=""
 RESLIB7TARGETN!:=$(foreach,i,$(alllangiso) $(subst,LANGEXT,$i $(RESLIB7TARGETN)))
 .ENDIF
 
 .IF "$(RESLIB8NAME)" != ""
 .IF "$(RESLIB8NOVERSION)"==""
 .ENDIF			# "$(RESLIB8NOVERSION)"==""
-.IF "$(common_build_reslib)"!=""
-RESLIB8TARGETN=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))/$(RESLIB8NAME)LANGEXT.res
-RSC_MULTI8=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))/rsc_$(RESLIB8NAME)
-.ELSE			# "$(common_build_reslib)"!=""
 RESLIB8TARGETN=$(BIN)/$(RESLIB8NAME)LANGEXT.res
 RSC_MULTI8=$(MISC)/rsc_$(RESLIB8NAME)
-.ENDIF			# "$(common_build_reslib)"!=""
 RESLIB8TARGETN!:=$(foreach,i,$(alllangiso) $(subst,LANGEXT,$i $(RESLIB8TARGETN)))
 .ENDIF
 
 .IF "$(RESLIB9NAME)" != ""
 .IF "$(RESLIB9NOVERSION)"==""
 .ENDIF			# "$(RESLIB9NOVERSION)"==""
-.IF "$(common_build_reslib)"!=""
-RESLIB9TARGETN=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))/$(RESLIB9NAME)LANGEXT.res
-RSC_MULTI9=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))/rsc_$(RESLIB9NAME)
-.ELSE			# "$(common_build_reslib)"!=""
 RESLIB9TARGETN=$(BIN)/$(RESLIB9NAME)LANGEXT.res
 RSC_MULTI9=$(MISC)/rsc_$(RESLIB9NAME)
-.ENDIF			# "$(common_build_reslib)"!=""
 RESLIB9TARGETN!:=$(foreach,i,$(alllangiso) $(subst,LANGEXT,$i $(RESLIB9TARGETN)))
 .ENDIF
 

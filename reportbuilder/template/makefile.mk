@@ -30,7 +30,6 @@ PRJNAME=reportbuilder
 TARGET=rpt_templates
 
 # ???
-no_common_build_zip=true
 
 EXTENSION_VERSION_BASE=1.0.0
 .IF "$(DBG_LEVEL)" == "0"

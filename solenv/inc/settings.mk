@@ -366,12 +366,6 @@ COMPILER_WARN_ALL=TRUE
 COMPILER_WARN_ERRORS=TRUE
 .ENDIF
 
-#.IF "$(COMMON_BUILD)"!=""
-#common_build*=$(COMMON_BUILD)
-#.ENDIF
-common_build:=
-COMMON_BUILD:=
-
 .IF "$(USE_SHL_VERSIONS)"!=""
 use_shl_versions*=$(USE_SHL_VERSIONS)
 .ENDIF
@@ -558,24 +552,7 @@ PATH_IN_MODULE:=$(subst,$(shell @+cd $(PRJ) && pwd $(PWDFLAGS))/, $(PWD))
 PATH_IN_MODULE:=
 .ENDIF			# "$(PRJ)"!="."
 
-## common output tree
-#.IF "$(common_build)"!=""
-#COMMON_OUTDIR*=common
-#.IF "$(no_common_build_reslib)"==""
-#common_build_reslib=true
-#.ENDIF			# "$(no_common_build_reslib)"==""
-#.IF "$(no_common_build_zip)"==""
-#common_build_zip=true
-#.ENDIF			# "$(no_common_build_zip)"==""
-#.IF "$(no_common_build_sign_jar)"==""
-#common_build_sign_jar=true
-#.ENDIF			# "$(no_common_build_sign_jar)"==""
-#.IF "$(no_common_build_srs)"==""
-#common_build_srs=true
-#.ENDIF			# "$(no_common_build_srs)"==""
-#.ELSE			# "$(common_build)"!=""
 COMMON_OUTDIR:=$(OUTPATH)
-#.ENDIF			# "$(common_build)"!=""
 
 LOCAL_OUT:=$(OUT)
 LOCAL_OUT_FOR_BUILD:=$(OUT_FOR_BUILD)
@@ -595,13 +572,6 @@ $(posix_PWD)/$(OUT)/inc/%world.mk :
 
 .INCLUDE :  $(posix_PWD)/$(OUT)/inc/myworld.mk
 
-.IF "$(common_build)"!=""
-$(posix_PWD)/$(LOCAL_COMMON_OUT)/inc/%world.mk :
-    @$(MKOUT) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(ROUT))
-    @echo $(EMQ)# > $@
-
-.INCLUDE : $(posix_PWD)/$(LOCAL_COMMON_OUT)/inc/myworld.mk
-.ENDIF			# "$(common_build)"!=""
 .ENDIF          # "$(TARGET)"!="prj"
 
 .INCLUDE .IGNORE : office.mk
@@ -725,13 +695,8 @@ INCDEPN+=$(INCPRE)
 
 # Resource-Pfad fuer .SRS
 
-.IF "$(common_build_srs)"!=""
-SRS=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(OUT))/srs
-SRSX=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(OUT))/srs
-.ELSE          # "$(common_build_srs)"!=""
 SRS=$(OUT)/srs
 SRSX=$(OUT)/srs
-.ENDIF          # "$(common_build_srs)"!=""
 
 # Resource-Pfad fuer .RC und .RES
 RES=$(OUT)/res
@@ -744,11 +709,7 @@ BIN=$(PRJ)/$(OUTPATH).xl/bin
 
 # damit gezielt Abhaengigkeiten auf s: angegeben werden koennen
 
-.IF "$(common_build)"!=""
-SOLARIDLDIR=$(SOLARVERSION)/common$(PROEXT)/idl
-.ELSE
 SOLARIDLDIR=$(SOLARVERSION)/$(INPATH)/idl
-.ENDIF
 
 SOLARRESDIR=$(SOLARVERSION)/$(INPATH)/res
 SOLARRESXDIR=$(SOLARVERSION)/$(INPATH)/res
@@ -774,12 +735,10 @@ SOLARCOMMONBINDIR=$(SOLARVERSION)/common$(PROEXT)/bin
 SOLARCOMMONRESDIR=$(SOLARVERSION)/common$(PROEXT)/res
 SOLARCOMMONPCKDIR=$(SOLARVERSION)/common$(PROEXT)/pck
 SOLARCOMMONSDFDIR=$(SOLARVERSION)/common$(PROEXT)/sdf
-.IF "$(common_build)"==""
 SOLARCOMMONBINDIR=$(SOLARBINDIR)
 SOLARCOMMONRESDIR=$(SOLARRESDIR)
 SOLARCOMMONPCKDIR=$(SOLARPCKDIR)
 SOLARCOMMONSDFDIR=$(SOLARSDFDIR)
-.ENDIF
 
 .EXPORT : SOLARBINDIR
 

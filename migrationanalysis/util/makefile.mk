@@ -30,8 +30,6 @@ PRJ=..
 PRJNAME=migrationanalysis
 TARGET=paw
 
-no_common_build_zip=TRUE
-
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :	settings.mk

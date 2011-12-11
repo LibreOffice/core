@@ -30,8 +30,6 @@ PRJNAME = updateinfo
 PACKAGE = com$/sun$/star$/comp$/smoketest
 TARGET  = com_sun_star_comp_smoketest
 
-no_common_build_zip:=TRUE
-
 # --- Settings -----------------------------------------------------
 
 .INCLUDE : settings.mk

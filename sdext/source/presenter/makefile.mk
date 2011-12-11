@@ -52,7 +52,6 @@ PACKAGE=com.sun.PresenterScreen-$(PLATFORMID)
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 DLLPRE=
-common_build_zip=
 
 # --- Files -------------------------------------
 

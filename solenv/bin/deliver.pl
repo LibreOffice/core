@@ -74,7 +74,6 @@ $dlst_file          = 0;            # path to d.lst
 $ilst_ext           = 'ilst';       # extension of image lists
 $umask              = 22;           # default file/directory creation mask
 $dest               = 0;            # optional destination path
-$common_build       = 0;            # do we have common trees?
 $common_dest        = 0;            # common tree on solver
 
 @action_data        = ();           # LoL with all action data
@@ -175,17 +174,6 @@ sub do_copy
     ($from, $to) = split(' ', $dependent);
     print "copy dependent: from: $from, to: $to\n" if $is_debug;
     glob_and_copy($from, $to, $touch);
-
-    if ($delete_common && $common_build && ( $line !~ /%COMMON_OUTDIR%/ ) ) {
-        $line =~ s/%__SRC%/%COMMON_OUTDIR%/ig;
-        if ( $line =~ /%COMMON_OUTDIR%/ ) {
-            $line =~ s/%_DEST%/%COMMON_DEST%/ig;
-            $common = expand_macros($line);
-            ($from, $to) = split(' ', $common);
-            print "copy common: from: $from, to: $to\n" if $is_debug;
-            glob_and_copy($from, $to, $touch);
-        }
-    }
 }
 
 sub do_dos
@@ -459,26 +447,9 @@ sub init_globals
             exit(3);
     }
 
-    # Do we have common trees?
-    if ( defined($ENV{'common_build'}) && $ENV{'common_build'} eq 'TRUE' ) {
-        $common_build = 1;
-        if ((defined $common_outdir) && ($common_outdir ne "")) {
-            $common_outdir = $common_outdir . ".pro" if $inpath =~ /\.pro$/;
-            if ( $dest ) {
-                $common_dest = $dest;
-            } else {
-                $common_dest = "$solarversion/$common_outdir";
-                $dest = "$solarversion/$inpath";
-            }
-        } else {
-            print_error("common_build defined without common_outdir", 0);
-            exit(6);
-        }
-    } else {
-        $common_outdir = $inpath;
-        $dest = "$solarversion/$inpath" if ( !$dest );
-        $common_dest = $dest;
-    }
+    $common_outdir = $inpath;
+    $dest = "$solarversion/$inpath" if ( !$dest );
+    $common_dest = $dest;
     $dest =~ s#\\#/#g;
     $common_dest =~ s#\\#/#g;
 
@@ -874,10 +845,6 @@ sub is_newer
             if ( $from_stat[9] > $logfiledate ) {
                 $logfiledate = $from_stat[9];
             }
-        } elsif ( $common_build && ( $to =~ /^\Q$common_dest\E/ ) ) {
-            if ( $from_stat[9] > $commonlogfiledate ) {
-                $commonlogfiledate = $from_stat[9];
-            }
         }
 
         @to_stat = stat($to.$maybedot);
@@ -970,8 +937,8 @@ sub push_default_actions
                     'xml'
                 );
     push(@subdirs, 'zip') if $opt_zip;
-    push(@subdirs, 'idl') if ! $common_build;
-    push(@subdirs, 'pus') if ! $common_build;
+    push(@subdirs, 'idl');
+    push(@subdirs, 'pus');
     my @common_subdirs = (
                     'bin',
                     'idl',
@@ -987,19 +954,9 @@ sub push_default_actions
         foreach $subdir (@subdirs) {
             push(@action_data, ['mkdir', "%_DEST%/$subdir"]);
         }
-        if ( $common_build ) {
-            foreach $subdir (@common_subdirs) {
-                push(@action_data, ['mkdir', "%COMMON_DEST%/$subdir"]);
-            }
-        }
     }
     push(@action_data, ['mkdir', "%_DEST%/inc/$module"]);
-    if ( $common_build ) {
-        push(@action_data, ['mkdir', "%COMMON_DEST%/inc/$module"]);
-        push(@action_data, ['mkdir', "%COMMON_DEST%/res/img"]);
-    } else {
-        push(@action_data, ['mkdir', "%_DEST%/res/img"]);
-    }
+    push(@action_data, ['mkdir', "%_DEST%/res/img"]);
 
     # need to copy libstaticmxp.dylib for Mac OS X
     if ( $^O eq 'darwin' )
@@ -1098,8 +1055,6 @@ sub push_on_loglist
     my $common;
     if ( $entry[2] =~ /^\Q$dest\E/ ) {
         $common = 0;
-    } elsif ( $common_build && ( $entry[2] =~ /^\Q$common_dest\E/ )) {
-        $common = 1;
     } else {
         warn "Neither common nor platform tree?";
         return;
@@ -1128,18 +1083,10 @@ sub zip_files
     my (%dest_dir, %list_ref);
     $dest_dir{$platform_zip_file} = $dest;
     $list_ref{$platform_zip_file} = \@zip_list;
-    if ( $common_build ) {
-        $common_zip_file = "%COMMON_DEST%/zip/$module.zip";
-        $common_zip_file = expand_macros($common_zip_file);
-        $dest_dir{$common_zip_file}   = $common_dest;
-        $list_ref{$common_zip_file}   = \@common_zip_list;
-    }
 
     my @zipfiles;
     $zipfiles[0] = $platform_zip_file;
-    if ( $common_build ) {
-        push @zipfiles, ($common_zip_file);
-    }
+
     foreach my $zip_file ( @zipfiles ) {
         print "ZIP: updating $zip_file\n" if $opt_verbose;
         next if ( $opt_check );
@@ -1258,7 +1205,6 @@ sub write_log
     $file_date{\@common_log_list} = $commonlogfiledate;
 
     my @logs = ( \@log_list );
-    push @logs, ( \@common_log_list ) if ( $common_build );
     foreach my $log ( @logs ) {
         $log_file{$log} = expand_macros( $log_file{$log} );
         if ( $opt_delete ) {

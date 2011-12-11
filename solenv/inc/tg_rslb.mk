@@ -35,22 +35,6 @@ $(RSC_MULTI$(TNR)) : \
         $(RESLIB$(TNR)TARGETN) \
         $(RESLIB$(TNR)BMPS)
     @echo Compiling: $(@:f)
-.IF "$(common_build_reslib)"!=""
-    $(COMMAND_ECHO)$(RSC) -presponse $(VERBOSITY) @$(mktmp \
-    -r -p \
-    $(foreach,i,$(alllangiso) -lg$i \
-    $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
-    -fs={$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))/$(RESLIB$(TNR)NAME)$i.res} \
-    $(foreach,j,$(subst,$(PRJ),$(SOLARDEFIMG)/$(PRJNAME) $(RESLIB$(TNR)IMAGES)) -lip={$j}/$i \
-    -lip={$j} ) \
-    -lip=$(SOLARDEFIMG)/res/$i -lip=$(SOLARDEFIMG)/res ) \
-    -subMODULE=$(SOLARDEFIMG) \
-    -subGLOBALRES=$(SOLARDEFIMG)/res \
-    -oil={$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))} \
-    -ft=$@ \
-    $(RSC$(TNR)HEADER) $(RESLIB$(TNR)SRSFILES) \
-    ) > $(NULLDEV)
-.ELSE			# "$(common_build_reslib)"!=""
     $(COMMAND_ECHO)$(RSC) -presponse $(VERBOSITY) @$(mktmp \
     -r -p \
     $(foreach,i,$(alllangiso) -lg$i \
@@ -65,24 +49,15 @@ $(RSC_MULTI$(TNR)) : \
     -ft=$@ \
     $(RSC$(TNR)HEADER) $(RESLIB$(TNR)SRSFILES) \
     ) > $(NULLDEV)
-.ENDIF			# "$(common_build_reslib)"!=""
 
 $(RESLIB$(TNR)TARGETN): \
         $(RESLIB$(TNR)SRSFILES) \
         $(RESLIB$(TNR)BMPS)
     @echo "Making:   " $(@:f)
 .IF "$(GUI)"=="UNX"
-.IF "$(common_build_reslib)"!=""
     @@-$(RM) $(RSC_MULTI$(TNR))
-.ELSE			# "$(common_build_reslib)"!=""
-    @@-$(RM) $(RSC_MULTI$(TNR))
-.ENDIF			# "$(common_build_reslib)"!=""
 .ELSE				# "$(GUI)"=="UNX"
-.IF "$(common_build_reslib)"!=""
     @@-$(RM) $(RSC_MULTI$(TNR))
-.ELSE			# "$(common_build_reslib)"!=""
-    @@-$(RM) $(RSC_MULTI$(TNR))
-.ENDIF			# "$(common_build_reslib)"!=""
 .ENDIF              # "$(GUI)"=="UNX"
 .ENDIF				# "$(RESLIB$(TNR)TARGETN)"!=""
 
