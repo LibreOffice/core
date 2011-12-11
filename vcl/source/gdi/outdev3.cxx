@@ -3147,15 +3147,6 @@ bool OutputDevice::ImplNewFont() const
 
 // -----------------------------------------------------------------------
 
-long OutputDevice::ImplGetTextWidth( const SalLayout& rSalLayout ) const
-{
-    long nWidth = rSalLayout.GetTextWidth();
-    nWidth /= rSalLayout.GetUnitsPerPixel();
-    return nWidth;
-}
-
-// -----------------------------------------------------------------------
-
 void OutputDevice::ImplDrawTextRect( long nBaseX, long nBaseY,
                                      long nDistX, long nDistY, long nWidth, long nHeight )
 {
@@ -5481,13 +5472,6 @@ void OutputDevice::DrawTextLine( const Point& rPos, long nWidth,
 
 // ------------------------------------------------------------------------
 
-sal_Bool OutputDevice::IsTextUnderlineAbove( const Font& rFont )
-{
-    return ImplIsUnderlineAbove( rFont );
-}
-
-// ------------------------------------------------------------------------
-
 void OutputDevice::DrawWaveLine( const Point& rStartPos, const Point& rEndPos,
                                  sal_uInt16 nStyle )
 {
@@ -7466,17 +7450,6 @@ long OutputDevice::GetMinKashida() const
     ImplFontEntry*      pEntry = mpFontEntry;
     ImplFontMetricData* pMetric = &(pEntry->maMetric);
     return ImplDevicePixelToLogicWidth( pMetric->mnMinKashida );
-}
-// -----------------------------------------------------------------------
-
-long OutputDevice::GetMinKashida( const Font& rFont ) const
-{
-    // select font, query Kashida, select original font again
-    Font aOldFont = GetFont();
-    const_cast<OutputDevice*>(this)->SetFont( rFont );
-    long aKashida = GetMinKashida();
-    const_cast<OutputDevice*>(this)->SetFont( aOldFont );
-    return aKashida;
 }
 
 // -----------------------------------------------------------------------

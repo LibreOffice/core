@@ -416,7 +416,6 @@ public:
                                             const sal_Int32* pPixelDXArray ) const;
     SAL_DLLPRIVATE SalLayout*   ImplGlyphFallbackLayout( SalLayout*, ImplLayoutArgs& ) const;
 
-    SAL_DLLPRIVATE long         ImplGetTextWidth( const SalLayout& ) const;
     static
     SAL_DLLPRIVATE XubString    ImplGetEllipsisString( const OutputDevice& rTargetDevice, const XubString& rStr,
                                                        long nMaxWidth, sal_uInt16 nStyle, const ::vcl::ITextLayout& _rLayout );
@@ -458,10 +457,7 @@ public:
     SAL_DLLPRIVATE long         ImplLogicHeightToDevicePixel( long nHeight ) const;
     SAL_DLLPRIVATE long         ImplDevicePixelToLogicWidth( long nWidth ) const;
     SAL_DLLPRIVATE long         ImplDevicePixelToLogicHeight( long nHeight ) const;
-    SAL_DLLPRIVATE float        ImplFloatLogicWidthToDevicePixel( float ) const;
     SAL_DLLPRIVATE float        ImplFloatLogicHeightToDevicePixel( float ) const;
-    SAL_DLLPRIVATE float        ImplFloatDevicePixelToLogicWidth( float ) const;
-    SAL_DLLPRIVATE float        ImplFloatDevicePixelToLogicHeight( float ) const;
     SAL_DLLPRIVATE Point        ImplLogicToDevicePixel( const Point& rLogicPt ) const;
     SAL_DLLPRIVATE Size         ImplLogicToDevicePixel( const Size& rLogicSize ) const;
     SAL_DLLPRIVATE Rectangle    ImplLogicToDevicePixel( const Rectangle& rLogicRect ) const;
@@ -601,7 +597,6 @@ public:
                                       FontUnderline eUnderline,
                                       FontUnderline eOverline,
                                       sal_Bool bUnderlineAbove = sal_False );
-    static sal_Bool         IsTextUnderlineAbove( const Font& rFont );
 
     void                DrawText( const Point& rStartPt, const XubString& rStr,
                                   xub_StrLen nIndex = 0, xub_StrLen nLen = STRING_LEN,
@@ -830,7 +825,6 @@ public:
                                            const ::vcl::RenderGraphic& rRenderGraphic );
 
     Color               GetPixel( const Point& rPt ) const;
-    Color*              GetPixel( const Polygon& rPts ) const;
 
     Bitmap              GetBitmap( const Point& rSrcPt, const Size& rSize ) const;
 
@@ -992,9 +986,7 @@ public:
     Size                LogicToPixel( const Size& rLogicSize ) const;
     Rectangle           LogicToPixel( const Rectangle& rLogicRect ) const;
     Polygon             LogicToPixel( const Polygon& rLogicPoly ) const;
-    basegfx::B2DPolygon LogicToPixel( const basegfx::B2DPolygon& rLogicPolyPoly ) const;
     PolyPolygon         LogicToPixel( const PolyPolygon& rLogicPolyPoly ) const;
-    basegfx::B2DPolyPolygon LogicToPixel( const basegfx::B2DPolyPolygon& rLogicPolyPoly ) const;
     Region              LogicToPixel( const Region& rLogicRegion )const;
     Point               LogicToPixel( const Point& rLogicPt,
                                       const MapMode& rMapMode ) const;
@@ -1004,21 +996,15 @@ public:
                                       const MapMode& rMapMode ) const;
     Polygon             LogicToPixel( const Polygon& rLogicPoly,
                                       const MapMode& rMapMode ) const;
-    basegfx::B2DPolygon LogicToPixel( const basegfx::B2DPolygon& rLogicPoly,
-                                          const MapMode& rMapMode ) const;
     PolyPolygon         LogicToPixel( const PolyPolygon& rLogicPolyPoly,
                                       const MapMode& rMapMode ) const;
     basegfx::B2DPolyPolygon LogicToPixel( const basegfx::B2DPolyPolygon& rLogicPolyPoly,
                                           const MapMode& rMapMode ) const;
-    Region              LogicToPixel( const Region& rLogicRegion,
-                                      const MapMode& rMapMode ) const;
     Point               PixelToLogic( const Point& rDevicePt ) const;
     Size                PixelToLogic( const Size& rDeviceSize ) const;
     Rectangle           PixelToLogic( const Rectangle& rDeviceRect ) const;
     Polygon             PixelToLogic( const Polygon& rDevicePoly ) const;
-    basegfx::B2DPolygon PixelToLogic( const basegfx::B2DPolygon& rDevicePoly ) const;
     PolyPolygon         PixelToLogic( const PolyPolygon& rDevicePolyPoly ) const;
-    basegfx::B2DPolyPolygon PixelToLogic( const basegfx::B2DPolyPolygon& rDevicePolyPoly ) const;
     Region              PixelToLogic( const Region& rDeviceRegion ) const;
     Point               PixelToLogic( const Point& rDevicePt,
                                       const MapMode& rMapMode ) const;
@@ -1034,9 +1020,6 @@ public:
                                       const MapMode& rMapMode ) const;
     basegfx::B2DPolyPolygon PixelToLogic( const basegfx::B2DPolyPolygon& rDevicePolyPoly,
                                           const MapMode& rMapMode ) const;
-    Region              PixelToLogic( const Region& rDeviceRegion,
-                                      const MapMode& rMapMode ) const;
-
     Point               LogicToLogic( const Point&      rPtSource,
                                       const MapMode*    pMapModeSource,
                                       const MapMode*    pMapModeDest ) const;
@@ -1044,10 +1027,6 @@ public:
                                       const MapMode*    pMapModeSource,
                                       const MapMode*    pMapModeDest ) const;
     Rectangle           LogicToLogic( const Rectangle&  rRectSource,
-                                      const MapMode*    pMapModeSource,
-                                      const MapMode*    pMapModeDest ) const;
-    long*               LogicToLogic( long*             pX,
-                                      sal_uInt16            nCount,
                                       const MapMode*    pMapModeSource,
                                       const MapMode*    pMapModeDest ) const;
     static Point        LogicToLogic( const Point&      rPtSource,
@@ -1066,9 +1045,6 @@ public:
     static basegfx::B2DPolygon LogicToLogic( const basegfx::B2DPolygon& rPoly,
                                              const MapMode&    rMapModeSource,
                                              const MapMode&    rMapModeDest );
-    static basegfx::B2DPolyPolygon LogicToLogic( const basegfx::B2DPolyPolygon& rPolyPoly,
-                                                 const MapMode&    rMapModeSource,
-                                                 const MapMode&    rMapModeDest );
 
     Size                GetOutputSizePixel() const
                             { return Size( mnOutWidth, mnOutHeight ); }
@@ -1099,7 +1075,6 @@ public:
                             xub_StrLen nIndex = 0, xub_StrLen nLen = STRING_LEN ) const;
 
     long                GetMinKashida() const;
-    long                GetMinKashida( const Font& rFont ) const;
 
     // i60594
     // validate kashida positions against the current font
@@ -1211,14 +1186,6 @@ public:
                                             ControlState nState,
                                             const ImplControlValue& aValue,
                                             ::rtl::OUString aCaption );
-
-     // Request rendering of a caption string for a control
-    sal_Bool                DrawNativeControlText(  ControlType nType,
-                                                ControlPart nPart,
-                                                const Rectangle& rControlRegion,
-                                                ControlState nState,
-                                                const ImplControlValue& aValue,
-                                                ::rtl::OUString aCaption );
 
     // Query the native control's actual drawing region (including adornment)
     sal_Bool                GetNativeControlRegion( ControlType nType,

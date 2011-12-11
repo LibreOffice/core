@@ -466,15 +466,6 @@ long OutputDevice::ImplLogicWidthToDevicePixel( long nWidth ) const
                              maThresRes.mnThresLogToPixX );
 }
 
-float OutputDevice::ImplFloatLogicWidthToDevicePixel( float fLogicWidth) const
-{
-    if( !mbMap)
-        return fLogicWidth;
-    // TODO: consolidate the calculation into one multiplication
-    float fPixelWidth = (fLogicWidth * mnDPIX * maMapRes.mnMapScNumX) / maMapRes.mnMapScDenomX;
-    return fPixelWidth;
-}
-
 // -----------------------------------------------------------------------
 
 long OutputDevice::ImplLogicHeightToDevicePixel( long nHeight ) const
@@ -507,14 +498,6 @@ long OutputDevice::ImplDevicePixelToLogicWidth( long nWidth ) const
                              maThresRes.mnThresPixToLogX );
 }
 
-float OutputDevice::ImplFloatDevicePixelToLogicWidth( float fPixelWidth) const
-{
-    if( !mbMap)
-        return fPixelWidth;
-    float fLogicHeight = (fPixelWidth * maMapRes.mnMapScDenomX) / (mnDPIX * maMapRes.mnMapScNumX);
-    return fLogicHeight;
-}
-
 // -----------------------------------------------------------------------
 
 long OutputDevice::ImplDevicePixelToLogicHeight( long nHeight ) const
@@ -526,15 +509,6 @@ long OutputDevice::ImplDevicePixelToLogicHeight( long nHeight ) const
                              maMapRes.mnMapScNumY, maMapRes.mnMapScDenomY,
                              maThresRes.mnThresPixToLogY );
 }
-
-float OutputDevice::ImplFloatDevicePixelToLogicHeight( float fPixelHeight) const
-{
-    if( !mbMap)
-        return fPixelHeight;
-    float fLogicHeight = (fPixelHeight * maMapRes.mnMapScDenomY) / (mnDPIY * maMapRes.mnMapScNumY);
-    return fLogicHeight;
-}
-
 
 // -----------------------------------------------------------------------
 
@@ -1166,26 +1140,6 @@ PolyPolygon OutputDevice::LogicToPixel( const PolyPolygon& rLogicPolyPoly ) cons
 
 // -----------------------------------------------------------------------
 
-basegfx::B2DPolygon OutputDevice::LogicToPixel( const basegfx::B2DPolygon& rLogicPoly ) const
-{
-    basegfx::B2DPolygon aTransformedPoly = rLogicPoly;
-    const ::basegfx::B2DHomMatrix& rTransformationMatrix = GetViewTransformation();
-    aTransformedPoly.transform( rTransformationMatrix );
-    return aTransformedPoly;
-}
-
-// -----------------------------------------------------------------------
-
-basegfx::B2DPolyPolygon OutputDevice::LogicToPixel( const basegfx::B2DPolyPolygon& rLogicPolyPoly ) const
-{
-    basegfx::B2DPolyPolygon aTransformedPoly = rLogicPolyPoly;
-    const ::basegfx::B2DHomMatrix& rTransformationMatrix = GetViewTransformation();
-    aTransformedPoly.transform( rTransformationMatrix );
-    return aTransformedPoly;
-}
-
-// -----------------------------------------------------------------------
-
 Region OutputDevice::LogicToPixel( const Region& rLogicRegion ) const
 {
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
@@ -1381,58 +1335,6 @@ basegfx::B2DPolyPolygon OutputDevice::LogicToPixel( const basegfx::B2DPolyPolygo
 
 // -----------------------------------------------------------------------
 
-basegfx::B2DPolygon OutputDevice::LogicToPixel( const basegfx::B2DPolygon& rLogicPoly,
-                                                const MapMode& rMapMode ) const
-{
-    basegfx::B2DPolygon aTransformedPoly = rLogicPoly;
-    const ::basegfx::B2DHomMatrix& rTransformationMatrix = GetViewTransformation( rMapMode );
-    aTransformedPoly.transform( rTransformationMatrix );
-    return aTransformedPoly;
-}
-
-// -----------------------------------------------------------------------
-
-Region OutputDevice::LogicToPixel( const Region& rLogicRegion,
-                                   const MapMode& rMapMode ) const
-{
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
-    DBG_CHKOBJ( &rLogicRegion, Region, ImplDbgTestRegion );
-
-    RegionType eType = rLogicRegion.GetType();
-
-    if ( rMapMode.IsDefault() || (eType == REGION_EMPTY) || (eType == REGION_NULL) )
-        return rLogicRegion;
-
-    Region          aRegion;
-    PolyPolygon*    pPolyPoly = rLogicRegion.ImplGetImplRegion()->mpPolyPoly;
-
-    if( pPolyPoly )
-        aRegion = Region( LogicToPixel( *pPolyPoly, rMapMode ) );
-    else
-    {
-        long                nX;
-        long                nY;
-        long                nWidth;
-        long                nHeight;
-        ImplRegionInfo      aInfo;
-        sal_Bool                bRegionRect;
-
-        aRegion.ImplBeginAddRect();
-        bRegionRect = rLogicRegion.ImplGetFirstRect( aInfo, nX, nY, nWidth, nHeight );
-        while ( bRegionRect )
-        {
-            Rectangle aRect( Point( nX, nY ), Size( nWidth, nHeight ) );
-            aRegion.ImplAddRect( LogicToPixel( aRect, rMapMode ) );
-            bRegionRect = rLogicRegion.ImplGetNextRect( aInfo, nX, nY, nWidth, nHeight );
-        }
-        aRegion.ImplEndAddRect();
-    }
-
-    return aRegion;
-}
-
-// -----------------------------------------------------------------------
-
 Point OutputDevice::PixelToLogic( const Point& rDevicePt ) const
 {
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
@@ -1539,26 +1441,6 @@ PolyPolygon OutputDevice::PixelToLogic( const PolyPolygon& rDevicePolyPoly ) con
         rPoly = PixelToLogic( rPoly );
     }
     return aPolyPoly;
-}
-
-// -----------------------------------------------------------------------
-
-basegfx::B2DPolygon OutputDevice::PixelToLogic( const basegfx::B2DPolygon& rPixelPoly ) const
-{
-    basegfx::B2DPolygon aTransformedPoly = rPixelPoly;
-    const ::basegfx::B2DHomMatrix& rTransformationMatrix = GetInverseViewTransformation();
-    aTransformedPoly.transform( rTransformationMatrix );
-    return aTransformedPoly;
-}
-
-// -----------------------------------------------------------------------
-
-basegfx::B2DPolyPolygon OutputDevice::PixelToLogic( const basegfx::B2DPolyPolygon& rPixelPolyPoly ) const
-{
-    basegfx::B2DPolyPolygon aTransformedPoly = rPixelPolyPoly;
-    const ::basegfx::B2DHomMatrix& rTransformationMatrix = GetInverseViewTransformation();
-    aTransformedPoly.transform( rTransformationMatrix );
-    return aTransformedPoly;
 }
 
 // -----------------------------------------------------------------------
@@ -1760,47 +1642,6 @@ basegfx::B2DPolyPolygon OutputDevice::PixelToLogic( const basegfx::B2DPolyPolygo
     const ::basegfx::B2DHomMatrix& rTransformationMatrix = GetInverseViewTransformation( rMapMode );
     aTransformedPoly.transform( rTransformationMatrix );
     return aTransformedPoly;
-}
-
-// -----------------------------------------------------------------------
-
-Region OutputDevice::PixelToLogic( const Region& rDeviceRegion,
-                                   const MapMode& rMapMode ) const
-{
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
-    DBG_CHKOBJ( &rDeviceRegion, Region, ImplDbgTestRegion );
-
-    RegionType eType = rDeviceRegion.GetType();
-
-    if ( rMapMode.IsDefault() || (eType == REGION_EMPTY) || (eType == REGION_NULL) )
-        return rDeviceRegion;
-
-    Region          aRegion;
-    PolyPolygon*    pPolyPoly = rDeviceRegion.ImplGetImplRegion()->mpPolyPoly;
-
-    if ( pPolyPoly )
-        aRegion = Region( PixelToLogic( *pPolyPoly, rMapMode ) );
-    else
-    {
-        long                nX;
-        long                nY;
-        long                nWidth;
-        long                nHeight;
-        ImplRegionInfo      aInfo;
-        sal_Bool                bRegionRect;
-
-        aRegion.ImplBeginAddRect();
-        bRegionRect = rDeviceRegion.ImplGetFirstRect( aInfo, nX, nY, nWidth, nHeight );
-        while ( bRegionRect )
-        {
-            Rectangle aRect( Point( nX, nY ), Size( nWidth, nHeight ) );
-            aRegion.ImplAddRect( PixelToLogic( aRect, rMapMode ) );
-            bRegionRect = rDeviceRegion.ImplGetNextRect( aInfo, nX, nY, nWidth, nHeight );
-        }
-        aRegion.ImplEndAddRect();
-    }
-
-    return aRegion;
 }
 
 // -----------------------------------------------------------------------
@@ -2103,24 +1944,6 @@ Rectangle OutputDevice::LogicToLogic( const Rectangle& rRectSource,
 
 // -----------------------------------------------------------------------
 
-long* OutputDevice::LogicToLogic( long* pX, sal_uInt16 nCount,
-                                  const MapMode* pMapModeSource,
-                                  const MapMode* pMapModeDest ) const
-{
-    ENTER1( pX, pMapModeSource, pMapModeDest );
-
-    for( ; nCount; nCount--, pX++ )
-    {
-        *pX = fn5( *pX,
-                   aMapResSource.mnMapScNumX, aMapResDest.mnMapScDenomX,
-                   aMapResSource.mnMapScDenomX, aMapResDest.mnMapScNumX );
-    }
-
-    return NULL;
-}
-
-// -----------------------------------------------------------------------
-
 Point OutputDevice::LogicToLogic( const Point& rPtSource,
                                   const MapMode& rMapModeSource,
                                   const MapMode& rMapModeDest )
@@ -2230,51 +2053,6 @@ basegfx::B2DPolygon OutputDevice::LogicToLogic( const basegfx::B2DPolygon& rPoly
         aTransform.set(1, 2, fZeroPointY);
     }
     basegfx::B2DPolygon aPoly( rPolySource );
-    aPoly.transform( aTransform );
-    return aPoly;
-}
-
-// -----------------------------------------------------------------------
-
-basegfx::B2DPolyPolygon OutputDevice::LogicToLogic( const basegfx::B2DPolyPolygon& rPolySource,
-                                                    const MapMode& rMapModeSource,
-                                                    const MapMode& rMapModeDest )
-{
-    if ( rMapModeSource == rMapModeDest )
-        return rPolySource;
-
-    MapUnit eUnitSource = rMapModeSource.GetMapUnit();
-    MapUnit eUnitDest   = rMapModeDest.GetMapUnit();
-    ENTER2( eUnitSource, eUnitDest );
-
-    basegfx::B2DHomMatrix aTransform;
-
-    if ( rMapModeSource.mpImplMapMode->mbSimple &&
-         rMapModeDest.mpImplMapMode->mbSimple )
-    {
-        ENTER3( eUnitSource, eUnitDest );
-
-        const double fScaleFactor((double)nNumerator / (double)nDenominator);
-        aTransform.set(0, 0, fScaleFactor);
-        aTransform.set(1, 1, fScaleFactor);
-    }
-    else
-    {
-        ENTER4( rMapModeSource, rMapModeDest );
-
-        const double fScaleFactorX(  (double(aMapResSource.mnMapScNumX) *  double(aMapResDest.mnMapScDenomX))
-                                   / (double(aMapResSource.mnMapScDenomX) * double(aMapResDest.mnMapScNumX)) );
-        const double fScaleFactorY(  (double(aMapResSource.mnMapScNumY) *  double(aMapResDest.mnMapScDenomY))
-                                   / (double(aMapResSource.mnMapScDenomY) * double(aMapResDest.mnMapScNumY)) );
-        const double fZeroPointX(double(aMapResSource.mnMapOfsX) * fScaleFactorX - double(aMapResDest.mnMapOfsX));
-        const double fZeroPointY(double(aMapResSource.mnMapOfsY) * fScaleFactorY - double(aMapResDest.mnMapOfsY));
-
-        aTransform.set(0, 0, fScaleFactorX);
-        aTransform.set(1, 1, fScaleFactorY);
-        aTransform.set(0, 2, fZeroPointX);
-        aTransform.set(1, 2, fZeroPointY);
-    }
-    basegfx::B2DPolyPolygon aPoly( rPolySource );
     aPoly.transform( aTransform );
     return aPoly;
 }

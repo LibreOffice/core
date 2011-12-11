@@ -1405,44 +1405,6 @@ Color OutputDevice::GetPixel( const Point& rPt ) const
 
 // ------------------------------------------------------------------
 
-Color* OutputDevice::GetPixel( const Polygon& rPts ) const
-{
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
-
-    Color*          pColors = NULL;
-    const sal_uInt16    nSize = rPts.GetSize();
-
-    if( nSize )
-    {
-        if ( mpGraphics || ((OutputDevice*)this)->ImplGetGraphics() )
-        {
-            if ( mbInitClipRegion )
-                ((OutputDevice*)this)->ImplInitClipRegion();
-
-            if ( !mbOutputClipped )
-            {
-                pColors = new Color[ nSize ];
-
-                for( sal_uInt16 i = 0; i < nSize; i++ )
-                {
-                    Color&          rCol = pColors[ i ];
-                    const Point&    rPt = rPts[ i ];
-                    const SalColor  aSalCol( mpGraphics->GetPixel( ImplLogicXToDevicePixel( rPt.X() ),
-                                                                   ImplLogicYToDevicePixel( rPt.Y() ) , this) );
-
-                    rCol.SetRed( SALCOLOR_RED( aSalCol ) );
-                    rCol.SetGreen( SALCOLOR_GREEN( aSalCol ) );
-                    rCol.SetBlue( SALCOLOR_BLUE( aSalCol ) );
-                }
-            }
-        }
-    }
-
-    return pColors;
-}
-
-// -----------------------------------------------------------------------
-
 void OutputDevice::DrawPixel( const Point& rPt )
 {
     OSL_TRACE( "OutputDevice::DrawPixel()" );

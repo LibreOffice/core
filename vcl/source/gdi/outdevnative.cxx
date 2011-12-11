@@ -258,45 +258,6 @@ sal_Bool OutputDevice::DrawNativeControl( ControlType nType,
     return bRet;
 }
 
-
-// -----------------------------------------------------------------------
-
-sal_Bool OutputDevice::DrawNativeControlText(ControlType nType,
-                            ControlPart nPart,
-                            const Rectangle& rControlRegion,
-                            ControlState nState,
-                            const ImplControlValue& aValue,
-                            ::rtl::OUString aCaption )
-{
-    if( !lcl_enableNativeWidget( *this ) )
-        return sal_False;
-
-    // make sure the current clip region is initialized correctly
-    if ( !mpGraphics )
-        if ( !ImplGetGraphics() )
-            return false;
-
-    if ( mbInitClipRegion )
-        ImplInitClipRegion();
-    if ( mbOutputClipped )
-        return true;
-
-    if ( mbInitLineColor )
-        ImplInitLineColor();
-    if ( mbInitFillColor )
-        ImplInitFillColor();
-
-    // Convert the coordinates from relative to Window-absolute, so we draw
-    // in the correct place in platform code
-    boost::shared_ptr< ImplControlValue > aScreenCtrlValue( lcl_transformControlValue( aValue, *this ) );
-    Rectangle screenRegion( ImplLogicToDevicePixel( rControlRegion ) );
-
-    sal_Bool bRet = mpGraphics->DrawNativeControlText(nType, nPart, screenRegion, nState, *aScreenCtrlValue, aCaption, this );
-
-    return bRet;
-}
-
-
 // -----------------------------------------------------------------------
 
 sal_Bool OutputDevice::GetNativeControlRegion(  ControlType nType,
