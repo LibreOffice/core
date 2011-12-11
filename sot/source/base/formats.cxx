@@ -1325,8 +1325,7 @@ rEntry
 
                                 if( pFDesc->cItems )
                                 {
-                                    ByteString sDesc( pFDesc->fgd[ 0 ].cFileName );
-                                    bRet = 4 < sDesc.Len() && sDesc.Copy( sDesc.Len()-4 ).EqualsIgnoreCaseAscii( ".URL" );
+                                    bRet = (4 < (pFDesc->fgd[ 0 ].cFileName.size())) && sDesc.Copy( sDesc.Len()-4 ).EqualsIgnoreCaseAscii( ".URL" );
                                 }
                             }
                         }
