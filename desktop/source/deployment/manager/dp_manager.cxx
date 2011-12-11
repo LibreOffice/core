@@ -1037,7 +1037,7 @@ Reference<deployment::XPackage> PackageManagerImpl::getDeployedPackage_(
         if (INetContentTypes::parse( data.mediaType, type, subType, &params ))
         {
             INetContentTypeParameter const * param = params.find(
-                ByteString("platform") );
+                rtl::OString("platform") );
             if (param != 0 && !platform_fits( param->m_sValue ))
                 throw lang::IllegalArgumentException(
                     getResourceString(RID_STR_NO_SUCH_PACKAGE) + id,
