@@ -885,9 +885,8 @@ SvStream& HTMLOutFuncs::OutScript( SvStream& rStrm,
         {
             // Wir schreiben das Modul mm ANSI-Zeichensatz, aber mit
             // System-Zeilenumbruechen raus.
-            ByteString sSource(rtl::OUStringToOString(rSource, eDestEnc));
-            sSource.ConvertLineEnd( GetSystemLineEnd() );
-            rStrm << sSource.GetBuffer();
+            rtl::OString sSource(rtl::OUStringToOString(rSource, eDestEnc));
+            rStrm << sSource.getStr() << sNewLine;
         }
         rStrm << sNewLine;
 
