@@ -132,7 +132,7 @@ static bool checkComponent( Reference< XComponent >& rxComponent, const OUString
             }
         }
     }
-    catch( Exception& )
+    catch( const Exception& )
     {
         OSL_FAIL( "checkComponent exception catched!" );
     }
@@ -191,7 +191,7 @@ XMLFilterTestDialog::XMLFilterTestDialog( Window* pParent, ResMgr& rResMgr, cons
             mxGlobalBroadcaster->addEventListener( mxGlobalEventListener );
         }
     }
-    catch( Exception& )
+    catch( const Exception& )
     {
         OSL_FAIL( "XMLFilterTestDialog::XMLFilterTestDialog exception catched!" );
     }
@@ -204,7 +204,7 @@ XMLFilterTestDialog::~XMLFilterTestDialog()
         if( mxGlobalBroadcaster.is() )
             mxGlobalBroadcaster->removeEventListener( mxGlobalEventListener );
     }
-    catch( Exception& )
+    catch( const Exception& )
     {
         OSL_FAIL( "XMLFilterTestDialog::~XMLFilterTestDialog exception catched!" );
     }
@@ -449,7 +449,7 @@ void XMLFilterTestDialog::onExportBrowse()
             }
         }
     }
-    catch(Exception&)
+    catch(const Exception&)
     {
         OSL_FAIL("XMLFilterTestDialog::onExportBrowse exception caught!");
     }
@@ -523,7 +523,7 @@ void XMLFilterTestDialog::doExport( Reference< XComponent > xComp )
                             xGrfResolver = Reference< XGraphicObjectResolver >::query( xDocFac->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.ExportGraphicObjectResolver" )) ) );
                             xObjectResolver = Reference< XEmbeddedObjectResolver >::query( xDocFac->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.ExportEmbeddedObjectResolver" )) ) );
                         }
-                        catch( Exception& )
+                        catch( const Exception& )
                         {
                         }
                     }
@@ -556,7 +556,7 @@ void XMLFilterTestDialog::doExport( Reference< XComponent > xComp )
             }
         }
     }
-    catch( Exception& )
+    catch( const Exception& )
     {
         OSL_FAIL( "XMLFilterTestDialog::doExport exception catched!" );
     }
@@ -689,7 +689,7 @@ void XMLFilterTestDialog::import( const OUString& rURL )
             displayXMLFile( aTempFileURL );
         }
     }
-    catch(Exception&)
+    catch(const Exception&)
     {
         OSL_FAIL("XMLFilterTestDialog::import catched an exception" );
     }
@@ -769,7 +769,7 @@ Reference< XComponent > XMLFilterTestDialog::getFrontMostDocument( const OUStrin
             }
         }
     }
-    catch( Exception& )
+    catch( const Exception& )
     {
         OSL_FAIL( "XMLFilterTestDialog::getFrontMostDocument exception catched!" );
     }

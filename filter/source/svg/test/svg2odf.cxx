@@ -98,7 +98,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         if( xFactory.is() )
             ::comphelper::setProcessServiceFactory( xFactory );
     }
-    catch( uno::Exception& )
+    catch( const uno::Exception& )
     {
     }
 

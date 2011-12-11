@@ -159,7 +159,7 @@ OdfFlatXml::importer(
         {
             saxParser->parseStream(inputSource);
         }
-    catch (Exception &exc)
+    catch (const Exception &exc)
         {
             OString msg = OUStringToOString(exc.Message,
                                             RTL_TEXTENCODING_ASCII_US);

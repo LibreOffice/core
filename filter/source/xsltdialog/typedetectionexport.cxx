@@ -226,7 +226,7 @@ void TypeDetectionExporter::doExport( Reference< XOutputStream > xOS,  const XML
         xHandler->endElement( sComponentData );
         xHandler->endDocument();
     }
-    catch( Exception& )
+    catch( const Exception& )
     {
         OSL_FAIL( "TypeDetectionExporter::doExport exception catched!" );
     }
@@ -256,7 +256,7 @@ void TypeDetectionExporter::addProperty( Reference< XDocumentHandler > xHandler,
         xHandler->ignorableWhitespace ( sWhiteSpace );
         xHandler->endElement( sProp );
     }
-    catch( Exception& )
+    catch( const Exception& )
     {
         OSL_FAIL( "TypeDetectionExporter::addProperty exception catched!" );
     }
@@ -287,7 +287,7 @@ void TypeDetectionExporter::addLocaleProperty( Reference< XDocumentHandler > xHa
         xHandler->ignorableWhitespace ( sWhiteSpace );
         xHandler->endElement( sProp );
     }
-    catch( Exception& )
+    catch( const Exception& )
     {
         OSL_FAIL( "TypeDetectionExporter::addLocaleProperty exception catched!" );
     }

@@ -461,7 +461,7 @@ class stlcomp_removeIfMatchFlags
                 // We are asked for bRemove ! And bMatch = !bRemove => so bRemove = !bMatch .-)
                 return !bMatch;
             }
-            catch(css::container::NoSuchElementException)
+            catch(const css::container::NoSuchElementException &)
             {
                 return true;
             }

@@ -90,7 +90,7 @@ XMLFilterJarHelper::XMLFilterJarHelper( Reference< XMultiServiceFactory >& xMSF 
             sTemplatePath = xCfgMgr->substituteVariables( sTemplatePath );
         }
     }
-    catch(Exception&)
+    catch(const Exception&)
     {
     }
 }
@@ -219,7 +219,7 @@ bool XMLFilterJarHelper::savePackage( const OUString& rPackageURL, const XMLFilt
                         if( pFilter->maImportXSLT.getLength() )
                             addFile( xFilterRoot, xFactory, pFilter->maImportXSLT );
                     }
-                    catch( com::sun::star::container::ElementExistException&)
+                    catch(const com::sun::star::container::ElementExistException&)
                     {
                     // in case of same named import / export XSLT the latter
                     // is ignored
@@ -258,7 +258,7 @@ bool XMLFilterJarHelper::savePackage( const OUString& rPackageURL, const XMLFilt
             return true;
         }
     }
-    catch( Exception& )
+    catch( const Exception& )
     {
         OSL_FAIL( "XMLFilterJarHelper::savePackage exception catched!" );
     }
@@ -334,7 +334,7 @@ void XMLFilterJarHelper::openPackage( const OUString& rPackageURL, XMLFilterVect
             }
         }
     }
-    catch( Exception& )
+    catch( const Exception& )
     {
         OSL_FAIL( "XMLFilterJarHelper::savePackage exception catched!" );
     }
@@ -408,7 +408,7 @@ bool XMLFilterJarHelper::copyFile( Reference< XHierarchicalNameAccess > xIfc, OU
             }
         }
     }
-    catch( Exception& )
+    catch( const Exception& )
     {
         OSL_FAIL( "XMLFilterJarHelper::copyFile exception catched" );
     }

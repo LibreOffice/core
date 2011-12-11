@@ -528,7 +528,7 @@ void xforms_instanceFuction(xmlXPathParserContextPtr ctxt, int nargs)
                 xmlNodePtr pNode = reinterpret_cast< xmlNodePtr >( aTunnel->getSomething(Sequence< sal_Int8 >()) );
                 xmlXPathObjectPtr pObject = xmlXPathNewNodeSet(pNode);
                 xmlXPathReturnNodeSet(ctxt, pObject->nodesetval);
-            } catch (RuntimeException&)
+            } catch (const RuntimeException&)
             {
                 xmlXPathReturnEmptyNodeSet(ctxt);
             }
@@ -556,7 +556,7 @@ void xforms_currentFunction(xmlXPathParserContextPtr ctxt, int nargs)
             xmlXPathObjectPtr pObject = xmlXPathNewNodeSet(pNode);
             xmlXPathReturnNodeSet(ctxt, pObject->nodesetval);
         }
-        catch (RuntimeException&)
+        catch (const RuntimeException&)
         {
             xmlXPathReturnEmptyNodeSet(ctxt);
         }

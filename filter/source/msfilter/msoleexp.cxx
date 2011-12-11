@@ -117,7 +117,7 @@ sal_Bool UseOldMSExport()
                 return bResult;
         }
     }
-    catch( uno::Exception& )
+    catch( const uno::Exception& )
     {
     }
 
@@ -215,13 +215,13 @@ void SvxMSExportOLEObjects::ExportOLEObject( svt::EmbeddedObjectRef& rObj, SvSto
         {
             xStor->storeToURL( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:stream" )), aSeq );
         }
-        catch( uno::Exception& ) {} // #TODO really handle exceptions - interactionalhandler etc. ?
+        catch( const uno::Exception& ) {} // #TODO really handle exceptions - interactionalhandler etc. ?
 
             SotStorageRef xOLEStor = new SotStorage( pStream, sal_True );
             xOLEStor->CopyTo( &rDestStg );
             rDestStg.Commit();
         }
-        catch( uno::Exception& )
+        catch( const uno::Exception& )
         {
             // TODO/LATER: Error handling
             OSL_FAIL( "The object could not be exported!" );
@@ -257,13 +257,13 @@ void SvxMSExportOLEObjects::ExportOLEObject( svt::EmbeddedObjectRef& rObj, SvSto
                         // extension stream
                         aSize = rObj->getVisualAreaSize( embed::Aspects::MSOLE_CONTENT );
                     }
-                    catch( embed::NoVisualAreaSizeException& )
+                    catch( const embed::NoVisualAreaSizeException& )
                     {
                         OSL_FAIL( "Could not get visual area size!\n" );
                         aSize.Width = 5000;
                         aSize.Height = 5000;
                     }
-                    catch( uno::Exception& )
+                    catch( const uno::Exception& )
                     {
                         OSL_FAIL( "Unexpected exception while getting visual area size!\n" );
                         aSize.Width = 5000;
@@ -311,7 +311,7 @@ void SvxMSExportOLEObjects::ExportOLEObject( svt::EmbeddedObjectRef& rObj, SvSto
                         uno::Reference < frame::XStorable > xStor( rObj->getComponent(), uno::UNO_QUERY );
                         xStor->storeToURL( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:stream" )), aSeq );
                     }
-                    catch( uno::Exception& )
+                    catch( const uno::Exception& )
                     {
                         // TODO/LATER: Error handling
                         OSL_FAIL( "The object could not be exported!" );
@@ -339,7 +339,7 @@ void SvxMSExportOLEObjects::ExportOLEObject( svt::EmbeddedObjectRef& rObj, SvSto
             {
                 xPers->storeToEntry( xStor, aTempName, aEmptySeq, aEmptySeq );
             }
-            catch ( uno::Exception& )
+            catch ( const uno::Exception& )
             {}
 
             SotStorageRef xOLEStor = SotStorage::OpenOLEStorage( xStor, aTempName, STREAM_STD_READ );

@@ -354,7 +354,7 @@ void TIFFReader::ReadTagData( sal_uInt16 nTagType, sal_uInt32 nDataLen)
                 {
                     pStripOffsets = new sal_uLong[ nNumStripOffsets ];
                 }
-                    catch (std::bad_alloc)
+                    catch (const std::bad_alloc &)
                 {
                     pStripOffsets = NULL;
                     nNumStripOffsets = 0;
@@ -400,7 +400,7 @@ void TIFFReader::ReadTagData( sal_uInt16 nTagType, sal_uInt32 nDataLen)
                 {
                     pStripByteCounts = new sal_uLong[ nNumStripByteCounts ];
                 }
-                    catch (std::bad_alloc)
+                    catch (const std::bad_alloc &)
                 {
                     pStripByteCounts = NULL;
                     nNumStripByteCounts = 0;
@@ -1298,7 +1298,7 @@ sal_Bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
                         {
                             pMap[ j ] = new sal_uInt8[ nBytesPerRow ];
                         }
-                        catch (std::bad_alloc)
+                        catch (const std::bad_alloc &)
                         {
                             pMap[ j ] = NULL;
                             bStatus = sal_False;

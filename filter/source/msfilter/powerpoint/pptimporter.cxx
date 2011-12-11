@@ -67,7 +67,7 @@ PptImporter::PptImporter( const REF( NMSP_LANG::XMultiServiceFactory )& rxMgr ) 
         xHdl      = REF( NMSP_SAX::XDocumentHandler ) ( xFact->createInstance( sService ), NMSP_UNO::UNO_QUERY );
         xImporter = REF( NMSP_DOCUMENT::XImporter )( xHdl, NMSP_UNO::UNO_QUERY );
     }
-    catch( NMSP_UNO::Exception & )
+    catch( const NMSP_UNO::Exception & )
     {
     }
 }

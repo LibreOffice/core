@@ -121,7 +121,7 @@ void PropertySetBase::notifyAndCachePropertyValue( sal_Int32 nHandle )
             // insert into the cache
             aPos = m_aCache.insert( PropertyValueCache::value_type( nHandle, aEmptyValue ) ).first;
         }
-        catch( Exception& )
+        catch( const Exception& )
         {
             OSL_FAIL( "PropertySetBase::notifyAndCachePropertyValue: this is not expected to fail!" );
         }

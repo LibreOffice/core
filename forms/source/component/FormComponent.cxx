@@ -2068,7 +2068,7 @@ sal_Bool SAL_CALL OBoundControlModel::commit() throw(RuntimeException)
             if ( m_xColumnUpdate.is() )
                 bSuccess = commitControlValueToDbColumn( sal_False );
         }
-        catch(Exception&)
+        catch(const Exception&)
         {
             bSuccess = sal_False;
         }
@@ -2527,7 +2527,7 @@ void OBoundControlModel::reset() throw (RuntimeException)
 
             bIsNull = m_xColumn->wasNull();
         }
-        catch(Exception&)
+        catch(const Exception&)
         {
             OSL_FAIL("OBoundControlModel::reset: this should have succeeded in all cases!");
         }

@@ -61,7 +61,7 @@ void CustomToolBarImportHelper::showToolbar( const rtl::OUString& rName )
         uno::Reference< frame::XLayoutManager > xLayoutMgr( xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("LayoutManager") ) ), uno::UNO_QUERY_THROW );
         xLayoutMgr->showElement( rName );
     }
-    catch( uno::Exception& ) {}
+    catch( const uno::Exception& ) {}
 }
 
 void CustomToolBarImportHelper::ScaleImage( uno::Reference< graphic::XGraphic >& xGraphic, long nNewSize )
@@ -192,7 +192,7 @@ CustomToolBarImportHelper::createMenu( const rtl::OUString& rName, const uno::Re
             }
         }
     }
-    catch( uno::Exception& )
+    catch( const uno::Exception& )
     {
         bRes = false;
     }

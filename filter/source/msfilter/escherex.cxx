@@ -2058,7 +2058,7 @@ void ConvertEnhancedCustomShapeEquation( SdrObjCustomShape* pCustoShape,
                         rEquations.push_back( aEquation );
                     }
                 }
-                catch ( EnhancedCustomShape::ParseError& )
+                catch ( const EnhancedCustomShape::ParseError& )
                 {
                     EnhancedCustomShapeEquation aEquation;      // ups, we should not be here,
                     aEquation.nOperation = 0;                   // creating a default equation with value 1
@@ -3277,7 +3277,7 @@ MSO_SPT EscherPropertyContainer::GetCustomShapeType( const uno::Reference< drawi
                 }
             }
         }
-        catch( ::com::sun::star::uno::Exception& )
+        catch( const ::com::sun::star::uno::Exception& )
         {
         }
     }
@@ -3386,7 +3386,7 @@ sal_Bool EscherPropertyValueHelper::GetPropertyValue(
             if ( aXPropSetInfo.is() )
                 bRetValue = aXPropSetInfo->hasPropertyByName( rString );
         }
-        catch( ::com::sun::star::uno::Exception& )
+        catch( const ::com::sun::star::uno::Exception& )
         {
             bRetValue = sal_False;
         }
@@ -3399,7 +3399,7 @@ sal_Bool EscherPropertyValueHelper::GetPropertyValue(
             if ( !rAny.hasValue() )
                 bRetValue = sal_False;
         }
-        catch( ::com::sun::star::uno::Exception& )
+        catch( const ::com::sun::star::uno::Exception& )
         {
             bRetValue = sal_False;
         }
@@ -3419,7 +3419,7 @@ sal_Bool EscherPropertyValueHelper::GetPropertyValue(
         if ( aXPropState.is() )
             eRetValue = aXPropState->getPropertyState( rPropertyName );
     }
-    catch( ::com::sun::star::uno::Exception& )
+    catch( const ::com::sun::star::uno::Exception& )
     {
     }
     return eRetValue;

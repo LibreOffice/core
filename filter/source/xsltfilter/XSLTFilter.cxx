@@ -203,7 +203,7 @@ m_rServiceFactory(r), m_bTerminated(sal_False), m_bError(sal_False)
                 if (nPos != -1)
                     sExpandedUrl = sExpandedUrl.copy(nPos + 20);
             }
-        catch (Exception&)
+        catch (const Exception&)
             {
             }
         return sExpandedUrl;
@@ -401,9 +401,9 @@ m_rServiceFactory(r), m_bTerminated(sal_False), m_bError(sal_False)
                         return !m_bError;
                     }
 #if OSL_DEBUG_LEVEL > 0
-                catch( Exception& exc)
+                catch( const Exception& exc)
 #else
-                catch (Exception&)
+                catch (const Exception&)
 #endif
                     {
                         // something went wrong

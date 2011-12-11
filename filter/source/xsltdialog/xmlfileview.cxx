@@ -630,7 +630,7 @@ void XMLSourceFileDialog::onValidate()
             xImporter->importer( aSourceData, xWriter, aFilterUserData );
         }
     }
-    catch(Exception& e)
+    catch(const Exception& e)
     {
         String sErr( e.Message );
         sal_uInt16 nEntry = maLBOutput.InsertEntry( sErr );

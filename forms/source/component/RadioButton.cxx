@@ -421,7 +421,7 @@ sal_Bool ORadioButtonModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
             if ( nValue == 1 )
                 xField->setPropertyValue( PROPERTY_VALUE, makeAny( getReferenceValue() ) );
         }
-        catch(Exception&)
+        catch(const Exception&)
         {
             OSL_FAIL("ORadioButtonModel::commitControlValueToDbColumn: could not commit !");
         }

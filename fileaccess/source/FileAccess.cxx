@@ -396,7 +396,7 @@ sal_Bool OFileAccess::isFolder( const rtl::OUString& FileURL )
         ucbhelper::Content aCnt( aURLObj.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment );
         bRet = aCnt.isFolder();
     }
-    catch (Exception &) {}
+    catch (const Exception &) {}
     return bRet;
 }
 
@@ -600,7 +600,7 @@ sal_Bool OFileAccess::exists( const rtl::OUString& FileURL )
                 xStream->closeInput();
         }
     }
-    catch (Exception &) {}
+    catch (const Exception &) {}
     return bRet;
 }
 

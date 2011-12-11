@@ -1066,7 +1066,7 @@ sal_Bool ImplEESdrObject::ImplGetPropertyValue( const sal_Unicode* rString )
             if( mAny.hasValue() )
                 bRetValue = sal_True;
         }
-        catch( ::com::sun::star::uno::Exception& )
+        catch( const ::com::sun::star::uno::Exception& )
         {
             bRetValue = sal_False;
         }
@@ -1087,7 +1087,7 @@ sal_Bool ImplEESdrObject::ImplGetPropertyValue( const Reference< XPropertySet >&
             if( 0 != mAny.get() )
                 bRetValue = sal_True;
         }
-        catch( ::com::sun::star::uno::Exception& )
+        catch( const ::com::sun::star::uno::Exception& )
         {
             bRetValue = sal_False;
         }

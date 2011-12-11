@@ -323,7 +323,7 @@ MacroResolvedInfo resolveVBAMacro( SfxObjectShell* pShell, const rtl::OUString& 
     {
         xPrjNameCache.set( xSF->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.VBAProjectNameProvider" ) ) ), uno::UNO_QUERY );
     }
-    catch( uno::Exception& )    // createInstance may throw
+    catch( const uno::Exception& )    // createInstance may throw
     {
     }
 #endif
@@ -358,7 +358,7 @@ MacroResolvedInfo resolveVBAMacro( SfxObjectShell* pShell, const rtl::OUString& 
                 uno::Reference< script::vba::XVBACompatibility > xVBAMode( xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("BasicLibraries") ) ), uno::UNO_QUERY_THROW );
                 sThisProject = xVBAMode->getProjectName();
             }
-            catch( uno::Exception& /*e*/) {}
+            catch( const uno::Exception& /*e*/) {}
 
         sSearchList.push_back( sThisProject ); // First Lib to search
 
@@ -465,7 +465,7 @@ sal_Bool executeMacro( SfxObjectShell* pShell, const String& sMacroName, uno::Se
         }
         bRes = ( nErr == ERRCODE_NONE );
     }
-    catch ( uno::Exception& )
+    catch ( const uno::Exception& )
     {
        bRes = sal_False;
     }

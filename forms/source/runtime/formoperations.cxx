@@ -979,7 +979,7 @@ namespace frm
                         m_xParser->setOrder( sNewValue );
                 }
             }
-            catch( Exception& )
+            catch( const Exception& )
             {
                 OSL_FAIL( "FormOperations::propertyChange: caught an exception while updating the parser!" );
             }

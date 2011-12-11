@@ -178,7 +178,7 @@ sal_Bool ONumericModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
             {
                 m_xColumnUpdate->updateDouble( getDouble( aControlValue ) );
             }
-            catch(Exception&)
+            catch(const Exception&)
             {
                 return sal_False;
             }

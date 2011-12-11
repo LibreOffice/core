@@ -83,7 +83,7 @@ XMLFilterTabPageXSLT::XMLFilterTabPageXSLT( Window* pParent, ResMgr& rResMgr, co
         if( xCfgMgr.is() )
             sInstPath = xCfgMgr->substituteVariables( sInstPath );
     }
-    catch(Exception&)
+    catch(const Exception&)
     {
         OSL_FAIL( "XMLFilterTabPageXSLT::XMLFilterTabPageXSLT exception catched!" );
     }

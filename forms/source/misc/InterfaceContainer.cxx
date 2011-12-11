@@ -541,7 +541,7 @@ namespace
                     xObjProps->setPropertyValue( PROPERTY_NAME, makeAny( FRM_RES_STRING( RID_STR_CONTROL_SUBSTITUTED_NAME ) ) );
                     xObjProps->setPropertyValue( PROPERTY_TAG, makeAny( FRM_RES_STRING( RID_STR_CONTROL_SUBSTITUTED_EPXPLAIN ) ) );
                 }
-                catch(Exception&)
+                catch(const Exception&)
                 {
                 }
             }
@@ -576,9 +576,8 @@ void SAL_CALL OInterfaceContainer::read( const Reference< XObjectInputStream >& 
             {
                 xObj = _rxInStream->readObject();
             }
-            catch(WrongFormatException& e)
+            catch(const WrongFormatException&)
             {
-                (void)e;    // make compiler happy
                 // the object could not be read
                 // create a object (so the readEvents below will assign the events to the right controls)
                 xObj = lcl_createPlaceHolder( m_xServiceFactory );
@@ -586,7 +585,7 @@ void SAL_CALL OInterfaceContainer::read( const Reference< XObjectInputStream >& 
                     // couldn't handle it
                     throw;
             }
-            catch(Exception&)
+            catch(const Exception&)
             {
                 // unsere Map leeren
                 while (!m_aItems.empty())

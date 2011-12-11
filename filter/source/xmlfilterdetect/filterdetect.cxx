@@ -217,7 +217,7 @@ bool isXMLStream(const ::rtl::OString& aHeaderStrm)
             i++;
         }
     }
-    catch (Exception &)
+    catch (const Exception &)
     {
         OSL_FAIL( "An Exception occurred while opening File stream" );
     }

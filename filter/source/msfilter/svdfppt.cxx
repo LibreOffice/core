@@ -2719,7 +2719,7 @@ void ImportComment10( SvxMSDffManager& rMan, SvStream& rStCtrl, SdrPage* pPage, 
         uno::Reference< text::XText > xText( xAnnotation->getTextRange() );
         xText->setString( sText );
     }
-    catch( uno::Exception& )
+    catch( const uno::Exception& )
     {
 
     }
@@ -7206,7 +7206,7 @@ void MergeCells( const Reference< XTable >& xTable, sal_Int32 nCol, sal_Int32 nR
        if( xRange->isMergeable() )
                xRange->merge();
    }
-   catch( Exception& )
+   catch( const Exception& )
    {
        DBG_ASSERT( false, "exception caught!" );
    }
@@ -7311,7 +7311,7 @@ void ApplyCellAttributes( const SdrObject* pObj, Reference< XCell >& xCell )
             }
         }
     }
-    catch( Exception& )
+    catch( const Exception& )
     {
     }
 }
@@ -7376,7 +7376,7 @@ void ApplyCellLineAttributes( const SdrObject* pLine, Reference< XTable >& xTabl
             ++aIter;
         }
     }
-    catch( Exception& )
+    catch( const Exception& )
     {
     }
 }
@@ -7516,7 +7516,7 @@ SdrObject* SdrPowerPointImport::CreateTable( SdrObject* pGroup, sal_uInt32* pTab
 
                 SdrObject::Free( pGroup );
             }
-            catch( Exception& )
+            catch( const Exception& )
             {
                 pTable->uno_unlock();
                 SdrObject* pObj = pTable;

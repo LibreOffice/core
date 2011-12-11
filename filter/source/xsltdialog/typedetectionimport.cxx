@@ -87,7 +87,7 @@ void TypeDetectionImporter::doImport( Reference< XMultiServiceFactory >& xMSF, R
             pImporter->fillFilterVector( rFilters );
         }
     }
-    catch( Exception& /* e */ )
+    catch( const Exception& /* e */ )
     {
         OSL_FAIL( "TypeDetectionImporter::doImport exception catched!" );
     }

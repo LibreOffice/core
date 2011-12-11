@@ -263,7 +263,7 @@ sal_Bool PDFExport::ExportSelection( vcl::PDFWriter& rPDFWriter,
             }
         }
     }
-    catch( RuntimeException )
+    catch(const RuntimeException &)
     {
     }
     return bRet;
@@ -307,7 +307,7 @@ void PDFExportStreamDoc::write( const Reference< XOutputStream >& xStream )
             xStore->storeToURL( OUString( RTL_CONSTASCII_USTRINGPARAM( "private:stream" ) ),
                                 aArgs );
         }
-        catch( IOException& )
+        catch( const IOException& )
         {
         }
     }

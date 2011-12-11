@@ -598,7 +598,7 @@ void OComboBoxModel::loadData( bool _bForce )
             xListCursor.reset( m_aListRowSet.execute() );
         }
     }
-    catch(SQLException& eSQL)
+    catch(const SQLException& eSQL)
     {
         onError(eSQL, FRM_RES_STRING(RID_BASELISTBOX_ERROR_FILLLIST));
         return;
@@ -670,7 +670,7 @@ void OComboBoxModel::loadData( bool _bForce )
                 break;
         }
     }
-    catch(SQLException& eSQL)
+    catch(const SQLException& eSQL)
     {
         onError(eSQL, FRM_RES_STRING(RID_BASELISTBOX_ERROR_FILLLIST));
         return;

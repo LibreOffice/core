@@ -66,7 +66,7 @@ CSubmission::SubmissionResult CSubmissionPut::submit(const CSS::uno::Reference< 
 
         // no content as a result of put...
 
-    } catch (Exception&)
+    } catch (const Exception&)
     {
         // XXX
         OSL_FAIL("Exception during UCB operatration.");

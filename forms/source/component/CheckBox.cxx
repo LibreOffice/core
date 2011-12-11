@@ -258,7 +258,7 @@ sal_Bool OCheckBoxModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
                     OSL_FAIL("OCheckBoxModel::commitControlValueToDbColumn: invalid value !");
             }
         }
-        catch(Exception&)
+        catch(const Exception&)
         {
             OSL_FAIL("OCheckBoxModel::commitControlValueToDbColumn: could not commit !");
         }

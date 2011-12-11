@@ -842,7 +842,7 @@ ImportCGM( String& rFileName, uno::Reference< frame::XModel > & rXModel, sal_uIn
                 }
             }
         }
-        catch( ::com::sun::star::uno::Exception& )
+        catch( const ::com::sun::star::uno::Exception& )
         {
             nStatus = 0;
         }

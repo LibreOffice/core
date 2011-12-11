@@ -133,7 +133,7 @@ void OCurrencyModel::implConstruct()
                 m_xAggregateSet->setPropertyValue(PROPERTY_CURRSYM_POSITION, makeAny(bPrependCurrencySymbol));
             }
         }
-        catch(Exception&)
+        catch(const Exception&)
         {
             OSL_FAIL( "OCurrencyModel::implConstruct: caught an exception while initializing the aggregate!" );
         }
@@ -224,7 +224,7 @@ sal_Bool OCurrencyModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
             {
                 m_xColumnUpdate->updateDouble( getDouble( aControlValue ) );
             }
-            catch(Exception&)
+            catch(const Exception&)
             {
                 return sal_False;
             }

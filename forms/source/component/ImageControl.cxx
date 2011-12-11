@@ -871,7 +871,7 @@ bool OImageControlControl::implInsertGraphics()
             return true;
         }
     }
-    catch(Exception&)
+    catch(const Exception&)
     {
         OSL_FAIL("OImageControlControl::implInsertGraphics: caught an exception while attempting to execute the FilePicker!");
     }

@@ -198,9 +198,9 @@ sal_Bool SAL_CALL XmlFilterAdaptor::importImpl( const Sequence< ::com::sun::star
         }
     }
 #if OSL_DEBUG_LEVEL > 0
-    catch( Exception& e )
+    catch( const Exception& e )
 #else
-    catch( Exception& )
+    catch( const Exception& )
 #endif
     {
         if (xStatusIndicator.is())
@@ -320,9 +320,9 @@ sal_Bool SAL_CALL XmlFilterAdaptor::exportImpl( const Sequence< ::com::sun::star
         }
     }
 #if OSL_DEBUG_LEVEL > 0
-    catch( Exception& exE )
+    catch( const Exception& exE )
 #else
-    catch( Exception& )
+    catch( const Exception& )
 #endif
     {
         OSL_FAIL( ::rtl::OUStringToOString( exE.Message, RTL_TEXTENCODING_ASCII_US).getStr());

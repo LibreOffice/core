@@ -589,7 +589,7 @@ void OFormattedModel::_propertyChanged( const com::sun::star::beans::PropertyCha
                         calculateExternalValueType();
                     }
                 }
-                catch(Exception&)
+                catch(const Exception&)
                 {
                 }
             }
@@ -888,7 +888,7 @@ void OFormattedModel::write(const Reference<XObjectOutputStream>& _rxOutStream) 
                 Any aEffectiveValue;
         if (m_xAggregateSet.is())
         {
-            try { aEffectiveValue = m_xAggregateSet->getPropertyValue(PROPERTY_EFFECTIVE_VALUE); } catch(Exception&) { }
+            try { aEffectiveValue = m_xAggregateSet->getPropertyValue(PROPERTY_EFFECTIVE_VALUE); } catch(const Exception&) { }
         }
 
         {
@@ -987,7 +987,7 @@ void OFormattedModel::read(const Reference<XObjectInputStream>& _rxInStream) thr
                     {
                         m_xAggregateSet->setPropertyValue(PROPERTY_EFFECTIVE_VALUE, aEffectiveValue);
                     }
-                    catch(Exception&)
+                    catch(const Exception&)
                     {
                     }
                 }
@@ -1049,7 +1049,7 @@ sal_Bool OFormattedModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
                     m_xColumnUpdate->updateString( getString( aControlValue ) );
                 }
             }
-            catch(Exception&)
+            catch(const Exception&)
             {
                 return sal_False;
             }

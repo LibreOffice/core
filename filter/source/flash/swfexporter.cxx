@@ -161,7 +161,7 @@ sal_Bool FlashExporter::exportAll( Reference< XComponent > xDoc, Reference< XOut
         delete mpWriter;
         mpWriter = new Writer( nOutputWidth, nOutputHeight, mnDocWidth, mnDocHeight, mnJPEGcompressMode  );
     }
-    catch( Exception& )
+    catch( const Exception& )
     {
         OSL_ASSERT( false );
         return false; // no writer, no cookies
@@ -265,7 +265,7 @@ sal_Bool FlashExporter::exportSlides( Reference< XDrawPage > xDrawPage, Referenc
                 return sal_False;
         }
     }
-    catch( Exception& )
+    catch( const Exception& )
     {
         OSL_ASSERT( false );
     }
@@ -370,7 +370,7 @@ sal_Bool FlashExporter::exportSound( Reference< XOutputStream > &xOutputStream, 
         delete mpWriter;
         mpWriter = new Writer( 0, 0, 0, 0 );
     }
-    catch( Exception& )
+    catch( const Exception& )
     {
         OSL_ASSERT( false );
     }
@@ -564,7 +564,7 @@ void FlashExporter::exportShape( Reference< XShape >& xShape, bool bMaster )
                     return;
             }
         }
-        catch( Exception& )
+        catch( const Exception& )
         {
             // TODO: If we are exporting a draw, this property is not available
         }
@@ -642,7 +642,7 @@ void FlashExporter::exportShape( Reference< XShape >& xShape, bool bMaster )
 
             delete pShapeInfo;
     }
-    catch( Exception& )
+    catch( const Exception& )
     {
         OSL_ASSERT(false);
     }

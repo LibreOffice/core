@@ -114,7 +114,7 @@ XMLFilterSettingsDialog::XMLFilterSettingsDialog( Window* pParent, ResMgr& rResM
             sTemplatePath = xCfgMgr->substituteVariables( sTemplatePath );
         }
     }
-    catch(Exception&)
+    catch(const Exception&)
     {
         OSL_FAIL( "XMLFilterSettingsDialog::XMLFilterSettingsDialog exception catched!" );
     }
@@ -432,7 +432,7 @@ OUString XMLFilterSettingsDialog::createUniqueInterfaceName( const OUString& rIn
             }
         }
     }
-    catch( Exception& )
+    catch( const Exception& )
     {
         OSL_FAIL( "XMLFilterSettingsDialog::createUniqueInterfaceName exception catched!" );
     }
@@ -477,7 +477,7 @@ bool XMLFilterSettingsDialog::insertOrEdit( filter_info_impl* pNewInfo, const fi
             if( pOldInfo->maType != pNewInfo->maType )
                 mxTypeDetection->removeByName( pOldInfo->maType );
         }
-        catch( Exception& )
+        catch( const Exception& )
         {
             OSL_FAIL( "XMLFilterSettingsDialog::insertOrEdit exception catched!" );
             bOk = false;
@@ -599,7 +599,7 @@ bool XMLFilterSettingsDialog::insertOrEdit( filter_info_impl* pNewInfo, const fi
                 mxFilterContainer->insertByName( pFilterEntry->maFilterName, aAny );
             }
         }
-        catch( Exception& )
+        catch( const Exception& )
         {
             OSL_FAIL( "XMLFilterSettingsDialog::insertOrEdit exception catched!" );
             bOk = false;
@@ -662,7 +662,7 @@ bool XMLFilterSettingsDialog::insertOrEdit( filter_info_impl* pNewInfo, const fi
                     mxTypeDetection->insertByName( pFilterEntry->maType, aAny );
                 }
             }
-            catch( Exception& )
+            catch( const Exception& )
             {
                 OSL_FAIL( "XMLFilterSettingsDialog::insertOrEdit exception catched!" );
                 bOk = false;
@@ -677,7 +677,7 @@ bool XMLFilterSettingsDialog::insertOrEdit( filter_info_impl* pNewInfo, const fi
                 if( xFlushable.is() )
                     xFlushable->flush();
             }
-            catch( Exception& )
+            catch( const Exception& )
             {
                 OSL_FAIL( "XMLFilterSettingsDialog::insertOrEdit exception catched!" );
                 bOk = false;
@@ -691,7 +691,7 @@ bool XMLFilterSettingsDialog::insertOrEdit( filter_info_impl* pNewInfo, const fi
             {
                 mxFilterContainer->removeByName( pFilterEntry->maFilterName );
             }
-            catch( Exception& )
+            catch( const Exception& )
             {
                 OSL_FAIL( "XMLFilterSettingsDialog::insertOrEdit exception catched!" );
                 bOk = false;
@@ -707,7 +707,7 @@ bool XMLFilterSettingsDialog::insertOrEdit( filter_info_impl* pNewInfo, const fi
                     if( xFlushable.is() )
                         xFlushable->flush();
                 }
-                catch( Exception& )
+                catch( const Exception& )
                 {
                     OSL_FAIL( "XMLFilterSettingsDialog::insertOrEdit exception catched!" );
                     bOk = false;
@@ -720,7 +720,7 @@ bool XMLFilterSettingsDialog::insertOrEdit( filter_info_impl* pNewInfo, const fi
                     {
                         mxTypeDetection->removeByName( pFilterEntry->maType );
                     }
-                    catch( Exception& )
+                    catch( const Exception& )
                     {
                         OSL_FAIL( "XMLFilterSettingsDialog::insertOrEdit exception catched!" );
                     }
@@ -897,7 +897,7 @@ void XMLFilterSettingsDialog::onDelete()
                     delete pInfo;
                 }
             }
-            catch( Exception& )
+            catch( const Exception& )
             {
                 OSL_FAIL( "XMLFilterSettingsDialog::onDelete exception catched!" );
             }
@@ -1239,7 +1239,7 @@ void XMLFilterSettingsDialog::initFilterList()
                             }
                         }
                     }
-                    catch( ::com::sun::star::container::NoSuchElementException& )
+                    catch( const ::com::sun::star::container::NoSuchElementException& )
                     {
                         OSL_FAIL( "Type not found, user error?" ); // TODO: error?
                     }
@@ -1252,7 +1252,7 @@ void XMLFilterSettingsDialog::initFilterList()
 
                 pTempFilter = new filter_info_impl;
             }
-            catch( Exception& )
+            catch( const Exception& )
             {
                 OSL_FAIL( "XMLFilterSettingsDialog::initFilterList exception catched!" );
             }
@@ -1768,7 +1768,7 @@ bool copyStreams( Reference< XInputStream > xIS, Reference< XOutputStream > xOS 
 
         return true;
     }
-    catch(Exception&)
+    catch(const Exception&)
     {
         OSL_FAIL( "copyStreams() exception catched!" );
     }

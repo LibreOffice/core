@@ -236,7 +236,7 @@ void ODateModel::onConnectedDbColumn( const Reference< XInterface >& _rxForm )
             xField->getPropertyValue(PROPERTY_FIELDTYPE) >>= nFieldType;
             m_bDateTimeField = (nFieldType == DataType::TIMESTAMP);
         }
-        catch(Exception&)
+        catch(const Exception&)
         {
         }
     }
@@ -273,7 +273,7 @@ sal_Bool ODateModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
                     m_xColumnUpdate->updateTimestamp( aDateTime );
                 }
             }
-            catch(Exception&)
+            catch(const Exception&)
             {
                 return sal_False;
             }

@@ -7554,7 +7554,7 @@ SdrOle2Obj* SvxMSDffManager::CreateSdrOLEFromStorage(
                         xObj->setVisualAreaSize( nAspect, aAwtSz );
                         //xInplaceObj->EnableSetModified( sal_True );*/
                     }
-                    catch( uno::Exception& )
+                    catch( const uno::Exception& )
                     {
                         OSL_FAIL( "Could not set visual area of the object!\n" );
                     }
@@ -7601,7 +7601,7 @@ sal_Bool SvxMSDffManager::SetPropValue( const uno::Any& rAny, const uno::Referen
             if ( aXPropSetInfo.is() )
                 bRetValue = aXPropSetInfo->hasPropertyByName( rPropName );
         }
-        catch( uno::Exception& )
+        catch( const uno::Exception& )
         {
             bRetValue = sal_False;
         }
@@ -7613,7 +7613,7 @@ sal_Bool SvxMSDffManager::SetPropValue( const uno::Any& rAny, const uno::Referen
             rXPropSet->setPropertyValue( rPropName, rAny );
             bRetValue = sal_True;
         }
-        catch( uno::Exception& )
+        catch( const uno::Exception& )
         {
             bRetValue = sal_False;
         }

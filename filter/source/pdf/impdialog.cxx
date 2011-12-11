@@ -137,7 +137,7 @@ ImpPDFTabDialog::ImpPDFTabDialog( Window* pParent,
                 xView->getSelection() >>= maSelection;
         }
     }
-    catch( RuntimeException )
+    catch(const RuntimeException &)
     {
     }
     mbSelectionPresent = maSelection.hasValue();
@@ -175,7 +175,7 @@ ImpPDFTabDialog::ImpPDFTabDialog( Window* pParent,
                 mbIsWriter = sal_True;
         }
     }
-    catch( RuntimeException )
+    catch(const RuntimeException &)
     {
     }
 
