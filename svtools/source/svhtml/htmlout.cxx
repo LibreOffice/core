@@ -885,7 +885,7 @@ SvStream& HTMLOutFuncs::OutScript( SvStream& rStrm,
         {
             // Wir schreiben das Modul mm ANSI-Zeichensatz, aber mit
             // System-Zeilenumbruechen raus.
-            rtl::OString sSource(rtl::OUStringToOString(rSource, eDestEnc));
+            const rtl::OString sSource(rtl::OUStringToOString(rSource, eDestEnc));
             rStrm << sSource.getStr() << sNewLine;
         }
         rStrm << sNewLine;

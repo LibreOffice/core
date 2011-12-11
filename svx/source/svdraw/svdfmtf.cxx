@@ -951,7 +951,7 @@ void ImpSdrGDIMetaFileImport::MapScaling()
 
 void ImpSdrGDIMetaFileImport::DoAction( MetaCommentAction& rAct, GDIMetaFile* pMtf )
 {
-    ByteString aSkipComment;
+    bool aSkipComment = false;
 
     if (rAct.GetComment().equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("XGRAD_SEQ_BEGIN")))
     {
@@ -1006,17 +1006,17 @@ void ImpSdrGDIMetaFileImport::DoAction( MetaCommentAction& rAct, GDIMetaFile* pM
                 }
             }
 
-            aSkipComment = "XGRAD_SEQ_END";
+            aSkipComment = true;
         }
     }
 
-    if(aSkipComment.Len())
+    if(aSkipComment)
     {
         MetaAction* pSkipAct = pMtf->NextAction();
 
         while( pSkipAct
             && ((pSkipAct->GetType() != META_COMMENT_ACTION )
-                || !(((MetaCommentAction*)pSkipAct)->GetComment().equalsIgnoreAsciiCase(aSkipComment))))
+                || !(((MetaCommentAction*)pSkipAct)->GetComment().equalsIgnoreAsciiCase("XGRAD_SEQ_END"))))
         {
             pSkipAct = pMtf->NextAction();
         }
