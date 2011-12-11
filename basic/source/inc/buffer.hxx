@@ -47,8 +47,6 @@ public:
    ~SbiBuffer();
     void Patch( sal_uInt32, sal_uInt32 );
     void Chain( sal_uInt32 );
-    void Align( sal_Int32 );
-    sal_Bool Add( const void*, sal_uInt16 );
     sal_Bool operator += (const String&);   // save basic-string
     sal_Bool operator += (sal_Int8);        // save character
     sal_Bool operator += (sal_Int16);       // save integer

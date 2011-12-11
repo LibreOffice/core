@@ -98,25 +98,6 @@ sal_Bool SbiBuffer::Check( sal_uInt16 n )
     return sal_True;
 }
 
-// Conditioning of the buffer onto the passed Byte limit
-
-void SbiBuffer::Align( sal_Int32 n )
-{
-    if( nOff % n ) {
-        sal_uInt32 nn =( ( nOff + n ) / n ) * n;
-        if( nn <= UP_LIMIT )
-        {
-            nn = nn - nOff;
-            if( Check( static_cast<sal_uInt16>(nn) ) )
-            {
-                memset( pCur, 0, nn );
-                pCur += nn;
-                nOff = nOff + nn;
-            }
-        }
-    }
-}
-
 // Patch of a Location
 
 void SbiBuffer::Patch( sal_uInt32 off, sal_uInt32 val )
@@ -232,18 +213,5 @@ sal_Bool SbiBuffer::operator +=( const String& n )
     }
     else return sal_False;
 }
-
-sal_Bool SbiBuffer::Add( const void* p, sal_uInt16 len )
-{
-    if( Check( len ) )
-    {
-        memcpy( pCur, p, len );
-        pCur += len;
-        nOff = nOff + len;
-        return sal_True;
-    } else return sal_False;
-}
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
