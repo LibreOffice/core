@@ -126,7 +126,7 @@ namespace dbaui
     {   \
         const sal_Char* pError = impl_CheckInvariants();    \
         if (pError) \
-            OSL_FAIL((ByteString(methodname) += ByteString(": ") += ByteString(pError)).GetBuffer());   \
+            OSL_FAIL(rtl::OStringBuffer(methodname).append(": ").append(pError). makeStringAndClear().getStr());   \
     }
 #else
 #define CHECK_INVARIANTS(methodname)

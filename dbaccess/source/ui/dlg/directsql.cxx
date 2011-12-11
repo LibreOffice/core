@@ -36,6 +36,7 @@
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 #include <tools/diagnose_ex.h>
+#include <rtl/strbuf.hxx>
 
 //........................................................................
 namespace dbaui
@@ -45,6 +46,8 @@ namespace dbaui
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::sdbc;
     using namespace ::com::sun::star::lang;
+
+    using ::rtl::OStringBuffer;
 
     //====================================================================
     //= LargeEntryListBox
