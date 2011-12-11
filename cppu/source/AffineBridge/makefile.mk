@@ -30,7 +30,6 @@ PRJNAME := cppu
 TARGET  := AffineBridge
 
 ENABLE_EXCEPTIONS  := TRUE
-NO_BSYMBOLIC       := TRUE
 USE_DEFFILE        := FALSE
 
 

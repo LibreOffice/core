@@ -31,7 +31,6 @@ TARGET=test_security
 TARGETTYPE=CUI
 LIBTARGET=NO
 ENABLE_EXCEPTIONS=TRUE
-NO_BSYMBOLIC=TRUE
 
 # --- Settings -----------------------------------------------------
 

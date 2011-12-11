@@ -31,7 +31,6 @@ TARGET  := bootstrap.test
 
 
 ENABLE_EXCEPTIONS  := TRUE
-NO_BSYMBOLIC       := TRUE
 USE_DEFFILE        := TRUE
 
 

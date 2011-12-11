@@ -32,7 +32,6 @@ TARGET=unowinreg
 ENABLE_EXCEPTIONS=TRUE
 
 NO_DEFAULT_STL=TRUE
-NO_BSYMBOLIC=TRUE
 USE_DEFFILE=TRUE
 
 # --- Settings -----------------------------------------------------

@@ -48,8 +48,7 @@ my ( $oldoutfile, $outfile, $bootfile, $newline, $comment,
 my ( $CALL_CDECL, $COMMON_OUTDIR,
      $common_build, $NO_REC_RES, $SOLAR_JAVA,
      $SOLAR_PLUGIN, $UPDATER, $VCL,
-     $CC, $CXX,
-     $NO_BSYMBOLIC);
+     $CC, $CXX);
 #
 # Platform dependent constant values.
 my ( $COM, $ARCH, $CPU, $CPUNAME, $GUI, $GUIBASE,
@@ -174,7 +173,6 @@ $SOLAR_JAVA           = "@SOLAR_JAVA@";
 $SOLAR_PLUGIN         = "TRUE";
 $UPDATER              = "YES";
 $VCL                  = "TRUE";
-$NO_BSYMBOLIC         = "TRUE";
 $comment              = "#";           # UNIX script comment character
 $TARFILE_LOCATION = "@TARFILE_LOCATION@"; # where to find tarballs with external sources
 
@@ -1445,7 +1443,6 @@ ToFile( "NO_REC_RES",        $NO_REC_RES,        "e" );
 ToFile( "SOLAR_PLUGIN",      $SOLAR_PLUGIN,      "e" );
 ToFile( "UPDATER",           $UPDATER,           "e" );
 ToFile( "VCL",               $VCL,               "e" );
-ToFile( "NO_BSYMBOLIC",      $NO_BSYMBOLIC,      "e" );
 if ("@ENABLE_DEBUG@" eq "TRUE") {
 ToFile( "debug",             "true",             "e" );
 }

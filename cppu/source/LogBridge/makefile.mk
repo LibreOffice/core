@@ -30,7 +30,6 @@ PRJNAME := cppu
 TARGET  := LogBridge
 
 ENABLE_EXCEPTIONS  := TRUE
-NO_BSYMBOLIC       := TRUE
 USE_DEFFILE        := FALSE
 
 

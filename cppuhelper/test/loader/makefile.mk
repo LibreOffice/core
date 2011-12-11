@@ -31,7 +31,6 @@ TARGET  := loader.test
 
 
 ENABLE_EXCEPTIONS  := TRUE
-NO_BSYMBOLIC       := TRUE
 USE_DEFFILE        := TRUE
 
 .INCLUDE :  settings.mk

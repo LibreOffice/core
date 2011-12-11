@@ -31,7 +31,6 @@ TARGET=chelp
 
 ENABLE_EXCEPTIONS=TRUE
 USE_DEFFILE=TRUE
-NO_BSYMBOLIC=TRUE
 
 
 # --- Settings ---------------------------------------------------------

@@ -35,7 +35,6 @@ UCPHELP_MAJOR=1
 
 ENABLE_EXCEPTIONS=TRUE
 USE_DEFFILE=TRUE
-NO_BSYMBOLIC=TRUE
 
 # --- Settings ---------------------------------------------------------
 

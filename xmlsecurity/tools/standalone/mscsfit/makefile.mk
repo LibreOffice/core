@@ -30,7 +30,6 @@ PRJ=..$/..$/..
 PRJNAME=xmlsecurity
 TARGET=xmlsecurity-mscxsfit
 ENABLE_EXCEPTIONS=TRUE
-NO_BSYMBOLIC=TRUE
 LIBTARGET=NO
 
 

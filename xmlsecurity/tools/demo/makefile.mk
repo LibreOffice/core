@@ -30,7 +30,6 @@ PRJ=..$/..
 PRJNAME=xmlsecurity
 TARGET=demo
 ENABLE_EXCEPTIONS=TRUE
-NO_BSYMBOLIC=TRUE
 LIBTARGET=NO
 
 # --- Settings -----------------------------------------------------

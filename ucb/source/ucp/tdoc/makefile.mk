@@ -32,7 +32,6 @@ UCPTDOC_MAJOR=1
 TARGET=$(ENFORCEDSHLPREFIX)ucptdoc$(UCPTDOC_MAJOR).uno
 ENABLE_EXCEPTIONS=TRUE
 USE_DEFFILE=TRUE
-NO_BSYMBOLIC=TRUE
 
 # --- Settings ---------------------------------------------------------
 

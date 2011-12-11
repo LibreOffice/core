@@ -39,7 +39,6 @@ TARGET=ucp$(UCP_NAME)
 
 ENABLE_EXCEPTIONS=TRUE
 USE_DEFFILE=TRUE
-NO_BSYMBOLIC=TRUE
 
 # --- Settings ---------------------------------------------------------
 

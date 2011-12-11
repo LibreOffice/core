@@ -31,7 +31,6 @@ PRJNAME=bridges
 TARGET=gcc3_uno
 LIBTARGET=no
 ENABLE_EXCEPTIONS=TRUE
-NO_BSYMBOLIC=TRUE
 
 # --- Settings -----------------------------------------------------
 

@@ -30,7 +30,6 @@ PRJ=..
 PRJNAME          :=cppu
 TARGET           :=cppu
 ENABLE_EXCEPTIONS:=TRUE
-NO_BSYMBOLIC     :=TRUE
 USE_DEFFILE      :=TRUE
 
 # --- Settings -----------------------------------------------------

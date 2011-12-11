@@ -28,7 +28,6 @@ PRJ=..$/..
 
 PRJNAME=io
 TARGET=teststm
-NO_BSYMBOLIC=TRUE
 ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------

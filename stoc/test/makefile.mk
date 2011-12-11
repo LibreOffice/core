@@ -41,7 +41,6 @@ TARGET9=testsmgr2
 TARGETTYPE=CUI
 
 ENABLE_EXCEPTIONS=TRUE
-NO_BSYMBOLIC=TRUE
 
 # --- Settings -----------------------------------------------------
 
