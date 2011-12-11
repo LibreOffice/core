@@ -164,7 +164,7 @@ LibreOffice_Dev
 	{
 		variables
 		{
-			PRODUCTNAME LOdev
+			PRODUCTNAME LibO-dev
 			PRODUCTVERSION 3.5
 			PRODUCTEXTENSION 
 			LONG_PRODUCTEXTENSION 
@@ -217,8 +217,8 @@ LibreOffice_Dev
 		compression		5
 		script			setup_osl
 		downloadname	LibO-dev_{productversion}_{os}_install_{languages}
-		langpackdownloadname	LibO_{productversion}_languagepack_{os}_install_{languages}
-		helppackdownloadname	LibO_{productversion}_helppack_{os}_install_{languages}
+		langpackdownloadname	LibO-dev_{productversion}_languagepack_{os}_install_{languages}
+		helppackdownloadname	LibO-dev_{productversion}_helppack_{os}_install_{languages}
 		include			{solarenvpath}/{os}/loader2,.,{localpath}/bin/dev,{localpath}/bin,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor}/desktop-integration/{pkgtype},{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarpath}/pck.{minor}/openoffice_dev,{solarpath}/pck.{minor}/openoffice,{solarpath}/pck.{minor},{solarpath}/xml.{minor}/office/instance,{solarpath}/xml.{minor},../../external/common,{solarenvpath}/{os}/OOo_external
 	}
 }
@@ -265,7 +265,7 @@ LibreOffice_SDK
 {
     Settings
     {
-        downloadname OOo-SDK_{packageversion}_{os}_install_{languages}
+        downloadname LibO-SDK_{packageversion}_{os}_install_{languages}
         variables
         {
             PRODUCTNAME LibreOffice
@@ -308,10 +308,10 @@ LibreOffice_Dev_SDK
 {
     Settings
     {
-        downloadname OOo-Dev-SDK_{packageversion}_{os}_install_{languages}
+        downloadname LibO-Dev-SDK_{packageversion}_{os}_install_{languages}
         variables
         {
-            PRODUCTNAME LOdev
+            PRODUCTNAME LibO-dev
             PRODUCTVERSION 3.5
             PRODUCTEXTENSION
             LONG_PRODUCTEXTENSION
@@ -403,7 +403,7 @@ LibreOffice_Dev_Test
         downloadname LO-Dev-Test_{packageversion}_{os}_install_{languages}
         variables
         {
-            PRODUCTNAME LOdev
+            PRODUCTNAME LibO-dev
             PRODUCTVERSION 3.5
             PRODUCTEXTENSION
             LONG_PRODUCTEXTENSION
