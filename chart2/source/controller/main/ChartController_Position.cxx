@@ -127,7 +127,7 @@ void SAL_CALL ChartController::executeDispatch_PositionAndSize()
 {
     const ::rtl::OUString aCID( m_aSelection.getSelectedCID() );
 
-    if( !aCID.getLength() )
+    if( aCID.isEmpty() )
         return;
 
     awt::Size aSelectedSize;

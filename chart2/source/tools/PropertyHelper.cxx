@@ -138,14 +138,14 @@ OUString lcl_addNamedPropertyUniqueNameToTable(
             OUString aUniqueName;
 
             // check if preferred name is already used
-            if( rPreferredName.getLength())
+            if( !rPreferredName.isEmpty())
             {
                 aIt = ::std::find( aNames.begin(), aNames.end(), rPreferredName );
                 if( aIt == aNames.end())
                     aUniqueName = rPreferredName;
             }
 
-            if( ! aUniqueName.getLength())
+            if( aUniqueName.isEmpty())
             {
                 // create a unique id using the prefix plus a number
                 ::std::vector< sal_Int32 > aNumbers;
@@ -164,7 +164,7 @@ OUString lcl_addNamedPropertyUniqueNameToTable(
                 aUniqueName = rPrefix + OUString::valueOf( nIndex );
             }
 
-            OSL_ASSERT( aUniqueName.getLength());
+            OSL_ASSERT( !aUniqueName.isEmpty());
             xNameContainer->insertByName( aUniqueName, rValue );
             return aUniqueName;
         }

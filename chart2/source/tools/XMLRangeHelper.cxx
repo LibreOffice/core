@@ -272,7 +272,7 @@ bool lcl_getCellRangeAddressFromXMLString(
         bResult = lcl_getCellAddressFromXMLString( rXMLString, nStartPos, nEndPos,
                                                    rOutRange.aUpperLeft,
                                                    rOutRange.aTableName );
-        if( !rOutRange.aTableName.getLength() )
+        if( rOutRange.aTableName.isEmpty() )
             bResult = false;
     }
     else
@@ -281,7 +281,7 @@ bool lcl_getCellRangeAddressFromXMLString(
         bResult = lcl_getCellAddressFromXMLString( rXMLString, nStartPos, nDelimiterPos - 1,
                                                    rOutRange.aUpperLeft,
                                                    rOutRange.aTableName );
-        if( !rOutRange.aTableName.getLength() )
+        if( rOutRange.aTableName.isEmpty() )
             bResult = false;
 
         ::rtl::OUString sTableSecondName;
@@ -292,7 +292,7 @@ bool lcl_getCellRangeAddressFromXMLString(
                                                        sTableSecondName );
         }
         if( bResult &&
-            sTableSecondName.getLength() &&
+            !sTableSecondName.isEmpty() &&
             ! sTableSecondName.equals( rOutRange.aTableName ))
             bResult = false;
     }
@@ -370,7 +370,7 @@ OUString getXMLStringFromCellRange( const CellRange & rRange )
 
     ::rtl::OUStringBuffer aBuffer;
 
-    if( (rRange.aTableName).getLength())
+    if( !(rRange.aTableName).isEmpty())
     {
         bool bNeedsEscaping = ( rRange.aTableName.indexOf( aQuote ) > -1 );
         bool bNeedsQuoting = bNeedsEscaping || ( rRange.aTableName.indexOf( aSpace ) > -1 );

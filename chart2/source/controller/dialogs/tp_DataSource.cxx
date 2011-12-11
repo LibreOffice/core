@@ -401,7 +401,7 @@ sal_Bool DataSourceTabPage::commitPage( ::svt::WizardTypes::CommitPageReason /*e
 bool DataSourceTabPage::isRangeFieldContentValid( Edit & rEdit )
 {
     OUString aRange( rEdit.GetText());
-    bool bIsValid = ( aRange.getLength() == 0 ) ||
+    bool bIsValid = ( aRange.isEmpty() ) ||
         m_rDialogModel.getRangeSelectionHelper()->verifyCellRange( aRange );
 
     if( bIsValid )
@@ -906,7 +906,7 @@ bool DataSourceTabPage::updateModelFromControl( Edit * pField )
         if( xDataProvider.is())
         {
             OUString aRange( m_aEDT_CATEGORIES.GetText());
-            if( aRange.getLength())
+            if( !aRange.isEmpty())
             {
                 // create or change categories
                 if( !xLabeledSeq.is())
@@ -972,7 +972,7 @@ bool DataSourceTabPage::updateModelFromControl( Edit * pField )
                         }
                         if( xLabeledSeq.is())
                         {
-                            if( aRange.getLength())
+                            if( !aRange.isEmpty())
                             {
                                 Reference< data::XDataSequence > xNewSeq;
                                 try
@@ -1003,7 +1003,7 @@ bool DataSourceTabPage::updateModelFromControl( Edit * pField )
                     }
                     else
                     {
-                        if( aRange.getLength())
+                        if( !aRange.isEmpty())
                         {
                             Reference< data::XDataSequence > xNewSeq;
                             try

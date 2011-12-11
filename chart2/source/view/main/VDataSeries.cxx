@@ -134,7 +134,7 @@ void lcl_clearIfNoValuesButTextIsContained( VDataSequence& rData, const uno::Ref
     sal_Int32 nTextCount = aStrings.getLength();
     for( sal_Int32 j = 0; j < nTextCount; ++j )
     {
-        if( aStrings[j].getLength() )
+        if( !aStrings[j].isEmpty() )
         {
             rData.clear();
             return;

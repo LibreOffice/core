@@ -726,7 +726,7 @@ bool ChartController::executeDlg_ObjectProperties_withoutUndoGuard( const ::rtl:
 {
     //return true if the properties were changed successfully
     bool bRet = false;
-    if( !rObjectCID.getLength() )
+    if( rObjectCID.isEmpty() )
     {
        return bRet;
     }

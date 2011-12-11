@@ -532,7 +532,7 @@ Reference< chart2::data::XDataSequence > InternalDataProvider::lcl_createDataSeq
             // TODO: This will be problematic if ';' is used in label names
             // '"' character also needs to be considered in such cases
             aToken = str.getToken(0,';',nIndex);
-            if( !aToken.getLength() )
+            if( aToken.isEmpty() )
                 break;
             if( aToken.indexOf('"') < 0 )
             {
@@ -774,7 +774,7 @@ Reference< chart2::data::XDataSequence > SAL_CALL InternalDataProvider::createDa
                             : m_aInternalData.getRowCount()) - 1;
         return lcl_createDataSequenceAndAddToMap( OUString::valueOf( nIndex ));
     }
-    else if( aRangeRepresentation.getLength())
+    else if( !aRangeRepresentation.isEmpty())
     {
         // data
         return lcl_createDataSequenceAndAddToMap( aRangeRepresentation );

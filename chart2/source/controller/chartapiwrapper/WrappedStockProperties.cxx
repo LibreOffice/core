@@ -169,7 +169,7 @@ WrappedVolumeProperty::~WrappedVolumeProperty()
             if(    aTemplateAndService.second.equals( C2U( "com.sun.star.chart2.template.StockVolumeLowHighClose" ) )
                 || aTemplateAndService.second.equals( C2U( "com.sun.star.chart2.template.StockVolumeOpenLowHighClose" ) ) )
                 m_aOuterValue <<= sal_Bool(sal_True);
-            else if( aTemplateAndService.second.getLength() || !m_aOuterValue.hasValue() )
+            else if( !aTemplateAndService.second.isEmpty() || !m_aOuterValue.hasValue() )
                 m_aOuterValue <<= sal_Bool(sal_False);
         }
         else if(!m_aOuterValue.hasValue())
@@ -240,7 +240,7 @@ WrappedUpDownProperty::~WrappedUpDownProperty()
             if(    aTemplateAndService.second.equals( C2U( "com.sun.star.chart2.template.StockOpenLowHighClose" ) )
                 || aTemplateAndService.second.equals( C2U( "com.sun.star.chart2.template.StockVolumeOpenLowHighClose" ) ) )
                 m_aOuterValue <<= sal_Bool(sal_True);
-            else if( aTemplateAndService.second.getLength() || !m_aOuterValue.hasValue() )
+            else if( !aTemplateAndService.second.isEmpty() || !m_aOuterValue.hasValue() )
                 m_aOuterValue <<= sal_Bool(sal_False);
         }
         else if(!m_aOuterValue.hasValue())

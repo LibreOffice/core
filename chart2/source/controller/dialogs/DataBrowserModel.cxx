@@ -103,7 +103,7 @@ OUString lcl_getUIRoleName(
     const Reference< chart2::data::XLabeledDataSequence > & xLSeq )
 {
     OUString aResult( lcl_getRole( xLSeq ));
-    if( aResult.getLength())
+    if( !aResult.isEmpty())
         aResult = ::chart::DialogModel::ConvertRoleFromInternalToUI( aResult );
     return aResult;
 }

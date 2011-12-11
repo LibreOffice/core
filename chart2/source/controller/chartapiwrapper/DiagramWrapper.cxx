@@ -668,7 +668,7 @@ OUString SAL_CALL DiagramWrapper::getDiagramType()
         aRet = lcl_getDiagramType( aTemplateAndService.second );
     }
 
-    if( !aRet.getLength())
+    if( aRet.isEmpty())
     {
         // none of the standard templates matched
         // use first chart type
@@ -676,10 +676,10 @@ OUString SAL_CALL DiagramWrapper::getDiagramType()
         if( xChartType.is() )
         {
             aRet = xChartType->getChartType();
-            if( aRet.getLength() )
+            if( !aRet.isEmpty() )
                 aRet = lcl_getOldChartTypeName( aRet );
         }
-        if( !aRet.getLength())
+        if( aRet.isEmpty())
             aRet = C2U( "com.sun.star.chart.BarDiagram" );
     }
 
