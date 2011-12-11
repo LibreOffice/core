@@ -1922,11 +1922,11 @@ if test "$enable_ccache" = "yes" -o \( "$enable_ccache" = "" -a "$enable_icecrea
                 fi
             fi
         else
-            AC_MSG_NOTICE([Automatic ccache detection ingored: CXX is pre-defined])
+            AC_MSG_NOTICE([Automatic ccache detection ignored: CXX is pre-defined])
             CCACHE=""
         fi
     else
-        AC_MSG_NOTICE([Automatic ccache detection ingored: CC is pre-defined])
+        AC_MSG_NOTICE([Automatic ccache detection ignored: CC is pre-defined])
         CCACHE=""
     fi
 else
