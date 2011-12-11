@@ -1109,28 +1109,17 @@ ScMultiTextWnd::~ScMultiTextWnd()
 {
 }
 
-int ScMultiTextWnd::GetLineCount()
-{
-   if(pEditView)
-   {
-       return pEditEngine->GetLineCount(0);
-   }
-   return 1;
-}
-
 void ScMultiTextWnd::Paint( const Rectangle& rRec )
 {
-    // We always use edit engine to draw text at all times.
-    if (!pEditEngine)
-        InitEditEngine(SfxObjectShell::Current());
-        //StartEditEngine();
-
-    if (pEditView)
-    {
-        pEditView->Paint(rRec);
-    }
+    GetEditView()->Paint( rRec );
 }
 
+EditView* ScMultiTextWnd::GetEditView()
+{
+    if ( !pEditView )
+        InitEditEngine( SfxObjectShell::Current() );
+    return pEditView;
+}
 
 long ScMultiTextWnd::GetPixelHeightForLines( long nLines )
 {
@@ -1229,7 +1218,6 @@ ScMultiTextWnd::DoScroll()
 void ScMultiTextWnd::StartEditEngine()
 {
     //	Bei "eigener Modalitaet" (Doc-modale Dialoge) nicht aktivieren
-
     SfxObjectShell* pObjSh = SfxObjectShell::Current();
     if ( pObjSh && pObjSh->IsInModalMode() )
         return;
@@ -1393,11 +1381,18 @@ void ScMultiTextWnd::InitEditEngine(SfxObjectShell* pObjSh)
 
 void ScMultiTextWnd::StopEditEngine( sal_Bool bAll )
 {
+    if ( pEditEngine )
+        pEditEngine->SetNotifyHdl(Link());
     ScTextWnd::StopEditEngine( bAll );
 }
 
 void ScMultiTextWnd::SetTextString( const String& rNewString )
 {
+    // Ideally it would be best to create on demand the EditEngine/EditView here, but... for
+    // the initialisation scenario where a cell is first clicked on we end up with the text in the
+    // inputbar window scrolled to the bottom if we do that here ( because the tableview and topview
+    // are synced I guess ).
+    // should fix that I suppose :-/ need to look a bit further into that
     if ( pEditView )
         pEditView->Invalidate();
     ScTextWnd::SetTextString( rNewString );
