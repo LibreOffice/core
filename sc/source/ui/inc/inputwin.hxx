@@ -176,8 +176,8 @@ public:
     virtual ~ScMultiTextWnd();
     virtual void StartEditEngine();
     virtual void StopEditEngine( sal_Bool bAll );
-    int GetLineCount();
     virtual void Resize();
+    virtual EditView*  GetEditView();
     long GetPixelHeightForLines( long nLines );
     long GetEditEngTxtHeight();
 

@@ -2046,7 +2046,8 @@ void ScInputHandler::SyncViews( EditView* pSourceView )
         if (pTableView && pTableView != pSourceView)
             lcl_SetTopSelection( pTableView, aSel );
     }
-    else if (pTopView && pTableView)
+    // Only sync selection from topView if we are actually editiing there
+    else if ( ( eMode == SC_INPUT_TOP ) && pTopView && pTableView)
     {
         aSel = pTopView->GetSelection();
         lcl_SetTopSelection( pTableView, aSel );
