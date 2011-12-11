@@ -346,6 +346,8 @@ $(call gb_WinResTarget_WinResTarget_init,$(2))
 $(call gb_WinResTarget_add_file,$(2),solenv/inc/shlinfo)
 $(call gb_WinResTarget_set_defs,$(2),\
 		$$(DEFS) \
+		-DVERVARIANT="$(BUILD)" \
+		-DRES_APP_VENDOR="$(OOO_VENDOR)" \
 		-DADDITIONAL_VERINFO1="" \
 		-DADDITIONAL_VERINFO2="" \
 		-DADDITIONAL_VERINFO3="" \
