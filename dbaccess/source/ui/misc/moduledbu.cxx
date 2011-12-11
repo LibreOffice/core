@@ -86,8 +86,7 @@ ResMgr* OModuleImpl::getResManager()
     if (!m_pRessources)
     {
         // create a manager with a fixed prefix
-        ByteString aMgrName = ByteString( "dbu" );
-        m_pRessources = ResMgr::CreateResMgr(aMgrName.GetBuffer());
+        m_pRessources = ResMgr::CreateResMgr(rtl::OString("dbu").getStr());
     }
     return m_pRessources;
 }
