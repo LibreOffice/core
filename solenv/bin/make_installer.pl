@@ -134,8 +134,6 @@ installer::parameter::control_required_parameter();
 if (!($installer::globals::languages_defined_in_productlist)) { installer::languages::analyze_languagelist(); }
 installer::parameter::outputparameter();
 
-installer::control::check_updatepack();
-
 $installer::globals::build = uc($installer::globals::build);    # using "SRC680" instead of "src680"
 
 ######################################
@@ -659,8 +657,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
     $installer::globals::globalinfo_copied = 1;
 
     my $logminor = "";
-    if ( $installer::globals::updatepack ) { $logminor = $installer::globals::lastminor; }
-    else { $logminor = $installer::globals::minor; }
+    $logminor = $installer::globals::minor;
 
     my $loglanguagestring = $$languagestringref;
     my $loglanguagestring_orig = $loglanguagestring;
@@ -689,12 +686,6 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
     }
 
     $installer::globals::exitlog = $loggingdir;
-
-    ##############################################################
-    # Determining the ship location, if this is an update pack
-    ##############################################################
-
-    if ( $installer::globals::updatepack ) { $shipinstalldir = installer::control::determine_ship_directory($languagestringref); }
 
     ###################################################################
     # Reading an existing msi database, to prepare update and patch

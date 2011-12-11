@@ -69,8 +69,7 @@ sub get_arpcomments_for_property_table
     $comment = $comment . " ($languagestring)";
 
     my $localminor = "";
-    if ( $installer::globals::updatepack ) { $localminor = $installer::globals::lastminor; }
-    else { $localminor = $installer::globals::minor; }
+    $localminor = $installer::globals::minor;
 
     my $buildidstring = "(" . $installer::globals::build . $localminor . "(Build:" . $installer::globals::buildid . "))";
 

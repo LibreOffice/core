@@ -373,23 +373,12 @@ sub create_installation_directory
 
     my $languageref = $languagestringref;
 
-    if ( $installer::globals::updatepack )
-    {
-        $installdir = $shipinstalldir;
-        installer::systemactions::create_directory_structure($installdir);
-        $$current_install_number_ref = installer::systemactions::determine_maximum_number($installdir, $languageref);
-        $installdir = installer::systemactions::rename_string_in_directory($installdir, "number", $$current_install_number_ref);
-        remove_old_ship_installation_sets($installdir);
-    }
-    else
-    {
-        $installdir = installer::systemactions::create_directories("install", $languageref);
-        installer::logger::print_message( "... creating installation set in $installdir ...\n" );
-        remove_old_installation_sets($installdir);
-        my $inprogressinstalldir = $installdir . "_inprogress";
-        installer::systemactions::rename_directory($installdir, $inprogressinstalldir);
-        $installdir = $inprogressinstalldir;
-    }
+    $installdir = installer::systemactions::create_directories("install", $languageref);
+    installer::logger::print_message( "... creating installation set in $installdir ...\n" );
+    remove_old_installation_sets($installdir);
+    my $inprogressinstalldir = $installdir . "_inprogress";
+    installer::systemactions::rename_directory($installdir, $inprogressinstalldir);
+    $installdir = $inprogressinstalldir;
 
     $installer::globals::saveinstalldir = $installdir;  # saving directory globally, in case of exiting
 
@@ -431,20 +420,7 @@ sub analyze_and_save_logfile
     {
         my $destdir = "";
 
-        if ( $installer::globals::updatepack )
-        {
-            if ( $installdir =~ /_download_inprogress/ ) { $destdir = installer::systemactions::rename_string_in_directory($installdir, "_download_inprogress", "_download"); }
-            elsif ( $installdir =~ /_msp_inprogress/ ) { $destdir = installer::systemactions::rename_string_in_directory($installdir, "_msp_inprogress", "_msp"); }
-            else
-            {
-                if ( $installdir =~ /_packed/ ) { $destdir = installer::systemactions::rename_string_in_directory($installdir, "_inprogress", ""); }
-                else { $destdir = installer::systemactions::rename_string_in_directory($installdir, "_inprogress", "_packed"); }
-            }
-        }
-        else
-        {
-            $destdir = installer::systemactions::rename_string_in_directory($installdir, "_inprogress", "");
-        }
+	$destdir = installer::systemactions::rename_string_in_directory($installdir, "_inprogress", "");
 
         $finalinstalldir = $destdir;
     }
@@ -452,7 +428,6 @@ sub analyze_and_save_logfile
     # Saving the logfile in the log file directory and additionally in a log directory in the install directory
 
     my $numberedlogfilename = $installer::globals::logfilename;
-    if ( $installer::globals::updatepack ) { $numberedlogfilename =~ s /log_/log_$current_install_number\_/; }
     installer::logger::print_message( "... creating log file $numberedlogfilename \n" );
     installer::files::save_file($loggingdir . $numberedlogfilename, \@installer::globals::logfileinfo);
     installer::files::save_file($installlogdir . $installer::globals::separator . $numberedlogfilename, \@installer::globals::logfileinfo);
@@ -484,7 +459,6 @@ sub save_logfile_after_linking
 
     # Saving the logfile in the log file directory and additionally in a log directory in the install directory
     my $numberedlogfilename = $installer::globals::logfilename;
-    if ( $installer::globals::updatepack ) { $numberedlogfilename =~ s /log_/log_$current_install_number\_/; }
     installer::logger::print_message( "... creating log file $numberedlogfilename \n" );
     installer::files::save_file($loggingdir . $numberedlogfilename, \@installer::globals::logfileinfo);
     installer::files::save_file($installlogdir . $installer::globals::separator . $numberedlogfilename, \@installer::globals::logfileinfo);

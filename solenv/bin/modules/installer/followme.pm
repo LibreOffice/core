@@ -44,7 +44,6 @@ sub save_followme_info
     my ($finalinstalldir, $includepatharrayref, $allvariableshashref, $downloadname, $languagestringref, $languagesarrayref, $current_install_number, $loggingdir, $installlogdir) = @_;
 
     my $downloadinfofilename = $installer::globals::logfilename;
-    if ( $installer::globals::updatepack ) { $downloadinfofilename =~ s/log_/log_$current_install_number\_/; }
     $downloadinfofilename =~ s/log_/follow_me_/;
 
     # Creating directory
