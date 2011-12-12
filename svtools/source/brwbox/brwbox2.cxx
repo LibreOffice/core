@@ -599,8 +599,10 @@ void BrowseBox::Resize()
         nSBSize = (sal_uLong)(nSBSize * (double)GetZoom());
 
     DoHideCursor( "Resize" );
-    sal_uInt16 nOldVisibleRows =
-        (sal_uInt16)(pDataWin->GetOutputSizePixel().Height() / GetDataRowHeight() + 1);
+    sal_uInt16 nOldVisibleRows = 0;
+    //fdo#42694, post #i111125# GetDataRowHeight() can be 0
+    if (GetDataRowHeight())
+        nOldVisibleRows = (sal_uInt16)(pDataWin->GetOutputSizePixel().Height() / GetDataRowHeight() + 1);
 
     // did we need a horiz. scroll bar oder gibt es eine Control Area?
     if ( !getDataWindow()->bNoHScroll &&
@@ -623,8 +625,10 @@ void BrowseBox::Resize()
         Point( 0, GetTitleHeight() ),
         Size( nDataWidth, nDataHeight ) );
 
-    sal_uInt16 nVisibleRows =
-        (sal_uInt16)(pDataWin->GetOutputSizePixel().Height() / GetDataRowHeight() + 1);
+    sal_uInt16 nVisibleRows = 0;
+
+    if (GetDataRowHeight())
+        nVisibleRows = (sal_uInt16)(pDataWin->GetOutputSizePixel().Height() / GetDataRowHeight() + 1);
 
     // TopRow ist unveraendert, aber die Anzahl sichtbarer Zeilen hat sich
     // geaendert
@@ -911,8 +915,13 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const Rectangle& _rRect, sal_
     long nDataRowHeigt = GetDataRowHeight();
 
     // compute relative rows to redraw
-    sal_uLong nRelTopRow = _bForeignDevice ? 0 : ((sal_uLong)_rRect.Top() / nDataRowHeigt);
-    sal_uLong nRelBottomRow = (sal_uLong)(_bForeignDevice ? aOverallAreaSize.Height() : _rRect.Bottom()) / nDataRowHeigt;
+    sal_uLong nRelTopRow = 0;
+    sal_uLong nRelBottomRow = aOverallAreaSize.Height();
+    if (!_bForeignDevice && nDataRowHeigt)
+    {
+        nRelTopRow = ((sal_uLong)_rRect.Top() / nDataRowHeigt);
+        nRelBottomRow = (sal_uLong)(_rRect.Bottom()) / nDataRowHeigt;
+    }
 
     // cache frequently used values
     Point aPos( aOverallAreaPos.X(), nRelTopRow * nDataRowHeigt + aOverallAreaPos.Y() );
@@ -1182,11 +1191,16 @@ void BrowseBox::UpdateScrollbars()
     if (IsZoom())
         nCornerSize = (sal_uLong)(nCornerSize * (double)GetZoom());
 
-    // needs VScroll?
-    long nMaxRows = (pDataWin->GetSizePixel().Height()) / GetDataRowHeight();
-    sal_Bool bNeedsVScroll =    getDataWindow()->bAutoVScroll
-                        ?   nTopRow || ( nRowCount > nMaxRows )
-                        :   !getDataWindow()->bNoVScroll;
+    sal_Bool bNeedsVScroll = sal_False;
+    long nMaxRows = 0;
+    if (GetDataRowHeight())
+    {
+        // needs VScroll?
+        nMaxRows = (pDataWin->GetSizePixel().Height()) / GetDataRowHeight();
+        bNeedsVScroll =    getDataWindow()->bAutoVScroll
+                            ?   nTopRow || ( nRowCount > nMaxRows )
+                            :   !getDataWindow()->bNoVScroll;
+    }
     Size aDataWinSize = pDataWin->GetSizePixel();
     if ( !bNeedsVScroll )
     {
@@ -1269,8 +1283,8 @@ void BrowseBox::UpdateScrollbars()
     pVScroll->SetPosSizePixel(
         Point( aDataWinSize.Width(), GetTitleHeight() ),
         Size( nCornerSize, aDataWinSize.Height()) );
-    if ( nRowCount <
-         long( aDataWinSize.Height() / GetDataRowHeight() ) )
+    long nLclDataRowHeight = GetDataRowHeight();
+    if ( nLclDataRowHeight > 0 && nRowCount < long( aDataWinSize.Height() / nLclDataRowHeight ) )
         ScrollRows( -nTopRow );
     if ( bNeedsVScroll && !pVScroll->IsVisible() )
         pVScroll->Show();
