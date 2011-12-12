@@ -52,7 +52,8 @@ PATCH_FILES=\
     icu4c-4_4_2-wchar_t.patch \
     icu4c-warnings.patch \
     icu4c-escapespace.patch \
-    icu4c-strict-c.patch
+    icu4c-strict-c.patch \
+    CVE-2011-4599.patch
 
 .IF "$(OS)"=="ANDROID"
 PATCH_FILES+=\
