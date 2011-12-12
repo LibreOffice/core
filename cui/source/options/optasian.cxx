@@ -220,7 +220,7 @@ sal_Bool SvxAsianLayoutPage::FillItemSet( SfxItemSet& )
                     pImpl->xForbidden->setForbiddenCharacters( aLocale, *( itElem->second->pCharacters ) );
             }
         }
-        catch(Exception&)
+        catch (const Exception&)
         {
             OSL_FAIL("exception in XForbiddenCharacters");
         }
@@ -354,7 +354,7 @@ IMPL_LINK(SvxAsianLayoutPage, LanguageHdl, SvxLanguageBox*, EMPTYARG )
                     sEnd = aForbidden.endLine;
                 }
             }
-            catch(Exception&)
+            catch (const Exception&)
             {
                 OSL_FAIL("exception in XForbiddenCharacters");
             }
@@ -417,7 +417,7 @@ IMPL_LINK(SvxAsianLayoutPage, ModifyHdl, Edit*, pEdit)
             else
                 pImpl->addForbiddenCharacters(eSelectLanguage, 0);
         }
-        catch(Exception&)
+        catch (const Exception&)
         {
             OSL_FAIL("exception in XForbiddenCharacters");
         }
