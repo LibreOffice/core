@@ -40,8 +40,6 @@ c441926f3a552ed3e5b274b62e86af16-STLport-4.0.tar.gz
 ca66e26082cab8bb817185a116db809b-redland-1.0.8.tar.gz
 377a60170e5185eb63d3ed2fae98e621-README_silgraphite-2.3.1.txt
 d35724900f6a4105550293686688bbb3-silgraphite-2.3.1.tar.gz
-d70951c80dabecc2892c919ff5d07172-db-4.7.25.NC-custom.tar.gz
-e0707ff896045731ff99e99799606441-README_db-4.7.25.NC-custom.txt
 e81c2f0953aa60f8062c05a4673f2be0-Python-2.6.1.tar.bz2
 e61d0364a30146aaa3001296f853b2b9-libxslt-1.1.26.tar.gz
 ea570af93c284aa9e5621cd563f54f4d-bsh-2.0b1-src.tar.gz
@@ -61,6 +59,4 @@ c735eab2d659a96e5a594c9e8541ad63-zlib-1.2.5.tar.gz
 
 # Temporary
 http://hg.services.openoffice.org/binaries/
-d70951c80dabecc2892c919ff5d07172-db-4.7.25.NC-custom.tar.gz
-e0707ff896045731ff99e99799606441-README_db-4.7.25.NC-custom.txt
 35c94d2df8893241173de1d16b6034c0-swingExSrc.zip

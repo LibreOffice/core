@@ -224,11 +224,6 @@ NEON3RDLIB=$(SOLARLIBDIR)/libneon.dylib
 .ELSE
 NEON3RDLIB=-lneon
 .ENDIF
-.IF "$(SYSTEM_DB)" == "YES"
-BERKELEYLIB=-ldb
-.ELSE
-BERKELEYLIB=-ldb-4.7
-.ENDIF
 CURLLIB=-lcurl
 SFX2LIB=-lsfx$(DLLPOSTFIX)
 SFXLIB=-lsfx$(DLLPOSTFIX)
@@ -449,7 +444,6 @@ EXPATASCII3RDLIB=expat_xmltok.lib ascii_expat_xmlparse.lib
 ZLIB3RDLIB=zlib.lib
 JPEG3RDLIB=jpeglib.lib
 NEON3RDLIB=ineon.lib
-BERKELEYLIB=libdb47.lib
 CURLLIB=libcurl.lib
 CHAOSLIB=ichaos.lib
 UUILIB=iuui.lib

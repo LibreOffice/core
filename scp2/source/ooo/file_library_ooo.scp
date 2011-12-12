@@ -193,21 +193,6 @@ End
 
 #endif
 
-#ifndef SYSTEM_DB
-
-File gid_File_Lib_Db
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = SCP2_OOO_BIN_DIR;
-  #ifdef UNX
-    Name = STRING(CONCAT2(libdb-4.7,UNXSUFFIX));
-  #else
-    Name = "libdb47.dll";
-  #endif
-End
-
-#endif
-
 #ifdef UNX
 #ifdef ENABLE_GTK
 #ifdef ENABLE_SYSTRAY_GTK

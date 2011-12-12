@@ -370,9 +370,6 @@ AC_ARG_WITH(system-icu,
 AC_ARG_WITH(system-poppler,
 [  --with-system-poppler   Use poppler already on system
 ],,)
-AC_ARG_WITH(system-db,
-[  --with-system-db        Use berkeley db already on system
-],,)
 AC_ARG_WITH(system-lucene,
 [  --with-system-lucene    Use lucene already on system
 ],,)
@@ -3893,44 +3890,6 @@ AC_SUBST(PYTHON_CFLAGS)
 AC_SUBST(PYTHON_LIBS)
 HOME=`echo $HOME | sed 's:\\\\:/:g'`
 AC_SUBST(HOME)
-
-dnl ===================================================================
-dnl Check for system berkley db
-dnl ===================================================================
-AC_MSG_CHECKING([which db to use])
-if test -n "$with_system_db" -o -n "$with_system_libs" && \
-	test "$with_system_db" != "no"; then
-    SYSTEM_DB=YES
-    AC_MSG_RESULT([external])
-    AC_CHECK_HEADER(db.h, [ DB_INCLUDES=/usr/include ],
-        [
-             CFLAGS=-I/usr/include/db4
-             AC_CHECK_HEADER(db4/db.h,
-             [ DB_INCLUDES=/usr/include/db4 ],
-             [ AC_MSG_ERROR(no. install the db4 libraries) ], []+             )
-        ], []
-    )
-    AC_MSG_CHECKING([whether db is at least 4.1])
-    AC_TRY_RUN([
-#include <db.h>
-
-int main(int argc, char **argv) {
-       if(DB_VERSION_MAJOR > 4 || (DB_VERSION_MAJOR == 4 && DB_VERSION_MINOR >= 1)) return 0;
-       else return 1;
-}
-    ], [AC_MSG_RESULT([yes])], [AC_MSG_ERROR([no. you need at least db 4.1])])
-    AC_HAVE_LIBRARY(db, [],
-      [AC_MSG_ERROR([db not installed or functional])], [])
-    SCPDEFS="$SCPDEFS -DSYSTEM_DB"
-else
-    AC_MSG_RESULT([internal])
-    SYSTEM_DB=NO
-    BUILD_TYPE="$BUILD_TYPE BERKELEYDB"
-fi
-AC_SUBST(SYSTEM_DB)
-AC_SUBST(DB_VERSION)
-AC_SUBST(DB_INCLUDES)
-AC_SUBST(DB_JAR)
 
 dnl ===================================================================
 dnl Check for system lucene

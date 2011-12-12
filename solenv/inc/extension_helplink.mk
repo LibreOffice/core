@@ -33,10 +33,6 @@ my_cp!:=$(my_cp)$(PATH_SEPERATOR)$(LUCENE_CORE_JAR)$(PATH_SEPERATOR)$(LUCENE_ANA
 my_cp!:=$(my_cp)$(PATH_SEPERATOR)$(SOLARBINDIR)/lucene-core-2.3.jar$(PATH_SEPERATOR)$(SOLARBINDIR)/lucene-analyzers-2.3.jar
 .ENDIF
  
-.IF "$(SYSTEM_DB)" != "YES"
-JAVA_LIBRARY_PATH= -Djava.library.path=$(SOLARSHAREDBIN)
-.ENDIF 
-
 #aux_alllangiso*:=$(foreach,i,$(alllangiso) $(foreach,j,$(aux_langdirs) $(eq,$i,$j  $i $(NULL))))
 aux_alllangiso*:=$(alllangiso)
 
@@ -47,10 +43,6 @@ HELPLINKALLTARGETS=$(foreach,i,$(aux_alllangiso) $(MISC)/$(TARGET)_$(LINKNAME)_$
 HELPLINKALLADDEDDEPS=$(foreach,i,$(aux_alllangiso) $(subst,LANGUAGE,$i $(LINKADDEDDPES)))
 
 ALLTAR : $(HELPLINKALLTARGETS)
-
-.IF "$(SYSTEM_DB)" != "YES"
-JAVA_LIBRARY_PATH= -Djava.library.path=$(SOLARSHAREDBIN)
-.ENDIF
 
 XSL_DIR*:=$(SOLARBINDIR)
 XHPLINKSRC*:=$(XHPDEST)
