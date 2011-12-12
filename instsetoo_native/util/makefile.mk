@@ -170,8 +170,6 @@ ure: $(foreach,i,$(alllangiso) ure_$i)
 
 oxygenoffice: $(foreach,i,$(alllangiso) oxygenoffice_$i)
 
-oxygenofficewithjre: $(foreach,i,$(alllangiso) oxygenofficewithjre_$i)
-
 oxygenofficelanguagepack : $(foreach,i,$(alllangiso) oxygenofficelanguagepack_$i)
 
 oxygenofficehelppack : $(foreach,i,$(allhelplangiso) oxygenofficehelppack_$i)
@@ -222,8 +220,6 @@ $(foreach,i,$(alllangiso) lodevtest_$i) : $(ADDDEPS)
 $(foreach,i,$(alllangiso) ure_$i) : $(ADDDEPS)
 
 $(foreach,i,$(alllangiso) oxygenoffice_$i) : $(ADDDEPS)
-
-$(foreach,i,$(alllangiso) oxygenofficewithjre_$i) : $(ADDDEPS)
 
 $(foreach,i,$(alllangiso) oxygenofficelanguagepack_$i) : $(ADDDEPS)
 
@@ -304,10 +300,6 @@ oxygenoffice_%{$(PKGFORMAT:^".") .archive} :
     $(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p OxygenOffice -u $(OUT) -buildid $(BUILD) -msitemplate $(MSIOFFICETEMPLATEDIR) -msilanguage $(COMMONMISC)$/win_ulffiles -format $(@:e:s/.//) $(VERBOSESWITCH)
     $(PERL) -w $(SOLARENV)$/bin$/gen_update_info.pl --buildid $(BUILD) --arch "$(RTL_ARCH)" --os "$(RTL_OS)" --lstfile $(PRJ)$/util$/openoffice.lst --product OxygenOffice --languages $(subst,$(@:s/_/ /:1)_, $(@:b)) $(PRJ)$/util$/update.xml > $(MISC)/`date +%Y%m%d_%H%M`_$(RTL_OS)_$(RTL_ARCH)$(@:e).update.xml
 
-$(foreach,i,$(alllangiso) oxygenofficewithjre_$i) : $$@{$(PKGFORMAT:^".")}
-oxygenofficewithjre_%{$(PKGFORMAT:^".")} :
-    $(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p OxygenOffice_wJRE -u $(OUT) -buildid $(BUILD) -msitemplate $(MSIOFFICETEMPLATEDIR) -msilanguage $(COMMONMISC)$/win_ulffiles -format $(@:e:s/.//) $(VERBOSESWITCH)
-
 $(foreach,i,$(alllangiso) oxygenofficelanguagepack_$i) : $$@{$(PKGFORMAT:^".")}
 oxygenofficelanguagepack_%{$(PKGFORMAT:^".")} :
     $(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p OxygenOffice -u $(OUT) -buildid $(BUILD) -msitemplate $(MSILANGPACKTEMPLATEDIR) -msilanguage $(COMMONMISC)$/win_ulffiles -languagepack -format $(@:e:s/.//) $(VERBOSESWITCH)
@@ -324,7 +316,7 @@ openoffice:
 
 .IF "$(DISABLE_PYTHON)" != "TRUE"
 .IF "$(LOCALPYFILES)"!=""
-$(foreach,i,$(alllangiso) openoffice_$i{$(PKGFORMAT:^".") .archive} openofficedev_$i{$(PKGFORMAT:^".")} sdkoo_$i{$(PKGFORMAT:^".")} lotest_$i{$(PKGFORMAT:^".")} oxygenoffice_$i{$(PKGFORMAT:^".") .archive} oxygenofficewithjre_$i{$(PKGFORMAT:^".")}) updatepack : $(LOCALPYFILES)
+$(foreach,i,$(alllangiso) openoffice_$i{$(PKGFORMAT:^".") .archive} openofficedev_$i{$(PKGFORMAT:^".")} sdkoo_$i{$(PKGFORMAT:^".")} lotest_$i{$(PKGFORMAT:^".")} oxygenoffice_$i{$(PKGFORMAT:^".") .archive} updatepack : $(LOCALPYFILES)
 .ENDIF			# "$(LOCALPYFILES)"!=""
 
 .IF "$(GUI)"!="WNT"
