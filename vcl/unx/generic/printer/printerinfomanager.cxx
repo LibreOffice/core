@@ -631,7 +631,7 @@ void PrinterInfoManager::initialize()
         aPrinter.m_aInfo.m_aComment         = it->m_aComment;
         aPrinter.m_aInfo.m_aLocation        = it->m_aLocation;
         aPrinter.m_bModified                = false;
-        aPrinter.m_aGroup                   = ByteString( aPrinterName, aEncoding ); //provide group name in case user makes this one permanent in padmin
+        aPrinter.m_aGroup                   = rtl::OUStringToOString(aPrinterName, aEncoding); //provide group name in case user makes this one permanent in padmin
 
         m_aPrinters[ aPrinterName ] = aPrinter;
     }
@@ -780,11 +780,11 @@ bool PrinterInfoManager::writePrinterConfig()
             aValue.append(rtl::OUStringToOString(it->first, RTL_TEXTENCODING_UTF8));
             pConfig->WriteKey("Printer", aValue.makeStringAndClear());
             pConfig->WriteKey( "DefaultPrinter", it->first == m_aDefaultPrinter ? "1" : "0" );
-            pConfig->WriteKey( "Location", ByteString( String( it->second.m_aInfo.m_aLocation ), RTL_TEXTENCODING_UTF8 ) );
-            pConfig->WriteKey( "Comment", ByteString( String( it->second.m_aInfo.m_aComment ), RTL_TEXTENCODING_UTF8 ) );
-            pConfig->WriteKey( "Command", ByteString( String( it->second.m_aInfo.m_aCommand ), RTL_TEXTENCODING_UTF8 ) );
-            pConfig->WriteKey( "QuickCommand", ByteString( String( it->second.m_aInfo.m_aQuickCommand ), RTL_TEXTENCODING_UTF8 ) );
-            pConfig->WriteKey( "Features", ByteString( String( it->second.m_aInfo.m_aFeatures ), RTL_TEXTENCODING_UTF8 ) );
+            pConfig->WriteKey( "Location", rtl::OUStringToOString(it->second.m_aInfo.m_aLocation, RTL_TEXTENCODING_UTF8) );
+            pConfig->WriteKey( "Comment", rtl::OUStringToOString(it->second.m_aInfo.m_aComment, RTL_TEXTENCODING_UTF8) );
+            pConfig->WriteKey( "Command", rtl::OUStringToOString(it->second.m_aInfo.m_aCommand, RTL_TEXTENCODING_UTF8) );
+            pConfig->WriteKey( "QuickCommand", rtl::OUStringToOString(it->second.m_aInfo.m_aQuickCommand, RTL_TEXTENCODING_UTF8) );
+            pConfig->WriteKey( "Features", rtl::OUStringToOString(it->second.m_aInfo.m_aFeatures, RTL_TEXTENCODING_UTF8) );
             pConfig->WriteKey("Copies", rtl::OString::valueOf(static_cast<sal_Int32>(it->second.m_aInfo.m_nCopies)));
             pConfig->WriteKey( "Orientation", it->second.m_aInfo.m_eOrientation == orientation::Landscape ? "Landscape" : "Portrait" );
             pConfig->WriteKey("PSLevel", rtl::OString::valueOf(static_cast<sal_Int32>(it->second.m_aInfo.m_nPSLevel)));
@@ -806,15 +806,15 @@ bool PrinterInfoManager::writePrinterConfig()
                 for( int i = 0; i < it->second.m_aInfo.m_aContext.countValuesModified(); i++ )
                 {
                     const PPDKey* pKey = it->second.m_aInfo.m_aContext.getModifiedKey( i );
-                    ByteString aKey( "PPD_" );
-                    aKey += ByteString( pKey->getKey(), RTL_TEXTENCODING_ISO_8859_1 );
+                    rtl::OStringBuffer aKey(RTL_CONSTASCII_STRINGPARAM("PPD_"));
+                    aKey.append(rtl::OUStringToOString(pKey->getKey(), RTL_TEXTENCODING_ISO_8859_1));
 
                     const PPDValue* pValue = it->second.m_aInfo.m_aContext.getValue( pKey );
                     if (pValue)
                         aValue.append(rtl::OUStringToOString(pValue->m_aOption, RTL_TEXTENCODING_ISO_8859_1));
                     else
                         aValue.append(RTL_CONSTASCII_STRINGPARAM("*nil"));
-                    pConfig->WriteKey(aKey, aValue.makeStringAndClear());
+                    pConfig->WriteKey(aKey.makeStringAndClear(), aValue.makeStringAndClear());
                 }
             }
 

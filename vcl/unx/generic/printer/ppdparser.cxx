@@ -1871,12 +1871,12 @@ char* PPDContext::getStreamableBuffer( sal_uLong& rBytes ) const
     hash_type::const_iterator it;
     for( it = m_aCurrentValues.begin(); it != m_aCurrentValues.end(); ++it )
     {
-        ByteString aCopy( it->first->getKey(), RTL_TEXTENCODING_MS_1252 );
+        ByteString aCopy(rtl::OUStringToOString(it->first->getKey(), RTL_TEXTENCODING_MS_1252));
         rBytes += aCopy.Len();
         rBytes += 1; // for ':'
         if( it->second )
         {
-            aCopy = ByteString( it->second->m_aOption, RTL_TEXTENCODING_MS_1252 );
+            aCopy = rtl::OUStringToOString(it->second->m_aOption, RTL_TEXTENCODING_MS_1252);
             rBytes += aCopy.Len();
         }
         else
@@ -1889,13 +1889,13 @@ char* PPDContext::getStreamableBuffer( sal_uLong& rBytes ) const
     char* pRun = pBuffer;
     for( it = m_aCurrentValues.begin(); it != m_aCurrentValues.end(); ++it )
     {
-        ByteString aCopy( it->first->getKey(), RTL_TEXTENCODING_MS_1252 );
+        ByteString aCopy(rtl::OUStringToOString(it->first->getKey(), RTL_TEXTENCODING_MS_1252));
         int nBytes = aCopy.Len();
         memcpy( pRun, aCopy.GetBuffer(), nBytes );
         pRun += nBytes;
         *pRun++ = ':';
         if( it->second )
-            aCopy = ByteString( it->second->m_aOption, RTL_TEXTENCODING_MS_1252 );
+            aCopy = rtl::OUStringToOString(it->second->m_aOption, RTL_TEXTENCODING_MS_1252);
         else
             aCopy = "*nil";
         nBytes = aCopy.Len();

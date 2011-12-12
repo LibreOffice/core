@@ -1706,7 +1706,7 @@ OString PrintFontManager::getXLFD( PrintFont* pFont ) const
     OStringBuffer aXLFD( 128 );
 
     aXLFD.append( "-misc-" );
-    ByteString aFamily( String( m_pAtoms->getString( ATOM_FAMILYNAME, pFont->m_nFamilyName ) ), RTL_TEXTENCODING_UTF8 );
+    ByteString aFamily(rtl::OUStringToOString(m_pAtoms->getString( ATOM_FAMILYNAME, pFont->m_nFamilyName ), RTL_TEXTENCODING_UTF8));
     aFamily.SearchAndReplaceAll( '-',' ' );
     aFamily.SearchAndReplaceAll( '?',' ' );
     aFamily.SearchAndReplaceAll( '*',' ' );
@@ -3209,7 +3209,7 @@ int PrintFontManager::importFonts( const ::std::list< OString >& rFiles, bool bL
             if( pCallback && pCallback->isCanceled() )
                 break;
 
-            if( ! access( ByteString( String(aTo.PathToFileName()), aEncoding ).GetBuffer(), F_OK ) )
+            if (!access( rtl::OUStringToOString(aTo.PathToFileName(), aEncoding).getStr(), F_OK))
             {
                 if( ! ( pCallback ? pCallback->queryOverwriteFile( aTo.PathToFileName() ) : false ) )
                     continue;
@@ -3222,19 +3222,19 @@ int PrintFontManager::importFonts( const ::std::list< OString >& rFiles, bool bL
             {
                 INetURLObject aFromAfm( aFrom );
                 aFromAfm.setExtension( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "afm" ) ) );
-                if( access( ByteString( String(aFromAfm.PathToFileName()), aEncoding ).GetBuffer(), F_OK ) )
+                if (access(rtl::OUStringToOString(aFromAfm.PathToFileName(), aEncoding).getStr(), F_OK))
                 {
                     aFromAfm.setExtension( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "AFM" ) ) );
-                    if( access( ByteString( String(aFromAfm.PathToFileName()), aEncoding ).GetBuffer(), F_OK ) )
+                    if (access(rtl::OUStringToOString(aFromAfm.PathToFileName(), aEncoding).getStr(), F_OK))
                     {
                         aFromAfm.removeSegment();
                         aFromAfm.Append( String( RTL_CONSTASCII_USTRINGPARAM( "afm" ) ) );
                         aFromAfm.Append( aTo.GetName() );
                         aFromAfm.setExtension( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "afm" ) ) );
-                        if( access( ByteString( String(aFromAfm.PathToFileName()), aEncoding ).GetBuffer(), F_OK ) )
+                        if (access(rtl::OUStringToOString(aFromAfm.PathToFileName(), aEncoding).getStr(), F_OK))
                         {
                             aFromAfm.setExtension( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "AFM" ) ) );
-                            if( access( ByteString( String(aFromAfm.PathToFileName()), aEncoding ).GetBuffer(), F_OK ) )
+                            if (access(rtl::OUStringToOString(aFromAfm.PathToFileName(), aEncoding).getStr(), F_OK))
                             {
                                 // give up
                                 if( pCallback )
@@ -3249,11 +3249,11 @@ int PrintFontManager::importFonts( const ::std::list< OString >& rFiles, bool bL
                 OUString aFromPath, aToPath;
                 if( bLinkOnly )
                 {
-                    ByteString aLinkFromPath( String(aFromAfm.PathToFileName()),
-                        aEncoding );
-                    ByteString aLinkToPath( String(aToAfm.PathToFileName()),
-                        aEncoding );
-                    nError = (FileBase::RC)symlink( aLinkFromPath.GetBuffer(), aLinkToPath.GetBuffer() );
+                    rtl::OString aLinkFromPath(rtl::OUStringToOString(aFromAfm.PathToFileName(),
+                        aEncoding));
+                    rtl::OString aLinkToPath(rtl::OUStringToOString(aToAfm.PathToFileName(),
+                        aEncoding));
+                    nError = (FileBase::RC)symlink(aLinkFromPath.getStr(), aLinkToPath.getStr());
                 }
                 else
                     nError = File::copy( aFromAfm.GetMainURL(INetURLObject::DECODE_TO_IURI), aToAfm.GetMainURL(INetURLObject::DECODE_TO_IURI) );
@@ -3267,11 +3267,9 @@ int PrintFontManager::importFonts( const ::std::list< OString >& rFiles, bool bL
             }
             if( bLinkOnly )
             {
-                ByteString aFromPath( String(aFrom.PathToFileName()),
-                    aEncoding );
-                ByteString aToPath( String(aTo.PathToFileName()), aEncoding );
-                nError = (FileBase::RC)symlink( aFromPath.GetBuffer(),
-                    aToPath.GetBuffer() );
+                rtl::OString aFromPath(rtl::OUStringToOString(aFrom.PathToFileName(), aEncoding));
+                rtl::OString aToPath(rtl::OUStringToOString(aTo.PathToFileName(), aEncoding));
+                nError = (FileBase::RC)symlink(aFromPath.getStr(), aToPath.getStr());
             }
             else
                 nError = File::copy( aFrom.GetMainURL(INetURLObject::DECODE_TO_IURI), aTo.GetMainURL(INetURLObject::DECODE_TO_IURI) );
