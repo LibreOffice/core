@@ -516,8 +516,6 @@ void DocxAttributeOutput::StartRun( const SwRedlineData* pRedlineData )
 
 void DocxAttributeOutput::EndRun()
 {
-    if ( m_nCloseHyperlinkStatus == Detected )
-        m_nCloseHyperlinkStatus = EndInThisRun;
     // Write field starts
     for ( std::vector<FieldInfos>::iterator pIt = m_Fields.begin(); pIt != m_Fields.end(); ++pIt )
     {
@@ -543,6 +541,11 @@ void DocxAttributeOutput::EndRun()
     // before "postponed run start")
     m_pSerializer->mark(); // let's call it "actual run start"
 
+    if ( m_closeHyperlinkInPreviousRun )
+    {
+        m_pSerializer->endElementNS( XML_w, XML_hyperlink );
+        m_closeHyperlinkInPreviousRun = false;
+    }
     // prepend the actual run start
     if ( m_pHyperlinkAttrList )
     {
@@ -550,11 +553,6 @@ void DocxAttributeOutput::EndRun()
 
         m_pSerializer->startElementNS( XML_w, XML_hyperlink, xAttrList );
         m_pHyperlinkAttrList = NULL;
-    }
-    if ( m_nCloseHyperlinkStatus == EndInPrevRun)
-    {
-        m_pSerializer->endElementNS( XML_w, XML_hyperlink );
-        m_nCloseHyperlinkStatus = Undetected;
     }
 
     // Write the hyperlink and toc fields starts
@@ -592,10 +590,10 @@ void DocxAttributeOutput::EndRun()
         EndField_Impl( m_Fields.front( ) );
         m_Fields.erase( m_Fields.begin( ) );
     }
-    if ( m_nCloseHyperlinkStatus == EndInThisRun)
+    if ( m_closeHyperlinkInThisRun )
     {
         m_pSerializer->endElementNS( XML_w, XML_hyperlink );
-        m_nCloseHyperlinkStatus = Undetected;
+        m_closeHyperlinkInThisRun = false;
     }
 
     // if there is some redlining in the document, output it
@@ -1043,8 +1041,11 @@ static void impl_WriteRunText( FSHelperPtr pSerializer, sal_Int32 nTextToken,
 
 void DocxAttributeOutput::RunText( const String& rText, rtl_TextEncoding /*eCharSet*/ )
 {
-    if ( m_nCloseHyperlinkStatus == Detected )
-        m_nCloseHyperlinkStatus = EndInPrevRun;
+    if( m_closeHyperlinkInThisRun )
+    {
+        m_closeHyperlinkInPreviousRun = true;
+        m_closeHyperlinkInThisRun = false;
+    }
     OUString aText( rText );
 
     // one text can be split into more <w:t>blah</w:t>'s by line breaks etc.
@@ -1232,7 +1233,7 @@ bool DocxAttributeOutput::StartURL( const String& rUrl, const String& rTarget )
 
 bool DocxAttributeOutput::EndURL()
 {
-    m_nCloseHyperlinkStatus = Detected;
+    m_closeHyperlinkInThisRun = true;
     return true;
 }
 
@@ -4350,7 +4351,8 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
       m_bParagraphOpened( false ),
       m_nColBreakStatus( COLBRK_NONE ),
       m_pParentFrame( NULL ),
-      m_nCloseHyperlinkStatus( Undetected ),
+      m_closeHyperlinkInThisRun( false ),
+      m_closeHyperlinkInPreviousRun( false ),
       m_postponedGraphic( NULL ),
       m_postponedMath( NULL ),
       m_postitFieldsMaxId( 0 )
