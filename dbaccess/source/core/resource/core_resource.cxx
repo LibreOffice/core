@@ -56,9 +56,7 @@ namespace dbaccess
 
         ::com::sun::star::lang::Locale aLocale = Application::GetSettings().GetUILocale();
 
-        rtl::OString sFileName("dba");
-
-        m_pImpl = ResMgr::CreateResMgr(sFileName.getStr(), aLocale);
+        m_pImpl = ResMgr::CreateResMgr("dba", aLocale);
     }
 
     //------------------------------------------------------------------
