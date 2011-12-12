@@ -26,13 +26,13 @@
  *
  ************************************************************************/
 
+#include <map>
 #include <optasian.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/unolingu.hxx>
 #include <optasian.hrc>
 #include <dialmgr.hxx>
 #include <cuires.hrc>
-#include <tools/table.hxx>
 #include <tools/shl.hxx>
 #include <svl/asiancfg.hxx>
 #include <com/sun/star/lang/Locale.hpp>
@@ -59,77 +59,76 @@ const sal_Char cCharacterCompressionType[] = "CharacterCompressionType";
 
 struct SvxForbiddenChars_Impl
 {
+    ~SvxForbiddenChars_Impl();
+
     sal_Bool                bRemoved;
     ForbiddenCharacters*    pCharacters;
 };
 
-DECLARE_TABLE( _SvxForbiddenCharacterTable_Impl, SvxForbiddenChars_Impl* )
-
-class SvxForbiddenCharacterTable_Impl : public _SvxForbiddenCharacterTable_Impl
+SvxForbiddenChars_Impl::~SvxForbiddenChars_Impl()
 {
-public:
-    SvxForbiddenCharacterTable_Impl()
-        : _SvxForbiddenCharacterTable_Impl( 4, 4 )
-    {}
-    ~SvxForbiddenCharacterTable_Impl();
-};
+    delete pCharacters;
+}
+
+typedef ::std::map< LanguageType, SvxForbiddenChars_Impl* > SvxForbiddenCharacterMap_Impl;
 
 struct SvxAsianLayoutPage_Impl
 {
     SvxAsianConfig  aConfig;
         SvxAsianLayoutPage_Impl() {}
 
+    ~SvxAsianLayoutPage_Impl();
+
     Reference< XForbiddenCharacters >   xForbidden;
     Reference< XPropertySet >           xPrSet;
     Reference< XPropertySetInfo >       xPrSetInfo;
-    SvxForbiddenCharacterTable_Impl     aChangedLanguagesTbl;
+    SvxForbiddenCharacterMap_Impl       aChangedLanguagesMap;
 
     sal_Bool                hasForbiddenCharacters(LanguageType eLang);
     SvxForbiddenChars_Impl* getForbiddenCharacters(LanguageType eLang);
     void                    addForbiddenCharacters(LanguageType eLang, ForbiddenCharacters* pForbidden);
 };
 
-SvxForbiddenCharacterTable_Impl::~SvxForbiddenCharacterTable_Impl()
+SvxAsianLayoutPage_Impl::~SvxAsianLayoutPage_Impl()
 {
-    for( SvxForbiddenChars_Impl*  pDel = First(); pDel; pDel = Next() )
+    SvxForbiddenCharacterMap_Impl::iterator it;
+    for( it = aChangedLanguagesMap.begin(); it != aChangedLanguagesMap.end(); ++it )
     {
-        delete pDel->pCharacters;
-        delete pDel;
+        delete it->second;
     }
 }
 
 sal_Bool    SvxAsianLayoutPage_Impl::hasForbiddenCharacters(LanguageType eLang)
 {
-    return 0 != aChangedLanguagesTbl.Get(eLang);
+    return aChangedLanguagesMap.count( eLang );
 }
 
 SvxForbiddenChars_Impl* SvxAsianLayoutPage_Impl::getForbiddenCharacters(LanguageType eLang)
 {
-    SvxForbiddenChars_Impl* pImp = aChangedLanguagesTbl.Get(eLang);
-    DBG_ASSERT(pImp, "language not available");
-    if(pImp)
-        return pImp;
+    SvxForbiddenCharacterMap_Impl::iterator it = aChangedLanguagesMap.find( eLang );
+    DBG_ASSERT( ( it != aChangedLanguagesMap.end() ), "language not available");
+    if( it != aChangedLanguagesMap.end() )
+        return it->second;
     return 0;
 }
 
 void SvxAsianLayoutPage_Impl::addForbiddenCharacters(
     LanguageType eLang, ForbiddenCharacters* pForbidden)
 {
-    SvxForbiddenChars_Impl* pOld = aChangedLanguagesTbl.Get(eLang);
-    if( !pOld )
+    SvxForbiddenCharacterMap_Impl::iterator itOld = aChangedLanguagesMap.find( eLang );
+    if( itOld == aChangedLanguagesMap.end() )
     {
-        pOld = new SvxForbiddenChars_Impl;
-        pOld->bRemoved = 0 == pForbidden;
-        pOld->pCharacters = pForbidden ? new ForbiddenCharacters(*pForbidden) : 0;
-        aChangedLanguagesTbl.Insert( eLang, pOld );
+        SvxForbiddenChars_Impl* pChar = new SvxForbiddenChars_Impl;
+        pChar->bRemoved = 0 == pForbidden;
+        pChar->pCharacters = pForbidden ? new ForbiddenCharacters(*pForbidden) : 0;
+        aChangedLanguagesMap.insert( ::std::make_pair( eLang, pChar ) );
     }
     else
     {
-        pOld->bRemoved = 0 == pForbidden;
-        delete pOld->pCharacters;
-        pOld->pCharacters = pForbidden ? new ForbiddenCharacters(*pForbidden) : 0;
+        itOld->second->bRemoved = 0 == pForbidden;
+        delete itOld->second->pCharacters;
+        itOld->second->pCharacters = pForbidden ? new ForbiddenCharacters(*pForbidden) : 0;
     }
-
 }
 
 static LanguageType eLastUsedLanguageTypeForForbiddenCharacters = USHRT_MAX;
@@ -209,16 +208,16 @@ sal_Bool SvxAsianLayoutPage::FillItemSet( SfxItemSet& )
     {
         try
         {
-            for( SvxForbiddenChars_Impl*  pElem = pImpl->aChangedLanguagesTbl.First();
-                pElem; pElem = pImpl->aChangedLanguagesTbl.Next() )
+            SvxForbiddenCharacterMap_Impl::iterator itElem;
+            for( itElem = pImpl->aChangedLanguagesMap.begin();
+                itElem != pImpl->aChangedLanguagesMap.end(); ++itElem )
             {
-                sal_uLong nLang = pImpl->aChangedLanguagesTbl.GetKey( pElem );
                 Locale aLocale;
-                SvxLanguageToLocale(aLocale, (sal_uInt16)nLang );
-                if(pElem->bRemoved)
+                SvxLanguageToLocale( aLocale, itElem->first );
+                if(itElem->second->bRemoved)
                     pImpl->xForbidden->removeForbiddenCharacters( aLocale );
-                else if(pElem->pCharacters)
-                    pImpl->xForbidden->setForbiddenCharacters( aLocale, *pElem->pCharacters );
+                else if(itElem->second->pCharacters)
+                    pImpl->xForbidden->setForbiddenCharacters( aLocale, *( itElem->second->pCharacters ) );
             }
         }
         catch(Exception&)
