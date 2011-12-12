@@ -112,11 +112,6 @@ void SvPasteObjectDialog::SetDefault()
 
 SvPasteObjectDialog::~SvPasteObjectDialog()
 {
-    ::std::map< SotFormatStringId, String* >::iterator it;
-    for(it = aSupplementMap.begin(); it != aSupplementMap.end(); ++it)
-    {
-        delete it->second;
-    }
 }
 
 /*************************************************************************
@@ -124,9 +119,7 @@ SvPasteObjectDialog::~SvPasteObjectDialog()
 *************************************************************************/
 void SvPasteObjectDialog::Insert( SotFormatStringId nFormat, const String& rFormatName )
 {
-    String * pStr = new String( rFormatName );
-    if( !aSupplementMap.insert( ::std::make_pair( nFormat, pStr ) ).second )
-        delete pStr;
+    aSupplementMap.insert( ::std::make_pair( nFormat, rFormatName ) );
 }
 
 sal_uLong SvPasteObjectDialog::GetFormat( const TransferableDataHelper& rHelper,
@@ -155,15 +148,15 @@ sal_uLong SvPasteObjectDialog::GetFormat( const TransferableDataHelper& rHelper,
         ::com::sun::star::datatransfer::DataFlavor aFlavor( *aIter );
         SotFormatStringId nFormat = (*aIter++).mnSotId;
 
-        String* pName = NULL;
-        String aName;
-        ::std::map< SotFormatStringId, String* >::iterator itName;
-        itName = aSupplementMap.find( nFormat );
+        ::std::map< SotFormatStringId, String >::iterator itName =
+            aSupplementMap.find( nFormat );
 
         // if there is an "Embed Source" or and "Embedded Object" on the
         // Clipboard we read the Description and the Source of this object
         // from an accompanied "Object Descriptor" format on the clipboard
         // Remember: these formats mostly appear together on the clipboard
+        String aName;
+        const String* pName = NULL;
         if ( itName == aSupplementMap.end() )
         {
             SvPasteObjectHelper::GetEmbeddedName(rHelper,aName,aSourceName,nFormat);
@@ -172,7 +165,7 @@ sal_uLong SvPasteObjectDialog::GetFormat( const TransferableDataHelper& rHelper,
         }
         else
         {
-            pName = itName->second;
+            pName = &(itName->second);
         }
 
         if( pName )
@@ -181,7 +174,8 @@ sal_uLong SvPasteObjectDialog::GetFormat( const TransferableDataHelper& rHelper,
 
             if( SOT_FORMATSTR_ID_EMBED_SOURCE == nFormat )
             {
-                if( aDesc.maClassName != aEmptyNm )                                {
+                if( aDesc.maClassName != aEmptyNm )
+                {
                     aSourceName = aDesc.maDisplayName;
 
                     if( aDesc.maClassName == aObjClassName )

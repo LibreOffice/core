@@ -60,7 +60,7 @@ class SvPasteObjectDialog : public ModalDialog
     OKButton aOKButton1;
     CancelButton aCancelButton1;
     HelpButton aHelpButton1;
-    ::std::map< SotFormatStringId, String* > aSupplementMap;
+    ::std::map< SotFormatStringId, String > aSupplementMap;
     SvGlobalName    aObjClassName;
     String          aObjName;
     sal_uInt16          nAspect;
