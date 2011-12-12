@@ -87,14 +87,4 @@ JNIEXPORT jlong JNICALL Java_com_sun_star_beans_LocalOfficeWindow_getNativeWindo
     return Java_com_sun_star_comp_beans_LocalOfficeWindow_getNativeWindow(env, obj_this);
 }
 
-
-
-
-
-
-
-
-
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
