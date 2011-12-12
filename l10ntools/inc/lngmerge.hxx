@@ -53,7 +53,7 @@ private:
     bool bQuiet;
     std::vector<ByteString> aLanguages;
 
-    bool isNextGroup(  ByteString &sGroup_out , ByteString &sLine_in);
+    bool isNextGroup(rtl::OString &sGroup_out, rtl::OString &sLine_in);
     void ReadLine(const rtl::OString &rLine_in,
         ByteStringHashMap &rText_inout);
     void WriteSDF(SvFileStream &aSDFStream, ByteStringHashMap &rText_inout,

@@ -110,10 +110,9 @@ sal_Bool LngParser::CreateSDF(const rtl::OString &rSDFFile,
 
     size_t nPos  = 0;
     sal_Bool bStart = true;
-    ByteString sGroup;
+    rtl::OString sGroup, sLine;
     ByteStringHashMap Text;
     ByteString sID;
-    ByteString sLine;
 
     while( nPos < pLines->size() ) {
         sLine = *(*pLines)[ nPos++ ];
@@ -164,12 +163,11 @@ void LngParser::WriteSDF(SvFileStream &aSDFStream,
    }
 }
 
-bool LngParser::isNextGroup( ByteString &sGroup_out , ByteString &sLine_in )
+bool LngParser::isNextGroup(rtl::OString &sGroup_out, rtl::OString &sLine_in)
 {
     sLine_in = comphelper::string::stripStart(sLine_in, ' ');
     sLine_in = comphelper::string::stripEnd(sLine_in, ' ');
-    if (( sLine_in.GetChar( 0 ) == '[' ) &&
-           ( sLine_in.GetChar( sLine_in.Len() - 1 ) == ']' ))
+    if ((sLine_in[0] == '[') && (sLine_in[sLine_in.getLength() - 1] == ']'))
     {
         sGroup_out = getToken(getToken(sLine_in, 1, '['), 0, ']');
         sGroup_out = comphelper::string::stripStart(sGroup_out, ' ');
@@ -211,16 +209,16 @@ sal_Bool LngParser::Merge(
 
     size_t nPos = 0;
     sal_Bool bGroup = sal_False;
-    ByteString sGroup;
+    rtl::OString sGroup;
 
     // seek to next group
     while ( nPos < pLines->size() && !bGroup )
     {
-        ByteString sLine( *(*pLines)[ nPos ] );
+        rtl::OString sLine( *(*pLines)[ nPos ] );
         sLine = comphelper::string::stripStart(sLine, ' ');
         sLine = comphelper::string::stripEnd(sLine, ' ');
-        if (( sLine.GetChar( 0 ) == '[' ) &&
-            ( sLine.GetChar( sLine.Len() - 1 ) == ']' ))
+        if (( sLine[0] == '[' ) &&
+            ( sLine[sLine.getLength() - 1] == ']' ))
         {
             sGroup = getToken(getToken(sLine, 1, '['), 0, ']');
             sGroup = comphelper::string::stripStart(sGroup, ' ');
@@ -277,7 +275,8 @@ sal_Bool LngParser::Merge(
                 {
                     // this is a valid text line
                     ByteString sText = getToken(getToken(sLine, 1, '\"'), 0, '\"');
-                    if( sLang.Len() ){
+                    if( sLang.Len() )
+                    {
                         ByteString sNewText;
                         pEntrys->GetText( sNewText, STRING_TYP_TEXT, sLang, sal_True );
 
