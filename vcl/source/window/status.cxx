@@ -176,20 +176,6 @@ StatusBar::StatusBar( Window* pParent, WinBits nStyle ) :
 
 // -----------------------------------------------------------------------
 
-StatusBar::StatusBar( Window* pParent, const ResId& rResId ) :
-    Window( WINDOW_STATUSBAR )
-{
-    rResId.SetRT( RSC_STATUSBAR );
-    WinBits nStyle = ImplInitRes( rResId );
-    ImplInit( pParent, nStyle );
-    ImplLoadRes( rResId );
-
-    if ( !(nStyle & WB_HIDE) )
-        Show();
-}
-
-// -----------------------------------------------------------------------
-
 StatusBar::~StatusBar()
 {
     // Alle Items loeschen
@@ -1050,28 +1036,6 @@ void StatusBar::RemoveItem( sal_uInt16 nItemId )
 
 // -----------------------------------------------------------------------
 
-void StatusBar::ShowItem( sal_uInt16 nItemId )
-{
-    sal_uInt16 nPos = GetItemPos( nItemId );
-
-    if ( nPos != STATUSBAR_ITEM_NOTFOUND )
-    {
-        ImplStatusItem* pItem = (*mpItemList)[ nPos ];
-        if ( !pItem->mbVisible )
-        {
-            pItem->mbVisible = sal_True;
-
-            mbFormat = sal_True;
-            if ( ImplIsItemUpdate() )
-                Invalidate();
-
-            ImplCallEventListeners( VCLEVENT_STATUSBAR_SHOWITEM, (void*) sal_IntPtr(nItemId) );
-        }
-    }
-}
-
-// -----------------------------------------------------------------------
-
 void StatusBar::HideItem( sal_uInt16 nItemId )
 {
     sal_uInt16 nPos = GetItemPos( nItemId );
@@ -1102,54 +1066,6 @@ sal_Bool StatusBar::IsItemVisible( sal_uInt16 nItemId ) const
         return (*mpItemList)[ nPos ]->mbVisible;
     else
         return sal_False;
-}
-
-// -----------------------------------------------------------------------
-
-void StatusBar::ShowItems()
-{
-    if ( !mbVisibleItems )
-    {
-        mbVisibleItems = sal_True;
-        if ( !mbProgressMode )
-            Invalidate();
-
-        ImplCallEventListeners( VCLEVENT_STATUSBAR_SHOWALLITEMS );
-    }
-}
-
-// -----------------------------------------------------------------------
-
-void StatusBar::HideItems()
-{
-    if ( mbVisibleItems )
-    {
-        mbVisibleItems = sal_False;
-        if ( !mbProgressMode )
-            Invalidate();
-
-        ImplCallEventListeners( VCLEVENT_STATUSBAR_HIDEALLITEMS );
-    }
-}
-
-// -----------------------------------------------------------------------
-
-void StatusBar::CopyItems( const StatusBar& rStatusBar )
-{
-    // Alle Items entfernen
-    for ( size_t i = 0, n = mpItemList->size(); i < n; ++i ) {
-        delete (*mpItemList)[ i ];
-    }
-    mpItemList->clear();
-
-    // Items kopieren
-    for ( size_t i = 0, n = rStatusBar.mpItemList->size(); i < n; ++i ) {
-        mpItemList->push_back( new ImplStatusItem( *(*rStatusBar.mpItemList)[ i ] ) );
-    }
-
-    mbFormat = sal_True;
-    if ( ImplIsItemUpdate() )
-        Invalidate();
 }
 
 // -----------------------------------------------------------------------
@@ -1275,30 +1191,6 @@ Point StatusBar::GetItemTextPos( sal_uInt16 nItemId ) const
 
 // -----------------------------------------------------------------------
 
-sal_uLong StatusBar::GetItemWidth( sal_uInt16 nItemId ) const
-{
-    sal_uInt16 nPos = GetItemPos( nItemId );
-
-    if ( nPos != STATUSBAR_ITEM_NOTFOUND )
-        return (*mpItemList)[ nPos ]->mnWidth;
-
-    return 0;
-}
-
-// -----------------------------------------------------------------------
-
-StatusBarItemBits StatusBar::GetItemBits( sal_uInt16 nItemId ) const
-{
-    sal_uInt16 nPos = GetItemPos( nItemId );
-
-    if ( nPos != STATUSBAR_ITEM_NOTFOUND )
-        return (*mpItemList)[ nPos ]->mnBits;
-
-    return 0;
-}
-
-// -----------------------------------------------------------------------
-
 long StatusBar::GetItemOffset( sal_uInt16 nItemId ) const
 {
     sal_uInt16 nPos = GetItemPos( nItemId );
@@ -1405,18 +1297,6 @@ void StatusBar::SetItemData( sal_uInt16 nItemId, void* pNewData )
             Flush();
         }
     }
-}
-
-// -----------------------------------------------------------------------
-
-void* StatusBar::GetItemData( sal_uInt16 nItemId ) const
-{
-    sal_uInt16 nPos = GetItemPos( nItemId );
-
-    if ( nPos != STATUSBAR_ITEM_NOTFOUND )
-        return (*mpItemList)[ nPos ]->mpUserData;
-
-    return NULL;
 }
 
 // -----------------------------------------------------------------------
@@ -1528,24 +1408,6 @@ void StatusBar::ImplCalcBorder( )
     Invalidate();
 }
 
-void StatusBar::SetBottomBorder( sal_Bool bBottomBorder )
-{
-    if ( mbBottomBorder != bBottomBorder )
-    {
-        mbBottomBorder = bBottomBorder;
-        ImplCalcBorder();
-    }
-}
-
-void StatusBar::SetTopBorder( sal_Bool bTopBorder )
-{
-    if ( mpImplData->mbTopBorder != static_cast<bool>(bTopBorder) )
-    {
-        mpImplData->mbTopBorder = static_cast<bool>(bTopBorder);
-        ImplCalcBorder();
-    }
-}
-
 sal_Bool StatusBar::IsTopBorder() const
 {
     return mpImplData->mbTopBorder;
@@ -1614,23 +1476,6 @@ void StatusBar::EndProgressMode()
         Invalidate();
         Update();
         Flush();
-    }
-}
-
-// -----------------------------------------------------------------------
-
-void StatusBar::ResetProgressMode()
-{
-    if ( mbProgressMode )
-    {
-        mnPercent = 0;
-        maPrgsTxt.Erase();
-        if ( IsReallyVisible() )
-        {
-            Invalidate();
-            Update();
-            Flush();
-        }
     }
 }
 

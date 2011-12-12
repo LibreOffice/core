@@ -123,7 +123,6 @@ private:
 public:
                         StatusBar( Window* pParent,
                                    WinBits nWinStyle = WB_BORDER | WB_RIGHT );
-                        StatusBar( Window* pParent, const ResId& rResId );
                         ~StatusBar();
 
     virtual void        MouseButtonDown( const MouseEvent& rMEvt );
@@ -144,15 +143,11 @@ public:
                                     sal_uInt16 nPos = STATUSBAR_APPEND );
     void                RemoveItem( sal_uInt16 nItemId );
 
-    void                ShowItem( sal_uInt16 nItemId );
     void                HideItem( sal_uInt16 nItemId );
     sal_Bool                IsItemVisible( sal_uInt16 nItemId ) const;
 
-    void                ShowItems();
-    void                HideItems();
     sal_Bool                AreItemsVisible() const { return mbVisibleItems; }
 
-    void                CopyItems( const StatusBar& rStatusBar );
     void                Clear();
 
     sal_uInt16              GetItemCount() const;
@@ -163,15 +158,12 @@ public:
     Point               GetItemTextPos( sal_uInt16 nItemId ) const;
     sal_uInt16              GetCurItemId() const { return mnCurItemId; }
 
-    sal_uLong               GetItemWidth( sal_uInt16 nItemId ) const;
-    StatusBarItemBits   GetItemBits( sal_uInt16 nItemId ) const;
     long                GetItemOffset( sal_uInt16 nItemId ) const;
 
     void                SetItemText( sal_uInt16 nItemId, const XubString& rText );
     const XubString&    GetItemText( sal_uInt16 nItemId ) const;
 
     void                SetItemData( sal_uInt16 nItemId, void* pNewData );
-    void*               GetItemData( sal_uInt16 nItemId ) const;
 
     void                SetItemCommand( sal_uInt16 nItemId, const XubString& rCommand );
     const XubString&    GetItemCommand( sal_uInt16 nItemId );
@@ -187,17 +179,13 @@ public:
     void                SetHelpId( sal_uInt16 nItemId, const rtl::OString& rHelpId );
     rtl::OString        GetHelpId( sal_uInt16 nItemId ) const;
 
-    void                SetBottomBorder( sal_Bool bBottomBorder = sal_True );
     sal_Bool                IsBottomBorder() const { return mbBottomBorder; }
-
-    void                SetTopBorder( sal_Bool bTopBorder = sal_True );
     sal_Bool                IsTopBorder() const;
 
     void                StartProgressMode( const XubString& rText );
     void                SetProgressValue( sal_uInt16 nPercent );
     void                EndProgressMode();
     sal_Bool                IsProgressMode() const { return mbProgressMode; }
-    void                ResetProgressMode();
 
     void                SetText( const XubString& rText );
 
