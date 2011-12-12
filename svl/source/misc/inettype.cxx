@@ -85,8 +85,9 @@ class Registration
 {
     typedef boost::ptr_map<UniString, TypeNameMapEntry>  TypeNameMap;
     typedef boost::ptr_map<UniString, ExtensionMapEntry> ExtensionMap;
+    typedef std::map<INetContentType, TypeIDMapEntry*>   TypeIDMap;
 
-    Table m_aTypeIDMap; // map TypeID to TypeName, Presentation
+    TypeIDMap    m_aTypeIDMap;    // map ContentType to TypeID
     TypeNameMap  m_aTypeNameMap;  // map TypeName to TypeID, Extension
     ExtensionMap m_aExtensionMap; // map Extension to TypeID
     sal_uInt32 m_nNextDynamicID;
@@ -127,8 +128,13 @@ namespace
 // static
 inline TypeIDMapEntry * Registration::getEntry(INetContentType eTypeID)
 {
-    return static_cast< TypeIDMapEntry * >(theRegistration::get().
-                                                m_aTypeIDMap.Get(eTypeID));
+    Registration &rRegistration = theRegistration::get();
+
+    TypeIDMap::iterator it = rRegistration.m_aTypeIDMap.find( eTypeID );
+    if( it != rRegistration.m_aTypeIDMap.end() )
+        return it->second;
+    else
+        return NULL;
 }
 
 //============================================================================
@@ -526,10 +532,8 @@ MediaTypeEntry const aStaticPresentationMap[]
 //============================================================================
 Registration::~Registration()
 {
-    {for (sal_uLong i = 0; i < m_aTypeIDMap.Count(); ++i)
-        delete static_cast< TypeIDMapEntry * >(m_aTypeIDMap.GetObject(i));
-    }
-    m_aTypeIDMap.Clear();
+    for ( TypeIDMap::iterator it = m_aTypeIDMap.begin(); it != m_aTypeIDMap.end(); ++it )
+        delete it->second;
 }
 
 //============================================================================
@@ -571,7 +575,7 @@ INetContentType Registration::RegisterContentType(UniString const & rTypeName,
     pTypeIDMapEntry->m_aPresentation = rPresentation;
     if (pSystemFileType)
         pTypeIDMapEntry->m_aSystemFileType = *pSystemFileType;
-    rRegistration.m_aTypeIDMap.Insert(eTypeID, pTypeIDMapEntry);
+    rRegistration.m_aTypeIDMap.insert( ::std::make_pair( eTypeID, pTypeIDMapEntry ) );
 
     std::auto_ptr<TypeNameMapEntry> pTypeNameMapEntry(new TypeNameMapEntry());
     if (pExtension)
@@ -609,10 +613,11 @@ UniString Registration::GetContentType(INetContentType eTypeID)
 {
     Registration &rRegistration = theRegistration::get();
 
-    TypeIDMapEntry * pEntry
-        = static_cast< TypeIDMapEntry * >(rRegistration.
-                                              m_aTypeIDMap.Get(eTypeID));
-    return pEntry ? pEntry->m_aTypeName : UniString();
+    TypeIDMap::iterator pEntry = rRegistration.m_aTypeIDMap.find( eTypeID );
+    if( pEntry != rRegistration.m_aTypeIDMap.end() )
+        return pEntry->second->m_aTypeName;
+    else
+        return  UniString();
 }
 
 //============================================================================
@@ -621,10 +626,11 @@ UniString Registration::GetPresentation(INetContentType eTypeID)
 {
     Registration &rRegistration = theRegistration::get();
 
-    TypeIDMapEntry * pEntry
-        = static_cast< TypeIDMapEntry * >(rRegistration.
-                                              m_aTypeIDMap.Get(eTypeID));
-    return pEntry ? pEntry->m_aPresentation : UniString();
+    TypeIDMap::iterator pEntry = rRegistration.m_aTypeIDMap.find( eTypeID );
+    if( pEntry != rRegistration.m_aTypeIDMap.end() )
+        return pEntry->second->m_aPresentation;
+    else
+        return  UniString();
 }
 
 //============================================================================
