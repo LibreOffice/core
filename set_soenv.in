@@ -38,7 +38,7 @@ my ( $oldoutfile, $outfile, $bootfile, $newline, $comment,
      $wps, $cur_dir, $par_dir, $I, $L, $tmp, $MINGW,
      $platform,
      $cygwinver, $empty, $no_ant, $no_gcc_include,
-     $no_gxx_include, $warnfile, $Warning, $result, $unsetvars, $exportvars, $win_format_var, $perl_os, @mingw_lib_include_paths, $mingw_lib_include_path);
+     $no_gxx_include, $warnfile, $Warning, $result, $unsetvars, $exportvars, $win_format_var, @mingw_lib_include_paths, $mingw_lib_include_path);
 #
 #-------------------------------------------------
 # IIb. Declaring environment values (constants).
@@ -146,11 +146,6 @@ print ("Setting up the environment for building LibreOffice $newline");
 # V. Setting the environment variables/values.
 #--------------------------------------------------
 #
-# A. Checking the platform first.
-#
-# get perls idea for OS
-# needed to differentiate cygwin/native perl on windows
-$perl_os = $^O;
 
 #
 # B. Gathering information from the system.
@@ -798,9 +793,6 @@ if ( "@WITH_MOZILLA@" eq "YES" and "@BUILD_MOZAB@" ne "TRUE" and "@SYSTEM_MOZILL
 {
    print("Checking for prebuilt Mozilla libraries ...");
    my $mozbinfile = $SRC_ROOT."/moz/zipped/";
-   if ( $^O eq 'MSWin32' ) {
-       chomp( $mozbinfile = qx{cygpath -d "$mozbinfile"} );
-   }
    $mozbinfile .= $OS.$COM.$CPU;
    if ( -e $mozbinfile."inc.zip"
         and -e $mozbinfile."lib.zip"
@@ -2137,7 +2129,7 @@ sub CheckPathName
 #-------------------------------------------------------------
 sub CheckPathExist
 {  my $dir = $_[ 0 ];
-   if ( !( -d $dir ) and $^O ne 'MSWin32' )
+   if ( !( -d $dir ) )
    {  print ( "The directory $_[ 0 ] does not exist. Please create first.\n" );
       exit 1;
    }
