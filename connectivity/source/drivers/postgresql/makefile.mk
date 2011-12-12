@@ -77,6 +77,18 @@ PQ_SDBC_MINOR=8
 PQ_SDBC_MICRO=2
 PQ_SDBC_VERSION=$(PQ_SDBC_MAJOR).$(PQ_SDBC_MINOR).$(PQ_SDBC_MICRO)
 
+.IF "$(SYSTEM_POSTGRESQL)"=="YES"
+LIBPQ_LINK=-lpq
+.ELSE #SYSTEM_POSTGRESQL==NO
+.IF "$(GUI)$(COM)"=="WNTMSC"
+LIBPQ_LINK=$(OUTDIR)/lib/libpq.lib ws2_32.lib secur32.lib advapi32.lib shell32.lib
+.ELSE
+LIBPQ_LINK=$(OUTDIR)/lib/libpq.a
+.ENDIF
+POSTGRESQL_INC=-I$(OUTDIR)/inc/postgresql
+POSTGRESQL_LIB=
+.ENDIF
+
 CFLAGS+=$(POSTGRESQL_INC) \
     -DPQ_SDBC_MAJOR=$(PQ_SDBC_MAJOR) \
     -DPQ_SDBC_MINOR=$(PQ_SDBC_MINOR) \
@@ -96,22 +108,6 @@ SHL1LIBS=	$(LIB1TARGET)
 SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=	$(SHL1TARGET)
 SHL1VERSIONMAP=$(SOLARENV)$/src$/reg-component.map
-
-# use the static version on Windows?
-# LEM 17/11/2011: removed everything except libpq proper;
-#  as per instructions in libpq documentation.
-#  If it turns out the rest was needed, reenable it.
-.IF "$(SYSTEM_POSTGRESQL)"=="YES"
-LIBPQ_LINK=-lpq
-.ELSE #SYSTEM_POSTGRESQL==NO
-.IF "$(GUI)$(COM)"=="WNTMSC"
-LIBPQ_LINK=$(OUTDIR_FOR_BUILD)/lib/libpq.lib ws2_32.lib secur32.lib advapi32.lib shell32.lib
-.ELSE
-LIBPQ_LINK=$(OUTDIR_FOR_BUILD)/lib/libpq.a
-.ENDIF
-POSTGRESQL_INC=-I$(OUTDIR_FOR_BUILD)/inc/postgresql
-POSTGRESQL_LIB=
-.ENDIF
 
 SHL2TARGET=postgresql-sdbc-impl.uno
 LIB2TARGET=$(SLB)$/$(SHL2TARGET).lib

@@ -5432,8 +5432,10 @@ dnl ===================================================================
 dnl Check for PostgreSQL stuff
 dnl ===================================================================
 
-if test "x$enable_ext_postgresql_sdbc" = "xyes" -a "x$enable_extension_integration" != "xno"; then
-    SCPDEFS="$SCPDEFS -DWITH_EXTENSION_POSTGRESQL"
+if test "x$enable_ext_postgresql_sdbc" = "xyes"; then
+    if test "x$enable_extension_integration" = "xyes"; then
+      SCPDEFS="$SCPDEFS -DWITH_EXTENSION_POSTGRESQL"
+    fi
 
     AC_MSG_CHECKING([PostgreSQL C interface])
     if test "$with_system_postgresql" = "yes"; then
