@@ -1125,7 +1125,7 @@ rtl::OUString SalDisplay::GetKeyName( sal_uInt16 nKeyCode ) const
             nKeySym = XK_slash;
             break;
         case KEY_POINT:
-            nKeySym = XK_period;
+            aCustomKeyName = '.';
             break;
         case KEY_COMMA:
             nKeySym = XK_comma;
@@ -1467,6 +1467,7 @@ sal_uInt16 SalDisplay::GetKeyCode( KeySym keysym, char*pcPrintable ) const
             break;
         case XK_period:
             nKey = KEY_POINT;
+            *pcPrintable = '.';
             break;
         case XK_comma:
             nKey = KEY_COMMA;
