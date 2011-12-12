@@ -452,6 +452,17 @@ Module gid_Module_Root_Extension_Dictionary_Ru
     Styles = ();
 End
 
+Module gid_Module_Root_Extension_Dictionary_Si
+    MOD_NAME_DESC ( MODULE_EXTENSION_DICTIONARY_SI );
+    Files = (gid_File_Extension_Dictionary_Si);
+    InstallOrder = "2000";
+    Sortkey = "690";
+    Spellcheckerlanguage = "si";
+    PackageInfo = "packinfo_office.txt";
+    ParentID = gid_Module_Dictionaries;
+    Styles = ();
+End
+
 Module gid_Module_Root_Extension_Dictionary_Sk
     MOD_NAME_DESC ( MODULE_EXTENSION_DICTIONARY_SK );
     Files = (gid_File_Extension_Dictionary_Sk);

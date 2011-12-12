@@ -1628,6 +1628,15 @@ End
 #endif
 
 #ifndef WITHOUT_MYSPELL_DICTS
+File gid_File_Extension_Dictionary_Si
+	Dir = gid_Brand_Dir_Share_Extensions_Dict_Si;
+	Name = "dict-si.oxt";
+	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
+	UnixRights = 444;
+End
+#endif
+
+#ifndef WITHOUT_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Sk
 	Dir = gid_Brand_Dir_Share_Extensions_Dict_Sk;
 	Name = "dict-sk.oxt";
