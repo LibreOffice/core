@@ -116,7 +116,7 @@ OString createFileNameFromType( const OString& destination,
         fileNameBuf.append("/", 1);
 
     OString tmpStr(type);
-    if (prefix.getLength() > 0)
+    if (!prefix.isEmpty())
     {
         tmpStr = type.replaceAt(type.lastIndexOf('/')+1, 0, prefix);
     }
@@ -298,7 +298,7 @@ FileStream::FileStream()
 FileStream::FileStream(const OString& name, FileAccessMode mode)
     : m_file(NULL)
 {
-    if ( name.getLength() > 0 )
+    if ( !name.isEmpty() )
     {
         OUString sUrl(convertToFileUrl(name));
 #ifdef SAL_UNX
@@ -338,7 +338,7 @@ void FileStream::createTempFile(const OString& sPath)
     OUString sTmpPath;
     OUString sTmpName;
 
-    if (sPath.getLength() > 0)
+    if (!sPath.isEmpty())
         sTmp = sPath;
 
     sTmpPath = convertToFileUrl(sTmp);
@@ -364,7 +364,7 @@ void FileStream::createTempFile(const OString& sPath)
 
 void FileStream::open(const OString& name, FileAccessMode mode)
 {
-    if ( name.getLength() > 0 )
+    if ( !name.isEmpty() )
     {
         oslFileError ret =  osl_File_E_None;
         if ((ret = osl_openFile(convertToFileUrl(name).pData, &m_file, checkAccessMode(mode))) == osl_File_E_None)
