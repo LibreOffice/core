@@ -33,11 +33,6 @@
 #include <sstream>
 #include <algorithm>
 #include <ctype.h>
-#ifdef SYSTEM_DB
-#include <db.h>
-#else
-#include <berkeleydb/db.h>
-#endif
 
 #include <boost/shared_ptr.hpp>
 

@@ -1,4 +1,4 @@
-tr	l10ntools	:	tools LIBXSLT:libxslt BERKELEYDB:berkeleydb LUCENE:lucene PYTHON:python NULL
+tr	l10ntools	:	tools LIBXSLT:libxslt LUCENE:lucene PYTHON:python NULL
 tr	l10ntools						usr1	-	all	tr_mkout NULL
 tr	l10ntools\inc					nmake	-	all	tr_inc NULL
 tr	l10ntools\scripts					nmake	-	all	tr_scripts NULL
