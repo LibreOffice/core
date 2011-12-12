@@ -46,21 +46,22 @@ friend class CfgParser;
 friend class CfgExport;
 friend class CfgMerge;
 private:
-    ByteString sTagType;
-    ByteString sIdentifier;
+    rtl::OString sTagType;
+    rtl::OString sIdentifier;
 
-    ByteString sResTyp;
+    rtl::OString sResTyp;
 
-    ByteString sTextTag;
-    ByteString sEndTextTag;
+    rtl::OString sTextTag;
+    rtl::OString sEndTextTag;
 
     ByteStringHashMap sText;
 public:
-    CfgStackData( const ByteString &rTag, const ByteString &rId )
-            : sTagType( rTag ), sIdentifier( rId ) {};
+    CfgStackData(const rtl::OString &rTag, const rtl::OString &rId)
+        : sTagType( rTag ), sIdentifier( rId )
+    {}
 
-    ByteString &GetTagType() { return sTagType; }
-    ByteString &GetIdentifier() { return sIdentifier; }
+    const rtl::OString &GetTagType() { return sTagType; }
+    const rtl::OString &GetIdentifier() { return sIdentifier; }
 
 };
 
@@ -79,18 +80,19 @@ public:
     CfgStack() {}
     ~CfgStack();
 
-    CfgStackData *Push( const ByteString &rTag, const ByteString &rId );
+    CfgStackData *Push(const rtl::OString &rTag, const rtl::OString &rId);
     CfgStackData *Pop()
-        {
-            if ( maList.empty() ) return NULL;
-            CfgStackData* temp = maList.back();
-            maList.pop_back();
-            return temp;
-        }
+    {
+        if (maList.empty())
+            return NULL;
+        CfgStackData* temp = maList.back();
+        maList.pop_back();
+        return temp;
+    }
 
     CfgStackData *GetStackData( size_t nPos = LIST_APPEND );
 
-    ByteString GetAccessPath( size_t nPos = LIST_APPEND );
+    rtl::OString GetAccessPath( size_t nPos = LIST_APPEND );
 
     size_t size() const { return maList.size(); }
 };
@@ -102,11 +104,11 @@ public:
 class CfgParser
 {
 protected:
-    ByteString sCurrentResTyp;
-    ByteString sCurrentIsoLang;
+    rtl::OString sCurrentResTyp;
+    rtl::OString sCurrentIsoLang;
     ByteString sCurrentText;
 
-    ByteString sLastWhitespace;
+    rtl::OString sLastWhitespace;
 
     CfgStack aStack;
     CfgStackData *pStackData;
@@ -115,11 +117,11 @@ protected:
 
     virtual void WorkOnText(
         ByteString &rText,
-        const ByteString &nLangIndex )=0;
+        const rtl::OString &rLangIndex )=0;
 
     virtual void WorkOnRessourceEnd()=0;
 
-    virtual void Output( const ByteString& rOutput )=0;
+    virtual void Output(const rtl::OString & rOutput)=0;
 
     void Error( const ByteString &rError );
 
@@ -131,7 +133,7 @@ private:
         const ByteString &rIsoLang,
         const ByteString &rResTyp );
 
-sal_Bool IsTokenClosed( const ByteString &rToken );
+    sal_Bool IsTokenClosed(const rtl::OString &rToken);
 
 public:
     CfgParser();
@@ -164,13 +166,13 @@ private:
     ByteString sPath;
     std::vector<ByteString> aLanguages;
 protected:
-    void WorkOnText(
+    virtual void WorkOnText(
         ByteString &rText,
-        const ByteString &rIsoLang
+        const rtl::OString &rIsoLang
         );
 
     void WorkOnRessourceEnd();
-    void Output( const ByteString& rOutput );
+    void Output(const rtl::OString& rOutput);
 public:
     CfgExport(
         const ByteString &rOutputFile,
@@ -191,23 +193,18 @@ private:
     std::vector<ByteString> aLanguages;
     ResData *pResData;
 
-    ByteString sFilename;
+    rtl::OString sFilename;
     sal_Bool bEnglish;
 
 protected:
-    void WorkOnText(
-        ByteString &rText,
-        const ByteString &nLangIndex );
+    virtual void WorkOnText(ByteString &rText, const rtl::OString &rLangIndex);
 
     void WorkOnRessourceEnd();
 
-    void Output( const ByteString& rOutput );
+    void Output(const rtl::OString& rOutput);
 public:
-    CfgMerge(
-        const ByteString &rMergeSource,
-        const ByteString &rOutputFile,
-        ByteString &rFilename
-    );
+    CfgMerge(const rtl::OString &rMergeSource,
+        const rtl::OString &rOutputFile, const rtl::OString &rFilename);
     ~CfgMerge();
 };
 

@@ -62,22 +62,21 @@ int rsc2_main(int, char**);
 |*
 |*    Beschreibung
 *************************************************************************/
-static sal_Bool CallPrePro( const ByteString& rInput,
-                        const ByteString& rOutput,
-                        RscPtrPtr * pCmdLine,
-                        sal_Bool bResponse )
+static sal_Bool CallPrePro( const rtl::OString& rInput,
+    const rtl::OString& rOutput, RscPtrPtr * pCmdLine,
+    sal_Bool bResponse )
 {
     RscPtrPtr       aNewCmdL;   // Kommandozeile
     RscPtrPtr       aRespCmdL;   // Kommandozeile
     RscPtrPtr *     pCmdL = &aNewCmdL;
     int             i, nRet;
     FILE*           fRspFile = NULL;
-    ByteString      aRspFileName;
+    rtl::OString    aRspFileName;
 
     if( bResponse )
     {
         aRspFileName = ::GetTmpFileName();
-        fRspFile = fopen( aRspFileName.GetBuffer(), "w" );
+        fRspFile = fopen( aRspFileName.getStr(), "w" );
     }
 
     if( !fRspFile )
@@ -100,8 +99,8 @@ static sal_Bool CallPrePro( const ByteString& rInput,
         }
     }
 
-    aNewCmdL.Append( rsc_strdup( rInput.GetBuffer() ) );
-    aNewCmdL.Append( rsc_strdup( rOutput.GetBuffer() ) );
+    aNewCmdL.Append( rsc_strdup( rInput.getStr() ) );
+    aNewCmdL.Append( rsc_strdup( rOutput.getStr() ) );
     aNewCmdL.Append( (void *)0 );
 
     if ( bVerbose )
@@ -145,11 +144,13 @@ static sal_Bool CallPrePro( const ByteString& rInput,
     nRet = rscpp_main( pCmdL->GetCount()-1, (char**)pCmdL->GetBlock() );
 
     if ( fRspFile )
+    {
         #if OSL_DEBUG_LEVEL > 5
-        fprintf( stderr, "leaving response file %s\n", aRspFileName.GetBuffer() );
+        fprintf( stderr, "leaving response file %s\n", aRspFileName.getStr() );
         #else
-        unlink( aRspFileName.GetBuffer() );
+        unlink( aRspFileName.getStr() );
         #endif
+    }
     if ( nRet )
         return sal_False;
 
@@ -163,8 +164,7 @@ static sal_Bool CallPrePro( const ByteString& rInput,
 |*    Beschreibung
 *************************************************************************/
 static sal_Bool CallRsc2( RscStrList * pInputList,
-                      ByteString aSrsName,
-                      RscPtrPtr * pCmdLine )
+    const rtl::OString &rSrsName, RscPtrPtr * pCmdLine )
 {
     int nRet;
     rtl::OString*  pString;
@@ -200,7 +200,7 @@ static sal_Bool CallRsc2( RscStrList * pInputList,
             aNewCmdL.Append( rsc_strdup( (char *)pCmdLine->GetEntry( i ) ) );
     };
 
-    aNewCmdL.Append( rsc_strdup( aSrsName.GetBuffer() ) );
+    aNewCmdL.Append( rsc_strdup( rSrsName.getStr() ) );
 
     for ( size_t i = 0, n = pInputList->size(); i < n; ++i )
     {
@@ -232,12 +232,12 @@ static sal_Bool CallRsc2( RscStrList * pInputList,
 *************************************************************************/
 SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 {
-    sal_Bool            bPrePro  = sal_True;
-    sal_Bool            bHelp    = sal_False;
-    sal_Bool            bError   = sal_False;
-    sal_Bool            bResponse = sal_False;
-    ByteString      aSrsName;
-    ByteString      aResName;
+    sal_Bool        bPrePro  = sal_True;
+    sal_Bool        bHelp    = sal_False;
+    sal_Bool        bError   = sal_False;
+    sal_Bool        bResponse = sal_False;
+    rtl::OString    aSrsName;
+    rtl::OString    aResName;
     RscStrList      aInputList;
     RscStrList      aTmpList;
     char *          pStr;
@@ -296,12 +296,12 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     if( !aInputList.empty() )
     {
         /* build the output file names          */
-        if( ! aResName.Len() )
+        if (!aResName.getLength())
             aResName = OutputFile( *aInputList[ 0 ], "res" );
         if( ! bSetSrs )
         {
-            aSrsName = "-fp=";
-            aSrsName += OutputFile( *aInputList[ 0 ], "srs" );
+            aSrsName = rtl::OStringBuffer("-fp=").append(OutputFile(*aInputList[0], "srs")).
+                makeStringAndClear();
         }
     };
 
@@ -309,7 +309,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         bPrePro = sal_False;
     if( bPrePro && !aInputList.empty() )
     {
-        ByteString aTmpName;
+        rtl::OString aTmpName;
 
         for ( size_t k = 0, n = aInputList.size(); k < n; ++k )
         {

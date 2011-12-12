@@ -64,8 +64,8 @@ ByteString sPrjRoot;
 ByteString sInputFileName;
 ByteString sActFileName;
 ByteString sFullEntry;
-ByteString sOutputFile;
-ByteString sMergeSrc;
+rtl::OString sOutputFile;
+rtl::OString sMergeSrc;
 String sUsedTempFile;
 
 CfgParser *pParser;
@@ -145,7 +145,7 @@ extern char *GetOutputFile( int argc, char* argv[])
                 }
                 break;
                 case STATE_MERGESRC: {
-                    sMergeSrc = ByteString( argv[ i ]);
+                    sMergeSrc = rtl::OString(argv[i]);
                     bMergeMode = sal_True; // activate merge mode, cause merge database found
                 }
                 break;
@@ -160,26 +160,25 @@ extern char *GetOutputFile( int argc, char* argv[])
     if ( bInput ) {
         // command line is valid
         bEnableExport = sal_True;
-        char *pReturn = new char[ sOutputFile.Len() + 1 ];
-        strcpy( pReturn, sOutputFile.GetBuffer());  // #100211# - checked
+        char *pReturn = new char[ sOutputFile.getLength() + 1 ];
+        strcpy( pReturn, sOutputFile.getStr());  // #100211# - checked
         return pReturn;
     }
 
     // command line is not valid
     return NULL;
 }
-/*****************************************************************************/
+
 int InitCfgExport( char *pOutput , char* pFilename )
-/*****************************************************************************/
 {
     // instanciate Export
-    ByteString sOutput( pOutput );
+    rtl::OString sOutput( pOutput );
     ByteString sFilename( pFilename );
     Export::InitLanguages();
 
     if ( bMergeMode )
         pParser = new CfgMerge( sMergeSrc, sOutputFile, sFilename );
-      else if ( sOutputFile.Len())
+    else if ( sOutputFile.getLength())
         pParser = new CfgExport( sOutputFile, sPrj, sActFileName );
 
     return 1;
@@ -283,7 +282,7 @@ int GetError()
 // class CfgStackData
 //
 
-CfgStackData* CfgStack::Push( const ByteString &rTag, const ByteString &rId )
+CfgStackData* CfgStack::Push(const rtl::OString &rTag, const rtl::OString &rId)
 {
     CfgStackData *pD = new CfgStackData( rTag, rId );
     maList.push_back( pD );
@@ -303,21 +302,20 @@ CfgStack::~CfgStack()
     maList.clear();
 }
 
-/*****************************************************************************/
-ByteString CfgStack::GetAccessPath( size_t nPos )
-/*****************************************************************************/
+rtl::OString CfgStack::GetAccessPath( size_t nPos )
 {
     if ( nPos == LIST_APPEND )
         nPos = maList.size() - 1;
 
-    ByteString sReturn;
-    for ( size_t i = 0; i <= nPos; i++ ) {
-        if ( i )
-            sReturn += ".";
-        sReturn += GetStackData( i )->GetIdentifier();
+    rtl::OStringBuffer sReturn;
+    for (size_t i = 0; i <= nPos; ++i)
+    {
+        if (i)
+            sReturn.append('.');
+        sReturn.append(GetStackData( i )->GetIdentifier());
     }
 
-    return sReturn;
+    return sReturn.makeStringAndClear();
 }
 
 /*****************************************************************************/
@@ -347,18 +345,13 @@ CfgParser::CfgParser()
 {
 }
 
-/*****************************************************************************/
 CfgParser::~CfgParser()
-/*****************************************************************************/
 {
 }
 
-
-/*****************************************************************************/
-sal_Bool CfgParser::IsTokenClosed( const ByteString &rToken )
-/*****************************************************************************/
+sal_Bool CfgParser::IsTokenClosed(const rtl::OString &rToken)
 {
-    return rToken.GetChar( rToken.Len() - 2 ) == '/';
+    return rToken[rToken.getLength() - 2] == '/';
 }
 
 /*****************************************************************************/
@@ -392,7 +385,7 @@ int CfgParser::ExecuteAnalyzedToken( int nToken, char *pToken )
     if ( sToken == " " || sToken == "\t" )
         sLastWhitespace += sToken;
 
-    ByteString sTokenName;
+    rtl::OString sTokenName;
     ByteString sTokenId;
 
     sal_Bool bOutput = sal_True;
@@ -484,13 +477,15 @@ int CfgParser::ExecuteAnalyzedToken( int nToken, char *pToken )
         break;
         case CFG_CLOSETAG:
             sTokenName = getToken(getToken(getToken(sToken, 1, '/'), 0, '>'), 0, ' ');
-               if ( aStack.GetStackData() && ( aStack.GetStackData()->GetTagType() == sTokenName )) {
-                if ( ! sCurrentText.Len())
+            if ( aStack.GetStackData() && ( aStack.GetStackData()->GetTagType() == sTokenName ))
+            {
+                if (!sCurrentText.Len())
                     WorkOnRessourceEnd();
                 aStack.Pop();
                 pStackData = aStack.GetStackData();
             }
-            else {
+            else
+            {
                 ByteString sError( "Misplaced close tag: " );
                 ByteString sInFile(" in file ");
                 sError += sToken;
@@ -511,7 +506,8 @@ int CfgParser::ExecuteAnalyzedToken( int nToken, char *pToken )
         break;
     }
 
-    if ( sCurrentText.Len() && nToken != CFG_TEXTCHAR ) {
+    if ( sCurrentText.Len() && nToken != CFG_TEXTCHAR )
+    {
         AddText( sCurrentText, sCurrentIsoLang, sCurrentResTyp );
         Output( sCurrentText );
         sCurrentText = "";
@@ -527,12 +523,8 @@ int CfgParser::ExecuteAnalyzedToken( int nToken, char *pToken )
     return 1;
 }
 
-/*****************************************************************************/
-void CfgExport::Output( const ByteString& rOutput )
-/*****************************************************************************/
+void CfgExport::Output(const rtl::OString&)
 {
-    // Dummy operation to suppress warnings caused by poor class design
-    ByteString a( rOutput );
 }
 
 /*****************************************************************************/
@@ -681,14 +673,12 @@ void CfgExport::WorkOnRessourceEnd()
     }
 }
 
-/*****************************************************************************/
 void CfgExport::WorkOnText(
     ByteString &rText,
-    const ByteString &rIsoLang
+    const rtl::OString &rIsoLang
 )
-/*****************************************************************************/
 {
-    if( rIsoLang.Len() ) Export::UnquotHTML( rText );
+    if( rIsoLang.getLength() ) Export::UnquotHTML( rText );
 }
 
 
@@ -696,18 +686,16 @@ void CfgExport::WorkOnText(
 // class CfgMerge
 //
 
-/*****************************************************************************/
 CfgMerge::CfgMerge(
-    const ByteString &rMergeSource, const ByteString &rOutputFile,
-    ByteString &rFilename )
-/*****************************************************************************/
+    const rtl::OString &rMergeSource, const rtl::OString &rOutputFile,
+    const rtl::OString &rFilename)
                 : CfgOutputParser( rOutputFile ),
                 pMergeDataFile( NULL ),
                 pResData( NULL ),
                 sFilename( rFilename ),
                 bEnglish( sal_False )
 {
-    if (rMergeSource.Len())
+    if (rMergeSource.getLength())
     {
         pMergeDataFile = new MergeDataFile(
         rMergeSource, sInputFileName, bErrorLog, true );
@@ -730,12 +718,7 @@ CfgMerge::~CfgMerge()
     delete pResData;
 }
 
-/*****************************************************************************/
-void CfgMerge::WorkOnText(
-    ByteString &rText,
-    const ByteString& nLangIndex
-)
-/*****************************************************************************/
+void CfgMerge::WorkOnText(ByteString &rText, const rtl::OString& rLangIndex)
 {
 
     if ( pMergeDataFile && bLocalize ) {
@@ -757,15 +740,15 @@ void CfgMerge::WorkOnText(
             pResData->sResTyp = pStackData->sResTyp;
         }
 
-        if (( nLangIndex.EqualsIgnoreCaseAscii("en-US") ))
+        if (rLangIndex.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("en-US")))
             bEnglish = sal_True;
 
         PFormEntrys *pEntrys = pMergeDataFile->GetPFormEntrysCaseSensitive( pResData );
         if ( pEntrys ) {
             ByteString sContent;
-            pEntrys->GetText( sContent, STRING_TYP_TEXT, nLangIndex );
+            pEntrys->GetText( sContent, STRING_TYP_TEXT, rLangIndex );
 
-            if ( Export::isAllowed( nLangIndex ) &&
+            if ( Export::isAllowed( rLangIndex ) &&
                 ( sContent != "-" ) && ( sContent.Len()))
             {
                 Export::QuotHTML( rText );
@@ -774,12 +757,10 @@ void CfgMerge::WorkOnText(
     }
 }
 
-/*****************************************************************************/
-void CfgMerge::Output( const ByteString& rOutput )
-/*****************************************************************************/
+void CfgMerge::Output(const rtl::OString& rOutput)
 {
-    if ( pOutputStream )
-        pOutputStream->Write( rOutput.GetBuffer(), rOutput.Len());
+    if (pOutputStream)
+        pOutputStream->Write(rOutput.getStr(), rOutput.getLength());
 }
 
 /*****************************************************************************/

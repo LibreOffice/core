@@ -381,7 +381,7 @@ void IncludeParser( RscFileInst * pFileInst )
                 }
                 else if( INCLUDE_STRING == nToken ){
                     lKey = pTypCon->aFileTab.NewIncFile( aYYSType.string,
-                                                         ByteString() );
+                                                         rtl::OString() );
                     pFName->InsertDependFile( lKey, ULONG_MAX );
                 };
             };

@@ -311,12 +311,12 @@ ERRTYPE RscMgr::WriteRc( const RSCINST &, RscWriteRc &,
 }
 
 
-static rtl::OString MakeSmartName( const ByteString & rDefName )
+static rtl::OString MakeSmartName( const rtl::OString& rDefName )
 {
     rtl::OStringBuffer aSmartName;
-    if( rDefName.Len() )
+    if( rDefName.getStr() )
     {
-        char * pStr = (char *)rDefName.GetBuffer();
+        char * pStr = (char *)rDefName.getStr();
         aSmartName.append(static_cast<sal_Char>(toupper(*pStr)));
         while( *++pStr )
         {
@@ -335,10 +335,10 @@ static rtl::OString MakeSmartName( const ByteString & rDefName )
 }
 
 static rtl::OString MakeName( RscTypCont * pTypCon, RscTop * pClass,
-                            const ByteString & rName )
+                            const rtl::OString& rName )
 {
     rtl::OStringBuffer aRet;
-    if( !pTypCon->IsSmart() || isdigit( rName.GetChar(0) ) )
+    if( !pTypCon->IsSmart() || isdigit( rName[0] ) )
     {
         aRet.append(pHS->getString( pClass->GetId() ).getStr());
         aRet.append(rName);

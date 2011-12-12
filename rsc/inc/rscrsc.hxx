@@ -97,14 +97,14 @@ private:
     void            Append( const rtl::OString& rOutputSrs, const rtl::OString& rTmpFile );
 
     bool            GetImageFilePath( const RscCmdLine::OutputFile& rOutputFile,
-                                       const WriteRcContext& rContext,
-                                    const ByteString& rBaseFileName,
-                                    ByteString& rImagePath,
-                                    FILE* pSysListFile );
+                                      const WriteRcContext& rContext,
+                                      const rtl::OString& rBaseFileName,
+                                      ByteString& rImagePath,
+                                      FILE* pSysListFile );
     void            PreprocessSrsFile( const RscCmdLine::OutputFile& rOutputFile,
-                                          const WriteRcContext& rContext,
-                                         const DirEntry& rSrsInPath,
-                                         const DirEntry& rSrsOutPath );
+                                       const WriteRcContext& rContext,
+                                       const DirEntry& rSrsInPath,
+                                       const DirEntry& rSrsOutPath );
 
 public:
     RscTypCont*     pTC;        // String und Id-Verwalter

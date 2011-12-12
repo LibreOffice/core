@@ -504,13 +504,13 @@ type
   {
 	if( $1 )
 	{
-		ByteString aTypeName = pHS->getString( $1->GetId() );
-		aTypeName += "[]";
-		$$ = pTC->SearchType( pHS->getID( aTypeName.GetBuffer(), true ) );
+		rtl::OString aTypeName = rtl::OStringBuffer(pHS->getString($1->GetId())).
+                    append("[]").makeStringAndClear();
+		$$ = pTC->SearchType( pHS->getID( aTypeName.getStr(), true ) );
 		if( !$$ )
 		{
 			RscCont * pCont;
-			pCont = new RscCont( pHS->getID( aTypeName.GetBuffer() ), RSC_NOTYPE );
+			pCont = new RscCont( pHS->getID( aTypeName.getStr() ), RSC_NOTYPE );
 			pCont->SetTypeClass( $1 );
 			pTC->InsertType( pCont );
 			$$ = pCont;

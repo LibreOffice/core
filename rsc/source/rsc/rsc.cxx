@@ -856,11 +856,11 @@ ERRTYPE RscCompiler::Link()
             pTC->SetSourceCharSet( RTL_TEXTENCODING_UTF8 );
             pTC->ClearSysNames();
             rtl::OStringBuffer aSysSearchPath(it->aLangSearchPath);
-            xub_StrLen nIndex = 0;
-            ByteString aSearchPath = pTC->GetSearchPath();
-            while( nIndex != STRING_NOTFOUND )
+            sal_Int32 nIndex = 0;
+            rtl::OString aSearchPath = pTC->GetSearchPath();
+            do
             {
-                ByteString aToken = aSearchPath.GetToken( 0, cSearchDelim, nIndex );
+                rtl::OString aToken = aSearchPath.getToken( 0, cSearchDelim, nIndex );
                 if (aSysSearchPath.getLength())
                     aSysSearchPath.append(cSearchDelim);
                 aSysSearchPath.append(aToken);
@@ -869,6 +869,7 @@ ERRTYPE RscCompiler::Link()
                 aSysSearchPath.append(cSearchDelim);
                 aSysSearchPath.append(aToken);
             }
+            while ( nIndex >= 0 );
             OSL_TRACE( "setting search path for language %s: %s", it->aLangName.GetBuffer(), aSysSearchPath.getStr() );
             pTC->SetSysSearchPath(aSysSearchPath.makeStringAndClear());
 
@@ -975,12 +976,12 @@ ERRTYPE RscCompiler::Link()
 
         pTC->pEH->StdOut( "Generating .cxx file\n" );
 
-        ByteString aHxx = pCL->aOutputHxx;
-        if( !aHxx.Len() )
+        rtl::OString aHxx = pCL->aOutputHxx;
+        if( !aHxx.getLength() )
         {
             UniString aUniOutputCxx( pCL->aOutputCxx, RTL_TEXTENCODING_ASCII_US );
-            aHxx = rtl::OUStringToOString(DirEntry( aUniOutputCxx ).GetBase(), RTL_TEXTENCODING_ASCII_US);
-            aHxx += ".hxx";
+            aHxx = rtl::OStringBuffer(rtl::OUStringToOString(DirEntry(aUniOutputCxx).GetBase(),
+                RTL_TEXTENCODING_ASCII_US)).append(".hxx").makeStringAndClear();
         }
 
         // Schreibe Datei
@@ -1050,20 +1051,17 @@ void RscCompiler::Append( const rtl::OString& rOutputSrs,
 
 bool RscCompiler::GetImageFilePath( const RscCmdLine::OutputFile& rOutputFile,
                                     const WriteRcContext& rContext,
-                                    const ByteString& rBaseFileName,
+                                    const rtl::OString& rBaseFileName,
                                     ByteString& rImagePath,
                                     FILE* pSysListFile )
 {
-    ::std::list< ByteString >                   aFileNames;
-    bool                                        bFound = false;
+    ::std::list< rtl::OString >  aFileNames;
+    bool bFound = false;
 
-    ByteString  aFileName( rBaseFileName );
-    aFileNames.push_back( aFileName += ".png" );
+    aFileNames.push_back( rBaseFileName + rtl::OString(".png") );
+    aFileNames.push_back( rBaseFileName + rtl::OString(".bmp") );
 
-    aFileName = rBaseFileName;
-    aFileNames.push_back( aFileName += ".bmp" );
-
-    ::std::list< ByteString >::iterator aFileIter( aFileNames.begin() );
+    ::std::list< rtl::OString >::iterator aFileIter( aFileNames.begin() );
 
     while( ( aFileIter != aFileNames.end() ) && !bFound )
     {
@@ -1090,11 +1088,9 @@ bool RscCompiler::GetImageFilePath( const RscCmdLine::OutputFile& rOutputFile,
 
                 while( ( aReplIter != rContext.pCmdLine->m_aReplacements.end() ) && !bFound )
                 {
-                    ByteString aSearch( aReplIter->second );
-                    aSearch.ToLowerAscii();
-                    ByteString aSearchIn( aRelPathStr );
-                    aSearchIn.ToLowerAscii();
-                    if( aSearchIn.Search( aSearch ) == 0 )
+                    rtl::OString aSearch(aReplIter->second.toAsciiLowerCase());
+                    rtl::OString aSearchIn(aRelPathStr.toAsciiLowerCase());
+                    if( aSearchIn.indexOf(aSearch) == 0 )
                     {
                         sal_Int32       nCopyPos = aReplIter->second.getLength(), nLength = aRelPathStr.getLength();
                         const sal_Char* pChars = aRelPathStr.getStr();
@@ -1145,7 +1141,7 @@ void RscCompiler::PreprocessSrsFile( const RscCmdLine::OutputFile& rOutputFile,
 {
     SvFileStream                aIStm( rSrsInPath.GetFull(), STREAM_READ );
     SvFileStream                aOStm( rSrsOutPath.GetFull(), STREAM_WRITE | STREAM_TRUNC );
-    ::std::vector< ByteString > aMissingImages;
+    ::std::vector< rtl::OString > aMissingImages;
     FILE*                       pSysListFile = rContext.aOutputSysList.getLength() ? fopen( rContext.aOutputSysList.getStr(), "ab" ) : NULL;
 
     if( !aIStm.GetError() && !aOStm.GetError() )
@@ -1183,7 +1179,7 @@ void RscCompiler::PreprocessSrsFile( const RscCmdLine::OutputFile& rOutputFile,
                     }
                     while( aLine.Search( "Prefix" ) == STRING_NOTFOUND );
 
-                    const ByteString aPrefix( getToken(aLine, 1, '"') );
+                    const rtl::OString aPrefix( getToken(aLine, 1, '"') );
                     aIStm.Seek( nImgListStartPos );
 
                     do

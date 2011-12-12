@@ -147,19 +147,19 @@ void RscLangEnum::Init( RscNameTable& rNames )
     rtl::OString aEnvIsoTokens = getenv( "RSC_LANG_ISO" );
     if ( aEnvIsoTokens.getLength() )
     {
-        ByteString aIsoToken;
+        rtl::OString aIsoToken;
         sal_uInt16 nTokenCounter = 0;
         sal_Bool bOneMore = 1;
         while ( bOneMore )
         {
             aIsoToken = comphelper::string::getToken(aEnvIsoTokens, nTokenCounter, ' ');
-            if ( aIsoToken.Len() )
+            if ( aIsoToken.getLength() )
             {
-                SetConstant( rNames.Put( aIsoToken.GetBuffer(), CONSTNAME, mnLangId ), mnLangId );
+                SetConstant( rNames.Put( aIsoToken.getStr(), CONSTNAME, mnLangId ), mnLangId );
                 if ( ! GetLangId( aIsoToken ))
                     ULong_Iso_map[ aIsoToken ] = mnLangId;
 #if OSL_DEBUG_LEVEL > 2
-                fprintf( stderr, "Env ISO Language out: %s 0x%lx\n", aIsoToken.GetBuffer(), mnLangId );
+                fprintf( stderr, "Env ISO Language out: %s 0x%lx\n", aIsoToken.getStr(), mnLangId );
 #endif
                 mnLangId++;
             }
