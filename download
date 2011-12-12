@@ -211,8 +211,8 @@ if [ "$COM" = "MSC" -a -n "$md5sum" ]; then
     TMPUNPACK=`cygpath -d $TARFILE_LOCATION/tmp`
     chmod a+w $TARFILE_LOCATION/tmp
     if [ ! -f ./external/dbghelp/dbghelp.dll -a -f $TARFILE_LOCATION/dbghinst.EXE ]; then
-	if [ ! -x $TARFILE_LOCATION/dbghinst.EXE ]; then
-	    chmod +x $TARFILE_LOCATION/dbghinst.EXE
+	if [ ! -x `cygpath $TARFILE_LOCATION`/dbghinst.EXE ]; then
+	    chmod +x `cygpath $TARFILE_LOCATION`/dbghinst.EXE
 	fi
         $TARFILE_LOCATION/dbghinst.EXE /T:$TMPUNPACK /C
         sum=`$md5sum $md5special $TARFILE_LOCATION/tmp/dbghelp.exe | sed "s/ .*//"`
@@ -222,6 +222,7 @@ if [ "$COM" = "MSC" -a -n "$md5sum" ]; then
     fi
     if [ ! -f ./external/gdiplus/gdiplus.dll -a -f $TARFILE_LOCATION/WindowsXP-KB975337-x86-ENU.exe ]; then
 	gdiplus_dll_path=asms/10/msft/windows/gdiplus/gdiplus.dll
+	chmod +x `cygpath $TARFILE_LOCATION`/WindowsXP-KB975337-x86-ENU.exe
 
 	# Run it through cmd so that the UAC prompt is displayed
 	echo
