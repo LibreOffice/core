@@ -1111,7 +1111,9 @@ ScMultiTextWnd::~ScMultiTextWnd()
 
 void ScMultiTextWnd::Paint( const Rectangle& rRec )
 {
-    GetEditView()->Paint( rRec );
+    EditView* pView = GetEditView();
+    if ( pView )
+        pView->Paint( rRec );
 }
 
 EditView* ScMultiTextWnd::GetEditView()
