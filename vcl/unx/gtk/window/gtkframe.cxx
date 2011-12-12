@@ -215,7 +215,7 @@ static sal_uInt16 GetKeyCode( guint keyval )
             case GDK_KP_Multiply:   nCode = KEY_MULTIPLY;   break;
             case GDK_slash:
             case GDK_KP_Divide:     nCode = KEY_DIVIDE;     break;
-            case GDK_period:
+            case GDK_period:        nCode = KEY_POINT;      break;
             case GDK_decimalpoint:  nCode = KEY_POINT;      break;
             case GDK_comma:         nCode = KEY_COMMA;      break;
             case GDK_less:          nCode = KEY_LESS;       break;
