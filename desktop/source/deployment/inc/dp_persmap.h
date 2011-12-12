@@ -25,10 +25,8 @@
 #define INCLUDED_DP_PERSMAP_H
 
 #include "rtl/ustring.hxx"
-#include "db.hxx"
+#include "osl/file.hxx"
 #include <hash_map>
-
-using namespace berkeleydbproxy;
 
 namespace dp_misc
 {
@@ -39,9 +37,12 @@ typedef ::std::hash_map<
 //==============================================================================
 class PersistentMap
 {
-    ::rtl::OUString m_sysPath;
-    mutable Db m_db;
-    void throw_rtexc( int err, char const * msg = 0 ) const;
+    ::osl::File m_MapFile;
+    t_string2string_map m_entries;
+    bool m_bReadOnly;
+    bool m_bIsOpen;
+    bool m_bToBeCreated;
+    bool m_bIsDirty;
 
 public:
     ~PersistentMap();
@@ -54,8 +55,13 @@ public:
     t_string2string_map getEntries() const;
     void put( ::rtl::OString const & key, ::rtl::OString const & value );
     bool erase( ::rtl::OString const & key, bool flush_immediately = true );
+
+private:
+    bool open( void);
+    void flush( void);
 };
 
 }
 
 #endif
+

@@ -19,231 +19,290 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_desktop.hxx"
 
 #include "dp_misc.h"
-#include "dp_ucb.h"
 #include "dp_persmap.h"
 #include "rtl/strbuf.hxx"
-#include "rtl/ustrbuf.hxx"
-#include "osl/file.hxx"
-#include "osl/thread.h"
 
-
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
 using namespace ::rtl;
-using ::osl::File;
+
+// the persistent map is used to manage a handful of key-value string pairs
+// this implementation replaces a rather heavy-weight berkeleydb integration
+
+// the file backing up a persistent map consists of line pairs with
+// - an encoded key name (with chars 0x00..0x0F being escaped)
+// - an encoded value name (with chars 0x00..0x0F being escaped)
 
 namespace dp_misc
 {
 
-//______________________________________________________________________________
-void PersistentMap::throw_rtexc( int err, char const * pmsg ) const
-{
-    OUStringBuffer buf;
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("[") );
-    buf.append( m_sysPath );
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("] Berkeley Db error (") );
-    buf.append( static_cast<sal_Int32>(err) );
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("): ") );
-    if (pmsg == 0)
-        pmsg = DbEnv::strerror(err);
-    const OString msg(pmsg);
-    buf.append( OUString( msg.getStr(), msg.getLength(),
-                          osl_getThreadTextEncoding() ) );
-    const OUString msg_(buf.makeStringAndClear());
-    OSL_ENSURE( 0, rtl::OUStringToOString(
-                    msg_, RTL_TEXTENCODING_UTF8 ).getStr() );
-    throw RuntimeException( msg_, Reference<XInterface>() );
-}
-
-//______________________________________________________________________________
-PersistentMap::~PersistentMap()
-{
-    try {
-        m_db.close(0);
-    }
-    catch (DbException & exc) {
-        (void) exc; // avoid warnings
-        OSL_ENSURE( 0, DbEnv::strerror( exc.get_errno() ) );
-    }
-}
+static const char PmapMagic[4] = {'P','m','p','1'};
 
 //______________________________________________________________________________
 PersistentMap::PersistentMap( OUString const & url_, bool readOnly )
-    : m_db( 0, 0 )
+:   m_MapFile( expandUnoRcUrl(url_) )
+,   m_bReadOnly( readOnly)
+,   m_bIsOpen( false)
+,   m_bToBeCreated( !readOnly)
+,   m_bIsDirty( false)
 {
-    try {
-        OUString url( expandUnoRcUrl(url_) );
-        if ( File::getSystemPathFromFileURL( url, m_sysPath ) != File::E_None )
-        {
-            OSL_ASSERT( false );
-        }
-        OString cstr_sysPath(
-            OUStringToOString( m_sysPath, RTL_TEXTENCODING_UTF8 ) );
-        char const * pcstr_sysPath = cstr_sysPath.getStr();
-
-        u_int32_t flags = DB_CREATE;
-        if (readOnly) {
-            flags = DB_RDONLY;
-            if (! create_ucb_content(
-                    0, url,
-                    Reference<com::sun::star::ucb::XCommandEnvironment>(),
-                    false /* no throw */ )) {
-                // ignore non-existent file in read-only mode: simulate empty db
-                pcstr_sysPath = 0;
-                flags = DB_CREATE;
-            }
-        }
-
-        int err = m_db.open(
-            // xxx todo: DB_THREAD, DB_DBT_MALLOC currently not used
-            0, pcstr_sysPath, 0, DB_HASH, flags/* | DB_THREAD*/, 0664 /* fs mode */ );
-        if (err != 0)
-            throw_rtexc(err);
-    }
-    catch (DbException & exc) {
-        throw_rtexc( exc.get_errno(), exc.what() );
-    }
+    open();
 }
 
 //______________________________________________________________________________
 PersistentMap::PersistentMap()
-    : m_db( 0, 0 )
+:   m_MapFile( OUString())
+,   m_bReadOnly( false)
+,   m_bIsOpen( false)
+,   m_bToBeCreated( false)
+,   m_bIsDirty( false)
+{}
+
+//______________________________________________________________________________
+PersistentMap::~PersistentMap()
 {
-    try {
-        // xxx todo: DB_THREAD, DB_DBT_MALLOC currently not used
-        int err = m_db.open( 0, 0, 0, DB_HASH, DB_CREATE/* | DB_THREAD*/, 0 );
-        if (err != 0)
-            throw_rtexc(err);
+    if( m_bIsDirty)
+        flush();
+    if( m_bIsOpen)
+        m_MapFile.close();
+}
+
+//______________________________________________________________________________
+
+// replace 0x00..0x0F with "%0".."%F"
+// replace "%" with "%%"
+static OString encodeString( const OString& rStr)
+{
+    const sal_Char* pChar = rStr.getStr();
+    const sal_Int32 nLen = rStr.getLength();
+    sal_Int32 i = nLen;
+    // short circuit for the simple non-encoded case
+    while( --i >= 0)
+    {
+        const sal_Char c = *(pChar++);
+        if( (0x00 <= c) && (c <= 0x0F))
+            break;
+        if( c == '%')
+            break;
     }
-    catch (DbException & exc) {
-        throw_rtexc( exc.get_errno(), exc.what() );
+    if( i < 0)
+        return rStr;
+
+    // escape chars 0x00..0x0F with "%0".."%F"
+    OStringBuffer aEncStr( nLen + 32);
+    aEncStr.append( pChar - (nLen-i), nLen - i);
+    while( --i >= 0)
+    {
+        sal_Char c = *(pChar++);
+        if( (0x00 <= c) && (c <= 0x0F))
+        {
+            aEncStr.append( '%');
+            c += (c <= 0x09) ? '0' : 'A'-10;
+        } else if( c == '%')
+            aEncStr.append( '%');
+        aEncStr.append( c);
     }
+
+    return aEncStr.makeStringAndClear();
+}
+
+//______________________________________________________________________________
+
+// replace "%0".."%F" with 0x00..0x0F
+// replace "%%" with "%"
+static OString decodeString( const sal_Char* pEncChars, int nLen)
+{
+    const char* pChar = pEncChars;
+    sal_Int32 i = nLen;
+    // short circuit for the simple non-encoded case
+    while( --i >= 0)
+        if( *(pChar++) == '%')
+            break;
+    if( i < 0)
+        return OString( pEncChars, nLen);
+
+    // replace escaped chars with their decoded counterparts
+    OStringBuffer aDecStr( nLen);
+    pChar = pEncChars;
+    for( i = nLen; --i >= 0;)
+    {
+        sal_Char c = *(pChar++);
+        // handle escaped character
+        if( c == '%')
+        {
+            --i;
+            OSL_ASSERT( i >= 0);
+            c = *(pChar++);
+            if( ('0' <= c) && (c <= '9'))
+                c -= '0';
+            else
+            {
+                OSL_ASSERT( ('A' <= c) && (c <= 'F'));
+                c -= ('A'-10);
+            }
+        }
+        aDecStr.append( c);
+    }
+
+    return aDecStr.makeStringAndClear();
+}
+
+//______________________________________________________________________________
+bool PersistentMap::open()
+{
+    // open the existing file
+    sal_uInt32 nOpenFlags = osl_File_OpenFlag_Read;
+    if( !m_bReadOnly)
+        nOpenFlags |= osl_File_OpenFlag_Write;
+
+    ::osl::File::RC rcOpen = m_MapFile.open( nOpenFlags);
+    m_bIsOpen = (rcOpen == osl::File::E_None);
+
+    // or create later if needed
+    m_bToBeCreated = (rcOpen == osl::File::E_NOENT) && !m_bIsOpen;
+    if( !m_bIsOpen)
+        return m_bToBeCreated;
+
+    // read header and check magic
+    char aHeaderBytes[ sizeof(PmapMagic)];
+    sal_uInt64 nBytesRead = 0;
+    m_MapFile.read( aHeaderBytes, sizeof(aHeaderBytes), nBytesRead);
+    OSL_ASSERT( nBytesRead == sizeof(aHeaderBytes));
+    if( nBytesRead != sizeof(aHeaderBytes))
+        return false;
+    // check header magic
+    for( int i = 0; i < (int)sizeof(PmapMagic); ++i)
+        if( aHeaderBytes[i] != PmapMagic[i])
+            return false;
+
+    // read key value pairs and add them to the map
+    ByteSequence aKeyLine;
+    ByteSequence aValLine;
+    for(;;)
+    {
+        // read key-value line pair
+        // an empty key name indicates the end of the line pairs
+        if( m_MapFile.readLine( aKeyLine) != osl::File::E_None)
+            return false;
+        if( !aKeyLine.getLength())
+            break;
+        if( m_MapFile.readLine( aValLine) != osl::File::E_None)
+            return false;
+        // decode key and value strings
+        const OString aKeyName = decodeString( (sal_Char*)aKeyLine.getConstArray(), aKeyLine.getLength());
+        const OString aValName = decodeString( (sal_Char*)aValLine.getConstArray(), aValLine.getLength());
+        // insert key-value pair into map
+        put( aKeyName, aValName);
+        // check end-of-file status
+        sal_Bool bIsEOF = true;
+        if( m_MapFile.isEndOfFile( &bIsEOF) != osl::File::E_None)
+            return false;
+        if( bIsEOF)
+            break;
+    }
+
+    return true;
+}
+
+//______________________________________________________________________________
+void PersistentMap::flush( void)
+{
+    if( !m_bIsDirty)
+        return;
+    OSL_ASSERT( !m_bReadOnly);
+    if( m_bToBeCreated && !m_entries.empty())
+    {
+        const sal_uInt32 nOpenFlags = osl_File_OpenFlag_Read | osl_File_OpenFlag_Write | osl_File_OpenFlag_Create;
+        ::osl::File::RC rcOpen = m_MapFile.open( nOpenFlags);
+        m_bIsOpen = (rcOpen == osl::File::E_None);
+        m_bToBeCreated = !m_bIsOpen;
+    }
+    if( !m_bIsOpen)
+        return;
+
+    // write header magic
+    m_MapFile.setPos( osl_Pos_Absolut, 0);
+    sal_uInt64 nBytesWritten = 0;
+    m_MapFile.write( PmapMagic, sizeof(PmapMagic), nBytesWritten);
+
+    // write key value pairs
+    t_string2string_map::const_iterator it = m_entries.begin();
+    for(; it != m_entries.end(); ++it) {
+        // write line for key
+        const OString aKeyString = encodeString( (*it).first);
+        const sal_Int32 nKeyLen = aKeyString.getLength();
+        m_MapFile.write( aKeyString.getStr(), nKeyLen, nBytesWritten);
+        OSL_ASSERT( nKeyLen == (sal_Int32)nBytesWritten);
+        m_MapFile.write( "\n", 1, nBytesWritten);
+        // write line for value
+        const OString& rValString = encodeString( (*it).second);
+        const sal_Int32 nValLen = rValString.getLength();
+        m_MapFile.write( rValString.getStr(), nValLen, nBytesWritten);
+        OSL_ASSERT( nValLen == (sal_Int32)nBytesWritten);
+        m_MapFile.write( "\n", 1, nBytesWritten);
+    }
+
+    // write a file delimiter (an empty key-string)
+    m_MapFile.write( "\n", 1, nBytesWritten);
+    // truncate file here
+    sal_uInt64 nNewFileSize;
+    if( m_MapFile.getPos( nNewFileSize) == osl::File::E_None)
+        m_MapFile.setSize( nNewFileSize);
+    // flush to disk
+    m_MapFile.sync();
+    // the in-memory map now matches to the file on disk
+    m_bIsDirty = false;
 }
 
 //______________________________________________________________________________
 bool PersistentMap::has( OString const & key ) const
 {
-    return get( 0, key );
+    return get( NULL, key );
 }
 
 //______________________________________________________________________________
 bool PersistentMap::get( OString * value, OString const & key ) const
 {
-    try {
-        Dbt dbKey( const_cast< sal_Char * >(key.getStr()), key.getLength() );
-        Dbt dbData;
-        int err = m_db.get( 0, &dbKey, &dbData, 0 );
-        if (err == DB_NOTFOUND)
-            return false;
-        if (err == 0) {
-            if (value != 0) {
-                *value = OString(
-                    static_cast< sal_Char const * >(dbData.get_data()),
-                    dbData.get_size() );
-            }
-            return true;
-        }
-        throw_rtexc(err);
-    }
-    catch (DbException & exc) {
-        throw_rtexc( exc.get_errno(), exc.what() );
-    }
-    return false; // avoiding warning
+    t_string2string_map::const_iterator it = m_entries.find( key);
+    if( it == m_entries.end())
+        return false;
+    if( value)
+        *value = it->second;
+    return true;
 }
 
 //______________________________________________________________________________
 void PersistentMap::put( OString const & key, OString const & value )
 {
-    try {
-        Dbt dbKey( const_cast< sal_Char * >(key.getStr()), key.getLength() );
-        Dbt dbData( const_cast< sal_Char * >(
-                        value.getStr()), value.getLength() );
-        int err = m_db.put( 0, &dbKey, &dbData, 0 );
-        if (err == 0) {
-#if OSL_DEBUG_LEVEL > 0
-            OString v;
-            OSL_ASSERT( get( &v, key ) );
-            OSL_ASSERT( v.equals( value ) );
-#endif
-            err = m_db.sync(0);
-        }
-        if (err != 0)
-            throw_rtexc(err);
-    }
-    catch (DbException & exc) {
-        throw_rtexc( exc.get_errno(), exc.what() );
-    }
+    if( m_bReadOnly)
+        return;
+    typedef std::pair<t_string2string_map::iterator,bool> InsertRC;
+    InsertRC r = m_entries.insert( t_string2string_map::value_type(key,value));
+    m_bIsDirty = r.second;
+    (void)r;
 }
 
 //______________________________________________________________________________
 bool PersistentMap::erase( OString const & key, bool flush_immediately )
 {
-    try {
-        Dbt dbKey( const_cast< sal_Char * >(key.getStr()), key.getLength() );
-        int err = m_db.del( &dbKey, 0 );
-        if (err == 0) {
-            if (flush_immediately) {
-                err = m_db.sync(0);
-                if (err != 0)
-                    throw_rtexc(err);
-            }
-            return true;
-        }
-        if (err == DB_NOTFOUND)
-            return false;
-        throw_rtexc(err);
-    }
-    catch (DbException & exc) {
-        throw_rtexc( exc.get_errno(), exc.what() );
-    }
-    return false; // avoiding warning
+    if( m_bReadOnly)
+        return false;
+    size_t nCount = m_entries.erase( key);
+    if( !nCount)
+        return false;
+    m_bIsDirty = true;
+    if( flush_immediately)
+        flush();
+    return true;
 }
 
 //______________________________________________________________________________
 t_string2string_map PersistentMap::getEntries() const
 {
-    try {
-        Dbc * pcurs = 0;
-        int err = m_db.cursor( 0, &pcurs, 0 );
-        if (err != 0)
-            throw_rtexc(err);
-
-        t_string2string_map ret;
-        for (;;) {
-            Dbt dbKey, dbData;
-            err = pcurs->get( &dbKey, &dbData, DB_NEXT );
-            if (err == DB_NOTFOUND)
-                break;
-            if (err != 0)
-                throw_rtexc(err);
-
-            ::std::pair<t_string2string_map::iterator, bool > insertion(
-                ret.insert( t_string2string_map::value_type(
-                                t_string2string_map::value_type(
-                                    OString( static_cast< sal_Char const * >(
-                                                 dbKey.get_data()),
-                                             dbKey.get_size() ),
-                                    OString( static_cast< sal_Char const * >(
-                                                 dbData.get_data()),
-                                             dbData.get_size() ) ) ) ) );
-            OSL_ASSERT( insertion.second );
-        }
-        err = pcurs->close();
-        if (err != 0)
-            throw_rtexc(err);
-        return ret;
-    }
-    catch (DbException & exc) {
-        throw_rtexc( exc.get_errno(), exc.what() );
-    }
-    return t_string2string_map(); // avoiding warning
+    // TODO: return by const reference instead?
+    return m_entries;
 }
 
 }
-

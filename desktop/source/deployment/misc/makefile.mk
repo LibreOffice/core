@@ -61,7 +61,6 @@ SHL1OBJS = \
         $(SLO)$/dp_identifier.obj \
         $(SLO)$/dp_interact.obj \
         $(SLO)$/dp_ucb.obj \
-        $(SLO)$/db.obj \
         $(SLO)$/dp_version.obj \
         $(SLO)$/dp_descriptioninfoset.obj \
         $(SLO)$/dp_dependencies.obj \
@@ -69,7 +68,6 @@ SHL1OBJS = \
         $(SLO)$/dp_update.obj
         
 SHL1STDLIBS = \
-    $(BERKELEYLIB) \
     $(CPPUHELPERLIB) \
     $(CPPULIB) \
     $(SALLIB) \

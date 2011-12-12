@@ -185,12 +185,12 @@ void PackageManagerImpl::initActivationLayer(
 
         OUString dbName;
         if (m_context.equals(OUSTR("user")))
-            dbName = m_activePackages_expanded + OUSTR(".db");
+            dbName = m_activePackages_expanded + OUSTR(".pmap");
         else
         {
             //Create the extension data base in the user installation
             create_folder( 0, m_registrationData_expanded, xCmdEnv, true);
-            dbName = m_registrationData_expanded + OUSTR("/extensions.db");
+            dbName = m_registrationData_expanded + OUSTR("/extensions.pmap");
         }
         //The data base can always be written because it it always in the user installation
         m_activePackagesDB.reset(

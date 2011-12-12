@@ -224,7 +224,7 @@ BackendImpl::BackendImpl(
         configmgrini_verify_init( xCmdEnv );
         m_registeredPackages.reset(
             new PersistentMap(
-                makeURL( getCachePath(), OUSTR("registered_packages.db") ),
+                makeURL( getCachePath(), OUSTR("registered_packages.pmap") ),
                 false ) );
      }
 }
