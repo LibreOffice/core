@@ -114,7 +114,7 @@ public:
 
     virtual bool isWriteable() const
     {
-        return m_pWriter != NULL;
+        return m_pWriter != 0;
     }
 };
 
