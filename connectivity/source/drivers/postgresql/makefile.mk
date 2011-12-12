@@ -151,6 +151,7 @@ SHL2STDLIBS= \
         $(CPPUHELPERLIB)	\
         $(SALLIB)		\
         $(SALHELPERLIB)		\
+		$(OPENSSLLIB)	\
         $(POSTGRESQL_LIB)	\
         $(LIBPQ_LINK)
 
