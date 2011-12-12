@@ -151,9 +151,10 @@ SHL2STDLIBS= \
         $(CPPUHELPERLIB)	\
         $(SALLIB)		\
         $(SALHELPERLIB)		\
-		$(OPENSSLLIB)	\
         $(POSTGRESQL_LIB)	\
-        $(LIBPQ_LINK)
+        $(LIBPQ_LINK)	\
+        $(OPENSSLLIB)	\
+        $(LDAPSDKLIB)
 
 SHL2LIBS=	$(LIB2TARGET)
 SHL2DEF=	$(MISC)$/$(SHL2TARGET).def

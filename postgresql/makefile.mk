@@ -58,6 +58,9 @@ CONFIGURE_DIR=.
 BUILD_DIR=src/interfaces/libpq
 
 CONFIGURE_ACTION = ./configure --without-readline --disable-shared --with-openssl
+.IF "$(WITH_LDAP)" == "YES" && "$(WITH_OPENLDAP)" == "YES"
+CONFIGURE_ACTION += --with-ldap
+.ENDIF
 BUILD_ACTION = make -j$(GMAKE_MODULE_PARALLELISM) all-static-lib
 .ENDIF
 
