@@ -64,6 +64,7 @@ void SourceTreeIterator::ExecuteDirectory( transex::Directory& aDirectory )
         static rtl::OUString WCARD7 ( RTL_CONSTASCII_USTRINGPARAM(".git") );
         static rtl::OUString WCARD8 ( RTL_CONSTASCII_USTRINGPARAM("clone") );
         static rtl::OUString WCARD9 ( RTL_CONSTASCII_USTRINGPARAM("install") );
+        static rtl::OUString WCARDA ( RTL_CONSTASCII_USTRINGPARAM("wntgcc") );
 
 
         if( sDirName.indexOf( WCARD1 , 0 ) > -1 ||
@@ -76,7 +77,8 @@ void SourceTreeIterator::ExecuteDirectory( transex::Directory& aDirectory )
 #ifndef WNT
             sDirName.indexOf( WCARD8 , 0 ) > -1 ||
 #endif
-            sDirName.indexOf( WCARD9 , 0 ) > -1
+            sDirName.indexOf( WCARD9 , 0 ) > -1 ||
+            sDirName.indexOf( WCARDA , 0 ) > -1
            )    return;
         //printf("**** %s \n", OUStringToOString( sDirName , RTL_TEXTENCODING_UTF8 , sDirName.getLength() ).getStr() );
 
