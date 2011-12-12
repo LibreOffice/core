@@ -26,10 +26,12 @@
  *
  ************************************************************************/
 
-#ifndef _EEITEM_HXX
-#define _EEITEM_HXX
+#ifndef EEITEM_HXX
+#define EEITEM_HXX
 
-#define EE_ITEMS_START              3989
+#include <svl/solar.hrc>
+
+#define EE_ITEMS_START              (OWN_ATTR_VALUE_END+1)
 
 // Paragraph attributes:
 #define EE_PARA_START               (EE_ITEMS_START+0)
