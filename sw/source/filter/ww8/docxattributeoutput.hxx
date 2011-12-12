@@ -588,14 +588,8 @@ private:
 
     const sw::Frame *m_pParentFrame;
     // close of hyperlink needed
-    enum HyperLinkCloseState
-    {
-        Undetected = 0,
-        Detected,
-        EndInPrevRun,
-        EndInThisRun
-    };
-    HyperLinkCloseState m_nCloseHyperlinkStatus;
+    bool m_closeHyperlinkInThisRun;
+    bool m_closeHyperlinkInPreviousRun;
 
     struct PostponedGraphic
     {
