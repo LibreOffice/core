@@ -1111,10 +1111,16 @@ ScMultiTextWnd::~ScMultiTextWnd()
 
 void ScMultiTextWnd::Paint( const Rectangle& rRec )
 {
+    EditView* pView = GetEditView();
+    if ( pView )
+        pView->Paint( rRec );
+}
+
+EditView* ScMultiTextWnd::GetEditView()
+{
     if ( !pEditView )
         InitEditEngine( SfxObjectShell::Current() );
-    if ( pEditView )
-        pEditView->Paint( rRec );
+    return pEditView;
 }
 
 long ScMultiTextWnd::GetPixelHeightForLines( long nLines )
