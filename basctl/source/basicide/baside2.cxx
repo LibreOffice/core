@@ -248,7 +248,7 @@ void ModulWindow::Resize()
 }
 
 
-// "Import" von baside4.cxx
+// "Import" of baside4.cxx
 void CreateEngineForBasic( StarBASIC* pBasic );
 
 void ModulWindow::CheckCompileBasic()

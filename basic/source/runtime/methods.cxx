@@ -3222,9 +3222,9 @@ RTLFUNC(Rnd)
 //  WindowStyles (VBA-kompatibel):
 //      2 == Minimized
 //      3 == Maximized
-//     10 == Full-Screen (Textmodus-Anwendungen OS/2, WIN95, WNT)
-// !!!HACK der WindowStyle wird im Creator an Application::StartApp
-//         uebergeben. Format: "xxxx2"
+//     10 == Full-Screen (text mode applications OS/2, WIN95, WNT)
+//     HACK: The WindowStyle will be passed to
+//     Application::StartApp in Creator. Format: "xxxx2"
 
 
 RTLFUNC(Shell)

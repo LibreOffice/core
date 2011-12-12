@@ -45,7 +45,7 @@ using namespace com::sun::star::uno;
 TYPEINIT1(SbxVariable,SbxValue)
 TYPEINIT1(SbxHint,SfxSimpleHint)
 
-extern sal_uInt32 nVarCreator;          // in SBXBASE.CXX, fuer LoadData()
+extern sal_uInt32 nVarCreator;          // in SBXBASE.CXX, for LoadData()
 #ifdef DBG_UTIL
 static sal_uIntPtr nVar = 0;
 #endif
@@ -174,7 +174,7 @@ void SbxVariable::Broadcast( sal_uIntPtr nHintId )
 {
     if( pCst && !IsSet( SBX_NO_BROADCAST ) )
     {
-        // Because the method could be called from outside, check the Da die Methode von aussen aufrufbar ist, hier noch einmal
+        // Because the method could be called from outside, check the
         // rights here again
         if( nHintId & SBX_HINT_DATAWANTED )
             if( !CanRead() )

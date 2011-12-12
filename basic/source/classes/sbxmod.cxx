@@ -1986,7 +1986,7 @@ void SbModule::handleProcedureProperties( SfxBroadcaster& rBC, const SfxHint& rH
 }
 
 
-// Implementation SbJScriptModule (Basic-Modul fuer JavaScript-Sourcen)
+// Implementation SbJScriptModule (Basic module for JavaScript source code)
 SbJScriptModule::SbJScriptModule( const String& rName )
     :SbModule( rName )
 {

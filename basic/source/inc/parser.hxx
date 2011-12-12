@@ -84,7 +84,7 @@ public:
     sal_Bool          bClassModule;     // sal_True: OPTION ClassModule
     StringVector  aIfaceVector;     // Holds all interfaces implemented by a class module
     StringVector  aRequiredTypes;   // Types used in Dim As New <type> outside subs
-    SbxDataType   eDefTypes[26];    // DEFxxx-Datentypen
+    SbxDataType   eDefTypes[26];    // DEFxxx data types
 
     SbiParser( StarBASIC*, SbModule* );
     sal_Bool Parse();

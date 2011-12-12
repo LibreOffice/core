@@ -1455,7 +1455,7 @@ sal_Bool StarBASIC::IsCompilerError()       { return GetSbData()->bCompiler; }
 // through the table SFX_VB_ErrorTab[]. This is indeed not with good performance,
 // but it consumes much less memory than corresponding switch blocs.
 // Because the conversion of error codes has not to be fast. there is no
-// binaere search by VB-Error -> SFX-Error.
+// binary search by VB Error -> Error SFX.
 
 // Map back new error codes to old, Sbx-compatible
 sal_uInt16 StarBASIC::GetVBErrorCode( SbError nError )

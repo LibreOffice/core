@@ -2471,7 +2471,7 @@ void SbUnoObject::doIntrospection( void )
 
     if( !mxUnoAccess.is() )
     {
-        // #51475 mark an invalid objekt kennzeichnen (no mxMaterialHolder)
+        // #51475 mark to indicate an invalid object (no mxMaterialHolder)
         return;
     }
 
@@ -2701,9 +2701,9 @@ SbxVariable* SbUnoObject::Find( const String& rName, SbxClassType t )
                     {
                         Any aAny = xNameAccess->getByName( aUName2 );
 
-                        // ATTENTION: Die hier erzeugte Variable darf wegen bei XNameAccess
-                        // nicht als feste Property in das Object aufgenommen werden und
-                        // wird daher nirgendwo gehalten.
+                        // ATTENTION: Because of XNameAccess, the variable generated here
+                        // may not be included as a fixed property in the object and therefore
+                        // won't be stored anywhere.
                         // If this leads to problems, it has to be created synthetically or
                         // a class SbUnoNameAccessProperty, whose existence had to be checked
                         // constantly and which were if necessary thrown away
@@ -2972,7 +2972,7 @@ void RTL_Impl_CreateUnoStruct( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrit
     if( !xUnoObj )
         return;
 
-    // return the objekt
+    // return the object
     SbxVariableRef refVar = rPar.Get(0);
     refVar->PutObject( (SbUnoObject*)xUnoObj );
 }

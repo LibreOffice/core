@@ -189,8 +189,8 @@ class Tok_UnblockMacro : public ::TextToken
 class Tok_TypeKey : public cpp::Token                  // file-><type-PE>
 class Tok_Template : public cpp::Token                 // file
 class Tok_Namespace : public cpp::Token                // file
-class Tok_Bracket : public cpp::Token                  // ueberall
-class Tok_Separator : public cpp::Token                // ueberall
+class Tok_Bracket : public cpp::Token                  // everywhere
+class Tok_Separator : public cpp::Token                // everywhere
 
 class Tok_Identifier : public cpp::Token               // ueberall
 class Tok_NameSeparator : public cpp::Token            // Type, Name

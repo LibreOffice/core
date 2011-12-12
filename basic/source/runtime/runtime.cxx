@@ -196,7 +196,7 @@ SbiRuntime::pStep2 SbiRuntime::aStep2[] = {// all opcodes with two operands
     &SbiRuntime::StepSTMNT,         // beginning of a statement (+Line+Col)
     // E/A
     &SbiRuntime::StepOPEN,          // (+SvStreamFlags+Flags)
-    // Objekte
+    // Objects
     &SbiRuntime::StepLOCAL,     // define local variable (+StringId+Typ)
     &SbiRuntime::StepPUBLIC,        // module global variable (+StringID+Typ)
     &SbiRuntime::StepGLOBAL,        // define global variable (+StringID+Typ)

@@ -250,7 +250,7 @@ SbxVariable* SbxObject::Find( const XubString& rName, SbxClassType t )
             pRes = pArray->Find( rName, t );
     }
     // ExtendedsSearch in the Object-Array?
-    // For objects and DontCare is the Objektarray already
+    // For objects and DontCare is the array of objects already
     // searched through
     if( !pRes && ( t == SbxCLASS_METHOD || t == SbxCLASS_PROPERTY ) )
         pRes = pObjs->Find( rName, t );

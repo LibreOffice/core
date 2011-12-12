@@ -1655,7 +1655,7 @@ sal_Bool SbxValue::StoreData( SvStream& r ) const
         case SbxUSHORT:
             r << aData.nUShort; break;
         case SbxOBJECT:
-            // to save itself as Objektptr doesn't work!
+            // to save itself as Objectptr does not work!
             if( aData.pObj )
             {
                 if( PTR_CAST(SbxValue,aData.pObj) != this )

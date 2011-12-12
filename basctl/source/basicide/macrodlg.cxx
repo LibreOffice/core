@@ -36,7 +36,7 @@
 #include <macrodlg.hrc>
 #include <basidesh.hrc>
 #include <basidesh.hxx>
-#include <baside2.hrc>      // ID's fuer Imagese
+#include <baside2.hrc>      // ID's for Images
 #include <basobj.hxx>
 #include <baside3.hxx>
 
