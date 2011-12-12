@@ -52,10 +52,6 @@ CFLAGSWERRCXX:=
 
 CFLAGS +=  -DHAVE_EXPAT_H
 
-.IF "$(SYSTEM_DB)" == "YES"
-CFLAGS+=-DSYSTEM_DB -I$(DB_INCLUDES)
-.ENDIF
-
 .IF "$(SYSTEM_LIBXML)" == "YES"
 CFLAGS+= $(LIBXML_CFLAGS)
 .ELSE
@@ -77,18 +73,18 @@ CFLAGS+=-GR
 # --- General -----------------------------------------------------
 
 SLOFILES=\
+    $(SLO)$/db.obj                     \
+    $(SLO)$/databases.obj          \
     $(SLO)$/services.obj    	   \
-    $(SLO)$/provider.obj    	   \
-    $(SLO)$/content.obj     	   \
     $(SLO)$/resultset.obj     	   \
     $(SLO)$/resultsetbase.obj      \
     $(SLO)$/resultsetforroot.obj   \
     $(SLO)$/resultsetforquery.obj  \
     $(SLO)$/contentcaps.obj        \
+    $(SLO)$/provider.obj    	   \
+    $(SLO)$/content.obj     	   \
     $(SLO)$/urlparameter.obj       \
     $(SLO)$/inputstream.obj        \
-    $(SLO)$/databases.obj          \
-    $(SLO)$/db.obj		           \
     $(SLO)$/bufferedinputstream.obj
 
 # --- Targets ----------------------------------------------------------

@@ -67,7 +67,6 @@
 #include "urlparameter.hxx"
 
 using namespace chelp;
-using namespace berkeleydbproxy;
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::io;
@@ -201,8 +200,6 @@ Databases::~Databases()
         DatabasesTable::iterator it = m_aDatabases.begin();
         while( it != m_aDatabases.end() )
         {
-            if( it->second )
-                it->second->close( 0 );
             delete it->second;
             ++it;
         }
@@ -608,7 +605,7 @@ rtl::OUString Databases::country( const rtl::OUString& Language )
 
 
 
-Db* Databases::getBerkeley( const rtl::OUString& Database,
+helpdatafileproxy::Hdf* Databases::getHelpDataFile( const rtl::OUString& Database,
                             const rtl::OUString& Language, bool helpText,
                             const rtl::OUString* pExtensionPath )
 {
@@ -633,7 +630,7 @@ Db* Databases::getBerkeley( const rtl::OUString& Database,
 
     if( aPair.second && ! it->second )
     {
-        Db* table = new Db();
+        helpdatafileproxy::Hdf* pHdf = 0;
 
         rtl::OUString fileURL;
         if( pExtensionPath )
@@ -641,34 +638,18 @@ Db* Databases::getBerkeley( const rtl::OUString& Database,
         else
             fileURL = getInstallPathAsURL() + key;
 
-        rtl::OUString fileNameDBHelp( fileURL );
+        rtl::OUString fileNameHDFHelp( fileURL );
         //Extensions always use the new format
         if( pExtensionPath != NULL )
-            fileNameDBHelp += rtl::OUString::createFromAscii( "_" );
+            fileNameHDFHelp += rtl::OUString::createFromAscii( "_" );
         //SimpleFileAccess takes file URLs as arguments!!! Using filenames works accidentally but
         //fails for example when using long path names on Windows (starting with \\?\)
-        if( m_xSFA->exists( fileNameDBHelp ) )
+        if( m_xSFA->exists( fileNameHDFHelp ) )
         {
-            DBHelp* pDBHelp = new DBHelp( fileNameDBHelp, m_xSFA );
-            table->setDBHelp( pDBHelp );
-
-#ifdef TEST_DBHELP
-            bool bSuccess;
-            bool bOldDbAccess = false;
-            bSuccess = pDBHelp->testAgainstDb( fileURL, bOldDbAccess );
-
-            bOldDbAccess = true;
-            bSuccess = pDBHelp->testAgainstDb( fileURL, bOldDbAccess );
-#endif
-        }
-        else if( table->open( 0,fileURL, DB_BTREE,DB_RDONLY,0644 ) )
-        {
-            table->close( 0 );
-            delete table;
-            table = 0;
+            pHdf = new helpdatafileproxy::Hdf( fileNameHDFHelp, m_xSFA );
         }
 
-        it->second = table;
+        it->second = pHdf;
     }
 
     return it->second;
@@ -776,18 +757,18 @@ namespace chelp {
 
 
 KeywordInfo::KeywordElement::KeywordElement( Databases *pDatabases,
-                                             Db* pDb,
+                                             helpdatafileproxy::Hdf* pHdf,
                                              rtl::OUString& ky,
                                              rtl::OUString& data )
     : key( ky )
 {
     pDatabases->replaceName( key );
-    init( pDatabases,pDb,data );
+    init( pDatabases,pHdf,data );
 }
 
 
 
-void KeywordInfo::KeywordElement::init( Databases *pDatabases,Db* pDb,const rtl::OUString& ids )
+void KeywordInfo::KeywordElement::init( Databases *pDatabases,helpdatafileproxy::Hdf* pHdf,const rtl::OUString& ids )
 {
     const sal_Unicode* idstr = ids.getStr();
     std::vector< rtl::OUString > id,anchor;
@@ -823,28 +804,15 @@ void KeywordInfo::KeywordElement::init( Databases *pDatabases,Db* pDb,const rtl:
 
         nSize = 0;
         pData = pEmpty;
-        if( pDb )
+        if( pHdf )
         {
             rtl::OString idi( id[i].getStr(),id[i].getLength(),RTL_TEXTENCODING_UTF8 );
-            DBHelp* pDBHelp = pDb->getDBHelp();
-            if( pDBHelp != NULL )
+            helpdatafileproxy::HDFData aHDFData;
+            bool bSuccess = pHdf->getValueForKey( idi, aHDFData );
+            if( bSuccess )
             {
-                DBData aDBData;
-                bool bSuccess = pDBHelp->getValueForKey( idi, aDBData );
-                if( bSuccess )
-                {
-                    nSize = aDBData.getSize();
-                    pData = aDBData.getData();
-                }
-            }
-            else
-            {
-                Dbt key_( static_cast< void* >( const_cast< sal_Char* >( idi.getStr() ) ),
-                         idi.getLength() );
-                Dbt data;
-                pDb->get( 0,&key_,&data,0 );
-                nSize = data.get_size();
-                pData = static_cast<sal_Char*>( data.get_data() );
+                nSize = aHDFData.getSize();
+                pData = aHDFData.getData();
             }
         }
 
@@ -943,30 +911,26 @@ KeywordInfo* Databases::getKeyword( const rtl::OUString& Database,
         bool bExtension = false;
         while( (fileURL = aDbFileIt.nextDbFile( bExtension )).getLength() > 0 )
         {
-            Db table;
-
-            rtl::OUString fileNameDBHelp( fileURL );
+            rtl::OUString fileNameHDFHelp( fileURL );
             if( bExtension )
-                fileNameDBHelp += rtl::OUString::createFromAscii( "_" );
-            if( m_xSFA->exists( fileNameDBHelp ) )
+                fileNameHDFHelp += rtl::OUString::createFromAscii( "_" );
+            if( m_xSFA->exists( fileNameHDFHelp ) )
             {
-                DBHelp aDBHelp( fileNameDBHelp, m_xSFA );
+                helpdatafileproxy::Hdf aHdf( fileNameHDFHelp, m_xSFA );
 
-                DBData aKey;
-                DBData aValue;
-                if( aDBHelp.startIteration() )
+                helpdatafileproxy::HDFData aKey;
+                helpdatafileproxy::HDFData aValue;
+                if( aHdf.startIteration() )
                 {
-                    Db* idmap = getBerkeley( Database,Language );
-
-                    DBHelp* pDBHelp = idmap->getDBHelp();
-                    if( pDBHelp != NULL )
+                    helpdatafileproxy::Hdf* pHdf = getHelpDataFile( Database,Language );
+                    if( pHdf != NULL )
                     {
                         bool bOptimizeForPerformance = true;
-                        pDBHelp->releaseHashMap();
-                        pDBHelp->createHashMap( bOptimizeForPerformance );
+                        pHdf->releaseHashMap();
+                        pHdf->createHashMap( bOptimizeForPerformance );
                     }
 
-                    while( aDBHelp.getNextKeyAndValue( aKey, aValue ) )
+                    while( aHdf.getNextKeyAndValue( aKey, aValue ) )
                     {
                         rtl::OUString keyword( aKey.getData(), aKey.getSize(),
                                                RTL_TEXTENCODING_UTF8 );
@@ -981,70 +945,16 @@ KeywordInfo* Databases::getKeyword( const rtl::OUString& Database,
                             continue;
 
                         aVector.push_back( KeywordInfo::KeywordElement( this,
-                                                                        idmap,
+                                                                        pHdf,
                                                                         keyword,
                                                                         doclist ) );
                     }
-                    aDBHelp.stopIteration();
+                    aHdf.stopIteration();
 
-                    if( pDBHelp != NULL )
-                        pDBHelp->releaseHashMap();
+                    if( pHdf != NULL )
+                        pHdf->releaseHashMap();
                 }
-
-#ifdef TEST_DBHELP
-                bool bSuccess;
-                bool bOldDbAccess = false;
-                bSuccess = aDBHelp.testAgainstDb( fileURL, bOldDbAccess );
-
-                bOldDbAccess = true;
-                bSuccess = aDBHelp.testAgainstDb( fileURL, bOldDbAccess );
-
-                int nDummy = 0;
-#endif
             }
-
-            else if( 0 == table.open( 0,fileURL,DB_BTREE,DB_RDONLY,0644 ) )
-            {
-                Db* idmap = getBerkeley( Database,Language );
-
-                bool first = true;
-
-                Dbc* cursor = 0;
-                table.cursor( 0,&cursor,0 );
-                Dbt key_,data;
-                key_.set_flags( DB_DBT_MALLOC ); // Initially the cursor must allocate the necessary memory
-                data.set_flags( DB_DBT_MALLOC );
-                while( cursor && DB_NOTFOUND != cursor->get( &key_,&data,DB_NEXT ) )
-                {
-                    rtl::OUString keyword( static_cast<sal_Char*>(key_.get_data()),
-                                           key_.get_size(),
-                                           RTL_TEXTENCODING_UTF8 );
-                    rtl::OUString doclist( static_cast<sal_Char*>(data.get_data()),
-                                           data.get_size(),
-                                           RTL_TEXTENCODING_UTF8 );
-
-                    bool bBelongsToDatabase = true;
-                    if( bExtension )
-                        bBelongsToDatabase = checkModuleMatchForExtension( Database, doclist );
-
-                    if( !bBelongsToDatabase )
-                        continue;
-
-                    aVector.push_back( KeywordInfo::KeywordElement( this,
-                                                                    idmap,
-                                                                    keyword,
-                                                                    doclist ) );
-                    if( first )
-                    {
-                        key_.set_flags( DB_DBT_REALLOC );
-                        data.set_flags( DB_DBT_REALLOC );
-                        first = false;
-                    }
-                }
-
-                if( cursor ) cursor->close();
-            }
-            table.close( 0 );
         }
 
         // sorting
@@ -1361,8 +1271,7 @@ void Databases::setActiveText( const rtl::OUString& Module,
     rtl::OString id( Id.getStr(),Id.getLength(),RTL_TEXTENCODING_UTF8 );
     EmptyActiveTextSet::iterator it = m_aEmptyActiveTextSet.find( id );
     bool bFoundAsEmpty = ( it != m_aEmptyActiveTextSet.end() );
-    Dbt data;
-    DBData aDBData;
+    helpdatafileproxy::HDFData aHDFData;
 
     int nSize = 0;
     const sal_Char* pData = NULL;
@@ -1370,27 +1279,12 @@ void Databases::setActiveText( const rtl::OUString& Module,
     bool bSuccess = false;
     if( !bFoundAsEmpty )
     {
-        Db* db;
-        Dbt key( static_cast< void* >( const_cast< sal_Char* >( id.getStr() ) ),id.getLength() );
-        while( !bSuccess && (db = aDbIt.nextDb()) != NULL )
+        helpdatafileproxy::Hdf* pHdf = 0;
+        while( !bSuccess && (pHdf = aDbIt.nextHdf()) != NULL )
         {
-            DBHelp* pDBHelp = db->getDBHelp();
-            if( pDBHelp != NULL )
-            {
-                bSuccess = pDBHelp->getValueForKey( id, aDBData );
-                nSize = aDBData.getSize();
-                pData = aDBData.getData();
-            }
-            else
-            {
-                int err = db->get( 0, &key, &data, 0 );
-                if( err == 0 )
-                {
-                    bSuccess = true;
-                    nSize = data.get_size();
-                    pData = static_cast<sal_Char*>( data.get_data() );
-                }
-            }
+            bSuccess = pHdf->getValueForKey( id, aHDFData );
+            nSize = aHDFData.getSize();
+            pData = aHDFData.getData();
         }
     }
 
@@ -1736,16 +1630,16 @@ void ExtensionIteratorBase::implGetLanguageVectorFromPackage( ::std::vector< ::r
 //===================================================================
 // class DataBaseIterator
 
-Db* DataBaseIterator::nextDb( rtl::OUString* o_pExtensionPath, rtl::OUString* o_pExtensionRegistryPath )
+helpdatafileproxy::Hdf* DataBaseIterator::nextHdf( rtl::OUString* o_pExtensionPath, rtl::OUString* o_pExtensionRegistryPath )
 {
-    Db* pRetDb = NULL;
+    helpdatafileproxy::Hdf* pRetHdf = NULL;
 
-    while( !pRetDb && m_eState != END_REACHED )
+    while( !pRetHdf && m_eState != END_REACHED )
     {
         switch( m_eState )
         {
             case INITIAL_MODULE:
-                pRetDb = m_rDatabases.getBerkeley( m_aInitialModule, m_aLanguage, m_bHelpText );
+                pRetHdf = m_rDatabases.getHelpDataFile( m_aInitialModule, m_aLanguage, m_bHelpText );
                 m_eState = USER_EXTENSIONS;     // Later: SHARED_MODULE
                 break;
 
@@ -1759,7 +1653,7 @@ Db* DataBaseIterator::nextDb( rtl::OUString* o_pExtensionPath, rtl::OUString* o_
                 Reference< deployment::XPackage > xHelpPackage = implGetNextUserHelpPackage( xParentPackageBundle );
                 if( !xHelpPackage.is() )
                     break;
-                pRetDb = implGetDbFromPackage( xHelpPackage, o_pExtensionPath, o_pExtensionRegistryPath );
+                pRetHdf = implGetHdfFromPackage( xHelpPackage, o_pExtensionPath, o_pExtensionRegistryPath );
                 break;
             }
 
@@ -1770,7 +1664,7 @@ Db* DataBaseIterator::nextDb( rtl::OUString* o_pExtensionPath, rtl::OUString* o_
                 if( !xHelpPackage.is() )
                     break;
 
-                pRetDb = implGetDbFromPackage( xHelpPackage, o_pExtensionPath, o_pExtensionRegistryPath );
+                pRetHdf = implGetHdfFromPackage( xHelpPackage, o_pExtensionPath, o_pExtensionRegistryPath );
                 break;
             }
 
@@ -1781,7 +1675,7 @@ Db* DataBaseIterator::nextDb( rtl::OUString* o_pExtensionPath, rtl::OUString* o_
                 if( !xHelpPackage.is() )
                     break;
 
-                pRetDb = implGetDbFromPackage( xHelpPackage, o_pExtensionPath, o_pExtensionRegistryPath );
+                pRetHdf = implGetHdfFromPackage( xHelpPackage, o_pExtensionPath, o_pExtensionRegistryPath );
                 break;
             }
 
@@ -1791,10 +1685,10 @@ Db* DataBaseIterator::nextDb( rtl::OUString* o_pExtensionPath, rtl::OUString* o_
         }
     }
 
-    return pRetDb;
+    return pRetHdf;
 }
 
-Db* DataBaseIterator::implGetDbFromPackage( Reference< deployment::XPackage > xPackage,
+helpdatafileproxy::Hdf* DataBaseIterator::implGetHdfFromPackage( Reference< deployment::XPackage > xPackage,
             rtl::OUString* o_pExtensionPath, rtl::OUString* o_pExtensionRegistryPath )
 {
 
@@ -1808,18 +1702,18 @@ Db* DataBaseIterator::implGetDbFromPackage( Reference< deployment::XPackage > xP
         return NULL;
     }
 
-    Db* pRetDb = NULL;
+    helpdatafileproxy::Hdf* pRetHdf = NULL;
     if (optRegData.IsPresent && optRegData.Value.getLength() > 0)
     {
         rtl::OUString aRegDataUrl(optRegData.Value);
         aRegDataUrl += aSlash;
 
         rtl::OUString aUsedLanguage = m_aLanguage;
-        pRetDb = m_rDatabases.getBerkeley(
+        pRetHdf = m_rDatabases.getHelpDataFile(
             aHelpFilesBaseName, aUsedLanguage, m_bHelpText, &aRegDataUrl);
 
         // Language fallback
-        if( !pRetDb )
+        if( !pRetHdf )
         {
             ::std::vector< ::rtl::OUString > av;
             implGetLanguageVectorFromPackage( av, xPackage );
@@ -1833,7 +1727,7 @@ Db* DataBaseIterator::implGetDbFromPackage( Reference< deployment::XPackage > xP
             if( pFound != av.end() )
             {
                 aUsedLanguage = *pFound;
-                pRetDb = m_rDatabases.getBerkeley(
+                pRetHdf = m_rDatabases.getHelpDataFile(
                     aHelpFilesBaseName, aUsedLanguage, m_bHelpText, &aRegDataUrl);
             }
         }
@@ -1845,7 +1739,7 @@ Db* DataBaseIterator::implGetDbFromPackage( Reference< deployment::XPackage > xP
             *o_pExtensionRegistryPath = xPackage->getURL() + aSlash + aUsedLanguage;
     }
 
-    return pRetDb;
+    return pRetHdf;
 }
 
 

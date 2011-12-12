@@ -50,9 +50,9 @@
 // Forward declaration
 
 
-namespace berkeleydbproxy {
+namespace helpdatafileproxy {
 
-    class Db;
+    class Hdf;
 
 }
 
@@ -116,7 +116,7 @@ namespace chelp {
         public:
 
             KeywordElement( Databases* pDatabases,
-                            berkeleydbproxy::Db* pDb,
+                            helpdatafileproxy::Hdf* pHdf,
                             rtl::OUString& key,
                             rtl::OUString& ids );
 
@@ -127,7 +127,7 @@ namespace chelp {
             com::sun::star::uno::Sequence< rtl::OUString > listAnchor;
             com::sun::star::uno::Sequence< rtl::OUString > listTitle;
 
-            void init( Databases *pDatabases,berkeleydbproxy::Db* pDb,const rtl::OUString& ids );
+            void init( Databases *pDatabases,helpdatafileproxy::Hdf* pHdf,const rtl::OUString& ids );
         };
 
 
@@ -205,7 +205,7 @@ namespace chelp {
         KeywordInfo* getKeyword( const rtl::OUString& Module,
                                  const rtl::OUString& Language );
 
-        berkeleydbproxy::Db* getBerkeley( const rtl::OUString& Module,
+        helpdatafileproxy::Hdf* getHelpDataFile( const rtl::OUString& Module,
                          const rtl::OUString& Language, bool helpText = false,
                          const rtl::OUString* pExtensionPath = NULL );
 
@@ -328,7 +328,7 @@ namespace chelp {
 
         std::vector< rtl::OUString >    m_avModules;
 
-        typedef std::hash_map< rtl::OUString,berkeleydbproxy::Db*,ha,eq >   DatabasesTable;
+        typedef std::hash_map< rtl::OUString,helpdatafileproxy::Hdf*,ha,eq >   DatabasesTable;
         DatabasesTable m_aDatabases;         // Language and module dependent databases
 
         typedef  std::hash_map< rtl::OUString,rtl::OUString,ha,eq > LangSetTable;
@@ -482,11 +482,11 @@ namespace chelp {
                 , m_bHelpText( bHelpText )
         {}
 
-        berkeleydbproxy::Db* nextDb( rtl::OUString* o_pExtensionPath = NULL, rtl::OUString* o_pExtensionRegistryPath = NULL );
+        helpdatafileproxy::Hdf* nextHdf( rtl::OUString* o_pExtensionPath = NULL, rtl::OUString* o_pExtensionRegistryPath = NULL );
 
 
     private:
-        berkeleydbproxy::Db* implGetDbFromPackage(
+        helpdatafileproxy::Hdf* implGetHdfFromPackage(
             com::sun::star::uno::Reference< com::sun::star::deployment::XPackage > xPackage,
             rtl::OUString* o_pExtensionPath, rtl::OUString* o_pExtensionRegistryPath );
 

@@ -144,7 +144,7 @@ namespace chelp {
 
         rtl::OUString get_title();
 
-        rtl::OUString get_jar()      { return get_the_jar(); }      // BerkeleyDb
+        rtl::OUString get_jar()      { return get_the_jar(); }
 
         rtl::OUString get_ExtensionRegistryPath()    { return m_aExtensionRegistryPath; }
 
@@ -189,7 +189,7 @@ namespace chelp {
 
         Databases* m_pDatabases;
 
-        bool m_bBerkeleyRead;
+        bool m_bHelpDataFileRead;
         bool m_bStart;
         bool m_bUseDB;
 
@@ -234,7 +234,7 @@ namespace chelp {
 
         rtl::OUString get_the_jar();
 
-        void readBerkeley();
+        void readHelpDataFile();
 
         void parse() throw( com::sun::star::ucb::IllegalIdentifierException );
 

@@ -89,7 +89,6 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::ucb;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::container;
-using namespace berkeleydbproxy;
 using namespace chelp;
 
 
@@ -215,7 +214,7 @@ void URLParameter::init( bool bDefaultLanguageIsInitialized )
 {
     (void)bDefaultLanguageIsInitialized;
 
-    m_bBerkeleyRead = false;
+    m_bHelpDataFileRead = false;
     m_bStart = false;
     m_bUseDB = true;
     m_nHitCount = 100;                // The default maximum hitcount
@@ -225,10 +224,10 @@ void URLParameter::init( bool bDefaultLanguageIsInitialized )
 rtl::OUString URLParameter::get_the_tag()
 {
     if(m_bUseDB) {
-        if( ! m_bBerkeleyRead )
-            readBerkeley();
+        if( ! m_bHelpDataFileRead )
+            readHelpDataFile();
 
-        m_bBerkeleyRead = true;
+        m_bHelpDataFileRead = true;
 
         return m_aTag;
     }
@@ -241,9 +240,9 @@ rtl::OUString URLParameter::get_the_tag()
 rtl::OUString URLParameter::get_the_path()
 {
     if(m_bUseDB) {
-        if( ! m_bBerkeleyRead )
-            readBerkeley();
-        m_bBerkeleyRead = true;
+        if( ! m_bHelpDataFileRead )
+            readHelpDataFile();
+        m_bHelpDataFileRead = true;
 
         return m_aPath;
     }
@@ -256,9 +255,9 @@ rtl::OUString URLParameter::get_the_path()
 rtl::OUString URLParameter::get_the_title()
 {
     if(m_bUseDB) {
-        if( ! m_bBerkeleyRead )
-            readBerkeley();
-        m_bBerkeleyRead = true;
+        if( ! m_bHelpDataFileRead )
+            readHelpDataFile();
+        m_bHelpDataFileRead = true;
 
         return m_aTitle;
     }
@@ -270,9 +269,9 @@ rtl::OUString URLParameter::get_the_title()
 rtl::OUString URLParameter::get_the_jar()
 {
     if(m_bUseDB) {
-        if( ! m_bBerkeleyRead )
-            readBerkeley();
-        m_bBerkeleyRead = true;
+        if( ! m_bHelpDataFileRead )
+            readHelpDataFile();
+        m_bHelpDataFileRead = true;
 
         return m_aJar;
     }
@@ -283,7 +282,7 @@ rtl::OUString URLParameter::get_the_jar()
 
 
 
-void URLParameter::readBerkeley()
+void URLParameter::readHelpDataFile()
 {
     static rtl::OUString aQuestionMark( rtl::OUString::createFromAscii( "?" ) );
 
@@ -299,41 +298,23 @@ void URLParameter::readBerkeley()
     int nSize = 0;
     const sal_Char* pData = NULL;
 
-    Dbt data;
-    DBData aDBData;
+    helpdatafileproxy::HDFData aHDFData;
     rtl::OUString aExtensionPath;
     rtl::OUString aExtensionRegistryPath;
     while( true )
     {
-        Db* db = aDbIt.nextDb( &aExtensionPath, &aExtensionRegistryPath );
-        if( !db )
+        helpdatafileproxy::Hdf* pHdf = aDbIt.nextHdf( &aExtensionPath, &aExtensionRegistryPath );
+        if( !pHdf )
             break;
 
         rtl::OString keyStr( m_aId.getStr(),m_aId.getLength(),RTL_TEXTENCODING_UTF8 );
 
-        DBHelp* pDBHelp = db->getDBHelp();
-        if( pDBHelp != NULL )
+        bSuccess = pHdf->getValueForKey( keyStr, aHDFData );
+        if( bSuccess )
         {
-            bSuccess = pDBHelp->getValueForKey( keyStr, aDBData );
-            if( bSuccess )
-            {
-                nSize = aDBData.getSize();
-                pData = aDBData.getData();
-                break;
-            }
-        }
-        else
-        {
-            Dbt key( static_cast< void* >( const_cast< sal_Char* >( keyStr.getStr() ) ),
-                     keyStr.getLength() );
-            int err = db->get( 0,&key,&data,0 );
-            if( err == 0 )
-            {
-                bSuccess = true;
-                nSize = data.get_size();
-                pData = static_cast<sal_Char*>( data.get_data() );
-                break;
-            }
+            nSize = aHDFData.getSize();
+            pData = aHDFData.getData();
+            break;
         }
     }
 

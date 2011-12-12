@@ -60,7 +60,6 @@ SHL1STDLIBS=                     \
     $(SALLIB)                \
     $(EXPATASCII3RDLIB)      \
     $(UCBHELPERLIB)          \
-        $(BERKELEYLIB)           \
         $(XSLTLIB)
 
 SHL1LIBS =                       \

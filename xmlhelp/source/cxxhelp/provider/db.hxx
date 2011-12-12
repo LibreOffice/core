@@ -20,33 +20,17 @@
  *************************************************************/
 
 
-#ifndef BERKELEYDBPROXY_DB_HXX_
-#define BERKELEYDBPROXY_DB_HXX_
-
-#ifdef SYSTEM_DB
-#include <db.h>
-#else
-#include <berkeleydb/db.h>
-#endif
+#ifndef HELPDATAFILEPROXY_DB_HXX_
+#define HELPDATAFILEPROXY_DB_HXX_
 
 #include "com/sun/star/ucb/XSimpleFileAccess.hpp"
 
 #include <hash_map>
 #include <rtl/string.hxx>
 
-extern "C" {
-  typedef void *(*db_malloc_fcn_type)(size_t);
-  typedef void *(*db_realloc_fcn_type)(void *, size_t);
-  typedef void (*db_free_fcn_type)(void *);
-}
+namespace helpdatafileproxy {
 
-
-namespace berkeleydbproxy {
-
-    class Dbc;
-    class Dbt;
-
-    namespace db_internal
+    namespace hdf_internal
     {
         class Noncopyable
         {
@@ -59,16 +43,27 @@ namespace berkeleydbproxy {
         };
     }
 
-    class DbException
+    class HDFData
     {
-        rtl::OString what_;
-    public:
-        explicit DbException(rtl::OString const & whatparam)
-        : what_(whatparam)
-        {}
+        friend class        Hdf;
 
-        const char *what() const
-        { return what_.getStr(); }
+        int                 m_nSize;
+        char*               m_pBuffer;
+
+        void copyToBuffer( const char* pSrcData, int nSize );
+
+    public:
+        HDFData( void )
+            : m_nSize( 0 )
+            , m_pBuffer( NULL )
+        {}
+        ~HDFData()
+            { delete [] m_pBuffer; }
+
+          int getSize() const
+            { return m_nSize; }
+          const char* getData() const
+            { return m_pBuffer; }
     };
 
     struct eq
@@ -83,36 +78,10 @@ namespace berkeleydbproxy {
             { return rName.hashCode(); }
     };
 
-
-//#define TEST_DBHELP
-
-    class DBData
-    {
-        friend class        DBHelp;
-
-        int                 m_nSize;
-        char*               m_pBuffer;
-
-        void copyToBuffer( const char* pSrcData, int nSize );
-
-    public:
-        DBData( void )
-            : m_nSize( 0 )
-            , m_pBuffer( NULL )
-        {}
-        ~DBData()
-            { delete [] m_pBuffer; }
-
-          int getSize() const
-            { return m_nSize; }
-          const char* getData() const
-            { return m_pBuffer; }
-    };
-
     typedef std::hash_map< rtl::OString,std::pair<int,int>,ha,eq >  StringToValPosMap;
     typedef std::hash_map< rtl::OString,rtl::OString,ha,eq >        StringToDataMap;
 
-    class DBHelp
+    class Hdf : hdf_internal::Noncopyable
     {
         rtl::OUString       m_aFileURL;
         StringToDataMap*    m_pStringToDataMap;
@@ -126,13 +95,13 @@ namespace berkeleydbproxy {
         int                 m_nItRead;
         int                 m_iItPos;
 
-        bool implReadLenAndData( const char* pData, int& riPos, DBData& rValue );
+        bool implReadLenAndData( const char* pData, int& riPos, HDFData& rValue );
 
     public:
-        //DBHelp must get a fileURL which can then directly be used by simple file access.
+        //HDFHelp must get a fileURL which can then directly be used by simple file access.
         //SimpleFileAccess requires file URLs as arguments. Passing file path may work but fails
         //for example when using long file paths on Windows, which start with "\\?\"
-        DBHelp( const rtl::OUString& rFileURL,
+        Hdf( const rtl::OUString& rFileURL,
             com::sun::star::uno::Reference< com::sun::star::ucb::XSimpleFileAccess > xSFA )
                 : m_aFileURL( rFileURL )
                 , m_pStringToDataMap( NULL )
@@ -144,114 +113,19 @@ namespace berkeleydbproxy {
         {
             OSL_ASSERT(!rFileURL.compareTo(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("file:")), 5));
         }
-        ~DBHelp()
+        ~Hdf()
             { releaseHashMap(); }
 
         void createHashMap( bool bOptimizeForPerformance = false );
         void releaseHashMap( void );
 
-#ifdef TEST_DBHELP
-        bool testAgainstDb( const rtl::OUString& fileURL, bool bOldDbAccess );
-#endif
-
-        bool getValueForKey( const rtl::OString& rKey, DBData& rValue );
+        bool getValueForKey( const rtl::OString& rKey, HDFData& rValue );
 
         bool startIteration( void );
-        bool getNextKeyAndValue( DBData& rKey, DBData& rValue );
+        bool getNextKeyAndValue( HDFData& rKey, HDFData& rValue );
         void stopIteration( void );
-    };
-
-    class Db : db_internal::Noncopyable
-    {
-    private:
-        DB* m_pDBP;
-        DBHelp* m_pDBHelp;
-
-    public:
-        Db();
-        ~Db();
-
-        void setDBHelp( DBHelp* pDBHelp )
-            { m_pDBHelp = pDBHelp; }
-        DBHelp* getDBHelp( void )
-            { return m_pDBHelp; }
-
-        int close(u_int32_t flags);
-
-        int open(DB_TXN *txnid,
-                 const char *file,
-                 const char *database,
-                 DBTYPE type,
-                 u_int32_t flags,
-                 int mode);
-
-        int open(DB_TXN *txnid,
-                 ::rtl::OUString const & fileURL,
-                 DBTYPE type,
-                 u_int32_t flags,
-                 int mode);
-
-
-        int get(DB_TXN* txnid, Dbt *key, Dbt *data, u_int32_t flags);
-
-        int cursor(DB_TXN *txnid, Dbc **cursorp, u_int32_t flags);
-    };
-
-    class Dbc : db_internal::Noncopyable
-    {
-        friend class Db;
-        friend class Dbt;
-
-    private:
-        DBC* m_pDBC;
-
-        explicit Dbc(DBC* pDBC);
-        ~Dbc();
-
-    public:
-        int close();
-
-        int get(Dbt *key, Dbt *data, u_int32_t flags);
-    };
-
-    class Dbt: private DBT
-    {
-        friend class Db;
-        friend class Dbc;
-
-    public:
-        Dbt(void *data_arg, u_int32_t size_arg);
-
-        Dbt();
-        //Dbt(const Dbt & other);
-        //Dbt & operator=(const Dbt & other);
-
-        ~Dbt();
-
-          void *get_data() const;
-        void set_data(void *value);
-
-          u_int32_t get_size() const;
-        void set_size(u_int32_t value);
-
-        void set_flags(u_int32_t);
     };
 }
 
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
