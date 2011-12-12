@@ -1,5 +1,5 @@
 --- misc/postgresql-9.1.1/src/interfaces/libpq/win32.mak	2011-09-22 23:57:57.000000000 +0200
-+++ misc/build/postgresql-9.1.1/src/interfaces/libpq/win32.mak	2011-12-09 10:44:54.151291450 +0100
++++ misc/build/postgresql-9.1.1/src/interfaces/libpq/win32.mak	2011-12-12 11:21:08.796898284 +0100
 @@ -11,18 +11,19 @@
  
  # CPU="i386" or CPU environment of nmake.exe (AMD64 or IA64)
@@ -46,11 +46,11 @@
 -INTDIR=.\Release
 -CPP_OBJS=.\Release/
 -!ENDIF
--
 +OUTDIR=.
 +INTDIR=.
 +CPP_OBJS=./
  
+-
 -ALL : config "$(OUTDIR)\$(OUTFILENAME).lib" "$(OUTDIR)\$(OUTFILENAME).dll"
 +ALL : config "$(OUTDIR)\$(OUTFILENAME).lib"
  
@@ -65,16 +65,31 @@
   /D "FRONTEND" $(DEBUGDEF) \
   /D "WIN32" /D "_WINDOWS" /Fp"$(INTDIR)\libpq.pch" \
   /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c  \
-@@ -205,7 +199,7 @@
+@@ -189,6 +183,11 @@
+ SSL_LIBS=ssleay32.lib libeay32.lib gdi32.lib
+ !ENDIF
+ 
++!IFDEF USE_LDAP
++CPP_PROJ=$(CPP_PROJ) /D USE_LDAP
++LDAP_LIBS=wldap32.lib
++!ENDIF
++
+ !IFDEF USE_KFW
+ CPP_PROJ=$(CPP_PROJ) /D KRB5
+ KFW_LIBS=krb5_32.lib comerr32.lib gssapi32.lib
+@@ -203,9 +202,9 @@
+ RSC_PROJ=/l 0x409 /fo"$(INTDIR)\libpq.res"
+ 
  LINK32=link.exe
- LINK32_FLAGS=kernel32.lib user32.lib advapi32.lib shfolder.lib wsock32.lib ws2_32.lib secur32.lib $(SSL_LIBS)  $(KFW_LIB) $(ADD_SECLIB) \
+-LINK32_FLAGS=kernel32.lib user32.lib advapi32.lib shfolder.lib wsock32.lib ws2_32.lib secur32.lib $(SSL_LIBS)  $(KFW_LIB) $(ADD_SECLIB) \
++LINK32_FLAGS=kernel32.lib user32.lib advapi32.lib shfolder.lib wsock32.lib ws2_32.lib secur32.lib $(SSL_LIBS) $(LDAP_LIBS) $(KFW_LIB) $(ADD_SECLIB) \
   /nologo /subsystem:windows /dll $(LOPT) /incremental:no \
 - /pdb:"$(OUTDIR)\libpqdll.pdb" /machine:$(CPU) \
 + /pdb:"$(OUTDIR)\libpqdll.pdb" /machine:$(MACHINE) \
   /out:"$(OUTDIR)\$(OUTFILENAME).dll"\
   /implib:"$(OUTDIR)\$(OUTFILENAME)dll.lib"  \
   /libpath:"$(SSL_LIB_PATH)" /libpath:"$(KFW_LIB_PATH)" \
-@@ -222,7 +216,7 @@
+@@ -222,7 +221,7 @@
  <<
  
  "$(INTDIR)\libpq.res" : "$(INTDIR)" libpq-dist.rc
