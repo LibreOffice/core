@@ -27,18 +27,18 @@
  ************************************************************************/
 
 
-#include <tools/table.hxx>
 #include <tools/debug.hxx>
 #include <tools/rc.h>
 
 #include <vcl/svapp.hxx>
 #include <accel.h>
 #include <vcl/accel.hxx>
+#include <map>
 #include <vector>
 
 // =======================================================================
 
-DECLARE_TABLE( ImplAccelTable, ImplAccelEntry* )
+typedef ::std::map< sal_uLong, ImplAccelEntry* > ImplAccelMap;
 typedef ::std::vector< ImplAccelEntry* > ImplAccelList;
 
 #define ACCELENTRY_NOTFOUND     ((sal_uInt16)0xFFFF)
@@ -48,8 +48,8 @@ typedef ::std::vector< ImplAccelEntry* > ImplAccelList;
 class ImplAccelData
 {
 public:
-    ImplAccelTable  maKeyTable;     // for keycodes, generated with a code
-    ImplAccelList   maIdList;       // Id-List
+    ImplAccelMap  maKeyMap; // for keycodes, generated with a code
+    ImplAccelList maIdList; // Id-List
 };
 
 // =======================================================================
@@ -179,7 +179,11 @@ void Accelerator::ImplInit()
 
 ImplAccelEntry* Accelerator::ImplGetAccelData( const KeyCode& rKeyCode ) const
 {
-    return mpData->maKeyTable.Get( rKeyCode.GetFullKeyCode() );
+    ImplAccelMap::iterator it = mpData->maKeyMap.find( rKeyCode.GetFullKeyCode() );
+    if( it != mpData->maKeyMap.end() )
+        return it->second;
+    else
+        return NULL;
 }
 
 // -----------------------------------------------------------------------
@@ -200,7 +204,7 @@ void Accelerator::ImplCopyData( ImplAccelData& rAccelData )
         else
             pEntry->mpAutoAccel = NULL;
 
-        mpData->maKeyTable.Insert( (sal_uLong)pEntry->maKeyCode.GetFullKeyCode(), pEntry );
+        mpData->maKeyMap.insert( std::make_pair( pEntry->maKeyCode.GetFullKeyCode(), pEntry ) );
         mpData->maIdList.push_back( pEntry );
     }
 }
@@ -267,7 +271,7 @@ void Accelerator::ImplInsertAccel( sal_uInt16 nItemId, const KeyCode& rKeyCode,
         OSL_FAIL( "Accelerator::InsertItem(): KeyCode with KeyCode 0 not allowed" );
         delete pEntry;
     }
-    else if ( !mpData->maKeyTable.Insert( nCode, pEntry ) )
+    else if ( mpData->maKeyMap.insert( std::make_pair( nCode, pEntry ) ).second )
     {
         OSL_TRACE( "Accelerator::InsertItem(): KeyCode (Key: %lx) already exists", nCode );
         delete pEntry;
@@ -470,7 +474,7 @@ Accelerator& Accelerator::operator=( const Accelerator& rAccel )
 
     // delete and copy tables
     ImplDeleteData();
-    mpData->maKeyTable.Clear();
+    mpData->maKeyMap.clear();
     ImplCopyData( *((ImplAccelData*)(rAccel.mpData)) );
 
     return *this;
