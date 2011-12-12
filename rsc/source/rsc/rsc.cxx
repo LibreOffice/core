@@ -630,7 +630,6 @@ ERRTYPE RscCompiler :: IncludeParser( sal_uLong lFileKey )
         else
         {
             RscFile         * pFNTmp;
-            ByteString        aPathName;
             RscDepend       * pDep;
             RscFileInst       aFileInst( pTC, lFileKey, lFileKey, finput );
 
