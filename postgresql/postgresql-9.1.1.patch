@@ -46,8 +46,8 @@
  static int ldapServiceLookup(const char *purl, PQconninfoOption *options,
  				  PQExpBuffer errorMessage);
  #endif
---- misc/postgresql-9.1.1/configure	2011-09-22 23:57:57.000000000 +0200
-+++ misc/build/postgresql-9.1.1/configure	2011-12-12 12:26:58.368351739 +0100
+--- misc/postgresql-9.1.1/configure	2011-12-12 14:54:25.053159648 +0100
++++ misc/build/postgresql-9.1.1/configure	2011-12-12 14:54:03.010060700 +0100
 @@ -718,6 +718,7 @@
  with_selinux
  with_openssl
@@ -76,8 +76,8 @@
  $as_echo "$with_ldap" >&6; }
  
  
-+{ $as_echo "$as_me:$LINENO: checking whether to use Mozilla LDAP implementation" >&5
-+$as_echo_n "checking whether to use Mozilla LDAP implementation... " >&6; }
++{ $as_echo "$as_me:$LINENO: checking whether to build with Mozilla LDAP support" >&5
++$as_echo_n "checking whether to build with Mozilla LDAP support... " >&6; }
 +
 +
 +
@@ -375,6 +375,104 @@
    fi
    LIBS="$_LIBS"
  fi
+--- misc/postgresql-9.1.1/configure.in	2011-09-22 23:57:57.000000000 +0200
++++ misc/build/postgresql-9.1.1/configure.in	2011-12-12 14:53:09.022369189 +0100
+@@ -662,6 +662,13 @@
+ AC_MSG_RESULT([$with_ldap])
+ AC_SUBST(with_ldap)
+ 
++AC_MSG_CHECKING([whether to build with Mozilla LDAP support])
++PGAC_ARG_BOOL(with, mozldap, no,
++              [build with Mozilla LDAP support],
++              [AC_DEFINE([USE_MOZLDAP], 1, [Define to 1 to build with Mozilla LDAP support. (--with-mozldap)])])
++AC_MSG_RESULT([$with_mozldap])
++AC_SUBST(with_mozldap)
++
+ 
+ #
+ # Bonjour
+@@ -1077,15 +1084,12 @@
+ fi
+ 
+ if test "$with_ldap" = yes ; then
+-  if test "$PORTNAME" != "win32"; then
++  if test "$with_mozldap" != "yes"; then
+      AC_CHECK_HEADERS(ldap.h, [],
+                       [AC_MSG_ERROR([header file <ldap.h> is required for LDAP])])
+   else
+-     AC_CHECK_HEADERS(winldap.h, [],
+-                      [AC_MSG_ERROR([header file <winldap.h> is required for LDAP])],
+-                      [AC_INCLUDES_DEFAULT
+-#include <windows.h>
+-                      ])
++     AC_CHECK_HEADERS(mozilla/ldap/ldap.h, [],
++                      [AC_MSG_ERROR([header file <mozilla/ldap/ldap.h> is required for LDAP])])
+   fi
+ fi
+ 
+@@ -1498,7 +1502,7 @@
+ # We can test for libldap_r only after we know PTHREAD_LIBS
+ if test "$with_ldap" = yes ; then
+   _LIBS="$LIBS"
+-  if test "$PORTNAME" != "win32"; then
++  if test "$with_mozldap" != "yes"; then
+     AC_CHECK_LIB(ldap, ldap_bind, [],
+ 		 [AC_MSG_ERROR([library 'ldap' is required for LDAP])],
+ 		 [$EXTRA_LDAP_LIBS])
+@@ -1513,9 +1517,8 @@
+       LDAP_LIBS_FE="-lldap $EXTRA_LDAP_LIBS"
+     fi
+   else
+-    AC_CHECK_LIB(wldap32, ldap_bind, [], [AC_MSG_ERROR([library 'wldap32' is required for LDAP])])
+-    LDAP_LIBS_FE="-lwldap32"
+-    LDAP_LIBS_BE="-lwldap32"
++    LDAP_LIBS_FE=
++    LDAP_LIBS_BE=
+   fi
+   LIBS="$_LIBS"
+ fi
+--- misc/postgresql-9.1.1/src/include/pg_config.h.in	2011-09-22 23:57:57.000000000 +0200
++++ misc/build/postgresql-9.1.1/src/include/pg_config.h.in	2011-12-12 14:57:55.000000000 +0100
+@@ -314,9 +314,6 @@
+ /* Define to 1 if you have the `ssleay32' library (-lssleay32). */
+ #undef HAVE_LIBSSLEAY32
+ 
+-/* Define to 1 if you have the `wldap32' library (-lwldap32). */
+-#undef HAVE_LIBWLDAP32
+-
+ /* Define to 1 if you have the `xml2' library (-lxml2). */
+ #undef HAVE_LIBXML2
+ 
+@@ -351,6 +348,9 @@
+ /* Define to 1 if the system has the type `MINIDUMP_TYPE'. */
+ #undef HAVE_MINIDUMP_TYPE
+ 
++/* Define to 1 if you have the <mozilla/ldap/ldap.h> header file. */
++#undef HAVE_MOZILLA_LDAP_LDAP_H
++
+ /* Define to 1 if you have the <netinet/in.h> header file. */
+ #undef HAVE_NETINET_IN_H
+ 
+@@ -659,9 +659,6 @@
+ /* Define to 1 if you have the <wctype.h> header file. */
+ #undef HAVE_WCTYPE_H
+ 
+-/* Define to 1 if you have the <winldap.h> header file. */
+-#undef HAVE_WINLDAP_H
+-
+ /* Define to the appropriate snprintf format for 64-bit ints. */
+ #undef INT64_FORMAT
+ 
+@@ -785,6 +782,9 @@
+    (--with-libxslt) */
+ #undef USE_LIBXSLT
+ 
++/* Define to 1 to build with Mozilla LDAP support. (--with-mozldap) */
++#undef USE_MOZLDAP
++
+ /* Define to select named POSIX semaphores. */
+ #undef USE_NAMED_POSIX_SEMAPHORES
+ 
 --- misc/postgresql-9.1.1/src/interfaces/libpq/win32.mak	2011-09-22 23:57:57.000000000 +0200
 +++ misc/build/postgresql-9.1.1/src/interfaces/libpq/win32.mak	2011-12-12 11:21:08.796898284 +0100
 @@ -11,18 +11,19 @@
