@@ -81,20 +81,23 @@ LIBPQ_DEP_LIBS=
 .IF "$(SYSTEM_POSTGRESQL)"=="YES"
 LIBPQ_LINK=-lpq
 .ELSE #SYSTEM_POSTGRESQL==NO
+.IF "$(GUI)$(COM)"=="WNTMSC"
+LIBPQ_LINK:=$(OUTDIR)/lib/libpq.lib ws2_32.lib secur32.lib advapi32.lib shell32.lib
 LIBPQ_DEP_LIBS += \
         $(OPENSSLLIB)
 .IF "$(WITH_LDAP)" == "YES"
 LIBPQ_DEP_LIBS+=\
         $(LDAPSDKLIB)
 .ENDIF
-.IF "$(GUI)$(COM)"=="WNTMSC"
-LIBPQ_LINK=$(OUTDIR)/lib/libpq.lib ws2_32.lib secur32.lib advapi32.lib shell32.lib
 .ELSE
 LIBPQ_LINK=$(OUTDIR)/lib/libpq.a
+LIBPQ_DEP_LIBS += -Wl,--as-needed
+.INCLUDE : $(OUTDIR_FOR_BUILD)/inc/postgresql/libpq-flags.mk
+LIBPQ_DEP_LIBS += -Wl,--no-as-needed
 .ENDIF
 POSTGRESQL_INC=-I$(OUTDIR)/inc/postgresql
 POSTGRESQL_LIB=
-.ENDIF
+.ENDIF # SYSTEM_POSTGRESQL
 
 CFLAGS+=$(POSTGRESQL_INC) \
     -DPQ_SDBC_MAJOR=$(PQ_SDBC_MAJOR) \

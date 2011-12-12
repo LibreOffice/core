@@ -64,7 +64,7 @@ CONFIGURE_ACTION += --with-ldap
 CONFIGURE_ACTION += --with-mozldap
 .ENDIF
 .ENDIF
-BUILD_ACTION = make -j$(GMAKE_MODULE_PARALLELISM) all-static-lib
+BUILD_ACTION = make -j$(GMAKE_MODULE_PARALLELISM) all-static-lib libpq-flags.mk
 .ENDIF
 
 # --- Targets ------------------------------------------------------
