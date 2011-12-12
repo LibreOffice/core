@@ -214,7 +214,7 @@ RscCmdLine::RscCmdLine( int argc, char ** argv, RscError * pEH )
             }
             else if( !rsc_strnicmp( (*ppStr) + 1, "fs=", 3 ) )
             { // anderer Name fuer .rc-file
-                if( m_aOutputFiles.back().aOutputRc.Len() )
+                if( m_aOutputFiles.back().aOutputRc.getLength() )
                     m_aOutputFiles.push_back( OutputFile() );
                 m_aOutputFiles.back().aOutputRc = (*ppStr) + 4;
             }
@@ -225,15 +225,18 @@ RscCmdLine::RscCmdLine( int argc, char ** argv, RscError * pEH )
                 // ignore empty -lip= arguments that we get lots of these days
                 if (aSysSearchDir.getLength())
                 {
-                    DirEntry aSysDir( String( aSysSearchDir, RTL_TEXTENCODING_ASCII_US ) );
+                    DirEntry aSysDir(rtl::OStringToOUString(aSysSearchDir, RTL_TEXTENCODING_ASCII_US));
                     m_aOutputFiles.back().aSysSearchDirs.push_back(
                         rtl::OUStringToOString(aSysDir.GetFull(), RTL_TEXTENCODING_ASCII_US) );
-                    if( m_aOutputFiles.back().aLangSearchPath.Len() )
+                    rtl::OString aLangSearchPath = m_aOutputFiles.back().aLangSearchPath;
+                    if( aLangSearchPath.getLength() )
                     {
-                        m_aOutputFiles.back().aLangSearchPath.Append(
-                        rtl::OUStringToOString(DirEntry::GetSearchDelimiter(), RTL_TEXTENCODING_ASCII_US) );
+                        aLangSearchPath = aLangSearchPath +
+                        rtl::OUStringToOString(DirEntry::GetSearchDelimiter(), RTL_TEXTENCODING_ASCII_US);
                     }
-                    m_aOutputFiles.back().aLangSearchPath.Append( aSysSearchDir );
+                    aLangSearchPath = aLangSearchPath + aSysSearchDir;
+
+                    m_aOutputFiles.back().aLangSearchPath = aLangSearchPath;
                 }
             }
             else if( !rsc_strnicmp( (*ppStr) + 1, "fp=", 3 ) )
@@ -287,7 +290,7 @@ RscCmdLine::RscCmdLine( int argc, char ** argv, RscError * pEH )
             }
             else if( !rsc_strnicmp( (*ppStr) + 1, "lg", 2 ) )
             {
-                if( m_aOutputFiles.back().aLangName.Len() )
+                if( m_aOutputFiles.back().aLangName.getLength() )
                     m_aOutputFiles.push_back( OutputFile() );
                 m_aOutputFiles.back().aLangName = rtl::OString((*ppStr)+3);
             }
@@ -311,7 +314,7 @@ RscCmdLine::RscCmdLine( int argc, char ** argv, RscError * pEH )
         ::std::list<OutputFile>::iterator it;
         for( it = m_aOutputFiles.begin(); it != m_aOutputFiles.end(); ++it )
         {
-            if( ! it->aOutputRc.Len() )
+            if( ! it->aOutputRc.getLength() )
                 it->aOutputRc  = ::OutputFile( *aInputList.front(), "rc"  );
         }
         if( ! bOutputSrsIsSet )
@@ -870,7 +873,7 @@ ERRTYPE RscCompiler::Link()
                 aSysSearchPath.append(aToken);
             }
             while ( nIndex >= 0 );
-            OSL_TRACE( "setting search path for language %s: %s", it->aLangName.GetBuffer(), aSysSearchPath.getStr() );
+            OSL_TRACE( "setting search path for language %s: %s", it->aLangName.getStr(), aSysSearchPath.getStr() );
             pTC->SetSysSearchPath(aSysSearchPath.makeStringAndClear());
 
             WriteRcContext  aContext;
@@ -905,8 +908,8 @@ ERRTYPE RscCompiler::Link()
 
             fclose( foutput );
             fExitFile = NULL;
-            unlink( it->aOutputRc.GetBuffer() );
-            if( rename( aRcTmp.getStr(), it->aOutputRc.GetBuffer() ) )
+            unlink( it->aOutputRc.getStr() );
+            if( rename( aRcTmp.getStr(), it->aOutputRc.getStr() ) )
             {
                 OStringBuffer aBuf;
                 aBuf.append( aRcTmp );
@@ -917,7 +920,7 @@ ERRTYPE RscCompiler::Link()
             else
             {
 #ifdef UNX
-                chmod( it->aOutputRc.GetBuffer(), S_IRWXU | S_IRWXG | S_IROTH );
+                chmod( it->aOutputRc.getStr(), S_IRWXU | S_IRWXG | S_IROTH );
 #endif
             }
 
@@ -1052,7 +1055,7 @@ void RscCompiler::Append( const rtl::OString& rOutputSrs,
 bool RscCompiler::GetImageFilePath( const RscCmdLine::OutputFile& rOutputFile,
                                     const WriteRcContext& rContext,
                                     const rtl::OString& rBaseFileName,
-                                    ByteString& rImagePath,
+                                    rtl::OString& rImagePath,
                                     FILE* pSysListFile )
 {
     ::std::list< rtl::OString >  aFileNames;
@@ -1065,7 +1068,7 @@ bool RscCompiler::GetImageFilePath( const RscCmdLine::OutputFile& rOutputFile,
 
     while( ( aFileIter != aFileNames.end() ) && !bFound )
     {
-        ::std::list< ByteString >::const_iterator aDirIter( rOutputFile.aSysSearchDirs.begin() );
+        ::std::list< rtl::OString >::const_iterator aDirIter( rOutputFile.aSysSearchDirs.begin() );
 
         while( ( aDirIter != rOutputFile.aSysSearchDirs.end() ) && !bFound )
         {
@@ -1119,7 +1122,7 @@ bool RscCompiler::GetImageFilePath( const RscCmdLine::OutputFile& rOutputFile,
                 }
 
 #if OSL_DEBUG_LEVEL > 1
-                fprintf( stderr, "ImagePath to add: %s\n", rImagePath.GetBuffer() );
+                fprintf( stderr, "ImagePath to add: %s\n", rImagePath.getStr() );
 #endif
             }
 
@@ -1146,14 +1149,15 @@ void RscCompiler::PreprocessSrsFile( const RscCmdLine::OutputFile& rOutputFile,
 
     if( !aIStm.GetError() && !aOStm.GetError() )
     {
-        ByteString aLine, aFilePath;
+        ByteString aLine;
+        rtl::OString aFilePath;
 
         while( aIStm.ReadLine( aLine ) )
         {
             if( ( aLine.GetTokenCount( '=' ) == 2 ) &&
                 ( getToken(aLine, 0, '=').indexOf("File") != -1 ) )
             {
-                ByteString aBaseFileName( getToken(getToken(aLine, 1, '"'), 0, '.') );
+                rtl::OString aBaseFileName( getToken(getToken(aLine, 1, '"'), 0, '.') );
 
                 if( GetImageFilePath( rOutputFile, rContext, aBaseFileName, aFilePath, pSysListFile ) )
                     ( ( aLine = "File = \"" ) += aFilePath ) += "\";";
@@ -1164,7 +1168,7 @@ void RscCompiler::PreprocessSrsFile( const RscCmdLine::OutputFile& rOutputFile,
             }
             else if( aLine.Search( "ImageList" ) != STRING_NOTFOUND )
             {
-                ::std::vector< ::std::pair< ByteString, sal_Int32 > > aEntryVector;
+                ::std::vector< ::std::pair< rtl::OString, sal_Int32 > > aEntryVector;
 
                 aOStm.WriteLine( aLine );
 
@@ -1210,7 +1214,7 @@ void RscCompiler::PreprocessSrsFile( const RscCmdLine::OutputFile& rOutputFile,
                             rtl::OString aBaseFileName = aBuf.makeStringAndClear();
 
                             if( GetImageFilePath( rOutputFile, rContext, aBaseFileName, aFilePath, pSysListFile ) )
-                                aEntryVector.push_back( ::std::pair< ByteString, sal_Int32 >( aFilePath, nNumber ) );
+                                aEntryVector.push_back( ::std::pair< rtl::OString, sal_Int32 >( aFilePath, nNumber ) );
                             else
                                 aMissingImages.push_back( aBaseFileName );
                         }

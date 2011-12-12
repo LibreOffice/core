@@ -65,10 +65,10 @@ public:
 
     struct OutputFile
     {
-        ByteString                   aLangName;         // language name
-        ByteString                   aOutputRc;         // target file
-        ByteString                   aLangSearchPath;   // language specific search path
-        ::std::list< ByteString >    aSysSearchDirs;    // pathes to search for images
+        rtl::OString aLangName;         // language name
+        rtl::OString aOutputRc;         // target file
+        rtl::OString aLangSearchPath;   // language specific search path
+        ::std::list< rtl::OString >    aSysSearchDirs;    // pathes to search for images
 
         OutputFile() {}
     };
@@ -99,7 +99,7 @@ private:
     bool            GetImageFilePath( const RscCmdLine::OutputFile& rOutputFile,
                                       const WriteRcContext& rContext,
                                       const rtl::OString& rBaseFileName,
-                                      ByteString& rImagePath,
+                                      rtl::OString& rImagePath,
                                       FILE* pSysListFile );
     void            PreprocessSrsFile( const RscCmdLine::OutputFile& rOutputFile,
                                        const WriteRcContext& rContext,
