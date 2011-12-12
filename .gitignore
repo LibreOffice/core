@@ -2,6 +2,7 @@
 *~
 .*.sw[op]
 \#*
+.DS_Store
 
 # python generated file
 *.pyc
