@@ -144,8 +144,6 @@ my_components = \
     dbtools \
     embobj \
     flat \
-    fpicker \
-    fps_office \
     guesslang \
     hyphen \
     lnth \
@@ -155,7 +153,6 @@ my_components = \
     sdbc2 \
     spell \
     srtrs1 \
-    syssh \
     ucb1 \
     ucpexpand1 \
     ucpext \
@@ -177,10 +174,13 @@ my_components += \
     component/desktop/source/offacc/offacc \
     component/desktop/source/splash/spl \
     dbp \
+    fpicker \
+    fps_office \
     log \
     pcr \
     res \
     scn \
+    syssh \
     tvhlp1 \
     ucpchelp1 \
     updatefeed \
@@ -345,7 +345,7 @@ my_components += mozbootstrap
 my_components += fps_kde4
 .END
 
-.IF "$(OS)" != "WNT"
+.IF "$(OS)" != "WNT" && "$(OS)" != "ANDROID" && "$(OS)" != "IOS"
 my_components += cmdmail
 .END
 
