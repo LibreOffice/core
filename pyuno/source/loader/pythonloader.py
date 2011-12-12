@@ -139,8 +139,8 @@ class Loader( XImplementationLoader, XServiceInfo, unohelper.Base ):
 
         mod = self.getModuleFromUrl( locationUrl )
         implHelper = mod.__dict__.get( "g_ImplementationHelper" , None )
-        print ("dump stuff")
         if DEBUG:
+            print ("dump stuff")
             print ("Fetched ImplHelper as " + str(implHelper))
         if implHelper == None:
             return mod.getComponentFactory( implementationName, self.ctx.ServiceManager, regKey )
