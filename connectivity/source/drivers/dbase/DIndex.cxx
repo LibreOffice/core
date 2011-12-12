@@ -443,7 +443,7 @@ sal_Bool ODbaseIndex::DropImpl()
     Config aInfFile(sPhysicalPath);
     aInfFile.SetGroup(dBASE_III_GROUP);
     sal_uInt16 nKeyCnt = aInfFile.GetKeyCount();
-    ByteString aKeyName;
+    rtl::OString aKeyName;
     String sEntry = m_Name;
     sEntry += String::CreateFromAscii(".ndx");
 
@@ -452,7 +452,7 @@ sal_Bool ODbaseIndex::DropImpl()
     {
         // References the Key to an Index-file?
         aKeyName = aInfFile.GetKeyName( nKey );
-        if (aKeyName.Copy(0,3) == "NDX")
+        if (aKeyName.copy(0,3) == "NDX")
         {
             if(sEntry == String(rtl::OStringToOUString(aInfFile.ReadKey(aKeyName),m_pTable->getConnection()->getTextEncoding())))
             {
