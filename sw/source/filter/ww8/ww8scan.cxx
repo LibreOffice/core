@@ -923,7 +923,7 @@ void WW8SprmIter::UpdateMyMembers()
         nAktSize = mrSprmParser.GetSprmSize(nAktId, pSprms);
         pAktParams = pSprms + mrSprmParser.DistanceToData(nAktId);
         bValid = nAktSize <= nRemLen;
-        OSL_ENSURE(bValid, "sprm longer than remaining bytes");
+        SAL_WARN_IF(!bValid, ".doc", "sprm longer than remaining bytes, doc or parser is wrong");
     }
 
     if (!bValid)
@@ -7410,7 +7410,7 @@ sal_uInt8* wwSprmParser::findSprmData(sal_uInt16 nId, sal_uInt8* pSprms,
 
         bool bValid = nSize <= nLen;
 
-        OSL_ENSURE(bValid, "sprm longer than remaining bytes");
+        SAL_WARN_IF(!bValid, ".doc", "sprm longer than remaining bytes, doc or parser is wrong");
 
         if (nAktId == nId && bValid) // Sprm found
             return pSprms + DistanceToData(nId);

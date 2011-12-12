@@ -97,6 +97,7 @@ $(eval $(call gb_CppunitTest_add_old_components,sw_filters_test,\
     configmgr \
     ucb1 \
     ucpfile1 \
+    ucpchelp1 \
 ))
 
 $(eval $(call gb_CppunitTest_set_args,sw_filters_test,\
