@@ -273,8 +273,6 @@ sal_Bool LngParser::Merge(
                 }
                 if( bULF && pEntrys )
                 {
-                    // this is a valid text line
-                    ByteString sText = getToken(getToken(sLine, 1, '\"'), 0, '\"');
                     if( sLang.Len() )
                     {
                         ByteString sNewText;
