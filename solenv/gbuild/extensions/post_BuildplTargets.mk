@@ -36,7 +36,7 @@ ifeq ($(gb_SourceEnvAndRecurse_STAGE),buildpl)
 
 all: build
 	@true
-        
+
 # fake targets -- whatever is requested from gbuild requires a full build before (dev-install for JunitTests)
 $(call gb_Package_get_target,%): build
 	@true
@@ -61,7 +61,7 @@ $(call gb_Pyuno_get_target,%): build
 
 $(call gb_WinResTarget_get_target,%): build
 	@true
- 
+
 $(call gb_CppunitTest_get_target,%): build
 	@true
 
@@ -104,8 +104,14 @@ define gb_BuildplTarget_command
 cd $(SRCDIR)/$(1) && unset MAKEFLAGS && export gb_SourceEnvAndRecurse_STAGE=gbuild && $(SOLARENV)/bin/build.pl $(if $(findstring s,$(MAKEFLAGS)),,VERBOSE=T) -P$(BUILD_NCPUS) $(2) -- -P$(GMAKE_PARALLELISM) gb_MAKETARGET=$(gb_MAKETARGET)
 endef
 
-dev-install: $(WORKDIR)/bootstrap  $(SRCDIR)/src.downloaded $(if $(filter $(INPATH),$(INPATH_FOR_BUILD)),,cross_toolset) | $(filter build,$(MAKECMDGOALS))
-	$(call gb_BuildplTarget_command,smoketestoo_native,--from instsetoo_native)
+# the build order dependencies are rather ugly...
+dev-install: \
+			$(WORKDIR)/bootstrap \
+			$(SRCDIR)/src.downloaded \
+			$(if $(filter $(INPATH),$(INPATH_FOR_BUILD)),,cross_toolset) \
+		|   $(filter build,$(MAKECMDGOALS)) \
+			$(if $(filter check,$(MAKECMDGOALS)),build)
+	$(call gb_BuildplTarget_command,smoketestoo_native,)
 
 build: $(WORKDIR)/bootstrap $(SRCDIR)/src.downloaded $(if $(filter $(INPATH),$(INPATH_FOR_BUILD)),,cross_toolset)
 	$(call gb_BuildplTarget_command,instsetoo_native,--all)
@@ -150,7 +156,7 @@ debugrun:
 	@true
 
 endif # gb_SourceEnvAndRecurse_STAGE=buildpl
-    
+
 ifeq ($(gb_SourceEnvAndRecurse_STAGE),gbuild)
 
 clean: clean-host clean-build
