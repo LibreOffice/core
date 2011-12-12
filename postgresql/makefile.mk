@@ -52,17 +52,12 @@ CONFIGURE_DIR=.
 BUILD_DIR=src
 
 CONFIGURE_ACTION =
-BUILD_ACTION = nmake -f win32.mak
+BUILD_ACTION = nmake -f win32.mak USE_SSL=1
 .ELSE
 CONFIGURE_DIR=.
 BUILD_DIR=src/interfaces/libpq
 
-# TODO:
-# --datarootdir changes where libpq expects internationalisation of its messages
-#               (which we don't install anyway for now...)
-# --sysconfdir: config files. Ideally, we would like that to be "the same as the platform default",
-#               but that's quite some guessing work.
-CONFIGURE_ACTION = ./configure --without-readline --disable-shared
+CONFIGURE_ACTION = ./configure --without-readline --disable-shared --with-openssl
 BUILD_ACTION = make -j$(GMAKE_MODULE_PARALLELISM) all-static-lib
 .ENDIF
 
