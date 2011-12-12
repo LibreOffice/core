@@ -84,14 +84,16 @@ sal_Int32 CustomShapeProperties::SetCustomShapeGuideValue( std::vector< CustomSh
 // if the return value is < 0 then the guide value could not be found
 sal_Int32 CustomShapeProperties::GetCustomShapeGuideValue( const std::vector< CustomShapeGuide >& rGuideList, const rtl::OUString& rFormulaName )
 {
-    sal_Int32 nIndex = 0;
-    for( ; nIndex < static_cast< sal_Int32 >( rGuideList.size() ); nIndex++ )
+    // traverse the list from the end, because guide names can be reused
+    // and current is the last one
+    // see a1 guide in gear6 custom shape preset as example
+    sal_Int32 nIndex = static_cast< sal_Int32 >( rGuideList.size() ) - 1;
+    for( ; nIndex >= 0; nIndex-- )
     {
         if ( rGuideList[ nIndex ].maName == rFormulaName )
             break;
     }
-    if ( nIndex == static_cast< sal_Int32 >( rGuideList.size() ) )
-        nIndex = -1;
+
     return nIndex;
 }
 
