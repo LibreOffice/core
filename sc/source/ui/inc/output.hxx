@@ -102,6 +102,7 @@ private:
         long                    mnPosX;
         long                    mnPosY;
         long                    mnInitPosX;
+        sal_uInt8               mnScript;
         bool                    mbBreak;
         bool                    mbCellIsValue;
         bool                    mbAsianVertical;

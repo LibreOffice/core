@@ -1561,9 +1561,27 @@ void ScOutputData::DrawStrings( sal_Bool bPixelToLogic )
                         bCellIsValue = pFCell->IsRunning() || pFCell->IsValue();
                     }
 
-                    eOutHorJust = ( aVars.GetHorJust() != SVX_HOR_JUSTIFY_STANDARD ) ?
-                                  aVars.GetHorJust() :
-                                  ( bCellIsValue ? SVX_HOR_JUSTIFY_RIGHT : SVX_HOR_JUSTIFY_LEFT );
+                    if (aVars.GetHorJust() == SVX_HOR_JUSTIFY_STANDARD)
+                    {
+                        // fdo#32530: Default alignment depends on value vs
+                        // string, and the script type of the 1st letter.
+                        sal_uInt8 nScript1st = 0;
+                        rtl::OUString aStr = aVars.GetString();
+                        if (!aStr.isEmpty())
+                        {
+                            aStr = aStr.copy(0, 1);
+                            nScript1st = pDoc->GetStringScriptType(aStr);
+                            if (!nScript1st)
+                                nScript1st = ScGlobal::GetDefaultScriptType();
+                        }
+
+                        if (nScript1st == SCRIPTTYPE_COMPLEX)
+                            eOutHorJust = bCellIsValue ? SVX_HOR_JUSTIFY_LEFT : SVX_HOR_JUSTIFY_RIGHT;
+                        else
+                            eOutHorJust = bCellIsValue ? SVX_HOR_JUSTIFY_RIGHT : SVX_HOR_JUSTIFY_LEFT;
+                    }
+                    else
+                        eOutHorJust = aVars.GetHorJust();
 
                     if ( eOutHorJust == SVX_HOR_JUSTIFY_BLOCK || eOutHorJust == SVX_HOR_JUSTIFY_REPEAT )
                         eOutHorJust = SVX_HOR_JUSTIFY_LEFT;     // repeat is not yet implemented
@@ -2137,6 +2155,7 @@ ScOutputData::DrawEditParam::DrawEditParam(const ScPatternAttr* pPattern, const 
     mnArrY(0),
     mnX(0), mnY(0), mnCellX(0), mnCellY(0),
     mnPosX(0), mnPosY(0), mnInitPosX(0),
+    mnScript(0),
     mbBreak( (meHorJust == SVX_HOR_JUSTIFY_BLOCK) || lcl_GetBoolValue(*pPattern, ATTR_LINEBREAK, pCondSet) ),
     mbCellIsValue(bCellIsValue),
     mbAsianVertical(false),
@@ -2567,9 +2586,16 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
         bHidden = true;     // gedreht wird getrennt ausgegeben
     }
 
-    SvxCellHorJustify eOutHorJust =
-        ( rParam.meHorJust != SVX_HOR_JUSTIFY_STANDARD ) ? rParam.meHorJust :
-        ( rParam.mbCellIsValue ? SVX_HOR_JUSTIFY_RIGHT : SVX_HOR_JUSTIFY_LEFT );
+    SvxCellHorJustify eOutHorJust = rParam.meHorJust;
+    if (eOutHorJust == SVX_HOR_JUSTIFY_STANDARD)
+    {
+        // fdo#32530: Default alignment depends on value vs string, and the
+        // script type of the 1st letter.
+        if (rParam.mnScript == SCRIPTTYPE_COMPLEX)
+            eOutHorJust = rParam.mbCellIsValue ? SVX_HOR_JUSTIFY_LEFT : SVX_HOR_JUSTIFY_RIGHT;
+        else
+            eOutHorJust = rParam.mbCellIsValue ? SVX_HOR_JUSTIFY_RIGHT : SVX_HOR_JUSTIFY_LEFT;
+    }
 
     if ( eOutHorJust == SVX_HOR_JUSTIFY_BLOCK || eOutHorJust == SVX_HOR_JUSTIFY_REPEAT )
         eOutHorJust = SVX_HOR_JUSTIFY_LEFT;     // repeat is not yet implemented
@@ -4570,6 +4596,17 @@ void ScOutputData::DrawEdit(sal_Bool bPixelToLogic)
                         else
                             lcl_ClearEdit( *pEngine );      // also calls SetUpdateMode(sal_False)
 
+                        // fdo#32530: Get the script type of the first letter.
+                        sal_uInt8 nScript = 0;
+                        rtl::OUString aStr = pDoc->GetString(nCellX, nCellY, nTab);
+                        if (!aStr.isEmpty())
+                        {
+                            aStr = aStr.copy(0, 1);
+                            nScript = pDoc->GetStringScriptType(aStr);
+                        }
+                        if (nScript == 0)
+                            nScript = ScGlobal::GetDefaultScriptType();
+
                         DrawEditParam aParam(pPattern, pCondSet, lcl_SafeIsValue(pCell));
                         aParam.mbPixelToLogic = bPixelToLogic;
                         aParam.mbHyphenatorSet = bHyphenatorSet;
@@ -4583,6 +4620,7 @@ void ScOutputData::DrawEdit(sal_Bool bPixelToLogic)
                         aParam.mnPosX = nPosX;
                         aParam.mnPosY = nPosY;
                         aParam.mnInitPosX = nInitPosX;
+                        aParam.mnScript = nScript;
                         aParam.mpOldPattern = pOldPattern;
                         aParam.mpOldCondSet = pOldCondSet;
                         aParam.mpThisRowInfo = pThisRowInfo;
