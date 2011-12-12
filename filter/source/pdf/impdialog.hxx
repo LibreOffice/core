@@ -89,9 +89,11 @@ private:
 
     Any                         maSelection;
 
+    DECL_LINK( CancelHdl, Button * );
+
 protected:
 //the following data are the configuration used throughout the dialog and pages
-       sal_Bool                    mbIsPresentation;
+    sal_Bool                    mbIsPresentation;
     sal_Bool                    mbIsWriter;
     sal_Bool                    mbSelectionPresent;
     sal_Bool                    mbUseCTLFont;

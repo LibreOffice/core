@@ -255,9 +255,17 @@ ImpPDFTabDialog::ImpPDFTabDialog( Window* pParent,
     GetOKButton().SetText( ( sOkButtonText.getLength() > 0 ) ?
                             sOkButtonText : OUString( String( PDFFilterResId( STR_PDF_EXPORT ) ) ));
 
+    GetCancelButton().SetClickHdl(LINK(this, ImpPDFTabDialog, CancelHdl));
+
 //remove the reset button, not needed in this tabbed dialog
     RemoveResetButton();
 /////////////////
+}
+
+IMPL_LINK( ImpPDFTabDialog, CancelHdl, Button *, EMPTYARG )
+{
+    EndDialog( sal_False );
+    return 0;
 }
 
 // -----------------------------------------------------------------------------
