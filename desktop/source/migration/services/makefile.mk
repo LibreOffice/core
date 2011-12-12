@@ -42,10 +42,6 @@ DLLPRE =
 
 .INCLUDE :  cppumaker.mk
 
-.IF "$(SYSTEM_DB)" == "YES"
-CFLAGS+=-DSYSTEM_DB -I$(DB_INCLUDES)
-.ENDIF
-
 SLOFILES= \
         $(SLO)$/jvmfwk.obj \
         $(SLO)$/cexports.obj \
@@ -76,7 +72,6 @@ SHL1STDLIBS= \
     $(I18NISOLANGLIB) \
     $(JVMFWKLIB) \
     $(XMLSCRIPTLIB) \
-    $(BERKELEYLIB)
 
 SHL1DEPN=
 SHL1IMPLIB=imigrationoo2
@@ -104,7 +99,6 @@ SHL2STDLIBS= \
     $(I18NISOLANGLIB) \
     $(JVMFWKLIB) \
     $(XMLSCRIPTLIB) \
-    $(BERKELEYLIB)
 
 SHL2DEPN=
 SHL2IMPLIB=imigrationoo3

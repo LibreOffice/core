@@ -42,10 +42,6 @@ TARGET = deplmisc
 # Reduction of exported symbols:
 CDEFS += -DDESKTOP_DEPLOYMENTMISC_DLLIMPLEMENTATION
 
-.IF "$(SYSTEM_DB)" == "YES"
-CFLAGS+=-DSYSTEM_DB -I$(DB_INCLUDES)
-.ENDIF
-
 SRS1NAME = $(TARGET)
 SRC1FILES = \
     dp_misc.src

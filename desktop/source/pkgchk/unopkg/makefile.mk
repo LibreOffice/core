@@ -41,10 +41,6 @@ PRJINC += ..$/..$/deployment ..$/..
 .INCLUDE : settings.mk
 .INCLUDE : $(PRJ)$/source$/deployment$/inc$/dp_misc.mk
 
-.IF "$(SYSTEM_DB)" == "YES"
-CFLAGS+=-DSYSTEM_DB -I$(DB_INCLUDES)
-.ENDIF
-
 .IF "$(LINK_SO)"!=""
 APP1TARGET = so$/unopkg
 APP1OBJS = $(OBJFILES)
