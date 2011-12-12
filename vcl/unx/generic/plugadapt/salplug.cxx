@@ -76,6 +76,7 @@ static SalInstance* tryInstance( const OUString& rModuleBase )
             {
                 pCloseModule = aMod;
 
+#ifndef ANDROID
                 /*
                  * Recent GTK+ versions load their modules with RTLD_LOCAL, so we can
                  * not access the 'gnome_accessibility_module_shutdown' anymore.
@@ -95,7 +96,7 @@ static SalInstance* tryInstance( const OUString& rModuleBase )
                 {
                     pCloseModule = NULL;
                 }
-
+#endif
                 GetSalData()->m_pPlugin = aMod;
             }
             else
@@ -120,6 +121,8 @@ static SalInstance* tryInstance( const OUString& rModuleBase )
     return pInst;
 }
 
+#ifndef ANDROID
+
 static DesktopType get_desktop_environment()
 {
     OUStringBuffer aModName( 128 );
@@ -141,6 +144,12 @@ static DesktopType get_desktop_environment()
     osl_unloadModule( aMod );
     return ret;
 }
+
+#else
+
+#define get_desktop_environment() DESKTOP_NONE // For now...
+
+#endif
 
 static SalInstance* autodetect_plugin()
 {
