@@ -1157,7 +1157,13 @@ public:
             return false;
 
         if (pCell)
+        {
+            if (pCell->GetErrorCode())
+                // Error values are compared as string.
+                return false;
+
             return pCell->HasValueData();
+        }
 
         return mrTab.HasValueData(nCol, nRow);
     }
