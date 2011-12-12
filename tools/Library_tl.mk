@@ -39,7 +39,6 @@ $(eval $(call gb_Library_set_include,tl,\
 
 $(eval $(call gb_Library_add_defs,tl,\
     -DTOOLS_DLLIMPLEMENTATION \
-    -DVCL \
 ))
 
 $(eval $(call gb_Library_add_api,tl,\

@@ -51,7 +51,7 @@ my ( $SOLAR_JAVA,
 #
 # Platform dependent constant values.
 my ( $COM, $ARCH, $CPU, $CPUNAME, $GUI, $GUIBASE,
-      $GVER, $OS, $OSVERSION, $OUTPATH, $INPATH, $PATH_SEPERATOR,
+      $OS, $OSVERSION, $OUTPATH, $INPATH, $PATH_SEPERATOR,
       $DYNAMIC_CRT, $use_shl_versions, $JRELIBDIR,
       $JRETOOLKITDIR, $JRETHREADDIR );
 #
@@ -208,7 +208,6 @@ if ( $platform =~ m/solaris/ )
    $COMPATH        = '@COMPATH@';
    $GUI            = "UNX";
    $GUIBASE        = "unx";
-   $GVER           = "VCL";
    $INPATH         = $OUTPATH.$PROEXT;
    $OS             = "SOLARIS";
    $PATH_SEPERATOR = $ps;
@@ -257,7 +256,6 @@ elsif ( $platform =~ m/netbsd/ )
       $COMPATH        = '@COMPATH@';
       $GUI            = "UNX";
       $GUIBASE        = "unx";
-      $GVER           = "VCL";
       $OS             = "NETBSD";
       $PATH_SEPERATOR = $ps;
       $OUTPATH        = "unxnbsd";
@@ -271,7 +269,6 @@ elsif ( $platform =~ m/kfreebsd/ )
       $COMPATH        = '@COMPATH@';
       $GUI            = "UNX";
       $GUIBASE        = "unx";
-      $GVER           = "VCL";
       $OS             = "LINUX";
       $PATH_SEPERATOR = $ps;
 
@@ -307,7 +304,6 @@ elsif ( $platform =~ m/freebsd/ )
       $COMPATH        = '@COMPATH@';
       $GUI            = "UNX";
       $GUIBASE        = "unx";
-      $GVER           = "VCL";
       $OS             = "FREEBSD";
       $PATH_SEPERATOR = $ps;
       $OSVERSION      = '@OSVERSION@';
@@ -351,7 +347,6 @@ elsif ( $platform =~ m/openbsd/ )
       $COMPATH        = '@COMPATH@';
       $GUI            = "UNX";
       $GUIBASE        = "unx";
-      $GVER           = "VCL";
       $OS             = "OPENBSD";
       $PATH_SEPERATOR = $ps;
       $OSVERSION      = '@OSVERSION@';
@@ -387,7 +382,6 @@ elsif ( $platform =~ m/linux/ )
       $COMPATH        = '@COMPATH@';
       $GUI            = "UNX";
       $GUIBASE        = "unx";
-      $GVER           = "VCL";
       $OS             = "LINUX";
       $PATH_SEPERATOR = $ps;
 
@@ -632,7 +626,6 @@ elsif ( $platform =~ m/cygwin|mingw32/ )
       $CPU            = "X" if $CL_X64;
       $GUI            = "WNT";
       $GUIBASE        = "WIN";
-      $GVER           = "NT351";
       $OS             = "WNT";
       $DYNAMIC_CRT    = "TRUE";
       $use_shl_versions = "TRUE";
@@ -719,7 +712,6 @@ elsif ( $platform =~ m/darwin/ )
         $MACOSX_SDK_PATH='@MACOSX_SDK_PATH@';
         $FRAMEWORKSHOME = $MACOSX_SDK_PATH."/System/Library/Frameworks";
     }
-    $GVER           = "VCL";
     $INPATH         = $OUTPATH.$PROEXT;
     $PATH_SEPERATOR = $ps;
 }
@@ -750,7 +742,6 @@ elsif ( $platform =~ m/dragonfly/ )
       $COMPATH        = '@COMPATH@';
       $GUI            = "UNX";
       $GUIBASE        = "unx";
-      $GVER           = "VCL";
       $OS             = "DRAGONFLY";
       $PATH_SEPERATOR = $ps;
       $OUTPATH        = "unxdfly";
@@ -771,7 +762,6 @@ elsif ( $platform =~ m/aix/ )
    $COMPATH        = '@COMPATH@';
    $GUI            = "UNX";
    $GUIBASE        = "unx";
-   $GVER           = "VCL";
    $INPATH         = $OUTPATH.$PROEXT;
    $OS             = "AIX";
    $PATH_SEPERATOR = $ps;
@@ -1553,7 +1543,6 @@ ToFile( "CPU",               $CPU,               "e" );
 ToFile( "CPUNAME",           $CPUNAME,           "e" );
 ToFile( "GUI",               $GUI,               "e" );
 ToFile( "GUIBASE",           $GUIBASE,           "e" );
-ToFile( "GVER",              $GVER,              "e" );
 ToFile( "OS",                $OS,                "e" );
 ToFile( "OSVERSION",         $OSVERSION,         "e" );
 ToFile( "PTHREAD_CFLAGS",    "@PTHREAD_CFLAGS@", "e" );

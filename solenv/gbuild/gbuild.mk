@@ -182,7 +182,6 @@ gb_GLOBALDEFS := \
 	-D_REENTRANT \
 	-DOSL_DEBUG_LEVEL=$(gb_DEBUGLEVEL) \
 	-DSUPD=$(UPD) \
-	-DVCL \
 	$(gb_OSDEFS) \
 	$(gb_COMPILERDEFS) \
 	$(gb_CPUDEFS) \
