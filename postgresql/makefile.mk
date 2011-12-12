@@ -60,10 +60,9 @@ BUILD_DIR=src/interfaces/libpq
 CONFIGURE_ACTION = CPPFLAGS=-I$(SOLARVER)$/$(INPATH)$/inc ./configure --without-readline --disable-shared --with-openssl
 .IF "$(WITH_LDAP)" == "YES"
 CONFIGURE_ACTION += --with-ldap
-.ENDIF
 .IF "$(WITH_OPENLDAP)" != "YES"
 CONFIGURE_ACTION += --with-mozldap
-.ELSE
+.ENDIF
 .ENDIF
 BUILD_ACTION = make -j$(GMAKE_MODULE_PARALLELISM) all-static-lib
 .ENDIF
