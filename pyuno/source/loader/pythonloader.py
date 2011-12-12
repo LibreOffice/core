@@ -111,16 +111,18 @@ class Loader( XImplementationLoader, XServiceInfo, unohelper.Base ):
                     g_loadedComponents[url] = mod
                 return mod
             elif "vnd.openoffice.pymodule" == protocol:
-                # the failure is on symbol lookup later in the parent ...
-                print ("Warning: Python module loading is almost certainly pre-broken")
                 nSlash = dependent.rfind('/')
                 if -1 != nSlash:
                     path = unohelper.fileUrlToSystemPath( dependent[0:nSlash] )
                     dependent = dependent[nSlash+1:len(dependent)]
                     if not path in sys.path:
                         sys.path.append( path )
-                var =  __import__( dependent )
-                return var
+                mod =  __import__( dependent )
+                path_component, dot, rest = dependent.partition('.')
+                while dot == '.':
+                    path_component, dot, rest = rest.partition('.')
+                    mod = getattr(mod, path_component)
+                return mod
             else:
                 if DEBUG:
                     print("Unknown protocol '" + protocol + "'");
@@ -140,7 +142,6 @@ class Loader( XImplementationLoader, XServiceInfo, unohelper.Base ):
         mod = self.getModuleFromUrl( locationUrl )
         implHelper = mod.__dict__.get( "g_ImplementationHelper" , None )
         if DEBUG:
-            print ("dump stuff")
             print ("Fetched ImplHelper as " + str(implHelper))
         if implHelper == None:
             return mod.getComponentFactory( implementationName, self.ctx.ServiceManager, regKey )

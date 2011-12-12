@@ -59,7 +59,6 @@ class FaxWizardDialogImpl(FaxWizardDialog):
     def startWizard(self, xMSF):
         self.running = True
         try:
-            print "entra"
             #Number of steps on WizardDialog
             self.nMaxStep = 5
 
