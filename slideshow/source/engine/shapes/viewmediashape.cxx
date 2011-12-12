@@ -286,11 +286,21 @@ namespace slideshow
                         xPropSet.set( mxShape, uno::UNO_QUERY );
 
                         // create Player
-                        if( xPropSet.is() &&
-                            ( xPropSet->getPropertyValue(
-                                  ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MediaURL" ) ) ) >>=aURL ) )
+                        if (xPropSet.is())
                         {
-                            implInitializeMediaPlayer( aURL );
+                            if ((xPropSet->getPropertyValue(
+                                  ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                          "PrivateTempFileURL"))) >>= aURL)
+                                && aURL.getLength())
+                            {
+                                implInitializeMediaPlayer( aURL );
+                            }
+                            else if (xPropSet->getPropertyValue(
+                                  ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                          "MediaURL"))) >>= aURL)
+                            {
+                                implInitializeMediaPlayer( aURL );
+                            }
                         }
 
                         // create visible object
