@@ -14498,7 +14498,7 @@ void CustomShapeProperties::initializePresetsMap2()
         aStringSequence[12] = CREATE_OUSTRING ("(1+?11 )/12");
         aStringSequence[13] = CREATE_OUSTRING ("?12 *logwidth/1");
         aStringSequence[14] = CREATE_OUSTRING ("?12 *logheight/1");
-        aStringSequence[15] = CREATE_OUSTRING ("logwidth+0-?10 ");
+        aStringSequence[15] = CREATE_OUSTRING ("logwidth+0-?13 ");
         aStringSequence[16] = CREATE_OUSTRING ("logheight+0-?14 ");
         aStringSequence[17] = CREATE_OUSTRING ("logwidth/2");
         aStringSequence[18] = CREATE_OUSTRING ("logheight*?17 /?4 ");
@@ -14680,7 +14680,7 @@ void CustomShapeProperties::initializePresetsMap2()
                     EnhancedCustomShapeParameterPair aParameterPair;
                     {
                         EnhancedCustomShapeParameter aParameter;
-                        Any aAny ((sal_Int32) 10);
+                        Any aAny ((sal_Int32) 13);
                         aParameter.Value = aAny;
                         aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
                         aParameterPair.First = aParameter;

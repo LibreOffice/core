@@ -901,8 +901,8 @@ void CustomShapeProperties::initializePresetsMap5()
         aStringSequence[196] = CREATE_OUSTRING ("?16 *cos(pi*(?4 )/10800000)");
         aStringSequence[197] = CREATE_OUSTRING ("?15 *(cos(atan2(?195 ,?196 )))");
         aStringSequence[198] = CREATE_OUSTRING ("?16 *(sin(atan2(?195 ,?196 )))");
-        aStringSequence[199] = CREATE_OUSTRING ("?21 +?132 -0");
-        aStringSequence[200] = CREATE_OUSTRING ("?23 +?133 -0");
+        aStringSequence[199] = CREATE_OUSTRING ("?21 +?197 -0");
+        aStringSequence[200] = CREATE_OUSTRING ("?23 +?198 -0");
         aStringSequence[201] = CREATE_OUSTRING ("?4 +5400000-0");
         aStringSequence[202] = CREATE_OUSTRING ("?52 +0-5400000");
         aStringSequence[203] = CREATE_OUSTRING ("?52 +10800000-0");
@@ -12397,8 +12397,8 @@ void CustomShapeProperties::initializePresetsMap5()
         aStringSequence[156] = CREATE_OUSTRING ("?16 *cos(pi*(?4 )/10800000)");
         aStringSequence[157] = CREATE_OUSTRING ("?15 *(cos(atan2(?155 ,?156 )))");
         aStringSequence[158] = CREATE_OUSTRING ("?16 *(sin(atan2(?155 ,?156 )))");
-        aStringSequence[159] = CREATE_OUSTRING ("?21 +?117 -0");
-        aStringSequence[160] = CREATE_OUSTRING ("?23 +?118 -0");
+        aStringSequence[159] = CREATE_OUSTRING ("?21 +?157 -0");
+        aStringSequence[160] = CREATE_OUSTRING ("?23 +?158 -0");
         aStringSequence[161] = CREATE_OUSTRING ("?4 +0-?48 ");
         aStringSequence[162] = CREATE_OUSTRING ("?15 *sin(pi*(?161 )/10800000)");
         aStringSequence[163] = CREATE_OUSTRING ("?16 *cos(pi*(?161 )/10800000)");
