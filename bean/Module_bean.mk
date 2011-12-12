@@ -32,6 +32,7 @@ $(eval $(call gb_Module_Module,bean))
 ifneq ($(SOLAR_JAVA),)
 
 ifneq ($(OS),MACOSX)
+ifneq ($(OS),ANDROID)
 $(eval $(call gb_Module_add_targets,bean,\
 	Jar_officebean \
 	Library_officebean \
@@ -41,6 +42,7 @@ $(eval $(call gb_Module_add_targets,bean,\
 #$(eval $(call gb_Module_add_subsequentcheck_targets,bean,\
 #	JunitTest_bean_complex \
 #))
+endif
 endif
 
 endif
