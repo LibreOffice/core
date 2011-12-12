@@ -909,6 +909,12 @@ void ScaleAutomatism::calculateExplicitIncrementAndScaleForLinear(
                     fDistanceNormalized = 1.0;
                     fDistanceMagnitude = 1.0e-307;
                 }
+                else if ( !rtl::math::isFinite(fDistance) )
+                {
+                    // fdo#43703: Handle values bigger than limits correctly
+                    fDistanceNormalized = 1.0;
+                    fDistanceMagnitude = std::numeric_limits<double>::max();
+                }
                 else
                 {
                     // distance magnitude (a power of 10)
