@@ -2103,7 +2103,6 @@ static Rectangle NWGetSpinButtonRect( int nScreen,
             buttonRect.Left()   = buttonRect.Right()+1;
             buttonRect.Right()  = aAreaRect.Right();
         } else {
-            printf("%ld\n", buttonRect.GetWidth());
             buttonRect.Right()  = buttonRect.Left()-1;
             buttonRect.Left()   = aAreaRect.Left();
         }
