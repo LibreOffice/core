@@ -271,7 +271,7 @@ void Accelerator::ImplInsertAccel( sal_uInt16 nItemId, const KeyCode& rKeyCode,
         OSL_FAIL( "Accelerator::InsertItem(): KeyCode with KeyCode 0 not allowed" );
         delete pEntry;
     }
-    else if ( mpData->maKeyMap.insert( std::make_pair( nCode, pEntry ) ).second )
+    else if ( !mpData->maKeyMap.insert( std::make_pair( nCode, pEntry ) ).second )
     {
         OSL_TRACE( "Accelerator::InsertItem(): KeyCode (Key: %lx) already exists", nCode );
         delete pEntry;
