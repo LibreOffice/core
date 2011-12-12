@@ -15624,7 +15624,7 @@ void CustomShapeProperties::initializePresetsMap4()
         aStringSequence[23] = CREATE_OUSTRING ("logheight+0-?22 ");
         aStringSequence[24] = CREATE_OUSTRING ("logwidth+0-?21 ");
         aStringSequence[25] = CREATE_OUSTRING ("logheight*?0 /100000");
-        aStringSequence[26] = CREATE_OUSTRING ("?17 +0-?15 ");
+        aStringSequence[26] = CREATE_OUSTRING ("?25 +0-?15 ");
         aStringSequence[27] = CREATE_OUSTRING ("?9 *?9 /logwidth");
         aStringSequence[28] = CREATE_OUSTRING ("?9 +0-?27 ");
         aStringSequence[29] = CREATE_OUSTRING ("?16 *?28 /1");
@@ -15634,7 +15634,7 @@ void CustomShapeProperties::initializePresetsMap4()
         aStringSequence[33] = CREATE_OUSTRING ("?32 +?15 -0");
         aStringSequence[34] = CREATE_OUSTRING ("?33 +?26 -0");
         aStringSequence[35] = CREATE_OUSTRING ("logheight+0-?34 ");
-        aStringSequence[36] = CREATE_OUSTRING ("logheight+0-?17 ");
+        aStringSequence[36] = CREATE_OUSTRING ("logheight+0-?25 ");
         aStringSequence[37] = CREATE_OUSTRING ("?15 *14/16");
         aStringSequence[38] = CREATE_OUSTRING ("(?37 +?36 )/2");
         aStringSequence[39] = CREATE_OUSTRING ("logheight+0-?38 ");
@@ -15651,7 +15651,7 @@ void CustomShapeProperties::initializePresetsMap4()
         aStringSequence[50] = CREATE_OUSTRING ("logheight+0-?49 ");
         aStringSequence[51] = CREATE_OUSTRING ("?19 +?26 -0");
         aStringSequence[52] = CREATE_OUSTRING ("logheight+0-?51 ");
-        aStringSequence[53] = CREATE_OUSTRING ("?17 +?17 -?51 ");
+        aStringSequence[53] = CREATE_OUSTRING ("?25 +?25 -?51 ");
         aStringSequence[54] = CREATE_OUSTRING ("logheight+0-?53 ");
         aStringSequence[55] = CREATE_OUSTRING ("logheight");
         aStringSequence[56] = CREATE_OUSTRING ("logwidth");
@@ -15995,7 +15995,7 @@ void CustomShapeProperties::initializePresetsMap4()
                 }
                 {
                     EnhancedCustomShapeParameter aParameter;
-                    Any aAny ((sal_Int32) 17);
+                    Any aAny ((sal_Int32) 25);
                     aParameter.Value = aAny;
                     aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
                     aParameterPair.Second = aParameter;
@@ -16139,7 +16139,7 @@ void CustomShapeProperties::initializePresetsMap4()
                 }
                 {
                     EnhancedCustomShapeParameter aParameter;
-                    Any aAny ((sal_Int32) 17);
+                    Any aAny ((sal_Int32) 25);
                     aParameter.Value = aAny;
                     aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
                     aParameterPair.Second = aParameter;
@@ -16373,7 +16373,7 @@ void CustomShapeProperties::initializePresetsMap4()
                 }
                 {
                     EnhancedCustomShapeParameter aParameter;
-                    Any aAny ((sal_Int32) 17);
+                    Any aAny ((sal_Int32) 25);
                     aParameter.Value = aAny;
                     aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
                     aParameterPair.Second = aParameter;
@@ -16517,7 +16517,7 @@ void CustomShapeProperties::initializePresetsMap4()
                 }
                 {
                     EnhancedCustomShapeParameter aParameter;
-                    Any aAny ((sal_Int32) 17);
+                    Any aAny ((sal_Int32) 25);
                     aParameter.Value = aAny;
                     aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
                     aParameterPair.Second = aParameter;

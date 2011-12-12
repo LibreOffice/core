@@ -1078,7 +1078,7 @@ void CustomShapeProperties::initializePresetsMap3()
         aStringSequence[21] = CREATE_OUSTRING ("?16 *?20 /1");
         aStringSequence[22] = CREATE_OUSTRING ("logwidth+0-?20 ");
         aStringSequence[23] = CREATE_OUSTRING ("logheight*?0 /100000");
-        aStringSequence[24] = CREATE_OUSTRING ("?17 +0-?15 ");
+        aStringSequence[24] = CREATE_OUSTRING ("?23 +0-?15 ");
         aStringSequence[25] = CREATE_OUSTRING ("?9 *?9 /logwidth");
         aStringSequence[26] = CREATE_OUSTRING ("?9 +0-?25 ");
         aStringSequence[27] = CREATE_OUSTRING ("?16 *?26 /1");
@@ -1086,7 +1086,7 @@ void CustomShapeProperties::initializePresetsMap3()
         aStringSequence[29] = CREATE_OUSTRING ("?15 +?24 -?28 ");
         aStringSequence[30] = CREATE_OUSTRING ("?29 +?15 -0");
         aStringSequence[31] = CREATE_OUSTRING ("?30 +?24 -0");
-        aStringSequence[32] = CREATE_OUSTRING ("logheight+0-?17 ");
+        aStringSequence[32] = CREATE_OUSTRING ("logheight+0-?23 ");
         aStringSequence[33] = CREATE_OUSTRING ("?15 *14/16");
         aStringSequence[34] = CREATE_OUSTRING ("(?33 +?32 )/2");
         aStringSequence[35] = CREATE_OUSTRING ("?27 +?32 -0");
@@ -1097,7 +1097,7 @@ void CustomShapeProperties::initializePresetsMap3()
         aStringSequence[40] = CREATE_OUSTRING ("logwidth+0-?37 ");
         aStringSequence[41] = CREATE_OUSTRING ("?31 +?32 -0");
         aStringSequence[42] = CREATE_OUSTRING ("?19 +?24 -0");
-        aStringSequence[43] = CREATE_OUSTRING ("?17 +?17 -?42 ");
+        aStringSequence[43] = CREATE_OUSTRING ("?23 +?23 -?42 ");
         aStringSequence[44] = CREATE_OUSTRING ("logheight+0-?15 ");
         aStringSequence[45] = CREATE_OUSTRING ("logheight");
         aStringSequence[46] = CREATE_OUSTRING ("logwidth");
@@ -1119,7 +1119,7 @@ void CustomShapeProperties::initializePresetsMap3()
                 }
                 {
                     EnhancedCustomShapeParameter aParameter;
-                    Any aAny ((sal_Int32) 17);
+                    Any aAny ((sal_Int32) 23);
                     aParameter.Value = aAny;
                     aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
                     aParameterPair.Second = aParameter;
@@ -2575,7 +2575,7 @@ void CustomShapeProperties::initializePresetsMap3()
                     }
                     {
                         EnhancedCustomShapeParameter aParameter;
-                        Any aAny ((sal_Int32) 17);
+                        Any aAny ((sal_Int32) 23);
                         aParameter.Value = aAny;
                         aParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
                         aParameterPair.Second = aParameter;
@@ -17813,14 +17813,14 @@ void CustomShapeProperties::initializePresetsMap3()
         aStringSequence[42] = CREATE_OUSTRING ("?29 +0-?40 ");
         aStringSequence[43] = CREATE_OUSTRING ("sqrt(?41 *?41 +?42 *?42 +0*0)");
         aStringSequence[44] = CREATE_OUSTRING ("(10800000*atan2(?41 ,?42 ))/pi");
-        aStringSequence[45] = CREATE_OUSTRING ("?4 *sin(pi*(?0 )/10800000)");
-        aStringSequence[46] = CREATE_OUSTRING ("?4 *cos(pi*(?0 )/10800000)");
+        aStringSequence[45] = CREATE_OUSTRING ("?4 *sin(pi*(?44 )/10800000)");
+        aStringSequence[46] = CREATE_OUSTRING ("?4 *cos(pi*(?44 )/10800000)");
         aStringSequence[47] = CREATE_OUSTRING ("?39 +?45 -0");
         aStringSequence[48] = CREATE_OUSTRING ("?40 +?46 -0");
         aStringSequence[49] = CREATE_OUSTRING ("?27 +0-?45 ");
         aStringSequence[50] = CREATE_OUSTRING ("?29 +0-?46 ");
-        aStringSequence[51] = CREATE_OUSTRING ("?3 *sin(pi*(?0 )/10800000)");
-        aStringSequence[52] = CREATE_OUSTRING ("?3 *cos(pi*(?0 )/10800000)");
+        aStringSequence[51] = CREATE_OUSTRING ("?3 *sin(pi*(?44 )/10800000)");
+        aStringSequence[52] = CREATE_OUSTRING ("?3 *cos(pi*(?44 )/10800000)");
         aStringSequence[53] = CREATE_OUSTRING ("?48 +?51 -0");
         aStringSequence[54] = CREATE_OUSTRING ("?47 +0-?52 ");
         aStringSequence[55] = CREATE_OUSTRING ("?50 +?51 -0");
