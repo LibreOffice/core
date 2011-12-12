@@ -29,7 +29,7 @@
 #ifndef _PASTEDLG_HXX
 #define _PASTEDLG_HXX
 
-#include <tools/table.hxx>
+#include <map>
 #include <sot/formats.hxx>
 #include <tools/globname.hxx>
 #include <svtools/transfer.hxx>
@@ -60,7 +60,7 @@ class SvPasteObjectDialog : public ModalDialog
     OKButton aOKButton1;
     CancelButton aCancelButton1;
     HelpButton aHelpButton1;
-    Table           aSupplementTable;
+    ::std::map< SotFormatStringId, String* > aSupplementMap;
     SvGlobalName    aObjClassName;
     String          aObjName;
     sal_uInt16          nAspect;
