@@ -118,7 +118,6 @@ RscCmdLine::RscCmdLine( int argc, char ** argv, RscError * pEH )
     char *          pStr;
     char **         ppStr;
     RscPtrPtr       aCmdLine;       // Kommandozeile
-    ByteString      aString;
     sal_uInt32      i;
     sal_Bool        bOutputSrsIsSet = sal_False;
 
