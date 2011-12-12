@@ -59,7 +59,9 @@ static double getN10Exp( int nExp )
 {
     if ( nExp < 0 )
     {
-        if ( -nExp <= n10Count )
+        // && -nExp > 0 necessary for std::numeric_limits<int>::min()
+        // because -nExp = nExp
+        if ( -nExp <= n10Count && -nExp > 0 )
             return n10s[1][-nExp-1];
         else
             return pow( 10.0, static_cast<double>( nExp ) );
