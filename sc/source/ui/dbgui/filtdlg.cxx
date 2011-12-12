@@ -1157,7 +1157,11 @@ IMPL_LINK( ScFilterDlg, ValModifyHdl, ComboBox*, pEd )
             {
                 rItem.maString = aStrVal;
                 rItem.mfVal = 0.0;
-                rItem.meType = ScQueryEntry::ByString;
+
+                sal_uInt32 nIndex;
+                bool bNumber = pDoc->GetFormatTable()->IsNumberFormat(
+                    rItem.maString, nIndex, rItem.mfVal);
+                rItem.meType = bNumber ? ScQueryEntry::ByValue : ScQueryEntry::ByString;
             }
 
             sal_uInt16  nField  = pLbField->GetSelectEntryPos();
