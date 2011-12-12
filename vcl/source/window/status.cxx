@@ -1036,28 +1036,6 @@ void StatusBar::RemoveItem( sal_uInt16 nItemId )
 
 // -----------------------------------------------------------------------
 
-void StatusBar::HideItem( sal_uInt16 nItemId )
-{
-    sal_uInt16 nPos = GetItemPos( nItemId );
-
-    if ( nPos != STATUSBAR_ITEM_NOTFOUND )
-    {
-        ImplStatusItem* pItem = (*mpItemList)[ nPos ];
-        if ( pItem->mbVisible )
-        {
-            pItem->mbVisible = sal_False;
-
-            mbFormat = sal_True;
-            if ( ImplIsItemUpdate() )
-                Invalidate();
-
-            ImplCallEventListeners( VCLEVENT_STATUSBAR_HIDEITEM, (void*) sal_IntPtr(nItemId) );
-        }
-    }
-}
-
-// -----------------------------------------------------------------------
-
 sal_Bool StatusBar::IsItemVisible( sal_uInt16 nItemId ) const
 {
     sal_uInt16 nPos = GetItemPos( nItemId );

@@ -143,9 +143,7 @@ public:
                                     sal_uInt16 nPos = STATUSBAR_APPEND );
     void                RemoveItem( sal_uInt16 nItemId );
 
-    void                HideItem( sal_uInt16 nItemId );
     sal_Bool                IsItemVisible( sal_uInt16 nItemId ) const;
-
     sal_Bool                AreItemsVisible() const { return mbVisibleItems; }
 
     void                Clear();
