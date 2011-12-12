@@ -187,7 +187,11 @@
 
 #define OWN_ATTR_STYLE                          (OWN_ATTR_VALUE_START+87)
 
-#define OWN_ATTR_EDGE_POLYPOLYGONBEZIER         (OWN_ATTR_VALUE_START+88)   // maximum is OWN_ATTR_VALUE_START+88, see svl/inc/svl/solar.hrc
+#define OWN_ATTR_EDGE_POLYPOLYGONBEZIER         (OWN_ATTR_VALUE_START+88)
+
+#define OWN_ATTR_MEDIA_STREAM                   (OWN_ATTR_VALUE_START+89)
+#define OWN_ATTR_MEDIA_TEMPFILEURL              (OWN_ATTR_VALUE_START+90)
+// ATTENTION: maximum is OWN_ATTR_VALUE_START+90, see svl/inc/svl/solar.hrc
 
 // #FontWork#
 #define FONTWORK_PROPERTIES \

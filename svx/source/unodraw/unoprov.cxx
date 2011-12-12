@@ -761,7 +761,8 @@ SfxItemPropertyMapEntry* ImplGetSvxMediaShapePropertyMap()
         // #i68101#
         { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_TITLE),        OWN_ATTR_MISC_OBJ_TITLE         , &::getCppuType((const ::rtl::OUString*)0),    0,  0},
         { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_DESCRIPTION),  OWN_ATTR_MISC_OBJ_DESCRIPTION   , &::getCppuType((const ::rtl::OUString*)0),    0,  0},
-        {MAP_CHAR_LEN("PrivateStream"), OWN_ATTR_GRAPHIC_STREAM, &::com::sun::star::io::XInputStream::static_type(), ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
+        {MAP_CHAR_LEN("PrivateStream"), OWN_ATTR_MEDIA_STREAM, &::com::sun::star::io::XInputStream::static_type(), ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
+        {MAP_CHAR_LEN("PrivateTempFileURL"), OWN_ATTR_MEDIA_TEMPFILEURL, &::getCppuType((const ::rtl::OUString*)0), ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
         {0,0,0,0,0,0}
 
     };

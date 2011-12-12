@@ -955,7 +955,8 @@ bool SvxMediaShape::getPropertyValueImpl( const ::rtl::OUString& rName, const Sf
 {
     if (   ((pProperty->nWID >= OWN_ATTR_MEDIA_URL) &&
             (pProperty->nWID <= OWN_ATTR_MEDIA_ZOOM))
-        || (pProperty->nWID == OWN_ATTR_GRAPHIC_STREAM))
+        || (pProperty->nWID == OWN_ATTR_MEDIA_STREAM)
+        || (pProperty->nWID == OWN_ATTR_MEDIA_TEMPFILEURL))
     {
         SdrMediaObj* pMedia = static_cast< SdrMediaObj* >( mpObj.get() );
         const ::avmedia::MediaItem aItem( pMedia->getMediaProperties() );
@@ -982,8 +983,12 @@ bool SvxMediaShape::getPropertyValueImpl( const ::rtl::OUString& rName, const Sf
                 rValue <<= aItem.getZoom();
                 break;
 
-            case OWN_ATTR_GRAPHIC_STREAM:
+            case OWN_ATTR_MEDIA_STREAM:
                 rValue <<= pMedia->GetInputStream();
+                break;
+
+            case OWN_ATTR_MEDIA_TEMPFILEURL:
+                rValue <<= aItem.getTempURL();
                 break;
 
             default:
