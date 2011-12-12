@@ -41,6 +41,7 @@ $(eval $(call gb_Module_add_targets,desktop,\
     AllLangResTarget_deployment \
     AllLangResTarget_deploymentgui \
     AllLangResTarget_dkt \
+    Library_deploymentmisc \
     Library_offacc \
     Library_sofficeapp \
     Library_spl \
@@ -58,7 +59,6 @@ $(eval $(call gb_Module_add_targets,desktop,\
     Executable_unopkg.bin \
     Library_deployment \
     Library_deploymentgui \
-    Library_deploymentmisc \
     Library_migrationoo2 \
     Library_migrationoo3 \
     Package_scripts \
