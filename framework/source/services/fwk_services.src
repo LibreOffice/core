@@ -73,10 +73,6 @@ Resource RES_BACKING_IMAGES
     {
         File = "extension.png";
     };
-    Bitmap BMP_BACKING_REG
-    {
-        File = "register_32.png";
-    };
     Bitmap BMP_BACKING_INFO
     {
         File = "info_26.png";

@@ -58,7 +58,6 @@
 #define RES_BACKING_IMAGES                  (DLG_BACKING+1)
 
 #define BMP_BACKING_EXT                     6
-#define BMP_BACKING_REG                     7
 #define BMP_BACKING_INFO                    8
 #define BMP_BACKING_TPLREP                  9
 #define BMP_BACKING_WRITER                  10
