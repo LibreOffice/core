@@ -164,7 +164,7 @@ LibreOffice_Dev
 	{
 		variables
 		{
-			PRODUCTNAME LibO-dev
+			PRODUCTNAME LOdev
 			PRODUCTVERSION 3.5
 			PRODUCTEXTENSION 
 			LONG_PRODUCTEXTENSION 
@@ -311,7 +311,7 @@ LibreOffice_Dev_SDK
         downloadname LibO-Dev-SDK_{packageversion}_{os}_install_{languages}
         variables
         {
-            PRODUCTNAME LibO-dev
+            PRODUCTNAME LOdev
             PRODUCTVERSION 3.5
             PRODUCTEXTENSION
             LONG_PRODUCTEXTENSION
@@ -403,7 +403,7 @@ LibreOffice_Dev_Test
         downloadname LO-Dev-Test_{packageversion}_{os}_install_{languages}
         variables
         {
-            PRODUCTNAME LibO-dev
+            PRODUCTNAME LOdev
             PRODUCTVERSION 3.5
             PRODUCTEXTENSION
             LONG_PRODUCTEXTENSION
