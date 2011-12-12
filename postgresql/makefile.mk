@@ -52,14 +52,18 @@ CONFIGURE_DIR=.
 BUILD_DIR=src
 
 CONFIGURE_ACTION =
-BUILD_ACTION = nmake -f win32.mak USE_SSL=1
+BUILD_ACTION = nmake -f win32.mak USE_SSL=1 USE_LDAP=1 USE_MOZLDAL=1
 .ELSE
 CONFIGURE_DIR=.
 BUILD_DIR=src/interfaces/libpq
 
 CONFIGURE_ACTION = ./configure --without-readline --disable-shared --with-openssl
-.IF "$(WITH_LDAP)" == "YES" && "$(WITH_OPENLDAP)" == "YES"
+.IF "$(WITH_LDAP)" == "YES"
 CONFIGURE_ACTION += --with-ldap
+.ENDIF
+.IF "$(WITH_OPENLDAP)" != "YES"
+CONFIGURE_ACTION += --with-mozldap
+.ELSE
 .ENDIF
 BUILD_ACTION = make -j$(GMAKE_MODULE_PARALLELISM) all-static-lib
 .ENDIF
