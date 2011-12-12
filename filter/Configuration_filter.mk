@@ -26,7 +26,7 @@ ifeq ($(SOLAR_JAVA),)
 filter_MERGE_TARGET := $(SRCDIR)/filter/source/config/tools/merge/pyAltFCFGMerge
 filter_MERGE := $(gb_PYTHON) $(filter_MERGE_TARGET)
 else # SOLAR_JAVA
-filter_MERGE_TARGET := $(OUTDIR)/bin/FCFGMerge.jar
+filter_MERGE_TARGET := $(OUTDIR_FOR_BUILD)/bin/FCFGMerge.jar
 filter_MERGE := $(JAVAINTERPRETER) $(JAVAIFLAGS) -jar $(filter_MERGE_TARGET)
 endif
 
