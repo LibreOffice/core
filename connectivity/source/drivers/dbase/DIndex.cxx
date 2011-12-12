@@ -452,7 +452,7 @@ sal_Bool ODbaseIndex::DropImpl()
     {
         // References the Key to an Index-file?
         aKeyName = aInfFile.GetKeyName( nKey );
-        if (aKeyName.copy(0,3) == "NDX")
+        if (aKeyName.copy(0,3).equalsL(RTL_CONSTASCII_STRINGPARAM("NDX")))
         {
             if(sEntry == String(rtl::OStringToOUString(aInfFile.ReadKey(aKeyName),m_pTable->getConnection()->getTextEncoding())))
             {
