@@ -51,6 +51,8 @@ fetch: $(SRCDIR)/src.downloaded
 $(SRCDIR)/Env.Host.sh: autogen.lastrun configure.in ooo.lst.in set_soenv.in
 	$(if $(filter reconfigure,$(gb_SourceEnvAndRecurse_STAGE)),$(SRCDIR)/autogen.sh,@echo "cannot reconfigure from within solarenv" && rm -f $(SRCDIR)/Env.Host.sh && exit 2)
 
+autogen.lastrun:
+
 $(WORKDIR)/bootstrap:
 	@cd $(SRCDIR) && ./bootstrap
 	@mkdir -p $(dir $@) && touch $@
