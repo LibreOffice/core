@@ -265,6 +265,12 @@ en-US = "Russian"
 [STR_DESC_MODULE_EXTENSION_DICTIONARY_RU]
 en-US = "Russian spelling dictionary, hyphenation rules, and thesaurus"
 
+[STR_NAME_MODULE_EXTENSION_DICTIONARY_SI]
+en-US = "Sinhala"
+
+[STR_DESC_MODULE_EXTENSION_DICTIONARY_SI]
+en-US = "Sinhala spelling dictionary"
+
 [STR_NAME_MODULE_EXTENSION_DICTIONARY_SK]
 en-US = "Slovak"
 
