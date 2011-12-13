@@ -81,6 +81,8 @@ struct Data: private boost::noncopyable {
     static rtl::Reference< Node > findNode(
         int layer, NodeMap const & map, rtl::OUString const & name);
 
+    Data();
+
     rtl::Reference< Node > resolvePathRepresentation(
         rtl::OUString const & pathRepresentation,
         rtl::OUString * canonicRepresenation, Path * path, int * finalizedLayer)
@@ -98,6 +100,8 @@ struct Data: private boost::noncopyable {
 private:
     typedef std::map< rtl::OUString, rtl::Reference< ExtensionXcu > >
         ExtensionXcuAdditions;
+
+    rtl::Reference< Node > root_;
 
     ExtensionXcuAdditions extensionXcuAdditions_;
 };

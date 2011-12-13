@@ -137,7 +137,7 @@ bool canRemoveFromLayer(int layer, rtl::Reference< Node > const & node) {
     switch (node->kind()) {
     case Node::KIND_LOCALIZED_PROPERTY:
     case Node::KIND_GROUP:
-        for (NodeMap::iterator i(node->getMembers().begin());
+        for (NodeMap::const_iterator i(node->getMembers().begin());
              i != node->getMembers().end(); ++i)
         {
             if (!canRemoveFromLayer(layer, i->second)) {
@@ -402,7 +402,9 @@ void Components::removeExtensionXcuFile(
                         node->kind() == Node::KIND_GROUP ||
                         node->kind() == Node::KIND_SET);
                     if (canRemoveFromLayer(item->layer, node)) {
-                        parent->getMembers().erase(i->back());
+                        NodeMap * members = parent->getMemberMap();
+                        assert(members != 0);
+                        members->erase(i->back());
                         data_.modifications.remove(*i);
                         modifications->add(*i);
                     }

@@ -42,6 +42,8 @@
 #include "configurationprovider.hxx"
 #include "configurationregistry.hxx"
 #include "defaultprovider.hxx"
+#include "readonlyaccess.hxx"
+#include "readwriteaccess.hxx"
 #include "update.hxx"
 
 namespace {
@@ -67,6 +69,14 @@ static cppu::ImplementationEntry const services[] = {
     { &configmgr::configuration_registry::create,
       &configmgr::configuration_registry::getImplementationName,
       &configmgr::configuration_registry::getSupportedServiceNames,
+      &cppu::createSingleComponentFactory, 0, 0 },
+    { &configmgr::read_only_access::create,
+      &configmgr::read_only_access::getImplementationName,
+      &configmgr::read_only_access::getSupportedServiceNames,
+      &cppu::createSingleComponentFactory, 0, 0 },
+    { &configmgr::read_write_access::create,
+      &configmgr::read_write_access::getImplementationName,
+      &configmgr::read_write_access::getSupportedServiceNames,
       &cppu::createSingleComponentFactory, 0, 0 },
     { &configmgr::update::create, &configmgr::update::getImplementationName,
       &configmgr::update::getSupportedServiceNames,

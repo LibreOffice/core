@@ -44,13 +44,14 @@ class Node: public salhelper::SimpleReferenceObject {
 public:
     enum Kind {
         KIND_PROPERTY, KIND_LOCALIZED_PROPERTY, KIND_LOCALIZED_VALUE,
-        KIND_GROUP, KIND_SET };
+        KIND_GROUP, KIND_SET, KIND_ROOT };
 
     virtual Kind kind() const = 0;
 
     virtual rtl::Reference< Node > clone(bool keepTemplateName) const = 0;
 
-    virtual NodeMap & getMembers();
+    virtual NodeMap const & getMembers() const;
+    virtual NodeMap * getMemberMap();
     virtual rtl::OUString getTemplateName() const;
 
     virtual void setMandatory(int layer);

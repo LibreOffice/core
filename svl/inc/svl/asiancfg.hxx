@@ -70,7 +70,7 @@ public:
         rtl::OUString const * startChars, rtl::OUString const * endChars);
 
 private:
-    class Impl;
+    struct Impl;
 
     boost::scoped_ptr< Impl > impl_;
 };

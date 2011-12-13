@@ -55,7 +55,10 @@ SLOFILES = \
     $(SLO)/parsemanager.obj \
     $(SLO)/partial.obj \
     $(SLO)/propertynode.obj \
+    $(SLO)/readonlyaccess.obj \
+    $(SLO)/readwriteaccess.obj \
     $(SLO)/rootaccess.obj \
+    $(SLO)/rootnode.obj \
     $(SLO)/services.obj \
     $(SLO)/setnode.obj \
     $(SLO)/type.obj \

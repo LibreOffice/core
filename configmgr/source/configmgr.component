@@ -38,6 +38,12 @@
     <service name="com.sun.star.configuration.DefaultProvider"/>
     <singleton name="com.sun.star.configuration.theDefaultProvider"/>
   </implementation>
+  <implementation name="com.sun.star.comp.configuration.ReadOnlyAccess">
+    <singleton name="com.sun.star.configuration.ReadOnlyAccess"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.configuration.ReadWriteAccess">
+    <service name="com.sun.star.configuration.ReadWriteAccess"/>
+  </implementation>
   <implementation name="com.sun.star.comp.configuration.Update">
     <service name="com.sun.star.configuration.Update_Service"/>
     <singleton name="com.sun.star.configuration.Update"/>

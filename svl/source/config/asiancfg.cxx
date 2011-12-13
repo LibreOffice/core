@@ -31,19 +31,18 @@
 #include <cassert>
 
 #include "boost/noncopyable.hpp"
-#include "com/sun/star/beans/NamedValue.hpp"
 #include "com/sun/star/beans/XPropertySet.hpp"
 #include "com/sun/star/container/ElementExistException.hpp"
 #include "com/sun/star/container/NoSuchElementException.hpp"
+#include "com/sun/star/container/XNameAccess.hpp"
 #include "com/sun/star/container/XNameContainer.hpp"
 #include "com/sun/star/lang/Locale.hpp"
-#include "com/sun/star/lang/XMultiServiceFactory.hpp"
 #include "com/sun/star/lang/XSingleServiceFactory.hpp"
 #include "com/sun/star/uno/Any.hxx"
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/Sequence.hxx"
-#include "com/sun/star/util/XChangesBatch.hpp"
 #include "comphelper/processfactory.hxx"
+#include "officecfg/Office/Common.hxx"
 #include "rtl/oustringostreaminserter.hxx"
 #include "rtl/ustrbuf.hxx"
 #include "rtl/ustring.h"
@@ -51,37 +50,11 @@
 #include "sal/log.hxx"
 #include "sal/types.h"
 #include "svl/asiancfg.hxx"
+#include "unotools/configuration.hxx"
 
 namespace {
 
 namespace css = com::sun::star;
-
-css::uno::Reference< css::beans::XPropertySet >
-obtainPropertySet() {
-    css::uno::Sequence< css::uno::Any > args(1);
-    args[0] <<= css::beans::NamedValue(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("nodepath")),
-        css::uno::makeAny(
-            rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "/org.openoffice.Office.Common/AsianLayout"))));
-    return css::uno::Reference< css::beans::XPropertySet >(
-        (css::uno::Reference< css::lang::XMultiServiceFactory >(
-            (css::uno::Reference< css::lang::XMultiServiceFactory >(
-                comphelper::getProcessServiceFactory(),
-                css::uno::UNO_SET_THROW)->
-             createInstance(
-                 rtl::OUString(
-                     RTL_CONSTASCII_USTRINGPARAM(
-                         "com.sun.star.configuration.ConfigurationProvider")))),
-            css::uno::UNO_QUERY_THROW)->
-         createInstanceWithArguments(
-             rtl::OUString(
-                 RTL_CONSTASCII_USTRINGPARAM(
-                     "com.sun.star.configuration.ConfigurationUpdateAccess")),
-             args)),
-        css::uno::UNO_QUERY_THROW);
-}
 
 rtl::OUString toString(css::lang::Locale const & locale) {
     SAL_WARN_IF(
@@ -108,74 +81,54 @@ rtl::OUString toString(css::lang::Locale const & locale) {
 
 }
 
-class SvxAsianConfig::Impl: private boost::noncopyable {
-public:
-    Impl(): propertySet_(obtainPropertySet()) {}
+struct SvxAsianConfig::Impl: private boost::noncopyable {
+    Impl():
+        context(comphelper::getProcessComponentContext()),
+        batch(unotools::ConfigurationChanges::create(context))
+    {}
 
-    css::uno::Reference< css::beans::XPropertySet > getPropertySet() const
-    { return propertySet_; }
+    css::uno::Reference< css::uno::XComponentContext > context;
 
-    css::uno::Reference< css::container::XNameContainer >
-    getStartEndCharacters() const;
-
-private:
-    css::uno::Reference< css::beans::XPropertySet > propertySet_;
+    boost::shared_ptr< unotools::ConfigurationChanges > batch;
 };
-
-css::uno::Reference< css::container::XNameContainer >
-SvxAsianConfig::Impl::getStartEndCharacters() const {
-    return
-        css::uno::Reference< css::container::XNameContainer >(
-            (propertySet_->getPropertyValue(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM("StartEndCharacters"))).
-             get< css::uno::Reference< css::container::XNameContainer > >()),
-            css::uno::UNO_SET_THROW);
-}
 
 SvxAsianConfig::SvxAsianConfig(): impl_(new Impl) {}
 
 SvxAsianConfig::~SvxAsianConfig() {}
 
 void SvxAsianConfig::Commit() {
-    css::uno::Reference< css::util::XChangesBatch >(
-        impl_->getPropertySet(), css::uno::UNO_QUERY_THROW)->commitChanges();
+    impl_->batch->commit();
 }
 
 bool SvxAsianConfig::IsKerningWesternTextOnly() const {
     return
-        impl_->getPropertySet()->getPropertyValue(
-            rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM("IsKerningWesternTextOnly"))).
-        get< bool >();
+        officecfg::Office::Common::AsianLayout::IsKerningWesternTextOnly::get(
+            impl_->context);
 }
 
 void SvxAsianConfig::SetKerningWesternTextOnly(bool value) {
-    impl_->getPropertySet()->setPropertyValue(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsKerningWesternTextOnly")),
-        css::uno::makeAny(value));
+    officecfg::Office::Common::AsianLayout::IsKerningWesternTextOnly::set(
+        impl_->context, impl_->batch, value);
 }
 
 sal_Int16 SvxAsianConfig::GetCharDistanceCompression() const {
     return
-        impl_->getPropertySet()->getPropertyValue(
-            rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM("CompressCharacterDistance"))).
-        get< sal_Int16 >();
+        officecfg::Office::Common::AsianLayout::CompressCharacterDistance::get(
+            impl_->context);
 }
 
 void SvxAsianConfig::SetCharDistanceCompression(sal_Int16 value) {
-    assert(value >= 0 && value <= 2);
-    impl_->getPropertySet()->setPropertyValue(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CompressCharacterDistance")),
-        css::uno::makeAny(value));
+    officecfg::Office::Common::AsianLayout::CompressCharacterDistance::set(
+        impl_->context, impl_->batch, value);
 }
 
 css::uno::Sequence< css::lang::Locale > SvxAsianConfig::GetStartEndCharLocales()
     const
 {
     css::uno::Sequence< rtl::OUString > ns(
-        impl_->getStartEndCharacters()->getElementNames());
+        officecfg::Office::Common::AsianLayout::StartEndCharacters::get(
+            impl_->context)->
+        getElementNames());
     css::uno::Sequence< css::lang::Locale > ls(ns.getLength());
     for (sal_Int32 i = 0; i < ns.getLength(); ++i) {
         sal_Int32 n = 0;
@@ -190,8 +143,9 @@ bool SvxAsianConfig::GetStartEndChars(
     css::lang::Locale const & locale, rtl::OUString & startChars,
     rtl::OUString & endChars) const
 {
-    css::uno::Reference< css::container::XNameContainer > set(
-        impl_->getStartEndCharacters());
+    css::uno::Reference< css::container::XNameAccess > set(
+        officecfg::Office::Common::AsianLayout::StartEndCharacters::get(
+            impl_->context));
     css::uno::Any v;
     try {
         v = set->getByName(toString(locale));
@@ -218,7 +172,8 @@ void SvxAsianConfig::SetStartEndChars(
 {
     assert((startChars == 0) == (endChars == 0));
     css::uno::Reference< css::container::XNameContainer > set(
-        impl_->getStartEndCharacters());
+        officecfg::Office::Common::AsianLayout::StartEndCharacters::get(
+            impl_->context, impl_->batch));
     rtl::OUString name(toString(locale));
     if (startChars == 0) {
         try {

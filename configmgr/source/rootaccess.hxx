@@ -88,9 +88,25 @@ public:
 
     void setAlive(bool b);
 
-protected:
+    virtual void SAL_CALL addChangesListener(
+        com::sun::star::uno::Reference< com::sun::star::util::XChangesListener >
+            const & aListener)
+        throw (com::sun::star::uno::RuntimeException);
 
-    virtual rtl::OUString SAL_CALL getImplementationName()
+    virtual void SAL_CALL removeChangesListener(
+        com::sun::star::uno::Reference< com::sun::star::util::XChangesListener >
+            const & aListener)
+        throw (com::sun::star::uno::RuntimeException);
+
+    virtual void SAL_CALL commitChanges()
+        throw (
+            com::sun::star::lang::WrappedTargetException,
+            com::sun::star::uno::RuntimeException);
+
+    virtual sal_Bool SAL_CALL hasPendingChanges()
+        throw (com::sun::star::uno::RuntimeException);
+
+    virtual com::sun::star::util::ChangesSet SAL_CALL getPendingChanges()
         throw (com::sun::star::uno::RuntimeException);
 
 private:
@@ -124,25 +140,7 @@ private:
         com::sun::star::uno::Type const & aType)
         throw (com::sun::star::uno::RuntimeException);
 
-    virtual void SAL_CALL addChangesListener(
-        com::sun::star::uno::Reference< com::sun::star::util::XChangesListener >
-            const & aListener)
-        throw (com::sun::star::uno::RuntimeException);
-
-    virtual void SAL_CALL removeChangesListener(
-        com::sun::star::uno::Reference< com::sun::star::util::XChangesListener >
-            const & aListener)
-        throw (com::sun::star::uno::RuntimeException);
-
-    virtual void SAL_CALL commitChanges()
-        throw (
-            com::sun::star::lang::WrappedTargetException,
-            com::sun::star::uno::RuntimeException);
-
-    virtual sal_Bool SAL_CALL hasPendingChanges()
-        throw (com::sun::star::uno::RuntimeException);
-
-    virtual com::sun::star::util::ChangesSet SAL_CALL getPendingChanges()
+    virtual rtl::OUString SAL_CALL getImplementationName()
         throw (com::sun::star::uno::RuntimeException);
 
     typedef

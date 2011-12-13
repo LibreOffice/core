@@ -51,7 +51,7 @@
 #include "com/sun/star/container/NoSuchElementException.hpp"
 #include "com/sun/star/container/XContainer.hpp"
 #include "com/sun/star/container/XHierarchicalName.hpp"
-#include "com/sun/star/container/XHierarchicalNameAccess.hpp"
+#include "com/sun/star/container/XHierarchicalNameReplace.hpp"
 #include "com/sun/star/container/XNameContainer.hpp"
 #include "com/sun/star/container/XNamed.hpp"
 #include "com/sun/star/lang/IllegalArgumentException.hpp"
@@ -106,7 +106,7 @@ class Access:
     public cppu::OWeakObject, public com::sun::star::lang::XTypeProvider,
     public com::sun::star::lang::XServiceInfo,
     public com::sun::star::lang::XComponent,
-    public com::sun::star::container::XHierarchicalNameAccess,
+    public com::sun::star::container::XHierarchicalNameReplace,
     public com::sun::star::container::XContainer,
     public com::sun::star::beans::XExactName,
     public com::sun::star::beans::XPropertySetInfo,
@@ -145,68 +145,6 @@ public:
 
     using OWeakObject::acquire;
     using OWeakObject::release;
-
-protected:
-    Access(Components & components);
-
-    virtual ~Access();
-
-    virtual rtl::OUString getNameInternal() = 0;
-    virtual rtl::Reference< RootAccess > getRootAccess() = 0;
-    virtual rtl::Reference< Access > getParentAccess() = 0;
-
-    virtual void addTypes(std::vector< com::sun::star::uno::Type > * types)
-        const = 0;
-
-    virtual void addSupportedServiceNames(
-        std::vector< rtl::OUString > * services) = 0;
-
-    virtual void initDisposeBroadcaster(Broadcaster * broadcaster);
-    virtual void clearListeners() throw ();
-
-    virtual com::sun::star::uno::Any SAL_CALL queryInterface(
-        com::sun::star::uno::Type const & aType)
-        throw (com::sun::star::uno::RuntimeException);
-
-    Components & getComponents() const;
-
-    void checkLocalizedPropertyAccess();
-
-    rtl::Reference< Node > getParentNode();
-    rtl::Reference< ChildAccess > getChild(rtl::OUString const & name);
-    std::vector< rtl::Reference< ChildAccess > > getAllChildren();
-
-    void checkValue(
-        com::sun::star::uno::Any const & value, Type type, bool nillable);
-
-    void insertLocalizedValueChild(
-        rtl::OUString const & name, com::sun::star::uno::Any const & value,
-        Modifications * localModifications);
-
-    void reportChildChanges(
-        std::vector< com::sun::star::util::ElementChange > * changes);
-
-    void commitChildChanges(bool valid, Modifications * globalModifications);
-
-    void initBroadcasterAndChanges(
-        Modifications::Node const & modifications, Broadcaster * broadcaster,
-        std::vector< com::sun::star::util::ElementChange > * changes);
-
-    bool isDisposed() const;
-
-private:
-    struct ModifiedChild {
-        rtl::Reference< ChildAccess > child;
-        bool directlyModified;
-
-        ModifiedChild();
-
-        ModifiedChild(
-            rtl::Reference< ChildAccess > const & theChild,
-            bool theDirectlyModified);
-    };
-
-    typedef std::map< rtl::OUString, ModifiedChild > ModifiedChildren;
 
     virtual com::sun::star::uno::Sequence< com::sun::star::uno::Type > SAL_CALL
     getTypes() throw (com::sun::star::uno::RuntimeException);
@@ -263,6 +201,14 @@ private:
 
     virtual sal_Bool SAL_CALL hasByHierarchicalName(rtl::OUString const & aName)
         throw (com::sun::star::uno::RuntimeException);
+
+    virtual void SAL_CALL replaceByHierarchicalName(
+        rtl::OUString const & aName, com::sun::star::uno::Any const & aElement)
+        throw (
+            com::sun::star::lang::IllegalArgumentException,
+            com::sun::star::container::NoSuchElementException,
+            com::sun::star::lang::WrappedTargetException,
+            com::sun::star::uno::RuntimeException);
 
     virtual void SAL_CALL addContainerListener(
         com::sun::star::uno::Reference<
@@ -490,6 +436,68 @@ private:
         throw (
             com::sun::star::uno::Exception,
             com::sun::star::uno::RuntimeException);
+
+protected:
+    Access(Components & components);
+
+    virtual ~Access();
+
+    virtual rtl::OUString getNameInternal() = 0;
+    virtual rtl::Reference< RootAccess > getRootAccess() = 0;
+    virtual rtl::Reference< Access > getParentAccess() = 0;
+
+    virtual void addTypes(std::vector< com::sun::star::uno::Type > * types)
+        const = 0;
+
+    virtual void addSupportedServiceNames(
+        std::vector< rtl::OUString > * services) = 0;
+
+    virtual void initDisposeBroadcaster(Broadcaster * broadcaster);
+    virtual void clearListeners() throw ();
+
+    virtual com::sun::star::uno::Any SAL_CALL queryInterface(
+        com::sun::star::uno::Type const & aType)
+        throw (com::sun::star::uno::RuntimeException);
+
+    Components & getComponents() const;
+
+    void checkLocalizedPropertyAccess();
+
+    rtl::Reference< Node > getParentNode();
+    rtl::Reference< ChildAccess > getChild(rtl::OUString const & name);
+    std::vector< rtl::Reference< ChildAccess > > getAllChildren();
+
+    void checkValue(
+        com::sun::star::uno::Any const & value, Type type, bool nillable);
+
+    void insertLocalizedValueChild(
+        rtl::OUString const & name, com::sun::star::uno::Any const & value,
+        Modifications * localModifications);
+
+    void reportChildChanges(
+        std::vector< com::sun::star::util::ElementChange > * changes);
+
+    void commitChildChanges(bool valid, Modifications * globalModifications);
+
+    void initBroadcasterAndChanges(
+        Modifications::Node const & modifications, Broadcaster * broadcaster,
+        std::vector< com::sun::star::util::ElementChange > * changes);
+
+    bool isDisposed() const;
+
+private:
+    struct ModifiedChild {
+        rtl::Reference< ChildAccess > child;
+        bool directlyModified;
+
+        ModifiedChild();
+
+        ModifiedChild(
+            rtl::Reference< ChildAccess > const & theChild,
+            bool theDirectlyModified);
+    };
+
+    typedef std::map< rtl::OUString, ModifiedChild > ModifiedChildren;
 
     rtl::Reference< ChildAccess > getModifiedChild(
         ModifiedChildren::iterator const & childIterator);

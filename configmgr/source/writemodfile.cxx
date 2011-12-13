@@ -395,7 +395,7 @@ void writeNode(
         writeData(handle, RTL_CONSTASCII_STRINGPARAM("<prop oor:name=\""));
         writeAttributeValue(handle, name);
         writeData(handle, RTL_CONSTASCII_STRINGPARAM("\" oor:op=\"fuse\">"));
-        for (NodeMap::iterator i(node->getMembers().begin());
+        for (NodeMap::const_iterator i(node->getMembers().begin());
              i != node->getMembers().end(); ++i)
         {
             writeNode(components, handle, node, i->first, i->second);
@@ -443,12 +443,15 @@ void writeNode(
                 handle, RTL_CONSTASCII_STRINGPARAM("\" oor:op=\"replace"));
         }
         writeData(handle, RTL_CONSTASCII_STRINGPARAM("\">"));
-        for (NodeMap::iterator i(node->getMembers().begin());
+        for (NodeMap::const_iterator i(node->getMembers().begin());
              i != node->getMembers().end(); ++i)
         {
             writeNode(components, handle, node, i->first, i->second);
         }
         writeData(handle, RTL_CONSTASCII_STRINGPARAM("</node>"));
+        break;
+    case Node::KIND_ROOT:
+        assert(false); // this cannot happen
         break;
     }
 }

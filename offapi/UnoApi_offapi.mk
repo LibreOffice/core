@@ -65,6 +65,8 @@ $(eval $(call gb_UnoApiTarget_add_idlfiles_nohdl,offapi,offapi/com/sun/star/char
 	DatabaseDataProvider \
 ))
 $(eval $(call gb_UnoApiTarget_add_idlfiles_nohdl,offapi,offapi/com/sun/star/configuration,\
+    ReadOnlyAccess \
+    ReadWriteAccess \
 	Update \
     theDefaultProvider \
 ))
@@ -1990,6 +1992,7 @@ $(eval $(call gb_UnoApiTarget_add_idlfiles,offapi,offapi/com/sun/star/configurat
 	InstallationIncompleteException \
 	InvalidBootstrapFileException \
 	MissingBootstrapFileException \
+    XReadWriteAccess \
 	XTemplateContainer \
 	XTemplateInstance \
 	XUpdate \

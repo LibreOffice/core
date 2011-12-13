@@ -79,16 +79,18 @@ void merge(
         case Node::KIND_LOCALIZED_VALUE:
             break; //TODO: merge certain parts?
         case Node::KIND_GROUP:
-            for (NodeMap::iterator i2(update->getMembers().begin());
+            for (NodeMap::const_iterator i2(update->getMembers().begin());
                  i2 != update->getMembers().end(); ++i2)
             {
-                NodeMap::iterator i1(original->getMembers().find(i2->first));
-                if (i1 == original->getMembers().end()) {
+                NodeMap * members = original->getMemberMap();
+                assert(members != 0);
+                NodeMap::iterator i1(members->find(i2->first));
+                if (i1 == members->end()) {
                     if (i2->second->kind() == Node::KIND_PROPERTY &&
                         dynamic_cast< GroupNode * >(
                             original.get())->isExtensible())
                     {
-                        original->getMembers().insert(*i2);
+                        members->insert(*i2);
                     }
                 } else if (i2->second->kind() == i1->second->kind()) {
                     merge(i1->second, i2->second);
@@ -96,15 +98,17 @@ void merge(
             }
             break;
         case Node::KIND_SET:
-            for (NodeMap::iterator i2(update->getMembers().begin());
+            for (NodeMap::const_iterator i2(update->getMembers().begin());
                  i2 != update->getMembers().end(); ++i2)
             {
-                NodeMap::iterator i1(original->getMembers().find(i2->first));
-                if (i1 == original->getMembers().end()) {
+                NodeMap * members = original->getMemberMap();
+                assert(members != 0);
+                NodeMap::iterator i1(members->find(i2->first));
+                if (i1 == members->end()) {
                     if (dynamic_cast< SetNode * >(original.get())->
                         isValidTemplate(i2->second->getTemplateName()))
                     {
-                        original->getMembers().insert(*i2);
+                        members->insert(*i2);
                     }
                 } else if (i2->second->kind() == i1->second->kind() &&
                            (i2->second->getTemplateName() ==
@@ -113,6 +117,9 @@ void merge(
                     merge(i1->second, i2->second);
                 }
             }
+            break;
+        case Node::KIND_ROOT:
+            assert(false); // this cannot happen
             break;
         }
     }
@@ -308,15 +315,20 @@ void XcsParser::endElement(xmlreader::XmlReader const & reader) {
                             RTL_CONSTASCII_USTRINGPARAM("this cannot happen")),
                         css::uno::Reference< css::uno::XInterface >());
                 }
-            } else if (!elements_.top().node->getMembers().insert(
-                           NodeMap::value_type(top.name, top.node)).second)
-            {
-                throw css::uno::RuntimeException(
-                    (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("duplicate ")) +
-                     top.name +
-                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" in ")) +
-                     reader.getUrl()),
-                    css::uno::Reference< css::uno::XInterface >());
+            } else {
+                NodeMap * members = elements_.top().node->getMemberMap();
+                assert(members != 0);
+                if (!members->insert(NodeMap::value_type(top.name, top.node)).
+                    second)
+                {
+                    throw css::uno::RuntimeException(
+                        (rtl::OUString(
+                            RTL_CONSTASCII_USTRINGPARAM("duplicate ")) +
+                         top.name +
+                         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" in ")) +
+                         reader.getUrl()),
+                        css::uno::Reference< css::uno::XInterface >());
+                }
             }
         }
     } else {

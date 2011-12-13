@@ -133,125 +133,6 @@ void RootAccess::setAlive(bool b) {
     alive_ = b;
 }
 
-RootAccess::~RootAccess()
-{
-    osl::MutexGuard g(*lock_);
-    if (alive_)
-        getComponents().removeRootAccess(this);
-}
-
-Path RootAccess::getRelativePath() {
-    return Path();
-}
-
-rtl::OUString RootAccess::getRelativePathRepresentation() {
-    return rtl::OUString();
-}
-
-rtl::Reference< Node > RootAccess::getNode() {
-    if (!node_.is()) {
-        rtl::OUString canonic;
-        int finalizedLayer;
-        node_ = getComponents().resolvePathRepresentation(
-            pathRepresentation_, &canonic, &path_, &finalizedLayer);
-        if (!node_.is()) {
-            throw css::uno::RuntimeException(
-                (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("cannot find ")) +
-                 pathRepresentation_),
-                0);
-                // RootAccess::queryInterface indirectly calls
-                // RootAccess::getNode, so if this RootAccess were passed out in
-                // RuntimeException.Context, client code that called
-                // queryInterface on it would cause trouble; therefore,
-                // RuntimeException.Context is left null here
-        }
-        pathRepresentation_ = canonic;
-        assert(!path_.empty());
-        name_ = path_.back();
-        finalized_ = finalizedLayer != Data::NO_LAYER;
-    }
-    return node_;
-}
-
-bool RootAccess::isFinalized() {
-    getNode();
-    return finalized_;
-}
-
-rtl::OUString RootAccess::getNameInternal() {
-    getNode();
-    return name_;
-}
-
-rtl::Reference< RootAccess > RootAccess::getRootAccess() {
-    return this;
-}
-
-rtl::Reference< Access > RootAccess::getParentAccess() {
-    return rtl::Reference< Access >();
-}
-
-void RootAccess::addTypes(std::vector< css::uno::Type > * types) const {
-    assert(types != 0);
-    types->push_back(cppu::UnoType< css::util::XChangesNotifier >::get());
-    types->push_back(cppu::UnoType< css::util::XChangesBatch >::get());
-}
-
-void RootAccess::addSupportedServiceNames(
-    std::vector< rtl::OUString > * services)
-{
-    assert(services != 0);
-    services->push_back(
-        rtl::OUString(
-            RTL_CONSTASCII_USTRINGPARAM(
-                "com.sun.star.configuration.AccessRootElement")));
-    if (update_) {
-        services->push_back(
-            rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "com.sun.star.configuration.UpdateRootElement")));
-    }
-}
-
-void RootAccess::initDisposeBroadcaster(Broadcaster * broadcaster) {
-    assert(broadcaster != 0);
-    for (ChangesListeners::iterator i(changesListeners_.begin());
-         i != changesListeners_.end(); ++i)
-    {
-        broadcaster->addDisposeNotification(
-            i->get(),
-            css::lang::EventObject(static_cast< cppu::OWeakObject * >(this)));
-    }
-    Access::initDisposeBroadcaster(broadcaster);
-}
-
-void RootAccess::clearListeners() throw() {
-    changesListeners_.clear();
-    Access::clearListeners();
-}
-
-css::uno::Any RootAccess::queryInterface(css::uno::Type const & aType)
-    throw (css::uno::RuntimeException)
-{
-    assert(thisIs(IS_ANY));
-    osl::MutexGuard g(*lock_);
-    checkLocalizedPropertyAccess();
-    css::uno::Any res(Access::queryInterface(aType));
-    if (res.hasValue()) {
-        return res;
-    }
-    res = cppu::queryInterface(
-        aType, static_cast< css::util::XChangesNotifier * >(this));
-    if (res.hasValue()) {
-        return res;
-    }
-    if (!res.hasValue() && update_) {
-        res = cppu::queryInterface(
-            aType, static_cast< css::util::XChangesBatch * >(this));
-    }
-    return res;
-}
-
 void RootAccess::addChangesListener(
     css::uno::Reference< css::util::XChangesListener > const & aListener)
     throw (css::uno::RuntimeException)
@@ -337,12 +218,134 @@ css::util::ChangesSet RootAccess::getPendingChanges()
     return changes.getAsConstList();
 }
 
-rtl::OUString RootAccess::getImplementationName() throw (css::uno::RuntimeException)
+RootAccess::~RootAccess()
+{
+    osl::MutexGuard g(*lock_);
+    if (alive_)
+        getComponents().removeRootAccess(this);
+}
+
+Path RootAccess::getRelativePath() {
+    return Path();
+}
+
+rtl::OUString RootAccess::getRelativePathRepresentation() {
+    return rtl::OUString();
+}
+
+rtl::Reference< Node > RootAccess::getNode() {
+    if (!node_.is()) {
+        rtl::OUString canonic;
+        int finalizedLayer;
+        node_ = getComponents().resolvePathRepresentation(
+            pathRepresentation_, &canonic, &path_, &finalizedLayer);
+        if (!node_.is()) {
+            throw css::uno::RuntimeException(
+                (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("cannot find ")) +
+                 pathRepresentation_),
+                0);
+                // RootAccess::queryInterface indirectly calls
+                // RootAccess::getNode, so if this RootAccess were passed out in
+                // RuntimeException.Context, client code that called
+                // queryInterface on it would cause trouble; therefore,
+                // RuntimeException.Context is left null here
+        }
+        pathRepresentation_ = canonic;
+        assert(!path_.empty() || node_->kind() == Node::KIND_ROOT);
+        if (!path_.empty()) {
+            name_ = path_.back();
+        }
+        finalized_ = finalizedLayer != Data::NO_LAYER;
+    }
+    return node_;
+}
+
+bool RootAccess::isFinalized() {
+    getNode();
+    return finalized_;
+}
+
+rtl::OUString RootAccess::getNameInternal() {
+    getNode();
+    return name_;
+}
+
+rtl::Reference< RootAccess > RootAccess::getRootAccess() {
+    return this;
+}
+
+rtl::Reference< Access > RootAccess::getParentAccess() {
+    return rtl::Reference< Access >();
+}
+
+void RootAccess::addTypes(std::vector< css::uno::Type > * types) const {
+    assert(types != 0);
+    types->push_back(cppu::UnoType< css::util::XChangesNotifier >::get());
+    types->push_back(cppu::UnoType< css::util::XChangesBatch >::get());
+}
+
+void RootAccess::addSupportedServiceNames(
+    std::vector< rtl::OUString > * services)
+{
+    assert(services != 0);
+    services->push_back(
+        rtl::OUString(
+            RTL_CONSTASCII_USTRINGPARAM(
+                "com.sun.star.configuration.AccessRootElement")));
+    if (update_) {
+        services->push_back(
+            rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM(
+                    "com.sun.star.configuration.UpdateRootElement")));
+    }
+}
+
+void RootAccess::initDisposeBroadcaster(Broadcaster * broadcaster) {
+    assert(broadcaster != 0);
+    for (ChangesListeners::iterator i(changesListeners_.begin());
+         i != changesListeners_.end(); ++i)
+    {
+        broadcaster->addDisposeNotification(
+            i->get(),
+            css::lang::EventObject(static_cast< cppu::OWeakObject * >(this)));
+    }
+    Access::initDisposeBroadcaster(broadcaster);
+}
+
+void RootAccess::clearListeners() throw() {
+    changesListeners_.clear();
+    Access::clearListeners();
+}
+
+css::uno::Any RootAccess::queryInterface(css::uno::Type const & aType)
+    throw (css::uno::RuntimeException)
 {
     assert(thisIs(IS_ANY));
     osl::MutexGuard g(*lock_);
     checkLocalizedPropertyAccess();
-    return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "configmgr.RootAccess" ) );
+    css::uno::Any res(Access::queryInterface(aType));
+    if (res.hasValue()) {
+        return res;
+    }
+    res = cppu::queryInterface(
+        aType, static_cast< css::util::XChangesNotifier * >(this));
+    if (res.hasValue()) {
+        return res;
+    }
+    if (!res.hasValue() && update_) {
+        res = cppu::queryInterface(
+            aType, static_cast< css::util::XChangesBatch * >(this));
+    }
+    return res;
+}
+
+rtl::OUString RootAccess::getImplementationName()
+    throw (css::uno::RuntimeException)
+{
+    assert(thisIs(IS_ANY));
+    osl::MutexGuard g(*lock_);
+    checkLocalizedPropertyAccess();
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("configmgr.RootAccess"));
 }
 
 }

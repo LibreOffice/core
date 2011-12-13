@@ -45,7 +45,7 @@ public:
 
     virtual rtl::Reference< Node > clone(bool keepTemplateName) const;
 
-    virtual NodeMap & getMembers();
+    virtual NodeMap * getMemberMap();
 
     virtual rtl::OUString getTemplateName() const;
 

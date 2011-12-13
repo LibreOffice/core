@@ -48,6 +48,7 @@
 #include "groupnode.hxx"
 #include "node.hxx"
 #include "nodemap.hxx"
+#include "rootnode.hxx"
 #include "setnode.hxx"
 
 namespace configmgr {
@@ -207,6 +208,8 @@ rtl::Reference< Node > Data::findNode(
         ? rtl::Reference< Node >() : i->second;
 }
 
+Data::Data(): root_(new RootNode(components)) {}
+
 rtl::Reference< Node > Data::resolvePathRepresentation(
     rtl::OUString const & pathRepresentation,
     rtl::OUString * canonicRepresentation, Path * path, int * finalizedLayer)
@@ -217,6 +220,18 @@ rtl::Reference< Node > Data::resolvePathRepresentation(
             (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("bad path ")) +
              pathRepresentation),
             css::uno::Reference< css::uno::XInterface >());
+    }
+    if (path != 0) {
+        path->clear();
+    }
+    if (pathRepresentation.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("/"))) {
+        if (canonicRepresentation != 0) {
+            *canonicRepresentation = pathRepresentation;
+        }
+        if (finalizedLayer != 0) {
+            *finalizedLayer = NO_LAYER;
+        }
+        return root_;
     }
     rtl::OUString seg;
     bool setElement;
@@ -231,9 +246,6 @@ rtl::Reference< Node > Data::resolvePathRepresentation(
     }
     NodeMap::const_iterator i(components.find(seg));
     rtl::OUStringBuffer canonic;
-    if (path != 0) {
-        path->clear();
-    }
     rtl::Reference< Node > parent;
     int finalized = NO_LAYER;
     for (rtl::Reference< Node > p(i == components.end() ? 0 : i->second);;) {
