@@ -61,4 +61,8 @@ $(eval $(call gb_Library_add_exception_objects,MacOSXSpell,\
 	lingucomponent/source/spellcheck/macosxspell/macspellimp \
 ))
 
+$(eval $(call gb_Library_add_cxxflags,MacOSXSpell,\
+	$(gb_LinkTarget_OBJCXXFLAGS) \
+))
+
 # vim: set noet sw=4 ts=4:
