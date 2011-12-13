@@ -1609,7 +1609,7 @@ void Access::commitChildChanges(
         }
         NodeMap * members = getNode()->getMemberMap();
         if (members != 0) {
-            NodeMap::const_iterator j(members->find(i->first));
+            NodeMap::iterator j(members->find(i->first));
             if (child.is()) {
                 // Inserted:
                 if (j != members->end()) {
