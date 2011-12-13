@@ -629,6 +629,8 @@ void AreaChart::createShapes()
     sal_Int32 nCreatedPoints = 0;
     //
 
+    bool bDateCategory = (m_pExplicitCategoriesProvider && m_pExplicitCategoriesProvider->isDateAxis());
+
 //=============================================================================
     //iterate through all x values per indices
     for( sal_Int32 nIndex = nStartIndex; nIndex < nEndIndex; nIndex++ )
@@ -646,14 +648,17 @@ void AreaChart::createShapes()
             for( ; aXSlotIter != aXSlotEnd; ++aXSlotIter )
             {
                 ::std::vector< VDataSeries* >* pSeriesList = &(aXSlotIter->m_aSeriesVector);
-                ::std::vector< VDataSeries* >::const_iterator       aSeriesIter = pSeriesList->begin();
-                const ::std::vector< VDataSeries* >::const_iterator aSeriesEnd  = pSeriesList->end();
+                std::vector<VDataSeries*>::iterator       aSeriesIter = pSeriesList->begin();
+                const std::vector<VDataSeries*>::iterator aSeriesEnd  = pSeriesList->end();
 
                 for( ; aSeriesIter != aSeriesEnd; ++aSeriesIter )
                 {
                     VDataSeries* pSeries( *aSeriesIter );
                     if(!pSeries)
                         continue;
+
+                    if (bDateCategory)
+                        pSeries->doSortByXValues();
 
                     sal_Int32 nAttachedAxisIndex = pSeries->getAttachedAxisIndex();
                     if( aLogicYSumMap.find(nAttachedAxisIndex)==aLogicYSumMap.end() )
@@ -716,7 +721,7 @@ void AreaChart::createShapes()
 
                     //collect data point information (logic coordinates, style ):
                     double fLogicX = (*aSeriesIter)->getXValue(nIndex);
-                    if( m_pExplicitCategoriesProvider && m_pExplicitCategoriesProvider->isDateAxis() )
+                    if (bDateCategory)
                         fLogicX = DateHelper::RasterizeDateValue( fLogicX, m_aNullDate, m_nTimeResolution );
                     double fLogicY = (*aSeriesIter)->getYValue(nIndex);
 
