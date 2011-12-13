@@ -207,7 +207,7 @@ sal_Int32 MimeConfigurationHelper::GetFilterFlags( const ::rtl::OUString& aFilte
     sal_Int32 nFlags = 0;
     try
     {
-        if ( aFilterName.getLength() )
+        if ( !aFilterName.isEmpty() )
         {
             uno::Reference< container::XNameAccess > xFilterFactory(
                 GetFilterFactory(),
@@ -280,10 +280,10 @@ sal_Int32 MimeConfigurationHelper::GetFilterFlags( const ::rtl::OUString& aFilte
                     {
                         ::rtl::OUString aFilterName;
                         if ( aType[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "PreferredFilter" ) )
-                          && ( aType[nInd].Value >>= aFilterName ) && aFilterName.getLength() )
+                          && ( aType[nInd].Value >>= aFilterName ) && !aFilterName.isEmpty() )
                         {
                             ::rtl::OUString aDocumentName = GetDocServiceNameFromFilter( aFilterName );
-                            if ( aDocumentName.getLength() )
+                            if ( !aDocumentName.isEmpty() )
                                 return aDocumentName;
                         }
                     }
@@ -445,7 +445,7 @@ uno::Sequence< beans::NamedValue > MimeConfigurationHelper::GetObjectPropsByClas
     }
 
     ::rtl::OUString aStringClassID = GetStringClassIDRepresentation( aClassID );
-    if ( aStringClassID.getLength() )
+    if ( !aStringClassID.isEmpty() )
     {
         uno::Reference< container::XNameAccess > xObjConfig = GetObjConfiguration();
         uno::Reference< container::XNameAccess > xObjectProps;
@@ -471,7 +471,7 @@ uno::Sequence< beans::NamedValue > MimeConfigurationHelper::GetObjectPropsByMedi
         return aObject;
 
     ::rtl::OUString aDocumentName = GetDocServiceNameFromMediaType( aMediaType );
-    if ( aDocumentName.getLength() )
+    if ( !aDocumentName.isEmpty() )
         return GetObjectPropsByDocumentName( aDocumentName );
 
     return uno::Sequence< beans::NamedValue >();
@@ -481,7 +481,7 @@ uno::Sequence< beans::NamedValue > MimeConfigurationHelper::GetObjectPropsByMedi
 uno::Sequence< beans::NamedValue > MimeConfigurationHelper::GetObjectPropsByFilter( const ::rtl::OUString& aFilterName )
 {
     ::rtl::OUString aDocumentName = GetDocServiceNameFromFilter( aFilterName );
-    if ( aDocumentName.getLength() )
+    if ( !aDocumentName.isEmpty() )
         return GetObjectPropsByDocumentName( aDocumentName );
 
     return uno::Sequence< beans::NamedValue >();
@@ -490,7 +490,7 @@ uno::Sequence< beans::NamedValue > MimeConfigurationHelper::GetObjectPropsByFilt
 //-----------------------------------------------------------------------
 uno::Sequence< beans::NamedValue > MimeConfigurationHelper::GetObjectPropsByDocumentName( const ::rtl::OUString& aDocName )
 {
-    if ( aDocName.getLength() )
+    if ( !aDocName.isEmpty() )
     {
         uno::Reference< container::XNameAccess > xObjConfig = GetObjConfiguration();
         if ( xObjConfig.is() )
@@ -532,7 +532,7 @@ uno::Sequence< beans::NamedValue > MimeConfigurationHelper::GetObjectPropsByDocu
 {
     ::rtl::OUString aResult;
 
-    if ( aStringClassID.getLength() )
+    if ( !aStringClassID.isEmpty() )
     {
         uno::Reference< container::XNameAccess > xObjConfig = GetObjConfiguration();
         uno::Reference< container::XNameAccess > xObjectProps;
@@ -557,7 +557,7 @@ uno::Sequence< beans::NamedValue > MimeConfigurationHelper::GetObjectPropsByDocu
 {
     ::rtl::OUString aResult;
 
-    if ( aDocName.getLength() )
+    if ( !aDocName.isEmpty() )
     {
         uno::Reference< container::XNameAccess > xObjConfig = GetObjConfiguration();
         if ( xObjConfig.is() )
@@ -594,10 +594,10 @@ uno::Sequence< beans::NamedValue > MimeConfigurationHelper::GetObjectPropsByDocu
 {
     ::rtl::OUString aResult = GetFactoryNameByStringClassID( GetExplicitlyRegisteredObjClassID( aMediaType ) );
 
-    if ( !aResult.getLength() )
+    if ( aResult.isEmpty() )
     {
         ::rtl::OUString aDocumentName = GetDocServiceNameFromMediaType( aMediaType );
-        if ( aDocumentName.getLength() )
+        if ( !aDocumentName.isEmpty() )
             aResult = GetFactoryNameByDocumentName( aDocumentName );
     }
 
@@ -615,7 +615,7 @@ uno::Sequence< beans::NamedValue > MimeConfigurationHelper::GetObjectPropsByDocu
         if ( aMediaDescr[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "FilterName" ) ) )
             aMediaDescr[nInd].Value >>= aFilterName;
 
-    if ( !aFilterName.getLength() )
+    if ( aFilterName.isEmpty() )
     {
         // filter name is not specified, so type detection should be done
 
@@ -637,7 +637,7 @@ uno::Sequence< beans::NamedValue > MimeConfigurationHelper::GetObjectPropsByDocu
             if ( aTempMD[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "FilterName" ) ) )
                 aTempMD[nInd].Value >>= aFilterName;
 
-        if ( aFilterName.getLength() )
+        if ( !aFilterName.isEmpty() )
         {
             sal_Int32 nOldLen = aMediaDescr.getLength();
             aMediaDescr.realloc( nOldLen + 1 );
@@ -645,7 +645,7 @@ uno::Sequence< beans::NamedValue > MimeConfigurationHelper::GetObjectPropsByDocu
             aMediaDescr[ nOldLen ].Value <<= aFilterName;
 
         }
-        else if ( aTypeName.getLength() && !bIgnoreType )
+        else if ( !aTypeName.isEmpty() && !bIgnoreType )
         {
             uno::Reference< container::XNameAccess > xNameAccess( xTypeDetection, uno::UNO_QUERY );
             uno::Sequence< beans::PropertyValue > aTypes;
@@ -682,7 +682,7 @@ uno::Sequence< beans::NamedValue > MimeConfigurationHelper::GetObjectPropsByDocu
             break;
         }
 
-    OSL_ENSURE( aDocName.getLength(), "The name must exist at this point!\n" );
+    OSL_ENSURE( !aDocName.isEmpty(), "The name must exist at this point!\n" );
 
 
     sal_Bool bNeedsAddition = sal_True;
@@ -711,7 +711,7 @@ sal_Bool MimeConfigurationHelper::AddFilterNameCheckOwnFile(
     sal_Bool bResult = sal_False;
 
     ::rtl::OUString aFilterName = UpdateMediaDescriptorWithFilterName( aMediaDescr, sal_False );
-    if ( aFilterName.getLength() )
+    if ( !aFilterName.isEmpty() )
     {
         sal_Int32 nFlags = GetFilterFlags( aFilterName );
         // check the OWN flag
@@ -726,7 +726,7 @@ sal_Bool MimeConfigurationHelper::AddFilterNameCheckOwnFile(
 {
     rtl::OUString aResult;
 
-    if ( aServiceName.getLength() && nVersion )
+    if ( !aServiceName.isEmpty() && nVersion )
         try
         {
             uno::Reference< container::XContainerQuery > xFilterQuery(
@@ -760,7 +760,7 @@ sal_Bool MimeConfigurationHelper::AddFilterNameCheckOwnFile(
                         {
                             // if there are more than one filter the preffered one should be used
                             // if there is no preffered filter the first one will be used
-                            if ( !aResult.getLength() || ( nFlags & SFX_FILTER_PREFERED ) )
+                            if ( aResult.isEmpty() || ( nFlags & SFX_FILTER_PREFERED ) )
                                 aResult = aPropsHM.getUnpackedValueOrDefault( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Name" )),
                                                                                 ::rtl::OUString() );
                             if ( nFlags & SFX_FILTER_PREFERED )
@@ -782,7 +782,7 @@ sal_Bool MimeConfigurationHelper::AddFilterNameCheckOwnFile(
 
     try
     {
-        if ( aImportFilterName.getLength() )
+        if ( !aImportFilterName.isEmpty() )
         {
             uno::Reference< container::XNameAccess > xFilterFactory(
                 GetFilterFactory(),
@@ -811,8 +811,8 @@ sal_Bool MimeConfigurationHelper::AddFilterNameCheckOwnFile(
                     ::rtl::OUString aDocumentServiceName = aImpFilterHM.getUnpackedValueOrDefault( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DocumentService")), ::rtl::OUString() );
                     ::rtl::OUString aTypeName = aImpFilterHM.getUnpackedValueOrDefault( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Type")), ::rtl::OUString() );
 
-                    OSL_ENSURE( aDocumentServiceName.getLength() && aTypeName.getLength(), "Incomplete filter data!" );
-                    if ( aDocumentServiceName.getLength() && aTypeName.getLength() )
+                    OSL_ENSURE( !aDocumentServiceName.isEmpty() && !aTypeName.isEmpty(), "Incomplete filter data!" );
+                    if ( !(aDocumentServiceName.isEmpty() || aTypeName.isEmpty()) )
                     {
                         uno::Sequence< beans::NamedValue > aSearchRequest( 2 );
                         aSearchRequest[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Type"));

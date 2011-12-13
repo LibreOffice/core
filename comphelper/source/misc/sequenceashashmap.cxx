@@ -129,7 +129,7 @@ void SequenceAsHashMap::operator<<(const css::uno::Sequence< css::uno::Any >& lS
         if (lSource[i] >>= lP)
         {
             if (
-                (!lP.Name.getLength()) ||
+                (lP.Name.isEmpty()) ||
                 (!lP.Value.hasValue())
                )
                 throw css::beans::IllegalTypeException(
@@ -143,7 +143,7 @@ void SequenceAsHashMap::operator<<(const css::uno::Sequence< css::uno::Any >& lS
         if (lSource[i] >>= lN)
         {
             if (
-                (!lN.Name.getLength()) ||
+                (lN.Name.isEmpty()) ||
                 (!lN.Value.hasValue())
                )
                 throw css::beans::IllegalTypeException(

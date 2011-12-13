@@ -187,12 +187,12 @@ void Locale::fromISO(const ::rtl::OUString& sISO)
     ::rtl::OUStringBuffer sISO(64);
 
     sISO.append(m_sLanguage);
-    if (m_sCountry.getLength())
+    if (!m_sCountry.isEmpty())
     {
         sISO.append(SEPERATOR_LC);
         sISO.append(m_sCountry);
 
-        if (m_sVariant.getLength())
+        if (!m_sVariant.isEmpty())
         {
             sISO.append(SEPERATOR_CV);
             sISO.append(m_sVariant);

@@ -126,7 +126,7 @@ void copyProperties(const Reference<XPropertySet>& _rxSource,
                 aBuffer.append( "'" );
 
                 Exception aBaseException;
-                if ( ( aException >>= aBaseException ) && aBaseException.Message.getLength() )
+                if ( ( aException >>= aBaseException ) && !aBaseException.Message.isEmpty() )
                 {
                     aBuffer.append( ", saying '" );
                     aBuffer.append( ::rtl::OString( aBaseException.Message.getStr(), aBaseException.Message.getLength(), osl_getThreadTextEncoding() ) );

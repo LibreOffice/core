@@ -324,7 +324,7 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::GetEmbeddedOb
 {
     RTL_LOGFILE_CONTEXT( aLog, "comphelper (mv76033) comphelper::EmbeddedObjectContainer::GetEmbeddedObject" );
 
-    OSL_ENSURE( rName.getLength(), "Empty object name!");
+    OSL_ENSURE( !rName.isEmpty(), "Empty object name!");
 
     uno::Reference < embed::XEmbeddedObject > xObj;
     EmbeddedObjectContainerNameMap::iterator aIt = pImpl->maObjectContainer.find( rName );
@@ -402,7 +402,7 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::CreateEmbedde
 {
     RTL_LOGFILE_CONTEXT( aLog, "comphelper (mv76033) comphelper::EmbeddedObjectContainer::CreateEmbeddedObject" );
 
-    if ( !rNewName.getLength() )
+    if ( rNewName.isEmpty() )
         rNewName = CreateUniqueObjectName();
 
     OSL_ENSURE( !HasEmbeddedObject(rNewName), "Object to create already exists!");
@@ -444,7 +444,7 @@ void EmbeddedObjectContainer::AddEmbeddedObject( const ::com::sun::star::uno::Re
     RTL_LOGFILE_CONTEXT( aLog, "comphelper (mv76033) comphelper::EmbeddedObjectContainer::AddEmbeddedObject" );
 
 #if OSL_DEBUG_LEVEL > 1
-    OSL_ENSURE( rName.getLength(), "Added object doesn't have a name!");
+    OSL_ENSURE( !rName.isEmpty(), "Added object doesn't have a name!");
     uno::Reference < container::XNameAccess > xAccess( pImpl->mxStorage, uno::UNO_QUERY );
     uno::Reference < embed::XEmbedPersist > xEmb( xObj, uno::UNO_QUERY );
     uno::Reference < embed::XLinkageSupport > xLink( xEmb, uno::UNO_QUERY );
@@ -508,7 +508,7 @@ sal_Bool EmbeddedObjectContainer::StoreEmbeddedObject( const uno::Reference < em
     RTL_LOGFILE_CONTEXT( aLog, "comphelper (mv76033) comphelper::EmbeddedObjectContainer::StoreEmbeddedObject" );
 
     uno::Reference < embed::XEmbedPersist > xPersist( xObj, uno::UNO_QUERY );
-    if ( !rName.getLength() )
+    if ( rName.isEmpty() )
         rName = CreateUniqueObjectName();
 
 #if OSL_DEBUG_LEVEL > 1
@@ -561,7 +561,7 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::InsertEmbedde
 {
     RTL_LOGFILE_CONTEXT( aLog, "comphelper (mv76033) comphelper::EmbeddedObjectContainer::InsertEmbeddedObject( InputStream )" );
 
-    if ( !rNewName.getLength() )
+    if ( rNewName.isEmpty() )
         rNewName = CreateUniqueObjectName();
 
     // store it into the container storage
@@ -623,7 +623,7 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::InsertEmbedde
 {
     RTL_LOGFILE_CONTEXT( aLog, "comphelper (mv76033) comphelper::EmbeddedObjectContainer::InsertEmbeddedObject( MediaDescriptor )" );
 
-    if ( !rNewName.getLength() )
+    if ( rNewName.isEmpty() )
         rNewName = CreateUniqueObjectName();
 
     uno::Reference < embed::XEmbeddedObject > xObj;
@@ -658,7 +658,7 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::InsertEmbedde
 {
     RTL_LOGFILE_CONTEXT( aLog, "comphelper (mv76033) comphelper::EmbeddedObjectContainer::InsertEmbeddedLink" );
 
-    if ( !rNewName.getLength() )
+    if ( rNewName.isEmpty() )
         rNewName = CreateUniqueObjectName();
 
     uno::Reference < embed::XEmbeddedObject > xObj;
@@ -698,7 +698,7 @@ sal_Bool EmbeddedObjectContainer::TryToCopyGraphReplacement( EmbeddedObjectConta
 
     sal_Bool bResult = sal_False;
 
-    if ( ( &rSrc != this || !aOrigName.equals( aTargetName ) ) && aOrigName.getLength() && aTargetName.getLength() )
+    if ( ( &rSrc != this || !aOrigName.equals( aTargetName ) ) && !aOrigName.isEmpty() && !aTargetName.isEmpty() )
     {
         ::rtl::OUString aMediaType;
         uno::Reference < io::XInputStream > xGrStream = rSrc.GetGraphicStream( aOrigName, &aMediaType );
@@ -726,7 +726,7 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::CopyAndGetEmb
     catch( uno::Exception& )
     {}
 
-    if ( !rName.getLength() )
+    if ( rName.isEmpty() )
         rName = CreateUniqueObjectName();
 
     // objects without persistance are not really stored by the method
@@ -744,7 +744,7 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::CopyAndGetEmb
                 {
                     // this is a OOo link, it has no persistence
                     ::rtl::OUString aURL = xOrigLinkage->getLinkURL();
-                    if ( !aURL.getLength() )
+                    if ( aURL.isEmpty() )
                         throw uno::RuntimeException();
 
                     // create new linked object from the URL the link is based on
@@ -846,7 +846,7 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::CopyAndGetEmb
     if ( xResult.is() )
     {
         // the object is successfully copied, try to copy graphical replacement
-        if ( aOrigName.getLength() )
+        if ( !aOrigName.isEmpty() )
             TryToCopyGraphReplacement( rSrc, aOrigName, rName );
 
         // the object might need the size to be set
@@ -1058,7 +1058,7 @@ sal_Bool EmbeddedObjectContainer::RemoveEmbeddedObject( const uno::Reference < e
                         static const ::rtl::OUString s_sMediaType(RTL_CONSTASCII_USTRINGPARAM("MediaType"));
                         xStorProps->getPropertyValue( s_sMediaType ) >>= aOrigStorMediaType;
 
-                        OSL_ENSURE( aOrigStorMediaType.getLength(), "No valuable media type in the storage!\n" );
+                        OSL_ENSURE( !aOrigStorMediaType.isEmpty(), "No valuable media type in the storage!\n" );
 
                         uno::Reference< beans::XPropertySet > xTargetStorProps(
                                                                     pImpl->mpTempObjectContainer->pImpl->mxStorage,
@@ -1178,8 +1178,8 @@ uno::Reference < io::XInputStream > EmbeddedObjectContainer::GetGraphicStream( c
 
     uno::Reference < io::XInputStream > xStream;
 
-    OSL_ENSURE( aName.getLength(), "Retrieving graphic for unknown object!" );
-    if ( aName.getLength() )
+    OSL_ENSURE( !aName.isEmpty(), "Retrieving graphic for unknown object!" );
+    if ( !aName.isEmpty() )
     {
         try
         {
@@ -1316,7 +1316,7 @@ namespace {
                                             const uno::Reference< io::XInputStream >& xInStream,
                                             const ::rtl::OUString& aStreamName )
     {
-        OSL_ENSURE( aStreamName.getLength() && xInStream.is() && xDocStor.is(), "Misuse of the method!\n" );
+        OSL_ENSURE( !aStreamName.isEmpty() && xInStream.is() && xDocStor.is(), "Misuse of the method!\n" );
 
         try
         {

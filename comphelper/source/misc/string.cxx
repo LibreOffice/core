@@ -373,7 +373,7 @@ uno::Sequence< ::rtl::OUString >
       ::rtl::OUString kw =
         i_rString.getToken(0, static_cast<sal_Unicode> (','), idx);
       kw = kw.trim();
-      if (kw.getLength() > 0) {
+      if (!kw.isEmpty()) {
           vec.push_back(kw);
       }
     } while (idx >= 0);
