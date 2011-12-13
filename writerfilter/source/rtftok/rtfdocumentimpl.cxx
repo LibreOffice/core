@@ -288,6 +288,7 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
     m_aStyleTableEntries(),
     m_nCurrentStyleIndex(0),
     m_bEq(false),
+    m_bFormField(false),
     m_bWasInFrame(false),
     m_bIsInFrame(false),
     m_aUnicodeBuffer()
@@ -969,18 +970,32 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
             break;
         case RTF_FLDINST:
             {
+                // Look for the field type
                 sal_Int32 nPos = Strm().Tell();
                 OStringBuffer aBuf;
                 char ch;
-                for (int i = 0; i < 4; ++i)
+                bool bFoundCode = false;
+                bool bInKeyword = false;
+                while (!bFoundCode && ch != '}')
                 {
                     Strm() >> ch;
-                    aBuf.append(ch);
+                    if ('\\' == ch)
+                        bInKeyword = true;
+                    if (!bInKeyword  && isalnum(ch))
+                        aBuf.append(ch);
+                    else if (bInKeyword && isspace(ch))
+                        bInKeyword = false;
+                    if (aBuf.getLength() > 0 && !isalnum(ch))
+                        bFoundCode = true;
                 }
                 Strm().Seek(nPos);
 
+                // Form data should be handled only for form fields if any
+                if (aBuf.toString().indexOf(OString("FORM")) != -1 )
+                    m_bFormField = true;
+
                 // EQ fields are not really fields in fact.
-                if (aBuf.toString().equals("{ EQ"))
+                if (aBuf.toString().equals("EQ"))
                     m_bEq = true;
                 else
                 {
@@ -2871,7 +2886,7 @@ int RTFDocumentImpl::popState()
         RTFValue::Pointer_t pValue(new RTFValue(m_aStates.top().aDestinationText.makeStringAndClear()));
         m_aFormfieldSprms->push_back(make_pair(NS_ooxml::LN_CT_FFDDList_listEntry, pValue));
     }
-    else if (m_aStates.top().nDestinationState == DESTINATION_DATAFIELD)
+    else if (m_aStates.top().nDestinationState == DESTINATION_DATAFIELD && m_bFormField)
     {
         OString aStr = OUStringToOString(m_aStates.top().aDestinationText.makeStringAndClear(), m_aStates.top().nCurrentEncoding);
         // decode hex dump
@@ -2914,6 +2929,8 @@ int RTFDocumentImpl::popState()
         m_aFormfieldSprms->push_back(make_pair(NS_ooxml::LN_CT_FFData_name, pNValue));
         RTFValue::Pointer_t pDValue(new RTFValue(OStringToOUString(aDefaultText, m_aStates.top().nCurrentEncoding)));
         m_aFormfieldSprms->push_back(make_pair(NS_ooxml::LN_CT_FFTextInput_default, pDValue));
+
+        m_bFormField = false;
     }
     else if (m_aStates.top().nDestinationState == DESTINATION_CREATIONTIME && m_xDocumentProperties.is())
         m_xDocumentProperties->setCreationDate(lcl_getDateTime(m_aStates));

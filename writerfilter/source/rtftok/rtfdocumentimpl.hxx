@@ -425,6 +425,7 @@ namespace writerfilter {
                 RTFReferenceTable::Entries_t m_aStyleTableEntries;
                 int m_nCurrentStyleIndex;
                 bool m_bEq;
+                bool m_bFormField;
                 /// If we were in a frame.
                 bool m_bWasInFrame;
                 /// If a frame start token is already sent to dmapper (nesting them is not OK).
