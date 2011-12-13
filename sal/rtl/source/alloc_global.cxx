@@ -28,6 +28,7 @@
 
 #include "alloc_impl.hxx"
 #include "rtl/alloc.h"
+#include <sal/log.hxx>
 #include <sal/macros.h>
 
 #include <cassert>
@@ -295,6 +296,9 @@ void * SAL_CALL rtl_reallocateMemory_SYSTEM (void * p, sal_Size n)
 
 void* SAL_CALL rtl_allocateMemory (sal_Size n) SAL_THROW_EXTERN_C()
 {
+    SAL_WARN_IF(
+        n >= SAL_MAX_INT32, "sal",
+        "suspicious massive alloc " << n);
 #if !defined(FORCE_SYSALLOC)
     while (1)
     {
@@ -315,6 +319,9 @@ void* SAL_CALL rtl_allocateMemory (sal_Size n) SAL_THROW_EXTERN_C()
 
 void* SAL_CALL rtl_reallocateMemory (void * p, sal_Size n) SAL_THROW_EXTERN_C()
 {
+    SAL_WARN_IF(
+        n >= SAL_MAX_INT32, "sal",
+        "suspicious massive alloc " << n);
 #if !defined(FORCE_SYSALLOC)
     while (1)
     {
