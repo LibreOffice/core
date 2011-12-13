@@ -55,8 +55,8 @@ rtl::Reference< Node > LocalizedPropertyNode::clone(bool) const {
     return new LocalizedPropertyNode(*this);
 }
 
-NodeMap * LocalizedPropertyNode::getMemberMap() {
-    return &members_;
+NodeMap & LocalizedPropertyNode::getMembers() {
+    return members_;
 }
 
 Type LocalizedPropertyNode::getStaticType() const {

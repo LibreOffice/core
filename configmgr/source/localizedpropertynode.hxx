@@ -50,7 +50,7 @@ public:
 
     virtual rtl::Reference< Node > clone(bool keepTemplateName) const;
 
-    virtual NodeMap * getMemberMap();
+    virtual NodeMap & getMembers();
 
     Type getStaticType() const;
 

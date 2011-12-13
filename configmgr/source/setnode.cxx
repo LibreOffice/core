@@ -73,8 +73,8 @@ rtl::Reference< Node > SetNode::clone(bool keepTemplateName) const {
     return new SetNode(*this, keepTemplateName);
 }
 
-NodeMap * SetNode::getMemberMap() {
-    return &members_;
+NodeMap & SetNode::getMembers() {
+    return members_;
 }
 
 rtl::OUString SetNode::getTemplateName() const {

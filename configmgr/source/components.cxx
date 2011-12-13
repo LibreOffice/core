@@ -385,7 +385,7 @@ void Components::removeExtensionXcuFile(
              i != item->additions.rend(); ++i)
         {
             rtl::Reference< Node > parent;
-            NodeMap const * map = &data_.components;
+            NodeMap const * map = &data_.getComponents();
             rtl::Reference< Node > node;
             for (Path::const_iterator j(i->begin()); j != i->end(); ++j) {
                 parent = node;
@@ -402,9 +402,7 @@ void Components::removeExtensionXcuFile(
                         node->kind() == Node::KIND_GROUP ||
                         node->kind() == Node::KIND_SET);
                     if (canRemoveFromLayer(item->layer, node)) {
-                        NodeMap * members = parent->getMemberMap();
-                        assert(members != 0);
-                        members->erase(i->back());
+                        parent->getMembers().erase(i->back());
                         data_.modifications.remove(*i);
                         modifications->add(*i);
                     }

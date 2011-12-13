@@ -41,21 +41,18 @@ namespace configmgr {
 
 class RootNode: public Node {
 public:
-    RootNode(NodeMap const & members);
+    RootNode();
 
 private:
-    RootNode(RootNode const & other);
-
     virtual ~RootNode();
 
     virtual Kind kind() const;
 
     virtual rtl::Reference< Node > clone(bool keepTemplateName) const;
 
-    virtual NodeMap const & getMembers() const;
-    virtual NodeMap * getMemberMap();
+    virtual NodeMap & getMembers();
 
-    NodeMap const & members_;
+    NodeMap members_;
 };
 
 }

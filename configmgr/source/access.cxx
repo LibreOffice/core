@@ -1607,30 +1607,27 @@ void Access::commitChildChanges(
                 // children); clarify what exactly should happen here for
                 // directly inserted children
         }
-        NodeMap * members = getNode()->getMemberMap();
-        if (members != 0) {
-            NodeMap::iterator j(members->find(i->first));
-            if (child.is()) {
-                // Inserted:
-                if (j != members->end()) {
-                    childValid = childValid &&
-                        j->second->getFinalized() == Data::NO_LAYER;
-                    if (childValid) {
-                        child->getNode()->setMandatory(
-                            j->second->getMandatory());
-                    }
-                }
+        NodeMap & members = getNode()->getMembers();
+        NodeMap::iterator j(members.find(i->first));
+        if (child.is()) {
+            // Inserted:
+            if (j != members.end()) {
+                childValid = childValid &&
+                    j->second->getFinalized() == Data::NO_LAYER;
                 if (childValid) {
-                    (*members)[i->first] = child->getNode();
+                    child->getNode()->setMandatory(j->second->getMandatory());
                 }
-            } else {
-                // Removed:
-                childValid = childValid && j != members->end() &&
-                    j->second->getFinalized() == Data::NO_LAYER &&
-                    j->second->getMandatory() == Data::NO_LAYER;
-                if (childValid) {
-                    members->erase(j);
-                }
+            }
+            if (childValid) {
+                members[i->first] = child->getNode();
+            }
+        } else {
+            // Removed:
+            childValid = childValid && j != members.end() &&
+                j->second->getFinalized() == Data::NO_LAYER &&
+                j->second->getMandatory() == Data::NO_LAYER;
+            if (childValid) {
+                members.erase(j);
             }
         }
         if (childValid && i->second.directlyModified) {

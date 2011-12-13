@@ -50,8 +50,7 @@ public:
 
     virtual rtl::Reference< Node > clone(bool keepTemplateName) const = 0;
 
-    virtual NodeMap const & getMembers() const;
-    virtual NodeMap * getMemberMap();
+    virtual NodeMap & getMembers();
     virtual rtl::OUString getTemplateName() const;
 
     virtual void setMandatory(int layer);

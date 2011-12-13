@@ -48,8 +48,8 @@ rtl::Reference< Node > GroupNode::clone(bool keepTemplateName) const {
     return new GroupNode(*this, keepTemplateName);
 }
 
-NodeMap * GroupNode::getMemberMap() {
-    return &members_;
+NodeMap & GroupNode::getMembers() {
+    return members_;
 }
 
 rtl::OUString GroupNode::getTemplateName() const {

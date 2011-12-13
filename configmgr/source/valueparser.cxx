@@ -413,11 +413,10 @@ bool ValueParser::endElement() {
                 break;
             case Node::KIND_LOCALIZED_PROPERTY:
                 {
-                    NodeMap * members = node_->getMemberMap();
-                    assert(members != 0);
-                    NodeMap::iterator i(members->find(localizedName_));
-                    if (i == members->end()) {
-                        members->insert(
+                    NodeMap & members = node_->getMembers();
+                    NodeMap::iterator i(members.find(localizedName_));
+                    if (i == members.end()) {
+                        members.insert(
                             NodeMap::value_type(
                                 localizedName_,
                                 new LocalizedValueNode(layer_, value)));

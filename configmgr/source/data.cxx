@@ -208,7 +208,7 @@ rtl::Reference< Node > Data::findNode(
         ? rtl::Reference< Node >() : i->second;
 }
 
-Data::Data(): root_(new RootNode(components)) {}
+Data::Data(): root_(new RootNode) {}
 
 rtl::Reference< Node > Data::resolvePathRepresentation(
     rtl::OUString const & pathRepresentation,
@@ -244,6 +244,7 @@ rtl::Reference< Node > Data::resolvePathRepresentation(
              pathRepresentation),
             css::uno::Reference< css::uno::XInterface >());
     }
+    NodeMap const & components = getComponents();
     NodeMap::const_iterator i(components.find(seg));
     rtl::OUStringBuffer canonic;
     rtl::Reference< Node > parent;
@@ -338,6 +339,10 @@ rtl::Reference< Node > Data::getTemplate(
     int layer, rtl::OUString const & fullName) const
 {
     return findNode(layer, templates, fullName);
+}
+
+NodeMap & Data::getComponents() const {
+    return root_->getMembers();
 }
 
 Additions * Data::addExtensionXcuAdditions(

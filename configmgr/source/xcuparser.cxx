@@ -242,9 +242,7 @@ void XcuParser::endElement(xmlreader::XmlReader const &) {
     state_.pop();
     if (insert.is()) {
         assert(!state_.empty() && state_.top().node.is());
-        NodeMap * members = state_.top().node->getMemberMap();
-        assert(members != 0);
-        (*members)[name] = insert;
+        state_.top().node->getMembers()[name] = insert;
     }
     if (pop && !path_.empty()) {
         path_.pop_back();
@@ -358,7 +356,7 @@ void XcuParser::handleComponentData(xmlreader::XmlReader & reader) {
     }
     rtl::Reference< Node > node(
         Data::findNode(
-            valueParser_.getLayer(), data_.components, componentName_));
+            valueParser_.getLayer(), data_.getComponents(), componentName_));
     if (!node.is()) {
         SAL_WARN(
             "configmgr",
@@ -595,11 +593,9 @@ void XcuParser::handleLocpropValue(
             return;
         }
     }
-    NodeMap * members = locprop->getMemberMap();
-    assert(members != 0);
-    NodeMap::iterator i(members->find(name));
-    if (i != members->end() && i->second->getLayer() > valueParser_.getLayer())
-    {
+    NodeMap & members = locprop->getMembers();
+    NodeMap::iterator i(members.find(name));
+    if (i != members.end() && i->second->getLayer() > valueParser_.getLayer()) {
         state_.push(State(true)); // ignored
         return;
     }
@@ -616,8 +612,8 @@ void XcuParser::handleLocpropValue(
         {
             bool pop = false;
             if (nil) {
-                if (i == members->end()) {
-                    (*members)[name] = new LocalizedValueNode(
+                if (i == members.end()) {
+                    members[name] = new LocalizedValueNode(
                         valueParser_.getLayer(), css::uno::Any());
                 } else {
                     dynamic_cast< LocalizedValueNode * >(
@@ -641,8 +637,8 @@ void XcuParser::handleLocpropValue(
     case OPERATION_REMOVE:
         //TODO: only allow if parent.op == OPERATION_FUSE
         //TODO: disallow removing when e.g. lang=""?
-        if (i != members->end()) {
-            members->erase(i);
+        if (i != members.end()) {
+            members.erase(i);
         }
         state_.push(State(true));
         recordModification(false);
@@ -708,10 +704,9 @@ void XcuParser::handleGroupProp(
             return;
         }
     }
-    NodeMap * members = group->getMemberMap();
-    assert(members != 0);
-    NodeMap::iterator i(members->find(name));
-    if (i == members->end()) {
+    NodeMap & members = group->getMembers();
+    NodeMap::iterator i(members.find(name));
+    if (i == members.end()) {
         handleUnknownGroupProp(reader, group, name, type, op, finalized);
     } else {
         switch (i->second->kind()) {
@@ -822,9 +817,7 @@ void XcuParser::handlePlainGroupProp(
                  reader.getUrl()),
                 css::uno::Reference< css::uno::XInterface >());
         }
-        NodeMap * members = group->getMemberMap();
-        assert(members != 0);
-        members->erase(propertyIndex);
+        group->getMembers().erase(propertyIndex);
         state_.push(State(true)); // ignore children
         recordModification(false);
         break;
@@ -1045,10 +1038,9 @@ void XcuParser::handleSetNode(xmlreader::XmlReader & reader, SetNode * set) {
     }
     int finalizedLayer = finalized ? valueParser_.getLayer() : Data::NO_LAYER;
     int mandatoryLayer = mandatory ? valueParser_.getLayer() : Data::NO_LAYER;
-    NodeMap * members = set->getMemberMap();
-    assert(members != 0);
-    NodeMap::iterator i(members->find(name));
-    if (i != members->end()) {
+    NodeMap & members = set->getMembers();
+    NodeMap::iterator i(members.find(name));
+    if (i != members.end()) {
         finalizedLayer = std::min(finalizedLayer, i->second->getFinalized());
         i->second->setFinalized(finalizedLayer);
         mandatoryLayer = std::min(mandatoryLayer, i->second->getMandatory());
@@ -1060,7 +1052,7 @@ void XcuParser::handleSetNode(xmlreader::XmlReader & reader, SetNode * set) {
     }
     switch (op) {
     case OPERATION_MODIFY:
-        if (i == members->end()) {
+        if (i == members.end()) {
             SAL_WARN(
                 "configmgr",
                 "ignoring modify of unknown set member node \"" << name
@@ -1083,11 +1075,11 @@ void XcuParser::handleSetNode(xmlreader::XmlReader & reader, SetNode * set) {
             member->setFinalized(finalizedLayer);
             member->setMandatory(mandatoryLayer);
             state_.push(State(member, name, false));
-            recordModification(i == members->end());
+            recordModification(i == members.end());
         }
         break;
     case OPERATION_FUSE:
-        if (i == members->end()) {
+        if (i == members.end()) {
             if (state_.top().locked || finalizedLayer < valueParser_.getLayer())
             {
                 state_.push(State(true)); // ignored
@@ -1114,13 +1106,13 @@ void XcuParser::handleSetNode(xmlreader::XmlReader & reader, SetNode * set) {
             // forget about user-layer removals that no longer remove anything
             // (so that paired additions/removals in the user layer do not grow
             // registrymodifications.xcu unbounded):
-            bool known = i != members->end();
+            bool known = i != members.end();
             if (known && !state_.top().locked &&
                 finalizedLayer >= valueParser_.getLayer() &&
                 (mandatoryLayer == Data::NO_LAYER ||
                  mandatoryLayer > valueParser_.getLayer()))
             {
-                members->erase(i);
+                members.erase(i);
             }
             state_.push(State(true));
             if (known) {

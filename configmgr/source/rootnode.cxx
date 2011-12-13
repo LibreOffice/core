@@ -38,9 +38,7 @@
 
 namespace configmgr {
 
-RootNode::RootNode(NodeMap const & members):
-    Node(Data::NO_LAYER), members_(members)
-{}
+RootNode::RootNode(): Node(Data::NO_LAYER) {}
 
 RootNode::~RootNode() {}
 
@@ -53,12 +51,8 @@ rtl::Reference< Node > RootNode::clone(bool) const {
     return rtl::Reference< Node >();
 }
 
-NodeMap const & RootNode::getMembers() const {
+NodeMap & RootNode::getMembers() {
     return members_;
-}
-
-NodeMap * RootNode::getMemberMap() {
-    return 0;
 }
 
 }

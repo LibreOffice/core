@@ -60,8 +60,6 @@ struct Data: private boost::noncopyable {
 
     NodeMap templates;
 
-    NodeMap components;
-
     Modifications modifications;
 
     static rtl::OUString createSegment(
@@ -90,6 +88,8 @@ struct Data: private boost::noncopyable {
 
     rtl::Reference< Node > getTemplate(
         int layer, rtl::OUString const & fullName) const;
+
+    NodeMap & getComponents() const;
 
     Additions * addExtensionXcuAdditions(
         rtl::OUString const & url, int layer);

@@ -30,7 +30,11 @@
 
 #include <cassert>
 
+#include "com/sun/star/uno/Reference.hxx"
+#include "com/sun/star/uno/RuntimeException.hpp"
+#include "com/sun/star/uno/XInterface.hpp"
 #include "rtl/ref.hxx"
+#include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
 
 #include "data.hxx"
@@ -39,15 +43,17 @@
 
 namespace configmgr {
 
-NodeMap const & Node::getMembers() const {
-    NodeMap * members = const_cast< Node * >(this)->getMemberMap();
-    assert(members != 0);
-    return *members;
+namespace {
+
+namespace css = com::sun::star;
+
 }
 
-NodeMap * Node::getMemberMap() {
+NodeMap & Node::getMembers() {
     assert(false);
-    return 0;
+    throw css::uno::RuntimeException(
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("this cannot happen")),
+        css::uno::Reference< css::uno::XInterface >());
 }
 
 rtl::OUString Node::getTemplateName() const {
