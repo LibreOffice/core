@@ -300,7 +300,7 @@ sal_Bool SvMetaSlot::IsMethod() const
     return b;
 }
 
-ByteString SvMetaSlot::GetMangleName( sal_Bool bVariable ) const
+rtl::OString SvMetaSlot::GetMangleName( sal_Bool bVariable ) const
 {
     if( !bVariable )
     {
@@ -1393,7 +1393,7 @@ void SvMetaSlot::WriteSlot( const ByteString & rShellName, sal_uInt16 nCount,
             rOutStm << '.';
             if ( !IsVariable() || !GetType() ||
                  GetType()->GetBaseType()->GetType() != TYPE_STRUCT )
-                rOutStm << GetMangleName( sal_False ).GetBuffer();
+                rOutStm << GetMangleName( sal_False ).getStr();
             rOutStm << "\",";
         }
         else
@@ -1414,7 +1414,7 @@ void SvMetaSlot::WriteSlot( const ByteString & rShellName, sal_uInt16 nCount,
 
     {
         rOutStm << ",\"";
-        rOutStm << GetMangleName( sal_False ).GetBuffer();
+        rOutStm << GetMangleName( sal_False ).getStr();
         rOutStm << "\"";
     }
 

@@ -183,7 +183,7 @@ sal_Bool SvMetaAttribute::IsVariable() const
     return pType->GetType() != TYPE_METHOD;
 }
 
-ByteString SvMetaAttribute::GetMangleName( sal_Bool ) const
+rtl::OString SvMetaAttribute::GetMangleName( sal_Bool ) const
 {
     return GetName();
 }
@@ -769,8 +769,8 @@ SvMetaType::SvMetaType()
 {
 }
 
-SvMetaType::SvMetaType( const ByteString & rName, char cPC,
-                        const ByteString & rCName )
+SvMetaType::SvMetaType( const rtl::OString& rName, char cPC,
+                        const rtl::OString& rCName )
     CTOR
 {
     SetName( rName );
@@ -778,13 +778,13 @@ SvMetaType::SvMetaType( const ByteString & rName, char cPC,
     aCName = rCName;
 }
 
-SvMetaType::SvMetaType( const ByteString & rName,
-                        const ByteString & rSbxName,
-                        const ByteString & rOdlName,
+SvMetaType::SvMetaType( const rtl::OString& rName,
+                        const rtl::OString& rSbxName,
+                        const rtl::OString& rOdlName,
                         char cPc,
-                        const ByteString & rCName,
-                        const ByteString & rBasicName,
-                        const ByteString & rBasicPostfix )
+                        const rtl::OString& rCName,
+                        const rtl::OString& rBasicName,
+                        const rtl::OString& rBasicPostfix )
     CTOR
 {
     SetName( rName );

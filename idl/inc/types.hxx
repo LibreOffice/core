@@ -103,7 +103,7 @@ public:
 
     virtual sal_Bool        IsMethod() const;
     virtual sal_Bool        IsVariable() const;
-    virtual ByteString      GetMangleName( sal_Bool bVariable ) const;
+    virtual rtl::OString    GetMangleName( sal_Bool bVariable ) const;
 
 
 #ifdef IDL_COMPILER
@@ -178,12 +178,12 @@ protected:
 public:
             SV_DECL_META_FACTORY1( SvMetaType, SvMetaExtern, 18 )
             SvMetaType();
-            SvMetaType( const ByteString & rTypeName, char cParserChar,
-                                const ByteString & rCName );
-            SvMetaType( const ByteString & rTypeName, const ByteString & rSbxName,
-                        const ByteString & rOdlName, char cParserChar,
-                        const ByteString & rCName, const ByteString & rBasicName,
-                        const ByteString & rBasicPostfix );
+            SvMetaType( const rtl::OString& rTypeName, char cParserChar,
+                                const rtl::OString& rCName );
+            SvMetaType( const rtl::OString& rTypeName, const rtl::OString& rSbxName,
+                        const rtl::OString& rOdlName, char cParserChar,
+                        const rtl::OString& rCName, const rtl::OString& rBasicName,
+                        const rtl::OString& rBasicPostfix );
 
     SvMetaAttributeMemberList & GetAttrList() const;
     sal_uLong               GetAttrCount() const

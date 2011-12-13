@@ -189,7 +189,7 @@ public:
 
     virtual sal_Bool    IsVariable() const;
     virtual sal_Bool    IsMethod() const;
-    virtual ByteString  GetMangleName( sal_Bool bVariable ) const;
+    virtual rtl::OString GetMangleName( sal_Bool bVariable ) const;
 
     SvMetaAttribute *   GetMethod() const;
     SvMetaType *        GetSlotType() const;
