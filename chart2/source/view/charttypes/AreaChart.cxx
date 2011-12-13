@@ -637,7 +637,7 @@ void AreaChart::createShapes()
         const ::std::vector< ::std::vector< VDataSeriesGroup > >::const_iterator  aZSlotEnd = m_aZSlots.end();
 
         std::map< sal_Int32, double > aLogicYSumMap;//one for each different nAttachedAxisIndex
-        for( ; aZSlotIter != aZSlotEnd; aZSlotIter++ )
+        for( ; aZSlotIter != aZSlotEnd; ++aZSlotIter )
         {
             ::std::vector< VDataSeriesGroup >::iterator             aXSlotIter = aZSlotIter->begin();
             const ::std::vector< VDataSeriesGroup >::const_iterator aXSlotEnd = aZSlotIter->end();
@@ -673,7 +673,7 @@ void AreaChart::createShapes()
 
 //=============================================================================
         aZSlotIter = m_aZSlots.begin();
-        for( sal_Int32 nZ=1; aZSlotIter != aZSlotEnd; aZSlotIter++, nZ++ )
+        for( sal_Int32 nZ=1; aZSlotIter != aZSlotEnd; ++aZSlotIter, ++nZ )
         {
             ::std::vector< VDataSeriesGroup >::iterator             aXSlotIter = aZSlotIter->begin();
             const ::std::vector< VDataSeriesGroup >::const_iterator aXSlotEnd = aZSlotIter->end();
@@ -797,7 +797,7 @@ void AreaChart::createShapes()
                         pPosHelper->isSameForGivenResolution( aFormerPoint.m_fX, aFormerPoint.m_fY, aFormerPoint.m_fZ
                                                             , aScaledLogicPosition.PositionX, aScaledLogicPosition.PositionY, aScaledLogicPosition.PositionZ ) )
                     {
-                        nSkippedPoints++;
+                        ++nSkippedPoints;
                         m_bPointsWereSkipped = true;
                         continue;
                     }

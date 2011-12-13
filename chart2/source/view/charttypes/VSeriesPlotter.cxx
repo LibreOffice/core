@@ -1405,7 +1405,7 @@ sal_Int32 VSeriesPlotter::getPointCount() const
     ::std::vector< ::std::vector< VDataSeriesGroup > >::const_iterator       aZSlotIter = m_aZSlots.begin();
     const ::std::vector< ::std::vector< VDataSeriesGroup > >::const_iterator aZSlotEnd = m_aZSlots.end();
 
-    for( ; aZSlotIter != aZSlotEnd; aZSlotIter++ )
+    for( ; aZSlotIter != aZSlotEnd; ++aZSlotIter )
     {
         ::std::vector< VDataSeriesGroup >::const_iterator       aXSlotIter = aZSlotIter->begin();
         const ::std::vector< VDataSeriesGroup >::const_iterator aXSlotEnd = aZSlotIter->end();
