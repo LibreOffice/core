@@ -57,6 +57,7 @@ class VCL_DLLPUBLIC SalGenericSystem : public SalSystem
     static const char *getFrameResName();
     static const char *getFrameClassName();
     static rtl::OString getFrameResName( SalExtStyle nStyle );
+    static bool        enableExperimentalFeatures();
 };
 
 #endif // _SV_GENSYS_H

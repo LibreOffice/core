@@ -39,7 +39,6 @@
 #include "vcl/help.hxx"
 #include "vcl/print.hxx"
 #include "vcl/svapp.hxx"
-#include "vcl/unohelp.hxx"
 #include "vcl/window.hxx"
 
 #include <gtk/gtk.h>
@@ -53,7 +52,6 @@
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/sheet/XSpreadsheetView.hpp>
@@ -181,72 +179,9 @@ lcl_getGtkSalInstance()
 }
 
 bool
-lcl_enableExperimentalFeatures()
-{
-    bool bEnable = true;
-    try
-    {
-        // get service provider
-        uno::Reference<lang::XMultiServiceFactory> const xSMgr(vcl::unohelper::GetMultiServiceFactory());
-        // create configuration hierachical access name
-        if (xSMgr.is())
-        {
-            try
-            {
-                uno::Reference<lang::XMultiServiceFactory> const xConfigProvider(
-                   uno::Reference<lang::XMultiServiceFactory>(
-                        xSMgr->createInstance(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                        "com.sun.star.configuration.ConfigurationProvider"))),
-                        UNO_QUERY))
-                    ;
-                if (xConfigProvider.is())
-                {
-                    uno::Sequence<uno::Any> aArgs(1);
-                    beans::PropertyValue aVal;
-                    aVal.Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("nodepath"));
-                    aVal.Value <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Office.Common/Misc"));
-                    aArgs.getArray()[0] <<= aVal;
-                    uno::Reference<container::XNameAccess> const xConfigAccess(
-                        uno::Reference<container::XNameAccess>(
-                            xConfigProvider->createInstanceWithArguments(
-                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationAccess")),
-                                aArgs),
-                            UNO_QUERY))
-                        ;
-                    if (xConfigAccess.is())
-                    {
-                        try
-                        {
-                            sal_Bool bValue = sal_False;
-                            uno::Any const aAny(xConfigAccess->getByName(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ExperimentalMode"))));
-                            if (aAny >>= bValue)
-                                bEnable = bValue;
-                        }
-                        catch (container::NoSuchElementException const&)
-                        {
-                        }
-                        catch (lang::WrappedTargetException const&)
-                        {
-                        }
-                    }
-                }
-            }
-            catch (uno::Exception const&)
-            {
-            }
-        }
-    }
-    catch (lang::WrappedTargetException const&)
-    {
-    }
-
-    return bEnable;
-}
-
-bool
 lcl_useSystemPrintDialog()
 {
-    return vcl::useSystemPrintDialog() && lcl_enableExperimentalFeatures()
+    return vcl::useSystemPrintDialog() && SalGenericSystem::enableExperimentalFeatures()
         && lcl_getGtkSalInstance().getPrintWrapper()->supportsPrinting();
 }
 
