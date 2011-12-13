@@ -33,7 +33,7 @@ use File::Basename;
 # IIa. Declaring variables for the system commands, etc.
 #--------------------------------------------------------
 #
-my ( $oldoutfile, $outfile, $bootfile, $newline, $comment,
+my ( $outfile, $bootfile, $newline, $comment,
      $ds, $ps,
      $wps, $cur_dir, $par_dir, $I, $L, $tmp, $MINGW,
      $platform,
@@ -168,10 +168,8 @@ if ( $platform =~ m/solaris/ )
    if ($platform =~ m/^i[3456]86/)
    {
       if ( $CC =~ "gcc") {
-         $oldoutfile     = "SolarisX86GccEnv.Set.sh";
          $OUTPATH        = "unxsogi";
       } else {
-         $oldoutfile     = "SolarisX86Env.Set.sh";
          $OUTPATH        = "unxsoli4";
       }
       $CPU            = "I";
@@ -184,10 +182,8 @@ if ( $platform =~ m/solaris/ )
    else
    {
       if ( $CC =~ "gcc") {
-         $oldoutfile     = "SolarisSparcGccEnv.Set.sh";
          $OUTPATH        = "unxsogs";
       } else {
-         $oldoutfile     = "SolarisSparcEnv.Set.sh";
          $OUTPATH        = "unxsols4";
       }
       $CPU            = "S";
@@ -252,7 +248,6 @@ elsif ( $platform =~ m/netbsd/ )
       $OS             = "NETBSD";
       $PATH_SEPERATOR = $ps;
       $OUTPATH        = "unxnbsd";
-      $oldoutfile     = "NetBSDEnv.Set.sh";
       $INPATH         = $OUTPATH.$PROEXT;
 }
 elsif ( $platform =~ m/kfreebsd/ )
@@ -268,7 +263,6 @@ elsif ( $platform =~ m/kfreebsd/ )
 #Set platform specific values:
    if ($platform =~ m/^i[3456]86/)
    {  print "Setting GNU/kFreeBSD x86 specific values... ";
-      $oldoutfile     = "GNUkFreeBSDX86Env.Set.sh";
       $CPU            = "I";
       $CPUNAME        = "INTEL";
       $OUTPATH        = "unxkfgi6";
@@ -280,7 +274,6 @@ elsif ( $platform =~ m/kfreebsd/ )
    }
    elsif ($platform =~ m/^x86_64/)
    {  print "Setting GNU/kFreeBSD x86-64 specific values... ";
-      $oldoutfile     = "GNUkFreeBSDX86-64Env.Set.sh";
       $CPU            = "X";
       $CPUNAME        = "X86_64";
       $OUTPATH        = "unxkfgx6";
@@ -301,7 +294,6 @@ elsif ( $platform =~ m/freebsd/ )
       $PATH_SEPERATOR = $ps;
       $OSVERSION      = '@OSVERSION@';
       $OUTPATH        = 'unxfbsd';
-      $oldoutfile     = 'FreeBSDEnv.Set.sh';
    if ($platform =~ m/^(amd64|x86_64)/)
    {  my ( $JAVA_OS );
       print "Setting FreeBSD AMD64 specific values... ";
@@ -344,7 +336,6 @@ elsif ( $platform =~ m/openbsd/ )
       $PATH_SEPERATOR = $ps;
       $OSVERSION      = '@OSVERSION@';
       $OUTPATH        = "unxobsd";
-      $oldoutfile     = "OpenBSDEnv.Set.sh";
    if ($platform =~ m/^(amd64|x86_64)/)
    {
       print "Setting OpenBSD AMD64 specific values... ";
@@ -381,7 +372,6 @@ elsif ( $platform =~ m/linux/ )
 #Set platform specific values:
    if ($platform =~ m/^i[3456]86/)
    {  print "Setting Linux x86 specific values... ";
-      $oldoutfile     = "LinuxX86Env.Set.sh";
       $CPU            = "I";
       $CPUNAME        = "INTEL";
 
@@ -406,7 +396,6 @@ elsif ( $platform =~ m/linux/ )
    }
    elsif ($platform =~ m/^x86_64/)
    {  print "Setting Linux x86-64 specific values... ";
-      $oldoutfile     = "LinuxX86-64Env.Set.sh";
       $CPU            = "X";
       $CPUNAME        = "X86_64";
       $OUTPATH        = "unxlngx6";
@@ -418,7 +407,6 @@ elsif ( $platform =~ m/linux/ )
    }
    elsif ($platform =~ m/^ia64/)
    {  print "Setting Linux ia64 specific values... ";
-      $oldoutfile     = "LinuxIA64Env.Set.sh";
       $CPU            = "A";
       $CPUNAME        = "IA64";
       $OUTPATH        = "unxlnga";
@@ -429,7 +417,6 @@ elsif ( $platform =~ m/linux/ )
    elsif ($platform =~ m/^sparc/)
 
    {  print "Setting Linux Sparc specific values... ";
-      $oldoutfile     = "LinuxSparcEnv.Set.sh";
       $CPU            = "S";
       $CPUNAME        = "SPARC";
       $OUTPATH        = "unxlngs";
@@ -441,7 +428,6 @@ elsif ( $platform =~ m/linux/ )
    {
       if (($platform =~ m/^powerpc64/) && ('@SIZEOF_LONG@' eq '8')) {
          print "Setting Linux PPC64 specific values... ";
-         $oldoutfile = "LinuxPPC64Env.Set.sh";
          $OUTPATH = "unxlngppc64";
          $CPUNAME = "POWERPC64";
 
@@ -459,7 +445,6 @@ elsif ( $platform =~ m/linux/ )
       }
       else {
          print "Setting Linux PPC specific values... ";
-         $oldoutfile = "LinuxPPCEnv.Set.sh";
          $OUTPATH = "unxlngppc";
          $CPUNAME = "POWERPC";
 
@@ -487,14 +472,12 @@ elsif ( $platform =~ m/linux/ )
    {
       if (($platform =~ m/^s390x/) && ('@SIZEOF_LONG@' eq '8')) {
          print "Setting Linux zSeries specific values... ";
-         $oldoutfile     = "LinuxS390XEnv.Set.sh";
          $CPUNAME        = "S390X";
 	 $ARCH           = "s390x";
          $OUTPATH        = "unxlngs390x";
       }
       else {
          print "Setting Linux S/390 specific values... ";
-         $oldoutfile     = "LinuxS390Env.Set.sh";
          $CPUNAME        = "S390";
 	 $ARCH           = "s390";
          $OUTPATH        = "unxlngs390";
@@ -506,7 +489,6 @@ elsif ( $platform =~ m/linux/ )
    }
    elsif ($platform =~ m/^m68k/)
    {  print "Setting Linux m68k specific values... ";
-      $oldoutfile     = "LinuxM68KEnv.Set.sh";
       $CPU            = "6";
       $CPUNAME        = "M68K";
       $OUTPATH        = "unxlngm68k";
@@ -516,7 +498,6 @@ elsif ( $platform =~ m/linux/ )
    }
    elsif ($platform =~ m/^hppa/)
    {  print "Setting Linux hppa specific values... ";
-      $oldoutfile     = "LinuxHPPAEnv.Set.sh";
       $CPU            = "H";
       $CPUNAME        = "HPPA";
       $OUTPATH        = "unxlnghppa";
@@ -527,7 +508,6 @@ elsif ( $platform =~ m/linux/ )
    }
    elsif ($platform =~ m/^alpha/)
    {  print "Setting Linux Alpha specific values... ";
-      $oldoutfile     = "LinuxAlphaEnv.Set.sh";
       $CPU            = "L";
       $CPUNAME        = "AXP";
       $OUTPATH        = "unxlngaxp";
@@ -537,7 +517,6 @@ elsif ( $platform =~ m/linux/ )
    }
    elsif ($platform =~ m/^arm.*?l-/)
    {  print "Setting Linux ARM specific values... ";
-      $oldoutfile     = "LinuxARMEnv.Set.sh";
       $CPU            = "R";
       $CPUNAME        = "ARM";
       $OUTPATH        = "unxlngr";
@@ -550,7 +529,6 @@ elsif ( $platform =~ m/linux/ )
    {  print "Setting Android ARM specific values... ";
       $GUIBASE        = "android";
       $OS             = "ANDROID";
-      $oldoutfile     = "AndroidARMEnv.Set.sh";
       $CPU            = "R";
       $CPUNAME        = "ARM";
       $OUTPATH        = "unxandr";
@@ -561,7 +539,6 @@ elsif ( $platform =~ m/linux/ )
    }
    elsif ($platform =~ m/^mips/)
    {  print "Setting Linux MIPS specific values... ";
-      $oldoutfile     = "LinuxMIPSEnv.Set.sh";
       $CPU            = "M";
       $CPUNAME        = "GODSON";
       $OUTPATH        = "unxlngmips";
@@ -629,7 +606,6 @@ elsif ( $platform =~ m/cygwin|mingw32/ )
       die 'For building natively on Windows we support only MSVC' if ('@build_os@' eq 'cygwin');
 
       $PATH_SEPERATOR = ':';
-      $oldoutfile     = "WindowsMinGWEnv.Set.sh";
       $COMPATH        = PathFormat('@COMPATH@/bin');
       $COMPATH        =~ s/\/bin$//i;
       $COM            = "GCC";
@@ -639,7 +615,6 @@ elsif ( $platform =~ m/cygwin|mingw32/ )
   }
   else # The MSVC section starts here
   {   print "Setting Windows (MSVC) specific values... ";
-      $oldoutfile     = "WindowsMSVCEnv.Set.sh";
       $COMPATH        = PathFormat('@COMPATH@');
       $COM            = "MSC";
       $OUTPATH        = "wntmsci@COMEX@";
@@ -671,7 +646,6 @@ elsif ( $platform =~ m/darwin/ )
     if ($platform =~ m/^arm/)
     {
         print "Setting values for iOS... ";
-        $oldoutfile     = "iOSEnv.Set.sh";
         $CPU            = "R";
         $CPUNAME        = "ARM";
         $OUTPATH        = "unxiosr";
@@ -682,7 +656,6 @@ elsif ( $platform =~ m/darwin/ )
     elsif ($platform =~ m/^powerpc/)
     {
         print "Setting values for Mac OS X/Darwin on PowerPC... ";
-        $oldoutfile     = "MacOSXPPCEnv.Set.sh";
         $CPU            = "P";
         $CPUNAME        = "POWERPC";
         $OUTPATH        = "unxmacxp";
@@ -695,7 +668,6 @@ elsif ( $platform =~ m/darwin/ )
     else
     {
         print "Setting values for Mac OS X/Darwin on default x86... ";
-        $oldoutfile     = "MacOSXX86Env.Set.sh";
         $CPU            = "I";
         $CPUNAME        = "INTEL";
         $OUTPATH        = "unxmacxi";
@@ -738,13 +710,11 @@ elsif ( $platform =~ m/dragonfly/ )
       $OS             = "DRAGONFLY";
       $PATH_SEPERATOR = $ps;
       $OUTPATH        = "unxdfly";
-      $oldoutfile     = "DragonFlyEnv.Set.sh";
       $INPATH         = $OUTPATH.$PROEXT;
 }
 elsif ( $platform =~ m/aix/ )
 {
    print "Setting AIX PPC specific values... ";
-   $oldoutfile     = "aixPPCEnv.Set.sh";
    $CPU            = "P";
    $CPUNAME        = "POWERPC";
    $OUTPATH        = "unxaigppc";
@@ -1353,12 +1323,6 @@ else
 # VI. Open the output file.
 #--------------------------
 #
-if (-f $SRC_ROOT.$ds.$oldoutfile) {
-    print "****\n";
-    print "**** Note: There is no $oldoutfile any more. Now it is just called Env.Host.sh\n";
-    print "****\n";
-    unlink($SRC_ROOT.$ds.$oldoutfile);
-}
 $outfile = 'Env.Host.sh';
 
 open( OUT, ">$SRC_ROOT/$outfile" ) ||
