@@ -36,6 +36,7 @@
 
 #include <rtl/math.hxx>
 #include <tools/debug.hxx>
+#include <limits>
 
 //.............................................................................
 namespace chart
