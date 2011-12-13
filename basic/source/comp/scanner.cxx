@@ -52,7 +52,6 @@ SbiScanner::SbiScanner( const ::rtl::OUString& rBuf, StarBASIC* p ) : aBuf( rBuf
     bSpaces  =
     bNumber  =
     bSymbol  =
-    bUsedForHilite =
     bCompatible =
     bVBASupportOn =
     bPrevLineExtentsComment = sal_False;
@@ -260,7 +259,7 @@ bool SbiScanner::NextSym()
 
         // replace closing '_' by space when end of line is following
         // (wrong line continuation otherwise)
-        if( !bUsedForHilite && !*pLine && *(pLine-1) == '_' )
+        if( !*pLine && *(pLine-1) == '_' )
         {
             // We are going to modify a potentially shared string, so force
             // a copy, so that aSym is not modified by the following operation

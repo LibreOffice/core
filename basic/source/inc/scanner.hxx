@@ -69,7 +69,6 @@ protected:
     bool   bAbort;
     bool   bHash;                       // sal_True: # has been read in
     bool   bError;                      // sal_True: generate error
-    bool   bUsedForHilite;
     bool   bCompatible;                 // sal_True: OPTION compatible
     bool   bVBASupportOn;               // sal_True: OPTION VBASupport 1 otherwise default False
     bool   bPrevLineExtentsComment;     // sal_True: Previous line is comment and ends on "... _"
