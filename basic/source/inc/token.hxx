@@ -161,8 +161,6 @@ public:
     SbiToken Next();                    // read a token
     sal_Bool MayBeLabel( sal_Bool= sal_False );
 
-    void Hilite( SbTextPortions& );
-
     void Error( SbError c ) { GenError( c ); }
     void Error( SbError, SbiToken );
     void Error( SbError, const char* );

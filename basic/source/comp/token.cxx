@@ -505,48 +505,4 @@ sal_Bool SbiTokenizer::MayBeLabel( sal_Bool bNeedsColon )
 #endif
 
 
-void SbiTokenizer::Hilite( SbTextPortions& rList )
-{
-    bErrors = sal_False;
-    bUsedForHilite = sal_True;
-    SbiToken eLastTok = NIL;
-    for( ;; )
-    {
-        Next();
-        if( IsEof() )
-            break;
-        SbTextPortion aRes;
-        aRes.nLine = nLine;
-        aRes.nStart = nCol1;
-        aRes.nEnd = nCol2;
-        switch( eCurTok )
-        {
-            case REM:
-                aRes.eType = SB_COMMENT; break;
-            case SYMBOL:
-                aRes.eType = SB_SYMBOL; break;
-            case FIXSTRING:
-                aRes.eType = SB_STRING; break;
-            case NUMBER:
-                aRes.eType = SB_NUMBER; break;
-            default:
-                if( ( eCurTok >= FIRSTKWD && eCurTok <= LASTKWD )
-                 || (eCurTok >= _CDECL_ ) )
-                    aRes.eType = SB_KEYWORD;
-                else
-                    aRes.eType = SB_PUNCTUATION;
-        }
-        // the sequence xxx.Keyword should not be flagged as Kwd
-        if( aRes.eType == SB_KEYWORD
-         && ( eLastTok == DOT|| eLastTok == EXCLAM ) )
-            aRes.eType = SB_SYMBOL;
-        if( eCurTok != EOLN && aRes.nStart <= aRes.nEnd )
-            rList.Insert( aRes, rList.Count() );
-        if( aRes.eType == SB_COMMENT )
-            break;
-        eLastTok = eCurTok;
-    }
-    bUsedForHilite = sal_False;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
