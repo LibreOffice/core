@@ -82,8 +82,7 @@ bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW nRo
             case SVX_SEARCHIN_FORMULA:
             {
                 if ( eCellType == CELLTYPE_FORMULA )
-                    ((ScFormulaCell*)pCell)->GetFormula( aString,
-                       formula::FormulaGrammar::GRAM_NATIVE_UI);
+                    static_cast<ScFormulaCell*>(pCell)->GetFormula(aString, pDocument->GetGrammar());
                 else if ( eCellType == CELLTYPE_EDIT )
                     bMultiLine = lcl_GetTextWithBreaks(
                         *(const ScEditCell*)pCell, pDocument, aString );
@@ -239,7 +238,7 @@ bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW nRo
                 }
                 ScAddress aAdr( nCol, nRow, nTab );
                 ScFormulaCell* pFCell = new ScFormulaCell( pDocument, aAdr,
-                    aString,formula::FormulaGrammar::GRAM_NATIVE_UI, cMatrixFlag );
+                    aString, pDocument->GetGrammar(), cMatrixFlag );
                 SCCOL nMatCols;
                 SCROW nMatRows;
                 ((ScFormulaCell*)pCell)->GetMatColsRows( nMatCols, nMatRows );
@@ -249,7 +248,7 @@ bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW nRo
             else if ( bMultiLine && aString.Search('\n') != STRING_NOTFOUND )
                 PutCell( nCol, nRow, new ScEditCell( aString, pDocument ) );
             else
-                aCol[nCol].SetString(nRow, nTab, aString);
+                aCol[nCol].SetString(nRow, nTab, aString, pDocument->GetAddressConvention());
             // pCell is invalid now (deleted)
         }
     }
@@ -1043,7 +1042,7 @@ bool ScTable::SearchRangeForAllEmptyCells(
                         ScAddress aCellPos(nCol, nRow, nTab);
                         pUndoDoc->PutCell(nCol, nRow, nTab, pCell->CloneWithNote(aCellPos, *pUndoDoc, aCellPos));
                     }
-                    aCol[nCol].SetString(nRow, nTab, rSearchItem.GetReplaceString());
+                    aCol[nCol].SetString(nRow, nTab, rSearchItem.GetReplaceString(), pDocument->GetAddressConvention());
                 }
             }
         }
