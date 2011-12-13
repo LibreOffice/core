@@ -37,7 +37,7 @@ USE_DEFFILE        := TRUE
 .INCLUDE :  settings.mk
 
 
-.IF "$(GUI)"=="UNX" || "$(GUI)"=="MAC"
+.IF "$(GUI)"=="UNX"
 PURPENVHELPERLIB := -luno_purpenvhelper$(COMID)
 
 .ELSE

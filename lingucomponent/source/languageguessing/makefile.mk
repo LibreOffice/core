@@ -39,19 +39,19 @@ VISIBILITY_HIDDEN=TRUE
 
 # --- Files --------------------------------------------------------
 
-.IF "$(GUI)"=="UNX" || "$(GUI)"=="MAC"
+.IF "$(GUI)"=="UNX"
 .IF "$(SYSTEM_LIBEXTTEXTCAT)" == "YES"
 LIBTEXTCATLIB=$(LIBEXTTEXTCAT_LIBS)
 .ELSE
 LIBTEXTCATLIB=-lexttextcat
 .ENDIF
-.ELSE               # "$(GUI)"=="UNX" || "$(GUI)"=="MAC"
+.ELSE               # "$(GUI)"=="UNX"
 .IF "$(COM)"=="GCC"
 LIBTEXTCATLIB=-lilibexttextcat
 .ELSE
 LIBTEXTCATLIB=ilibexttextcat.lib
 .ENDIF
-.ENDIF  # "$(GUI)"=="UNX" || "$(GUI)"=="MAC"
+.ENDIF  # "$(GUI)"=="UNX"
 
 SLOFILES = \
         $(SLO)$/altstrfunc.obj \
