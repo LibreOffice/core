@@ -1747,8 +1747,6 @@ comphelper::SequenceAsHashMap::getAsConstAnyList(unsigned char) const
 comphelper::ServiceInfoHelper::concatSequences(com::sun::star::uno::Sequence<rtl::OUString> const&, com::sun::star::uno::Sequence<rtl::OUString> const&)
 comphelper::createEventAttacherManager(com::sun::star::uno::Reference<com::sun::star::beans::XIntrospection> const&, com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> const&)
 comphelper::findProperty(com::sun::star::beans::Property&, com::sun::star::uno::Sequence<com::sun::star::beans::Property>&, rtl::OUString const&)
-comphelper::getPathToSystemRegistry()
-comphelper::getPathToUserRegistry()
 comphelper::string::isalnumAsciiString(rtl::OUString const&)
 comphelper::string::islowerAsciiString(rtl::OUString const&)
 comphelper::string::isupperAsciiString(rtl::OUString const&)

@@ -30,7 +30,6 @@
 // This code strongly inspired by Miguel / Federico's Gnome Canvas demo code.
 
 #include <comphelper/processfactory.hxx>
-#include <comphelper/regpathhelper.hxx>
 #include <cppuhelper/servicefactory.hxx>
 #include <cppuhelper/bootstrap.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>

@@ -36,7 +36,6 @@
 #include <unotools/ucbstreamhelper.hxx>
 
 #include <comphelper/processfactory.hxx>
-#include <comphelper/regpathhelper.hxx>
 #include <cppuhelper/servicefactory.hxx>
 #include <cppuhelper/bootstrap.hxx>
 #include <com/sun/star/uno/Reference.h>

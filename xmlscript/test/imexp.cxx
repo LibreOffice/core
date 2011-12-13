@@ -41,7 +41,6 @@
 #include <cppuhelper/implbase2.hxx>
 
 #include <comphelper/processfactory.hxx>
-#include <comphelper/regpathhelper.hxx>
 
 #include <tools/debug.hxx>
 #include <vcl/svapp.hxx>

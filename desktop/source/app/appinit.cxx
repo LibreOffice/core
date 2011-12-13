@@ -54,7 +54,6 @@
 #include <rtl/uri.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/bootstrap.hxx>
-#include <comphelper/regpathhelper.hxx>
 #include <tools/debug.hxx>
 #include <tools/tempfile.hxx>
 #include <ucbhelper/configurationkeys.hxx>

@@ -52,7 +52,6 @@
 //  other includes
 //_________________________________________________________________________________________________________________
 
-#include <comphelper/regpathhelper.hxx>
 #include <cppuhelper/servicefactory.hxx>
 #include <cppuhelper/bootstrap.hxx>
 #include <comphelper/processfactory.hxx>

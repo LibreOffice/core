@@ -51,7 +51,6 @@
 
 #include "connectivity/sqlnode.hxx"
 #include <ucbhelper/contentbroker.hxx>
-#include <comphelper/regpathhelper.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <osl/process.h>

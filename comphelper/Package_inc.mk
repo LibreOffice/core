@@ -60,7 +60,6 @@ $(eval $(call gb_Package_add_file,comphelper_inc,inc/comphelper/propertystatecon
 $(eval $(call gb_Package_add_file,comphelper_inc,inc/comphelper/propertysetinfo.hxx,comphelper/propertysetinfo.hxx))
 $(eval $(call gb_Package_add_file,comphelper_inc,inc/comphelper/accimplaccess.hxx,comphelper/accimplaccess.hxx))
 $(eval $(call gb_Package_add_file,comphelper_inc,inc/comphelper/docpasswordrequest.hxx,comphelper/docpasswordrequest.hxx))
-$(eval $(call gb_Package_add_file,comphelper_inc,inc/comphelper/regpathhelper.hxx,comphelper/regpathhelper.hxx))
 $(eval $(call gb_Package_add_file,comphelper_inc,inc/comphelper/extract.hxx,comphelper/extract.hxx))
 $(eval $(call gb_Package_add_file,comphelper_inc,inc/comphelper/interaction.hxx,comphelper/interaction.hxx))
 $(eval $(call gb_Package_add_file,comphelper_inc,inc/comphelper/uno3.hxx,comphelper/uno3.hxx))

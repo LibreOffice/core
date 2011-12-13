@@ -32,7 +32,6 @@
 #include <rtl/bootstrap.hxx>
 #include <rtl/ref.hxx>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/regpathhelper.hxx>
 #include <cppuhelper/servicefactory.hxx>
 #include <cppuhelper/bootstrap.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
