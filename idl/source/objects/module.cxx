@@ -154,9 +154,9 @@ void SvMetaModule::ReadAttributesSvIdl( SvIdlDataBase & rBase,
         sal_uInt32 nTokPos = rInStm.Tell();
         if( !rBase.ReadIdFile( String::CreateFromAscii( aSlotIdFile.GetBuffer() ) ) )
         {
-            ByteString aStr = "cannot read file: ";
-            aStr += aSlotIdFile;
-            rBase.SetError( aStr, rInStm.GetToken() );
+            rtl::OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM("cannot read file: "));
+            aStr.append(aSlotIdFile);
+            rBase.SetError( aStr.makeStringAndClear(), rInStm.GetToken() );
             rBase.WriteError( rInStm );
 
             rInStm.Seek( nTokPos );

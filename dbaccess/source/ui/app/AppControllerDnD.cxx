@@ -202,7 +202,7 @@ void OApplicationController::deleteObjects( ElementType _eType, const ::std::vec
     Reference< XHierarchicalNameContainer > xHierarchyName( xNames, UNO_QUERY );
     if ( xNames.is() )
     {
-        ByteString sDialogPosition;
+        rtl::OString sDialogPosition;
         svtools::QueryDeleteResult_Impl eResult = _bConfirm ? svtools::QUERYDELETE_YES : svtools::QUERYDELETE_ALL;
 
         // The list of elements to delete is allowed to contain related elements: A given element may
@@ -227,7 +227,7 @@ void OApplicationController::deleteObjects( ElementType _eType, const ::std::vec
             {
                 svtools::QueryDeleteDlg_Impl aDlg( getView(), *aThisRound );
 
-                if ( sDialogPosition.Len() )
+                if ( sDialogPosition.getLength() )
                     aDlg.SetWindowState( sDialogPosition );
 
                 if ( nObjectsLeft > 1 )

@@ -76,7 +76,7 @@ IdlDll::~IdlDll()
     delete pHashTable;
 }
 
-inline SvStringHashEntry * INS( const ByteString & rName )
+inline SvStringHashEntry * INS( const rtl::OString& rName )
 {
     sal_uInt32  nIdx;
     IDLAPP->pHashTable->Insert( rName, &nIdx );

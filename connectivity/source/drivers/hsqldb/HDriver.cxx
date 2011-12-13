@@ -278,21 +278,21 @@ namespace connectivity
                             ::std::auto_ptr<SvStream> pStream( ::utl::UcbStreamHelper::CreateStream(xStream) );
                             if ( pStream.get() )
                             {
-                                ByteString sLine;
+                                rtl::OString sLine;
                                 rtl::OString sVersionString;
                                 while ( pStream->ReadLine(sLine) )
                                 {
-                                    if ( sLine.Len() == 0 )
+                                    if ( sLine.getLength() == 0 )
                                         continue;
-                                    const ByteString sIniKey = comphelper::string::getToken(sLine, 0, '=');
-                                    const ByteString sValue = comphelper::string::getToken(sLine, 1, '=');
-                                    if ( sIniKey.Equals( "hsqldb.compatible_version" ) )
+                                    const rtl::OString sIniKey = comphelper::string::getToken(sLine, 0, '=');
+                                    const rtl::OString sValue = comphelper::string::getToken(sLine, 1, '=');
+                                    if (sIniKey.equalsL(RTL_CONSTASCII_STRINGPARAM("hsqldb.compatible_version")))
                                     {
                                         sVersionString = sValue;
                                     }
                                     else
                                     {
-                                        if  (   sIniKey.Equals( "version" )
+                                        if (sIniKey.equalsL(RTL_CONSTASCII_STRINGPARAM("version"))
                                             &&  ( sVersionString.isEmpty() )
                                             )
                                         {

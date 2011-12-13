@@ -204,8 +204,8 @@ void OSelectionBrowseBox::initialize()
         for (size_t i = 0; i < SAL_N_ELEMENTS(eFunctions); ++i)
         {
             m_aFunctionStrings += String(RTL_CONSTASCII_USTRINGPARAM(";"));
-            m_aFunctionStrings += String(ByteString(rContext.getIntlKeywordAscii(eFunctions[i])),RTL_TEXTENCODING_UTF8);
-
+            m_aFunctionStrings += rtl::OStringToOUString(rContext.getIntlKeywordAscii(eFunctions[i]),
+                RTL_TEXTENCODING_UTF8);
         }
         m_aFunctionStrings += String(RTL_CONSTASCII_USTRINGPARAM(";"));
         m_aFunctionStrings += sGroup;

@@ -52,7 +52,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
 using namespace ::svt;
 
-const ByteString aGroupIdent("dBase III");
+const rtl::OString aGroupIdent(RTL_CONSTASCII_STRINGPARAM("dBase III"));
 
 //////////////////////////////////////////////////////////////////////////
 // Klasse ODbaseIndexDialog
@@ -377,19 +377,19 @@ void ODbaseIndexDialog::Init()
 
             ///////////////////////////////////////////////////////////////////////////
             // fill the indexes list
-            ByteString aNDX;
+            rtl::OString aNDX;
             sal_uInt16 nKeyCnt = aInfFile.GetKeyCount();
-            ByteString aKeyName;
+            rtl::OString aKeyName;
             String aEntry;
 
             for( sal_uInt16 nKey = 0; nKey < nKeyCnt; nKey++ )
             {
                 // does the key point to an index file ?
                 aKeyName = aInfFile.GetKeyName( nKey );
-                aNDX = aKeyName.Copy(0,3);
+                aNDX = aKeyName.copy(0,3);
 
                 // yes -> add to the tables index list
-                if (aNDX == "NDX" )
+                if (aNDX.equalsL(RTL_CONSTASCII_STRINGPARAM("NDX")))
                 {
                     aEntry = rtl::OStringToOUString(aInfFile.ReadKey(aKeyName), osl_getThreadTextEncoding());
                     rTabInfo.aIndexList.push_back( OTableIndex( aEntry ) );
@@ -488,18 +488,18 @@ void OTableInfo::WriteInfFile( const String& rDSN ) const
     aInfFile.SetGroup( aGroupIdent );
 
     // Erst einmal alle Tabellenindizes loeschen
-    ByteString aNDX;
+    rtl::OString aNDX;
     sal_uInt16 nKeyCnt = aInfFile.GetKeyCount();
     sal_uInt16 nKey = 0;
 
     while( nKey < nKeyCnt )
     {
         // Verweist der Key auf ein Indexfile?...
-        ByteString aKeyName = aInfFile.GetKeyName( nKey );
-        aNDX = aKeyName.Copy(0,3);
+        rtl::OString aKeyName = aInfFile.GetKeyName( nKey );
+        aNDX = aKeyName.copy(0,3);
 
         //...wenn ja, Indexfile loeschen, nKey steht dann auf nachfolgendem Key
-        if( aNDX == "NDX" )
+        if (aNDX.equalsL(RTL_CONSTASCII_STRINGPARAM("NDX")))
         {
             aInfFile.DeleteKey(aKeyName);
             nKeyCnt--;

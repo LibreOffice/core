@@ -341,10 +341,10 @@ sal_Bool SvMetaClass::TestAttribute( SvIdlDataBase & rBase, SvTokenStream & rInS
                 OSL_FAIL( pS->GetSlotId().GetBuffer() );
                 OSL_FAIL( rAttr.GetSlotId().GetBuffer() );
 
-                ByteString aStr( "Attribute's " );
-                aStr += pS->GetName();
-                aStr += " with different id's";
-                rBase.SetError( aStr, rInStm.GetToken() );
+                rtl::OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM("Attribute's "));
+                aStr.append(pS->GetName());
+                aStr.append(RTL_CONSTASCII_STRINGPARAM(" with different id's"));
+                rBase.SetError(aStr.makeStringAndClear(), rInStm.GetToken());
                 rBase.WriteError( rInStm );
                 return sal_False;
              }
@@ -361,12 +361,12 @@ sal_Bool SvMetaClass::TestAttribute( SvIdlDataBase & rBase, SvTokenStream & rInS
                 OSL_FAIL( pS->GetSlotId().GetBuffer() );
                 OSL_FAIL( rAttr.GetSlotId().GetBuffer() );
 
-                ByteString aStr( "Attribute " );
-                aStr += pS->GetName();
-                aStr += " and Attribute ";
-                aStr += rAttr.GetName();
-                aStr += " with equal id's";
-                rBase.SetError( aStr, rInStm.GetToken() );
+                rtl::OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM("Attribute "));
+                aStr.append(pS->GetName());
+                aStr.append(RTL_CONSTASCII_STRINGPARAM(" and Attribute "));
+                aStr.append(rAttr.GetName());
+                aStr.append(RTL_CONSTASCII_STRINGPARAM(" with equal id's"));
+                rBase.SetError(aStr.makeStringAndClear(), rInStm.GetToken());
                 rBase.WriteError( rInStm );
                 return sal_False;
              }

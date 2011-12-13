@@ -603,7 +603,7 @@ void
 SwitchIMCallback (XIC, XPointer, XPointer call_data)
 {
     XIMSwitchIMNotifyCallbackStruct* pCallData = (XIMSwitchIMNotifyCallbackStruct*)call_data;
-    ::vcl::I18NStatus::get().changeIM( String( ByteString( pCallData->to->name ), RTL_TEXTENCODING_UTF8 ) );
+    ::vcl::I18NStatus::get().changeIM( rtl::OStringToOUString(pCallData->to->name, RTL_TEXTENCODING_UTF8) );
 }
 
 // ----------------------------------------------------------------------------------

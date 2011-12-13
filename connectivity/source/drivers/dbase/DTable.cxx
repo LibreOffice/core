@@ -1661,7 +1661,7 @@ Reference<XPropertySet> ODbaseTable::isUniqueByColumnName(sal_Int32 _nColumnPos)
     return Reference<XPropertySet>();
 }
 //------------------------------------------------------------------
-double toDouble(const ByteString& rString)
+static double toDouble(const rtl::OString& rString)
 {
     return ::rtl::math::stringToDouble( rString, '.', ',', NULL, NULL );
 }
@@ -1908,12 +1908,12 @@ sal_Bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow,c
 
                     // one, because const_cast GetFormatPrecision on SvNumberFormat is not constant,
                     // even though it really could and should be
-                    const ByteString aDefaultValue( ::rtl::math::doubleToString( n, rtl_math_StringFormat_F, nScale, '.', NULL, 0));
-                    const sal_Int32 nValueLen = aDefaultValue.Len();
+                    const rtl::OString aDefaultValue( ::rtl::math::doubleToString( n, rtl_math_StringFormat_F, nScale, '.', NULL, 0));
+                    const sal_Int32 nValueLen = aDefaultValue.getLength();
                     if ( nValueLen <= nLen )
                     {
                         // Write value right-justified, padded with blanks to the left.
-                        memcpy(pData+nLen-nValueLen,aDefaultValue.GetBuffer(),nValueLen);
+                        memcpy(pData+nLen-nValueLen,aDefaultValue.getStr(),nValueLen);
                         // write the resulting double back
                         *rRow.get()[nPos] = toDouble(aDefaultValue);
                     }

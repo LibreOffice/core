@@ -239,12 +239,13 @@ sal_Bool SvIdlDataBase::ReadIdFile( const String & rFileName )
                 if( pTok->Is( SvHash_define() ) )
                 {
                     pTok = aTokStm.GetToken_Next();
-                    ByteString aDefName;
+                    rtl::OString aDefName;
                     if( pTok->IsIdentifier() )
                         aDefName = pTok->GetString();
                     else
                     {
-                        ByteString aStr( "unexpected token after define" );
+                        rtl::OString aStr(RTL_CONSTASCII_STRINGPARAM(
+                            "unexpected token after define"));
                         // set error
                         SetError( aStr, pTok );
                         WriteError( aTokStm );
@@ -300,7 +301,7 @@ sal_Bool SvIdlDataBase::ReadIdFile( const String & rFileName )
                     {
                         if( !InsertId( aDefName, nVal ) )
                         {
-                            ByteString aStr = "hash table overflow: ";
+                            rtl::OString aStr(RTL_CONSTASCII_STRINGPARAM("hash table overflow: "));
                             SetError( aStr, pTok );
                             WriteError( aTokStm );
                             return sal_False;
@@ -616,9 +617,9 @@ void SvIdlDataBase::WriteError( SvTokenStream & rInStm )
     }
     if( pTok && pTok->IsIdentifier() )
     {
-        ByteString aN = IDLAPP->pHashTable->GetNearString( pTok->GetString() );
-        if( aN.Len() )
-            fprintf( stderr, "%s versus %s\n", pTok->GetString().GetBuffer(), aN.GetBuffer() );
+        rtl::OString aN = IDLAPP->pHashTable->GetNearString( pTok->GetString() );
+        if( aN.getLength() )
+            fprintf( stderr, "%s versus %s\n", pTok->GetString().GetBuffer(), aN.getStr() );
     }
 }
 

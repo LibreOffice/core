@@ -274,7 +274,7 @@ using ::rtl::OUString;
 using ::rtl::OStringBuffer;
 using ::rtl::OUStringHash;
 
-#define BSTRING(x) ByteString( x, osl_getThreadTextEncoding() )
+#define BSTRING(x) rtl::OUStringToOString( x, osl_getThreadTextEncoding() )
 
 namespace
 {
@@ -328,15 +328,15 @@ void PPDDecompressStream::Open( const rtl::OUString& i_rFile )
         return;
     }
 
-    ByteString aLine;
+    rtl::OString aLine;
     mpFileStream->ReadLine( aLine );
     mpFileStream->Seek( 0 );
 
     // check for compress'ed or gzip'ed file
     sal_uLong nCompressMethod = 0;
-    if( aLine.Len() > 1 && static_cast<unsigned char>(aLine.GetChar( 0 )) == 0x1f )
+    if( aLine.getLength() > 1 && static_cast<unsigned char>(aLine[0]) == 0x1f )
     {
-        if( static_cast<unsigned char>(aLine.GetChar( 1 )) == 0x8b ) // check for gzip
+        if( static_cast<unsigned char>(aLine[1]) == 0x8b ) // check for gzip
             nCompressMethod = ZCODEC_DEFAULT | ZCODEC_GZ_LIB;
     }
 
@@ -743,7 +743,7 @@ PPDParser::PPDParser( const String& rFile ) :
     // now get the Values
     parse( aLines );
 #if OSL_DEBUG_LEVEL > 2
-    fprintf( stderr, "acquired %d Keys from PPD %s:\n", m_aKeys.size(), BSTRING( m_aFile ).GetBuffer() );
+    fprintf( stderr, "acquired %d Keys from PPD %s:\n", m_aKeys.size(), BSTRING( m_aFile ).getStr() );
     for( PPDParser::hash_type::const_iterator it = m_aKeys.begin(); it != m_aKeys.end(); ++it )
     {
         const PPDKey* pKey = it->second;
@@ -759,7 +759,7 @@ PPDParser::PPDParser( const String& rFile ) :
             default: break;
         };
         fprintf( stderr, "\t\"%s\" (%d values) OrderDependency: %d %s\n",
-                 BSTRING( pKey->getKey() ).GetBuffer(),
+                 BSTRING( pKey->getKey() ).getStr(),
                  pKey->countValues(),
                  pKey->m_nOrderDependency,
                  pSetupType );
@@ -780,19 +780,19 @@ PPDParser::PPDParser( const String& rFile ) :
                 default: break;
             };
             fprintf( stderr, "option: \"%s\", value: type %s \"%s\"\n",
-                     BSTRING( pValue->m_aOption ).GetBuffer(),
+                     BSTRING( pValue->m_aOption ).getStr(),
                      pVType,
-                     BSTRING( pValue->m_aValue ).GetBuffer() );
+                     BSTRING( pValue->m_aValue ).getStr() );
         }
     }
     fprintf( stderr, "constraints: (%d found)\n", m_aConstraints.size() );
     for( std::list< PPDConstraint >::const_iterator cit = m_aConstraints.begin(); cit != m_aConstraints.end(); ++cit )
     {
         fprintf( stderr, "*\"%s\" \"%s\" *\"%s\" \"%s\"\n",
-                 BSTRING( cit->m_pKey1->getKey() ).GetBuffer(),
-                 cit->m_pOption1 ? BSTRING( cit->m_pOption1->m_aOption ).GetBuffer() : "<nil>",
-                 BSTRING( cit->m_pKey2->getKey() ).GetBuffer(),
-                 cit->m_pOption2 ? BSTRING( cit->m_pOption2->m_aOption ).GetBuffer() : "<nil>"
+                 BSTRING( cit->m_pKey1->getKey() ).getStr(),
+                 cit->m_pOption1 ? BSTRING( cit->m_pOption1->m_aOption ).getStr() : "<nil>",
+                 BSTRING( cit->m_pKey2->getKey() ).getStr(),
+                 cit->m_pOption2 ? BSTRING( cit->m_pOption2->m_aOption ).getStr() : "<nil>"
                  );
     }
 #endif

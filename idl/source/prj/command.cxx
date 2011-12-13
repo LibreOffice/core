@@ -363,13 +363,13 @@ SvCommand::SvCommand( int argc, char ** argv )
         delete aList[ i ];
     aList.clear();
 
-    ByteString aInc( getenv( "INCLUDE" ) );
+    rtl::OString aInc(getenv("INCLUDE"));
     // append include environment variable
-    if( aInc.Len() )
+    if( aInc.getLength() )
     {
         if( aPath.Len() )
             aPath += DirEntry::GetSearchDelimiter();
-        aPath += String::CreateFromAscii( aInc.GetBuffer() );
+        aPath += String::CreateFromAscii( aInc.getStr() );
     }
 }
 

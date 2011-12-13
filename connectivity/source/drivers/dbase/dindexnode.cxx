@@ -911,7 +911,7 @@ void ONDXPage::PrintPage()
         }
         else
         {
-            OSL_TRACE("SDB: [%d,%s,%d]",rKey.GetRecord(), (const char* )ByteString(rKey.getValue().getString().getStr(), rIndex.m_pTable->getConnection()->getTextEncoding()).GetBuffer(),rNode.GetChild().GetPagePos());
+            OSL_TRACE("SDB: [%d,%s,%d]",rKey.GetRecord(), rtl::OUStringToOString(rKey.getValue().getString(), rIndex.m_pTable->getConnection()->getTextEncoding()).getStr(),rNode.GetChild().GetPagePos());
         }
     }
     OSL_TRACE("SDB: -----------------------------------------------");

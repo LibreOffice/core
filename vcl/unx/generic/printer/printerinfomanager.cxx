@@ -823,9 +823,9 @@ bool PrinterInfoManager::writePrinterConfig()
             for( ::boost::unordered_map< OUString, OUString, OUStringHash >::const_iterator subst = it->second.m_aInfo.m_aFontSubstitutes.begin();
             subst != it->second.m_aInfo.m_aFontSubstitutes.end(); ++subst )
             {
-                ByteString aKey( "SubstFont_" );
-                aKey.Append( rtl::OUStringToOString( subst->first, RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
-                pConfig->WriteKey( aKey, rtl::OUStringToOString( subst->second, RTL_TEXTENCODING_ISO_8859_1 ) );
+                rtl::OStringBuffer aKey(RTL_CONSTASCII_STRINGPARAM("SubstFont_"));
+                aKey.append(rtl::OUStringToOString(subst->first, RTL_TEXTENCODING_ISO_8859_1));
+                pConfig->WriteKey( aKey.makeStringAndClear(), rtl::OUStringToOString( subst->second, RTL_TEXTENCODING_ISO_8859_1 ) );
             }
         }
     }
@@ -1324,18 +1324,18 @@ static void lpgetSysQueueTokenHandler(
             nPos = it->indexOf( aDescrStr, 0 );
             if( nPos != -1 )
             {
-                ByteString aComment( WhitespaceToSpace( it->copy(nPos+12) ) );
-                if( aComment.Len() > 0 )
-                    o_rQueues.back().m_aComment = String( aComment, aEncoding );
+                rtl::OString aComment( WhitespaceToSpace( it->copy(nPos+12) ) );
+                if( aComment.getLength() > 0 )
+                    o_rQueues.back().m_aComment = rtl::OStringToOUString(aComment, aEncoding);
                 continue;
             }
             // look for "location" attribute, inser as location
             nPos = it->indexOf( aLocStr, 0 );
             if( nPos != -1 )
             {
-                ByteString aLoc( WhitespaceToSpace( it->copy(nPos+9) ) );
-                if( aLoc.Len() > 0 )
-                    o_rQueues.back().m_aLocation = String( aLoc, aEncoding );
+                rtl::OString aLoc( WhitespaceToSpace( it->copy(nPos+9) ) );
+                if( aLoc.getLength() > 0 )
+                    o_rQueues.back().m_aLocation = rtl::OStringToOUString(aLoc, aEncoding);
                 continue;
             }
         }
