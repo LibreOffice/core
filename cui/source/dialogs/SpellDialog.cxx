@@ -1233,7 +1233,7 @@ bool SpellDialog::GetNextSentence_Impl(bool bUseSavedSentence, bool bRecheck)
                     beans::PropertyValues  aProperties = aStart->aGrammarError.aProperties;
                     rtl::OUString sFullCommentURL;
                     sal_Int32 i = 0;
-                    while ( !sFullCommentURL.isEmpty() && i < aProperties.getLength() )
+                    while ( sFullCommentURL.isEmpty() && i < aProperties.getLength() )
                     {
                         if ( aProperties[i].Name.equalsAscii( "FullCommentURL" ) )
                         {
