@@ -1168,29 +1168,6 @@ void ImpFileDialog::SetPath( Edit const& rEdit )
         SetPath( aPresetText );
 }
 
-void ImpFileDialog::SetCurFilter( const UniString& rFilter )
-{
-    if( !pTypeList )
-        return;
-
-    for ( size_t i = 0, n = aFilterList.size(); i < n; ++i ) {
-        if ( aFilterList[ i ]->aName == rFilter ) {
-            pTypeList->SelectEntryPos( sal_uInt16( i ) );
-            return;
-        }
-    }
-
-    pTypeList->SetNoSelection();
-}
-
-UniString ImpFileDialog::GetCurFilter() const
-{
-    UniString aFilter;
-    if ( pTypeList )
-        aFilter = pTypeList->GetSelectEntry();
-    return aFilter;
-}
-
 void ImpFileDialog::PreExecute()
 {
     // ListBoxen erst unmittelbar vor Execute fuellen

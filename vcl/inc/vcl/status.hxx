@@ -140,7 +140,6 @@ public:
                                     StatusBarItemBits nBits = SIB_CENTER | SIB_IN,
                                     long nOffset = STATUSBAR_OFFSET,
                                     sal_uInt16 nPos = STATUSBAR_APPEND );
-    void                RemoveItem( sal_uInt16 nItemId );
 
     sal_Bool                IsItemVisible( sal_uInt16 nItemId ) const;
     sal_Bool                AreItemsVisible() const { return mbVisibleItems; }
@@ -154,8 +153,6 @@ public:
     Rectangle           GetItemRect( sal_uInt16 nItemId ) const;
     Point               GetItemTextPos( sal_uInt16 nItemId ) const;
     sal_uInt16              GetCurItemId() const { return mnCurItemId; }
-
-    long                GetItemOffset( sal_uInt16 nItemId ) const;
 
     void                SetItemText( sal_uInt16 nItemId, const XubString& rText );
     const XubString&    GetItemText( sal_uInt16 nItemId ) const;

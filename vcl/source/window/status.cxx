@@ -1018,24 +1018,6 @@ void StatusBar::InsertItem( sal_uInt16 nItemId, sal_uLong nWidth,
 
 // -----------------------------------------------------------------------
 
-void StatusBar::RemoveItem( sal_uInt16 nItemId )
-{
-    sal_uInt16 nPos = GetItemPos( nItemId );
-    if ( nPos != STATUSBAR_ITEM_NOTFOUND )
-    {
-        delete (*mpItemList)[ nPos ];
-        mpItemList->erase( mpItemList->begin() + nPos );
-
-        mbFormat = sal_True;
-        if ( ImplIsItemUpdate() )
-            Invalidate();
-
-        ImplCallEventListeners( VCLEVENT_STATUSBAR_ITEMREMOVED, (void*) sal_IntPtr(nItemId) );
-    }
-}
-
-// -----------------------------------------------------------------------
-
 sal_Bool StatusBar::IsItemVisible( sal_uInt16 nItemId ) const
 {
     sal_uInt16 nPos = GetItemPos( nItemId );
@@ -1165,18 +1147,6 @@ Point StatusBar::GetItemTextPos( sal_uInt16 nItemId ) const
     }
 
     return Point();
-}
-
-// -----------------------------------------------------------------------
-
-long StatusBar::GetItemOffset( sal_uInt16 nItemId ) const
-{
-    sal_uInt16 nPos = GetItemPos( nItemId );
-
-    if ( nPos != STATUSBAR_ITEM_NOTFOUND )
-        return (*mpItemList)[ nPos ]->mnOffset;
-
-    return 0;
 }
 
 // -----------------------------------------------------------------------

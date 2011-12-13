@@ -63,8 +63,6 @@
 #include <com/sun/star/script/ModuleInfo.hpp>
 using namespace ::com::sun::star::script;
 
-SV_IMPL_VARARR(SbTextPortions,SbTextPortion)
-
 TYPEINIT1(StarBASIC,SbxObject)
 
 #define RTLNAME "@SBRTL"
