@@ -68,7 +68,6 @@ $(eval $(call gb_Library_add_exception_objects,sb,\
 	basic/source/basmgr/basicmanagerrepository \
 	basic/source/basmgr/basmgr \
 	basic/source/basmgr/vbahelper \
-	basic/source/classes/disas \
 	basic/source/classes/errobject \
 	basic/source/classes/eventatt \
 	basic/source/classes/image \

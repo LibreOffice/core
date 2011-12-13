@@ -39,11 +39,11 @@
 #include <tools/rc.hxx>
 #include <vcl/svapp.hxx>
 #include <comphelper/processfactory.hxx>
+#include "image.hxx"
 #include "sbunoobj.hxx"
 #include "sbjsmeth.hxx"
 #include "sbjsmod.hxx"
 #include "sbintern.hxx"
-#include "disas.hxx"
 #include "runtime.hxx"
 #include <basic/sbuno.hxx>
 #include <basic/sbobjmod.hxx>
