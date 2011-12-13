@@ -65,9 +65,9 @@ JAVA_RUNTIME=-ljava_g
 .ENDIF
 
 # name of C++ Compiler
-CXX*=g++
+CXX*=c++
 # name of C Compiler
-CC*=gcc
+CC*=cc
 .IF "$(SYSBASE)"!=""
 CFLAGS_SYSBASE:=--sysroot=$(SYSBASE)
 CXX+:=$(CFLAGS_SYSBASE)
