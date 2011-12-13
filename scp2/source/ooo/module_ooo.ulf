@@ -119,7 +119,7 @@ en-US = "German (Austria, Germany, Switzerland) spelling dictionaries, hyphenati
 en-US = "English"
 
 [STR_DESC_MODULE_EXTENSION_DICTIONARY_EN]
-en-US = "English (Australia, Canada, South Africa, UK, USA) spelling dictionaries, hyphenation rules, and thesaurus"
+en-US = "English spelling dictionaries, hyphenation rules, thesaurus, and grammar checker"
 
 [STR_NAME_MODULE_EXTENSION_DICTIONARY_EL]
 en-US = "Greek"
@@ -179,7 +179,7 @@ en-US = "Hindi spelling dictionary"
 en-US = "Hungarian"
 
 [STR_DESC_MODULE_EXTENSION_DICTIONARY_HU]
-en-US = "Hungarian spelling dictionary, hyphenation rules, and thesaurus"
+en-US = "Hungarian spelling dictionary, hyphenation rules, thesaurus, and grammar checker"
 
 [STR_NAME_MODULE_EXTENSION_DICTIONARY_HR]
 en-US = "Croatian"
