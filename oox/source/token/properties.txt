@@ -458,6 +458,7 @@ TextLeftDistance
 TextLowerDistance
 TextOverlap
 TextRightDistance
+TextRotateAngle
 TextRotation
 TextUpperDistance
 TextVerticalAdjust

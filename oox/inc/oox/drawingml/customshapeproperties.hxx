@@ -136,6 +136,7 @@ public:
     std::vector< com::sun::star::drawing::EnhancedCustomShapeSegment >& getSegments(){ return maSegments; };
     void                                setMirroredX( sal_Bool bMirroredX ) { mbMirroredX = bMirroredX; };
     void                                setMirroredY( sal_Bool bMirroredY ) { mbMirroredY = bMirroredY; };
+    void                                setTextRotateAngle( sal_Int32 nAngle ) { mnTextRotateAngle = nAngle; };
 
     double getValue( const std::vector< CustomShapeGuide >&, sal_uInt32 nIndex ) const;
     static sal_Int32 SetCustomShapeGuideValue( std::vector< CustomShapeGuide >& rGuideList, const CustomShapeGuide& rGuide );
@@ -157,6 +158,7 @@ private:
                                     maSegments;
     sal_Bool                        mbMirroredX;
     sal_Bool                        mbMirroredY;
+    sal_Int32                       mnTextRotateAngle;
 
     typedef boost::unordered_map< sal_Int32, PropertyMap > PresetsMap;
 
