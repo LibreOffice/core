@@ -20,7 +20,6 @@ Globals
 			SOLSUREPACKAGEPREFIX libreoffice
 			USE_FILEVERSION 1
 			LIBRARYVERSION 9.4.0
-            POOLPRODUCT 1
             REGISTRATION_HOST https://registration.libreoffice.org/RegistrationWeb
 			REGISTRATIONURL http://survey.libreoffice.org/user/index.php
 			PROGRESSBARCOLOR 126,170,23
@@ -185,7 +184,6 @@ URE
             SETSTATICPATH 1
             NOVERSIONINDIRNAME 1
             PCPFILENAME ure.pcp
-            POOLPRODUCT 0
             GLOBALFILEGID gid_File_Dl_Cppu
             DONTUSESTARTMENUFOLDER 1
             RELATIVE_PATHES_IN_DDF 1
@@ -222,7 +220,6 @@ LibreOffice_SDK
             PACKAGEVERSION 3.6.0
             PACKAGEREVISION {buildid}
             PACK_INSTALLED 1
-            POOLPRODUCT 0
             DMG_VOLUMEEXTENSION SDK
             DATABASENAME libreoffice35sdk
             NO_README_IN_ROOTDIR 1
@@ -271,7 +268,6 @@ LibreOffice_Dev_SDK
             REGISTRYLAYERNAME LayerDev
 			DEVELOPMENTPRODUCT 1
             PACK_INSTALLED 1
-            POOLPRODUCT 0
             DMG_VOLUMEEXTENSION SDK
             DATABASENAME libreoffice35devsdk
             NO_README_IN_ROOTDIR 1
@@ -314,7 +310,6 @@ LibreOffice_Test
             PACKAGEVERSION 3.6.0
             PACKAGEREVISION {buildid}
             PACK_INSTALLED 1
-            POOLPRODUCT 0
             DMG_VOLUMEEXTENSION TEST
             DATABASENAME libreoffice35test
             NO_README_IN_ROOTDIR 1
@@ -363,7 +358,6 @@ LibreOffice_Dev_Test
             REGISTRYLAYERNAME LayerDev
 			DEVELOPMENTPRODUCT 1
             PACK_INSTALLED 1
-            POOLPRODUCT 0
             DMG_VOLUMEEXTENSION TEST
             DATABASENAME libreoffice35devtest
             NO_README_IN_ROOTDIR 1

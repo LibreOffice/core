@@ -342,15 +342,7 @@ BEGIN
     $nopatchfilecollector = "";
     @userregistrycollector = ();
     $addeduserregitrykeys = 0;
-    $poolpathset = 0;
-    $poolpath = 0;
-    $poollockfilename = "";
-    $poolcheckfilename = "";
-    %poolshiftedpackages = ();
-    %poolpackages = ();
     %createpackages = ();
-    $processhaspoolcheckfile = 0;
-    $processhaspoollockfile = 0;
     $newpcfcontentcalculated = 0;
     $sessionid = 0;
     $sessionidset = 0;

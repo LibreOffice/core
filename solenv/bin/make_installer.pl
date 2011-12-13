@@ -49,7 +49,6 @@ use installer::languagepack;
 use installer::languages;
 use installer::logger;
 use installer::packagelist;
-use installer::packagepool;
 use installer::parameter;
 use installer::pathanalyzer;
 use installer::profiles;
@@ -1354,39 +1353,6 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
             installer::logger::include_header_into_logfile("Creating package: $packagename ($k)");
 
-            ####################################################
-            # Pool check: If package is created at the moment
-            # try it again later.
-            ####################################################
-
-            if (( $installer::globals::patch ) ||
-                ( $installer::globals::languagepack ) ||
-                ( $installer::globals::helppack ) ||
-                ( $installer::globals::packageformat eq "native" ) ||
-                ( $installer::globals::packageformat eq "portable" ) ||
-                ( $installer::globals::packageformat eq "osx" )) { $allvariableshashref->{'POOLPRODUCT'} = 0; }
-
-            if ( $allvariableshashref->{'POOLPRODUCT'} )
-            {
-                if ( ! $installer::globals::sessionidset ) { installer::packagepool::set_sessionid(); }
-                if ( ! $installer::globals::poolpathset ) { installer::packagepool::set_pool_path(); }
-                if (( ! $installer::globals::getuidpathset ) && ( $installer::globals::issolarisbuild )) { installer::worker::set_getuid_path($includepatharrayref); }
-
-                my $package_is_creatable = installer::packagepool::check_package_availability($packagename);
-
-                if (( ! $package_is_creatable ) && ( ! exists($installer::globals::poolshiftedpackages{$packagename}) ))
-                {
-                    splice(@{$packages}, $k, 1);    # removing package ...
-                    push(@{$packages}, $onepackage);  # ... and adding it to the end
-                    $installer::globals::poolshiftedpackages{$packagename} = 1; # only shifting each package once
-                    $k--;                                                       # decreasing the counter
-                    my $localinfoline = "Pool: Package \"$packagename\" cannot be created at the moment. Trying again later (1).\n";
-                    installer::logger::print_message($localinfoline);
-                    push( @installer::globals::logfileinfo, $localinfoline);
-                    next;                                                       # repeating this iteration with new package
-                }
-            }
-
             ###########################################
             # Root path, can be defined as parameter
             ###########################################
@@ -1611,42 +1577,6 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
                 installer::epmfile::resolve_path_in_epm_list_before_packaging(\@epmfile, $completeepmfilename, "UREPACKAGEPREFIX", $allvariableshashref->{'UREPACKAGEPREFIX'});
                 installer::files::save_file($completeepmfilename ,\@epmfile);
 
-                #######################################################
-                # Now the complete content of the package is known,
-                # including variables and shell scripts.
-                # Create the package or using the package pool?
-                #######################################################
-
-                my $use_package_from_pool = 0;
-                if ( $allvariableshashref->{'POOLPRODUCT'} ) { $use_package_from_pool = installer::packagepool::package_is_up_to_date($allvariableshashref, $onepackage, $packagename, \@epmfile, $filesinpackage, $installdir, $installer::globals::epmoutpath, $languagestringref); }
-
-                if ( $use_package_from_pool == 3 ) # repeat this package later
-                {
-                    my $package_is_creatable = installer::packagepool::check_package_availability($packagename);
-
-                    if (( ! $package_is_creatable ) && ( ! exists($installer::globals::poolshiftedpackages{$packagename}) ))
-                    {
-                        splice(@{$packages}, $k, 1);    # removing package ...
-                        push(@{$packages}, $onepackage);  # ... and adding it to the end
-                        $installer::globals::poolshiftedpackages{$packagename} = 1; # only shifting each package once
-                        $k--;                                                       # decreasing the counter
-                        my $localinfoline = "\nPool: Package \"$packagename\" cannot be created at the moment. Trying again later (2).\n";
-                        installer::logger::print_message($localinfoline);
-                        push( @installer::globals::logfileinfo, $localinfoline);
-                        next;                                                       # repeating this iteration with new package
-                    }
-                }
-
-                if ( $use_package_from_pool == 4 ) # There was a problem with pooling. Repeat this package immediately.
-                {
-                        $k--;                                                       # decreasing the counter
-                        my $localinfoline = "\nPool: Package \"$packagename\" had pooling problems. Repeating packaging immediately (3).\n";
-                        installer::logger::print_message($localinfoline);
-                        push( @installer::globals::logfileinfo, $localinfoline);
-                        next;                                                       # repeating this iteration
-                }
-
-                if ( $use_package_from_pool == 0 )
                 {
                     # changing into the "install" directory to create installation sets
 
@@ -1694,6 +1624,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
                             # solaris patch not needed anymore
                         }
                     }
+
                     else    # this is the standard epm (not relocatable) or ( nonlinux and nonsolaris )
                     {
                         installer::epmfile::resolve_path_in_epm_list_before_packaging(\@epmfile, $completeepmfilename, "\$\$PRODUCTINSTALLLOCATION", $relocatablepath);
@@ -1714,11 +1645,9 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
                         }
                     }
 
-                    if ( $allvariableshashref->{'POOLPRODUCT'} ) { installer::packagepool::put_content_into_pool($packagename, $installdir, $installer::globals::epmoutpath, $filesinpackage, \@epmfile); }
-
                     chdir($currentdir); # changing back into start directory
 
-                } # end of "if ( ! $use_package_from_pool )
+                }
 
             } # end of "if ( ! $installer::globals::simple )
 
@@ -1726,7 +1655,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
             # xpd installation mechanism
             ###########################################
 
-            # Creating the xpd file for the package. This has to happen always, not determined by $use_package_from_pool
+            # Creating the xpd file for the package. This has to happen always
 
             if ( $installer::globals::isxpdplatform )
             {
@@ -1744,8 +1673,6 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
             if ( $installer::globals::makelinuxlinkrpm ) { $k--; }  # decreasing the counter to create the link rpm!
 
         }   # end of "for ( my $k = 0; $k <= $#{$packages}; $k++ )"
-
-        installer::packagepool::log_pool_statistics();
 
         ##############################################################
         # Post epm functionality, after the last package is packed
