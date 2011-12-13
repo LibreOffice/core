@@ -78,7 +78,7 @@
 #include "svx/xflhtit.hxx"
 #include "svx/xlnclit.hxx"
 
-#include <svl/asiancfg.hxx>
+#include "officecfg/Office/Common.hxx"
 #include "editeng/fontitem.hxx"
 #include <editeng/colritem.hxx>
 #include <editeng/fhgtitem.hxx>
@@ -181,8 +181,7 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* _pEmbe
     mbAddExtLeading = sal_False;
     mnHandoutPageCount = 0;
 
-    SvxAsianConfig aAsian;
-    mnCharCompressType = aAsian.GetCharDistanceCompression();
+    mnCharCompressType = officecfg::Office::Common::AsianLayout::CompressCharacterDistance::get(comphelper::getProcessComponentContext());
 
 #ifdef OSL_LITENDIAN
     nStreamNumberFormat=NUMBERFORMAT_INT_LITTLEENDIAN;
