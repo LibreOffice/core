@@ -786,7 +786,6 @@ SfxSingleTabDialog::~SfxSingleTabDialog()
     delete pImpl->m_pTabPage;
     delete pImpl->m_pSfxPage;
     delete pImpl->m_pLine;
-    delete pImpl->m_pInfoImage;
     delete pImpl;
 }
 

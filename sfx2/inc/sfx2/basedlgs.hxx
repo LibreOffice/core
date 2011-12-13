@@ -166,19 +166,16 @@ public:
 
 // class SfxSingleTabDialog --------------------------------------------------
 
-namespace svt { class FixedHyperlinkImage; }
-
 struct SingleTabDlgImpl
 {
     TabPage*                    m_pTabPage;
     SfxTabPage*                 m_pSfxPage;
     FixedLine*                  m_pLine;
-    ::svt::FixedHyperlinkImage* m_pInfoImage;
     String                      m_sInfoURL;
     Link                        m_aInfoLink;
 
     SingleTabDlgImpl() :
-        m_pTabPage( NULL ), m_pSfxPage( NULL ), m_pLine( NULL ), m_pInfoImage( NULL ) {}
+        m_pTabPage( NULL ), m_pSfxPage( NULL ), m_pLine( NULL ) {}
 };
 
 typedef sal_uInt16* (*GetTabPageRanges)(); // liefert internationale Which-Werte
