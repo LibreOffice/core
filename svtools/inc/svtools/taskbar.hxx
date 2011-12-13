@@ -69,7 +69,6 @@ Liefert die Position zurueck, wo das Contextmenu angezeigt werden soll.
 TaskStatusBar
 =============
 
-InsertStatusField()/RemoveStatusField()
 Fuegt ein Statusfeld ein, wo die aktuelle Uhrzeit angezeigt wird. In
 dieses Feld koennen dann mit AddStatusFielItem(), ModifyStatusFielItem()
 und RemoveStatusFielItem() Status-Items eingefuegt werden. Bei diesen
@@ -305,8 +304,6 @@ public:
     virtual void        RequestHelp( const HelpEvent& rHEvt );
     virtual void        UserDraw( const UserDrawEvent& rUDEvt );
 
-    void                RemoveStatusField()
-                            { maTimer.Stop(); RemoveItem( TASKSTATUSBAR_STATUSFIELDID ); }
     sal_uInt16              GetFieldFlags() const { return mnFieldFlags; }
     void                SetNotifyObject( ITaskStatusNotify* pNotify ) { mpNotify = pNotify; }
     ITaskStatusNotify*  GetNotifyObject() const { return mpNotify; }
