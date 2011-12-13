@@ -7948,7 +7948,7 @@ SfxVoidItem InsertCurrentDate SID_INSERT_CURRENT_DATE
     MenuConfig = TRUE,
     StatusBarConfig = FALSE,
     ToolBoxConfig = FALSE,
-    GroupId = GID_OPTIONS;
+    GroupId = GID_INSERT;
 ]
 
 //--------------------------------------------------------------------------
@@ -7973,7 +7973,7 @@ SfxVoidItem InsertCurrentTime SID_INSERT_CURRENT_TIME
     MenuConfig = TRUE,
     StatusBarConfig = FALSE,
     ToolBoxConfig = FALSE,
-    GroupId = GID_OPTIONS;
+    GroupId = GID_INSERT;
 ]
 
 //--------------------------------------------------------------------------
