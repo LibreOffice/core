@@ -47,6 +47,7 @@ class ScAccessibleEditLineTextData;
 struct EENotify;
 class ScRangeList;
 class ScDocument;
+class ScTabViewShell;
 
 //========================================================================
 
@@ -69,7 +70,7 @@ public:
 class ScTextWnd : public ScTextWndBase, public DragSourceHelper     // edit window
 {
 public:
-                    ScTextWnd( Window* pParent );
+                    ScTextWnd( Window* pParent, ScTabViewShell* pViewSh );
     virtual         ~ScTextWnd();
 
     virtual void            SetTextString( const String& rString );
@@ -114,6 +115,8 @@ protected:
     void            ImplInitSettings();
     void            UpdateAutoCorrFlag();
 
+    ScTabViewShell* GetViewShell();
+
     typedef ::std::vector< ScAccessibleEditLineTextData* > AccTextDataVector;
 
     String      aString;
@@ -129,6 +132,9 @@ protected:
     // it prevents the call of InputChanged in the ModifyHandler of the EditEngine
     sal_Bool        bInputMode;
     sal_Int16       nTextStartPos;
+
+private:
+    ScTabViewShell* mpViewShell;
 };
 
 //========================================================================
@@ -172,7 +178,7 @@ class ScInputBarGroup;
 class ScMultiTextWnd : public ScTextWnd
 {
 public:
-    ScMultiTextWnd( ScInputBarGroup* pParent );
+    ScMultiTextWnd( ScInputBarGroup* pParent, ScTabViewShell* pViewSh );
     virtual ~ScMultiTextWnd();
     virtual void StartEditEngine();
     virtual void StopEditEngine( sal_Bool bAll );
@@ -188,7 +194,7 @@ public:
     long GetLastNumExpandedLines() { return mnLastExpandedLines; }
 protected:
     void SetScrollBarRange();
-    void InitEditEngine(SfxObjectShell* pObjSh);
+    void InitEditEngine();
 
     virtual void Paint( const Rectangle& rRec );
     DECL_LINK( NotifyHdl, EENotify* );
@@ -196,7 +202,6 @@ protected:
 private:
     long GetPixelTextHeight();
     ScInputBarGroup& mrGroupBar;
-    const ScDocument* mpAssignedDocument;
     long mnLines;
     long mnLastExpandedLines;
 };
@@ -205,7 +210,7 @@ class ScInputBarGroup : public ScTextWndBase
 {
 
 public:
-                    ScInputBarGroup( Window* Parent );
+                    ScInputBarGroup( Window* Parent, ScTabViewShell* pViewSh );
     virtual         ~ScInputBarGroup();
     virtual void            InsertAccessibleTextData( ScAccessibleEditLineTextData& rTextData );
     virtual void            RemoveAccessibleTextData( ScAccessibleEditLineTextData& rTextData );
