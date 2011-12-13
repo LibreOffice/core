@@ -647,9 +647,9 @@ void AreaChart::createShapes()
             //iterate through all x slots in this category to get 100percent sum
             for( ; aXSlotIter != aXSlotEnd; ++aXSlotIter )
             {
-                ::std::vector< VDataSeries* >* pSeriesList = &(aXSlotIter->m_aSeriesVector);
-                std::vector<VDataSeries*>::iterator       aSeriesIter = pSeriesList->begin();
-                const std::vector<VDataSeries*>::iterator aSeriesEnd  = pSeriesList->end();
+                std::vector<VDataSeries*>& rSeriesList = aXSlotIter->m_aSeriesVector;
+                std::vector<VDataSeries*>::iterator       aSeriesIter = rSeriesList.begin();
+                const std::vector<VDataSeries*>::iterator aSeriesEnd  = rSeriesList.end();
 
                 for( ; aSeriesIter != aSeriesEnd; ++aSeriesIter )
                 {
@@ -688,9 +688,9 @@ void AreaChart::createShapes()
             aXSlotIter = aZSlotIter->begin();
             for( sal_Int32 nX=0; aXSlotIter != aXSlotEnd; ++aXSlotIter, ++nX )
             {
-                ::std::vector< VDataSeries* >* pSeriesList = &(aXSlotIter->m_aSeriesVector);
-                ::std::vector< VDataSeries* >::const_iterator       aSeriesIter = pSeriesList->begin();
-                const ::std::vector< VDataSeries* >::const_iterator aSeriesEnd  = pSeriesList->end();
+                std::vector<VDataSeries*>& rSeriesList = aXSlotIter->m_aSeriesVector;
+                std::vector<VDataSeries*>::const_iterator       aSeriesIter = rSeriesList.begin();
+                const std::vector<VDataSeries*>::const_iterator aSeriesEnd  = rSeriesList.end();
 
                 std::map< sal_Int32, double > aLogicYForNextSeriesMap;//one for each different nAttachedAxisIndex
     //=============================================================================
@@ -704,7 +704,7 @@ void AreaChart::createShapes()
                     /*  #i70133# ignore points outside of series length in standard area
                         charts. Stacked area charts will use missing points as zeros. In
                         standard charts, pSeriesList contains only one series. */
-                    if( m_bArea && (pSeriesList->size() == 1) && (nIndex >= (*aSeriesIter)->getTotalPointCount()) )
+                    if( m_bArea && (rSeriesList.size() == 1) && (nIndex >= (*aSeriesIter)->getTotalPointCount()) )
                         continue;
 
                     uno::Reference< drawing::XShapes > xSeriesGroupShape_Shapes = getSeriesGroupShapeFrontChild(*aSeriesIter, m_xSeriesTarget);
@@ -730,7 +730,7 @@ void AreaChart::createShapes()
                     {
                         if( (*aSeriesIter)->getMissingValueTreatment() == ::com::sun::star::chart::MissingValueTreatment::LEAVE_GAP )
                         {
-                            if( pSeriesList->size() == 1 || nSeriesIndex == 0 )
+                            if( rSeriesList.size() == 1 || nSeriesIndex == 0 )
                             {
                                 fLogicY = pPosHelper->getLogicMinY();
                                 if( !pPosHelper->isMathematicalOrientationY() )
@@ -741,7 +741,7 @@ void AreaChart::createShapes()
                         }
                     }
 
-                    if( m_nDimension==3 && m_bArea && pSeriesList->size()!=1 )
+                    if( m_nDimension==3 && m_bArea && rSeriesList.size()!=1 )
                         fLogicY = fabs( fLogicY );
 
                     if( pPosHelper->isPercentY() && !::rtl::math::approxEqual( aLogicYSumMap[nAttachedAxisIndex], 0.0 ) )
