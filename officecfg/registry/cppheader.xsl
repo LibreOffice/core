@@ -144,7 +144,7 @@
     <xsl:param name="path"/>
     <xsl:if test=".//prop or .//set">
       <xsl:text>namespace </xsl:text>
-      <xsl:value-of select="translate(@oor:name, '-', '_')"/>
+      <xsl:value-of select="translate(@oor:name, '-.', '__')"/>
       <xsl:text> {&#xA;</xsl:text>
       <xsl:text>&#xA;</xsl:text>
       <xsl:apply-templates select="group|set|prop">
@@ -161,7 +161,7 @@
 
   <xsl:template match="set">
     <xsl:param name="path"/>
-    <xsl:variable name="name" select="translate(@oor:name, '-', '_')"/>
+    <xsl:variable name="name" select="translate(@oor:name, '-.', '__')"/>
     <xsl:text>struct </xsl:text>
     <xsl:value-of select="$name"/>
     <xsl:text>: public unotools::ConfigurationSet&lt; </xsl:text>
@@ -186,7 +186,7 @@
 
   <xsl:template match="prop">
     <xsl:param name="path"/>
-    <xsl:variable name="name" select="translate(@oor:name, '-', '_')"/>
+    <xsl:variable name="name" select="translate(@oor:name, '-.', '__')"/>
     <xsl:text>struct </xsl:text>
     <xsl:value-of select="$name"/>
     <xsl:text>: public unotools::</xsl:text>
