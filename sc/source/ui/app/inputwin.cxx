@@ -873,7 +873,8 @@ ScInputBarGroup::ScInputBarGroup(Window* pParent, ScTabViewShell* pViewSh)
       // too bad at the size from 'Settings' for me
       // set button width to scrollbar width then for the moment
       aButton.SetClickHdl	( LINK( this, ScInputBarGroup, ClickHdl ) );
-      aButton.SetSizePixel(Size(GetSettings().GetStyleSettings().GetScrollBarSize(), aMultiTextWnd.GetPixelHeightForLines(1)) );
+      // Add 2 pixels to compensate for the fact that scrollbar of the same width doesn't quite match
+      aButton.SetSizePixel(Size(GetSettings().GetStyleSettings().GetScrollBarSize() + 2, aMultiTextWnd.GetPixelHeightForLines(1)) );
       aButton.Enable();
       aButton.SetSymbol( SYMBOL_SPIN_DOWN  );
       aButton.SetQuickHelpText( ScResId( SCSTR_QHELP_EXPAND_FORMULA ) );
@@ -928,7 +929,7 @@ void ScInputBarGroup::Resize()
     Size aSize  = GetSizePixel();
     aSize.Width() = Max( ((long)(nWidth - nLeft - LEFT_OFFSET)), (long)0 );
 
-    aScrollBar.SetPosPixel(Point(aSize.Width()- ( aButton.GetSizePixel().Width() ) + 1, aButton.GetSizePixel().Height() - 1 ));
+    aScrollBar.SetPosPixel(Point( aSize.Width() - aButton.GetSizePixel().Width() + 2, aButton.GetSizePixel().Height() ) );
 
     Size aTmpSize( aSize );
     aTmpSize.Width() = aTmpSize.Width() - aButton.GetSizePixel().Width();
