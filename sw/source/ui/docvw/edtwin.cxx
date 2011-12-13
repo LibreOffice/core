@@ -1360,8 +1360,7 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
     sal_Bool bChkInsBlank = pQuickHlpData->bChkInsBlank;
     pQuickHlpData->bChkInsBlank = sal_False;
 
-#ifdef DBG_UTIL
-    if (rKEvt.GetKeyCode().GetCode() == KEY_F12)
+    if ( getenv("SW_DEBUG") && rKEvt.GetKeyCode().GetCode() == KEY_F12 )
     {
         if( rKEvt.GetKeyCode().IsShift())
         {
@@ -1375,7 +1374,6 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
             return;
         }
     }
-#endif
 
     KeyEvent aKeyEvent( rKEvt );
     // look for vertical mappings

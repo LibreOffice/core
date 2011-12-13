@@ -337,13 +337,11 @@ public:
     SwNode * DocumentSectionStartNode(SwNode * pNode) const;
     SwNode * DocumentSectionEndNode(SwNode * pNode) const;
 
-#ifdef DBG_UTIL
     /**
      * Dumps the entire nodes structure to the given destination (file nodes.xml in the current directory by default)
      * @since 3.5
      */
     void dumpAsXml( xmlTextWriterPtr writer = NULL );
-#endif
 };
 
 #endif

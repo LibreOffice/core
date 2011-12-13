@@ -2038,13 +2038,11 @@ public:
     ::sw::UndoManager const& GetUndoManager() const;
     SfxObjectShell* CreateCopy(bool bCallInitNew) const;
 
-#ifdef DBG_UTIL
     /**
      * Dumps the entire nodes structure to the given destination (file nodes.xml in the current directory by default)
      * @since 3.5
      */
     void dumpAsXml( xmlTextWriterPtr writer = NULL );
-#endif
 
     /// must be called only in SwDocShell::InitNew, causes UpdateDrawDefaults to be called when drawing layer is created
     void SetDrawDefaults();

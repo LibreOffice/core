@@ -29,8 +29,6 @@
 #include "doc.hxx"
 #include "ndtxt.hxx"
 
-#ifdef DBG_UTIL
-
 namespace
 {
 
@@ -153,6 +151,7 @@ void SwNode::dumpAsXml( xmlTextWriterPtr w )
     }
     writer.startElement( name );
     writer.writeFormatAttribute( "ptr", "%p", this );
+    writer.writeFormatAttribute( "index", "%lu", GetIndex() );
     writer.endElement();
     if( GetNodeType() == ND_ENDNODE )
         writer.endElement(); // end start node
@@ -185,6 +184,7 @@ void SwStartNode::dumpAsXml( xmlTextWriterPtr w )
     }
     writer.startElement( name );
     writer.writeFormatAttribute( "ptr", "%p", this );
+    writer.writeFormatAttribute( "index", "%lu", GetIndex() );
     // writer.endElement(); - it is a start node, so don't end, will make xml better nested
 }
 
@@ -193,6 +193,7 @@ void SwTxtNode::dumpAsXml( xmlTextWriterPtr w )
     WriterHelper writer( w );
     writer.startElement( "text" );
     writer.writeFormatAttribute( "ptr", "%p", this );
+    writer.writeFormatAttribute( "index", "%lu", GetIndex() );
     rtl::OUString txt = GetTxt();
     for( int i = 0; i < 32; ++i )
         txt = txt.replace( i, '*' );
@@ -200,7 +201,5 @@ void SwTxtNode::dumpAsXml( xmlTextWriterPtr w )
     xmlTextWriterWriteString( writer, BAD_CAST( txt8.getStr()));
     writer.endElement();
 }
-
-#endif // DBG_UTIL
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

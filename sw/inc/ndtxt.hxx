@@ -801,9 +801,7 @@ public:
 
     bool IsCollapse() const;
 
-#ifdef DBG_UTIL
     virtual void dumpAsXml( xmlTextWriterPtr writer = NULL );
-#endif
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwTxtNode)
 };
