@@ -33,7 +33,7 @@ use File::Basename;
 # IIa. Declaring variables for the system commands, etc.
 #--------------------------------------------------------
 #
-my ( $outfile, $bootfile, $newline, $comment,
+my ( $outfile, $newline, $comment,
      $ds, $ps,
      $wps, $cur_dir, $par_dir, $I, $L, $tmp, $MINGW,
      $platform,
