@@ -277,9 +277,6 @@ typedef OUString *OUStringPtr;
 SV_DECL_PTRARR_DEL( OUStrings_Impl, OUStringPtr, 20, 10 )
 SV_IMPL_PTRARR( OUStrings_Impl, OUStringPtr )
 
-SV_DECL_PTRARR_SORT_DEL( OUStringsSort_Impl, OUStringPtr, 20, 10 )
-SV_IMPL_OP_PTRARR_SORT( OUStringsSort_Impl, OUStringPtr )
-
 #ifdef DBG_UTIL
 static int txtparae_bContainsIllegalCharacters = sal_False;
 #endif

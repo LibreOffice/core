@@ -50,7 +50,6 @@ class SvXMLExport;
 class SvXMLAutoStylePoolP;
 class XMLTextFieldExport;
 class OUStrings_Impl;
-class OUStringsSort_Impl;
 class XMLTextNumRuleInfo;
 class XMLTextListAutoStylePool;
 class XMLSectionExport;

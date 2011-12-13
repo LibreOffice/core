@@ -46,7 +46,6 @@ class SvXMLExportItemMapper;
 class SfxPoolItem;
 class SfxItemSet;
 class OUStrings_Impl;
-class OUStringsSort_Impl;
 class Rectangle;
 
 class ImpPresPageDrawStylePropMapper;
