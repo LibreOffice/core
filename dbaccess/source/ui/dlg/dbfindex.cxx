@@ -244,7 +244,6 @@ IMPL_LINK( ODbaseIndexDialog, AddAllClickHdl, PushButton*, /*pButton*/ )
 {
     sal_uInt16 nCnt = aLB_FreeIndexes.GetEntryCount();
     String aTableName = aCB_Tables.GetText();
-    String aEntry;
 
     for( sal_uInt16 nPos = 0; nPos < nCnt; ++nPos )
         InsertTableIndex( aTableName, RemoveFreeIndex( aLB_FreeIndexes.GetEntry(0), sal_True ) );
@@ -258,7 +257,6 @@ IMPL_LINK( ODbaseIndexDialog, RemoveAllClickHdl, PushButton*, /*pButton*/ )
 {
     sal_uInt16 nCnt = aLB_TableIndexes.GetEntryCount();
     String aTableName = aCB_Tables.GetText();
-    String aEntry;
 
     for( sal_uInt16 nPos = 0; nPos < nCnt; ++nPos )
         InsertFreeIndex( RemoveTableIndex( aTableName, aLB_TableIndexes.GetEntry(0), sal_True ) );
@@ -492,7 +490,6 @@ void OTableInfo::WriteInfFile( const String& rDSN ) const
     // Erst einmal alle Tabellenindizes loeschen
     ByteString aNDX;
     sal_uInt16 nKeyCnt = aInfFile.GetKeyCount();
-    ByteString aEntry;
     sal_uInt16 nKey = 0;
 
     while( nKey < nKeyCnt )
