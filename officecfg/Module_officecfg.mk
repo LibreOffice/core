@@ -24,6 +24,7 @@ $(eval $(call gb_Module_add_targets,officecfg,\
 	Package_misc \
 	Package_tools \
 	Configuration_officecfg \
+        CppunitTest_officecfg_cppheader_test \
 ))
 
 # vim: set noet sw=4 ts=4:
