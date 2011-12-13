@@ -103,7 +103,7 @@ namespace ww8
         snprintf(sBuffer, sizeof(sBuffer), "offset=\"%" SAL_PRIuUINT32 "\" count=\"%" SAL_PRIuUINT32 "\"",
                  nOffset, nCount);
         ::std::clog << "<WW8Struct-getUString" << sBuffer << ">"
-                    << dbg_out(aResult) << "</WW8Struct-getUString>"
+                    << rtl::OUStringToOString( aResult, RTL_TEXTENCODING_UTF8 ).getStr() << "</WW8Struct-getUString>"
                     << ::std::endl;
 #endif
 
