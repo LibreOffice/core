@@ -148,9 +148,11 @@ bool GlyphCache::IFSD_Equal::operator()( const FontSelectPattern& rA, const Font
     // NOTE: ignoring meFamily deliberately
 
     // compare with the requested width, allow default width
-    if( (rA.mnWidth != rB.mnWidth)
-    && ((rA.mnHeight != rB.mnWidth) || (rA.mnWidth != 0)) )
+    int nAWidth = rA.mnWidth != 0 ? rA.mnWidth : rA.mnHeight;
+    int nBWidth = rB.mnWidth != 0 ? rB.mnWidth : rB.mnHeight;
+    if( nAWidth != nBWidth )
         return false;
+
 #ifdef ENABLE_GRAPHITE
    if (rA.meLanguage != rB.meLanguage)
         return false;
