@@ -522,7 +522,7 @@ sal_Bool OStorageHelper::PathHasSegment( const ::rtl::OUString& aPath, const ::r
     const sal_Int32 nPathLen = aPath.getLength();
     const sal_Int32 nSegLen = aSegment.getLength();
 
-    if ( nSegLen && nPathLen >= nSegLen )
+    if ( !aSegment.isEmpty() && nPathLen >= nSegLen )
     {
         ::rtl::OUString aEndSegment( RTL_CONSTASCII_USTRINGPARAM( "/" ) );
         aEndSegment += aSegment;
