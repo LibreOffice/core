@@ -36,8 +36,6 @@
 
 using rtl::OUString;
 
-#define _BASIC_TEXTPORTIONS
-
 // Type of a text token (syntax highlighting)
 enum SbTextType
 {
@@ -59,7 +57,6 @@ enum SbLanguageMode
     SB_LANG_JAVASCRIPT   // JavaScript
 };
 
-#ifdef _BASIC_TEXTPORTIONS
 struct SbTextPortion
 { // Syntax Highlighting: a text portion
     xub_StrLen nLine;        // Line number
@@ -108,10 +105,6 @@ private:
     BASIC_DLLPRIVATE SbTextPortions( const SbTextPortions& );
     BASIC_DLLPRIVATE SbTextPortions& operator=( const SbTextPortions& );
 };
-
-#else
-class SbTextPortions;
-#endif
 
 // Returns type name for Basic type, array flag is ignored
 // implementation: basic/source/runtime/methods.cxx
