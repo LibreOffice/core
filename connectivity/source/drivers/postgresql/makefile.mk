@@ -91,13 +91,13 @@ LIBPQ_DEP_LIBS+=\
 .ENDIF
 .ELSE
 LIBPQ_LINK=$(OUTDIR)/lib/libpq.a
-.IF "$(GUI)"=="MAC"
+.IF "$(OS)"=="MACOSX"
 LIBPQ_DEP_LIBS += -Wl,-dead_strip_dylibs
 .ELSE
 LIBPQ_DEP_LIBS += -Wl,--as-needed
 .ENDIF
 .INCLUDE : $(OUTDIR_FOR_BUILD)/inc/postgresql/libpq-flags.mk
-.IF "$(GUI)"=="MAC"
+.IF "$(OS)"=="MACOSX"
 .ELSE
 LIBPQ_DEP_LIBS += -Wl,--no-as-needed
 .ENDIF
