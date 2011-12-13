@@ -159,18 +159,27 @@ bool lcl_isExperimentalMode()
 //  class ScInputWindow
 //==================================================================
 
-ScTextWndBase* lcl_chooseRuntimeImpl( Window* pParent )
+ScTextWndBase* lcl_chooseRuntimeImpl( Window* pParent, SfxBindings* pBind )
 {
+    ScTabViewShell* pViewSh = NULL;
+    SfxDispatcher* pDisp = pBind->GetDispatcher();
+    if ( pDisp )
+    {
+        SfxViewFrame* pViewFrm = pDisp->GetFrame();
+        if ( pViewFrm )
+            pViewSh = PTR_CAST( ScTabViewShell, pViewFrm->GetViewShell() );
+    }
+
     if ( !lcl_isExperimentalMode() )
-        return new ScTextWnd( pParent );
-    return new ScInputBarGroup( pParent );
+        return new ScTextWnd( pParent, pViewSh );
+    return new ScInputBarGroup( pParent, pViewSh );
 }
 
 ScInputWindow::ScInputWindow( Window* pParent, SfxBindings* pBind ) :
 // mit WB_CLIPCHILDREN, sonst Flicker
         ToolBox         ( pParent, WinBits(WB_BORDER|WB_3DLOOK|WB_CLIPCHILDREN) ),
         aWndPos         ( this ),
-        pRuntimeWindow ( lcl_chooseRuntimeImpl( this ) ),
+        pRuntimeWindow ( lcl_chooseRuntimeImpl( this, pBind ) ),
         aTextWindow    ( *pRuntimeWindow ),
         pInputHdl       ( NULL ),
         pBindings       ( pBind ),
@@ -848,9 +857,9 @@ void ScInputWindow::MouseButtonUp( const MouseEvent& rMEvt )
 //                  ScInputBarGroup
 //========================================================================
 
-ScInputBarGroup::ScInputBarGroup(Window* pParent)
+ScInputBarGroup::ScInputBarGroup(Window* pParent, ScTabViewShell* pViewSh)
     :   ScTextWndBase        ( pParent, WinBits(WB_HIDE |  WB_TABSTOP ) ),
-        aMultiTextWnd        ( this ),
+        aMultiTextWnd        ( this, pViewSh ),
         aButton              ( this, WB_TABSTOP | WB_RECTSTYLE ),
         aScrollBar           ( this, WB_TABSTOP | WB_VERT | WB_DRAG )
 {
@@ -1094,11 +1103,10 @@ IMPL_LINK( ScInputBarGroup, Impl_ScrollHdl, ScrollBar*, EMPTYARG )
 //                      ScMultiTextWnd
 //========================================================================
 
-ScMultiTextWnd::ScMultiTextWnd( ScInputBarGroup* pParen )
+ScMultiTextWnd::ScMultiTextWnd( ScInputBarGroup* pParen, ScTabViewShell* pViewSh )
     :
-        ScTextWnd( pParen/*, WB_TABSTOP*/ ),
+        ScTextWnd( pParen, pViewSh ),
         mrGroupBar(* pParen ),
-        mpAssignedDocument( NULL ),
         mnLines( 1 ),
         mnLastExpandedLines( INPUTWIN_MULTILINES )
 {
@@ -1119,7 +1127,7 @@ void ScMultiTextWnd::Paint( const Rectangle& rRec )
 EditView* ScMultiTextWnd::GetEditView()
 {
     if ( !pEditView )
-        InitEditEngine( SfxObjectShell::Current() );
+        InitEditEngine();
     return pEditView;
 }
 
@@ -1226,7 +1234,7 @@ void ScMultiTextWnd::StartEditEngine()
 
     if ( !pEditView || !pEditEngine )
     {
-        InitEditEngine(pObjSh);
+        InitEditEngine();
     }
 
     SC_MOD()->SetInputMode( SC_INPUT_TOP );
@@ -1281,31 +1289,15 @@ void lcl_ModifyRTLVisArea( EditView* pEditView )
 }
 
 
-void ScMultiTextWnd::InitEditEngine(SfxObjectShell* pObjSh)
+void ScMultiTextWnd::InitEditEngine()
 {
     ScFieldEditEngine* pNew;
-    ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();
+    ScTabViewShell* pViewSh = GetViewShell();
+    ScDocShell* pDocSh = NULL;
     if ( pViewSh )
     {
+        pDocSh = pViewSh->GetViewData()->GetDocShell();
         const ScDocument* pDoc = pViewSh->GetViewData()->GetDocument();
-
-        // fdo#43614 If called from Paint() because pEditEngine==0 it may be
-        // that StopEditEngine() was previously called when opening another
-        // document or switching documents, the Paint() wants to paint the
-        // previous document, but GetActiveViewShell() already returns the
-        // shell of the new document. In that case we'd create an EditEngine
-        // with the wrong item pool that later crashes when the corresponding
-        // document was closed and may lead to other sorts of trouble.
-
-        if (mpAssignedDocument)
-        {
-            if (mpAssignedDocument != pDoc)
-                return;     // Bail out, don't create and remember an
-                            // EditEngine without document pools for this case.
-        }
-        else
-            mpAssignedDocument = pDoc;  // stick with this document
-
         pNew = new ScFieldEditEngine( pDoc->GetEnginePool(), pDoc->GetEditPool() );
     }
     else
@@ -1371,10 +1363,9 @@ void ScMultiTextWnd::InitEditEngine(SfxObjectShell* pObjSh)
 
     //	as long as EditEngine and DrawText sometimes differ for CTL text,
     //	repaint now to have the EditEngine's version visible
-//        SfxObjectShell* pObjSh = SfxObjectShell::Current();
-    if ( pObjSh && pObjSh->ISA(ScDocShell) )
+    if (pDocSh)
     {
-        ScDocument* pDoc = ((ScDocShell*)pObjSh)->GetDocument();	// any document
+        ScDocument* pDoc = pDocSh->GetDocument();	// any document
         sal_uInt8 nScript = pDoc->GetStringScriptType( aString );
         if ( nScript & SCRIPTTYPE_COMPLEX )
             Invalidate();
@@ -1405,7 +1396,7 @@ void ScMultiTextWnd::SetTextString( const String& rNewString )
 // 							ScTextWnd
 //========================================================================
 
-ScTextWnd::ScTextWnd( Window* pParent )
+ScTextWnd::ScTextWnd( Window* pParent, ScTabViewShell* pViewSh )
     :   ScTextWndBase        ( pParent, WinBits(WB_HIDE | WB_BORDER) ),
         DragSourceHelper( this ),
         pEditEngine  ( NULL ),
@@ -1413,7 +1404,8 @@ ScTextWnd::ScTextWnd( Window* pParent )
         bIsInsertMode( sal_True ),
         bFormulaMode ( false ),
         bInputMode   ( false ),
-        nTextStartPos ( TEXT_STARTPOS )
+        nTextStartPos ( TEXT_STARTPOS ),
+        mpViewShell(pViewSh)
 {
     EnableRTL( false );     // EditEngine can't be used with VCL EnableRTL
 
@@ -1667,6 +1659,11 @@ void ScTextWnd::UpdateAutoCorrFlag()
         if ( nControl != nOld )
             pEditEngine->SetControlWord( nControl );
     }
+}
+
+ScTabViewShell* ScTextWnd::GetViewShell()
+{
+    return mpViewShell;
 }
 
 void ScTextWnd::StartEditEngine()
