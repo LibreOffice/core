@@ -233,18 +233,6 @@ static const char* _crlf()
 #endif
 }
 
-// This method exists because we want to load the file as own segment
-sal_Bool SbModule::Disassemble( String& rText )
-{
-    rText.Erase();
-    if( pImage )
-    {
-        SbiDisas aDisas( this, pImage );
-        aDisas.Disas( rText );
-    }
-    return sal_Bool( rText.Len() != 0 );
-}
-
 SbiDisas::SbiDisas( SbModule* p, const SbiImage* q ) : rImg( *q ), pMod( p )
 {
     memset( cLabels, 0, 8192 );

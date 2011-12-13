@@ -241,21 +241,6 @@ typedef std::hash_map< ::rtl::OUString, PCToTextDataMap*, ::rtl::OUStringHash, :
 ModuleTraceMap      GaModuleTraceMap;
 ModuleTraceMap&     rModuleTraceMap = GaModuleTraceMap;
 
-static void lcl_PrepareTraceForModule( SbModule* pModule )
-{
-    String aModuleName = pModule->GetName();
-    ModuleTraceMap::iterator it = rModuleTraceMap.find( aModuleName );
-    if( it != rModuleTraceMap.end() )
-    {
-        PCToTextDataMap* pInnerMap = it->second;
-        delete pInnerMap;
-        rModuleTraceMap.erase( it );
-    }
-
-    String aDisassemblyStr;
-    pModule->Disassemble( aDisassemblyStr );
-}
-
 static FILE* GpGlobalFile = NULL;
 
 static void lcl_lineOut( const char* pStr, const char* pPreStr = NULL, const char* pPostStr = NULL )

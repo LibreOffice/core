@@ -1168,17 +1168,6 @@ void ImpFileDialog::SetPath( Edit const& rEdit )
         SetPath( aPresetText );
 }
 
-
-void ImpFileDialog::AddFilter( const UniString& rFilter, const UniString& rMask )
-{
-    aFilterList.push_back( new ImpFilterItem( rFilter, rMask ) );
-    if( pTypeList )
-        pTypeList->InsertEntry( rFilter, LISTBOX_APPEND );
-
-    if( !GetCurFilter().Len() )
-        SetCurFilter( rFilter );
-}
-
 void ImpFileDialog::SetCurFilter( const UniString& rFilter )
 {
     if( !pTypeList )

@@ -33,16 +33,4 @@
 
 TYPEINIT1( TTProperties, ApplicationProperty )
 
-sal_Bool TTProperties::RequestProperty( sal_uInt16 nRequest )
-{
-    if ( (( nRequest & TT_PR_ONCE ) == 0) || (nDonePRs & (nRequest & 0x0ff)) == 0 )
-    {
-        nActualPR = nRequest;
-        nDonePRs |= nRequest;
-        GetpApp()->Property( *this );
-        return nActualPR == 0;
-    }
-    return sal_True;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

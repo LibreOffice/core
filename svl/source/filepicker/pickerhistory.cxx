@@ -86,24 +86,6 @@ namespace svt
             // then push_back the picker
             _rHistory.push_back( InterfaceAdapter( _rxPicker ) );
         }
-
-        //-----------------------------------------------------------------
-        Reference< XInterface > implGetTopMostPicker( const InterfaceArray& _rHistory )
-        {
-            Reference< XInterface > xTopMostAlive;
-
-            //=============================================================
-            // search the first picker which is still alive ...
-            for (   InterfaceArray::const_reverse_iterator aLoop = _rHistory.rbegin();
-                    ( aLoop != _rHistory.rend() ) && !xTopMostAlive.is();
-                    ++aLoop
-                )
-            {
-                xTopMostAlive = aLoop->get();
-            }
-
-            return xTopMostAlive;
-        }
     }
 
     //---------------------------------------------------------------------

@@ -291,7 +291,6 @@ private:
     SVT_DLLPRIVATE ImplTaskSBFldItem*  ImplGetFieldItem( const Point& rPos, sal_Bool& rFieldRect ) const;
     SVT_DLLPRIVATE sal_Bool                ImplUpdateClock();
     SVT_DLLPRIVATE sal_Bool                ImplUpdateFlashItems();
-    SVT_DLLPRIVATE void                ImplUpdateField( sal_Bool bItems );
                         DECL_DLLPRIVATE_LINK( ImplTimerHdl, Timer* );
 #endif
 

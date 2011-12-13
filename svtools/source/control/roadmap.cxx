@@ -107,8 +107,6 @@ namespace svt
         void                    SetIndex( ItemIndex _Index );
         ItemIndex               GetIndex() const;
 
-        ::rtl::OUString         GetLabel( );
-
         void                    Update( ItemIndex _RMIndex, const ::rtl::OUString& _rText );
 
         void                    SetPosition( RoadmapItem* OldHyperLabel );
@@ -789,12 +787,6 @@ namespace svt
     RoadmapTypes::ItemIndex RoadmapItem::GetIndex() const
     {
         return mpDescription ? mpDescription->GetIndex() : ItemIndex(-1);
-    }
-
-    //---------------------------------------------------------------------
-    ::rtl::OUString RoadmapItem::GetLabel( )
-    {
-        return mpDescription ? mpDescription->GetText() : String();
     }
 
     //---------------------------------------------------------------------

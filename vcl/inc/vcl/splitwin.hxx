@@ -118,7 +118,6 @@ private:
     SAL_DLLPRIVATE void ImplInitSettings();
     SAL_DLLPRIVATE void ImplCalcLayout();
     SAL_DLLPRIVATE void ImplUpdate();
-    SAL_DLLPRIVATE void ImplUpdateSet( ImplSplitSet* pSet );
     SAL_DLLPRIVATE void ImplSetWindowSize( long nDelta );
     SAL_DLLPRIVATE void ImplSplitMousePos( Point& rMousePos );
     SAL_DLLPRIVATE void ImplGetButtonRect( Rectangle& rRect, long nEx, sal_Bool bTest ) const;

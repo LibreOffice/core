@@ -62,7 +62,6 @@ class Bitmap;
 class SVT_DLLPUBLIC TTProperties : public ApplicationProperty
 {
     sal_uInt16 nDonePRs;                    // Verwaltung f�r die Properties, die nur einmal gerufen werden mussen.
-    SVT_DLLPRIVATE sal_Bool RequestProperty( sal_uInt16 nRequest );
 
     sal_Bool HasSlots(){ return nPropertyVersion == TT_PROPERTIES_VERSION; }
 

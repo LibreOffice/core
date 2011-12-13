@@ -144,11 +144,6 @@ uno::Reference< frame::XModel > lcl_GetXModel( ScDocument * pDoc )
     return xModel;
 }
 
-uno::Reference< sheet::XSpreadsheetDocument > lcl_GetSpreadSheetDocument( ScDocument * pDoc )
-{
-    return uno::Reference< sheet::XSpreadsheetDocument >( lcl_GetXModel( pDoc ), uno::UNO_QUERY );
-}
-
 struct TokenTable : boost::noncopyable
 {
     SCROW mnRowCount;

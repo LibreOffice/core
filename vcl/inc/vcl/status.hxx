@@ -118,7 +118,6 @@ private:
     SAL_DLLPRIVATE void      ImplCalcProgressRect();
     SAL_DLLPRIVATE Rectangle ImplGetItemRectPos( sal_uInt16 nPos ) const;
     SAL_DLLPRIVATE sal_uInt16    ImplGetFirstVisiblePos() const;
-    SAL_DLLPRIVATE void      ImplCalcBorder();
 
 public:
                         StatusBar( Window* pParent,

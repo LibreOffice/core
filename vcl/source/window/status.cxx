@@ -1368,24 +1368,6 @@ rtl::OString StatusBar::GetHelpId( sal_uInt16 nItemId ) const
     return aRet;
 }
 
-// -----------------------------------------------------------------------
-
-void StatusBar::ImplCalcBorder( )
-{
-    mnCalcHeight = mnDY;
-    // subtract border
-    if( IsTopBorder() )
-    {
-        mnCalcHeight -= 2;
-        mnTextY += 2;
-        mnItemY += 2;
-    }
-    if ( IsBottomBorder() )
-        mnCalcHeight -= 2;
-    mbFormat = sal_True;
-    Invalidate();
-}
-
 sal_Bool StatusBar::IsTopBorder() const
 {
     return mpImplData->mbTopBorder;

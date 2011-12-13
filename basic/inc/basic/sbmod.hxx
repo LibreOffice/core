@@ -118,7 +118,6 @@ public:
     void            SetSource32( const ::rtl::OUString& r );
 
     virtual sal_Bool    Compile();
-    sal_Bool            Disassemble( String& rText );
     virtual sal_Bool    IsCompiled() const;
     const SbxObject* FindType( String aTypeName ) const;
 

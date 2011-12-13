@@ -4,10 +4,10 @@ AtomFolder::AtomFolder(AtomPubSession*, std::basic_string<char, std::char_traits
 AtomPubSession::getCollectionUrl(Collection::Type)
 AtomPubSession::~AtomPubSession()
 BitmapWriteAccess::DrawPolygon(Polygon const&)
-BreakPointList::push_back(BreakPoint*)
 BufferNode::childAt(int) const
 ByteString::Assign(char const*, unsigned short)
 ByteString::Assign(char)
+ByteString::ByteString(String const&, unsigned short, unsigned int)
 CIccCLUT::Interp3dTetra(float*, float const*)
 CIccCLUT::Iterate(IIccCLUTExec*)
 CIccFormulaCurveSegment::SetFunction(unsigned short, unsigned char, float*)
@@ -95,7 +95,6 @@ ElementCollector::setSecurityId(int)
 ExtraKernInfo::HasKernPairs() const
 FieldEntry::GetBookmarkType()
 FileControl::SetButtonText(String const&)
-FileDialog::FileDialog(Window*, long)
 FileList::GetFormat()
 FileStat::FileStat()
 FileStat::FileStat(void const*, void const*)
@@ -240,23 +239,8 @@ OUStringsSort_Impl::Remove(rtl::OUString* const&, unsigned short)
 OUStringsSort_Impl::Remove(unsigned short, unsigned short)
 Octree::AddColor(BitmapColor const&)
 Octree::Octree(unsigned long)
-OutputDevice::DrawNativeControlText(unsigned int, unsigned int, Rectangle const&, unsigned int, ImplControlValue const&, rtl::OUString)
-OutputDevice::GetMinKashida(Font const&) const
-OutputDevice::GetPixel(Polygon const&) const
-OutputDevice::ImplFloatDevicePixelToLogicHeight(float) const
-OutputDevice::ImplFloatDevicePixelToLogicWidth(float) const
-OutputDevice::ImplFloatLogicWidthToDevicePixel(float) const
-OutputDevice::ImplGetTextWidth(SalLayout const&) const
-OutputDevice::IsTextUnderlineAbove(Font const&)
-OutputDevice::LogicToLogic(basegfx::B2DPolyPolygon const&, MapMode const&, MapMode const&)
-OutputDevice::LogicToLogic(long*, unsigned short, MapMode const*, MapMode const*) const
-OutputDevice::LogicToPixel(Region const&, MapMode const&) const
-OutputDevice::LogicToPixel(basegfx::B2DPolyPolygon const&) const
-OutputDevice::LogicToPixel(basegfx::B2DPolygon const&) const
-OutputDevice::LogicToPixel(basegfx::B2DPolygon const&, MapMode const&) const
-OutputDevice::PixelToLogic(Region const&, MapMode const&) const
-OutputDevice::PixelToLogic(basegfx::B2DPolyPolygon const&) const
-OutputDevice::PixelToLogic(basegfx::B2DPolygon const&) const
+OutputDevice::LogicToPixel(PolyPolygon const&, MapMode const&) const
+OutputDevice::PixelToLogic(PolyPolygon const&, MapMode const&) const
 PageSpan::getMarginLeft() const
 PageSpan::getMarginRight() const
 ParagraphObj::ParagraphObj(ParagraphObj&)
@@ -284,6 +268,7 @@ SalColormap::SalColormap(BitmapPalette const&)
 SalColormap::SetPalette(BitmapPalette const&)
 SalDisplay::IsLocal()
 SalGraphics::DrawBitmap(SalTwoRect const*, SalBitmap const&, unsigned int, OutputDevice const*)
+SalGraphics::DrawNativeControlText(unsigned int, unsigned int, Rectangle const&, unsigned int, ImplControlValue const&, rtl::OUString const&, OutputDevice const*)
 SalGraphics::drawAlphaBitmap(SalTwoRect const&, SalBitmap const&, SalBitmap const&)
 SalGraphics::drawPolyLine(basegfx::B2DPolygon const&, double, basegfx::B2DVector const&, basegfx::B2DLineJoin)
 SalGraphics::drawPolyPolygon(basegfx::B2DPolyPolygon const&, double)
@@ -298,8 +283,6 @@ SbTextPortions::Replace(SbTextPortion const&, unsigned short)
 SbTextPortions::Replace(SbTextPortion const*, unsigned short, unsigned short)
 SbTextPortions::SbTextPortions(unsigned short, unsigned char)
 SbTextPortions::_ForEach(unsigned short, unsigned short, unsigned char (*)(SbTextPortion const&, void*), void*)
-SbiBuffer::Add(void const*, unsigned short)
-SbiBuffer::Align(int)
 SbiExprNode::IsString()
 SbiExpression::SbiExpression(SbiParser*, SbiToken)
 SbiExpression::SbiExpression(SbiParser*, String const&)
@@ -320,11 +303,6 @@ SbxDecimal::getUShort(unsigned short&)
 SbxDecimal::setShort(short)
 SbxDecimal::setString(rtl::OUString*)
 SbxDecimal::setUShort(unsigned short)
-SbxItem::SetDocument(basctl::ScriptDocument const&)
-SbxItem::SetLibName(rtl::OUString const&)
-SbxItem::SetMethodName(rtl::OUString const&)
-SbxItem::SetName(rtl::OUString const&)
-SbxItem::SetType(BasicIDEType)
 SbxValue::PutDecimal(SbxDecimal*)
 ScAddInAsyncs::Insert(ScAddInAsync* const&, unsigned short&)
 ScAddInAsyncs::Insert(ScAddInAsync* const*, unsigned short)
@@ -390,7 +368,6 @@ ScLeftFooterEditPage::GetRanges()
 ScLeftHeaderEditPage::GetRanges()
 ScMatrix::CalcOffset(unsigned long, unsigned long) const
 ScModule::Find1RefWindow(Window*)
-ScMultiTextWnd::GetLineCount()
 ScMyCellInfo::ScMyCellInfo()
 ScMyStyleRanges::SetStylesToRanges(ScRangeList*, rtl::OUString const*, short, rtl::OUString const*, ScXMLImport&)
 ScMyStyleRanges::SetStylesToRanges(ScRangeListRef, rtl::OUString const*, short, rtl::OUString const*, ScXMLImport&)
@@ -567,18 +544,6 @@ SpinButton::SpinButton(Window*, ResId const&)
 SrchAttrItemList::Replace(SearchAttrItem const&, unsigned short)
 SrchAttrItemList::Replace(SearchAttrItem const*, unsigned short, unsigned short)
 SrchAttrItemList::_ForEach(unsigned short, unsigned short, unsigned char (*)(SearchAttrItem const&, void*), void*)
-StatusBar::CopyItems(StatusBar const&)
-StatusBar::GetItemBits(unsigned short) const
-StatusBar::GetItemData(unsigned short) const
-StatusBar::GetItemWidth(unsigned short) const
-StatusBar::HideItem(unsigned short)
-StatusBar::HideItems()
-StatusBar::ResetProgressMode()
-StatusBar::SetBottomBorder(unsigned char)
-StatusBar::SetTopBorder(unsigned char)
-StatusBar::ShowItem(unsigned short)
-StatusBar::ShowItems()
-StatusBar::StatusBar(Window*, ResId const&)
 StgAvlIterator::Last()
 StgCache::Pos2Page(int)
 StgHeader::SetClassId(ClsId const&)
@@ -2219,8 +2184,6 @@ std::__cxx1998::vector<CntHTTPCookie*, std::allocator<CntHTTPCookie*> >::~vector
 std::__cxx1998::vector<OrderedEntry*, std::allocator<OrderedEntry*> >::~vector()
 std::__cxx1998::vector<ServiceInfo*, std::allocator<ServiceInfo*> >::~vector()
 std::__cxx1998::vector<SfxFilter*, std::allocator<SfxFilter*> >::~vector()
-std::__cxx1998::vector<SotFactory*, std::allocator<SotFactory*> >::~vector()
-std::__cxx1998::vector<com::sun::star::datatransfer::DataFlavor*, std::allocator<com::sun::star::datatransfer::DataFlavor*> >::~vector()
 svgi::(anonymous namespace)::appendChar(std::basic_string<char, std::char_traits<char>, std::allocator<char> >&, char)
 svt::table::TableControl::GoTo(int, int)
 svx::SvxShowCharSetItem::~SvxShowCharSetItem()

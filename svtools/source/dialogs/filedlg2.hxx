@@ -158,7 +158,6 @@ public:
                         ImpFileDialog( PathDialog* pDlg, WinBits nStyle, RESOURCE_TYPE nType );
     virtual             ~ImpFileDialog();
 
-    void                AddFilter( const String& rFilter, const String& rMask );
     void                SetCurFilter( const String& rFilter );
     String              GetCurFilter() const;
 

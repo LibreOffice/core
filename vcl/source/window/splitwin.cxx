@@ -1629,48 +1629,6 @@ void SplitWindow::ImplUpdate()
 
 // -----------------------------------------------------------------------
 
-void SplitWindow::ImplUpdateSet( ImplSplitSet* pSet )
-{
-    if ( IsReallyShown() && IsUpdateMode() && mbRecalc )
-    {
-        // Wenn wir noch berechnen muessen, dann alles invalidieren.
-        if ( mbCalc )
-        {
-            // Wenn nicht NOSPLITDRAW gesetzt ist, koennen wir uns das
-            // invalidieren sparen, da bei ImplCalcSet2() die freien flaechen
-            // sowieso invalidiert werden
-            if ( !mpMainSet->mpItems || (mnWinStyle & WB_NOSPLITDRAW) )
-                pSet = mpMainSet;
-            else
-                return;
-        }
-
-        Rectangle aRect;
-        if ( pSet == mpMainSet )
-        {
-            aRect.Left()    = mnLeftBorder;
-            aRect.Top()     = mnTopBorder;
-            aRect.Right()   = mnDX-mnRightBorder-1;
-            aRect.Bottom()  = mnDY-mnBottomBorder-1;
-        }
-        else
-        {
-            ImplSplitItem*  pItem;
-            sal_uInt16          nPos;
-
-            pSet = ImplFindItem( mpMainSet, pSet->mnId, nPos );
-            pItem = &(pSet->mpItems[nPos]);
-            aRect.Left()    = pItem->mnLeft;
-            aRect.Top()     = pItem->mnTop;
-            aRect.Right()   = aRect.Left()+pItem->mnWidth;
-            aRect.Bottom()  = aRect.Top()+pItem->mnHeight;
-        }
-        Invalidate( aRect );
-    }
-}
-
-// -----------------------------------------------------------------------
-
 void SplitWindow::ImplSplitMousePos( Point& rMousePos )
 {
     if ( mnSplitTest & SPLIT_HORZ )
