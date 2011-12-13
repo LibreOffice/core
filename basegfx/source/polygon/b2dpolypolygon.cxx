@@ -84,7 +84,8 @@ public:
         {
             // add nCount copies of rPolygon
             PolygonVector::iterator aIndex(maPolygons.begin());
-            aIndex += nIndex;
+            if( nIndex )
+                aIndex += nIndex;
             maPolygons.insert(aIndex, nCount, rPolygon);
         }
     }
@@ -93,7 +94,8 @@ public:
     {
         // add all polygons from rPolyPolygon
         PolygonVector::iterator aIndex(maPolygons.begin());
-        aIndex += nIndex;
+        if( nIndex )
+            aIndex += nIndex;
         maPolygons.insert(aIndex, rPolyPolygon.begin(), rPolyPolygon.end());
     }
 
