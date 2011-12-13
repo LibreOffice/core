@@ -246,9 +246,9 @@ public:
     bool               HasEditCells(SCROW nStartRow, SCROW nEndRow, SCROW& rFirst) const;
 
                 //     TRUE = format for numbers is set
-    bool               SetString( SCROW nRow, SCTAB nTab, const String& rString,
-                           formula::FormulaGrammar::AddressConvention conv = formula::FormulaGrammar::CONV_OOO,
-                           ScSetStringParam* pParam = NULL );
+    bool SetString(
+        SCROW nRow, SCTAB nTab, const String& rString, formula::FormulaGrammar::AddressConvention eConv,
+        ScSetStringParam* pParam = NULL );
     void        SetValue( SCROW nRow, const double& rVal);
     void        SetError( SCROW nRow, const sal_uInt16 nError);
 
