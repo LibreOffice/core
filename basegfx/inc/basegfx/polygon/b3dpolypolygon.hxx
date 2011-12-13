@@ -121,6 +121,12 @@ namespace basegfx
 
         // apply transformation given in matrix form to the polygon
         void transform(const basegfx::B3DHomMatrix& rMatrix);
+
+        // polygon iterators (same iterator validity conditions as for vector)
+        const B3DPolygon* begin() const;
+        const B3DPolygon* end() const;
+        B3DPolygon* begin();
+        B3DPolygon* end();
     };
 } // end of namespace basegfx
 

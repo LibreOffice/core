@@ -1628,25 +1628,6 @@ namespace basegfx
         }
     }
 
-    const B2DPoint* B2DPolygon::begin() const
-    {
-        return mpPolygon->begin();
-    }
-
-    const B2DPoint* B2DPolygon::end() const
-    {
-        return mpPolygon->end();
-    }
-
-    B2DPoint* B2DPolygon::begin()
-    {
-        return mpPolygon->begin();
-    }
-
-    B2DPoint* B2DPolygon::end()
-    {
-        return mpPolygon->end();
-    }
 } // end of namespace basegfx
 
 //////////////////////////////////////////////////////////////////////////////

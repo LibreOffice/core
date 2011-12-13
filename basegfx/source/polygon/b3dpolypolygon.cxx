@@ -90,21 +90,10 @@ public:
 
     void insert(sal_uInt32 nIndex, const ::basegfx::B3DPolyPolygon& rPolyPolygon)
     {
-        const sal_uInt32 nCount = rPolyPolygon.count();
-
-        if(nCount)
-        {
-            // add nCount polygons from rPolyPolygon
-            maPolygons.reserve(maPolygons.size() + nCount);
-            PolygonVector::iterator aIndex(maPolygons.begin());
-            aIndex += nIndex;
-
-            for(sal_uInt32 a(0L); a < nCount; a++)
-            {
-                maPolygons.insert(aIndex, rPolyPolygon.getB3DPolygon(a));
-                aIndex++;
-            }
-        }
+        // add all polygons from rPolyPolygon
+        PolygonVector::iterator aIndex(maPolygons.begin());
+        aIndex += nIndex;
+        maPolygons.insert(aIndex, rPolyPolygon.begin(), rPolyPolygon.end());
     }
 
     void remove(sal_uInt32 nIndex, sal_uInt32 nCount)
@@ -200,6 +189,38 @@ public:
         std::for_each( maPolygons.begin(),
                        maPolygons.end(),
                        std::mem_fun_ref( &::basegfx::B3DPolygon::makeUnique ));
+    }
+
+    const basegfx::B3DPolygon* begin() const
+    {
+        if(maPolygons.empty())
+            return 0;
+        else
+            return &maPolygons.front();
+    }
+
+    const basegfx::B3DPolygon* end() const
+    {
+        if(maPolygons.empty())
+            return 0;
+        else
+            return (&maPolygons.back())+1;
+    }
+
+    basegfx::B3DPolygon* begin()
+    {
+        if(maPolygons.empty())
+            return 0;
+        else
+            return &maPolygons.front();
+    }
+
+    basegfx::B3DPolygon* end()
+    {
+        if(maPolygons.empty())
+            return 0;
+        else
+            return &(maPolygons.back())+1;
     }
 };
 
@@ -439,6 +460,26 @@ namespace basegfx
         {
             mpPolyPolygon->transform(rMatrix);
         }
+    }
+
+    const B3DPolygon* B3DPolyPolygon::begin() const
+    {
+        return mpPolyPolygon->begin();
+    }
+
+    const B3DPolygon* B3DPolyPolygon::end() const
+    {
+        return mpPolyPolygon->end();
+    }
+
+    B3DPolygon* B3DPolyPolygon::begin()
+    {
+        return mpPolyPolygon->begin();
+    }
+
+    B3DPolygon* B3DPolyPolygon::end()
+    {
+        return mpPolyPolygon->end();
     }
 } // end of namespace basegfx
 

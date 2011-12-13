@@ -206,18 +206,25 @@ public:
                 aTmp.flip();
 
             aTmp=tools::removeNeutralPoints(aTmp);
+            std::vector<B2DPoint> aTmp2(aTmp.count());
+            for(sal_uInt32 j=0; j<aTmp.count(); ++j)
+                aTmp2[j] = aTmp.getB2DPoint(j);
 
-            B2DPoint* pSmallest=0;
-            for(B2DPoint* pCurr=aTmp.begin(); pCurr!=aTmp.end(); ++pCurr)
+            std::vector<B2DPoint>::iterator pSmallest=aTmp2.end();
+            for(std::vector<B2DPoint>::iterator pCurr=aTmp2.begin(); pCurr!=aTmp2.end(); ++pCurr)
             {
-                if( ! pSmallest || compare(*pCurr, *pSmallest) )
+                if( pSmallest == aTmp2.end() || compare(*pCurr, *pSmallest) )
                 {
                     pSmallest=pCurr;
                 }
             }
 
-            if( pSmallest )
-                std::rotate(aTmp.begin(),pSmallest,aTmp.end());
+            if( pSmallest != aTmp2.end() )
+                std::rotate(aTmp2.begin(),pSmallest,aTmp2.end());
+
+            aTmp.clear();
+            for(std::vector<B2DPoint>::iterator pCurr=aTmp2.begin(); pCurr!=aTmp2.end(); ++pCurr)
+                aTmp.append(*pCurr);
 
             aRes.append(aTmp);
         }
