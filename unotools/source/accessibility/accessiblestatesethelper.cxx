@@ -58,10 +58,6 @@ public:
         throw (uno::RuntimeException);
     void RemoveState(sal_Int16 aState)
         throw (uno::RuntimeException);
-    sal_Bool Compare(const AccessibleStateSetHelperImpl* pComparativeValue,
-                        AccessibleStateSetHelperImpl* pOldStates,
-                        AccessibleStateSetHelperImpl* pNewStates) const
-        throw (uno::RuntimeException);
 
     inline void AddStates( const sal_Int64 _nStates ) SAL_THROW( ( ) );
 
@@ -138,31 +134,6 @@ inline void AccessibleStateSetHelperImpl::RemoveState(sal_Int16 aState)
     aTempBitSet = ~aTempBitSet;
     maStates &= aTempBitSet;
 }
-
-inline sal_Bool AccessibleStateSetHelperImpl::Compare(
-    const AccessibleStateSetHelperImpl* pComparativeValue,
-        AccessibleStateSetHelperImpl* pOldStates,
-        AccessibleStateSetHelperImpl* pNewStates) const
-    throw (uno::RuntimeException)
-{
-    sal_Bool bResult(sal_False);
-    if (pComparativeValue && pOldStates && pNewStates)
-    {
-        if (maStates == pComparativeValue->maStates)
-            bResult = sal_True;
-        else
-        {
-            sal_uInt64 aTempBitSet(maStates);
-            aTempBitSet ^= pComparativeValue->maStates;
-            pOldStates->maStates = aTempBitSet;
-            pOldStates->maStates &= maStates;
-            pNewStates->maStates = aTempBitSet;
-            pNewStates->maStates &= pComparativeValue->maStates;
-        }
-    }
-    return bResult;
-}
-
 
 //=====  internal  ============================================================
 
@@ -278,17 +249,6 @@ void AccessibleStateSetHelper::RemoveState(sal_Int16 aState)
 {
     osl::MutexGuard aGuard (maMutex);
     mpHelperImpl->RemoveState(aState);
-}
-
-sal_Bool AccessibleStateSetHelper::Compare(
-    const AccessibleStateSetHelper& rComparativeValue,
-        AccessibleStateSetHelper& rOldStates,
-        AccessibleStateSetHelper& rNewStates)
-    throw (uno::RuntimeException)
-{
-    osl::MutexGuard aGuard (maMutex);
-    return mpHelperImpl->Compare(rComparativeValue.mpHelperImpl,
-        rOldStates.mpHelperImpl, rNewStates.mpHelperImpl);
 }
 
 //=====  XTypeProvider  =======================================================

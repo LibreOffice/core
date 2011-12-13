@@ -64,14 +64,6 @@ const ::rtl::OUString& AtomProvider::getString( int nAtom ) const
     return it == m_aStringMap.end() ? aEmpty : it->second;
 }
 
-void AtomProvider::overrideAtom( int atom, const ::rtl::OUString& description )
-{
-    m_aAtomMap[ description ] = atom;
-    m_aStringMap[ atom ] = description;
-    if( m_nAtoms <= atom )
-        m_nAtoms=atom+1;
-}
-
 // -----------------------------------------------------------------------
 
 MultiAtomProvider::MultiAtomProvider()
@@ -109,14 +101,6 @@ const ::rtl::OUString& MultiAtomProvider::getString( int atomClass, int atom ) c
 
     static ::rtl::OUString aEmpty;
     return aEmpty;
-}
-
-void MultiAtomProvider::overrideAtom( int atomClass, int atom, const ::rtl::OUString& description )
-{
-    ::boost::unordered_map< int, AtomProvider*, ::boost::hash< int > >::const_iterator it = m_aAtomLists.find( atomClass );
-    if( it == m_aAtomLists.end() )
-        m_aAtomLists[ atomClass ] = new AtomProvider();
-    m_aAtomLists[ atomClass ]->overrideAtom( atom, description );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

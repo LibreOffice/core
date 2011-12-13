@@ -139,20 +139,6 @@ public:
     void    RemoveState(sal_Int16 aState)
         throw (::com::sun::star::uno::RuntimeException);
 
-    /** Compares the set with the set given by rComparativeValue and puts the results
-        into rOldStates and rNewStates.
-
-        rOldStates contains after call all states which are in the own set and
-        not in the comparative set.
-
-        rNewStates contains after call all states which are in the comparative
-         set and not in the own set.
-    */
-    sal_Bool Compare(const AccessibleStateSetHelper& rComparativeValue,
-                        AccessibleStateSetHelper& rOldStates,
-                        AccessibleStateSetHelper& rNewStates)
-        throw (::com::sun::star::uno::RuntimeException);
-
     //=====  XTypeProvider  ===================================================
 
     /** Returns a sequence of all supported interfaces.
