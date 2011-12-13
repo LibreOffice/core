@@ -47,10 +47,7 @@
 #include <vcl/window.hxx>
 #include <vcl/toolbox.hxx>
 
-#define UIRESOURCE_PROTOCO_ASCII        "private:"
-#define UIRESOURCE_RESOURCE_ASCII       "resource"
-#define UIRESOURCE_URL_ASCII            "private:resource"
-#define UIRESOURCE_URL                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( UIRESOURCE_URL_ASCII ))
+#define UIRESOURCE_URL                  RTL_CONSTASCII_USTRINGPARAM( "private:resource" )
 #define UIRESOURCETYPE_TOOLBAR          "toolbar"
 #define UIRESOURCETYPE_STATUSBAR        "statusbar"
 #define UIRESOURCETYPE_MENUBAR          "menubar"

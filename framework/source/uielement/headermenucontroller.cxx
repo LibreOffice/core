@@ -71,10 +71,6 @@ using namespace com::sun::star::util;
 using namespace com::sun::star::style;
 using namespace com::sun::star::container;
 
-// Copied from Writer module
-//#define RID_SW_SHELLRES (RID_SW_START + 1250 + 1)
-//#define STR_ALLPAGE_HEADFOOT 14
-
 const sal_uInt16 ALL_MENUITEM_ID = 1;
 
 namespace framework

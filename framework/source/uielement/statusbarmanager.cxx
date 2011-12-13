@@ -76,7 +76,6 @@ using namespace ::com::sun::star;
 #define css_ui ::com::sun::star::ui
 #endif
 
-const sal_Int32  HELPID_PREFIX_LENGTH    = 7;
 static const char HELPID_PREFIX[] = "helpid:";
 
 // Property names of a menu/menu item ItemDescriptor

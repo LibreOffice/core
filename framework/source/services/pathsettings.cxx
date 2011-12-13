@@ -63,8 +63,6 @@
 // ______________________________________________
 //  non exported const
 
-#define CFG_READONLY_DEFAULT    sal_False
-
 const ::rtl::OUString CFGPROP_USERPATHES(RTL_CONSTASCII_USTRINGPARAM("UserPaths"));
 const ::rtl::OUString CFGPROP_WRITEPATH(RTL_CONSTASCII_USTRINGPARAM("WritePath"));
 

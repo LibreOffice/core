@@ -60,10 +60,6 @@
 #include "osl/mutex.hxx"
 #include "vcl/svapp.hxx"
 
-// define ----------------------------------------------------------------
-
-#define MAKE_ANY    ::com::sun::star::uno::makeAny
-
 // using ----------------------------------------------------------------
 
 using namespace     ::com::sun::star::container;

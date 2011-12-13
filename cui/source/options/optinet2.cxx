@@ -107,31 +107,13 @@ using namespace ::com::sun::star::uno;
 using namespace ::sfx2;
 using ::rtl::OUString;
 
-
-// define ----------------------------------------------------------------
-
-// different delimiter for Unix (:) and Windows (;)
-
-#ifdef UNX
-#define CLASSPATH_DELIMITER ':'
-#else
-#define CLASSPATH_DELIMITER ';'
-#endif
-
 // static ----------------------------------------------------------------
 
 #define C2U(cChar) OUString::createFromAscii(cChar)
 
-#define INET_SEARCH_TOKEN   '"'
-#define RET_ALL             ((short)200)
-#define CFG_READONLY_DEFAULT    FALSE
-
 #include <sal/config.h>
 
 SV_IMPL_PTRARR( SfxFilterPtrArr, SfxFilterPtr )
-
-const char* SEARCHENGINE_INI    = "srcheng.ini";
-const char* SEARCHENGINE_GROUP  = "SearchEngines-$(vlang)";
 
 // -----------------------------------------------------------------------
 
