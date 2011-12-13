@@ -31,6 +31,7 @@
 #include <hintids.hxx>
 #include <hints.hxx>
 #include <tools/bigint.hxx>
+#include <editeng/opaqitem.hxx>
 #include <editeng/protitem.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/outdev.hxx>
@@ -78,7 +79,8 @@ namespace {
                                 static_cast<const SwVirtFlyDrawObj*>(aIter());
             const SwAnchoredObject* pAnchoredObj = GetUserCall( aIter() )->GetAnchoredObj( aIter() );
             const SwFmtSurround& rSurround = pAnchoredObj->GetFrmFmt().GetSurround();
-            bool bInBackground = ( rSurround.GetSurround() == SURROUND_THROUGHT );
+            const SvxOpaqueItem& rOpaque = pAnchoredObj->GetFrmFmt().GetOpaque();
+            bool bInBackground = ( rSurround.GetSurround() == SURROUND_THROUGHT ) && !rOpaque.GetValue();
 
             bool bBackgroundMatches = ( bInBackground && bSearchBackground ) ||
                                       ( !bInBackground && !bSearchBackground );
@@ -274,7 +276,7 @@ sal_Bool SwPageFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
         }
 
         // TODO Pick up the best approaching selection
-        if ( bTextRet && bBackRet && ( nTextSurface < nBackSurface ) )
+        if ( bTextRet && bBackRet && ( nTextSurface > nBackSurface ) )
         {
             bRet = bBackRet;
             pPos->nNode = aBackPos.nNode;
