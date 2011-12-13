@@ -58,6 +58,7 @@ const char *ExeTable[][4] = {
     { "xrm", "xrmex", " -e", "negative" },
     { "xml", "xrmex", " -e", "positive" },
     { "xhp", "helpex", " -e", "negative" },
+    { "properties", "propex", " -e", "negative" },
     { "NULL", "NULL", "NULL", "NULL" }
 };
 
