@@ -3285,7 +3285,7 @@ gboolean GtkSalFrame::signalMap( GtkWidget *pWidget, GdkEvent*, gpointer frame )
                         RevertToParent, CurrentTime );
     }
 #else
-    (void)pWidget;
+    (void)pWidget; (void)bSetFocus;
 #  warning FIXME no set input focus ...
 #endif
 
