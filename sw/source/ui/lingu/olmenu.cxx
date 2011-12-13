@@ -589,7 +589,7 @@ aInfo16( SW_RES(IMG_INFO_16) )
     beans::PropertyValues  aProperties = rResult.aErrors[ nErrorInResult ].aProperties;
     {
         sal_Int32 i = 0;
-        while ( !sExplanationLink.isEmpty() && i < aProperties.getLength() )
+        while ( sExplanationLink.isEmpty() && i < aProperties.getLength() )
         {
             if ( aProperties[i].Name.equalsAscii( "FullCommentURL" ) )
             {
