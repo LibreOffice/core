@@ -1889,7 +1889,7 @@ BitmapDeviceSharedPtr createBitmapDeviceImpl( const basegfx::B2IVector&         
         pMem.reset(
             reinterpret_cast<sal_uInt8*>(rtl_allocateMemory( nMemSize )),
             &rtl_freeMemory );
-        if (!pMem.get())
+        if (pMem.get() == 0 && nMemSize != 0)
             return BitmapDeviceSharedPtr();
         rtl_zeroMemory(pMem.get(),nMemSize);
     }
