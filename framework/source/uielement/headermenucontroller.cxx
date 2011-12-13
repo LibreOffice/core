@@ -202,7 +202,7 @@ void HeaderMenuController::fillPopupMenu( const Reference< ::com::sun::star::fra
                 }
             }
         }
-        catch ( com::sun::star::container::NoSuchElementException& )
+        catch ( const com::sun::star::container::NoSuchElementException& )
         {
         }
     }

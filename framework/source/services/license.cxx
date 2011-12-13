@@ -367,7 +367,7 @@ css::uno::Any SAL_CALL License::execute(const css::uno::Sequence< css::beans::Na
             aRet <<= sal_False;
         }
     }
-    catch (RuntimeException&)
+    catch (const RuntimeException&)
     {
         // license could not be verified
         aRet <<= sal_False;

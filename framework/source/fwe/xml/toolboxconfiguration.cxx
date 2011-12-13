@@ -100,15 +100,15 @@ sal_Bool ToolBoxConfiguration::LoadToolBox(
         xParser->parseStream( aInputSource );
         return sal_True;
     }
-    catch ( RuntimeException& )
+    catch ( const RuntimeException& )
     {
         return sal_False;
     }
-    catch( SAXException& )
+    catch( const SAXException& )
     {
         return sal_False;
     }
-    catch( ::com::sun::star::io::IOException& )
+    catch( const ::com::sun::star::io::IOException& )
     {
         return sal_False;
     }
@@ -131,15 +131,15 @@ sal_Bool ToolBoxConfiguration::StoreToolBox(
         aWriteToolBoxDocumentHandler.WriteToolBoxDocument();
         return sal_True;
     }
-    catch ( RuntimeException& )
+    catch ( const RuntimeException& )
     {
         return sal_False;
     }
-    catch ( SAXException& )
+    catch ( const SAXException& )
     {
         return sal_False;
     }
-    catch ( ::com::sun::star::io::IOException& )
+    catch ( const ::com::sun::star::io::IOException& )
     {
         return sal_False;
     }

@@ -307,7 +307,7 @@ IMPL_STATIC_LINK_NOINSTANCE( GenericToolbarController, ExecuteHdl_Impl, ExecuteI
         // elements if a component gets detached from its frame!
         pExecuteInfo->xDispatch->dispatch( pExecuteInfo->aTargetURL, pExecuteInfo->aArgs );
    }
-   catch ( Exception& )
+   catch ( const Exception& )
    {
    }
 
@@ -327,7 +327,7 @@ MenuToolbarController::~MenuToolbarController()
         if ( m_xMenuManager.is() )
             m_xMenuManager->dispose();
     }
-    catch( Exception& ) {}
+    catch( const Exception& ) {}
     if ( pMenu )
     {
         delete pMenu;

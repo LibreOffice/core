@@ -172,7 +172,7 @@ void SessionListener::StoreSession( sal_Bool bAsync )
         Sequence< PropertyValue > args(1);
         args[0] = PropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("DispatchAsynchron")),-1,makeAny(bAsync),PropertyState_DIRECT_VALUE);
         xDispatch->dispatch(aURL, args);
-    } catch (com::sun::star::uno::Exception& e) {
+    } catch (const com::sun::star::uno::Exception& e) {
         OString aMsg = OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8);
         OSL_FAIL(aMsg.getStr());
         // save failed, but tell manager to go on if we havent yet dispatched the request
@@ -200,7 +200,7 @@ void SessionListener::QuitSessionQuietly()
         Sequence< PropertyValue > args(1);
         args[0] = PropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("DispatchAsynchron")),-1,makeAny(sal_False),PropertyState_DIRECT_VALUE);
         xDispatch->dispatch(aURL, args);
-    } catch (com::sun::star::uno::Exception& e) {
+    } catch (const com::sun::star::uno::Exception& e) {
         OString aMsg = OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8);
         OSL_FAIL(aMsg.getStr());
     }
@@ -278,7 +278,7 @@ sal_Bool SAL_CALL SessionListener::doRestore()
         xDispatch->dispatch(aURL, args);
         m_bRestored = sal_True;
 
-    } catch (com::sun::star::uno::Exception& e) {
+    } catch (const com::sun::star::uno::Exception& e) {
         OString aMsg = OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8);
         OSL_FAIL(aMsg.getStr());
     }
@@ -329,7 +329,7 @@ void SAL_CALL SessionListener::approveInteraction( sal_Bool bInteractionGranted 
                     m_rSessionManager->interactionDone( this );
             }
         }
-        catch( css::uno::Exception& )
+        catch( const css::uno::Exception& )
         {
             StoreSession( sal_True );
             m_rSessionManager->interactionDone( this );

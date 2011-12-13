@@ -242,7 +242,7 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
             m_xServiceManager->createInstance( SERVICENAME_MODULEMANAGER ), UNO_QUERY_THROW );
         aModuleIdentifier = xModuleManager->identify( m_xFrame );
     }
-    catch ( Exception& )
+    catch ( const Exception& )
     {
     }
 
@@ -341,7 +341,7 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
                                                                             aURL, aArgs, xComponentContext ),
                                                                         UNO_QUERY );
                         }
-                        catch ( uno::Exception& )
+                        catch ( const uno::Exception& )
                         {
                         }
                         bMustBeInit = sal_False; // factory called init already!
@@ -376,7 +376,7 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
                     {
                         xInit->initialize( aArgs );
                     }
-                    catch ( uno::Exception& )
+                    catch ( const uno::Exception& )
                     {
                     }
                 }
@@ -407,7 +407,7 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
                     {
                         xUpdatable->update();
                     }
-                    catch ( uno::Exception& )
+                    catch ( const uno::Exception& )
                     {
                     }
                 }

@@ -102,11 +102,11 @@ throw ( WrappedTargetException )
         xParser->parseStream( aInputSource );
         return Reference< XIndexAccess >( xItemContainer, UNO_QUERY );
     }
-    catch ( RuntimeException& e )
+    catch ( const RuntimeException& e )
     {
         throw WrappedTargetException( e.Message, Reference< XInterface >(), Any() );
     }
-    catch( SAXException& e )
+    catch( const SAXException& e )
     {
         SAXException aWrappedSAXException;
 
@@ -115,7 +115,7 @@ throw ( WrappedTargetException )
         else
             throw WrappedTargetException( aWrappedSAXException.Message, Reference< XInterface >(), Any() );
     }
-    catch( ::com::sun::star::io::IOException& e )
+    catch( const ::com::sun::star::io::IOException& e )
     {
         throw WrappedTargetException( e.Message, Reference< XInterface >(), Any() );
     }
@@ -152,15 +152,15 @@ throw ( WrappedTargetException )
         OWriteMenuDocumentHandler aWriteMenuDocumentHandler( rMenuBarConfiguration, xWriter );
         aWriteMenuDocumentHandler.WriteMenuDocument();
     }
-    catch ( RuntimeException& e )
+    catch ( const RuntimeException& e )
     {
         throw WrappedTargetException( e.Message, Reference< XInterface >(), Any() );
     }
-    catch ( SAXException& e )
+    catch ( const SAXException& e )
     {
         throw WrappedTargetException( e.Message, Reference< XInterface >(), Any() );
     }
-    catch ( ::com::sun::star::io::IOException& e )
+    catch ( const ::com::sun::star::io::IOException& e )
     {
         throw WrappedTargetException( e.Message, Reference< XInterface >(), Any() );
     }

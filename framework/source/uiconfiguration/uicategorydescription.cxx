@@ -258,10 +258,10 @@ sal_Bool ConfigurationAccess_UICategory::fillCache()
                 m_aIdCache.insert( IdToInfoCache::value_type( aNameSeq[i], aUIName ));
             }
         }
-        catch ( com::sun::star::lang::WrappedTargetException& )
+        catch ( const com::sun::star::lang::WrappedTargetException& )
         {
         }
-        catch ( com::sun::star::container::NoSuchElementException& )
+        catch ( const com::sun::star::container::NoSuchElementException& )
         {
         }
     }
@@ -288,19 +288,19 @@ Any ConfigurationAccess_UICategory::getUINameFromID( const rtl::OUString& rId )
                 {
                     return m_xGenericUICategories->getByName( rId );
                 }
-                catch ( com::sun::star::lang::WrappedTargetException& )
+                catch ( const com::sun::star::lang::WrappedTargetException& )
                 {
                 }
-                catch ( com::sun::star::container::NoSuchElementException& )
+                catch ( const com::sun::star::container::NoSuchElementException& )
                 {
                 }
             }
         }
     }
-    catch( com::sun::star::container::NoSuchElementException& )
+    catch( const com::sun::star::container::NoSuchElementException& )
     {
     }
-    catch ( com::sun::star::lang::WrappedTargetException& )
+    catch ( const com::sun::star::lang::WrappedTargetException& )
     {
     }
 
@@ -357,10 +357,10 @@ Sequence< rtl::OUString > ConfigurationAccess_UICategory::getAllIds()
 
             return aNameSeq;
         }
-        catch( com::sun::star::container::NoSuchElementException& )
+        catch( const com::sun::star::container::NoSuchElementException& )
         {
         }
-        catch ( com::sun::star::lang::WrappedTargetException& )
+        catch ( const com::sun::star::lang::WrappedTargetException& )
         {
         }
     }
@@ -394,10 +394,10 @@ sal_Bool ConfigurationAccess_UICategory::initializeConfigAccess()
 
         return sal_True;
     }
-    catch ( WrappedTargetException& )
+    catch ( const WrappedTargetException& )
     {
     }
-    catch ( Exception& )
+    catch ( const Exception& )
     {
     }
 

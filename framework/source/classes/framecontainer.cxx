@@ -248,7 +248,7 @@ css::uno::Reference< css::frame::XFrame > FrameContainer::operator[]( sal_uInt32
         aReadLock.unlock();
         /* } SAFE */
     }
-    catch( std::out_of_range& )
+    catch( const std::out_of_range& )
     {
         // The index is not valid for current container-content - we must handle this case!
         // We can return the default value ...

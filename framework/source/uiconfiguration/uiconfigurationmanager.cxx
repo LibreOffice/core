@@ -267,7 +267,7 @@ void UIConfigurationManager::impl_requestUIElementData( sal_Int16 nElementType, 
                                 aUIElementData.xSettings = Reference< XIndexAccess >( static_cast< OWeakObject * >( new ConstItemContainer( xContainer, sal_True ) ), UNO_QUERY );
                             return;
                         }
-                        catch ( ::com::sun::star::lang::WrappedTargetException& )
+                        catch ( const ::com::sun::star::lang::WrappedTargetException& )
                         {
                         }
                     }
@@ -288,7 +288,7 @@ void UIConfigurationManager::impl_requestUIElementData( sal_Int16 nElementType, 
                             aUIElementData.xSettings = Reference< XIndexAccess >( static_cast< OWeakObject * >( new ConstItemContainer( pRootItemContainer, sal_True ) ), UNO_QUERY );
                             return;
                         }
-                        catch ( ::com::sun::star::lang::WrappedTargetException& )
+                        catch ( const ::com::sun::star::lang::WrappedTargetException& )
                         {
                         }
 
@@ -305,7 +305,7 @@ void UIConfigurationManager::impl_requestUIElementData( sal_Int16 nElementType, 
                             aUIElementData.xSettings = Reference< XIndexAccess >( static_cast< OWeakObject * >( new ConstItemContainer( pRootItemContainer, sal_True ) ), UNO_QUERY );
                             return;
                         }
-                        catch ( ::com::sun::star::lang::WrappedTargetException& )
+                        catch ( const ::com::sun::star::lang::WrappedTargetException& )
                         {
                         }
 
@@ -319,16 +319,16 @@ void UIConfigurationManager::impl_requestUIElementData( sal_Int16 nElementType, 
                 }
             }
         }
-        catch ( ::com::sun::star::embed::InvalidStorageException& )
+        catch ( const ::com::sun::star::embed::InvalidStorageException& )
         {
         }
-        catch ( ::com::sun::star::lang::IllegalArgumentException& )
+        catch ( const ::com::sun::star::lang::IllegalArgumentException& )
         {
         }
-        catch ( ::com::sun::star::io::IOException& )
+        catch ( const ::com::sun::star::io::IOException& )
         {
         }
-        catch ( ::com::sun::star::embed::StorageWrappedTargetException& )
+        catch ( const ::com::sun::star::embed::StorageWrappedTargetException& )
         {
         }
     }
@@ -393,7 +393,7 @@ void UIConfigurationManager::impl_storeElementTypeData( Reference< XStorage >& x
                                 MenuConfiguration aMenuCfg( m_xServiceManager );
                                 aMenuCfg.StoreMenuBarConfigurationToXML( rElement.xSettings, xOutputStream );
                             }
-                            catch ( ::com::sun::star::lang::WrappedTargetException& )
+                            catch ( const ::com::sun::star::lang::WrappedTargetException& )
                             {
                             }
                         }
@@ -405,7 +405,7 @@ void UIConfigurationManager::impl_storeElementTypeData( Reference< XStorage >& x
                             {
                                 ToolBoxConfiguration::StoreToolBox( m_xServiceManager, xOutputStream, rElement.xSettings );
                             }
-                            catch ( ::com::sun::star::lang::WrappedTargetException& )
+                            catch ( const ::com::sun::star::lang::WrappedTargetException& )
                             {
                             }
                         }
@@ -417,7 +417,7 @@ void UIConfigurationManager::impl_storeElementTypeData( Reference< XStorage >& x
                             {
                                 StatusBarConfiguration::StoreStatusBar( m_xServiceManager, xOutputStream, rElement.xSettings );
                             }
-                            catch ( ::com::sun::star::lang::WrappedTargetException& )
+                            catch ( const ::com::sun::star::lang::WrappedTargetException& )
                             {
                             }
                         }
@@ -563,19 +563,19 @@ void UIConfigurationManager::impl_Initialize()
             {
                 xElementTypeStorage = m_xDocConfigStorage->openStorageElement( rtl::OUString::createFromAscii( UIELEMENTTYPENAMES[i] ), nModes );
             }
-            catch ( com::sun::star::container::NoSuchElementException& )
+            catch ( const com::sun::star::container::NoSuchElementException& )
             {
             }
-            catch ( ::com::sun::star::embed::InvalidStorageException& )
+            catch ( const ::com::sun::star::embed::InvalidStorageException& )
             {
             }
-            catch ( ::com::sun::star::lang::IllegalArgumentException& )
+            catch ( const ::com::sun::star::lang::IllegalArgumentException& )
             {
             }
-            catch ( ::com::sun::star::io::IOException& )
+            catch ( const ::com::sun::star::io::IOException& )
             {
             }
-            catch ( ::com::sun::star::embed::StorageWrappedTargetException& )
+            catch ( const ::com::sun::star::embed::StorageWrappedTargetException& )
             {
             }
 
@@ -631,7 +631,7 @@ void SAL_CALL UIConfigurationManager::dispose() throw (::com::sun::star::uno::Ru
             if ( m_xImageManager.is() )
                 m_xImageManager->dispose();
         }
-        catch ( Exception& )
+        catch ( const Exception& )
         {
         }
 
@@ -755,16 +755,16 @@ void SAL_CALL UIConfigurationManager::reset() throw (::com::sun::star::uno::Runt
             for ( sal_uInt32 k = 0; k < aRemoveEventNotifyContainer.size(); k++ )
                 implts_notifyContainerListener( aRemoveEventNotifyContainer[k], NotifyOp_Remove );
         }
-        catch ( ::com::sun::star::lang::IllegalArgumentException& )
+        catch ( const ::com::sun::star::lang::IllegalArgumentException& )
         {
         }
-        catch ( ::com::sun::star::container::NoSuchElementException& )
+        catch ( const ::com::sun::star::container::NoSuchElementException& )
         {
         }
-        catch ( ::com::sun::star::embed::InvalidStorageException& )
+        catch ( const ::com::sun::star::embed::InvalidStorageException& )
         {
         }
-        catch ( ::com::sun::star::embed::StorageWrappedTargetException& )
+        catch ( const ::com::sun::star::embed::StorageWrappedTargetException& )
         {
         }
     }
@@ -1142,7 +1142,7 @@ void SAL_CALL UIConfigurationManager::setStorage( const Reference< XStorage >& S
             if ( xComponent.is() )
                 xComponent->dispose();
         }
-        catch ( Exception& )
+        catch ( const Exception& )
         {
         }
     }
@@ -1174,10 +1174,10 @@ void SAL_CALL UIConfigurationManager::setStorage( const Reference< XStorage >& S
                 if ( a >>= nOpenMode )
                     m_bReadOnly = !( nOpenMode & ElementModes::WRITE );
             }
-            catch ( com::sun::star::beans::UnknownPropertyException& )
+            catch ( const com::sun::star::beans::UnknownPropertyException& )
             {
             }
-            catch ( com::sun::star::lang::WrappedTargetException& )
+            catch ( const com::sun::star::lang::WrappedTargetException& )
             {
             }
         }
@@ -1217,7 +1217,7 @@ void SAL_CALL UIConfigurationManager::reload() throw (::com::sun::star::uno::Exc
                 if ( rDocElementType.bModified )
                     impl_reloadElementTypeData( rDocElementType, aRemoveNotifyContainer, aReplaceNotifyContainer );
             }
-            catch ( Exception& )
+            catch ( const Exception& )
             {
                 throw IOException();
             }
@@ -1256,7 +1256,7 @@ void SAL_CALL UIConfigurationManager::store() throw (::com::sun::star::uno::Exce
                 if ( rElementType.bModified && xStorage.is() )
                     impl_storeElementTypeData( xStorage, rElementType );
             }
-            catch ( Exception& )
+            catch ( const Exception& )
             {
                 throw IOException();
             }
@@ -1290,7 +1290,7 @@ void SAL_CALL UIConfigurationManager::storeToStorage( const Reference< XStorage 
                 if ( rElementType.bModified && xElementTypeStorage.is() )
                     impl_storeElementTypeData( xElementTypeStorage, rElementType, false ); // store data to storage, but don't reset modify flag!
             }
-            catch ( Exception& )
+            catch ( const Exception& )
             {
                 throw IOException();
             }
@@ -1339,7 +1339,7 @@ void UIConfigurationManager::implts_notifyContainerListener( const Configuration
                         break;
                 }
             }
-            catch( css::uno::RuntimeException& )
+            catch( const css::uno::RuntimeException& )
             {
                 pIterator.remove();
             }

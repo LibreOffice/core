@@ -607,7 +607,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_searchProt
                             m_xFactory->createInstance(aHandler.m_sUNOName),
                             css::uno::UNO_QUERY);
         }
-        catch(css::uno::Exception&) {}
+        catch(const css::uno::Exception&) {}
 
         // look if initialization is neccessary
         css::uno::Reference< css::lang::XInitialization > xInit( xHandler, css::uno::UNO_QUERY );
@@ -624,7 +624,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_searchProt
                     lContext[0] <<= xOwner;
                     xInit->initialize(lContext);
                 }
-                catch(css::uno::Exception&) {}
+                catch(const css::uno::Exception&) {}
             }
         }
 

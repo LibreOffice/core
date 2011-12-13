@@ -576,7 +576,7 @@ void Job::impl_startListening()
                 m_bListenOnDesktop = sal_True;
             }
         }
-        catch(css::uno::Exception&)
+        catch(const css::uno::Exception&)
         {
             m_xDesktop = css::uno::Reference< css::frame::XDesktop >();
         }
@@ -595,7 +595,7 @@ void Job::impl_startListening()
                 m_bListenOnFrame = sal_True;
             }
         }
-        catch(css::uno::Exception&)
+        catch(const css::uno::Exception&)
         {
             m_bListenOnFrame = sal_False;
         }
@@ -614,7 +614,7 @@ void Job::impl_startListening()
                 m_bListenOnModel = sal_True;
             }
         }
-        catch(css::uno::Exception&)
+        catch(const css::uno::Exception&)
         {
             m_bListenOnModel = sal_False;
         }
@@ -644,7 +644,7 @@ void Job::impl_stopListening()
             m_xDesktop = css::uno::Reference< css::frame::XDesktop >();
             m_bListenOnDesktop = sal_False;
         }
-        catch(css::uno::Exception&)
+        catch(const css::uno::Exception&)
         {
         }
     }
@@ -662,7 +662,7 @@ void Job::impl_stopListening()
                 m_bListenOnFrame = sal_False;
             }
         }
-        catch(css::uno::Exception&)
+        catch(const css::uno::Exception&)
         {
         }
     }
@@ -680,7 +680,7 @@ void Job::impl_stopListening()
                 m_bListenOnModel = sal_False;
             }
         }
-        catch(css::uno::Exception&)
+        catch(const css::uno::Exception&)
         {
         }
     }

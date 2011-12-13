@@ -717,7 +717,7 @@ rtl::OUString SubstitutePathVariables::GetWorkPath() const
                             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("WritePath")),
                             ::comphelper::ConfigurationHelper::E_READONLY) >>= aWorkPath;
     }
-    catch(RuntimeException &)
+    catch(const RuntimeException &)
     {
     }
 
@@ -742,7 +742,7 @@ rtl::OUString SubstitutePathVariables::GetWorkVariableValue() const
                             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Work")),
                             ::comphelper::ConfigurationHelper::E_READONLY) >>= aWorkPath;
     }
-    catch(RuntimeException &)
+    catch(const RuntimeException &)
     {
     }
 

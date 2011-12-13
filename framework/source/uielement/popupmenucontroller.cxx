@@ -226,7 +226,7 @@ Reference< awt::XWindow > SAL_CALL PopupMenuController::createPopupWindow() thro
         mxPopupMenu->execute( xPeer, VCLUnoHelper::ConvertToAWTRect( aRect ), 0 );
         pToolBox->SetItemDown( nItemId, sal_False );
     }
-    catch( Exception& )
+    catch( const Exception& )
     {
     }
 

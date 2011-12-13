@@ -231,7 +231,7 @@ void SAL_CALL StatusBarManager::dispose() throw( uno::RuntimeException )
                                                             static_cast< ::cppu::OWeakObject *>( this ),
                                                             uno::UNO_QUERY ));
                 }
-                catch ( uno::Exception& )
+                catch ( const uno::Exception& )
                 {
                 }
             }
@@ -310,7 +310,7 @@ void StatusBarManager::UpdateControllers()
                 if ( xUpdatable.is() )
                     xUpdatable->update();
             }
-            catch ( uno::Exception& )
+            catch ( const uno::Exception& )
             {
             }
         }
@@ -336,7 +336,7 @@ void StatusBarManager::RemoveControllers()
             if ( xComponent.is() )
                 xComponent->dispose();
         }
-        catch ( uno::Exception& )
+        catch ( const uno::Exception& )
         {
         }
 
@@ -532,7 +532,7 @@ void StatusBarManager::FillStatusBar( const uno::Reference< container::XIndexAcc
                 }
             }
         }
-        catch ( ::com::sun::star::lang::IndexOutOfBoundsException& )
+        catch ( const ::com::sun::star::lang::IndexOutOfBoundsException& )
         {
             break;
         }

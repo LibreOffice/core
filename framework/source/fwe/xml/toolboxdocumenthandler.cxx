@@ -277,7 +277,7 @@ throw(  SAXException, RuntimeException )
                                     {
                                         xPropSet->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "UIName" )), makeAny( aUIName ) );
                                     }
-                                    catch ( UnknownPropertyException& )
+                                    catch ( const UnknownPropertyException& )
                                     {
                                     }
                                 }
@@ -698,7 +698,7 @@ void OWriteToolBoxDocumentHandler::WriteToolBoxDocument() throw
         {
             xPropSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "UIName" ))) >>= aUIName;
         }
-        catch ( UnknownPropertyException& )
+        catch ( const UnknownPropertyException& )
         {
         }
     }

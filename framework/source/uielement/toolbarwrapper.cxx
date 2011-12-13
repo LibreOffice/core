@@ -199,7 +199,7 @@ void SAL_CALL ToolBarWrapper::initialize( const Sequence< Any >& aArguments ) th
                     pToolBar->SetOutputSizePixel( aSize );
                 }
             }
-            catch ( NoSuchElementException& )
+            catch ( const NoSuchElementException& )
             {
                 // No settings in our configuration manager. This means we are
                 // a transient toolbar which has no persistent settings.
@@ -257,7 +257,7 @@ void SAL_CALL ToolBarWrapper::updateSettings() throw (::com::sun::star::uno::Run
                 if ( m_xConfigData.is() )
                     pToolBarManager->FillToolbar( m_xConfigData );
             }
-            catch ( NoSuchElementException& )
+            catch ( const NoSuchElementException& )
             {
             }
         }

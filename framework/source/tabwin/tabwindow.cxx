@@ -214,7 +214,7 @@ void TabWindow::implts_SendNotification( Notification eNotify, sal_Int32 ID ) co
                         break;
                 }
             }
-            catch( css::uno::RuntimeException& )
+            catch( const css::uno::RuntimeException& )
             {
                 pIterator.remove();
             }
@@ -242,7 +242,7 @@ void TabWindow::implts_SendNotification( Notification eNotify, sal_Int32 ID, con
                         break;
                 }
             }
-            catch( css::uno::RuntimeException& )
+            catch( const css::uno::RuntimeException& )
             {
                 pIterator.remove();
             }
@@ -318,11 +318,11 @@ throw (css::uno::Exception, css::uno::RuntimeException)
                 xToolkit = css::uno::Reference< css::awt::XToolkit >(
                     xSMGR->createInstance( SERVICENAME_VCLTOOLKIT ), css::uno::UNO_QUERY );
             }
-            catch ( css::uno::RuntimeException& )
+            catch ( const css::uno::RuntimeException& )
             {
                 throw;
             }
-            catch ( css::uno::Exception& )
+            catch ( const css::uno::Exception& )
             {
             }
         }
@@ -359,11 +359,11 @@ throw (css::uno::Exception, css::uno::RuntimeException)
                 {
                     xTopWindow = css::uno::Reference< css::awt::XTopWindow >( xToolkit->createWindow( aDescriptor ), css::uno::UNO_QUERY );
                 }
-                catch ( css::uno::RuntimeException& )
+                catch ( const css::uno::RuntimeException& )
                 {
                     throw;
                 }
-                catch ( css::uno::Exception& )
+                catch ( const css::uno::Exception& )
                 {
                 }
             }

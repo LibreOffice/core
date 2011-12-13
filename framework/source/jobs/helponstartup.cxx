@@ -310,9 +310,9 @@ void SAL_CALL HelpOnStartup::disposing(const css::lang::EventObject& aEvent)
         if (xHelpContent.is())
             sCurrentHelpURL = xHelpContent->getURL();
     }
-    catch(css::uno::RuntimeException& exRun)
+    catch(const css::uno::RuntimeException& exRun)
         { throw exRun; }
-    catch(css::uno::Exception&)
+    catch(const css::uno::Exception&)
         { sCurrentHelpURL = ::rtl::OUString(); }
 
     return sCurrentHelpURL;

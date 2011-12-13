@@ -133,11 +133,11 @@ void FwkTabPage::CreateDialog()
 
         CallMethod( INITIALIZE_METHOD );
     }
-    catch ( lang::IllegalArgumentException& )
+    catch ( const lang::IllegalArgumentException& )
     {
         DBG_ERRORFILE( "FwkTabPage::CreateDialog(): illegal argument" );
     }
-    catch ( uno::Exception& )
+    catch ( const uno::Exception& )
     {
         DBG_ERRORFILE( "FwkTabPage::CreateDialog(): exception of XDialogProvider2::createContainerWindow()" );
     }
@@ -154,7 +154,7 @@ sal_Bool FwkTabPage::CallMethod( const rtl::OUString& rMethod )
         {
             bRet = m_xEventHdl->callHandlerMethod( m_xPage, uno::makeAny( rMethod ), EXTERNAL_EVENT );
         }
-        catch ( uno::Exception& )
+        catch ( const uno::Exception& )
         {
             DBG_UNHANDLED_EXCEPTION();
         }

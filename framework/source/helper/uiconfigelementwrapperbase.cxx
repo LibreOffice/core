@@ -318,7 +318,7 @@ void SAL_CALL UIConfigElementWrapperBase::setFastPropertyValue_NoBroadcast(   sa
                                 m_bConfigListening = sal_False;
                             }
                         }
-                        catch ( Exception& )
+                        catch ( const Exception& )
                         {
                         }
                     }
@@ -336,7 +336,7 @@ void SAL_CALL UIConfigElementWrapperBase::setFastPropertyValue_NoBroadcast(   sa
                                 m_bConfigListening = sal_True;
                             }
                         }
-                        catch ( Exception& )
+                        catch ( const Exception& )
                         {
                         }
                     }
@@ -518,7 +518,7 @@ void SAL_CALL UIConfigElementWrapperBase::setSettings( const Reference< XIndexAc
             {
                 xUICfgMgr->replaceSettings( aResourceURL, m_xConfigData );
             }
-            catch( NoSuchElementException& )
+            catch( const NoSuchElementException& )
             {
             }
         }

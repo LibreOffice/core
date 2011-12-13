@@ -77,11 +77,11 @@ sal_Bool UIConfigurationImporterOOo1x::ImportCustomToolbars(
                 }
             }
         }
-        catch ( uno::RuntimeException& )
+        catch ( const uno::RuntimeException& )
         {
             throw;
         }
-        catch ( uno::Exception& )
+        catch ( const uno::Exception& )
         {
         }
     }

@@ -168,7 +168,7 @@ void ConfigAccess::open( /*IN*/ EOpenMode eMode )
                 if (eMode==E_READWRITE)
                     m_xConfig = xConfigProvider->createInstanceWithArguments(SERVICENAME_CFGUPDATEACCESS, lParams);
             }
-            catch(css::uno::Exception& ex)
+            catch(const css::uno::Exception& ex)
             {
                 (void) ex; // avoid warning
                 LOG_WARNING("open config ...", U2B(ex.Message))

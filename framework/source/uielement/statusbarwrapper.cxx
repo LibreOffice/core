@@ -147,7 +147,7 @@ void SAL_CALL StatusBarWrapper::initialize( const Sequence< Any >& aArguments ) 
                     pStatusBarManager->FillStatusBar( m_xConfigData );
                 }
             }
-            catch ( NoSuchElementException& )
+            catch ( const NoSuchElementException& )
             {
             }
         }
@@ -174,7 +174,7 @@ void SAL_CALL StatusBarWrapper::updateSettings() throw ( RuntimeException )
             if ( m_xConfigData.is() )
                 pStatusBarManager->FillStatusBar( m_xConfigData );
         }
-        catch ( NoSuchElementException& )
+        catch ( const NoSuchElementException& )
         {
         }
     }

@@ -67,7 +67,7 @@ sal_Bool SAL_CALL component_writeInfo( void* /*pServiceManager*/, void* pRegistr
             Reference< XRegistryKey > pXNewKey( static_cast< XRegistryKey* >( pRegistryKey ) );
             pXNewKey->createKey( OUString(RTL_CONSTASCII_USTRINGPARAM( FILE_PICKER_REGKEY_NAME ) ));
         }
-        catch( InvalidRegistryException& )
+        catch( const InvalidRegistryException& )
         {
             OSL_FAIL( "InvalidRegistryException caught" );
             bRetVal = sal_False;

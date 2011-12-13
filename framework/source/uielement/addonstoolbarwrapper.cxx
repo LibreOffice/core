@@ -162,7 +162,7 @@ void SAL_CALL AddonsToolBarWrapper::initialize( const Sequence< Any >& aArgument
                     pToolBar->SetSizePixel( aSize );
                 }
             }
-            catch ( NoSuchElementException& )
+            catch ( const NoSuchElementException& )
             {
             }
         }

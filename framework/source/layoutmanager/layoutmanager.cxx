@@ -293,7 +293,7 @@ void LayoutManager::implts_reset( sal_Bool bAttached )
             {
                 aModuleIdentifier = m_xModuleManager->identify( Reference< XInterface >( xFrame, UNO_QUERY ) );
             }
-            catch( Exception& ) {}
+            catch( const Exception& ) {}
 
             if ( aModuleIdentifier.getLength() && aOldModuleIdentifier != aModuleIdentifier )
             {
@@ -2696,7 +2696,7 @@ void LayoutManager::implts_notifyListeners( short nEvent, uno::Any aInfoParam )
             {
                 ((frame::XLayoutManagerListener*)pIterator.next())->layoutEvent( aSource, nEvent, aInfoParam );
             }
-            catch( uno::RuntimeException& )
+            catch( const uno::RuntimeException& )
             {
                 pIterator.remove();
             }

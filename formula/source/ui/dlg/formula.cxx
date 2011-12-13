@@ -722,7 +722,7 @@ void FormulaDlg_Impl::MakeTree(IStructHelper* _pTree,SvLBoxEntry* pParent,Formul
                 MakeTree(_pTree,pParent,m_pTokenArray->PrevRPN(),Count);
             }
         }
-        catch(uno::Exception&)
+        catch(const uno::Exception&)
         {
             DBG_UNHANDLED_EXCEPTION();
         }

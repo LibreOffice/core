@@ -503,7 +503,7 @@ IMPL_STATIC_LINK_NOINSTANCE( RecentFilesMenuController, ExecuteHdl_Impl, LoadRec
         // elements if a component gets detached from its frame!
         pLoadRecentFile->xDispatch->dispatch( pLoadRecentFile->aTargetURL, pLoadRecentFile->aArgSeq );
     }
-    catch ( Exception& )
+    catch ( const Exception& )
     {
     }
 

@@ -239,7 +239,7 @@ IMPL_STATIC_LINK_NOINSTANCE( ComplexToolbarController, ExecuteHdl_Impl, ExecuteI
        // elements if a component gets detached from its frame!
        pExecuteInfo->xDispatch->dispatch( pExecuteInfo->aTargetURL, pExecuteInfo->aArgs );
    }
-   catch ( Exception& )
+   catch ( const Exception& )
    {
    }
 
@@ -264,7 +264,7 @@ IMPL_STATIC_LINK_NOINSTANCE( ComplexToolbarController, Notify_Impl, NotifyInfo*,
        aEvent.aInformation = pNotifyInfo->aInfoSeq;
        pNotifyInfo->xNotifyListener->controlEvent( aEvent );
    }
-   catch ( Exception& )
+   catch ( const Exception& )
    {
    }
 

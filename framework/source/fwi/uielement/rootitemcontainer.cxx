@@ -108,7 +108,7 @@ RootItemContainer::RootItemContainer( const Reference< XIndexAccess >& rSourceCo
             xPropSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "UIName" ))) >>= m_aUIName;
         }
     }
-    catch ( Exception& )
+    catch ( const Exception& )
     {
     }
 
@@ -141,7 +141,7 @@ RootItemContainer::RootItemContainer( const Reference< XIndexAccess >& rSourceCo
                 }
             }
         }
-        catch ( IndexOutOfBoundsException& )
+        catch ( const IndexOutOfBoundsException& )
         {
         }
     }

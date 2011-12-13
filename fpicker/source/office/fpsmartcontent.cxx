@@ -168,10 +168,10 @@ namespace svt
                     // is really valid (some UCP's only tell this when asking for properties, not upon
                     // creation)
             }
-            catch( ContentCreationException& )
+            catch( const ContentCreationException& )
             {
             }
-            catch( Exception& )
+            catch( const Exception& )
             {
                 OSL_FAIL( "SmartContent::bindTo: unexpected exception caught!" );
             }
@@ -217,7 +217,7 @@ namespace svt
             // from here on, we definately know that the content is valid
             m_eState = VALID;
         }
-        catch( Exception& )
+        catch( const Exception& )
         {
             // now we're definately invalid
             m_eState = INVALID;
@@ -240,7 +240,7 @@ namespace svt
             // from here on, we definately know that the content is valid
             m_eState = VALID;
         }
-        catch( ::com::sun::star::uno::Exception& )
+        catch( const ::com::sun::star::uno::Exception& )
         {
             // now we're definately invalid
             m_eState = INVALID;
@@ -303,7 +303,7 @@ namespace svt
             // now we're definately valid
             m_eState = VALID;
         }
-        catch( Exception& )
+        catch( const Exception& )
         {
             // now we're definately invalid
             m_eState = INVALID;

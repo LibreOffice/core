@@ -329,7 +329,7 @@ void ModuleUIConfigurationManager::impl_requestUIElementData( sal_Int16 nElement
                                 aUIElementData.xSettings = Reference< XIndexAccess >( static_cast< OWeakObject * >( new ConstItemContainer( xContainer, sal_True ) ), UNO_QUERY );
                             return;
                         }
-                        catch ( ::com::sun::star::lang::WrappedTargetException& )
+                        catch ( const ::com::sun::star::lang::WrappedTargetException& )
                         {
                         }
                     }
@@ -350,7 +350,7 @@ void ModuleUIConfigurationManager::impl_requestUIElementData( sal_Int16 nElement
                             aUIElementData.xSettings = Reference< XIndexAccess >( static_cast< OWeakObject * >( new ConstItemContainer( pRootItemContainer, sal_True ) ), UNO_QUERY );
                             return;
                         }
-                        catch ( ::com::sun::star::lang::WrappedTargetException& )
+                        catch ( const ::com::sun::star::lang::WrappedTargetException& )
                         {
                         }
 
@@ -367,7 +367,7 @@ void ModuleUIConfigurationManager::impl_requestUIElementData( sal_Int16 nElement
                             aUIElementData.xSettings = Reference< XIndexAccess >( static_cast< OWeakObject * >( new ConstItemContainer( pRootItemContainer, sal_True ) ), UNO_QUERY );
                             return;
                         }
-                        catch ( ::com::sun::star::lang::WrappedTargetException& )
+                        catch ( const ::com::sun::star::lang::WrappedTargetException& )
                         {
                         }
 
@@ -381,16 +381,16 @@ void ModuleUIConfigurationManager::impl_requestUIElementData( sal_Int16 nElement
                 }
             }
         }
-        catch ( ::com::sun::star::embed::InvalidStorageException& )
+        catch ( const ::com::sun::star::embed::InvalidStorageException& )
         {
         }
-        catch ( ::com::sun::star::lang::IllegalArgumentException& )
+        catch ( const ::com::sun::star::lang::IllegalArgumentException& )
         {
         }
-        catch ( ::com::sun::star::io::IOException& )
+        catch ( const ::com::sun::star::io::IOException& )
         {
         }
-        catch ( ::com::sun::star::embed::StorageWrappedTargetException& )
+        catch ( const ::com::sun::star::embed::StorageWrappedTargetException& )
         {
         }
     }
@@ -464,7 +464,7 @@ void ModuleUIConfigurationManager::impl_storeElementTypeData( Reference< XStorag
                                 MenuConfiguration aMenuCfg( m_xServiceManager );
                                 aMenuCfg.StoreMenuBarConfigurationToXML( rElement.xSettings, xOutputStream );
                             }
-                            catch ( ::com::sun::star::lang::WrappedTargetException& )
+                            catch ( const ::com::sun::star::lang::WrappedTargetException& )
                             {
                             }
                         }
@@ -476,7 +476,7 @@ void ModuleUIConfigurationManager::impl_storeElementTypeData( Reference< XStorag
                             {
                                 ToolBoxConfiguration::StoreToolBox( m_xServiceManager, xOutputStream, rElement.xSettings );
                             }
-                            catch ( ::com::sun::star::lang::WrappedTargetException& )
+                            catch ( const ::com::sun::star::lang::WrappedTargetException& )
                             {
                             }
                         }
@@ -488,7 +488,7 @@ void ModuleUIConfigurationManager::impl_storeElementTypeData( Reference< XStorag
                             {
                                 StatusBarConfiguration::StoreStatusBar( m_xServiceManager, xOutputStream, rElement.xSettings );
                             }
-                            catch ( ::com::sun::star::lang::WrappedTargetException& )
+                            catch ( const ::com::sun::star::lang::WrappedTargetException& )
                             {
                             }
                         }
@@ -685,19 +685,19 @@ void ModuleUIConfigurationManager::impl_Initialize()
                 if ( m_pStorageHandler[i] )
                     xElementTypeStorage = m_pStorageHandler[i]->getWorkingStorageUser();
             }
-            catch ( com::sun::star::container::NoSuchElementException& )
+            catch ( const com::sun::star::container::NoSuchElementException& )
             {
             }
-            catch ( ::com::sun::star::embed::InvalidStorageException& )
+            catch ( const ::com::sun::star::embed::InvalidStorageException& )
             {
             }
-            catch ( ::com::sun::star::lang::IllegalArgumentException& )
+            catch ( const ::com::sun::star::lang::IllegalArgumentException& )
             {
             }
-            catch ( ::com::sun::star::io::IOException& )
+            catch ( const ::com::sun::star::io::IOException& )
             {
             }
-            catch ( ::com::sun::star::embed::StorageWrappedTargetException& )
+            catch ( const ::com::sun::star::embed::StorageWrappedTargetException& )
             {
             }
 
@@ -723,7 +723,7 @@ void ModuleUIConfigurationManager::impl_Initialize()
                 if( xNameAccess->hasByName( sName ) )
                     xNameAccess->getByName( sName ) >>= xElementTypeStorage;
             }
-            catch ( com::sun::star::container::NoSuchElementException& )
+            catch ( const com::sun::star::container::NoSuchElementException& )
             {
             }
 
@@ -794,7 +794,7 @@ void SAL_CALL ModuleUIConfigurationManager::dispose() throw (::com::sun::star::u
         if ( xModuleImageManager.is() )
             xModuleImageManager->dispose();
     }
-    catch ( Exception& )
+    catch ( const Exception& )
     {
     }
 }
@@ -949,7 +949,7 @@ void SAL_CALL ModuleUIConfigurationManager::reset() throw (::com::sun::star::uno
                     impl_resetElementTypeData( rUserElementType, rDefaultElementType, aRemoveEventNotifyContainer, aReplaceEventNotifyContainer );
                     rUserElementType.bModified = sal_False;
                 }
-                catch ( Exception& )
+                catch ( const Exception& )
                 {
                     throw IOException();
                 }
@@ -967,16 +967,16 @@ void SAL_CALL ModuleUIConfigurationManager::reset() throw (::com::sun::star::uno
             for ( k = 0; k < aReplaceEventNotifyContainer.size(); k++ )
                 implts_notifyContainerListener( aReplaceEventNotifyContainer[k], NotifyOp_Replace );
         }
-        catch ( ::com::sun::star::lang::IllegalArgumentException& )
+        catch ( const ::com::sun::star::lang::IllegalArgumentException& )
         {
         }
-        catch ( ::com::sun::star::container::NoSuchElementException& )
+        catch ( const ::com::sun::star::container::NoSuchElementException& )
         {
         }
-        catch ( ::com::sun::star::embed::InvalidStorageException& )
+        catch ( const ::com::sun::star::embed::InvalidStorageException& )
         {
         }
-        catch ( ::com::sun::star::embed::StorageWrappedTargetException& )
+        catch ( const ::com::sun::star::embed::StorageWrappedTargetException& )
         {
         }
     }
@@ -1482,7 +1482,7 @@ void SAL_CALL ModuleUIConfigurationManager::reload() throw (::com::sun::star::un
                 if ( rUserElementType.bModified )
                     impl_reloadElementTypeData( rUserElementType, rDefaultElementType, aRemoveNotifyContainer, aReplaceNotifyContainer );
             }
-            catch ( Exception& )
+            catch ( const Exception& )
             {
                 throw IOException();
             }
@@ -1524,7 +1524,7 @@ void SAL_CALL ModuleUIConfigurationManager::store() throw (::com::sun::star::uno
                     m_pStorageHandler[i]->commitUserChanges();
                 }
             }
-            catch ( Exception& )
+            catch ( const Exception& )
             {
                 throw IOException();
             }
@@ -1555,7 +1555,7 @@ void SAL_CALL ModuleUIConfigurationManager::storeToStorage( const Reference< XSt
                 if ( rElementType.bModified && xElementTypeStorage.is() )
                     impl_storeElementTypeData( xElementTypeStorage, rElementType, false ); // store data to storage, but don't reset modify flag!
             }
-            catch ( Exception& )
+            catch ( const Exception& )
             {
                 throw IOException();
             }
@@ -1604,7 +1604,7 @@ void ModuleUIConfigurationManager::implts_notifyContainerListener( const Configu
                         break;
                 }
             }
-            catch( css::uno::RuntimeException& )
+            catch( const css::uno::RuntimeException& )
             {
                 pIterator.remove();
             }

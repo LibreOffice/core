@@ -286,10 +286,10 @@ sal_Bool MailToDispatcher::implts_dispatch( const css::util::URL&               
             xSystemShellExecute->execute( aURL.Complete, ::rtl::OUString(), css::system::SystemShellExecuteFlags::DEFAULTS );
             bSuccess = sal_True;
         }
-        catch (css::lang::IllegalArgumentException&)
+        catch (const css::lang::IllegalArgumentException&)
         {
         }
-        catch (css::system::SystemShellExecuteException&)
+        catch (const css::system::SystemShellExecuteException&)
         {
         }
     }

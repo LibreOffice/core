@@ -135,7 +135,7 @@ Reference< XLayoutManager > getLayoutManagerFromFrame( const Reference< XFrame >
     {
         xPropSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" ))) >>= xLayoutManager;
     }
-    catch ( UnknownPropertyException& )
+    catch ( const UnknownPropertyException& )
     {
     }
 
@@ -249,7 +249,7 @@ rtl::OUString ToolbarsMenuController::getUINameFromCommand( const rtl::OUString&
                                                                 UNO_QUERY );
             xNameAccess->getByName( m_aModuleIdentifier ) >>= m_xUICommandDescription;
         }
-        catch ( Exception& )
+        catch ( const Exception& )
         {
         }
     }
@@ -273,7 +273,7 @@ rtl::OUString ToolbarsMenuController::getUINameFromCommand( const rtl::OUString&
             }
             aLabel = aStr;
         }
-        catch ( Exception& )
+        catch ( const Exception& )
         {
         }
     }
@@ -337,7 +337,7 @@ Sequence< Sequence< com::sun::star::beans::PropertyValue > > ToolbarsMenuControl
                     aToolBarArray.push_back( aToolBarInfo );
                 }
             }
-            catch ( Exception& )
+            catch ( const Exception& )
             {
             }
         }
@@ -434,7 +434,7 @@ void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
                         }
                     }
                 }
-                catch ( Exception& )
+                catch ( const Exception& )
                 {
                 }
 
@@ -685,7 +685,7 @@ void SAL_CALL ToolbarsMenuController::select( const css::awt::MenuEvent& rEvent 
                                     }
                                 }
                             }
-                            catch ( NoSuchElementException& )
+                            catch ( const NoSuchElementException& )
                             {
                             }
                         }
@@ -702,10 +702,10 @@ void SAL_CALL ToolbarsMenuController::select( const css::awt::MenuEvent& rEvent 
                                     {
                                         xPropSet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "RefreshContextToolbarVisibility" )), makeAny( sal_True ));
                                     }
-                                    catch ( RuntimeException& )
+                                    catch ( const RuntimeException& )
                                     {
                                     }
-                                    catch ( Exception& )
+                                    catch ( const Exception& )
                                     {
                                     }
                                 }
@@ -713,11 +713,11 @@ void SAL_CALL ToolbarsMenuController::select( const css::awt::MenuEvent& rEvent 
                             RefreshToolbars( xFrame );
                         }
                     }
-                    catch ( RuntimeException& )
+                    catch ( const RuntimeException& )
                     {
                         throw;
                     }
-                    catch ( Exception& )
+                    catch ( const Exception& )
                     {
                     }
                 }
@@ -878,7 +878,7 @@ void SAL_CALL ToolbarsMenuController::initialize( const Sequence< Any >& aArgume
                     }
                     m_aModuleIdentifier = aModuleIdentifier;
                 }
-                catch ( Exception& )
+                catch ( const Exception& )
                 {
                 }
             }
@@ -898,7 +898,7 @@ IMPL_STATIC_LINK_NOINSTANCE( ToolbarsMenuController, ExecuteHdl_Impl, ExecuteInf
             pExecuteInfo->xDispatch->dispatch( pExecuteInfo->aTargetURL, pExecuteInfo->aArgs );
         }
     }
-    catch ( Exception& )
+    catch ( const Exception& )
     {
     }
 

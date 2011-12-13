@@ -173,7 +173,7 @@ throw (uno::Exception, uno::RuntimeException)
         if ( xFrame.is() && xModuleManager.is() )
             aModuleId = xModuleManager->identify( uno::Reference< uno::XInterface >( xFrame, uno::UNO_QUERY ) );
     }
-    catch ( frame::UnknownModuleException& )
+    catch ( const frame::UnknownModuleException& )
     {
     }
 
@@ -214,10 +214,10 @@ throw (uno::Exception, uno::RuntimeException)
                     {
                         xWindow = xFactory->createInstanceWithArgumentsAndContext( Arguments, Context );
                     }
-                    catch ( uno::RuntimeException& )
+                    catch ( const uno::RuntimeException& )
                     {
                     }
-                    catch ( uno::Exception& )
+                    catch ( const uno::Exception& )
                     {
                     }
                 }

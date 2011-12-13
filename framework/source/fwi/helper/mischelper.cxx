@@ -66,9 +66,8 @@ uno::Reference< linguistic2::XLanguageGuessing > LanguageGuessingHelper::GetGues
                         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.linguistic2.LanguageGuessing")) ),
                         uno::UNO_QUERY );
         }
-        catch (uno::Exception &r)
+        catch (const uno::Exception &)
         {
-            (void) r;
             DBG_ASSERT( 0, "failed to get language guessing component" );
         }
     }
@@ -101,7 +100,7 @@ uno::Reference< linguistic2::XLanguageGuessing > LanguageGuessingHelper::GetGues
                 {
                     _rModuleIdentifier = xModuleManager->identify( _xFrame );
                 }
-                catch( Exception& )
+                catch( const Exception& )
                 {
                 }
             }
@@ -112,7 +111,7 @@ uno::Reference< linguistic2::XLanguageGuessing > LanguageGuessingHelper::GetGues
                 xNameAccess->getByName( _rModuleIdentifier ) >>= _xUICommandLabels;
             }
         }
-        catch ( Exception& )
+        catch ( const Exception& )
         {
         }
     }
@@ -142,7 +141,7 @@ uno::Reference< linguistic2::XLanguageGuessing > LanguageGuessingHelper::GetGues
                 aLabel = aStr;
             }
         }
-        catch ( com::sun::star::uno::Exception& )
+        catch ( const com::sun::star::uno::Exception& )
         {
         }
     }

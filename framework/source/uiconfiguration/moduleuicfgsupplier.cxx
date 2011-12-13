@@ -222,7 +222,7 @@ throw ( NoSuchElementException, RuntimeException)
                 }
             }
         }
-        catch( Exception& )
+        catch( const Exception& )
         {
             sShort = ::rtl::OUString();
         }

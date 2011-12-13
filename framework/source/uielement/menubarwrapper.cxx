@@ -165,7 +165,7 @@ void SAL_CALL MenuBarWrapper::initialize( const Sequence< Any >& aArguments ) th
             {
                 aModuleIdentifier = xModuleManager->identify( xFrame );
             }
-            catch( Exception& )
+            catch( const Exception& )
             {
             }
 
@@ -183,7 +183,7 @@ void SAL_CALL MenuBarWrapper::initialize( const Sequence< Any >& aArguments ) th
                     MenuBarManager::FillMenuWithConfiguration( nId, pVCLMenuBar, aModuleIdentifier, m_xConfigData, xTrans );
                 }
             }
-            catch ( NoSuchElementException& )
+            catch ( const NoSuchElementException& )
             {
             }
 
@@ -246,7 +246,7 @@ void SAL_CALL MenuBarWrapper::updateSettings() throw ( RuntimeException )
                 if ( m_xConfigData.is() )
                     pMenuBarManager->SetItemContainer( m_xConfigData );
             }
-            catch ( NoSuchElementException& )
+            catch ( const NoSuchElementException& )
             {
             }
         }

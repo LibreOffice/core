@@ -202,10 +202,10 @@ sal_Bool GlobalSettings_Access::HasStatesInfo( GlobalSettings::UIElementType eEl
             if ( a >>= bValue )
                 return bValue;
         }
-        catch ( css::container::NoSuchElementException& )
+        catch ( const css::container::NoSuchElementException& )
         {
         }
-        catch ( css::uno::Exception& )
+        catch ( const css::uno::Exception& )
         {
         }
     }
@@ -248,10 +248,10 @@ sal_Bool GlobalSettings_Access::GetStateInfo( GlobalSettings::UIElementType eEle
                 return sal_True;
             }
         }
-        catch ( css::container::NoSuchElementException& )
+        catch ( const css::container::NoSuchElementException& )
         {
         }
-        catch ( css::uno::Exception& )
+        catch ( const css::uno::Exception& )
         {
         }
     }
@@ -296,10 +296,10 @@ sal_Bool GlobalSettings_Access::impl_initConfigAccess()
 
         return m_xConfigAccess.is();
     }
-    catch ( css::lang::WrappedTargetException& )
+    catch ( const css::lang::WrappedTargetException& )
     {
     }
-    catch ( css::uno::Exception& )
+    catch ( const css::uno::Exception& )
     {
     }
 

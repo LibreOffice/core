@@ -280,7 +280,7 @@ throw (::com::sun::star::uno::RuntimeException)
 
             xDispatch->dispatch( aTargetURL, aArgs );
         }
-        catch ( DisposedException& )
+        catch ( const DisposedException& )
         {
         }
     }

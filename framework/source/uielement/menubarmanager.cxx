@@ -389,7 +389,7 @@ void SAL_CALL MenuBarManager::dispose() throw( RuntimeException )
                     Reference< XUIConfigurationListener >(
                         static_cast< OWeakObject* >( this ), UNO_QUERY ));
             }
-            catch ( Exception& )
+            catch ( const Exception& )
             {
             }
         }
@@ -401,7 +401,7 @@ void SAL_CALL MenuBarManager::dispose() throw( RuntimeException )
                     Reference< XUIConfigurationListener >(
                         static_cast< OWeakObject* >( this ), UNO_QUERY ));
             }
-            catch ( Exception& )
+            catch ( const Exception& )
             {
             }
         }
@@ -676,11 +676,11 @@ void MenuBarManager::RemoveListener()
                     if ( xComponent.is() )
                         xComponent->dispose();
                 }
-                catch ( RuntimeException& )
+                catch ( const RuntimeException& )
                 {
                     throw;
                 }
-                catch ( Exception& )
+                catch ( const Exception& )
                 {
                 }
 
@@ -701,7 +701,7 @@ void MenuBarManager::RemoveListener()
             m_xFrame->removeFrameActionListener( Reference< XFrameActionListener >(
                                                     static_cast< OWeakObject* >( this ), UNO_QUERY ));
     }
-    catch ( Exception& )
+    catch ( const Exception& )
     {
     }
 
@@ -999,7 +999,7 @@ IMPL_LINK( MenuBarManager, Activate, Menu *, pMenu )
                             pMenuItemHandler->xMenuItemDispatch->removeStatusListener(
                                                                     static_cast< XStatusListener* >( this ), aTargetURL );
                         }
-                        catch ( Exception& )
+                        catch ( const Exception& )
                         {
                         }
                     }
@@ -1513,7 +1513,7 @@ void MenuBarManager::impl_RetrieveShortcutsFromConfiguration(
                     aMenuShortCuts[i]->aKeyCode = svt::AcceleratorExecute::st_AWTKey2VCLKey( aKeyEvent );
             }
         }
-        catch ( IllegalArgumentException& )
+        catch ( const IllegalArgumentException& )
         {
         }
     }
@@ -1532,7 +1532,7 @@ void MenuBarManager::RetrieveShortcuts( std::vector< MenuItemHandler* >& aMenuSh
         {
             m_aModuleIdentifier = xModuleManager->identify( m_xFrame );
         }
-        catch( Exception& )
+        catch( const Exception& )
         {
         }
     }
@@ -1584,11 +1584,11 @@ void MenuBarManager::RetrieveShortcuts( std::vector< MenuItemHandler* >& aMenuSh
                         m_xModuleAcceleratorManager = xModuleAccelCfg;
                     }
                 }
-                catch ( RuntimeException& )
+                catch ( const RuntimeException& )
                 {
                     throw;
                 }
-                catch ( Exception& )
+                catch ( const Exception& )
                 {
                 }
             }
@@ -1654,7 +1654,7 @@ void MenuBarManager::RetrieveImageManagers()
         if ( xModuleManager.is() )
             m_aModuleIdentifier = xModuleManager->identify( Reference< XInterface >( m_xFrame, UNO_QUERY ) );
     }
-    catch( Exception& )
+    catch( const Exception& )
     {
     }
 
@@ -1810,7 +1810,7 @@ void MenuBarManager::FillMenu(
                 }
             }
         }
-        catch ( IndexOutOfBoundsException& )
+        catch ( const IndexOutOfBoundsException& )
         {
             break;
         }
@@ -1890,7 +1890,7 @@ void MenuBarManager::SetItemContainer( const Reference< XIndexAccess >& rItemCon
         {
             m_aModuleIdentifier = xModuleManager->identify( xFrame );
         }
-        catch( Exception& )
+        catch( const Exception& )
         {
         }
     }

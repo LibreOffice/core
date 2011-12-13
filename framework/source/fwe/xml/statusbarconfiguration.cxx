@@ -99,15 +99,15 @@ sal_Bool StatusBarConfiguration::LoadStatusBar(
         xParser->parseStream( aInputSource );
         return sal_True;
     }
-    catch ( RuntimeException& )
+    catch ( const RuntimeException& )
     {
         return sal_False;
     }
-    catch( SAXException& )
+    catch( const SAXException& )
     {
         return sal_False;
     }
-    catch( ::com::sun::star::io::IOException& )
+    catch( const ::com::sun::star::io::IOException& )
     {
         return sal_False;
     }
@@ -128,15 +128,15 @@ sal_Bool StatusBarConfiguration::StoreStatusBar(
         aWriteStatusBarDocumentHandler.WriteStatusBarDocument();
         return sal_True;
     }
-    catch ( RuntimeException& )
+    catch ( const RuntimeException& )
     {
         return sal_False;
     }
-    catch ( SAXException& )
+    catch ( const SAXException& )
     {
         return sal_False;
     }
-    catch ( ::com::sun::star::io::IOException& )
+    catch ( const ::com::sun::star::io::IOException& )
     {
         return sal_False;
     }

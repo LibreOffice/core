@@ -315,7 +315,7 @@ void NewMenuController::retrieveShortcutsFromConfiguration(
                     aMenuShortCuts[i] = svt::AcceleratorExecute::st_AWTKey2VCLKey( aKeyEvent );
             }
         }
-        catch ( IllegalArgumentException& )
+        catch ( const IllegalArgumentException& )
         {
         }
     }
@@ -524,11 +524,11 @@ void NewMenuController::impl_setPopupMenu()
                 }
             }
         }
-        catch ( RuntimeException& )
+        catch ( const RuntimeException& )
         {
             throw;
         }
-        catch ( Exception& )
+        catch ( const Exception& )
         {
         }
     }

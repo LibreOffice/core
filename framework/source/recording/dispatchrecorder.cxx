@@ -232,7 +232,7 @@ void SAL_CALL DispatchRecorder::AppendToBuffer( css::uno::Any aValue, ::rtl::OUS
         css::uno::Sequence < css::uno::Any > aSeq;
         css::uno::Any aNew;
         try { aNew = m_xConverter->convertTo( aValue, ::getCppuType((const css::uno::Sequence < css::uno::Any >*)0) ); }
-        catch (css::uno::Exception&) {}
+        catch (const css::uno::Exception&) {}
 
         aNew >>= aSeq;
         aArgumentBuffer.appendAscii("Array(");
@@ -320,8 +320,8 @@ void SAL_CALL DispatchRecorder::AppendToBuffer( css::uno::Any aValue, ::rtl::OUS
         {
             aNew = m_xConverter->convertToSimpleType( aValue, css::uno::TypeClass_STRING );
         }
-        catch (css::script::CannotConvertException&) {}
-        catch (css::uno::Exception&) {}
+        catch (const css::script::CannotConvertException&) {}
+        catch (const css::uno::Exception&) {}
         ::rtl::OUString sVal;
         aNew >>= sVal;
 

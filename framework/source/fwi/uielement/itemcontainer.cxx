@@ -96,7 +96,7 @@ ItemContainer::ItemContainer( const Reference< XIndexAccess >& rSourceContainer,
                 }
             }
         }
-        catch ( IndexOutOfBoundsException& )
+        catch ( const IndexOutOfBoundsException& )
         {
         }
     }

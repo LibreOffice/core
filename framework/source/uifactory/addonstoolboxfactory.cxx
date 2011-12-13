@@ -112,11 +112,11 @@ sal_Bool AddonsToolBoxFactory::hasButtonsInContext(
     {
         aModuleIdentifier = m_xModuleManager->identify( rFrame );
     }
-    catch ( RuntimeException& )
+    catch ( const RuntimeException& )
     {
         throw;
     }
-    catch ( Exception& )
+    catch ( const Exception& )
     {
     }
 

@@ -436,7 +436,7 @@ throw( NoSuchElementException, WrappedTargetException, RuntimeException )
                 xFlush->commitChanges();
         }
     }
-    catch ( com::sun::star::lang::WrappedTargetException& )
+    catch ( const com::sun::star::lang::WrappedTargetException& )
     {
     }
 }
@@ -493,7 +493,7 @@ throw( IllegalArgumentException, ElementExistException, WrappedTargetException, 
                                     xFlush->commitChanges();
                             }
                         }
-                        catch ( Exception& )
+                        catch ( const Exception& )
                         {
                         }
                     }
@@ -567,7 +567,7 @@ throw( IllegalArgumentException, NoSuchElementException, WrappedTargetException,
                             xFlush->commitChanges();
                     }
                 }
-                catch ( Exception& )
+                catch ( const Exception& )
                 {
                 }
             }
@@ -847,10 +847,10 @@ Any ConfigurationAccess_WindowState::impl_insertCacheAndReturnSequence( const rt
                 aPropSeq[nIndex].Value = a;
             }
         }
-        catch( com::sun::star::container::NoSuchElementException& )
+        catch( const com::sun::star::container::NoSuchElementException& )
         {
         }
-        catch ( com::sun::star::lang::WrappedTargetException& )
+        catch ( const com::sun::star::lang::WrappedTargetException& )
         {
         }
     }
@@ -1022,10 +1022,10 @@ ConfigurationAccess_WindowState::WindowStateInfo& ConfigurationAccess_WindowStat
                     DBG_ASSERT( sal_False, "Wrong value for ConfigurationAccess_WindowState. Who has forgotten to add this new property!" );
             }
         }
-        catch( com::sun::star::container::NoSuchElementException& )
+        catch( const com::sun::star::container::NoSuchElementException& )
         {
         }
-        catch ( com::sun::star::lang::WrappedTargetException& )
+        catch ( const com::sun::star::lang::WrappedTargetException& )
         {
         }
     }
@@ -1054,10 +1054,10 @@ Any ConfigurationAccess_WindowState::impl_getWindowStateFromResourceURL( const r
                 return impl_insertCacheAndReturnSequence( rResourceURL, xNameAccess );
         }
     }
-    catch( com::sun::star::container::NoSuchElementException& )
+    catch( const com::sun::star::container::NoSuchElementException& )
     {
     }
-    catch ( com::sun::star::lang::WrappedTargetException& )
+    catch ( const com::sun::star::lang::WrappedTargetException& )
     {
     }
 
@@ -1295,7 +1295,7 @@ void ConfigurationAccess_WindowState::impl_putPropertiesFromStruct( const Window
                         DBG_ASSERT( sal_False, "Wrong value for ConfigurationAccess_WindowState. Who has forgotten to add this new property!" );
                 }
             }
-            catch( Exception& )
+            catch( const Exception& )
             {
             }
         }
@@ -1332,10 +1332,10 @@ sal_Bool ConfigurationAccess_WindowState::impl_initializeConfigAccess()
 
         return sal_True;
     }
-    catch ( WrappedTargetException& )
+    catch ( const WrappedTargetException& )
     {
     }
-    catch ( Exception& )
+    catch ( const Exception& )
     {
     }
 
@@ -1382,7 +1382,7 @@ WindowStateConfiguration::WindowStateConfiguration( const Reference< XMultiServi
     {
         aElementNames = xNameAccess->getElementNames();
     }
-    catch (::com::sun::star::uno::RuntimeException &)
+    catch (const ::com::sun::star::uno::RuntimeException &)
     {
     }
     Sequence< PropertyValue > aSeq;

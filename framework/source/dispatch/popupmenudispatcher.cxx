@@ -243,11 +243,11 @@ throw( css::uno::RuntimeException )
                 if ( xDispatchProvider.is() )
                     xDispatch = xDispatchProvider->queryDispatch( rURL, sTarget, nFlags );
             }
-            catch ( RuntimeException& )
+            catch ( const RuntimeException& )
             {
                 throw;
             }
-            catch ( Exception& )
+            catch ( const Exception& )
             {
             }
         }
@@ -390,11 +390,11 @@ void PopupMenuDispatcher::impl_RetrievePopupControllerQuery()
                                                 xMenuBar, css::uno::UNO_QUERY );
                     }
                 }
-                catch ( css::uno::RuntimeException& )
+                catch ( const css::uno::RuntimeException& )
                 {
                     throw;
                 }
-                catch ( css::uno::Exception& )
+                catch ( const css::uno::Exception& )
                 {
                 }
             }

@@ -320,7 +320,7 @@ void ConfigurationAccess_FactoryManager::readConfigurationData()
         {
             m_xConfigAccess.set( m_xConfigProvider->createInstanceWithArguments(SERVICENAME_CFGREADACCESS,aArgs ), UNO_QUERY );
         }
-        catch ( WrappedTargetException& )
+        catch ( const WrappedTargetException& )
         {
         }
 
@@ -374,11 +374,11 @@ sal_Bool ConfigurationAccess_FactoryManager::impl_getElementProps( const Any& aE
             xPropertySet->getPropertyValue( m_aPropModule ) >>= rModule;
             xPropertySet->getPropertyValue( m_aPropFactory ) >>= rServiceSpecifier;
         }
-        catch ( com::sun::star::beans::UnknownPropertyException& )
+        catch ( const com::sun::star::beans::UnknownPropertyException& )
         {
             return sal_False;
         }
-        catch ( com::sun::star::lang::WrappedTargetException& )
+        catch ( const com::sun::star::lang::WrappedTargetException& )
         {
             return sal_False;
         }
@@ -461,7 +461,7 @@ throw ( ::com::sun::star::container::NoSuchElementException, ::com::sun::star::l
         if ( xUIElementFactory.is() )
             return xUIElementFactory->createUIElement( ResourceURL, Args );
     }
-    catch ( UnknownModuleException& )
+    catch ( const UnknownModuleException& )
     {
     }
 

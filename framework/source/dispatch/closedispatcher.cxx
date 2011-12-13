@@ -404,7 +404,7 @@ IMPL_LINK( CloseDispatcher, impl_asyncCallback, void*, EMPTYARG )
                     bQuickstarterRunning = bState;
             }
         }
-        catch( css::uno::Exception& )
+        catch( const css::uno::Exception& )
         {
         }
         bSuccess = bQuickstarterRunning ? implts_terminateApplication() : implts_establishBackingMode();

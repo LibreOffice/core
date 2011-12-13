@@ -257,7 +257,7 @@ namespace
                         {
                             bRealExtensions = !_pDialog->ContentIsFolder( aURL.GetMainURL( INetURLObject::NO_DECODE ) );
                         }
-                        catch( ::com::sun::star::uno::Exception& )
+                        catch( const ::com::sun::star::uno::Exception& )
                         {
                             DBG_WARNING( "Exception in lcl_autoUpdateFileExtension" );
                         }

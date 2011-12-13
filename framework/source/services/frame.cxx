@@ -1637,7 +1637,7 @@ void SAL_CALL Frame::close( sal_Bool bDeliverOwnerShip ) throw( css::util::Close
             {
                 ((css::util::XCloseListener*)pIterator.next())->queryClosing( aSource, bDeliverOwnerShip );
             }
-            catch( css::uno::RuntimeException& )
+            catch( const css::uno::RuntimeException& )
             {
                 pIterator.remove();
             }
@@ -1674,7 +1674,7 @@ void SAL_CALL Frame::close( sal_Bool bDeliverOwnerShip ) throw( css::util::Close
             {
                 ((css::util::XCloseListener*)pIterator.next())->notifyClosing( aSource );
             }
-            catch( css::uno::RuntimeException& )
+            catch( const css::uno::RuntimeException& )
             {
                 pIterator.remove();
             }
@@ -2783,7 +2783,7 @@ void Frame::implts_sendFrameActionEvent( const css::frame::FrameAction& aAction 
             {
                 ((css::frame::XFrameActionListener*)aIterator.next())->frameAction( aFrameActionEvent );
             }
-            catch( css::uno::RuntimeException& )
+            catch( const css::uno::RuntimeException& )
             {
                 aIterator.remove();
             }
@@ -2875,7 +2875,7 @@ void Frame::implts_setIconOnWindow()
             {
                 xSet->getPropertyValue( DECLARE_ASCII("IconId") )>>= nIcon;
             }
-            catch( css::beans::UnknownPropertyException& )
+            catch( const css::beans::UnknownPropertyException& )
             {
             }
         }

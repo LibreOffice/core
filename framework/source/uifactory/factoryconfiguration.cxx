@@ -250,7 +250,7 @@ void ConfigurationAccess_ControllerFactory::readConfigurationData()
         {
             m_xConfigAccess = Reference< XNameAccess >( m_xConfigProvider->createInstanceWithArguments(SERVICENAME_CFGREADACCESS,aArgs ), UNO_QUERY );
         }
-        catch ( WrappedTargetException& )
+        catch ( const WrappedTargetException& )
         {
         }
 
@@ -302,10 +302,10 @@ void ConfigurationAccess_ControllerFactory::updateConfigurationData()
                     m_aMenuControllerMap.insert( MenuControllerMap::value_type( aHashKey, ControllerInfo(aService,aValue) ));
                 }
             }
-            catch ( NoSuchElementException& )
+            catch ( const NoSuchElementException& )
             {
             }
-            catch ( WrappedTargetException& )
+            catch ( const WrappedTargetException& )
             {
             }
         }
@@ -328,11 +328,11 @@ sal_Bool ConfigurationAccess_ControllerFactory::impl_getElementProps( const Any&
             if ( m_bAskValue )
                 xPropertySet->getPropertyValue( m_aPropValue ) >>= aValue;
         }
-        catch ( com::sun::star::beans::UnknownPropertyException& )
+        catch ( const com::sun::star::beans::UnknownPropertyException& )
         {
             return sal_False;
         }
-        catch ( com::sun::star::lang::WrappedTargetException& )
+        catch ( const com::sun::star::lang::WrappedTargetException& )
         {
             return sal_False;
         }

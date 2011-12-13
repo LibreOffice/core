@@ -374,7 +374,7 @@ void impl_addWindowListeners(
                     xThis, css::uno::UNO_QUERY ));
             xDockWindow->enableDocking( sal_True );
         }
-        catch ( css::uno::Exception& )
+        catch ( const css::uno::Exception& )
         {
         }
     }

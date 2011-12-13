@@ -156,7 +156,7 @@ void SAL_CALL JobDispatch::initialize( const css::uno::Sequence< css::uno::Any >
             {
                 m_sModuleIdentifier = xModuleManager->identify( m_xFrame );
             }
-            catch( css::uno::Exception& )
+            catch( const css::uno::Exception& )
             {}
         }
     }

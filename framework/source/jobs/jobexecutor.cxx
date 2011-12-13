@@ -246,7 +246,7 @@ void SAL_CALL JobExecutor::notifyEvent( const css::document::EventObject& aEvent
     {
         aModuleIdentifier = m_xModuleManager->identify( aEvent.Source );
     }
-    catch( css::uno::Exception& )
+    catch( const css::uno::Exception& )
     {}
 
     // Special feature: If the events "OnNew" or "OnLoad" occures - we generate our own event "onDocumentOpened".
