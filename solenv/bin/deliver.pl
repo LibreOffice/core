@@ -438,7 +438,6 @@ sub init_globals
     my $common_outdir = $ENV{'COMMON_OUTDIR'};
     my $inpath        = $ENV{'INPATH'};
     my $solarversion  = $ENV{'SOLARVERSION'};
-    my $work_stamp    = $ENV{'WORK_STAMP'};
 
     # do we have a valid environment?
     if ( !defined($inpath) ) {
