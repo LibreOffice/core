@@ -1061,6 +1061,9 @@ IMPL_LINK( ScInputBarGroup, ClickHdl, PushButton*, EMPTYARG )
         aMultiTextWnd.SetNumLines( aMultiTextWnd.GetLastNumExpandedLines() );
     }
     TriggerToolboxLayout();
+    // Restore focus to input line(s) if necessary
+    if (  SC_MOD()->GetInputHdl()->IsTopMode() )
+        aMultiTextWnd.GrabFocus();
     return 0;
 }
 
