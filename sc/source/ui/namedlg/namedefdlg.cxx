@@ -96,6 +96,7 @@ ScNameDefDlg::ScNameDefDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParen
     maEdName.SetModifyHdl( LINK( this, ScNameDefDlg, NameModifyHdl ));
     maEdRange.SetGetFocusHdl( LINK( this, ScNameDefDlg, AssignGetFocusHdl ) );
 
+    maFtInfo.SetStyle(WB_VCENTER);
     maFtInfo.SetText(maStrInfoDefault);
 
     maBtnAdd.Disable(); // empty name is invalid
