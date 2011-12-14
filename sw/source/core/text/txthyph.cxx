@@ -79,7 +79,7 @@ sal_Bool SwTxtFrm::Hyphenate( SwInterHyphInfo &rHyphInf )
     OSL_ENSURE( ! IsVertical() || ! IsSwapped(),"swapped frame at SwTxtFrm::Hyphenate" );
 
     if( !pBreakIt->GetBreakIter().is() )
-        return sal_False;;
+        return sal_False;
     // Wir machen den Laden erstmal dicht:
     OSL_ENSURE( !IsLocked(), "SwTxtFrm::Hyphenate: this is locked" );
     // 4935: Der frame::Frame muss eine gueltige SSize haben!

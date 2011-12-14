@@ -753,7 +753,7 @@ sal_Int32 SwXTextDocument::replaceAll(const Reference< util::XSearchDescriptor >
     else if(pSearch->bStyles)
     {
         SwTxtFmtColl *pSearchColl = lcl_GetParaStyle(pSearch->sSearchText, pUnoCrsr->GetDoc());
-        SwTxtFmtColl *pReplaceColl = lcl_GetParaStyle(pSearch->sReplaceText, pUnoCrsr->GetDoc());;
+        SwTxtFmtColl *pReplaceColl = lcl_GetParaStyle(pSearch->sReplaceText, pUnoCrsr->GetDoc());
 
         sal_Bool bCancel;
         nResult = pUnoCrsr->Find( *pSearchColl,
@@ -3113,7 +3113,7 @@ uno::Sequence< lang::Locale > SAL_CALL SwXTextDocument::getDocumentLanguages(
     for (sal_uInt16 i = 0; i < pColls->Count(); ++i)
     {
         const SwAttrSet &rAttrSet = (*pColls)[i]->GetAttrSet();
-        LanguageType nLang = LANGUAGE_DONTKNOW;;
+        LanguageType nLang = LANGUAGE_DONTKNOW;
         if (bLatin)
         {
             nLang = rAttrSet.GetLanguage( sal_False ).GetLanguage();

@@ -2505,7 +2505,7 @@ IMPL_LINK(SwTOXEntryTabPage, LevelHdl, SvTreeListBox*, pBox)
 
         // #i21237#
         SwFormTokens aPattern = m_pCurrentForm->GetPattern(nLevel + 1);
-        SwFormTokens::iterator aIt = aPattern.begin();;
+        SwFormTokens::iterator aIt = aPattern.begin();
 
         while(aIt != aPattern.end())
         {

@@ -334,7 +334,7 @@ OUString SAL_CALL AccessibleTableShape::getImplementationName(void) throw (Runti
 
 OUString AccessibleTableShape::CreateAccessibleBaseName(void) throw (RuntimeException)
 {
-    return OUString (RTL_CONSTASCII_USTRINGPARAM("TableShape"));;
+    return OUString (RTL_CONSTASCII_USTRINGPARAM("TableShape"));
 }
 
 //--------------------------------------------------------------------

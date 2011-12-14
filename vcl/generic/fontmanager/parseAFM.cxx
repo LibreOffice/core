@@ -834,7 +834,7 @@ static int parseCharMetrics( FileInputStream* fp, register FontInfo* fi)
                     (*tail)->lig = (char *)strdup(keyword);
                 break; }
             case ENDCHARMETRICS:
-                cont = false;;
+                cont = false;
                 break;
             case ENDFONTMETRICS:
                 cont = false;

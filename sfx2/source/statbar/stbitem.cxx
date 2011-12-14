@@ -403,7 +403,7 @@ throw ( ::uno::RuntimeException )
 {
     SolarMutexGuard aGuard;
 
-    OutputDevice* pOutDev = VCLUnoHelper::GetOutputDevice( xGraphics );;
+    OutputDevice* pOutDev = VCLUnoHelper::GetOutputDevice( xGraphics );
     if ( pOutDev )
     {
         ::Rectangle aRect = VCLRectangle( rOutputRectangle );

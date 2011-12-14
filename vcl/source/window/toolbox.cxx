@@ -2621,7 +2621,7 @@ void ToolBox::ImplFormat( sal_Bool bResize )
                     }
                     else
                     {
-                        maUpperRect.Top()    = nTop+nMax+TB_SPIN_OFFSET;;
+                        maUpperRect.Top()    = nTop+nMax+TB_SPIN_OFFSET;
                         maUpperRect.Bottom() = maUpperRect.Top()+TB_SPIN_SIZE-1;
                         maUpperRect.Left()   = nLeft;
                         maLowerRect.Right()  = mnDX-mnRightBorder-mnBorderX-TB_BORDER_OFFSET2-1;

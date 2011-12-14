@@ -73,7 +73,7 @@ const xmlChar** attrlist_to_nxmlstr( const cssu::Sequence< cssxcsax::XMLAttribut
     const xmlChar** attrs = NULL ;
     rtl::OUString oustr ;
 
-    sal_Int32 nLength = aAttributes.getLength();;
+    sal_Int32 nLength = aAttributes.getLength();
 
     if( nLength != 0 )
     {

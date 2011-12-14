@@ -56,7 +56,7 @@ sal_Int32 TypeManager::release()
     {
         delete m_pImpl;
     }
-    return refCount;;
+    return refCount;
 }
 
 RegistryTypeManager::RegistryTypeManager()

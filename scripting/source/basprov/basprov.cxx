@@ -251,7 +251,7 @@ namespace basprov
 
         Reference< frame::XModel > xModel;
 
-        m_xInvocationContext.set( aArguments[0], UNO_QUERY );;
+        m_xInvocationContext.set( aArguments[0], UNO_QUERY );
         if ( m_xInvocationContext.is() )
         {
             xModel.set( m_xInvocationContext->getScriptContainer(), UNO_QUERY );

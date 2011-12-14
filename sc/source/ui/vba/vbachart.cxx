@@ -592,7 +592,7 @@ ScVbaChart::setSourceData( const css::uno::Reference< ::ooo::vba::excel::XRange 
             ScDocument* pDoc = pRange->getScDocument();
             if ( pDoc )
             {
-                bsetRowHeaders = pDoc->HasRowHeader(  static_cast< SCCOL >( mSingleRangeAddress.StartColumn ), static_cast< SCROW >( mSingleRangeAddress.StartRow ), static_cast< SCCOL >( mSingleRangeAddress.EndColumn ), static_cast< SCROW >( mSingleRangeAddress.EndRow ), static_cast< SCTAB >( mSingleRangeAddress.Sheet ) );;
+                bsetRowHeaders = pDoc->HasRowHeader(  static_cast< SCCOL >( mSingleRangeAddress.StartColumn ), static_cast< SCROW >( mSingleRangeAddress.StartRow ), static_cast< SCCOL >( mSingleRangeAddress.EndColumn ), static_cast< SCROW >( mSingleRangeAddress.EndRow ), static_cast< SCTAB >( mSingleRangeAddress.Sheet ) );
                 bsetColumnHeaders =  pDoc->HasColHeader(  static_cast< SCCOL >( mSingleRangeAddress.StartColumn ), static_cast< SCROW >( mSingleRangeAddress.StartRow ), static_cast< SCCOL >( mSingleRangeAddress.EndColumn ), static_cast< SCROW >( mSingleRangeAddress.EndRow ), static_cast< SCTAB >( mSingleRangeAddress.Sheet ));
 ;
             }

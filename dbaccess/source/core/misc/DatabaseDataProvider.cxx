@@ -308,7 +308,7 @@ uno::Any DatabaseDataProvider::impl_getNumberFormatKey_nothrow(const ::rtl::OUSt
 uno::Reference< chart2::data::XDataSequence > SAL_CALL DatabaseDataProvider::createDataSequenceByRangeRepresentation(const ::rtl::OUString & _sRangeRepresentation) throw (uno::RuntimeException, lang::IllegalArgumentException)
 {
     osl::MutexGuard g(m_aMutex);
-    uno::Reference< chart2::data::XDataSequence > xData = m_xInternal->createDataSequenceByRangeRepresentation(_sRangeRepresentation);;
+    uno::Reference< chart2::data::XDataSequence > xData = m_xInternal->createDataSequenceByRangeRepresentation(_sRangeRepresentation);
     uno::Reference<beans::XPropertySet> xProp(xData,uno::UNO_QUERY);
     const static ::rtl::OUString s_sNumberFormatKey(RTL_CONSTASCII_USTRINGPARAM("NumberFormatKey"));
     if ( xProp.is() && xProp->getPropertySetInfo()->hasPropertyByName(s_sNumberFormatKey) )

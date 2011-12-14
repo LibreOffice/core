@@ -341,7 +341,7 @@ MenuItemData* MenuItemList::SearchItem(
 {
     const vcl::I18nHelper& rI18nHelper = Application::GetSettings().GetUILocaleI18nHelper();
 
-    size_t nListCount = maItemList.size();;
+    size_t nListCount = maItemList.size();
 
     // try character code first
     nDuplicates = GetItemCount( cSelectChar );  // return number of duplicates

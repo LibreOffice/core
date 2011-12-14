@@ -515,7 +515,7 @@ bool WinGlyphFallbackSubstititution::HasMissingChars( const ImplFontData* pFace,
         HFONT hOldFont = ::SelectFont( mhDC, hNewFont );
 
         // read CMAP table to update their pCharMap
-        pWinFont->UpdateFromHDC( mhDC );;
+        pWinFont->UpdateFromHDC( mhDC );
 
         // cleanup temporary font
         ::SelectFont( mhDC, hOldFont );
@@ -1769,7 +1769,7 @@ void WinSalGraphics::GetFontMetric( ImplFontMetricData* pMetric, int nFallbackLe
         return;
 
     // device independent font attributes
-    pMetric->meFamily       = ImplFamilyToSal( aWinMetric.tmPitchAndFamily );;
+    pMetric->meFamily       = ImplFamilyToSal( aWinMetric.tmPitchAndFamily );
     pMetric->mbSymbolFlag   = (aWinMetric.tmCharSet == SYMBOL_CHARSET);
     pMetric->meWeight       = ImplWeightToSal( aWinMetric.tmWeight );
     pMetric->mePitch        = ImplMetricPitchToSal( aWinMetric.tmPitchAndFamily );
@@ -2259,7 +2259,7 @@ static bool ImplGetFontAttrFromFile( const String& rFontFileURL,
     rDFA.meWidthType  = WIDTH_DONTKNOW;
     rDFA.meWeight     = WEIGHT_DONTKNOW;
     rDFA.meItalic     = ITALIC_DONTKNOW;
-    rDFA.mePitch      = PITCH_DONTKNOW;;
+    rDFA.mePitch      = PITCH_DONTKNOW;
     rDFA.mbSubsettable= true;
     rDFA.mbEmbeddable = false;
 
@@ -2377,7 +2377,7 @@ bool WinSalGraphics::AddTempDevFont( ImplDevFontList* pFontList,
     aDFA.meWidthType  = WIDTH_DONTKNOW;
     aDFA.meWeight     = WEIGHT_DONTKNOW;
     aDFA.meItalic     = ITALIC_DONTKNOW;
-    aDFA.mePitch      = PITCH_DONTKNOW;;
+    aDFA.mePitch      = PITCH_DONTKNOW;
     aDFA.mbSubsettable= true;
     aDFA.mbEmbeddable = false;
 

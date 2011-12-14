@@ -795,7 +795,7 @@ sal_Bool AquaSalGraphics::drawNativeControl(ControlType nType,
             {
                 aTrackDraw.bounds = rc;
                 aTrackDraw.min   = pSLVal->mnMin;
-                aTrackDraw.max   = pSLVal->mnMax;;
+                aTrackDraw.max   = pSLVal->mnMax;
                 aTrackDraw.value = pSLVal->mnCur;
                 aTrackDraw.reserved = 0;
                 aTrackDraw.attributes = kThemeTrackShowThumb;

@@ -236,7 +236,7 @@ void SwView::ExecutePrint(SfxRequest& rReq)
                 {
                     short nBtn = SvxPrtQryBox(&GetEditWin()).Execute();
                     if( RET_CANCEL == nBtn )
-                        return;;
+                        return;
 
                     if( RET_OK == nBtn )
                         bPrintSelection = true;

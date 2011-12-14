@@ -122,7 +122,7 @@ OFieldDescription::OFieldDescription(const Reference< XPropertySet >& xAffectedC
         if ( _bUseAsDest )
         {
             m_xDest = xAffectedCol;
-            m_xDestInfo = xAffectedCol->getPropertySetInfo();;
+            m_xDestInfo = xAffectedCol->getPropertySetInfo();
         }
         else
         {

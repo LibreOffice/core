@@ -75,7 +75,7 @@ uno::Reference< uno::XInterface > SAL_CALL SwXAutoTextContainer_createInstance(
     //the module may not be loaded
     SolarMutexGuard aGuard;
     SwGlobals::ensure();
-    static uno::Reference< uno::XInterface > xAText = (cppu::OWeakObject*)new SwXAutoTextContainer();;
+    static uno::Reference< uno::XInterface > xAText = (cppu::OWeakObject*)new SwXAutoTextContainer();
     return xAText;
 }
 

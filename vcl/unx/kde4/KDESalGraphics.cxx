@@ -281,7 +281,7 @@ sal_Bool KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
         OSL_ASSERT( value.getType() != CTRL_SPINBUTTONS );
         const SpinbuttonValue* pSpinVal = static_cast<const SpinbuttonValue *>(&value);
         Rectangle aButtonRect( pSpinVal->maUpperRect);
-        aButtonRect.Union( pSpinVal->maLowerRect );;
+        aButtonRect.Union( pSpinVal->maLowerRect );
         widgetRect = QRect( aButtonRect.Left(), aButtonRect.Top(),
                             aButtonRect.Right(), aButtonRect.Bottom() );
     }

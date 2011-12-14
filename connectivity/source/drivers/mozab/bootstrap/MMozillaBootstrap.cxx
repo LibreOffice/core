@@ -226,7 +226,7 @@ Sequence< ::rtl::OUString > SAL_CALL MozillaBootstrap::getSupportedServiceNames(
         setCurrentProfile(aCode->getProductType(),profileName);
        MNSRunnable xRunnable;
 
-    return xRunnable.StartProxy(aCode);;
+    return xRunnable.StartProxy(aCode);
 #else
     (void)aCode; /* avoid warning about unused parameter */
     return -1;

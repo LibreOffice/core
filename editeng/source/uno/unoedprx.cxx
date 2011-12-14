@@ -533,7 +533,7 @@ String SvxAccessibleTextAdapter::GetText( const ESelection& rSel ) const
     if( aEndIndex.InBullet() )
     {
         // append trailing bullet
-        sStr += aBulletInfo2.aText;;
+        sStr += aBulletInfo2.aText;
 
         DBG_ASSERT(sStr.Len() - (aEndIndex.GetBulletLen() - aEndIndex.GetBulletOffset()) >= 0 &&
                    sStr.Len() - (aEndIndex.GetBulletLen() - aEndIndex.GetBulletOffset()) <= USHRT_MAX,

@@ -962,7 +962,7 @@ void MetaPolyLineAction::Scale( double fScaleX, double fScaleY )
 
 sal_Bool MetaPolyLineAction::Compare( const MetaAction& rMetaAction ) const
 {
-    sal_Bool bIsEqual = sal_True;;
+    sal_Bool bIsEqual = sal_True;
     if ( maLineInfo != ((MetaPolyLineAction&)rMetaAction).maLineInfo )
         bIsEqual = sal_False;
     else

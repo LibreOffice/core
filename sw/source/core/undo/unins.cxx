@@ -378,7 +378,7 @@ void SwUndoInsert::RepeatImpl(::sw::RepeatContext & rContext)
 
     SwDoc & rDoc = rContext.GetDoc();
     SwNodeIndex aNd( rDoc.GetNodes(), nNode );
-    SwCntntNode* pCNd = aNd.GetNode().GetCntntNode();;
+    SwCntntNode* pCNd = aNd.GetNode().GetCntntNode();
 
     if( !bIsAppend && 1 == nLen )       // >1 dann immer nur Text, ansonsten Grafik/OLE/Text/...
     {

@@ -268,8 +268,8 @@ void SvxLinguConfigUpdate::UpdateAll( sal_Bool bForceCheck )
                 Sequence< OUString > aAvailSvcs(
                         xLngSvcMgr->getAvailableServices( aService, aLocale ));
 #if OSL_DEBUG_LEVEL > 1
-                const OUString * pCfgSvcs   = aCfgSvcs.getConstArray();;
-                const OUString * pAvailSvcs = aAvailSvcs.getConstArray();;
+                const OUString * pCfgSvcs   = aCfgSvcs.getConstArray();
+                const OUString * pAvailSvcs = aAvailSvcs.getConstArray();
                 (void) pCfgSvcs;
                 (void) pAvailSvcs;
 #endif

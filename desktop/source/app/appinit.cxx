@@ -181,7 +181,7 @@ static bool configureUcb(bool bServer, rtl::OUString const & rPortalConnect)
     }
 #endif // GNOME_VFS_ENABLED
 
-    return ret;;
+    return ret;
 }
 
 Reference< XMultiServiceFactory > Desktop::CreateApplicationServiceManager()

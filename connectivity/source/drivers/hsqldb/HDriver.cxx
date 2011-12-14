@@ -175,7 +175,7 @@ namespace connectivity
                 aPermittedMethods.append( sPermittedMethod );
             }
 
-            return aPermittedMethods.makeStringAndClear();;
+            return aPermittedMethods.makeStringAndClear();
         }
     }
 

@@ -789,7 +789,7 @@ void PolyPolygon::Write( SvStream& rOStream ) const
 
     // Die einzelnen Polygone ausgeben
     for ( sal_uInt16 i = 0; i < nPolyCount; i++ )
-        mpImplPolyPolygon->mpPolyAry[i]->ImplWrite( rOStream );;
+        mpImplPolyPolygon->mpPolyAry[i]->ImplWrite( rOStream );
 }
 
 // -----------------------------------------------------------------------

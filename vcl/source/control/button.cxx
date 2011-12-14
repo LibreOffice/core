@@ -887,7 +887,7 @@ void PushButton::ImplDrawPushButtonContent( OutputDevice* pDev, sal_uLong nDrawF
             DecorationView aDecoView( pDev );
             if( bMenuBtnSep )
             {
-                long nX = aInRect.Left() - 2*nDistance;;
+                long nX = aInRect.Left() - 2*nDistance;
                 Point aStartPt( nX, aInRect.Top()+nDistance );
                 Point aEndPt( nX, aInRect.Bottom()-nDistance );
                 aDecoView.DrawSeparator( aStartPt, aEndPt );

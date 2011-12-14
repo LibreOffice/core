@@ -1968,7 +1968,7 @@ bool UnoConversionUtilities<T>::convertValueObject( const VARIANTARG *var, Any& 
                         }
                     }
                     else
-                        bFail = true;;
+                        bFail = true;
                 }
             }
         }

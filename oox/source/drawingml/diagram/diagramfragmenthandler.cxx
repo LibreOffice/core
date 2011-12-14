@@ -223,16 +223,16 @@ ColorFragmentHandler::ColorFragmentHandler( ::oox::core::XmlFilterBase& rFilter,
     switch( getCurrentElement() )
     {
         case XML_ROOT_CONTEXT:
-            return nElement == DGM_TOKEN(colorsDef) ? this : NULL;;
+            return nElement == DGM_TOKEN(colorsDef) ? this : NULL;
         case DGM_TOKEN(colorsDef):
-            return nElement == DGM_TOKEN(styleLbl) ? this : NULL;;
+            return nElement == DGM_TOKEN(styleLbl) ? this : NULL;
         case DGM_TOKEN(styleLbl):
             return ((nElement == DGM_TOKEN(fillClrLst)) ||
                     (nElement == DGM_TOKEN(linClrLst)) ||
                     (nElement == DGM_TOKEN(effectClrLst)) ||
                     (nElement == DGM_TOKEN(txLinClrLst)) ||
                     (nElement == DGM_TOKEN(txFillClrLst)) ||
-                    (nElement == DGM_TOKEN(txEffectClrLst))) ? this : NULL;;
+                    (nElement == DGM_TOKEN(txEffectClrLst))) ? this : NULL;
 
         // the actual colors - defer to color fragment handlers.
 

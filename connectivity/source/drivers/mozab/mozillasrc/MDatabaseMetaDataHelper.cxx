@@ -632,7 +632,7 @@ sal_Bool MDatabaseMetaDataHelper::getTables( OConnection* _pCon,
 
     ::std::vector< ::rtl::OUString > tables;
     ::std::vector< ::rtl::OUString > tabletypes;
-    ::rtl::OUString matchAny = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("%"));;
+    ::rtl::OUString matchAny = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("%"));
 
     if ( !getTableStrings( _pCon, tables,tabletypes ) )
         return sal_False;

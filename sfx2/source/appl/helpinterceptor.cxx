@@ -234,7 +234,7 @@ Sequence< ::rtl::OUString > SAL_CALL HelpInterceptor_Impl::getInterceptedURLs()
 {
     Sequence< ::rtl::OUString > aURLList( 1 );
     aURLList[0] = DEFINE_CONST_UNICODE("vnd.sun.star.help://*");
-    return aURLList;;
+    return aURLList;
 }
 
 // -----------------------------------------------------------------------

@@ -115,7 +115,7 @@ class PluginSlideChange: public SlideChangeBase
     ~TransitionViewPair()
     {
         mxTransition.clear();
-        mpView.reset();;
+        mpView.reset();
     }
 
     void update( double t )

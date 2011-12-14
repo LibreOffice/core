@@ -335,7 +335,7 @@ long ScrollBar::ImplCalcThumbPosPix( long nPos )
 void ScrollBar::ImplCalc( sal_Bool bUpdate )
 {
     const Size aSize = GetOutputSizePixel();
-    const long nMinThumbSize = GetSettings().GetStyleSettings().GetMinThumbSize();;
+    const long nMinThumbSize = GetSettings().GetStyleSettings().GetMinThumbSize();
 
     Rectangle& maTrackRect = mpData->maTrackRect;  // TODO: remove when maTrackRect is no longer in mpData
     if ( mbCalcSize )

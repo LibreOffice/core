@@ -180,7 +180,7 @@ const oox::drawingml::table::TableStyleListPtr PowerPointImport::getTableStyles(
         importFragment( new oox::drawingml::table::TableStyleListFragmentHandler(
             *this, maTableStyleListPath, *mpTableStyleList ) );
     }
-    return mpTableStyleList;;
+    return mpTableStyleList;
 }
 
 ::oox::drawingml::chart::ChartConverter* PowerPointImport::getChartConverter()

@@ -403,7 +403,7 @@ void ScViewFunc::DoThesaurus( sal_Bool bRecord )
     {
         OSL_FAIL("DoThesaurus: Keine String oder Editzelle");
     }
-    pEditView = GetViewData()->GetEditView(GetViewData()->GetActivePart());;
+    pEditView = GetViewData()->GetEditView(GetViewData()->GetActivePart());
     if (pEditSel)
         pEditView->SetSelection(*pEditSel);
     else

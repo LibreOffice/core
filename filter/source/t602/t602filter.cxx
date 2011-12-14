@@ -181,7 +181,7 @@ T602ImportFilter::~T602ImportFilter()
         (aData[1] != 'C') || (aData[2] != 'T') || (aData[3] != ' '))
         return ::rtl::OUString();
 
-    return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "writer_T602_Document" ) );;
+    return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "writer_T602_Document" ) );
 }
 
 // XFilter

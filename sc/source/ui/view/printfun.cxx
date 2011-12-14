@@ -624,7 +624,7 @@ void lcl_FillHFParam( ScPrintHFParam& rParam, const SfxItemSet* pHFSet )
         rParam.nRight = nTmp < 0 ? 0 : sal_uInt16(nTmp);
         rParam.pBorder  = (const SvxBoxItem*)   &pHFSet->Get(ATTR_BORDER);
         rParam.pBack    = (const SvxBrushItem*) &pHFSet->Get(ATTR_BACKGROUND);
-        rParam.pShadow  = (const SvxShadowItem*)&pHFSet->Get(ATTR_SHADOW);;
+        rParam.pShadow  = (const SvxShadowItem*)&pHFSet->Get(ATTR_SHADOW);
 
 //  jetzt doch wieder schon im Dialog:
 //      rParam.nHeight += rParam.nDistance;             // nicht mehr im Dialog ???

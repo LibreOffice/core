@@ -336,7 +336,7 @@ dwEffect
 // XServiceInfo
 OUString SAL_CALL DragSource::getImplementationName(  ) throw (RuntimeException)
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM(DNDSOURCE_IMPL_NAME));;
+    return OUString(RTL_CONSTASCII_USTRINGPARAM(DNDSOURCE_IMPL_NAME));
 }
 // XServiceInfo
 sal_Bool SAL_CALL DragSource::supportsService( const OUString& ServiceName ) throw (RuntimeException)

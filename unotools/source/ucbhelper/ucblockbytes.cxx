@@ -1602,7 +1602,7 @@ IMPL_LINK( UcbLockBytes, DataAvailHdl, void*, EMPTYARG )
 UcbLockBytesRef UcbLockBytes::CreateInputLockBytes( const Reference< XInputStream >& xInputStream )
 {
     if( !xInputStream.is() )
-        return NULL;;
+        return NULL;
 
     UcbLockBytesRef xLockBytes = new UcbLockBytes();
     xLockBytes->setDontClose_Impl();
@@ -1614,7 +1614,7 @@ UcbLockBytesRef UcbLockBytes::CreateInputLockBytes( const Reference< XInputStrea
 UcbLockBytesRef UcbLockBytes::CreateLockBytes( const Reference< XStream >& xStream )
 {
     if( !xStream.is() )
-        return NULL;;
+        return NULL;
 
     UcbLockBytesRef xLockBytes = new UcbLockBytes();
     xLockBytes->setDontClose_Impl();
@@ -1627,7 +1627,7 @@ UcbLockBytesRef UcbLockBytes::CreateLockBytes( const Reference < XContent >& xCo
         const Reference < XInputStream >& xPostData, const Reference < XInteractionHandler >& xInteractionHandler, UcbLockBytesHandler* pHandler )
 {
     if( !xContent.is() )
-        return NULL;;
+        return NULL;
 
     UcbLockBytesRef xLockBytes = new UcbLockBytes( pHandler );
     xLockBytes->SetSynchronMode( !pHandler );
@@ -1666,7 +1666,7 @@ UcbLockBytesRef UcbLockBytes::CreateLockBytes( const Reference < XContent >& xCo
         StreamMode eOpenMode, const Reference < XInteractionHandler >& xInteractionHandler, UcbLockBytesHandler* pHandler )
 {
     if( !xContent.is() )
-        return NULL;;
+        return NULL;
 
     UcbLockBytesRef xLockBytes = new UcbLockBytes( pHandler );
     xLockBytes->SetSynchronMode( !pHandler );

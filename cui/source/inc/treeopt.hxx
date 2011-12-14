@@ -202,7 +202,7 @@ private:
 
     // for the ColorTabPage
     SfxItemSet*     pColorPageItemSet;
-    SvxColorTabPage *mpColorPage;;
+    SvxColorTabPage *mpColorPage;
 
     sal_Bool        bForgetSelection;
     sal_Bool        bExternBrowserActive;

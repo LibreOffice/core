@@ -584,7 +584,7 @@ void SwHTMLParser::NewObject()
 
     // Objects that are declared only are not evaluated. Moreover, only
     // Java applets are supported.
-    sal_Bool bIsApplet = sal_False;;
+    sal_Bool bIsApplet = sal_False;
 
     if( !bDeclare && aClassID.Len() == 42 &&
         aClassID.EqualsAscii( "clsid:", 0, 6 ) )

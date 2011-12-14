@@ -176,7 +176,7 @@ SvXMLImportContext *SvXMLStyleContext::CreateChildContext( sal_uInt16 nPrefix,
                                             const OUString& rLocalName,
                                             const uno::Reference< xml::sax::XAttributeList > & )
 {
-    return new SvXMLImportContext( GetImport(), nPrefix, rLocalName );;
+    return new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
 }
 
 void SvXMLStyleContext::StartElement( const uno::Reference< xml::sax::XAttributeList > & xAttrList )

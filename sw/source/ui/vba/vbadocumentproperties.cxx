@@ -349,7 +349,7 @@ rtl::OUString
 SwVbaCustomDocumentProperty::getLinkSource(  ) throw (script::BasicErrorException, uno::RuntimeException)
 {
     // #FIXME we need to store the link content somewhere
-    return rtl::OUString();;
+    return rtl::OUString();
 }
 
 void
