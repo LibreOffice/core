@@ -39,6 +39,7 @@ define my_target
 $(if $(1),$(1)/$(if $(2),$(2)/))%.hxx: \
             $(WFDIR)/schema/org/openoffice/$(if $(1),$(1)/$(if $(2),$(2)/))%.xcs \
             $(WFDIR)/cppheader.xsl
+	$$(call gb_Helper_abbreviate_dirs_native,mkdir -p $$(dir $$@))
 	$$(call gb_Helper_abbreviate_dirs_native, \
             $$(gb_XSLTPROC) --nonet --stringparam ns1 \
             $(if $(1), \
