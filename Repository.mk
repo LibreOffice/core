@@ -362,6 +362,13 @@ $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
 	writerfilter_debug \
 ))
 
+ifeq ($(OS),WNT)
+$(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
+	oleautobridge \
+	oleautobridge2 \
+))
+endif
+
 $(eval $(call gb_Helper_register_libraries,UNOLIBS_URE, \
 	binaryurp \
 ))

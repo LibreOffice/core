@@ -398,6 +398,7 @@ gb_Library_win32_OLDNAMES := oldnames
 
 gb_Library_PLAINLIBS_NONE += \
 	advapi32 \
+	$(if $(USE_DEBUG_RUNTIME),atlsd,atls) \
 	comdlg32 \
 	crypt32 \
 	d3d9 \

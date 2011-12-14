@@ -35,6 +35,15 @@ $(eval $(call gb_Module_add_targets,extensions,\
 	Library_updchk \
 ))
 
+ifeq ($(OS),WNT)
+ifeq ($(DISABLE_ATL),)
+$(eval $(call gb_Module_add_targets,extensions,\
+	Library_oleautobridge \
+	Library_oleautobridge2 \
+))
+endif
+endif
+
 $(eval $(call gb_Module_add_check_targets,extensions,\
     CppunitTest_extensions_test_update \
 ))

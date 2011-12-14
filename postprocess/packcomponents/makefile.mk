@@ -321,7 +321,7 @@ my_components += \
 .IF "$(OS)" == "WNT" && "$(DISABLE_ATL)" == ""
 my_components += \
     emser \
-    oleautobridge
+    component/extensions/source/ole/oleautobridge
 .END
 
 .IF "$(OS)" == "WNT" && "$(ENABLE_DIRECTX)" != ""
