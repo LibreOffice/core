@@ -686,7 +686,7 @@ sal_Bool ZipFile::readLOC( ZipEntry &rEntry )
             rEntry.sPath = sLOCPath;
         }
 
-        // the method can be reset for internal use so it is not checked
+        // check basic local file header / entry consistency
         bBroken = rEntry.nVersion != nVersion
                         || rEntry.nMethod != nHow
                         || rEntry.nTime != nTime
