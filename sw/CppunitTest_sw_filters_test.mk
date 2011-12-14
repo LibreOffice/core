@@ -79,6 +79,7 @@ $(eval $(call gb_CppunitTest_add_type_rdbs,sw_filters_test,\
 ))
 
 $(eval $(call gb_CppunitTest_add_components,sw_filters_test,\
+    configmgr/source/configmgr \
     sw/util/sw \
     sw/util/msword \
     forms/util/frm \
@@ -94,7 +95,6 @@ $(eval $(call gb_CppunitTest_add_components,sw_filters_test,\
 ))
 
 $(eval $(call gb_CppunitTest_add_old_components,sw_filters_test,\
-    configmgr \
     ucb1 \
     ucpfile1 \
     ucpchelp1 \

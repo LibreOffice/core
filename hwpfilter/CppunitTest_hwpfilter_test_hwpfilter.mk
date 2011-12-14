@@ -65,7 +65,7 @@ $(eval $(call gb_CppunitTest_add_components,hwpfilter_test_hwpfilter,\
     hwpfilter/source/hwp \
 ))
 $(eval $(call gb_CppunitTest_add_old_components,hwpfilter_test_hwpfilter,\
-    configmgr \
+    configmgr/source/configmgr \
     ucb1 \
     ucpfile1 \
 ))

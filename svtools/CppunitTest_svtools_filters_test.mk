@@ -60,8 +60,8 @@ $(eval $(call gb_CppunitTest_add_type_rdbs,svtools_filters_test,\
     types \
 ))
 
-$(eval $(call gb_CppunitTest_add_old_components,svtools_filters_test,\
-    configmgr \
+$(eval $(call gb_CppunitTest_add_components,svtools_filters_test,\
+    configmgr/source/configmgr \
 ))
 
 $(eval $(call gb_CppunitTest_set_args,svtools_filters_test,\

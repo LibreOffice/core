@@ -83,6 +83,7 @@ $(eval $(call gb_CppunitTest_add_type_rdbs,starmath_qa_cppunit,\
 ))
 
 $(eval $(call gb_CppunitTest_add_components,starmath_qa_cppunit,\
+    configmgr/source/configmgr \
     framework/util/fwk \
     i18npool/util/i18npool \
     toolkit/util/tk \
@@ -91,7 +92,6 @@ $(eval $(call gb_CppunitTest_add_components,starmath_qa_cppunit,\
 
 $(eval $(call gb_CppunitTest_add_old_components,starmath_qa_cppunit,\
     component/vcl/vcl \
-    configmgr \
     mcnttype \
 ))
 

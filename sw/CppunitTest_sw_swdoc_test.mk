@@ -94,6 +94,7 @@ $(eval $(call gb_CppunitTest_add_type_rdbs,sw_swdoc_test,\
 ))
 
 $(eval $(call gb_CppunitTest_add_components,sw_swdoc_test,\
+    configmgr/source/configmgr \
     sfx2/util/sfx \
     framework/util/fwk \
     unoxml/source/service/unoxml \
@@ -103,7 +104,6 @@ $(eval $(call gb_CppunitTest_add_components,sw_swdoc_test,\
 ))
 
 $(eval $(call gb_CppunitTest_add_old_components,sw_swdoc_test,\
-    configmgr \
     ucb1 \
     ucpfile1 \
 ))

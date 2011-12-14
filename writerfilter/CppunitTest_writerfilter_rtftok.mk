@@ -59,11 +59,11 @@ $(eval $(call gb_CppunitTest_add_type_rdbs,writerfilter_rtftok,\
 ))
 
 $(eval $(call gb_CppunitTest_add_components,writerfilter_rtftok,\
+    configmgr/source/configmgr \
 	writerfilter/util/writerfilter \
 ))
 
 $(eval $(call gb_CppunitTest_add_old_components,writerfilter_rtftok,\
-    configmgr \
 	ucb1 \
 	ucpfile1 \
 ))

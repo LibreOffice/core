@@ -94,6 +94,7 @@ $(eval $(call gb_CppunitTest_add_type_rdbs,sc_ucalc,\
 ))
 
 $(eval $(call gb_CppunitTest_add_components,sc_ucalc,\
+    configmgr/source/configmgr \
     framework/util/fwk \
     i18npool/util/i18npool \
     sfx2/util/sfx \
@@ -101,7 +102,6 @@ $(eval $(call gb_CppunitTest_add_components,sc_ucalc,\
 ))
 
 $(eval $(call gb_CppunitTest_add_old_components,sc_ucalc,\
-    configmgr \
     ucb1 \
     ucpfile1 \
 ))

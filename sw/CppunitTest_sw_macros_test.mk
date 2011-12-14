@@ -93,6 +93,7 @@ $(eval $(call gb_CppunitTest_add_type_rdbs,sw_macros_test,\
 $(eval $(call gb_CppunitTest_add_components,sw_macros_test,\
     basic/util/sb \
     comphelper/util/comphelp \
+    configmgr/source/configmgr \
     dbaccess/util/dba \
     fileaccess/source/fileacc \
     filter/source/config/cache/filterconfig1 \
@@ -120,7 +121,6 @@ $(eval $(call gb_CppunitTest_add_components,sw_macros_test,\
 ))
 
 $(eval $(call gb_CppunitTest_add_old_components,sw_macros_test,\
-    configmgr \
     ucb1 \
     ucpfile1 \
     ucptdoc1 \

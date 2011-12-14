@@ -89,6 +89,7 @@ $(eval $(call gb_CppunitTest_add_components,sc_subsequent_filters_test,\
     chart2/source/tools/charttools \
     chart2/source/model/chartmodel \
     comphelper/util/comphelp \
+    configmgr/source/configmgr \
     dbaccess/util/dba \
     eventattacher/source/evtatt \
     fileaccess/source/fileacc \
@@ -130,7 +131,6 @@ endif
 
 $(eval $(call gb_CppunitTest_add_old_components,sc_subsequent_filters_test,\
 	embobj \
-    configmgr \
     ucb1 \
     ucpfile1 \
     ucptdoc1 \

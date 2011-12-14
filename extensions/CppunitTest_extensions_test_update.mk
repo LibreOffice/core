@@ -66,11 +66,11 @@ $(eval $(call gb_CppunitTest_add_type_rdbs,extensions_test_update,\
 ))
 
 $(eval $(call gb_CppunitTest_add_components,extensions_test_update,\
+    configmgr/source/configmgr \
     unoxml/source/service/unoxml \
 ))
 
 $(eval $(call gb_CppunitTest_add_old_components,extensions_test_update,\
-    configmgr \
     ucb1 \
     ucpfile1 \
     updatefeed \
