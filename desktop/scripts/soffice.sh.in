@@ -161,11 +161,11 @@ fi
 if test "$#" -eq 1; then
     case "$1" in
         -h | --h | --he | --hel | --help)
-            "$sd_prog/soffice.bin" -h
+            "$sd_prog/soffice.bin" --help
             exit 0
             ;;
         -V | --v | --ve | --ver | --vers | --versi | --versio | --version)
-            "$sd_prog/soffice.bin" -h | head -1
+            "$sd_prog/soffice.bin" --version
             exit 0
             ;;
         *)
