@@ -173,6 +173,7 @@ my_components += \
     component/desktop/source/migration/services/migrationoo3 \
     component/desktop/source/offacc/offacc \
     component/desktop/source/splash/spl \
+    component/extensions/source/propctrlr/pcr \
     component/extensions/source/scanner/scn \
     component/extensions/source/update/check/updchk.uno \
     component/extensions/source/update/feed/updatefeed \
@@ -181,7 +182,6 @@ my_components += \
     fpicker \
     fps_office \
     log \
-    pcr \
     res \
     syssh \
     tvhlp1 \

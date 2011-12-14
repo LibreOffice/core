@@ -180,6 +180,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
 	msworks \
 	odfflatxml \
     offacc \
+	pcr \
 	pdffilter \
 	placeware \
 	protocolhandler \
