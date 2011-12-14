@@ -53,7 +53,7 @@
 // and SFNT fonts on Mac usually do not contain an OS/2 table.
 static void UpdateAttributesFromPSName( const String& rPSName, ImplDevFontAttributes& rDFA )
 {
-    ByteString aPSName( rPSName, RTL_TEXTENCODING_UTF8 );
+    ByteString aPSName( rtl::OUStringToOString( rPSName, RTL_TEXTENCODING_UTF8 ) );
     aPSName.ToLowerAscii();
 
     // TODO: use a multi-string ignore-case matcher once it becomes available
