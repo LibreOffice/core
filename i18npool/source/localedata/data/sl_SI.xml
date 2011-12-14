@@ -25,10 +25,10 @@
       <LongDateYearSeparator> </LongDateYearSeparator>
     </Separators>
     <Markers>
-      <QuotationStart>‘</QuotationStart>
+      <QuotationStart>’</QuotationStart>
       <QuotationEnd>’</QuotationEnd>
-      <DoubleQuotationStart>„</DoubleQuotationStart>
-      <DoubleQuotationEnd>“</DoubleQuotationEnd>
+      <DoubleQuotationStart>»</DoubleQuotationStart>
+      <DoubleQuotationEnd>«</DoubleQuotationEnd>
     </Markers>
     <TimeAM>dop.</TimeAM>
     <TimePM>pop.</TimePM>
@@ -60,46 +60,46 @@
       <FormatCode>0,00E+00</FormatCode>
     </FormatElement>
     <FormatElement msgid="PercentFormatskey1" default="true" type="short" usage="PERCENT_NUMBER" formatindex="8">
-      <FormatCode>0%</FormatCode>
+      <FormatCode>0 %</FormatCode>
     </FormatElement>
     <FormatElement msgid="PercentFormatskey2" default="true" type="long" usage="PERCENT_NUMBER" formatindex="9">
-      <FormatCode>0,00%</FormatCode>
+      <FormatCode>0,00 %</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey1" default="true" type="short" usage="CURRENCY" formatindex="12">
-      <FormatCode>#.##0 [$SIT-424];-#.##0 [$SIT-424]</FormatCode>
+      <FormatCode>#.##0 [CURRENCY];-#.##0 [CURRENCY]</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey2" default="false" type="medium" usage="CURRENCY" formatindex="13">
-      <FormatCode>#.##0,00 [$SIT-424];-#.##0,00 [$SIT-424]</FormatCode>
+      <FormatCode>#.##0,00 [CURRENCY];-#.##0,00 [CURRENCY]</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey3" default="false" type="medium" usage="CURRENCY" formatindex="14">
-      <FormatCode>#.##0 [$SIT-424];[RED]-#.##0 [$SIT-424]</FormatCode>
+      <FormatCode>#.##0 [CURRENCY];[RED]-#.##0 [CURRENCY]</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey4" default="true" type="medium" usage="CURRENCY" formatindex="15">
-      <FormatCode>#.##0,00 [$SIT-424];[RED]-#.##0,00 [$SIT-424]</FormatCode>
+      <FormatCode>#.##0,00 [CURRENCY];[RED]-#.##0,00 [CURRENCY]</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey5" default="false" type="medium" usage="CURRENCY" formatindex="16">
       <FormatCode>#.##0,00 CCC</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey6" default="false" type="medium" usage="CURRENCY" formatindex="17">
-      <FormatCode>#.##0,-- [$SIT-424];[RED]-#.##0,-- [$SIT-424]</FormatCode>
+      <FormatCode>#.##0,-- [CURRENCY];[RED]-#.##0,-- [CURRENCY]</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey1" default="true" type="short" usage="DATE" formatindex="18">
       <FormatCode>DD.MM.YY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey9" default="true" type="long" usage="DATE" formatindex="19">
-      <FormatCode>NNNND. MMMM YYYY</FormatCode>
+      <FormatCode>NNNN, D. MMMM YYYY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey8" default="true" type="medium" usage="DATE" formatindex="20">
-      <FormatCode>DD.MM.YY</FormatCode>
+      <FormatCode>DD. MM. YY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey7" default="false" type="medium" usage="DATE" formatindex="21">
-      <FormatCode>DD.MM.YYYY</FormatCode>
+      <FormatCode>DD. MM. YYYY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey10" default="false" type="long" usage="DATE" formatindex="22">
       <FormatCode>D. MMM YY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey11" default="false" type="long" usage="DATE" formatindex="23">
-      <FormatCode>D. MMM YYYY</FormatCode>
+      <FormatCode>D. MMM. YYYY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey16" default="false" type="long" usage="DATE" formatindex="24">
       <FormatCode>D. MMM. YYYY</FormatCode>
@@ -111,16 +111,16 @@
       <FormatCode>D. MMMM YYYY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey13" default="false" type="long" usage="DATE" formatindex="27">
-      <FormatCode>NN, D. MMM YY</FormatCode>
+      <FormatCode>NN., D. MMM. YY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey2" default="false" type="medium" usage="DATE" formatindex="28">
-      <FormatCode>NN DD.MMM YY</FormatCode>
+      <FormatCode>NN, DD. MMM YY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey14" default="false" type="long" usage="DATE" formatindex="29">
-      <FormatCode>NN, D. MMMM YYYY</FormatCode>
+      <FormatCode>NN., D. MMMM YYYY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey15" default="false" type="long" usage="DATE" formatindex="30">
-      <FormatCode>NNNND. MMMM YYYY</FormatCode>
+      <FormatCode>NNNN, D. MMMM YYYY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey18" default="false" type="short" usage="DATE" formatindex="31">
       <FormatCode>MM-DD</FormatCode>
@@ -137,7 +137,7 @@
       <FormatCode>MM.YY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey4" default="false" type="medium" usage="DATE" formatindex="35">
-      <FormatCode>DD.MMM</FormatCode>
+      <FormatCode>DD. MMM</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey5" default="false" type="medium" usage="DATE" formatindex="36">
       <FormatCode>MMMM</FormatCode>
@@ -192,8 +192,8 @@
     <UnicodeScript>0</UnicodeScript>
     <UnicodeScript>1</UnicodeScript>
     <UnicodeScript>2</UnicodeScript>
-    <FollowPageWord>p.</FollowPageWord>
-    <FollowPageWord>pp.</FollowPageWord>
+    <FollowPageWord>str.</FollowPageWord>
+    <FollowPageWord>str.</FollowPageWord>
   </LC_INDEX>
   <LC_CALENDAR>
     <Calendar unoid="gregorian" default="true">
@@ -299,13 +299,13 @@
       <Eras>
         <Era>
           <EraID>bc</EraID>
-          <DefaultAbbrvName>pr.n.š.</DefaultAbbrvName>
+          <DefaultAbbrvName>pr. n. št.</DefaultAbbrvName>
           <DefaultFullName>pred našim štetjem</DefaultFullName>
         </Era>
         <Era>
           <EraID>ad</EraID>
-          <DefaultAbbrvName>n.š.</DefaultAbbrvName>
-          <DefaultFullName>naše štetje</DefaultFullName>
+          <DefaultAbbrvName>n. št.</DefaultAbbrvName>
+          <DefaultFullName>našega štetja</DefaultFullName>
         </Era>
       </Eras>
       <StartDayOfWeek>
