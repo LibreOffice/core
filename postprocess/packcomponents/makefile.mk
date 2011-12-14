@@ -46,7 +46,8 @@ my_components = \
     component/canvas/source/simplecanvas/simplecanvas \
     component/canvas/source/vcl/vclcanvas \
     component/comphelper/util/comphelp \
-	component/cppcanvas/source/uno/mtfrenderer \
+    component/configmgr/source/configmgr \
+    component/cppcanvas/source/uno/mtfrenderer \
     component/cui/util/cui \
     component/dbaccess/source/ext/macromigration/dbmm \
     component/dbaccess/source/filter/xml/dbaxml \
@@ -141,7 +142,6 @@ my_components = \
     component/xmlscript/util/xcr \
     component/xmlsecurity/util/xmlsecurity \
     component/xmlsecurity/util/xsec_fw \
-    configmgr \
     ctl \
     dbase \
     dbpool2 \
