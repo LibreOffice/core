@@ -28,6 +28,8 @@
 
 #include "sal/config.h"
 
+#include <cassert>
+
 #include "com/sun/star/beans/XPropertiesChangeListener.hpp"
 #include "com/sun/star/beans/XPropertyChangeListener.hpp"
 #include "com/sun/star/container/XContainerListener.hpp"
@@ -40,7 +42,6 @@
 #include "com/sun/star/uno/XInterface.hpp"
 #include "com/sun/star/util/XChangesListener.hpp"
 #include "cppuhelper/exc_hlp.hxx"
-#include "osl/diagnose.hxx"
 #include "rtl/string.h"
 #include "rtl/ustrbuf.hxx"
 #include "rtl/ustring.h"
@@ -217,7 +218,7 @@ Broadcaster::DisposeNotification::DisposeNotification(
     css::lang::EventObject const & theEvent):
     listener(theListener), event(theEvent)
 {
-    OSL_ASSERT(theListener.is());
+    assert(theListener.is());
 }
 
 Broadcaster::ContainerNotification::ContainerNotification(
@@ -226,7 +227,7 @@ Broadcaster::ContainerNotification::ContainerNotification(
     css::container::ContainerEvent const & theEvent):
     listener(theListener), event(theEvent)
 {
-    OSL_ASSERT(theListener.is());
+    assert(theListener.is());
 }
 
 Broadcaster::PropertyChangeNotification::PropertyChangeNotification(
@@ -235,7 +236,7 @@ Broadcaster::PropertyChangeNotification::PropertyChangeNotification(
     css::beans::PropertyChangeEvent const & theEvent):
     listener(theListener), event(theEvent)
 {
-    OSL_ASSERT(theListener.is());
+    assert(theListener.is());
 }
 
 Broadcaster::PropertiesChangeNotification::PropertiesChangeNotification(
@@ -244,7 +245,7 @@ Broadcaster::PropertiesChangeNotification::PropertiesChangeNotification(
     css::uno::Sequence< css::beans::PropertyChangeEvent > const & theEvent):
     listener(theListener), event(theEvent)
 {
-    OSL_ASSERT(theListener.is());
+    assert(theListener.is());
 }
 
 Broadcaster::ChangesNotification::ChangesNotification(
@@ -252,7 +253,7 @@ Broadcaster::ChangesNotification::ChangesNotification(
     css::util::ChangesEvent const & theEvent):
     listener(theListener), event(theEvent)
 {
-    OSL_ASSERT(theListener.is());
+    assert(theListener.is());
 }
 
 }

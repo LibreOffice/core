@@ -28,6 +28,8 @@
 
 #include "sal/config.h"
 
+#include <cassert>
+
 #include "rtl/ustring.hxx"
 
 #include "modifications.hxx"
@@ -60,7 +62,7 @@ void Modifications::add(Path const & path) {
 }
 
 void Modifications::remove(Path const & path) {
-    OSL_ASSERT(!path.empty());
+    assert(!path.empty());
     Node * p = &root_;
     for (Path::const_iterator i(path.begin());;) {
         Node::Children::iterator j(p->children.find(*i));

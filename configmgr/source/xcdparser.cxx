@@ -28,12 +28,12 @@
 
 #include "sal/config.h"
 
+#include <cassert>
 #include <climits>
 
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "com/sun/star/uno/XInterface.hpp"
-#include "osl/diagnose.hxx"
 #include "rtl/string.h"
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
@@ -69,7 +69,7 @@ bool XcdParser::startElement(
     xmlreader::XmlReader & reader, int nsId, xmlreader::Span const & name)
 {
     if (nestedParser_.is()) {
-        OSL_ASSERT(nesting_ != LONG_MAX);
+        assert(nesting_ != LONG_MAX);
         ++nesting_;
         return nestedParser_->startElement(reader, nsId, name);
     }
@@ -145,7 +145,7 @@ bool XcdParser::startElement(
         }
         break;
     default: // STATE_DEPENDENCY
-        OSL_ASSERT(false); // this cannot happen
+        assert(false); // this cannot happen
         break;
     }
     throw css::uno::RuntimeException(
@@ -170,7 +170,7 @@ void XcdParser::endElement(xmlreader::XmlReader const & reader) {
         case STATE_COMPONENTS:
             break;
         default:
-            OSL_ASSERT(false); // this cannot happen
+            assert(false); // this cannot happen
             break;
         }
     }

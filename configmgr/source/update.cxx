@@ -28,6 +28,7 @@
 
 #include "sal/config.h"
 
+#include <cassert>
 #include <set>
 
 #include "boost/noncopyable.hpp"
@@ -75,7 +76,7 @@ public:
     Service(css::uno::Reference< css::uno::XComponentContext > const context):
         context_(context)
     {
-        OSL_ASSERT(context.is());
+        assert(context.is());
         lock_ = lock();
     }
 
