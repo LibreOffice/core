@@ -27,6 +27,8 @@
 
 .PHONY: id tags docs distro-pack-install install fetch clean-host clean-build bootstrap
 
+ifneq ($(gb_SourceEnvAndRecurse_STAGE),buildpl)
+
 id:
 	@create-ids
 
@@ -86,5 +88,6 @@ install: build
 
 endif
 
+endif
 
 # vim:set shiftwidth=4 softtabstop=4 noexpandtab:
