@@ -79,6 +79,7 @@ void ScMyOLEFixer::CreateChartListener(ScDocument* pDoc,
     }
 
     OUString aRangeStr;
+    // This one returns ranges with ';' as the separators.
     ScRangeStringConverter::GetStringFromXMLRangeString(aRangeStr, rRangeList, pDoc);
     if (!aRangeStr.getLength())
     {
@@ -95,9 +96,8 @@ void ScMyOLEFixer::CreateChartListener(ScDocument* pDoc,
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     auto_ptr< vector<ScTokenRef> > pRefTokens(new vector<ScTokenRef>);
     SAL_WNODEPRECATED_DECLARATIONS_POP
-    const sal_Unicode cSep = ScCompiler::GetNativeSymbol(ocSep).GetChar(0);
     ScRefTokenHelper::compileRangeRepresentation(
-        *pRefTokens, aRangeStr, pDoc, cSep, formula::FormulaGrammar::GRAM_ENGLISH);
+        *pRefTokens, aRangeStr, pDoc, ';', formula::FormulaGrammar::GRAM_ENGLISH);
     if (!pRefTokens->empty())
     {
         ScChartListener* pCL(new ScChartListener(rName, pDoc, pRefTokens.release()));

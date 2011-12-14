@@ -154,7 +154,7 @@ void XMLTableShapeImportHelper::finishShape(
                 }
             }
 
-            if ( bOnTable && pRangeList )
+            if (pRangeList)
             {
                 // #i78086# If there are notification ranges, the ChartListener must be created
                 // also when anchored to the sheet
