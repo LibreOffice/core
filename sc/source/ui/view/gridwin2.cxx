@@ -480,7 +480,12 @@ void ScGridWindow::DPLaunchFieldPopupMenu(
         for (size_t i = 0; i < n; ++i)
         {
             const ScDPLabelData::Member& rMem = rLabelData.maMembers[i];
-            mpDPFieldPopup->addMember(rMem.getDisplayName(), rMem.mbVisible);
+            rtl::OUString aName = rMem.getDisplayName();
+            if (aName.isEmpty())
+                // Use special string for an empty name.
+                mpDPFieldPopup->addMember(ScGlobal::GetRscString(STR_EMPTYDATA), rMem.mbVisible);
+            else
+                mpDPFieldPopup->addMember(rMem.getDisplayName(), rMem.mbVisible);
         }
         mpDPFieldPopup->initMembers();
     }
@@ -581,9 +586,14 @@ void ScGridWindow::UpdateDPFromFieldPopupMenu()
         if (itrNameMap == aMemNameMap.end())
         {
             // This is an original member name.  Use it as-is.
+            rtl::OUString aName = itr->first;
+            if (aName.equals(ScGlobal::GetRscString(STR_EMPTYDATA)))
+                // Translate the special empty name into an empty string.
+                aName = rtl::OUString();
+
             aResult.insert(
                 ScCheckListMenuWindow::ResultType::value_type(
-                    itr->first, itr->second));
+                    aName, itr->second));
         }
         else
         {
