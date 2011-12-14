@@ -1604,8 +1604,8 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
     // Trivial paragraph flags
     switch (nKeyword)
     {
-        case RTF_KEEP: nParam = NS_sprm::LN_PFKeep; break;
-        case RTF_KEEPN: nParam = NS_sprm::LN_PFKeepFollow; break;
+        case RTF_KEEP: if (m_pCurrentBuffer != &m_aTableBuffer) nParam = NS_sprm::LN_PFKeep; break;
+        case RTF_KEEPN: if (m_pCurrentBuffer != &m_aTableBuffer) nParam = NS_sprm::LN_PFKeepFollow; break;
         case RTF_INTBL: m_pCurrentBuffer = &m_aTableBuffer; nParam = NS_sprm::LN_PFInTable; break;
         case RTF_PAGEBB: nParam = NS_sprm::LN_PFPageBreakBefore; break;
         default: break;
