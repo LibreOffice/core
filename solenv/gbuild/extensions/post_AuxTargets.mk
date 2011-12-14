@@ -27,6 +27,14 @@
 
 .PHONY: id tags docs distro-pack-install install fetch clean-host clean-build bootstrap
 
+$(WORKDIR)/bootstrap:
+	@cd $(SRCDIR) && ./bootstrap
+	@mkdir -p $(dir $@) && touch $@
+
+bootstrap: $(WORKDIR)/bootstrap
+
+autogen.lastrun:
+
 ifneq ($(gb_SourceEnvAndRecurse_STAGE),buildpl)
 
 id:
@@ -56,14 +64,6 @@ fetch:
 $(SRCDIR)/Env.Host.sh: autogen.lastrun configure.in ooo.lst.in set_soenv.in
 	$(if $(filter reconfigure,$(gb_SourceEnvAndRecurse_STAGE)),$(SRCDIR)/autogen.sh,@echo "cannot reconfigure from within solarenv" && rm -f $(SRCDIR)/Env.Host.sh && exit 2)
 
-autogen.lastrun:
-
-
-$(WORKDIR)/bootstrap:
-	@cd $(SRCDIR) && ./bootstrap
-	@mkdir -p $(dir $@) && touch $@
-
-bootstrap: $(WORKDIR)/bootstrap
 
 ifeq ($(strip $(gb_PARTIALBUILD)),)
 
@@ -111,15 +111,6 @@ distro-pack-install:
 	@true
 
 $(SRCDIR)/Env.Host.sh:
-	@true
-
-autogen.lastrun:
-	@true
-
-$(WORKDIR)/bootstrap:
-	@true
-
-bootstrap:
 	@true
 
 clean-host:
