@@ -56,12 +56,16 @@ $(eval $(call gb_Library_use_externals,avmediaQuickTime,\
 	quicktime \
 ))
 
-$(eval $(call gb_Library_add_objcxxobjects,avmediaQuickTime,\
+$(eval $(call gb_Library_add_exception_objects,avmediaQuickTime,\
 	avmedia/source/quicktime/framegrabber \
 	avmedia/source/quicktime/manager \
 	avmedia/source/quicktime/player \
 	avmedia/source/quicktime/quicktimeuno \
 	avmedia/source/quicktime/window \
+))
+
+$(eval $(call gb_Library_add_cxxflags,avmediaQuickTime,\
+	$(gb_LinkTarget_OBJCXXFLAGS) \
 ))
 
 # vim: set noet sw=4 ts=4:
