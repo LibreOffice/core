@@ -534,6 +534,18 @@ void ScInputWindow::Resize()
         aTextWindow.Resize();
         Size aSize = GetSizePixel();
         aSize.Height() = CalcWindowSizePixel().Height();
+        ScInputBarGroup* pGroupBar = dynamic_cast< ScInputBarGroup* > ( pRuntimeWindow.get() );
+        if ( pGroupBar )
+        {
+            // To ensure smooth display and prevent the items in the toolbar being
+            // repositioned ( vertically ) we lock the vertical positioning of the toolbox
+            // items when we are displaying > 1 line.
+            // So, we need to adjust the height of the toolbox accordingly. If we don't
+            // then the largest item ( e.g. the GroupBar window ) will actually be
+            // positioned such that the toolbar will cut off the bottom of that item
+            if ( pGroupBar->GetNumLines() > 1 )
+                aSize.Height() += pGroupBar->GetVertOffset();
+        }
         SetSizePixel(aSize);
         Invalidate();
     }
@@ -861,7 +873,8 @@ ScInputBarGroup::ScInputBarGroup(Window* pParent, ScTabViewShell* pViewSh)
     :   ScTextWndBase        ( pParent, WinBits(WB_HIDE |  WB_TABSTOP ) ),
         aMultiTextWnd        ( this, pViewSh ),
         aButton              ( this, WB_TABSTOP | WB_RECTSTYLE ),
-        aScrollBar           ( this, WB_TABSTOP | WB_VERT | WB_DRAG )
+        aScrollBar           ( this, WB_TABSTOP | WB_VERT | WB_DRAG ),
+        nVertOffset          ( 0 )
 {
       aMultiTextWnd.Show();
       aMultiTextWnd.SetQuickHelpText( ScResId( SCSTR_QHELP_INPUTWND ) );
@@ -1057,6 +1070,13 @@ void ScInputBarGroup::TriggerToolboxLayout()
     ScInputWindow *pParent;
     pParent=dynamic_cast<ScInputWindow*>(w);
     SfxViewFrame* pViewFrm = SfxViewFrame::Current();
+
+    // Capture the vertical position of this window in the toolbar, when we increase
+    // the size of the toolbar to accomadate expanded line input we need to take this
+    // into account
+    if ( !nVertOffset )
+        nVertOffset = pParent->GetItemPosRect( pParent->GetItemCount() - 1 ).Top();
+
     if ( pViewFrm )
     {
         Reference< com::sun::star::beans::XPropertySet > xPropSet( pViewFrm->GetFrame().GetFrameInterface(), UNO_QUERY );
@@ -1071,7 +1091,7 @@ void ScInputBarGroup::TriggerToolboxLayout()
         if ( xLayoutManager.is() )
         {
             if ( aMultiTextWnd.GetNumLines() > 1)
-                pParent->SetToolbarLayoutMode( TBX_LAYOUT_TOP );
+                pParent->SetToolbarLayoutMode( TBX_LAYOUT_LOCKVERT );
             else
                 pParent->SetToolbarLayoutMode( TBX_LAYOUT_NORMAL );
             xLayoutManager->lock();

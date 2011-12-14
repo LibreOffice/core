@@ -231,12 +231,14 @@ public:
     ScrollBar&      GetScrollBar() { return aScrollBar; }
     void            IncrementVerticalSize();
     void            DecrementVerticalSize();
+    long            GetNumLines() { return aMultiTextWnd.GetNumLines(); }
+    long            GetVertOffset() { return  nVertOffset; }
 private:
     void            TriggerToolboxLayout();
     ScMultiTextWnd  aMultiTextWnd;
     PushButton      aButton;
     ScrollBar       aScrollBar;
-
+    long            nVertOffset;
     DECL_LINK( ClickHdl,	 PushButton* );
     DECL_LINK( Impl_ScrollHdl,  ScrollBar* );
 

@@ -160,12 +160,11 @@ enum ToolBoxButtonSize { TOOLBOX_BUTTONSIZE_DONTCARE, TOOLBOX_BUTTONSIZE_SMALL, 
 // used for internal sizing calculations
 enum FloatingSizeMode { FSMODE_AUTO, FSMODE_FAVOURWIDTH, FSMODE_FAVOURHEIGHT };
 
-// TBX_LAYOUT_NORMAL - traditional layout, items are centered in the toolbar
-// TBX_LAYOUT_TOP    - special mode (currently used for calc input/formula bar)
-//                   where items are aligned with the top of highest item
-//                  ( currently only valid for docked, single line,  horizontal
-//                  toolbars )
-enum ToolBoxLayoutMode { TBX_LAYOUT_NORMAL, TBX_LAYOUT_TOP };
+// TBX_LAYOUT_NORMAL   - traditional layout, items are centered in the toolbar
+// TBX_LAYOUT_LOCKVERT - special mode (currently used for calc input/formula
+//                       bar) where item's vertical position is locked, e.g.
+//                       toolbox is prevented from centering the items
+enum ToolBoxLayoutMode { TBX_LAYOUT_NORMAL, TBX_LAYOUT_LOCKVERT };
 // -----------
 // - ToolBox -
 // -----------
