@@ -38,6 +38,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     canvas \
     chart2 \
     comphelper \
+    configmgr \
     cppcanvas \
     cui \
     dbaccess \
@@ -111,7 +112,6 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
 
 # these have only migrated subsequentcheck for now
 $(eval $(call gb_Module_add_moduledirs,ooo,\
-    configmgr \
     sal \
     ucb \
 ))
