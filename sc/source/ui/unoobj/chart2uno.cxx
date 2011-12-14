@@ -1400,6 +1400,11 @@ public:
         if (ScRefTokenHelper::isExternalRef(rRef))
             return;
 
+        // Don't assume an ScDoubleRefToken if it isn't. It can be at least an
+        // ScSingleRefToken, then there isn't anything to shrink.
+        if (rRef->GetType() != svDoubleRef)
+            return;
+
         ScComplexRefData& rData = rRef->GetDoubleRef();
         ScSingleRefData& s = rData.Ref1;
         ScSingleRefData& e = rData.Ref2;
