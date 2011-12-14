@@ -688,7 +688,7 @@ sal_Bool ZipFile::readLOC( ZipEntry &rEntry )
 
         // the method can be reset for internal use so it is not checked
         bBroken = rEntry.nVersion != nVersion
-                        || rEntry.nFlag != nFlag
+                        || rEntry.nMethod != nHow
                         || rEntry.nTime != nTime
                         || rEntry.nPathLen != nPathLen
                         || !rEntry.sPath.equals( sLOCPath );
@@ -697,6 +697,12 @@ sal_Bool ZipFile::readLOC( ZipEntry &rEntry )
     {
         bBroken = sal_True;
     }
+
+    // ignore bits 1 & 2 for normal deflate algo - they're purely informative
+    if( nHow != 8 && nHow != 9 )
+        bBroken = bBroken || rEntry.nFlag != nFlag;
+    else if( (rEntry.nFlag & ~6L) != (nFlag & ~6L) )
+        bBroken = true;
 
     if ( bBroken && !bRecoveryMode )
         throw ZipIOException( OUString( RTL_CONSTASCII_USTRINGPARAM( "The stream seems to be broken!" ) ),
