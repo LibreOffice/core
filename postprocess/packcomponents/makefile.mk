@@ -173,6 +173,7 @@ my_components += \
     component/desktop/source/migration/services/migrationoo3 \
     component/desktop/source/offacc/offacc \
     component/desktop/source/splash/spl \
+    component/extensions/source/scanner/scn \
     component/extensions/source/update/check/updchk.uno \
     component/extensions/source/update/feed/updatefeed \
     component/extensions/source/update/ui/updchk \
@@ -182,7 +183,6 @@ my_components += \
     log \
     pcr \
     res \
-    scn \
     syssh \
     tvhlp1 \
     ucpchelp1 \

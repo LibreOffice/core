@@ -194,6 +194,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     sc \
     scd \
     scfilt \
+    scn \
     scui \
     sd \
     sdbt \
