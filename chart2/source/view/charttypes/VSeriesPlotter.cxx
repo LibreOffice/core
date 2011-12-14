@@ -1378,7 +1378,7 @@ void VSeriesPlotter::getMinimumAndMaximiumYInContinuousXRange( double& rfMinY, d
 
     ::std::vector< ::std::vector< VDataSeriesGroup > >::const_iterator       aZSlotIter = m_aZSlots.begin();
     const ::std::vector< ::std::vector< VDataSeriesGroup > >::const_iterator  aZSlotEnd = m_aZSlots.end();
-    for( ; aZSlotIter != aZSlotEnd; aZSlotIter++ )
+    for( ; aZSlotIter != aZSlotEnd; ++aZSlotIter )
     {
         ::std::vector< VDataSeriesGroup >::const_iterator      aXSlotIter = aZSlotIter->begin();
         const ::std::vector< VDataSeriesGroup >::const_iterator aXSlotEnd = aZSlotIter->end();
@@ -1499,16 +1499,24 @@ void VDataSeriesGroup::getMinimumAndMaximiumX( double& rfMinimum, double& rfMaxi
     if(::rtl::math::isInf(rfMaximum))
         ::rtl::math::setNan(&rfMaximum);
 }
-void VDataSeriesGroup::getMinimumAndMaximiumYInContinuousXRange( double& rfMinY, double& rfMaxY, double fMinX, double fMaxX, sal_Int32 nAxisIndex ) const
+
+void VDataSeriesGroup::getMinimumAndMaximiumYInContinuousXRange(
+    double& rfMinY, double& rfMaxY, double fMinX, double fMaxX, sal_Int32 nAxisIndex ) const
 {
-    const ::std::vector< VDataSeries* >* pSeriesList = &this->m_aSeriesVector;
+    ::rtl::math::setNan(&rfMinY);
+    ::rtl::math::setNan(&rfMaxY);
 
-    ::std::vector< VDataSeries* >::const_iterator       aSeriesIter = pSeriesList->begin();
-    const ::std::vector< VDataSeries* >::const_iterator aSeriesEnd  = pSeriesList->end();
+    if (m_aSeriesVector.empty())
+        // No data series.  Bail out.
+        return;
 
-    ::rtl::math::setInf(&rfMinY, false);
-    ::rtl::math::setInf(&rfMaxY, true);
+    // Collect minimum y-value and accumulative maximum y-value for each
+    // x-value first, in case of stacked data series.
+    typedef boost::unordered_map<double, std::pair<double,double> > MinMaxPerXType;
+    MinMaxPerXType aStore;
 
+    std::vector<VDataSeries*>::const_iterator       aSeriesIter = m_aSeriesVector.begin();
+    const std::vector<VDataSeries*>::const_iterator aSeriesEnd  = m_aSeriesVector.end();
     for( ; aSeriesIter != aSeriesEnd; ++aSeriesIter )
     {
         sal_Int32 nPointCount = (*aSeriesIter)->getTotalPointCount();
@@ -1525,16 +1533,35 @@ void VDataSeriesGroup::getMinimumAndMaximiumYInContinuousXRange( double& rfMinY,
             double fY = (*aSeriesIter)->getYValue( nN );
             if( ::rtl::math::isNan(fY) )
                 continue;
-            if(rfMaxY<fY)
-                rfMaxY=fY;
-            if(rfMinY>fY)
-                rfMinY=fY;
+
+            MinMaxPerXType::iterator itr = aStore.find(fX);
+            if (itr == aStore.end())
+                aStore.insert(MinMaxPerXType::value_type(fX, std::pair<double,double>(fY, fY)));
+            else
+            {
+                std::pair<double,double>& r = itr->second;
+                if (fY < r.first)
+                    r.first = fY; // min y-value
+
+                r.second += fY; // accumulative max y-value.
+            }
         }
     }
-    if(::rtl::math::isInf(rfMinY))
-        ::rtl::math::setNan(&rfMinY);
-    if(::rtl::math::isInf(rfMaxY))
-        ::rtl::math::setNan(&rfMaxY);
+
+    if (aStore.empty())
+        // No data within the specified x range.
+        return;
+
+    MinMaxPerXType::const_iterator itr = aStore.begin(), itrEnd = aStore.end();
+    rfMinY = itr->second.first;
+    rfMaxY = itr->second.second;
+    for (++itr; itr != itrEnd; ++itr)
+    {
+        if (rfMinY > itr->second.first)
+            rfMinY = itr->second.first;
+        if (rfMaxY < itr->second.second)
+            rfMaxY = itr->second.second;
+    }
 }
 
 void VDataSeriesGroup::calculateYMinAndMaxForCategory( sal_Int32 nCategoryIndex
