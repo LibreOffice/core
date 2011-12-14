@@ -1328,6 +1328,8 @@ Size GtkSalFrame::calcDefaultSize()
         w = 785;
     if( aScreenSize.Width() >= 1024 )
         w = 920;
+    if( aScreenSize.Width() >= 1280 )
+        w = 1050;
 
     if( aScreenSize.Height() >= 600 )
         h = 550;
