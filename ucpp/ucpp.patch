@@ -1,6 +1,6 @@
 --- misc/ucpp/makefile.mk	2011-09-21 14:52:57.436957300 +0200
 +++ misc/build/ucpp/makefile.mk	2011-09-21 14:37:13.843986900 +0200
-@@ -1 +1,46 @@
+@@ -1 +1,50 @@
 -dummy
 +#**************************************************************
 +# 
@@ -28,11 +28,15 @@
 +TARGET=ucpp
 +TARGETTYPE=CUI
 +LIBTARGET=NO
++NO_DEFAULT_STL=TRUE
 +
 +EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
 +
 +# --- Settings -----------------------------------------------------
 +.INCLUDE :  settings.mk
++
++UWINAPILIB=$(0)
++LIBSALCPPRT=$(0)
 +
 +# --- Files --------------------------------------------------------
 +
