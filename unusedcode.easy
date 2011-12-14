@@ -2197,6 +2197,8 @@ unicode::isPunctuation(unsigned short)
 unicode::isTitle(unsigned short)
 unicode::isUnicodeScriptType(unsigned short, short)
 unographic::GraphicDescriptor::isValid() const
+unotools::detail::ConfigurationWrapper::getLocalizedPropertyValue(rtl::OUString const&) const
+unotools::detail::ConfigurationWrapper::setLocalizedPropertyValue(boost::shared_ptr<unotools::ConfigurationChanges> const&, rtl::OUString const&, com::sun::star::uno::Any const&) const
 utl::NodeValueAccessor::bind(com::sun::star::uno::Any*)
 utl::OConfigurationNode::appendNode(rtl::OUString const&, utl::OConfigurationNode const&) const
 utl::OConfigurationValueContainer::getServiceFactory() const
