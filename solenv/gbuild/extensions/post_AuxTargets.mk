@@ -44,16 +44,20 @@ distro-pack-install: install
 	$(SRCDIR)/bin/distro-install-sdk
 	$(SRCDIR)/bin/distro-install-file-lists
 
-$(SRCDIR)/src.downloaded: $(SRCDIR)/ooo.lst $(SRCDIR)/download
-	$(if $(filter YES,$(DO_FETCH_TARBALLS)),cd $(SRCDIR) && ./download ./ooo.lst && touch $@,touch $@)
 
-fetch: $(SRCDIR)/src.downloaded
+#these need to stay in the buildpl phase as buildpl depends on them
+$(SRCDIR)/src.downloaded:
+	@true
+
+fetch:
+	@true
 
 # fixme: can we prevent these exports in the first place?
 $(SRCDIR)/Env.Host.sh: autogen.lastrun configure.in ooo.lst.in set_soenv.in
 	$(if $(filter reconfigure,$(gb_SourceEnvAndRecurse_STAGE)),$(SRCDIR)/autogen.sh,@echo "cannot reconfigure from within solarenv" && rm -f $(SRCDIR)/Env.Host.sh && exit 2)
 
 autogen.lastrun:
+
 
 $(WORKDIR)/bootstrap:
 	@cd $(SRCDIR) && ./bootstrap
@@ -87,6 +91,48 @@ install: build
 	echo "$(INSTALLDIR)/program/soffice"
 
 endif
+
+else
+$(SRCDIR)/src.downloaded: $(SRCDIR)/ooo.lst $(SRCDIR)/download
+	$(if $(filter YES,$(DO_FETCH_TARBALLS)),cd $(SRCDIR) && ./download ./ooo.lst && touch $@,touch $@)
+
+fetch: $(SRCDIR)/src.downloaded
+
+id:
+	@true
+
+tags:
+	@true
+
+docs:
+	@true
+
+distro-pack-install:
+	@true
+
+$(SRCDIR)/Env.Host.sh:
+	@true
+
+autogen.lastrun:
+	@true
+
+$(WORKDIR)/bootstrap:
+	@true
+
+bootstrap:
+	@true
+
+clean-host:
+	@true
+
+clean-build:
+	@true
+
+distclean:
+	@true
+
+install:
+	@true
 
 endif
 
