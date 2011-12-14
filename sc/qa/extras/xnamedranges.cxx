@@ -38,8 +38,6 @@
 #include <com/sun/star/sheet/XNamedRange.hpp>
 #include <com/sun/star/table/XCell.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
-#include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/util/XCloseable.hpp>
 
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>
@@ -50,7 +48,7 @@
 
 namespace ScNamedRangeObj {
 
-class ScXNamedRange : public UnoApiTest
+class ScXNamedRanges : public UnoApiTest
 {
     uno::Reference< sheet::XSpreadsheetDocument> init();
 
@@ -60,7 +58,7 @@ class ScXNamedRange : public UnoApiTest
     void testRemoveByName();
     void testOutputList();
 
-    CPPUNIT_TEST_SUITE(ScXNamedRange);
+    CPPUNIT_TEST_SUITE(ScXNamedRanges);
     CPPUNIT_TEST(testAddNewByName);
     CPPUNIT_TEST(testAddNewFromTitles);
     //fix first warning in ExceptionsTestCaseDecorator
@@ -70,70 +68,70 @@ class ScXNamedRange : public UnoApiTest
 };
 
 
-void ScXNamedRange::testAddNewByName()
+void ScXNamedRanges::testAddNewByName()
 {
     uno::Reference< sheet::XSpreadsheetDocument> xDoc = init();
     uno::Reference< container::XIndexAccess > xIndex (xDoc->getSheets(), UNO_QUERY_THROW);
     uno::Reference< sheet::XSpreadsheet > xSheet( xIndex->getByIndex(0), UNO_QUERY_THROW);
 
-    uno::Reference< beans::XPropertySet > propSet (xDoc, UNO_QUERY_THROW);
-    rtl::OUString namedRangesString(RTL_CONSTASCII_USTRINGPARAM("NamedRanges"));
-    uno::Reference< sheet::XNamedRanges > xNamedRanges(propSet->getPropertyValue(namedRangesString), UNO_QUERY_THROW);
-    uno::Reference< container::XNameAccess > xNamedRangesNameAccess(propSet->getPropertyValue(namedRangesString), UNO_QUERY_THROW);
+    uno::Reference< beans::XPropertySet > xPropSet (xDoc, UNO_QUERY_THROW);
+    rtl::OUString aNamedRangesString(RTL_CONSTASCII_USTRINGPARAM("NamedRanges"));
+    uno::Reference< sheet::XNamedRanges > xNamedRanges(xPropSet->getPropertyValue(aNamedRangesString), UNO_QUERY_THROW);
+    uno::Reference< container::XNameAccess > xNamedRangesNameAccess(xPropSet->getPropertyValue(aNamedRangesString), UNO_QUERY_THROW);
 
-    table::CellAddress xBaseAddress = table::CellAddress(0,0,0);
+    table::CellAddress aBaseAddress = table::CellAddress(0,0,0);
 
     sal_Int32 nType = 0;
-    rtl::OUString content1(RTL_CONSTASCII_USTRINGPARAM("D1"));
-    rtl::OUString name1(RTL_CONSTASCII_USTRINGPARAM("type_0"));
-    xNamedRanges->addNewByName(name1, content1, xBaseAddress, nType);
-    CPPUNIT_ASSERT_MESSAGE("Failed to create Namedrange Type 0 - Normal case", xNamedRanges->hasByName(name1));
+    rtl::OUString aContent1(RTL_CONSTASCII_USTRINGPARAM("D1"));
+    rtl::OUString aName1(RTL_CONSTASCII_USTRINGPARAM("type_0"));
+    xNamedRanges->addNewByName(aName1, aContent1, aBaseAddress, nType);
+    CPPUNIT_ASSERT_MESSAGE("Failed to create Namedrange Type 0 - Normal case", xNamedRanges->hasByName(aName1));
 
     nType = ::sheet::NamedRangeFlag::COLUMN_HEADER;
-    rtl::OUString content2(RTL_CONSTASCII_USTRINGPARAM("D2"));
-    rtl::OUString name2(RTL_CONSTASCII_USTRINGPARAM("type_COLUMN_HEADER"));
-    xNamedRanges->addNewByName(name2, content2, xBaseAddress, nType);
-    CPPUNIT_ASSERT_MESSAGE("Failed to create Namedrange Type COLUMN_HEADER", xNamedRanges->hasByName(name2));
+    rtl::OUString aContent2(RTL_CONSTASCII_USTRINGPARAM("D2"));
+    rtl::OUString aName2(RTL_CONSTASCII_USTRINGPARAM("type_COLUMN_HEADER"));
+    xNamedRanges->addNewByName(aName2, aContent2, aBaseAddress, nType);
+    CPPUNIT_ASSERT_MESSAGE("Failed to create Namedrange Type COLUMN_HEADER", xNamedRanges->hasByName(aName2));
 
     nType = ::sheet::NamedRangeFlag::FILTER_CRITERIA;
-    rtl::OUString content3(RTL_CONSTASCII_USTRINGPARAM("D3"));
-    rtl::OUString name3(RTL_CONSTASCII_USTRINGPARAM("type_FILTER_CRITERIA"));
-    xNamedRanges->addNewByName(name3, content3, xBaseAddress, nType);
-    CPPUNIT_ASSERT_MESSAGE("Failed to create Namedrange Type FILTER_CRITERIA", xNamedRanges->hasByName(name3));
+    rtl::OUString aContent3(RTL_CONSTASCII_USTRINGPARAM("D3"));
+    rtl::OUString aName3(RTL_CONSTASCII_USTRINGPARAM("type_FILTER_CRITERIA"));
+    xNamedRanges->addNewByName(aName3, aContent3, aBaseAddress, nType);
+    CPPUNIT_ASSERT_MESSAGE("Failed to create Namedrange Type FILTER_CRITERIA", xNamedRanges->hasByName(aName3));
 
     nType = ::sheet::NamedRangeFlag::PRINT_AREA;
-    rtl::OUString content4(RTL_CONSTASCII_USTRINGPARAM("D4"));
-    rtl::OUString name4(RTL_CONSTASCII_USTRINGPARAM("type_PRINT_AREA"));
-    xNamedRanges->addNewByName(name4, content4, xBaseAddress, nType);
-    CPPUNIT_ASSERT_MESSAGE("Failed to create Namedrange Type PRINT_AREA", xNamedRanges->hasByName(name4));
+    rtl::OUString aContent4(RTL_CONSTASCII_USTRINGPARAM("D4"));
+    rtl::OUString aName4(RTL_CONSTASCII_USTRINGPARAM("type_PRINT_AREA"));
+    xNamedRanges->addNewByName(aName4, aContent4, aBaseAddress, nType);
+    CPPUNIT_ASSERT_MESSAGE("Failed to create Namedrange Type PRINT_AREA", xNamedRanges->hasByName(aName4));
 
     nType = ::sheet::NamedRangeFlag::ROW_HEADER;
-    rtl::OUString content5(RTL_CONSTASCII_USTRINGPARAM("D5"));
-    rtl::OUString name5(RTL_CONSTASCII_USTRINGPARAM("type_ROW_HEADERA"));
-    xNamedRanges->addNewByName(name5, content5, xBaseAddress, nType);
-    CPPUNIT_ASSERT_MESSAGE("Failed to create Namedrange Type ROW_HEADER", xNamedRanges->hasByName(name5));
+    rtl::OUString aContent5(RTL_CONSTASCII_USTRINGPARAM("D5"));
+    rtl::OUString aName5(RTL_CONSTASCII_USTRINGPARAM("type_ROW_HEADERA"));
+    xNamedRanges->addNewByName(aName5, aContent5, aBaseAddress, nType);
+    CPPUNIT_ASSERT_MESSAGE("Failed to create Namedrange Type ROW_HEADER", xNamedRanges->hasByName(aName5));
 
 }
 
-void ScXNamedRange::testAddNewFromTitles()
+void ScXNamedRanges::testAddNewFromTitles()
 {
 
     uno::Reference< sheet::XSpreadsheetDocument> xDoc = init();
     uno::Reference< container::XIndexAccess > xIndex (xDoc->getSheets(), UNO_QUERY_THROW);
     uno::Reference< sheet::XSpreadsheet > xSheet( xIndex->getByIndex(1), UNO_QUERY_THROW);
 
-    uno::Reference< beans::XPropertySet > propSet (xDoc, UNO_QUERY_THROW);
-    rtl::OUString namedRangesString(RTL_CONSTASCII_USTRINGPARAM("NamedRanges"));
-    uno::Reference< sheet::XNamedRanges > xNamedRanges(propSet->getPropertyValue(namedRangesString), UNO_QUERY_THROW);
-    uno::Reference< container::XIndexAccess > xNamedRangesIndex(propSet->getPropertyValue(namedRangesString), UNO_QUERY_THROW);
-    uno::Reference< container::XNameAccess > xNamedRangesNameAccess(propSet->getPropertyValue(namedRangesString), UNO_QUERY_THROW);
+    uno::Reference< beans::XPropertySet > xPropSet (xDoc, UNO_QUERY_THROW);
+    rtl::OUString aNamedRangesString(RTL_CONSTASCII_USTRINGPARAM("NamedRanges"));
+    uno::Reference< sheet::XNamedRanges > xNamedRanges(xPropSet->getPropertyValue(aNamedRangesString), UNO_QUERY_THROW);
+    uno::Reference< container::XIndexAccess > xNamedRangesIndex(xPropSet->getPropertyValue(aNamedRangesString), UNO_QUERY_THROW);
+    uno::Reference< container::XNameAccess > xNamedRangesNameAccess(xPropSet->getPropertyValue(aNamedRangesString), UNO_QUERY_THROW);
 
-    table::CellRangeAddress xCellRangeAddress = table::CellRangeAddress(1,0,0,3,3);
+    table::CellRangeAddress aCellRangeAddress = table::CellRangeAddress(1,0,0,3,3);
 
     rtl::OUString aString;
     uno::Reference< table::XCell > xCell;
 
-    xNamedRanges->addNewFromTitles(xCellRangeAddress, sheet::Border_TOP);
+    xNamedRanges->addNewFromTitles(aCellRangeAddress, sheet::Border_TOP);
 
     for (sal_Int32 i = 1; i < 4; i++)
     {
@@ -158,7 +156,7 @@ void ScXNamedRange::testAddNewFromTitles()
         CPPUNIT_ASSERT(cellRangeAddress.Sheet == 1);
     }
 
-    xNamedRanges->addNewFromTitles(xCellRangeAddress, sheet::Border_LEFT);
+    xNamedRanges->addNewFromTitles(aCellRangeAddress, sheet::Border_LEFT);
 
     for (sal_Int32 i = 1; i < 4; i++)
     {
@@ -184,13 +182,13 @@ void ScXNamedRange::testAddNewFromTitles()
     }
 }
 
-void ScXNamedRange::testRemoveByName()
+void ScXNamedRanges::testRemoveByName()
 {
     uno::Reference< sheet::XSpreadsheetDocument> xDoc = init();
-    uno::Reference< beans::XPropertySet > propSet (xDoc, UNO_QUERY_THROW);
-    rtl::OUString namedRangesString(RTL_CONSTASCII_USTRINGPARAM("NamedRanges"));
-    uno::Reference< sheet::XNamedRanges > xNamedRanges(propSet->getPropertyValue(namedRangesString), UNO_QUERY_THROW);
-    uno::Reference< container::XIndexAccess > xIndex(propSet->getPropertyValue(namedRangesString), UNO_QUERY_THROW);
+    uno::Reference< beans::XPropertySet > xPropSet (xDoc, UNO_QUERY_THROW);
+    rtl::OUString aNamedRangesString(RTL_CONSTASCII_USTRINGPARAM("NamedRanges"));
+    uno::Reference< sheet::XNamedRanges > xNamedRanges(xPropSet->getPropertyValue(aNamedRangesString), UNO_QUERY_THROW);
+    uno::Reference< container::XIndexAccess > xIndex(xPropSet->getPropertyValue(aNamedRangesString), UNO_QUERY_THROW);
 
     rtl::OUString aNr1(RTL_CONSTASCII_USTRINGPARAM("initial1"));
     bool bHasIt = xNamedRanges->hasByName(aNr1);
@@ -203,16 +201,14 @@ void ScXNamedRange::testRemoveByName()
         xNamedRanges->removeByName(aNr1);
         sal_Int32 nNewCount = xIndex->getCount();
         CPPUNIT_ASSERT_MESSAGE("NamedRange initial1 not removed", nNewCount == nInitialCount - 1);
-        bool bHasItAgain = xNamedRanges->hasByName(aNr1);
-        CPPUNIT_ASSERT_MESSAGE("Wrong NamedRange removed, initial1 still present", !bHasItAgain);
-
-        rtl::OUString nr2(RTL_CONSTASCII_USTRINGPARAM("dummyNamedRange"));
-        xNamedRanges->removeByName(aNr1);
-        // should throw an exception
+        CPPUNIT_ASSERT_MESSAGE("Wrong NamedRange removed, initial1 still present", !xNamedRanges->hasByName(aNr1));
+        // try to remove non existing
+        rtl::OUString aNr2(RTL_CONSTASCII_USTRINGPARAM("dummyNonExistingNamedRange"));
+        xNamedRanges->removeByName(aNr2);// an exception should be raised here
     }
 }
 
-void ScXNamedRange::testOutputList()
+void ScXNamedRanges::testOutputList()
 {
 
     uno::Reference< sheet::XSpreadsheetDocument> xDoc = init();
@@ -221,10 +217,10 @@ void ScXNamedRange::testOutputList()
 
     table::CellAddress xCellAddress = table::CellAddress (0,2,0);
 
-    uno::Reference< beans::XPropertySet > propSet (xDoc, UNO_QUERY_THROW);
-    rtl::OUString namedRangesString(RTL_CONSTASCII_USTRINGPARAM("NamedRanges"));
-    uno::Reference< sheet::XNamedRanges > xNamedRanges(propSet->getPropertyValue(namedRangesString), UNO_QUERY_THROW);
-    uno::Reference< container::XIndexAccess > xNamedRangesIndex(propSet->getPropertyValue(namedRangesString), UNO_QUERY_THROW);
+    uno::Reference< beans::XPropertySet > xPropSet (xDoc, UNO_QUERY_THROW);
+    rtl::OUString aNamedRangesString(RTL_CONSTASCII_USTRINGPARAM("NamedRanges"));
+    uno::Reference< sheet::XNamedRanges > xNamedRanges(xPropSet->getPropertyValue(aNamedRangesString), UNO_QUERY_THROW);
+    uno::Reference< container::XIndexAccess > xNamedRangesIndex(xPropSet->getPropertyValue(aNamedRangesString), UNO_QUERY_THROW);
     sal_Int32 nElementsCount = xNamedRangesIndex->getCount();
 
     xNamedRanges->outputList(xCellAddress);
@@ -242,7 +238,7 @@ void ScXNamedRange::testOutputList()
     }
 }
 
-uno::Reference< sheet::XSpreadsheetDocument> ScXNamedRange::init()
+uno::Reference< sheet::XSpreadsheetDocument> ScXNamedRanges::init()
 {
     rtl::OUString aFileURL;
     const rtl::OUString aFileBase(RTL_CONSTASCII_USTRINGPARAM("rangenames.ods"));
@@ -256,7 +252,7 @@ uno::Reference< sheet::XSpreadsheetDocument> ScXNamedRange::init()
     return xDoc;
 }
 
-CPPUNIT_TEST_SUITE_REGISTRATION(ScXNamedRange);
+CPPUNIT_TEST_SUITE_REGISTRATION(ScXNamedRanges);
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
