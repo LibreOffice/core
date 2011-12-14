@@ -987,13 +987,6 @@ void ScInputBarGroup::Resize()
     Invalidate();
 }
 
-
-void ScInputBarGroup::GainFocus()
-{
-    aMultiTextWnd.GrabFocus();
-}
-
-
 void ScInputBarGroup::StopEditEngine( sal_Bool bAll )
 {
     aMultiTextWnd.StopEditEngine( bAll );
