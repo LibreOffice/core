@@ -390,7 +390,6 @@ public:
                 /// convert the BytString with the given encoding to a String
     sal_Bool        ReadCString( ByteString& rStr );
     sal_Bool        ReadCString( String& rStr, rtl_TextEncoding eToEncode );
-    sal_Bool        ReadCString( String& rStr ) { return ReadCString( rStr, GetStreamCharSet()); }
 
     sal_Bool        ReadLine( ByteString& rStr );
     sal_Bool        ReadLine( rtl::OString& rStr );
