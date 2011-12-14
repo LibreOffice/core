@@ -227,11 +227,19 @@ if [ -n "$DMAKE_URL" -a ! -x "$SOLARENV/$OUTPATH/bin/dmake$EXEEXT" ]; then
     download $DMAKE_URL
 fi
 
-# Special handling of epm
-if [ -n "$EPM_URL" -a ! -x "$SOLARENV/$OUTPATH/bin/epm$EXEEXT" ]; then
+# Special handling of epm-3.7
+# Basically just a download of the epm archive.
+# When its name contains "-source" than that part is removed.
+epm_archive_tail=`echo $(basename $EPM_URL) | sed 's/-source//'`
+epm_archive_name=$(find "$TARFILE_LOCATION" -type f -name "*-$epm_archive_tail")
+if [ -n "$EPM_URL" -a ! -x "$SOLARENV/$OUTPATH/bin/epm$EXEEXT" -a -z "$epm_archive_name" ]; then
     download $EPM_URL
+    archive_name=$(find "$TARFILE_LOCATION" -type f -name "*-epm-3.7-source*")
+    if [ -n "$archive_name" ]; then
+        epm_archive_name=`echo $archive_name | sed 's/-source//'`
+        mv "$archive_name" "$epm_archive_name"
+    fi
 fi
-
 
 if [ ! -z "$failed" ]; then
     echo
