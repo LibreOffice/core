@@ -806,30 +806,23 @@ sal_Bool SvStream::ReadUniOrByteStringLine( String& rStr, rtl_TextEncoding eSrcC
         return ReadByteStringLine( rStr, eSrcCharSet );
 }
 
-/*************************************************************************
-|*
-|*    Stream::ReadCString
-|*
-*************************************************************************/
-
-sal_Bool SvStream::ReadCString( ByteString& rStr )
+rtl::OString read_zeroTerminated_uInt8s_AsOString(SvStream& rStream)
 {
-    if( rStr.Len() )
-        rStr.Erase();
+    rtl::OStringBuffer aOutput;
 
     sal_Char buf[ 256 + 1 ];
     sal_Bool bEnd = sal_False;
-    sal_Size nFilePos = Tell();
+    sal_Size nFilePos = rStream.Tell();
 
-    while( !bEnd && !GetError() )
+    while( !bEnd && !rStream.GetError() )
     {
-        sal_uInt16 nLen = (sal_uInt16)Read( buf, sizeof(buf)-1 );
-        sal_uInt16 nReallyRead = nLen;
-        if( !nLen )
+        sal_Size nLen = rStream.Read(buf, sizeof(buf)-1);
+        if (!nLen)
             break;
 
+        sal_Size nReallyRead = nLen;
         const sal_Char* pPtr = buf;
-        while( *pPtr && nLen )
+        while (nLen && *pPtr)
             ++pPtr, --nLen;
 
         bEnd =  ( nReallyRead < sizeof(buf)-1 )         // read less than attempted to read
@@ -837,24 +830,20 @@ sal_Bool SvStream::ReadCString( ByteString& rStr )
                     &&  ( 0 == *pPtr )                  //    AND found a string terminator
                     );
 
-        rStr.Append( buf, ::sal::static_int_cast< xub_StrLen >( pPtr - buf ) );
+        aOutput.append(buf, pPtr - buf);
     }
 
-    nFilePos += rStr.Len();
-    if( Tell() > nFilePos )
-        nFilePos++;
-    Seek( nFilePos );  // seeken wg. obigem BlockRead!
-    return bEnd;
+    nFilePos += aOutput.getLength();
+    if (rStream.Tell() > nFilePos)
+        rStream.Seek(nFilePos+1);  // seeken wg. obigem BlockRead!
+    return aOutput.makeStringAndClear();
 }
 
-sal_Bool SvStream::ReadCString( String& rStr, rtl_TextEncoding eToEncode )
+rtl::OUString read_zeroTerminated_uInt8s_AsOUString(SvStream& rStream, rtl_TextEncoding eEnc)
 {
-    ByteString sStr;
-    sal_Bool bRet = ReadCString( sStr );
-    rStr = String( sStr, eToEncode );
-    return bRet;
+    return rtl::OStringToOUString(
+        read_zeroTerminated_uInt8s_AsOString(rStream), eEnc);
 }
-
 
 /*************************************************************************
 |*

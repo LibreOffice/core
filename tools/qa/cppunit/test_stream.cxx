@@ -46,10 +46,12 @@ namespace
     public:
         void test_stdstream();
         void test_fastostring();
+        void test_read_cstring();
 
         CPPUNIT_TEST_SUITE(Test);
         CPPUNIT_TEST(test_stdstream);
         CPPUNIT_TEST(test_fastostring);
+        CPPUNIT_TEST(test_read_cstring);
         CPPUNIT_TEST_SUITE_END();
     };
 
@@ -145,6 +147,25 @@ namespace
         rtl::OString aFour = read_uInt8s_AsOString(aMemStream, 100);
         CPPUNIT_ASSERT(aFour.equalsL(RTL_CONSTASCII_STRINGPARAM(foo)));
     }
+
+    void Test::test_read_cstring()
+    {
+        char foo[] = "foobar";
+        SvMemoryStream aMemStream(RTL_CONSTASCII_STRINGPARAM(foo), STREAM_READ);
+
+        rtl::OString aOne = read_zeroTerminated_uInt8s_AsOString(aMemStream);
+        CPPUNIT_ASSERT(aOne.equalsL(RTL_CONSTASCII_STRINGPARAM("foobar")));
+        CPPUNIT_ASSERT(!aMemStream.good());
+        CPPUNIT_ASSERT(!aMemStream.bad());
+        CPPUNIT_ASSERT(aMemStream.eof());
+
+        aMemStream.Seek(0);
+        foo[3] = 0;
+        rtl::OString aTwo = read_zeroTerminated_uInt8s_AsOString(aMemStream);
+        CPPUNIT_ASSERT(aTwo.equalsL(RTL_CONSTASCII_STRINGPARAM("foo")));
+        CPPUNIT_ASSERT(aMemStream.good());
+    }
+
 
     CPPUNIT_TEST_SUITE_REGISTRATION(Test);
 }

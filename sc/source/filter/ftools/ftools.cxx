@@ -311,9 +311,7 @@ ByteString ScfTools::ReadCString( SvStream& rStrm, sal_Int32& rnBytesLeft )
 
 void ScfTools::AppendCString( SvStream& rStrm, String& rString, rtl_TextEncoding eTextEnc )
 {
-    ByteString aByteString;
-    rStrm.ReadCString(aByteString);
-    rString += String( aByteString, eTextEnc );
+    rString += read_zeroTerminated_uInt8s_AsOUString(rStrm, eTextEnc);
 }
 
 // *** HTML table names <-> named range names *** -----------------------------

@@ -385,12 +385,6 @@ public:
     // next Tell() <= nSize
     sal_Bool        SetStreamSize( sal_Size nSize );
 
-                /// Read in the stream to a zero character and put all
-                /// read chracters in the Bytestring. The String interface
-                /// convert the BytString with the given encoding to a String
-    sal_Bool        ReadCString( ByteString& rStr );
-    sal_Bool        ReadCString( String& rStr, rtl_TextEncoding eToEncode );
-
     sal_Bool        ReadLine( ByteString& rStr );
     sal_Bool        ReadLine( rtl::OString& rStr );
     sal_Bool        WriteLine( const ByteString& rStr );
@@ -558,6 +552,13 @@ TOOLS_DLLPUBLIC rtl::OString read_uInt8s_AsOString(SvStream& rStr, sal_Size nLen
 //Attempt to read nLen little endian 16bit units to an OUString, returned
 //rtl::OUString's length is number of units successfully read
 TOOLS_DLLPUBLIC rtl::OUString read_LEuInt16s_AsOUString(SvStream& rStr, sal_Size nLen);
+
+//Attempt to read 8bit units to an OString until a zero terminator is encountered
+TOOLS_DLLPUBLIC rtl::OString read_zeroTerminated_uInt8s_AsOString(SvStream& rStr);
+
+//Attempt to read 8bit units assuming source encoding eEnc to an OUString until
+//a zero terminator is encountered
+TOOLS_DLLPUBLIC rtl::OUString read_zeroTerminated_uInt8s_AsOUString(SvStream& rStr, rtl_TextEncoding eEnc);
 
 // --------------
 // - FileStream -
