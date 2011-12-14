@@ -278,35 +278,16 @@ ScStyleSheet& ScfTools::MakePageStyleSheet( ScStyleSheetPool& rPool, const Strin
 
 ByteString ScfTools::ReadCString( SvStream& rStrm )
 {
-    rtl::OStringBuffer aRet;
-
-    while (1)
-    {
-        sal_Char cChar(0);
-        rStrm >> cChar;
-        if (!cChar)
-            break;
-        aRet.append(cChar);
-    }
-
-    return aRet.makeStringAndClear();
+    return read_zeroTerminated_uInt8s_AsOString(rStrm);
 }
 
 ByteString ScfTools::ReadCString( SvStream& rStrm, sal_Int32& rnBytesLeft )
 {
-    rtl::OStringBuffer aRet;
-
-    while (1)
-    {
-        sal_Char cChar(0);
-        rStrm >> cChar;
-        rnBytesLeft--;
-        if (!cChar)
-            break;
-        aRet.append(cChar);
-    }
-
-    return aRet.makeStringAndClear();
+    rtl::OString aRet(read_zeroTerminated_uInt8s_AsOString(rStrm));
+    rnBytesLeft -= aRet.getLength(); //we read this number of bytes anyway
+    if (rStrm.good()) //if the stream is happy we read the null terminator as well
+        --rnBytesLeft;
+    return aRet;
 }
 
 void ScfTools::AppendCString( SvStream& rStrm, String& rString, rtl_TextEncoding eTextEnc )
