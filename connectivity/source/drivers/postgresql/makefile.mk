@@ -91,7 +91,7 @@ LIBPQ_DEP_LIBS+=\
 .ENDIF
 .ELSE
 LIBPQ_LINK=$(OUTDIR)/lib/libpq.a
-LIBPQ_DEP_LIBS+=$(eq,$(OS),MACOSX -Wl,-dead_strip_dylibs -Wl,--as-needed)
+LIBPQ_DEP_LIBS+=$(eq,$(OS),MACOSX $(NULL) -Wl,--as-needed)
 .INCLUDE : $(OUTDIR_FOR_BUILD)/inc/postgresql/libpq-flags.mk
 LIBPQ_DEP_LIBS+=$(eq,$(OS),MACOSX $(NULL) -Wl,--no-as-needed)
 .ENDIF
