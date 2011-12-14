@@ -61,9 +61,9 @@ using namespace ::rtl;
 struct SfxDock_Impl
 {
     sal_uInt16              nType;
-    SfxDockingWindow*   pWin;           // This window has SplitWindow
+    SfxDockingWindow*   pWin;           // SplitWindow hat dieses Fenster
     sal_Bool                bNewLine;
-    sal_Bool                bHide;          // SplitWindow had this window
+    sal_Bool                bHide;          // SplitWindow hatte dieses Fenster
     long                nSize;
 };
 
@@ -75,9 +75,9 @@ class SfxEmptySplitWin_Impl : public SplitWindow
 {
 /*  [Beschreibung]
 
-    SfxEmptySplitWin_Impldow is an empty split window replacing the SfxSplitWindow
-    in AutoHide mode. It works as a placeholder to receive mouse MouseMoves.
-    the actual light split window display
+    Das SfxEmptySplitWin_Impldow ist ein leeres SplitWindow, das das SfxSplitWindow
+    im AutoHide-Modus ersetzt. Es dient nur als Platzhalter, um MouseMoves
+    zu empfangen und ggf. das eigentlichte SplitWindow einzublenden
 */
 friend class SfxSplitWindow;
 
@@ -154,9 +154,9 @@ void SfxEmptySplitWin_Impl::FadeIn()
     pOwner->Show_Impl();
     if ( bAutoHide )
     {
-        // Put timer to close; the caller must make sure it is,
-        // that the window does not stay or leave ( z.B. by setting the
-        // Focus mode or modal )
+        // Timer zum Schlie\sen aufsetzen; der Aufrufer mu\s selbst sicherstellen,
+        // da\s das Window nicht gleich wieder zu geht ( z.B. durch Setzen des
+        // Focus oder einen modal mode )
         aLastPos = GetPointerPosPixel();
         aTimer.Start();
     }
@@ -434,13 +434,13 @@ void SfxSplitWindow::InsertWindow( SfxDockingWindow* pDockWin, const Size& rSize
 
 /*  [Beschreibung]
 
-    To insert SfxDockingWindows with no position can also be transfered.
-    The SfxSplitWindow then searches out the noted recently transfered
-    to the newly SfxDockingWindow or it depends on the last.
+    Zum Einf"ugen von SfxDockingWindows kann auch keine Position "ubergeben
+    werden. Das SfxSplitWindow sucht dann die zuletzt gemerkte zu dem
+    "ubergebenen SfxDockingWindow heraus oder h"angt es als letztes neu an.
 
 */
 {
-    short nLine = -1;       // so first window can be set to 0 nLine high
+    short nLine = -1;       // damit erstes Fenster nLine auf 0 hochsetzen kann
     sal_uInt16 nL;
     sal_uInt16 nPos = 0;
     sal_Bool bNewLine = sal_True;
@@ -452,33 +452,33 @@ void SfxSplitWindow::InsertWindow( SfxDockingWindow* pDockWin, const Size& rSize
         SfxDock_Impl *pDock = (*pDockArr)[n];
         if ( pDock->bNewLine )
         {
-            // The window opens a new line
+            // Das Fenster er"offnet eine neue Zeile
             if ( pFoundDock )
-                // But behind the window just inserted
+                // Aber hinter dem gerade eingef"ugten Fenster
                 break;
 
-            // new line
+            // Neue Zeile
             nPos = 0;
             bNewLine = sal_True;
         }
 
         if ( pDock->pWin )
         {
-            // It is at this point just a window
+            // Es gibt an dieser Stelle gerade ein Fenster
             if ( bNewLine && !pFoundDock )
             {
-                // It is not known, in which real line is the one
+                // Bisher ist nicht bekannt, in welcher realen Zeile es liegt
                 GetWindowPos( pDock->pWin, nL, nPos );
                 nLine = (short) nL;
             }
 
             if ( !pFoundDock )
             {
-                // before the window is attached
+                // Fenster liegt vor dem eingef"ugten
                 nPos++;
             }
 
-            // Line is now open
+            // Zeile ist schon er"offnet
             bNewLine = sal_False;
             if ( pFoundDock )
                 break;
@@ -486,16 +486,16 @@ void SfxSplitWindow::InsertWindow( SfxDockingWindow* pDockWin, const Size& rSize
 
         if ( pDock->nType == pDockWin->GetType() )
         {
-            DBG_ASSERT( !pFoundDock && !pDock->pWin, "Window is already available!");
+            DBG_ASSERT( !pFoundDock && !pDock->pWin, "Fenster ist schon vorhanden!");
             pFoundDock = pDock;
             if ( !bNewLine )
                 break;
             else
             {
-                // It was most recently a new series started, but not found a
-                // window above it, so keep looking if nochein window follows
-                // this line to bNewLine to set correctly. But it must be nLine
-                // or nPos shouldn't be changed.
+                // Es wurde zuletzt eine neue Reihe gestartet, aber noch kein
+                // darin liegendes Fenster gefunden; daher weitersuchen, ob noch
+                // ein Fenster in dieser Zeile folgt, um bNewLine korrekt zu setzen.
+                // Dabei darf aber nLine oder nPos nicht mehr ver"andert werden!
                 nLine++;
             }
         }
@@ -528,7 +528,7 @@ void SfxSplitWindow::ReleaseWindow_Impl(SfxDockingWindow *pDockWin, sal_Bool bSa
 
 /*  [Beschreibung]
 
-    The DockinWindow is no longer stored in the  internal data.
+    Das DockingWindow wird nicht mehr in den internen Daten gespeichert.
 */
 
 {
@@ -607,16 +607,15 @@ void SfxSplitWindow::InsertWindow( SfxDockingWindow* pDockWin, const Size& rSize
     pDock->bNewLine = bNewLine;
     pDock->pWin = pDockWin;
 
-    DBG_ASSERT( nPos==0 || !bNewLine, "Wrong Parameter!");
+    DBG_ASSERT( nPos==0 || !bNewLine, "Falsche Paramenter!");
     if ( bNewLine )
         nPos = 0;
 
-    // The window introduced before the first window are suffices that the
-    // body or a greater position as the pDockWin.
+    // Das Fenster mu\s vor dem ersten Fenster eingef"ugt werden, das die
+    // gleiche oder eine gr"o\sere Position hat als pDockWin.
     sal_uInt16 nCount = pDockArr->Count();
-    sal_uInt16 nLastWindowIdx(0);
 
-    // If window not found, is inserted as the first
+    // Wenn gar kein Fenster gefunden wird, wird als erstes eingef"ugt
     sal_uInt16 nInsertPos = 0;
     for ( sal_uInt16 n=0; n<nCount; n++ )
     {
@@ -628,30 +627,25 @@ void SfxSplitWindow::InsertWindow( SfxDockingWindow* pDockWin, const Size& rSize
             // Wenn kein geeignetes Fenster hinter der gew"unschten Einf"ugeposition
             // gefunden wird, wird am Ende eingef"ugt
             nInsertPos = nCount;
-            nLastWindowIdx = n;
             sal_uInt16 nL=0, nP=0;
             GetWindowPos( pD->pWin, nL, nP );
 
             if ( (nL == nLine && nP == nPos) || nL > nLine )
             {
-                DBG_ASSERT( nL == nLine || bNewLine || nPos > 0, "Wrong Parameter!" );
+                DBG_ASSERT( nL == nLine || bNewLine || nPos > 0, "Falsche Parameter!" );
                 if ( nL == nLine && nPos == 0 && !bNewLine )
                 {
-                    DBG_ASSERT(pD->bNewLine, "No new line?");
+                    DBG_ASSERT(pD->bNewLine, "Keine neue Zeile?");
 
                     // Das Fenster wird auf nPos==0 eingeschoben
                     pD->bNewLine = sal_False;
                     pDock->bNewLine = sal_True;
                 }
 
-                nInsertPos = n != 0 ? nLastWindowIdx + 1 : 0;    // ignore all non-windows after the last window
+                nInsertPos = n;
                 break;
             }
         }
-    }
-    if (nInsertPos == nCount && nLastWindowIdx != nCount - 1)
-    {
-        nInsertPos = nLastWindowIdx + 1;    // ignore all non-windows after the last window
     }
 
     pDockArr->Insert(pDock, nInsertPos);
