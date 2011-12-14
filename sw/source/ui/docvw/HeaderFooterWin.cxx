@@ -284,6 +284,8 @@ void SwHeaderFooterWin::Paint( const Rectangle& )
     aSeq[1] = Primitive2DReference( new PolygonHairlinePrimitive2D(
             aPolygon, aLineColor ) );
 
+    bool bRtl = Application::GetSettings().GetLayoutRTL();
+
     // Create the text primitive
     B2DVector aFontSize;
     FontAttribute aFontAttr = getFontAttributeFromVclFont(
@@ -294,8 +296,11 @@ void SwHeaderFooterWin::Paint( const Rectangle& )
 
     FontMetric aFontMetric = GetFontMetric( GetFont() );
     double nTextOffsetY = aFontMetric.GetHeight() - aFontMetric.GetDescent() + TEXT_PADDING;
+    double nTextOffsetX = TEXT_PADDING;
+    if ( bRtl )
+        nTextOffsetX = aRect.GetWidth( ) - aTextRect.GetWidth() - TEXT_PADDING;
 
-    Point aTextPos( TEXT_PADDING, nTextOffsetY );
+    Point aTextPos( nTextOffsetX, nTextOffsetY );
 
     basegfx::B2DHomMatrix aTextMatrix( createScaleTranslateB2DHomMatrix(
                 aFontSize.getX(), aFontSize.getY(),
@@ -312,8 +317,11 @@ void SwHeaderFooterWin::Paint( const Rectangle& )
     // Create the 'plus' or 'arrow' primitive if not readonly
     if ( !m_bReadonly )
     {
-        B2DRectangle aSignArea( B2DPoint( aRect.Right() - BUTTON_WIDTH, 0.0 ),
-                                B2DSize( aRect.Right(), aRect.getHeight() ) );
+        double aSignPosX = aRect.Right() - BUTTON_WIDTH;
+        if ( bRtl )
+            aSignPosX = aRect.Left();
+        B2DRectangle aSignArea( B2DPoint( aSignPosX, 0.0 ),
+                                B2DSize( aSignPosX + BUTTON_WIDTH, aRect.getHeight() ) );
 
         B2DPolygon aSign;
         if ( IsEmptyHeaderFooter( ) )
