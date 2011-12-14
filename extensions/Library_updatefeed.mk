@@ -1,4 +1,5 @@
-# -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
+# -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
+#
 # Version: MPL 1.1 / GPLv3+ / LGPLv3+
 #
 # The contents of this file are subject to the Mozilla Public License Version
@@ -12,7 +13,7 @@
 # License.
 #
 # Major Contributor(s):
-# Copyright (C) 2011 Jan Holesovsky <kendy@suse.cz> (initial developer)
+# [ Copyright (C) 2011 Red Hat, Inc., Michael Stahl <mstahl@redhat.com> (initial developer) ]
 #
 # All Rights Reserved.
 #
@@ -23,20 +24,25 @@
 # the GNU Lesser General Public License Version 3 or later (the "LGPLv3+"),
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
+#
 
-$(eval $(call gb_Module_Module,extensions))
+$(eval $(call gb_Library_Library,updatefeed))
 
-$(eval $(call gb_Module_add_targets,extensions,\
-	AllLangResTarget_upd \
-	AllLangResTarget_updchk \
-	Configuration_updchk \
-	Library_updatecheckui \
-	Library_updatefeed \
-	Library_updchk \
+$(eval $(call gb_Library_set_componentfile,updatefeed,extensions/source/update/feed/updatefeed))
+
+$(eval $(call gb_Library_add_api,updatefeed,\
+	udkapi \
+	offapi \
 ))
 
-$(eval $(call gb_Module_add_check_targets,extensions,\
-    CppunitTest_extensions_test_update \
+$(eval $(call gb_Library_add_linked_libs,updatefeed,\
+	cppuhelper \
+	cppu \
+	sal \
 ))
 
-# vim:set shiftwidth=4 softtabstop=4 noexpandtab:
+$(eval $(call gb_Library_add_exception_objects,updatefeed,\
+	extensions/source/update/feed/updatefeed \
+))
+
+# vim:set shiftwidth=4 softtabstop=4 expandtab:

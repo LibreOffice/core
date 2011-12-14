@@ -309,6 +309,11 @@ $(call gb_Configuration_get_target,%) :
 	$(call gb_Helper_abbreviate_dirs,\
 		mkdir -p $(dir $@) && touch $@)
 
+# TODO: ?
+define gb_Configuration_Configuration_nozip
+$$(eval $$(call gb_Module_register_target,$(call gb_Configuration_get_target,$(1)),$(call gb_Configuration_get_clean_target,$(1))))
+endef
+
 # $(call gb_Configuration_Configuration,zipfile,repo,nodeliver)
 # cannot use target local variable for REPO because it's needed in prereq
 # last parameter may be used to turn off delivering of files

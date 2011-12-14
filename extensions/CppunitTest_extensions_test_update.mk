@@ -73,7 +73,7 @@ $(eval $(call gb_CppunitTest_add_components,extensions_test_update,\
 $(eval $(call gb_CppunitTest_add_old_components,extensions_test_update,\
     ucb1 \
     ucpfile1 \
-    updatefeed \
+    component/extensions/source/update/feed/updatefeed \
 ))
 
 $(eval $(call gb_CppunitTest_set_args,extensions_test_update,\

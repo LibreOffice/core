@@ -1,4 +1,5 @@
-# -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
+# -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
+#
 # Version: MPL 1.1 / GPLv3+ / LGPLv3+
 #
 # The contents of this file are subject to the Mozilla Public License Version
@@ -12,7 +13,7 @@
 # License.
 #
 # Major Contributor(s):
-# Copyright (C) 2011 Jan Holesovsky <kendy@suse.cz> (initial developer)
+# [ Copyright (C) 2011 Red Hat, Inc., Michael Stahl <mstahl@redhat.com> (initial developer) ]
 #
 # All Rights Reserved.
 #
@@ -23,20 +24,14 @@
 # the GNU Lesser General Public License Version 3 or later (the "LGPLv3+"),
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
+#
 
-$(eval $(call gb_Module_Module,extensions))
+# TODO is this really supposed to be delivered to the officecfg registry?
+$(eval $(call gb_Configuration_Configuration_nozip,updchk))
 
-$(eval $(call gb_Module_add_targets,extensions,\
-	AllLangResTarget_upd \
-	AllLangResTarget_updchk \
-	Configuration_updchk \
-	Library_updatecheckui \
-	Library_updatefeed \
-	Library_updchk \
+$(eval $(call gb_Configuration_add_spool_modules,updchk,extensions/source/update/check,\
+	org/openoffice/Office/Jobs-onlineupdate.xcu \
+	org/openoffice/Office/Addons-onlineupdate.xcu \
 ))
 
-$(eval $(call gb_Module_add_check_targets,extensions,\
-    CppunitTest_extensions_test_update \
-))
-
-# vim:set shiftwidth=4 softtabstop=4 noexpandtab:
+# vim:set shiftwidth=4 softtabstop=4 expandtab:

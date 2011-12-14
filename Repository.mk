@@ -224,6 +224,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     tl \
     unordf \
     unoxml \
+    updatecheckui \
     utl \
 	uui \
     vbahelper \
@@ -351,6 +352,8 @@ $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
     slideshow \
     stocservices \
 	stringresource \
+	updatefeed \
+	updchk \
 	vbaevents \
     vbaobj \
     vbaswobj \

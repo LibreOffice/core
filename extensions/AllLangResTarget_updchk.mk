@@ -1,4 +1,5 @@
-# -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
+# -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
+#
 # Version: MPL 1.1 / GPLv3+ / LGPLv3+
 #
 # The contents of this file are subject to the Mozilla Public License Version
@@ -12,7 +13,7 @@
 # License.
 #
 # Major Contributor(s):
-# Copyright (C) 2011 Jan Holesovsky <kendy@suse.cz> (initial developer)
+# [ Copyright (C) 2011 Red Hat, Inc., Michael Stahl <mstahl@redhat.com> (initial developer) ]
 #
 # All Rights Reserved.
 #
@@ -23,20 +24,20 @@
 # the GNU Lesser General Public License Version 3 or later (the "LGPLv3+"),
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
+#
 
-$(eval $(call gb_Module_Module,extensions))
+$(eval $(call gb_AllLangResTarget_AllLangResTarget,updchk))
 
-$(eval $(call gb_Module_add_targets,extensions,\
-	AllLangResTarget_upd \
-	AllLangResTarget_updchk \
-	Configuration_updchk \
-	Library_updatecheckui \
-	Library_updatefeed \
-	Library_updchk \
+$(eval $(call gb_AllLangResTarget_set_reslocation,updchk,extensions/source/update/ui))
+
+$(eval $(call gb_AllLangResTarget_add_srs,updchk,\
+	updchk/res \
 ))
 
-$(eval $(call gb_Module_add_check_targets,extensions,\
-    CppunitTest_extensions_test_update \
+$(eval $(call gb_SrsTarget_SrsTarget,updchk/res))
+
+$(eval $(call gb_SrsTarget_add_files,updchk/res,\
+	extensions/source/update/ui/updatecheckui.src \
 ))
 
-# vim:set shiftwidth=4 softtabstop=4 noexpandtab:
+# vim:set shiftwidth=4 softtabstop=4 expandtab:

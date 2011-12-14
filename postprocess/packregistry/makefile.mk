@@ -356,8 +356,8 @@ MY_FILES_math = \
 .IF "$(BUILD_TYPE)" != "$(BUILD_TYPE:s/DESKTOP//)"
 MY_DEPS_onlineupdate = main
 MY_FILES_onlineupdate = \
-    $(MY_MOD)/org/openoffice/Office/Addons/Addons-onlineupdate.xcu \
-    $(MY_MOD)/org/openoffice/Office/Jobs/Jobs-onlineupdate.xcu
+    $(MY_MOD)/org/openoffice/Office/Addons-onlineupdate.xcu \
+    $(MY_MOD)/org/openoffice/Office/Jobs-onlineupdate.xcu
 .ENDIF
 
 MY_DEPS_palm = main

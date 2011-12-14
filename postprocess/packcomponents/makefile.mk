@@ -173,6 +173,9 @@ my_components += \
     component/desktop/source/migration/services/migrationoo3 \
     component/desktop/source/offacc/offacc \
     component/desktop/source/splash/spl \
+    component/extensions/source/update/check/updchk.uno \
+    component/extensions/source/update/feed/updatefeed \
+    component/extensions/source/update/ui/updchk \
     dbp \
     fpicker \
     fps_office \
@@ -183,9 +186,6 @@ my_components += \
     syssh \
     tvhlp1 \
     ucpchelp1 \
-    updatefeed \
-    updchk \
-    updchk.uno \
     xmx
 .ENDIF
 
