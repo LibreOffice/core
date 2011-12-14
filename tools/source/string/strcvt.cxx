@@ -29,19 +29,6 @@
 
 // =======================================================================
 
-ByteString::ByteString( const UniString& rUniStr, rtl_TextEncoding eTextEncoding, sal_uInt32 nCvtFlags )
-{
-    DBG_CTOR( ByteString, DbgCheckByteString );
-    DBG_CHKOBJ( &rUniStr, UniString, DbgCheckUniString );
-
-    mpData = NULL;
-    rtl_uString2String( (rtl_String **)(&mpData),
-                        rUniStr.mpData->maStr, rUniStr.mpData->mnLen,
-                        eTextEncoding, nCvtFlags );
-}
-
-// =======================================================================
-
 ByteString::ByteString( const rtl::OString& rStr )
     : mpData(NULL)
 {

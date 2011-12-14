@@ -163,6 +163,9 @@ private:
                         ByteString( const sal_Unicode* pUniStr, xub_StrLen nLen,
                                     rtl_TextEncoding eTextEncoding,
                                     sal_uInt32 nCvtFlags = UNISTRING_TO_BYTESTRING_CVTFLAGS ); //not implemented, to detect use of removed methods without compiler making somethiing to fit
+                        ByteString( const UniString& rUniStr,
+                                    rtl_TextEncoding eTextEncoding,
+                                    sal_uInt32 nCvtFlags = UNISTRING_TO_BYTESTRING_CVTFLAGS ); //not implemented, to detect use of removed methods without compiler making somethiing to fit
     void                Assign(int); // not implemented; to detect misuses of
                                      // Assign(sal_Char)
     void                operator =(int); // not implemented; to detect misuses
@@ -179,9 +182,6 @@ public:
                         ByteString( const rtl::OString& rStr );
                         ByteString( const sal_Char* pCharStr );
                         ByteString( const sal_Char* pCharStr, xub_StrLen nLen );
-                        ByteString( const UniString& rUniStr,
-                                    rtl_TextEncoding eTextEncoding,
-                                    sal_uInt32 nCvtFlags = UNISTRING_TO_BYTESTRING_CVTFLAGS );
                         ~ByteString();
 
     operator rtl::OString () const
