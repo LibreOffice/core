@@ -205,7 +205,7 @@ Service::createInstanceWithArguments(
         } else if (Arguments.getLength() == 1 && (Arguments[i] >>= nodepath)) {
             // For backwards compatibility, allow a single string argument that
             // denotes nodepath.
-            if (nodepath.getLength() == 0) {
+            if (nodepath.isEmpty()) {
                 badNodePath();
             }
             break;
@@ -222,16 +222,16 @@ Service::createInstanceWithArguments(
         if (name.equalsIgnoreAsciiCaseAsciiL(
                 RTL_CONSTASCII_STRINGPARAM("nodepath")))
         {
-            if (nodepath.getLength() != 0 || !(value >>= nodepath) ||
-                nodepath.getLength() == 0)
+            if (!nodepath.isEmpty() || !(value >>= nodepath) ||
+                nodepath.isEmpty())
             {
                 badNodePath();
             }
         } else if (name.equalsIgnoreAsciiCaseAsciiL(
                        RTL_CONSTASCII_STRINGPARAM("locale")))
         {
-            if (locale.getLength() != 0 || !(value >>= locale) ||
-                locale.getLength() == 0)
+            if (!locale.isEmpty() || !(value >>= locale) ||
+                locale.isEmpty())
             {
                 throw css::uno::Exception(
                     rtl::OUString(
@@ -243,7 +243,7 @@ Service::createInstanceWithArguments(
             }
         }
     }
-    if (nodepath.getLength() == 0) {
+    if (nodepath.isEmpty()) {
         badNodePath();
     }
     // For backwards compatibility, allow a nodepath that misses the leading
@@ -251,10 +251,10 @@ Service::createInstanceWithArguments(
     if (nodepath[0] != '/') {
         nodepath = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")) + nodepath;
     }
-    if (locale.getLength() == 0) {
+    if (locale.isEmpty()) {
         //TODO: should the Access use the dynamically changing locale_ instead?
         locale = locale_;
-        if (locale.getLength() == 0) {
+        if (locale.isEmpty()) {
             locale = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("en-US"));
         }
     }
@@ -367,7 +367,7 @@ css::lang::Locale Service::getLocale() throw (css::uno::RuntimeException) {
     css::lang::Locale loc;
     if (locale_.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("*"))) {
         loc.Language = locale_;
-    } else if (locale_.getLength() != 0) {
+    } else if (! locale_.isEmpty()) {
         try {
             comphelper::Locale l(locale_);
             loc.Language = l.getLanguage();
@@ -487,8 +487,8 @@ Factory::createInstanceWithArgumentsAndContext(
             if (name.equalsIgnoreAsciiCaseAsciiL(
                     RTL_CONSTASCII_STRINGPARAM("locale")))
             {
-                if (locale.getLength() != 0 || !(value >>= locale) ||
-                    locale.getLength() == 0)
+                if (!locale.isEmpty() || !(value >>= locale) ||
+                    locale.isEmpty())
                 {
                     throw css::uno::Exception(
                         rtl::OUString(

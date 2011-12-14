@@ -615,7 +615,7 @@ rtl::OUString Access::getHierarchicalName() throw (css::uno::RuntimeException) {
         path.append(root->getAbsolutePathRepresentation());
     }
     rtl::OUString rel(getRelativePathRepresentation());
-    if (path.getLength() != 0 && rel.getLength() != 0) {
+    if (path.getLength() != 0 && !rel.isEmpty()) {
         path.append(sal_Unicode('/'));
     }
     path.append(rel);
@@ -631,7 +631,7 @@ rtl::OUString Access::composeHierarchicalName(
     assert(thisIs(IS_ANY));
     osl::MutexGuard g(*lock_);
     checkLocalizedPropertyAccess();
-    if (aRelativeName.getLength() == 0 || aRelativeName[0] == '/') {
+    if (aRelativeName.isEmpty() || aRelativeName[0] == '/') {
         throw css::lang::IllegalArgumentException(
             rtl::OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
@@ -671,7 +671,7 @@ void Access::setName(rtl::OUString const & aName)
                 rtl::Reference< Access > parent(getParentAccess());
                 if (parent.is()) {
                     rtl::Reference< Node > node(getNode());
-                    if (node->getTemplateName().getLength() != 0) {
+                    if (! node->getTemplateName().isEmpty()) {
                         rtl::Reference< ChildAccess > other(
                             parent->getChild(aName));
                         if (other.get() == this) {
@@ -1817,7 +1817,7 @@ void Access::initBroadcasterAndChanges(
             case Node::KIND_GROUP:
             case Node::KIND_SET:
                 if (i->second.children.empty()) {
-                    if (child->getNode()->getTemplateName().getLength() != 0) {
+                    if (!child->getNode()->getTemplateName().isEmpty()) {
                         for (ContainerListeners::iterator j(
                                  containerListeners_.begin());
                              j != containerListeners_.end(); ++j)
@@ -2054,7 +2054,7 @@ rtl::Reference< ChildAccess > Access::getUnmodifiedChild(
 rtl::Reference< ChildAccess > Access::getSubChild(rtl::OUString const & path) {
     sal_Int32 i = 0;
     // For backwards compatibility, allow absolute paths where meaningful:
-    if (path.getLength() != 0 && path[0] == '/') {
+    if (!path.isEmpty() && path[0] == '/') {
         ++i;
         if (!getRootAccess().is()) {
             return rtl::Reference< ChildAccess >();
@@ -2101,13 +2101,13 @@ rtl::Reference< ChildAccess > Access::getSubChild(rtl::OUString const & path) {
             switch (p->kind()) {
             case Node::KIND_LOCALIZED_PROPERTY:
                 if (!Components::allLocales(getRootAccess()->getLocale()) ||
-                    templateName.getLength() != 0)
+                    !templateName.isEmpty())
                 {
                     return rtl::Reference< ChildAccess >();
                 }
                 break;
             case Node::KIND_SET:
-                if (templateName.getLength() != 0 &&
+                if (!templateName.isEmpty() &&
                     !dynamic_cast< SetNode * >(p.get())->isValidTemplate(
                         templateName))
                 {
@@ -2211,7 +2211,7 @@ void Access::checkFinalized() {
 }
 
 void Access::checkKnownProperty(rtl::OUString const & descriptor) {
-    if (descriptor.getLength() == 0) {
+    if (descriptor.isEmpty()) {
         return;
     }
     rtl::Reference< ChildAccess > child(getChild(descriptor));

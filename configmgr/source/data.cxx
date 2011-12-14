@@ -99,7 +99,7 @@ bool decode(
 rtl::OUString Data::createSegment(
     rtl::OUString const & templateName, rtl::OUString const & name)
 {
-    if (templateName.getLength() == 0) {
+    if (templateName.isEmpty()) {
         return name;
     }
     rtl::OUStringBuffer buf(templateName);
@@ -215,7 +215,7 @@ rtl::Reference< Node > Data::resolvePathRepresentation(
     rtl::OUString * canonicRepresentation, Path * path, int * finalizedLayer)
     const
 {
-    if (pathRepresentation.getLength() == 0 || pathRepresentation[0] != '/') {
+    if (pathRepresentation.isEmpty() || pathRepresentation[0] != '/') {
         throw css::uno::RuntimeException(
             (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("bad path ")) +
              pathRepresentation),
@@ -295,7 +295,7 @@ rtl::Reference< Node > Data::resolvePathRepresentation(
         if (setElement) {
             switch (parent->kind()) {
             case Node::KIND_LOCALIZED_PROPERTY:
-                if (templateName.getLength() != 0) {
+                if (!templateName.isEmpty()) {
                     throw css::uno::RuntimeException(
                         (rtl::OUString(
                             RTL_CONSTASCII_USTRINGPARAM("bad path ")) +
@@ -304,7 +304,7 @@ rtl::Reference< Node > Data::resolvePathRepresentation(
                 }
                 break;
             case Node::KIND_SET:
-                if (templateName.getLength() != 0 &&
+                if (!templateName.isEmpty() &&
                     !dynamic_cast< SetNode * >(parent.get())->isValidTemplate(
                         templateName))
                 {
@@ -321,8 +321,8 @@ rtl::Reference< Node > Data::resolvePathRepresentation(
                      pathRepresentation),
                     css::uno::Reference< css::uno::XInterface >());
             }
-            if (templateName.getLength() != 0 && p != 0) {
-                assert(p->getTemplateName().getLength() != 0);
+            if (!templateName.isEmpty() && p != 0) {
+                assert(!p->getTemplateName().isEmpty());
                 if (!equalTemplateNames(templateName, p->getTemplateName())) {
                     throw css::uno::RuntimeException(
                         (rtl::OUString(

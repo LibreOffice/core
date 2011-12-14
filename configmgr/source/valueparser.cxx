@@ -194,7 +194,7 @@ template< typename T > css::uno::Any parseListValue(
 {
     comphelper::SequenceAsVector< T > seq;
     xmlreader::Span sep;
-    if (separator.getLength() == 0) {
+    if (separator.isEmpty()) {
         sep = xmlreader::Span(RTL_CONSTASCII_STRINGPARAM(" "));
     } else {
         sep = xmlreader::Span(separator.getStr(), separator.getLength());
@@ -285,7 +285,7 @@ xmlreader::XmlReader::Text ValueParser::getTextMode() const {
         case STATE_IT:
             return
                 (type_ == TYPE_STRING || type_ == TYPE_STRING_LIST ||
-                 separator_.getLength() != 0)
+                 !separator_.isEmpty())
                 ? xmlreader::XmlReader::TEXT_RAW
                 : xmlreader::XmlReader::TEXT_NORMALIZED;
         default:
@@ -305,7 +305,7 @@ bool ValueParser::startElement(
     case STATE_TEXT:
         if (nsId == xmlreader::XmlReader::NAMESPACE_NONE &&
             name.equals(RTL_CONSTASCII_STRINGPARAM("it")) &&
-            isListType(type_) && separator_.getLength() == 0)
+            isListType(type_) && separator_.isEmpty())
         {
             pad_.clear();
                 // before first <it>, characters are not ignored; assume they
