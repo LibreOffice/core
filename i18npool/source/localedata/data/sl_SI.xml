@@ -34,7 +34,7 @@
     <TimePM>pop.</TimePM>
     <MeasurementSystem>metric</MeasurementSystem>
   </LC_CTYPE>
-  <LC_FORMAT>
+  <LC_FORMAT replaceFrom="[CURRENCY]" replaceTo="[$SIT-424]">
     <FormatElement msgid="FixedFormatskey1" default="true" type="medium" usage="FIXED_NUMBER" formatindex="0">
       <FormatCode>Standard</FormatCode>
     </FormatElement>
