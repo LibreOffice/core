@@ -325,7 +325,7 @@ void InitSalMain()
             if ( aCmdPath.Len() ) {
                 DirEntry aCmdDirEntry( aCmdPath );
                 aCmdDirEntry.ToAbs();
-                aCmdPath = ByteString( aCmdDirEntry.GetPath().GetFull(), RTL_TEXTENCODING_ASCII_US );
+                aCmdPath = rtl::OUStringToOString( aCmdDirEntry.GetPath().GetFull(), RTL_TEXTENCODING_ASCII_US );
             }
             // Assign to PATH environment variable
             if ( aCmdPath.Len() )
@@ -333,7 +333,7 @@ void InitSalMain()
                 aTmpPath = ByteString( "PATH=" );
                 aTmpPath += aCmdPath;
                 if ( aPath.Len() )
-                    aTmpPath += ByteString( DirEntry::GetSearchDelimiter(), RTL_TEXTENCODING_ASCII_US );
+                    aTmpPath += rtl::OUStringToOString( DirEntry::GetSearchDelimiter(), RTL_TEXTENCODING_ASCII_US );
                 aTmpPath += aPath;
                 putenv( (char*)aTmpPath.GetBuffer() );
             }
@@ -343,7 +343,7 @@ void InitSalMain()
                 aTmpPath = ByteString( "STAR_RESOURCEPATH=" );
                 aTmpPath += aCmdPath;
                 if ( aResPath.Len() )
-                    aTmpPath += ByteString( DirEntry::GetSearchDelimiter(), RTL_TEXTENCODING_ASCII_US );
+                    aTmpPath += rtl::OUStringToOString( DirEntry::GetSearchDelimiter(), RTL_TEXTENCODING_ASCII_US );
                 aTmpPath += aResPath;
                 putenv( (char*)aTmpPath.GetBuffer() );
             }
@@ -353,7 +353,7 @@ void InitSalMain()
                 aTmpPath = ByteString( "DYLD_LIBRARY_PATH=" );
                 aTmpPath += aCmdPath;
                 if ( aLibPath.Len() )
-                    aTmpPath += ByteString( DirEntry::GetSearchDelimiter(), RTL_TEXTENCODING_ASCII_US );
+                    aTmpPath += rtl::OUStringToOString( DirEntry::GetSearchDelimiter(), RTL_TEXTENCODING_ASCII_US );
                 aTmpPath += aLibPath;
                 putenv( (char*)aTmpPath.GetBuffer() );
             }
