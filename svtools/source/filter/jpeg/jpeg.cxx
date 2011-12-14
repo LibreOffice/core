@@ -328,16 +328,25 @@ JPEGReader::~JPEGReader()
 
 // ------------------------------------------------------------------------
 
-void* JPEGReader::CreateBitmap( void* pParam )
+void* JPEGReader::CreateBitmap( void* _pParam )
 {
-    Size        aSize( ((JPEGCreateBitmapParam*)pParam)->nWidth,
-                        ((JPEGCreateBitmapParam*)pParam)->nHeight );
-    sal_Bool    bGray = ((JPEGCreateBitmapParam*)pParam)->bGray != 0;
+    JPEGCreateBitmapParam *pParam = (JPEGCreateBitmapParam *) _pParam;
+
+    if (pParam->nWidth > SAL_MAX_INT32/8 || pParam->nHeight > SAL_MAX_INT32/8)
+        return NULL; // avoid overflows later
+
+    Size        aSize( pParam->nWidth, pParam->nHeight );
+    sal_Bool    bGray = pParam->bGray != 0;
 
     void* pBmpBuf = NULL;
 
     if( pAcc )
         aBmp.ReleaseAccess( pAcc );
+
+    sal_uInt64 nSize = aSize.Width();
+    nSize *= aSize.Height();
+    if (nSize > SAL_MAX_INT32 / 24)
+        return NULL;
 
     if( bGray )
     {
@@ -359,12 +368,11 @@ void* JPEGReader::CreateBitmap( void* pParam )
         unsigned long nUnit = ((JPEGCreateBitmapParam*)pParam)->density_unit;
 
         if( ( ( 1 == nUnit ) || ( 2 == nUnit ) ) &&
-            ( (JPEGCreateBitmapParam*) pParam )->X_density &&
-            ( (JPEGCreateBitmapParam*) pParam )->Y_density )
+            pParam->X_density && pParam->Y_density )
         {
             Point       aEmptyPoint;
-            Fraction    aFractX( 1, ((JPEGCreateBitmapParam*)pParam)->X_density );
-            Fraction    aFractY( 1, ((JPEGCreateBitmapParam*)pParam)->Y_density );
+            Fraction    aFractX( 1, pParam->X_density );
+            Fraction    aFractY( 1, pParam->Y_density );
             MapMode     aMapMode( nUnit == 1 ? MAP_INCH : MAP_CM, aEmptyPoint, aFractX, aFractY );
             Size        aPrefSize = OutputDevice::LogicToLogic( aSize, aMapMode, MAP_100TH_MM );
 
@@ -377,8 +385,6 @@ void* JPEGReader::CreateBitmap( void* pParam )
 
     if( pAcc )
     {
-        long nAlignedWidth;
-
         const sal_uLong nFormat = pAcc->GetScanlineFormat();
 
         if(
@@ -387,16 +393,15 @@ void* JPEGReader::CreateBitmap( void* pParam )
           )
         {
             pBmpBuf = pAcc->GetBuffer();
-            nAlignedWidth = pAcc->GetScanlineSize();
-            ((JPEGCreateBitmapParam*)pParam)->bTopDown = pAcc->IsTopDown();
+            pParam->nAlignedWidth = pAcc->GetScanlineSize();
+            pParam->bTopDown = pAcc->IsTopDown();
         }
         else
         {
-            nAlignedWidth = AlignedWidth4Bytes( aSize.Width() * ( bGray ? 8 : 24 ) );
-            ((JPEGCreateBitmapParam*)pParam)->bTopDown = sal_True;
-            pBmpBuf = pBuffer = rtl_allocateMemory( nAlignedWidth * aSize.Height() );
+            pParam->nAlignedWidth = AlignedWidth4Bytes( aSize.Width() * ( bGray ? 8 : 24 ) );
+            pParam->bTopDown = sal_True;
+            pBmpBuf = pBuffer = rtl_allocateMemory( pParam->nAlignedWidth * aSize.Height() );
         }
-        ((JPEGCreateBitmapParam*)pParam)->nAlignedWidth = nAlignedWidth;
     }
 
     return pBmpBuf;
