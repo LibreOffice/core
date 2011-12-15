@@ -70,7 +70,11 @@ SHL1STDLIBS = \
 
 SHL1TARGET = $(TARGET)
 
+.IF "$(GUI)"=="WNT"
+SHL1VERSIONMAP=$(SOLARENV)/src/component.map
+.ELSE # just a quick hack for GCC fdo#42865
 SHL1USE_EXPORTS = name
+.ENDIF
 SHL1DEPN =
 SHL1IMPLIB = i$(TARGET)
 SHL1LIBS = $(SLB)$/$(TARGET).lib
