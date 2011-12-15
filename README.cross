@@ -323,7 +323,28 @@ particular) and Mac OS X. The Android cross-buld tool-chain (the
 Windows. (Trying to cross-compile from Windows will probably drive you
 insane.)
 
-Here is my autogen.lastrun for Android:
+Here is my autogen.lastrun for Android, when cross-compiling from Mac OS X:
+SYSBASE=/Users/tml/android-ndk-r7/platforms/android-9/arch-arm
+CC=ccache /Users/tml/android-ndk-r7/toolchains/arm-linux-androideabi-4.4.3/prebuilt/darwin-x86/bin/arm-linux-androideabi-gcc -march=armv7-a -mfloat-abi=softfp -mthumb -mfpu=neon -Wl,--fix-cortex-a8 --sysroot /Users/tml/android-ndk-r7/platforms/android-9/arch-arm -L/Users/tml/android-ndk-r7/sources/cxx-stl/gnu-libstdc++/libs/armeabi-v7a
+CXX=ccache /Users/tml/android-ndk-r7/toolchains/arm-linux-androideabi-4.4.3/prebuilt/darwin-x86/bin/arm-linux-androideabi-g++ -march=armv7-a -mfloat-abi=softfp -mthumb -mfpu=neon -Wl,--fix-cortex-a8 --sysroot /Users/tml/android-ndk-r7/platforms/android-9/arch-arm -I /Users/tml/android-ndk-r7/sources/cxx-stl/gnu-libstdc++/include -I/Users/tml/android-ndk-r7/sources/cxx-stl/gnu-libstdc++/libs/armeabi-v7a/include -L/Users/tml/android-ndk-r7/sources/cxx-stl/gnu-libstdc++/libs/armeabi-v7a -fexceptions -frtti
+AR=/Users/tml/android-ndk-r7/toolchains/arm-linux-androideabi-4.4.3/prebuilt/darwin-x86/bin/arm-linux-androideabi-ar
+NM=/Users/tml/android-ndk-r7/toolchains/arm-linux-androideabi-4.4.3/prebuilt/darwin-x86/bin/arm-linux-androideabi-nm
+OBJDUMP=/Users/tml/android-ndk-r7/toolchains/arm-linux-androideabi-4.4.3/prebuilt/darwin-x86/bin/arm-linux-androideabi-objdump
+RANLIB=/Users/tml/android-ndk-r7/toolchains/arm-linux-androideabi-4.4.3/prebuilt/darwin-x86/bin/arm-linux-androideabi-ranlib
+STRIP=/Users/tml/android-ndk-r7/toolchains/arm-linux-androideabi-4.4.3/prebuilt/darwin-x86/bin/arm-linux-androideabi-strip
+CC_FOR_BUILD=ccache /Xcode3/usr/bin/gcc-4.0 -mmacosx-version-min=10.4
+CXX_FOR_BUILD=ccache /Xcode3/usr/bin/g++-4.0 -mmacosx-version-min=10.4
+--build=x86_64-apple-darwin11
+--disable-zenity
+--enable-werror
+--with-distro=LibreOfficeAndroid
+--with-external-tar=/Volumes/ooo/git/master/src
+--disable-python
+--without-helppack-integration
+--without-myspell-dicts
+--with-java
+
+And here is the autogen.lastrun for Android when cross-compiling from Linux:
 SYSBASE=/home/tml/android-ndk-r7/platforms/android-9/arch-arm
 CC=ccache /home/tml/android-ndk-r7/toolchains/arm-linux-androideabi-4.4.3/prebuilt/linux-x86/bin/arm-linux-androideabi-gcc -march=armv7-a -mfloat-abi=softfp -mthumb -mfpu=neon -Wl,--fix-cortex-a8 --sysroot /home/tml/android-ndk-r7/platforms/android-9/arch-arm -L/home/tml/android-ndk-r7/sources/cxx-stl/gnu-libstdc++/libs/armeabi-v7a
 CXX=ccache /home/tml/android-ndk-r7/toolchains/arm-linux-androideabi-4.4.3/prebuilt/linux-x86/bin/arm-linux-androideabi-g++ -march=armv7-a -mfloat-abi=softfp -mthumb -mfpu=neon -Wl,--fix-cortex-a8 --sysroot /home/tml/android-ndk-r7/platforms/android-9/arch-arm -I /home/tml/android-ndk-r7/sources/cxx-stl/gnu-libstdc++/include -I/home/tml/android-ndk-r7/sources/cxx-stl/gnu-libstdc++/libs/armeabi-v7a/include -L/home/tml/android-ndk-r7/sources/cxx-stl/gnu-libstdc++/libs/armeabi-v7a -fexceptions -frtti
