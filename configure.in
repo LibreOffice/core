@@ -2245,7 +2245,6 @@ if test "$cross_compiling" = "yes"; then
     rm -rf CONF-FOR-BUILD Env.Build.sh
     mkdir CONF-FOR-BUILD
     tar cf - \
-        Makefile.in \
         bin/repo-list.in \
         build_env.in \
         config.guess \
