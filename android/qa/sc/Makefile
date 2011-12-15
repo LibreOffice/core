@@ -58,7 +58,15 @@ copy-stuff:
 		  avmedialo \
 		  basegfxlo \
 		  bootstrap.uno \
+		  canvastoolslo \
 		  comphelpgcc3 \
+		  cppcanvaslo \
+		  drawinglayerlo \
+		  editenglo \
+		  fontconfig \
+		  forlo \
+		  foruilo \
+		  freetype \
 		  fwelo \
 		  fwilo \
 		  gcc3_uno \
@@ -72,8 +80,10 @@ copy-stuff:
 		  icuuclo \
 		  jvmaccessgcc3 \
 		  jvmfwk \
+		  lnglo \
 		  localedata_en \
 		  localedata_others \
+		  msfilterlo \
 		  reg \
 		  saxlo \
 		  sblo \
@@ -82,6 +92,9 @@ copy-stuff:
 		  store \
 		  svllo \
 		  svtlo \
+		  svxcorelo \
+		  svxlo \
+		  test \
 		  tklo \
 		  tllo \
 		  ucbhelper4gcc3 \
@@ -90,11 +103,15 @@ copy-stuff:
 		  uno_sal \
 		  uno_salhelpergcc3 \
 		  unoexceptionprotector \
+		  unotest \
 		  utllo \
+		  vbahelperlo \
 		  vcllo \
 		  vclplug_svplo \
+		  xcrlo \
 		  xml2 \
 		  xmlreader \
+		  xolo \
 		  ); do \
 	    $(call COPY,$(OUTDIR)/lib/lib$${F}.so); \
 	done
