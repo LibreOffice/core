@@ -247,7 +247,7 @@ public:
                     { return bHTML ? aWebTableConfig.bInsTblAlignNum : aTableConfig.bInsTblAlignNum; }
     void        SetInsTblAlignNum( sal_Bool bHTML, sal_Bool b )
                     { bHTML ? (aWebTableConfig.bInsTblAlignNum = b) : (aTableConfig.bInsTblAlignNum = b);
-                        bHTML ? aWebTableConfig.SetModified() : aTableConfig.SetModified();;}
+                        bHTML ? aWebTableConfig.SetModified() : aTableConfig.SetModified();}
 
     SwInsertTableOptions GetInsTblFlags(sal_Bool bHTML) const
                     { return bHTML ? aWebInsertConfig.aInsTblOpts : aInsertConfig.aInsTblOpts;}
