@@ -2280,6 +2280,7 @@ if test "$cross_compiling" = "yes"; then
         2>&1 | sed -e 's/^/    /'
     test -f ./Env.Host.sh 2>/dev/null || exit
     cp Env.Host.sh ../Env.Build.sh
+    cp config.log ../config.Build.log
     . ./Env.Host.sh
     for V in COM GUI GUIBASE OS CPU CPUNAME CC CXX GXX_INCLUDE_PATH MACOSX_DEPLOYMENT_TARGET INPATH OUTPATH \
              SYSTEM_LIBXSLT; do
