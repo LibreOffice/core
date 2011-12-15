@@ -98,9 +98,6 @@ gb_LinkTarget_LDFLAGS += -shared-libgcc
 endif
 
 gb_DEBUG_CFLAGS := -ggdb2 -finline-limit=0 -fno-inline -fno-default-inline
-ifeq ($(HAVE_GCC_DWARF_4),TRUE)
-gb_DEBUG_CFLAGS += -gdwarf-4
-endif
 
 gb_STDLIBS := \
 	mingwthrd \
@@ -154,10 +151,6 @@ gb_LinkTarget_CXXFLAGS := $(gb_CXXFLAGS) $(gb_CXXFLAGS_WERROR)
 ifeq ($(gb_SYMBOL),$(true))
 gb_LinkTarget_CXXFLAGS += -ggdb2
 gb_LinkTarget_CFLAGS += -ggdb2
-ifeq ($(HAVE_GCC_DWARF_4),TRUE)
-gb_LinkTarget_CXXFLAGS += -gdwarf-4
-gb_LinkTarget_CFLAGS += -gdwarf-4
-endif
 endif
 
 gb_LinkTarget_INCLUDE +=\
