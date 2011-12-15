@@ -271,7 +271,7 @@ extern "C" DESKTOP_DLLPUBLIC int unopkg_main()
             return 0;
         }
         else if (isOption( info_version, &nPos )) {
-            dp_misc::writeConsole("\n"APP_NAME" Version 3.3\n");
+            dp_misc::writeConsole("\n" APP_NAME " Version 3.3\n");
             return 0;
         }
         //consume all bootstrap variables which may occur before the subcommannd
@@ -651,7 +651,7 @@ extern "C" DESKTOP_DLLPUBLIC int unopkg_main()
         }
 
         if (option_verbose)
-            dp_misc::writeConsole(OUSTR("\n"APP_NAME" done.\n"));
+            dp_misc::writeConsole(OUSTR("\n" APP_NAME " done.\n"));
         //Force to release all bridges which connect us to the child processes
         disposeBridges(xLocalComponentContext);
         return 0;
@@ -663,7 +663,7 @@ extern "C" DESKTOP_DLLPUBLIC int unopkg_main()
     }
     catch (const ucb::CommandAbortedException &)
     {
-        dp_misc::writeConsoleError("\n"APP_NAME" aborted!\n");
+        dp_misc::writeConsoleError("\n" APP_NAME " aborted!\n");
     }
     catch (const deployment::DeploymentException & exc)
     {
@@ -701,7 +701,7 @@ extern "C" DESKTOP_DLLPUBLIC int unopkg_main()
             OUSTR("\n"));
     }
     if (!bNoOtherErrorMsg)
-        dp_misc::writeConsoleError("\n"APP_NAME" failed.\n");
+        dp_misc::writeConsoleError("\n" APP_NAME " failed.\n");
     disposeBridges(xLocalComponentContext);
     return 1;
 }

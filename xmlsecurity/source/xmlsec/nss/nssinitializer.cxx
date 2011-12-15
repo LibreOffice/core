@@ -300,7 +300,7 @@ bool nsscrypto_initialize( const css::uno::Reference< css::lang::XMultiServiceFa
 #if defined SYSTEM_MOZILLA
         OUString rootModule(RTL_CONSTASCII_USTRINGPARAM("libnssckbi"SAL_DLLEXTENSION));
 #else
-        OUString rootModule(RTL_CONSTASCII_USTRINGPARAM("${LO_LIB_DIR}/libnssckbi"SAL_DLLEXTENSION));
+        OUString rootModule(RTL_CONSTASCII_USTRINGPARAM("${LO_LIB_DIR}/libnssckbi" SAL_DLLEXTENSION));
 #endif
         ::rtl::Bootstrap::expandMacros(rootModule);
 
@@ -330,18 +330,18 @@ bool nsscrypto_initialize( const css::uno::Reference< css::lang::XMultiServiceFa
                 RootsModule = 0;
                 if (found)
                     xmlsec_trace("Added new root certificate module "
-                              "\""ROOT_CERTS"\" contained in \n%s", ospath.getStr());
+                              "\"" ROOT_CERTS "\" contained in \n%s", ospath.getStr());
                 else
                 {
                     xmlsec_trace("FAILED to load the new root certificate module "
-                              "\""ROOT_CERTS"\" contained in \n%s", ospath.getStr());
+                              "\"" ROOT_CERTS "\" contained in \n%s", ospath.getStr());
                     return_value = false;
                 }
             }
             else
             {
                 xmlsec_trace("FAILED to add new root certifice module: "
-                          "\""ROOT_CERTS"\" contained in \n%s", ospath.getStr());
+                          "\"" ROOT_CERTS "\" contained in \n%s", ospath.getStr());
                 return_value = false;
 
             }
@@ -370,17 +370,17 @@ extern "C" void nsscrypto_finalize()
 
         if (SECSuccess == SECMOD_UnloadUserModule(RootsModule))
         {
-            xmlsec_trace("Unloaded module \""ROOT_CERTS"\".");
+            xmlsec_trace("Unloaded module \"" ROOT_CERTS "\".");
         }
         else
         {
-            xmlsec_trace("Failed unloading module \""ROOT_CERTS"\".");
+            xmlsec_trace("Failed unloading module \"" ROOT_CERTS "\".");
         }
         SECMOD_DestroyModule(RootsModule);
     }
     else
     {
-        xmlsec_trace("Unloading module \""ROOT_CERTS
+        xmlsec_trace("Unloading module \"" ROOT_CERTS
                   "\" failed because it was not found.");
     }
     PK11_LogoutAll();

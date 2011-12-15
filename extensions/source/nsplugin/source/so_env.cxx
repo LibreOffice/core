@@ -322,7 +322,7 @@ const char* findInstallDir()
     debug_fprintf(NSP_LOG_APPEND, "start of findInstallDir()\n");
     if (!pInstall)
     {
-        findReadSversion((void**)&pInstall, 0, "["SECTION_NAME"]", SOFFICE_VERSION"=");
+        findReadSversion((void**)&pInstall, 0, "[" SECTION_NAME "]", SOFFICE_VERSION "=");
         if (!pInstall)
             pInstall = const_cast< char* >( "" );
     }
