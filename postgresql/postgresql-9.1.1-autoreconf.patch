@@ -1,0 +1,209 @@
+diff --recursive -u misc/build/postgresql-9.1.1/configure misc/build/postgresql-9.1.1.patched/configure
+--- misc/build/postgresql-9.1.1/configure	2011-09-22 23:57:57.000000000 +0200
++++ misc/build/postgresql-9.1.1.patched/configure	2011-12-15 09:30:36.000000000 +0100
+@@ -718,6 +718,7 @@
+ with_selinux
+ with_openssl
+ with_bonjour
++with_mozldap
+ with_ldap
+ with_pam
+ krb_srvtab
+@@ -836,6 +837,7 @@
+ with_krb_srvnam
+ with_pam
+ with_ldap
++with_mozldap
+ with_bonjour
+ with_openssl
+ with_selinux
+@@ -1533,6 +1535,7 @@
+                           [postgres]
+   --with-pam              build with PAM support
+   --with-ldap             build with LDAP support
++  --with-mozldap          build with Mozilla LDAP support
+   --with-bonjour          build with Bonjour support
+   --with-openssl          build with OpenSSL support
+   --with-selinux          build with SELinux support
+@@ -5432,6 +5435,42 @@
+ $as_echo "$with_ldap" >&6; }
+ 
+ 
++{ $as_echo "$as_me:$LINENO: checking whether to use Mozilla C SDK for LDAP support" >&5
++$as_echo_n "checking whether to use Mozilla C SDK for LDAP support... " >&6; }
++
++
++
++# Check whether --with-mozldap was given.
++if test "${with_mozldap+set}" = set; then
++  withval=$with_mozldap;
++  case $withval in
++    yes)
++
++cat >>confdefs.h <<\_ACEOF
++#define USE_MOZLDAP 1
++_ACEOF
++
++      ;;
++    no)
++      :
++      ;;
++    *)
++      { { $as_echo "$as_me:$LINENO: error: no argument expected for --with-mozldap option" >&5
++$as_echo "$as_me: error: no argument expected for --with-mozldap option" >&2;}
++   { (exit 1); exit 1; }; }
++      ;;
++  esac
++
++else
++  with_mozldap=no
++
++fi
++
++
++{ $as_echo "$as_me:$LINENO: result: $with_mozldap" >&5
++$as_echo "$with_mozldap" >&6; }
++
++
+ 
+ #
+ # Bonjour
+@@ -13584,7 +13623,7 @@
+ fi
+ 
+ if test "$with_ldap" = yes ; then
+-  if test "$PORTNAME" != "win32"; then
++  if test "$PORTNAME" != "win32" || test "$with_mozldap" = "yes"; then
+ 
+ for ac_header in ldap.h
+ do
+@@ -13809,6 +13848,11 @@
+ 
+ done
+ 
++
++cat >>confdefs.h <<\_ACEOF
++#define USE_MICROSOFT_LDAP 1
++_ACEOF
++
+   fi
+ fi
+ 
+@@ -23348,7 +23392,99 @@
+ # We can test for libldap_r only after we know PTHREAD_LIBS
+ if test "$with_ldap" = yes ; then
+   _LIBS="$LIBS"
+-  if test "$PORTNAME" != "win32"; then
++  if test "$with_mozldap" = "yes"; then
++    if test "$PORTNAME" != "win32"; then
++      mozlibname=ldap50
++    else
++      mozlibname=nsldap32v50
++    fi
++
++as_ac_Lib=`$as_echo "ac_cv_lib_$mozlibname''_ldap_bind" | $as_tr_sh`
++{ $as_echo "$as_me:$LINENO: checking for ldap_bind in -l$mozlibname" >&5
++$as_echo_n "checking for ldap_bind in -l$mozlibname... " >&6; }
++if { as_var=$as_ac_Lib; eval "test \"\${$as_var+set}\" = set"; }; then
++  $as_echo_n "(cached) " >&6
++else
++  ac_check_lib_save_LIBS=$LIBS
++LIBS="-l$mozlibname $PTHREAD_CFLAGS $PTHREAD_LIBS $EXTRA_LDAP_LIBS $LIBS"
++cat >conftest.$ac_ext <<_ACEOF
++/* confdefs.h.  */
++_ACEOF
++cat confdefs.h >>conftest.$ac_ext
++cat >>conftest.$ac_ext <<_ACEOF
++/* end confdefs.h.  */
++
++/* Override any GCC internal prototype to avoid an error.
++   Use char because int might match the return type of a GCC
++   builtin and then its argument prototype would still apply.  */
++#ifdef __cplusplus
++extern "C"
++#endif
++char ldap_bind ();
++int
++main ()
++{
++return ldap_bind ();
++  ;
++  return 0;
++}
++_ACEOF
++rm -f conftest.$ac_objext conftest$ac_exeext
++if { (ac_try="$ac_link"
++case "(($ac_try" in
++  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
++  *) ac_try_echo=$ac_try;;
++esac
++eval ac_try_echo="\"\$as_me:$LINENO: $ac_try_echo\""
++$as_echo "$ac_try_echo") >&5
++  (eval "$ac_link") 2>conftest.er1
++  ac_status=$?
++  grep -v '^ *+' conftest.er1 >conftest.err
++  rm -f conftest.er1
++  cat conftest.err >&5
++  $as_echo "$as_me:$LINENO: \$? = $ac_status" >&5
++  (exit $ac_status); } && {
++	 test -z "$ac_c_werror_flag" ||
++	 test ! -s conftest.err
++       } && test -s conftest$ac_exeext && {
++	 test "$cross_compiling" = yes ||
++	 $as_test_x conftest$ac_exeext
++       }; then
++  eval "$as_ac_Lib=yes"
++else
++  $as_echo "$as_me: failed program was:" >&5
++sed 's/^/| /' conftest.$ac_ext >&5
++
++	eval "$as_ac_Lib=no"
++fi
++
++rm -rf conftest.dSYM
++rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
++      conftest$ac_exeext conftest.$ac_ext
++LIBS=$ac_check_lib_save_LIBS
++fi
++ac_res=`eval 'as_val=${'$as_ac_Lib'}
++		 $as_echo "$as_val"'`
++	       { $as_echo "$as_me:$LINENO: result: $ac_res" >&5
++$as_echo "$ac_res" >&6; }
++as_val=`eval 'as_val=${'$as_ac_Lib'}
++		 $as_echo "$as_val"'`
++   if test "x$as_val" = x""yes; then
++  cat >>confdefs.h <<_ACEOF
++#define `$as_echo "HAVE_LIB$mozlibname" | $as_tr_cpp` 1
++_ACEOF
++
++  LIBS="-l$mozlibname $LIBS"
++
++else
++  { { $as_echo "$as_me:$LINENO: error: library \"$mozlibname\" is required for Mozilla LDAP" >&5
++$as_echo "$as_me: error: library \"$mozlibname\" is required for Mozilla LDAP" >&2;}
++   { (exit 1); exit 1; }; }
++fi
++
++    LDAP_LIBS_FE="-l$mozlibname $EXTRA_LDAP_LIBS"
++    LDAP_LIBS_BE="-l$mozlibname $EXTRA_LDAP_LIBS"
++  elif test "$PORTNAME" != "win32"; then
+ 
+ { $as_echo "$as_me:$LINENO: checking for ldap_bind in -lldap" >&5
+ $as_echo_n "checking for ldap_bind in -lldap... " >&6; }
+diff --recursive -u misc/build/postgresql-9.1.1/src/include/pg_config.h.in misc/build/postgresql-9.1.1.patched/src/include/pg_config.h.in
+--- misc/build/postgresql-9.1.1/src/include/pg_config.h.in	2011-09-22 23:57:57.000000000 +0200
++++ misc/build/postgresql-9.1.1.patched/src/include/pg_config.h.in	2011-12-15 09:30:37.000000000 +0100
+@@ -785,6 +785,13 @@
+    (--with-libxslt) */
+ #undef USE_LIBXSLT
+ 
++/* Defined when using Microsof LDAP */
++#undef USE_MICROSOFT_LDAP
++
++/* Define to 1 to use the Mozilla LDAP C SDK instead of platform default
++   (OpenLDAP or Microsoft LDAP). (--with-mozldap) */
++#undef USE_MOZLDAP
++
+ /* Define to select named POSIX semaphores. */
+ #undef USE_NAMED_POSIX_SEMAPHORES
+ 

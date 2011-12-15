@@ -39,7 +39,9 @@ TARGET=so_postgresql
 TARFILE_NAME=postgresql-9.1.1
 TARFILE_MD5=061a9f17323117c9358ed60f33ecff78
 PATCH_FILES=\
-	$(TARFILE_NAME).patch
+	postgresql-moz-ldap.patch \
+	$(TARFILE_NAME)-libreoffice.patch \
+	$(TARFILE_NAME)-autoreconf.patch
 
 .IF "$(SYSTEM_POSTGRESQL)" == "YES"
 @all:
@@ -61,7 +63,7 @@ CONFIGURE_ACTION = CPPFLAGS="$(SOLARINC)" LDFLAGS="$(SOLARLIB)" ./configure --wi
 .IF "$(WITH_LDAP)" == "YES"
 CONFIGURE_ACTION += --with-ldap
 .IF "$(WITH_OPENLDAP)" != "YES"
-CONFIGURE_ACTION += --with-mozldap
+CONFIGURE_ACTION += --with-includes='$(SOLARVER)$/$(INPATH)$/inc$/mozilla$/ldap' --with-mozldap
 .ENDIF
 .ENDIF
 BUILD_ACTION = make -j$(GMAKE_MODULE_PARALLELISM) all-static-lib libpq-flags.mk
