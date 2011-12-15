@@ -1,0 +1,35 @@
+diff -uNrp misc/mozilla/security/coreconf/config.mk misc/build/mozilla/security/coreconf/config.mk
+--- misc/mozilla/security/coreconf/config.mk	2008-06-15 19:22:15.000000000 -0300
++++ misc/build/mozilla/security/coreconf/config.mk	2011-12-14 22:27:52.383209720 -0300
+@@ -63,7 +63,7 @@ endif
+ #######################################################################
+ 
+ TARGET_OSES = FreeBSD BSD_OS NetBSD OpenUNIX OS2 QNX Darwin BeOS OpenBSD \
+-              OpenVMS AIX
++              OpenVMS AIX Linux
+ 
+ ifeq (,$(filter-out $(TARGET_OSES),$(OS_TARGET)))
+ include $(CORE_DEPTH)/coreconf/$(OS_TARGET).mk
+diff -uNrp misc/mozilla/security/coreconf/Linux.mk misc/build/mozilla/security/coreconf/Linux.mk
+--- misc/mozilla/security/coreconf/Linux.mk	2011-12-14 22:26:12.391200222 -0300
++++ misc/build/mozilla/security/coreconf/Linux.mk	2011-12-14 22:29:30.183219009 -0300
+@@ -177,3 +177,19 @@ G++INCLUDES		= -I/usr/include/g++
+ # Always set CPU_TAG on Linux, OpenVMS, WINCE.
+ #
+ CPU_TAG = _$(CPU_ARCH)
++
++OS_REL_CFLAGS   += -DLINUX2_1
++MKSHLIB         = $(CC) $(DSO_LDOPTS) -Wl,-soname -Wl,$(@:$(OBJDIR)/%.so=%.so) $(RPATH)
++
++ifdef MAPFILE
++	MKSHLIB += -Wl,--version-script,$(MAPFILE)
++endif
++PROCESS_MAP_FILE = grep -v ';-' $< | \
++        sed -e 's,;+,,' -e 's; DATA ;;' -e 's,;;,,' -e 's,;.*,;,' > $@
++
++ifeq ($(OS_RELEASE),2.4)
++# Softoken 3.13 uses NO_FORK_CHECK only.
++# Softoken 3.12 uses NO_FORK_CHECK and NO_CHECK_FORK.
++# Don't use NO_CHECK_FORK in new code.
++DEFINES += -DNO_FORK_CHECK -DNO_CHECK_FORK
++endif

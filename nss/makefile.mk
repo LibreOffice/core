@@ -91,6 +91,7 @@ BUILD_ACTION= $(GNUMAKE) nss_build_all
 #See #i105566# && moz#513024#
 .IF "$(OS)"=="LINUX"
 BUILD_ACTION+=FREEBL_NO_DEPEND=1
+PATCH_FILES+=nss_linux.patch
 .ENDIF
 
 .ENDIF			# "$(GUI)"=="UNX"
@@ -179,15 +180,3 @@ OUTDIR2INC=mozilla$/dist$/public$/nss mozilla$/dist$/out$/include
 .INCLUDE : set_ext.mk
 .INCLUDE :	target.mk
 .INCLUDE :	tg_ext.mk
-
-# This is a hack to build on a Linux 3.0 system.  Between unpacking
-# the archive and building it, the existing Linux2.6.mk makefile is
-# copied to Linux3.0.mk, which otherwise would be missing and break
-# the build.  See moz module for a similar hack.
-# If someone finds a better solution then please change this.
-.IF "$(OS)"=="LINUX"
-BUILD_ACTION:= $(COPY) \
-    ../../../mozilla/security/coreconf/Linux2.6.mk \
-    ../../../mozilla/security/coreconf/Linux3.0.mk \
-    && $(BUILD_ACTION)
-.ENDIF
