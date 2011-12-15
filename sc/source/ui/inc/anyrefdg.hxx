@@ -189,7 +189,7 @@ public:
 //============================================================================
 
 template<  class TWindow, bool bBindRef = true >
-class ScRefHdlrImplBase:public TWindow, public ScRefHandler
+class SC_DLLPUBLIC ScRefHdlrImplBase:public TWindow, public ScRefHandler
 {
 public:
     //Overwrite TWindow
@@ -211,16 +211,16 @@ private:
 
 template<class TWindow, bool bBindRef>
 template<class TBindings, class TChildWindow, class TParentWindow, class TResId>
-ScRefHdlrImplBase<TWindow, bBindRef>::ScRefHdlrImplBase( TBindings* pB, TChildWindow* pCW,
+SC_DLLPUBLIC ScRefHdlrImplBase<TWindow, bBindRef>::ScRefHdlrImplBase( TBindings* pB, TChildWindow* pCW,
                  TParentWindow* pParent, TResId nResId):TWindow(pB, pCW, pParent, ScResId(static_cast<sal_uInt16>( nResId ) ) ), ScRefHandler( *static_cast<TWindow*>(this), pB, bBindRef ){}
 
 template<class TWindow, bool bBindRef >
 template<class TParentWindow, class TResId, class TArg>
-ScRefHdlrImplBase<TWindow,bBindRef>::ScRefHdlrImplBase( TParentWindow* pParent, TResId nResIdP, const TArg &rArg, SfxBindings *pB /*= NULL*/ )
+SC_DLLPUBLIC ScRefHdlrImplBase<TWindow,bBindRef>::ScRefHdlrImplBase( TParentWindow* pParent, TResId nResIdP, const TArg &rArg, SfxBindings *pB /*= NULL*/ )
 :TWindow( pParent, ScResId(static_cast<sal_uInt16>( nResIdP )), rArg ), ScRefHandler( *static_cast<TWindow*>(this), pB, bBindRef ){}
 
 template<class TWindow, bool bBindRef >
-ScRefHdlrImplBase<TWindow,bBindRef>::~ScRefHdlrImplBase(){}
+SC_DLLPUBLIC ScRefHdlrImplBase<TWindow,bBindRef>::~ScRefHdlrImplBase(){}
 
 //============================================================================
 template<class TDerived, class TBase, bool bBindRef = true>

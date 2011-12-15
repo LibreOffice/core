@@ -193,7 +193,7 @@ inline void printError( const ::osl::FileBase::RC nError )
 inline void printInt( sal_Int64 i )
 {
     printf( "#printInt_i64# " );
-    printf( "The Integer64 is %"SAL_PRIdINT64"\n", i);
+    printf( "The Integer64 is %" SAL_PRIdINT64 "\n", i);
 }
 
 /** print an unsigned Integer Number.
@@ -201,7 +201,7 @@ inline void printInt( sal_Int64 i )
 inline void printInt( sal_uInt64 i )
 {
     printf( "#printInt_u64# " );
-    printf( "The unsigned Integer64 is %"SAL_PRIuUINT64"\n", i);
+    printf( "The unsigned Integer64 is %" SAL_PRIuUINT64 "\n", i);
 }
 
 /** print Boolean value.
@@ -1291,7 +1291,7 @@ namespace osl_FileBase
 
         void searchFileURL_003( )
         {
-            OSLTEST_DECLARE( SystemPathList,  TEST_PLATFORM_ROOT":"TEST_PLATFORM_ROOT TEST_PLATFORM_TEMP":"TEST_PLATFORM_ROOT"system/path" );
+            OSLTEST_DECLARE( SystemPathList,  TEST_PLATFORM_ROOT ":" TEST_PLATFORM_ROOT TEST_PLATFORM_TEMP ":" TEST_PLATFORM_ROOT "system/path" );
             nError1 = ::osl::FileBase::searchFileURL( aUserDirectoryURL, aSystemPathList, aUStr );
             sal_Bool bOk = compareFileName( aUStr, aUserDirectoryURL );
             CPPUNIT_ASSERT_MESSAGE( "test for searchFileURL function: search directory is a list of system paths",
@@ -5715,27 +5715,27 @@ namespace osl_Directory
                 {
                     // within Linux, df / * 1024 bytes is the result
                     sal_uInt64 nSize = _aVolumeInfo.getTotalSpace();
-                    printf("Total space: %"SAL_PRIuUINT64"\n", nSize);
+                    printf("Total space: %" SAL_PRIuUINT64 "\n", nSize);
                 }
                 if (_nMask == osl_VolumeInfo_Mask_UsedSpace)
                 {
                     sal_uInt64 nSize = _aVolumeInfo.getUsedSpace();
-                    printf(" Used space: %"SAL_PRIuUINT64"\n", nSize);
+                    printf(" Used space: %" SAL_PRIuUINT64 "\n", nSize);
                 }
                 if (_nMask == osl_VolumeInfo_Mask_FreeSpace)
                 {
                     sal_uInt64 nSize = _aVolumeInfo.getFreeSpace();
-                    printf(" Free space: %"SAL_PRIuUINT64"\n", nSize);
+                    printf(" Free space: %" SAL_PRIuUINT64 "\n", nSize);
                 }
                 if (_nMask == osl_VolumeInfo_Mask_MaxNameLength)
                 {
                     sal_uInt32 nLength = _aVolumeInfo.getMaxNameLength();
-                    printf("max name length: %"SAL_PRIuUINT32"\n", nLength);
+                    printf("max name length: %" SAL_PRIuUINT32 "\n", nLength);
                 }
                 if (_nMask == osl_VolumeInfo_Mask_MaxPathLength)
                 {
                     sal_uInt32 nLength = _aVolumeInfo.getMaxPathLength();
-                    printf("max path length: %"SAL_PRIuUINT32"\n", nLength);
+                    printf("max path length: %" SAL_PRIuUINT32 "\n", nLength);
                 }
                 if (_nMask == osl_VolumeInfo_Mask_FileSystemCaseHandling)
                 {
