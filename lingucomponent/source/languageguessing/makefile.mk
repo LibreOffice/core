@@ -70,12 +70,15 @@ SHL1STDLIBS= \
         $(UNOTOOLSLIB)
 
 # build DLL
+.IF "$(GUI)"=="WNT"
+SHL1VERSIONMAP=$(SOLARENV)/src/component.map
+.ELSE # just a quick hack for GCC fdo#42865
+SHL1USE_EXPORTS = name
+.ENDIF
 SHL1LIBS=       $(SLB)$/$(TARGET).lib
 SHL1IMPLIB=     i$(TARGET)
 SHL1DEPN=       $(SHL1LIBS)
 SHL1DEF=        $(MISC)$/$(SHL1TARGET).def
-
-SHL1VERSIONMAP=$(SOLARENV)/src/component.map
 
 # build DEF file
 DEF1NAME    =$(SHL1TARGET)
