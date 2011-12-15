@@ -40,6 +40,7 @@
 #include "osl/mutex.hxx"
 #include "rtl/alloc.h"
 #include "rtl/ustring.hxx"
+#include "sal/log.hxx"
 #include "sal/types.h"
 #include "typelib/typedescription.hxx"
 
@@ -63,6 +64,10 @@
 #endif
 #else
 #error Unsupported platform
+#endif
+
+#if defined USE_DOUBLE_MMAP
+#include <fcntl.h>
 #endif
 
 using bridges::cpp_uno::shared::VtableFactory;
@@ -259,9 +264,10 @@ bool VtableFactory::createBlock(Block &block, sal_Int32 slotCount) const
         }
         unlink(tmpfname);
         delete[] tmpfname;
-        if (ftruncate(block.fd, block.size) == -1)
+        int err = posix_fallocate(block.fd, 0, block.size);
+        if (err != 0)
         {
-            perror("truncation of executable memory area failed");
+            SAL_WARN("bridges", "posix_fallocate failed with code " << err);
             close(block.fd);
             block.fd = -1;
             break;
