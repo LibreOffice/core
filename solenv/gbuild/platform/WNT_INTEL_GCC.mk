@@ -97,7 +97,7 @@ ifeq ($(MINGW_GCCLIB_EH),YES)
 gb_LinkTarget_LDFLAGS += -shared-libgcc
 endif
 
-gb_DEBUG_CFLAGS := -ggdb3 -finline-limit=0 -fno-inline -fno-default-inline
+gb_DEBUG_CFLAGS := -ggdb2 -finline-limit=0 -fno-inline -fno-default-inline
 ifeq ($(HAVE_GCC_DWARF_4),TRUE)
 gb_DEBUG_CFLAGS += -gdwarf-4
 endif
