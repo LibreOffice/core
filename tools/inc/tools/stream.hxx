@@ -553,11 +553,15 @@ TOOLS_DLLPUBLIC rtl::OString read_uInt8s_AsOString(SvStream& rStr, sal_Size nLen
 //rtl::OUString's length is number of units successfully read
 TOOLS_DLLPUBLIC rtl::OUString read_LEuInt16s_AsOUString(SvStream& rStr, sal_Size nLen);
 
-//Attempt to read 8bit units to an OString until a zero terminator is encountered
+//Attempt to read 8bit units to an OString until a zero terminator is
+//encountered, returned rtl::OString's length is number of units *definitely*
+//successfully read, check SvStream::good() to see if null terminator was
+//sucessfully read
 TOOLS_DLLPUBLIC rtl::OString read_zeroTerminated_uInt8s_AsOString(SvStream& rStr);
 
 //Attempt to read 8bit units assuming source encoding eEnc to an OUString until
-//a zero terminator is encountered
+//a zero terminator is encountered. Check SvStream::good() to see if null
+//terminator was sucessfully read
 TOOLS_DLLPUBLIC rtl::OUString read_zeroTerminated_uInt8s_AsOUString(SvStream& rStr, rtl_TextEncoding eEnc);
 
 // --------------
