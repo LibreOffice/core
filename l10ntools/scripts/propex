@@ -50,6 +50,8 @@ while (<INFILE>) {
     chomp;
     if (/=/) {
         my ($id, $value) = split /=/;
+        $id    =~ s/^\s+//; #remove leading spaces
+        $id    =~ s/\s+$//; #remove trailing spaces
         $value =~ s/^\s+//; #remove leading spaces
         $value =~ s/\s+$//; #remove trailing spaces
         $value =~ s/(\\u([0-9a-fA-F]{4}))/pack("C0U1",hex($2))/ge; #convert ascii escaped unicode to utf-8
