@@ -1,2 +1,0 @@
-mkdir: %COMMON_DEST%\bin%_EXT%\broffice_nologo
-..\%__SRC%\bin\broffice_nologo\*.zip %COMMON_DEST%\bin%_EXT%\broffice_nologo
