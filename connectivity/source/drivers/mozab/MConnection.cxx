@@ -167,7 +167,7 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
     if ( nLen == -1 )
     {
         // There isn't any subschema: - but could be just subschema
-        if ( aAddrbookURI.getLength() > 0 )
+        if ( !aAddrbookURI.isEmpty() )
         {
             aAddrbookScheme= aAddrbookURI;
         }
@@ -207,7 +207,7 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
     if ( aAddrbookScheme.compareToAscii( getSdbcScheme( SDBC_MOZILLA ) ) == 0 ) {
         m_sMozillaURI = rtl::OUString::createFromAscii( getSchemeURI( SCHEME_MOZILLA ) );
         m_eSDBCAddressType = SDBCAddress::Mozilla;
-        if(sAdditionalInfo.getLength())
+        if(!sAdditionalInfo.isEmpty())
             m_sMozillaProfile = sAdditionalInfo;
     }
     else
@@ -215,7 +215,7 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
         //Yes. I am sure it is SCHEME_MOZILLA
         m_sMozillaURI = rtl::OUString::createFromAscii( getSchemeURI( SCHEME_MOZILLA ) );
         m_eSDBCAddressType = SDBCAddress::ThunderBird;
-        if(sAdditionalInfo.getLength())
+        if(!sAdditionalInfo.isEmpty())
             m_sMozillaProfile = sAdditionalInfo;
     }
     else if ( aAddrbookScheme.compareToAscii( getSdbcScheme( SDBC_LDAP ) ) == 0 ) {
@@ -225,10 +225,10 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
         m_sMozillaURI = rtl::OUString::createFromAscii( getSchemeURI( SCHEME_LDAP ) );
         m_eSDBCAddressType = SDBCAddress::LDAP;
 
-        if ( !m_sHostName.getLength() )
+        if ( m_sHostName.isEmpty() )
         {
             // see whether the URI contains a hostname/port
-            if ( sAdditionalInfo.getLength() )
+            if ( !sAdditionalInfo.isEmpty() )
             {
                 sal_Int32 nPortSeparator = sAdditionalInfo.indexOf( ':' );
                 if ( nPortSeparator == -1 )
@@ -281,7 +281,7 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
             }
         }
 
-        if ( m_sHostName.getLength() != 0 ) {
+        if ( !m_sHostName.isEmpty() ) {
             m_sMozillaURI += m_sHostName;
         }
         else
@@ -292,7 +292,7 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
             m_sMozillaURI += rtl::OUString::valueOf( nPortNumber );
         }
 
-        if ( sBaseDN.getLength() != 0 ) {
+        if ( !sBaseDN.isEmpty() ) {
             m_sMozillaURI += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("/") );
             m_sMozillaURI += sBaseDN;
         }
@@ -564,7 +564,7 @@ void OConnection::throwSQLException( const ErrorDescriptor& _rError, const Refer
             "OConnection::throwSQLException: unsupported error code combination!" );
 
         ::rtl::OUString sParameter( _rError.getParameter() );
-        if ( sParameter.getLength() )
+        if ( !sParameter.isEmpty() )
         {
             const ::rtl::OUString sError( getResources().getResourceStringWithSubstitution(
                 _rError.getResId(),
@@ -582,7 +582,7 @@ void OConnection::throwSQLException( const ErrorDescriptor& _rError, const Refer
     {
         SQLError aErrorHelper( getDriver()->getMSFactory() );
         ::rtl::OUString sParameter( _rError.getParameter() );
-        if ( sParameter.getLength() )
+        if ( !sParameter.isEmpty() )
             aErrorHelper.raiseException( _rError.getErrorCondition(), _rxContext, sParameter );
         else
             aErrorHelper.raiseException( _rError.getErrorCondition(), _rxContext);

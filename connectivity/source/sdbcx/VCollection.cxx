@@ -534,8 +534,8 @@ void OCollection::renameObject(const ::rtl::OUString _sOldName,const ::rtl::OUSt
 {
     OSL_ENSURE(m_pElements->exists(_sOldName),"Element doesn't exist");
     OSL_ENSURE(!m_pElements->exists(_sNewName),"Element already exists");
-    OSL_ENSURE(_sNewName.getLength(),"New name must not be empty!");
-    OSL_ENSURE(_sOldName.getLength(),"New name must not be empty!");
+    OSL_ENSURE(!_sNewName.isEmpty(),"New name must not be empty!");
+    OSL_ENSURE(!_sOldName.isEmpty(),"New name must not be empty!");
 
     if ( m_pElements->rename(_sOldName,_sNewName) )
     {

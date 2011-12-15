@@ -258,7 +258,7 @@ Reference< XDataSource> getDataSource_allowException(
             const ::rtl::OUString& _rsTitleOrPath,
             const Reference< XMultiServiceFactory >& _rxFactory )
 {
-    ENSURE_OR_RETURN( _rsTitleOrPath.getLength(), "getDataSource_allowException: invalid arg !", NULL );
+    ENSURE_OR_RETURN( !_rsTitleOrPath.isEmpty(), "getDataSource_allowException: invalid arg !", NULL );
 
     Reference< XNameAccess> xDatabaseContext(
         _rxFactory->createInstance(
@@ -298,7 +298,7 @@ Reference< XConnection > getConnection_allowException(
     if (xDataSource.is())
     {
         // do it with interaction handler
-        if(!_rsUser.getLength() || !_rsPwd.getLength())
+        if(_rsUser.isEmpty() || _rsPwd.isEmpty())
         {
             Reference<XPropertySet> xProp(xDataSource,UNO_QUERY);
             ::rtl::OUString sPwd, sUser;
@@ -313,7 +313,7 @@ Reference< XConnection > getConnection_allowException(
             {
                 OSL_FAIL("dbtools::getConnection: error while retrieving data source properties!");
             }
-            if(bPwdReq && !sPwd.getLength())
+            if(bPwdReq && sPwd.isEmpty())
             {   // password required, but empty -> connect using an interaction handler
                 Reference<XCompletedConnection> xConnectionCompletion(xProp, UNO_QUERY);
                 if (xConnectionCompletion.is())
@@ -436,7 +436,7 @@ SharedConnection lcl_connectRowSet(const Reference< XRowSet>& _rxRowSet, const R
         xRowSetProps->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("URL"))) >>= sURL;
 
         Reference< XConnection > xPureConnection;
-        if (sDataSourceName.getLength())
+        if (!sDataSourceName.isEmpty())
         {   // the row set's data source property is set
             // -> try to connect, get user and pwd setting for that
             ::rtl::OUString sUser, sPwd;
@@ -448,7 +448,7 @@ SharedConnection lcl_connectRowSet(const Reference< XRowSet>& _rxRowSet, const R
 
             xPureConnection = getConnection_allowException( sDataSourceName, sUser, sPwd, _rxFactory );
         }
-        else if (sURL.getLength())
+        else if (!sURL.isEmpty())
         {   // the row set has no data source, but a connection url set
             // -> try to connection with that url
             Reference< XDriverManager > xDriverManager(
@@ -460,7 +460,7 @@ SharedConnection lcl_connectRowSet(const Reference< XRowSet>& _rxRowSet, const R
                     xRowSetProps->getPropertyValue(sUserProp) >>= sUser;
                 if (hasProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PASSWORD), xRowSetProps))
                     xRowSetProps->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PASSWORD)) >>= sPwd;
-                if (sUser.getLength())
+                if (!sUser.isEmpty())
                 {   // use user and pwd together with the url
                     Sequence< PropertyValue> aInfo(2);
                     aInfo.getArray()[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("user"));
@@ -586,7 +586,7 @@ Reference< XNameAccess > getFieldsByCommandDescriptor( const Reference< XConnect
     OSL_PRECOND( _rxConnection.is(), "::dbtools::getFieldsByCommandDescriptor: invalid connection!" );
     OSL_PRECOND( ( CommandType::TABLE == _nCommandType ) || ( CommandType::QUERY == _nCommandType ) || ( CommandType::COMMAND == _nCommandType ),
         "::dbtools::getFieldsByCommandDescriptor: invalid command type!" );
-    OSL_PRECOND( _rCommand.getLength(), "::dbtools::getFieldsByCommandDescriptor: invalid command (empty)!" );
+    OSL_PRECOND( !_rCommand.isEmpty(), "::dbtools::getFieldsByCommandDescriptor: invalid command (empty)!" );
 
     Reference< XNameAccess > xFields;
 
@@ -878,7 +878,7 @@ static ::rtl::OUString impl_doComposeTableName( const Reference< XDatabaseMetaDa
     OSL_ENSURE(_rxMetaData.is(), "impl_doComposeTableName : invalid meta data !");
     if ( !_rxMetaData.is() )
         return ::rtl::OUString();
-    OSL_ENSURE(_rName.getLength(), "impl_doComposeTableName : at least the name should be non-empty !");
+    OSL_ENSURE(!_rName.isEmpty(), "impl_doComposeTableName : at least the name should be non-empty !");
 
     const ::rtl::OUString sQuoteString = _rxMetaData->getIdentifierQuoteString();
     const NameComponentSupport aNameComps( lcl_getNameComponentSupport( _rxMetaData, _eComposeRule ) );
@@ -887,19 +887,19 @@ static ::rtl::OUString impl_doComposeTableName( const Reference< XDatabaseMetaDa
 
     ::rtl::OUString sCatalogSep;
     sal_Bool bCatlogAtStart = sal_True;
-    if ( _rCatalog.getLength() && aNameComps.bCatalogs )
+    if ( !_rCatalog.isEmpty() && aNameComps.bCatalogs )
     {
         sCatalogSep     = _rxMetaData->getCatalogSeparator();
         bCatlogAtStart  = _rxMetaData->isCatalogAtStart();
 
-        if ( bCatlogAtStart && sCatalogSep.getLength())
+        if ( bCatlogAtStart && !sCatalogSep.isEmpty())
         {
             aComposedName.append( _bQuote ? quoteName( sQuoteString, _rCatalog ) : _rCatalog );
             aComposedName.append( sCatalogSep );
         }
     }
 
-    if ( _rSchema.getLength() && aNameComps.bSchemas )
+    if ( !_rSchema.isEmpty() && aNameComps.bSchemas )
     {
         aComposedName.append( _bQuote ? quoteName( sQuoteString, _rSchema ) : _rSchema );
         aComposedName.appendAscii( "." );
@@ -907,9 +907,9 @@ static ::rtl::OUString impl_doComposeTableName( const Reference< XDatabaseMetaDa
 
     aComposedName.append( _bQuote ? quoteName( sQuoteString, _rName ) : _rName );
 
-    if  (   _rCatalog.getLength()
+    if  (   !_rCatalog.isEmpty()
         &&  !bCatlogAtStart
-        &&  sCatalogSep.getLength()
+        &&  !sCatalogSep.isEmpty()
         &&  aNameComps.bCatalogs
         )
     {

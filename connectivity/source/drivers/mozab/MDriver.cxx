@@ -233,7 +233,7 @@ EDriverType MozabDriver::impl_classifyURL( const ::rtl::OUString& url )
     if ( nLen == -1 )
     {
         // There isn't any subschema: - but could be just subschema
-        if ( aAddrbookURI.getLength() > 0 )
+        if ( !aAddrbookURI.isEmpty() )
             aAddrbookScheme= aAddrbookURI;
         else if(url == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:address:")) )
             return Unknown; // TODO check

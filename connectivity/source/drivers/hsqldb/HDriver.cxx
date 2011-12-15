@@ -205,7 +205,7 @@ namespace connectivity
                     }
                 }
 
-                if ( !xStorage.is() || !sURL.getLength() )
+                if ( !xStorage.is() || sURL.isEmpty() )
                 {
                     ::connectivity::SharedResources aResources;
                     const ::rtl::OUString sMessage = aResources.getResourceString(STR_NO_STROAGE);
@@ -215,7 +215,7 @@ namespace connectivity
                 ::rtl::OUString sSystemPath;
                 osl_getSystemPathFromFileURL( sURL.pData, &sSystemPath.pData );
                 sal_Int32 nIndex = sSystemPath.lastIndexOf('.');
-                if ( !sURL.getLength() || !sSystemPath.getLength() )
+                if ( sURL.isEmpty() || sSystemPath.isEmpty() )
                 {
                     ::connectivity::SharedResources aResources;
                     const ::rtl::OUString sMessage = aResources.getResourceString(STR_INVALID_FILE_URL);
@@ -322,7 +322,7 @@ namespace connectivity
                 catch(Exception&)
                 {
                 }
-                if ( sMessage.getLength() )
+                if ( !sMessage.isEmpty() )
                 {
                     ::dbtools::throwGenericSQLException(sMessage ,*this);
                 }
@@ -645,7 +645,7 @@ namespace connectivity
 
         Reference< XStorage> xStorage(aEvent.Source,UNO_QUERY);
         ::rtl::OUString sKey = StorageContainer::getRegisteredKey(xStorage);
-        if ( sKey.getLength() )
+        if ( !sKey.isEmpty() )
         {
             TWeakPairVector::iterator i = ::std::find_if(m_aConnections.begin(),m_aConnections.end(),::o3tl::compose1(
                             ::std::bind2nd(::std::equal_to< ::rtl::OUString >(),sKey)
@@ -872,7 +872,7 @@ namespace connectivity
             {
                 OSL_FAIL( "lcl_getSystemLocale: caught an exception!" );
             }
-            if ( !sLocaleString.getLength() )
+            if ( sLocaleString.isEmpty() )
             {
                 rtl_Locale* pProcessLocale = NULL;
                 osl_getProcessLocale( &pProcessLocale );

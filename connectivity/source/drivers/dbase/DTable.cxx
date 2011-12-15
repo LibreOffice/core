@@ -1737,7 +1737,7 @@ sal_Bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow,c
                 if (pIndex->Find(0,*rRow.get()[nPos]))
                 {
                     // There is no unique value
-                    if ( !aColName.getLength() )
+                    if ( aColName.isEmpty() )
                     {
                         m_pColumns->getByIndex(i) >>= xCol;
                         OSL_ENSURE(xCol.is(),"ODbaseTable::UpdateBuffer column is null!");

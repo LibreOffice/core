@@ -67,10 +67,10 @@ namespace dbtools
     //---------------------------------------------------------------------
     static sal_Unicode lcl_getSeparatorChar( const ::rtl::OUString& _rSeparator, sal_Unicode _nFallback )
     {
-        OSL_ENSURE( 0 < _rSeparator.getLength(), "::lcl_getSeparatorChar: invalid separator string!" );
+        OSL_ENSURE( !_rSeparator.isEmpty(), "::lcl_getSeparatorChar: invalid separator string!" );
 
         sal_Unicode nReturn( _nFallback );
-        if ( _rSeparator.getLength() )
+        if ( !_rSeparator.isEmpty() )
             nReturn = static_cast< sal_Char >( _rSeparator.getStr()[0] );
         return nReturn;
     }
@@ -156,7 +156,7 @@ namespace dbtools
                 )
             {   // yes -> force a quoted text and try again
                 ::rtl::OUString sQuoted( _rStatement );
-                if  (   sQuoted.getLength()
+                if  (   !sQuoted.isEmpty()
                     &&  (   (sQuoted.getStr()[0] != '\'')
                         ||  (sQuoted.getStr()[ sQuoted.getLength() - 1 ] != '\'' )
                         )
@@ -220,7 +220,7 @@ namespace dbtools
                             ) >>= aFormatLocale;
 
                             // valid locale
-                            if ( aFormatLocale.Language.getLength() )
+                            if ( !aFormatLocale.Language.isEmpty() )
                             {
                                 getSeparatorChars( aFormatLocale, nFmtDecSep, nCtxThdSep );
                             }
@@ -349,7 +349,7 @@ namespace dbtools
         if(nIndex == -1)
             sField = _sField;
         sal_Int32 nType = ::connectivity::OSQLParser::getFunctionReturnType(sField,&m_aParser.getContext());
-        if ( nType == DataType::OTHER || !sField.getLength() )
+        if ( nType == DataType::OTHER || sField.isEmpty() )
         {
             // first try the international version
             ::rtl::OUString sSql;

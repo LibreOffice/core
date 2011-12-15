@@ -181,7 +181,7 @@ Reference< XResultSet > SAL_CALL OStatement_Base::getGeneratedValues(  ) throw (
     if ( m_pConnection )
     {
         ::rtl::OUString sStmt = m_pConnection->getTransformedGeneratedStatement(m_sSqlStatement);
-        if ( sStmt.getLength() )
+        if ( !sStmt.isEmpty() )
         {
             ::comphelper::disposeComponent(m_xGeneratedStatement);
             m_xGeneratedStatement = m_pConnection->createStatement();

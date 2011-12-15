@@ -86,7 +86,7 @@ namespace connectivity
             {
                 ::rtl::OUString currentProfile = getCurrentProfile();
                 //if profileName not given, then skip and return curernt profile
-                if (!profileName.getLength() && m_CurrentProduct == product)
+                if (profileName.isEmpty() && m_CurrentProduct == product)
                     return currentProfile;
 
                 if (m_CurrentProduct == product && profileName.equals(currentProfile))

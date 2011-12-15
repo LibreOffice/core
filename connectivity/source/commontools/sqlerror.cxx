@@ -253,7 +253,7 @@ namespace connectivity
         if ( impl_initResources() )
         {
             ::rtl::OUString sResMessage( m_pResources->loadString( lcl_getResourceID( _eCondition, false ) ) );
-            OSL_ENSURE( sResMessage.getLength(), "SQLError_Impl::impl_getErrorMessage: illegal error condition, or invalid resource!" );
+            OSL_ENSURE( !sResMessage.isEmpty(), "SQLError_Impl::impl_getErrorMessage: illegal error condition, or invalid resource!" );
             aMessage.append( getMessagePrefix() ).appendAscii( " " ).append( sResMessage );
         }
 
@@ -272,7 +272,7 @@ namespace connectivity
                 sState = m_pResources->loadString( nResourceId );
         }
 
-        if ( !sState.getLength() )
+        if ( sState.isEmpty() )
             sState = ::rtl::OUString::intern( RTL_CONSTASCII_USTRINGPARAM( "S1000" ) );
 
         return sState;

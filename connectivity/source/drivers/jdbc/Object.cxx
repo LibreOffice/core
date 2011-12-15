@@ -192,9 +192,9 @@ namespace
         {
             ::std::auto_ptr< java_lang_Throwable > pThrow( new java_lang_Throwable( _pEnvironment, jThrow ) );
             ::rtl::OUString sMessage = pThrow->getMessage();
-            if ( !sMessage.getLength() )
+            if ( sMessage.isEmpty() )
                 sMessage = pThrow->getLocalizedMessage();
-            if(  !sMessage.getLength() )
+            if(  sMessage.isEmpty() )
                 sMessage = pThrow->toString();
             _out_rException = SQLException( sMessage, _rxContext, ::rtl::OUString(), -1, Any() );
             return true;

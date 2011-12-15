@@ -301,7 +301,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
             sal_Bool bErg = sal_False;
             do
             {
-                if (!aURL.getExtension().getLength())
+                if (aURL.getExtension().isEmpty())
                 {
                     sal_Unicode nChar = aURL.getBase().getStr()[0];
                     if(match(tableNamePattern,aURL.getBase(),'\0') && ( !bCheckEnabled || ( bCheckEnabled && ((nChar < '0' || nChar > '9')))) )

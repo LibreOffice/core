@@ -131,7 +131,7 @@ namespace
         rNewValue += rValue;
         sal_Int32 nIndex = (sal_Int32)-1;   // Quotes durch zweifache Quotes ersetzen, sonst kriegt der Parser Probleme
 
-        if (rQuot.getLength())
+        if (!rQuot.isEmpty())
         {
             do
             {
@@ -349,7 +349,7 @@ namespace
 {
     bool lcl_isAliasNamePresent( const OSQLParseNode& _rTableNameNode )
     {
-        return OSQLParseNode::getTableRange(_rTableNameNode.getParent()).getLength() != 0;
+        return !OSQLParseNode::getTableRange(_rTableNameNode.getParent()).isEmpty();
     }
 }
 
@@ -763,7 +763,7 @@ sal_Bool OSQLParseNode::getTableComponents(const OSQLParseNode* _pTableNode,
             OSL_FAIL("Error in parse tree!");
         }
     }
-    return _rTable.getLength() != 0;
+    return !_rTable.isEmpty();
 }
 // -----------------------------------------------------------------------------
 void OSQLParser::killThousandSeparator(OSQLParseNode* pLiteral)
@@ -919,7 +919,7 @@ sal_Int16 OSQLParser::buildPredicateRule(OSQLParseNode*& pAppend,OSQLParseNode* 
         if ( pNode1 )
         {
             OSQLParseNode* pNode2 = convertNode(nType,pLiteral2);
-            if ( !m_sErrorMessage.getLength() )
+            if ( m_sErrorMessage.isEmpty() )
                 nErg = buildNode(pAppend,pCompare,pNode1,pNode2);
         }
     }
@@ -1245,9 +1245,9 @@ OSQLParseNode* OSQLParser::predicateTree(::rtl::OUString& rErrorMessage, const :
         m_nFormatKey = 0;
         m_nDateFormatKey = 0;
 
-        if (!m_sErrorMessage.getLength())
+        if (m_sErrorMessage.isEmpty())
             m_sErrorMessage = s_pScanner->getErrorMessage();
-        if (!m_sErrorMessage.getLength())
+        if (m_sErrorMessage.isEmpty())
             m_sErrorMessage = m_pContext->getErrorMessage(IParseContext::ERROR_GENERAL);
 
         rErrorMessage = m_sErrorMessage;
@@ -2471,7 +2471,7 @@ void OSQLParseNode::parseLeaf(::rtl::OUStringBuffer& rString, const SQLParseNode
                     case ' ' :
                     case '.' : break;
                     default  :
-                        if  (   !rParam.aMetaData.getCatalogSeparator().getLength()
+                        if  (   rParam.aMetaData.getCatalogSeparator().isEmpty()
                                 || rString[rString.getLength() - 1] != rParam.aMetaData.getCatalogSeparator().toChar()
                             )
                             rString.appendAscii(" "); break;
@@ -2527,7 +2527,7 @@ void OSQLParseNode::parseLeaf(::rtl::OUStringBuffer& rString, const SQLParseNode
                     case ' ' :
                     case '.' : break;
                     default  :
-                        if  (   !rParam.aMetaData.getCatalogSeparator().getLength()
+                        if  (   rParam.aMetaData.getCatalogSeparator().isEmpty()
                             ||  rString[rString.getLength() - 1] != rParam.aMetaData.getCatalogSeparator().toChar()
                             )
                             rString.appendAscii(" "); break;

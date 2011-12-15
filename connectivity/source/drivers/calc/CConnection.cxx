@@ -127,7 +127,7 @@ Reference< XSpreadsheetDocument> OCalcConnection::acquireDoc()
     aArgs[1].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ReadOnly"));
     aArgs[1].Value <<= (sal_Bool) sal_True;
 
-    if ( m_sPassword.getLength() )
+    if ( !m_sPassword.isEmpty() )
     {
         const sal_Int32 nPos = aArgs.getLength();
         aArgs.realloc(nPos+1);

@@ -290,7 +290,7 @@ namespace
             sComposedName = ::rtl::OUString();
 
             Reference< XResultSet> xRes = _rxDBMeta->getTables(
-                _rCatalog.getLength() ? makeAny( _rCatalog ) : Any(), _rSchema.getLength() ? _rSchema : s_sWildcard, _rTableName, sTableTypes );
+                !_rCatalog.isEmpty() ? makeAny( _rCatalog ) : Any(), !_rSchema.isEmpty() ? _rSchema : s_sWildcard, _rTableName, sTableTypes );
 
             Reference< XRow > xCurrentRow( xRes, UNO_QUERY );
             if ( xCurrentRow.is() && xRes->next() )
@@ -342,7 +342,7 @@ void OSQLParseTreeIterator::impl_getQueryParameterColumns( const OSQLTable& _rQu
     // parse the sub query
     do {
 
-    if ( !bEscapeProcessing || ( sSubQueryCommand.getLength() == 0 ) )
+    if ( !bEscapeProcessing || ( sSubQueryCommand.isEmpty() ) )
         break;
 
     ::rtl::OUString sError;
@@ -368,7 +368,7 @@ void OSQLParseTreeIterator::impl_getQueryParameterColumns( const OSQLTable& _rQu
 OSQLTable OSQLParseTreeIterator::impl_locateRecordSource( const ::rtl::OUString& _rComposedName )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "parse", "Ocke.Janssen@sun.com", "OSQLParseTreeIterator::impl_locateRecordSource" );
-    if ( !_rComposedName.getLength() )
+    if ( _rComposedName.isEmpty() )
     {
         OSL_FAIL( "OSQLParseTreeIterator::impl_locateRecordSource: no object name at all?" );
         return OSQLTable();
@@ -468,7 +468,7 @@ void OSQLParseTreeIterator::traverseOneTableName( OSQLTables& _rTables,const OSQ
                                 ::dbtools::eInDataManipulation);
 
     // if there is no alias for the table name assign the orignal name to it
-    if ( !aTableRange.getLength() )
+    if ( aTableRange.isEmpty() )
         aTableRange = aComposedName;
 
     // get the object representing this table/query
@@ -488,7 +488,7 @@ void OSQLParseTreeIterator::impl_fillJoinConditions(const OSQLParseNode* i_pJoin
     else if (SQL_ISRULEOR2(i_pJoinCondition,search_condition,boolean_term)  &&          // AND/OR-Verknuepfung:
              i_pJoinCondition->count() == 3)
     {
-        // nur AND Verknüpfung zulassen
+        // nur AND Verknï¿½pfung zulassen
         if ( SQL_ISTOKEN(i_pJoinCondition->getChild(1),AND) )
         {
             impl_fillJoinConditions(i_pJoinCondition->getChild(0));
@@ -808,7 +808,7 @@ sal_Bool OSQLParseTreeIterator::getColumnTableRange(const OSQLParseNode* pNode, 
     {
         ::rtl::OUString aColName, aTableRange;
         getColumnRange(pNode, aColName, aTableRange);
-        if (!aTableRange.getLength())   // keinen gefunden
+        if (aTableRange.isEmpty())   // keinen gefunden
         {
             // dann die Spalte in den Tabellen suchen
             for (ConstOSQLTablesIterator aIter = m_pImpl->m_pTables->begin(); aIter != m_pImpl->m_pTables->end(); ++aIter)
@@ -834,12 +834,12 @@ sal_Bool OSQLParseTreeIterator::getColumnTableRange(const OSQLParseNode* pNode, 
                     }
                 }
             }
-            if (!aTableRange.getLength())
+            if (aTableRange.isEmpty())
                 return sal_False;
         }
 
 
-        if (!rTableRange.getLength())
+        if (rTableRange.isEmpty())
             rTableRange = aTableRange;
         else if (rTableRange != aTableRange)
             return sal_False;
@@ -901,7 +901,7 @@ void OSQLParseTreeIterator::traverseCreateColumns(const OSQLParseNode* pSelectNo
                 aTypeName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VARCHAR"));
             }
 
-            if (aTypeName.getLength())
+            if (!aTypeName.isEmpty())
             {
                 //TODO:Create a new class for create statement to handle field length
                 OParseColumn* pColumn = new OParseColumn(aColumnName,aTypeName,::rtl::OUString(),::rtl::OUString(),
@@ -981,7 +981,7 @@ bool OSQLParseTreeIterator::traverseSelectColumnNames(const OSQLParseNode* pSele
                 if (SQL_ISRULE(pColumnRef,column_ref))
                 {
                     getColumnRange(pColumnRef,sColumnName,aTableRange);
-                    OSL_ENSURE(sColumnName.getLength(),"Columnname darf nicht leer sein");
+                    OSL_ENSURE(!sColumnName.isEmpty(),"Columnname darf nicht leer sein");
                 }
                 else /*if (SQL_ISRULE(pColumnRef,general_set_fct) || SQL_ISRULE(pColumnRef,set_fct_spec)    ||
                          SQL_ISRULE(pColumnRef,position_exp)    || SQL_ISRULE(pColumnRef,extract_exp)   ||
@@ -1016,7 +1016,7 @@ bool OSQLParseTreeIterator::traverseSelectColumnNames(const OSQLParseNode* pSele
                     return;
                 }
                 */
-                if(!aColumnAlias.getLength())
+                if(aColumnAlias.isEmpty())
                     aColumnAlias = sColumnName;
                 setSelectColumnName(m_aSelectColumns,sColumnName,aColumnAlias,aTableRange,bFkt,nType,SQL_ISRULE(pColumnRef,general_set_fct) || SQL_ISRULE(pColumnRef,set_fct_spec));
             }
@@ -1103,7 +1103,7 @@ void OSQLParseTreeIterator::traverseByColumnNames(const OSQLParseNode* pSelectNo
             else // eine Expression
                 pColumnRef->parseNodeToStr( sColumnName, m_pImpl->m_xConnection, NULL, sal_False, sal_False );
 
-            OSL_ENSURE(sColumnName.getLength(),"sColumnName darf nicht leer sein");
+            OSL_ENSURE(!sColumnName.isEmpty(),"sColumnName darf nicht leer sein");
         }
         else
         {   // here I found a predicate
@@ -1465,9 +1465,9 @@ void OSQLParseTreeIterator::traverseParameter(const OSQLParseNode* _pParseNode
 
     if (SQL_ISPUNCTUATION(pMark,"?"))
     {
-        sParameterName =    _rColumnAlias.getLength()
+        sParameterName =    !_rColumnAlias.isEmpty()
                         ?   _rColumnAlias
-                        :   _aColumnName.getLength()
+                        :   !_aColumnName.isEmpty()
                         ?   _aColumnName
                         :   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("?"));
     }
@@ -1530,7 +1530,7 @@ void OSQLParseTreeIterator::traverseParameter(const OSQLParseNode* _pParseNode
             m_aParameters->get().push_back(pNewColumn);
             bNotFound = sal_False;
         }
-        else if(_aColumnName.getLength())// search in the tables for the right one
+        else if(!_aColumnName.isEmpty())// search in the tables for the right one
         {
 
             Reference<XPropertySet> xColumn = findColumn( _aColumnName, _aTableRange, true );
@@ -1730,13 +1730,13 @@ void OSQLParseTreeIterator::appendColumns(::rtl::Reference<OSQLColumns>& _rColum
 void OSQLParseTreeIterator::setSelectColumnName(::rtl::Reference<OSQLColumns>& _rColumns,const ::rtl::OUString & rColumnName,const ::rtl::OUString & rColumnAlias, const ::rtl::OUString & rTableRange,sal_Bool bFkt,sal_Int32 _nType,sal_Bool bAggFkt)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "parse", "Ocke.Janssen@sun.com", "OSQLParseTreeIterator::setSelectColumnName" );
-    if(rColumnName.toChar() == '*' && !rTableRange.getLength())
+    if(rColumnName.toChar() == '*' && rTableRange.isEmpty())
     {   // SELECT * ...
         OSL_ENSURE(_rColumns == m_aSelectColumns,"Invalid columns used here!");
         for(ConstOSQLTablesIterator aIter = m_pImpl->m_pTables->begin(); aIter != m_pImpl->m_pTables->end();++aIter)
             appendColumns(_rColumns,aIter->first,aIter->second);
     }
-    else if( rColumnName.toChar() == '*' && rTableRange.getLength() )
+    else if( rColumnName.toChar() == '*' && !rTableRange.isEmpty() )
     {   // SELECT <table>.*
         OSL_ENSURE(_rColumns == m_aSelectColumns,"Invalid columns used here!");
         ConstOSQLTablesIterator aFind = m_pImpl->m_pTables->find(rTableRange);
@@ -1744,7 +1744,7 @@ void OSQLParseTreeIterator::setSelectColumnName(::rtl::Reference<OSQLColumns>& _
         if(aFind != m_pImpl->m_pTables->end())
             appendColumns(_rColumns,rTableRange,aFind->second);
     }
-    else if ( !rTableRange.getLength() )
+    else if ( rTableRange.isEmpty() )
     {   // SELECT <something> ...
         // without table specified
         if ( !bFkt )
@@ -2095,7 +2095,7 @@ Reference< XPropertySet > OSQLParseTreeIterator::findColumn(const OSQLTables& _r
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "parse", "Ocke.Janssen@sun.com", "OSQLParseTreeIterator::findColumn" );
     Reference< XPropertySet > xColumn;
-    if ( rTableRange.getLength() )
+    if ( !rTableRange.isEmpty() )
     {
         ConstOSQLTablesIterator aFind = _rTables.find(rTableRange);
 
@@ -2148,7 +2148,7 @@ void OSQLParseTreeIterator::impl_appendError( IParseContext::ErrorCode _eError, 
 void OSQLParseTreeIterator::impl_appendError( const SQLException& _rError )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "parse", "Ocke.Janssen@sun.com", "OSQLParseTreeIterator::impl_appendError" );
-    if ( m_aErrors.Message.getLength() )
+    if ( !m_aErrors.Message.isEmpty() )
     {
         SQLException* pErrorChain = &m_aErrors;
         while ( pErrorChain->NextException.hasValue() )
@@ -2186,7 +2186,7 @@ sal_Int32 OSQLParseTreeIterator::getFunctionReturnType(const OSQLParseNode* _pNo
                 ::rtl::OUString sColumnName;
                 ::rtl::OUString aTableRange;
                 getColumnRange(pValueExp,sColumnName,aTableRange);
-                OSL_ENSURE(sColumnName.getLength(),"Columnname darf nicht leer sein");
+                OSL_ENSURE(!sColumnName.isEmpty(),"Columnname darf nicht leer sein");
                 Reference<XPropertySet> xColumn = findColumn( sColumnName, aTableRange, true );
 
                 if ( xColumn.is() )

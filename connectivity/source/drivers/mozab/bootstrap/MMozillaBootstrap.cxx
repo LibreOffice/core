@@ -221,7 +221,7 @@ Sequence< ::rtl::OUString > SAL_CALL MozillaBootstrap::getSupportedServiceNames(
     ::com::sun::star::mozilla::MozillaProductType currProduct = getCurrentProduct();
 
      //if client provides a profileName, we will use it
-    if (profileName.getLength()
+    if (!profileName.isEmpty()
              && ( aCode->getProductType() != currProduct  || !profileName.equals(currProfileName)) )
         setCurrentProfile(aCode->getProductType(),profileName);
        MNSRunnable xRunnable;

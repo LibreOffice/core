@@ -263,7 +263,7 @@ namespace connectivity
                 {
                     ::comphelper::NamedValueCollection aSettings( info );
                     ::rtl::OUString sIanaName = aSettings.getOrDefault( "CharSet", ::rtl::OUString() );
-                    if ( sIanaName.getLength() )
+                    if ( !sIanaName.isEmpty() )
                     {
                         ::dbtools::OCharsetMap aLookupIanaName;
                         ::dbtools::OCharsetMap::const_iterator aLookup = aLookupIanaName.find(sIanaName, ::dbtools::OCharsetMap::IANA());

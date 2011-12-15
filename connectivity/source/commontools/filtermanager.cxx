@@ -107,7 +107,7 @@ namespace dbtools
 
         try
         {
-            if ( m_xComponentAggregate.is() && getFilterComponent( fcPublicFilter ).getLength() )
+            if ( m_xComponentAggregate.is() && !getFilterComponent( fcPublicFilter ).isEmpty() )
             {   // only if there changed something
                 m_xComponentAggregate->setPropertyValue( OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FILTER), makeAny( getComposedFilter() ) );
             }
@@ -140,7 +140,7 @@ namespace dbtools
         sal_Int32 i;
         for ( i = getFirstApplicableFilterIndex(); i < FC_COMPONENT_COUNT; ++i )
         {
-            if ( m_aFilterComponents[ i ].getLength() )
+            if ( !m_aFilterComponents[ i ].isEmpty() )
             {
                 if ( nOnlyNonEmpty != -1 )
                     // it's the second non-empty component

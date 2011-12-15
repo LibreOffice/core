@@ -71,7 +71,7 @@ sdbcx::ObjectType OTables::createObject(const ::rtl::OUString& _rName)
     sTableTypes[2] = s_sAll;    // just to be sure to include anything else ....
 
     Any aCatalog;
-    if ( sCatalog.getLength() )
+    if ( !sCatalog.isEmpty() )
         aCatalog <<= sCatalog;
     Reference< XResultSet > xResult = m_xMetaData->getTables(aCatalog,sSchema,sTable,sTableTypes);
 

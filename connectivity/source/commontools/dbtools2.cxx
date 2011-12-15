@@ -115,10 +115,10 @@ namespace dbtools
                 sPostFix = xRow->getString (5);
                 sCreateParams = xRow->getString(6);
                 // first identical type will be used if typename is empty
-                if ( !sTypeName.getLength() && nType == nDataType )
+                if ( sTypeName.isEmpty() && nType == nDataType )
                     sTypeName = sTypeName2Cmp;
 
-                if( sTypeName.equalsIgnoreAsciiCase(sTypeName2Cmp) && nType == nDataType && sCreateParams.getLength() && !xRow->wasNull())
+                if( sTypeName.equalsIgnoreAsciiCase(sTypeName2Cmp) && nType == nDataType && !sCreateParams.isEmpty() && !xRow->wasNull())
                 {
                     bUseLiteral = sal_True;
                     break;
@@ -128,7 +128,7 @@ namespace dbtools
     }
 
     sal_Int32 nIndex = 0;
-    if ( sAutoIncrementValue.getLength() && (nIndex = sTypeName.indexOf(sAutoIncrementValue)) != -1 )
+    if ( !sAutoIncrementValue.isEmpty() && (nIndex = sTypeName.indexOf(sAutoIncrementValue)) != -1 )
     {
         sTypeName = sTypeName.replaceAt(nIndex,sTypeName.getLength() - nIndex,::rtl::OUString());
     }
@@ -149,10 +149,10 @@ namespace dbtools
         if ( nPrecision > 0 && nDataType != DataType::TIMESTAMP )
         {
             aSql.append(nPrecision);
-            if ( (nScale > 0) || (_sCreatePattern.getLength() && sCreateParams.indexOf(_sCreatePattern) != -1) )
+            if ( (nScale > 0) || (!_sCreatePattern.isEmpty() && sCreateParams.indexOf(_sCreatePattern) != -1) )
                 aSql.appendAscii(",");
         }
-        if ( (nScale > 0) || (_sCreatePattern.getLength() && sCreateParams.indexOf(_sCreatePattern) != -1 ) || nDataType == DataType::TIMESTAMP )
+        if ( (nScale > 0) || ( !_sCreatePattern.isEmpty() && sCreateParams.indexOf(_sCreatePattern) != -1 ) || nDataType == DataType::TIMESTAMP )
             aSql.append(nScale);
 
         if ( nParenPos == -1 )
@@ -167,7 +167,7 @@ namespace dbtools
         aSql.append(sTypeName); // simply add the type name
 
     ::rtl::OUString aDefault = ::comphelper::getString(xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_DEFAULTVALUE)));
-    if ( aDefault.getLength() )
+    if ( !aDefault.isEmpty() )
     {
         aSql.append(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" DEFAULT ")));
         aSql.append(sPreFix);
@@ -178,7 +178,7 @@ namespace dbtools
     if(::comphelper::getINT32(xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_ISNULLABLE))) == ColumnValue::NO_NULLS)
         aSql.append(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" NOT NULL")));
 
-    if ( bIsAutoIncrement && sAutoIncrementValue.getLength())
+    if ( bIsAutoIncrement && !sAutoIncrementValue.isEmpty())
     {
         aSql.appendAscii(" ");
         aSql.append(sAutoIncrementValue);
@@ -204,7 +204,7 @@ namespace dbtools
     descriptor->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_NAME))         >>= sTable;
 
     sComposedName = ::dbtools::composeTableName( xMetaData, sCatalog, sSchema, sTable, sal_True, ::dbtools::eInTableDefinitions );
-    if ( !sComposedName.getLength() )
+    if ( sComposedName.isEmpty() )
         ::dbtools::throwFunctionSequenceException(_xConnection);
 
     aSql.append(sComposedName);
@@ -324,7 +324,7 @@ namespace
                     sComposedName = ::dbtools::composeTableName( xMetaData, sCatalog, sSchema, sTable, sal_True, ::dbtools::eInTableDefinitions );
 
 
-                    if ( !sComposedName.getLength() )
+                    if ( sComposedName.isEmpty() )
                         ::dbtools::throwFunctionSequenceException(_xConnection);
 
                     aSql.append(generateColumnNames(xColumns,xMetaData));
@@ -370,7 +370,7 @@ namespace
 {
     ::rtl::OUString aSql = ::dbtools::createStandardCreateStatement(descriptor,_xConnection,_pHelper,_sCreatePattern);
     const ::rtl::OUString sKeyStmt = ::dbtools::createStandardKeyStatement(descriptor,_xConnection);
-    if ( sKeyStmt.getLength() )
+    if ( !sKeyStmt.isEmpty() )
         aSql += sKeyStmt;
     else
     {
@@ -670,7 +670,7 @@ sal_Int32 getTablePrivileges(const Reference< XDatabaseMetaData>& _xMetaData,
     try
     {
         Any aVal;
-        if(_sCatalog.getLength())
+        if(!_sCatalog.isEmpty())
             aVal <<= _sCatalog;
         Reference< XResultSet > xPrivileges = _xMetaData->getTablePrivileges(aVal, _sSchema, _sTable);
         Reference< XRow > xCurrentRow(xPrivileges, UNO_QUERY);
@@ -943,7 +943,7 @@ sal_Int32 DBTypeConversion::convertUnicodeStringToLength( const ::rtl::OUString&
     {
         ::rtl::OUString sDefaultReportEngineName;
         aReportEngines.getNodeValue(lcl_getDefaultReportEngine()) >>= sDefaultReportEngineName;
-        if ( sDefaultReportEngineName.getLength() )
+        if ( !sDefaultReportEngineName.isEmpty() )
         {
             ::utl::OConfigurationNode aReportEngineNames = aReportEngines.openNode(lcl_getReportEngineNames());
             if ( aReportEngineNames.isValid() )

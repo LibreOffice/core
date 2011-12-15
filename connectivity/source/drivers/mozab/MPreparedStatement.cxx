@@ -470,7 +470,7 @@ _pParameter,OSQLParseNode* _pNode,const OSQLTable& _xTable)
     {
         ::rtl::OUString sColumnName,sTableRange;
         m_pSQLIterator->getColumnRange(_pNode,sColumnName,sTableRange);
-        if(sColumnName.getLength())
+        if(!sColumnName.isEmpty())
         {
             Reference<XNameAccess> xNameAccess = _xTable->getColumns();
             if(xNameAccess->hasByName(sColumnName))

@@ -92,7 +92,7 @@ namespace
 
         static ::rtl::OUString s_productDirectories[3];
 
-        if ( !s_productDirectories[ productIndex ].getLength() )
+        if ( s_productDirectories[ productIndex ].isEmpty() )
         {
             ::rtl::OUString sProductPath;
 

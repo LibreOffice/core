@@ -494,7 +494,7 @@ String OFlatTable::getEntry()
             // name and extension have to coincide
             if ( m_pConnection->matchesExtension( sExt ) )
             {
-                if ( sExt.getLength() )
+                if ( !sExt.isEmpty() )
                     sName = sName.replaceAt(sName.getLength()-(sExt.getLength()+1),sExt.getLength()+1,::rtl::OUString());
                 if ( sName == m_Name )
                 {
