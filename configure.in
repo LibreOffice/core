@@ -1592,6 +1592,25 @@ AC_ARG_WITH(lang,
     ],
 ,)
 
+# Kerberos and GSSAPI used only by PostgreSQL as of LibO 3.5
+AC_ARG_WITH(krb5,
+    AS_HELP_STRING([--with-krb5],
+        [Enable MIT Kerberos 5 support in modules that support it.
+         By default automatically enabled on platforms
+         where a good system Kerberos 5 is available.]),
+,)
+#AC_ARG_WITH(system-redland,
+#    AS_HELP_STRING([--with-system-redland],
+#        [Use redland library already on system.]),,
+#    [with_system_redland="$with_system_libs"])
+
+AC_ARG_WITH(gssapi,
+    AS_HELP_STRING([--with-gssapi],
+        [Enable GSSAPI support in modules that support it.
+         By default automatically enabled on platforms
+         where a good system GSSAPI is available.]),
+,)
+
 dnl ===================================================================
 dnl Branding
 dnl ===================================================================
@@ -5413,11 +5432,50 @@ fi
 dnl ===================================================================
 dnl Check for PostgreSQL stuff
 dnl ===================================================================
-
 if test "x$enable_ext_postgresql_sdbc" = "xyes"; then
     if test "x$enable_extension_integration" = "xyes"; then
       SCPDEFS="$SCPDEFS -DWITH_EXTENSION_POSTGRESQL"
     fi
+
+# if/when anything else than PostgreSQL uses Kerberos,
+# move this out of `test "x$enable_ext_postgresql_sdbc" = "xyes"'
+WITH_KRB5=NO
+WITH_GSSAPI=no
+case "$_os" in
+  Darwin)
+    # MacOS X has system MIT Kerberos 5 since 10.4
+    if test "$with_krb5" != "no"; then
+      WITH_KRB5=YES
+      AC_SEARCH_LIBS(com_err, [krb5 'krb5 -lcrypto -ldes -lasn1 -lroken' com_err 'com_err -lssl -lcrypto'], [],
+                    [AC_MSG_ERROR([could not find function 'com_err' required for Kerberos 5])])
+      AC_SEARCH_LIBS(krb5_sendauth, [krb5 'krb5 -lcrypto -ldes -lasn1 -lroken'], [],
+                    [AC_MSG_ERROR([could not find function 'krb5_sendauth' required for Kerberos 5])])
+    fi
+    if test "$with_gssapi" != "no"; then
+      WITH_GSSAPI=YES
+      AC_SEARCH_LIBS(gss_init_sec_context, [gssapi_krb5 gss 'gssapi -lkrb5 -lcrypto'], [],
+		 		  [AC_MSG_ERROR([could not find function 'gss_init_sec_context' required for GSSAPI])])
+    fi
+   ;;
+  WINNT)
+   if test "$with_krb5" = "yes" || "$with_gssapi" = "yes"; then
+      AC_MSG_ERROR([Refusing to enable MIT Kerberos 5 or GSSAPI on Microsoft Windows.])
+   fi
+  ;;
+  *)
+    if test "$with_krb5" = "yes"; then
+      WITH_KRB5=YES
+      AC_SEARCH_LIBS(com_err, [krb5 'krb5 -lcrypto -ldes -lasn1 -lroken' com_err 'com_err -lssl -lcrypto'], [],
+                    [AC_MSG_ERROR([could not find function 'com_err' required for Kerberos 5])])
+      AC_SEARCH_LIBS(krb5_sendauth, [krb5 'krb5 -lcrypto -ldes -lasn1 -lroken'], [],
+                    [AC_MSG_ERROR([could not find function 'krb5_sendauth' required for Kerberos 5])])
+    fi
+    if test "$with_gssapi" = "yes"; then
+      WITH_GSSAPI=YES
+      AC_SEARCH_LIBS(gss_init_sec_context, [gssapi_krb5 gss 'gssapi -lkrb5 -lcrypto'], [],
+		 		  [AC_MSG_ERROR([could not find function 'gss_init_sec_context' required for GSSAPI])])
+    fi
+esac
 
     AC_MSG_CHECKING([PostgreSQL C interface])
     if test "$with_system_postgresql" = "yes"; then
@@ -5465,6 +5523,8 @@ if test "x$enable_ext_postgresql_sdbc" = "xyes"; then
     fi
     BUILD_POSTGRESQL_SDBC=YES
 fi
+AC_SUBST(WITH_KRB5)
+AC_SUBST(WITH_GSSAPI)
 AC_SUBST(BUILD_POSTGRESQL_SDBC)
 AC_SUBST(SYSTEM_POSTGRESQL)
 AC_SUBST(POSTGRESQL_INC)

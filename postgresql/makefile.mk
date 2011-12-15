@@ -60,14 +60,24 @@ CONFIGURE_DIR=.
 BUILD_DIR=src/interfaces/libpq
 
 CONFIGURE_ACTION = CPPFLAGS="$(SOLARINC)" LDFLAGS="$(SOLARLIB)" ./configure --without-readline --disable-shared --with-openssl
+
 .IF "$(WITH_LDAP)" == "YES"
 CONFIGURE_ACTION += --with-ldap
 .IF "$(WITH_OPENLDAP)" != "YES"
 CONFIGURE_ACTION += --with-includes='$(SOLARVER)$/$(INPATH)$/inc$/mozilla$/ldap' --with-mozldap
 .ENDIF
+.ENDIF # "$(WITH_LDAP)" == "YES"
+
+.IF "$(WITH_KRB5)" == "YES"
+CONFIGURE_ACTION += --with-krb5
 .ENDIF
+.IF "$(WITH_GSSAPI)" == "YES"
+CONFIGURE_ACTION += --with-gssapi
+.ENDIF
+
 BUILD_ACTION = make -j$(GMAKE_MODULE_PARALLELISM) all-static-lib libpq-flags.mk
-.ENDIF
+
+.ENDIF # "$(GUI)$(COM)"=="WNTMSC"
 
 # --- Targets ------------------------------------------------------
 
