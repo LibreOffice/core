@@ -937,6 +937,10 @@ void ImportExcel::Row34( void )
         aIn >> nRowHeight;  // direkt in Twips angegeben
         aIn.Ignore( 4 );
 
+        nRowHeight = nRowHeight & 0x7FFF; // Bit 15: Row Height not changed manually
+        if( !nRowHeight )
+            nRowHeight = (GetBiff() == EXC_BIFF2) ? 0x25 : 0x225;
+
         aIn >> nGrbit >> nXF;
 
         sal_uInt8 nLevel = ::extract_value< sal_uInt8 >( nGrbit, 0, 3 );
