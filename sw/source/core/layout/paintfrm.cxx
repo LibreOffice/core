@@ -3470,6 +3470,8 @@ void SwPageFrm::PaintDecorators( ) const
                  !pGlobalShell->IsPreView() &&
                  pGlobalShell->IsShowHeaderFooterSeparator( ) )
             {
+                bool bRtl = Application::GetSettings().GetLayoutRTL();
+
                 // Header
                 const SwFrm* pHeaderFrm = Lower();
                 if ( !pHeaderFrm->IsHeaderFrm() )
@@ -3477,6 +3479,8 @@ void SwPageFrm::PaintDecorators( ) const
 
                 const SwRect& rVisArea = pGlobalShell->VisArea();
                 long nXOff = std::min( aBodyRect.Right(), rVisArea.Right() );
+                if ( bRtl )
+                    nXOff = std::max( aBodyRect.Left(), rVisArea.Left() );
 
                 long nHeaderYOff = aBodyRect.Top();
                 Point nOutputOff = rEditWin.LogicToPixel( Point( nXOff, nHeaderYOff ) );
