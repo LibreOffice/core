@@ -195,7 +195,6 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(if $(filter Executable,$(TARGETTYPE)),$(gb_Executable_TARGETTYPEFLAGS)) \
 		$(if $(filter Library CppunitTest,$(TARGETTYPE)),$(gb_Library_TARGETTYPEFLAGS)) \
 		$(if $(filter Library,$(TARGETTYPE)),$(gb_Library_LTOFLAGS)) \
-		$(if $(SOVERSIONSCRIPT),-Wl$(COMMA)-exported_symbols_list$(COMMA)$(SOVERSIONSCRIPT)) \
 		$(subst \d,$$,$(RPATH)) \
 		$(T_LDFLAGS) \
 		$(call gb_LinkTarget__get_liblinkflags,$(LINKED_LIBS)) \
