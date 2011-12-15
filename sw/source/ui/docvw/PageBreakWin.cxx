@@ -68,7 +68,7 @@ using namespace drawinglayer::primitive2d;
 
 namespace
 {
-    B2DPolygon lcl_CreatePolygon( B2DRectangle aBounds, bool bShowOnRight )
+    B2DPolygon lcl_CreatePolygon( B2DRectangle aBounds, bool bMirror )
     {
         B2DPolygon aRetval;
         const double nRadius = 1;
@@ -144,7 +144,7 @@ namespace
 
         aRetval.setClosed( true );
 
-        if ( bShowOnRight )
+        if ( bMirror )
         {
             B2DHomMatrix bRotMatrix = createRotateAroundPoint(
                     aBounds.getCenterX(), aBounds.getCenterY(), M_PI );
@@ -233,11 +233,13 @@ void SwPageBreakWin::Paint( const Rectangle& )
     }
 
     bool bShowOnRight = ShowOnRight( );
+    bool bRtl = Application::GetSettings().GetLayoutRTL();
 
     Primitive2DSequence aSeq( 3 );
     B2DRectangle aBRect( double( aRect.Left() ), double( aRect.Top( ) ),
            double( aRect.Right() ), double( aRect.Bottom( ) ) );
-    B2DPolygon aPolygon = lcl_CreatePolygon( aBRect, bShowOnRight );
+    bool bMirror = ( bShowOnRight && !bRtl ) || ( !bShowOnRight && bRtl );
+    B2DPolygon aPolygon = lcl_CreatePolygon( aBRect, bMirror );
 
     // Create the polygon primitives
     aSeq[0] = Primitive2DReference( new PolyPolygonColorPrimitive2D(
@@ -248,7 +250,7 @@ void SwPageBreakWin::Paint( const Rectangle& )
     // Create the primitive for the image
     Image aImg( SW_RES( IMG_PAGE_BREAK ) );
     double nImgOfstX = 3.0;
-    if ( bShowOnRight )
+    if ( bMirror )
         nImgOfstX = aRect.Right() - aImg.GetSizePixel().Width() - 3.0;
     aSeq[2] = Primitive2DReference( new DiscreteBitmapPrimitive2D(
             aImg.GetBitmapEx(), B2DPoint( nImgOfstX, 1.0 ) ) );
@@ -259,7 +261,7 @@ void SwPageBreakWin::Paint( const Rectangle& )
         double nTop = double( aRect.getHeight() ) / 2.0;
         double nBottom = nTop + 4.0;
         double nLeft = aRect.getWidth( ) - ARROW_WIDTH - 6.0;
-        if ( bShowOnRight )
+        if ( bMirror )
             nLeft = ARROW_WIDTH - 2.0;
         double nRight = nLeft + 8.0;
 
@@ -403,7 +405,9 @@ bool SwPageBreakWin::ShowOnRight( )
     if ( bBookMode )
         bOnRight = GetPageFrame()->SidebarPosition( ) == sw::sidebarwindows::SIDEBAR_RIGHT;
 
-    // TODO Handle the RTL case
+    // Handle the RTL case
+    if ( !bBookMode && Application::GetSettings().GetLayoutRTL() )
+        bOnRight = !bOnRight;
 
     return bOnRight;
 }

@@ -33,6 +33,7 @@
 #include <vcl/menu.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/menubtn.hxx>
+#include <vcl/svapp.hxx>
 
 
 
@@ -62,6 +63,7 @@ void MenuButton::ImplInit( Window* pParent, WinBits nStyle )
         nStyle |= WB_TABSTOP;
 
     PushButton::ImplInit( pParent, nStyle );
+    EnableRTL( Application::GetSettings().GetLayoutRTL() );
 }
 
 // -----------------------------------------------------------------------
