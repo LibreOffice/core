@@ -276,14 +276,9 @@ ScStyleSheet& ScfTools::MakePageStyleSheet( ScStyleSheetPool& rPool, const Strin
 
 // *** byte string import operations *** --------------------------------------
 
-ByteString ScfTools::ReadCString( SvStream& rStrm )
+rtl::OString ScfTools::read_zeroTerminated_uInt8s_AsOString(SvStream& rStrm, sal_Int32& rnBytesLeft)
 {
-    return read_zeroTerminated_uInt8s_AsOString(rStrm);
-}
-
-ByteString ScfTools::ReadCString( SvStream& rStrm, sal_Int32& rnBytesLeft )
-{
-    rtl::OString aRet(read_zeroTerminated_uInt8s_AsOString(rStrm));
+    rtl::OString aRet(::read_zeroTerminated_uInt8s_AsOString(rStrm));
     rnBytesLeft -= aRet.getLength(); //we read this number of bytes anyway
     if (rStrm.good()) //if the stream is happy we read the null terminator as well
         --rnBytesLeft;
@@ -292,7 +287,7 @@ ByteString ScfTools::ReadCString( SvStream& rStrm, sal_Int32& rnBytesLeft )
 
 void ScfTools::AppendCString( SvStream& rStrm, String& rString, rtl_TextEncoding eTextEnc )
 {
-    rString += read_zeroTerminated_uInt8s_AsOUString(rStrm, eTextEnc);
+    rString += ::read_zeroTerminated_uInt8s_AsOUString(rStrm, eTextEnc);
 }
 
 // *** HTML table names <-> named range names *** -----------------------------

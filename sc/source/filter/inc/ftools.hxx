@@ -236,17 +236,13 @@ public:
 
 // *** byte string import operations *** --------------------------------------
 
-    /** Reads and returns a zero terminted byte string. */
-    static ByteString   ReadCString( SvStream& rStrm );
-    /** Reads and returns a zero terminted byte string. */
-    inline static String ReadCString( SvStream& rStrm, rtl_TextEncoding eTextEnc )
-                            { return String( ReadCString( rStrm ), eTextEnc ); }
-
     /** Reads and returns a zero terminted byte string and decreases a stream counter. */
-    static ByteString   ReadCString( SvStream& rStrm, sal_Int32& rnBytesLeft );
+    static rtl::OString read_zeroTerminated_uInt8s_AsOString(SvStream& rStrm, sal_Int32& rnBytesLeft);
     /** Reads and returns a zero terminted byte string and decreases a stream counter. */
-    inline static String ReadCString( SvStream& rStrm, sal_Int32& rnBytesLeft, rtl_TextEncoding eTextEnc )
-                            { return String( ReadCString( rStrm, rnBytesLeft ), eTextEnc ); }
+    inline static rtl::OUString read_zeroTerminated_uInt8s_AsOUString(SvStream& rStrm, sal_Int32& rnBytesLeft, rtl_TextEncoding eTextEnc)
+    {
+        return rtl::OStringToOUString(read_zeroTerminated_uInt8s_AsOString(rStrm, rnBytesLeft), eTextEnc);
+    }
 
     /** Appends a zero terminted byte string. */
     static void         AppendCString( SvStream& rStrm, String& rString, rtl_TextEncoding eTextEnc );
