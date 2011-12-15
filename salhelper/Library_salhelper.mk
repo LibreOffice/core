@@ -52,30 +52,6 @@ $(eval $(call gb_Library_add_exception_objects,salhelper,\
 # Solaris would need something like this, too.  Its backwards compatibility is
 # broken for now:
 
-ifeq ($(OS),LINUX)
-
-$(eval $(call gb_Library_add_ldflags,salhelper, \
-    -Wl$(COMMA)--soname=libuno_salhelpergcc3.so.3 \
-    -Wl$(COMMA)--version-script=$(SRCDIR)/salhelper/source/gcc3.map \
-))
-
-$(call gb_LinkTarget_get_target,$(call \
-gb_Library_get_linktargetname,salhelper)): $(SRCDIR)/salhelper/source/gcc3.map
-
-endif
-
-# A hack to generate the soname symlink in the solver:
-
-ifneq ($(OS),WNT)
-
-$(call gb_Library_get_target,salhelper): | \
-    $(call gb_Library_get_target,salhelper).3
-
-$(call gb_Library_get_target,salhelper).3:
-	$(call gb_Helper_abbreviate_dirs,rm -f $@)
-	$(call gb_Helper_abbreviate_dirs, \
-        ln -s $(notdir $(call gb_Library_get_target,salhelper)) $@)
-
-endif
+$(eval $(call gb_Library_set_soversion_script,salhelper,3,$(SRCDIR)/salhelper/source/gcc3.map))
 
 # vim: set noet sw=4 ts=4:
