@@ -46,7 +46,7 @@
 
 #include <rtl/oustringostreaminserter.hxx>
 
-namespace ScNamedRangeObj {
+namespace ScNamedRangesObj {
 
 class ScXNamedRanges : public UnoApiTest
 {
@@ -253,8 +253,6 @@ uno::Reference< sheet::XSpreadsheetDocument> ScXNamedRanges::init()
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScXNamedRanges);
-
-CPPUNIT_PLUGIN_IMPLEMENT();
 
 }
 
