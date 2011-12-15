@@ -593,7 +593,7 @@ Any ComponentContext::lookupMap( OUString const & rName )
             {
                 OUString serviceName;
                 if ((usesService >>= serviceName) &&
-                    serviceName.getLength())
+                    !serviceName.isEmpty())
                 {
                     xInstance = args.getLength()
                         ? m_xSMgr->createInstanceWithArgumentsAndContext(

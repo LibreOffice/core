@@ -203,7 +203,7 @@ static int s_getNextEnv(uno_Environment ** ppEnv, uno_Environment * pCurrEnv, un
         res = 1;
     }
 
-    if (nextPurpose.getLength())
+    if (!nextPurpose.isEmpty())
     {
         rtl::OUString next_envDcp(s_uno_envDcp);
         next_envDcp += nextPurpose;

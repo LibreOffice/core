@@ -264,7 +264,7 @@ sal_Bool parseOptions(int ac, char* av[], Options& rOptions, sal_Bool bCmdFile)
                         {
                             i++;
                             OUString regName = OStringToOUString(av[i], osl_getThreadTextEncoding());
-                            if( ! rOptions.sBootRegName.getLength() )
+                            if( rOptions.sBootRegName.isEmpty() )
                             {
                                 rOptions.sBootRegName = regName;
                             }
@@ -321,7 +321,7 @@ sal_Bool parseOptions(int ac, char* av[], Options& rOptions, sal_Bool bCmdFile)
                         sUrls = OStringToOUString(av[i]+2, osl_getThreadTextEncoding());
                     }
 
-                    if (rOptions.sComponentUrls.getLength())
+                    if (!rOptions.sComponentUrls.isEmpty())
                     {
                         OUString tmp(rOptions.sComponentUrls + OUString(";", 1, osl_getThreadTextEncoding()) + sUrls);
                         rOptions.sComponentUrls = tmp;
@@ -660,7 +660,7 @@ static void bootstrap(
 
     if ( opt.sRegName.equals(opt.sBootRegName) )
     {
-        if( opt.sBootRegName2.getLength() )
+        if( !opt.sBootRegName2.isEmpty() )
         {
             xSMgr = createRegistryServiceFactory(
                 convertToFileUrl(opt.sRegName),
@@ -675,14 +675,14 @@ static void bootstrap(
     }
     else
     {
-        if( opt.sBootRegName2.getLength() )
+        if( !opt.sBootRegName2.isEmpty() )
         {
             xSMgr = createRegistryServiceFactory(
                 convertToFileUrl( opt.sBootRegName2 ),
                 convertToFileUrl( opt.sBootRegName ),
                 sal_True );
         }
-        else if ( opt.sBootRegName.getLength() )
+        else if ( !opt.sBootRegName.isEmpty() )
         {
             xSMgr = createRegistryServiceFactory(
                 convertToFileUrl( opt.sBootRegName ),
@@ -766,12 +766,12 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         exit(1);
     }
 
-    if( ! aOptions.sRegName.getLength() )
+    if( aOptions.sRegName.isEmpty() )
     {
         fprintf( stderr, "ERROR: target registry missing (-r option)\n" );
         exit( 1 );
     }
-    if ( aOptions.sComponentUrls.getLength() == 0 )
+    if ( aOptions.sComponentUrls.isEmpty() )
     {
         fprintf(stderr, "ERROR: no component url is specified!\n");
         exit(1);
@@ -786,7 +786,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     catch( Exception& e )
     {
         fprintf(stderr, "ERROR: create ServiceManager failed!\n");
-        if ( e.Message.getLength() )
+        if ( !e.Message.isEmpty() )
         {
             fprintf(stderr, "ERROR description: %s\n",
                     OUStringToOString(e.Message, osl_getThreadTextEncoding()).getStr());

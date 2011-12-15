@@ -876,7 +876,7 @@ Reference< XInterface > ORegistryFactoryHelper::createModuleFactory()
     }
 
     Reference< XInterface > xFactory;
-    if( aActivatorName.getLength() != 0 )
+    if( !aActivatorName.isEmpty() )
     {
         Reference<XInterface > x = xSMgr->createInstance( aActivatorName );
         Reference<XImplementationLoader > xLoader( x, UNO_QUERY );

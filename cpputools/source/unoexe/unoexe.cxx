@@ -510,7 +510,7 @@ inline Reference< XInterface > OInstanceProvider::createInstance()
     throw (Exception)
 {
     Reference< XInterface > xRet;
-    if (_aImplName.getLength()) // manually via loader
+    if (!_aImplName.isEmpty()) // manually via loader
         xRet = loadComponent( _xContext, _aImplName, _aLocation );
     else // via service manager
         unoexe::createInstance( xRet, _xContext, _aServiceName );
@@ -532,7 +532,7 @@ Reference< XInterface > OInstanceProvider::getInstance( const OUString & rName )
         {
             Reference< XInterface > xRet;
 
-            if (_aImplName.getLength() == 0 && _aServiceName.getLength() == 0)
+            if (_aImplName.isEmpty() && _aServiceName.isEmpty())
             {
                 OSL_ASSERT(
                     rName.equalsAsciiL(
@@ -702,9 +702,9 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc,)
             }
         }
 
-        if ((aImplName.getLength() != 0) && (aServiceName.getLength() != 0))
+        if (!(aImplName.isEmpty() || aServiceName.isEmpty()))
             throw RuntimeException( OUString( RTL_CONSTASCII_USTRINGPARAM("give component exOR service name!" ) ), Reference< XInterface >() );
-        if (aImplName.getLength() == 0 && aServiceName.getLength() == 0)
+        if (aImplName.isEmpty() && aServiceName.isEmpty())
         {
             if (! aUnoUrl.endsWithIgnoreAsciiCaseAsciiL(
                     RTL_CONSTASCII_STRINGPARAM(";uno.ComponentContext") ))
@@ -719,9 +719,9 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc,)
                                   "unexpected option --singleinstance!") ),
                     Reference<XInterface>() );
         }
-        if (aImplName.getLength() && !aLocation.getLength())
+        if (!aImplName.isEmpty() && aLocation.isEmpty())
             throw RuntimeException( OUString( RTL_CONSTASCII_USTRINGPARAM("give component location!" ) ), Reference< XInterface >() );
-        if (aServiceName.getLength() && aLocation.getLength())
+        if (!aServiceName.isEmpty() && !aLocation.isEmpty())
             out( "\n> warning: service name given, will ignore location!" );
 
         // read component params
@@ -761,7 +761,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc,)
                     xRegistry = (xRegistry.is() ? nestRegistries(
                                      xNewReg, xRegistry ) : xNewReg);
             }
-            if (aReadWriteRegistry.getLength())
+            if (!aReadWriteRegistry.isEmpty())
             {
 #if OSL_DEBUG_LEVEL > 1
                 out( "\n> trying to open rw registry: " );
@@ -788,7 +788,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc,)
 
         //#### accept, instanciate, etc. ###########################################################
 
-        if (aUnoUrl.getLength()) // accepting connections
+        if (!aUnoUrl.isEmpty()) // accepting connections
         {
             sal_Int32 nIndex = 0, nTokens = 0;
             do { aUnoUrl.getToken( 0, ';', nIndex ); nTokens++; } while( nIndex != -1 );
@@ -854,7 +854,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc,)
         else // no uno url
         {
             Reference< XInterface > xInstance;
-            if (aImplName.getLength()) // manually via loader
+            if (!aImplName.isEmpty()) // manually via loader
                 xInstance = loadComponent( xContext, aImplName, aLocation );
             else // via service manager
                 createInstance( xInstance, xContext, aServiceName );

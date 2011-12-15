@@ -312,7 +312,7 @@ static inline OUString getBridgeName(
     SAL_THROW( () )
 {
     OUStringBuffer aBridgeName( 16 );
-    if (rAddPurpose.getLength())
+    if (!rAddPurpose.isEmpty())
     {
         aBridgeName.append( rAddPurpose );
         aBridgeName.append( (sal_Unicode)'_' );
@@ -469,7 +469,7 @@ static Mapping getMediateMapping(
     }
 
     // connect to uno
-    if (rAddPurpose.getLength()) // insert purpose mapping between new ano_uno <-> uno
+    if (!rAddPurpose.isEmpty()) // insert purpose mapping between new ano_uno <-> uno
     {
         // create anonymous uno env
         Environment aAnUno;
@@ -540,7 +540,7 @@ void SAL_CALL uno_getMapping(
     }
 
     // See if an identity mapping does fit.
-    if (!aRet.is() && pFrom == pTo && !aAddPurpose.getLength())
+    if (!aRet.is() && pFrom == pTo && aAddPurpose.isEmpty())
         aRet = createIdentityMapping(pFrom);
 
     if (!aRet.is())

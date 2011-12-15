@@ -1022,7 +1022,7 @@ PropertySetMixinImpl::~PropertySetMixinImpl() {
 }
 
 void PropertySetMixinImpl::checkUnknown(rtl::OUString const & propertyName) {
-    if (propertyName.getLength() != 0) {
+    if (!propertyName.isEmpty()) {
         m_impl->get(
             static_cast< css::beans::XPropertySet * >(this), propertyName);
     }

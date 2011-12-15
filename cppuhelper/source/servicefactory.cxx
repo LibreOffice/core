@@ -113,7 +113,7 @@ Reference< registry::XSimpleRegistry > SAL_CALL createSimpleRegistry(
             createInstance(
                 loadSharedLibComponentFactory(
                     OUSTR("bootstrap.uno" SAL_DLLEXTENSION),
-                    0 == rBootstrapPath.getLength()
+                    rBootstrapPath.isEmpty()
                     ? get_this_libpath() : rBootstrapPath,
                     OUSTR("com.sun.star.comp.stoc.SimpleRegistry"),
                     Reference< lang::XMultiServiceFactory >(),
@@ -144,7 +144,7 @@ Reference< registry::XSimpleRegistry > SAL_CALL createNestedRegistry(
             createInstance(
                 loadSharedLibComponentFactory(
                     OUSTR("bootstrap.uno" SAL_DLLEXTENSION),
-                    0 == rBootstrapPath.getLength()
+                    rBootstrapPath.isEmpty()
                     ? get_this_libpath() : rBootstrapPath,
                     OUSTR("com.sun.star.comp.stoc.NestedRegistry"),
                     Reference< lang::XMultiServiceFactory >(),
@@ -247,7 +247,7 @@ static void add_access_control_entries(
     if (bootstrap.getFrom( OUSTR("UNO_AC_SINGLEUSER"), ac_user ))
     {
         // ac in single-user mode
-        if (ac_user.getLength())
+        if (!ac_user.isEmpty())
         {
             // - ac prop: single-user-id
             entry.bLateInitService = false;
@@ -383,7 +383,7 @@ Reference< lang::XMultiComponentFactory > bootstrapInitialSF(
     SAL_THROW( (Exception) )
 {
     OUString const & bootstrap_path =
-        0 == rBootstrapPath.getLength() ? get_this_libpath() : rBootstrapPath;
+        rBootstrapPath.isEmpty() ? get_this_libpath() : rBootstrapPath;
 
     Reference< lang::XMultiComponentFactory > xMgr(
         createInstance(
@@ -542,7 +542,7 @@ Reference< XComponentContext > bootstrapInitialContext(
             Reference< lang::XSingleComponentFactory > xFac(
                 loadSharedLibComponentFactory(
                     OUSTR("bootstrap.uno" SAL_DLLEXTENSION),
-                    0 == rBootstrapPath.getLength()
+                    rBootstrapPath.isEmpty()
                     ? get_this_libpath() : rBootstrapPath,
                 OUSTR("com.sun.star.comp.stoc.RegistryTypeDescriptionProvider"),
                 Reference< lang::XMultiServiceFactory >( xSF, UNO_QUERY ),
@@ -587,7 +587,7 @@ static Reference< lang::XMultiComponentFactory > createImplServiceFactory(
 
     // open a registry
     sal_Bool bRegistryShouldBeValid = sal_False;
-    if (rWriteRegistry.getLength() && !rReadRegistry.getLength())
+    if (!rWriteRegistry.isEmpty() && rReadRegistry.isEmpty())
     {
         bRegistryShouldBeValid = sal_True;
         xRegistry.set( createSimpleRegistry( rBootstrapPath ) );
@@ -603,7 +603,7 @@ static Reference< lang::XMultiComponentFactory > createImplServiceFactory(
             }
         }
     }
-    else if (rWriteRegistry.getLength() && rReadRegistry.getLength())
+    else if (!rWriteRegistry.isEmpty() && !rReadRegistry.isEmpty())
     {
         // default registry
         bRegistryShouldBeValid = sal_True;

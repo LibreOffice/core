@@ -1031,7 +1031,7 @@ inline void EnvironmentsData::getRegisteredEnvironments(
           iPos != aName2EnvMap.end(); ++iPos )
     {
         uno_Environment * pWeak = iPos->second;
-        if (!rEnvDcp.getLength() ||
+        if (rEnvDcp.isEmpty() ||
             rEnvDcp.equals( pWeak->pTypeName ))
         {
             ppFound[nSize] = 0;
@@ -1116,7 +1116,7 @@ static uno_Environment * initDefaultEnvironment(
         that->releaseInterface = unoenv_releaseInterface;
 
         OUString envPurpose = cppu::EnvDcp::getPurpose(rEnvDcp);
-        if (envPurpose.getLength())
+        if (!envPurpose.isEmpty())
         {
             rtl::OUString libStem = envPurpose.copy(envPurpose.lastIndexOf(':') + 1);
             libStem += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("_uno_uno") );
