@@ -236,15 +236,15 @@ public:
 
 // *** byte string import operations *** --------------------------------------
 
-    /** Reads and returns a zero terminted byte string and decreases a stream counter. */
+    /** Reads and returns a zero terminated byte string and decreases a stream counter. */
     static rtl::OString read_zeroTerminated_uInt8s_AsOString(SvStream& rStrm, sal_Int32& rnBytesLeft);
-    /** Reads and returns a zero terminted byte string and decreases a stream counter. */
+    /** Reads and returns a zero terminated byte string and decreases a stream counter. */
     inline static rtl::OUString read_zeroTerminated_uInt8s_AsOUString(SvStream& rStrm, sal_Int32& rnBytesLeft, rtl_TextEncoding eTextEnc)
     {
         return rtl::OStringToOUString(read_zeroTerminated_uInt8s_AsOString(rStrm, rnBytesLeft), eTextEnc);
     }
 
-    /** Appends a zero terminted byte string. */
+    /** Appends a zero terminated byte string. */
     static void         AppendCString( SvStream& rStrm, String& rString, rtl_TextEncoding eTextEnc );
 
 // *** HTML table names <-> named range names *** -----------------------------
