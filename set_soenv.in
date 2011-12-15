@@ -79,7 +79,8 @@ my ( $oldPATH, $SRC_ROOT, $JAVA_HOME, $JDK, $JAVAFLAGS, $OOO_SHELL,
      $WIN_GNUCOPY, $WIN_TOUCH, $MOZILLA_VERSION, $MOZILLA_TOOLKIT, $PREBUILD_MOZAB, $MOZILLABUILD,
      $PROEXT, $TARFILE_LOCATION, $GNUMAKE,
      $PYTHON, $SYSTEM_PYTHON, $SYSTEM_MOZILLA, $EPM_FLAGS,
-     $MACOSX_SDK_PATH);
+     $MACOSX_SDK_PATH,
+     $SYSBASE);
 #
 #-------------------------------------------
 # IId. Declaring the aliases.
@@ -1628,7 +1629,13 @@ ToFile( "SOLARINC",          $SOLARINC,          "e" );
 ToFile( "COMP_ENV",          $COMP_ENV,          "e" );
 ToFile( "JAVAHOME",          $JAVAHOME,          "e" );
 ToFile( "CC",                $CC,                "e" );
-ToFile( "SYSBASE",           "$ENV{SYSBASE}",    "e" ) if defined $ENV{SYSBASE};
+if ( defined $ENV{SYSBASE} )
+{  $SYSBASE = $ENV{SYSBASE};
+}
+else
+{  $SYSBASE = '';
+}
+ToFile( "SYSBASE",           "$SYSBASE",         "e" );
 ToFile( "CROSS_COMPILING",   "@CROSS_COMPILING@","e" );
 ToFile( "AR",                "@AR@",             "e" );
 ToFile( "DLLTOOL",           "@DLLTOOL@",        "e" );
