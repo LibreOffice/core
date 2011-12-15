@@ -650,8 +650,11 @@ UpdateInformationProvider::getUpdateInformationEnumeration(
             if( m_bCancelled.check() )
                 break;
         }
-        // rethrow runtime exceptions
-        catch( uno::RuntimeException const & ) { throw; }
+        catch( uno::RuntimeException const& /*e*/)
+        {
+            // #i118675# ignore runtime exceptions for now
+            // especially the "unsatisfied query for interface of type com.sun.star.ucb.XCommandProcessor!" exception
+        }
 
         // rethrow only if last url in the list
         catch( uno::Exception const & )
