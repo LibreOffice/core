@@ -149,10 +149,8 @@ gb_LinkTarget__RPATHS := \
 	SDKBIN: \
 	NONE:@__VIA_LIBRARY_PATH__@ \
 
-# The below contains a bad hack to set the correct install name for
-# libuno_salhepergcc3.dylib.3, with a trailing ".3":
 define gb_LinkTarget__get_installname
-$(if $(2),-install_name '$(2)$(1)$(if $(filter $(1),libuno_salhelpergcc3.dylib),.3)',$(error
+$(if $(2),-install_name '$(2)$(1)',$(error
     cannot determine -install_name for $(2)))
 endef
 
