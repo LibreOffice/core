@@ -77,6 +77,20 @@ $(call gb_Deliver_add_deliverable,$(call gb_Library_get_target,$(1)),$(call gb_L
 
 endef
 
+define gb_Library_set_soversion_script
+$(if $(2),,$(call gb_Output_error,gb_Library_set_soversion_script: no version))
+$(if $(3),,$(call gb_Output_error,gb_Library_set_soversion_script: no script))
+$(call gb_LinkTarget_get_target,$(call gb_Library_get_linktargetname,$(1))) : \
+	$(3)
+$(call gb_Library_get_target,$(1)) : SOVERSION := $(2)
+$(call gb_Library_get_target,$(1)) : SOVERSIONSCRIPT := $(3)
+$(call gb_Library_get_target,$(1)) \
+$(call gb_Library_get_clean_target,$(1)) : \
+	AUXTARGETS += $(call gb_Library_get_target,$(1)).$(2)
+$(call gb_LinkTarget_set_auxtargets,$(call gb_Library_get_linktargetname,$(1)),\
+	$(call gb_LinkTarget_get_target,$(call gb_Library_get_linktargetname,$(1))).$(2))
+endef
+
 define gb_Library_set_componentfile
 $(call gb_ComponentTarget_ComponentTarget,$(2),$(call gb_Library__get_componentprefix,$(1)),\
 	$(call gb_Library_get_runtime_filename,$(if $(MERGELIBS),$(if $(filter $(gb_MERGED_LIBS),$(1)),merged,$(1)),$(1))))

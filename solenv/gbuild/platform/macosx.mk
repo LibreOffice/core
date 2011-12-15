@@ -197,6 +197,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(if $(filter Executable,$(TARGETTYPE)),$(gb_Executable_TARGETTYPEFLAGS)) \
 		$(if $(filter Library CppunitTest,$(TARGETTYPE)),$(gb_Library_TARGETTYPEFLAGS)) \
 		$(if $(filter Library,$(TARGETTYPE)),$(gb_Library_LTOFLAGS)) \
+		$(if $(SOVERSIONSCRIPT),-Wl$(COMMA)-exported_symbols_list$(COMMA)$(SOVERSIONSCRIPT)) \
 		$(subst \d,$$,$(RPATH)) \
 		$(T_LDFLAGS) \
 		$(call gb_LinkTarget__get_liblinkflags,$(LINKED_LIBS)) \
@@ -209,13 +210,14 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(foreach extraobjectlist,$(EXTRAOBJECTLISTS),`cat $(extraobjectlist)`) \
 		$(foreach lib,$(LINKED_STATIC_LIBS),$(call gb_StaticLibrary_get_target,$(lib))) \
 		$(LIBS) \
-		-o $(1) \
+		-o $(if $(SOVERSION),$(1).$(SOVERSION),$(1)) \
 		`cat $${DYLIB_FILE}` && \
+	$(if $(SOVERSION),ln -sf $(notdir $(1)).$(SOVERSION) $(1),:) && \
     $(if $(filter Executable,$(TARGETTYPE)), \
         $(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl Executable \
             $(LAYER) $(1) &&) \
 	$(if $(filter Library CppunitTest,$(TARGETTYPE)),\
-		$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl Library $(LAYER) $(1) && \
+		$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl Library $(LAYER) $(if $(SOVERSION),$(1).$(SOVERSION),$(1)) && \
 		ln -sf $(1) $(patsubst %.dylib,%.jnilib,$(1)) &&) \
 	rm -f $${DYLIB_FILE})
 endef
