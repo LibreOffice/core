@@ -133,6 +133,12 @@ copy-stuff:
 	for F in uno_services uno_types; do \
 		sed -e 's!uri="./!uri="$(APP_DATA_PATH)/lib/!g' <$(SRC_ROOT)/testtools/$(INPATH)/lib/$${F}.rdb >assets/lib/$${F}.rdb; \
 	done
+#
+# Then gdbserver and gdb.setup so that we can debug with ndk-gdb.
+#
+	cp $(NDK_HOME)/toolchains/arm-linux-androideabi-4.4.3/prebuilt/gdbserver $(SODEST)
+	echo set solib-search-path ./obj/local/armeabi-v7a >$(SODEST)/gdb.setup
+
 
 build-ant: copy-stuff
 	unset JAVA_HOME && ant debug
