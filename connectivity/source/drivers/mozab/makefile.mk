@@ -85,7 +85,11 @@ SLOFILES=\
             
 # --- MOZAB BASE Library -----------------------------------
 
+.IF "$(GUI)"=="WNT"
+SHL1VERSIONMAP=$(SOLARENV)/src/component.map
+.ELSE # just a quick hack for GCC fdo#42865
 SHL1USE_EXPORTS = name
+.ENDIF
 SHL1TARGET=	$(TARGET)$(DLLPOSTFIX)
 SHL1OBJS=$(SLOFILES)
 SHL1STDLIBS=\
@@ -145,7 +149,11 @@ DEPOBJFILES=$(SLO2FILES)
 
 # --- MOZAB BASE Library -----------------------------------
 
+.IF "$(GUI)"=="WNT"
+SHL2VERSIONMAP=$(TARGET2).map
+.ELSE # just a quick hack for GCC fdo#42865
 SHL2USE_EXPORTS = name
+.ENDIF
 SHL2NOCHECK=TRUE
 SHL2TARGET=	$(TARGET2)$(DLLPOSTFIX)
 SHL2OBJS=$(SLO2FILES)
