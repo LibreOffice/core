@@ -52,12 +52,12 @@ static oslModule pCloseModule = NULL;
 static SalInstance* tryInstance( const OUString& rModuleBase )
 {
     SalInstance* pInst = NULL;
-
+#ifndef ANDROID
     // Disable gtk3 plugin load except in experimental mode for now.
     if( rModuleBase.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "gtk3" ) ) &&
         !SalGenericSystem::enableExperimentalFeatures() )
         return NULL;
-
+#endif
     OUStringBuffer aModName( 128 );
     aModName.appendAscii( SAL_DLLPREFIX"vclplug_" );
     aModName.append( rModuleBase );
