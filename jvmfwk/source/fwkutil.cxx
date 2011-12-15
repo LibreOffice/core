@@ -229,7 +229,7 @@ rtl::OUString findPlugin(
     {
         expandedPlugin = cppu::bootstrap_expandUri(plugin);
     }
-    catch (com::sun::star::lang::IllegalArgumentException & e)
+    catch (const com::sun::star::lang::IllegalArgumentException & e)
     {
         throw FrameworkException(
             JFW_E_ERROR,
@@ -244,7 +244,7 @@ rtl::OUString findPlugin(
     {
         sUrl = rtl::Uri::convertRelToAbs(baseUrl, expandedPlugin);
     }
-    catch (rtl::MalformedUriException & e)
+    catch (const rtl::MalformedUriException & e)
     {
         throw FrameworkException(
             JFW_E_ERROR,

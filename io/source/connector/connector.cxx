@@ -192,7 +192,7 @@ namespace stoc_connector
             }
             return r;
         }
-        catch (rtl::MalformedUriException & rEx)
+        catch (const rtl::MalformedUriException & rEx)
         {
             throw ConnectionSetupException(rEx.getMessage(),
                                            Reference< XInterface > ());

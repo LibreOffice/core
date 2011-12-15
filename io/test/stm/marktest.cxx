@@ -158,7 +158,7 @@ sal_Int32 OMarkableOutputStreamTest::test(
             }
 
         }
-        catch( Exception &e )
+        catch( const Exception &e )
         {
             OString o = OUStringToOString( e.Message , RTL_TEXTENCODING_ASCII_US );
             BUILD_ERROR( 0 , o.getStr() );
@@ -525,7 +525,7 @@ sal_Int32 OMarkableInputStreamTest::test(
             }
 
         }
-        catch( Exception & e )
+        catch( const Exception & e )
         {
             OString o = OUStringToOString( e.Message , RTL_TEXTENCODING_ASCII_US );
             BUILD_ERROR( 0 , o.getStr() );

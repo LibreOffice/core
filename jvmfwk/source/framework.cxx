@@ -234,7 +234,7 @@ javaFrameworkError SAL_CALL jfw_findAllJREs(JavaInfo ***pparInfo, sal_Int32 *pSi
         *pSize = nSize;
         return errcode;
     }
-    catch (jfw::FrameworkException& e)
+    catch (const jfw::FrameworkException& e)
     {
         retVal = e.errorCode;
         fprintf(stderr, "%s\n", e.message.getStr());
@@ -417,7 +417,7 @@ javaFrameworkError SAL_CALL jfw_startVM(JavaVMOption *arOptions, sal_Int32 cOpti
         }
         OSL_ASSERT(plerr != JFW_PLUGIN_E_WRONG_VENDOR);
     }
-    catch (jfw::FrameworkException& e)
+    catch (const jfw::FrameworkException& e)
     {
         errcode = e.errorCode;
         fprintf(stderr, "%s\n", e.message.getStr());
@@ -626,7 +626,7 @@ javaFrameworkError SAL_CALL jfw_findAndSelectJRE(JavaInfo **pInfo)
             errcode = JFW_E_NO_JAVA_FOUND;
         }
     }
-    catch (jfw::FrameworkException& e)
+    catch (const jfw::FrameworkException& e)
     {
         errcode = e.errorCode;
         fprintf(stderr, "%s\n", e.message.getStr());
@@ -715,7 +715,7 @@ javaFrameworkError SAL_CALL jfw_getSelectedJRE(JavaInfo **ppInfo)
             return JFW_E_INVALID_SETTINGS;
         *ppInfo = aInfo.detach();
     }
-    catch (jfw::FrameworkException& e)
+    catch (const jfw::FrameworkException& e)
     {
         errcode = e.errorCode;
         fprintf(stderr, "%s\n", e.message.getStr());
@@ -843,7 +843,7 @@ javaFrameworkError SAL_CALL jfw_getJavaInfoByPath(
         if (*ppInfo == NULL && errcode != JFW_E_FAILED_VERSION)
             errcode = JFW_E_NOT_RECOGNIZED;
     }
-    catch (jfw::FrameworkException& e)
+    catch (const jfw::FrameworkException& e)
     {
         errcode = e.errorCode;
         fprintf(stderr, "%s\n", e.message.getStr());
@@ -877,7 +877,7 @@ javaFrameworkError SAL_CALL jfw_setSelectedJRE(JavaInfo const *pInfo)
             jfw::setJavaSelected();
         }
     }
-    catch (jfw::FrameworkException& e)
+    catch (const jfw::FrameworkException& e)
     {
         errcode = e.errorCode;
         fprintf(stderr, "%s\n", e.message.getStr());
@@ -910,7 +910,7 @@ javaFrameworkError SAL_CALL jfw_setEnabled(sal_Bool bEnabled)
         node.setEnabled(bEnabled);
         node.write();
     }
-    catch (jfw::FrameworkException& e)
+    catch (const jfw::FrameworkException& e)
     {
         errcode = e.errorCode;
         fprintf(stderr, "%s\n", e.message.getStr());
@@ -932,7 +932,7 @@ javaFrameworkError SAL_CALL jfw_getEnabled(sal_Bool *pbEnabled)
         jfw::MergedSettings settings;
         *pbEnabled = settings.getEnabled();
     }
-    catch (jfw::FrameworkException& e)
+    catch (const jfw::FrameworkException& e)
     {
         errcode = e.errorCode;
         fprintf(stderr, "%s\n", e.message.getStr());
@@ -957,7 +957,7 @@ javaFrameworkError SAL_CALL jfw_setVMParameters(
         node.setVmParameters(arOptions, nLen);
         node.write();
     }
-    catch (jfw::FrameworkException& e)
+    catch (const jfw::FrameworkException& e)
     {
         errcode = e.errorCode;
         fprintf(stderr, "%s\n", e.message.getStr());
@@ -982,7 +982,7 @@ javaFrameworkError SAL_CALL jfw_getVMParameters(
         const jfw::MergedSettings settings;
         settings.getVmParametersArray(parOptions, pLen);
     }
-    catch (jfw::FrameworkException& e)
+    catch (const jfw::FrameworkException& e)
     {
         errcode = e.errorCode;
         fprintf(stderr, "%s\n", e.message.getStr());
@@ -1005,7 +1005,7 @@ javaFrameworkError SAL_CALL jfw_setUserClassPath(rtl_uString * pCp)
         node.setUserClassPath(pCp);
         node.write();
     }
-    catch (jfw::FrameworkException& e)
+    catch (const jfw::FrameworkException& e)
     {
         errcode = e.errorCode;
         fprintf(stderr, "%s\n", e.message.getStr());
@@ -1028,7 +1028,7 @@ javaFrameworkError SAL_CALL jfw_getUserClassPath(rtl_uString ** ppCP)
         *ppCP = settings.getUserClassPath().pData;
         rtl_uString_acquire(*ppCP);
     }
-    catch (jfw::FrameworkException& e)
+    catch (const jfw::FrameworkException& e)
     {
         errcode = e.errorCode;
         fprintf(stderr, "%s\n", e.message.getStr());
@@ -1052,7 +1052,7 @@ javaFrameworkError SAL_CALL jfw_addJRELocation(rtl_uString * sLocation)
         node.addJRELocation(sLocation);
         node.write();
     }
-    catch (jfw::FrameworkException& e)
+    catch (const jfw::FrameworkException& e)
     {
         errcode = e.errorCode;
         fprintf(stderr, "%s\n", e.message.getStr());
@@ -1078,7 +1078,7 @@ javaFrameworkError SAL_CALL jfw_setJRELocations(
         node.setJRELocations(arLocations, nLen);
         node.write();
     }
-    catch (jfw::FrameworkException& e)
+    catch (const jfw::FrameworkException& e)
     {
         errcode = e.errorCode;
         fprintf(stderr, "%s\n", e.message.getStr());
@@ -1103,7 +1103,7 @@ javaFrameworkError SAL_CALL jfw_getJRELocations(
         const jfw::MergedSettings settings;
         settings.getJRELocations(parLocations, pLen);
     }
-    catch (jfw::FrameworkException& e)
+    catch (const jfw::FrameworkException& e)
     {
         errcode = e.errorCode;
         fprintf(stderr, "%s\n", e.message.getStr());

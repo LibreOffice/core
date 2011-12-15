@@ -97,7 +97,7 @@ void MyThread::run()
     {
         m_rConnection = m_rAcceptor->accept( m_sConnectionDescription );
     }
-    catch ( Exception &e)
+    catch ( const Exception &e)
     {
         OString tmp= OUStringToOString( e.Message , RTL_TEXTENCODING_ASCII_US );
         printf( "Exception was thrown by acceptor thread: %s\n", tmp.getStr() );
@@ -261,7 +261,7 @@ int SAL_CALL main( int argc, char * argv[] )
         rAcceptor->accept( OUString(RTL_CONSTASCII_USTRINGPARAM("socket,host=localhost,port=2001")) );
         OSL_FAIL( "already existing exception expected" );
     }
-    catch( AlreadyAcceptingException & e)
+    catch( AlreadyAcceptingException & )
     {
         // everything is fine
     }

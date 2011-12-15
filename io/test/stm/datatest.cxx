@@ -213,7 +213,7 @@ sal_Int32 ODataStreamTest::test(
                 }
             }
         }
-        catch( Exception & e )
+        catch( const Exception & e )
         {
             OString o = OUStringToOString( e.Message , RTL_TEXTENCODING_ASCII_US );
             BUILD_ERROR( 0 , o.getStr() );
@@ -796,7 +796,7 @@ sal_Int32 OObjectStreamTest::test(  const OUString& TestName,
 
             }
         }
-        catch( Exception &e )  {
+        catch( const Exception &e )  {
             OString o = OUStringToOString( e.Message , RTL_TEXTENCODING_ASCII_US );
             BUILD_ERROR( 0 , o.getStr() );
         }

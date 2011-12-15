@@ -89,7 +89,7 @@ void * ::jvmaccess::ClassPath::doTranslateToUrls(
                     css::uno::UNO_QUERY_THROW);
                 try {
                     url = expUrl->expand(expander);
-                } catch (css::lang::IllegalArgumentException & e) {
+                } catch (const css::lang::IllegalArgumentException & e) {
                     throw css::uno::RuntimeException(
                         (::rtl::OUString(
                             RTL_CONSTASCII_USTRINGPARAM(

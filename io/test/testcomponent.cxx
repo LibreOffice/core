@@ -93,7 +93,7 @@ int main (int argc, char **argv)
                 xSimpleReg );
         }
     }
-    catch( Exception &e ) {
+    catch( const Exception &e ) {
         printf( "%s\n" , OUStringToOString( e.Message , RTL_TEXTENCODING_ASCII_US ).getStr() );
 
         exit(1);
@@ -119,7 +119,7 @@ int main (int argc, char **argv)
             aDllName,
             xSimpleReg );
     }
-    catch( Exception & e )
+    catch( Exception & )
     {
         printf( "Couldn't reach dll %s\n" , szBuf );
         exit(1);
@@ -163,7 +163,7 @@ int main (int argc, char **argv)
             nNewHandle = xTest->test(
                 OStringToOUString( argv[1] , RTL_TEXTENCODING_ASCII_US ) , x , nHandle );
         }
-        catch( Exception & e ) {
+        catch( const Exception & e ) {
             OString o  = OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US );
             printf( "testcomponent : uncaught exception %s\n" , o.getStr() );
             exit(1);

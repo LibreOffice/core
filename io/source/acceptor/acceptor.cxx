@@ -242,7 +242,7 @@ namespace io_acceptor
                     }
                 }
             }
-            catch (rtl::MalformedUriException & rEx)
+            catch (const rtl::MalformedUriException & rEx)
             {
                 throw IllegalArgumentException(
                     rEx.getMessage(),
