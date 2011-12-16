@@ -252,15 +252,31 @@ GrammarCheckingIterator::GrammarCheckingIterator( const uno::Reference< lang::XM
     m_aEventListeners( MyMutex::get() ),
     m_aNotifyListeners( MyMutex::get() )
 {
-    osl_createThread( workerfunc, this );
+    m_thread = osl_createThread( workerfunc, this );
 }
 
 
 GrammarCheckingIterator::~GrammarCheckingIterator()
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( MyMutex::get() );
+    TerminateThread();
 }
 
+void GrammarCheckingIterator::TerminateThread()
+{
+    oslThread t;
+    {
+        ::osl::Guard< ::osl::Mutex > aGuard( MyMutex::get() );
+        t = m_thread;
+        m_thread = 0;
+        m_bEnd = sal_True;
+        m_aWakeUpThread.set();
+    }
+    if (t != 0)
+    {
+        osl_joinWithThread(t);
+        osl_destroyThread(t);
+    }
+}
 
 sal_Int32 GrammarCheckingIterator::NextDocId()
 {
@@ -489,19 +505,16 @@ void GrammarCheckingIterator::DequeueAndCheck()
     uno::Sequence< sal_Int32 >      aLangPortions;
     uno::Sequence< lang::Locale >   aLangPortionsLocale;
 
-    // ---- THREAD SAFE START ----
-    bool bEnd = false;
-    {
-        ::osl::Guard< ::osl::Mutex > aGuard( MyMutex::get() );
-        bEnd = m_bEnd;
-    }
-    // ---- THREAD SAFE END ----
-    while (!bEnd)
+    for (;;)
     {
         // ---- THREAD SAFE START ----
         bool bQueueEmpty = false;
         {
             ::osl::Guard< ::osl::Mutex > aGuard( MyMutex::get() );
+            if (m_bEnd)
+            {
+                break;
+            }
             bQueueEmpty = m_aFPEntriesQueue.empty();
         }
         // ---- THREAD SAFE END ----
@@ -605,6 +618,10 @@ void GrammarCheckingIterator::DequeueAndCheck()
             // ---- THREAD SAFE START ----
             {
                 ::osl::Guard< ::osl::Mutex > aGuard( MyMutex::get() );
+                if (m_bEnd)
+                {
+                    break;
+                }
                 // Check queue state again
                 if (m_aFPEntriesQueue.empty())
                     m_aWakeUpThread.reset();
@@ -618,17 +635,7 @@ void GrammarCheckingIterator::DequeueAndCheck()
             // safe implemented.
             m_aWakeUpThread.wait();
         }
-
-        // ---- THREAD SAFE START ----
-        {
-            ::osl::Guard< ::osl::Mutex > aGuard( MyMutex::get() );
-            bEnd = m_bEnd;
-        }
-        // ---- THREAD SAFE END ----
     }
-
-    //!! This one must be the very last statement to call in this function !!
-    m_aRequestEndThread.set();
 }
 
 
@@ -901,19 +908,7 @@ throw (uno::RuntimeException)
     lang::EventObject aEvt( (linguistic2::XProofreadingIterator *) this );
     m_aEventListeners.disposeAndClear( aEvt );
 
-    // now end the thread...
-    m_aRequestEndThread.reset();
-    // ---- THREAD SAFE START ----
-    {
-        ::osl::Guard< ::osl::Mutex > aGuard( MyMutex::get() );
-        m_bEnd = sal_True;
-    }
-    // ---- THREAD SAFE END ----
-    m_aWakeUpThread.set();
-    const TimeValue aTime = { 3, 0 };   // wait 3 seconds...
-    m_aRequestEndThread.wait( &aTime );
-    // if the call ends because of time-out we will end anyway...
-
+    TerminateThread();
 
     // ---- THREAD SAFE START ----
     {
