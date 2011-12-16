@@ -1,0 +1,215 @@
+--- misc/cairo-1.10.2/build/Makefile.win32.common	2009-06-14 23:53:24.000000000 +0200
++++ misc/build/cairo-1.10.2/build/Makefile.win32.common	2011-12-16 11:49:42.998709720 +0100
+@@ -22,8 +22,8 @@
+ OPT := -MD -O2
+ endif
+ 
+-PIXMAN_CFLAGS := -I$(top_srcdir)/../pixman/pixman
+-PIXMAN_LIBS := $(top_builddir)/../pixman/pixman/$(CFG)/pixman-1.lib
++PIXMAN_CFLAGS :=  -I../../../../inc
++PIXMAN_LIBS := ../../../../lib/pixman-1.lib
+ 
+ CAIRO_LIBS =  gdi32.lib msimg32.lib user32.lib
+ ifeq ($(CAIRO_HAS_PNG_FUNCTIONS),1)
+@@ -33,13 +33,15 @@
+ ifeq ($(CAIRO_HAS_PS_SURFACE)$(CAIRO_HAS_PDF_SURFACE),00)
+ else
+ ZLIB_CFLAGS += -I$(top_srcdir)/../zlib/
+-CAIRO_LIBS += $(top_builddir)/../zlib/zdll.lib
++CAIRO_LIBS += $(top_builddir)/../zlib/zlib.lib
+ endif
+ 
+ DEFAULT_CFLAGS = -nologo $(MS_MDFLAGS) $(OPT)
+ DEFAULT_CFLAGS += -D_CRT_SECURE_NO_DEPRECATE -D_CRT_NONSTDC_NO_DEPRECATE
+ DEFAULT_CFLAGS += -I. -I$(top_srcdir)
+ DEFAULT_CFLAGS += $(PIXMAN_CFLAGS) $(LIBPNG_CFLAGS) $(ZLIB_CFLAGS)
++DEFAULT_CFLAGS += $(SOLARINC)
++DEFAULT_CFLAGS += -I$(SOLARVER)/$(INPATH)/inc/zlib -I$(SOLARVER)/$(INPATH)/inc/external/libpng -DZLIB_FIX
+ 
+ CAIRO_CFLAGS = $(DEFAULT_CFLAGS) $(CFLAGS)
+ 
+@@ -61,7 +63,7 @@
+ 
+ $(CFG)/%.obj: %.c
+ 	@mkdir -p $(CFG)
+-	@$(CC) $(CAIRO_CFLAGS) -c -Fo"$@" $<
++	$(CC) $(CAIRO_CFLAGS) -c -Fo"$@" $<
+ 
+ $(CFG)/%-static.obj: %.c
+ 	@mkdir -p $(CFG)
+--- misc/cairo-1.10.2/build/Makefile.win32.features	2010-08-18 09:47:30.000000000 +0200
++++ misc/build/cairo-1.10.2/build/Makefile.win32.features	2011-12-16 11:50:50.600524156 +0100
+@@ -30,7 +30,7 @@
+ CAIRO_HAS_FC_FONT=0
+ CAIRO_HAS_PS_SURFACE=1
+ CAIRO_HAS_PDF_SURFACE=1
+-CAIRO_HAS_SVG_SURFACE=1
++CAIRO_HAS_SVG_SURFACE=0
+ CAIRO_HAS_TEST_SURFACES=0
+ CAIRO_HAS_TEE_SURFACE=0
+ CAIRO_HAS_XML_SURFACE=0
+--- misc/cairo-1.10.2/build/config.sub	2009-08-14 23:33:32.000000000 +0200
++++ misc/build/cairo-1.10.2/build/config.sub	2011-12-16 11:53:38.935974163 +0100
+@@ -1272,7 +1272,7 @@
+ 	      | -ekkobsd* | -kfreebsd* | -freebsd* | -riscix* | -lynxos* \
+ 	      | -bosx* | -nextstep* | -cxux* | -aout* | -elf* | -oabi* \
+ 	      | -ptx* | -coff* | -ecoff* | -winnt* | -domain* | -vsta* \
+-	      | -udi* | -eabi* | -lites* | -ieee* | -go32* | -aux* \
++	      | -udi* | -androideabi* | -eabi* | -lites* | -ieee* | -go32* | -aux* \
+ 	      | -chorusos* | -chorusrdb* | -cegcc* \
+ 	      | -cygwin* | -pe* | -psos* | -moss* | -proelf* | -rtems* \
+ 	      | -mingw32* | -linux-gnu* | -linux-newlib* | -linux-uclibc* \
+--- misc/cairo-1.10.2/configure	2010-12-25 15:22:57.000000000 +0100
++++ misc/build/cairo-1.10.2/configure	2011-12-16 12:15:47.141406809 +0100
+@@ -19259,61 +19228,11 @@
+ rm -f confcache
+ 
+ 
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for compress in -lz" >&5
+-$as_echo_n "checking for compress in -lz... " >&6; }
+-if test "${ac_cv_lib_z_compress+set}" = set; then :
+-  $as_echo_n "(cached) " >&6
+-else
+-  ac_check_lib_save_LIBS=$LIBS
+-LIBS="-lz  $LIBS"
+-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+-/* end confdefs.h.  */
+-
+-/* Override any GCC internal prototype to avoid an error.
+-   Use char because int might match the return type of a GCC
+-   builtin and then its argument prototype would still apply.  */
+-#ifdef __cplusplus
+-extern "C"
+-#endif
+-char compress ();
+-int
+-main ()
+-{
+-return compress ();
+-  ;
+-  return 0;
+-}
+-_ACEOF
+-if ac_fn_c_try_link "$LINENO"; then :
+-  ac_cv_lib_z_compress=yes
+-else
+-  ac_cv_lib_z_compress=no
+-fi
+-rm -f core conftest.err conftest.$ac_objext \
+-    conftest$ac_exeext conftest.$ac_ext
+-LIBS=$ac_check_lib_save_LIBS
+-fi
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_z_compress" >&5
+-$as_echo "$ac_cv_lib_z_compress" >&6; }
+-if test "x$ac_cv_lib_z_compress" = x""yes; then :
+-  ac_fn_c_check_header_mongrel "$LINENO" "zlib.h" "ac_cv_header_zlib_h" "$ac_includes_default"
+-if test "x$ac_cv_header_zlib_h" = x""yes; then :
+-
+ 	  have_libz=yes
+ 
+ $as_echo "#define HAVE_ZLIB 1" >>confdefs.h
+ 
+ 
+-else
+-  have_libz="no (requires zlib http://www.gzip.org/zlib/)"
+-fi
+-
+-
+-else
+-  have_libz="no (requires zlib http://www.gzip.org/zlib/)"
+-fi
+-
+-
+ { $as_echo "$as_me:${as_lineno-$LINENO}: checking for dlsym in -ldl" >&5
+ $as_echo_n "checking for dlsym in -ldl... " >&6; }
+ if test "${ac_cv_lib_dl_dlsym+set}" = set; then :
+@@ -26427,7 +26346,7 @@
+ 
+   if test "x$png_REQUIRES" = x; then
+     # libpng13 is GnuWin32's libpng-1.2.8 :-(
+-    for l in libpng libpng14 libpng12 libpng13 libpng10; do
++    for l in libpng libpng14 libpng12 libpng15 libpng13 libpng10; do
+       if $PKG_CONFIG --exists $l ; then
+         png_REQUIRES=$l
+         use_png=yes
+--- misc/cairo-1.10.2/configure.ac	2010-12-13 17:30:14.000000000 +0100
++++ misc/build/cairo-1.10.2/configure.ac	2011-12-16 11:57:32.007884203 +0100
+@@ -33,13 +33,8 @@
+ 
+ dnl ===========================================================================
+ 
+-AC_CHECK_LIB(z, compress,
+-	 [AC_CHECK_HEADER(zlib.h, [
+ 	  have_libz=yes
+ 	  AC_DEFINE(HAVE_ZLIB, 1, [Define to 1 if you have zlib available])
+-	 ],
+-	 [have_libz="no (requires zlib http://www.gzip.org/zlib/)"])],
+-	 [have_libz="no (requires zlib http://www.gzip.org/zlib/)"])
+
+ AC_CHECK_LIB(dl, dlsym,
+ 	     [have_dlsym=yes; have_dl=yes],
+@@ -279,7 +271,7 @@
+   AC_ARG_VAR([png_REQUIRES], [module name for libpng to search for using pkg-config])
+   if test "x$png_REQUIRES" = x; then
+     # libpng13 is GnuWin32's libpng-1.2.8 :-(
+-    for l in libpng libpng14 libpng12 libpng13 libpng10; do
++    for l in libpng libpng14 libpng12 libpng15 libpng13 libpng10; do
+       if $PKG_CONFIG --exists $l ; then
+         png_REQUIRES=$l
+         use_png=yes
+--- misc/cairo-1.10.2/src/cairo-deflate-stream.c	2010-06-18 13:47:12.000000000 +0200
++++ misc/build/cairo-1.10.2/src/cairo-deflate-stream.c	2011-12-16 11:48:52.381857312 +0100
+@@ -37,7 +37,11 @@
+ #include "cairoint.h"
+ #include "cairo-error-private.h"
+ #include "cairo-output-stream-private.h"
++#ifdef ZLIB_FIX
++#include <zlib/zlib.h>
++#else
+ #include <zlib.h>
++#endif
+ 
+ #define BUFFER_SIZE 16384
+ 
+--- misc/cairo-1.10.2/src/cairo-output-stream.c	2010-07-12 10:57:03.000000000 +0200
++++ misc/build/cairo-1.10.2/src/cairo-output-stream.c	2011-12-16 11:48:52.389858238 +0100
+@@ -313,7 +313,11 @@
+ 	d = 0.0;
+ 
+     locale_data = localeconv ();
++#ifdef __ANDROID__
++    decimal_point = ".";
++#else
+     decimal_point = locale_data->decimal_point;
++#endif
+     decimal_point_len = strlen (decimal_point);
+ 
+     assert (decimal_point_len != 0);
+--- misc/cairo-1.10.2/src/cairo-pdf-surface.c	2010-12-25 15:21:34.000000000 +0100
++++ misc/build/cairo-1.10.2/src/cairo-pdf-surface.c	2011-12-16 11:48:52.384857660 +0100
+@@ -57,7 +57,11 @@
+ #include "cairo-type3-glyph-surface-private.h"
+ 
+ #include <time.h>
++#ifdef ZLIB_FIX
++#include <zlib/zlib.h>
++#else
+ #include <zlib.h>
++#endif
+ 
+ /* Issues:
+  *
+--- misc/cairo-1.10.2/src/cairo-ps-surface.c	2010-12-25 15:21:34.000000000 +0100
++++ misc/build/cairo-1.10.2/src/cairo-ps-surface.c	2011-12-16 11:48:52.388858122 +0100
+@@ -72,7 +72,11 @@
+ #include <stdio.h>
+ #include <ctype.h>
+ #include <time.h>
++#ifdef ZLIB_FIX
++#include <zlib/zlib.h>
++#else
+ #include <zlib.h>
++#endif
+ #include <errno.h>
+ 
+ #define DEBUG_PS 0

@@ -42,10 +42,10 @@ all:
 
 # --- Files --------------------------------------------------------
 
-CAIROVERSION=1.8.0
+CAIROVERSION=1.10.2
 
 TARFILE_NAME=$(PRJNAME)-$(CAIROVERSION)
-TARFILE_MD5=4ea70ea87b47e92d318d4e7f5b940f47
+TARFILE_MD5=f101a9e88b783337b20b2e26dfd26d5f
 
 PATCH_FILES=..$/$(TARFILE_NAME).patch
 
@@ -55,7 +55,7 @@ PATCH_FILES+=..$/$(TARFILE_NAME).ios.patch
 .ENDIF
 
 cairo_CFLAGS=$(SOLARINC)
-cairo_LDFLAGS=$(SOLARLIB)
+cairo_LDFLAGS=-L$(SOLARENV)$/$(OUTPATH)$/lib -L$(SOLARVER)$/$(INPATH)$/lib
 
 cairo_CPPFLAGS=
 

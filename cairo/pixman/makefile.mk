@@ -43,10 +43,10 @@ all:
 
 # --- Files --------------------------------------------------------
 
-PIXMANVERSION=0.12.0
+PIXMANVERSION=0.24.0
 
 TARFILE_NAME=pixman-$(PIXMANVERSION)
-TARFILE_MD5=09357cc74975b01714e00c5899ea1881
+TARFILE_MD5=db5ffcd50064421176e8afb7b85fd1a7
 
 PATCH_FILES=..$/$(TARFILE_NAME).patch
 

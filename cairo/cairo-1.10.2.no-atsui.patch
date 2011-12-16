@@ -1,0 +1,22 @@
+--- misc/cairo-1.10.2/src/cairo-quartz-font.c	2010-12-25 15:21:34.000000000 +0100
++++ misc/build/cairo-1.10.2/src/cairo-quartz-font.c	2011-12-16 09:54:18.672445207 +0100
+@@ -777,7 +777,7 @@
+     return ffont->cgFont;
+ }
+ 
+-#ifndef __LP64__
++#if 0
+ /*
+  * compat with old ATSUI backend
+  */
+--- misc/cairo-1.10.2/src/cairo-quartz.h	2010-06-18 13:47:13.000000000 +0200
++++ misc/build/cairo-1.10.2/src/cairo-quartz.h	2011-12-16 09:52:53.081501547 +0100
+@@ -66,7 +66,7 @@
+ cairo_public cairo_font_face_t *
+ cairo_quartz_font_face_create_for_cgfont (CGFontRef font);
+ 
+-#ifndef __LP64__
++#if 0
+ cairo_public cairo_font_face_t *
+ cairo_quartz_font_face_create_for_atsu_font_id (ATSUFontID font_id);
+ #endif
