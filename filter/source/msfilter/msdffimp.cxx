@@ -3380,7 +3380,7 @@ sal_Bool SvxMSDffManager::SeekToShape( SvStream& rSt, void* /* pClientData */, s
                 rSt >> aEscherF002Hd;
                 sal_uLong nEscherF002End = aEscherF002Hd.GetRecEndFilePos();
                 DffRecordHeader aEscherObjListHd;
-                while ( rSt.Tell() < nEscherF002End )
+                while (rSt.good() && rSt.Tell() < nEscherF002End)
                 {
                     rSt >> aEscherObjListHd;
                     if ( aEscherObjListHd.nRecVer != 0xf )
@@ -3417,6 +3417,8 @@ bool SvxMSDffManager::SeekToRec( SvStream& rSt, sal_uInt16 nRecId, sal_uLong nMa
     do
     {
         rSt >> aHd;
+        if (!rSt.good())
+            break;
         if ( aHd.nRecType == nRecId )
         {
             if ( nSkipCount )
@@ -3431,9 +3433,13 @@ bool SvxMSDffManager::SeekToRec( SvStream& rSt, sal_uInt16 nRecId, sal_uLong nMa
             }
         }
         if ( !bRet )
-            aHd.SeekToEndOfRecord( rSt );
+        {
+            bool bSeekSuccess = aHd.SeekToEndOfRecord( rSt );
+            if (!bSeekSuccess)
+                break;
+        }
     }
-    while ( rSt.GetError() == 0 && rSt.Tell() < nMaxFilePos && !bRet );
+    while ( rSt.good() && rSt.Tell() < nMaxFilePos && !bRet );
     if ( !bRet )
         rSt.Seek( nFPosMerk );  // FilePos restaurieren
     return bRet;
@@ -6018,10 +6024,17 @@ void SvxMSDffManager::GetFidclData( sal_uInt32 nOffsDggL )
 
             if ( mnIdClusters-- > 2 )
             {
-                if ( aDggAtomHd.nRecLen == ( mnIdClusters * sizeof( FIDCL ) + 16 ) )
+                const sal_Size nFIDCLsize = sizeof(sal_uInt32) * 2;
+                if ( aDggAtomHd.nRecLen == ( mnIdClusters * nFIDCLsize + 16 ) )
                 {
+                    sal_Size nMaxEntriesPossible = rStCtrl.remainingSize() / nFIDCLsize;
+                    SAL_WARN_IF(nMaxEntriesPossible < mnIdClusters,
+                        "escher", "FIDCL list longer than remaining bytes, ppt or parser is wrong");
+                    mnIdClusters = std::min(nMaxEntriesPossible, static_cast<sal_Size>(mnIdClusters));
+
                     mpFidcls = new FIDCL[ mnIdClusters ];
-                    for ( sal_uInt32 i = 0; i < mnIdClusters; i++ )
+                    memset(mpFidcls, 0, mnIdClusters * sizeof(FIDCL));
+                    for (sal_uInt32 i = 0; i < mnIdClusters; ++i)
                     {
                         rStCtrl >> mpFidcls[ i ].dgid
                                 >> mpFidcls[ i ].cspidCur;
@@ -6814,6 +6827,8 @@ bool SvxMSDffManager::ReadCommonRecordHeader(DffRecordHeader& rRec,
         rRec.nRecInstance, rRec.nRecType, rRec.nRecLen);
 }
 
+sal_uInt32 nMaxLegalRecordLength = SAL_MAX_UINT32 - DFF_COMMON_RECORD_HEADER_SIZE;
+
 /* also static */
 bool SvxMSDffManager::ReadCommonRecordHeader(SvStream& rSt,
     sal_uInt8& rVer, sal_uInt16& rInst, sal_uInt16& rFbt, sal_uInt32& rLength)
@@ -6822,7 +6837,11 @@ bool SvxMSDffManager::ReadCommonRecordHeader(SvStream& rSt,
     rSt >> nTmp >> rFbt >> rLength;
     rVer = sal::static_int_cast< sal_uInt8 >(nTmp & 15);
     rInst = nTmp >> 4;
-    return rSt.good();
+    if (!rSt.good())
+        return false;
+    if (rLength > nMaxLegalRecordLength)
+        return false;
+    return true;
 }
 
 sal_Bool SvxMSDffManager::ProcessClientAnchor(SvStream& rStData, sal_uInt32 nDatLen,
