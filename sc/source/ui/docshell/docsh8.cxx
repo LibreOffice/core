@@ -309,6 +309,10 @@ sal_uLong ScDocShell::DBaseImport( const String& rFullFileName, CharSet eCharSet
     long i;
     long nColCount = 0;
 
+    // Try to get the Text Encoding from the driver
+    if( eCharSet == RTL_TEXTENCODING_IBM_850 )
+        eCharSet = RTL_TEXTENCODING_DONTKNOW;
+
     try
     {
         String aTabName;

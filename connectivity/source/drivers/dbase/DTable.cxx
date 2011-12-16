@@ -268,6 +268,14 @@ void ODbaseTable::readHeader()
                         //case 0x69: m_eEncoding = ; break;     // Mazovia (Polish) MS-DOS
                         case 0x6A: m_eEncoding = RTL_TEXTENCODING_IBM_737; break;       // Greek MS-DOS (437G)
                         case 0x6B: m_eEncoding = RTL_TEXTENCODING_IBM_857; break;       // Turkish MS-DOS
+                        case 0x6C: m_eEncoding = RTL_TEXTENCODING_IBM_863; break;       // MS-DOS, Canada
+                        case 0x78: m_eEncoding = RTL_TEXTENCODING_MS_950; break;        // Windows, Traditional Chinese
+                        case 0x79: m_eEncoding = RTL_TEXTENCODING_MS_949; break;        // Windows, Korean (Hangul)
+                        case 0x7A: m_eEncoding = RTL_TEXTENCODING_MS_936; break;        // Windows, Simplified Chinese
+                        case 0x7B: m_eEncoding = RTL_TEXTENCODING_MS_932; break;        // Windows, Japanese (Shift-jis)
+                        case 0x7C: m_eEncoding = RTL_TEXTENCODING_MS_874; break;        // Windows, Thai
+                        case 0x7D: m_eEncoding = RTL_TEXTENCODING_MS_1255; break;       // Windows, Hebrew
+                        case 0x7E: m_eEncoding = RTL_TEXTENCODING_MS_1256; break;       // Windows, Arabic
                         case 0x96: m_eEncoding = RTL_TEXTENCODING_APPLE_CYRILLIC; break;    // Russian Macintosh
                         case 0x97: m_eEncoding = RTL_TEXTENCODING_APPLE_CENTEURO; break;    // Eastern European Macintosh
                         case 0x98: m_eEncoding = RTL_TEXTENCODING_APPLE_GREEK; break;   // Greek Macintosh
@@ -275,7 +283,10 @@ void ODbaseTable::readHeader()
                         case 0xC9: m_eEncoding = RTL_TEXTENCODING_MS_1251; break;       // Russian Windows
                         case 0xCA: m_eEncoding = RTL_TEXTENCODING_MS_1254; break;       // Turkish Windows
                         case 0xCB: m_eEncoding = RTL_TEXTENCODING_MS_1253; break;       // Greek Windows
+                        case 0xCC: m_eEncoding = RTL_TEXTENCODING_MS_1257; break;       // Windows, Baltic
                         default:
+                            // Default Encoding
+                            m_eEncoding = RTL_TEXTENCODING_IBM_850;
                             break;
                     }
                 }
