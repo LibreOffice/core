@@ -1,5 +1,5 @@
 --- misc/cairo-1.10.2/build/Makefile.win32.common	2009-06-14 23:53:24.000000000 +0200
-+++ misc/build/cairo-1.10.2/build/Makefile.win32.common	2011-12-16 11:49:42.998709720 +0100
++++ misc/build/cairo-1.10.2/build/Makefile.win32.common	2011-12-16 11:50:50.600524156 +0100
 @@ -22,8 +22,8 @@
  OPT := -MD -O2
  endif
@@ -38,7 +38,7 @@
  $(CFG)/%-static.obj: %.c
  	@mkdir -p $(CFG)
 --- misc/cairo-1.10.2/build/Makefile.win32.features	2010-08-18 09:47:30.000000000 +0200
-+++ misc/build/cairo-1.10.2/build/Makefile.win32.features	2011-12-16 11:50:50.600524156 +0100
++++ misc/build/cairo-1.10.2/build/Makefile.win32.features	2011-12-16 11:49:42.998709720 +0100
 @@ -30,7 +30,7 @@
  CAIRO_HAS_FC_FONT=0
  CAIRO_HAS_PS_SURFACE=1
@@ -214,8 +214,13 @@
  
  #define DEBUG_PS 0
 --- misc/cairo-1.10.2/src/cairo-ft-font.c	2010-12-25 15:21:34.000000000 +0100
-+++ misc/build/cairo-1.10.2/src/cairo-ft-font.c	2011-12-16 13:22:28.360171103 +0100
-@@ -538,12 +538,12 @@
++++ misc/build/cairo-1.10.2/src/cairo-ft-font.c	2011-12-16 13:40:11.921257695 +0100
+@@ -534,16 +534,16 @@
+     ret = FcPatternGetFTFace (pattern, FC_FT_FACE, 0, &font_face);
+     if (ret == FcResultMatch)
+ 	goto DONE;
+-    if (ret == FcResultOutOfMemory)
++    if (ret == 4 /*FcResultOutOfMemory*/)
  	return _cairo_error (CAIRO_STATUS_NO_MEMORY);
  
      ret = FcPatternGetString (pattern, FC_FILE, 0, (FcChar8 **) &filename);
