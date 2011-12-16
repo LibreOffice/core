@@ -50,6 +50,7 @@ SHL1STDLIBS=\
         $(CPPUHELPERLIB) 	\
         $(CPPULIB)			\
         $(SALLIB) \
+        $(SALHELPERLIB) \
         $(JVMACCESSLIB)
 
 SHL1VERSIONMAP = $(SOLARENV)/src/component.map
