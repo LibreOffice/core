@@ -59,7 +59,7 @@ PATCH_FILES+=..$/$(TARFILE_NAME).ios.patch
 .ENDIF
 
 cairo_CFLAGS=$(SOLARINC)
-cairo_LDFLAGS=-L$(SOLARENV)$/$(OUTPATH)$/lib -L$(SOLARVER)$/$(INPATH)$/lib
+cairo_LDFLAGS=-L$(SOLARVER)$/$(INPATH)$/lib
 
 cairo_CPPFLAGS=
 
