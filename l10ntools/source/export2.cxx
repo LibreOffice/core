@@ -429,13 +429,13 @@ sal_Bool Export::ConvertLineEnds(
     while ( !aSource.IsEof())
     {
         aSource.ReadLine( sLine );
-        if ( !aSource.IsEof())
+        if ( !aSource.IsEof())  //a complete line
         {
             sLine = comphelper::string::remove(sLine, '\r');
             aDestination.WriteLine( sLine );
         }
-        else
-            aDestination.WriteByteString( sLine );
+        else                    //a final incomplete line, just copy it as-is
+            aDestination.Write( sLine.getStr(), sLine.getLength() );
     }
 
     aSource.Close();
