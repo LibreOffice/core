@@ -49,7 +49,7 @@
  CAIRO_HAS_TEE_SURFACE=0
  CAIRO_HAS_XML_SURFACE=0
 --- misc/cairo-1.10.2/build/config.sub	2009-08-14 23:33:32.000000000 +0200
-+++ misc/build/cairo-1.10.2/build/config.sub	2011-12-16 11:53:38.935974163 +0100
++++ misc/build/cairo-1.10.2/build/config.sub	2011-12-16 11:57:32.007884203 +0100
 @@ -1272,7 +1272,7 @@
  	      | -ekkobsd* | -kfreebsd* | -freebsd* | -riscix* | -lynxos* \
  	      | -bosx* | -nextstep* | -cxux* | -aout* | -elf* | -oabi* \
@@ -60,8 +60,8 @@
  	      | -cygwin* | -pe* | -psos* | -moss* | -proelf* | -rtems* \
  	      | -mingw32* | -linux-gnu* | -linux-newlib* | -linux-uclibc* \
 --- misc/cairo-1.10.2/configure	2010-12-25 15:22:57.000000000 +0100
-+++ misc/build/cairo-1.10.2/configure	2011-12-16 12:15:47.141406809 +0100
-@@ -19259,61 +19228,11 @@
++++ misc/build/cairo-1.10.2/configure	2011-12-16 13:21:50.143725559 +0100
+@@ -19259,61 +19259,11 @@
  rm -f confcache
  
  
@@ -123,7 +123,7 @@
  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for dlsym in -ldl" >&5
  $as_echo_n "checking for dlsym in -ldl... " >&6; }
  if test "${ac_cv_lib_dl_dlsym+set}" = set; then :
-@@ -26427,7 +26346,7 @@
+@@ -26427,7 +26367,7 @@
  
    if test "x$png_REQUIRES" = x; then
      # libpng13 is GnuWin32's libpng-1.2.8 :-(
@@ -213,3 +213,20 @@
  #include <errno.h>
  
  #define DEBUG_PS 0
+--- misc/cairo-1.10.2/src/cairo-ft-font.c	2010-12-25 15:21:34.000000000 +0100
++++ misc/build/cairo-1.10.2/src/cairo-ft-font.c	2011-12-16 13:22:28.360171103 +0100
+@@ -538,12 +538,12 @@
+ 	return _cairo_error (CAIRO_STATUS_NO_MEMORY);
+ 
+     ret = FcPatternGetString (pattern, FC_FILE, 0, (FcChar8 **) &filename);
+-    if (ret == FcResultOutOfMemory)
++    if (ret == 4 /*FcResultOutOfMemory*/)
+ 	return _cairo_error (CAIRO_STATUS_NO_MEMORY);
+     if (ret == FcResultMatch) {
+ 	/* If FC_INDEX is not set, we just use 0 */
+ 	ret = FcPatternGetInteger (pattern, FC_INDEX, 0, &id);
+-	if (ret == FcResultOutOfMemory)
++	if (ret == 4 /*FcResultOutOfMemory*/)
+ 	    return _cairo_error (CAIRO_STATUS_NO_MEMORY);
+ 
+ 	goto DONE;

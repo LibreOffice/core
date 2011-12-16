@@ -86,7 +86,7 @@ CONFIGURE_ACTION=cp $(SRC_ROOT)$/$(PRJNAME)$/cairo$/dummy_pkg_config . && .$/con
 CONFIGURE_FLAGS=--disable-valgrind --disable-xlib --disable-ft --disable-pthread --disable-svg --enable-gtk-doc=no --enable-test-surfaces=no --enable-static=no --build=i586-pc-mingw32 --host=i586-pc-mingw32 PKG_CONFIG=./dummy_pkg_config CC="$(cairo_CC)" LIBS="$(cairo_LIBS)" ZLIB3RDLIB=$(ZLIB3RDLIB) COMPRESS=$(cairo_COMPRESS) OBJDUMP="$(WRAPCMD) objdump"
 BUILD_ACTION=$(GNUMAKE)
 BUILD_FLAGS+= -j$(EXTMAXPROCESS)
-BUILD_DIR=$(CONFIGURE_DIR)
+BUILD_DIR=$(CONFIGURE_DIR)$/src
 .IF "$(GUI)$(COM)"=="WNTGCC"
 .EXPORT : PWD
 .ENDIF
@@ -119,7 +119,7 @@ cairo_CPPFLAGS+=$(EXTRA_CDEFS)
 cairo_LDFLAGS+=$(EXTRA_LINKFLAGS)
 BUILD_ACTION=$(GNUMAKE)
 BUILD_FLAGS+= -j$(EXTMAXPROCESS)
-BUILD_DIR=$(CONFIGURE_DIR)
+BUILD_DIR=$(CONFIGURE_DIR)$/src
 
 OUT2INC+=src$/cairo-quartz.h
 
@@ -178,7 +178,7 @@ CONFIGURE_FLAGS+=--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)
 
 BUILD_ACTION=$(GNUMAKE)
 BUILD_FLAGS+= -j$(EXTMAXPROCESS)
-BUILD_DIR=$(CONFIGURE_DIR)
+BUILD_DIR=$(CONFIGURE_DIR)$/src
 
 .IF "$(OS)" == "IOS"
 OUT2INC+=src$/cairo-quartz.h
