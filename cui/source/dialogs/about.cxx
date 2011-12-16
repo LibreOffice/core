@@ -95,7 +95,7 @@ GetBuildId()
         sBuildId = aBuffer.makeStringAndClear();
     }
 
-    OSL_ENSURE( sBuildId.getLength() > 0, "No BUILDID in bootstrap file" );
+    OSL_ENSURE( !sBuildId.isEmpty(), "No BUILDID in bootstrap file" );
     return sBuildId;
 }
 
@@ -260,7 +260,7 @@ IMPL_LINK( AboutDialog, HandleHyperlink, svt::FixedHyperlink*, pHyperlink )
     rtl::OUString sURL=pHyperlink->GetURL();
     rtl::OUString sTitle=GetText();
 
-    if ( ! sURL.getLength() ) // Nothing to do, when the URL is empty
+    if ( sURL.isEmpty() ) // Nothing to do, when the URL is empty
         return 1;
     try
     {

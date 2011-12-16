@@ -110,7 +110,7 @@ struct TAccInfo
 
         sal_Bool isConfigured() const
         {
-            return (m_nKeyPos>-1 && m_nListPos>-1 && m_sCommand.getLength());
+            return (m_nKeyPos>-1 && m_nListPos>-1 && !m_sCommand.isEmpty());
         }
 
         sal_Int32 m_nKeyPos;

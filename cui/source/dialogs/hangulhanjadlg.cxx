@@ -1518,7 +1518,7 @@ namespace svx
                                 Sequence< OUString >& _rEntries )
         {
             bool    bRet = false;
-            if( _xDict.is() && _rOrg.getLength() )
+            if( _xDict.is() && !_rOrg.isEmpty() )
             {
                 try
                 {

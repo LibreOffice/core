@@ -740,7 +740,7 @@ IMPL_LINK( SvxGradientTabPage, ClickSaveHdl_Impl, void *, EMPTYARG )
     {
         aFile.Append( pGradientList->GetName() );
 
-        if( !aFile.getExtension().getLength() )
+        if( aFile.getExtension().isEmpty() )
             aFile.SetExtension( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "sog" ) ) );
     }
 

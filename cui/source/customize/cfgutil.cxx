@@ -145,7 +145,7 @@ sal_Bool SfxStylesInfo_Impl::parseStyleCommand(SfxStyleInfo_Impl& aStyle)
     if (sArg.indexOf(CMDURL_FPART_ONLY) == 0)
         aStyle.sFamily = sArg.copy(LEN_FPART, sArg.getLength()-LEN_FPART);
 
-    if (aStyle.sFamily.getLength() && aStyle.sStyle.getLength())
+    if (!(aStyle.sFamily.isEmpty() || aStyle.sStyle.isEmpty()))
         return sal_True;
 
     return sal_False;
@@ -178,7 +178,7 @@ void SfxStylesInfo_Impl::getLabel4Style(SfxStyleInfo_Impl& aStyle)
     catch(const css::uno::Exception&)
         { aStyle.sLabel = ::rtl::OUString(); }
 
-    if (!aStyle.sLabel.getLength())
+    if (aStyle.sLabel.isEmpty())
     {
         aStyle.sLabel = aStyle.sCommand;
     }
@@ -503,7 +503,7 @@ void SfxConfigGroupListBox_Impl::InitModule()
             try
             {
                 m_xModuleCategoryInfo->getByName(sGroupID) >>= sGroupName;
-                if (!sGroupName.getLength())
+                if (sGroupName.isEmpty())
                     continue;
             }
             catch(const css::container::NoSuchElementException&)
@@ -813,7 +813,7 @@ Image SfxConfigGroupListBox_Impl::GetImage(
                     }
                 }
             }
-            if( factoryURL.getLength() > 0 )
+            if( !factoryURL.isEmpty() )
             {
                 aImage = SvFileInformationManager::GetFileImage( INetURLObject(factoryURL), false );
             }
@@ -886,7 +886,7 @@ SfxConfigGroupListBox_Impl::getDocumentModel( Reference< XComponentContext >& xC
         { sUIName = ::rtl::OUString(); }
 
     // fallback for missing UINames !?
-    if (!sUIName.getLength())
+    if (sUIName.isEmpty())
     {
         sUIName = sCommand;
     }

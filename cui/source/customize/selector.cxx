@@ -470,7 +470,7 @@ void SvxConfigGroupListBox_Impl::Init()
         Reference< container::XNameAccess > xModuleCategories;
         if ( xAllCategories.is() )
         {
-            if ( aModuleId.getLength() != 0 )
+            if ( !aModuleId.isEmpty() )
             {
                 try
                 {
@@ -629,7 +629,7 @@ Image SvxConfigGroupListBox_Impl::GetImage(
                     }
                 }
             }
-            if( factoryURL.getLength() > 0 )
+            if( !factoryURL.isEmpty() )
             {
                 aImage = SvFileInformationManager::GetFileImage( INetURLObject(factoryURL), false );
             }
@@ -720,7 +720,7 @@ void SvxConfigGroupListBox_Impl::GroupSelected()
 
                 for ( sal_Int32 i = 0; i < commands.getLength(); ++i )
                 {
-                    if ( commands[i].Command.getLength() == 0 )
+                    if ( commands[i].Command.isEmpty() )
                     {
                         continue;
                     }
@@ -756,7 +756,7 @@ void SvxConfigGroupListBox_Impl::GroupSelected()
                     {
                     }
 
-                    if ( aLabel.getLength() == 0 )
+                    if ( aLabel.isEmpty() )
                     {
                         aLabel = commands[i].Command;
                     }
@@ -1072,7 +1072,7 @@ void
 SvxScriptSelectorDialog::UpdateUI()
 {
     OUString url = GetScriptURL();
-    if ( url != NULL && url.getLength() != 0 )
+    if ( url != NULL && !url.isEmpty() )
     {
         String rMessage =
             aCommands.GetHelpText( aCommands.FirstSelected() );

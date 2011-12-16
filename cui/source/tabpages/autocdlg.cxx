@@ -2597,7 +2597,7 @@ void OfaSmartTagOptionsTabPage::FillListBox( const SmartTagMgr& rSmartTagMgr )
             const rtl::OUString aSmartTagType = xRec->getSmartTagName(j);
             rtl::OUString aSmartTagCaption = rSmartTagMgr.GetSmartTagCaption( aSmartTagType, aLocale );
 
-            if ( !aSmartTagCaption.getLength() )
+            if ( aSmartTagCaption.isEmpty() )
                 aSmartTagCaption = aSmartTagType;
 
             const rtl::OUString aLBEntry = aSmartTagCaption +

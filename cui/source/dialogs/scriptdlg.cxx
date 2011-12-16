@@ -379,7 +379,7 @@ SvLBoxEntry * SFTreeListBox::insertEntry(
     bool bChildrenOnDemand, std::auto_ptr< SFEntry > aUserData, ::rtl::OUString factoryURL )
 {
     SvLBoxEntry * p;
-    if( nBitmap == IMG_DOCUMENT && factoryURL.getLength() > 0 )
+    if( nBitmap == IMG_DOCUMENT && !factoryURL.isEmpty() )
     {
         Image aImage = SvFileInformationManager::GetFileImage( INetURLObject(factoryURL), false );
         p = InsertEntry(
@@ -1296,7 +1296,7 @@ void SvxScriptOrgDialog::RestorePreviousSelection()
 {
     sal_Int32 pos = source.indexOf( token );
 
-    if ( pos != -1 && value.getLength() != 0 )
+    if ( pos != -1 && !value.isEmpty() )
     {
         return source.replaceAt( pos, token.getLength(), value );
     }
@@ -1323,7 +1323,7 @@ void SvxScriptOrgDialog::RestorePreviousSelection()
     result = ReplaceString(
         result, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("%LINENUMBER") ), line );
 
-    if ( type.getLength() != 0 )
+    if ( !type.isEmpty() )
     {
         result += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\n\n") );
         result += ::rtl::OUString(String(CUI_RES(RID_SVXSTR_ERROR_TYPE_LABEL)));
@@ -1331,7 +1331,7 @@ void SvxScriptOrgDialog::RestorePreviousSelection()
         result += type;
     }
 
-    if ( message.getLength() != 0 )
+    if ( !message.isEmpty() )
     {
         result += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\n\n") );
         result += ::rtl::OUString(String(CUI_RES(RID_SVXSTR_ERROR_MESSAGE_LABEL)));
@@ -1354,17 +1354,17 @@ void SvxScriptOrgDialog::RestorePreviousSelection()
     ::rtl::OUString type = ::rtl::OUString();
     ::rtl::OUString message = eScriptError.Message;
 
-        if ( eScriptError.language.getLength() != 0 )
+        if ( !eScriptError.language.isEmpty() )
         {
             language = eScriptError.language;
         }
 
-        if ( eScriptError.scriptName.getLength() != 0 )
+        if ( !eScriptError.scriptName.isEmpty() )
         {
             script = eScriptError.scriptName;
         }
 
-        if ( eScriptError.Message.getLength() != 0 )
+        if ( !eScriptError.Message.isEmpty() )
         {
             message = eScriptError.Message;
         }
@@ -1397,16 +1397,16 @@ void SvxScriptOrgDialog::RestorePreviousSelection()
     ::rtl::OUString type = unknown;
     ::rtl::OUString message = eScriptException.Message;
 
-    if ( eScriptException.language.getLength() != 0 )
+    if ( !eScriptException.language.isEmpty() )
     {
         language = eScriptException.language;
     }
-    if ( eScriptException.scriptName.getLength() != 0 )
+    if ( !eScriptException.scriptName.isEmpty() )
     {
         script = eScriptException.scriptName;
     }
 
-    if ( eScriptException.Message.getLength() != 0 )
+    if ( !eScriptException.Message.isEmpty() )
     {
         message = eScriptException.Message;
     }
@@ -1423,7 +1423,7 @@ void SvxScriptOrgDialog::RestorePreviousSelection()
             CUI_RES( RID_SVXSTR_EXCEPTION_RUNNING ) );
     }
 
-    if ( eScriptException.exceptionType.getLength() != 0 )
+    if ( !eScriptException.exceptionType.isEmpty() )
     {
         type = eScriptException.exceptionType;
     }
@@ -1444,11 +1444,11 @@ void SvxScriptOrgDialog::RestorePreviousSelection()
 
     ::rtl::OUString message;
 
-    if ( sError.scriptName.getLength() > 0 )
+    if ( !sError.scriptName.isEmpty() )
     {
         script = sError.scriptName;
     }
-    if ( sError.language.getLength() > 0 )
+    if ( !sError.language.isEmpty() )
     {
         language = sError.language;
     }
@@ -1565,7 +1565,7 @@ IMPL_LINK( SvxScriptErrorDialog, ShowDialog, ::rtl::OUString*, pMessage )
 {
     ::rtl::OUString message;
 
-    if ( pMessage && pMessage->getLength() != 0 )
+    if ( pMessage && !pMessage->isEmpty() )
     {
         message = *pMessage;
     }

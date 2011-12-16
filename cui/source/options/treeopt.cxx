@@ -539,7 +539,7 @@ OfaTreeOptionsDialog::OfaTreeOptionsDialog( Window* pParent, const rtl::OUString
 {
     FreeResource();
 
-    bIsFromExtensionManager = ( rExtensionId.getLength() > 0 );
+    bIsFromExtensionManager = ( !rExtensionId.isEmpty() );
     InitTreeAndHandler();
     LoadExtensionOptions( rExtensionId );
     ResizeTreeLB();
@@ -1266,7 +1266,7 @@ sal_Bool EnableSSO( void )
 
     sal_Bool bSSOEnabled =
         ( theOfflineValue == theDefaultOfflineValue                     &&
-          ( theServerTypeValue.getLength() == 0 ||
+          ( theServerTypeValue.isEmpty() ||
           theServerTypeValue == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("uno") ) ) &&
           theBackendServiceTypeValue ==
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
@@ -2058,7 +2058,7 @@ void OfaTreeOptionsDialog::LoadExtensionOptions( const rtl::OUString& rExtension
             ::comphelper::ConfigurationHelper::E_READONLY ), UNO_QUERY );
     DBG_ASSERT( xRoot.is(), "OfaTreeOptionsDialog::LoadExtensionOptions(): no config" );
     // when called by Tools - Options then load nodes of active module
-    if ( rExtensionId.getLength() == 0 )
+    if ( rExtensionId.isEmpty() )
         pModule = LoadModule( GetModuleIdentifier( xMSFac, Reference< XFrame >() ), xRoot );
 
     VectorOfNodes aNodeList;
@@ -2201,15 +2201,15 @@ void OfaTreeOptionsDialog::LoadNodes(
                     xNodeAccess->getByName( C2U("GroupId") ) >>= sGroupId;
                     xNodeAccess->getByName( C2U("GroupIndex") ) >>= nGroupIndex;
 
-                    if ( sLabel.getLength() == 0 )
+                    if ( sLabel.isEmpty() )
                         sLabel = sGroupName;
-                    String sTemp = getGroupName( sLabel, rExtensionId.getLength() > 0 );
+                    String sTemp = getGroupName( sLabel, !rExtensionId.isEmpty() );
                     if ( sTemp.Len() > 0 )
                         sLabel = sTemp;
                     OptionsNode* pNode =
                         new OptionsNode( sNodeId, sLabel, sPageURL, bAllModules, sGroupId, nGroupIndex );
 
-                    if ( !rExtensionId.getLength() && !isNodeActive( pNode, pModule ) )
+                    if ( rExtensionId.isEmpty() && !isNodeActive( pNode, pModule ) )
                     {
                         delete pNode;
                         continue;
@@ -2237,12 +2237,12 @@ void OfaTreeOptionsDialog::LoadNodes(
                                 xLeaveAccess->getByName( C2U("GroupId") ) >>= sLeafGrpId;
                                 xLeaveAccess->getByName( C2U("GroupIndex") ) >>= nLeafGrpIdx;
 
-                                if ( !rExtensionId.getLength() || sId == rExtensionId )
+                                if ( rExtensionId.isEmpty() || sId == rExtensionId )
                                 {
                                     OptionsLeaf* pLeaf = new OptionsLeaf(
                                         sId, sLeafLabel, sLeafURL, sEventHdl, sLeafGrpId, nLeafGrpIdx );
 
-                                    if ( sLeafGrpId.getLength() > 0 )
+                                    if ( !sLeafGrpId.isEmpty() )
                                     {
                                         bool bAlreadyOpened = false;
                                         if ( pNode->m_aGroupedLeaves.size() > 0 )
@@ -2346,7 +2346,7 @@ void lcl_insertLeaf(
     {
         sal_uInt16 nNodeGrpId = getGroupNodeId( pNode->m_sId );
         nGrpId = pDlg->AddGroup( pNode->m_sLabel, NULL, NULL, nNodeGrpId );
-        if ( pNode->m_sPageURL.getLength() > 0 )
+        if ( !pNode->m_sPageURL.isEmpty() )
         {
             SvLBoxEntry* pGrpEntry = rTreeLB.GetEntry( 0, nGrpId );
             DBG_ASSERT( pGrpEntry, "OfaTreeOptionsDialog::InsertNodes(): no group" );
@@ -2442,7 +2442,7 @@ void ExtensionsTabPage::CreateDialogWithHandler()
 {
     try
     {
-        bool bWithHandler = ( m_sEventHdl.getLength() > 0 );
+        bool bWithHandler = ( !m_sEventHdl.isEmpty() );
         if ( bWithHandler )
         {
             Reference < XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
@@ -2516,7 +2516,7 @@ void ExtensionsTabPage::ActivatePage()
             Size aSize = GetSizePixel();
             m_xPage->setPosSize( aPos.X() + 1, aPos.Y() + 1,
                                  aSize.Width() - 2, aSize.Height() - 2, awt::PosSize::POSSIZE );
-            if ( m_sEventHdl.getLength() > 0 )
+            if ( !m_sEventHdl.isEmpty() )
                 DispatchAction( C2U("initialize") );
         }
     }

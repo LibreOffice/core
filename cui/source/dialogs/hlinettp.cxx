@@ -134,7 +134,7 @@ void SvxHyperlinkInternetTp::FillDlgFields ( String& aStrURL )
             setFTPUser(aURL.GetUser(), aURL.GetPass());
 
         //do not show password and user in url
-        if(aURL.GetUser().getLength()!=0 || aURL.GetPass().getLength()!=0 )
+        if(!aURL.GetUser().isEmpty() || !aURL.GetPass().isEmpty() )
             aURL.SetUserAndPass(aEmptyStr,aEmptyStr);
     }
 

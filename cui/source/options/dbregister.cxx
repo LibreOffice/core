@@ -209,7 +209,7 @@ sal_Bool DbRegistrationOptionsPage::FillItemSet( SfxItemSet& rCoreSet )
     {
         SvLBoxEntry* pEntry = pPathBox->GetEntry(i);
         DatabaseRegistration* pRegistration = static_cast< DatabaseRegistration* >( pEntry->GetUserData() );
-        if ( pRegistration && pRegistration->sLocation.getLength() )
+        if ( pRegistration && !pRegistration->sLocation.isEmpty() )
         {
             ::rtl::OUString sName( pPathBox->GetEntryText( pEntry, 0 ) );
             OFileNotation aTransformer( pRegistration->sLocation );

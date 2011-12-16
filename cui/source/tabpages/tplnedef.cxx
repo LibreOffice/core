@@ -839,7 +839,7 @@ IMPL_LINK( SvxLineDefTabPage, ClickSaveHdl_Impl, void *, EMPTYARG )
     {
         aFile.Append( pDashList->GetName() );
 
-        if( !aFile.getExtension().getLength() )
+        if( aFile.getExtension().isEmpty() )
             aFile.SetExtension( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "sod" ) ) );
     }
 

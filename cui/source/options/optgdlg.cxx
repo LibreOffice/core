@@ -1321,7 +1321,7 @@ OfaLanguagesTabPage::OfaLanguagesTabPage( Window* pParent, const SfxItemSet& rSe
         if (theNameAccess->hasByName(sUserLocaleKey))
             theNameAccess->getByName(sUserLocaleKey) >>= m_sUserLocaleValue;
         // select the user specified locale in the listbox
-        if (m_sUserLocaleValue.getLength() > 0)
+        if (!m_sUserLocaleValue.isEmpty())
         {
             sal_Int32 d = 0;
             for (sal_uInt16 i=0; i < aUserInterfaceLB.GetEntryCount(); i++)
@@ -1527,7 +1527,7 @@ sal_Bool OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
     }
 
     OUString sLang = pLangConfig->aSysLocaleOptions.GetLocaleConfigString();
-    LanguageType eOldLocale = (sLang.getLength() ?
+    LanguageType eOldLocale = (!sLang.isEmpty() ?
         lcl_LangStringToLangType( sLang ) : LANGUAGE_SYSTEM);
     LanguageType eNewLocale = aLocaleSettingLB.GetSelectLanguage();
     if ( eOldLocale != eNewLocale )
@@ -1539,7 +1539,7 @@ sal_Bool OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
             Locale aLocale;
             SvxLanguageToLocale( aLocale, eNewLocale );
             sNewLang = aLocale.Language;
-            if ( aLocale.Country.getLength() > 0 )
+            if ( !aLocale.Country.isEmpty() )
             {
                 sNewLang += C2U("-");
                 sNewLang += aLocale.Country;
@@ -1688,7 +1688,7 @@ sal_Bool OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
 void OfaLanguagesTabPage::Reset( const SfxItemSet& rSet )
 {
     OUString sLang = pLangConfig->aSysLocaleOptions.GetLocaleConfigString();
-    if ( sLang.getLength() )
+    if ( !sLang.isEmpty() )
         aLocaleSettingLB.SelectLanguage(lcl_LangStringToLangType(sLang));
     else
         aLocaleSettingLB.SelectLanguage( LANGUAGE_SYSTEM );
@@ -1711,7 +1711,7 @@ void OfaLanguagesTabPage::Reset( const SfxItemSet& rSet )
     LanguageType eLang;
     const NfCurrencyEntry* pCurr = NULL;
     sLang = pLangConfig->aSysLocaleOptions.GetCurrencyConfigString();
-    if ( sLang.getLength() )
+    if ( !sLang.isEmpty() )
     {
         SvtSysLocaleOptions::GetCurrencyAbbrevAndLanguage( aAbbrev, eLang, sLang );
         pCurr = SvNumberFormatter::GetCurrencyEntry( aAbbrev, eLang );

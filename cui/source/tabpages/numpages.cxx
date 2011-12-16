@@ -361,8 +361,8 @@ IMPL_LINK(SvxSingleNumPickTabPage, NumSelectHdl_Impl, ValueSet*, EMPTYARG)
             return 0;
         SvxNumSettings_ImplPtr _pSet = aNumSettingsArr.GetObject(nIdx);
         sal_Int16 eNewType = _pSet->nNumberType;
-        const sal_Unicode cLocalPrefix = _pSet->sPrefix.getLength() ? _pSet->sPrefix.getStr()[0] : 0;
-        const sal_Unicode cLocalSuffix = _pSet->sSuffix.getLength() ? _pSet->sSuffix.getStr()[0] : 0;
+        const sal_Unicode cLocalPrefix = !_pSet->sPrefix.isEmpty() ? _pSet->sPrefix.getStr()[0] : 0;
+        const sal_Unicode cLocalSuffix = !_pSet->sSuffix.isEmpty() ? _pSet->sSuffix.getStr()[0] : 0;
 
         sal_uInt16 nMask = 1;
         for(sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++)
@@ -744,7 +744,7 @@ IMPL_LINK(SvxNumPickTabPage, NumSelectHdl_Impl, ValueSet*, EMPTYARG)
                 // #i93908# clear suffix for bullet lists
                 aFmt.SetPrefix(::rtl::OUString());
                 aFmt.SetSuffix(::rtl::OUString());
-                if( pLevelSettings->sBulletFont.getLength() &&
+                if( !pLevelSettings->sBulletFont.isEmpty() &&
                     pLevelSettings->sBulletFont.compareTo(
                             rActBulletFont.GetName()))
                 {
@@ -780,7 +780,7 @@ IMPL_LINK(SvxNumPickTabPage, NumSelectHdl_Impl, ValueSet*, EMPTYARG)
                 else
                     aFmt.SetBulletFont( &rActBulletFont );
 
-                aFmt.SetBulletChar( pLevelSettings->sBulletChar.getLength()
+                aFmt.SetBulletChar( !pLevelSettings->sBulletChar.isEmpty()
                                         ? pLevelSettings->sBulletChar.getStr()[0]
                                         : 0 );
                 aFmt.SetCharFmtName( sBulletCharFmtName );

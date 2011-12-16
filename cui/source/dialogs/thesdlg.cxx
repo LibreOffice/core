@@ -305,7 +305,7 @@ uno::Sequence< uno::Reference< linguistic2::XMeaning > > SAL_CALL SvxThesaurusDi
             xThesaurus->queryMeanings( rTerm, rLocale, rProperties ) );
 
     // text with '.' at the end?
-    if (0 == aMeanings.getLength() && rTerm.getLength() &&
+    if ( 0 == aMeanings.getLength() && !rTerm.isEmpty() &&
         rTerm.getStr()[ rTerm.getLength() - 1 ] == '.')
     {
         // try again without trailing '.' chars. It may be a word at the
@@ -342,7 +342,7 @@ bool SvxThesaurusDialog_Impl::UpdateAlternativesBox_Impl()
         uno::Sequence< OUString > aSynonyms( pMeanings[i]->querySynonyms() );
         const sal_Int32 nSynonyms = aSynonyms.getLength();
         const OUString *pSynonyms = aSynonyms.getConstArray();
-        DBG_ASSERT( rMeaningTxt.getLength() > 0, "meaning with empty text" );
+        DBG_ASSERT( !rMeaningTxt.isEmpty(), "meaning with empty text" );
         DBG_ASSERT( nSynonyms > 0, "meaning without synonym" );
 
         m_pAlternativesCT->AddEntry( i + 1, rMeaningTxt, true );
@@ -397,7 +397,7 @@ void SvxThesaurusDialog_Impl::LookUp_Impl()
     String aText( aWordCB.GetText() );
 
     aLookUpText = OUString( aText );
-    if (aLookUpText.getLength() > 0 &&
+    if (!aLookUpText.isEmpty() &&
             (aLookUpHistory.empty() || aLookUpText != aLookUpHistory.top()))
         aLookUpHistory.push( aLookUpText );
 
@@ -534,7 +534,7 @@ void SvxThesaurusDialog_Impl::UpdateVendorImage()
         Image aImage;
         String sThesImplName( lcl_GetThesImplName( SvxCreateLocale( nLookUpLanguage ) ) );
         OUString aThesDialogImageUrl( aCfg.GetThesaurusDialogImage( sThesImplName ) );
-        if (sThesImplName.Len() > 0 && aThesDialogImageUrl.getLength() > 0)
+        if (sThesImplName.Len() > 0 && !aThesDialogImageUrl.isEmpty())
             aImage = Image( lcl_GetImageFromPngUrl( aThesDialogImageUrl ) );
         else
             aImage = aVendorDefaultImage;

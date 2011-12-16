@@ -927,7 +927,7 @@ short SfxInsertFloatingFrameDialog::Execute()
                 aURL = aObj.GetMainURL( INetURLObject::NO_DECODE );
         }
 
-        if ( !m_xObj.is() && aURL.getLength() )
+        if ( !m_xObj.is() && !aURL.isEmpty() )
         {
             // create the object
             ::rtl::OUString aName;

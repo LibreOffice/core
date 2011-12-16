@@ -791,7 +791,7 @@ Any _SvxMacroTabPage::GetPropsByName( const ::rtl::OUString& eventName, EventsHa
 
     Any aReturn;
     ::comphelper::NamedValueCollection aProps;
-    if ( rAssignedEvent.first.getLength() && rAssignedEvent.second.getLength() )
+    if ( !(rAssignedEvent.first.isEmpty() || rAssignedEvent.second.isEmpty()) )
     {
         aProps.put( "EventType", rAssignedEvent.first );
         aProps.put( "Script", rAssignedEvent.second );
@@ -882,7 +882,7 @@ IMPL_LINK(AssignComponentDialog, ButtonHandler, Button *, EMPTYARG)
 {
     ::rtl::OUString aMethodName = maMethodEdit.GetText();
     maURL = ::rtl::OUString();
-    if( aMethodName.getLength() )
+    if( !aMethodName.isEmpty() )
     {
         maURL = aVndSunStarUNO;
         maURL += aMethodName;
@@ -904,7 +904,7 @@ AssignComponentDialog::AssignComponentDialog( Window * pParent, const ::rtl::OUS
     maOKButton.SetClickHdl(LINK(this, AssignComponentDialog, ButtonHandler));
 
     ::rtl::OUString aMethodName;
-    if( maURL.getLength() )
+    if( !maURL.isEmpty() )
     {
         sal_Int32 nIndex = maURL.indexOf( aVndSunStarUNO );
         if( nIndex == 0 )
