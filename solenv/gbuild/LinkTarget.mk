@@ -896,7 +896,12 @@ $(call gb_LinkTarget_get_target,$(1)) : DLLTARGET := $(2)
 endef
 
 define gb_LinkTarget_set_auxtargets
-$(call gb_LinkTarget_get_clean_target,$(1)) : AUXTARGETS := $(2)
+$$(call gb_Output_error,\
+ gb_LinkTarget_set_auxtargets: use gb_LinkTarget_add_auxtargets instead.)
+endef
+
+define gb_LinkTarget_add_auxtargets
+$(call gb_LinkTarget_get_clean_target,$(1)) : AUXTARGETS += $(2)
 endef
 
 define gb_LinkTarget__add_internal_headers

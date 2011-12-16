@@ -85,7 +85,7 @@ $(call gb_Library_get_target,$(1)) : SOVERSIONSCRIPT := $(3)
 $(call gb_Library_get_target,$(1)) \
 $(call gb_Library_get_clean_target,$(1)) : \
 	AUXTARGETS += $(call gb_Library_get_target,$(1)).$(2)
-$(call gb_LinkTarget_set_auxtargets,$(call gb_Library_get_linktargetname,$(1)),\
+$(call gb_LinkTarget_add_auxtargets,$(call gb_Library_get_linktargetname,$(1)),\
 	$(call gb_LinkTarget_get_target,$(call gb_Library_get_linktargetname,$(1))).$(2))
 endef
 

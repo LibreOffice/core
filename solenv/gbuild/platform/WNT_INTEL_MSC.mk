@@ -464,7 +464,7 @@ gb_Library_DLLFILENAMES :=\
 define gb_Library_Library_platform
 $(call gb_LinkTarget_set_dlltarget,$(2),$(3))
 
-$(call gb_LinkTarget_set_auxtargets,$(2),\
+$(call gb_LinkTarget_add_auxtargets,$(2),\
 	$(patsubst %.lib,%.exp,$(call gb_LinkTarget_get_target,$(2))) \
 	$(3).manifest \
 	$(call gb_LinkTarget_get_pdbfile,$(2)) \
@@ -535,7 +535,7 @@ define gb_StaticLibrary_StaticLibrary_platform
 $(call gb_LinkTarget_get_target,$(2)) \
 $(call gb_LinkTarget_get_headers_target,$(2)) : PDBFILE = $(call gb_LinkTarget_get_pdbfile,$(2))
 
-$(call gb_LinkTarget_set_auxtargets,$(2),\
+$(call gb_LinkTarget_add_auxtargets,$(2),\
 	$(call gb_LinkTarget_get_pdbfile,$(2)) \
 )
 
@@ -549,7 +549,7 @@ gb_Executable_TARGETTYPEFLAGS := $(gb_Windows_PE_TARGETTYPEFLAGS)
 gb_Executable_get_rpath :=
 
 define gb_Executable_Executable_platform
-$(call gb_LinkTarget_set_auxtargets,$(2),\
+$(call gb_LinkTarget_add_auxtargets,$(2),\
 	$(patsubst %.exe,%.pdb,$(call gb_LinkTarget_get_target,$(2))) \
 	$(call gb_LinkTarget_get_pdbfile,$(2)) \
 	$(call gb_LinkTarget_get_target,$(2)).manifest \
@@ -583,7 +583,7 @@ gb_CppunitTest_get_libfilename = test_$(1).dll
 define gb_CppunitTest_CppunitTest_platform
 $(call gb_LinkTarget_set_dlltarget,$(2),$(3))
 
-$(call gb_LinkTarget_set_auxtargets,$(2),\
+$(call gb_LinkTarget_add_auxtargets,$(2),\
 	$(patsubst %.lib,%.exp,$(call gb_LinkTarget_get_target,$(2))) \
 	$(3).manifest \
 	$(patsubst %.dll,%.pdb,$(3)) \
