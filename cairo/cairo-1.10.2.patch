@@ -93,6 +93,15 @@
  			   [AC_MSG_RESULT($FREETYPE_VERSION - Too old)
  			   use_ft="no ($FREETYPE_VERSION found; version $FREETYPE_MIN_VERSION from release $FREETYPE_MIN_RELEASE required)"])
        fi
+@@ -462,7 +462,7 @@
+     fi
+ 
+   ft_CFLAGS="$FREETYPE_CFLAGS"
+-  ft_LIBS="$FREETYPE_LIBS"
++  ft_LIBS=`echo "$FREETYPE_LIBS" | $SED -e 's/-lz//g'`
+ ])
+ 
+ FONTCONFIG_MIN_VERSION=2.2.95
 @@ -505,7 +505,7 @@
  CAIRO_ENABLE_SURFACE_BACKEND(ps, PostScript, yes, [
      # The ps backend requires zlib.
@@ -202,6 +211,15 @@
      else { $as_echo "$as_me:${as_lineno-$LINENO}: result: $FREETYPE_VERSION - Too old" >&5
  $as_echo "$FREETYPE_VERSION - Too old" >&6; }
  			   use_ft="no ($FREETYPE_VERSION found; version $FREETYPE_MIN_VERSION from release $FREETYPE_MIN_RELEASE required)"
+@@ -29434,7 +29434,7 @@
+     fi
+ 
+   ft_CFLAGS="$FREETYPE_CFLAGS"
+-  ft_LIBS="$FREETYPE_LIBS"
++  ft_LIBS=`echo "$FREETYPE_LIBS" | $SED -e 's/-lz//g'`
+ 
+ 			cairo_cv_ft_use=$use_ft
+ 			cairo_cv_ft_cache_vars=" BASE REQUIRES CFLAGS NONPKGCONFIG_CFLAGS LIBS NONPKGCONFIG_LIBS NONPKGCONFIG_EXTRA_LIBS"
 @@ -30121,7 +30121,7 @@
  
      # The ps backend requires zlib.
