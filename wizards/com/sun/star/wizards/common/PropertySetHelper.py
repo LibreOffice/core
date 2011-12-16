@@ -4,16 +4,8 @@ class PropertySetHelper(object):
 
     @classmethod
     def __init__(self, _aObj):
-        if not _aObj:
-           return
-
         self.m_xPropertySet = _aObj
-
-    def getHashMap(self):
-        if self.m_aHashMap == None:
-            self.m_aHashMap = HashMap < String, Object >.Object()
-
-        return self.m_aHashMap
+        self.m_aHashMap = {}
 
     '''
     set a property, don't throw any exceptions,
@@ -55,7 +47,7 @@ class PropertySetHelper(object):
                 DebugHelper.exception(e)
 
         else:
-            getHashMap().put(_sName, _aValue)
+            self.m_aHashMap[_sName] = _aValue
 
     '''
     get a property and convert it to a int value
@@ -128,9 +120,11 @@ class PropertySetHelper(object):
             except com.sun.star.lang.WrappedTargetException, e:
                 DebugHelper.writeInfo(e.getMessage())
 
+        # TODO: I wonder why the same thing is not done in the rest of the
+        # getPropertyValueAs* functions...
         if aObject == None:
-            if getHashMap().containsKey(_sName):
-                aObject = getHashMap().get(_sName)
+            if _sName in self.m_aHashMap:
+                aObject = self.m_aHashMap[_sName]
 
         if aObject != None:
             try:
