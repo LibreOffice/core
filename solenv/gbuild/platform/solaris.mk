@@ -26,6 +26,12 @@
 #
 #*************************************************************************
 
+# FIXME: this is currently hardcoded to SunStudio.
+# We really don't want to support building with that because of all its
+# bugs that need painful work-arounds; if somebody revives the Solaris
+# port then please make it use GCC instead (there used to be a Solaris/GCC
+# port at some point in the past, see solenv/inc/unxsog{i,s}.mk).
+
 GUI := UNX
 COM := C52
 
