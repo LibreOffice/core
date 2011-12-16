@@ -107,7 +107,7 @@ void ScXNamedRanges::testAddNewByName()
 
     nType = ::sheet::NamedRangeFlag::ROW_HEADER;
     rtl::OUString aContent5(RTL_CONSTASCII_USTRINGPARAM("D5"));
-    rtl::OUString aName5(RTL_CONSTASCII_USTRINGPARAM("type_ROW_HEADERA"));
+    rtl::OUString aName5(RTL_CONSTASCII_USTRINGPARAM("type_ROW_HEADER"));
     xNamedRanges->addNewByName(aName5, aContent5, aBaseAddress, nType);
     CPPUNIT_ASSERT_MESSAGE("Failed to create Namedrange Type ROW_HEADER", xNamedRanges->hasByName(aName5));
 
