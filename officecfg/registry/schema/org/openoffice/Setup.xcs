@@ -267,6 +267,13 @@
 				</info>
 				<value/>
 			</prop>
+			<prop oor:name="ooSetupVersionAboutBoxSuffix" oor:type="xs:string">
+				<info>
+					<author>PMLADEK</author>
+					<desc>Specifies the version suffix (beta1, rc2) of the product that appears only on the about box.</desc>
+				</info>
+				<value/>
+			</prop>
 			<prop oor:name="ooVendor" oor:type="xs:string">
 				<info>
 					<author>IHI</author>
