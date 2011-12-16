@@ -349,7 +349,6 @@ ScHorizontalValueIterator::GetCurNumFmtInfo(short&, unsigned long&)
 ScLeftFooterEditPage::GetRanges()
 ScLeftHeaderEditPage::GetRanges()
 ScMatrix::CalcOffset(unsigned long, unsigned long) const
-ScModule::Find1RefWindow(Window*)
 ScMyCellInfo::ScMyCellInfo()
 ScMyStyleRanges::SetStylesToRanges(ScRangeList*, rtl::OUString const*, short, rtl::OUString const*, ScXMLImport&)
 ScMyStyleRanges::SetStylesToRanges(ScRangeListRef, rtl::OUString const*, short, rtl::OUString const*, ScXMLImport&)

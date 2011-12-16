@@ -2201,20 +2201,4 @@ Window *  ScModule::Find1RefWindow( sal_uInt16 nSlotId, Window *pWndAncestor )
     return NULL;
 }
 
-Window *  ScModule::Find1RefWindow( Window *pWndAncestor )
-{
-    if (!pWndAncestor)
-        return NULL;
-
-    while( Window *pParent = pWndAncestor->GetParent() ) pWndAncestor = pParent;
-
-    for( std::map<sal_uInt16, std::list<Window*> >::iterator i = m_mapRefWindow.begin();
-        i!=m_mapRefWindow.end(); ++i )
-        for( std::list<Window*>::iterator j = i->second.begin(); j!=i->second.end(); ++j )
-            if ( pWndAncestor->IsWindowOrChild( *j, (*j)->IsSystemWindow() ) )
-                return *j;
-
-    return NULL;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
