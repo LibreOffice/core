@@ -49,6 +49,10 @@ TARFILE_MD5=f101a9e88b783337b20b2e26dfd26d5f
 
 PATCH_FILES=..$/$(TARFILE_NAME).patch
 
+.IF "$(OS)$(COM)" == "WNTMSC"
+PATCH_FILES+= ..$/$(TARFILE_NAME).wntmsc.patch
+.ENDIF
+
 .IF "$(OS)" == "IOS"
 PATCH_FILES+=..$/$(TARFILE_NAME).no-atsui.patch
 PATCH_FILES+=..$/$(TARFILE_NAME).ios.patch
