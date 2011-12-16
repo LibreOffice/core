@@ -1,0 +1,27 @@
+--- misc/cairo-1.10.2/configure	2011-12-16 10:02:39.626077757 +0100
++++ misc/build/cairo-1.10.2/configure	2011-12-16 10:02:23.518237109 +0100
+@@ -22766,11 +22766,13 @@
+ 
+ 
+     ac_fn_c_check_header_mongrel "$LINENO" "ApplicationServices/ApplicationServices.h" "ac_cv_header_ApplicationServices_ApplicationServices_h" "$ac_includes_default"
++if false; then
+ if test "x$ac_cv_header_ApplicationServices_ApplicationServices_h" = x""yes; then :
+ 
+ else
+   use_quartz="no (requires ApplicationServices framework)"
+ fi
++fi
+ 
+ 
+   if test "x$use_quartz" != "xyes" ; then
+--- misc/cairo-1.10.2/src/cairo-quartz.h	2011-12-16 10:02:39.639079241 +0100
++++ misc/build/cairo-1.10.2/src/cairo-quartz.h	2011-12-16 10:01:18.404789245 +0100
+@@ -40,7 +40,7 @@
+ 
+ #if CAIRO_HAS_QUARTZ_SURFACE
+ 
+-#include <ApplicationServices/ApplicationServices.h>
++#include <CoreGraphics/CoreGraphics.h>
+ 
+ CAIRO_BEGIN_DECLS
+ 
