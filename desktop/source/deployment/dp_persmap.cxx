@@ -32,8 +32,8 @@ using namespace ::rtl;
 // this implementation replaces a rather heavy-weight berkeleydb integration
 
 // the file backing up a persistent map consists of line pairs with
-// - an encoded key name (with chars 0x00..0x0F being escaped)
-// - an encoded value name (with chars 0x00..0x0F being escaped)
+// - a key string   (encoded with chars 0x00..0x0F being escaped)
+// - a value string (encoded with chars 0x00..0x0F being escaped)
 
 namespace dp_misc
 {
@@ -157,13 +157,24 @@ bool PersistentMap::open()
     if( !m_bReadOnly)
         nOpenFlags |= osl_File_OpenFlag_Write;
 
-    ::osl::File::RC rcOpen = m_MapFile.open( nOpenFlags);
+    const ::osl::File::RC rcOpen = m_MapFile.open( nOpenFlags);
     m_bIsOpen = (rcOpen == osl::File::E_None);
 
     // or create later if needed
-    m_bToBeCreated = (rcOpen == osl::File::E_NOENT) && !m_bIsOpen;
+    m_bToBeCreated &= (rcOpen == osl::File::E_NOENT) && !m_bIsOpen;
     if( !m_bIsOpen)
         return m_bToBeCreated;
+
+    const bool readOK = readAll();
+    return readOK;
+}
+
+//______________________________________________________________________________
+bool PersistentMap::readAll()
+{
+    // prepare for re-reading the map-file
+    m_MapFile.setPos( osl_Pos_Absolut, 0);
+    m_entries.clear();
 
     // read header and check magic
     char aHeaderBytes[ sizeof(PmapMagic)];
@@ -203,6 +214,7 @@ bool PersistentMap::open()
             break;
     }
 
+    m_bIsDirty = false;
     return true;
 }
 
@@ -215,7 +227,7 @@ void PersistentMap::flush( void)
     if( m_bToBeCreated && !m_entries.empty())
     {
         const sal_uInt32 nOpenFlags = osl_File_OpenFlag_Read | osl_File_OpenFlag_Write | osl_File_OpenFlag_Create;
-        ::osl::File::RC rcOpen = m_MapFile.open( nOpenFlags);
+        const ::osl::File::RC rcOpen = m_MapFile.open( nOpenFlags);
         m_bIsOpen = (rcOpen == osl::File::E_None);
         m_bToBeCreated = !m_bIsOpen;
     }
@@ -281,7 +293,6 @@ void PersistentMap::put( OString const & key, OString const & value )
     typedef std::pair<t_string2string_map::iterator,bool> InsertRC;
     InsertRC r = m_entries.insert( t_string2string_map::value_type(key,value));
     m_bIsDirty = r.second;
-    (void)r;
 }
 
 //______________________________________________________________________________

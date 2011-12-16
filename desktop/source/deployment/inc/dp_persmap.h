@@ -19,8 +19,6 @@
  *
  *************************************************************/
 
-
-
 #if ! defined INCLUDED_DP_PERSMAP_H
 #define INCLUDED_DP_PERSMAP_H
 
@@ -56,8 +54,9 @@ public:
     void put( ::rtl::OString const & key, ::rtl::OString const & value );
     bool erase( ::rtl::OString const & key, bool flush_immediately = true );
 
-private:
+protected:
     bool open( void);
+    bool readAll( void);
     void flush( void);
 };
 
