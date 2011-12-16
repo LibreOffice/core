@@ -29,6 +29,7 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
     basctl \
     bean \
     chart2 \
+    configmgr \
     cui \
     dbaccess \
     desktop \
