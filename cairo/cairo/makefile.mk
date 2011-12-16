@@ -83,7 +83,7 @@ cairo_LIBS+=$(MINGW_SHARED_LIBSTDCPP)
 
 CONFIGURE_DIR=
 CONFIGURE_ACTION=cp $(SRC_ROOT)$/$(PRJNAME)$/cairo$/dummy_pkg_config . && .$/configure
-CONFIGURE_FLAGS=--disable-xlib --disable-ft --disable-pthread --disable-svg --enable-gtk-doc=no --enable-test-surfaces=no --enable-static=no --build=i586-pc-mingw32 --host=i586-pc-mingw32 PKG_CONFIG=./dummy_pkg_config CC="$(cairo_CC)" LIBS="$(cairo_LIBS)" ZLIB3RDLIB=$(ZLIB3RDLIB) COMPRESS=$(cairo_COMPRESS) OBJDUMP="$(WRAPCMD) objdump"
+CONFIGURE_FLAGS=--disable-valgrind --disable-xlib --disable-ft --disable-pthread --disable-svg --enable-gtk-doc=no --enable-test-surfaces=no --enable-static=no --build=i586-pc-mingw32 --host=i586-pc-mingw32 PKG_CONFIG=./dummy_pkg_config CC="$(cairo_CC)" LIBS="$(cairo_LIBS)" ZLIB3RDLIB=$(ZLIB3RDLIB) COMPRESS=$(cairo_COMPRESS) OBJDUMP="$(WRAPCMD) objdump"
 BUILD_ACTION=$(GNUMAKE)
 BUILD_FLAGS+= -j$(EXTMAXPROCESS)
 BUILD_DIR=$(CONFIGURE_DIR)
@@ -111,7 +111,7 @@ CONFIGURE_ACTION=cp $(SRC_ROOT)$/$(PRJNAME)$/cairo$/dummy_pkg_config . && .$/con
 .IF $(MAC_OS_X_VERSION_MIN_REQUIRED) >= 1070
 PATCH_FILES+=..$/$(TARFILE_NAME).no-atsui.patch
 .ENDIF
-CONFIGURE_FLAGS=--enable-static=no --disable-xlib --disable-ft --disable-svg --enable-quartz --enable-quartz-font --enable-gtk-doc=no --enable-test-surfaces=no PKG_CONFIG=./dummy_pkg_config ZLIB3RDLIB=$(ZLIB3RDLIB) COMPRESS=$(cairo_COMPRESS)
+CONFIGURE_FLAGS=--enable-static=no --disable-valgrind --disable-xlib --disable-ft --disable-svg --enable-quartz --enable-quartz-font --enable-gtk-doc=no --enable-test-surfaces=no PKG_CONFIG=./dummy_pkg_config ZLIB3RDLIB=$(ZLIB3RDLIB) COMPRESS=$(cairo_COMPRESS)
 .IF "$(CROSS_COMPILING)"=="YES"
 CONFIGURE_FLAGS+=--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)
 .ENDIF
@@ -159,9 +159,9 @@ CONFIGURE_ACTION=.$/configure
 .ENDIF
 
 .IF "$(OS)"=="IOS"
-CONFIGURE_FLAGS=--disable-shared --disable-xlib --enable-quartz --enable-quartz-font
+CONFIGURE_FLAGS=--disable-valgrind --disable-shared --disable-xlib --enable-quartz --enable-quartz-font
 .ELSE
-CONFIGURE_FLAGS=--disable-static --enable-xlib
+CONFIGURE_FLAGS=--disable-valgrind --disable-static --enable-xlib
 .ENDIF
 
 .IF "$(OS)"=="IOS" || "$(OS)"=="ANDROID"
