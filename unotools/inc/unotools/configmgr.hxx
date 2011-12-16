@@ -50,6 +50,8 @@ class UNOTOOLS_DLLPUBLIC ConfigManager: private boost::noncopyable {
 public:
     static rtl::OUString getAboutBoxProductVersion();
 
+    static rtl::OUString getAboutBoxProductVersionSuffix();
+
     static rtl::OUString getDefaultCurrency();
 
     static rtl::OUString getLocale();

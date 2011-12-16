@@ -37,6 +37,9 @@
         <prop oor:name="ooSetupVersionAboutBox">
             <value>${ABOUTBOXPRODUCTVERSION}</value>
         </prop>
+        <prop oor:name="ooSetupVersionAboutBoxSuffix">
+            <value>${ABOUTBOXPRODUCTVERSIONSUFFIX}</value>
+        </prop>
         <prop oor:name="ooVendor">
             <value>${OOOVENDOR}</value>
         </prop>

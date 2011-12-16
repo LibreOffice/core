@@ -274,6 +274,8 @@ namespace
         : public rtl::Static< String, Version > {};
     struct AboutBoxVersion
         : public rtl::Static< String, AboutBoxVersion > {};
+    struct AboutBoxVersionSuffix
+        : public rtl::Static< String, AboutBoxVersionSuffix > {};
     struct OOOVendor
         : public rtl::Static< String, OOOVendor > {};
     struct Extension
@@ -296,6 +298,7 @@ void ReplaceStringHookProc( UniString& rStr )
         String rBrandName = BrandName::get();
         String rVersion = Version::get();
         String rAboutBoxVersion = AboutBoxVersion::get();
+        String rAboutBoxVersionSuffix = AboutBoxVersionSuffix::get();
         String rExtension = Extension::get();
         String rXMLFileFormatName = XMLFileFormatName::get();
         String rXMLFileFormatVersion = XMLFileFormatVersion::get();
@@ -308,6 +311,7 @@ void ReplaceStringHookProc( UniString& rStr )
                 utl::ConfigManager::getProductXmlFileFormatVersion();
             rVersion = utl::ConfigManager::getProductVersion();
             rAboutBoxVersion = utl::ConfigManager::getAboutBoxProductVersion();
+            rAboutBoxVersionSuffix = utl::ConfigManager::getAboutBoxProductVersionSuffix();
             if ( !rExtension.Len() )
             {
                 rExtension = utl::ConfigManager::getProductExtension();
@@ -317,6 +321,7 @@ void ReplaceStringHookProc( UniString& rStr )
         nPro++;
         rStr.SearchAndReplaceAllAscii( "%PRODUCTNAME", rBrandName );
         rStr.SearchAndReplaceAllAscii( "%PRODUCTVERSION", rVersion );
+        rStr.SearchAndReplaceAllAscii( "%ABOUTBOXPRODUCTVERSIONSUFFIX", rAboutBoxVersionSuffix );
         rStr.SearchAndReplaceAllAscii( "%ABOUTBOXPRODUCTVERSION", rAboutBoxVersion );
         rStr.SearchAndReplaceAllAscii( "%PRODUCTEXTENSION", rExtension );
         rStr.SearchAndReplaceAllAscii( "%PRODUCTXMLFILEFORMATNAME", rXMLFileFormatName );
