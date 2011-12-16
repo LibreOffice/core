@@ -1029,6 +1029,32 @@
             <info>
                 <desc>Contains the dialogs settings.</desc>
             </info>
+            <group oor:name="DBFImport">
+                <info>
+                    <desc>Contains settings for DBF Import dialog</desc>
+                </info>
+                <prop oor:name="CharSet" oor:type="xs:int">
+                    <info>
+                        <author>muthusuba</author>
+                        <desc>Charset/Language</desc>
+                        <label>CharSet</label>
+                    </info>
+                    <value>-1</value>
+                </prop>
+            </group>
+            <group oor:name="DBFExport">
+                <info>
+                    <desc>Contains settings for DBF Export dialog</desc>
+                </info>
+                <prop oor:name="CharSet" oor:type="xs:int">
+                    <info>
+                        <author>muthusuba</author>
+                        <desc>Charset/Language</desc>
+                        <label>CharSet</label>
+                    </info>
+                    <value>-1</value>
+                </prop>
+            </group>
             <group oor:name="CSVImport">
                 <info>
                     <desc>Contains setting for Text CSV Import</desc>
