@@ -43,27 +43,6 @@
 sal_Bool            EnableSSO();
 CreateTabPage   GetSSOCreator( void );
 
-// class OfaOptionsTreeListBox -------------------------------------------
-
-class SfxModule;
-class SfxShell;
-class SfxItemSet;
-class XColorList;
-class OfaOptionsTreeListBox : public SvTreeListBox
-{
-    using  SvListView::Collapse;
-
-private:
-    sal_Bool            bInCollapse;
-
-public:
-    OfaOptionsTreeListBox(Window* pParent, const ResId& rResId) :
-        SvTreeListBox( pParent, rResId ), bInCollapse(sal_False) {}
-
-    virtual sal_Bool    Collapse( SvLBoxEntry* pParent );
-    sal_Bool            IsInCollapse()const {return bInCollapse;}
-};
-
 // struct OrderedEntry ---------------------------------------------------
 
 struct OrderedEntry
@@ -184,16 +163,8 @@ private:
     PushButton      aBackPB;
 
     FixedBorder     aHiddenGB;
-    FixedText       aPageTitleFT;
-    FixedLine       aLine1FL;
-    FixedText       aHelpFT;
-    FixedImage      aHelpImg;
 
-    ImageList       aPageImages;
-
-    ResStringArray  aHelpTextsArr;
-
-    OfaOptionsTreeListBox   aTreeLB;
+    SvTreeListBox   aTreeLB;
 
     String          sTitle;
     String          sNotLoadedError;
@@ -206,7 +177,6 @@ private:
 
     sal_Bool        bForgetSelection;
     sal_Bool        bExternBrowserActive;
-    sal_Bool        bImageResized;
     bool            bInSelectHdl_Impl;
     bool            bIsFromExtensionManager;
 
@@ -250,7 +220,6 @@ protected:
     DECL_LINK( SelectHdl_Impl, Timer * );
 
     virtual long    Notify( NotifyEvent& rNEvt );
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt );
     virtual short   Execute();
 
 public:

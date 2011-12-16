@@ -519,14 +519,6 @@ struct OptionsGroupInfo
     ~OptionsGroupInfo() { delete m_pInItemSet; delete m_pOutItemSet; }
 };
 
-sal_Bool OfaOptionsTreeListBox::Collapse( SvLBoxEntry* pParent )
-{
-    bInCollapse = sal_True;
-    sal_Bool bRet = SvTreeListBox::Collapse(pParent);
-    bInCollapse = sal_False;
-    return bRet;
-}
-
 // -----------------------------------------------------------------------
 
 #define INI_LIST() \
@@ -535,11 +527,6 @@ sal_Bool OfaOptionsTreeListBox::Collapse( SvLBoxEntry* pParent )
     aHelpPB             ( this, CUI_RES( PB_HELP ) ),\
     aBackPB             ( this, CUI_RES( PB_BACK ) ),\
     aHiddenGB           ( this, CUI_RES( FB_BORDER ) ),\
-    aPageTitleFT        ( this, CUI_RES( FT_PAGE_TITLE ) ),\
-    aLine1FL            ( this, CUI_RES( FL_LINE_1 ) ),\
-    aHelpFT             ( this, CUI_RES( FT_HELPTEXT ) ),\
-    aHelpImg            ( this, CUI_RES( IMG_HELP ) ),\
-    aHelpTextsArr       (       CUI_RES( STR_HELPTEXTS ) ),\
     aTreeLB             ( this, CUI_RES( TLB_PAGES ) ),\
     sTitle              ( GetText() ),\
     sNotLoadedError     (       CUI_RES( ST_LOAD_ERROR ) ),\
@@ -547,7 +534,6 @@ sal_Bool OfaOptionsTreeListBox::Collapse( SvLBoxEntry* pParent )
     pColorPageItemSet   ( NULL ),\
     mpColorPage         ( NULL ),\
     bForgetSelection    ( sal_False ),\
-    bImageResized       ( sal_False ),\
     bInSelectHdl_Impl   ( false ),\
     bIsFromExtensionManager( false ), \
     bIsForSetDocumentLanguage( false )
@@ -580,7 +566,6 @@ OfaTreeOptionsDialog::OfaTreeOptionsDialog( Window* pParent, const rtl::OUString
 
     SfxModalDialog( pParent, CUI_RES( RID_OFADLG_OPTIONS_TREE ) ),
     INI_LIST()
-
 {
     FreeResource();
 
@@ -821,8 +806,6 @@ void OfaTreeOptionsDialog::ApplyItemSets()
 void OfaTreeOptionsDialog::InitTreeAndHandler()
 {
     aTreeLB.SetNodeDefaultImages();
-    aPageImages = ImageList( CUI_RES( RID_IMGLIST_TREEOPT ) );
-
 
     aTreeLB.SetHelpId( HID_OFADLG_TREELISTBOX );
     aTreeLB.SetStyle( aTreeLB.GetStyle()|WB_HASBUTTONS | WB_HASBUTTONSATROOT |
@@ -988,26 +971,6 @@ long    OfaTreeOptionsDialog::Notify( NotifyEvent& rNEvt )
 
 // --------------------------------------------------------------------
 
-void OfaTreeOptionsDialog::DataChanged( const DataChangedEvent& rDCEvt )
-{
-    SfxModalDialog::DataChanged( rDCEvt );
-
-    SvLBoxEntry* pEntry = aTreeLB.GetCurEntry();
-    if ( ( rDCEvt.GetType() == DATACHANGED_SETTINGS ) && ( rDCEvt.GetFlags() & SETTINGS_STYLE ) &&
-        !aTreeLB.GetParent(pEntry))
-    {
-        OptionsGroupInfo* pInfo = static_cast<OptionsGroupInfo*>(pEntry->GetUserData());
-        ImageList* pImgLst = &aPageImages;
-        for ( sal_uInt16 i = 0; i < aHelpTextsArr.Count(); ++i )
-        {
-            if ( aHelpTextsArr.GetValue(i) == pInfo->m_nDialogId )
-            {
-                aHelpImg.SetImage( pImgLst->GetImage( pInfo->m_nDialogId ) );
-                break;
-            }
-        }
-    }
-}
 class FlagSet_Impl
 {
     bool & rFlag;
@@ -1120,281 +1083,169 @@ IMPL_LINK( OfaTreeOptionsDialog, SelectHdl_Impl, Timer*, EMPTYARG )
             pGroupInfo->m_pExtPage->DeactivatePage();
         }
     }
-    if ( pParent )
+
+    OptionsPageInfo *pPageInfo = (OptionsPageInfo *)pEntry->GetUserData();
+    OptionsGroupInfo* pGroupInfo = (OptionsGroupInfo *)pParent->GetUserData();
+    if(!pPageInfo->m_pPage && pPageInfo->m_nPageId > 0)
     {
-        aPageTitleFT.Hide();
-        aLine1FL.Hide();
-        aHelpFT.Hide();
-        aHelpImg.Hide();
-        OptionsPageInfo *pPageInfo = (OptionsPageInfo *)pEntry->GetUserData();
-        OptionsGroupInfo* pGroupInfo = (OptionsGroupInfo *)pParent->GetUserData();
-        if(!pPageInfo->m_pPage && pPageInfo->m_nPageId > 0)
+        if(pGroupInfo->m_bLoadError)
+            return 0;
+        if ( RID_SVXPAGE_COLOR == pPageInfo->m_nPageId )
         {
-            if(pGroupInfo->m_bLoadError)
-                return 0;
-            if ( RID_SVXPAGE_COLOR == pPageInfo->m_nPageId )
+            if(!pColorPageItemSet)
             {
-                if(!pColorPageItemSet)
-                {
-                    // Move usage of a static XOutdevItemPool instance here
-                    if(!mpStaticXOutdevItemPool)
-                    {
-                        mpStaticXOutdevItemPool = new XOutdevItemPool();
-                    }
-                    pColorPageItemSet = new SfxItemSet( *mpStaticXOutdevItemPool, XATTR_FILLSTYLE, XATTR_FILLCOLOR);
-                    pColorPageItemSet->Put( XFillColorItem() );
-                }
+                // Move usage of a static XOutdevItemPool instance here
+                if(!mpStaticXOutdevItemPool)
+                    mpStaticXOutdevItemPool = new XOutdevItemPool();
+
+                pColorPageItemSet = new SfxItemSet( *mpStaticXOutdevItemPool, XATTR_FILLSTYLE, XATTR_FILLCOLOR);
+                pColorPageItemSet->Put( XFillColorItem() );
             }
-            else
-            {
-                if(pGroupInfo->m_pModule /*&& !pGroupInfo->pModule->IsLoaded()*/)
-                {
-                    SfxModule* pOldModule = pGroupInfo->m_pModule;
-                    sal_Bool bIdentical = pGroupInfo->m_pModule == pGroupInfo->m_pShell;
-
-                    WaitObject aWait(this);
-                    //pGroupInfo->pModule = pGroupInfo->pModule->Load();
-                    if(!pGroupInfo->m_pModule)
-                    {
-                        pGroupInfo->m_bLoadError = sal_True;
-                        InfoBox(pBox, sNotLoadedError).Execute();
-                        return 0;
-                    }
-                    if(bIdentical)
-                         pGroupInfo->m_pShell = pGroupInfo->m_pModule;
-                    //jetzt noch testen, ob es auch in anderen Gruppen das gleiche Module gab (z.B. Text+HTML)
-                    SvLBoxEntry* pTemp = aTreeLB.First();
-                    while(pTemp)
-                    {
-                        if(!aTreeLB.GetParent(pTemp) && pTemp != pEntry)
-                        {
-                            OptionsGroupInfo* pTGInfo = (OptionsGroupInfo *)pTemp->GetUserData();
-                            if(pTGInfo->m_pModule == pOldModule)
-                            {
-                                pTGInfo->m_pModule = pGroupInfo->m_pModule;
-                                if(bIdentical)
-                                    pTGInfo->m_pShell = pGroupInfo->m_pModule;
-                            }
-                        }
-                        pTemp = aTreeLB.Next(pTemp);
-                    }
-                }
-
-//              if ( pPageInfo->nPageId != RID_OPTPAGE_CHART_DEFCOLORS )
-                {
-                    if(!pGroupInfo->m_pInItemSet)
-                        pGroupInfo->m_pInItemSet = pGroupInfo->m_pShell
-                            ? pGroupInfo->m_pShell->CreateItemSet( pGroupInfo->m_nDialogId )
-                            : CreateItemSet( pGroupInfo->m_nDialogId );
-                    if(!pGroupInfo->m_pOutItemSet)
-                        pGroupInfo->m_pOutItemSet = new SfxItemSet(
-                            *pGroupInfo->m_pInItemSet->GetPool(),
-                            pGroupInfo->m_pInItemSet->GetRanges());
-                }
-            }
-
-            if(pGroupInfo->m_pModule)
-            {
-                pPageInfo->m_pPage = pGroupInfo->m_pModule->CreateTabPage(
-                    pPageInfo->m_nPageId, this, *pGroupInfo->m_pInItemSet );
-            }
-            else if(RID_SVXPAGE_COLOR != pPageInfo->m_nPageId)
-                pPageInfo->m_pPage = ::CreateGeneralTabPage( pPageInfo->m_nPageId, this, *pGroupInfo->m_pInItemSet );
-            else
-            {
-                pPageInfo->m_pPage = ::CreateGeneralTabPage(
-                    pPageInfo->m_nPageId, this, *pColorPageItemSet );
-                mpColorPage = (SvxColorTabPage*)pPageInfo->m_pPage;
-                mpColorPage->SetupForViewFrame( SfxViewFrame::Current() );
-            }
-
-            DBG_ASSERT( pPageInfo->m_pPage, "tabpage could not created");
-            if ( pPageInfo->m_pPage )
-            {
-                SvtViewOptions aTabPageOpt( E_TABPAGE, String::CreateFromInt32( pPageInfo->m_nPageId ) );
-                pPageInfo->m_pPage->SetUserData( GetViewOptUserItem( aTabPageOpt ) );
-
-                Point aTreePos(aTreeLB.GetPosPixel());
-                Size aTreeSize(aTreeLB.GetSizePixel());
-                Point aGBPos(aHiddenGB.GetPosPixel());
-                Size aPageSize(pPageInfo->m_pPage->GetSizePixel());
-                Size aGBSize(aHiddenGB.GetSizePixel());
-                Point aPagePos( aGBPos.X() + ( aGBSize.Width() - aPageSize.Width() ) / 2,
-                                aGBPos.Y() + ( aGBSize.Height() - aPageSize.Height() ) / 2 );
-                pPageInfo->m_pPage->SetPosPixel( aPagePos );
-                if ( RID_SVXPAGE_COLOR == pPageInfo->m_nPageId )
-                {
-                    pPageInfo->m_pPage->Reset( *pColorPageItemSet );
-                    pPageInfo->m_pPage->ActivatePage( *pColorPageItemSet );
-                }
-                else
-                {
-                    pPageInfo->m_pPage->Reset( *pGroupInfo->m_pInItemSet );
-                }
-            }
-        }
-        else if ( 0 == pPageInfo->m_nPageId && !pPageInfo->m_pExtPage )
-        {
-            if ( !m_xContainerWinProvider.is() )
-            {
-                Reference < XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
-                m_xContainerWinProvider = Reference < awt::XContainerWindowProvider >(
-                    xFactory->createInstance(
-                        C2U("com.sun.star.awt.ContainerWindowProvider") ), UNO_QUERY );
-                DBG_ASSERT( m_xContainerWinProvider.is(), "service com.sun.star.awt.ContainerWindowProvider could not be loaded" );
-            }
-
-            pPageInfo->m_pExtPage = new ExtensionsTabPage(
-                this, 0, pPageInfo->m_sPageURL, pPageInfo->m_sEventHdl, m_xContainerWinProvider );
-            Size aSize = aHiddenGB.GetSizePixel();
-            aSize.Width() = aSize.Width() - 4;
-            aSize.Height() = aSize.Height() - 4;
-            Point aPos = aHiddenGB.GetPosPixel();
-            aPos.X() = aPos.X() + 2;
-            aPos.Y() = aPos.Y() + 2;
-            pPageInfo->m_pExtPage->SetPosSizePixel( aPos, aSize );
-        }
-
-        if ( pPageInfo->m_pPage )
-        {
-            if ( RID_SVXPAGE_COLOR != pPageInfo->m_nPageId &&
-                 pPageInfo->m_pPage->HasExchangeSupport())
-            {
-                pPageInfo->m_pPage->ActivatePage(*pGroupInfo->m_pOutItemSet);
-            }
-            pPageInfo->m_pPage->Show();
-        }
-        else if ( pPageInfo->m_pExtPage )
-        {
-            pPageInfo->m_pExtPage->Show();
-            pPageInfo->m_pExtPage->ActivatePage();
-        }
-
-        String sTmpTitle = sTitle;
-        sTmpTitle += String::CreateFromAscii(" - ");
-        sTmpTitle += aTreeLB.GetEntryText(pParent);
-        sTmpTitle += String::CreateFromAscii(" - ");
-        sTmpTitle += aTreeLB.GetEntryText(pEntry);
-        SetText(sTmpTitle);
-        pCurrentPageEntry = pEntry;
-        if ( !bForgetSelection )
-        {
-            if ( !pLastPageSaver )
-                pLastPageSaver = new LastPageSaver;
-            if ( !bIsFromExtensionManager )
-                pLastPageSaver->m_nLastPageId = pPageInfo->m_nPageId;
-            if ( pPageInfo->m_pExtPage )
-            {
-                if ( bIsFromExtensionManager )
-                    pLastPageSaver->m_sLastPageURL_ExtMgr = pPageInfo->m_sPageURL;
-                else
-                    pLastPageSaver->m_sLastPageURL_Tools = pPageInfo->m_sPageURL;
-            }
-        }
-        pNewPage = pPageInfo->m_pPage;
-    }
-    else
-    {
-        OptionsGroupInfo* pTGInfo = (OptionsGroupInfo *)pEntry->GetUserData();
-        if ( pTGInfo->m_sPageURL.getLength() == 0 )
-        {
-            ImageList* pImgLst = &aPageImages;
-            //hier den Hilfetext anzeigen
-            for ( sal_uInt16 i = 0; i < aHelpTextsArr.Count(); ++i )
-            {
-                if ( aHelpTextsArr.GetValue(i) == pTGInfo->m_nDialogId )
-                {
-                    aHelpFT.SetText(aHelpTextsArr.GetString(i));
-                    aHelpImg.SetImage(pImgLst->GetImage(pTGInfo->m_nDialogId));
-                    break;
-                }
-            }
-
-            aPageTitleFT.Show();
-            aLine1FL.Show();
-            aHelpFT.Show();
-            aHelpImg.Show();
-
-            //auf die Groesse der Bitmap anpassen
-            if(!bImageResized)
-            {
-                const long nCtrlDist = 2;
-                bImageResized = sal_True;
-                Point aImgPos(aHelpImg.GetPosPixel());
-                Size aImgSize(aHelpImg.GetSizePixel());
-                Point aTitlePos(aPageTitleFT.GetPosPixel());
-                Point aLinePos(aLine1FL.GetPosPixel());
-                Point aHelpPos(aHelpFT.GetPosPixel());
-                Size aHelpSize(aHelpFT.GetSizePixel());
-                long nXDiff = 0;
-                long nYDiff = 0;
-                if(aTitlePos.X() <= (aImgPos.X() + aImgSize.Width() + nCtrlDist))
-                {
-                    nXDiff = aImgPos.X() + aImgSize.Width() + nCtrlDist - aTitlePos.X();
-                }
-                if(aLinePos.Y() <= (aImgPos.Y() + aImgSize.Height() + nCtrlDist))
-                {
-                    nYDiff = aImgPos.Y() + aImgSize.Height() + nCtrlDist - aLinePos.Y();
-                }
-                aLinePos.Y() += nYDiff;
-                aLine1FL.SetPosPixel(aLinePos);
-
-                aTitlePos.X() += nXDiff;
-                aPageTitleFT.SetPosPixel(aTitlePos);
-
-                aHelpPos.X() += nXDiff;
-                aHelpPos.Y() += nYDiff;
-                aHelpSize.Width() -= nXDiff;
-                aHelpSize.Height() -= nYDiff;
-                aHelpFT.SetPosSizePixel(aHelpPos, aHelpSize);
-
-                Font aFont = aHelpFT.GetFont();
-                Size aSz = aFont.GetSize();
-                aSz.Height() = (aSz.Height() * 14 ) / 10;
-                aFont.SetSize(aSz);
-                aPageTitleFT.SetFont(aFont);
-            }
-
-            String sTmpTitle = sTitle;
-            sTmpTitle += String::CreateFromAscii(" - ");
-            aPageTitleFT.SetText(aTreeLB.GetEntryText(pEntry));
-            sTmpTitle += aPageTitleFT.GetText();
-            SetText(sTmpTitle);
-            pCurrentPageEntry = NULL;
         }
         else
         {
-            if ( !pTGInfo->m_pExtPage )
+            if(pGroupInfo->m_pModule /*&& !pGroupInfo->pModule->IsLoaded()*/)
             {
-                if ( !m_xContainerWinProvider.is() )
+                SfxModule* pOldModule = pGroupInfo->m_pModule;
+                sal_Bool bIdentical = pGroupInfo->m_pModule == pGroupInfo->m_pShell;
+
+                WaitObject aWait(this);
+                //pGroupInfo->pModule = pGroupInfo->pModule->Load();
+                if(!pGroupInfo->m_pModule)
                 {
-                    Reference < XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
-                    m_xContainerWinProvider = Reference < awt::XContainerWindowProvider >(
-                        xFactory->createInstance(
-                            C2U("com.sun.star.awt.ContainerWindowProvider") ), UNO_QUERY );
-                    DBG_ASSERT( m_xContainerWinProvider.is(), "service com.sun.star.awt.ContainerWindowProvider could not be loaded" );
+                    pGroupInfo->m_bLoadError = sal_True;
+                    InfoBox(pBox, sNotLoadedError).Execute();
+                    return 0;
                 }
-
-                pTGInfo->m_pExtPage =
-                    new ExtensionsTabPage( this, 0, pTGInfo->m_sPageURL, rtl::OUString(), m_xContainerWinProvider );
-                Size aSize = aHiddenGB.GetSizePixel();
-                aSize.Width() = aSize.Width() - 4;
-                aSize.Height() = aSize.Height() - 4;
-                Point aPos = aHiddenGB.GetPosPixel();
-                aPos.X() = aPos.X() + 2;
-                aPos.Y() = aPos.Y() + 2;
-                pTGInfo->m_pExtPage->SetPosSizePixel( aPos, aSize );
+                if(bIdentical)
+                    pGroupInfo->m_pShell = pGroupInfo->m_pModule;
+                //jetzt noch testen, ob es auch in anderen Gruppen das gleiche Module gab (z.B. Text+HTML)
+                SvLBoxEntry* pTemp = aTreeLB.First();
+                while(pTemp)
+                {
+                    if(!aTreeLB.GetParent(pTemp) && pTemp != pEntry)
+                    {
+                        OptionsGroupInfo* pTGInfo = (OptionsGroupInfo *)pTemp->GetUserData();
+                        if(pTGInfo->m_pModule == pOldModule)
+                        {
+                            pTGInfo->m_pModule = pGroupInfo->m_pModule;
+                            if(bIdentical)
+                                pTGInfo->m_pShell = pGroupInfo->m_pModule;
+                        }
+                    }
+                    pTemp = aTreeLB.Next(pTemp);
+                }
             }
 
-            if ( pTGInfo->m_pExtPage )
+            if(!pGroupInfo->m_pInItemSet)
+                pGroupInfo->m_pInItemSet = pGroupInfo->m_pShell
+                    ? pGroupInfo->m_pShell->CreateItemSet( pGroupInfo->m_nDialogId )
+                    : CreateItemSet( pGroupInfo->m_nDialogId );
+            if(!pGroupInfo->m_pOutItemSet)
+                pGroupInfo->m_pOutItemSet = new SfxItemSet(
+                    *pGroupInfo->m_pInItemSet->GetPool(),
+                    pGroupInfo->m_pInItemSet->GetRanges());
+        }
+
+        if(pGroupInfo->m_pModule)
+        {
+            pPageInfo->m_pPage = pGroupInfo->m_pModule->CreateTabPage(
+                pPageInfo->m_nPageId, this, *pGroupInfo->m_pInItemSet );
+        }
+        else if(RID_SVXPAGE_COLOR != pPageInfo->m_nPageId)
+            pPageInfo->m_pPage = ::CreateGeneralTabPage( pPageInfo->m_nPageId, this, *pGroupInfo->m_pInItemSet );
+        else
+        {
+            pPageInfo->m_pPage = ::CreateGeneralTabPage(
+                pPageInfo->m_nPageId, this, *pColorPageItemSet );
+            mpColorPage = (SvxColorTabPage*)pPageInfo->m_pPage;
+            mpColorPage->SetupForViewFrame( SfxViewFrame::Current() );
+        }
+
+        DBG_ASSERT( pPageInfo->m_pPage, "tabpage could not created");
+        if ( pPageInfo->m_pPage )
+        {
+            SvtViewOptions aTabPageOpt( E_TABPAGE, String::CreateFromInt32( pPageInfo->m_nPageId ) );
+            pPageInfo->m_pPage->SetUserData( GetViewOptUserItem( aTabPageOpt ) );
+
+            Point aTreePos(aTreeLB.GetPosPixel());
+            Size aTreeSize(aTreeLB.GetSizePixel());
+            Point aGBPos(aHiddenGB.GetPosPixel());
+            Size aPageSize(pPageInfo->m_pPage->GetSizePixel());
+            Size aGBSize(aHiddenGB.GetSizePixel());
+            Point aPagePos( aGBPos.X() + ( aGBSize.Width() - aPageSize.Width() ) / 2,
+                            aGBPos.Y() + ( aGBSize.Height() - aPageSize.Height() ) / 2 );
+            pPageInfo->m_pPage->SetPosPixel( aPagePos );
+            if ( RID_SVXPAGE_COLOR == pPageInfo->m_nPageId )
             {
-                pTGInfo->m_pExtPage->Show();
-                pTGInfo->m_pExtPage->ActivatePage();
+                pPageInfo->m_pPage->Reset( *pColorPageItemSet );
+                pPageInfo->m_pPage->ActivatePage( *pColorPageItemSet );
             }
-
-            pCurrentPageEntry = pEntry;
+            else
+            {
+                pPageInfo->m_pPage->Reset( *pGroupInfo->m_pInItemSet );
+            }
         }
     }
+    else if ( 0 == pPageInfo->m_nPageId && !pPageInfo->m_pExtPage )
+    {
+        if ( !m_xContainerWinProvider.is() )
+        {
+            Reference < XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
+            m_xContainerWinProvider = Reference < awt::XContainerWindowProvider >(
+                xFactory->createInstance(
+                C2U("com.sun.star.awt.ContainerWindowProvider") ), UNO_QUERY );
+            DBG_ASSERT( m_xContainerWinProvider.is(), "service com.sun.star.awt.ContainerWindowProvider could not be loaded" );
+        }
+
+        pPageInfo->m_pExtPage = new ExtensionsTabPage(
+            this, 0, pPageInfo->m_sPageURL, pPageInfo->m_sEventHdl, m_xContainerWinProvider );
+        Size aSize = aHiddenGB.GetSizePixel();
+        aSize.Width() = aSize.Width() - 4;
+        aSize.Height() = aSize.Height() - 4;
+        Point aPos = aHiddenGB.GetPosPixel();
+        aPos.X() = aPos.X() + 2;
+        aPos.Y() = aPos.Y() + 2;
+        pPageInfo->m_pExtPage->SetPosSizePixel( aPos, aSize );
+    }
+
+    if ( pPageInfo->m_pPage )
+    {
+        if ( RID_SVXPAGE_COLOR != pPageInfo->m_nPageId &&
+             pPageInfo->m_pPage->HasExchangeSupport())
+        {
+            pPageInfo->m_pPage->ActivatePage(*pGroupInfo->m_pOutItemSet);
+        }
+        pPageInfo->m_pPage->Show();
+    }
+    else if ( pPageInfo->m_pExtPage )
+    {
+        pPageInfo->m_pExtPage->Show();
+        pPageInfo->m_pExtPage->ActivatePage();
+    }
+
+    String sTmpTitle = sTitle;
+    sTmpTitle += String::CreateFromAscii(" - ");
+    sTmpTitle += aTreeLB.GetEntryText(pParent);
+    sTmpTitle += String::CreateFromAscii(" - ");
+    sTmpTitle += aTreeLB.GetEntryText(pEntry);
+    SetText(sTmpTitle);
+    pCurrentPageEntry = pEntry;
+    if ( !bForgetSelection )
+    {
+        if ( !pLastPageSaver )
+            pLastPageSaver = new LastPageSaver;
+        if ( !bIsFromExtensionManager )
+            pLastPageSaver->m_nLastPageId = pPageInfo->m_nPageId;
+        if ( pPageInfo->m_pExtPage )
+        {
+            if ( bIsFromExtensionManager )
+                pLastPageSaver->m_sLastPageURL_ExtMgr = pPageInfo->m_sPageURL;
+            else
+                pLastPageSaver->m_sLastPageURL_Tools = pPageInfo->m_sPageURL;
+        }
+    }
+    pNewPage = pPageInfo->m_pPage;
 
     // restore lost focus, if necessary
     Window* pFocusWin = Application::GetFocusWindow();
@@ -2207,10 +2058,6 @@ void OfaTreeOptionsDialog::ResizeTreeLB( void )
     MoveControl( aHelpPB, nDelta );
     MoveControl( aBackPB, nDelta );
     MoveControl( aHiddenGB, nDelta );
-    MoveControl( aPageTitleFT, nDelta );
-    MoveControl( aLine1FL, nDelta );
-    MoveControl( aHelpFT, nDelta );
-    MoveControl( aHelpImg, nDelta );
 }
 
 bool isNodeActive( OptionsNode* pNode, Module* pModule )

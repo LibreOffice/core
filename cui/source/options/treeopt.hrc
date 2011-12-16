@@ -32,18 +32,9 @@
 #define PB_HELP                 3
 #define PB_BACK                 4
 #define TLB_PAGES               5
-#define FT_HELPTEXT             6
-#define STR_HELPTEXTS           7
-#define IMG_LIST                8
-#define IMG_HELP                9
-#define FT_PAGE_TITLE           10
-#define FL_LINE_1               11
 
-#define BMP_ROOT_CLOSED         17
-#define BMP_ROOT_OPENED         18
 #define FB_BORDER               19
 
-#define IMG_HINT                20
 #define FT_HINT                 21
 #define CB_DISABLE              22
 #define BTN_HINT                23
@@ -62,15 +53,10 @@
 #define STR_SAVE_PAGE           (STR_GENERAL_PAGES_START + 9)
 #define STR_USERDATA_PAGE       (STR_GENERAL_PAGES_START + 10)
 
-#define FB_IMAGE                43
-
-
 // metrics
 
 #define WIDTH_PAGEFRAME         263
 #define HEIGHT_PAGEFRAME        191
-#define WIDTH_IMG_HELP          25
-#define HEIGHT_IMG_HELP         30
 
 #define COL_1                   (RSC_SP_DLG_INNERBORDER_LEFT)
 #define COL_2                   (COL_1+0)
@@ -85,16 +71,9 @@
 #define COL_5                   (COL_6-RSC_SP_CTRL_GROUP_X)
 #define COL_4                   (COL_5-RSC_CD_PUSHBUTTON_WIDTH)
 #define COL_3_1                 (COL_3+RSC_SP_TBPG_INNERBORDER_LEFT)
-#define COL_3_3                 (COL_3_1+WIDTH_IMG_HELP)
-#define COL_3_5                 (COL_11-RSC_SP_TBPG_INNERBORDER_RIGHT)
 
 #define ROW_1                   (RSC_SP_DLG_INNERBORDER_TOP)
 #define ROW_2                   (ROW_1+HEIGHT_PAGEFRAME)
 #define ROW_3                   (ROW_2+RSC_SP_CTRL_GROUP_Y)
 #define ROW_4                   (ROW_3+RSC_CD_PUSHBUTTON_HEIGHT)
 #define ROW_5                   (ROW_4+RSC_SP_DLG_INNERBORDER_BOTTOM)
-#define ROW_1_1                 (ROW_1+2)
-#define ROW_1_2                 (ROW_1+12)
-#define ROW_1_3                 (ROW_1_1+HEIGHT_IMG_HELP+2)
-#define ROW_1_4                 (ROW_1_3+8)
-
