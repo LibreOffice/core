@@ -48,6 +48,8 @@ PIXMANVERSION=0.24.0
 TARFILE_NAME=pixman-$(PIXMANVERSION)
 TARFILE_MD5=db5ffcd50064421176e8afb7b85fd1a7
 
+ADDITIONAL_FILES=Makefile.win32.common
+
 PATCH_FILES=..$/$(TARFILE_NAME).patch
 
 # Note: we are building static pixman library to avoid linking problems.
