@@ -36,7 +36,12 @@ TARGET=hyphen
 
 # --- Files --------------------------------------------------------
 
-.IF "$(DISABLE_HYPHEN)" == ""
+.IF "$(ENABLE_HYPHEN)" != "YES"
+
+all:
+    @echo "hyphen is disabled"
+
+.ELSE
 
 TARFILE_NAME=hyphen-2.7.1
 TARFILE_MD5=48a9f787f43a09c0a9b7b00cd1fddbbf
@@ -109,8 +114,4 @@ OUT2INC += hyphen.h
 .INCLUDE : target.mk
 .INCLUDE : tg_ext.mk
 
-.ELSE
-all:
-    @echo "hyphen disabled"
-
-.ENDIF
+.ENDIF # "$(ENABLE_HYPHEN)"

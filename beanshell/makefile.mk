@@ -30,7 +30,18 @@ PRJ=.
 PRJNAME=ooo_beanshell
 TARGET=ooo_beanshell
 
-.IF "$(SOLAR_JAVA)"!=""
+.IF "$(SOLAR_JAVA)"==""
+
+all:
+        @echo java disabled
+
+.ELIF "$(DISABLE_BEANSHELL)"=="YES"
+
+all:
+        @echo beanshell support disabled
+
+.ELSE
+
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :	settings.mk
@@ -52,7 +63,4 @@ BUILD_ACTION=dmake $(MFLAGS) $(CALLMACROS)
 .INCLUDE : target.mk
 .INCLUDE : tg_ext.mk
 
-.ELSE
-all:
-        @echo java disabled
 .ENDIF

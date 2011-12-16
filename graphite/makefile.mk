@@ -38,13 +38,20 @@ TARGET=so_graphite
 .INCLUDE :	settings.mk
 
 .IF "$(SYSTEM_GRAPHITE)" == "YES"
+
 all:
         @echo "An already available installation of silgraphite should exist on your system."
         @echo "Therefore the version provided here does not need to be built in addition."
-.ENDIF
+
+.ELIF "$(ENABLE_GRAPHITE)" != "TRUE"
+
+all:
+        @echo "Support for silgraphite has been disabled.  Nothing to do."
+
+.ELSE
 
 # --- Files --------------------------------------------------------
-.IF "$(ENABLE_GRAPHITE)"=="TRUE"
+
 TARFILE_NAME=silgraphite-2.3.1
 TARFILE_MD5=d35724900f6a4105550293686688bbb3
 PATCH_FILES=graphite-2.3.1.patch graphite-2.3.1_debug.patch
@@ -162,10 +169,7 @@ OUTDIR2INC= \
 .IF "$(OS)"=="WNT"
 OUT2INC=wrappers$/win32$/WinFont.h
 .ENDIF
-.ELSE
-dddd:
-    @echo Nothing to do
-.ENDIF
+
 # --- Targets ------------------------------------------------------
 
 
@@ -173,3 +177,4 @@ dddd:
 .INCLUDE :	target.mk
 .INCLUDE :	tg_ext.mk
 
+.ENDIF

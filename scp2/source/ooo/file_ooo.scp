@@ -399,26 +399,22 @@ End
 
 #endif
 
-#ifdef SOLAR_JAVA
-#ifndef SYSTEM_BSH
+#if defined SOLAR_JAVA && defined ENABLE_BEANSHELL && ! defined SYSTEM_BSH
 STD_JAR_FILE( gid_File_Jar_Bsh, bsh )
 #endif
-#endif
 
-#ifdef SOLAR_JAVA
-#ifndef SYSTEM_LUCENE
+#if defined SOLAR_JAVA && ! defined SYSTEM_LUCENE
 STD_JAR_FILE( gid_File_Jar_Lucene_Core, lucene-core-2.3 )
 STD_JAR_FILE( gid_File_Jar_Lucene_Analyzers, lucene-analyzers-2.3 )
 #endif
-#endif
 
-#ifdef SOLAR_JAVA
+
 STD_JAR_FILE( gid_File_Jar_Lucenehelpwrapper, LuceneHelpWrapper )
-#endif
 
-#ifdef SOLAR_JAVA
+#if defined SOLAR_JAVA && defined ENABLE_JAVASCRIPT
 STD_JAR_FILE( gid_File_Jar_Js, js )
 #endif
+
 
 #ifdef SOLAR_JAVA
 
@@ -465,9 +461,13 @@ End
 
 #ifdef SOLAR_JAVA
 STD_JAR_FILE( gid_File_Jar_Scriptframework, ScriptFramework )
+#ifdef ENABLE_BEANSHELL
 STD_JAR_FILE( gid_File_Jar_Scriptproviderforbeanshell, ScriptProviderForBeanShell )
+#endif
 STD_JAR_FILE( gid_File_Jar_Scriptproviderforjava, ScriptProviderForJava )
+#ifdef ENABLE_JAVASCRIPT
 STD_JAR_FILE( gid_File_Jar_Scriptproviderforjavascript, ScriptProviderForJavaScript )
+#endif
 #endif
 
 #ifdef SOLAR_JAVA
@@ -1210,11 +1210,13 @@ File gid_File_Share_Registry_Ctl_Xcd
     Name (my) = "ctl.xcd";
 End
 
+#ifdef ENABLE_BEANSHELL
 File gid_File_Scripts_Beanshell
     Dir = gid_Dir_Share_Scripts;
     ARCHIVE_TXT_FILE_BODY;
     Name = "ScriptsBeanShell.zip";
 End
+#endif
 
 #ifdef SOLAR_JAVA
 File gid_File_Scripts_Java
@@ -1224,11 +1226,13 @@ File gid_File_Scripts_Java
 End
 #endif
 
+#ifdef ENABLE_JAVASCRIPT 
 File gid_File_Scripts_Javascript
     Dir = gid_Dir_Share_Scripts;
     ARCHIVE_TXT_FILE_BODY;
     Name = "ScriptsJavaScript.zip";
 End
+#endif
 
 // new user interface configuration files
 File gid_File_Share_Config_Sofficecfg_uiconfig_Zip

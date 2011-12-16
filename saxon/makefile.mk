@@ -35,14 +35,23 @@ TARGET=saxon
 .INCLUDE :	settings.mk
 .INCLUDE : antsettings.mk
 
-.IF "$(DISABLE_SAXON)" == ""
-
-.IF "$(SOLAR_JAVA)" != ""
 .IF "$(SYSTEM_SAXON)" == "YES"
+
 all:
-        @echo "An already available installation of saxon should exist on your system."
+    @echo "An already available installation of saxon should exist on your system."
     @echo "Therefore the version provided here does not need to be built in addition."
-.ENDIF
+
+.ELIF "$(DISABLE_SAXON)" == "YES"
+
+all:
+    @echo Support for saxon is disabled.
+
+.ELIF "$(SOLAR_JAVA)" == ""
+
+all:
+    @echo No Java support.  Can not compile saxon.
+
+.ELSE
 
 # --- Files --------------------------------------------------------
 
@@ -57,19 +66,10 @@ BUILD_ACTION=$(ANT) $(ANT_FLAGS) -Dsolarbindir=$(SOLARBINDIR) jar-bj
 
 OUT2CLASS= saxon-build$/9.0.0.7$/bj$/saxon9.jar
 
-.ELSE			# $(SOLAR_JAVA)!= ""
-nojava:
-    @echo "Not building $(PRJNAME) because Java is disabled"
-.ENDIF			# $(SOLAR_JAVA)!= ""
 # --- Targets ------------------------------------------------------
 
 .INCLUDE : set_ext.mk
 .INCLUDE : target.mk
-.IF "$(SOLAR_JAVA)" != ""
 .INCLUDE : tg_ext.mk
-.ENDIF
 
-.ELSE
-all:
-    @echo "saxon disabled"
-.ENDIF
+.ENDIF # "$(SOLAR_JAVA)" == ""

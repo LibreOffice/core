@@ -30,7 +30,15 @@ PRJ=.
 PRJNAME=ooo_rhino
 TARGET=ooo_rhino
 
-.IF "$(SOLAR_JAVA)"!=""
+.IF "$(SOLAR_JAVA)"==""
+all:
+        @echo java disabled
+
+.ELIF "$(ENABLE_JAVASCRIPT)"!="YES"
+all:
+        @echo javascript support disabled
+.ELSE
+
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :	settings.mk
@@ -65,12 +73,4 @@ BUILD_ACTION=$(ANT) -Dbuild.label="build-$(RSCREVISION)" jar
 .INCLUDE : target.mk
 .INCLUDE : tg_ext.mk
 
-#.ELSE
-#all:
-#        @echo rhino disabled
-#.ENDIF
-
-.ELSE
-all:
-        @echo java disabled
 .ENDIF

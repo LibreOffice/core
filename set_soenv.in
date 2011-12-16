@@ -90,7 +90,7 @@ my ( $oldPATH, $SRC_ROOT, $SO_HOME, $JAVA_HOME, $JDK, $JAVAFLAGS, $OOO_SHELL,
      $COMMON_BUILD_TOOLS, $WIN_GREP, $WIN_FIND, $WIN_LS,
      $WIN_GNUCOPY, $WIN_TOUCH, $STLPORT4, $MOZILLA_VERSION, $MOZILLA_TOOLKIT, $PREBUILD_MOZAB, $MOZILLABUILD,
 	 $PROEXT, $TARFILE_LOCATION,
-     $DISABLE_SAXON, $ENABLE_HUNSPELL, $ENABLE_HYPHEN,
+     $ENABLE_HUNSPELL, $ENABLE_HYPHEN,
      $SYSTEM_PYTHON, $SYSTEM_MOZILLA, $EPM_FLAGS);
 #
 #-------------------------------------------
@@ -1768,7 +1768,6 @@ if ( $platform =~ m/cygwin/ )
    chomp($tmpdir);
    ToFile( "TMPDIR",     $tmpdir,            "e" );
 }
-ToFile( "DISABLE_SAXON",	"@DISABLE_SAXON@", "e" );
 ToFile( "ENABLE_HUNSPELL",	"@ENABLE_HUNSPELL@", "e" );
 ToFile( "ENABLE_HYPHEN",	"@ENABLE_HYPHEN@", "e" );
 
@@ -1943,8 +1942,11 @@ ToFile( "LUCENE_CORE_JAR",   "@LUCENE_CORE_JAR@",  "e" );
 ToFile( "LUCENE_ANALYZERS_JAR",   "@LUCENE_ANALYZERS_JAR@",  "e" );
 ToFile( "SYSTEM_BSH",        "@SYSTEM_BSH@",       "e" );
 ToFile( "BSH_JAR",           "@BSH_JAR@",          "e" );
+ToFile( "ENABLE_BEANSHELL", "@ENABLE_BEANSHELL@",  "e" );
 ToFile( "SYSTEM_SAXON",      "@SYSTEM_SAXON@",     "e" );
 ToFile( "SAXON_JAR",         "@SAXON_JAR@",        "e" );
+ToFile( "DISABLE_SAXON",     "@DISABLE_SAXON@",    "e" );
+ToFile( "ENABLE_JAVASCRIPT", "@ENABLE_JAVASCRIPT@","e" );
 ToFile( "SYSTEM_ODBC_HEADERS","@SYSTEM_ODBC_HEADERS@","e" );
 ToFile( "SYSTEM_LIBXSLT",    "@SYSTEM_LIBXSLT@",   "e" );
 ToFile( "LIBXSLT_CFLAGS",    "@LIBXSLT_CFLAGS@",   "e" );

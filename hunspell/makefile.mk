@@ -36,7 +36,12 @@ TARGET=hunspell
 
 # --- Files --------------------------------------------------------
 
-.IF "$(ENABLE_HUNSPELL)" == "YES"
+.IF "$(ENABLE_HUNSPELL)" != "YES"
+
+all:
+    @echo "hunspell is disabled"
+
+.ELSE
 
 TARFILE_NAME=hunspell-1.2.9
 TARFILE_MD5=68dd2e8253d9a7930e9fd50e2d7220d0
@@ -47,7 +52,7 @@ PATCH_FILES=\
     hunspell-solaris.patch \
     hunspell-stacksmash.patch \
     hunspell.patch
-    
+
 .IF "$(GUI)"=="UNX"
 
 #relative to CONFIGURE_DIR
@@ -100,8 +105,4 @@ OUT2INC= \
 .INCLUDE : set_ext.mk
 .INCLUDE : target.mk
 .INCLUDE : tg_ext.mk
-
-.ELSE
-all:
-    @echo "hunspell disabled"
 .ENDIF

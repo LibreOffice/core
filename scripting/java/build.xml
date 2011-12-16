@@ -45,6 +45,15 @@
   <property environment="env"/>
   <property name="env.BSH_JAR" value="${solar.jar}/bsh.jar"/>
 
+  <target name="eval_environment">
+    <condition property="with_rhino">
+      <equals arg1="${env.ENABLE_JAVASCRIPT}" arg2="YES" />
+    </condition>
+    <condition property="with_beanshell">
+      <equals arg1="${env.ENABLE_BEANSHELL}" arg2="YES" />
+    </condition>
+  </target>
+
   <!-- ==================== classpath setting ============================ -->
   <path id="idlclasspath">
     <pathelement location="${solar.jar}/jurt.jar"/>
@@ -95,10 +104,12 @@
   </target>
 
   <!-- ======================== Compile Classes ========================== -->
-  <target name="compile" depends="prepare">
+  <target name="compile" depends="prepare, eval_environment">
     <javac srcdir="com" destdir="${jardir}"
          includes="**/*.java" classpathref="idlclasspath"
          debug="${debug}" optimize="${optimize}" deprecation="off">
+      <exclude name="**/provider/javascript/*.java" unless="with_rhino" />
+      <exclude name="**/provider/beanshell/*.java" unless="with_beanshell" />
       <compilerarg value="-Xbootclasspath:${toString:my.bootstrap.classpath}"/>
     </javac>
     <javac srcdir="Framework/" destdir="${jardir}"
@@ -156,7 +167,7 @@
   </target>
 
   <!-- ===================== jar ========================= -->
-  <target name="jar" depends="compile">
+  <target name="jar.provider.java" depends="compile">
     <jar jarfile="${jardir}/ScriptProviderForJava.jar"
          basedir="${jardir}">
         <manifest>
@@ -168,7 +179,9 @@
         </manifest>
         <include name="**/provider/java/*.class"/>
     </jar>
+  </target>
 
+  <target name="jar.provider.beanshell" depends="compile" if="with_beanshell">
     <jar jarfile="${jardir}/ScriptProviderForBeanShell.jar"
          basedir="${jardir}">
         <manifest>
@@ -183,7 +196,9 @@
           <include name="**/provider/beanshell/*.bsh"/>
         </fileset>
     </jar>
+  </target>
 
+  <target name="jar.provider.javascript" depends="compile" if="with_rhino">
     <jar jarfile="${jardir}/ScriptProviderForJavaScript.jar"
          basedir="${jardir}">
         <manifest>
@@ -198,7 +213,9 @@
           <include name="**/provider/javascript/*.js"/>
         </fileset>
     </jar>
+  </target>
 
+  <target name="jar.scriptframework" depends="compile">
     <jar jarfile="${jardir}/ScriptFramework.jar"
          basedir="${jardir}">
         <manifest>
@@ -214,7 +231,9 @@
         <include name="**/container/*.class"/>
         <include name="**/io/*.class"/>
     </jar>
+  </target>
 
+  <target name="jar" depends="jar.provider.java,jar.provider.beanshell,jar.provider.javascript,jar.scriptframework">
   </target>
 
   <target name="idesupport.jar" depends="idesupport.compile">

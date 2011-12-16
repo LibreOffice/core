@@ -37,9 +37,11 @@ TARGET=nss
 # --- Files --------------------------------------------------------
 
 .IF "$(ENABLE_NSS_MODULE)"!="YES"
+
 all:
     @echo "NSS will not be built. ENABLE_NSS_MODULE is '$(ENABLE_NSS_MODULE)'"
-.ENDIF	
+
+.ELSE
 
 TARFILE_NAME=nss-3.12.6-with-nspr-4.8.4
 TARFILE_MD5=b92261a5679276c400555004937af965
@@ -180,3 +182,5 @@ OUTDIR2INC=mozilla$/dist$/public$/nss mozilla$/dist$/out$/include
 .INCLUDE : set_ext.mk
 .INCLUDE :	target.mk
 .INCLUDE :	tg_ext.mk
+
+.ENDIF

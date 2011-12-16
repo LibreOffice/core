@@ -35,6 +35,20 @@ TARGET=ooo_mozab
 .INCLUDE :	settings.mk
 
 # --- Files --------------------------------------------------------
+
+.IF "$(WITH_MOZILLA)"=="NO"
+
+all:
+    @echo Support for mozilla is disabled.
+
+.ELIF "$(BUILD_MOZAB)"==""
+
+all:
+    @echo Use of internal mozilla is disabled.
+
+.ELSE
+
+
 # ----- pkg-config start -------
 .INCLUDE .IGNORE : pkgroot.mk
 .IF "$(PKGCONFIG_ROOT)"!=""
@@ -267,11 +281,6 @@ LIBIDL_PREFIX:=$(MOZ_TOOLS)/vc71
 
 # --- Targets ------------------------------------------------------
 
-.IF "$(BUILD_MOZAB)"==""
-all:
-    @echo "Never Build Mozilla."
-.ENDIF	
-
 .INCLUDE : set_ext.mk
 .INCLUDE : target.mk
 .INCLUDE : tg_ext.mk
@@ -428,3 +437,5 @@ $(OUT)$/zipped$/$(OS)$(COM)UBruntime.zip : zipped$/$(OS)$(COM)Pruntime.zip zippe
 .ENDIF # $(GUIBASE)=="aqua"
 
 .INCLUDE : extractfiles.mk
+
+.ENDIF
