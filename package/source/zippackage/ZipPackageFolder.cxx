@@ -657,15 +657,15 @@ bool ZipPackageFolder::saveChild( const ::rtl::OUString &rShortName, const Conte
                 rInfo.pStream->SetToBeEncrypted( sal_True );
             }
 
-            // Remove hacky bit from entry flags
-            if ( pTempEntry->nFlag & ( 1 << 4 ) )
-            {
-                pTempEntry->nFlag &= ~( 1 << 4 );
-                pTempEntry->nMethod = STORED;
-            }
-
             // Then copy it back afterwards...
             ZipPackageFolder::copyZipEntry ( rInfo.pStream->aEntry, *pTempEntry );
+
+            // Remove hacky bit from entry flags
+            if ( rInfo.pStream->aEntry.nFlag & ( 1 << 4 ) )
+            {
+                rInfo.pStream->aEntry.nFlag &= ~( 1 << 4 );
+                rInfo.pStream->aEntry.nMethod = STORED;
+            }
 
             // TODO/LATER: get rid of this hack ( the encrypted stream size property is changed during saving )
             if ( rInfo.pStream->IsEncrypted() )
