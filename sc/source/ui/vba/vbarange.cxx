@@ -4548,7 +4548,7 @@ ScVbaRange::AutoFilter( const uno::Any& Field, const uno::Any& Criteria1, const 
                 SCROW nStartRow = autoFiltAddress.StartRow;
                 SCCOL nEndCol = autoFiltAddress.EndColumn;
                 SCROW nEndRow = autoFiltAddress.EndRow;
-                pDocument->GetDataArea( autoFiltAddress.Sheet, nStartCol, nStartRow, nEndCol, nEndRow, sal_True, true );
+                pDocument->GetDataArea( autoFiltAddress.Sheet, nStartCol, nStartRow, nEndCol, nEndRow, true, true );
                 autoFiltAddress.StartColumn = nStartCol;
                 autoFiltAddress.StartRow = nStartRow;
                 autoFiltAddress.EndColumn = nEndCol;

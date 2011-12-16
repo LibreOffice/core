@@ -131,7 +131,7 @@ void SAL_CALL ScCellCursorObj::collapseToCurrentRegion() throw(uno::RuntimeExcep
         SCTAB nTab = aOneRange.aStart.Tab();
 
         pDocSh->GetDocument()->GetDataArea(
-                        nTab, nStartCol, nStartRow, nEndCol, nEndRow, sal_True, false );
+                        nTab, nStartCol, nStartRow, nEndCol, nEndRow, true, false );
 
         ScRange aNew( nStartCol, nStartRow, nTab, nEndCol, nEndRow, nTab );
         SetNewRange( aNew );
