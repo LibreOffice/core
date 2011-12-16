@@ -177,13 +177,10 @@ private:
 
     sal_Bool        bForgetSelection;
     sal_Bool        bExternBrowserActive;
-    bool            bInSelectHdl_Impl;
     bool            bIsFromExtensionManager;
 
     // check "for the current document only" and set focus to "Western" languages box
     bool            bIsForSetDocumentLanguage;
-
-    Timer           aSelectTimer;
 
     com::sun::star::uno::Reference < com::sun::star::awt::XContainerWindowProvider >
                     m_xContainerWinProvider;

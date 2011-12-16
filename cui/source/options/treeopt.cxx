@@ -149,9 +149,6 @@ using namespace ::com::sun::star::util;
     #define C2U(cChar)      rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( cChar ) )
 #endif
 
-#define HINT_TIMEOUT            200
-#define SELECT_FIRST_TIMEOUT    0
-#define SELECT_TIMEOUT          300
 #define EXPAND_PROTOCOL         "vnd.sun.star.expand:"
 
 LastPageSaver* OfaTreeOptionsDialog::pLastPageSaver = NULL;
@@ -365,7 +362,6 @@ SfxTabPage* CreateGeneralTabPage( sal_uInt16 nId, Window* pParent, const SfxItem
     return pRet;
 }
 
-
 struct OptionsMapping_Impl
 {
     const char* m_pGroupName;
@@ -534,7 +530,6 @@ struct OptionsGroupInfo
     pColorPageItemSet   ( NULL ),\
     mpColorPage         ( NULL ),\
     bForgetSelection    ( sal_False ),\
-    bInSelectHdl_Impl   ( false ),\
     bIsFromExtensionManager( false ), \
     bIsForSetDocumentLanguage( false )
 
@@ -667,14 +662,7 @@ sal_uInt16  OfaTreeOptionsDialog::AddGroup(const String& rGroupName,
 
 IMPL_LINK(OfaTreeOptionsDialog, ShowPageHdl_Impl, SvTreeListBox*, EMPTYARG)
 {
-    if ( aSelectTimer.GetTimeout() == SELECT_FIRST_TIMEOUT )
-    {
-        aSelectTimer.SetTimeout( SELECT_TIMEOUT );
-        SelectHdl_Impl( NULL );
-    }
-    else if ( aSelectTimer.GetTimeout() == SELECT_TIMEOUT )
-        aSelectTimer.Start();
-
+    SelectHdl_Impl( NULL );
     return 0;
 }
 
@@ -820,8 +808,6 @@ void OfaTreeOptionsDialog::InitTreeAndHandler()
     aOkPB.SetClickHdl( LINK( this, OfaTreeOptionsDialog, OKHdl_Impl ) );
 
     aHiddenGB.Show();
-    aSelectTimer.SetTimeout( SELECT_FIRST_TIMEOUT );
-    aSelectTimer.SetTimeoutHdl( LINK( this, OfaTreeOptionsDialog, SelectHdl_Impl ) );
 }
 
 void OfaTreeOptionsDialog::ActivatePage( sal_uInt16 nResId )
@@ -971,31 +957,25 @@ long    OfaTreeOptionsDialog::Notify( NotifyEvent& rNEvt )
 
 // --------------------------------------------------------------------
 
-class FlagSet_Impl
-{
-    bool & rFlag;
-    public:
-        FlagSet_Impl(bool& bFlag) : rFlag(bFlag){rFlag = true;}
-        ~FlagSet_Impl(){rFlag = false;}
-};
-
 IMPL_LINK( OfaTreeOptionsDialog, SelectHdl_Impl, Timer*, EMPTYARG )
 {
     SvTreeListBox* pBox = &aTreeLB;
+
+    if(pCurrentPageEntry == pBox->GetCurEntry())
+    {
+        pBox->EndSelection();
+        return 0;
+    }
+
     SvLBoxEntry* pEntry = pBox->GetCurEntry();
     SvLBoxEntry* pParent = pBox->GetParent(pEntry);
-    pBox->EndSelection();
-
-    DBG_ASSERT(!bInSelectHdl_Impl, "Timeout handler called twice");
-    if(bInSelectHdl_Impl || pCurrentPageEntry == pEntry)
-        return 0;
-    //#111938# lock the SelectHdl_Impl to prevent multiple executes
-    FlagSet_Impl aFlag(bInSelectHdl_Impl);
 
     // If the user has selected a category, automatically switch to a suitable
     // default sub-page instead.
     if (!pParent)
     {
+        pBox->EndSelection();
+
         OptionsGroupInfo* pGroupInfo = static_cast<OptionsGroupInfo*>(pEntry->GetUserData());
 
         if(!pGroupInfo)
@@ -1046,6 +1026,8 @@ IMPL_LINK( OfaTreeOptionsDialog, SelectHdl_Impl, Timer*, EMPTYARG )
 
         return 0;
     }
+
+    pBox->EndSelection();
 
     TabPage* pOldPage = NULL;
     TabPage* pNewPage = NULL;
@@ -1147,19 +1129,19 @@ IMPL_LINK( OfaTreeOptionsDialog, SelectHdl_Impl, Timer*, EMPTYARG )
                     pGroupInfo->m_pInItemSet->GetRanges());
         }
 
-        if(pGroupInfo->m_pModule)
-        {
-            pPageInfo->m_pPage = pGroupInfo->m_pModule->CreateTabPage(
-                pPageInfo->m_nPageId, this, *pGroupInfo->m_pInItemSet );
-        }
-        else if(RID_SVXPAGE_COLOR != pPageInfo->m_nPageId)
-            pPageInfo->m_pPage = ::CreateGeneralTabPage( pPageInfo->m_nPageId, this, *pGroupInfo->m_pInItemSet );
-        else
+        if(pPageInfo->m_nPageId == RID_SVXPAGE_COLOR)
         {
             pPageInfo->m_pPage = ::CreateGeneralTabPage(
                 pPageInfo->m_nPageId, this, *pColorPageItemSet );
             mpColorPage = (SvxColorTabPage*)pPageInfo->m_pPage;
             mpColorPage->SetupForViewFrame( SfxViewFrame::Current() );
+        }
+        else
+        {
+            pPageInfo->m_pPage = ::CreateGeneralTabPage(pPageInfo->m_nPageId, this, *pGroupInfo->m_pInItemSet );
+
+            if(!pPageInfo->m_pPage && pGroupInfo->m_pModule)
+                pPageInfo->m_pPage = pGroupInfo->m_pModule->CreateTabPage(pPageInfo->m_nPageId, this, *pGroupInfo->m_pInItemSet);
         }
 
         DBG_ASSERT( pPageInfo->m_pPage, "tabpage could not created");
