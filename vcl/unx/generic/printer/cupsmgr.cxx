@@ -28,6 +28,8 @@
 
 
 #include <cups/cups.h>
+#include <cups/http.h>
+#include <cups/ipp.h>
 #include <cups/ppd.h>
 
 #include <unistd.h>
@@ -54,21 +56,25 @@ class CUPSWrapper
     osl::Mutex      m_aGetPPDMutex;
     bool            m_bPPDThreadRunning;
 
-    int             (*m_pcupsPrintFile)(const char*, const char*, const char*, int, cups_option_t*);
-    int             (*m_pcupsGetDests)(cups_dest_t**);
-    void            (*m_pcupsSetDests)(int,cups_dest_t*);
-    void            (*m_pcupsFreeDests)(int,cups_dest_t*);
-    const char*     (*m_pcupsGetPPD)(const char*);
-    int             (*m_pcupsMarkOptions)(ppd_file_t*,int,cups_option_t*);
-    int             (*m_pcupsAddOption)(const char*,const char*,int,cups_option_t**);
-    void            (*m_pcupsFreeOptions)(int,cups_option_t*);
-    ppd_file_t*     (*m_pppdOpenFile)(const char* pFile);
-    void            (*m_pppdClose)(ppd_file_t*);
-    const char*     (*m_pcupsServer)();
-    void            (*m_pcupsSetPasswordCB)(const char*(cb)(const char*));
-    const char*     (*m_pcupsUser)();
-    void            (*m_pcupsSetUser)(const char*);
-    const char*     (*m_pcupsGetOption)(const char*,int,cups_option_t*);
+    int               (*m_pcupsPrintFile)(const char*, const char*, const char*, int, cups_option_t*);
+    int               (*m_pcupsGetDests)(cups_dest_t**);
+    void              (*m_pcupsSetDests)(int,cups_dest_t*);
+    void              (*m_pcupsFreeDests)(int,cups_dest_t*);
+    const char*       (*m_pcupsGetPPD)(const char*);
+    int               (*m_pcupsMarkOptions)(ppd_file_t*,int,cups_option_t*);
+    int               (*m_pcupsAddOption)(const char*,const char*,int,cups_option_t**);
+    void              (*m_pcupsFreeOptions)(int,cups_option_t*);
+    ppd_file_t*       (*m_pppdOpenFile)(const char* pFile);
+    void              (*m_pppdClose)(ppd_file_t*);
+    http_t*           (*m_phttpConnectEncrypt)(const char*, int, http_encryption_t);
+    void              (*m_phttpClose)(http_t*);
+    int               (*m_pippPort)();
+    const char*       (*m_pcupsServer)();
+    http_encryption_t (*m_pcupsEncryption)();
+    void              (*m_pcupsSetPasswordCB)(const char*(cb)(const char*));
+    const char*       (*m_pcupsUser)();
+    void              (*m_pcupsSetUser)(const char*);
+    const char*       (*m_pcupsGetOption)(const char*,int,cups_option_t*);
 
     oslGenericFunction loadSymbol( const char* );
 public:
@@ -110,8 +116,20 @@ public:
     void ppdClose( ppd_file_t* pPPD )
     { m_pppdClose( pPPD ); }
 
+    http_t* httpConnectEncrypt(const char* host, int port, http_encryption_t crypt)
+    { return m_phttpConnectEncrypt(host, port, crypt); }
+
+    void httpClose(http_t* server)
+    { m_phttpClose(server); }
+
+    int ippPort()
+    { return m_pippPort(); }
+
     const char  *cupsServer(void)
     { return m_pcupsServer(); }
+
+    http_encryption_t cupsEncryption()
+    { return m_pcupsEncryption(); }
 
     const char  *cupsUser(void)
     { return m_pcupsUser(); }
@@ -192,8 +210,16 @@ CUPSWrapper::CUPSWrapper()
         loadSymbol( "ppdOpenFile" );
     m_pppdClose             = (void(*)(ppd_file_t*))
         loadSymbol( "ppdClose" );
+    m_phttpConnectEncrypt   = (http_t*(*)(const char*, int, http_encryption_t))
+        loadSymbol( "httpConnectEncrypt" );
+    m_phttpClose            = (void(*)(http_t*))
+        loadSymbol( "httpClose" );
+    m_pippPort              = (int(*)())
+        loadSymbol( "ippPort" );
     m_pcupsServer           = (const char*(*)())
         loadSymbol( "cupsServer" );
+    m_pcupsEncryption       = (http_encryption_t(*)())
+        loadSymbol( "cupsEncryption" );
     m_pcupsUser             = (const char*(*)())
         loadSymbol( "cupsUser" );
     m_pcupsSetPasswordCB    = (void(*)(const char*(*)(const char*)))
@@ -218,6 +244,9 @@ CUPSWrapper::CUPSWrapper()
            m_pcupsFreeOptions               &&
            m_pppdOpenFile                   &&
            m_pppdClose                      &&
+           m_phttpConnectEncrypt            &&
+           m_phttpClose                     &&
+           m_pippPort                       &&
            m_pcupsGetOption
            ) )
     {
@@ -448,18 +477,30 @@ void CUPSManager::runDests()
     // prepare against a signal during FcInit or FcConfigGetCurrent
     if( sigsetjmp( aViolationBuffer, ~0 ) == 0 )
     {
-        int nDests = m_pCUPSWrapper->cupsGetDests( &pDests );
-        #if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "came out of cupsGetDests\n" );
-        #endif
+        // n#722902 - do a fast-failing check for cups working *at
+        // all* first
+        http_t* p_http;
+        if( (p_http=m_pCUPSWrapper->httpConnectEncrypt(
+                 m_pCUPSWrapper->cupsServer(), 
+                 m_pCUPSWrapper->ippPort(),
+                 m_pCUPSWrapper->cupsEncryption())) != NULL )
+        {
+            // neat, cups is up, clean up the canary
+            m_pCUPSWrapper->httpClose(p_http);
 
-        osl::MutexGuard aGuard( m_aCUPSMutex );
-        m_nDests = nDests;
-        m_pDests = pDests;
-        m_bNewDests = true;
-        #if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "finished cupsGetDests\n" );
-        #endif
+            int nDests = m_pCUPSWrapper->cupsGetDests( &pDests );
+#if OSL_DEBUG_LEVEL > 1
+            fprintf( stderr, "came out of cupsGetDests\n" );
+#endif
+
+            osl::MutexGuard aGuard( m_aCUPSMutex );
+            m_nDests = nDests;
+            m_pDests = pDests;
+            m_bNewDests = true;
+#if OSL_DEBUG_LEVEL > 1
+            fprintf( stderr, "finished cupsGetDests\n" );
+#endif
+        }
     }
     else
     {
