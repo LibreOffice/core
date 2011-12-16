@@ -86,4 +86,6 @@ endef
 
 gb_LinkTarget_LDFLAGS := $(subst -Wl$(COMMA)-rpath-link$(COMMA)$(SYSBASE)/lib:$(SYSBASE)/usr/lib,,$(gb_LinkTarget_LDFLAGS))
 
+gb_Library__set_soversion_script_platform = 
+
 # vim: set noet sw=4:
