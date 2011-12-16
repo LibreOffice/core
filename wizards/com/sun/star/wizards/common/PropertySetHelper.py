@@ -225,10 +225,7 @@ class PropertySetHelper(object):
     def showProperties(self):
         sName = ""
         if self.m_xPropertySet != None:
-            XServiceInfo xServiceInfo = (XServiceInfo)
-            UnoRuntime.queryInterface(XServiceInfo.class, self.m_xPropertySet)
-            if xServiceInfo != None:
-                sName = xServiceInfo.getImplementationName()
+            sName = self.m_xPropertySet.getImplementationName()
 
             xInfo = self.m_xPropertySet.getPropertySetInfo()
             aAllProperties = xInfo.getProperties()
