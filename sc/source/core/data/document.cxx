@@ -42,12 +42,14 @@
 #include <svx/svdocapt.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/objsh.hxx>
+#include <sfx2/docfile.hxx>
 #include <svl/poolcach.hxx>
 #include <unotools/saveopt.hxx>
 #include <svl/zforlist.hxx>
 #include <unotools/charclass.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <tools/tenccvt.hxx>
+#include <tools/urlobj.hxx>
 
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/script/vba/XVBACompatibility.hpp>
@@ -96,6 +98,9 @@
 
 #include <map>
 #include <limits>
+
+#include <rtl/oustringostreaminserter.hxx>
+#include <iostream>
 
 using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;
@@ -178,6 +183,14 @@ bool ScDocument::GetName( SCTAB nTab, rtl::OUString& rName ) const
         }
     rName = rtl::OUString();
     return false;
+}
+
+rtl::OUString ScDocument::GetCopyTabName( SCTAB nTab ) const
+{
+    if (nTab < static_cast<SCTAB>(maTabNames.size()))
+        return maTabNames[nTab];
+    else
+        return rtl::OUString();
 }
 
 bool ScDocument::SetCodeName( SCTAB nTab, const rtl::OUString& rName )
@@ -1675,6 +1688,7 @@ void ScDocument::InitUndoSelected( ScDocument* pSrcDoc, const ScMarkData& rTabSe
 
         xPoolHelper = pSrcDoc->xPoolHelper;
 
+
         rtl::OUString aString;
         for (SCTAB nTab = 0; nTab <= rTabSelection.GetLastSelected(); nTab++)
             if ( rTabSelection.GetTableSelect( nTab ) )
@@ -1694,9 +1708,9 @@ void ScDocument::InitUndoSelected( ScDocument* pSrcDoc, const ScMarkData& rTabSe
             }
     }
     else
-        {
+    {
         OSL_FAIL("InitUndo");
-        }
+    }
 }
 
 
@@ -1708,6 +1722,12 @@ void ScDocument::InitUndo( ScDocument* pSrcDoc, SCTAB nTab1, SCTAB nTab2,
         Clear();
 
         xPoolHelper = pSrcDoc->xPoolHelper;
+        if (pSrcDoc->pShell->GetMedium())
+        {
+            maFileURL = pSrcDoc->pShell->GetMedium()->GetURLObject().GetMainURL(INetURLObject::DECODE_TO_IURI);
+            std::cout << "SfxMedium: " << maFileURL << std::endl;
+            std::cout << "GetName: " << rtl::OUString(pSrcDoc->pShell->GetName()) << std::endl;
+        }
 
         rtl::OUString aString;
         if ( nTab2 >= static_cast<SCTAB>(maTabs.size()))
@@ -1891,6 +1911,34 @@ void ScDocument::CopyToClip(const ScClipParam& rClipParam,
     {
         OSL_TRACE("CopyToClip: no ClipDoc");
         pClipDoc = SC_MOD()->GetClipDoc();
+    }
+
+    if (pShell->GetMedium())
+    {
+        pClipDoc->maFileURL = pShell->GetMedium()->GetURLObject().GetMainURL(INetURLObject::DECODE_TO_IURI);
+        // for unsaved files use the title name and adjust during save of file
+        if (pClipDoc->maFileURL.isEmpty())
+            pClipDoc->maFileURL = pShell->GetName();
+
+        std::cout << pClipDoc->maFileURL << std::endl;
+        std::cout << "GetName: " << rtl::OUString(pShell->GetName()) << std::endl;
+    }
+    else
+    {
+        pClipDoc->maFileURL = pShell->GetName();
+    }
+
+    //init maTabNames
+    for (TableContainer::iterator itr = maTabs.begin(); itr != maTabs.end(); ++itr)
+    {
+        if( *itr )
+        {
+            rtl::OUString aTabName;
+            (*itr)->GetName(aTabName);
+            pClipDoc->maTabNames.push_back(aTabName);
+        }
+        else
+            pClipDoc->maTabNames.push_back(rtl::OUString());
     }
 
     pClipDoc->aDocName = aDocName;

@@ -37,9 +37,12 @@
 #include <string.h>
 #include <tools/mempool.hxx>
 #include <osl/diagnose.h>
+#include <sfx2/docfile.hxx>
 
 #include "token.hxx"
 #include "tokenarray.hxx"
+#include "reftokenhelper.hxx"
+#include "clipparam.hxx"
 #include "compiler.hxx"
 #include <formula/compiler.hrc>
 #include "rechead.hxx"
@@ -48,6 +51,9 @@
 #include "rangeseq.hxx"
 #include "externalrefmgr.hxx"
 #include "document.hxx"
+
+#include <iostream>
+#include <rtl/oustringostreaminserter.hxx>
 
 using ::std::vector;
 
@@ -1804,6 +1810,89 @@ void ScTokenArray::ReadjustRelative3DReferences( const ScAddress& rOldPos,
                 {
                     rRef1.CalcAbsIfRel( rOldPos );
                     rRef1.CalcRelFromAbs( rNewPos );
+                }
+            }
+            break;
+            default:
+            {
+                // added to avoid warnings
+            }
+        }
+    }
+}
+
+namespace {
+
+void GetExternalTableData(const ScDocument* pOldDoc, const ScDocument* pNewDoc, const SCTAB nTab, rtl::OUString& rTabName, sal_uInt16& rFileId)
+{
+    rtl::OUString aFileName = pOldDoc->GetFileURL();;
+    std::cout << aFileName << std::endl;
+    rFileId = pNewDoc->GetExternalRefManager()->getExternalFileId(aFileName);
+    rTabName = pOldDoc->GetCopyTabName(nTab);
+    std::cout << "TabName: " << rTabName << std::endl;
+}
+
+bool IsInCopyRange( const ScRange& rRange, const ScDocument* pClipDoc )
+{
+    ScClipParam& rClipParam = const_cast<ScDocument*>(pClipDoc)->GetClipParam();
+    std::cout << "Col: " << rRange.aStart.Col() << "Row: " << rRange.aStart.Row() << "Tab: " << rRange.aStart.Tab() << std::endl;
+    return rClipParam.maRanges.In(rRange);
+}
+
+}
+
+void ScTokenArray::ReadjusteAbsolute3DReferences( const ScDocument* pOldDoc, const ScDocument* pNewDoc, const ScAddress& rPos )
+{
+    for ( sal_uInt16 j=0; j<nLen; ++j )
+    {
+        switch ( pCode[j]->GetType() )
+        {
+            case svDoubleRef :
+            {
+                ScComplexRefData& rRef = static_cast<ScToken*>(pCode[j])->GetDoubleRef();
+                ScSingleRefData& rRef2 = rRef.Ref2;
+                ScSingleRefData& rRef1 = rRef.Ref1;
+
+                ScRange aRange;
+                if (!ScRefTokenHelper::getAbsRangeFromToken(aRange, static_cast<ScToken*>(pCode[j]), rPos))
+                    continue;   // might be an external ref token
+
+                if (IsInCopyRange(aRange, pOldDoc))
+                    continue;   // don't adjust references to copied values
+
+                if ( (rRef2.IsFlag3D() && !rRef2.IsTabRel()) || (rRef1.IsFlag3D() && !rRef1.IsTabRel()) )
+                {
+                    rtl::OUString aTabName;
+                    sal_uInt16 nFileId;
+                    GetExternalTableData(pOldDoc, pNewDoc, rRef1.nTab, aTabName, nFileId);
+                    pCode[j]->DecRef();
+                    ScExternalDoubleRefToken* pToken = new ScExternalDoubleRefToken(nFileId, aTabName, rRef);
+                    pToken->IncRef();
+                    pCode[j] = pToken;
+                }
+            }
+            break;
+            case svSingleRef :
+            {
+                ScSingleRefData& rRef = static_cast<ScToken*>(pCode[j])->GetSingleRef();
+
+                ScRange aRange;
+                if (!ScRefTokenHelper::getAbsRangeFromToken(aRange, static_cast<ScToken*>(pCode[j]), rPos))
+                    continue;   // might be an external ref token
+
+                if (IsInCopyRange(aRange, pOldDoc))
+                    continue;   // don't adjust references to copied values
+
+                if ( rRef.IsFlag3D() && !rRef.IsTabRel() )
+                {
+                    rtl::OUString aTabName;
+                    sal_uInt16 nFileId;
+                    GetExternalTableData(pOldDoc, pNewDoc, rRef.nTab, aTabName, nFileId);
+                    //replace with ScExternalSingleRefToken and adjust references
+                    pCode[j]->DecRef();
+                    ScExternalSingleRefToken* pToken = new ScExternalSingleRefToken(nFileId, aTabName, rRef);
+                    pToken->IncRef();
+                    pCode[j] = pToken;
                 }
             }
             break;

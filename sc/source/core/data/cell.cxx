@@ -881,6 +881,11 @@ ScFormulaCell::ScFormulaCell( const ScFormulaCell& rCell, ScDocument& rDoc, cons
                     adjustDBRange(pToken, rDoc, rCell.pDocument);
             }
         }
+
+        if (pDocument->GetPool() != rCell.pDocument->GetPool())
+        {
+            pCode->ReadjusteAbsolute3DReferences( rCell.pDocument, &rDoc, rCell.aPos);
+        }
     }
 
     if( !bCompile )

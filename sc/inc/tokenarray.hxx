@@ -95,6 +95,9 @@ public:
     void            ReadjustRelative3DReferences(
                                 const ScAddress& rOldPos,
                                 const ScAddress& rNewPos );
+
+    // Make all absolute references external references pointing to the old document
+    void ReadjusteAbsolute3DReferences( const ScDocument* pOldDoc, const ScDocument* pNewDoc, const ScAddress& rPos );
 };
 
 #endif // SC_TOKENARRAY_HXX

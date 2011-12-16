@@ -242,6 +242,7 @@ private:
     ScValidationDataList* pValidationList;              // validity
     SvNumberFormatterIndexTable*    pFormatExchangeList;    // for application of number formats
     TableContainer maTabs;
+    std::vector<rtl::OUString> maTabNames;               // for undo document, we need the information tab name <-> index
     mutable ScRangeName* pRangeName;
     ScDBCollection*     pDBCollection;
     ScDPCollection*     pDPCollection;
@@ -280,8 +281,9 @@ private:
     mutable ::std::auto_ptr< ScFormulaParserPool >
                         mxFormulaParserPool;            /// Pool for all external formula parsers used by this document.
 
-    rtl::OUString              aDocName;                       // optional: name of document
-    rtl::OUString              aDocCodeName;                       // optional: name of document (twice?)
+    rtl::OUString       aDocName;                       // optional: name of document
+    rtl::OUString       aDocCodeName;                       // optional: name of document (twice?)
+    rtl::OUString       maFileURL;      // file URL for copy & paste
     ScRangePairListRef  xColNameRanges;
     ScRangePairListRef  xRowNameRanges;
 
@@ -432,6 +434,7 @@ public:
     void            SetName( const rtl::OUString& r ) { aDocName = r; }
     const rtl::OUString&   GetCodeName() const { return aDocCodeName; }
     void                SetCodeName( const rtl::OUString& r ) { aDocCodeName = r; }
+    const rtl::OUString& GetFileURL() const { return maFileURL; }
 
     void            GetDocStat( ScDocStat& rDocStat );
 
@@ -533,6 +536,7 @@ public:
     SC_DLLPUBLIC bool GetCodeName( SCTAB nTab, rtl::OUString& rName ) const;
     SC_DLLPUBLIC bool SetCodeName( SCTAB nTab, const rtl::OUString& rName );
     SC_DLLPUBLIC bool GetTable( const rtl::OUString& rName, SCTAB& rTab ) const;
+    rtl::OUString   GetCopyTabName(SCTAB nTab) const;
 
     SC_DLLPUBLIC void SetAnonymousDBData(SCTAB nTab, ScDBData* pDBData);
     SC_DLLPUBLIC ScDBData* GetAnonymousDBData(SCTAB nTab);
