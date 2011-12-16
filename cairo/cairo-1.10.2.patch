@@ -70,12 +70,21 @@
  	@mkdir -p $(CFG)
 --- misc/cairo-1.10.2/build/config.sub	2009-08-14 23:33:32.000000000 +0200
 +++ misc/build/cairo-1.10.2/build/config.sub	2009-08-14 23:33:32.000000000 +0200
+@@ -120,7 +120,7 @@
+ # Here we must recognize all the valid KERNEL-OS combinations.
+ maybe_os=`echo $1 | sed 's/^\(.*\)-\([^-]*-[^-]*\)$/\2/'`
+ case $maybe_os in
+-  nto-qnx* | linux-gnu* | linux-dietlibc | linux-newlib* | linux-uclibc* | \
++  nto-qnx* | linux-gnu* | linux-android* | linux-dietlibc | linux-newlib* | linux-uclibc* | \
+   uclinux-uclibc* | uclinux-gnu* | kfreebsd*-gnu* | knetbsd*-gnu* | netbsd*-gnu* | \
+   kopensolaris*-gnu* | \
+   storm-chaos* | os2-emx* | rtmk-nova*)
 @@ -1272,7 +1272,7 @@
  	      | -ekkobsd* | -kfreebsd* | -freebsd* | -riscix* | -lynxos* \
  	      | -bosx* | -nextstep* | -cxux* | -aout* | -elf* | -oabi* \
  	      | -ptx* | -coff* | -ecoff* | -winnt* | -domain* | -vsta* \
 -	      | -udi* | -eabi* | -lites* | -ieee* | -go32* | -aux* \
-+	      | -udi* | -androideabi* | -eabi* | -lites* | -ieee* | -go32* | -aux* \
++	      | -udi* | -linux-androideabi* | -eabi* | -lites* | -ieee* | -go32* | -aux* \
  	      | -chorusos* | -chorusrdb* | -cegcc* \
  	      | -cygwin* | -pe* | -psos* | -moss* | -proelf* | -rtems* \
  	      | -mingw32* | -linux-gnu* | -linux-newlib* | -linux-uclibc* \

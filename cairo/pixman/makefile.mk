@@ -35,7 +35,7 @@ EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
 
 .INCLUDE :	settings.mk
 
-.IF "$(SYSTEM_CAIRO)" == "YES" || "$(GUIBASE)" == "android"
+.IF "$(SYSTEM_CAIRO)" == "YES"
 all:
     @echo "Not building pixman."
 
@@ -51,6 +51,10 @@ TARFILE_MD5=db5ffcd50064421176e8afb7b85fd1a7
 ADDITIONAL_FILES=Makefile.win32.common
 
 PATCH_FILES=..$/$(TARFILE_NAME).patch
+
+.IF "$(OS)"=="ANDROID"
+PATCH_FILES+=..$/$(TARFILE_NAME).android.patch
+.ENDIF
 
 # Note: we are building static pixman library to avoid linking problems.
 # However, for Unix dynamic library must be used (especially due to 64bit issues)
@@ -121,15 +125,32 @@ pixman_CFLAGS+=-fPIC
 
 CONFIGURE_DIR=
 CONFIGURE_ACTION=.$/configure
+
 .IF "$(OS)"=="IOS"
 CONFIGURE_FLAGS=--disable-shared
 .ELSE
 CONFIGURE_FLAGS=--disable-static
 .ENDIF
+
 CONFIGURE_FLAGS+=CFLAGS="$(pixman_CFLAGS)"
+
+.IF "$(OS)"=="ANDROID"
+
+# The pixman-cpu.c code wants to read /proc/<pid>/auxv, but 
+# the Android headers don't define Elf32_auxv_t.
+
+# Maybe we should instead just patch the arm_has_* booleans in
+# pixman-cpu.c to be hardcoded as TRUE and patch out the run-time
+# check?
+
+CONFIGURE_FLAGS+=--disable-arm-simd --disable-arm-neon --disable-arm-iwmmxt
+
+.ENDIF
+
 .IF "$(CROSS_COMPILING)"=="YES"
 CONFIGURE_FLAGS+=--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)
 .ENDIF
+
 BUILD_ACTION=$(GNUMAKE)
 BUILD_FLAGS+= -j$(EXTMAXPROCESS)
 BUILD_DIR=$(CONFIGURE_DIR)
@@ -150,7 +171,7 @@ OUT2LIB+=pixman$/.libs$/*.a
 .ELSE
 OUT2LIB+=pixman$/release$/*.lib
 .ENDIF
-.ELIF "$(OS)"=="IOS" || "$(OS)"=="ANDROID"
+.ELIF "$(OS)"=="IOS"
 OUT2LIB+=pixman$/.libs$/libpixman-1.a
 .ELSE
 OUT2LIB+=pixman$/.libs$/libpixman-1.so*

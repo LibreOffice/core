@@ -69,12 +69,21 @@
  GPGKEY = 6FF7C1A8
 --- misc/pixman-0.24.0/config.sub	2008-08-30 00:27:25.000000000 +0200
 +++ misc/build/pixman-0.24.0/config.sub	2011-12-16 09:05:14.595773609 +0100
+@@ -120,7 +120,7 @@
+ # Here we must recognize all the valid KERNEL-OS combinations.
+ maybe_os=`echo $1 | sed 's/^\(.*\)-\([^-]*-[^-]*\)$/\2/'`
+ case $maybe_os in
+-  nto-qnx* | linux-gnu* | linux-dietlibc | linux-newlib* | linux-uclibc* | \
++  nto-qnx* | linux-gnu* | linux-android* | linux-dietlibc | linux-newlib* | linux-uclibc* | \
+   uclinux-uclibc* | uclinux-gnu* | kfreebsd*-gnu* | knetbsd*-gnu* | netbsd*-gnu* | \
+   storm-chaos* | os2-emx* | rtmk-nova*)
+     os=-$maybe_os
 @@ -1247,7 +1247,7 @@
  	      | -ekkobsd* | -kfreebsd* | -freebsd* | -riscix* | -lynxos* \
  	      | -bosx* | -nextstep* | -cxux* | -aout* | -elf* | -oabi* \
  	      | -ptx* | -coff* | -ecoff* | -winnt* | -domain* | -vsta* \
 -	      | -udi* | -eabi* | -lites* | -ieee* | -go32* | -aux* \
-+	      | -udi* | -androideabi* | -eabi* | -lites* | -ieee* | -go32* | -aux* \
++	      | -udi* | -linux-androideabi* | -eabi* | -lites* | -ieee* | -go32* | -aux* \
  	      | -chorusos* | -chorusrdb* \
  	      | -cygwin* | -pe* | -psos* | -moss* | -proelf* | -rtems* \
  	      | -mingw32* | -linux-gnu* | -linux-newlib* | -linux-uclibc* \
@@ -103,3 +112,14 @@
   { $as_echo "$as_me:$LINENO: checking whether byte ordering is bigendian" >&5
  $as_echo_n "checking whether byte ordering is bigendian... " >&6; }
  if test "${ac_cv_c_bigendian+set}" = set; then
+--- misc/pixman-0.24.0/pixman/pixman-utils.c
++++ misc/build/pixman-0.24.0/pixman/pixman-utils.c
+@@ -27,6 +27,7 @@
+ #endif
+ #include <stdio.h>
+ #include <stdlib.h>
++#include <limits.h>
+ 
+ #include "pixman-private.h"
+ 
+

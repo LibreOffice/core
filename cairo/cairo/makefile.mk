@@ -35,7 +35,7 @@ EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
 
 .INCLUDE :	settings.mk
 
-.IF "$(SYSTEM_CAIRO)" == "YES" || "$(GUIBASE)" == "android"
+.IF "$(SYSTEM_CAIRO)" == "YES"
 all:
     @echo "Not building cairo."
 .ENDIF
@@ -56,6 +56,10 @@ PATCH_FILES+= ..$/$(TARFILE_NAME).wntmsc.patch
 .IF "$(OS)" == "IOS"
 PATCH_FILES+=..$/$(TARFILE_NAME).no-atsui.patch
 PATCH_FILES+=..$/$(TARFILE_NAME).ios.patch
+.ENDIF
+
+.IF "$(OS)" == "ANDROID"
+PATCH_FILES+=..$/$(TARFILE_NAME).android.patch
 .ENDIF
 
 cairo_CFLAGS=$(SOLARINC)
@@ -163,15 +167,31 @@ CONFIGURE_ACTION=.$/configure
 .ENDIF
 
 .IF "$(OS)"=="IOS"
-CONFIGURE_FLAGS=--disable-valgrind --disable-shared --disable-xlib --enable-quartz --enable-quartz-font
+CONFIGURE_FLAGS=--disable-shared
 .ELSE
-CONFIGURE_FLAGS=--disable-valgrind --disable-static --enable-xlib
+CONFIGURE_FLAGS=--disable-static
 .ENDIF
 
 .IF "$(OS)"=="IOS" || "$(OS)"=="ANDROID"
-CONFIGURE_FLAGS+=--disable-ft PKG_CONFIG=./dummy_pkg_config
+CONFIGURE_FLAGS+=--disable-xlib
+.ELSE
+CONFIGURE_FLAGS+=--enable-xlib
+.ENDIF
+
+.IF "$(OS)"=="IOS"
+CONFIGURE_FLAGS+=--enable-quartz --enable-quartz-font
+.ENDIF
+
+CONFIGURE_FLAGS+=--disable-valgrind
+
+.IF "$(OS)"=="IOS"
+CONFIGURE_FLAGS+=--disable-ft
 .ELSE
 CONFIGURE_FLAGS+=--enable-ft
+.ENDIF
+
+.IF "$(OS)"=="IOS" || "$(OS)"=="ANDROID"
+CONFIGURE_FLAGS+=PKG_CONFIG=./dummy_pkg_config
 .ENDIF
 
 CONFIGURE_FLAGS+=--disable-svg --enable-gtk-doc=no --enable-test-surfaces=no ZLIB3RDLIB=$(ZLIB3RDLIB) COMPRESS=$(cairo_COMPRESS)
@@ -237,7 +257,7 @@ OUT2BIN+=src$/.libs$/*.dll
 OUT2LIB+=src$/release$/*.lib
 OUT2BIN+=src$/release$/*.dll
 .ENDIF
-.ELIF "$(OS)"=="IOS" || "$(OS)"=="ANDROID"
+.ELIF "$(OS)"=="IOS"
 OUT2LIB+=src$/.libs$/libcairo*.a
 .ELSE
 OUT2LIB+=src$/.libs$/libcairo.so*

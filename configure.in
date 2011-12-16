@@ -8800,11 +8800,7 @@ if test "$with_system_cairo" = "yes"; then
 else
     AC_MSG_RESULT([no])
 
-    if test $_os = Android; then
-        dnl For Android cairo isn't
-        dnl buildable yet.
-        :
-    elif test $_os = WINNT; then
+    if test $_os = WINNT; then
         dnl We only need cairo for Windows if we
         dnl build librsvg or directx disabled
         if test "$ENABLE_LIBRSVG" != NO -o -z "$ENABLE_DIRECTX"; then
