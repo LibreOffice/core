@@ -686,9 +686,15 @@ sal_Bool ZipFile::readLOC( ZipEntry &rEntry )
             rEntry.sPath = sLOCPath;
         }
 
-        // the method can be reset for internal use so it is not checked
+        // check basic local file header / entry consistency, just
+        // plain ignore bits 1 & 2 of the flag field - they are either
+        // purely informative, or even fully undefined (depending on
+        // nMethod)
+        // Do *not* compare nMethod / nHow, older versions with
+        // encrypted streams write mismatching DEFLATE/STORE pairs
+        // there.
         bBroken = rEntry.nVersion != nVersion
-                        || rEntry.nFlag != nFlag
+                        || (rEntry.nFlag & ~6L) != (nFlag & ~6L)
                         || rEntry.nTime != nTime
                         || rEntry.nPathLen != nPathLen
                         || !rEntry.sPath.equals( sLOCPath );
