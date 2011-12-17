@@ -1671,8 +1671,6 @@ SvStream& operator>>( SvStream& rIStream, Polygon& rPoly )
     DBG_ASSERTWARNING( rIStream.GetVersion(), "Polygon::>> - Solar-Version not set on rIStream" );
 
     sal_uInt16          i;
-    sal_uInt16          nStart;
-    sal_uInt16          nCurPoints;
     sal_uInt16          nPoints;
 
     // Anzahl der Punkte einlesen und Array erzeugen
@@ -1686,40 +1684,6 @@ SvStream& operator>>( SvStream& rIStream, Polygon& rPoly )
     else
         rPoly.mpImplPolygon->ImplSetSize( nPoints, sal_False );
 
-    // Je nach CompressMode das Polygon einlesen
-    if ( rIStream.GetCompressMode() == COMPRESSMODE_FULL )
-    {
-        i = 0;
-        unsigned char bShort;
-        while ( i < nPoints )
-        {
-            rIStream >> bShort >> nCurPoints;
-
-            if ( bShort )
-            {
-                short nShortX;
-                short nShortY;
-                for ( nStart = i; i < nStart+nCurPoints; i++ )
-                {
-                    rIStream >> nShortX >> nShortY;
-                    rPoly.mpImplPolygon->mpPointAry[i].X() = nShortX;
-                    rPoly.mpImplPolygon->mpPointAry[i].Y() = nShortY;
-                }
-            }
-            else
-            {
-                long nLongX;
-                long nLongY;
-                for ( nStart = i; i < nStart+nCurPoints; i++ )
-                {
-                    rIStream >> nLongX >> nLongY;
-                    rPoly.mpImplPolygon->mpPointAry[i].X() = nLongX;
-                    rPoly.mpImplPolygon->mpPointAry[i].Y() = nLongY;
-                }
-            }
-        }
-    }
-    else
     {
         // Feststellen, ob ueber die Operatoren geschrieben werden muss
 #if (SAL_TYPES_SIZEOFLONG) != 4
@@ -1752,74 +1716,12 @@ SvStream& operator<<( SvStream& rOStream, const Polygon& rPoly )
     DBG_CHKOBJ( &rPoly, Polygon, NULL );
     DBG_ASSERTWARNING( rOStream.GetVersion(), "Polygon::<< - Solar-Version not set on rOStream" );
 
-    sal_uInt16          nStart;
     sal_uInt16          i;
     sal_uInt16          nPoints = rPoly.GetSize();
 
     // Anzahl der Punkte rausschreiben
     rOStream << nPoints;
 
-    // Je nach CompressMode das Polygon rausschreiben
-    if ( rOStream.GetCompressMode() == COMPRESSMODE_FULL )
-    {
-        i = 0;
-        unsigned char bShort;
-        while ( i < nPoints )
-        {
-            nStart = i;
-
-            // Feststellen, welcher Typ geschrieben werden soll
-            if ( ((rPoly.mpImplPolygon->mpPointAry[nStart].X() >= SHRT_MIN) &&
-                  (rPoly.mpImplPolygon->mpPointAry[nStart].X() <= SHRT_MAX)) &&
-                 ((rPoly.mpImplPolygon->mpPointAry[nStart].Y() >= SHRT_MIN) &&
-                  (rPoly.mpImplPolygon->mpPointAry[nStart].Y() <= SHRT_MAX)) )
-                bShort = sal_True;
-            else
-                bShort = sal_False;
-            unsigned char bCurShort;
-            while ( i < nPoints )
-            {
-                // Feststellen, welcher Typ geschrieben werden soll
-                if ( ((rPoly.mpImplPolygon->mpPointAry[nStart].X() >= SHRT_MIN) &&
-                      (rPoly.mpImplPolygon->mpPointAry[nStart].X() <= SHRT_MAX)) &&
-                     ((rPoly.mpImplPolygon->mpPointAry[nStart].Y() >= SHRT_MIN) &&
-                      (rPoly.mpImplPolygon->mpPointAry[nStart].Y() <= SHRT_MAX)) )
-                    bCurShort = sal_True;
-                else
-                    bCurShort = sal_False;
-
-                // Wenn sich die Werte in einen anderen Bereich begeben,
-                // muessen wir neu rausschreiben
-                if ( bCurShort != bShort )
-                {
-                    bShort = bCurShort;
-                    break;
-                }
-
-                i++;
-            }
-
-            rOStream << bShort << (sal_uInt16)(i-nStart);
-
-            if ( bShort )
-            {
-                for( ; nStart < i; nStart++ )
-                {
-                    rOStream << (short)rPoly.mpImplPolygon->mpPointAry[nStart].X()
-                             << (short)rPoly.mpImplPolygon->mpPointAry[nStart].Y();
-                }
-            }
-            else
-            {
-                for( ; nStart < i; nStart++ )
-                {
-                    rOStream << rPoly.mpImplPolygon->mpPointAry[nStart].X()
-                             << rPoly.mpImplPolygon->mpPointAry[nStart].Y();
-                }
-            }
-        }
-    }
-    else
     {
         // Feststellen, ob ueber die Operatoren geschrieben werden muss
 #if (SAL_TYPES_SIZEOFLONG) != 4

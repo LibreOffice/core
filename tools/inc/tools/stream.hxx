@@ -90,7 +90,6 @@ typedef sal_uInt16 StreamMode;
 #define NUMBERFORMAT_INT_BIGENDIAN      (sal_uInt16)0x0000
 #define NUMBERFORMAT_INT_LITTLEENDIAN   (sal_uInt16)0xFFFF
 
-#define COMPRESSMODE_FULL           (sal_uInt16)0xFFFF
 #define COMPRESSMODE_NONE           (sal_uInt16)0x0000
 #define COMPRESSMODE_ZBITMAP            (sal_uInt16)0x0001
 #define COMPRESSMODE_NATIVE             (sal_uInt16)0x0010
