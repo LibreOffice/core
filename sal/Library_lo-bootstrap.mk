@@ -1,9 +1,11 @@
+# -*- Mode: makefile; tab-width: 4; indent-tabs-mode: t -*-
+#
 # Version: MPL 1.1 / GPLv3+ / LGPLv3+
 #
 # The contents of this file are subject to the Mozilla Public License Version
 # 1.1 (the "License"); you may not use this file except in compliance with
 # the License or as specified alternatively below. You may obtain a copy of
-# the License at http:#www.mozilla.org/MPL/
+# the License at http://www.mozilla.org/MPL/
 #
 # Software distributed under the License is distributed on an "AS IS" basis,
 # WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
@@ -11,11 +13,7 @@
 # License.
 #
 # Major Contributor(s):
-# Copyright (C) 2011 Tor Lillqvist <tml@iki.fi> (initial developer)
-# Copyright (C) 2011 SUSE Linux http://suse.com (initial developer's employer)
-#
-# Zip parsing code lifted from Mozilla's other-licenses/android/APKOpen.cpp,
-# by Michael Wu <mwu@mozilla.com>.
+# Copyright (C) 2011 Matúš Kukan <matus.kukan@gmail.com>
 #
 # All Rights Reserved.
 #
@@ -27,33 +25,22 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-PRJ = ..
-PRJNAME = sal
-TARGET = lo-bootstrap
-
 # Too many warnings from android_native_app_glue.[ch]
 EXTERNAL_WARNINGS_NOT_ERRORS = TRUE
 
-.INCLUDE :  settings.mk
-
-.IF "$(OS)" != "ANDROID"
-ALL:
-# do nothing
-.ENDIF
-
-SHL1TARGET = $(TARGET)
-
-SHL1OBJS = \
-    $(SLO)$/lo-bootstrap.obj
+$(eval $(call gb_Library_Library,lo-bootstrap))
 
 # We don't want to link liblo-bootstrap.so against
 # libgnustl_shared.so. The Android dynamic linker won't find it
 # anyway. One very point of liblo-bootstrap is its wrapper for
 # dlopen() that searches also in the app's lib folder for needed
-# shared libraries. So just re-define STDSHLCUIMT.
+# shared libraries.
+$(eval $(call gb_Library_add_libs,lo-bootstrap,\
+	-llog -landroid \
+))
 
-STDSHLCUIMT := -llog -landroid
+$(eval $(call gb_Library_add_cobjects,lo-bootstrap,\
+	sal/android/lo-bootstrap \
+))
 
-# Also don't pointless
-
-.INCLUDE :  target.mk
+# vim: set noet sw=4 ts=4:

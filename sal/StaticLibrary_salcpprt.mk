@@ -1,4 +1,5 @@
 # -*- Mode: makefile; tab-width: 4; indent-tabs-mode: t -*-
+#
 # Version: MPL 1.1 / GPLv3+ / LGPLv3+
 #
 # The contents of this file are subject to the Mozilla Public License Version
@@ -11,12 +12,10 @@
 # for the specific language governing rights and limitations under the
 # License.
 #
-# The Initial Developer of the Original Code is
-#       Bjoern Michaelsen, Canonical Ltd. <bjoern.michaelsen@canonical.com>
-# Portions created by the Initial Developer are Copyright (C) 2010 the
-# Initial Developer. All Rights Reserved.
-#
 # Major Contributor(s):
+# Copyright (C) 2011 Matúš Kukan <matus.kukan@gmail.com> (initial developer)
+#
+# All Rights Reserved.
 #
 # For minor contributions see the git repository.
 #
@@ -26,29 +25,16 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Module_Module,sal))
+$(eval $(call gb_StaticLibrary_StaticLibrary,salcpprt))
 
-$(eval $(call gb_Module_add_targets,sal,\
-	Executable_cppunittester \
-	$(if $(filter $(CROSS_COMPILING),YES)$(filter $(COM),MSC),, \
-		Executable_typesconfig) \
-	$(if $(filter $(OS),ANDROID), \
-		Library_lo-bootstrap) \
-	Library_sal \
-	Library_sal_textenc \
-	$(if $(filter $(OS),WNT), \
-		Library_uwinapi) \
-	Package_inc \
-	Package_generated \
-	StaticLibrary_salcpprt \
+$(eval $(call gb_StaticLibrary_add_package_headers,salcpprt,sal_generated))
+
+$(eval $(call gb_StaticLibrary_add_defs,salcpprt, \
+	$(LFS_CFLAGS) \
 ))
 
-$(eval $(call gb_Module_add_check_targets,sal,\
-	CppunitTest_sal_osl_mutex \
-	CppunitTest_sal_osl_pipe \
-	CppunitTest_sal_osl_profile \
-	CppunitTest_sal_osl_setthreadname \
-	CppunitTest_sal_rtl_math \
+$(eval $(call gb_StaticLibrary_add_exception_objects,salcpprt, \
+	sal/cpprt/operators_new_delete \
 ))
 
 # vim: set noet sw=4 ts=4:

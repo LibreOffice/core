@@ -266,6 +266,7 @@ gb_Library_PLAINLIBS_NONE += \
 	Cocoa \
 	objc \
 	OpenGL \
+	dl \
 	m \
 	pthread \
 

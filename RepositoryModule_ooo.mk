@@ -73,6 +73,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     qadevOOo \
     regexp \
     reportdesign \
+    sal \
     salhelper \
     sane \
     sax \
@@ -114,7 +115,6 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
 
 # these have only migrated subsequentcheck for now
 $(eval $(call gb_Module_add_moduledirs,ooo,\
-    sal \
     ucb \
 ))
 

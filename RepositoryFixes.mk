@@ -116,6 +116,7 @@ gb_Library_NOILIBFILENAMES += \
     nspr4 \
     nss3 \
     shlwapi \
+    uwinapi \
     version \
 
 gb_Library_FILENAMES := $(filter-out $(foreach lib,$(gb_Library_NOILIBFILENAMES),$(lib):%),$(gb_Library_FILENAMES))

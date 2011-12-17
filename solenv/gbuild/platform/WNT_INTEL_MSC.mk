@@ -423,10 +423,10 @@ gb_Library_PLAINLIBS_NONE += \
 	shlwapi \
 	user32 \
 	uuid \
-	uwinapi \
 	version \
 	winmm \
 	winspool \
+	ws2_32 \
 
 gb_Library_LAYER := \
 	$(foreach lib,$(gb_Library_OOOLIBS),$(lib):OOO) \

@@ -1,3 +1,5 @@
+# -*- Mode: makefile; tab-width: 4; indent-tabs-mode: t -*-
+#
 # Version: MPL 1.1 / GPLv3+ / LGPLv3+
 #
 # The contents of this file are subject to the Mozilla Public License Version
@@ -11,8 +13,7 @@
 # License.
 #
 # Major Contributor(s):
-# Copyright (C) 2011 Red Hat, Inc., Stephan Bergmann <sbergman@redhat.com>
-#   (initial developer) ]
+# Copyright (C) 2011 Matúš Kukan <matus.kukan@gmail.com> (initial developer)
 #
 # All Rights Reserved.
 #
@@ -24,23 +25,28 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-PRJ = ../..
-PRJNAME = sal
-TARGET = sal_textenc
+$(eval $(call gb_Library_Library,uwinapi))
 
-# Should be VISIBILITY_HIDDEN=TRUE, but sal/textenc contains objects that end up
-# in both sal and sal_textenc libraries, so need to use a map file here for now.
+$(eval $(call gb_Library_add_linked_libs,uwinapi,\
+	$(if $(filter $(COM),MSC), \
+		kernel32 \
+		msvcrt \
+		shlwapi \
+		user32 \
+		version \
+	) \
+	$(filter-out uwinapi,$(gb_STDLIBS)) \
+))
 
-.INCLUDE: settings.mk
+$(eval $(call gb_Library_add_defs,uwinapi,\
+	$(if $(filter $(COM),GCC), \
+		-Wno-unused-parameter -Wno-return-type) \
+	$(LFS_CFLAGS) \
+))
 
-# Should be DLLPRE= as it is loaded dynamically, but IOS links against it.
+$(eval $(call gb_Library_add_cobjects,uwinapi,\
+	sal/systools/win32/uwinapi/snprintf \
+	sal/systools/win32/uwinapi/snwprintf \
+))
 
-SHL1IMPLIB = i$(SHL1TARGET)
-SHL1LIBS = $(SLB)/textenc_tables.lib
-SHL1RPATH = URELIB
-SHL1STDLIBS = $(SALLIB)
-SHL1TARGET = sal_textenc
-SHL1VERSIONMAP = saltextenc.map
-DEF1NAME = $(SHL1TARGET)
-
-.INCLUDE: target.mk
+# vim: set noet sw=4 ts=4:

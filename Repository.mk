@@ -257,6 +257,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
 endif
 
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_URE, \
+    sal_textenc \
 	xmlreader \
 ))
 
@@ -294,6 +295,12 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 	xsec_fw \
 	xsec_xmlsec \
 	xstor \
+	$(if $(filter $(OS),ANDROID), \
+		lo-bootstrap \
+	) \
+	$(if $(filter $(OS),WNT), \
+		uwinapi \
+	) \
 ))
 
 ifeq ($(OS),WNT)
@@ -308,7 +315,6 @@ endif
 ifeq ($(OS),IOS)
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
     gcc3_uno \
-    sal_textenc \
 ))
 endif
 
