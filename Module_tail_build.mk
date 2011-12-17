@@ -54,6 +54,7 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
     sd \
     slideshow \
     starmath \
+    svx \
     sw \
     swext \
     unoxml \
