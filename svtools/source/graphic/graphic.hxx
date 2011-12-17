@@ -58,7 +58,7 @@ public:
     Graphic();
     ~Graphic() throw();
 
-    using unographic::GraphicDescriptor::init;
+    using ::unographic::GraphicDescriptor::init;
     void init( const ::Graphic& rGraphic ) throw();
 
     static const ::Graphic* getImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxIFace ) throw();
