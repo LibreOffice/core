@@ -166,13 +166,13 @@ my_components = \
 .IF "$(BUILD_TYPE)" != "$(BUILD_TYPE:s/DESKTOP//)"
 my_components += \
     abp \
-    bib \
     component/desktop/source/deployment/deployment \
     component/desktop/source/deployment/gui/deploymentgui \
     component/desktop/source/migration/services/migrationoo2 \
     component/desktop/source/migration/services/migrationoo3 \
     component/desktop/source/offacc/offacc \
     component/desktop/source/splash/spl \
+    component/extensions/source/bibliography/bib \
     component/extensions/source/propctrlr/pcr \
     component/extensions/source/scanner/scn \
     component/extensions/source/update/check/updchk.uno \

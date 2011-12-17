@@ -120,6 +120,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
 	animcore \
 	basctl \
 	basebmp \
+	bib \
 	canvastools \
 	communi \
 	date \

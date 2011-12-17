@@ -27,16 +27,19 @@
 $(eval $(call gb_Module_Module,extensions))
 
 $(eval $(call gb_Module_add_targets,extensions,\
+	AllLangResTarget_bib \
 	AllLangResTarget_pcr \
 	AllLangResTarget_san \
 	AllLangResTarget_upd \
 	AllLangResTarget_updchk \
 	Configuration_updchk \
+	Library_bib \
 	Library_pcr \
 	Library_scn \
 	Library_updatecheckui \
 	Library_updatefeed \
 	Library_updchk \
+	Package_bib \
 	Package_pcr \
 ))
 

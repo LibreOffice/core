@@ -6,12 +6,11 @@ ex  extensions\inc\ucbhelper                    get     -   all ex_incucbh ex_in
 ex  extensions\source\activex\msidl             nmake   -   w   ex_axmsidl ex_inc NULL
 ex  extensions\source\activex\main              nmake   -   w   ex_axmain ex_axmsidl.w ex_inc NULL
 ex  extensions\source\resource                  nmake   -   all ex_resrc ex_inc NULL
-ex  extensions\source\bibliography              nmake   -   all ex_bib ex_inc NULL
 ex  extensions\source\xmlextract                nmake   -   all ex_xmlextr ex_inc NULL
 ex  extensions\source\dbpilots                  nmake   -   all ex_dbpilots ex_inc NULL
 ex  extensions\source\abpilot                   nmake   -   all ex_abpilot ex_inc NULL
 ex  extensions\source\logging                   nmake   -   all ex_logging ex_inc NULL
-ex  extensions\util                             nmake   -   all ex_util ex_abpilot ex_dbpilots ex_logging ex_bib NULL
+ex  extensions\util                             nmake   -   all ex_util ex_abpilot ex_dbpilots ex_logging NULL
 ex  extensions\prj                              nmake   -   all ex_prj NULL
 
 # Fails at the moment
