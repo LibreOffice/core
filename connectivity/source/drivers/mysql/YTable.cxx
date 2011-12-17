@@ -271,7 +271,7 @@ void SAL_CALL OMySQLTable::alterColumnByName( const ::rtl::OUString& colName, co
             if(!sNewDefault.isEmpty() && sOldDefault != sNewDefault)
                 alterDefaultValue(sNewDefault,colName);
         }
-        else if(sOldDefault.isEmpty() && !sNewDefault.isEmpty())
+        else if(!sNewDefault.isEmpty())
             alterDefaultValue(sNewDefault,colName);
 
         // now we should look if the name of the column changed
