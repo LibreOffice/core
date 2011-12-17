@@ -677,6 +677,21 @@ int fd;
     return buffer;
 }
 
+static void _cancel_relative(char* base, char** ref_cursor, char** ref_cursor_out, char* end)
+{
+    char* cursor = *ref_cursor;
+    char* cursor_out = *ref_cursor_out;
+
+    do
+    {
+        cursor += 3;
+        while(cursor_out > base && *--cursor_out != '/');
+    }
+    while(cursor + 3 < end && !memcmp(cursor, "/../", 4));
+    *ref_cursor = cursor;
+    *ref_cursor_out = cursor_out;
+}
+
 static int _process(struct hash* dep_hash, char* fn)
 {
 int rc;
@@ -687,7 +702,6 @@ char* cursor_out;
 char* base;
 int continuation = 0;
 char last_ns = 0;
-char* last_slash = NULL;
 off_t size;
 
     buffer = file_load(fn, &size, &rc);
@@ -713,16 +727,9 @@ off_t size;
                 {
                     if(!memcmp(cursor, "/../", 4))
                     {
-                        if(last_slash != NULL)
-                        {
-                            /* bactrack to the previous '/' */
-                            cursor_out = last_slash;
-                            /* skip the /.. section */
-                            cursor += 3;
-                        }
+                        _cancel_relative(base, &cursor, &cursor_out, end);
                     }
                 }
-                last_slash = cursor_out;
                 *cursor_out++ = *cursor++;
             }
             else if(*cursor == '\n')
@@ -760,7 +767,6 @@ off_t size;
                     /* here we have a '\' followed by \n this is a continuation
                      * i.e not a complete rule yet
                      */
-                    last_slash = NULL;
                     *cursor_out++ = *cursor++;
                 }
             }
