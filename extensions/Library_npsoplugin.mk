@@ -71,7 +71,6 @@ ifeq ($(GUI),WNT)
 $(eval $(call gb_Library_add_ldflags,npsoplugin,\
 	$(OUTDIR)/lib/pathutils-obj.obj \
 	$(OUTDIR)/lib/npwin.obj \
-	/DEF:$(call gb_Helper_convert_native,$(SRCDIR)/extensions/source/nsplugin/source/npsoplugin.def) \
 ))
 
 $(eval $(call gb_Library_add_linked_libs,npsoplugin,\

@@ -48,6 +48,12 @@ $(eval $(call gb_Executable_add_linked_libs,nsplugin,\
 	sal \
 ))
 
+ifeq ($(OS),LINUX)
+$(eval $(call gb_Executable_add_linked_libs,nsplugin,\
+	dl \
+))
+endif
+
 ifeq ($(OS),SOLARIS)
 $(eval $(call gb_Executable_add_libs,nsplugin,\
 	-lsocket \

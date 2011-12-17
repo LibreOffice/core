@@ -361,7 +361,7 @@ MIMETYPE_OASIS_OPENDOCUMENT_PRESENTATION_ASCII ":odp:OpenDocument Presentation;"
 MIMETYPE_OASIS_OPENDOCUMENT_PRESENTATION_TEMPLATE_ASCII ":otp:OpenDocument Presentation Template;"
 MIMETYPE_OASIS_OPENDOCUMENT_FORMULA_ASCII ":odf:OpenDocument Formula;" );
 
-char*
+SAL_DLLPUBLIC_EXPORT char*
 NPP_GetMIMEDescription(void)
 {
     debug_fprintf(NSP_LOG_APPEND, "print by Netscape Plugin,  NPP_GetMIMEDescription:%s.\n", pMimeTypes);
@@ -369,7 +369,7 @@ NPP_GetMIMEDescription(void)
 }
 
 #ifdef UNIX
-NPError
+SAL_DLLPUBLIC_EXPORT NPError
 // I am not actually sure wrt this, it ast least compiles with external
 // npapi.h now...
 NPP_GetValue(NPP /*instance*/, NPPVariable variable, void *value)
@@ -404,7 +404,7 @@ dupMimeType(NPMIMEType type)
 }
 #endif // end of UNIX
 
-NPError
+SAL_DLLPUBLIC_EXPORT NPError
 NPP_Initialize(void)
 {
     debug_fprintf(NSP_LOG_NEW, "NS Plugin begin initialize.\n");
@@ -419,7 +419,7 @@ NPP_GetJavaClass()
 }
 #endif
 
-void
+SAL_DLLPUBLIC_EXPORT void
 NPP_Shutdown(void)
 {
     PLUGIN_MSG msg;
@@ -435,7 +435,7 @@ NPP_Shutdown(void)
 #endif
 }
 
-NPError
+SAL_DLLPUBLIC_EXPORT NPError
 NPP_New(NPMIMEType pluginType,
     NPP instance,
     uint16_t mode,
@@ -487,7 +487,7 @@ NPP_New(NPMIMEType pluginType,
     return NPERR_NO_ERROR;
 }
 
-NPError
+SAL_DLLPUBLIC_EXPORT NPError
 NPP_Destroy(NPP instance, NPSavedData** /*save*/)
 {
     debug_fprintf(NSP_LOG_APPEND, "print by Nsplugin, enter NPP_Destroy.\n");
@@ -532,7 +532,7 @@ NPP_Destroy(NPP instance, NPSavedData** /*save*/)
 }
 
 
-NPError
+SAL_DLLPUBLIC_EXPORT NPError
 NPP_SetWindow(NPP instance, NPWindow* window)
 {
     PluginInstance* This;
@@ -626,7 +626,7 @@ NPP_SetWindow(NPP instance, NPWindow* window)
 }
 
 
-NPError
+SAL_DLLPUBLIC_EXPORT NPError
 NPP_NewStream(NPP instance,
           NPMIMEType /*type*/,
           NPStream* /*stream*/,
@@ -648,21 +648,21 @@ int32_t STREAMBUFSIZE = 0X0FFFFFFF;
  * mode so we can take any size stream in our
  * write call (since we ignore it) */
 
-int32_t
+SAL_DLLPUBLIC_EXPORT int32_t
 NPP_WriteReady(NPP /*instance*/, NPStream* /*stream*/)
 {
     return STREAMBUFSIZE;
 }
 
 
-int32_t
+SAL_DLLPUBLIC_EXPORT int32_t
 NPP_Write(NPP /*instance*/, NPStream* /*stream*/, int32_t /*offset*/, int32_t len, void* /*buffer*/)
 {
     return len;     /* The number of bytes accepted */
 }
 
 
-NPError
+SAL_DLLPUBLIC_EXPORT NPError
 NPP_DestroyStream(NPP instance, NPStream* /*stream*/, NPError /*reason*/)
 {
     if (instance == NULL)
@@ -671,7 +671,7 @@ NPP_DestroyStream(NPP instance, NPStream* /*stream*/, NPError /*reason*/)
 }
 
 // save fname to another file with the original file name
-void
+SAL_DLLPUBLIC_EXPORT void
 NPP_StreamAsFile(NPP instance, NPStream *stream, const char* fname)
 {
     debug_fprintf(NSP_LOG_APPEND, "Into Stream\n");
@@ -812,14 +812,14 @@ NPP_StreamAsFile(NPP instance, NPStream *stream, const char* fname)
         debug_fprintf(NSP_LOG_APPEND, "NPP_StreamAsFile send SO_SET_WINDOW return failure \n");
 }
 
-void
+SAL_DLLPUBLIC_EXPORT void
 NPP_URLNotify(NPP /*instance*/, const char* /*url*/,
                 NPReason /*reason*/, void* /*notifyData*/)
 {
 }
 
 
-void
+SAL_DLLPUBLIC_EXPORT void
 NPP_Print(NPP instance, NPPrint* printInfo)
 {
     if(printInfo == NULL)
