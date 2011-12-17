@@ -13,7 +13,7 @@
 # License.
 #
 # Major Contributor(s):
-# [ Copyright (C) 2011 Red Hat, Inc., Michael Stahl <mstahl@redhat.com> (initial developer) ]
+# [ Copyright (C) 2011 Peter Foley <pefoley2@verizon.net> (initial developer) ]
 #
 # All Rights Reserved.
 #
@@ -27,11 +27,16 @@
 #
 
 # TODO is this really supposed to be delivered to the officecfg registry?
-$(eval $(call gb_Configuration_Configuration_nozip,updchk))
+$(eval $(call gb_Configuration_Configuration,updchk))
 
 $(eval $(call gb_Configuration_add_spool_modules,updchk,extensions/source/update/check,\
 	org/openoffice/Office/Jobs-onlineupdate.xcu \
 	org/openoffice/Office/Addons-onlineupdate.xcu \
+))
+
+$(eval $(call gb_Configuration_add_localized_datas,updchk,extensions/source/update/check,\
+	org/openoffice/Office/Jobs.xcu \
+	org/openoffice/Office/Addons.xcu \
 ))
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:

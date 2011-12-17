@@ -290,6 +290,7 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
     ucb \
     ucpfile \
     unopkgapp \
+	updchk \
 	xmlsecurity \
 	xsec_fw \
 	xsec_xmlsec \
@@ -355,7 +356,6 @@ $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
     stocservices \
 	stringresource \
 	updatefeed \
-	updchk \
 	vbaevents \
     vbaobj \
     vbaswobj \

@@ -14,6 +14,7 @@
 #
 # Major Contributor(s):
 # [ Copyright (C) 2011 Red Hat, Inc., Michael Stahl <mstahl@redhat.com> (initial developer) ]
+# [ Copyright (C) 2011 Peter Foley <pefoley2@verizon.net> ]
 #
 # All Rights Reserved.
 #
@@ -30,13 +31,17 @@ $(eval $(call gb_Library_Library,updchk))
 
 $(eval $(call gb_Library_set_componentfile,updchk,extensions/source/update/check/updchk.uno))
 
+$(eval $(call gb_Library_set_include,updchk,\
+	$$(INCLUDE) \
+	-I$(SRCDIR)/extensions/inc \
+))
+
 $(eval $(call gb_Library_add_api,updchk,\
 	udkapi \
 	offapi \
 ))
 
 $(eval $(call gb_Library_add_linked_libs,updchk,\
-	comphelper \
 	cppuhelper \
 	cppu \
 	sal \
