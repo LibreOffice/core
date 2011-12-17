@@ -44,11 +44,32 @@ $(eval $(call gb_Module_add_targets,sal,\
 ))
 
 $(eval $(call gb_Module_add_check_targets,sal,\
+	CppunitTest_sal_bytesequence \
+	CppunitTest_sal_osl_condition \
+	CppunitTest_sal_osl_file \
+	CppunitTest_sal_osl_module \
 	CppunitTest_sal_osl_mutex \
-	CppunitTest_sal_osl_pipe \
+	CppunitTest_sal_osl_process \
 	CppunitTest_sal_osl_profile \
+	CppunitTest_sal_osl_security \
 	CppunitTest_sal_osl_setthreadname \
+	CppunitTest_sal_rtl_alloc \
+	CppunitTest_sal_rtl_cipher \
+	CppunitTest_sal_rtl_crc32 \
+	CppunitTest_sal_rtl_doublelock \
+	CppunitTest_sal_rtl_locale \
 	CppunitTest_sal_rtl_math \
+	CppunitTest_sal_rtl_ostringbuffer \
+	CppunitTest_sal_rtl_oustringbuffer \
+	CppunitTest_sal_rtl_strings \
+	CppunitTest_sal_types \
 ))
+
+# CppunitTest_sal_osl_pipe has circular dependency on unotest
+$(eval $(call gb_Module_add_subsequentcheck_targets,sal,\
+	CppunitTest_sal_osl_pipe \
+))
+# error when building test-getsystempathfromfileurl.cxx \
+	CppunitTest_sal_osl_getsystempathfromfileurl \
 
 # vim: set noet sw=4 ts=4:
