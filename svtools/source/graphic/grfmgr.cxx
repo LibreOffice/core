@@ -1125,7 +1125,6 @@ SvStream& operator>>( SvStream& rIStm, GraphicObject& rGraphicObj )
     VersionCompat   aCompat( rIStm, STREAM_READ );
     Graphic         aGraphic;
     GraphicAttr     aAttr;
-    ByteString      aLink;
     sal_Bool            bLink;
 
     rIStm >> aGraphic >> aAttr >> bLink;
@@ -1135,8 +1134,8 @@ SvStream& operator>>( SvStream& rIStm, GraphicObject& rGraphicObj )
 
     if( bLink )
     {
-        rIStm.ReadByteString(aLink);
-        rGraphicObj.SetLink( UniString( aLink, RTL_TEXTENCODING_UTF8 ) );
+        rtl::OUString aLink = read_lenPrefixed_uInt8s_ToOUString(rIStm, RTL_TEXTENCODING_UTF8);
+        rGraphicObj.SetLink(aLink);
     }
     else
         rGraphicObj.SetLink();
@@ -1154,7 +1153,7 @@ SvStream& operator<<( SvStream& rOStm, const GraphicObject& rGraphicObj )
     rOStm << rGraphicObj.GetGraphic() << rGraphicObj.GetAttr() << bLink;
 
     if( bLink )
-        rOStm.WriteByteString(rtl::OUStringToOString(rGraphicObj.GetLink(), RTL_TEXTENCODING_UTF8));
+        write_lenPrefixed_uInt8s_FromOUString(rOStm, rGraphicObj.GetLink(), RTL_TEXTENCODING_UTF8);
 
     return rOStm;
 }

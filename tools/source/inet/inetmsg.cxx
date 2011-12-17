@@ -66,7 +66,7 @@ inline sal_Unicode ascii_toLowerCase( sal_Unicode ch )
 /*
  * ~INetMessage.
  */
-INetMessage::~INetMessage (void)
+INetMessage::~INetMessage()
 {
     ListCleanup_Impl();
 }
@@ -74,7 +74,7 @@ INetMessage::~INetMessage (void)
 /*
  * ListCleanup_Impl.
  */
-void INetMessage::ListCleanup_Impl (void)
+void INetMessage::ListCleanup_Impl()
 {
     // Cleanup.
     sal_uIntPtr i, n = m_aHeaderList.size();
@@ -243,7 +243,7 @@ enum _ImplINetRFC822MessageHeaderState
 /*
  * INetRFC822Message.
  */
-INetRFC822Message::INetRFC822Message (void)
+INetRFC822Message::INetRFC822Message()
     : INetMessage()
 {
     for (sal_uInt16 i = 0; i < INETMSG_RFC822_NUMHDR; i++)
@@ -275,7 +275,7 @@ INetRFC822Message& INetRFC822Message::operator= (const INetRFC822Message& rMsg)
 /*
  * ~INetRFC822Message.
  */
-INetRFC822Message::~INetRFC822Message (void)
+INetRFC822Message::~INetRFC822Message()
 {
 }
 
@@ -753,7 +753,7 @@ enum _ImplINetMIMEMessageHeaderState
 /*
  * INetMIMEMessage.
  */
-INetMIMEMessage::INetMIMEMessage (void)
+INetMIMEMessage::INetMIMEMessage()
     : INetRFC822Message (),
       pParent       (NULL),
       bHeaderParsed (sal_False)
@@ -792,7 +792,7 @@ INetMIMEMessage& INetMIMEMessage::operator= (
 /*
  * ~INetMIMEMessage.
  */
-INetMIMEMessage::~INetMIMEMessage (void)
+INetMIMEMessage::~INetMIMEMessage()
 {
     // Cleanup.
     CleanupImp();
@@ -801,7 +801,7 @@ INetMIMEMessage::~INetMIMEMessage (void)
 /*
  * CleanupImp.
  */
-void INetMIMEMessage::CleanupImp (void)
+void INetMIMEMessage::CleanupImp()
 {
     for( size_t i = 0, n = aChildren.size(); i < n; ++i ) {
         delete aChildren[ i ];
@@ -1161,7 +1161,7 @@ SvStream& INetMIMEMessage::operator<< (SvStream& rStrm) const
     for (sal_uInt16 i = 0; i < INETMSG_MIME_NUMHDR; i++)
         rStrm << static_cast<sal_uInt32>(m_nIndex[i]);
 
-    rStrm.WriteByteString (m_aBoundary);
+    write_lenPrefixed_uInt8s_FromOString(rStrm, m_aBoundary);
     rStrm << static_cast<sal_uInt32>(aChildren.size());
 
     return rStrm;
@@ -1181,7 +1181,7 @@ SvStream& INetMIMEMessage::operator>> (SvStream& rStrm)
         m_nIndex[i] = nTemp;
     }
 
-    rStrm.ReadByteString (m_aBoundary);
+    m_aBoundary = read_lenPrefixed_uInt8s_ToOString(rStrm);
 
     rStrm >> nTemp;
 
