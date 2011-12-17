@@ -14,6 +14,7 @@
 #
 # Major Contributor(s):
 # [ Copyright (C) 2011 Red Hat, Inc., Michael Stahl <mstahl@redhat.com> (initial developer) ]
+# [ Copyright (C) 2011 Peter Foley <pefoley2@verizon.net> ]
 #
 # All Rights Reserved.
 #
@@ -45,11 +46,22 @@ $(eval $(call gb_Library_add_linked_libs,oleautobridge,\
 	cppu \
 	sal \
 	advapi32 \
-	$(if $(USE_DEBUG_RUNTIME),atlsd,atls)
 	ole32 \
 	oleaut32 \
 	uuid \
 ))
+
+ifeq ($(COM),MSC)
+ifneq ($(USE_DEBUG_RUNTIME),)
+$(eval $(call gb_Library_add_libs,oleautobridge,\
+	$(ATL_LIB)/atlsd.lib \
+))
+else
+$(eval $(call gb_Library_add_libs,oleautobridge,\
+	$(ATL_LIB)/atls.lib \
+))
+endif
+endif
 
 $(eval $(call gb_Library_add_exception_objects,oleautobridge,\
 	extensions/source/ole/jscriptclasses \

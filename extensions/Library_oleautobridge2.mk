@@ -14,6 +14,7 @@
 #
 # Major Contributor(s):
 # [ Copyright (C) 2011 Red Hat, Inc., Michael Stahl <mstahl@redhat.com> (initial developer) ]
+# [ Copyright (C) 2011 Peter Foley <pefoley2@verizon.net> ]
 #
 # All Rights Reserved.
 #
@@ -39,6 +40,7 @@ $(eval $(call gb_Library_add_api,oleautobridge2,\
 ))
 
 $(eval $(call gb_Library_set_include,oleautobridge2,\
+	-I$(SRCDIR)/extensions/source/ole \
 	$(foreach inc,$(ATL_INCLUDE),-I$(inc)) \
 	$$(INCLUDE) \
 ))
@@ -48,23 +50,38 @@ $(eval $(call gb_Library_add_linked_libs,oleautobridge2,\
 	cppu \
 	sal \
 	advapi32 \
-	$(if $(USE_DEBUG_RUNTIME),atlsd,atls)
 	ole32 \
 	oleaut32 \
 	uuid \
 ))
 
-$(eval $(call gb_Library_add_exception_objects,oleautobridge2,\
-	extensions/source/ole/jscriptclasses \
-	extensions/source/ole/ole2uno \
-	extensions/source/ole/oledll \
-	extensions/source/ole/oleobjw \
-	extensions/source/ole/olethread \
-	extensions/source/ole/servprov \
-	extensions/source/ole/servreg \
-	extensions/source/ole/unoobjw \
-	extensions/source/ole/unotypewrapper \
-	extensions/source/ole/windata \
+ifeq ($(COM),MSC)
+ifneq ($(USE_DEBUG_RUNTIME),)
+$(eval $(call gb_Library_add_libs,oleautobridge2,\
+	$(ATL_LIB)/atlsd.lib \
+))
+else
+$(eval $(call gb_Library_add_libs,oleautobridge2,\
+	$(ATL_LIB)/atls.lib \
+))
+endif
+endif
+
+$(WORKDIR)/CustomTarget/extensions/source/ole/%.cxx: $(SRCDIR)/extensions/source/ole/%.cxx
+	mkdir -p $(dir $@)
+	cp $< $@
+
+$(eval $(call gb_Library_add_generated_exception_objects,oleautobridge2,\
+	CustomTarget/extensions/source/ole/jscriptclasses \
+	CustomTarget/extensions/source/ole/ole2uno \
+	CustomTarget/extensions/source/ole/oledll \
+	CustomTarget/extensions/source/ole/oleobjw \
+	CustomTarget/extensions/source/ole/olethread \
+	CustomTarget/extensions/source/ole/servprov \
+	CustomTarget/extensions/source/ole/servreg \
+	CustomTarget/extensions/source/ole/unoobjw \
+	CustomTarget/extensions/source/ole/unotypewrapper \
+	CustomTarget/extensions/source/ole/windata \
 ))
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:
