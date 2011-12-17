@@ -163,7 +163,6 @@ public:
     SalColormap( const SalDisplay*  pSalDisplay,
                  Colormap           hColormap,
                  int                nScreen );
-    SalColormap( const BitmapPalette &rpPalette );
     SalColormap( sal_uInt16             nDepth );
     SalColormap();
     ~SalColormap();
@@ -189,7 +188,6 @@ public:
                                        int      b ) const;
     Pixel           GetPixel( SalColor nColor ) const;
     SalColor        GetColor( Pixel nPixel ) const;
-    void            SetPalette( const BitmapPalette &rPalette );
 };
 
 // -=-= SalXLib =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

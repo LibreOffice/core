@@ -2777,30 +2777,6 @@ SalColormap::SalColormap( const SalDisplay *pDisplay, Colormap hColormap, int nS
     }
 }
 
-// PseudoColor
-SalColormap::SalColormap( const BitmapPalette &rPalette )
-    : m_pDisplay( GetGenericData()->GetSalDisplay() ),
-      m_hColormap( None ),
-      m_nWhitePixel( SALCOLOR_NONE ),
-      m_nBlackPixel( SALCOLOR_NONE ),
-      m_nUsed( rPalette.GetEntryCount() ),
-      m_nScreen( GetGenericData()->GetSalDisplay()->GetDefaultScreenNumber() )
-{
-    m_aPalette = std::vector<SalColor>(m_nUsed);
-
-    for( unsigned int i = 0; i < m_nUsed; i++ )
-    {
-        const BitmapColor &rColor = rPalette[i];
-        m_aPalette[i] = MAKE_SALCOLOR( rColor.GetRed(),
-                                       rColor.GetGreen(),
-                                       rColor.GetBlue() );
-        if( (m_nBlackPixel == SALCOLOR_NONE) && (SALCOLOR_BLACK == m_aPalette[i]) )
-            m_nBlackPixel = i;
-        else if( (m_nWhitePixel == SALCOLOR_NONE) && (SALCOLOR_WHITE == m_aPalette[i]) )
-            m_nWhitePixel = i;
-    }
-}
-
 // MonoChrome
 SalColormap::SalColormap()
     : m_pDisplay( GetGenericData()->GetSalDisplay() ),
@@ -2911,36 +2887,6 @@ SalColormap::~SalColormap()
     m_hColormap      = (Colormap)ILLEGAL_POINTER;
     m_pDisplay       = (SalDisplay*)ILLEGAL_POINTER;
 #endif
-}
-
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void SalColormap::SetPalette( const BitmapPalette &rPalette )
-{
-    if( this != &GetGenericData()->GetSalDisplay()->GetColormap(m_nScreen) )
-    {
-        m_nBlackPixel = SALCOLOR_NONE;
-        m_nWhitePixel = SALCOLOR_NONE;
-    }
-
-    if( rPalette.GetEntryCount() > m_nUsed )
-    {
-        m_nBlackPixel = SALCOLOR_NONE;
-        m_nWhitePixel = SALCOLOR_NONE;
-        m_nUsed = rPalette.GetEntryCount();
-        m_aPalette = std::vector<SalColor>(m_nUsed);
-    }
-
-    for( int i = 0; i < rPalette.GetEntryCount(); i++ )
-    {
-        const BitmapColor &rColor = rPalette[i];
-        m_aPalette[i] = MAKE_SALCOLOR( rColor.GetRed(),
-                                       rColor.GetGreen(),
-                                       rColor.GetBlue() );
-        if( (m_nBlackPixel == SALCOLOR_NONE) && (SALCOLOR_BLACK == m_aPalette[i]) )
-            m_nBlackPixel = i;
-        else if( (m_nWhitePixel == SALCOLOR_NONE) && (SALCOLOR_WHITE == m_aPalette[i]) )
-            m_nWhitePixel = i;
-    }
 }
 
 void SalColormap::GetPalette()
