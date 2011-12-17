@@ -660,15 +660,6 @@ sal_uInt32 SvtHistoryOptions::GetSize( EHistoryType eHistory ) const
 //*****************************************************************************************************************
 // public method
 //*****************************************************************************************************************
-void SvtHistoryOptions::SetSize( EHistoryType eHistory, sal_uInt32 nSize )
-{
-    MutexGuard aGuard( GetOwnStaticMutex() );
-    m_pDataContainer->SetSize( eHistory, nSize );
-}
-
-//*****************************************************************************************************************
-// public method
-//*****************************************************************************************************************
 void SvtHistoryOptions::Clear( EHistoryType eHistory )
 {
     MutexGuard aGuard( GetOwnStaticMutex() );

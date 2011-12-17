@@ -58,15 +58,6 @@
 
 using namespace com::sun::star;
 
-// STATIC DATA -----------------------------------------------------------
-
-static sal_uInt16 pSortRanges[] =
-{
-    SID_SORT,
-    SID_SORT,
-    0
-};
-
 // -----------------------------------------------------------------------
 
 /*
@@ -172,13 +163,6 @@ void ScTabPageSortFields::Init()
     aFlArr[0]           = &aFlSort1;
     aFlArr[1]           = &aFlSort2;
     aFlArr[2]           = &aFlSort3;
-}
-
-//------------------------------------------------------------------------
-
-sal_uInt16* ScTabPageSortFields::GetRanges()
-{
-    return pSortRanges;
 }
 
 // -----------------------------------------------------------------------
@@ -688,13 +672,6 @@ void ScTabPageSortOptions::Init()
 
     aLbLanguage.SetLanguageList( LANG_LIST_ALL | LANG_LIST_ONLY_KNOWN, false );
     aLbLanguage.InsertLanguage( LANGUAGE_SYSTEM );
-}
-
-//------------------------------------------------------------------------
-
-sal_uInt16* ScTabPageSortOptions::GetRanges()
-{
-    return pSortRanges;
 }
 
 // -----------------------------------------------------------------------

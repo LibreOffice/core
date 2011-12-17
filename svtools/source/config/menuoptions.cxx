@@ -495,33 +495,6 @@ sal_Bool SvtMenuOptions::IsEntryHidingEnabled() const
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
-sal_Bool SvtMenuOptions::IsFollowMouseEnabled() const
-{
-    MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pDataContainer->IsFollowMouseEnabled();
-}
-
-//*****************************************************************************************************************
-//  public method
-//*****************************************************************************************************************
-void SvtMenuOptions::SetEntryHidingState( sal_Bool bState )
-{
-    MutexGuard aGuard( GetOwnStaticMutex() );
-    m_pDataContainer->SetEntryHidingState( bState );
-}
-
-//*****************************************************************************************************************
-//  public method
-//*****************************************************************************************************************
-void SvtMenuOptions::SetFollowMouseState( sal_Bool bState )
-{
-    MutexGuard aGuard( GetOwnStaticMutex() );
-    m_pDataContainer->SetFollowMouseState( bState );
-}
-
-//*****************************************************************************************************************
-//  public method
-//*****************************************************************************************************************
 sal_Int16 SvtMenuOptions::GetMenuIconsState() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );

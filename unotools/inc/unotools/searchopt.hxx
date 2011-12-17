@@ -57,7 +57,6 @@ public:
     sal_Bool    IsWholeWordsOnly() const;
     sal_Bool    IsBackwards() const;
     sal_Bool    IsUseRegularExpression() const;
-    sal_Bool    IsSearchForStyles() const;
     sal_Bool    IsSimilaritySearch() const;
     sal_Bool    IsUseAsianOptions() const;
     sal_Bool    IsMatchCase() const;            // also Japanese search option

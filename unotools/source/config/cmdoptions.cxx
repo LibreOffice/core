@@ -541,15 +541,6 @@ SvtCommandOptions::~SvtCommandOptions()
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
-void SvtCommandOptions::Clear( CmdOption eCmdOption )
-{
-    MutexGuard aGuard( GetOwnStaticMutex() );
-    m_pDataContainer->Clear( eCmdOption );
-}
-
-//*****************************************************************************************************************
-//  public method
-//*****************************************************************************************************************
 sal_Bool SvtCommandOptions::HasEntries( CmdOption eOption ) const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
@@ -563,24 +554,6 @@ sal_Bool SvtCommandOptions::Lookup( CmdOption eCmdOption, const OUString& aComma
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pDataContainer->Lookup( eCmdOption, aCommandURL );
-}
-
-//*****************************************************************************************************************
-//  public method
-//*****************************************************************************************************************
-Sequence< OUString > SvtCommandOptions::GetList( CmdOption eCmdOption ) const
-{
-    MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pDataContainer->GetList( eCmdOption );
-}
-
-//*****************************************************************************************************************
-//  public method
-//*****************************************************************************************************************
-void SvtCommandOptions::AddCommand( CmdOption eCmdOption, const OUString& sURL )
-{
-    MutexGuard aGuard( GetOwnStaticMutex() );
-    m_pDataContainer->AddCommand( eCmdOption, sURL );
 }
 
 //*****************************************************************************************************************

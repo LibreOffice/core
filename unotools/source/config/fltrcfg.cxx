@@ -565,12 +565,6 @@ sal_Bool SvtFilterOptions::IsUseEnhancedFields() const
     return pImp->IsFlag( FILTERCFG_USE_ENHANCED_FIELDS );
 }
 
-void SvtFilterOptions::SetUseEnhancedFields( sal_Bool bFlag )
-{
-    pImp->SetFlag( FILTERCFG_USE_ENHANCED_FIELDS, bFlag );
-    SetModified();
-}
-
 // -----------------------------------------------------------------------
 sal_Bool SvtFilterOptions::IsExcel2Calc() const
 {

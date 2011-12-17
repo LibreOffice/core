@@ -28,20 +28,12 @@
 #ifndef INCLUDED_SVTOOLS_MISCOPT_HXX
 #define INCLUDED_SVTOOLS_MISCOPT_HXX
 
-//_________________________________________________________________________________________________________________
-//  includes
-//_________________________________________________________________________________________________________________
-
 #include "svtools/svtdllapi.h"
 #include <sal/types.h>
 #include <osl/mutex.hxx>
 #include <com/sun/star/uno/Sequence.h>
 #include <rtl/ustring.hxx>
 #include <unotools/options.hxx>
-
-//_________________________________________________________________________________________________________________
-//  forward declarations
-//_________________________________________________________________________________________________________________
 
 /*-************************************************************************************************************//**
     @short          forward declaration to our private date container implementation
@@ -52,10 +44,6 @@
 
 class SvtMiscOptions_Impl;
 class Link;
-
-//_________________________________________________________________________________________________________________
-//  declarations
-//_________________________________________________________________________________________________________________
 
 /*-************************************************************************************************************//**
     @short          collect informations about misc group
@@ -71,16 +59,7 @@ class Link;
 
 class SVT_DLLPUBLIC SvtMiscOptions: public utl::detail::Options
 {
-    //-------------------------------------------------------------------------------------------------------------
-    //  public methods
-    //-------------------------------------------------------------------------------------------------------------
-
     public:
-
-        //---------------------------------------------------------------------------------------------------------
-        //  constructor / destructor
-        //---------------------------------------------------------------------------------------------------------
-
         /*-****************************************************************************************************//**
             @short      standard constructor and destructor
             @descr      This will initialize an instance with default values.
@@ -103,39 +82,28 @@ class SVT_DLLPUBLIC SvtMiscOptions: public utl::detail::Options
         void AddListenerLink( const Link& rLink );
         void RemoveListenerLink( const Link& rLink );
 
-        //---------------------------------------------------------------------------------------------------------
-        //  interface
-        //---------------------------------------------------------------------------------------------------------
-
         sal_Bool    UseSystemFileDialog() const;
         void        SetUseSystemFileDialog( sal_Bool bSet );
         sal_Bool    IsUseSystemFileDialogReadOnly() const;
 
         sal_Bool    TryODMADialog() const;
         void        SetTryODMADialog( sal_Bool bSet );
-        sal_Bool    IsTryUseODMADialogReadOnly() const;
 
         sal_Bool    DisableUICustomization() const;
 
         sal_Bool    IsPluginsEnabled() const;
-        void        SetPluginsEnabled( sal_Bool bEnable );
-        sal_Bool    IsPluginsEnabledReadOnly() const;
 
         sal_Int16   GetSymbolsSize() const;
         void        SetSymbolsSize( sal_Int16 eSet );
         sal_Int16   GetCurrentSymbolsSize() const;
         bool        AreCurrentSymbolsLarge() const;
-        sal_Bool    IsGetSymbolsSizeReadOnly() const;
 
         sal_Int16   GetSymbolsStyle() const;
         void        SetSymbolsStyle( sal_Int16 eSet );
         sal_Int16   GetCurrentSymbolsStyle() const;
-        ::rtl::OUString GetCurrentSymbolsStyleName() const;
-        sal_Bool    IsGetSymbolsStyleReadOnly() const;
 
         sal_Int16   GetToolboxStyle() const;
         void        SetToolboxStyle( sal_Int16 nStyle );
-        sal_Bool    IsGetToolboxStyleReadOnly() const;
 
         sal_Bool    IsModifyByPrinting() const;
         void        SetModifyByPrinting(sal_Bool bSet );
@@ -152,10 +120,6 @@ class SVT_DLLPUBLIC SvtMiscOptions: public utl::detail::Options
 
         void        SetExperimentalMode( sal_Bool bSet );
         sal_Bool    IsExperimentalMode() const;
-
-    //-------------------------------------------------------------------------------------------------------------
-    //  private methods
-    //-------------------------------------------------------------------------------------------------------------
 
     private:
 
@@ -174,10 +138,6 @@ class SVT_DLLPUBLIC SvtMiscOptions: public utl::detail::Options
         *//*-*****************************************************************************************************/
 
         SVT_DLLPRIVATE static ::osl::Mutex& GetInitMutex();
-
-    //-------------------------------------------------------------------------------------------------------------
-    //  private member
-    //-------------------------------------------------------------------------------------------------------------
 
     private:
 

@@ -358,13 +358,6 @@ void SvtSearchOptions::SetUseRegularExpression( sal_Bool bVal )
     pImpl->SetFlag( 2, bVal );
 }
 
-
-sal_Bool SvtSearchOptions::IsSearchForStyles() const
-{
-    return pImpl->GetFlag( 3 );
-}
-
-
 void SvtSearchOptions::SetSearchForStyles( sal_Bool bVal )
 {
     pImpl->SetFlag( 3, bVal );

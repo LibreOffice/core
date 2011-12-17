@@ -28,20 +28,12 @@
 #ifndef INCLUDED_unotools_DYNAMICMENUOPTIONS_HXX
 #define INCLUDED_unotools_DYNAMICMENUOPTIONS_HXX
 
-//_________________________________________________________________________________________________________________
-//  includes
-//_________________________________________________________________________________________________________________
-
 #include "unotools/unotoolsdllapi.h"
 #include <sal/types.h>
 #include <osl/mutex.hxx>
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <unotools/options.hxx>
-
-//_________________________________________________________________________________________________________________
-//  types, enums, ...
-//_________________________________________________________________________________________________________________
 
 /*-************************************************************************************************************//**
     @descr          The method GetList() returns a list of property values.
@@ -61,9 +53,6 @@ enum EDynamicMenuType
     E_WIZARDMENU    =   1,
     E_HELPBOOKMARKS =   2
 };
-//_________________________________________________________________________________________________________________
-//  forward declarations
-//_________________________________________________________________________________________________________________
 
 /*-************************************************************************************************************//**
     @short          forward declaration to our private date container implementation
@@ -73,10 +62,6 @@ enum EDynamicMenuType
 *//*-*************************************************************************************************************/
 
 class SvtDynamicMenuOptions_Impl;
-
-//_________________________________________________________________________________________________________________
-//  declarations
-//_________________________________________________________________________________________________________________
 
 /*-************************************************************************************************************//**
     @short          collect informations about dynamic menus
@@ -90,16 +75,7 @@ class SvtDynamicMenuOptions_Impl;
 
 class UNOTOOLS_DLLPUBLIC SvtDynamicMenuOptions: public utl::detail::Options
 {
-    //-------------------------------------------------------------------------------------------------------------
-    //  public methods
-    //-------------------------------------------------------------------------------------------------------------
-
     public:
-
-        //---------------------------------------------------------------------------------------------------------
-        //  constructor / destructor
-        //---------------------------------------------------------------------------------------------------------
-
         /*-****************************************************************************************************//**
             @short      standard constructor and destructor
             @descr      This will initialize an instance with default values.
@@ -119,25 +95,6 @@ class UNOTOOLS_DLLPUBLIC SvtDynamicMenuOptions: public utl::detail::Options
          SvtDynamicMenuOptions();
         virtual ~SvtDynamicMenuOptions();
 
-        //---------------------------------------------------------------------------------------------------------
-        //  interface
-        //---------------------------------------------------------------------------------------------------------
-
-        /*-****************************************************************************************************//**
-            @short      clear complete sepcified list
-            @descr      Call this methods to clear the whole list.
-                        To fill it again use AppendItem().
-
-            @seealso    -
-
-            @param      "eMenu" select right menu to clear.
-            @return     -
-
-            @onerror    -
-        *//*-*****************************************************************************************************/
-
-        void Clear( EDynamicMenuType eMenu );
-
         /*-****************************************************************************************************//**
             @short      return complete specified list
             @descr      Call it to get all entries of an dynamic menu.
@@ -152,34 +109,6 @@ class UNOTOOLS_DLLPUBLIC SvtDynamicMenuOptions: public utl::detail::Options
         *//*-*****************************************************************************************************/
 
         ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > > GetMenu( EDynamicMenuType eMenu ) const;
-
-        /*-****************************************************************************************************//**
-            @short      append a new item to specified menu
-            @descr      You can append items to a menu only - removing isn't allowed for a special item!
-                        We support a nothing or all mechanism only! Clear all or append something ...
-
-            @seealso    method Clear()
-
-            @param      "eMenu"             select right menu.
-            @param      "sURL"              URL for dispatch
-            @param      "sTitle"            label of menu entry
-            @param      "sImageIdentifier"  icon identifier
-            @param      "sTargetName"       target for dispatch
-            @return     -
-
-            @onerror    -
-        *//*-*****************************************************************************************************/
-
-        void AppendItem(            EDynamicMenuType    eMenu            ,
-                            const   ::rtl::OUString&    sURL             ,
-                            const   ::rtl::OUString&    sTitle           ,
-                            const   ::rtl::OUString&    sImageIdentifier ,
-                            const   ::rtl::OUString&    sTargetName      );
-
-    //-------------------------------------------------------------------------------------------------------------
-    //  private methods
-    //-------------------------------------------------------------------------------------------------------------
-
     private:
 
         /*-****************************************************************************************************//**
@@ -197,10 +126,6 @@ class UNOTOOLS_DLLPUBLIC SvtDynamicMenuOptions: public utl::detail::Options
         *//*-*****************************************************************************************************/
 
         UNOTOOLS_DLLPRIVATE static ::osl::Mutex& GetOwnStaticMutex();
-
-    //-------------------------------------------------------------------------------------------------------------
-    //  private member
-    //-------------------------------------------------------------------------------------------------------------
 
     private:
 

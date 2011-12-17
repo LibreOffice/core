@@ -1011,20 +1011,5 @@ sal_Bool SvtPathOptions::SearchFile( String& rIniFile, Pathes ePath )
 {
     return pImp->GetLocale();
 }
-// -----------------------------------------------------------------------
-sal_Bool SvtPathOptions::IsPathReadonly(Pathes ePath)const
-{
-    return pImp->IsPathReadonly(ePath);
-}
-// -----------------------------------------------------------------------
-const String& SvtPathOptions::GetPath(Pathes ePath)const
-{
-    return pImp->GetPath(ePath);
-}
-// -----------------------------------------------------------------------
-void SvtPathOptions::SetPath( SvtPathOptions::Pathes ePath, const String& rNewPath )
-{
-    pImp->SetPath(ePath, rNewPath);
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

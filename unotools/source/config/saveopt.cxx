@@ -1000,11 +1000,6 @@ sal_Bool SvtSaveOptions::IsSaveRelFSys() const
     return pImp->pSaveOpt->IsSaveRelFSys();
 }
 
-void SvtSaveOptions::SetSaveUnpacked( sal_Bool b )
-{
-    pImp->pSaveOpt->SetSaveUnpacked( b );
-}
-
 sal_Bool SvtSaveOptions::IsSaveUnpacked() const
 {
     return pImp->pSaveOpt->IsSaveUnpacked();
@@ -1060,19 +1055,9 @@ SvtSaveOptions::ODFDefaultVersion SvtSaveOptions::GetODFDefaultVersion() const
     return pImp->pSaveOpt->GetODFDefaultVersion();
 }
 
-void SvtSaveOptions::SetUseSHA1InODF12( sal_Bool bUse )
-{
-    pImp->pSaveOpt->SetUseSHA1InODF12( bUse );
-}
-
 sal_Bool SvtSaveOptions::IsUseSHA1InODF12() const
 {
     return pImp->pSaveOpt->IsUseSHA1InODF12();
-}
-
-void SvtSaveOptions::SetUseBlowfishInODF12( sal_Bool bUse )
-{
-    pImp->pSaveOpt->SetUseBlowfishInODF12( bUse );
 }
 
 sal_Bool SvtSaveOptions::IsUseBlowfishInODF12() const

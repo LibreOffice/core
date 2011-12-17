@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-
 #undef SC_DLLIMPLEMENTATION
 
 #include "scitems.hxx"
@@ -41,15 +40,6 @@
 #include "subtdlg.hxx"
 #include "subtdlg.hrc"
 #include "tpsubt.hxx"
-
-// STATIC DATA -----------------------------------------------------------
-
-static sal_uInt16 pSubTotalsRanges[] =
-{
-    SID_SUBTOTALS,
-    SID_SUBTOTALS,
-    0
-};
 
 //========================================================================
 // Zwischenergebnisgruppen-Tabpage:
@@ -124,13 +114,6 @@ void ScTpSubTotalGroup::Init()
 
     nFieldArr[0] = 0;
     FillListBoxes();
-}
-
-//------------------------------------------------------------------------
-
-sal_uInt16* ScTpSubTotalGroup::GetRanges()
-{
-    return pSubTotalsRanges;
 }
 
 // -----------------------------------------------------------------------

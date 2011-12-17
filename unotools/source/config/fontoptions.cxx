@@ -428,24 +428,6 @@ SvtFontOptions::~SvtFontOptions()
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
-sal_Bool SvtFontOptions::IsReplacementTableEnabled() const
-{
-    MutexGuard aGuard( impl_GetOwnStaticMutex() );
-    return m_pDataContainer->IsReplacementTableEnabled();
-}
-
-//*****************************************************************************************************************
-//  public method
-//*****************************************************************************************************************
-void SvtFontOptions::EnableReplacementTable( sal_Bool bState )
-{
-    MutexGuard aGuard( impl_GetOwnStaticMutex() );
-    m_pDataContainer->EnableReplacementTable( bState );
-}
-
-//*****************************************************************************************************************
-//  public method
-//*****************************************************************************************************************
 sal_Bool SvtFontOptions::IsFontHistoryEnabled() const
 {
     MutexGuard aGuard( impl_GetOwnStaticMutex() );

@@ -77,7 +77,6 @@ public:
     void SetWriter2WinWord( sal_Bool bFlag );
 
     sal_Bool IsUseEnhancedFields() const;
-    void SetUseEnhancedFields( sal_Bool  bFlag );
 
     sal_Bool IsExcel2Calc() const;
     void SetExcel2Calc( sal_Bool bFlag );

@@ -379,15 +379,6 @@ OUString SvtStartOptions::GetConnectionURL() const
     return m_pDataContainer->GetConnectionURL();
 }
 
-//*****************************************************************************************************************
-//  public method
-//*****************************************************************************************************************
-void SvtStartOptions::SetConnectionURL( const OUString& sURL )
-{
-    MutexGuard aGuard( GetOwnStaticMutex() );
-    m_pDataContainer->SetConnectionURL( sURL );
-}
-
 namespace
 {
     class theStartOptionsMutex : public rtl::Static<osl::Mutex, theStartOptionsMutex>{};

@@ -26,10 +26,7 @@
  *
  ************************************************************************/
 
-
 #undef SC_DLLIMPLEMENTATION
-
-
 
 //------------------------------------------------------------------
 
@@ -51,15 +48,6 @@
 #undef _TPCALC_CXX
 
 #include <math.h>
-
-// STATIC DATA -----------------------------------------------------------
-
-static sal_uInt16 pCalcOptRanges[] =
-{
-    SID_SCDOCOPTIONS,
-    SID_SCDOCOPTIONS,
-    0
-};
 
 //========================================================================
 
@@ -119,13 +107,6 @@ void ScTpCalcOptions::Init()
     aBtnDateStd .SetClickHdl( LINK( this, ScTpCalcOptions, RadioClickHdl ) );
     aBtnDateSc10.SetClickHdl( LINK( this, ScTpCalcOptions, RadioClickHdl ) );
     aBtnDate1904.SetClickHdl( LINK( this, ScTpCalcOptions, RadioClickHdl ) );
-}
-
-//-----------------------------------------------------------------------
-
-sal_uInt16* ScTpCalcOptions::GetRanges()
-{
-    return pCalcOptRanges;
 }
 
 //-----------------------------------------------------------------------

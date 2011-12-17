@@ -660,11 +660,6 @@ com::sun::star::lang::Locale SvtSysLocaleOptions::GetLocale() const
     return lcl_str_to_locale( GetLocaleConfigString() );
 }
 
-com::sun::star::lang::Locale SvtSysLocaleOptions::GetUILocale() const
-{
-    return lcl_str_to_locale( GetUILocaleConfigString() );
-}
-
 com::sun::star::lang::Locale SvtSysLocaleOptions::GetRealLocale() const
 {
     return pOptions->GetRealLocale();

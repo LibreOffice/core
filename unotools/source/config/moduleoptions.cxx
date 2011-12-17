@@ -1208,32 +1208,6 @@ sal_Bool SvtModuleOptions::IsDataBase() const
     ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
     return m_pDataContainer->IsModuleInstalled( E_SDATABASE );
 }
-//*****************************************************************************************************************
-sal_uInt32 SvtModuleOptions::GetFeatures() const
-{
-    ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
-
-    sal_uInt32 nFeature = 0;
-
-    if( m_pDataContainer->IsModuleInstalled( E_SWRITER ) == sal_True )
-        nFeature |= FEATUREFLAG_WRITER;
-    if( m_pDataContainer->IsModuleInstalled( E_SCALC ) == sal_True )
-        nFeature |= FEATUREFLAG_CALC;
-    if( m_pDataContainer->IsModuleInstalled( E_SDRAW ) == sal_True )
-        nFeature |= FEATUREFLAG_DRAW;
-    if( m_pDataContainer->IsModuleInstalled( E_SIMPRESS ) == sal_True )
-        nFeature |= FEATUREFLAG_IMPRESS;
-    if( m_pDataContainer->IsModuleInstalled( E_SCHART ) == sal_True )
-        nFeature |= FEATUREFLAG_CHART;
-    if( m_pDataContainer->IsModuleInstalled( E_SMATH ) == sal_True )
-        nFeature |= FEATUREFLAG_MATH;
-    if( m_pDataContainer->IsModuleInstalled( E_SBASIC ) == sal_True )
-        nFeature |= FEATUREFLAG_BASICIDE;
-    if( m_pDataContainer->IsModuleInstalled( E_SDATABASE ) == sal_True )
-        nFeature |= FEATUREFLAG_INSIGHT;
-
-    return nFeature;
-}
 
 namespace
 {
@@ -1274,28 +1248,6 @@ namespace
         case SvtModuleOptions::E_SDATABASE  :   { return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Database")); }
         default:
             OSL_FAIL( "unknown module" );
-            break;
-    }
-
-    return ::rtl::OUString();
-}
-
-::rtl::OUString SvtModuleOptions::GetModuleName( EFactory eFactory ) const
-{
-    switch( eFactory )
-    {
-        case SvtModuleOptions::E_WRITER         :   { return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Writer")); }
-        case SvtModuleOptions::E_WRITERWEB      :   { return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Writer")); }
-        case SvtModuleOptions::E_WRITERGLOBAL   :   { return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Writer")); }
-        case SvtModuleOptions::E_CALC           :   { return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Calc")); }
-        case SvtModuleOptions::E_DRAW           :   { return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Draw")); }
-        case SvtModuleOptions::E_IMPRESS        :   { return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Impress")); }
-        case SvtModuleOptions::E_MATH           :   { return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Math")); }
-        case SvtModuleOptions::E_CHART          :   { return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Chart")); }
-        case SvtModuleOptions::E_BASIC          :   { return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Basic")); }
-        case SvtModuleOptions::E_DATABASE       :   { return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Database")); }
-        default:
-            OSL_FAIL( "unknown factory" );
             break;
     }
 

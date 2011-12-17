@@ -29,19 +29,11 @@
 #ifndef INCLUDED_unotools_PRINTWARNINGOPTIONS_HXX
 #define INCLUDED_unotools_PRINTWARNINGOPTIONS_HXX
 
-//_________________________________________________________________________________________________________________
-//  includes
-//_________________________________________________________________________________________________________________
-
 #include "unotools/unotoolsdllapi.h"
 #include <sal/types.h>
 #include <osl/mutex.hxx>
 #include <rtl/ustring.hxx>
 #include <unotools/options.hxx>
-
-//_________________________________________________________________________________________________________________
-//  forward declarations
-//_________________________________________________________________________________________________________________
 
 /*-************************************************************************************************************//**
     @short          forward declaration to our private date container implementation
@@ -51,10 +43,6 @@
 *//*-*************************************************************************************************************/
 
 class SvtPrintWarningOptions_Impl;
-
-//_________________________________________________________________________________________________________________
-//  declarations
-//_________________________________________________________________________________________________________________
 
 /*-************************************************************************************************************//**
     @short          collect informations about startup features
@@ -68,16 +56,7 @@ class SvtPrintWarningOptions_Impl;
 
 class UNOTOOLS_DLLPUBLIC SvtPrintWarningOptions: public utl::detail::Options
 {
-    //-------------------------------------------------------------------------------------------------------------
-    //  public methods
-    //-------------------------------------------------------------------------------------------------------------
-
     public:
-
-        //---------------------------------------------------------------------------------------------------------
-        //  constructor / destructor
-        //---------------------------------------------------------------------------------------------------------
-
         /*-****************************************************************************************************//**
             @short      standard constructor and destructor
             @descr      This will initialize an instance with default values.
@@ -97,10 +76,6 @@ class UNOTOOLS_DLLPUBLIC SvtPrintWarningOptions: public utl::detail::Options
          SvtPrintWarningOptions();
         virtual ~SvtPrintWarningOptions();
 
-        //---------------------------------------------------------------------------------------------------------
-        //  interface
-        //---------------------------------------------------------------------------------------------------------
-
         /*-****************************************************************************************************//**
             @short      interface methods to get and set value of config key "org.openoffice.Office.Common/Print/Warning..."
             @descr      These options describe internal states to enable/disable features of installed office.
@@ -110,19 +85,13 @@ class UNOTOOLS_DLLPUBLIC SvtPrintWarningOptions: public utl::detail::Options
 
         sal_Bool    IsPaperSize() const;
         sal_Bool    IsPaperOrientation() const;
-        sal_Bool    IsNotFound() const;
         sal_Bool    IsTransparency() const;
         sal_Bool    IsModifyDocumentOnPrintingAllowed() const;
 
         void        SetPaperSize( sal_Bool bState );
         void        SetPaperOrientation( sal_Bool bState );
-        void        SetNotFound( sal_Bool bState );
         void        SetTransparency( sal_Bool bState );
         void        SetModifyDocumentOnPrintingAllowed( sal_Bool bState );
-
-    //-------------------------------------------------------------------------------------------------------------
-    //  private methods
-    //-------------------------------------------------------------------------------------------------------------
 
     private:
 
@@ -141,9 +110,6 @@ class UNOTOOLS_DLLPUBLIC SvtPrintWarningOptions: public utl::detail::Options
 
         UNOTOOLS_DLLPRIVATE static ::osl::Mutex& GetOwnStaticMutex();
 
-    //-------------------------------------------------------------------------------------------------------------
-    //  private member
-    //-------------------------------------------------------------------------------------------------------------
     private:
 
         /*Attention

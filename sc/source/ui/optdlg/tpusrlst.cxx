@@ -54,15 +54,7 @@
 #define CR  (sal_Unicode)13
 #define LF  (sal_Unicode)10
 
-static sal_uInt16 pUserListsRanges[] =
-{
-    SID_SCUSERLISTS,
-    SID_SCUSERLISTS,
-    0
-};
-
 static const sal_Unicode cDelimiter = ',';
-
 
 //========================================================================
 // Benutzerdefinierte Listen:
@@ -161,13 +153,6 @@ void ScTpUserLists::Init()
         aFtCopyFrom.Disable();
         aEdCopyFrom.Disable();
     }
-}
-
-// -----------------------------------------------------------------------
-
-sal_uInt16* ScTpUserLists::GetRanges()
-{
-    return pUserListsRanges;
 }
 
 // -----------------------------------------------------------------------

@@ -90,7 +90,6 @@ public:
      ::rtl::OUString    GetApartment() const;
 
      ::rtl::OUString    GetFullName() const;
-     ::rtl::OUString    GetLocale() const;
 
     // set the address token
     void            SetCompany( const ::rtl::OUString& rNewToken );

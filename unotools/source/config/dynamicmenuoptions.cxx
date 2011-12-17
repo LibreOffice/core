@@ -857,32 +857,10 @@ SvtDynamicMenuOptions::~SvtDynamicMenuOptions()
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
-void SvtDynamicMenuOptions::Clear( EDynamicMenuType eMenu )
-{
-    MutexGuard aGuard( GetOwnStaticMutex() );
-    m_pDataContainer->Clear( eMenu );
-}
-
-//*****************************************************************************************************************
-//  public method
-//*****************************************************************************************************************
 Sequence< Sequence< PropertyValue > > SvtDynamicMenuOptions::GetMenu( EDynamicMenuType eMenu ) const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pDataContainer->GetMenu( eMenu );
-}
-
-//*****************************************************************************************************************
-//  public method
-//*****************************************************************************************************************
-void SvtDynamicMenuOptions::AppendItem(         EDynamicMenuType    eMenu           ,
-                                        const   OUString&           sURL            ,
-                                        const   OUString&           sTitle          ,
-                                        const   OUString&           sImageIdentifier,
-                                        const   OUString&           sTargetName     )
-{
-    MutexGuard aGuard( GetOwnStaticMutex() );
-    m_pDataContainer->AppendItem( eMenu, sURL, sTitle, sImageIdentifier, sTargetName );
 }
 
 namespace

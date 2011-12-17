@@ -397,28 +397,10 @@ sal_Bool SvtLocalisationOptions::IsAutoMnemonic() const
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
-void SvtLocalisationOptions::SetAutoMnemonic( sal_Bool bState )
-{
-    MutexGuard aGuard( GetOwnStaticMutex() );
-    m_pDataContainer->SetAutoMnemonic( bState );
-}
-
-//*****************************************************************************************************************
-//  public method
-//*****************************************************************************************************************
 sal_Int32 SvtLocalisationOptions::GetDialogScale() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pDataContainer->GetDialogScale();
-}
-
-//*****************************************************************************************************************
-//  public method
-//*****************************************************************************************************************
-void SvtLocalisationOptions::SetDialogScale( sal_Int32 nScale )
-{
-    MutexGuard aGuard( GetOwnStaticMutex() );
-    m_pDataContainer->SetDialogScale( nScale );
 }
 
 namespace

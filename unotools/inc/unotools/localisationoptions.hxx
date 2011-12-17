@@ -28,18 +28,10 @@
 #ifndef INCLUDED_unotools_LOCALISATIONOPTIONS_HXX
 #define INCLUDED_unotools_LOCALISATIONOPTIONS_HXX
 
-//_________________________________________________________________________________________________________________
-//  includes
-//_________________________________________________________________________________________________________________
-
 #include <sal/types.h>
 #include "unotools/unotoolsdllapi.h"
 #include <osl/mutex.hxx>
 #include <unotools/options.hxx>
-
-//_________________________________________________________________________________________________________________
-//  forward declarations
-//_________________________________________________________________________________________________________________
 
 /*-************************************************************************************************************//**
     @short          forward declaration to our private date container implementation
@@ -49,10 +41,6 @@
 *//*-*************************************************************************************************************/
 
 class SvtLocalisationOptions_Impl;
-
-//_________________________________________________________________________________________________________________
-//  declarations
-//_________________________________________________________________________________________________________________
 
 /*-************************************************************************************************************//**
     @short          collect informations about localisation features
@@ -66,16 +54,7 @@ class SvtLocalisationOptions_Impl;
 
 class UNOTOOLS_DLLPUBLIC SvtLocalisationOptions: public utl::detail::Options
 {
-    //-------------------------------------------------------------------------------------------------------------
-    //  public methods
-    //-------------------------------------------------------------------------------------------------------------
-
     public:
-
-        //---------------------------------------------------------------------------------------------------------
-        //  constructor / destructor
-        //---------------------------------------------------------------------------------------------------------
-
         /*-****************************************************************************************************//**
             @short      standard constructor and destructor
             @descr      This will initialize an instance with default values.
@@ -95,10 +74,6 @@ class UNOTOOLS_DLLPUBLIC SvtLocalisationOptions: public utl::detail::Options
          SvtLocalisationOptions();
         virtual ~SvtLocalisationOptions();
 
-        //---------------------------------------------------------------------------------------------------------
-        //  interface
-        //---------------------------------------------------------------------------------------------------------
-
         /*-****************************************************************************************************//**
             @short      interface methods to get and set value of config key "org.openoffice.Office.Common/View/Localisation/AutoMnemonic"
             @descr      These value specifies if shortcuts should be assigned automatically.
@@ -112,7 +87,6 @@ class UNOTOOLS_DLLPUBLIC SvtLocalisationOptions: public utl::detail::Options
         *//*-*****************************************************************************************************/
 
         sal_Bool    IsAutoMnemonic  (                   ) const ;
-        void        SetAutoMnemonic ( sal_Bool bState   )       ;
 
         /*-****************************************************************************************************//**
             @short      interface methods to get and set value of config key "org.openoffice.Office.Common/View/Localisation/DialogScale"
@@ -133,12 +107,6 @@ class UNOTOOLS_DLLPUBLIC SvtLocalisationOptions: public utl::detail::Options
         *//*-*****************************************************************************************************/
 
         sal_Int32   GetDialogScale(                     ) const ;
-        void        SetDialogScale( sal_Int32 nScale    )       ;
-
-    //-------------------------------------------------------------------------------------------------------------
-    //  private methods
-    //-------------------------------------------------------------------------------------------------------------
-
     private:
 
         /*-****************************************************************************************************//**
@@ -156,10 +124,6 @@ class UNOTOOLS_DLLPUBLIC SvtLocalisationOptions: public utl::detail::Options
         *//*-*****************************************************************************************************/
 
         UNOTOOLS_DLLPRIVATE static ::osl::Mutex& GetOwnStaticMutex();
-
-    //-------------------------------------------------------------------------------------------------------------
-    //  private member
-    //-------------------------------------------------------------------------------------------------------------
 
     private:
 

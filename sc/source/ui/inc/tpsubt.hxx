@@ -55,7 +55,6 @@ protected:
 public:
     virtual ~ScTpSubTotalGroup();
 
-    static sal_uInt16*  GetRanges       ();
     bool            DoReset         ( sal_uInt16            nGroupNo,
                                       const SfxItemSet& rArgSet  );
     bool            DoFillItemSet   ( sal_uInt16        nGroupNo,
@@ -153,7 +152,6 @@ protected:
 public:
     virtual ~ScTpSubTotalOptions();
 
-    static sal_uInt16*      GetRanges   ();
     static SfxTabPage*  Create      ( Window*               pParent,
                                       const SfxItemSet&     rArgSet );
     virtual sal_Bool    FillItemSet ( SfxItemSet& rArgSet );

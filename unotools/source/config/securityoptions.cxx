@@ -1140,12 +1140,6 @@ void SvtSecurityOptions::SetTrustedAuthors( const Sequence< Certificate >& rAuth
     m_pDataContainer->SetTrustedAuthors( rAuthors );
 }
 
-sal_Bool SvtSecurityOptions::IsTrustedAuthorsEnabled()
-{
-    MutexGuard aGuard( GetInitMutex() );
-    return m_pDataContainer->IsTrustedAuthorsEnabled();
-}
-
 bool SvtSecurityOptions::IsOptionSet( EOption eOption ) const
 {
     MutexGuard aGuard( GetInitMutex() );

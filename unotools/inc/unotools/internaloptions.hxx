@@ -28,26 +28,14 @@
 #ifndef INCLUDED_unotools_INTERNALOPTIONS_HXX
 #define INCLUDED_unotools_INTERNALOPTIONS_HXX
 
-//_________________________________________________________________________________________________________________
-//  includes
-//_________________________________________________________________________________________________________________
-
 #include "unotools/unotoolsdllapi.h"
 #include <sal/types.h>
 #include <osl/mutex.hxx>
 #include <rtl/ustring.hxx>
 #include <unotools/options.hxx>
 
-//_________________________________________________________________________________________________________________
-//  namespaces!
-//_________________________________________________________________________________________________________________
-
 #define MUTEX           ::osl::Mutex
 #define OUSTRING        ::rtl::OUString
-
-//_________________________________________________________________________________________________________________
-//  forward declarations
-//_________________________________________________________________________________________________________________
 
 /*-************************************************************************************************************//**
     @short          forward declaration to our private date container implementation
@@ -57,10 +45,6 @@
 *//*-*************************************************************************************************************/
 
 class SvtInternalOptions_Impl;
-
-//_________________________________________________________________________________________________________________
-//  declarations
-//_________________________________________________________________________________________________________________
 
 /*-************************************************************************************************************//**
     @short          collect informations about internal features
@@ -76,15 +60,7 @@ class SvtInternalOptions_Impl;
 
 class UNOTOOLS_DLLPUBLIC SvtInternalOptions: public utl::detail::Options
 {
-    //-------------------------------------------------------------------------------------------------------------
-    //  public methods
-    //-------------------------------------------------------------------------------------------------------------
-
     public:
-
-        //---------------------------------------------------------------------------------------------------------
-        //  constructor / destructor
-        //---------------------------------------------------------------------------------------------------------
 
         /*-****************************************************************************************************//**
             @short      standard constructor and destructor
@@ -105,10 +81,6 @@ class UNOTOOLS_DLLPUBLIC SvtInternalOptions: public utl::detail::Options
          SvtInternalOptions();
         virtual ~SvtInternalOptions();
 
-        //---------------------------------------------------------------------------------------------------------
-        //  interface
-        //---------------------------------------------------------------------------------------------------------
-
         /*-****************************************************************************************************//**
             @short      interface methods to get and set value of config key "org.openoffice.Office.Common/Internal/..."
             @descr      These options describe internal states to enable/disable features of installed office.
@@ -127,19 +99,10 @@ class UNOTOOLS_DLLPUBLIC SvtInternalOptions: public utl::detail::Options
         *//*-*****************************************************************************************************/
 
         sal_Bool    SlotCFGEnabled      () const;
-        sal_Bool    CrashMailEnabled    () const;
         sal_Bool    MailUIEnabled      () const;
-        sal_Bool    IsRemoveMenuEntryClose() const;
-        sal_Bool    IsRemoveMenuEntryBackToWebtop() const;
-        sal_Bool    IsRemoveMenuEntryNewWebtop() const;
-        sal_Bool    IsRemoveMenuEntryLogout() const;
 
         OUSTRING    GetCurrentTempURL() const;
         void        SetCurrentTempURL( const OUSTRING& aNewCurrentTempURL );
-
-    //-------------------------------------------------------------------------------------------------------------
-    //  private methods
-    //-------------------------------------------------------------------------------------------------------------
 
     private:
 
@@ -158,10 +121,6 @@ class UNOTOOLS_DLLPUBLIC SvtInternalOptions: public utl::detail::Options
         *//*-*****************************************************************************************************/
 
         UNOTOOLS_DLLPRIVATE static MUTEX& GetOwnStaticMutex();
-
-    //-------------------------------------------------------------------------------------------------------------
-    //  private member
-    //-------------------------------------------------------------------------------------------------------------
 
     private:
 

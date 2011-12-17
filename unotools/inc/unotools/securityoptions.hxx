@@ -28,20 +28,12 @@
 #ifndef INCLUDED_unotools_SECURITYOPTIONS_HXX
 #define INCLUDED_unotools_SECURITYOPTIONS_HXX
 
-//_________________________________________________________________________________________________________________
-//  includes
-//_________________________________________________________________________________________________________________
-
 #include "unotools/unotoolsdllapi.h"
 #include <sal/types.h>
 #include <osl/mutex.hxx>
 #include <com/sun/star/uno/Sequence.h>
 #include <rtl/ustring.hxx>
 #include <unotools/options.hxx>
-
-//_________________________________________________________________________________________________________________
-//  forward declarations
-//_________________________________________________________________________________________________________________
 
 /*-************************************************************************************************************//**
     @short          forward declaration to our private date container implementation
@@ -51,10 +43,6 @@
 *//*-*************************************************************************************************************/
 
 class SvtSecurityOptions_Impl;
-
-//_________________________________________________________________________________________________________________
-//  declarations
-//_________________________________________________________________________________________________________________
 
 /*-************************************************************************************************************//**
     @descr          These values present modes to handle StarOffice basic scripts.
@@ -82,9 +70,6 @@ enum EBasicSecurityMode
 
 class UNOTOOLS_DLLPUBLIC SvtSecurityOptions: public utl::detail::Options
 {
-    //-------------------------------------------------------------------------------------------------------------
-    //  public types
-    //-------------------------------------------------------------------------------------------------------------
     public:
 
         enum EOption
@@ -125,16 +110,7 @@ class UNOTOOLS_DLLPUBLIC SvtSecurityOptions: public utl::detail::Options
         };
         */
 
-    //-------------------------------------------------------------------------------------------------------------
-    //  public methods
-    //-------------------------------------------------------------------------------------------------------------
-
     public:
-
-        //---------------------------------------------------------------------------------------------------------
-        //  constructor / destructor
-        //---------------------------------------------------------------------------------------------------------
-
         /*-****************************************************************************************************//**
             @short      standard constructor and destructor
             @descr      This will initialize an instance with default values.
@@ -153,10 +129,6 @@ class UNOTOOLS_DLLPUBLIC SvtSecurityOptions: public utl::detail::Options
 
          SvtSecurityOptions();
         virtual ~SvtSecurityOptions();
-
-        //---------------------------------------------------------------------------------------------------------
-        //  interface
-        //---------------------------------------------------------------------------------------------------------
 
         /*-****************************************************************************************************//**
             @short      returns readonly state
@@ -236,7 +208,6 @@ class UNOTOOLS_DLLPUBLIC SvtSecurityOptions: public utl::detail::Options
 
         ::com::sun::star::uno::Sequence< Certificate >  GetTrustedAuthors       (                                                                   ) const ;
         void                                            SetTrustedAuthors       ( const ::com::sun::star::uno::Sequence< Certificate >& rAuthors    )       ;
-        sal_Bool                                        IsTrustedAuthorsEnabled (                                                                   )       ;
 
         // for bool options only!
         bool        IsOptionSet     ( EOption eOption                   ) const ;

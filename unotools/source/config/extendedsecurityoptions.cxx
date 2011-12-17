@@ -469,42 +469,10 @@ SvtExtendedSecurityOptions::~SvtExtendedSecurityOptions()
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
-sal_Bool SvtExtendedSecurityOptions::IsSecureHyperlink( const rtl::OUString& aURL ) const
-{
-    MutexGuard aGuard( GetInitMutex() );
-    return m_pDataContainer->IsSecureHyperlink( aURL );
-}
-
-//*****************************************************************************************************************
-//  public method
-//*****************************************************************************************************************
-Sequence< rtl::OUString > SvtExtendedSecurityOptions::GetSecureExtensionList() const
-{
-    MutexGuard aGuard( GetInitMutex() );
-    return m_pDataContainer->GetSecureExtensionList();
-}
-
-//*****************************************************************************************************************
-//  public method
-//*****************************************************************************************************************
 SvtExtendedSecurityOptions::OpenHyperlinkMode SvtExtendedSecurityOptions::GetOpenHyperlinkMode()
 {
     MutexGuard aGuard( GetInitMutex() );
     return m_pDataContainer->GetOpenHyperlinkMode();
-}
-
-sal_Bool SvtExtendedSecurityOptions::IsOpenHyperlinkModeReadOnly() const
-{
-    return m_pDataContainer->IsOpenHyperlinkModeReadOnly();
-}
-
-//*****************************************************************************************************************
-//  public method
-//*****************************************************************************************************************
-void SvtExtendedSecurityOptions::SetOpenHyperlinkMode( SvtExtendedSecurityOptions::OpenHyperlinkMode eMode )
-{
-    MutexGuard aGuard( GetInitMutex() );
-    m_pDataContainer->SetOpenHyperlinkMode( eMode );
 }
 
 namespace
