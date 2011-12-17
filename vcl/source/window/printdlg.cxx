@@ -902,6 +902,9 @@ PrintDialog::PrintDialog( Window* i_pParent, const boost::shared_ptr<PrinterCont
     // setup dependencies
     checkControlDependencies();
 
+    // set initial focus to "Number of copies"
+    maJobPage.maCopyCountField.GrabFocus();
+    maJobPage.maCopyCountField.SetSelection( Selection(0, 0xFFFF) );
 }
 
 PrintDialog::~PrintDialog()
