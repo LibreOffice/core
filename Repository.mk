@@ -192,6 +192,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
 	iti \
     lng \
 	lnth \
+	log \
     lwpft \
 	MacOSXSpell \
     merged \

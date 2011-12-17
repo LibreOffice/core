@@ -34,6 +34,7 @@ $(eval $(call gb_Module_add_targets,extensions,\
 	AllLangResTarget_updchk \
 	Configuration_updchk \
 	Library_bib \
+	Library_log \
 	Library_pcr \
 	Library_scn \
 	Library_updatecheckui \
