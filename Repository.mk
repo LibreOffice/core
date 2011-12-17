@@ -103,6 +103,14 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
 endif # WITH_MOZILLA
 
 
+ifeq ($(OS),MACOSX)
+
+$(eval $(call gb_Helper_register_libraries,NONE, \
+    OOoSpotlightImporter \
+))
+
+endif
+
 $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
 	PptImporter \
 	adabas \

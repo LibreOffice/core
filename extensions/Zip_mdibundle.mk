@@ -28,13 +28,11 @@
 # instead of those above.
 #
 
-MDISRC := $(SRCDIR)/extensions/source/macosx/spotlight/mdimporter
-
 $(eval $(call gb_Zip_Zip,mdibundle,$(WORKDIR)/Zip/mdibundle))
 
-$(eval $(call gb_Zip_add_file,mdibundle,schema.xml,$(MDISRC)/schema.xml))
-$(eval $(call gb_Zip_add_file,mdibundle,Info.plist,$(MDISRC)/Info.plist))
-$(eval $(call gb_Zip_add_file,mdibundle,en.lproj/schema.strings,$(MDISRC)/en.lproj/schema.strings))
-$(eval $(call gb_Zip_add_file,mdibundle,OOoSpotlightImporter,$(OUTDIR)/bin/OOoSpotlightImporter))
+$(eval $(call gb_Zip_add_file,mdibundle,schema.xml,$(SRCDIR)/extensions/source/macosx/spotlight/mdimporter/schema.xml))
+$(eval $(call gb_Zip_add_file,mdibundle,Info.plist,$(SRCDIR)/extensions/source/macosx/spotlight/mdimporter/Info.plist))
+$(eval $(call gb_Zip_add_file,mdibundle,en.lproj/schema.strings,$(SRCDIR)/extensions/source/macosx/spotlight/mdimporter/en.lproj/schema.strings))
+$(eval $(call gb_Zip_add_file,mdibundle,MacOS/OOoSpotlightImporter,$(OUTDIR)/lib/libOOoSpotlightImporter.dylib))
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:
