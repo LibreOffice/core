@@ -901,6 +901,28 @@ endef
 endif # SYSTEM_CURL
 
 
+ifeq ($(SYSTEM_MOZILLA_HEADERS),YES)
+
+define gb_LinkTarget__use_mozilla_headers
+$(eval $(call gb_LinkTarget_set_include,$(1),\
+	$$(INCLUDE) \
+	$(MOZILLA_HEADERS_CFLAGS)
+))
+endef
+
+else #!SYSTEM_MOZILLA_HEADERS
+
+define gb_LinkTarget__use_mozilla_headers
+$(eval $(call gb_LinkTarget_set_include,$(1),\
+	$$(INCLUDE) \
+	-I$(OUTDIR)/inc/npsdk \
+))
+endef
+
+endif #SYSTEM_MOZILLA_HEADERS
+#TODO np_sdk $(eval $(call gb_LinkTarget_add_external_headers,$(1),np_sdk))
+
+
 # MacOSX-only frameworks ############################################
 # (in alphabetical order)
 

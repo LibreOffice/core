@@ -30,17 +30,7 @@
 
 $(eval $(call gb_Library_Library,npsoplugin))
 
-ifeq ($(SYSTEM_MOZILLA_HEADERS),YES)
-$(eval $(call gb_Library_set_include,npsoplugin,\
-	$$(INCLUDE) \
-	$(MOZILLA_HEADERS_CFLAGS)
-))
-else
-$(eval $(call gb_Library_set_include,npsoplugin,\
-	-I$(OUTDIR)/inc/npsdk \
-	$$(INCLUDE) \
-))
-endif
+$(eval $(call gb_Library_use_external,npsoplugin,mozilla_headers))
 
 ifeq ($(GUI),UNX)
 
