@@ -26,17 +26,11 @@
  *
  ************************************************************************/
 
-#include <com/sun/star/uno/Reference.h>
-#include <sfx2/basedlgs.hxx>
-#include <sfx2/tabdlg.hxx>
-#include <svtools/svtreebx.hxx>
 #include <tools/resary.hxx>
-#include <vcl/image.hxx>
 #include <vcl/fixbrd.hxx>
-#include <vcl/fixed.hxx>
-#include <svx/xtable.hxx>
 
-#include <vector>
+class SfxModule;
+class SfxShell;
 
 // static ----------------------------------------------------------------
 
