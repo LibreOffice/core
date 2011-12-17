@@ -32,7 +32,7 @@ $(eval $(call gb_Executable_Executable,pluginapp.bin))
 
 $(eval $(call gb_Executable_set_include,pluginapp.bin,\
 	$$(INCLUDE) \
-	-I$(realpath $(SRCDIR)/extensions/source/plugin/inc) \
+	-I$(SRCDIR)/extensions/source/plugin/inc \
 ))
 
 $(eval $(call gb_Executable_add_api,pluginapp.bin,\
@@ -87,6 +87,7 @@ endif
 ifeq ($(ENABLE_GTK),TRUE)
 $(eval $(call gb_Executable_use_external,pluginapp.bin,gtk))
 
+# the orignal dmakefile said: don't ask, it's ugly
 ifeq ($(OS),SOLARIS)
 $(eval $(call gb_Executable_set_ldflags,pluginapp.bin,\
 	-z nodefs \

@@ -34,7 +34,7 @@ $(eval $(call gb_Library_set_componentfile,pl,extensions/source/plugin/pl))
 
 $(eval $(call gb_Library_set_include,pl,\
 	$$(INCLUDE) \
-	-I$(realpath $(SRCDIR)/extensions/source/plugin/inc) \
+	-I$(SRCDIR)/extensions/source/plugin/inc \
 	-I$(OUTDIR)/inc/mozilla/plugin \
 ))
 
@@ -49,6 +49,10 @@ $(eval $(call gb_Library_set_include,pl,\
 	$$(INCLUDE) \
 	-I$(OUTDIR)/mozilla/java \
 	-I$(OUTDIR)/mozilla/nspr \
+))
+
+$(eval $(call gb_Library_add_defs,pl,\
+	-DOJI \
 ))
 
 ifeq ($(GUIBASE),aqua)
@@ -91,13 +95,15 @@ ifeq ($(GUIBASE),aqua)
 
 $(eval $(call gb_Library_add_exception_objects,pl,\
 	extensions/source/plugin/aqua/macmgr \
-	extensions/source/plugin/sysplug \
+))
+$(eval $(call gb_Library_add_objcxxobjects,pl,\
+	extensions/source/plugin/aqua/sysplug \
 ))
 
 $(eval $(call gb_Library_set_include,pl,\
 	$$(INCLUDE) \
-	-I$(realpath $(FRAMEWORKSHOME)/ApplicationServices.framework/Version/Current/Frameworks/QD.framework/Headers) \
-	-I$(realpath $(FRAMEWORKSHOME)/Carbon.framework/Versions/Current/Frameworks/HIToolbox.framework/Versions/Current/Headers) \
+	-I$(FRAMEWORKSHOME)/ApplicationServices.framework/Version/Current/Frameworks/QD.framework/Headers \
+	-I$(FRAMEWORKSHOME)/Carbon.framework/Versions/Current/Frameworks/HIToolbox.framework/Versions/Current/Headers \
 ))
 
 endif # GUIBASE=aqua
@@ -111,10 +117,10 @@ $(eval $(call gb_Library_use_external,pl,gtk))
 endif # ENABLE_GTK=TRUE
 
 $(eval $(call gb_Library_add_exception_objects,pl,\
-	extensions/source/plugin/unx/nppapi \
-	extensions/source/plugin/unx/sysplug \
 	extensions/source/plugin/unx/mediator \
+	extensions/source/plugin/unx/nppapi \
 	extensions/source/plugin/unx/plugcon \
+	extensions/source/plugin/unx/sysplug \
 	extensions/source/plugin/unx/unxmgr \
 ))
 
@@ -139,16 +145,16 @@ $(eval $(call gb_Library_add_linked_libs,pl,\
 ))
 
 $(eval $(call gb_Library_add_exception_objects,pl,\
-	extensions/source/plugin/base/plctrl \
-	extensions/source/plugin/base/service \
-	extensions/source/plugin/base/xplugin \
-	extensions/source/plugin/base/nfuncs \
-	extensions/source/plugin/base/manager \
 	extensions/source/plugin/base/context \
 	extensions/source/plugin/base/evtlstnr \
-	extensions/source/plugin/base/plcom \
+	extensions/source/plugin/base/manager \
 	extensions/source/plugin/base/multiplx \
+	extensions/source/plugin/base/nfuncs \
+	extensions/source/plugin/base/plcom \
+	extensions/source/plugin/base/plctrl \
 	extensions/source/plugin/base/plmodel \
+	extensions/source/plugin/base/service \
+	extensions/source/plugin/base/xplugin \
 ))
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:
