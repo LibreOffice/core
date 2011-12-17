@@ -29,6 +29,7 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
     avmedia \
     basctl \
     bean \
+    canvas \
     chart2 \
     cppcanvas \
     cui \
