@@ -3,8 +3,8 @@
  *    License: GPLv3
  */
 
-//* define to activate stats reporting on hash usage
-#define HASH_STAT
+/* define to activate stats reporting on hash usage*/
+/* #define HASH_STAT */
 
 /* ===============================================
  * Set-up: defines to identify the system and system related properties
@@ -566,7 +566,6 @@ int cost = 0;
             {
                 hash->collisions += 1;
                 hash->cost += cost;
-//                fprintf(stderr, "key colision %s and %s\n", key, hash_elem->next->key);
             }
 #endif
             hash->array[hashed] = hash_elem;

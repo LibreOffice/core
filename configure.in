@@ -1899,7 +1899,7 @@ fi
 
 dnl ===================================================================
 dnl Extra check for Windows. Cygwin builds need gcc to build dmake
-dnl although MSVC is used to build other build-time tools and 
+dnl although MSVC is used to build other build-time tools and
 dnl LibreOffice itself.
 dnl ===================================================================
 if test "$build_os" = "cygwin" ; then
