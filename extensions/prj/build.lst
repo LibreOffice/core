@@ -21,8 +21,6 @@ ex  extensions\source\dbpilots                  nmake   -   all ex_dbpilots ex_i
 ex  extensions\source\abpilot                   nmake   -   all ex_abpilot ex_inc NULL
 ex  extensions\source\logging                   nmake   -   all ex_logging ex_inc NULL
 ex  extensions\source\config\ldap               nmake   -   all ex_ldap ex_inc NULL
-ex	extensions\source\nsplugin\source			nmake	-	u	ex_nsplugin ex_inc NULL
-ex	extensions\source\nsplugin\source			nmake	-	w	ex_nsplugin ex_inc NULL
 ex  extensions\util                             nmake   -   all ex_util ex_abpilot ex_dbpilots ex_logging ex_ldap ex_bib ex_plutil NULL
 ex  extensions\prj                              nmake   -   all ex_prj NULL
 

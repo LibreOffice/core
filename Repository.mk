@@ -279,6 +279,7 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 	localedata_others \
 	mcnttype \
 	neon \
+	npsoplugin \
 	package2 \
     reg \
 	scriptframe \

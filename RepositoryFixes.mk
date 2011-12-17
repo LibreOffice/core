@@ -55,6 +55,8 @@ gb_Library_FILENAMES := $(patsubst sfx:isfx%,sfx:sfx%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst svt:isvt%,svt:svtool%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst tl:itl%,tl:itools%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst vbahelper:ivbahelper%,vbahelper:vbahelper%,$(gb_Library_FILENAMES))
+gb_Library_FILENAMES := $(patsubst curl:icurl%,curl:libcurl%,$(gb_Library_FILENAMES))
+gb_Library_FILENAMES := $(patsubst npsoplugin:inpsoplugin%,npsoplugin:npsoplugin%,$(gb_Library_FILENAMES))
 
 gb_StaticLibrary_FILENAMES := $(patsubst graphite:graphite%,graphite:graphite_dll%,$(gb_StaticLibrary_FILENAMES))
 

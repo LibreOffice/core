@@ -278,12 +278,14 @@ gb_Library_PLAINLIBS_NONE += \
 	oleaut32 \
 	shell32 \
 	shlwapi \
+	urlmon \
 	user32 \
 	uuid \
 	uwinapi \
 	winmm \
 	version \
 	winspool \
+	ws2_32 \
 
 gb_Library_LAYER := \
 	$(foreach lib,$(gb_Library_OOOLIBS),$(lib):OOO) \
