@@ -79,6 +79,12 @@ endif # GUI=UNX
 
 endif # WITH_MOZILLA=YES
 
+ifeq ($(OS),MACOSX)
+$(eval $(call gb_Module_add_targets,extensions,\
+	Library_OOoSpotlightImporter \
+	Zip_mdibundle \
+))
+endif # OS=MACOSX
 
 $(eval $(call gb_Module_add_check_targets,extensions,\
     CppunitTest_extensions_test_update \

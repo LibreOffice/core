@@ -6,7 +6,6 @@ ex  extensions\inc\ucbhelper                    get     -   all ex_incucbh ex_in
 ex  extensions\source\activex\msidl             nmake   -   w   ex_axmsidl ex_inc NULL
 ex  extensions\source\activex\main              nmake   -   w   ex_axmain ex_axmsidl.w ex_inc NULL
 ex  extensions\source\resource                  nmake   -   all ex_resrc ex_inc NULL
-ex  extensions\source\macosx\spotlight          nmake   -   u   ex_mxspotlight NULL
 ex  extensions\source\bibliography              nmake   -   all ex_bib ex_inc NULL
 ex  extensions\source\xmlextract                nmake   -   all ex_xmlextr ex_inc NULL
 ex  extensions\source\dbpilots                  nmake   -   all ex_dbpilots ex_inc NULL
