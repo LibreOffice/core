@@ -54,6 +54,7 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
     sccomp \
     scripting \
     sd \
+    sfx2 \
     slideshow \
     starmath \
     svx \
