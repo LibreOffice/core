@@ -1,4 +1,5 @@
-# -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
+# -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
+#
 # Version: MPL 1.1 / GPLv3+ / LGPLv3+
 #
 # The contents of this file are subject to the Mozilla Public License Version
@@ -11,10 +12,12 @@
 # for the specific language governing rights and limitations under the
 # License.
 #
-# Major Contributor(s):
-# Copyright (C) 2011 Jan Holesovsky <kendy@suse.cz> (initial developer)
+# The Initial Developer of the Original Code is
+# 	Peter Foley <pefoley2@verizon.net>
+# Portions created by the Initial Developer are Copyright (C) 2011 the
+# Initial Developer. All Rights Reserved.
 #
-# All Rights Reserved.
+# Major Contributor(s):
 #
 # For minor contributions see the git repository.
 #
@@ -23,34 +26,10 @@
 # the GNU Lesser General Public License Version 3 or later (the "LGPLv3+"),
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
+#
 
-$(eval $(call gb_Module_Module,extensions))
+$(eval $(call gb_Package_Package,pcr,$(SRCDIR)/extensions/source/propctrlr))
 
-$(eval $(call gb_Module_add_targets,extensions,\
-	AllLangResTarget_pcr \
-	AllLangResTarget_san \
-	AllLangResTarget_upd \
-	AllLangResTarget_updchk \
-	Configuration_updchk \
-	Library_pcr \
-	Library_scn \
-	Library_updatecheckui \
-	Library_updatefeed \
-	Library_updchk \
-	Package_pcr \
-))
+$(eval $(call gb_Package_add_file,pcr,xml/pcr.xml,pcr.xml))
 
-ifeq ($(OS),WNT)
-ifeq ($(DISABLE_ATL),)
-$(eval $(call gb_Module_add_targets,extensions,\
-	Library_oleautobridge \
-	Library_oleautobridge2 \
-))
-endif
-endif
-
-$(eval $(call gb_Module_add_check_targets,extensions,\
-    CppunitTest_extensions_test_update \
-))
-
-# vim:set shiftwidth=4 softtabstop=4 noexpandtab:
+# vim:set shiftwidth=4 softtabstop=4 expandtab:
