@@ -747,7 +747,7 @@ void ImplDrawFrame( OutputDevice *const pDev, Rectangle& rRect,
                                             rRect.Right(), rRect.Bottom() ) );
                     pDev->SetLineColor( rStyleSettings.GetShadowColor() );
                     pDev->DrawRect( Rectangle( rRect.Left(), rRect.Top(),
-                                            rRect.Right()+1, rRect.Bottom()+1 ) );
+                                            rRect.Right()-1, rRect.Bottom()-1 ) );
 
                     // adjust target rectangle
                     rRect.Left()   += 2;
