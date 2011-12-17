@@ -40,6 +40,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     comphelper \
     configmgr \
     cppcanvas \
+    cppu \
     cui \
     dbaccess \
     desktop \

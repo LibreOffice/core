@@ -1,8 +1,9 @@
+# -*- Mode: makefile; tab-width: 4; indent-tabs-mode: t -*-
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
-# Copyright 2000, 2010 Oracle and/or its affiliates.
+#
+# Copyright 2000, 2011 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
@@ -25,19 +26,16 @@
 #
 #*************************************************************************
 
-PRJ     := ..$/..
-PRJNAME := cppu
-TARGET  := AffineBridge
+gb_PARTIALBUILD := T
+ifeq ($(strip $(SOLARENV)),)
+include $(dir $(realpath $(firstword $(MAKEFILE_LIST))))/../solenv/gbuild/source_and_rerun.mk
+else
 
-ENABLE_EXCEPTIONS  := TRUE
-USE_DEFFILE        := FALSE
+gb_SourceEnvAndRecurse_STAGE=gbuild
+include $(SOLARENV)/gbuild/gbuild.mk
 
+$(eval $(call gb_Module_make_global_targets,$(shell ls $(dir $(realpath $(firstword $(MAKEFILE_LIST))))/Module*.mk)))
 
-.INCLUDE: settings.mk
+endif
 
-
-SLOFILES := $(SLO)$/AffineBridge.obj
-
-
-.INCLUDE: target.mk
-
+# vim: set noet sw=4 ts=4:

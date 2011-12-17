@@ -32,13 +32,17 @@
 # Make has no support for 'or' clauses in conditionals,
 # we use a filter expression instead.
 ifneq (,$(filter SOLARIS GCC,$(OS) $(COM)))
+gb_Library_FILENAMES := $(patsubst affine_uno:libaffine_uno%,affine_uno:libaffine_uno_uno%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst comphelper:libcomphelper%,comphelper:libcomphelp%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst cppuhelper:libcppuhelper%,cppuhelper:libuno_cppuhelper%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst jvmfwk:libuno_jvmfwk%,jvmfwk:libjvmfwk%,$(gb_Library_FILENAMES))
+gb_Library_FILENAMES := $(patsubst log_uno:liblog_uno%,log_uno:liblog_uno_uno%,$(gb_Library_FILENAMES))
+gb_Library_FILENAMES := $(patsubst purpenvhelper:libpurpen%,purpenvhelper:libuno_purpen%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst salhelper:libsalhelper%,salhelper:libuno_salhelper%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst ucbhelper:libucbhelper%,ucbhelper:libucbhelper4%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst ucb:libucb%,ucb:libucb1%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst ucpfile:libucpfile%,ucpfile:libucpfile1%,$(gb_Library_FILENAMES))
+gb_Library_FILENAMES := $(patsubst unsafe_uno:libunsafe_uno%,unsafe_uno:libunsafe_uno_uno%,$(gb_Library_FILENAMES))
 endif
 
 ifeq ($(OS),WNT)

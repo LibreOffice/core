@@ -261,6 +261,7 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_URE, \
 ))
 
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
+	affine_uno \
 	avmediagst \
 	avmediawin \
 	collator_data \
@@ -274,6 +275,7 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 	localedata_es \
 	localedata_euro \
 	localedata_others \
+	log_uno \
 	mcnttype \
 	neon \
 	package2 \
@@ -287,6 +289,7 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
     ucb \
     ucpfile \
     unopkgapp \
+	unsafe_uno \
 	xmlsecurity \
 	xsec_fw \
 	xsec_xmlsec \
@@ -319,6 +322,7 @@ $(eval $(call gb_Helper_register_libraries,RTLIBS, \
 
 $(eval $(call gb_Helper_register_libraries,RTVERLIBS, \
     cppuhelper \
+	purpenvhelper \
     salhelper \
 ))
 
