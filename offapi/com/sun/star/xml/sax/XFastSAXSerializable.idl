@@ -77,10 +77,10 @@ interface XFastSAXSerializable
         @throws com::sun::star::xml::sax::SAXException
                  if serializing the XML document fails
      */
-    void fastSerialize([in] sax::XFastDocumentHandler handler,
-                       [in] sax::XFastTokenHandler tokenHandler,
-                       [in] sequence< beans::StringPair > namespaces,
-                       [in] sequence< beans::Pair<string, long> > registerNamespaces)
+    void fastSerialize([in] com::sun::star::xml::sax::XFastDocumentHandler handler,
+                       [in] com::sun::star::xml::sax::XFastTokenHandler tokenHandler,
+                       [in] sequence< com::sun::star::beans::StringPair > namespaces,
+                       [in] sequence< com::sun::star::beans::Pair<string, long> > registerNamespaces)
         raises( com::sun::star::xml::sax::SAXException );
 };
 

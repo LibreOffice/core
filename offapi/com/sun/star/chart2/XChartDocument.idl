@@ -105,7 +105,7 @@ interface XChartDocument : ::com::sun::star::frame::XModel
         <member>XDataReceiver::attachDataProvider</member> has been
         called.
      */
-    data::XDataProvider getDataProvider();
+    com::sun::star::chart2::data::XDataProvider getDataProvider();
 
     /** sets a new component that is able to create different chart
         type templates (components of type

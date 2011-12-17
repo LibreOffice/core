@@ -67,8 +67,8 @@ interface XSAXSerializable
         @throws com::sun::star::xml::sax::SAXException
                  if serializing the XML document fails
      */
-    void serialize([in] sax::XDocumentHandler handler,
-            [in] sequence< beans::StringPair > namespaces)
+    void serialize([in] com::sun::star::xml::sax::XDocumentHandler handler,
+            [in] sequence< com::sun::star::beans::StringPair > namespaces)
         raises( com::sun::star::xml::sax::SAXException );
 
 };

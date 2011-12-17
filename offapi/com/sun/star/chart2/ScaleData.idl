@@ -60,7 +60,7 @@ struct ScaleData
 
     XScaling            Scaling;
 
-    data::XLabeledDataSequence Categories;
+    com::sun::star::chart2::data::XLabeledDataSequence Categories;
 
     /** describes the type of the axis.
 

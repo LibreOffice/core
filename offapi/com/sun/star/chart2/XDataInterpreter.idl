@@ -64,7 +64,7 @@ interface XDataInterpreter  : ::com::sun::star::uno::XInterface
             creating new ones.
      */
     InterpretedData interpretDataSource(
-        [in] data::XDataSource xSource,
+        [in] com::sun::star::chart2::data::XDataSource xSource,
         [in] sequence< com::sun::star::beans::PropertyValue > aArguments,
         [in] sequence< XDataSeries > aSeriesToReUse );
 
@@ -91,7 +91,7 @@ interface XDataInterpreter  : ::com::sun::star::uno::XInterface
         <member>interpretDataSource</member>( <code>xSource</code> ),
         the result of this method should be <code>xSource</code>.</p>
      */
-    data::XDataSource mergeInterpretedData( [in] InterpretedData aInterpretedData );
+    com::sun::star::chart2::data::XDataSource mergeInterpretedData( [in] InterpretedData aInterpretedData );
 };
 
 } ; // chart2

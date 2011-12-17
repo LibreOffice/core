@@ -68,7 +68,7 @@ interface XChartTypeTemplate : ::com::sun::star::uno::XInterface
             <type>ChartTypeTemplate</type>.
      */
     XDiagram createDiagramByDataSource(
-        [in] data::XDataSource xDataSource,
+        [in] com::sun::star::chart2::data::XDataSource xDataSource,
         [in] sequence< com::sun::star::beans::PropertyValue > aArguments );
 
     /** @return
@@ -121,7 +121,7 @@ interface XChartTypeTemplate : ::com::sun::star::uno::XInterface
      */
     void changeDiagramData(
         [in] XDiagram xDiagram,
-        [in] data::XDataSource xDataSource,
+        [in] com::sun::star::chart2::data::XDataSource xDataSource,
         [in] sequence< com::sun::star::beans::PropertyValue > aArguments );
 
     /** States whether the given diagram could have been created by

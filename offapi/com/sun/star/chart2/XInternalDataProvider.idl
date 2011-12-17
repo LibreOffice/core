@@ -73,7 +73,7 @@ interface XInternalDataProvider  : com::sun::star::chart2::data::XDataProvider
         labeled data sequence was created by cloning an existing one,
         it has to be explicitly registered via this method.</p>
      */
-    void registerDataSequenceForChanges( [in] data::XDataSequence xSeq );
+    void registerDataSequenceForChanges( [in] com::sun::star::chart2::data::XDataSequence xSeq );
 
     /** insert an additional sequence for categories nLevel>=1;
     categories at level 0 are always present and cannot be inserted or deleted
