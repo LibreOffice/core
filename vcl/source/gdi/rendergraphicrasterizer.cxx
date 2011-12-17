@@ -32,6 +32,7 @@
 #include <vcl/unohelp.hxx>
 #include <vcl/bmpacc.hxx>
 #include <vcl/graph.hxx>
+#include <tools/diagnose_ex.h>
 #include <tools/stream.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/streamwrap.hxx>
@@ -231,44 +232,44 @@ void RenderGraphicRasterizer::InitializeRasterizer()
 
         maDefaultSizePixel.Width() = maDefaultSizePixel.Height() = 0;
 
-        if( !maRenderGraphic.IsEmpty() )
+        if ( !maRenderGraphic.IsEmpty() )
         {
             rtl::OUString aServiceName;
 
-            if( 0 == maRenderGraphic.GetGraphicDataMimeType().compareToAscii( "image/svg+xml" ) )
+            if ( 0 == maRenderGraphic.GetGraphicDataMimeType().compareToAscii( RTL_CONSTASCII_STRINGPARAM( "image/svg+xml" ) ) )
             {
                 aServiceName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( VCL_SERVICENAME_RASTERIZER_SVG ) );
             }
 
             if( aServiceName.getLength() )
             {
-                mxRasterizer.set( xFactory->createInstance( aServiceName ), uno::UNO_QUERY );
-
-                if( mxRasterizer.is() )
+                try
                 {
-                    std::auto_ptr< VirtualDevice > apCompVDev;
-                    OutputDevice* pCompDev = NULL;
+                    mxRasterizer.set( xFactory->createInstance( aServiceName ), uno::UNO_QUERY );
+
+                    if( mxRasterizer.is() )
+                    {
+                        std::auto_ptr< VirtualDevice > apCompVDev;
+                        OutputDevice* pCompDev = NULL;
 
 #ifndef NO_GETAPPWINDOW
-                    pCompDev = Application::GetAppWindow();
+                        pCompDev = Application::GetAppWindow();
 #endif
 
-                    if( !pCompDev )
-                    {
-                        apCompVDev.reset( new VirtualDevice );
-                        pCompDev = apCompVDev.get();
-                    }
+                        if( !pCompDev )
+                        {
+                            apCompVDev.reset( new VirtualDevice );
+                            pCompDev = apCompVDev.get();
+                        }
 
-                    const Size      aDPI( pCompDev->LogicToPixel( Size( 1, 1 ), MAP_INCH ) );
-                    awt::Size       aSizePixel;
-                    SvMemoryStream  aMemStm( maRenderGraphic.GetGraphicData().get(),
-                                             maRenderGraphic.GetGraphicDataLength(),
-                                             STREAM_READ );
+                        const Size      aDPI( pCompDev->LogicToPixel( Size( 1, 1 ), MAP_INCH ) );
+                        awt::Size       aSizePixel;
+                        SvMemoryStream  aMemStm( maRenderGraphic.GetGraphicData().get(),
+                                                maRenderGraphic.GetGraphicDataLength(),
+                                                STREAM_READ );
 
-                    uno::Reference< io::XInputStream > xIStm( new utl::OSeekableInputStreamWrapper( aMemStm ) );
+                        uno::Reference< io::XInputStream > xIStm( new utl::OSeekableInputStreamWrapper( aMemStm ) );
 
-                    try
-                    {
                         if( !xIStm.is() || !mxRasterizer->initializeData( xIStm, aDPI.Width(), aDPI.Height(), aSizePixel ) )
                         {
                             mxRasterizer.clear();
@@ -279,11 +280,11 @@ void RenderGraphicRasterizer::InitializeRasterizer()
                             maDefaultSizePixel.Height() = aSizePixel.Height;
                         }
                     }
-                    catch( ... )
-                    {
-                        OSL_TRACE( "caught exception during initialization of SVG rasterizer component" );
-                        mxRasterizer.clear();
-                    }
+                }
+                catch( ... )
+                {
+                    DBG_UNHANDLED_EXCEPTION();
+                    mxRasterizer.clear();
                 }
             }
         }
