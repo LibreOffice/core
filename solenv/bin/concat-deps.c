@@ -684,9 +684,11 @@ int rc;
 char* buffer;
 char* end;
 char* cursor;
+char* cursor_out;
 char* base;
 int continuation = 0;
 char last_ns = 0;
+char* last_slash = NULL;
 off_t size;
 
     buffer = file_load(fn, &size, &rc);
@@ -697,20 +699,38 @@ off_t size;
      */
     if(!rc)
     {
-        base = cursor = end = buffer;
+        base = cursor_out = cursor = end = buffer;
         end += size;
         while(cursor < end)
         {
             if(*cursor == '\\')
             {
                 continuation = 1;
-                cursor += 1;
+                *cursor_out++ = *cursor++;
+            }
+            else if(*cursor == '/')
+            {
+                if(cursor + 3 < end)
+                {
+                    if(!memcmp(cursor, "/../", 4))
+                    {
+                        if(last_slash != NULL)
+                        {
+                            /* bactrack to the previous '/' */
+                            cursor_out = last_slash;
+                            /* skip the /.. section */
+                            cursor += 3;
+                        }
+                    }
+                }
+                last_slash = cursor_out;
+                *cursor_out++ = *cursor++;
             }
             else if(*cursor == '\n')
             {
                 if(!continuation)
                 {
-                    *cursor = 0;
+                    *cursor_out = 0;
                     if(base < cursor)
                     {
                         /* here we have a complete rule */
@@ -720,7 +740,7 @@ off_t size;
                              * these are the one for which we want to filter
                              * duplicate out
                              */
-                            if(hash_store(dep_hash, base, (int)(cursor - base)))
+                            if(hash_store(dep_hash, base, (int)(cursor_out - base)))
                             {
                                 puts(base);
                                 putc('\n', stdout);
@@ -734,14 +754,15 @@ off_t size;
                         }
                     }
                     cursor += 1;
-                    base = cursor;
+                    base = cursor_out = cursor;
                 }
                 else
                 {
                     /* here we have a '\' followed by \n this is a continuation
                      * i.e not a complete rule yet
                      */
-                    cursor += 1;
+                    last_slash = NULL;
+                    *cursor_out++ = *cursor++;
                 }
             }
             else
@@ -752,15 +773,15 @@ off_t size;
                 {
                     last_ns = *cursor;
                 }
-                cursor += 1;
+                *cursor_out++ = *cursor++;
             }
         }
         /* just in case the file did not end with a \n, there may be a pending rule */
-        if(base < cursor)
+        if(base < cursor_out)
         {
             if(last_ns == ':')
             {
-                if(hash_store(dep_hash, base, (int)(cursor - base)))
+                if(hash_store(dep_hash, base, (int)(cursor_out - base)))
                 {
                     puts(base);
                     putc('\n', stdout);
