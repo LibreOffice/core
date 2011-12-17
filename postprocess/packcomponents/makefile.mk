@@ -268,7 +268,7 @@ my_components += \
 .END
 
 .IF "$(WITH_LDAP)" == "YES"
-my_components += ldapbe2
+my_components += component/extensions/source/config/ldap/ldapbe2
 .END
 
 .IF "$(WITH_MOZILLA)" != "NO"

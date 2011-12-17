@@ -86,6 +86,12 @@ $(eval $(call gb_Module_add_targets,extensions,\
 ))
 endif # OS=MACOSX
 
+ifeq ($(WITH_LDAP),YES)
+$(eval $(call gb_Module_add_targets,extensions,\
+	Library_ldapbe2 \
+))
+endif # WITH_LDAP=YES
+
 $(eval $(call gb_Module_add_check_targets,extensions,\
     CppunitTest_extensions_test_update \
 ))

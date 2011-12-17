@@ -391,6 +391,12 @@ $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
 ))
 endif
 
+ifeq ($(WITH_LDAP),YES)
+$(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
+	ldapbe2 \
+))
+endif
+
 $(eval $(call gb_Helper_register_libraries,UNOLIBS_URE, \
 	binaryurp \
 ))
