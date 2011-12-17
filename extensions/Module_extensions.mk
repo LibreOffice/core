@@ -52,6 +52,7 @@ endif
 ifneq ($(WITH_MOZILLA),NO)
 
 $(eval $(call gb_Module_add_targets,extensions,\
+	Library_pl \
 	Executable_nsplugin \
 ))
 
@@ -63,6 +64,10 @@ $(eval $(call gb_Module_add_targets,extensions,\
 endif # GUI=WNT
 
 ifeq ($(GUI),UNX)
+
+$(eval $(call gb_Module_add_targets,extensions,\
+	Executable_pluginapp.bin \
+))
 
 ifneq ($(ENABLE_GTK),)
 $(eval $(call gb_Module_add_targets,extensions,\

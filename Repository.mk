@@ -92,6 +92,17 @@ endif
 
 endif
 
+ifneq ($(WITH_MOZILLA),NO)
+$(eval $(call gb_Helper_register_executables,OOO,\
+	nspugin \
+	pluginapp.bin \
+))
+$(eval $(call gb_Helper_register_libraries,OOOLIBS, \
+	pl \
+))
+endif # WITH_MOZILLA
+
+
 $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
 	PptImporter \
 	adabas \

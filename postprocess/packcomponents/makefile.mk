@@ -272,7 +272,7 @@ my_components += ldapbe2
 .END
 
 .IF "$(WITH_MOZILLA)" != "NO"
-my_components += pl
+my_components += component/extensions/source/plugin/pl
 .END
 
 .IF "$(ENABLE_XMLSEC)" == "YES"
