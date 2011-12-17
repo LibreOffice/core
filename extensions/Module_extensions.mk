@@ -40,10 +40,12 @@ $(eval $(call gb_Module_add_targets,extensions,\
 	Library_dbp \
 	Library_log \
 	Library_pcr \
+	Library_res \
 	Library_scn \
 	Library_updatecheckui \
 	Library_updatefeed \
 	Library_updchk \
+	Library_xmx \
 	Package_bib \
 	Package_pcr \
 ))

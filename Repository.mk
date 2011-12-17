@@ -208,6 +208,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
 	placeware \
 	protocolhandler \
     qstart_gtk \
+	res \
     resourcemodel \
     rpt \
     rptui \
@@ -268,6 +269,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     xcr \
 	xmlfa \
 	xmlfd \
+	xmx \
     xo \
     xof \
 	xsltdlg \

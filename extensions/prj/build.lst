@@ -5,8 +5,6 @@ ex  extensions\inc                              nmake   -   all ex_inc NULL
 ex  extensions\inc\ucbhelper                    get     -   all ex_incucbh ex_inc NULL
 ex  extensions\source\activex\msidl             nmake   -   w   ex_axmsidl ex_inc NULL
 ex  extensions\source\activex\main              nmake   -   w   ex_axmain ex_axmsidl.w ex_inc NULL
-ex  extensions\source\resource                  nmake   -   all ex_resrc ex_inc NULL
-ex  extensions\source\xmlextract                nmake   -   all ex_xmlextr ex_inc NULL
 ex  extensions\util                             nmake   -   all ex_util NULL
 ex  extensions\prj                              nmake   -   all ex_prj NULL
 

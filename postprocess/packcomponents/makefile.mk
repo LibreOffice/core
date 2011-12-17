@@ -176,17 +176,18 @@ my_components += \
     component/extensions/source/dbpilots/dbp \
     component/extensions/source/logging/log \
     component/extensions/source/propctrlr/pcr \
+    component/extensions/source/resource/res \
     component/extensions/source/scanner/scn \
     component/extensions/source/update/check/updchk.uno \
     component/extensions/source/update/feed/updatefeed \
     component/extensions/source/update/ui/updchk \
+    component/extensions/source/xmlextract/xmx \
     fpicker \
     fps_office \
-    res \
     syssh \
     tvhlp1 \
     ucpchelp1 \
-    xmx
+
 .ENDIF
 
 .IF "$(DISABLE_PYTHON)" != "TRUE"
