@@ -65,7 +65,8 @@ extern "C" {
     @param bUseEthernetAddress  ignored (was used when this function returned
                                 Version 1 instead of Version 4 UUIDs).
  */
-void SAL_CALL rtl_createUuid( sal_uInt8 *pTargetUUID ,
+SAL_DLLPUBLIC void SAL_CALL rtl_createUuid(
+                              sal_uInt8 *pTargetUUID,
                               const sal_uInt8 *pPredecessorUUID,
                               sal_Bool bUseEthernetAddress );
 
@@ -84,7 +85,8 @@ void SAL_CALL rtl_createUuid( sal_uInt8 *pTargetUUID ,
     </ul>
 
  */
-sal_Int32 SAL_CALL rtl_compareUuid( const sal_uInt8 *pUUID1 , const sal_uInt8 *pUUID2 );
+SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_compareUuid(
+        const sal_uInt8 *pUUID1 , const sal_uInt8 *pUUID2 );
 
 /** Creates named UUIDs.
 
@@ -121,7 +123,7 @@ sal_Int32 SAL_CALL rtl_compareUuid( const sal_uInt8 *pUUID1 , const sal_uInt8 *p
 
     @param pName the name
  */
-void SAL_CALL rtl_createNamedUuid(
+SAL_DLLPUBLIC void SAL_CALL rtl_createNamedUuid(
     sal_uInt8  *pTargetUUID,
     const sal_uInt8  *pNameSpaceUUID,
     const rtl_String *pName

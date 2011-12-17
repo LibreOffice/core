@@ -48,7 +48,7 @@ extern "C" {
     @param pTargetUUID 16 byte of memory
     @see rtl_createUiid()
  */
-void SAL_CALL rtl_getGlobalProcessId( sal_uInt8 *pTargetUUID );
+SAL_DLLPUBLIC void SAL_CALL rtl_getGlobalProcessId( sal_uInt8 *pTargetUUID );
 
 /** Get the nArg-th command-line argument passed to the main-function of this process.
 
@@ -62,7 +62,7 @@ void SAL_CALL rtl_getGlobalProcessId( sal_uInt8 *pTargetUUID );
     @see osl_getCommandArg()
     @see rtl_getCommandArgCount()
 */
-oslProcessError SAL_CALL rtl_getAppCommandArg(sal_uInt32 nArg, rtl_uString **strCommandArg);
+SAL_DLLPUBLIC oslProcessError SAL_CALL rtl_getAppCommandArg(sal_uInt32 nArg, rtl_uString **strCommandArg);
 
 /** Returns the number of command line arguments at process start.
 
@@ -74,7 +74,7 @@ oslProcessError SAL_CALL rtl_getAppCommandArg(sal_uInt32 nArg, rtl_uString **str
     @see osl_getCommandArgCount()
     @see rtl_getCommandArg()
 */
-sal_uInt32 SAL_CALL rtl_getAppCommandArgCount();
+SAL_DLLPUBLIC sal_uInt32 SAL_CALL rtl_getAppCommandArgCount();
 
 #ifdef __cplusplus
 }

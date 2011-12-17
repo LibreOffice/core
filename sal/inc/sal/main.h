@@ -38,8 +38,8 @@
 extern "C" {
 #endif
 
-void SAL_CALL sal_detail_initialize(int argc, char ** argv);
-void SAL_CALL sal_detail_deinitialize();
+SAL_DLLPUBLIC void SAL_CALL sal_detail_initialize(int argc, char ** argv);
+SAL_DLLPUBLIC void SAL_CALL sal_detail_deinitialize();
 
 #ifdef IOS
 

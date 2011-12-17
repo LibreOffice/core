@@ -73,14 +73,14 @@ typedef void ( SAL_CALL *oslGenericFunction )( void );
     @param strModuleName denotes the name of the module to be loaded.
     @return NULL if the module could not be loaded, otherwise a handle to the module.
 */
-oslModule SAL_CALL osl_loadModule(rtl_uString *strModuleName, sal_Int32 nRtldMode);
+SAL_DLLPUBLIC oslModule SAL_CALL osl_loadModule(rtl_uString *strModuleName, sal_Int32 nRtldMode);
 
 /** Load a shared library or module.
     @param pModuleName denotes the name of the module to be loaded.
     @return NULL if the module could not be loaded, otherwise a handle to the module.
     @since UDK 3.6
 */
-oslModule SAL_CALL osl_loadModuleAscii(const sal_Char *pModuleName, sal_Int32 nRtldMode);
+SAL_DLLPUBLIC oslModule SAL_CALL osl_loadModuleAscii(const sal_Char *pModuleName, sal_Int32 nRtldMode);
 
 /** Load a module located relative to some other module.
 
@@ -99,7 +99,7 @@ oslModule SAL_CALL osl_loadModuleAscii(const sal_Char *pModuleName, sal_Int32 nR
 
     @since UDK 3.2.8
 */
-oslModule SAL_CALL osl_loadModuleRelative(
+SAL_DLLPUBLIC oslModule SAL_CALL osl_loadModuleRelative(
     oslGenericFunction baseModule, rtl_uString * relativePath, sal_Int32 mode);
 
 /** Load a module located relative to some other module.
@@ -146,16 +146,16 @@ oslModule SAL_CALL osl_loadModuleRelativeAscii(
     @see osl_getFunctionSymbol
     @see osl_getAsciiFunctionSymbol
 */
-sal_Bool SAL_CALL osl_getModuleHandle(rtl_uString *pModuleName, oslModule *pResult);
+SAL_DLLPUBLIC sal_Bool SAL_CALL osl_getModuleHandle(rtl_uString *pModuleName, oslModule *pResult);
 
 /** Release the module
 */
-void SAL_CALL osl_unloadModule(oslModule Module);
+SAL_DLLPUBLIC void SAL_CALL osl_unloadModule(oslModule Module);
 
 /** lookup the specified symbol name.
     @return address of the symbol or NULL if lookup failed.
 */
-void* SAL_CALL osl_getSymbol( oslModule Module, rtl_uString *strSymbolName);
+SAL_DLLPUBLIC void* SAL_CALL osl_getSymbol( oslModule Module, rtl_uString *strSymbolName);
 
 /** Lookup the specified function symbol name.
 
@@ -179,7 +179,8 @@ void* SAL_CALL osl_getSymbol( oslModule Module, rtl_uString *strSymbolName);
     @see osl_getSymbol
     @see osl_getAsciiFunctionSymbol
 */
-oslGenericFunction SAL_CALL osl_getFunctionSymbol( oslModule Module, rtl_uString *ustrFunctionSymbolName );
+SAL_DLLPUBLIC oslGenericFunction SAL_CALL osl_getFunctionSymbol(
+        oslModule Module, rtl_uString *ustrFunctionSymbolName );
 
 /** Lookup the specified function symbol name.
 
@@ -203,7 +204,8 @@ oslGenericFunction SAL_CALL osl_getFunctionSymbol( oslModule Module, rtl_uString
     @see osl_getModuleHandle
     @see osl_getFunctionSymbol
 */
-oslGenericFunction SAL_CALL osl_getAsciiFunctionSymbol(oslModule Module, const sal_Char *pSymbol);
+SAL_DLLPUBLIC oslGenericFunction SAL_CALL osl_getAsciiFunctionSymbol(
+        oslModule Module, const sal_Char *pSymbol );
 
 
 /** Lookup URL of module which is mapped at the specified address.
@@ -211,7 +213,8 @@ oslGenericFunction SAL_CALL osl_getAsciiFunctionSymbol(oslModule Module, const s
     @param pustrURL receives the URL of the module that is mapped at pv.
     @return sal_True on success, sal_False if no module can be found at the specified address.
 */
-sal_Bool SAL_CALL osl_getModuleURLFromAddress( void *pv, rtl_uString **pustrURL );
+SAL_DLLPUBLIC sal_Bool SAL_CALL osl_getModuleURLFromAddress(
+        void *pv, rtl_uString **pustrURL );
 
 /** Lookup URL of module which is mapped at the specified function address.
 
@@ -234,7 +237,8 @@ sal_Bool SAL_CALL osl_getModuleURLFromAddress( void *pv, rtl_uString **pustrURL 
 
     @see osl_getModuleURLFromAddress
 */
-sal_Bool SAL_CALL osl_getModuleURLFromFunctionAddress( oslGenericFunction pf, rtl_uString **pustrFunctionURL );
+SAL_DLLPUBLIC sal_Bool SAL_CALL osl_getModuleURLFromFunctionAddress(
+        oslGenericFunction pf, rtl_uString **pustrFunctionURL );
 
 #ifdef __cplusplus
 }

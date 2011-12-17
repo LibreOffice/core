@@ -106,7 +106,8 @@ typedef struct _oslDateTime
 /** Get the current system time as TimeValue.
     @return false if any error occurs.
 */
-sal_Bool SAL_CALL osl_getSystemTime( TimeValue* pTimeVal );
+SAL_DLLPUBLIC sal_Bool SAL_CALL osl_getSystemTime(
+        TimeValue* pTimeVal );
 
 
 /** Get the GMT from a TimeValue and fill a struct oslDateTime
@@ -115,7 +116,8 @@ sal_Bool SAL_CALL osl_getSystemTime( TimeValue* pTimeVal );
 
     @return sal_False if any error occurs else sal_True.
 */
-sal_Bool SAL_CALL osl_getDateTimeFromTimeValue( TimeValue* pTimeVal, oslDateTime* pDateTime );
+SAL_DLLPUBLIC sal_Bool SAL_CALL osl_getDateTimeFromTimeValue(
+        TimeValue* pTimeVal, oslDateTime* pDateTime );
 
 
 /** Get the GMT from a oslDateTime and fill a TimeValue
@@ -124,7 +126,8 @@ sal_Bool SAL_CALL osl_getDateTimeFromTimeValue( TimeValue* pTimeVal, oslDateTime
 
     @return sal_False if any error occurs else sal_True.
 */
-sal_Bool SAL_CALL osl_getTimeValueFromDateTime( oslDateTime* pDateTime, TimeValue* pTimeVal );
+SAL_DLLPUBLIC sal_Bool SAL_CALL osl_getTimeValueFromDateTime(
+        oslDateTime* pDateTime, TimeValue* pTimeVal );
 
 
 /** Convert GMT to local time
@@ -133,7 +136,8 @@ sal_Bool SAL_CALL osl_getTimeValueFromDateTime( oslDateTime* pDateTime, TimeValu
 
     @return sal_False if any error occurs else sal_True.
 */
-sal_Bool SAL_CALL osl_getLocalTimeFromSystemTime( TimeValue* pSystemTimeVal, TimeValue* pLocalTimeVal );
+SAL_DLLPUBLIC sal_Bool SAL_CALL osl_getLocalTimeFromSystemTime(
+        TimeValue* pSystemTimeVal, TimeValue* pLocalTimeVal );
 
 
 /** Convert local time to GMT
@@ -142,14 +146,15 @@ sal_Bool SAL_CALL osl_getLocalTimeFromSystemTime( TimeValue* pSystemTimeVal, Tim
 
     @return sal_False if any error occurs else sal_True.
 */
-sal_Bool SAL_CALL osl_getSystemTimeFromLocalTime( TimeValue* pLocalTimeVal, TimeValue* pSystemTimeVal );
+SAL_DLLPUBLIC sal_Bool SAL_CALL osl_getSystemTimeFromLocalTime(
+        TimeValue* pLocalTimeVal, TimeValue* pSystemTimeVal );
 
 
 /** Get the value of the global timer
     @return current timer value in milli seconds
  */
 
-sal_uInt32 SAL_CALL osl_getGlobalTimer(void);
+SAL_DLLPUBLIC sal_uInt32 SAL_CALL osl_getGlobalTimer(void);
 
 #ifdef __cplusplus
 }

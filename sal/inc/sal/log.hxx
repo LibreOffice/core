@@ -44,7 +44,7 @@
 // recursion.
 
 /// @internal
-extern "C" void SAL_CALL sal_detail_log(
+extern "C" SAL_DLLPUBLIC void SAL_CALL sal_detail_log(
     enum sal_detail_LogLevel level, char const * area, char const * where,
     char const * message);
 

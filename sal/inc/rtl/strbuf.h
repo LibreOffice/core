@@ -47,7 +47,8 @@ extern "C" {
     @param  value    the initial value of the string.
     @param  count    the length of value.
  */
-void SAL_CALL rtl_stringbuffer_newFromStr_WithLength( rtl_String ** newStr,
+SAL_DLLPUBLIC void SAL_CALL rtl_stringbuffer_newFromStr_WithLength(
+                                                      rtl_String ** newStr,
                                                       const sal_Char * value,
                                                       sal_Int32 count);
 
@@ -66,7 +67,8 @@ void SAL_CALL rtl_stringbuffer_newFromStr_WithLength( rtl_String ** newStr,
     @param  oldStr      the initial value of the string.
     @return the new capacity of the string buffer
  */
-sal_Int32 SAL_CALL rtl_stringbuffer_newFromStringBuffer( rtl_String ** newStr,
+SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_stringbuffer_newFromStringBuffer(
+                                                         rtl_String ** newStr,
                                                          sal_Int32 capacity,
                                                          rtl_String * olsStr );
 
@@ -87,7 +89,8 @@ sal_Int32 SAL_CALL rtl_stringbuffer_newFromStringBuffer( rtl_String ** newStr,
     @param   capacity         in: old capicity, out: new capacity.
     @param   minimumCapacity   the minimum desired capacity.
  */
-void SAL_CALL rtl_stringbuffer_ensureCapacity(  /*inout*/rtl_String ** This,
+SAL_DLLPUBLIC void SAL_CALL rtl_stringbuffer_ensureCapacity(
+                                                /*inout*/rtl_String ** This,
                                                 /*inout*/sal_Int32* capacity,
                                                 sal_Int32 minimumCapacity);
 
@@ -106,7 +109,8 @@ void SAL_CALL rtl_stringbuffer_ensureCapacity(  /*inout*/rtl_String ** This,
     @param  ch          a character array.
     @param  len         the number of characters to append.
  */
-void SAL_CALL rtl_stringbuffer_insert( /*inout*/rtl_String ** This,
+SAL_DLLPUBLIC void SAL_CALL rtl_stringbuffer_insert(
+                                       /*inout*/rtl_String ** This,
                                        /*inout*/sal_Int32 * capacity,
                                        sal_Int32 offset,
                                        const sal_Char * str,
@@ -123,7 +127,8 @@ void SAL_CALL rtl_stringbuffer_insert( /*inout*/rtl_String ** This,
     @param  start       The beginning index, inclusive
     @param  len         The substring length
  */
-void SAL_CALL rtl_stringbuffer_remove( /*inout*/rtl_String ** This,
+SAL_DLLPUBLIC void SAL_CALL rtl_stringbuffer_remove(
+                                       /*inout*/rtl_String ** This,
                                        sal_Int32 start,
                                        sal_Int32 len );
 

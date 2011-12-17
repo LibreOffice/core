@@ -203,7 +203,7 @@ enum rtl_math_DecimalPlaces
     @param bEraseTrailingDecZeros
     Trailing zeros in decimal places are erased.
  */
-void SAL_CALL rtl_math_doubleToString(rtl_String ** pResult,
+SAL_DLLPUBLIC void SAL_CALL rtl_math_doubleToString(rtl_String ** pResult,
                                       sal_Int32 * pResultCapacity,
                                       sal_Int32 nResultOffset, double fValue,
                                       enum rtl_math_StringFormat eFormat,
@@ -278,7 +278,7 @@ void SAL_CALL rtl_math_doubleToString(rtl_String ** pResult,
     @param bEraseTrailingDecZeros
     Trailing zeros in decimal places are erased.
  */
-void SAL_CALL rtl_math_doubleToUString(rtl_uString ** pResult,
+SAL_DLLPUBLIC void SAL_CALL rtl_math_doubleToUString(rtl_uString ** pResult,
                                        sal_Int32 * pResultCapacity,
                                        sal_Int32 nResultOffset, double fValue,
                                        enum rtl_math_StringFormat eFormat,
@@ -324,7 +324,7 @@ void SAL_CALL rtl_math_doubleToUString(rtl_uString ** pResult,
     found, *pParsedEnd == pBegin on return, even if there was leading
     whitespace.
  */
-double SAL_CALL rtl_math_stringToDouble(
+SAL_DLLPUBLIC double SAL_CALL rtl_math_stringToDouble(
     sal_Char const * pBegin, sal_Char const * pEnd, sal_Char cDecSeparator,
     sal_Char cGroupSeparator, enum rtl_math_ConversionStatus * pStatus,
     sal_Char const ** pParsedEnd) SAL_THROW_EXTERN_C();
@@ -364,7 +364,7 @@ double SAL_CALL rtl_math_stringToDouble(
     found, *pParsedEnd == pBegin on return, even if there was leading
     whitespace.
  */
-double SAL_CALL rtl_math_uStringToDouble(
+SAL_DLLPUBLIC double SAL_CALL rtl_math_uStringToDouble(
     sal_Unicode const * pBegin, sal_Unicode const * pEnd,
     sal_Unicode cDecSeparator, sal_Unicode cGroupSeparator,
     enum rtl_math_ConversionStatus * pStatus, sal_Unicode const ** pParsedEnd)
@@ -383,7 +383,7 @@ double SAL_CALL rtl_math_uStringToDouble(
     @param eMode
     Specifies the rounding mode.
  */
-double SAL_CALL rtl_math_round(double fValue, int nDecPlaces,
+SAL_DLLPUBLIC double SAL_CALL rtl_math_round(double fValue, int nDecPlaces,
                                enum rtl_math_RoundingMode eMode)
     SAL_THROW_EXTERN_C();
 
@@ -399,14 +399,14 @@ double SAL_CALL rtl_math_round(double fValue, int nDecPlaces,
     @return
     fVal * pow(10.0, nExp)
  */
-double SAL_CALL rtl_math_pow10Exp(double fValue, int nExp) SAL_THROW_EXTERN_C();
+SAL_DLLPUBLIC double SAL_CALL rtl_math_pow10Exp(double fValue, int nExp) SAL_THROW_EXTERN_C();
 
 /** Rounds value to 15 significant decimal digits.
 
     @param fValue
     The value to be rounded.
   */
-double SAL_CALL rtl_math_approxValue(double fValue) SAL_THROW_EXTERN_C();
+SAL_DLLPUBLIC double SAL_CALL rtl_math_approxValue(double fValue) SAL_THROW_EXTERN_C();
 
 /** Returns more accurate e^x-1 for x near 0 than calculating directly.
 
@@ -415,7 +415,7 @@ double SAL_CALL rtl_math_approxValue(double fValue) SAL_THROW_EXTERN_C();
     @param fValue
     The value x in the term e^x-1.
   */
-double SAL_CALL rtl_math_expm1(double fValue) SAL_THROW_EXTERN_C();
+SAL_DLLPUBLIC double SAL_CALL rtl_math_expm1(double fValue) SAL_THROW_EXTERN_C();
 
 /** Returns more accurate log(1+x) for x near 0 than calculating directly.
 
@@ -424,7 +424,7 @@ double SAL_CALL rtl_math_expm1(double fValue) SAL_THROW_EXTERN_C();
     @param fValue
     The value x in the term log(1+x).
   */
-double SAL_CALL rtl_math_log1p(double fValue) SAL_THROW_EXTERN_C();
+SAL_DLLPUBLIC double SAL_CALL rtl_math_log1p(double fValue) SAL_THROW_EXTERN_C();
 
 /** Returns more accurate atanh(x) for x near 0 than calculating
     0.5*log((1+x)/(1-x)).
@@ -434,7 +434,7 @@ double SAL_CALL rtl_math_log1p(double fValue) SAL_THROW_EXTERN_C();
     @param fValue
     The value x in the term atanh(x).
   */
-double SAL_CALL rtl_math_atanh(double fValue) SAL_THROW_EXTERN_C();
+SAL_DLLPUBLIC double SAL_CALL rtl_math_atanh(double fValue) SAL_THROW_EXTERN_C();
 
 /** Returns values of the Errorfunction erf.
 
@@ -443,7 +443,7 @@ double SAL_CALL rtl_math_atanh(double fValue) SAL_THROW_EXTERN_C();
     @param fValue
     The value x in the term erf(x).
   */
-double SAL_CALL rtl_math_erf(double fValue) SAL_THROW_EXTERN_C();
+SAL_DLLPUBLIC double SAL_CALL rtl_math_erf(double fValue) SAL_THROW_EXTERN_C();
 
 /** Returns values of the complement Errorfunction erfc.
 
@@ -452,7 +452,7 @@ double SAL_CALL rtl_math_erf(double fValue) SAL_THROW_EXTERN_C();
     @param fValue
     The value x in the term erfc(x).
   */
-double SAL_CALL rtl_math_erfc(double fValue) SAL_THROW_EXTERN_C();
+SAL_DLLPUBLIC double SAL_CALL rtl_math_erfc(double fValue) SAL_THROW_EXTERN_C();
 
 /** Returns values of the inverse hyperbolic sine.
 
@@ -461,7 +461,7 @@ double SAL_CALL rtl_math_erfc(double fValue) SAL_THROW_EXTERN_C();
     @param fValue
     The value x in the term asinh(x).
   */
-double SAL_CALL rtl_math_asinh(double fValue) SAL_THROW_EXTERN_C();
+SAL_DLLPUBLIC double SAL_CALL rtl_math_asinh(double fValue) SAL_THROW_EXTERN_C();
 
 /** Returns values of the inverse hyperbolic cosine.
 
@@ -470,7 +470,7 @@ double SAL_CALL rtl_math_asinh(double fValue) SAL_THROW_EXTERN_C();
     @param fValue
     The value x in the term acosh(x).
   */
-double SAL_CALL rtl_math_acosh(double fValue) SAL_THROW_EXTERN_C();
+SAL_DLLPUBLIC double SAL_CALL rtl_math_acosh(double fValue) SAL_THROW_EXTERN_C();
 
 #if defined __cplusplus
 }

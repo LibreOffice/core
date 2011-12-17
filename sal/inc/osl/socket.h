@@ -216,18 +216,20 @@ typedef sal_uInt8 oslSocketIpxNodeNumber[6];
                   set to INADDR_ANY port 0.
     @return 0 if address could not be created.
 */
-oslSocketAddr SAL_CALL osl_createEmptySocketAddr(oslAddrFamily Family);
+SAL_DLLPUBLIC oslSocketAddr SAL_CALL osl_createEmptySocketAddr(
+        oslAddrFamily Family);
 
 
 /** Creates a new SocketAddress and fills it from Addr.
 */
-oslSocketAddr SAL_CALL osl_copySocketAddr(oslSocketAddr Addr);
+SAL_DLLPUBLIC oslSocketAddr SAL_CALL osl_copySocketAddr(
+        oslSocketAddr Addr);
 
 /** Compares the values of two SocketAddresses.
     @return <code>sal_True</code> if both addresses denote the same socket address,
             <code>sal_False</code> otherwise.
 */
-sal_Bool SAL_CALL osl_isEqualSocketAddr(
+SAL_DLLPUBLIC sal_Bool SAL_CALL osl_isEqualSocketAddr(
     oslSocketAddr Addr1, oslSocketAddr Addr2);
 
 /** Uses the systems name-service interface to find an address for strHostname.
@@ -235,7 +237,8 @@ sal_Bool SAL_CALL osl_isEqualSocketAddr(
     @return The desired address if one could be found, otherwise 0.
     Don't forget to destroy the address if you don't need it any longer.
 */
-oslSocketAddr SAL_CALL osl_resolveHostname(rtl_uString *strHostname);
+SAL_DLLPUBLIC oslSocketAddr SAL_CALL osl_resolveHostname(
+        rtl_uString *strHostname);
 
 /** Create an internet address usable for sending broadcast datagrams.
     To limit the broadcast to your subnet, pass your hosts IP address
@@ -246,7 +249,7 @@ oslSocketAddr SAL_CALL osl_resolveHostname(rtl_uString *strHostname);
     @param  Port          [in] port number in host byte order.
     @return 0 if address could not be created.
 */
-oslSocketAddr SAL_CALL osl_createInetBroadcastAddr (
+SAL_DLLPUBLIC oslSocketAddr SAL_CALL osl_createInetBroadcastAddr (
     rtl_uString *strDottedAddr, sal_Int32 Port);
 
 
@@ -257,20 +260,22 @@ oslSocketAddr SAL_CALL osl_createInetBroadcastAddr (
     @param Port [in] portnumber in host byte order.
     @return 0 if address could not be created.
 */
-oslSocketAddr SAL_CALL osl_createInetSocketAddr (
+SAL_DLLPUBLIC oslSocketAddr SAL_CALL osl_createInetSocketAddr (
     rtl_uString *strDottedAddr, sal_Int32 Port);
 
 
 /** Frees all resources allocated by Addr. The handle Addr must not
     be used after the call anymore.
 */
-void SAL_CALL osl_destroySocketAddr(oslSocketAddr Addr);
+SAL_DLLPUBLIC void SAL_CALL osl_destroySocketAddr(
+        oslSocketAddr Addr);
 
 /** Looks up the port-number designated to the specified service/protocol-pair.
     (e.g. "ftp" "tcp").
     @return OSL_INVALID_PORT if no appropriate entry was found, otherwise the port-number.
 */
-sal_Int32 SAL_CALL osl_getServicePort(rtl_uString *strServicename, rtl_uString *strProtocol);
+SAL_DLLPUBLIC sal_Int32 SAL_CALL osl_getServicePort(
+        rtl_uString *strServicename, rtl_uString *strProtocol);
 
 
 
@@ -278,28 +283,32 @@ sal_Int32 SAL_CALL osl_getServicePort(rtl_uString *strServicename, rtl_uString *
     @return the family of the socket-address.
     In case of an unknown family you get <code>osl_Socket_FamilyInvalid</code>.
 */
-oslAddrFamily SAL_CALL osl_getFamilyOfSocketAddr(oslSocketAddr Addr);
+SAL_DLLPUBLIC oslAddrFamily SAL_CALL osl_getFamilyOfSocketAddr(
+        oslSocketAddr Addr);
 
 
 /** Retrieves the internet port-number of Addr.
     @return the port-number of the address in host-byte order. If Addr
     is not an address of type <code>osl_Socket_FamilyInet</code>, it returns <code>OSL_INVALID_PORT</code>
 */
-sal_Int32 SAL_CALL osl_getInetPortOfSocketAddr(oslSocketAddr Addr);
+SAL_DLLPUBLIC sal_Int32 SAL_CALL osl_getInetPortOfSocketAddr(
+        oslSocketAddr Addr);
 
 
 /** Sets the Port of Addr.
     @param Port [in] is expected in host byte-order.
     @return <code>sal_False</code> if Addr is not an inet-addr.
 */
-sal_Bool SAL_CALL osl_setInetPortOfSocketAddr(oslSocketAddr Addr, sal_Int32 Port);
+SAL_DLLPUBLIC sal_Bool SAL_CALL osl_setInetPortOfSocketAddr(
+        oslSocketAddr Addr, sal_Int32 Port);
 
 
 /** Returns the hostname represented by Addr.
     @param strHostname out-parameter. The hostname represented by the address. If
     there is no hostname to be found, it returns 0.
 */
-oslSocketResult SAL_CALL osl_getHostnameOfSocketAddr(oslSocketAddr Addr, rtl_uString **strHostname);
+SAL_DLLPUBLIC oslSocketResult SAL_CALL osl_getHostnameOfSocketAddr(
+        oslSocketAddr Addr, rtl_uString **strHostname);
 
 
 /** Gets the address in dotted decimal format.
@@ -309,18 +318,21 @@ oslSocketResult SAL_CALL osl_getHostnameOfSocketAddr(oslSocketAddr Addr, rtl_uSt
     it returns 0.
     @return <code>osl_Socket_Ok</code> or <code>osl_Socket_Error</code>
 */
-oslSocketResult SAL_CALL osl_getDottedInetAddrOfSocketAddr(oslSocketAddr Addr, rtl_uString **strDottedInetAddr);
+SAL_DLLPUBLIC oslSocketResult SAL_CALL osl_getDottedInetAddrOfSocketAddr(
+        oslSocketAddr Addr, rtl_uString **strDottedInetAddr);
 
 /** Sets the addr field in the struct sockaddr with pByteSeq. pByteSeq must be in network byte order.
  */
-oslSocketResult SAL_CALL osl_setAddrOfSocketAddr( oslSocketAddr Addr, sal_Sequence *pByteSeq );
+SAL_DLLPUBLIC oslSocketResult SAL_CALL osl_setAddrOfSocketAddr(
+        oslSocketAddr Addr, sal_Sequence *pByteSeq );
 
 /** Returns the addr field in the struct sockaddr.
     @param ppByteSeq out parameter. After the call, *ppByteSeq contains the ipadrress
                      in network byteorder. *ppByteSeq may be 0 in case of an invalid socket handle.
     @return <code>osl_Socket_Ok</code> or <code>osl_Socket_Error</code>
  */
-oslSocketResult SAL_CALL osl_getAddrOfSocketAddr( oslSocketAddr Addr, sal_Sequence **ppByteSeq );
+SAL_DLLPUBLIC oslSocketResult SAL_CALL osl_getAddrOfSocketAddr(
+        oslSocketAddr Addr, sal_Sequence **ppByteSeq );
 
 /*
     Opaque datatype HostAddr.
@@ -333,7 +345,8 @@ typedef struct oslHostAddrImpl * oslHostAddr;
     @param Addr [in] The socket address to be stored.
     @return The created address or 0 upon failure.
 */
-oslHostAddr SAL_CALL osl_createHostAddr(rtl_uString *strHostname, const oslSocketAddr Addr);
+SAL_DLLPUBLIC oslHostAddr SAL_CALL osl_createHostAddr(
+        rtl_uString *strHostname, const oslSocketAddr Addr);
 
 
 /** Create an oslHostAddr by resolving the given strHostname.
@@ -343,7 +356,7 @@ oslHostAddr SAL_CALL osl_createHostAddr(rtl_uString *strHostname, const oslSocke
     @param strHostname [in] The hostname to be resolved.
     @return The resulting address or 0 upon failure.
 */
-oslHostAddr SAL_CALL osl_createHostAddrByName(rtl_uString *strHostname);
+SAL_DLLPUBLIC oslHostAddr SAL_CALL osl_createHostAddrByName(rtl_uString *strHostname);
 
 
 /** Create an oslHostAddr by reverse resolution of the given Addr.
@@ -353,38 +366,38 @@ oslHostAddr SAL_CALL osl_createHostAddrByName(rtl_uString *strHostname);
     @param Addr [in] The socket address to be reverse resolved.
     @return The resulting address or 0 upon failure.
 */
-oslHostAddr SAL_CALL osl_createHostAddrByAddr(const oslSocketAddr Addr);
+SAL_DLLPUBLIC oslHostAddr SAL_CALL osl_createHostAddrByAddr(const oslSocketAddr Addr);
 
 
 /** Create a copy of the given Addr.
     @return The copied address or 0 upon failure.
 */
-oslHostAddr SAL_CALL osl_copyHostAddr(const oslHostAddr Addr);
+SAL_DLLPUBLIC oslHostAddr SAL_CALL osl_copyHostAddr(const oslHostAddr Addr);
 
 
 /** Frees all resources allocated by Addr. The handle Addr must not
     be used after the call anymore.
 */
-void SAL_CALL osl_destroyHostAddr(oslHostAddr Addr);
+SAL_DLLPUBLIC void SAL_CALL osl_destroyHostAddr(oslHostAddr Addr);
 
 
 /** Get the hostname member of Addr.
     @return The hostname or 0 upon failure.
 */
-void SAL_CALL osl_getHostnameOfHostAddr(const oslHostAddr Addr, rtl_uString **strHostname);
+SAL_DLLPUBLIC void SAL_CALL osl_getHostnameOfHostAddr(const oslHostAddr Addr, rtl_uString **strHostname);
 
 
 /** Get the socket address member of Addr.
     @return The socket address or 0 upon failure.
 */
-oslSocketAddr SAL_CALL osl_getSocketAddrOfHostAddr(const oslHostAddr Addr);
+SAL_DLLPUBLIC oslSocketAddr SAL_CALL osl_getSocketAddrOfHostAddr(const oslHostAddr Addr);
 
 /** Retrieve this machines hostname.
     May not always be a fully qualified domain name (FQDN).
     @param  strLocalHostname out-parameter. The string that receives the local host name.
     @return <code>sal_True</code> upon success, <code>sal_False</code> otherwise.
 */
-oslSocketResult SAL_CALL osl_getLocalHostname(rtl_uString **strLocalHostname);
+SAL_DLLPUBLIC oslSocketResult SAL_CALL osl_getLocalHostname(rtl_uString **strLocalHostname);
 
 
 /**@} end section oslHostAddr
@@ -402,21 +415,22 @@ typedef struct oslSocketImpl * oslSocket;
 
 /** increases the refcount of the socket handle by one
  */
-void SAL_CALL osl_acquireSocket( oslSocket Socket );
+SAL_DLLPUBLIC void SAL_CALL osl_acquireSocket( oslSocket Socket );
 
 /** decreases the refcount of the socket handle by one.
 
     If the refcount drops to zero, the underlying socket handle
     is destroyed and becomes invalid.
  */
-void SAL_CALL osl_releaseSocket( oslSocket Socket );
+SAL_DLLPUBLIC void SAL_CALL osl_releaseSocket( oslSocket Socket );
 
 /** Create a socket of the specified Family and Type. The semantic of
     the Protocol parameter depends on the given family and type.
     @return 0 if socket could not be created, otherwise you get a handle
     to the allocated socket-datastructure.
 */
-oslSocket SAL_CALL osl_createSocket(oslAddrFamily   Family,
+SAL_DLLPUBLIC oslSocket SAL_CALL osl_createSocket(
+                                    oslAddrFamily   Family,
                                     oslSocketType   Type,
                                     oslProtocol     Protocol);
 
@@ -426,7 +440,7 @@ oslSocket SAL_CALL osl_createSocket(oslAddrFamily   Family,
     @return 0 if socket-address could not be created, otherwise you get
     the created Socket-Address.
 */
-oslSocketAddr SAL_CALL osl_getLocalAddrOfSocket(oslSocket Socket);
+SAL_DLLPUBLIC oslSocketAddr SAL_CALL osl_getLocalAddrOfSocket(oslSocket Socket);
 
 /** Retrieves the Address of the remote end of the socket.
     Note that a socket must be connected before
@@ -434,7 +448,7 @@ oslSocketAddr SAL_CALL osl_getLocalAddrOfSocket(oslSocket Socket);
     @return 0 if socket-address could not be created, otherwise you get
     the created Socket-Address.
 */
-oslSocketAddr SAL_CALL osl_getPeerAddrOfSocket(oslSocket Socket);
+SAL_DLLPUBLIC oslSocketAddr SAL_CALL osl_getPeerAddrOfSocket(oslSocket Socket);
 
 /** Binds the given address to the socket.
     @param Socket [in]
@@ -442,7 +456,8 @@ oslSocketAddr SAL_CALL osl_getPeerAddrOfSocket(oslSocket Socket);
     @return <code>sal_False</code> if the bind failed, <code> sal_True</code> if successful.
     @see osl_getLastSocketError()
 */
-sal_Bool SAL_CALL osl_bindAddrToSocket(oslSocket Socket,
+SAL_DLLPUBLIC sal_Bool SAL_CALL osl_bindAddrToSocket(
+                                       oslSocket Socket,
                                        oslSocketAddr Addr);
 
 /** Connects the socket to the given address.
@@ -456,9 +471,10 @@ sal_Bool SAL_CALL osl_bindAddrToSocket(oslSocket Socket,
             <code>osl_Socket_Interrupted</code> if operation was interrupted
             <code>osl_Socket_Error</code> if the connection failed.
 */
-oslSocketResult SAL_CALL osl_connectSocketTo(oslSocket Socket,
-                                             oslSocketAddr Addr,
-                                             const TimeValue* pTimeout);
+SAL_DLLPUBLIC oslSocketResult SAL_CALL osl_connectSocketTo(
+                                        oslSocket Socket,
+                                        oslSocketAddr Addr,
+                                        const TimeValue* pTimeout);
 
 
 /** Prepares the socket to act as an acceptor of incoming connections.
@@ -468,7 +484,8 @@ oslSocketResult SAL_CALL osl_connectSocketTo(oslSocket Socket,
     -1, the systems default value will be used (Usually 5).
     @return <code>sal_False</code> if the listen failed.
 */
-sal_Bool SAL_CALL osl_listenOnSocket(oslSocket Socket,
+SAL_DLLPUBLIC sal_Bool SAL_CALL osl_listenOnSocket(
+                           oslSocket Socket,
                            sal_Int32 MaxPendingConnections);
 
 
@@ -478,7 +495,8 @@ sal_Bool SAL_CALL osl_listenOnSocket(oslSocket Socket,
     @return 0 if the accept-call failed, otherwise you get a socket
     representing the new connection.
 */
-oslSocket SAL_CALL osl_acceptConnectionOnSocket(oslSocket Socket,
+SAL_DLLPUBLIC oslSocket SAL_CALL osl_acceptConnectionOnSocket
+                                       (oslSocket Socket,
                                        oslSocketAddr* pAddr);
 
 /** Tries to receive BytesToRead data from the connected socket,
@@ -501,7 +519,8 @@ oslSocket SAL_CALL osl_acceptConnectionOnSocket(oslSocket Socket,
 
     @return the number of received bytes.
 */
-sal_Int32 SAL_CALL osl_receiveSocket(oslSocket Socket,
+SAL_DLLPUBLIC sal_Int32 SAL_CALL osl_receiveSocket(
+                          oslSocket Socket,
                           void* pBuffer,
                            sal_uInt32 BytesToRead,
                           oslSocketMsgFlag Flag);
@@ -528,7 +547,8 @@ sal_Int32 SAL_CALL osl_receiveSocket(oslSocket Socket,
 
     @return the number of received bytes.
 */
-sal_Int32 SAL_CALL osl_receiveFromSocket(oslSocket Socket,
+SAL_DLLPUBLIC sal_Int32 SAL_CALL osl_receiveFromSocket(
+                              oslSocket Socket,
                                oslSocketAddr SenderAddr,
                               void* pBuffer,
                               sal_uInt32 BufferSize,
@@ -552,7 +572,8 @@ sal_Int32 SAL_CALL osl_receiveFromSocket(oslSocket Socket,
 
     @return the number of transfered bytes.
 */
-sal_Int32 SAL_CALL osl_sendSocket(oslSocket Socket,
+SAL_DLLPUBLIC sal_Int32 SAL_CALL osl_sendSocket(
+                       oslSocket Socket,
                        const void* pBuffer,
                         sal_uInt32 BytesToSend,
                        oslSocketMsgFlag Flag);
@@ -582,7 +603,8 @@ sal_Int32 SAL_CALL osl_sendSocket(oslSocket Socket,
 
     @return the number of transfered bytes.
 */
-sal_Int32 SAL_CALL osl_sendToSocket(oslSocket Socket,
+SAL_DLLPUBLIC sal_Int32 SAL_CALL osl_sendToSocket(
+                         oslSocket Socket,
                          oslSocketAddr ReceiverAddr,
                           const void* pBuffer,
                          sal_uInt32 BytesToSend,
@@ -599,7 +621,8 @@ sal_Int32 SAL_CALL osl_sendToSocket(oslSocket Socket,
     @param Socket the Socket to perfom the operation on.
     @param pTimeout if NULL, the operation will block without a timeout.
 */
-sal_Bool SAL_CALL osl_isReceiveReady(oslSocket Socket, const TimeValue* pTimeout);
+SAL_DLLPUBLIC sal_Bool SAL_CALL osl_isReceiveReady(
+        oslSocket Socket, const TimeValue* pTimeout);
 
 /** Checks if send operations will block.
     You can specify a timeout-value in seconds/microseconds that denotes
@@ -611,7 +634,8 @@ sal_Bool SAL_CALL osl_isReceiveReady(oslSocket Socket, const TimeValue* pTimeout
     @param pTimeout if NULL, the operation will block without a timeout. Otherwise
     the time define by timeout value.
 */
-sal_Bool SAL_CALL osl_isSendReady(oslSocket Socket, const TimeValue* pTimeout);
+SAL_DLLPUBLIC sal_Bool SAL_CALL osl_isSendReady(
+        oslSocket Socket, const TimeValue* pTimeout);
 
 /** Checks if a request for out-of-band data will block.
     You can specify a timeout-value in seconds/microseconds that denotes
@@ -622,7 +646,8 @@ sal_Bool SAL_CALL osl_isSendReady(oslSocket Socket, const TimeValue* pTimeout);
     @param Socket the Socket to perfom the operation on.
     @param pTimeout if NULL, the operation will block without a timeout.
 */
-sal_Bool SAL_CALL osl_isExceptionPending(oslSocket Socket, const TimeValue* pTimeout);
+SAL_DLLPUBLIC sal_Bool SAL_CALL osl_isExceptionPending(
+        oslSocket Socket, const TimeValue* pTimeout);
 
 /** Shuts down communication on a connected socket.
     @param Direction denotes which end of the socket
@@ -634,7 +659,7 @@ sal_Bool SAL_CALL osl_isExceptionPending(oslSocket Socket, const TimeValue* pTim
     </ul>
     @return <code>sal_True</code> if the socket could be closed down.
 */
-sal_Bool SAL_CALL osl_shutdownSocket(oslSocket Socket,
+SAL_DLLPUBLIC sal_Bool SAL_CALL osl_shutdownSocket(oslSocket Socket,
                            oslSocketDirection Direction);
 
 /** Retrieves attributes associated with the socket.
@@ -721,7 +746,7 @@ sal_Bool SAL_CALL osl_shutdownSocket(oslSocket Socket,
     pBuffer.
     @see osl_setSocketOption()
 */
-sal_Int32 SAL_CALL osl_getSocketOption(oslSocket            Socket,
+SAL_DLLPUBLIC sal_Int32 SAL_CALL osl_getSocketOption( oslSocket Socket,
                                oslSocketOptionLevel Level,
                             oslSocketOption      Option,
                             void*                pBuffer,
@@ -747,7 +772,7 @@ sal_Int32 SAL_CALL osl_getSocketOption(oslSocket            Socket,
 
     @return True if the option could be changed.
 */
-sal_Bool SAL_CALL osl_setSocketOption(oslSocket Socket,
+SAL_DLLPUBLIC sal_Bool SAL_CALL osl_setSocketOption( oslSocket Socket,
                             oslSocketOptionLevel    Level,
                             oslSocketOption         Option,
                             void*                   pBuffer,
@@ -759,15 +784,16 @@ sal_Bool SAL_CALL osl_setSocketOption(oslSocket Socket,
               <code>sal_False</code> disables non-blocking mode.
     @return <code>sal_True</code> if mode could be changed.
 */
-sal_Bool SAL_CALL osl_enableNonBlockingMode(oslSocket Socket,
-                                  sal_Bool On);
+SAL_DLLPUBLIC sal_Bool SAL_CALL osl_enableNonBlockingMode(
+        oslSocket Socket, sal_Bool On);
 
 
 /** Query state of non-blocking-mode of the socket.
     @param Socket Query mode for this socket.
     @return True if non-blocking-mode is enabled.
 */
-sal_Bool SAL_CALL osl_isNonBlockingMode(oslSocket Socket);
+SAL_DLLPUBLIC sal_Bool SAL_CALL osl_isNonBlockingMode(
+        oslSocket Socket);
 
 
 /** Queries the socket for its type.
@@ -782,19 +808,22 @@ sal_Bool SAL_CALL osl_isNonBlockingMode(oslSocket Socket);
     </ul>
 
 */
-oslSocketType SAL_CALL osl_getSocketType(oslSocket Socket);
+SAL_DLLPUBLIC oslSocketType SAL_CALL osl_getSocketType(
+        oslSocket Socket);
 
 /** returns  a string which describes the last socket error.
     @param strError out-parameter. The string that receives the error message.
 */
-void SAL_CALL osl_getLastSocketErrorDescription(oslSocket Socket, rtl_uString **strError);
+SAL_DLLPUBLIC void SAL_CALL osl_getLastSocketErrorDescription(
+        oslSocket Socket, rtl_uString **strError);
 
 /** returns a constant decribing the last error for the socket system.
     @return <code>osl_Socket_E_NONE</code> if no error occurred,
             <code>osl_invalid_SocketError</code> if an unknown (unmapped)
             error occurred, otherwise an enum describing the    error.
 */
-oslSocketError SAL_CALL osl_getLastSocketError(oslSocket Socket);
+SAL_DLLPUBLIC oslSocketError SAL_CALL osl_getLastSocketError(
+        oslSocket Socket);
 
 /** Type for the representation of socket sets.
 */
@@ -803,36 +832,36 @@ typedef struct oslSocketSetImpl * oslSocketSet;
 /** Creates a set of sockets to be used with osl_demultiplexSocketEvents().
     @return A oslSocketSet or 0 if creation failed.
 */
-oslSocketSet SAL_CALL osl_createSocketSet(void);
+SAL_DLLPUBLIC oslSocketSet SAL_CALL osl_createSocketSet(void);
 
 /** Destroys a oslSocketSet.
 */
-void SAL_CALL osl_destroySocketSet(oslSocketSet Set);
+SAL_DLLPUBLIC void SAL_CALL osl_destroySocketSet(oslSocketSet Set);
 
 /** Clears the set from all previously added sockets.
     @param Set the set to be cleared.
 */
-void SAL_CALL osl_clearSocketSet(oslSocketSet Set);
+SAL_DLLPUBLIC void SAL_CALL osl_clearSocketSet(oslSocketSet Set);
 
 
 /** Adds a socket to the set.
     @param Set the set were the socket is added.
     @param Socket the socket to be added.
 */
-void SAL_CALL osl_addToSocketSet(oslSocketSet Set, oslSocket Socket);
+SAL_DLLPUBLIC void SAL_CALL osl_addToSocketSet(oslSocketSet Set, oslSocket Socket);
 
 /** Removes a socket from the set.
     @param Set the set were the socket is removed from.
     @param Socket the socket to be removed.
 */
-void SAL_CALL osl_removeFromSocketSet(oslSocketSet Set, oslSocket Socket);
+SAL_DLLPUBLIC void SAL_CALL osl_removeFromSocketSet(oslSocketSet Set, oslSocket Socket);
 
 /** Checks if socket is in the set.
     @param Set the set to be checked.
     @param Socket check if this socket is in the set.
     @return <code>sal_True</code> if socket is in the set.
 */
-sal_Bool SAL_CALL osl_isInSocketSet(oslSocketSet Set, oslSocket Socket);
+SAL_DLLPUBLIC sal_Bool SAL_CALL osl_isInSocketSet(oslSocketSet Set, oslSocket Socket);
 
 /** Checks multiple sockets for events.
     @param IncomingSet Checks the sockets in this set
@@ -849,14 +878,14 @@ sal_Bool SAL_CALL osl_isInSocketSet(oslSocketSet Set, oslSocket Socket);
     @return -1 on errors, otherwise the number of sockets with
     pending events. In case of timeout, the number might be 0.
 */
-sal_Int32 SAL_CALL osl_demultiplexSocketEvents(oslSocketSet IncomingSet,
+SAL_DLLPUBLIC sal_Int32 SAL_CALL osl_demultiplexSocketEvents(oslSocketSet IncomingSet,
                                     oslSocketSet OutgoingSet,
                                     oslSocketSet OutOfBandSet,
                                     const TimeValue* pTimeout);
 
 /** Closes the socket terminating any ongoing dataflow.
  */
-void SAL_CALL osl_closeSocket(oslSocket Socket);
+SAL_DLLPUBLIC void SAL_CALL osl_closeSocket(oslSocket Socket);
 
 
 /** Retrieves n bytes from the stream and copies them into pBuffer.
@@ -867,7 +896,7 @@ void SAL_CALL osl_closeSocket(oslSocket Socket);
     @return the number of read bytes. The number will only be smaller than
     n if an exceptional condition (e.g. connection closed) occurs.
 */
-sal_Int32 SAL_CALL osl_readSocket( oslSocket Socket, void *pBuffer, sal_Int32 nSize );
+SAL_DLLPUBLIC sal_Int32 SAL_CALL osl_readSocket( oslSocket Socket, void *pBuffer, sal_Int32 nSize );
 
 
 /** Writes n bytes from pBuffer to the stream. The method avoids
@@ -877,7 +906,7 @@ sal_Int32 SAL_CALL osl_readSocket( oslSocket Socket, void *pBuffer, sal_Int32 nS
     @return the number of written bytes. The number will only be smaller than
     n if an exceptional condition (e.g. connection closed) occurs.
 */
-sal_Int32 SAL_CALL osl_writeSocket( oslSocket Socket, const void *pBuffer, sal_Int32 nSize );
+SAL_DLLPUBLIC sal_Int32 SAL_CALL osl_writeSocket( oslSocket Socket, const void *pBuffer, sal_Int32 nSize );
 
 /**@} end section oslSocket
 */

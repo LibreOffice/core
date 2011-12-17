@@ -36,12 +36,12 @@
 extern "C" {
 #endif
 
-void SAL_CALL rtl_zeroMemory(void *Ptr, sal_Size Bytes);
-void SAL_CALL rtl_fillMemory(void *Ptr, sal_Size Bytes, sal_uInt8 Fill);
-void SAL_CALL rtl_copyMemory(void *Dst, const void *Src, sal_Size Bytes);
-void SAL_CALL rtl_moveMemory(void *Dst, const void *Src, sal_Size Bytes);
-sal_Int32 SAL_CALL rtl_compareMemory(const void *MemA, const void *MemB, sal_Size Bytes);
-void* SAL_CALL rtl_findInMemory(const void *MemA, sal_uInt8 ch, sal_Size Bytes);
+SAL_DLLPUBLIC void SAL_CALL rtl_zeroMemory(void *Ptr, sal_Size Bytes);
+SAL_DLLPUBLIC void SAL_CALL rtl_fillMemory(void *Ptr, sal_Size Bytes, sal_uInt8 Fill);
+SAL_DLLPUBLIC void SAL_CALL rtl_copyMemory(void *Dst, const void *Src, sal_Size Bytes);
+SAL_DLLPUBLIC void SAL_CALL rtl_moveMemory(void *Dst, const void *Src, sal_Size Bytes);
+SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_compareMemory(const void *MemA, const void *MemB, sal_Size Bytes);
+SAL_DLLPUBLIC void* SAL_CALL rtl_findInMemory(const void *MemA, sal_uInt8 ch, sal_Size Bytes);
 
 #ifdef __cplusplus
 }

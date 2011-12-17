@@ -176,7 +176,7 @@ typedef void* oslProcess;
     @see osl_freeProcessHandle
     @see osl_loginUser
 */
-oslProcessError SAL_CALL osl_executeProcess(
+SAL_DLLPUBLIC oslProcessError SAL_CALL osl_executeProcess(
     rtl_uString* ustrImageName,
     rtl_uString* ustrArguments[],
     sal_uInt32  nArguments,
@@ -262,7 +262,7 @@ oslProcessError SAL_CALL osl_executeProcess(
     @see osl_loginUser
     @see osl_closeFile
 */
-oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
+SAL_DLLPUBLIC oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
     rtl_uString* strImageName,
     rtl_uString* ustrArguments[],
     sal_uInt32 nArguments,
@@ -283,7 +283,8 @@ oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
     @see osl_getProcess
     @see osl_joinProcess
  */
-oslProcessError SAL_CALL osl_terminateProcess(oslProcess Process);
+SAL_DLLPUBLIC oslProcessError SAL_CALL osl_terminateProcess(
+        oslProcess Process);
 
 
 /** @deprecated
@@ -292,13 +293,15 @@ oslProcessError SAL_CALL osl_terminateProcess(oslProcess Process);
 
     @return the process handle on success, NULL in all other cases
  */
-oslProcess SAL_CALL osl_getProcess(oslProcessIdentifier Ident);
+SAL_DLLPUBLIC oslProcess SAL_CALL osl_getProcess(
+        oslProcessIdentifier Ident);
 
 
 /** Free the specified proces-handle.
     @param Process [in]
 */
-void SAL_CALL osl_freeProcessHandle(oslProcess Process);
+SAL_DLLPUBLIC void SAL_CALL osl_freeProcessHandle(
+        oslProcess Process);
 
 
 /** Wait for completation of the specified childprocess.
@@ -306,7 +309,8 @@ void SAL_CALL osl_freeProcessHandle(oslProcess Process);
     @return ols_Process_E_None
     @see osl_executeProcess
 */
-oslProcessError SAL_CALL osl_joinProcess(oslProcess Process);
+SAL_DLLPUBLIC oslProcessError SAL_CALL osl_joinProcess(
+        oslProcess Process);
 
 /** Wait with a timeout for the completion of the specified child
     process.
@@ -325,7 +329,8 @@ oslProcessError SAL_CALL osl_joinProcess(oslProcess Process);
 
     @see osl_executeProcess
 */
-oslProcessError SAL_CALL osl_joinProcessWithTimeout(oslProcess Process, const TimeValue* pTimeout);
+SAL_DLLPUBLIC oslProcessError SAL_CALL osl_joinProcessWithTimeout(
+        oslProcess Process, const TimeValue* pTimeout);
 
 /** Retrieves information about a Process
     @param Process [in] the process handle of the process
@@ -342,21 +347,22 @@ oslProcessError SAL_CALL osl_joinProcessWithTimeout(oslProcess Process, const Ti
                         retrieved valid information fields.
     @return osl_Process_E_None on success, osl_Process_E_Unknown on failure.
  */
-oslProcessError SAL_CALL osl_getProcessInfo(oslProcess Process, oslProcessData Fields,
-                                   oslProcessInfo* pInfo);
+SAL_DLLPUBLIC oslProcessError SAL_CALL osl_getProcessInfo(
+        oslProcess Process, oslProcessData Fields, oslProcessInfo* pInfo);
 
 /** Get the filename of the executable.
     @param strFile [out] the string that receives the executable file path.
     @return osl_Process_E_None or does not return.
     @see osl_executeProcess
 */
-oslProcessError SAL_CALL osl_getExecutableFile(rtl_uString **strFile);
+SAL_DLLPUBLIC oslProcessError SAL_CALL osl_getExecutableFile(
+        rtl_uString **strFile);
 
 /** @return the number of commandline arguments passed to the main-function of
     this process
     @see osl_getCommandArg
 */
-sal_uInt32 SAL_CALL osl_getCommandArgCount(void);
+SAL_DLLPUBLIC sal_uInt32 SAL_CALL osl_getCommandArgCount(void);
 
 /** Get the nArg-th command-line argument passed to the main-function of this process.
     @param nArg [in] The number of the argument to return.
@@ -364,7 +370,8 @@ sal_uInt32 SAL_CALL osl_getCommandArgCount(void);
     @return osl_Process_E_None or does not return.
     @see osl_executeProcess
 */
-oslProcessError SAL_CALL osl_getCommandArg(sal_uInt32 nArg, rtl_uString **strCommandArg);
+SAL_DLLPUBLIC oslProcessError SAL_CALL osl_getCommandArg(
+        sal_uInt32 nArg, rtl_uString **strCommandArg);
 
 /** Set the command-line arguments as passed to the main-function of this process.
 
@@ -379,13 +386,14 @@ oslProcessError SAL_CALL osl_getCommandArg(sal_uInt32 nArg, rtl_uString **strCom
     @see osl_getCommandArgCount
     @see osl_getCommandArg
 */
-void SAL_CALL osl_setCommandArgs (int argc, char **argv);
+SAL_DLLPUBLIC void SAL_CALL osl_setCommandArgs (int argc, char **argv);
 
 /** Get the value of one enviroment variable.
     @param strVar [in] denotes the name of the variable to get.
     @param strValue [out] string that receives the value of environment variable.
 */
-oslProcessError SAL_CALL osl_getEnvironment(rtl_uString *strVar, rtl_uString **strValue);
+SAL_DLLPUBLIC oslProcessError SAL_CALL osl_getEnvironment(
+        rtl_uString *strVar, rtl_uString **strValue);
 
 /** Set the value of one enviroment variable.
     @param strVar [in] denotes the name of the variable to set.
@@ -393,14 +401,16 @@ oslProcessError SAL_CALL osl_getEnvironment(rtl_uString *strVar, rtl_uString **s
 
     @since UDK 3.2.13
 */
-oslProcessError SAL_CALL osl_setEnvironment(rtl_uString *strVar, rtl_uString *strValue);
+SAL_DLLPUBLIC oslProcessError SAL_CALL osl_setEnvironment(
+        rtl_uString *strVar, rtl_uString *strValue);
 
 /** Unsets the value of one enviroment variable.
     @param strVar [in] denotes the name of the variable to unset.
 
     @since UDK 3.2.13
 */
-oslProcessError SAL_CALL osl_clearEnvironment(rtl_uString *strVar);
+SAL_DLLPUBLIC oslProcessError SAL_CALL osl_clearEnvironment(
+        rtl_uString *strVar);
 
 /** Get the working directory of the current process as a file URL.
 
@@ -408,7 +418,8 @@ oslProcessError SAL_CALL osl_clearEnvironment(rtl_uString *strVar);
     @param  pustrWorkingDir [out] string that receives the working directory file URL.
 */
 
-oslProcessError SAL_CALL osl_getProcessWorkingDir( rtl_uString **pustrWorkingDir );
+SAL_DLLPUBLIC oslProcessError SAL_CALL osl_getProcessWorkingDir(
+        rtl_uString **pustrWorkingDir );
 
 /** Get the locale the process is currently running in.
 
@@ -419,7 +430,8 @@ oslProcessError SAL_CALL osl_getProcessWorkingDir( rtl_uString **pustrWorkingDir
     @see osl_setProcessLocale
 */
 
-oslProcessError SAL_CALL osl_getProcessLocale( rtl_Locale ** ppLocale );
+SAL_DLLPUBLIC oslProcessError SAL_CALL osl_getProcessLocale(
+        rtl_Locale ** ppLocale );
 
 /** Change the locale of the process.
 
@@ -427,12 +439,15 @@ oslProcessError SAL_CALL osl_getProcessLocale( rtl_Locale ** ppLocale );
     @see osl_getProcessLocale
 */
 
-oslProcessError SAL_CALL osl_setProcessLocale( rtl_Locale * pLocale );
+SAL_DLLPUBLIC oslProcessError SAL_CALL osl_setProcessLocale(
+        rtl_Locale * pLocale );
 
 
-sal_Bool SAL_CALL osl_sendResourcePipe(oslPipe Pipe, oslSocket Socket);
+SAL_DLLPUBLIC sal_Bool SAL_CALL osl_sendResourcePipe(
+        oslPipe Pipe, oslSocket Socket );
 
-oslSocket SAL_CALL osl_receiveResourcePipe(oslPipe Pipe);
+SAL_DLLPUBLIC oslSocket SAL_CALL osl_receiveResourcePipe(
+        oslPipe Pipe );
 
 #ifdef __cplusplus
 }

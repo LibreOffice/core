@@ -45,7 +45,7 @@ extern "C" {
            implemented on the platform. In this case, pEthernetAddr is
            unchanged.
 */
-sal_Bool SAL_CALL osl_getEthernetAddress( sal_uInt8 *pEthernetAddr );
+SAL_DLLPUBLIC sal_Bool SAL_CALL osl_getEthernetAddress( sal_uInt8 *pEthernetAddr );
 
 #ifdef __cplusplus
 }

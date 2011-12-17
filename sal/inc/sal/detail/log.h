@@ -63,7 +63,7 @@ enum sal_detail_LogLevel {
     SAL_DETAIL_MAKE_FIXED_SIZE = SAL_MAX_ENUM
 };
 
-void SAL_CALL sal_detail_logFormat(
+SAL_DLLPUBLIC void SAL_CALL sal_detail_logFormat(
     enum sal_detail_LogLevel level, char const * area, char const * where,
     char const * format, ...)
 /* TODO: enabling this will produce a huge amount of -Werror=format errors: */

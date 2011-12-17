@@ -50,6 +50,7 @@ $(eval $(call gb_Library_add_defs,sal,\
 		-DNO_CHILD_PROCESSES \
 	) \
 	$(LFS_CFLAGS) \
+	-DSAL_DLLIMPLEMENTATION \
 ))
 
 $(eval $(call gb_Library_add_linked_libs,sal,\

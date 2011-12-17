@@ -125,8 +125,8 @@ static sal_uInt16 const aImplDoubleByteIdentifierTab[1] = { 0 };
 #include "convertiso2022kr.tab"
 #include "convertadobe.tab"
 
-extern "C" ImplTextEncodingData const * sal_getFullTextEncodingData(
-    rtl_TextEncoding nEncoding)
+extern "C" SAL_DLLPUBLIC_EXPORT ImplTextEncodingData const *
+    sal_getFullTextEncodingData( rtl_TextEncoding nEncoding )
 {
     static ImplTextEncodingData const * const aData[]
         = { NULL, /* DONTKNOW */

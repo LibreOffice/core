@@ -47,7 +47,7 @@ typedef void* oslSemaphore;
     immedeatly  successfull.
     @return 0 if the semaphore could not be created, otherwise a handle to the sem.
 */
-oslSemaphore SAL_CALL osl_createSemaphore(sal_uInt32 initialCount);
+SAL_DLLPUBLIC oslSemaphore SAL_CALL osl_createSemaphore(sal_uInt32 initialCount);
 
 /** Release the OS-structures and free semaphore data-structure
 
@@ -56,7 +56,7 @@ oslSemaphore SAL_CALL osl_createSemaphore(sal_uInt32 initialCount);
 
     @return fbbb
 */
-void SAL_CALL osl_destroySemaphore(oslSemaphore Semaphore);
+SAL_DLLPUBLIC void SAL_CALL osl_destroySemaphore(oslSemaphore Semaphore);
 
 /** acquire() decreases the count. It will block if it tries to
     decrease below zero.
@@ -66,7 +66,7 @@ void SAL_CALL osl_destroySemaphore(oslSemaphore Semaphore);
 
     @return False if the system-call failed.
 */
-sal_Bool SAL_CALL osl_acquireSemaphore(oslSemaphore Semaphore);
+SAL_DLLPUBLIC sal_Bool SAL_CALL osl_acquireSemaphore(oslSemaphore Semaphore);
 
 /** tryToAcquire() tries to decreases the count. It will
     return with False if it would decrease the count below zero.
@@ -76,7 +76,7 @@ sal_Bool SAL_CALL osl_acquireSemaphore(oslSemaphore Semaphore);
     @deprecated
     Must not be used, as unnamed semaphores are not supported on Mac OS X.
 */
-sal_Bool SAL_CALL osl_tryToAcquireSemaphore(oslSemaphore Semaphore);
+SAL_DLLPUBLIC sal_Bool SAL_CALL osl_tryToAcquireSemaphore(oslSemaphore Semaphore);
 
 /** release() increases the count.
 
@@ -85,7 +85,7 @@ sal_Bool SAL_CALL osl_tryToAcquireSemaphore(oslSemaphore Semaphore);
 
     @return False if the system-call failed.
 */
-sal_Bool SAL_CALL osl_releaseSemaphore(oslSemaphore Semaphore);
+SAL_DLLPUBLIC sal_Bool SAL_CALL osl_releaseSemaphore(oslSemaphore Semaphore);
 
 #ifdef __cplusplus
 }

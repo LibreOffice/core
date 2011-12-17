@@ -123,7 +123,7 @@ typedef enum __rtl_CipherError rtlCipherError;
     @param  Mode      [in] cipher mode.
     @return Cipher handle, or 0 upon failure.
  */
-rtlCipher SAL_CALL rtl_cipher_create (
+SAL_DLLPUBLIC rtlCipher SAL_CALL rtl_cipher_create (
     rtlCipherAlgorithm Algorithm,
     rtlCipherMode      Mode
 ) SAL_THROW_EXTERN_C();
@@ -140,7 +140,7 @@ rtlCipher SAL_CALL rtl_cipher_create (
     @param  nArgLen   [in] initialization vector length in bytes.
     @return rtl_Cipher_E_None upon success.
  */
-rtlCipherError SAL_CALL rtl_cipher_init (
+SAL_DLLPUBLIC rtlCipherError SAL_CALL rtl_cipher_init (
     rtlCipher           Cipher,
     rtlCipherDirection  Direction,
     const sal_uInt8    *pKeyData, sal_Size nKeyLen,
@@ -159,7 +159,7 @@ rtlCipherError SAL_CALL rtl_cipher_init (
     @param  nBufLen [in]  ciphertext length in bytes.
     @return rtl_Cipher_E_None upon success.
  */
-rtlCipherError SAL_CALL rtl_cipher_encode (
+SAL_DLLPUBLIC rtlCipherError SAL_CALL rtl_cipher_encode (
     rtlCipher   Cipher,
     const void *pData,   sal_Size nDatLen,
     sal_uInt8  *pBuffer, sal_Size nBufLen
@@ -177,7 +177,7 @@ rtlCipherError SAL_CALL rtl_cipher_encode (
     @param  nBufLen [in]  plaintext length in bytes.
     @return rtl_Cipher_E_None upon success.
  */
-rtlCipherError SAL_CALL rtl_cipher_decode (
+SAL_DLLPUBLIC rtlCipherError SAL_CALL rtl_cipher_decode (
     rtlCipher   Cipher,
     const void *pData,   sal_Size nDatLen,
     sal_uInt8  *pBuffer, sal_Size nBufLen
@@ -188,7 +188,7 @@ rtlCipherError SAL_CALL rtl_cipher_decode (
     @param  Cipher [in] cipher handle to be destroyed.
     @return None. Cipher handle destroyed and invalid.
  */
-void SAL_CALL rtl_cipher_destroy (
+SAL_DLLPUBLIC void SAL_CALL rtl_cipher_destroy (
     rtlCipher Cipher
 ) SAL_THROW_EXTERN_C();
 
@@ -204,7 +204,7 @@ void SAL_CALL rtl_cipher_destroy (
 
     @see rtl_cipher_create()
  */
-rtlCipher SAL_CALL rtl_cipher_createBF (
+SAL_DLLPUBLIC rtlCipher SAL_CALL rtl_cipher_createBF (
     rtlCipherMode Mode
 ) SAL_THROW_EXTERN_C();
 
@@ -212,7 +212,7 @@ rtlCipher SAL_CALL rtl_cipher_createBF (
 /** Inititialize a Blowfish cipher for the given direction.
     @see rtl_cipher_init()
  */
-rtlCipherError SAL_CALL rtl_cipher_initBF (
+SAL_DLLPUBLIC rtlCipherError SAL_CALL rtl_cipher_initBF (
     rtlCipher          Cipher,
     rtlCipherDirection Direction,
     const sal_uInt8 *pKeyData, sal_Size nKeyLen,
@@ -223,7 +223,7 @@ rtlCipherError SAL_CALL rtl_cipher_initBF (
 /** Encode a buffer under the Blowfish cipher algorithm.
     @see rtl_cipher_encode()
  */
-rtlCipherError SAL_CALL rtl_cipher_encodeBF (
+SAL_DLLPUBLIC rtlCipherError SAL_CALL rtl_cipher_encodeBF (
     rtlCipher   Cipher,
     const void *pData,   sal_Size nDatLen,
     sal_uInt8  *pBuffer, sal_Size nBufLen
@@ -233,7 +233,7 @@ rtlCipherError SAL_CALL rtl_cipher_encodeBF (
 /** Decode a buffer under the Blowfish cipher algorithm.
     @see rtl_cipher_decode()
  */
-rtlCipherError SAL_CALL rtl_cipher_decodeBF (
+SAL_DLLPUBLIC rtlCipherError SAL_CALL rtl_cipher_decodeBF (
     rtlCipher   Cipher,
     const void *pData,   sal_Size nDatLen,
     sal_uInt8  *pBuffer, sal_Size nBufLen
@@ -243,7 +243,7 @@ rtlCipherError SAL_CALL rtl_cipher_decodeBF (
 /** Destroy a Blowfish cipher handle.
     @see rtl_cipher_destroy()
  */
-void SAL_CALL rtl_cipher_destroyBF (
+SAL_DLLPUBLIC void SAL_CALL rtl_cipher_destroyBF (
     rtlCipher Cipher
 ) SAL_THROW_EXTERN_C();
 
@@ -262,7 +262,7 @@ void SAL_CALL rtl_cipher_destroyBF (
     @param  Mode [in] cipher mode. Must be rtl_Cipher_ModeStream.
     @return Cipher handle, or 0 upon failure.
  */
-rtlCipher SAL_CALL rtl_cipher_createARCFOUR (
+SAL_DLLPUBLIC rtlCipher SAL_CALL rtl_cipher_createARCFOUR (
     rtlCipherMode Mode
 ) SAL_THROW_EXTERN_C();
 
@@ -270,7 +270,7 @@ rtlCipher SAL_CALL rtl_cipher_createARCFOUR (
 /** Inititialize a RC4 cipher for the given direction.
     @see rtl_cipher_init()
  */
-rtlCipherError SAL_CALL rtl_cipher_initARCFOUR (
+SAL_DLLPUBLIC rtlCipherError SAL_CALL rtl_cipher_initARCFOUR (
     rtlCipher          Cipher,
     rtlCipherDirection Direction,
     const sal_uInt8 *pKeyData, sal_Size nKeyLen,
@@ -281,7 +281,7 @@ rtlCipherError SAL_CALL rtl_cipher_initARCFOUR (
 /** Encode a buffer under the RC4 cipher algorithm.
     @see rtl_cipher_encode()
  */
-rtlCipherError SAL_CALL rtl_cipher_encodeARCFOUR (
+SAL_DLLPUBLIC rtlCipherError SAL_CALL rtl_cipher_encodeARCFOUR (
     rtlCipher   Cipher,
     const void *pData,   sal_Size nDatLen,
     sal_uInt8  *pBuffer, sal_Size nBufLen
@@ -291,7 +291,7 @@ rtlCipherError SAL_CALL rtl_cipher_encodeARCFOUR (
 /** Decode a buffer under the RC4 cipher algorithm.
     @see rtl_cipher_decode()
  */
-rtlCipherError SAL_CALL rtl_cipher_decodeARCFOUR (
+SAL_DLLPUBLIC rtlCipherError SAL_CALL rtl_cipher_decodeARCFOUR (
     rtlCipher   Cipher,
     const void *pData,   sal_Size nDatLen,
     sal_uInt8  *pBuffer, sal_Size nBufLen
@@ -301,7 +301,7 @@ rtlCipherError SAL_CALL rtl_cipher_decodeARCFOUR (
 /** Destroy a RC4 cipher handle.
     @see rtl_cipher_destroy()
  */
-void SAL_CALL rtl_cipher_destroyARCFOUR (
+SAL_DLLPUBLIC void SAL_CALL rtl_cipher_destroyARCFOUR (
     rtlCipher Cipher
 ) SAL_THROW_EXTERN_C();
 

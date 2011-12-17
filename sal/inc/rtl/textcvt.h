@@ -51,23 +51,23 @@ typedef void* rtl_TextToUnicodeContext;
 
 /** see http://udk.openoffice.org/cpp/man/spec/textconversion.html
  */
-rtl_TextToUnicodeConverter SAL_CALL rtl_createTextToUnicodeConverter( rtl_TextEncoding eTextEncoding );
+SAL_DLLPUBLIC rtl_TextToUnicodeConverter SAL_CALL rtl_createTextToUnicodeConverter( rtl_TextEncoding eTextEncoding );
 
 /** see http://udk.openoffice.org/cpp/man/spec/textconversion.html
  */
-void                       SAL_CALL rtl_destroyTextToUnicodeConverter( rtl_TextToUnicodeConverter hConverter );
+SAL_DLLPUBLIC void SAL_CALL rtl_destroyTextToUnicodeConverter( rtl_TextToUnicodeConverter hConverter );
 
 /** see http://udk.openoffice.org/cpp/man/spec/textconversion.html
  */
-rtl_TextToUnicodeContext   SAL_CALL rtl_createTextToUnicodeContext( rtl_TextToUnicodeConverter hConverter );
+SAL_DLLPUBLIC rtl_TextToUnicodeContext SAL_CALL rtl_createTextToUnicodeContext( rtl_TextToUnicodeConverter hConverter );
 
 /** see http://udk.openoffice.org/cpp/man/spec/textconversion.html
  */
-void                       SAL_CALL rtl_destroyTextToUnicodeContext( rtl_TextToUnicodeConverter hConverter, rtl_TextToUnicodeContext hContext );
+SAL_DLLPUBLIC void SAL_CALL rtl_destroyTextToUnicodeContext( rtl_TextToUnicodeConverter hConverter, rtl_TextToUnicodeContext hContext );
 
 /** see http://udk.openoffice.org/cpp/man/spec/textconversion.html
  */
-void                       SAL_CALL rtl_resetTextToUnicodeContext( rtl_TextToUnicodeConverter hConverter, rtl_TextToUnicodeContext hContext );
+SAL_DLLPUBLIC void SAL_CALL rtl_resetTextToUnicodeContext( rtl_TextToUnicodeConverter hConverter, rtl_TextToUnicodeContext hContext );
 
 #define RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR             ((sal_uInt32)0x0001)
 #define RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_IGNORE            ((sal_uInt32)0x0002)
@@ -97,7 +97,8 @@ void                       SAL_CALL rtl_resetTextToUnicodeContext( rtl_TextToUni
 
 /** see http://udk.openoffice.org/cpp/man/spec/textconversion.html
  */
-sal_Size SAL_CALL rtl_convertTextToUnicode( rtl_TextToUnicodeConverter hConverter,
+SAL_DLLPUBLIC sal_Size SAL_CALL rtl_convertTextToUnicode(
+                                            rtl_TextToUnicodeConverter hConverter,
                                             rtl_TextToUnicodeContext hContext,
                                             const sal_Char* pSrcBuf, sal_Size nSrcBytes,
                                             sal_Unicode* pDestBuf, sal_Size nDestChars,
@@ -114,23 +115,23 @@ typedef void* rtl_UnicodeToTextContext;
 
 /** see http://udk.openoffice.org/cpp/man/spec/textconversion.html
  */
-rtl_UnicodeToTextConverter SAL_CALL rtl_createUnicodeToTextConverter( rtl_TextEncoding eTextEncoding );
+SAL_DLLPUBLIC rtl_UnicodeToTextConverter SAL_CALL rtl_createUnicodeToTextConverter( rtl_TextEncoding eTextEncoding );
 
 /** see http://udk.openoffice.org/cpp/man/spec/textconversion.html
  */
-void                       SAL_CALL rtl_destroyUnicodeToTextConverter( rtl_UnicodeToTextConverter hConverter );
+SAL_DLLPUBLIC void SAL_CALL rtl_destroyUnicodeToTextConverter( rtl_UnicodeToTextConverter hConverter );
 
 /** see http://udk.openoffice.org/cpp/man/spec/textconversion.html
  */
-rtl_UnicodeToTextContext   SAL_CALL rtl_createUnicodeToTextContext( rtl_UnicodeToTextConverter hConverter );
+SAL_DLLPUBLIC rtl_UnicodeToTextContext SAL_CALL rtl_createUnicodeToTextContext( rtl_UnicodeToTextConverter hConverter );
 
 /** see http://udk.openoffice.org/cpp/man/spec/textconversion.html
  */
-void                       SAL_CALL rtl_destroyUnicodeToTextContext( rtl_UnicodeToTextConverter hConverter, rtl_UnicodeToTextContext hContext );
+SAL_DLLPUBLIC void SAL_CALL rtl_destroyUnicodeToTextContext( rtl_UnicodeToTextConverter hConverter, rtl_UnicodeToTextContext hContext );
 
 /** see http://udk.openoffice.org/cpp/man/spec/textconversion.html
  */
-void                       SAL_CALL rtl_resetUnicodeToTextContext( rtl_UnicodeToTextConverter hConverter, rtl_UnicodeToTextContext hContext );
+SAL_DLLPUBLIC void SAL_CALL rtl_resetUnicodeToTextContext( rtl_UnicodeToTextConverter hConverter, rtl_UnicodeToTextContext hContext );
 
 #define RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR             ((sal_uInt32)0x0001)
 #define RTL_UNICODETOTEXT_FLAGS_UNDEFINED_IGNORE            ((sal_uInt32)0x0002)
@@ -167,7 +168,8 @@ void                       SAL_CALL rtl_resetUnicodeToTextContext( rtl_UnicodeTo
 
 /** see http://udk.openoffice.org/cpp/man/spec/textconversion.html
  */
-sal_Size SAL_CALL rtl_convertUnicodeToText( rtl_UnicodeToTextConverter hConverter,
+SAL_DLLPUBLIC sal_Size SAL_CALL rtl_convertUnicodeToText(
+                                            rtl_UnicodeToTextConverter hConverter,
                                             rtl_UnicodeToTextContext hContext,
                                             const sal_Unicode* pSrcBuf, sal_Size nSrcChars,
                                             sal_Char* pDestBuf, sal_Size nDestBytes,

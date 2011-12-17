@@ -49,7 +49,7 @@ extern "C" {
     @param ...       An arbitrary number of arguments for fprintf, matching the
                      format string.
 */
-void SAL_CALL rtl_logfile_trace( const sal_Char* pszFormat, ... );
+SAL_DLLPUBLIC void SAL_CALL rtl_logfile_trace( const sal_Char* pszFormat, ... );
 
 /** Like rtl_logfile_trace, but prefixing every log entry with the current time
     and thread ID.
@@ -63,7 +63,7 @@ void SAL_CALL rtl_logfile_trace( const sal_Char* pszFormat, ... );
 
     @since UDK 3.2.0
 */
-void SAL_CALL rtl_logfile_longTrace(char const * format, ...);
+SAL_DLLPUBLIC void SAL_CALL rtl_logfile_longTrace(char const * format, ...);
 
 /** Return if a log file is written.
 
@@ -71,7 +71,7 @@ void SAL_CALL rtl_logfile_longTrace(char const * format, ...);
 
     @since UDK 3.2.11
 */
-sal_Bool SAL_CALL rtl_logfile_hasLogFile( void );
+SAL_DLLPUBLIC sal_Bool SAL_CALL rtl_logfile_hasLogFile( void );
 
 #ifdef __cplusplus
 }
