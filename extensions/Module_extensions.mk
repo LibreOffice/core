@@ -27,6 +27,7 @@
 $(eval $(call gb_Module_Module,extensions))
 
 $(eval $(call gb_Module_add_targets,extensions,\
+	AllLangResTarget_abp \
 	AllLangResTarget_bib \
 	AllLangResTarget_dbp \
 	AllLangResTarget_pcr \
@@ -34,6 +35,7 @@ $(eval $(call gb_Module_add_targets,extensions,\
 	AllLangResTarget_upd \
 	AllLangResTarget_updchk \
 	Configuration_updchk \
+	Library_abp \
 	Library_bib \
 	Library_dbp \
 	Library_log \
