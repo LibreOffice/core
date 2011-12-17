@@ -173,13 +173,13 @@ my_components += \
     component/desktop/source/offacc/offacc \
     component/desktop/source/splash/spl \
     component/extensions/source/bibliography/bib \
+    component/extensions/source/dbpilots/dbp \
     component/extensions/source/logging/log \
     component/extensions/source/propctrlr/pcr \
     component/extensions/source/scanner/scn \
     component/extensions/source/update/check/updchk.uno \
     component/extensions/source/update/feed/updatefeed \
     component/extensions/source/update/ui/updchk \
-    dbp \
     fpicker \
     fps_office \
     res \

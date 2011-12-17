@@ -28,12 +28,14 @@ $(eval $(call gb_Module_Module,extensions))
 
 $(eval $(call gb_Module_add_targets,extensions,\
 	AllLangResTarget_bib \
+	AllLangResTarget_dbp \
 	AllLangResTarget_pcr \
 	AllLangResTarget_san \
 	AllLangResTarget_upd \
 	AllLangResTarget_updchk \
 	Configuration_updchk \
 	Library_bib \
+	Library_dbp \
 	Library_log \
 	Library_pcr \
 	Library_scn \

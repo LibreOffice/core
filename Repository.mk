@@ -145,6 +145,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     dba \
     dbaxml \
     dbmm \
+	dbp \
     dbtools \
     dbu \
     deploymentmisc \
