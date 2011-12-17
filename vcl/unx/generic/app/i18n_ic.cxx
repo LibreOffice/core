@@ -565,21 +565,6 @@ SalI18N_InputContext::SupportInputMethodStyle( XIMStyles *pIMStyles )
 // ---------------------------------------------------------------------------
 
 int
-SalI18N_InputContext::CommitStringCallback (sal_Unicode* pText, sal_Size nLength)
-{
-    XIMUnicodeText call_data;
-
-    call_data.string.utf16_char = pText;
-    call_data.length            = nLength;
-    call_data.annotations       = NULL;
-    call_data.count_annotations = 0;
-    call_data.feedback          = NULL;
-
-    return ::CommitStringCallback( maContext,
-                                   (XPointer)&maClientData, (XPointer)&call_data );
-}
-
-int
 SalI18N_InputContext::CommitKeyEvent(sal_Unicode* pText, sal_Size nLength)
 {
     if (nLength == 1 && IsControlCode(pText[0]))
@@ -687,33 +672,6 @@ SalI18N_InputContext::UnsetICFocus( SalFrame* pFrame )
 // multi byte input method only
 //
 // ---------------------------------------------------------------------------
-
-void
-SalI18N_InputContext::SetPreeditState(Bool aPreeditState)
-{
-    XIMPreeditState preedit_state = XIMPreeditUnKnown;
-    XVaNestedList preedit_attr;
-
-    preedit_attr = XVaCreateNestedList(
-                                       0,
-                                       XNPreeditState, &preedit_state,
-                                       NULL);
-    if (!XGetICValues(maContext, XNPreeditAttributes, preedit_attr, NULL))
-    {
-        XFree(preedit_attr);
-
-        preedit_state = aPreeditState? XIMPreeditEnable : XIMPreeditDisable;
-        preedit_attr = XVaCreateNestedList(
-                                           0,
-                                           XNPreeditState, preedit_state,
-                                           NULL);
-        XSetICValues(maContext, XNPreeditAttributes, preedit_attr, NULL);
-    }
-
-    XFree(preedit_attr);
-
-    return;
-}
 
 void
 SalI18N_InputContext::SetLanguage(LanguageType)

@@ -35,9 +35,6 @@
 extern "C" {
 #endif
 
-// for iiimp / ml input
-int  CommitStringCallback( XIC ic, XPointer client_data, XPointer call_data);
-
 // xim callbacks
 void PreeditDoneCallback ( XIC ic, XPointer client_data, XPointer call_data);
 int  PreeditStartCallback( XIC ic, XPointer client_data, XPointer call_data);

@@ -498,45 +498,6 @@ IsControlCode(sal_Unicode nChar)
         return False;
 }
 
-int
-CommitStringCallback( XIC ic, XPointer client_data, XPointer call_data )
-{
-    preedit_data_t* pPreeditData = (preedit_data_t*)client_data;
-
-      XIMUnicodeText *cbtext = (XIMUnicodeText *)call_data;
-      sal_Unicode *p_unicode_data = (sal_Unicode*)cbtext->string.utf16_char;
-
-    // filter unexpected pure control events
-    if (cbtext->length == 1 && IsControlCode(p_unicode_data[0]) )
-    {
-        if( pPreeditData->pFrame )
-        {
-            pPreeditData->pFrame->CallCallback( SALEVENT_ENDEXTTEXTINPUT, (void*)NULL );
-        }
-    }
-    else
-    {
-        if( pPreeditData->pFrame )
-        {
-            pPreeditData->aInputEv.mnTime           = 0;
-            pPreeditData->aInputEv.mpTextAttr       = 0;
-            pPreeditData->aInputEv.mnCursorPos      = cbtext->length;
-            pPreeditData->aInputEv.maText           = UniString(p_unicode_data, cbtext->length);
-            pPreeditData->aInputEv.mnCursorFlags    = 0; // default: make cursor visible
-            pPreeditData->aInputEv.mnDeltaStart     = 0;
-            pPreeditData->aInputEv.mbOnlyCursor     = False;
-
-            pPreeditData->pFrame->CallCallback( SALEVENT_EXTTEXTINPUT, (void*)&pPreeditData->aInputEv);
-            pPreeditData->pFrame->CallCallback( SALEVENT_ENDEXTTEXTINPUT, (void*)NULL );
-        }
-    }
-    pPreeditData->eState = ePreeditStatusStartPending;
-
-    GetPreeditSpotLocation(ic, (XPointer)pPreeditData);
-
-    return 0;
-}
-
 // ----------------------------------------------------------------------------------
 //
 // vi. status callbacks: for now these are empty, they are just needed for turbo linux

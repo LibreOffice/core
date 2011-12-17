@@ -82,7 +82,6 @@ public:
     void Map( SalFrame *pFrame );
     void Unmap( SalFrame* pFrame );
 
-    void SetPreeditState(Bool aPreeditState);
     void SetLanguage(LanguageType aInputLanguage);
 
     SalI18N_InputContext( SalFrame *aFrame );
