@@ -118,11 +118,8 @@ ValueSet::~ValueSet()
     if (xComponent.is())
         xComponent->dispose ();
 
-    if ( mpScrBar )
-        delete mpScrBar;
-
-    if ( mpNoneItem )
-        delete mpNoneItem;
+    delete mpScrBar;
+    delete mpNoneItem;
 
     ImplDeleteItems();
     delete mpImpl;
@@ -665,8 +662,7 @@ void ValueSet::Format()
     mbFormat = sal_False;
 
     // ScrollBar loeschen
-    if ( pDelScrBar )
-        delete pDelScrBar;
+    delete pDelScrBar;
 }
 
 // -----------------------------------------------------------------------
