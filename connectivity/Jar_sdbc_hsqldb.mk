@@ -25,11 +25,30 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Module_Module,connectivity))
+$(eval $(call gb_Jar_Jar,sdbc_hsqldb))
 
-$(eval $(call gb_Module_add_targets,connectivity,\
-	Package_inc \
-	Jar_sdbc_hsqldb \
+ifeq ($(SYSTEM_HSQLDB),YES)
+$(eval $(call gb_Jar_add_jars,sdbc_hsqldb,\
+	$(HSQLDB_JAR) \
+))
+else
+$(eval $(call gb_Jar_add_jars,sdbc_hsqldb,\
+	$(OUTDIR)/bin/hsqldb.jar \
+))
+endif
+
+$(eval $(call gb_Jar_set_packageroot,sdbc_hsqldb,com))
+
+$(eval $(call gb_Jar_add_sourcefiles,sdbc_hsqldb,\
+	connectivity/com/sun/star/sdbcx/comp/hsqldb/FileSystemRuntimeException \
+	connectivity/com/sun/star/sdbcx/comp/hsqldb/NativeInputStreamHelper \
+	connectivity/com/sun/star/sdbcx/comp/hsqldb/NativeLibraries \
+	connectivity/com/sun/star/sdbcx/comp/hsqldb/NativeOutputStreamHelper \
+	connectivity/com/sun/star/sdbcx/comp/hsqldb/NativeStorageAccess \
+	connectivity/com/sun/star/sdbcx/comp/hsqldb/StorageAccess \
+	connectivity/com/sun/star/sdbcx/comp/hsqldb/StorageFileAccess \
+	connectivity/com/sun/star/sdbcx/comp/hsqldb/StorageNativeInputStream \
+	connectivity/com/sun/star/sdbcx/comp/hsqldb/StorageNativeOutputStream \
 ))
 
 # vim: set noet sw=4 ts=4:
