@@ -74,7 +74,8 @@ void WorkWindow::ImplInit( Window* pParent, WinBits nStyle, SystemParentData* pS
     pBorderWin->mpWindowImpl->mpClientWindow = this;
     pBorderWin->GetBorder( mpWindowImpl->mnLeftBorder, mpWindowImpl->mnTopBorder, mpWindowImpl->mnRightBorder, mpWindowImpl->mnBottomBorder );
     mpWindowImpl->mpBorderWindow  = pBorderWin;
-//        mpWindowImpl->mpRealParent    = pParent; // !!! Muesste eigentlich gesetzt werden, aber wegen Fehlern mit dem MenuBar erstmal nicht gesetzt !!!
+
+    // mpWindowImpl->mpRealParent    = pParent; // should actually be set, but is not set due to errors with the menubar!!
 
     if ( nStyle & WB_APP )
     {

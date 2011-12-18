@@ -529,9 +529,8 @@ void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, sal_Bool bCallHdl
     }
 
 #if defined(DBG_UTIL)
-    // Evt. AppFont auf Fett schalten, damit man feststellen kann,
-    // ob fuer die Texte auf anderen Systemen genuegend Platz
-    // vorhanden ist
+    // If needed, set AppFont to bold, in order to check
+    // if there is enough space available for texts on other systems
     if ( DbgIsBoldAppFont() )
     {
         aStyleSettings = rSettings.GetStyleSettings();
@@ -690,12 +689,12 @@ void Window::ImplInitWindowData( WindowType nType )
     mpWindowImpl->mbInitWinClipRegion = sal_True;         // sal_True: Calc Window Clip Region
     mpWindowImpl->mbInitChildRegion   = sal_False;        // sal_True: InitChildClipRegion
     mpWindowImpl->mbWinRegion         = sal_False;        // sal_True: Window Region
-    mpWindowImpl->mbClipChildren      = sal_False;        // sal_True: Child-Fenster muessen evt. geclippt werden
-    mpWindowImpl->mbClipSiblings      = sal_False;        // sal_True: Nebeneinanderliegende Child-Fenster muessen evt. geclippt werden
-    mpWindowImpl->mbChildTransparent  = sal_False;        // sal_True: Child-Fenster duerfen transparent einschalten (inkl. Parent-CLIPCHILDREN)
-    mpWindowImpl->mbPaintTransparent  = sal_False;        // sal_True: Paints muessen auf Parent ausgeloest werden
+    mpWindowImpl->mbClipChildren      = sal_False;        // sal_True: Child-window should be clipped
+    mpWindowImpl->mbClipSiblings      = sal_False;        // sal_True: Adjacent Child-window should be clipped
+    mpWindowImpl->mbChildTransparent  = sal_False;        // sal_True: Child-windows are allowed to switch to transparent (incl. Parent-CLIPCHILDREN)
+    mpWindowImpl->mbPaintTransparent  = sal_False;        // sal_True: Paints should be executed on the Parent
     mpWindowImpl->mbMouseTransparent  = sal_False;        // sal_True: Window is transparent for Mouse
-    mpWindowImpl->mbDlgCtrlStart      = sal_False;        // sal_True: Ab hier eigenes Dialog-Control
+    mpWindowImpl->mbDlgCtrlStart      = sal_False;        // sal_True: From here on own Dialog-Control
     mpWindowImpl->mbFocusVisible      = sal_False;        // sal_True: Focus Visible
     mpWindowImpl->mbUseNativeFocus    = sal_False;
     mpWindowImpl->mbNativeFocusVisible= sal_False;        // sal_True: native Focus Visible
@@ -704,14 +703,14 @@ void Window::ImplInitWindowData( WindowType nType )
     mpWindowImpl->mbTrackVisible      = sal_False;        // sal_True: Tracking Visible
     mpWindowImpl->mbControlForeground = sal_False;        // sal_True: Foreground-Property set
     mpWindowImpl->mbControlBackground = sal_False;        // sal_True: Background-Property set
-    mpWindowImpl->mbAlwaysOnTop       = sal_False;        // sal_True: immer vor allen anderen normalen Fenstern sichtbar
-    mpWindowImpl->mbCompoundControl   = sal_False;        // sal_True: Zusammengesetztes Control => Listener...
-    mpWindowImpl->mbCompoundControlHasFocus = sal_False;  // sal_True: Zusammengesetztes Control hat irgendwo den Focus
-    mpWindowImpl->mbPaintDisabled     = sal_False;        // sal_True: Paint soll nicht ausgefuehrt werden
-    mpWindowImpl->mbAllResize         = sal_False;        // sal_True: Auch ResizeEvents mit 0,0 schicken
-    mpWindowImpl->mbInDtor            = sal_False;        // sal_True: Wir befinden uns im Window-Dtor
+    mpWindowImpl->mbAlwaysOnTop       = sal_False;        // sal_True: always visible for all others windows
+    mpWindowImpl->mbCompoundControl   = sal_False;        // sal_True: Composite Control => Listener...
+    mpWindowImpl->mbCompoundControlHasFocus = sal_False;  // sal_True: Composite Control has focus somewhere
+    mpWindowImpl->mbPaintDisabled     = sal_False;        // sal_True: Paint should not be executed
+    mpWindowImpl->mbAllResize         = sal_False;        // sal_True: Also sent ResizeEvents with 0,0
+    mpWindowImpl->mbInDtor            = sal_False;        // sal_True: We're still in Window-Dtor
     mpWindowImpl->mbExtTextInput      = sal_False;        // sal_True: ExtTextInput-Mode is active
-    mpWindowImpl->mbInFocusHdl        = sal_False;        // sal_True: Innerhalb vom GetFocus-Handler
+    mpWindowImpl->mbInFocusHdl        = sal_False;        // sal_True: Within GetFocus-Handler
     mpWindowImpl->mbCreatedWithToolkit = sal_False;
     mpWindowImpl->mbSuppressAccessibilityEvents = sal_False; // sal_True: do not send any accessibility events
     mpWindowImpl->mbDrawSelectionBackground = sal_False;    // sal_True: draws transparent window background to indicate (toolbox) selection
@@ -1376,7 +1375,7 @@ Window* Window::ImplFindWindow( const Point& rFramePos )
     sal_uInt16 nHitTest = ImplHitTest( rFramePos );
     if ( nHitTest & WINDOW_HITTEST_INSIDE )
     {
-        // und danach gehen wir noch alle Child-Fenster durch
+        // and then we check all child windows
         pTempWindow = mpWindowImpl->mpFirstChild;
         while ( pTempWindow )
         {

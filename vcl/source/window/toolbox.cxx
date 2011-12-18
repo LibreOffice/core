@@ -1419,7 +1419,7 @@ void ImplTBDragMgr::EndDragging( sal_Bool bOK )
                 aSize.Width() = maRect.GetWidth();
                 pItem->mpWindow->SetSizePixel( aSize );
 
-                // ToolBox neu brechnen und neu ausgeben
+                // re-calculate and show ToolBox
                 mpDragBox->ImplInvalidate( sal_True );
                 mpDragBox->Customize( ToolBoxCustomizeEvent( mpDragBox, nTempItem,
                                                              TOOLBOX_CUSTOMIZE_RESIZE,
@@ -1433,7 +1433,7 @@ void ImplTBDragMgr::EndDragging( sal_Bool bOK )
                 ToolBox* pDropBox = FindToolBox( aScreenRect );
                 if ( pDropBox )
                 {
-                    // Such-Position bestimmen
+                    // Determine search position
                     Point aPos;
                     if ( pDropBox->mbHorz )
                     {
@@ -1470,7 +1470,7 @@ void ImplTBDragMgr::EndDragging( sal_Bool bOK )
 
 void ImplTBDragMgr::UpdateDragRect()
 {
-    // Nur Updaten, wenn wir schon im Dragging sind
+    // Only update if we're already dragging
     if ( !mbShowDragRect )
         return;
 
@@ -1510,10 +1510,10 @@ static void ImplDrawOutButton( OutputDevice* pOutDev, const Rectangle& rRect,
         nOffset++;
     }
 
-    // Hintergrund loeschen
+    // delete background
     pOutDev->Erase( rRect );
 
-    // Button zeichnen
+    // draw button
     pOutDev->SetLineColor( rStyleSettings.GetLightColor() );
     pOutDev->DrawLine( aPos,
                        Point( aPos.X()+aSize.Width()-OUTBUTTON_BORDER, aPos.Y() ) );
@@ -1539,7 +1539,7 @@ static void ImplDrawOutButton( OutputDevice* pOutDev, const Rectangle& rRect,
 void ToolBox::ImplInit( Window* pParent, WinBits nStyle )
 {
 
-    // Variablen initialisieren
+    // initialize variables
     ImplGetWindowImpl()->mbToolBox         = sal_True;
     mpBtnDev          = NULL;
     mpFloatSizeAry    = NULL;
@@ -1547,8 +1547,8 @@ void ToolBox::ImplInit( Window* pParent, WinBits nStyle )
     mpFloatWin        = NULL;
     mnDX              = 0;
     mnDY              = 0;
-    mnMaxItemWidth       = 0;
-    mnMaxItemHeight      = 0;
+    mnMaxItemWidth    = 0;
+    mnMaxItemHeight   = 0;
     mnWinHeight       = 0;
     mnBorderX         = 0;
     mnBorderY         = 0;
@@ -1595,8 +1595,8 @@ void ToolBox::ImplInit( Window* pParent, WinBits nStyle )
     meLastStyle       = POINTER_ARROW;
     mnWinStyle        = nStyle;
     meLayoutMode      = TBX_LAYOUT_NORMAL;
-    mnLastFocusItemId          = 0;
-    mnKeyModifier      = 0;
+    mnLastFocusItemId = 0;
+    mnKeyModifier     = 0;
     mnActivateCount   = 0;
 
     maTimer.SetTimeout( 50 );
@@ -1734,7 +1734,7 @@ void ToolBox::ImplLoadRes( const ResId& rResId )
     {
         sal_uLong nEle = ReadLongRes();
 
-        // Item hinzufuegen
+        // insert item
         for ( sal_uLong i = 0; i < nEle; i++ )
         {
             InsertItem( ResId( (RSHEADER_TYPE *)GetClassRes(), *pMgr ) );
@@ -1763,8 +1763,8 @@ ToolBox::ToolBox( Window* pParent, const ResId& rResId ) :
     ImplInit( pParent, nStyle );
     ImplLoadRes( rResId );
 
-    // Groesse des FloatingWindows berechnen und umschalten, wenn die
-    // ToolBox initial im FloatingModus ist
+    // calculate size of floating windows and switch if the
+    // toolbox is initially in floating mode
     if ( ImplIsFloatingMode() )
         mbHorz = sal_True;
     else
@@ -1786,23 +1786,23 @@ ToolBox::~ToolBox()
     while( mnActivateCount > 0 )
         Deactivate();
 
-    // Falls noch ein Floating-Window connected ist, dann den
-    // PopupModus beenden
+    // terminate popupmode if the floating window is
+    // still connected
     if ( mpFloatWin )
         mpFloatWin->EndPopupMode( FLOATWIN_POPUPMODEEND_CANCEL );
 
     // delete private data
     delete mpData;
 
-    // FloatSizeAry gegebenenfalls loeschen
+    // delete FloatSizeAry if required
     delete mpFloatSizeAry;
 
-    // Wenn keine ToolBox-Referenzen mehr auf die Listen bestehen, dann
-    // Listen mit wegloeschen
+    // remove the lists when there are no more toolbox references to
+    // the lists
     ImplSVData* pSVData = ImplGetSVData();
     if ( pSVData->maCtrlData.mpTBDragMgr )
     {
-        // Wenn im TBDrag-Manager, dann wieder rausnehmen
+        // remove if in TBDrag-Manager
         if ( mbCustomize )
             pSVData->maCtrlData.mpTBDragMgr->erase( this );
 
@@ -2024,7 +2024,7 @@ sal_Bool ToolBox::ImplCalcItem()
                     it->mbEmptyBtn = sal_True;
                 }
 
-                // Gegebenenfalls die Fensterhoehe mit beruecksichtigen
+                // if required, take window height into consideration
                 if ( it->mpWindow )
                 {
                     long nHeight = it->mpWindow->GetSizePixel().Height();
@@ -2201,7 +2201,7 @@ sal_uInt16 ToolBox::ImplCalcBreaks( long nWidth, long* pMaxLineWidth, sal_Bool b
             {
                 nLines++;
 
-                // Gruppe auseinanderbrechen oder ganze Gruppe umbrechen?
+                // Add break before the entire group or take group apart?
                 if ( (it->meType == TOOLBOXITEM_BREAK) ||
                      (nLineStart == nGroupStart) )
                 {
@@ -2219,8 +2219,8 @@ sal_uInt16 ToolBox::ImplCalcBreaks( long nWidth, long* pMaxLineWidth, sal_Bool b
                     if ( nLastGroupLineWidth > nMaxLineWidth )
                         nMaxLineWidth = nLastGroupLineWidth;
 
-                    // Wenn ganze Gruppe umgebrochen wird, diese auf
-                    // Zeilenanfang setzen und wieder neu berechnen
+                    // if the break is added before the group, set it to
+                    // beginning of line and re-calculate
                     nLineWidth = 0;
                     nLineStart = nGroupStart;
                     it = mpData->m_aItems.begin() + nGroupStart;
@@ -2341,13 +2341,13 @@ void ToolBox::ImplFormat( sal_Bool bResize )
 {
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
-    // Muss ueberhaupt neu formatiert werden
+    // Has to re-formatted
     if ( !mbFormat )
         return;
 
     mpData->ImplClearLayoutData();
 
-    // Positionen/Groessen berechnen
+    // recalulate positions and sizes
     Rectangle       aEmptyRect;
     long            nLineSize;
     long            nLeft;
@@ -2363,7 +2363,7 @@ void ToolBox::ImplFormat( sal_Bool bResize )
     ImplDockingWindowWrapper *pWrapper = ImplGetDockingManager()->GetDockingWindowWrapper( this );
     sal_Bool bIsInPopupMode = ImplIsInPopupMode();
 
-    // FloatSizeAry gegebenenfalls loeschen
+    // delete FloatSizeAry if required
     if ( mpFloatSizeAry )
     {
         delete mpFloatSizeAry;
@@ -3317,7 +3317,7 @@ void ToolBox::ImplDrawItem( sal_uInt16 nPos, sal_uInt16 nHighlight, sal_Bool bPa
     if(!pItem->mbEnabled)
         nHighlight = 0;
 
-    // Falls Rechteck ausserhalb des sichbaren Bereichs liegt
+    // if the rectangle is outside visible area
     if ( pItem->maRect.IsEmpty() )
         return;
 
@@ -3422,7 +3422,7 @@ void ToolBox::ImplDrawItem( sal_uInt16 nPos, sal_uInt16 nHighlight, sal_Bool bPa
         SetFont( aOldFont );
         SetTextColor( aOldTextColor );
 
-        // Gegebenenfalls noch Config-Frame zeichnen
+        // draw Config-Frame if required
         if ( pMgr && !bLayout)
             pMgr->UpdateDragRect();
         return;
@@ -3636,7 +3636,7 @@ void ToolBox::ImplDrawItem( sal_uInt16 nPos, sal_uInt16 nHighlight, sal_Bool bPa
         ImplDrawDropdownArrow( this, aDropDownRect, bSetColor, bRotate );
     }
 
-    // Gegebenenfalls noch Config-Frame zeichnen
+    // draw config-frame if required
     if ( pMgr )
         pMgr->UpdateDragRect();
 }
@@ -3759,10 +3759,10 @@ sal_Bool ToolBox::ImplHandleMouseMove( const MouseEvent& rMEvt, sal_Bool bRepeat
 {
     Point aMousePos = rMEvt.GetPosPixel();
 
-    // Ist ToolBox aktiv
+    // ToolBox active?
     if ( mbDrag && mnCurPos != TOOLBOX_ITEM_NOTFOUND )
     {
-        // Befindet sich Maus ueber dem Item
+        // is the cursor over the item?
         ImplToolItem* pItem = &mpData->m_aItems[mnCurPos];
         if ( pItem->maRect.IsInside( aMousePos ) )
         {
@@ -3841,8 +3841,8 @@ sal_Bool ToolBox::ImplHandleMouseButtonUp( const MouseEvent& rMEvt, sal_Bool bCa
 
     if ( mbDrag || mbSelection )
     {
-        // Hier die MouseDaten setzen, wenn Selection-Modus, da dann kein
-        // MouseButtonDown-Handler gerufen wird
+        // set mouse data if in selection mode, as then
+        // the MouseButtonDown handler cannot be called
         if ( mbSelection )
         {
             mnMouseClicks    = rMEvt.GetClicks();
@@ -3860,7 +3860,7 @@ sal_Bool ToolBox::ImplHandleMouseButtonUp( const MouseEvent& rMEvt, sal_Bool bCa
                 return sal_True;
         }
 
-        // Wurde Maus ueber dem Item losgelassen
+        // has mouse been released on top of item?
         if( mnCurPos < mpData->m_aItems.size() )
         {
             ImplToolItem* pItem = &mpData->m_aItems[mnCurPos];
@@ -3869,7 +3869,7 @@ sal_Bool ToolBox::ImplHandleMouseButtonUp( const MouseEvent& rMEvt, sal_Bool bCa
                 mnCurItemId = pItem->mnId;
                 if ( !bCancel )
                 {
-                    // Gegebenenfalls ein AutoCheck durchfuehren
+                    // execute AutoCheck if required
                     if ( pItem->mnBits & TIB_AUTOCHECK )
                     {
                         if ( pItem->mnBits & TIB_RADIOCHECK )
@@ -3886,11 +3886,11 @@ sal_Bool ToolBox::ImplHandleMouseButtonUp( const MouseEvent& rMEvt, sal_Bool bCa
                         }
                     }
 
-                    // Select nicht bei Repeat ausloesen, da dies schon im
-                    // MouseButtonDown ausgeloest wurde
+                    // do not call Select when Repeat is active, as in this
+                    // case that was triggered already in MouseButtonDown
                     if ( !(pItem->mnBits & TIB_REPEAT) )
                     {
-                        // Gegen zerstoeren im Select-Handler sichern
+                        // prevent from being destroyed in the select handler
                         ImplDelData aDelData;
                         ImplAddDel( &aDelData );
                         Select();
@@ -3904,7 +3904,7 @@ sal_Bool ToolBox::ImplHandleMouseButtonUp( const MouseEvent& rMEvt, sal_Bool bCa
                     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
                 }
 
-                // Items nicht geloescht, im Select-Handler
+                // Items not destroyed, in Select handler
                 if ( mnCurItemId )
                 {
                     sal_uInt16 nHighlight;
@@ -3982,19 +3982,19 @@ void ToolBox::MouseMove( const MouseEvent& rMEvt )
         sal_uInt16  i = 0;
         sal_uInt16  nNewPos = TOOLBOX_ITEM_NOTFOUND;
 
-        // Item suchen, das geklickt wurde
+        // search the item that has been clicked
         std::vector< ImplToolItem >::const_iterator it = mpData->m_aItems.begin();
         while ( it != mpData->m_aItems.end() )
         {
-            // Wenn Mausposition in diesem Item vorhanden, kann die
-            // Suche abgebrochen werden
+            // if the mouse position is in this item,
+            // we can stop the search
             if ( it->maRect.IsInside( aMousePos ) )
             {
-                // Wenn es ein Button ist, dann wird er selektiert
+                // select it if it is a button
                 if ( it->meType == TOOLBOXITEM_BUTTON )
                 {
-                    // Wenn er disablet ist, findet keine Aenderung
-                    // statt
+                    // if button is disabled, do not
+                    // change it
                     if ( !it->mbEnabled || it->mbShowWindow )
                         nNewPos = mnCurPos;
                     else
@@ -4071,12 +4071,11 @@ void ToolBox::MouseMove( const MouseEvent& rMEvt )
 
     if ( (eStyle == POINTER_ARROW) && mbCustomizeMode )
     {
-        // Item suchen, das geklickt wurde
+        // search the item which was clicked
         std::vector< ImplToolItem >::const_iterator it = mpData->m_aItems.begin();
         while ( it != mpData->m_aItems.end() )
         {
-            // Wenn es ein Customize-Window ist, gegebenenfalls den
-            // Resize-Pointer anzeigen
+            // show resize pointer if it is a customize window
             if ( it->mbShowWindow )
             {
                 if ( it->maRect.IsInside( aMousePos ) )
@@ -4182,15 +4181,15 @@ void ToolBox::MouseMove( const MouseEvent& rMEvt )
 
 void ToolBox::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    // Nur bei linker Maustaste ToolBox ausloesen und wenn wir uns nicht
-    // noch in der normalen Bearbeitung befinden
+    // only trigger toolbox for left mouse button and when
+    // we're not in normal operation
     if ( rMEvt.IsLeft() && !mbDrag && (mnCurPos == TOOLBOX_ITEM_NOTFOUND) )
     {
-        // Activate schon hier rufen, da gegebenenfalls noch Items
-        // ausgetauscht werden
+        // call activate already here, as items could
+        // be exchanged
         Activate();
 
-        // ToolBox hier updaten, damit der Anwender weiss, was Sache ist
+        // update ToolBox here, such that user knows it
         if ( mbFormat )
         {
             ImplFormat();
@@ -4201,15 +4200,15 @@ void ToolBox::MouseButtonDown( const MouseEvent& rMEvt )
         sal_uInt16 i = 0;
         sal_uInt16 nNewPos = TOOLBOX_ITEM_NOTFOUND;
 
-        // Item suchen, das geklickt wurde
+        // search for item that was clicked
         std::vector< ImplToolItem >::const_iterator it = mpData->m_aItems.begin();
         while ( it != mpData->m_aItems.end() )
         {
-            // Ist es dieses Item
+            // is this the item?
             if ( it->maRect.IsInside( aMousePos ) )
             {
-                // Ist es ein Separator oder ist das Item disabled,
-                // dann mache nichts
+                // do nothing if it is a separator or
+                // if the item has been disabled
                 if ( (it->meType == TOOLBOXITEM_BUTTON) &&
                      (!it->mbShowWindow || mbCustomizeMode) )
                     nNewPos = i;
@@ -4221,7 +4220,7 @@ void ToolBox::MouseButtonDown( const MouseEvent& rMEvt )
             ++it;
         }
 
-        // Item gefunden
+        // item found
         if ( nNewPos != TOOLBOX_ITEM_NOTFOUND )
         {
             if ( mbCustomize )
@@ -4252,7 +4251,7 @@ void ToolBox::MouseButtonDown( const MouseEvent& rMEvt )
             }
 
 
-            // Aktuelle Daten setzen
+            // update actual data
             sal_uInt16 nTrackFlags = 0;
             mnCurPos         = i;
             mnCurItemId      = it->mnId;
@@ -4270,12 +4269,12 @@ void ToolBox::MouseButtonDown( const MouseEvent& rMEvt )
             }
             else
             {
-                // Hier schon bDrag setzen, da in EndSelection ausgewertet wird
+                // update bDrag here, as it is evaluated in the EndSelection
                 mbDrag = sal_True;
 
-                // Bei Doppelklick nur den Handler rufen, aber bevor der
-                // Button gehiltet wird, da evt. in diesem Handler der
-                // Drag-Vorgang abgebrochen wird
+                // on double-click: only call the handler, but do so before the button
+                // is hit, as in the handler dragging
+                // can be terminated
                 if ( rMEvt.GetClicks() == 2 )
                     DoubleClick();
 
@@ -4319,21 +4318,21 @@ void ToolBox::MouseButtonDown( const MouseEvent& rMEvt )
                 }
 
 
-                // Click-Handler aufrufen
+                // call Click handler
                 if ( rMEvt.GetClicks() != 2 )
                     Click();
 
-                // Bei Repeat auch den Select-Handler rufen
+                // also call Select handler at repeat
                 if ( nTrackFlags & STARTTRACK_BUTTONREPEAT )
                     Select();
 
-                // Wenn die Aktion nicht im Click-Handler abgebrochen wurde
+                // if the actions was not aborted in Click handler
                 if ( mbDrag )
                     StartTracking( nTrackFlags );
             }
 
-            // Wenn Maus ueber einem Item gedrueckt wurde, koennen wir
-            // die Bearbeitung abbrechen
+            // if mouse was clicked over an item we
+            // can abort here
             return;
         }
 
@@ -4346,8 +4345,7 @@ void ToolBox::MouseButtonDown( const MouseEvent& rMEvt )
             return;
         }
 
-
-        // Gegebenenfalls noch Scroll- und Next-Buttons ueberpruefen
+        // check scroll- and next-buttons here
         if ( maUpperRect.IsInside( aMousePos ) )
         {
             if ( mnCurLine > 1 )
@@ -4387,22 +4385,22 @@ void ToolBox::MouseButtonDown( const MouseEvent& rMEvt )
             {
                 ImplTBDragMgr* pMgr = ImplGetTBDragMgr();
 
-                // Handler rufen, damit die Dock-Rectangles gesetzt werden
-                // koenen
+                // call handler, such that we can set the
+                // dock rectangles
                 StartDocking();
 
                 Point aPos  = GetParent()->OutputToScreenPixel( GetPosPixel() );
                 Size  aSize = GetSizePixel();
                 aPos = ScreenToOutputPixel( aPos );
 
-                // Dragging starten
+                // start dragging
                 pMgr->StartDragging( this, aMousePos, Rectangle( aPos, aSize ),
                                      nLineMode, sal_False );
                 return;
             }
         }
 
-        // Kein Item, dann nur Click oder DoubleClick
+        // no item, then only click or double click
         if ( rMEvt.GetClicks() == 2 )
             DoubleClick();
         else
@@ -4472,17 +4470,17 @@ void ToolBox::Paint( const Rectangle& rPaintRect )
 
     ImplDrawMenubutton( this, mpData->mbMenubuttonSelected );
 
-    // SpinButtons zeichnen
+    // draw SpinButtons
     if ( mnWinStyle & WB_SCROLL )
     {
         if ( mnCurLines > mnLines )
             ImplDrawSpin( sal_False, sal_False );
     }
 
-    // NextButton zeichnen
+    // draw NextButton
     ImplDrawNext( sal_False );
 
-    // Buttons zeichnen
+    // draw buttons
     sal_uInt16 nHighPos;
     if ( mnHighItemId )
         nHighPos = GetItemPos( mnHighItemId );
@@ -4494,7 +4492,7 @@ void ToolBox::Paint( const Rectangle& rPaintRect )
     {
         ImplToolItem* pItem = &mpData->m_aItems[i];
 
-        // Nur malen, wenn Rechteck im PaintRectangle liegt
+        // only draw when the rectangle is in the draw rectangle
         if ( !pItem->maRect.IsEmpty() && rPaintRect.IsOver( pItem->maRect ) )
         {
             sal_uInt16 nHighlight = 0;
@@ -4535,7 +4533,7 @@ void ToolBox::Resize()
     // invalidate everything to have gradient backgrounds properly drawn
     Invalidate();
 
-    // Evt. neu formatieren oder neu painten
+    // re-format or re-draw
     if ( mbScroll )
     {
         if ( !mbFormat )
@@ -4546,10 +4544,10 @@ void ToolBox::Resize()
         }
     }
 
-    // Border muss neu ausgegeben werden
+    // redraw border
     if ( mnWinStyle & WB_BORDER )
     {
-        // Da wir sonst beim Paint denken, das alles neu gepaintet wird
+        // as otherwise, when painting we might think we have to re-draw everything
         if ( mbFormat && IsReallyVisible() )
             Invalidate();
         else
@@ -4627,7 +4625,7 @@ void ToolBox::RequestHelp( const HelpEvent& rHEvt )
     {
         if ( rHEvt.GetMode() & (HELPMODE_BALLOON | HELPMODE_QUICK) )
         {
-            // Rechteck ermitteln
+            // get rectangle
             Rectangle aTempRect = GetItemRect( nItemId );
             Point aPt = OutputToScreenPixel( aTempRect.TopLeft() );
             aTempRect.Left()   = aPt.X();
@@ -4636,7 +4634,7 @@ void ToolBox::RequestHelp( const HelpEvent& rHEvt )
             aTempRect.Right()  = aPt.X();
             aTempRect.Bottom() = aPt.Y();
 
-            // Text ermitteln und anzeigen
+            // get text and display it
             XubString aStr = GetQuickHelpText( nItemId );
             const XubString& rHelpStr = GetHelpText( nItemId );
             if ( !aStr.Len() )
@@ -4658,7 +4656,7 @@ void ToolBox::RequestHelp( const HelpEvent& rHEvt )
 
             if ( aCommand.Len() || aHelpId.getLength() )
             {
-                // Wenn eine Hilfe existiert, dann ausloesen
+                // If help is available then trigger it
                 Help* pHelp = Application::GetHelp();
                 if ( pHelp )
                 {
@@ -4675,7 +4673,7 @@ void ToolBox::RequestHelp( const HelpEvent& rHEvt )
     {
         if ( rHEvt.GetMode() & (HELPMODE_BALLOON | HELPMODE_QUICK) )
         {
-            // Rechteck ermitteln
+            // get rectangle
             Rectangle aTempRect = maNextToolRect;
             Point aPt = OutputToScreenPixel( aTempRect.TopLeft() );
             aTempRect.Left()   = aPt.X();
@@ -4781,27 +4779,27 @@ long ToolBox::Notify( NotifyEvent& rNEvt )
 
 void ToolBox::Command( const CommandEvent& rCEvt )
 {
-    // StartDrag auf MouseButton/Left/Alt abbilden
+    // depict StartDrag on MouseButton/Left/Alt
     if ( (rCEvt.GetCommand() == COMMAND_STARTDRAG) && rCEvt.IsMouseEvent() &&
          mbCustomize && !mbDragging && !mbDrag && !mbSelection &&
          (mnCurPos == TOOLBOX_ITEM_NOTFOUND) )
     {
-        // Wir erlauben nur das Draggen von Items. Deshalb muessen wir
-        // testen, ob auch ein Item angeklickt wurde, ansonsten wuerden
-        // wir evt. das Fenster verschieben, was nicht gewollt waere.
-        // Wir machen dieses jedoch nur im Customize-Mode, da ansonsten
-        // Items zuhaeufig ausversehen verschoben werden.
+        // We only allow dragging of items. Therefore, we have to check
+        // if an item was clicked, otherwise we could move the window, and
+        // this is unwanted.
+        // We only do this in customize mode, as otherwise
+        // items could be moved accidentally
         if ( mbCustomizeMode )
         {
             Point           aMousePos = rCEvt.GetMousePosPixel();
             std::vector< ImplToolItem >::const_iterator it = mpData->m_aItems.begin();
             while ( it != mpData->m_aItems.end() )
             {
-                // Ist es dieses Item
+                // is this the item?
                 if ( it->maRect.IsInside( aMousePos ) )
                 {
-                    // Ist es ein Separator oder ist das Item disabled,
-                    // dann mache nichts
+                    // do nothing if it is a separator or
+                    // the item has been disabled
                     if ( (it->meType == TOOLBOXITEM_BUTTON) &&
                          !it->mbShowWindow )
                         mbCommandDrag = sal_True;
@@ -4959,7 +4957,7 @@ void ToolBox::StartDocking()
 
 sal_Bool ToolBox::Docking( const Point& rPos, Rectangle& rRect )
 {
-    // Wenn Dragging, dann nicht machen, da vorher schon berechnet
+    // do nothing during dragging, it was calculated before
     if ( mbDragging )
         return sal_False;
 
@@ -4967,8 +4965,7 @@ sal_Bool ToolBox::Docking( const Point& rPos, Rectangle& rRect )
 
     DockingWindow::Docking( rPos, rRect );
 
-    // Befindet sich die Maus ausserhalb des Bereichs befindet, kann es nur ein
-    // FloatWindow werden
+    // if the mouse is outside the area, it can only become a floating window
     Rectangle aDockingRect( rRect );
     if ( !ImplIsFloatingMode() )
     {
@@ -4995,7 +4992,7 @@ sal_Bool ToolBox::Docking( const Point& rPos, Rectangle& rRect )
         aInRect.Right()  -= aDockSize.Width()/2;
         aInRect.Bottom() -= aDockSize.Height()/2;
 
-        // Wenn Fenster zu klein, wird das gesammte InDock-Rect genommen
+        // if the window is too small, use the complete InDock-Rect
         if ( aInRect.Left() >= aInRect.Right() )
         {
             aInRect.Left()  = maInDockRect.Left();
@@ -5007,8 +5004,8 @@ sal_Bool ToolBox::Docking( const Point& rPos, Rectangle& rRect )
             aInRect.Bottom() = maInDockRect.Bottom();
         }
 
-        // Wenn Maus nicht im Dock-Bereich, dann kann es nur zum
-        // FloatWindow werden
+        // if the mouse is outside the Dock area, it can only
+        // become a floating window
         Rectangle aIntersect = aInRect.GetIntersection( aDockingRect );
         if ( aIntersect == aDockingRect )
             bFloatMode = sal_True;
@@ -5029,8 +5026,7 @@ sal_Bool ToolBox::Docking( const Point& rPos, Rectangle& rRect )
             else if ( aInPosBR.Y() >= aInSize.Height() )
                 meDockAlign = WINDOWALIGN_BOTTOM;
 
-            // Wenn sich Dock-Align geaendert hat, muessen wir die
-            // neue Dock-Groesse setzen
+            // update the Dock size if Dock-Align was changed
             if ( (meDockAlign == WINDOWALIGN_TOP) || (meDockAlign == WINDOWALIGN_BOTTOM) )
                 aDockSize.Width() = maInDockRect.GetWidth();
             else

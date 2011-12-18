@@ -74,7 +74,7 @@ sal_Bool Window::ImplIsWindowInFront( const Window* pTestWindow ) const
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
     DBG_CHKOBJ( pTestWindow, Window, ImplDbgCheckWindow );
 
-    // Testen, ob es Fenster untereinander liegen
+    // check for overlapping window
     pTestWindow = pTestWindow->ImplGetFirstOverlapWindow();
     const Window* pTempWindow = pTestWindow;
     const Window* pThisWindow = ImplGetFirstOverlapWindow();
@@ -100,7 +100,7 @@ sal_Bool Window::ImplIsWindowInFront( const Window* pTestWindow ) const
     }
     while ( pTempWindow );
 
-    // Fenster auf gleiche Ebene bringen
+    // move window to same level
     if ( pThisWindow->mpWindowImpl->mpOverlapWindow != pTestWindow->mpWindowImpl->mpOverlapWindow )
     {
         sal_uInt16 nThisLevel = 0;
@@ -146,7 +146,7 @@ sal_Bool Window::ImplIsWindowInFront( const Window* pTestWindow ) const
         }
     }
 
-    // Wenn TestWindow vor ThisWindow kommt, liegt es vorne
+    // if TestWindow is before ThisWindow, it is in front
     pTempWindow = pTestWindow;
     do
     {
@@ -253,7 +253,7 @@ void Window::ImplDeleteOverlapBackground()
             mpWindowImpl->mpOverlapData->mpSaveBackRgn = NULL;
         }
 
-        // Fenster aus der Liste entfernen
+        // remove window from the list
         if ( mpWindowImpl->mpFrameData->mpFirstBackWin == this )
             mpWindowImpl->mpFrameData->mpFirstBackWin = mpWindowImpl->mpOverlapData->mpNextBackWin;
         else
@@ -276,8 +276,8 @@ void Window::ImplInvalidateAllOverlapBackgrounds()
     Window* pWindow = mpWindowImpl->mpFrameData->mpFirstBackWin;
     while ( pWindow )
     {
-        // Naechstes Fenster schon hier merken, da dieses Fenster in
-        // der if-Abfrage aus der Liste entfernt werden kann
+        // remember next window here already, as this window could
+        // be removed within the next if clause from the list
         Window* pNext = pWindow->mpWindowImpl->mpOverlapData->mpNextBackWin;
 
         if ( ImplIsWindowInFront( pWindow ) )
@@ -725,8 +725,8 @@ void Window::EndTracking( sal_uInt16 nFlags )
 
     if ( pSVData->maWinData.mpTrackWin == this )
     {
-        // Hier wegen DbgChkThis geklammert, da Window im Handler zerstoert
-        // werden kann
+        // due to DbgChkThis in brackets, as the window could be destroyed
+        // in the handler
         {
         DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
@@ -741,7 +741,7 @@ void Window::EndTracking( sal_uInt16 nFlags )
         ReleaseMouse();
         }
 
-        // EndTracking rufen, wenn es gerufen werden soll
+        // call EndTracking if required
         if ( !(nFlags & ENDTRACK_DONTCALLHDL) )
         {
             Point           aMousePos( mpWindowImpl->mpFrameData->mnLastMouseX, mpWindowImpl->mpFrameData->mnLastMouseY );
@@ -923,8 +923,8 @@ void Window::SetZoomedPointFont( const Font& rFont )
         aFont.SetSize( aSize );
         SetPointFont( aFont );
 
-        // Wenn Darstellung skaliert wird, nehmen wir gegebenenfalls
-        // einen anderen Font, wenn der aktuelle nicht skalierbar ist
+        // Use another font if the representation is to be scaled,
+        // and the actual font is not scalable
         FontMetric aMetric = GetFontMetric();
         long       nFontDiff = Abs( GetFont().GetSize().Height()-aMetric.GetSize().Height() );
         if ( (aMetric.GetType() == TYPE_RASTER) && (nFontDiff >= 2) )
