@@ -9,7 +9,7 @@
                  android:debuggable="true">
         <!-- Bootstrap is the subclass of  android.app.NativeActivity -->
         <activity android:name="org.libreoffice.android.Bootstrap"
-                  android:label="LO simple cppunittests"
+                  android:label="LO Calc unit tests"
                   android:configChanges="orientation|keyboardHidden">
             <!-- Tell NativeActivity the name of our .so -->
             <meta-data android:name="android.app.lib_name"
