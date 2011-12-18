@@ -48,17 +48,18 @@ $(eval $(call gb_Library_add_api,so_activex_x64,\
 
 $(eval $(call gb_Library_add_nativeres,so_activex_x64,activex_res))
 
-$(WORKDIR)/extensions/source/activex/%.cxx: $(SRCDIR)/extensions/source/activex/%.cxx
+$(WORKDIR)/CustomTarget/extensions/source/activex/%.cxx : \
+		$(SRCDIR)/extensions/source/activex/%.cxx
 	mkdir -p $(dir $@)
 	cp $< $@
 
 $(eval $(call gb_Library_add_x64_generated_exception_objects,so_activex_x64,\
-	extensions/source/activex/so_activex \
-	extensions/source/activex/SOActiveX \
-	extensions/source/activex/SOComWindowPeer \
-	extensions/source/activex/SODispatchInterceptor \
-	extensions/source/activex/SOActionsApproval \
-	extensions/source/activex/StdAfx2 \
+	CustomTarget/extensions/source/activex/so_activex \
+	CustomTarget/extensions/source/activex/SOActiveX \
+	CustomTarget/extensions/source/activex/SOComWindowPeer \
+	CustomTarget/extensions/source/activex/SODispatchInterceptor \
+	CustomTarget/extensions/source/activex/SOActionsApproval \
+	CustomTarget/extensions/source/activex/StdAfx2 \
 ))
 
 $(eval $(call gb_Library_add_ldflags,so_activex_x64,\
@@ -84,7 +85,5 @@ $(eval $(call gb_Library_add_libs,so_activex_x64,\
 	$(ATL_LIB)/amd64/atls.lib \
 ))
 endif
-
-$(call gb_Library_get_clean_target,so_activex_x64): idlclean
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:

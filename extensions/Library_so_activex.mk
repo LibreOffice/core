@@ -37,6 +37,12 @@ $(WORKDIR)/CustomTarget/so_activex/so_activex.tlb: $(SRCDIR)/extensions/source/a
 	midl.exe -out $(call gb_Helper_convert_native,$(WORKDIR)/CustomTarget/so_activex) -Oicf $(call gb_Helper_convert_native,$<) \
 	$(foreach i,$(SOLARINC_FOR_BUILD), $(patsubst -I,/I,$(i)))
 
+$(call gb_Library_get_clean_target,so_activex) : extensions_activex_idlclean
+
+.PHONY: extensions_activex_idlclean
+extensions_activex_idlclean:
+	rm -rf $(WORKDIR)/CustomTarget/so_activex
+
 $(eval $(call gb_Library_set_include,so_activex,\
 	$$(INCLUDE) \
 	-I$(WORKDIR)/CustomTarget/so_activex \
@@ -82,10 +88,5 @@ $(eval $(call gb_Library_add_libs,so_activex,\
 	$(ATL_LIB)/atls.lib \
 ))
 endif
-
-$(call gb_Library_get_clean_target,so_activex): idlclean
-
-idlclean:
-	rm -rf $(WORKDIR)/CustomTarget/so_activex
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:
