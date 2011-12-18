@@ -36,7 +36,9 @@
 #define USE_MEMORY_ALIGNMENT 64 /* big value -> no alignment */
 #endif /* Def __CYGWIN__ */
 
-#ifdef __linux
+#if defined(__linux) || defined(__OpenBSD__) || \
+    defined(__FreeBSD__) || defined(__NetBSD__) || \
+    defined(__DragonFly__)
 #if __BYTE_ORDER == __LITTLE_ENDIAN
 #define CORE_BIG_ENDIAN 0
 #define CORE_LITTLE_ENDIAN 1
@@ -48,7 +50,7 @@
 #define USE_MEMORY_ALIGNMENT 4
 #endif /* __BYTE_ORDER == __BIG_ENDIAN */
 #endif /* !(__BYTE_ORDER == __LITTLE_ENDIAN) */
-#endif /* Def __linux */
+#endif /* Def __linux || Def *BSD */
 
 #ifdef __sun
 #ifdef __sparc
