@@ -328,6 +328,8 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 	dnd \
 	dtrans \
 	ftransl \
+	so_activex \
+	so_activex_x64 \
 	sysdtrans \
 ))
 endif

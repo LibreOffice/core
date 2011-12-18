@@ -104,8 +104,6 @@ END
 // Generated from the TEXTINCLUDE 3 resource.
 //
 
-#include "envsettings.h"
-
 1 TYPELIB MISC\so_activex.tlb
 
 /////////////////////////////////////////////////////////////////////////////
