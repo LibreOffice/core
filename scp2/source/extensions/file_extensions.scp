@@ -98,21 +98,6 @@ End
 
 #endif
 
-/* ** Lightproof ** */
-
-#ifdef WITH_EXTENSION_LIGHTPROOF
-
-File gid_File_Oxt_LightProof
-    TXT_FILE_BODY;
-    Styles = (PACKED, ARCHIVE);
-    Dir = gid_Brand_Dir_Share_Extensions_LightProof;
-    Name (en-US) = "lightproof-en.oxt";
-    Name (hu) = "lightproof-hu.oxt";
-    Name (ru) = "lightproof-ru.oxt";
-End
-
-#endif
-
 /* ** Numbertext ** */
 
 #ifdef WITH_EXTENSION_NUMBERTEXT

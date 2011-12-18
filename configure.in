@@ -327,14 +327,6 @@ AC_ARG_ENABLE(ext-languagetool,
         [Enable the LanguageTool extension.])
 )
 
-AC_ARG_ENABLE(ext-lightproof,
-    AS_HELP_STRING([--enable-ext-lightproof],
-        [Enable the Lightproof extension. The enable switch can contain only
-         the desired languages: --enable-lightproof="en hu ru"]),
-    [enable_ext_lightproof="$enableval"],
-    [enable_ext_lightproof=no]
-)
-
 AC_ARG_ENABLE(ext-mysql-connector,
     AS_HELP_STRING([--enable-ext-mysql-connector],
         [Enable the build of the MySQL Connector extension.])
@@ -8122,48 +8114,6 @@ else
     AC_MSG_RESULT([no, do not integrate])
 fi
 AC_SUBST(WITH_EXTENSION_INTEGRATION)
-
-dnl ===================================================================
-dnl Test whether to include Lightproof extensions
-dnl ===================================================================
-AC_MSG_CHECKING([for Lightproof extensions integration (only supported languages displayed)])
-LIGHTPROOF_LANG=
-LIGHTPROOF_HU_PACK=
-LIGHTPROOF_RU_PACK=
-LIGHTPROOF_EN_US_PACK=
-if test "x$enable_ext_lightproof" = "xno" -o "x$enable_extension_integration" = "xno"; then
-    AC_MSG_RESULT([no integration])
-else
-    SCPDEFS="$SCPDEFS -DWITH_EXTENSION_LIGHTPROOF"
-    if test "x$enable_ext_lightproof" = "xyes" -o "x$enable_ext_lightproof" = "x"; then
-        wanted_lightproof="en-US hu ru"
-    else
-        for lang in $enable_ext_lightproof ; do
-            case $lang in
-                en-US|hu|ru)
-                    wanted_lightproof="$wanted_lightproof $lang"
-                    ;;
-                *)
-                    AC_MSG_ERROR([Unknown value for --enable-ext-lightproof: $lang])
-                    ;;
-                esac
-        done
-    fi
-    for lang in $wanted_lightproof ; do
-        LIGHTPROOF_LANG="$LIGHTPROOF_LANG $lang"
-        case $lang in
-            en-US) LIGHTPROOF_EN_US_PACK="0ab55ac8e88f04258f1d3e79e984382f-lightproof-en_US-0.1.oxt" ;;
-            hu) LIGHTPROOF_HU_PACK="76345f925e34fef2d29bade4f29108e9-lightproof-hu_1.3.oxt" ;;
-            ru) LIGHTPROOF_RU_PACK="673860e8649cff2ebdc68bd46f2f7f1a-lightproof-ru_0.1.oxt" ;;
-            *) AC_MSG_ERROR([Unknown value for --enable-ext-lightproof: $lang]) ;;
-        esac
-    done
-    AC_MSG_RESULT([$LIGHTPROOF_LANG])
-fi
-AC_SUBST(LIGHTPROOF_LANG)
-AC_SUBST(LIGHTPROOF_HU_PACK)
-AC_SUBST(LIGHTPROOF_RU_PACK)
-AC_SUBST(LIGHTPROOF_EN_US_PACK)
 
 dnl ===================================================================
 dnl Test whether to include Watch Window extension

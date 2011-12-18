@@ -45,14 +45,12 @@ SCP_PRODUCT_TYPE=osl
 PARFILES= \
         module_extensions.par                        \
         module_extensions_sun_templates.par          \
-        module_extensions_lightproof.par             \
         directory_extensions.par                     \
         file_extensions.par
 
 ULFFILES= \
         module_extensions.ulf                        \
-        module_extensions_sun_templates.ulf          \
-        module_extensions_lightproof.ulf
+        module_extensions_sun_templates.ulf
 
 #--- File ---------------------------------------------------------
 .INCLUDE :  target.mk

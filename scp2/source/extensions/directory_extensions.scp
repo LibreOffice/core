@@ -88,20 +88,6 @@ End
 
 #endif
 
-/* ** Lightproof ** */
-
-#ifdef WITH_EXTENSION_LIGHTPROOF
-
-Directory gid_Brand_Dir_Share_Extensions_LightProof
-    ParentID = gid_Brand_Dir_Share_Extensions;
-    DosName (en-US) = "lightproof-en-US";
-    DosName (hu) = "lightproof-hu";
-    DosName (ru) = "lightproof-ru";
-    DosName = "lightproof";
-End
-
-#endif
-
 /* ** Numbertext ** */
 
 #ifdef WITH_EXTENSION_NUMBERTEXT
