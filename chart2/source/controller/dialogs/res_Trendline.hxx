@@ -31,7 +31,6 @@
 #include <vcl/window.hxx>
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
-#include <svtools/valueset.hxx>
 #include <svl/itemset.hxx>
 #include <svx/chrtitem.hxx>
 
