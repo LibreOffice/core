@@ -31,7 +31,7 @@
 #include "env_subst.hxx"
 
 
-void SAL_CALL uno_getEnvironment(uno_Environment ** ppEnv,
+CPPU_DLLPUBLIC void SAL_CALL uno_getEnvironment(uno_Environment ** ppEnv,
                                  rtl_uString      * pEnvDcp,
                                  void             * pContext)
     SAL_THROW_EXTERN_C()

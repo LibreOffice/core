@@ -26,7 +26,7 @@
  *
  ************************************************************************/
 
-#include <sal/types.h>
+#include <cppu/cppudllapi.h>
 #include <rtl/byteseq.h>
 
 #ifdef __cplusplus
@@ -50,7 +50,7 @@ extern "C" {
 
   @see uno_releaseIdFromCurrentThread()
  */
-sal_Bool SAL_CALL uno_bindIdToCurrentThread( sal_Sequence *pThreadId )
+CPPU_DLLPUBLIC sal_Bool SAL_CALL uno_bindIdToCurrentThread( sal_Sequence *pThreadId )
     SAL_THROW_EXTERN_C();
 
 
@@ -64,7 +64,7 @@ sal_Bool SAL_CALL uno_bindIdToCurrentThread( sal_Sequence *pThreadId )
   @param ppThreadId [out] Contains the (acquired) ThreadId.
   @see uno_releaseIdFromCurrentThread()
  */
-void SAL_CALL uno_getIdOfCurrentThread( sal_Sequence **ppThreadId )
+CPPU_DLLPUBLIC void SAL_CALL uno_getIdOfCurrentThread( sal_Sequence **ppThreadId )
     SAL_THROW_EXTERN_C();
 
 
@@ -72,7 +72,7 @@ void SAL_CALL uno_getIdOfCurrentThread( sal_Sequence **ppThreadId )
   If the internal refcount drops to zero, the association betwen threadId and
   thread is broken.
  */
-void SAL_CALL uno_releaseIdFromCurrentThread()
+CPPU_DLLPUBLIC void SAL_CALL uno_releaseIdFromCurrentThread()
     SAL_THROW_EXTERN_C();
 
 
@@ -83,7 +83,7 @@ typedef struct _uno_ThreadPool * uno_ThreadPool;
   Creates a threadpool handle. Typically each remote bridge instances creates one
   handle.
  */
-uno_ThreadPool SAL_CALL
+CPPU_DLLPUBLIC uno_ThreadPool SAL_CALL
 uno_threadpool_create() SAL_THROW_EXTERN_C();
 
 
@@ -98,7 +98,7 @@ uno_threadpool_create() SAL_THROW_EXTERN_C();
   @param hPool The bridge threadpool handle previously created by uno_threadpool_create.
 
 */
-void SAL_CALL
+CPPU_DLLPUBLIC void SAL_CALL
 uno_threadpool_attach( uno_ThreadPool hPool ) SAL_THROW_EXTERN_C();
 
 /**
@@ -110,7 +110,7 @@ uno_threadpool_attach( uno_ThreadPool hPool ) SAL_THROW_EXTERN_C();
   0, when uno_threadpool_dispose() was the reason to fall off from threadpool.
   @see uno_threadpool_dispose()
  **/
-void SAL_CALL
+CPPU_DLLPUBLIC void SAL_CALL
 uno_threadpool_enter( uno_ThreadPool hPool , void **ppJob )
     SAL_THROW_EXTERN_C();
 
@@ -118,7 +118,7 @@ uno_threadpool_enter( uno_ThreadPool hPool , void **ppJob )
    Detaches the current thread from the threadpool. Must be called for
    every call to uno_threadpool_attach.
 */
-void SAL_CALL
+CPPU_DLLPUBLIC void SAL_CALL
 uno_threadpool_detach( uno_ThreadPool hPool ) SAL_THROW_EXTERN_C();
 
 /**
@@ -150,7 +150,7 @@ uno_threadpool_detach( uno_ThreadPool hPool ) SAL_THROW_EXTERN_C();
   @param bIsOneway True, if the request is asynchrons. False, if it is synchronous.
                    Set to sal_False, if pJob is a reply.
  */
-void SAL_CALL
+CPPU_DLLPUBLIC void SAL_CALL
 uno_threadpool_putJob(
     uno_ThreadPool hPool,
     sal_Sequence *pThreadId,
@@ -173,7 +173,7 @@ uno_threadpool_putJob(
 
   This function is called i.e. by a bridge, that is forced to dispose itself.
  */
-void SAL_CALL
+CPPU_DLLPUBLIC void SAL_CALL
 uno_threadpool_dispose( uno_ThreadPool hPool ) SAL_THROW_EXTERN_C();
 
 
@@ -182,7 +182,7 @@ uno_threadpool_dispose( uno_ThreadPool hPool ) SAL_THROW_EXTERN_C();
     uno_threadpool_destroy().
     @see uno_threadpool_create()
  */
-void SAL_CALL
+CPPU_DLLPUBLIC void SAL_CALL
 uno_threadpool_destroy( uno_ThreadPool hPool ) SAL_THROW_EXTERN_C();
 
 #ifdef __cplusplus

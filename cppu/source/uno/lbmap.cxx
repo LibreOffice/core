@@ -509,7 +509,7 @@ using namespace ::cppu;
 extern "C"
 {
 //##################################################################################################
-void SAL_CALL uno_getMapping(
+CPPU_DLLPUBLIC void SAL_CALL uno_getMapping(
     uno_Mapping ** ppMapping, uno_Environment * pFrom, uno_Environment * pTo,
     rtl_uString * pAddPurpose )
     SAL_THROW_EXTERN_C()
@@ -577,7 +577,7 @@ void SAL_CALL uno_getMapping(
     }
 }
 //##################################################################################################
-void SAL_CALL uno_getMappingByName(
+CPPU_DLLPUBLIC void SAL_CALL uno_getMappingByName(
     uno_Mapping ** ppMapping, rtl_uString * pFrom, rtl_uString * pTo,
     rtl_uString * pAddPurpose )
     SAL_THROW_EXTERN_C()
@@ -607,7 +607,7 @@ void SAL_CALL uno_getMappingByName(
 }
 
 //##################################################################################################
-void SAL_CALL uno_registerMapping(
+CPPU_DLLPUBLIC void SAL_CALL uno_registerMapping(
     uno_Mapping ** ppMapping, uno_freeMappingFunc freeMapping,
     uno_Environment * pFrom, uno_Environment * pTo, rtl_uString * pAddPurpose )
     SAL_THROW_EXTERN_C()
@@ -645,7 +645,7 @@ void SAL_CALL uno_registerMapping(
     }
 }
 //##################################################################################################
-void SAL_CALL uno_revokeMapping(
+CPPU_DLLPUBLIC void SAL_CALL uno_revokeMapping(
     uno_Mapping * pMapping )
     SAL_THROW_EXTERN_C()
 {
@@ -670,7 +670,7 @@ void SAL_CALL uno_revokeMapping(
 }
 
 //##################################################################################################
-void SAL_CALL uno_registerMappingCallback(
+CPPU_DLLPUBLIC void SAL_CALL uno_registerMappingCallback(
     uno_getMappingFunc pCallback )
     SAL_THROW_EXTERN_C()
 {
@@ -680,7 +680,7 @@ void SAL_CALL uno_registerMappingCallback(
     rData.aCallbacks.insert( pCallback );
 }
 //##################################################################################################
-void SAL_CALL uno_revokeMappingCallback(
+CPPU_DLLPUBLIC void SAL_CALL uno_revokeMappingCallback(
     uno_getMappingFunc pCallback )
     SAL_THROW_EXTERN_C()
 {

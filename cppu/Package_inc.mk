@@ -37,6 +37,7 @@ $(eval $(call gb_Package_add_file,cppu_inc,inc/com/sun/star/uno/Sequence.h,com/s
 $(eval $(call gb_Package_add_file,cppu_inc,inc/com/sun/star/uno/Sequence.hxx,com/sun/star/uno/Sequence.hxx))
 $(eval $(call gb_Package_add_file,cppu_inc,inc/com/sun/star/uno/Type.h,com/sun/star/uno/Type.h))
 $(eval $(call gb_Package_add_file,cppu_inc,inc/com/sun/star/uno/Type.hxx,com/sun/star/uno/Type.hxx))
+$(eval $(call gb_Package_add_file,cppu_inc,inc/cppu/cppudllapi.h,cppu/cppudllapi.h))
 $(eval $(call gb_Package_add_file,cppu_inc,inc/cppu/EnvDcp.hxx,cppu/EnvDcp.hxx))
 $(eval $(call gb_Package_add_file,cppu_inc,inc/cppu/Enterable.hxx,cppu/Enterable.hxx))
 $(eval $(call gb_Package_add_file,cppu_inc,inc/cppu/EnvGuards.hxx,cppu/EnvGuards.hxx))

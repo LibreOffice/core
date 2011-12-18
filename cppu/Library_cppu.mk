@@ -42,6 +42,10 @@ $(eval $(call gb_Library_add_api,cppu,\
 	offapi \
 ))
 
+$(eval $(call gb_Library_add_defs,cppu,\
+	-DCPPU_DLLIMPLEMENTATION \
+))
+
 $(eval $(call gb_Library_add_linked_libs,cppu,\
 	sal \
 	$(gb_STDLIBS) \

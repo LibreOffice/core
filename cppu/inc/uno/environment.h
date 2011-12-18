@@ -28,7 +28,7 @@
 #ifndef _UNO_ENVIRONMENT_H_
 #define _UNO_ENVIRONMENT_H_
 
-#include <sal/types.h>
+#include <cppu/cppudllapi.h>
 #include <rtl/ustring.h>
 
 #include <stdarg.h>
@@ -273,7 +273,7 @@ typedef void (SAL_CALL * uno_initEnvironmentFunc)( uno_Environment * pEnv );
     @param pEnvDcp      descriptor of environment
     @param pContext     some context pointer (e.g., to distinguish java vm; set 0 if not needed)
 */
-void SAL_CALL uno_getEnvironment(
+CPPU_DLLPUBLIC void SAL_CALL uno_getEnvironment(
     uno_Environment ** ppEnv, rtl_uString * pEnvDcp, void * pContext )
     SAL_THROW_EXTERN_C();
 
@@ -285,7 +285,7 @@ void SAL_CALL uno_getEnvironment(
     @param memAlloc     function for allocating memory that is passed back
     @param pEnvDcp      descriptor of environments; 0 defaults to all
 */
-void SAL_CALL uno_getRegisteredEnvironments(
+CPPU_DLLPUBLIC void SAL_CALL uno_getRegisteredEnvironments(
     uno_Environment *** pppEnvs, sal_Int32 * pnLen, uno_memAlloc memAlloc,
     rtl_uString * pEnvDcp )
     SAL_THROW_EXTERN_C();
@@ -296,7 +296,7 @@ void SAL_CALL uno_getRegisteredEnvironments(
     @param pEnvDcp      descriptor of environment
     @param pContext     context pointer (e.g., to distinguish java vm); set 0 if not needed
 */
-void SAL_CALL uno_createEnvironment(
+CPPU_DLLPUBLIC void SAL_CALL uno_createEnvironment(
     uno_Environment ** ppEnv, rtl_uString * pEnvDcp, void * pContext )
     SAL_THROW_EXTERN_C();
 
@@ -306,7 +306,7 @@ void SAL_CALL uno_createEnvironment(
     @param pEnv         environment to be dumped
     @param pFilter      if not null, filters output
 */
-void SAL_CALL uno_dumpEnvironment(
+CPPU_DLLPUBLIC void SAL_CALL uno_dumpEnvironment(
     void * stream, uno_Environment * pEnv, const sal_Char * pFilter )
     SAL_THROW_EXTERN_C();
 /** Dumps out environment information, i.e. registered interfaces.
@@ -315,7 +315,7 @@ void SAL_CALL uno_dumpEnvironment(
     @param pEnvDcp      descritpro of environment to be dumped
     @param pFilter      if not null, filters output
 */
-void SAL_CALL uno_dumpEnvironmentByName(
+CPPU_DLLPUBLIC void SAL_CALL uno_dumpEnvironmentByName(
     void * stream, rtl_uString * pEnvDcp, const sal_Char * pFilter )
     SAL_THROW_EXTERN_C();
 
@@ -329,7 +329,7 @@ void SAL_CALL uno_dumpEnvironmentByName(
     @param pTypeName  the optional type of the environment, falls back to "uno"
     @since UDK 3.2.7
 */
-void SAL_CALL uno_getCurrentEnvironment(uno_Environment ** ppEnv, rtl_uString * pTypeName)
+CPPU_DLLPUBLIC void SAL_CALL uno_getCurrentEnvironment(uno_Environment ** ppEnv, rtl_uString * pTypeName)
     SAL_THROW_EXTERN_C();
 
 /** Typedef for variable argument function.
@@ -343,7 +343,7 @@ typedef void SAL_CALL uno_EnvCallee(va_list * pParam);
     @param pParam   the parameter pointer passed to the function
     @since UDK 3.2.7
  */
-void SAL_CALL uno_Environment_invoke_v(uno_Environment * pEnv, uno_EnvCallee * pCallee, va_list * pParam)
+CPPU_DLLPUBLIC void SAL_CALL uno_Environment_invoke_v(uno_Environment * pEnv, uno_EnvCallee * pCallee, va_list * pParam)
     SAL_THROW_EXTERN_C();
 
 /** Invoke the passed function in the given environment.
@@ -353,7 +353,7 @@ void SAL_CALL uno_Environment_invoke_v(uno_Environment * pEnv, uno_EnvCallee * p
     @param ...      the parameters passed to the function
     @since UDK 3.2.7
 */
-void SAL_CALL uno_Environment_invoke (uno_Environment * pEnv, uno_EnvCallee * pCallee, ...)
+CPPU_DLLPUBLIC void SAL_CALL uno_Environment_invoke (uno_Environment * pEnv, uno_EnvCallee * pCallee, ...)
     SAL_THROW_EXTERN_C();
 
 /** Enter an environment explicitly.
@@ -361,7 +361,7 @@ void SAL_CALL uno_Environment_invoke (uno_Environment * pEnv, uno_EnvCallee * pC
     @param pEnv    the environment to enter; NULL leaves all environments
     @since UDK 3.2.7
 */
-void SAL_CALL uno_Environment_enter(uno_Environment * pEnv)
+CPPU_DLLPUBLIC void SAL_CALL uno_Environment_enter(uno_Environment * pEnv)
     SAL_THROW_EXTERN_C();
 
 /** Check if a particular environment is currently valid, so
@@ -372,7 +372,7 @@ void SAL_CALL uno_Environment_enter(uno_Environment * pEnv)
     @return                        1 == valid, 0 == invalid
     @since UDK 3.2.7
 */
-int SAL_CALL uno_Environment_isValid(uno_Environment * pEnv, rtl_uString ** pReason)
+CPPU_DLLPUBLIC int SAL_CALL uno_Environment_isValid(uno_Environment * pEnv, rtl_uString ** pReason)
     SAL_THROW_EXTERN_C();
 
 #ifdef IOS

@@ -31,6 +31,7 @@
 
 #include "com/sun/star/uno/Any.h"
 
+#include <cppu/cppudllapi.h>
 #include "uno/environment.h"
 #include "uno/mapping.h"
 
@@ -57,7 +58,7 @@ typedef void ProbeFun(
 
 
 
-void createMapping(uno_Mapping     ** ppMapping,
+PURPENV_DLLPUBLIC  void createMapping(uno_Mapping     ** ppMapping,
                    uno_Environment  * pFrom,
                    uno_Environment  * pTo,
                    ProbeFun         * probeFun  = NULL,

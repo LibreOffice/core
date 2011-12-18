@@ -34,6 +34,10 @@ $(eval $(call gb_Library_set_include,purpenvhelper,\
 	-I$(realpath $(SRCDIR)/cppu/inc) \
 ))
 
+$(eval $(call gb_Library_add_defs,purpenvhelper,\
+	-DPURPENV_DLLIMPLEMENTATION \
+))
+
 $(eval $(call gb_Library_add_api,purpenvhelper,\
 	udkapi \
 	offapi \

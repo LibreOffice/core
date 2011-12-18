@@ -141,7 +141,7 @@ static inline typelib_TypeDescriptionReference * igetTypeByName( rtl_uString * p
 extern "C"
 {
 //##################################################################################################
-typelib_TypeDescriptionReference ** SAL_CALL typelib_static_type_getByTypeClass(
+CPPU_DLLPUBLIC typelib_TypeDescriptionReference ** SAL_CALL typelib_static_type_getByTypeClass(
     typelib_TypeClass eTypeClass )
     SAL_THROW_EXTERN_C()
 {
@@ -306,7 +306,7 @@ typelib_TypeDescriptionReference ** SAL_CALL typelib_static_type_getByTypeClass(
 }
 
 //##################################################################################################
-void SAL_CALL typelib_static_type_init(
+CPPU_DLLPUBLIC void SAL_CALL typelib_static_type_init(
     typelib_TypeDescriptionReference ** ppRef,
     typelib_TypeClass eTypeClass, const sal_Char * pTypeName )
     SAL_THROW_EXTERN_C()
@@ -326,7 +326,7 @@ void SAL_CALL typelib_static_type_init(
 }
 
 //##################################################################################################
-void SAL_CALL typelib_static_sequence_type_init(
+CPPU_DLLPUBLIC void SAL_CALL typelib_static_sequence_type_init(
     typelib_TypeDescriptionReference ** ppRef,
     typelib_TypeDescriptionReference * pElementType )
     SAL_THROW_EXTERN_C()
@@ -446,7 +446,7 @@ void init(
 
 }
 
-void SAL_CALL typelib_static_compound_type_init(
+CPPU_DLLPUBLIC void SAL_CALL typelib_static_compound_type_init(
     typelib_TypeDescriptionReference ** ppRef,
     typelib_TypeClass eTypeClass, const sal_Char * pTypeName,
     typelib_TypeDescriptionReference * pBaseType,
@@ -456,7 +456,7 @@ void SAL_CALL typelib_static_compound_type_init(
     init(ppRef, eTypeClass, pTypeName, pBaseType, nMembers, ppMembers, 0);
 }
 
-void SAL_CALL typelib_static_struct_type_init(
+CPPU_DLLPUBLIC void SAL_CALL typelib_static_struct_type_init(
     typelib_TypeDescriptionReference ** ppRef, const sal_Char * pTypeName,
     typelib_TypeDescriptionReference * pBaseType,
     sal_Int32 nMembers, typelib_TypeDescriptionReference ** ppMembers,
@@ -469,7 +469,7 @@ void SAL_CALL typelib_static_struct_type_init(
 }
 
 //##################################################################################################
-void SAL_CALL typelib_static_interface_type_init(
+CPPU_DLLPUBLIC void SAL_CALL typelib_static_interface_type_init(
     typelib_TypeDescriptionReference ** ppRef,
     const sal_Char * pTypeName,
     typelib_TypeDescriptionReference * pBaseType )
@@ -480,7 +480,7 @@ void SAL_CALL typelib_static_interface_type_init(
 }
 
 //##################################################################################################
-void SAL_CALL typelib_static_mi_interface_type_init(
+CPPU_DLLPUBLIC void SAL_CALL typelib_static_mi_interface_type_init(
     typelib_TypeDescriptionReference ** ppRef,
     const sal_Char * pTypeName,
     sal_Int32 nBaseTypes,
@@ -544,7 +544,7 @@ void SAL_CALL typelib_static_mi_interface_type_init(
 }
 
 //##################################################################################################
-void SAL_CALL typelib_static_enum_type_init(
+CPPU_DLLPUBLIC void SAL_CALL typelib_static_enum_type_init(
     typelib_TypeDescriptionReference ** ppRef,
     const sal_Char * pTypeName,
     sal_Int32 nDefaultValue )
@@ -584,7 +584,7 @@ void SAL_CALL typelib_static_enum_type_init(
 }
 
 //##################################################################################################
-void SAL_CALL typelib_static_array_type_init(
+CPPU_DLLPUBLIC void SAL_CALL typelib_static_array_type_init(
     typelib_TypeDescriptionReference ** ppRef,
     typelib_TypeDescriptionReference * pElementTypeRef,
     sal_Int32 nDimensions, ... )

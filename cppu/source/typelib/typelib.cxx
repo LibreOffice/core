@@ -363,7 +363,7 @@ TypeDescriptor_Init_Impl::~TypeDescriptor_Init_Impl() SAL_THROW( () )
 
 namespace { struct Init : public rtl::Static< TypeDescriptor_Init_Impl, Init > {}; }
 
-extern "C" void SAL_CALL typelib_typedescription_registerCallback(
+extern "C" CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_registerCallback(
     void * pContext, typelib_typedescription_Callback pCallback )
     SAL_THROW_EXTERN_C()
 {
@@ -376,7 +376,7 @@ extern "C" void SAL_CALL typelib_typedescription_registerCallback(
 }
 
 //------------------------------------------------------------------------
-extern "C" void SAL_CALL typelib_typedescription_revokeCallback(
+extern "C" CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_revokeCallback(
     void * pContext, typelib_typedescription_Callback pCallback )
     SAL_THROW_EXTERN_C()
 {
@@ -906,7 +906,7 @@ void newTypeDescription(
 
 }
 
-extern "C" void SAL_CALL typelib_typedescription_new(
+extern "C" CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_new(
     typelib_TypeDescription ** ppRet,
     typelib_TypeClass eTypeClass,
     rtl_uString * pTypeName,
@@ -919,7 +919,7 @@ extern "C" void SAL_CALL typelib_typedescription_new(
         ppRet, eTypeClass, pTypeName, pType, nMembers, pMembers, 0);
 }
 
-extern "C" void SAL_CALL typelib_typedescription_newStruct(
+extern "C" CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_newStruct(
     typelib_TypeDescription ** ppRet,
     rtl_uString * pTypeName,
     typelib_TypeDescriptionReference * pType,
@@ -933,7 +933,7 @@ extern "C" void SAL_CALL typelib_typedescription_newStruct(
 }
 
 //------------------------------------------------------------------------
-extern "C" void SAL_CALL typelib_typedescription_newUnion(
+extern "C" CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_newUnion(
     typelib_TypeDescription ** ppRet,
     rtl_uString * pTypeName,
     typelib_TypeDescriptionReference * pDiscriminantTypeRef,
@@ -986,7 +986,7 @@ extern "C" void SAL_CALL typelib_typedescription_newUnion(
 }
 
 //------------------------------------------------------------------------
-extern "C" void SAL_CALL typelib_typedescription_newEnum(
+extern "C" CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_newEnum(
     typelib_TypeDescription ** ppRet,
     rtl_uString * pTypeName,
     sal_Int32 nDefaultValue,
@@ -1015,7 +1015,7 @@ extern "C" void SAL_CALL typelib_typedescription_newEnum(
 }
 
 //------------------------------------------------------------------------
-extern "C" void SAL_CALL typelib_typedescription_newArray(
+extern "C" CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_newArray(
     typelib_TypeDescription ** ppRet,
     typelib_TypeDescriptionReference * pElementTypeRef,
     sal_Int32 nDimensions,
@@ -1053,7 +1053,7 @@ extern "C" void SAL_CALL typelib_typedescription_newArray(
 }
 
 //------------------------------------------------------------------------
-extern "C" void SAL_CALL typelib_typedescription_newInterface(
+extern "C" CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_newInterface(
     typelib_InterfaceTypeDescription ** ppRet,
     rtl_uString * pTypeName,
     sal_uInt32 nUik1, sal_uInt16 nUik2, sal_uInt16 nUik3, sal_uInt32 nUik4, sal_uInt32 nUik5,
@@ -1138,7 +1138,7 @@ void BaseList::calculate(
 
 }
 
-extern "C" void SAL_CALL typelib_typedescription_newMIInterface(
+extern "C" CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_newMIInterface(
     typelib_InterfaceTypeDescription ** ppRet,
     rtl_uString * pTypeName,
     sal_uInt32 nUik1, sal_uInt16 nUik2, sal_uInt16 nUik3, sal_uInt32 nUik4, sal_uInt32 nUik5,
@@ -1269,7 +1269,7 @@ typelib_TypeDescriptionReference ** copyExceptions(
 
 }
 
-extern "C" void SAL_CALL typelib_typedescription_newInterfaceMethod(
+extern "C" CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_newInterfaceMethod(
     typelib_InterfaceMethodTypeDescription ** ppRet,
     sal_Int32 nAbsolutePosition,
     sal_Bool bOneWay,
@@ -1349,7 +1349,7 @@ extern "C" void SAL_CALL typelib_typedescription_newInterfaceMethod(
 
 
 //------------------------------------------------------------------------
-extern "C" void SAL_CALL typelib_typedescription_newInterfaceAttribute(
+extern "C" CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_newInterfaceAttribute(
     typelib_InterfaceAttributeTypeDescription ** ppRet,
     sal_Int32 nAbsolutePosition,
     rtl_uString * pTypeName,
@@ -1364,7 +1364,7 @@ extern "C" void SAL_CALL typelib_typedescription_newInterfaceAttribute(
 }
 
 //------------------------------------------------------------------------
-extern "C" void SAL_CALL typelib_typedescription_newExtendedInterfaceAttribute(
+extern "C" CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_newExtendedInterfaceAttribute(
     typelib_InterfaceAttributeTypeDescription ** ppRet,
     sal_Int32 nAbsolutePosition,
     rtl_uString * pTypeName,
@@ -1427,7 +1427,7 @@ extern "C" void SAL_CALL typelib_typedescription_newExtendedInterfaceAttribute(
 }
 
 //------------------------------------------------------------------------
-extern "C" void SAL_CALL typelib_typedescription_acquire(
+extern "C" CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_acquire(
     typelib_TypeDescription * pTypeDescription )
     SAL_THROW_EXTERN_C()
 {
@@ -1584,7 +1584,7 @@ static inline void typelib_typedescription_destructExtendedMembers(
 }
 
 //------------------------------------------------------------------------
-extern "C" void SAL_CALL typelib_typedescription_release(
+extern "C" CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_release(
     typelib_TypeDescription * pTD )
     SAL_THROW_EXTERN_C()
 {
@@ -1661,7 +1661,7 @@ extern "C" void SAL_CALL typelib_typedescription_release(
 }
 
 //------------------------------------------------------------------------
-extern "C" void SAL_CALL typelib_typedescription_register(
+extern "C" CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_register(
     typelib_TypeDescription ** ppNewDescription )
     SAL_THROW_EXTERN_C()
 {
@@ -1802,7 +1802,7 @@ static inline sal_Bool type_equals(
              p1->pTypeName->length == p2->pTypeName->length &&
              rtl_ustr_compare( p1->pTypeName->buffer, p2->pTypeName->buffer ) == 0));
 }
-extern "C" sal_Bool SAL_CALL typelib_typedescription_equals(
+extern "C" CPPU_DLLPUBLIC sal_Bool SAL_CALL typelib_typedescription_equals(
     const typelib_TypeDescription * p1, const typelib_TypeDescription * p2 )
     SAL_THROW_EXTERN_C()
 {
@@ -2081,7 +2081,7 @@ bool createDerivedInterfaceMemberDescription(
 
 }
 
-extern "C" void SAL_CALL typelib_typedescription_getByName(
+extern "C" CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_getByName(
     typelib_TypeDescription ** ppRet, rtl_uString * pName )
     SAL_THROW_EXTERN_C()
 {
@@ -2273,7 +2273,7 @@ extern "C" void SAL_CALL typelib_typedescription_getByName(
     }
 }
 
-extern "C" void SAL_CALL typelib_typedescriptionreference_newByAsciiName(
+extern "C" CPPU_DLLPUBLIC void SAL_CALL typelib_typedescriptionreference_newByAsciiName(
     typelib_TypeDescriptionReference ** ppTDR,
     typelib_TypeClass eTypeClass,
     const sal_Char * pTypeName )
@@ -2283,7 +2283,7 @@ extern "C" void SAL_CALL typelib_typedescriptionreference_newByAsciiName(
     typelib_typedescriptionreference_new( ppTDR, eTypeClass, aTypeName.pData );
 }
 //------------------------------------------------------------------------
-extern "C" void SAL_CALL typelib_typedescriptionreference_new(
+extern "C" CPPU_DLLPUBLIC void SAL_CALL typelib_typedescriptionreference_new(
     typelib_TypeDescriptionReference ** ppTDR,
     typelib_TypeClass eTypeClass, rtl_uString * pTypeName )
     SAL_THROW_EXTERN_C()
@@ -2380,7 +2380,7 @@ extern "C" void SAL_CALL typelib_typedescriptionreference_new(
 }
 
 //------------------------------------------------------------------------
-extern "C" void SAL_CALL typelib_typedescriptionreference_acquire(
+extern "C" CPPU_DLLPUBLIC void SAL_CALL typelib_typedescriptionreference_acquire(
     typelib_TypeDescriptionReference * pRef )
     SAL_THROW_EXTERN_C()
 {
@@ -2388,7 +2388,7 @@ extern "C" void SAL_CALL typelib_typedescriptionreference_acquire(
 }
 
 //------------------------------------------------------------------------
-extern "C" void SAL_CALL typelib_typedescriptionreference_release(
+extern "C" CPPU_DLLPUBLIC void SAL_CALL typelib_typedescriptionreference_release(
     typelib_TypeDescriptionReference * pRef )
     SAL_THROW_EXTERN_C()
 {
@@ -2424,7 +2424,7 @@ extern "C" void SAL_CALL typelib_typedescriptionreference_release(
 }
 
 //------------------------------------------------------------------------
-extern "C" void SAL_CALL typelib_typedescriptionreference_getDescription(
+extern "C" CPPU_DLLPUBLIC void SAL_CALL typelib_typedescriptionreference_getDescription(
     typelib_TypeDescription ** ppRet, typelib_TypeDescriptionReference * pRef )
     SAL_THROW_EXTERN_C()
 {
@@ -2507,7 +2507,7 @@ extern "C" void SAL_CALL typelib_typedescriptionreference_getByName(
 }
 
 //------------------------------------------------------------------------
-extern "C" sal_Bool SAL_CALL typelib_typedescriptionreference_equals(
+extern "C" CPPU_DLLPUBLIC sal_Bool SAL_CALL typelib_typedescriptionreference_equals(
     const typelib_TypeDescriptionReference * p1,
     const typelib_TypeDescriptionReference * p2 )
     SAL_THROW_EXTERN_C()
@@ -2519,7 +2519,7 @@ extern "C" sal_Bool SAL_CALL typelib_typedescriptionreference_equals(
 }
 
 //##################################################################################################
-extern "C" void SAL_CALL typelib_typedescriptionreference_assign(
+extern "C" CPPU_DLLPUBLIC void SAL_CALL typelib_typedescriptionreference_assign(
     typelib_TypeDescriptionReference ** ppDest,
     typelib_TypeDescriptionReference * pSource )
     SAL_THROW_EXTERN_C()
@@ -2533,7 +2533,7 @@ extern "C" void SAL_CALL typelib_typedescriptionreference_assign(
 }
 
 //##################################################################################################
-extern "C" void SAL_CALL typelib_setCacheSize( sal_Int32 nNewSize )
+extern "C" CPPU_DLLPUBLIC void SAL_CALL typelib_setCacheSize( sal_Int32 nNewSize )
     SAL_THROW_EXTERN_C()
 {
     OSL_ENSURE( nNewSize >= 0, "### illegal cache size given!" );
@@ -2571,7 +2571,7 @@ static sal_Bool s_aAssignableFromTab[11][11] =
 };
 
 //##################################################################################################
-extern "C" sal_Bool SAL_CALL typelib_typedescriptionreference_isAssignableFrom(
+extern "C" CPPU_DLLPUBLIC sal_Bool SAL_CALL typelib_typedescriptionreference_isAssignableFrom(
     typelib_TypeDescriptionReference * pAssignable,
     typelib_TypeDescriptionReference * pFrom )
     SAL_THROW_EXTERN_C()
@@ -2643,7 +2643,7 @@ extern "C" sal_Bool SAL_CALL typelib_typedescriptionreference_isAssignableFrom(
     return sal_False;
 }
 //##################################################################################################
-extern "C" sal_Bool SAL_CALL typelib_typedescription_isAssignableFrom(
+extern "C" CPPU_DLLPUBLIC sal_Bool SAL_CALL typelib_typedescription_isAssignableFrom(
     typelib_TypeDescription * pAssignable,
     typelib_TypeDescription * pFrom )
     SAL_THROW_EXTERN_C()
@@ -2653,7 +2653,7 @@ extern "C" sal_Bool SAL_CALL typelib_typedescription_isAssignableFrom(
 }
 
 //##################################################################################################
-extern "C" sal_Bool SAL_CALL typelib_typedescription_complete(
+extern "C" CPPU_DLLPUBLIC sal_Bool SAL_CALL typelib_typedescription_complete(
     typelib_TypeDescription ** ppTypeDescr )
     SAL_THROW_EXTERN_C()
 {

@@ -28,7 +28,7 @@
 #ifndef _UNO_SEQUENCE2_H_
 #define _UNO_SEQUENCE2_H_
 
-#include <sal/types.h>
+#include <cppu/cppudllapi.h>
 #include <uno/data.h>
 
 #ifdef __cplusplus
@@ -48,7 +48,7 @@ typedef sal_Sequence uno_Sequence;
     @param release      function called each time an interface needs to
                         be released; defaults (0) to uno
 */
-void SAL_CALL uno_sequence_assign(
+CPPU_DLLPUBLIC void SAL_CALL uno_sequence_assign(
     uno_Sequence ** ppDest,
     uno_Sequence * pSource,
     struct _typelib_TypeDescription * pTypeDescr,
@@ -62,7 +62,7 @@ void SAL_CALL uno_sequence_assign(
     @param release      function called each time an interface needs to
                         be released; defaults (0) to uno
 */
-void SAL_CALL uno_type_sequence_assign(
+CPPU_DLLPUBLIC void SAL_CALL uno_type_sequence_assign(
     uno_Sequence ** ppDest,
     uno_Sequence * pSource,
     struct _typelib_TypeDescriptionReference * pType,
@@ -81,7 +81,7 @@ void SAL_CALL uno_type_sequence_assign(
                               be acquired; defaults (0) to uno
     @return                   false, if memoray allocation has failed
 */
-sal_Bool SAL_CALL uno_sequence_construct(
+CPPU_DLLPUBLIC sal_Bool SAL_CALL uno_sequence_construct(
     uno_Sequence ** ppSequence,
     struct _typelib_TypeDescription * pTypeDescr,
     void * pElements, sal_Int32 len,
@@ -98,7 +98,7 @@ sal_Bool SAL_CALL uno_sequence_construct(
                               be acquired; defaults (0) to uno
     @return                   false, if memoray allocation has failed
 */
-sal_Bool SAL_CALL uno_type_sequence_construct(
+CPPU_DLLPUBLIC sal_Bool SAL_CALL uno_type_sequence_construct(
     uno_Sequence ** ppSequence,
     struct _typelib_TypeDescriptionReference * pType,
     void * pElements, sal_Int32 len,
@@ -117,7 +117,7 @@ sal_Bool SAL_CALL uno_type_sequence_construct(
                             be released; defaults (0) to uno
     @return                 false, if memoray allocation has failed
 */
-sal_Bool SAL_CALL uno_sequence_reference2One(
+CPPU_DLLPUBLIC sal_Bool SAL_CALL uno_sequence_reference2One(
     uno_Sequence ** ppSequence,
     struct _typelib_TypeDescription * pTypeDescr,
     uno_AcquireFunc acquire,
@@ -135,7 +135,7 @@ sal_Bool SAL_CALL uno_sequence_reference2One(
                             be released; defaults (0) to uno
     @return                 false, if memoray allocation has failed
 */
-sal_Bool SAL_CALL uno_type_sequence_reference2One(
+CPPU_DLLPUBLIC sal_Bool SAL_CALL uno_type_sequence_reference2One(
     uno_Sequence ** ppSequence,
     struct _typelib_TypeDescriptionReference * pType,
     uno_AcquireFunc acquire,
@@ -154,7 +154,7 @@ sal_Bool SAL_CALL uno_type_sequence_reference2One(
                             be released; defaults (0) to uno
     @return                 false, if memoray allocation has failed
 */
-sal_Bool SAL_CALL uno_sequence_realloc(
+CPPU_DLLPUBLIC sal_Bool SAL_CALL uno_sequence_realloc(
     uno_Sequence ** ppSequence,
     struct _typelib_TypeDescription * pTypeDescr,
     sal_Int32 nSize,
@@ -173,7 +173,7 @@ sal_Bool SAL_CALL uno_sequence_realloc(
                             be released; defaults (0) to uno
     @return                 false, if memoray allocation has failed
 */
-sal_Bool SAL_CALL uno_type_sequence_realloc(
+CPPU_DLLPUBLIC sal_Bool SAL_CALL uno_type_sequence_realloc(
     uno_Sequence ** ppSequence,
     struct _typelib_TypeDescriptionReference * pType,
     sal_Int32 nSize,

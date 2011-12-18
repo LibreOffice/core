@@ -28,7 +28,7 @@
 #ifndef _TYPELIB_TYPEDESCRIPTION_H_
 #define _TYPELIB_TYPEDESCRIPTION_H_
 
-#include <sal/types.h>
+#include <cppu/cppudllapi.h>
 #include <typelib/uik.h>
 #include <typelib/typeclass.h>
 #include <rtl/ustring.h>
@@ -574,7 +574,7 @@ typedef struct _typelib_Union_Init
     @param nMembers number of union members
     @param pMembers init members
 */
-void SAL_CALL typelib_typedescription_newUnion(
+CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_newUnion(
     typelib_TypeDescription ** ppRet,
     rtl_uString * pTypeName,
     typelib_TypeDescriptionReference * pDiscriminantTypeRef,
@@ -593,7 +593,7 @@ void SAL_CALL typelib_typedescription_newUnion(
     @param ppEnumNames names of enum values
     @param pEnumValues enum values
 */
-void SAL_CALL typelib_typedescription_newEnum(
+CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_newEnum(
     typelib_TypeDescription ** ppRet,
     rtl_uString * pTypeName,
     sal_Int32 nDefaultValue,
@@ -609,7 +609,7 @@ void SAL_CALL typelib_typedescription_newEnum(
     @param nDimensions number of dimensions
     @param pDimensions dimensions
 */
-void SAL_CALL typelib_typedescription_newArray(
+CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_newArray(
     typelib_TypeDescription ** ppRet,
     typelib_TypeDescriptionReference * pElementTypeRef,
     sal_Int32 nDimensions,
@@ -631,7 +631,7 @@ void SAL_CALL typelib_typedescription_newArray(
     @param nMembers number of members if struct, exception
     @param pMember array of members if struct, exception
 */
-void SAL_CALL typelib_typedescription_new(
+CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_new(
     typelib_TypeDescription ** ppRet,
     typelib_TypeClass eTypeClass,
     rtl_uString * pTypeName,
@@ -650,7 +650,7 @@ void SAL_CALL typelib_typedescription_new(
 
     @since UDK 3.2.0
 */
-void SAL_CALL typelib_typedescription_newStruct(
+CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_newStruct(
     typelib_TypeDescription ** ppRet,
     rtl_uString * pTypeName,
     typelib_TypeDescriptionReference * pType,
@@ -674,7 +674,7 @@ void SAL_CALL typelib_typedescription_newStruct(
     @deprecated
     use typelib_typedescription_newMIInterface instead
 */
-void SAL_CALL typelib_typedescription_newInterface(
+CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_newInterface(
     typelib_InterfaceTypeDescription ** ppRet,
     rtl_uString * pTypeName,
     sal_uInt32 nUik1, sal_uInt16 nUik2, sal_uInt16 nUik3, sal_uInt32 nUik4, sal_uInt32 nUik5,
@@ -699,7 +699,7 @@ void SAL_CALL typelib_typedescription_newInterface(
 
     @since UDK 3.2.0
 */
-void SAL_CALL typelib_typedescription_newMIInterface(
+CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_newMIInterface(
     typelib_InterfaceTypeDescription ** ppRet,
     rtl_uString * pTypeName,
     sal_uInt32 nUik1, sal_uInt16 nUik2, sal_uInt16 nUik3, sal_uInt32 nUik4, sal_uInt32 nUik5,
@@ -722,7 +722,7 @@ void SAL_CALL typelib_typedescription_newMIInterface(
     @param nExceptions number of exceptions
     @param ppExceptionNames type names of exceptions
 */
-void SAL_CALL typelib_typedescription_newInterfaceMethod(
+CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_newInterfaceMethod(
     typelib_InterfaceMethodTypeDescription ** ppRet,
     sal_Int32 nAbsolutePosition,
     sal_Bool bOneWay,
@@ -748,7 +748,7 @@ void SAL_CALL typelib_typedescription_newInterfaceMethod(
     @deprecated
     use typelib_typedescription_newExtendedInterfaceAttribute instead
 */
-void SAL_CALL typelib_typedescription_newInterfaceAttribute(
+CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_newInterfaceAttribute(
     typelib_InterfaceAttributeTypeDescription ** ppRet,
     sal_Int32 nAbsolutePosition,
     rtl_uString * pAttributeName,
@@ -774,7 +774,7 @@ void SAL_CALL typelib_typedescription_newInterfaceAttribute(
 
     @since UDK 3.2.0
 */
-void SAL_CALL typelib_typedescription_newExtendedInterfaceAttribute(
+CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_newExtendedInterfaceAttribute(
     typelib_InterfaceAttributeTypeDescription ** ppRet,
     sal_Int32 nAbsolutePosition,
     rtl_uString * pAttributeName,
@@ -789,7 +789,7 @@ void SAL_CALL typelib_typedescription_newExtendedInterfaceAttribute(
 
     @param pDesc type description
 */
-void SAL_CALL typelib_typedescription_acquire(
+CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_acquire(
     typelib_TypeDescription * pDesc )
     SAL_THROW_EXTERN_C();
 
@@ -798,7 +798,7 @@ void SAL_CALL typelib_typedescription_acquire(
 
     @param pDesc type description
 */
-void SAL_CALL typelib_typedescription_release(
+CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_release(
     typelib_TypeDescription * pDesc )
     SAL_THROW_EXTERN_C();
 
@@ -807,7 +807,7 @@ void SAL_CALL typelib_typedescription_release(
 
     @param ppNewDescription inout description to be registered;
 */
-void SAL_CALL typelib_typedescription_register(
+CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_register(
     typelib_TypeDescription ** ppNewDescription )
     SAL_THROW_EXTERN_C();
 
@@ -817,7 +817,7 @@ void SAL_CALL typelib_typedescription_register(
     @param p2 another type description
     @return true, if type descriptions are equal
 */
-sal_Bool SAL_CALL typelib_typedescription_equals(
+CPPU_DLLPUBLIC sal_Bool SAL_CALL typelib_typedescription_equals(
     const typelib_TypeDescription * p1, const typelib_TypeDescription * p2 )
     SAL_THROW_EXTERN_C();
 
@@ -826,7 +826,7 @@ sal_Bool SAL_CALL typelib_typedescription_equals(
     @param ppRet inout type description; *ppRet is 0, if type description was not found
     @param pName name demanded type description
 */
-void SAL_CALL typelib_typedescription_getByName(
+CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_getByName(
     typelib_TypeDescription ** ppRet, rtl_uString * pName )
     SAL_THROW_EXTERN_C();
 
@@ -834,7 +834,7 @@ void SAL_CALL typelib_typedescription_getByName(
 
     @param nNewSize new size of cache
 */
-void SAL_CALL typelib_setCacheSize(
+CPPU_DLLPUBLIC void SAL_CALL typelib_setCacheSize(
     sal_Int32 nNewSize )
     SAL_THROW_EXTERN_C();
 
@@ -853,7 +853,7 @@ typedef void (SAL_CALL * typelib_typedescription_Callback)(
     @param pContext callback context
     @param pCallback callback function
 */
-void SAL_CALL typelib_typedescription_registerCallback(
+CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_registerCallback(
     void * pContext, typelib_typedescription_Callback pCallback )
     SAL_THROW_EXTERN_C();
 
@@ -862,7 +862,7 @@ void SAL_CALL typelib_typedescription_registerCallback(
     @param pContext callback context
     @param pCallback registered callback function
 */
-void SAL_CALL typelib_typedescription_revokeCallback(
+CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_revokeCallback(
     void * pContext, typelib_typedescription_Callback pCallback )
     SAL_THROW_EXTERN_C();
 
@@ -923,7 +923,7 @@ void SAL_CALL typelib_typedescription_revokeCallback(
     @param eTypeClass type class of type
     @param pTypeName name of type
 */
-void SAL_CALL typelib_typedescriptionreference_new(
+CPPU_DLLPUBLIC void SAL_CALL typelib_typedescriptionreference_new(
     typelib_TypeDescriptionReference ** ppTDR,
     typelib_TypeClass eTypeClass,
     rtl_uString * pTypeName )
@@ -936,7 +936,7 @@ void SAL_CALL typelib_typedescriptionreference_new(
     @param eTypeClass type class of type
     @param pTypeName ascii name of type
 */
-void SAL_CALL typelib_typedescriptionreference_newByAsciiName(
+CPPU_DLLPUBLIC void SAL_CALL typelib_typedescriptionreference_newByAsciiName(
     typelib_TypeDescriptionReference ** ppTDR,
     typelib_TypeClass eTypeClass,
     const sal_Char * pTypeName )
@@ -946,7 +946,7 @@ void SAL_CALL typelib_typedescriptionreference_newByAsciiName(
 
     @param pRef type description reference
 */
-void SAL_CALL typelib_typedescriptionreference_acquire(
+CPPU_DLLPUBLIC void SAL_CALL typelib_typedescriptionreference_acquire(
     typelib_TypeDescriptionReference * pRef )
     SAL_THROW_EXTERN_C();
 
@@ -955,7 +955,7 @@ void SAL_CALL typelib_typedescriptionreference_acquire(
 
     @param pRef type description reference
 */
-void SAL_CALL typelib_typedescriptionreference_release(
+CPPU_DLLPUBLIC void SAL_CALL typelib_typedescriptionreference_release(
     typelib_TypeDescriptionReference * pRef )
     SAL_THROW_EXTERN_C();
 
@@ -964,7 +964,7 @@ void SAL_CALL typelib_typedescriptionreference_release(
 
     @param ppRet inout type description
 */
-void SAL_CALL typelib_typedescriptionreference_getDescription(
+CPPU_DLLPUBLIC void SAL_CALL typelib_typedescriptionreference_getDescription(
     typelib_TypeDescription ** ppRet, typelib_TypeDescriptionReference * pRef )
     SAL_THROW_EXTERN_C();
 
@@ -974,7 +974,7 @@ void SAL_CALL typelib_typedescriptionreference_getDescription(
     @param p2 another type description reference
     @return true, if type description references are equal
 */
-sal_Bool SAL_CALL typelib_typedescriptionreference_equals(
+CPPU_DLLPUBLIC sal_Bool SAL_CALL typelib_typedescriptionreference_equals(
     const typelib_TypeDescriptionReference * p1, const typelib_TypeDescriptionReference * p2 )
     SAL_THROW_EXTERN_C();
 
@@ -983,7 +983,7 @@ sal_Bool SAL_CALL typelib_typedescriptionreference_equals(
     @param ppDest destination type
     @param pSource source type
 */
-void SAL_CALL typelib_typedescriptionreference_assign(
+CPPU_DLLPUBLIC void SAL_CALL typelib_typedescriptionreference_assign(
     typelib_TypeDescriptionReference ** ppDest,
     typelib_TypeDescriptionReference * pSource )
     SAL_THROW_EXTERN_C();
@@ -994,7 +994,7 @@ void SAL_CALL typelib_typedescriptionreference_assign(
     @param pAssignable type description of value to be assigned
     @param pFrom type description of value
 */
-sal_Bool SAL_CALL typelib_typedescription_isAssignableFrom(
+CPPU_DLLPUBLIC sal_Bool SAL_CALL typelib_typedescription_isAssignableFrom(
     typelib_TypeDescription * pAssignable,
     typelib_TypeDescription * pFrom )
     SAL_THROW_EXTERN_C();
@@ -1005,7 +1005,7 @@ sal_Bool SAL_CALL typelib_typedescription_isAssignableFrom(
     @param pAssignable type of value to be assigned
     @param pFrom type of value
 */
-sal_Bool SAL_CALL typelib_typedescriptionreference_isAssignableFrom(
+CPPU_DLLPUBLIC sal_Bool SAL_CALL typelib_typedescriptionreference_isAssignableFrom(
     typelib_TypeDescriptionReference * pAssignable,
     typelib_TypeDescriptionReference * pFrom )
     SAL_THROW_EXTERN_C();
@@ -1019,7 +1019,7 @@ sal_Bool SAL_CALL typelib_typedescriptionreference_isAssignableFrom(
     @param eTypeClass type class of basic type
     @return pointer to type reference pointer
 */
-typelib_TypeDescriptionReference ** SAL_CALL typelib_static_type_getByTypeClass(
+CPPU_DLLPUBLIC typelib_TypeDescriptionReference ** SAL_CALL typelib_static_type_getByTypeClass(
     typelib_TypeClass eTypeClass )
     SAL_THROW_EXTERN_C();
 
@@ -1029,7 +1029,7 @@ typelib_TypeDescriptionReference ** SAL_CALL typelib_static_type_getByTypeClass(
     @param eTypeClass type class of type
     @param pTypeName ascii name of type
 */
-void SAL_CALL typelib_static_type_init(
+CPPU_DLLPUBLIC void SAL_CALL typelib_static_type_init(
     typelib_TypeDescriptionReference ** ppRef,
     typelib_TypeClass eTypeClass, const sal_Char * pTypeName )
     SAL_THROW_EXTERN_C();
@@ -1039,7 +1039,7 @@ void SAL_CALL typelib_static_type_init(
     @param ppRef pointer to type reference pointer
     @param pElementType element type of sequence
 */
-void SAL_CALL typelib_static_sequence_type_init(
+CPPU_DLLPUBLIC void SAL_CALL typelib_static_sequence_type_init(
     typelib_TypeDescriptionReference ** ppRef,
     typelib_TypeDescriptionReference * pElementType )
     SAL_THROW_EXTERN_C ();
@@ -1051,7 +1051,7 @@ void SAL_CALL typelib_static_sequence_type_init(
     @param nDimensions number of dimensions
     @param ... additional sal_Int32 parameter for each dimension
 */
-void SAL_CALL typelib_static_array_type_init(
+CPPU_DLLPUBLIC void SAL_CALL typelib_static_array_type_init(
     typelib_TypeDescriptionReference ** ppRef,
     typelib_TypeDescriptionReference * pElementType,
     sal_Int32 nDimensions, ... )
@@ -1070,7 +1070,7 @@ void SAL_CALL typelib_static_array_type_init(
     @param nMembers number of members
     @param ppMembers member types
 */
-void SAL_CALL typelib_static_compound_type_init(
+CPPU_DLLPUBLIC void SAL_CALL typelib_static_compound_type_init(
     typelib_TypeDescriptionReference ** ppRef,
     typelib_TypeClass eTypeClass, const sal_Char * pTypeName,
     typelib_TypeDescriptionReference * pBaseType,
@@ -1092,7 +1092,7 @@ void SAL_CALL typelib_static_compound_type_init(
 
     @since UDK 3.2.0
 */
-void SAL_CALL typelib_static_struct_type_init(
+CPPU_DLLPUBLIC void SAL_CALL typelib_static_struct_type_init(
     typelib_TypeDescriptionReference ** ppRef, const sal_Char * pTypeName,
     typelib_TypeDescriptionReference * pBaseType,
     sal_Int32 nMembers, typelib_TypeDescriptionReference ** ppMembers,
@@ -1105,7 +1105,7 @@ void SAL_CALL typelib_static_struct_type_init(
     @param pTypeName name of interface
     @param pBaseType base type
 */
-void SAL_CALL typelib_static_interface_type_init(
+CPPU_DLLPUBLIC void SAL_CALL typelib_static_interface_type_init(
     typelib_TypeDescriptionReference ** ppRef,
     const sal_Char * pTypeName,
     typelib_TypeDescriptionReference * pBaseType )
@@ -1121,7 +1121,7 @@ void SAL_CALL typelib_static_interface_type_init(
 
     @since UDK 3.2.0
 */
-void SAL_CALL typelib_static_mi_interface_type_init(
+CPPU_DLLPUBLIC void SAL_CALL typelib_static_mi_interface_type_init(
     typelib_TypeDescriptionReference ** ppRef,
     const sal_Char * pTypeName,
     sal_Int32 nBaseTypes,
@@ -1134,7 +1134,7 @@ void SAL_CALL typelib_static_mi_interface_type_init(
     @param pTypeName name of enum
     @param nDefaultEnumValue default enum value
 */
-void SAL_CALL typelib_static_enum_type_init(
+CPPU_DLLPUBLIC void SAL_CALL typelib_static_enum_type_init(
     typelib_TypeDescriptionReference ** ppRef,
     const sal_Char * pTypeName,
     sal_Int32 nDefaultValue )
@@ -1148,7 +1148,7 @@ void SAL_CALL typelib_static_enum_type_init(
     @param ppTypeDescr [inout] type description to be completed (may be exchanged!)
     @return true, if type description is complete
 */
-sal_Bool SAL_CALL typelib_typedescription_complete(
+CPPU_DLLPUBLIC sal_Bool SAL_CALL typelib_typedescription_complete(
     typelib_TypeDescription ** ppTypeDescr )
     SAL_THROW_EXTERN_C();
 
