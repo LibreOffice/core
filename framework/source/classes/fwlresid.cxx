@@ -44,7 +44,7 @@ ResMgr* FwlResId::GetResManager()
     if ( !pResMgr )
     {
         SolarMutexGuard aSolarGuard;
-        pResMgr = ResMgr::CreateResMgr("fwe");
+        pResMgr = ResMgr::CreateResMgr("fwe", Application::GetSettings().GetUILocale());
     }
 
     return pResMgr;
