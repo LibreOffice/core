@@ -416,6 +416,7 @@ $(call gb_LinkTarget_get_headers_target,%) : $(call gb_LinkTarget_get_external_h
 #   on clean.
 # - TARGETTYPE is the type of linktarget as some platforms need very different
 #   command to link different targettypes.
+# - LIBRARY_X64 is only relevent for building a x64 library on windows.
 #
 # Since most variables are set on the linktarget and not on the object, the
 # object learns about these setting via GNU makes scoping of target variables.
@@ -465,6 +466,7 @@ $(call gb_LinkTarget_get_target,$(1)) : LINKED_LIBS :=
 $(call gb_LinkTarget_get_target,$(1)) : LINKED_STATIC_LIBS :=
 $(call gb_LinkTarget_get_target,$(1)) : LIBS :=
 $(call gb_LinkTarget_get_target,$(1)) : TARGETTYPE :=
+$(call gb_LinkTarget_get_target,$(1)) : LIBRARY_X64 :=
 $(call gb_LinkTarget_get_headers_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : PDBFILE :=
 $(call gb_LinkTarget_get_target,$(1)) : EXTRAOBJECTLISTS :=
@@ -489,6 +491,7 @@ $(call gb_LinkTarget_get_dep_target,$(1)) : DEFS := $$(gb_LinkTarget_DEFAULTDEFS
 $(call gb_LinkTarget_get_dep_target,$(1)) : INCLUDE := $$(gb_LinkTarget_INCLUDE)
 $(call gb_LinkTarget_get_dep_target,$(1)) : INCLUDE_STL := $$(gb_LinkTarget_INCLUDE_STL)
 $(call gb_LinkTarget_get_dep_target,$(1)) : TARGETTYPE :=
+$(call gb_LinkTarget_get_dep_target,$(1)) : LIBRARY_X64 :=
 $(call gb_LinkTarget_get_dep_target,$(1)) : EXTRAOBJECTLISTS :=
 endif
 
@@ -869,6 +872,12 @@ define gb_LinkTarget_add_exception_objects
 $(foreach obj,$(2),$(call gb_LinkTarget_add_exception_object,$(1),$(obj)))
 endef
 
+#only useful for building x64 libraries on windows
+define gb_LinkTarget_add_x64_generated_exception_objects
+$(foreach obj,$(2),$(call gb_LinkTarget_add_generated_exception_object,$(1),$(obj)))
+$(foreach obj,$(2),$(eval $(call gb_GenCxxObject_get_target,$(obj)) : CXXOBJECT_X64 := YES))
+endef
+
 define gb_LinkTarget_add_generated_cobjects
 $(foreach obj,$(2),$(call gb_LinkTarget_add_generated_c_object,$(1),$(obj),$(3)))
 endef
@@ -888,6 +897,11 @@ endef
 define gb_LinkTarget_set_targettype
 $(call gb_LinkTarget_get_target,$(1)) \
 $(call gb_LinkTarget_get_dep_target,$(1)) : TARGETTYPE := $(2)
+endef
+
+define gb_LinkTarget_set_x64
+$(call gb_LinkTarget_get_target,$(1)) \
+$(call gb_LinkTarget_get_dep_target,$(1)) : LIBRARY_X64 := $(2)
 endef
 
 define gb_LinkTarget_set_dlltarget
