@@ -45,6 +45,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     codemaker \
     comphelper \
     configmgr \
+    connectivity \
     cppcanvas \
     cppu \
     cppuhelper \
