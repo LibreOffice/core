@@ -179,6 +179,8 @@ void adjustRangeName(ScToken* pToken, ScDocument& rNewDoc, const ScDocument* pOl
     {
         bNewGlobal = bOldGlobal;
         pRangeData = new ScRangeData(*pOldRangeData, &rNewDoc);
+        ScTokenArray* pRangeNameToken = pRangeData->GetCode();
+        pRangeNameToken->ReadjusteAbsolute3DReferences(pOldDoc, &rNewDoc, pRangeData->GetPos());
         bool bInserted;
         if (bNewGlobal)
             bInserted = rNewDoc.GetRangeName()->insert(pRangeData);
