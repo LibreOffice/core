@@ -47,6 +47,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     dtrans \
     editeng \
     eventattacher \
+	extensions \
     fileaccess \
     filter \
     forms \
