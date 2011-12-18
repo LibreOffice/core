@@ -76,7 +76,6 @@ SCP1FILES  = installation_ooo.par          \
              file_graphicfilter.par        \
              module_extensions.par         \
              module_extensions_sun_templates.par         \
-             module_extensions_lightproof.par   \
              directory_extensions.par                     \
              file_extensions.par           \
              module_xsltfilter.par         \
