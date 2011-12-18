@@ -39,6 +39,7 @@ mkdir: %_DEST%\bin\help\com\sun\star\help
 ..\scripts\addkeyid2pot.pl %_DEST%\bin\addkeyid2pot.pl
 ..\scripts\po2lo %_DEST%\bin\po2lo
 ..\scripts\propex %_DEST%\bin\propex
+..\scripts\propex.bat %_DEST%\bin\propex.bat
 ..\scripts\propmerge %_DEST%\bin\propmerge
 ..\inc\export.hxx %_DEST%\inc\l10ntools\export.hxx
 ..\inc\l10ntools\directory.hxx %_DEST%\inc\l10ntools\directory.hxx
