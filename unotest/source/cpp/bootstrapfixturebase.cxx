@@ -46,6 +46,7 @@ using namespace ::com::sun::star;
 test::BootstrapFixtureBase::BootstrapFixtureBase()
     : m_aSrcRootURL(RTL_CONSTASCII_USTRINGPARAM("file://")), m_aSolverRootURL( m_aSrcRootURL )
 {
+#ifndef ANDROID
     const char* pSrcRoot = getenv( "SRC_ROOT" );
     CPPUNIT_ASSERT_MESSAGE("SRC_ROOT env variable not set", pSrcRoot != NULL && pSrcRoot[0] != 0);
     const char* pSolverRoot = getenv( "OUTDIR_FOR_BUILD" );
@@ -55,6 +56,10 @@ test::BootstrapFixtureBase::BootstrapFixtureBase()
         m_aSrcRootURL += rtl::OUString::createFromAscii( "/" );
     if (pSolverRoot[1] == ':')
         m_aSolverRootURL += rtl::OUString::createFromAscii( "/" );
+#endif
+#else
+    const char* pSrcRoot = "/";
+    const char* pSolverRoot = "/";
 #endif
     m_aSrcRootPath = rtl::OUString::createFromAscii( pSrcRoot );
     m_aSrcRootURL += m_aSrcRootPath;
