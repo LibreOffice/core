@@ -33,6 +33,7 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
     dbaccess \
     desktop \
     eventattacher \
+    extensions \
     fileaccess \
     filter \
     forms \
