@@ -33,6 +33,15 @@ gb_CFLAGS += -fno-omit-frame-pointer
 
 include $(GBUILDDIR)/platform/unxgcc.mk
 
+# Link almost everything with -lgnustl_shared
+gb_STDLIBS := \
+	gnustl_shared
+
+gb_Library_PLAINLIBS_NONE := \
+	android \
+	gnustl_shared \
+	log \
+
 # No unit testing can be run
 gb_CppunitTest_CPPTESTPRECOMMAND := :
 
@@ -58,7 +67,6 @@ $(call gb_Helper_abbreviate_dirs,\
 		-Wl$(COMMA)--start-group $(foreach lib,$(LINKED_STATIC_LIBS),$(call gb_StaticLibrary_get_target,$(lib))) -Wl$(COMMA)--end-group \
 		$(LIBS) \
 		$(patsubst lib%.a,-l%,$(patsubst lib%.so,-l%,$(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_filename,$(lib))))) \
-		-llog -landroid -lgnustl_shared \
 		-o $(1))
 endef
 
