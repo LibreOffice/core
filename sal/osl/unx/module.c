@@ -162,11 +162,8 @@ oslModule SAL_CALL osl_loadModuleAscii(const sal_Char *pModuleName, sal_Int32 nR
     {
 #ifndef NO_DL_FUNCTIONS
 #ifdef ANDROID
-        void *(*lo_dlopen)(const char *) = dlsym(RTLD_DEFAULT, "lo_dlopen");
-        void *pLib;
+        void *pLib = lo_dlopen(pModuleName);
         (void) nRtldMode;
-        OSL_ASSERT(lo_dlopen != NULL);
-        pLib = (*lo_dlopen)(pModuleName);
 #else
         int rtld_mode =
             ((nRtldMode & SAL_LOADMODULE_NOW) ? RTLD_NOW : RTLD_LAZY) |

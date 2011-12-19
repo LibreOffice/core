@@ -268,10 +268,17 @@ static void* osl_thread_start_Impl (void* pData)
     /* Check if thread is started in SUSPENDED state */
     while (pImpl->m_Flags & THREADIMPL_FLAGS_SUSPENDED)
     {
+#ifdef ANDROID
+/* Avoid compiler warning: declaration of '__cleanup' shadows a previous local */
+#define __cleanup __cleanup_2
+#endif
         /* wait until SUSPENDED flag is cleared */
         pthread_cleanup_push (osl_thread_wait_cleanup_Impl, &(pImpl->m_Lock));
         pthread_cond_wait (&(pImpl->m_Cond), &(pImpl->m_Lock));
         pthread_cleanup_pop (0);
+#ifdef ANDROID
+#undef __cleanup
+#endif
     }
 
     /* check for SUSPENDED to TERMINATE state change */

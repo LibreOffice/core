@@ -48,7 +48,11 @@
 
 #include "lo-bootstrap.h"
 
+#pragma GCC diagnostic ignored "-Wdeclaration-after-statement"
+
 #include "android_native_app_glue.c"
+
+#pragma GCC diagnostic warning "-Wdeclaration-after-statement"
 
 #undef LOGI
 #undef LOGW
@@ -133,10 +137,11 @@ struct cdir_end {
 /* End of Zip data structures */
 
 static void
-engine_handle_cmd(struct android_app* app,
+engine_handle_cmd(struct android_app* state,
                   int32_t cmd)
 {
-    struct engine* engine = (struct engine*)app->userData;
+    (void) state;
+
     switch (cmd) {
     case APP_CMD_SAVE_STATE:
         break;
@@ -163,7 +168,7 @@ read_section(int fd,
         free(result);
         return NULL;
     }
-    if (read(fd, result, shdr->sh_size) < shdr->sh_size) {
+    if (read(fd, result, shdr->sh_size) < (int) shdr->sh_size) {
         close(fd);
         free(result);
         return NULL;
@@ -190,9 +195,11 @@ Java_org_libreoffice_android_Bootstrap_dlneeds(JNIEnv* env,
 {
     char **needed;
     int n_needed;
-    const jbyte *libName;
+    const char *libName;
     jclass String;
     jobjectArray result;
+
+    (void) clazz;
 
     libName = (*env)->GetStringUTFChars(env, library, NULL);
 
@@ -236,9 +243,13 @@ Java_org_libreoffice_android_Bootstrap_dlopen(JNIEnv* env,
                                               jobject clazz,
                                               jstring library)
 {
-    const jbyte *libName = (*env)->GetStringUTFChars(env, library, NULL);
-    void *p = lo_dlopen (libName);
+    const char *libName;
+    void *p;
 
+    (void) clazz;
+
+    libName = (*env)->GetStringUTFChars(env, library, NULL);
+    p = lo_dlopen (libName);
     (*env)->ReleaseStringUTFChars(env, library, libName);
 
     return (jint) p;
@@ -250,9 +261,13 @@ Java_org_libreoffice_android_Bootstrap_dlsym(JNIEnv* env,
                                              jint handle,
                                              jstring symbol)
 {
-    const jbyte *symName = (*env)->GetStringUTFChars(env, symbol, NULL);
-    void *p = lo_dlsym ((void *) handle, symName);
+    const char *symName;
+    void *p;
 
+    (void) clazz;
+
+    symName = (*env)->GetStringUTFChars(env, symbol, NULL);
+    p = lo_dlsym ((void *) handle, symName);
     (*env)->ReleaseStringUTFChars(env, symbol, symName);
 
     return (jint) p;
@@ -264,8 +279,11 @@ Java_org_libreoffice_android_Bootstrap_dlcall(JNIEnv* env,
                                               jint function,
                                               jobject argument)
 {
-    jclass StringArray = (*env)->FindClass(env, "[Ljava/lang/String;");
+    jclass StringArray;
 
+    (void) clazz;
+
+    StringArray = (*env)->FindClass(env, "[Ljava/lang/String;");
     if (StringArray == NULL) {
         LOGE("Could not find String[] class");
         return 0;
@@ -307,9 +325,11 @@ Java_org_libreoffice_android_Bootstrap_setup__Ljava_lang_String_2Ljava_lang_Stri
 {
     struct stat st;
     int i, n, fd;
-    const jbyte *dataDirPath;
-    const jbyte *apkFilePath;
+    const char *dataDirPath;
+    const char *apkFilePath;
     char *lib_dir;
+
+    (void) clazz;
 
     n = (*env)->GetArrayLength(env, ld_library_path);
 
@@ -326,7 +346,7 @@ Java_org_libreoffice_android_Bootstrap_setup__Ljava_lang_String_2Ljava_lang_Stri
     library_locations[0] = lib_dir;
 
     for (i = 0; i < n; i++) {
-        const jbyte *s = (*env)->GetStringUTFChars(env, (*env)->GetObjectArrayElement(env, ld_library_path, i), NULL);
+        const char *s = (*env)->GetStringUTFChars(env, (*env)->GetObjectArrayElement(env, ld_library_path, i), NULL);
         library_locations[i+1] = strdup(s);
         (*env)->ReleaseStringUTFChars(env, (*env)->GetObjectArrayElement(env, ld_library_path, i), s);
     }
@@ -379,6 +399,8 @@ Java_org_libreoffice_android_Bootstrap_setup__ILjava_lang_Object_2I(JNIEnv* env,
     jclass StringArray;
     int i;
 
+    (void) clazz;
+
     lo_main = lo_main_ptr;
 
     StringArray = (*env)->FindClass(env, "[Ljava/lang/String;");
@@ -396,7 +418,7 @@ Java_org_libreoffice_android_Bootstrap_setup__ILjava_lang_Object_2I(JNIEnv* env,
     lo_main_argv = malloc(sizeof(char *) * (lo_main_argc+1));
 
     for (i = 0; i < lo_main_argc; i++) {
-        const jbyte *s = (*env)->GetStringUTFChars(env, (*env)->GetObjectArrayElement(env, lo_main_argument, i), NULL);
+        const char *s = (*env)->GetStringUTFChars(env, (*env)->GetObjectArrayElement(env, lo_main_argument, i), NULL);
         lo_main_argv[i] = strdup(s);
         (*env)->ReleaseStringUTFChars(env, (*env)->GetObjectArrayElement(env, lo_main_argument, i), s);
         /* LOGI("argv[%d] = %s", i, lo_main_argv[i]); */
@@ -414,18 +436,25 @@ jint
 Java_org_libreoffice_android_Bootstrap_getpid(JNIEnv* env,
                                               jobject clazz)
 {
+    (void) env;
+    (void) clazz;
+
     return getpid();
 }
 
 
 // public static native void system(String cmdline);
 
-jint
+void
 Java_org_libreoffice_android_Bootstrap_system(JNIEnv* env,
                                               jobject clazz,
                                               jstring cmdline)
 {
-    const jbyte *s = (*env)->GetStringUTFChars(env, cmdline, NULL);
+    const char *s;
+
+    (void) clazz;
+
+    s = (*env)->GetStringUTFChars(env, cmdline, NULL);
 
     LOGI("system(%s)", s);
 
@@ -441,7 +470,11 @@ Java_org_libreoffice_android_Bootstrap_putenv(JNIEnv* env,
                                               jobject clazz,
                                               jstring string)
 {
-    const jbyte *s = (*env)->GetStringUTFChars(env, string, NULL);
+    const char *s;
+
+    (void) clazz;
+
+    s = (*env)->GetStringUTFChars(env, string, NULL);
 
     LOGI("putenv(%s)", s);
 
@@ -470,7 +503,7 @@ lo_dlneeds(const char *library)
         return NULL;
     }
 
-    if (read(fd, &hdr, sizeof(hdr)) < sizeof(hdr)) {
+    if (read(fd, &hdr, sizeof(hdr)) < (int) sizeof(hdr)) {
         LOGE("lo_dlneeds: Could not read ELF header of %s", library);
         close(fd);
         return NULL;
@@ -483,7 +516,7 @@ lo_dlneeds(const char *library)
         close(fd);
         return NULL;
     }
-    if (read(fd, &shdr, sizeof(shdr)) < sizeof(shdr)) {
+    if (read(fd, &shdr, sizeof(shdr)) < (int) sizeof(shdr)) {
         LOGE("lo_dlneeds: Could not read section header of %s", library);
         close(fd);
         return NULL;
@@ -501,7 +534,7 @@ lo_dlneeds(const char *library)
         return NULL;
     }
     for (i = 0; i < hdr.e_shnum; i++) {
-        if (read(fd, &shdr, sizeof(shdr)) < sizeof(shdr)) {
+        if (read(fd, &shdr, sizeof(shdr)) < (int) sizeof(shdr)) {
             LOGE("lo_dlneeds: Could not read section header of %s", library);
             close(fd);
             return NULL;
@@ -531,14 +564,13 @@ lo_dlneeds(const char *library)
         return NULL;
     }
     for (i = 0; i < hdr.e_shnum; i++) {
-        if (read(fd, &shdr, sizeof(shdr)) < sizeof(shdr)) {
+        if (read(fd, &shdr, sizeof(shdr)) < (int) sizeof(shdr)) {
             LOGE("lo_dlneeds: Could not read section header of %s", library);
             close(fd);
             return NULL;
         }
         if (shdr.sh_type == SHT_DYNAMIC) {
-            int dynoff;
-            int *libnames;
+            size_t dynoff;
 
             /* Count number of DT_NEEDED entries */
             n_needed = 0;
@@ -548,7 +580,7 @@ lo_dlneeds(const char *library)
                 return NULL;
             }
             for (dynoff = 0; dynoff < shdr.sh_size; dynoff += sizeof(dyn)) {
-                if (read(fd, &dyn, sizeof(dyn)) < sizeof(dyn)) {
+                if (read(fd, &dyn, sizeof(dyn)) < (int) sizeof(dyn)) {
                     LOGE("lo_dlneeds: Could not read .dynamic entry of %s", library);
                     close(fd);
                     return NULL;
@@ -569,7 +601,7 @@ lo_dlneeds(const char *library)
                 return NULL;
             }
             for (dynoff = 0; dynoff < shdr.sh_size; dynoff += sizeof(dyn)) {
-                if (read(fd, &dyn, sizeof(dyn)) < sizeof(dyn)) {
+                if (read(fd, &dyn, sizeof(dyn)) < (int) sizeof(dyn)) {
                     LOGE("lo_dlneeds: Could not read .dynamic entry in %s", library);
                     close(fd);
                     free(result);
@@ -736,7 +768,7 @@ lo_dladdr(void *addr,
         void *lo, *hi;
         char file[sizeof(line)];
         file[0] = '\0';
-        if (sscanf(line, "%x-%x %*s %*x %*x:%*x %*d %[^\n]", &lo, &hi, file) == 3) {
+        if (sscanf(line, "%x-%x %*s %*x %*x:%*x %*d %[^\n]", (unsigned *) &lo, (unsigned *) &hi, file) == 3) {
             /* LOGI("got %p-%p: %s", lo, hi, file); */
             if (addr >= lo && addr < hi) {
                 if (info->dli_fbase != lo) {
@@ -800,7 +832,7 @@ lo_apkentry(const char *filename,
         dirend = (struct cdir_end *)((char *)dirend - 1);
     if (letoh32(dirend->signature) != CDIR_END_SIG) {
         LOGE("lo_apkentry: Could not find end of central directory record");
-        return;
+        return NULL;
     }
 
     cdir_offset = letoh32(dirend->cdir_offset);
@@ -1019,6 +1051,9 @@ void
 Java_org_libreoffice_android_Bootstrap_patch_libgnustl_shared(JNIEnv* env,
                                                               jobject clazz)
 {
+    (void) env;
+    (void) clazz;
+
     patch_libgnustl_shared();
 }
 
