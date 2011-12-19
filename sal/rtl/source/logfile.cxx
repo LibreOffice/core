@@ -185,7 +185,7 @@ void init() {
                 {
                     SAL_WARN(
                         "sal",
-                        "Couldn't open logfile " << o << '(' << e << ')');
+                        "Couldn't open logfile " << o << '(' << +e << ')');
                 }
             }
             g_bHasBeenCalled = sal_True;

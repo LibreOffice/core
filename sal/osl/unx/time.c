@@ -45,15 +45,15 @@
  * osl_getSystemTime
  *-------------------------------------------------*/
 
-sal_Bool SAL_CALL osl_getSystemTime(TimeValue* TimeValue)
+sal_Bool SAL_CALL osl_getSystemTime(TimeValue* tv)
 {
     struct timeval tp;
 
     /* FIXME: use higher resolution */
     gettimeofday(&tp, NULL);
 
-    TimeValue->Seconds = tp.tv_sec;
-    TimeValue->Nanosec = tp.tv_usec * 1000;
+    tv->Seconds = tp.tv_sec;
+    tv->Nanosec = tp.tv_usec * 1000;
 
     return (sal_True);
 }

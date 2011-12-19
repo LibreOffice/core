@@ -119,12 +119,10 @@ sal_Size ImplConvertBig5HkscsToUnicode(ImplTextConverterData const * pData,
                 }
                 if (nUnicode == 0xFFFF)
                 {
-                    sal_uInt32 nFirst = pBig5Data[nRow].mnTrailStart;
-                    if (nChar >= nFirst
-                        && nChar <= pBig5Data[nRow].mnTrailEnd)
+                    sal_uInt32 n = pBig5Data[nRow].mnTrailStart;
+                    if (nChar >= n && nChar <= pBig5Data[nRow].mnTrailEnd)
                     {
-                        nUnicode
-                            = pBig5Data[nRow].mpToUniTrailTab[nChar - nFirst];
+                        nUnicode = pBig5Data[nRow].mpToUniTrailTab[nChar - n];
                         if (nUnicode == 0)
                             nUnicode = 0xFFFF;
                         OSL_VERIFY(!ImplIsHighSurrogate(nUnicode));
