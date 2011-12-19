@@ -103,3 +103,34 @@
   { $as_echo "$as_me:$LINENO: checking whether byte ordering is bigendian" >&5
  $as_echo_n "checking whether byte ordering is bigendian... " >&6; }
  if test "${ac_cv_c_bigendian+set}" = set; then
+--- misc/pixman-0.24.0/pixman/pixman-utils.c
++++ misc/build/pixman-0.24.0/pixman/pixman-utils.c
+@@ -27,6 +27,7 @@
+ #endif
+ #include <stdio.h>
+ #include <stdlib.h>
++#include <limits.h>
+ 
+ #include "pixman-private.h"
+ 
+--- misc/pixman-0.24.0/pixman/pixman-mmx.c	2011-11-06 13:47:42.000000000 -0700
++++ misc/build/pixman-0.24.0/pixman/pixman-mmx.c	2011-12-19 00:41:42.280402800 -0700
+@@ -309,7 +309,7 @@
+ 
+ /* Elemental unaligned loads */
+ 
+-static __inline__ __m64 ldq_u(uint64_t *p)
++static inline __m64 ldq_u(uint64_t *p)
+ {
+ #ifdef USE_X86_MMX
+     /* x86's alignment restrictions are very relaxed. */
+@@ -328,7 +328,7 @@
+ #endif
+ }
+ 
+-static __inline__ uint32_t ldl_u(uint32_t *p)
++static inline uint32_t ldl_u(uint32_t *p)
+ {
+ #ifdef USE_X86_MMX
+     /* x86's alignment restrictions are very relaxed. */
+
