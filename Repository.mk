@@ -98,6 +98,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
 	PptImporter \
 	adabas \
 	adabasui \
+	acc \
 	agg \
 	analysis \
 	animcore \
