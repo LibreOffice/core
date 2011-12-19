@@ -39,10 +39,6 @@ $(eval $(call gb_Executable_add_api,svidl,\
     udkapi \
 ))
 
-$(eval $(call gb_Executable_add_defs,svidl,\
-	-DIDL_COMPILER \
-))
-
 $(eval $(call gb_Executable_add_linked_libs,svidl,\
 	tl \
 	sal \

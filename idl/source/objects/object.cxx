@@ -135,7 +135,6 @@ void SvMetaClass::Save( SvPersistStream & rStm )
     if( nMask & 0x10 ) rStm << aAutomation;
 }
 
-#ifdef IDL_COMPILER
 void SvMetaClass::ReadAttributesSvIdl( SvIdlDataBase & rBase,
                                         SvTokenStream & rInStm )
 {
@@ -750,7 +749,5 @@ void SvMetaClass::WriteCxx( SvIdlDataBase &, SvStream & rOutStm, sal_uInt16 )
     << "\t" << pSup << "::Notify( rBC, rHint );" << endl
     << '}' << endl;
 }
-
-#endif // IDL_COMPILER
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

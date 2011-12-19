@@ -150,11 +150,9 @@ public:
     friend SvStream& operator << (SvStream &, const SvBOOL &);
     friend SvStream& operator >> (SvStream &, SvBOOL &);
 
-#ifdef IDL_COMPILER
     sal_Bool        ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm );
     sal_Bool        WriteSvIdl( SvStringHashEntry * pName, SvStream & rOutStm );
     ByteString      GetSvIdlString( SvStringHashEntry * pName );
-#endif
 };
 
 
@@ -168,11 +166,9 @@ public:
     friend SvStream& operator >> (SvStream &, SvIdentifier &);
 
     sal_Bool        IsSet() const { return Len() != 0; }
-#ifdef IDL_COMPILER
     sal_Bool        ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm );
     sal_Bool        WriteSvIdl( SvStringHashEntry * pName, SvStream & rOutStm,
                             sal_uInt16 nTab );
-#endif
 };
 
 
@@ -192,11 +188,9 @@ public:
 
     friend SvStream& operator << (SvStream &, const SvNumberIdentifier &);
     friend SvStream& operator >> (SvStream &, SvNumberIdentifier &);
-#ifdef IDL_COMPILER
     sal_Bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
     sal_Bool        ReadSvIdl( SvIdlDataBase &, SvStringHashEntry * pName,
                            SvTokenStream & rInStm );
-#endif
 };
 
 
@@ -210,11 +204,9 @@ public:
     friend SvStream& operator << (SvStream &, const SvString &);
     friend SvStream& operator >> (SvStream &, SvString &);
 
-#ifdef IDL_COMPILER
     sal_Bool        ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm );
     sal_Bool        WriteSvIdl( SvStringHashEntry * pName, SvStream & rOutStm,
                             sal_uInt16 nTab );
-#endif
 };
 
 
@@ -222,11 +214,9 @@ class SvHelpText : public SvString
 {
 public:
                 SvHelpText() {}
-#ifdef IDL_COMPILER
     sal_Bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
     sal_Bool        WriteSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm,
                             sal_uInt16 nTab );
-#endif
 };
 
 
@@ -238,10 +228,8 @@ class SvUUId : public SvGlobalName
 {
 public:
                 SvUUId() {}
-#ifdef IDL_COMPILER
     sal_Bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
     sal_Bool        WriteSvIdl( SvStream & rOutStm );
-#endif
 };
 
 
@@ -266,10 +254,8 @@ public:
 
     friend SvStream& operator << (SvStream &, const SvVersion &);
     friend SvStream& operator >> (SvStream &, SvVersion &);
-#ifdef IDL_COMPILER
     sal_Bool        ReadSvIdl( SvTokenStream & rInStm );
     sal_Bool        WriteSvIdl( SvStream & rOutStm );
-#endif
 };
 
 

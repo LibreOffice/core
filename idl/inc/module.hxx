@@ -53,7 +53,6 @@ class SvMetaModule : public SvMetaExtern
     SvString                aTypeLibFile;
     SvString                aModulePrefix;
 
-#ifdef IDL_COMPILER
     sal_Bool                    bImported   : 1,
                             bIsModified : 1;
     SvGlobalName            aBeginName;
@@ -64,7 +63,6 @@ protected:
     virtual void        WriteAttributesSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab );
     virtual void        ReadContextSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
     virtual void        WriteContextSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab );
-#endif
 public:
                         SV_DECL_META_FACTORY1( SvMetaModule, SvMetaExtern, 13 )
                         SvMetaModule();
@@ -81,7 +79,6 @@ public:
     const SvMetaTypeMemberList & GetTypeList() const { return aTypeList; }
     const SvMetaClassMemberList & GetClassList() const { return aClassList; }
 
-#ifdef IDL_COMPILER
                         SvMetaModule( const String & rIdlFileName,
                                       sal_Bool bImported );
 
@@ -105,7 +102,6 @@ public:
 
     virtual void        WriteCxx( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab );
     virtual void        WriteHxx( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab );
-#endif
 };
 SV_DECL_IMPL_REF(SvMetaModule)
 SV_DECL_IMPL_PERSIST_LIST(SvMetaModule,SvMetaModule *)

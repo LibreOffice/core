@@ -79,7 +79,6 @@ public:
             SV_DECL_META_FACTORY1( SvMetaObject, SvPersistBase, 14 )
             SvMetaObject();
 
-#ifdef IDL_COMPILER
     static void         WriteTab( SvStream & rOutStm, sal_uInt16 nTab );
     static sal_Bool         TestAndSeekSpaceOnly( SvStream &, sal_uLong nBegPos );
     static void         Back2Delemitter( SvStream & );
@@ -93,7 +92,6 @@ public:
 
     virtual void        WriteCxx( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab );
     virtual void        WriteHxx( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab );
-#endif
 };
 SV_DECL_IMPL_REF(SvMetaObject)
 SV_DECL_PERSIST_LIST(SvMetaObject,SvMetaObject *)
@@ -135,7 +133,6 @@ class SvMetaName : public SvMetaObject
     SvString      aDescription;
 
 protected:
-#ifdef IDL_COMPILER
     virtual sal_Bool ReadNameSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
             void DoReadContextSvIdl( SvIdlDataBase &, SvTokenStream & rInStm,
                                      char c = '\0' );
@@ -150,7 +147,6 @@ protected:
                                         WriteType, WriteAttribute = 0);
     virtual void WriteContext( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab,
                                         WriteType, WriteAttribute = 0);
-#endif
 public:
             SV_DECL_META_FACTORY1( SvMetaName, SvMetaObject, 15 )
             SvMetaName();
@@ -164,14 +160,12 @@ public:
     virtual const SvString &    GetConfigName() const{ return aConfigName; }
     virtual const SvString&     GetDescription() const{ return aDescription; }
 
-#ifdef IDL_COMPILER
     virtual sal_Bool        Test( SvIdlDataBase &, SvTokenStream & rInStm );
     virtual sal_Bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
     virtual void        WriteSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab );
     virtual void        Write( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab,
                                        WriteType, WriteAttribute = 0);
     void                WriteDescription( SvStream& rOutStm );
-#endif
 };
 SV_DECL_IMPL_REF(SvMetaName)
 SV_DECL_IMPL_PERSIST_LIST(SvMetaName,SvMetaName *)
@@ -242,7 +236,6 @@ public:
 
     const SvGlobalName &GetUUId() const;
     const SvVersion &   GetVersion() const { return aVersion; }
-#ifdef IDL_COMPILER
     void                SetModule( SvIdlDataBase & rBase );
     virtual sal_Bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
     virtual void        WriteSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab );
@@ -255,7 +248,6 @@ protected:
                                               SvStream & rOutStm, sal_uInt16 nTab );
     virtual void        WriteAttributes( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab,
                                           WriteType, WriteAttribute = 0);
-#endif
 };
 SV_DECL_IMPL_REF(SvMetaExtern)
 SV_DECL_IMPL_PERSIST_LIST(SvMetaExtern,SvMetaExtern *)

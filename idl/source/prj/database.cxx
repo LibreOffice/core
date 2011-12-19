@@ -185,7 +185,6 @@ void SvIdlDataBase::Push( SvMetaObject * pObj )
     GetStack().Push( pObj );
 }
 
-#ifdef IDL_COMPILER
 sal_Bool SvIdlDataBase::FindId( const rtl::OString& rIdName, sal_uLong * pVal )
 {
     if( pIdTable )
@@ -900,7 +899,5 @@ bool SvIdlDataBase::WriteDepFile(
     ::std::for_each(m_DepFiles.begin(), m_DepFiles.end(), WriteDep(rStream));
     return rStream.GetError() == SVSTREAM_OK;
 }
-
-#endif // IDL_COMPILER
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

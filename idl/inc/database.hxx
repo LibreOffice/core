@@ -35,14 +35,10 @@
 #include <rtl/string.hxx>
 #include <tools/pstm.hxx>
 
-#ifdef IDL_COMPILER
 #include <rtl/ustring.hxx>
 #include <set>
-#endif
 
 class SvCommand;
-
-#ifdef IDL_COMPILER
 
 class SvIdlError
 {
@@ -65,7 +61,6 @@ public:
       return *this;
     }
 };
-#endif
 
 class SvIdlDataBase
 {
@@ -87,7 +82,6 @@ class SvIdlDataBase
     SvMetaTypeMemberList        aTmpTypeList; // not persistent
 
 protected:
-#ifdef IDL_COMPILER
     ::std::set< ::rtl::OUString > m_DepFiles;
     SvMetaObjectMemberStack     aContextStack;
     String                      aPath;
@@ -97,7 +91,6 @@ protected:
         aUsedTypes.Clear();
         aIFaceName = rtl::OString();
     }
-#endif
 public:
                 explicit SvIdlDataBase( const SvCommand& rCmd );
                 ~SvIdlDataBase();
@@ -118,7 +111,6 @@ public:
     rtl::OString            aIFaceName;
     SvNumberIdentifier      aStructSlotId;
 
-#ifdef IDL_COMPILER
     void                    StartNewFile( const String& rName );
     void                    SetExportFile( const String& rName )
                             { aExportFile = rName; }
@@ -162,10 +154,8 @@ public:
     SvMetaClass *           ReadKnownClass( SvTokenStream & rInStm );
     void AddDepFile(String const& rFileName);
     bool WriteDepFile(SvFileStream & rStream, ::rtl::OUString const& rTarget);
-#endif
 };
 
-#ifdef IDL_COMPILER
 class SvIdlWorkingBase : public SvIdlDataBase
 {
 public:
@@ -180,7 +170,6 @@ public:
     sal_Bool        WriteCSV( SvStream& );
     sal_Bool        WriteDocumentation( SvStream& );
 };
-#endif
 
 #endif // _DATABASE_HXX
 

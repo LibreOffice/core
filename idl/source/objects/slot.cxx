@@ -503,7 +503,6 @@ const ByteString& SvMetaSlot::GetUnoName() const
     return ((SvMetaSlot *)GetRef())->GetUnoName();
 }
 
-#ifdef IDL_COMPILER
 void SvMetaSlot::ReadAttributesSvIdl( SvIdlDataBase & rBase,
                                     SvTokenStream & rInStm )
 {
@@ -1720,8 +1719,5 @@ void SvMetaSlot::WriteCSV( SvIdlDataBase& rBase, SvStream& rStrm )
 
     rStrm << endl;
 }
-
-#endif // IDL_COMPILER
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

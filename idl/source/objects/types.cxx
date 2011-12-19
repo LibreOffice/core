@@ -188,7 +188,6 @@ rtl::OString SvMetaAttribute::GetMangleName( sal_Bool ) const
     return GetName();
 }
 
-#ifdef IDL_COMPILER
 sal_Bool SvMetaAttribute::Test( SvIdlDataBase & rBase,
                             SvTokenStream & rInStm )
 {
@@ -751,8 +750,6 @@ void SvMetaAttribute::WriteHelpId( SvIdlDataBase &, SvStream &, Table * )
 {
 }
 
-#endif // IDL_COMPILER
-
 SV_IMPL_META_FACTORY1( SvMetaType, SvMetaExtern );
 #define CTOR                            \
     : aCall0( CALL_VALUE, sal_False )       \
@@ -1030,7 +1027,6 @@ sal_Bool SvMetaType::SetName( const ByteString & rName, SvIdlDataBase * pBase )
     return SvMetaReference::SetName( rName, pBase );
 }
 
-#ifdef IDL_COMPILER
 ByteString SvMetaType::GetCString() const
 {
     rtl::OStringBuffer out( GetSvName() );
@@ -1751,8 +1747,6 @@ void SvMetaType::WriteParamNames( SvIdlDataBase & rBase,
     }
 }
 
-#endif // IDL_COMPILER
-
 SV_IMPL_META_FACTORY1( SvMetaTypeString, SvMetaType );
 SvMetaTypeString::SvMetaTypeString()
     : SvMetaType( "String", "SbxSTRING", "BSTR", 's', "char *", "String", "$" )
@@ -1802,7 +1796,6 @@ void SvMetaEnumValue::Save( SvPersistStream & rStm )
     if( nMask & 0x01 ) rStm.WriteByteString( aEnumValue );
 }
 
-#ifdef IDL_COMPILER
 sal_Bool SvMetaEnumValue::ReadSvIdl( SvIdlDataBase & rBase,
                                  SvTokenStream & rInStm )
 {
@@ -1824,7 +1817,6 @@ void SvMetaEnumValue::Write( SvIdlDataBase &, SvStream & rOutStm, sal_uInt16,
     else
         rOutStm << GetName().GetBuffer();
 }
-#endif // IDL_COMPILER
 
 SV_IMPL_META_FACTORY1( SvMetaTypeEnum, SvMetaType );
 SvMetaTypeEnum::SvMetaTypeEnum()
@@ -1863,7 +1855,6 @@ void SvMetaTypeEnum::Save( SvPersistStream & rStm )
     if( nMask & 0x02 ) rStm.WriteByteString( aPrefix );
 }
 
-#ifdef IDL_COMPILER
 void SvMetaTypeEnum::ReadContextSvIdl( SvIdlDataBase & rBase,
                                        SvTokenStream & rInStm )
 {
@@ -1957,8 +1948,6 @@ void SvMetaTypeEnum::WriteContext( SvIdlDataBase & rBase, SvStream & rOutStm,
     }
     rOutStm << endl;
 }
-
-#endif // IDL_COMPILER
 
 SV_IMPL_META_FACTORY1( SvMetaTypevoid, SvMetaType );
 SvMetaTypevoid::SvMetaTypevoid()

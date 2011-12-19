@@ -37,7 +37,6 @@
 #include <hash.hxx>
 #include <database.hxx>
 
-#ifdef IDL_COMPILER
 static sal_Bool ReadRangeSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm,
                             sal_uLong nMin, sal_uLong nMax, sal_uLong* pValue )
 {
@@ -67,7 +66,6 @@ static sal_Bool ReadRangeSvIdl( SvStringHashEntry * pName, SvTokenStream & rInSt
     rInStm.Seek( nTokPos );
     return sal_False;
 }
-#endif
 
 sal_uInt32 SvUINT32::Read( SvStream & rStm )
 {
@@ -140,7 +138,6 @@ SvStream& operator >> (SvStream & rStm, SvVersion & r )
 }
 
 
-#ifdef IDL_COMPILER
 sal_Bool SvBOOL::ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm )
 {
     sal_uInt32 nTokPos = rInStm.Tell();
@@ -436,7 +433,5 @@ sal_Bool SvVersion::WriteSvIdl( SvStream & rOutStm )
         << ')';
     return sal_True;
 }
-#endif //IDL_COMPILER
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
