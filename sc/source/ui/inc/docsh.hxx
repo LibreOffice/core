@@ -65,7 +65,6 @@ class ScAutoStyleList;
 class ScRange;
 class ScMarkData;
 class ScPaintLockData;
-class ScJobSetup;
 class ScChangeAction;
 class VirtualDevice;
 class ScImportOptions;
@@ -118,7 +117,6 @@ class SC_DLLPUBLIC ScDocShell: public SfxObjectShell, public SfxListener
 
     ScAutoStyleList*    pAutoStyleList;
     ScPaintLockData*    pPaintLockData;
-    ScJobSetup*         pOldJobSetup;
     ScOptSolverSave*    pSolverSaveData;
     ScSheetSaveData*    pSheetSaveData;
 

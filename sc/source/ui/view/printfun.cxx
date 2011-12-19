@@ -3051,25 +3051,4 @@ void ScPrintFunc::CalcPages()               // berechnet aPageRect und Seiten au
     }
 }
 
-//------------------------------------------------------------------------
-//  class ScJobSetup
-//------------------------------------------------------------------------
-
-ScJobSetup::ScJobSetup( SfxPrinter* pPrinter )
-{
-    eOrientation = pPrinter->GetOrientation();
-    nPaperBin    = pPrinter->GetPaperBin();
-    ePaper       = pPrinter->GetPaper();
-
-    if ( PAPER_USER == ePaper )
-    {
-        aUserSize = pPrinter->GetPaperSize();
-        aUserMapMode = pPrinter->GetMapMode();
-    }
-};
-
-
-
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

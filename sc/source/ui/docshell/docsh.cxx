@@ -2514,7 +2514,6 @@ ScDocShell::ScDocShell( const ScDocShell& rShell ) :
     pDocHelper      ( NULL ),
     pAutoStyleList  ( NULL ),
     pPaintLockData  ( NULL ),
-    pOldJobSetup    ( NULL ),
     pSolverSaveData ( NULL ),
     pSheetSaveData  ( NULL ),
     pModificator    ( NULL )
@@ -2561,7 +2560,6 @@ ScDocShell::ScDocShell( const sal_uInt64 i_nSfxCreationFlags ) :
     pDocHelper      ( NULL ),
     pAutoStyleList  ( NULL ),
     pPaintLockData  ( NULL ),
-    pOldJobSetup    ( NULL ),
     pSolverSaveData ( NULL ),
     pSheetSaveData  ( NULL ),
     pModificator    ( NULL )
@@ -2613,8 +2611,6 @@ ScDocShell::~ScDocShell()
     delete pImpl;
 
     delete pPaintLockData;
-
-    delete pOldJobSetup;        // gesetzt nur bei Fehler in StartJob()
 
     delete pSolverSaveData;
     delete pSheetSaveData;
