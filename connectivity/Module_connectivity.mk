@@ -30,6 +30,7 @@ $(eval $(call gb_Module_Module,connectivity))
 $(eval $(call gb_Module_add_targets,connectivity,\
 	Package_inc \
 	Jar_sdbc_hsqldb \
+	Library_dbtools \
 ))
 
 # vim: set noet sw=4 ts=4:
