@@ -29,6 +29,7 @@ $(eval $(call gb_Module_Module,connectivity))
 
 $(eval $(call gb_Module_add_targets,connectivity,\
 	Package_inc \
+	Package_xml \
 	Jar_sdbc_hsqldb \
 	Library_dbtools \
 	Library_sdbc2 \
