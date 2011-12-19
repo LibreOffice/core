@@ -1181,12 +1181,15 @@ IMPL_LINK( OfaTreeOptionsDialog, SelectHdl_Impl, Timer*, EMPTYARG )
         pPageInfo->m_pExtPage->ActivatePage();
     }
 
-    String sTmpTitle = sTitle;
-    sTmpTitle += String::CreateFromAscii(" - ");
-    sTmpTitle += aTreeLB.GetEntryText(pParent);
-    sTmpTitle += String::CreateFromAscii(" - ");
-    sTmpTitle += aTreeLB.GetEntryText(pEntry);
-    SetText(sTmpTitle);
+    {
+        ::rtl::OUStringBuffer sTitleBuf(sTitle);
+        sTitleBuf.appendAscii(RTL_CONSTASCII_STRINGPARAM(" - "));
+        sTitleBuf.append(aTreeLB.GetEntryText(pParent));
+        sTitleBuf.appendAscii(RTL_CONSTASCII_STRINGPARAM(" - "));
+        sTitleBuf.append(aTreeLB.GetEntryText(pEntry));
+        SetText(sTitleBuf.makeStringAndClear());
+    }
+
     pCurrentPageEntry = pEntry;
     if ( !bForgetSelection )
     {
