@@ -25,13 +25,31 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Module_Module,connectivity))
+$(eval $(call gb_Library_Library,sdbc2))
 
-$(eval $(call gb_Module_add_targets,connectivity,\
-	Package_inc \
-	Jar_sdbc_hsqldb \
-	Library_dbtools \
-	Library_sdbc2 \
+$(eval $(call gb_Library_add_package_headers,sdbc2,connectivity_inc))
+
+$(eval $(call gb_Library_set_componentfile,sdbc2,connectivity/source/manager/sdbc2))
+
+
+$(eval $(call gb_Library_add_api,sdbc2,\
+	offapi \
+	udkapi \
+))
+
+$(eval $(call gb_Library_add_linked_libs,sdbc2,\
+	cppu \
+	cppuhelper \
+	comphelper \
+	dbtools \
+	utl \
+	sal \
+	$(gb_STDLIBS) \
+))
+
+$(eval $(call gb_Library_add_exception_objects,sdbc2,\
+	connectivity/source/manager/mdrivermanager \
+	connectivity/source/manager/mregistration \
 ))
 
 # vim: set noet sw=4 ts=4:

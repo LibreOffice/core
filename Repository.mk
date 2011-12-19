@@ -313,6 +313,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     scn \
     scui \
     sd \
+    sdbc2 \
     sdbt \
     sdd \
     sdfilt \

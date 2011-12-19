@@ -43,6 +43,7 @@ my_components = \
     component/canvas/source/vcl/vclcanvas \
     component/comphelper/util/comphelp \
     component/connectivity/source/dbtools/dbtools \
+    component/connectivity/source/manager/sdbc2 \
     component/configmgr/source/configmgr \
     component/cppcanvas/source/uno/mtfrenderer \
     component/cui/util/cui \
@@ -150,9 +151,6 @@ my_components += \
     localebe1 \
     mysql \
     odbc \
-    sdbc2 \
-
-.ENDIF
 
 .IF "$(BUILD_TYPE)" != "$(BUILD_TYPE:s/DESKTOP//)"
 
