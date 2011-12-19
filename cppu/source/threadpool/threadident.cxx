@@ -60,7 +60,7 @@ static inline void createLocalId( sal_Sequence **ppThreadId )
 }
 
 
-extern "C" CPPU_DLLPUBLIC void SAL_CALL
+extern "C" void SAL_CALL
 uno_getIdOfCurrentThread( sal_Sequence **ppThreadId )
     SAL_THROW_EXTERN_C()
 {
@@ -92,7 +92,7 @@ uno_getIdOfCurrentThread( sal_Sequence **ppThreadId )
 }
 
 
-extern "C" CPPU_DLLPUBLIC void SAL_CALL uno_releaseIdFromCurrentThread()
+extern "C" void SAL_CALL uno_releaseIdFromCurrentThread()
     SAL_THROW_EXTERN_C()
 {
     IdContainer *p = getIdContainer();
@@ -106,7 +106,7 @@ extern "C" CPPU_DLLPUBLIC void SAL_CALL uno_releaseIdFromCurrentThread()
     }
 }
 
-extern "C" CPPU_DLLPUBLIC sal_Bool SAL_CALL uno_bindIdToCurrentThread( sal_Sequence *pThreadId )
+extern "C" sal_Bool SAL_CALL uno_bindIdToCurrentThread( sal_Sequence *pThreadId )
     SAL_THROW_EXTERN_C()
 {
     IdContainer *p = getIdContainer();

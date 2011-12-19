@@ -509,7 +509,7 @@ using namespace ::cppu;
 extern "C"
 {
 //##################################################################################################
-CPPU_DLLPUBLIC void SAL_CALL uno_getMapping(
+void SAL_CALL uno_getMapping(
     uno_Mapping ** ppMapping, uno_Environment * pFrom, uno_Environment * pTo,
     rtl_uString * pAddPurpose )
     SAL_THROW_EXTERN_C()
@@ -577,7 +577,7 @@ CPPU_DLLPUBLIC void SAL_CALL uno_getMapping(
     }
 }
 //##################################################################################################
-CPPU_DLLPUBLIC void SAL_CALL uno_getMappingByName(
+void SAL_CALL uno_getMappingByName(
     uno_Mapping ** ppMapping, rtl_uString * pFrom, rtl_uString * pTo,
     rtl_uString * pAddPurpose )
     SAL_THROW_EXTERN_C()

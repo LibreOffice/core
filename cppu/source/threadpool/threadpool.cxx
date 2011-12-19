@@ -412,7 +412,7 @@ struct _uno_ThreadPool
     sal_Int32 dummy;
 };
 
-extern "C" CPPU_DLLPUBLIC uno_ThreadPool SAL_CALL
+extern "C" uno_ThreadPool SAL_CALL
 uno_threadpool_create() SAL_THROW_EXTERN_C()
 {
     MutexGuard guard( Mutex::getGlobalMutex() );
@@ -427,7 +427,7 @@ uno_threadpool_create() SAL_THROW_EXTERN_C()
     return h;
 }
 
-extern "C" CPPU_DLLPUBLIC void SAL_CALL
+extern "C" void SAL_CALL
 uno_threadpool_attach( uno_ThreadPool ) SAL_THROW_EXTERN_C()
 {
     sal_Sequence *pThreadId = 0;
@@ -437,7 +437,7 @@ uno_threadpool_attach( uno_ThreadPool ) SAL_THROW_EXTERN_C()
     uno_releaseIdFromCurrentThread();
 }
 
-extern "C" CPPU_DLLPUBLIC void SAL_CALL
+extern "C" void SAL_CALL
 uno_threadpool_enter( uno_ThreadPool hPool , void **ppJob )
     SAL_THROW_EXTERN_C()
 {
@@ -452,13 +452,13 @@ uno_threadpool_enter( uno_ThreadPool hPool , void **ppJob )
     uno_releaseIdFromCurrentThread();
 }
 
-extern "C" CPPU_DLLPUBLIC void SAL_CALL
+extern "C" void SAL_CALL
 uno_threadpool_detach( uno_ThreadPool ) SAL_THROW_EXTERN_C()
 {
     // we might do here some tiding up in case a thread called attach but never detach
 }
 
-extern "C" CPPU_DLLPUBLIC void SAL_CALL
+extern "C" void SAL_CALL
 uno_threadpool_putJob(
     uno_ThreadPool,
     sal_Sequence *pThreadId,
@@ -469,7 +469,7 @@ uno_threadpool_putJob(
     ThreadPool::getInstance()->addJob( pThreadId, bIsOneway, pJob ,doRequest );
 }
 
-extern "C" CPPU_DLLPUBLIC void SAL_CALL
+extern "C" void SAL_CALL
 uno_threadpool_dispose( uno_ThreadPool hPool ) SAL_THROW_EXTERN_C()
 {
     ThreadPool::getInstance()->dispose(
@@ -477,7 +477,7 @@ uno_threadpool_dispose( uno_ThreadPool hPool ) SAL_THROW_EXTERN_C()
             reinterpret_cast< sal_IntPtr >(hPool)) );
 }
 
-extern "C" CPPU_DLLPUBLIC void SAL_CALL
+extern "C" void SAL_CALL
 uno_threadpool_destroy( uno_ThreadPool hPool ) SAL_THROW_EXTERN_C()
 {
     ThreadPool::getInstance()->stopDisposing(
