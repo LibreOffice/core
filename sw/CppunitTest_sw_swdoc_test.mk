@@ -108,9 +108,6 @@ $(eval $(call gb_CppunitTest_add_old_components,sw_swdoc_test,\
     ucpfile1 \
 ))
 
-$(call gb_CppunitTest_get_target,sw_swdoc_test) : \
-        $(call gb_AllLangResTarget_get_target,sw)
-
 $(eval $(call gb_CppunitTest_set_args,sw_swdoc_test,\
     --headless \
     --protector unoexceptionprotector$(gb_Library_DLLEXT) unoexceptionprotector \
@@ -119,6 +116,9 @@ $(eval $(call gb_CppunitTest_set_args,sw_swdoc_test,\
 
 # we need to explicitly depend on the sw resource files needed at unit-test
 # runtime
-$(call gb_CppunitTest_get_target,sw_swdoc_test) : $(WORKDIR)/AllLangRes/sw
+$(call gb_CppunitTest_get_target,sw_swdoc_test) : \
+    $(WORKDIR)/AllLangRes/sw \
+    $(call gb_AllLangResTarget_get_target,sw) \
+    $(call gb_Library_get_target,localedata_en) \
 
 # vim: set noet sw=4 ts=4:

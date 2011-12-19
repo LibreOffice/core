@@ -138,7 +138,8 @@ $(eval $(call gb_CppunitTest_set_args,sw_macros_test,\
 #    relation
 # b) explicitly depend on the sw resource files needed at unit-test runtime
 $(call gb_CppunitTest_get_target,sw_macros_test) : \
-	$(call gb_Library_get_target,msword) \
-	$(call gb_Library_get_target,vbaswobj) \
+    $(call gb_Library_get_target,localedata_en) \
+    $(call gb_Library_get_target,msword) \
+    $(call gb_Library_get_target,vbaswobj) \
 
 # vim: set noet sw=4 ts=4:
