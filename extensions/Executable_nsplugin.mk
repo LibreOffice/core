@@ -1,4 +1,4 @@
-# -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
+# -*- Mode: makefile; tab-width: 4; indent-tabs-mode: t -*-
 #
 # Version: MPL 1.1 / GPLv3+ / LGPLv3+
 #
@@ -46,20 +46,14 @@ $(eval $(call gb_Executable_add_linked_libs,nsplugin,\
 	cppu \
 	cppuhelper \
 	sal \
+	$(if $(filter $(GUI),UNX), \
+		dl \
+	) \
+	$(if $(filter $(OS),SOLARIS), \
+		nsl \
+		socket \
+	) \
 ))
-
-ifeq ($(OS),LINUX)
-$(eval $(call gb_Executable_add_linked_libs,nsplugin,\
-	dl \
-))
-endif
-
-ifeq ($(OS),SOLARIS)
-$(eval $(call gb_Executable_add_libs,nsplugin,\
-	-lsocket \
-	-lnsl \
-))
-endif
 
 ifeq ($(GUI),WNT)
 $(eval $(call gb_Executable_add_ldflags,nsplugin,\
@@ -85,4 +79,4 @@ $(eval $(call gb_Executable_add_linked_libs,nsplugin,\
 ))
 endif # WNT
 
-# vim:set shiftwidth=4 softtabstop=4 expandtab:
+# vim: set noet sw=4 ts=4:
