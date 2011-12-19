@@ -74,7 +74,7 @@ BUILD_DIR=$(CONFIGURE_DIR)
 
 .ELSE   # WNT, not GCC
 BUILD_DIR=pixman
-BUILD_ACTION=$(GNUMAKE) -f Makefile.win32 MMX=off SSE2=on CFG=release
+BUILD_ACTION=$(GNUMAKE) -f Makefile.win32 MMX=on SSE2=on CFG=release
 .ENDIF
 
 .ELIF "$(GUIBASE)"=="aqua"
