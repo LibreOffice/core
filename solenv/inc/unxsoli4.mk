@@ -44,7 +44,7 @@ JAVA_RUNTIME=-ljava_g
 
 # architecture dependent flags for the C and C++ compiler that can be changed by
 # exporting the variable ARCH_FLAGS="..." in the shell, which is used to start build
-ARCH_FLAGS*=
+ARCH_FLAGS*="-features=rvalueref"
 
 CXX*=CC
 CC*=cc
