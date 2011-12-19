@@ -104,10 +104,11 @@ ScRangeManagerTable::~ScRangeManagerTable()
     Clear();
 }
 
-void ScRangeManagerTable::addEntry(const ScRangeNameLine& rLine)
+void ScRangeManagerTable::addEntry(const ScRangeNameLine& rLine, bool bSetCurEntry)
 {
     SvLBoxEntry* pEntry = InsertEntryToColumn( createEntryString(rLine), LIST_APPEND, 0xffff);
-    SetCurEntry(pEntry);
+    if (bSetCurEntry)
+        SetCurEntry(pEntry);
 }
 
 void ScRangeManagerTable::GetCurrentLine(ScRangeNameLine& rLine)
@@ -141,7 +142,7 @@ void ScRangeManagerTable::Init()
             if (!it->second->HasType(RT_DATABASE) && !it->second->HasType(RT_SHARED))
             {
                 aLine.aName = it->second->GetName();
-                addEntry(aLine);
+                addEntry(aLine, false);
             }
         }
     }
