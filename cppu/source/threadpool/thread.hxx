@@ -74,6 +74,7 @@ namespace cppu_threadpool {
     class ThreadAdmin
     {
     public:
+        ThreadAdmin();
         ~ThreadAdmin ();
         static ThreadAdminHolder &getInstance();
         void add( ORequestThread * );
@@ -83,6 +84,7 @@ namespace cppu_threadpool {
     private:
         ::osl::Mutex m_mutex;
         ::std::list< ORequestThread * > m_lst;
+        bool m_disposed;
     };
 
 } // end cppu_threadpool
