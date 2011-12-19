@@ -149,11 +149,10 @@ gb_LinkTarget__RPATHS := \
 	SDKBIN: \
 	NONE:@__VIA_LIBRARY_PATH__@ \
 
-# The below contains a bad hack to set the correct install name for
-# libuno_salhepergcc3.dylib.3, with a trailing ".3":
+# $(call gb_LinkTarget__get_installname,libfilename,soversion,layerprefix)
 define gb_LinkTarget__get_installname
-$(if $(2),-install_name '$(2)$(1)$(if $(filter $(1),libuno_salhelpergcc3.dylib),.3)',$(error
-    cannot determine -install_name for $(2)))
+$(if $(3),-install_name '$(3)$(1)$(if $(2),.$(2))',
+	$(call gb_Output_error,cannot determine -install_name for $(3)))
 endef
 
 gb_LinkTarget_CFLAGS := $(gb_CFLAGS) $(gb_CFLAGS_WERROR)
@@ -293,11 +292,13 @@ gb_Library_LAYER := \
 	$(foreach lib,$(gb_Library_UNOVERLIBS),$(lib):URELIB) \
 
 define gb_Library_get_rpath
-$(call gb_LinkTarget__get_installname,$(call gb_Library_get_filename,$(1)),$(call gb_LinkTarget__get_rpath_for_layer,$(call gb_Library_get_layer,$(1))))
+$(call gb_LinkTarget__get_installname,$(call gb_Library_get_filename,$(1)),$(2),$(call gb_LinkTarget__get_rpath_for_layer,$(call gb_Library_get_layer,$(1))))
 endef
 
+# RPATH def is delayed until the link command to get current value of SOVERSION
 define gb_Library_Library_platform
-$(call gb_LinkTarget_get_target,$(2)) : RPATH := $(call gb_Library_get_rpath,$(1))
+$(call gb_LinkTarget_get_target,$(2)) : \
+	RPATH = $$(call gb_Library_get_rpath,$(1),$$(SOVERSION))
 $(call gb_LinkTarget_get_target,$(2)) : LAYER := $(call gb_Library_get_layer,$(1))
 
 endef
