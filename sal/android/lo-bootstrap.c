@@ -188,6 +188,7 @@ free_ptrarray(void **pa)
     free(pa);
 }
 
+__attribute__ ((visibility("default")))
 jobjectArray
 Java_org_libreoffice_android_Bootstrap_dlneeds(JNIEnv* env,
                                                jobject clazz,
@@ -238,6 +239,7 @@ Java_org_libreoffice_android_Bootstrap_dlneeds(JNIEnv* env,
     return result;
 }
 
+__attribute__ ((visibility("default")))
 jint
 Java_org_libreoffice_android_Bootstrap_dlopen(JNIEnv* env,
                                               jobject clazz,
@@ -255,6 +257,7 @@ Java_org_libreoffice_android_Bootstrap_dlopen(JNIEnv* env,
     return (jint) p;
 }
 
+__attribute__ ((visibility("default")))
 jint
 Java_org_libreoffice_android_Bootstrap_dlsym(JNIEnv* env,
                                              jobject clazz,
@@ -273,6 +276,7 @@ Java_org_libreoffice_android_Bootstrap_dlsym(JNIEnv* env,
     return (jint) p;
 }
 
+__attribute__ ((visibility("default")))
 jint
 Java_org_libreoffice_android_Bootstrap_dlcall(JNIEnv* env,
                                               jobject clazz,
@@ -315,6 +319,7 @@ Java_org_libreoffice_android_Bootstrap_dlcall(JNIEnv* env,
 //                                    String apkFile,
 //                                    String[] ld_library_path);
 
+__attribute__ ((visibility("default")))
 jboolean
 Java_org_libreoffice_android_Bootstrap_setup__Ljava_lang_String_2Ljava_lang_String_2_3Ljava_lang_String_2
     (JNIEnv* env,
@@ -389,6 +394,7 @@ Java_org_libreoffice_android_Bootstrap_setup__Ljava_lang_String_2Ljava_lang_Stri
 //                                    Object lo_main_argument,
 //                                    int lo_main_delay);
 
+__attribute__ ((visibility("default")))
 jboolean
 Java_org_libreoffice_android_Bootstrap_setup__ILjava_lang_Object_2I(JNIEnv* env,
                                                                     jobject clazz,
@@ -432,6 +438,7 @@ Java_org_libreoffice_android_Bootstrap_setup__ILjava_lang_Object_2I(JNIEnv* env,
 
 // public static native int getpid();
 
+__attribute__ ((visibility("default")))
 jint
 Java_org_libreoffice_android_Bootstrap_getpid(JNIEnv* env,
                                               jobject clazz)
@@ -445,6 +452,7 @@ Java_org_libreoffice_android_Bootstrap_getpid(JNIEnv* env,
 
 // public static native void system(String cmdline);
 
+__attribute__ ((visibility("default")))
 void
 Java_org_libreoffice_android_Bootstrap_system(JNIEnv* env,
                                               jobject clazz,
@@ -465,6 +473,7 @@ Java_org_libreoffice_android_Bootstrap_system(JNIEnv* env,
 
 // public static native void putenv(String string);
 
+__attribute__ ((visibility("default")))
 void
 Java_org_libreoffice_android_Bootstrap_putenv(JNIEnv* env,
                                               jobject clazz,
@@ -483,6 +492,7 @@ Java_org_libreoffice_android_Bootstrap_putenv(JNIEnv* env,
     (*env)->ReleaseStringUTFChars(env, string, s);
 }
 
+__attribute__ ((visibility("default")))
 char **
 lo_dlneeds(const char *library)
 {
@@ -627,6 +637,7 @@ lo_dlneeds(const char *library)
     return NULL;
 }
 
+__attribute__ ((visibility("default")))
 void *
 lo_dlopen(const char *library)
 {
@@ -730,6 +741,7 @@ lo_dlopen(const char *library)
     return p;
 }
 
+__attribute__ ((visibility("default")))
 void *
 lo_dlsym(void *handle,
          const char *symbol)
@@ -741,6 +753,7 @@ lo_dlsym(void *handle,
     return p;
 }
 
+__attribute__ ((visibility("default")))
 int
 lo_dladdr(void *addr,
           Dl_info *info)
@@ -815,6 +828,7 @@ find_cdir_entry (struct cdir_entry *entry, int count, const char *name)
     return NULL;
 }
 
+__attribute__ ((visibility("default")))
 void *
 lo_apkentry(const char *filename,
             size_t *size)
@@ -863,6 +877,7 @@ lo_apkentry(const char *filename,
     return data;
 }
 
+__attribute__ ((visibility("default")))
 int
 lo_dlcall_argc_argv(void *function,
                     int argc,
@@ -1047,6 +1062,7 @@ patch_libgnustl_shared(void)
           &replacement_method_before_arm);
 }
 
+__attribute__ ((visibility("default")))
 void
 Java_org_libreoffice_android_Bootstrap_patch_libgnustl_shared(JNIEnv* env,
                                                               jobject clazz)
@@ -1057,12 +1073,14 @@ Java_org_libreoffice_android_Bootstrap_patch_libgnustl_shared(JNIEnv* env,
     patch_libgnustl_shared();
 }
 
+__attribute__ ((visibility("default")))
 JavaVM *
 lo_get_javavm(void)
 {
     return app->activity->vm;
 }
 
+__attribute__ ((visibility("default")))
 void
 android_main(struct android_app* state)
 {
