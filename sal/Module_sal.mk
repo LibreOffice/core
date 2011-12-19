@@ -30,8 +30,6 @@ $(eval $(call gb_Module_Module,sal))
 
 $(eval $(call gb_Module_add_targets,sal,\
 	Executable_cppunittester \
-	$(if $(filter $(CROSS_COMPILING),YES)$(filter $(COM),MSC),, \
-		Executable_typesconfig) \
 	$(if $(filter $(OS),ANDROID), \
 		Library_lo-bootstrap) \
 	Library_sal \

@@ -29,12 +29,6 @@ $(eval $(call gb_Package_Package,sal_generated,$(WORKDIR)/CustomTarget/sal/util)
 
 $(eval $(call gb_Package_add_customtarget,sal_generated,sal/util))
 
-ifneq ($(OS),WNT)
-$(eval $(call gb_CustomTarget_add_outdir_dependencies,sal/util,\
-	$(call gb_Executable_get_target,typesconfig) \
-))
-endif
-
 $(eval $(call gb_Package_add_file,sal_generated,inc/rtlbootstrap.mk,rtlbootstrap.mk))
 $(eval $(call gb_Package_add_file,sal_generated,inc/sal/udkversion.h,sal/udkversion.h))
 
