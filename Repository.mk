@@ -41,6 +41,7 @@ $(eval $(call gb_Helper_register_executables,NONE, \
     saxparser \
     so_checksum \
     svidl \
+    typesconfig \
     xml2cmp \
 ))
 
