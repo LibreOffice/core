@@ -29,6 +29,10 @@
 
 #include <boost/bind.hpp>
 
+#include "comphelper/processfactory.hxx"
+
+#include "officecfg/Office/Common.hxx"
+
 #include "vcl/print.hxx"
 #include <sal/macros.h>
 
@@ -321,7 +325,7 @@ sal_uLong AquaSalInfoPrinter::GetCapabilities( const ImplJobSetup*, sal_uInt16 i
         case PRINTER_CAPABILITIES_SETPAPER:
             return 1;
         case PRINTER_CAPABILITIES_EXTERNALDIALOG:
-            return useSystemPrintDialog() ? 1 : 0;
+            return officecfg::Office::Common::Misc::UseSystemPrintDialog::get(comphelper::getProcessComponentContext()) ? 1 : 0;
         case PRINTER_CAPABILITIES_PDF:
             return 1;
         case PRINTER_CAPABILITIES_USEPULLMODEL:
@@ -516,7 +520,7 @@ sal_Bool AquaSalInfoPrinter::StartJob( const rtl::OUString* i_pFileName,
             if( pPrintOperation )
             {
                 NSObject* pReleaseAfterUse = nil;
-                bool bShowPanel = (! i_rController.isDirectPrint() && useSystemPrintDialog() && i_rController.isShowDialogs() );
+                bool bShowPanel = (! i_rController.isDirectPrint() && officecfg::Office::Common::Misc::UseSystemPrintDialog::get(comphelper::getProcessComponentContext()) && i_rController.isShowDialogs() );
                 [pPrintOperation setShowsPrintPanel: bShowPanel ? YES : NO ];
                 [pPrintOperation setShowsProgressPanel: bShowProgressPanel ? YES : NO];
 

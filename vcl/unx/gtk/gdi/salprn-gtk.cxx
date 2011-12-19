@@ -58,6 +58,8 @@
 #include <com/sun/star/view/PrintableState.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 
+#include <officecfg/Office/Common.hxx>
+
 #include <rtl/oustringostreaminserter.hxx>
 
 #include <unotools/streamwrap.hxx>
@@ -181,7 +183,9 @@ lcl_getGtkSalInstance()
 bool
 lcl_useSystemPrintDialog()
 {
-    return vcl::useSystemPrintDialog() && SalGenericSystem::enableExperimentalFeatures()
+    uno::Reference<uno::XComponentContext> const xCtxt(comphelper::getProcessComponentContext());
+    return officecfg::Office::Common::Misc::UseSystemPrintDialog::get(xCtxt)
+        && officecfg::Office::Common::Misc::ExperimentalMode::get(xCtxt)
         && lcl_getGtkSalInstance().getPrintWrapper()->supportsPrinting();
 }
 
