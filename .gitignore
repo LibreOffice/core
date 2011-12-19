@@ -1,8 +1,11 @@
 # backup and temporary files
 *~
-.*.sw[op]
+.*sw?
 \#*
 .DS_Store
+
+# StGit
+.stgit-edit.txt
 
 # python generated file
 *.pyc
