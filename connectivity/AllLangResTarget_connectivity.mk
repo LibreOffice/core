@@ -25,16 +25,23 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Module_Module,connectivity))
+$(eval $(call gb_AllLangResTarget_AllLangResTarget,connectivity))
 
-$(eval $(call gb_Module_add_targets,connectivity,\
-	AllLangResTarget_connectivity \
-	Package_inc \
-	Package_xml \
-	Jar_sdbc_hsqldb \
-	Library_dbtools \
-	Library_sdbc2 \
-	Library_dbpool2 \
+$(eval $(call gb_AllLangResTarget_add_srs,connectivity,\
+	connectivity/res \
+))
+
+$(eval $(call gb_SrsTarget_SrsTarget,connectivity/res))
+
+$(eval $(call gb_SrsTarget_set_include,connectivity/res,\
+	$$(INCLUDE) \
+	-I$(SRCDIR)/connectivity/source/inc \
+))
+
+$(eval $(call gb_SrsTarget_add_files,connectivity/res,\
+	connectivity/source/resource/conn_error_message.src \
+	connectivity/source/resource/conn_log_res.src \
+	connectivity/source/resource/conn_shared_res.src \
 ))
 
 # vim: set noet sw=4 ts=4:
