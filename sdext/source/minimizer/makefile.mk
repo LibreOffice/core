@@ -146,10 +146,13 @@ $(DESCRIPTION_SRC) : description.xml
     $(COPY) $< $@
 .ENDIF
 
-$(COMPONENT_DESCRIPTION) : $(DESCRIPTION)
+$(COMPONENT_DESCRIPTION) : $(MISC)/descriptions
+
+$(MISC)/descriptions : $(DESCRIPTION)
     $(COPY) description-en-US.txt $(EXTENSIONDIR)
 .IF "$(WITH_LANG)" != ""
     $(COPY) $(MISC)/$(EXTENSIONNAME)_in/description-*.txt $(EXTENSIONDIR)
 .ENDIF
+    $(TOUCH) $@
 	 
 .ENDIF # L10N_framework
