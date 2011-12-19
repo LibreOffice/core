@@ -46,11 +46,14 @@ gb_Library_FILENAMES := $(patsubst unsafe_uno:libunsafe_uno%,unsafe_uno:libunsaf
 endif
 
 ifeq ($(OS),WNT)
+gb_Library_DLLFILENAMES := $(patsubst affine_uno:affine_uno%,affine_uno:affine_uno_uno%,$(gb_Library_DLLFILENAMES))
 gb_Library_DLLFILENAMES := $(patsubst comphelper:comphelper%,comphelper:comphelp%,$(gb_Library_DLLFILENAMES))
 gb_Library_DLLFILENAMES := $(patsubst icuuc:icuuc%,icuuc:icuuc40%,$(gb_Library_DLLFILENAMES))
+gb_Library_DLLFILENAMES := $(patsubst log_uno:log_uno%,log_uno:log_uno_uno%,$(gb_Library_DLLFILENAMES))
 gb_Library_DLLFILENAMES := $(patsubst ucbhelper:ucbhelper%,ucbhelper:ucbhelper4%,$(gb_Library_DLLFILENAMES))
 gb_Library_DLLFILENAMES := $(patsubst ucb:libucb%,ucb:libucb1%,$(gb_Library_DLLFILENAMES))
 gb_Library_DLLFILENAMES := $(patsubst ucpfile:libucpfile%,ucpfile:libucpfile1%,$(gb_Library_DLLFILENAMES))
+gb_Library_DLLFILENAMES := $(patsubst unsafe_uno:unsafe_uno%,unsafe_uno:unsafe_uno_uno%,$(gb_Library_DLLFILENAMES))
 gb_Library_DLLFILENAMES := $(patsubst z:z%,z:zlib%,$(gb_Library_DLLFILENAMES))
 
 gb_Library_FILENAMES := $(patsubst exttextcat:libexttextcat%,exttextcat:libilibexttextcat%,$(gb_Library_FILENAMES))

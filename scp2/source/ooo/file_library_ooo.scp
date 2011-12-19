@@ -1479,15 +1479,6 @@ STD_LIB_FILE( gid_File_Lib_Updchkui , updchk )
 
 SPECIAL_COMPONENT_LIB_FILE( gid_File_Lib_Updatefeed , updatefeed.uno )
 
-#ifdef WNT
-File gid_File_Lib_Onlinecheck
-    LIB_FILE_BODY;
-    Styles = (PACKED);
-    Dir = SCP2_OOO_BIN_DIR;
-    Name = "onlinecheck.dll";
-End
-#endif
-
 #ifndef SYSTEM_OPENSSL
 File gid_File_Lib_Openssl
     LIB_FILE_BODY;

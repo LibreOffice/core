@@ -191,7 +191,11 @@ End
 File gid_File_Dl_Cppuhelper
     LIB_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
+#if defined WNT && !defined _MSC // Hack for not gbuild'ified cppuhelper on MinGW:
+    Name = "uno_cppuhelpergcc33.dll"
+#else
     Name = SCP2_URE_DL_UNO_COMID_VER("cppuhelper", "3");
+#endif
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
     // CompID = "D2A191E6-2023-41F5-9032-B98C50C37964";
 End
@@ -252,11 +256,7 @@ End
 File gid_File_Dl_Salhelper
     LIB_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
-#if defined WNT && !defined _MSC // Hack for gbuild'ified salhelper on MinGW:
-    Name = "uno_salhelpergcc3.dll"
-#else
     Name = SCP2_URE_DL_UNO_COMID_VER("salhelper", "3");
-#endif
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
     // CompID = "879B80E0-F6E1-4931-8EE6-7CF867CB6AA5";
 End
