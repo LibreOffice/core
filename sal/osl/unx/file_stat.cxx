@@ -163,6 +163,22 @@ namespace /* private */
         }
     }
 
+    /* contrary to what is stated above the use of access calls
+       is required on network file systems not using unix semantics
+      (AFS)
+    */
+    inline void set_file_access_real_rights(const rtl::OUString& file_path, oslFileStatus* pStat)
+    {
+        pStat->uValidFields |= osl_FileStatus_Mask_Attributes;
+
+        if (access_u(file_path.pData, W_OK) < 0)
+            pStat->uAttributes |= osl_File_Attribute_ReadOnly;
+
+        if (access_u(file_path.pData, X_OK) == 0)
+            pStat->uAttributes |= osl_File_Attribute_Executable;
+    }
+
+
     inline void set_file_hidden_status(const rtl::OUString& file_path, oslFileStatus* pStat)
     {
         pStat->uAttributes   = osl::systemPathIsHiddenFileOrDirectoryEntry(file_path) ? osl_File_Attribute_Hidden : 0;
@@ -177,10 +193,15 @@ namespace /* private */
         set_file_hidden_status(file_path, pStat);
         set_file_access_mask(file_stat, pStat);
 
+#ifdef FAKE_ACCESS_RIGHTS
         // we set the file access rights only on demand
         // because it's potentially expensive
         if (uFieldMask & osl_FileStatus_Mask_Attributes)
                set_file_access_rights(file_stat, pStat);
+#else
+        if (uFieldMask & osl_FileStatus_Mask_Attributes)
+            set_file_access_real_rights(file_path, pStat);
+#endif
     }
 
     inline void set_file_access_time(const struct stat& file_stat, oslFileStatus* pStat)
