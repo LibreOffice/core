@@ -30,6 +30,7 @@ $(eval $(call gb_Helper_register_executables,NONE, \
     bestreversemap \
     bmp \
     bmpsum \
+    cppunit/cppunittester \
     g2g \
     gencoll_rule \
     genconv_dict \
