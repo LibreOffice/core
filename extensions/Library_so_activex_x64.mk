@@ -36,7 +36,7 @@ $(SRCDIR)/extensions/source/activex/so_activex.cxx: $(WORKDIR)/CustomTarget/so_a
 
 $(eval $(call gb_Library_set_include,so_activex_x64,\
 	$$(INCLUDE) \
-	-I$(realpath $(SRCDIR)/extensions/source/activex) \
+	-I$(SRCDIR)/extensions/source/activex \
 	-I$(WORKDIR)/CustomTarget/so_activex \
 	$(foreach i,$(ATL_INCLUDE), -I$(i)) \
 ))

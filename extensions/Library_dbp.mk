@@ -34,8 +34,8 @@ $(eval $(call gb_Library_set_componentfile,dbp,extensions/source/dbpilots/dbp))
 
 $(eval $(call gb_Library_set_include,dbp,\
 	$$(INCLUDE) \
-	-I$(realpath $(SRCDIR)/extensions/inc) \
-	-I$(realpath $(SRCDIR)/extensions/source/inc) \
+	-I$(SRCDIR)/extensions/inc \
+	-I$(SRCDIR)/extensions/source/inc \
 ))
 
 $(eval $(call gb_Library_add_defs,dbp,\

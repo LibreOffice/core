@@ -38,7 +38,7 @@ $(eval $(call gb_SrsTarget_SrsTarget,abp/res))
 
 $(eval $(call gb_SrsTarget_set_include,abp/res,\
 	$$(INCLUDE) \
-	-I$(realpath $(SRCDIR)/extensions/inc) \
+	-I$(SRCDIR)/extensions/inc \
 ))
 
 $(eval $(call gb_SrsTarget_add_files,abp/res,\

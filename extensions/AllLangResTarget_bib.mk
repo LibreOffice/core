@@ -36,7 +36,7 @@ $(eval $(call gb_SrsTarget_SrsTarget,bib/res))
 
 $(eval $(call gb_SrsTarget_set_include,bib/res,\
 	$$(INCLUDE) \
-	-I$(realpath $(SRCDIR)/extensions/inc) \
+	-I$(SRCDIR)/extensions/inc \
 ))
 
 $(eval $(call gb_SrsTarget_add_files,bib/res,\
@@ -44,10 +44,6 @@ $(eval $(call gb_SrsTarget_add_files,bib/res,\
 	extensions/source/bibliography/datman.src \
 	extensions/source/bibliography/sections.src \
 	extensions/source/bibliography/toolbar.src \
-))
-
-$(eval $(call gb_SrsTarget_add_templates,bib/res,\
-	extensions/source/bibliography/bib.hrc \
 ))
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:

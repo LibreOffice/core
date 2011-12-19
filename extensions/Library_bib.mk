@@ -34,7 +34,7 @@ $(eval $(call gb_Library_set_componentfile,bib,extensions/source/bibliography/bi
 
 $(eval $(call gb_Library_set_include,bib,\
 	$$(INCLUDE) \
-	-I$(realpath $(SRCDIR)/extensions/inc) \
+	-I$(SRCDIR)/extensions/inc \
 ))
 
 $(eval $(call gb_Library_add_api,bib,\

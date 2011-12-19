@@ -34,8 +34,8 @@ $(eval $(call gb_Library_set_componentfile,abp,extensions/source/abpilot/abp))
 
 $(eval $(call gb_Library_set_include,abp,\
 	$$(INCLUDE) \
-	-I$(realpath $(SRCDIR)/extensions/inc) \
-	-I$(realpath $(SRCDIR)/extensions/source/inc) \
+	-I$(SRCDIR)/extensions/inc \
+	-I$(SRCDIR)/extensions/source/inc \
 ))
 
 ifneq ($(WITH_MOZILLA),NO)
