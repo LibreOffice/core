@@ -96,74 +96,76 @@ public:
 void Test::testUnoType() {
     css::uno::Type t;
     t = ::cppu::UnoType< ::cppu::UnoVoidType >::get();
-    CPPUNIT_ASSERT_EQUAL(css::uno::TypeClass_VOID, t.getTypeClass());
+    CPPUNIT_ASSERT_EQUAL(+css::uno::TypeClass_VOID, +t.getTypeClass());
     CPPUNIT_ASSERT_EQUAL(
         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("void")), t.getTypeName());
     t = ::cppu::UnoType< bool >::get();
-    CPPUNIT_ASSERT_EQUAL(css::uno::TypeClass_BOOLEAN, t.getTypeClass());
+    CPPUNIT_ASSERT_EQUAL(+css::uno::TypeClass_BOOLEAN, +t.getTypeClass());
     CPPUNIT_ASSERT_EQUAL(
         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("boolean")),
         t.getTypeName());
     CPPUNIT_ASSERT(::cppu::UnoType< ::sal_Bool >::get() == t);
     t = ::cppu::UnoType< ::sal_Int8 >::get();
-    CPPUNIT_ASSERT_EQUAL(css::uno::TypeClass_BYTE, t.getTypeClass());
+    CPPUNIT_ASSERT_EQUAL(+css::uno::TypeClass_BYTE, +t.getTypeClass());
     CPPUNIT_ASSERT_EQUAL(
         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("byte")), t.getTypeName());
     t = ::cppu::UnoType< ::sal_Int16 >::get();
-    CPPUNIT_ASSERT_EQUAL(css::uno::TypeClass_SHORT, t.getTypeClass());
+    CPPUNIT_ASSERT_EQUAL(+css::uno::TypeClass_SHORT, +t.getTypeClass());
     CPPUNIT_ASSERT_EQUAL(
         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("short")), t.getTypeName());
     t = ::cppu::UnoType< ::cppu::UnoUnsignedShortType >::get();
-    CPPUNIT_ASSERT_EQUAL(css::uno::TypeClass_UNSIGNED_SHORT, t.getTypeClass());
+    CPPUNIT_ASSERT_EQUAL(
+        +css::uno::TypeClass_UNSIGNED_SHORT, +t.getTypeClass());
     CPPUNIT_ASSERT_EQUAL(
         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("unsigned short")),
         t.getTypeName());
     t = ::cppu::UnoType< ::sal_Int32 >::get();
-    CPPUNIT_ASSERT_EQUAL(css::uno::TypeClass_LONG, t.getTypeClass());
+    CPPUNIT_ASSERT_EQUAL(+css::uno::TypeClass_LONG, +t.getTypeClass());
     CPPUNIT_ASSERT_EQUAL(
         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("long")), t.getTypeName());
     t = ::cppu::UnoType< ::sal_uInt32 >::get();
-    CPPUNIT_ASSERT_EQUAL(css::uno::TypeClass_UNSIGNED_LONG, t.getTypeClass());
+    CPPUNIT_ASSERT_EQUAL(+css::uno::TypeClass_UNSIGNED_LONG, +t.getTypeClass());
     CPPUNIT_ASSERT_EQUAL(
         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("unsigned long")),
         t.getTypeName());
     t = ::cppu::UnoType< ::sal_Int64 >::get();
-    CPPUNIT_ASSERT_EQUAL(css::uno::TypeClass_HYPER, t.getTypeClass());
+    CPPUNIT_ASSERT_EQUAL(+css::uno::TypeClass_HYPER, +t.getTypeClass());
     CPPUNIT_ASSERT_EQUAL(
         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("hyper")), t.getTypeName());
     t = ::cppu::UnoType< ::sal_uInt64 >::get();
-    CPPUNIT_ASSERT_EQUAL(css::uno::TypeClass_UNSIGNED_HYPER, t.getTypeClass());
+    CPPUNIT_ASSERT_EQUAL(
+        +css::uno::TypeClass_UNSIGNED_HYPER, +t.getTypeClass());
     CPPUNIT_ASSERT_EQUAL(
         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("unsigned hyper")),
         t.getTypeName());
     t = ::cppu::UnoType< float >::get();
-    CPPUNIT_ASSERT_EQUAL(css::uno::TypeClass_FLOAT, t.getTypeClass());
+    CPPUNIT_ASSERT_EQUAL(+css::uno::TypeClass_FLOAT, +t.getTypeClass());
     CPPUNIT_ASSERT_EQUAL(
         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("float")), t.getTypeName());
     t = ::cppu::UnoType< double >::get();
-    CPPUNIT_ASSERT_EQUAL(css::uno::TypeClass_DOUBLE, t.getTypeClass());
+    CPPUNIT_ASSERT_EQUAL(+css::uno::TypeClass_DOUBLE, +t.getTypeClass());
     CPPUNIT_ASSERT_EQUAL(
         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("double")),
         t.getTypeName());
     t = ::cppu::UnoType< ::cppu::UnoCharType >::get();
-    CPPUNIT_ASSERT_EQUAL(css::uno::TypeClass_CHAR, t.getTypeClass());
+    CPPUNIT_ASSERT_EQUAL(+css::uno::TypeClass_CHAR, +t.getTypeClass());
     CPPUNIT_ASSERT_EQUAL(
         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("char")), t.getTypeName());
     t = ::cppu::UnoType< ::rtl::OUString >::get();
-    CPPUNIT_ASSERT_EQUAL(css::uno::TypeClass_STRING, t.getTypeClass());
+    CPPUNIT_ASSERT_EQUAL(+css::uno::TypeClass_STRING, +t.getTypeClass());
     CPPUNIT_ASSERT_EQUAL(
         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("string")),
         t.getTypeName());
     t = ::cppu::UnoType< css::uno::Type >::get();
-    CPPUNIT_ASSERT_EQUAL(css::uno::TypeClass_TYPE, t.getTypeClass());
+    CPPUNIT_ASSERT_EQUAL(+css::uno::TypeClass_TYPE, +t.getTypeClass());
     CPPUNIT_ASSERT_EQUAL(
         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("type")), t.getTypeName());
     t = ::cppu::UnoType< css::uno::Any >::get();
-    CPPUNIT_ASSERT_EQUAL(css::uno::TypeClass_ANY, t.getTypeClass());
+    CPPUNIT_ASSERT_EQUAL(+css::uno::TypeClass_ANY, +t.getTypeClass());
     CPPUNIT_ASSERT_EQUAL(
         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("any")), t.getTypeName());
     t = ::cppu::UnoType< ::cppu::UnoSequenceType< ::sal_Int8 > >::get();
-    CPPUNIT_ASSERT_EQUAL(css::uno::TypeClass_SEQUENCE, t.getTypeClass());
+    CPPUNIT_ASSERT_EQUAL(+css::uno::TypeClass_SEQUENCE, +t.getTypeClass());
     CPPUNIT_ASSERT_EQUAL(
         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("[]byte")),
         t.getTypeName());
@@ -171,19 +173,19 @@ void Test::testUnoType() {
         ::cppu::UnoType< css::uno::Sequence< ::sal_Int8 > >::get() == t);
     t = ::cppu::UnoType<
         ::cppu::UnoSequenceType< ::cppu::UnoUnsignedShortType > >::get();
-    CPPUNIT_ASSERT_EQUAL(css::uno::TypeClass_SEQUENCE, t.getTypeClass());
+    CPPUNIT_ASSERT_EQUAL(+css::uno::TypeClass_SEQUENCE, +t.getTypeClass());
     CPPUNIT_ASSERT_EQUAL(
         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("[]unsigned short")),
         t.getTypeName());
     t = ::cppu::UnoType<
         ::cppu::UnoSequenceType< ::cppu::UnoCharType > >::get();
-    CPPUNIT_ASSERT_EQUAL(css::uno::TypeClass_SEQUENCE, t.getTypeClass());
+    CPPUNIT_ASSERT_EQUAL(+css::uno::TypeClass_SEQUENCE, +t.getTypeClass());
     CPPUNIT_ASSERT_EQUAL(
         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("[]char")),
         t.getTypeName());
     t = ::cppu::UnoType< ::cppu::UnoSequenceType< ::cppu::UnoSequenceType<
         ::sal_Int8 > > >::get();
-    CPPUNIT_ASSERT_EQUAL(css::uno::TypeClass_SEQUENCE, t.getTypeClass());
+    CPPUNIT_ASSERT_EQUAL(+css::uno::TypeClass_SEQUENCE, +t.getTypeClass());
     CPPUNIT_ASSERT_EQUAL(
         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("[][]byte")),
         t.getTypeName());
@@ -192,31 +194,31 @@ void Test::testUnoType() {
         css::uno::Sequence< css::uno::Sequence< ::sal_Int8 > > >::get() == t);
     t = ::cppu::UnoType< ::cppu::UnoSequenceType< ::cppu::UnoSequenceType<
         ::cppu::UnoUnsignedShortType > > >::get();
-    CPPUNIT_ASSERT_EQUAL(css::uno::TypeClass_SEQUENCE, t.getTypeClass());
+    CPPUNIT_ASSERT_EQUAL(+css::uno::TypeClass_SEQUENCE, +t.getTypeClass());
     CPPUNIT_ASSERT_EQUAL(
         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("[][]unsigned short")),
         t.getTypeName());
     t = ::cppu::UnoType< ::cppu::UnoSequenceType< ::cppu::UnoSequenceType<
         ::cppu::UnoCharType > > >::get();
-    CPPUNIT_ASSERT_EQUAL(css::uno::TypeClass_SEQUENCE, t.getTypeClass());
+    CPPUNIT_ASSERT_EQUAL(+css::uno::TypeClass_SEQUENCE, +t.getTypeClass());
     CPPUNIT_ASSERT_EQUAL(
         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("[][]char")),
         t.getTypeName());
     t = ::cppu::UnoType< css::uno::TypeClass >::get();
-    CPPUNIT_ASSERT_EQUAL(css::uno::TypeClass_ENUM, t.getTypeClass());
+    CPPUNIT_ASSERT_EQUAL(+css::uno::TypeClass_ENUM, +t.getTypeClass());
     CPPUNIT_ASSERT_EQUAL(
         ::rtl::OUString(
             RTL_CONSTASCII_USTRINGPARAM("com.sun.star.uno.TypeClass")),
         t.getTypeName());
     t = ::cppu::UnoType< css::lang::EventObject >::get();
-    CPPUNIT_ASSERT_EQUAL(css::uno::TypeClass_STRUCT, t.getTypeClass());
+    CPPUNIT_ASSERT_EQUAL(+css::uno::TypeClass_STRUCT, +t.getTypeClass());
     CPPUNIT_ASSERT_EQUAL(
         ::rtl::OUString(
             RTL_CONSTASCII_USTRINGPARAM("com.sun.star.lang.EventObject")),
         t.getTypeName());
     CPPUNIT_ASSERT(::cppu::UnoType< DerivedStruct1 >::get() == t);
     t = ::cppu::UnoType< css::beans::PropertyChangeEvent >::get();
-    CPPUNIT_ASSERT_EQUAL(css::uno::TypeClass_STRUCT, t.getTypeClass());
+    CPPUNIT_ASSERT_EQUAL(+css::uno::TypeClass_STRUCT, +t.getTypeClass());
     CPPUNIT_ASSERT_EQUAL(
         ::rtl::OUString(
             RTL_CONSTASCII_USTRINGPARAM(
@@ -226,20 +228,20 @@ void Test::testUnoType() {
     CPPUNIT_ASSERT(::cppu::UnoType< DerivedStruct2 >::get() == t);
 #endif
     t = ::cppu::UnoType< css::beans::Optional< ::sal_Int8 > >::get();
-    CPPUNIT_ASSERT_EQUAL(css::uno::TypeClass_STRUCT, t.getTypeClass());
+    CPPUNIT_ASSERT_EQUAL(+css::uno::TypeClass_STRUCT, +t.getTypeClass());
     CPPUNIT_ASSERT_EQUAL(
         ::rtl::OUString(
             RTL_CONSTASCII_USTRINGPARAM("com.sun.star.beans.Optional<byte>")),
         t.getTypeName());
     t = ::cppu::UnoType< css::uno::Exception >::get();
-    CPPUNIT_ASSERT_EQUAL(css::uno::TypeClass_EXCEPTION, t.getTypeClass());
+    CPPUNIT_ASSERT_EQUAL(+css::uno::TypeClass_EXCEPTION, +t.getTypeClass());
     CPPUNIT_ASSERT_EQUAL(
         ::rtl::OUString(
             RTL_CONSTASCII_USTRINGPARAM("com.sun.star.uno.Exception")),
         t.getTypeName());
     CPPUNIT_ASSERT(::cppu::UnoType< DerivedException1 >::get() == t);
     t = ::cppu::UnoType< css::uno::RuntimeException >::get();
-    CPPUNIT_ASSERT_EQUAL(css::uno::TypeClass_EXCEPTION, t.getTypeClass());
+    CPPUNIT_ASSERT_EQUAL(+css::uno::TypeClass_EXCEPTION, +t.getTypeClass());
     CPPUNIT_ASSERT_EQUAL(
         ::rtl::OUString(
             RTL_CONSTASCII_USTRINGPARAM("com.sun.star.uno.RuntimeException")),
@@ -248,7 +250,7 @@ void Test::testUnoType() {
     CPPUNIT_ASSERT(::cppu::UnoType< DerivedException2 >::get() == t);
 #endif
     t = ::cppu::UnoType< css::uno::XInterface >::get();
-    CPPUNIT_ASSERT_EQUAL(css::uno::TypeClass_INTERFACE, t.getTypeClass());
+    CPPUNIT_ASSERT_EQUAL(+css::uno::TypeClass_INTERFACE, +t.getTypeClass());
     CPPUNIT_ASSERT_EQUAL(
         ::rtl::OUString(
             RTL_CONSTASCII_USTRINGPARAM("com.sun.star.uno.XInterface")),
@@ -261,7 +263,7 @@ void Test::testUnoType() {
         ::cppu::UnoType< css::uno::Reference< DerivedInterface1 > >::get() ==
         t);
     t = ::cppu::UnoType< css::uno::XComponentContext >::get();
-    CPPUNIT_ASSERT_EQUAL(css::uno::TypeClass_INTERFACE, t.getTypeClass());
+    CPPUNIT_ASSERT_EQUAL(+css::uno::TypeClass_INTERFACE, +t.getTypeClass());
     CPPUNIT_ASSERT_EQUAL(
         ::rtl::OUString(
             RTL_CONSTASCII_USTRINGPARAM("com.sun.star.uno.XComponentContext")),
