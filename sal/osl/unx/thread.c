@@ -237,6 +237,14 @@ static void osl_thread_cleanup_Impl (void* pData)
 /*****************************************************************************/
 /* osl_thread_start_Impl */
 /*****************************************************************************/
+#if defined __GNUC__
+#if __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 2)
+#if __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 6)
+#pragma GCC diagnostic push
+#endif
+#pragma GCC diagnostic ignored "-Wshadow"
+#endif
+#endif
 static void* osl_thread_start_Impl (void* pData)
 {
     int terminate;
@@ -247,20 +255,7 @@ static void* osl_thread_start_Impl (void* pData)
     pthread_mutex_lock (&(pImpl->m_Lock));
 
     /* install cleanup handler */
-#if defined __GNUC__
-#if __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 2)
-#if __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 6)
-#pragma GCC diagnostic push
-#endif
-#pragma GCC diagnostic ignored "-Wshadow"
-#endif
-#endif
     pthread_cleanup_push (osl_thread_cleanup_Impl, pData);
-#if defined __GNUC__
-#if __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 6)
-#pragma GCC diagnostic pop
-#endif
-#endif
 
     /* request oslThreadIdentifier @@@ see TODO @@@ */
     pImpl->m_Ident = insertThreadId (pImpl->m_hThread);
@@ -274,20 +269,7 @@ static void* osl_thread_start_Impl (void* pData)
     while (pImpl->m_Flags & THREADIMPL_FLAGS_SUSPENDED)
     {
         /* wait until SUSPENDED flag is cleared */
-#if defined __GNUC__
-#if __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 2)
-#if __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 6)
-#pragma GCC diagnostic push
-#endif
-#pragma GCC diagnostic ignored "-Wshadow"
-#endif
-#endif
         pthread_cleanup_push (osl_thread_wait_cleanup_Impl, &(pImpl->m_Lock));
-#if defined __GNUC__
-#if __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 6)
-#pragma GCC diagnostic pop
-#endif
-#endif
         pthread_cond_wait (&(pImpl->m_Cond), &(pImpl->m_Lock));
         pthread_cleanup_pop (0);
     }
@@ -307,6 +289,11 @@ static void* osl_thread_start_Impl (void* pData)
     pthread_cleanup_pop (1);
     return (0);
 }
+#if defined __GNUC__
+#if __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 6)
+#pragma GCC diagnostic pop
+#endif
+#endif
 
 /*****************************************************************************/
 /* osl_thread_create_Impl */
