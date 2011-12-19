@@ -79,4 +79,4 @@ $(eval $(call gb_Executable_add_linked_libs,nsplugin,\
 ))
 endif # WNT
 
-# vim: set noet sw=4 ts=4:
+# vim:set shiftwidth=4 softtabstop=4 expandtab:

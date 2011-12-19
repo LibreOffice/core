@@ -1,3 +1,4 @@
+# -*- Mode: makefile; tab-width: 4; indent-tabs-mode: t -*-
 #
 # Version: MPL 1.1 / GPLv3+ / LGPLv3+
 #
@@ -44,3 +45,5 @@ $(eval $(call gb_WinResTarget_set_defs,activex_res,\
 	$$(DEFS) \
 	-DMISC=$(call gb_Helper_convert_native,$(WORKDIR)/CustomTarget/so_activex) \
 ))
+
+# vim:set shiftwidth=4 softtabstop=4 expandtab:
