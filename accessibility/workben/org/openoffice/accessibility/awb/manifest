@@ -1,3 +1,0 @@
-Manifest-Version: 1.0
-Main-Class: org.openoffice.accessibility.awb.AccessibilityWorkBench
-Class-Path: classes.jar ridl.jar unoil.jar jurt.jar juh.jar java_uno.jar xt.jar jaxp.jar
