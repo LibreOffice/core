@@ -69,8 +69,8 @@ TabPage DLG_MM_MERGE_PAGE
     Edit       ED_FIND
     {
         HelpID = "sw:Edit:DLG_MM_MERGE_PAGE:ED_FIND";
-        Pos = MAP_APPFONT ( 55 ,114 ) ;
-        Size = MAP_APPFONT ( 140 , 12 ) ;
+        Pos = MAP_APPFONT ( 65 ,114 ) ;
+        Size = MAP_APPFONT ( 130 , 12 ) ;
         Border = TRUE;
     };
     PushButton PB_FIND
@@ -83,21 +83,21 @@ TabPage DLG_MM_MERGE_PAGE
     CheckBox   CB_WHOLEWORDS
     {
         HelpID = "sw:CheckBox:DLG_MM_MERGE_PAGE:CB_WHOLEWORDS";
-        Pos = MAP_APPFONT ( 55 , 131 ) ;
+        Pos = MAP_APPFONT ( 65 , 131 ) ;
         Size = MAP_APPFONT ( 180 , 10 ) ;
         Text [ en-US ] = "Whole wor~ds only";
     };
     CheckBox   CB_BACKWARDS
     {
         HelpID = "sw:CheckBox:DLG_MM_MERGE_PAGE:CB_BACKWARDS";
-        Pos = MAP_APPFONT ( 55 , 144 ) ;
+        Pos = MAP_APPFONT ( 65 , 144 ) ;
         Size = MAP_APPFONT ( 180 , 10 ) ;
         Text [ en-US ] = "Back~wards";
     };
     CheckBox   CB_MATCHCASE
     {
         HelpID = "sw:CheckBox:DLG_MM_MERGE_PAGE:CB_MATCHCASE";
-        Pos = MAP_APPFONT ( 55 , 157 ) ;
+        Pos = MAP_APPFONT ( 65 , 157 ) ;
         Size = MAP_APPFONT ( 180 , 10 ) ;
         Text [ en-US ] = "Ma~tch case";
     };
