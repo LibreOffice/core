@@ -30,6 +30,7 @@ $(eval $(call gb_CppunitTest_CppunitTest,binaryurp_test-cache))
 
 $(eval $(call gb_CppunitTest_add_linked_libs,binaryurp_test-cache,\
 	sal \
+    $(gb_STDLIBS) \
 ))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,binaryurp_test-cache,\

@@ -46,6 +46,7 @@ $(eval $(call gb_Library_add_linked_libs,analysis,\
 	cppuhelper \
 	sal \
 	tl \
+    $(gb_STDLIBS) \
 ))
 
 ifeq ($(GUI),WNT)

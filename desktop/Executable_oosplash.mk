@@ -35,6 +35,7 @@ $(eval $(call gb_Executable_set_include,oosplash,\
 
 $(eval $(call gb_Executable_add_linked_libs,oosplash,\
     sal \
+    $(gb_STDLIBS) \
 ))
 
 $(eval $(call gb_Executable_add_cobjects,oosplash,\

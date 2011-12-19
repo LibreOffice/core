@@ -1,3 +1,4 @@
+## -*- Mode: makefile; tab-width: 4; indent-tabs-mode: t -*-
 ##
 ## Version: MPL 1.1 / GPLv3+ / LGPLv3+
 ##
@@ -28,6 +29,10 @@
 
 $(eval $(call gb_CppunitTest_CppunitTest,officecfg_cppheader_test))
 
+$(eval $(call gb_CppunitTest_add_linked_libs,officecfg_cppheader_test,\
+    $(gb_STDLIBS) \
+))
+
 $(eval $(call gb_CppunitTest_add_exception_objects,officecfg_cppheader_test, \
     officecfg/qa/cppheader \
 ))
@@ -37,3 +42,5 @@ $(eval $(call gb_CppunitTest_add_api,officecfg_cppheader_test, \
 ))
 
 $(eval $(call gb_CppunitTest_add_package_headers,officecfg_cppheader_test,officecfg_cppheader))
+
+## vim: set noet sw=4 ts=4:

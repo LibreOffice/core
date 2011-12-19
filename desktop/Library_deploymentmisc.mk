@@ -51,6 +51,7 @@ $(eval $(call gb_Library_add_linked_libs,deploymentmisc,\
     ucbhelper \
     utl \
     xcr \
+    $(gb_STDLIBS) \
 ))
 
 $(eval $(call gb_Library_use_externals,deploymentmisc,\

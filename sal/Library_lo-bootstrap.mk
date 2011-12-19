@@ -25,18 +25,12 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-# Too many warnings from android_native_app_glue.[ch]
-EXTERNAL_WARNINGS_NOT_ERRORS = TRUE
-
 $(eval $(call gb_Library_Library,lo-bootstrap))
 
-# We don't want to link liblo-bootstrap.so against
-# libgnustl_shared.so. The Android dynamic linker won't find it
-# anyway. One very point of liblo-bootstrap is its wrapper for
-# dlopen() that searches also in the app's lib folder for needed
-# shared libraries.
-$(eval $(call gb_Library_add_libs,lo-bootstrap,\
-	-llog -landroid \
+# We explicitly *don't* want gb_STDLIBS to be linked here
+$(eval $(call gb_Library_add_linked_libs,lo-bootstrap,\
+	log \
+	android \
 ))
 
 $(eval $(call gb_Library_add_cobjects,lo-bootstrap,\

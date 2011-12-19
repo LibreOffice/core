@@ -1,3 +1,4 @@
+# -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
 #
 # Version: MPL 1.1 / GPLv3+ / LGPLv3+
 #
@@ -35,6 +36,7 @@ $(eval $(call gb_Library_add_linked_libs,evtatt,\
 	cppuhelper \
 	cppu \
 	sal \
+	$(gb_STDLIBS) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,evtatt,\
@@ -44,3 +46,5 @@ $(eval $(call gb_Library_add_exception_objects,evtatt,\
 $(eval $(call gb_Library_add_api,evtatt,\
 	udkapi \
 ))
+
+# vim: set ts=4 sw=4 et:

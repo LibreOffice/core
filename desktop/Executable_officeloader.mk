@@ -33,6 +33,7 @@ $(eval $(call gb_Executable_set_include,officeloader,\
 
 $(eval $(call gb_Executable_add_linked_libs,officeloader,\
     sal \
+    $(gb_STDLIBS) \
 ))
 
 # I'm not suer wht was the intent, but that break the link

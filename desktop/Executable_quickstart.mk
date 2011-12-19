@@ -39,6 +39,7 @@ $(eval $(call gb_Executable_add_linked_libs,quickstart,\
     ole32 \
     oleaut32 \
     shell32 \
+    $(gb_STDLIBS) \
 ))
 
 ifeq ($(COM),GCC)

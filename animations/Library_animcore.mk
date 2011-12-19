@@ -47,6 +47,7 @@ $(eval $(call gb_Library_add_linked_libs,animcore,\
     cppu \
 	cppuhelper \
     sal \
+	$(gb_STDLIBS) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,animcore,\

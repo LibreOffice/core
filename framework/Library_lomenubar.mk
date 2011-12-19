@@ -46,6 +46,7 @@ $(eval $(call gb_Library_add_linked_libs,lomenubar,\
 	cppu \
 	cppuhelper \
 	X11 \
+	$(gb_STDLIBS) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,lomenubar,\

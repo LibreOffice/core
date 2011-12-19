@@ -1,3 +1,4 @@
+# -*- Mode: makefile; tab-width: 4; indent-tabs-mode: t -*-
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,6 +32,7 @@ $(eval $(call gb_CppunitTest_add_package_headers,o3tl_tests,o3tl_inc))
 
 $(eval $(call gb_CppunitTest_add_linked_libs,o3tl_tests,\
 	sal \
+    $(gb_STDLIBS) \
 ))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,o3tl_tests,\

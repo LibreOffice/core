@@ -37,6 +37,10 @@ $(eval $(call gb_Executable_add_defs,sbase,\
     -DUNICODE \
 ))
 
+$(eval $(call gb_Executable_add_linked_libs,sbase,\
+    $(gb_STDLIBS) \
+))
+
 $(eval $(call gb_Executable_add_noexception_objects,sbase,\
     desktop/win32/source/applauncher/launcher \
     desktop/win32/source/applauncher/sbase \

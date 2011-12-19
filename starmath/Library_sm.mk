@@ -59,6 +59,7 @@ $(eval $(call gb_Library_add_linked_libs,sm,\
         utl \
         vcl \
 	xo \
+    $(gb_STDLIBS) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,sm,\

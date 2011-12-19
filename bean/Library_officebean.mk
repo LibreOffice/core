@@ -1,3 +1,4 @@
+# -*- Mode: makefile; tab-width: 4; indent-tabs-mode: t -*-
 #
 # Version: MPL 1.1 / GPLv3+ / LGPLv3+
 #
@@ -62,3 +63,8 @@ $(eval $(call gb_Library_add_ldflags,officebean,\
 
 endif
 
+$(eval $(call gb_Library_add_linked_libs,officebean,\
+    $(gb_STDLIBS) \
+))
+
+# vim: set noet sw=4 ts=4:

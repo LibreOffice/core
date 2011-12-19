@@ -30,6 +30,10 @@ $(eval $(call gb_Library_Library,localedata_en))
 
 $(eval $(call gb_Library_add_package_headers,localedata_en,i18npool_generated))
 
+$(eval $(call gb_Library_add_linked_libs,localedata_en,\
+    $(gb_STDLIBS) \
+))
+
 $(eval $(call gb_Library_add_generated_exception_objects,localedata_en,\
 	CustomTarget/i18npool/source/localedata/localedata_en_AU \
 	CustomTarget/i18npool/source/localedata/localedata_en_BZ \
