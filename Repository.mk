@@ -400,6 +400,7 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
     avmediawin \
     cached1 \
     collator_data \
+    dbpool2 \
     deployment \
     deploymentgui \
     dict_ja \

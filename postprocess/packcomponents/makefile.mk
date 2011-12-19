@@ -42,6 +42,7 @@ my_components = \
     component/canvas/source/simplecanvas/simplecanvas \
     component/canvas/source/vcl/vclcanvas \
     component/comphelper/util/comphelp \
+    component/connectivity/source/cpool/dbpool2 \
     component/connectivity/source/dbtools/dbtools \
     component/connectivity/source/manager/sdbc2 \
     component/configmgr/source/configmgr \
@@ -146,7 +147,6 @@ my_components += \
     component/reportdesign/util/rptui \
     component/reportdesign/util/rptxml \
     dbase \
-    dbpool2 \
     flat \
     localebe1 \
     mysql \

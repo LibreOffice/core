@@ -25,14 +25,39 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Module_Module,connectivity))
+$(eval $(call gb_Library_Library,dbpool2))
 
-$(eval $(call gb_Module_add_targets,connectivity,\
-	Package_inc \
-	Jar_sdbc_hsqldb \
-	Library_dbtools \
-	Library_sdbc2 \
-	Library_dbpool2 \
+$(eval $(call gb_Library_set_componentfile,dbpool2,connectivity/source/cpool/dbpool2))
+
+$(eval $(call gb_Library_add_package_headers,dbpool2,connectivity_inc))
+
+$(eval $(call gb_Library_set_include,dbpool2,\
+	$$(INCLUDE) \
+	-I$(SRCDIR)/connectivity/source/inc \
+))
+
+$(eval $(call gb_Library_add_api,dbpool2,\
+	offapi \
+	udkapi \
+))
+
+$(eval $(call gb_Library_add_linked_libs,dbpool2,\
+	comphelper \
+	cppu \
+	cppuhelper \
+	dbtools \
+	sal \
+	salhelper \
+	$(gb_STDLIBS) \
+))
+
+$(eval $(call gb_Library_add_exception_objects,dbpool2,\
+	connectivity/source/cpool/ZConnectionWrapper \
+	connectivity/source/cpool/ZDriverWrapper \
+	connectivity/source/cpool/ZPooledConnection \
+	connectivity/source/cpool/ZConnectionPool \
+	connectivity/source/cpool/ZPoolCollection \
+	connectivity/source/cpool/Zregistration \
 ))
 
 # vim: set noet sw=4 ts=4:
