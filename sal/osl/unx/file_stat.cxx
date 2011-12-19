@@ -101,73 +101,14 @@ namespace /* private */
         pStat->uValidFields |= osl_FileStatus_Mask_Attributes;
     }
 
-    inline void set_file_access_rights(const struct stat& file_stat, int S_IR, int S_IW, int S_IX, oslFileStatus* pStat)
-    {
-        /* we cannot really map osl_File_Attribute_ReadOnly to
-           the Unix access rights, it's a Windows only flag
-           that's why the following hack. We set osl_FileStatus_Mask_Attributes
-           but if there is no read access for a file we clear the flag
-           again to signal to the caller that there are no file attributes
-           to read because that's better than to give them incorrect one.
-        */
-        pStat->uValidFields |= osl_FileStatus_Mask_Attributes;
-
-        if ((0 == (S_IW & file_stat.st_mode)) && (S_IR & file_stat.st_mode))
-            pStat->uAttributes |= osl_File_Attribute_ReadOnly;
-
-        if (S_IX & file_stat.st_mode)
-            pStat->uAttributes |= osl_File_Attribute_Executable;
-    }
-
-    /* a process may belong to up to NGROUPS_MAX groups, so when
-       checking group access rights, we have to check all belonging
-       groups */
-    inline bool is_in_process_grouplist(const gid_t file_group)
-    {
-        // check primary process group
-
-        if (getgid() == file_group)
-            return true;
-
-        // check supplementary process groups
-
-        gid_t grplist[NGROUPS_MAX];
-        int   grp_number = getgroups(NGROUPS_MAX, grplist);
-
-        for (int i = 0; i < grp_number; i++)
-        {
-            if (grplist[i] == file_group)
-                return true;
-        }
-        return false;
-    }
-
-    /* Currently we are determining the file access right based
-       on the real user ID not the effective user ID!
-       We don't use access(...) because access follows links which
-       may cause performance problems see #97133.
+    /* This code used not to use access(...) because access follows links which
+       may cause performance problems see #97133.  (That apparently references a
+       no-longer accessible Hamburg-internal bug-tracking system.)
+       However, contrary to what is stated above the use of access calls is
+       required on network file systems not using unix semantics (AFS, see
+       fdo#43095).
     */
-    inline void set_file_access_rights(const struct stat& file_stat, oslFileStatus* pStat)
-    {
-        if (getuid() == file_stat.st_uid)
-        {
-            set_file_access_rights(file_stat, S_IRUSR, S_IWUSR, S_IXUSR, pStat);
-        }
-        else if (is_in_process_grouplist(file_stat.st_gid))
-        {
-            set_file_access_rights(file_stat, S_IRGRP, S_IWGRP, S_IXGRP, pStat);
-        }
-        else
-        {
-            set_file_access_rights(file_stat, S_IROTH, S_IWOTH, S_IXOTH, pStat);
-        }
-    }
-
-    /* contrary to what is stated above the use of access calls
-       is required on network file systems not using unix semantics
-      (AFS)
-    */
-    inline void set_file_access_real_rights(const rtl::OUString& file_path, oslFileStatus* pStat)
+    inline void set_file_access_rights(const rtl::OUString& file_path, oslFileStatus* pStat)
     {
         pStat->uValidFields |= osl_FileStatus_Mask_Attributes;
 
@@ -193,15 +134,10 @@ namespace /* private */
         set_file_hidden_status(file_path, pStat);
         set_file_access_mask(file_stat, pStat);
 
-#ifdef FAKE_ACCESS_RIGHTS
         // we set the file access rights only on demand
         // because it's potentially expensive
         if (uFieldMask & osl_FileStatus_Mask_Attributes)
-               set_file_access_rights(file_stat, pStat);
-#else
-        if (uFieldMask & osl_FileStatus_Mask_Attributes)
-            set_file_access_real_rights(file_path, pStat);
-#endif
+            set_file_access_rights(file_path, pStat);
     }
 
     inline void set_file_access_time(const struct stat& file_stat, oslFileStatus* pStat)
