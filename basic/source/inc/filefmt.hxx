@@ -78,11 +78,7 @@ class SvStream;
 #define B_LINERANGES    0x524C      // LR line ranges for publics
 #define B_MODEND        0x454D      // ME module end
 #define B_SBXOBJECTS    0x5853      // SX SBX objects
-
-#define EXTENDED_BINARY_MODULES
-#ifdef  EXTENDED_BINARY_MODULES
 #define B_EXTSOURCE     0x5345      // ES extended source
-#endif
 
 // A library record contains only module records
 //  sal_uInt16 identifier BL

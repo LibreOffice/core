@@ -159,7 +159,6 @@ sal_Bool SbiImage::Load( SvStream& r, sal_uInt32& nVersion )
                 aOUSource = aTmp;
                 break;
             }
-#ifdef EXTENDED_BINARY_MODULES
             case B_EXTSOURCE:
             {
                 for( sal_uInt16 j = 0 ; j < nCount ; j++ )
@@ -170,7 +169,6 @@ sal_Bool SbiImage::Load( SvStream& r, sal_uInt32& nVersion )
                 }
                 break;
             }
-#endif
             case B_PCODE:
                 if( bBadVer ) break;
                 pCode = new char[ nLen ];
@@ -300,7 +298,6 @@ sal_Bool SbiImage::Save( SvStream& r, sal_uInt32 nVer )
         r.WriteByteString( aTmp, eCharSet );
         SbiCloseRecord( r, nPos );
 
-#ifdef EXTENDED_BINARY_MODULES
         if( nLen > STRING_MAXLEN )
         {
             sal_Int32 nRemainingLen = nLen - nMaxUnitSize;
@@ -316,7 +313,6 @@ sal_Bool SbiImage::Save( SvStream& r, sal_uInt32 nVer )
             }
             SbiCloseRecord( r, nPos );
         }
-#endif
     }
     // Binary data?
     if( pCode && SbiGood( r ) )
