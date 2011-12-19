@@ -173,14 +173,14 @@ void MapReturn(sal_uInt32 r0, sal_uInt32 r1, typelib_TypeDescriptionReference * 
             pRegisterReturn[0] = r0;
             break;
         case typelib_TypeClass_FLOAT:
-#if defined(__ARM_EABI__) || defined(__SOFTFP__)
+#if !defined(__ARM_PCS_VFP) && (defined(__ARM_EABI__) || defined(__SOFTFP__))
             pRegisterReturn[0] = r0;
 #else
             *(float*)pRegisterReturn = fret;
 #endif
         break;
         case typelib_TypeClass_DOUBLE:
-#if defined(__ARM_EABI__) || defined(__SOFTFP__)
+#if !defined(__ARM_PCS_VFP) && (defined(__ARM_EABI__) || defined(__SOFTFP__))
             pRegisterReturn[1] = r1;
             pRegisterReturn[0] = r0;
 #else
