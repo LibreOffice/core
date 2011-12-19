@@ -53,7 +53,6 @@
 #include <basegfx/color/bcolor.hxx>
 #include <basegfx/color/bcolortools.hxx>
 
-#include <basegfx/tools/debugplotter.hxx>
 #include <basegfx/tools/rectcliptools.hxx>
 
 #include <iostream>
@@ -324,266 +323,6 @@ public:
     CPPUNIT_TEST(check);
     SAL_CPPUNIT_TEST_SUITE_END();
 };
-
-class b2dbeziertools : public CppUnit::TestFixture
-{
-private:
-    B2DCubicBezier aHalfCircle;                     // not exactly, but a look-alike
-    B2DCubicBezier aQuarterCircle;                  // not exactly, but a look-alike
-    B2DCubicBezier aLoop;                           // identical endpoints, curve goes back to where it started
-    B2DCubicBezier aStraightLineDistinctEndPoints;  // truly a line
-    B2DCubicBezier aStraightLineDistinctEndPoints2; // truly a line, with slightly different control points
-    B2DCubicBezier aStraightLineIdenticalEndPoints; // degenerate case of aLoop
-    B2DCubicBezier aStraightLineIdenticalEndPoints2;// degenerate case of aLoop, with slightly different control points
-    B2DCubicBezier aCrossing;                       // curve self-intersects somewhere in the middle
-    B2DCubicBezier aCusp;                           // curve has a point of undefined tangency
-
-
-public:
-    // initialise your test code values here.
-    void setUp()
-    {
-        const B2DPoint a00(0.0, 0.0);
-        const B2DPoint a10(1.0, 0.0);
-        const B2DPoint a11(1.0, 1.0);
-        const B2DPoint a01(0.0, 1.0);
-        const B2DPoint middle( 0.5, 0.5 );
-        const B2DPoint quarterDown( 0.25, 0.25 );
-        const B2DPoint quarterUp( 0.75, 0.75 );
-
-        aHalfCircle     = B2DCubicBezier(a00, a01, a11, a10);
-
-        // The spline control points become
-        //
-        //  (R * cos(A), R * sin(A))
-        //  (R * cos(A) - h * sin(A), R * sin(A) + h * cos (A))
-        //  (R * cos(B) + h * sin(B), R * sin(B) - h * cos (B))
-        //  (R * cos(B), R * sin(B))
-        //
-        // where    h = 4/3 * R * tan ((B-A)/4)
-        //
-        // with R being the radius, A start angle and B end angle (A < B).
-        //
-        // (This calculation courtesy Carl Worth, himself based on
-        // Michael Goldapp and Dokken/Daehlen)
-
-        // Choosing R=1, A=0, B=pi/2
-        const double h( 4.0/3.0 * tan(M_PI/8.0) );
-        aQuarterCircle  = B2DCubicBezier(a10 + B2DPoint(1.0,0.0),
-                                         B2DPoint(B2DPoint( 1.0, h ) + B2DPoint(1.0,0.0)),
-                                         B2DPoint(B2DPoint( h, 1.0) + B2DPoint(1.0,0.0)),
-                                         a01 + B2DPoint(1.0,0.0));
-
-        aCusp           = B2DCubicBezier(a00 + B2DPoint(2.0,0.0),
-                                         B2DPoint(a11 + B2DPoint(2.0,0.0)),
-                                         B2DPoint(a01 + B2DPoint(2.0,0.0)),
-                                         a10 + B2DPoint(2.0,0.0));
-
-        aLoop           = B2DCubicBezier(a00 + B2DPoint(3.0,0.0),
-                                         B2DPoint(a01 + B2DPoint(3.0,0.0)),
-                                         B2DPoint(a10 + B2DPoint(3.0,0.0)),
-                                         a00 + B2DPoint(3.0,0.0));
-
-        aStraightLineDistinctEndPoints  = B2DCubicBezier(a00 + B2DPoint(4.0,0.0),
-                                                         B2DPoint(middle + B2DPoint(4.0,0.0)),
-                                                         B2DPoint(middle + B2DPoint(4.0,0.0)),
-                                                         a11 + B2DPoint(4.0,0.0));
-
-        aStraightLineDistinctEndPoints2  = B2DCubicBezier(a00 + B2DPoint(5.0,0.0),
-                                                          B2DPoint(quarterDown + B2DPoint(5.0,0.0)),
-                                                          B2DPoint(quarterUp + B2DPoint(5.0,0.0)),
-                                                          a11 + B2DPoint(5.0,0.0));
-
-        aStraightLineIdenticalEndPoints = B2DCubicBezier(a00 + B2DPoint(6.0,0.0),
-                                                         B2DPoint(a11 + B2DPoint(6.0,0.0)),
-                                                         B2DPoint(a11 + B2DPoint(6.0,0.0)),
-                                                         a00 + B2DPoint(6.0,0.0));
-
-        aStraightLineIdenticalEndPoints2 = B2DCubicBezier(a00 + B2DPoint(7.0,0.0),
-                                                          B2DPoint(quarterDown + B2DPoint(7.0,0.0)),
-                                                          B2DPoint(quarterUp + B2DPoint(7.0,0.0)),
-                                                          a00 + B2DPoint(7.0,0.0));
-
-        aCrossing       = B2DCubicBezier(a00 + B2DPoint(8.0,0.0),
-                                         B2DPoint(B2DPoint(2.0,2.0) + B2DPoint(8.0,0.0)),
-                                         B2DPoint(B2DPoint(-1.0,2.0) + B2DPoint(8.0,0.0)),
-                                         a10 + B2DPoint(8.0,0.0));
-
-        ::std::ofstream output("bez_testcases.gnuplot");
-        DebugPlotter aPlotter( "Original curves",
-                               output );
-
-        aPlotter.plot( aHalfCircle,
-                       "half circle" );
-        aPlotter.plot( aQuarterCircle,
-                       "quarter circle" );
-        aPlotter.plot( aCusp,
-                       "cusp" );
-        aPlotter.plot( aLoop,
-                       "loop" );
-        aPlotter.plot( aStraightLineDistinctEndPoints,
-                       "straight line 0" );
-        aPlotter.plot( aStraightLineDistinctEndPoints2,
-                       "straight line 1" );
-        aPlotter.plot( aStraightLineIdenticalEndPoints,
-                       "straight line 2" );
-        aPlotter.plot( aStraightLineIdenticalEndPoints2,
-                       "straight line 3" );
-        aPlotter.plot( aCrossing,
-                       "crossing" );
-
-        // break up a complex bezier (loopy, spiky or self intersecting)
-        // into simple segments (left to right)
-        B2DCubicBezier aSegment = aCrossing;
-        double fExtremePos(0.0);
-
-        aPlotter.plot( aSegment, "segment" );
-        while(aSegment.getMinimumExtremumPosition(fExtremePos))
-        {
-            aSegment.split(fExtremePos, 0, &aSegment);
-            aPlotter.plot( aSegment, "segment" );
-        }
-    }
-
-    void tearDown()
-    {
-    }
-
-    void adaptiveByDistance()
-    {
-        ::std::ofstream output("bez_adaptiveByDistance.gnuplot");
-        DebugPlotter aPlotter( "distance-adaptive subdivision",
-                               output );
-
-        const double fBound( 0.0001 );
-        B2DPolygon result;
-
-        aHalfCircle.adaptiveSubdivideByDistance(result, fBound);
-        aPlotter.plot(result,
-                      "half circle"); result.clear();
-
-        aQuarterCircle.adaptiveSubdivideByDistance(result, fBound);
-        aPlotter.plot(result,
-                      "quarter circle"); result.clear();
-
-        aLoop.adaptiveSubdivideByDistance(result, fBound);
-        aPlotter.plot(result,
-                      "loop"); result.clear();
-
-        aStraightLineDistinctEndPoints.adaptiveSubdivideByDistance(result, fBound);
-        aPlotter.plot(result,
-                      "straight line 0"); result.clear();
-
-        aStraightLineDistinctEndPoints2.adaptiveSubdivideByDistance(result, fBound);
-        aPlotter.plot(result,
-                      "straight line 1"); result.clear();
-
-        aStraightLineIdenticalEndPoints.adaptiveSubdivideByDistance(result, fBound);
-        aPlotter.plot(result,
-                      "straight line 2"); result.clear();
-
-        aStraightLineIdenticalEndPoints2.adaptiveSubdivideByDistance(result, fBound);
-        aPlotter.plot(result,
-                      "straight line 3"); result.clear();
-
-        aCrossing.adaptiveSubdivideByDistance(result, fBound);
-        aPlotter.plot(result,
-                      "straight line 4"); result.clear();
-
-        aCusp.adaptiveSubdivideByDistance(result, fBound);
-        aPlotter.plot(result,
-                      "straight line 5"); result.clear();
-
-        CPPUNIT_ASSERT_MESSAGE("adaptiveByDistance", true );
-    }
-
-    void adaptiveByAngle()
-    {
-        const double fBound( 5.0 );
-        B2DPolygon result;
-
-        ::std::ofstream output("bez_adaptiveByAngle.gnuplot");
-        DebugPlotter aPlotter( "angle-adaptive subdivision",
-                               output );
-
-        aHalfCircle.adaptiveSubdivideByAngle(result, fBound, true);
-        aPlotter.plot(result,
-                      "half circle"); result.clear();
-
-        aQuarterCircle.adaptiveSubdivideByAngle(result, fBound, true);
-        aPlotter.plot(result,
-                      "quarter cirle"); result.clear();
-
-        aLoop.adaptiveSubdivideByAngle(result, fBound, true);
-        aPlotter.plot(result,
-                      "loop"); result.clear();
-
-        aStraightLineDistinctEndPoints.adaptiveSubdivideByAngle(result, fBound, true);
-        aPlotter.plot(result,
-                      "straight line 0"); result.clear();
-
-        aStraightLineDistinctEndPoints2.adaptiveSubdivideByAngle(result, fBound, true);
-        aPlotter.plot(result,
-                      "straight line 1"); result.clear();
-
-        aStraightLineIdenticalEndPoints.adaptiveSubdivideByAngle(result, fBound, true);
-        aPlotter.plot(result,
-                      "straight line 2"); result.clear();
-
-        aStraightLineIdenticalEndPoints2.adaptiveSubdivideByAngle(result, fBound, true);
-        aPlotter.plot(result,
-                      "straight line 3"); result.clear();
-
-        aCrossing.adaptiveSubdivideByAngle(result, fBound, true);
-        aPlotter.plot(result,
-                      "straight line 4"); result.clear();
-
-        aCusp.adaptiveSubdivideByAngle(result, fBound, true);
-        aPlotter.plot(result,
-                      "straight line 5"); result.clear();
-
-        CPPUNIT_ASSERT_MESSAGE("adaptiveByAngle", true );
-    }
-
-    // Change the following lines only, if you add, remove or rename
-    // member functions of the current class,
-    // because these macros are need by auto register mechanism.
-
-    SAL_CPPUNIT_TEST_SUITE(b2dbeziertools);
-    CPPUNIT_TEST(adaptiveByDistance);   // TODO: add tests for quadratic bezier (subdivide and degree reduction)
-    CPPUNIT_TEST(adaptiveByAngle);
-    SAL_CPPUNIT_TEST_SUITE_END();
-}; // class b2dcubicbezier
-
-
-class b2dcubicbezier : public CppUnit::TestFixture
-{
-public:
-    // initialise your test code values here.
-    void setUp()
-    {
-    }
-
-    void tearDown()
-    {
-    }
-
-    // insert your test code here.
-    void EmptyMethod()
-    {
-        // this is demonstration code
-        // CPPUNIT_ASSERT_MESSAGE("a message", 1 == 1);
-    }
-
-    // Change the following lines only, if you add, remove or rename
-    // member functions of the current class,
-    // because these macros are need by auto register mechanism.
-
-    SAL_CPPUNIT_TEST_SUITE(b2dcubicbezier);
-    CPPUNIT_TEST(EmptyMethod);
-    SAL_CPPUNIT_TEST_SUITE_END();
-}; // class b2dcubicbezier
-
 
 class b2dhommatrix : public CppUnit::TestFixture
 {
@@ -1193,36 +932,6 @@ public:
     SAL_CPPUNIT_TEST_SUITE_END();
 }; // class b2dpolypolygon
 
-
-class b2dquadraticbezier : public CppUnit::TestFixture
-{
-public:
-    // initialise your test code values here.
-    void setUp()
-    {
-    }
-
-    void tearDown()
-    {
-    }
-
-    // insert your test code here.
-    // this is only demonstration code
-    void EmptyMethod()
-    {
-          // CPPUNIT_ASSERT_MESSAGE("a message", 1 == 1);
-    }
-
-    // Change the following lines only, if you add, remove or rename
-    // member functions of the current class,
-    // because these macros are need by auto register mechanism.
-
-    SAL_CPPUNIT_TEST_SUITE(b2dquadraticbezier);
-    CPPUNIT_TEST(EmptyMethod);
-    SAL_CPPUNIT_TEST_SUITE_END();
-}; // class b2dquadraticbezier
-
-
 class b1Xrange : public CppUnit::TestFixture
 {
 public:
@@ -1485,33 +1194,6 @@ public:
     SAL_CPPUNIT_TEST_SUITE_END();
 }; // class b2dtuple
 
-
-class b2dvector : public CppUnit::TestFixture
-{
-public:
-    // initialise your test code values here.
-    void setUp()
-    {
-    }
-
-    void tearDown()
-    {
-    }
-
-    // insert your test code here.
-    void EmptyMethod()
-    {
-    }
-
-    // Change the following lines only, if you add, remove or rename
-    // member functions of the current class,
-    // because these macros are need by auto register mechanism.
-
-    SAL_CPPUNIT_TEST_SUITE(b2dvector);
-    CPPUNIT_TEST(EmptyMethod);
-    SAL_CPPUNIT_TEST_SUITE_END();
-}; // class b2dvector
-
 class bcolor : public CppUnit::TestFixture
 {
     BColor maWhite;
@@ -1690,20 +1372,17 @@ public:
 
 CPPUNIT_TEST_SUITE_REGISTRATION(basegfx2d::b2dsvgdimpex);
 CPPUNIT_TEST_SUITE_REGISTRATION(basegfx2d::b2dpolyrange);
-CPPUNIT_TEST_SUITE_REGISTRATION(basegfx2d::b2dcubicbezier);
 CPPUNIT_TEST_SUITE_REGISTRATION(basegfx2d::b2dhommatrix);
 CPPUNIT_TEST_SUITE_REGISTRATION(basegfx2d::b2dhompoint);
 CPPUNIT_TEST_SUITE_REGISTRATION(basegfx2d::b2dpoint);
 CPPUNIT_TEST_SUITE_REGISTRATION(basegfx2d::b2dpolygon);
 CPPUNIT_TEST_SUITE_REGISTRATION(basegfx2d::b2dpolygontools);
 CPPUNIT_TEST_SUITE_REGISTRATION(basegfx2d::b2dpolypolygon);
-CPPUNIT_TEST_SUITE_REGISTRATION(basegfx2d::b2dquadraticbezier);
 CPPUNIT_TEST_SUITE_REGISTRATION(basegfx2d::b1Xrange);
 CPPUNIT_TEST_SUITE_REGISTRATION(basegfx2d::b1ibox);
 CPPUNIT_TEST_SUITE_REGISTRATION(basegfx2d::b2Xrange);
 CPPUNIT_TEST_SUITE_REGISTRATION(basegfx2d::b2ibox);
 CPPUNIT_TEST_SUITE_REGISTRATION(basegfx2d::b2dtuple);
-CPPUNIT_TEST_SUITE_REGISTRATION(basegfx2d::b2dvector);
 CPPUNIT_TEST_SUITE_REGISTRATION(basegfx2d::bcolor);
 } // namespace basegfx2d
 

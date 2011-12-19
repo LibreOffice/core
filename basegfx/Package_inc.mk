@@ -30,7 +30,6 @@ $(eval $(call gb_Package_Package,basegfx_inc,$(SRCDIR)/basegfx/inc))
 
 $(eval $(call gb_Package_add_file,basegfx_inc,inc/basegfx/tools/lerp.hxx,basegfx/tools/lerp.hxx))
 $(eval $(call gb_Package_add_file,basegfx_inc,inc/basegfx/tools/keystoplerp.hxx,basegfx/tools/keystoplerp.hxx))
-$(eval $(call gb_Package_add_file,basegfx_inc,inc/basegfx/tools/debugplotter.hxx,basegfx/tools/debugplotter.hxx))
 $(eval $(call gb_Package_add_file,basegfx_inc,inc/basegfx/tools/canvastools.hxx,basegfx/tools/canvastools.hxx))
 $(eval $(call gb_Package_add_file,basegfx_inc,inc/basegfx/tools/rectcliptools.hxx,basegfx/tools/rectcliptools.hxx))
 $(eval $(call gb_Package_add_file,basegfx_inc,inc/basegfx/tools/b2dclipstate.hxx,basegfx/tools/b2dclipstate.hxx))
