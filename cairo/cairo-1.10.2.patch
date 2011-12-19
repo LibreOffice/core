@@ -1,33 +1,6 @@
---- misc/cairo-1.10.2/build/Makefile.win32.features	2010-08-18 09:47:30.000000000 +0200
-+++ misc/build/cairo-1.10.2/build/Makefile.win32.features	2010-08-18 09:47:30.000000000 +0200
-@@ -18,7 +18,7 @@
- CAIRO_HAS_DRM_XR_FUNCTIONS=0
- CAIRO_HAS_GALLIUM_SURFACE=0
- CAIRO_HAS_XCB_DRM_FUNCTIONS=0
--CAIRO_HAS_PNG_FUNCTIONS=1
-+CAIRO_HAS_PNG_FUNCTIONS=0
- CAIRO_HAS_GL_SURFACE=0
- CAIRO_HAS_DIRECTFB_SURFACE=0
- CAIRO_HAS_VG_SURFACE=0
-@@ -30,7 +30,7 @@
- CAIRO_HAS_FC_FONT=0
- CAIRO_HAS_PS_SURFACE=1
- CAIRO_HAS_PDF_SURFACE=1
--CAIRO_HAS_SVG_SURFACE=1
-+CAIRO_HAS_SVG_SURFACE=0
- CAIRO_HAS_TEST_SURFACES=0
- CAIRO_HAS_TEE_SURFACE=0
- CAIRO_HAS_XML_SURFACE=0
-@@ -37,5 +37,5 @@
- CAIRO_HAS_PTHREAD=0
- CAIRO_HAS_GOBJECT_FUNCTIONS=0
- CAIRO_HAS_TRACE=0
--CAIRO_HAS_INTERPRETER=1
-+CAIRO_HAS_INTERPRETER=0
- CAIRO_HAS_SYMBOL_LOOKUP=0
 --- misc/cairo-1.10.2/build/Makefile.win32.common	2009-06-14 23:53:24.000000000 +0200
 +++ misc/build/cairo-1.10.2/build/Makefile.win32.common	2009-06-14 23:53:24.000000000 +0200
-@@ -22,8 +22,8 @@
+@@ -22,24 +22,26 @@
  OPT := -MD -O2
  endif
  
@@ -38,7 +11,10 @@
  
  CAIRO_LIBS =  gdi32.lib msimg32.lib user32.lib
  ifeq ($(CAIRO_HAS_PNG_FUNCTIONS),1)
-@@ -33,13 +33,15 @@
+ LIBPNG_CFLAGS += -I$(top_srcdir)/../libpng/
+-CAIRO_LIBS +=  $(top_builddir)/../libpng/libpng.lib
++CAIRO_LIBS += libpng.lib
+ endif
  ifeq ($(CAIRO_HAS_PS_SURFACE)$(CAIRO_HAS_PDF_SURFACE),00)
  else
  ZLIB_CFLAGS += -I$(top_srcdir)/../zlib/
@@ -66,21 +42,12 @@
  	@mkdir -p $(CFG)
 --- misc/cairo-1.10.2/build/config.sub	2009-08-14 23:33:32.000000000 +0200
 +++ misc/build/cairo-1.10.2/build/config.sub	2009-08-14 23:33:32.000000000 +0200
-@@ -120,7 +120,7 @@
- # Here we must recognize all the valid KERNEL-OS combinations.
- maybe_os=`echo $1 | sed 's/^\(.*\)-\([^-]*-[^-]*\)$/\2/'`
- case $maybe_os in
--  nto-qnx* | linux-gnu* | linux-dietlibc | linux-newlib* | linux-uclibc* | \
-+  nto-qnx* | linux-gnu* | linux-android* | linux-dietlibc | linux-newlib* | linux-uclibc* | \
-   uclinux-uclibc* | uclinux-gnu* | kfreebsd*-gnu* | knetbsd*-gnu* | netbsd*-gnu* | \
-   kopensolaris*-gnu* | \
-   storm-chaos* | os2-emx* | rtmk-nova*)
 @@ -1272,7 +1272,7 @@
  	      | -ekkobsd* | -kfreebsd* | -freebsd* | -riscix* | -lynxos* \
  	      | -bosx* | -nextstep* | -cxux* | -aout* | -elf* | -oabi* \
  	      | -ptx* | -coff* | -ecoff* | -winnt* | -domain* | -vsta* \
 -	      | -udi* | -eabi* | -lites* | -ieee* | -go32* | -aux* \
-+	      | -udi* | -linux-androideabi* | -eabi* | -lites* | -ieee* | -go32* | -aux* \
++	      | -udi* | -androideabi* | -eabi* | -lites* | -ieee* | -go32* | -aux* \
  	      | -chorusos* | -chorusrdb* | -cegcc* \
  	      | -cygwin* | -pe* | -psos* | -moss* | -proelf* | -rtems* \
  	      | -mingw32* | -linux-gnu* | -linux-newlib* | -linux-uclibc* \
