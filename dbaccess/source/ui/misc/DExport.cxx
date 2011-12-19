@@ -711,7 +711,7 @@ sal_Bool ODatabaseExport::executeWizard(const ::rtl::OUString& _rTableName,const
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "ODatabaseExport::executeWizard" );
     DBG_CHKTHIS(ODatabaseExport,NULL);
 
-    bool bHaveDefaultTable = ( m_sDefaultTableName.getLength() != 0 );
+    bool bHaveDefaultTable =  !m_sDefaultTableName.isEmpty();
     ::rtl::OUString sTableName( bHaveDefaultTable ? m_sDefaultTableName : _rTableName );
     OCopyTableWizard aWizard(
         NULL,
@@ -882,7 +882,7 @@ Reference< XPreparedStatement > ODatabaseExport::createPreparedStatment( const R
     ::std::vector< ::rtl::OUString>::iterator aInsertEnd = aInsertList.end();
     for (::std::vector< ::rtl::OUString>::iterator aInsertIter = aInsertList.begin(); aInsertIter != aInsertEnd; ++aInsertIter)
     {
-        if ( aInsertIter->getLength() )
+        if ( !aInsertIter->isEmpty() )
         {
             aSql += *aInsertIter;
             aSql += aComma;

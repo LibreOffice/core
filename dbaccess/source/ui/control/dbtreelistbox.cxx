@@ -482,9 +482,9 @@ namespace
                 else
                 {
                     ::rtl::OUString sCommandURL( _pPopup->GetItemCommand( nId ) );
-                    bool bEnabled = ( sCommandURL.getLength() )
-                                  ? _rController.isCommandEnabled( sCommandURL )
-                                  : _rController.isCommandEnabled( nId );
+                    bool bEnabled =  sCommandURL.isEmpty()
+                                  ? _rController.isCommandEnabled( nId )
+                                  : _rController.isCommandEnabled( sCommandURL );
                     _pPopup->EnableItem( nId, bEnabled );
                 }
             }
@@ -522,7 +522,7 @@ namespace
             // more things to preserve:
             // - the help command
             ::rtl::OUString sHelpURL = _rMenu.GetHelpCommand( nId );
-            if ( sHelpURL.getLength() )
+            if ( !sHelpURL.isEmpty() )
                 _rMenu.SetHelpCommand(  nCommandId, sHelpURL  );
 
             // remove the "old" item

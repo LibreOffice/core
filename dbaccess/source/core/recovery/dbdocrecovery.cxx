@@ -218,7 +218,7 @@ namespace dbaccess
                 ::rtl::OUString sLine = xTextInput->readLine();
                 lcl_stripTrailingLineFeed( sLine );
 
-                if ( sLine.getLength() == 0 )
+                if ( sLine.isEmpty() )
                     continue;
 
                 if ( lcl_isSectionStart( sLine, sCurrentSection ) )

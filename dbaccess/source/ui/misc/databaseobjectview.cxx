@@ -208,7 +208,7 @@ namespace dbaui
     {
         DatabaseObjectView::fillDispatchArgs( i_rDispatchArgs, _aDataSource, _rObjectName );
 
-        const bool bIncludeQueryName = 0 != _rObjectName.getLength();
+        const bool bIncludeQueryName = !_rObjectName.isEmpty();
         const bool bGraphicalDesign = i_rDispatchArgs.getOrDefault( (::rtl::OUString)PROPERTY_GRAPHICAL_DESIGN, sal_True );
         const bool bEditViewAsSQLCommand = ( m_nCommandType == CommandType::TABLE ) && !bGraphicalDesign;
 
@@ -240,7 +240,7 @@ namespace dbaui
     {
         DatabaseObjectView::fillDispatchArgs( i_rDispatchArgs, _aDataSource, _rObjectName );
 
-        if ( 0 != _rObjectName.getLength() )
+        if ( !_rObjectName.isEmpty() )
         {
             i_rDispatchArgs.put( (::rtl::OUString)PROPERTY_CURRENTTABLE, _rObjectName );
         }
@@ -250,7 +250,7 @@ namespace dbaui
     Reference< XComponent > TableDesigner::doCreateView( const Any& _rDataSource, const ::rtl::OUString& _rObjectName,
         const ::comphelper::NamedValueCollection& i_rCreationArgs )
     {
-        bool bIsNewDesign = ( _rObjectName.getLength() == 0 );
+        bool bIsNewDesign =  _rObjectName.isEmpty();
 
         // let's see whether the connection can provide a dedicated table desginer
         Reference< XInterface > xDesigner;
@@ -307,7 +307,7 @@ namespace dbaui
         const ::rtl::OUString& _rQualifiedName)
     {
         DatabaseObjectView::fillDispatchArgs( i_rDispatchArgs, _aDataSource, _rQualifiedName );
-        OSL_ENSURE( 0 != _rQualifiedName.getLength(),"A Table name must be set");
+        OSL_ENSURE( !_rQualifiedName.isEmpty(),"A Table name must be set");
         ::rtl::OUString sCatalog;
         ::rtl::OUString sSchema;
         ::rtl::OUString sTable;

@@ -160,9 +160,9 @@ namespace dbmm
                     const ::rtl::OUString& _rDetail3 = ::rtl::OUString()
                 )
         {
-            if ( _rDetail1.getLength() ) aErrorDetails.push_back( _rDetail1 );
-            if ( _rDetail2.getLength() ) aErrorDetails.push_back( _rDetail2 );
-            if ( _rDetail3.getLength() ) aErrorDetails.push_back( _rDetail3 );
+            if ( !_rDetail1.isEmpty() ) aErrorDetails.push_back( _rDetail1 );
+            if ( !_rDetail2.isEmpty() ) aErrorDetails.push_back( _rDetail2 );
+            if ( !_rDetail3.isEmpty() ) aErrorDetails.push_back( _rDetail3 );
         }
     };
 

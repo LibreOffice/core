@@ -1069,8 +1069,8 @@ namespace dbmm
             SubDocuments& _out_rDocs, const SubDocumentType _eType, size_t& _io_counter )
         {
             const ::rtl::OUString sHierarhicalBase(
-                _rContainerLoc.getLength()  ?   ::rtl::OUStringBuffer( _rContainerLoc ).appendAscii( "/" ).makeStringAndClear()
-                                            :   ::rtl::OUString() );
+                _rContainerLoc.isEmpty() ? ::rtl::OUString() :
+                                           ::rtl::OUStringBuffer( _rContainerLoc ).appendAscii( "/" ).makeStringAndClear());
 
             Sequence< ::rtl::OUString > aElementNames( _rxContainer->getElementNames() );
             for (   const ::rtl::OUString* elementName = aElementNames.getConstArray();
@@ -1625,8 +1625,8 @@ namespace dbmm
     bool MigrationEngine_Impl::impl_adjustScriptLibrary_nothrow( const ::rtl::OUString& _rScriptType,
             ::rtl::OUString& _inout_rScriptCode ) const
     {
-        OSL_PRECOND( _inout_rScriptCode.getLength(), "MigrationEngine_Impl::impl_adjustScriptLibrary_nothrow: invalid script!" );
-        if ( !_inout_rScriptCode.getLength() )
+        OSL_PRECOND( !_inout_rScriptCode.isEmpty(), "MigrationEngine_Impl::impl_adjustScriptLibrary_nothrow: invalid script!" );
+        if ( _inout_rScriptCode.isEmpty() )
             return false;
 
         bool bSuccess = false;
@@ -1634,7 +1634,7 @@ namespace dbmm
         try
         {
             if  (   !_rScriptType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Script" ) )
-                ||  !_rScriptType.getLength()
+                ||  _rScriptType.isEmpty()
                 )
             {
                 OSL_FAIL(
@@ -1724,7 +1724,7 @@ namespace dbmm
     //--------------------------------------------------------------------
     bool MigrationEngine_Impl::impl_adjustScriptLibrary_nothrow( ScriptEventDescriptor& _inout_rScriptEvent ) const
     {
-        if ( _inout_rScriptEvent.ScriptType.getLength() && _inout_rScriptEvent.ScriptCode.getLength() )
+        if ( !(_inout_rScriptEvent.ScriptType.isEmpty() || _inout_rScriptEvent.ScriptCode.isEmpty()) )
             return impl_adjustScriptLibrary_nothrow( _inout_rScriptEvent.ScriptType, _inout_rScriptEvent.ScriptCode );
         return false;
     }
@@ -1749,7 +1749,7 @@ namespace dbmm
             ) );
         }
 
-        if ( sScriptType.getLength() && sScript.getLength() )
+        if ( !(sScriptType.isEmpty() || sScript.isEmpty()) )
             if ( !impl_adjustScriptLibrary_nothrow( sScriptType, sScript ) )
                 return false;
 

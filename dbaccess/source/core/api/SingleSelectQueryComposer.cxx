@@ -555,10 +555,10 @@ void SAL_CALL OSingleSelectQueryComposer::appendOrderByColumn( const Reference< 
     ::osl::MutexGuard aGuard( m_aMutex );
     ::rtl::OUString sColumnName( impl_getColumnName_throw(column) );
     ::rtl::OUString sOrder = getOrder();
-    if ( (sOrder.getLength() != 0) && sColumnName.getLength() )
+    if ( !(sOrder.isEmpty() || sColumnName.isEmpty()) )
         sOrder += COMMA;
     sOrder += sColumnName;
-    if ( !ascending && sColumnName.getLength() )
+    if ( !(ascending || sColumnName.isEmpty()) )
         sOrder += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" DESC "));
 
     setOrder(sOrder);
@@ -582,7 +582,7 @@ void SAL_CALL OSingleSelectQueryComposer::appendGroupByColumn( const Reference< 
 
     ::rtl::OUStringBuffer aSql( m_aPureSelectSQL );
     for ( SQLPart eLoopParts = Where; eLoopParts != SQLPartCount; incSQLPart( eLoopParts ) )
-        if ( _rParts[ eLoopParts ].getLength() )
+        if ( !_rParts[ eLoopParts ].isEmpty() )
         {
             aSql.append( getKeyword( eLoopParts ) );
             aSql.append( _rParts[ eLoopParts ] );
@@ -640,7 +640,7 @@ namespace
         _rComposer.append( _rElementaryClause );
         _rComposer.append( _rAdditionalClause );
         ::rtl::OUString sComposed = _rComposer.getComposedAndClear();
-        if ( sComposed.getLength() )
+        if ( !sComposed.isEmpty() )
             sComposed = _rKeyword + sComposed;
         return sComposed;
     }
@@ -793,7 +793,7 @@ Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getColumns(  ) thr
         // preserve the original WHERE clause
         // #i102234#
         ::rtl::OUString sOriginalWhereClause = getSQLPart( Where, m_aSqlIterator, sal_False );
-        if ( sOriginalWhereClause.getLength() )
+        if ( !sOriginalWhereClause.isEmpty() )
         {
             aSQL.appendAscii( " ( 0 = 1 ) AND ( " );
             aSQL.append( sOriginalWhereClause );
@@ -805,7 +805,7 @@ Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getColumns(  ) thr
         }
 
         ::rtl::OUString sGroupBy = getSQLPart( Group, m_aSqlIterator, sal_True );
-        if ( sGroupBy.getLength() )
+        if ( !sGroupBy.isEmpty() )
             aSQL.append( sGroupBy );
 
         ::rtl::OUString sSQL( aSQL.makeStringAndClear() );
@@ -936,7 +936,7 @@ Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getColumns(  ) thr
                 ::rtl::OUString sRealName;
                 xProp->getPropertyValue(PROPERTY_REALNAME) >>= sRealName;
                 ::std::vector< ::rtl::OUString>::iterator aFindName;
-                if ( !sColumnName.getLength() )
+                if ( sColumnName.isEmpty() )
                     xProp->getPropertyValue(PROPERTY_NAME) >>= sColumnName;
 
                 aFindName = ::std::find_if(aNames.begin(),aNames.end(),::std::bind2nd(aCaseCompareFunctor,sColumnName));
@@ -1310,7 +1310,7 @@ sal_Bool OSingleSelectQueryComposer::setComparsionPredicate(OSQLParseNode * pCon
         const ::rtl::OUString* pBegin   = aNames.getConstArray();
         const ::rtl::OUString* pEnd     = pBegin + aNames.getLength();
 
-        if(!aTable.getLength())
+        if(aTable.isEmpty())
         { // we haven't found a table name, now we must search every table for this column
             for(;pBegin != pEnd;++pBegin)
             {
@@ -1693,7 +1693,7 @@ void OSingleSelectQueryComposer::setConditionByColumn( const Reference< XPropert
     // select ohne where und order by aufbauen
     ::rtl::OUString sFilter = getFilter();
 
-    if ( sFilter.getLength() && aSQL.getLength() )
+    if ( !sFilter.isEmpty() && aSQL.getLength() )
     {
         ::rtl::OUString sTemp(L_BRACKET);
         sTemp += sFilter;
@@ -1717,7 +1717,7 @@ Sequence< Sequence< PropertyValue > > OSingleSelectQueryComposer::getStructuredC
     Sequence< Sequence< PropertyValue > > aFilterSeq;
     ::rtl::OUString sFilter = getStatementPart( _aGetFunctor, m_aAdditiveIterator );
 
-    if ( sFilter.getLength() != 0 )
+    if ( !sFilter.isEmpty() )
     {
         ::rtl::OUString aSql(m_aPureSelectSQL);
         // build a temporary parse node
@@ -1847,7 +1847,7 @@ Sequence< Sequence< PropertyValue > > OSingleSelectQueryComposer::getStructuredC
     }
 
     ::rtl::OUString sRet = getStatementPart( F_tmp, _rIterator );
-    if ( _bWithKeyword && sRet.getLength() )
+    if ( _bWithKeyword && !sRet.isEmpty() )
         sRet = sKeyword + sRet;
     return sRet;
 }

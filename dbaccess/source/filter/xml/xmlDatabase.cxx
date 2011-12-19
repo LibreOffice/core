@@ -86,7 +86,7 @@ SvXMLImportContext* OXMLDatabase::CreateChildContext(
                 ::rtl::OUString sService;
                 dbtools::getDataSourceSetting(GetOwnImport().getDataSource(),"Forms",aValue);
                 aValue >>= sService;
-                if ( !sService.getLength() )
+                if ( sService.isEmpty() )
                 {
                     Reference<XFormDocumentsSupplier> xSup(GetOwnImport().GetModel(),UNO_QUERY);
                     if ( xSup.is() )
@@ -101,7 +101,7 @@ SvXMLImportContext* OXMLDatabase::CreateChildContext(
                 ::rtl::OUString sService;
                 dbtools::getDataSourceSetting(GetOwnImport().getDataSource(),"Reports",aValue);
                 aValue >>= sService;
-                if ( !sService.getLength() )
+                if ( sService.isEmpty() )
                 {
                     Reference<XReportDocumentsSupplier> xSup(GetOwnImport().GetModel(),UNO_QUERY);
                     if ( xSup.is() )
@@ -116,7 +116,7 @@ SvXMLImportContext* OXMLDatabase::CreateChildContext(
                 ::rtl::OUString sService;
                 dbtools::getDataSourceSetting(GetOwnImport().getDataSource(),"CommandDefinitions",aValue);
                 aValue >>= sService;
-                if ( !sService.getLength() )
+                if ( sService.isEmpty() )
                 {
                     Reference<XQueryDefinitionsSupplier> xSup(GetOwnImport().getDataSource(),UNO_QUERY);
                     if ( xSup.is() )

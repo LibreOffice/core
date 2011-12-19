@@ -274,7 +274,7 @@ void SAL_CALL OContentHelper::addPropertiesChangeListener( const Sequence< ::rtl
         for ( sal_Int32 n = 0; n < nCount; ++n )
         {
             const ::rtl::OUString& rName = pSeq[ n ];
-            if ( rName.getLength() )
+            if ( !rName.isEmpty() )
                 m_aPropertyChangeListeners.addInterface(rName, Listener );
         }
     }
@@ -296,7 +296,7 @@ void SAL_CALL OContentHelper::removePropertiesChangeListener( const Sequence< ::
         for ( sal_Int32 n = 0; n < nCount; ++n )
         {
             const ::rtl::OUString& rName = pSeq[ n ];
-            if ( rName.getLength() )
+            if ( !rName.isEmpty() )
                 m_aPropertyChangeListeners.removeInterface( rName, Listener );
         }
     }

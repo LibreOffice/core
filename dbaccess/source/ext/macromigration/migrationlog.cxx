@@ -442,7 +442,7 @@ namespace dbmm
     {
         ::rtl::OUStringBuffer aBuffer;
 
-        if ( m_pData->sBackupLocation.getLength() )
+        if ( !m_pData->sBackupLocation.isEmpty() )
         {
             String sBackedUp( MacroMigrationResId( STR_SAVED_COPY_TO ) );
             sBackedUp.SearchAndReplaceAllAscii( "$location$", m_pData->sBackupLocation );

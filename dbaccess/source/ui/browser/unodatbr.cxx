@@ -479,7 +479,7 @@ void SbaTableQueryBrowser::impl_sanitizeRowSetClauses_nothrow()
             ::rtl::OUString sColumnName;
             OSL_VERIFY( xOrderColumn->getPropertyValue( PROPERTY_NAME ) >>= sColumnName );
 
-            if ( sTableName.getLength() == 0 )
+            if ( sTableName.isEmpty() )
             {
                 if ( !xColumnNames->hasByName( sColumnName ) )
                 {
@@ -789,7 +789,7 @@ sal_Bool SbaTableQueryBrowser::InitializeGridModel(const Reference< ::com::sun::
                 aInitialValues.push_back( NamedValue( PROPERTY_CONTROLSOURCE, makeAny( *pIter ) ) );
                 ::rtl::OUString sLabel;
                 xColumn->getPropertyValue(PROPERTY_LABEL) >>= sLabel;
-                if ( sLabel.getLength() )
+                if ( !sLabel.isEmpty() )
                     aInitialValues.push_back( NamedValue( PROPERTY_LABEL, makeAny( sLabel ) ) );
                 else
                     aInitialValues.push_back( NamedValue( PROPERTY_LABEL, makeAny( *pIter ) ) );
@@ -824,7 +824,7 @@ sal_Bool SbaTableQueryBrowser::InitializeGridModel(const Reference< ::com::sun::
                     aDescription = xColumn->getPropertyValue( PROPERTY_HELPTEXT );
                 ::rtl::OUString sTemp;
                 aDescription >>= sTemp;
-                if ( !sTemp.getLength() )
+                if ( sTemp.isEmpty() )
                     xColumn->getPropertyValue( PROPERTY_DESCRIPTION ) >>= sTemp;
 
                 aDescription <<= sTemp;
@@ -1107,7 +1107,7 @@ void SbaTableQueryBrowser::checkDocumentDataSource()
                     ::rtl::OUString sCommand;
                     m_aDocumentDataSource[daCommand] >>= sCommand;
 
-                    bKnownDocDataSource = (CommandType::COMMAND == nCommandType) && (0 != sCommand.getLength());
+                    bKnownDocDataSource = (CommandType::COMMAND == nCommandType) && (!sCommand.isEmpty());
                 }
             }
         }
@@ -1934,7 +1934,7 @@ void SbaTableQueryBrowser::Execute(sal_uInt16 nId, const Sequence< PropertyValue
 
             sal_Bool bFullReinit = sal_False;
             // check if the query signature (if the form is based on a query) has changed
-            if ( m_sQueryCommand.getLength() )
+            if ( !m_sQueryCommand.isEmpty() )
             {
                 ::rtl::OUString sNewQueryCommand;
                 sal_Bool bNewQueryEP;
@@ -3131,7 +3131,7 @@ namespace
         Reference< XDataSource > xDataSource;
         try
         {
-            if ( _rDataSourceName.getLength() && _rxDatabaseContext->hasByName( _rDataSourceName ) )
+            if ( !_rDataSourceName.isEmpty() && _rxDatabaseContext->hasByName( _rDataSourceName ) )
                 xDataSource.set( _rxDatabaseContext->getByName( _rDataSourceName ), UNO_QUERY_THROW );
 
             if ( !xDataSource.is() )
@@ -3265,7 +3265,7 @@ void SbaTableQueryBrowser::impl_initialize()
             startConnectionListening( xConnection );
 
             // if no initial name was given, try to obtain one from the data source
-            if ( !sInitialDataSourceName.getLength() )
+            if ( sInitialDataSourceName.isEmpty() )
             {
                 Reference< XChild > xChild( xConnection, UNO_QUERY );
                 Reference< XPropertySet > xDataSourceProperties;
@@ -3752,7 +3752,7 @@ void SbaTableQueryBrowser::loadMenu(const Reference< XFrame >& _xFrame)
         INetURLObject aURL(sTitle);
         if ( aURL.GetProtocol() != INET_PROT_NOT_VALID )
             sTitle = aURL.getBase(INetURLObject::LAST_SEGMENT,true,INetURLObject::DECODE_WITH_CHARSET);
-        if ( sName.getLength() )
+        if ( !sName.isEmpty() )
         {
             sName += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" - "));
             sName += sTitle;
@@ -3779,7 +3779,7 @@ sal_Bool SbaTableQueryBrowser::preReloadForm()
         sal_Int32 nCommandType = CommandType::COMMAND;
         sal_Bool bEscapeProcessing = sal_True;
         extractDescriptorProps(aDesc, sDataSource, sCommand, nCommandType, bEscapeProcessing);
-        if ( sDataSource.getLength() && sCommand.getLength() && (-1 != nCommandType) )
+        if ( !sDataSource.isEmpty() && !sCommand.isEmpty() && (-1 != nCommandType) )
         {
             SvLBoxEntry* pDataSource = NULL;
             SvLBoxEntry* pCommandType = NULL;

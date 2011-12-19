@@ -308,7 +308,7 @@ bool ORelationTableView::RemoveConnection( OTableConnection* pConn ,sal_Bool /*_
 void ORelationTableView::AddTabWin(const ::rtl::OUString& _rComposedName, const ::rtl::OUString& rWinName, sal_Bool /*bNewTable*/)
 {
     DBG_CHKTHIS(ORelationTableView,NULL);
-    OSL_ENSURE(_rComposedName.getLength(),"There must be a table name supplied!");
+    OSL_ENSURE(!_rComposedName.isEmpty(),"There must be a table name supplied!");
     OJoinTableView::OTableWindowMap::iterator aIter = GetTabWinMap()->find(_rComposedName);
 
     if(aIter != GetTabWinMap()->end())

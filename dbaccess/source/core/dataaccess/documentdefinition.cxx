@@ -397,7 +397,7 @@ namespace dbaccess
         ::comphelper::MimeConfigurationHelper aConfigHelper( _rContext.getLegacyServiceFactory() );
         sResult = aConfigHelper.GetDocServiceNameFromMediaType( _rMediaType );
         _rClassId = aConfigHelper.GetSequenceClassIDRepresentation(aConfigHelper.GetExplicitlyRegisteredObjClassID( _rMediaType ));
-        if ( !_rClassId.getLength() && sResult.getLength() )
+        if ( !_rClassId.getLength() && !sResult.isEmpty() )
         {
             Reference< XNameAccess > xObjConfig = aConfigHelper.GetObjConfiguration();
             if ( xObjConfig.is() )
@@ -544,7 +544,7 @@ void SAL_CALL ODocumentDefinition::getFastPropertyValue( Any& o_rValue, sal_Int3
     if ( i_nHandle == PROPERTY_ID_PERSISTENT_PATH )
     {
         ::rtl::OUString sPersistentPath;
-        if ( m_pImpl->m_aProps.sPersistentName.getLength() )
+        if ( !m_pImpl->m_aProps.sPersistentName.isEmpty() )
         {
             ::rtl::OUStringBuffer aBuffer;
             aBuffer.append( ODatabaseModelImpl::getObjectContainerStorageName( m_bForm ? ODatabaseModelImpl::E_FORM : ODatabaseModelImpl::E_REPORT ) );
@@ -936,9 +936,9 @@ Any ODocumentDefinition::onCommandOpenSomething( const Any& _rOpenArgument, cons
         OSL_FAIL( "unreachable" );
       }
 
-    OSL_ENSURE( m_pImpl->m_aProps.sPersistentName.getLength(),
+    OSL_ENSURE( !m_pImpl->m_aProps.sPersistentName.isEmpty(),
         "ODocumentDefinition::onCommandOpenSomething: no persistent name - cannot load!" );
-    if ( !m_pImpl->m_aProps.sPersistentName.getLength() )
+    if ( m_pImpl->m_aProps.sPersistentName.isEmpty() )
         return Any();
 
     // embedded objects themself do not support the hidden flag. We implement support for
@@ -1204,7 +1204,7 @@ void ODocumentDefinition::onCommandInsert( const ::rtl::OUString& _sURL, const R
     osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
 
     // Check, if all required properties were set.
-    if ( !_sURL.getLength() || m_xEmbeddedObject.is() )
+    if ( _sURL.isEmpty() || m_xEmbeddedObject.is() )
     {
         OSL_FAIL( "Content::onCommandInsert - property value missing!" );
 
@@ -1275,7 +1275,7 @@ sal_Bool ODocumentDefinition::save(sal_Bool _bApprove)
             Reference<XNameAccess> xName(m_xParentContainer,UNO_QUERY);
             DocumentSaveRequest aRequest;
             aRequest.Name = m_pImpl->m_aProps.aTitle;
-            if ( !aRequest.Name.getLength() )
+            if ( aRequest.Name.isEmpty() )
             {
                 if ( m_bForm )
                     aRequest.Name = DBACORE_RESSTRING( RID_STR_FORM );
@@ -1291,7 +1291,7 @@ sal_Bool ODocumentDefinition::save(sal_Bool _bApprove)
             // two continuations allowed: OK and Cancel
             ODocumentSaveContinuation* pDocuSave = NULL;
 
-            if ( !m_pImpl->m_aProps.aTitle.getLength() )
+            if ( m_pImpl->m_aProps.aTitle.isEmpty() )
             {
                 pDocuSave = new ODocumentSaveContinuation;
                 pRequest->addContinuation(pDocuSave);
@@ -1356,7 +1356,7 @@ sal_Bool ODocumentDefinition::saveAs()
 
     {
         osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
-        if ( !m_pImpl->m_aProps.aTitle.getLength() )
+        if ( m_pImpl->m_aProps.aTitle.isEmpty() )
         {
             aGuard.clear();
             return save(sal_False); // (sal_False) : we don't want an approve dialog
@@ -1612,7 +1612,7 @@ Sequence< PropertyValue > ODocumentDefinition::fillLoadArgs( const Reference< XC
         aMediaDesc.put( "ComponentData", aComponentData.getPropertyValues() );
     }
 
-    if ( m_pImpl->m_aProps.aTitle.getLength() )
+    if ( !m_pImpl->m_aProps.aTitle.isEmpty() )
         aMediaDesc.put( "DocumentTitle", m_pImpl->m_aProps.aTitle );
 
     aMediaDesc.put( "DocumentBaseURL", m_pImpl->m_pDataSource->getURL() );
@@ -2129,7 +2129,7 @@ void ODocumentDefinition::updateDocumentTitle()
     ::rtl::OUString sName = m_pImpl->m_aProps.aTitle;
     if ( m_pImpl->m_pDataSource )
     {
-        if ( !sName.getLength() )
+        if ( sName.isEmpty() )
         {
             if ( m_bForm )
                 sName = DBACORE_RESSTRING( RID_STR_FORM );

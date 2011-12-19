@@ -206,7 +206,7 @@ namespace dbaui
             if ( m_xConnection.is() )
                 aArgs.put( "ActiveConnection", m_xConnection );
 
-            if ( _rObjectName.getLength() && ( _nCommandType != -1 ) )
+            if ( !_rObjectName.isEmpty() && ( _nCommandType != -1 ) )
             {
                 aArgs.put( "CommandType", _nCommandType );
                 aArgs.put( "Command", _rObjectName );

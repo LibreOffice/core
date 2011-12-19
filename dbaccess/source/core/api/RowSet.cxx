@@ -352,7 +352,7 @@ void SAL_CALL ORowSet::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const 
             break;
         case PROPERTY_ID_URL:
             // is the connection-to-be-built determined by the url (which is the case if m_aDataSourceName is empty) ?
-            if (!m_aDataSourceName.getLength())
+            if (m_aDataSourceName.isEmpty())
             {
                 // are we active at the moment ?
                 if (m_xStatement.is())
@@ -1508,7 +1508,7 @@ Reference< XIndexAccess > SAL_CALL ORowSet::getParameters(  ) throw (RuntimeExce
         // complete command, and thus the parameters, changed
         impl_disposeParametersContainer_nothrow();
 
-    if ( !m_pParameters.get() && m_aCommand.getLength() )
+    if ( !m_pParameters.get() && !m_aCommand.isEmpty() )
     {
         try
         {
@@ -1800,7 +1800,7 @@ void ORowSet::execute_NoApprove_NoNewConn(ResettableMutexGuard& _rClearForNotifi
         m_aWarnings.setExternalWarnings( Reference< XWarningsSupplier >( xResultSet, UNO_QUERY ) );
 
         ::rtl::OUString aComposedUpdateTableName;
-        if ( m_aUpdateTableName.getLength() )
+        if ( !m_aUpdateTableName.isEmpty() )
             aComposedUpdateTableName = composeTableName( m_xActiveConnection->getMetaData(), m_aUpdateCatalogName, m_aUpdateSchemaName, m_aUpdateTableName, sal_False, ::dbtools::eInDataManipulation );
 
         {
@@ -1976,7 +1976,7 @@ void ORowSet::execute_NoApprove_NoNewConn(ResettableMutexGuard& _rClearForNotifi
 
                     pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_ISREADONLY,makeAny(rKeyColumns.find(i) != rKeyColumns.end()));
 
-                    if(!sColumnLabel.getLength())
+                    if(sColumnLabel.isEmpty())
                     {
                         if(xColumn.is())
                             xColumn->getPropertyValue(PROPERTY_NAME) >>= sColumnLabel;
@@ -2162,7 +2162,7 @@ Reference< XConnection >  ORowSet::calcConnection(const Reference< XInteractionH
     if (!m_xActiveConnection.is())
     {
         Reference< XConnection > xNewConn;
-        if ( m_aDataSourceName.getLength() )
+        if ( !m_aDataSourceName.isEmpty() )
         {
             Reference< XNameAccess > xDatabaseContext(
                 m_aContext.createComponent( (::rtl::OUString)SERVICE_SDB_DATABASECONTEXT ),
@@ -2316,7 +2316,7 @@ sal_Bool ORowSet::impl_buildActiveCommand_throw()
     m_aActiveCommand = ::rtl::OUString();
     ::rtl::OUString sCommand;
 
-    if ( !m_aCommand.getLength() )
+    if ( m_aCommand.isEmpty() )
         return bDoEscapeProcessing;
 
     switch (m_nCommandType)
@@ -2372,7 +2372,7 @@ sal_Bool ORowSet::impl_buildActiveCommand_throw()
                         xQuery->getPropertyValue(PROPERTY_UPDATE_CATALOGNAME)   >>= aCatalog;
                         xQuery->getPropertyValue(PROPERTY_UPDATE_SCHEMANAME)    >>= aSchema;
                         xQuery->getPropertyValue(PROPERTY_UPDATE_TABLENAME)     >>= aTable;
-                        if(aTable.getLength())
+                        if(!aTable.isEmpty())
                             m_aUpdateTableName = composeTableName( m_xActiveConnection->getMetaData(), aCatalog, aSchema, aTable, sal_False, ::dbtools::eInDataManipulation );
                     }
                 }
@@ -2395,7 +2395,7 @@ sal_Bool ORowSet::impl_buildActiveCommand_throw()
 
     m_aActiveCommand = sCommand;
 
-    if ( !m_aActiveCommand.getLength() && !bDoEscapeProcessing )
+    if ( m_aActiveCommand.isEmpty() && !bDoEscapeProcessing )
         ::dbtools::throwSQLException( DBACORE_RESSTRING( RID_STR_NO_SQL_COMMAND ), SQL_FUNCTION_SEQUENCE_ERROR, *this );
 
     return bDoEscapeProcessing;

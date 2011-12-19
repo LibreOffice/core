@@ -94,10 +94,10 @@ OXMLColumn::OXMLColumn( ODBFilter& rImport
                 break;
             case XML_TOK_COLUMN_TYPE_NAME:
                 sType = sValue;
-                OSL_ENSURE(sType.getLength(),"No type name set");
+                OSL_ENSURE(!sType.isEmpty(),"No type name set");
                 break;
             case XML_TOK_COLUMN_DEFAULT_VALUE:
-                if ( sValue.getLength() && sType.getLength() )
+                if ( !(sValue.isEmpty() || sType.isEmpty()) )
                     m_aDefaultValue <<= sValue;
                 break;
             case XML_TOK_COLUMN_VISIBLE:
@@ -120,14 +120,14 @@ OXMLColumn::~OXMLColumn()
 void OXMLColumn::EndElement()
 {
     Reference<XDataDescriptorFactory> xFac(m_xParentContainer,UNO_QUERY);
-    if ( xFac.is() && m_sName.getLength() )
+    if ( xFac.is() && !m_sName.isEmpty() )
     {
         Reference<XPropertySet> xProp(xFac->createDataDescriptor());
         if ( xProp.is() )
         {
             xProp->setPropertyValue(PROPERTY_NAME,makeAny(m_sName));
             xProp->setPropertyValue(PROPERTY_HIDDEN,makeAny(m_bHidden));
-            if ( m_sHelpMessage.getLength() )
+            if ( !m_sHelpMessage.isEmpty() )
                 xProp->setPropertyValue(PROPERTY_HELPTEXT,makeAny(m_sHelpMessage));
 
             if ( m_aDefaultValue.hasValue() )
@@ -138,7 +138,7 @@ void OXMLColumn::EndElement()
                 xAppend->appendByDescriptor(xProp);
             m_xParentContainer->getByName(m_sName) >>= xProp;
 
-            if ( m_sStyleName.getLength() )
+            if ( !m_sStyleName.isEmpty() )
             {
                 const SvXMLStylesContext* pAutoStyles = GetOwnImport().GetAutoStyles();
                 if ( pAutoStyles )
@@ -150,7 +150,7 @@ void OXMLColumn::EndElement()
                     }
                 }
             }
-            if ( m_sCellStyleName.getLength() )
+            if ( !m_sCellStyleName.isEmpty() )
             {
                 const SvXMLStylesContext* pAutoStyles = GetOwnImport().GetAutoStyles();
                 if ( pAutoStyles )
@@ -167,7 +167,7 @@ void OXMLColumn::EndElement()
 
         }
     }
-    else if ( m_sCellStyleName.getLength() )
+    else if ( !m_sCellStyleName.isEmpty() )
     {
         const SvXMLStylesContext* pAutoStyles = GetOwnImport().GetAutoStyles();
         if ( pAutoStyles )

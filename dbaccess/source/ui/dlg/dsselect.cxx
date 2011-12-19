@@ -263,7 +263,7 @@ void ODatasourceSelectDialog::fillListBox(const StringBag& _rDatasources)
 
     if (m_aDatasource.GetEntryCount())
     {
-        if (sSelected.getLength())
+        if (!sSelected.isEmpty())
             m_aDatasource.SelectEntry(sSelected);
         else        // select the first entry
             m_aDatasource.SelectEntryPos(0);

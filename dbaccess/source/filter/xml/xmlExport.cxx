@@ -472,7 +472,7 @@ void ODBExport::exportDataSource()
 
             aSettingsMap.insert(TSettingsMap::value_type(eToken,sValue));
         }
-        if ( bAutoIncrementEnabled && (aAutoIncrement.first.getLength() || aAutoIncrement.second.getLength()) )
+        if ( bAutoIncrementEnabled && !(aAutoIncrement.first.isEmpty() && aAutoIncrement.second.isEmpty()) )
             m_aAutoIncrement.reset( new TStringPair(aAutoIncrement));
         if ( aDelimiter.bUsed )
             m_aDelimiter.reset( new TDelimiter( aDelimiter ) );
@@ -585,7 +585,7 @@ void ODBExport::exportConnectionData()
                         OSL_VERIFY( xProp->getPropertyValue( PROPERTY_SETTINGS ) >>= xDataSourceSettings );
                         xDataSourceSettings->getPropertyValue( INFO_TEXTFILEEXTENSION ) >>= sExtension;
                     }
-                    if ( sExtension.getLength() )
+                    if ( !sExtension.isEmpty() )
                         AddAttribute(XML_NAMESPACE_DB,XML_EXTENSION,sExtension);
                 }
                 catch(const Exception&)
@@ -644,7 +644,7 @@ void ODBExport::exportConnectionData()
                             if ( xSettingsInfo->hasPropertyByName( sPropertyName ) )
                             {
                                 ::rtl::OUString sPropertyValue;
-                                if ( ( xDataSourceSettings->getPropertyValue( sPropertyName ) >>= sPropertyValue ) && sPropertyValue.getLength() )
+                                if ( ( xDataSourceSettings->getPropertyValue( sPropertyName ) >>= sPropertyValue ) && !sPropertyValue.isEmpty() )
                                     AddAttribute( XML_NAMESPACE_DB, XML_LOCAL_SOCKET, sPropertyValue );
 
                             }
@@ -760,7 +760,7 @@ void ODBExport::exportDataSourceSettings()
 // -----------------------------------------------------------------------------
 void ODBExport::exportCharSet()
 {
-    if ( m_sCharSet.getLength() )
+    if ( !m_sCharSet.isEmpty() )
     {
         AddAttribute(XML_NAMESPACE_DB, XML_ENCODING,m_sCharSet);
 
@@ -815,7 +815,7 @@ void ODBExport::exportLogin()
     Reference<XPropertySet> xProp(getDataSource());
     ::rtl::OUString sValue;
     xProp->getPropertyValue(PROPERTY_USER) >>= sValue;
-    sal_Bool bAddLogin = sValue.getLength() > 0;
+    sal_Bool bAddLogin = !sValue.isEmpty();
     if ( bAddLogin )
         AddAttribute(XML_NAMESPACE_DB, XML_USER_NAME,sValue);
     sal_Bool bValue = sal_False;
@@ -949,14 +949,14 @@ void ODBExport::exportTableName(XPropertySet* _xProp,sal_Bool _bUpdate)
 {
     ::rtl::OUString sValue;
     _xProp->getPropertyValue(_bUpdate ? PROPERTY_UPDATE_TABLENAME : PROPERTY_NAME) >>= sValue;
-    if ( sValue.getLength() )
+    if ( !sValue.isEmpty() )
     {
         AddAttribute(XML_NAMESPACE_DB, XML_NAME,sValue);
         _xProp->getPropertyValue(_bUpdate ? PROPERTY_UPDATE_SCHEMANAME : PROPERTY_SCHEMANAME) >>= sValue;
-        if ( sValue.getLength() )
+        if ( !sValue.isEmpty() )
             AddAttribute(XML_NAMESPACE_DB, XML_SCHEMA_NAME,sValue);
         _xProp->getPropertyValue(_bUpdate ? PROPERTY_UPDATE_CATALOGNAME : PROPERTY_CATALOGNAME) >>= sValue;
-        if ( sValue.getLength() )
+        if ( !sValue.isEmpty() )
             AddAttribute(XML_NAMESPACE_DB, XML_CATALOG_NAME,sValue);
 
         if ( _bUpdate )
@@ -973,7 +973,7 @@ void ODBExport::exportFilter(XPropertySet* _xProp
     OSL_PRECOND(!GetAttrList().getLength(),"Invalid attribute length!");
     ::rtl::OUString sCommand;
     _xProp->getPropertyValue(_sProp) >>= sCommand;
-    if ( sCommand.getLength() )
+    if ( !sCommand.isEmpty() )
     {
         AddAttribute(XML_NAMESPACE_DB, XML_COMMAND,sCommand);
         SvXMLElementExport aComponents(*this,XML_NAMESPACE_DB, _eStatementType, sal_True, sal_True);
@@ -1027,13 +1027,13 @@ void ODBExport::exportColumns(const Reference<XColumnsSupplier>& _xColSup)
                 Any aColumnDefault;
                 aColumnDefault = xProp->getPropertyValue(PROPERTY_CONTROLDEFAULT);
 
-                if ( bHidden || sValue.getLength() || aColumnDefault.hasValue() || pAtt->getLength() )
+                if ( bHidden || !sValue.isEmpty() || aColumnDefault.hasValue() || pAtt->getLength() )
                 {
                     AddAttribute(XML_NAMESPACE_DB, XML_NAME,*pIter);
                     if ( bHidden )
                         AddAttribute(XML_NAMESPACE_DB, XML_VISIBLE,XML_FALSE);
 
-                    if ( sValue.getLength() )
+                    if ( !sValue.isEmpty() )
                         AddAttribute(XML_NAMESPACE_DB, XML_HELP_MESSAGE,sValue);
 
                     if ( aColumnDefault.hasValue() )
@@ -1068,7 +1068,7 @@ void ODBExport::exportForms()
     ::rtl::OUString sService;
     dbtools::getDataSourceSetting(getDataSource(),"Forms",aValue);
     aValue >>= sService;
-    if ( !sService.getLength() )
+    if ( sService.isEmpty() )
     {
         Reference<XFormDocumentsSupplier> xSup(GetModel(),UNO_QUERY);
         if ( xSup.is() )
@@ -1089,7 +1089,7 @@ void ODBExport::exportReports()
     ::rtl::OUString sService;
     dbtools::getDataSourceSetting(getDataSource(),"Reports",aValue);
     aValue >>= sService;
-    if ( !sService.getLength() )
+    if ( sService.isEmpty() )
     {
         Reference<XReportDocumentsSupplier> xSup(GetModel(),UNO_QUERY);
         if ( xSup.is() )
@@ -1110,7 +1110,7 @@ void ODBExport::exportQueries(sal_Bool _bExportContext)
     ::rtl::OUString sService;
     dbtools::getDataSourceSetting(getDataSource(),"CommandDefinitions",aValue);
     aValue >>= sService;
-    if ( !sService.getLength() )
+    if ( sService.isEmpty() )
     {
         Reference<XQueryDefinitionsSupplier> xSup(getDataSource(),UNO_QUERY);
         if ( xSup.is() )

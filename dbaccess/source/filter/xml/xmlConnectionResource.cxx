@@ -90,7 +90,7 @@ OXMLConnectionResource::OXMLConnectionResource( ODBFilter& rImport,
                 aProperty.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Actuate"));
                 break;
         }
-        if ( aProperty.Name.getLength() )
+        if ( !aProperty.Name.isEmpty() )
         {
             if ( !aProperty.Value.hasValue() )
                 aProperty.Value <<= sValue;

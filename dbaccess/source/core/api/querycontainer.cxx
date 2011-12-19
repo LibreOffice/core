@@ -240,9 +240,9 @@ void SAL_CALL OQueryContainer::elementInserted( const ::com::sun::star::containe
             // nothing to do, we're inserting via an "appendByDescriptor"
             return;
 
-        OSL_ENSURE(sElementName.getLength(), "OQueryContainer::elementInserted : invalid name !");
+        OSL_ENSURE(!sElementName.isEmpty(), "OQueryContainer::elementInserted : invalid name !");
         OSL_ENSURE(m_aDocumentMap.find(sElementName) == m_aDocumentMap.end(), "OQueryContainer::elementInserted         : oops .... we're inconsistent with our master container !");
-        if (!sElementName.getLength() || hasByName(sElementName))
+        if (sElementName.isEmpty() || hasByName(sElementName))
             return;
 
         // insert an own new element
@@ -256,9 +256,9 @@ void SAL_CALL OQueryContainer::elementRemoved( const ::com::sun::star::container
     ::rtl::OUString sAccessor;
     _rEvent.Accessor >>= sAccessor;
     {
-        OSL_ENSURE(sAccessor.getLength(), "OQueryContainer::elementRemoved : invalid name !");
+        OSL_ENSURE(!sAccessor.isEmpty(), "OQueryContainer::elementRemoved : invalid name !");
         OSL_ENSURE(m_aDocumentMap.find(sAccessor) != m_aDocumentMap.end(), "OQueryContainer::elementRemoved : oops .... we're inconsistent with our master container !");
-        if ( !sAccessor.getLength() || !hasByName(sAccessor) )
+        if ( sAccessor.isEmpty() || !hasByName(sAccessor) )
             return;
     }
     removeByName(sAccessor);
@@ -273,9 +273,9 @@ void SAL_CALL OQueryContainer::elementReplaced( const ::com::sun::star::containe
 
     {
         MutexGuard aGuard(m_aMutex);
-        OSL_ENSURE(sAccessor.getLength(), "OQueryContainer::elementReplaced : invalid name !");
+        OSL_ENSURE(!sAccessor.isEmpty(), "OQueryContainer::elementReplaced : invalid name !");
         OSL_ENSURE(m_aDocumentMap.find(sAccessor) != m_aDocumentMap.end(), "OQueryContainer::elementReplaced         : oops .... we're inconsistent with our master container !");
-        if (!sAccessor.getLength() || !hasByName(sAccessor))
+        if (sAccessor.isEmpty() || !hasByName(sAccessor))
             return;
 
         xNewElement = implCreateWrapper(sAccessor);

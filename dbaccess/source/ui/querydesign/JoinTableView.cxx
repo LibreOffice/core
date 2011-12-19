@@ -336,7 +336,7 @@ OTableWindowData* OJoinTableView::CreateImpl(const ::rtl::OUString& _rComposedNa
 void OJoinTableView::AddTabWin(const ::rtl::OUString& _rComposedName, const ::rtl::OUString& rWinName, sal_Bool /*bNewTable*/)
 {
     DBG_CHKTHIS(OJoinTableView,NULL);
-    OSL_ENSURE(_rComposedName.getLength(),"There must be a table name supplied!");
+    OSL_ENSURE(!_rComposedName.isEmpty(),"There must be a table name supplied!");
 
     TTableWindowData::value_type pNewTabWinData(createTableWindowData( _rComposedName, rWinName,rWinName ));
 

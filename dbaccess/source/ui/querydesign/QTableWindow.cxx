@@ -100,7 +100,7 @@ sal_Bool OQueryTableWindow::Init()
 
     TTableWindowData::value_type pWinData = GetData();
 
-    if (m_strInitialAlias.getLength() )
+    if (!m_strInitialAlias.isEmpty() )
         // Der Alias wurde explizit mit angegeben
         sAliasName = m_strInitialAlias;
     else if ( GetTable().is() )
@@ -125,7 +125,7 @@ sal_Bool OQueryTableWindow::Init()
 
     if (!bSuccess)
     {   // es soll nur ein Dummy-Window aufgemacht werden ...
-        OSL_ENSURE(GetAliasName().getLength(), "OQueryTableWindow::Init : kein Alias- UND kein Tabellenname geht nicht !");
+        OSL_ENSURE(!GetAliasName().isEmpty(), "OQueryTableWindow::Init : kein Alias- UND kein Tabellenname geht nicht !");
             // .. aber das braucht wenigstens einen Alias
 
         // ::com::sun::star::form::ListBox anlegen

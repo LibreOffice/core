@@ -436,11 +436,11 @@ sal_Bool ODBFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
     ::comphelper::NamedValueCollection aMediaDescriptor( rDescriptor );
     if ( aMediaDescriptor.has( "URL" ) )
         sFileName = aMediaDescriptor.getOrDefault( "URL", ::rtl::OUString() );
-    if ( !sFileName.getLength() && aMediaDescriptor.has( "FileName" ) )
+    if ( sFileName.isEmpty() && aMediaDescriptor.has( "FileName" ) )
         sFileName = aMediaDescriptor.getOrDefault( "FileName", sFileName );
 
-    OSL_ENSURE( sFileName.getLength(), "ODBFilter::implImport: no URL given!" );
-    sal_Bool bRet = ( sFileName.getLength() != 0 );
+    OSL_ENSURE( !sFileName.isEmpty(), "ODBFilter::implImport: no URL given!" );
+    sal_Bool bRet = !sFileName.isEmpty();
 
     if ( bRet )
     {

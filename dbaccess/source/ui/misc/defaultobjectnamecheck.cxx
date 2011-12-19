@@ -130,7 +130,7 @@ namespace dbaui
         try
         {
             ::rtl::OUStringBuffer aCompleteName;
-            if ( m_pImpl->sRelativeRoot.getLength() )
+            if ( !m_pImpl->sRelativeRoot.isEmpty() )
             {
                 aCompleteName.append( m_pImpl->sRelativeRoot );
                 aCompleteName.appendAscii( "/" );

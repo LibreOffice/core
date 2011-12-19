@@ -1312,7 +1312,7 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
         {
             ActivateAggregate( tpLength );
             pLength->SetMax(::std::max<sal_Int32>(pFieldType->nPrecision,pFieldDescr->GetPrecision()));
-            pLength->SetSpecialReadOnly(pFieldType->aCreateParams.getLength()==0);
+            pLength->SetSpecialReadOnly(pFieldType->aCreateParams.isEmpty());
         }
         else
             DeactivateAggregate( tpLength );
@@ -1323,7 +1323,7 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
             pScale->SetMax(::std::max<sal_Int32>(pFieldType->nMaximumScale,pFieldDescr->GetScale()));
             pScale->SetMin(pFieldType->nMinimumScale);
             static const ::rtl::OUString s_sPRECISION(RTL_CONSTASCII_USTRINGPARAM("PRECISION"));
-            pScale->SetSpecialReadOnly(pFieldType->aCreateParams.getLength() == 0 || pFieldType->aCreateParams == s_sPRECISION);
+            pScale->SetSpecialReadOnly(pFieldType->aCreateParams.isEmpty() || pFieldType->aCreateParams == s_sPRECISION);
         }
         else
             DeactivateAggregate( tpScale );
@@ -1343,7 +1343,7 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
                 {
                     ActivateAggregate( tpTextLen );
                     pTextLen->SetMax(::std::max<sal_Int32>(pFieldType->nPrecision,pFieldDescr->GetPrecision()));
-                    pTextLen->SetSpecialReadOnly(pFieldType->aCreateParams.getLength()==0);
+                    pTextLen->SetSpecialReadOnly(pFieldType->aCreateParams.isEmpty());
                 }
                 else
                     DeactivateAggregate( tpTextLen );
@@ -1359,7 +1359,7 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
                 ActivateAggregate( tpFormat );
                 break;
             case DataType::BIT:
-                if ( pFieldType->aCreateParams.getLength() )
+                if ( !pFieldType->aCreateParams.isEmpty() )
                 {
                     DeactivateAggregate( tpFormat );
                     DeactivateAggregate( tpTextLen );
@@ -1668,7 +1668,7 @@ void OFieldDescControl::SaveData( OFieldDescription* pFieldDescr )
         sDefault = BoolStringPersistent(pBoolDefault->GetSelectEntry());
     }
 
-    if ( sDefault.getLength() )
+    if ( !sDefault.isEmpty() )
         pFieldDescr->SetControlDefault(makeAny(sDefault));
     else
         pFieldDescr->SetControlDefault(Any());
@@ -1845,7 +1845,7 @@ String OFieldDescControl::getControlDefault( const OFieldDescription* _pFieldDes
             {
                 if ( !bTextFormat )
                 {
-                    if ( sDefault.getLength() )
+                    if ( !sDefault.isEmpty() )
                     {
                         try
                         {
@@ -1886,8 +1886,8 @@ String OFieldDescControl::getControlDefault( const OFieldDescription* _pFieldDes
                 OSL_ENSURE(xPreViewer.is(),"XNumberFormatPreviewer is null!");
                 sDefault = xPreViewer->convertNumberToPreviewString(sFormat,nValue,aLocale,sal_True);
             }
-            else if ( !_bCheck || (sDefault.getLength() != 0) )
-                sDefault = xNumberFormatter->formatString(nFormatKey,(sDefault.getLength() != 0 )? sDefault : sFormat);
+            else if ( !(_bCheck && sDefault.isEmpty()) )
+                sDefault = xNumberFormatter->formatString(nFormatKey, sDefault.isEmpty() ? sFormat : sDefault);
         }
         catch(const Exception&)
         {

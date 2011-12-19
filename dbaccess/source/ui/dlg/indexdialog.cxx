@@ -246,7 +246,7 @@ DBG_NAME(DbaIndexDialog)
                 ++aCheck
             )
         {
-            if (aCheck->sDescription.getLength())
+            if (!aCheck->sDescription.isEmpty())
                 break;
         }
 

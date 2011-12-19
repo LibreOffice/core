@@ -302,7 +302,7 @@ namespace dbaui
             // get a number formatter
             Reference< XPropertySet > xDataSourceProps( m_pImpl->m_aDataSource.getDataSourceProps(), UNO_SET_THROW );
             xDataSourceProps->getPropertyValue( PROPERTY_NAME ) >>= m_pImpl->m_sDataSourceName;
-            DBG_ASSERT( m_pImpl->m_sDataSourceName.getLength(), "DBSubComponentController::initializeConnection: invalid data source name!" );
+            DBG_ASSERT( !m_pImpl->m_sDataSourceName.isEmpty(), "DBSubComponentController::initializeConnection: invalid data source name!" );
             Reference< XNumberFormatsSupplier> xSupplier = ::dbtools::getNumberFormats(m_pImpl->m_xConnection);
             if(xSupplier.is())
             {

@@ -585,7 +585,7 @@ namespace dbaccess
         // load/create the sub component hidden. We'll show it when the main app window is shown.
         aLoadArgs.put( "Hidden", true );
 
-        if ( i_rComponentName.getLength() )
+        if ( !i_rComponentName.isEmpty() )
         {
             xDocDefinition = lcl_getSubComponentDef_nothrow( m_xDocumentUI, m_eType, i_rComponentName );
             xSubComponent.set( m_xDocumentUI->loadComponentWithArguments(
@@ -646,7 +646,7 @@ namespace dbaccess
         aLoadArgs.put( "CurrentQueryDesign", aCurrentQueryDesign );
         aLoadArgs.put( "Hidden", true );
 
-        if ( i_rComponentName.getLength() )
+        if ( !i_rComponentName.isEmpty() )
         {
             xSubComponent.set( m_xDocumentUI->loadComponentWithArguments(
                     m_eType,

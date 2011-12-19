@@ -88,7 +88,7 @@ OXMLComponent::OXMLComponent( ODBFilter& rImport
                 break;
         }
     }
-    if ( m_sHREF.getLength() && m_sName.getLength() && _xParentContainer.is() )
+    if ( !m_sHREF.isEmpty() && !m_sName.isEmpty() && _xParentContainer.is() )
     {
         Sequence< Any > aArguments(3);
         PropertyValue aValue;

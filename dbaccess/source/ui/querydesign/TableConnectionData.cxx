@@ -177,7 +177,7 @@ void OTableConnectionData::normalizeLines()
     sal_Int32 nCount = m_vConnLineData.size();
     for(sal_Int32 i=0;i<nCount;)
     {
-        if(!m_vConnLineData[i]->GetSourceFieldName().getLength() || !m_vConnLineData[i]->GetDestFieldName().getLength())
+        if(m_vConnLineData[i]->GetSourceFieldName().isEmpty() || m_vConnLineData[i]->GetDestFieldName().isEmpty())
         {
             OConnectionLineDataRef pData = m_vConnLineData[i];
             m_vConnLineData.erase(m_vConnLineData.begin()+i);

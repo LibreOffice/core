@@ -216,7 +216,7 @@ connectivity::sdbcx::ObjectType OTableContainer::createObject(const ::rtl::OUStr
                                                 sTable,
                                                 ::dbtools::eInDataManipulation);
             Any aCatalog;
-            if(sCatalog.getLength())
+            if(!sCatalog.isEmpty())
                 aCatalog <<= sCatalog;
             ::rtl::OUString sType,sDescription;
             Sequence< ::rtl::OUString> aTypeFilter;
@@ -402,7 +402,7 @@ void OTableContainer::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElement
                 bIsView = sType.equalsIgnoreAsciiCase(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VIEW")));
             }
 
-            if(!sComposedName.getLength())
+            if(sComposedName.isEmpty())
                 ::dbtools::throwFunctionSequenceException(static_cast<XTypeProvider*>(static_cast<OFilteredContainer*>(this)));
 
             ::rtl::OUString aSql(RTL_CONSTASCII_USTRINGPARAM("DROP "));

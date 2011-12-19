@@ -334,7 +334,7 @@ sal_Bool ORelationTableConnectionData::Update()
             OConnectionLineDataVec::iterator aEnd = m_vConnLineData.end();
             for(;aIter != aEnd;++aIter)
             {
-                if((*aIter)->GetSourceFieldName().getLength() && (*aIter)->GetDestFieldName().getLength())
+                if(!((*aIter)->GetSourceFieldName().isEmpty() || (*aIter)->GetDestFieldName().isEmpty()))
                 {
                     Reference<XPropertySet> xColumn;
                     xColumn = xColumnFactory->createDataDescriptor();

@@ -196,7 +196,7 @@ SQLExceptionInfo createConnection(  const Reference< ::com::sun::star::beans::XP
 
     try
     {
-        if(bPwdReq && !sPwd.getLength())
+        if(bPwdReq && sPwd.isEmpty())
         {   // password required, but empty -> connect using an interaction handler
             Reference<XCompletedConnection> xConnectionCompletion(_xDataSource, UNO_QUERY);
             if (!xConnectionCompletion.is())
@@ -367,13 +367,13 @@ TOTypeInfoSP getTypeInfoFromType(const OTypeInfoMap& _rTypeInfo,
             sal_Bool        bDBAutoIncrement    = aIter->second->bAutoIncrement;    (void)bDBAutoIncrement;
     #endif
             if  (   (
-                        !_sTypeName.getLength()
+                        _sTypeName.isEmpty()
                     ||  (aIter->second->aTypeName.equalsIgnoreAsciiCase(_sTypeName))
                     )
                 &&  (
                         (
                                 !aIter->second->aCreateParams.getLength()
-                            &&  !_sCreateParams.getLength()
+                            &&  _sCreateParams.isEmpty()
                         )
                     ||  (
                                 (aIter->second->nPrecision      >= _nPrecision)
@@ -621,7 +621,7 @@ void fillTypeInfo(  const Reference< ::com::sun::star::sdbc::XConnection>& _rxCo
                     aName = _rsTypeNames.GetToken(TYPE_DATETIME);
                     break;
                 case DataType::BIT:
-                    if ( pInfo->aCreateParams.getLength() )
+                    if ( !pInfo->aCreateParams.isEmpty() )
                     {
                         aName = _rsTypeNames.GetToken(TYPE_BIT);
                         break;
@@ -715,7 +715,7 @@ void setColumnProperties(const Reference<XPropertySet>& _rxColumn,const OFieldDe
         _rxColumn->setPropertyValue(PROPERTY_ISCURRENCY,::cppu::bool2any(_pFieldDesc->IsCurrency()));
     // set autoincrement value when available
     // and only set when the entry is not empty, that lets the value in the column untouched
-    if ( _pFieldDesc->IsAutoIncrement() && _pFieldDesc->GetAutoIncrementValue().getLength() && _rxColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_AUTOINCREMENTCREATION) )
+    if ( _pFieldDesc->IsAutoIncrement() && !_pFieldDesc->GetAutoIncrementValue().isEmpty() && _rxColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_AUTOINCREMENTCREATION) )
         _rxColumn->setPropertyValue(PROPERTY_AUTOINCREMENTCREATION,makeAny(_pFieldDesc->GetAutoIncrementValue()));
 }
 // -----------------------------------------------------------------------------
@@ -733,7 +733,7 @@ void setColumnProperties(const Reference<XPropertySet>& _rxColumn,const OFieldDe
                 Reference< XConnection> xCon = _xMetaData->getConnection();
                 if ( xCon.is() )
                     sCatalog = xCon->getCatalog();
-                if ( !sCatalog.getLength() )
+                if ( sCatalog.isEmpty() )
                 {
                     Reference<XResultSet> xRes = _xMetaData->getCatalogs();
                     Reference<XRow> xRow(xRes,UNO_QUERY);
@@ -1224,7 +1224,7 @@ void fillAutoIncrementValue(const Reference<XConnection>& _xConnection,
 // -----------------------------------------------------------------------------
 ::rtl::OUString getStrippedDatabaseName(const Reference<XPropertySet>& _xDataSource,::rtl::OUString& _rsDatabaseName)
 {
-    if ( !_rsDatabaseName.getLength() && _xDataSource.is() )
+    if ( _rsDatabaseName.isEmpty() && _xDataSource.is() )
     {
         try
         {
@@ -1275,7 +1275,7 @@ namespace
             if ( ( aCnt.getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AnchorName")) ) >>= sAnchor ) )
             {
 
-                if ( sAnchor.getLength() > 0 )
+                if ( !sAnchor.isEmpty() )
                 {
                     _rAnchor = sAnchor;
                     bRet = sal_True;
@@ -1581,12 +1581,12 @@ sal_Bool insertHierachyElement( Window* _pParent, const Reference< XMultiService
     if ( xProp.is() )
         xProp->getPropertyValue(PROPERTY_NAME) >>= sNewName;
 
-    if ( !_bMove || !sNewName.getLength() )
+    if ( !_bMove || sNewName.isEmpty() )
     {
         String sTargetName,sLabel;
-        if ( !sNewName.getLength() || xNameAccess->hasByName(sNewName) )
+        if ( sNewName.isEmpty() || xNameAccess->hasByName(sNewName) )
         {
-            if ( sNewName.getLength() )
+            if ( !sNewName.isEmpty() )
                 sTargetName = sNewName;
             else
                 sTargetName = String(ModuleRes( _bCollection ? STR_NEW_FOLDER : ((_bForm) ? RID_STR_FORM : RID_STR_REPORT)));

@@ -200,7 +200,7 @@ void ObjectCopySource::copyFilterAndSortingTo( const Reference< XConnection >& _
             {
                 ::rtl::OUString sFilter;
                 m_xObject->getPropertyValue( aProperties[i].first ) >>= sFilter;
-                if ( sFilter.getLength() )
+                if ( !sFilter.isEmpty() )
                 {
                     sStatement += aProperties[i].second;
                     String sReplace = sFilter;
@@ -589,12 +589,12 @@ OCopyTableWizard::OCopyTableWizard( Window * pParent, const ::rtl::OUString& _rD
     try
     {
         m_sSourceName = m_rSourceObject.getQualifiedObjectName();
-        OSL_ENSURE( m_sSourceName.getLength() > 0, "OCopyTableWizard::OCopyTableWizard: unable to retrieve the source object's name!" );
+        OSL_ENSURE( !m_sSourceName.isEmpty(), "OCopyTableWizard::OCopyTableWizard: unable to retrieve the source object's name!" );
 
-        if ( !sInitialTableName.getLength() )
+        if ( sInitialTableName.isEmpty() )
             sInitialTableName = m_sSourceName;
 
-        if ( !m_sName.getLength() )
+        if ( m_sName.isEmpty() )
         {
             if ( _xSourceConnection == m_xDestConnection )
             {
@@ -951,7 +951,7 @@ IMPL_LINK( OCopyTableWizard, ImplOKHdl, OKButton*, EMPTYARG )
                                 OCopyTable* pPage = static_cast<OCopyTable*>(GetPage(0));
                                 m_bCreatePrimaryKeyColumn = sal_True;
                                 m_aKeyName = pPage->GetKeyName();
-                                if ( !m_aKeyName.getLength() )
+                                if ( m_aKeyName.isEmpty() )
                                     m_aKeyName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ID" ) );
                                 m_aKeyName = createUniqueName( m_aKeyName );
                                 sal_Int32 nBreakPos2 = 0;
@@ -992,7 +992,7 @@ void OCopyTableWizard::setCreatePrimaryKey( bool _bDoCreate, const ::rtl::OUStri
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OCopyTableWizard::setCreatePrimaryKey" );
     m_bCreatePrimaryKeyColumn = _bDoCreate;
-    if ( _rSuggestedName.getLength() )
+    if ( !_rSuggestedName.isEmpty() )
         m_aKeyName = _rSuggestedName;
 
     OCopyTable* pSettingsPage = dynamic_cast< OCopyTable* >( GetPage( 0 ) );
@@ -1266,7 +1266,7 @@ Reference< XPropertySet > OCopyTableWizard::createView() const
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OCopyTableWizard::createView" );
     ::rtl::OUString sCommand( m_rSourceObject.getSelectStatement() );
-    OSL_ENSURE( sCommand.getLength(), "OCopyTableWizard::createView: no statement in the source object!" );
+    OSL_ENSURE( !sCommand.isEmpty(), "OCopyTableWizard::createView: no statement in the source object!" );
         // there are legitimate cases in which getSelectStatement does not provide a statement,
         // but in all those cases, this method here should never be called.
     return ::dbaui::createView( m_sName, m_xDestConnection, sCommand );
@@ -1302,12 +1302,12 @@ Reference< XPropertySet > OCopyTableWizard::createTable()
                                             sTable,
                                             ::dbtools::eInDataManipulation);
 
-        if ( !sCatalog.getLength() && xMetaData->supportsCatalogsInTableDefinitions() )
+        if ( sCatalog.isEmpty() && xMetaData->supportsCatalogsInTableDefinitions() )
         {
             sCatalog = m_xDestConnection->getCatalog();
         }
 
-        if ( !sSchema.getLength() && xMetaData->supportsSchemasInTableDefinitions() )
+        if ( sSchema.isEmpty() && xMetaData->supportsSchemasInTableDefinitions() )
         {
             sSchema = xMetaData->getUserName();
         }

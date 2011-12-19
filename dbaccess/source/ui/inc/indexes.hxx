@@ -85,7 +85,7 @@ namespace dbaui
         void        setModified(sal_Bool _bModified) { bModified = _bModified; }
         void        clearModified() { setModified(sal_False); }
 
-        sal_Bool    isNew() const { return 0 == getOriginalName().getLength(); }
+        sal_Bool    isNew() const { return getOriginalName().isEmpty(); }
         void        flagAsNew(const GrantIndexAccess&) { sOriginalName = ::rtl::OUString(); }
         void        flagAsCommitted(const GrantIndexAccess&) { sOriginalName = sName; }
 

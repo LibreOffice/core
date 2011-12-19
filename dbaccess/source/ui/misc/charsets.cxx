@@ -120,7 +120,7 @@ namespace dbaui
         :CharsetDisplayDerefHelper_Base(_rBase)
         ,m_sDisplayName(_rDisplayName)
     {
-        OSL_ENSURE( m_sDisplayName.getLength(), "CharsetDisplayDerefHelper::CharsetDisplayDerefHelper: invalid display name!" );
+        OSL_ENSURE( !m_sDisplayName.isEmpty(), "CharsetDisplayDerefHelper::CharsetDisplayDerefHelper: invalid display name!" );
     }
 
     //=========================================================================

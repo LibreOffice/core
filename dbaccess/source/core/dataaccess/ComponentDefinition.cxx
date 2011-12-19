@@ -150,7 +150,7 @@ OComponentDefinition::OComponentDefinition( const Reference< XInterface >& _rxCo
     registerProperties();
 
     m_pImpl->m_aProps.aTitle = _rElementName;
-    OSL_ENSURE(m_pImpl->m_aProps.aTitle.getLength() != 0, "OComponentDefinition::OComponentDefinition : invalid name !");
+    OSL_ENSURE(!m_pImpl->m_aProps.aTitle.isEmpty(), "OComponentDefinition::OComponentDefinition : invalid name !");
 }
 
 IMPLEMENT_IMPLEMENTATION_ID(OComponentDefinition);

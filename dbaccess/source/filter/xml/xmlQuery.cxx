@@ -128,11 +128,11 @@ void OXMLQuery::setProperties(Reference< XPropertySet > & _xProp )
             _xProp->setPropertyValue(PROPERTY_COMMAND,makeAny(m_sCommand));
             _xProp->setPropertyValue(PROPERTY_ESCAPE_PROCESSING,makeAny(m_bEscapeProcessing));
 
-            if ( m_sTable.getLength() )
+            if ( !m_sTable.isEmpty() )
                 _xProp->setPropertyValue(PROPERTY_UPDATE_TABLENAME,makeAny(m_sTable));
-            if ( m_sCatalog.getLength() )
+            if ( !m_sCatalog.isEmpty() )
                 _xProp->setPropertyValue(PROPERTY_UPDATE_CATALOGNAME,makeAny(m_sCatalog));
-            if ( m_sSchema.getLength() )
+            if ( !m_sSchema.isEmpty() )
                 _xProp->setPropertyValue(PROPERTY_UPDATE_SCHEMANAME,makeAny(m_sSchema));
 
             const ODBFilter::TPropertyNameMap& rSettings = GetOwnImport().getQuerySettings();

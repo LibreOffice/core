@@ -64,7 +64,7 @@ OTableWindowData::OTableWindowData( const Reference< XPropertySet>& _xTable
     ,m_bIsValid(true)
 {
     DBG_CTOR(OTableWindowData,NULL);
-    if( !m_aWinName.getLength() )
+    if( m_aWinName.isEmpty() )
         m_aWinName = m_aTableName;
 
     listen();

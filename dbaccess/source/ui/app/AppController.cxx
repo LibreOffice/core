@@ -422,7 +422,7 @@ void SAL_CALL OApplicationController::disposing()
         if ( m_xModel.is() )
         {
             ::rtl::OUString sUrl = m_xModel->getURL();
-            if ( sUrl.getLength() )
+            if ( !sUrl.isEmpty() )
             {
                 ::comphelper::NamedValueCollection aArgs( m_xModel->getArgs() );
                 if ( true == aArgs.getOrDefault( "PickListEntry", true ) )
@@ -676,7 +676,7 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
                     if ( aReturn.bEnabled )
                     {
                         const ::rtl::OUString sReportEngineServiceName = ::dbtools::getDefaultReportEngineServiceName(m_xServiceFactory);
-                        aReturn.bEnabled = sReportEngineServiceName.getLength() != 0;
+                        aReturn.bEnabled = !sReportEngineServiceName.isEmpty();
                         if ( aReturn.bEnabled )
                         {
                             const Reference< XEnumeration > xEnumDrivers = xEnumAccess->createContentEnumeration(sReportEngineServiceName);
@@ -1175,7 +1175,7 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                     ::rtl::OUString sUrl;
                     if ( m_xModel.is() )
                         sUrl = m_xModel->getURL();
-                    if ( !sUrl.getLength() )
+                    if ( sUrl.isEmpty() )
                         sUrl = SvtPathOptions().GetWorkPath();
 
                     ::sfx2::FileDialogHelper aFileDlg(
@@ -2507,7 +2507,7 @@ sal_Int8 OApplicationController::queryDrop( const AcceptDropEvent& _rEvt, const 
                     if ( pHitEntry )
                     {
                         sName = pView->getQualifiedName( pHitEntry );
-                        if ( sName.getLength() )
+                        if ( !sName.isEmpty() )
                         {
                             Reference< XHierarchicalNameAccess > xContainer(getElements(pView->getElementType()),UNO_QUERY);
                             if ( xContainer.is() && xContainer->hasByHierarchicalName(sName) )
@@ -2848,7 +2848,7 @@ void OApplicationController::containerFound( const Reference< XContainer >& _xCo
         try
         {
             sName = getContainer()->getQualifiedName( NULL );
-            OSL_ENSURE( sName.getLength(), "OApplicationController::getCurrentlySelectedName: no name given!" );
+            OSL_ENSURE( !sName.isEmpty(), "OApplicationController::getCurrentlySelectedName: no name given!" );
         }
         catch( const Exception& )
         {

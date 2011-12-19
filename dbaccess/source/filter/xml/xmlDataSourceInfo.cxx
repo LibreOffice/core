@@ -102,7 +102,7 @@ OXMLDataSourceInfo::OXMLDataSourceInfo( ODBFilter& rImport
                 bFoundCharset = true;
                 break;
         }
-        if ( aProperty.Name.getLength() )
+        if ( !aProperty.Name.isEmpty() )
         {
             aProperty.Value <<= sValue;
             rImport.addInfo(aProperty);

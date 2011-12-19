@@ -737,7 +737,7 @@ namespace
         {
             OSL_VERIFY( _rxDescriptor->getPropertyValue( _rPropertyName ) >>= sValue );
         }
-        return sValue.getLength() > 0;
+        return !sValue.isEmpty();
     }
 }
 
@@ -760,7 +760,7 @@ void CopyTableWizard::impl_checkForUnsupportedSettings_throw( const Reference< X
         }
     }
 
-    if ( sUnsupportedSetting.getLength() != 0 )
+    if ( !sUnsupportedSetting.isEmpty() )
     {
         ::rtl::OUString sMessage( String(ModuleRes( STR_CTW_ERROR_UNSUPPORTED_SETTING )) );
         ::comphelper::string::searchAndReplaceAsciiI( sMessage, "$name$", sUnsupportedSetting );
@@ -924,9 +924,9 @@ SharedConnection CopyTableWizard::impl_extractConnection_throw( const Reference<
     // need a DatabaseContext for loading the data source
     Reference< XNameAccess > xDatabaseContext( m_aContext.createComponent( "com.sun.star.sdb.DatabaseContext" ), UNO_QUERY_THROW );
     Reference< XDataSource > xDataSource;
-    if ( sDataSource.getLength() )
+    if ( !sDataSource.isEmpty() )
         xDataSource.set( xDatabaseContext->getByName( sDataSource ), UNO_QUERY_THROW );
-    if ( !xDataSource.is() && sDatabaseLocation.getLength() )
+    if ( !xDataSource.is() && !sDatabaseLocation.isEmpty() )
         xDataSource.set( xDatabaseContext->getByName( sDatabaseLocation ), UNO_QUERY_THROW );
 
     if ( xDataSource.is() )

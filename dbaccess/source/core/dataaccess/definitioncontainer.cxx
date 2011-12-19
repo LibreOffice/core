@@ -200,7 +200,7 @@ void SAL_CALL ODefinitionContainer::removeByName( const ::rtl::OUString& _rName 
     ResettableMutexGuard aGuard(m_aMutex);
 
     // check the arguments
-    if (!_rName.getLength())
+    if (_rName.isEmpty())
         throw IllegalArgumentException();
 
     if (!checkExistence(_rName))
@@ -573,7 +573,7 @@ void ODefinitionContainer::implReplace(const ::rtl::OUString& _rName, const Refe
 void ODefinitionContainer::approveNewObject(const ::rtl::OUString& _sName,const Reference< XContent >& _rxObject) const
 {
     // check the arguments
-    if ( !_sName.getLength() )
+    if ( _sName.isEmpty() )
         throw IllegalArgumentException(
             DBA_RES( RID_STR_NAME_MUST_NOT_BE_EMPTY ),
             *this,

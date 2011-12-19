@@ -286,7 +286,7 @@ namespace
             if ( aCurrentElement.getType() == SQLExceptionInfo::SQL_CONTEXT )
             {
                 const SQLContext* pContext = (const SQLContext*)aCurrentElement;
-                if ( pContext->Details.getLength() )
+                if ( !pContext->Details.isEmpty() )
                 {
                     ExceptionDisplayInfo aSubInfo( aCurrentElement.getType() );
 
@@ -634,7 +634,7 @@ void OSQLMessageBox::impl_createStandardButtons( WinBits _nStyle )
         AddButton( BUTTON_OK, BUTTONID_OK, BUTTONDIALOG_DEFBUTTON | BUTTONDIALOG_FOCUSBUTTON );
     }
 
-    if ( m_sHelpURL.getLength() )
+    if ( !m_sHelpURL.isEmpty() )
     {
         lcl_addButton( *this, BUTTON_HELP, false );
 

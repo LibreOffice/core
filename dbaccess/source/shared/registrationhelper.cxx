@@ -121,7 +121,7 @@ uno::Reference< uno::XInterface > OModuleRegistration::getComponentFactory(
     const uno::Reference< lang::XMultiServiceFactory >& _rxServiceManager)
 {
     OSL_ENSURE(_rxServiceManager.is(), "OModuleRegistration::getComponentFactory : invalid argument (service manager) !");
-    OSL_ENSURE(_rImplementationName.getLength(), "OModuleRegistration::getComponentFactory : invalid argument (implementation name) !");
+    OSL_ENSURE(!_rImplementationName.isEmpty(), "OModuleRegistration::getComponentFactory : invalid argument (implementation name) !");
 
     if (!s_pImplementationNames)
     {

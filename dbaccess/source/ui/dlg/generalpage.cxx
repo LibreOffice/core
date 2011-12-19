@@ -197,7 +197,7 @@ namespace dbaui
                     )
                 {
                     const ::rtl::OUString sURLPrefix = aTypeLoop.getURLPrefix();
-                    if ( sURLPrefix.getLength() )
+                    if ( !sURLPrefix.isEmpty() )
                     {
                         String sDisplayName = aTypeLoop.getDisplayName();
                         if (   m_pDatasourceType->GetEntryPos( sDisplayName ) == LISTBOX_ENTRY_NOTFOUND
@@ -260,7 +260,7 @@ namespace dbaui
     void OGeneralPage::switchMessage(const ::rtl::OUString& _sURLPrefix)
     {
         SPECIAL_MESSAGE eMessage = smNone;
-        if ( !_sURLPrefix.getLength()/*_eType == m_eNotSupportedKnownType*/ )
+        if ( _sURLPrefix.isEmpty()/*_eType == m_eNotSupportedKnownType*/ )
         {
             eMessage = smUnsupportedType;
         }

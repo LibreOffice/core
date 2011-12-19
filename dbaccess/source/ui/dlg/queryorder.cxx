@@ -255,7 +255,7 @@ void DlgOrderCrit::EnableLines()
     {
         if(m_aColumnList[i]->GetSelectEntryPos() != 0)
         {
-            if(sOrder.getLength())
+            if(!sOrder.isEmpty())
                 sOrder += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(","));
 
             String sName = m_aColumnList[i]->GetSelectEntry();

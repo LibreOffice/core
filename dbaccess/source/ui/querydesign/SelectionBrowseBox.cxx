@@ -74,7 +74,7 @@ namespace
 {
     sal_Bool isFieldNameAsterix(const ::rtl::OUString& _sFieldName )
     {
-        sal_Bool bAsterix = !(_sFieldName.getLength() && _sFieldName.toChar() != '*');
+        sal_Bool bAsterix = !(!_sFieldName.isEmpty() && _sFieldName.toChar() != '*');
         if ( !bAsterix )
         {
             String sName = _sFieldName;
@@ -520,7 +520,7 @@ void OSelectionBrowseBox::InitController(CellControllerRef& /*rController*/, lon
                         m_pTableCell->InsertEntry(static_cast<OQueryTableWindow*>(aIter->second)->GetAliasName());
 
                     m_pTableCell->InsertEntry(String(ModuleRes(STR_QUERY_NOTABLE)), 0);
-                    if (pEntry->GetAlias().getLength())
+                    if (!pEntry->GetAlias().isEmpty())
                         m_pTableCell->SelectEntry(pEntry->GetAlias());
                     else
                         m_pTableCell->SelectEntry(String(ModuleRes(STR_QUERY_NOTABLE)));
@@ -613,7 +613,7 @@ sal_Bool OSelectionBrowseBox::fillColumnRef(const ::rtl::OUString& _sColumnName,
     sal_Bool bError = sal_False;
     ::comphelper::UStringMixEqual bCase(_xMetaData->supportsMixedCaseQuotedIdentifiers());
     // check if the table name is the same
-    if ( _sTableRange.getLength() && (bCase(_pEntry->GetTable(),_sTableRange) || bCase(_pEntry->GetAlias(),_sTableRange)) )
+    if ( !_sTableRange.isEmpty() && (bCase(_pEntry->GetTable(),_sTableRange) || bCase(_pEntry->GetAlias(),_sTableRange)) )
     { // a table was already inserted and the tables contains that column name
 
         if ( !_pEntry->GetTabWindow() )
@@ -705,7 +705,7 @@ sal_Bool OSelectionBrowseBox::saveField(const String& _sFieldName,OTableFieldDes
 
         if  ( _pEntry->isAggreateFunction() )
         {
-            OSL_ENSURE(_pEntry->GetFunction().getLength(),"Functionname darf hier nicht leer sein! ;-(");
+            OSL_ENSURE(!_pEntry->GetFunction().isEmpty(),"Functionname darf hier nicht leer sein! ;-(");
             ::rtl::OUStringBuffer aTmpStr2( _pEntry->GetFunction());
             aTmpStr2.appendAscii("(");
             aTmpStr2.append(sSql);
@@ -714,7 +714,7 @@ sal_Bool OSelectionBrowseBox::saveField(const String& _sFieldName,OTableFieldDes
         }
 
         sSql = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SELECT ")) + sSql;
-        if ( sFieldAlias.getLength() )
+        if ( !sFieldAlias.isEmpty() )
         { // always quote the alias name there canbe no function in it
             sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" "));
             sSql += ::dbtools::quoteName( xMetaData->getIdentifierQuoteString(), sFieldAlias );
@@ -769,7 +769,7 @@ sal_Bool OSelectionBrowseBox::saveField(const String& _sFieldName,OTableFieldDes
             OSL_ENSURE(SQL_ISRULE(pChild,derived_column), "No derived column found!");
             // get the column alias
             ::rtl::OUString sColumnAlias = OSQLParseTreeIterator::getColumnAlias(pChild);
-            if ( sColumnAlias.getLength() ) // we found an as clause
+            if ( !sColumnAlias.isEmpty() ) // we found an as clause
             {
                 String aSelectionAlias = aSelEntry->GetFieldAlias();
                 aSelEntry->SetFieldAlias( sColumnAlias );
@@ -1175,7 +1175,7 @@ sal_Bool OSelectionBrowseBox::SaveModified()
                 strOldCellContents = pEntry->GetCriteria(nIdx);
                 pEntry->SetCriteria(nIdx, aCrit);
                 sNewValue = pEntry->GetCriteria(nIdx);
-                if(aCrit.getLength() && nRow >= (GetRowCount()-1))
+                if(!aCrit.isEmpty() && nRow >= (GetRowCount()-1))
                     bAppendRow = sal_True;
             }
         }
@@ -1764,7 +1764,7 @@ void OSelectionBrowseBox::DuplicateConditionLevel( const sal_uInt16 nLevel)
         OTableFieldDescRef pEntry = *aIter;
 
         ::rtl::OUString sValue = pEntry->GetCriteria(nLevel);
-        if ( sValue.getLength() )
+        if ( !sValue.isEmpty() )
         {
             pEntry->SetCriteria( nNewLevel, sValue);
             if ( nNewLevel == (m_nVisibleCount-BROW_CRIT1_ROW-1) )
@@ -1812,7 +1812,7 @@ void OSelectionBrowseBox::AddCondition( const OTableFieldDescRef& rInfo, const S
                 if(!m_bGroupByUnRelated && pEntry->IsGroupBy())
                     pEntry->SetVisible(sal_True);
             }
-            if (!pEntry->GetCriteria(nLevel).getLength() )
+            if (pEntry->GetCriteria(nLevel).isEmpty() )
             {
                 pEntry->SetCriteria( nLevel, rValue);
                 if(nLevel == (m_nVisibleCount-BROW_CRIT1_ROW-1))

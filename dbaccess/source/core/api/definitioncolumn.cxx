@@ -249,7 +249,7 @@ Reference< XPropertySet > OQueryColumn::impl_determineOriginalTableColumn( const
         OSL_VERIFY( getPropertyValue( PROPERTY_CATALOGNAME ) >>= sCatalog );
         OSL_VERIFY( getPropertyValue( PROPERTY_SCHEMANAME ) >>= sSchema );
         OSL_VERIFY( getPropertyValue( PROPERTY_TABLENAME ) >>= sTable );
-        if ( !sCatalog.getLength() && !sSchema.getLength() && !sTable.getLength() )
+        if ( sCatalog.isEmpty() && sSchema.isEmpty() && sTable.isEmpty() )
             return NULL;
 
         ::rtl::OUString sComposedTableName = ::dbtools::composeTableName(
@@ -317,7 +317,7 @@ void SAL_CALL OQueryColumn::getFastPropertyValue( Any& _rValue, sal_Int32 _nHand
         ::rtl::OUString sPropName;
         sal_Int16 nAttributes( 0 );
         const_cast< OQueryColumn* >( this )->getInfoHelper().fillPropertyMembersByHandle( &sPropName, &nAttributes, _nHandle );
-        OSL_ENSURE( sPropName.getLength(), "OColumnWrapper::impl_getPropertyNameFromHandle: property not found!" );
+        OSL_ENSURE( !sPropName.isEmpty(), "OColumnWrapper::impl_getPropertyNameFromHandle: property not found!" );
 
         _rValue = m_xOriginalTableColumn->getPropertyValue( sPropName );
     }
@@ -363,7 +363,7 @@ OColumnWrapper::~OColumnWrapper()
     ::rtl::OUString sPropName;
     sal_Int16 nAttributes( 0 );
     const_cast< OColumnWrapper* >( this )->getInfoHelper().fillPropertyMembersByHandle( &sPropName, &nAttributes, _nHandle );
-    OSL_ENSURE( sPropName.getLength(), "OColumnWrapper::impl_getPropertyNameFromHandle: property not found!" );
+    OSL_ENSURE( !sPropName.isEmpty(), "OColumnWrapper::impl_getPropertyNameFromHandle: property not found!" );
     return sPropName;
 }
 

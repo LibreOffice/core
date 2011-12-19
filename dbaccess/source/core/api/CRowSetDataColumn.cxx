@@ -128,7 +128,7 @@ void SAL_CALL ORowSetDataColumn::getFastPropertyValue( Any& rValue, sal_Int32 nH
             rValue = ((*m_aColumnValue)->get())[m_nPos].makeAny();
         }
     }
-    else if ( PROPERTY_ID_LABEL == nHandle && m_sLabel.getLength() )
+    else if ( PROPERTY_ID_LABEL == nHandle && !m_sLabel.isEmpty() )
         rValue <<= m_sLabel;
     else
         ODataColumn::getFastPropertyValue( rValue, nHandle );

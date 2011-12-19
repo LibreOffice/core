@@ -429,7 +429,7 @@ void OQueryTableView::AddTabWin(const ::rtl::OUString& _rTableName, const ::rtl:
                                     sTable,
                                     ::dbtools::eInDataManipulation);
         ::rtl::OUString sRealName(sSchema);
-        if (sRealName.getLength())
+        if (!sRealName.isEmpty())
             sRealName+= ::rtl::OUString('.');
         sRealName += sTable;
 
@@ -474,7 +474,7 @@ Reference<XPropertySet> getKeyReferencedTo(const Reference<XIndexAccess>& _rxKey
 void OQueryTableView::AddTabWin(const ::rtl::OUString& _rComposedName, const ::rtl::OUString& _rTableName, const ::rtl::OUString& strAlias, sal_Bool bNewTable)
 {
     DBG_CHKTHIS(OQueryTableView,NULL);
-    OSL_ENSURE(_rTableName.getLength() || strAlias.getLength(), "OQueryTableView::AddTabWin : kein Tabellen- und kein Aliasname !");
+    OSL_ENSURE(!_rTableName.isEmpty() || !strAlias.isEmpty(), "OQueryTableView::AddTabWin : kein Tabellen- und kein Aliasname !");
         // wenn der Tabellenname nicht gesetzt ist, steht das fuer ein Dummy-Fenster, das braucht aber wenigstens einen Alias-Namen
 
     // neue Datenstruktur erzeugen
@@ -516,7 +516,7 @@ void OQueryTableView::AddTabWin(const ::rtl::OUString& _rComposedName, const ::r
 
     // Relationen zwischen den einzelnen Tabellen anzeigen
     OTableWindowMap* pTabWins = GetTabWinMap();
-    if(bNewTable && !pTabWins->empty() && _rTableName.getLength())
+    if(bNewTable && !pTabWins->empty() && !_rTableName.isEmpty())
     {
         modified();
         if ( m_pAccessible )
@@ -558,7 +558,7 @@ void OQueryTableView::AddTabWin(const ::rtl::OUString& _rComposedName, const ::r
                 {   // our new table has a foreign key
                     // so look if the referenced table is already in our list
                     xProp->getPropertyValue(PROPERTY_REFERENCEDTABLE) >>= aReferencedTable;
-                    OSL_ENSURE(aReferencedTable.getLength(),"Foreign key without referencedTableName");
+                    OSL_ENSURE(!aReferencedTable.isEmpty(),"Foreign key without referencedTableName");
 
                     OTableWindowMap::const_iterator aIter = pTabWins->find(aReferencedTable);
                     OTableWindowMap::const_iterator aEnd  = pTabWins->end();

@@ -154,8 +154,8 @@ DBTypeDetection::DBTypeDetection(const Reference< XMultiServiceFactory >& _rxFac
         {
             ::rtl::OUString sSalvagedURL( aMedia.getOrDefault( "SalvagedFile", ::rtl::OUString() ) );
 
-            ::rtl::OUString sFileLocation( sSalvagedURL.getLength() ? sSalvagedURL : sURL );
-            if ( sFileLocation.getLength() )
+            ::rtl::OUString sFileLocation( sSalvagedURL.isEmpty() ? sURL : sSalvagedURL );
+            if ( !sFileLocation.isEmpty() )
             {
                 xStorageProperties.set( ::comphelper::OStorageHelper::GetStorageFromURL(
                     sFileLocation, ElementModes::READ, m_aContext.getLegacyServiceFactory() ), UNO_QUERY );
@@ -521,7 +521,7 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
         // If it already *does* have an URL, then it was either passed in the arguments, or a previous incarnation
         // of that model existed before (which can happen if a model is closed, but an associated DataSource is kept
         // alive 'til loading the document again).
-        bool bNeedLoad = ( xModel->getURL().getLength() == 0 );
+        bool bNeedLoad = ( xModel->getURL().isEmpty() );
         try
         {
             aMediaDesc.put( "FileName", _rURL );

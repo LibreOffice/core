@@ -81,7 +81,7 @@ OXMLHierarchyCollection::OXMLHierarchyCollection( ODBFilter& rImport
                 break;
         }
     }
-    if ( m_sName.getLength() && _xParentContainer.is() )
+    if ( !m_sName.isEmpty() && _xParentContainer.is() )
     {
         try
         {

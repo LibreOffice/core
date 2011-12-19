@@ -62,7 +62,7 @@ void OXMLAutoStylePoolP::exportStyleAttributes(
                     if ( i->maValue >>= nNumberFormat )
                     {
                         rtl::OUString sAttrValue = rODBExport.getDataStyleName(nNumberFormat);
-                        if ( sAttrValue.getLength() )
+                        if ( !sAttrValue.isEmpty() )
                         {
                             GetExport().AddAttribute(
                                 aPropMapper->GetEntryNameSpace(i->mnIndex),

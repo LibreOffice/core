@@ -239,7 +239,7 @@ void OApplicationController::openDialog( const ::rtl::OUString& _sServiceName )
         ::rtl::OUString sInitialSelection;
         if ( getContainer() )
             sInitialSelection = getDatabaseName();
-        if ( sInitialSelection.getLength() )
+        if ( !sInitialSelection.isEmpty() )
         {
             aArgs[ nArgPos++ ] <<= PropertyValue(
                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "InitialSelection" ) ), 0,
@@ -331,7 +331,7 @@ void SAL_CALL OApplicationController::propertyChange( const PropertyChangeEvent&
             // if the old name is empty, then this is a newly inserted content. We're notified of it via the
             // elementInserted method, so there's no need to handle it here.
 
-            if ( sOldName.getLength() )
+            if ( !sOldName.isEmpty() )
             {
                 Reference<XChild> xChild(evt.Source,UNO_QUERY);
                 if ( xChild.is() )

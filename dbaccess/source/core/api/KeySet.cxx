@@ -178,7 +178,7 @@ void OKeySet::findTableColumnsMatching_throw(   const Any& i_aTable,
     }
 
     ::rtl::OUString sUpdateTableName( i_rUpdateTableName );
-    if ( sUpdateTableName.getLength() == 0 )
+    if ( sUpdateTableName.isEmpty() )
     {
         OSL_FAIL( "OKeySet::findTableColumnsMatching_throw: This is a fallback only - it won't work when the table has an alias name." );
         // If i_aTable originates from a query composer, and is a table which appears with an alias in the SELECT statement,
@@ -309,7 +309,7 @@ void OKeySet::construct(const Reference< XResultSet>& _xDriverSet,const ::rtl::O
 }
 void OKeySet::executeStatement(::rtl::OUStringBuffer& io_aFilter,const ::rtl::OUString& i_sRowSetFilter,Reference<XSingleSelectQueryComposer>& io_xAnalyzer)
 {
-    bool bFilterSet = i_sRowSetFilter.getLength() != 0;
+    bool bFilterSet = !i_sRowSetFilter.isEmpty();
     if ( bFilterSet )
     {
         FilterCreator aFilterCreator;
@@ -607,7 +607,7 @@ void OKeySet::executeUpdate(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rO
     sal_uInt16 j = 0;
     for(;aIter != aEnd;++aIter,++j)
     {
-        if ( !i_sTableName.getLength() || aIter->second.sTableName == i_sTableName )
+        if ( i_sTableName.isEmpty() || aIter->second.sTableName == i_sTableName )
         {
             sal_Int32 nPos = aIter->second.nPosition;
             if((_rInsertRow->get())[nPos].isModified())
@@ -628,7 +628,7 @@ void OKeySet::executeUpdate(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rO
     j = 0;
     for(;aIter != aEnd;++aIter,++j)
     {
-        if ( !i_sTableName.getLength() || aIter->second.sTableName == i_sTableName )
+        if ( i_sTableName.isEmpty() || aIter->second.sTableName == i_sTableName )
         {
             setParameter(i++,xParameter,(_rOrginalRow->get())[aIter->second.nPosition],aIter->second.nType,aIter->second.nScale);
         }
@@ -713,7 +713,7 @@ void OKeySet::executeInsert( const ORowSetRow& _rInsertRow,const ::rtl::OUString
     SelectColumnsMetaData::const_iterator aEnd = m_pColumnNames->end();
     for(sal_Int32 i = 1;aIter != aEnd;++aIter)
     {
-        if ( !i_sTableName.getLength() || aIter->second.sTableName == i_sTableName )
+        if ( i_sTableName.isEmpty() || aIter->second.sTableName == i_sTableName )
         {
             const sal_Int32 nPos = aIter->second.nPosition;
             if((_rInsertRow->get())[nPos].isModified())
@@ -776,7 +776,7 @@ void OKeySet::executeInsert( const ORowSetRow& _rInsertRow,const ::rtl::OUString
 
     ::comphelper::disposeComponent(xPrep);
 
-    if ( !i_sTableName.getLength() && !bAutoValuesFetched && m_bInserted )
+    if ( i_sTableName.isEmpty() && !bAutoValuesFetched && m_bInserted )
     {
         // first check if all key column values were set
         const ::rtl::OUString sMax(RTL_CONSTASCII_USTRINGPARAM(" MAX("));
@@ -799,7 +799,7 @@ void OKeySet::executeInsert( const ORowSetRow& _rInsertRow,const ::rtl::OUString
             }
         }
 
-        if(sMaxStmt.getLength())
+        if(!sMaxStmt.isEmpty())
         {
             sMaxStmt = sMaxStmt.replaceAt(sMaxStmt.getLength()-1,1,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ")));
             ::rtl::OUString sStmt = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SELECT "));

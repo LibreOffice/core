@@ -186,7 +186,7 @@ void SAL_CALL SbaExternalSourceBrowser::dispatch(const ::com::sun::star::util::U
             else
                 OSL_FAIL(rtl::OStringBuffer("SbaExternalSourceBrowser::dispatch(AddGridColumn) : unknown argument (").append(rtl::OUStringToOString(pArguments->Name, osl_getThreadTextEncoding())).append(") !").getStr());
         }
-        if (!sControlType.getLength())
+        if (sControlType.isEmpty())
         {
             OSL_FAIL("SbaExternalSourceBrowser::dispatch(AddGridColumn) : missing argument (ColumnType) !");
             sControlType = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TextField"));
@@ -287,7 +287,7 @@ Reference< ::com::sun::star::frame::XDispatch >  SAL_CALL SbaExternalSourceBrows
             )
         )
     {
-        OSL_ENSURE(aURL.Mark.getLength() == 0, "SbaExternalSourceBrowser::queryDispatch : the ::com::sun::star::util::URL shouldn't have a mark !");
+        OSL_ENSURE(aURL.Mark.isEmpty(), "SbaExternalSourceBrowser::queryDispatch : the ::com::sun::star::util::URL shouldn't have a mark !");
         ::com::sun::star::util::URL aNewUrl = aURL;
 
         // split the ::com::sun::star::util::URL

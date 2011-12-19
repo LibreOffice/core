@@ -564,7 +564,7 @@ sal_Bool OGenericUnoController::isFeatureSupported( sal_Int32 _nId )
         ::std::bind2nd( CompareFeatureById(), _nId )
     );
 
-    return ( m_aSupportedFeatures.end() != aFeaturePos && aFeaturePos->first.getLength());
+    return ( m_aSupportedFeatures.end() != aFeaturePos && !aFeaturePos->first.isEmpty());
 }
 
 // -----------------------------------------------------------------------
@@ -809,7 +809,7 @@ void OGenericUnoController::removeStatusListener(const Reference< XStatusListene
 {
     DispatchIterator iterSearch = m_arrStatusListener.begin();
 
-    sal_Bool bRemoveForAll = (_rURL.Complete.getLength() == 0);
+    sal_Bool bRemoveForAll = _rURL.Complete.isEmpty();
     while ( iterSearch != m_arrStatusListener.end() )
     {
         DispatchTarget& rCurrent = *iterSearch;
@@ -996,7 +996,7 @@ URL OGenericUnoController::getURLForId(sal_Int32 _nId) const
             ::std::bind2nd( CompareFeatureById(), _nId )
         );
 
-        if ( m_aSupportedFeatures.end() != aIter && aIter->first.getLength() )
+        if ( m_aSupportedFeatures.end() != aIter && !aIter->first.isEmpty() )
         {
             aReturn.Complete = aIter->first;
             m_xUrlTransformer->parseStrict( aReturn );
@@ -1487,7 +1487,7 @@ sal_Bool OGenericUnoController::isCommandEnabled(sal_uInt16 _nCommandId) const
 // -----------------------------------------------------------------------------
 sal_uInt16 OGenericUnoController::registerCommandURL( const ::rtl::OUString& _rCompleteCommandURL )
 {
-    if ( !_rCompleteCommandURL.getLength() )
+    if ( _rCompleteCommandURL.isEmpty() )
         return 0;
 
     SupportedFeatures::const_iterator aIter = m_aSupportedFeatures.find( _rCompleteCommandURL );
@@ -1546,7 +1546,7 @@ sal_Bool OGenericUnoController::isCommandChecked(sal_uInt16 _nCommandId) const
 // -----------------------------------------------------------------------------
 sal_Bool OGenericUnoController::isCommandEnabled( const ::rtl::OUString& _rCompleteCommandURL ) const
 {
-    OSL_ENSURE( _rCompleteCommandURL.getLength(), "OGenericUnoController::isCommandEnabled: Empty command url!" );
+    OSL_ENSURE( !_rCompleteCommandURL.isEmpty(), "OGenericUnoController::isCommandEnabled: Empty command url!" );
 
     sal_Bool bIsEnabled = sal_False;
     SupportedFeatures::const_iterator aIter = m_aSupportedFeatures.find( _rCompleteCommandURL );

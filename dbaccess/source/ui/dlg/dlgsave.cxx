@@ -271,7 +271,7 @@ OSaveAsDlg::OSaveAsDlg( Window * pParent,
                     if ( nPos != COMBOBOX_ENTRY_NOTFOUND )
                         m_pImpl->m_aCatalog.SelectEntryPos(nPos);
 
-                    if ( sSchema.getLength() )
+                    if ( !sSchema.isEmpty() )
                     {
                         nPos = m_pImpl->m_aSchema.GetEntryPos(String(sSchema));
                         if ( nPos != COMBOBOX_ENTRY_NOTFOUND )

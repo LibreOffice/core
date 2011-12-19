@@ -244,7 +244,7 @@ namespace COMPMOD_NAMESPACE
         const Reference< XMultiServiceFactory >& _rxServiceManager)
     {
         OSL_ENSURE(_rxServiceManager.is(), "OModule::getComponentFactory : invalid argument (service manager) !");
-        OSL_ENSURE(_rImplementationName.getLength(), "OModule::getComponentFactory : invalid argument (implementation name) !");
+        OSL_ENSURE(!_rImplementationName.isEmpty(), "OModule::getComponentFactory : invalid argument (implementation name) !");
 
         if (!s_pImplementationNames)
         {

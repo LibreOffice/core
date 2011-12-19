@@ -176,7 +176,7 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
             OSL_ENSURE(xTabSup.is(),"ORowSet::execute composer isn't a tablesupplier!");
             Reference<XNameAccess> xTables = xTabSup->getTables();
             Sequence< ::rtl::OUString> aTableNames = xTables->getElementNames();
-            if ( aTableNames.getLength() > 1 && !_rUpdateTableName.getLength() && bNeedKeySet )
+            if ( aTableNames.getLength() > 1 && _rUpdateTableName.isEmpty() && bNeedKeySet )
             {// here we have a join or union and nobody told us which table to update, so we update them all
                 m_nPrivileges = Privilege::SELECT|Privilege::DELETE|Privilege::INSERT|Privilege::UPDATE;
                 OptimisticSet* pCursor = new OptimisticSet(m_aContext,xConnection,_xAnalyzer,_aParameterValueForCache,i_nMaxRows,m_nRowCount);
@@ -198,7 +198,7 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
             }
             else
             {
-                if(_rUpdateTableName.getLength() && xTables->hasByName(_rUpdateTableName))
+                if(!_rUpdateTableName.isEmpty() && xTables->hasByName(_rUpdateTableName))
                     xTables->getByName(_rUpdateTableName) >>= m_aUpdateTable;
                 else if(xTables->getElementNames().getLength())
                 {
@@ -1568,7 +1568,7 @@ sal_Bool ORowSetCache::checkJoin(const Reference< XConnection>& _xConnection,
                     OSL_ENSURE(SQL_ISRULE(pTableRef,table_ref),"Must be a tableref here!");
 
                     ::rtl::OUString sTableRange = OSQLParseNode::getTableRange(pTableRef);
-                    if(!sTableRange.getLength())
+                    if(sTableRange.isEmpty())
                         pTableRef->getChild(0)->parseNodeToStr( sTableRange, _xConnection, NULL, sal_False, sal_False );
                     bOk =  sTableRange == _sUpdateTableName;
                 }

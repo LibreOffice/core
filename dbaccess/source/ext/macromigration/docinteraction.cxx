@@ -105,7 +105,7 @@ namespace dbmm
         DocumentPasswordRequest aRequest(
             ::rtl::OUString(), NULL,
             InteractionClassification_QUERY,
-            _io_rPassword.getLength() ? PasswordRequestMode_PASSWORD_REENTER : PasswordRequestMode_PASSWORD_ENTER,
+            _io_rPassword.isEmpty() ? PasswordRequestMode_PASSWORD_ENTER : PasswordRequestMode_PASSWORD_REENTER,
             _rDocumentName
         );
 

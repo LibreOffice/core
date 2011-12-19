@@ -227,7 +227,7 @@ uno::Reference< chart2::data::XDataSource > SAL_CALL DatabaseDataProvider::creat
             aArgs.getOrDefault( "ColumnDescriptions", uno::Sequence< ::rtl::OUString >() );
 
         bool bRet = false;
-        if ( m_Command.getLength() != 0 && m_xActiveConnection.is() )
+        if ( !m_Command.isEmpty() && m_xActiveConnection.is() )
         {
             try
             {
@@ -713,7 +713,7 @@ void DatabaseDataProvider::impl_fillInternalDataProvider_throw(sal_Bool _bHasCat
         sal_Int32 nLastNonEmptyColName = aImposedColumnNames.getLength() - 1;
         for ( ; nLastNonEmptyColName >= 0; --nLastNonEmptyColName )
         {
-            if ( aImposedColumnNames[ nLastNonEmptyColName ].getLength() != 0 )
+            if ( !aImposedColumnNames[ nLastNonEmptyColName ].isEmpty() )
                 break;
         }
         aImposedColumnNames.realloc( nLastNonEmptyColName + 1 );
@@ -722,7 +722,7 @@ void DatabaseDataProvider::impl_fillInternalDataProvider_throw(sal_Bool _bHasCat
         // column. This, this results in a ColumnDescriptions array like <"", "col2", "col3">, where you'd expect
         // <"col1", "col2", "col3">.
         // Fix this with some heuristics:
-        if ( ( aImposedColumnNames.getLength() > 0 ) && ( aImposedColumnNames[0].getLength() == 0 ) )
+        if ( ( aImposedColumnNames.getLength() > 0 ) && ( !aImposedColumnNames[0].isEmpty() ) )
         {
             const sal_Int32 nAssumedRowSetColumnIndex = _bHasCategories ? 1 : 0;
             if ( nAssumedRowSetColumnIndex < aRowSetColumnNames.getLength() )
