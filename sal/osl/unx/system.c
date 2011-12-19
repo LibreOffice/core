@@ -38,7 +38,7 @@ static pthread_mutex_t getrtl_mutex = PTHREAD_MUTEX_INITIALIZER;
 extern int h_errno;
 
 struct hostent *gethostbyname_r(const char *name, struct hostent *result,
-                                char *buffer, int buflen, int *h_errnop)
+                                char *buffer, size_t buflen, int *h_errnop)
 {
     /* buffer layout:   name\0
      *                  array_of_pointer_to_aliases

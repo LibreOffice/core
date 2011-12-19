@@ -55,9 +55,9 @@ gb_COMPILERDEFS += \
 gb_CFLAGS := \
 	-isysroot $(gb_SDKDIR) \
 	$(gb_CFLAGS_COMMON) \
-	-Wshadow \
 	-fPIC \
 	-fno-strict-aliasing \
+    #-Wshadow \ break in compiler headers already
 
 gb_CXXFLAGS := \
 	-isysroot $(gb_SDKDIR) \
