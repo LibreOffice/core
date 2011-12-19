@@ -766,7 +766,7 @@ extern "C"
 {
 
 //##############################################################################
-CPPU_DLLPUBLIC sal_Bool SAL_CALL uno_type_sequence_construct(
+sal_Bool SAL_CALL uno_type_sequence_construct(
     uno_Sequence ** ppSequence, typelib_TypeDescriptionReference * pType,
     void * pElements, sal_Int32 len,
     uno_AcquireFunc acquire )
@@ -810,7 +810,7 @@ CPPU_DLLPUBLIC sal_Bool SAL_CALL uno_type_sequence_construct(
 }
 
 //##############################################################################
-CPPU_DLLPUBLIC sal_Bool SAL_CALL uno_sequence_construct(
+sal_Bool SAL_CALL uno_sequence_construct(
     uno_Sequence ** ppSequence, typelib_TypeDescription * pTypeDescr,
     void * pElements, sal_Int32 len,
     uno_AcquireFunc acquire )
@@ -849,7 +849,7 @@ CPPU_DLLPUBLIC sal_Bool SAL_CALL uno_sequence_construct(
 }
 
 //##############################################################################
-CPPU_DLLPUBLIC sal_Bool SAL_CALL uno_type_sequence_realloc(
+sal_Bool SAL_CALL uno_type_sequence_realloc(
     uno_Sequence ** ppSequence, typelib_TypeDescriptionReference * pType,
     sal_Int32 nSize, uno_AcquireFunc acquire, uno_ReleaseFunc release )
     SAL_THROW_EXTERN_C()
@@ -871,7 +871,7 @@ CPPU_DLLPUBLIC sal_Bool SAL_CALL uno_type_sequence_realloc(
 }
 
 //##############################################################################
-CPPU_DLLPUBLIC sal_Bool SAL_CALL uno_sequence_realloc(
+sal_Bool SAL_CALL uno_sequence_realloc(
     uno_Sequence ** ppSequence, typelib_TypeDescription * pTypeDescr,
     sal_Int32 nSize, uno_AcquireFunc acquire, uno_ReleaseFunc release )
     SAL_THROW_EXTERN_C()
@@ -890,7 +890,7 @@ CPPU_DLLPUBLIC sal_Bool SAL_CALL uno_sequence_realloc(
 }
 
 //##############################################################################
-CPPU_DLLPUBLIC sal_Bool SAL_CALL uno_type_sequence_reference2One(
+sal_Bool SAL_CALL uno_type_sequence_reference2One(
     uno_Sequence ** ppSequence,
     typelib_TypeDescriptionReference * pType,
     uno_AcquireFunc acquire, uno_ReleaseFunc release )
@@ -937,7 +937,7 @@ CPPU_DLLPUBLIC sal_Bool SAL_CALL uno_type_sequence_reference2One(
 }
 
 //##############################################################################
-CPPU_DLLPUBLIC sal_Bool SAL_CALL uno_sequence_reference2One(
+sal_Bool SAL_CALL uno_sequence_reference2One(
     uno_Sequence ** ppSequence,
     typelib_TypeDescription * pTypeDescr,
     uno_AcquireFunc acquire, uno_ReleaseFunc release )
@@ -981,7 +981,7 @@ CPPU_DLLPUBLIC sal_Bool SAL_CALL uno_sequence_reference2One(
 }
 
 //##############################################################################
-CPPU_DLLPUBLIC void SAL_CALL uno_sequence_assign(
+void SAL_CALL uno_sequence_assign(
     uno_Sequence ** ppDest,
     uno_Sequence * pSource,
     typelib_TypeDescription * pTypeDescr,
@@ -997,7 +997,7 @@ CPPU_DLLPUBLIC void SAL_CALL uno_sequence_assign(
 }
 
 //##############################################################################
-CPPU_DLLPUBLIC void SAL_CALL uno_type_sequence_assign(
+void SAL_CALL uno_type_sequence_assign(
     uno_Sequence ** ppDest,
     uno_Sequence * pSource,
     typelib_TypeDescriptionReference * pType,
