@@ -1,5 +1,7 @@
 UDK_3_0_0 {
     global:
+        _ZTI*; _ZTS*; # weak RTTI symbols for C++ exceptions
+
         typelib_typedescription_new;
         typelib_typedescription_newInterface;
         typelib_typedescription_newInterfaceMethod;
@@ -125,3 +127,9 @@ UDK_3.3 {   # OOo 2.4
     global:
         cppu_unsatisfied_iset_msg;
 } UDK_3.2;
+
+# Unique libstdc++ symbols:
+GLIBCXX_3.4 {
+    global:
+        _ZGVNSt7num_put*; _ZNSt7num_put*;
+};

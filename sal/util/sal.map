@@ -1,6 +1,7 @@
 UDK_3_0_0 {
     global:
-        GetVersionInfo;
+        _ZTI*; _ZTS*; # weak RTTI symbols for C++ exceptions
+
         osl_acceptConnectionOnSocket;
         osl_acceptPipe;
         osl_acquireSocket;
@@ -629,3 +630,9 @@ PRIVATE_1.2 { # LibreOffice 3.5
         sal_detail_log;
         sal_detail_logFormat;
 } PRIVATE_1.1;
+
+# Unique libstdc++ symbols:
+GLIBCXX_3.4 {
+    global:
+        _ZGVNSt7num_put*; _ZNSt7num_put*;
+};

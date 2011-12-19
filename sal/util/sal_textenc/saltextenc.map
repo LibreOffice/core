@@ -26,7 +26,14 @@
 
 UDK_3_0_0 {
     global:
+        _ZTI*; _ZTS*; # weak RTTI symbols for C++ exceptions
         sal_getFullTextEncodingData;
     local:
         *;
+};
+
+# Unique libstdc++ symbols:
+GLIBCXX_3.4 {
+    global:
+        _ZGVNSt7num_put*; _ZNSt7num_put*;
 };
