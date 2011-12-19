@@ -80,7 +80,7 @@ $(eval $(call gb_Library_add_linked_libs,sal,\
 ifeq ($(OS),MACOSX)
 $(eval $(call gb_Library_use_externals,sal,\
 	carbon \
-	corefoundation
+	corefoundation \
 ))
 endif
 
