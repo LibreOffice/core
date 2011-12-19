@@ -51,6 +51,11 @@ ifeq ($(OS),WNT)
 $(eval $(call gb_Library_add_linked_libs,updchk,\
 	ole32 \
 	shell32 \
+	wininet \
+))
+
+$(eval $(call gb_Library_add_exception_objects,updchk,\
+	extensions/source/update/check/onlinecheck \
 ))
 endif # OS WNT
 

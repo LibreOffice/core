@@ -43,7 +43,7 @@
 #include <tchar.h>
 
 // #i71984
-extern "C" sal_Bool SAL_CALL hasInternetConnection()
+extern "C" bool SAL_CALL WNT_hasInternetConnection()
 {
     DWORD   dwFlags;
     TCHAR   szConnectionName[1024];
@@ -57,11 +57,11 @@ extern "C" sal_Bool SAL_CALL hasInternetConnection()
         SAL_N_ELEMENTS(szConnectionName),
         0 );
 
-    return fIsConnected ? sal_True : sal_False;
+    return fIsConnected ? true : false;
 
 #ifndef __MINGW32__
     } __except( EXCEPTION_EXECUTE_HANDLER ) {
-        return sal_False;
+        return false;
     }
 #endif
 }
