@@ -128,6 +128,10 @@ namespace basegfx
         B2DPolygon* begin();
         B2DPolygon* end();
     };
+
+    // typedef for a vector of B2DPolyPolygons
+    typedef ::std::vector< B2DPolyPolygon > B2DPolyPolygonVector;
+
 } // end of namespace basegfx
 
 #endif /* _BGFX_POLYGON_B2DPOLYPOLYGON_HXX */

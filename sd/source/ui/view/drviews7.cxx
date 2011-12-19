@@ -1426,11 +1426,17 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
                         bFoundMetafile = true;
                         break;
                     case OBJ_GRAF :
+                    {
                         bSingleGraphicSelected = nMarkCount == 1;
-                        switch ( ((SdrGrafObj*)pObj)->GetGraphicType() )
+                        const SdrGrafObj* pSdrGrafObj = static_cast< const SdrGrafObj* >(pObj);
+                        switch(pSdrGrafObj->GetGraphicType())
                         {
                             case GRAPHIC_BITMAP :
                                 bFoundBitmap = sal_True;
+                                if(pSdrGrafObj->isEmbeddedSvg())
+                                {
+                                    bFoundMetafile = true;
+                                }
                                 break;
                             case GRAPHIC_GDIMETAFILE :
                                 bFoundMetafile = sal_True;
@@ -1442,6 +1448,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
                         // #i25616# bFoundObjNoLine = sal_True;
                         // #i25616# bFoundObjNoArea = sal_True;
                         break;
+                    }
                     case OBJ_TABLE:
                         bFoundTable = true;
                         break;

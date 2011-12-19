@@ -701,6 +701,94 @@ namespace basegfx
 
         //////////////////////////////////////////////////////////////////////////////
 
+        B2DPolyPolygon createNonzeroConform(const B2DPolyPolygon& rCandidate)
+        {
+            B2DPolyPolygon aCandidate;
+
+            // remove all self-intersections and intersections
+            if(rCandidate.count() == 1)
+            {
+                aCandidate = basegfx::tools::solveCrossovers(rCandidate.getB2DPolygon(0));
+            }
+            else
+            {
+                aCandidate = basegfx::tools::solveCrossovers(rCandidate);
+            }
+
+            // cleanup evtl. neutral polygons
+            aCandidate = basegfx::tools::stripNeutralPolygons(aCandidate);
+
+            // remove all polygons which have the same orientation as the polygon they are directly contained in
+            const sal_uInt32 nCount(aCandidate.count());
+
+            if(nCount > 1)
+            {
+                sal_uInt32 a, b;
+                ::std::vector< StripHelper > aHelpers;
+                aHelpers.resize(nCount);
+
+                for(a = 0; a < nCount; a++)
+                {
+                    const B2DPolygon aCand(aCandidate.getB2DPolygon(a));
+                    StripHelper* pNewHelper = &(aHelpers[a]);
+                    pNewHelper->maRange = tools::getRange(aCand);
+                    pNewHelper->meOrinetation = tools::getOrientation(aCand);
+
+                    // initialize with own orientation
+                    pNewHelper->mnDepth = (ORIENTATION_NEGATIVE == pNewHelper->meOrinetation ? -1 : 1);
+                }
+
+                for(a = 0; a < nCount - 1; a++)
+                {
+                    const B2DPolygon aCandA(aCandidate.getB2DPolygon(a));
+                    StripHelper& rHelperA = aHelpers[a];
+
+                    for(b = a + 1; b < nCount; b++)
+                    {
+                        const B2DPolygon aCandB(aCandidate.getB2DPolygon(b));
+                        StripHelper& rHelperB = aHelpers[b];
+                        const bool bAInB(rHelperB.maRange.isInside(rHelperA.maRange) && tools::isInside(aCandB, aCandA, true));
+
+                        if(bAInB)
+                        {
+                            // A is inside B, add orientation of B to A
+                            rHelperA.mnDepth += (ORIENTATION_NEGATIVE == rHelperB.meOrinetation ? -1 : 1);
+                        }
+
+                        const bool bBInA(rHelperA.maRange.isInside(rHelperB.maRange) && tools::isInside(aCandA, aCandB, true));
+
+                        if(bBInA)
+                        {
+                            // B is inside A, add orientation of A to B
+                            rHelperB.mnDepth += (ORIENTATION_NEGATIVE == rHelperA.meOrinetation ? -1 : 1);
+                        }
+                    }
+                }
+
+                const B2DPolyPolygon aSource(aCandidate);
+                aCandidate.clear();
+
+                for(a = 0L; a < nCount; a++)
+                {
+                    const StripHelper& rHelper = aHelpers[a];
+                    // for contained unequal oriented polygons sum will be 0
+                    // for contained equal it will be >=2 or <=-2
+                    // for free polygons (not contained) it will be 1 or -1
+                    // -> accept all which are >=-1 && <= 1
+                    bool bAcceptEntry(rHelper.mnDepth >= -1 && rHelper.mnDepth <= 1);
+
+                    if(bAcceptEntry)
+                    {
+                        aCandidate.append(aSource.getB2DPolygon(a));
+                    }
+                }
+            }
+
+            return aCandidate;
+        }
+
+        //////////////////////////////////////////////////////////////////////////////
+
         B2DPolyPolygon stripDispensablePolygons(const B2DPolyPolygon& rCandidate, bool bKeepAboveZero)
         {
             const sal_uInt32 nCount(rCandidate.count());
@@ -922,15 +1010,15 @@ namespace basegfx
             }
         }
 
-        B2DPolyPolygon mergeToSinglePolyPolygon(const std::vector< basegfx::B2DPolyPolygon >& rInput)
+        B2DPolyPolygon mergeToSinglePolyPolygon(const B2DPolyPolygonVector& rInput)
         {
-            std::vector< basegfx::B2DPolyPolygon > aInput(rInput);
+            B2DPolyPolygonVector aInput(rInput);
 
             // first step: prepareForPolygonOperation and simple merge of non-overlapping
             // PolyPolygons for speedup; this is possible for the wanted OR-operation
             if(aInput.size())
             {
-                std::vector< basegfx::B2DPolyPolygon > aResult;
+                B2DPolyPolygonVector aResult;
                 aResult.reserve(aInput.size());
 
                 for(sal_uInt32 a(0); a < aInput.size(); a++)
@@ -972,7 +1060,7 @@ namespace basegfx
             // second step: melt pairwise to a single PolyPolygon
             while(aInput.size() > 1)
             {
-                std::vector< basegfx::B2DPolyPolygon > aResult;
+                B2DPolyPolygonVector aResult;
                 aResult.reserve((aInput.size() / 2) + 1);
 
                 for(sal_uInt32 a(0); a < aInput.size(); a += 2)

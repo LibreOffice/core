@@ -48,7 +48,6 @@ SLOFILES =	$(SLO)$/cachedprimitivebase.obj \
             $(SLO)$/lineaction.obj \
             $(SLO)$/pointaction.obj \
             $(SLO)$/polypolyaction.obj \
-            $(SLO)$/rendergraphicaction.obj \
             $(SLO)$/textaction.obj \
             $(SLO)$/transparencygroupaction.obj \
             $(SLO)$/mtftools.obj

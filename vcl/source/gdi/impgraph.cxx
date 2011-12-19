@@ -175,6 +175,8 @@ ImpGraphic::ImpGraphic( const ImpGraphic& rImpGraphic ) :
     }
     else
         mpAnimation = NULL;
+
+    maSvgData = rImpGraphic.maSvgData;
 }
 
 // ------------------------------------------------------------------------
@@ -208,6 +210,23 @@ ImpGraphic::ImpGraphic( const BitmapEx& rBitmapEx ) :
         mnRefCount      ( 1UL ),
         mbSwapOut       ( sal_False ),
         mbSwapUnderway  ( sal_False )
+{
+}
+
+// ------------------------------------------------------------------------
+
+ImpGraphic::ImpGraphic(const SvgDataPtr& rSvgDataPtr)
+:   mpAnimation( NULL ),
+    mpContext( NULL ),
+    mpSwapFile( NULL ),
+    mpGfxLink( NULL ),
+    meType( rSvgDataPtr.get() ? GRAPHIC_BITMAP : GRAPHIC_NONE ),
+    mnDocFilePos( 0UL ),
+    mnSizeBytes( 0UL ),
+    mnRefCount( 1UL ),
+    mbSwapOut( sal_False ),
+    mbSwapUnderway( sal_False ),
+    maSvgData(rSvgDataPtr)
 {
 }
 
@@ -298,6 +317,8 @@ ImpGraphic& ImpGraphic::operator=( const ImpGraphic& rImpGraphic )
             mpGfxLink = new GfxLink( *rImpGraphic.mpGfxLink );
         else
             mpGfxLink = NULL;
+
+        maSvgData = rImpGraphic.maSvgData;
     }
 
     return *this;
@@ -328,13 +349,35 @@ sal_Bool ImpGraphic::operator==( const ImpGraphic& rImpGraphic ) const
 
             case( GRAPHIC_BITMAP ):
             {
-                if( mpAnimation )
+                if(maSvgData.get())
+                {
+                    if(maSvgData == rImpGraphic.maSvgData)
+                    {
+                        bRet = sal_True;
+                    }
+                    else if(rImpGraphic.maSvgData)
+                    {
+                        if(maSvgData->getSvgDataArrayLength() == rImpGraphic.maSvgData->getSvgDataArrayLength())
+                        {
+                            if(0 == memcmp(
+                                maSvgData->getSvgDataArray().get(),
+                                rImpGraphic.maSvgData->getSvgDataArray().get(),
+                                maSvgData->getSvgDataArrayLength()))
+                            {
+                                bRet = sal_True;
+                            }
+                        }
+                    }
+                }
+                else if( mpAnimation )
                 {
                     if( rImpGraphic.mpAnimation && ( *rImpGraphic.mpAnimation == *mpAnimation ) )
                         bRet = sal_True;
                 }
                 else if( !rImpGraphic.mpAnimation && ( rImpGraphic.maEx == maEx ) )
+                {
                     bRet = sal_True;
+                }
             }
             break;
 
@@ -371,6 +414,8 @@ void ImpGraphic::ImplClearGraphics( sal_Bool bCreateSwapInfo )
         delete mpGfxLink;
         mpGfxLink = NULL;
     }
+
+    maSvgData.reset();
 }
 
 // ------------------------------------------------------------------------
@@ -446,12 +491,12 @@ sal_Bool ImpGraphic::ImplIsSupportedGraphic() const
 
 sal_Bool ImpGraphic::ImplIsTransparent() const
 {
-    sal_Bool bRet;
+    sal_Bool bRet(sal_True);
 
-    if( meType == GRAPHIC_BITMAP )
+    if( meType == GRAPHIC_BITMAP && !maSvgData.get())
+    {
         bRet = ( mpAnimation ? mpAnimation->IsTransparent() : maEx.IsTransparent() );
-    else
-        bRet = sal_True;
+    }
 
     return bRet;
 }
@@ -460,12 +505,16 @@ sal_Bool ImpGraphic::ImplIsTransparent() const
 
 sal_Bool ImpGraphic::ImplIsAlpha() const
 {
-    sal_Bool bRet;
+    sal_Bool bRet(sal_False);
 
-    if( meType == GRAPHIC_BITMAP )
+    if(maSvgData.get())
+    {
+        bRet = sal_True;
+    }
+    else if( meType == GRAPHIC_BITMAP )
+    {
         bRet = ( NULL == mpAnimation ) && maEx.IsAlpha();
-    else
-        bRet = sal_False;
+    }
 
     return bRet;
 }
@@ -488,45 +537,18 @@ sal_Bool ImpGraphic::ImplIsEPS() const
 
 // ------------------------------------------------------------------------
 
-sal_Bool ImpGraphic::ImplIsRenderGraphic() const
-{
-    return( ( GRAPHIC_GDIMETAFILE == meType ) &&
-            ( 1 == maMetaFile.GetActionCount() ) &&
-            ( META_RENDERGRAPHIC_ACTION == maMetaFile.GetAction( 0 )->GetType() ) );
-}
-
-// ------------------------------------------------------------------------
-
-sal_Bool ImpGraphic::ImplHasRenderGraphic() const
-{
-    sal_Bool bRet = sal_False;
-
-    if( GRAPHIC_GDIMETAFILE == meType )
-    {
-        GDIMetaFile& rMtf = const_cast< ImpGraphic* >( this )->maMetaFile;
-
-        for( MetaAction* pAct = rMtf.FirstAction(); pAct && !bRet; pAct = rMtf.NextAction() )
-        {
-            if( META_RENDERGRAPHIC_ACTION == pAct->GetType() )
-            {
-                bRet = sal_True;
-            }
-        }
-
-        rMtf.WindStart();
-    }
-
-    return( bRet );
-}
-
-// ------------------------------------------------------------------------
-
 Bitmap ImpGraphic::ImplGetBitmap(const GraphicConversionParameters& rParameters) const
 {
     Bitmap aRetBmp;
 
     if( meType == GRAPHIC_BITMAP )
     {
+        if(maSvgData.get() && maEx.IsEmpty())
+        {
+            // use maEx as local buffer for rendered svg
+            const_cast< ImpGraphic* >(this)->maEx = maSvgData->getReplacement();
+        }
+
         const BitmapEx& rRetBmpEx = ( mpAnimation ? mpAnimation->GetBitmapEx() : maEx );
         const Color     aReplaceColor( COL_WHITE );
 
@@ -605,6 +627,12 @@ BitmapEx ImpGraphic::ImplGetBitmapEx(const GraphicConversionParameters& rParamet
 
     if( meType == GRAPHIC_BITMAP )
     {
+        if(maSvgData.get() && maEx.IsEmpty())
+        {
+            // use maEx as local buffer for rendered svg
+            const_cast< ImpGraphic* >(this)->maEx = maSvgData->getReplacement();
+        }
+
         aRetBmpEx = ( mpAnimation ? mpAnimation->GetBitmapEx() : maEx );
 
         if(rParameters.getSizePixel().Width() || rParameters.getSizePixel().Height())
@@ -633,18 +661,6 @@ Animation ImpGraphic::ImplGetAnimation() const
 
 // ------------------------------------------------------------------------
 
-::vcl::RenderGraphic ImpGraphic::ImplGetRenderGraphic() const
-{
-    ::vcl::RenderGraphic aRet;
-
-    if( ImplIsRenderGraphic() )
-        aRet = static_cast< MetaRenderGraphicAction* >( maMetaFile.GetAction( 0 ) )->GetRenderGraphic();
-
-    return( aRet );
-}
-
-// ------------------------------------------------------------------------
-
 const GDIMetaFile& ImpGraphic::ImplGetGDIMetaFile() const
 {
     return maMetaFile;
@@ -668,10 +684,22 @@ Size ImpGraphic::ImplGetPrefSize() const
 
             case( GRAPHIC_BITMAP ):
             {
-                aSize = maEx.GetPrefSize();
+                if(maSvgData.get() && maEx.IsEmpty())
+                {
+                    // svg not yet buffered in maEx, return size derived from range
+                    const basegfx::B2DRange& rRange = maSvgData->getRange();
 
-                if( !aSize.Width() || !aSize.Height() )
-                    aSize = maEx.GetSizePixel();
+                    aSize = Size(basegfx::fround(rRange.getWidth()), basegfx::fround(rRange.getHeight()));
+                }
+                else
+                {
+                    aSize = maEx.GetPrefSize();
+
+                    if( !aSize.Width() || !aSize.Height() )
+                    {
+                        aSize = maEx.GetSizePixel();
+                    }
+                }
             }
             break;
 
@@ -698,12 +726,24 @@ void ImpGraphic::ImplSetPrefSize( const Size& rPrefSize )
         break;
 
         case( GRAPHIC_BITMAP ):
+        {
             // #108077# Push through pref size to animation object,
             // will be lost on copy otherwise
-            if( ImplIsAnimated() )
-                const_cast< BitmapEx& >(mpAnimation->GetBitmapEx()).SetPrefSize( rPrefSize );
+            if(maSvgData.get())
+            {
+                // ignore for Svg. If this is really used (except the grfcache)
+                // it can be extended by using maEx as buffer for maSvgData->getReplacement()
+            }
+            else
+            {
+                if( ImplIsAnimated() )
+                {
+                    const_cast< BitmapEx& >(mpAnimation->GetBitmapEx()).SetPrefSize( rPrefSize );
+                }
 
-            maEx.SetPrefSize( rPrefSize );
+                maEx.SetPrefSize( rPrefSize );
+            }
+        }
         break;
 
         default:
@@ -733,10 +773,18 @@ MapMode ImpGraphic::ImplGetPrefMapMode() const
 
             case( GRAPHIC_BITMAP ):
             {
-                const Size aSize( maEx.GetPrefSize() );
+                if(maSvgData.get() && maEx.IsEmpty())
+                {
+                    // svg not yet buffered in maEx, return default PrefMapMode
+                    aMapMode = MapMode(MAP_100TH_MM);
+                }
+                else
+                {
+                    const Size aSize( maEx.GetPrefSize() );
 
-                if ( aSize.Width() && aSize.Height() )
-                    aMapMode = maEx.GetPrefMapMode();
+                    if ( aSize.Width() && aSize.Height() )
+                        aMapMode = maEx.GetPrefMapMode();
+                }
             }
             break;
 
@@ -763,12 +811,24 @@ void ImpGraphic::ImplSetPrefMapMode( const MapMode& rPrefMapMode )
         break;
 
         case( GRAPHIC_BITMAP ):
-            // #108077# Push through pref mapmode to animation object,
-            // will be lost on copy otherwise
-            if( ImplIsAnimated() )
-                const_cast< BitmapEx& >(mpAnimation->GetBitmapEx()).SetPrefMapMode( rPrefMapMode );
+        {
+            if(maSvgData.get())
+            {
+                // ignore for Svg. If this is really used (except the grfcache)
+                // it can be extended by using maEx as buffer for maSvgData->getReplacement()
+            }
+            else
+            {
+                // #108077# Push through pref mapmode to animation object,
+                // will be lost on copy otherwise
+                if( ImplIsAnimated() )
+                {
+                    const_cast< BitmapEx& >(mpAnimation->GetBitmapEx()).SetPrefMapMode( rPrefMapMode );
+                }
 
-            maEx.SetPrefMapMode( rPrefMapMode );
+                maEx.SetPrefMapMode( rPrefMapMode );
+            }
+        }
         break;
 
         default:
@@ -788,7 +848,14 @@ sal_uLong ImpGraphic::ImplGetSizeBytes() const
     {
         if( meType == GRAPHIC_BITMAP )
         {
-            mnSizeBytes = mpAnimation ? mpAnimation->GetSizeBytes() : maEx.GetSizeBytes();
+            if(maSvgData.get())
+            {
+                mnSizeBytes = maSvgData->getSvgDataArrayLength();
+            }
+            else
+            {
+                mnSizeBytes = mpAnimation ? mpAnimation->GetSizeBytes() : maEx.GetSizeBytes();
+            }
         }
         else if( meType == GRAPHIC_GDIMETAFILE )
         {
@@ -812,10 +879,20 @@ void ImpGraphic::ImplDraw( OutputDevice* pOutDev, const Point& rDestPt ) const
 
             case( GRAPHIC_BITMAP ):
             {
+                if(maSvgData.get() && !maEx)
+                {
+                    // use maEx as local buffer for rendered svg
+                    const_cast< ImpGraphic* >(this)->maEx = maSvgData->getReplacement();
+                }
+
                 if ( mpAnimation )
+                {
                     mpAnimation->Draw( pOutDev, rDestPt );
+                }
                 else
+                {
                     maEx.Draw( pOutDev, rDestPt );
+                }
             }
             break;
 
@@ -840,10 +917,20 @@ void ImpGraphic::ImplDraw( OutputDevice* pOutDev,
 
             case( GRAPHIC_BITMAP ):
             {
+                if(maSvgData.get() && maEx.IsEmpty())
+                {
+                    // use maEx as local buffer for rendered svg
+                    const_cast< ImpGraphic* >(this)->maEx = maSvgData->getReplacement();
+                }
+
                 if( mpAnimation )
+                {
                     mpAnimation->Draw( pOutDev, rDestPt, rDestSize );
+                }
                 else
+                {
                     maEx.Draw( pOutDev, rDestPt, rDestSize );
+                }
             }
             break;
 
@@ -1052,6 +1139,12 @@ sal_Bool ImpGraphic::ImplReadEmbedded( SvStream& rIStm, sal_Bool bSwap )
     {
         if( meType == GRAPHIC_BITMAP )
         {
+            if(maSvgData.get() && maEx.IsEmpty())
+            {
+                // use maEx as local buffer for rendered svg
+                maEx = maSvgData->getReplacement();
+            }
+
             maEx.aBitmapSize = aSize;
 
             if( aMapMode != MapMode() )
@@ -1510,10 +1603,20 @@ sal_uLong ImpGraphic::ImplGetChecksum() const
 
             case( GRAPHIC_BITMAP ):
             {
+                if(maSvgData.get() && maEx.IsEmpty())
+                {
+                    // use maEx as local buffer for rendered svg
+                    const_cast< ImpGraphic* >(this)->maEx = maSvgData->getReplacement();
+                }
+
                 if( mpAnimation )
+                {
                     nRet = mpAnimation->GetChecksum();
+                }
                 else
+                {
                     nRet = maEx.GetChecksum();
+                }
             }
             break;
 
@@ -1549,6 +1652,13 @@ sal_Bool ImpGraphic::ImplExportNative( SvStream& rOStm ) const
     }
 
     return bResult;
+}
+
+// ------------------------------------------------------------------------
+
+const SvgDataPtr& ImpGraphic::getSvgData() const
+{
+    return maSvgData;
 }
 
 // ------------------------------------------------------------------------
@@ -1704,10 +1814,18 @@ SvStream& operator<<( SvStream& rOStm, const ImpGraphic& rImpGraphic )
 
                     case GRAPHIC_BITMAP:
                     {
-                        if ( rImpGraphic.ImplIsAnimated() )
+                        if(rImpGraphic.getSvgData().get())
+                        {
+                            rOStm << rImpGraphic.getSvgData()->getReplacement();
+                        }
+                        else if( rImpGraphic.ImplIsAnimated())
+                        {
                             rOStm << *rImpGraphic.mpAnimation;
+                        }
                         else
+                        {
                             rOStm << rImpGraphic.maEx;
+                        }
                     }
                     break;
 

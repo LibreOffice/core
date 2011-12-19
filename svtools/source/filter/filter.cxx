@@ -35,7 +35,7 @@
 #include <vcl/salctype.hxx>
 #include <vcl/pngread.hxx>
 #include <vcl/pngwrite.hxx>
-#include <vcl/svgread.hxx>
+#include <vcl/svgdata.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/file.hxx>
@@ -71,6 +71,7 @@
 #include <comphelper/processfactory.hxx>
 #include <rtl/bootstrap.hxx>
 #include <rtl/instance.hxx>
+#include <vcl/metaact.hxx>
 
 #include "SvFilterOptionsDialog.hxx"
 
@@ -675,13 +676,19 @@ static sal_Bool ImpPeekGraphicFormat( SvStream& rStream, String& rFormatExtensio
     }
 
     //--------------------------- SVG ------------------------------------
-    if( !bTest || ( rFormatExtension.CompareToAscii( "SVG", 3 ) == COMPARE_EQUAL ) )
+    if( !bTest )
     {
-        bSomethingTested=sal_True;
-
-        // just a simple test for the extension
-        if( rFormatExtension.CompareToAscii( "SVG", 3 ) == COMPARE_EQUAL )
+        if( ImplSearchEntry( sFirstBytes, (sal_uInt8*)"DOCTYPE", 256, 7 )
+            && ImplSearchEntry( sFirstBytes, (sal_uInt8*)"svg", 256, 3 ) )
+        {
+            rFormatExtension = UniString::CreateFromAscii( "SVG", 3 );
             return sal_True;
+        }
+    }
+    else if( rFormatExtension.CompareToAscii( "SVG", 3 ) == COMPARE_EQUAL )
+    {
+        bSomethingTested = sal_True;
+        return sal_True;
     }
 
     //--------------------------- TGA ------------------------------------
@@ -1500,21 +1507,38 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const String& rPath,
             if( rGraphic.GetContext() == (GraphicReader*) 1 )
                 rGraphic.SetContext( NULL );
 
-            vcl::SVGReader  aSVGReader( rIStream );
-            GDIMetaFile     aSVGMtf;
+            const sal_uInt32 nStmPos(rIStream.Tell());
+            const sal_uInt32 nStmLen(rIStream.Seek(STREAM_SEEK_TO_END) - nStmPos);
+            bool bOkay(false);
 
-            if( 0 == aSVGReader.Read( aSVGMtf ).GetActionCount() )
-                nStatus = GRFILTER_FILTERERROR;
+            if(nStmLen)
+            {
+                SvgDataArray aNewData(new sal_uInt8[nStmLen]);
+
+                rIStream.Seek(nStmPos);
+                rIStream.Read(aNewData.get(), nStmLen);
+
+                if(!rIStream.GetError())
+                {
+                    SvgDataPtr aSvgDataPtr(
+                        new SvgData(
+                            aNewData,
+                            nStmLen,
+                            rPath));
+
+                    rGraphic = Graphic(aSvgDataPtr);
+                    bOkay = true;
+                }
+            }
+
+            if(bOkay)
+            {
+                eLinkType = GFX_LINK_TYPE_NATIVE_SVG;
+            }
             else
-                rGraphic = Graphic( aSVGMtf );
-
-            // Dont set any GfxLink here, since the MetaRenderGraphicAction
-            // inside the just read MetaFile contains excatly this native data;
-            // setting a ǴfxLink would also affect other program parts, since
-            // GfxLinks are preferably written to the file format in general,
-            // which would be a bad idea in case of SVG files, since earlier
-            // implementations are not able to handle native SVG data in any
-            // case. (KA 01/19/2011)
+            {
+                nStatus = GRFILTER_FILTERERROR;
+            }
         }
         else if( aFilterName.EqualsIgnoreCaseAscii( IMP_XBM ) )
         {
@@ -1856,7 +1880,7 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& 
                     aMTF.SetPrefSize( aGraphic.GetPrefSize() );
                     aMTF.SetPrefMapMode( aGraphic.GetPrefMapMode() );
                 }
-                aMTF.Write( rOStm, GDIMETAFILE_WRITE_REPLACEMENT_RENDERGRAPHIC );
+                aMTF.Write( rOStm );
                 if( rOStm.GetError() )
                     nStatus = GRFILTER_IOERROR;
             }
@@ -1973,24 +1997,22 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& 
             }
             else if( aFilterName.EqualsIgnoreCaseAscii( EXP_SVG ) )
             {
-                sal_Bool bDone = sal_False;
+                bool bDone(false);
 
                 // do we have a native SVG RenderGraphic, whose data can be written directly?
-                if( ( GRAPHIC_GDIMETAFILE == eType ) && aGraphic.IsRenderGraphic() )
+                const SvgDataPtr aSvgDataPtr(rGraphic.getSvgData());
+
+                if(aSvgDataPtr.get() && aSvgDataPtr->getSvgDataArrayLength())
                 {
-                    const ::vcl::RenderGraphic aRenderGraphic( aGraphic.GetRenderGraphic() );
+                    rOStm.Write(aSvgDataPtr->getSvgDataArray().get(), aSvgDataPtr->getSvgDataArrayLength());
 
-                    if( aRenderGraphic.GetGraphicDataLength() &&
-                        aRenderGraphic.GetGraphicDataMimeType().equalsIgnoreAsciiCase(
-                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "image/svg+xml" ) ) ) )
+                       if( rOStm.GetError() )
                     {
-                        rOStm.Write( aRenderGraphic.GetGraphicData().get(),
-                                     aRenderGraphic.GetGraphicDataLength() );
-
-                           if( rOStm.GetError() )
-                        {
-                            nStatus = GRFILTER_IOERROR;
-                        }
+                        nStatus = GRFILTER_IOERROR;
+                    }
+                    else
+                    {
+                        bDone = true;
                     }
                 }
 

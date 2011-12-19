@@ -37,6 +37,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/graphictools.hxx>
+#include <basegfx/polygon/b2dpolygon.hxx>
 
 // -----------
 // - Defines -
@@ -1445,15 +1446,6 @@ void GDIMetaFile::Rotate( long nAngle10 )
                 }
                 break;
 
-                case( META_RENDERGRAPHIC_ACTION ):
-                {
-                    OSL_TRACE( "Rotate not supported for RenderGraphic MetaActions yet" );
-
-                    pAction->Duplicate();
-                    aMtf.AddAction( pAction );
-                }
-                break;
-
                 default:
                 {
                     pAction->Execute( &aMapVDev );
@@ -1876,14 +1868,6 @@ Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference )
         }
         break;
 
-        case( META_RENDERGRAPHIC_ACTION ):
-        {
-            MetaRenderGraphicAction* pAct = (MetaRenderGraphicAction*) pAction;
-            Rectangle aRect( pAct->GetPoint(), pAct->GetSize() );
-            ImplActionBounds( aBound, aMapVDev.LogicToLogic( aRect, aMapVDev.GetMapMode(), GetPrefMapMode() ), aClipStack );
-        }
-        break;
-
         default:
             {
                 pAction->Execute( &aMapVDev );
@@ -2279,15 +2263,6 @@ void GDIMetaFile::ImplExchangeColors( ColorExchangeFnc pFncCol, const void* pCol
                 aMtf.Insert( new MetaEPSAction( pAct->GetPoint(), pAct->GetSize(),
                                                 pAct->GetLink(), aSubst ),
                                                 LIST_APPEND );
-            }
-            break;
-
-            case( META_RENDERGRAPHIC_ACTION ):
-            {
-                OSL_TRACE( "ExchangeColors not supported for RenderGraphic MetaActions yet" );
-
-                pAction->Duplicate();
-                aMtf.Insert( pAction, LIST_APPEND );
             }
             break;
 
@@ -2739,27 +2714,70 @@ sal_uLong GDIMetaFile::GetChecksum() const
             }
             break;
 
-            case( META_RENDERGRAPHIC_ACTION ):
+            case META_CLIPREGION_ACTION :
             {
-                MetaRenderGraphicAction*    pAct = (MetaRenderGraphicAction*) pAction;
-                const ::vcl::RenderGraphic& rRenderGraphic = pAct->GetRenderGraphic();
+                MetaClipRegionAction* pAct = dynamic_cast< MetaClipRegionAction* >(pAction);
+                const Region& rRegion = pAct->GetRegion();
 
-                ShortToSVBT16( pAct->GetType(), aBT16 );
-                nCrc = rtl_crc32( nCrc, aBT16, 2 );
+                if(rRegion.HasPolyPolygon())
+                {
+                    // It has shown that this is a possible bottleneck for checksum calculation.
+                    // In worst case a very expensive RegionHandle representation gets created.
+                    // In this case it's cheaper to use the PolyPolygon
+                    const basegfx::B2DPolyPolygon aPolyPolygon(rRegion.GetB2DPolyPolygon());
+                    const sal_uInt32 nPolyCount(aPolyPolygon.count());
+                    SVBT64 aSVBT64;
 
-                nCrc = rtl_crc32( nCrc, rRenderGraphic.GetGraphicData().get(), rRenderGraphic.GetGraphicDataLength() );
+                    for(sal_uInt32 a(0); a < nPolyCount; a++)
+                    {
+                        const basegfx::B2DPolygon aPolygon(aPolyPolygon.getB2DPolygon(a));
+                        const sal_uInt32 nPointCount(aPolygon.count());
+                        const bool bControl(aPolygon.areControlPointsUsed());
 
-                UInt32ToSVBT32( pAct->GetPoint().X(), aBT32 );
-                nCrc = rtl_crc32( nCrc, aBT32, 4 );
+                        for(sal_uInt32 b(0); b < nPointCount; b++)
+                        {
+                            const basegfx::B2DPoint aPoint(aPolygon.getB2DPoint(b));
 
-                UInt32ToSVBT32( pAct->GetPoint().Y(), aBT32 );
-                nCrc = rtl_crc32( nCrc, aBT32, 4 );
+                            DoubleToSVBT64(aPoint.getX(), aSVBT64);
+                            nCrc = rtl_crc32(nCrc, aSVBT64, 8);
+                            DoubleToSVBT64(aPoint.getY(), aSVBT64);
+                            nCrc = rtl_crc32(nCrc, aSVBT64, 8);
 
-                UInt32ToSVBT32( pAct->GetSize().Width(), aBT32 );
-                nCrc = rtl_crc32( nCrc, aBT32, 4 );
+                            if(bControl)
+                            {
+                                if(aPolygon.isPrevControlPointUsed(b))
+                                {
+                                    const basegfx::B2DPoint aCtrl(aPolygon.getPrevControlPoint(b));
 
-                UInt32ToSVBT32( pAct->GetSize().Height(), aBT32 );
-                nCrc = rtl_crc32( nCrc, aBT32, 4 );
+                                    DoubleToSVBT64(aCtrl.getX(), aSVBT64);
+                                    nCrc = rtl_crc32(nCrc, aSVBT64, 8);
+                                    DoubleToSVBT64(aCtrl.getY(), aSVBT64);
+                                    nCrc = rtl_crc32(nCrc, aSVBT64, 8);
+                                }
+
+                                if(aPolygon.isNextControlPointUsed(b))
+                                {
+                                    const basegfx::B2DPoint aCtrl(aPolygon.getNextControlPoint(b));
+
+                                    DoubleToSVBT64(aCtrl.getX(), aSVBT64);
+                                    nCrc = rtl_crc32(nCrc, aSVBT64, 8);
+                                    DoubleToSVBT64(aCtrl.getY(), aSVBT64);
+                                    nCrc = rtl_crc32(nCrc, aSVBT64, 8);
+                                }
+                            }
+                        }
+                    }
+
+                    SVBT8 aSVBT8;
+                    ByteToSVBT8((sal_uInt8)pAct->IsClipping(), aSVBT8);
+                    nCrc = rtl_crc32(nCrc, aSVBT8, 1);
+                }
+                else
+                {
+                    pAction->Write( aMemStm, &aWriteData );
+                    nCrc = rtl_crc32( nCrc, aMemStm.GetData(), aMemStm.Tell() );
+                    aMemStm.Seek( 0 );
+                }
             }
             break;
 
@@ -2828,8 +2846,6 @@ sal_uLong GDIMetaFile::GetSizeBytes() const
                     nSizeBytes += ( pTextArrayAction->GetLen() << 2 );
             }
             break;
-
-            case( META_RENDERGRAPHIC_ACTION ): nSizeBytes += ( ( (MetaRenderGraphicAction*) pAction )->GetRenderGraphic() ).GetGraphicDataLength(); break;
         }
     }
 
@@ -2857,63 +2873,27 @@ SvStream& operator>>( SvStream& rIStm, GDIMetaFile& rGDIMetaFile )
             // new format
             VersionCompat*  pCompat;
             MetaAction*     pAction;
-            sal_uInt32      nStmCompressMode = 0;
-            sal_uInt32      nCount = 0;
-            sal_uInt8       bRenderGraphicReplacements = 0;
+            sal_uInt32          nStmCompressMode = 0;
+            sal_uInt32          nCount = 0;
 
             pCompat = new VersionCompat( rIStm, STREAM_READ );
-            {
-                // version 1
-                rIStm >> nStmCompressMode;
-                rIStm >> rGDIMetaFile.aPrefMapMode;
-                rIStm >> rGDIMetaFile.aPrefSize;
-                rIStm >> nCount;
 
-                if( pCompat->GetVersion() >= 2 )
-                {
-                    // version 2
-                    // =========
-                    // contains an additional flag to indicate that RenderGraphic
-                    // actions are immediately followed by a replacement image, that
-                    // needs to be skipped in case the flag is set (KA 01/2011)
+            rIStm >> nStmCompressMode;
+            rIStm >> rGDIMetaFile.aPrefMapMode;
+            rIStm >> rGDIMetaFile.aPrefSize;
+            rIStm >> nCount;
 
-                    rIStm >> bRenderGraphicReplacements;
-                }
-            }
             delete pCompat;
 
             ImplMetaReadData aReadData;
             aReadData.meActualCharSet = rIStm.GetStreamCharSet();
 
-            for( sal_uInt32 nAction = 0UL; ( nAction < nCount ) && !rIStm.IsEof(); ++nAction )
+            for( sal_uInt32 nAction = 0UL; ( nAction < nCount ) && !rIStm.IsEof(); nAction++ )
             {
                 pAction = MetaAction::ReadMetaAction( rIStm, &aReadData );
 
                 if( pAction )
-                {
                     rGDIMetaFile.AddAction( pAction );
-
-                    // if the MetaFile was written in RenderGraphics replacement mode
-                    // and we just read a RenderGraphic action, skip the following
-                    // META_BMPEXSCALE_ACTION, since this is the replacement image,
-                    // just needed for old implementations; don't forget to increment
-                    // the action read counter! (KA 01/2011)
-                    if( bRenderGraphicReplacements &&
-                        ( META_RENDERGRAPHIC_ACTION == pAction->GetType() ) &&
-                        ( ++nAction < nCount ) && !rIStm.IsEof() )
-                    {
-                        sal_uInt16 nFollowingType;
-
-                        // dummy read of the next following META_BMPEXSCALE_ACTION
-                        // RenderGraphic replacement action (KA 01/2011)
-                        rIStm >> nFollowingType;
-                        delete ( new VersionCompat( rIStm, STREAM_READ ) );
-
-                        OSL_ENSURE( META_BMPEXSCALE_ACTION == nFollowingType, \
-"META_RENDERGRAPHIC_ACTION read in RenderGraphic replacement mode \
-without following META_BMPEXSCALE_ACTION replacement" );
-                    }
-                }
             }
         }
         else
@@ -2980,90 +2960,32 @@ SvStream& GDIMetaFile::Read( SvStream& rIStm )
 
 // ------------------------------------------------------------------------
 
-SvStream& GDIMetaFile::Write( SvStream& rOStm, GDIMetaFileWriteFlags nWriteFlags )
+SvStream& GDIMetaFile::Write( SvStream& rOStm )
 {
     VersionCompat*  pCompat;
     const sal_uInt32    nStmCompressMode = rOStm.GetCompressMode();
     sal_uInt16          nOldFormat = rOStm.GetNumberFormatInt();
-    const               sal_uInt8 bRenderGraphicReplacements =
-                                ( ( ( GDIMETAFILE_WRITE_REPLACEMENT_RENDERGRAPHIC & nWriteFlags ) != 0 ) ? 1 : 0 );
-
-    // With the introduction of the META_RENDERGRAPHIC_ACTION, it is neccessary
-    // to provide some kind of document backward compatibility:
-    //
-    //  If the flag GDIMETAFILE_WRITE_REPLACEMENT_RENDERGRAPHIC is set in
-    //  parameter nWriteFlags, each META_RENDERGRAPHIC_ACTION is followed by
-    //  an additional META_BMPEXSCALE_ACTION, that contains a replacement
-    //  image for the new RenderGraphic action.
-    //
-    //  Old implementations, not knowing anything about META_RENDERGRAPHIC_ACTION,
-    //  will skip this new action and read the META_BMPEXSCALE_ACTION instead
-    //
-    //  Since the current implementation is able to handle the new action, the
-    //  then following image replacement action needs to be skipped by this
-    //  implementation, if the metafile was written in the RenderGraphic
-    //  replacement mode.
-    //
-    //  To be able to detect this compatibility mode, the header needs to
-    //  be extended by a corresponding flag, resulting in version 2 of
-    //  the header. The surrounding VersionCompat of the header
-    //  allows to add such new data without any problems (KA 01/2011)
 
     rOStm.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
     rOStm.Write( "VCLMTF", 6 );
 
-    pCompat = new VersionCompat( rOStm, STREAM_WRITE, 2 );
+    pCompat = new VersionCompat( rOStm, STREAM_WRITE, 1 );
 
-    {
-        // version 1
-        sal_uInt32 nActionCount = 0;
-
-        // calculate correct action count and watch for
-        // additional RenderGraphic replacement actions, if the
-        // GDIMETAFILE_WRITE_REPLACEMENT_RENDERGRAPHIC is set
-        // and META_RENDERGRAPHIC_ACTION are encountered (KA 01/2011)
-        for( MetaAction* pAct = static_cast< MetaAction* >( First() ); pAct; pAct = static_cast< MetaAction* >( Next() ) )
-        {
-            nActionCount += ( bRenderGraphicReplacements && ( META_RENDERGRAPHIC_ACTION == pAct->GetType() ) ? 2 : 1 );
-        }
-
-        rOStm << nStmCompressMode << aPrefMapMode << aPrefSize << nActionCount;
-
-        {
-            // version 2
-            // =========
-            // since version 2, a GDIMETAFILE_WRITE_REPLACEMENT_RENDERGRAPHIC flag
-            // is written, to indicate that each META_BMPEXSCALE_ACTION following
-            // a META_RENDERGRAPHIC_ACTION needs to be skipped, in case the flag is
-            // set (KA 01/2011)
-            rOStm << bRenderGraphicReplacements;
-        }
-    }
+    rOStm << nStmCompressMode;
+    rOStm << aPrefMapMode;
+    rOStm << aPrefSize;
+    rOStm << (sal_uInt32) GetActionCount();
 
     delete pCompat;
 
     ImplMetaWriteData aWriteData;
-
     aWriteData.meActualCharSet = rOStm.GetStreamCharSet();
-    aWriteData.mnWriteFlags = nWriteFlags;
 
-    for( MetaAction* pAct = static_cast< MetaAction* >( First() ); pAct; pAct = static_cast< MetaAction* >( Next() ) )
+    MetaAction* pAct = (MetaAction*)First();
+    while ( pAct )
     {
         pAct->Write( rOStm, &aWriteData );
-
-        // write the RenderGraphic replacement image, if the
-        // GDIMETAFILE_WRITE_REPLACEMENT_RENDERGRAPHIC flag is set
-        // and if a META_RENDERGRAPHIC_ACTION is encountered (KA 01/2011)
-        if( bRenderGraphicReplacements && ( META_RENDERGRAPHIC_ACTION == pAct->GetType() ) )
-        {
-            MetaRenderGraphicAction*    pRenderAction = static_cast< MetaRenderGraphicAction* >( pAct );
-            MetaBmpExScaleAction*       pBmpExScaleAction = new MetaBmpExScaleAction(
-                                            pRenderAction->GetPoint(), pRenderAction->GetSize(),
-                                            pRenderAction->GetRenderGraphic().GetReplacement() );
-
-            pBmpExScaleAction->Write( rOStm, &aWriteData );
-            pBmpExScaleAction->Delete();
-        }
+        pAct = (MetaAction*)Next();
     }
 
     rOStm.SetNumberFormatInt( nOldFormat );

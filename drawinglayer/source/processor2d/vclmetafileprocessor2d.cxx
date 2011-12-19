@@ -34,7 +34,6 @@
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
-#include <drawinglayer/primitive2d/rendergraphicprimitive2d.hxx>
 #include <drawinglayer/primitive2d/metafileprimitive2d.hxx>
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
 #include <basegfx/polygon/b2dpolygonclipper.hxx>
@@ -1284,12 +1283,6 @@ namespace drawinglayer
                     RenderBitmapPrimitive2D(static_cast< const primitive2d::BitmapPrimitive2D& >(rCandidate));
                     break;
                 }
-                case PRIMITIVE2D_ID_RENDERGRAPHICPRIMITIVE2D :
-                {
-                    // direct draw of transformed RenderGraphic primitive; use default processing
-                    RenderRenderGraphicPrimitive2D(static_cast< const primitive2d::RenderGraphicPrimitive2D& >(rCandidate));
-                    break;
-                }
                 case PRIMITIVE2D_ID_POLYPOLYGONBITMAPPRIMITIVE2D :
                 {
                     // need to handle PolyPolygonBitmapPrimitive2D here to support XPATHFILL_SEQ_BEGIN/XPATHFILL_SEQ_END
@@ -1657,7 +1650,8 @@ namespace drawinglayer
                                 // the ClipRegion is built from the Polygon. A AdaptiveSubdivide on the source polygon was missing there
                                 mpOutputDevice->Push(PUSH_CLIPREGION);
                                 //mpOutputDevice->SetClipRegion(Region(PolyPolygon(basegfx::tools::adaptiveSubdivideByAngle(maClipPolyPolygon))));
-                                mpOutputDevice->SetClipRegion(Region(PolyPolygon(maClipPolyPolygon)));
+                                //mpOutputDevice->SetClipRegion(Region(PolyPolygon(maClipPolyPolygon)));
+                                mpOutputDevice->SetClipRegion(Region(maClipPolyPolygon));
                             }
 
                             // recursively paint content

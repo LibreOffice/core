@@ -31,10 +31,10 @@
 #include <vcl/bitmapex.hxx>
 #include <vcl/animate.hxx>
 #include <vcl/gdimtf.hxx>
-#include <vcl/rendergraphic.hxx>
 #include <vcl/graph.h>
 #include <vcl/gfxlink.hxx>
 #include <com/sun/star/uno/Reference.hxx>
+#include <vcl/svgdata.hxx>
 
 namespace com { namespace sun { namespace star { namespace graphic { class XGraphic;} } } }
 
@@ -100,6 +100,7 @@ public:
                         Graphic( const Graphic& rGraphic );
                         Graphic( const Bitmap& rBmp );
                         Graphic( const BitmapEx& rBmpEx );
+                        Graphic(const SvgDataPtr& rSvgDataPtr);
                         Graphic( const Animation& rAnimation );
                         Graphic( const GDIMetaFile& rMtf );
                         Graphic( const ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >& rxGraphic );
@@ -120,8 +121,6 @@ public:
     sal_Bool            IsAlpha() const;
     sal_Bool            IsAnimated() const;
     sal_Bool            IsEPS() const;
-    sal_Bool            IsRenderGraphic() const;
-    sal_Bool            HasRenderGraphic() const;
 
     // #i102089# Access of Bitmap potentially will have to rasterconvert the Graphic
     // if it is a MetaFile. To be able to control this conversion it is necessary to
@@ -133,7 +132,6 @@ public:
 
     Animation               GetAnimation() const;
     const GDIMetaFile&      GetGDIMetaFile() const;
-    ::vcl::RenderGraphic    GetRenderGraphic() const;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > GetXGraphic() const;
 
@@ -217,6 +215,9 @@ public:
     virtual void        Load( SvStream& );
     virtual void        Save( SvStream& );
     virtual void        Assign( const SvDataCopyStream& );
+
+    // SvgData support
+    const SvgDataPtr& getSvgData() const;
 };
 
 #endif  // _SV_GRAPH_HXX

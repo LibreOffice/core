@@ -910,6 +910,8 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 
 #define FN_EMBEDDED_OBJECT                  (FN_EXTRA2 + 116)
 
+#define FN_UNO_REPLACEMENT_GRAPHIC_U_R_L    (FN_EXTRA2 + 117)
+
 /*--------------------------------------------------------------------
     Bereich: Hilfe
  --------------------------------------------------------------------*/

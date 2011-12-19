@@ -393,7 +393,10 @@ void GraphicDescriptor::_getPropertyValues( const comphelper::PropertyMapEntry**
                             case( GFX_LINK_TYPE_NATIVE_PNG ): pMimeType = MIMETYPE_PNG; break;
                             case( GFX_LINK_TYPE_NATIVE_WMF ): pMimeType = MIMETYPE_WMF; break;
                             case( GFX_LINK_TYPE_NATIVE_MET ): pMimeType = MIMETYPE_MET; break;
-                            case( GFX_LINK_TYPE_NATIVE_PCT ): pMimeType = MIMETYPE_PCT ; break;
+                            case( GFX_LINK_TYPE_NATIVE_PCT ): pMimeType = MIMETYPE_PCT; break;
+
+                            // added Svg mimetype support
+                            case( GFX_LINK_TYPE_NATIVE_SVG ): pMimeType = MIMETYPE_SVG; break;
 
                             default:
                                 pMimeType = NULL;

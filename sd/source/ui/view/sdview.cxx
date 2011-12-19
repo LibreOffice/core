@@ -1073,10 +1073,15 @@ sal_Bool View::IsVectorizeAllowed() const
 
     if( rMarkList.GetMarkCount() == 1 )
     {
-        const SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
+        const SdrGrafObj* pObj = dynamic_cast< const SdrGrafObj* >(rMarkList.GetMark( 0 )->GetMarkedSdrObj());
 
-        if( pObj->ISA( SdrGrafObj ) && ( (SdrGrafObj*) pObj )->GetGraphicType() == GRAPHIC_BITMAP )
-            bRet = sal_True;
+        if(pObj)
+        {
+            if(GRAPHIC_BITMAP == pObj->GetGraphicType() && !pObj->isEmbeddedSvg())
+            {
+                bRet = sal_True;
+            }
+        }
     }
 
     return bRet;

@@ -50,7 +50,6 @@
 #include <vcl/cvtgrf.hxx>
 #endif
 #include <vcl/graphictools.hxx>
-#include <vcl/rendergraphicrasterizer.hxx>
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/nmspmap.hxx>
 

@@ -73,6 +73,8 @@ SwGrfNode::SwGrfNode(
         SwGrfFmtColl *pGrfColl,
         SwAttrSet* pAutoAttr ) :
     SwNoTxtNode( rWhere, ND_GRFNODE, pGrfColl, pAutoAttr ),
+    aGrfObj(),
+    mpReplacementGraphic(0),
     // --> OD 2007-01-23 #i73788#
     mbLinkedInputStreamReady( false ),
     mbIsStreamReadOnly( sal_False )
@@ -90,6 +92,8 @@ SwGrfNode::SwGrfNode( const SwNodeIndex & rWhere,
                           const GraphicObject& rGrfObj,
                       SwGrfFmtColl *pGrfColl, SwAttrSet* pAutoAttr ) :
     SwNoTxtNode( rWhere, ND_GRFNODE, pGrfColl, pAutoAttr ),
+    aGrfObj(rGrfObj),
+    mpReplacementGraphic(0),
     // --> OD 2007-01-23 #i73788#
     mbLinkedInputStreamReady( false ),
     mbIsStreamReadOnly( sal_False )
@@ -113,6 +117,8 @@ SwGrfNode::SwGrfNode( const SwNodeIndex & rWhere,
                       SwGrfFmtColl *pGrfColl,
                       SwAttrSet* pAutoAttr ) :
     SwNoTxtNode( rWhere, ND_GRFNODE, pGrfColl, pAutoAttr ),
+    aGrfObj(),
+    mpReplacementGraphic(0),
     // --> OD 2007-01-23 #i73788#
     mbLinkedInputStreamReady( false ),
     mbIsStreamReadOnly( sal_False )
@@ -146,6 +152,8 @@ sal_Bool SwGrfNode::ReRead(
     sal_Bool bNewGrf )
 {
     sal_Bool bReadGrf = sal_False, bSetTwipSize = sal_True;
+    delete mpReplacementGraphic;
+    mpReplacementGraphic = 0;
 
     ASSERT( pGraphic || pGrfObj || rGrfName.Len(),
             "GraphicNode without a name, Graphic or GraphicObject" );
@@ -315,6 +323,9 @@ sal_Bool SwGrfNode::ReRead(
 
 SwGrfNode::~SwGrfNode()
 {
+    delete mpReplacementGraphic;
+    mpReplacementGraphic = 0;
+
     // --> OD 2007-03-30 #i73788#
     mpThreadConsumer.reset();
     // <--
@@ -347,6 +358,21 @@ SwGrfNode::~SwGrfNode()
         DelFrms();
 }
 
+
+const GraphicObject* SwGrfNode::GetReplacementGrfObj() const
+{
+    if(!mpReplacementGraphic)
+    {
+        const SvgDataPtr& rSvgDataPtr = GetGrfObj().GetGraphic().getSvgData();
+
+        if(rSvgDataPtr.get())
+        {
+            const_cast< SwGrfNode* >(this)->mpReplacementGraphic = new GraphicObject(rSvgDataPtr->getReplacement());
+        }
+    }
+
+    return mpReplacementGraphic;
+}
 
 SwCntntNode *SwGrfNode::SplitCntntNode( const SwPosition & )
 {
@@ -394,12 +420,15 @@ Size SwGrfNode::GetTwipSize() const
 sal_Bool SwGrfNode::ImportGraphic( SvStream& rStrm )
 {
     Graphic aGraphic;
-    if( !GraphicFilter::GetGraphicFilter()->ImportGraphic( aGraphic, String(), rStrm ) )
+    const String aURL(aGrfObj.GetUserData());
+
+    if(!GraphicFilter::GetGraphicFilter()->ImportGraphic(aGraphic, aURL, rStrm))
     {
-        const String aUserData( aGrfObj.GetUserData() );
+        delete mpReplacementGraphic;
+        mpReplacementGraphic = 0;
 
         aGrfObj.SetGraphic( aGraphic );
-        aGrfObj.SetUserData( aUserData );
+        aGrfObj.SetUserData( aURL );
         return sal_True;
     }
 
@@ -432,6 +461,9 @@ short SwGrfNode::SwapIn( sal_Bool bWaitForData )
             else if( GRAPHIC_DEFAULT == aGrfObj.GetType() )
             {
                 // keine default Bitmap mehr, also neu Painten!
+                delete mpReplacementGraphic;
+                mpReplacementGraphic = 0;
+
                 aGrfObj.SetGraphic( Graphic() );
                 SwMsgPoolItem aMsgHint( RES_GRAPHIC_PIECE_ARRIVED );
                 ModifyNotification( &aMsgHint, &aMsgHint );
@@ -904,7 +936,8 @@ SwCntntNode* SwGrfNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
             SvStream* pStrm = _GetStreamForEmbedGrf( refPics, aStrmName );
             if ( pStrm )
             {
-                GraphicFilter::GetGraphicFilter()->ImportGraphic( aTmpGrf, String(), *pStrm );
+                const String aURL(aGrfObj.GetUserData());
+                GraphicFilter::GetGraphicFilter()->ImportGraphic(aTmpGrf, aURL, *pStrm);
                 delete pStrm;
             }
             // <--

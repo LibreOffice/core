@@ -263,6 +263,10 @@ namespace basegfx
         B2DPoint* begin();
         B2DPoint* end();
     };
+
+    // typedef for a vector of B2DPolygons
+    typedef ::std::vector< B2DPolygon > B2DPolygonVector;
+
 } // end of namespace basegfx
 
 //////////////////////////////////////////////////////////////////////////////

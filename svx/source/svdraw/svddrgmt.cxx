@@ -3628,6 +3628,19 @@ bool SdrDragCrop::EndSdrDrag(bool bCopy)
     double fScaleX = ( aGraphicSize.Width() - rOldCrop.GetLeft() - rOldCrop.GetRight() ) / (double)aOldRect.GetWidth();
     double fScaleY = ( aGraphicSize.Height() - rOldCrop.GetTop() - rOldCrop.GetBottom() ) / (double)aOldRect.GetHeight();
 
+    // to correct the never working combination of cropped images and mirroring
+    // I have to correct the rectangles the calculation is based on here. In the current
+    // core geometry stuff a vertical mirror is expressed as 180 degree rotation. All
+    // this can be removed again when aw080 will have cleaned up the old
+    // (non-)transformation mess in the core.
+    if(18000 == pObj->GetGeoStat().nDrehWink)
+    {
+        // old notation of vertical mirror, need to correct diffs since both rects
+        // are rotated by 180 degrees
+        aOldRect = Rectangle(aOldRect.TopLeft() - (aOldRect.BottomRight() - aOldRect.TopLeft()), aOldRect.TopLeft());
+        aNewRect = Rectangle(aNewRect.TopLeft() - (aNewRect.BottomRight() - aNewRect.TopLeft()), aNewRect.TopLeft());
+    }
+
     sal_Int32 nDiffLeft = aNewRect.nLeft - aOldRect.nLeft;
     sal_Int32 nDiffTop = aNewRect.nTop - aOldRect.nTop;
     sal_Int32 nDiffRight = aNewRect.nRight - aOldRect.nRight;

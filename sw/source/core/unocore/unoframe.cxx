@@ -1499,6 +1499,30 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
             }
             aAny <<= OUString(sGrfName);
         }
+        else if( FN_UNO_REPLACEMENT_GRAPHIC_U_R_L == pEntry->nWID)
+        {
+            String sGrfName;
+            const SwNodeIndex* pIdx = pFmt->GetCntnt().GetCntntIdx();
+
+            if(pIdx)
+            {
+                SwNodeIndex aIdx(*pIdx, 1);
+                SwGrfNode* pGrfNode = aIdx.GetNode().GetGrfNode();
+                if(!pGrfNode)
+                    throw uno::RuntimeException();
+
+                const GraphicObject* pGraphicObject = pGrfNode->GetReplacementGrfObj();
+
+                if(pGraphicObject)
+                {
+                    String sPrefix( RTL_CONSTASCII_STRINGPARAM(sGraphicObjectProtocol) );
+                    String sId( pGraphicObject->GetUniqueID(), RTL_TEXTENCODING_ASCII_US );
+                    (sGrfName = sPrefix) += sId;
+                }
+            }
+
+            aAny <<= OUString(sGrfName);
+        }
         else if( FN_UNO_GRAPHIC_FILTER == pEntry->nWID )
         {
             String sFltName;

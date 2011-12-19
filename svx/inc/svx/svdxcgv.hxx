@@ -75,7 +75,7 @@ public:
 
     // Alle markierten Objekte auf eine Bitmap malen. Diese hat die Farbtiefe
     // und Aufloesung des Bildschirms.
-    virtual Bitmap      GetMarkedObjBitmap(sal_Bool bNoVDevIfOneBmpMarked=sal_False) const;
+    BitmapEx GetMarkedObjBitmap(bool bNoVDevIfOneBmpMarked = false) const;
 
     // Alle markierten Objekte in ein neues Model kopieren. Dieses neue Model
     // hat dann genau eine Page. Das Flag PageNotValid an diesem Model ist
@@ -90,7 +90,7 @@ public:
     virtual SdrModel*   GetMarkedObjModel() const;
 
     GDIMetaFile     GetAllMarkedMetaFile(sal_Bool bNoVDevIfOneMtfMarked=sal_False) const { return GetMarkedObjMetaFile(bNoVDevIfOneMtfMarked); }
-    Bitmap          GetAllMarkedBitmap(sal_Bool bNoVDevIfOneBmpMarked=sal_False) const { return GetMarkedObjBitmap(bNoVDevIfOneBmpMarked); }
+    Bitmap          GetAllMarkedBitmap(sal_Bool bNoVDevIfOneBmpMarked=sal_False) const { return GetMarkedObjBitmap(bNoVDevIfOneBmpMarked).GetBitmap(); }
     Graphic         GetAllMarkedGraphic() const;
     SdrModel*       GetAllMarkedModel() const { return GetMarkedObjModel(); }
 

@@ -51,12 +51,9 @@ namespace drawinglayer
         class DRAWINGLAYER_DLLPUBLIC Shadow3DExtractingProcessor : public BaseProcessor3D
         {
         private:
-            /// typedef for data handling
-            typedef std::vector< primitive2d::BasePrimitive2D* > BasePrimitive2DVector;
-
             /// result holding vector (2D) and target vector for stacking (inited to &maPrimitive2DSequence)
-            BasePrimitive2DVector                           maPrimitive2DSequence;
-            BasePrimitive2DVector*                          mpPrimitive2DSequence;
+            primitive2d::Primitive2DVector                  maPrimitive2DSequence;
+            primitive2d::Primitive2DVector*                 mpPrimitive2DSequence;
 
             /// object transformation for scene for 2d definition
             basegfx::B2DHomMatrix                           maObjectTransformation;
@@ -92,10 +89,6 @@ namespace drawinglayer
                 virtual render method when the primitive implementation is BasePrimitive3D-based.
              */
             virtual void processBasePrimitive3D(const primitive3d::BasePrimitive3D& rCandidate);
-
-            /// helper to convert from BasePrimitive2DVector to primitive2d::Primitive2DSequence
-            const primitive2d::Primitive2DSequence getPrimitive2DSequenceFromBasePrimitive2DVector(
-                const BasePrimitive2DVector& rVector) const;
 
         public:
             Shadow3DExtractingProcessor(

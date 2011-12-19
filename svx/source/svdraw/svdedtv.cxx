@@ -636,19 +636,20 @@ void SdrEditView::CheckPossibilities()
                 if (!bOrthoDesiredOnMarked && !aInfo.bNoOrthoDesired) bOrthoDesiredOnMarked=sal_True;
                 // ImportMtf checken
 
-                if (!bImportMtfPossible) {
-                    sal_Bool bGraf=HAS_BASE(SdrGrafObj,pObj);
-                    sal_Bool bOle2=HAS_BASE(SdrOle2Obj,pObj);
+                if (!bImportMtfPossible)
+                {
+                    const SdrGrafObj* pSdrGrafObj = dynamic_cast< const SdrGrafObj* >(pObj);
+                    const SdrOle2Obj* pSdrOle2Obj = dynamic_cast< const SdrOle2Obj* >(pObj);
 
-                    if( bGraf &&
-                        ((SdrGrafObj*)pObj)->HasGDIMetaFile() &&
-                        !( ((SdrGrafObj*)pObj)->IsEPS() || ((SdrGrafObj*)pObj)->IsRenderGraphic() ) )
+                    if(pSdrGrafObj && ((pSdrGrafObj->HasGDIMetaFile() && !pSdrGrafObj->IsEPS()) || pSdrGrafObj->isEmbeddedSvg()))
                     {
                         bImportMtfPossible = sal_True;
                     }
 
-                    if (bOle2)
-                        bImportMtfPossible=((SdrOle2Obj*)pObj)->GetObjRef().is();
+                    if(pSdrOle2Obj)
+                    {
+                        bImportMtfPossible = pSdrOle2Obj->GetObjRef().is();
+                    }
                 }
             }
 

@@ -1145,8 +1145,7 @@ void SvxGrafAttrHelper::GetGrafAttrState( SfxItemSet& rSet, SdrView& rView )
 
         if( !pGrafObj ||
             ( pGrafObj->GetGraphicType() == GRAPHIC_NONE ) ||
-            ( pGrafObj->GetGraphicType() == GRAPHIC_DEFAULT  ) ||
-            pGrafObj->HasRenderGraphic() )
+            ( pGrafObj->GetGraphicType() == GRAPHIC_DEFAULT  ))
         {
             bEnableColors = bEnableTransparency = bEnableCrop = false;
             break;

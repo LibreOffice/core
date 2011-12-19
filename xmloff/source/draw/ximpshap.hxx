@@ -38,6 +38,7 @@
 
 #include <vector>
 #include <xmloff/shapeimport.hxx>
+#include <xmloff/xmlmultiimagehelper.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 // common shape context
@@ -573,12 +574,17 @@ public:
 //////////////////////////////////////////////////////////////////////////////
 // draw:-frame
 
-class SdXMLFrameShapeContext : public SdXMLShapeContext
+class SdXMLFrameShapeContext : public SdXMLShapeContext, public multiImageImportHelper
 {
 private:
     sal_Bool mbSupportsReplacement;
     SvXMLImportContextRef mxImplContext;
     SvXMLImportContextRef mxReplImplContext;
+
+protected:
+    /// helper to get the created xShape instance, needs to be overloaded
+    virtual rtl::OUString getGraphicURLFromImportContext(const SvXMLImportContext& rContext) const;
+    virtual void removeGraphicFromImportContext(const SvXMLImportContext& rContext) const;
 
 public:
     TYPEINFO();

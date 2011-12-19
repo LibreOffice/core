@@ -52,6 +52,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     cui \
     desktop_detector \
     drawinglayer \
+    svgio \
     editeng \
     fwe \
     fwi \

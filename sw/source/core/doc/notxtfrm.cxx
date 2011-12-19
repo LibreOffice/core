@@ -78,6 +78,11 @@
 #include <dview.hxx>
 // <--
 
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#include <svx/sdr/contact/objectcontacttools.hxx>
+#include <drawinglayer/processor2d/baseprocessor2d.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
+
 using namespace com::sun::star;
 
 #define DEFTEXTSIZE  12
@@ -941,9 +946,101 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
                                         0, GRFMGR_DRAW_STANDARD, pVout );
                 }
                 else
-                    rGrfObj.DrawWithPDFHandling( *pOut,
-                                                 aAlignedGrfArea.Pos(), aAlignedGrfArea.SSize(),
-                                                 &aGrfAttr );
+                {
+                    const SvgDataPtr& rSvgDataPtr = rGrfObj.GetGraphic().getSvgData();
+                    bool bDone(false);
+
+                    if(rSvgDataPtr.get())
+                    {
+                        // Graphic is Svg and can be painted as primitives (vector graphic)
+                        const basegfx::B2DRange& rRange = rSvgDataPtr->getRange();
+                        const double fWidth(rRange.getWidth());
+                        const double fHeight(rRange.getHeight());
+                        const drawinglayer::primitive2d::Primitive2DSequence& rSequence = rSvgDataPtr->getPrimitive2DSequence();
+
+                        if(rSequence.hasElements() && !basegfx::fTools::equalZero(fWidth) && !basegfx::fTools::equalZero(fHeight))
+                        {
+                            // get target range
+                            const basegfx::B2DRange aTargetRange(
+                                aAlignedGrfArea.Left(), aAlignedGrfArea.Top(),
+                                aAlignedGrfArea.Right(), aAlignedGrfArea.Bottom());
+
+                            // prepare evtl. cropped range
+                            basegfx::B2DRange aCroppedTargetRange(aTargetRange);
+
+                            if(aGrfAttr.IsCropped())
+                            {
+                                // calculate original TargetRange
+                                const double fFactor100thmmToTwips(72.0 / 127.0);
+
+                                aCroppedTargetRange = basegfx::B2DRange(
+                                    aTargetRange.getMinX() - (aGrfAttr.GetLeftCrop() * fFactor100thmmToTwips),
+                                    aTargetRange.getMinY() - (aGrfAttr.GetTopCrop() * fFactor100thmmToTwips),
+                                    aTargetRange.getMaxX() + (aGrfAttr.GetRightCrop() * fFactor100thmmToTwips),
+                                    aTargetRange.getMaxY() + (aGrfAttr.GetBottomCrop() * fFactor100thmmToTwips));
+                            }
+
+                            const double fTargetWidth(aCroppedTargetRange.getWidth());
+                            const double fTargetHeight(aCroppedTargetRange.getHeight());
+
+                            if(!basegfx::fTools::equalZero(fTargetWidth) && !basegfx::fTools::equalZero(fTargetHeight))
+                            {
+                                // map graphic range to target range. This will automatically include
+                                // tme mapping from Svg 1/100th mm content to twips since the target
+                                // range is twips already
+                                basegfx::B2DHomMatrix aMappingTransform(
+                                    basegfx::tools::createTranslateB2DHomMatrix(
+                                        -rRange.getMinX(),
+                                        -rRange.getMinY()));
+
+                                aMappingTransform.scale(fTargetWidth / fWidth, fTargetHeight / fHeight);
+                                aMappingTransform.translate(aCroppedTargetRange.getMinX(), aCroppedTargetRange.getMinY());
+
+                                // check for and apply mirrorings
+                                const bool bMirrorHor(aGrfAttr.GetMirrorFlags() & BMP_MIRROR_HORZ);
+                                const bool bMirrorVer(aGrfAttr.GetMirrorFlags() & BMP_MIRROR_VERT);
+
+                                if(bMirrorHor || bMirrorVer)
+                                {
+                                    aMappingTransform.translate(-aCroppedTargetRange.getCenterX(), -aCroppedTargetRange.getCenterY());
+                                    aMappingTransform.scale(bMirrorHor ? -1.0 : 1.0, bMirrorVer ? -1.0 : 1.0);
+                                    aMappingTransform.translate(aCroppedTargetRange.getCenterX(), aCroppedTargetRange.getCenterY());
+                                }
+
+                                // Fill ViewInformation. Use MappingTransform here, so there is no need to
+                                // embed the primitives to it. Use original TargetRange here so there is also
+                                // no need to embed the primitives to a MaskPrimitive for cropping. This works
+                                // only in this case where the graphic object cannot be rotated, though.
+                                const drawinglayer::geometry::ViewInformation2D aViewInformation2D(
+                                    aMappingTransform,
+                                    pOut->GetViewTransformation(),
+                                    aTargetRange,
+                                    0,
+                                    0.0,
+                                    com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >());
+
+                                // get a primitive processor for rendering
+                                drawinglayer::processor2d::BaseProcessor2D* pProcessor2D = sdr::contact::createBaseProcessor2DFromOutputDevice(
+                                    *pOut,
+                                    aViewInformation2D);
+
+                                if(pProcessor2D)
+                                {
+                                    // render and cleanup
+                                    pProcessor2D->process(rSequence);
+                                    delete pProcessor2D;
+                                    bDone = true;
+                                }
+                            }
+                        }
+                    }
+
+                    if(!bDone)
+                    {
+                        // fallback paint, uses replacement image
+                        rGrfObj.DrawWithPDFHandling(*pOut, aAlignedGrfArea.Pos(), aAlignedGrfArea.SSize(), &aGrfAttr);
+                    }
+                }
             }
             else
             {

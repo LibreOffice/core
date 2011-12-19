@@ -65,6 +65,13 @@ namespace basegfx
         // can be combined for logical polygon operations or polygon clipping.
         B2DPolyPolygon stripDispensablePolygons(const B2DPolyPolygon& rCandidate, bool bKeepAboveZero = false);
 
+        // geometrically convert PolyPolygons which are proposed to use nonzero fill rule
+        // to a representation where evenodd paint will give the same result. To do this
+        // all intersections and self-intersections get solved (the polygons will be rearranged
+        // if needed). Then all polygons which are inside another one with the same orientation
+        // get deleted
+        B2DPolyPolygon createNonzeroConform(const B2DPolyPolygon& rCandidate);
+
         // For convenience: The four basic operations OR, XOR, AND and DIFF for
         // two PolyPolygons. These are combinations of the above methods. To not be forced
         // to do evtl. already done preparations twice, You have to do the operations Yourself.
@@ -104,7 +111,7 @@ namespace basegfx
 
             @return A single PolyPolygon containing the Or-merged result
         */
-        B2DPolyPolygon mergeToSinglePolyPolygon(const std::vector< basegfx::B2DPolyPolygon >& rInput);
+        B2DPolyPolygon mergeToSinglePolyPolygon(const B2DPolyPolygonVector& rInput);
 
     } // end of namespace tools
 } // end of namespace basegfx

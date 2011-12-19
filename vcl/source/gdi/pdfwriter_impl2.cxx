@@ -31,7 +31,6 @@
 #include "vcl/metaact.hxx"
 #include "vcl/bmpacc.hxx"
 #include "vcl/graph.hxx"
-#include "vcl/rendergraphicrasterizer.hxx"
 
 #include "svdata.hxx"
 
@@ -1041,17 +1040,6 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                 case( META_REFPOINT_ACTION ):
                 {
                     // !!! >>> we don't want to support this actions
-                }
-                break;
-
-                case( META_RENDERGRAPHIC_ACTION ):
-                {
-                    const MetaRenderGraphicAction* pA = static_cast< const MetaRenderGraphicAction* >( pAction );
-                    const ::vcl::RenderGraphicRasterizer aRasterizer( pA->GetRenderGraphic() );
-
-                    implWriteBitmapEx( pA->GetPoint(), pA->GetSize(),
-                                       aRasterizer.Rasterize( pDummyVDev->LogicToPixel( pA->GetSize() ) ),
-                                       pDummyVDev, i_rContext );
                 }
                 break;
 

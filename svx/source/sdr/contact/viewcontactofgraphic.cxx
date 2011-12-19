@@ -410,11 +410,12 @@ namespace sdr
             {
                 // create primitive. Info: Calling the copy-constructor of GraphicObject in this
                 // SdrGrafPrimitive2D constructor will force a full swap-in of the graphic
-                const drawinglayer::primitive2d::Primitive2DReference xReference(new drawinglayer::primitive2d::SdrGrafPrimitive2D(
-                    aObjectMatrix,
-                    aAttribute,
-                    rGraphicObject,
-                    aLocalGrafInfo));
+                const drawinglayer::primitive2d::Primitive2DReference xReference(
+                    new drawinglayer::primitive2d::SdrGrafPrimitive2D(
+                        aObjectMatrix,
+                        aAttribute,
+                        rGraphicObject,
+                        aLocalGrafInfo));
 
                 xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
             }

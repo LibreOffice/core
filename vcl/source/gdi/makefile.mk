@@ -76,9 +76,7 @@ EXCEPTIONSFILES=	$(SLO)$/salmisc.obj		\
             $(SLO)$/graphictools.obj	\
             $(SLO)$/textlayout.obj		\
             $(SLO)$/lineinfo.obj		\
-            $(SLO)$/svgread.obj		\
-            $(SLO)$/rendergraphic.obj	\
-            $(SLO)$/rendergraphicrasterizer.obj
+            $(SLO)$/svgdata.obj
 
 SLOFILES=	$(EXCEPTIONSFILES)		\
             $(SLO)$/animate.obj 	\

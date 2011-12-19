@@ -33,14 +33,10 @@
 #include <vector>
 #include <com/sun/star/lang/Locale.hpp>
 #include <drawinglayer/attribute/fontattribute.hxx>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 // predefines
-
-namespace basegfx {
-    class B2DPolyPolygon;
-    typedef ::std::vector< B2DPolyPolygon > B2DPolyPolygonVector;
-}
 
 class OutputDevice;
 

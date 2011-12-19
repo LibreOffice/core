@@ -363,10 +363,23 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
                     SdrObject*   pObj=pM->GetMarkedSdrObj();
                     SdrGrafObj*  pGraf=PTR_CAST(SdrGrafObj,pObj);
                     SdrOle2Obj*  pOle2=PTR_CAST(SdrOle2Obj,pObj);
-                    if (pGraf!=NULL && pGraf->HasGDIMetaFile())
-                        nCount += pGraf->GetGraphic().GetGDIMetaFile().GetActionCount();
-                    if(pOle2!=NULL && pOle2->GetGraphic())
+
+                    if(pGraf)
+                    {
+                        if(pGraf->HasGDIMetaFile())
+                        {
+                            nCount += pGraf->GetGraphic().GetGDIMetaFile().GetActionCount();
+                        }
+                        else if(pGraf->isEmbeddedSvg())
+                        {
+                            nCount += pGraf->getMetafileFromEmbeddedSvg().GetActionCount();
+                        }
+                    }
+
+                    if(pOle2 && pOle2->GetGraphic())
+                    {
                         nCount += pOle2->GetGraphic()->GetGDIMetaFile().GetActionCount();
+                    }
                 }
 
                 // anhand der erm. Summe entscheiden ob mit

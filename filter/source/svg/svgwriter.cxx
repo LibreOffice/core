@@ -1658,24 +1658,6 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
             }
             break;
 
-            case( META_RENDERGRAPHIC_ACTION ):
-            {
-                if( nWriteFlags & SVGWRITER_WRITE_FILL )
-                {
-                    // TODO KA: try to embed the native data in case the RenderGraphic
-                    // contains valid SVG data (MimeType "image/svg+xml")
-                    // => incorporate 'use' or 'image' element (KA 01/2011)
-                    const MetaRenderGraphicAction*          pA = (const MetaRenderGraphicAction*) pAction;
-                    const ::vcl::RenderGraphicRasterizer    aRasterizer( pA->GetRenderGraphic() );
-                    const Point                             aPointPixel;
-                    const Size                              aSizePixel( mpVDev->LogicToPixel( pA->GetSize() ) );
-                    const BitmapEx                          aBmpEx( aRasterizer.Rasterize( aSizePixel ) );
-
-                    ImplWriteBmp( aBmpEx, pA->GetPoint(), pA->GetSize(), aPointPixel, aBmpEx.GetSizePixel() );
-                }
-            }
-            break;
-
             case( META_CLIPREGION_ACTION ):
             case( META_ISECTRECTCLIPREGION_ACTION ):
             case( META_ISECTREGIONCLIPREGION_ACTION ):

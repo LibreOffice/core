@@ -33,8 +33,8 @@
 #include <vcl/bitmapex.hxx>
 #include <vcl/animate.hxx>
 #include <vcl/gdimtf.hxx>
-#include <vcl/rendergraphic.hxx>
 #include <vcl/graph.h>
+#include <vcl/svgdata.hxx>
 
 // ---------------
 // - ImpSwapInfo -
@@ -70,11 +70,14 @@ private:
     GfxLink*            mpGfxLink;
     GraphicType         meType;
     String              maDocFileURLStr;
-    sal_uLong               mnDocFilePos;
-    mutable sal_uLong       mnSizeBytes;
-    sal_uLong               mnRefCount;
-    sal_Bool                mbSwapOut;
-    sal_Bool                mbSwapUnderway;
+    sal_uLong           mnDocFilePos;
+    mutable sal_uLong   mnSizeBytes;
+    sal_uLong           mnRefCount;
+    sal_Bool            mbSwapOut;
+    sal_Bool            mbSwapUnderway;
+
+    // SvgData support
+    SvgDataPtr          maSvgData;
 
 private:
 
@@ -82,6 +85,7 @@ private:
                         ImpGraphic( const ImpGraphic& rImpGraphic );
                         ImpGraphic( const Bitmap& rBmp );
                         ImpGraphic( const BitmapEx& rBmpEx );
+                        ImpGraphic(const SvgDataPtr& rSvgDataPtr);
                         ImpGraphic( const Animation& rAnimation );
                         ImpGraphic( const GDIMetaFile& rMtf );
     virtual             ~ImpGraphic();
@@ -101,14 +105,11 @@ private:
     sal_Bool            ImplIsAlpha() const;
     sal_Bool            ImplIsAnimated() const;
     sal_Bool            ImplIsEPS() const;
-    sal_Bool            ImplIsRenderGraphic() const;
-    sal_Bool            ImplHasRenderGraphic() const;
 
     Bitmap                  ImplGetBitmap(const GraphicConversionParameters& rParameters) const;
     BitmapEx                ImplGetBitmapEx(const GraphicConversionParameters& rParameters) const;
     Animation               ImplGetAnimation() const;
     const GDIMetaFile&      ImplGetGDIMetaFile() const;
-    ::vcl::RenderGraphic    ImplGetRenderGraphic() const;
 
 
     Size                ImplGetPrefSize() const;
@@ -177,6 +178,9 @@ private:
 
     friend SvStream&    operator<<( SvStream& rOStm, const ImpGraphic& rImpGraphic );
     friend SvStream&    operator>>( SvStream& rIStm, ImpGraphic& rImpGraphic );
+
+    // SvgData support
+    const SvgDataPtr& getSvgData() const;
 };
 
 #endif // _SV_IMPGRAPH_HXX

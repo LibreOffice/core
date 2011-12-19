@@ -782,9 +782,16 @@ namespace basegfx
                                 // (since
                                 // createPolygonFromEllipseSegment()
                                 // normalizes to e.g. cw arc)
-                                const bool bFlipSegment( (bLargeArcFlag!=0) ==
-                                    (fmod(fTheta2+2*M_PI-fTheta1,
-                                          2*M_PI)<M_PI) );
+
+                                // ALG: In my opinion flipping the segment only
+                                // depends on the sweep flag. At least, this gives
+                                // correct results forthe SVG example (see SVG doc 8.3.8 ff)
+                                //
+                                //const bool bFlipSegment( (bLargeArcFlag!=0) ==
+                                //    (fmod(fTheta2+2*M_PI-fTheta1,
+                                //          2*M_PI)<M_PI) );
+                                const bool bFlipSegment(!bSweepFlag);
+
                                 if( bFlipSegment )
                                     std::swap(fTheta1,fTheta2);
 

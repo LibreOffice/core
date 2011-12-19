@@ -30,6 +30,7 @@
 #include <basegfx/range/b2drange.hxx>
 #include <vector>
 #include <com/sun/star/lang/Locale.hpp>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 // predefines
@@ -42,11 +43,6 @@ class GDIMetaFile;
 namespace drawinglayer { namespace attribute {
     class FontAttribute;
 }}
-
-namespace basegfx {
-    class B2DPolyPolygon;
-    typedef ::std::vector< B2DPolyPolygon > B2DPolyPolygonVector;
-}
 
 //////////////////////////////////////////////////////////////////////////////
 // access to one global impTimedRefDev incarnation in namespace drawinglayer::primitive

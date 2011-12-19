@@ -529,19 +529,33 @@ void SdrExchangeView::ImpPasteObject(SdrObject* pObj, SdrObjList& rLst, const Po
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-Bitmap SdrExchangeView::GetMarkedObjBitmap( sal_Bool bNoVDevIfOneBmpMarked ) const
+BitmapEx SdrExchangeView::GetMarkedObjBitmap( bool bNoVDevIfOneBmpMarked ) const
 {
-    Bitmap aBmp;
+    BitmapEx aBmp;
 
     if( AreObjectsMarked() )
     {
-        if( bNoVDevIfOneBmpMarked )
+        if(1 == GetMarkedObjectCount())
         {
-            SdrObject*  pGrafObjTmp = GetMarkedObjectByIndex( 0 );
-            SdrGrafObj* pGrafObj = ( GetMarkedObjectCount() == 1 ) ? PTR_CAST( SdrGrafObj, pGrafObjTmp ) : NULL;
+            if(bNoVDevIfOneBmpMarked)
+            {
+                SdrObject*  pGrafObjTmp = GetMarkedObjectByIndex( 0 );
+                SdrGrafObj* pGrafObj = ( GetMarkedObjectCount() == 1 ) ? PTR_CAST( SdrGrafObj, pGrafObjTmp ) : NULL;
 
-            if( pGrafObj && ( pGrafObj->GetGraphicType() == GRAPHIC_BITMAP ) )
-                aBmp = pGrafObj->GetTransformedGraphic().GetBitmap();
+                if( pGrafObj && ( pGrafObj->GetGraphicType() == GRAPHIC_BITMAP ) )
+                {
+                    aBmp = pGrafObj->GetTransformedGraphic().GetBitmapEx();
+                }
+            }
+            else
+            {
+                const SdrGrafObj* pSdrGrafObj = dynamic_cast< const SdrGrafObj* >(GetMarkedObjectByIndex(0));
+
+                if(pSdrGrafObj && pSdrGrafObj->isEmbeddedSvg())
+                {
+                    aBmp = pSdrGrafObj->GetGraphic().getSvgData()->getReplacement();
+                }
+            }
         }
 
         if( !aBmp )
@@ -557,7 +571,7 @@ Bitmap SdrExchangeView::GetMarkedObjBitmap( sal_Bool bNoVDevIfOneBmpMarked ) con
                 aDrawinglayerOpt.IsAntiAliasing(),
                 aDrawinglayerOpt.IsSnapHorVerLinesToDiscrete());
 
-            aBmp = aGraphic.GetBitmap(aParameters);
+            aBmp = aGraphic.GetBitmapEx(aParameters);
         }
     }
 
@@ -665,10 +679,18 @@ Graphic SdrExchangeView::GetObjGraphic( const SdrModel* pModel, const SdrObject*
 
         if(pSdrGrafObj)
         {
-            // #110981# Make behaviour coherent with metafile
-            // recording below (which of course also takes
-            // view-transformed objects)
-            aRet = pSdrGrafObj->GetTransformedGraphic();
+            if(pSdrGrafObj->isEmbeddedSvg())
+            {
+                // get Metafile for Svg content
+                aRet = pSdrGrafObj->getMetafileFromEmbeddedSvg();
+            }
+            else
+            {
+                // #110981# Make behaviour coherent with metafile
+                // recording below (which of course also takes
+                // view-transformed objects)
+                aRet = pSdrGrafObj->GetTransformedGraphic();
+            }
         }
         else if(pSdrOle2Obj)
         {

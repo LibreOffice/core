@@ -28,6 +28,7 @@
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #endif
 #include <xmloff/xmlictxt.hxx>
+#include <xmloff/xmlmultiimagehelper.hxx>
 
 namespace com { namespace sun { namespace star {
     namespace text { class XTextCursor; class XTextContent; }
@@ -36,7 +37,7 @@ namespace com { namespace sun { namespace star {
 class SvXMLAttributeList;
 class XMLTextFrameContextHyperlink_Impl;
 
-class XMLTextFrameContext : public SvXMLImportContext
+class XMLTextFrameContext : public SvXMLImportContext, public multiImageImportHelper
 {
     ::com::sun::star::uno::Reference<
         ::com::sun::star::xml::sax::XAttributeList > m_xAttrList;
@@ -65,6 +66,11 @@ class XMLTextFrameContext : public SvXMLImportContext
     sal_Bool CreateIfNotThere();
     sal_Bool CreateIfNotThere( ::com::sun::star::uno::Reference <
         ::com::sun::star::beans::XPropertySet >& rPropSet );
+
+protected:
+    /// helper to get the created xShape instance, needs to be overloaded
+    virtual rtl::OUString getGraphicURLFromImportContext(const SvXMLImportContext& rContext) const;
+    virtual void removeGraphicFromImportContext(const SvXMLImportContext& rContext) const;
 
 public:
 

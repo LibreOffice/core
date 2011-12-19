@@ -46,6 +46,7 @@ class SW_DLLPUBLIC SwGrfNode: public SwNoTxtNode
     friend class SwNodes;
 
     GraphicObject aGrfObj;
+    GraphicObject* mpReplacementGraphic;
     ::sfx2::SvBaseLinkRef refLink;       // falls Grafik nur als Link, dann Pointer gesetzt
     Size nGrfSize;
 //  String aStrmName;           // SW3: Name des Storage-Streams fuer Embedded
@@ -146,6 +147,7 @@ public:
     const Graphic&          GetGrf() const      { return aGrfObj.GetGraphic(); }
     const GraphicObject&    GetGrfObj() const   { return aGrfObj; }
           GraphicObject&    GetGrfObj()         { return aGrfObj; }
+    const GraphicObject* GetReplacementGrfObj() const;
 
     virtual SwCntntNode *SplitCntntNode( const SwPosition & );
 

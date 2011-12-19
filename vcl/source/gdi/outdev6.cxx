@@ -33,7 +33,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/graph.hxx>
-#include <vcl/rendergraphicrasterizer.hxx>
 
 #include <wall2.hxx>
 #include <salgdi.hxx>
@@ -1246,25 +1245,3 @@ bool OutputDevice::DrawEPS( const Point& rPoint, const Size& rSize,
     return bDrawn;
 }
 
-// ------------------------------------------------------------------
-
-void OutputDevice::DrawRenderGraphic( const Point& rPoint, const Size& rSize,
-                                      const ::vcl::RenderGraphic& rRenderGraphic )
-{
-    DBG_TRACE( "OutputDevice::DrawRenderGraphic()" );
-
-    if( mpMetaFile )
-        mpMetaFile->AddAction( new MetaRenderGraphicAction( rPoint, rSize, rRenderGraphic ) );
-
-    if( !rRenderGraphic.IsEmpty() )
-    {
-        ::vcl::RenderGraphicRasterizer  aRasterizer( rRenderGraphic );
-        BitmapEx                        aBmpEx;
-        const Size                      aSizePixel( LogicToPixel( rSize ) );
-        GDIMetaFile*                    pOldMetaFile = mpMetaFile;
-
-        mpMetaFile = NULL;
-        DrawBitmapEx( rPoint, rSize, aRasterizer.Rasterize( aSizePixel ) );
-        mpMetaFile = pOldMetaFile;
-    }
-}

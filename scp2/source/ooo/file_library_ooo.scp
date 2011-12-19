@@ -378,6 +378,7 @@ End
 #endif
 
 STD_LIB_FILE(gid_File_Lib_Drawinglayer,drawinglayer)
+STD_LIB_FILE(gid_File_Lib_SvgIo,svgio)
 
 SPECIAL_LIB_FILE(gid_File_Lib_Embobj,embobj)
 

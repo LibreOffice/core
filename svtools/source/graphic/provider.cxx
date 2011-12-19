@@ -628,17 +628,24 @@ void ImplApplyFilterData( ::Graphic& rGraphic, uno::Sequence< beans::PropertyVal
     }
     if ( rGraphic.GetType() == GRAPHIC_BITMAP )
     {
-        Rectangle aCropPixel( Point( 0, 0 ), rGraphic.GetSizePixel() );
-        ImplCalculateCropRect( rGraphic, aCropLogic, aCropPixel );
-        if ( bRemoveCropArea )
+        if(rGraphic.getSvgData().get())
         {
-            BitmapEx aBmpEx( rGraphic.GetBitmapEx() );
-            aBmpEx.Crop( aCropPixel );
-            rGraphic = aBmpEx;
+            // embedded Svg, no need to scale. Also no method to apply crop data currently
         }
-        Size aVisiblePixelSize( bRemoveCropArea ? rGraphic.GetSizePixel() : aCropPixel.GetSize() );
-        ImplApplyBitmapResolution( rGraphic, nImageResolution, aVisiblePixelSize, aLogicalSize );
-        ImplApplyBitmapScaling( rGraphic, nPixelWidth, nPixelHeight );
+        else
+        {
+            Rectangle aCropPixel( Point( 0, 0 ), rGraphic.GetSizePixel() );
+            ImplCalculateCropRect( rGraphic, aCropLogic, aCropPixel );
+            if ( bRemoveCropArea )
+            {
+                BitmapEx aBmpEx( rGraphic.GetBitmapEx() );
+                aBmpEx.Crop( aCropPixel );
+                rGraphic = aBmpEx;
+            }
+            Size aVisiblePixelSize( bRemoveCropArea ? rGraphic.GetSizePixel() : aCropPixel.GetSize() );
+            ImplApplyBitmapResolution( rGraphic, nImageResolution, aVisiblePixelSize, aLogicalSize );
+            ImplApplyBitmapScaling( rGraphic, nPixelWidth, nPixelHeight );
+        }
     }
     else if ( ( rGraphic.GetType() == GRAPHIC_GDIMETAFILE ) && nImageResolution )
     {

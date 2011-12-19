@@ -64,15 +64,6 @@ class Gradient;
 #define MTF_MIRROR_HORZ             0x00000001UL
 #define MTF_MIRROR_VERT             0x00000002UL
 
-// -----------------------------
-// - Write flags for streaming -
-// -----------------------------
-
-#define GDIMETAFILE_WRITE_DEFAULT                   0x00000000
-#define GDIMETAFILE_WRITE_REPLACEMENT_RENDERGRAPHIC 0x00000001
-
-typedef sal_uInt32 GDIMetaFileWriteFlags;
-
 // ---------
 // - Enums -
 // ---------
@@ -242,7 +233,7 @@ public:
     // Methoden zum Lesen und Schreiben des neuen Formats;
     // die Read-Methode kann auch das alte Format lesen
     SvStream&       Read( SvStream& rIStm );
-    SvStream&       Write( SvStream& rOStm, GDIMetaFileWriteFlags = GDIMETAFILE_WRITE_DEFAULT );
+    SvStream&       Write( SvStream& rOStm );
 
     // Stream-Operatoren schreiben das alte Format (noch)
     // und lesen sowohl das alte wie auch das neue Format

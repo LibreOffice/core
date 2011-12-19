@@ -55,12 +55,14 @@ my_components = \
     charttools \
     chartview \
     component/comphelper/util/comphelp \
+    component/drawinglayer/drawinglayer \
     component/framework/util/fwk \
     component/framework/util/fwl \
     component/framework/util/fwm \
     component/vbahelper/util/msforms \
     component/sfx2/util/sfx \
     component/sot/util/sot \
+    component/svgio/svgio \
     component/svl/source/fsstor/fsstorage \
     component/svl/source/passwordcontainer/passwordcontainer \
     component/svl/util/svl \

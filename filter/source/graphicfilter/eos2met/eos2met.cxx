@@ -40,7 +40,6 @@
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/msgbox.hxx>
-#include <vcl/rendergraphicrasterizer.hxx>
 #include <svl/solar.hrc>
 
 
@@ -323,7 +322,6 @@ void METWriter::CountActionsAndBitmaps(const GDIMetaFile * pMTF)
             case META_BMPEX_ACTION:
             case META_BMPEXSCALE_ACTION:
             case META_BMPEXSCALEPART_ACTION:
-            case META_RENDERGRAPHIC_ACTION:
                 nNumberOfBitmaps++;
             break;
         }
@@ -797,16 +795,6 @@ void METWriter::WriteImageObjects(const GDIMetaFile * pMTF)
             }
             break;
 
-            case( META_RENDERGRAPHIC_ACTION ):
-            {
-                const MetaRenderGraphicAction*          pA = (const MetaRenderGraphicAction*) pMA;
-                const ::vcl::RenderGraphicRasterizer    aRasterizer( pA->GetRenderGraphic() );
-                const BitmapEx                          aBmpEx( aRasterizer.Rasterize( pCompDev->LogicToPixel( pA->GetSize() ) ) );
-
-                METSetMix( eGDIRasterOp );
-                WriteImageObject( Graphic( aBmpEx ).GetBitmap() );
-            }
-            break;
         }
 
         if (bStatus==sal_False)
@@ -2355,14 +2343,6 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
             }
             break;
 
-            case( META_RENDERGRAPHIC_ACTION ):
-            {
-                const MetaRenderGraphicAction*  pA = (const MetaRenderGraphicAction*) pMA;
-
-                METSetMix( eGDIRasterOp );
-                METBitBlt( pA->GetPoint(), pA->GetSize(), pCompDev->LogicToPixel( pA->GetSize(), pMTF->GetPrefMapMode() ) );
-            }
-            break;
       }
 
       nWrittenActions++;

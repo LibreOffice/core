@@ -101,6 +101,7 @@ protected:
     String                  aFileName;          // Wenn es sich um einen Link handelt, steht hier der Dateiname drin.
     String                  aFilterName;
     GraphicObject*          pGraphic;           // Zur Beschleunigung von Bitmapausgaben, besonders von gedrehten.
+    GraphicObject*          mpReplacementGraphic;
     SdrGraphicLink*         pGraphicLink;       // Und hier noch ein Pointer fuer gelinkte Grafiken
     bool                    bMirrored;          // True bedeutet, die Grafik ist horizontal, d.h. ueber die Y-Achse gespiegelt auszugeben.
 
@@ -131,6 +132,7 @@ public:
 
     void                    SetGraphicObject( const GraphicObject& rGrfObj );
     const GraphicObject&    GetGraphicObject( bool bForceSwapIn = false) const;
+    const GraphicObject*    GetReplacementGraphicObject() const;
 
     void                    NbcSetGraphic(const Graphic& rGrf);
     void                    SetGraphic(const Graphic& rGrf);
@@ -144,8 +146,6 @@ public:
     // Keep ATM for SD.
     sal_Bool IsAnimated() const;
     sal_Bool IsEPS() const;
-    sal_Bool IsRenderGraphic() const;
-    sal_Bool HasRenderGraphic() const;
     sal_Bool IsSwappedOut() const;
 
     const MapMode&          GetGrafPrefMapMode() const;
@@ -198,6 +198,9 @@ public:
 
     virtual void            SetPage(SdrPage* pNewPage);
     virtual void            SetModel(SdrModel* pNewModel);
+
+    bool isEmbeddedSvg() const;
+    GDIMetaFile getMetafileFromEmbeddedSvg() const;
 
     virtual SdrObject*      DoConvertToPolyObj(sal_Bool bBezier, bool bAddText) const;
 

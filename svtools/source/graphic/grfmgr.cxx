@@ -187,8 +187,6 @@ void GraphicObject::ImplAssignGraphicData()
     mbAlpha = maGraphic.IsAlpha();
     mbAnimated = maGraphic.IsAnimated();
     mbEPS = maGraphic.IsEPS();
-    mbIsRenderGraphic = maGraphic.IsRenderGraphic();
-    mbHasRenderGraphic = maGraphic.HasRenderGraphic();
     mnAnimationLoopCount = ( mbAnimated ? maGraphic.GetAnimationLoopCount() : 0 );
 }
 
@@ -438,7 +436,7 @@ void GraphicObject::Assign( const SvDataCopyStream& rCopyStream )
 
 ByteString GraphicObject::GetUniqueID() const
 {
-    if ( !IsInSwapIn() && ( IsEPS() || IsRenderGraphic() ) )
+    if ( !IsInSwapIn() && IsEPS() )
         const_cast<GraphicObject*>(this)->FireSwapInRequest();
 
     ByteString aRet;

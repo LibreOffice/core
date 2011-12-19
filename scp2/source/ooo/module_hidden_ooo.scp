@@ -173,6 +173,7 @@ Module gid_Module_Root_Files_4
 	gid_File_Lib_Dbt,
 	gid_File_Lib_Dbfile,
 	gid_File_Lib_Drawinglayer,
+    gid_File_Lib_SvgIo,
         gid_File_Lib_Editeng,
 	gid_File_Lib_Flat,
 	gid_File_Lib_For,

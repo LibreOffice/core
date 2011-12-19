@@ -56,6 +56,15 @@ namespace basegfx
                     return ::basegfx::BColor(1.0, 1.0, 1.0);
                 }
             }
+            case BCOLORMODIFYMODE_INVERT :
+            {
+                return ::basegfx::BColor(1.0 - aSourceColor.getRed(), 1.0 - aSourceColor.getGreen(), 1.0 - aSourceColor.getBlue());
+            }
+            case BCOLORMODIFYMODE_LUMINANCE_TO_ALPHA:
+            {
+                const double fAlpha(1.0 - ((aSourceColor.getRed() * 0.2125) + (aSourceColor.getGreen() * 0.7154) + (aSourceColor.getBlue() * 0.0721)));
+                return ::basegfx::BColor(fAlpha, fAlpha, fAlpha);
+            }
             default : // BCOLORMODIFYMODE_REPLACE
             {
                 return maBColor;

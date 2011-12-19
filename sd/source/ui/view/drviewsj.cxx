@@ -127,22 +127,22 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
             SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_TEXTATTR_DLG ) )
         {
             const SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
+            const SdrGrafObj* pSdrGrafObj = dynamic_cast< const SdrGrafObj* >(pObj);
+            const SdrOle2Obj* pSdrOle2Obj = dynamic_cast< const SdrOle2Obj* >(pObj);
             sal_uInt32 nInv = pObj->GetObjInventor();
             sal_uInt16 nId = pObj->GetObjIdentifier();
             SdrObjTransformInfoRec aInfoRec;
             pObj->TakeObjInfo( aInfoRec );
 
-
             // #91929#; don't show original size entry if not possible
-            if ( pObj->ISA( SdrOle2Obj ) )
+            if(pSdrOle2Obj)
             {
-                SdrOle2Obj* pOleObj = PTR_CAST(SdrOle2Obj, pObj);
-                if (pOleObj->GetObjRef().is() &&
-                    ((pOleObj->GetObjRef()->getStatus( pOleObj->GetAspect() ) & embed::EmbedMisc::MS_EMBED_RECOMPOSEONRESIZE) ) )
+                if (pSdrOle2Obj->GetObjRef().is() &&
+                    ((pSdrOle2Obj->GetObjRef()->getStatus( pSdrOle2Obj->GetAspect() ) & embed::EmbedMisc::MS_EMBED_RECOMPOSEONRESIZE) ) )
                     rSet.DisableItem(SID_ORIGINAL_SIZE);
             }
 
-            if ( !( pObj->ISA( SdrGrafObj ) ) )
+            if(!pSdrGrafObj)
             {
                 rSet.DisableItem(SID_SAVEGRAPHIC);
             }
@@ -167,9 +167,10 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
                 rSet.DisableItem( SID_NAME_GROUP );
             }
 */
-            if (!pObj->ISA(SdrGrafObj) ||
-                ((SdrGrafObj*) pObj)->GetGraphicType() != GRAPHIC_BITMAP ||
-                ((SdrGrafObj*) pObj)->IsLinkedGraphic())
+            if(!pSdrGrafObj ||
+                pSdrGrafObj->GetGraphicType() != GRAPHIC_BITMAP ||
+                pSdrGrafObj->IsLinkedGraphic() ||
+                pSdrGrafObj->isEmbeddedSvg())
             {
                 rSet.DisableItem(SID_CONVERT_TO_1BIT_THRESHOLD);
                 rSet.DisableItem(SID_CONVERT_TO_1BIT_MATRIX);

@@ -149,7 +149,7 @@ SvXMLGraphicInputStream::SvXMLGraphicInputStream( const ::rtl::OUString& rGraphi
                 {
                     pStm->SetVersion( SOFFICE_FILEFORMAT_8 );
                     pStm->SetCompressMode( COMPRESSMODE_ZBITMAP );
-                    ( (GDIMetaFile&) aGraphic.GetGDIMetaFile() ).Write( *pStm, GDIMETAFILE_WRITE_REPLACEMENT_RENDERGRAPHIC );
+                    ( (GDIMetaFile&) aGraphic.GetGDIMetaFile() ).Write( *pStm );
                     bRet = ( pStm->GetError() == 0 );
                 }
             }
@@ -645,7 +645,7 @@ sal_Bool SvXMLGraphicHelper::ImplWriteGraphic( const ::rtl::OUString& rPictureSt
                         pStream->Write( rLink.GetData(), rLink.GetDataSize() );
                     }
                     else
-                        rMtf.Write( *pStream, GDIMETAFILE_WRITE_REPLACEMENT_RENDERGRAPHIC );
+                        rMtf.Write( *pStream );
 
                     bRet = ( pStream->GetError() == 0 );
                 }

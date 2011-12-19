@@ -151,9 +151,9 @@ namespace basegfx
         // luminance
         double luminance() const
         {
-            const double fRedWeight(77.0 / 256.0);
-            const double fGreenWeight(151.0 / 256.0);
-            const double fBlueWeight(28.0 / 256.0);
+            const double fRedWeight(77.0 / 256.0);      // 0.30
+            const double fGreenWeight(151.0 / 256.0);   // 0.59
+            const double fBlueWeight(28.0 / 256.0);     // 0.11
 
             return (mfX * fRedWeight + mfY * fGreenWeight + mfZ * fBlueWeight);
         }

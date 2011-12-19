@@ -99,8 +99,6 @@ HXXDEPNLST= $(INC)$/vcl$/accel.hxx       \
             $(INC)$/vcl$/print.hxx       \
             $(INC)$/vcl$/prndlg.hxx      \
             $(INC)$/vcl$/region.hxx      \
-            $(INC)$/vcl$/rendergraphic.hxx		\
-            $(INC)$/vcl$/rendergraphicrasterizer.hxx	\
             $(INC)$/vcl$/salbtype.hxx    \
             $(INC)$/vcl$/scrbar.hxx      \
             $(INC)$/vcl$/slider.hxx      \

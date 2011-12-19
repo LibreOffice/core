@@ -115,6 +115,27 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
+        // convert helper stl vector of primitives to Primitive2DSequence
+        Primitive2DSequence Primitive2DVectorToPrimitive2DSequence(const Primitive2DVector& rSource, bool bInvert)
+        {
+            const sal_uInt32 nSize(rSource.size());
+            Primitive2DSequence aRetval;
+
+            aRetval.realloc(nSize);
+
+            for(sal_uInt32 a(0); a < nSize; a++)
+            {
+                aRetval[bInvert ? nSize - 1 - a : a] = rSource[a];
+            }
+
+            // all entries taken over to Uno References as owners. To avoid
+            // errors with users of this mechanism to delete pointers to BasePrimitive2D
+            // itself, clear given vector
+            const_cast< Primitive2DVector& >(rSource).clear();
+
+            return aRetval;
+        }
+
         // get B2DRange from a given Primitive2DReference
         basegfx::B2DRange getB2DRangeFromPrimitive2DReference(const Primitive2DReference& rCandidate, const geometry::ViewInformation2D& aViewInformation)
         {

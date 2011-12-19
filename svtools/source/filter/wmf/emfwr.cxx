@@ -33,7 +33,6 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <vcl/lineinfo.hxx>
-#include <vcl/rendergraphicrasterizer.hxx>
 
 // -----------
 // - Defines -
@@ -1405,26 +1404,6 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
             case( META_GRADIENTEX_ACTION ):
             {
                 // !!! >>> we don't want to support these actions
-            }
-            break;
-
-            case( META_RENDERGRAPHIC_ACTION ):
-            {
-                const MetaRenderGraphicAction*          pA = (const MetaRenderGraphicAction*) pAction;
-                const ::vcl::RenderGraphicRasterizer    aRasterizer( pA->GetRenderGraphic() );
-                const BitmapEx                          aBmpEx( aRasterizer.Rasterize( maVDev.LogicToPixel( pA->GetSize() ) ) );
-                Bitmap                                  aBmp( aBmpEx.GetBitmap() );
-                Bitmap                                  aMsk( aBmpEx.GetMask() );
-
-                if( !!aMsk )
-                {
-                    aBmp.Replace( aMsk, COL_WHITE );
-                    aMsk.Invert();
-                    ImplWriteBmpRecord( aMsk, pA->GetPoint(), pA->GetSize(), WIN_SRCPAINT );
-                    ImplWriteBmpRecord( aBmp, pA->GetPoint(), pA->GetSize(), WIN_SRCAND );
-                }
-                else
-                    ImplWriteBmpRecord( aBmp, pA->GetPoint(), pA->GetSize(), WIN_SRCCOPY );
             }
             break;
 

@@ -125,6 +125,9 @@
 #define OWN_ATTR_TRANSFORMATION                 (OWN_ATTR_VALUE_START+46)
 #define OWN_ATTR_BASE_GEOMETRY                  (OWN_ATTR_VALUE_START+47)
 
+/// reuse attr slots for GraphicObject which will never be used together with graphic object
+#define OWN_ATTR_REPLACEMENTGRAFURL             (OWN_ATTR_VALUE_START+14)
+
 #define OWN_ATTR_APPLET_DOCBASE                 (OWN_ATTR_VALUE_START+48)
 #define OWN_ATTR_APPLET_CODEBASE                (OWN_ATTR_VALUE_START+49)
 #define OWN_ATTR_APPLET_NAME                    (OWN_ATTR_VALUE_START+50)
@@ -415,11 +418,12 @@
 
 #define SPECIAL_GRAPHOBJ_PROPERTIES \
     SPECIAL_GRAPHOBJ_PROPERTIES_DEFAULTS \
-    { MAP_CHAR_LEN(UNO_NAME_GRAPHIC_GRAPHICCROP),   SDRATTR_GRAFCROP            , &::getCppuType((const ::com::sun::star::text::GraphicCrop*)0),        0,  0 }, \
-    { MAP_CHAR_LEN(UNO_NAME_GRAPHOBJ_GRAFURL),      OWN_ATTR_GRAFURL            , &::getCppuType((const ::rtl::OUString*)0), 0, 0 }, \
-    { MAP_CHAR_LEN(UNO_NAME_GRAPHOBJ_GRAFSTREAMURL),OWN_ATTR_GRAFSTREAMURL      , &::getCppuType((const ::rtl::OUString*)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 }, \
-    { MAP_CHAR_LEN(UNO_NAME_GRAPHOBJ_FILLBITMAP),   OWN_ATTR_VALUE_FILLBITMAP   , &::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XBitmap>*)0)  ,    0,     0},    \
-    { MAP_CHAR_LEN(UNO_NAME_GRAPHOBJ_GRAPHIC),      OWN_ATTR_VALUE_GRAPHIC      , &::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic>*)0)  ,   0,     0},
+    { MAP_CHAR_LEN(UNO_NAME_GRAPHIC_GRAPHICCROP),           SDRATTR_GRAFCROP            , &::getCppuType((const ::com::sun::star::text::GraphicCrop*)0),        0,  0 }, \
+    { MAP_CHAR_LEN(UNO_NAME_GRAPHOBJ_GRAFURL),              OWN_ATTR_GRAFURL            , &::getCppuType((const ::rtl::OUString*)0), 0, 0 }, \
+    { MAP_CHAR_LEN(UNO_NAME_GRAPHOBJ_REPLACEMENTGRAFURL),   OWN_ATTR_REPLACEMENTGRAFURL , &::getCppuType((const ::rtl::OUString*)0), 0, 0 }, \
+    { MAP_CHAR_LEN(UNO_NAME_GRAPHOBJ_GRAFSTREAMURL),        OWN_ATTR_GRAFSTREAMURL      , &::getCppuType((const ::rtl::OUString*)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 }, \
+    { MAP_CHAR_LEN(UNO_NAME_GRAPHOBJ_FILLBITMAP),           OWN_ATTR_VALUE_FILLBITMAP   , &::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XBitmap>*)0)  ,    0,     0},    \
+    { MAP_CHAR_LEN(UNO_NAME_GRAPHOBJ_GRAPHIC),              OWN_ATTR_VALUE_GRAPHIC      , &::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic>*)0)  ,   0,     0},
 
 
 #define SPECIAL_3DSCENEOBJECT_PROPERTIES_DEFAULTS \

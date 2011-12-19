@@ -1203,7 +1203,7 @@ basegfx::B2DPolyPolygon SdrObject::TakeContour() const
             // create extractor, process and get result
             drawinglayer::processor2d::ContourExtractor2D aExtractor(aViewInformation2D);
             aExtractor.process(xSequence);
-            const std::vector< basegfx::B2DPolyPolygon >& rResult(aExtractor.getExtractedContour());
+            const basegfx::B2DPolyPolygonVector& rResult(aExtractor.getExtractedContour());
             const sal_uInt32 nSize(rResult.size());
 
             // when count is one, it is implied that the object has only it's normal
@@ -2434,7 +2434,7 @@ SdrObject* SdrObject::ImpConvertToContourObj(SdrObject* pRet, sal_Bool bForceLin
             aExtractor.process(xSequence);
 
             // #i102241# check for line results
-            const std::vector< basegfx::B2DPolygon >& rHairlineVector = aExtractor.getExtractedHairlines();
+            const basegfx::B2DPolygonVector& rHairlineVector = aExtractor.getExtractedHairlines();
 
             if(!rHairlineVector.empty())
             {
@@ -2446,7 +2446,7 @@ SdrObject* SdrObject::ImpConvertToContourObj(SdrObject* pRet, sal_Bool bForceLin
             }
 
             // #i102241# check for fill rsults
-            const std::vector< basegfx::B2DPolyPolygon >& rLineFillVector(aExtractor.getExtractedLineFills());
+            const basegfx::B2DPolyPolygonVector& rLineFillVector(aExtractor.getExtractedLineFills());
 
             if(!rLineFillVector.empty())
             {

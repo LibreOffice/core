@@ -176,6 +176,7 @@
 
 #define UNO_NAME_GRAPHOBJ_FILLBITMAP            "GraphicObjectFillBitmap"
 #define UNO_NAME_GRAPHOBJ_GRAFURL               "GraphicURL"
+#define UNO_NAME_GRAPHOBJ_REPLACEMENTGRAFURL    "ReplacementGraphicURL"
 #define UNO_NAME_GRAPHOBJ_GRAFSTREAMURL         "GraphicStreamURL"
 #define UNO_NAME_GRAPHOBJ_URLPREFIX             "vnd.sun.star.GraphicObject:"
 #define UNO_NAME_GRAPHOBJ_URLPKGPREFIX          "vnd.sun.star.Package:"

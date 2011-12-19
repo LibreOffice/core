@@ -27,11 +27,9 @@
 #include <vcl/outdev.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/graph.hxx>
-
+#include <vcl/metaact.hxx>
 #include <impgraph.hxx>
-
 #include <comphelper/processfactory.hxx>
-
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
@@ -244,6 +242,13 @@ Graphic::Graphic( const BitmapEx& rBmpEx )
 
 // ------------------------------------------------------------------------
 
+Graphic::Graphic(const SvgDataPtr& rSvgDataPtr)
+{
+    mpImpGraphic = new ImpGraphic(rSvgDataPtr);
+}
+
+// ------------------------------------------------------------------------
+
 Graphic::Graphic( const Animation& rAnimation )
 {
     mpImpGraphic = new ImpGraphic( rAnimation );
@@ -434,20 +439,6 @@ sal_Bool Graphic::IsEPS() const
 
 // ------------------------------------------------------------------------
 
-sal_Bool Graphic::IsRenderGraphic() const
-{
-    return mpImpGraphic->ImplIsRenderGraphic();
-}
-
-// ------------------------------------------------------------------------
-
-sal_Bool Graphic::HasRenderGraphic() const
-{
-    return mpImpGraphic->ImplHasRenderGraphic();
-}
-
-// ------------------------------------------------------------------------
-
 Bitmap Graphic::GetBitmap(const GraphicConversionParameters& rParameters) const
 {
     return mpImpGraphic->ImplGetBitmap(rParameters);
@@ -472,13 +463,6 @@ Animation Graphic::GetAnimation() const
 const GDIMetaFile& Graphic::GetGDIMetaFile() const
 {
     return mpImpGraphic->ImplGetGDIMetaFile();
-}
-
-// ------------------------------------------------------------------------
-
-::vcl::RenderGraphic Graphic::GetRenderGraphic() const
-{
-    return mpImpGraphic->ImplGetRenderGraphic();
 }
 
 // ------------------------------------------------------------------------
@@ -839,4 +823,9 @@ SvStream& operator>>( SvStream& rIStream, Graphic& rGraphic )
 SvStream& operator<<( SvStream& rOStream, const Graphic& rGraphic )
 {
     return rOStream << *rGraphic.mpImpGraphic;
+}
+
+const SvgDataPtr& Graphic::getSvgData() const
+{
+    return mpImpGraphic->getSvgData();
 }

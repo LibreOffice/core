@@ -40,6 +40,7 @@
 #include <basegfx/vector/b2enums.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <unotools/fontdefs.hxx>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
 
 #include <vector>
 
@@ -87,7 +88,6 @@ namespace basegfx {
     class B2DHomMatrix;
     class B2DPolygon;
     class B2DPolyPolygon;
-    typedef ::std::vector< B2DPolyPolygon > B2DPolyPolygonVector;
 }
 
 namespace com {
@@ -104,7 +104,6 @@ namespace vcl
     class PDFWriterImpl;
     class ExtOutDevData;
     class ITextLayout;
-    class RenderGraphic;
 }
 
 #define OUTDEV_BUFFER_SIZE  128
@@ -812,9 +811,6 @@ public:
         that's too much for now, wrote #i107046# for this */
     bool                DrawEPS( const Point& rPt, const Size& rSz,
                                  const GfxLink& rGfxLink, GDIMetaFile* pSubst = NULL );
-
-    void                DrawRenderGraphic( const Point& rPt, const Size& rSz,
-                                           const ::vcl::RenderGraphic& rRenderGraphic );
 
     Color               GetPixel( const Point& rPt ) const;
     Color*              GetPixel( const Polygon& rPts ) const;

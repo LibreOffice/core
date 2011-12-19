@@ -29,7 +29,7 @@
 #include <vcl/outdev.hxx>
 #include <tools/poly.hxx>
 #include "grfcache.hxx"
-
+#include <rtl/crc.h>
 #include <memory>
 
 // -----------
@@ -88,7 +88,17 @@ GraphicID::GraphicID( const GraphicObject& rObj )
     {
         case( GRAPHIC_BITMAP ):
         {
-            if( rGraphic.IsAnimated() )
+            if(rGraphic.getSvgData().get())
+            {
+                const SvgDataPtr& rSvgDataPtr = rGraphic.getSvgData();
+                const basegfx::B2DRange& rRange = rSvgDataPtr->getRange();
+
+                mnID1 |= rSvgDataPtr->getSvgDataArrayLength();
+                mnID2 = basegfx::fround(rRange.getWidth());
+                mnID3 = basegfx::fround(rRange.getHeight());
+                mnID4 = rtl_crc32(0, rSvgDataPtr->getSvgDataArray().get(), rSvgDataPtr->getSvgDataArrayLength());
+            }
+            else if( rGraphic.IsAnimated() )
             {
                 const Animation aAnimation( rGraphic.GetAnimation() );
 
@@ -163,10 +173,13 @@ private:
     BitmapEx*           mpBmpEx;
     GDIMetaFile*        mpMtf;
     Animation*          mpAnimation;
-    sal_Bool                mbSwappedAll;
+    sal_Bool            mbSwappedAll;
 
-    sal_Bool                ImplInit( const GraphicObject& rObj );
-    sal_Bool                ImplMatches( const GraphicObject& rObj ) const { return( GraphicID( rObj ) == maID ); }
+    // SvgData support
+    SvgDataPtr          maSvgData;
+
+    sal_Bool            ImplInit( const GraphicObject& rObj );
+    sal_Bool            ImplMatches( const GraphicObject& rObj ) const { return( GraphicID( rObj ) == maID ); }
     void                ImplFillSubstitute( Graphic& rSubstitute );
 
 public:
@@ -194,8 +207,9 @@ GraphicCacheEntry::GraphicCacheEntry( const GraphicObject& rObj ) :
     mpBmpEx         ( NULL ),
     mpMtf           ( NULL ),
     mpAnimation     ( NULL ),
-    mbSwappedAll    ( !ImplInit( rObj ) )
+    mbSwappedAll    ( true )
 {
+    mbSwappedAll = !ImplInit(rObj);
     maGraphicObjectList.Insert( (void*) &rObj, LIST_APPEND );
 }
 
@@ -233,10 +247,18 @@ sal_Bool GraphicCacheEntry::ImplInit( const GraphicObject& rObj )
         {
             case( GRAPHIC_BITMAP ):
             {
-                if( rGraphic.IsAnimated() )
+                if(rGraphic.getSvgData().get())
+                {
+                    maSvgData = rGraphic.getSvgData();
+                }
+                else if( rGraphic.IsAnimated() )
+                {
                     mpAnimation = new Animation( rGraphic.GetAnimation() );
+                }
                 else
+                {
                     mpBmpEx = new BitmapEx( rGraphic.GetBitmapEx() );
+                }
             }
             break;
 
@@ -280,14 +302,26 @@ void GraphicCacheEntry::ImplFillSubstitute( Graphic& rSubstitute )
     if( rSubstitute.IsLink() && ( GFX_LINK_TYPE_NONE == maGfxLink.GetType() ) )
         maGfxLink = rSubstitute.GetLink();
 
-    if( mpBmpEx )
+    if(maSvgData.get())
+    {
+        rSubstitute = maSvgData;
+    }
+    else if( mpBmpEx )
+    {
         rSubstitute = *mpBmpEx;
+    }
     else if( mpAnimation )
+    {
         rSubstitute = *mpAnimation;
+    }
     else if( mpMtf )
+    {
         rSubstitute = *mpMtf;
+    }
     else
+    {
         rSubstitute.Clear();
+    }
 
     if( eOldType != GRAPHIC_NONE )
     {
@@ -298,10 +332,14 @@ void GraphicCacheEntry::ImplFillSubstitute( Graphic& rSubstitute )
     }
 
     if( GFX_LINK_TYPE_NONE != maGfxLink.GetType() )
+    {
         rSubstitute.SetLink( maGfxLink );
+    }
 
     if( bDefaultType )
+    {
         rSubstitute.SetDefaultType();
+    }
 }
 
 // -----------------------------------------------------------------------------

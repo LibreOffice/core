@@ -27,6 +27,7 @@
 #include <drawinglayer/drawinglayerdllapi.h>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <basegfx/polygon/b2dpolygon.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -42,8 +43,8 @@ namespace drawinglayer
         class DRAWINGLAYER_DLLPUBLIC LineGeometryExtractor2D : public BaseProcessor2D
         {
         private:
-            std::vector< basegfx::B2DPolygon >      maExtractedHairlines;
-            std::vector< basegfx::B2DPolyPolygon >  maExtractedLineFills;
+            basegfx::B2DPolygonVector               maExtractedHairlines;
+            basegfx::B2DPolyPolygonVector           maExtractedLineFills;
 
             /// bitfield
             unsigned                                mbInLineGeometry : 1;
@@ -55,8 +56,8 @@ namespace drawinglayer
             LineGeometryExtractor2D(const geometry::ViewInformation2D& rViewInformation);
             virtual ~LineGeometryExtractor2D();
 
-            const std::vector< basegfx::B2DPolygon >& getExtractedHairlines() const { return maExtractedHairlines; }
-            const std::vector< basegfx::B2DPolyPolygon >& getExtractedLineFills() const { return maExtractedLineFills; }
+            const basegfx::B2DPolygonVector& getExtractedHairlines() const { return maExtractedHairlines; }
+            const basegfx::B2DPolyPolygonVector& getExtractedLineFills() const { return maExtractedLineFills; }
         };
     } // end of namespace processor2d
 } // end of namespace drawinglayer

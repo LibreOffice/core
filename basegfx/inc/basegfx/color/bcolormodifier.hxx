@@ -35,10 +35,12 @@ namespace basegfx
     */
     enum BColorModifyMode
     {
-        BCOLORMODIFYMODE_REPLACE,       // replace all color with local color
-        BCOLORMODIFYMODE_INTERPOLATE,   // interpolate color between given and local with local value
-        BCOLORMODIFYMODE_GRAY,          // convert color to gray
-        BCOLORMODIFYMODE_BLACKANDWHITE  // convert color to B&W, local value is treshhold
+        BCOLORMODIFYMODE_REPLACE,               // replace all color with local color
+        BCOLORMODIFYMODE_INTERPOLATE,           // interpolate color between given and local with local value
+        BCOLORMODIFYMODE_GRAY,                  // convert color to gray
+        BCOLORMODIFYMODE_BLACKANDWHITE,         // convert color to B&W, local value is treshhold
+        BCOLORMODIFYMODE_INVERT,                // invert color
+        BCOLORMODIFYMODE_LUMINANCE_TO_ALPHA     // convert color to alpha value (used for Svg Mask)
     };
 
     /** Class to hold a color, value and mode for a color modification. Color modification is

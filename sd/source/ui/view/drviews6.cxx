@@ -446,7 +446,7 @@ void DrawViewShell::GetBmpMaskState( SfxItemSet& rSet )
 
     // valid graphic object?
     if( pObj && pObj->ISA( SdrGrafObj ) &&
-        !( ((SdrGrafObj*) pObj)->IsEPS() || ((SdrGrafObj*) pObj)->IsRenderGraphic() ) &&
+        !((SdrGrafObj*) pObj)->IsEPS() &&
         !mpDrawView->IsTextEdit() )
     {
         bEnable = sal_True;

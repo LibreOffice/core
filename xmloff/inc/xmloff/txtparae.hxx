@@ -146,6 +146,7 @@ protected:
     const ::rtl::OUString sGraphicFilter;
     const ::rtl::OUString sGraphicRotation;
     const ::rtl::OUString sGraphicURL;
+    const ::rtl::OUString sReplacementGraphicURL;
     const ::rtl::OUString sHeight;
     const ::rtl::OUString sHoriOrient;
     const ::rtl::OUString sHoriOrientPosition;

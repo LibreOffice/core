@@ -119,6 +119,7 @@ $(eval $(call gb_Library_add_exception_objects,xo,\
     xmloff/source/core/xmltkmap \
     xmloff/source/core/xmltoken \
     xmloff/source/core/xmluconv \
+    xmloff/source/core/xmlmultiimagehelper \
     xmloff/source/draw/EnhancedCustomShapeToken \
     xmloff/source/draw/XMLGraphicsDefaultStyle \
     xmloff/source/draw/XMLImageMapContext \

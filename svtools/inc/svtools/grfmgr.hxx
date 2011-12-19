@@ -217,8 +217,6 @@ private:
     sal_Bool                mbIsInSwapOut   : 1;
     sal_Bool                mbAlpha         : 1;
     sal_Bool                mbDummyFlag8    : 1;
-    sal_Bool                mbIsRenderGraphic   : 1;
-    sal_Bool                mbHasRenderGraphic  : 1;
 
     void                    SVT_DLLPRIVATE ImplConstruct();
     void                    SVT_DLLPRIVATE ImplAssignGraphicData();
@@ -400,8 +398,6 @@ public:
     sal_Bool                IsAlpha() const { return mbAlpha; }
     sal_Bool                IsAnimated() const { return mbAnimated; }
     sal_Bool                IsEPS() const { return mbEPS; }
-    sal_Bool                IsRenderGraphic() const { return mbIsRenderGraphic; }
-    sal_Bool                HasRenderGraphic() const { return mbHasRenderGraphic; }
 
     void                    ResetAnimationLoopCount();
     List*                   GetAnimationInfoList() const;

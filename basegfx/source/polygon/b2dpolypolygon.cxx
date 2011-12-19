@@ -38,9 +38,7 @@
 
 class ImplB2DPolyPolygon
 {
-    typedef ::std::vector< basegfx::B2DPolygon >    PolygonVector;
-
-    PolygonVector                                   maPolygons;
+    basegfx::B2DPolygonVector                   maPolygons;
 
 public:
     ImplB2DPolyPolygon() : maPolygons()
@@ -80,7 +78,7 @@ public:
         if(nCount)
         {
             // add nCount copies of rPolygon
-            PolygonVector::iterator aIndex(maPolygons.begin());
+            basegfx::B2DPolygonVector::iterator aIndex(maPolygons.begin());
             aIndex += nIndex;
             maPolygons.insert(aIndex, nCount, rPolygon);
         }
@@ -94,7 +92,7 @@ public:
         {
             // add nCount polygons from rPolyPolygon
             maPolygons.reserve(maPolygons.size() + nCount);
-            PolygonVector::iterator aIndex(maPolygons.begin());
+            basegfx::B2DPolygonVector::iterator aIndex(maPolygons.begin());
             aIndex += nIndex;
 
             for(sal_uInt32 a(0L); a < nCount; a++)
@@ -110,9 +108,9 @@ public:
         if(nCount)
         {
             // remove polygon data
-            PolygonVector::iterator aStart(maPolygons.begin());
+            basegfx::B2DPolygonVector::iterator aStart(maPolygons.begin());
             aStart += nIndex;
-            const PolygonVector::iterator aEnd(aStart + nCount);
+            const basegfx::B2DPolygonVector::iterator aEnd(aStart + nCount);
 
             maPolygons.erase(aStart, aEnd);
         }

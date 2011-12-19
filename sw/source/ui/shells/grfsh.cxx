@@ -515,13 +515,6 @@ void SwGrfShell::GetAttrState(SfxItemSet &rSet)
     rSh.GetCurAttr( aCoreSet );
     sal_Bool bParentCntProt = 0 != rSh.IsSelObjProtected( FLYPROTECT_CONTENT|FLYPROTECT_PARENT );
     sal_Bool bIsGrfCntnt = CNT_GRF == GetShell().GetCntType();
-//    const GraphicObject* pGrfObj = ( bIsGrfCntnt ? rSh.GetGraphicObj() : NULL );
-//    sal_Bool bIsRenderGraphicGrfCntnt = ( pGrfObj && pGrfObj->IsRenderGraphic() );
-
-    // --> OD 2006-11-03 #i59688#
-//    sal_Bool bSwappedOut = rSh.IsGrfSwapOut( sal_True );
-//    sal_Bool bBitmapType = !bSwappedOut && GRAPHIC_BITMAP == rSh.GetGraphicType();
-    // <--
 
     SetGetStateSet( &rSet );
 

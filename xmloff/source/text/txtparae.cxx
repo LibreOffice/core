@@ -1223,6 +1223,7 @@ XMLTextParagraphExport::XMLTextParagraphExport(
     sGraphicFilter(RTL_CONSTASCII_USTRINGPARAM("GraphicFilter")),
     sGraphicRotation(RTL_CONSTASCII_USTRINGPARAM("GraphicRotation")),
     sGraphicURL(RTL_CONSTASCII_USTRINGPARAM("GraphicURL")),
+    sReplacementGraphicURL(RTL_CONSTASCII_USTRINGPARAM("ReplacementGraphicURL")),
     sHeight(RTL_CONSTASCII_USTRINGPARAM("Height")),
     sHoriOrient(RTL_CONSTASCII_USTRINGPARAM("HoriOrient")),
     sHoriOrientPosition(RTL_CONSTASCII_USTRINGPARAM("HoriOrientPosition")),
@@ -3018,9 +3019,33 @@ void XMLTextParagraphExport::_exportTextGraphic(
                                   sRet.makeStringAndClear() );
     }
 
+    // original content
+    SvXMLElementExport aElem(GetExport(), XML_NAMESPACE_DRAW, XML_FRAME, sal_False, sal_True);
 
-    SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_DRAW,
-                              XML_FRAME, sal_False, sal_True );
+    // replacement graphic for backwards compatibility, but
+    // only for SVG currently
+    OUString sReplacementOrigURL;
+    rPropSet->getPropertyValue( sReplacementGraphicURL ) >>= sReplacementOrigURL;
+
+    if(sReplacementOrigURL.getLength())
+    {
+        const OUString sReplacementURL(GetExport().AddEmbeddedGraphicObject( sReplacementOrigURL ));
+
+        // If there is no url, then then graphic is empty
+        if(sReplacementURL.getLength())
+        {
+            GetExport().AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, sReplacementURL);
+            GetExport().AddAttribute(XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE);
+            GetExport().AddAttribute(XML_NAMESPACE_XLINK, XML_SHOW, XML_EMBED);
+            GetExport().AddAttribute(XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD);
+
+            // xlink:href for replacement, only written for Svg content
+            SvXMLElementExport aElement(GetExport(), XML_NAMESPACE_DRAW, XML_IMAGE, sal_False, sal_True);
+
+            // optional office:binary-data
+            GetExport().AddEmbeddedGraphicObjectAsBase64(sReplacementURL);
+        }
+    }
 
     // xlink:href
     OUString sOrigURL;

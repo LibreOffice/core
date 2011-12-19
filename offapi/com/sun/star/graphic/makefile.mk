@@ -48,6 +48,8 @@ IDLFILES= \
     GraphicRendererVCL.idl \
     GraphicType.idl \
     MediaProperties.idl \
+    Primitive2DTools.idl \
+    SvgTools.idl \
     XPrimitive2D.idl \
     XPrimitive3D.idl \
     XPrimitiveFactory2D.idl \
@@ -56,7 +58,9 @@ IDLFILES= \
     XGraphicRasterizer.idl \
     XGraphicRenderer.idl \
     XGraphicObject.idl \
-    XGraphicTransformer.idl
+    XGraphicTransformer.idl \
+    XPrimitive2DRenderer.idl \
+    XSvgParser.idl
     
 # --- Targets ------------------------------------------------------
 

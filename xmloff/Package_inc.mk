@@ -129,3 +129,4 @@ $(eval $(call gb_Package_add_file,xmloff_inc,inc/xmloff/xmltkmap.hxx,xmloff/xmlt
 $(eval $(call gb_Package_add_file,xmloff_inc,inc/xmloff/xmltoken.hxx,xmloff/xmltoken.hxx))
 $(eval $(call gb_Package_add_file,xmloff_inc,inc/xmloff/xmltypes.hxx,xmloff/xmltypes.hxx))
 $(eval $(call gb_Package_add_file,xmloff_inc,inc/xmloff/xmluconv.hxx,xmloff/xmluconv.hxx))
+$(eval $(call gb_Package_add_file,xmloff_inc,inc/xmloff/xmlmultiimagehelper.hxx,xmloff/xmlmultiimagehelper.hxx))

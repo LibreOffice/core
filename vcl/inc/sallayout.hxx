@@ -29,12 +29,8 @@
 #define _SV_SALLAYOUT_HXX
 
 #include <tools/gen.hxx>
-
 #include <vector>
-namespace basegfx {
-    class B2DPolyPolygon;
-    typedef std::vector<B2DPolyPolygon> B2DPolyPolygonVector;
-}
+#include <basegfx/polygon/b2dpolypolygon.hxx>
 
 #ifndef _TOOLS_LANG_HXX
 typedef unsigned short LanguageType;

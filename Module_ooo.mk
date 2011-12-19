@@ -30,7 +30,8 @@ $(eval $(call gb_Module_Module,ooo))
 $(eval $(call gb_Module_add_moduledirs,ooo,\
     comphelper \
     drawinglayer \
-        editeng \
+    svgio \
+    editeng \
     framework \
     padmin \
     sfx2 \
