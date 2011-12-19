@@ -591,8 +591,10 @@ sal_Bool SbxObject::LoadData( SvStream& rStrm, sal_uInt16 nVer )
         aData.pObj = this;
     sal_uInt32 nSize;
     XubString aDfltProp;
-    rStrm.ReadByteString( aClassName, RTL_TEXTENCODING_ASCII_US );
-    rStrm.ReadByteString( aDfltProp, RTL_TEXTENCODING_ASCII_US );
+    aClassName = read_lenPrefixed_uInt8s_ToOUString(rStrm,
+        RTL_TEXTENCODING_ASCII_US);
+    aDfltProp = read_lenPrefixed_uInt8s_ToOUString(rStrm,
+        RTL_TEXTENCODING_ASCII_US);
     sal_uIntPtr nPos = rStrm.Tell();
     rStrm >> nSize;
     if( !LoadPrivateData( rStrm, nVer ) )
@@ -620,8 +622,8 @@ sal_Bool SbxObject::StoreData( SvStream& rStrm ) const
     XubString aDfltProp;
     if( pDfltProp )
         aDfltProp = pDfltProp->GetName();
-    rStrm.WriteByteString( aClassName, RTL_TEXTENCODING_ASCII_US );
-    rStrm.WriteByteString( aDfltProp, RTL_TEXTENCODING_ASCII_US );
+    write_lenPrefixed_uInt8s_FromOUString(rStrm, aClassName, RTL_TEXTENCODING_ASCII_US);
+    write_lenPrefixed_uInt8s_FromOUString(rStrm, aDfltProp, RTL_TEXTENCODING_ASCII_US);
     sal_uIntPtr nPos = rStrm.Tell();
     rStrm << (sal_uInt32) 0L;
     if( !StorePrivateData( rStrm ) )
@@ -797,7 +799,7 @@ void SbxObject::Dump( SvStream& rStrm, sal_Bool bFill )
                 aLine += aAttrs2;
             if( !pVar->IsA( TYPE(SbxMethod) ) )
                 aLine.AppendAscii( "  !! Not a Method !!" );
-            rStrm.WriteByteString( aLine, RTL_TEXTENCODING_ASCII_US );
+            write_lenPrefixed_uInt8s_FromOUString(rStrm, aLine, RTL_TEXTENCODING_ASCII_US);
 
             // Output also the object at object-methods
             if ( pVar->GetValues_Impl().eType == SbxOBJECT &&
@@ -830,7 +832,7 @@ void SbxObject::Dump( SvStream& rStrm, sal_Bool bFill )
                     aLine += aAttrs3;
                 if( !pVar->IsA( TYPE(SbxProperty) ) )
                     aLine.AppendAscii( "  !! Not a Property !!" );
-                rStrm.WriteByteString( aLine, RTL_TEXTENCODING_ASCII_US );
+                write_lenPrefixed_uInt8s_FromOUString(rStrm, aLine, RTL_TEXTENCODING_ASCII_US);
 
                 // output also the object at object properties
                 if ( pVar->GetValues_Impl().eType == SbxOBJECT &&

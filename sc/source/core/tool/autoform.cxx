@@ -797,8 +797,14 @@ sal_Bool ScAutoFormatData::Load( SvStream& rStream, const ScAfVersions& rVersion
             (AUTOFORMAT_DATA_ID_504 <= nVer && nVer <= AUTOFORMAT_DATA_ID)) )
     {
         // --- from 680/dr25 on: store strings as UTF-8
-        CharSet eCharSet = (nVer >= AUTOFORMAT_ID_680DR25) ? RTL_TEXTENCODING_UTF8 : rStream.GetStreamCharSet();
-        rStream.ReadByteString( aName, eCharSet );
+        if (nVer >= AUTOFORMAT_ID_680DR25)
+        {
+            aName = read_lenPrefixed_uInt8s_ToOUString(rStream,
+                RTL_TEXTENCODING_UTF8);
+        }
+        else
+            rStream.ReadUniOrByteString( aName, rStream.GetStreamCharSet() );
+
         if( AUTOFORMAT_DATA_ID_552 <= nVer )
         {
             rStream >> nStrResId;
@@ -838,7 +844,7 @@ sal_Bool ScAutoFormatData::LoadOld( SvStream& rStream, const ScAfVersions& rVers
     bRet = (rStream.GetError() == 0);
     if (bRet && (nVal == AUTOFORMAT_OLD_DATA_ID))
     {
-        rStream.ReadByteString( aName, rStream.GetStreamCharSet() );
+        rStream.ReadUniOrByteString( aName, rStream.GetStreamCharSet() );
         sal_Bool b;
         rStream >> b; bIncludeFont = b;
         rStream >> b; bIncludeJustify = b;
@@ -863,7 +869,7 @@ sal_Bool ScAutoFormatData::Save(SvStream& rStream)
     sal_Bool b;
     rStream << nVal;
     // --- from 680/dr25 on: store strings as UTF-8
-    rStream.WriteByteString( aName, RTL_TEXTENCODING_UTF8 );
+    write_lenPrefixed_uInt8s_FromOUString(rStream, aName, RTL_TEXTENCODING_UTF8);
 
     rStream << nStrResId;
     rStream << ( b = bIncludeFont );

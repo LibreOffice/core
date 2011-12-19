@@ -251,7 +251,7 @@ SfxPoolItem* SvxPageItem::Create( SvStream& rStream, sal_uInt16 ) const
     sal_uInt16 nUse;
 
     // UNICODE: rStream >> sStr;
-    rStream.ReadByteString( sStr );
+    rStream.ReadUniOrByteString( sStr, rStream.GetStreamCharSet() );
 
     rStream >> eType;
     rStream >> bLand;
@@ -270,7 +270,7 @@ SfxPoolItem* SvxPageItem::Create( SvStream& rStream, sal_uInt16 ) const
 SvStream& SvxPageItem::Store( SvStream &rStrm, sal_uInt16 /*nItemVersion*/ ) const
 {
     // UNICODE: rStrm << aDescName;
-    rStrm.WriteByteString(aDescName);
+    rStrm.WriteUniOrByteString(aDescName, rStrm.GetStreamCharSet());
 
     rStrm << (sal_uInt8)eNumType << bLandscape << eUse;
     return rStrm;

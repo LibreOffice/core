@@ -991,7 +991,7 @@ sal_Bool lcl_WriteSbxVariable( const SbxVariable& rVar, SvStream* pStrm,
                 {
                     if( bIsVariant )
                         *pStrm << (sal_uInt16)SbxSTRING;
-                    pStrm->WriteByteString( rStr, osl_getThreadTextEncoding() );
+                    pStrm->WriteUniOrByteString( rStr, osl_getThreadTextEncoding() );
                 }
                 else
                 {
@@ -1107,7 +1107,7 @@ sal_Bool lcl_ReadSbxVariable( SbxVariable& rVar, SvStream* pStrm,
         case SbxLPSTR:
                 {
                 String aStr;
-                pStrm->ReadByteString( aStr, osl_getThreadTextEncoding() );
+                pStrm->ReadUniOrByteString( aStr, osl_getThreadTextEncoding() );
                 rVar.PutString( aStr );
                 }
                 break;

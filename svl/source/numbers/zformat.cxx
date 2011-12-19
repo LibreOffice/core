@@ -154,7 +154,7 @@ void ImpSvNumberformatInfo::Save(SvStream& rStream, sal_uInt16 nAnz) const
 {
     for (sal_uInt16 i = 0; i < nAnz; i++)
     {
-        rStream.WriteByteString( sStrArray[i], rStream.GetStreamCharSet() );
+        rStream.WriteUniOrByteString( sStrArray[i], rStream.GetStreamCharSet() );
         short nType = nTypeArray[i];
         switch ( nType )
         {   // der Krampf fuer Versionen vor SV_NUMBERFORMATTER_VERSION_NEW_CURR
@@ -392,7 +392,7 @@ void ImpSvNumFor::Save(SvStream& rStream) const
 {
     rStream << nAnzStrings;
     aI.Save(rStream, nAnzStrings);
-    rStream.WriteByteString( sColorName, rStream.GetStreamCharSet() );
+    rStream.WriteUniOrByteString( sColorName, rStream.GetStreamCharSet() );
 }
 
 void ImpSvNumFor::Load(SvStream& rStream, ImpSvNumberformatScan& rSc,
@@ -402,7 +402,7 @@ void ImpSvNumFor::Load(SvStream& rStream, ImpSvNumberformatScan& rSc,
     rStream >> nAnz;        //! noch nicht direkt nAnzStrings wg. Enlarge
     Enlarge( nAnz );
     aI.Load( rStream, nAnz );
-    rStream.ReadByteString( sColorName, rStream.GetStreamCharSet() );
+    rStream.ReadUniOrByteString( sColorName, rStream.GetStreamCharSet() );
     rLoadedColorName = sColorName;
     pColor = rSc.GetColor(sColorName);
 }
@@ -1828,13 +1828,13 @@ void SvNumberformat::Save( SvStream& rStream, ImpSvNumMultipleWriteHeader& rHdr 
     }
 
     rHdr.StartEntry();
-    rStream.WriteByteString( aFormatstring, rStream.GetStreamCharSet() );
+    rStream.WriteUniOrByteString( aFormatstring, rStream.GetStreamCharSet() );
     rStream << eType << fLimit1 << fLimit2 << (sal_uInt16) eOp1 << (sal_uInt16) eOp2
             << sal_Bool(bOldStandard) << sal_Bool(bIsUsed);
     for (sal_uInt16 i = 0; i < 4; i++)
         NumFor[i].Save(rStream);
     // ab SV_NUMBERFORMATTER_VERSION_NEWSTANDARD
-    rStream.WriteByteString( aComment, rStream.GetStreamCharSet() );
+    rStream.WriteUniOrByteString( aComment, rStream.GetStreamCharSet() );
     rStream << nNewStandardDefined;
     // ab SV_NUMBERFORMATTER_VERSION_NEW_CURR
     rStream << nNewCurrencyVersionId;

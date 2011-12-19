@@ -363,11 +363,6 @@ public:
     SvStream&       operator<<( const unsigned char* pBuf );
     SvStream&       operator<<( SvStream& rStream );
 
-    SvStream&       ReadByteString( UniString& rStr, rtl_TextEncoding eSrcCharSet );
-    SvStream&       ReadByteString( UniString& rStr ) { return ReadByteString( rStr, GetStreamCharSet() ); }
-    SvStream&       WriteByteString( const UniString& rStr, rtl_TextEncoding eDestCharSet );
-    SvStream&       WriteByteString( const UniString& rStr ) { return WriteByteString( rStr, GetStreamCharSet() ); }
-
     SvStream&       WriteNumber( sal_uInt32 nUInt32 );
     SvStream&       WriteNumber( sal_Int32 nInt32 );
 
@@ -412,6 +407,12 @@ public:
 
                 /// Read a line of Unicode
     sal_Bool        ReadUniStringLine( String& rStr );
+                /// Read a 32bit length prefixed sequence of utf-16 if eSrcCharSet==RTL_TEXTENCODING_UNICODE,
+                /// otherwise read a 16bit length prefixed sequence of bytes and convert from eSrcCharSet
+    SvStream&       ReadUniOrByteString( UniString& rStr, rtl_TextEncoding eSrcCharSet );
+                /// Write a 32bit length prefixed sequence of utf-16 if eSrcCharSet==RTL_TEXTENCODING_UNICODE,
+                /// otherwise convert to eSrcCharSet and write a 16bit length prefixed sequence of bytes
+    SvStream&       WriteUniOrByteString( const UniString& rStr, rtl_TextEncoding eDestCharSet );
                 /// Read a line of Unicode if eSrcCharSet==RTL_TEXTENCODING_UNICODE,
                 /// otherwise read a line of Bytecode and convert from eSrcCharSet
     sal_Bool        ReadUniOrByteStringLine( String& rStr, rtl_TextEncoding eSrcCharSet );

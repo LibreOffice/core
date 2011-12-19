@@ -780,8 +780,8 @@ SvStream& operator>>( SvStream& rIStm, Impl_Font& rImpl_Font )
     sal_Bool            bTmp;
     sal_uInt8           nTmp8;
 
-    rIStm.ReadByteString( rImpl_Font.maFamilyName, rIStm.GetStreamCharSet() );
-    rIStm.ReadByteString( rImpl_Font.maStyleName, rIStm.GetStreamCharSet() );
+    rIStm.ReadUniOrByteString( rImpl_Font.maFamilyName, rIStm.GetStreamCharSet() );
+    rIStm.ReadUniOrByteString( rImpl_Font.maStyleName, rIStm.GetStreamCharSet() );
     rIStm >> rImpl_Font.maSize;
 
     rIStm >> nTmp16; rImpl_Font.meCharSet = (rtl_TextEncoding) nTmp16;
@@ -823,8 +823,8 @@ SvStream& operator>>( SvStream& rIStm, Impl_Font& rImpl_Font )
 SvStream& operator<<( SvStream& rOStm, const Impl_Font& rImpl_Font )
 {
     VersionCompat aCompat( rOStm, STREAM_WRITE, 3 );
-    rOStm.WriteByteString( rImpl_Font.maFamilyName, rOStm.GetStreamCharSet() );
-    rOStm.WriteByteString( rImpl_Font.maStyleName, rOStm.GetStreamCharSet() );
+    rOStm.WriteUniOrByteString( rImpl_Font.maFamilyName, rOStm.GetStreamCharSet() );
+    rOStm.WriteUniOrByteString( rImpl_Font.maStyleName, rOStm.GetStreamCharSet() );
     rOStm << rImpl_Font.maSize;
 
     rOStm << (sal_uInt16) GetStoreCharSet( rImpl_Font.meCharSet );

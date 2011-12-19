@@ -280,10 +280,10 @@ SvStream& operator<<( SvStream& rOStream, const QueueInfo& rInfo )
 {
     VersionCompat aCompat( rOStream, STREAM_WRITE, 1 );
 
-    rOStream.WriteByteString( rInfo.maPrinterName, RTL_TEXTENCODING_UTF8 );
-    rOStream.WriteByteString( rInfo.maDriver, RTL_TEXTENCODING_UTF8 );
-    rOStream.WriteByteString( rInfo.maLocation, RTL_TEXTENCODING_UTF8 );
-    rOStream.WriteByteString( rInfo.maComment, RTL_TEXTENCODING_UTF8 );
+    write_lenPrefixed_uInt8s_FromOUString(rOStream, rInfo.maPrinterName, RTL_TEXTENCODING_UTF8);
+    write_lenPrefixed_uInt8s_FromOUString(rOStream, rInfo.maDriver, RTL_TEXTENCODING_UTF8);
+    write_lenPrefixed_uInt8s_FromOUString(rOStream, rInfo.maLocation, RTL_TEXTENCODING_UTF8);
+    write_lenPrefixed_uInt8s_FromOUString(rOStream, rInfo.maComment, RTL_TEXTENCODING_UTF8);
     rOStream << rInfo.mnStatus;
     rOStream << rInfo.mnJobs;
 
@@ -296,15 +296,10 @@ SvStream& operator>>( SvStream& rIStream, QueueInfo& rInfo )
 {
     VersionCompat aCompat( rIStream, STREAM_READ );
 
-    String aTmp;
-    rIStream.ReadByteString( aTmp, RTL_TEXTENCODING_UTF8 );
-    rInfo.maPrinterName = aTmp;
-    rIStream.ReadByteString( aTmp, RTL_TEXTENCODING_UTF8 );
-    rInfo.maDriver = aTmp;
-    rIStream.ReadByteString( aTmp, RTL_TEXTENCODING_UTF8 );
-    rInfo.maLocation = aTmp;
-    rIStream.ReadByteString( aTmp, RTL_TEXTENCODING_UTF8 );
-    rInfo.maComment = aTmp;
+    rInfo.maPrinterName = read_lenPrefixed_uInt8s_ToOUString(rIStream, RTL_TEXTENCODING_UTF8);
+    rInfo.maDriver = read_lenPrefixed_uInt8s_ToOUString(rIStream, RTL_TEXTENCODING_UTF8);
+    rInfo.maLocation = read_lenPrefixed_uInt8s_ToOUString(rIStream, RTL_TEXTENCODING_UTF8);
+    rInfo.maComment = read_lenPrefixed_uInt8s_ToOUString(rIStream, RTL_TEXTENCODING_UTF8);
     rIStream >> rInfo.mnStatus;
     rIStream >> rInfo.mnJobs;
 
