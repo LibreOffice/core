@@ -33,9 +33,9 @@ all: rtlbootstrap.mk $(if $(filter-out $(COM),MSC),sal/typesizes.h) sal/udkversi
 sal:
 	mkdir sal
 
-rtlbootstrap.mk:
+rtlbootstrap.mk: sal/typesizes.h
 	(echo '#include "macro.hxx"'; echo RTL_OS:=THIS_OS; echo RTL_ARCH:=THIS_ARCH) > bootstrap.cxx
-	$(CXX) -E $(gb_OSDEFS) -D$(CPUNAME) -I. -I$(SRCDIR)/sal/rtl/source -I$(SRCDIR)/sal/inc bootstrap.cxx | grep '^RTL_' | sed -e 's/"//g' > $@
+	$(CXX) -E $(gb_OSDEFS) $(gb_CXXFLAGS) -D$(CPUNAME) -I. -I$(SRCDIR)/sal/rtl/source -I$(SRCDIR)/sal/inc bootstrap.cxx | grep '^RTL_' | sed -e 's/"//g' > $@
 
 sal/typesizes.h: sal
 ifneq ($(CROSS_COMPILING),YES)
