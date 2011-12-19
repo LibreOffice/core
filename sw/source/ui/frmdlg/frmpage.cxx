@@ -224,7 +224,7 @@ static FrmMap aHFlyHtmlMap[] =
     {SwFPos::FROMLEFT,      SwFPos::MIR_FROMLEFT,   text::HoriOrientation::NONE,      LB_FLY_REL_PG_FRAME}
 };
 
-// own vertical alignment map for to frame anchored objects
+// own vertical alignment map for objects anchored to frame
 #define VERT_FRAME_REL   (LB_FLY_VERT_FRAME|LB_FLY_VERT_PRTAREA)
 
 static FrmMap aVFrameMap[] =
@@ -1941,7 +1941,7 @@ IMPL_LINK( SwFrmPage, PosHdl, ListBox *, pLB )
 }
 
 /*--------------------------------------------------------------------
-    Description:    horizonal Pos
+    Description:    horizontal Pos
  --------------------------------------------------------------------*/
 IMPL_LINK( SwFrmPage, RelHdl, ListBox *, pLB )
 {
@@ -2555,14 +2555,24 @@ void BmpWindow::Paint( const Rectangle& )
         aGrfSize = ::GetGraphicSizeTwip(aGraphic, this);
     //it should show the default bitmap also if no graphic can be found
     if(!aGrfSize.Width() && !aGrfSize.Height())
-        aGrfSize =  PixelToLogic(aBmp.GetSizePixel());
+        aGrfSize = PixelToLogic(aBmp.GetSizePixel());
 
     long nRelGrf = aGrfSize.Width() * 100L / aGrfSize.Height();
     long nRelWin = aPntSz.Width() * 100L / aPntSz.Height();
     if(nRelGrf < nRelWin)
     {
         const long nWidth = aPntSz.Width();
-        aPntSz.Width() = aPntSz.Height() * nRelGrf /100;
+        // if we use a replacement preview, try to draw at original size
+        if ( !bGraphic && ( aGrfSize.Width() <= aPntSz.Width() ) && ( aGrfSize.Height() <= aPntSz.Height() ) )
+        {
+            const long nHeight = aPntSz.Height();
+            aPntSz.Width() = aGrfSize.Width();
+            aPntSz.Height() = aGrfSize.Height();
+            aPntPos.Y() += (nHeight - aPntSz.Height()) / 2;
+        }
+        else
+            aPntSz.Width() = aPntSz.Height() * nRelGrf /100;
+
         if(!bLeftAlign)
             aPntPos.X() += nWidth - aPntSz.Width() ;
     }
