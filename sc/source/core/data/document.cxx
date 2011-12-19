@@ -1919,9 +1919,6 @@ void ScDocument::CopyToClip(const ScClipParam& rClipParam,
         // for unsaved files use the title name and adjust during save of file
         if (pClipDoc->maFileURL.isEmpty())
             pClipDoc->maFileURL = pShell->GetName();
-
-        std::cout << pClipDoc->maFileURL << std::endl;
-        std::cout << "GetName: " << rtl::OUString(pShell->GetName()) << std::endl;
     }
     else
     {
@@ -1991,6 +1988,31 @@ void ScDocument::CopyTabToClip(SCCOL nCol1, SCROW nRow1,
 {
     if (!bIsClip)
     {
+        if (pShell->GetMedium())
+        {
+            pClipDoc->maFileURL = pShell->GetMedium()->GetURLObject().GetMainURL(INetURLObject::DECODE_TO_IURI);
+            // for unsaved files use the title name and adjust during save of file
+            if (pClipDoc->maFileURL.isEmpty())
+                pClipDoc->maFileURL = pShell->GetName();
+        }
+        else
+        {
+            pClipDoc->maFileURL = pShell->GetName();
+        }
+
+        //init maTabNames
+        for (TableContainer::iterator itr = maTabs.begin(); itr != maTabs.end(); ++itr)
+        {
+            if( *itr )
+            {
+                rtl::OUString aTabName;
+                (*itr)->GetName(aTabName);
+                pClipDoc->maTabNames.push_back(aTabName);
+            }
+            else
+                pClipDoc->maTabNames.push_back(rtl::OUString());
+        }
+
         PutInOrder( nCol1, nCol2 );
         PutInOrder( nRow1, nRow2 );
         if (!pClipDoc)

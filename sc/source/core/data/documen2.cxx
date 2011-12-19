@@ -41,6 +41,7 @@
 #include <svx/svdobj.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/objsh.hxx>
+#include <sfx2/docfile.hxx>
 #include <sfx2/printer.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
@@ -48,6 +49,7 @@
 #include <comphelper/processfactory.hxx>
 #include <svl/PasswordHelper.hxx>
 #include <tools/tenccvt.hxx>
+#include <tools/urlobj.hxx>
 #include <rtl/crc.h>
 #include <basic/basmgr.hxx>
 
@@ -920,8 +922,21 @@ sal_uLong ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
                                 bool bResultsOnly )
 {
     sal_uLong nRetVal = 1;                      // 0 => Fehler 1 = ok
-                                            // 2 => RefBox, 3 => NameBox
+                                            // 3 => NameBox
                                             // 4 => beides
+
+    if (pSrcDoc->pShell->GetMedium())
+    {
+        pSrcDoc->maFileURL = pSrcDoc->pShell->GetMedium()->GetURLObject().GetMainURL(INetURLObject::DECODE_TO_IURI);
+        // for unsaved files use the title name and adjust during save of file
+        if (pSrcDoc->maFileURL.isEmpty())
+            pSrcDoc->maFileURL = pSrcDoc->pShell->GetName();
+    }
+    else
+    {
+        pSrcDoc->maFileURL = pSrcDoc->pShell->GetName();
+    }
+
     bool bValid = true;
     if (bInsertNew)             // neu einfuegen
     {
@@ -1046,15 +1061,8 @@ sal_uLong ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
             maTabs[nDestPos]->UpdateReference(URM_COPY, 0, 0, nDestPos,
                                                      MAXCOL, MAXROW, nDestPos,
                                                      0, 0, nDz, NULL);
-            // Test for outside absolute references for info box
-            bool bIsAbsRef = pSrcDoc->maTabs[nSrcPos]->TestTabRefAbs(nSrcPos);
             // Readjust self-contained absolute references to this sheet
             maTabs[nDestPos]->TestTabRefAbs(nSrcPos);
-            if (bIsAbsRef)
-            {
-                nRetVal += 1;
-                    // InfoBox AbsoluteRefs sind moeglicherweise nicht mehr korrekt!!
-            }
             if (bNamesLost)
             {
                 nRetVal += 2;

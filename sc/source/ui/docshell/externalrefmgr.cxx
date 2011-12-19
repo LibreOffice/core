@@ -2092,13 +2092,28 @@ const ScDocument* ScExternalRefManager::getInMemorySrcDocument(sal_uInt16 nFileI
     while (pShell)
     {
         SfxMedium* pMedium = pShell->GetMedium();
-        if (pMedium)
+        if (pMedium && pMedium->GetName().Len())
         {
             OUString aName = pMedium->GetName();
             // TODO: We should make the case sensitivity platform dependent.
             if (pFileName->equalsIgnoreAsciiCase(aName))
             {
                 // Found !
+                pSrcDoc = pShell->GetDocument();
+                break;
+            }
+        }
+        else
+        {
+            // handle unsaved documents here
+            OUString aName = pShell->GetName();
+            if (pFileName->equalsIgnoreAsciiCase(aName))
+            {
+                // Found !
+                SrcShell aSrcDoc;
+                aSrcDoc.maShell = pShell;
+                maUnsavedDocShells.insert(DocShellMap::value_type(nFileId, aSrcDoc));
+                StartListening(*pShell);
                 pSrcDoc = pShell->GetDocument();
                 break;
             }
@@ -2642,6 +2657,41 @@ sal_uInt32 ScExternalRefManager::getMappedNumberFormat(sal_uInt16 nFileId, sal_u
         return itrNumFmt->second;
 
     return nNumFmt;
+}
+
+void ScExternalRefManager::transformUnsavedRefToSavedRef( SfxObjectShell* pShell )
+{
+    for(DocShellMap::iterator itr = maUnsavedDocShells.begin();
+            itr != maUnsavedDocShells.end(); ++itr)
+    {
+        if (&(itr->second.maShell) == pShell)
+        {
+            // found that the shell is marked as unsaved
+            rtl::OUString aFileURL = pShell->GetMedium()->GetURLObject().GetMainURL(INetURLObject::DECODE_TO_IURI);
+            switchSrcFile(itr->first, aFileURL, rtl::OUString());
+            EndListening(*pShell);
+        }
+    }
+}
+
+void ScExternalRefManager::Notify( SfxBroadcaster&, const SfxHint& rHint )
+{
+    if ( rHint.ISA( SfxEventHint ) )
+    {
+        sal_uLong nEventId = ((SfxEventHint&)rHint).GetEventId();
+        switch ( nEventId )
+        {
+            case SFX_EVENT_SAVEDOCDONE:
+            case SFX_EVENT_SAVEASDOCDONE:
+                {
+                    SfxObjectShell* pObjShell = static_cast<const SfxEventHint&>( rHint ).GetObjShell();
+                    transformUnsavedRefToSavedRef(pObjShell);
+                }
+                break;
+            default:
+                break;
+        }
+    }
 }
 
 IMPL_LINK(ScExternalRefManager, TimeOutHdl, AutoTimer*, pTimer)

@@ -926,21 +926,11 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                     pSheetSaveData->SetInSupportedSave(true);
                 break;
             case SFX_EVENT_SAVEDOCDONE:
-                {
-                    if ( IsDocShared() && !SC_MOD()->IsInSharedDocSaving() )
-                    {
-                    }
-                    UseSheetSaveEntries();      // use positions from saved file for next saving
-                    if (pSheetSaveData)
-                        pSheetSaveData->SetInSupportedSave(false);
-                }
-                break;
             case SFX_EVENT_SAVEASDOCDONE:
-                // new positions are used after "save" and "save as", but not "save to"
-                UseSheetSaveEntries();      // use positions from saved file for next saving
-                if (pSheetSaveData)
-                    pSheetSaveData->SetInSupportedSave(false);
-                break;
+                {
+                    // new positions are used after "save" and "save as", but not "save to"
+                    UseSheetSaveEntries();      // use positions from saved file for next saving
+                } // fall through
             case SFX_EVENT_SAVETODOCDONE:
                 // only reset the flag, don't use the new positions
                 if (pSheetSaveData)

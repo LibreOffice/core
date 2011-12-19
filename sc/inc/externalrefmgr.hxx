@@ -33,9 +33,11 @@
 #include "address.hxx"
 #include "sfx2/objsh.hxx"
 #include "sfx2/lnkbase.hxx"
+#include "sfx2/event.hxx"
 #include "tools/time.hxx"
 #include "vcl/timer.hxx"
 #include "svl/zforlist.hxx"
+#include "svl/lstner.hxx"
 #include "scmatrix.hxx"
 #include "rangelst.hxx"
 #include "formula/token.hxx"
@@ -46,6 +48,7 @@
 #include <vector>
 #include <list>
 #include <set>
+#include <iostream>
 #include <formula/ExternalReferenceHelper.hxx>
 
 class ScDocument;
@@ -353,7 +356,7 @@ private:
     mutable DocDataType maDocs;
 };
 
-class SC_DLLPUBLIC ScExternalRefManager : public formula::ExternalReferenceHelper
+class SC_DLLPUBLIC ScExternalRefManager : public formula::ExternalReferenceHelper, SfxListener
 {
 public:
 
@@ -426,6 +429,7 @@ public:
         ::rtl::OUString maRelativeName;
         ::rtl::OUString maFilterName;
         ::rtl::OUString maFilterOptions;
+        bool bUnsaved;
 
         void maybeCreateRealFileName(const String& rOwnDocName);
     };
@@ -673,6 +677,16 @@ public:
      */
     bool isFileLoadable(const ::rtl::OUString& rFile) const;
 
+    /**
+     * If in maUnsavedDocShells move it to maDocShells and create a correct
+     * external reference entry
+     *
+     * @param Pointer to the newly saved DocumentShell
+     */
+    void transformUnsavedRefToSavedRef( SfxObjectShell* pShell );
+
+    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+
 private:
     ScExternalRefManager();
     ScExternalRefManager(const ScExternalRefManager&);
@@ -749,6 +763,13 @@ private:
 
     sal_uInt32 getMappedNumberFormat(sal_uInt16 nFileId, sal_uInt32 nNumFmt, const ScDocument* pSrcDoc);
 
+    /**
+     * If we still contain unsaved files we should warn the user before saving
+     *
+     * @return true if the document still contains references to an unsaved file
+     */
+    bool containsUnsavedReferences() { return !maUnsavedDocShells.empty(); }
+
 private:
     /** cache of referenced ranges and names from source documents. */
     ScExternalRefCache maRefCache;
@@ -760,6 +781,12 @@ private:
      * instances.  They get purged after a certain period of time.
      */
     DocShellMap maDocShells;
+
+    /**
+     * DocShells to unsaved but referenced documents. If not empty ask before saving!
+     * Move to maDocShells if document referenced here is saved
+     */
+    DocShellMap maUnsavedDocShells;
 
     /** list of source documents that are managed by the link manager. */
     LinkedDocMap maLinkedDocs;

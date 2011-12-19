@@ -1829,6 +1829,8 @@ void GetExternalTableData(const ScDocument* pOldDoc, const ScDocument* pNewDoc, 
     std::cout << aFileName << std::endl;
     rFileId = pNewDoc->GetExternalRefManager()->getExternalFileId(aFileName);
     rTabName = pOldDoc->GetCopyTabName(nTab);
+    if (rTabName.isEmpty())
+        pOldDoc->GetName(nTab, rTabName);
     std::cout << "TabName: " << rTabName << std::endl;
 }
 
