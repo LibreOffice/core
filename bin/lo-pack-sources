@@ -68,55 +68,16 @@ sub get_release_version($$$$)
     return $release_version;
 }
 
-
-sub generate_lo_piece_blacklist($)
-{
-    my ($blacklist) = @_;
-
-    # FIXME: crazy hacks to copy libreoffice-build without too big and useless subdirectories and to show a progress
-    open (BLACKLIST, ">$blacklist") || die "Can't open $blacklist: $!\n";
-
-    # IMPORTANT: Do not remove .git directories because "git log" is called during "make dist"
-    print BLACKLIST ".git\n";
-    print BLACKLIST ".gitignore\n";
-    print BLACKLIST ".gitattributes\n";
-    print BLACKLIST "autom4te.cache/*\n";
-    print BLACKLIST "autom4te.cache\n";
-    print BLACKLIST "autogen.lastrun\n";
-    print BLACKLIST "clone/*\n";
-    print BLACKLIST "config.log\n";
-    print BLACKLIST "git-hooks\n";
-    print BLACKLIST "Env.Host.sh\n";
-    print BLACKLIST "src/tmp*\n";
-    print BLACKLIST "src/fetch.log\n";
-    print BLACKLIST "src/libreoffice-*.tar.bz2\n";
-    print BLACKLIST "src/????????????????????????????????-*\n";
-    print BLACKLIST "warn\n";
-
-    close BLACKLIST;
-}
-
-# remove symlinks to clone subdir
-sub remove_module_symlinks($$)
-{
-    my ($tempdir, $piece_tarball_name) = @_;
-
-    print STDERR "find $tempdir/$piece_tarball_name -mindepth 1 -maxdepth 1 -type l -exec rm {} \\;\n";
-    system ("find $tempdir/$piece_tarball_name -mindepth 1 -maxdepth 1 -type l -exec rm {} \\;") &&
-        die "Error: can't delete symlinks to clone dir in $tempdir: $!\n";
-}
-
-
 # copy files to temp dir; showing a progress; using a black list
-sub copy_dir_filter_and_show_progress($$$)
+sub copy_dir_filter_and_show_progress($$)
 {
-    my ($source_dir, $target_dir, $blacklist) = @_;
+    my ($source_dir, $target_dir) = @_;
 
     print "Copying \"$source_dir\" -> \"$target_dir\"...";
-    # FIXME: crazy hacks to copy dir with a blacklist and showing a progress
-    system ("tar -cf - -C $source_dir -X $blacklist \.\/ | " .
-            "tar -xf - -C $target_dir --checkpoint 2>&1 | " .
-            "awk '{ ORS=\"\" ; if (++nlines\%50 == 0) printf \".\"; fflush() }'") &&
+    # copy sources from git and show progress
+    system ("cd $source_dir && " .
+            "git archive --format=tar HEAD | " .
+            "  tar -xf - -C $target_dir --checkpoint=500 --checkpoint-action=exec=\"echo -n .\"") &&
         die "Error: copying failed: $!\n";
     print "\n";
 }
@@ -126,18 +87,10 @@ sub copy_dir_filter_and_show_progress($$$)
 sub copy_lo_piece_to_tempdir($$$)
 {
     my ($piece_dir, $piece, $piece_tarball_name) = @_;
-
-
     my $tempdir = tempdir( 'libreoffice-XXXXXX', DIR => File::Spec->tmpdir );
-    my $blacklist = "$tempdir/libreoffice-$piece.copy.blacklist";
 
     mkdir "$tempdir/$piece_tarball_name" || die "Can't create directory \"$tempdir/$piece_tarball_name\": $!\n";
-
-    generate_lo_piece_blacklist($blacklist);
-    copy_dir_filter_and_show_progress("$piece_dir", "$tempdir/$piece_tarball_name", $blacklist);
-    remove_module_symlinks($tempdir, $piece_tarball_name);
-
-    unlink $blacklist;
+    copy_dir_filter_and_show_progress("$piece_dir", "$tempdir/$piece_tarball_name");
 
     return $tempdir;
 }
@@ -146,8 +99,7 @@ sub generate_lo_piece_changelog($$$)
 {
     my ($lo_piece_clone, $lo_piece_release_dir, $piece) = @_;
     print "Generating changelog for $piece...\n";
-    print "1:$lo_piece_clone, 2:$lo_piece_release_dir, 3:$piece\n";
-    # FIXME: crazy hacks to copy dir with a blacklist and showing a progress
+#    print "1:$lo_piece_clone, 2:$lo_piece_release_dir, 3:$piece\n";
     system ("cd $lo_piece_clone && " .
             "git log --date=short --pretty='format:@%cd  %an  <%ae>  [%H]%n%n%s%n%n%e%b' | " .
             "  sed -e 's|^\([^@]\)|\t\1|' -e 's|^@||' >$lo_piece_release_dir/ChangeLog" ) &&
