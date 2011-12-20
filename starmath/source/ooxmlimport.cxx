@@ -116,6 +116,9 @@ OUString SmOoxmlImport::readOMathArg()
             case OPENING( M_TOKEN( d )):
                 ret += handleD();
                 break;
+            case OPENING( M_TOKEN( eqArr )):
+                ret += handleEqArr();
+                break;
             case OPENING( M_TOKEN( f )):
                 ret += handleF();
                 break;
@@ -356,6 +359,22 @@ OUString SmOoxmlImport::handleD()
     ret.append( closing );
     stream.ensureClosingTag( M_TOKEN( d ));
     return ret.makeStringAndClear();
+}
+
+OUString SmOoxmlImport::handleEqArr()
+{
+    stream.ensureOpeningTag( M_TOKEN( eqArr ));
+    OUString ret;
+    do
+    { // there must be at least one m:e
+        if( !ret.isEmpty())
+            ret += STR( "#" );
+        ret += STR( " " );
+        ret += readOMathArgInElement( M_TOKEN( e ));
+        ret += STR( " " );
+    } while( !stream.atEnd() && stream.findTag( OPENING( M_TOKEN( e ))));
+    stream.ensureClosingTag( M_TOKEN( eqArr ));
+    return STR( "stack {" ) + ret + STR( "}" );
 }
 
 OUString SmOoxmlImport::handleF()
