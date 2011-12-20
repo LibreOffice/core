@@ -43,4 +43,10 @@ $(eval $(call gb_Module_add_targets,connectivity,\
 ))
 endif
 
+ifeq ($(GUI),WNT)
+$(eval $(call gb_Module_add_targets,connectivity,\
+	Library_ado \
+))
+endif
+
 # vim: set noet sw=4 ts=4:

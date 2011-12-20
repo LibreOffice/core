@@ -212,6 +212,9 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     PptImporter \
     abp \
     acc \
+	adabas \
+	adabasui \
+	ado \
     agg \
     analysis \
     animcore \
@@ -226,6 +229,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     odbc \
     odbcbase \
     oox \
+	ooxml \
     sdbc \
     AppleRemote \
     avmedia \
