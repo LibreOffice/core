@@ -1005,6 +1005,13 @@ void DomainMapper_Impl::finishParagraph( PropertyMapPtr pPropertyMap )
                 {
                     //handles (8)(9) and completes (6)
                     CheckUnregisteredFrameConversion( );
+
+                    // If different frame properties are set on this paragraph, keep them.
+                    if ( !bIsDropCap && pParaContext->IsFrameMode() )
+                    {
+                        pToBeSavedProperties.reset( new ParagraphProperties(*pParaContext) );
+                        lcl_AddRangeAndStyle(pToBeSavedProperties, xTextAppend, pPropertyMap);
+                    }
                 }
 
             }
