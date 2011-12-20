@@ -96,11 +96,13 @@ endef
 # source files are forwarded to the ClassSet
 define gb_Jar_add_sourcefile
 $(call gb_JavaClassSet_add_sourcefile,$(call gb_Jar_get_classsetname,$(1)),$(2))
+
 endef
 
 # PACKAGEROOTS is the list of all root folders to pack into the jar (without META-INF as this is added automatically)
 define gb_Jar_set_packageroot
 $(call gb_Jar_get_target,$(1)) : PACKAGEROOTS := $(2)
+
 endef
 
 # PACKAGEFILES is the list of all root files to pack into the jar
@@ -115,16 +117,18 @@ endef
 
 define gb_Jar_add_sourcefiles
 $(foreach sourcefile,$(2),$(call gb_Jar_add_sourcefile,$(1),$(sourcefile)))
+
 endef
 
 define gb_JarTest_set_classpath
 $(call gb_JavaClassSet_set_classpath,$(call gb_Jar_get_classsetname,$(1)),$(2))
+
 endef
 
 # JARCLASSPATH is the class path that is written to the manifest of the jar
 define gb_Jar_set_jarclasspath
-
 $(call gb_Jar_get_target,$(1)) : JARCLASSPATH := $(2)
+
 endef
 
 # provide a manifest template containing jar specific information to be written into the manifest
@@ -139,27 +143,33 @@ endef
 # remember: classpath is "inherited" to ClassSet
 define gb_Jar_add_jar
 $(call gb_JavaClassSet_add_jar,$(call gb_Jar_get_classsetname,$(1)),$(2))
+
 endef
 
 define gb_Jar_add_system_jar
 $(call gb_JavaClassSet_add_system_jar,$(call gb_Jar_get_classsetname,$(1)),$(2))
+
 endef
 
 # specify jars with imported modules
 define gb_Jar_add_jars
 $(call gb_JavaClassSet_add_jars,$(call gb_Jar_get_classsetname,$(1)),$(2))
+
 endef
 
 define gb_Jar_add_system_jars
 $(call gb_JavaClassSet_add_system_jars,$(call gb_Jar_get_classsetname,$(1)),$(2))
+
 endef
 
 define gb_Jar_use_external
 $(call gb_JavaClassSet_use_external,$(call gb_Jar_get_classsetname,$(1)),$(2))
+
 endef
 
 define gb_Jar_use_externals
 $(call gb_JavaClassSet_use_externals,$(call gb_Jar_get_classsetname,$(1)),$(2))
+
 endef
 
 # possible directories for jar files containing UNO services 
