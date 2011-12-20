@@ -101,7 +101,6 @@ public:
     static com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > GetMacroRecorder( SfxViewFrame* pFrame=NULL );
     static sal_Bool         HasMacroRecorder( SfxViewFrame* pFrame=NULL );
     sal_uInt16              GetCallMode() const;
-    bool                IsRecording() const;
     void                AllowRecording( sal_Bool );
     sal_Bool                AllowsRecording() const;
     sal_Bool                IsAPI() const;
