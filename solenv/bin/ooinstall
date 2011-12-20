@@ -116,6 +116,15 @@ if ($is_windows) {
            "-msilanguage $ENV{SRC_ROOT}/instsetoo_native/$ENV{INPATH}/misc/win_ulffiles";
 }
 
+# FIXME: a better solution would be to fix installer to deal with broken symlinks
+# make distro-pack-install shufle with the SDK installation to make it LSB compliant
+# it creates symlinks from the orignal path to /usr/share; they are not valid with $DESTDIR
+# and potential second ooinstall call fails with strange error messages if the old tree is still there
+if ($destdir && "$ENV{DESTDIR}" ne "/" && -d "$ENV{DESTDIR}") {
+    print "Cleaning destdir...\n";
+    system ("rm -rf \"$ENV{DESTDIR}\"") && die "Failed to clean up destdir: $!";
+}
+
 print "Running LibreOffice installer\n";
 system ("cd $ENV{SRC_ROOT}/instsetoo_native/util ; " .
 	"perl -w $ENV{SOLARENV}/bin/make_installer.pl " .
