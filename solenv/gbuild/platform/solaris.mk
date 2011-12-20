@@ -160,7 +160,7 @@ gb_Helper_OUTDIRLIBDIR := $(OUTDIR)/lib
 # CObject class
 
 define gb_CObject__command
-$(call gb_Output_announce,$(2),$(true),C  ,3)
+$(call gb_Output_announce,$(2).c,$(true),C  ,3)
 $(call gb_Helper_abbreviate_dirs,\
 	rm -f $(4) && \
 	mkdir -p $(dir $(1)) $(dir $(4)) && \

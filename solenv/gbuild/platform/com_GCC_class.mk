@@ -25,7 +25,7 @@
 
 # $(call gb_CObject__command,object,relative-source,source,dep-file)
 define gb_CObject__command
-$(call gb_Output_announce,$(2),$(true),C  ,3)
+$(call gb_Output_announce,$(2).c,$(true),C  ,3)
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) $(dir $(4)) && \
 	$(gb_CC) \
