@@ -233,14 +233,14 @@ XmlStream::Tag XmlStream::checkTag( int token, bool optional )
     if( optional )
     { // avoid printing debug messages about skipping tags if the optional one
       // will not be found and the position will be reset back
-        if( currentToken() != token && !recoverAndFindTagInternal( token, true ))
+        if( currentToken() != token && !findTagInternal( token, true ))
         {
             pos = savedPos;
             return Tag();
         }
     }
 #endif
-    if( currentToken() == token || recoverAndFindTag( token ))
+    if( currentToken() == token || findTag( token ))
     {
         Tag ret = currentTag();
         moveToNextTag();
@@ -255,12 +255,12 @@ XmlStream::Tag XmlStream::checkTag( int token, bool optional )
     return Tag();
 }
 
-bool XmlStream::recoverAndFindTag( int token )
+bool XmlStream::findTag( int token )
 {
-    return recoverAndFindTagInternal( token, false );
+    return findTagInternal( token, false );
 }
 
-bool XmlStream::recoverAndFindTagInternal( int token, bool /*silent*/ )
+bool XmlStream::findTagInternal( int token, bool /*silent*/ )
 {
     int depth = 0;
     for(;
@@ -320,7 +320,7 @@ void XmlStream::skipElementInternal( int token, bool /*silent*/ )
 //        fprintf( stderr, "Skipping unexpected element %s\n", CSTR( tokenToString( currentToken())));
     moveToNextTag();
     // and just find the matching closing tag
-    if( recoverAndFindTag( closing ))
+    if( findTag( closing ))
     {
 //        if( !silent )
 //            fprintf( stderr, "Skipped unexpected element %s\n", CSTR( tokenToString( token )));

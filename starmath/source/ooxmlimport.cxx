@@ -346,7 +346,7 @@ OUString SmOoxmlImport::handleD()
     OUStringBuffer ret;
     ret.append( opening );
     bool first = true;
-    while( stream.currentToken() == OPENING( M_TOKEN( e )))
+    while( stream.findTag( OPENING( M_TOKEN( e ))))
     {
         if( !first )
             ret.append( separator );
@@ -464,12 +464,12 @@ OUString SmOoxmlImport::handleM()
             if( !row.isEmpty())
                 row += STR( " # " );
             row += readOMathArgInElement( M_TOKEN( e ));
-        } while( !stream.atEnd() && stream.currentToken() == OPENING( M_TOKEN( e )));
+        } while( !stream.atEnd() && stream.findTag( OPENING( M_TOKEN( e ))));
         if( !allrows.isEmpty())
             allrows += STR( " ## " );
         allrows += row;
         stream.ensureClosingTag( M_TOKEN( mr ));
-    } while( !stream.atEnd() && stream.currentToken() == OPENING( M_TOKEN( mr )));
+    } while( !stream.atEnd() && stream.findTag( OPENING( M_TOKEN( mr ))));
     stream.ensureClosingTag( M_TOKEN( m ));
     return STR( "matrix {" ) + allrows + STR( "}" );
 }
