@@ -64,9 +64,10 @@ $(eval $(call gb_Module_add_check_targets,sal,\
 ))
 
 # CppunitTest_sal_osl_pipe has circular dependency on unotest
-$(eval $(call gb_Module_add_subsequentcheck_targets,sal,\
+# $(eval $(call gb_Module_add_subsequentcheck_targets,sal,\
 	CppunitTest_sal_osl_pipe \
 ))
+
 # error when building test-getsystempathfromfileurl.cxx \
 	CppunitTest_sal_osl_getsystempathfromfileurl \
 
