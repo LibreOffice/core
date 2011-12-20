@@ -346,7 +346,7 @@ void SwView::SpellStart( SvxSpellArea eWhich,
     Beschreibung: Fehlermeldung beim Spelling
  --------------------------------------------------------------------*/
 // Der uebergebene Pointer nLang ist selbst der Wert
-IMPL_LINK( SwView, SpellError, LanguageType *, pLang )
+void SwView::SpellError(LanguageType eLang)
 {
 #if OSL_DEBUG_LEVEL > 1
     sal_Bool bFocus = GetEditWin().HasFocus();
@@ -364,7 +364,6 @@ IMPL_LINK( SwView, SpellError, LanguageType *, pLang )
         }
         while( pWrtShell->ActionPend() );
     }
-    LanguageType eLang = pLang ? *pLang : LANGUAGE_NONE;
     String aErr(SvtLanguageTable::GetLanguageString( eLang ) );
 
     SwEditWin &rEditWin = GetEditWin();
@@ -402,7 +401,6 @@ IMPL_LINK( SwView, SpellError, LanguageType *, pLang )
         GetEditWin().GrabFocus();
 #endif
 
-    return 0;
 }
 
 /*--------------------------------------------------------------------
@@ -588,8 +586,7 @@ void SwView::StartThesaurus()
 
     if( eLang == LANGUAGE_DONTKNOW || eLang == LANGUAGE_NONE )
     {
-        LanguageType nLanguage = LANGUAGE_NONE;
-        SpellError( &nLanguage );
+        SpellError( LANGUAGE_NONE );
         return;
     }
 
@@ -605,7 +602,7 @@ void SwView::StartThesaurus()
     AbstractThesaurusDialog *pDlg = NULL;
 
     if ( !xThes.is() || !xThes->hasLocale( SvxCreateLocale( eLang ) ) )
-        SpellError( &eLang );
+        SpellError( eLang );
     else
     {
         // create dialog

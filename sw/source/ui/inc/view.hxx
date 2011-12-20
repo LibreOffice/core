@@ -466,7 +466,7 @@ public:
     long        SetVScrollMax(long lMax);
     long        SetHScrollMax(long lMax);
 
-    DECL_LINK( SpellError, LanguageType * );
+    void SpellError(LanguageType eLang);
     sal_Bool            ExecSpellPopup( const Point& rPt );
     void                ExecFieldPopup( const Point& rPt, sw::mark::IFieldmark *fieldBM );
 
