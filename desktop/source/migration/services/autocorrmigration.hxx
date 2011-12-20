@@ -49,9 +49,6 @@ namespace migration
 
     ::rtl::OUString SAL_CALL AutocorrectionMigration_getImplementationName();
     ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL AutocorrectionMigration_getSupportedServiceNames();
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL AutocorrectionMigration_create(
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & xContext )
-        SAL_THROW( (::com::sun::star::uno::Exception) );
 
 
     // =============================================================================

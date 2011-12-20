@@ -266,17 +266,6 @@ namespace migration
         return Any();
     }
 
-    // =============================================================================
-    // component operations
-    // =============================================================================
-
-    Reference< XInterface > SAL_CALL AutocorrectionMigration_create(
-        Reference< XComponentContext > const & )
-        SAL_THROW( () )
-    {
-        return static_cast< lang::XTypeProvider * >( new AutocorrectionMigration() );
-    }
-
     // -----------------------------------------------------------------------------
 
 //.........................................................................
