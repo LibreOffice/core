@@ -49,7 +49,7 @@ private:
     rtl::OUString handleBox();
     rtl::OUString handleBorderBox();
     rtl::OUString handleD();
-    rtl::OUString handleE();
+    rtl::OUString handleEqArr();
     rtl::OUString handleF();
     rtl::OUString handleFunc();
     enum LimLowUpp_t { LimLow, LimUpp };
