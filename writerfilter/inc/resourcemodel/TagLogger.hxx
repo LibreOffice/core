@@ -74,8 +74,6 @@ namespace writerfilter
         void unoPropertySet(uno::Reference<beans::XPropertySet> rPropSet);
 #endif
         void attribute(const std::string & name, const std::string & value);
-        void attribute(const std::string & name, const ::rtl::OUString & value);
-        void chars(const std::string & chars);
 
 #ifdef DEBUG_CONTEXT_HANDLER
         void propertySet(writerfilter::Reference<Properties>::Pointer_t props,

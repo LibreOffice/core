@@ -166,18 +166,6 @@ namespace writerfilter
         xmlFree( xmlName );
     }
 
-    void TagLogger::attribute(const string & name, const ::rtl::OUString & value)
-    {
-        attribute( name, OUStringToOString( value, RTL_TEXTENCODING_ASCII_US ).getStr() );
-    }
-
-    void TagLogger::chars(const string & rChars)
-    {
-        xmlChar* xmlChars = xmlCharStrdup( rChars.c_str() );
-        xmlTextWriterWriteString( pWriter, xmlChars );
-        xmlFree( xmlChars );
-    }
-
 #ifdef DEBUG_CONTEXT_HANDLER
     class PropertySetDumpHandler : public Properties
     {
