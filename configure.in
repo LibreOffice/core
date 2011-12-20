@@ -3346,12 +3346,22 @@ if test "$_os" != "WINNT" -o "$WITH_MINGW" = "yes"; then
             AC_CHECK_ALIGNOF(double,[#include <stddef.h>])
         ],
         [
-           if test -z "$ac_cv_alignof_short" -o \
-                   -z "$ac_cv_alignof_int" -o \
-                   -z "$ac_cv_alignof_long" -o \
-                   -z "$ac_cv_alignof_double"; then
-              AC_MSG_ERROR([Your Autoconf doesn't have [AC_][CHECK_ALIGNOF]. You need to set the environment variables ac_cv_alignof_short, ac_cv_alignof_int, ac_cv_alignof_long and ac_cv_alignof_double.])
-           fi
+            case "$_os-$host_cpu" in
+            Darwin-powerpc)
+                test -z "$ac_cv_alignof_short" && ac_cv_alignof_short=1
+                test -z "$ac_cv_alignof_int" && ac_cv_alignof_int=1
+                test -z "$ac_cv_alignof_long" && ac_cv_alignof_long=1
+                test -z "$ac_cv_alignof_double" && ac_cv_alignof_double=1
+                ;;
+            *)
+                if test -z "$ac_cv_alignof_short" -o \
+                        -z "$ac_cv_alignof_int" -o \
+                        -z "$ac_cv_alignof_long" -o \
+                        -z "$ac_cv_alignof_double"; then
+                   AC_MSG_ERROR([Your Autoconf doesn't have [AC_][CHECK_ALIGNOF]. You need to set the environment variables ac_cv_alignof_short, ac_cv_alignof_int, ac_cv_alignof_long and ac_cv_alignof_double.])
+                fi
+                ;;
+            esac
         ])
 
     ALIGNOF_SHORT=$ac_cv_alignof_short
