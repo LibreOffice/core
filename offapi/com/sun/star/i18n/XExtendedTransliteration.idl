@@ -29,7 +29,7 @@
 #define __com_sun_star_i18n_XExtendedTransliteration_idl__
 
 #include <com/sun/star/i18n/XTransliteration.idl>
-#include <com/sun/star/i18n/MultipleCharsOutputException.idl>
+#include <MultipleCharsOutputException.idl>
 
 //=============================================================================
 

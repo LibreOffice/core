@@ -28,7 +28,7 @@
 #ifndef __com_sun_star_linguistic2_LanguageGuessing_idl__
 #define __com_sun_star_linguistic2_LanguageGuessing_idl__
 
-#include <com/sun/star/linguistic2/XLanguageGuessing.idl>
+#include <XLanguageGuessing.idl>
 
 module com { module sun { module star { module linguistic2 {
 
