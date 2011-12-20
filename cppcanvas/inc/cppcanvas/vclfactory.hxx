@@ -77,44 +77,17 @@ namespace cppcanvas
     public:
         static VCLFactory& getInstance();
 
-        BitmapCanvasSharedPtr   createCanvas( const ::Window& rVCLWindow );
         BitmapCanvasSharedPtr   createCanvas( const ::com::sun::star::uno::Reference<
                                                           ::com::sun::star::rendering::XBitmapCanvas >& xCanvas );
 
         SpriteCanvasSharedPtr   createSpriteCanvas( const ::Window& rVCLWindow ) const;
         SpriteCanvasSharedPtr   createSpriteCanvas( const ::com::sun::star::uno::Reference<
                                                                ::com::sun::star::rendering::XSpriteCanvas >& xCanvas ) const;
-        SpriteCanvasSharedPtr   createFullscreenSpriteCanvas( const ::Window& rVCLWindow, const Size& rFullscreenSize ) const;
-
-        /** Create a polygon from a tools::Polygon
-
-            The created polygon initially has the same size in user
-            coordinate space as the source polygon
-         */
-        PolyPolygonSharedPtr    createPolyPolygon( const CanvasSharedPtr&, const ::Polygon& rPoly ) const;
-        PolyPolygonSharedPtr    createPolyPolygon( const CanvasSharedPtr&, const ::PolyPolygon& rPoly ) const;
-
-        /** Create an uninitialized bitmap with the given size
-         */
-        BitmapSharedPtr         createBitmap( const CanvasSharedPtr&, const ::Size& rSize ) const;
-
-        /** Create an uninitialized alpha bitmap with the given size
-         */
-        BitmapSharedPtr         createAlphaBitmap( const CanvasSharedPtr&, const ::Size& rSize ) const;
 
         /** Create a bitmap from a VCL Bitmap
          */
-        BitmapSharedPtr         createBitmap( const CanvasSharedPtr&, const ::Bitmap& rBitmap ) const;
         BitmapSharedPtr         createBitmap( const CanvasSharedPtr&, const ::BitmapEx& rBmpEx ) const;
 
-        /** Create a renderer object from a Graphic
-
-            The created renderer initially draws the graphic
-            one-by-one units large, in user coordinate space
-         */
-        RendererSharedPtr       createRenderer( const CanvasSharedPtr&          rCanvas,
-                                                const ::Graphic&                rGraphic,
-                                                const Renderer::Parameters&     rParms ) const;
         /** Create a renderer object from a Metafile
 
             The created renderer initially draws the metafile
@@ -123,14 +96,6 @@ namespace cppcanvas
         RendererSharedPtr       createRenderer( const CanvasSharedPtr&          rCanvas,
                                                 const ::GDIMetaFile&            rMtf,
                                                 const Renderer::Parameters&     rParms ) const;
-
-        /** Create an animated sprite from a VCL animation
-         */
-        SpriteSharedPtr         createAnimatedSprite( const SpriteCanvasSharedPtr&, const ::Animation& rAnim ) const;
-
-        /** Create a text portion with the given content string
-         */
-        TextSharedPtr           createText( const CanvasSharedPtr&, const ::rtl::OUString& ) const;
 
     private:
         friend struct InitInstance;
