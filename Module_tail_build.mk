@@ -28,6 +28,7 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
     animations \
     avmedia \
     basctl \
+    basic \
     bean \
     canvas \
     chart2 \
