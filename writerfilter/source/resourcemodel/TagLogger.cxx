@@ -156,13 +156,6 @@ namespace writerfilter
 
 #endif
 
-    void TagLogger::startElement(const string & name)
-    {
-        xmlChar* xmlName = xmlCharStrdup( name.c_str() );
-        xmlTextWriterStartElement( pWriter, xmlName );
-        xmlFree( xmlName );
-    }
-
     void TagLogger::attribute(const string & name, const string & value)
     {
         xmlChar* xmlName = xmlCharStrdup( name.c_str() );
@@ -178,57 +171,11 @@ namespace writerfilter
         attribute( name, OUStringToOString( value, RTL_TEXTENCODING_ASCII_US ).getStr() );
     }
 
-    void TagLogger::attribute(const string & name, sal_uInt32 value)
-    {
-        xmlChar* xmlName = xmlCharStrdup( name.c_str() );
-        xmlTextWriterWriteFormatAttribute( pWriter, xmlName,
-               "%" SAL_PRIuUINT32, value );
-        xmlFree( xmlName );
-    }
-
-    void TagLogger::attribute(const string & name, const uno::Any aAny)
-    {
-        string aTmpStrInt;
-        string aTmpStrFloat;
-        string aTmpStrString;
-
-        sal_Int32 nInt = 0;
-        float nFloat = 0.0;
-        ::rtl::OUString aStr;
-
-        xmlChar* xmlName = xmlCharStrdup( name.c_str() );
-        if ( aAny >>= nInt )
-        {
-            xmlTextWriterWriteFormatAttribute( pWriter, xmlName,
-                   "%" SAL_PRIdINT32, nInt );
-        }
-        else if ( aAny >>= nFloat )
-        {
-            xmlTextWriterWriteFormatAttribute( pWriter, xmlName,
-                   "%f", nFloat );
-        }
-        else if ( aAny >>= aStr )
-        {
-            attribute( name, aStr );
-        }
-        xmlFree( xmlName );
-    }
-
     void TagLogger::chars(const string & rChars)
     {
         xmlChar* xmlChars = xmlCharStrdup( rChars.c_str() );
         xmlTextWriterWriteString( pWriter, xmlChars );
         xmlFree( xmlChars );
-    }
-
-    void TagLogger::chars(const ::rtl::OUString & rChars)
-    {
-        chars(OUStringToOString(rChars, RTL_TEXTENCODING_ASCII_US).getStr());
-    }
-
-    void TagLogger::endElement()
-    {
-        xmlTextWriterEndElement( pWriter );
     }
 
 #ifdef DEBUG_CONTEXT_HANDLER
