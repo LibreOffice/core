@@ -575,14 +575,6 @@ bool parsePaintUri( std::pair<const char*,const char*>& o_rPaintUri,
 
 //////////////////////////////////////////////////////////////
 
-namespace
-{
-void appendChar( std::string& str, char character)
-{
-    str.append(1,character);
-}
-}
-
 bool parseXlinkHref( const char* sXlinkHref, std::string& data )
 {
     using namespace ::boost::spirit::classic;
