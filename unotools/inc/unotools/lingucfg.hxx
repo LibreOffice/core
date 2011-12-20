@@ -205,10 +205,8 @@ public:
                          const com::sun::star::uno::Any &rValue );
 
     sal_Bool    GetOptions( SvtLinguOptions &rOptions ) const;
-    sal_Bool    SetOptions( const SvtLinguOptions &rOptions );
 
     sal_Bool    IsReadOnly( const rtl::OUString &rPropertyName ) const;
-    sal_Bool    IsReadOnly( sal_Int32 nPropertyHandle ) const;
 
     //!
     //! the following functions work on the 'ServiceManager' sub node of the

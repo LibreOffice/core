@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-
 #include <unotools/pathoptions.hxx>
 #include <unotools/configitem.hxx>
 #include <unotools/configmgr.hxx>
@@ -189,8 +188,6 @@ class SvtPathOptions_Impl
         rtl::OUString   UsePathVariables( const rtl::OUString& rPath ) const;
 
         ::com::sun::star::lang::Locale  GetLocale() const { return m_aLocale; }
-
-        sal_Bool            IsPathReadonly(SvtPathOptions::Pathes ePath)const;
 };
 
 // global ----------------------------------------------------------------
@@ -287,26 +284,6 @@ const String& SvtPathOptions_Impl::GetPath( SvtPathOptions::Pathes ePath )
 
     return m_aEmptyString;
 }
-// -----------------------------------------------------------------------
-sal_Bool SvtPathOptions_Impl::IsPathReadonly(SvtPathOptions::Pathes ePath)const
-{
-    ::osl::MutexGuard aGuard( m_aMutex );
-    sal_Bool bReadonly = sal_False;
-    if ( ePath < SvtPathOptions::PATH_COUNT )
-    {
-        Reference<XPropertySet> xPrSet(m_xPathSettings, UNO_QUERY);
-        if(xPrSet.is())
-        {
-            Reference<XPropertySetInfo> xInfo = xPrSet->getPropertySetInfo();
-            const char* pA = aPropNames[ePath].pPropName;
-            ::rtl::OUString sU = OUString::createFromAscii(pA);
-            Property aProperty = xInfo->getPropertyByName(sU);
-            bReadonly = 0 != (aProperty.Attributes & PropertyAttribute::READONLY);
-        }
-    }
-    return bReadonly;
-}
-// -----------------------------------------------------------------------
 
 void SvtPathOptions_Impl::SetPath( SvtPathOptions::Pathes ePath, const String& rNewPath )
 {

@@ -86,8 +86,6 @@ public:
     sal_Bool IsRubyEnabled() const              { return bRuby;             }
     sal_Bool IsChangeCaseMapEnabled() const     { return bChangeCaseMap;    }
     sal_Bool IsDoubleLinesEnabled() const       { return bDoubleLines;      }
-    sal_Bool IsEmphasisMarksEnabled() const     { return bEmphasisMarks;    }
-    sal_Bool IsVerticalCallOutEnabled() const   { return bVerticalCallOut;  }
 
     sal_Bool IsAnyEnabled() const {
         return  bCJKFont||bVerticalText||bAsianTypography||bJapaneseFind||
@@ -447,18 +445,6 @@ sal_Bool SvtCJKOptions::IsDoubleLinesEnabled() const
 {
     DBG_ASSERT(pCJKOptions->IsLoaded(), "CJK options not loaded");
     return pCJKOptions->IsDoubleLinesEnabled();
-}
-// -----------------------------------------------------------------------
-sal_Bool SvtCJKOptions::IsEmphasisMarksEnabled() const
-{
-    DBG_ASSERT(pCJKOptions->IsLoaded(), "CJK options not loaded");
-    return pCJKOptions->IsEmphasisMarksEnabled();
-}
-// -----------------------------------------------------------------------
-sal_Bool SvtCJKOptions::IsVerticalCallOutEnabled() const
-{
-    DBG_ASSERT(pCJKOptions->IsLoaded(), "CJK options not loaded");
-    return pCJKOptions->IsVerticalCallOutEnabled();
 }
 
 void        SvtCJKOptions::SetAll(sal_Bool bSet)

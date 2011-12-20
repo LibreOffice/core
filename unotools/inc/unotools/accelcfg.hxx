@@ -68,18 +68,8 @@ public:
                     // save the configuration to a stream, f.e. into a document
     bool            Commit( SvStream& rStream );
 
-                    // returns the configured URL for a KeyEvent
-    ::rtl::OUString GetCommand( const ::com::sun::star::awt::KeyEvent& rKeyEvent );
-
-                    // returns the whole configuration
-    const SvtAcceleratorItemList& GetItems();
-
                     // sets a single configuration item
     void            SetCommand( const SvtAcceleratorConfigItem& rItem );
-
-                    // sets several or all configuration items
-                    // if bClear=sal_False, all items not in the sequence remain unchanged
-    void            SetItems( const SvtAcceleratorItemList& rItems, bool bClear );
 };
 
 #endif

@@ -26,10 +26,6 @@
  *
  ************************************************************************/
 
-//_________________________________________________________________________________________________________________
-//  includes
-//_________________________________________________________________________________________________________________
-
 #include <svtools/miscopt.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/configitem.hxx>
@@ -49,19 +45,11 @@
 
 #include <list>
 
-//_________________________________________________________________________________________________________________
-//  namespaces
-//_________________________________________________________________________________________________________________
-
 using namespace ::utl                   ;
 using namespace ::rtl                   ;
 using namespace ::osl                   ;
 using namespace ::com::sun::star::uno   ;
 using namespace ::com::sun::star;
-
-//_________________________________________________________________________________________________________________
-//  const
-//_________________________________________________________________________________________________________________
 
 #define ASCII_STR(s)                        OUString( RTL_CONSTASCII_USTRINGPARAM(s) )
 #define ROOTNODE_MISC                       ASCII_STR("Office.Common/Misc")
@@ -94,16 +82,8 @@ using namespace ::com::sun::star;
 
 #define VCL_TOOLBOX_STYLE_FLAT              ((sal_uInt16)0x0004) // from <vcl/toolbox.hxx>
 
-//_________________________________________________________________________________________________________________
-//  private declarations!
-//_________________________________________________________________________________________________________________
-
 class SvtMiscOptions_Impl : public ConfigItem
 {
-    //-------------------------------------------------------------------------------------------------------------
-    //  private member
-    //-------------------------------------------------------------------------------------------------------------
-
     private:
     ::std::list<Link> aList;
     sal_Bool    m_bUseSystemFileDialog;
@@ -125,22 +105,10 @@ class SvtMiscOptions_Impl : public ConfigItem
     sal_Bool    m_bAlwaysAllowSave;
     sal_Bool    m_bExperimentalMode;
 
-    //-------------------------------------------------------------------------------------------------------------
-    //  public methods
-    //-------------------------------------------------------------------------------------------------------------
-
     public:
-
-        //---------------------------------------------------------------------------------------------------------
-        //  constructor / destructor
-        //---------------------------------------------------------------------------------------------------------
 
          SvtMiscOptions_Impl();
         ~SvtMiscOptions_Impl();
-
-        //---------------------------------------------------------------------------------------------------------
-        //  overloaded methods of baseclass
-        //---------------------------------------------------------------------------------------------------------
 
         /*-****************************************************************************************************//**
             @short      called for notify of configmanager
@@ -218,8 +186,6 @@ class SvtMiscOptions_Impl : public ConfigItem
 
         inline sal_Bool IsPluginsEnabled() const
         { return m_bPluginsEnabled; }
-
-        void SetPluginsEnabled( sal_Bool bEnable );
 
         inline sal_Bool IsPluginsEnabledReadOnly() const
         { return m_bIsPluginsEnabledRO; }
@@ -644,13 +610,6 @@ void SvtMiscOptions_Impl::ImplSetSymbolsStyle( bool bValue, sal_Int16 nSet, cons
         SetModified();
         CallListeners();
     }
-}
-
-void SvtMiscOptions_Impl::SetPluginsEnabled( sal_Bool bEnable )
-{
-    m_bPluginsEnabled = bEnable;
-    SetModified();
-    CallListeners();
 }
 
 //*****************************************************************************************************************

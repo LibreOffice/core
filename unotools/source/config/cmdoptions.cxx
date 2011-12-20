@@ -26,11 +26,6 @@
  *
  ************************************************************************/
 
-
-//_________________________________________________________________________________________________________________
-//  includes
-//_________________________________________________________________________________________________________________
-
 #include <unotools/cmdoptions.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/configitem.hxx>
@@ -47,20 +42,12 @@
 #include <algorithm>
 #include <boost/unordered_map.hpp>
 
-//_________________________________________________________________________________________________________________
-//  namespaces
-//_________________________________________________________________________________________________________________
-
 using namespace ::std                   ;
 using namespace ::utl                   ;
 using namespace ::rtl                   ;
 using namespace ::osl                   ;
 using namespace ::com::sun::star::uno   ;
 using namespace ::com::sun::star::beans ;
-
-//_________________________________________________________________________________________________________________
-//  const
-//_________________________________________________________________________________________________________________
 
 #define ROOTNODE_CMDOPTIONS                             OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Commands/Execute"  ))
 #define PATHDELIMITER                                   OUString(RTL_CONSTASCII_USTRINGPARAM("/"                        ))
@@ -72,10 +59,6 @@ using namespace ::com::sun::star::beans ;
 #define PROPERTYCOUNT                                   1
 
 #define OFFSET_CMD                                      0
-
-//_________________________________________________________________________________________________________________
-//  private declarations!
-//_________________________________________________________________________________________________________________
 
 // Method to retrieve a hash code from a string. May be we have to change it to decrease collisions in the hash map
 struct OUStringHashCode
@@ -156,22 +139,10 @@ typedef ::std::vector< ::com::sun::star::uno::WeakReference< ::com::sun::star::f
 
 class SvtCommandOptions_Impl : public ConfigItem
 {
-    //-------------------------------------------------------------------------------------------------------------
-    //  public methods
-    //-------------------------------------------------------------------------------------------------------------
-
     public:
-
-        //---------------------------------------------------------------------------------------------------------
-        //  constructor / destructor
-        //---------------------------------------------------------------------------------------------------------
 
          SvtCommandOptions_Impl();
         ~SvtCommandOptions_Impl();
-
-        //---------------------------------------------------------------------------------------------------------
-        //  overloaded methods of baseclass
-        //---------------------------------------------------------------------------------------------------------
 
         /*-****************************************************************************************************//**
             @short      called for notify of configmanager
@@ -204,10 +175,6 @@ class SvtCommandOptions_Impl : public ConfigItem
 
         virtual void Commit();
 
-        //---------------------------------------------------------------------------------------------------------
-        //  public interface
-        //---------------------------------------------------------------------------------------------------------
-
         /*-****************************************************************************************************//**
             @short      base implementation of public interface for "SvtDynamicMenuOptions"!
             @descr      These class is used as static member of "SvtDynamicMenuOptions" ...
@@ -221,17 +188,9 @@ class SvtCommandOptions_Impl : public ConfigItem
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        void                    Clear       (   SvtCommandOptions::CmdOption    eCmdOption  );
         sal_Bool                HasEntries  (   SvtCommandOptions::CmdOption    eOption     ) const;
         sal_Bool                Lookup      (   SvtCommandOptions::CmdOption    eCmdOption, const OUString& ) const;
-        Sequence< OUString >    GetList     (   SvtCommandOptions::CmdOption    eCmdOption  ) const ;
-        void                    AddCommand  (   SvtCommandOptions::CmdOption    eCmdOption,
-                                                const OUString& sURL        );
         void EstablisFrameCallback(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame);
-
-    //-------------------------------------------------------------------------------------------------------------
-    //  private methods
-    //-------------------------------------------------------------------------------------------------------------
 
     private:
 
@@ -250,18 +209,10 @@ class SvtCommandOptions_Impl : public ConfigItem
 
         Sequence< OUString > impl_GetPropertyNames();
 
-    //-------------------------------------------------------------------------------------------------------------
-    //  private member
-    //-------------------------------------------------------------------------------------------------------------
-
     private:
         SvtCmdOptions  m_aDisabledCommands;
         SvtFrameVector m_lFrames;
 };
-
-//_________________________________________________________________________________________________________________
-//  definitions
-//_________________________________________________________________________________________________________________
 
 //*****************************************************************************************************************
 //  constructor
@@ -367,53 +318,12 @@ void SvtCommandOptions_Impl::Commit()
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
-void SvtCommandOptions_Impl::Clear( SvtCommandOptions::CmdOption eCmdOption )
-{
-    switch( eCmdOption )
-    {
-        case SvtCommandOptions::CMDOPTION_DISABLED:
-        {
-            m_aDisabledCommands.Clear();
-            SetModified();
-        }
-        break;
-
-        default:
-            DBG_ASSERT( sal_False, "SvtCommandOptions_Impl::Clear()\nUnknown option type given!\n" );
-    }
-}
-
-//*****************************************************************************************************************
-//  public method
-//*****************************************************************************************************************
 sal_Bool SvtCommandOptions_Impl::HasEntries( SvtCommandOptions::CmdOption eOption ) const
 {
     if ( eOption == SvtCommandOptions::CMDOPTION_DISABLED )
         return ( m_aDisabledCommands.HasEntries() > 0 );
     else
         return sal_False;
-}
-
-//*****************************************************************************************************************
-//  public method
-//*****************************************************************************************************************
-Sequence< OUString > SvtCommandOptions_Impl::GetList( SvtCommandOptions::CmdOption eCmdOption ) const
-{
-    Sequence< OUString > lReturn;
-
-    switch( eCmdOption )
-    {
-        case SvtCommandOptions::CMDOPTION_DISABLED:
-        {
-            lReturn = m_aDisabledCommands.GetList();
-        }
-        break;
-
-        default:
-            DBG_ASSERT( sal_False, "SvtCommandOptions_Impl::GetList()\nUnknown option type given!\n" );
-    }
-
-    return lReturn;
 }
 
 //*****************************************************************************************************************
@@ -432,25 +342,6 @@ sal_Bool SvtCommandOptions_Impl::Lookup( SvtCommandOptions::CmdOption eCmdOption
     }
 
     return sal_False;
-}
-
-//*****************************************************************************************************************
-//  public method
-//*****************************************************************************************************************
-void SvtCommandOptions_Impl::AddCommand( SvtCommandOptions::CmdOption eCmdOption, const OUString& sCmd )
-{
-    switch( eCmdOption )
-    {
-        case SvtCommandOptions::CMDOPTION_DISABLED:
-        {
-            m_aDisabledCommands.AddCommand( sCmd );
-            SetModified();
-        }
-        break;
-
-        default:
-            DBG_ASSERT( sal_False, "SvtCommandOptions_Impl::GetList()\nUnknown option type given!\n" );
-    }
 }
 
 //*****************************************************************************************************************

@@ -202,25 +202,6 @@ SvtAcceleratorConfiguration::~SvtAcceleratorConfiguration()
     }
 }
 
-::rtl::OUString SvtAcceleratorConfiguration::GetCommand( const ::com::sun::star::awt::KeyEvent& rKeyEvent )
-{
-    sal_Int16 nCode=rKeyEvent.KeyCode, nModifier=rKeyEvent.Modifiers;
-    if ( !nCode )
-        nCode = rKeyEvent.KeyFunc;
-
-    std::list< SvtAcceleratorConfigItem>::const_iterator p;
-    for ( p = pImp->aList.begin(); p != pImp->aList.end(); ++p )
-        if ( p->nCode == nCode && p->nModifier == nModifier )
-            return p->aCommand;
-
-    return ::rtl::OUString();
-}
-
-const SvtAcceleratorItemList& SvtAcceleratorConfiguration::GetItems()
-{
-    return pImp->aList;
-}
-
 void SvtAcceleratorConfiguration::SetCommand( const SvtAcceleratorConfigItem& rItem )
 {
     std::list< SvtAcceleratorConfigItem>::iterator p;
@@ -233,20 +214,6 @@ void SvtAcceleratorConfiguration::SetCommand( const SvtAcceleratorConfigItem& rI
 
     pImp->aList.push_back( rItem );
 
-}
-
-void SvtAcceleratorConfiguration::SetItems( const SvtAcceleratorItemList& rItems, bool bClear )
-{
-    if ( bClear )
-    {
-        pImp->aList = rItems;
-    }
-    else
-    {
-        std::list< SvtAcceleratorConfigItem>::const_iterator p;
-        for ( p = rItems.begin(); p != rItems.end(); ++p )
-            SetCommand( *p );
-    }
 }
 
 String SvtAcceleratorConfiguration::GetStreamName()

@@ -586,19 +586,7 @@ SvXMLUnitConverter::GetCoreMeasureUnit() const
 SvXMLUnitConverter::convertEnum(rtl::OUStringBuffer&, unsigned short, SvXMLEnumStringMapEntry const*, char*)
 SvXMLUnitConverter::convertMeasureToXML(rtl::OUStringBuffer&, int, short) const
 SvpSalInstance::CancelEvent(SalFrame const*, void*, unsigned short)
-SvtAcceleratorConfiguration::GetCommand(com::sun::star::awt::KeyEvent const&)
-SvtAcceleratorConfiguration::GetItems()
-SvtAcceleratorConfiguration::SetItems(std::__debug::list<SvtAcceleratorConfigItem, std::allocator<SvtAcceleratorConfigItem> > const&, bool)
 SvtBroadcaster::Forward(SvtBroadcaster&, SfxHint const&)
-SvtCJKOptions::IsEmphasisMarksEnabled() const
-SvtCJKOptions::IsVerticalCallOutEnabled() const
-SvtCommandOptions_Impl::AddCommand(SvtCommandOptions::CmdOption, rtl::OUString const&)
-SvtCommandOptions_Impl::Clear(SvtCommandOptions::CmdOption)
-SvtCommandOptions_Impl::GetList(SvtCommandOptions::CmdOption) const
-SvtDynamicMenuOptions_Impl::AppendItem(EDynamicMenuType, rtl::OUString const&, rtl::OUString const&, rtl::OUString const&, rtl::OUString const&)
-SvtDynamicMenuOptions_Impl::Clear(EDynamicMenuType)
-SvtFontOptions_Impl::EnableReplacementTable(unsigned char)
-SvtFontOptions_Impl::IsReplacementTableEnabled() const
 SvtFrameWindow_Impl::ExecuteHdl_Impl(SvtFrameWindow_Impl*, SvtFrameWindow_Impl::SvtExecuteInfo*)
 SvtGraphicFill::getGradient1stColor() const
 SvtGraphicFill::getGradient2ndColor() const
@@ -622,29 +610,17 @@ SvtGraphicStroke::setMiterLimit(double)
 SvtGraphicStroke::setStartArrow(PolyPolygon const&)
 SvtGraphicStroke::setStrokeWidth(double)
 SvtGraphicStroke::setTransparency(double)
-SvtHistoryOptions_Impl::SetSize(EHistoryType, unsigned int)
 SvtIconChoiceCtrl::SvtIconChoiceCtrl(Window*, ResId const&)
 SvtIconWindow_Impl::GetSelectedIconText() const
-SvtLinguConfig::IsReadOnly(int) const
-SvtLinguConfig::SetOptions(SvtLinguOptions const&)
 SvtListenerIter::First(void* (*)())
 SvtListenerIter::GoEnd()
 SvtListenerIter::GoPrev()
 SvtListenerIter::GoRoot()
 SvtListenerIter::Next()
-SvtLocalisationOptions_Impl::SetAutoMnemonic(unsigned char)
-SvtLocalisationOptions_Impl::SetDialogScale(int)
-SvtMiscOptions_Impl::SetPluginsEnabled(unsigned char)
-SvtPathOptions_Impl::IsPathReadonly(SvtPathOptions::Pathes) const
 SvtResId::SvtResId(unsigned short, com::sun::star::lang::Locale)
-SvtSaveOptions_Impl::SetSaveUnpacked(unsigned char)
-SvtSaveOptions_Impl::SetUseBlowfishInODF12(unsigned char)
-SvtSaveOptions_Impl::SetUseSHA1InODF12(unsigned char)
 SvtScriptedTextHelper::GetText() const
 SvtScriptedTextHelper::GetTextHeight() const
 SvtScriptedTextHelper::GetTextWidth() const
-SvtStartOptions_Impl::SetConnectionURL(rtl::OUString const&)
-SvtSysLocaleOptions::GetUILocaleConfigString() const
 SvtTabAppearanceCfg::SetDragMode(unsigned short)
 Svx3DLightControl::Svx3DLightControl(Window*, ResId const&)
 Svx3DWin::LinkStubClickLightHdl(void*, void*)
