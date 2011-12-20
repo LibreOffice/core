@@ -346,6 +346,10 @@ OUString SmOoxmlImport::handleD()
         closing = STR( " right " ) + closing;
     if( separator == STR( "|" )) // plain "|" would be actually "V" (logical or)
         separator = STR( " mline " );
+    if( opening.isEmpty())
+        opening = STR( "left none " );
+    if( closing.isEmpty())
+        closing = STR( " right none" );
     OUStringBuffer ret;
     ret.append( opening );
     bool first = true;
