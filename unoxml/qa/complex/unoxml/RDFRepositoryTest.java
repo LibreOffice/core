@@ -785,14 +785,29 @@ public class RDFRepositoryTest
         String[] vars = (String[]) i_Result.getBindingNames();
         XEnumeration iter = (XEnumeration) i_Result;
         XNode[][] bindings = toSeqs(iter);
-        if (vars.length != i_Vars.length) {
-            System.out.println("var lengths differ");
-            return false;
-        }
         if (bindings.length != i_Bindings.length) {
             System.out.println("binding lengths differ: " + i_Bindings.length +
                 " vs " + bindings.length );
             return false;
+        }
+        if (vars.length != i_Vars.length) {
+            // ignore for empty result: it is unclear to me whether SPARQL
+            // spec requires returning the variables in this case,
+            // and evidently newer rasqal versions don't
+            if (0 != i_Bindings.length || 0 != vars.length)
+            {
+                System.out.println("var lengths differ: expected "
+                        + i_Vars.length + " but got " + vars.length);
+                return false;
+            }
+        } else {
+            for (int i = 0; i < i_Vars.length; ++i) {
+                if (!vars[i].equals(i_Vars[i])) {
+                    System.out.println("variable names differ: " +
+                        vars[i] + " != " + i_Vars[i]);
+                    return false;
+                }
+            }
         }
         java.util.Arrays.sort(bindings, new BindingComp());
         java.util.Arrays.sort(i_Bindings, new BindingComp());
@@ -813,13 +828,6 @@ public class RDFRepositoryTest
                 }
             }
         }
-        for (int i = 0; i < i_Vars.length; ++i) {
-            if (!vars[i].equals(i_Vars[i])) {
-                System.out.println("variable names differ: " +
-                    vars[i] + " != " + i_Vars[i]);
-                return false;
-            }
-        }
         return true;
     }
 
@@ -837,6 +845,20 @@ public class RDFRepositoryTest
         namespaces += mkNamespace("odf",
             "http://docs.oasis-open.org/opendocument/meta/package/odf#");
         return namespaces;
+    }
+
+    // useful when debugging
+    static void dumpRepo(XDocumentRepository xRep) throws Exception
+    {
+        XEnumeration xEnum = xRep.getStatements(null, null, null);
+        while (xEnum.hasMoreElements())
+        {
+            Statement s = (Statement) xEnum.nextElement();
+            System.out.println("STATEMENT IN: " + toS(s.Graph)
+                    + "\n S: " + toS(s.Subject)
+                    + "\n P: " + toS(s.Predicate)
+                    + "\n O: " + toS(s.Object));
+        }
     }
 
     class TestRange implements XTextRange, XMetadatable, XServiceInfo
