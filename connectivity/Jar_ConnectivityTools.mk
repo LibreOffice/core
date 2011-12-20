@@ -25,22 +25,33 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Module_Module,connectivity))
+$(eval $(call gb_Jar_Jar,ConnectivityTools))
 
-$(eval $(call gb_Module_add_targets,connectivity,\
-	AllLangResTarget_connectivity \
-	Package_inc \
-	Package_xml \
-	Jar_sdbc_hsqldb \
-	Library_dbtools \
-	Library_sdbc2 \
-	Library_dbpool2 \
+$(eval $(call gb_Jar_add_jars,ConnectivityTools,\
+	$(OUTDIR)/bin/ridl.jar \
+	$(OUTDIR)/bin/unoil.jar \
+	$(OUTDIR)/bin/jurt.jar \
+	$(OUTDIR)/bin/juh.jar \
+	$(OUTDIR)/bin/java_uno.jar \
+	$(OUTDIR)/bin/OOoRunnerLight.jar \
 ))
 
-ifneq ($(SOLAR_JAVA),)
-$(eval $(call gb_Module_add_targets,connectivity,\
-	Jar_ConnectivityTools \
+$(eval $(call gb_Jar_set_packageroot,ConnectivityTools,connectivity))
+
+$(eval $(call gb_Jar_add_sourcefiles,ConnectivityTools,\
+	connectivity/qa/connectivity/tools/AbstractDatabase \
+	connectivity/qa/connectivity/tools/CRMDatabase \
+	connectivity/qa/connectivity/tools/CsvDatabase \
+	connectivity/qa/connectivity/tools/DatabaseAccess \
+	connectivity/qa/connectivity/tools/DataSource \
+	connectivity/qa/connectivity/tools/DbaseDatabase \
+	connectivity/qa/connectivity/tools/FlatFileDatabase \
+	connectivity/qa/connectivity/tools/HsqlColumnDescriptor \
+	connectivity/qa/connectivity/tools/HsqlDatabase \
+	connectivity/qa/connectivity/tools/HsqlTableDescriptor \
+	connectivity/qa/connectivity/tools/QueryDefinition \
+	connectivity/qa/connectivity/tools/RowSet \
+	connectivity/qa/connectivity/tools/sdb/Connection \
 ))
-endif
 
 # vim: set noet sw=4 ts=4:
