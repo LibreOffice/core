@@ -48,4 +48,6 @@ $(eval $(call gb_SrsTarget_add_files,sm/res,\
 	starmath/source/toolbox.src \
 ))
 
+$(call gb_SrsTarget_get_target,sm/res) :| $(OUTDIR)/inc/svx/globlmn.hrc
+
 # vim: set noet sw=4 ts=4:

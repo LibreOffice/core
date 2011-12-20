@@ -188,4 +188,6 @@ $(eval $(call gb_SrsTarget_add_files,sw/res,\
     sw/source/ui/wrtsh/wrtsh.src \
 ))
 
+$(call gb_SrsTarget_get_target,sw/res) :| $(OUTDIR)/inc/svx/globlmn.hrc
+
 # vim: set noet sw=4 ts=4:

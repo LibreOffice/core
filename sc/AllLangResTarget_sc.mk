@@ -105,4 +105,6 @@ $(eval $(call gb_SrsTarget_add_files,sc/res,\
     sc/source/core/src/compiler.src \
 ))
 
+$(call gb_SrsTarget_get_target,sc/res) :| $(OUTDIR)/inc/svx/globlmn.hrc
+
 # vim: set noet sw=4 ts=4:
