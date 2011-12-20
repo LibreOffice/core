@@ -184,7 +184,7 @@ public:
     CPPUNIT_TEST(testFunctionLists);
     CPPUNIT_TEST(testToggleRefFlag);
     CPPUNIT_TEST(testAutofilter);
-    CPPUNIT_TEST(testCopyPaste);
+    //CPPUNIT_TEST(testCopyPaste);
     CPPUNIT_TEST(testMergedCells);
     CPPUNIT_TEST(testUpdateReference);
     CPPUNIT_TEST_SUITE_END();
