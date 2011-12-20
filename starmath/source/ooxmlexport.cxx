@@ -152,7 +152,7 @@ void SmOoxmlExport::HandleTable( const SmNode* pNode, int nLevel )
     //OOXML output stack which would grow
     //without bound in a multi step conversion
     if( nLevel || pNode->GetNumSubNodes() > 1 )
-        HandleVerticalStack( pNode, nLevel, 0 );
+        HandleVerticalStack( pNode, nLevel );
     else
         HandleAllSubNodes( pNode, nLevel );
 }
@@ -174,29 +174,19 @@ void SmOoxmlExport::HandleAllSubNodes( const SmNode* pNode, int nLevel )
     }
 }
 
-// output vertical stack, firstItem says which child to use as first (if there
-// are more than two children, OOXML can have only a vertical stack of two items,
-// so create a bigger vertical stack recursively)
-void SmOoxmlExport::HandleVerticalStack( const SmNode* pNode, int nLevel, int firstItem )
+void SmOoxmlExport::HandleVerticalStack( const SmNode* pNode, int nLevel )
 {
-    if( firstItem == pNode->GetNumSubNodes() - 1 ) // only one item, just output the item
+    m_pSerializer->startElementNS( XML_m, XML_eqArr, FSEND );
+    int size = pNode->GetNumSubNodes();
+    for( int i = 0;
+         i < size;
+         ++i )
     {
-        HandleNode( pNode->GetSubNode( firstItem ), nLevel + 1 );
-        return;
+        m_pSerializer->startElementNS( XML_m, XML_e, FSEND );
+        HandleNode( pNode->GetSubNode( i ), nLevel + 1 );
+        m_pSerializer->endElementNS( XML_m, XML_e );
     }
-    m_pSerializer->startElementNS( XML_m, XML_f, FSEND );
-    m_pSerializer->startElementNS( XML_m, XML_fPr, FSEND );
-    m_pSerializer->singleElementNS( XML_m, XML_type, FSNS( XML_m, XML_val ), "noBar", FSEND );
-    m_pSerializer->endElementNS( XML_m, XML_fPr );
-    m_pSerializer->startElementNS( XML_m, XML_num, FSEND );
-    HandleNode( pNode->GetSubNode( firstItem ), nLevel + 1 );
-    m_pSerializer->endElementNS( XML_m, XML_num );
-    // TODO this nesting means MSOffice will use smaller fonts for nested items,
-    // not sure if there's another way to represent a bigger stack than 2 items
-    m_pSerializer->startElementNS( XML_m, XML_den, FSEND );
-    HandleVerticalStack( pNode, nLevel, firstItem + 1 );
-    m_pSerializer->endElementNS( XML_m, XML_den );
-    m_pSerializer->endElementNS( XML_m, XML_f );
+    m_pSerializer->endElementNS( XML_m, XML_eqArr );
 }
 
 void SmOoxmlExport::HandleText( const SmNode* pNode, int /*nLevel*/)
