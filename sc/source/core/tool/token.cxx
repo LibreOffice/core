@@ -1868,11 +1868,9 @@ bool SkipReference(ScToken* pToken, const ScAddress& rPos, const ScDocument* pOl
                 break;
         }
     }
-    else
-    {
-        if (IsInCopyRange(aRange, pOldDoc))
-            return true;
-    }
+
+    if (IsInCopyRange(aRange, pOldDoc))
+        return true;
 
     return false;
 }
