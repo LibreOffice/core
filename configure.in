@@ -2705,7 +2705,19 @@ if test "$_make_longver" -ge "038200" ; then
 elif test "$_make_longver" -ge "038100" ; then
     AC_MSG_RESULT([$GNUMAKE $_make_version])
     AC_MSG_CHECKING([for GNU make bug 20033])
-    TESTGMAKEBUG20033=`mktemp -d`
+    dnl
+    dnl FIXME: mktemp takes different arguments on different platforms:
+    dnl http://stackoverflow.com/questions/2792675/how-portable-is-mktemp1
+    dnl
+    dnl -t means either 'use $TMPDIR' (OK) or 'the following is a template'.
+    dnl and without 'the following is a template', a following template
+    dnl is allowed, so this *may* work on *most* platforms
+    dnl
+    TESTGMAKEBUG20033=`mktemp -d -t MakefileXX`
+    SHA1SUM=sha1sum
+    if test "$_os" = "Darwin"; then
+        SHA1SUM=shasum
+    fi
     cat > $TESTGMAKEBUG20033/Makefile << EOF
 A := \$(wildcard *.a)
 
@@ -2728,7 +2740,7 @@ define d2
 endef
 
 %.b : %.a
-	\$(eval CHECKSUM := \$(word 1,\$(shell cat \$^ | sha1sum))) \$(if \$(wildcard \$(CACHEDIR)/\$(CHECKSUM)),\
+	\$(eval CHECKSUM := \$(word 1,\$(shell cat \$^ | $SHA1SUM))) \$(if \$(wildcard \$(CACHEDIR)/\$(CHECKSUM)),\
 	\$(call d1,\$(CHECKSUM)),\
 	\$(call d2,\$(CHECKSUM)))
 EOF
