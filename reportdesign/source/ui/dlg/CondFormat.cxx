@@ -44,9 +44,6 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 /** === end UNO includes === **/
 
-#include <svx/globlmn.hrc>
-#include <svx/svxids.hrc>
-
 #include <toolkit/helper/vclunohelper.hxx>
 
 #include <vcl/msgbox.hxx>

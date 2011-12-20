@@ -34,8 +34,6 @@
 #include "ModuleHelper.hxx"
 #include "helpids.hrc"
 #include <vcl/msgbox.hxx>
-#include <svx/globlmn.hrc>
-#include <svx/svxids.hrc>
 #include <connectivity/dbconversion.hxx>
 #include <unotools/syslocale.hxx>
 #include "UITools.hxx"
