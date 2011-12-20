@@ -251,13 +251,11 @@ namespace vcl
         // add a managed window at the given index
         // an index smaller than zero means add the window at the end
         size_t addWindow( Window*, sal_Int32 i_nExpandPrio = 0, const Size& i_rMinSize = Size(), size_t i_nIndex = ~0 );
-        void remove( Window* );
 
         size_t addChild( boost::shared_ptr<WindowArranger> const &, sal_Int32 i_nExpandPrio = 0, size_t i_nIndex = ~0 );
         // convenience: use for addChild( new WindowArranger( ... ) ) constructs
         size_t addChild( WindowArranger* i_pNewChild, sal_Int32 i_nExpandPrio = 0, size_t i_nIndex = ~0 )
         { return addChild( boost::shared_ptr<WindowArranger>( i_pNewChild ), i_nExpandPrio, i_nIndex ); }
-        void remove( boost::shared_ptr<WindowArranger> const & );
 
         long getBorderWidth() const { return m_nBorderWidth; }
     };

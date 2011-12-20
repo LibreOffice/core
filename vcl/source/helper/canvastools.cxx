@@ -79,48 +79,6 @@ namespace vcl
 {
     namespace unotools
     {
-        // #i79917# removed helpers bezierSequenceFromPolygon and
-        // pointSequenceFromPolygon here
-        // Also all helpers using tools Polygon and PolyPolygon will get mapped to the
-        // B2DPolygon helpers for these cases, see comments with the same TaskID below.
-        // TODO: Remove those wrapped methods
-
-        //---------------------------------------------------------------------------------------
-
-        uno::Reference< rendering::XPolyPolygon2D > xPolyPolygonFromPolygon( const uno::Reference< rendering::XGraphicDevice >&     xGraphicDevice,
-                                                                             const ::Polygon&                                       inputPolygon )
-        {
-            RTL_LOGFILE_CONTEXT( aLog, "::vcl::unotools::xPolyPolygonFromPolygon()" );
-
-            // #i79917# map to basegfx
-            const basegfx::B2DPolygon aB2DPolygon(inputPolygon.getB2DPolygon());
-            return basegfx::unotools::xPolyPolygonFromB2DPolygon(xGraphicDevice, aB2DPolygon);
-        }
-
-        //---------------------------------------------------------------------------------------
-
-        uno::Reference< rendering::XPolyPolygon2D > xPolyPolygonFromPolyPolygon( const uno::Reference< rendering::XGraphicDevice >& xGraphicDevice,
-                                                                                 const ::PolyPolygon&                               inputPolyPolygon )
-        {
-            RTL_LOGFILE_CONTEXT( aLog, "::vcl::unotools::xPolyPolygonFromPolyPolygon()" );
-
-            // #i79917# map to basegfx
-            const basegfx::B2DPolyPolygon aB2DPolyPolygon(inputPolyPolygon.getB2DPolyPolygon());
-            return basegfx::unotools::xPolyPolygonFromB2DPolyPolygon(xGraphicDevice, aB2DPolyPolygon);
-        }
-
-        //---------------------------------------------------------------------------------------
-
-        uno::Reference< rendering::XBitmap > xBitmapFromBitmap( const uno::Reference< rendering::XGraphicDevice >&  /*xGraphicDevice*/,
-                                                                const ::Bitmap&                                     inputBitmap )
-        {
-            RTL_LOGFILE_CONTEXT( aLog, "::vcl::unotools::xBitmapFromBitmap()" );
-
-            return new vcl::unotools::VclCanvasBitmap( BitmapEx( inputBitmap ) );
-        }
-
-        //---------------------------------------------------------------------------------------
-
         uno::Reference< rendering::XBitmap > xBitmapFromBitmapEx( const uno::Reference< rendering::XGraphicDevice >&    /*xGraphicDevice*/,
                                                                   const ::BitmapEx&                                     inputBitmap )
         {
@@ -128,8 +86,6 @@ namespace vcl
 
             return new vcl::unotools::VclCanvasBitmap( inputBitmap );
         }
-
-        //---------------------------------------------------------------------------------------
 
         namespace
         {

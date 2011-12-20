@@ -1028,11 +1028,6 @@ bool PrintDialog::isPrintToFile()
     return maOptionsPage.maToFileBox.IsChecked();
 }
 
-int PrintDialog::getCopyCount()
-{
-    return static_cast<int>(maJobPage.maCopyCountField.GetValue());
-}
-
 bool PrintDialog::isCollate()
 {
     return maJobPage.maCopyCountField.GetValue() > 1 ? maJobPage.maCollateBox.IsChecked() : sal_False;
