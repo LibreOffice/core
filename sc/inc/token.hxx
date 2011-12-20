@@ -455,7 +455,8 @@ class SingleDoubleRefModifier
 public:
                 SingleDoubleRefModifier( ScToken& rT )
                     {
-                        if ( rT.GetType() == formula::svSingleRef )
+                        formula::StackVar eType = rT.GetType();
+                        if ( eType == formula::svSingleRef || eType == formula::svExternalSingleRef )
                         {
                             pS = &rT.GetSingleRef();
                             aDub.Ref1 = aDub.Ref2 = *pS;
@@ -490,8 +491,9 @@ public:
 
                 SingleDoubleRefProvider( const ScToken& r )
                         : Ref1( r.GetSingleRef() ),
-                        Ref2( r.GetType() == formula::svDoubleRef ?
-                        r.GetDoubleRef().Ref2 : Ref1 )
+                        Ref2( (r.GetType() == formula::svDoubleRef ||
+                                    r.GetType() == formula::svExternalDoubleRef) ?
+                                r.GetDoubleRef().Ref2 : Ref1 )
                     {}
                 SingleDoubleRefProvider( const ScSingleRefData& r )
                         : Ref1( r ), Ref2( r )
