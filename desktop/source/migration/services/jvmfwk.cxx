@@ -323,7 +323,7 @@ css::uno::Any SAL_CALL JavaMigration::execute(
 
 void JavaMigration::migrateJavarc()
 {
-    if (m_sUserDir.getLength() == 0)
+    if (m_sUserDir.isEmpty())
         return;
 
     OUString sValue;
@@ -331,7 +331,7 @@ void JavaMigration::migrateJavarc()
     sal_Bool bSuccess = javaini.getFrom(OUSTR("Home"), sValue);
     OSL_ENSURE(bSuccess, "[Service implementation " IMPL_NAME
                        "] XJob::execute: Could not get Home entry from java.ini/javarc.");
-    if (bSuccess == sal_True && sValue.getLength() > 0)
+    if (bSuccess == sal_True && !sValue.isEmpty())
     {
         //get the directory
         CJavaInfo aInfo;

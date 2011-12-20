@@ -235,7 +235,7 @@ void PackageRegistryImpl::insertBackend(
             //The package backend shall also be called to determine the mediatype
             //(XPackageRegistry.bindPackage) when the URL points to a directory.
             const bool bExtension = mediaType.equals(OUSTR("application/vnd.sun.star.package-bundle"));
-            if (fileFilter.getLength() == 0 ||
+            if (fileFilter.isEmpty() ||
                 fileFilter.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("*.*") ) ||
                 fileFilter.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("*") ) ||
                 bExtension)
@@ -249,7 +249,7 @@ void PackageRegistryImpl::insertBackend(
                     OUString token( fileFilter.getToken( 0, ';', nIndex ) );
                     if (token.matchAsciiL( RTL_CONSTASCII_STRINGPARAM("*.") ))
                         token = token.copy( 1 );
-                    if (token.getLength() == 0)
+                    if (token.isEmpty())
                         continue;
                     // mark any further wildcards ambig:
                     bool ambig = (token.indexOf('*') >= 0 ||
@@ -331,10 +331,9 @@ Reference<deployment::XPackageRegistry> PackageRegistryImpl::create(
         while (xEnum->hasMoreElements())
         {
             Any element( xEnum->nextElement() );
-            Sequence<Any> registryArgs(
-                cachePath.getLength() == 0 ? 1 : 3 );
+            Sequence<Any> registryArgs(cachePath.isEmpty() ? 1 : 3 );
             registryArgs[ 0 ] <<= context;
-            if (cachePath.getLength() > 0)
+            if (!cachePath.isEmpty())
             {
                 Reference<lang::XServiceInfo> xServiceInfo(
                     element, UNO_QUERY_THROW );
@@ -443,7 +442,7 @@ Reference<deployment::XPackageRegistry> PackageRegistryImpl::create(
                     types[ pos ];
                 buf.append( xInfo->getMediaType() );
                 const OUString filter( xInfo->getFileFilter() );
-                if (filter.getLength() > 0) {
+                if (!filter.isEmpty()) {
                     buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(" (") );
                     buf.append( filter );
                     buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(")") );
@@ -487,7 +486,7 @@ Reference<deployment::XPackage> PackageRegistryImpl::bindPackage(
 {
     check();
     OUString mediaType(mediaType_);
-    if (mediaType.getLength() == 0)
+    if (mediaType.isEmpty())
     {
         ::ucbhelper::Content ucbContent;
         if (create_ucb_content(
@@ -511,7 +510,7 @@ Reference<deployment::XPackage> PackageRegistryImpl::bindPackage(
             }
         }
     }
-    if (mediaType.getLength() == 0)
+    if (mediaType.isEmpty())
     {
         // try ambiguous backends:
         t_registryset::const_iterator iPos( m_ambiguousBackends.begin() );

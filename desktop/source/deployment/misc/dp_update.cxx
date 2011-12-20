@@ -146,7 +146,7 @@ void getDefaultUpdateInfos(
      std::vector<std::pair<Reference<deployment::XPackage>, uno::Any> > & out_errors)
 {
     const rtl::OUString sDefaultURL(dp_misc::getExtensionDefaultUpdateURL());
-    OSL_ASSERT(sDefaultURL.getLength());
+    OSL_ASSERT(!sDefaultURL.isEmpty());
 
     Any anyError;
     Sequence< Reference< xml::dom::XElement > >
@@ -248,7 +248,7 @@ UPDATE_SOURCE isUpdateUserExtension(
     UPDATE_SOURCE retVal = UPDATE_SOURCE_NONE;
     if (bReadOnlyShared)
     {
-        if (userVersion.getLength())
+        if (!userVersion.isEmpty())
         {
             int index = determineHighestVersion(
                 userVersion, sharedVersion, bundledVersion, onlineVersion);
@@ -259,7 +259,7 @@ UPDATE_SOURCE isUpdateUserExtension(
             else if (index == 3)
                 retVal = UPDATE_SOURCE_ONLINE;
         }
-        else if (sharedVersion.getLength())
+        else if (!sharedVersion.isEmpty())
         {
             int index = determineHighestVersion(
                 OUString(), sharedVersion, bundledVersion, onlineVersion);
@@ -272,7 +272,7 @@ UPDATE_SOURCE isUpdateUserExtension(
     }
     else
     {
-        if (userVersion.getLength())
+        if (!userVersion.isEmpty())
         {
             int index = determineHighestVersion(
                 userVersion, sharedVersion, bundledVersion, onlineVersion);
@@ -298,7 +298,7 @@ UPDATE_SOURCE isUpdateSharedExtension(
         return UPDATE_SOURCE_NONE;
     UPDATE_SOURCE retVal = UPDATE_SOURCE_NONE;
 
-    if (sharedVersion.getLength())
+    if (!sharedVersion.isEmpty())
     {
         int index = determineHighestVersion(
             OUString(), sharedVersion, bundledVersion, onlineVersion);

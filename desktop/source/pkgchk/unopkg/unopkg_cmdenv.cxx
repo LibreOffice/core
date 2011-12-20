@@ -120,7 +120,7 @@ CommandEnvironmentImpl::CommandEnvironmentImpl(
       m_option_suppress_license( option_suppressLicense ),
       m_xComponentContext(xComponentContext)
 {
-    if (log_file.getLength() > 0) {
+    if (!log_file.isEmpty()) {
         const Any logfile(log_file);
         m_xLogFile.set(
             xComponentContext->getServiceManager()

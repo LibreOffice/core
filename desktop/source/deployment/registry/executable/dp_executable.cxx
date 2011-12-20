@@ -171,7 +171,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
     OUString const & url, OUString const & mediaType, sal_Bool bRemoved,
     OUString const & identifier, Reference<XCommandEnvironment> const & xCmdEnv )
 {
-    if (mediaType.getLength() == 0)
+    if (mediaType.isEmpty())
     {
         throw lang::IllegalArgumentException(
             StrCannotDetectMediaType::get() + url,

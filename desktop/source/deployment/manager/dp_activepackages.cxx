@@ -162,7 +162,7 @@ ActivePackages::Entries ActivePackages::getEntries() const {
     for (::dp_misc::t_string2string_map::const_iterator i(m.begin());
          i != m.end(); ++i)
     {
-        if (i->first.getLength() > 0 && i->first[0] == separator) {
+        if (!i->first.isEmpty() && i->first[0] == separator) {
             es.push_back(
                 ::std::make_pair(
                     ::rtl::OUString(

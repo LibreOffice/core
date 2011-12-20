@@ -116,7 +116,7 @@ namespace {
 
 OUString getVersion( OUString const & sVersion )
 {
-    return ( sVersion.getLength() == 0 ) ? OUString( RTL_CONSTASCII_USTRINGPARAM( "0" ) ) : sVersion;
+    return ( sVersion.isEmpty() ) ? OUString( RTL_CONSTASCII_USTRINGPARAM( "0" ) ) : sVersion;
 }
 
 OUString getVersion( const uno::Reference< deployment::XPackage > &rPackage )
@@ -597,7 +597,7 @@ void ProgressCmdEnv::update_( uno::Any const & rStatus )
     {
         if ( rStatus.getValueTypeClass() == uno::TypeClass_EXCEPTION )
             text = static_cast< uno::Exception const *>( rStatus.getValue() )->Message;
-        if ( text.getLength() == 0 )
+        if ( text.isEmpty() )
             text = ::comphelper::anyToString( rStatus ); // fallback
 
         const SolarMutexGuard aGuard;
@@ -648,7 +648,7 @@ void ExtensionCmdQueue::Thread::addExtension( const ::rtl::OUString &rExtensionU
                                               const ::rtl::OUString &rRepository,
                                               const bool bWarnUser )
 {
-    if ( rExtensionURL.getLength() )
+    if ( !rExtensionURL.isEmpty() )
     {
         TExtensionCmd pEntry( new ExtensionCmd( ExtensionCmd::ADD, rExtensionURL, rRepository, bWarnUser ) );
         _insert( pEntry );
@@ -839,7 +839,7 @@ void ExtensionCmdQueue::Thread::execute()
                     // notify error cause only:
                     msg = reinterpret_cast< uno::Exception const * >( dpExc.Cause.getValue() )->Message;
                 }
-                if (msg.getLength() == 0) // fallback for debugging purposes
+                if (msg.isEmpty()) // fallback for debugging purposes
                     msg = ::comphelper::anyToString(exc);
 
                 const SolarMutexGuard guard;
@@ -969,7 +969,7 @@ void ExtensionCmdQueue::Thread::_checkForUpdates(
 
         for ( cit i = vData.begin(); i < vData.end(); ++i )
         {
-            if ( i->sWebsiteURL.getLength() > 0 )
+            if ( !i->sWebsiteURL.isEmpty() )
                 countWebsiteDownload ++;
             else
                 dataDownload.push_back( *i );
@@ -989,7 +989,7 @@ void ExtensionCmdQueue::Thread::_checkForUpdates(
         {
             for ( cit i = vData.begin(); i < vData.end(); ++i )
             {
-                if ( m_pDialogHelper && ( i->sWebsiteURL.getLength() > 0 ) )
+                if ( m_pDialogHelper && ( !i->sWebsiteURL.isEmpty() ) )
                     m_pDialogHelper->openWebBrowser( i->sWebsiteURL, m_pDialogHelper->getWindow()->GetText() );
             }
         }

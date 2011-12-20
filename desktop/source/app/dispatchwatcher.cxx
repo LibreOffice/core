@@ -184,7 +184,7 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
 
         // create parameter array
         sal_Int32 nCount = 4;
-        if ( aDispatchRequest.aPreselectedFactory.getLength() )
+        if ( !aDispatchRequest.aPreselectedFactory.isEmpty() )
             nCount++;
 
         // Set Input Filter
@@ -237,7 +237,7 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
             aArgs[3].Value <<= nUpdateDoc;
         }
 
-        if ( aDispatchRequest.aPreselectedFactory.getLength() )
+        if ( !aDispatchRequest.aPreselectedFactory.isEmpty() )
         {
             aArgs[nCount-1].Name = ::comphelper::MediaDescriptor::PROP_DOCUMENTSERVICE();
             aArgs[nCount-1].Value <<= aDispatchRequest.aPreselectedFactory;
@@ -510,12 +510,12 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
                         FileBase::getSystemPathFromFileURL( aOutFile, aTempName );
                         rtl::OString aTargetURL8 = ::rtl::OUStringToOString(aTempName, RTL_TEXTENCODING_UTF8 );
                         printf("print %s -> %s using %s\n", aSource8.getStr(), aTargetURL8.getStr(),
-                               aPrinterName.getLength() ?
-                               ::rtl::OUStringToOString( aPrinterName, RTL_TEXTENCODING_UTF8 ).getStr() : "<default_printer>");
+                               aPrinterName.isEmpty() ?
+                                                     "<default_printer>" : ::rtl::OUStringToOString( aPrinterName, RTL_TEXTENCODING_UTF8 ).getStr() );
 
                         // create the custom printer, if given
                         Sequence < PropertyValue > aPrinterArgs( 1 );
-                        if( aPrinterName.getLength() )
+                        if( !aPrinterName.isEmpty() )
                         {
                             aPrinterArgs[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Name"));
                             aPrinterArgs[0].Value <<= aPrinterName;

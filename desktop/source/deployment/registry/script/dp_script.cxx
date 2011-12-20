@@ -130,17 +130,17 @@ BackendImpl::PackageImpl::PackageImpl(
     OUString const & identifier)
     : Package( myBackend.get(), url,
                OUString(), OUString(), // will be late-initialized
-               scriptURL.getLength() > 0 ? myBackend->m_xBasicLibTypeInfo
+               !scriptURL.isEmpty() ? myBackend->m_xBasicLibTypeInfo
                : myBackend->m_xDialogLibTypeInfo, bRemoved, identifier),
       m_scriptURL( scriptURL ),
       m_dialogURL( dialogURL )
 {
     // name, displayName:
-    if (dialogURL.getLength() > 0) {
+    if (!dialogURL.isEmpty()) {
         m_dialogName = LibraryContainer::get_libname(
             dialogURL, xCmdEnv, myBackend->getComponentContext() );
     }
-    if (scriptURL.getLength() > 0) {
+    if (!scriptURL.isEmpty()) {
         m_name = LibraryContainer::get_libname(
             scriptURL, xCmdEnv, myBackend->getComponentContext() );
     }
@@ -230,7 +230,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
     Reference<XCommandEnvironment> const & xCmdEnv )
 {
     OUString mediaType( mediaType_ );
-    if (mediaType.getLength() == 0)
+    if (mediaType.isEmpty())
     {
         // detect media-type:
         ::ucbhelper::Content ucbContent;
@@ -248,7 +248,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
                          xCmdEnv, false /* no throw */ ))
                 mediaType = OUSTR("application/vnd.sun.star.dialog-library");
         }
-        if (mediaType.getLength() == 0)
+        if (mediaType.isEmpty())
             throw lang::IllegalArgumentException(
                 StrCannotDetectMediaType::get() + url,
                 static_cast<OWeakObject *>(this), static_cast<sal_Int16>(-1) );
@@ -392,10 +392,10 @@ void BackendImpl::PackageImpl::processPackage_(
     Reference< deployment::XPackage > xThisPackage( this );
     Reference<XComponentContext> const & xComponentContext = that->getComponentContext();
 
-    bool bScript = (m_scriptURL.getLength() > 0);
+    bool bScript = !m_scriptURL.isEmpty();
     Reference<css::script::XLibraryContainer3> xScriptLibs;
 
-    bool bDialog = (m_dialogURL.getLength() > 0);
+    bool bDialog = !m_dialogURL.isEmpty();
     Reference<css::script::XLibraryContainer3> xDialogLibs;
 
     bool bRunning = office_is_running();

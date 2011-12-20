@@ -125,9 +125,9 @@ OUString getExtensionFolder(OUString const &  parentFolder,
 void PackageManagerImpl::initActivationLayer(
     Reference<XCommandEnvironment> const & xCmdEnv )
 {
-    if (m_activePackages.getLength() == 0)
+    if (m_activePackages.isEmpty())
     {
-        OSL_ASSERT( m_registryCache.getLength() == 0 );
+        OSL_ASSERT( m_registryCache.isEmpty() );
         // documents temp activation:
         m_activePackagesDB.reset( new ActivePackages );
         ::ucbhelper::Content ucbContent;
@@ -161,7 +161,7 @@ void PackageManagerImpl::initActivationLayer(
 
                 OUString mediaType( detectMediaType( sourceContent,
                                                      false /* no throw */) );
-                if (mediaType.getLength() >0)
+                if (!mediaType.isEmpty())
                 {
                     ActivePackages::Data dbData;
                     insertToActivationLayer(
@@ -180,7 +180,7 @@ void PackageManagerImpl::initActivationLayer(
     else
     {
         // user|share:
-        OSL_ASSERT( m_activePackages.getLength() > 0 );
+        OSL_ASSERT( !m_activePackages.isEmpty() );
         m_activePackages_expanded = expandUnoRcUrl( m_activePackages );
         m_registrationData_expanded = expandUnoRcUrl(m_registrationData);
         if (!m_readOnly)
@@ -304,7 +304,7 @@ void PackageManagerImpl::initActivationLayer(
 //______________________________________________________________________________
 void PackageManagerImpl::initRegistryBackends()
 {
-    if (m_registryCache.getLength() > 0)
+    if (!m_registryCache.isEmpty())
         create_folder( 0, m_registryCache,
                        Reference<XCommandEnvironment>(), false);
     m_xRegistry.set( ::dp_registry::create(
@@ -408,7 +408,7 @@ Reference<deployment::XPackageManager> PackageManagerImpl::create(
 
     try {
         //There is no stampURL for the bundled folder
-        if (stampURL.getLength() > 0)
+        if (!stampURL.isEmpty())
         {
 #define CURRENT_STAMP "1"
             try {
@@ -441,7 +441,7 @@ Reference<deployment::XPackageManager> PackageManagerImpl::create(
             }
         }
 
-        if (!that->m_readOnly && logFile.getLength() > 0)
+        if (!that->m_readOnly && !logFile.isEmpty())
         {
             const Any any_logFile(logFile);
             that->m_xLogFile.set(
@@ -601,9 +601,9 @@ OUString PackageManagerImpl::detectMediaType(
         }
         catch (const beans::UnknownPropertyException &) {
         }
-        OSL_ENSURE( mediaType.getLength() > 0, "### no media-type?!" );
+        OSL_ENSURE( !mediaType.isEmpty(), "### no media-type?!" );
     }
-    if (mediaType.getLength() == 0)
+    if (mediaType.isEmpty())
     {
         try {
             Reference<deployment::XPackage> xPackage(
@@ -781,14 +781,14 @@ Reference<deployment::XPackage> PackageManagerImpl::addPackage(
         OUString destFolder;
 
         OUString mediaType(mediaType_);
-        if (mediaType.getLength() == 0)
+        if (mediaType.isEmpty())
             mediaType = detectMediaType( sourceContent );
 
         Reference<deployment::XPackage> xPackage;
         // copy file:
         progressUpdate(
             getResourceString(RID_STR_COPYING_PACKAGE) + title, xCmdEnv );
-        if (m_activePackages.getLength() == 0)
+        if (m_activePackages.isEmpty())
         {
             ::ucbhelper::Content docFolderContent;
             create_folder( &docFolderContent, m_context, xCmdEnv );
@@ -940,7 +940,7 @@ void PackageManagerImpl::removePackage(
             {
                 ActivePackages::Data val;
                 m_activePackagesDB->get( & val, id, fileName);
-                OSL_ASSERT(val.temporaryName.getLength());
+                OSL_ASSERT(!val.temporaryName.isEmpty());
                 OUString url(makeURL(m_activePackages_expanded,
                                      val.temporaryName + OUSTR("removed")));
                 ::ucbhelper::Content contentRemoved(url, xCmdEnv );
@@ -1217,7 +1217,7 @@ void PackageManagerImpl::reinstallDeployedPackages(
 
         try_dispose( m_xRegistry );
         m_xRegistry.clear();
-        if (m_registryCache.getLength() > 0)
+        if (!m_registryCache.isEmpty())
             erase_path( m_registryCache, xCmdEnv );
         initRegistryBackends();
         Reference<util::XUpdatable> xUpdatable( m_xRegistry, UNO_QUERY );
@@ -1430,7 +1430,7 @@ bool PackageManagerImpl::synchronizeAddedExtensions(
                         dbData.fileName = title;
                     dbData.mediaType = xPackage->getPackageType()->getMediaType();
                     dbData.version = xPackage->getVersion();
-                    OSL_ENSURE(dbData.version.getLength() > 0,
+                    OSL_ENSURE(!dbData.version.isEmpty(),
                                "Extension Manager: bundled and shared extensions must have "
                                "an identifier and a version");
 

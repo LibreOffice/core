@@ -368,7 +368,7 @@ public:
     getComponentContext() const { return m_xComponentContext; }
 
     inline ::rtl::OUString const & getCachePath() const { return m_cachePath; }
-    inline bool transientMode() const { return m_cachePath.getLength() == 0; }
+    inline bool transientMode() const { return m_cachePath.isEmpty(); }
 
     inline ::rtl::OUString getContext() const {return m_context; }
 

@@ -183,7 +183,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
     Reference<XCommandEnvironment> const & xCmdEnv )
 {
     // we don't support auto detection:
-    if (mediaType_.getLength() == 0)
+    if (mediaType_.isEmpty())
         throw lang::IllegalArgumentException(
             StrCannotDetectMediaType::get() + url,
             static_cast<OWeakObject *>(this), static_cast<sal_Int16>(-1) );
@@ -572,7 +572,7 @@ void BackendImpl::implProcessHelp(
                                     aErrMsg = aErrMsg.copy( 0, nCopy );
                                 }
                                 aErrStr += aErrMsg;
-                                if( nErrStrId == RID_STR_HELPPROCESSING_XMLPARSING_ERROR && aErrorInfo.m_aXMLParsingFile.getLength() )
+                                if( nErrStrId == RID_STR_HELPPROCESSING_XMLPARSING_ERROR && !aErrorInfo.m_aXMLParsingFile.isEmpty() )
                                 {
                                     aErrStr += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( " in " ));
 

@@ -626,7 +626,7 @@ bool DialogHelper::continueOnSharedExtension( const uno::Reference< deployment::
 //------------------------------------------------------------------------------
 void DialogHelper::openWebBrowser( const OUString & sURL, const OUString &sTitle ) const
 {
-    if ( ! sURL.getLength() ) // Nothing to do, when the URL is empty
+    if ( sURL.isEmpty() ) // Nothing to do, when the URL is empty
         return;
 
     try
@@ -948,7 +948,7 @@ uno::Sequence< OUString > ExtMgrDialog::raiseAddPicker()
     {
         uno::Reference< deployment::XPackageTypeInfo > const & xPackageType = packageTypes[ pos ];
         const OUString filter( xPackageType->getFileFilter() );
-        if (filter.getLength() > 0)
+        if (!filter.isEmpty())
         {
             const OUString title( xPackageType->getShortDescription() );
             const ::std::pair< t_string2string::iterator, bool > insertion(

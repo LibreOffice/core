@@ -282,7 +282,7 @@ bool OO3ExtensionMigration::scanDescriptionXml( const ::rtl::OUString& sDescript
                 }
             }
 
-            if ( aExtIdentifier.getLength() > 0 )
+            if ( !aExtIdentifier.isEmpty() )
             {
                 // scan extension identifier and try to match with our black list entries
                 for ( sal_uInt32 i = 0; i < m_aBlackList.size(); i++ )
@@ -304,7 +304,7 @@ bool OO3ExtensionMigration::scanDescriptionXml( const ::rtl::OUString& sDescript
         {
         }
 
-        if ( aExtIdentifier.getLength() == 0 )
+        if ( aExtIdentifier.isEmpty() )
         {
             // Fallback:
             // Try to use the folder name to match our black list

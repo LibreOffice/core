@@ -205,7 +205,7 @@ OUString MakeStartupConfigAccessErrorMessage( OUString const & aInternalErrMsg )
     else
         aDiagnosticMessage.appendAscii( "The program cannot be started." );
 
-    if ( aInternalErrMsg.getLength() > 0 )
+    if ( !aInternalErrMsg.isEmpty() )
     {
         aDiagnosticMessage.appendAscii( "\n\n" );
         if ( pResMgr )
@@ -231,7 +231,7 @@ OUString MakeStartupConfigAccessErrorMessage( OUString const & aInternalErrMsg )
 void FatalError(const ::rtl::OUString& sMessage)
 {
     ::rtl::OUString sProductKey = ::utl::Bootstrap::getProductKey();
-    if ( ! sProductKey.getLength())
+    if ( sProductKey.isEmpty())
     {
         osl_getExecutableFile( &sProductKey.pData );
 
@@ -798,7 +798,7 @@ void Desktop::HandleBootstrapPathErrors( ::utl::Bootstrap::Status aBootstrapStat
             aProductKey = aProductKey.copy( lastIndex+1 );
 
         aTemp = ::utl::Bootstrap::getProductKey( aProductKey );
-        if ( aTemp.getLength() > 0 )
+        if ( !aTemp.isEmpty() )
             aProductKey = aTemp;
 
         OUString        aMessage;
@@ -1242,7 +1242,7 @@ sal_Bool impl_callRecoveryUI(sal_Bool bEmergencySave     ,
     }
 
     sal_Bool bRet = sal_False;
-    if ( aURL.Complete.getLength() > 0 )
+    if ( !aURL.Complete.isEmpty() )
     {
         xURLParser->parseStrict(aURL);
 
@@ -2603,14 +2603,14 @@ void Desktop::OpenClients()
         rArgs.GetConversionOut( aRequest.aConversionOut );
         rArgs.GetInFilter( aRequest.aInFilter );
 
-        if ( aRequest.aOpenList.getLength() > 0 ||
-             aRequest.aViewList.getLength() > 0 ||
-             aRequest.aStartList.getLength() > 0 ||
-             aRequest.aPrintList.getLength() > 0 ||
-             aRequest.aForceOpenList.getLength() > 0 ||
-             aRequest.aForceNewList.getLength() > 0 ||
-             ( aRequest.aPrintToList.getLength() > 0 && aRequest.aPrinterName.getLength() > 0 ) ||
-             aRequest.aConversionList.getLength() > 0 )
+        if ( !aRequest.aOpenList.isEmpty() ||
+             !aRequest.aViewList.isEmpty() ||
+             !aRequest.aStartList.isEmpty() ||
+             !aRequest.aPrintList.isEmpty() ||
+             !aRequest.aForceOpenList.isEmpty() ||
+             !aRequest.aForceNewList.isEmpty() ||
+             ( !aRequest.aPrintToList.isEmpty() && !aRequest.aPrinterName.isEmpty() ) ||
+             !aRequest.aConversionList.isEmpty() )
         {
             bLoaded = sal_True;
 
@@ -2630,7 +2630,7 @@ void Desktop::OpenClients()
             }
 
             // check for printing disabled
-            if( ( aRequest.aPrintList.getLength() || aRequest.aPrintToList.getLength() )
+            if( ( !(aRequest.aPrintList.isEmpty() && aRequest.aPrintToList.isEmpty()) )
                 && Application::GetSettings().GetMiscSettings().GetDisablePrinting() )
             {
                 aRequest.aPrintList = rtl::OUString();
@@ -2699,7 +2699,7 @@ void Desktop::OpenDefault()
             aName = aOpt.GetFactoryEmptyDocumentURL( SvtModuleOptions::E_WRITERWEB );
     }
 
-    if ( !aName.getLength() )
+    if ( aName.isEmpty() )
     {
         // Old way to create a default document
         if ( aOpt.IsModuleInstalled( SvtModuleOptions::E_SWRITER ) )
@@ -2927,7 +2927,7 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
                 aCommand.Complete = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:OptionsTreeDialog" ) );
             else if( rAppEvent.GetData() == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ABOUT")) )
                 aCommand.Complete = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:About" ) );
-            if( aCommand.Complete.getLength() )
+            if( !aCommand.Complete.isEmpty() )
             {
                 xParser->parseStrict(aCommand);
 
@@ -2986,7 +2986,7 @@ void Desktop::OpenSplashScreen()
 
         // Which splash to use
         OUString aSplashService( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.office.SplashScreen" ));
-        if ( rCmdLine.GetStringParam( CommandLineArgs::CMD_STRINGPARAM_SPLASHPIPE ).getLength() )
+        if ( !rCmdLine.GetStringParam( CommandLineArgs::CMD_STRINGPARAM_SPLASHPIPE ).isEmpty() )
             aSplashService = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.office.PipeSplashScreen"));
 
         bVisible = sal_True;

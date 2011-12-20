@@ -385,7 +385,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
     Reference<ucb::XCommandEnvironment> const & xCmdEnv )
 {
     OUString mediaType( mediaType_ );
-    if (mediaType.getLength() == 0)
+    if (mediaType.isEmpty())
     {
         // detect media-type:
         ::ucbhelper::Content ucbContent;
@@ -418,7 +418,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
                         OUSTR("application/vnd.sun.star.legacy-package-bundle");
             }
         }
-        if (mediaType.getLength() == 0)
+        if (mediaType.isEmpty())
             throw lang::IllegalArgumentException(
                 StrCannotDetectMediaType::get() + url,
                 static_cast<OWeakObject *>(this), static_cast<sal_Int16>(-1) );
@@ -682,7 +682,7 @@ bool BackendImpl::PackageImpl::checkDependencies(
         //If we do not get a localized licence then there is an error in the description.xml
         //This should be handled by using a validating parser. Therefore we assume that no
         //license is available.
-        if (sLic.getLength() == 0)
+        if (sLic.isEmpty())
             throw css::deployment::DeploymentException(
                 OUSTR("Could not obtain path to license. Possible error in description.xml"), 0, Any());
         OUString sHref = m_url_expanded + OUSTR("/") + sLic;
@@ -832,7 +832,7 @@ uno::Reference< graphic::XGraphic > BackendImpl::PackageImpl::getIcon( sal_Bool 
     uno::Reference< graphic::XGraphic > xGraphic;
 
     OUString aIconURL = getDescriptionInfoset().getIconURL( bHighContrast );
-    if ( aIconURL.getLength() )
+    if ( !aIconURL.isEmpty() )
     {
         OUString aFullIconURL = m_url_expanded + OUSTR("/") + aIconURL;
 
@@ -996,7 +996,7 @@ OUString BackendImpl::PackageImpl::getDescription()
 
     const OUString sRelativeURL(getDescriptionInfoset().getLocalizedDescriptionURL());
     OUString sDescription;
-    if (sRelativeURL.getLength())
+    if (!sRelativeURL.isEmpty())
     {
         OUString sURL = m_url_expanded + OUSTR("/") + sRelativeURL;
 
@@ -1010,7 +1010,7 @@ OUString BackendImpl::PackageImpl::getDescription()
         }
     }
 
-    if (sDescription.getLength())
+    if (!sDescription.isEmpty())
         return sDescription;
     return m_oldDescription;
 }
@@ -1030,7 +1030,7 @@ OUString BackendImpl::PackageImpl::getLicenseText()
     {
         OUString aLicenseURL = aInfo.getLocalizedLicenseURL();
 
-        if ( aLicenseURL.getLength() )
+        if ( !aLicenseURL.isEmpty() )
         {
             OUString aFullURL = m_url_expanded + OUSTR("/") + aLicenseURL;
                sLicense = getTextFromURL( Reference< ucb::XCommandEnvironment >(), aFullURL);
@@ -1053,7 +1053,7 @@ void BackendImpl::PackageImpl::exportTo(
 
     ::ucbhelper::Content sourceContent( m_url_expanded, xCmdEnv );
     OUString title(newTitle);
-    if (title.getLength() == 0)
+    if (title.isEmpty())
         sourceContent.getPropertyValue( StrTitle::get() ) >>= title;
     OUString destURL( makeURL( destFolderURL, ::rtl::Uri::encode(
                                    title, rtl_UriCharClassPchar,
@@ -1272,7 +1272,7 @@ Sequence< Reference<deployment::XPackage> > BackendImpl::PackageImpl::getBundle(
                         mediaType = OUSTR("application/vnd.sun.star."
                                           "dialog-library");
 
-                    if (mediaType.getLength() > 0) {
+                    if (!mediaType.isEmpty()) {
                         const Reference<deployment::XPackage> xPackage(
                             bindBundleItem( getURL(), mediaType, false, OUString(),
                                             xCmdEnv ) );
@@ -1362,7 +1362,7 @@ Sequence< Reference<deployment::XPackage> > BackendImpl::PackageImpl::getBundle(
 inline bool isBundle_( OUString const & mediaType )
 {
     // xxx todo: additional parsing?
-    return mediaType.getLength() > 0 &&
+    return !mediaType.isEmpty() &&
         (mediaType.matchIgnoreAsciiCaseAsciiL(
             RTL_CONSTASCII_STRINGPARAM(
                 "application/vnd.sun.star.package-bundle") ) ||
@@ -1458,7 +1458,7 @@ void BackendImpl::PackageImpl::scanBundle(
         Sequence<beans::PropertyValue> const & attribs = manifestSeq[ pos ];
         for ( sal_Int32 i = attribs.getLength(); i--; )
         {
-            if (fullPath.getLength() > 0 && mediaType.getLength() > 0)
+            if (!(fullPath.isEmpty() || mediaType.isEmpty()))
                 break;
             if (attribs[i].Name.equalsAsciiL(
                     RTL_CONSTASCII_STRINGPARAM("FullPath") ))
@@ -1468,7 +1468,7 @@ void BackendImpl::PackageImpl::scanBundle(
                 attribs[i].Value >>= mediaType;
         }
 
-        if (fullPath.getLength() == 0 || mediaType.getLength() == 0 ||
+        if (fullPath.isEmpty() || mediaType.isEmpty() ||
             mediaType.equalsAsciiL( // opt: exclude common text/xml
                 RTL_CONSTASCII_STRINGPARAM("text/xml") ))
             continue;
@@ -1492,7 +1492,7 @@ void BackendImpl::PackageImpl::scanBundle(
             // check locale:
             param = params.find( ByteString("locale") );
             if (param == 0) {
-                if (descrFile.getLength() == 0)
+                if (descrFile.isEmpty())
                     descrFile = url;
             }
             else {
@@ -1531,7 +1531,7 @@ void BackendImpl::PackageImpl::scanBundle(
         }
     }
 
-    if (descrFile.getLength() > 0)
+    if (!descrFile.isEmpty())
     {
         ::ucbhelper::Content descrFileContent;
         if (create_ucb_content( &descrFileContent, descrFile,
@@ -1615,7 +1615,7 @@ void BackendImpl::PackageImpl::scanLegacyBundle(
             bundle.push_back( xPackage );
         }
 
-        if (mediaType.getLength() == 0 ||
+        if (mediaType.isEmpty() ||
             // script.xlb, dialog.xlb can be met everywhere:
             mediaType.matchIgnoreAsciiCaseAsciiL(
                 RTL_CONSTASCII_STRINGPARAM(
@@ -1639,7 +1639,7 @@ OUString BackendImpl::PackageImpl::getDisplayName()
         throw deployment::ExtensionRemovedException();
 
     OUString sName = getDescriptionInfoset().getLocalizedDisplayName();
-    if (sName.getLength() == 0)
+    if (sName.isEmpty())
         return m_displayName;
     else
         return sName;
@@ -1672,10 +1672,9 @@ Reference<deployment::XPackageRegistry> create(
     OUString const & context, OUString const & cachePath, bool readOnly,
     Reference<XComponentContext> const & xComponentContext )
 {
-    Sequence<Any> args(
-        cachePath.getLength() == 0 ? 1 : 3 );
+    Sequence<Any> args(cachePath.isEmpty() ? 1 : 3 );
     args[ 0 ] <<= context;
-    if (cachePath.getLength() > 0) {
+    if (!cachePath.isEmpty()) {
         args[ 1 ] <<= cachePath;
         args[ 2 ] <<= readOnly;
     }

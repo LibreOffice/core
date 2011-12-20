@@ -269,7 +269,7 @@ void ServiceImpl::startExecuteModal(
                 m_parent ? *m_parent : Reference<awt::XWindow>(),
                 m_extensionURL ? *m_extensionURL : OUString() ) );
         myExtMgr->createDialog( false );
-        if (m_initialTitle.getLength() > 0) {
+        if (!m_initialTitle.isEmpty()) {
             myExtMgr->SetText( m_initialTitle );
             m_initialTitle = OUString();
         }

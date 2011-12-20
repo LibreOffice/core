@@ -174,11 +174,11 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
             xTranslator.is())
         {
             OUString tmp(xTranslator->translateToInternal(aArg));
-            if (tmp.getLength() > 0)
+            if (!tmp.isEmpty())
                 aArg = tmp;
         }
 
-        if ( aArg.getLength() > 0 )
+        if ( !aArg.isEmpty() )
         {
             m_eArgumentCount = m_eArgumentCount == NONE ? ONE : MANY;
             ::rtl::OUString oArg;

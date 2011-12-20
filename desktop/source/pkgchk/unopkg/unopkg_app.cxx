@@ -307,7 +307,7 @@ extern "C" DESKTOP_DLLPUBLIC int unopkg_main()
                 osl_getCommandArg( nPos, &cmdArg.pData );
                 ++nPos;
                 cmdArg = cmdArg.trim();
-                if (cmdArg.getLength() > 0)
+                if (!cmdArg.isEmpty())
                 {
                     if (cmdArg[ 0 ] == '-')
                     {
@@ -334,7 +334,7 @@ extern "C" DESKTOP_DLLPUBLIC int unopkg_main()
             }
         }
 
-        if (repository.getLength() == 0)
+        if (repository.isEmpty())
         {
             if (option_shared)
                 repository = OUSTR("shared");
@@ -681,7 +681,7 @@ extern "C" DESKTOP_DLLPUBLIC int unopkg_main()
 
         dp_misc::writeConsoleError(
             OUSTR("\nERROR: ") + exc.Message + OUSTR("\n"));
-        if (cause.getLength())
+        if (!cause.isEmpty())
             dp_misc::writeConsoleError(
                 OUSTR("       Cause: ") + cause + OUSTR("\n"));
     }

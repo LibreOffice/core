@@ -134,7 +134,7 @@ const OUString OfficePipeId::operator () ()
 bool existsOfficePipe()
 {
     OUString const & pipeId = OfficePipeId::get();
-    if (pipeId.getLength() == 0)
+    if (pipeId.isEmpty())
         return false;
     ::osl::Security sec;
     ::osl::Pipe pipe( pipeId, osl_Pipe_OPEN, sec );
@@ -284,9 +284,9 @@ OUString makeURL( OUString const & baseURL, OUString const & relPath_ )
     else
         buf.append( baseURL );
     OUString relPath(relPath_);
-    if (relPath.getLength() > 0 && relPath[ 0 ] == '/')
+    if (!relPath.isEmpty() && relPath[ 0 ] == '/')
         relPath = relPath.copy( 1 );
-    if (relPath.getLength() > 0)
+    if (!relPath.isEmpty())
     {
         buf.append( static_cast<sal_Unicode>('/') );
         if (baseURL.matchAsciiL(
@@ -599,7 +599,7 @@ void syncRepositories(Reference<ucb::XCommandEnvironment> const & xCmdEnv)
 {
     OUString sDisable;
     ::rtl::Bootstrap::get( OUSTR( "DISABLE_EXTENSION_SYNCHRONIZATION" ), sDisable, OUString() );
-    if (sDisable.getLength() > 0)
+    if (!sDisable.isEmpty())
         return;
 
     Reference<deployment::XExtensionManager> xExtensionManager;

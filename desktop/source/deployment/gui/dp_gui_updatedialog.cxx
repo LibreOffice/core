@@ -437,12 +437,12 @@ void UpdateDialog::Thread::handleSpecificError(
             b.append(m_dialog.m_version);
     }
     b.append(static_cast< sal_Unicode >(' '));
-    if (version.getLength())
+    if (!version.isEmpty())
         b.append(version);
     else
         b.append(data.updateVersion);
 
-    if (data.sWebsiteURL.getLength())
+    if (!data.sWebsiteURL.isEmpty())
     {
         b.append(static_cast< sal_Unicode >(' '));
         {
@@ -464,7 +464,7 @@ void UpdateDialog::Thread::prepareUpdateData(
     if (!updateInfo.is())
         return;
     dp_misc::DescriptionInfoset infoset(m_context, updateInfo);
-    OSL_ASSERT(infoset.getVersion().getLength() != 0);
+    OSL_ASSERT(!infoset.getVersion().isEmpty());
     uno::Sequence< uno::Reference< xml::dom::XElement > > ds(
         dp_misc::Dependencies::check(infoset));
 
@@ -1025,12 +1025,12 @@ bool UpdateDialog::showDescription(std::pair< rtl::OUString, rtl::OUString > con
     rtl::OUString sPub = pairPublisher.first;
     rtl::OUString sURL = pairPublisher.second;
 
-    if ( sPub.getLength() == 0 && sURL.getLength() == 0 && sReleaseNotes.getLength() == 0 )
+    if ( sPub.isEmpty() && sURL.isEmpty() && sReleaseNotes.isEmpty() )
         // nothing to show
         return false;
 
     bool bPublisher = false;
-    if ( sPub.getLength() > 0 )
+    if ( !sPub.isEmpty() )
     {
         m_PublisherLabel.Show();
         m_PublisherLink.Show();
@@ -1039,7 +1039,7 @@ bool UpdateDialog::showDescription(std::pair< rtl::OUString, rtl::OUString > con
         bPublisher = true;
     }
 
-    if ( sReleaseNotes.getLength() > 0 )
+    if ( !sReleaseNotes.isEmpty() )
     {
         if ( !bPublisher )
         {
@@ -1170,7 +1170,7 @@ bool UpdateDialog::isIgnoredUpdate( UpdateDialog::Index * index )
         {
             if ( (*i)->sExtensionID == aExtensionID )
             {
-                if ( ( (*i)->sVersion.getLength() == 0 ) || ( (*i)->sVersion == aVersion ) )
+                if ( ( !(*i)->sVersion.isEmpty() ) || ( (*i)->sVersion == aVersion ) )
                 {
                     bIsIgnored = true;
                     index->m_bIgnored = true;
@@ -1211,7 +1211,7 @@ void UpdateDialog::setIgnoredUpdate( UpdateDialog::Index *pIndex, bool bIgnore, 
             aVersion = aInfoset.getVersion();
     }
 
-    if ( aExtensionID.getLength() )
+    if ( !aExtensionID.isEmpty() )
     {
         bool bFound = false;
         for ( std::vector< UpdateDialog::IgnoredUpdate* >::iterator i( m_ignoredUpdates.begin() ); i != m_ignoredUpdates.end(); ++i )
@@ -1318,7 +1318,7 @@ IMPL_LINK(UpdateDialog, selectionHandler, void *, EMPTYARG)
                 UpdateDialog::SpecificError & data = m_specificErrors[ pos ];
                 b.append(m_failure);
                 b.append(LF);
-                b.append( data.message.getLength() == 0 ? m_unknownError : data.message );
+                b.append( data.message.isEmpty() ? m_unknownError : data.message );
                 break;
             }
             default:
@@ -1414,7 +1414,7 @@ IMPL_LINK( UpdateDialog, hyperlink_clicked, svt::FixedHyperlink*, pHyperlink )
     ::rtl::OUString sURL;
     if ( pHyperlink )
         sURL = ::rtl::OUString( pHyperlink->GetURL() );
-    if ( sURL.getLength() == 0 )
+    if ( sURL.isEmpty() )
         return 0;
 
     try
