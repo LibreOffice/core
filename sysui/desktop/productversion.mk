@@ -63,18 +63,18 @@ PRODUCTVERSION.libreoffice = $(PRODUCTVERSION)
 PRODUCTVERSIONSHORT.libreoffice = $(PRODUCTVERSIONSHORT)
 PKGVERSION.libreoffice = $(PKGVERSION)
 UNIXFILENAME.libreoffice = $(PRODUCTNAME.libreoffice:l)$(PRODUCTVERSION.libreoffice)
-ICONPREFIX.libreoffice = $(UNIXFILENAME.libreoffice:s/.//g)
+ICONPREFIX.libreoffice = $(UNIXFILENAME.libreoffice)
 
 PRODUCTNAME.lodev = LibreOfficeDev
 PRODUCTVERSION.lodev = $(PRODUCTVERSION)
 PRODUCTVERSIONSHORT.lodev = $(PRODUCTVERSIONSHORT)
 PKGVERSION.lodev = $(PKGVERSION)
 UNIXFILENAME.lodev = lodev$(PRODUCTVERSION.lodev)
-ICONPREFIX.lodev = $(UNIXFILENAME.lodev:s/.//g)
+ICONPREFIX.lodev = $(UNIXFILENAME.lodev)
 
 PRODUCTNAME.oxygenoffice = OxygenOffice
 PRODUCTVERSION.oxygenoffice = $(PRODUCTVERSION)
 PRODUCTVERSIONSHORT.oxygenoffice = $(PRODUCTVERSIONSHORT)
 PKGVERSION.oxygenoffice = $(PKGVERSION)
 UNIXFILENAME.oxygenoffice = $(PRODUCTNAME.oxygenoffice:l)$(PRODUCTVERSION.oxygenoffice)
-ICONPREFIX.oxygenoffice = $(UNIXFILENAME.oxygenoffice:s/.//g)
+ICONPREFIX.oxygenoffice = $(UNIXFILENAME.oxygenoffice)
