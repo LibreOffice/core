@@ -290,6 +290,68 @@
           <DefaultFullName>grudzień</DefaultFullName>
         </Month>
       </MonthsOfYear>
+      <GenitiveMonths>
+        <Month>
+          <MonthID>jan</MonthID>
+          <DefaultAbbrvName>I</DefaultAbbrvName>
+          <DefaultFullName>stycznia</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>feb</MonthID>
+          <DefaultAbbrvName>II</DefaultAbbrvName>
+          <DefaultFullName>lutego</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>mar</MonthID>
+          <DefaultAbbrvName>III</DefaultAbbrvName>
+          <DefaultFullName>marca</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>apr</MonthID>
+          <DefaultAbbrvName>IV</DefaultAbbrvName>
+          <DefaultFullName>kwietnia</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>may</MonthID>
+          <DefaultAbbrvName>V</DefaultAbbrvName>
+          <DefaultFullName>maja</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>jun</MonthID>
+          <DefaultAbbrvName>VI</DefaultAbbrvName>
+          <DefaultFullName>czerwca</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>jul</MonthID>
+          <DefaultAbbrvName>VII</DefaultAbbrvName>
+          <DefaultFullName>lipca</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>aug</MonthID>
+          <DefaultAbbrvName>VIII</DefaultAbbrvName>
+          <DefaultFullName>sierpnia</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>sep</MonthID>
+          <DefaultAbbrvName>IX</DefaultAbbrvName>
+          <DefaultFullName>września</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>oct</MonthID>
+          <DefaultAbbrvName>X</DefaultAbbrvName>
+          <DefaultFullName>października</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>nov</MonthID>
+          <DefaultAbbrvName>XI</DefaultAbbrvName>
+          <DefaultFullName>listopada</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>dec</MonthID>
+          <DefaultAbbrvName>XII</DefaultAbbrvName>
+          <DefaultFullName>grudnia</DefaultFullName>
+        </Month>
+      </GenitiveMonths>
       <Eras>
         <Era>
           <EraID>bc</EraID>
