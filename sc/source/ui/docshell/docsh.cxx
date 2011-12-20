@@ -913,11 +913,25 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                         if ( !bSuccess )
                             SetError( ERRCODE_IO_ABORT, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) ); // this error code will produce no error message, but will break the further saving process
                     }
+
+
                     if (pSheetSaveData)
                         pSheetSaveData->SetInSupportedSave(true);
                 }
                 break;
             case SFX_EVENT_SAVEASDOC:
+                {
+                    if ( GetDocument()->GetExternalRefManager()->containsUnsavedReferences() )
+                    {
+                        WarningBox aBox( GetActiveDialogParent(), WinBits( WB_YES_NO ),
+                                ScGlobal::GetRscString( STR_UNSAVED_EXT_REF ) );
+
+                        if( RET_NO == aBox.Execute())
+                        {
+                            SetError( ERRCODE_IO_ABORT, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) ); // this error code will produce no error message, but will break the further saving process
+                        }
+                    }
+                } // fall through
             case SFX_EVENT_SAVETODOC:
                 // #i108978# If no event is sent before saving, there will also be no "...DONE" event,
                 // and SAVE/SAVEAS can't be distinguished from SAVETO. So stream copying is only enabled
@@ -1556,6 +1570,7 @@ sal_Bool ScDocShell::SaveAs( SfxMedium& rMedium )
             // password re-type cancelled.  Don't save the document.
             return false;
     }
+
 
     ScRefreshTimerProtector( aDocument.GetRefreshTimerControlAddress() );
 

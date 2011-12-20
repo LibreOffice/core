@@ -687,6 +687,13 @@ public:
 
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
+    /**
+     * If we still contain unsaved files we should warn the user before saving
+     *
+     * @return true if the document still contains references to an unsaved file
+     */
+    bool containsUnsavedReferences() { return !maUnsavedDocShells.empty(); }
+
 private:
     ScExternalRefManager();
     ScExternalRefManager(const ScExternalRefManager&);
@@ -763,12 +770,6 @@ private:
 
     sal_uInt32 getMappedNumberFormat(sal_uInt16 nFileId, sal_uInt32 nNumFmt, const ScDocument* pSrcDoc);
 
-    /**
-     * If we still contain unsaved files we should warn the user before saving
-     *
-     * @return true if the document still contains references to an unsaved file
-     */
-    bool containsUnsavedReferences() { return !maUnsavedDocShells.empty(); }
 
 private:
     /** cache of referenced ranges and names from source documents. */

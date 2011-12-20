@@ -1851,5 +1851,9 @@ Resource RID_GLOBSTR
     {
         Text [ en-US ] = "Invalid name. Only use letters, numbers and underscore.";
     };
+    String STR_UNSAVED_EXT_REF
+    {
+        Text [ en-US ] = "This Document contains external references to unsaved documents.\n\nDo you want to continue?";
+    };
 };
 
