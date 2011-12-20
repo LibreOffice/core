@@ -198,7 +198,6 @@ class SvtSecurityOptions_Impl : public ConfigItem
 
         Sequence< SvtSecurityOptions::Certificate > GetTrustedAuthors       (                                                                                       ) const ;
         void                                        SetTrustedAuthors       ( const Sequence< SvtSecurityOptions::Certificate >& rAuthors                           )       ;
-        sal_Bool                                    IsTrustedAuthorsEnabled (                                                                                       )       ;
 
         sal_Bool                IsOptionSet     ( SvtSecurityOptions::EOption eOption                   ) const ;
         sal_Bool                SetOption       ( SvtSecurityOptions::EOption eOption, sal_Bool bValue  )       ;
@@ -966,11 +965,6 @@ void SvtSecurityOptions_Impl::SetTrustedAuthors( const Sequence< SvtSecurityOpti
         m_seqTrustedAuthors = rAuthors;
         SetModified();
     }
-}
-
-sal_Bool SvtSecurityOptions_Impl::IsTrustedAuthorsEnabled()
-{
-    return m_bROTrustedAuthors;
 }
 
 sal_Bool SvtSecurityOptions_Impl::IsOptionSet( SvtSecurityOptions::EOption eOption ) const
