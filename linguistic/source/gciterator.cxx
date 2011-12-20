@@ -867,7 +867,7 @@ throw (uno::RuntimeException)
         {
              throw;
         }
-        catch (::uno::Exception &rE)
+        catch (const ::uno::Exception &rE)
         {
              (void) rE;
              // ignore

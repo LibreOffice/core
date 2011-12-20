@@ -909,10 +909,9 @@ static sal_Bool IsVers2OrNewer( const String& rFileURL, sal_uInt16& nLng, sal_Bo
                 A2OU( "com.sun.star.ucb.SimpleFileAccess" ) ), uno::UNO_QUERY_THROW );
         xStream = xAccess->openFileRead( rFileURL );
     }
-    catch (uno::Exception & e)
+    catch (const uno::Exception &)
     {
         DBG_ASSERT( 0, "failed to get input stream" );
-        (void) e;
     }
     DBG_ASSERT( xStream.is(), "failed to get stream for read" );
     if (!xStream.is())

@@ -119,9 +119,9 @@ OUString ODatabaseMetaData::impl_getStringMetaData(const sal_Char* _methodName, 
     OUString stringMetaData;
     try {
         stringMetaData = mysqlc_sdbc_driver::convert((meta->*_Method)(), m_rConnection.getConnectionEncoding());
-    } catch (sql::MethodNotImplementedException) {
+    } catch (const sql::MethodNotImplementedException &) {
         mysqlc_sdbc_driver::throwFeatureNotImplementedException(_methodName, *this);
-    } catch (sql::InvalidArgumentException) {
+    } catch (const sql::InvalidArgumentException &) {
         mysqlc_sdbc_driver::throwInvalidArgumentException(_methodName, *this);
     } catch (const sql::SQLException& e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_rConnection.getConnectionEncoding());
@@ -138,9 +138,9 @@ OUString ODatabaseMetaData::impl_getStringMetaData(const sal_Char* _methodName, 
     OUString stringMetaData;
     try {
         stringMetaData = mysqlc_sdbc_driver::convert((meta->*_Method)(), m_rConnection.getConnectionEncoding());
-    } catch (sql::MethodNotImplementedException) {
+    } catch (const sql::MethodNotImplementedException &) {
         mysqlc_sdbc_driver::throwFeatureNotImplementedException(_methodName, *this);
-    } catch (sql::InvalidArgumentException) {
+    } catch (const sql::InvalidArgumentException &) {
         mysqlc_sdbc_driver::throwInvalidArgumentException(_methodName, *this);
     } catch (const sql::SQLException& e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_rConnection.getConnectionEncoding());
@@ -157,9 +157,9 @@ OUString ODatabaseMetaData::impl_getStringMetaData(const sal_Char* _methodName, 
     OUString stringMetaData;
     try {
         stringMetaData = mysqlc_sdbc_driver::convert((meta->*_Method)(), m_rConnection.getConnectionEncoding());
-    } catch (sql::MethodNotImplementedException) {
+    } catch (const sql::MethodNotImplementedException &) {
         mysqlc_sdbc_driver::throwFeatureNotImplementedException(_methodName, *this);
-    } catch (sql::InvalidArgumentException) {
+    } catch (const sql::InvalidArgumentException &) {
         mysqlc_sdbc_driver::throwInvalidArgumentException(_methodName, *this);
     } catch (const sql::SQLException& e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_rConnection.getConnectionEncoding());
@@ -176,9 +176,9 @@ OUString ODatabaseMetaData::impl_getStringMetaData(const sal_Char* _methodName, 
     OUString stringMetaData;
     try {
         stringMetaData = mysqlc_sdbc_driver::convert((meta->*_Method)(), m_rConnection.getConnectionEncoding());
-    } catch (sql::MethodNotImplementedException) {
+    } catch (const sql::MethodNotImplementedException &) {
         mysqlc_sdbc_driver::throwFeatureNotImplementedException(_methodName, *this);
-    } catch (sql::InvalidArgumentException) {
+    } catch (const sql::InvalidArgumentException &) {
         mysqlc_sdbc_driver::throwInvalidArgumentException(_methodName, *this);
     } catch (const sql::SQLException& e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_rConnection.getConnectionEncoding());
@@ -195,9 +195,9 @@ sal_Int32 ODatabaseMetaData::impl_getInt32MetaData(const sal_Char* _methodName, 
     sal_Int32 int32MetaData(0);
     try {
         int32MetaData = (meta->*_Method)();
-    } catch (sql::MethodNotImplementedException) {
+    } catch (const sql::MethodNotImplementedException &) {
         mysqlc_sdbc_driver::throwFeatureNotImplementedException(_methodName, *this);
-    } catch (sql::InvalidArgumentException) {
+    } catch (const sql::InvalidArgumentException &) {
         mysqlc_sdbc_driver::throwInvalidArgumentException(_methodName, *this);
     } catch (const sql::SQLException& e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_rConnection.getConnectionEncoding());
@@ -214,9 +214,9 @@ sal_Bool ODatabaseMetaData::impl_getBoolMetaData(const sal_Char* _methodName, bo
     sal_Bool boolMetaData(0);
     try {
         boolMetaData = (meta->*_Method)() ? sal_True : sal_False;
-    } catch (sql::MethodNotImplementedException) {
+    } catch (const sql::MethodNotImplementedException &) {
         mysqlc_sdbc_driver::throwFeatureNotImplementedException(_methodName, *this);
-    } catch (sql::InvalidArgumentException) {
+    } catch (const sql::InvalidArgumentException &) {
         mysqlc_sdbc_driver::throwInvalidArgumentException(_methodName, *this);
     } catch (const sql::SQLException& e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_rConnection.getConnectionEncoding());
@@ -233,9 +233,9 @@ sal_Bool ODatabaseMetaData::impl_getBoolMetaData(const sal_Char* _methodName, bo
     sal_Bool boolMetaData(0);
     try {
         boolMetaData = (meta->*_Method)( _arg ) ? sal_True : sal_False;
-    } catch (sql::MethodNotImplementedException) {
+    } catch (const sql::MethodNotImplementedException &) {
         mysqlc_sdbc_driver::throwFeatureNotImplementedException(_methodName, *this);
-    } catch (sql::InvalidArgumentException) {
+    } catch (const sql::InvalidArgumentException &) {
         mysqlc_sdbc_driver::throwInvalidArgumentException(_methodName, *this);
     } catch (const sql::SQLException& e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_rConnection.getConnectionEncoding());
@@ -855,9 +855,9 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsConvert(sal_Int32 /* fromType */, s
     try {
         /* ToDo -> use supportsConvert( fromType, toType) */
         return meta->supportsConvert()? sal_True:sal_False;
-    } catch (sql::MethodNotImplementedException) {
+    } catch (const sql::MethodNotImplementedException &) {
         mysqlc_sdbc_driver::throwFeatureNotImplementedException("ODatabaseMetaData::supportsConvert", *this);
-    } catch (sql::InvalidArgumentException) {
+    } catch (const sql::InvalidArgumentException &) {
         mysqlc_sdbc_driver::throwInvalidArgumentException("ODatabaseMetaData::supportsConvert", *this);
     } catch (const sql::SQLException& e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_rConnection.getConnectionEncoding());
@@ -1200,9 +1200,9 @@ sal_Int32 SAL_CALL ODatabaseMetaData::getDefaultTransactionIsolation()
             case sql::TRANSACTION_READ_COMMITTED:   return TransactionIsolation::READ_COMMITTED;
             case sql::TRANSACTION_READ_UNCOMMITTED: return TransactionIsolation::READ_UNCOMMITTED;
         }
-    } catch (sql::MethodNotImplementedException) {
+    } catch (const sql::MethodNotImplementedException &) {
         mysqlc_sdbc_driver::throwFeatureNotImplementedException("ODatabaseMetaData::getDriverMajorVersion", *this);
-    } catch (sql::InvalidArgumentException) {
+    } catch (const sql::InvalidArgumentException &) {
         mysqlc_sdbc_driver::throwInvalidArgumentException("ODatabaseMetaData::getDriverMajorVersion", *this);
     } catch (const sql::SQLException& e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_rConnection.getConnectionEncoding());
@@ -1377,9 +1377,9 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsResultSetConcurrency(sal_Int32 setT
                                                     sql::TRANSACTION_READ_COMMITTED:
                                                     (concurrency == com::sun::star::sdbc::TransactionIsolation::SERIALIZABLE?
                                                         sql::TRANSACTION_SERIALIZABLE:sql::TRANSACTION_SERIALIZABLE))? sal_True:sal_False;
-    } catch (sql::MethodNotImplementedException) {
+    } catch (const sql::MethodNotImplementedException &) {
         mysqlc_sdbc_driver::throwFeatureNotImplementedException("ODatabaseMetaData::supportsResultSetConcurrency", *this);
-    } catch (sql::InvalidArgumentException) {
+    } catch (const sql::InvalidArgumentException &) {
         mysqlc_sdbc_driver::throwInvalidArgumentException("ODatabaseMetaData::supportsResultSetConcurrency", *this);
     } catch (const sql::SQLException& e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_rConnection.getConnectionEncoding());
@@ -1585,9 +1585,9 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getCatalogs()
             }
             rRows.push_back(aRow);
         }
-    } catch (sql::MethodNotImplementedException) {
+    } catch (const sql::MethodNotImplementedException &) {
         mysqlc_sdbc_driver::throwFeatureNotImplementedException("ODatabaseMetaData::getCatalogs", *this);
-    } catch (sql::InvalidArgumentException) {
+    } catch (const sql::InvalidArgumentException &) {
         mysqlc_sdbc_driver::throwInvalidArgumentException("ODatabaseMetaData::getCatalogs", *this);
     } catch (const sql::SQLException& e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_rConnection.getConnectionEncoding());
@@ -1627,9 +1627,9 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getSchemas()
                 rRows.push_back(aRow);
             }
         }
-    } catch (sql::MethodNotImplementedException) {
+    } catch (const sql::MethodNotImplementedException &) {
         mysqlc_sdbc_driver::throwFeatureNotImplementedException("ODatabaseMetaData::getSchemas", *this);
-    } catch (sql::InvalidArgumentException) {
+    } catch (const sql::InvalidArgumentException &) {
         mysqlc_sdbc_driver::throwInvalidArgumentException("ODatabaseMetaData::getSchemas", *this);
     } catch (const sql::SQLException& e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_rConnection.getConnectionEncoding());
@@ -1670,9 +1670,9 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumnPrivileges(
             }
             rRows.push_back(aRow);
         }
-    } catch (sql::MethodNotImplementedException) {
+    } catch (const sql::MethodNotImplementedException &) {
         mysqlc_sdbc_driver::throwFeatureNotImplementedException("ODatabaseMetaData::getColumnPrivileges", *this);
-    } catch (sql::InvalidArgumentException) {
+    } catch (const sql::InvalidArgumentException &) {
         mysqlc_sdbc_driver::throwInvalidArgumentException("ODatabaseMetaData::getColumnPrivileges", *this);
     } catch (const sql::SQLException& e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_rConnection.getConnectionEncoding());
@@ -1720,9 +1720,9 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumns(
             }
             rRows.push_back(aRow);
         }
-    } catch (sql::MethodNotImplementedException) {
+    } catch (const sql::MethodNotImplementedException &) {
         mysqlc_sdbc_driver::throwFeatureNotImplementedException("ODatabaseMetaData::getColumns", *this);
-    } catch (sql::InvalidArgumentException) {
+    } catch (const sql::InvalidArgumentException &) {
         mysqlc_sdbc_driver::throwInvalidArgumentException("ODatabaseMetaData::getColumns", *this);
     } catch (const sql::SQLException& e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_rConnection.getConnectionEncoding());
@@ -1781,9 +1781,9 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
                 rRows.push_back(aRow);
             }
         }
-    } catch (sql::MethodNotImplementedException) {
+    } catch (const sql::MethodNotImplementedException &) {
         mysqlc_sdbc_driver::throwFeatureNotImplementedException("ODatabaseMetaData::getTables", *this);
-    } catch (sql::InvalidArgumentException) {
+    } catch (const sql::InvalidArgumentException &) {
         mysqlc_sdbc_driver::throwInvalidArgumentException("ODatabaseMetaData::getTables", *this);
     } catch (const sql::SQLException& e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_rConnection.getConnectionEncoding());
@@ -1841,9 +1841,9 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getProcedures(
             }
             rRows.push_back(aRow);
         }
-    } catch (sql::MethodNotImplementedException) {
+    } catch (const sql::MethodNotImplementedException &) {
         mysqlc_sdbc_driver::throwFeatureNotImplementedException("ODatabaseMetaData::getProcedures", *this);
-    } catch (sql::InvalidArgumentException) {
+    } catch (const sql::InvalidArgumentException &) {
         mysqlc_sdbc_driver::throwInvalidArgumentException("ODatabaseMetaData::getProcedures", *this);
     } catch (const sql::SQLException& e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_rConnection.getConnectionEncoding());
@@ -1897,9 +1897,9 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getExportedKeys(
             }
             rRows.push_back(aRow);
         }
-    } catch (sql::MethodNotImplementedException) {
+    } catch (const sql::MethodNotImplementedException &) {
         mysqlc_sdbc_driver::throwFeatureNotImplementedException("ODatabaseMetaData::getExportedKeys", *this);
-    } catch (sql::InvalidArgumentException) {
+    } catch (const sql::InvalidArgumentException &) {
         mysqlc_sdbc_driver::throwInvalidArgumentException("ODatabaseMetaData::getExportedKeys", *this);
     } catch (const sql::SQLException& e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_rConnection.getConnectionEncoding());
@@ -1939,9 +1939,9 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getImportedKeys(
             }
             rRows.push_back(aRow);
         }
-    } catch (sql::MethodNotImplementedException) {
+    } catch (const sql::MethodNotImplementedException &) {
         mysqlc_sdbc_driver::throwFeatureNotImplementedException("ODatabaseMetaData::getImportedKeys", *this);
-    } catch (sql::InvalidArgumentException) {
+    } catch (const sql::InvalidArgumentException &) {
         mysqlc_sdbc_driver::throwInvalidArgumentException("ODatabaseMetaData::getImportedKeys", *this);
     } catch (const sql::SQLException& e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_rConnection.getConnectionEncoding());
@@ -1980,9 +1980,9 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getPrimaryKeys(
             }
             rRows.push_back(aRow);
         }
-    } catch (sql::MethodNotImplementedException) {
+    } catch (const sql::MethodNotImplementedException &) {
         mysqlc_sdbc_driver::throwFeatureNotImplementedException("ODatabaseMetaData::getPrimaryKeys", *this);
-    } catch (sql::InvalidArgumentException) {
+    } catch (const sql::InvalidArgumentException &) {
         mysqlc_sdbc_driver::throwInvalidArgumentException("ODatabaseMetaData::getPrimaryKeys", *this);
     } catch (const sql::SQLException& e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_rConnection.getConnectionEncoding());
@@ -2023,9 +2023,9 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getIndexInfo(
             }
             rRows.push_back(aRow);
         }
-    } catch (sql::MethodNotImplementedException) {
+    } catch (const sql::MethodNotImplementedException &) {
         mysqlc_sdbc_driver::throwFeatureNotImplementedException("ODatabaseMetaData::getIndexInfo", *this);
-    } catch (sql::InvalidArgumentException) {
+    } catch (const sql::InvalidArgumentException &) {
         mysqlc_sdbc_driver::throwInvalidArgumentException("ODatabaseMetaData::getIndexInfo", *this);
     } catch (const sql::SQLException& e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_rConnection.getConnectionEncoding());
@@ -2066,9 +2066,9 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getBestRowIdentifier(
             }
             rRows.push_back(aRow);
         }
-    } catch (sql::MethodNotImplementedException) {
+    } catch (const sql::MethodNotImplementedException &) {
         mysqlc_sdbc_driver::throwFeatureNotImplementedException("ODatabaseMetaData::getBestRowIdentifier", *this);
-    } catch (sql::InvalidArgumentException) {
+    } catch (const sql::InvalidArgumentException &) {
         mysqlc_sdbc_driver::throwInvalidArgumentException("ODatabaseMetaData::getBestRowIdentifier", *this);
     } catch (const sql::SQLException& e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_rConnection.getConnectionEncoding());
@@ -2128,9 +2128,9 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTablePrivileges(
                 rRows.push_back(aRow);
             }
         }
-    } catch (sql::MethodNotImplementedException) {
+    } catch (const sql::MethodNotImplementedException &) {
         mysqlc_sdbc_driver::throwFeatureNotImplementedException("ODatabaseMetaData::getTablePrivileges", *this);
-    } catch (sql::InvalidArgumentException) {
+    } catch (const sql::InvalidArgumentException &) {
         mysqlc_sdbc_driver::throwInvalidArgumentException("ODatabaseMetaData::getTablePrivileges", *this);
     } catch (const sql::SQLException& e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_rConnection.getConnectionEncoding());
@@ -2175,9 +2175,9 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getCrossReference(
             }
             rRows.push_back(aRow);
         }
-    } catch (sql::MethodNotImplementedException) {
+    } catch (const sql::MethodNotImplementedException &) {
         mysqlc_sdbc_driver::throwFeatureNotImplementedException("ODatabaseMetaData::getCrossReference", *this);
-    } catch (sql::InvalidArgumentException) {
+    } catch (const sql::InvalidArgumentException &) {
         mysqlc_sdbc_driver::throwInvalidArgumentException("ODatabaseMetaData::getCrossReference", *this);
     } catch (const sql::SQLException& e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_rConnection.getConnectionEncoding());

@@ -76,7 +76,7 @@ OPreparedStatement::OPreparedStatement(OConnection* _pConnection, sql::PreparedS
 
     try {
         m_paramCount = ((sql::PreparedStatement *)cppStatement)->getParameterMetaData()->getParameterCount();
-    } catch (sql::SQLException &e) {
+    } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_pConnection->getConnectionEncoding());
     }
 }
@@ -150,9 +150,9 @@ Reference< XResultSetMetaData > SAL_CALL OPreparedStatement::getMetaData()
                                     getOwnConnection()->getConnectionEncoding()
                                 );
         }
-    } catch (sql::MethodNotImplementedException) {
+    } catch (const sql::MethodNotImplementedException &) {
         mysqlc_sdbc_driver::throwFeatureNotImplementedException("OPreparedStatement::getMetaData", *this);
-    } catch (sql::SQLException &e) {
+    } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_pConnection->getConnectionEncoding());
     }
     return m_xMetaData;
@@ -173,7 +173,7 @@ void SAL_CALL OPreparedStatement::close()
         clearWarnings();
         clearParameters();
         OCommonStatement::close();
-    } catch (SQLException) {
+    } catch (const SQLException &) {
         // If we get an error, ignore
     }
 
@@ -194,7 +194,7 @@ sal_Bool SAL_CALL OPreparedStatement::execute()
     sal_Bool success = sal_False;
     try {
         success = ((sql::PreparedStatement *)cppStatement)->execute()? sal_True:sal_False;
-    } catch (sql::SQLException &e) {
+    } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_pConnection->getConnectionEncoding());
     }
     return success;
@@ -213,7 +213,7 @@ sal_Int32 SAL_CALL OPreparedStatement::executeUpdate()
     sal_Int32 affectedRows = sal_False;
     try {
         affectedRows = ((sql::PreparedStatement *)cppStatement)->executeUpdate();
-    } catch (sql::SQLException &e) {
+    } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_pConnection->getConnectionEncoding());
     }
     return affectedRows;
@@ -233,9 +233,9 @@ void SAL_CALL OPreparedStatement::setString(sal_Int32 parameter, const OUString&
     try {
         std::string stringie(::rtl::OUStringToOString(x, m_pConnection->getConnectionEncoding()).getStr());
         ((sql::PreparedStatement *)cppStatement)->setString(parameter, stringie);
-    } catch (sql::MethodNotImplementedException) {
+    } catch (const sql::MethodNotImplementedException &) {
         mysqlc_sdbc_driver::throwFeatureNotImplementedException("OPreparedStatement::clearParameters", *this);
-    } catch (sql::SQLException &e) {
+    } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_pConnection->getConnectionEncoding());
     }
 }
@@ -284,7 +284,7 @@ Reference< XResultSet > SAL_CALL OPreparedStatement::executeQuery()
     try {
         sql::ResultSet * res = ((sql::PreparedStatement *)cppStatement)->executeQuery();
         xResultSet = new OResultSet(this, res, getOwnConnection()->getConnectionEncoding());
-    } catch (sql::SQLException &e) {
+    } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_pConnection->getConnectionEncoding());
     }
     return xResultSet;
@@ -303,9 +303,9 @@ void SAL_CALL OPreparedStatement::setBoolean(sal_Int32 parameter, sal_Bool x)
 
     try {
         ((sql::PreparedStatement *)cppStatement)->setBoolean(parameter, x);
-    } catch (sql::MethodNotImplementedException) {
+    } catch (const sql::MethodNotImplementedException &) {
         mysqlc_sdbc_driver::throwFeatureNotImplementedException("OPreparedStatement::setBoolean", *this);
-    } catch (sql::SQLException &e) {
+    } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_pConnection->getConnectionEncoding());
     }
 }
@@ -323,9 +323,9 @@ void SAL_CALL OPreparedStatement::setByte(sal_Int32 parameter, sal_Int8 x)
 
     try {
         ((sql::PreparedStatement *)cppStatement)->setInt(parameter, x);
-    } catch (sql::MethodNotImplementedException) {
+    } catch (const sql::MethodNotImplementedException &) {
         mysqlc_sdbc_driver::throwFeatureNotImplementedException("OPreparedStatement::setByte", *this);
-    } catch (sql::SQLException &e) {
+    } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_pConnection->getConnectionEncoding());
     }
 }
@@ -351,9 +351,9 @@ void SAL_CALL OPreparedStatement::setDate(sal_Int32 parameter, const Date& aData
 
     try {
         ((sql::PreparedStatement *)cppStatement)->setDateTime(parameter, dateStr);
-    } catch (sql::MethodNotImplementedException) {
+    } catch (const sql::MethodNotImplementedException &) {
         mysqlc_sdbc_driver::throwFeatureNotImplementedException("OPreparedStatement::setDate", *this);
-    } catch (sql::SQLException &e) {
+    } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_pConnection->getConnectionEncoding());
     }
 }
@@ -379,9 +379,9 @@ void SAL_CALL OPreparedStatement::setTime(sal_Int32 parameter, const Time& aVal)
 
     try {
         ((sql::PreparedStatement *)cppStatement)->setDateTime(parameter, timeStr);
-    } catch (sql::MethodNotImplementedException) {
+    } catch (const sql::MethodNotImplementedException &) {
         mysqlc_sdbc_driver::throwFeatureNotImplementedException("OPreparedStatement::setTime", *this);
-    } catch (sql::SQLException &e) {
+    } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_pConnection->getConnectionEncoding());
     }
 }
@@ -415,9 +415,9 @@ void SAL_CALL OPreparedStatement::setTimestamp(sal_Int32 parameter, const DateTi
 
     try {
         ((sql::PreparedStatement *)cppStatement)->setDateTime(parameter, timeStr);
-    } catch (sql::MethodNotImplementedException) {
+    } catch (const sql::MethodNotImplementedException &) {
         mysqlc_sdbc_driver::throwFeatureNotImplementedException("OPreparedStatement::setTimestamp", *this);
-    } catch (sql::SQLException &e) {
+    } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_pConnection->getConnectionEncoding());
     }
 }
@@ -435,9 +435,9 @@ void SAL_CALL OPreparedStatement::setDouble(sal_Int32 parameter, double x)
 
     try {
         ((sql::PreparedStatement *)cppStatement)->setDouble(parameter, x);
-    } catch (sql::MethodNotImplementedException) {
+    } catch (const sql::MethodNotImplementedException &) {
         mysqlc_sdbc_driver::throwFeatureNotImplementedException("OPreparedStatement::setDouble", *this);
-    } catch (sql::SQLException &e) {
+    } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_pConnection->getConnectionEncoding());
     }
 }
@@ -455,9 +455,9 @@ void SAL_CALL OPreparedStatement::setFloat(sal_Int32 parameter, float x)
 
     try {
         ((sql::PreparedStatement *)cppStatement)->setDouble(parameter, x);
-    } catch (sql::MethodNotImplementedException) {
+    } catch (const sql::MethodNotImplementedException &) {
         mysqlc_sdbc_driver::throwFeatureNotImplementedException("OPreparedStatement::setFloat", *this);
-    } catch (sql::SQLException &e) {
+    } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_pConnection->getConnectionEncoding());
     }
 }
@@ -475,9 +475,9 @@ void SAL_CALL OPreparedStatement::setInt(sal_Int32 parameter, sal_Int32 x)
 
     try {
         ((sql::PreparedStatement *)cppStatement)->setInt(parameter, x);
-    } catch (sql::MethodNotImplementedException) {
+    } catch (const sql::MethodNotImplementedException &) {
         mysqlc_sdbc_driver::throwFeatureNotImplementedException("OPreparedStatement::setInt", *this);
-    } catch (sql::SQLException &e) {
+    } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_pConnection->getConnectionEncoding());
     }
 }
@@ -495,9 +495,9 @@ void SAL_CALL OPreparedStatement::setLong(sal_Int32 parameter, sal_Int64 aVal)
 
     try {
         ((sql::PreparedStatement *)cppStatement)->setInt64(parameter, aVal);
-    } catch (sql::MethodNotImplementedException) {
+    } catch (const sql::MethodNotImplementedException &) {
         mysqlc_sdbc_driver::throwFeatureNotImplementedException("OPreparedStatement::setLong", *this);
-    } catch (sql::SQLException &e) {
+    } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_pConnection->getConnectionEncoding());
     }
 }
@@ -515,9 +515,9 @@ void SAL_CALL OPreparedStatement::setNull(sal_Int32 parameter, sal_Int32 sqlType
 
     try {
         ((sql::PreparedStatement *)cppStatement)->setNull(parameter, sqlType);
-    } catch (sql::MethodNotImplementedException) {
+    } catch (const sql::MethodNotImplementedException &) {
         mysqlc_sdbc_driver::throwFeatureNotImplementedException("OPreparedStatement::setNull", *this);
-    } catch (sql::SQLException &e) {
+    } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_pConnection->getConnectionEncoding());
     }
 }
@@ -784,9 +784,9 @@ void SAL_CALL OPreparedStatement::setShort(sal_Int32 parameter, sal_Int16 x)
 
     try {
         ((sql::PreparedStatement *)cppStatement)->setInt(parameter, x);
-    } catch (sql::MethodNotImplementedException) {
+    } catch (const sql::MethodNotImplementedException &) {
         mysqlc_sdbc_driver::throwFeatureNotImplementedException("OPreparedStatement::setShort", *this);
-    } catch (sql::SQLException &e) {
+    } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_pConnection->getConnectionEncoding());
     }
 }
@@ -805,9 +805,9 @@ void SAL_CALL OPreparedStatement::setBytes(sal_Int32 parameter, const Sequence< 
     std::string blobby((char *)x.getConstArray(), x.getLength());
     try {
         ((sql::PreparedStatement *)cppStatement)->setString(parameter, blobby);
-    } catch (sql::MethodNotImplementedException) {
+    } catch (const sql::MethodNotImplementedException &) {
         mysqlc_sdbc_driver::throwFeatureNotImplementedException("OPreparedStatement::setBytes", *this);
-    } catch (sql::SQLException &e) {
+    } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_pConnection->getConnectionEncoding());
     }
 }
@@ -856,9 +856,9 @@ void SAL_CALL OPreparedStatement::clearParameters()
 
     try {
         ((sql::PreparedStatement *)cppStatement)->clearParameters();
-    } catch (sql::MethodNotImplementedException) {
+    } catch (const sql::MethodNotImplementedException &) {
         mysqlc_sdbc_driver::throwFeatureNotImplementedException("OPreparedStatement::clearParameters", *this);
-    } catch (sql::SQLException &e) {
+    } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_pConnection->getConnectionEncoding());
     }
 }

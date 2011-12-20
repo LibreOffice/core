@@ -110,7 +110,7 @@ OResultSet::OResultSet(OCommonStatement * pStmt, sql::ResultSet * result, rtl_Te
     try {
         sql::ResultSetMetaData * rs_meta = m_result->getMetaData();
         fieldCount = rs_meta->getColumnCount();
-    } catch (sql::SQLException &e) {
+    } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
 }
@@ -184,7 +184,7 @@ sal_Int32 SAL_CALL OResultSet::findColumn(const OUString& columnName)
                 return i;
             }
         }
-    } catch (sql::SQLException &e) {
+    } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
     return 0;
@@ -233,7 +233,7 @@ sal_Bool SAL_CALL OResultSet::getBoolean(sal_Int32 column)
     checkColumnIndex(column);
     try {
         return m_result->getBoolean(column)? sal_True:sal_False;
-    } catch (sql::SQLException &e) {
+    } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
     return sal_False;
@@ -252,7 +252,7 @@ sal_Int8 SAL_CALL OResultSet::getByte(sal_Int32 column)
     checkColumnIndex(column);
     try {
         return m_result->getInt(column);
-    } catch (sql::SQLException &e) {
+    } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
     return 0; // fool compiler
@@ -311,7 +311,7 @@ Date SAL_CALL OResultSet::getDate(sal_Int32 column)
             }
             i++;
         } while (nIndex >= 0);
-    } catch (sql::SQLException &e) {
+    } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
     return d;
@@ -330,7 +330,7 @@ double SAL_CALL OResultSet::getDouble(sal_Int32 column)
     checkColumnIndex(column);
     try {
         return m_result->getDouble(column);
-    } catch (sql::SQLException &e) {
+    } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
     return 0.0; // fool compiler
@@ -349,7 +349,7 @@ float SAL_CALL OResultSet::getFloat(sal_Int32 column)
     checkColumnIndex(column);
     try {
         return m_result->getDouble(column);
-    } catch (sql::SQLException &e) {
+    } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
     return 0.0; // fool compiler
@@ -368,7 +368,7 @@ sal_Int32 SAL_CALL OResultSet::getInt(sal_Int32 column)
     checkColumnIndex(column);
     try {
         return m_result->getInt(column);
-    } catch (sql::SQLException &e) {
+    } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
     return 0; // fool compiler
@@ -386,7 +386,7 @@ sal_Int32 SAL_CALL OResultSet::getRow()
 
     try {
         return m_result->getRow();
-    } catch (sql::SQLException &e) {
+    } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
     return 0; // fool compiler
@@ -405,7 +405,7 @@ sal_Int64 SAL_CALL OResultSet::getLong(sal_Int32 column)
     checkColumnIndex(column);
     try {
         return m_result->getInt64(column);
-    } catch (sql::SQLException &e) {
+    } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
     return 0; // fool compiler
@@ -424,9 +424,9 @@ Reference< XResultSetMetaData > SAL_CALL OResultSet::getMetaData()
         if (!m_xMetaData.is()) {
             m_xMetaData = new OResultSetMetaData(m_result->getMetaData(), m_encoding);
         }
-    } catch (sql::MethodNotImplementedException) {
+    } catch (const sql::MethodNotImplementedException &) {
         mysqlc_sdbc_driver::throwFeatureNotImplementedException("OResultSet::getMetaData", *this);
-    } catch (sql::SQLException &e) {
+    } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
     return m_xMetaData;
@@ -521,7 +521,7 @@ sal_Int16 SAL_CALL OResultSet::getShort(sal_Int32 column)
 
     try {
         return (sal_Int16) m_result->getInt(column);
-    } catch (sql::SQLException &e) {
+    } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
     return 0; // fool compiler
@@ -546,7 +546,7 @@ OUString SAL_CALL OResultSet::getString(sal_Int32 column)
         } else {
             return OUString();
         }
-    } catch (sql::SQLException &e) {
+    } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
     return OUString(); // fool compiler
@@ -625,7 +625,7 @@ sal_Bool SAL_CALL OResultSet::isBeforeFirst()
 
     try {
         return m_result->isBeforeFirst()? sal_True:sal_False;
-    } catch (sql::SQLException &e) {
+    } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
     return sal_False; //fool
@@ -643,7 +643,7 @@ sal_Bool SAL_CALL OResultSet::isAfterLast()
 
     try {
         return m_result->isAfterLast()? sal_True:sal_False;
-    } catch (sql::SQLException &e) {
+    } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
     return sal_False; //fool
@@ -661,7 +661,7 @@ sal_Bool SAL_CALL OResultSet::isFirst()
 
     try {
         return m_result->isFirst();
-    } catch (sql::SQLException &e) {
+    } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
     return sal_False; //fool
@@ -679,7 +679,7 @@ sal_Bool SAL_CALL OResultSet::isLast()
 
     try {
         return m_result->isLast()? sal_True:sal_False;
-    } catch (sql::SQLException &e) {
+    } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
     return sal_False; //fool
@@ -697,7 +697,7 @@ void SAL_CALL OResultSet::beforeFirst()
 
     try {
         m_result->beforeFirst();
-    } catch (sql::SQLException &e) {
+    } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
 }
@@ -714,7 +714,7 @@ void SAL_CALL OResultSet::afterLast()
 
     try {
         m_result->afterLast();
-    } catch (sql::SQLException &e) {
+    } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
 }
@@ -730,7 +730,7 @@ void SAL_CALL OResultSet::close() throw(SQLException, RuntimeException)
 
     try {
         m_result->close();
-    } catch (sql::SQLException &e) {
+    } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
 
@@ -748,7 +748,7 @@ sal_Bool SAL_CALL OResultSet::first() throw(SQLException, RuntimeException)
 
     try {
         return m_result->first()? sal_True:sal_False;
-    } catch (sql::SQLException &e) {
+    } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
     return sal_False; //fool
@@ -766,7 +766,7 @@ sal_Bool SAL_CALL OResultSet::last()
 
     try {
         return m_result->last()? sal_True:sal_False;
-    } catch (sql::SQLException &e) {
+    } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
     return sal_False; //fool
@@ -784,7 +784,7 @@ sal_Bool SAL_CALL OResultSet::absolute(sal_Int32 row)
 
     try {
         return m_result->absolute(row)? sal_True:sal_False;
-    } catch (sql::SQLException &e) {
+    } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
     return sal_False; //fool
@@ -802,7 +802,7 @@ sal_Bool SAL_CALL OResultSet::relative(sal_Int32 row)
 
     try {
         return m_result->relative(row)? sal_True:sal_False;
-    } catch (sql::SQLException &e) {
+    } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
     return sal_False; //fool
@@ -820,7 +820,7 @@ sal_Bool SAL_CALL OResultSet::previous()
 
     try {
         return m_result->previous()? sal_True:sal_False;
-    } catch (sql::SQLException &e) {
+    } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
     return sal_False; //fool
@@ -890,7 +890,7 @@ sal_Bool SAL_CALL OResultSet::next()
 
     try {
         return m_result->next()? sal_True:sal_False;
-    } catch (sql::SQLException &e) {
+    } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
     return sal_False; //fool
@@ -908,7 +908,7 @@ sal_Bool SAL_CALL OResultSet::wasNull()
 
     try {
         return m_result->wasNull()? sal_True:sal_False;
-    } catch (sql::SQLException &e) {
+    } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
     return sal_False; //fool

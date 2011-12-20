@@ -237,7 +237,7 @@ void OConnection::construct(const OUString& url, const Sequence< PropertyValue >
             OSL_TRACE("schema=%s", schema_str.c_str());
 
             m_settings.cppConnection.reset(cppDriver->connect(connProps));
-        } catch (sql::SQLException &e) {
+        } catch (const sql::SQLException &e) {
             mysqlc_sdbc_driver::translateAndThrow(e, *this, getConnectionEncoding());
         }
     } else {
@@ -282,7 +282,7 @@ Reference< XStatement > SAL_CALL OConnection::createStatement()
         xReturn = new OStatement(this, m_settings.cppConnection->createStatement());
         m_aStatements.push_back(WeakReferenceHelper(xReturn));
         return xReturn;
-    } catch (sql::SQLException & e) {
+    } catch (const sql::SQLException & e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, getConnectionEncoding());
     }
     return xReturn;
@@ -306,7 +306,7 @@ Reference< XPreparedStatement > SAL_CALL OConnection::prepareStatement(const OUS
         xStatement = new OPreparedStatement(this,
                     m_settings.cppConnection->prepareStatement(OUStringToOString(sSqlStatement, getConnectionEncoding()).getStr()));
         m_aStatements.push_back( WeakReferenceHelper( xStatement ) );
-    } catch (sql::SQLException & e) {
+    } catch (const sql::SQLException & e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, getConnectionEncoding());
     }
     return xStatement;
@@ -340,7 +340,7 @@ OUString SAL_CALL OConnection::nativeSQL(const OUString& _sSql)
     try {
         sNativeSQL = mysqlc_sdbc_driver::convert(m_settings.cppConnection->nativeSQL(mysqlc_sdbc_driver::convert(sSqlStatement, getConnectionEncoding())),
                                                                                 getConnectionEncoding());
-    } catch (sql::SQLException & e) {
+    } catch (const sql::SQLException & e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, getConnectionEncoding());
     }
     return sNativeSQL;
@@ -357,7 +357,7 @@ void SAL_CALL OConnection::setAutoCommit(sal_Bool autoCommit)
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
     try {
         m_settings.cppConnection->setAutoCommit(autoCommit == sal_True? true:false);
-    } catch (sql::SQLException & e) {
+    } catch (const sql::SQLException & e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, getConnectionEncoding());
     }
 }
@@ -378,7 +378,7 @@ sal_Bool SAL_CALL OConnection::getAutoCommit()
     sal_Bool autoCommit = sal_False;
     try {
         autoCommit = m_settings.cppConnection->getAutoCommit() == true ? sal_True : sal_False;
-    } catch (sql::SQLException & e) {
+    } catch (const sql::SQLException & e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, getConnectionEncoding());
     }
     return autoCommit;
@@ -395,7 +395,7 @@ void SAL_CALL OConnection::commit()
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
     try {
         m_settings.cppConnection->commit();
-    } catch (sql::SQLException & e) {
+    } catch (const sql::SQLException & e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, getConnectionEncoding());
     }
 }
@@ -411,7 +411,7 @@ void SAL_CALL OConnection::rollback()
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
     try {
         m_settings.cppConnection->rollback();
-    } catch (sql::SQLException & e) {
+    } catch (const sql::SQLException & e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, getConnectionEncoding());
     }
 }
@@ -443,7 +443,7 @@ Reference< XDatabaseMetaData > SAL_CALL OConnection::getMetaData()
     if (!xMetaData.is()) {
         try {
             xMetaData = new ODatabaseMetaData(*this); // need the connection because it can return it
-        } catch (sql::SQLException & e) {
+        } catch (const sql::SQLException & e) {
             mysqlc_sdbc_driver::translateAndThrow(e, *this, getConnectionEncoding());
         }
         m_xMetaData = xMetaData;
@@ -510,7 +510,7 @@ OUString SAL_CALL OConnection::getCatalog()
     OUString catalog;
     try {
         catalog = mysqlc_sdbc_driver::convert(m_settings.cppConnection->getSchema(), getConnectionEncoding());
-    } catch (sql::SQLException & e) {
+    } catch (const sql::SQLException & e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, getConnectionEncoding());
     }
     return catalog;
@@ -549,7 +549,7 @@ void SAL_CALL OConnection::setTransactionIsolation(sal_Int32 level)
     }
     try {
         m_settings.cppConnection->setTransactionIsolation(cpplevel);
-    } catch (sql::SQLException & e) {
+    } catch (const sql::SQLException & e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, getConnectionEncoding());
     }
 }
@@ -573,7 +573,7 @@ sal_Int32 SAL_CALL OConnection::getTransactionIsolation()
             default:
                 ;
         }
-    } catch (sql::SQLException & e) {
+    } catch (const sql::SQLException & e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, getConnectionEncoding());
     }
     return TransactionIsolation::NONE;
@@ -710,7 +710,7 @@ OUString OConnection::getMysqlVariable(const char *varname)
             Reference< XRow > xRow(rs, UNO_QUERY);
             ret = xRow->getString(2);
         }
-    } catch (sql::SQLException & e) {
+    } catch (const sql::SQLException & e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, getConnectionEncoding());
     }
 
@@ -732,7 +732,7 @@ sal_Int32 OConnection::getMysqlVersion()
         version = 10000 * m_settings.cppConnection->getMetaData()->getDatabaseMajorVersion();
         version += 100 * m_settings.cppConnection->getMetaData()->getDatabaseMinorVersion();
         version += m_settings.cppConnection->getMetaData()->getDatabasePatchVersion();
-    } catch (sql::SQLException & e) {
+    } catch (const sql::SQLException & e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, getConnectionEncoding());
     }
     return version;

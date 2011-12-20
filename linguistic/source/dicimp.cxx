@@ -284,10 +284,9 @@ sal_uLong DictionaryNeo::loadEntries(const OUString &rMainURL)
                 A2OU( "com.sun.star.ucb.SimpleFileAccess" ) ), uno::UNO_QUERY_THROW );
         xStream = xAccess->openFileRead( rMainURL );
     }
-    catch (uno::Exception & e)
+    catch (const uno::Exception &)
     {
         DBG_ASSERT( 0, "failed to get input stream" );
-        (void) e;
     }
     if (!xStream.is())
         return static_cast< sal_uLong >(-1);
@@ -427,10 +426,9 @@ sal_uLong DictionaryNeo::saveEntries(const OUString &rURL)
                 A2OU( "com.sun.star.ucb.SimpleFileAccess" ) ), uno::UNO_QUERY_THROW );
         xStream = xAccess->openFileReadWrite( rURL );
     }
-    catch (uno::Exception & e)
+    catch (const uno::Exception &)
     {
         DBG_ASSERT( 0, "failed to get input stream" );
-        (void) e;
     }
     if (!xStream.is())
         return static_cast< sal_uLong >(-1);

@@ -99,10 +99,9 @@ void ReadThroughDic( const String &rMainURL, ConvDicXMLImport &rImport )
                 A2OU( "com.sun.star.ucb.SimpleFileAccess" ) ), uno::UNO_QUERY_THROW );
         xIn = xAccess->openFileRead( rMainURL );
     }
-    catch (uno::Exception & e)
+    catch (const uno::Exception &)
     {
         DBG_ASSERT( 0, "failed to get input stream" );
-        (void) e;
     }
     if (!xIn.is())
         return;
@@ -274,10 +273,9 @@ void ConvDic::Save()
                 A2OU( "com.sun.star.ucb.SimpleFileAccess" ) ), uno::UNO_QUERY_THROW );
         xStream = xAccess->openFileReadWrite( aMainURL );
     }
-    catch (uno::Exception & e)
+    catch (const uno::Exception &)
     {
         DBG_ASSERT( 0, "failed to get input stream" );
-        (void) e;
     }
     if (!xStream.is())
         return;
