@@ -408,8 +408,7 @@ OUString SmOoxmlImport::handleF()
     else if( operation == lin )
         return STR( "{" ) + num + STR( "} / {" ) + den + STR( "}" );
     else // noBar
-    { // TODO we write out stack of 3 items as recursive m:f, so merge here back
-      // to 'stack { x # y # z }'
+    {
         return STR( "binom {" ) + num + STR( "} {" ) + den + STR( "}" );
     }
 }
