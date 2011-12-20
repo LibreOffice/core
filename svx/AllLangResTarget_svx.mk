@@ -98,14 +98,17 @@ $(eval $(call gb_SrsTarget_add_files,svx/res,\
     svx/source/unodraw/unodraw.src \
 ))
 
-$(call gb_SrsPartTarget_get_target,svx/source/fmcomp/gridctrl.src) : $(WORKDIR)/inc/svx/globlmn.hrc
-$(call gb_SrsPartTarget_get_target,svx/source/form/fmexpl.src) : $(WORKDIR)/inc/svx/globlmn.hrc
-$(call gb_SrsPartTarget_get_target,svx/source/form/datanavi.src) : $(WORKDIR)/inc/svx/globlmn.hrc
-$(call gb_SrsPartTarget_get_target,svx/source/form/formshell.src) : $(WORKDIR)/inc/svx/globlmn.hrc
-$(call gb_SrsTarget_get_clean_target,svx/res) : $(WORKDIR)/inc/svx/globlmn.hrc_clean
+$(call gb_SrsPartTarget_get_target,svx/source/fmcomp/gridctrl.src) : $(OUTDIR)/inc/svx/globlmn.hrc
+$(call gb_SrsPartTarget_get_target,svx/source/form/fmexpl.src) : $(OUTDIR)/inc/svx/globlmn.hrc
+$(call gb_SrsPartTarget_get_target,svx/source/form/datanavi.src) : $(OUTDIR)/inc/svx/globlmn.hrc
+$(call gb_SrsPartTarget_get_target,svx/source/form/formshell.src) : $(OUTDIR)/inc/svx/globlmn.hrc
+$(call gb_SrsTarget_get_clean_target,svx/res) : $(OUTDIR)/inc/svx/globlmn.hrc_clean
 
 # hack !!!
 # just a temporary - globlmn.hrc about to be removed!
+
+$(OUTDIR)/inc/svx/globlmn.hrc: $(WORKDIR)/inc/svx/globlmn.hrc
+
 ifeq ($(strip $(WITH_LANG)),)
 $(WORKDIR)/inc/svx/globlmn.hrc : $(realpath $(SRCDIR)/svx/inc/globlmn_tmpl.hrc)
 	echo copying $@
@@ -130,10 +133,11 @@ $(WORKDIR)/inc/svx/globlmn.hrc : $(realpath $(SRCDIR)/svx/inc/globlmn_tmpl.hrc) 
 	$(call gb_Deliver_deliver, $@, $(OUTDIR)/inc/svx/globlmn.hrc)
 endif
 
-.PHONY : $(WORKDIR)/inc/svx/globlmn.hrc_clean
-$(WORKDIR)/inc/svx/globlmn.hrc_clean :
+.PHONY : $(OUTDIR)/inc/svx/globlmn.hrc_clean
+$(OUTDIR)/inc/svx/globlmn.hrc_clean :
 	rm -f $(WORKDIR)/inc/svx/lastrun.mk \
-            $(WORKDIR)/inc/svx/globlmn.hrc
+		 $(WORKDIR)/inc/svx/globlmn.hrc \
+		 $(OUTDIR)/inc/svx/globlmn.hrc \
 
 
 # vim: set noet sw=4 ts=4:
