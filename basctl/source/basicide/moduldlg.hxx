@@ -171,7 +171,7 @@ public:
                     LibDialog( Window* pParent );
                     ~LibDialog();
 
-    void            SetStorageName( const String& rName );
+    void            SetStorageName( const ::rtl::OUString& rName );
 
     BasicCheckBox&  GetLibBox()                 { return aLibBox; }
     sal_Bool            IsReference() const         { return aReferenceBox.IsChecked(); }
@@ -211,7 +211,7 @@ protected:
     DECL_LINK( BasicBoxHighlightHdl, BasicTreeListBox * );
     DECL_LINK( ButtonHdl, Button * );
     void                CheckButtons();
-    bool                GetSelection( ScriptDocument& rDocument, String& rLibName );
+    bool                GetSelection( ScriptDocument& rDocument, ::rtl::OUString& rLibName );
     void                DeleteCurrent();
     void                NewModule();
     void                NewDialog();
@@ -282,7 +282,7 @@ public:
 
 // Helper functions
 SbModule* createModImpl( Window* pWin, const ScriptDocument& rDocument,
-    BasicTreeListBox& rBasicBox, const String& rLibName, String aModName, bool bMain = false );
+    BasicTreeListBox& rBasicBox, const ::rtl::OUString& rLibName, ::rtl::OUString aModName, bool bMain = false );
 void createLibImpl( Window* pWin, const ScriptDocument& rDocument,
                     BasicCheckBox* pLibBox, BasicTreeListBox* pBasicBox );
 
