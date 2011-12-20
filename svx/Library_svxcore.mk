@@ -305,7 +305,6 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/svdraw/clonelist \
     svx/source/svdraw/gradtrns \
     svx/source/svdraw/polypolygoneditor \
-    svx/source/svdraw/sdrcomment \
     svx/source/svdraw/sdrhittesthelper \
     svx/source/svdraw/sdrmasterpagedescriptor \
     svx/source/svdraw/sdrpagewindow \

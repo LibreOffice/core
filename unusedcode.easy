@@ -2023,11 +2023,6 @@ sdext::presenter::(anonymous namespace)::TransparentOverlayAnimator::Transparent
 sdext::presenter::(anonymous namespace)::UnfoldInCenterAnimator::UnfoldInCenterAnimator(com::sun::star::uno::Reference<com::sun::star::drawing::framework::XResourceId> const&, rtl::Reference<sdext::presenter::PresenterController> const&, bool, std::__debug::vector<boost::function<void ()>, std::allocator<boost::function<void ()> > > const&, std::__debug::vector<boost::function<void ()>, std::allocator<boost::function<void ()> > > const&)
 sdext::presenter::PresenterHorizontalScrollBar::PresenterHorizontalScrollBar(com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> const&, com::sun::star::uno::Reference<com::sun::star::awt::XWindow> const&, boost::shared_ptr<sdext::presenter::PresenterPaintManager> const&, boost::function<void (double)> const&)
 sdext::presenter::PresenterTextView::PresenterTextView(com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> const&, com::sun::star::uno::Reference<com::sun::star::rendering::XCanvas> const&)
-sdr::Comment::Comment(unsigned int, Date, rtl::OUString const&, rtl::OUString const&, basegfx::B2DPoint const&)
-sdr::Comment::SetCreationDate(Date)
-sdr::Comment::SetPosition(basegfx::B2DPoint const&)
-sdr::Comment::SetText(rtl::OUString const&)
-sdr::Comment::SetUserName(rtl::OUString const&)
 sdr::animation::Scheduler::Reset(unsigned int)
 sdr::contact::ViewContactOfPageObj::GetReferencedPage() const
 sdr::contact::ViewContactOfSdrMediaObj::hasPreferredSize() const
