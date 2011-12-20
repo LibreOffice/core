@@ -98,6 +98,7 @@ TAGS
 /external/*/*.exe
 /external/*/*.manifest
 /external/*/*.txt
+/external/*/*.msm
 /moz/zipped/*.zip
 /extras/source/extensions
 
