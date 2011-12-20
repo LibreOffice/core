@@ -637,7 +637,7 @@ sal_uInt16  OfaTreeOptionsDialog::AddGroup(const String& rGroupName,
 
 IMPL_LINK(OfaTreeOptionsDialog, ShowPageHdl_Impl, SvTreeListBox*, EMPTYARG)
 {
-    SelectHdl_Impl( NULL );
+    SelectHdl_Impl();
     return 0;
 }
 
@@ -932,14 +932,14 @@ long    OfaTreeOptionsDialog::Notify( NotifyEvent& rNEvt )
 
 // --------------------------------------------------------------------
 
-IMPL_LINK( OfaTreeOptionsDialog, SelectHdl_Impl, Timer*, EMPTYARG )
+void OfaTreeOptionsDialog::SelectHdl_Impl()
 {
     SvTreeListBox* pBox = &aTreeLB;
 
     if(pCurrentPageEntry == pBox->GetCurEntry())
     {
         pBox->EndSelection();
-        return 0;
+        return;
     }
 
     SvLBoxEntry* pEntry = pBox->GetCurEntry();
@@ -954,7 +954,7 @@ IMPL_LINK( OfaTreeOptionsDialog, SelectHdl_Impl, Timer*, EMPTYARG )
         OptionsGroupInfo* pGroupInfo = static_cast<OptionsGroupInfo*>(pEntry->GetUserData());
 
         if(!pGroupInfo)
-            return 0;
+            return;
 
         switch(pGroupInfo->m_nDialogId)
         {
@@ -999,7 +999,7 @@ IMPL_LINK( OfaTreeOptionsDialog, SelectHdl_Impl, Timer*, EMPTYARG )
             break;
         }
 
-        return 0;
+        return;
     }
 
     pBox->EndSelection();
@@ -1021,7 +1021,7 @@ IMPL_LINK( OfaTreeOptionsDialog, SelectHdl_Impl, Timer*, EMPTYARG )
         {
             // we cannot leave this page
             pBox->Select( pCurrentPageEntry );
-            return 0;
+            return;
         }
         else
             pOptPageInfo->m_pPage->Hide();
@@ -1046,7 +1046,7 @@ IMPL_LINK( OfaTreeOptionsDialog, SelectHdl_Impl, Timer*, EMPTYARG )
     if(!pPageInfo->m_pPage && pPageInfo->m_nPageId > 0)
     {
         if(pGroupInfo->m_bLoadError)
-            return 0;
+            return;
         if ( RID_SVXPAGE_COLOR == pPageInfo->m_nPageId )
         {
             if(!pColorPageItemSet)
@@ -1072,7 +1072,7 @@ IMPL_LINK( OfaTreeOptionsDialog, SelectHdl_Impl, Timer*, EMPTYARG )
                 {
                     pGroupInfo->m_bLoadError = sal_True;
                     InfoBox(pBox, sNotLoadedError).Execute();
-                    return 0;
+                    return;
                 }
                 if(bIdentical)
                     pGroupInfo->m_pShell = pGroupInfo->m_pModule;
@@ -1214,7 +1214,7 @@ IMPL_LINK( OfaTreeOptionsDialog, SelectHdl_Impl, Timer*, EMPTYARG )
         // then set the focus to the new page or if we are on a group set the focus to the options treebox
         pNewPage ? pNewPage->GrabFocus() : pBox->GrabFocus();
 
-    return 0;
+    return;
 }
 
 OfaPageResource::OfaPageResource() :

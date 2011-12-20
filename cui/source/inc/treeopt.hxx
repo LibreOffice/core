@@ -208,7 +208,7 @@ protected:
     DECL_LINK(BackHdl_Impl, PushButton* );
     DECL_LINK( OKHdl_Impl, Button * );
     DECL_LINK( HintHdl_Impl, Timer * );
-    DECL_LINK( SelectHdl_Impl, Timer * );
+    void SelectHdl_Impl();
 
     virtual long    Notify( NotifyEvent& rNEvt );
     virtual short   Execute();
