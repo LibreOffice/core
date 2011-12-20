@@ -25,21 +25,30 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Module_Module,accessibility))
+$(eval $(call gb_Jar_Jar,java_uno_accessbridge))
 
-$(eval $(call gb_Module_add_targets,accessibility,\
-    AllLangResTarget_acc \
-    Library_acc \
+$(eval $(call gb_Jar_add_jars,java_uno_accessbridge,\
+    $(OUTDIR)/bin/java_accessibility.jar \
+    $(OUTDIR)/bin/jurt.jar \
+    $(OUTDIR)/bin/ridl.jar \
+    $(OUTDIR)/bin/unoil.jar \
 ))
 
-ifneq ($(SOLAR_JAVA),)
-ifeq ($(OS),WNT)
-$(eval $(call gb_Module_add_targets,accessibility,\
-    Jar_accessibility \
-    Jar_uno_accessbridge \
-    Package_bridge \
+$(eval $(call gb_Jar_set_packageroot,java_uno_accessbridge,org))
+
+$(eval $(call gb_Jar_set_manifest,java_uno_accessbridge,$(SRCDIR)/accessibility/bridge/org/openoffice/accessibility/manifest))
+
+$(eval $(call gb_Jar_set_jarclasspath,java_uno_accessbridge,\
+    $$(JARCLASSPATH) \
 ))
-endif
-endif
+
+$(eval $(call gb_Jar_set_componentfile,java_uno_accessbridge,accessibility/bridge/org/openoffice/accessibility/java_uno_accessbridge,OOO))
+
+$(eval $(call gb_Jar_add_sourcefiles,java_uno_accessbridge,\
+    accessibility/bridge/org/openoffice/accessibility/AccessBridge \
+    accessibility/bridge/org/openoffice/accessibility/KeyHandler \
+    accessibility/bridge/org/openoffice/accessibility/PopupWindow \
+    accessibility/bridge/org/openoffice/accessibility/WindowsAccessBridgeAdapter \
+))
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:

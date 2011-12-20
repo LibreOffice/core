@@ -25,21 +25,8 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Module_Module,accessibility))
+$(eval $(call gb_Package_Package,accessibility_bridge,$(WORKDIR)/CustomTarget/accessibility/bridge))
 
-$(eval $(call gb_Module_add_targets,accessibility,\
-    AllLangResTarget_acc \
-    Library_acc \
-))
-
-ifneq ($(SOLAR_JAVA),)
-ifeq ($(OS),WNT)
-$(eval $(call gb_Module_add_targets,accessibility,\
-    Jar_accessibility \
-    Jar_uno_accessbridge \
-    Package_bridge \
-))
-endif
-endif
+$(eval $(call gb_Package_add_customtarget,accessibility_bridge,accessibility/bridge))
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:
