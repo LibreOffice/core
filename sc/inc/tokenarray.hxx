@@ -96,8 +96,15 @@ public:
                                 const ScAddress& rOldPos,
                                 const ScAddress& rNewPos );
 
-    // Make all absolute references external references pointing to the old document
-    void ReadjusteAbsolute3DReferences( const ScDocument* pOldDoc, const ScDocument* pNewDoc, const ScAddress& rPos );
+    /**
+     * Make all absolute references external references pointing to the old document
+     *
+     * @param pOldDoc old document
+     * @param pNewDoc new document
+     * @param rPos position of the cell to determine if the reference is in the copied area
+     * @param bRangeName set for range names, range names have special handling for absolute sheet ref + relative col/row ref
+     */
+    void ReadjusteAbsolute3DReferences( const ScDocument* pOldDoc, const ScDocument* pNewDoc, const ScAddress& rPos, bool bRangeName = false );
 };
 
 #endif // SC_TOKENARRAY_HXX

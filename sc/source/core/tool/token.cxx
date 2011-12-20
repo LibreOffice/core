@@ -1841,9 +1841,45 @@ bool IsInCopyRange( const ScRange& rRange, const ScDocument* pClipDoc )
     return rClipParam.maRanges.In(rRange);
 }
 
+bool SkipReference(ScToken* pToken, const ScAddress& rPos, const ScDocument* pOldDoc, bool bRangeName)
+{
+    ScRange aRange;
+    if (!ScRefTokenHelper::getAbsRangeFromToken(aRange, pToken, rPos))
+        return true;
+
+    if (bRangeName && aRange.aStart.Tab() == rPos.Tab())
+    {
+        switch (pToken->GetType())
+        {
+            case svDoubleRef:
+                {
+                    ScSingleRefData& rRef = pToken->GetSingleRef2();
+                    if (rRef.IsColRel() || rRef.IsRowRel())
+                        return true;
+                } // fall through
+            case svSingleRef:
+                {
+                    ScSingleRefData& rRef = pToken->GetSingleRef();
+                    if (rRef.IsColRel() || rRef.IsRowRel())
+                        return true;
+                }
+                break;
+            default:
+                break;
+        }
+    }
+    else
+    {
+        if (IsInCopyRange(aRange, pOldDoc))
+            return true;
+    }
+
+    return false;
 }
 
-void ScTokenArray::ReadjusteAbsolute3DReferences( const ScDocument* pOldDoc, const ScDocument* pNewDoc, const ScAddress& rPos )
+}
+
+void ScTokenArray::ReadjusteAbsolute3DReferences( const ScDocument* pOldDoc, const ScDocument* pNewDoc, const ScAddress& rPos, bool bRangeName )
 {
     for ( sal_uInt16 j=0; j<nLen; ++j )
     {
@@ -1855,12 +1891,8 @@ void ScTokenArray::ReadjusteAbsolute3DReferences( const ScDocument* pOldDoc, con
                 ScSingleRefData& rRef2 = rRef.Ref2;
                 ScSingleRefData& rRef1 = rRef.Ref1;
 
-                ScRange aRange;
-                if (!ScRefTokenHelper::getAbsRangeFromToken(aRange, static_cast<ScToken*>(pCode[j]), rPos))
-                    continue;   // might be an external ref token
-
-                if (IsInCopyRange(aRange, pOldDoc))
-                    continue;   // don't adjust references to copied values
+                if (SkipReference(static_cast<ScToken*>(pCode[j]), rPos, pOldDoc, bRangeName))
+                    continue;
 
                 if ( (rRef2.IsFlag3D() && !rRef2.IsTabRel()) || (rRef1.IsFlag3D() && !rRef1.IsTabRel()) )
                 {
@@ -1878,12 +1910,8 @@ void ScTokenArray::ReadjusteAbsolute3DReferences( const ScDocument* pOldDoc, con
             {
                 ScSingleRefData& rRef = static_cast<ScToken*>(pCode[j])->GetSingleRef();
 
-                ScRange aRange;
-                if (!ScRefTokenHelper::getAbsRangeFromToken(aRange, static_cast<ScToken*>(pCode[j]), rPos))
-                    continue;   // might be an external ref token
-
-                if (IsInCopyRange(aRange, pOldDoc))
-                    continue;   // don't adjust references to copied values
+                if (SkipReference(static_cast<ScToken*>(pCode[j]), rPos, pOldDoc, bRangeName))
+                    continue;
 
                 if ( rRef.IsFlag3D() && !rRef.IsTabRel() )
                 {

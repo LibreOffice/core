@@ -1864,10 +1864,6 @@ private: // CLOOK-Impl-methods
 
     void    CopyRangeNamesToClip(ScDocument* pClipDoc, const ScRange& rClipRange, const ScMarkData* pMarks, bool bAllTabs);
     void    CopyRangeNamesToClip(ScDocument* pClipDoc, const ScRange& rClipRange, SCTAB nTab);
-    void    CopyRangeNamesFromClip(ScDocument* pClipDoc, ScClipRangeNameData& rRangeNames);
-    void    UpdateRangeNamesInFormulas(
-        ScClipRangeNameData& rRangeNames, const ScRangeList& rDestRanges, const ScMarkData& rMark,
-        SCCOL nXw, SCROW nYw);
 
     bool    HasPartOfMerged( const ScRange& rRange );
 

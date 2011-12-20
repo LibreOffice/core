@@ -2184,116 +2184,6 @@ void ScDocument::MergeNumberFormatter(ScDocument* pSrcDoc)
     }
 }
 
-void ScDocument::CopyRangeNamesFromClip(ScDocument* pClipDoc, ScClipRangeNameData& rRangeNames)
-{
-    if (!pClipDoc->pRangeName)
-        return;
-
-    ScClipRangeNameData aClipRangeNames;
-
-    ScRangeName::const_iterator itr = pClipDoc->pRangeName->begin();
-    ScRangeName::const_iterator itrEnd = pClipDoc->pRangeName->end();
-    for (; itr != itrEnd; ++itr)        //! DB-Bereiche Pivot-Bereiche auch
-    {
-        /*  Copy only if the name doesn't exist in this document.
-            If it exists we use the already existing name instead,
-            another possibility could be to create new names if
-            documents differ.
-            A proper solution would ask the user how to proceed.
-            The adjustment of the indices in the formulas is done later.
-        */
-        const ScRangeData* pExistingData = GetRangeName()->findByUpperName(itr->first);
-        if (pExistingData)
-        {
-            sal_uInt16 nOldIndex = itr->second->GetIndex();
-            sal_uInt16 nNewIndex = pExistingData->GetIndex();
-            aClipRangeNames.insert(nOldIndex, nNewIndex);
-            if ( !aClipRangeNames.mbReplace )
-                aClipRangeNames.mbReplace = ( nOldIndex != nNewIndex );
-        }
-        else
-        {
-            ScRangeData* pData = new ScRangeData( *itr->second );
-            pData->SetDocument(this);
-            if ( pRangeName->findByIndex( pData->GetIndex() ) )
-                pData->SetIndex(0);     // need new index, done in Insert
-            if ( pRangeName->insert(pData) )
-            {
-                aClipRangeNames.mpRangeNames.push_back(pData);
-                sal_uInt16 nOldIndex = itr->second->GetIndex();
-                sal_uInt16 nNewIndex = pData->GetIndex();
-                aClipRangeNames.insert(nOldIndex, nNewIndex);
-                if ( !aClipRangeNames.mbReplace )
-                    aClipRangeNames.mbReplace = ( nOldIndex != nNewIndex );
-            }
-            else
-            {   // must be an overflow
-                pData = NULL;
-                aClipRangeNames.insert(itr->second->GetIndex(), 0);
-                aClipRangeNames.mbReplace = true;
-            }
-        }
-    }
-    rRangeNames = aClipRangeNames;
-}
-
-void ScDocument::UpdateRangeNamesInFormulas(
-    ScClipRangeNameData& rRangeNames, const ScRangeList& rDestRanges, const ScMarkData& rMark,
-    SCCOL nXw, SCROW nYw)
-{
-    // nXw and nYw are the extra width and height of the destination range
-    // extended due to presence of merged cell(s).
-
-    if (!rRangeNames.mbReplace)
-        return;
-
-    // first update all inserted named formulas if they contain other
-    // range names and used indices changed
-    for (size_t i = 0, n = rRangeNames.mpRangeNames.size(); i < n; ++i)        //! DB-Bereiche Pivot-Bereiche auch
-    {
-        rRangeNames.mpRangeNames[i]->ReplaceRangeNamesInUse(rRangeNames.maRangeMap);
-    }
-    // then update the formulas, they might need just the updated range names
-    for ( size_t nRange = 0, n = rDestRanges.size(); nRange < n; ++nRange )
-    {
-        const ScRange* pRange = rDestRanges[nRange];
-        SCCOL nCol1 = pRange->aStart.Col();
-        SCROW nRow1 = pRange->aStart.Row();
-        SCCOL nCol2 = pRange->aEnd.Col();
-        SCROW nRow2 = pRange->aEnd.Row();
-
-        SCCOL nC1 = nCol1;
-        SCROW nR1 = nRow1;
-        SCCOL nC2 = nC1 + nXw;
-        if (nC2 > nCol2)
-            nC2 = nCol2;
-        SCROW nR2 = nR1 + nYw;
-        if (nR2 > nRow2)
-            nR2 = nRow2;
-        do
-        {
-            do
-            {
-                ScMarkData::const_iterator itr = rMark.begin(), itrEnd = rMark.end();
-                for (; itr != itrEnd; ++itr)
-                {
-                    if ( maTabs[*itr] )
-                        maTabs[*itr]->ReplaceRangeNamesInUse(nC1, nR1,
-                            nC2, nR2, rRangeNames.maRangeMap);
-                }
-                nC1 = nC2 + 1;
-                nC2 = Min((SCCOL)(nC1 + nXw), nCol2);
-            } while (nC1 <= nCol2);
-            nC1 = nCol1;
-            nC2 = nC1 + nXw;
-            if (nC2 > nCol2)
-                nC2 = nCol2;
-            nR1 = nR2 + 1;
-            nR2 = Min((SCROW)(nR1 + nYw), nRow2);
-        } while (nR1 <= nRow2);
-    }
-}
-
 ScClipParam& ScDocument::GetClipParam()
 {
     if (!mpClipParam.get())
@@ -2498,9 +2388,6 @@ void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMar
 
             NumFmtMergeHandler aNumFmtMergeHdl(this, pClipDoc);
 
-            ScClipRangeNameData aClipRangeNames;
-            CopyRangeNamesFromClip(pClipDoc, aClipRangeNames);
-
             SCCOL nAllCol1 = rDestRange.aStart.Col();
             SCROW nAllRow1 = rDestRange.aStart.Row();
             SCCOL nAllCol2 = rDestRange.aEnd.Col();
@@ -2657,8 +2544,6 @@ void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMar
 
             bInsertingFromOtherDoc = false;
 
-            UpdateRangeNamesInFormulas(aClipRangeNames, *pDestRanges, rMark, nXw, nYw);
-
             // Listener aufbauen nachdem alles inserted wurde
             StartListeningFromClip( nAllCol1, nAllRow1, nAllCol2, nAllRow2, rMark, nInsFlag );
             // nachdem alle Listener aufgebaut wurden, kann gebroadcastet werden
@@ -2700,9 +2585,6 @@ void ScDocument::CopyMultiRangeFromClip(
     SetAutoCalc( false );   // avoid multiple recalculations
 
     NumFmtMergeHandler aNumFmtMergeHdl(this, pClipDoc);
-
-    ScClipRangeNameData aClipRangeNames;
-    CopyRangeNamesFromClip(pClipDoc, aClipRangeNames);
 
     SCCOL nCol1 = rDestPos.Col();
     SCROW nRow1 = rDestPos.Row();
@@ -2798,9 +2680,6 @@ void ScDocument::CopyMultiRangeFromClip(
 
     ScRangeList aRanges;
     aRanges.Append(aDestRange);
-    SCCOL nCols = aDestRange.aEnd.Col() - aDestRange.aStart.Col() + 1;
-    SCROW nRows = aDestRange.aEnd.Row() - aDestRange.aStart.Row() + 1;
-    UpdateRangeNamesInFormulas(aClipRangeNames, aRanges, rMark, nCols-1, nRows-1);
 
     // Listener aufbauen nachdem alles inserted wurde
     StartListeningFromClip(aDestRange.aStart.Col(), aDestRange.aStart.Row(),
