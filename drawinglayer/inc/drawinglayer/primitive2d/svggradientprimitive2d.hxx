@@ -148,7 +148,7 @@ namespace drawinglayer
                 const SvgGradientEntryVector& rEntries,
                 sal_Int32 nOffset) const;
             virtual void checkPreconditions();
-            Primitive2DSequence SvgGradientHelper::createResult(
+            Primitive2DSequence createResult(
                 const Primitive2DVector& rTargetColor,
                 const Primitive2DVector& rTargetOpacity,
                 const basegfx::B2DHomMatrix& rUnitGradientToObject,
