@@ -120,11 +120,11 @@ static int sal_main(void);
 #elif defined ANDROID
 
 #ifdef __cplusplus
-extern "C" void lo_main(int argc, char **argv);
+extern "C" __attribute__ ((visibility("default"))) void lo_main(int argc, char **argv);
 #endif
 
 #define SAL_MAIN_WITH_ARGS_IMPL \
-void lo_main(int argc, char **argv) \
+__attribute__ ((visibility("default"))) void lo_main(int argc, char **argv) \
 { \
     sal_detail_initialize(argc, argv); \
     sal_main_with_args(argc, argv); \
@@ -132,7 +132,7 @@ void lo_main(int argc, char **argv) \
 }
 
 #define SAL_MAIN_IMPL \
-void lo_main(int argc, char **argv) \
+__attribute__ ((visibility("default"))) void lo_main(int argc, char **argv) \
 { \
     sal_detail_initialize(argc, argv); \
     sal_main(); \
