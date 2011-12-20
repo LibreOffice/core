@@ -52,15 +52,9 @@ PresenterCanvasHelper::PresenterCanvasHelper (void)
 {
 }
 
-
-
-
 PresenterCanvasHelper::~PresenterCanvasHelper (void)
 {
 }
-
-
-
 
 void PresenterCanvasHelper::Paint (
     const SharedBitmapDescriptor& rpBitmap,
@@ -72,9 +66,6 @@ void PresenterCanvasHelper::Paint (
     PaintRectangle(rpBitmap,rxCanvas,rRepaintBox,rOuterBoundingBox,rContentBoundingBox,
         maDefaultViewState, maDefaultRenderState);
 }
-
-
-
 
 void PresenterCanvasHelper::PaintRectangle (
     const SharedBitmapDescriptor& rpBitmap,

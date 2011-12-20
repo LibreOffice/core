@@ -39,7 +39,6 @@ using namespace ::com::sun::star::uno;
 
 namespace sdext { namespace presenter {
 
-
 void PresenterUIPainter::PaintHorizontalBitmapComposite (
     const css::uno::Reference<css::rendering::XCanvas>& rxCanvas,
     const css::awt::Rectangle& rRepaintBox,
@@ -141,9 +140,6 @@ void PresenterUIPainter::PaintHorizontalBitmapComposite (
         }
     }
 }
-
-
-
 
 void PresenterUIPainter::PaintVerticalBitmapComposite (
     const css::uno::Reference<css::rendering::XCanvas>& rxCanvas,
@@ -247,10 +243,6 @@ void PresenterUIPainter::PaintVerticalBitmapComposite (
         }
     }
 }
-
-
-
-
 
 } } // end of namespace sdext::presenter
 

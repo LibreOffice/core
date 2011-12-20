@@ -94,20 +94,9 @@ private:
 
     void Shutdown (void);
 
-    /** Predicate that returns true when the specified resource is active
-        with respect to the given configuration controller.
-    */
-    static bool HasResource (
-        const css::uno::Reference<css::drawing::framework::XConfigurationController>&rxController,
-        const css::uno::Reference<css::drawing::framework::XResourceId>& rxResourceId);
-
     /** Predicate that always returns true.
     */
     static bool True (void);
-
-    /** Predicate that always returns false.
-    */
-    static bool False (void);
 };
 
 

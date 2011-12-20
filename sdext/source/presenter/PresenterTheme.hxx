@@ -84,13 +84,10 @@ public:
         const ::rtl::OUString& rsStyleName,
         const bool bOuter) const;
 
-    class FontDescriptor;
     class Theme;
-
     class FontDescriptor
     {
     public:
-        explicit FontDescriptor (void);
         explicit FontDescriptor (const ::boost::shared_ptr<FontDescriptor>& rpDescriptor);
 
         ::rtl::OUString msFamilyName;

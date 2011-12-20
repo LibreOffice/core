@@ -246,15 +246,7 @@ public:
         const css::uno::Reference<css::uno::XComponentContext>& rxContext,
         const css::uno::Reference<css::rendering::XCanvas>& rxCanvas,
         const ::boost::function<void(const ::css::awt::Rectangle&)>& rInvalidator);
-    /** Create a new instance that does no output but only provides
-        geometric information to an accessibility object.
-    */
-    PresenterTextView (
-        const css::uno::Reference<css::uno::XComponentContext>& rxContext,
-        const css::uno::Reference<css::rendering::XCanvas>& rxCanvas);
-
     void SetText (const css::uno::Reference<css::text::XText>& rxText);
-    void SetText (const ::rtl::OUString& rsText);
     void SetTextChangeBroadcaster (const ::boost::function<void(void)>& rBroadcaster);
 
     void SetLocation (const css::geometry::RealPoint2D& rLocation);

@@ -109,8 +109,7 @@ public:
     void InvalidateArea (
         const css::awt::Rectangle& rRepaintBox,
         const bool bSynchronous);
-    sal_Int32 GetSlideCount (void);
-    sal_Int32 GetCurrentSlideIndex (void);
+
     void RequestLayout (void);
     css::geometry::RealSize2D GetMinimalSize (void);
     ::rtl::Reference<PresenterController> GetPresenterController (void) const;

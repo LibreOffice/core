@@ -116,54 +116,6 @@ PresenterTextView::PresenterTextView (
         UNO_QUERY_THROW);
 }
 
-
-
-
-PresenterTextView::PresenterTextView (
-    const Reference<XComponentContext>& rxContext,
-    const Reference<rendering::XCanvas>& rxCanvas)
-    : mxCanvas(rxCanvas),
-      mbDoOuput(false),
-      mxBreakIterator(),
-      mxScriptTypeDetector(),
-      maLocation(0,0),
-      maSize(0,0),
-      mpFont(),
-      maParagraphs(),
-      mpCaret(new PresenterTextCaret(
-          ::boost::bind(&PresenterTextView::GetCaretBounds, this, _1, _2),
-          ::boost::function<void(const css::awt::Rectangle&)>())),
-      mnLeftOffset(0),
-      mnTopOffset(0),
-      maInvalidator(),
-      mbIsFormatPending(false),
-      mnCharacterCount(-1),
-      maTextChangeBroadcaster()
-{
-    Reference<lang::XMultiComponentFactory> xFactory (
-        rxContext->getServiceManager(), UNO_QUERY);
-    if ( ! xFactory.is())
-        return;
-
-    // Create the break iterator that we use to break text into lines.
-    mxBreakIterator = Reference<i18n::XBreakIterator>(
-        xFactory->createInstanceWithContext(
-            A2S("com.sun.star.i18n.BreakIterator"),
-            rxContext),
-        UNO_QUERY_THROW);
-
-    // Create the script type detector that is used to split paragraphs into
-    // portions of the same text direction.
-    mxScriptTypeDetector = Reference<i18n::XScriptTypeDetector>(
-        xFactory->createInstanceWithContext(
-            A2S("com.sun.star.i18n.ScriptTypeDetector"),
-            rxContext),
-        UNO_QUERY_THROW);
-}
-
-
-
-
 void PresenterTextView::SetText (const Reference<text::XText>& rxText)
 {
     maParagraphs.clear();
@@ -202,47 +154,11 @@ void PresenterTextView::SetText (const Reference<text::XText>& rxText)
     RequestFormat();
 }
 
-
-
-
-void PresenterTextView::SetText (const ::rtl::OUString& rsText)
-{
-    maParagraphs.clear();
-    mnCharacterCount = -1;
-
-    if ( ! mpFont || ! mpFont->PrepareFont(mxCanvas))
-        return;
-
-    sal_Int32 nCharacterCount (0);
-
-    SharedPresenterTextParagraph pParagraph (new PresenterTextParagraph(
-        0,
-        mxBreakIterator,
-        mxScriptTypeDetector,
-        rsText,
-        mpCaret));
-    pParagraph->SetupCellArray(mpFont);
-    pParagraph->SetCharacterOffset(nCharacterCount);
-    nCharacterCount += pParagraph->GetCharacterCount();
-    maParagraphs.push_back(pParagraph);
-
-    if (mpCaret)
-        mpCaret->HideCaret();
-
-    RequestFormat();
-}
-
-
-
-
 void PresenterTextView::SetTextChangeBroadcaster (
     const ::boost::function<void(void)>& rBroadcaster)
 {
     maTextChangeBroadcaster = rBroadcaster;
 }
-
-
-
 
 void PresenterTextView::SetLocation (const css::geometry::RealPoint2D& rLocation)
 {
@@ -260,17 +176,11 @@ void PresenterTextView::SetLocation (const css::geometry::RealPoint2D& rLocation
     }
 }
 
-
-
-
 void PresenterTextView::SetSize (const css::geometry::RealSize2D& rSize)
 {
     maSize = rSize;
     RequestFormat();
 }
-
-
-
 
 double PresenterTextView::GetTotalTextHeight (void)
 {
@@ -295,17 +205,11 @@ double PresenterTextView::GetTotalTextHeight (void)
     return nTotalHeight;
 }
 
-
-
-
 void PresenterTextView::SetFont (const PresenterTheme::SharedFontDescriptor& rpFont)
 {
     mpFont = rpFont;
     RequestFormat();
 }
-
-
-
 
 void PresenterTextView::SetOffset(
     const double nLeft,
@@ -317,8 +221,6 @@ void PresenterTextView::SetOffset(
     // Trigger an update of the text origin stored at the individual paragraphs.
     SetLocation(maLocation);
 }
-
-
 
 void PresenterTextView::MoveCaret (
     const sal_Int32 nDistance,
@@ -401,9 +303,6 @@ void PresenterTextView::MoveCaret (
     // Move the caret to the new position.
     mpCaret->SetPosition(nParagraphIndex, nCharacterIndex);
 }
-
-
-
 
 void PresenterTextView::Paint (
     const css::awt::Rectangle& rUpdateBox)
