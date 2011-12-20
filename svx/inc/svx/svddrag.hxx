@@ -35,11 +35,11 @@
 #include <tools/fract.hxx>
 #include "svx/svxdllapi.h"
 
-// Statushalter fuer objektspeziefisches Draggen. Damit das Model
-// Statusfrei bleibt werden die Statusdaten an der View gehalten
-// und dem Objekt zu gegebener Zeit als Parameter uebergeben.
-// Ausserdem auch Statushalter fuer den Vorgang der Interaktiven
-// Objekterzeugung. pHdl ist in diesem Fall NULL.
+// Status information for specialized object dragging. In order for the model
+// to stay status free, the status data is kept on the View
+// and handed over to the object at the appropriate time as a parameter.
+// This also includes the status of the operation and Interactive
+// Object creation. In this case, pHdl is null.
 class SdrHdl;
 class SdrView;
 class SdrPageView;
@@ -84,14 +84,14 @@ protected:
     void*     aReservePtr3;
     void*     aReservePtr4;
 
-    bool      bShown;    // Xor sichrbar?
-    sal_uInt16    nMinMov;   // Soviel muss erstmal minimal bewegt werden
-    bool      bMinMoved; // MinMove durchbrochen?
+    bool      bShown;    // Xor visible?
+    sal_uInt16    nMinMov;   // So much has to be minimally moved first
+    bool      bMinMoved; // MinMove surpassed?
 
-    bool      bHorFixed; // nur Vertikal draggen
-    bool      bVerFixed; // nur Horizontal draggen
-    bool      bWantNoSnap; // TRUE=Fuer die Entscheidung ob fuer pObj->MovCreate() NoSnapPos verwendet
-                          // werden soll. Entsprechend wird auch NoSnapPos in den Buffer geschrieben.
+    bool      bHorFixed; // Dragging only vertical
+    bool      bVerFixed; // Dragging only horizontal
+    bool      bWantNoSnap; // To decide if pObj-> MovCreate () should use NoSnapPos or not.
+                          // Therefore, NoSnapPos is written into the buffer.
     bool  bOrtho4;
     bool  bOrtho8;
 
@@ -144,27 +144,27 @@ public:
     bool         IsVerFixed() const                  { return bVerFixed; }
     void         SetVerFixed(bool bOn)               { bVerFixed=bOn; }
 
-    // Hier kann das Obj sagen: "Ich will keinen Koordinatenfang!"
-    // z.B. fuer den Winkel des Kreisbogen...
+    // Here, the object can say: "I do not want to snap to coordinates!"
+    // for example, the angle of the arc ...
     bool         IsNoSnap() const                     { return bWantNoSnap; }
     void         SetNoSnap(bool bOn = true)           { bWantNoSnap=bOn; }
 
-    // Und hier kann das Obj sagen welches Ortho (wenn ueberhaupt eins)
-    // sinnvoll auf ihm angewendet werden kann.
-    // Ortho4 bedeutet Ortho in 4 Richtungen (fuer Rect und Cirt)
+    // And here the Obj say which Ortho (if there is one)
+    // can be usefully applied to him.
+    // Ortho4 means Ortho in four directions (for Rect and CIRT)
     bool         IsOrtho4Possible() const             { return bOrtho4; }
     void         SetOrtho4Possible(bool bOn = true)   { bOrtho4=bOn; }
-    // Ortho8 bedeutet Ortho in 8 Richtungen (fuer Linien)
+    // Ortho8 means Ortho in 8 directions (for lines)
     bool         IsOrtho8Possible() const             { return bOrtho8; }
     void         SetOrtho8Possible(bool bOn = true)   { bOrtho8=bOn; }
 
-    // Wird vom gedraggten Objekt gesetzt
+    // Is set by an object that was dragged.
     bool         IsEndDragChangesAttributes() const    { return bEndDragChangesAttributes; }
     void         SetEndDragChangesAttributes(bool bOn) { bEndDragChangesAttributes=bOn; }
     bool         IsEndDragChangesGeoAndAttributes() const   { return bEndDragChangesGeoAndAttributes; }
     void         SetEndDragChangesGeoAndAttributes(bool bOn) { bEndDragChangesGeoAndAttributes=bOn; }
 
-    // Wird von der View gesetzt und kann vom Obj ausgewertet werden
+    // Is set by the view and can be evaluated by Obj
     bool         IsMouseDown() const                  { return !bMouseIsUp; }
     void         SetMouseDown(bool bDown)         { bMouseIsUp=!bDown; }
 
@@ -185,7 +185,7 @@ public:
     const Rectangle& GetActionRect() const             { return aActionRect; }
     void             SetActionRect(const Rectangle& rR) { aActionRect=rR; }
 
-    // Unter Beruecksichtigung von 1stPointAsCenter
+    // also considering 1stPointAsCenter
     void TakeCreateRect(Rectangle& rRect) const;
 };
 

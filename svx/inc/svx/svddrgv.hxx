@@ -65,20 +65,20 @@ protected:
     SdrUndoGeoObj*              pInsPointUndo;
     Rectangle                   aDragLimit;
     XubString                   aInsPointUndoStr;
-    SdrMarkList                 aFollowingEdges; // Wenn Knoten gedraggd werden, sollen alle Kanten als Xor folgen
+    SdrMarkList                 aFollowingEdges; // If nodes are dragged, all edges should follow as Xor
     SdrHdlKind                  eDragHdl;
 
     sal_uIntPtr                     nDragXorPolyLimit;
     sal_uIntPtr                     nDragXorPointLimit;
     sal_uInt16                      nDetailedEdgeDraggingLimit;
 
-    unsigned                    bFramDrag : 1;        // z.Zt. FrameDrag
-    unsigned                    bDragSpecial : 1;     // z.Zt. Special Obj-Dragging
+    unsigned                    bFramDrag : 1;        // currently frame dragging
+    unsigned                    bDragSpecial : 1;     // currently Special Obj-dragging
     unsigned                    bMarkedHitMovesAlways : 1; // Persistent
-    unsigned                    bDragLimit : 1;      // Limit auf SnapRect statt BoundRect
-    unsigned                    bDragHdl : 1;        // TRUE: RefPt wird verschoben
+    unsigned                    bDragLimit : 1;      // Limit on SnapRect instead of BoundRect
+    unsigned                    bDragHdl : 1;        // TRUE: RefPt is slid
     unsigned                    bDragStripes : 1;    // Persistent
-    unsigned                    bMirrRefDragObj : 1; // Persistent - Waehrend des Draggens der Spiegelachse die gespiegelten Objekte als Xor zeigen
+    unsigned                    bMirrRefDragObj : 1; // Persistent - During the drag, show the mirror axis of the mirrored objects as Xor
     unsigned                    mbSolidDragging : 1;  // allow solid create/drag of objects
     unsigned                    bMouseHideWhileDraggingPoints : 1;
     unsigned                    bResizeAtCenter : 1;

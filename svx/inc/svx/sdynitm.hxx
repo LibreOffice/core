@@ -34,9 +34,9 @@
 
 //------------------------------------------------------------
 // class SdrYesNoItem
-// hier liefert GetValueTextByVal() "ja" oder "nein"
-// anstelle von "TRUE" und "FALSE"
-//------------------------------------------------------------
+// GetValueTextByVal() returns "yes" or "no"
+// instead of "TRUE" and "FALSE"
+//-------------------------------------------------- ----------
 class SVX_DLLPUBLIC SdrYesNoItem: public SfxBoolItem {
 public:
     TYPEINFO();
