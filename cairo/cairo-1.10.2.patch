@@ -1,3 +1,14 @@
+--- misc/cairo-1.10.2/build/Makefile.win32.features	2010-08-18 09:47:30.000000000 +0200
++++ misc/build/cairo-1.10.2/build/Makefile.win32.features	2011-12-20 09:57:06.428170146 +0100
+@@ -30,7 +30,7 @@
+ CAIRO_HAS_FC_FONT=0
+ CAIRO_HAS_PS_SURFACE=1
+ CAIRO_HAS_PDF_SURFACE=1
+-CAIRO_HAS_SVG_SURFACE=1
++CAIRO_HAS_SVG_SURFACE=0
+ CAIRO_HAS_TEST_SURFACES=0
+ CAIRO_HAS_TEE_SURFACE=0
+ CAIRO_HAS_XML_SURFACE=0
 --- misc/cairo-1.10.2/build/Makefile.win32.common	2009-06-14 23:53:24.000000000 +0200
 +++ misc/build/cairo-1.10.2/build/Makefile.win32.common	2009-06-14 23:53:24.000000000 +0200
 @@ -22,24 +22,26 @@
