@@ -194,8 +194,12 @@ gb_GLOBALDEFS += \
 else
 gb_GLOBALDEFS += \
 	-DDBG_UTIL \
+
+ifneq ($(COM),MSC)
+gb_GLOBALDEFS += \
 	-D_DEBUG \
 
+endif
 endif
 
 ifneq ($(strip $(SOLAR_JAVA)),)

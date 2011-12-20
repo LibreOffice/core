@@ -125,10 +125,6 @@ gb_Library_NOILIBFILENAMES += \
 gb_Library_FILENAMES := $(filter-out $(foreach lib,$(gb_Library_NOILIBFILENAMES),$(lib):%),$(gb_Library_FILENAMES))
 gb_Library_FILENAMES += $(foreach lib,$(gb_Library_NOILIBFILENAMES),$(lib):$(lib)$(gb_Library_PLAINEXT))
 
-ifneq ($(gb_PRODUCT),$(true))
-gb_Library_FILENAMES := $(patsubst msvcrt:msvcrt%,msvcrt:msvcrtd%,$(gb_Library_FILENAMES))
-endif
-
 endif # ifeq ($(COM),GCC)
 
 endif # ifeq ($(OS),WNT)

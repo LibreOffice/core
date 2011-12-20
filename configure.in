@@ -2434,15 +2434,6 @@ if test -n "$enable_dbgutil" && test "$enable_dbgutil" != "no"; then
     PROEXT=""
     PRODUCT=""
 
-    # Compiling with MSVC using --enable-dbgutil (i.e. using the
-    # debugging runtime, and defining _DEBUG when compiling) just
-    # causes too many compilation errors. After having spent some
-    # months slowly fixing them one by one, having reached sw, I give
-    # up. Feel free to try again.
-    if test "$_os" = WINNT -a "$WITH_MINGW" != yes; then
-        AC_MSG_ERROR([Sorry, --enable-dbgutil won't work with MSVC])
-    fi
-
     AC_MSG_RESULT([yes])
     # cppunit and graphite expose STL in public headers
     if test "$with_system_cppunit" = "yes"; then

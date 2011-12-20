@@ -434,7 +434,7 @@
  	}
  	else if (strcmp(argv[1], "Debug") == 0) {
 -		strcat_s(command, CMD_SIZE, "-D_DEBUG -MDd ");
-+		strcat_s(command, CMD_SIZE, "-D_DEBUG -MD ");
++		strcat_s(command, CMD_SIZE, "-MD ");
  	}
  	else if (strcmp(argv[1], "ReleaseItanium") == 0) {
  		strcat_s(command, CMD_SIZE, "-MD /USECL:MS_ITANIUM ");

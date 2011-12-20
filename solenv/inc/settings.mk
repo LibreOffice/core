@@ -452,7 +452,6 @@ DBG_LEVEL*=0
 optimize!=true
 dbgutil!=true
 DBG_LEVEL*=1
-USE_DEBUG_RUNTIME*=TRUE
 .ENDIF
 
 .IF "$(debug)"!=""

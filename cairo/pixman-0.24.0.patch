@@ -19,7 +19,7 @@
 +endif
 +
 +ifeq ($(CFG_VAR),debug)
-+CFG_CFLAGS  = -MDd -Od -Zi
++CFG_CFLAGS  = -MD -Od -Zi
 +CFG_LDFLAGS = -DEBUG
 +else
 +CFG_CFLAGS  = -MD -O2
