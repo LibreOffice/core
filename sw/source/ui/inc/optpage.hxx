@@ -361,6 +361,8 @@ public:
  TabPage test settings for SW
 --------------------------------------------------------- */
 
+#ifdef DBG_UTIL
+
 class SwTestTabPage : public SfxTabPage
 {
 public:
@@ -392,6 +394,7 @@ private:
     DECL_LINK( AutoClickHdl, CheckBox * );
 
 };
+#endif // DBG_UTIL
 
 #endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

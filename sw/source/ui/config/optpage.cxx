@@ -1729,6 +1729,8 @@ void SwRedlineOptionsTabPage::InitFontStyle(SvxFontPrevWindow& rExampleWin)
 }
 
 
+#ifdef DBG_UTIL
+
 void lcl_SetPosSize(Window& rWin, Point aPos, Size aSize)
 {
     aPos = rWin.LogicToPixel(aPos, MAP_APPFONT);
@@ -1861,6 +1863,8 @@ IMPL_LINK_INLINE_START( SwTestTabPage, AutoClickHdl, CheckBox *, EMPTYARG )
     return 0;
 }
 IMPL_LINK_INLINE_END( SwTestTabPage, AutoClickHdl, CheckBox *, EMPTYARG )
+#endif
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
