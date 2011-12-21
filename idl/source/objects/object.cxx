@@ -55,7 +55,7 @@ void SvClassElement::Load( SvPersistStream & rStm )
         return;
     }
     if( nMask & 0x01 ) rStm >> aAutomation;
-    if( nMask & 0x02 ) aPrefix = read_lenPrefixed_uInt8s_ToOString(rStm);
+    if( nMask & 0x02 ) rStm.ReadByteString( aPrefix );
     if( nMask & 0x04 )
     {
         SvMetaClass * p;
@@ -75,7 +75,7 @@ void SvClassElement::Save( SvPersistStream & rStm )
     // write data
     rStm << nMask;
     if( nMask & 0x01 ) rStm << aAutomation;
-    if( nMask & 0x02 ) write_lenPrefixed_uInt8s_FromOString(rStm, aPrefix);
+    if( nMask & 0x02 ) rStm.WriteByteString( aPrefix );
     if( nMask & 0x04 ) rStm << xClass;
 }
 

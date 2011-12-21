@@ -73,7 +73,7 @@ sal_Bool INetImage::Read( SvStream& rIStm, sal_uLong nFormat )
     {
     case SOT_FORMATSTR_ID_INET_IMAGE:
         {
-            String sINetImg = read_zeroTerminated_uInt8s_ToOUString(rIStm, RTL_TEXTENCODING_UTF8);
+            String sINetImg = read_zeroTerminated_uInt8s_AsOUString(rIStm, RTL_TEXTENCODING_UTF8);
             xub_StrLen nStart = 0;
             aImageURL = sINetImg.GetToken( 0, TOKEN_SEPARATOR, nStart );
             aTargetURL = sINetImg.GetToken( 0, TOKEN_SEPARATOR, nStart );
@@ -119,11 +119,11 @@ sal_Bool INetImage::Read( SvStream& rIStm, sal_uLong nFormat )
             // skip over iExtraHTML_Offset
             rIStm.SeekRel( sizeof( int ) );
 
-            aImageURL = read_zeroTerminated_uInt8s_ToOUString(rIStm, eSysCSet);
+            aImageURL = read_zeroTerminated_uInt8s_AsOUString(rIStm, eSysCSet);
             if( nAltOffset )
             {
                 rIStm.Seek( nFilePos + nAltOffset );
-                aAlternateText = read_zeroTerminated_uInt8s_ToOUString(rIStm, eSysCSet);
+                aAlternateText = read_zeroTerminated_uInt8s_AsOUString(rIStm, eSysCSet);
             }
             else if( aAlternateText.Len() )
                 aAlternateText.Erase();
@@ -131,7 +131,7 @@ sal_Bool INetImage::Read( SvStream& rIStm, sal_uLong nFormat )
             if( nAnchorOffset )
             {
                 rIStm.Seek( nFilePos + nAnchorOffset );
-                aTargetURL = read_zeroTerminated_uInt8s_ToOUString(rIStm, eSysCSet);
+                aTargetURL = read_zeroTerminated_uInt8s_AsOUString(rIStm, eSysCSet);
             }
             else if( aTargetURL.Len() )
                 aTargetURL.Erase();

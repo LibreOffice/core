@@ -136,10 +136,7 @@ public:
 
 //Read a Pascal-style, i.e. single byte string length followed
 //by string contents
-inline String read_uInt8_PascalString(SvStream& rStrm, rtl_TextEncoding eEnc)
-{
-    return read_lenPrefixed_uInt8s_ToOUString<sal_uInt8>(rStrm, eEnc);
-}
+String read_uInt8_PascalString(SvStream& rStrm, rtl_TextEncoding eEnc);
 String read_LEuInt16_PascalString(SvStream& rStrm);
 
 //Belt and Braces strings, i.e. Pascal-style strings followed by

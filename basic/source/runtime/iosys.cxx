@@ -656,7 +656,7 @@ SbError SbiStream::Read( ByteString& rBuf, sal_uInt16 n, bool bForceReadingPerBy
             n = nLen;
         if( !n )
             return nError = SbERR_BAD_RECORD_LENGTH;
-        rtl::OStringBuffer aBuffer(read_uInt8s_ToOString(*pStrm, n));
+        rtl::OStringBuffer aBuffer(read_uInt8s_AsOString(*pStrm, n));
         //Pad it out with ' ' to the requested length on short read
         sal_Int32 nRequested = sal::static_int_cast<sal_Int32>(n);
         comphelper::string::padToLength(aBuffer, nRequested, ' ');

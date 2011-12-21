@@ -78,7 +78,7 @@ GalleryThemeEntry::GalleryThemeEntry( const INetURLObject& rBaseURL, const Strin
     if( nId && bThemeNameFromResource )
         aName = String( GAL_RESID( RID_GALLERYSTR_THEME_START + (sal_uInt16) nId ) );
 
-    if( !aName.getLength() )
+    if( !aName.Len() )
         aName = rName;
 }
 
@@ -107,7 +107,7 @@ INetURLObject GalleryThemeEntry::ImplGetURLIgnoreCase( const INetURLObject& rURL
 
 // -----------------------------------------------------------------------------
 
-void GalleryThemeEntry::SetName( const rtl::OUString& rNewName )
+void GalleryThemeEntry::SetName( const String& rNewName )
 {
     if( aName != rNewName )
     {
@@ -132,12 +132,16 @@ void GalleryThemeEntry::SetId( sal_uInt32 nNewId, sal_Bool bResetThemeName )
 
 SvStream& operator<<( SvStream& rOut, const GalleryImportThemeEntry& rEntry )
 {
-    write_lenPrefixed_uInt8s_FromOUString(rOut, rEntry.aThemeName, RTL_TEXTENCODING_UTF8);
-    write_lenPrefixed_uInt8s_FromOUString(rOut, rEntry.aUIName, RTL_TEXTENCODING_UTF8);
-    write_lenPrefixed_uInt8s_FromOUString(rOut, (rEntry.aURL.GetMainURL( INetURLObject::NO_DECODE )), RTL_TEXTENCODING_UTF8);
-    write_lenPrefixed_uInt8s_FromOUString(rOut, rEntry.aImportName, RTL_TEXTENCODING_UTF8);
+    rOut.WriteByteString(rtl::OUStringToOString(rEntry.aThemeName, RTL_TEXTENCODING_UTF8));
 
-    write_lenPrefixed_uInt8s_FromOString(rOut, rtl::OString());
+    rOut.WriteByteString(rtl::OUStringToOString(rEntry.aUIName, RTL_TEXTENCODING_UTF8));
+
+    rOut.WriteByteString(rtl::OUStringToOString(String(rEntry.aURL.GetMainURL( INetURLObject::NO_DECODE )), RTL_TEXTENCODING_UTF8));
+
+    rOut.WriteByteString(rtl::OUStringToOString(rEntry.aImportName, RTL_TEXTENCODING_UTF8));
+
+    rOut.WriteByteString(rtl::OUString());
+
     return rOut;
 }
 
@@ -145,11 +149,22 @@ SvStream& operator<<( SvStream& rOut, const GalleryImportThemeEntry& rEntry )
 
 SvStream& operator>>( SvStream& rIn, GalleryImportThemeEntry& rEntry )
 {
-    rEntry.aThemeName = read_lenPrefixed_uInt8s_ToOUString(rIn, RTL_TEXTENCODING_UTF8);
-    rEntry.aUIName = read_lenPrefixed_uInt8s_ToOUString(rIn, RTL_TEXTENCODING_UTF8);
-    rEntry.aURL = read_lenPrefixed_uInt8s_ToOUString(rIn, RTL_TEXTENCODING_UTF8);
-    rEntry.aImportName = read_lenPrefixed_uInt8s_ToOUString(rIn, RTL_TEXTENCODING_UTF8);
-    read_lenPrefixed_uInt8s_ToOString(rIn);
+    ByteString aTmpStr;
+
+    rIn.ReadByteString(aTmpStr);
+    rEntry.aThemeName = String( aTmpStr, RTL_TEXTENCODING_UTF8 );
+
+    rIn.ReadByteString(aTmpStr);
+    rEntry.aUIName = String( aTmpStr, RTL_TEXTENCODING_UTF8 );
+
+    rIn.ReadByteString(aTmpStr);
+    rEntry.aURL = INetURLObject( String( aTmpStr, RTL_TEXTENCODING_UTF8 ) );
+
+    rIn.ReadByteString(aTmpStr);
+    rEntry.aImportName = String( aTmpStr, RTL_TEXTENCODING_UTF8 );
+
+    rIn.ReadByteString(aTmpStr);
+
     return rIn;
 }
 
@@ -532,23 +547,21 @@ void Gallery::ImplWriteImportList()
 
 // ------------------------------------------------------------------------
 
-GalleryThemeEntry* Gallery::ImplGetThemeEntry( const rtl::OUString& rThemeName )
+GalleryThemeEntry* Gallery::ImplGetThemeEntry( const String& rThemeName )
 {
     GalleryThemeEntry* pFound = NULL;
 
-    if( rThemeName.getLength() )
-    {
+    if( rThemeName.Len() )
         for ( size_t i = 0, n = aThemeList.size(); i < n && !pFound; ++i )
             if( rThemeName == aThemeList[ i ]->GetThemeName() )
                 pFound = aThemeList[ i ];
-    }
 
     return pFound;
 }
 
 // ------------------------------------------------------------------------
 
-GalleryImportThemeEntry* Gallery::ImplGetImportThemeEntry( const rtl::OUString& rImportName )
+GalleryImportThemeEntry* Gallery::ImplGetImportThemeEntry( const String& rImportName )
 {
     for ( size_t i = 0, n = aImportList.size(); i < n; ++i )
         if ( rImportName == aImportList[ i ]->aUIName )
@@ -558,7 +571,7 @@ GalleryImportThemeEntry* Gallery::ImplGetImportThemeEntry( const rtl::OUString& 
 
 // ------------------------------------------------------------------------
 
-rtl::OUString Gallery::GetThemeName( sal_uIntPtr nThemeId ) const
+String Gallery::GetThemeName( sal_uIntPtr nThemeId ) const
 {
     GalleryThemeEntry* pFound = NULL;
 
@@ -593,7 +606,7 @@ rtl::OUString Gallery::GetThemeName( sal_uIntPtr nThemeId ) const
         pFound = ( (Gallery*) this )->ImplGetThemeEntry( String::CreateFromAscii( aFallback.GetBuffer() ) );
     }
 
-    return( pFound ? pFound->GetThemeName() : rtl::OUString() );
+    return( pFound ? pFound->GetThemeName() : String() );
 }
 
 // ------------------------------------------------------------------------

@@ -733,7 +733,8 @@ GalleryThemeEntry* GalleryTheme::CreateThemeEntry( const INetURLObject& rURL, sa
             {
                 sal_uInt32      nThemeId = 0;
 
-                rtl::OString aTmpStr = read_lenPrefixed_uInt8s_ToOString(*pIStm);
+                ByteString aTmpStr;
+                pIStm->ReadByteString(aTmpStr);
                 aThemeName = rtl::OStringToOUString(aTmpStr, RTL_TEXTENCODING_UTF8);
 
                 // Charakterkonvertierung durchfuehren
@@ -1354,7 +1355,7 @@ SvStream& GalleryTheme::WriteData( SvStream& rOStm ) const
     sal_Bool                bRel;
 
     rOStm << (sal_uInt16) 0x0004;
-    write_lenPrefixed_uInt8s_FromOUString(rOStm, GetRealName(), RTL_TEXTENCODING_UTF8);
+    rOStm.WriteByteString(rtl::OUStringToOString(GetRealName(), RTL_TEXTENCODING_UTF8));
     rOStm << nCount << (sal_uInt16) osl_getThreadTextEncoding();
 
     for( sal_uInt32 i = 0; i < nCount; i++ )
@@ -1394,7 +1395,7 @@ SvStream& GalleryTheme::WriteData( SvStream& rOStm ) const
 
         aPath.SearchAndReplace(m_aDestDir, String());
         rOStm << bRel;
-        write_lenPrefixed_uInt8s_FromOUString(rOStm, aPath, RTL_TEXTENCODING_UTF8);
+        rOStm.WriteByteString(rtl::OUStringToOString(aPath, RTL_TEXTENCODING_UTF8));
         rOStm << pObj->nOffset << (sal_uInt16) pObj->eObjKind;
     }
 
@@ -1432,9 +1433,10 @@ SvStream& GalleryTheme::ReadData( SvStream& rIStm )
     String              aThemeName;
     rtl_TextEncoding    nTextEncoding;
 
-    aImportName = rtl::OUString();
+    aImportName = String();
     rIStm >> nVersion;
-    rtl::OString aTmpStr = read_lenPrefixed_uInt8s_ToOString(rIStm);
+    ByteString aTmpStr;
+    rIStm.ReadByteString(aTmpStr);
     rIStm >> nCount;
 
     if( nVersion >= 0x0004 )
@@ -1469,12 +1471,13 @@ SvStream& GalleryTheme::ReadData( SvStream& rIStm )
         {
             pObj = new GalleryObject;
 
+            ByteString  aTempFileName;
             String      aFileName;
             String      aPath;
             sal_uInt16  nTemp;
 
             rIStm >> bRel;
-            rtl::OString aTempFileName = read_lenPrefixed_uInt8s_ToOString(rIStm);
+            rIStm.ReadByteString(aTempFileName);
             rIStm >> pObj->nOffset;
             rIStm >> nTemp; pObj->eObjKind = (SgaObjKind) nTemp;
 
@@ -1580,7 +1583,7 @@ SvStream& operator>>( SvStream& rIn, GalleryTheme& rTheme )
 void GalleryTheme::ImplSetModified( sal_Bool bModified )
 { pThm->SetModified( bModified ); }
 
-const rtl::OUString& GalleryTheme::GetRealName() const { return pThm->GetThemeName(); }
+const String& GalleryTheme::GetRealName() const { return pThm->GetThemeName(); }
 const INetURLObject& GalleryTheme::GetThmURL() const { return pThm->GetThmURL(); }
 const INetURLObject& GalleryTheme::GetSdgURL() const { return pThm->GetSdgURL(); }
 const INetURLObject& GalleryTheme::GetSdvURL() const { return pThm->GetSdvURL(); }
@@ -1591,7 +1594,7 @@ sal_Bool GalleryTheme::IsImported() const { return pThm->IsImported(); }
 sal_Bool GalleryTheme::IsReadOnly() const { return pThm->IsReadOnly(); }
 sal_Bool GalleryTheme::IsDefault() const { return pThm->IsDefault(); }
 sal_Bool GalleryTheme::IsModified() const { return pThm->IsModified(); }
-const rtl::OUString& GalleryTheme::GetName() const { return IsImported() ? aImportName : pThm->GetThemeName(); }
+const String& GalleryTheme::GetName() const { return IsImported() ? aImportName : pThm->GetThemeName(); }
 
 void GalleryTheme::InsertAllThemes( ListBox& rListBox )
 {

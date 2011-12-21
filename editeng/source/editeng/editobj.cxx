@@ -1131,10 +1131,10 @@ void BinTextObject::StoreData( SvStream& rOStream ) const
 
         // Convert CH_FEATURE to CH_FEATURE_OLD
         aText.SearchAndReplaceAll( cFeatureConverted, CH_FEATURE_OLD );
-        write_lenPrefixed_uInt8s_FromOString(rOStream, aText);
+        rOStream.WriteByteString( aText );
 
         // StyleName and Family...
-        write_lenPrefixed_uInt8s_FromOUString(rOStream, pC->GetStyle(), eEncoding);
+        rOStream.WriteByteString( rtl::OUStringToOString(pC->GetStyle(), eEncoding) );
         rOStream << (sal_uInt16)pC->GetFamily();
 
         // Paragraph attributes ...
@@ -1226,8 +1226,9 @@ void BinTextObject::CreateData( SvStream& rIStream )
         ContentInfo* pC = CreateAndInsertContent();
 
         // The Text...
-        ByteString aByteString = read_lenPrefixed_uInt8s_ToOString(rIStream);
-        pC->GetText() = rtl::OStringToOUString(aByteString, eSrcEncoding);
+        ByteString aByteString;
+        rIStream.ReadByteString( aByteString );
+        pC->GetText() = String( aByteString, eSrcEncoding );
 
         // StyleName and Family...
         rIStream.ReadByteString( pC->GetStyle(), eSrcEncoding );

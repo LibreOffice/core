@@ -877,7 +877,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                     rIStm >> aPt >> nIndex >> nLen >> nTmp;
                     if ( nTmp && ( static_cast< sal_uInt32 >( nTmp ) < ( SAL_MAX_UINT16 - 1 ) ) )
                     {
-                        rtl::OString aByteStr = read_uInt8s_ToOString(rIStm, nTmp);
+                        rtl::OString aByteStr = read_uInt8s_AsOString(rIStm, nTmp);
                         sal_uInt8 nTerminator = 0;
                         rIStm >> nTerminator;
                         DBG_ASSERT( nTerminator == 0, "expected string to be NULL terminated" );
@@ -899,7 +899,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                     rIStm >> aPt >> nIndex >> nLen >> nTmp >> nAryLen;
                     if ( nTmp && ( static_cast< sal_uInt32 >( nTmp ) < ( SAL_MAX_UINT16 - 1 ) ) )
                     {
-                        rtl::OString aByteStr = read_uInt8s_ToOString(rIStm, nTmp);
+                        rtl::OString aByteStr = read_uInt8s_AsOString(rIStm, nTmp);
                         sal_uInt8 nTerminator = 0;
                         rIStm >> nTerminator;
                         DBG_ASSERT( nTerminator == 0, "expected string to be NULL terminated" );
@@ -962,7 +962,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                     rIStm >> aPt >> nIndex >> nLen >> nTmp >> nWidth;
                     if ( nTmp && ( static_cast< sal_uInt32 >( nTmp ) < ( SAL_MAX_INT16 - 1 ) ) )
                     {
-                        rtl::OString aByteStr = read_uInt8s_ToOString(rIStm, nTmp);
+                        rtl::OString aByteStr = read_uInt8s_AsOString(rIStm, nTmp);
                         sal_uInt8 nTerminator = 0;
                         rIStm >> nTerminator;
                         DBG_ASSERT( nTerminator == 0, "expected string to be NULL terminated" );
@@ -1322,12 +1322,13 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
 
                 case( GDI_COMMENT_COMMENT ):
                 {
+                    ByteString  aComment;
                     sal_Int32   nValue;
                     sal_uInt32  nDataSize;
                     sal_uInt8*      pData;
                     sal_Int32       nFollowingActionCount;
 
-                    rtl::OString aComment = read_lenPrefixed_uInt8s_ToOString(rIStm);
+                    rIStm.ReadByteString(aComment);
                     rIStm >> nValue >> nDataSize;
 
                     if( nDataSize )
@@ -2412,7 +2413,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                 rOStm.SeekRel( 4 );
 
                 // write data
-                write_lenPrefixed_uInt8s_FromOString(rOStm, pA->GetComment());
+                rOStm.WriteByteString(pA->GetComment());
                 rOStm << pA->GetValue() << nDataSize;
 
                 if( nDataSize )

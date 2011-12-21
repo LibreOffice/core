@@ -806,7 +806,7 @@ sal_Bool SvStream::ReadUniOrByteStringLine( String& rStr, rtl_TextEncoding eSrcC
         return ReadByteStringLine( rStr, eSrcCharSet );
 }
 
-rtl::OString read_zeroTerminated_uInt8s_ToOString(SvStream& rStream)
+rtl::OString read_zeroTerminated_uInt8s_AsOString(SvStream& rStream)
 {
     rtl::OStringBuffer aOutput;
 
@@ -839,10 +839,10 @@ rtl::OString read_zeroTerminated_uInt8s_ToOString(SvStream& rStream)
     return aOutput.makeStringAndClear();
 }
 
-rtl::OUString read_zeroTerminated_uInt8s_ToOUString(SvStream& rStream, rtl_TextEncoding eEnc)
+rtl::OUString read_zeroTerminated_uInt8s_AsOUString(SvStream& rStream, rtl_TextEncoding eEnc)
 {
     return rtl::OStringToOUString(
-        read_zeroTerminated_uInt8s_ToOString(rStream), eEnc);
+        read_zeroTerminated_uInt8s_AsOString(rStream), eEnc);
 }
 
 /*************************************************************************
@@ -1517,7 +1517,19 @@ SvStream& SvStream::ReadByteString( UniString& rStr, rtl_TextEncoding eSrcCharSe
         return *this;
     }
 
-    rStr = read_lenPrefixed_uInt8s_ToOUString(*this, eSrcCharSet);
+    ByteString aStr;
+    ReadByteString( aStr );
+    rStr = UniString( aStr, eSrcCharSet );
+    return *this;
+}
+
+// -----------------------------------------------------------------------
+
+SvStream& SvStream::ReadByteString( ByteString& rStr )
+{
+    sal_uInt16 nLen = 0;
+    operator>>( nLen );
+    rStr = read_uInt8s_AsOString(*this, nLen);
     return *this;
 }
 
@@ -1551,7 +1563,17 @@ SvStream& SvStream::WriteByteString( const UniString& rStr, rtl_TextEncoding eDe
         return *this;
     }
 
-    write_lenPrefixed_uInt8s_FromOUString(*this, rStr, eDestCharSet);
+    return WriteByteString(rtl::OUStringToOString(rStr, eDestCharSet));
+}
+
+// -----------------------------------------------------------------------
+
+SvStream& SvStream::WriteByteString( const ByteString& rStr)
+{
+    sal_uInt16 nLen = rStr.Len();
+    operator<< ( nLen );
+    if( nLen != 0 )
+        Write( rStr.GetBuffer(), nLen );
     return *this;
 }
 
@@ -2432,7 +2454,7 @@ void SvDataCopyStream::Assign( const SvDataCopyStream& )
 }
 
 //Create a OString of nLen bytes from rStream
-rtl::OString read_uInt8s_ToOString(SvStream& rStrm, sal_Size nLen)
+rtl::OString read_uInt8s_AsOString(SvStream& rStrm, sal_Size nLen)
 {
     using comphelper::string::rtl_string_alloc;
 
@@ -2459,7 +2481,7 @@ rtl::OString read_uInt8s_ToOString(SvStream& rStrm, sal_Size nLen)
 }
 
 //Create a OUString of nLen little endian sal_Unicodes from rStream
-rtl::OUString read_LEuInt16s_ToOUString(SvStream& rStrm, sal_Size nLen)
+rtl::OUString read_LEuInt16s_AsOUString(SvStream& rStrm, sal_Size nLen)
 {
     using comphelper::string::rtl_uString_alloc;
 

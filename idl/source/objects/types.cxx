@@ -1780,7 +1780,7 @@ void SvMetaEnumValue::Load( SvPersistStream & rStm )
         OSL_FAIL( "wrong format" );
         return;
     }
-    if( nMask & 0x01 ) aEnumValue = read_lenPrefixed_uInt8s_ToOString(rStm);
+    if( nMask & 0x01 ) rStm.ReadByteString( aEnumValue );
 }
 
 void SvMetaEnumValue::Save( SvPersistStream & rStm )
@@ -1793,7 +1793,7 @@ void SvMetaEnumValue::Save( SvPersistStream & rStm )
 
     // write data
     rStm << nMask;
-    if( nMask & 0x01 ) write_lenPrefixed_uInt8s_FromOString(rStm, aEnumValue);
+    if( nMask & 0x01 ) rStm.WriteByteString( aEnumValue );
 }
 
 sal_Bool SvMetaEnumValue::ReadSvIdl( SvIdlDataBase & rBase,
@@ -1837,7 +1837,7 @@ void SvMetaTypeEnum::Load( SvPersistStream & rStm )
         return;
     }
     if( nMask & 0x01 ) rStm >> aEnumValueList;
-    if( nMask & 0x02 ) aPrefix = read_lenPrefixed_uInt8s_ToOString(rStm);
+    if( nMask & 0x02 ) rStm.ReadByteString( aPrefix );
 }
 
 void SvMetaTypeEnum::Save( SvPersistStream & rStm )
@@ -1852,7 +1852,7 @@ void SvMetaTypeEnum::Save( SvPersistStream & rStm )
     // write data
     rStm << nMask;
     if( nMask & 0x01 ) rStm << aEnumValueList;
-    if( nMask & 0x02 ) write_lenPrefixed_uInt8s_FromOString(rStm, aPrefix);
+    if( nMask & 0x02 ) rStm.WriteByteString( aPrefix );
 }
 
 void SvMetaTypeEnum::ReadContextSvIdl( SvIdlDataBase & rBase,

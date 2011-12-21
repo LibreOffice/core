@@ -1608,7 +1608,7 @@ int INetMIMEMessageStream::PutMsgLine (const sal_Char *pData, sal_uIntPtr nSize)
 
                 // Multipart message body. Initialize multipart delimiters.
                 // Multipart message.
-                if (pMsg->GetMultipartBoundary().getLength() == 0)
+                if (pMsg->GetMultipartBoundary().Len() == 0)
                 {
                     // Determine boundary.
                     rtl::OString aType(rtl::OUStringToOString(

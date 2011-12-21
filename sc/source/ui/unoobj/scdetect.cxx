@@ -734,7 +734,7 @@ static sal_Bool lcl_MayBeDBase( SvStream& rStream )
                             // get file header
                             rStr.Seek( 0 );
                             const sal_Size nTrySize = 80;
-                            ByteString aHeader = read_uInt8s_ToOString(rStr, nTrySize);
+                            ByteString aHeader = read_uInt8s_AsOString(rStr, nTrySize);
 
                             if ( HTMLParser::IsHTMLFormat( aHeader.GetBuffer() ) )
                             {

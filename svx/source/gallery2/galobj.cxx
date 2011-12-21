@@ -168,7 +168,7 @@ void SgaObject::WriteData( SvStream& rOut, const String& rDestDir ) const
 
     String aURLWithoutDestDir = String(aURL.GetMainURL( INetURLObject::NO_DECODE ));
     aURLWithoutDestDir.SearchAndReplace(rDestDir, String());
-    write_lenPrefixed_uInt8s_FromOUString(rOut, aURLWithoutDestDir, RTL_TEXTENCODING_UTF8);
+    rOut.WriteByteString(rtl::OUStringToOString(aURLWithoutDestDir, RTL_TEXTENCODING_UTF8));
 }
 
 // ------------------------------------------------------------------------
@@ -185,8 +185,9 @@ void SgaObject::ReadData(SvStream& rIn, sal_uInt16& rReadVersion )
     else
         rIn >> aThumbMtf;
 
-    rtl::OUString aTmpStr = read_lenPrefixed_uInt8s_ToOUString(rIn, RTL_TEXTENCODING_UTF8);
-    aURL = INetURLObject(aTmpStr);
+    ByteString aTmpStr;
+    rIn.ReadByteString(aTmpStr);
+    aURL = INetURLObject(rtl::OStringToOUString(aTmpStr,RTL_TEXTENCODING_UTF8));
 }
 
 // ------------------------------------------------------------------------
@@ -293,8 +294,9 @@ void SgaObjectBmp::WriteData( SvStream& rOut, const String& rDestDir ) const
     SgaObject::WriteData( rOut, rDestDir );
     char aDummy[ 10 ];
     rOut.Write( aDummy, 10 );
-    write_lenPrefixed_uInt8s_FromOString(rOut, rtl::OString()); //dummy
-    write_lenPrefixed_uInt8s_FromOUString(rOut, aTitle, RTL_TEXTENCODING_UTF8);
+    String aDummyStr;
+    rOut.WriteByteString(rtl::OUStringToOString(aDummyStr, RTL_TEXTENCODING_UTF8));
+    rOut.WriteByteString(rtl::OUStringToOString(aTitle, RTL_TEXTENCODING_UTF8));
 }
 
 // ------------------------------------------------------------------------
@@ -304,10 +306,14 @@ void SgaObjectBmp::ReadData( SvStream& rIn, sal_uInt16& rReadVersion )
 
     SgaObject::ReadData( rIn, rReadVersion );
     rIn.SeekRel( 10 ); // 16, 16, 32, 16
-    read_lenPrefixed_uInt8s_ToOString(rIn); //dummy
+    ByteString aTmpStr;
+    rIn.ReadByteString(aTmpStr); // dummy
 
     if( rReadVersion >= 5 )
-        aTitle = read_lenPrefixed_uInt8s_ToOUString(rIn, RTL_TEXTENCODING_UTF8);
+    {
+        rIn.ReadByteString(aTmpStr);
+        aTitle = rtl::OStringToOUString(aTmpStr, RTL_TEXTENCODING_UTF8);
+    }
 }
 
 // ------------------
@@ -374,7 +380,7 @@ void SgaObjectSound::WriteData( SvStream& rOut, const String& rDestDir ) const
 {
     SgaObject::WriteData( rOut, rDestDir );
     rOut << (sal_uInt16) eSoundType;
-    write_lenPrefixed_uInt8s_FromOUString(rOut, aTitle, RTL_TEXTENCODING_UTF8);
+    rOut.WriteByteString(rtl::OUStringToOString(aTitle, RTL_TEXTENCODING_UTF8));
 }
 
 // ------------------------------------------------------------------------
@@ -390,7 +396,11 @@ void SgaObjectSound::ReadData( SvStream& rIn, sal_uInt16& rReadVersion )
         rIn >> nTmp16; eSoundType = (GalSoundType) nTmp16;
 
         if( rReadVersion >= 6 )
-            aTitle = read_lenPrefixed_uInt8s_ToOUString(rIn, RTL_TEXTENCODING_UTF8);
+        {
+            ByteString  aTmpStr;
+            rIn.ReadByteString(aTmpStr);
+            aTitle = rtl::OStringToOUString(aTmpStr, RTL_TEXTENCODING_UTF8);
+        }
     }
 }
 
@@ -581,7 +591,7 @@ sal_Bool SgaObjectSvDraw::DrawCentered( OutputDevice* pOut, const FmFormModel& r
 void SgaObjectSvDraw::WriteData( SvStream& rOut, const String& rDestDir ) const
 {
     SgaObject::WriteData( rOut, rDestDir );
-    write_lenPrefixed_uInt8s_FromOUString(rOut, aTitle, RTL_TEXTENCODING_UTF8);
+    rOut.WriteByteString(rtl::OUStringToOString(aTitle, RTL_TEXTENCODING_UTF8));
 }
 
 // ------------------------------------------------------------------------
@@ -591,7 +601,11 @@ void SgaObjectSvDraw::ReadData( SvStream& rIn, sal_uInt16& rReadVersion )
     SgaObject::ReadData( rIn, rReadVersion );
 
     if( rReadVersion >= 5 )
-        aTitle = read_lenPrefixed_uInt8s_ToOUString(rIn, RTL_TEXTENCODING_UTF8);
+    {
+        ByteString aTmpStr;
+        rIn.ReadByteString(aTmpStr);
+        aTitle = rtl::OStringToOUString(aTmpStr, RTL_TEXTENCODING_UTF8);
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -673,7 +673,7 @@ void ONDXNode::Read(SvStream &rStream, ODbaseIndex& rIndex)
     else
     {
         sal_uInt16 nLen = rIndex.getHeader().db_keylen;
-        rtl::OString aBuf = read_uInt8s_ToOString(rStream, nLen);
+        rtl::OString aBuf = read_uInt8s_AsOString(rStream, nLen);
         //get length minus trailing whitespace
         sal_Int32 nContentLen = aBuf.getLength();
         while (nContentLen && aBuf[nContentLen-1] == ' ')

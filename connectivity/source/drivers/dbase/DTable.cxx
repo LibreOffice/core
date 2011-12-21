@@ -2739,7 +2739,7 @@ sal_Bool ODbaseTable::ReadMemo(sal_uIntPtr nBlockNo, ORowSetValue& aVariable)
             {
                 if ( bIsText )
                 {
-                    rtl::OStringBuffer aBuffer(read_uInt8s_ToOString(*m_pMemoStream, nLength));
+                    rtl::OStringBuffer aBuffer(read_uInt8s_AsOString(*m_pMemoStream, nLength));
                     //pad it out with ' ' to expected length on short read
                     sal_Int32 nRequested = sal::static_int_cast<sal_Int32>(nLength);
                     comphelper::string::padToLength(aBuffer, nRequested, ' ');

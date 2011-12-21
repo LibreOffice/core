@@ -66,9 +66,9 @@ void SvMetaModule::Load( SvPersistStream & rStm )
     rStm >> aAttrList;
     // browser
     rStm.ReadByteString( aIdlFileName );
-    aHelpFileName = read_lenPrefixed_uInt8s_ToOString(rStm);
-    aSlotIdFile = read_lenPrefixed_uInt8s_ToOString(rStm);
-    aModulePrefix = read_lenPrefixed_uInt8s_ToOString(rStm);
+    rStm.ReadByteString( aHelpFileName );
+    rStm.ReadByteString( aSlotIdFile );
+    rStm.ReadByteString( aModulePrefix );
 
     // read compiler data
     sal_uInt16 nCmpLen;
@@ -91,9 +91,9 @@ void SvMetaModule::Save( SvPersistStream & rStm )
     rStm << aAttrList;
     // browser
     rStm.WriteByteString( aIdlFileName );
-    write_lenPrefixed_uInt8s_FromOString(rStm, aHelpFileName);
-    write_lenPrefixed_uInt8s_FromOString(rStm, aSlotIdFile);
-    write_lenPrefixed_uInt8s_FromOString(rStm, aModulePrefix);
+    rStm.WriteByteString( aHelpFileName );
+    rStm.WriteByteString( aSlotIdFile );
+    rStm.WriteByteString( aModulePrefix );
 
     // write compiler data
     sal_uInt16 nCmpLen = 0;

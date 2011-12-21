@@ -237,11 +237,11 @@ public:
 // *** byte string import operations *** --------------------------------------
 
     /** Reads and returns a zero terminated byte string and decreases a stream counter. */
-    static rtl::OString read_zeroTerminated_uInt8s_ToOString(SvStream& rStrm, sal_Int32& rnBytesLeft);
+    static rtl::OString read_zeroTerminated_uInt8s_AsOString(SvStream& rStrm, sal_Int32& rnBytesLeft);
     /** Reads and returns a zero terminated byte string and decreases a stream counter. */
-    inline static rtl::OUString read_zeroTerminated_uInt8s_ToOUString(SvStream& rStrm, sal_Int32& rnBytesLeft, rtl_TextEncoding eTextEnc)
+    inline static rtl::OUString read_zeroTerminated_uInt8s_AsOUString(SvStream& rStrm, sal_Int32& rnBytesLeft, rtl_TextEncoding eTextEnc)
     {
-        return rtl::OStringToOUString(read_zeroTerminated_uInt8s_ToOString(rStrm, rnBytesLeft), eTextEnc);
+        return rtl::OStringToOUString(read_zeroTerminated_uInt8s_AsOString(rStrm, rnBytesLeft), eTextEnc);
     }
 
     /** Appends a zero terminated byte string. */

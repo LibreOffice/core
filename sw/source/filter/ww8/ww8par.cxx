@@ -281,7 +281,7 @@ bool Sttb::Read( SvStream& rS )
         {
             SBBItem aItem;
             rS >> aItem.cchData;
-            aItem.data = read_LEuInt16s_ToOUString(rS, aItem.cchData);
+            aItem.data = read_LEuInt16s_AsOUString(rS, aItem.cchData);
             dataItems.push_back( aItem );
         }
     }

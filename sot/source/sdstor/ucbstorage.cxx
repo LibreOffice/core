@@ -3303,7 +3303,8 @@ String UCBStorage::GetLinkedFile( SvStream &rStream )
     rStream >> nBytes;
     if( nBytes == 0x04034b50 )
     {
-        ByteString aTmp = read_lenPrefixed_uInt8s_ToOString(rStream);
+        ByteString aTmp;
+        rStream.ReadByteString( aTmp );
         if ( aTmp.CompareTo( "ContentURL=", 11 ) == COMPARE_EQUAL )
         {
             aTmp.Erase( 0, 11 );
