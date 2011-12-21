@@ -3323,7 +3323,7 @@ drawinglayer::primitive2d::Primitive2DSequence lcl_CreateDashedIndicatorPrimitiv
 
 void SwPageFrm::PaintBreak( ) const
 {
-    if ( !pGlobalShell->GetViewOptions()->IsPrinting() &&
+    if ( pGlobalShell->GetOut()->GetOutDevType() != OUTDEV_PRINTER  &&
          !pGlobalShell->GetViewOptions()->IsPDFExport() &&
          !pGlobalShell->IsPreView() )
     {
@@ -3358,7 +3358,7 @@ void SwPageFrm::PaintBreak( ) const
 
 void SwColumnFrm::PaintBreak( ) const
 {
-    if ( !pGlobalShell->GetViewOptions()->IsPrinting() &&
+    if ( pGlobalShell->GetOut()->GetOutDevType() != OUTDEV_PRINTER  &&
          !pGlobalShell->GetViewOptions()->IsPDFExport() &&
          !pGlobalShell->IsPreView() )
     {
@@ -3465,7 +3465,7 @@ void SwPageFrm::PaintDecorators( ) const
         {
             SwRect aBodyRect( pBody->Frm() );
 
-            if ( !pGlobalShell->GetViewOptions()->IsPrinting() &&
+            if ( pGlobalShell->GetOut()->GetOutDevType() != OUTDEV_PRINTER &&
                  !pGlobalShell->GetViewOptions()->IsPDFExport() &&
                  !pGlobalShell->IsPreView() &&
                  pGlobalShell->IsShowHeaderFooterSeparator( ) )
