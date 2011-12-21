@@ -2425,7 +2425,18 @@ SwDoc * SwXTextDocument::GetRenderDoc(
             const TypeId aSwViewTypeId = TYPE(SwView);
             if (rpView  &&  rpView->IsA(aSwViewTypeId))
             {
-                SfxObjectShellLock xDocSh(((SwView*)rpView)->GetOrCreateTmpSelectionDoc());
+                if (!m_pRenderData)
+                {
+                    OSL_FAIL("GetRenderDoc: no renderdata");
+                    return 0;
+                }
+                SwView *const pSwView(static_cast<SwView *>(rpView));
+                SfxObjectShellLock xDocSh(m_pRenderData->GetTempDocShell());
+                if (!xDocSh.Is())
+                {
+                    xDocSh = pSwView->CreateTmpSelectionDoc();
+                    m_pRenderData->SetTempDocShell(xDocSh);
+                }
                 if (xDocSh.Is())
                 {
                     pDoc = ((SwDocShell*)&xDocSh)->GetDoc();
@@ -2555,7 +2566,10 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
                 if (m_pRenderData && m_pRenderData->NeedNewViewOptionAdjust( *pViewShell ) )
                     m_pRenderData->ViewOptionAdjustStop();
                 if (m_pRenderData && !m_pRenderData->IsViewOptionAdjust())
-                    m_pRenderData->ViewOptionAdjustStart( *pViewShell, *pViewShell->GetViewOptions(), rSelection.hasValue() );
+                {
+                    m_pRenderData->ViewOptionAdjustStart(
+                        *pViewShell, *pViewShell->GetViewOptions() );
+                }
             }
 
             m_pRenderData->MakeSwPrtOptions( pRenderDocShell,
@@ -3842,21 +3856,16 @@ void SwXDocumentPropertyHelper::onChange()
        m_pDoc->SetModified();
 }
 
-SwViewOptionAdjust_Impl::SwViewOptionAdjust_Impl( ViewShell& rSh, const SwViewOption &rViewOptions, bool bIsTmpSelection ) :
-    m_rShell( rSh ),
-    m_aOldViewOptions( rViewOptions ),
-    m_bIsTmpSelection( bIsTmpSelection )
+SwViewOptionAdjust_Impl::SwViewOptionAdjust_Impl(
+            ViewShell& rSh, const SwViewOption &rViewOptions)
+    : m_rShell( rSh )
+    , m_aOldViewOptions( rViewOptions )
 {
 }
 
 SwViewOptionAdjust_Impl::~SwViewOptionAdjust_Impl()
 {
-    //fdo#39159 don't restore original view options on a temporary document
-    //selection, it triggers throwing away the current view. Presumably we can
-    //forget about it in the temporary document case as unimportant to restore
-    //the original view settings
-    if (!m_bIsTmpSelection)
-        m_rShell.ApplyViewOptions( m_aOldViewOptions );
+    m_rShell.ApplyViewOptions( m_aOldViewOptions );
 }
 
 void

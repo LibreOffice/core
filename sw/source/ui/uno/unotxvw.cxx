@@ -882,14 +882,6 @@ void SwXTextView::NotifySelChanged()
 {
     OSL_ENSURE( m_pView, "view is missing" );
 
-    // destroy temporary document with selected text that is used
-    // in PDF export of (multi-)selections.
-    if (m_pView && m_pView->GetTmpSelectionDoc().Is())
-    {
-        m_pView->GetTmpSelectionDoc()->DoClose();
-        m_pView->GetTmpSelectionDoc() = 0;
-    }
-
     uno::Reference< uno::XInterface >  xInt = (cppu::OWeakObject*)(SfxBaseController*)this;
 
      lang::EventObject aEvent(xInt);

@@ -28,10 +28,10 @@
 #ifndef SW_PRINTDATA_HXX
 #define SW_PRINTDATA_HXX
 
-
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
 #include <vcl/print.hxx>
+#include <sfx2/objsh.hxx>
 
 #include <boost/scoped_ptr.hpp>
 
@@ -244,6 +244,10 @@ class SwRenderData
 
     rtl::OUString               m_aPageRange;
 
+    // temp print document -- must live longer than m_pViewOptionAdjust!
+    // also this is a Lock and not a Ref because Ref does not delete the doc
+    SfxObjectShellLock m_xTempDocShell;
+
     // the view options to be applied for printing
     ::boost::scoped_ptr<SwViewOptionAdjust_Impl> m_pViewOptionAdjust;
 
@@ -266,9 +270,12 @@ public:
     void CreatePostItData( SwDoc *pDoc, const SwViewOption *pViewOpt, OutputDevice *pOutDev );
     void DeletePostItData();
 
+    SfxObjectShellLock const& GetTempDocShell() const;
+    void SetTempDocShell(SfxObjectShellLock const&);
+
     bool IsViewOptionAdjust() const  { return m_pViewOptionAdjust != 0; }
     bool NeedNewViewOptionAdjust( const ViewShell& ) const;
-    void ViewOptionAdjustStart( ViewShell &rSh, const SwViewOption &rViewOptions, bool bIsTmpSelection );
+    void ViewOptionAdjustStart( ViewShell &rSh, const SwViewOption &rViewOptions);
     void ViewOptionAdjust( SwPrintData const* const pPrtOptions );
     void ViewOptionAdjustStop();
 
