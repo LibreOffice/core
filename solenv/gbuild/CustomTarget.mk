@@ -56,20 +56,23 @@ endef
 define gb_CustomTarget_CustomTarget
 $(call gb_CustomTarget_get_target,$(1)) : \
   $(call gb_CustomTarget__get_makefile,$(1))
+
 endef
 
 
 define gb_CustomTarget_add_dependency
-$(eval $(call gb_CustomTarget_get_target,$(1)) : \
-	$(SRCDIR)/$(2))
+$(call gb_CustomTarget_get_target,$(1)) : $(SRCDIR)/$(2)
+
 endef
 
 define gb_CustomTarget_add_dependencies
 $(foreach dependency,$(2),$(call gb_CustomTarget_add_dependency,$(1),$(dependency)))
+
 endef
 
 define gb_CustomTarget_add_outdir_dependency
-$(eval $(call gb_CustomTarget_get_target,$(1)) : $(2))
+$(call gb_CustomTarget_get_target,$(1)) : $(2)
+
 endef
 
 define gb_CustomTarget_add_outdir_dependencies
