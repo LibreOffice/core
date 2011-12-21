@@ -69,6 +69,10 @@ public:
     /// get threshold of two-digit year input
     sal_uInt16  GetYear2000() const { return nYear2000; }
 
+    // Whether input may be a ISO 8601 date format, yyyy-mm-dd...
+    // checks if at least 3 numbers and first number>31
+    bool MayBeIso8601();
+
 private:
     SvNumberFormatter*  pFormatter;
     String* pUpperMonthText;                    // Array of month names, uppercase
@@ -255,10 +259,6 @@ private:
     bool ScanEndString(                         // Analyze end of string
             const String& rString,
             const SvNumberformat* pFormat = NULL );
-
-    // Whether input may be a ISO 8601 date format, yyyy-mm-dd...
-    // checks if at least 3 numbers and first number>31
-    bool MayBeIso8601();
 
     // Compare rString to substring of array indexed by nString
     // nString == 0xFFFF => last substring
