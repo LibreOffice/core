@@ -52,6 +52,10 @@
 
 #include <boost/scoped_ptr.hpp>
 
+#ifdef WNT
+#include <windows.h>
+#endif
+
 using namespace osl;
 
 using ::rtl::OUString;
