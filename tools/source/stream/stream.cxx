@@ -1287,7 +1287,7 @@ SvStream& SvStream::operator>>(float& r)
 
 SvStream& SvStream::operator>>(double& r)
 {
-    double n;
+    double n = 0;
     READNUMBER_WITHOUT_SWAP(double, n)
     if (good())
     {
