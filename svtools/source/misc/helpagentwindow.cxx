@@ -99,9 +99,6 @@ namespace svt
 
         SetPointer(Pointer(POINTER_REFHAND));
         AlwaysEnableInput( sal_True, sal_True );
-
-        // unique id for the testtool
-        SetUniqueId( HID_HELPAGENT_WINDOW );
     }
 
     //--------------------------------------------------------------------

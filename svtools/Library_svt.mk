@@ -224,7 +224,6 @@ $(eval $(call gb_Library_add_exception_objects,svt,\
     svtools/source/misc/unitconv \
     svtools/source/misc/wallitem \
     svtools/source/misc/xwindowitem \
-    svtools/source/plugapp/ttprops \
     svtools/source/svhtml/htmlkywd \
     svtools/source/svhtml/htmlout \
     svtools/source/svhtml/htmlsupp \
