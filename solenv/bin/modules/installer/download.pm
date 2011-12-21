@@ -425,7 +425,6 @@ sub get_download_version
 
     $version = $allvariables->{'PRODUCTVERSION'};
     if (( $allvariables->{'ABOUTBOXPRODUCTVERSION'} ) && ( $allvariables->{'ABOUTBOXPRODUCTVERSION'} ne "" )) { $version = $allvariables->{'ABOUTBOXPRODUCTVERSION'}; }
-    if (( $allvariables->{'ABOUTBOXPRODUCTVERSIONSUFFIX'} ) && ( $allvariables->{'ABOUTBOXPRODUCTVERSIONSUFFIX'} ne "" )) { $version = $allvariables->{'ABOUTBOXPRODUCTVERSIONSUFFIX'}; }
     if (( $allvariables->{'SHORT_PRODUCTEXTENSION'} ) && ( $allvariables->{'SHORT_PRODUCTEXTENSION'} ne "" )) { $version = $version . $allvariables->{'SHORT_PRODUCTEXTENSION'}; }
 
     return $version;
