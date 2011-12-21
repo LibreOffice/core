@@ -641,8 +641,7 @@ public:
 
     void NotifyDBChanged();
 
-    SfxObjectShellLock & GetTmpSelectionDoc();
-    SfxObjectShellLock & GetOrCreateTmpSelectionDoc();
+    SfxObjectShellLock CreateTmpSelectionDoc();
 
     void        AddTransferable(SwTransferable& rTransferable);
 
