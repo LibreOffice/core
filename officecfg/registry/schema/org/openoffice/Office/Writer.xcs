@@ -1131,7 +1131,7 @@
 						<desc>Determines whether certain settings are applied (display of tab stops, spaces, breaks)</desc>
 						<label>Meta characters</label>
 					</info>
-					<value>true</value>
+					<value>false</value>
 				</prop>
 				<prop oor:name="ParagraphEnd" oor:type="xs:boolean">
 					<!-- OldPath: Writer/Contents/Nonprinting_characters -->
