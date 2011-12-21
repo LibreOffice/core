@@ -445,7 +445,8 @@ sal_Bool SbxVariable::LoadData( SvStream& rStrm, sal_uInt16 nVer )
     {
         if( !SbxValue::LoadData( rStrm, nVer ) )
             return sal_False;
-        rStrm.ReadByteString( maName, RTL_TEXTENCODING_ASCII_US );
+        maName = read_lenPrefixed_uInt8s_ToOUString(rStrm,
+            RTL_TEXTENCODING_ASCII_US);
         sal_uInt32 nTemp;
         rStrm >> nTemp;
         nUserData = nTemp;
@@ -454,7 +455,8 @@ sal_Bool SbxVariable::LoadData( SvStream& rStrm, sal_uInt16 nVer )
     {
         rStrm.SeekRel( -1L );
         rStrm >> nType;
-        rStrm.ReadByteString( maName, RTL_TEXTENCODING_ASCII_US );
+        maName = read_lenPrefixed_uInt8s_ToOUString(rStrm,
+            RTL_TEXTENCODING_ASCII_US);
         sal_uInt32 nTemp;
         rStrm >> nTemp;
         nUserData = nTemp;
@@ -477,7 +479,8 @@ sal_Bool SbxVariable::LoadData( SvStream& rStrm, sal_uInt16 nVer )
             case SbxSINGLE:
             {
                 // Floats as ASCII
-                rStrm.ReadByteString( aTmpString, RTL_TEXTENCODING_ASCII_US );
+                aTmpString = read_lenPrefixed_uInt8s_ToOUString(
+                    rStrm, RTL_TEXTENCODING_ASCII_US);
                 double d;
                 SbxDataType t;
                 if( ImpScan( aTmpString, d, t, NULL ) != SbxERR_OK || t == SbxDOUBLE )
@@ -492,7 +495,8 @@ sal_Bool SbxVariable::LoadData( SvStream& rStrm, sal_uInt16 nVer )
             case SbxDOUBLE:
             {
                 // Floats as ASCII
-                rStrm.ReadByteString( aTmpString, RTL_TEXTENCODING_ASCII_US );
+                aTmpString = read_lenPrefixed_uInt8s_ToOUString(rStrm,
+                    RTL_TEXTENCODING_ASCII_US);
                 SbxDataType t;
                 if( ImpScan( aTmpString, aTmp.nDouble, t, NULL ) != SbxERR_OK )
                 {
@@ -502,8 +506,8 @@ sal_Bool SbxVariable::LoadData( SvStream& rStrm, sal_uInt16 nVer )
                 break;
             }
             case SbxSTRING:
-                rStrm.ReadByteString( aTmpString, RTL_TEXTENCODING_ASCII_US );
-                aVal = aTmpString;
+                aVal = read_lenPrefixed_uInt8s_ToOUString(rStrm,
+                    RTL_TEXTENCODING_ASCII_US);
                 break;
             case SbxEMPTY:
             case SbxNULL:
@@ -561,7 +565,8 @@ sal_Bool SbxVariable::StoreData( SvStream& rStrm ) const
         bValStore = SbxValue::StoreData( rStrm );
     if( !bValStore )
         return sal_False;
-    rStrm.WriteByteString( maName, RTL_TEXTENCODING_ASCII_US );
+    write_lenPrefixed_uInt8s_FromOUString(rStrm, maName,
+        RTL_TEXTENCODING_ASCII_US);
     rStrm << (sal_uInt32)nUserData;
     if( pInfo.Is() )
     {

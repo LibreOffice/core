@@ -1259,7 +1259,7 @@ void MetaTextAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     WRITE_BASE_COMPAT( rOStm, 2, pData );
     rOStm   << maPt;
-    rOStm.WriteByteString( maStr, pData->meActualCharSet );
+    rOStm.WriteUniOrByteString( maStr, pData->meActualCharSet );
     rOStm   << mnIndex;
     rOStm   << mnLen;
 
@@ -1278,7 +1278,7 @@ void MetaTextAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
 {
     COMPAT( rIStm );
     rIStm   >> maPt;
-    rIStm.ReadByteString( maStr, pData->meActualCharSet );
+    rIStm.ReadUniOrByteString( maStr, pData->meActualCharSet );
     rIStm   >> mnIndex;
     rIStm   >> mnLen;
 
@@ -1408,7 +1408,7 @@ void MetaTextArrayAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 
     WRITE_BASE_COMPAT( rOStm, 2, pData );
     rOStm   << maStartPt;
-    rOStm.WriteByteString( maStr, pData->meActualCharSet );
+    rOStm.WriteUniOrByteString( maStr, pData->meActualCharSet );
     rOStm   << mnIndex;
     rOStm   << mnLen;
     rOStm   << nAryLen;
@@ -1435,7 +1435,7 @@ void MetaTextArrayAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
 
     COMPAT( rIStm );
     rIStm   >> maStartPt;
-    rIStm.ReadByteString( maStr, pData->meActualCharSet );
+    rIStm.ReadUniOrByteString( maStr, pData->meActualCharSet );
     rIStm   >> mnIndex;
     rIStm   >> mnLen;
     rIStm   >> nAryLen;
@@ -1555,7 +1555,7 @@ void MetaStretchTextAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     WRITE_BASE_COMPAT( rOStm, 2, pData );
     rOStm   << maPt;
-    rOStm.WriteByteString( maStr, pData->meActualCharSet );
+    rOStm.WriteUniOrByteString( maStr, pData->meActualCharSet );
     rOStm   << mnWidth;
     rOStm   << mnIndex;
     rOStm   << mnLen;
@@ -1575,7 +1575,7 @@ void MetaStretchTextAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
 {
     COMPAT( rIStm );
     rIStm   >> maPt;
-    rIStm.ReadByteString( maStr, pData->meActualCharSet );
+    rIStm.ReadUniOrByteString( maStr, pData->meActualCharSet );
     rIStm   >> mnWidth;
     rIStm   >> mnIndex;
     rIStm   >> mnLen;
@@ -1650,7 +1650,7 @@ void MetaTextRectAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     WRITE_BASE_COMPAT( rOStm, 2, pData );
     rOStm   << maRect;
-    rOStm.WriteByteString( maStr, pData->meActualCharSet );
+    rOStm.WriteUniOrByteString( maStr, pData->meActualCharSet );
     rOStm   << mnStyle;
 
     sal_uInt16 i, nLen = maStr.Len();                           // version 2
@@ -1668,7 +1668,7 @@ void MetaTextRectAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
 {
     COMPAT( rIStm );
     rIStm   >> maRect;
-    rIStm.ReadByteString( maStr, pData->meActualCharSet );
+    rIStm.ReadUniOrByteString( maStr, pData->meActualCharSet );
     rIStm   >> mnStyle;
 
     if ( aCompat.GetVersion() >= 2 )                            // Version 2

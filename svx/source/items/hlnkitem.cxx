@@ -49,13 +49,13 @@ SvStream& SvxHyperlinkItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ 
 {
     // store 'simple' data
     // UNICODE: rStrm << sName;
-    rStrm.WriteByteString(sName);
+    rStrm.WriteUniOrByteString(sName, rStrm.GetStreamCharSet());
 
     // UNICODE: rStrm << sURL;
-    rStrm.WriteByteString(sURL);
+    rStrm.WriteUniOrByteString(sURL, rStrm.GetStreamCharSet());
 
     // UNICODE: rStrm << sTarget;
-    rStrm.WriteByteString(sTarget);
+    rStrm.WriteUniOrByteString(sTarget, rStrm.GetStreamCharSet());
 
     rStrm << (sal_uInt32) eType;
 
@@ -64,7 +64,7 @@ SvStream& SvxHyperlinkItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ 
 
     // new data
     // UNICODE: rStrm << sIntName;
-    rStrm.WriteByteString(sIntName);
+    rStrm.WriteUniOrByteString(sIntName, rStrm.GetStreamCharSet());
 
     // macro-events
     rStrm << nMacroEvents;
@@ -91,10 +91,10 @@ SvStream& SvxHyperlinkItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ 
                 rStrm << (sal_uInt16)pMacroTable->GetCurKey();
 
                 // UNICODE: rStrm << pMac->GetLibName();
-                rStrm.WriteByteString(pMac->GetLibName());
+                rStrm.WriteUniOrByteString(pMac->GetLibName(), rStrm.GetStreamCharSet());
 
                 // UNICODE: rStrm << pMac->GetMacName();
-                rStrm.WriteByteString(pMac->GetMacName());
+                rStrm.WriteUniOrByteString(pMac->GetMacName(), rStrm.GetStreamCharSet());
             }
         }
     }
@@ -111,10 +111,10 @@ SvStream& SvxHyperlinkItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ 
                 rStrm << (sal_uInt16)pMacroTable->GetCurKey();
 
                 // UNICODE: rStrm << pMac->GetLibName();
-                rStrm.WriteByteString(pMac->GetLibName());
+                rStrm.WriteUniOrByteString(pMac->GetLibName(), rStrm.GetStreamCharSet());
 
                 // UNICODE: rStrm << pMac->GetMacName();
-                rStrm.WriteByteString(pMac->GetMacName());
+                rStrm.WriteUniOrByteString(pMac->GetMacName(), rStrm.GetStreamCharSet());
 
                 rStrm << (sal_uInt16)pMac->GetScriptType();
             }
@@ -131,13 +131,13 @@ SfxPoolItem*    SvxHyperlinkItem::Create( SvStream &rStrm, sal_uInt16 /*nItemVer
 
     // simple data-types
     // UNICODE: rStrm >> pNew->sName;
-    rStrm.ReadByteString(pNew->sName);
+    rStrm.ReadUniOrByteString(pNew->sName, rStrm.GetStreamCharSet());
 
     // UNICODE: rStrm >> pNew->sURL;
-    rStrm.ReadByteString(pNew->sURL);
+    rStrm.ReadUniOrByteString(pNew->sURL, rStrm.GetStreamCharSet());
 
     // UNICODE: rStrm >> pNew->sTarget;
-    rStrm.ReadByteString(pNew->sTarget);
+    rStrm.ReadUniOrByteString(pNew->sTarget, rStrm.GetStreamCharSet());
 
     rStrm >> nType;
     pNew->eType = (SvxLinkInsertMode) nType;
@@ -149,7 +149,7 @@ SfxPoolItem*    SvxHyperlinkItem::Create( SvStream &rStrm, sal_uInt16 /*nItemVer
     {
         // new data
         // UNICODE: rStrm >> pNew->sIntName;
-        rStrm.ReadByteString(pNew->sIntName);
+        rStrm.ReadUniOrByteString(pNew->sIntName, rStrm.GetStreamCharSet());
 
         // macro-events
         rStrm >> pNew->nMacroEvents;
@@ -164,10 +164,10 @@ SfxPoolItem*    SvxHyperlinkItem::Create( SvStream &rStrm, sal_uInt16 /*nItemVer
 
             rStrm >> nCurKey;
             // UNICODE: rStrm >> aLibName;
-            rStrm.ReadByteString(aLibName);
+            rStrm.ReadUniOrByteString(aLibName, rStrm.GetStreamCharSet());
 
             // UNICODE: rStrm >> aMacName;
-            rStrm.ReadByteString(aMacName);
+            rStrm.ReadUniOrByteString(aMacName, rStrm.GetStreamCharSet());
 
             pNew->SetMacro( nCurKey, SvxMacro( aMacName, aLibName, STARBASIC ) );
         }
@@ -181,10 +181,10 @@ SfxPoolItem*    SvxHyperlinkItem::Create( SvStream &rStrm, sal_uInt16 /*nItemVer
             rStrm >> nCurKey;
 
             // UNICODE: rStrm >> aLibName;
-            rStrm.ReadByteString(aLibName);
+            rStrm.ReadUniOrByteString(aLibName, rStrm.GetStreamCharSet());
 
             // UNICODE: rStrm >> aMacName;
-            rStrm.ReadByteString(aMacName);
+            rStrm.ReadUniOrByteString(aMacName, rStrm.GetStreamCharSet());
 
             rStrm >> nScriptType;
 

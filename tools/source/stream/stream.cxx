@@ -1489,7 +1489,7 @@ SvStream& SvStream::operator<< ( SvStream& rStream )
 
 // -----------------------------------------------------------------------
 
-SvStream& SvStream::ReadByteString( UniString& rStr, rtl_TextEncoding eSrcCharSet )
+SvStream& SvStream::ReadUniOrByteString( UniString& rStr, rtl_TextEncoding eSrcCharSet )
 {
     // read UTF-16 string directly from stream ?
     if (eSrcCharSet == RTL_TEXTENCODING_UNICODE)
@@ -1523,7 +1523,7 @@ SvStream& SvStream::ReadByteString( UniString& rStr, rtl_TextEncoding eSrcCharSe
 
 // -----------------------------------------------------------------------
 
-SvStream& SvStream::WriteByteString( const UniString& rStr, rtl_TextEncoding eDestCharSet )
+SvStream& SvStream::WriteUniOrByteString( const UniString& rStr, rtl_TextEncoding eDestCharSet )
 {
     // write UTF-16 string directly into stream ?
     if (eDestCharSet == RTL_TEXTENCODING_UNICODE)

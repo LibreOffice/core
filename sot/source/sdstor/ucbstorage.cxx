@@ -3375,7 +3375,7 @@ String UCBStorage::CreateLinkFile( const String& rName )
         // store it as key/value pair
         String aLink = String::CreateFromAscii("ContentURL=");
         aLink += aURL;
-        pStream->WriteByteString( aLink, RTL_TEXTENCODING_UTF8 );
+        write_lenPrefixed_uInt8s_FromOUString(*pStream, aLink, RTL_TEXTENCODING_UTF8);
         pStream->Flush();
 
         // move the stream to its desired location

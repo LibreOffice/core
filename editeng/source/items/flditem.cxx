@@ -735,7 +735,7 @@ void SvxExtFileField::Load( SvPersistStream & rStm )
     sal_uInt16 nType, nFormat;
 
     // UNICODE: rStm >> aFile;
-    rStm.ReadByteString(aFile);
+    rStm.ReadUniOrByteString(aFile, rStm.GetStreamCharSet());
 
     rStm >> nType;
     rStm >> nFormat;
@@ -749,7 +749,7 @@ void SvxExtFileField::Load( SvPersistStream & rStm )
 void SvxExtFileField::Save( SvPersistStream & rStm )
 {
     // UNICODE: rStm << aFile;
-    rStm.WriteByteString(aFile);
+    rStm.WriteUniOrByteString(aFile, rStm.GetStreamCharSet());
 
     rStm << (sal_uInt16) eType;
     rStm << (sal_uInt16) eFormat;

@@ -64,7 +64,7 @@ void SvxBulletItem::StoreFont( SvStream& rStream, const Font& rFont )
     nTemp = (sal_uInt16)rFont.GetItalic(); rStream << nTemp;
 
     // UNICODE: rStream << rFont.GetName();
-    rStream.WriteByteString(rFont.GetName());
+    rStream.WriteUniOrByteString(rFont.GetName(), rStream.GetStreamCharSet());
 
     rStream << rFont.IsOutline();
     rStream << rFont.IsShadow();
@@ -94,7 +94,7 @@ Font SvxBulletItem::CreateFont( SvStream& rStream, sal_uInt16 nVer )
 
     // UNICODE: rStream >> aName; aFont.SetName( aName );
     String aName;
-    rStream.ReadByteString(aName);
+    rStream.ReadUniOrByteString(aName, rStream.GetStreamCharSet());
     aFont.SetName( aName );
 
     if( nVer == 1 )
@@ -217,10 +217,10 @@ SvxBulletItem::SvxBulletItem( SvStream& rStrm, sal_uInt16 _nWhich ) :
     rStrm >> nScale;
 
     // UNICODE: rStrm >> aPrevText;
-    rStrm.ReadByteString(aPrevText);
+    rStrm.ReadUniOrByteString(aPrevText, rStrm.GetStreamCharSet());
 
     // UNICODE: rStrm >> aFollowText;
-    rStrm.ReadByteString(aFollowText);
+    rStrm.ReadUniOrByteString(aFollowText, rStrm.GetStreamCharSet());
 
     nValidMask = 0xFFFF;
 }
@@ -416,10 +416,10 @@ SvStream& SvxBulletItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) c
     rStrm << nScale;
 
     // UNICODE: rStrm << aPrevText;
-    rStrm.WriteByteString(aPrevText);
+    rStrm.WriteUniOrByteString(aPrevText, rStrm.GetStreamCharSet());
 
     // UNICODE: rStrm << aFollowText;
-    rStrm.WriteByteString(aFollowText);
+    rStrm.WriteUniOrByteString(aFollowText, rStrm.GetStreamCharSet());
 
     return rStrm;
 }
