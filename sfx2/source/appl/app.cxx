@@ -138,7 +138,6 @@
 #include <unotools/syslocaleoptions.hxx>
 #include <unotools/syslocale.hxx>
 #include <framework/addonsoptions.hxx>
-#include <svtools/ttprops.hxx>
 #include <unotools/extendedsecurityoptions.hxx>
 #include <rtl/instance.hxx>
 #include <rtl/strbuf.hxx>

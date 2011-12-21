@@ -49,7 +49,6 @@
 
 #define _SVSTDARR_STRINGS
 #include <svl/svstdarr.hxx>
-#include <svtools/ttprops.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <sot/exchange.hxx>
 
