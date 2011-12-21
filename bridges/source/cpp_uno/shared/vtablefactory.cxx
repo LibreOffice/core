@@ -264,10 +264,18 @@ bool VtableFactory::createBlock(Block &block, sal_Int32 slotCount) const
         }
         unlink(tmpfname);
         delete[] tmpfname;
+#if defined(HAVE_POSIX_FALLOCATE)
         int err = posix_fallocate(block.fd, 0, block.size);
+#else
+        int err = ftruncate(block.fd, block.size);
+#endif
         if (err != 0)
         {
+#if defined(HAVE_POSIX_FALLOCATE)
             SAL_WARN("bridges", "posix_fallocate failed with code " << err);
+#else
+            SAL_WARN("bridges", "truncation of executable memory area failed with code " << err);
+#endif
             close(block.fd);
             block.fd = -1;
             break;

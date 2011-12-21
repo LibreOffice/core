@@ -3879,6 +3879,8 @@ fi
 if test "$with_alloc" = "internal" -o -z "$with_alloc"; then
     AC_MSG_RESULT([internal])
 fi
+AC_CHECK_FUNCS(posix_fallocate, HAVE_POSIX_FALLOCATE=YES, [HAVE_POSIX_FALLOCATE=NO])
+AC_SUBST(HAVE_POSIX_FALLOCATE)
 AC_SUBST(ALLOC)
 
 dnl ===================================================================

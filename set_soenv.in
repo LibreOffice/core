@@ -1934,6 +1934,7 @@ ToFile( "HUNSPELL_LIBS",     "@HUNSPELL_LIBS@",    "e" );
 ToFile( "SYSTEM_LPSOLVE",    "@SYSTEM_LPSOLVE@",   "e" );
 ToFile( "HAVE_GETOPT",       "@HAVE_GETOPT@",      "e" );
 ToFile( "HAVE_READDIR_R",    "@HAVE_READDIR_R@",   "e" );
+ToFile( "HAVE_POSIX_FALLOCATE",    "@HAVE_POSIX_FALLOCATE@",   "e" );
 ToFile( "SYSTEM_LIBC",       "@SYSTEM_LIBC@",      "e" );
 ToFile( "SYSTEM_HYPH",       "@SYSTEM_HYPH@",      "e" );
 ToFile( "HYPHEN_LIB",        "@HYPHEN_LIB@",       "e" );
