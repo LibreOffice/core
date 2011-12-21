@@ -476,6 +476,7 @@ struct FileMapping
 {
     sal_uInt8 * m_pAddr;
     sal_uInt32  m_nSize;
+    oslFileHandle m_hFile;
 
     FileMapping() : m_pAddr(0), m_nSize(0) {}
 
@@ -497,15 +498,17 @@ struct FileMapping
             return osl_File_E_OVERFLOW;
         m_nSize = sal::static_int_cast<sal_uInt32>(uSize);
 
+        m_hFile = hFile;
+
         // Acquire mapping.
         return osl_mapFile (hFile, reinterpret_cast<void**>(&m_pAddr), m_nSize, 0, osl_File_MapFlag_RandomAccess);
     }
 
     /** @see MappedLockBytes::destructor.
      */
-    static void unmapFile (sal_uInt8 * pAddr, sal_uInt32 nSize)
+    static void unmapFile (oslFileHandle hFile, sal_uInt8 * pAddr, sal_uInt32 nSize)
     {
-        (void) osl_unmapFile (pAddr, nSize);
+        (void) osl_unmapMappedFile (hFile, pAddr, nSize);
     }
 
     /** @see ResourceHolder<T>::destructor_type
@@ -515,7 +518,7 @@ struct FileMapping
         void operator ()(FileMapping & rMapping) const
         {
             // Release mapping.
-            unmapFile (rMapping.m_pAddr, rMapping.m_nSize);
+            unmapFile (rMapping.m_hFile, rMapping.m_pAddr, rMapping.m_nSize);
             rMapping.m_pAddr = 0, rMapping.m_nSize = 0;
         }
     };
@@ -532,6 +535,7 @@ class MappedLockBytes :
     sal_uInt8 * m_pData;
     sal_uInt32  m_nSize;
     sal_uInt16  m_nPageSize;
+    oslFileHandle m_hFile;
 
     /** PageData::Allocator implementation.
      */
@@ -577,13 +581,13 @@ protected:
 } // namespace store
 
 MappedLockBytes::MappedLockBytes (FileMapping & rMapping)
-    : m_pData (rMapping.m_pAddr), m_nSize (rMapping.m_nSize), m_nPageSize(0)
+    : m_pData (rMapping.m_pAddr), m_nSize (rMapping.m_nSize), m_nPageSize(0), m_hFile (rMapping.m_hFile)
 {
 }
 
 MappedLockBytes::~MappedLockBytes()
 {
-    FileMapping::unmapFile (m_pData, m_nSize);
+    FileMapping::unmapFile (m_hFile, m_pData, m_nSize);
 }
 
 oslInterlockedCount SAL_CALL MappedLockBytes::acquire()

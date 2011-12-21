@@ -865,7 +865,6 @@ SAL_CALL osl_openMemoryAsFile( void *address, size_t size, oslFileHandle *pHandl
         eRet = oslTranslateFileError (OSL_FET_ERROR, ENOMEM);
         return eRet;
     }
-    pImpl->m_kind = FileHandle_Impl::KIND_MEM;
     pImpl->m_size = sal::static_int_cast< sal_uInt64 >(size);
 
     *pHandle = (oslFileHandle)(pImpl);
@@ -1116,13 +1115,7 @@ SAL_CALL osl_mapFile (
 {
     FileHandle_Impl* pImpl = static_cast<FileHandle_Impl*>(Handle);
 
-    if (pImpl->m_kind == FileHandle_Impl::KIND_MEM)
-    {
-        *ppAddr = pImpl->m_buffer;
-        return osl_File_E_None;
-    }
-
-    if ((0 == pImpl) || (-1 == pImpl->m_fd) || (0 == ppAddr))
+    if ((0 == pImpl) || ((pImpl->m_kind == FileHandle_Impl::KIND_FD) && (-1 == pImpl->m_fd)) || (0 == ppAddr))
         return osl_File_E_INVAL;
     *ppAddr = 0;
 
@@ -1134,6 +1127,13 @@ SAL_CALL osl_mapFile (
     static sal_uInt64 const g_limit_off_t = std::numeric_limits< off_t >::max();
     if (g_limit_off_t < uOffset)
         return osl_File_E_OVERFLOW;
+
+    if (pImpl->m_kind == FileHandle_Impl::KIND_MEM)
+    {
+        *ppAddr = pImpl->m_buffer + uOffset;
+        return osl_File_E_None;
+    }
+
     off_t const nOffset = sal::static_int_cast< off_t >(uOffset);
 
     void* p = mmap(NULL, nLength, PROT_READ, MAP_SHARED, pImpl->m_fd, nOffset);
@@ -1195,11 +1195,9 @@ SAL_CALL osl_mapFile (
     return osl_File_E_None;
 }
 
-/*******************************************
-    osl_unmapFile
-********************************************/
+static
 oslFileError
-SAL_CALL osl_unmapFile (void* pAddr, sal_uInt64 uLength)
+unmapFile (void* pAddr, sal_uInt64 uLength)
 {
     if (0 == pAddr)
         return osl_File_E_INVAL;
@@ -1212,6 +1210,40 @@ SAL_CALL osl_unmapFile (void* pAddr, sal_uInt64 uLength)
     if (-1 == munmap(static_cast<char*>(pAddr), nLength))
         return oslTranslateFileError(OSL_FET_ERROR, errno);
 
+    return osl_File_E_None;
+}
+
+#ifndef ANDROID
+
+// Note that osl_unmapFile() just won't work on Android in general
+// where for (uncompressed) files inside the .apk, in the /assets
+// folder osl_mapFile just returns a pointer to the file inside the
+// already mmapped .apk archive.
+
+/*******************************************
+    osl_unmapFile
+********************************************/
+oslFileError
+SAL_CALL osl_unmapFile (void* pAddr, sal_uInt64 uLength)
+{
+    return unmapFile (pAddr, uLength);
+}
+
+#endif
+
+/*******************************************
+    osl_unmapMappedFile
+********************************************/
+oslFileError
+SAL_CALL osl_unmapMappedFile (oslFileHandle Handle, void* pAddr, sal_uInt64 uLength)
+{
+    FileHandle_Impl * pImpl = static_cast<FileHandle_Impl*>(Handle);
+
+    if (pImpl->m_kind == FileHandle_Impl::KIND_FD)
+        return unmapFile (pAddr, uLength);
+
+    // For parts of already mmapped "parent" files, whose mapping we
+    // can't change, not much we can or should do...
     return osl_File_E_None;
 }
 

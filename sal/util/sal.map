@@ -610,6 +610,11 @@ LIBO_UDK_3.5 { # symbols available in >= LibO 3.5
         rtl_uStringbuffer_remove;
 } UDK_3.10;
 
+LIBO_UDK_3.6 { # symbols available in >= LibO 3.6
+    global:
+        osl_unmapMappedFile;
+} UDK_3.10;
+
 PRIVATE_1.0 {
     global:
         osl_detail_ObjectRegistry_storeAddresses;

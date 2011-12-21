@@ -680,6 +680,12 @@ typedef void *oslFileHandle;
     @param uFlags [in]
     Specifies the open mode.
 
+    On Android, if the file path is below the /assets folder, the file
+    exists only as a hopefully uncompressed element inside the app
+    package (.apk), which has been mapped into memory as a whole by
+    the LibreOffice Android bootstrapping code. So files "opened" from
+    there aren't actually files in the OS sense.
+
     @return
     osl_File_E_None on success<br>
     osl_File_E_NOMEM not enough memory for allocating structures <br>
@@ -837,6 +843,15 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_getFileSize(
 
 /** Map a shared file into memory.
 
+    Don't know what the "shared" is supposed to mean there? Also,
+    obviously this API can be used to map *part* of a file into
+    memory, and different parts can be mapped separately even.
+
+    On Android, if the Handle refers to a file that is actually inside
+    the app package (.apk zip archive), no new mapping is created,
+    just a pointer to the file inside the already mapped .apk is
+    returned.
+
     @since UDK 3.2.10
  */
 SAL_DLLPUBLIC oslFileError SAL_CALL osl_mapFile (
@@ -848,11 +863,41 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_mapFile (
 );
 
 
+#ifndef ANDROID
+
 /** Unmap a shared file from memory.
+
+    Ditto here, why do we need to mention "shared"?
+
+    This function just won't work on Android in general where for
+    (uncompressed) files inside the .apk, per SDK conventions in the
+    /assets folder, osl_mapFile() returns a pointer to the file inside
+    the already by LibreOffice Android-specific bootstrapping code
+    mmapped .apk archive. We can't go and randomly munmap part of the
+    .apk archive. So this function is not present on Android.
 
     @since UDK 3.2.10
  */
 SAL_DLLPUBLIC oslFileError SAL_CALL osl_unmapFile (
+  void*      pAddr,
+  sal_uInt64 uLength
+);
+
+#endif
+
+/** Unmap a file segment from memory.
+
+    Like osl_unmapFile(), but takes also the oslFileHandle argument
+    passed to osl_mapFile() when creating this mapping.
+
+    On Android, for files below /assets, i.e. located inside the app
+    archive (.apk), this won't actually unmap anything; all the .apk
+    stays mapped.
+
+    @since UDK 3.6
+ */
+SAL_DLLPUBLIC oslFileError SAL_CALL osl_unmapMappedFile (
+  oslFileHandle Handle,
   void*      pAddr,
   sal_uInt64 uLength
 );
