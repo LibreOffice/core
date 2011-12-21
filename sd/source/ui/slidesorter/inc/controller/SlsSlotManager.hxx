@@ -114,8 +114,6 @@ private:
         This can be the current selection or the insertion indicator.
     */
     sal_Int32 GetInsertionPosition (void);
-
-    DECL_LINK(UserEventCallback, void*);
 };
 
 } } } // end of namespace ::sd::slidesorter::controller

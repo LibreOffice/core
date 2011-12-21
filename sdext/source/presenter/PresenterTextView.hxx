@@ -108,12 +108,6 @@ public:
         const cssu::Reference<css::i18n::XScriptTypeDetector>& rxScriptTypeDetector,
         const cssu::Reference<css::text::XTextRange>& rxTextRange,
         const SharedPresenterTextCaret& rpCaret);
-    PresenterTextParagraph (
-        const sal_Int32 nParagraphIndex,
-        const cssu::Reference<css::i18n::XBreakIterator>& rxBreakIterator,
-        const cssu::Reference<css::i18n::XScriptTypeDetector>& rxScriptTypeDetector,
-        const ::rtl::OUString& rsText,
-        const SharedPresenterTextCaret& rpCaret);
 
     void Paint (
         const cssu::Reference<css::rendering::XCanvas>& rxCanvas,

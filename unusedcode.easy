@@ -373,7 +373,6 @@ ScSimpleRangeList::Range::contains(ScSimpleRangeList::Range const&) const
 ScStringCell::ScStringCell()
 ScSubTotalDescriptorBase::GetData(ScSubTotalParam&) const
 ScSubTotalDescriptorBase::PutData(ScSubTotalParam const&)
-ScTabViewShell::LinkStubHtmlOptionsHdl(void*, void*)
 ScUserList::end()
 ScUserList::end() const
 ScValidationEntries_Impl::Insert(ScValidationData* const&, unsigned short&)
@@ -864,8 +863,6 @@ SwVbaColumn::calculateAbsoluteColumnWidth(int, com::sun::star::uno::Sequence<com
 SwVbaColumn::calculateRelativeColumnWidth(double const*, double*, int)
 SwVbaStyle::getOOoStyleTypeFromMSWord(int)
 SwVbaTableHelper::setTableWidth(int)
-SwView::LinkStubHtmlOptionsHdl(void*, void*)
-SwView::LinkStubSpellError(void*, void*)
 SwWriteTableCols::Insert(SwWriteTableCol* const&, unsigned short&)
 SwWriteTableCols::Insert(SwWriteTableCol* const*, unsigned short)
 SwWriteTableCols::Insert(SwWriteTableCols const*, unsigned short, unsigned short)
@@ -1628,7 +1625,6 @@ canvas::tools::mergeViewAndRenderState(com::sun::star::rendering::ViewState&, co
 canvas::tools::prependToViewState(com::sun::star::rendering::ViewState&, basegfx::B2DHomMatrix const&)
 canvas::tools::verifyInput(com::sun::star::geometry::RealSize2D const&, char const*, com::sun::star::uno::Reference<com::sun::star::uno::XInterface> const&, short)
 canvas::tools::verifyInput(com::sun::star::rendering::FloatingPointBitmapLayout const&, char const*, com::sun::star::uno::Reference<com::sun::star::uno::XInterface> const&, short)
-chart::DateHelper::GetMonthsBetweenDates(Date, Date)
 chart::EquidistantTickIter::getCurrentIndex() const
 chart::EquidistantTickIter::getMaxIndex() const
 chart::EquidistantTickIter::gotoIndex(int)
@@ -1783,8 +1779,6 @@ graphite2::Segment::append(graphite2::Segment const&)
 graphite2::Slot::update(int, int, graphite2::Position&)
 graphite2::TtfUtil::GetNameInfo(void const*, int, int, int, int, unsigned long&, unsigned long&)
 graphite2::TtfUtil::GlyfLookup(unsigned short, void const*, void const*, unsigned long, unsigned long, void const*)
-jfw_plugin::VendorBase::createInstance()
-jfw_plugin::VendorBase::getJavaExePaths(int*)
 jvmaccess::ClassPath::doLoadClass(com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> const&, void*, rtl::OUString const&, rtl::OUString const&)
 libcdr::CDRDocument::generateSVG(WPXInputStream*, WPXString&)
 libcdr::CDRInternalStream::CDRInternalStream(unsigned char const*, unsigned long)
@@ -1798,7 +1792,6 @@ linguistic::ToLower(unsigned short, short)
 linguistic::ToTitle(String const&, short)
 linguistic::ToUpper(String const&, short)
 linguistic::ToUpper(unsigned short, short)
-migration::AutocorrectionMigration_create(com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> const&)
 nullcanvas::CanvasFont::getFontMatrix() const
 nullcanvas::CanvasHelper::flush() const
 nullcanvas::CanvasHelper::getPalette()
@@ -1996,7 +1989,6 @@ sax_fastparser::FastSerializerHelper::singleElement(char const*, com::sun::star:
 sax_fastparser::FastSerializerHelper::startElement(char const*, ...)
 sax_fastparser::FastSerializerHelper::write(float)
 sd::CopyDlg::LinkStubReset(void*, void*)
-sd::FuText::LinkStubSpellError(void*, void*)
 sd::LeftDrawPaneShell::RegisterInterface(SfxModule*)
 sd::LeftImpressPaneShell::RegisterInterface(SfxModule*)
 sd::ToolPanelPaneShell::RegisterInterface(SfxModule*)
@@ -2010,19 +2002,16 @@ sd::framework::ConfigurationClassifier::TraceResourceIdVector(char const*, std::
 sd::framework::ConfigurationTracer::TraceConfiguration(com::sun::star::uno::Reference<com::sun::star::drawing::framework::XConfiguration> const&, char const*)
 sd::slidesorter::cache::GenericPageCache::ReleasePreviewBitmap(SdrPage const*)
 sd::slidesorter::controller::SelectionFunction::EventDescriptor::EventDescriptor(KeyEvent const&, sd::slidesorter::SlideSorter&)
-sd::slidesorter::controller::SlotManager::LinkStubUserEventCallback(void*, void*)
 sd::slidesorter::model::VisualState::SetVisualStateBlend(double)
 sd::slidesorter::view::(anonymous namespace)::Blend(unsigned char, unsigned char, double)
 sd::slidesorter::view::(anonymous namespace)::CalculateColorChannel(double, double, double, double, double)
 sd::slidesorter::view::(anonymous namespace)::PageObjectRun::GetInnerBoundingBox(sd::slidesorter::view::Layouter const&, int) const
 sd::slidesorter::view::(anonymous namespace)::RectangleBackgroundTheme::RectangleBackgroundTheme(boost::shared_ptr<sd::slidesorter::view::Theme> const&, std::__debug::vector<boost::shared_ptr<sd::slidesorter::view::Button>, std::allocator<boost::shared_ptr<sd::slidesorter::view::Button> > > const&)
 sd::slidesorter::view::FontProvider::GetFont(OutputDevice const&)
-sd::slidesorter::view::Layouter::_SetZoom(Fraction)
 sdext::presenter::(anonymous namespace)::MoveInFromBottomAnimator::MoveInFromBottomAnimator(com::sun::star::uno::Reference<com::sun::star::drawing::framework::XResourceId> const&, rtl::Reference<sdext::presenter::PresenterController> const&, bool, std::__debug::vector<boost::function<void ()>, std::allocator<boost::function<void ()> > > const&, std::__debug::vector<boost::function<void ()>, std::allocator<boost::function<void ()> > > const&)
 sdext::presenter::(anonymous namespace)::TransparentOverlayAnimator::TransparentOverlayAnimator(com::sun::star::uno::Reference<com::sun::star::drawing::framework::XResourceId> const&, rtl::Reference<sdext::presenter::PresenterController> const&, bool, std::__debug::vector<boost::function<void ()>, std::allocator<boost::function<void ()> > > const&, std::__debug::vector<boost::function<void ()>, std::allocator<boost::function<void ()> > > const&)
 sdext::presenter::(anonymous namespace)::UnfoldInCenterAnimator::UnfoldInCenterAnimator(com::sun::star::uno::Reference<com::sun::star::drawing::framework::XResourceId> const&, rtl::Reference<sdext::presenter::PresenterController> const&, bool, std::__debug::vector<boost::function<void ()>, std::allocator<boost::function<void ()> > > const&, std::__debug::vector<boost::function<void ()>, std::allocator<boost::function<void ()> > > const&)
 sdext::presenter::PresenterHorizontalScrollBar::PresenterHorizontalScrollBar(com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> const&, com::sun::star::uno::Reference<com::sun::star::awt::XWindow> const&, boost::shared_ptr<sdext::presenter::PresenterPaintManager> const&, boost::function<void (double)> const&)
-sdext::presenter::PresenterTextView::PresenterTextView(com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> const&, com::sun::star::uno::Reference<com::sun::star::rendering::XCanvas> const&)
 sdr::animation::Scheduler::Reset(unsigned int)
 sdr::contact::ViewContactOfPageObj::GetReferencedPage() const
 sdr::contact::ViewContactOfSdrMediaObj::hasPreferredSize() const
@@ -2068,7 +2057,6 @@ std::__cxx1998::vector<CntHTTPCookie*, std::allocator<CntHTTPCookie*> >::~vector
 std::__cxx1998::vector<OrderedEntry*, std::allocator<OrderedEntry*> >::~vector()
 std::__cxx1998::vector<ServiceInfo*, std::allocator<ServiceInfo*> >::~vector()
 std::__cxx1998::vector<SfxFilter*, std::allocator<SfxFilter*> >::~vector()
-svgi::(anonymous namespace)::appendChar(std::basic_string<char, std::char_traits<char>, std::allocator<char> >&, char)
 svt::table::TableControl::GoTo(int, int)
 svx::SvxShowCharSetItem::~SvxShowCharSetItem()
 svxform::DataNavigatorManager::GetChildWindowId()
@@ -2122,3 +2110,4 @@ vcl::PDFWriterImpl::drawPolyPolygon(PolyPolygon const&, int, bool)
 vcl::unx::GtkPrintWrapper::print_operation_set_has_selection(_GtkPrintOperation*, int) const
 vcl::unx::GtkPrintWrapper::print_operation_set_support_selection(_GtkPrintOperation*, int) const
 void ScCompressedArrayIterator<int, unsigned short>::Follow<unsigned char>(ScCompressedArrayIterator<int, unsigned char> const&)
+writerfilter::TagLogger::attribute(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)

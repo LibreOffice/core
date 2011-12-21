@@ -202,23 +202,9 @@ SvtAcceleratorConfiguration::~SvtAcceleratorConfiguration()
     }
 }
 
-void SvtAcceleratorConfiguration::SetCommand( const SvtAcceleratorConfigItem& rItem )
-{
-    std::list< SvtAcceleratorConfigItem>::iterator p;
-    for ( p = pImp->aList.begin(); p != pImp->aList.end(); ++p )
-        if ( p->nCode == rItem.nCode && p->nModifier == rItem.nModifier )
-        {
-            p->aCommand = rItem.aCommand;
-            return;
-        }
-
-    pImp->aList.push_back( rItem );
-
-}
-
 String SvtAcceleratorConfiguration::GetStreamName()
 {
-    return String::CreateFromAscii("KeyBindings.xml");
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("KeyBindings.xml"));
 }
 
 SvStream* SvtAcceleratorConfiguration::GetDefaultStream( StreamMode nMode )

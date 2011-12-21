@@ -99,13 +99,4 @@ SFX_IMPL_NAMED_VIEWFACTORY( ScTabViewShell, "Default" )
     SFX_VIEW_REGISTRATION(ScDocShell);
 }
 
-//------------------------------------------------------------------
-
-IMPL_LINK( ScTabViewShell, HtmlOptionsHdl, void*, EMPTYARG )
-{
-    // Invalidierung, falls blinkender Text erlaubt/verboten wurde
-    GetViewFrame()->GetBindings().Invalidate(SID_DRAW_TEXT_MARQUEE);
-    return 0;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

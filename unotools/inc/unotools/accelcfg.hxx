@@ -67,9 +67,6 @@ public:
 
                     // save the configuration to a stream, f.e. into a document
     bool            Commit( SvStream& rStream );
-
-                    // sets a single configuration item
-    void            SetCommand( const SvtAcceleratorConfigItem& rItem );
 };
 
 #endif

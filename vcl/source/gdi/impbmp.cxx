@@ -94,13 +94,6 @@ sal_Bool ImpBitmap::ImplCreate( const ImpBitmap& rImpBitmap, sal_uInt16 nNewBitC
 
 // -----------------------------------------------------------------------
 
-void ImpBitmap::ImplDestroy()
-{
-    mpSalBitmap->Destroy();
-}
-
-// -----------------------------------------------------------------------
-
 Size ImpBitmap::ImplGetSize() const
 {
     return mpSalBitmap->GetSize();

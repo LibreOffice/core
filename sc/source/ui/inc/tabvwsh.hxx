@@ -205,7 +205,6 @@ private:
     DECL_LINK( SimpleRefAborted, String* );
     DECL_LINK( SimpleRefChange, String* );
     DECL_LINK( FormControlActivated, FmFormShell* );
-    DECL_LINK( HtmlOptionsHdl, void * );
 
 protected:
     virtual void    Activate(sal_Bool bMDI);

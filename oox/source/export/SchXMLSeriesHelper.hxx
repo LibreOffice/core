@@ -57,11 +57,6 @@ public:
                     ::com::sun::star::frame::XModel >& xChartModel  );
 
     static ::com::sun::star::uno::Reference<
-                ::com::sun::star::chart2::XDataSeries > getFirstCandleStickSeries(
-                    const ::com::sun::star::uno::Reference<
-                        ::com::sun::star::chart2::XDiagram > & xDiagram  );
-
-    static ::com::sun::star::uno::Reference<
                 ::com::sun::star::beans::XPropertySet > createOldAPISeriesPropertySet(
                     const ::com::sun::star::uno::Reference<
                         ::com::sun::star::chart2::XDataSeries >& xSeries

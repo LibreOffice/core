@@ -595,11 +595,4 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
     rReq.Done();
 }
 
-IMPL_LINK( SwView, HtmlOptionsHdl, void*, EMPTYARG )
-{
-    // Invalidierung, falls blinkender Text erlaubt/verboten wurde
-    GetViewFrame()->GetBindings().Invalidate(SID_DRAW_TEXT_MARQUEE);
-    return 0;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

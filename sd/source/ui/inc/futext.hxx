@@ -72,8 +72,6 @@ public:
     sal_Bool    DeleteDefaultText();
     SdrTextObj* GetTextObj() { return static_cast< SdrTextObj* >( mxTextObj.get() ); }
 
-    DECL_LINK(SpellError, void* );
-
     virtual SdrObject* CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle);
 
     /** is called when the currenct function should be aborted. <p>

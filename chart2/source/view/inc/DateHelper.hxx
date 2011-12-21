@@ -46,7 +46,6 @@ public:
     static bool IsInSameYear( const Date& rD1, const Date& rD2 );
     static bool IsInSameMonth( const Date& rD1, const Date& rD2 );
 
-    static long GetMonthsBetweenDates( Date aD1, Date aD2 );
     static Date GetDateSomeMonthsAway( const Date& rD, long nMonthDistance );
     static Date GetDateSomeYearsAway( const Date& rD, long nYearDistance );
     static bool IsLessThanOneMonthAway( const Date& rD1, const Date& rD2 );

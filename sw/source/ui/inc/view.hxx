@@ -302,8 +302,6 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     SW_DLLPRIVATE DECL_LINK( TimeoutHdl, Timer * );
     SW_DLLPRIVATE DECL_LINK( UpdatePercentHdl, GraphicFilter* );
 
-    SW_DLLPRIVATE DECL_LINK( HtmlOptionsHdl, void * );
-
     SW_DLLPRIVATE DECL_LINK( FieldPopupModeEndHdl, FloatingWindow * );
 
     inline long     GetXScroll() const;

@@ -549,38 +549,6 @@ PresenterTextParagraph::PresenterTextParagraph (
     }
 }
 
-
-
-
-PresenterTextParagraph::PresenterTextParagraph (
-    const sal_Int32 nParagraphIndex,
-    const Reference<i18n::XBreakIterator>& rxBreakIterator,
-    const Reference<i18n::XScriptTypeDetector>& rxScriptTypeDetector,
-    const ::rtl::OUString& rsText,
-    const SharedPresenterTextCaret& rpCaret)
-    : msParagraphText(rsText),
-      mnParagraphIndex(nParagraphIndex),
-      mpCaret(rpCaret),
-      mxBreakIterator(rxBreakIterator),
-      mxScriptTypeDetector(rxScriptTypeDetector),
-      maLines(),
-      mnVerticalOffset(0),
-      mnXOrigin(0),
-      mnYOrigin(0),
-      mnWidth(0),
-      mnAscent(0),
-      mnDescent(0),
-      mnLineHeight(-1),
-      meAdjust(style::ParagraphAdjust_LEFT),
-      mnWritingMode (text::WritingMode2::LR_TB),
-      mnCharacterOffset(0),
-      maCells()
-{
-}
-
-
-
-
 void PresenterTextParagraph::Paint (
     const Reference<rendering::XCanvas>& rxCanvas,
     const geometry::RealSize2D& rSize,

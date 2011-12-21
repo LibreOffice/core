@@ -187,41 +187,6 @@ bool SchXMLSeriesHelper::isCandleStickSeries(
     return bRet;
 }
 
-// static
-Reference< chart2::XDataSeries > SchXMLSeriesHelper::getFirstCandleStickSeries(
-    const Reference< chart2::XDiagram > & xDiagram  )
-{
-    Reference< chart2::XDataSeries > xResult;
-
-    try
-    {
-        Reference< chart2::XCoordinateSystemContainer > xCooSysCnt( xDiagram, uno::UNO_QUERY_THROW );
-        Sequence< Reference< chart2::XCoordinateSystem > > aCooSysSeq( xCooSysCnt->getCoordinateSystems());
-        for( sal_Int32 nCooSysIdx=0; !xResult.is() && nCooSysIdx<aCooSysSeq.getLength(); ++nCooSysIdx )
-        {
-            Reference< chart2::XChartTypeContainer > xCTCnt( aCooSysSeq[nCooSysIdx], uno::UNO_QUERY_THROW );
-            Sequence< Reference< chart2::XChartType > > aCTSeq( xCTCnt->getChartTypes());
-            for( sal_Int32 nCTIdx=0; !xResult.is() && nCTIdx<aCTSeq.getLength(); ++nCTIdx )
-            {
-                if( aCTSeq[nCTIdx]->getChartType().equals(
-                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.chart2.CandleStickChartType"))))
-                {
-                    Reference< chart2::XDataSeriesContainer > xSeriesCnt( aCTSeq[nCTIdx], uno::UNO_QUERY_THROW );
-                    Sequence< Reference< chart2::XDataSeries > > aSeriesSeq( xSeriesCnt->getDataSeries() );
-                    if( aSeriesSeq.getLength())
-                        xResult.set( aSeriesSeq[0] );
-                    break;
-                }
-            }
-        }
-    }
-    catch( const uno::Exception & )
-    {
-        OSL_FAIL( "Exception caught" );
-    }
-    return xResult;
-}
-
 //static
 uno::Reference< beans::XPropertySet > SchXMLSeriesHelper::createOldAPISeriesPropertySet(
             const uno::Reference< chart2::XDataSeries >& xSeries
