@@ -243,7 +243,7 @@
 +    /* default first level: hyphen and ASCII apostrophe */
 +    if (!dict[0]->utf8) hnj_hyphen_load_line("NOHYPHEN '\n", dict[k], hashtab);
 +    else hnj_hyphen_load_line("NOHYPHEN ',\xe2\x80\x93,\xe2\x80\x99\n", dict[k], hashtab);
-+    strcpy(buf, "1-1/=,1,1\n"); // buf rewritten by hnj_hyphen_load here
++    strcpy(buf, "1-1\n"); // buf rewritten by hnj_hyphen_load here
 +    hnj_hyphen_load_line(buf, dict[k], hashtab); /* remove hyphen */
 +    hnj_hyphen_load_line("1'1\n", dict[k], hashtab); /* ASCII apostrophe */
 +    if (dict[0]->utf8) {
