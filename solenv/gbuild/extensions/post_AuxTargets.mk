@@ -78,8 +78,8 @@ clean-build:
 
 distclean: clean
 	if [ -f $(SRCDIR)/dmake/Makefile ] ; then $(GNUMAKE) -C $(SRCDIR)/dmake clean; fi
-	cd $(SRCDIR) && rm -rf Env.Host.sh aclocal.m4 autogen.lastrun autom4te.cache \
-	bin/repo-list build_env config.log config.status configure \
+	cd $(SRCDIR) && rm -rf Env.Host.sh autogen.lastrun autom4te.cache \
+	bin/repo-list build_env config.log config.status \
 	desktop/scripts/soffice.sh ooo.lst post_download post_download.log \
 	set_soenv set_soenv.last set_soenv.stamp src.downloaded warn
 
