@@ -105,7 +105,7 @@ endif # WITH_MOZILLA
 
 ifeq ($(OS),MACOSX)
 
-$(eval $(call gb_Helper_register_libraries,NONE, \
+$(eval $(call gb_Helper_register_libraries,PLAINLIBS_NONE, \
     OOoSpotlightImporter \
 ))
 
