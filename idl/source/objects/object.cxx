@@ -324,7 +324,7 @@ sal_Bool SvMetaClass::TestAttribute( SvIdlDataBase & rBase, SvTokenStream & rInS
     if ( !rAttr.GetRef() && rAttr.IsA( TYPE( SvMetaSlot ) ) )
     {
         OSL_FAIL( "Neuer Slot : " );
-        OSL_FAIL( rAttr.GetSlotId().GetBuffer() );
+        OSL_FAIL( rAttr.GetSlotId().getIdentifier().GetBuffer() );
     }
 
     for( sal_uLong n = 0; n < aAttrList.Count(); n++ )
@@ -337,8 +337,8 @@ sal_Bool SvMetaClass::TestAttribute( SvIdlDataBase & rBase, SvTokenStream & rInS
             {
                 OSL_FAIL( "Gleicher Name in MetaClass : " );
                 OSL_FAIL( pS->GetName().GetBuffer() );
-                OSL_FAIL( pS->GetSlotId().GetBuffer() );
-                OSL_FAIL( rAttr.GetSlotId().GetBuffer() );
+                OSL_FAIL( pS->GetSlotId().getIdentifier().GetBuffer() );
+                OSL_FAIL( rAttr.GetSlotId().getIdentifier().GetBuffer() );
 
                 rtl::OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM("Attribute's "));
                 aStr.append(pS->GetName());
@@ -357,8 +357,8 @@ sal_Bool SvMetaClass::TestAttribute( SvIdlDataBase & rBase, SvTokenStream & rInS
                 OSL_FAIL( "Gleiche Id in MetaClass : " );
                 OSL_FAIL(rtl::OString::valueOf(static_cast<sal_Int32>(
                     pS->GetSlotId().GetValue())).getStr());
-                OSL_FAIL( pS->GetSlotId().GetBuffer() );
-                OSL_FAIL( rAttr.GetSlotId().GetBuffer() );
+                OSL_FAIL( pS->GetSlotId().getIdentifier().GetBuffer() );
+                OSL_FAIL( rAttr.GetSlotId().getIdentifier().GetBuffer() );
 
                 rtl::OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM("Attribute "));
                 aStr.append(pS->GetName());

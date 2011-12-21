@@ -245,7 +245,7 @@ void SvMetaAttribute::WriteSvIdl
     pType->WriteTypePrefix( rBase, rOutStm, nTab, WRITE_IDL );
     rOutStm << ' ' << GetName().GetBuffer();
     if( aSlotId.IsSet() )
-        rOutStm << ' ' << aSlotId.GetBuffer();
+        rOutStm << ' ' << aSlotId.getIdentifier().GetBuffer();
     if( pType->GetType() == TYPE_METHOD )
         pType->WriteMethodArgs( rBase, rOutStm, nTab, WRITE_IDL );
     sal_uLong nPos = rOutStm.Tell();
@@ -386,7 +386,7 @@ sal_uLong SvMetaAttribute::MakeSlotValue( SvIdlDataBase & rBase, sal_Bool bVar )
 {
      const SvNumberIdentifier & rId = GetSlotId();
     sal_uLong n = rId.GetValue();
-    if( rBase.aStructSlotId.Len() )
+    if( rBase.aStructSlotId.getIdentifier().Len() )
     {
         n = n << 20;
         n += rBase.aStructSlotId.GetValue();
@@ -517,7 +517,7 @@ void SvMetaAttribute::WriteRecursiv_Impl( SvIdlDataBase & rBase,
     sal_uLong nCount = rList.Count();
 
     SvNumberIdentifier slotId = rBase.aStructSlotId;
-    if ( GetSlotId().Len() )
+    if ( GetSlotId().getIdentifier().Len() )
         rBase.aStructSlotId = GetSlotId();
 
     // offial hack interface by MM: special controls get passed with the WriteAttribute
@@ -653,7 +653,7 @@ void SvMetaAttribute::Write( SvIdlDataBase & rBase, SvStream & rOutStm,
         if( !bVariable && IsMethod() )
         {
             rOutStm << "<METHOD>" << endl
-                    << GetSlotId().GetBuffer() << endl
+                    << GetSlotId().getIdentifier().GetBuffer() << endl
                     << GetName().GetBuffer() << endl
                     << endl;    // readonly
 
@@ -691,7 +691,7 @@ void SvMetaAttribute::Write( SvIdlDataBase & rBase, SvStream & rOutStm,
             else
             {
                 rOutStm << "<PROPERTY>" << endl
-                        << GetSlotId().GetBuffer() << endl
+                        << GetSlotId().getIdentifier().GetBuffer() << endl
                         << GetName().GetBuffer() << endl;
                 if ( GetReadonly() )
                     rOutStm << "(nur lesen)" << endl;
@@ -730,7 +730,7 @@ sal_uLong SvMetaAttribute::MakeSfx( rtl::OStringBuffer& rAttrArray )
     else
     {
         rAttrArray.append('{');
-        rAttrArray.append(GetSlotId());
+        rAttrArray.append(GetSlotId().getIdentifier());
         rAttrArray.append(",\"");
         rAttrArray.append(GetName());
         rAttrArray.append("\"}");
@@ -772,7 +772,7 @@ SvMetaType::SvMetaType( const rtl::OString& rName, char cPC,
 {
     SetName( rName );
     cParserChar = cPC;
-    aCName = rCName;
+    aCName.setIdentifier(rCName);
 }
 
 SvMetaType::SvMetaType( const rtl::OString& rName,
@@ -785,12 +785,12 @@ SvMetaType::SvMetaType( const rtl::OString& rName,
     CTOR
 {
     SetName( rName );
-    aSbxName    = rSbxName;
-    aOdlName    = rOdlName;
+    aSbxName.setIdentifier(rSbxName);
+    aOdlName.setIdentifier(rOdlName);
     cParserChar = cPc;
-    aCName      = rCName;
-    aBasicName  = rBasicName;
-    aBasicPostfix = rBasicPostfix;
+    aCName.setIdentifier(rCName);
+    aBasicName.setIdentifier(rBasicName);
+    aBasicPostfix.setIdentifier(rBasicPostfix);
 }
 
 void SvMetaType::Load( SvPersistStream & rStm )
@@ -875,12 +875,13 @@ void SvMetaType::SetType( int nT )
     nType = nT;
     if( nType == TYPE_ENUM )
     {
-        aOdlName = "short";
+        aOdlName.setIdentifier("short");
     }
     else if( nType == TYPE_CLASS )
     {
-        aCName = C_PREF;
-        aCName += "Object *";
+        ByteString aTmp(C_PREF);
+        aTmp += "Object *";
+        aCName.setIdentifier(aTmp);
     }
 }
 
@@ -901,7 +902,7 @@ SvMetaType * SvMetaType::GetReturnType() const
 const ByteString& SvMetaType::GetBasicName() const
 {
     if( aBasicName.IsSet() || !GetRef() )
-        return aBasicName;
+        return aBasicName.getIdentifier();
     else
         return ((SvMetaType*)GetRef())->GetBasicName();
 }
@@ -988,7 +989,7 @@ int SvMetaType::GetCall1() const
 const ByteString & SvMetaType::GetSvName() const
 {
     if( aSvName.IsSet() || !GetRef() )
-        return aSvName;
+        return aSvName.getIdentifier();
     else
         return ((SvMetaType *)GetRef())->GetSvName();
 }
@@ -996,7 +997,7 @@ const ByteString & SvMetaType::GetSvName() const
 const ByteString & SvMetaType::GetSbxName() const
 {
     if( aSbxName.IsSet() || !GetRef() )
-        return aSbxName;
+        return aSbxName.getIdentifier();
     else
         return ((SvMetaType *)GetRef())->GetSbxName();
 }
@@ -1004,7 +1005,7 @@ const ByteString & SvMetaType::GetSbxName() const
 const ByteString & SvMetaType::GetOdlName() const
 {
     if( aOdlName.IsSet() || !GetRef() )
-        return aOdlName;
+        return aOdlName.getIdentifier();
     else
         return ((SvMetaType *)GetRef())->GetOdlName();
 }
@@ -1012,18 +1013,18 @@ const ByteString & SvMetaType::GetOdlName() const
 const ByteString & SvMetaType::GetCName() const
 {
     if( aCName.IsSet() || !GetRef() )
-        return aCName;
+        return aCName.getIdentifier();
     else
         return ((SvMetaType *)GetRef())->GetCName();
 }
 
 sal_Bool SvMetaType::SetName( const ByteString & rName, SvIdlDataBase * pBase )
 {
-    aSvName     = rName;
-    aSbxName    = rName;
-    aCName      = rName;
+    aSvName.setIdentifier(rName);
+    aSbxName.setIdentifier(rName);
+    aCName.setIdentifier(rName);
     if( GetType() != TYPE_ENUM )
-        aOdlName = rName;
+        aOdlName.setIdentifier(rName);
     return SvMetaReference::SetName( rName, pBase );
 }
 
@@ -1327,23 +1328,23 @@ void SvMetaType::WriteAttributesSvIdl( SvIdlDataBase & rBase,
 {
     SvMetaExtern::WriteAttributesSvIdl( rBase, rOutStm, nTab );
     ByteString name = GetName();
-    if( aSvName != name || aSbxName != name || aOdlName != name )
+    if( aSvName.getIdentifier() != name || aSbxName.getIdentifier() != name || aOdlName.getIdentifier() != name )
     {
         WriteTab( rOutStm, nTab );
         rOutStm << "class SvMetaType" << endl;
-        if( aSvName != name )
+        if( aSvName.getIdentifier() != name )
         {
             WriteTab( rOutStm, nTab );
             aSvName.WriteSvIdl( SvHash_SvName(), rOutStm, nTab );
             rOutStm << endl;
         }
-        if( aSbxName != name )
+        if( aSbxName.getIdentifier() != name )
         {
             WriteTab( rOutStm, nTab );
             aSbxName.WriteSvIdl( SvHash_SbxName(), rOutStm, nTab );
             rOutStm << endl;
         }
-        if( aOdlName != name )
+        if( aOdlName.getIdentifier() != name )
         {
             WriteTab( rOutStm, nTab );
             aOdlName.WriteSvIdl( SvHash_OdlName(), rOutStm, nTab );
@@ -2030,7 +2031,7 @@ void SvMetaAttribute::WriteCSV( SvIdlDataBase&, SvStream& rStrm )
 {
     rStrm << GetType()->GetSvName().GetBuffer() << ' ';
     rStrm << GetName().GetBuffer() << ' ';
-    rStrm << GetSlotId().GetBuffer();
+    rStrm << GetSlotId().getIdentifier().GetBuffer();
 }
 
 

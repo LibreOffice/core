@@ -485,7 +485,7 @@ SvMetaAttribute * SvIdlDataBase::ReadKnownAttr
                 for( sal_uLong i = 0; i < aAttrList.Count(); i++ )
                 {
                     SvMetaAttribute * pAttr = aAttrList.GetObject( i );
-                    if( pAttr->GetSlotId() == pTok->GetString() )
+                    if( pAttr->GetSlotId().getIdentifier() == pTok->GetString() )
                         return pAttr;
                 }
             }
@@ -506,12 +506,12 @@ SvMetaAttribute* SvIdlDataBase::SearchKnownAttr
 )
 {
     sal_uLong n;
-    if( FindId( rId, &n ) )
+    if( FindId( rId.getIdentifier(), &n ) )
     {
         for( sal_uLong i = 0; i < aAttrList.Count(); i++ )
         {
             SvMetaAttribute * pAttr = aAttrList.GetObject( i );
-            if( pAttr->GetSlotId() == rId )
+            if( pAttr->GetSlotId().getIdentifier() == rId.getIdentifier() )
                 return pAttr;
         }
     }

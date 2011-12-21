@@ -209,7 +209,7 @@ public:
     int                 GetCall1() const;
 
     void                SetBasicName(const ByteString& rName)
-                        { aBasicName = rName; }
+                        { aBasicName.setIdentifier(rName); }
 
     const ByteString &      GetBasicName() const;
     ByteString              GetBasicPostfix() const;
