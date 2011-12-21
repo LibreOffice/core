@@ -30,11 +30,11 @@
 #define SC_CHGTRACK_HXX
 
 #include <deque>
+#include <map>
 #include <stack>
 
 #include <tools/string.hxx>
 #include <tools/datetime.hxx>
-#include <tools/table.hxx>
 #include <tools/mempool.hxx>
 #include <tools/link.hxx>
 #include <unotools/options.hxx>
@@ -952,6 +952,7 @@ struct ScChangeTrackMsgInfo
 // MsgQueue for notification via ModifiedLink
 typedef std::deque<ScChangeTrackMsgInfo*> ScChangeTrackMsgQueue;
 typedef std::stack<ScChangeTrackMsgInfo*> ScChangeTrackMsgStack;
+typedef std::map<sal_uLong, ScChangeAction*> ScChangeActionMap;
 
 enum ScChangeTrackMergeState
 {
@@ -961,9 +962,6 @@ enum ScChangeTrackMergeState
     SC_CTMS_UNDO,
     SC_CTMS_OTHER
 };
-
-// Table, additionally to pFirst/pNext/pLast/pPrev, to enable fast access by ActionNumber and by list
-DECLARE_TABLE( ScChangeActionTable, ScChangeAction* )
 
 // Internally generated actions start at this value (nearly all bits set)
 // and are decremented, to keep values in a table seperated from "normal" actions.
@@ -981,9 +979,9 @@ class ScChangeTrack : public utl::ConfigurationListener
     static  const SCSIZE        nContentSlots;
 
     com::sun::star::uno::Sequence< sal_Int8 >   aProtectPass;
-            ScChangeActionTable aTable;
-            ScChangeActionTable aGeneratedTable;
-            ScChangeActionTable aPasteCutTable;
+    ScChangeActionMap   aMap;
+    ScChangeActionMap   aGeneratedMap;
+    ScChangeActionMap   aPasteCutMap;
         ScChangeTrackMsgQueue   aMsgQueue;
         ScChangeTrackMsgStack   aMsgStackTmp;
         ScChangeTrackMsgStack   aMsgStackFinal;
@@ -1097,7 +1095,7 @@ class ScChangeTrack : public utl::ConfigurationListener
                                 // is NULL otherwise.
                                 // bRecursion == called from reject with table
             sal_Bool                Reject( ScChangeAction*,
-                                    ScChangeActionTable*, sal_Bool bRecursion );
+                                    ScChangeActionMap*, sal_Bool bRecursion );
 
 #endif  // SC_CHGTRACK_CXX
 
@@ -1126,9 +1124,21 @@ public:
             sal_Bool                IsGenerated( sal_uLong nAction ) const
                                     { return nAction >= nGeneratedMin; }
             ScChangeAction*     GetAction( sal_uLong nAction ) const
-                                    { return aTable.Get( nAction ); }
+            {
+                ScChangeActionMap::const_iterator it = aMap.find( nAction );
+                if( it != aMap.end() )
+                    return it->second;
+                else
+                    return NULL;
+            }
             ScChangeAction*     GetGenerated( sal_uLong nGenerated ) const
-                                    { return aGeneratedTable.Get( nGenerated ); }
+            {
+                ScChangeActionMap::const_iterator it = aGeneratedMap.find( nGenerated );
+                if( it != aGeneratedMap.end() )
+                    return it->second;
+                else
+                    return NULL;
+            }
             ScChangeAction*     GetActionOrGenerated( sal_uLong nAction ) const
                                     {
                                         return IsGenerated( nAction ) ?
@@ -1140,7 +1150,13 @@ public:
             void                SetLastSavedActionNumber(sal_uLong nNew)
                                     { nMarkLastSaved = nNew; }
             ScChangeAction*     GetLastSaved() const
-                                    { return aTable.Get( nMarkLastSaved ); }
+            {
+                ScChangeActionMap::const_iterator it = aMap.find( nMarkLastSaved );
+                if( it != aMap.end() )
+                    return it->second;
+                else
+                    return NULL;
+            }
         ScChangeActionContent** GetContentSlots() const { return ppContentSlots; }
 
             sal_Bool                IsLoadSave() const { return bLoadSave; }
@@ -1278,8 +1294,8 @@ public:
                                 // With bAllFlat (==TRUE ?) all dependents of dependents
                                 // will be inserted flatly.
 
-    SC_DLLPUBLIC        void                GetDependents( ScChangeAction*,
-                                    ScChangeActionTable&,
+    SC_DLLPUBLIC        void    GetDependents( ScChangeAction*,
+                                    ScChangeActionMap&,
                                     sal_Bool bListMasterDelete = false,
                                     sal_Bool bAllFlat = false ) const;
 

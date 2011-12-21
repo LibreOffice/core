@@ -31,6 +31,8 @@
 
 #include <xmloff/xmltoken.hxx>
 #include <list>
+#include <map>
+#include <tools/solar.h>
 #include <com/sun/star/text/XText.hpp>
 #include <rtl/ustrbuf.hxx>
 
@@ -41,11 +43,11 @@ class ScBaseCell;
 class ScChangeActionDel;
 class ScBigRange;
 class ScEditEngineTextObj;
-class ScChangeActionTable;
 class String;
 class DateTime;
 
 typedef std::list<ScChangeActionDel*> ScMyDeletionsList;
+typedef std::map<sal_uLong, ScChangeAction*> ScChangeActionMap;
 
 class ScChangeTrackingExportHelper
 {
@@ -53,7 +55,7 @@ class ScChangeTrackingExportHelper
 
     ScChangeTrack*  pChangeTrack;
     ScEditEngineTextObj* pEditTextObj;
-    ScChangeActionTable* pDependings;
+    ScChangeActionMap* pDependings;
     rtl::OUString   sChangeIDPrefix;
     com::sun::star::uno::Reference<com::sun::star::text::XText> xText;
 

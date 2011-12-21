@@ -212,17 +212,17 @@ protected:
                                               SvLBoxEntry* pParent,sal_uLong nSpecial);
 
     void            GetDependents( const ScChangeAction* pScChangeAction,
-                                ScChangeActionTable& aActionTable,
+                                ScChangeActionMap& aActionMap,
                                 SvLBoxEntry* pEntry);
 
-    bool            InsertContentChildren(ScChangeActionTable* pActionTable,SvLBoxEntry* pParent);
+    bool            InsertContentChildren( ScChangeActionMap* pActionMap, SvLBoxEntry* pParent );
 
     bool            InsertAcceptedORejected(SvLBoxEntry* pParent);
 
-    bool            InsertDeletedChildren(const ScChangeAction *pChangeAction, ScChangeActionTable* pActionTable,
+    bool            InsertDeletedChildren( const ScChangeAction* pChangeAction, ScChangeActionMap* pActionMap,
                                         SvLBoxEntry* pParent);
 
-    bool            InsertChildren(ScChangeActionTable* pActionTable,SvLBoxEntry* pParent);
+    bool            InsertChildren( ScChangeActionMap* pActionMap, SvLBoxEntry* pParent );
 
     void            AppendChanges(ScChangeTrack* pChanges,sal_uLong nStartAction, sal_uLong nEndAction,
                                     sal_uLong nPos=LIST_APPEND);

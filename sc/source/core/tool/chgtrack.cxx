@@ -454,12 +454,12 @@ void ScChangeAction::GetDescription( String& rStr, ScDocument* /* pDoc */,
                     }
                     else if (pReject->HasDependent())
                     {
-                        ScChangeActionTable aTable;
-                        pCT->GetDependents( pReject, aTable, false, sal_True );
-                        for ( const ScChangeAction* p = aTable.First(); p;
-                                p = aTable.Next() )
+                        ScChangeActionMap aMap;
+                        pCT->GetDependents( pReject, aMap, false, sal_True );
+                        ScChangeActionMap::iterator itChangeAction;
+                        for( itChangeAction = aMap.begin(); itChangeAction != aMap.end(); ++itChangeAction )
                         {
-                            if (p->GetType() == SC_CAT_MOVE)
+                            if( itChangeAction->second->GetType() == SC_CAT_MOVE)
                             {
                                 rStr += ScGlobal::GetRscString(
                                         STR_CHANGED_MOVE_REJECTION_WARNING);
@@ -2116,6 +2116,7 @@ void ScChangeTrack::DtorClear()
 {
     ScChangeAction* p;
     ScChangeAction* pNext;
+    ScChangeActionMap::iterator itChangeAction;
     for ( p = GetFirst(); p; p = pNext )
     {
         pNext = p->GetNext();
@@ -2126,9 +2127,9 @@ void ScChangeTrack::DtorClear()
         pNext = p->GetNext();
         delete p;
     }
-    for ( p = aPasteCutTable.First(); p; p = aPasteCutTable.Next() )
+    for( itChangeAction = aPasteCutMap.begin(); itChangeAction != aPasteCutMap.end(); ++itChangeAction )
     {
-        delete p;
+        delete itChangeAction->second;
     }
     delete pLastCutMove;
     ClearMsgQueue();
@@ -2164,9 +2165,9 @@ void ScChangeTrack::ClearMsgQueue()
 void ScChangeTrack::Clear()
 {
     DtorClear();
-    aTable.Clear();
-    aGeneratedTable.Clear();
-    aPasteCutTable.Clear();
+    aMap.clear();
+    aGeneratedMap.clear();
+    aPasteCutMap.clear();
     aUserCollection.FreeAll();
     aUser.Erase();
     Init();
@@ -2339,7 +2340,7 @@ void ScChangeTrack::MasterLinks( ScChangeAction* pAppend )
 
 void ScChangeTrack::AppendLoaded( ScChangeAction* pAppend )
 {
-    aTable.Insert( pAppend->GetActionNumber(), pAppend );
+    aMap.insert( ::std::make_pair( pAppend->GetActionNumber(), pAppend ) );
     if ( !pLast )
         pFirst = pLast = pAppend;
     else
@@ -2360,7 +2361,7 @@ void ScChangeTrack::Append( ScChangeAction* pAppend, sal_uLong nAction )
     if ( bUseFixDateTime )
         pAppend->SetDateTimeUTC( aFixDateTime );
     pAppend->SetActionNumber( nAction );
-    aTable.Insert( nAction, pAppend );
+    aMap.insert( ::std::make_pair( nAction, pAppend ) );
     // UpdateReference Inserts vor Dependencies.
     // Delete rejectendes Insert hatte UpdateReference mit Delete-Undo.
     // UpdateReference auch wenn pLast==NULL, weil pAppend ein Delete sein
@@ -2831,7 +2832,7 @@ ScChangeActionContent* ScChangeTrack::GenerateDelContent(
         pContent->pNext = pFirstGeneratedDelContent;
     }
     pFirstGeneratedDelContent = pContent;
-    aGeneratedTable.Insert( nGeneratedMin, pContent );
+    aGeneratedMap.insert( std::make_pair( nGeneratedMin, pContent ) );
     NotifyModified( SC_CTM_APPEND, nGeneratedMin, nGeneratedMin );
     return pContent;
 }
@@ -2840,7 +2841,7 @@ ScChangeActionContent* ScChangeTrack::GenerateDelContent(
 void ScChangeTrack::DeleteGeneratedDelContent( ScChangeActionContent* pContent )
 {
     sal_uLong nAct = pContent->GetActionNumber();
-    aGeneratedTable.Remove( nAct );
+    aGeneratedMap.erase( nAct );
     if ( pFirstGeneratedDelContent == pContent )
         pFirstGeneratedDelContent = (ScChangeActionContent*) pContent->pNext;
     if ( pContent->pNext )
@@ -3038,7 +3039,7 @@ void ScChangeTrack::Remove( ScChangeAction* pRemove )
 {
     // aus Track ausklinken
     sal_uLong nAct = pRemove->GetActionNumber();
-    aTable.Remove( nAct );
+    aMap.erase( nAct );
     if ( nAct == nActionMax )
         --nActionMax;
     if ( pRemove == pLast )
@@ -3125,7 +3126,7 @@ void ScChangeTrack::Undo( sal_uLong nStartAction, sal_uLong nEndAction, bool bMe
                 SetInDeleteTop( false );
                 Remove( pAct );
                 if ( IsInPasteCut() )
-                    aPasteCutTable.Insert( pAct->GetActionNumber(), pAct );
+                    aPasteCutMap.insert( ::std::make_pair( pAct->GetActionNumber(), pAct ) );
                 else
                 {
                     if ( j == nStartAction && pAct->GetType() == SC_CAT_MOVE )
@@ -3140,16 +3141,15 @@ void ScChangeTrack::Undo( sal_uLong nStartAction, sal_uLong nEndAction, bool bMe
                             StartBlockModify( SC_CTM_APPEND, nStart );
                             for ( sal_uLong nCut = nStart; nCut <= nEnd; nCut++ )
                             {
-                                ScChangeAction* pCut = aPasteCutTable.Remove( nCut );
-                                if ( pCut )
-                                {
-                                    OSL_ENSURE( !aTable.Get( nCut ), "ScChangeTrack::Undo: nCut dup" );
-                                    Append( pCut, nCut );
-                                }
-                                else
+                                ScChangeActionMap::iterator itCut = aPasteCutMap.find( nCut );
+
+                                if ( itCut == aMap.end() )
                                 {
                                     OSL_FAIL( "ScChangeTrack::Undo: nCut not found" );
                                 }
+
+                                Append( itCut->second, nCut );
+                                aPasteCutMap.erase( nCut );
                             }
                             EndBlockModify( nEnd );
                             ResetLastCut();
@@ -3848,7 +3848,7 @@ void ScChangeTrack::UpdateReference( ScChangeAction** ppFirstAction,
 
 
 void ScChangeTrack::GetDependents( ScChangeAction* pAct,
-        ScChangeActionTable& rTable, sal_Bool bListMasterDelete, sal_Bool bAllFlat ) const
+        ScChangeActionMap& rMap, sal_Bool bListMasterDelete, sal_Bool bAllFlat ) const
 {
     //! bAllFlat==TRUE: intern aus Accept oder Reject gerufen,
     //! => Generated werden nicht aufgenommen
@@ -3876,7 +3876,7 @@ void ScChangeTrack::GetDependents( ScChangeAction* pAct,
                     if ( bAllFlat )
                     {
                         sal_uLong n = p->GetActionNumber();
-                        if ( !IsGenerated( n ) && rTable.Insert( n, p ) )
+                        if ( !IsGenerated( n ) && rMap.insert( ::std::make_pair( n, p ) ).second )
                             if ( p->HasDependent() )
                                 cStack.push( p );
                     }
@@ -3885,10 +3885,10 @@ void ScChangeTrack::GetDependents( ScChangeAction* pAct,
                         if ( p->GetType() == SC_CAT_CONTENT )
                         {
                             if ( ((ScChangeActionContent*)p)->IsTopContent() )
-                                rTable.Insert( p->GetActionNumber(), p );
+                                rMap.insert( ::std::make_pair( p->GetActionNumber(), p ) );
                         }
                         else
-                            rTable.Insert( p->GetActionNumber(), p );
+                            rMap.insert( ::std::make_pair( p->GetActionNumber(), p ) );
                     }
                 }
                 pL = pL->GetNext();
@@ -3907,9 +3907,9 @@ void ScChangeTrack::GetDependents( ScChangeAction* pAct,
                     ScChangeAction* p = pDel;
                     while ( (p = p->GetPrev()) != NULL && p->GetType() == eType &&
                             !((ScChangeActionDel*)p)->IsTopDelete() )
-                        rTable.Insert( p->GetActionNumber(), p );
-                    // dieses Delete auch in Table!
-                    rTable.Insert( pAct->GetActionNumber(), pAct );
+                        rMap.insert( ::std::make_pair( p->GetActionNumber(), p ) );
+                    // delete this in the map too
+                    rMap.insert( ::std::make_pair( pAct->GetActionNumber(), pAct ) );
                 }
                 else
                 {
@@ -3923,7 +3923,7 @@ void ScChangeTrack::GetDependents( ScChangeAction* pAct,
                             {
                                 // nur ein TopContent einer Kette ist in LinkDeleted
                                 sal_uLong n = p->GetActionNumber();
-                                if ( !IsGenerated( n ) && rTable.Insert( n, p ) )
+                                if ( !IsGenerated( n ) && rMap.insert( ::std::make_pair( n, p ) ).second )
                                     if ( p->HasDeleted() ||
                                             p->GetType() == SC_CAT_CONTENT )
                                         cStack.push( p );
@@ -3934,10 +3934,10 @@ void ScChangeTrack::GetDependents( ScChangeAction* pAct,
                                 {   // weiteres TopDelete in gleiche Ebene,
                                     // es ist nicht rejectable
                                     if ( ((ScChangeActionDel*)p)->IsTopDelete() )
-                                        rTable.Insert( p->GetActionNumber(), p );
+                                        rMap.insert( ::std::make_pair( p->GetActionNumber(), p ) );
                                 }
                                 else
-                                    rTable.Insert( p->GetActionNumber(), p );
+                                    rMap.insert( ::std::make_pair( p->GetActionNumber(), p ) );
                             }
                         }
                         pL = pL->GetNext();
@@ -3952,7 +3952,7 @@ void ScChangeTrack::GetDependents( ScChangeAction* pAct,
             while ( pL )
             {
                 ScChangeAction* p = (ScChangeAction*) pL->GetAction();
-                if ( p != pAct && rTable.Insert( p->GetActionNumber(), p ) )
+                if ( p != pAct && rMap.insert( ::std::make_pair( p->GetActionNumber(), p ) ).second )
                 {
                     // nur ein TopContent einer Kette ist in LinkDeleted
                     if ( bAllFlat && (p->HasDeleted() ||
@@ -3972,7 +3972,7 @@ void ScChangeTrack::GetDependents( ScChangeAction* pAct,
                     if ( bAllFlat )
                     {
                         sal_uLong n = p->GetActionNumber();
-                        if ( !IsGenerated( n ) && rTable.Insert( n, p ) )
+                        if ( !IsGenerated( n ) && rMap.insert( ::std::make_pair( n, p ) ).second )
                             if ( p->HasDependent() || p->HasDeleted() )
                                 cStack.push( p );
                     }
@@ -3981,10 +3981,10 @@ void ScChangeTrack::GetDependents( ScChangeAction* pAct,
                         if ( p->GetType() == SC_CAT_CONTENT )
                         {
                             if ( ((ScChangeActionContent*)p)->IsTopContent() )
-                                rTable.Insert( p->GetActionNumber(), p );
+                                rMap.insert( ::std::make_pair( p->GetActionNumber(), p ) );
                         }
                         else
-                            rTable.Insert( p->GetActionNumber(), p );
+                            rMap.insert( ::std::make_pair( p->GetActionNumber(), p ) );
                     }
                 }
                 pL = pL->GetNext();
@@ -3997,14 +3997,14 @@ void ScChangeTrack::GetDependents( ScChangeAction* pAct,
             while ( ( pContent = pContent->GetPrevContent() ) != NULL )
             {
                 if ( !pContent->IsRejected() )
-                    rTable.Insert( pContent->GetActionNumber(), pContent );
+                    rMap.insert( ::std::make_pair( pContent->GetActionNumber(), pContent ) );
             }
             pContent = (ScChangeActionContent*) pCur;
             // alle nachfolgenden
             while ( ( pContent = pContent->GetNextContent() ) != NULL )
             {
                 if ( !pContent->IsRejected() )
-                    rTable.Insert( pContent->GetActionNumber(), pContent );
+                    rMap.insert( ::std::make_pair( pContent->GetActionNumber(), pContent ) );
             }
             // all MatrixReferences of a MatrixOrigin
             const ScChangeActionLinkEntry* pL = pCur->GetFirstDependentEntry();
@@ -4016,12 +4016,12 @@ void ScChangeTrack::GetDependents( ScChangeAction* pAct,
                     if ( bAllFlat )
                     {
                         sal_uLong n = p->GetActionNumber();
-                        if ( !IsGenerated( n ) && rTable.Insert( n, p ) )
+                        if ( !IsGenerated( n ) && rMap.insert( ::std::make_pair( n, p ) ).second )
                             if ( p->HasDependent() )
                                 cStack.push( p );
                     }
                     else
-                        rTable.Insert( p->GetActionNumber(), p );
+                        rMap.insert( ::std::make_pair( p->GetActionNumber(), p ) );
                 }
                 pL = pL->GetNext();
             }
@@ -4032,7 +4032,7 @@ void ScChangeTrack::GetDependents( ScChangeAction* pAct,
             {
                 ScChangeAction* p = GetAction(
                         ((ScChangeActionReject*)pCur)->GetRejectAction() );
-                if ( p != pAct && !rTable.Get( p->GetActionNumber() ) )
+                if ( p != pAct && rMap.find( p->GetActionNumber() ) != rMap.end() )
                     cStack.push( p );
             }
         }
@@ -4137,11 +4137,14 @@ sal_Bool ScChangeTrack::Accept( ScChangeAction* pAct )
 
     if ( pAct->IsDeleteType() || pAct->GetType() == SC_CAT_CONTENT )
     {
-        ScChangeActionTable aActionTable;
-        GetDependents( pAct, aActionTable, false, sal_True );
-        for ( ScChangeAction* p = aActionTable.First(); p; p = aActionTable.Next() )
+        ScChangeActionMap aActionMap;
+        ScChangeActionMap::iterator itChangeAction;
+
+        GetDependents( pAct, aActionMap, false, sal_True );
+
+        for( itChangeAction = aActionMap.begin(); itChangeAction != aActionMap.end(); ++itChangeAction )
         {
-            p->Accept();
+            itChangeAction->second->Accept();
         }
     }
     pAct->Accept();
@@ -4171,20 +4174,20 @@ sal_Bool ScChangeTrack::Reject( ScChangeAction* pAct, bool bShared )
     if ( !pAct->IsRejectable() )
         return false;
 
-    ScChangeActionTable* pTable = NULL;
+    ScChangeActionMap* pMap = NULL;
     if ( pAct->HasDependent() )
     {
-        pTable = new ScChangeActionTable;
-        GetDependents( pAct, *pTable, false, sal_True );
+        pMap = new ScChangeActionMap;
+        GetDependents( pAct, *pMap, false, sal_True );
     }
-    sal_Bool bRejected = Reject( pAct, pTable, false );
-    if ( pTable )
-        delete pTable;
+    sal_Bool bRejected = Reject( pAct, pMap, false );
+    if ( pMap )
+        delete pMap;
     return bRejected;
 }
 
 
-sal_Bool ScChangeTrack::Reject( ScChangeAction* pAct, ScChangeActionTable* pTable,
+sal_Bool ScChangeTrack::Reject( ScChangeAction* pAct, ScChangeActionMap* pMap,
         sal_Bool bRecursion )
 {
     if ( !pAct->IsInternalRejectable() )
@@ -4196,16 +4199,17 @@ sal_Bool ScChangeTrack::Reject( ScChangeAction* pAct, ScChangeActionTable* pTabl
     {
         if ( pAct->HasDependent() && !bRecursion )
         {
-            OSL_ENSURE( pTable, "ScChangeTrack::Reject: Insert ohne Table" );
-            for ( ScChangeAction* p = pTable->Last(); p && bOk; p = pTable->Prev() )
+            OSL_ENSURE( pMap, "ScChangeTrack::Reject: Insert ohne map" );
+            ScChangeActionMap::iterator itChangeAction;
+            for( itChangeAction = pMap->begin(); itChangeAction != pMap->end() && bOk; ++itChangeAction )
             {
                 // keine Contents restoren, die eh geloescht werden wuerden
-                if ( p->GetType() == SC_CAT_CONTENT )
-                    p->SetRejected();
-                else if ( p->IsDeleteType() )
-                    p->Accept();        // geloeschtes ins Nirvana
+                if ( itChangeAction->second->GetType() == SC_CAT_CONTENT )
+                    itChangeAction->second->SetRejected();
+                else if ( itChangeAction->second->IsDeleteType() )
+                    itChangeAction->second->Accept();        // geloeschtes ins Nirvana
                 else
-                    bOk = Reject( p, NULL, sal_True );      //! rekursiv
+                    bOk = Reject( itChangeAction->second, NULL, sal_True );      //! rekursiv
             }
         }
         if ( bOk && (bRejected = pAct->Reject( pDoc )) != false )
@@ -4217,7 +4221,7 @@ sal_Bool ScChangeTrack::Reject( ScChangeAction* pAct, ScChangeActionTable* pTabl
     }
     else if ( pAct->IsDeleteType() )
     {
-        OSL_ENSURE( !pTable, "ScChangeTrack::Reject: Delete mit Table" );
+        OSL_ENSURE( !pMap, "ScChangeTrack::Reject: Delete mit map" );
         ScBigRange aDelRange;
         sal_uLong nRejectAction = pAct->GetActionNumber();
         sal_Bool bTabDel, bTabDelOk;
@@ -4312,10 +4316,12 @@ sal_Bool ScChangeTrack::Reject( ScChangeAction* pAct, ScChangeActionTable* pTabl
     {
         if ( pAct->HasDependent() && !bRecursion )
         {
-            OSL_ENSURE( pTable, "ScChangeTrack::Reject: Move ohne Table" );
-            for ( ScChangeAction* p = pTable->Last(); p && bOk; p = pTable->Prev() )
+            OSL_ENSURE( pMap, "ScChangeTrack::Reject: Move ohne Map" );
+            ScChangeActionMap::reverse_iterator itChangeAction;
+
+            for( itChangeAction = pMap->rbegin(); itChangeAction != pMap->rend() && bOk; ++itChangeAction )
             {
-                bOk = Reject( p, NULL, sal_True );      //! rekursiv
+                bOk = Reject( itChangeAction->second, NULL, sal_True );      //! rekursiv
             }
         }
         if ( bOk && (bRejected = pAct->Reject( pDoc )) != false )
@@ -4368,7 +4374,7 @@ sal_uLong ScChangeTrack::AddLoadedGenerated(ScBaseCell* pNewCell, const ScBigRan
             pFirstGeneratedDelContent->pPrev = pAct;
         pAct->pNext = pFirstGeneratedDelContent;
         pFirstGeneratedDelContent = pAct;
-        aGeneratedTable.Insert( pAct->GetActionNumber(), pAct );
+        aGeneratedMap.insert( ::std::make_pair( pAct->GetActionNumber(), pAct ) );
         return pAct->GetActionNumber();
     }
     return 0;
@@ -4376,7 +4382,7 @@ sal_uLong ScChangeTrack::AddLoadedGenerated(ScBaseCell* pNewCell, const ScBigRan
 
 void ScChangeTrack::AppendCloned( ScChangeAction* pAppend )
 {
-    aTable.Insert( pAppend->GetActionNumber(), pAppend );
+    aMap.insert( ::std::make_pair( pAppend->GetActionNumber(), pAppend ) );
     if ( !pLast )
         pFirst = pLast = pAppend;
     else
