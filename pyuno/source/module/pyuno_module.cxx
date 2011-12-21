@@ -306,26 +306,26 @@ static PyObject* getComponentContext (PyObject*, PyObject*)
         Runtime runtime;
         ret = runtime.any2PyObject( makeAny( ctx ) );
     }
-    catch (com::sun::star::registry::InvalidRegistryException &e)
+    catch (const com::sun::star::registry::InvalidRegistryException &e)
     {
         // can't use raisePyExceptionWithAny() here, because the function
         // does any conversions, which will not work with a
         // wrongly bootstrapped pyuno!
         raisePySystemException( "InvalidRegistryException", e.Message );
     }
-    catch( com::sun::star::lang::IllegalArgumentException & e)
+    catch(const com::sun::star::lang::IllegalArgumentException & e)
     {
         raisePySystemException( "IllegalArgumentException", e.Message );
     }
-    catch( com::sun::star::script::CannotConvertException & e)
+    catch(const com::sun::star::script::CannotConvertException & e)
     {
         raisePySystemException( "CannotConvertException", e.Message );
     }
-    catch (com::sun::star::uno::RuntimeException & e)
+    catch (const com::sun::star::uno::RuntimeException & e)
     {
         raisePySystemException( "RuntimeException", e.Message );
     }
-    catch (com::sun::star::uno::Exception & e)
+    catch (const com::sun::star::uno::Exception & e)
     {
         raisePySystemException( "uno::Exception", e.Message );
     }
@@ -424,15 +424,15 @@ static PyObject *createUnoStructHelper(PyObject *, PyObject* args, PyObject* key
             PyErr_SetString (PyExc_AttributeError, "pyuno._createUnoStructHelper: expects exactly two non-keyword arguments:\n\tStructure Name\n\tinitialiser tuple; may be the empty tuple");
         }
     }
-    catch( com::sun::star::uno::RuntimeException & e )
+    catch( const com::sun::star::uno::RuntimeException & e )
     {
         raisePyExceptionWithAny( makeAny( e ) );
     }
-    catch( com::sun::star::script::CannotConvertException & e )
+    catch( const com::sun::star::script::CannotConvertException & e )
     {
         raisePyExceptionWithAny( makeAny( e ) );
     }
-    catch( com::sun::star::uno::Exception & e )
+    catch( const com::sun::star::uno::Exception & e )
     {
         raisePyExceptionWithAny( makeAny( e ) );
     }
@@ -465,7 +465,7 @@ static PyObject *getTypeByName( PyObject *, PyObject *args )
             }
         }
     }
-    catch ( RuntimeException & e )
+    catch ( const RuntimeException & e )
     {
         raisePyExceptionWithAny( makeAny( e ) );
     }
@@ -498,22 +498,22 @@ static PyObject *getConstantByName( PyObject *, PyObject *args )
             ret = constant.getAcquired();
         }
     }
-    catch( NoSuchElementException & e )
+    catch( const NoSuchElementException & e )
     {
         // to the python programmer, this is a runtime exception,
         // do not support tweakings with the type system
         RuntimeException runExc( e.Message, Reference< XInterface > () );
         raisePyExceptionWithAny( makeAny( runExc ) );
     }
-    catch( com::sun::star::script::CannotConvertException & e)
+    catch(const com::sun::star::script::CannotConvertException & e)
     {
         raisePyExceptionWithAny( makeAny( e ) );
     }
-    catch( com::sun::star::lang::IllegalArgumentException & e)
+    catch(const com::sun::star::lang::IllegalArgumentException & e)
     {
         raisePyExceptionWithAny( makeAny( e ) );
     }
-    catch( RuntimeException & e )
+    catch( const RuntimeException & e )
     {
         raisePyExceptionWithAny( makeAny(e) );
     }
@@ -535,7 +535,7 @@ static PyObject *checkType( PyObject *, PyObject *args )
     {
         PyType2Type( obj );
     }
-    catch( RuntimeException & e)
+    catch(const  RuntimeException & e)
     {
         raisePyExceptionWithAny( makeAny( e ) );
         return NULL;
@@ -559,7 +559,7 @@ static PyObject *checkEnum( PyObject *, PyObject *args )
     {
         PyEnum2Enum( obj );
     }
-    catch( RuntimeException & e)
+    catch(const RuntimeException & e)
     {
         raisePyExceptionWithAny( makeAny( e) );
         return NULL;
@@ -583,7 +583,7 @@ static PyObject *getClass( PyObject *, PyObject *args )
         Py_XINCREF( ret.get() );
         return ret.get();
     }
-    catch( RuntimeException & e)
+    catch(const RuntimeException & e)
     {
         // NOOPT !!!
         // gcc 3.2.3 crashes here in the regcomp test scenario
@@ -616,7 +616,7 @@ static PyObject * generateUuid( PyObject *, PyObject * )
         Runtime runtime;
         ret = runtime.any2PyObject( makeAny( seq ) );
     }
-    catch( RuntimeException & e )
+    catch( const RuntimeException & e )
     {
         raisePyExceptionWithAny( makeAny(e) );
     }
@@ -753,7 +753,7 @@ static PyObject *getCurrentContext( PyObject *, PyObject * )
         ret = runtime.any2PyObject(
             makeAny( com::sun::star::uno::getCurrentContext() ) );
     }
-    catch( com::sun::star::uno::Exception & e )
+    catch( const com::sun::star::uno::Exception & e )
     {
         raisePyExceptionWithAny( makeAny( e ) );
     }
@@ -794,7 +794,7 @@ static PyObject *setCurrentContext( PyObject *, PyObject * args )
                 PyExc_RuntimeError, buf.makeStringAndClear().getStr() );
         }
     }
-    catch( com::sun::star::uno::Exception & e )
+    catch( const com::sun::star::uno::Exception & e )
     {
         raisePyExceptionWithAny( makeAny( e ) );
     }

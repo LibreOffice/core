@@ -152,7 +152,7 @@ PyObject* PyUNO_callable_call (PyObject* self, PyObject* args, PyObject*)
             ret = temp;
         }
     }
-    catch( com::sun::star::reflection::InvocationTargetException & e )
+    catch( const com::sun::star::reflection::InvocationTargetException & e )
     {
 
         if( isLog( cargo, LogLevel::CALL ) )
@@ -162,7 +162,7 @@ PyObject* PyUNO_callable_call (PyObject* self, PyObject* args, PyObject*)
         }
         raisePyExceptionWithAny( e.TargetException );
     }
-    catch( com::sun::star::script::CannotConvertException &e )
+    catch( const com::sun::star::script::CannotConvertException &e )
     {
         if( isLog( cargo, LogLevel::CALL ) )
         {
@@ -171,7 +171,7 @@ PyObject* PyUNO_callable_call (PyObject* self, PyObject* args, PyObject*)
         }
         raisePyExceptionWithAny( com::sun::star::uno::makeAny( e ) );
     }
-    catch( com::sun::star::lang::IllegalArgumentException &e )
+    catch( const com::sun::star::lang::IllegalArgumentException &e )
     {
         if( isLog( cargo, LogLevel::CALL ) )
         {
@@ -180,7 +180,7 @@ PyObject* PyUNO_callable_call (PyObject* self, PyObject* args, PyObject*)
         }
         raisePyExceptionWithAny( com::sun::star::uno::makeAny( e ) );
     }
-    catch (::com::sun::star::uno::RuntimeException &e)
+    catch (const ::com::sun::star::uno::RuntimeException &e)
     {
         if( cargo && isLog( cargo, LogLevel::CALL ) )
         {

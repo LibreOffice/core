@@ -76,7 +76,7 @@ using ::rtl::OUString;
             }
         }
     }
-    catch( uno::Exception & ex )
+    catch( const uno::Exception & ex )
     {
         (void)ex; // avoid warning for pro build
 
@@ -212,7 +212,7 @@ uno::Reference< beans::XPropertySet > SchXMLSeriesHelper::createOldAPISeriesProp
                 }
             }
         }
-        catch( uno::Exception & rEx )
+        catch( const uno::Exception & rEx )
         {
             (void)rEx; // avoid warning for pro build
             OSL_TRACE( "Exception caught SchXMLSeriesHelper::createOldAPISeriesPropertySet: %s",
@@ -250,7 +250,7 @@ uno::Reference< beans::XPropertySet > SchXMLSeriesHelper::createOldAPIDataPointP
                 }
             }
         }
-        catch( uno::Exception & rEx )
+        catch( const uno::Exception & rEx )
         {
             (void)rEx; // avoid warning for pro build
 

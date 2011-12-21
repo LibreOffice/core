@@ -387,19 +387,19 @@ PyObject *PyUNO_invoke( PyObject *object, const char *name , PyObject *args )
         }
         ret = PyRef( PyObject_CallObject( callable.get(), paras.get() ), SAL_NO_ACQUIRE );
     }
-    catch (::com::sun::star::lang::IllegalArgumentException &e)
+    catch (const ::com::sun::star::lang::IllegalArgumentException &e)
     {
         raisePyExceptionWithAny( com::sun::star::uno::makeAny( e ) );
     }
-    catch (::com::sun::star::script::CannotConvertException &e)
+    catch (const ::com::sun::star::script::CannotConvertException &e)
     {
         raisePyExceptionWithAny( com::sun::star::uno::makeAny( e ) );
     }
-    catch (::com::sun::star::uno::RuntimeException &e)
+    catch (const ::com::sun::star::uno::RuntimeException &e)
     {
         raisePyExceptionWithAny( com::sun::star::uno::makeAny( e ) );
     }
-    catch (::com::sun::star::uno::Exception &e)
+    catch (const ::com::sun::star::uno::Exception &e)
     {
         raisePyExceptionWithAny( com::sun::star::uno::makeAny( e ) );
     }
@@ -524,23 +524,23 @@ PyObject* PyUNO_getattr (PyObject* self, char* name)
         //or else...
         PyErr_SetString (PyExc_AttributeError, name);
     }
-    catch( com::sun::star::reflection::InvocationTargetException & e )
+    catch( const com::sun::star::reflection::InvocationTargetException & e )
     {
         raisePyExceptionWithAny( makeAny(e.TargetException) );
     }
-    catch( com::sun::star::beans::UnknownPropertyException & e )
+    catch( const com::sun::star::beans::UnknownPropertyException & e )
     {
         raisePyExceptionWithAny( makeAny(e) );
     }
-    catch( com::sun::star::lang::IllegalArgumentException &e )
+    catch( const com::sun::star::lang::IllegalArgumentException &e )
     {
         raisePyExceptionWithAny( makeAny(e) );
     }
-    catch( com::sun::star::script::CannotConvertException &e )
+    catch( const com::sun::star::script::CannotConvertException &e )
     {
         raisePyExceptionWithAny( makeAny(e) );
     }
-    catch( RuntimeException &e )
+    catch( const RuntimeException &e )
     {
         raisePyExceptionWithAny( makeAny(e) );
     }
@@ -568,22 +568,22 @@ int PyUNO_setattr (PyObject* self, char* name, PyObject* value)
             }
         }
     }
-    catch( com::sun::star::reflection::InvocationTargetException & e )
+    catch( const com::sun::star::reflection::InvocationTargetException & e )
     {
         raisePyExceptionWithAny( makeAny(e.TargetException) );
         return 1;
     }
-    catch( com::sun::star::beans::UnknownPropertyException & e )
+    catch( const com::sun::star::beans::UnknownPropertyException & e )
     {
         raisePyExceptionWithAny( makeAny(e) );
         return 1;
     }
-    catch( com::sun::star::script::CannotConvertException &e )
+    catch( const com::sun::star::script::CannotConvertException &e )
     {
         raisePyExceptionWithAny( makeAny(e) );
         return 1;
     }
-    catch( RuntimeException & e )
+    catch( const RuntimeException & e )
     {
         raisePyExceptionWithAny( makeAny( e ) );
         return 1;
@@ -637,7 +637,7 @@ static PyObject* PyUNO_cmp( PyObject *self, PyObject *that, int op )
             }
         }
     }
-    catch( com::sun::star::uno::RuntimeException & e)
+    catch( const com::sun::star::uno::RuntimeException & e)
     {
         raisePyExceptionWithAny( makeAny( e ) );
     }

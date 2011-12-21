@@ -216,7 +216,7 @@ Reference< chart2::data::XLabeledDataSequence > lcl_getCategories( const Referen
             }
         }
     }
-    catch( uno::Exception & ex )
+    catch( const uno::Exception & ex )
     {
         (void)ex; // avoid warning for pro build
         OSL_FAIL( rtl::OUStringToOString(
@@ -334,7 +334,7 @@ bool lcl_isSeriesAttachedToFirstAxis(
             xProp->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("AttachedAxisIndex") ) ) >>= nAxisIndex;
         bResult = (0==nAxisIndex);
     }
-    catch( uno::Exception & ex )
+    catch( const uno::Exception & ex )
     {
         (void)ex; // avoid warning for pro build
         OSL_FAIL( rtl::OUStringToOString(
@@ -495,9 +495,8 @@ bool lcl_SequenceHasUnhiddenData( const uno::Reference< chart2::data::XDataSeque
             if( !aHiddenValues.getLength() )
                 return true;
         }
-        catch( uno::Exception& e )
+        catch( uno::Exception& )
         {
-            (void)e; // avoid warning
             return true;
         }
     }
@@ -787,7 +786,7 @@ void ChartExport::InitRangeSegmentationProperties( const Reference< chart2::XCha
                 }
             }
         }
-        catch( uno::Exception & ex )
+        catch( const uno::Exception & ex )
         {
             (void)ex; // avoid warning for pro build
             OSL_FAIL( rtl::OUStringToOString(
@@ -2573,7 +2572,7 @@ void ChartExport::exportDataPoints(
                     xPropSet = SchXMLSeriesHelper::createOldAPIDataPointPropertySet(
                             xSeries, nElement, getModel() );
                 }
-                catch( uno::Exception & rEx )
+                catch( const uno::Exception & rEx )
                 {
                     (void)rEx; // avoid warning for pro build
                     OSL_TRACE( "Exception caught during Export of data point: %s",
