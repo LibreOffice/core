@@ -126,7 +126,7 @@ static void InsertMenu_Impl( const uno::Reference< container::XIndexContainer >&
     for ( nInd = 0; nInd < aSourceProps.getLength(); nInd++ )
     {
         aTargetProps[nInd].Name = aSourceProps[nInd].Name;
-        if ( aContModuleName.getLength() && aTargetProps[nInd].Name.equals( aModuleIdentPropName ) )
+        if ( !aContModuleName.isEmpty() && aTargetProps[nInd].Name.equals( aModuleIdentPropName ) )
         {
             aTargetProps[nInd].Value <<= aContModuleName;
             bModuleNameSet = sal_True;
@@ -140,7 +140,7 @@ static void InsertMenu_Impl( const uno::Reference< container::XIndexContainer >&
             aTargetProps[nInd].Value = aSourceProps[nInd].Value;
     }
 
-    if ( !bModuleNameSet && aContModuleName.getLength() )
+    if ( !bModuleNameSet && !aContModuleName.isEmpty() )
     {
         aTargetProps.realloc( ++nInd );
         aTargetProps[nInd-1].Name = aModuleIdentPropName;
@@ -582,7 +582,7 @@ uno::Reference< container::XIndexAccess > DocumentHolder::RetrieveOwnMenu_Impl()
         ::rtl::OUString aModuleIdent =
             xModuleMan->identify( uno::Reference< uno::XInterface >( m_xComponent, uno::UNO_QUERY ) );
 
-        if ( aModuleIdent.getLength() )
+        if ( !aModuleIdent.isEmpty() )
         {
             uno::Reference< ::com::sun::star::ui::XModuleUIConfigurationManagerSupplier > xModConfSupplier(
                     m_xFactory->createInstance( ::rtl::OUString(
@@ -623,7 +623,7 @@ void DocumentHolder::FindConnectPoints(
                 break;
             }
 
-        if ( !aCommand.getLength() )
+        if ( aCommand.isEmpty() )
             throw uno::RuntimeException();
 
         if ( aCommand.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ".uno:PickList" ) ) )

@@ -246,7 +246,7 @@ static void SetDocToEmbedded( const uno::Reference< frame::XModel > xDocument, c
         aSeq[0].Value <<= sal_True;
         xDocument->attachResource( ::rtl::OUString(), aSeq );
 
-        if ( aModuleName.getLength() )
+        if ( !aModuleName.isEmpty() )
         {
             try
             {
@@ -465,7 +465,7 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::LoadLink_Impl()
 ::rtl::OUString OCommonEmbeddedObject::GetFilterName( sal_Int32 nVersion ) const
 {
     ::rtl::OUString aFilterName = GetPresetFilterName();
-    if ( !aFilterName.getLength() )
+    if ( aFilterName.isEmpty() )
     {
         try {
             ::comphelper::MimeConfigurationHelper aHelper( m_xFactory );
@@ -486,8 +486,8 @@ void OCommonEmbeddedObject::FillDefaultLoadArgs_Impl( const uno::Reference< embe
     o_rLoadArgs.put( "ReadOnly", m_bReadOnly );
 
     ::rtl::OUString aFilterName = GetFilterName( ::comphelper::OStorageHelper::GetXStorageFormat( i_rxStorage ) );
-    OSL_ENSURE( aFilterName.getLength(), "OCommonEmbeddedObject::FillDefaultLoadArgs_Impl: Wrong document service name!" );
-    if ( !aFilterName.getLength() )
+    OSL_ENSURE( !aFilterName.isEmpty(), "OCommonEmbeddedObject::FillDefaultLoadArgs_Impl: Wrong document service name!" );
+    if ( aFilterName.isEmpty() )
         throw io::IOException();    // TODO: error message/code
 
     o_rLoadArgs.put( "FilterName", aFilterName );
@@ -543,7 +543,7 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::LoadDocumentFromStorag
         {
         }
 
-        OSL_ENSURE( aTempFileURL.getLength(), "Coudn't retrieve temporary file URL!\n" );
+        OSL_ENSURE( !aTempFileURL.isEmpty(), "Coudn't retrieve temporary file URL!\n" );
 
         aLoadArgs.put( "URL", aTempFileURL );
         aLoadArgs.put( "InputStream", xTempInpStream );
@@ -613,8 +613,8 @@ uno::Reference< io::XInputStream > OCommonEmbeddedObject::StoreDocumentToTempStr
 
     ::rtl::OUString aFilterName = GetFilterName( nStorageFormat );
 
-    OSL_ENSURE( aFilterName.getLength(), "Wrong document service name!" );
-    if ( !aFilterName.getLength() )
+    OSL_ENSURE( !aFilterName.isEmpty(), "Wrong document service name!" );
+    if ( aFilterName.isEmpty() )
         throw io::IOException(); // TODO:
 
     uno::Sequence< beans::PropertyValue > aArgs( 4 );
@@ -692,7 +692,7 @@ void OCommonEmbeddedObject::SaveObject_Impl()
         {}
     }
 
-    if ( !aBaseURL.getLength() )
+    if ( aBaseURL.isEmpty() )
     {
         for ( nInd = 0; nInd < m_aDocMediaDescriptor.getLength(); nInd++ )
             if ( m_aDocMediaDescriptor[nInd].Name.equals(
@@ -703,7 +703,7 @@ void OCommonEmbeddedObject::SaveObject_Impl()
             }
     }
 
-    if ( !aBaseURL.getLength() )
+    if ( aBaseURL.isEmpty() )
         aBaseURL = m_aDefaultParentBaseURL;
 
     return aBaseURL;
@@ -724,7 +724,7 @@ void OCommonEmbeddedObject::SaveObject_Impl()
             break;
         }
 
-    if ( !aBaseURL.getLength() )
+    if ( aBaseURL.isEmpty() )
     {
         for ( nInd = 0; nInd < lObjArgs.getLength(); nInd++ )
             if ( lObjArgs[nInd].Name.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultParentBaseURL" ) ) ) )
@@ -775,8 +775,8 @@ void OCommonEmbeddedObject::StoreDocToStorage_Impl( const uno::Reference< embed:
     {
         ::rtl::OUString aFilterName = GetFilterName( nStorageFormat );
 
-        OSL_ENSURE( aFilterName.getLength(), "Wrong document service name!" );
-        if ( !aFilterName.getLength() )
+        OSL_ENSURE( !aFilterName.isEmpty(), "Wrong document service name!" );
+        if ( aFilterName.isEmpty() )
             throw io::IOException(); // TODO:
 
         uno::Sequence< beans::PropertyValue > aArgs( 3 );
@@ -896,7 +896,7 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::CreateTempDocFromLink_
         {
         }
 
-        OSL_ENSURE( aTempFileURL.getLength(), "Couldn't retrieve temporary file URL!\n" );
+        OSL_ENSURE( !aTempFileURL.isEmpty(), "Couldn't retrieve temporary file URL!\n" );
 
         aTempMediaDescr[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "URL" ));
         aTempMediaDescr[0].Value <<= aTempFileURL;
@@ -948,7 +948,7 @@ void SAL_CALL OCommonEmbeddedObject::setPersistentEntry(
                                             uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
                                             1 );
 
-    if ( !sEntName.getLength() )
+    if ( sEntName.isEmpty() )
         throw lang::IllegalArgumentException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Empty element name is provided!\n" )),
                                             uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
                                             2 );
@@ -1717,9 +1717,9 @@ void SAL_CALL OCommonEmbeddedObject::reload(
         }
 
         ::comphelper::MimeConfigurationHelper aHelper( m_xFactory );
-        if ( !m_aLinkFilterName.getLength() )
+        if ( m_aLinkFilterName.isEmpty() )
         {
-            if ( aNewLinkFilter.getLength() )
+            if ( !aNewLinkFilter.isEmpty() )
                 m_aLinkFilterName = aNewLinkFilter;
             else
             {
@@ -1814,7 +1814,7 @@ void SAL_CALL OCommonEmbeddedObject::breakLink( const uno::Reference< embed::XSt
                                             uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
                                             1 );
 
-    if ( !sEntName.getLength() )
+    if ( sEntName.isEmpty() )
         throw lang::IllegalArgumentException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Empty element name is provided!\n" )),
                                             uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
                                             2 );

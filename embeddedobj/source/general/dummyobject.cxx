@@ -325,7 +325,7 @@ void SAL_CALL ODummyEmbeddedObject::setPersistentEntry(
                                             uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
                                             1 );
 
-    if ( !sEntName.getLength() )
+    if ( sEntName.isEmpty() )
         throw lang::IllegalArgumentException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Empty element name is provided!\n" )),
                                             uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
                                             2 );
@@ -469,7 +469,7 @@ sal_Bool SAL_CALL ODummyEmbeddedObject::hasEntry()
                     ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "The object waits for saveCompleted() call!\n" )),
                     uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
-    if ( m_aEntryName.getLength() )
+    if ( !m_aEntryName.isEmpty() )
         return sal_True;
 
     return sal_False;
