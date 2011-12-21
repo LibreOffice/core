@@ -36,15 +36,14 @@ TARGET=mythes
 
 # --- Files --------------------------------------------------------
 
-TARFILE_NAME=mythes-1.2.0
-TARFILE_MD5=067201ea8b126597670b5eff72e1f66c
+TARFILE_NAME=mythes-1.2.2
+TARFILE_MD5=e1e255dc43dbcbb34cb19e8a0eba90ae
 
 ADDITIONAL_FILES += makefile.mk
 
 PATCH_FILES=\
     mythes-1.2.0-vanilla-th-gen-idx.patch \
     mythes-1.2.0-makefile-mk.diff \
-    mythes-1.2.1-rhbz675806.patch \
     mythes-1.2.0-android.patch
 
 .IF "$(GUI)"=="UNX"
