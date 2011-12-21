@@ -115,10 +115,11 @@ ScNameDefDlg::ScNameDefDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParen
     aRange.Format( aAreaStr, ABS_DREF3D, mpDoc,
             ScAddress::Details(mpDoc->GetAddressConvention(), 0, 0) );
 
-    Selection aCurSel = Selection( 0, SELECTION_MAX );
-    maEdRange.GrabFocus();
     maEdRange.SetText( aAreaStr );
-    maEdRange.SetSelection( aCurSel );
+
+    Selection aCurSel = Selection( 0, SELECTION_MAX );
+    maEdName.GrabFocus();
+    maEdName.SetSelection( aCurSel );
 }
 
 void ScNameDefDlg::CancelPushed()
