@@ -30,7 +30,7 @@
 #include <com/sun/star/linguistic2/XHyphenatedWord.hpp>
 #include <com/sun/star/beans/PropertyValues.hpp>
 
-#include <tools/table.hxx>
+#include <map>
 
 #include "swtypes.hxx"
 #include "txttypes.hxx"
@@ -168,14 +168,14 @@ public:
  *                      class SwTxtSizeInfo
  *************************************************************************/
 
-DECLARE_TABLE( SwTxtPortionTable, sal_IntPtr )
+typedef ::std::map< sal_uLong, sal_IntPtr > SwTxtPortionMap;
 
 class SwTxtSizeInfo : public SwTxtInfo
 {
 protected:
     // during formatting, a small database is built, mapping portion pointers
     // to their maximum size (used for kana compression)
-    SwTxtPortionTable aMaxWidth;
+    SwTxtPortionMap aMaxWidth;
     // for each line, an array of compression values is calculated
     // this array is passed over to the info structure
     std::deque<sal_uInt16>* pKanaComp;
@@ -343,19 +343,24 @@ public:
     // stored in aMaxWidth and discarded after a line has been formatted.
     inline void SetMaxWidthDiff( sal_uLong nKey, sal_uInt16 nVal )
     {
-        aMaxWidth.Insert( nKey, nVal );
+        aMaxWidth.insert( ::std::make_pair( nKey, nVal ) );
     };
     inline sal_uInt16 GetMaxWidthDiff( sal_uLong nKey )
     {
-        return (sal_uInt16)aMaxWidth.Get( nKey );
+        SwTxtPortionMap::iterator it = aMaxWidth.find( nKey );
+
+        if( it != aMaxWidth.end() )
+            return it->second;
+        else
+            return 0;
     };
     inline void ResetMaxWidthDiff()
     {
-        aMaxWidth.Clear();
+        aMaxWidth.clear();
     };
     inline sal_Bool CompressLine()
     {
-        return (sal_Bool)aMaxWidth.Count();
+        return (sal_Bool)!aMaxWidth.empty();
     };
 
     //
