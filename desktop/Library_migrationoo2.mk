@@ -54,7 +54,6 @@ $(eval $(call gb_Library_use_externals,migrationoo2,\
 $(eval $(call gb_Library_set_componentfile,migrationoo2,desktop/source/migration/services/migrationoo2))
 
 $(eval $(call gb_Library_add_exception_objects,migrationoo2,\
-    desktop/source/migration/services/autocorrmigration \
     desktop/source/migration/services/basicmigration \
     desktop/source/migration/services/cexports \
     desktop/source/migration/services/jvmfwk \
