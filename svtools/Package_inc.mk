@@ -80,7 +80,6 @@ $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/generictoolboxcontroll
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/genericunodialog.hxx,svtools/genericunodialog.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/grfmgr.hxx,svtools/grfmgr.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/headbar.hxx,svtools/headbar.hxx))
-$(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/helpagentwindow.hxx,svtools/helpagentwindow.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/helpid.hrc,svtools/helpid.hrc))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/helpopt.hxx,svtools/helpopt.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/htmlcfg.hxx,svtools/htmlcfg.hxx))

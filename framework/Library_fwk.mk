@@ -82,7 +82,6 @@ $(eval $(call gb_Library_add_exception_objects,fwk,\
     framework/source/dispatch/closedispatcher \
     framework/source/dispatch/dispatchinformationprovider \
     framework/source/dispatch/dispatchprovider \
-    framework/source/dispatch/helpagentdispatcher \
     framework/source/dispatch/interceptionhelper \
     framework/source/dispatch/loaddispatcher \
     framework/source/dispatch/menudispatcher \

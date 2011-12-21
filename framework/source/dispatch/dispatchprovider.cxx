@@ -26,18 +26,12 @@
  *
  ************************************************************************/
 
-
-//_________________________________________________________________________________________________________________
-//  my own includes
-//_________________________________________________________________________________________________________________
-
 #include <stdio.h>
 #include <dispatch/dispatchprovider.hxx>
 #include <loadenv/loadenv.hxx>
 #include <dispatch/loaddispatcher.hxx>
 #include <dispatch/closedispatcher.hxx>
 #include <dispatch/menudispatcher.hxx>
-#include <dispatch/helpagentdispatcher.hxx>
 #include <dispatch/startmoduledispatcher.hxx>
 
 #include <pattern/window.hxx>
@@ -50,40 +44,19 @@
 #include <targets.h>
 #include <general.h>
 
-//_________________________________________________________________________________________________________________
-//  interface includes
-//_________________________________________________________________________________________________________________
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/ucb/XContentProviderManager.hpp>
 #include <com/sun/star/document/XTypeDetection.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 
-//_________________________________________________________________________________________________________________
-//  includes of other projects
-//_________________________________________________________________________________________________________________
 #include <osl/diagnose.h>
 #include <rtl/string.h>
 #include <rtl/ustring.hxx>
 #include <vcl/svapp.hxx>
 #include <rtl/ustrbuf.hxx>
-//_________________________________________________________________________________________________________________
-//  namespace
-//_________________________________________________________________________________________________________________
 
 namespace framework{
-
-//_________________________________________________________________________________________________________________
-//  non exported const
-//_________________________________________________________________________________________________________________
-
-//_________________________________________________________________________________________________________________
-//  non exported definitions
-//_________________________________________________________________________________________________________________
-
-//_________________________________________________________________________________________________________________
-//  declarations
-//_________________________________________________________________________________________________________________
 
 //*****************************************************************************************************************
 //  XInterface, XTypeProvider
@@ -98,8 +71,6 @@ DEFINE_XTYPEPROVIDER_2( DispatchProvider             ,
                         css::lang::XTypeProvider     ,
                         css::frame::XDispatchProvider
                       )
-
-//_________________________________________________________________________________________________________________
 
 /**
     @short      standard ctor/dtor
@@ -128,8 +99,6 @@ DispatchProvider::DispatchProvider( const css::uno::Reference< css::lang::XMulti
 {
 }
 
-//_________________________________________________________________________________________________________________
-
 /**
     @short      protected(!) dtor for deinitializing
     @descr      We made it protected to prevent using of us as base class instead as a member.
@@ -139,8 +108,6 @@ DispatchProvider::DispatchProvider( const css::uno::Reference< css::lang::XMulti
 DispatchProvider::~DispatchProvider()
 {
 }
-
-//_________________________________________________________________________________________________________________
 
 /**
     @interface  XDispatchProvider
@@ -184,8 +151,6 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL DispatchProvider::queryDis
     return xDispatcher;
 }
 
-//_________________________________________________________________________________________________________________
-
 /**
     @interface  XDispatchProvider
     @short      do the same like queryDispatch() ... but handle multiple dispatches at the same time
@@ -220,14 +185,10 @@ css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL Disp
     return lDispatcher;
 }
 
-//_________________________________________________________________________________________________________________
-
 ::sal_Bool lcl_isStartModuleDispatch (const css::util::URL& aURL)
 {
     return (aURL.Complete.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(CMD_UNO_SHOWSTARTMODULE)));
 }
-
-//_________________________________________________________________________________________________________________
 
 /**
     @short      helper for queryDispatch()
@@ -247,7 +208,6 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryDeskt
     // ignore wrong requests which are not supported
     if (
         (sTargetFrameName==SPECIALTARGET_MENUBAR  )   ||    // valid for frame dispatches - not for desktop
-        (sTargetFrameName==SPECIALTARGET_HELPAGENT)   ||    // valid for frame dispatches - not for desktop
         (sTargetFrameName==SPECIALTARGET_PARENT   )   ||    // we have no parent by definition
         (sTargetFrameName==SPECIALTARGET_BEAMER   )         // beamer frames are allowed as child of tasks only -
                                                             // and they exist more then ones. We have no idea which our sub tasks is the right one
@@ -375,28 +335,6 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryFrame
     if (sTargetName==SPECIALTARGET_MENUBAR)
     {
         xDispatcher = implts_getOrCreateDispatchHelper( E_MENUDISPATCHER, xFrame );
-    }
-
-    //-----------------------------------------------------------------------------------------------------
-    // I.III) "_helpagent"
-    //  Special mode on frame or task to start the help agent.
-    //  It's defined for top level frames only.
-    //-----------------------------------------------------------------------------------------------------
-    else
-    if (sTargetName==SPECIALTARGET_HELPAGENT)
-    {
-        if (WindowHelper::isTopWindow(xFrame->getContainerWindow()))
-            xDispatcher = implts_getOrCreateDispatchHelper( E_HELPAGENTDISPATCHER, xFrame );
-        else
-        {
-            // Don''t use findFrame() here - because it's not possible to find
-            // a top lebel frame without knowing his name. And a frame with name
-            // "" can't be realy searched! That's why forward query to any parent
-            // explicitly.
-            css::uno::Reference< css::frame::XDispatchProvider > xProvider( xFrame->getCreator(), css::uno::UNO_QUERY );
-            if (xProvider.is())
-                xDispatcher = xProvider->queryDispatch(aURL,SPECIALTARGET_HELPAGENT,0);
-        }
     }
 
     //-----------------------------------------------------------------------------------------------------
@@ -692,25 +630,6 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_getOrCreat
                         m_xMenuDispatcher = css::uno::Reference< css::frame::XDispatch >( static_cast< ::cppu::OWeakObject* >(pDispatcher), css::uno::UNO_QUERY );
                     }
                     xDispatchHelper = m_xMenuDispatcher;
-                    aWriteLock.unlock();
-                    /* } SAFE */
-                }
-                break;
-
-        case E_HELPAGENTDISPATCHER :
-                {
-                    // Attention: It's not a good idea to create this help agent twice for the same frame (window)
-                    // May it will be shown twice too - and user activate the first one. Then he get the corresponding
-                    // help window ... but there exist another help agent window on bottom side of the frame window.
-                    // It's superflous. Create it on demand - but hold it alive till this provider dies.
-                    /* SAFE { */
-                    WriteGuard aWriteLock( m_aLock );
-                    if ( ! m_xHelpAgentDispatcher.is() )
-                    {
-                        HelpAgentDispatcher* pDispatcher = new HelpAgentDispatcher( xOwner );
-                        m_xHelpAgentDispatcher = css::uno::Reference< css::frame::XDispatch >( static_cast< ::cppu::OWeakObject* >(pDispatcher), css::uno::UNO_QUERY );
-                    }
-                    xDispatchHelper = m_xHelpAgentDispatcher;
                     aWriteLock.unlock();
                     /* } SAFE */
                 }
