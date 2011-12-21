@@ -49,7 +49,7 @@ $(eval $(call gb_Library_set_include,svt,\
 ))
 
 $(eval $(call gb_Library_add_defs,svt,\
-    -DSVT_DLLIMPLEMENTATION \
+    -DSVT_DLLIMPLEMENTATION -DNOMINMAX\
 ))
 
 $(eval $(call gb_Library_add_linked_libs,svt,\
