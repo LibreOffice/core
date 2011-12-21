@@ -1993,9 +1993,9 @@ int SwTransferable::_PasteDDE( TransferableDataHelper& rData,
         }   // report useful error!!
 
         rtl_TextEncoding eEncoding = DDE_TXT_ENCODING;
-        aApp = read_zeroTerminated_uInt8s_AsOUString(*xStrm, eEncoding);
-        aTopic = read_zeroTerminated_uInt8s_AsOUString(*xStrm, eEncoding);
-        aItem = read_zeroTerminated_uInt8s_AsOUString(*xStrm, eEncoding);
+        aApp = read_zeroTerminated_uInt8s_ToOUString(*xStrm, eEncoding);
+        aTopic = read_zeroTerminated_uInt8s_ToOUString(*xStrm, eEncoding);
+        aItem = read_zeroTerminated_uInt8s_ToOUString(*xStrm, eEncoding);
     }
 
     String aCmd;

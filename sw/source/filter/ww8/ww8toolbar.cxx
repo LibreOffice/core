@@ -1128,7 +1128,7 @@ bool TcgSttbfCore::Read( SvStream& rS )
         for ( sal_Int32 index = 0; index < cData; ++index )
         {
             rS >> dataItems[ index ].cchData;
-            dataItems[ index ].data = read_LEuInt16s_AsOUString(rS, dataItems[index].cchData);
+            dataItems[ index ].data = read_LEuInt16s_ToOUString(rS, dataItems[index].cchData);
             rS >> dataItems[ index ].extraData;
         }
     }

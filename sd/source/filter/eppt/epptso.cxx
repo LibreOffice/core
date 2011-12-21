@@ -2605,7 +2605,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                                 *xCompObj   >> nStringLen;
                                 if ( ( nStringLen > 1 ) && ( ( xCompObj->Tell() + nStringLen ) < nStreamLen ) )
                                 {   // i think that the OleIdentifier will follow
-                                    rtl::OString aTemp = read_uInt8s_AsOString(*xCompObj, nStringLen - 1);
+                                    rtl::OString aTemp = read_uInt8s_ToOString(*xCompObj, nStringLen - 1);
                                     aOleIdentifier = rtl::OStringToOUString(aTemp, RTL_TEXTENCODING_MS_1252);
                                 }
                             }

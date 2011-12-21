@@ -410,13 +410,21 @@ SvStream& operator<<( SvStream& rOStream, const JobSetup& rJobSetup )
                 rOStream.WriteByteString( it->first, RTL_TEXTENCODING_UTF8 );
                 rOStream.WriteByteString( it->second, RTL_TEXTENCODING_UTF8 );
             }
-            rOStream.WriteByteString( "COMPAT_DUPLEX_MODE" ) ;
+            write_lenPrefixed_uInt8s_FromOString(rOStream, "COMPAT_DUPLEX_MODE");
             switch( pJobData->meDuplexMode )
             {
-            case DUPLEX_UNKNOWN: rOStream.WriteByteString( "DUPLEX_UNKNOWN" );break;
-            case DUPLEX_OFF: rOStream.WriteByteString( "DUPLEX_OFF" );break;
-            case DUPLEX_SHORTEDGE: rOStream.WriteByteString( "DUPLEX_SHORTEDGE" );break;
-            case DUPLEX_LONGEDGE: rOStream.WriteByteString( "DUPLEX_LONGEDGE" );break;
+                case DUPLEX_UNKNOWN:
+                    write_lenPrefixed_uInt8s_FromOString(rOStream, "DUPLEX_UNKNOWN");
+                    break;
+                case DUPLEX_OFF:
+                    write_lenPrefixed_uInt8s_FromOString(rOStream, "DUPLEX_OFF");
+                    break;
+                case DUPLEX_SHORTEDGE:
+                    write_lenPrefixed_uInt8s_FromOString(rOStream, "DUPLEX_SHORTEDGE");
+                    break;
+                case DUPLEX_LONGEDGE:
+                    write_lenPrefixed_uInt8s_FromOString(rOStream, "DUPLEX_LONGEDGE");
+                    break;
             }
             nLen = sal::static_int_cast<sal_uInt16>(rOStream.Tell() - nPos);
             rOStream.Seek( nPos );

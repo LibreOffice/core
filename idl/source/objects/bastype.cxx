@@ -228,13 +228,13 @@ sal_Bool SvIdentifier::WriteSvIdl( SvStringHashEntry * pName,
 
 SvStream& operator << (SvStream & rStm, const SvIdentifier & r )
 {
-    rStm.WriteByteString( r );
+    write_lenPrefixed_uInt8s_FromOString(rStm, r);
     return rStm;
 }
 
 SvStream& operator >> (SvStream & rStm, SvIdentifier & r )
 {
-    rStm.ReadByteString( r );
+    r = read_lenPrefixed_uInt8s_ToOString(rStm);
     return rStm;
 }
 
@@ -343,13 +343,13 @@ sal_Bool SvString::WriteSvIdl( SvStringHashEntry * pName, SvStream & rOutStm,
 
 SvStream& operator << (SvStream & rStm, const SvString & r )
 {
-    rStm.WriteByteString( r );
+    write_lenPrefixed_uInt8s_FromOString(rStm, r);
     return rStm;
 }
 
 SvStream& operator >> (SvStream & rStm, SvString & r )
 {
-    rStm.ReadByteString( r );
+    r = read_lenPrefixed_uInt8s_ToOString(rStm);
     return rStm;
 }
 

@@ -47,16 +47,16 @@ class GalleryThemeEntry
 {
 private:
 
-    String                  aName;
+    rtl::OUString           aName;
     INetURLObject           aThmURL;
     INetURLObject           aSdgURL;
     INetURLObject           aSdvURL;
-    sal_uInt32                  nFileNumber;
-    sal_uInt32                  nId;
-    sal_Bool                    bReadOnly;
-    sal_Bool                    bImported;
-    sal_Bool                    bModified;
-    sal_Bool                    bThemeNameFromResource;
+    sal_uInt32              nFileNumber;
+    sal_uInt32              nId;
+    sal_Bool                bReadOnly;
+    sal_Bool                bImported;
+    sal_Bool                bModified;
+    sal_Bool                bThemeNameFromResource;
 
                             GalleryThemeEntry();
     INetURLObject           ImplGetURLIgnoreCase( const INetURLObject& rURL ) const;
@@ -68,26 +68,26 @@ public:
                                                sal_Bool bNewFile, sal_uInt32 nId, sal_Bool bThemeNameFromResource );
                             ~GalleryThemeEntry() {};
 
-    const String&           GetThemeName() const { return aName; }
-    sal_uInt32                  GetFileNumber() const { return nFileNumber; }
+    const rtl::OUString&    GetThemeName() const { return aName; }
+    sal_uInt32              GetFileNumber() const { return nFileNumber; }
 
     const INetURLObject&    GetThmURL() const { return aThmURL; }
     const INetURLObject&    GetSdgURL() const { return aSdgURL; }
     const INetURLObject&    GetSdvURL() const { return aSdvURL; }
 
-    sal_Bool                    IsImported() const { return bImported; }
-    sal_Bool                    IsReadOnly() const { return bReadOnly; }
-    sal_Bool                    IsDefault() const;
+    sal_Bool                IsImported() const { return bImported; }
+    sal_Bool                IsReadOnly() const { return bReadOnly; }
+    sal_Bool                IsDefault() const;
 
-    sal_Bool                    IsHidden() const { return aName.SearchAscii( "private://gallery/hidden/" ) == 0; }
+    sal_Bool                IsHidden() const { return aName.matchAsciiL(RTL_CONSTASCII_STRINGPARAM("private://gallery/hidden/")); }
 
-    sal_Bool                    IsModified() const { return bModified; }
+    sal_Bool                IsModified() const { return bModified; }
     void                    SetModified( sal_Bool bSet ) { bModified = ( bSet && !IsImported() && !IsReadOnly() ); }
 
-    void                    SetName( const String& rNewName );
-    sal_Bool                    IsNameFromResource() const { return bThemeNameFromResource; }
+    void                    SetName( const rtl::OUString& rNewName );
+    sal_Bool                IsNameFromResource() const { return bThemeNameFromResource; }
 
-    sal_uInt32                  GetId() const { return nId; }
+    sal_uInt32              GetId() const { return nId; }
     void                    SetId( sal_uInt32 nNewId, sal_Bool bResetThemeName );
 };
 
@@ -99,10 +99,10 @@ typedef ::std::vector< GalleryThemeEntry* > GalleryThemeList;
 
 struct GalleryImportThemeEntry
 {
-    String          aThemeName;
-    String          aUIName;
-    INetURLObject   aURL;
-    String          aImportName;
+    rtl::OUString aThemeName;
+    rtl::OUString aUIName;
+    INetURLObject aURL;
+    rtl::OUString aImportName;
 };
 
 typedef ::std::vector< GalleryImportThemeEntry* > GalleryImportThemeList;
@@ -144,9 +144,9 @@ private:
     void                        ImplLoadImports();
     void                        ImplWriteImportList();
 
-    SVX_DLLPUBLIC GalleryThemeEntry*            ImplGetThemeEntry( const String& rThemeName );
+    SVX_DLLPUBLIC GalleryThemeEntry*            ImplGetThemeEntry( const rtl::OUString& rThemeName );
     GalleryThemeEntry*          ImplGetThemeEntry( sal_uIntPtr nThemeId );
-    GalleryImportThemeEntry*    ImplGetImportThemeEntry( const String& rImportName );
+    GalleryImportThemeEntry*    ImplGetImportThemeEntry( const rtl::OUString& rImportName );
 
     GalleryTheme*               ImplGetCachedTheme( const GalleryThemeEntry* pThemeEntry );
     void                        ImplDeleteCachedTheme( GalleryTheme* pTheme );
@@ -164,7 +164,7 @@ public:
     const GalleryThemeEntry*    GetThemeInfo( const String& rThemeName ) { return ImplGetThemeEntry( rThemeName ); }
 
     SVX_DLLPUBLIC sal_Bool          HasTheme( const String& rThemeName );
-    String                      GetThemeName( sal_uIntPtr nThemeId ) const;
+    rtl::OUString                   GetThemeName( sal_uIntPtr nThemeId ) const;
 
     SVX_DLLPUBLIC sal_Bool          CreateTheme( const String& rThemeName, sal_uInt32 nNumFrom = 0 );
     sal_Bool                        RenameTheme( const String& rOldName, const String& rNewName );

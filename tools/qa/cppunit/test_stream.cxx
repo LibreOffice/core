@@ -47,11 +47,13 @@ namespace
         void test_stdstream();
         void test_fastostring();
         void test_read_cstring();
+        void test_read_pstring();
 
         CPPUNIT_TEST_SUITE(Test);
         CPPUNIT_TEST(test_stdstream);
         CPPUNIT_TEST(test_fastostring);
         CPPUNIT_TEST(test_read_cstring);
+        CPPUNIT_TEST(test_read_pstring);
         CPPUNIT_TEST_SUITE_END();
     };
 
@@ -67,7 +69,7 @@ namespace
 
         char tools_a(78);
         aMemStream >> tools_a;
-        CPPUNIT_ASSERT(std_a == 'f');
+        CPPUNIT_ASSERT(tools_a == 'f');
 
         iss.seekg(0, std::ios_base::end);
         //seeking to end doesn't set eof, reading past eof does
@@ -98,7 +100,7 @@ namespace
         //a failed read doesn't change the data, it remains unchanged
         CPPUNIT_ASSERT(tools_a == 78);
         //nothing wrong with the stream, so not bad
-        CPPUNIT_ASSERT(!aMemStream.GetError());
+        CPPUNIT_ASSERT(!aMemStream.bad());
         //yet, the read didn't succeed
         CPPUNIT_ASSERT(!aMemStream.good());
 
@@ -133,18 +135,18 @@ namespace
         char foo[] = "foobar";
         SvMemoryStream aMemStream(RTL_CONSTASCII_STRINGPARAM(foo), STREAM_READ);
 
-        rtl::OString aOne = read_uInt8s_AsOString(aMemStream, 3);
+        rtl::OString aOne = read_uInt8s_ToOString(aMemStream, 3);
         CPPUNIT_ASSERT(aOne.equalsL(RTL_CONSTASCII_STRINGPARAM("foo")));
 
-        rtl::OString aTwo = read_uInt8s_AsOString(aMemStream, 3);
+        rtl::OString aTwo = read_uInt8s_ToOString(aMemStream, 3);
         CPPUNIT_ASSERT(aTwo.equalsL(RTL_CONSTASCII_STRINGPARAM("bar")));
 
-        rtl::OString aThree = read_uInt8s_AsOString(aMemStream, 3);
+        rtl::OString aThree = read_uInt8s_ToOString(aMemStream, 3);
         CPPUNIT_ASSERT(!aThree.getLength());
 
         aMemStream.Seek(0);
 
-        rtl::OString aFour = read_uInt8s_AsOString(aMemStream, 100);
+        rtl::OString aFour = read_uInt8s_ToOString(aMemStream, 100);
         CPPUNIT_ASSERT(aFour.equalsL(RTL_CONSTASCII_STRINGPARAM(foo)));
     }
 
@@ -153,7 +155,7 @@ namespace
         char foo[] = "foobar";
         SvMemoryStream aMemStream(RTL_CONSTASCII_STRINGPARAM(foo), STREAM_READ);
 
-        rtl::OString aOne = read_zeroTerminated_uInt8s_AsOString(aMemStream);
+        rtl::OString aOne = read_zeroTerminated_uInt8s_ToOString(aMemStream);
         CPPUNIT_ASSERT(aOne.equalsL(RTL_CONSTASCII_STRINGPARAM("foobar")));
         CPPUNIT_ASSERT(!aMemStream.good());
         CPPUNIT_ASSERT(!aMemStream.bad());
@@ -161,11 +163,52 @@ namespace
 
         aMemStream.Seek(0);
         foo[3] = 0;
-        rtl::OString aTwo = read_zeroTerminated_uInt8s_AsOString(aMemStream);
+        rtl::OString aTwo = read_zeroTerminated_uInt8s_ToOString(aMemStream);
         CPPUNIT_ASSERT(aTwo.equalsL(RTL_CONSTASCII_STRINGPARAM("foo")));
         CPPUNIT_ASSERT(aMemStream.good());
     }
 
+    void Test::test_read_pstring()
+    {
+        char foo[] = "\3foobar";
+        SvMemoryStream aMemStream(RTL_CONSTASCII_STRINGPARAM(foo), STREAM_READ);
+
+        rtl::OString aFoo = read_lenPrefixed_uInt8s_ToOString<sal_uInt8>(aMemStream);
+        CPPUNIT_ASSERT(aFoo.equalsL(RTL_CONSTASCII_STRINGPARAM("foo")));
+        CPPUNIT_ASSERT(aMemStream.good());
+        CPPUNIT_ASSERT(!aMemStream.bad());
+        CPPUNIT_ASSERT(!aMemStream.eof());
+
+        aMemStream.Seek(0);
+        foo[0] = 10;
+        aFoo = read_lenPrefixed_uInt8s_ToOString<sal_uInt8>(aMemStream);
+        CPPUNIT_ASSERT(aFoo.equalsL(RTL_CONSTASCII_STRINGPARAM("foobar")));
+        CPPUNIT_ASSERT(!aMemStream.good());
+        CPPUNIT_ASSERT(!aMemStream.bad());
+        CPPUNIT_ASSERT(aMemStream.eof());
+
+        aMemStream.SetNumberFormatInt(NUMBERFORMAT_INT_BIGENDIAN);
+        aMemStream.Seek(0);
+        foo[0] = 0;
+        foo[1] = 3;
+        aFoo = read_lenPrefixed_uInt8s_ToOString<sal_uInt16>(aMemStream);
+        CPPUNIT_ASSERT(aFoo.equalsL(RTL_CONSTASCII_STRINGPARAM("oob")));
+        CPPUNIT_ASSERT(aMemStream.good());
+        CPPUNIT_ASSERT(!aMemStream.bad());
+        CPPUNIT_ASSERT(!aMemStream.eof());
+
+        aMemStream.SetNumberFormatInt(NUMBERFORMAT_INT_LITTLEENDIAN);
+        aMemStream.Seek(0);
+        foo[0] = 3;
+        foo[1] = 0;
+        foo[2] = 0;
+        foo[3] = 0;
+        aFoo = read_lenPrefixed_uInt8s_ToOString<sal_uInt32>(aMemStream);
+        CPPUNIT_ASSERT(aFoo.equalsL(RTL_CONSTASCII_STRINGPARAM("bar")));
+        CPPUNIT_ASSERT(aMemStream.good());
+        CPPUNIT_ASSERT(!aMemStream.bad());
+        CPPUNIT_ASSERT(!aMemStream.eof());
+    }
 
     CPPUNIT_TEST_SUITE_REGISTRATION(Test);
 }
