@@ -56,9 +56,11 @@ $(eval $(call gb_Library_add_defs,sal,\
 $(eval $(call gb_Library_add_linked_libs,sal,\
 	$(if $(filter $(GUI),UNX), \
 		$(if $(filter $(OS),ANDROID),, \
-			dl \
 			pthread \
 		) \
+	) \
+	$(if $(filter $(OS),LINUX), \
+		dl \
 	) \
 	$(if $(filter $(OS),SOLARIS), \
 		nsl \
