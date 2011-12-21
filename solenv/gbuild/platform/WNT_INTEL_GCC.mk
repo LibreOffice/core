@@ -284,6 +284,7 @@ gb_Library_PLAINLIBS_NONE += \
 	uwinapi \
 	winmm \
 	version \
+	wininet \
 	winspool \
 	ws2_32 \
 
