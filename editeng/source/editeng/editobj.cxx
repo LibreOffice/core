@@ -1226,7 +1226,7 @@ void BinTextObject::CreateData( SvStream& rIStream )
         ContentInfo* pC = CreateAndInsertContent();
 
         // The Text...
-        ByteString aByteString = read_lenPrefixed_uInt8s_ToOString<sal_uInt16>(rIStream);
+        rtl::OString aByteString = read_lenPrefixed_uInt8s_ToOString<sal_uInt16>(rIStream);
         pC->GetText() = rtl::OStringToOUString(aByteString, eSrcEncoding);
 
         // StyleName and Family...
@@ -1260,7 +1260,7 @@ void BinTextObject::CreateData( SvStream& rIStream )
             {
                 if ( pItem->Which() == EE_FEATURE_NOTCONV )
                 {
-                    sal_Char cEncodedChar = aByteString.GetChar(nStart);
+                    sal_Char cEncodedChar = aByteString[nStart];
                     sal_Unicode cChar = rtl::OUString(&cEncodedChar, 1,
                         ((SvxCharSetColorItem*)pItem)->GetCharSet()).toChar();
                     pC->GetText().SetChar(nStart, cChar);
@@ -1273,8 +1273,8 @@ void BinTextObject::CreateData( SvStream& rIStream )
                     if ( ( _nWhich >= EE_FEATURE_START ) && ( _nWhich <= EE_FEATURE_END ) )
                     {
                         // Convert CH_FEATURE to CH_FEATURE_OLD
-                        DBG_ASSERT( (sal_uInt8) aByteString.GetChar( nStart ) == CH_FEATURE_OLD, "CreateData: CH_FEATURE expected!" );
-                        if ( (sal_uInt8) aByteString.GetChar( nStart ) == CH_FEATURE_OLD )
+                        DBG_ASSERT( (sal_uInt8) aByteString[nStart] == CH_FEATURE_OLD, "CreateData: CH_FEATURE expected!" );
+                        if ( (sal_uInt8) aByteString[nStart] == CH_FEATURE_OLD )
                             pC->GetText().SetChar( nStart, CH_FEATURE );
                     }
                 }
@@ -1290,7 +1290,7 @@ void BinTextObject::CreateData( SvStream& rIStream )
             const SvxFontItem& rFontItem = (const SvxFontItem&)pC->GetParaAttribs().Get( EE_CHAR_FONTINFO );
             if ( rFontItem.GetCharSet() == RTL_TEXTENCODING_SYMBOL )
             {
-                pC->GetText() = String( aByteString, RTL_TEXTENCODING_SYMBOL );
+                pC->GetText() = rtl::OStringToOUString(aByteString, RTL_TEXTENCODING_SYMBOL);
                 bSymbolPara = sal_True;
             }
         }
@@ -1305,8 +1305,8 @@ void BinTextObject::CreateData( SvStream& rIStream )
                       || ( bSymbolPara && ( rFontItem.GetCharSet() != RTL_TEXTENCODING_SYMBOL ) ) )
                 {
                     // Not correctly converted
-                    ByteString aPart( aByteString, pAttr->GetStart(), pAttr->GetEnd()-pAttr->GetStart() );
-                    String aNew( aPart, rFontItem.GetCharSet() );
+                    rtl::OString aPart(aByteString.copy(pAttr->GetStart(), pAttr->GetEnd()-pAttr->GetStart()));
+                    rtl::OUString aNew(rtl::OStringToOUString(aPart, rFontItem.GetCharSet()));
                     pC->GetText().Erase( pAttr->GetStart(), pAttr->GetEnd()-pAttr->GetStart() );
                     pC->GetText().Insert( aNew, pAttr->GetStart() );
                 }

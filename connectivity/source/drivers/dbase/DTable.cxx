@@ -691,7 +691,7 @@ void ODbaseTable::refreshIndexes()
         Config aInfFile(aURL.getFSysPath(INetURLObject::FSYS_DETECT));
         aInfFile.SetGroup(dBASE_III_GROUP);
         sal_uInt16 nKeyCnt = aInfFile.GetKeyCount();
-        ByteString aKeyName;
+        rtl::OString aKeyName;
         ByteString aIndexName;
 
         for (sal_uInt16 nKey = 0; nKey < nKeyCnt; nKey++)
@@ -699,7 +699,7 @@ void ODbaseTable::refreshIndexes()
             // Refences the key an index-file?
             aKeyName = aInfFile.GetKeyName( nKey );
             //...if yes, add the index list of the table
-            if (aKeyName.Copy(0,3) == ByteString("NDX") )
+            if (aKeyName.copy(0,3).equalsL(RTL_CONSTASCII_STRINGPARAM("NDX")))
             {
                 aIndexName = aInfFile.ReadKey(aKeyName);
                 aURL.setName(String(aIndexName,m_eEncoding));
