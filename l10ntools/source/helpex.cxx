@@ -213,10 +213,10 @@ int _cdecl main( int argc, char *argv[] )
     }else if ( sOutputFileX.getLength() && sOutputFileY.getLength() && hasInputList ) {  // Merge multiple files ?
         if ( bMergeMode ){
 
-            ifstream aFStream( sInputFile.copy( 1 , sInputFile.getLength() ).getStr() , ios::in );
+            ifstream aFStream( sInputFile.copy( 1 ).getStr() , ios::in );
 
             if( !aFStream ){
-                cerr << "ERROR: - helpex - Can't open the file " << sInputFile.copy( 1 , sInputFile.getLength() ).getStr() << "\n";
+                cerr << "ERROR: - helpex - Can't open the file " << sInputFile.copy( 1 ).getStr() << "\n";
                 exit(-1);
             }
 
