@@ -825,6 +825,11 @@ namespace cppcanvas
             y = 100*nMmY*y/nPixY;
         }
 
+        ::basegfx::B2DPoint ImplRenderer::Map (::basegfx::B2DPoint& p)
+        {
+            return Map (p.getX (), p.getY ());
+        }
+
         ::basegfx::B2DPoint ImplRenderer::Map (double ix, double iy)
         {
             double x, y;
@@ -856,6 +861,29 @@ namespace cppcanvas
             h *= aBaseTransform.eM22;
 
             return ::basegfx::B2DSize (w, h);
+        }
+
+        ::basegfx::B2DRange ImplRenderer::MapRectangle (double ix, double iy, double iwidth, double iheight)
+        {
+            double x, y, w, h;
+
+            x = ix*aWorldTransform.eM11 + iy*aWorldTransform.eM21 + aWorldTransform.eDx;
+            y = ix*aWorldTransform.eM12 + iy*aWorldTransform.eM22 + aWorldTransform.eDy;
+            w = iwidth*aWorldTransform.eM11 + iheight*aWorldTransform.eM21;
+            h = iwidth*aWorldTransform.eM12 + iheight*aWorldTransform.eM22;
+
+            MapToDevice (x, y);
+            MapToDevice (w, h);
+
+            x -= nFrameLeft;
+            y -= nFrameTop;
+
+            x *= aBaseTransform.eM11;
+            y *= aBaseTransform.eM22;
+            w *= aBaseTransform.eM11;
+            h *= aBaseTransform.eM22;
+
+            return ::basegfx::B2DRange (x, y, x + w, y + h);
         }
 
 #define COLOR(x) \
