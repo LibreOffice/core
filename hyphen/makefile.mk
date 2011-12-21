@@ -44,7 +44,8 @@ ADDITIONAL_FILES += makefile.mk
 PATCH_FILES= \
     hyphen-2.7.1.patch \
     hyphen-2.7.1-read-charset.patch \
-    hyphen-2.7.1-2.8.3.patch
+    hyphen-2.7.1-2.8.3.patch \
+    hyphen-android.patch
 
 .IF "$(GUI)"=="UNX"
 CONFIGURE_DIR=$(BUILD_DIR)
