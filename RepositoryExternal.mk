@@ -1064,6 +1064,16 @@ endef
 
 endif # SYSTEM_CURL
 
+define gb_LinkTarget__use_kde
+$(call gb_LinkTarget_add_libs,$(1),\
+	$(KDE_LIBS) \
+)
+
+$(call gb_LinkTarget_set_include,$(1),\
+	$$(INCLUDE) \
+	$(KDE_CFLAGS) \
+)
+endef
 
 ifeq ($(SYSTEM_MOZILLA_HEADERS),YES)
 

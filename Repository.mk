@@ -278,18 +278,20 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     hwp \
     hyphen \
     i18nregexp \
-    icd \
-    icg \
-    idx \
-    ime \
-    ipb \
-    ipd \
-    ips \
-    ipt \
-    ipx \
-    ira \
-    itg \
-    iti \
+	icd \
+	icg \
+	idx \
+	ime \
+	ipb \
+	ipd \
+	ips \
+	ipt \
+	ipx \
+	ira \
+	itg \
+	iti \
+	kab1 \
+	kabdrv1 \
     lng \
     lnth \
     log \

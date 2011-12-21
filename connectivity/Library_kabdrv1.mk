@@ -25,37 +25,44 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Module_Module,connectivity))
+$(eval $(call gb_Library_Library,kabdrv1))
 
-$(eval $(call gb_Module_add_targets,connectivity,\
-	AllLangResTarget_connectivity \
-	Package_inc \
-	Package_xml \
-	Jar_sdbc_hsqldb \
-	Library_dbtools \
-	Library_sdbc2 \
-	Library_dbpool2 \
+$(eval $(call gb_Library_add_package_headers,kabdrv1,connectivity_inc))
+
+$(eval $(call gb_Library_add_api,kabdrv1,\
+	offapi \
+	udkapi \
 ))
 
-ifneq ($(SOLAR_JAVA),)
-$(eval $(call gb_Module_add_targets,connectivity,\
-	Jar_ConnectivityTools \
+$(eval $(call gb_Library_add_libs,kabdrv1,\
+	-lkabc \
 ))
-endif
 
-ifeq ($(GUI),UNX)
-ifeq ($(ENABLE_KAB),TRUE)
-$(eval $(call gb_Module_add_targets,connectivity,\
-	Library_kab1 \
-	Library_kabdrv1 \
+$(eval $(call gb_Library_add_linked_libs,kabdrv1,\
+	cppu \
+	cppuhelper \
+	sal \
+	salhelper \
+	dbtools \
+	comphelper \
+	$(gb_STDLIBS) \
 ))
-endif
-endif
 
-ifeq ($(GUI),WNT)
-$(eval $(call gb_Module_add_targets,connectivity,\
-	Library_ado \
+$(eval $(call gb_Library_add_exception_objects,kabdrv1,\
+	connectivity/source/drivers/kab/KColumns \
+	connectivity/source/drivers/kab/KTable \
+	connectivity/source/drivers/kab/KTables \
+	connectivity/source/drivers/kab/KCatalog \
+	connectivity/source/drivers/kab/KResultSet \
+	connectivity/source/drivers/kab/KStatement \
+	connectivity/source/drivers/kab/KPreparedStatement \
+	connectivity/source/drivers/kab/KDatabaseMetaData \
+	connectivity/source/drivers/kab/KConnection \
+	connectivity/source/drivers/kab/KResultSetMetaData \
+	connectivity/source/drivers/kab/kcondition \
+	connectivity/source/drivers/kab/korder \
+	connectivity/source/drivers/kab/kfields \
+	connectivity/source/drivers/kab/KDEInit \
 ))
-endif
 
 # vim: set noet sw=4 ts=4:

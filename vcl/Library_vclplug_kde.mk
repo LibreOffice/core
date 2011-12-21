@@ -33,11 +33,6 @@ $(eval $(call gb_Library_set_include,vclplug_kde,\
     -I$(SRCDIR)/vcl/inc \
 ))
 
-$(eval $(call gb_Library_set_include,vclplug_kde,\
-	$$(INCLUDE) \
-    $$(KDE_CFLAGS) \
-))
-
 $(eval $(call gb_Library_add_defs,vclplug_kde,\
     -DVCLPLUG_KDE_IMPLEMENTATION \
 ))
@@ -76,6 +71,7 @@ $(eval $(call gb_Library_use_libraries,vclplug_kde,\
 $(eval $(call gb_Library_use_externals,vclplug_kde,\
 	icule \
 	icuuc \
+	kde \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,vclplug_kde,\
