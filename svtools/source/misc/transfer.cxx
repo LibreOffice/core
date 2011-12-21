@@ -96,8 +96,8 @@ SvStream& operator>>( SvStream& rIStm, TransferableObjectDescriptor& rObjDesc )
     rIStm >> rObjDesc.maSize.Height();
     rIStm >> rObjDesc.maDragStartPos.X();
     rIStm >> rObjDesc.maDragStartPos.Y();
-    rIStm.ReadUniOrByteString( rObjDesc.maTypeName, osl_getThreadTextEncoding() );
-    rIStm.ReadUniOrByteString( rObjDesc.maDisplayName, osl_getThreadTextEncoding() );
+    rIStm.ReadByteString( rObjDesc.maTypeName, osl_getThreadTextEncoding() );
+    rIStm.ReadByteString( rObjDesc.maDisplayName, osl_getThreadTextEncoding() );
     rIStm >> nSig1 >> nSig2;
 
     rObjDesc.mnViewAspect = static_cast< sal_uInt16 >( nViewAspect );
@@ -126,8 +126,8 @@ SvStream& operator<<( SvStream& rOStm, const TransferableObjectDescriptor& rObjD
     rOStm << rObjDesc.maSize.Height();
     rOStm << rObjDesc.maDragStartPos.X();
     rOStm << rObjDesc.maDragStartPos.Y();
-    rOStm.WriteUniOrByteString( rObjDesc.maTypeName, osl_getThreadTextEncoding() );
-    rOStm.WriteUniOrByteString( rObjDesc.maDisplayName, osl_getThreadTextEncoding() );
+    rOStm.WriteByteString( rObjDesc.maTypeName, osl_getThreadTextEncoding() );
+    rOStm.WriteByteString( rObjDesc.maDisplayName, osl_getThreadTextEncoding() );
     rOStm << nSig1 << nSig2;
 
     const sal_uInt32 nLastPos = rOStm.Tell();

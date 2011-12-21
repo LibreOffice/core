@@ -383,18 +383,15 @@ sal_Bool SbxInfo::LoadData( SvStream& rStrm, sal_uInt16 nVer )
 {
     aParams.Remove( 0, aParams.Count() );
     sal_uInt16 nParam;
-    aComment = read_lenPrefixed_uInt8s_ToOUString(rStrm,
-        RTL_TEXTENCODING_ASCII_US);
-    aHelpFile = read_lenPrefixed_uInt8s_ToOUString(rStrm,
-        RTL_TEXTENCODING_ASCII_US);
+    rStrm.ReadByteString( aComment, RTL_TEXTENCODING_ASCII_US );
+    rStrm.ReadByteString( aHelpFile, RTL_TEXTENCODING_ASCII_US );
     rStrm >> nHelpId >> nParam;
     while( nParam-- )
     {
         XubString aName;
         sal_uInt16 nType, nFlags;
         sal_uInt32 nUserData = 0;
-        aName = read_lenPrefixed_uInt8s_ToOUString(rStrm,
-            RTL_TEXTENCODING_ASCII_US);
+        rStrm.ReadByteString( aName, RTL_TEXTENCODING_ASCII_US );
         rStrm >> nType >> nFlags;
         if( nVer > 1 )
             rStrm >> nUserData;
@@ -407,16 +404,13 @@ sal_Bool SbxInfo::LoadData( SvStream& rStrm, sal_uInt16 nVer )
 
 sal_Bool SbxInfo::StoreData( SvStream& rStrm ) const
 {
-    write_lenPrefixed_uInt8s_FromOUString(rStrm, aComment,
-        RTL_TEXTENCODING_ASCII_US );
-    write_lenPrefixed_uInt8s_FromOUString(rStrm, aHelpFile,
-        RTL_TEXTENCODING_ASCII_US);
+    rStrm.WriteByteString( aComment, RTL_TEXTENCODING_ASCII_US );
+    rStrm.WriteByteString( aHelpFile, RTL_TEXTENCODING_ASCII_US );
     rStrm << nHelpId << aParams.Count();
     for( sal_uInt16 i = 0; i < aParams.Count(); i++ )
     {
         SbxParamInfo* p = aParams.GetObject( i );
-        write_lenPrefixed_uInt8s_FromOUString(rStrm, p->aName,
-            RTL_TEXTENCODING_ASCII_US);
+        rStrm.WriteByteString( p->aName, RTL_TEXTENCODING_ASCII_US );
         rStrm << (sal_uInt16) p->eType
               << (sal_uInt16) p->nFlags
               << (sal_uInt32) p->nUserData;

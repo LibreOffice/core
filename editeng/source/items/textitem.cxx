@@ -398,16 +398,16 @@ SvStream& SvxFontItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ ) co
     String aStoreFamilyName( GetFamilyName() );
     if( bToBats )
         aStoreFamilyName = String( "StarBats", sizeof("StarBats")-1, RTL_TEXTENCODING_ASCII_US );
-    rStrm.WriteUniOrByteString(aStoreFamilyName, rStrm.GetStreamCharSet());
-    rStrm.WriteUniOrByteString(GetStyleName(), rStrm.GetStreamCharSet());
+    rStrm.WriteByteString(aStoreFamilyName);
+    rStrm.WriteByteString(GetStyleName());
 
     // cach for EditEngine, only set while creating clipboard stream.
     if ( bEnableStoreUnicodeNames )
     {
         sal_uInt32 nMagic = STORE_UNICODE_MAGIC_MARKER;
         rStrm << nMagic;
-        rStrm.WriteUniOrByteString( aStoreFamilyName, RTL_TEXTENCODING_UNICODE );
-        rStrm.WriteUniOrByteString( GetStyleName(), RTL_TEXTENCODING_UNICODE );
+        rStrm.WriteByteString( aStoreFamilyName, RTL_TEXTENCODING_UNICODE );
+        rStrm.WriteByteString( GetStyleName(), RTL_TEXTENCODING_UNICODE );
     }
 
     return rStrm;
@@ -424,10 +424,10 @@ SfxPoolItem* SvxFontItem::Create(SvStream& rStrm, sal_uInt16) const
     rStrm >> eFontTextEncoding;
 
     // UNICODE: rStrm >> aName;
-    rStrm.ReadUniOrByteString(aName, rStrm.GetStreamCharSet());
+    rStrm.ReadByteString(aName);
 
     // UNICODE: rStrm >> aStyle;
-    rStrm.ReadUniOrByteString(aStyle, rStrm.GetStreamCharSet());
+    rStrm.ReadByteString(aStyle);
 
     // Set the "correct" textencoding
     eFontTextEncoding = (sal_uInt8)GetSOLoadTextEncoding( eFontTextEncoding, (sal_uInt16)rStrm.GetVersion() );
@@ -442,8 +442,8 @@ SfxPoolItem* SvxFontItem::Create(SvStream& rStrm, sal_uInt16) const
     rStrm >> nMagic;
     if ( nMagic == STORE_UNICODE_MAGIC_MARKER )
     {
-        rStrm.ReadUniOrByteString( aName, RTL_TEXTENCODING_UNICODE );
-        rStrm.ReadUniOrByteString( aStyle, RTL_TEXTENCODING_UNICODE );
+        rStrm.ReadByteString( aName, RTL_TEXTENCODING_UNICODE );
+        rStrm.ReadByteString( aStyle, RTL_TEXTENCODING_UNICODE );
     }
     else
     {

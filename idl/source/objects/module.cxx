@@ -65,7 +65,7 @@ void SvMetaModule::Load( SvPersistStream & rStm )
     rStm >> aTypeList;
     rStm >> aAttrList;
     // browser
-    rStm.ReadUniOrByteString( aIdlFileName, rStm.GetStreamCharSet() );
+    rStm.ReadByteString( aIdlFileName );
     aHelpFileName = read_lenPrefixed_uInt8s_ToOString(rStm);
     aSlotIdFile = read_lenPrefixed_uInt8s_ToOString(rStm);
     aModulePrefix = read_lenPrefixed_uInt8s_ToOString(rStm);
@@ -90,7 +90,7 @@ void SvMetaModule::Save( SvPersistStream & rStm )
     rStm << aTypeList;
     rStm << aAttrList;
     // browser
-    rStm.WriteUniOrByteString( aIdlFileName, rStm.GetStreamCharSet() );
+    rStm.WriteByteString( aIdlFileName );
     write_lenPrefixed_uInt8s_FromOString(rStm, aHelpFileName);
     write_lenPrefixed_uInt8s_FromOString(rStm, aSlotIdFile);
     write_lenPrefixed_uInt8s_FromOString(rStm, aModulePrefix);
@@ -368,9 +368,9 @@ void SvMetaModule::WriteSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm,
 {
     rOutStm << SvHash_module()->GetName().GetBuffer() << endl
             << '\"';
-    rOutStm.WriteUniOrByteString( aBeginName.GetHexName(), rOutStm.GetStreamCharSet() );
+    rOutStm.WriteByteString( aBeginName.GetHexName() );
     rOutStm << '\"' << endl << '\"';
-    rOutStm.WriteUniOrByteString( aEndName.GetHexName(), rOutStm.GetStreamCharSet() );
+    rOutStm.WriteByteString( aEndName.GetHexName() );
     rOutStm << '\"' << endl;
     SvMetaExtern::WriteSvIdl( rBase, rOutStm, nTab );
 }

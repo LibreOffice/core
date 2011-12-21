@@ -334,8 +334,9 @@ SvStream& operator>>( SvStream& rIStream, JobSetup& rJobSetup )
                     rIStream.Seek( nFirstPos + sizeof( ImplOldJobSetupData ) + 4 + sizeof( Impl364JobSetupData ) + pJobData->mnDriverDataLen );
                     while( rIStream.Tell() < nFirstPos + nLen )
                     {
-                        String aKey = read_lenPrefixed_uInt8s_ToOUString(rIStream, RTL_TEXTENCODING_UTF8);
-                        String aValue = read_lenPrefixed_uInt8s_ToOUString(rIStream, RTL_TEXTENCODING_UTF8);
+                        String aKey, aValue;
+                        rIStream.ReadByteString( aKey, RTL_TEXTENCODING_UTF8 );
+                        rIStream.ReadByteString( aValue, RTL_TEXTENCODING_UTF8 );
                         if( aKey.EqualsAscii( "COMPAT_DUPLEX_MODE" ) )
                         {
                             if( aValue.EqualsAscii( "DUPLEX_UNKNOWN" ) )
@@ -406,8 +407,8 @@ SvStream& operator<<( SvStream& rOStream, const JobSetup& rJobSetup )
             ::boost::unordered_map< ::rtl::OUString, ::rtl::OUString, ::rtl::OUStringHash >::const_iterator it;
             for( it = pJobData->maValueMap.begin(); it != pJobData->maValueMap.end(); ++it )
             {
-                write_lenPrefixed_uInt8s_FromOUString(rOStream, it->first, RTL_TEXTENCODING_UTF8);
-                write_lenPrefixed_uInt8s_FromOUString(rOStream, it->second, RTL_TEXTENCODING_UTF8);
+                rOStream.WriteByteString( it->first, RTL_TEXTENCODING_UTF8 );
+                rOStream.WriteByteString( it->second, RTL_TEXTENCODING_UTF8 );
             }
             write_lenPrefixed_uInt8s_FromOString(rOStream, "COMPAT_DUPLEX_MODE");
             switch( pJobData->meDuplexMode )

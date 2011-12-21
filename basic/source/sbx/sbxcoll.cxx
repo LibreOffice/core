@@ -279,8 +279,7 @@ sal_Bool SbxStdCollection::LoadData( SvStream& rStrm, sal_uInt16 nVer )
     sal_Bool bRes = SbxCollection::LoadData( rStrm, nVer );
     if( bRes )
     {
-        aElemClass = read_lenPrefixed_uInt8s_ToOUString(rStrm,
-            RTL_TEXTENCODING_ASCII_US);
+        rStrm.ReadByteString( aElemClass, RTL_TEXTENCODING_ASCII_US );
         rStrm >> bAddRemoveOk;
     }
     return bRes;
@@ -291,8 +290,7 @@ sal_Bool SbxStdCollection::StoreData( SvStream& rStrm ) const
     sal_Bool bRes = SbxCollection::StoreData( rStrm );
     if( bRes )
     {
-        write_lenPrefixed_uInt8s_FromOUString(rStrm, aElemClass,
-            RTL_TEXTENCODING_ASCII_US);
+        rStrm.WriteByteString( aElemClass, RTL_TEXTENCODING_ASCII_US );
         rStrm << bAddRemoveOk;
     }
     return bRes;

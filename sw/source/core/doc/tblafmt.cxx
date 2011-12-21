@@ -401,7 +401,7 @@ sal_Bool SwBoxAutoFmt::Load( SvStream& rStream, const SwAfVersions& rVersions, s
         sal_uInt16 eSys, eLge;
         // --- from 680/dr25 on: store strings as UTF-8
         CharSet eCharSet = (nVer >= AUTOFORMAT_ID_680DR25) ? RTL_TEXTENCODING_UTF8 : rStream.GetStreamCharSet();
-        rStream.ReadUniOrByteString( sNumFmtString, eCharSet )
+        rStream.ReadByteString( sNumFmtString, eCharSet )
                 >> eSys >> eLge;
         eSysLanguage = (LanguageType) eSys;
         eNumFmtLanguage = (LanguageType) eLge;
@@ -486,9 +486,8 @@ sal_Bool SwBoxAutoFmt::Save( SvStream& rStream ) const
     aRotateMode.Store( rStream, aRotateMode.GetVersion(SOFFICE_FILEFORMAT_40) );
 
     // --- from 680/dr25 on: store strings as UTF-8
-    write_lenPrefixed_uInt8s_FromOUString(rStream, sNumFmtString,
-        RTL_TEXTENCODING_UTF8);
-    rStream << (sal_uInt16)eSysLanguage << (sal_uInt16)eNumFmtLanguage;
+    rStream.WriteByteString( sNumFmtString, RTL_TEXTENCODING_UTF8 )
+        << (sal_uInt16)eSysLanguage << (sal_uInt16)eNumFmtLanguage;
 
     return 0 == rStream.GetError();
 }
@@ -780,7 +779,7 @@ sal_Bool SwTableAutoFmt::Load( SvStream& rStream, const SwAfVersions& rVersions 
         sal_Bool b;
         // --- from 680/dr25 on: store strings as UTF-8
         CharSet eCharSet = (nVal >= AUTOFORMAT_ID_680DR25) ? RTL_TEXTENCODING_UTF8 : rStream.GetStreamCharSet();
-        rStream.ReadUniOrByteString( aName, eCharSet );
+        rStream.ReadByteString( aName, eCharSet );
         if( AUTOFORMAT_DATA_ID_552 <= nVal )
         {
             rStream >> nStrResId;
@@ -830,7 +829,7 @@ sal_Bool SwTableAutoFmt::LoadOld( SvStream& rStream, sal_uInt16 aLoadVer[] )
     if( bRet && ( AUTOFORMAT_OLD_DATA_ID == nVal ))
     {
         sal_Bool b;
-        rStream.ReadUniOrByteString( aName, rStream.GetStreamCharSet() );
+        rStream.ReadByteString( aName, rStream.GetStreamCharSet() );
         rStream >> b; bInclFont = b;
         rStream >> b; bInclJustify = b;
         rStream >> b; bInclFrame = b;
@@ -861,8 +860,7 @@ sal_Bool SwTableAutoFmt::Save( SvStream& rStream ) const
     sal_Bool b;
     rStream << nVal;
     // --- from 680/dr25 on: store strings as UTF-8
-    write_lenPrefixed_uInt8s_FromOUString(rStream, aName,
-        RTL_TEXTENCODING_UTF8 );
+    rStream.WriteByteString( aName, RTL_TEXTENCODING_UTF8 );
     rStream << nStrResId;
     rStream << ( b = bInclFont );
     rStream << ( b = bInclJustify );

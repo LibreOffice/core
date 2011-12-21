@@ -267,25 +267,19 @@ SvStream& operator >> (SvStream& rIn, SdPublishingDesign& rDesign)
 
     sal_uInt16 nTemp16;
 
-    rDesign.m_aDesignName = read_lenPrefixed_uInt8s_ToOUString(rIn,
-        RTL_TEXTENCODING_UTF8);
+    rIn.ReadByteString( rDesign.m_aDesignName, RTL_TEXTENCODING_UTF8 );
     rIn >> nTemp16;
     rDesign.m_eMode = (HtmlPublishMode)nTemp16;
     rIn >> rDesign.m_bContentPage;
     rIn >> rDesign.m_bNotes;
     rIn >> rDesign.m_nResolution;
-    rDesign.m_aCompression = read_lenPrefixed_uInt8s_ToOUString(rIn,
-        RTL_TEXTENCODING_UTF8);
+    rIn.ReadByteString( rDesign.m_aCompression, RTL_TEXTENCODING_UTF8 );
     rIn >> nTemp16;
     rDesign.m_eFormat = (PublishingFormat)nTemp16;
-    rDesign.m_aAuthor = read_lenPrefixed_uInt8s_ToOUString(rIn,
-        RTL_TEXTENCODING_UTF8);
-    rDesign.m_aEMail = read_lenPrefixed_uInt8s_ToOUString(rIn,
-        RTL_TEXTENCODING_UTF8);
-    rDesign.m_aWWW = read_lenPrefixed_uInt8s_ToOUString(rIn,
-        RTL_TEXTENCODING_UTF8);
-    rDesign.m_aMisc = read_lenPrefixed_uInt8s_ToOUString(rIn,
-        RTL_TEXTENCODING_UTF8);
+    rIn.ReadByteString( rDesign.m_aAuthor, RTL_TEXTENCODING_UTF8 );
+    rIn.ReadByteString( rDesign.m_aEMail, RTL_TEXTENCODING_UTF8 );
+    rIn.ReadByteString( rDesign.m_aWWW, RTL_TEXTENCODING_UTF8 );
+    rIn.ReadByteString( rDesign.m_aMisc, RTL_TEXTENCODING_UTF8 );
     rIn >> rDesign.m_bDownload;
     rIn >> rDesign.m_bCreated;      // not used
     rIn >> rDesign.m_nButtonThema;
@@ -300,10 +294,8 @@ SvStream& operator >> (SvStream& rIn, SdPublishingDesign& rDesign)
 
     rIn >> nTemp16;
     rDesign.m_eScript = (PublishingScript)nTemp16;
-    rDesign.m_aURL = read_lenPrefixed_uInt8s_ToOUString(rIn,
-        RTL_TEXTENCODING_UTF8);
-    rDesign.m_aCGI = read_lenPrefixed_uInt8s_ToOUString(rIn,
-        RTL_TEXTENCODING_UTF8);
+    rIn.ReadByteString( rDesign.m_aURL, RTL_TEXTENCODING_UTF8 );
+    rIn.ReadByteString( rDesign.m_aCGI, RTL_TEXTENCODING_UTF8 );
 
     rIn >> rDesign.m_bAutoSlide;
     rIn >> rDesign.m_nSlideDuration;
@@ -323,24 +315,18 @@ SvStream& operator << (SvStream& rOut, const SdPublishingDesign& rDesign)
     SdIOCompat aIO(rOut, STREAM_WRITE, 0);
 
     // Name
-    write_lenPrefixed_uInt8s_FromOUString(rOut, rDesign.m_aDesignName,
-        RTL_TEXTENCODING_UTF8);
+    rOut.WriteByteString( rDesign.m_aDesignName, RTL_TEXTENCODING_UTF8 );
 
     rOut << (sal_uInt16)rDesign.m_eMode;
     rOut << rDesign.m_bContentPage;
     rOut << rDesign.m_bNotes;
     rOut << rDesign.m_nResolution;
-    write_lenPrefixed_uInt8s_FromOUString(rOut, rDesign.m_aCompression,
-        RTL_TEXTENCODING_UTF8);
+    rOut.WriteByteString( rDesign.m_aCompression, RTL_TEXTENCODING_UTF8 );
     rOut << (sal_uInt16)rDesign.m_eFormat;
-    write_lenPrefixed_uInt8s_FromOUString(rOut, rDesign.m_aAuthor,
-        RTL_TEXTENCODING_UTF8);
-    write_lenPrefixed_uInt8s_FromOUString(rOut, rDesign.m_aEMail,
-        RTL_TEXTENCODING_UTF8);
-    write_lenPrefixed_uInt8s_FromOUString(rOut, rDesign.m_aWWW,
-        RTL_TEXTENCODING_UTF8);
-    write_lenPrefixed_uInt8s_FromOUString(rOut, rDesign.m_aMisc,
-        RTL_TEXTENCODING_UTF8);
+    rOut.WriteByteString( rDesign.m_aAuthor, RTL_TEXTENCODING_UTF8 );
+    rOut.WriteByteString( rDesign.m_aEMail, RTL_TEXTENCODING_UTF8 );
+    rOut.WriteByteString( rDesign.m_aWWW, RTL_TEXTENCODING_UTF8 );
+    rOut.WriteByteString( rDesign.m_aMisc, RTL_TEXTENCODING_UTF8 );
     rOut << rDesign.m_bDownload;
     rOut << rDesign.m_bCreated;     // not used
     rOut << rDesign.m_nButtonThema;
@@ -354,10 +340,8 @@ SvStream& operator << (SvStream& rOut, const SdPublishingDesign& rDesign)
     rOut << rDesign.m_bUseColor;
 
     rOut << (sal_uInt16)rDesign.m_eScript;
-    write_lenPrefixed_uInt8s_FromOUString(rOut, rDesign.m_aURL,
-        RTL_TEXTENCODING_UTF8);
-    write_lenPrefixed_uInt8s_FromOUString(rOut, rDesign.m_aCGI,
-        RTL_TEXTENCODING_UTF8);
+    rOut.WriteByteString( rDesign.m_aURL, RTL_TEXTENCODING_UTF8 );
+    rOut.WriteByteString( rDesign.m_aCGI, RTL_TEXTENCODING_UTF8 );
 
     rOut << rDesign.m_bAutoSlide;
     rOut << rDesign.m_nSlideDuration;

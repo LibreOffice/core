@@ -137,7 +137,7 @@ sal_uIntPtr INetMessage::SetHeaderField (
 SvStream& INetMessage::operator<< (SvStream& rStrm) const
 {
     rStrm << static_cast<sal_uInt32>(m_nDocSize);
-    write_lenPrefixed_uInt8s_FromOUString(rStrm, m_aDocName, RTL_TEXTENCODING_UTF8);
+    rStrm.WriteByteString (m_aDocName, RTL_TEXTENCODING_UTF8);
 
     sal_uIntPtr i, n = m_aHeaderList.size();
     rStrm << static_cast<sal_uInt32>(n);
@@ -163,7 +163,7 @@ SvStream& INetMessage::operator>> (SvStream& rStrm)
     // Copy.
     rStrm >> nTemp;
     m_nDocSize = nTemp;
-    m_aDocName = read_lenPrefixed_uInt8s_ToOUString(rStrm, RTL_TEXTENCODING_UTF8);
+    rStrm.ReadByteString (m_aDocName, RTL_TEXTENCODING_UTF8);
 
     sal_uIntPtr i, n = 0;
     rStrm >> nTemp;

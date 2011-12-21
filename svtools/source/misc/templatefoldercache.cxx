@@ -292,7 +292,7 @@ namespace svt
 
         void operator() ( const String& _rString ) const
         {
-            m_rStorage.WriteUniOrByteString( _rString, m_rStorage.GetStreamCharSet() );
+            m_rStorage.WriteByteString( _rString );
         }
     };
 
@@ -418,7 +418,7 @@ namespace svt
             while ( nChildren-- )
             {
                 String sURL;
-                m_rStorage.ReadUniOrByteString( sURL, m_rStorage.GetStreamCharSet() );
+                m_rStorage.ReadByteString( sURL );
                 sURL = m_xOfficeInstDirs->makeAbsoluteURL( sURL );
                 INetURLObject aChildURL( sURL );
                 rChildren.push_back( new TemplateContent( aChildURL ) );
@@ -736,7 +736,7 @@ namespace svt
         while ( nRootDirectories-- )
         {
             String sURL;
-            m_pCacheStream->ReadUniOrByteString( sURL, m_pCacheStream->GetStreamCharSet() );
+            m_pCacheStream->ReadByteString( sURL );
             // #116281# Keep office installtion relocatable. Never store
             // any direct references to office installation directory.
             sURL = getOfficeInstDirs()->makeAbsoluteURL( sURL );

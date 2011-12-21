@@ -643,17 +643,17 @@ BasicLibInfo* BasicLibInfo::Create( SotStorageStream& rSStream )
 
         // The name of the lib...
         String aName;
-        rSStream.ReadUniOrByteString(aName, rSStream.GetStreamCharSet());
+        rSStream.ReadByteString(aName);
         pInfo->SetLibName( aName );
 
         // Absolute path...
         String aStorageName;
-        rSStream.ReadUniOrByteString(aStorageName, rSStream.GetStreamCharSet());
+        rSStream.ReadByteString(aStorageName);
         pInfo->SetStorageName( aStorageName );
 
         // Relative path...
         String aRelStorageName;
-        rSStream.ReadUniOrByteString(aRelStorageName, rSStream.GetStreamCharSet());
+        rSStream.ReadByteString(aRelStorageName);
         pInfo->SetRelStorageName( aRelStorageName );
 
         if ( nVer >= 2 )
@@ -1041,7 +1041,7 @@ void BasicManager::LoadOldBasicManager( SotStorage& rStorage )
     }
     xManagerStream->Seek( nBasicEndOff+1 ); // +1: 0x00 as separator
     String aLibs;
-    xManagerStream->ReadUniOrByteString(aLibs, xManagerStream->GetStreamCharSet());
+    xManagerStream->ReadByteString(aLibs);
     xManagerStream->SetBufferSize( 0 );
     xManagerStream.Clear(); // Close stream
 
@@ -1235,8 +1235,7 @@ sal_Bool BasicManager::ImpLoadLibary( BasicLibInfo* pLibInfo, SotStorage* pCurSt
                 if ( ( nPasswordMarker == PASSWORD_MARKER ) && !xBasicStream->IsEof() )
                 {
                     String aPassword;
-                    xBasicStream->ReadUniOrByteString(aPassword,
-                        xBasicStream->GetStreamCharSet());
+                    xBasicStream->ReadByteString(aPassword);
                     pLibInfo->SetPassword( aPassword );
                 }
                 xBasicStream->SetCryptMaskKey(rtl::OString());

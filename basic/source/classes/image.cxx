@@ -147,15 +147,15 @@ sal_Bool SbiImage::Load( SvStream& r, sal_uInt32& nVersion )
           switch( nSign )
         {
             case B_NAME:
-                r.ReadUniOrByteString( aName, eCharSet );
+                r.ReadByteString( aName, eCharSet );
                 break;
             case B_COMMENT:
-                r.ReadUniOrByteString( aComment, eCharSet );
+                r.ReadByteString( aComment, eCharSet );
                 break;
             case B_SOURCE:
             {
                 String aTmp;
-                r.ReadUniOrByteString( aTmp, eCharSet );
+                r.ReadByteString( aTmp, eCharSet );
                 aOUSource = aTmp;
                 break;
             }
@@ -164,7 +164,7 @@ sal_Bool SbiImage::Load( SvStream& r, sal_uInt32& nVersion )
                 for( sal_uInt16 j = 0 ; j < nCount ; j++ )
                 {
                     String aTmp;
-                    r.ReadUniOrByteString( aTmp, eCharSet );
+                    r.ReadByteString( aTmp, eCharSet );
                     aOUSource += aTmp;
                 }
                 break;
@@ -274,14 +274,14 @@ sal_Bool SbiImage::Save( SvStream& r, sal_uInt32 nVer )
     if( aName.Len() && SbiGood( r ) )
     {
         nPos = SbiOpenRecord( r, B_NAME, 1 );
-        r.WriteUniOrByteString( aName, eCharSet );
+        r.WriteByteString( aName, eCharSet );
         SbiCloseRecord( r, nPos );
     }
     // Comment?
     if( aComment.Len() && SbiGood( r ) )
     {
         nPos = SbiOpenRecord( r, B_COMMENT, 1 );
-        r.WriteUniOrByteString( aComment, eCharSet );
+        r.WriteByteString( aComment, eCharSet );
         SbiCloseRecord( r, nPos );
     }
     // Source?
@@ -295,7 +295,7 @@ sal_Bool SbiImage::Save( SvStream& r, sal_uInt32 nVer )
             aTmp = aOUSource.copy( 0, nMaxUnitSize );
         else
             aTmp = aOUSource;
-        r.WriteUniOrByteString( aTmp, eCharSet );
+        r.WriteByteString( aTmp, eCharSet );
         SbiCloseRecord( r, nPos );
 
         if( nLen > STRING_MAXLEN )
@@ -309,7 +309,7 @@ sal_Bool SbiImage::Save( SvStream& r, sal_uInt32 nVer )
                     (nRemainingLen > nMaxUnitSize) ? nMaxUnitSize : nRemainingLen;
                 String aTmp2 = aOUSource.copy( (i+1) * nMaxUnitSize, nCopyLen );
                 nRemainingLen -= nCopyLen;
-                r.WriteUniOrByteString( aTmp2, eCharSet );
+                r.WriteByteString( aTmp2, eCharSet );
             }
             SbiCloseRecord( r, nPos );
         }

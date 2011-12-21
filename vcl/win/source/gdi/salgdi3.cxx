@@ -160,10 +160,10 @@ ImplFontAttrCache::ImplFontAttrCache( const String& rFileNameURL, const String& 
     ImplDevFontAttributes aDFA;
     for(;;)
     {
-        aFontFileURL = read_lenPrefixed_uInt8s_ToOUString(aCacheFile, RTL_TEXTENCODING_UTF8);
+        aCacheFile.ReadByteString( aFontFileURL, RTL_TEXTENCODING_UTF8 );
         if( !aFontFileURL.Len() )
             break;
-        aDFA.maName = read_lenPrefixed_uInt8s_ToOUString(aCacheFile, RTL_TEXTENCODING_UTF8);
+        aCacheFile.ReadByteString( aDFA.maName, RTL_TEXTENCODING_UTF8 );
 
         short n;
         aCacheFile >> n; aDFA.meWeight     = static_cast<FontWeight>(n);
@@ -195,8 +195,8 @@ ImplFontAttrCache::~ImplFontAttrCache()
             {
                 const String rFontFileURL( (*aIter).first );
                 const ImplDevFontAttributes& rDFA( (*aIter).second );
-                write_lenPrefixed_uInt8s_FromOUString(aCacheFile, rFontFileURL, RTL_TEXTENCODING_UTF8);
-                write_lenPrefixed_uInt8s_FromOUString(aCacheFile, rDFA.maName, RTL_TEXTENCODING_UTF8);
+                aCacheFile.WriteByteString( rFontFileURL, RTL_TEXTENCODING_UTF8 );
+                aCacheFile.WriteByteString( rDFA.maName, RTL_TEXTENCODING_UTF8 );
 
                 aCacheFile << static_cast<short>(rDFA.meWeight);
                 aCacheFile << static_cast<short>(rDFA.meItalic);
@@ -205,12 +205,13 @@ ImplFontAttrCache::~ImplFontAttrCache()
                 aCacheFile << static_cast<short>(rDFA.meFamily);
                 aCacheFile << static_cast<short>(rDFA.mbSymbolFlag != false);
 
-                write_lenPrefixed_uInt8s_FromOUString(aCacheFile, rDFA.maStyleName, RTL_TEXTENCODING_UTF8);
+                aCacheFile.WriteByteStringLine( rDFA.maStyleName, RTL_TEXTENCODING_UTF8 );
 
                 ++aIter;
             }
             // EOF Marker
-            write_lenPrefixed_uInt8s_FromOString(aCacheFile, rtl::OString(), RTL_TEXTENCODING_UTF8);
+            String aEmptyStr;
+            aCacheFile.WriteByteString( aEmptyStr, RTL_TEXTENCODING_UTF8 );
         }
     }
 }
