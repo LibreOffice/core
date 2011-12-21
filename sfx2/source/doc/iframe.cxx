@@ -182,8 +182,9 @@ void SAL_CALL IFrameObject::cancel() throw( com::sun::star::uno::RuntimeExceptio
             xClose->close( sal_True );
         mxFrame = 0;
     }
-    catch ( uno::Exception& )
-    {}
+    catch (const uno::Exception&)
+    {
+    }
 }
 
 void SAL_CALL IFrameObject::close( sal_Bool /*bDeliverOwnership*/ ) throw( com::sun::star::util::CloseVetoException, com::sun::star::uno::RuntimeException )

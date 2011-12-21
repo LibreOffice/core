@@ -542,7 +542,7 @@ sal_Bool SfxApplication::IsXScriptURL( const String& rScriptURL )
                 result = sal_True;
             }
         }
-        catch ( ::com::sun::star::uno::RuntimeException& )
+        catch (const ::com::sun::star::uno::RuntimeException&)
         {
             // ignore, will just return FALSE
         }

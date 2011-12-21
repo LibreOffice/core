@@ -184,7 +184,7 @@ void SfxChildWindow::Destroy()
             else
                 GetFrame()->dispose();
         }
-        catch ( com::sun::star::uno::Exception& )
+        catch (const com::sun::star::uno::Exception&)
         {
         }
     }

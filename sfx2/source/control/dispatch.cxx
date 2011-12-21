@@ -1368,7 +1368,7 @@ void SfxDispatcher::Update_Impl( sal_Bool bForce )
             com::sun::star::uno::Any aValue = xPropSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" )) );
             aValue >>= xLayoutManager;
         }
-        catch ( com::sun::star::uno::Exception& )
+        catch (const com::sun::star::uno::Exception&)
         {
         }
     }

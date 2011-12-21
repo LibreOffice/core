@@ -556,10 +556,22 @@ class ImplUCBPrintWatcher : public ::osl::Thread
                             ::com::sun::star::ucb::NameClash::OVERWRITE);
                 }
             }
-            catch( ::com::sun::star::ucb::ContentCreationException& ) { OSL_FAIL("content create exception"); }
-            catch( ::com::sun::star::ucb::CommandAbortedException&  ) { OSL_FAIL("command abort exception"); }
-            catch( ::com::sun::star::uno::RuntimeException&         ) { OSL_FAIL("runtime exception"); }
-            catch( ::com::sun::star::uno::Exception&                ) { OSL_FAIL("unknown exception"); }
+            catch (const ::com::sun::star::ucb::ContentCreationException&)
+            {
+                OSL_FAIL("content create exception");
+            }
+            catch (const ::com::sun::star::ucb::CommandAbortedException&)
+            {
+                OSL_FAIL("command abort exception");
+            }
+            catch (const ::com::sun::star::uno::RuntimeException&)
+            {
+                OSL_FAIL("runtime exception");
+            }
+            catch (const ::com::sun::star::uno::Exception&)
+            {
+                OSL_FAIL("unknown exception");
+            }
 
             // kill the temp file!
             delete *ppTempFile;

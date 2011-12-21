@@ -998,7 +998,7 @@ void SfxBaseController::BorderWidthsChanged_Impl()
             {
                 ((frame::XBorderResizeListener*)pIterator.next())->borderWidthsChanged( xThis, aBWidths );
             }
-            catch( uno::RuntimeException& )
+            catch (const uno::RuntimeException&)
             {
                 pIterator.remove();
             }
@@ -1302,7 +1302,7 @@ void SfxBaseController::ConnectSfxFrame_Impl( const ConnectSfxFrame i_eConnect )
                             xFrameProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" ) ) ), uno::UNO_QUERY_THROW );
                         xLayouterProps->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PreserveContentSize" ) ), uno::makeAny( sal_True ) );
                     }
-                    catch( const uno::Exception& )
+                    catch (const uno::Exception&)
                     {
                         DBG_UNHANDLED_EXCEPTION();
                     }
@@ -1446,7 +1446,7 @@ void SfxBaseController::ConnectSfxFrame_Impl( const ConnectSfxFrame i_eConnect )
                             m_pData->m_pViewShell->ReadUserDataSequence( aViewData, sal_True );
                     }
                 }
-                catch( const Exception& )
+                catch (const Exception&)
                 {
                     DBG_UNHANDLED_EXCEPTION();
                 }
