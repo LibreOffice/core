@@ -3143,13 +3143,16 @@ void ScChangeTrack::Undo( sal_uLong nStartAction, sal_uLong nEndAction, bool bMe
                             {
                                 ScChangeActionMap::iterator itCut = aPasteCutMap.find( nCut );
 
-                                if ( itCut == aMap.end() )
+                                if ( itCut != aPasteCutMap.end() )
+                                {
+                                    OSL_ENSURE( aMap.find( nCut ) == aMap.end(), "ScChangeTrack::Undo: nCut dup" );
+                                    Append( itCut->second, nCut );
+                                    aPasteCutMap.erase( itCut );
+                                }
+                                else
                                 {
                                     OSL_FAIL( "ScChangeTrack::Undo: nCut not found" );
                                 }
-
-                                Append( itCut->second, nCut );
-                                aPasteCutMap.erase( nCut );
                             }
                             EndBlockModify( nEnd );
                             ResetLastCut();
