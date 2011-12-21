@@ -25,23 +25,34 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Module_Module,accessibility))
+$(eval $(call gb_Library_Library,java_uno_accessbridge))
 
-$(eval $(call gb_Module_add_targets,accessibility,\
-    AllLangResTarget_acc \
-    Library_acc \
+$(eval $(call gb_Library_add_package_headers,java_uno_accessbridge,\
+    accessibility_bridge_inc \
 ))
 
-ifneq ($(SOLAR_JAVA),)
-ifeq ($(OS),WNT)
-$(eval $(call gb_Module_add_targets,accessibility,\
-    Jar_accessibility \
-    Jar_uno_accessbridge \
-    Library_java_uno_accessbridge \
-    Package_bridge \
-    Package_bridge_inc \
+$(eval $(call gb_Library_set_include,java_uno_accessbridge,\
+    $$(INCLUDE) \
+    -I$(WORKDIR)/CustomTarget/accessibility/bridge/inc \
 ))
-endif
-endif
+
+$(eval $(call gb_Library_add_api,java_uno_accessbridge,\
+    offapi \
+    udkapi \
+))
+
+$(eval $(call gb_Library_add_linked_libs,java_uno_accessbridge,\
+    cppu \
+    jvmaccess \
+    sal \
+    salhelper \
+    tl \
+    vcl \
+    $(gb_STDLIBS) \
+))
+
+$(eval $(call gb_Library_add_exception_objects,java_uno_accessbridge,\
+    accessibility/bridge/source/java/WindowsAccessBridgeAdapter \
+))
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:

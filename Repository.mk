@@ -275,6 +275,7 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 	dict_zh \
 	fileacc \
 	index_data \
+	java_uno_accessbridge \
 	localedata_en \
 	localedata_es \
 	localedata_euro \

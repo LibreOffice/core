@@ -12,7 +12,7 @@
 # License.
 #
 # Major Contributor(s):
-# Copyright (C) 2010 Red Hat, Inc., David Tardon <dtardon@redhat.com>
+# Copyright (C) 2011 Red Hat, Inc., David Tardon <dtardon@redhat.com>
 #  (initial developer)
 #
 # All Rights Reserved.
@@ -25,23 +25,19 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Module_Module,accessibility))
+gb_PARTIALBUILD := T
+include $(GBUILDDIR)/gbuild.mk
 
-$(eval $(call gb_Module_add_targets,accessibility,\
-    AllLangResTarget_acc \
-    Library_acc \
-))
+TARGETDIR := $(WORKDIR)/CustomTarget/accessibility/bridge/inc
 
-ifneq ($(SOLAR_JAVA),)
-ifeq ($(OS),WNT)
-$(eval $(call gb_Module_add_targets,accessibility,\
-    Jar_accessibility \
-    Jar_uno_accessbridge \
-    Library_java_uno_accessbridge \
-    Package_bridge \
-    Package_bridge_inc \
-))
-endif
-endif
+$(TARGETDIR)/WindowsAccessBridgeAdapter.h :
+	mkdir -p $(dir $@) && \
+       cd $(call gb_JavaClassSet_get_classdir,$(call gb_Jar_get_classsetname,java_uno_accessbridge)) && \
+       javah -classpath . -o $@ org.openoffice.accessibility.WindowsAccessBridgeAdapter
 
-# vim:set shiftwidth=4 softtabstop=4 expandtab:
+.DEFAULT_GOAL := all
+.PHONY : all
+all : \
+	$(TARGETDIR)/WindowsAccessBridgeAdapter.h
+
+# vim: set ts=4 sw=4 et:
