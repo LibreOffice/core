@@ -4032,7 +4032,7 @@ void ScChangeTrack::GetDependents( ScChangeAction* pAct,
             {
                 ScChangeAction* p = GetAction(
                         ((ScChangeActionReject*)pCur)->GetRejectAction() );
-                if ( p != pAct && rMap.find( p->GetActionNumber() ) != rMap.end() )
+                if (p != pAct && rMap.find( p->GetActionNumber() ) == rMap.end())
                     cStack.push( p );
             }
         }
@@ -4200,8 +4200,9 @@ sal_Bool ScChangeTrack::Reject( ScChangeAction* pAct, ScChangeActionMap* pMap,
         if ( pAct->HasDependent() && !bRecursion )
         {
             OSL_ENSURE( pMap, "ScChangeTrack::Reject: Insert ohne map" );
-            ScChangeActionMap::iterator itChangeAction;
-            for( itChangeAction = pMap->begin(); itChangeAction != pMap->end() && bOk; ++itChangeAction )
+            ScChangeActionMap::reverse_iterator itChangeAction;
+            for (itChangeAction = pMap->rbegin();
+                 itChangeAction != pMap->rend() && bOk; ++itChangeAction)
             {
                 // keine Contents restoren, die eh geloescht werden wuerden
                 if ( itChangeAction->second->GetType() == SC_CAT_CONTENT )
