@@ -56,7 +56,7 @@ Standard-Menus zusammenarbeiten.
 Querverweise
 
 class FontNameBox, class FontStyleBox, class FontSizeBox,
-class FontNameMenu, class FontStyleMenu, class FontSizeMenu
+class FontNameMenu, class FontSizeMenu
 
 --------------------------------------------------------------------------
 
