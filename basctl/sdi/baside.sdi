@@ -471,43 +471,43 @@ shell BasicIDEShell
         StateMethod = GetState;
     ]
 
-    SID_INSERT_FORM_RADIO
+    SID_INSERT_RADIO
     [
         ExecMethod      = ExecuteDialog;
         StateMethod     = GetState;
     ]
 
-    SID_INSERT_FORM_CHECK
+    SID_INSERT_CHECK
     [
         ExecMethod      = ExecuteDialog;
         StateMethod     = GetState;
     ]
 
-    SID_INSERT_FORM_LIST
+    SID_INSERT_LIST
     [
         ExecMethod      = ExecuteDialog;
         StateMethod     = GetState;
     ]
 
-    SID_INSERT_FORM_COMBO
+    SID_INSERT_COMBO
     [
         ExecMethod      = ExecuteDialog;
         StateMethod     = GetState;
     ]
 
-    SID_INSERT_FORM_VSCROLL
+    SID_INSERT_VSCROLL
     [
         ExecMethod      = ExecuteDialog;
         StateMethod     = GetState;
     ]
 
-    SID_INSERT_FORM_HSCROLL
+    SID_INSERT_HSCROLL
     [
         ExecMethod      = ExecuteDialog;
         StateMethod     = GetState;
     ]
 
-    SID_INSERT_FORM_SPIN
+    SID_INSERT_SPIN
     [
         ExecMethod      = ExecuteDialog;
         StateMethod     = GetState;

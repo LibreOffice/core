@@ -8613,7 +8613,7 @@ SfxBoolItem InsertPushbutton SID_INSERT_PUSHBUTTON
 
 //--------------------------------------------------------------------------
 
-SfxBoolItem RadioBUTTON SID_INSERT_FORM_RADIO
+SfxBoolItem InsertFormRadio SID_INSERT_RADIO
 
 [
     /* flags: */
@@ -8640,7 +8640,7 @@ SfxBoolItem RadioBUTTON SID_INSERT_FORM_RADIO
 ]
 
 //--------------------------------------------------------------------------
-SfxBoolItem CheckBOX SID_INSERT_FORM_CHECK
+SfxBoolItem InsertFormCheck SID_INSERT_CHECK
 
 [
     /* flags: */
@@ -8667,7 +8667,7 @@ SfxBoolItem CheckBOX SID_INSERT_FORM_CHECK
 ]
 
 //--------------------------------------------------------------------------
-SfxBoolItem InsertListBOX SID_INSERT_FORM_LIST
+SfxBoolItem InsertFormList SID_INSERT_LIST
 
 [
     /* flags: */
@@ -8694,7 +8694,7 @@ SfxBoolItem InsertListBOX SID_INSERT_FORM_LIST
 ]
 
 //--------------------------------------------------------------------------
-SfxBoolItem ComboBOX SID_INSERT_FORM_COMBO
+SfxBoolItem InsertFormCombo SID_INSERT_COMBO
 
 [
     /* flags: */
@@ -8720,34 +8720,7 @@ SfxBoolItem ComboBOX SID_INSERT_FORM_COMBO
     GroupId = GID_CONTROLS;
 ]
 //--------------------------------------------------------------------------
-SfxBoolItem SpinBUTTON SID_INSERT_FORM_SPIN
-
-[
-    /* flags: */
-    AutoUpdate = TRUE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerItem;
-    Synchron;
-
-    Readonly = FALSE,
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_CONTROLS;
-]
-
-//--------------------------------------------------------------------------
-SfxBoolItem VScrollBAR SID_INSERT_FORM_VSCROLL
+SfxBoolItem InsertFormSpin SID_INSERT_SPIN
 
 [
     /* flags: */
@@ -8774,8 +8747,35 @@ SfxBoolItem VScrollBAR SID_INSERT_FORM_VSCROLL
 ]
 
 //--------------------------------------------------------------------------
+SfxBoolItem InsertFormVScroll SID_INSERT_VSCROLL
 
-SfxBoolItem HScrollBAR SID_INSERT_FORM_HSCROLL
+[
+    /* flags: */
+    AutoUpdate = TRUE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerItem;
+    Synchron;
+
+    Readonly = FALSE,
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_CONTROLS;
+]
+
+//--------------------------------------------------------------------------
+
+SfxBoolItem InsertFormHScroll SID_INSERT_HSCROLL
 
 [
     /* flags: */
