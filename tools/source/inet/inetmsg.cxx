@@ -137,7 +137,7 @@ sal_uIntPtr INetMessage::SetHeaderField (
 SvStream& INetMessage::operator<< (SvStream& rStrm) const
 {
     rStrm << static_cast<sal_uInt32>(m_nDocSize);
-    write_lenPrefixed_uInt8s_FromOUString(rStrm, m_aDocName, RTL_TEXTENCODING_UTF8);
+    write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rStrm, m_aDocName, RTL_TEXTENCODING_UTF8);
 
     sal_uIntPtr i, n = m_aHeaderList.size();
     rStrm << static_cast<sal_uInt32>(n);
@@ -163,7 +163,7 @@ SvStream& INetMessage::operator>> (SvStream& rStrm)
     // Copy.
     rStrm >> nTemp;
     m_nDocSize = nTemp;
-    m_aDocName = read_lenPrefixed_uInt8s_ToOUString(rStrm, RTL_TEXTENCODING_UTF8);
+    m_aDocName = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(rStrm, RTL_TEXTENCODING_UTF8);
 
     sal_uIntPtr i, n = 0;
     rStrm >> nTemp;
@@ -1161,7 +1161,7 @@ SvStream& INetMIMEMessage::operator<< (SvStream& rStrm) const
     for (sal_uInt16 i = 0; i < INETMSG_MIME_NUMHDR; i++)
         rStrm << static_cast<sal_uInt32>(m_nIndex[i]);
 
-    write_lenPrefixed_uInt8s_FromOString(rStrm, m_aBoundary);
+    write_lenPrefixed_uInt8s_FromOString<sal_uInt16>(rStrm, m_aBoundary);
     rStrm << static_cast<sal_uInt32>(aChildren.size());
 
     return rStrm;
@@ -1181,7 +1181,7 @@ SvStream& INetMIMEMessage::operator>> (SvStream& rStrm)
         m_nIndex[i] = nTemp;
     }
 
-    m_aBoundary = read_lenPrefixed_uInt8s_ToOString(rStrm);
+    m_aBoundary = read_lenPrefixed_uInt8s_ToOString<sal_uInt16>(rStrm);
 
     rStrm >> nTemp;
 

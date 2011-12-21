@@ -566,7 +566,7 @@ TOOLS_DLLPUBLIC rtl::OUString read_zeroTerminated_uInt8s_ToOUString(SvStream& rS
 //Attempt to read a pascal-style length (of type prefix) prefixed sequence of
 //8bit units to an OString, returned rtl::OString's length is number of units
 //successfully read.
-template<typename prefix=sal_uInt16> rtl::OString read_lenPrefixed_uInt8s_ToOString(SvStream& rStrm)
+template<typename prefix> rtl::OString read_lenPrefixed_uInt8s_ToOString(SvStream& rStrm)
 {
     prefix nLen = 0;
     rStrm >> nLen;
@@ -575,7 +575,7 @@ template<typename prefix=sal_uInt16> rtl::OString read_lenPrefixed_uInt8s_ToOStr
 
 //Attempt to read a pascal-style length (of type prefix) prefixed sequence of
 //8bit units to an OUString
-template<typename prefix=sal_uInt16> rtl::OUString read_lenPrefixed_uInt8s_ToOUString(SvStream& rStrm,
+template<typename prefix> rtl::OUString read_lenPrefixed_uInt8s_ToOUString(SvStream& rStrm,
     rtl_TextEncoding eEnc)
 {
     return rtl::OStringToOUString(read_lenPrefixed_uInt8s_ToOString<prefix>(rStrm), eEnc);
@@ -584,7 +584,7 @@ template<typename prefix=sal_uInt16> rtl::OUString read_lenPrefixed_uInt8s_ToOUS
 //Attempt to write a pascal-style length (of type prefix) prefixed sequence of
 //8bit units from an OString, returned value is number of bytes written (including
 //byte-count of prefix)
-template<typename prefix=sal_uInt16> sal_Size write_lenPrefixed_uInt8s_FromOString(SvStream& rStrm,
+template<typename prefix> sal_Size write_lenPrefixed_uInt8s_FromOString(SvStream& rStrm,
     const rtl::OString &rStr)
 {
     SAL_WARN_IF(rStr.getLength() > std::numeric_limits<prefix>::max(),
@@ -605,7 +605,7 @@ template<typename prefix=sal_uInt16> sal_Size write_lenPrefixed_uInt8s_FromOStri
 //Attempt to write a pascal-style length (of type prefix) prefixed sequence of
 //8bit units from an OUString, returned value is number of bytes written (including
 //byte-count of prefix)
-template<typename prefix=sal_uInt16> sal_Size write_lenPrefixed_uInt8s_FromOUString(SvStream& rStrm,
+template<typename prefix> sal_Size write_lenPrefixed_uInt8s_FromOUString(SvStream& rStrm,
     const rtl::OUString &rStr, rtl_TextEncoding eEnc)
 {
     return write_lenPrefixed_uInt8s_FromOString<prefix>(rStrm, rtl::OUStringToOString(rStr, eEnc));

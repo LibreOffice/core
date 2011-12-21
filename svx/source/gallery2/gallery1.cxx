@@ -132,12 +132,12 @@ void GalleryThemeEntry::SetId( sal_uInt32 nNewId, sal_Bool bResetThemeName )
 
 SvStream& operator<<( SvStream& rOut, const GalleryImportThemeEntry& rEntry )
 {
-    write_lenPrefixed_uInt8s_FromOUString(rOut, rEntry.aThemeName, RTL_TEXTENCODING_UTF8);
-    write_lenPrefixed_uInt8s_FromOUString(rOut, rEntry.aUIName, RTL_TEXTENCODING_UTF8);
-    write_lenPrefixed_uInt8s_FromOUString(rOut, (rEntry.aURL.GetMainURL( INetURLObject::NO_DECODE )), RTL_TEXTENCODING_UTF8);
-    write_lenPrefixed_uInt8s_FromOUString(rOut, rEntry.aImportName, RTL_TEXTENCODING_UTF8);
+    write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rOut, rEntry.aThemeName, RTL_TEXTENCODING_UTF8);
+    write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rOut, rEntry.aUIName, RTL_TEXTENCODING_UTF8);
+    write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rOut, (rEntry.aURL.GetMainURL( INetURLObject::NO_DECODE )), RTL_TEXTENCODING_UTF8);
+    write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rOut, rEntry.aImportName, RTL_TEXTENCODING_UTF8);
 
-    write_lenPrefixed_uInt8s_FromOString(rOut, rtl::OString());
+    write_lenPrefixed_uInt8s_FromOString<sal_uInt16>(rOut, rtl::OString());
     return rOut;
 }
 
@@ -145,11 +145,11 @@ SvStream& operator<<( SvStream& rOut, const GalleryImportThemeEntry& rEntry )
 
 SvStream& operator>>( SvStream& rIn, GalleryImportThemeEntry& rEntry )
 {
-    rEntry.aThemeName = read_lenPrefixed_uInt8s_ToOUString(rIn, RTL_TEXTENCODING_UTF8);
-    rEntry.aUIName = read_lenPrefixed_uInt8s_ToOUString(rIn, RTL_TEXTENCODING_UTF8);
-    rEntry.aURL = read_lenPrefixed_uInt8s_ToOUString(rIn, RTL_TEXTENCODING_UTF8);
-    rEntry.aImportName = read_lenPrefixed_uInt8s_ToOUString(rIn, RTL_TEXTENCODING_UTF8);
-    read_lenPrefixed_uInt8s_ToOString(rIn);
+    rEntry.aThemeName = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(rIn, RTL_TEXTENCODING_UTF8);
+    rEntry.aUIName = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(rIn, RTL_TEXTENCODING_UTF8);
+    rEntry.aURL = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(rIn, RTL_TEXTENCODING_UTF8);
+    rEntry.aImportName = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(rIn, RTL_TEXTENCODING_UTF8);
+    read_lenPrefixed_uInt8s_ToOString<sal_uInt16>(rIn);
     return rIn;
 }
 

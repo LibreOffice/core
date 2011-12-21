@@ -1768,7 +1768,7 @@ void SvNumberformat::ConvertLanguage( SvNumberFormatter& rConverter,
 void SvNumberformat::LoadString( SvStream& rStream, String& rStr )
 {
     CharSet eStream = rStream.GetStreamCharSet();
-    ByteString aStr = read_lenPrefixed_uInt8s_ToOString(rStream);
+    ByteString aStr = read_lenPrefixed_uInt8s_ToOString<sal_uInt16>(rStream);
     sal_Char cStream = NfCurrencyEntry::GetEuroSymbol( eStream );
     if ( aStr.Search( cStream ) == STRING_NOTFOUND )
     {   // simple conversion to unicode

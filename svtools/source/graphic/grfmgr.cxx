@@ -1134,7 +1134,7 @@ SvStream& operator>>( SvStream& rIStm, GraphicObject& rGraphicObj )
 
     if( bLink )
     {
-        rtl::OUString aLink = read_lenPrefixed_uInt8s_ToOUString(rIStm, RTL_TEXTENCODING_UTF8);
+        rtl::OUString aLink = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(rIStm, RTL_TEXTENCODING_UTF8);
         rGraphicObj.SetLink(aLink);
     }
     else
@@ -1153,7 +1153,7 @@ SvStream& operator<<( SvStream& rOStm, const GraphicObject& rGraphicObj )
     rOStm << rGraphicObj.GetGraphic() << rGraphicObj.GetAttr() << bLink;
 
     if( bLink )
-        write_lenPrefixed_uInt8s_FromOUString(rOStm, rGraphicObj.GetLink(), RTL_TEXTENCODING_UTF8);
+        write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rOStm, rGraphicObj.GetLink(), RTL_TEXTENCODING_UTF8);
 
     return rOStm;
 }

@@ -733,7 +733,7 @@ GalleryThemeEntry* GalleryTheme::CreateThemeEntry( const INetURLObject& rURL, sa
             {
                 sal_uInt32      nThemeId = 0;
 
-                rtl::OString aTmpStr = read_lenPrefixed_uInt8s_ToOString(*pIStm);
+                rtl::OString aTmpStr = read_lenPrefixed_uInt8s_ToOString<sal_uInt16>(*pIStm);
                 aThemeName = rtl::OStringToOUString(aTmpStr, RTL_TEXTENCODING_UTF8);
 
                 // Charakterkonvertierung durchfuehren
@@ -1354,7 +1354,7 @@ SvStream& GalleryTheme::WriteData( SvStream& rOStm ) const
     sal_Bool                bRel;
 
     rOStm << (sal_uInt16) 0x0004;
-    write_lenPrefixed_uInt8s_FromOUString(rOStm, GetRealName(), RTL_TEXTENCODING_UTF8);
+    write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rOStm, GetRealName(), RTL_TEXTENCODING_UTF8);
     rOStm << nCount << (sal_uInt16) osl_getThreadTextEncoding();
 
     for( sal_uInt32 i = 0; i < nCount; i++ )
@@ -1394,7 +1394,7 @@ SvStream& GalleryTheme::WriteData( SvStream& rOStm ) const
 
         aPath.SearchAndReplace(m_aDestDir, String());
         rOStm << bRel;
-        write_lenPrefixed_uInt8s_FromOUString(rOStm, aPath, RTL_TEXTENCODING_UTF8);
+        write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rOStm, aPath, RTL_TEXTENCODING_UTF8);
         rOStm << pObj->nOffset << (sal_uInt16) pObj->eObjKind;
     }
 
@@ -1434,7 +1434,7 @@ SvStream& GalleryTheme::ReadData( SvStream& rIStm )
 
     aImportName = rtl::OUString();
     rIStm >> nVersion;
-    rtl::OString aTmpStr = read_lenPrefixed_uInt8s_ToOString(rIStm);
+    rtl::OString aTmpStr = read_lenPrefixed_uInt8s_ToOString<sal_uInt16>(rIStm);
     rIStm >> nCount;
 
     if( nVersion >= 0x0004 )
@@ -1474,7 +1474,7 @@ SvStream& GalleryTheme::ReadData( SvStream& rIStm )
             sal_uInt16  nTemp;
 
             rIStm >> bRel;
-            rtl::OString aTempFileName = read_lenPrefixed_uInt8s_ToOString(rIStm);
+            rtl::OString aTempFileName = read_lenPrefixed_uInt8s_ToOString<sal_uInt16>(rIStm);
             rIStm >> pObj->nOffset;
             rIStm >> nTemp; pObj->eObjKind = (SgaObjKind) nTemp;
 

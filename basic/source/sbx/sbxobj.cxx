@@ -591,9 +591,9 @@ sal_Bool SbxObject::LoadData( SvStream& rStrm, sal_uInt16 nVer )
         aData.pObj = this;
     sal_uInt32 nSize;
     XubString aDfltProp;
-    aClassName = read_lenPrefixed_uInt8s_ToOUString(rStrm,
+    aClassName = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(rStrm,
         RTL_TEXTENCODING_ASCII_US);
-    aDfltProp = read_lenPrefixed_uInt8s_ToOUString(rStrm,
+    aDfltProp = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(rStrm,
         RTL_TEXTENCODING_ASCII_US);
     sal_uIntPtr nPos = rStrm.Tell();
     rStrm >> nSize;
@@ -622,8 +622,8 @@ sal_Bool SbxObject::StoreData( SvStream& rStrm ) const
     XubString aDfltProp;
     if( pDfltProp )
         aDfltProp = pDfltProp->GetName();
-    write_lenPrefixed_uInt8s_FromOUString(rStrm, aClassName, RTL_TEXTENCODING_ASCII_US);
-    write_lenPrefixed_uInt8s_FromOUString(rStrm, aDfltProp, RTL_TEXTENCODING_ASCII_US);
+    write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rStrm, aClassName, RTL_TEXTENCODING_ASCII_US);
+    write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rStrm, aDfltProp, RTL_TEXTENCODING_ASCII_US);
     sal_uIntPtr nPos = rStrm.Tell();
     rStrm << (sal_uInt32) 0L;
     if( !StorePrivateData( rStrm ) )
@@ -799,7 +799,7 @@ void SbxObject::Dump( SvStream& rStrm, sal_Bool bFill )
                 aLine += aAttrs2;
             if( !pVar->IsA( TYPE(SbxMethod) ) )
                 aLine.AppendAscii( "  !! Not a Method !!" );
-            write_lenPrefixed_uInt8s_FromOUString(rStrm, aLine, RTL_TEXTENCODING_ASCII_US);
+            write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rStrm, aLine, RTL_TEXTENCODING_ASCII_US);
 
             // Output also the object at object-methods
             if ( pVar->GetValues_Impl().eType == SbxOBJECT &&
@@ -832,7 +832,7 @@ void SbxObject::Dump( SvStream& rStrm, sal_Bool bFill )
                     aLine += aAttrs3;
                 if( !pVar->IsA( TYPE(SbxProperty) ) )
                     aLine.AppendAscii( "  !! Not a Property !!" );
-                write_lenPrefixed_uInt8s_FromOUString(rStrm, aLine, RTL_TEXTENCODING_ASCII_US);
+                write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rStrm, aLine, RTL_TEXTENCODING_ASCII_US);
 
                 // output also the object at object properties
                 if ( pVar->GetValues_Impl().eType == SbxOBJECT &&

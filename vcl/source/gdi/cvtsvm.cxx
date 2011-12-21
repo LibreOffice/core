@@ -1327,7 +1327,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                     sal_uInt8*      pData;
                     sal_Int32       nFollowingActionCount;
 
-                    rtl::OString aComment = read_lenPrefixed_uInt8s_ToOString(rIStm);
+                    rtl::OString aComment = read_lenPrefixed_uInt8s_ToOString<sal_uInt16>(rIStm);
                     rIStm >> nValue >> nDataSize;
 
                     if( nDataSize )
@@ -2412,7 +2412,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                 rOStm.SeekRel( 4 );
 
                 // write data
-                write_lenPrefixed_uInt8s_FromOString(rOStm, pA->GetComment());
+                write_lenPrefixed_uInt8s_FromOString<sal_uInt16>(rOStm, pA->GetComment());
                 rOStm << pA->GetValue() << nDataSize;
 
                 if( nDataSize )

@@ -1517,7 +1517,7 @@ SvStream& SvStream::ReadUniOrByteString( UniString& rStr, rtl_TextEncoding eSrcC
         return *this;
     }
 
-    rStr = read_lenPrefixed_uInt8s_ToOUString(*this, eSrcCharSet);
+    rStr = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(*this, eSrcCharSet);
     return *this;
 }
 
@@ -1551,7 +1551,7 @@ SvStream& SvStream::WriteUniOrByteString( const UniString& rStr, rtl_TextEncodin
         return *this;
     }
 
-    write_lenPrefixed_uInt8s_FromOUString(*this, rStr, eDestCharSet);
+    write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(*this, rStr, eDestCharSet);
     return *this;
 }
 

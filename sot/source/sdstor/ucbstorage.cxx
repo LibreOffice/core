@@ -3303,7 +3303,7 @@ String UCBStorage::GetLinkedFile( SvStream &rStream )
     rStream >> nBytes;
     if( nBytes == 0x04034b50 )
     {
-        ByteString aTmp = read_lenPrefixed_uInt8s_ToOString(rStream);
+        ByteString aTmp = read_lenPrefixed_uInt8s_ToOString<sal_uInt16>(rStream);
         if ( aTmp.CompareTo( "ContentURL=", 11 ) == COMPARE_EQUAL )
         {
             aTmp.Erase( 0, 11 );
@@ -3375,7 +3375,7 @@ String UCBStorage::CreateLinkFile( const String& rName )
         // store it as key/value pair
         String aLink = String::CreateFromAscii("ContentURL=");
         aLink += aURL;
-        write_lenPrefixed_uInt8s_FromOUString(*pStream, aLink, RTL_TEXTENCODING_UTF8);
+        write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(*pStream, aLink, RTL_TEXTENCODING_UTF8);
         pStream->Flush();
 
         // move the stream to its desired location

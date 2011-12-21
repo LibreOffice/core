@@ -80,16 +80,16 @@ public:
     friend SvStream& operator<< (
         SvStream& rStrm, const INetMessageHeader& rHdr)
     {
-        write_lenPrefixed_uInt8s_FromOString(rStrm, rHdr.m_aName);
-        write_lenPrefixed_uInt8s_FromOString(rStrm, rHdr.m_aValue);
+        write_lenPrefixed_uInt8s_FromOString<sal_uInt16>(rStrm, rHdr.m_aName);
+        write_lenPrefixed_uInt8s_FromOString<sal_uInt16>(rStrm, rHdr.m_aValue);
         return rStrm;
     }
 
     friend SvStream& operator>> (
         SvStream& rStrm, INetMessageHeader& rHdr)
     {
-        rHdr.m_aName = read_lenPrefixed_uInt8s_ToOString(rStrm);
-        rHdr.m_aValue = read_lenPrefixed_uInt8s_ToOString(rStrm);
+        rHdr.m_aName = read_lenPrefixed_uInt8s_ToOString<sal_uInt16>(rStrm);
+        rHdr.m_aValue = read_lenPrefixed_uInt8s_ToOString<sal_uInt16>(rStrm);
         return rStrm;
     }
 };

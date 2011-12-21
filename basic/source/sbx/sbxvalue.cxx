@@ -1479,7 +1479,7 @@ sal_Bool SbxValue::LoadData( SvStream& r, sal_uInt16 )
         case SbxSINGLE:
         {
             // Floats as ASCII
-            XubString aVal = read_lenPrefixed_uInt8s_ToOUString(r,
+            XubString aVal = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(r,
                 RTL_TEXTENCODING_ASCII_US);
             double d;
             SbxDataType t;
@@ -1495,7 +1495,7 @@ sal_Bool SbxValue::LoadData( SvStream& r, sal_uInt16 )
         case SbxDOUBLE:
         {
             // Floats as ASCII
-            XubString aVal = read_lenPrefixed_uInt8s_ToOUString(r,
+            XubString aVal = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(r,
                 RTL_TEXTENCODING_ASCII_US);
             SbxDataType t;
             if( ImpScan( aVal, aData.nDouble, t, NULL ) != SbxERR_OK )
@@ -1524,7 +1524,7 @@ sal_Bool SbxValue::LoadData( SvStream& r, sal_uInt16 )
         }
         case SbxSTRING:
         {
-            rtl::OUString aVal = read_lenPrefixed_uInt8s_ToOUString(r,
+            rtl::OUString aVal = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(r,
                 RTL_TEXTENCODING_ASCII_US);
             if( aVal.getLength() )
                 aData.pOUString = new ::rtl::OUString( aVal );
@@ -1621,12 +1621,12 @@ sal_Bool SbxValue::StoreData( SvStream& r ) const
         case SbxDATE:
             // #49935: Save as double, elsewise an error during the read in
             ((SbxValue*)this)->aData.eType = (SbxDataType)( ( nType & 0xF000 ) | SbxDOUBLE );
-            write_lenPrefixed_uInt8s_FromOUString(r, GetCoreString(), RTL_TEXTENCODING_ASCII_US);
+            write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(r, GetCoreString(), RTL_TEXTENCODING_ASCII_US);
             ((SbxValue*)this)->aData.eType = (SbxDataType)nType;
             break;
         case SbxSINGLE:
         case SbxDOUBLE:
-            write_lenPrefixed_uInt8s_FromOUString(r, GetCoreString(), RTL_TEXTENCODING_ASCII_US);
+            write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(r, GetCoreString(), RTL_TEXTENCODING_ASCII_US);
             break;
         case SbxSALUINT64:
         case SbxSALINT64:
@@ -1643,11 +1643,11 @@ sal_Bool SbxValue::StoreData( SvStream& r ) const
         case SbxSTRING:
             if( aData.pOUString )
             {
-                write_lenPrefixed_uInt8s_FromOUString(r, *aData.pOUString, RTL_TEXTENCODING_ASCII_US);
+                write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(r, *aData.pOUString, RTL_TEXTENCODING_ASCII_US);
             }
             else
             {
-                write_lenPrefixed_uInt8s_FromOUString(r, rtl::OUString(), RTL_TEXTENCODING_ASCII_US);
+                write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(r, rtl::OUString(), RTL_TEXTENCODING_ASCII_US);
             }
             break;
         case SbxERROR:

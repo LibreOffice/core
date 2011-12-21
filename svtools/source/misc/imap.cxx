@@ -104,16 +104,16 @@ void IMapObject::Write( SvStream& rOStm, const String& rBaseURL ) const
 
     const rtl::OString aRelURL = rtl::OUStringToOString(
         URIHelper::simpleNormalizedMakeRelative(rBaseURL, aURL), eEncoding);
-    write_lenPrefixed_uInt8s_FromOString(rOStm, aRelURL);
-    write_lenPrefixed_uInt8s_FromOUString(rOStm, aAltText, eEncoding);
+    write_lenPrefixed_uInt8s_FromOString<sal_uInt16>(rOStm, aRelURL);
+    write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rOStm, aAltText, eEncoding);
     rOStm << bActive;
-    write_lenPrefixed_uInt8s_FromOUString(rOStm, aTarget, eEncoding);
+    write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rOStm, aTarget, eEncoding);
 
     pCompat = new IMapCompat( rOStm, STREAM_WRITE );
 
     WriteIMapObject( rOStm );
     aEventList.Write( rOStm );                                      // V4
-    write_lenPrefixed_uInt8s_FromOUString(rOStm, aName, eEncoding); // V5
+    write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rOStm, aName, eEncoding); // V5
 
     delete pCompat;
 }
@@ -134,10 +134,10 @@ void IMapObject::Read( SvStream& rIStm, const String& rBaseURL )
     rIStm.SeekRel( 2 );
     rIStm >> nReadVersion;
     rIStm >> nTextEncoding;
-    aURL = read_lenPrefixed_uInt8s_ToOUString(rIStm, nTextEncoding);
-    aAltText = read_lenPrefixed_uInt8s_ToOUString(rIStm, nTextEncoding);
+    aURL = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(rIStm, nTextEncoding);
+    aAltText = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(rIStm, nTextEncoding);
     rIStm >> bActive;
-    aTarget = read_lenPrefixed_uInt8s_ToOUString(rIStm, nTextEncoding);
+    aTarget = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(rIStm, nTextEncoding);
 
     // URL absolut machen
     aURL = URIHelper::SmartRel2Abs( INetURLObject(rBaseURL), aURL, URIHelper::GetMaybeFileHdl(), true, false, INetURLObject::WAS_ENCODED, INetURLObject::DECODE_UNAMBIGUOUS );
@@ -152,7 +152,7 @@ void IMapObject::Read( SvStream& rIStm, const String& rBaseURL )
 
         // ab Version 5 kann ein Objektname vorhanden sein
         if ( nReadVersion >= 0x0005 )
-            aName = read_lenPrefixed_uInt8s_ToOUString(rIStm, nTextEncoding);
+            aName = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(rIStm, nTextEncoding);
     }
 
     delete pCompat;
@@ -1123,10 +1123,10 @@ void ImageMap::Write( SvStream& rOStm, const String& rBaseURL ) const
     // MagicCode schreiben
     rOStm << IMAPMAGIC;
     rOStm << GetVersion();
-    write_lenPrefixed_uInt8s_FromOUString(rOStm, aImageName, eEncoding);
-    write_lenPrefixed_uInt8s_FromOString(rOStm, rtl::OString()); //dummy
+    write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rOStm, aImageName, eEncoding);
+    write_lenPrefixed_uInt8s_FromOString<sal_uInt16>(rOStm, rtl::OString()); //dummy
     rOStm << nCount;
-    write_lenPrefixed_uInt8s_FromOUString(rOStm, aImageName, eEncoding);
+    write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rOStm, aImageName, eEncoding);
 
     pCompat = new IMapCompat( rOStm, STREAM_WRITE );
 
@@ -1165,10 +1165,10 @@ void ImageMap::Read( SvStream& rIStm, const String& rBaseURL )
         // Version ueberlesen wir
         rIStm.SeekRel( 2 );
 
-        aName = read_lenPrefixed_uInt8s_ToOUString(rIStm, osl_getThreadTextEncoding());
-        read_lenPrefixed_uInt8s_ToOString(rIStm); // Dummy
+        aName = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(rIStm, osl_getThreadTextEncoding());
+        read_lenPrefixed_uInt8s_ToOString<sal_uInt16>(rIStm); // Dummy
         rIStm >> nCount;
-        read_lenPrefixed_uInt8s_ToOString(rIStm); // Dummy
+        read_lenPrefixed_uInt8s_ToOString<sal_uInt16>(rIStm); // Dummy
 
         pCompat = new IMapCompat( rIStm, STREAM_READ );
 

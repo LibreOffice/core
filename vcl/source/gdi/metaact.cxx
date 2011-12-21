@@ -4198,7 +4198,7 @@ sal_Bool MetaCommentAction::Compare( const MetaAction& rMetaAction ) const
 void MetaCommentAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     WRITE_BASE_COMPAT( rOStm, 1, pData );
-    write_lenPrefixed_uInt8s_FromOString(rOStm, maComment);
+    write_lenPrefixed_uInt8s_FromOString<sal_uInt16>(rOStm, maComment);
     rOStm << mnValue << mnDataSize;
 
     if ( mnDataSize )
@@ -4210,7 +4210,7 @@ void MetaCommentAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 void MetaCommentAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
     COMPAT( rIStm );
-    maComment = read_lenPrefixed_uInt8s_ToOString(rIStm);
+    maComment = read_lenPrefixed_uInt8s_ToOString<sal_uInt16>(rIStm);
     rIStm >> mnValue >> mnDataSize;
 
     delete[] mpData;

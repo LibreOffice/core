@@ -160,10 +160,10 @@ ImplFontAttrCache::ImplFontAttrCache( const String& rFileNameURL, const String& 
     ImplDevFontAttributes aDFA;
     for(;;)
     {
-        aFontFileURL = read_lenPrefixed_uInt8s_ToOUString(aCacheFile, RTL_TEXTENCODING_UTF8);
+        aFontFileURL = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(aCacheFile, RTL_TEXTENCODING_UTF8);
         if( !aFontFileURL.Len() )
             break;
-        aDFA.maName = read_lenPrefixed_uInt8s_ToOUString(aCacheFile, RTL_TEXTENCODING_UTF8);
+        aDFA.maName = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(aCacheFile, RTL_TEXTENCODING_UTF8);
 
         short n;
         aCacheFile >> n; aDFA.meWeight     = static_cast<FontWeight>(n);
@@ -195,8 +195,8 @@ ImplFontAttrCache::~ImplFontAttrCache()
             {
                 const String rFontFileURL( (*aIter).first );
                 const ImplDevFontAttributes& rDFA( (*aIter).second );
-                write_lenPrefixed_uInt8s_FromOUString(aCacheFile, rFontFileURL, RTL_TEXTENCODING_UTF8);
-                write_lenPrefixed_uInt8s_FromOUString(aCacheFile, rDFA.maName, RTL_TEXTENCODING_UTF8);
+                write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(aCacheFile, rFontFileURL, RTL_TEXTENCODING_UTF8);
+                write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(aCacheFile, rDFA.maName, RTL_TEXTENCODING_UTF8);
 
                 aCacheFile << static_cast<short>(rDFA.meWeight);
                 aCacheFile << static_cast<short>(rDFA.meItalic);
@@ -205,7 +205,7 @@ ImplFontAttrCache::~ImplFontAttrCache()
                 aCacheFile << static_cast<short>(rDFA.meFamily);
                 aCacheFile << static_cast<short>(rDFA.mbSymbolFlag != false);
 
-                write_lenPrefixed_uInt8s_FromOUString(aCacheFile, rDFA.maStyleName, RTL_TEXTENCODING_UTF8);
+                write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(aCacheFile, rDFA.maStyleName, RTL_TEXTENCODING_UTF8);
 
                 ++aIter;
             }

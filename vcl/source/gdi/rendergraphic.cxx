@@ -194,7 +194,7 @@ void RenderGraphic::ImplGetDefaults() const
     ::VersionCompat aVCompat( rIStm, STREAM_READ );
     sal_uInt32      nGraphicDataLength = 0;
 
-    rtl::OUString aGraphicDataMimeType = read_lenPrefixed_uInt8s_ToOUString(rIStm, RTL_TEXTENCODING_ASCII_US);
+    rtl::OUString aGraphicDataMimeType = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(rIStm, RTL_TEXTENCODING_ASCII_US);
     rIStm >> nGraphicDataLength;
 
     rRenderGraphic = RenderGraphic( aGraphicDataMimeType, nGraphicDataLength );
@@ -214,7 +214,7 @@ void RenderGraphic::ImplGetDefaults() const
     ::VersionCompat     aVCompat( rOStm, STREAM_WRITE, 1 );
     const sal_uInt32    nGraphicDataLength = rRenderGraphic.GetGraphicDataLength();
 
-    write_lenPrefixed_uInt8s_FromOUString(rOStm, rRenderGraphic.GetGraphicDataMimeType(),
+    write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rOStm, rRenderGraphic.GetGraphicDataMimeType(),
         RTL_TEXTENCODING_ASCII_US);
     rOStm << nGraphicDataLength;
 

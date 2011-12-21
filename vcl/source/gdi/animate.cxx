@@ -824,7 +824,7 @@ SvStream& operator<<( SvStream& rOStm, const Animation& rAnimation )
             rOStm << nDummy32;  // unbenutzt
             rOStm << nDummy32;  // unbenutzt
             rOStm << nDummy32;  // unbenutzt
-            write_lenPrefixed_uInt8s_FromOString(rOStm, rtl::OString()); // dummy
+            write_lenPrefixed_uInt8s_FromOString<sal_uInt16>(rOStm, rtl::OString()); // dummy
             rOStm << nRest;     // Anzahl der Strukturen, die noch _folgen_
         }
     }
@@ -888,7 +888,7 @@ SvStream& operator>>( SvStream& rIStm, Animation& rAnimation )
             rIStm >> nTmp32;    // unbenutzt
             rIStm >> nTmp32;    // unbenutzt
             rIStm >> nTmp32;    // unbenutzt
-            read_lenPrefixed_uInt8s_ToOString(rIStm); // unbenutzt
+            read_lenPrefixed_uInt8s_ToOString<sal_uInt16>(rIStm); // unbenutzt
             rIStm >> nTmp16;    // Rest zu lesen
 
             rAnimation.Insert( aAnimBmp );
