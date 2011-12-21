@@ -210,7 +210,7 @@ ImplFontAttrCache::~ImplFontAttrCache()
                 ++aIter;
             }
             // EOF Marker
-            write_lenPrefixed_uInt8s_FromOString(aCacheFile, rtl::OString(), RTL_TEXTENCODING_UTF8);
+            write_lenPrefixed_uInt8s_FromOString<sal_uInt16>(aCacheFile, rtl::OString());
         }
     }
 }
