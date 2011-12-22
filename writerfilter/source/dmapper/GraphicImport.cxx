@@ -1475,8 +1475,17 @@ uno::Reference< text::XTextContent > GraphicImport::createGraphicObject( const b
                     lcl_CalcCrop( m_pImpl->nRightCrop, aGraphicSize.Width );
 
 
-                    xGraphicProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_GRAPHIC_CROP ),
-                        uno::makeAny(text::GraphicCrop(m_pImpl->nTopCrop, m_pImpl->nBottomCrop, m_pImpl->nLeftCrop, m_pImpl->nRightCrop)));
+                    // We need a separate try-catch here, otherwise a bad crop setting will also nuke the size settings as well.
+                    try
+                    {
+                        xGraphicProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_GRAPHIC_CROP ),
+                                uno::makeAny(text::GraphicCrop(m_pImpl->nTopCrop, m_pImpl->nBottomCrop, m_pImpl->nLeftCrop, m_pImpl->nRightCrop)));
+                    }
+                    catch (const uno::Exception& e)
+                    {
+                        clog << __FILE__ << ":" << __LINE__ << " failed. Message :";
+                        clog << rtl::OUStringToOString (e.Message, RTL_TEXTENCODING_UTF8).getStr() << endl;
+                    }
                 }
 
             }
