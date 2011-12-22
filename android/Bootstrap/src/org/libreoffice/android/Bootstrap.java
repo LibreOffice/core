@@ -136,7 +136,14 @@ public class Bootstrap extends NativeActivity
             return;
         }
 
-        // Tell lo-bootstrap to Start a strace on itself if requested
+        // Start a strace on ourself if requested.
+
+        // Note that the started strace will have its stdout and
+        // stderr connected to /dev/null, so you definitely want to
+        // specify an -o option in the lo-strace extra. Also, strace
+        // will trace only *this* thread, which is not the one that
+        // eventually will run android_main() and lo_main(), so you
+        // also want the -f option.
         String strace_args = getIntent().getStringExtra("lo-strace");
         if (strace_args != null)
             system("/system/xbin/strace -p " + getpid() + " " + (strace_args != "yes" ? strace_args : "" ) + " &");
