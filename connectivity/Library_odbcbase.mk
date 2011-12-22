@@ -25,54 +25,51 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Module_Module,connectivity))
+$(eval $(call gb_Library_Library,odbcbase))
 
-$(eval $(call gb_Module_add_targets,connectivity,\
-	AllLangResTarget_connectivity \
-	Package_inc \
-	Package_xml \
-	Jar_sdbc_hsqldb \
-	Library_dbtools \
-	Library_sdbc2 \
-	Library_dbpool2 \
-	Library_calc \
-	Library_odbcbase \
+$(eval $(call gb_Library_add_package_headers,odbcbase,connectivity_inc))
+
+
+$(eval $(call gb_Library_add_api,odbcbase,\
+	offapi \
+	udkapi \
 ))
 
-ifneq ($(SOLAR_JAVA),)
-$(eval $(call gb_Module_add_targets,connectivity,\
-	Jar_ConnectivityTools \
+$(eval $(call gb_Library_set_include,odbcbase,\
+	$$(INCLUDE) \
+	-I$(SRCDIR)/connectivity/source/inc \
 ))
-endif
 
-ifeq ($(GUI),UNX)
+$(eval $(call gb_Library_add_defs,odbcbase,\
+	-DOOO_DLLIMPLEMENTATION_ODBCBASE \
+))
 
-ifeq ($(ENABLE_KAB),TRUE)
-$(eval $(call gb_Module_add_targets,connectivity,\
-	Library_kab1 \
-	Library_kabdrv1 \
+ifeq ($(SYSTEM_ODBC_HEADERS),YES)
+$(eval $(call gb_Library_add_defs,odbcbase,\
+	-DSYSTEM_ODBC_HEADERS \
 ))
 endif
 
-ifeq ($(OS),MACOSX)
-$(eval $(call gb_Module_add_targets,connectivity,\
-	Library_macab1 \
-	Library_macabdrv1 \
+$(eval $(call gb_Library_add_linked_libs,odbcbase,\
+	cppu \
+	cppuhelper \
+	sal \
+	salhelper \
+	dbtools \
+	comphelper \
+	$(gb_STDLIBS) \
 ))
-endif
 
-endif
-
-ifeq ($(GUI),WNT)
-$(eval $(call gb_Module_add_targets,connectivity,\
-	Library_ado \
+$(eval $(call gb_Library_add_exception_objects,odbcbase,\
+	connectivity/source/drivers/odbcbase/OPreparedStatement \
+	connectivity/source/drivers/odbcbase/OStatement \
+	connectivity/source/drivers/odbcbase/OResultSetMetaData \
+	connectivity/source/drivers/odbcbase/OResultSet \
+	connectivity/source/drivers/odbcbase/OTools \
+	connectivity/source/drivers/odbcbase/ODatabaseMetaDataResultSet \
+	connectivity/source/drivers/odbcbase/ODatabaseMetaData \
+	connectivity/source/drivers/odbcbase/ODriver \
+	connectivity/source/drivers/odbcbase/OConnection \
 ))
-endif
-
-ifeq ($(ENABLE_EVOAB2),TRUE)
-$(eval $(call gb_Module_add_targets,connectivity,\
-	Library_evoab2 \
-))
-endif
 
 # vim: set noet sw=4 ts=4:
