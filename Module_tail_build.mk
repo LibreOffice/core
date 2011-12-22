@@ -45,6 +45,7 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
     filter \
     forms \
     formula \
+    framework \
     hwpfilter \
     idl \
     lingucomponent \
