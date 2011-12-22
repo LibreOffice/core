@@ -27,7 +27,7 @@
     This will validate the file against the HEAD revision of locale.dtd
 
 
-    Please test locale data files either in an --enable-dbgutil build, which
+    Please test locale data files either in an enable-dbgutil build, which
     implements some checks and pops up assertion message boxes if the tests
     fail, or by setting the environment variable OOO_ENABLE_LOCALE_DATA_CHECKS
     to 'Y' or 'Yes' (or any other string starting with 'Y') or '1' before
