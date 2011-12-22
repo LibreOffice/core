@@ -49,6 +49,7 @@
 
 #include <cppuhelper/implbase1.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <rtl/oustringostreaminserter.hxx>
 
 #include <dmapper/DomainMapper.hxx>
 #include <doctok/resourceids.hxx>
@@ -1483,8 +1484,7 @@ uno::Reference< text::XTextContent > GraphicImport::createGraphicObject( const b
                     }
                     catch (const uno::Exception& e)
                     {
-                        clog << __FILE__ << ":" << __LINE__ << " failed. Message :";
-                        clog << rtl::OUStringToOString (e.Message, RTL_TEXTENCODING_UTF8).getStr() << endl;
+                        SAL_WARN("writerfilter", "failed. Message :" << e.Message);
                     }
                 }
 
@@ -1503,16 +1503,16 @@ uno::Reference< text::XTextContent > GraphicImport::createGraphicObject( const b
                         xNamed->setName( m_pImpl->sName );
                     }
                 }
-                catch( const uno::Exception& )
+                catch( const uno::Exception& e )
                 {
+                    SAL_WARN("writerfilter", "failed. Message :" << e.Message);
                 }
             }
         }
     }
     catch( const uno::Exception& e )
     {
-        clog << __FILE__ << ":" << __LINE__ << " failed. Message :" ;
-        clog << rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_UTF8 ).getStr( )  << endl;
+        SAL_WARN("writerfilter", "failed. Message :" << e.Message);
     }
     return xGraphicObject;
 }
