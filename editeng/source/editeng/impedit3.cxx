@@ -3455,6 +3455,27 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                                             aOverlineColor, aTextLineColor);
                                     }
                                 }
+                                else if ( bStripOnly )
+                                {
+                                    // #i108052# When stripping, a callback for _empty_ paragraphs is also needed.
+                                    // This was optimized away (by not rendering the space-only tab portion), so do
+                                    // it manually here.
+                                    const bool bEndOfLine(y == pLine->GetEndPortion());
+                                    const bool bEndOfParagraph(bEndOfLine && nLine + 1 == nLines);
+
+                                    const Color aOverlineColor(pOutDev->GetOverlineColor());
+                                    const Color aTextLineColor(pOutDev->GetTextLineColor());
+
+                                    GetEditEnginePtr()->DrawingText(
+                                        aTmpPos, String(), 0, 0, 0,
+                                        aTmpFont, n, nIndex, 0,
+                                        0,
+                                        0,
+                                        bEndOfLine, bEndOfParagraph, false,
+                                        0,
+                                        aOverlineColor,
+                                        aTextLineColor);
+                                }
                             }
                             break;
                         }
