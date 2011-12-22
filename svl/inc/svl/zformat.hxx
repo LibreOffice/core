@@ -456,6 +456,15 @@ public:
             return false;
         }
 #endif
+
+    /// Whether it's a (YY)YY-M(M)-D(D) format.
+    bool IsIso8601( sal_uInt16 nNumFor )
+        {
+            if ( nNumFor < 4 )
+                return ImpIsIso8601( NumFor[nNumFor]);
+            return false;
+        }
+
 private:
     ImpSvNumFor NumFor[4];          // Array for the 4 subformats
     String sFormatstring;           // The format code string
@@ -475,6 +484,11 @@ private:
     SVL_DLLPRIVATE sal_uInt16 ImpGetNumForStringElementCount( sal_uInt16 nNumFor ) const;
 
     SVL_DLLPRIVATE bool ImpIsOtherCalendar( const ImpSvNumFor& rNumFor ) const;
+
+#ifdef THE_FUTURE
+    SVL_DLLPRIVATE bool ImpSwitchToSpecifiedCalendar( String& rOrgCalendar,
+            double& fOrgDateTime, const ImpSvNumFor& rNumFor ) const;
+#endif
 
     /** Whether to use possessive genitive case month name, or partitive case 
         month name, instead of nominative name (noun).
@@ -496,10 +510,8 @@ private:
      */
     SVL_DLLPRIVATE sal_Int32 ImpUseMonthCase( int & io_nState, const ImpSvNumFor& rNumFor, NfKeywordIndex eCodeType ) const;
 
-#ifdef THE_FUTURE
-    SVL_DLLPRIVATE bool ImpSwitchToSpecifiedCalendar( String& rOrgCalendar,
-            double& fOrgDateTime, const ImpSvNumFor& rNumFor ) const;
-#endif
+    /// Whether it's a (YY)YY-M(M)-D(D) format.
+    SVL_DLLPRIVATE bool ImpIsIso8601( const ImpSvNumFor& rNumFor );
 
 #ifdef _ZFORMAT_CXX     // ----- private implementation methods -----
 
