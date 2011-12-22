@@ -296,7 +296,9 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     lnth \
     log \
     lwpft \
-    MacOSXSpell \
+	macab1 \
+	macabdrv1 \
+	MacOSXSpell \
     merged \
     msfilter \
     msword \

@@ -25,46 +25,29 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Module_Module,connectivity))
+$(eval $(call gb_Library_Library,macab1))
 
-$(eval $(call gb_Module_add_targets,connectivity,\
-	AllLangResTarget_connectivity \
-	Package_inc \
-	Package_xml \
-	Jar_sdbc_hsqldb \
-	Library_dbtools \
-	Library_sdbc2 \
-	Library_dbpool2 \
+$(eval $(call gb_Library_add_package_headers,macab1,connectivity_inc))
+
+$(eval $(call gb_Library_set_componentfile,macab1,connectivity/source/drivers/macab/macab1))
+
+$(eval $(call gb_Library_add_api,macab1,\
+	offapi \
+	udkapi \
 ))
 
-ifneq ($(SOLAR_JAVA),)
-$(eval $(call gb_Module_add_targets,connectivity,\
-	Jar_ConnectivityTools \
+$(eval $(call gb_Library_add_linked_libs,macab1,\
+	cppu \
+	cppuhelper \
+	dbtools \
+	sal \
+	salhelper \
+	$(gb_STDLIBS) \
 ))
-endif
 
-ifeq ($(GUI),UNX)
-
-ifeq ($(ENABLE_KAB),TRUE)
-$(eval $(call gb_Module_add_targets,connectivity,\
-	Library_kab1 \
-	Library_kabdrv1 \
+$(eval $(call gb_Library_add_exception_objects,macab1,\
+	connectivity/source/drivers/macab/MacabDriver \
+	connectivity/source/drivers/macab/MacabServices \
 ))
-endif
-
-ifeq ($(OS),MACOSX)
-$(eval $(call gb_Module_add_targets,connectivity,\
-	Library_macab1 \
-	Library_macabdrv1 \
-))
-endif
-
-endif
-
-ifeq ($(GUI),WNT)
-$(eval $(call gb_Module_add_targets,connectivity,\
-	Library_ado \
-))
-endif
 
 # vim: set noet sw=4 ts=4:
