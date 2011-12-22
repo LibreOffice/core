@@ -102,7 +102,6 @@ $(eval $(call gb_StaticLibrary_add_generated_exception_objects,basegfx_s,\
 	CustomTarget/basegfx/source/polygon/b3dpolygonclipper \
 	CustomTarget/basegfx/source/polygon/b2dpolygonclipper \
 	CustomTarget/basegfx/source/polygon/b2dpolypolygoncutter \
-	CustomTarget/basegfx/source/polygon/b2dpolypolygonrasterconverter \
 	CustomTarget/basegfx/source/polygon/b2dpolygon \
 	CustomTarget/basegfx/source/polygon/b2dpolygontriangulator \
 	CustomTarget/basegfx/source/polygon/b2dpolypolygon \
@@ -122,7 +121,6 @@ $(eval $(call gb_StaticLibrary_add_generated_exception_objects,basegfx_s,\
 	CustomTarget/basegfx/source/point/b2ipoint \
 	CustomTarget/basegfx/source/curve/b2dbeziertools \
 	CustomTarget/basegfx/source/curve/b2dcubicbezier \
-	CustomTarget/basegfx/source/curve/b2dquadraticbezier \
 	CustomTarget/basegfx/source/color/bcolormodifier \
 	CustomTarget/basegfx/source/color/bcolortools \
 	CustomTarget/basegfx/source/raster/rasterconvert3d \

@@ -72,7 +72,6 @@ SLOFILES=										\
     $(SLO)$/PresenterNotesView.obj				\
     $(SLO)$/PresenterPaintManager.obj			\
     $(SLO)$/PresenterPane.obj					\
-    $(SLO)$/PresenterPaneAnimator.obj			\
     $(SLO)$/PresenterPaneBase.obj				\
     $(SLO)$/PresenterPaneBorderManager.obj		\
     $(SLO)$/PresenterPaneBorderPainter.obj		\

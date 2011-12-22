@@ -97,7 +97,6 @@ $(eval $(call gb_Library_add_exception_objects,basegfx,\
 	basegfx/source/polygon/b3dpolygonclipper \
 	basegfx/source/polygon/b2dpolygonclipper \
 	basegfx/source/polygon/b2dpolypolygoncutter \
-	basegfx/source/polygon/b2dpolypolygonrasterconverter \
 	basegfx/source/polygon/b2dpolygon \
 	basegfx/source/polygon/b2dpolygontriangulator \
 	basegfx/source/polygon/b2dpolypolygon \
@@ -117,7 +116,6 @@ $(eval $(call gb_Library_add_exception_objects,basegfx,\
 	basegfx/source/point/b2ipoint \
 	basegfx/source/curve/b2dbeziertools \
 	basegfx/source/curve/b2dcubicbezier \
-	basegfx/source/curve/b2dquadraticbezier \
 	basegfx/source/color/bcolormodifier \
 	basegfx/source/color/bcolortools \
 	basegfx/source/raster/rasterconvert3d \

@@ -620,9 +620,6 @@ namespace basegfx
             // right event come last. This is advantageous for the
             // clip algorithm below, see handleRightEdgeCrossing().
 
-            // TODO(P3): Use radix sort (from
-            // b2dpolypolygonrasterconverter, or have your own
-            // templatized version).
             std::stable_sort( o_rEventVector.begin(),
                               o_rEventVector.end() );
         }

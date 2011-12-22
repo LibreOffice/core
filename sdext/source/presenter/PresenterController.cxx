@@ -38,7 +38,6 @@
 #include "PresenterScreen.hxx"
 #include "PresenterNotesView.hxx"
 #include "PresenterPaintManager.hxx"
-#include "PresenterPaneAnimator.hxx"
 #include "PresenterPaneBase.hxx"
 #include "PresenterPaneContainer.hxx"
 #include "PresenterPaneBorderPainter.hxx"
@@ -121,7 +120,6 @@ PresenterController::PresenterController (
       mxCurrentSlide(),
       mxNextSlide(),
       mpWindowManager(new PresenterWindowManager(rxContext,mpPaneContainer,this)),
-      mpCurrentPaneAnimation(),
       mnWindowBackgroundColor(0x00ffffff),
       mpTheme(),
       mxMainWindow(),
@@ -260,7 +258,6 @@ void PresenterController::disposing (void)
     mnCurrentSlideIndex = -1;
     mxCurrentSlide = NULL;
     mxNextSlide = NULL;
-    mpCurrentPaneAnimation.reset();
     mpTheme.reset();
     {
         Reference<lang::XComponent> xComponent (
@@ -573,19 +570,6 @@ Reference<drawing::XPresenterHelper> PresenterController::GetPresenterHelper (vo
 {
     return mpPaintManager;
 }
-
-
-
-
-void PresenterController::HideSlideSorter (void)
-{
-    if (mpCurrentPaneAnimation.get() != NULL)
-    {
-        mpCurrentPaneAnimation->HidePane();
-        mpCurrentPaneAnimation.reset();
-    }
-}
-
 
 
 

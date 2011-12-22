@@ -42,7 +42,6 @@
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
-#include <basegfx/polygon/b2dpolypolygonrasterconverter.hxx>
 #include <basegfx/polygon/b2dpolygontriangulator.hxx>
 #include <basegfx/polygon/b2dpolygoncutandtouch.hxx>
 
