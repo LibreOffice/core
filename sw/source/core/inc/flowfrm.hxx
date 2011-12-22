@@ -138,7 +138,7 @@ protected:
     void LockJoin()   { bLockJoin = sal_True;  }
     void UnlockJoin() { bLockJoin = sal_False; }
 
-            sal_Bool CheckMoveFwd( sal_Bool &rbMakePage, sal_Bool bKeep, sal_Bool bMovedBwd );
+            sal_Bool CheckMoveFwd( bool& rbMakePage, sal_Bool bKeep, sal_Bool bMovedBwd );
             sal_Bool MoveFwd( sal_Bool bMakePage, sal_Bool bPageBreak, sal_Bool bMoveAlways = sal_False );
     virtual sal_Bool ShouldBwdMoved( SwLayoutFrm *pNewUpper, sal_Bool bHead, sal_Bool &rReformat )=0;
             sal_Bool MoveBwd( sal_Bool &rbReformat );

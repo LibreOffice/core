@@ -1859,14 +1859,15 @@ void SwTabFrm::MakeAll()
                             pLayout->GetBrowseWidthByTabFrm( *this ), sal_False );
     }
 
-
-    sal_Bool bMakePage  = sal_True;     //solange sal_True kann eine neue Seite
-                                //angelegt werden (genau einmal)
-    sal_Bool bMovedBwd  = sal_False;    //Wird sal_True wenn der Frame zurueckfliesst
-    sal_Bool bMovedFwd  = sal_False;    //solange sal_False kann der Frm zurueck-
-                                //fliessen (solange, bis er einmal
-                                //vorwaerts ge'moved wurde).
-    sal_Bool bSplit     = sal_False;    //Wird sal_True wenn der Frm gesplittet wurde.
+    // as long as bMakePage is true, a new page can be created (exactly once)
+    bool bMakePage = true;
+    // bMovedBwd gets set to true when the frame flows backwards
+    bool bMovedBwd = false;
+    // as long as bMovedFwd is false, the Frm may flow backwards (until
+    // it has been moved forward once)
+    bool bMovedFwd  = false;
+    // gets set to true when the Frm is split
+    bool bSplit = false;
     const sal_Bool bFtnsInDoc = 0 != GetFmt()->GetDoc()->GetFtnIdxs().Count();
     sal_Bool bMoveable;
     const sal_Bool bFly     = IsInFly();
@@ -1937,15 +1938,15 @@ void SwTabFrm::MakeAll()
         }
     }
 
-    //Einen Frischling moven wir gleich schon einmal vorwaerts...
+    // a new one is moved forwards immediately
     if ( !Frm().Top() && IsFollow() )
     {
         SwFrm *pPre = GetPrev();
         if ( pPre && pPre->IsTabFrm() && ((SwTabFrm*)pPre)->GetFollow() == this)
         {
             if ( !MoveFwd( bMakePage, sal_False ) )
-                bMakePage = sal_False;
-            bMovedFwd = sal_True;
+                bMakePage = false;
+            bMovedFwd = true;
         }
     }
 
@@ -1956,12 +1957,12 @@ void SwTabFrm::MakeAll()
         if ( sal_True == (bMoveable = IsMoveable()) )
             if ( CheckMoveFwd( bMakePage, bKeep && KEEPTAB, bMovedBwd ) )
             {
-                bMovedFwd = sal_True;
+                bMovedFwd = true;
                 bCalcLowers = sal_True;
                 // #i99267#
                 // reset <bSplit> after forward move to assure that follows
                 // can be joined, if further space is available.
-                bSplit = sal_False;
+                bSplit = false;
             }
 
         Point aOldPos( (Frm().*fnRect->fnGetPos)() );
@@ -1992,7 +1993,7 @@ void SwTabFrm::MakeAll()
                 // #i99267#
                 // reset <bSplit> after forward move to assure that follows
                 // can be joined, if further space is available.
-                bSplit = sal_False;
+                bSplit = false;
             }
         }
 
@@ -2029,18 +2030,17 @@ void SwTabFrm::MakeAll()
                 aNotify.SetLowersComplete( sal_False );
         }
 
-        //Wenn ich der erste einer Kette bin koennte ich mal sehen ob
-        //ich zurueckfliessen kann (wenn ich mich ueberhaupt bewegen soll).
-        //Damit es keine Oszillation gibt, darf ich nicht gerade vorwaerts
-        //geflosssen sein.
+        // If this is the first one in a chain, check if this can flow
+        // backwards (if this is movable at all).
+        // To prevent oscillations/loops, check that this has not just
+        // flowed forwards.
         if ( !bMovedFwd && (bMoveable || bFly) && lcl_NoPrev( *this ) )
         {
-            //Bei Follows muss der Master benachrichtigt
-            //werden. Der Follow muss nur dann Moven, wenn er leere Blaetter
-            //ueberspringen muss.
+            // for Follows notify Master.
+            // only move Follow if it has to skip empty pages.
             if ( IsFollow() )
             {
-                //Nur wenn die Hoehe der ersten Zeile kleiner geworder ist.
+                // Only if the height of the first line got smaller.
                 SwFrm *pFrm = GetFirstNonHeadlineRow();
                 if( pFrm && n1StLineHeight >(pFrm->Frm().*fnRect->fnGetHeight )() )
                 {
@@ -2055,7 +2055,7 @@ void SwTabFrm::MakeAll()
             if ( MoveBwd( bReformat ) )
             {
                 SWREFRESHFN( this )
-                bMovedBwd = sal_True;
+                bMovedBwd = true;
                 aNotify.SetLowersComplete( sal_False );
                 if ( bFtnsInDoc )
                     MoveLowerFtns( 0, pOldBoss, 0, sal_True );
@@ -2425,7 +2425,7 @@ void SwTabFrm::MakeAll()
                 if( (*fnRect->fnYDiff)(nDeadLine, nBreakLine) >=0 || !pIndPrev )
                 {
                     aNotify.SetLowersComplete( sal_False );
-                    bSplit = sal_True;
+                    bSplit = true;
 
                     //
                     // An existing follow flow line has to be removed.
@@ -2551,14 +2551,16 @@ void SwTabFrm::MakeAll()
             GetUpper()->GetUpper()->GetUpper()->IsSctFrm() &&
             ( GetUpper()->GetUpper()->GetPrev() || GetIndPrev() ) &&
             ((SwSectionFrm*)GetUpper()->GetUpper()->GetUpper())->MoveAllowed(this) )
-            bMovedFwd = sal_False;
+        {
+            bMovedFwd = false;
+        }
 
         // #i29771# Reset bTryToSplit flag on change of upper
         const SwFrm* pOldUpper = GetUpper();
 
         //Mal sehen ob ich irgenwo Platz finde...
         if ( !bMovedFwd && !MoveFwd( bMakePage, sal_False ) )
-            bMakePage = sal_False;
+            bMakePage = false;
 
         // #i29771# Reset bSplitError flag on change of upper
         if ( GetUpper() != pOldUpper )
@@ -2568,7 +2570,8 @@ void SwTabFrm::MakeAll()
         }
 
         SWREFRESHFN( this )
-        bMovedFwd = bCalcLowers = sal_True;
+        bCalcLowers = sal_True;
+        bMovedFwd = true;
         aNotify.SetLowersComplete( sal_False );
         if ( IsFollow() )
         {   //Um Oszillationen zu vermeiden sollte kein ungueltiger Master

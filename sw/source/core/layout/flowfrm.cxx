@@ -1779,7 +1779,7 @@ SwTwips SwFlowFrm::CalcAddLowerSpaceAsLastInTableCell(
 |*************************************************************************/
 
 
-sal_Bool SwFlowFrm::CheckMoveFwd( sal_Bool &rbMakePage, sal_Bool bKeep, sal_Bool )
+sal_Bool SwFlowFrm::CheckMoveFwd( bool& rbMakePage, sal_Bool bKeep, sal_Bool )
 {
     const SwFrm* pNxt = rThis.GetIndNext();
 
@@ -1829,7 +1829,7 @@ sal_Bool SwFlowFrm::CheckMoveFwd( sal_Bool &rbMakePage, sal_Bool bKeep, sal_Bool
         {
             bMovedFwd = sal_True;
             if ( !MoveFwd( rbMakePage, sal_False ) )
-                rbMakePage = sal_False;
+                rbMakePage = false;
         }
         else
         {
@@ -1837,7 +1837,7 @@ sal_Bool SwFlowFrm::CheckMoveFwd( sal_Bool &rbMakePage, sal_Bool bKeep, sal_Bool
             {
                 while ( MoveFwd( rbMakePage, sal_True ) )
                         /* do nothing */;
-                rbMakePage = sal_False;
+                rbMakePage = false;
                 bMovedFwd = sal_True;
             }
             else if ( IsColBreak ( sal_False ) )
@@ -1856,7 +1856,7 @@ sal_Bool SwFlowFrm::CheckMoveFwd( sal_Bool &rbMakePage, sal_Bool bKeep, sal_Bool
                         break;
                 } while ( IsColBreak( sal_False ) );
                 if ( pPage != rThis.FindPageFrm() )
-                    rbMakePage = sal_False;
+                    rbMakePage = false;
             }
         }
     }

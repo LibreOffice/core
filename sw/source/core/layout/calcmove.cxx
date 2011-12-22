@@ -1168,12 +1168,13 @@ void SwCntntFrm::MakeAll()
     //uebernimmt im DTor die Benachrichtigung
     SwCntntNotify *pNotify = new SwCntntNotify( this );
 
-    sal_Bool    bMakePage   = sal_True;     //solange sal_True kann eine neue Seite
-                                    //angelegt werden (genau einmal)
-    sal_Bool    bMovedBwd   = sal_False;    //Wird sal_True wenn der Frame zurueckfliesst
-    sal_Bool    bMovedFwd   = sal_False;    //solange sal_False kann der Frm zurueck-
-                                    //fliessen (solange, bis er einmal
-                                    //vorwaerts ge'moved wurde).
+    // as long as bMakePage is true, a new page can be created (exactly once)
+    bool bMakePage = true;
+    // bMovedBwd gets set to true when the frame flows backwards
+    bool bMovedBwd = false;
+    // as long as bMovedFwd is false, the Frm may flow backwards (until
+    // it has been moved forward once)
+    bool bMovedFwd  = false;
     sal_Bool    bFormatted  = sal_False;    //Fuer die Witwen und Waisen Regelung
                                     //wird der letzte CntntFrm einer Kette
                                     //u.U. zum Formatieren angeregt, dies
@@ -1250,7 +1251,7 @@ void SwCntntFrm::MakeAll()
                  GetUpper()->GetUpper()->IsCellFrm() ) ) &&
              IsMoveable() )
         {
-            bMovedFwd = sal_True;
+            bMovedFwd = true;
             MoveFwd( bMakePage, sal_False );
         }
     }
@@ -1259,7 +1260,7 @@ void SwCntntFrm::MakeAll()
     //gleich verschoben werden.
     if ( lcl_Prev( this ) && ((SwTxtFrm*)this)->IsFollow() && IsMoveable() )
     {
-        bMovedFwd = sal_True;
+        bMovedFwd = true;
         // OD 2004-03-02 #106629# - If follow frame is in table, it's master
         // will be the last in the current table cell. Thus, invalidate the
         // printing area of the master,
@@ -1286,7 +1287,7 @@ void SwCntntFrm::MakeAll()
                  pFtnBossOfFtn != pFtnBossOfRef &&
                  pFtnBossOfFtn->IsBefore( pFtnBossOfRef ) )
             {
-                bMovedFwd = sal_True;
+                bMovedFwd = true;
                 MoveFwd( bMakePage, sal_False );
             }
         }
@@ -1305,7 +1306,7 @@ void SwCntntFrm::MakeAll()
             if ( CheckMoveFwd( bMakePage, bKeep, bMovedBwd ) )
             {
                 SWREFRESHFN( this )
-                bMovedFwd = sal_True;
+                bMovedFwd = true;
                 if ( bMovedBwd )
                 {
                     //Beim zurueckfliessen wurde der Upper angeregt sich
@@ -1434,10 +1435,10 @@ void SwCntntFrm::MakeAll()
 #endif
         }
 
-        //Wenn ich der erste einer Kette bin koennte ich mal sehen ob
-        //ich zurueckfliessen kann (wenn ich mich ueberhaupt bewegen soll).
-        //Damit es keine Oszillation gibt, darf ich nicht gerade vorwaerts
-        //geflossen sein.
+        // If this is the first one in a chain, check if this can flow
+        // backwards (if this is movable at all).
+        // To prevent oscillations/loops, check that this has not just
+        // flowed forwards.
         sal_Bool bDummy;
         if ( !lcl_Prev( this ) &&
              !bMovedFwd &&
@@ -1446,13 +1447,13 @@ void SwCntntFrm::MakeAll()
              && MoveBwd( bDummy ) )
         {
             SWREFRESHFN( this )
-            bMovedBwd = sal_True;
+            bMovedBwd = true;
             bFormatted = sal_False;
             if ( bKeep && bMoveable )
             {
                 if( CheckMoveFwd( bMakePage, sal_False, bMovedBwd ) )
                 {
-                    bMovedFwd = sal_True;
+                    bMovedFwd = true;
                     bMoveable = IsMoveable();
                     SWREFRESHFN( this )
                 }
@@ -1593,7 +1594,7 @@ void SwCntntFrm::MakeAll()
                     {
                         if( bMovedFwd )
                             pNotify->SetInvaKeep();
-                        bMovedFwd = sal_False;
+                        bMovedFwd = false;
                     }
                 }
             }
@@ -1696,13 +1697,15 @@ void SwCntntFrm::MakeAll()
             pOldUp->GetUpper()->GetUpper()->IsSctFrm() &&
             ( pPre || pOldUp->GetUpper()->GetPrev() ) &&
             ((SwSectionFrm*)pOldUp->GetUpper()->GetUpper())->MoveAllowed(this) )
-            bMovedFwd = sal_False;
+        {
+            bMovedFwd = false;
+        }
 
         const sal_Bool bCheckForGrownBody = pOldUp->IsBodyFrm();
         const long nOldBodyHeight = (pOldUp->Frm().*fnRect->fnGetHeight)();
 
         if ( !bMovedFwd && !MoveFwd( bMakePage, sal_False ) )
-            bMakePage = sal_False;
+            bMakePage = false;
         SWREFRESHFN( this )
 
         // If MoveFwd moves the paragraph to the next page, a following
@@ -1713,9 +1716,13 @@ void SwCntntFrm::MakeAll()
         // Therefore we only check for growing body frames.
         if ( bCheckForGrownBody && ! bMovedBwd && pOldUp != GetUpper() &&
              (pOldUp->Frm().*fnRect->fnGetHeight)() > nOldBodyHeight )
-            bMovedFwd = sal_False;
+        {
+            bMovedFwd = false;
+        }
         else
-            bMovedFwd = sal_True;
+        {
+            bMovedFwd = true;
+        }
 
         bFormatted = sal_False;
         if ( bMoveOrFit && GetUpper() == pOldUp )
