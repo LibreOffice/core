@@ -1865,12 +1865,6 @@ oox::ole::VbaProject::hasDialog(rtl::OUString const&) const
 oox::ole::VbaProject::hasModule(rtl::OUString const&) const
 oox::ole::VbaSiteModel::isVisible() const
 oox::ppt::PPTShape::findPlaceholder(int, int, std::__debug::vector<boost::shared_ptr<oox::drawingml::Shape>, std::allocator<boost::shared_ptr<oox::drawingml::Shape> > >&)
-oox::vml::(anonymous namespace)::lclInsertTextFrame(oox::core::XmlFilterBase const&, com::sun::star::uno::Reference<com::sun::star::drawing::XShape> const&)
-oox::vml::(anonymous namespace)::lclSetXShapeRect(com::sun::star::uno::Reference<com::sun::star::drawing::XShape> const&, com::sun::star::awt::Rectangle const&)
-oox::xls::(anonymous namespace)::lclCalcEmu(oox::xls::UnitConverter const&, long, oox::xls::Unit)
-oox::xls::(anonymous namespace)::lclGetBuiltInStyleName(rtl::OUString const&)
-oox::xls::(anonymous namespace)::lclGetBuiltinStyleId(int&, int&, rtl::OUString const&)
-oox::xls::(anonymous namespace)::lclGetThickerLine(com::sun::star::table::BorderLine2 const&, unsigned char, com::sun::star::table::BorderLine2 const&, unsigned char)
 oox::xls::AddressConverter::checkCellRangeList(oox::xls::ApiCellRangeList const&, bool, bool)
 oox::xls::ApiTokenIterator::ApiTokenIterator(oox::xls::ApiTokenIterator const&, bool)
 oox::xls::BiffDrawingBase::appendRawObject(boost::shared_ptr<oox::xls::BiffDrawingObjectBase> const&)
@@ -1882,12 +1876,6 @@ oox::xls::BiffInputStream::sizeBase() const
 oox::xls::BiffInputStream::skipByteString(bool)
 oox::xls::BiffInputStream::skipUniString()
 oox::xls::BiffObjLineModel::isVisible() const
-oox::xls::BiffObjTextModel::BiffObjTextModel()
-oox::xls::BiffObjTextModel::getHorAlign() const
-oox::xls::BiffObjTextModel::getVerAlign() const
-oox::xls::BiffObjTextModel::readObj3(oox::xls::BiffInputStream&)
-oox::xls::BiffObjTextModel::readObj5(oox::xls::BiffInputStream&)
-oox::xls::BiffObjTextModel::readTxo8(oox::xls::BiffInputStream&)
 oox::xls::BiffOutputStream::BiffOutputStream(oox::BinaryOutputStream&, unsigned short)
 oox::xls::BiffOutputStream::endRecord()
 oox::xls::BiffOutputStream::fill(unsigned char, int, unsigned long)
@@ -1915,7 +1903,6 @@ oox::xls::FormulaProcessorBase::extractCellAddress(com::sun::star::table::CellAd
 oox::xls::FormulaProcessorBase::generateApiAddressString(com::sun::star::table::CellAddress const&) const
 oox::xls::FunctionParamInfoIterator::getParamInfo() const
 oox::xls::FunctionProvider::getFuncInfoFromOdfFuncName(rtl::OUString const&) const
-oox::xls::OOXMLFormulaPrinterImpl::OOXMLFormulaPrinterImpl(com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> const&)
 oox::xls::SheetDataBuffer::XfIdRange::set(com::sun::star::table::CellAddress const&, int, int)
 oox::xls::SheetDataBuffer::XfIdRange::tryExpand(com::sun::star::table::CellAddress const&, int, int)
 oox::xls::SheetDataBuffer::XfIdRange::tryMerge(oox::xls::SheetDataBuffer::XfIdRange const&)

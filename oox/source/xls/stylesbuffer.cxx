@@ -1639,17 +1639,6 @@ inline sal_Int32 lclGetBorderLineWidth( const BorderLine& rBorderLine )
     return rBorderLine.OuterLineWidth + rBorderLine.LineDistance + rBorderLine.InnerLineWidth;
 }
 
-const BorderLine2* lclGetThickerLine( const BorderLine2& rBorderLine1, sal_Bool bValid1, const BorderLine2& rBorderLine2, sal_Bool bValid2 )
-{
-    if( bValid1 && bValid2 )
-        return (lclGetBorderLineWidth( rBorderLine1 ) < lclGetBorderLineWidth( rBorderLine2 )) ? &rBorderLine2 : &rBorderLine1;
-    if( bValid1 )
-        return &rBorderLine1;
-    if( bValid2 )
-        return &rBorderLine2;
-    return 0;
-}
-
 } // namespace
 
 // ----------------------------------------------------------------------------
@@ -2827,76 +2816,6 @@ OUString lclGetBuiltinStyleName( sal_Int32 nBuiltinId, const OUString& rName, sa
     if( (nBuiltinId == OOX_STYLE_ROWLEVEL) || (nBuiltinId == OOX_STYLE_COLLEVEL) )
         aStyleName.append( nLevel );
     return aStyleName.makeStringAndClear();
-}
-
-OUString lclGetBuiltInStyleName( const OUString& rName )
-{
-    OUStringBuffer aStyleName;
-    aStyleName.appendAscii( spcStyleNamePrefix ).append( rName );
-    return aStyleName.makeStringAndClear();
-}
-
-bool lclIsBuiltinStyleName( const OUString& rStyleName, sal_Int32* pnBuiltinId, sal_Int32* pnNextChar )
-{
-    // try the other built-in styles
-    OUString aPrefix = OUString::createFromAscii( spcStyleNamePrefix );
-    sal_Int32 nPrefixLen = aPrefix.getLength();
-    sal_Int32 nFoundId = 0;
-    sal_Int32 nNextChar = 0;
-    if( rStyleName.matchIgnoreAsciiCase( aPrefix ) )
-    {
-        OUString aShortName;
-        for( sal_Int32 nId = 0; nId < snStyleNamesCount; ++nId )
-        {
-            aShortName = OUString::createFromAscii( sppcStyleNames[ nId ] );
-            if( rStyleName.matchIgnoreAsciiCase( aShortName, nPrefixLen ) &&
-                    (nNextChar < nPrefixLen + aShortName.getLength()) )
-            {
-                nFoundId = nId;
-                nNextChar = nPrefixLen + aShortName.getLength();
-            }
-        }
-    }
-
-    if( nNextChar > 0 )
-    {
-        if( pnBuiltinId ) *pnBuiltinId = nFoundId;
-        if( pnNextChar ) *pnNextChar = nNextChar;
-        return true;
-    }
-
-    if( pnBuiltinId ) *pnBuiltinId = -1;
-    if( pnNextChar ) *pnNextChar = 0;
-    return false;
-}
-
-bool lclGetBuiltinStyleId( sal_Int32& rnBuiltinId, sal_Int32& rnLevel, const OUString& rStyleName )
-{
-    sal_Int32 nBuiltinId;
-    sal_Int32 nNextChar;
-    if( lclIsBuiltinStyleName( rStyleName, &nBuiltinId, &nNextChar ) )
-    {
-        if( (nBuiltinId == OOX_STYLE_ROWLEVEL) || (nBuiltinId == OOX_STYLE_COLLEVEL) )
-        {
-            OUString aLevel = rStyleName.copy( nNextChar );
-            sal_Int32 nLevel = aLevel.toInt32();
-            if( (0 < nLevel) && (nLevel <= OOX_STYLE_LEVELCOUNT) )
-            {
-                rnBuiltinId = nBuiltinId;
-                rnLevel = nLevel;
-                return true;
-            }
-        }
-        else if( rStyleName.getLength() == nNextChar )
-        {
-            rnBuiltinId = nBuiltinId;
-            rnLevel = 0;
-            return true;
-        }
-    }
-    rnBuiltinId = -1;
-    rnLevel = 0;
-    return false;
 }
 
 } // namespace

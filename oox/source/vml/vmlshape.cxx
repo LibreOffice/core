@@ -107,65 +107,6 @@ Rectangle lclGetAbsRect( const Rectangle& rRelRect, const Rectangle& rShapeRect,
     return aAbsRect;
 }
 
-void lclInsertTextFrame( const XmlFilterBase& rFilter, const Reference< XShape >& rxShape )
-{
-    OSL_ENSURE( rxShape.is(), "lclInsertTextFrame - missing XShape" );
-    if ( rxShape.is( ) )
-    {
-        try
-        {
-            Reference< XTextDocument > xDoc( rFilter.getModel( ), UNO_QUERY_THROW );
-            Reference< XTextContent > xCtnt( rxShape, UNO_QUERY_THROW );
-            xCtnt->attach( xDoc->getText( )->getStart( ) );
-        }
-        catch( Exception& )
-        {
-        }
-    }
-}
-
-void lclSetXShapeRect( const Reference< XShape >& rxShape, const Rectangle& rShapeRect )
-{
-    OSL_ENSURE( rxShape.is(), "lclSetXShapeRect - missing XShape" );
-    if( rxShape.is() )
-    {
-        Reference< XTextFrame > xTextFrame( rxShape, UNO_QUERY );
-        if ( !xTextFrame.is( ) )
-        {
-            rxShape->setPosition( Point( rShapeRect.X, rShapeRect.Y ) );
-            rxShape->setSize( Size( rShapeRect.Width, rShapeRect.Height ) );
-        }
-        else
-        {
-            Reference< XPropertySet > xProps( xTextFrame, UNO_QUERY_THROW );
-            try
-            {
-                // The size
-                xProps->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("SizeType")), Any( SizeType::FIX ) );
-                xProps->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("FrameIsAutomaticHeight")), Any( sal_False ) );
-                xProps->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("Height")), Any( rShapeRect.Height ) );
-                xProps->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("Width")), Any( rShapeRect.Width ) );
-
-                // The position
-                xProps->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("HoriOrientPosition")), Any( rShapeRect.X ) );
-                xProps->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("HoriOrientRelation")),
-                        Any( RelOrientation::FRAME ) );
-                xProps->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("HoriOrient")),
-                        Any( HoriOrientation::NONE ) );
-
-                xProps->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("VertOrientPosition")), Any( rShapeRect.Y ) );
-                xProps->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("VertOrientRelation")),
-                        Any( RelOrientation::FRAME ) );
-                xProps->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("VertOrient")),
-                        Any( VertOrientation::NONE ) );
-            }
-            catch ( Exception& )
-            {
-            }
-        }
-    }
-}
-
 } // namespace
 
 // ============================================================================
