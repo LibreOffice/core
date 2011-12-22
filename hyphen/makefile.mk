@@ -43,7 +43,8 @@ ADDITIONAL_FILES += makefile.mk
 
 PATCH_FILES= \
     hyphen-build.patch \
-    hyphen-android.patch
+    hyphen-android.patch \
+    hyphen-fdo43931.patch
 
 .IF "$(GUI)"=="UNX"
 CONFIGURE_DIR=$(BUILD_DIR)
