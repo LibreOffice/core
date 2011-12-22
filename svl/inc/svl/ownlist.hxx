@@ -80,7 +80,6 @@ private:
 public:
     SvCommand&      Append( const String & rCommand, const String & rArg );
     sal_Bool        AppendCommands( const String & rCmd, sal_uInt16 * pEaten );
-    String          GetCommands() const;
 
     sal_Bool FillFromSequence( const com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >& );
     void FillSequence( com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >& );

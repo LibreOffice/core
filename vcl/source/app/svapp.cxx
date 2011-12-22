@@ -1809,11 +1809,6 @@ void Application::Property( ApplicationProperty& rProp )
         pHandler->Property( rProp );
 }
 
-void Application::SetPropertyHandler( PropertyHandler* p )
-{
-    pHandler = p;
-}
-
 void Application::AppEvent( const ApplicationEvent& /*rAppEvent*/ )
 {
 }

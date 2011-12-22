@@ -115,36 +115,6 @@ sal_Bool SvCommandList::AppendCommands
 }
 
 //=========================================================================
-String SvCommandList::GetCommands() const
-/*  [Beschreibung]
-
-    Die Kommandos in der Liste werden als Text hintereinander, durch ein
-    Leerzeichen getrennt geschrieben. Der Text muss nicht genauso
-    aussehen wie der in <SvCommandList::AppendCommands()> "ubergebene.
-
-    [R"uckgabewert]
-
-    String      Die Kommandos werden zur"uckgegeben.
-*/
-{
-    String aRet;
-    for( sal_uLong i = 0; i < aCommandList.size(); i++ )
-    {
-        if( i != 0 )
-            aRet += ' ';
-        SvCommand aCmd = aCommandList[ i ];
-        aRet += aCmd.GetCommand();
-        if( aCmd.GetArgument().Len() )
-        {
-            aRet.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "=\"" ) );
-            aRet += aCmd.GetArgument();
-            aRet.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "\"" ) );
-        }
-    }
-    return aRet;
-}
-
-//=========================================================================
 SvCommand & SvCommandList::Append
 (
     const String & rCommand,    /* das Kommando */
