@@ -145,24 +145,6 @@ UndoGuardWithSelection::~UndoGuardWithSelection()
         rollback();
 }
 
-//-----------------------------------------------------------------------------
-
-UndoContext::UndoContext( const Reference< document::XUndoManager > & i_undoManager, const ::rtl::OUString& i_undoTitle )
-    :m_xUndoManager( i_undoManager )
-{
-    ENSURE_OR_THROW( m_xUndoManager.is(), "invalid undo manager!" );
-    m_xUndoManager->enterUndoContext( i_undoTitle );
-}
-
-//-----------------------------------------------------------------------------
-
-UndoContext::~UndoContext()
-{
-    m_xUndoManager->leaveUndoContext();
-}
-
-//-----------------------------------------------------------------------------
-
 HiddenUndoContext::HiddenUndoContext( const Reference< document::XUndoManager > & i_undoManager )
     :m_xUndoManager( i_undoManager )
 {

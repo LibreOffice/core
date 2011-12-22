@@ -298,9 +298,6 @@ ScCellObj::SetFormulaResultDouble(double)
 ScCellObj::SetFormulaResultString(rtl::OUString const&)
 ScCellObj::SetFormulaWithGrammar(rtl::OUString const&, rtl::OUString const&, formula::FormulaGrammar::Grammar)
 ScChangeActionContent::SetNewValue(String const&, ScDocument*)
-ScClipRangeNameData::ScClipRangeNameData()
-ScClipRangeNameData::insert(unsigned short, unsigned short)
-ScClipRangeNameData::~ScClipRangeNameData()
 ScCompressedArray<int, unsigned char>::GetEntryCount() const
 ScCompressedArray<int, unsigned short>::CopyFrom(ScCompressedArray<int, unsigned short> const&, int, int, long)
 ScCompressedArray<int, unsigned short>::GetValue(int) const
@@ -1607,8 +1604,6 @@ canvas::ParametricPolyPolygon::ParametricPolyPolygon(com::sun::star::uno::Refere
 canvas::PropertySetHelper::PropertySetHelper(std::__debug::vector<canvas::tools::ValueMap<canvas::PropertySetHelper::Callbacks>::MapEntry, std::allocator<canvas::tools::ValueMap<canvas::PropertySetHelper::Callbacks>::MapEntry> > const&)
 canvas::createSurfaceProxyManager(boost::shared_ptr<canvas::IRenderModule> const&)
 canvas::tools::ElapsedTime::getTimeBase() const
-canvas::tools::PriorityBooster::PriorityBooster(int)
-canvas::tools::PriorityBooster::~PriorityBooster()
 canvas::tools::appendToViewState(com::sun::star::rendering::ViewState&, basegfx::B2DHomMatrix const&)
 canvas::tools::calcRectToRectTransform(basegfx::B2DHomMatrix&, basegfx::B2DRange const&, basegfx::B2DRange const&, basegfx::B2DHomMatrix const&)
 canvas::tools::clipBlit(basegfx::B2IRange&, basegfx::B2IPoint&, basegfx::B2IRange const&, basegfx::B2IRange const&)
@@ -1619,8 +1614,6 @@ canvas::tools::verifyInput(com::sun::star::rendering::FloatingPointBitmapLayout 
 chart::EquidistantTickIter::getCurrentIndex() const
 chart::EquidistantTickIter::getMaxIndex() const
 chart::EquidistantTickIter::gotoIndex(int)
-chart::UndoContext::UndoContext(com::sun::star::uno::Reference<com::sun::star::document::XUndoManager> const&, rtl::OUString const&)
-chart::UndoContext::~UndoContext()
 cmis::Content::exchangeIdentity(com::sun::star::uno::Reference<com::sun::star::ucb::XContentIdentifier> const&)
 cmis::Content::queryChildren(std::__debug::list<rtl::Reference<cmis::Content>, std::allocator<rtl::Reference<cmis::Content> > >&)
 codemaker::cpp::typeToPrefix(TypeManager const&, rtl::OString const&)
@@ -1651,7 +1644,6 @@ comphelper::PropertySetInfo::add(comphelper::PropertyMapEntry*, int)
 comphelper::ResourceBasedEventLogger::ResourceBasedEventLogger(com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> const&, rtl::OUString const&, rtl::OUString const&)
 comphelper::SequenceAsHashMap::getAsConstAnyList(unsigned char) const
 comphelper::ServiceInfoHelper::concatSequences(com::sun::star::uno::Sequence<rtl::OUString> const&, com::sun::star::uno::Sequence<rtl::OUString> const&)
-comphelper::createEventAttacherManager(com::sun::star::uno::Reference<com::sun::star::beans::XIntrospection> const&, com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> const&)
 comphelper::findProperty(com::sun::star::beans::Property&, com::sun::star::uno::Sequence<com::sun::star::beans::Property>&, rtl::OUString const&)
 comphelper::string::isalnumAsciiString(rtl::OUString const&)
 comphelper::string::islowerAsciiString(rtl::OUString const&)

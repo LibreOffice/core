@@ -46,7 +46,6 @@ $(eval $(call gb_Package_add_file,canvas_inc,inc/canvas/canvastoolsdllapi.h,canv
 $(eval $(call gb_Package_add_file,canvas_inc,inc/canvas/debug.hxx,canvas/debug.hxx))
 $(eval $(call gb_Package_add_file,canvas_inc,inc/canvas/elapsedtime.hxx,canvas/elapsedtime.hxx))
 $(eval $(call gb_Package_add_file,canvas_inc,inc/canvas/parametricpolypolygon.hxx,canvas/parametricpolypolygon.hxx))
-$(eval $(call gb_Package_add_file,canvas_inc,inc/canvas/prioritybooster.hxx,canvas/prioritybooster.hxx))
 $(eval $(call gb_Package_add_file,canvas_inc,inc/canvas/propertysethelper.hxx,canvas/propertysethelper.hxx))
 $(eval $(call gb_Package_add_file,canvas_inc,inc/canvas/rendering/bitmap.hxx,canvas/rendering/bitmap.hxx))
 $(eval $(call gb_Package_add_file,canvas_inc,inc/canvas/rendering/icachedprimitive.hxx,canvas/rendering/icachedprimitive.hxx))

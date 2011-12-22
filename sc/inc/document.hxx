@@ -146,7 +146,6 @@ struct ScLookupCacheMapImpl;
 class SfxUndoManager;
 class ScFormulaParserPool;
 struct ScClipParam;
-struct ScClipRangeNameData;
 class ScRowBreakIterator;
 struct ScSetStringParam;
 class ScDocRowHeightUpdater;

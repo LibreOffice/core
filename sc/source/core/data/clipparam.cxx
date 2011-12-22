@@ -192,21 +192,4 @@ void ScClipParam::transpose()
     maRanges = aNewRanges;
 }
 
-// ============================================================================
-
-ScClipRangeNameData::ScClipRangeNameData() :
-    mbReplace(false)
-{
-}
-
-ScClipRangeNameData::~ScClipRangeNameData()
-{
-}
-
-void ScClipRangeNameData::insert(sal_uInt16 nOldIndex, sal_uInt16 nNewIndex)
-{
-    maRangeMap.insert(
-        ScRangeData::IndexMap::value_type(nOldIndex, nNewIndex));
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
