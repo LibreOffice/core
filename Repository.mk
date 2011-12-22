@@ -235,6 +235,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     avmedia \
     avmediaQuickTime \
     basegfx \
+    calc \
     chartcontroller \
     chartmodel \
     charttools \
@@ -264,6 +265,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     eti \
 	evoab2 \
     exp \
+	file \
     filterconfig \
     filtertracer \
     flash \
