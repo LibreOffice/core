@@ -306,6 +306,9 @@ void SAL_CALL KDE4FilePicker::appendFilter( const ::rtl::OUString &title, const 
     // openoffice gives us filters separated by ';' qt dialogs just want space separated
     f.replace(";", " ");
 
+    // make sure "*.*" is not used as "all files"
+    f.replace("*.*", "*");
+
     _filter.append(QString("%1|%2").arg(f).arg(t));
 }
 
