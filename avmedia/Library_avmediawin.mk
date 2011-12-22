@@ -35,6 +35,10 @@ $(eval $(call gb_Library_set_include,avmediawin,\
 	-I$(realpath $(SRCDIR)/avmedia/source/inc) \
 ))
 
+$(eval $(call gb_Library_add_defs,avmediawin,\
+	-DNOMINMAX \
+))
+
 $(eval $(call gb_Library_add_api,avmediawin,\
 	udkapi \
 	offapi \
