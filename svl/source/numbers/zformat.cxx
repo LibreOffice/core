@@ -3195,6 +3195,74 @@ void SvNumberformat::ImpAppendEraG( String& OutString,
         OutString += rCal.getDisplayString( CalendarDisplayCode::SHORT_ERA, nNatNum );
 }
 
+bool SvNumberformat::ImpIsIso8601( const ImpSvNumFor& rNumFor )
+{
+    bool bIsIso = false;
+    if ((eType & NUMBERFORMAT_DATE) == NUMBERFORMAT_DATE)
+    {
+        enum State
+        {
+            eNone,
+            eAtYear,
+            eAtSep1,
+            eAtMonth,
+            eAtSep2,
+            eNotIso
+        };
+        State eState = eNone;
+        short const * const pType = rNumFor.Info().nTypeArray;
+        sal_uInt16 nAnz = rNumFor.GetCount();
+        for (sal_uInt16 i=0; i < nAnz && !bIsIso && eState != eNotIso; ++i)
+        {
+            switch ( pType[i] )
+            {
+                case NF_KEY_YY:     // two digits not strictly ISO 8601
+                case NF_KEY_YYYY:
+                    if (eState != eNone)
+                        eState = eNotIso;
+                    else
+                        eState = eAtYear;
+                    break;
+                case NF_KEY_M:      // single digit not strictly ISO 8601
+                case NF_KEY_MM:
+                    if (eState != eAtSep1)
+                        eState = eNotIso;
+                    else
+                        eState = eAtMonth;
+                    break;
+                case NF_KEY_D:      // single digit not strictly ISO 8601
+                case NF_KEY_DD:
+                    if (eState != eAtSep2)
+                        eState = eNotIso;
+                    else
+                        bIsIso = true;
+                    break;
+                case NF_SYMBOLTYPE_STRING:
+                case NF_SYMBOLTYPE_DATESEP:
+                    if (rNumFor.Info().sStrArray[i] == '-')
+                    {
+                        if (eState == eAtYear)
+                            eState = eAtSep1;
+                        else if (eState == eAtMonth)
+                            eState = eAtSep2;
+                        else
+                            eState = eNotIso;
+                    }
+                    else
+                        eState = eNotIso;
+                    break;
+                default:
+                    eState = eNotIso;
+            }
+        }
+    }
+    else
+    {
+       OSL_FAIL( "SvNumberformat::ImpIsIso8601: no date" );
+    }
+    return bIsIso;
+}
+
 bool SvNumberformat::ImpGetDateOutput(double fNumber,
                                    sal_uInt16 nIx,
                                    String& OutString)

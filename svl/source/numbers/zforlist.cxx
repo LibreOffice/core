@@ -1437,7 +1437,8 @@ sal_uInt32 SvNumberFormatter::GetStandardFormat( double fNumber, sal_uInt32 nFIn
     }
 }
 
-sal_uInt32 SvNumberFormatter::GetEditFormat( double fNumber, sal_uInt32 nFIndex, short eType, LanguageType eLang )
+sal_uInt32 SvNumberFormatter::GetEditFormat( double fNumber, sal_uInt32 nFIndex,
+        short eType, LanguageType eLang, SvNumberformat* pFormat )
 {
     sal_uInt32 nKey = nFIndex;
     switch ( eType )
@@ -1456,7 +1457,8 @@ sal_uInt32 SvNumberFormatter::GetEditFormat( double fNumber, sal_uInt32 nFIndex,
                 // Preserve ISO 8601 format.
                 if (    nFIndex == GetFormatIndex( NF_DATE_DIN_YYYYMMDD, eLang) ||
                         nFIndex == GetFormatIndex( NF_DATE_DIN_YYMMDD, eLang) ||
-                        nFIndex == GetFormatIndex( NF_DATE_DIN_MMDD, eLang))
+                        nFIndex == GetFormatIndex( NF_DATE_DIN_MMDD, eLang) ||
+                        (pFormat && pFormat->IsIso8601( 0 )))
                     nKey = GetFormatIndex( NF_DATE_DIN_YYYYMMDD, eLang);
                 else
                     nKey = GetFormatIndex( NF_DATE_SYS_DDMMYYYY, eLang );
@@ -1517,7 +1519,7 @@ void SvNumberFormatter::GetInputLineString(const double& fOutNumber,
         ChangeStandardPrec(INPUTSTRING_PRECISION);
         bPrecChanged = true;
     }
-    sal_uInt32 nKey = GetEditFormat( fOutNumber, nFIndex, eType, eLang);
+    sal_uInt32 nKey = GetEditFormat( fOutNumber, nFIndex, eType, eLang, pFormat);
     if ( nKey != nFIndex )
         pFormat = (SvNumberformat*) aFTable.Get( nKey );
     if (pFormat)
