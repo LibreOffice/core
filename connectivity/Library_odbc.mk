@@ -25,55 +25,41 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Module_Module,connectivity))
+$(eval $(call gb_Library_Library,odbc))
 
-$(eval $(call gb_Module_add_targets,connectivity,\
-	AllLangResTarget_connectivity \
-	Package_inc \
-	Package_xml \
-	Jar_sdbc_hsqldb \
-	Library_dbtools \
-	Library_sdbc2 \
-	Library_dbpool2 \
-	Library_calc \
-	Library_odbcbase \
-	Library_odbc \
+$(eval $(call gb_Library_add_package_headers,odbc,connectivity_inc))
+
+$(eval $(call gb_Library_set_componentfile,odbc,connectivity/source/drivers/odbc/odbc))
+
+$(eval $(call gb_Library_add_api,odbc,\
+	offapi \
+	udkapi \
 ))
 
-ifneq ($(SOLAR_JAVA),)
-$(eval $(call gb_Module_add_targets,connectivity,\
-	Jar_ConnectivityTools \
+$(eval $(call gb_Library_set_include,odbc,\
+	$$(INCLUDE) \
+	-I$(SRCDIR)/connectivity/source/inc \
 ))
-endif
 
-ifeq ($(GUI),UNX)
-
-ifeq ($(ENABLE_KAB),TRUE)
-$(eval $(call gb_Module_add_targets,connectivity,\
-	Library_kab1 \
-	Library_kabdrv1 \
+ifeq ($(SYSTEM_ODBC_HEADERS),YES)
+$(eval $(call gb_Library_add_defs,odbc,\
+	-DSYSTEM_ODBC_HEADERS \
 ))
 endif
 
-ifeq ($(OS),MACOSX)
-$(eval $(call gb_Module_add_targets,connectivity,\
-	Library_macab1 \
-	Library_macabdrv1 \
+$(eval $(call gb_Library_add_linked_libs,odbc,\
+	odbcbase \
+	cppu \
+	cppuhelper \
+	sal \
+	salhelper \
+	$(gb_STDLIBS) \
 ))
-endif
 
-endif
-
-ifeq ($(GUI),WNT)
-$(eval $(call gb_Module_add_targets,connectivity,\
-	Library_ado \
+$(eval $(call gb_Library_add_exception_objects,odbc,\
+	connectivity/source/drivers/odbc/oservices \
+	connectivity/source/drivers/odbc/ORealDriver \
+	connectivity/source/drivers/odbc/OFunctions \
 ))
-endif
-
-ifeq ($(ENABLE_EVOAB2),TRUE)
-$(eval $(call gb_Module_add_targets,connectivity,\
-	Library_evoab2 \
-))
-endif
 
 # vim: set noet sw=4 ts=4:
