@@ -141,9 +141,6 @@ public:
                                               sal_uInt16 nTypeStyle = 0 );
                             ImplBorderWindow( Window* pParent, WinBits nStyle = 0,
                                               sal_uInt16 nTypeStyle = 0 );
-                            ImplBorderWindow( Window* pParent,
-                                              WinBits nStyle, sal_uInt16 nTypeStyle,
-                                              const ::com::sun::star::uno::Any& );
                             ~ImplBorderWindow();
 
     virtual void            MouseMove( const MouseEvent& rMEvt );
@@ -174,7 +171,6 @@ public:
     void                    SetCloser();
     void                    SetDockButton( sal_Bool bDockButton );
     void                    SetHideButton( sal_Bool bHideButton );
-    void                    SetHelpButton( sal_Bool bHelpButton );
     void                    SetMenuButton( sal_Bool bMenuButton );
 
     void                    UpdateMenuHeight();

@@ -153,8 +153,6 @@ public:
     // returns the character index for corresponding to rPoint (in control coordinates)
     // -1 is returned if no character is at that point
     long GetIndexForPoint( const Point& rPoint ) const;
-    // returns the number of lines in the result of GetDisplayText()
-    long GetLineCount() const;
     // returns the interval [start,end] of line nLine
     // returns [-1,-1] for an invalid line
     Pair GetLineStartEnd( long nLine ) const;

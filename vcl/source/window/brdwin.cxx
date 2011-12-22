@@ -1954,14 +1954,6 @@ ImplBorderWindow::ImplBorderWindow( Window* pParent, WinBits nStyle ,
     ImplInit( pParent, nStyle, nTypeStyle, ::com::sun::star::uno::Any() );
 }
 
-ImplBorderWindow::ImplBorderWindow( Window* pParent,
-                                    WinBits nStyle, sal_uInt16 nTypeStyle,
-                                    const ::com::sun::star::uno::Any& aSystemToken ) :
-    Window( WINDOW_BORDERWINDOW )
-{
-    ImplInit( pParent, nStyle, nTypeStyle, aSystemToken );
-}
-
 // -----------------------------------------------------------------------
 
 ImplBorderWindow::~ImplBorderWindow()
@@ -2307,16 +2299,6 @@ void ImplBorderWindow::SetDockButton( sal_Bool bDockButton )
 void ImplBorderWindow::SetHideButton( sal_Bool bHideButton )
 {
     mbHideBtn = bHideButton;
-    Size aSize = GetOutputSizePixel();
-    mpBorderView->Init( this, aSize.Width(), aSize.Height() );
-    InvalidateBorder();
-}
-
-// -----------------------------------------------------------------------
-
-void ImplBorderWindow::SetHelpButton( sal_Bool bHelpButton )
-{
-    mbHelpBtn = bHelpButton;
     Size aSize = GetOutputSizePixel();
     mpBorderView->Init( this, aSize.Width(), aSize.Height() );
     InvalidateBorder();

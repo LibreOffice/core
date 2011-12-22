@@ -178,7 +178,6 @@ public:
     void            SetEntryData( sal_uInt16 nPos, void* pNewData );
     void*           GetEntryData( sal_uInt16 nPos ) const;
 
-    void            SetTopEntry( sal_uInt16 nPos );
     sal_uInt16          GetTopEntry() const;
 
     void            SetProminentEntryType( ProminentEntry eType );

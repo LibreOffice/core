@@ -33,15 +33,7 @@
 #include <vcl/timer.hxx>
 #include <vcl/bitmapex.hxx>
 
-// -----------
-// - Defines -
-// -----------
-
 #define ANIMATION_TIMEOUT_ON_CLICK 2147483647L
-
-// ---------
-// - Enums -
-// ---------
 
 enum Disposal
 {
@@ -59,10 +51,6 @@ enum CycleMode
     CYCLE_REVERS,
     CYCLE_REVERS_FALLBACK
 };
-
-// -------------------
-// - AnimationBitmap -
-// -------------------
 
 struct VCL_DLLPUBLIC AnimationBitmap
 {
@@ -115,10 +103,6 @@ struct VCL_DLLPUBLIC AnimationBitmap
     sal_uLong   GetChecksum() const;
 };
 
-// -------------------
-// - AnimationBitmap -
-// -------------------
-
 struct AInfo
 {
     Bitmap          aLastSaveBitmap;
@@ -140,10 +124,6 @@ struct AInfo
                               bWithSize( sal_False ),
                               bPause( sal_False ) {}
 };
-
-// -------------------
-// - AnimationBitmap -
-// -------------------
 
 class ImplAnimView;
 typedef ::std::vector< AnimationBitmap* > AnimationBitmapList_impl;
@@ -191,9 +171,6 @@ public:
     sal_Bool                operator==( const Animation& rAnimation ) const;
     sal_Bool                operator!=( const Animation& rAnimation ) const
                             { return !(*this==rAnimation); }
-
-    sal_Bool                IsEmpty() const;
-    void                    SetEmpty();
 
     void                    Clear();
 

@@ -129,8 +129,6 @@ public:
     void                        ScaleX( double fHorzScale );
 
     sal_Bool                        IsInside( long nX );
-    sal_Bool                        IsInside( long nLeft, long nRight );
-    sal_Bool                        IsOver( long nLeft, long nRight );
 
     sal_Bool                        IsEmpty() const { return ((!mpFirstSep) && (!mpFirstBandPoint)); }
 

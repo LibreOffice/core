@@ -530,45 +530,6 @@ sal_uInt16 LongCurrencyFormatter::GetDecimalDigits() const
     return mnDecimalDigits;
 }
 
-// -----------------------------------------------------------------------
-
-sal_Bool LongCurrencyFormatter::IsValueModified() const
-{
-    if ( ImplGetEmptyFieldValue() )
-        return !IsEmptyValue();
-    else if ( GetValue() != mnFieldValue )
-        return sal_True;
-    else
-        return sal_False;
-}
-
-// -----------------------------------------------------------------------
-
-void LongCurrencyFormatter::SetEmptyValue()
-{
-    GetField()->SetText( ImplGetSVEmptyStr() );
-    SetEmptyFieldValueData( sal_True );
-}
-
-// -----------------------------------------------------------------------
-
-BigInt LongCurrencyFormatter::Normalize( BigInt nValue ) const
-{
-    return (nValue * ImplPower10( GetDecimalDigits() ) );
-}
-
-// -----------------------------------------------------------------------
-
-BigInt LongCurrencyFormatter::Denormalize( BigInt nValue ) const
-{
-    BigInt nFactor = ImplPower10( GetDecimalDigits() );
-    BigInt nTmp    = nFactor;
-    nTmp /= 2;
-    nTmp += nValue;
-    nTmp /= nFactor;
-    return nTmp;
-}
-
 // =======================================================================
 
 void ImplNewLongCurrencyFieldValue( LongCurrencyField* pField, BigInt nNewValue )
@@ -604,44 +565,6 @@ LongCurrencyField::LongCurrencyField( Window* pParent, WinBits nWinStyle ) :
     mnLast       = mnMax;
 
     Reformat();
-}
-
-// -----------------------------------------------------------------------
-
-LongCurrencyField::LongCurrencyField( Window* pParent, const ResId& rResId ) :
-    SpinField( WINDOW_NUMERICFIELD )
-{
-    rResId.SetRT( RSC_NUMERICFIELD );
-    WinBits nStyle = ImplInitRes( rResId ) ;
-    SpinField::ImplInit( pParent, nStyle );
-
-    SetField( this );
-    mnSpinSize   = 1;
-    mnFirst      = mnMin;
-    mnLast       = mnMax;
-
-    Reformat();
-
-    if ( !(nStyle & WB_HIDE) )
-        Show();
-}
-
-// -----------------------------------------------------------------------
-
-void LongCurrencyField::ImplLoadRes( const ResId& rResId )
-{
-    SpinField::ImplLoadRes( rResId );
-    LongCurrencyFormatter::ImplLoadRes( ResId( (RSHEADER_TYPE *)GetClassRes(), *rResId.GetResMgr() ) );
-
-    sal_uLong nMask = ReadLongRes();
-    if ( CURRENCYFIELD_FIRST & nMask )
-        mnFirst = ReadLongRes();
-
-    if ( CURRENCYFIELD_LAST & nMask )
-        mnLast = ReadLongRes();
-
-    if ( CURRENCYFIELD_SPINSIZE & nMask )
-        mnSpinSize = ReadLongRes();
 }
 
 // -----------------------------------------------------------------------
@@ -732,28 +655,12 @@ void LongCurrencyField::Last()
 }
 
 // =======================================================================
-
+
 LongCurrencyBox::LongCurrencyBox( Window* pParent, WinBits nWinStyle ) :
     ComboBox( pParent, nWinStyle )
 {
     SetField( this );
     Reformat();
-}
-
-// -----------------------------------------------------------------------
-
-LongCurrencyBox::LongCurrencyBox( Window* pParent, const ResId& rResId ) :
-    ComboBox( WINDOW_NUMERICFIELD )
-{
-    SetField( this );
-    WinBits nStyle = ImplInitRes( rResId ) ;
-    ComboBox::ImplLoadRes( rResId );
-    ImplInit( pParent, nStyle );
-    LongCurrencyFormatter::ImplLoadRes( rResId );
-    Reformat();
-
-    if ( !(nStyle & WB_HIDE) )
-        Show();
 }
 
 // -----------------------------------------------------------------------
@@ -818,40 +725,6 @@ void LongCurrencyBox::ReformatAll()
     }
     LongCurrencyFormatter::Reformat();
     SetUpdateMode( sal_True );
-}
-
-// -----------------------------------------------------------------------
-
-void LongCurrencyBox::InsertValue( BigInt nValue, sal_uInt16 nPos )
-{
-    XubString aStr = ImplGetCurr( GetLocaleDataWrapper(), nValue, GetDecimalDigits(), GetCurrencySymbol(), IsUseThousandSep() );
-    ComboBox::InsertEntry( aStr, nPos );
-}
-
-// -----------------------------------------------------------------------
-
-void LongCurrencyBox::RemoveValue( BigInt nValue )
-{
-    XubString aStr = ImplGetCurr( GetLocaleDataWrapper(), nValue, GetDecimalDigits(), GetCurrencySymbol(), IsUseThousandSep() );
-    ComboBox::RemoveEntry( aStr );
-}
-
-// -----------------------------------------------------------------------
-
-BigInt LongCurrencyBox::GetValue( sal_uInt16 nPos ) const
-{
-    BigInt nValue = 0;
-    ImplLongCurrencyGetValue( ComboBox::GetEntry( nPos ), nValue,
-                              GetDecimalDigits(), GetLocaleDataWrapper() );
-    return nValue;
-}
-
-// -----------------------------------------------------------------------
-
-sal_uInt16 LongCurrencyBox::GetValuePos( BigInt nValue ) const
-{
-    XubString aStr = ImplGetCurr( GetLocaleDataWrapper(), nValue, GetDecimalDigits(), GetCurrencySymbol(), IsUseThousandSep() );
-    return ComboBox::GetEntryPos( aStr );
 }
 
 // =======================================================================

@@ -115,7 +115,6 @@ public:
                     ImageList( const ImageList& rImageList );
                     ~ImageList();
 
-    void                Clear();
     void                    InsertFromHorizontalStrip( const BitmapEx &rBitmapEx,
                                    const std::vector< rtl::OUString > &rNameVector );
     void                    InsertFromHorizontalBitmap( const ResId& rResId,
@@ -131,14 +130,10 @@ public:
     void            AddImage( sal_uInt16 nNewId, const Image& rImage );
     void            AddImage( const ::rtl::OUString& rImageName, const Image& rImage );
 
-    void            ReplaceImage( sal_uInt16 nId, const Image& rImage );
     void            ReplaceImage( const ::rtl::OUString& rImageName, const Image& rImage );
-
     void            ReplaceImage( sal_uInt16 nId, sal_uInt16 nReplaceId );
-    void            ReplaceImage( const ::rtl::OUString& rImageName, const ::rtl::OUString& rReplaceName );
 
     void            RemoveImage( sal_uInt16 nId );
-    void            RemoveImage( const ::rtl::OUString& rImageName );
 
     Image           GetImage( sal_uInt16 nId ) const;
     Image           GetImage( const ::rtl::OUString& rImageName ) const;

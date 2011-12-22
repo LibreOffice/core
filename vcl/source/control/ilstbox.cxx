@@ -2345,13 +2345,6 @@ void ImplListBox::SetEntryFlags( sal_uInt16 nPos, long nFlags )
 
 // -----------------------------------------------------------------------
 
-long ImplListBox::GetEntryFlags( sal_uInt16 nPos ) const
-{
-    return maLBWindow.GetEntryList()->GetEntryFlags( nPos );
-}
-
-// -----------------------------------------------------------------------
-
 void ImplListBox::SelectEntry( sal_uInt16 nPos, sal_Bool bSelect )
 {
     maLBWindow.SelectEntry( nPos, bSelect );

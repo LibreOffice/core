@@ -612,18 +612,6 @@ void ImageList::AddImage( const ::rtl::OUString& rImageName, const Image& rImage
 
 // -----------------------------------------------------------------------
 
-void ImageList::ReplaceImage( sal_uInt16 nId, const Image& rImage )
-{
-    DBG_CHKTHIS( ImageList, NULL );
-    DBG_CHKOBJ( &rImage, Image, NULL );
-    DBG_ASSERT( GetImagePos( nId ) != IMAGELIST_IMAGE_NOTFOUND, "ImageList::ReplaceImage(): Unknown nId" );
-
-    RemoveImage( nId );
-    AddImage( nId, rImage );
-}
-
-// -----------------------------------------------------------------------
-
 void ImageList::ReplaceImage( const ::rtl::OUString& rImageName, const Image& rImage )
 {
     const sal_uInt16 nId = ImplGetImageId( rImageName );
@@ -658,16 +646,6 @@ void ImageList::ReplaceImage( sal_uInt16 nId, sal_uInt16 nReplaceId )
 
 // -----------------------------------------------------------------------
 
-void ImageList::ReplaceImage( const ::rtl::OUString& rImageName, const ::rtl::OUString& rReplaceName )
-{
-    const sal_uInt16 nId1 = ImplGetImageId( rImageName ), nId2 = ImplGetImageId( rReplaceName );
-
-    if( nId1 && nId2 )
-        ReplaceImage( nId1, nId2 );
-}
-
-// -----------------------------------------------------------------------
-
 void ImageList::RemoveImage( sal_uInt16 nId )
 {
     DBG_CHKTHIS( ImageList, NULL );
@@ -680,16 +658,6 @@ void ImageList::RemoveImage( sal_uInt16 nId )
             break;
         }
     }
-}
-
-// -----------------------------------------------------------------------
-
-void ImageList::RemoveImage( const ::rtl::OUString& rImageName )
-{
-    const sal_uInt16 nId = ImplGetImageId( rImageName );
-
-    if( nId )
-        RemoveImage( nId );
 }
 
 // -----------------------------------------------------------------------
@@ -744,18 +712,6 @@ Image ImageList::GetImage( const ::rtl::OUString& rImageName ) const
     }
 
     return Image();
-}
-
-// -----------------------------------------------------------------------
-
-void ImageList::Clear()
-{
-    DBG_CHKTHIS( ImageList, NULL );
-
-    if( mpImplData && ( 0 == --mpImplData->mnRefCount ) )
-        delete mpImplData;
-
-    mpImplData = NULL;
 }
 
 // -----------------------------------------------------------------------

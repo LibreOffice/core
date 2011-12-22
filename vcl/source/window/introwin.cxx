@@ -65,15 +65,6 @@ IntroWindow::~IntroWindow()
         pSVData->mpIntroWindow = NULL;
 }
 
-void IntroWindow::SetBackgroundBitmap( const Bitmap& rBitmap )
-{
-    if( ! rBitmap.IsEmpty() )
-    {
-        SalBitmap* pBmp = rBitmap.ImplGetImpBitmap()->ImplGetSalBitmap();
-        ImplGetFrame()->SetBackgroundBitmap( pBmp );
-    }
-}
-
 void IntroWindow::SetBackgroundBitmap( const BitmapEx& rBitmapEx )
 {
     if( ! rBitmapEx.IsEmpty() )

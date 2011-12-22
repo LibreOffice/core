@@ -185,16 +185,7 @@ sal_Bool Animation::operator==( const Animation& rAnimation ) const
     return bRet;
 }
 
-// ------------------------------------------------------------------
-
-sal_Bool Animation::IsEmpty() const
-{
-    return( maBitmapEx.IsEmpty() && maList.empty() );
-}
-
-// ------------------------------------------------------------------
-
-void Animation::SetEmpty()
+void Animation::Clear()
 {
     maTimer.Stop();
     mbIsInAnimation = sal_False;
@@ -208,13 +199,6 @@ void Animation::SetEmpty()
     for( size_t i = 0, n = maViewList.size(); i < n; ++i )
         delete maViewList[ i ];
     maViewList.clear();
-}
-
-// -----------------------------------------------------------------------
-
-void Animation::Clear()
-{
-    SetEmpty();
 }
 
 // -----------------------------------------------------------------------

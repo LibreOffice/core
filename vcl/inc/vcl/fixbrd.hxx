@@ -51,10 +51,6 @@
 class VCL_DLLPUBLIC FixedBorder : public Control
 {
 private:
-    sal_uInt16          mnType;
-    sal_Bool            mbTransparent;
-
-private:
     using Control::ImplInitSettings;
     using Window::ImplInit;
     SAL_DLLPRIVATE void    ImplInit( Window* pParent, WinBits nStyle );
@@ -64,7 +60,6 @@ private:
                               const Point& rPos, const Size& rSize );
 
 public:
-                    FixedBorder( Window* pParent, WinBits nStyle = 0 );
                     FixedBorder( Window* pParent, const ResId& rResId );
                     ~FixedBorder();
 
@@ -73,11 +68,6 @@ public:
     virtual void    Resize();
     virtual void    StateChanged( StateChangedType nType );
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
-
-    void            SetTransparent( sal_Bool bTransparent );
-    sal_Bool            IsTransparent() const { return mbTransparent; }
-    void            SetBorderType( sal_uInt16 nType );
-    sal_uInt16          GetBorderType() const { return mnType; }
 };
 
 #endif  // _SV_FIXBRD_HXX

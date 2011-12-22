@@ -203,7 +203,6 @@ public:
     void                        DrawRect( const Rectangle& rRect );
 
     void                        FillPolygon( const Polygon& rPoly );
-    void                        DrawPolygon( const Polygon& rPoly );
 
 private:
 

@@ -927,23 +927,6 @@ PatternField::PatternField( Window* pParent, WinBits nWinStyle ) :
 
 // -----------------------------------------------------------------------
 
-PatternField::PatternField( Window* pParent, const ResId& rResId ) :
-    SpinField( WINDOW_PATTERNFIELD )
-{
-    rResId.SetRT( RSC_PATTERNFIELD );
-    WinBits nStyle = ImplInitRes( rResId );
-    ImplInit( pParent, nStyle );
-    SetField( this );
-    SpinField::ImplLoadRes( rResId );
-    PatternFormatter::ImplLoadRes( ResId( (RSHEADER_TYPE *)GetClassRes(), *rResId.GetResMgr() ) );
-    Reformat();
-
-    if ( !(nStyle & WB_HIDE ) )
-        Show();
-}
-
-// -----------------------------------------------------------------------
-
 PatternField::~PatternField()
 {
 }
@@ -1000,24 +983,6 @@ PatternBox::PatternBox( Window* pParent, WinBits nWinStyle ) :
 {
     SetField( this );
     Reformat();
-}
-
-// -----------------------------------------------------------------------
-
-PatternBox::PatternBox( Window* pParent, const ResId& rResId ) :
-    ComboBox( WINDOW_PATTERNBOX )
-{
-    rResId.SetRT( RSC_PATTERNBOX );
-    WinBits nStyle = ImplInitRes( rResId );
-    ImplInit( pParent, nStyle );
-
-    SetField( this );
-    ComboBox::ImplLoadRes( rResId );
-    PatternFormatter::ImplLoadRes( ResId( (RSHEADER_TYPE *)GetClassRes(), *rResId.GetResMgr() ) );
-    Reformat();
-
-    if ( !(nStyle & WB_HIDE ) )
-        Show();
 }
 
 // -----------------------------------------------------------------------
@@ -1086,34 +1051,6 @@ void PatternBox::ReformatAll()
     }
     PatternFormatter::Reformat();
     SetUpdateMode( sal_True );
-}
-
-// -----------------------------------------------------------------------
-
-void PatternBox::InsertString( const XubString& rStr, sal_uInt16 nPos )
-{
-    ComboBox::InsertEntry( ImplPatternReformat( rStr, GetEditMask(), GetLiteralMask(), GetFormatFlags() ), nPos );
-}
-
-// -----------------------------------------------------------------------
-
-void PatternBox::RemoveString( const XubString& rStr )
-{
-    ComboBox::RemoveEntry( ImplPatternReformat( rStr, GetEditMask(), GetLiteralMask(), GetFormatFlags() ) );
-}
-
-// -----------------------------------------------------------------------
-
-XubString PatternBox::GetString( sal_uInt16 nPos ) const
-{
-    return ImplPatternReformat( ComboBox::GetEntry( nPos ), GetEditMask(), GetLiteralMask(), GetFormatFlags() );
-}
-
-// -----------------------------------------------------------------------
-
-sal_uInt16 PatternBox::GetStringPos( const XubString& rStr ) const
-{
-    return ComboBox::GetEntryPos( ImplPatternReformat( rStr, GetEditMask(), GetLiteralMask(), GetFormatFlags() ) );
 }
 
 // =======================================================================
