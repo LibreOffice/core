@@ -136,6 +136,58 @@ struct cdir_end {
 
 /* End of Zip data structures */
 
+static struct cdir_entry *cdir_start;
+static uint16_t cdir_entries;
+
+struct lo_apk_dir {
+    char *folder_path;
+    struct cdir_entry *current_entry;
+    int remaining_entries;
+};
+
+static uint32_t cdir_entry_size (struct cdir_entry *entry)
+{
+    return sizeof(*entry) +
+        letoh16(entry->filename_size) +
+        letoh16(entry->extra_field_size) +
+        letoh16(entry->file_comment_size);
+}
+
+static int
+setup_cdir(void)
+{
+    struct cdir_end *dirend = (struct cdir_end *)((char *) apk_file + apk_file_size - sizeof(*dirend));
+    uint32_t cdir_offset;
+
+    while ((void *)dirend > apk_file &&
+           letoh32(dirend->signature) != CDIR_END_SIG)
+        dirend = (struct cdir_end *)((char *)dirend - 1);
+    if (letoh32(dirend->signature) != CDIR_END_SIG) {
+        LOGE("setup_cdir: Could not find end of central directory record");
+        return 0;
+    }
+
+    cdir_offset = letoh32(dirend->cdir_offset);
+
+    cdir_entries = letoh16(dirend->cdir_entries);
+    cdir_start = (struct cdir_entry *)((char *)apk_file + cdir_offset);
+
+    return 1;
+}
+
+static struct cdir_entry *
+find_cdir_entry (struct cdir_entry *entry, int count, const char *name)
+{
+    size_t name_size = strlen(name);
+    while (count--) {
+        if (letoh16(entry->filename_size) == name_size &&
+            !memcmp(entry->data, name, name_size))
+            return entry;
+        entry = (struct cdir_entry *)((char *)entry + cdir_entry_size(entry));
+    }
+    return NULL;
+}
+
 static void
 engine_handle_cmd(struct android_app* state,
                   int32_t cmd)
@@ -386,6 +438,9 @@ Java_org_libreoffice_android_Bootstrap_setup__Ljava_lang_String_2Ljava_lang_Stri
     apk_file_size = st.st_size;
 
     (*env)->ReleaseStringUTFChars(env, apkFile, apkFilePath);
+
+    if (!setup_cdir())
+        return JNI_FALSE;
 
     return JNI_TRUE;
 }
@@ -807,51 +862,14 @@ lo_dladdr(void *addr,
     return result;
 }
 
-static uint32_t cdir_entry_size (struct cdir_entry *entry)
-{
-    return sizeof(*entry) +
-        letoh16(entry->filename_size) +
-        letoh16(entry->extra_field_size) +
-        letoh16(entry->file_comment_size);
-}
-
-static struct cdir_entry *
-find_cdir_entry (struct cdir_entry *entry, int count, const char *name)
-{
-    size_t name_size = strlen(name);
-    while (count--) {
-        if (letoh16(entry->filename_size) == name_size &&
-            !memcmp(entry->data, name, name_size))
-            return entry;
-        entry = (struct cdir_entry *)((char *)entry + cdir_entry_size(entry));
-    }
-    return NULL;
-}
-
 __attribute__ ((visibility("default")))
 void *
 lo_apkentry(const char *filename,
             size_t *size)
 {
-    struct cdir_end *dirend = (struct cdir_end *)((char *) apk_file + apk_file_size - sizeof(*dirend));
-    uint32_t cdir_offset;
-    uint16_t cdir_entries;
-    struct cdir_entry *cdir_start;
     struct cdir_entry *entry;
     struct local_file_header *file;
     void *data;
-
-    while ((void *)dirend > apk_file &&
-           letoh32(dirend->signature) != CDIR_END_SIG)
-        dirend = (struct cdir_end *)((char *)dirend - 1);
-    if (letoh32(dirend->signature) != CDIR_END_SIG) {
-        LOGE("lo_apkentry: Could not find end of central directory record");
-        return NULL;
-    }
-
-    cdir_offset = letoh32(dirend->cdir_offset);
-    cdir_entries = letoh16(dirend->cdir_entries);
-    cdir_start = (struct cdir_entry *)((char *)apk_file + cdir_offset);
 
     if (*filename == '/')
         filename++;
@@ -875,6 +893,110 @@ lo_apkentry(const char *filename,
     /* LOGI("lo_apkentry(%s): %p, %d", filename, data, *size); */
 
     return data;
+}
+
+static lo_apk_dir *
+new_dir(const char *folder_path,
+        struct cdir_entry *start_entry,
+        int remaining_entries)
+{
+    lo_apk_dir *result;
+
+    result = malloc(sizeof(*result));
+    if (result == NULL)
+        return NULL;
+
+    result->folder_path = strdup(folder_path);
+    result->current_entry = start_entry;
+    result->remaining_entries = remaining_entries;
+
+    return result;
+}
+
+
+__attribute__ ((visibility("default")))
+lo_apk_dir *
+lo_apk_opendir(const char *dirname)
+{
+    int count = cdir_entries;
+    struct cdir_entry *entry = cdir_start;
+    size_t name_size = strlen(dirname);
+
+    if (*dirname == '/') {
+        dirname++;
+        if (!dirname[0])
+            return new_dir("", cdir_start, count);
+    }
+
+    while (count--) {
+        if (letoh16(entry->filename_size) >= name_size &&
+            !memcmp(entry->data, dirname, name_size) &&
+            entry->data[name_size] == '/')
+            break;
+        entry = (struct cdir_entry *)((char *)entry + cdir_entry_size(entry));
+    }
+    if (count >= 0)
+        return new_dir(dirname, entry, count+1);
+
+    return NULL;
+}
+
+static int
+path_component_length(const char *path)
+{
+    const char *slash = strchr(path, '/');
+
+    if (slash)
+        return slash - path;
+
+    return strlen(path);
+}
+
+__attribute__ ((visibility("default")))
+struct dirent *
+lo_apk_readdir(lo_apk_dir *dirp)
+{
+    static struct dirent result;
+    size_t folder_size = strlen(dirp->folder_path);
+
+    while (dirp->remaining_entries > 0) {
+        const char *folder_end = dirp->current_entry->data + folder_size;
+        int entry_len;
+
+        if (letoh16(dirp->current_entry->filename_size) > folder_size &&
+            !memcmp(dirp->current_entry->data, dirp->folder_path, folder_size) &&
+            *folder_end == '/' &&
+            (entry_len = path_component_length(folder_end + 1)) < 256) {
+
+            /* Fake an unique inode number; might be used? */
+            result.d_ino = cdir_entries - dirp->remaining_entries + 2;
+
+            result.d_off = 0;
+            result.d_reclen = 0;
+
+            if (folder_end[entry_len] == '/')
+                result.d_type = DT_DIR;
+            else
+                result.d_type = DT_REG;
+
+            memcpy(result.d_name, folder_end + 1, entry_len);
+            result.d_name[entry_len] = '\0';
+            return &result;
+        }
+        dirp->remaining_entries--;
+    }
+
+    return NULL;
+}
+
+__attribute__ ((visibility("default")))
+int
+lo_apk_closedir(lo_apk_dir *dirp)
+{
+    free(dirp->folder_path);
+    free(dirp);
+
+    return 0;
 }
 
 __attribute__ ((visibility("default")))
