@@ -224,21 +224,18 @@ bool getMetaFile( const uno::Reference< lang::XComponent >&       xSource,
     aProps[1].Name = OUSTR("GraphicRenderer");
     aProps[1].Value <<= xRenderer;
 
-    uno::Sequence< beans::PropertyValue > aFilterData(5);
-    aFilterData[0].Name = OUSTR("VerboseComments");
-    aFilterData[0].Value <<= ((mtfLoadFlags & MTF_LOAD_VERBOSE_COMMENTS) != 0);
+    uno::Sequence< beans::PropertyValue > aFilterData(4);
+    aFilterData[0].Name = OUSTR("ScrollText");
+    aFilterData[0].Value <<= ((mtfLoadFlags & MTF_LOAD_SCROLL_TEXT_MTF) != 0);
 
-    aFilterData[1].Name = OUSTR("ScrollText");
-    aFilterData[1].Value <<= ((mtfLoadFlags & MTF_LOAD_SCROLL_TEXT_MTF) != 0);
+    aFilterData[1].Name = OUSTR("ExportOnlyBackground");
+    aFilterData[1].Value <<= ((mtfLoadFlags & MTF_LOAD_BACKGROUND_ONLY) != 0);
 
-    aFilterData[2].Name = OUSTR("ExportOnlyBackground");
-    aFilterData[2].Value <<= ((mtfLoadFlags & MTF_LOAD_BACKGROUND_ONLY) != 0);
+    aFilterData[2].Name = OUSTR("Version");
+    aFilterData[2].Value <<= static_cast<sal_Int32>( SOFFICE_FILEFORMAT_50 );
 
-    aFilterData[3].Name = OUSTR("Version");
-    aFilterData[3].Value <<= static_cast<sal_Int32>( SOFFICE_FILEFORMAT_50 );
-
-    aFilterData[4].Name = OUSTR("CurrentPage");
-    aFilterData[4].Value <<= uno::Reference< uno::XInterface >( xContainingPage,
+    aFilterData[3].Name = OUSTR("CurrentPage");
+    aFilterData[3].Value <<= uno::Reference< uno::XInterface >( xContainingPage,
                                                                 uno::UNO_QUERY_THROW );
 
     aProps[2].Name = OUSTR("FilterData");
@@ -478,9 +475,10 @@ bool getRectanglesFromScrollMtf( ::basegfx::B2DRectangle&       o_rScrollRect,
         {
             MetaCommentAction * pAct =
                 static_cast<MetaCommentAction *>(pCurrAct);
-            // skip comment if not a special XTEXT comment
-            if (pAct->GetComment().equalsIgnoreAsciiCaseL(
-                    RTL_CONSTASCII_STRINGPARAM("XTEXT") ))
+            // skip comment if not a special XTEXT... comment
+            if( pAct->GetComment().matchIgnoreAsciiCase(
+                    rtl::OString(RTL_CONSTASCII_STRINGPARAM("XTEXT")),
+                    0) )
             {
                 if (pAct->GetComment().equalsIgnoreAsciiCaseL(
                         RTL_CONSTASCII_STRINGPARAM("XTEXT_SCROLLRECT") ))
