@@ -67,4 +67,10 @@ $(eval $(call gb_Module_add_targets,connectivity,\
 ))
 endif
 
+ifeq ($(ENABLE_EVOAB2),TRUE)
+$(eval $(call gb_Module_add_targets,connectivity,\
+	Library_evoab2 \
+))
+endif
+
 # vim: set noet sw=4 ts=4:

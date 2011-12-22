@@ -1209,6 +1209,17 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO,\
 
 endif # SYSTEM_CLUCENE
 
+define gb_LinkTarget__use_gobject
+$(call gb_LinkTarget_add_libs,$(1),\
+	$(GOBJECT_LIBS) \
+)
+
+$(call gb_LinkTarget_set_include,$(1),\
+	$$(INCLUDE) \
+	$(GOBJECT_CFLAGS) \
+)
+endef
+
 # MacOSX-only frameworks ############################################
 # (in alphabetical order)
 
