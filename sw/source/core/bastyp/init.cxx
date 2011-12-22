@@ -129,6 +129,7 @@
 
 #include <fmtfollowtextflow.hxx>
 #include <fmtwrapinfluenceonobjpos.hxx>
+#include <editeng/rsiditem.hxx>
 
 #include <fmtmeta.hxx>
 
@@ -298,8 +299,8 @@ SfxItemInfo aSlotTab[] =
     { SID_ATTR_CHAR_RELIEF, SFX_ITEM_POOLABLE },        // RES_CHRATR_RELIEF
     { SID_ATTR_CHAR_HIDDEN, SFX_ITEM_POOLABLE },        // RES_CHRATR_HIDDEN
     { SID_ATTR_CHAR_OVERLINE, SFX_ITEM_POOLABLE },      // RES_CHRATR_OVERLINE
+    { 0, SFX_ITEM_POOLABLE },							// RES_CHRATR_RSID
     { 0, SFX_ITEM_POOLABLE },                           // RES_CHRATR_DUMMY1
-    { 0, SFX_ITEM_POOLABLE },                           // RES_CHRATR_DUMMY2
 
     { 0, 0 },                                           // RES_TXTATR_REFMARK
     { 0, 0 },                                           // RES_TXTATR_TOXMARK
@@ -340,7 +341,7 @@ SfxItemInfo aSlotTab[] =
     { SID_ATTR_BORDER_CONNECT, SFX_ITEM_POOLABLE },     // RES_PARATR_CONNECT_BORDER
 
     { SID_ATTR_PARA_OUTLINE_LEVEL, SFX_ITEM_POOLABLE }, // RES_PARATR_OUTLINELEVEL //#outline level,zhaojianwei
-
+    { 0, SFX_ITEM_POOLABLE },							// RES_PARATR_RSID
     { 0, SFX_ITEM_POOLABLE },                           // RES_PARATR_LIST_ID
     { 0, SFX_ITEM_POOLABLE },                           // RES_PARATR_LIST_LEVEL
     { 0, SFX_ITEM_POOLABLE },                           // RES_PARATR_LIST_ISRESTART
@@ -478,6 +479,7 @@ void _InitCore()
     aAttrTab[ RES_CHRATR_SHADOWED- POOLATTR_BEGIN ] =       new SvxShadowedItem( sal_False, RES_CHRATR_SHADOWED );
     aAttrTab[ RES_CHRATR_UNDERLINE- POOLATTR_BEGIN ] =      new SvxUnderlineItem( UNDERLINE_NONE, RES_CHRATR_UNDERLINE );
     aAttrTab[ RES_CHRATR_WEIGHT- POOLATTR_BEGIN ] =         new SvxWeightItem( WEIGHT_NORMAL, RES_CHRATR_WEIGHT );
+    aAttrTab[ RES_CHRATR_RSID - POOLATTR_BEGIN ] =          new SvxRsidItem( 0, RES_CHRATR_RSID );
     aAttrTab[ RES_CHRATR_WORDLINEMODE- POOLATTR_BEGIN ] =   new SvxWordLineModeItem( sal_False, RES_CHRATR_WORDLINEMODE );
     aAttrTab[ RES_CHRATR_AUTOKERN- POOLATTR_BEGIN ] =       new SvxAutoKernItem( sal_False, RES_CHRATR_AUTOKERN );
     aAttrTab[ RES_CHRATR_BLINK - POOLATTR_BEGIN ] =         new SvxBlinkItem( sal_False, RES_CHRATR_BLINK );
@@ -509,7 +511,7 @@ void _InitCore()
 
 // CharakterAttr - Dummies
     aAttrTab[ RES_CHRATR_DUMMY1 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_CHRATR_DUMMY1 );
-    aAttrTab[ RES_CHRATR_DUMMY2 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_CHRATR_DUMMY2 );
+
 // CharakterAttr - Dummies
 
     aAttrTab[ RES_TXTATR_AUTOFMT- POOLATTR_BEGIN ] = new SwFmtAutoFmt;
@@ -557,6 +559,7 @@ void _InitCore()
     aAttrTab[ RES_PARATR_CONNECT_BORDER - POOLATTR_BEGIN ] = new SwParaConnectBorderItem;
 
     aAttrTab[ RES_PARATR_OUTLINELEVEL - POOLATTR_BEGIN ] = new SfxUInt16Item( RES_PARATR_OUTLINELEVEL, 0 );//#outline level,zhaojianwei
+    aAttrTab[ RES_PARATR_RSID - POOLATTR_BEGIN ] = new SvxRsidItem( 0, RES_PARATR_RSID );
 
     aAttrTab[ RES_PARATR_LIST_ID - POOLATTR_BEGIN ] = new SfxStringItem( RES_PARATR_LIST_ID, aEmptyStr );
     aAttrTab[ RES_PARATR_LIST_LEVEL - POOLATTR_BEGIN ] = new SfxInt16Item( RES_PARATR_LIST_LEVEL, 0 );

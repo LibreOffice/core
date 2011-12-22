@@ -40,6 +40,7 @@
 #include <fldupde.hxx>
 #include <com/sun/star/linguistic2/XLinguServiceEventListener.hpp>
 #include <com/sun/star/linguistic2/XLanguageGuessing.hpp>
+#include <editeng/svxenum.hxx>
 
 class SvStringsDtor;
 class Color;
@@ -209,6 +210,15 @@ public:
 
     sal_uInt16              GetRedlineMarkPos();
     const Color&            GetRedlineMarkColor();
+
+    SvxCompareMode      GetCompareMode() const;
+    void                SetCompareMode( SvxCompareMode eMode );
+    sal_Bool            IsUseRsid() const;
+    void                SetUseRsid( sal_Bool b );
+    sal_Bool            IsIgnorePieces() const;
+    void				SetIgnorePieces( sal_Bool b );
+    sal_uInt16          GetPieceLen() const;
+    void                SetPieceLen( sal_uInt16 nLen );
 
     // Return defined DocStat - WordDelimiter.
     const String&       GetDocStatWordDelim() const;

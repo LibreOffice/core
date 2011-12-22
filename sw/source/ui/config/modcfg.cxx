@@ -1332,4 +1332,84 @@ void SwMiscConfig::Load()
     }
 }
 
+const Sequence<OUString>& SwCompareConfig::GetPropertyNames()
+{
+    static Sequence<OUString> aNames;
+    if(!aNames.getLength())
+    {
+        const int nCount = 4;
+        aNames.realloc(nCount);
+        static const char* aPropNames[] =
+        {
+            "Mode",							// 0
+            "UseRSID",						// 1
+            "IgnorePieces",				// 2
+            "IgnoreLength"					// 3
+        };
+        OUString* pNames = aNames.getArray();
+        for(int i = 0; i < nCount; i++)
+            pNames[i] = OUString::createFromAscii(aPropNames[i]);
+    }
+    return aNames;
+}
+
+SwCompareConfig::SwCompareConfig() :
+    ConfigItem(C2U("Office.Writer/Comparison"),
+        CONFIG_MODE_DELAYED_UPDATE|CONFIG_MODE_RELEASE_TREE)
+{
+    eCmpMode = SVX_CMP_AUTO;
+    bUseRsid = 0;
+    bIgnorePieces = 0;
+    nPieceLen = 1;
+
+    Load();
+}
+
+SwCompareConfig::~SwCompareConfig()
+{
+}
+
+void SwCompareConfig::Commit()
+{
+    const Sequence<OUString>& aNames = GetPropertyNames();
+    Sequence<Any> aValues(aNames.getLength());
+    Any* pValues = aValues.getArray();
+
+   const Type& rType = ::getBooleanCppuType();
+
+    pValues[0] <<= (sal_Int32) eCmpMode;
+    pValues[1].setValue(&bUseRsid, rType);
+    pValues[2].setValue(&bIgnorePieces, rType);
+    pValues[3] <<= (sal_Int32) nPieceLen;
+
+    PutProperties(aNames, aValues);
+}
+
+void SwCompareConfig::Load()
+{
+    const Sequence<OUString>& aNames = GetPropertyNames();
+    Sequence<Any> aValues = GetProperties(aNames);
+    const Any* pValues = aValues.getConstArray();
+    DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed");
+    if(aValues.getLength() == aNames.getLength())
+    {
+        for(int nProp = 0; nProp < aNames.getLength(); nProp++)
+        {
+            if(pValues[nProp].hasValue())
+            {
+                sal_Int32 nVal = 0;
+                pValues[nProp] >>= nVal;
+
+                switch(nProp)
+                {
+                    case 0 : eCmpMode = (SvxCompareMode) nVal; break;;
+                    case 1 : bUseRsid = *(sal_Bool*)pValues[nProp].getValue(); break;
+                    case 2 : bIgnorePieces = *(sal_Bool*)pValues[nProp].getValue(); break;
+                    case 3 : nPieceLen = nVal; break;
+                }
+            }
+        }
+    }
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

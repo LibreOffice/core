@@ -115,6 +115,8 @@ enum SwDocumentSettingsPropertyHandles
     HANDLE_USE_OLD_PRINTER_METRICS,
     HANDLE_PROTECT_FORM,
     HANDLE_TABS_RELATIVE_TO_INDENT,
+    HANDLE_RSID,
+    HANDLE_RSID_ROOT,
     // #i89181#
     HANDLE_TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST,
     HANDLE_MODIFYPASSWORDINFO,
@@ -174,6 +176,8 @@ MasterPropertySetInfo * lcl_createSettingsInfo()
         { RTL_CONSTASCII_STRINGPARAM("UnxForceZeroExtLeading"), HANDLE_UNIX_FORCE_ZERO_EXT_LEADING, CPPUTYPE_BOOLEAN, 0, 0},
         { RTL_CONSTASCII_STRINGPARAM("UseOldPrinterMetrics"), HANDLE_USE_OLD_PRINTER_METRICS, CPPUTYPE_BOOLEAN, 0, 0},
         { RTL_CONSTASCII_STRINGPARAM("TabsRelativeToIndent"), HANDLE_TABS_RELATIVE_TO_INDENT, CPPUTYPE_BOOLEAN, 0, 0},
+        { RTL_CONSTASCII_STRINGPARAM("Rsid"), HANDLE_RSID, CPPUTYPE_INT32, 0, 0},
+        { RTL_CONSTASCII_STRINGPARAM("RsidRoot"), HANDLE_RSID_ROOT, CPPUTYPE_INT32, 0, 0},
         { RTL_CONSTASCII_STRINGPARAM("ProtectForm"), HANDLE_PROTECT_FORM, CPPUTYPE_BOOLEAN, 0, 0},
         // #i89181#
         { RTL_CONSTASCII_STRINGPARAM("TabAtLeftIndentForParagraphsInList"), HANDLE_TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST, CPPUTYPE_BOOLEAN, 0, 0},
@@ -657,6 +661,20 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
             mpDoc->set(IDocumentSettingAccess::TABS_RELATIVE_TO_INDENT, bTmp);
         }
         break;
+        case HANDLE_RSID:
+        {
+            sal_uInt32 nTmp = 0;
+            rValue >>= nTmp;
+            mpDoc->setRsid( nTmp );
+        }
+        break;
+        case HANDLE_RSID_ROOT:
+        {
+            sal_uInt32 nTmp = 0;
+            rValue >>= nTmp;
+            mpDoc->setRsidRoot( nTmp );
+        }
+        break;
         case HANDLE_PROTECT_FORM:
         {
             sal_Bool bTmp = *(sal_Bool*)rValue.getValue();
@@ -1027,6 +1045,16 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
         {
             sal_Bool bTmp = mpDoc->get(IDocumentSettingAccess::TABS_RELATIVE_TO_INDENT);
             rValue.setValue( &bTmp, ::getBooleanCppuType() );
+        }
+        break;
+        case HANDLE_RSID:
+        {
+            rValue <<= static_cast < sal_Int32 > ( mpDoc->getRsid() );
+        }
+        break;
+        case HANDLE_RSID_ROOT:
+        {
+            rValue <<= static_cast < sal_Int32 > ( mpDoc->getRsidRoot() );
         }
         break;
         case HANDLE_PROTECT_FORM:

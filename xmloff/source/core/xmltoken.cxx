@@ -1503,6 +1503,8 @@ namespace xmloff { namespace token {
         TOKEN( "row-height",                      XML_ROW_HEIGHT ),
         TOKEN( "row-number",                      XML_ROW_NUMBER ),
         TOKEN( "rows",                            XML_ROWS ),
+        TOKEN( "rsid",                            XML_RSID ),
+        TOKEN( "paragraph-rsid",                  XML_PARRSID ),
         TOKEN( "ruby",                            XML_RUBY ),
         TOKEN( "ruby-align",                      XML_RUBY_ALIGN ),
         TOKEN( "ruby-base",                       XML_RUBY_BASE ),

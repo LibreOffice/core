@@ -1043,6 +1043,7 @@ sal_Bool SwFEShell::Paste( SwDoc* pClpDoc, sal_Bool bIncludingPageFrames )
                 // muessen die BoxAttribute aber entfernt werden.
                 GetDoc()->ClearBoxNumAttrs( rInsPos.nNode );
             }
+
             //find out if the clipboard document starts with a table
             bool bStartWithTable = 0 != aCpyPam.Start()->nNode.GetNode().FindTableNode();
             SwPosition aInsertPosition( rInsPos );
@@ -1060,6 +1061,22 @@ sal_Bool SwFEShell::Paste( SwDoc* pClpDoc, sal_Bool bIncludingPageFrames )
                                SwPosition(rInsPos.nNode));
 
                     aPaM.GetDoc()->MakeUniqueNumRules(aPaM);
+                }
+            }
+
+            // Update the rsid of each pasted text node.
+            {
+                xub_StrLen nNodesCnt = aCpyPam.End()->nNode.GetIndex() - aCpyPam.Start()->nNode.GetIndex();
+                SwNodes &rDestNodes = GetDoc()->GetNodes();
+                xub_StrLen nDestStart = PCURCRSR->GetPoint()->nNode.GetIndex() - nNodesCnt;
+
+                for ( sal_uInt64 nIdx = 0; nIdx <= nNodesCnt; nIdx++ )
+                {
+                    SwTxtNode *pTxtNode = rDestNodes[ nDestStart + nIdx ]->GetTxtNode();
+                    if ( pTxtNode )
+                    {
+                        GetDoc()->UpdateParRsid( pTxtNode );
+                    }
                 }
             }
 

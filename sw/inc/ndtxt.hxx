@@ -803,6 +803,13 @@ public:
 
     virtual void dumpAsXml( xmlTextWriterPtr writer = NULL );
 
+    sal_uInt32 GetRsid( xub_StrLen nStt, xub_StrLen nEnd ) const;
+    sal_uInt32 GetParRsid() const;
+
+    bool CompareRsid( const SwTxtNode &rTxtNode, xub_StrLen nStt1, xub_StrLen nStt2,
+            xub_StrLen nEnd1 = 0,  xub_StrLen nEnd2 = 0 ) const;
+    bool CompareParRsid( const SwTxtNode &rTxtNode ) const;
+
     DECL_FIXEDMEMPOOL_NEWDEL(SwTxtNode)
 };
 

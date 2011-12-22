@@ -545,6 +545,48 @@ sal_Bool XMLColorPropHdl::exportXML( OUString& rStrExpValue, const Any& rValue, 
 
 ///////////////////////////////////////////////////////////////////////////////
 //
+// class XMLHexPropHdl
+//
+
+XMLHexPropHdl::~XMLHexPropHdl()
+{
+    // Nothing to do
+}
+
+sal_Bool XMLHexPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
+{
+    sal_Bool bRet = sal_False;
+    sal_uInt32 nRsid;
+
+    bRet = SvXMLUnitConverter::convertHex( nRsid, rStrImpValue );
+    rValue <<= nRsid;
+
+    return bRet;
+}
+
+sal_Bool XMLHexPropHdl::exportXML( OUString& rStrExpValue, const Any& rValue, const SvXMLUnitConverter& ) const
+{
+    sal_Bool bRet = sal_False;
+    sal_uInt32 nRsid = 0;
+
+    OUStringBuffer aOut;
+    if( rValue >>= nRsid )
+    {
+        SvXMLUnitConverter::convertHex( aOut, nRsid );
+        rStrExpValue = aOut.makeStringAndClear();
+
+        bRet = sal_True;
+    }
+    else
+    {
+        bRet = sal_False;
+    }
+
+    return bRet;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//
 // class XMLStringPropHdl
 //
 

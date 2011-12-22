@@ -504,6 +504,7 @@ SfxTabPage* SwModule::CreateTabPage( sal_uInt16 nId, Window* pParent, const SfxI
         case RID_SW_TP_OPTSHDWCRSR:
         case RID_SW_TP_HTML_OPTSHDWCRSR:
         case RID_SW_TP_REDLINE_OPT:
+        case RID_SW_TP_COMPARISON_OPT:
         case RID_SW_TP_OPTLOAD_PAGE:
         case RID_SW_TP_OPTCOMPATIBILITY_PAGE:
         case RID_SW_TP_MAILCONFIG:

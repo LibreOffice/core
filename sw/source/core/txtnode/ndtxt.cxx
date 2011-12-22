@@ -33,6 +33,7 @@
 #include <editeng/brkitem.hxx>
 #include <editeng/escpitem.hxx>
 #include <editeng/lrspitem.hxx>
+#include <editeng/rsiditem.hxx>
 #include <editeng/tstpitem.hxx>
 #include <svl/urihelper.hxx>
 #ifndef _SVSTDARR_HXX
@@ -4740,6 +4741,45 @@ sal_uInt16 SwTxtNode::ResetAllAttr()
     mbInSetOrResetAttr = bOldIsSetOrResetAttr;
 
     return nRet;
+}
+
+
+sal_uInt32 SwTxtNode::GetRsid( xub_StrLen nStt, xub_StrLen nEnd ) const
+{
+    SfxItemSet aSet( (SfxItemPool&) (GetDoc()->GetAttrPool()), RES_CHRATR_RSID, RES_CHRATR_RSID );
+    if ( GetAttr(aSet, nStt, nEnd) )
+    {
+        SvxRsidItem* pRsid = (SvxRsidItem*)aSet.GetItem(RES_CHRATR_RSID);
+        if( pRsid )
+            return pRsid->GetValue();
+    }
+
+    return 0;
+}
+
+sal_uInt32 SwTxtNode::GetParRsid() const
+{
+    SvxRsidItem &rItem = ( SvxRsidItem& ) GetAttr( RES_PARATR_RSID );
+
+    return rItem.GetValue();
+}
+
+bool SwTxtNode::CompareParRsid( const SwTxtNode &rTxtNode ) const
+{
+    sal_uInt32 nThisRsid = GetParRsid();
+    sal_uInt32 nRsid = rTxtNode.GetParRsid();
+
+    return nThisRsid == nRsid;
+}
+
+bool SwTxtNode::CompareRsid( const SwTxtNode &rTxtNode, xub_StrLen nStt1, xub_StrLen nStt2,
+                            xub_StrLen nEnd1,  xub_StrLen nEnd2 ) const
+
+{
+    sal_uInt32 nThisRsid = GetRsid( nStt1, nEnd1 ? nEnd1 : nStt1 );
+    sal_uInt32 nRsid = rTxtNode.GetRsid( nStt2, nEnd2 ? nEnd2 : nStt2 );
+
+    return nThisRsid == nRsid;
 }
 
 // sw::Metadatable

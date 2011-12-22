@@ -84,6 +84,7 @@ SwUnoPropertyMapProvider::~SwUnoPropertyMapProvider()
     { SW_PROP_NMID(UNO_NAME_CHAR_FONT_CHAR_SET), RES_CHRATR_FONT,       CPPU_E2T(CPPUTYPE_INT16),   PropertyAttribute::MAYBEVOID, MID_FONT_CHAR_SET },                    \
     { SW_PROP_NMID(UNO_NAME_CHAR_FONT_PITCH), RES_CHRATR_FONT,      CPPU_E2T(CPPUTYPE_INT16),                   PropertyAttribute::MAYBEVOID, MID_FONT_PITCH   },     \
     { SW_PROP_NMID(UNO_NAME_CHAR_POSTURE), RES_CHRATR_POSTURE   ,  CPPU_E2T(CPPUTYPE_FONTSLANT),        PropertyAttribute::MAYBEVOID, MID_POSTURE},                   \
+    { SW_PROP_NMID(UNO_NAME_RSID), RES_CHRATR_RSID, CPPU_E2T(CPPUTYPE_INT32), PropertyAttribute::MAYBEVOID, 0 }, \
     { SW_PROP_NMID(UNO_NAME_CHAR_LOCALE), RES_CHRATR_LANGUAGE ,   CPPU_E2T(CPPUTYPE_LOCALE)  ,          PropertyAttribute::MAYBEVOID,  MID_LANG_LOCALE },
 
 #define _CJK_FONT_PROPERTIES \
@@ -154,6 +155,7 @@ SwUnoPropertyMapProvider::~SwUnoPropertyMapProvider()
 // UNO_NAME_BREAK_TYPE and UNO_NAME_PAGE_DESC_NAME which can not be used
 // by the SwXTextTableCursor
 #define COMMON_CRSR_PARA_PROPERTIES_WITHOUT_FN_01 \
+        { SW_PROP_NMID(UNO_NAME_PARRSID), RES_PARATR_RSID, CPPU_E2T(CPPUTYPE_INT32), PropertyAttribute::MAYBEVOID, 0 }, \
         { SW_PROP_NMID(UNO_NAME_PARA_IS_HYPHENATION), RES_PARATR_HYPHENZONE,        CPPU_E2T(CPPUTYPE_BOOLEAN),     PropertyAttribute::MAYBEVOID, MID_IS_HYPHEN         },                                        \
         { SW_PROP_NMID(UNO_NAME_PARA_HYPHENATION_MAX_LEADING_CHARS), RES_PARATR_HYPHENZONE,         CPPU_E2T(CPPUTYPE_INT16),   PropertyAttribute::MAYBEVOID, MID_HYPHEN_MIN_LEAD   },                              \
         { SW_PROP_NMID(UNO_NAME_PARA_HYPHENATION_MAX_TRAILING_CHARS), RES_PARATR_HYPHENZONE,        CPPU_E2T(CPPUTYPE_INT16),   PropertyAttribute::MAYBEVOID, MID_HYPHEN_MIN_TRAIL  },                              \

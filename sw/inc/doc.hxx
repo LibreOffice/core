@@ -416,6 +416,9 @@ private:
     RedlineMode_t eRedlineMode;         // Current Redline Mode.
     SwCharCompressType eChrCmprType;    // for ASIAN: compress punctuation/kana
 
+    sal_uInt32  nRsid;				// current session ID of the document
+    sal_uInt32  nRsidRoot;			// session ID when the document was created
+
     sal_Int32   mReferenceCount;
     sal_Int32   mIdleBlockCount;
     sal_Int8    nLockExpFld;        // If != 0 UpdateExpFlds() has no effect!
@@ -732,6 +735,10 @@ public:
     virtual void setFieldUpdateFlags( /*[in]*/ SwFldUpdateFlags eMode );
     virtual SwCharCompressType getCharacterCompressionType() const;
     virtual void setCharacterCompressionType( /*[in]*/SwCharCompressType nType );
+    virtual sal_uInt32 getRsid() const;
+    virtual void setRsid( sal_uInt32 nVal );
+    virtual sal_uInt32 getRsidRoot() const;
+    virtual void setRsidRoot( sal_uInt32 nVal );
 
     /** IDocumentDeviceAccess
     */
@@ -859,6 +866,9 @@ public:
     virtual bool Overwrite(const SwPaM &rRg, const String& rStr);
     virtual bool InsertString(const SwPaM &rRg, const String&,
               const enum InsertFlags nInsertMode = INS_EMPTYEXPAND );
+    virtual bool UpdateRsid( SwTxtNode *pTxtNode, xub_StrLen nStt, xub_StrLen nEnd );
+    virtual bool UpdateParRsid( SwTxtNode *pTxtNode, sal_uInt32 nVal = 0 );
+    virtual bool UpdateRsid( const SwPaM &rRg, xub_StrLen nLen );
     virtual SwFlyFrmFmt* Insert(const SwPaM &rRg, const String& rGrfName, const String& rFltName, const Graphic* pGraphic,
                         const SfxItemSet* pFlyAttrSet, const SfxItemSet* pGrfAttrSet, SwFrmFmt*);
     virtual SwFlyFrmFmt* Insert(const SwPaM& rRg, const GraphicObject& rGrfObj, const SfxItemSet* pFlyAttrSet,

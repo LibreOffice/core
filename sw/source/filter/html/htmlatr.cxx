@@ -3365,8 +3365,8 @@ SwAttrFnTab aHTMLAttrFnTab = {
 /* RES_CHRATR_RELIEF */             0,
 /* RES_CHRATR_HIDDEN */             0,
 /* RES_CHRATR_OVERLINE */           OutHTML_CSS1Attr,
+/* RES_CHRATR_RSID */               0,
 /* RES_CHRATR_DUMMY1 */             0,
-/* RES_CHRATR_DUMMY2 */             0,
 
 /* RES_TXTATR_REFMARK */            0,
 /* RES_TXTATR_TOXMARK */            0,

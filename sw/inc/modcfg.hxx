@@ -39,6 +39,7 @@
 #include "tblenum.hxx"
 #include "itabenum.hxx"
 #include <tools/globname.hxx>
+#include <editeng/svxenum.hxx>
 class SwModuleOptions;
 
 class InsCaptionOpt;
@@ -75,6 +76,26 @@ class SwRevisionConfig : public utl::ConfigItem
     virtual void Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames );
     void                    Load();
     void                    SetModified(){ConfigItem::SetModified();}
+};
+
+class SwCompareConfig : public utl::ConfigItem
+{
+    friend class SwModuleOptions;
+
+    sal_uInt16      eCmpMode;		//Compare/CompareDocuments;
+    sal_Bool        bUseRsid;		//Compare/Settings/Use RSID
+    sal_Bool        bIgnorePieces;	//Compare/Settings/Ignore pieces of length
+    sal_uInt16      nPieceLen;		//Compare/Settings/Ignore pieces of length
+
+    const com::sun::star::uno::Sequence<rtl::OUString>& GetPropertyNames();
+    public:
+        SwCompareConfig();
+        ~SwCompareConfig();
+
+    virtual void    Commit();
+    virtual void    Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& ){ };
+    void            Load();
+    void            SetModified() {ConfigItem::SetModified(); }
 };
 
 class SwInsertConfig : public utl::ConfigItem
@@ -166,6 +187,8 @@ class SW_DLLPUBLIC SwModuleOptions
     SwTableConfig                   aWebTableConfig;
 
     SwMiscConfig                    aMiscConfig;
+
+    SwCompareConfig					aCompareConfig;
 
     //fiscus: don't show tips of text fields - it's not part of the configuration!
     sal_Bool        bHideFieldTips : 1;
@@ -309,20 +332,37 @@ public:
     //convert word delimiter from or to user interface
     static String ConvertWordDelimiter(const String& rDelim, sal_Bool bFromUI);
 
-    sal_Bool        IsShowIndexPreview() const {return  aMiscConfig.bShowIndexPreview;}
+    sal_Bool    IsShowIndexPreview() const {return  aMiscConfig.bShowIndexPreview;}
     void        SetShowIndexPreview(sal_Bool bSet)
                     {aMiscConfig.bShowIndexPreview = bSet;
                     aMiscConfig.SetModified();}
 
-    sal_Bool        IsDefaultFontInCurrDocOnly() const { return aMiscConfig.bDefaultFontsInCurrDocOnly;}
+    sal_Bool    IsDefaultFontInCurrDocOnly() const { return aMiscConfig.bDefaultFontsInCurrDocOnly;}
     void        SetDefaultFontInCurrDocOnly(sal_Bool bSet)
                     {
                         aMiscConfig.bDefaultFontsInCurrDocOnly = bSet;
                         aMiscConfig.SetModified();
                     }
 
-    sal_Bool        IsHideFieldTips() const {return bHideFieldTips;}
+    sal_Bool    IsHideFieldTips() const {return bHideFieldTips;}
     void        SetHideFieldTips(sal_Bool bSet) {bHideFieldTips = bSet;}
+
+    SvxCompareMode  GetCompareMode() const { return (SvxCompareMode)aCompareConfig.eCmpMode; }
+    void            SetCompareMode( SvxCompareMode eMode ) { aCompareConfig.eCmpMode = eMode;
+                                                             aCompareConfig.SetModified(); }
+
+    sal_Bool    IsUseRsid() const { return aCompareConfig.bUseRsid; }
+    void        SetUseRsid( sal_Bool b ) { aCompareConfig.bUseRsid = b;
+                                                            aCompareConfig.SetModified(); }
+
+    sal_Bool    IsIgnorePieces() const { return aCompareConfig.bIgnorePieces; }
+    void        SetIgnorePieces( sal_Bool b ) { aCompareConfig.bIgnorePieces = b;
+                                                aCompareConfig.SetModified(); }
+
+    sal_uInt16  GetPieceLen() const { return aCompareConfig.nPieceLen; }
+    void        SetPieceLen( sal_uInt16 nLen ) { aCompareConfig.nPieceLen = nLen;
+                                                 aCompareConfig.SetModified(); }
+
 };
 #endif
 

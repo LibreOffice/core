@@ -156,6 +156,14 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
     if( (getExportFlags() & (EXPORT_FONTDECLS|EXPORT_STYLES|
                              EXPORT_MASTERSTYLES|EXPORT_CONTENT)) != 0 )
     {
+        if( getDefaultVersion() == SvtSaveOptions::ODFVER_LATEST )
+        {
+            _GetNamespaceMap().Add(
+                GetXMLToken(XML_NP_OFFICE_EXT),
+                GetXMLToken(XML_N_OFFICE_EXT),
+                XML_NAMESPACE_OFFICE_EXT);
+        }
+
         GetTextParagraphExport()->SetBlockMode( bBlock );
 
         const SfxPoolItem* pItem;

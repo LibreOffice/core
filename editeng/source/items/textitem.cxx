@@ -73,6 +73,7 @@
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/text/FontEmphasis.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
+#include <editeng/rsiditem.hxx>
 #include <editeng/memberids.hrc>
 #include <editeng/flstitem.hxx>
 #include <editeng/fontitem.hxx>
@@ -157,7 +158,7 @@ TYPEINIT1_FACTORY(SvxScriptTypeItem, SfxUInt16Item, new SvxScriptTypeItem);
 TYPEINIT1_FACTORY(SvxCharRotateItem, SfxUInt16Item, new SvxCharRotateItem(0, sal_False, 0));
 TYPEINIT1_FACTORY(SvxCharScaleWidthItem, SfxUInt16Item, new SvxCharScaleWidthItem(100, 0));
 TYPEINIT1_FACTORY(SvxCharReliefItem, SfxEnumItem, new SvxCharReliefItem(RELIEF_NONE, 0));
-
+TYPEINIT1_FACTORY(SvxRsidItem, SfxUInt32Item, new SvxRsidItem(0, 0));
 
 TYPEINIT1(SvxScriptSetItem, SfxSetItem );
 
@@ -3740,4 +3741,29 @@ short GetI18NScriptType( sal_uInt16 nItemType )
     return 0;
 }
 
+bool SvxRsidItem::QueryValue( uno::Any& rVal, sal_uInt8 ) const
+{
+    rVal <<= ( (sal_uInt32)GetValue() );
+    return true;
+}
+
+bool SvxRsidItem::PutValue( const uno::Any& rVal, sal_uInt8 )
+{
+    sal_uInt32 nRsid = 0;
+    if( !( rVal >>= nRsid ) )
+        return false;
+
+    SetValue( nRsid );
+    return true;
+}
+
+SfxPoolItem* SvxRsidItem::Clone( SfxItemPool * ) const
+{
+    return new SvxRsidItem( *this );
+}
+
+SfxPoolItem* SvxRsidItem::Create(SvStream& rIn, sal_uInt16 ) const
+{
+    return new SvxRsidItem( rIn, Which() );
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

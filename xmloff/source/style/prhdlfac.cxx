@@ -210,6 +210,9 @@ const XMLPropertyHandler* XMLPropertyHandlerFactory::CreatePropertyHandler( sal_
         case XML_TYPE_COLOR :
             pPropHdl = new XMLColorPropHdl;
             break;
+        case XML_TYPE_HEX :
+            pPropHdl = new XMLHexPropHdl;
+            break;
         case XML_TYPE_NUMBER :
             pPropHdl = new XMLNumberPropHdl( 4 );
             break;

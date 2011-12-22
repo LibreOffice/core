@@ -34,6 +34,8 @@
 #include <tools/shl.hxx>
 #include <tools/globname.hxx>
 #include <svx/svxids.hrc>
+#include <rtl/random.h>
+
 #include <com/sun/star/i18n/WordType.hdl>
 #include <com/sun/star/i18n/ForbiddenCharacters.hdl>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -59,6 +61,7 @@
 #include <editeng/forbiddencharacterstable.hxx>
 #include <svx/svdmodel.hxx>
 #include <editeng/pbinitem.hxx>
+#include <editeng/rsiditem.hxx>
 #include <unotools/charclass.hxx>
 #include <unotools/localedatawrapper.hxx>
 
@@ -456,6 +459,33 @@ void SwDoc::setLinkUpdateMode( /*[in]*/sal_uInt16 eMode )
     nLinkUpdMode = eMode;
 }
 
+sal_uInt32 SwDoc::getRsid() const
+{
+    return nRsid;
+}
+
+void SwDoc::setRsid( sal_uInt32 nVal )
+{
+    // Increase the rsid with a random number smaller than 2^17. This way we
+    // expect to be able to edit a document 2^12 times before rsid overflows.
+    sal_uInt32 nIncrease = 0;
+    static rtlRandomPool aPool = rtl_random_createPool();
+    rtl_random_getBytes( aPool, &nIncrease, sizeof ( nIncrease ) );
+    nIncrease &= ( 1<<17 ) - 1;
+    nIncrease++; // make sure the new rsid is not the same
+    nRsid = nVal + nIncrease;
+}
+
+sal_uInt32 SwDoc::getRsidRoot() const
+{
+    return nRsidRoot;
+}
+
+void SwDoc::setRsidRoot( sal_uInt32 nVal )
+{
+    nRsidRoot = nVal;
+}
+
 SwFldUpdateFlags SwDoc::getFieldUpdateFlags( /*[in]*/bool bGlobalSettings ) const
 {
     SwFldUpdateFlags eRet = eFldUpdMode;
@@ -729,6 +759,15 @@ bool SwDoc::SplitNode( const SwPosition &rPos, bool bChkTableStart )
             pUndo = new SwUndoSplitNode( this, rPos, bChkTableStart );
             GetIDocumentUndoRedo().AppendUndo(pUndo);
         }
+    }
+
+    // Update the rsid of the old and the new node unless
+    // the old node is split at the beginning or at the end
+    SwTxtNode *pTxtNode =  rPos.nNode.GetNode().GetTxtNode();
+    xub_StrLen nPos = rPos.nContent.GetIndex();
+    if( pTxtNode && nPos && nPos != pTxtNode->Len() )
+    {
+        UpdateParRsid( pTxtNode );
     }
 
     //JP 28.01.97: Special case for SplitNode at table start:
@@ -1065,6 +1104,41 @@ SwFieldType *SwDoc::GetSysFldType( const sal_uInt16 eWhich ) const
             return (*pFldTypes)[i];
     return 0;
 }
+
+// Set the rsid from nStt to nEnd of pTxtNode to the current session number
+bool SwDoc::UpdateRsid( SwTxtNode *pTxtNode, xub_StrLen nStt, xub_StrLen nEnd )
+{
+    if ( !pTxtNode )
+    {
+        return false;
+    }
+
+    SvxRsidItem aRsid( nRsid, RES_CHRATR_RSID );
+    SwTxtAttr* pAttr = MakeTxtAttr( *this, aRsid, nStt, nEnd );
+    return pTxtNode->InsertHint( pAttr, INS_DEFAULT );
+}
+
+// Set the rsid of the next nLen symbols of rRg to the current session number
+bool SwDoc::UpdateRsid( const SwPaM &rRg, const xub_StrLen nLen )
+{
+    const SwPosition* pPos = rRg.GetPoint();
+    SwTxtNode *pTxtNode = pPos->nNode.GetNode().GetTxtNode();
+    xub_StrLen nInsPos = pPos->nContent.GetIndex();
+
+    return UpdateRsid( pTxtNode, nInsPos - nLen, nInsPos );
+}
+
+bool SwDoc::UpdateParRsid( SwTxtNode *pTxtNode, sal_uInt32 nVal )
+{
+    if ( !pTxtNode )
+    {
+        return false;
+    }
+
+    SvxRsidItem aRsid( nVal ? nVal : nRsid, RES_PARATR_RSID );
+    return pTxtNode->SetAttr( aRsid );
+}
+
 
 /*************************************************************************
  *             void SetDocStat( const SwDocStat& rStat );

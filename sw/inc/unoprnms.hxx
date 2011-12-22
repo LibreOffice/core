@@ -806,7 +806,9 @@ enum SwPropNameIds
 /* 0742 */  UNO_NAME_SEPARATOR_LINE_STYLE,
 /* 0743 */  UNO_NAME_FOOTNOTE_LINE_STYLE,
 /* 0744 */  UNO_NAME_EMBEDDED_OBJECT,
-/* 0745 */  SW_PROPNAME_END
+/* 0745 */  UNO_NAME_RSID,
+/* 0746 */  UNO_NAME_PARRSID,
+/* 0747 */  SW_PROPNAME_END
 
 // new items in this array must match SwPropNameTab aPropNameTab
 };

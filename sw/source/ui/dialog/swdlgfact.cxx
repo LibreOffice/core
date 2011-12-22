@@ -1612,6 +1612,7 @@ GlossarySetActGroup SwAbstractDialogFactory_Impl::SetGlossaryActGroupFunc( sal_u
     return 0;
 }
 
+
 //------------------ Factories for TabPages
 CreateTabPage SwAbstractDialogFactory_Impl::GetTabPageCreatorFunc( sal_uInt16 nId )
 {
@@ -1664,6 +1665,10 @@ CreateTabPage SwAbstractDialogFactory_Impl::GetTabPageCreatorFunc( sal_uInt16 nI
             break;
         case RID_SW_TP_MAILCONFIG:
             pRet = SwMailConfigPage::Create;
+        break;
+        case RID_SW_TP_COMPARISON_OPT :
+        case TP_COMPARISON_OPT :
+            pRet = SwCompareOptionsTabPage::Create;
         break;
     }
 

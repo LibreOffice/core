@@ -385,6 +385,7 @@ static OptionsMapping_Impl const OptionsMap_Impl[] =
     { "Writer",             "Print",                RID_SW_TP_OPTPRINT_PAGE },
     { "Writer",             "Table",                RID_SW_TP_OPTTABLE_PAGE },
     { "Writer",             "Changes",              RID_SW_TP_REDLINE_OPT },
+    { "Writer",             "Comparison",           RID_SW_TP_COMPARISON_OPT },
     { "Writer",             "Compatibility",        RID_SW_TP_OPTCOMPATIBILITY_PAGE },
     { "Writer",             "AutoCaption",          RID_SW_TP_OPTCAPTION_PAGE },
     { "Writer",             "MailMerge",            RID_SW_TP_MAILCONFIG },

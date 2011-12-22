@@ -507,6 +507,9 @@ sal_Bool SwDocShell::SaveAs( SfxMedium& rMedium )
         pDoc->SetOle2Link( aOldOLELnk );
 
         SW_MOD()->SetEmbeddedLoadSave( sal_False );
+
+        // Increase RSID
+        pDoc->setRsid( pDoc->getRsid() );
     }
     SetError( nErr ? nErr : nVBWarning, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
 

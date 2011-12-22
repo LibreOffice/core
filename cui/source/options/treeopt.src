@@ -148,6 +148,7 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
             < "Print" ;       RID_SW_TP_OPTPRINT_PAGE  ; > ;
             < "Table" ;         RID_SW_TP_OPTTABLE_PAGE  ; > ;
             < "Changes" ;    RID_SW_TP_REDLINE_OPT    ; > ;
+            < "Comparison" ; RID_SW_TP_COMPARISON_OPT ; > ;
             < "Compatibility" ; RID_SW_TP_OPTCOMPATIBILITY_PAGE    ; > ;
             < "AutoCaption" ; RID_SW_TP_OPTCAPTION_PAGE ; > ;
             < "Mail Merge E-mail" ; RID_SW_TP_MAILCONFIG ; >;
