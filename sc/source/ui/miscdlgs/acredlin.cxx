@@ -1218,7 +1218,7 @@ bool ScAcceptChgDlg::InsertContentChildren(ScChangeActionMap* pActionMap,SvLBoxE
         ++itChangeAction;
     }
 
-    if( itChangeAction != pActionMap->end() )
+    if( itChangeAction == pActionMap->end() )
         return true;
 
     SvLBoxEntry* pOriginal = InsertChangeActionContent(
