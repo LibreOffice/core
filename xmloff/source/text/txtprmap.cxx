@@ -264,8 +264,8 @@ XMLPropertyMapEntry aXMLParaPropMap[] =
     MP_ED( "ParaTabStops",      STYLE,  TAB_STOPS,          MID_FLAG_ELEMENT_ITEM|XML_TYPE_TEXT_TABSTOP, CTF_TABSTOP ), // this is not realy a string!
     // RES_PARATR_HYPHENZONE
     MT_E( "ParaIsHyphenation",  FO,     HYPHENATE,          XML_TYPE_BOOL, 0 ),
-    MT_E( "ParaHyphenationMaxLeadingChars", FO, HYPHENATION_REMAIN_CHAR_COUNT, XML_TYPE_NUMBER16, 0 ),
-    MT_E( "ParaHyphenationMaxTrailingChars",FO, HYPHENATION_PUSH_CHAR_COUNT, XML_TYPE_NUMBER16, 0 ),
+    MT_E( "ParaHyphenationMaxLeadingChars", FO, HYPHENATION_REMAIN_CHAR_COUNT, XML_TYPE_NUMBER16_NO_ZERO, 0 ),
+    MT_E( "ParaHyphenationMaxTrailingChars",FO, HYPHENATION_PUSH_CHAR_COUNT, XML_TYPE_NUMBER16_NO_ZERO, 0 ),
     MP_E( "ParaHyphenationMaxHyphens",  FO, HYPHENATION_LADDER_COUNT, XML_TYPE_NUMBER16_NONE, 0 ),
     // RES_PARATR_DROP
     MP_E( "DropCapWholeWord",   STYLE,  LENGTH,     MID_FLAG_SPECIAL_ITEM|XML_TYPE_BOOL, CTF_DROPCAPWHOLEWORD ),
