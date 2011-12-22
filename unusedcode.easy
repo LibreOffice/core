@@ -1608,7 +1608,6 @@ chart::EquidistantTickIter::getMaxIndex() const
 chart::EquidistantTickIter::gotoIndex(int)
 cmis::Content::exchangeIdentity(com::sun::star::uno::Reference<com::sun::star::ucb::XContentIdentifier> const&)
 cmis::Content::queryChildren(std::__debug::list<rtl::Reference<cmis::Content>, std::allocator<rtl::Reference<cmis::Content> > >&)
-codemaker::cpp::typeToPrefix(TypeManager const&, rtl::OString const&)
 comphelper::AccessibleEventNotifier::getEventListeners(unsigned int)
 comphelper::AttributeList::AppendAttributeList(com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList> const&)
 comphelper::AttributeList::Clear()

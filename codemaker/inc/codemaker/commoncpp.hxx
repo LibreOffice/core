@@ -33,8 +33,6 @@
 
 namespace codemaker { namespace cpp {
 
-rtl::OString typeToPrefix(TypeManager const & manager, rtl::OString const & type);
-
 rtl::OString scopedCppName(rtl::OString const & type, bool bNoNameSpace=false,
                            bool shortname=false);
 
