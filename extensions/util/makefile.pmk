@@ -27,3 +27,4 @@
 
 .INCLUDE :  settings.mk
 
+CDEFS += -DNOMINMAX
