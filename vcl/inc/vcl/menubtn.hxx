@@ -88,7 +88,8 @@ public:
     void            SetPopupMenu( PopupMenu* pNewMenu );
     PopupMenu*      GetPopupMenu() const { return mpMenu; }
 
-    sal_uInt16          GetCurItemId() const { return mnCurItemId; }
+    sal_uInt16      GetCurItemId() const { return mnCurItemId; }
+    void            SetCurItemId( sal_uInt16 nItemId ) { mnCurItemId = nItemId; }
 
     void            SetActivateHdl( const Link& rLink ) { maActivateHdl = rLink; }
     const Link&     GetActivateHdl() const              { return maActivateHdl; }
