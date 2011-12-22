@@ -68,7 +68,7 @@ using namespace drawinglayer::primitive2d;
 
 namespace
 {
-    B2DPolygon lcl_CreatePolygon( B2DRectangle aBounds, bool bMirror )
+    static B2DPolygon lcl_CreatePolygon( B2DRectangle aBounds, bool bMirror )
     {
         B2DPolygon aRetval;
         const double nRadius = 1;
@@ -164,16 +164,32 @@ namespace
                 SwDashedLine( pParent, rColor ),
                 m_pWin( pWin ) {};
 
-
             virtual void MouseMove( const MouseEvent& rMEvt );
+            virtual void MouseButtonDown( const MouseEvent& rMEvt );
     };
 
     void SwBreakDashedLine::MouseMove( const MouseEvent& rMEvt )
     {
         if ( rMEvt.IsLeaveWindow() )
-            m_pWin->Fade( false );
+        {
+            // don't fade if we just move to the 'button'
+            Rectangle aRect( m_pWin->GetPosPixel(), m_pWin->GetSizePixel() );
+            Point aEventPos( GetPosPixel() + rMEvt.GetPosPixel() );
+            if ( !aRect.IsInside( aEventPos ) )
+                m_pWin->Fade( false );
+        }
         else if ( !m_pWin->IsVisible() )
             m_pWin->Fade( true );
+    }
+
+    void SwBreakDashedLine::MouseButtonDown( const MouseEvent& rMEvt )
+    {
+        sal_uInt16 nItemId = m_pWin->GetPopupMenu()->Execute( this, rMEvt.GetPosPixel() );
+        if ( nItemId )
+        {
+            m_pWin->SetCurItemId( nItemId );
+            m_pWin->Select();
+        }
     }
 }
 
@@ -195,9 +211,10 @@ SwPageBreakWin::SwPageBreakWin( SwEditWin* pEditWin, const SwPageFrm* pPageFrm )
 
     // Create the popup menu
     m_pPopupMenu = new PopupMenu( SW_RES( MN_PAGEBREAK_BUTTON ) );
+    m_pPopupMenu->SetDeactivateHdl( LINK( this, SwPageBreakWin, HideHandler ) );
     SetPopupMenu( m_pPopupMenu );
 
-    m_aFadeTimer.SetTimeout( 500 );
+    m_aFadeTimer.SetTimeout( 50 );
     m_aFadeTimer.SetTimeoutHdl( LINK( this, SwPageBreakWin, FadeHandler ) );
 }
 
@@ -383,7 +400,13 @@ void SwPageBreakWin::Select( )
 void SwPageBreakWin::MouseMove( const MouseEvent& rMEvt )
 {
     if ( rMEvt.IsLeaveWindow() )
-        Fade( false );
+    {
+        // don't fade if we just move to the 'line', or the popup menu is open
+        Rectangle aRect( m_pLine->GetPosPixel(), m_pLine->GetSizePixel() );
+        Point aEventPos( GetPosPixel() + rMEvt.GetPosPixel() );
+        if ( !aRect.IsInside( aEventPos ) && !PopupMenu::IsInExecute() )
+            Fade( false );
+    }
     else if ( !IsVisible() )
         Fade( true );
 }
@@ -457,13 +480,13 @@ void SwPageBreakWin::UpdatePosition( )
         long nRight = std::min( nPgRight + aBtnSize.getWidth() - ARROW_WIDTH / 2, aVisArea.Right() );
         nBtnLeft = nRight - aBtnSize.getWidth();
         if ( IsVisible() )
-           nLineRight = nBtnLeft - ARROW_WIDTH / 2;
+           nLineRight = nBtnLeft;
     }
     else
     {
         nBtnLeft = std::max( nPgLeft - aBtnSize.Width() + ARROW_WIDTH / 2, aVisArea.Left() );
         if ( IsVisible() )
-           nLineLeft = nBtnLeft + aBtnSize.Width( ) + ARROW_WIDTH / 2;
+           nLineLeft = nBtnLeft + aBtnSize.Width();
     }
 
     // Set the button position
@@ -493,22 +516,26 @@ void SwPageBreakWin::SetReadonly( bool bReadonly )
 
 void SwPageBreakWin::Fade( bool bFadeIn )
 {
-    if ( !PopupMenu::IsInExecute() )
-    {
-        m_bIsAppearing = bFadeIn;
-        if ( !m_bDestroyed && m_aFadeTimer.IsActive( ) )
-            m_aFadeTimer.Stop();
-        if ( !m_bDestroyed )
-            m_aFadeTimer.Start( );
-    }
+    m_bIsAppearing = bFadeIn;
+    if ( !m_bDestroyed && m_aFadeTimer.IsActive( ) )
+        m_aFadeTimer.Stop();
+    if ( !m_bDestroyed )
+        m_aFadeTimer.Start( );
+}
+
+IMPL_LINK( SwPageBreakWin, HideHandler, void *, EMPTYARG )
+{
+    Fade( false );
+
+    return 0;
 }
 
 IMPL_LINK( SwPageBreakWin, FadeHandler, Timer *, EMPTYARG )
 {
     if ( m_bIsAppearing && m_nFadeRate > 0 )
-        m_nFadeRate -= 10;
+        m_nFadeRate -= 25;
     else if ( !m_bIsAppearing && m_nFadeRate < 100 )
-        m_nFadeRate += 10;
+        m_nFadeRate += 25;
 
     if ( m_nFadeRate != 100 && !IsVisible() )
         Show();
@@ -520,20 +547,8 @@ IMPL_LINK( SwPageBreakWin, FadeHandler, Timer *, EMPTYARG )
         Invalidate();
     }
 
-    if ( IsVisible( ) )
-    {
-        if ( m_nFadeRate > 0 )
-            m_aFadeTimer.SetTimeout( 100 );
-        else
-        {
-            m_aFadeTimer.SetTimeout( 3000 );
-        }
-
-        if ( m_nFadeRate > 0 && m_nFadeRate < 100 )
-            m_aFadeTimer.Start();
-    }
-    else
-        m_aFadeTimer.SetTimeout( 500 );
+    if ( IsVisible( ) && m_nFadeRate > 0 && m_nFadeRate < 100 )
+        m_aFadeTimer.Start();
 
     return 0;
 }
