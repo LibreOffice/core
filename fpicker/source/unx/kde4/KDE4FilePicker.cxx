@@ -343,13 +343,7 @@ void SAL_CALL KDE4FilePicker::appendFilterGroup( const rtl::OUString& , const un
     for (sal_uInt16 i = 0; i < length; ++i)
     {
         beans::StringPair aPair = filters[i];
-
-        _filter.append(QString("%1|%2").arg(
-            toQString(aPair.Second).replace(";", " ")).arg(
-            toQString(aPair.First).replace("/","\\/")));
-
-        if (i != length - 1)
-            _filter.append('\n');
+        appendFilter( aPair.First, aPair.Second );
     }
 }
 
