@@ -360,7 +360,9 @@ void XMLPageMasterExportPropMapper::ContextFilter(
     XMLPropertyState*       pPMScaleToY         = NULL;
     XMLPropertyState*       pPMStandardMode     = NULL;
     XMLPropertyState*       pPMGridBaseWidth    = NULL;
+    // same as pPMGridSnapTo but for backward compatibility only
     XMLPropertyState*       pPMGridSnapToChars  = NULL;
+    XMLPropertyState*       pPMGridSnapTo       = NULL;
 
     XMLPropertyState*       pPrint              = NULL;
 
@@ -421,6 +423,7 @@ void XMLPageMasterExportPropMapper::ContextFilter(
             case CTF_PM_STANDARD_MODE:      pPMStandardMode     = pProp;    break;
             case CTP_PM_GRID_BASE_WIDTH:        pPMGridBaseWidth    = pProp;    break;
             case CTP_PM_GRID_SNAP_TO_CHARS:     pPMGridSnapToChars  = pProp;    break;
+            case CTP_PM_GRID_SNAP_TO:       pPMGridSnapTo = pProp;    break;
         }
         if (nPrintId == CTF_PM_PRINTMASK)
         {
@@ -436,6 +439,10 @@ void XMLPageMasterExportPropMapper::ContextFilter(
             lcl_RemoveState(pPMGridBaseWidth);
         if( pPMGridSnapToChars )
             lcl_RemoveState(pPMGridSnapToChars);
+        if (pPMGridSnapTo)
+        {
+            lcl_RemoveState(pPMGridSnapTo);
+        }
     }
 
     if( pPMGridBaseWidth && pPMStandardMode )
