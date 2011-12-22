@@ -397,7 +397,7 @@ String STR_SD_PAGE
 };
 String STR_ALL_FILES
 {
-    Text [ en-US ] = "All files (*.*)" ;
+    Text [ en-US ] = "All files" ;
 };
 String STR_UNDO_INSERT_TEXTFRAME
 {

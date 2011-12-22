@@ -50,7 +50,7 @@ String AVMEDIA_STR_ALL_MEDIAFILES
 
 String AVMEDIA_STR_ALL_FILES
 {
-    Text[en-US] = "All files (*.*)";
+    Text[en-US] = "All files";
 };
 
 // ------------------------------------------------------------------------------

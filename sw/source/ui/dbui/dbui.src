@@ -159,7 +159,7 @@ String STR_NOTASSIGNED
 };
 String STR_FILTER_ALL
 {
-    Text [ en-US ] = "All files (*.*)" ;
+    Text [ en-US ] = "All files" ;
 };
 String STR_FILTER_ALL_DATA
 {

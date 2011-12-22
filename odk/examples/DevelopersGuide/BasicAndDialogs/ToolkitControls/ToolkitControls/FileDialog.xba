@@ -38,10 +38,10 @@ Sub OpenFileDialog()
 	oFilePicker = CreateUnoService( &quot;com.sun.star.ui.dialogs.FilePicker&quot; )
 
 	REM set filter
-	oFilePicker.AppendFilter( &quot;All files (*.*)&quot;, &quot;*.*&quot; )	
+	oFilePicker.AppendFilter( &quot;All files&quot;, &quot;*.*&quot; )	
 	oFilePicker.AppendFilter( &quot;StarOffice 6.0 Text Text Document&quot;, &quot;*.sxw&quot; )
 	oFilePicker.AppendFilter( &quot;StarOffice 6.0 Spreadsheet&quot;, &quot;*.sxc&quot; )		
-	oFilePicker.SetCurrentFilter( &quot;All files (*.*)&quot; )
+	oFilePicker.SetCurrentFilter( &quot;All files&quot; )
 
 	REM if no file URL is set, get path settings from configuration
 	oTextFieldModel = oDialog.Model.TextField1
