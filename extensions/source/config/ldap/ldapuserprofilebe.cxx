@@ -178,7 +178,7 @@ bool LdapUserProfileBe::getLdapStringParam(
     xAccess->getByName(aLdapSetting) >>= sParam;
     aServerParameter = rtl::OUStringToOString(sParam, RTL_TEXTENCODING_ASCII_US);
 
-    return aServerParameter.getLength() != 0;
+    return !aServerParameter.isEmpty();
 }
 //------------------------------------------------------------------------------
 void LdapUserProfileBe::setPropertyValue(

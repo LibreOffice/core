@@ -240,7 +240,7 @@ namespace pcr
 
         // get the UNO representation of the address
         CellAddress aAddress;
-        if ( !_rAddress.getLength() || !convertStringAddress( _rAddress, aAddress ) )
+        if ( _rAddress.isEmpty() || !convertStringAddress( _rAddress, aAddress ) )
             return xBinding;
 
         return createCellBindingFromAddress( aAddress, _bSupportIntegerExchange );
@@ -252,7 +252,7 @@ namespace pcr
         Reference< XListEntrySource > xSource;
 
         CellRangeAddress aRangeAddress;
-        if ( !_rAddress.getLength() || !convertStringAddress( _rAddress, aRangeAddress ) )
+        if ( _rAddress.isEmpty() || !convertStringAddress( _rAddress, aRangeAddress ) )
             return xSource;
 
         // create a range object for this address
@@ -277,7 +277,7 @@ namespace pcr
         {
             try
             {
-                if ( _rArgumentName.getLength() )
+                if ( !_rArgumentName.isEmpty() )
                 {
                     NamedValue aArg;
                     aArg.Name = _rArgumentName;

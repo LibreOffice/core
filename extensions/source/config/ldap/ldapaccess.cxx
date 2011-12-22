@@ -163,7 +163,7 @@ void  LdapConnection::connectSimple()
 void LdapConnection::initConnection()
     throw (ldap::LdapConnectionException)
 {
-    if (mLdapDefinition.mServer.getLength() == 0)
+    if (mLdapDefinition.mServer.isEmpty())
     {
         rtl::OUStringBuffer message ;
 
@@ -230,7 +230,7 @@ void LdapConnection::initConnection()
 {
     if (!isValid()) { connectSimple(); }
 
-    if (aUser.getLength() == 0)
+    if (aUser.isEmpty())
     {
         throw lang::IllegalArgumentException(
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM

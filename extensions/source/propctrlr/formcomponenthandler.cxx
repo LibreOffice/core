@@ -439,7 +439,7 @@ namespace pcr
                                     Locale aLocale = pLocale[iLocale];
 
                                     ::rtl::OUString aResourceStr;
-                                    if( aOldPureIdStr.getLength() != 0 )
+                                    if( !aOldPureIdStr.isEmpty() )
                                     {
                                         if( xStringResourceManager->hasEntryForIdAndLocale( aOldPureIdStr, aLocale ) )
                                         {
@@ -536,7 +536,7 @@ namespace pcr
             ::rtl::OUString sControlValue;
             OSL_VERIFY( _rControlValue >>= sControlValue );
 
-            if ( sControlValue.getLength() )
+            if ( !sControlValue.isEmpty() )
             {
                 Reference< XNameAccess > xDatabaseContext;
                 m_aContext.createComponent( (::rtl::OUString)SERVICE_DATABASE_CONTEXT, xDatabaseContext );
@@ -685,7 +685,7 @@ namespace pcr
 
             ::rtl::OUString sDataSource;
             _rPropertyValue >>= sDataSource;
-            if ( sDataSource.getLength() )
+            if ( !sDataSource.isEmpty() )
             {
                 ::svt::OFileNotation aTransformer( sDataSource );
                 sDataSource = aTransformer.get( ::svt::OFileNotation::N_SYSTEM );
@@ -768,7 +768,7 @@ namespace pcr
             OSL_VERIFY( _rPropertyValue >>= aFont );
 
             ::rtl::OUStringBuffer displayName;
-            if ( !aFont.Name.getLength() )
+            if ( aFont.Name.isEmpty() )
             {
                 displayName.append( String( PcrRes( RID_STR_FONT_DEFAULT ) ) );
             }
@@ -883,7 +883,7 @@ namespace pcr
             pProperty->Handle = nPropId;
 
             sDisplayName = m_pInfoService->getPropertyTranslation( nPropId );
-            if ( !sDisplayName.getLength() )
+            if ( sDisplayName.isEmpty() )
                 continue;
 
             sal_uInt32  nPropertyUIFlags = m_pInfoService->getPropertyUIFlags( nPropId );
@@ -1417,9 +1417,9 @@ namespace pcr
             }
         }
 
-        if ( aDescriptor.PrimaryButtonId.getLength() )
+        if ( !aDescriptor.PrimaryButtonId.isEmpty() )
             aDescriptor.HasPrimaryButton = sal_True;
-        if ( aDescriptor.SecondaryButtonId.getLength() )
+        if ( !aDescriptor.SecondaryButtonId.isEmpty() )
             aDescriptor.HasSecondaryButton = sal_True;
 
         bool bIsDataProperty = ( nPropertyUIFlags & PROP_FLAG_DATA_PROPERTY ) != 0;
@@ -1608,9 +1608,9 @@ namespace pcr
             ::rtl::OUString sControlSource;
             _rNewValue >>= sControlSource;
             if ( impl_componentHasProperty_throw( PROPERTY_FILTERPROPOSAL ) )
-                _rxInspectorUI->enablePropertyUI( PROPERTY_FILTERPROPOSAL, sControlSource.getLength() > 0 );
+                _rxInspectorUI->enablePropertyUI( PROPERTY_FILTERPROPOSAL, !sControlSource.isEmpty() );
             if ( impl_componentHasProperty_throw( PROPERTY_EMPTY_IS_NULL ) )
-                _rxInspectorUI->enablePropertyUI( PROPERTY_EMPTY_IS_NULL, sControlSource.getLength() > 0 );
+                _rxInspectorUI->enablePropertyUI( PROPERTY_EMPTY_IS_NULL, !sControlSource.isEmpty() );
 
             aDependentProperties.push_back( PROPERTY_ID_BOUNDCOLUMN );
             aDependentProperties.push_back( PROPERTY_ID_SCALEIMAGE );
@@ -1680,7 +1680,7 @@ namespace pcr
             {
                 ::rtl::OUString sImageURL;
                 OSL_VERIFY( _rNewValue >>= sImageURL );
-                _rxInspectorUI->enablePropertyUI( PROPERTY_IMAGEPOSITION, sImageURL.getLength() != 0 );
+                _rxInspectorUI->enablePropertyUI( PROPERTY_IMAGEPOSITION, !sImageURL.isEmpty() );
             }
 
             aDependentProperties.push_back( PROPERTY_ID_SCALEIMAGE );
@@ -1842,7 +1842,7 @@ namespace pcr
                 }
 
                 sal_Bool bIsEnabled =   (  ( eLSType == ListSourceType_VALUELIST )
-                                        || ( sListSource.getLength() == 0 )
+                                        || ( sListSource.isEmpty() )
                                         );
                 _rxInspectorUI->enablePropertyUI( PROPERTY_STRINGITEMLIST, bIsEnabled );
             }
@@ -1858,7 +1858,7 @@ namespace pcr
                 OSL_VERIFY( impl_getPropertyValue_throw( PROPERTY_LISTSOURCETYPE ) >>= eLSType );
 
                 _rxInspectorUI->enablePropertyUI( PROPERTY_BOUNDCOLUMN,
-                        ( sControlSource.getLength() > 0 )
+                        ( !sControlSource.isEmpty() )
                     &&  ( eLSType != ListSourceType_TABLEFIELDS )
                     &&  ( eLSType != ListSourceType_VALUELIST )
                 );
@@ -1877,7 +1877,7 @@ namespace pcr
                 impl_getPropertyValue_throw( PROPERTY_IMAGE_URL ) >>= sImageURL;
 
                 _rxInspectorUI->enablePropertyUI( impl_getPropertyNameFromId_nothrow( _nPropId ),
-                    ( sControlSource.getLength() != 0 ) || ( sImageURL.getLength() != 0 )
+                    ( !sControlSource.isEmpty() ) || ( !sImageURL.isEmpty() )
                 );
             }
             break;  // case PROPERTY_ID_SCALEIMAGE, PROPERTY_ID_SCALE_MODE
@@ -1899,7 +1899,7 @@ namespace pcr
                 // then "Input required" does not make sense, too (since there's always an input, even if the control
                 // is empty).
                 _rxInspectorUI->enablePropertyUI( PROPERTY_INPUT_REQUIRED,
-                    ( sControlSource.getLength() != 0 ) && ( !bHasEmptyIsNULL || bEmptyIsNULL )
+                    ( !sControlSource.isEmpty() ) && ( !bHasEmptyIsNULL || bEmptyIsNULL )
                 );
             }
             break;
@@ -1936,7 +1936,7 @@ namespace pcr
                 // if m_nClassId is 0, then we're inspecting a form. In this case, eButtonType is always
                 // FormButtonType_URL here
                 _rxInspectorUI->enablePropertyUI( PROPERTY_TARGET_FRAME,
-                    ( eButtonType == FormButtonType_URL ) && ( sTargetURL.getLength() > 0 )
+                    ( eButtonType == FormButtonType_URL ) && ( !sTargetURL.isEmpty() )
                 );
             }
             break;
@@ -2372,7 +2372,7 @@ namespace pcr
             ::rtl::OUString sObjectName;
             OSL_VERIFY( xFormSet->getPropertyValue( PROPERTY_COMMAND ) >>= sObjectName );
             // when there is no command we don't need to ask for columns
-            if ( sObjectName.getLength() && impl_ensureRowsetConnection_nothrow() )
+            if ( !sObjectName.isEmpty() && impl_ensureRowsetConnection_nothrow() )
             {
                 ::rtl::OUString aDatabaseName;
                 OSL_VERIFY( xFormSet->getPropertyValue( PROPERTY_DATASOURCE ) >>= aDatabaseName );
@@ -2552,7 +2552,7 @@ namespace pcr
         Sequence< ::rtl::OUString> aQueryNames = _xQueryNames->getElementNames();
         sal_uInt32 nCount = aQueryNames.getLength();
         const ::rtl::OUString* pQueryNames = aQueryNames.getConstArray();
-        sal_Bool bAdd = _sName.getLength();
+        sal_Bool bAdd = !_sName.isEmpty();
 
         for ( sal_uInt32 i=0; i<nCount; i++, ++pQueryNames )
         {
@@ -2804,7 +2804,7 @@ namespace pcr
 
         ::rtl::OUString sCurValue;
         OSL_VERIFY( impl_getPropertyValue_throw( PROPERTY_IMAGE_URL ) >>= sCurValue );
-        if ( sCurValue.getLength() != 0 && sCurValue.compareToAscii(GRAPHOBJ_URLPREFIX, RTL_CONSTASCII_LENGTH(GRAPHOBJ_URLPREFIX) ) != 0 )
+        if ( !sCurValue.isEmpty() && sCurValue.compareToAscii(GRAPHOBJ_URLPREFIX, RTL_CONSTASCII_LENGTH(GRAPHOBJ_URLPREFIX) ) != 0 )
         {
             aFileDlg.SetDisplayDirectory( sCurValue );
             // TODO: need to set the display directory _and_ the default name
@@ -3231,7 +3231,7 @@ namespace pcr
                 m_xBrowserUI = _rxInspectorUI;
                 // disable everything which would affect this property
                 const ::rtl::OUString* pToDisable = xCommandUI->getPropertiesToDisable();
-                while ( pToDisable->getLength() )
+                while ( !pToDisable->isEmpty() )
                 {
                     m_xBrowserUI->enablePropertyUIElements( *pToDisable++, PropertyLineElement::All, sal_False );
                 }
@@ -3262,7 +3262,7 @@ namespace pcr
                     throw NullPointerException();
 
                 const ::rtl::OUString* pToEnable = xCommandUI->getPropertiesToDisable();
-                while ( pToEnable->getLength() )
+                while ( !pToEnable->isEmpty() )
                 {
                     m_xBrowserUI->enablePropertyUIElements( *pToEnable++, PropertyLineElement::All, sal_True );
                 }
@@ -3288,14 +3288,14 @@ namespace pcr
                 // first, we need the name of an existent data source
                 if ( _xFormProperties->getPropertySetInfo()->hasPropertyByName(PROPERTY_DATASOURCE) )
                     _xFormProperties->getPropertyValue( PROPERTY_DATASOURCE ) >>= sPropertyValue;
-                bHas = ( sPropertyValue.getLength() != 0 ) || _bAllowEmptyDataSourceName;
+                bHas = ( !sPropertyValue.isEmpty() ) || _bAllowEmptyDataSourceName;
 
                 // then, the command should not be empty
                 if ( bHas )
                 {
                     if ( _xFormProperties->getPropertySetInfo()->hasPropertyByName(PROPERTY_COMMAND) )
                         _xFormProperties->getPropertyValue( PROPERTY_COMMAND ) >>= sPropertyValue;
-                    bHas = ( sPropertyValue.getLength() != 0 );
+                    bHas = !sPropertyValue.isEmpty();
                 }
             }
             catch( const Exception& )

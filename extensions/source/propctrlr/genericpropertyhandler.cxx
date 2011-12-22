@@ -275,7 +275,7 @@ namespace pcr
         if ( aControlValue.hasValue() && !( aControlValue >>= sURL ) )
             throw RuntimeException( ::rtl::OUString(), *this );
 
-        if ( !sURL.getLength() )
+        if ( sURL.isEmpty() )
             return;
 
         impl_dispatch_throw( sURL );

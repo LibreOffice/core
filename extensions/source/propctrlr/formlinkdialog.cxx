@@ -181,7 +181,7 @@ namespace pcr
         ,m_sMasterLabel(_sMasterLabel)
     {
         FreeResource();
-        if ( _sExplanation.getLength() )
+        if ( !_sExplanation.isEmpty() )
             m_aExplanation.SetText(_sExplanation);
 
         m_aSuggest.SetClickHdl       ( LINK( this, FormLinkDialog, OnSuggest      ) );
@@ -279,7 +279,7 @@ namespace pcr
         String sDetailType = getFormDataSourceType( m_xDetailForm );
         if ( !sDetailType.Len() )
         {
-            if ( !m_sDetailLabel.getLength() )
+            if ( m_sDetailLabel.isEmpty() )
             {
                 ::svt::OLocalResourceAccess aStringAccess( PcrRes( RID_DLG_FORMLINKS ), RSC_MODALDIALOG );
                 m_sDetailLabel = String( PcrRes( STR_DETAIL_FORM ) );
@@ -292,7 +292,7 @@ namespace pcr
         String sMasterType = getFormDataSourceType( m_xMasterForm );
         if ( !sMasterType.Len() )
         {
-            if ( !m_sMasterLabel.getLength() )
+            if ( m_sMasterLabel.isEmpty() )
             {
                 ::svt::OLocalResourceAccess aStringAccess( PcrRes( RID_DLG_FORMLINKS ), RSC_MODALDIALOG );
                 m_sMasterLabel = String( PcrRes( STR_MASTER_FORM ) );
@@ -566,7 +566,7 @@ namespace pcr
             OSL_FAIL( "FormLinkDialog::getExistingRelation: caught an exception!" );
         }
 
-        return ( _rLeftFields.getLength() > 0 ) && ( _rLeftFields[ 0 ].getLength() > 0 );
+        return ( _rLeftFields.getLength() > 0 ) && ( !_rLeftFields[ 0 ].isEmpty() );
     }
 
     //------------------------------------------------------------------------

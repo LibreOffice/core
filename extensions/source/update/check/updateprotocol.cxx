@@ -64,18 +64,18 @@ getBootstrapData(
 {
     rBuildID = UNISTRING( "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE("version") ":ProductBuildid}" );
     rtl::Bootstrap::expandMacros( rBuildID );
-    if ( ! rBuildID.getLength() )
+    if ( rBuildID.isEmpty() )
         return false;
 
     rInstallSetID = UNISTRING( "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE("version") ":UpdateID}" );
     rtl::Bootstrap::expandMacros( rInstallSetID );
-    if ( ! rInstallSetID.getLength() )
+    if ( rInstallSetID.isEmpty() )
         return false;
 
     rtl::OUString aValue( UNISTRING( "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE("version") ":UpdateURL}" ) );
     rtl::Bootstrap::expandMacros( aValue );
 
-    if( aValue.getLength() > 0 )
+    if( !aValue.isEmpty() )
     {
         rRepositoryList.realloc(1);
         rRepositoryList[0] = aValue;

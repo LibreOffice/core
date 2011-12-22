@@ -281,7 +281,7 @@ void BibliographyLoader::loadView(const Reference< XFrame > & rFrame, const rtl:
     m_xDatMan = m_pDatMan;
     BibDBDescriptor aBibDesc = BibModul::GetConfig()->GetBibliographyURL();
 
-    if(!aBibDesc.sDataSource.getLength())
+    if(aBibDesc.sDataSource.isEmpty())
     {
         DBChangeDialogConfig_Impl aConfig;
         const Sequence<OUString> aSources = aConfig.GetDataSourceNames();
@@ -532,7 +532,7 @@ Sequence< rtl::OUString > BibliographyLoader::getElementNames(void) throw ( Runt
             do
             {
                 rtl::OUString sTemp = xIdColumn->getString();
-                if (sTemp.getLength() && !xIdColumn->wasNull())
+                if (!sTemp.isEmpty() && !xIdColumn->wasNull())
                 {
                     int nLen = aRet.getLength();
                     if(nLen == nRealNameCount)

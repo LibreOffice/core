@@ -130,7 +130,7 @@ void XPluginContext_Impl::getURL(const Reference< ::com::sun::star::plugin::XPlu
     if( ! xInst.is() )
         return;
 
-    if( ! target.getLength() )
+    if(  target.isEmpty() )
     {
         INetURLObject aURL;
         aURL.SetSmartProtocol( INET_PROT_FILE );

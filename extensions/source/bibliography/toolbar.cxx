@@ -283,7 +283,7 @@ void BibToolBar::InitListener()
 
             util::URL aURL;
             aURL.Complete = GetItemCommand(nId);
-            if(!aURL.Complete.getLength())
+            if(aURL.Complete.isEmpty())
                 continue;
 
             xTrans->parseStrict( aURL );
@@ -345,7 +345,7 @@ void BibToolBar::SendDispatch(sal_uInt16 nId, const Sequence< PropertyValue >& r
 
     uno::Reference< frame::XDispatchProvider >  xDSP( xController, UNO_QUERY );
 
-    if( xDSP.is() && aCommand.getLength())
+    if( xDSP.is() && !aCommand.isEmpty())
     {
         uno::Reference< lang::XMultiServiceFactory >  xMgr = comphelper::getProcessServiceFactory();
 
@@ -382,7 +382,7 @@ void BibToolBar::Click()
         if(pDatMan)
         {
             OUString sNew = pDatMan->CreateDBChangeDialog(GetParent());
-            if(sNew.getLength())
+            if(!sNew.isEmpty())
                 pDatMan->setActiveDataSource(sNew);
         }
         CheckItem( nId, sal_False );

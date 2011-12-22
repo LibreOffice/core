@@ -333,7 +333,7 @@ void XPlugin_Impl::handleSpecialArgs()
             }
         }
 
-        if( aURL.getLength() )
+        if( !aURL.isEmpty() )
         {
             // set new args, old args need not be freed as there were none set
             m_nArgs = 6;
@@ -403,7 +403,7 @@ void XPlugin_Impl::handleSpecialArgs()
             }
         }
 
-        if( aURL.getLength() )
+        if( !aURL.isEmpty() )
         {
             // SRC
             prependArg( "SRC", OUStringToOString( aURL, m_aEncoding ).getStr() );
@@ -446,7 +446,7 @@ void XPlugin_Impl::modelChanged()
     destroyInstance();
 
     m_aDescription = fitDescription( getCreationURL() );
-    if( !m_aDescription.Mimetype.getLength() )
+    if( m_aDescription.Mimetype.isEmpty() )
     {
         m_nProvidingState = PROVIDING_NONE;
         return;
@@ -484,7 +484,7 @@ sal_Bool XPlugin_Impl::setModel( const uno::Reference< com::sun::star::awt::XCon
     if( ! xPS.is() )
         return sal_False;
 
-    if( getCreationURL().getLength() )
+    if( !getCreationURL().isEmpty() )
     {
         m_xModel = Model;
         modelChanged();
@@ -527,7 +527,7 @@ void XPlugin_Impl::loadPlugin()
 #endif
     if( ! getPluginComm() )
     {
-        if( m_aDescription.PluginName.getLength() )
+        if( !m_aDescription.PluginName.isEmpty() )
         {
 #if defined QUARTZ
             PluginComm* pComm = new MacPluginComm( m_aDescription.Mimetype,
@@ -668,7 +668,7 @@ sal_Bool XPlugin_Impl::provideNewStream(const OUString& mimetype,
     m_nProvidingState = PROVIDING_NOW;
 
     OString aMIME;
-    if( mimetype.getLength() )
+    if( !mimetype.isEmpty() )
         aMIME = OUStringToOString( mimetype, m_aEncoding );
     else
         aMIME = OUStringToOString( m_aDescription.Mimetype, m_aEncoding );
@@ -693,7 +693,7 @@ sal_Bool XPlugin_Impl::provideNewStream(const OUString& mimetype,
     if( ! m_pPluginComm )
     {
         loadPlugin();
-        if( m_aLastGetUrl.getLength() && m_aLastGetUrl == aURL )
+        if( !m_aLastGetUrl.isEmpty() && m_aLastGetUrl == aURL )
         {
             // plugin is pulling data, don't push the same stream;
             // this complicated method could have been avoided if
@@ -706,7 +706,7 @@ sal_Bool XPlugin_Impl::provideNewStream(const OUString& mimetype,
      if( ! m_pPluginComm )
         return sal_False;
 
-     if( ! url.getLength() )
+     if(  url.isEmpty() )
          // this is valid if the plugin is supposed to
          // pull data (via e.g. NPN_GetURL)
          return sal_True;

@@ -261,8 +261,8 @@ namespace pcr
                     )
                     continue;
 
-                if  (   ( pAssignedEvent->ScriptCode.getLength() == 0 )
-                    ||  ( pAssignedEvent->ScriptType.getLength() == 0 )
+                if  (   ( pAssignedEvent->ScriptCode.isEmpty() )
+                    ||  ( pAssignedEvent->ScriptType.isEmpty() )
                     )
                 {
                     OSL_FAIL( "lcl_getAssignedScriptEvent: me thinks this should not happen!" );
@@ -674,7 +674,7 @@ namespace pcr
         const EventDescription& rEvent = impl_getEventForName_throw( _rPropertyName );
         ScriptEventDescriptor aAssignedScript = lcl_getAssignedScriptEvent( rEvent, aAllAssignedEvents );
 
-        OSL_ENSURE( !sNewScriptCode.getLength(), "EventHandler::convertToPropertyValue: cannot convert a non-empty display name!" );
+        OSL_ENSURE( sNewScriptCode.isEmpty(), "EventHandler::convertToPropertyValue: cannot convert a non-empty display name!" );
         // Usually, there is no possibility for the user to change the content of an event binding directly in the
         // input field, this instead is done with the macro assignment dialog.
         // The only exception is the user pressing "DEL" while the control has the focus, in this case, we reset the
@@ -701,7 +701,7 @@ namespace pcr
         (void)_rControlValueType;
 
         ::rtl::OUString sScript( aScriptEvent.ScriptCode );
-        if ( sScript.getLength() )
+        if ( !sScript.isEmpty() )
         {
             // format is: "name (location, language)"
             try
@@ -721,20 +721,20 @@ namespace pcr
                 const ::rtl::OUString sLangParamName( RTL_CONSTASCII_USTRINGPARAM( "language" ) );
                 const ::rtl::OUString sLanguage = xScriptUri->getParameter( sLangParamName );
 
-                if ( sLocation.getLength() || sLanguage.getLength() )
+                if ( !(sLocation.isEmpty() && sLanguage.isEmpty()) )
                 {
                     aComposeBuffer.appendAscii( " (" );
 
                     // location
-                    OSL_ENSURE( sLocation.getLength(), "EventHandler::convertToControlValue: unexpected: no location!" );
-                    if ( sLocation.getLength() )
+                    OSL_ENSURE( !sLocation.isEmpty(), "EventHandler::convertToControlValue: unexpected: no location!" );
+                    if ( !sLocation.isEmpty() )
                     {
                         aComposeBuffer.append( sLocation );
                         aComposeBuffer.appendAscii( ", " );
                     }
 
                     // language
-                    if ( sLanguage.getLength() )
+                    if ( !sLanguage.isEmpty() )
                     {
                         aComposeBuffer.append( sLanguage );
                     }
@@ -799,8 +799,8 @@ namespace pcr
 
                     // the programmatic name of the listener, to be used as "property" name
                     sListenerClassName = pListeners->getTypeName();
-                    OSL_ENSURE( sListenerClassName.getLength(), "EventHandler::getSupportedProperties: strange - no listener name ..." );
-                    if ( !sListenerClassName.getLength() )
+                    OSL_ENSURE( !sListenerClassName.isEmpty(), "EventHandler::getSupportedProperties: strange - no listener name ..." );
+                    if ( sListenerClassName.isEmpty() )
                         continue;
 
                     // loop through all methods
@@ -1165,7 +1165,7 @@ namespace pcr
         {
             ::rtl::OUString sScriptCode( _rScriptEvent.ScriptCode );
             ::rtl::OUString sScriptType( _rScriptEvent.ScriptType );
-            bool bResetScript = ( sScriptCode.getLength() == 0 );
+            bool bResetScript = sScriptCode.isEmpty();
 
             sal_Int32 nObjectIndex = impl_getComponentIndexInParent_throw();
             Reference< XChild > xChild( m_xComponent, UNO_QUERY_THROW );
@@ -1223,7 +1223,7 @@ namespace pcr
         try
         {
             ::rtl::OUString sScriptCode( _rScriptEvent.ScriptCode );
-            bool bResetScript = ( sScriptCode.getLength() == 0 );
+            bool bResetScript =  sScriptCode.isEmpty();
 
             Reference< XScriptEventsSupplier > xEventsSupplier( m_xComponent, UNO_QUERY_THROW );
             Reference< XNameContainer > xEvents( xEventsSupplier->getEvents(), UNO_QUERY_THROW );

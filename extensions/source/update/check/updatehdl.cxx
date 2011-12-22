@@ -555,7 +555,7 @@ void UpdateHandler::updateState( UpdateState eState )
             setControlProperty( TEXT_STATUS, UNISTRING("Text"), uno::Any( substVariables(msUpdFound) ) );
 
             sText = substVariables(msDownloadWarning);
-            if ( msDescriptionMsg.getLength() )
+            if ( !msDescriptionMsg.isEmpty() )
                 sText += UNISTRING("\n\n") + msDescriptionMsg;
             setControlProperty( TEXT_DESCRIPTION, UNISTRING("Text"), uno::Any( sText ) );
 
@@ -568,7 +568,7 @@ void UpdateHandler::updateState( UpdateState eState )
             setControlProperty( TEXT_STATUS, UNISTRING("Text"), uno::Any( substVariables(msUpdFound) ) );
 
             sText = substVariables(msDownloadNotAvail);
-            if ( msDescriptionMsg.getLength() )
+            if ( !msDescriptionMsg.isEmpty() )
                 sText += UNISTRING("\n\n") + msDescriptionMsg;
             setControlProperty( TEXT_DESCRIPTION, UNISTRING("Text"), uno::Any( sText ) );
 

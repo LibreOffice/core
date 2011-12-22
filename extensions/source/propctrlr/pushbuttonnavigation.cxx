@@ -297,7 +297,7 @@ namespace pcr
     {
         ::rtl::OUString sTargetURL;
         OSL_VERIFY( getCurrentTargetURL() >>= sTargetURL );
-        return sTargetURL.getLength() != 0;
+        return !sTargetURL.isEmpty();
     }
 
 //............................................................................

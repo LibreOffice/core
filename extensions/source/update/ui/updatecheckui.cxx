@@ -321,7 +321,7 @@ Image UpdateCheckUI::GetBubbleImage( ::rtl::OUString &rURL )
 {
     Image aImage;
 
-    if ( maBubbleImageURL.getLength() != 0 )
+    if ( !maBubbleImageURL.isEmpty() )
     {
         uno::Reference< lang::XMultiServiceFactory > xServiceManager = ::comphelper::getProcessServiceFactory();
 
@@ -379,11 +379,11 @@ void UpdateCheckUI::AddMenuBarIcon( SystemWindow *pSysWin, bool bAddEventHdl )
         if ( pActiveMBar )
         {
             rtl::OUStringBuffer aBuf;
-            if( maBubbleTitle.getLength() )
+            if( !maBubbleTitle.isEmpty() )
                 aBuf.append( maBubbleTitle );
-            if( maBubbleText.getLength() )
+            if( !maBubbleText.isEmpty() )
             {
-                if( maBubbleTitle.getLength() )
+                if( !maBubbleTitle.isEmpty() )
                     aBuf.appendAscii( "\n\n" );
                 aBuf.append( maBubbleText );
             }

@@ -359,7 +359,7 @@ UpdateInformationProvider::UpdateInformationProvider(
             "${${BRAND_BASE_DIR}/program/edition/edition.ini:"
             "EDITIONNAME}"));
     rtl::Bootstrap::expandMacros(edition);
-    if (edition.getLength() != 0) {
+    if (!edition.isEmpty()) {
         buf.append(sal_Unicode(' '));
         buf.append(edition);
     }
@@ -368,7 +368,7 @@ UpdateInformationProvider::UpdateInformationProvider(
         xConfigurationProvider,
         UNISTRING("org.openoffice.Setup/Product"),
         UNISTRING("ooSetupExtension")) >>= extension;
-    if (extension.getLength() != 0) {
+    if (!extension.isEmpty()) {
         buf.append(sal_Unicode(' '));
         buf.append(extension);
     }
@@ -390,7 +390,7 @@ UpdateInformationProvider::UpdateInformationProvider(
 
     m_aRequestHeaderList[0].Name = UNISTRING("Accept-Language");
     m_aRequestHeaderList[0].Value = getConfigurationItem( xConfigurationProvider, UNISTRING("org.openoffice.Setup/L10N"), UNISTRING("ooLocale") );
-    if( aUserAgent.getLength() > 0 )
+    if( !aUserAgent.isEmpty() )
     {
         m_aRequestHeaderList.realloc(2);
         m_aRequestHeaderList[1].Name = UNISTRING("User-Agent");
@@ -608,7 +608,7 @@ UpdateInformationProvider::getUpdateInformationEnumeration(
                 {
                     rtl::OUString aXPathExpression;
 
-                    if( extensionId.getLength() > 0 )
+                    if( !extensionId.isEmpty() )
                         aXPathExpression = UNISTRING("//atom:entry/atom:category[@term=\'") + extensionId + UNISTRING("\']/..");
                     else
                         aXPathExpression = UNISTRING("//atom:entry");
