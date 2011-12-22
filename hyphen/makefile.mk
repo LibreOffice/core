@@ -36,15 +36,13 @@ TARGET=hyphen
 
 # --- Files --------------------------------------------------------
 
-TARFILE_NAME=hyphen-2.7.1
-TARFILE_MD5=48a9f787f43a09c0a9b7b00cd1fddbbf
+TARFILE_NAME=hyphen-2.8.3
+TARFILE_MD5=86261f06c097d3e425a2f6d0b0635380
 
 ADDITIONAL_FILES += makefile.mk
 
 PATCH_FILES= \
-    hyphen-2.7.1.patch \
-    hyphen-2.7.1-read-charset.patch \
-    hyphen-2.7.1-2.8.3.patch \
+    hyphen-build.patch \
     hyphen-android.patch
 
 .IF "$(GUI)"=="UNX"
