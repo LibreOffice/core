@@ -120,7 +120,6 @@ namespace svx
         sal_Int32 mnWidth;
         sal_Int32 mnHeight;
         sal_Bool mbExportOnlyBackground;
-        sal_Bool mbVerboseComments;
         sal_Bool mbScrollText;
         sal_Bool mbUseHighContrast;
         sal_Bool mbTranslucent;
@@ -137,7 +136,6 @@ namespace svx
     : mnWidth( 0 )
     , mnHeight( 0 )
     , mbExportOnlyBackground( false )
-    , mbVerboseComments( false )
     , mbScrollText( false )
     , mbUseHighContrast( false )
     , mbTranslucent( sal_False )
@@ -537,11 +535,6 @@ void GraphicExporter::ParseSettings( const Sequence< PropertyValue >& aDescripto
                 else if( pDataValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "PageNumber" ) ) )
                 {
                     pDataValues->Value >>= mnPageNumber;
-                }
-                else if( pDataValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "VerboseComments" ) ) )
-                {
-                    // #110496# Read flag for verbose metafile comments
-                    pDataValues->Value >>= rSettings.mbVerboseComments;
                 }
                 else if( pDataValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ScrollText" ) ) )
                 {

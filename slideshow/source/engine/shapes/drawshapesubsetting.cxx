@@ -88,8 +88,10 @@ namespace slideshow
                     {
                         MetaCommentAction* pAct = static_cast<MetaCommentAction*>(pCurrAct);
 
-                        // skip comment if not a special XTEXT comment
-                        if( pAct->GetComment().equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("XTEXT")) )
+                        // skip comment if not a special XTEXT... comment
+                        if( pAct->GetComment().matchIgnoreAsciiCase(
+                                rtl::OString(RTL_CONSTASCII_STRINGPARAM("XTEXT")),
+                                0) )
                         {
                             // fill classification vector with NOOPs,
                             // then insert corresponding classes at
@@ -155,6 +157,8 @@ namespace slideshow
                                 maActionClassVector[ nActionIndex ] = CLASS_SHAPE_START;
                             }
                         }
+                        VERBOSE_TRACE( "Shape text structure: %s at action #%d",
+                                       pAct->GetComment().getStr(), nActionIndex );
                         ++nActionIndex;
                         break;
                     }
@@ -162,6 +166,15 @@ namespace slideshow
                     case META_TEXTARRAY_ACTION:
                     case META_STRETCHTEXT_ACTION:
                         nLastTextActionIndex = nActionIndex;
+#if OSL_DEBUG_LEVEL > 1
+                        {
+                            MetaTextAction* pText = static_cast<MetaTextAction*>(pCurrAct);
+                            VERBOSE_TRACE( "Shape text \"%s\" at action #%d",
+                                           ByteString(pText->GetText(),
+                                                      RTL_TEXTENCODING_ISO_8859_1).GetBuffer(),
+                                           nActionIndex );
+                        }
+#endif
                         // fallthrough intended
                     default:
                         // comment action and all actions not
