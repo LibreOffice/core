@@ -254,9 +254,9 @@ bool ZipFile::addFile( osl::File& rFile, const OString& rName )
     if( !mbOpen )
         return false;
 
-    OSL_ASSERT( 0 != rName.getLength() );
+    OSL_ASSERT( !rName.isEmpty() );
 
-    if(0 == rName.getLength())
+    if(rName.isEmpty())
         return false;
 
     mnRC = rFile.open( osl_File_OpenFlag_Read );

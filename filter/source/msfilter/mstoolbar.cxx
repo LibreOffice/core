@@ -328,7 +328,7 @@ bool TBCData::ImportToolBarControl( CustomToolBarImportHelper& helper, std::vect
             if ( TBCBitMap* pIcon = pSpecificInfo->getIcon() )
             {
                 // Without a command openoffice won't display the icon
-                if ( sCommand.getLength() )
+                if ( !sCommand.isEmpty() )
                 {
                     BitmapEx aBitEx( pIcon->getBitMap() );
                     if ( pSpecificInfo->getIconMask() )
@@ -345,7 +345,7 @@ bool TBCData::ImportToolBarControl( CustomToolBarImportHelper& helper, std::vect
             {
 
                 rtl::OUString sBuiltInCmd = helper.MSOTCIDToOOCommand(  *pSpecificInfo->getBtnFace() );
-                if ( sBuiltInCmd.getLength() )
+                if ( !sBuiltInCmd.isEmpty() )
                 {
                     uno::Sequence< rtl::OUString> sCmds(1);
                     sCmds[ 0 ] = sBuiltInCmd;
@@ -505,7 +505,7 @@ TBCGeneralInfo::ImportToolBarControlData( CustomToolBarImportHelper& helper, std
         beans::PropertyValue aProp;
         // probably access to the header would be a better test than seeing if there is an action, e.g.
         // if ( rHeader.getTct() == 0x01 && rHeader.getTcID() == 0x01 ) // not defined, probably this is a command
-        if ( extraInfo.getOnAction().getLength() )
+        if ( !extraInfo.getOnAction().isEmpty() )
         {
             aProp.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("CommandURL") );
             ooo::vba::MacroResolvedInfo aMacroInf = ooo::vba::resolveVBAMacro( &helper.GetDocShell(), extraInfo.getOnAction(), true );

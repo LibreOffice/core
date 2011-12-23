@@ -52,7 +52,7 @@ TypeDetectionExporter::TypeDetectionExporter( Reference< XMultiServiceFactory >&
 
 static OUString createRelativeURL( const OUString& rFilterName, const OUString& rURL )
 {
-    if( rURL.getLength() &&
+    if( !rURL.isEmpty() &&
         (rURL.compareToAscii( RTL_CONSTASCII_STRINGPARAM("http:") ) != 0) &&
         (rURL.compareToAscii( RTL_CONSTASCII_STRINGPARAM("shttp:") ) != 0) &&
         (rURL.compareToAscii( RTL_CONSTASCII_STRINGPARAM("jar:") ) != 0) &&
@@ -60,7 +60,7 @@ static OUString createRelativeURL( const OUString& rFilterName, const OUString& 
     {
         INetURLObject aURL( rURL );
         OUString aName( aURL.GetName() );
-        if( aName.getLength() == 0 )
+        if( aName.isEmpty() )
         {
             sal_Int32 nPos = rURL.lastIndexOf( sal_Unicode( '/' ) );
             if( nPos == -1 )
@@ -138,7 +138,7 @@ void TypeDetectionExporter::doExport( Reference< XOutputStream > xOS,  const XML
                 OUString sValue( sal_Unicode('0') );
                 sValue += sComma;
                 sValue += sComma;
-                if( pFilter->maDocType.getLength() )
+                if( !pFilter->maDocType.isEmpty() )
                 {
                     sValue += sDocTypePrefix;
                     sValue += pFilter->maDocType;

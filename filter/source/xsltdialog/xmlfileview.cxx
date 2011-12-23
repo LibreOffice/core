@@ -519,7 +519,7 @@ XMLSourceFileDialog::XMLSourceFileDialog( Window* pParent, ResMgr& rResMgr, cons
 
 XMLSourceFileDialog::~XMLSourceFileDialog()
 {
-    if( maFileURL.getLength() )
+    if( !maFileURL.isEmpty() )
         osl::File::remove( maFileURL );
 
     delete mpTextWindow;
@@ -528,7 +528,7 @@ XMLSourceFileDialog::~XMLSourceFileDialog()
 void XMLSourceFileDialog::ShowWindow( const rtl::OUString& rFileName, const filter_info_impl* pFilterInfo )
 {
     EnterWait();
-    if( maFileURL.getLength() )
+    if( !maFileURL.isEmpty() )
     {
         osl::File::remove( maFileURL );
         delete mpTextWindow;

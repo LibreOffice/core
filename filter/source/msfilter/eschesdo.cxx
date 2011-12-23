@@ -1119,7 +1119,7 @@ sal_uInt32 ImplEESdrObject::ImplGetText()
 sal_Bool ImplEESdrObject::ImplHasText() const
 {
     Reference< XText > xXText( mXShape, UNO_QUERY );
-    return xXText.is() && xXText->getString().getLength();
+    return xXText.is() && !xXText->getString().isEmpty();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

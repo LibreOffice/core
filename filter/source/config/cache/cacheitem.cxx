@@ -75,7 +75,7 @@ void CacheItem::update(const CacheItem& rUpdateItem)
 
 void CacheItem::validateUINames(const ::rtl::OUString& sActLocale)
 {
-    if (!sActLocale.getLength())
+    if (sActLocale.isEmpty())
         return;
 
     // 1) check UINames first
@@ -90,7 +90,7 @@ void CacheItem::validateUINames(const ::rtl::OUString& sActLocale)
     if (pUIName != end())
         pUIName->second >>= sUIName;
 
-    if (sUIName.getLength())
+    if (!sUIName.isEmpty())
     {
         // 1a) set UIName inside list of UINames for current locale
         lUINames[sActLocale] <<= sUIName;

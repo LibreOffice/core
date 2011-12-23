@@ -207,13 +207,13 @@ filter_info_impl* TypeDetectionImporter::createFilterForNode( Node * pNode )
     if( pTypeNode == NULL )
         bOk = false;
 
-    if( pFilter->maFilterName.getLength() == 0 )
+    if( pFilter->maFilterName.isEmpty() )
         bOk = false;
 
-    if( pFilter->maInterfaceName.getLength() == 0 )
+    if( pFilter->maInterfaceName.isEmpty() )
         bOk = false;
 
-    if( pFilter->maType.getLength() == 0 )
+    if( pFilter->maType.isEmpty() )
         bOk = false;
 
     if( pFilter->maFlags == 0 )
@@ -225,7 +225,7 @@ filter_info_impl* TypeDetectionImporter::createFilterForNode( Node * pNode )
     if( aAdapterService != sXSLTFilterService )
         bOk = false;
 
-    if( pFilter->maExtension.getLength() == 0 )
+    if( pFilter->maExtension.isEmpty() )
         bOk = false;
 
     if( !bOk )

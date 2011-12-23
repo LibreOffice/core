@@ -322,7 +322,7 @@ m_rServiceFactory(r), m_bTerminated(sal_False), m_bError(sal_False)
         args[2] <<= nv;
 
         OUString serviceName(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.documentconversion.LibXSLTTransformer"));
-        if (msUserData[1].getLength() != 0)
+        if (!msUserData[1].isEmpty())
             serviceName = msUserData[1];
 
         m_tcontrol = Reference<XActiveDataControl> (m_rServiceFactory->createInstanceWithArguments(serviceName, args), UNO_QUERY);
@@ -486,7 +486,7 @@ m_rServiceFactory(r), m_bTerminated(sal_False), m_bError(sal_False)
         args[3] <<= nv;
 
         OUString serviceName(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.documentconversion.LibXSLTTransformer"));
-        if (msUserData[1].getLength() != 0)
+        if (!msUserData[1].isEmpty())
             serviceName = msUserData[1];
 
         m_tcontrol = Reference<XActiveDataControl> (m_rServiceFactory->createInstanceWithArguments(serviceName, args), UNO_QUERY);

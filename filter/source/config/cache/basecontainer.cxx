@@ -219,7 +219,7 @@ void SAL_CALL BaseContainer::insertByName(const ::rtl::OUString& sItem ,
            css::lang::WrappedTargetException    ,
            css::uno::RuntimeException           )
 {
-    if (!sItem.getLength())
+    if (sItem.isEmpty())
         throw css::lang::IllegalArgumentException(
             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "empty value not allowed as item name." )),
             static_cast< css::container::XNameContainer* >(this),
@@ -283,7 +283,7 @@ void SAL_CALL BaseContainer::replaceByName(const ::rtl::OUString& sItem ,
            css::lang::WrappedTargetException     ,
            css::uno::RuntimeException            )
 {
-    if (!sItem.getLength())
+    if (sItem.isEmpty())
         throw css::lang::IllegalArgumentException(
             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "empty value not allowed as item name." )),
             static_cast< css::container::XNameContainer* >(this),
@@ -323,7 +323,7 @@ css::uno::Any SAL_CALL BaseContainer::getByName(const ::rtl::OUString& sItem)
            css::lang::WrappedTargetException     ,
            css::uno::RuntimeException            )
 {
-    if (!sItem.getLength())
+    if (sItem.isEmpty())
         throw css::container::NoSuchElementException(
                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "An empty item cant be part of this cache!" )),
                 css::uno::Reference< css::uno::XInterface >(static_cast< css::container::XNameAccess* >(this), css::uno::UNO_QUERY));

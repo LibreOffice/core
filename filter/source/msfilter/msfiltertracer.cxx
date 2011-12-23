@@ -71,20 +71,20 @@ MSFilterTracer::MSFilterTracer( const ::rtl::OUString& rConfigPath, uno::Sequenc
             rtl::OUString aName( mpCfgItem->ReadString( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Name" )), aEmptyString ) );
             rtl::OUString aDocumentURL( mpCfgItem->ReadString( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DocumentURL" )), aEmptyString ) );
             INetURLObject aLogFile( aDocumentURL );
-            if ( aLogFile.GetMainURL( INetURLObject::NO_DECODE ).getLength() )
+            if ( !aLogFile.GetMainURL( INetURLObject::NO_DECODE ).isEmpty() )
             {
-                if ( aPath.getLength() )
+                if ( !aPath.isEmpty() )
                 {
                     String aOldName( aLogFile.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::NO_DECODE ) );
                     aLogFile = INetURLObject( aPath );
                     aLogFile.insertName( aOldName );
                 }
-                if ( aName.getLength() )
+                if ( !aName.isEmpty() )
                     aLogFile.setName( aName );
             }
             else
             {
-                if ( aPath.getLength() )
+                if ( !aPath.isEmpty() )
                     aLogFile = INetURLObject( aPath );
                 else
                 {
@@ -96,7 +96,7 @@ MSFilterTracer::MSFilterTracer( const ::rtl::OUString& rConfigPath, uno::Sequenc
                         aLogFile .removeFinalSlash();
                     }
                 }
-                if ( !aName.getLength() )
+                if ( aName.isEmpty() )
                     aName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "tracer" ));
                 aLogFile.insertName( aName );
             }
@@ -191,7 +191,7 @@ void MSFilterTracer::Trace( const rtl::OUString& rElement, const rtl::OUString& 
     if ( mbEnabled && mxLogger.is() )
     {
         sal_Bool bFilter = sal_False;
-        if ( rMessage.getLength() && mxTextSearch.is() )
+        if ( !rMessage.isEmpty() && mxTextSearch.is() )
         {
             maSearchOptions.searchString = rMessage;
             mxTextSearch->setOptions(  maSearchOptions );
@@ -203,7 +203,7 @@ void MSFilterTracer::Trace( const rtl::OUString& rElement, const rtl::OUString& 
             uno::Reference < xml::sax::XAttributeList > xAttrList( new SvXMLAttributeList( *mpAttributeList ) );
             if ( mxHandler.is() )
                 mxHandler->startElement( rElement, xAttrList );
-            if ( rMessage.getLength() )
+            if ( !rMessage.isEmpty() )
             {
                 rtl::OUString aEmpty;
                 mxLogger->logp( 0, aEmpty, aEmpty, rMessage );

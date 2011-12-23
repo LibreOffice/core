@@ -134,10 +134,10 @@ bool XMLFilterTabDialog::onOk()
     String aReplace2;
 
     // 1. see if the filter name is ok
-    if( (mpNewInfo->maFilterName.getLength() == 0) || (mpNewInfo->maFilterName != mpOldInfo->maFilterName) )
+    if( (mpNewInfo->maFilterName.isEmpty()) || (mpNewInfo->maFilterName != mpOldInfo->maFilterName) )
     {
         // if the user deleted the filter name, we reset the original filter name
-        if( mpNewInfo->maFilterName.getLength() == 0 )
+        if( mpNewInfo->maFilterName.isEmpty() )
         {
             mpNewInfo->maFilterName = mpOldInfo->maFilterName;
         }
@@ -166,10 +166,10 @@ bool XMLFilterTabDialog::onOk()
     }
 
     // 2. see if the interface name is ok
-    if( (mpNewInfo->maInterfaceName.getLength() == 0) || (mpNewInfo->maInterfaceName != mpOldInfo->maInterfaceName) )
+    if( (mpNewInfo->maInterfaceName.isEmpty()) || (mpNewInfo->maInterfaceName != mpOldInfo->maInterfaceName) )
     {
         // if the user deleted the interface name, we reset the original filter name
-        if( mpNewInfo->maInterfaceName.getLength() == 0 )
+        if( mpNewInfo->maInterfaceName.isEmpty() )
         {
             mpNewInfo->maInterfaceName = mpOldInfo->maInterfaceName;
         }
@@ -272,7 +272,7 @@ bool XMLFilterTabDialog::onOk()
     }
 
     // see if we have at least an import or an export dtd
-    if((mpNewInfo->maImportXSLT.getLength() == 0) && (mpNewInfo->maExportXSLT.getLength() == 0) )
+    if((mpNewInfo->maImportXSLT.isEmpty()) && (mpNewInfo->maExportXSLT.isEmpty()) )
     {
         nErrorId = STR_ERROR_EXPORT_XSLT_NOT_FOUND;
         nErrorPage = RID_XML_FILTER_TABPAGE_XSLT;

@@ -146,7 +146,7 @@ static void addFile( Reference< XInterface > xRootFolder, Reference< XSingleServ
 
 void XMLFilterJarHelper::addFile( Reference< XInterface > xRootFolder, Reference< XSingleServiceFactory > xFactory, const OUString& rSourceFile ) throw( Exception )
 {
-    if( rSourceFile.getLength() &&
+    if( !rSourceFile.isEmpty() &&
         (rSourceFile.compareToAscii( RTL_CONSTASCII_STRINGPARAM("http:") ) != 0) &&
         (rSourceFile.compareToAscii( RTL_CONSTASCII_STRINGPARAM("shttp:") ) != 0) &&
         (rSourceFile.compareToAscii( RTL_CONSTASCII_STRINGPARAM("jar:") ) != 0) &&
@@ -209,14 +209,14 @@ bool XMLFilterJarHelper::savePackage( const OUString& rPackageURL, const XMLFilt
 
                 if( xFilterRoot.is() )
                 {
-                    if( pFilter->maDTD.getLength() )
+                    if( !pFilter->maDTD.isEmpty() )
                         addFile( xFilterRoot, xFactory, pFilter->maDTD );
 
-                    if( pFilter->maExportXSLT.getLength() )
+                    if( !pFilter->maExportXSLT.isEmpty() )
                         addFile( xFilterRoot, xFactory, pFilter->maExportXSLT );
                     try
                     {
-                        if( pFilter->maImportXSLT.getLength() )
+                        if( !pFilter->maImportXSLT.isEmpty() )
                             addFile( xFilterRoot, xFactory, pFilter->maImportXSLT );
                     }
                     catch(const com::sun::star::container::ElementExistException&)
@@ -226,7 +226,7 @@ bool XMLFilterJarHelper::savePackage( const OUString& rPackageURL, const XMLFilt
                         OSL_FAIL( "XMLFilterJarHelper::same named xslt filter exception!" );
                     }
 
-                    if( pFilter->maImportTemplate.getLength() )
+                    if( !pFilter->maImportTemplate.isEmpty() )
                         addFile( xFilterRoot, xFactory, pFilter->maImportTemplate );
                 }
 
@@ -382,7 +382,7 @@ bool XMLFilterJarHelper::copyFile( Reference< XHierarchicalNameAccess > xIfc, OU
 
                 rURL = URIHelper::SmartRel2Abs( aBaseURL, szPackagePath, Link(), false );
 
-                if( rURL.getLength() )
+                if( !rURL.isEmpty() )
                 {
                     // create output directory if needed
                     if( !createDirectory( rURL ) )

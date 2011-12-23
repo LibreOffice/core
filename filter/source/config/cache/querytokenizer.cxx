@@ -50,7 +50,7 @@ QueryTokenizer::QueryTokenizer(const ::rtl::OUString& sQuery)
     while(token != -1)
     {
         ::rtl::OUString sToken = sQuery.getToken(0, ':', token);
-        if (sToken.getLength())
+        if (!sToken.isEmpty())
         {
             sal_Int32 equal = sToken.indexOf('=');
 

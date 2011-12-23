@@ -110,7 +110,7 @@ bool XMLFilterTabPageBasic::FillInfo( filter_info_impl* pInfo )
 
         pInfo->maComment = string_encode( maEDDescription.GetText() );
 
-        if( pInfo->maDocumentService.getLength() )
+        if( !pInfo->maDocumentService.isEmpty() )
         {
             std::vector< application_info_impl* >& rInfos = getApplicationInfos();
             std::vector< application_info_impl* >::iterator aIter( rInfos.begin() );
@@ -140,7 +140,7 @@ void XMLFilterTabPageBasic::SetInfo(const filter_info_impl* pInfo)
         if( pInfo->maDocumentService.getLength() )
             maCBApplication.SetText( getApplicationUIName( pInfo->maDocumentService ) );
         */
-        if( pInfo->maExportService.getLength() )
+        if( !pInfo->maExportService.isEmpty() )
             maCBApplication.SetText( getApplicationUIName( pInfo->maExportService ) );
         else
             maCBApplication.SetText( getApplicationUIName( pInfo->maImportService ) );

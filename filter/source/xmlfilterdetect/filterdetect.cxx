@@ -198,17 +198,17 @@ bool isXMLStream(const ::rtl::OString& aHeaderStrm)
 
         sal_Int32 new_nlength=0;
         sal_Int32 i = 0 ;
-        while ((i < nLength) && (sTypeName.getLength() == 0))
+        while ((i < nLength) && (sTypeName.isEmpty()))
         {
             Any elem = xTypeCont->getByName(myTypes[i]);
             elem >>=lProps;
             new_nlength = lProps.getLength();
             sal_Int32 j =0;
-            while (j < new_nlength && (sTypeName.getLength() == 0))
+            while (j < new_nlength && (sTypeName.isEmpty()))
             {
                 ::rtl::OUString tmpStr;
                 lProps[j].Value >>=tmpStr;
-                if ((lProps[j].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ClipboardFormat"))) && tmpStr.getLength())
+                if ((lProps[j].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ClipboardFormat"))) && !tmpStr.isEmpty())
                 {
                     sTypeName = supportedByType(tmpStr,resultString, myTypes[i]);
                 }
@@ -222,7 +222,7 @@ bool isXMLStream(const ::rtl::OString& aHeaderStrm)
         OSL_FAIL( "An Exception occurred while opening File stream" );
     }
 
-    if (sTypeName.getLength())
+    if (!sTypeName.isEmpty())
     {
         if (location == aArguments.getLength())
         {

@@ -202,7 +202,7 @@ static void createSlideFile( Reference< XComponent > xDoc, ZipFile& rZipFile, co
     Reference< XDocumentProperties > xDocProps( xDPS->getDocumentProperties() );
 
     aTemp = xDocProps->getTitle();
-    if( 0 == aTemp.getLength() )
+    if( aTemp.isEmpty() )
     {
         sal_Int32 nPos1 = rURL.lastIndexOf( (sal_Unicode)'/' );
         if( -1 != nPos1 )
@@ -229,7 +229,7 @@ static void createSlideFile( Reference< XComponent > xDoc, ZipFile& rZipFile, co
 
     aTemp = xDocProps->getAuthor();
 
-    if( aTemp.getLength() )
+    if( !aTemp.isEmpty() )
     {
         aInfo += OString( "PresenterName: " );
         aInfo += convertString( aTemp );
@@ -243,7 +243,7 @@ static void createSlideFile( Reference< XComponent > xDoc, ZipFile& rZipFile, co
         PageEntry* pEntry = (*aIter++);
 
         aInfo += OString( "slide: " );
-        if( pEntry->getTitle().getLength() )
+        if( !pEntry->getTitle().isEmpty() )
         {
             aInfo += convertString( pEntry->getTitle() );
         }
@@ -261,7 +261,7 @@ static void createSlideFile( Reference< XComponent > xDoc, ZipFile& rZipFile, co
         aInfo += aNewLine;
 
 
-        if( pEntry->getNotes().getLength() )
+        if( !pEntry->getNotes().isEmpty() )
         {
             aInfo += OString( "notes: " );
             aInfo += convertString( pEntry->getNotes() );

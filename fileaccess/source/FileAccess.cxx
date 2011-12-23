@@ -425,7 +425,7 @@ void OFileAccess::createFolder( const rtl::OUString& NewFolderURL )
     throw(CommandAbortedException, Exception, RuntimeException)
 {
     // Does the folder already exist?
-    if( !NewFolderURL.getLength() || isFolder( NewFolderURL ) )
+    if( NewFolderURL.isEmpty() || isFolder( NewFolderURL ) )
         return;
 
     // SfxContentHelper::MakeFolder

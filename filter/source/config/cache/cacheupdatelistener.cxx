@@ -179,7 +179,7 @@ void SAL_CALL  CacheUpdateListener::changesOccurred(const css::util::ChangesEven
             }
         }
 
-        if ( ! sNode.getLength() )
+        if ( sNode.isEmpty() )
             continue;
 
         OUStringList::const_iterator pIt = ::std::find(lChangedItems.begin(), lChangedItems.end(), sNode);

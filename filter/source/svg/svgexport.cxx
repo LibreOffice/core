@@ -1325,7 +1325,7 @@ sal_Bool SVGFilter::implExportPages( const SVGFilter::XDrawPageSequence & rxPage
                 mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", sPageId );
 
                 OUString sPageName = implGetInterfaceName( rxPages[i] );
-                if( sPageName.getLength() && !mbSinglePage )
+                if( !(sPageName.isEmpty() || mbSinglePage ))
                     mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, aOOOAttrName, sPageName );
 
                 {
@@ -1565,7 +1565,7 @@ sal_Bool SVGFilter::implExportShape( const Reference< XShape >& rxShape )
 
                     OUString aTitle;
                     xShapePropSet->getPropertyValue( B2UCONST( "Title" ) ) >>= aTitle;
-                    if( aTitle.getLength() )
+                    if( !aTitle.isEmpty() )
                     {
                         SvXMLElementExport aExp2( *mpSVGExport, XML_NAMESPACE_NONE, "title", sal_True, sal_True );
                         xExtDocHandler->characters( aTitle );
@@ -1573,7 +1573,7 @@ sal_Bool SVGFilter::implExportShape( const Reference< XShape >& rxShape )
 
                     OUString aDescription;
                     xShapePropSet->getPropertyValue( B2UCONST( "Description" ) ) >>= aDescription;
-                    if( aDescription.getLength() )
+                    if( !aDescription.isEmpty() )
                     {
                         SvXMLElementExport aExp2( *mpSVGExport, XML_NAMESPACE_NONE, "desc", sal_True, sal_True );
                         xExtDocHandler->characters( aDescription );
@@ -1582,7 +1582,7 @@ sal_Bool SVGFilter::implExportShape( const Reference< XShape >& rxShape )
 
                     Reference< XInterface > xRef( rxShape, UNO_QUERY );
                     const OUString& rShapeId = implGetValidIDFromInterface( xRef );
-                    if( rShapeId.getLength() )
+                    if( !rShapeId.isEmpty() )
                     {
                         mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", rShapeId );
                         //mpSVGExport->AddAttributeIdLegacy( XML_NAMESPACE_DRAW, rShapeId );

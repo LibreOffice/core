@@ -156,7 +156,7 @@ ImpPDFTabDialog::ImpPDFTabDialog( Window* pParent,
                 else if ( nLen == 1 )
                 {
                     Reference< text::XTextRange > xTextRange( xIndexAccess->getByIndex( 0 ), UNO_QUERY );
-                    if ( xTextRange.is() && ( xTextRange->getString().getLength() == 0 ) )
+                    if ( xTextRange.is() && ( xTextRange->getString().isEmpty() ) )
                         mbSelectionPresent = sal_False;
                 }
             }
@@ -252,8 +252,8 @@ ImpPDFTabDialog::ImpPDFTabDialog( Window* pParent,
 
 //change text on the Ok button: get the relevant string from resources, update it on the button
 //according to the exported pdf file destination: send as e-mail or write to file?
-    GetOKButton().SetText( ( sOkButtonText.getLength() > 0 ) ?
-                            sOkButtonText : OUString( String( PDFFilterResId( STR_PDF_EXPORT ) ) ));
+    GetOKButton().SetText( ( sOkButtonText.isEmpty() ) ?
+                            OUString( String( PDFFilterResId( STR_PDF_EXPORT ) ) ) : sOkButtonText );
 
     GetCancelButton().SetClickHdl(LINK(this, ImpPDFTabDialog, CancelHdl));
 
@@ -1217,8 +1217,8 @@ IMPL_LINK( ImpPDFTabSecurityPage, ClickmaPbSetPwdHdl, void*, EMPTYARG )
         rtl::OUString aUserPW( aPwdDialog.GetPassword() );
         rtl::OUString aOwnerPW( aPwdDialog.GetPassword2() );
 
-        mbHaveUserPassword = (aUserPW.getLength() != 0);
-        mbHaveOwnerPassword = (aOwnerPW.getLength() != 0);
+        mbHaveUserPassword = !aUserPW.isEmpty();
+        mbHaveOwnerPassword = !aOwnerPW.isEmpty();
 
         mxPreparedPasswords = vcl::PDFWriter::InitEncryption( aOwnerPW, aUserPW, true );
 

@@ -503,12 +503,12 @@ bool XMLFilterSettingsDialog::insertOrEdit( filter_info_impl* pNewInfo, const fi
     }
 
     // check if we need to copy the template
-    if( pFilterEntry->maImportTemplate.getLength() )
+    if( !pFilterEntry->maImportTemplate.isEmpty() )
     {
         if( !pFilterEntry->maImportTemplate.matchIgnoreAsciiCase( sTemplatePath ) )
         {
             INetURLObject aSourceURL( pFilterEntry->maImportTemplate );
-            if( aSourceURL.GetName().getLength() != 0 )
+            if( !aSourceURL.GetName().isEmpty() )
             {
                 OUString aDestURL( sTemplatePath );
                 aDestURL += pFilterEntry->maFilterName;
@@ -531,13 +531,13 @@ bool XMLFilterSettingsDialog::insertOrEdit( filter_info_impl* pNewInfo, const fi
 
     if( bOk )
     {
-        if( pFilterEntry->maType.getLength() == 0 )
+        if( pFilterEntry->maType.isEmpty() )
         {
             pFilterEntry->maType = createUniqueTypeName( pNewInfo->maFilterName );
         }
 
         // update import/export flags
-        if( pFilterEntry->maImportXSLT.getLength() )
+        if( !pFilterEntry->maImportXSLT.isEmpty() )
         {
             pFilterEntry->maFlags |= 1;
         }
@@ -546,7 +546,7 @@ bool XMLFilterSettingsDialog::insertOrEdit( filter_info_impl* pNewInfo, const fi
             pFilterEntry->maFlags &= ~1;
         }
 
-        if( pFilterEntry->maExportXSLT.getLength() )
+        if( !pFilterEntry->maExportXSLT.isEmpty() )
         {
             pFilterEntry->maFlags |= 2;
         }
@@ -1379,7 +1379,7 @@ OUString getApplicationUIName( const OUString& rServiceName )
     else
     {
         OUString aRet = String( RESID( STR_UNKNOWN_APPLICATION ) );
-        if( rServiceName.getLength() )
+        if( !rServiceName.isEmpty() )
         {
             aRet += OUString( RTL_CONSTASCII_USTRINGPARAM( " (" ));
             aRet += rServiceName;
@@ -1581,7 +1581,7 @@ String XMLFilterListBox::getEntryString( const filter_info_impl* pInfo ) const
     String aEntryStr( pInfo->maFilterName );
     aEntryStr += '\t';
     // aEntryStr += String( getApplicationUIName( pInfo->maDocumentService ) );
-    if ( pInfo->maExportService.getLength() > 0 )
+    if ( !pInfo->maExportService.isEmpty() )
         aEntryStr += String( getApplicationUIName( pInfo->maExportService ) );
     else
         aEntryStr += String( getApplicationUIName( pInfo->maImportService ) );

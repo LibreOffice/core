@@ -746,7 +746,7 @@ sal_Bool EscherPropertyContainer::GetLineArrow( const sal_Bool bLineStart,
                 sal_Int16       nWhich = bLineStart ? XATTR_LINESTART : XATTR_LINEEND;
 
                 SvxUnogetApiNameForItem( nWhich, aArrowStartName, aApiName );
-                if ( aApiName.getLength() )
+                if ( !aApiName.isEmpty() )
                 {
 
                     /* todo:
@@ -1131,7 +1131,7 @@ sal_Bool EscherPropertyContainer::CreateOLEGraphicProperties(
             {
                 GraphicObject aGraphicObject( *pGraphic );
                 rtl::OString aUniqueId( aGraphicObject.GetUniqueID() );
-                if ( aUniqueId.getLength() )
+                if ( !aUniqueId.isEmpty() )
                 {
                     AddOpt( ESCHER_Prop_fillType, ESCHER_FillPicture );
                     uno::Reference< beans::XPropertySet > aXPropSet( rXShape, uno::UNO_QUERY );
@@ -1165,7 +1165,7 @@ sal_Bool EscherPropertyContainer::CreateOLEGraphicProperties(
 
 sal_Bool EscherPropertyContainer::ImplCreateEmbeddedBmp( const rtl::OString& rUniqueId )
 {
-    if( rUniqueId.getLength() > 0 )
+    if( !rUniqueId.isEmpty() )
     {
         EscherGraphicProvider aProvider;
         SvMemoryStream aMemStrm;
@@ -1409,7 +1409,7 @@ sal_Bool EscherPropertyContainer::CreateGraphicProperties(
                         delete pIn;
                     }
                 }
-                if ( !aUniqueId.getLength() )
+                if ( aUniqueId.isEmpty() )
                 {
                     if ( pGraphicProvider )
                     {
@@ -1419,7 +1419,7 @@ sal_Bool EscherPropertyContainer::CreateGraphicProperties(
                         {
                             rtl::OUString aRelUrl( INetURLObject::GetRelURL( rBaseURI, aGraphicUrl,
                                                     INetURLObject::WAS_ENCODED, INetURLObject::DECODE_TO_IURI, RTL_TEXTENCODING_UTF8, INetURLObject::FSYS_DETECT ) );
-                            if ( aRelUrl.getLength() )
+                            if ( !aRelUrl.isEmpty() )
                                 aGraphicUrl = aRelUrl;
                         }
                     }
@@ -1427,7 +1427,7 @@ sal_Bool EscherPropertyContainer::CreateGraphicProperties(
             }
         }
 
-        if ( aGraphicUrl.Len() || aUniqueId.getLength() )
+        if ( aGraphicUrl.Len() || !aUniqueId.isEmpty() )
         {
             if ( bMirrored || nAngle )
             {
@@ -1454,7 +1454,7 @@ sal_Bool EscherPropertyContainer::CreateGraphicProperties(
             else
                 AddOpt( ESCHER_Prop_fillType, ESCHER_FillPicture );
 
-            if ( aUniqueId.getLength() )
+            if ( !aUniqueId.isEmpty() )
             {
                 // write out embedded graphic
                 if ( pGraphicProvider && pPicOutStrm && pShapeBoundRect )
@@ -2960,7 +2960,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                             uno::Reference< text::XSimpleText > xText( rXShape, uno::UNO_QUERY );
                             if ( xText.is() )
                                 aText = xText->getString();
-                            if ( !aText.getLength() )
+                            if ( aText.isEmpty() )
                                 aText = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "your text" ));   // todo: moving into a resource
                             AddOpt( DFF_Prop_gtextUNICODE, aText );
 
@@ -2969,7 +2969,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                             const rtl::OUString sCharFontName           ( RTL_CONSTASCII_USTRINGPARAM( "CharFontName" ) );
                             uno::Any aAny = aXPropSet->getPropertyValue( sCharFontName );
                             aAny >>= aFontName;
-                            if ( !aFontName.getLength() )
+                            if ( aFontName.isEmpty() )
                                 aFontName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Arial Black" ));
                             AddOpt( DFF_Prop_gtextFont, aFontName );
 

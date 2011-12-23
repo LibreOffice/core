@@ -106,7 +106,7 @@ SfxObjectShell* findShellForUrl( const rtl::OUString& sMacroURLOrPath )
                 , rtl::OUStringToOString( aURL, RTL_TEXTENCODING_UTF8 ).getStr()
             );
             ::rtl::OUString aName = xModel->getURL() ;
-            if (0 == aName.getLength())
+            if (aName.isEmpty())
                 {
 
                     const static rtl::OUString sTitle( RTL_CONSTASCII_USTRINGPARAM("Title" ) );
@@ -143,7 +143,7 @@ SfxObjectShell* findShellForUrl( const rtl::OUString& sMacroURLOrPath )
                 // sometimes just the name of the document ( without the path
                 // is used
                 bool bDocNameNoPathMatch = false;
-                if ( aURL.getLength() && aURL.indexOf( '/' ) == -1 )
+                if ( !aURL.isEmpty() && aURL.indexOf( '/' ) == -1 )
                 {
                     sal_Int32 lastSlashIndex = xModel->getURL().lastIndexOf( '/' );
                     if ( lastSlashIndex > -1 )
@@ -231,7 +231,7 @@ bool hasMacro( SfxObjectShell* pShell, const String& sLibrary, String& sMod, con
     if( BasicManager* pBasicMgr = pShell ? pShell->GetBasicManager() : 0 )
     {
         aPrjName = pBasicMgr->GetName();
-        if( aPrjName.getLength() == 0 )
+        if( aPrjName.isEmpty() )
             aPrjName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Standard" ) );
     }
     return aPrjName;
@@ -262,7 +262,7 @@ void parseMacro( const rtl::OUString& sMacro, String& sContainer, String& sModul
 {
     if( pShell )
     {
-        ::rtl::OUString aLibName = (rLibName.getLength() > 0) ? rLibName : getDefaultProjectName( pShell );
+        ::rtl::OUString aLibName = rLibName.isEmpty() ?  getDefaultProjectName( pShell ) : rLibName ;
         String aModuleName = rModuleName;
         if( hasMacro( pShell, aLibName, aModuleName, rMacroName ) )
             return ::rtl::OUStringBuffer( aLibName ).append( sal_Unicode( '.' ) ).append( aModuleName ).append( sal_Unicode( '.' ) ).append( rMacroName ).makeStringAndClear();
@@ -372,7 +372,7 @@ MacroResolvedInfo resolveVBAMacro( SfxObjectShell* pShell, const rtl::OUString& 
             uno::Reference< document::XDocumentProperties > xDocProps( xDocPropSupp->getDocumentProperties(), uno::UNO_QUERY_THROW );
 
             rtl::OUString sCreatedFrom = xDocProps->getTemplateURL();
-            if ( sCreatedFrom.getLength() )
+            if ( !sCreatedFrom.isEmpty() )
             {
                 INetURLObject aObj;
                 aObj.SetURL( sCreatedFrom );
@@ -393,7 +393,7 @@ MacroResolvedInfo resolveVBAMacro( SfxObjectShell* pShell, const rtl::OUString& 
                 sCreatedFrom = sCreatedFrom.copy( 0, nIndex );
 
             rtl::OUString sPrj;
-            if ( sCreatedFrom.getLength() && xPrjNameCache->hasByName( sCreatedFrom ) )
+            if ( !sCreatedFrom.isEmpty() && xPrjNameCache->hasByName( sCreatedFrom ) )
             {
                 xPrjNameCache->getByName( sCreatedFrom ) >>= sPrj;
                 // Make sure we don't double up with this project
@@ -538,7 +538,7 @@ void SAL_CALL VBAMacroResolver::initialize( const uno::Sequence< uno::Any >& rAr
         throw uno::RuntimeException();
 
     // second argument: VBA project name
-    if( !(rArgs[ 1 ] >>= maProjectName) || (maProjectName.getLength() == 0) )
+    if( !(rArgs[ 1 ] >>= maProjectName) || (maProjectName.isEmpty()) )
         throw uno::RuntimeException();
 }
 
@@ -551,7 +551,7 @@ void SAL_CALL VBAMacroResolver::initialize( const uno::Sequence< uno::Any >& rAr
 
     // the name may be enclosed in apostrophs
     ::rtl::OUString aMacroName = trimMacroName( rVBAMacroName );
-    if( aMacroName.getLength() == 0 )
+    if( aMacroName.isEmpty() )
         throw lang::IllegalArgumentException();
 
     // external references not supported here (syntax is "url!macroname" or "[url]!macroname" or "[url]macroname")

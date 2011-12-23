@@ -261,7 +261,7 @@ void XMLFilterTestDialog::updateCurrentDocumentButtonState( Reference< XComponen
             }
         }
 
-        if( 0 == aTitle.getLength() )
+        if( aTitle.isEmpty() )
         {
             Reference< XStorable > xStorable( xCurrentDocument, UNO_QUERY );
             if( xStorable.is() )
@@ -307,13 +307,13 @@ void XMLFilterTestDialog::initDialog()
     maFLImport.Enable( bImport );
     maFTImportXSLT.Enable( bImport );
     maFTImportXSLTFile.Enable( bImport );
-    maFTImportTemplate.Enable( bImport && mpFilterInfo->maImportTemplate.getLength() );
-    maFTImportTemplateFile.Enable( bImport && mpFilterInfo->maImportTemplate.getLength() );
+    maFTImportTemplate.Enable( bImport && !mpFilterInfo->maImportTemplate.isEmpty() );
+    maFTImportTemplateFile.Enable( bImport && !mpFilterInfo->maImportTemplate.isEmpty() );
     maFTTransformFile.Enable( bImport );
     maCBXDisplaySource.Enable( bImport );
     maPBImportBrowse.Enable( bImport );
-    maPBRecentDocument.Enable( bImport && maImportRecentFile.getLength() );
-    maFTNameOfRecentFile.Enable( bImport && maImportRecentFile.getLength() );
+    maPBRecentDocument.Enable( bImport && !maImportRecentFile.isEmpty() );
+    maFTNameOfRecentFile.Enable( bImport && !maImportRecentFile.isEmpty() );
 
     maFTImportXSLTFile.SetText( getFileNameFromURL( mpFilterInfo->maImportXSLT ) );
     maFTImportTemplateFile.SetText( getFileNameFromURL( mpFilterInfo->maImportTemplate ) );
@@ -376,7 +376,7 @@ void XMLFilterTestDialog::onExportBrowse()
 
                 }
 
-                if( (nFound == 15) && (aType.getLength() && aService == mpFilterInfo->maDocumentService) )
+                if( (nFound == 15) && (!aType.isEmpty() && aService == mpFilterInfo->maDocumentService) )
                 {
                     // see if this filter is not supressed in dialog
                     if( (nFlags & 0x1000) == 0 )
@@ -484,8 +484,8 @@ void XMLFilterTestDialog::doExport( Reference< XComponent > xComp )
                 // create xslt exporter
                 Reference< XOutputStream > xIS( new comphelper::OSLOutputStreamWrapper( aOutputFile ) );
 
-                int bUseDTD = (mpFilterInfo->maDTD.getLength() != 0) ? 1 : 0 ;
-                int bUseDocType = (mpFilterInfo->maDocType.getLength() != 0 ) ? 1 : 0;
+                int bUseDTD = mpFilterInfo->maDTD.isEmpty() ? 0 : 1 ;
+                int bUseDocType = mpFilterInfo->maDocType.isEmpty()  ? 0 : 1;
                 Sequence< PropertyValue > aSourceData( 2 + bUseDTD + bUseDocType );
                 int i = 0;
 

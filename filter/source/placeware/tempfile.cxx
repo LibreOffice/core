@@ -139,7 +139,7 @@ TempFile::~TempFile()
 {
     close();
 
-    if( maURL.getLength() )
+    if( !maURL.isEmpty() )
         osl::File::remove( maURL );
 }
 

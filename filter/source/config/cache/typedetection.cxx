@@ -180,7 +180,7 @@ TypeDetection::~TypeDetection()
         // the might needed input stream, start detection
         // which uses all registered deep detection services.
         if (
-            (!sType.getLength()) &&
+            (sType.isEmpty()) &&
             (bAllowDeep        )
            )
         {
@@ -192,13 +192,13 @@ TypeDetection::~TypeDetection()
         // pure deep detection failed
         // => ask might existing InteractionHandler
         // means: ask user for it's decision
-        if (!sType.getLength())
+        if (sType.isEmpty())
             sType = impl_askUserForTypeAndFilterIfAllowed(stlDescriptor);
 
         //*******************************************
         // no real detected type - but a might valid one.
         // update descriptor and set last chance for return.
-        if (!sType.getLength() && sLastChance.getLength())
+        if (sType.isEmpty() && !sLastChance.isEmpty())
         {
             OSL_FAIL("set first flat detected type without a registered deep detection service as \"last chance\" ... nevertheless some other deep detections said \"NO\". I TRY IT!");
             sType = sLastChance;
@@ -229,7 +229,7 @@ void TypeDetection::impl_checkResultsAndAddBestFilter(::comphelper::MediaDescrip
     ::rtl::OUString sFilter = rDescriptor.getUnpackedValueOrDefault(
                                 ::comphelper::MediaDescriptor::PROP_FILTERNAME(),
                                 ::rtl::OUString());
-    if (sFilter.getLength())
+    if (!sFilter.isEmpty())
         return;
 
     // b)
@@ -238,7 +238,7 @@ void TypeDetection::impl_checkResultsAndAddBestFilter(::comphelper::MediaDescrip
     ::rtl::OUString sDocumentService = rDescriptor.getUnpackedValueOrDefault(
                                             ::comphelper::MediaDescriptor::PROP_DOCUMENTSERVICE(),
                                             ::rtl::OUString());
-    if (sDocumentService.getLength())
+    if (!sDocumentService.isEmpty())
     {
         try
         {
@@ -308,7 +308,7 @@ void TypeDetection::impl_checkResultsAndAddBestFilter(::comphelper::MediaDescrip
                 // <- SAFE
             }
 
-            if (sFilter.getLength() > 0)
+            if (!sFilter.isEmpty())
             {
                 rDescriptor[::comphelper::MediaDescriptor::PROP_TYPENAME()  ] <<= sRealType;
                 rDescriptor[::comphelper::MediaDescriptor::PROP_FILTERNAME()] <<= sFilter;
@@ -394,7 +394,7 @@ void TypeDetection::impl_checkResultsAndAddBestFilter(::comphelper::MediaDescrip
             sFilter = ::rtl::OUString();
         }
 
-        if (sFilter.getLength())
+        if (!sFilter.isEmpty())
         {
             rDescriptor[::comphelper::MediaDescriptor::PROP_TYPENAME()  ] <<= sType  ;
             rDescriptor[::comphelper::MediaDescriptor::PROP_FILTERNAME()] <<= sFilter;
@@ -505,7 +505,7 @@ sal_Bool TypeDetection::impl_getPreselectionForType(const ::rtl::OUString& sPreS
     }
 
     // if its a valid type - set it on all return values!
-    if (sType.getLength())
+    if (!sType.isEmpty())
     {
         FlatDetectionInfo aInfo;
         aInfo.sType              = sType;
@@ -578,7 +578,7 @@ sal_Bool TypeDetection::impl_getPreselectionForFilter(const ::rtl::OUString& sPr
         rInfo.bPreselectedByFilter = sal_True;
     }
 
-    if (sFilter.getLength())
+    if (!sFilter.isEmpty())
         return sal_True;
     else
         return sal_False;
@@ -687,15 +687,15 @@ void TypeDetection::impl_getPreselection(const css::util::URL&                aP
     */
 
     ::rtl::OUString sSelectedType = rDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_TYPENAME(), ::rtl::OUString());
-    if (sSelectedType.getLength())
+    if (!sSelectedType.isEmpty())
         impl_getPreselectionForType(sSelectedType, aParsedURL, rFlatTypes);
 
     ::rtl::OUString sSelectedFilter = rDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_FILTERNAME(), ::rtl::OUString());
-    if (sSelectedFilter.getLength())
+    if (!sSelectedFilter.isEmpty())
         impl_getPreselectionForFilter(sSelectedFilter, aParsedURL, rFlatTypes);
 
     ::rtl::OUString sSelectedDoc = rDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_DOCUMENTSERVICE(), ::rtl::OUString());
-    if (sSelectedDoc.getLength())
+    if (!sSelectedDoc.isEmpty())
         impl_getPreselectionForDocumentService(sSelectedDoc, aParsedURL, rFlatTypes);
 }
 
@@ -757,7 +757,7 @@ void TypeDetection::impl_getPreselection(const css::util::URL&                aP
             aType[PROPNAME_DETECTSERVICE] >>= sDetectService;
 
             // c)
-            if (!sDetectService.getLength())
+            if (sDetectService.isEmpty())
             {
                 // accept or not accept flat types without deep detection: that's the question :-)
                 // May be there exists some states, where we have to use our LastChance feature instead
@@ -778,7 +778,7 @@ void TypeDetection::impl_getPreselection(const css::util::URL&                aP
                 // preselected by the user can be used as LAST CHANCE in case no other type could
                 // be detected. Of course only the first type without deep detector can be used.
                 // Further ones has to be ignored.
-                if (rLastChance.getLength() < 1)
+                if (rLastChance.isEmpty())
                     rLastChance = sFlatType;
 
                 continue;
@@ -791,7 +791,7 @@ void TypeDetection::impl_getPreselection(const css::util::URL&                aP
             ::rtl::OUString sDeepType = impl_askDetectService(sDetectService, rDescriptor);
 
             // d)
-            if (sDeepType.getLength())
+            if (!sDeepType.isEmpty())
                 return sDeepType;
         }
         catch(const css::container::NoSuchElementException&)
@@ -843,7 +843,7 @@ namespace
     {
         const ::rtl::OUString& sDetectService = *pIt;
               ::rtl::OUString  sDeepType      = impl_askDetectService(sDetectService, rDescriptor);
-        if (sDeepType.getLength())
+        if (!sDeepType.isEmpty())
             return sDeepType;
         lInsideUsedDetectors.push_back(sDetectService);
     }
@@ -863,7 +863,7 @@ namespace
     ::rtl::OUString sPreselDocumentService = rDescriptor.getUnpackedValueOrDefault(
                                                 ::comphelper::MediaDescriptor::PROP_DOCUMENTSERVICE(),
                                                 ::rtl::OUString());
-    if (sPreselDocumentService.getLength())
+    if (!sPreselDocumentService.isEmpty())
     {
         for (  pIt  = lDetectors.begin();
                pIt != lDetectors.end()  ;
@@ -921,7 +921,7 @@ namespace
             if (bMatchDetectorToDocumentService)
             {
                 ::rtl::OUString sDeepType = impl_askDetectService(sDetectService, rDescriptor);
-                if (sDeepType.getLength())
+                if (!sDeepType.isEmpty())
                     return sDeepType;
                 lInsideUsedDetectors.push_back(sDetectService);
             }
@@ -942,7 +942,7 @@ namespace
             continue;
 
         ::rtl::OUString sDeepType = impl_askDetectService(sDetectService, rDescriptor);
-        if (sDeepType.getLength())
+        if (!sDeepType.isEmpty())
             return sDeepType;
     }
 
@@ -1090,7 +1090,7 @@ void TypeDetection::impl_seekStreamToZero(comphelper::MediaDescriptor& rDescript
     // and not for "missing files". Especialy if detection is done by a stream only
     // we cant check if the stream points to an "existing content"!
     if (
-        (!sURL.getLength()                                     ) || // "non existing file" ?
+        (sURL.isEmpty()                                     ) || // "non existing file" ?
         (!xStream.is()                                         ) || // non existing file !
         (sURL.equalsIgnoreAsciiCaseAsciiL("private:stream", 14))    // not a good idea .-)
        )
@@ -1134,7 +1134,7 @@ void TypeDetection::impl_openStream(::comphelper::MediaDescriptor& rDescriptor)
     sal_Bool bSuccess = sal_False;
     ::rtl::OUString sURL = rDescriptor.getUnpackedValueOrDefault( ::comphelper::MediaDescriptor::PROP_URL(), ::rtl::OUString() );
     sal_Bool bRequestedReadOnly = rDescriptor.getUnpackedValueOrDefault( ::comphelper::MediaDescriptor::PROP_READONLY(), sal_False );
-    if ( sURL.getLength() && ::utl::LocalFileHelper::IsLocalFile( INetURLObject( sURL ).GetMainURL( INetURLObject::NO_DECODE ) ) )
+    if ( !sURL.isEmpty() && ::utl::LocalFileHelper::IsLocalFile( INetURLObject( sURL ).GetMainURL( INetURLObject::NO_DECODE ) ) )
     {
         // OOo uses own file locking mechanics in case of local file
         bSuccess = rDescriptor.addInputStreamOwnLock();

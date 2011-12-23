@@ -161,7 +161,7 @@ void SVGAttributeWriter::AddColorAttr( const char* pColorAttrName,
 
     mrExport.AddAttribute( XML_NAMESPACE_NONE, pColorAttrName, aColor );
 
-    if( aColorOpacity.getLength() && mrExport.IsUseOpacity() )
+    if( !aColorOpacity.isEmpty() && mrExport.IsUseOpacity() )
         mrExport.AddAttribute( XML_NAMESPACE_NONE, pColorOpacityAttrName, aColorOpacity );
 }
 
@@ -177,7 +177,7 @@ void SVGAttributeWriter::AddPaintAttr( const Color& rLineColor, const Color& rFi
 
         AddGradientDef( *pObjBoundRect, *pFillGradient, aGradientId );
 
-        if( aGradientId.getLength() )
+        if( !aGradientId.isEmpty() )
         {
             ::rtl::OUString aGradientURL( B2UCONST( "url(#" ) );
             mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrFill, ( aGradientURL += aGradientId ) += B2UCONST( ")" ) );
@@ -673,7 +673,7 @@ void SVGActionWriter::ImplWriteShape( const SVGShapeDescriptor& rShape, sal_Bool
 
     mpContext->AddPaintAttr( rShape.maShapeLineColor, rShape.maShapeFillColor, &aBoundRect, rShape.mapShapeGradient.get() );
 
-    if( rShape.maId.getLength() )
+    if( !rShape.maId.isEmpty() )
         mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrId, rShape.maId );
 
     if( rShape.mnStrokeWidth )

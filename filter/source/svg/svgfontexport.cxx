@@ -140,7 +140,7 @@ void SVGFontExport::implCollectGlyphs()
                     break;
                 }
 
-                if( aText.getLength() )
+                if( !aText.isEmpty() )
                 {
                     GlyphSet& rGlyphSet = implGetGlyphSet( aVDev.GetFont() );
                     ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XBreakIterator > xBI(
@@ -286,7 +286,7 @@ void SVGFontExport::implEmbedGlyph( OutputDevice& rOut, const ::rtl::OUString& r
         mrExport.AddAttribute( XML_NAMESPACE_NONE, "horiz-adv-x", ::rtl::OUString::valueOf( aBoundRect.GetWidth() ) );
 
         const ::rtl::OUString aPathString( SVGActionWriter::GetPathString( aPolyPoly, sal_False ) );
-        if( aPathString.getLength() )
+        if( !aPathString.isEmpty() )
         {
             mrExport.AddAttribute( XML_NAMESPACE_NONE, "d", aPathString );
         }

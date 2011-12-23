@@ -5125,7 +5125,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
     if( pRet )
     {
         ::rtl::OUString aObjName = GetPropertyString( DFF_Prop_wzName, rSt );
-        if( aObjName.getLength() > 0 )
+        if( !aObjName.isEmpty() )
             pRet->SetName( aObjName );
     }
 
@@ -7337,14 +7337,14 @@ com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >  SvxMS
             else
                 aFilterName = GetFilterNameFromClassID_Impl( aStgNm );
 
-            uno::Sequence < beans::PropertyValue > aMedium( aFilterName.getLength() ? 3 : 2);
+            uno::Sequence < beans::PropertyValue > aMedium( aFilterName.isEmpty() ? 2 : 3);
             aMedium[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "InputStream" ) );
             uno::Reference < io::XInputStream > xStream = new ::utl::OSeekableInputStreamWrapper( *pStream );
             aMedium[0].Value <<= xStream;
             aMedium[1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "URL" ) );
             aMedium[1].Value <<= ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:stream" ) );
 
-            if ( aFilterName.getLength() )
+            if ( !aFilterName.isEmpty() )
             {
                 aMedium[2].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FilterName" ) );
                 aMedium[2].Value <<= aFilterName;
@@ -7356,7 +7356,7 @@ com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >  SvxMS
 
             if ( !xObj.is() )
             {
-                if( aFilterName.getLength() )
+                if( !aFilterName.isEmpty() )
                 {
                     // throw the filter parameter away as workaround
                     aMedium.realloc( 2 );

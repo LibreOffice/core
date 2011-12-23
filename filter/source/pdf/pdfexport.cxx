@@ -325,7 +325,7 @@ static OUString getMimetypeForDocument( const Reference< XMultiServiceFactory >&
     if( xModuleManager.is() && xStore.is() )
     {
         OUString aDocServiceName = xModuleManager->identify( Reference< XInterface >( xStore, uno::UNO_QUERY ) );
-        if ( aDocServiceName.getLength() )
+        if ( !aDocServiceName.isEmpty() )
         {
             // get the actual filter name
             OUString aFilterName;
@@ -349,7 +349,7 @@ static OUString getMimetypeForDocument( const Reference< XMultiServiceFactory >&
             if ( xApplConfig.is() )
             {
                 xApplConfig->getByName( OUString( RTL_CONSTASCII_USTRINGPARAM( "ooSetupFactoryActualFilter" ) ) ) >>= aFilterName;
-                if( aFilterName.getLength() )
+                if( !aFilterName.isEmpty() )
                 {
                     // find the related type name
                     OUString aTypeName;
@@ -363,7 +363,7 @@ static OUString getMimetypeForDocument( const Reference< XMultiServiceFactory >&
                         if ( aFilterData[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Type" ) ) )
                             aFilterData[nInd].Value >>= aTypeName;
 
-                    if ( aTypeName.getLength() )
+                    if ( !aTypeName.isEmpty() )
                     {
                         // find the mediatype
                         Reference< container::XNameAccess > xTypeDetection(
@@ -658,7 +658,7 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
 
 //set check for permission change password
 // if not enabled and no permission password, force permissions to default as if PDF where without encryption
-                if( mbRestrictPermissions && (xEnc.is() || aPermissionPassword.getLength() > 0) )
+                if( mbRestrictPermissions && (xEnc.is() || !aPermissionPassword.isEmpty()) )
                 {
                     mbEncrypt = sal_True;
 //permission set as desired, done after
@@ -710,7 +710,7 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                 aContext.Encryption.CanExtractForAccessibility  = mbCanExtractForAccessibility;
                 if( mbEncrypt && ! xEnc.is() )
                     xEnc = PDFWriter::InitEncryption( aPermissionPassword, aOpenPassword, aContext.Encryption.Security128bit );
-                if( mbEncrypt && aPermissionPassword.getLength() && ! aPreparedPermissionPassword.getLength() )
+                if( mbEncrypt && !aPermissionPassword.isEmpty() && ! aPreparedPermissionPassword.getLength() )
                     aPreparedPermissionPassword = comphelper::OStorageHelper::CreatePackageEncryptionData( aPermissionPassword );
             }
             // after this point we don't need the legacy clear passwords anymore
@@ -828,7 +828,7 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                 aRenderOptions[ 5 ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "PageRange" ) );
                 aRenderOptions[ 5 ].Value <<= aPageRange;
 
-                if( aPageRange.getLength() || !aSelection.hasValue() )
+                if( !aPageRange.isEmpty() || !aSelection.hasValue() )
                 {
                     aSelection = Any();
                     aSelection <<= mxSrcDoc;
@@ -866,7 +866,7 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                         bSecondPassForImpressNotes = sal_True;      // the export notes checkbox needs to be disabled
                 }
 
-                if( !aPageRange.getLength() )
+                if( aPageRange.isEmpty() )
                 {
                     aPageRange = OUStringBuffer()
                         .append( static_cast< sal_Int32 >( 1 ) )
@@ -903,7 +903,7 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
 
                 // if during the export the doc locale was set copy it to PDF writer
                 const com::sun::star::lang::Locale& rLoc( pPDFExtOutDevData->GetDocumentLocale() );
-                if( rLoc.Language.getLength() )
+                if( !rLoc.Language.isEmpty() )
                     pPDFWriter->SetDocumentLocale( rLoc );
 
                 if( bRet )

@@ -1060,7 +1060,7 @@ struct AnnotatingVisitor
         {
             aCurrToken=sValue.getToken(0,';',nIndex);
 
-            if( aCurrToken.getLength() )
+            if( !aCurrToken.isEmpty() )
             {
                 // split attrib & value
                 nDummyIndex=0;
@@ -1621,7 +1621,7 @@ struct ShapeWritingVisitor
 
         if (rShearX != 0.0f)
             sTransformValue += USTR("skewX(")+::rtl::OUString::valueOf(rShearX)+USTR(") ");
-        if (!sTransformValue.getLength())
+        if (sTransformValue.isEmpty())
             return;
         xAttrs->AddAttribute( USTR("draw:transform"), sTransformValue);
     }

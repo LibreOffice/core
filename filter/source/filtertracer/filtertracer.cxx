@@ -133,7 +133,7 @@ void SAL_CALL FilterTracer::initialize( const SEQ( NMSP_UNO::Any )& aArguments )
     }
 
     // check if we have to create the XOutputStream
-    if ( !mxOutputStream.is() && msURL.getLength() )
+    if ( !(mxOutputStream.is() || msURL.isEmpty()) )
     {
         mpStream = ::utl::UcbStreamHelper::CreateStream( msURL, STREAM_WRITE | STREAM_TRUNC | STREAM_SHARE_DENYNONE );
         if ( mpStream )

@@ -150,7 +150,7 @@ sal_Bool SAL_CALL XmlFilterAdaptor::importImpl( const Sequence< ::com::sun::star
      //********************
     //Template Loading if Required
     //********************
-    if (msTemplateName.getLength()){
+    if (!msTemplateName.isEmpty()){
         Reference< XStyleFamiliesSupplier > xstylefamiliessupplier(mxDoc, UNO_QUERY);
 
         Reference< XNameAccess >xName;

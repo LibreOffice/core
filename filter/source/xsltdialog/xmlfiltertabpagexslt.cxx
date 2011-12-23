@@ -161,7 +161,7 @@ void XMLFilterTabPageXSLT::SetURL( SvtURLBox& rURLBox, const OUString& rURL )
         rURLBox.SetBaseURL( rURL );
         rURLBox.SetText( rURL );
     }
-    else if( rURL.getLength() )
+    else if( !rURL.isEmpty() )
     {
         rtl::OUString aURL( rURL );
         aURL = URIHelper::SmartRel2Abs( sInstPath, aURL, Link(), false );

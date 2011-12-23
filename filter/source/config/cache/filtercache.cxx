@@ -232,24 +232,24 @@ void FilterCache::load(EFillState eRequired,
     if (m_eFillState == E_CONTAINS_NOTHING)
     {
         impl_getDirectCFGValue(CFGDIRECTKEY_OFFICELOCALE) >>= m_sActLocale;
-        if (!m_sActLocale.getLength())
+        if (m_sActLocale.isEmpty())
         {
             _FILTER_CONFIG_LOG_1_("FilterCache::ctor() ... could not specify office locale => use default \"%s\"\n", _FILTER_CONFIG_TO_ASCII_(DEFAULT_OFFICELOCALE));
             m_sActLocale = DEFAULT_OFFICELOCALE;
         }
 
         impl_getDirectCFGValue(CFGDIRECTKEY_FORMATNAME) >>= m_sFormatName;
-        if (!m_sFormatName.getLength())
+        if (m_sFormatName.isEmpty())
             impl_getDirectCFGValue(CFGDIRECTKEY_PRODUCTNAME) >>= m_sFormatName;
 
-        if (!m_sFormatName.getLength())
+        if (m_sFormatName.isEmpty())
         {
             _FILTER_CONFIG_LOG_1_("FilterCache::ctor() ... could not specify format name => use default \"%s\"\n", _FILTER_CONFIG_TO_ASCII_(DEFAULT_FORMATNAME));
             m_sFormatName = DEFAULT_FORMATNAME;
         }
 
         impl_getDirectCFGValue(CFGDIRECTKEY_FORMATVERSION) >>= m_sFormatVersion;
-        if (!m_sFormatVersion.getLength())
+        if (m_sFormatVersion.isEmpty())
         {
             _FILTER_CONFIG_LOG_1_("FilterCache::ctor() ... could not specify format version => use default \"%s\"\n", _FILTER_CONFIG_TO_ASCII_(DEFAULT_FORMATVERSION));
             m_sFormatVersion = DEFAULT_FORMATVERSION;
@@ -557,7 +557,7 @@ void FilterCache::addStatePropsToItem(      EItemType        eType,
                 ::rtl::OUString sDefaultFrameLoader;
                 if (
                     (aDirectValue >>= sDefaultFrameLoader) &&
-                    (sDefaultFrameLoader.getLength()     ) &&
+                    (!sDefaultFrameLoader.isEmpty()      ) &&
                     (sItem.equals(sDefaultFrameLoader)   )
                    )
                 {
@@ -911,8 +911,8 @@ css::uno::Any FilterCache::impl_getDirectCFGValue(const ::rtl::OUString& sDirect
 
     if (
         (!::utl::splitLastFromConfigurationPath(sDirectKey, sRoot, sKey)) ||
-        (!sRoot.getLength()                                             ) ||
-        (!sKey.getLength()                                              )
+        (sRoot.isEmpty()                                             ) ||
+        (sKey.isEmpty()                                              )
        )
         return css::uno::Any();
 
@@ -1066,7 +1066,7 @@ void FilterCache::impl_validateAndOptimize()
         // Because these informations are available as type properties!
         ::rtl::OUString sDetectService;
         aType[PROPNAME_DETECTSERVICE ] >>= sDetectService;
-        if (sDetectService.getLength())
+        if (!sDetectService.isEmpty())
             impl_resolveItem4TypeRegistration(&m_lDetectServices, sDetectService, sType);
 
         // get its registration for file Extensions AND(!) URLPattern ...
@@ -1157,7 +1157,7 @@ void FilterCache::impl_validateAndOptimize()
 
         ::rtl::OUString sPrefFilter;
         aType[PROPNAME_PREFERREDFILTER] >>= sPrefFilter;
-        if (!sPrefFilter.getLength())
+        if (sPrefFilter.isEmpty())
         {
             // OK - there is no filter for this type. But thats not an error.
             // May be it can be handled by a ContentHandler ...
@@ -1166,10 +1166,10 @@ void FilterCache::impl_validateAndOptimize()
             sal_Bool bReferencedByLoader  = sal_True;
             sal_Bool bReferencedByHandler = sal_True;
             if (bAllLoadersShouldExist)
-                bReferencedByLoader = (impl_searchFrameLoaderForType(sType).getLength()!=0);
+                bReferencedByLoader = !impl_searchFrameLoaderForType(sType).isEmpty();
 
             if (bAllHandlersShouldExist)
-                bReferencedByHandler = (impl_searchContentHandlerForType(sType).getLength()!=0);
+                bReferencedByHandler = !impl_searchContentHandlerForType(sType).isEmpty();
 
             if (
                 (!bReferencedByLoader ) &&
@@ -1184,7 +1184,7 @@ void FilterCache::impl_validateAndOptimize()
             }
         }
 
-        if (sPrefFilter.getLength())
+        if (!sPrefFilter.isEmpty())
         {
             CacheItemList::const_iterator pIt2 = m_lFilters.find(sPrefFilter);
             if (pIt2 == m_lFilters.end())
@@ -1260,7 +1260,7 @@ void FilterCache::impl_validateAndOptimize()
 
     if (
         (!(aDirectValue >>= sDefaultFrameLoader)) ||
-        (!sDefaultFrameLoader.getLength()       )
+        (sDefaultFrameLoader.isEmpty()       )
        )
     {
         sLog.appendAscii("error\t:\t"                                );
@@ -2371,7 +2371,7 @@ CacheItem FilterCache::impl_readOldItem(const css::uno::Reference< css::containe
     xItem->getByName(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Data" ))) >>= sData;
     lData = impl_tokenizeString(sData, (sal_Unicode)',');
     if (
-        (!sData.getLength()) ||
+        (sData.isEmpty()) ||
         (lData.size()<1    )
        )
     {

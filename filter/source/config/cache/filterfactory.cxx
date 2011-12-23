@@ -173,7 +173,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL FilterFactory::createInstan
 
     // create service instance
     css::uno::Reference< css::uno::XInterface > xFilter;
-    if (sFilterService.getLength())
+    if (!sFilterService.isEmpty())
         xFilter = m_xSMGR->createInstance(sFilterService);
 
     // initialize filter
@@ -377,7 +377,7 @@ OUStringList FilterFactory::impl_queryMatchByDocumentService(const QueryTokenize
             // "matchByDocumentService=com.sun.star..."     => only filter matching this document service will be adressed
             ::rtl::OUString sCheckValue = aFilter.getUnpackedValueOrDefault(PROPNAME_DOCUMENTSERVICE, ::rtl::OUString());
             if (
-                ( sDocumentService.getLength()                 ) &&
+                (!sDocumentService.isEmpty()                   ) &&
                 (!sDocumentService.equals(QUERY_CONSTVALUE_ALL)) &&
                 (!sCheckValue.equals(sDocumentService)         )
             )
@@ -491,7 +491,7 @@ OUStringList FilterFactory::impl_getSortedFilterList(const QueryTokenizer& lToke
 
     // simple search for filters of one specific module.
     OUStringList lFilterList;
-    if (sModule.getLength())
+    if (!sModule.isEmpty())
         lFilterList = impl_getSortedFilterListForModule(sModule, nIFlags, nEFlags);
     else
     {
