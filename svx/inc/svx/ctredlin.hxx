@@ -403,7 +403,6 @@ protected:
     virtual void    Resize();
 
 public:
-                    SvxAcceptChgCtr( Window* pParent, WinBits nWinStyle = 0 );
                     SvxAcceptChgCtr( Window* pParent, const ResId& rResId );
 
                     ~SvxAcceptChgCtr();
@@ -412,9 +411,6 @@ public:
 
     void            ShowFilterPage();
     void            ShowViewPage();
-
-    sal_Bool            IsFilterPageVisible();
-    sal_Bool            IsViewPageVisible();
 
     SvxTPFilter*    GetFilterPage();
     SvxTPView*      GetViewPage();
