@@ -1,0 +1,923 @@
+Index: toolsrc/org/mozilla/javascript/tools/debugger/GuiCallback.java
+===================================================================
+--- toolsrc/org/mozilla/javascript/tools/debugger/GuiCallback.java	(revision 1)
++++ misc/build/rhino1_7R3/toolsrc/org/mozilla/javascript/tools/debugger/GuiCallback.java	(working copy)
+@@ -56,6 +56,11 @@
+                         String threadTitle,
+                         String alertMessage);
+ 
++	/**
++	 * Called when the interrupt loop has been exited.
++	 */
++	void exitInterrupt();
++
+     /**
+      * Returns whether the current thread is the GUI's event thread.
+      * This information is required to avoid blocking the event thread
+Index: toolsrc/org/mozilla/javascript/tools/debugger/Main.java
+===================================================================
+--- toolsrc/org/mozilla/javascript/tools/debugger/Main.java	(revision 1)
++++ misc/build/rhino1_7R3/toolsrc/org/mozilla/javascript/tools/debugger/Main.java	(working copy)
+@@ -44,6 +44,8 @@
+ import java.io.InputStream;
+ import java.io.PrintStream;
+ 
++import java.net.URL;
++
+ import javax.swing.JFrame;
+ 
+ import org.mozilla.javascript.*;
+@@ -161,7 +163,7 @@
+      * Console window.
+      */
+     public InputStream getIn() {
+-        return debugGui.getConsole().getIn();
++        return null;//return debugGui.getConsole().getIn();
+     }
+ 
+     /**
+@@ -169,7 +171,7 @@
+      * Console window.
+      */
+     public PrintStream getOut() {
+-        return debugGui.getConsole().getOut();
++        return null;//return debugGui.getConsole().getOut();
+     }
+ 
+     /**
+@@ -177,7 +179,7 @@
+      * Console window.
+      */
+     public PrintStream getErr() {
+-        return debugGui.getConsole().getErr();
++        return null;//return debugGui.getConsole().getErr();
+     }
+ 
+     /**
+@@ -437,4 +439,39 @@
+             return scope;
+         }
+     }
++    
++    // shortcut methods
++
++    public void addWindowListener(java.awt.event.WindowListener l) {
++        debugGui.addWindowListener(l);
++    }
++
++    public void highlighLineInScriptWindow(URL url, int lineNum) {
++		debugGui.highlighLineInScriptWindow(url, lineNum);
++	}
++    
++    public Object runScriptWindow(URL scriptUrl) throws Exception
++    {
++		return debugGui.runScriptWindow(scriptUrl);
++	}
++    
++    public void openFile(URL scriptUrl, Scriptable scope, Runnable closeCallback) {
++		debugGui.openFile(scriptUrl, scope, closeCallback);
++	}
++    
++    public void toFront() {
++		debugGui.toFront();
++	}
++    
++    public void showScriptWindow(URL url) {
++		debugGui.showScriptWindow(url);
++	}
++
++    public boolean isModified(URL url) {
++		return debugGui.isModified(url);
++	}
++
++	public String getText(URL url) {
++		return debugGui.getText(url);
++	}
+ }
+Index: toolsrc/org/mozilla/javascript/tools/debugger/Dim.java
+===================================================================
+--- toolsrc/org/mozilla/javascript/tools/debugger/Dim.java	(revision 1)
++++ misc/build/rhino1_7R3/toolsrc/org/mozilla/javascript/tools/debugger/Dim.java	(working copy)
+@@ -69,6 +69,7 @@
+     private static final int IPROXY_OBJECT_TO_STRING = 5;
+     private static final int IPROXY_OBJECT_PROPERTY = 6;
+     private static final int IPROXY_OBJECT_IDS = 7;
++    private static final int IPROXY_EVAL_SCRIPT_WITH_RETURN = 8;
+ 
+     /**
+      * Interface to the debugger GUI.
+@@ -433,7 +434,7 @@
+      */
+     private String getNormalizedUrl(DebuggableScript fnOrScript) {
+         String url = fnOrScript.getSourceName();
+-        if (url == null) { url = "<stdin>"; }
++        if (url == null) { url = "document"; }
+         else {
+             // Not to produce window for eval from different lines,
+             // strip line numbers, i.e. replace all #[0-9]+\(eval\) by
+@@ -622,6 +623,17 @@
+     }
+ 
+     /**
++     * Evaluates the given script with scope and return value.
++     */
++    public Object evalScriptWithReturn(final String url, final String text, Scriptable scope) {
++        DimIProxy action = new DimIProxy(this, IPROXY_EVAL_SCRIPT_WITH_RETURN);
++        action.url = url;
++        action.text = text;
++        action.scope = scope;
++        return contextFactory.call(action);
++    }
++
++    /**
+      * Converts the given script object to a string.
+      */
+     public String objectToString(Object object) {
+@@ -869,6 +881,7 @@
+                 interruptedContextData = null;
+                 eventThreadMonitor.notifyAll();
+             }
++            callback.exitInterrupt();
+         }
+ 
+     }
+@@ -966,6 +979,11 @@
+         private Object[] objectArrayResult;
+ 
+         /**
++         * The Scriptable as arguments.
++         */
++        private Scriptable scope;
++
++        /**
+          * Creates a new DimIProxy.
+          */
+         private DimIProxy(Dim dim, int type) {
+@@ -1021,6 +1039,9 @@
+                 objectArrayResult = dim.getObjectIdsImpl(cx, object);
+                 break;
+ 
++              case IPROXY_EVAL_SCRIPT_WITH_RETURN:
++                return cx.evaluateString(this.scope, text, url, 1, null);
++
+               default:
+                 throw Kit.codeBug();
+             }
+Index: toolsrc/org/mozilla/javascript/tools/debugger/SwingGui.java
+===================================================================
+--- toolsrc/org/mozilla/javascript/tools/debugger/SwingGui.java	(revision 1)
++++ misc/build/rhino1_7R3/toolsrc/org/mozilla/javascript/tools/debugger/SwingGui.java	(working copy)
+@@ -68,6 +68,8 @@
+ import java.awt.Toolkit;
+ import java.awt.event.*;
+ 
++import java.net.URL;
++
+ import java.util.List;
+ import java.util.ArrayList;
+ import java.util.Arrays;
+@@ -84,6 +86,7 @@
+ import java.lang.reflect.Method;
+ 
+ import org.mozilla.javascript.Kit;
++import org.mozilla.javascript.Scriptable;
+ import org.mozilla.javascript.SecurityUtilities;
+ 
+ import org.mozilla.javascript.tools.shell.ConsoleTextArea;
+@@ -178,6 +181,16 @@
+      */
+     private EventQueue awtEventQueue;
+ 
++    private boolean sourceEditingEnabled = true;
++
++    public boolean isSourceEditingEnabled() {
++        return sourceEditingEnabled;
++    }
++
++    public void setSourceEditingEnabled(boolean b) {
++        sourceEditingEnabled = b;
++    }
++
+     /**
+      * Creates a new SwingGui.
+      */
+@@ -218,13 +231,13 @@
+         super.setVisible(b);
+         if (b) {
+             // this needs to be done after the window is visible
+-            console.consoleTextArea.requestFocus();
++            // console.consoleTextArea.requestFocus();
+             context.split.setDividerLocation(0.5);
+             try {
+-                console.setMaximum(true);
+-                console.setSelected(true);
+-                console.show();
+-                console.consoleTextArea.requestFocus();
++                // console.setMaximum(true);
++                // console.setSelected(true);
++                // console.show();
++                // console.consoleTextArea.requestFocus();
+             } catch (Exception exc) {
+             }
+         }
+@@ -320,7 +333,7 @@
+         desk = new JDesktopPane();
+         desk.setPreferredSize(new Dimension(600, 300));
+         desk.setMinimumSize(new Dimension(150, 50));
+-        desk.add(console = new JSInternalConsole("JavaScript Console"));
++        // desk.add(console = new JSInternalConsole("JavaScript Console"));
+         context = new ContextWindow(this);
+         context.setPreferredSize(new Dimension(600, 120));
+         context.setMinimumSize(new Dimension(50, 50));
+@@ -540,7 +553,7 @@
+         if (line != -1) {
+             currentWindow = w;
+         }
+-        menubar.addFile(url);
++        // menubar.addFile(url);
+         w.setVisible(true);
+ 
+         if (activate) {
+@@ -800,9 +813,17 @@
+             proxy.alertMessage = alertMessage;
+             SwingUtilities.invokeLater(proxy);
+         }
++        setSourceEditingEnabled(false);
+     }
+ 
+     /**
++     * Called when the interrupt loop has been exited.
++     */
++    public void exitInterrupt() {
++        setSourceEditingEnabled(true);
++    }
++
++    /**
+      * Returns whether the current thread is the GUI event thread.
+      */
+     public boolean isGuiEventThread() {
+@@ -879,6 +900,14 @@
+                     new Thread(proxy).start();
+                 }
+             }
++        } else if (cmd.equals("Run")) {
++            FileWindow w = (FileWindow)getSelectedFrame();
++            if (w != null)
++                w.load();
++        } else if (cmd.equals("Save")) {
++            FileWindow w = (FileWindow)getSelectedFrame();
++            if (w != null)
++                w.save();
+         } else if (cmd.equals("More Windows...")) {
+             MoreWindows dlg = new MoreWindows(this, fileWindows,
+                                               "Window", "Files");
+@@ -972,6 +1001,120 @@
+             dim.setReturnValue(returnValue);
+         }
+     }
++
++    private String getFileName(URL url) {
++        if (url.getProtocol().startsWith("vnd.sun.star."))
++            return url.toString();
++        return url.getPath();
++    }
++
++    public void openFile(URL scriptUrl, Scriptable scope, Runnable closeCallback) {
++        if (scope == null) {
++            MessageDialogWrapper.showMessageDialog(this,
++                "Can't compile scripts: no scope available",
++                "Open", JOptionPane.ERROR_MESSAGE);
++        } else {
++            if (scriptUrl != null) {
++                try
++                {
++                    InputStreamReader reader = new InputStreamReader(scriptUrl.openStream()); 
++                    String fileName = getFileName(scriptUrl);
++                    officeScripts.addScript( fileName, scriptUrl, scope, closeCallback  );
++                    RunProxy proxy = new RunProxy(this, RunProxy.OPEN_FILE);
++                    proxy.fileName = fileName;
++                    proxy.text = Kit.readReader(reader);
++                    new Thread(proxy).start();
++                }
++                catch ( IOException e )
++                {
++                    MessageDialogWrapper.showMessageDialog(this,
++                        "Can't open stream for script: " + e.toString(),
++                        "Open", JOptionPane.ERROR_MESSAGE);
++                }
++            }
++        }
++        split1.setDividerLocation(1.0);
++    }
++
++    // patched Office specific interface
++    OfficeScriptInfo officeScripts = new OfficeScriptInfo();
++
++    void removeScript(String url) {
++        officeScripts.deleteScript(url);
++    }
++
++    public void showScriptWindow(URL url) {
++        String key = getFileName(url);
++        FileWindow w = (FileWindow)getFileWindow(key);
++        if (w != null)
++        {
++            desk.getDesktopManager().deiconifyFrame(w);
++            desk.getDesktopManager().activateFrame(w);
++            w.show();
++            w.toFront();
++        }
++    }
++
++    public void highlighLineInScriptWindow(URL url, int lineNum) {
++        String key = getFileName(url);
++        FileWindow w = (FileWindow)getFileWindow(key);
++        if (w != null)
++        {
++            showFileWindow(key, lineNum);
++        }
++    }
++
++    public Object runScriptWindow(URL scriptUrl) throws Exception
++    {
++        String key = getFileName(scriptUrl);
++        FileWindow w = (FileWindow)getFileWindow(key);
++        Object result = null;
++        w.toFront();
++        if (w != null)
++        {
++            Scriptable scope = officeScripts.getScriptScope(key);
++            if (scope == null)
++            {
++                MessageDialogWrapper.showMessageDialog(this, "Can't load scripts: no scope available", "Run", JOptionPane.ERROR_MESSAGE);
++            }
++            else
++            {
++                String url = w.getUrl();
++                if (url != null) 
++                {
++                    if (officeScripts.isScriptRunning(key))
++                    {
++                        return result;
++                    }
++                    officeScripts.setScriptRunning(key, true);
++                    try {
++                        result = dim.evalScriptWithReturn(url, w.textArea.getText(), scope);
++                    } catch (Exception exc) {
++                        exc.printStackTrace();
++                        throw exc;
++                    } finally {
++                        officeScripts.setScriptRunning(key, false);
++                    }
++                }
++            }
++        }
++        return result;
++    }
++
++    public boolean isModified(URL url) 
++    {
++        String key = getFileName(url);
++        FileWindow w = (FileWindow)getFileWindow(key);
++        return w.isModified();
++    }
++
++    public String getText(URL url)
++    {
++        String key = getFileName(url);
++        FileWindow w = (FileWindow)getFileWindow(key);
++        return w.getText();
++    }
++
+ }
+ 
+ /**
+@@ -1590,7 +1733,9 @@
+         case KeyEvent.VK_ENTER:
+         case KeyEvent.VK_DELETE:
+         case KeyEvent.VK_TAB:
+-            e.consume();
++            if (! w.isEditable()) {
++                e.consume();
++            }
+             break;
+         }
+     }
+@@ -1599,14 +1744,18 @@
+      * Called when a key is typed.
+      */
+     public void keyTyped(KeyEvent e) {
+-        e.consume();
++        if (! w.isEditable()) {
++            e.consume();
++        }
+     }
+ 
+     /**
+      * Called when a key is released.
+      */
+     public void keyReleased(KeyEvent e) {
+-        e.consume();
++        if (! w.isEditable()) {
++            e.consume();
++        }
+     }
+ }
+ 
+@@ -2089,7 +2238,7 @@
+ /**
+  * An internal frame for script files.
+  */
+-class FileWindow extends JInternalFrame implements ActionListener {
++class FileWindow extends JInternalFrame implements ActionListener, DocumentListener {
+ 
+     /**
+      * Serializable magic number.
+@@ -2126,6 +2275,7 @@
+      */
+     int currentPos;
+ 
++    boolean isModified = false;
+     /**
+      * Loads the file.
+      */
+@@ -2134,11 +2284,62 @@
+         if (url != null) {
+             RunProxy proxy = new RunProxy(debugGui, RunProxy.LOAD_FILE);
+             proxy.fileName = url;
+-            proxy.text = sourceInfo.source();
++            proxy.text = textArea.getText();
++            proxy.scope = debugGui.officeScripts.getScriptScope(url);
+             new Thread(proxy).start();
+         }
+     }
+ 
++    void save() {
++        String url = getUrl();
++        if (url != null) {
++            OutputStream os = null;
++            try {
++                if (url.startsWith("vnd.sun.star"))
++                {
++                    URL scriptUrl = debugGui.officeScripts.getScriptUrl(url);
++                    if ( scriptUrl == null )
++                    {
++                        throw new IOException("Can't optain stream for " + url);
++                    }
++                    os = scriptUrl.openConnection().getOutputStream();
++                }
++                else
++                {
++                   os = new FileOutputStream(url);
++                }
++                String s = textArea.getText();
++                os.write(s.getBytes(), 0, s.length());
++
++                this.isModified = false;
++            } catch (IOException ioe) {
++                MessageDialogWrapper.showMessageDialog(this,
++                    "Error saving file: " + ioe.getMessage(),
++                    "Error", JOptionPane.ERROR_MESSAGE);
++            }
++            finally
++            {
++                if ( os != null )
++                {
++                    try
++                    {
++                        os.close();
++                        os = null;
++                    }
++                    catch( IOException ioe )
++                    {
++                        System.err.println("Error closing stream: " + ioe.getMessage() );
++                        ioe.printStackTrace();
++                    }
++                }
++            }
++        }
++    }
++
++    public boolean isEditable() {
++        return debugGui.isSourceEditingEnabled();
++    }
++
+     /**
+      * Returns the offset position for the given line.
+      */
+@@ -2214,7 +2415,16 @@
+         pack();
+         updateText(sourceInfo);
+         textArea.select(0);
++        addInternalFrameListener( new InternalFrameAdapter() {
++            public void internalFrameClosed(InternalFrameEvent e) {
++                getDebugGui().removeScript( getUrl() );
++            }
++        } );
+     }
++    
++    public SwingGui getDebugGui() {
++        return debugGui;
++    }
+ 
+     /**
+      * Updates the tool tip contents.
+@@ -2249,7 +2459,10 @@
+         this.sourceInfo = sourceInfo;
+         String newText = sourceInfo.source();
+         if (!textArea.getText().equals(newText)) {
++            textArea.getDocument().removeDocumentListener(this);
+             textArea.setText(newText);
++            this.isModified = false;
++            textArea.getDocument().addDocumentListener(this);
+             int pos = 0;
+             if (currentPos != -1) {
+                 pos = currentPos;
+@@ -2260,6 +2473,31 @@
+         fileHeader.repaint();
+     }
+ 
++    /* Implementation of DocumentListener interface */
++    public void insertUpdate(DocumentEvent e) {
++        doChanged(e);
++    }
++
++    public void removeUpdate(DocumentEvent e) {
++        doChanged(e);
++    }
++
++    public void changedUpdate(DocumentEvent e) {
++        doChanged(e);
++    }
++
++    public void doChanged(DocumentEvent e) {
++        this.isModified = true;
++    }
++
++    public boolean isModified() {
++        return this.isModified;
++    }
++
++    public String getText() {
++        return textArea.getText();
++    }
++
+     /**
+      * Sets the cursor position.
+      */
+@@ -2295,11 +2533,11 @@
+     public void actionPerformed(ActionEvent e) {
+         String cmd = e.getActionCommand();
+         if (cmd.equals("Cut")) {
+-            // textArea.cut();
++             textArea.cut();
+         } else if (cmd.equals("Copy")) {
+             textArea.copy();
+         } else if (cmd.equals("Paste")) {
+-            // textArea.paste();
++             textArea.paste();
+         }
+     }
+ }
+@@ -2920,7 +3158,7 @@
+      */
+     public ContextWindow(final SwingGui debugGui) {
+         this.debugGui = debugGui;
+-        enabled = false;
++        enabled = true;
+         JPanel left = new JPanel();
+         JToolBar t1 = new JToolBar();
+         t1.setName("Variables");
+@@ -3161,6 +3399,10 @@
+     public void enableUpdate() {
+         enabled = true;
+     }
++    
++    public boolean isEnabled() {
++        return enabled;
++    }
+ 
+     // ActionListener
+ 
+@@ -3249,8 +3491,10 @@
+     Menubar(SwingGui debugGui) {
+         super();
+         this.debugGui = debugGui;
+-        String[] fileItems  = {"Open...", "Run...", "", "Exit"};
+-        String[] fileCmds  = {"Open", "Load", "", "Exit"};
++        // String[] fileItems  = {"Open...", "Run...", "", "Exit"};
++        // String[] fileCmds  = {"Open", "Load", "", "Exit"};
++        String[] fileItems  = {"Run", "Save", "", "Exit"};
++        String[] fileCmds  = {"Run", "Save", "", "Exit"};
+         char[] fileShortCuts = {'0', 'N', 0, 'X'};
+         int[] fileAccelerators = {KeyEvent.VK_O,
+                                   KeyEvent.VK_N,
+@@ -3299,6 +3543,8 @@
+                                            editShortCuts[i]);
+             item.addActionListener(this);
+             editMenu.add(item);
++            if (i < 3)
++                runOnlyItems.add(item);
+         }
+         for (int i = 0; i < plafItems.length; ++i) {
+             JMenuItem item = new JMenuItem(plafItems[i],
+@@ -3348,9 +3594,9 @@
+         item.addActionListener(this);
+         windowMenu.add(item = new JMenuItem("Tile", 'T'));
+         item.addActionListener(this);
+-        windowMenu.addSeparator();
+-        windowMenu.add(item = new JMenuItem("Console", 'C'));
+-        item.addActionListener(this);
++        // windowMenu.addSeparator();
++        // windowMenu.add(item = new JMenuItem("Console", 'C'));
++        // item.addActionListener(this);
+         add(windowMenu);
+ 
+         updateEnabled(false);
+@@ -3530,6 +3776,11 @@
+      * interruption, if any.
+      */
+     String alertMessage;
++    
++    /**
++     * The arguments for evaluation.
++     */
++    Scriptable scope;
+ 
+     /**
+      * Creates a new RunProxy.
+@@ -3556,7 +3807,10 @@
+ 
+           case LOAD_FILE:
+             try {
+-                debugGui.dim.evalScript(fileName, text);
++                if (scope != null)
++                    debugGui.dim.evalScriptWithReturn(fileName, text, scope);
++                else
++                    debugGui.dim.evalScript(fileName, text);
+             } catch (RuntimeException ex) {
+                 MessageDialogWrapper.showMessageDialog(
+                     debugGui, ex.getMessage(), "Run error for "+fileName,
+Index: toolsrc/org/mozilla/javascript/tools/debugger/OfficeScriptInfo.java
+===================================================================
+--- toolsrc/org/mozilla/javascript/tools/debugger/OfficeScriptInfo.java	(revision 2)
++++ misc/build/rhino1_7R3/toolsrc/org/mozilla/javascript/tools/debugger/OfficeScriptInfo.java	(working copy)
+@@ -1 +1,124 @@
+-dummy
++/**************************************************************
++ * 
++ * Licensed to the Apache Software Foundation (ASF) under one
++ * or more contributor license agreements.  See the NOTICE file
++ * distributed with this work for additional information
++ * regarding copyright ownership.  The ASF licenses this file
++ * to you under the Apache License, Version 2.0 (the
++ * "License"); you may not use this file except in compliance
++ * with the License.  You may obtain a copy of the License at
++ * 
++ *   http://www.apache.org/licenses/LICENSE-2.0
++ * 
++ * Unless required by applicable law or agreed to in writing,
++ * software distributed under the License is distributed on an
++ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
++ * KIND, either express or implied.  See the License for the
++ * specific language governing permissions and limitations
++ * under the License.
++ * 
++ *************************************************************/
++
++
++package org.mozilla.javascript.tools.debugger;
++import java.net.URL;
++import java.util.Hashtable;
++import org.mozilla.javascript.Scriptable;
++
++public class OfficeScriptInfo
++{
++    private Hashtable<String, SFScriptInfo> loadedSFScripts = new Hashtable<String, SFScriptInfo>();
++   
++    public void addScript( URL url, Scriptable scope, Runnable closeCallback )
++    {
++        addScript( url.toString(), url, scope, closeCallback );
++    }
++
++    public void addScript( String key, URL url, Scriptable scope, Runnable closeCallback )
++    {
++        SFScriptInfo si = (SFScriptInfo)loadedSFScripts.get( key );
++        if ( si == null )
++        {
++            si = new SFScriptInfo();
++            si.url = url;
++            si.scope = scope; 
++            si.closeCallback = closeCallback; 
++            loadedSFScripts.put( key, si );
++        }  
++    }   
++
++    public void deleteScript( String key )
++    {
++        SFScriptInfo info = (SFScriptInfo)loadedSFScripts.remove( key );
++        if ( info != null )
++        {
++            if ( info.closeCallback != null )
++            {
++                System.out.println("** In removeSFScriptInfo  have callback for " + key );
++                info.closeCallback.run(); // really need to do this in seperate thread????
++            }
++        }
++    }
++
++    public Scriptable getScriptScope( String key )
++    {
++        Scriptable result = null;
++        SFScriptInfo info = (SFScriptInfo)loadedSFScripts.get( key );
++        if ( info != null )
++        {
++            result = info.scope;
++        }
++        return result;
++    } 
++  
++    public URL getScriptUrl( String key )
++    {
++        URL result = null;
++        SFScriptInfo info = (SFScriptInfo)loadedSFScripts.get( key );
++        if ( info != null )
++        {
++            result = info.url;
++        }
++        return result;
++    } 
++    public boolean hasScript( String key )
++    {
++        boolean result = true;
++        SFScriptInfo info = (SFScriptInfo)loadedSFScripts.get( key );
++        if ( info == null )
++        {
++            result = false;
++        }      
++        return result;
++    } 
++
++    public void setScriptRunning( String key, boolean running )
++    {
++        SFScriptInfo info = (SFScriptInfo)loadedSFScripts.get( key );
++        if ( info != null )
++        {
++            info.isExecuting = running;
++        }
++    }
++
++    public boolean isScriptRunning( String key )
++    {
++        boolean result = false;
++        SFScriptInfo info = (SFScriptInfo)loadedSFScripts.get( key );
++        if ( info != null )
++        {
++            result = info.isExecuting;
++        }
++        return result;
++    }
++
++    
++  
++    class SFScriptInfo
++    {
++        Scriptable scope;
++        boolean isExecuting;
++        URL url;
++        Runnable closeCallback;
++    }
++}
+Index: toolsrc/build.xml
+===================================================================
+--- toolsrc/build.xml	(revision 1)
++++ misc/build/rhino1_7R3/toolsrc/build.xml	(working copy)
+@@ -40,6 +40,24 @@
+ -->
+ <project name="toolsrc" default="compile" basedir="..">
+ 
++  <condition property="boot_refID" value="macPath" else="nonMacPath">
++    <and>
++      <os family="mac"/>
++      <os family="unix"/>
++    </and>
++  </condition>
++  <path id="macPath" location="${java.home}/../Classes/classes.jar"/>
++  <!-- rhino.jar from OpenJDK breaks build -->
++  <path id="nonMacPath">
++    <fileset dir="${java.home}/">
++       <include name="jre/lib/*.jar"/>
++       <include name="lib/*.jar"/>
++       <exclude name="jre/lib/rhino.jar"/>
++       <exclude name="lib/rhino.jar"/>
++     </fileset>
++  </path>
++  <path id="my.bootstrap.classpath" refID="${boot_refID}"/>
++
+   <target name="properties">
+     <property file="build.properties"/>
+   </target>
+Index: src/org/mozilla/javascript/DefiningClassLoader.java
+===================================================================
+--- src/org/mozilla/javascript/DefiningClassLoader.java	(revision 1)
++++ misc/build/rhino1_7R3/src/org/mozilla/javascript/DefiningClassLoader.java	(working copy)
+@@ -39,6 +39,8 @@
+ 
+ package org.mozilla.javascript;
+ 
++import java.lang.reflect.Method;
++import java.lang.reflect.InvocationTargetException;
+ /**
+  * Load generated classes.
+  *
+@@ -48,13 +50,33 @@
+     implements GeneratedClassLoader
+ {
+     public DefiningClassLoader() {
+-        this.parentLoader = getClass().getClassLoader();
++		this.parentLoader = getClass().getClassLoader();
++        init();
+     }
+ 
+     public DefiningClassLoader(ClassLoader parentLoader) {
+-        this.parentLoader = parentLoader;
++		this.parentLoader = parentLoader;
++        init();
+     }
+ 
++    private void init() {
++        this.contextLoader = null;
++        if (method_getContextClassLoader != null) {
++            try {
++                this.contextLoader = (ClassLoader)
++                    method_getContextClassLoader.invoke(
++                        Thread.currentThread(),
++                        ScriptRuntime.emptyArgs);
++            } catch (IllegalAccessException ex) {
++            } catch (InvocationTargetException ex) {
++            } catch (SecurityException ex) {
++            }
++            if (this.contextLoader == this.parentLoader) {
++                this.contextLoader = null;
++            }
++        }
++    }
++
+     public Class<?> defineClass(String name, byte[] data) {
+         // Use our own protection domain for the generated classes.
+         // TODO: we might want to use a separate protection domain for classes
+@@ -73,10 +95,14 @@
+     {
+         Class<?> cl = findLoadedClass(name);
+         if (cl == null) {
+-            if (parentLoader != null) {
+-                cl = parentLoader.loadClass(name);
++            if (contextLoader == null) {
++                cl = loadFromParent(name);
+             } else {
+-                cl = findSystemClass(name);
++                try {
++                    cl = loadFromParent(name);
++                } catch (ClassNotFoundException ex) {
++                    cl = contextLoader.loadClass(name);
++                }
+             }
+         }
+         if (resolve) {
+@@ -85,5 +111,36 @@
+         return cl;
+     }
+ 
++    private Class loadFromParent(String name)
++        throws ClassNotFoundException
++    {
++        if (parentLoader != null) {
++            return parentLoader.loadClass(name);
++        } else {
++            return findSystemClass(name);
++        }
++    }
++
+     private final ClassLoader parentLoader;
++
++    private ClassLoader contextLoader;
++
++    // We'd like to use "Thread.getContextClassLoader", but
++    // that's only available on Java2.
++    private static Method method_getContextClassLoader;
++
++    static {
++        try {
++            // Don't use "Thread.class": that performs the lookup
++            // in the class initializer, which doesn't allow us to
++            // catch possible security exceptions.
++            Class threadClass = Class.forName("java.lang.Thread");
++            method_getContextClassLoader =
++                threadClass.getDeclaredMethod("getContextClassLoader",
++                                               new Class[0]);
++        } catch (ClassNotFoundException e) {
++        } catch (NoSuchMethodException e) {
++        } catch (SecurityException e) {
++        }
++    }
+ }
