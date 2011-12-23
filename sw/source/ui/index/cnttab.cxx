@@ -2441,7 +2441,7 @@ IMPL_LINK(SwTOXEntryTabPage, InsertTokenHdl, PushButton*, pBtn)
     {
         sText.AssignAscii(SwForm::aFormLinkStt);
         eTokenType = TOKEN_LINK_START;
-        sCharStyle = String(SW_RES(STR_POOLCHR_INET_NORMAL));
+        sCharStyle = String(SW_RES(STR_POOLCHR_TOXJUMP));
     }
     else if(pBtn == &aTabPB)
     {
