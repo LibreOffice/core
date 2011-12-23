@@ -27,8 +27,6 @@
 
 $(eval $(call gb_Library_Library,kabdrv1))
 
-$(eval $(call gb_Library_add_package_headers,kabdrv1,connectivity_inc))
-
 $(eval $(call gb_Library_add_api,kabdrv1,\
 	offapi \
 	udkapi \

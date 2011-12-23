@@ -32,12 +32,11 @@ $(eval $(call gb_Library_add_defs,dbtools,\
 	-DBOOST_SPIRIT_USE_OLD_NAMESPACE \
 ))
 
-$(eval $(call gb_Library_add_package_headers,dbtools,connectivity_inc))
-
 $(eval $(call gb_Library_set_componentfile,dbtools,connectivity/source/dbtools/dbtools))
 
 $(eval $(call gb_Library_set_include,dbtools,\
 	$$(INCLUDE) \
+	-I$(SRCDIR)/connectivity/inc \
 	-I$(SRCDIR)/connectivity/source/inc \
 	-I$(dir $(call gb_YaccTarget_get_target,connectivity/source/parse/sqlbison)) \
 ))

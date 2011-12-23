@@ -27,8 +27,6 @@
 
 $(eval $(call gb_Library_Library,ado))
 
-$(eval $(call gb_Library_add_package_headers,ado,connectivity_inc))
-
 $(eval $(call gb_Library_set_componentfile,ado,connectivity/source/drivers/ado/ado))
 
 $(eval $(call gb_Library_add_api,ado,\

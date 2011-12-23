@@ -27,8 +27,6 @@
 
 $(eval $(call gb_Library_Library,macabdrv1))
 
-$(eval $(call gb_Library_add_package_headers,macabdrv1,connectivity_inc))
-
 $(eval $(call gb_Library_add_api,macabdrv1,\
 	offapi \
 	udkapi \

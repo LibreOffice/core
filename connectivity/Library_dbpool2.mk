@@ -29,10 +29,9 @@ $(eval $(call gb_Library_Library,dbpool2))
 
 $(eval $(call gb_Library_set_componentfile,dbpool2,connectivity/source/cpool/dbpool2))
 
-$(eval $(call gb_Library_add_package_headers,dbpool2,connectivity_inc))
-
 $(eval $(call gb_Library_set_include,dbpool2,\
 	$$(INCLUDE) \
+	-I$(SRCDIR)/connectivity/inc \
 	-I$(SRCDIR)/connectivity/source/inc \
 ))
 

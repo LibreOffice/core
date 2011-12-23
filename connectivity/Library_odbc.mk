@@ -27,8 +27,6 @@
 
 $(eval $(call gb_Library_Library,odbc))
 
-$(eval $(call gb_Library_add_package_headers,odbc,connectivity_inc))
-
 $(eval $(call gb_Library_set_componentfile,odbc,connectivity/source/drivers/odbc/odbc))
 
 $(eval $(call gb_Library_add_api,odbc,\
@@ -38,6 +36,7 @@ $(eval $(call gb_Library_add_api,odbc,\
 
 $(eval $(call gb_Library_set_include,odbc,\
 	$$(INCLUDE) \
+	-I$(SRCDIR)/connectivity/inc \
 	-I$(SRCDIR)/connectivity/source/inc \
 ))
 

@@ -27,8 +27,6 @@
 
 $(eval $(call gb_Library_Library,macab1))
 
-$(eval $(call gb_Library_add_package_headers,macab1,connectivity_inc))
-
 $(eval $(call gb_Library_set_componentfile,macab1,connectivity/source/drivers/macab/macab1))
 
 $(eval $(call gb_Library_add_api,macab1,\

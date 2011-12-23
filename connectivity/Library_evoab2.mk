@@ -27,8 +27,6 @@
 
 $(eval $(call gb_Library_Library,evoab2))
 
-$(eval $(call gb_Library_add_package_headers,evoab2,connectivity_inc))
-
 $(eval $(call gb_Library_use_externals,evoab2,\
 	gtk \
 	gobject \

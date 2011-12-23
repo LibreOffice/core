@@ -27,8 +27,6 @@
 
 $(eval $(call gb_Library_Library,calc))
 
-$(eval $(call gb_Library_add_package_headers,calc,connectivity_inc))
-
 $(eval $(call gb_Library_set_componentfile,calc,connectivity/source/drivers/calc/calc))
 
 $(eval $(call gb_Library_add_api,calc,\
@@ -38,7 +36,9 @@ $(eval $(call gb_Library_add_api,calc,\
 
 $(eval $(call gb_Library_set_include,calc,\
 	$$(INCLUDE) \
+	-I$(SRCDIR)/connectivity/inc \
 	-I$(SRCDIR)/connectivity/source/inc \
+	-I$(dir $(call gb_YaccTarget_get_target,connectivity/source/parse/sqlbison)) \
 ))
 
 $(eval $(call gb_Library_add_linked_libs,calc,\
