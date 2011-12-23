@@ -305,6 +305,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     merged \
     msfilter \
     msword \
+	mysql \
     odfflatxml \
     offacc \
     pcr \

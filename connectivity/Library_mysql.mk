@@ -25,56 +25,39 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Module_Module,connectivity))
+$(eval $(call gb_Library_Library,mysql))
 
-$(eval $(call gb_Module_add_targets,connectivity,\
-	AllLangResTarget_connectivity \
-	Package_inc \
-	Package_xml \
-	Jar_sdbc_hsqldb \
-	Library_dbtools \
-	Library_sdbc2 \
-	Library_dbpool2 \
-	Library_calc \
-	Library_odbcbase \
-	Library_odbc \
-	Library_mysql \
+$(eval $(call gb_Library_set_componentfile,mysql,connectivity/source/drivers/mysql/mysql))
+
+$(eval $(call gb_Library_add_api,mysql,\
+	offapi \
+	udkapi \
 ))
 
-ifneq ($(SOLAR_JAVA),)
-$(eval $(call gb_Module_add_targets,connectivity,\
-	Jar_ConnectivityTools \
+$(eval $(call gb_Library_set_include,mysql,\
+	$$(INCLUDE) \
+	-I$(SRCDIR)/connectivity/source/inc \
 ))
-endif
 
-ifeq ($(GUI),UNX)
-
-ifeq ($(ENABLE_KAB),TRUE)
-$(eval $(call gb_Module_add_targets,connectivity,\
-	Library_kab1 \
-	Library_kabdrv1 \
+$(eval $(call gb_Library_add_linked_libs,mysql,\
+	cppu \
+	cppuhelper \
+	sal \
+	dbtools \
+	comphelper \
+	$(gb_STDLIBS) \
 ))
-endif
 
-ifeq ($(OS),MACOSX)
-$(eval $(call gb_Module_add_targets,connectivity,\
-	Library_macab1 \
-	Library_macabdrv1 \
+$(eval $(call gb_Library_add_exception_objects,mysql,\
+	connectivity/source/drivers/mysql/YDriver \
+	connectivity/source/drivers/mysql/YTables \
+	connectivity/source/drivers/mysql/YTable \
+	connectivity/source/drivers/mysql/YViews \
+	connectivity/source/drivers/mysql/YCatalog \
+	connectivity/source/drivers/mysql/YColumns \
+	connectivity/source/drivers/mysql/YUser \
+	connectivity/source/drivers/mysql/YUsers \
+	connectivity/source/drivers/mysql/Yservices \
 ))
-endif
-
-endif
-
-ifeq ($(GUI),WNT)
-$(eval $(call gb_Module_add_targets,connectivity,\
-	Library_ado \
-))
-endif
-
-ifeq ($(ENABLE_EVOAB2),TRUE)
-$(eval $(call gb_Module_add_targets,connectivity,\
-	Library_evoab2 \
-))
-endif
 
 # vim: set noet sw=4 ts=4:
