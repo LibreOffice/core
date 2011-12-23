@@ -69,6 +69,10 @@ define gb_JavaClassSet__get_sourcefile
 $(SRCDIR)/$(1).java
 endef
 
+define gb_JavaClassSet__get_generated_sourcefile
+$(WORKDIR)/$(1).java
+endef
+
 define gb_JavaClassSet_add_sourcefile
 $(call gb_JavaClassSet_get_target,$(1)) : $(call gb_JavaClassSet__get_sourcefile,$(2))
 
@@ -76,6 +80,17 @@ endef
 
 define gb_JavaClassSet_add_sourcefiles
 $(foreach sourcefile,$(2),$(call gb_JavaClassSet_add_sourcefile,$(1),$(sourcefile)))
+
+endef
+
+define gb_JavaClassSet_add_generated_sourcefile
+$(call gb_JavaClassSet_get_target,$(1)) : $(call gb_JavaClassSet__get_generated_sourcefile,$(2))
+$(call gb_JavaClassSet__get_generated_sourcefile,$(2)) : $(gb_Helper_PHONY)
+
+endef
+
+define gb_JavaClassSet_add_generated_sourcefiles
+$(foreach sourcefile,$(2),$(call gb_JavaClassSet_add_generated_sourcefile,$(1),$(sourcefile)))
 
 endef
 

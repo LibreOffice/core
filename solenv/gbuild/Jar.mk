@@ -140,6 +140,16 @@ $(foreach sourcefile,$(2),$(call gb_Jar_add_sourcefile,$(1),$(sourcefile)))
 
 endef
 
+define gb_Jar_add_generated_sourcefile
+$(call gb_JavaClassSet_add_generated_sourcefile,$(call gb_Jar_get_classsetname,$(1)),$(2))
+
+endef
+
+define gb_Jar_add_generated_sourcefiles
+$(foreach sourcefile,$(2),$(call gb_Jar_add_generated_sourcefile,$(1),$(sourcefile)))
+
+endef
+
 define gb_JarTest_set_classpath
 $(call gb_JavaClassSet_set_classpath,$(call gb_Jar_get_classsetname,$(1)),$(2))
 
