@@ -55,7 +55,6 @@ class SvxViewForwarder;
 class SvxEditViewForwarder;
 class SvxFieldItem;
 class SfxBroadcaster;
-class EECharAttribArray;
 class SvxUnoTextRangeBase;
 
 typedef std::list< SvxUnoTextRangeBase* > SvxUnoTextRangeBaseList;

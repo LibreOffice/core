@@ -33,8 +33,6 @@
 #include <tools/string.hxx>
 #include "editeng/editengdllapi.h"
 
-#include <svl/svarray.hxx>
-
 class SfxItemSet;
 class SfxPoolItem;
 class SvParser;
@@ -304,8 +302,6 @@ struct EECharAttrib
     xub_StrLen          nStart;
     xub_StrLen          nEnd;
 };
-
-SV_DECL_VARARR_VISIBILITY( EECharAttribArray, EECharAttrib, 0, 4, EDITENG_DLLPUBLIC )
 
 struct MoveParagraphsInfo
 {

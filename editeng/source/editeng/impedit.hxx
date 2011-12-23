@@ -550,7 +550,7 @@ private:
     sal_uInt16          GetParaAttrib( sal_uInt8 nFunc, EditSelection aSel );
     void                SetCharAttrib( EditSelection aSel, const SfxPoolItem& rItem );
     void                ParaAttribsToCharAttribs( ContentNode* pNode );
-    void                GetCharAttribs( sal_uInt16 nPara, EECharAttribArray& rLst ) const;
+    void                GetCharAttribs( sal_uInt16 nPara, std::vector<EECharAttrib>& rLst ) const;
 
     EditTextObject*     CreateBinTextObject( EditSelection aSelection, SfxItemPool*, sal_Bool bAllowBigObjects = sal_False, sal_uInt16 nBigObjStart = 0 ) const;
     void                StoreBinTextObject( SvStream& rOStream, BinTextObject& rTextObject );

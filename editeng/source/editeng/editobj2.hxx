@@ -247,7 +247,7 @@ public:
     virtual sal_Bool            HasOnlineSpellErrors() const;
 
     virtual sal_Bool            HasCharAttribs( sal_uInt16 nWhich = 0 ) const;
-    virtual void            GetCharAttribs( sal_uInt16 nPara, EECharAttribArray& rLst ) const;
+    virtual void            GetCharAttribs( sal_uInt16 nPara, std::vector<EECharAttrib>& rLst ) const;
 
     virtual sal_Bool            RemoveCharAttribs( sal_uInt16 nWhich = 0 );
     virtual sal_Bool            RemoveParaAttribs( sal_uInt16 nWhich = 0 );

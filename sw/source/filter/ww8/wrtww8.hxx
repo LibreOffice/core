@@ -1371,7 +1371,7 @@ class MSWord_SdrAttrIter : public MSWordAttrIter
 private:
     const EditTextObject* pEditObj;
     const SfxItemPool* pEditPool;
-    EECharAttribArray aTxtAtrArr;
+    std::vector<EECharAttrib> aTxtAtrArr;
     SvPtrarr aChrTxtAtrArr;
     std::vector<sal_uInt16> aChrSetArr;
     sal_uInt16 nPara;

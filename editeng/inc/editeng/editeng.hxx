@@ -236,7 +236,7 @@ public:
     virtual void                SetParaAttribs( sal_uInt16 nPara, const SfxItemSet& rSet );
     virtual const SfxItemSet&   GetParaAttribs( sal_uInt16 nPara ) const;
 
-    void                GetCharAttribs( sal_uInt16 nPara, EECharAttribArray& rLst ) const;
+    void                GetCharAttribs( sal_uInt16 nPara, std::vector<EECharAttrib>& rLst ) const;
 
     SfxItemSet          GetAttribs( sal_uInt16 nPara, sal_uInt16 nStart, sal_uInt16 nEnd, sal_uInt8 nFlags = 0xFF ) const;
     SfxItemSet          GetAttribs( const ESelection& rSel, sal_Bool bOnlyHardAttrib = EditEngineAttribs_All );

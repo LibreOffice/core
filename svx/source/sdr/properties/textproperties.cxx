@@ -456,19 +456,16 @@ namespace sdr
                                 if(aSet.GetItemState(EE_CHAR_COLOR) == SFX_ITEM_SET)
                                 {
                                     EditEngine* pEditEngine = const_cast<EditEngine*>(&(pOutliner->GetEditEngine()));
-                                    EECharAttribArray aAttribs;
+                                    std::vector<EECharAttrib> aAttribs;
                                     pEditEngine->GetCharAttribs((sal_uInt16)nPara, aAttribs);
-                                    sal_uInt16 nAttrib;
 
-                                    for(nAttrib = 0; nAttrib < aAttribs.Count(); nAttrib++)
+                                    for(std::vector<EECharAttrib>::iterator i = aAttribs.begin(); i < aAttribs.end(); ++i)
                                     {
-                                        struct EECharAttrib aAttrib(aAttribs.GetObject(nAttrib));
-
-                                        if(EE_FEATURE_FIELD == aAttrib.pAttr->Which())
+                                        if(EE_FEATURE_FIELD == i->pAttr->Which())
                                         {
-                                            if(aAttrib.pAttr)
+                                            if(i->pAttr)
                                             {
-                                                SvxFieldItem* pFieldItem = (SvxFieldItem*)aAttrib.pAttr;
+                                                SvxFieldItem* pFieldItem = (SvxFieldItem*)(i->pAttr);
 
                                                 if(pFieldItem)
                                                 {
@@ -491,20 +488,16 @@ namespace sdr
 
                                         ESelection aSel((sal_uInt16)nPara, 0);
 
-                                        for(nAttrib = 0; nAttrib < aAttribs.Count(); nAttrib++)
+                                        for(std::vector<EECharAttrib>::iterator i = aAttribs.begin(); i < aAttribs.end(); ++i)
                                         {
-                                            struct EECharAttrib aAttrib(aAttribs.GetObject(nAttrib));
-
-                                            if(EE_FEATURE_FIELD == aAttrib.pAttr->Which())
+                                            if(EE_FEATURE_FIELD == i->pAttr->Which())
                                             {
-                                                aSel.nEndPos = aAttrib.nStart;
+                                                aSel.nEndPos = i->nStart;
 
                                                 if(aSel.nStartPos != aSel.nEndPos)
-                                                {
                                                     pEditEngine->QuickSetAttribs(aColorSet, aSel);
-                                                }
 
-                                                aSel.nStartPos = aAttrib.nEnd;
+                                                aSel.nStartPos = i->nEnd;
                                             }
                                         }
 

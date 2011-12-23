@@ -34,14 +34,16 @@
 #include <rsc/rscsfx.hxx>
 #include <svl/itemset.hxx>
 #include <editeng/eeitem.hxx>
+#include <editeng/editdata.hxx>
 #include "editeng/editengdllapi.h"
+
+#include <vector>
 
 DBG_NAMEEX( EE_EditTextObject )
 
 class SfxItemPool;
 class SfxStyleSheetPool;
 class SvxFieldItem;
-class EECharAttribArray;
 
 #define EDTOBJ_SETTINGS_ULITEMSUMMATION     0x00000001
 #define EDTOBJ_SETTINGS_ULITEMFIRSTPARA     0x00000002
@@ -96,7 +98,7 @@ public:
     virtual sal_Bool        HasOnlineSpellErrors() const;
 
     virtual sal_Bool        HasCharAttribs( sal_uInt16 nWhich = 0 ) const;
-    virtual void        GetCharAttribs( sal_uInt16 nPara, EECharAttribArray& rLst ) const;
+    virtual void        GetCharAttribs( sal_uInt16 nPara, std::vector<EECharAttrib>& rLst ) const;
 
     virtual sal_Bool        RemoveCharAttribs( sal_uInt16 nWhich = 0 );
     virtual sal_Bool        RemoveParaAttribs( sal_uInt16 nWhich = 0 );

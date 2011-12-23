@@ -235,7 +235,7 @@ sal_Bool EditTextObject::HasCharAttribs( sal_uInt16 ) const
     return sal_False;
 }
 
-void EditTextObject::GetCharAttribs( sal_uInt16 /*nPara*/, EECharAttribArray& /*rLst*/ ) const
+void EditTextObject::GetCharAttribs( sal_uInt16 /*nPara*/, std::vector<EECharAttrib>& /*rLst*/ ) const
 {
     OSL_FAIL( "Virtual method direct from EditTextObject!" );
 }
@@ -792,9 +792,9 @@ sal_Bool BinTextObject::HasCharAttribs( sal_uInt16 _nWhich ) const
     return sal_False;
 }
 
-void BinTextObject::GetCharAttribs( sal_uInt16 nPara, EECharAttribArray& rLst ) const
+void BinTextObject::GetCharAttribs( sal_uInt16 nPara, std::vector<EECharAttrib>& rLst ) const
 {
-    rLst.Remove( 0, rLst.Count() );
+    rLst.clear();
     ContentInfo* pC = GetContents().GetObject( nPara );
     if ( pC )
     {
@@ -806,7 +806,7 @@ void BinTextObject::GetCharAttribs( sal_uInt16 nPara, EECharAttribArray& rLst ) 
             aEEAttr.nPara = nPara;
             aEEAttr.nStart = pAttr->GetStart();
             aEEAttr.nEnd = pAttr->GetEnd();
-            rLst.Insert( aEEAttr, rLst.Count() );
+            rLst.push_back(aEEAttr);
         }
     }
 }

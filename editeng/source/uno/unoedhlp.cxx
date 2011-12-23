@@ -132,37 +132,33 @@ void SvxEditSourceHint::SetEndValue( sal_uLong n )
 
 sal_Bool SvxEditSourceHelper::GetAttributeRun( sal_uInt16& nStartIndex, sal_uInt16& nEndIndex, const EditEngine& rEE, sal_uInt16 nPara, sal_uInt16 nIndex )
 {
-    EECharAttribArray aCharAttribs;
+    std::vector<EECharAttrib> aCharAttribs;
 
     rEE.GetCharAttribs( nPara, aCharAttribs );
 
     // find closest index in front of nIndex
-    sal_uInt16 nAttr, nCurrIndex;
-    sal_Int32 nClosestStartIndex;
-    for( nAttr=0, nClosestStartIndex=0; nAttr<aCharAttribs.Count(); ++nAttr )
+    sal_uInt16 nCurrIndex;
+    sal_Int32 nClosestStartIndex = 0;
+    for(std::vector<EECharAttrib>::iterator i = aCharAttribs.begin(); i < aCharAttribs.end(); ++i)
     {
-        nCurrIndex = aCharAttribs[nAttr].nStart;
+        nCurrIndex = i->nStart;
 
         if( nCurrIndex > nIndex )
             break; // aCharAttribs array is sorted in increasing order for nStart values
-
-        if( nCurrIndex > nClosestStartIndex )
+        else if( nCurrIndex > nClosestStartIndex )
         {
             nClosestStartIndex = nCurrIndex;
         }
     }
 
     // find closest index behind of nIndex
-    sal_Int32 nClosestEndIndex;
-    for( nAttr=0, nClosestEndIndex=rEE.GetTextLen(nPara); nAttr<aCharAttribs.Count(); ++nAttr )
+    sal_Int32 nClosestEndIndex = rEE.GetTextLen(nPara);
+    for(std::vector<EECharAttrib>::iterator i = aCharAttribs.begin(); i < aCharAttribs.end(); ++i)
     {
-        nCurrIndex = aCharAttribs[nAttr].nEnd;
+        nCurrIndex = i->nEnd;
 
-        if( nCurrIndex > nIndex &&
-            nCurrIndex < nClosestEndIndex )
-        {
+        if( nCurrIndex > nIndex && nCurrIndex < nClosestEndIndex )
             nClosestEndIndex = nCurrIndex;
-        }
     }
 
     nStartIndex = static_cast<sal_uInt16>( nClosestStartIndex );

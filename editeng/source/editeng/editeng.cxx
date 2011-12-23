@@ -97,15 +97,12 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::linguistic2;
 
-
 DBG_NAME( EditEngine )
 DBG_NAMEEX( EditView )
 
 #if (OSL_DEBUG_LEVEL > 1) || defined ( DBG_UTIL )
 static sal_Bool bDebugPaint = sal_False;
 #endif
-
-SV_IMPL_VARARR( EECharAttribArray, EECharAttrib );
 
 static SfxItemPool* pGlobalPool=0;
 
@@ -1498,7 +1495,7 @@ const SfxPoolItem& EditEngine::GetParaAttrib( sal_uInt16 nPara, sal_uInt16 nWhic
     return pImpEditEngine->GetParaAttrib( nPara, nWhich );
 }
 
-void EditEngine::GetCharAttribs( sal_uInt16 nPara, EECharAttribArray& rLst ) const
+void EditEngine::GetCharAttribs( sal_uInt16 nPara, std::vector<EECharAttrib>& rLst ) const
 {
     DBG_CHKTHIS( EditEngine, 0 );
     pImpEditEngine->GetCharAttribs( nPara, rLst );

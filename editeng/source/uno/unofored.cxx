@@ -177,7 +177,7 @@ void SvxEditEngineForwarder::FieldClicked( const SvxFieldItem& rField, sal_uInt1
 
 sal_uInt16 GetSvxEditEngineItemState( EditEngine& rEditEngine, const ESelection& rSel, sal_uInt16 nWhich )
 {
-    EECharAttribArray aAttribs;
+    std::vector<EECharAttrib> aAttribs;
 
     const SfxPoolItem*  pLastItem = NULL;
 
@@ -207,83 +207,44 @@ sal_uInt16 GetSvxEditEngineItemState( EditEngine& rEditEngine, const ESelection&
 
         const SfxPoolItem* pParaItem = NULL;
 
-        for( sal_uInt16 nAttrib = 0; nAttrib < aAttribs.Count(); nAttrib++ )
+        for(std::vector<EECharAttrib>::const_iterator i = aAttribs.begin(); i < aAttribs.end(); ++i)
         {
-            struct EECharAttrib aAttrib = aAttribs.GetObject( nAttrib );
-            DBG_ASSERT( aAttrib.pAttr, "GetCharAttribs gives corrupt data" );
+            DBG_ASSERT(i->pAttr, "GetCharAttribs gives corrupt data");
 
-            const sal_Bool bEmptyPortion = aAttrib.nStart == aAttrib.nEnd;
-            if( (!bEmptyPortion && (aAttrib.nStart >= nEndPos)) || (bEmptyPortion && (aAttrib.nStart > nEndPos)) )
+            const sal_Bool bEmptyPortion = i->nStart == i->nEnd;
+            if((!bEmptyPortion && i->nStart >= nEndPos) ||
+               (bEmptyPortion && i->nStart > nEndPos))
                 break;  // break if we are already behind our selektion
 
-            if( (!bEmptyPortion && (aAttrib.nEnd <= nPos)) || (bEmptyPortion && (aAttrib.nEnd < nPos)) )
+            if((!bEmptyPortion && i->nEnd <= nPos) ||
+               (bEmptyPortion && i->nEnd < nPos))
                 continue;   // or if the attribute ends before our selektion
 
-            if( aAttrib.pAttr->Which() != nWhich )
+            if(i->pAttr->Which() != nWhich)
                 continue; // skip if is not the searched item
 
             // if we already found an item
             if( pParaItem )
             {
                 // ... and its different to this one than the state is dont care
-                if( *pParaItem != *aAttrib.pAttr )
+                if(*pParaItem != *(i->pAttr))
                     return SFX_ITEM_DONTCARE;
             }
             else
-            {
-                pParaItem = aAttrib.pAttr;
-            }
+                pParaItem = i->pAttr;
 
             if( bEmpty )
                 bEmpty = sal_False;
 
-            if( !bGaps && aAttrib.nStart > nLastEnd )
+            if(!bGaps && i->nStart > nLastEnd)
                 bGaps = sal_True;
 
-            nLastEnd = aAttrib.nEnd;
+            nLastEnd = i->nEnd;
         }
 
         if( !bEmpty && !bGaps && nLastEnd < ( nEndPos - 1 ) )
             bGaps = sal_True;
-/*
-        // since we have no portion with our item or if there were gaps
-        if( bEmpty || bGaps )
-        {
-            // we need to check the paragraph item
-            const SfxItemSet& rParaSet = rEditEngine.GetParaAttribs( nPara );
-            if( rParaSet.GetItemState( nWhich ) == SFX_ITEM_SET )
-            {
-                eState = SFX_ITEM_SET;
-                // get item from the paragraph
-                const SfxPoolItem* pTempItem = rParaSet.GetItem( nWhich );
-                if( pParaItem )
-                {
-                    if( *pParaItem != *pTempItem )
-                        return SFX_ITEM_DONTCARE;
-                }
-                else
-                {
-                    pParaItem = pTempItem;
-                }
 
-                // set if theres no last item or if its the same
-                eParaState = SFX_ITEM_SET;
-            }
-            else if( bEmpty )
-            {
-                eParaState = SFX_ITEM_DEFAULT;
-            }
-            else if( bGaps )
-            {
-                // gaps and item not set in paragraph, thats a dont care
-                return SFX_ITEM_DONTCARE;
-            }
-        }
-        else
-        {
-            eParaState = SFX_ITEM_SET;
-        }
-*/
         if( bEmpty )
             eParaState = SFX_ITEM_DEFAULT;
         else if( bGaps )
