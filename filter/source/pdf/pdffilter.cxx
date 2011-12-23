@@ -114,6 +114,7 @@ sal_Bool PDFFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
         aCfgItem.ReadBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportBookmarksToPDFDestination" ) ), sal_False );
 
         aCfgItem.ReadBool(  String( RTL_CONSTASCII_USTRINGPARAM( "ExportBookmarks" ) ), sal_True );
+        aCfgItem.ReadBool(  String( RTL_CONSTASCII_USTRINGPARAM( "ExportHiddenSlides" ) ), sal_False );
         aCfgItem.ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "OpenBookmarkLevels" ) ), -1 );
         aFilterData = aCfgItem.GetFilterData();
     }

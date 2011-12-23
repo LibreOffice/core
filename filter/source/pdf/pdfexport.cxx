@@ -113,6 +113,7 @@ PDFExport::PDFExport( const Reference< XComponent >& rxSrcDoc,
                                               //already used for i59651 (PDF/A-1)
     mbUseTransitionEffects      ( sal_True ),
     mbExportBookmarks           ( sal_True ),
+    mbExportHiddenSlides        ( sal_False ),
     mnOpenBookmarkLevels        ( -1 ),
     mbUseLosslessCompression    ( sal_False ),
     mbReduceImageResolution     ( sal_False ),
@@ -550,6 +551,8 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                       rFilterData[ nData ].Value >>= mbExportBmkToDest;
                 else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportBookmarks" ) ) )
                     rFilterData[ nData ].Value >>= mbExportBookmarks;
+                else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportHiddenSlides" ) ) )
+                    rFilterData[ nData ].Value >>= mbExportHiddenSlides;
                 else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "OpenBookmarkLevels" ) ) )
                     rFilterData[ nData ].Value >>= mnOpenBookmarkLevels;
             }
@@ -809,6 +812,7 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                 pPDFExtOutDevData->SetFormsFormat( mnFormsFormat );
                 pPDFExtOutDevData->SetIsExportFormFields( mbExportFormFields );
                 pPDFExtOutDevData->SetIsExportBookmarks( mbExportBookmarks );
+                pPDFExtOutDevData->SetIsExportHiddenSlides( mbExportHiddenSlides );
                 pPDFExtOutDevData->SetIsLosslessCompression( mbUseLosslessCompression );
                 pPDFExtOutDevData->SetIsReduceImageResolution( mbReduceImageResolution );
                 pPDFExtOutDevData->SetIsExportNamedDestinations( mbExportBmkToDest );

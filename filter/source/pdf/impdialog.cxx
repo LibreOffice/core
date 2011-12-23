@@ -93,6 +93,7 @@ ImpPDFTabDialog::ImpPDFTabDialog( Window* pParent,
     mbExportFormFields( sal_True ),
     mbAllowDuplicateFieldNames( sal_False ),
     mbExportBookmarks( sal_True ),
+    mbExportHiddenSlides ( sal_False),
     mnOpenBookmarkLevels( -1 ),
 
     mbHideViewerToolbar( sal_False ),
@@ -194,6 +195,8 @@ ImpPDFTabDialog::ImpPDFTabDialog( Window* pParent,
     mbExportNotes = maConfigItem.ReadBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportNotes"  ) ), sal_False );
 
     mbExportBookmarks = maConfigItem.ReadBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportBookmarks" ) ), sal_True );
+    if ( mbIsPresentation )
+        mbExportHiddenSlides = maConfigItem.ReadBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportHiddenSlides" ) ), sal_False );
     mnOpenBookmarkLevels = maConfigItem.ReadInt32( OUString( RTL_CONSTASCII_USTRINGPARAM( "OpenBookmarkLevels" ) ), -1 );
     mbUseTransitionEffects = maConfigItem.ReadBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "UseTransitionEffects"  ) ), sal_True );
     mbIsSkipEmptyPages = maConfigItem.ReadBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "IsSkipEmptyPages"  ) ), sal_False );
@@ -341,6 +344,8 @@ Sequence< PropertyValue > ImpPDFTabDialog::GetFilterData()
     maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportNotes" ) ), mbExportNotes );
 
     maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportBookmarks" ) ), mbExportBookmarks );
+    if ( mbIsPresentation )
+        maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportHiddenSlides" ) ), mbExportHiddenSlides );
     maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "UseTransitionEffects" ) ), mbUseTransitionEffects );
     maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "IsSkipEmptyPages" ) ), mbIsSkipEmptyPages );
     maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "IsAddStream" ) ), mbAddStream );
@@ -458,6 +463,7 @@ ImpPDFTabGeneralPage::ImpPDFTabGeneralPage( Window* pParent,
     maCbExportBookmarks( this, PDFFilterResId( CB_EXPORTBOOKMARKS ) ),
     maCbExportNotes( this, PDFFilterResId( CB_EXPORTNOTES ) ),
     maCbExportNotesPages( this, PDFFilterResId( CB_EXPORTNOTESPAGES ) ),
+    maCbExportHiddenSlides( this, PDFFilterResId( CB_EXPORTHIDDENSLIDES ) ),
     maCbExportEmptyPages( this, PDFFilterResId( CB_EXPORTEMPTYPAGES ) ),
     maCbAddStream( this, PDFFilterResId( CB_ADDSTREAM ) ),
     maFtAddStreamDescription( this, PDFFilterResId( FT_ADDSTREAMDESCRIPTION ) ),
@@ -569,6 +575,9 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem( const ImpPDFTabDialog* paParent 
     {
         maCbExportNotesPages.Show( sal_True );
         maCbExportNotesPages.Check( paParent->mbExportNotesPages );
+        maCbExportHiddenSlides.Show( sal_True);
+        maCbExportHiddenSlides.Check( paParent->mbExportHiddenSlides );
+
     }
     else
     {
@@ -581,6 +590,8 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem( const ImpPDFTabDialog* paParent 
         maCbEmbedStandardFonts.SetPosPixel( Point( aPos.X(), aPos.Y() - nCheckBoxHeight ) );
         maCbExportNotesPages.Show( sal_False );
         maCbExportNotesPages.Check( sal_False );
+        maCbExportHiddenSlides.Show( sal_False);
+        maCbExportHiddenSlides.Check( sal_False );
     }
 
     maCbExportEmptyPages.Check( !paParent->mbIsSkipEmptyPages );
@@ -606,6 +617,8 @@ void ImpPDFTabGeneralPage::GetFilterConfigItem( ImpPDFTabDialog* paParent )
     if ( mbIsPresentation )
         paParent->mbExportNotesPages = maCbExportNotesPages.IsChecked();
     paParent->mbExportBookmarks = maCbExportBookmarks.IsChecked();
+    if ( mbIsPresentation )
+        paParent->mbExportHiddenSlides = maCbExportHiddenSlides.IsChecked();
 
     paParent->mbIsSkipEmptyPages =  !maCbExportEmptyPages.IsChecked();
     paParent->mbAddStream = maCbAddStream.IsVisible() && maCbAddStream.IsChecked();
