@@ -111,7 +111,6 @@ public:
 
 #if OSL_DEBUG_LEVEL > 1
 public:
-    unsigned int getContextCount() const;
     void dumpXml( const TagLogger::Pointer_t& pLogger );
     XPathLogger & getXPathLogger();
 #endif

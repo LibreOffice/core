@@ -317,11 +317,6 @@ namespace slideshow
             return maSubset;
         }
 
-        bool DrawShapeSubsetting::hasSubsetShapes() const
-        {
-            return !maSubsetShapes.empty();
-        }
-
         AttributableShapeSharedPtr DrawShapeSubsetting::getSubsetShape( const DocTreeNode& rTreeNode ) const
         {
             RTL_LOGFILE_CONTEXT( aLog, "::presentation::internal::DrawShapeSubsetting::getSubsetShape()" );

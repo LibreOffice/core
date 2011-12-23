@@ -90,7 +90,7 @@ using ::rtl::OUStringHash;
 using ::rtl::OStringBuffer;
 using ::rtl::OUStringBuffer;
 
-#if (OSL_DEBUG_LEVEL < 2)
+#if (OSL_DEBUG_LEVEL < 3)
 #define COMPRESS_PAGES
 #else
 #define DEBUG_DISABLE_PDFCOMPRESSION // also do not compress streams

@@ -674,27 +674,6 @@ sal_Bool SvtHelpOptions::IsHelpAgentAutoStartMode() const
 
 // -----------------------------------------------------------------------
 
-sal_Int32 SvtHelpOptions::getAgentIgnoreURLCounter( const ::rtl::OUString& _rURL )
-{
-    return pImp->getAgentIgnoreURLCounter( _rURL );
-}
-
-// -----------------------------------------------------------------------
-
-void SvtHelpOptions::decAgentIgnoreURLCounter( const ::rtl::OUString& _rURL )
-{
-    pImp->decAgentIgnoreURLCounter( _rURL );
-}
-
-// -----------------------------------------------------------------------
-
-void SvtHelpOptions::resetAgentIgnoreURLCounter( const ::rtl::OUString& _rURL )
-{
-    pImp->resetAgentIgnoreURLCounter( _rURL );
-}
-
-// -----------------------------------------------------------------------
-
 void SvtHelpOptions::resetAgentIgnoreURLCounter()
 {
     pImp->resetAgentIgnoreURLCounter();

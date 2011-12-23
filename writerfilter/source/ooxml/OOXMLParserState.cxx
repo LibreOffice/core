@@ -276,11 +276,6 @@ void OOXMLParserState::incContextCount()
 }
 
 #if OSL_DEBUG_LEVEL > 1
-unsigned int OOXMLParserState::getContextCount() const
-{
-    return mnContexts;
-}
-
 void OOXMLParserState::dumpXml( const TagLogger::Pointer_t& pLogger )
 {
     pLogger->startElement("parserstate");

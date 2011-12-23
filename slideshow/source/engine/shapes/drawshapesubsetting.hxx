@@ -111,9 +111,6 @@ namespace slideshow
             /// Return subset node for this shape
             DocTreeNode                 getSubsetNode       () const;
 
-            /// Return true, if any child subset shapes exist
-            bool                        hasSubsetShapes     () const;
-
             /// Get subset shape for given node, if any
             AttributableShapeSharedPtr  getSubsetShape      ( const DocTreeNode& rTreeNode ) const;
 
