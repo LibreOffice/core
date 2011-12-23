@@ -48,6 +48,7 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
     oox \
     package \
     padmin \
+    psprint_config \
     reportdesign \
     sc \
     scaddins \
