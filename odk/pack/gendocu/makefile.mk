@@ -52,11 +52,15 @@ JAVA_PACKAGES=\
         $(JAVA_SRC_DIR)$/com$/sun$/star$/lib$/util$/UrlToFileMapper.java
 #        com.sun.star.beans \
 
-JAVA_SRC_FILES=\
+JAVA_SRC_FILES_BIN=\
         $(JAVA_SRC_DIR)$/jurt_src.zip \
-        $(JAVA_SRC_DIR)$/juh_src.zip \
+        $(JAVA_SRC_DIR)$/juh_src.zip
+
+JAVA_SRC_FILES_PCK=\
         $(JAVA_SRC_DIR)$/ridl_src.zip \
         $(JAVA_SRC_DIR)$/unoloader_src.zip
+
+JAVA_SRC_FILES=$(JAVA_SRC_FILES_BIN) $(JAVA_SRC_FILES_PCK)
 
 JAVA_BEAN_SRC_FILES=\
         $(JAVA_SRC_DIR)$/com$/sun$/star$/beans$/ContainerFactory.java \
@@ -101,7 +105,12 @@ $(CPP_DOCU_INDEX_FILE) : $(CPP_DOCU_CLEANUP_FLAG)
     -rm $(@:d:d)$/cpp.css
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $(PRJ)$/docs$/cpp$/ref$/cpp.css $(MY_TEXTCOPY_TARGETPRE) $(@:d:d)$/cpp.css
 
-$(JAVA_SRC_FILES) : $(SOLARCOMMONBINDIR)$/$$(@:f)
+$(JAVA_SRC_FILES_BIN) : $(SOLARCOMMONBINDIR)$/$$(@:f)
+    -$(MKDIRHIER) $(@:d)        
+    $(MY_COPY) $< $@
+    cd $(JAVA_SRC_DIR) && unzip -quo $(@:f)
+
+$(JAVA_SRC_FILES_PCK) : $(SOLARCOMMONPCKDIR)$/$$(@:f)
     -$(MKDIRHIER) $(@:d)        
     $(MY_COPY) $< $@
     cd $(JAVA_SRC_DIR) && unzip -quo $(@:f)
