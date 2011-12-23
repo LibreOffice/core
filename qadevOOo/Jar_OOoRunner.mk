@@ -71,6 +71,4 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
 	qadevOOo/tests/java/*/*/*/* \
 ))
 
-$(eval $(call gb_Jar_add_packagefiles,OOoRunner,\
-    $(SRCDIR)/qadevOOo/objdsc \
-))
+$(eval $(call gb_Jar_add_packagefile,OOoRunner,objdsc,$(SRCDIR)/qadevOOo/objdsc))
