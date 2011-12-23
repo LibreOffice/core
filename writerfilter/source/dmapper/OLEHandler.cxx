@@ -31,6 +31,7 @@
 
 #include <doctok/resourceids.hxx>
 #include <ooxml/resourceids.hxx>
+#include <rtl/oustringostreaminserter.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/document/XEmbeddedObjectResolver.hpp>
@@ -124,12 +125,7 @@ void OLEHandler::lcl_attribute(Id rName, Value & rVal)
                 }
                 catch( const uno::Exception& e )
                 {
-#if DEBUG
-                    clog << "Exception in OLE Handler: ";
-                    clog << rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_UTF8 ).getStr( ) << endl;
-#else
-                    (void)e;
-#endif
+                    SAL_WARN("writerfilter", "Exception in OLE Handler: " << e.Message);
                 }
             }
         }
@@ -175,12 +171,7 @@ void OLEHandler::lcl_sprm(Sprm & rSprm)
                 }
                 catch( const uno::Exception& e )
                 {
-#if DEBUG
-                    clog << "Exception in OLE Handler: ";
-                    clog << rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_UTF8 ).getStr( ) << endl;
-#else
-                    (void)e;
-#endif
+                    SAL_WARN("writerfilter", "Exception in OLE Handler: " << e.Message);
                 }
             }
         }

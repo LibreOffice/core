@@ -81,6 +81,7 @@
 #include <comphelper/storagehelper.hxx>
 
 #include <rtl/ustrbuf.hxx>
+#include <rtl/oustringostreaminserter.hxx>
 #include <boost/shared_ptr.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <tools/color.hxx>
@@ -3381,9 +3382,9 @@ void DomainMapper::lcl_text(const sal_uInt8 * data_, size_t len)
             m_pImpl->appendTextPortion( sText, pContext );
         }
     }
-    catch( const uno::RuntimeException& )
+    catch( const uno::RuntimeException& e )
     {
-        std::clog << __FILE__ << "(l" << __LINE__ << ")" << std::endl;
+        SAL_WARN("writerfilter", "failed. Message :" << e.Message);
     }
 }
 
