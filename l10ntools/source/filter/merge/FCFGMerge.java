@@ -56,8 +56,6 @@ public class FCFGMerge
 
     public static void main(java.lang.String[] sCmdLine)
     {
-        FCFGMerge.printCopyright();
-
         // create log object in default mode "WARNINGS"
         // If a command line parameter indicates another
         // level - change it!
@@ -77,6 +75,7 @@ public class FCFGMerge
             // help requested?
             if (aCfg.isHelp())
             {
+                FCFGMerge.printCopyright();
                 FCFGMerge.printHelp();
                 System.exit(-1);
             }
