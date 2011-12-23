@@ -26,9 +26,11 @@
  *
  ************************************************************************/
 
+#include "sal/config.h"
 
-#include <stdarg.h>
 #include <algorithm>
+#include <cassert>
+#include <stdarg.h>
 
 #include <osl/mutex.hxx>
 #include <osl/interlck.h>
@@ -226,7 +228,7 @@ CPPU_DLLPUBLIC typelib_TypeDescriptionReference ** SAL_CALL typelib_static_type_
                     ::typelib_typedescriptionreference_release( pMembers[1] );
                     ::typelib_typedescriptionreference_release( pMembers[2] );
                     // Exception
-                    OSL_ASSERT( ! s_aTypes[typelib_TypeClass_EXCEPTION] );
+                    assert( ! s_aTypes[typelib_TypeClass_EXCEPTION] );
                     {
                     typelib_TypeDescription * pTD1 = 0;
                     OUString sTypeName1( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.uno.Exception") );
@@ -341,7 +343,7 @@ CPPU_DLLPUBLIC void SAL_CALL typelib_static_sequence_type_init(
             aBuf.append( pElementType->pTypeName );
             OUString aTypeName( aBuf.makeStringAndClear() );
 
-            OSL_ASSERT( ! TYPELIB_TYPEDESCRIPTIONREFERENCE_ISREALLYWEAK(typelib_TypeClass_SEQUENCE) );
+            assert( ! TYPELIB_TYPEDESCRIPTIONREFERENCE_ISREALLYWEAK(typelib_TypeClass_SEQUENCE) );
             *ppRef = igetTypeByName( aTypeName.pData );
             if (!*ppRef)
             {
@@ -352,7 +354,7 @@ CPPU_DLLPUBLIC void SAL_CALL typelib_static_sequence_type_init(
 
                 ::typelib_typedescription_register( &pReg );
                 *ppRef = (typelib_TypeDescriptionReference *)pReg;
-                OSL_ASSERT( *ppRef == pReg->pWeakRef );
+                assert( *ppRef == pReg->pWeakRef );
             }
             // another static ref:
             ++((*ppRef)->nStaticRefCount);
@@ -370,15 +372,14 @@ void init(
     sal_Int32 nMembers, typelib_TypeDescriptionReference ** ppMembers,
     sal_Bool const * pParameterizedTypes)
 {
-    OSL_ENSURE( typelib_TypeClass_STRUCT == eTypeClass ||
-                 typelib_TypeClass_EXCEPTION == eTypeClass, "### unexpected type class!" );
+    assert( eTypeClass == typelib_TypeClass_STRUCT || eTypeClass == typelib_TypeClass_EXCEPTION );
 
     if (! *ppRef)
     {
         MutexGuard aGuard( typelib_StaticInitMutex::get() );
         if (! *ppRef)
         {
-            OSL_ASSERT( ! TYPELIB_TYPEDESCRIPTIONREFERENCE_ISREALLYWEAK(eTypeClass) );
+            assert( ! TYPELIB_TYPEDESCRIPTIONREFERENCE_ISREALLYWEAK(eTypeClass) );
             OUString aTypeName( OUString::createFromAscii( pTypeName ) );
             *ppRef = igetTypeByName( aTypeName.pData );
             if (!*ppRef)
@@ -392,9 +393,9 @@ void init(
                 {
                     ::typelib_typedescriptionreference_getDescription(
                         (typelib_TypeDescription **)&pComp->pBaseTypeDescription, pBaseType );
-                    OSL_ASSERT( pComp->pBaseTypeDescription );
+                    assert( pComp->pBaseTypeDescription );
                     nOffset = ((typelib_TypeDescription *)pComp->pBaseTypeDescription)->nSize;
-                    OSL_ENSURE( newAlignedSize( 0, ((typelib_TypeDescription *)pComp->pBaseTypeDescription)->nSize, ((typelib_TypeDescription *)pComp->pBaseTypeDescription)->nAlignment ) == ((typelib_TypeDescription *)pComp->pBaseTypeDescription)->nSize, "### unexpected offset!" );
+                    assert( newAlignedSize( 0, ((typelib_TypeDescription *)pComp->pBaseTypeDescription)->nSize, ((typelib_TypeDescription *)pComp->pBaseTypeDescription)->nAlignment ) == ((typelib_TypeDescription *)pComp->pBaseTypeDescription)->nSize ); // unexpected offset
                 }
 
                 if (nMembers)
@@ -414,7 +415,7 @@ void init(
                         // write offset
                         typelib_TypeDescription * pTD = 0;
                         TYPELIB_DANGER_GET( &pTD, pComp->ppTypeRefs[i] );
-                        OSL_ENSURE( pTD->nSize, "### void member?" );
+                        assert( pTD->nSize ); // void member?
                         nOffset = newAlignedSize( nOffset, pTD->nSize, pTD->nAlignment );
                         pComp->pMemberOffsets[i] = nOffset - pTD->nSize;
                         TYPELIB_DANGER_RELEASE( pTD );
@@ -436,7 +437,7 @@ void init(
 
                 ::typelib_typedescription_register( &pReg );
                 *ppRef = (typelib_TypeDescriptionReference *)pReg;
-                OSL_ASSERT( *ppRef == pReg->pWeakRef );
+                assert( *ppRef == pReg->pWeakRef );
             }
             // another static ref:
             ++((*ppRef)->nStaticRefCount);
@@ -492,7 +493,7 @@ CPPU_DLLPUBLIC void SAL_CALL typelib_static_mi_interface_type_init(
         MutexGuard aGuard( typelib_StaticInitMutex::get() );
         if (! *ppRef)
         {
-            OSL_ASSERT( ! TYPELIB_TYPEDESCRIPTIONREFERENCE_ISREALLYWEAK(typelib_TypeClass_INTERFACE) );
+            assert( ! TYPELIB_TYPEDESCRIPTIONREFERENCE_ISREALLYWEAK(typelib_TypeClass_INTERFACE) );
             OUString aTypeName( OUString::createFromAscii( pTypeName ) );
             *ppRef = igetTypeByName( aTypeName.pData );
             if (!*ppRef)
@@ -510,7 +511,7 @@ CPPU_DLLPUBLIC void SAL_CALL typelib_static_mi_interface_type_init(
                         pIface->ppBaseTypes[i] = 0;
                         ::typelib_typedescriptionreference_getDescription(
                             (typelib_TypeDescription **)&pIface->ppBaseTypes[i], ppBaseTypes[i] );
-                        OSL_ASSERT( pIface->ppBaseTypes[i] );
+                        assert( pIface->ppBaseTypes[i] );
                     }
                 }
                 else
@@ -519,7 +520,7 @@ CPPU_DLLPUBLIC void SAL_CALL typelib_static_mi_interface_type_init(
                     ::typelib_typedescriptionreference_getDescription(
                         (typelib_TypeDescription **)&pIface->ppBaseTypes[0],
                         * ::typelib_static_type_getByTypeClass( typelib_TypeClass_INTERFACE ) );
-                    OSL_ASSERT( pIface->ppBaseTypes[0] );
+                    assert( pIface->ppBaseTypes[0] );
                 }
                 pIface->pBaseTypeDescription = pIface->ppBaseTypes[0];
                 typelib_typedescription_acquire(
@@ -535,7 +536,7 @@ CPPU_DLLPUBLIC void SAL_CALL typelib_static_mi_interface_type_init(
 
                 ::typelib_typedescription_register( &pReg );
                 *ppRef = (typelib_TypeDescriptionReference *)pReg;
-                OSL_ASSERT( *ppRef == pReg->pWeakRef );
+                assert( *ppRef == pReg->pWeakRef );
             }
             // another static ref:
             ++((*ppRef)->nStaticRefCount);
@@ -555,7 +556,7 @@ CPPU_DLLPUBLIC void SAL_CALL typelib_static_enum_type_init(
         MutexGuard aGuard( typelib_StaticInitMutex::get() );
         if (! *ppRef)
         {
-            OSL_ASSERT( ! TYPELIB_TYPEDESCRIPTIONREFERENCE_ISREALLYWEAK(typelib_TypeClass_ENUM) );
+            assert( ! TYPELIB_TYPEDESCRIPTIONREFERENCE_ISREALLYWEAK(typelib_TypeClass_ENUM) );
             OUString aTypeName( OUString::createFromAscii( pTypeName ) );
             *ppRef = igetTypeByName( aTypeName.pData );
             if (!*ppRef)
@@ -575,7 +576,7 @@ CPPU_DLLPUBLIC void SAL_CALL typelib_static_enum_type_init(
 
                 ::typelib_typedescription_register( &pReg );
                 *ppRef = (typelib_TypeDescriptionReference *)pReg;
-                OSL_ASSERT( *ppRef == pReg->pWeakRef );
+                assert( *ppRef == pReg->pWeakRef );
             }
             // another static ref:
             ++((*ppRef)->nStaticRefCount);
@@ -615,7 +616,7 @@ CPPU_DLLPUBLIC void SAL_CALL typelib_static_array_type_init(
             va_end( dimArgs );
             OUString aTypeName( aBuf.makeStringAndClear() );
 
-            OSL_ASSERT( ! TYPELIB_TYPEDESCRIPTIONREFERENCE_ISREALLYWEAK(typelib_TypeClass_ARRAY) );
+            assert( ! TYPELIB_TYPEDESCRIPTIONREFERENCE_ISREALLYWEAK(typelib_TypeClass_ARRAY) );
             *ppRef = igetTypeByName( aTypeName.pData );
             if (!*ppRef)
             {
@@ -639,7 +640,7 @@ CPPU_DLLPUBLIC void SAL_CALL typelib_static_array_type_init(
 
                 ::typelib_typedescription_register( &pReg );
                 *ppRef = (typelib_TypeDescriptionReference *)pReg;
-                OSL_ASSERT( *ppRef == pReg->pWeakRef );
+                assert( *ppRef == pReg->pWeakRef );
             } else
                 delete [] pDimensions;
             // another static ref:
