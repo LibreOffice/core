@@ -1952,10 +1952,6 @@ sal_Bool SwTxtNode::GetAttr( SfxItemSet& rSet, xub_StrLen nStt, xub_StrLen nEnd,
                             pPrev = pAttrArr->end();
                         }
 
-#if OSL_DEBUG_LEVEL > 1
-                        SwPoolItemEndPair aTmp = *pPrev;
-#endif
-
                         if( pPrev != pAttrArr->end() )
                         {
                             if( !pPrev->mpItem )

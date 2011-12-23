@@ -1017,7 +1017,7 @@ sal_Bool PPTWriterBase::ContainsOtherShapeThanPlaceholders( sal_Bool bForOOMLX )
         } else
             bOtherThanPlaceHolders = sal_True;
         }
-        DBG(printf("mType == %s\n", mType.GetBuffer()));
+        DBG(printf("mType == %s\n", mType.getStr()));
     }
 
     return bOtherThanPlaceHolders;

@@ -1685,11 +1685,6 @@ sal_Bool SwFltOutDoc::SeekCell(short nRow, short nCol, sal_Bool bPam)
     {
         pPaM->GetPoint()->nNode = pTableBox->GetSttIdx() + 1;
         pPaM->GetPoint()->nContent.Assign(pPaM->GetCntntNode(), 0);
-//#pragma message(__FILE__ "(?) : Sw's const problem")
-#if OSL_DEBUG_LEVEL > 1
-        const SwTxtFmtColl* p = GetDoc().GetDfltTxtFmtColl();
-        p = GetDoc().GetTxtCollFromPool(RES_POOLCOLL_STANDARD, false );
-#endif
         GetDoc().SetTxtFmtColl(*pPaM,
             GetDoc().GetTxtCollFromPool(RES_POOLCOLL_STANDARD, false ));
     }

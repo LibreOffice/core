@@ -99,8 +99,11 @@ void DebugHeaderFooterContent( const SwPageDesc& rPageDesc )
                 nFooterLeft = 0;
         }
     }
-    int i = 0;
-    ++i; // To set a breakpoint
+
+    (void)nHeaderMaster;
+    (void)nHeaderLeft;
+    (void)nFooterMaster;
+    (void)nFooterLeft;
 }
 #endif
 

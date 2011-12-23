@@ -465,9 +465,8 @@ void ScParameterClassification::GenerateDocumentation()
         if ( xMap->getSymbol(eOp).Len() )
         {
             fprintf( stdout, "%s: ", aEnvVarName);
-            rtl::OStringBuffer aStr;
-            aStr.append( rtl::OUStringToOString(rtl::OUString(xMap->getSymbol(eOp).GetBuffer()), RTL_TEXTENCODING_UTF8 ) );
-            aStr.append("(");
+            rtl::OStringBuffer aStr(rtl::OUStringToOString(xMap->getSymbol(eOp), RTL_TEXTENCODING_UTF8));
+            aStr.append('(');
             formula::FormulaByteToken aToken( eOp);
             sal_uInt8 nParams = GetMinimumParameters( eOp);
             // preset parameter count according to opcode value, with some
@@ -523,7 +522,7 @@ void ScParameterClassification::GenerateDocumentation()
             for ( sal_uInt16 j=0; j < nParams; ++j )
             {
                 if ( j > 0 )
-                    aStr.append(",");
+                    aStr.append(',');
                 Type eType = GetParameterType( &aToken, j);
                 switch ( eType )
                 {
@@ -552,8 +551,8 @@ void ScParameterClassification::GenerateDocumentation()
             if ( HasRepeatParameters( eOp) )
                 aStr.append(", ...");
             if ( nParams )
-                aStr.append(" ");
-            aStr.append(")");
+                aStr.append(' ');
+            aStr.append(')');
             switch ( eOp )
             {
                 case ocZGZ:
@@ -573,7 +572,7 @@ void ScParameterClassification::GenerateDocumentation()
                 break;
                 default:;
             }
-            fprintf( stdout, "%s\n", aStr.makeStringAndClear().getStr());
+            fprintf( stdout, "%s\n", aStr.getStr());
         }
     }
     fflush( stdout);

@@ -182,9 +182,9 @@ namespace dbaui
 
                 case SQL_NODE_KEYWORD:
                     {
-                        rString+= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SQL_KEYWORD:"));
+                        rString += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SQL_KEYWORD:"));
                         ::rtl::OString sT = OSQLParser::TokenIDToStr(_pNode->getTokenID());
-                        rString += ::rtl::OUString(sT,sT.getLength(),RTL_TEXTENCODING_UTF8);
+                        rString += ::rtl::OStringToOUString(sT, RTL_TEXTENCODING_UTF8);
                      break;}
 
                 case SQL_NODE_COMPARISON:

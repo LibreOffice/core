@@ -492,12 +492,12 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
                 // EMF+ comment (fixme: BE?)
                 if( id == 0x2B464D45 && nRecSize >= 12 )
                     ReadEMFPlusComment( length, bHaveDC );
-                // GDIC comment, doesn't do anything useful yet => enabled only for debug
+                // GDIC comment, doesn't do anything useful yet
                 else if( id == 0x43494447 && nRecSize >= 12 ) {
-                    EMFP_DEBUG(ReadGDIComment());
+                    //ToDo: ReadGDIComment()
                 } else {
                     EMFP_DEBUG(printf ("\t\tunknown id: 0x%x\n",(unsigned int) id));
-        }
+                }
             }
         } else if( !bEMFPlus || bHaveDC || nRecType == EMR_EOF )
 

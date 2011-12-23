@@ -123,6 +123,7 @@ void lcl_DBGCheckStack()
     {
         nElement = *aIter;
     }
+    (void)nElement;
 }
 
 #endif
@@ -303,6 +304,7 @@ SwTaggedPDFHelper::SwTaggedPDFHelper( const Num_Info* pNumInfo,
 #if OSL_DEBUG_LEVEL > 1
         nCurrentStruct = mpPDFExtOutDevData->GetCurrentStructureElement();
         lcl_DBGCheckStack();
+        (void)nCurrentStruct;
 #endif
     }
 }
@@ -324,6 +326,7 @@ SwTaggedPDFHelper::~SwTaggedPDFHelper()
 #if OSL_DEBUG_LEVEL > 1
         nCurrentStruct = mpPDFExtOutDevData->GetCurrentStructureElement();
         lcl_DBGCheckStack();
+        (void)nCurrentStruct;
 #endif
 
     }

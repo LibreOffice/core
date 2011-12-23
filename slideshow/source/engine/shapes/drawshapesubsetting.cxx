@@ -170,8 +170,8 @@ namespace slideshow
                         {
                             MetaTextAction* pText = static_cast<MetaTextAction*>(pCurrAct);
                             VERBOSE_TRACE( "Shape text \"%s\" at action #%d",
-                                           ByteString(pText->GetText(),
-                                                      RTL_TEXTENCODING_ISO_8859_1).GetBuffer(),
+                                           rtl::OUStringToOString(pText->GetText(),
+                                                      RTL_TEXTENCODING_ISO_8859_1).getStr(),
                                            nActionIndex );
                         }
 #endif

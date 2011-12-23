@@ -832,6 +832,7 @@ void SwTxtFrm::ConnectFtn( SwTxtFtn *pFtn, const SwTwips nDeadLine )
         (void)bla;
     }
     nRstHeight = GetRstHeight();
+    (void)nRstHeight;
 #endif
     bInFtnConnect = sal_False;
     return;

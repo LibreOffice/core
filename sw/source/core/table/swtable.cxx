@@ -1164,10 +1164,6 @@ static void lcl_CalcNewWidths( std::list<sal_uInt16> &rSpanPos, ChangeList& rCha
         sal_uInt16 nPos = (sal_uInt16)nSum;
         while( pCurr != rChanges.end() && pCurr->first < nPos )
         {
-#if OSL_DEBUG_LEVEL > 1
-            sal_uInt16 nTemp = pCurr->first;
-            nTemp = pCurr->second;
-#endif
             ++nCurr;
             ++pCurr;
         }
