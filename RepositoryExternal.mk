@@ -224,7 +224,7 @@ else # !SYSTEM_LIBEXTTEXTCAT
 
 ifeq ($(OS),WNT)
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO,\
-	exttextcat \
+	libexttextcat \
 ))
 else
 $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS,\
@@ -235,7 +235,7 @@ endif
 define gb_LinkTarget__use_libexttextcat
 ifeq ($(OS),WNT)
 $(call gb_LinkTarget_add_linked_libs,$(1),\
-	exttextcat \
+	libexttextcat \
 )
 else
 $(call gb_LinkTarget_add_linked_static_libs,$(1),\

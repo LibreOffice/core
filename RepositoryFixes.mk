@@ -56,7 +56,6 @@ gb_Library_DLLFILENAMES := $(patsubst ucpfile:libucpfile%,ucpfile:libucpfile1%,$
 gb_Library_DLLFILENAMES := $(patsubst unsafe_uno:unsafe_uno%,unsafe_uno:unsafe_uno_uno%,$(gb_Library_DLLFILENAMES))
 gb_Library_DLLFILENAMES := $(patsubst z:z%,z:zlib%,$(gb_Library_DLLFILENAMES))
 
-gb_Library_FILENAMES := $(patsubst exttextcat:libexttextcat%,exttextcat:libilibexttextcat%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst sb:isb%,sb:basic%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst sfx:isfx%,sfx:sfx%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst svt:isvt%,svt:svtool%,$(gb_Library_FILENAMES))
@@ -68,6 +67,7 @@ gb_StaticLibrary_FILENAMES := $(patsubst graphite:graphite%,graphite:graphite_dl
 ifeq ($(COM),GCC)
 gb_Library_FILENAMES := $(patsubst crypto:icrypto%,crypto:crypto%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst graphite2_off:%.dll.a,graphite2_off:%.a,$(gb_Library_FILENAMES))
+gb_Library_FILENAMES := $(patsubst libexttextcat:liblibext%,libexttextcat:libilibext%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst rdf:irdf%,rdf:librdf.dll$(gb_Library_IARCEXT),$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst ssl:issl%,ssl:ssl%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst xml2:ixml2%,xml2:libxml2$(gb_Library_IARCEXT),$(gb_Library_FILENAMES))
