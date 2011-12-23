@@ -36,6 +36,10 @@ $(eval $(call gb_Jar_add_jars,java_accessibility,\
 
 $(eval $(call gb_Jar_set_packageroot,java_accessibility,org))
 
+$(eval $(call gb_Jar_add_packagedirs,java_accessibility,\
+    $(WORKDIR)/CustomTarget/accessibility/bridge/classes/org \
+))
+
 $(eval $(call gb_Jar_add_sourcefiles,java_accessibility,\
     accessibility/bridge/org/openoffice/java/accessibility/AbstractButton \
     accessibility/bridge/org/openoffice/java/accessibility/AccessibleActionImpl \
@@ -84,11 +88,9 @@ $(eval $(call gb_Jar_add_sourcefiles,java_accessibility,\
     accessibility/bridge/org/openoffice/java/accessibility/logging/XAccessibleTextLog \
 ))
 
-# XXX yes, I know this is a nasty hack. But it is the easiest way (and,
-# from what I have tried so far, the only working one) to get the damned
-# class file packed into the jar.
-$(WORKDIR)/CustomTarget/accessibility/bridge/classes : $(call gb_Package_get_target,accessibility_bridge)
-	mkdir -p $(call gb_Jar_get_workdir,java_accessibility)/org/openoffice/java/accessibility && \
-            $(call gb_Deliver_deliver,$(WORKDIR)/CustomTarget/accessibility/bridge/classes/org/openoffice/java/accessibility/Build.class,$(call gb_Jar_get_workdir,java_accessibility)/org/openoffice/java/accessibility)
+# Dummy dep. to satisfy make's depsolver: .../classes is created by a
+# custom target, so there is no dependency information for it here.
+# It also makes sure that the package is built before this jar .-)
+$(WORKDIR)/CustomTarget/accessibility/bridge/classes :| $(call gb_Package_get_target,accessibility_bridge)
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:
