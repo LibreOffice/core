@@ -960,7 +960,7 @@ void Menu::ImplInit()
 {
     mnHighlightedItemPos = ITEMPOS_INVALID;
     mpSalMenu       = NULL;
-    nMenuFlags      = 0;
+    nMenuFlags      = MENU_FLAG_SHOWCHECKIMAGES;
     nDefaultItem    = 0;
     //bIsMenuBar      = sal_False;  // this is now set in the ctor, must not be changed here!!!
     nSelectedId     = 0;
