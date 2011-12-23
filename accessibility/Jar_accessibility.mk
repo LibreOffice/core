@@ -31,14 +31,9 @@ $(eval $(call gb_Jar_add_jars,java_accessibility,\
     $(OUTDIR)/bin/jurt.jar \
     $(OUTDIR)/bin/ridl.jar \
     $(OUTDIR)/bin/unoil.jar \
-    $(WORKDIR)/CustomTarget/accessibility/bridge/classes \
 ))
 
 $(eval $(call gb_Jar_set_packageroot,java_accessibility,org))
-
-$(eval $(call gb_Jar_add_packagedirs,java_accessibility,\
-    $(WORKDIR)/CustomTarget/accessibility/bridge/classes/org \
-))
 
 $(eval $(call gb_Jar_add_sourcefiles,java_accessibility,\
     accessibility/bridge/org/openoffice/java/accessibility/AbstractButton \
@@ -88,9 +83,13 @@ $(eval $(call gb_Jar_add_sourcefiles,java_accessibility,\
     accessibility/bridge/org/openoffice/java/accessibility/logging/XAccessibleTextLog \
 ))
 
+$(eval $(call gb_Jar_add_generated_sourcefiles,java_accessibility,\
+    CustomTarget/accessibility/bridge/org/openoffice/java/accessibility/Build \
+))
+
 # Dummy dep. to satisfy make's depsolver: .../classes is created by a
 # custom target, so there is no dependency information for it here.
 # It also makes sure that the package is built before this jar .-)
-$(WORKDIR)/CustomTarget/accessibility/bridge/classes :| $(call gb_Package_get_target,accessibility_bridge)
+$(call gb_Jar_get_target,java_accessibility) :| $(call gb_Package_get_target,accessibility_bridge)
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:

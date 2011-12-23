@@ -26,10 +26,6 @@
 # instead of those above.
 
 gb_PARTIALBUILD := T
-include $(GBUILDDIR)/gbuild.mk
-
-TARGETDIR := $(WORKDIR)/CustomTarget/accessibility/bridge
-PACKAGE := org/openoffice/java/accessibility
 
 ifeq ($(PRODUCT),)
 DEBUGSWITCH := true
@@ -39,14 +35,7 @@ DEBUGSWITCH := false
 PRODUCTSWITCH := true
 endif
 
-$(TARGETDIR)/done : $(TARGETDIR)/classes/$(PACKAGE)/Build.class
-	mkdir -p $(dir $@) && touch $@
-
-$(TARGETDIR)/classes/$(PACKAGE)/Build.class : $(TARGETDIR)/src/$(PACKAGE)/Build.java | $(gb_JavaClassSet_JAVACCOMMAND)
-	mkdir -p $(dir $@) && \
-        $(gb_JavaClassSet_JAVACCOMMAND) $(gb_JavaClassSet_JAVACDEBUG) -d $(TARGETDIR)/classes $^
-
-$(TARGETDIR)/src/$(PACKAGE)/Build.java :
+org/openoffice/java/accessibility/Build.java :
 	mkdir -p $(dir $@) && (\
         echo package org.openoffice.java.accessibility\; && \
         echo public class Build \{ && \
@@ -58,6 +47,6 @@ $(TARGETDIR)/src/$(PACKAGE)/Build.java :
 .DEFAULT_GOAL := all
 .PHONY : all
 all : \
-	$(TARGETDIR)/done
+	org/openoffice/java/accessibility/Build.java
 
 # vim: set ts=4 sw=4 et:
