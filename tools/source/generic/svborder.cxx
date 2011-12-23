@@ -30,24 +30,6 @@
 #include <tools/svborder.hxx>
 #include <osl/diagnose.h>
 
-SvBorder::SvBorder( const Rectangle & rOuter, const Rectangle & rInner )
-{
-    Rectangle aOuter( rOuter );
-    aOuter.Justify();
-    Rectangle aInner( rInner );
-    if( aInner.IsEmpty() )
-        aInner = Rectangle( aOuter.Center(), aOuter.Center() );
-    else
-        aInner.Justify();
-
-    OSL_ENSURE( aOuter.IsInside( aInner ),
-                "SvBorder::SvBorder: sal_False == aOuter.IsInside( aInner )" );
-    nTop    = aInner.Top()    - aOuter.Top();
-    nRight  = aOuter.Right()  - aInner.Right();
-    nBottom = aOuter.Bottom() - aInner.Bottom();
-    nLeft   = aInner.Left()   - aOuter.Left();
-}
-
 Rectangle & operator += ( Rectangle & rRect, const SvBorder & rBorder )
 {
     // wegen Empty-Rect, GetSize muss als erstes gerufen werden
