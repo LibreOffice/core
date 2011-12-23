@@ -1643,7 +1643,7 @@ void EditEngine::SetControlWord( sal_uInt32 nWord )
                 {
                     ContentNode* pNode = pImpEditEngine->GetEditDoc().GetObject( n );
                     ParaPortion* pPortion = pImpEditEngine->GetParaPortions().GetObject( n );
-                    sal_Bool bWrongs = ( bSpellingChanged || ( nWord & EE_CNTRL_ONLINESPELLING ) ) ? pNode->GetWrongList()->HasWrongs() : sal_False;
+                    sal_Bool bWrongs = ( bSpellingChanged || ( nWord & EE_CNTRL_ONLINESPELLING ) ) ? !pNode->GetWrongList()->empty() : sal_False;
                     if ( bSpellingChanged )
                         pNode->DestroyWrongList();
                     if ( bWrongs )
@@ -2131,7 +2131,7 @@ sal_Bool EditEngine::HasOnlineSpellErrors() const
     for ( sal_uInt16 n = 0; n < nNodes; n++ )
     {
         ContentNode* pNode = pImpEditEngine->GetEditDoc().GetObject( n );
-        if ( pNode->GetWrongList() && pNode->GetWrongList()->Count() )
+        if ( pNode->GetWrongList() && !pNode->GetWrongList()->empty() )
             return sal_True;
     }
     return sal_False;

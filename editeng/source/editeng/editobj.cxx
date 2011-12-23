@@ -765,7 +765,7 @@ sal_Bool BinTextObject::HasOnlineSpellErrors() const
     for ( sal_uInt16 n = 0; n < aContents.Count(); n++ )
     {
         ContentInfo* p = aContents.GetObject( n );
-        if ( p->GetWrongList() && p->GetWrongList()->Count() )
+        if ( p->GetWrongList() && !p->GetWrongList()->empty() )
             return sal_True;
     }
     return sal_False;

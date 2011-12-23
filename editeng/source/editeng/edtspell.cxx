@@ -207,8 +207,6 @@ void EditSpellWrapper::CheckSpellTo()
 
 //////////////////////////////////////////////////////////////////////
 
-SV_IMPL_VARARR( WrongRanges, WrongRange );
-
 WrongList::WrongList()
 {
     nInvalidStart = 0;
@@ -244,50 +242,48 @@ void WrongList::TextInserted( sal_uInt16 nPos, sal_uInt16 nNew, sal_Bool bPosIsS
             nInvalidEnd = nPos+nNew;
     }
 
-    for ( sal_uInt16 n = 0; n < Count(); n++ )
+    for (WrongList::iterator i = begin(); i < end(); ++i)
     {
-        WrongRange& rWrong = GetObject( n );
         sal_Bool bRefIsValid = sal_True;
-        if ( rWrong.nEnd >= nPos )
+        if (i->nEnd >= nPos)
         {
             // Move all Wrongs after the insert position...
-            if ( rWrong.nStart > nPos )
+            if (i->nStart > nPos)
             {
-                rWrong.nStart = rWrong.nStart + nNew;
-                rWrong.nEnd = rWrong.nEnd + nNew;
+                i->nStart += nNew;
+                i->nEnd += nNew;
             }
             // 1: Starts before and goes until nPos...
-            else if ( rWrong.nEnd == nPos )
+            else if (i->nEnd == nPos)
             {
                 // Should be halted at a blank!
                 if ( !bPosIsSep )
-                    rWrong.nEnd = rWrong.nEnd + nNew;
+                    i->nEnd += nNew;
             }
             // 2: Starts before and goes until after nPos...
-            else if ( ( rWrong.nStart < nPos ) && ( rWrong.nEnd > nPos ) )
+            else if (i->nStart < nPos && i->nEnd > nPos)
             {
-                rWrong.nEnd = rWrong.nEnd + nNew;
+                i->nEnd += nNew;
                 // When a separator remove and re-examine the Wrong
                 if ( bPosIsSep )
                 {
                     // Split Wrong...
-                    WrongRange aNewWrong( rWrong.nStart, nPos );
-                    rWrong.nStart = nPos+1;
-                    Insert( aNewWrong, n );
+                    WrongRange aNewWrong(i->nStart, nPos);
+                    i->nStart = nPos + 1;
+                    insert(i, aNewWrong);
                     bRefIsValid = sal_False;    // Reference no longer valid after Insert, the other was inserted in front of this position
-                    n++; // This not again ...
+                    ++i; // Not this again...
                 }
             }
             // 3: Attribute starts at position ..
-            else if ( rWrong.nStart == nPos )
+            else if (i->nStart == nPos)
             {
-                rWrong.nEnd = rWrong.nEnd + nNew;
+                i->nEnd += nNew;
                 if ( bPosIsSep )
-                    rWrong.nStart++;
+                    ++(i->nStart);
             }
         }
-        DBG_ASSERT( !bRefIsValid || ( rWrong.nStart < rWrong.nEnd ),
-                "TextInserted, WrongRange: Start >= End?!" );
+        DBG_ASSERT(!bRefIsValid || i->nStart < i->nEnd, "TextInserted, WrongRange: Start >= End?!");
         (void)bRefIsValid;
     }
 
@@ -316,46 +312,40 @@ void WrongList::TextDeleted( sal_uInt16 nPos, sal_uInt16 nDeleted )
         }
     }
 
-    for ( sal_uInt16 n = 0; n < Count(); n++ )
+    for (WrongList::reverse_iterator i = rbegin(); i < rend(); ++i)
     {
-        WrongRange& rWrong = GetObject( n );
         sal_Bool bDelWrong = sal_False;
-        if ( rWrong.nEnd >= nPos )
+        if (i->nEnd >= nPos)
         {
             // Move all Wrongs after the insert position...
-            if ( rWrong.nStart >= nEndChanges )
+            if (i->nStart >= nEndChanges)
             {
-                rWrong.nStart = rWrong.nStart - nDeleted;
-                rWrong.nEnd = rWrong.nEnd - nDeleted;
+                i->nStart -= nDeleted;
+                i->nEnd -= nDeleted;
             }
             // 1. Delete Internal Wrongs ...
-            else if ( ( rWrong.nStart >= nPos ) && ( rWrong.nEnd <= nEndChanges ) )
+            else if (i->nStart >= nPos && i->nEnd <= nEndChanges)
             {
                 bDelWrong = sal_True;
             }
             // 2. Wrong begins before, ends inside or behind it ...
-            else if ( ( rWrong.nStart <= nPos ) && ( rWrong.nEnd > nPos ) )
+            else if (i->nStart <= nPos && i->nEnd > nPos)
             {
-                if ( rWrong.nEnd <= nEndChanges )   // ends inside
-                    rWrong.nEnd = nPos;
+                if (i->nEnd <= nEndChanges)   // ends inside
+                    i->nEnd = nPos;
                 else
-                    rWrong.nEnd = rWrong.nEnd - nDeleted; // ends after
+                    i->nEnd -= nDeleted; // ends after
             }
             // 3. Wrong begins inside, ending after ...
-            else if ( ( rWrong.nStart >= nPos ) && ( rWrong.nEnd > nEndChanges ) )
+            else if (i->nStart >= nPos && i->nEnd > nEndChanges)
             {
-                rWrong.nStart = nEndChanges;
-                rWrong.nStart = rWrong.nStart - nDeleted;
-                rWrong.nEnd = rWrong.nEnd - nDeleted;
+                i->nStart = nEndChanges - nDeleted;
+                i->nEnd -= nDeleted;
             }
         }
-        DBG_ASSERT( rWrong.nStart < rWrong.nEnd,
-                "TextInserted, WrongRange: Start >= End?!" );
+        DBG_ASSERT(i->nStart < i->nEnd, "TextInserted, WrongRange: Start >= End?!" );
         if ( bDelWrong )
-        {
-            Remove( n, 1 );
-            n--;
-        }
+            erase(--(i.base()));
     }
 
     DBG_ASSERT( !DbgIsBuggy(), "InsertWrong: WrongList broken!" );
@@ -367,13 +357,12 @@ sal_Bool WrongList::NextWrong( sal_uInt16& rnStart, sal_uInt16& rnEnd ) const
         rnStart get the start position, is possibly adjusted wrt. Wrong start
         rnEnd does not have to be initialized.
     */
-    for ( sal_uInt16 n = 0; n < Count(); n++ )
+    for (WrongList::const_iterator i = begin(); i < end(); ++i)
     {
-        WrongRange& rWrong = GetObject( n );
-        if ( rWrong.nEnd > rnStart )
+        if ( i->nEnd > rnStart )
         {
-            rnStart = rWrong.nStart;
-            rnEnd = rWrong.nEnd;
+            rnStart = i->nStart;
+            rnEnd = i->nEnd;
             return sal_True;
         }
     }
@@ -382,12 +371,11 @@ sal_Bool WrongList::NextWrong( sal_uInt16& rnStart, sal_uInt16& rnEnd ) const
 
 sal_Bool WrongList::HasWrong( sal_uInt16 nStart, sal_uInt16 nEnd ) const
 {
-    for ( sal_uInt16 n = 0; n < Count(); n++ )
+    for (WrongList::const_iterator i = begin(); i < end(); ++i)
     {
-        WrongRange& rWrong = GetObject( n );
-        if ( ( rWrong.nStart == nStart ) && ( rWrong.nEnd == nEnd ) )
+        if (i->nStart == nStart && i->nEnd == nEnd)
             return sal_True;
-        else if ( rWrong.nStart >= nStart )
+        else if ( i->nStart >= nStart )
             break;
     }
     return sal_False;
@@ -395,12 +383,11 @@ sal_Bool WrongList::HasWrong( sal_uInt16 nStart, sal_uInt16 nEnd ) const
 
 sal_Bool WrongList::HasAnyWrong( sal_uInt16 nStart, sal_uInt16 nEnd ) const
 {
-    for ( sal_uInt16 n = 0; n < Count(); n++ )
+    for (WrongList::const_iterator i = begin(); i < end(); ++i)
     {
-        WrongRange& rWrong = GetObject( n );
-        if ( ( rWrong.nEnd >= nStart ) && ( rWrong.nStart < nEnd ) )
+        if (i->nEnd >= nStart && i->nStart < nEnd)
             return sal_True;
-        else if ( rWrong.nStart >= nEnd )
+        else if (i->nStart >= nEnd)
             break;
     }
     return sal_False;
@@ -409,27 +396,21 @@ sal_Bool WrongList::HasAnyWrong( sal_uInt16 nStart, sal_uInt16 nEnd ) const
 void WrongList::ClearWrongs( sal_uInt16 nStart, sal_uInt16 nEnd,
             const ContentNode* pNode )
 {
-    for ( sal_uInt16 n = 0; n < Count(); n++ )
+    for (WrongList::reverse_iterator i = rbegin(); i < rend(); ++i)
     {
-        WrongRange& rWrong = GetObject( n );
-        if ( ( rWrong.nEnd > nStart ) && ( rWrong.nStart < nEnd ) )
+        if (i->nEnd > nStart && i->nStart < nEnd)
         {
-            if ( rWrong.nEnd > nEnd ) // Runs out
+            if (i->nEnd > nEnd) // Runs out
             {
-                rWrong.nStart = nEnd;
+                i->nStart = nEnd;
                 // Blanks?
-                while ( ( rWrong.nStart < pNode->Len() ) &&
-                            ( ( pNode->GetChar( rWrong.nStart ) == ' ' ) ||
-                              ( pNode->IsFeature( rWrong.nStart ) ) ) )
-                {
-                    rWrong.nStart++;
-                }
+                while (i->nStart < pNode->Len() &&
+                       (pNode->GetChar(i->nStart) == ' ' ||
+                        pNode->IsFeature(i->nStart)))
+                    ++(i->nStart);
             }
             else
-            {
-                Remove( n, 1 );
-                n--;
-            }
+                erase(--(i.base()));
         }
     }
 
@@ -439,47 +420,46 @@ void WrongList::ClearWrongs( sal_uInt16 nStart, sal_uInt16 nEnd,
 void WrongList::InsertWrong( sal_uInt16 nStart, sal_uInt16 nEnd,
             sal_Bool bClearRange )
 {
-    sal_uInt16 nPos = Count();
-    for ( sal_uInt16 n = 0; n < Count(); n++ )
+    WrongList::iterator nPos = end();
+    for (WrongList::iterator i = begin(); i < end(); ++i)
     {
-        WrongRange& rWrong = GetObject( n );
-        if ( rWrong.nStart >= nStart )
+        if (i->nStart >= nStart )
         {
-            nPos = n;
+            nPos = i;
             if ( bClearRange )
             {
                 // It can really only happen that the Wrong starts exactly here
                 // and runs along, but not that there are several ranges ...
                 // Exactly in the range is no one allowed to be, otherwise this
                 // Method can not be called!
-                DBG_ASSERT( ( ( rWrong.nStart == nStart ) && ( rWrong.nEnd > nEnd ) )
-                                || ( rWrong.nStart > nEnd ), "InsertWrong: RangeMismatch!" );
-                if ( ( rWrong.nStart == nStart ) && ( rWrong.nEnd > nEnd ) )
-                    rWrong.nStart = nEnd+1;
+                DBG_ASSERT((i->nStart == nStart && i->nEnd > nEnd) || i->nStart > nEnd, "InsertWrong: RangeMismatch!");
+                if (i->nStart == nStart && i->nEnd > nEnd)
+                    i->nStart = nEnd + 1;
             }
             break;
         }
     }
-    Insert( WrongRange( nStart, nEnd ), nPos );
+
+    if(nPos < end())
+        insert(nPos, WrongRange(nStart, nEnd));
+    else
+        push_back(WrongRange(nStart, nEnd));
 
     DBG_ASSERT( !DbgIsBuggy(), "InsertWrong: WrongList broken!" );
 }
 
 void WrongList::MarkWrongsInvalid()
 {
-    if ( Count() )
-        MarkInvalid( GetObject( 0 ).nStart, GetObject( Count()-1 ).nEnd );
+    if (!empty())
+        MarkInvalid(front().nStart, back().nEnd );
 }
 
-WrongList*  WrongList::Clone() const
+WrongList* WrongList::Clone() const
 {
     WrongList* pNew = new WrongList;
-    for ( sal_uInt16 n = 0; n < Count(); n++ )
-    {
-        WrongRange& rWrong = GetObject( n );
-        pNew->Insert( rWrong, pNew->Count() );
-    }
-
+    pNew->reserve(size());
+    for (WrongList::const_iterator i = begin(); i < end(); ++i)
+        pNew->push_back(*i);
     return pNew;
 }
 
@@ -489,22 +469,15 @@ bool WrongList::operator==(const WrongList& rCompare) const
     // cleck direct members
     if(GetInvalidStart() != rCompare.GetInvalidStart()
         || GetInvalidEnd() != rCompare.GetInvalidEnd()
-        || Count() != rCompare.Count())
-    {
+        || size() != rCompare.size())
         return false;
-    }
 
-    for(sal_uInt16 a(0); a < Count(); a++)
-    {
-        const WrongRange& rCandA(GetObject(a));
-        const WrongRange& rCandB(rCompare.GetObject(a));
+    WrongList::const_iterator rCA = begin();
+    WrongList::const_iterator rCB = rCompare.begin();
 
-        if(rCandA.nStart != rCandB.nStart
-            || rCandA.nEnd != rCandB.nEnd)
-        {
+    for(; rCA < end(); ++rCA)
+        if(rCA->nStart != rCB->nStart || rCA->nEnd != rCB->nEnd)
             return false;
-        }
-    }
 
     return true;
 }
@@ -514,19 +487,15 @@ sal_Bool WrongList::DbgIsBuggy() const
 {
     // Check if the ranges overlap.
     sal_Bool bError = sal_False;
-    for ( sal_uInt16 _nA = 0; !bError && ( _nA < Count() ); _nA++ )
+    for (WrongList::const_iterator i = begin(); !bError && (i < end()); ++i)
     {
-        WrongRange& rWrong = GetObject( _nA );
-        for ( sal_uInt16 nB = _nA+1; !bError && ( nB < Count() ); nB++ )
+        for (WrongList::const_iterator j = i + 1; !bError && (j < end()); ++j)
         {
-            WrongRange& rNextWrong = GetObject( nB );
             // 1) Start before, End after the second Start
-            if (   ( rWrong.nStart <= rNextWrong.nStart )
-                && ( rWrong.nEnd >= rNextWrong.nStart ) )
+            if (i->nStart <= j->nStart && i->nEnd >= j->nStart)
                 bError = sal_True;
             // 2) Start after the second Start, but still before the second End
-            else if (   ( rWrong.nStart >= rNextWrong.nStart)
-                     && ( rWrong.nStart <= rNextWrong.nEnd ) )
+            else if (i->nStart >= j->nStart && i->nStart <= j->nEnd)
                 bError = sal_True;
         }
     }

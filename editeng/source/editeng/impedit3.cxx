@@ -3143,7 +3143,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                                     {
                                         WrongList* pWrongs = pPortion->GetNode()->GetWrongList();
 
-                                        if(pWrongs && pWrongs->HasWrongs())
+                                        if(pWrongs && !pWrongs->empty())
                                         {
                                             sal_uInt16 nStart(nIndex);
                                             sal_uInt16 nEnd(0);
@@ -3367,7 +3367,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
 
                                     }
 
-                                    if ( GetStatus().DoOnlineSpelling() && pPortion->GetNode()->GetWrongList()->HasWrongs() && pTextPortion->GetLen() )
+                                    if ( GetStatus().DoOnlineSpelling() && !pPortion->GetNode()->GetWrongList()->empty() && pTextPortion->GetLen() )
                                     {
                                         {//#105750# adjust LinePos for superscript or subscript text
                                             short _nEsc = aTmpFont.GetEscapement();

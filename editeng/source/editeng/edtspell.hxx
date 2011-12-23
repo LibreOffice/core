@@ -81,10 +81,9 @@ struct WrongRange
     WrongRange( sal_uInt16 nS, sal_uInt16 nE ) { nStart = nS; nEnd = nE; }
 };
 
-SV_DECL_VARARR( WrongRanges, WrongRange, 4, 4 )
 #define NOT_INVALID 0xFFFF
 
-class WrongList : private WrongRanges
+class WrongList : public std::vector<WrongRange>
 {
 private:
     sal_uInt16  nInvalidStart;
@@ -100,12 +99,6 @@ public:
     void    SetValid()              { nInvalidStart = NOT_INVALID; nInvalidEnd = 0; }
     void    MarkInvalid( sal_uInt16 nS, sal_uInt16 nE );
 
-    sal_uInt16          Count() const               { return WrongRanges::Count(); }
-
-    // When one knows what to do:
-    WrongRange&     GetObject( sal_uInt16 n ) const { return WrongRanges::GetObject( n ); }
-    void            InsertWrong( const WrongRange& rWrong, sal_uInt16 nPos );
-
     sal_uInt16  GetInvalidStart() const { return nInvalidStart; }
     sal_uInt16& GetInvalidStart()       { return nInvalidStart; }
 
@@ -115,8 +108,6 @@ public:
     void    TextInserted( sal_uInt16 nPos, sal_uInt16 nChars, sal_Bool bPosIsSep );
     void    TextDeleted( sal_uInt16 nPos, sal_uInt16 nChars );
 
-    void    ResetRanges()           { Remove( 0, Count() ); }
-    sal_Bool    HasWrongs() const       { return Count() != 0; }
     void    InsertWrong( sal_uInt16 nStart, sal_uInt16 nEnd, sal_Bool bClearRange );
     sal_Bool    NextWrong( sal_uInt16& rnStart, sal_uInt16& rnEnd ) const;
     sal_Bool    HasWrong( sal_uInt16 nStart, sal_uInt16 nEnd ) const;
@@ -129,16 +120,6 @@ public:
     // #i102062#
     bool operator==(const WrongList& rCompare) const;
 };
-
-inline void WrongList::InsertWrong( const WrongRange& rWrong, sal_uInt16 nPos )
-{
-    WrongRanges::Insert( rWrong, nPos );
-#ifdef DBG_UTIL
-    DBG_ASSERT( !DbgIsBuggy(), "Insert: WrongList broken!" );
-#endif
-}
-
-
 
 class EdtAutoCorrDoc : public SvxAutoCorrDoc
 {
