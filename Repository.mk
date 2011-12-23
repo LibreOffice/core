@@ -94,6 +94,14 @@ endif
 
 endif
 
+ifneq ($(OS),MACOSX)
+
+$(eval $(call gb_Helper_register_executables,UREBIN,\
+	javaldx \
+))
+
+endif
+
 $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
 	PptImporter \
 	adabas \
@@ -260,6 +268,7 @@ endif
 
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_URE, \
     sal_textenc \
+    sunjavaplugin \
 	xmlreader \
 ))
 
