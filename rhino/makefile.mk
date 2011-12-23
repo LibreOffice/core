@@ -48,23 +48,21 @@ all:
 
 #.IF "$(DISABLE_RHINO)" == ""
 
-TARFILE_NAME=rhino1_5R5
-TARFILE_MD5=798b2ffdc8bcfe7bca2cf92b62caf685
-TARFILE_ROOTDIR=rhino1_5R5
+TARFILE_NAME=rhino1_7R3
+TARFILE_MD5=99d94103662a8d0b571e247a77432ac5
+TARFILE_ROOTDIR=rhino1_7R3
 
 ADDITIONAL_FILES= \
     toolsrc/org/mozilla/javascript/tools/debugger/OfficeScriptInfo.java
 
-PATCH_FILES=rhino1_5R5.patch \
-    rhino1_5R5-find_swing.patch \
-    rhino1_5R5-updateToolTip.patch
+PATCH_FILES=rhino1_7R3.patch
 
 .IF "$(JAVACISGCJ)"=="yes"
 JAVA_HOME=
 .EXPORT : JAVA_HOME
-BUILD_ACTION=$(ANT) -Dbuild.label="build-$(RSCREVISION)" -Dbuild.compiler=gcj jar
+BUILD_ACTION=$(ANT) -Dbuild.label="build-$(RSCREVISION)" -Dbuild.compiler=gcj -Dno-xmlbeans=true jar
 .ELSE
-BUILD_ACTION=$(ANT) -Dbuild.label="build-$(RSCREVISION)" jar
+BUILD_ACTION=$(ANT) -Dbuild.label="build-$(RSCREVISION)" -Dno-xmlbeans=true jar
 .ENDIF
 
 # --- Targets ------------------------------------------------------

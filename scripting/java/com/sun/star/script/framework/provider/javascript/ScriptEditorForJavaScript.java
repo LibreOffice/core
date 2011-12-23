@@ -261,6 +261,11 @@ public class ScriptEditorForJavaScript implements ScriptEditor
                 }
 
                 final Main sdb = new Main("Rhino JavaScript Debugger");
+                org.mozilla.javascript.tools.shell.ShellContextFactory contextFactory =
+                    new org.mozilla.javascript.tools.shell.ShellContextFactory();
+                sdb.attachTo(contextFactory);
+                contextFactory.setLanguageVersion(Context.VERSION_1_8);
+                contextFactory.setOptimizationLevel(9);
                 sdb.pack();
                 sdb.setSize(640, 640);
                 sdb.setVisible(true);
@@ -271,12 +276,14 @@ public class ScriptEditorForJavaScript implements ScriptEditor
                         shutdown();
                     }
                 });
+                /*
                 Context.addContextListener(sdb);
                 sdb.setScopeProvider(new ScopeProvider() {
                     public Scriptable getScope() {
                         return org.mozilla.javascript.tools.shell.Main.getScope();
                     }
                 });
+                */
                 sdb.addWindowListener( new WindowAdapter() {
                     public void windowClosing(WindowEvent e) {
                         shutdown();

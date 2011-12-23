@@ -264,6 +264,8 @@ class ScriptImpl implements XScript
 
                 // Initialize a Rhino Context object
                 ctxt = Context.enter();
+                ctxt.setLanguageVersion(Context.VERSION_1_8);
+                ctxt.setOptimizationLevel(9);
 
                 /* The ImporterTopLevel ensures that importClass and
                    importPackage statements work in Javascript scripts
@@ -289,14 +291,14 @@ class ScriptImpl implements XScript
             catch (JavaScriptException jse) {
                 LogUtils.DEBUG( "Caught JavaScriptException exception for JavaScript type = " + jse.getClass() );
                 String message = jse.getMessage();
-                //int lineNo = jse.getLineNumber();
+                int lineNo = jse.lineNumber();
                 Object wrap = jse.getValue();
                 LogUtils.DEBUG( "\t message  " + message );
                 LogUtils.DEBUG( "\t wrapped type " + wrap.getClass() );
                 LogUtils.DEBUG( "\t wrapped toString  " + wrap.toString() );
                 ScriptExceptionRaisedException se = new
                     ScriptExceptionRaisedException( message );
-                se.lineNum = -1;
+                se.lineNum = lineNo;
                 se.language = "JavaScript";
                 se.scriptName = metaData.getLanguageName();
                 se.exceptionType = wrap.getClass().getName();
