@@ -291,8 +291,6 @@ public:
     String GetAutoCorrFileName( LanguageType eLang = LANGUAGE_SYSTEM,
                                 sal_Bool bNewFile = sal_False,
                                 sal_Bool bTstUserExist = sal_False ) const;
-    void SetUserAutoCorrFileName( const String& rNew );
-    void SetShareAutoCorrFileName( const String& rNew );
 
     // Query/Set the current settings of AutoCorrect
     long GetFlags() const                       { return nFlags; }

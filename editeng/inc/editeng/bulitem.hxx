@@ -94,10 +94,6 @@ public:
     TYPEINFO();
 
     SvxBulletItem( sal_uInt16 nWhich = 0 );
-    SvxBulletItem( sal_uInt8 nStyle, const Font& rFont, sal_uInt16 nStart = 0, sal_uInt16 nWhich = 0 );
-    SvxBulletItem( const Font& rFont, sal_Unicode cSymbol, sal_uInt16 nWhich=0 );
-    SvxBulletItem( const Bitmap&, sal_uInt16 nWhich = 0 );
-    SvxBulletItem( const GraphicObject&, sal_uInt16 nWhich = 0 );
     SvxBulletItem( SvStream& rStrm, sal_uInt16 nWhich = 0 );
     SvxBulletItem( const SvxBulletItem& );
     ~SvxBulletItem();
@@ -117,9 +113,6 @@ public:
     sal_uInt8                GetJustification() const { return nJustify; }
     Font                GetFont() const { return aFont; }
     sal_uInt16              GetScale() const { return nScale; }
-
-    Bitmap              GetBitmap() const;
-    void                SetBitmap( const Bitmap& rBmp );
 
     const GraphicObject& GetGraphicObject() const;
     void                 SetGraphicObject( const GraphicObject& rGraphicObject );

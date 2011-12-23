@@ -1564,34 +1564,6 @@ sal_Bool SvxAutoCorrect::AddWrtSttException( const String& rNew,
     return pLists->AddToWrdSttExceptList(rNew);
 }
 
-
-
-
-void SvxAutoCorrect::SetUserAutoCorrFileName( const String& rNew )
-{
-    if( sUserAutoCorrFile != rNew )
-    {
-        sUserAutoCorrFile = rNew;
-
-        // if the lists are set, they must now be deleted
-        lcl_ClearTable(*pLangTable);
-        nFlags &= ~(CplSttLstLoad | WrdSttLstLoad | ChgWordLstLoad );
-    }
-}
-
-void SvxAutoCorrect::SetShareAutoCorrFileName( const String& rNew )
-{
-    if( sShareAutoCorrFile != rNew )
-    {
-        sShareAutoCorrFile = rNew;
-
-        // if the lists are set, they must now be deleted
-        lcl_ClearTable(*pLangTable);
-        nFlags &= ~(CplSttLstLoad | WrdSttLstLoad | ChgWordLstLoad );
-    }
-}
-
-
 sal_Bool SvxAutoCorrect::GetPrevAutoCorrWord( SvxAutoCorrDoc& rDoc,
                                         const String& rTxt, xub_StrLen nPos,
                                         String& rWord ) const

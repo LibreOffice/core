@@ -123,57 +123,6 @@ SvxBulletItem::SvxBulletItem( sal_uInt16 _nWhich ) : SfxPoolItem( _nWhich )
 
 // -----------------------------------------------------------------------
 
-SvxBulletItem::SvxBulletItem( sal_uInt8 nNewStyle, const Font& rFont, sal_uInt16 /*nStart*/, sal_uInt16 _nWhich ) : SfxPoolItem( _nWhich )
-{
-    SetDefaults_Impl();
-    nStyle = nNewStyle;
-    aFont  = rFont;
-    nValidMask = 0xFFFF;
-}
-
-// -----------------------------------------------------------------------
-
-SvxBulletItem::SvxBulletItem( const Font& rFont, xub_Unicode cSymb, sal_uInt16 _nWhich ) : SfxPoolItem( _nWhich )
-{
-    SetDefaults_Impl();
-    aFont   = rFont;
-    cSymbol = cSymb;
-    nStyle  = BS_BULLET;
-    nValidMask = 0xFFFF;
-}
-
-// -----------------------------------------------------------------------
-
-SvxBulletItem::SvxBulletItem( const Bitmap& rBmp, sal_uInt16 _nWhich ) : SfxPoolItem( _nWhich )
-{
-    SetDefaults_Impl();
-
-    if( !rBmp.IsEmpty() )
-    {
-        pGraphicObject = new GraphicObject( rBmp );
-        nStyle = BS_BMP;
-    }
-
-    nValidMask = 0xFFFF;
-}
-
-// -----------------------------------------------------------------------
-
-SvxBulletItem::SvxBulletItem( const GraphicObject& rGraphicObject, sal_uInt16 _nWhich ) : SfxPoolItem( _nWhich )
-{
-    SetDefaults_Impl();
-
-    if( ( GRAPHIC_NONE != pGraphicObject->GetType() ) && ( GRAPHIC_DEFAULT != pGraphicObject->GetType() ) )
-    {
-        pGraphicObject = new GraphicObject( rGraphicObject );
-        nStyle = BS_BMP;
-    }
-
-    nValidMask = 0xFFFF;
-}
-
-// -----------------------------------------------------------------------
-
 SvxBulletItem::SvxBulletItem( SvStream& rStrm, sal_uInt16 _nWhich ) :
     SfxPoolItem( _nWhich ),
     pGraphicObject( NULL )
@@ -460,39 +409,6 @@ SfxItemPresentation SvxBulletItem::GetPresentation
         default: ; //prevent warning
     }
     return eRet;
-}
-
-//------------------------------------------------------------------------
-
-Bitmap SvxBulletItem::GetBitmap() const
-{
-    if( pGraphicObject )
-        return pGraphicObject->GetGraphic().GetBitmap();
-    else
-    {
-        const Bitmap aDefaultBitmap;
-        return aDefaultBitmap;
-    }
-}
-
-//------------------------------------------------------------------------
-
-void SvxBulletItem::SetBitmap( const Bitmap& rBmp )
-{
-    if( rBmp.IsEmpty() )
-    {
-        if( pGraphicObject )
-        {
-            delete pGraphicObject;
-            pGraphicObject = NULL;
-        }
-    }
-    else
-    {
-        delete pGraphicObject;
-        pGraphicObject = new GraphicObject( rBmp );
-
-    }
 }
 
 //------------------------------------------------------------------------
