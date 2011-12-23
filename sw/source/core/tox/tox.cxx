@@ -323,7 +323,9 @@ SwForm::SwForm( TOXTypes eTyp ) // #i21237#
     SwFormTokens aTokens;
     if (TOX_CONTENT == eType)
     {
-        aTokens.push_back(SwFormToken(TOKEN_LINK_START));
+        SwFormToken aLinkStt (TOKEN_LINK_START);
+        aLinkStt.sCharStyleName = String(SW_RES(STR_POOLCHR_TOXJUMP));
+        aTokens.push_back(aLinkStt);
         aTokens.push_back(SwFormToken(TOKEN_ENTRY_NO));
         aTokens.push_back(SwFormToken(TOKEN_ENTRY_TEXT));
     }

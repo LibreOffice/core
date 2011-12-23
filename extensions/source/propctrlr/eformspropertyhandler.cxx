@@ -100,7 +100,7 @@ namespace pcr
     ::rtl::OUString EFormsPropertyHandler::getModelNamePropertyValue() const
     {
         ::rtl::OUString sModelName = m_pHelper->getCurrentFormModelName();
-        if ( !sModelName.getLength() )
+        if ( sModelName.isEmpty() )
             sModelName = m_sBindingLessModelName;
         return sModelName;
     }
@@ -214,7 +214,7 @@ namespace pcr
                 bool bPreviouslyEmptyModel = !m_pHelper->getCurrentFormModel().is();
 
                 Reference< XPropertySet > xNewBinding;
-                if ( sNewBindingName.getLength() )
+                if ( !sNewBindingName.isEmpty() )
                     // obtain the binding with this name, for the current model
                     xNewBinding = m_pHelper->getOrCreateBindingForModel( getModelNamePropertyValue(), sNewBindingName );
 
@@ -448,7 +448,7 @@ namespace pcr
         {
             nControlType = PropertyControlType::ComboBox;
             ::rtl::OUString sCurrentModel( getModelNamePropertyValue() );
-            if ( sCurrentModel.getLength() )
+            if ( !sCurrentModel.isEmpty() )
                 m_pHelper->getBindingNames( sCurrentModel, aListEntries );
         }
         break;
@@ -518,9 +518,9 @@ namespace pcr
             // the aspect of the binding which the dialog should modify
             ::rtl::OUString sFacetName( _rPropertyName );
 
-            OSL_ENSURE( xModel.is() && xBinding.is() && sFacetName.getLength(),
+            OSL_ENSURE( xModel.is() && xBinding.is() && !sFacetName.isEmpty(),
                 "EFormsPropertyHandler::onInteractivePropertySelection: something is missing for the dialog initialization!" );
-            if ( !( xModel.is() && xBinding.is() && sFacetName.getLength() ) )
+            if ( !( xModel.is() && xBinding.is() && !sFacetName.isEmpty() ) )
                 return InteractiveSelectionResult_Cancelled;
 
             xDialogProps->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FormModel" ) ), makeAny( xModel ) );
@@ -584,7 +584,7 @@ namespace pcr
                 break;
             ::rtl::OUString sDataModelName;
             OSL_VERIFY( _rNewValue >>= sDataModelName );
-            sal_Bool bBoundToSomeModel = 0 != sDataModelName.getLength();
+            sal_Bool bBoundToSomeModel = !sDataModelName.isEmpty();
             _rxInspectorUI->rebuildPropertyUI( PROPERTY_BINDING_NAME );
             _rxInspectorUI->enablePropertyUI( PROPERTY_BINDING_NAME, bBoundToSomeModel );
         }
@@ -592,7 +592,7 @@ namespace pcr
 
         case PROPERTY_ID_BINDING_NAME:
         {
-            sal_Bool bHaveABinding = ( m_pHelper->getCurrentBindingName().getLength() > 0 );
+            sal_Bool bHaveABinding = !m_pHelper->getCurrentBindingName().isEmpty();
             _rxInspectorUI->enablePropertyUI( PROPERTY_BIND_EXPRESSION, bHaveABinding );
             _rxInspectorUI->enablePropertyUI( PROPERTY_XSD_REQUIRED, bHaveABinding );
             _rxInspectorUI->enablePropertyUI( PROPERTY_XSD_RELEVANT, bHaveABinding );

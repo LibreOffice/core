@@ -275,7 +275,7 @@ Sequence<PluginDescription> XPluginManager_Impl::impl_getPluginDescriptions() th
         do
         {
             rtl::OString aPath(aSearchPath.getToken(0, ':', nIndex));
-            if (aPath.getLength())
+            if (!aPath.isEmpty())
             {
                 DIR* pDIR = opendir(aPath.getStr());
                 struct dirent* pDirEnt = NULL;

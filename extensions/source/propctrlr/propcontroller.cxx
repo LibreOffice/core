@@ -511,7 +511,7 @@ namespace pcr
     void SAL_CALL OPropertyBrowserController::restoreViewData( const Any& Data ) throw(RuntimeException)
     {
         ::rtl::OUString sPageSelection;
-        if ( ( Data >>= sPageSelection ) && sPageSelection.getLength() )
+        if ( ( Data >>= sPageSelection ) && !sPageSelection.isEmpty() )
         {
             m_sPageSelection = sPageSelection;
             selectPageFromViewData();
@@ -687,9 +687,9 @@ namespace pcr
             }
         }
 
-        if ( m_sPageSelection.getLength() )
+        if ( !m_sPageSelection.isEmpty() )
             m_sLastValidPageSelection = m_sPageSelection;
-        else if ( sOldSelection.getLength() )
+        else if ( !sOldSelection.isEmpty() )
             m_sLastValidPageSelection = sOldSelection;
     }
 
@@ -1168,13 +1168,13 @@ namespace pcr
             _rDescriptor.sName = _rProperty.Name;
             _rDescriptor.aValue = _rDescriptor.xPropertyHandler->getPropertyValue( _rProperty.Name );
 
-            if ( !_rDescriptor.DisplayName.getLength() )
+            if ( _rDescriptor.DisplayName.isEmpty() )
             {
             #ifdef DBG_UTIL
                 ::rtl::OString sMessage( "OPropertyBrowserController::describePropertyLine: handler did not provide a display name for '" );
                 sMessage += ::rtl::OString( _rProperty.Name.getStr(), _rProperty.Name.getLength(), RTL_TEXTENCODING_ASCII_US );
                 sMessage += ::rtl::OString( "'!" );
-                DBG_ASSERT( _rDescriptor.DisplayName.getLength(), sMessage.getStr() );
+                DBG_ASSERT( !_rDescriptor.DisplayName.isEmpty(), sMessage.getStr() );
             #endif
                 _rDescriptor.DisplayName = _rProperty.Name;
             }
@@ -1250,7 +1250,7 @@ namespace pcr
                 bool bIsActuatingProperty = impl_isActuatingProperty_nothrow( property->second.Name );
 
             #if OSL_DEBUG_LEVEL > 0
-                if ( !aDescriptor.Category.getLength() )
+                if ( aDescriptor.Category.isEmpty() )
                 {
                     ::rtl::OString sMessage( "OPropertyBrowserController::UpdateUI: empty category provided for property '" );
                     sMessage += ::rtl::OString( property->second.Name.getStr(), property->second.Name.getLength(), osl_getThreadTextEncoding() );
@@ -1320,7 +1320,7 @@ namespace pcr
             }
 
             // activate the previously active page (if possible)
-            if ( m_sLastValidPageSelection.getLength() )
+            if ( !m_sLastValidPageSelection.isEmpty() )
                 m_sPageSelection = m_sLastValidPageSelection;
             selectPageFromViewData();
         }

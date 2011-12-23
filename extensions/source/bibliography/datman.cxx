@@ -922,7 +922,7 @@ Reference< XForm >  BibDataManager::createDatabaseForm(BibDBDescriptor& rDesc)
             if(aTableNameSeq.getLength() > 0)
             {
                 const ::rtl::OUString* pTableNames = aTableNameSeq.getConstArray();
-                if(rDesc.sTableOrQuery.getLength())
+                if(!rDesc.sTableOrQuery.isEmpty())
                     aActiveDataTable = rDesc.sTableOrQuery;
                 else
                 {
@@ -1045,7 +1045,7 @@ Sequence< ::rtl::OUString > BibDataManager::getQueryFields()
 {
     BibConfig* pConfig = BibModul::GetConfig();
     ::rtl::OUString aFieldString = pConfig->getQueryField();
-    if(!aFieldString.getLength())
+    if(aFieldString.isEmpty())
     {
         Sequence< ::rtl::OUString > aSeq = getQueryFields();
         const ::rtl::OUString* pFields = aSeq.getConstArray();
@@ -1063,7 +1063,7 @@ void BibDataManager::startQueryWith(const ::rtl::OUString& rQuery)
     pConfig->setQueryText( rQuery );
 
     ::rtl::OUString aQueryString;
-    if(rQuery.getLength()>0)
+    if(!rQuery.isEmpty())
     {
         aQueryString=aQuoteChar;
         aQueryString+=getQueryField();
@@ -1538,7 +1538,7 @@ void BibDataManager::SetMeAsUidListener()
             }
         }
 
-        if(theFieldName.getLength()>0)
+        if(!theFieldName.isEmpty())
         {
             Reference< XPropertySet >  xPropSet;
             Any aElement;
@@ -1582,7 +1582,7 @@ void BibDataManager::RemoveMeAsUidListener()
             }
         }
 
-        if(theFieldName.getLength()>0)
+        if(!theFieldName.isEmpty())
         {
             Reference< XPropertySet >  xPropSet;
             Any aElement;
@@ -1634,7 +1634,7 @@ void BibDataManager::DispatchDBChangeDialog()
 
 const ::rtl::OUString& BibDataManager::GetIdentifierMapping()
 {
-    if(!sIdentifierMapping.getLength())
+    if(sIdentifierMapping.isEmpty())
     {
         BibConfig* pConfig = BibModul::GetConfig();
         BibDBDescriptor aDesc;

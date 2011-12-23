@@ -62,15 +62,20 @@ $(call gb_JavaClassSet_get_clean_target,%) :
 
 define gb_JavaClassSet_JavaClassSet
 $(call gb_JavaClassSet_get_target,$(1)) : JARDEPS :=
+
 endef
 
 define gb_JavaClassSet__get_sourcefile
 $(SRCDIR)/$(1).java
 endef
 
+define gb_JavaClassSet__get_generated_sourcefile
+$(WORKDIR)/$(1).java
+endef
+
 define gb_JavaClassSet_add_sourcefile
-$(eval $(call gb_JavaClassSet_get_target,$(1)) : \
-   $(call gb_JavaClassSet__get_sourcefile,$(2)))
+$(call gb_JavaClassSet_get_target,$(1)) : $(call gb_JavaClassSet__get_sourcefile,$(2))
+
 endef
 
 define gb_JavaClassSet_add_sourcefiles
@@ -78,43 +83,60 @@ $(foreach sourcefile,$(2),$(call gb_JavaClassSet_add_sourcefile,$(1),$(sourcefil
 
 endef
 
+define gb_JavaClassSet_add_generated_sourcefile
+$(call gb_JavaClassSet_get_target,$(1)) : $(call gb_JavaClassSet__get_generated_sourcefile,$(2))
+$(call gb_JavaClassSet__get_generated_sourcefile,$(2)) : $(gb_Helper_PHONY)
+
+endef
+
+define gb_JavaClassSet_add_generated_sourcefiles
+$(foreach sourcefile,$(2),$(call gb_JavaClassSet_add_generated_sourcefile,$(1),$(sourcefile)))
+
+endef
+
 define gb_JavaClassSet_set_classpath
-$(eval $(call gb_JavaClassSet_get_target,$(1)) : T_CP := $(2))
+$(call gb_JavaClassSet_get_target,$(1)) : T_CP := $(2)
 
 endef
 
 # problem: currently we can't get these dependencies to work
 # build order dependency is a hack to get these prerequisites out of the way in the build command
 define gb_JavaClassSet_add_jar
-$(eval $(call gb_JavaClassSet_get_target,$(1)) : $(2))
-$(eval $(call gb_JavaClassSet_get_target,$(1)) : T_CP := $$(T_CP)$(gb_CLASSPATHSEP)$(strip $(2)))
-$(eval $(call gb_JavaClassSet_get_target,$(1)) : JARDEPS += $(2))
+$(call gb_JavaClassSet_get_target,$(1)) : $(2)
+$(call gb_JavaClassSet_get_target,$(1)) : T_CP := $$(T_CP)$(gb_CLASSPATHSEP)$(strip $(2))
+$(call gb_JavaClassSet_get_target,$(1)) : JARDEPS += $(2)
+
 endef
 
 # this does not generate dependency on the jar
 define gb_JavaClassSet_add_system_jar
-$(eval $(call gb_JavaClassSet_get_target,$(1)) : T_CP := $$(T_CP)$(gb_CLASSPATHSEP)$(strip $(2)))
-$(eval $(call gb_JavaClassSet_get_target,$(1)) : JARDEPS += $(2))
+$(call gb_JavaClassSet_get_target,$(1)) : T_CP := $$(T_CP)$(gb_CLASSPATHSEP)$(strip $(2))
+$(call gb_JavaClassSet_get_target,$(1)) : JARDEPS += $(2)
+
 endef
 
 define gb_JavaClassSet_add_jars
 $(foreach jar,$(2),$(call gb_JavaClassSet_add_jar,$(1),$(jar)))
+
 endef
 
 define gb_JavaClassSet_add_system_jars
 $(foreach jar,$(2),$(call gb_JavaClassSet_add_system_jar,$(1),$(jar)))
+
 endef
 
 # this forwards to functions that must be defined in RepositoryExternal.mk.
-# $(call gb_LinkTarget_use_external,library,external)
+# $(eval $(call gb_LinkTarget_use_external,library,external))
 define gb_JavaClassSet_use_external
-$(eval $(if $(value gb_JavaClassSet__use_$(2)),\
+$(if $(value gb_JavaClassSet__use_$(2)),\
   $(call gb_JavaClassSet__use_$(2),$(1)),\
-  $(error gb_JavaClassSet_use_external: unknown external: $(2))))
+  $(error gb_JavaClassSet_use_external: unknown external: $(2)))
+
 endef
 
 define gb_JavaClassSet_use_externals
 $(foreach external,$(2),$(call gb_JavaClassSet_use_external,$(1),$(external)))
+
 endef
 
 # vim: set noet sw=4:

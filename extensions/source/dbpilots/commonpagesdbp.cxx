@@ -285,7 +285,7 @@ namespace dbp
             try
             {
                 ::rtl::OUString sCurrentDatasource = m_aDatasource.GetSelectEntry();
-                if (sCurrentDatasource.getLength())
+                if (!sCurrentDatasource.isEmpty())
                 {
                     // obtain the DS object
                     Reference< XCompletedConnection > xDatasource;

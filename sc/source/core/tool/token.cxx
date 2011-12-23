@@ -1875,9 +1875,25 @@ bool SkipReference(ScToken* pToken, const ScAddress& rPos, const ScDocument* pOl
     return false;
 }
 
+void AdjustSingleRefData( ScSingleRefData& rRef, const ScAddress& rOldPos, const ScAddress& rNewPos)
+{
+    SCsCOL nCols = rNewPos.Col() - rOldPos.Col();
+    SCsROW nRows = rNewPos.Row() - rOldPos.Row();
+    SCsTAB nTabs = rNewPos.Tab() - rOldPos.Tab();
+
+    if (!rRef.IsColRel())
+        rRef.nCol += nCols;
+
+    if (!rRef.IsRowRel())
+        rRef.nRow += nRows;
+
+    if (!rRef.IsTabRel())
+        rRef.nTab += nTabs;
 }
 
-void ScTokenArray::ReadjusteAbsolute3DReferences( const ScDocument* pOldDoc, const ScDocument* pNewDoc, const ScAddress& rPos, bool bRangeName )
+}
+
+void ScTokenArray::ReadjustAbsolute3DReferences( const ScDocument* pOldDoc, const ScDocument* pNewDoc, const ScAddress& rPos, bool bRangeName )
 {
     for ( sal_uInt16 j=0; j<nLen; ++j )
     {
@@ -1885,12 +1901,12 @@ void ScTokenArray::ReadjusteAbsolute3DReferences( const ScDocument* pOldDoc, con
         {
             case svDoubleRef :
             {
+                if (SkipReference(static_cast<ScToken*>(pCode[j]), rPos, pOldDoc, bRangeName))
+                    continue;
+
                 ScComplexRefData& rRef = static_cast<ScToken*>(pCode[j])->GetDoubleRef();
                 ScSingleRefData& rRef2 = rRef.Ref2;
                 ScSingleRefData& rRef1 = rRef.Ref1;
-
-                if (SkipReference(static_cast<ScToken*>(pCode[j]), rPos, pOldDoc, bRangeName))
-                    continue;
 
                 if ( (rRef2.IsFlag3D() && !rRef2.IsTabRel()) || (rRef1.IsFlag3D() && !rRef1.IsTabRel()) )
                 {
@@ -1906,10 +1922,10 @@ void ScTokenArray::ReadjusteAbsolute3DReferences( const ScDocument* pOldDoc, con
             break;
             case svSingleRef :
             {
-                ScSingleRefData& rRef = static_cast<ScToken*>(pCode[j])->GetSingleRef();
-
                 if (SkipReference(static_cast<ScToken*>(pCode[j]), rPos, pOldDoc, bRangeName))
                     continue;
+
+                ScSingleRefData& rRef = static_cast<ScToken*>(pCode[j])->GetSingleRef();
 
                 if ( rRef.IsFlag3D() && !rRef.IsTabRel() )
                 {
@@ -1922,6 +1938,46 @@ void ScTokenArray::ReadjusteAbsolute3DReferences( const ScDocument* pOldDoc, con
                     pToken->IncRef();
                     pCode[j] = pToken;
                 }
+            }
+            break;
+            default:
+            {
+                // added to avoid warnings
+            }
+        }
+    }
+}
+
+void ScTokenArray::AdjustAbsoluteRefs( const ScDocument* pOldDoc, const ScAddress& rOldPos, const ScAddress& rNewPos)
+{
+    for ( sal_uInt16 j=0; j<nLen; ++j )
+    {
+        switch ( pCode[j]->GetType() )
+        {
+            case svDoubleRef :
+            {
+                if (!SkipReference(static_cast<ScToken*>(pCode[j]), rOldPos, pOldDoc, false))
+                    continue;
+
+                ScComplexRefData& rRef = static_cast<ScToken*>(pCode[j])->GetDoubleRef();
+                ScSingleRefData& rRef2 = rRef.Ref2;
+                ScSingleRefData& rRef1 = rRef.Ref1;
+
+                AdjustSingleRefData( rRef1, rOldPos, rNewPos );
+                AdjustSingleRefData( rRef2, rOldPos, rNewPos );
+
+            }
+            break;
+            case svSingleRef :
+            {
+                if (!SkipReference(static_cast<ScToken*>(pCode[j]), rOldPos, pOldDoc, false))
+                    continue;
+
+                ScSingleRefData& rRef = static_cast<ScToken*>(pCode[j])->GetSingleRef();
+
+                AdjustSingleRefData( rRef, rOldPos, rNewPos );
+
+
             }
             break;
             default:

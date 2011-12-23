@@ -381,7 +381,7 @@ sal_Bool SoPluginInstance::SetWindow(NSP_HWND hParent, int x, int y, int w, int 
         m_nX = x;
         m_nY = y;
 
-        if (0 == m_sURL.getLength())
+        if ( m_sURL.isEmpty() )
             return sal_True;
 
         if(!mxRemoteMSF.is())

@@ -26,7 +26,7 @@ $(eval $(call gb_Jar_add_jars,XSLTFilter,\
 	$(OUTDIR)/bin/juh.jar \
 ))
 
-$(call gb_Jar_use_externals,XSLTFilter,saxon)
+$(eval $(call gb_Jar_use_externals,XSLTFilter,saxon))
 
 $(eval $(call gb_Jar_set_componentfile,XSLTFilter,filter/source/xsltfilter/XSLTFilter.jar,OOO))
 

@@ -195,7 +195,7 @@ namespace pcr
             ::rtl::OUString sControlSource;
             _rNewValue >>= sControlSource;
             if ( impl_isSupportedProperty_nothrow( PROPERTY_ID_BOUND_CELL ) )
-                _rxInspectorUI->enablePropertyUI( PROPERTY_BOUND_CELL, sControlSource.getLength() == 0 );
+                _rxInspectorUI->enablePropertyUI( PROPERTY_BOUND_CELL, sControlSource.isEmpty() );
         }
         break;  // case PROPERTY_ID_CONTROLSOURCE
 

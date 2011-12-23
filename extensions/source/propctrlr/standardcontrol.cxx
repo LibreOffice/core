@@ -216,7 +216,7 @@ namespace pcr
         ::rtl::OUString sText( getTypedControlWindow()->GetText() );
         if ( m_bIsPassword )
         {
-            if ( sText.getLength() )
+            if ( !sText.isEmpty() )
                 aPropValue <<= (sal_Int16)sText.getStr()[0];
         }
         else
@@ -829,7 +829,7 @@ namespace pcr
         ::rtl::OUString sControlValue( getTypedControlWindow()->GetSelectEntry() );
 
         Any aPropValue;
-        if ( sControlValue.getLength() )
+        if ( !sControlValue.isEmpty() )
             aPropValue <<= sControlValue;
         return aPropValue;
     }

@@ -302,9 +302,9 @@ my_components += \
     ado \
     fop \
     fps \
-    java_uno_accessbridge \
     smplmail \
     wininetbe1 \
+    component/accessibility/bridge/org/openoffice/accessibility/java_uno_accessbridge \
     component/dtrans/source/generic/dtrans \
     component/dtrans/util/dnd \
     component/dtrans/util/ftransl \

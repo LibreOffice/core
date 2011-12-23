@@ -362,7 +362,7 @@ Download::start(const rtl::OUString& rURL, const rtl::OUString& rFile, const rtl
 
     // when rFile is empty, there is no remembered file name. If there is already a file with the
     // same name ask the user if she wants to resume a download or restart the download
-    if ( !aFile.getLength() )
+    if ( aFile.isEmpty() )
     {
         // GetFileName()
         rtl::OUString aURL( rURL );
@@ -401,7 +401,7 @@ Download::start(const rtl::OUString& rURL, const rtl::OUString& rFile, const rtl
     out.DestinationDir = rDestinationDir;
     out.Handler = m_aHandler;
 
-    if( aFile.getLength() > 0 )
+    if( !aFile.isEmpty() )
     {
         oslFileError rc = osl_openFile(aFile.pData, &out.FileHandle, osl_File_OpenFlag_Write);
 

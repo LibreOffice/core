@@ -1,3 +1,4 @@
+# -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,38 +26,15 @@
 #
 #*************************************************************************
 
-PRJNAME	= accessibility
-PRJ		= ..$/..$/..$/..
-TARGET	= java_uno_accessbridge
-PACKAGE	= org$/openoffice$/accessibility
+gb_PARTIALBUILD := T
+ifeq ($(strip $(SOLARENV)),)
+include $(dir $(realpath $(firstword $(MAKEFILE_LIST))))/../solenv/gbuild/source_and_rerun.mk
+else
 
-# --- Settings -----------------------------------------------------
+gb_SourceEnvAndRecurse_STAGE=gbuild
+include $(SOLARENV)/gbuild/gbuild.mk
 
-.INCLUDE :  settings.mk
+$(eval $(call gb_Module_make_global_targets,$(shell ls $(dir $(realpath $(firstword $(MAKEFILE_LIST))))/Module*.mk)))
 
-JARFILES = jurt.jar unoil.jar ridl.jar 
-JAVAFILES = \
-    AccessBridge.java \
-    KeyHandler.java \
-    PopupWindow.java \
-    WindowsAccessBridgeAdapter.java
-
-JAVACLASSFILES= $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
-
-JARTARGET               = $(TARGET).jar
-JARCOMPRESS             = TRUE
-JARCLASSDIRS            = $(PACKAGE) org/openoffice/java/accessibility 
-CUSTOMMANIFESTFILE      = manifest
-
-# --- Targets ------------------------------------------------------
-
-
-.INCLUDE :  target.mk
-
-ALLTAR : $(MISC)/java_uno_accessbridge.component
-
-$(MISC)/java_uno_accessbridge.component .ERRREMOVE : \
-        $(SOLARENV)/bin/createcomponent.xslt java_uno_accessbridge.component
-    $(XSLTPROC) --nonet --stringparam uri \
-        '$(COMPONENTPREFIX_BASIS_JAVA)$(JARTARGET)' -o $@ \
-        $(SOLARENV)/bin/createcomponent.xslt java_uno_accessbridge.component
+endif
+# vim: set noet sw=4 ts=4:

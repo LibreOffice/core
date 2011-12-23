@@ -174,7 +174,7 @@ uno::Sequence< ::rtl::OUString >  SAL_CALL StringRepresentation::getSupportedSer
     {
         sReturn = convertSimpleToString( PropertyValue );
 #ifdef DBG_UTIL
-        if ( !sReturn.getLength() && PropertyValue.hasValue() )
+        if ( sReturn.isEmpty() && PropertyValue.hasValue() )
         {
             ::rtl::OString sMessage( "StringRepresentation::convertPropertyValueToStringRepresentation: cannot convert values of type '" );
             sMessage += ::rtl::OString( PropertyValue.getValueType().getTypeName().getStr(), PropertyValue.getValueType().getTypeName().getLength(), RTL_TEXTENCODING_ASCII_US );
@@ -219,7 +219,7 @@ uno::Any SAL_CALL StringRepresentation::convertToPropertyValue(const ::rtl::OUSt
 
     #if OSL_DEBUG_LEVEL > 0
         // could not convert ...
-        if ( !bCanConvert && ControlValue.getLength() )
+        if ( !bCanConvert && !ControlValue.isEmpty() )
         {
             ::rtl::OString sMessage( "StringRepresentation::convertStringRepresentationToPropertyValue: cannot convert into values of type '" );
             sMessage += ::rtl::OString( ControlValueType.getTypeName().getStr(), ControlValueType.getTypeName().getLength(), RTL_TEXTENCODING_ASCII_US );
@@ -285,7 +285,7 @@ void SAL_CALL StringRepresentation::initialize(const uno::Sequence< uno::Any > &
                 }
             }
 
-            if ( !sReturn.getLength() )
+            if ( sReturn.isEmpty() )
                 m_xTypeConverter->convertToSimpleType( _rValue, uno::TypeClass_STRING ) >>= sReturn;
         }
         catch( const script::CannotConvertException& ) { }
@@ -340,7 +340,7 @@ namespace
     void splitComposedStringToSequence( const ::rtl::OUString& _rComposed, Sequence< ElementType >& _out_SplitUp, const Transformer& _rTransformer )
     {
         _out_SplitUp.realloc( 0 );
-        if ( !_rComposed.getLength() )
+        if ( _rComposed.isEmpty() )
             return;
         sal_Int32 tokenPos = 0;
         do
@@ -464,7 +464,7 @@ bool StringRepresentation::convertGenericValueToString( const uno::Any& _rValue,
 uno::Any StringRepresentation::convertStringToSimple( const ::rtl::OUString& _rValue,const uno::TypeClass& _ePropertyType )
 {
     uno::Any aReturn;
-    if ( m_xTypeConverter.is() && _rValue.getLength() )
+    if ( m_xTypeConverter.is() && !_rValue.isEmpty() )
     {
         try
         {

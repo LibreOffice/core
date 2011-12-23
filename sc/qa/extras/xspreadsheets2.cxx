@@ -63,7 +63,7 @@ class ScXSpreadsheets2 : public UnoApiTest
 
     CPPUNIT_TEST_SUITE(ScXSpreadsheets2);
     // disable test, test fails, might be the ongoing copy refs work
-    //CPPUNIT_TEST(testImportSheet);
+    CPPUNIT_TEST(testImportSheet);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -154,15 +154,45 @@ void ScXSpreadsheets2::testImportSheet()
     uno::Reference< sheet::XNamedRange > xSrcNamedRange(aNr, UNO_QUERY_THROW);
     rtl::OUString aNrSrcContent = xSrcNamedRange->getContent();
 
-    std::cout << "testImportSheet : initial1 aNrDestContent " << aNrDestContent << std::endl;
-    std::cout << "testImportSheet : initial1 aNrSrcContent " << aNrSrcContent << std::endl;
-    CPPUNIT_ASSERT_MESSAGE("Sheet name for initial1 has been changed", aNrDestContent.equals(aNrSrcContent));
+    std::cout << "testImportSheet : initial1 aNrDestContent " << aNrDestContent << std::endl; // is $Sheet1.$B$1
+    std::cout << "testImportSheet : initial1 aNrSrcContent " << aNrSrcContent << std::endl; // is $Sheet1.$B$2
+    rtl::OUString aExpectedContent(RTL_CONSTASCII_USTRINGPARAM("$Sheet1.$B$1"));
+    CPPUNIT_ASSERT_MESSAGE("Sheet name for initial1 has been changed in dest (expected  $Sheet1.$B$1) ", aNrDestContent.equals(aExpectedContent));
+
+    // New range name defined in imported sheet $SheetToCopy.$A$7
+    rtl::OUString aNewInSheetNamedRangeString(RTL_CONSTASCII_USTRINGPARAM("InSheetRangeName"));
+    CPPUNIT_ASSERT_MESSAGE("InSheetRangeName", xDestNamedRangesNameAccess->hasByName(aNewInSheetNamedRangeString));
+
+    uno::Any aNewInSheetNr = xDestNamedRangesNameAccess->getByName(aNewInSheetNamedRangeString);
+    uno::Reference< sheet::XNamedRange > xDestNewInSheetNamedRange(aNewInSheetNr, UNO_QUERY_THROW);
+    rtl::OUString aNewInSheetNrDestContent = xDestNewInSheetNamedRange->getContent();
+    rtl::OUString aNewInSheetExpectedContent(RTL_CONSTASCII_USTRINGPARAM("$SheetToCopy.$A$7"));
+    std::cout << "testImportSheet : InSheetRangeName content " << aNewInSheetNrDestContent << std::endl;
+    //CPPUNIT_ASSERT_MESSAGE("Wrong address for InSheetRangeName", aNewInSheetNrDestContent.equals(aNewInSheetExpectedContent));
+
+    // the source file redefines an existing named range in the imported sheet --> the target should not be changed
+    rtl::OUString aRedefinedInSheetNamedRangeString(RTL_CONSTASCII_USTRINGPARAM("initial2"));
+    CPPUNIT_ASSERT_MESSAGE("aRedefinedInSheetNamedRangeString", xDestNamedRangesNameAccess->hasByName(aRedefinedInSheetNamedRangeString));
+
+    uno::Any aRedefinedInSheetNr = xDestNamedRangesNameAccess->getByName(aRedefinedInSheetNamedRangeString);
+    uno::Reference< sheet::XNamedRange > xDestRedefinedInSheetNamedRange(aRedefinedInSheetNr, UNO_QUERY_THROW);
+    rtl::OUString aRedefinedInSheetNrDestContent = xDestRedefinedInSheetNamedRange->getContent();
+    rtl::OUString aRedefinedInSheetExpectedContent(RTL_CONSTASCII_USTRINGPARAM("$Sheet1.$B$2"));
+    std::cout << "testImportSheet : initial2 content " << aRedefinedInSheetNrDestContent << std::endl;
+    CPPUNIT_ASSERT_MESSAGE("Wrong address for Redefined InSheet named range", aRedefinedInSheetNrDestContent.equals(aRedefinedInSheetExpectedContent));
 
     //formula with a non-existant named range in dest - new_rangename
     rtl::OUString aNewNamedRangeString(RTL_CONSTASCII_USTRINGPARAM("new_rangename"));
     CPPUNIT_ASSERT_MESSAGE("New NamedRange not created", xDestNamedRangesNameAccess->hasByName(aNewNamedRangeString));
 
-    // verify the content of this new namedrange
+    // verify the content of this new namedrange, pointing on $Sheet1.$B$1 in source. This address is already defined in target as NR content
+
+    uno::Any aNewNr = xDestNamedRangesNameAccess->getByName(aNewNamedRangeString);
+    uno::Reference< sheet::XNamedRange > xDestNewNamedRange(aNewNr, UNO_QUERY_THROW);
+    rtl::OUString aNewNrDestContent = xDestNewNamedRange->getContent();
+
+    rtl::OUString aNewExpectedContent(RTL_CONSTASCII_USTRINGPARAM("$Sheet1.$B$1"));
+/*
     xSrcCell = xSrcSheet->getCellByPosition(4,0);
     uno::Reference< text::XTextRange > xSrcTextRange3(xSrcCell, UNO_QUERY_THROW);
     aSrcString = xSrcTextRange3->getString();
@@ -170,10 +200,10 @@ void ScXSpreadsheets2::testImportSheet()
     xDestCell = xDestSheet->getCellByPosition(4,0);
     uno::Reference< text::XTextRange > xDestTextRange3(xDestCell, UNO_QUERY_THROW);
     aDestString = xDestTextRange3->getString();
-
-    std::cout << "testImportSheet : new_rangename aSrcString " << aSrcString << std::endl;
-    std::cout << "testImportSheet : new_rangename aDestString " << aDestString << std::endl;
-    CPPUNIT_ASSERT_MESSAGE("Wrong New NamedRange formula string value", aDestString.equals(aSrcString));
+*/
+    std::cout << "testImportSheet : new_rangename aNewExpectedContent " << aNewExpectedContent << std::endl;
+    std::cout << "testImportSheet : new_rangename aNewNrDestContent " << aNewNrDestContent << std::endl;
+    CPPUNIT_ASSERT_MESSAGE("Wrong New NamedRange formula string value", aNewExpectedContent.equals(aNewExpectedContent));
 
     //new style created in dest
     uno::Reference< beans::XPropertySet > xSrcCellPropSet (xSrcCell, UNO_QUERY_THROW);

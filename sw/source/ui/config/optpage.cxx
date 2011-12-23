@@ -1770,7 +1770,7 @@ sal_Bool SwCompareOptionsTabPage::FillItemSet( SfxItemSet& )
         aWordRB.IsChecked() != aWordRB.GetSavedValue() ||
         aCharRB.IsChecked() != aCharRB.GetSavedValue() )
     {
-        SvxCompareMode eCmpMode;
+        SvxCompareMode eCmpMode = SVX_CMP_AUTO;
 
         if ( aAutoRB.IsChecked() ) eCmpMode = SVX_CMP_AUTO;
         if ( aWordRB.IsChecked() ) eCmpMode = SVX_CMP_BY_WORD;

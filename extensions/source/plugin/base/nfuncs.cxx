@@ -148,7 +148,7 @@ static ::rtl::OString normalizeURL( XPlugin_Impl* plugin, const ::rtl::OString& 
         int nPos;
         if( ( nPos = aLoadURL.indexOf( "://" ) ) != -1 )
         {
-            if( url.getLength() && (url.getStr()[ 0 ] == '/' || url.indexOf( '/' ) != -1) )
+            if( !url.isEmpty() && (url.getStr()[ 0 ] == '/' || url.indexOf( '/' ) != -1) )
             {
                 // this means same server but new path
                 nPos = aLoadURL.indexOf( '/', nPos+3 );
@@ -275,7 +275,7 @@ extern "C" {
             return NPERR_INVALID_INSTANCE_ERROR;
 
         OString aLoadURL = normalizeURL( pImpl, url );
-        if( !aLoadURL.getLength() )
+        if( aLoadURL.isEmpty() )
             return NPERR_INVALID_URL;
 
         AsynchronousGetURL* pAsync = new AsynchronousGetURL();

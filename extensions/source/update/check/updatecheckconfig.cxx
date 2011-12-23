@@ -189,7 +189,7 @@ UpdateCheckROModel::getUpdateEntry(UpdateInfo& rInfo) const
     {
         rtl::OUString aUStr = getStringValue(
             (aStr + rtl::OString::valueOf(n)).getStr());
-        if( aUStr.getLength() > 0 )
+        if( !aUStr.isEmpty() )
             rInfo.ReleaseNotes.push_back(ReleaseNote((sal_Int8) n, aUStr));
     }
 }
@@ -553,7 +553,7 @@ UpdateCheckConfig::getByName( const ::rtl::OUString& aName )
         rtl::OUString aStr;
         aValue >>= aStr;
 
-        if( aStr.getLength() == 0 )
+        if( aStr.isEmpty() )
             aValue = uno::makeAny(getDesktopDirectory());
     }
 
@@ -682,7 +682,7 @@ bool UpdateCheckConfig::storeExtensionVersion( const rtl::OUString& rExtensionNa
         ::rtl::OUString aIgnoredVersion;
         uno::Any aValue( uno::Reference< beans::XPropertySet >( m_xIgnoredUpdates->getByName( rExtensionName ), uno::UNO_QUERY_THROW )->getPropertyValue( PROPERTY_VERSION ) );
         aValue >>= aIgnoredVersion;
-        if ( aIgnoredVersion.getLength() == 0 ) // no version means ignore all updates
+        if ( aIgnoredVersion.isEmpty() ) // no version means ignore all updates
             bNotify = false;
         else if ( aIgnoredVersion == rVersion ) // the user wanted to ignore this update
             bNotify = false;
@@ -708,7 +708,7 @@ bool UpdateCheckConfig::checkExtensionVersion( const rtl::OUString& rExtensionNa
             ::rtl::OUString aIgnoredVersion;
             uno::Any aValue2( uno::Reference< beans::XPropertySet >( m_xIgnoredUpdates->getByName( rExtensionName ), uno::UNO_QUERY_THROW )->getPropertyValue( PROPERTY_VERSION ) );
             aValue2 >>= aIgnoredVersion;
-            if ( aIgnoredVersion.getLength() == 0 ) // no version means ignore all updates
+            if ( aIgnoredVersion.isEmpty() ) // no version means ignore all updates
                 return false;
             else if ( aIgnoredVersion == aStoredVersion ) // the user wanted to ignore this update
                 return false;
