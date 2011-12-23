@@ -252,7 +252,7 @@ sal_Bool TextConvWrapper::ConvContinue_impl()
     pEditView->GetImpEditEngine()->ImpConvert( aConvText, nConvTextLang,
             pEditView, GetSourceLanguage(), aConvSel,
             bAllowChange, GetTargetLanguage(), GetTargetFont() );
-    return aConvText.getLength() != 0;
+    return !aConvText.isEmpty();
 }
 
 

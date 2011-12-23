@@ -297,7 +297,7 @@ sal_Bool SvxRTFParser::ReadBmpData( Graphic& rGrf, SvxRTFPictureType& rPicType )
             if( nShapePropertyBracket > 0 && nShapePropertyBracket > _nOpenBrakets )
             {
                 nShapePropertyBracket = -1;
-                if( sShapePropertyName.getLength() )
+                if( !sShapePropertyName.isEmpty() )
                 {
                     rPicType.aPropertyPairs.push_back( ::std::pair< OUString, OUString >( sShapePropertyName, sShapePropertyValue ) );
                     sShapePropertyName = sShapePropertyValue = ::rtl::OUString();

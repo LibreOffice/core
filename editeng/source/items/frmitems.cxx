@@ -3649,9 +3649,9 @@ bool SvxBrushItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 {
                     SetGraphicLink(sLink);
                 }
-                if ( sLink.getLength() && eGraphicPos == GPOS_NONE )
+                if ( !sLink.isEmpty() && eGraphicPos == GPOS_NONE )
                     eGraphicPos = GPOS_MM;
-                else if( !sLink.getLength() )
+                else if( sLink.isEmpty() )
                     eGraphicPos = GPOS_NONE;
             }
         }

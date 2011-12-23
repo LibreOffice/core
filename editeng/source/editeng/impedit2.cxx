@@ -1689,7 +1689,7 @@ void ImpEditEngine::InitScriptTypes( sal_uInt16 nPara )
         while ( pField )
         {
             ::rtl::OUString aFldText( ((EditCharAttribField*)pField)->GetFieldValue() );
-            if ( aFldText.getLength() )
+            if ( !aFldText.isEmpty() )
             {
                 aText.SetChar( pField->GetStart(), aFldText.getStr()[0] );
                 short nFldScriptType = _xBI->getScriptType( aFldText, 0 );

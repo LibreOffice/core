@@ -116,7 +116,7 @@ Sequence< OUString > lcl_RemoveMissingEntries(
     const OUString *pEntry = rCfgSvcs.getConstArray();
     for (sal_Int32 i = 0;  i < nEntries;  ++i)
     {
-        if (pEntry[i].getLength() && lcl_FindEntry( pEntry[i], rAvailSvcs ))
+        if (!pEntry[i].isEmpty() && lcl_FindEntry( pEntry[i], rAvailSvcs ))
             pRes[ nCnt++ ] = pEntry[i];
     }
 
@@ -175,7 +175,7 @@ Sequence< OUString > lcl_GetNewEntries(
     const OUString *pEntry = rAvailSvcs.getConstArray();
     for (sal_Int32 i = 0;  i < nLen;  ++i)
     {
-        if (pEntry[i].getLength() && !lcl_FindEntry( pEntry[i], rLastFoundSvcs ))
+        if (!pEntry[i].isEmpty() && !lcl_FindEntry( pEntry[i], rLastFoundSvcs ))
             pRes[ nCnt++ ] = pEntry[i];
     }
 
@@ -202,7 +202,7 @@ Sequence< OUString > lcl_MergeSeq(
         const OUString *pEntry = rSeq.getConstArray();
         for (sal_Int32 i = 0;  i < nLen;  ++i)
         {
-            if (pEntry[i].getLength() && !lcl_FindEntry( pEntry[i], aRes ))
+            if (!pEntry[i].isEmpty() && !lcl_FindEntry( pEntry[i], aRes ))
                 pRes[ nCnt++ ] = pEntry[i];
         }
     }
@@ -1272,7 +1272,7 @@ short SvxDicError( Window *pParent, sal_Int16 nError )
 
 LanguageType SvxLocaleToLanguage( const Locale& rLocale )
 {
-    if ( rLocale.Language.getLength() == 0 )
+    if ( rLocale.Language.isEmpty() )
         return LANGUAGE_NONE;
 
     return MsLangId::convertLocaleToLanguage( rLocale );

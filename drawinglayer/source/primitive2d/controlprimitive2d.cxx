@@ -69,7 +69,7 @@ namespace drawinglayer
 
                     if(aValue >>= aUnoControlTypeName)
                     {
-                        if(aUnoControlTypeName.getLength())
+                        if(!aUnoControlTypeName.isEmpty())
                         {
                             uno::Reference< lang::XMultiServiceFactory > xFactory( comphelper::getProcessServiceFactory() );
 

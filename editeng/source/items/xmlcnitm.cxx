@@ -147,7 +147,7 @@ bool SvXMLAttrContainerItem::PutValue( const com::sun::star::uno::Any& rVal, sal
                     const ::rtl::OUString aPrefix( aName.copy( 0, pos ));
                     const ::rtl::OUString aLName( aName.copy( pos+1 ));
 
-                    if( pData->Namespace.getLength() == 0 )
+                    if( pData->Namespace.isEmpty() )
                     {
                         if( !pNewImpl->AddAttr( aPrefix, aLName, pData->Value ) )
                             break;

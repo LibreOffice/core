@@ -2654,7 +2654,7 @@ bool SvxLanguageItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             if(!(rVal >>= aLocale))
                 return sal_False;
 
-            if (aLocale.Language.getLength() || aLocale.Country.getLength())
+            if (!aLocale.Language.isEmpty() || !aLocale.Country.isEmpty())
                 SetValue(MsLangId::convertLocaleToLanguage( aLocale ));
             else
                 SetValue(LANGUAGE_NONE);
@@ -3079,14 +3079,14 @@ bool SvxTwoLinesItem::PutValue( const com::sun::star::uno::Any& rVal,
     case MID_START_BRACKET:
         if( rVal >>= s )
         {
-            cStartBracket = s.getLength() ? s[ 0 ] : 0;
+            cStartBracket = s.isEmpty() ? 0 : s[ 0 ];
             bRet = sal_True;
         }
         break;
     case MID_END_BRACKET:
         if( rVal >>= s )
         {
-            cEndBracket = s.getLength() ? s[ 0 ] : 0;
+            cEndBracket = s.isEmpty() ? 0 : s[ 0 ];
             bRet = sal_True;
         }
         break;

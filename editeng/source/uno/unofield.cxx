@@ -434,7 +434,7 @@ SvxFieldData* SvxUnoTextField::CreateFieldData() const throw()
         break;
 
     case ID_URLFIELD:
-        pData = new SvxURLField( mpImpl->msString3, mpImpl->msString1, mpImpl->msString1.getLength() ? SVXURLFORMAT_REPR : SVXURLFORMAT_URL );
+        pData = new SvxURLField( mpImpl->msString3, mpImpl->msString1, !mpImpl->msString1.isEmpty() ? SVXURLFORMAT_REPR : SVXURLFORMAT_URL );
         ((SvxURLField*)pData)->SetTargetFrame( mpImpl->msString2 );
         if( mpImpl->mnInt16 >= SVXURLFORMAT_APPDEFAULT && mpImpl->mnInt16 <= SVXURLFORMAT_REPR )
             ((SvxURLField*)pData)->SetFormat( (SvxURLFormat)mpImpl->mnInt16 );
@@ -476,7 +476,7 @@ SvxFieldData* SvxUnoTextField::CreateFieldData() const throw()
         // mimic behaviour of writer, which means:
         // prefer CurrentPresentation over Content
         // if both are given.
-        if( mpImpl->msString1.getLength() )
+        if( !mpImpl->msString1.isEmpty() )
             aContent = mpImpl->msString1;
         else
             aContent = mpImpl->msString2;
