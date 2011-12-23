@@ -277,28 +277,9 @@ sal_Bool ScViewFunc::CopyToClip( ScDocument* pClipDoc, sal_Bool bCut, sal_Bool b
 {
     ScRange aRange;
     ScMarkType eMarkType = GetViewData()->GetSimpleArea( aRange );
-    ScDocument* pDoc = GetViewData()->GetDocument();
     ScMarkData& rMark = GetViewData()->GetMarkData();
     sal_Bool bDone = sal_False;
 
-    if( !pClipDoc ) // System Copy - adjust the ranges.
-    {
-        SCCOL nCol1 = aRange.aStart.Col();
-        SCCOL nCol2 = aRange.aEnd.Col();
-        SCROW nRow1 = aRange.aStart.Row();
-        SCROW nRow2 = aRange.aEnd.Row();
-        pDoc->ShrinkToDataArea( aRange.aStart.Tab(), nCol1, nRow1, nCol2, nRow2 );
-        if( aRange.aStart.Col() == 0 && aRange.aEnd.Col() == MAXCOL )
-        {
-            aRange.aStart.SetCol( nCol1 );
-            aRange.aEnd.SetCol( nCol2 );
-        }
-        if( aRange.aStart.Row() == 0 && aRange.aEnd.Row() == MAXROW )
-        {
-            aRange.aStart.SetRow( nRow1 );
-            aRange.aEnd.SetRow( nRow2 );
-        }
-    }
     if ( eMarkType == SC_MARK_SIMPLE || eMarkType == SC_MARK_SIMPLE_FILTERED )
     {
        ScRangeList aRangeList;
