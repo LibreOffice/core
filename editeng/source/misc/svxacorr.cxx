@@ -120,9 +120,6 @@ TYPEINIT0(SvxAutoCorrect)
 typedef SvxAutoCorrectLanguageLists* SvxAutoCorrectLanguageListsPtr;
 DECLARE_TABLE( SvxAutoCorrLanguageTable_Impl,  SvxAutoCorrectLanguageListsPtr)
 
-DECLARE_TABLE( SvxAutoCorrLastFileAskTable_Impl, long )
-
-
 inline int IsWordDelim( const sal_Unicode c )
 {
     return ' ' == c || '\t' == c || 0x0a == c ||
@@ -345,7 +342,7 @@ SvxAutoCorrect::SvxAutoCorrect( const String& rShareAutocorrFile,
     : sShareAutoCorrFile( rShareAutocorrFile ),
     sUserAutoCorrFile( rUserAutocorrFile ),
     pLangTable( new SvxAutoCorrLanguageTable_Impl ),
-    pLastFileTable( new SvxAutoCorrLastFileAskTable_Impl ),
+    pLastFileTable( new std::map<LanguageType, long> ),
     pCharClass( 0 ), bRunNext( false ),
     cStartDQuote( 0 ), cEndDQuote( 0 ), cStartSQuote( 0 ), cEndSQuote( 0 )
 {
@@ -362,7 +359,7 @@ SvxAutoCorrect::SvxAutoCorrect( const SvxAutoCorrect& rCpy )
     aSwFlags( rCpy.aSwFlags ),
 
     pLangTable( new SvxAutoCorrLanguageTable_Impl ),
-    pLastFileTable( new SvxAutoCorrLastFileAskTable_Impl ),
+    pLastFileTable( new std::map<LanguageType, long> ),
     pCharClass( 0 ), bRunNext( false ),
 
     nFlags( rCpy.nFlags & ~(ChgWordLstLoad|CplSttLstLoad|WrdSttLstLoad)),
@@ -1618,12 +1615,11 @@ sal_Bool SvxAutoCorrect::CreateLanguageFile( LanguageType eLang, sal_Bool bNewFi
     SvxAutoCorrectLanguageListsPtr pLists = 0;
 
     Time nMinTime( 0, 2 ), nAktTime( Time::SYSTEM ), nLastCheckTime( Time::EMPTY );
-    sal_uLong nFndPos;
-    if( TABLE_ENTRY_NOTFOUND !=
-                    pLastFileTable->SearchKey( sal_uLong( eLang ), &nFndPos ) &&
-        ( nLastCheckTime.SetTime( pLastFileTable->GetObject( nFndPos )),
-            nLastCheckTime < nAktTime ) &&
-        ( nAktTime - nLastCheckTime ) < nMinTime )
+
+    std::map<LanguageType, long>::iterator nFndPos = pLastFileTable->find(eLang);
+    if(nFndPos != pLastFileTable->end() &&
+       (nLastCheckTime.SetTime(nFndPos->second), nLastCheckTime < nAktTime) &&
+       nAktTime - nLastCheckTime < nMinTime)
     {
         // no need to test the file, because the last check is not older then
         // 2 minutes.
@@ -1633,7 +1629,7 @@ sal_Bool SvxAutoCorrect::CreateLanguageFile( LanguageType eLang, sal_Bool bNewFi
             pLists = new SvxAutoCorrectLanguageLists( *this, sShareDirFile,
                                                         sUserDirFile, eLang );
             pLangTable->Insert( sal_uLong(eLang), pLists );
-            pLastFileTable->Remove( sal_uLong( eLang ) );
+            pLastFileTable->erase(nFndPos);
         }
     }
     else if( ( FStatHelper::IsDocument( sUserDirFile ) ||
@@ -1644,12 +1640,11 @@ sal_Bool SvxAutoCorrect::CreateLanguageFile( LanguageType eLang, sal_Bool bNewFi
         pLists = new SvxAutoCorrectLanguageLists( *this, sShareDirFile,
                                                     sUserDirFile, eLang );
         pLangTable->Insert( sal_uLong(eLang), pLists );
-        pLastFileTable->Remove( sal_uLong( eLang ) );
+        pLastFileTable->erase(nFndPos);
     }
     else if( !bNewFile )
     {
-        if( !pLastFileTable->Insert( sal_uLong( eLang ), nAktTime.GetTime() ))
-            pLastFileTable->Replace( sal_uLong( eLang ), nAktTime.GetTime() );
+        pLastFileTable[eLang] = { std::make_pair(eLang, nAktTime.GetTime()) };
     }
     return pLists != 0;
 }

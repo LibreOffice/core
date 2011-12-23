@@ -39,13 +39,14 @@
 #include <editeng/swafopt.hxx>
 #include "editeng/editengdllapi.h"
 
+#include <map>
+
 class CharClass;
 class SfxPoolItem;
 class SvxAutoCorrect;
 class SvStringsISortDtor;
 class SfxObjectShell;
 class SvxAutoCorrLanguageTable_Impl;
-class SvxAutoCorrLastFileAskTable_Impl;
 class SotStorageRef;
 class SotStorage;
 class Window;
@@ -208,7 +209,7 @@ class EDITENG_DLLPUBLIC SvxAutoCorrect
 
     // all languages in a table
     SvxAutoCorrLanguageTable_Impl* pLangTable;
-    SvxAutoCorrLastFileAskTable_Impl* pLastFileTable;
+    std::map<LanguageType, long>* pLastFileTable;
     CharClass* pCharClass;
 
     bool bRunNext;
