@@ -31,7 +31,6 @@ $(eval $(call gb_Module_add_targets,connectivity,\
 	AllLangResTarget_connectivity \
 	Package_inc \
 	Package_xml \
-	Jar_sdbc_hsqldb \
 	Library_dbtools \
 	Library_sdbc2 \
 	Library_dbpool2 \
@@ -44,6 +43,7 @@ $(eval $(call gb_Module_add_targets,connectivity,\
 ifneq ($(SOLAR_JAVA),)
 $(eval $(call gb_Module_add_targets,connectivity,\
 	Jar_ConnectivityTools \
+	Jar_sdbc_hsqldb \
 ))
 endif
 
