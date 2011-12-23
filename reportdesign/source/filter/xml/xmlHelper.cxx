@@ -324,7 +324,7 @@ void OXMLHelper::copyStyleElements(const bool _bOld,const ::rtl::OUString& _sSty
                 {
                     xReportControlModel->setFontDescriptor(aFont);
                 }
-                catch(beans::UnknownPropertyException){}
+                catch(const beans::UnknownPropertyException &){}
             }
            }
         catch(uno::Exception&)

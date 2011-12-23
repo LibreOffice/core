@@ -393,7 +393,7 @@ void OObjectBase::EndListening(sal_Bool /*bRemoveListener*/)
             {
                 m_xReportComponent->removePropertyChangeListener( ::rtl::OUString() , m_xPropertyChangeListener );
             }
-            catch(uno::Exception)
+            catch(const uno::Exception &)
             {
                 OSL_FAIL("OObjectBase::EndListening: Exception caught!");
             }
@@ -1204,7 +1204,7 @@ void OOle2Obj::impl_createDataProvider_nothrow(const uno::Reference< frame::XMod
             xReceiver->attachDataProvider( xDataProvider.get() );
         }
     }
-    catch(uno::Exception)
+    catch(const uno::Exception &)
     {
     }
 }

@@ -266,7 +266,7 @@ namespace rptui
             {
                 m_xComponent.set(m_xContext->getServiceManager()->createInstanceWithContext(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.inspection.DefaultFormComponentInspectorModel")),m_xContext),UNO_QUERY_THROW);
             }
-            catch(Exception)
+            catch(const Exception &)
             {
                 return 0;
             }

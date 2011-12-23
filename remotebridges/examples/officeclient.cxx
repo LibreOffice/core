@@ -214,25 +214,25 @@ sal_Int32 OfficeClientMain::run( const Sequence< OUString > & aArguments ) throw
             }
 
         }
-        catch( ConnectionSetupException &e )
+        catch( const ConnectionSetupException &e )
         {
             OString o = OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US );
             printf( "%s\n", o.pData->buffer );
             printf( "couldn't access local resource ( possible security resons )\n" );
         }
-        catch( NoConnectException &e )
+        catch( const NoConnectException &e )
         {
             OString o = OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US );
             printf( "%s\n", o.pData->buffer );
             printf( "no server listening on the resource\n" );
         }
-        catch( IllegalArgumentException &e )
+        catch( const IllegalArgumentException &e )
         {
             OString o = OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US );
             printf( "%s\n", o.pData->buffer );
             printf( "uno url invalid\n" );
         }
-        catch( RuntimeException & e )
+        catch( const RuntimeException & e )
         {
             OString o = OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US );
             printf( "%s\n", o.pData->buffer );

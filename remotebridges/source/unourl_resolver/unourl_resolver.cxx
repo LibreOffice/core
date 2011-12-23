@@ -150,7 +150,7 @@ Reference< XInterface > ResolverImpl::resolve( const OUString & rUnoUrl )
         aConnectDescr = aUrl.getConnection().getDescriptor();
         aInstanceName = aUrl.getObjectName();
     }
-    catch (rtl::MalformedUriException & rEx)
+    catch (const rtl::MalformedUriException & rEx)
     {
         throw ConnectionSetupException(rEx.getMessage(), 0);
     }
