@@ -35,9 +35,11 @@ $(eval $(call gb_Library_add_defs,xmlreader,\
 ))
 
 $(eval $(call gb_Library_add_linked_libs,xmlreader,\
+    cppu \
 	sal \
     $(gb_STDLIBS) \
 ))
+    # cppu is only needed due to the cppumaker -C hack
 
 $(eval $(call gb_Library_add_exception_objects,xmlreader,\
 	xmlreader/source/pad \
