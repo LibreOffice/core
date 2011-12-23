@@ -49,6 +49,7 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
     padmin \
     reportdesign \
     sc \
+    scaddins \
     sccomp \
     scripting \
     sd \
