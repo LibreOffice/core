@@ -512,6 +512,7 @@ PDFExtOutDevData::PDFExtOutDevData( const OutputDevice& rOutDev ) :
     mbUseLosslessCompression( sal_True ),
     mbReduceImageResolution ( sal_False ),
     mbExportNDests          ( sal_False ),
+    mbExportHiddenSlides    ( sal_False ),
     mnFormsFormat           ( 0 ),
     mnPage                  ( -1 ),
     mpPageSyncData          ( NULL ),
@@ -613,6 +614,14 @@ sal_Bool PDFExtOutDevData::GetIsExportBookmarks() const
 void PDFExtOutDevData::SetIsExportBookmarks( const sal_Bool bExportBookmarks )
 {
     mbExportBookmarks = bExportBookmarks;
+}
+sal_Bool PDFExtOutDevData::GetIsExportHiddenSlides() const
+{
+    return mbExportHiddenSlides;
+}
+void PDFExtOutDevData::SetIsExportHiddenSlides( const sal_Bool bExportHiddenSlides )
+{
+    mbExportHiddenSlides = bExportHiddenSlides;
 }
 std::vector< PDFExtOutDevBookmarkEntry >& PDFExtOutDevData::GetBookmarks()
 {

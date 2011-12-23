@@ -92,6 +92,7 @@ class VCL_DLLPUBLIC PDFExtOutDevData : public ExtOutDevData
     sal_Bool                        mbReduceImageResolution;
     sal_Bool                        mbExportFormFields;
     sal_Bool                        mbExportBookmarks;
+    sal_Bool                        mbExportHiddenSlides;
     sal_Bool                        mbExportNDests; //i56629
     sal_Int32                       mnFormsFormat;
     sal_Int32                       mnPage;
@@ -135,6 +136,9 @@ public :
 
     sal_Bool    GetIsExportBookmarks() const;
     void        SetIsExportBookmarks( const sal_Bool bExportBookmarks );
+
+    sal_Bool    GetIsExportHiddenSlides() const;
+    void        SetIsExportHiddenSlides( const sal_Bool bExportHiddenSlides );
 
     sal_Bool    GetIsExportNamedDestinations() const; //i56629
     void        SetIsExportNamedDestinations( const sal_Bool bExportNDests ); //i56629

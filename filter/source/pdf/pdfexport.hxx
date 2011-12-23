@@ -66,6 +66,7 @@ private:
     sal_Bool                mbEmbedStandardFonts;
     sal_Bool                mbUseTransitionEffects;
     sal_Bool                mbExportBookmarks;
+    sal_Bool                mbExportHiddenSlides;
     sal_Int32               mnOpenBookmarkLevels;
 
     sal_Bool                mbUseLosslessCompression;

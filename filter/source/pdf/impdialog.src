@@ -260,10 +260,18 @@ TabPage  RID_PDF_TAB_GENER
         TabStop = TRUE ;
         Text[ en-US ] = "Export ~notes pages";
     };
+    CheckBox CB_EXPORTHIDDENSLIDES
+    {
+        HelpID = "filter:CheckBox:RID_PDF_TAB_GENER:CB_EXPORTHIDDENSLIDES";
+        Pos = MAP_APPFONT ( 188 , 144 ) ;
+        Size = MAP_APPFONT ( 158 , 10 ) ;
+        TabStop = TRUE ;
+        Text[ en-US ] = "Export ~hidden pages";
+    };
     CheckBox CB_EXPORTEMPTYPAGES
     {
         HelpID = "filter:CheckBox:RID_PDF_TAB_GENER:CB_EXPORTEMPTYPAGES";
-        Pos = MAP_APPFONT ( 188 , 144 ) ;
+        Pos = MAP_APPFONT ( 188 , 157 ) ;
         Size = MAP_APPFONT ( 158 , 16 ) ;
         TabStop = TRUE ;
         WordBreak = TRUE ;
@@ -272,7 +280,7 @@ TabPage  RID_PDF_TAB_GENER
     CheckBox CB_EMBEDSTANDARDFONTS
     {
         HelpID = "filter:CheckBox:RID_PDF_TAB_GENER:CB_EMBEDSTANDARDFONTS";
-        Pos = MAP_APPFONT ( 188 , 163 ) ;
+        Pos = MAP_APPFONT ( 188 , 176 ) ;
         Size = MAP_APPFONT ( 158 , 10 ) ;
         TabStop = TRUE ;
         Text[ en-US ] = "E~mbed standard fonts";

@@ -111,6 +111,7 @@ protected:
     sal_Bool                    mbExportFormFields;
     sal_Bool                    mbAllowDuplicateFieldNames;
     sal_Bool                    mbExportBookmarks;
+    sal_Bool                    mbExportHiddenSlides;
     sal_Int32                   mnOpenBookmarkLevels;
 
     sal_Bool                    mbHideViewerToolbar;
@@ -205,6 +206,7 @@ class ImpPDFTabGeneralPage : public SfxTabPage
     CheckBox                    maCbAllowDuplicateFieldNames;
 
     CheckBox                    maCbExportBookmarks;
+    CheckBox                    maCbExportHiddenSlides;
     CheckBox                    maCbExportNotes;
     CheckBox                    maCbExportNotesPages;
 
