@@ -60,6 +60,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     idl \
     javaunohelper \
     jvmaccess \
+    jvmfwk \
     jurt \
     lingucomponent \
     linguistic \
