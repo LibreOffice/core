@@ -33,6 +33,10 @@ $(eval $(call gb_Library_add_package_headers,jvmfwk,\
     jvmfwk_inc \
 ))
 
+$(eval $(call gb_Library_add_defs,jvmfwk,\
+    -DJVMFWK_DLLIMPLEMENTATION \
+))
+
 $(eval $(call gb_Library_add_api,jvmfwk,\
     udkapi \
 ))
