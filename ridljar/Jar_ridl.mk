@@ -33,6 +33,10 @@ $(eval $(call gb_Jar_add_jars,ridl,\
 
 $(eval $(call gb_Jar_set_packageroot,ridl,com))
 
+$(eval $(call gb_Jar_add_packagedirs,ridl,\
+    $(WORKDIR)/CustomTarget/ridljar/javamaker/class/com \
+))
+
 $(eval $(call gb_Jar_add_sourcefiles,ridl,\
     ridljar/com/sun/star/lib/uno/typedesc/FieldDescription \
     ridljar/com/sun/star/lib/uno/typedesc/MemberDescriptionHelper \
