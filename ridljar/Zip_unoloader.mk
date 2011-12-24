@@ -25,8 +25,6 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-# TODO: the zip is placed in $(OUTDIR)/pck, not in $(OUTDIR)/bin. Does
-# it matter?
 $(eval $(call gb_Zip_Zip,unoloader_src,$(SRCDIR)/ridljar/source/unoloader))
 
 $(eval $(call gb_Zip_add_files,unoloader_src,\
