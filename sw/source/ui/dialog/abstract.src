@@ -68,7 +68,7 @@ ModalDialog DLG_INSERT_ABSTRACT
     {
         Pos = MAP_APPFONT ( 12 , 27 ) ;
         Size = MAP_APPFONT ( 120 , 8 ) ;
-        Text [ en-US ] = "Subpoints per level" ;
+        Text [ en-US ] = "Paragraphs per level" ;
     };
     NumericField NF_PARA
     {
