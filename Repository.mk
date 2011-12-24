@@ -269,6 +269,8 @@ endif
 
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_URE, \
     jpipe \
+    juh \
+    juhx \
     sal_textenc \
     sunjavaplugin \
 	xmlreader \

@@ -55,7 +55,7 @@ my_components = \
 my_components += \
     javaloader \
     javavm \
-    juh
+    component/javaunohelper/util/juh
 
 .ENDIF
 
