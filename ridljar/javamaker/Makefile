@@ -35,4 +35,4 @@ done : $(OUTDIR)/bin/udkapi.rdb
 .PHONY : all
 all : done
 
-# vim:set shiftwidth=4 softtabstop=4 expandtab:
+# vim:set shiftwidth=4 tabstop=4 noexpandtab:
