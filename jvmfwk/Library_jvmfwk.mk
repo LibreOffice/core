@@ -44,8 +44,13 @@ $(eval $(call gb_Library_add_api,jvmfwk,\
 $(eval $(call gb_Library_add_linked_libs,jvmfwk,\
     cppuhelper \
     sal \
-    $(if $(filter WNT,$(OS)),advapi32) \
 ))
+
+ifeq ($(OS),WNT)
+$(eval $(call gb_Library_add_libs,jvmfwk,\
+    advapi32 \
+))
+endif
 
 $(eval $(call gb_Library_use_externals,jvmfwk,\
     libxml2 \
