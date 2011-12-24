@@ -1644,7 +1644,7 @@ sal_Bool SvxAutoCorrect::CreateLanguageFile( LanguageType eLang, sal_Bool bNewFi
     }
     else if( !bNewFile )
     {
-        pLastFileTable[eLang] = { std::make_pair(eLang, nAktTime.GetTime()), };
+        (*pLastFileTable)[eLang] = nAktTime.GetTime();
     }
     return pLists != 0;
 }
