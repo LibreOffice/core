@@ -342,7 +342,6 @@ SvxAutoCorrect::SvxAutoCorrect( const String& rShareAutocorrFile,
     : sShareAutoCorrFile( rShareAutocorrFile ),
     sUserAutoCorrFile( rUserAutocorrFile ),
     pLangTable( new SvxAutoCorrLanguageTable_Impl ),
-    pLastFileTable( new std::map<LanguageType, long> ),
     pCharClass( 0 ), bRunNext( false ),
     cStartDQuote( 0 ), cEndDQuote( 0 ), cStartSQuote( 0 ), cEndSQuote( 0 )
 {
@@ -359,7 +358,6 @@ SvxAutoCorrect::SvxAutoCorrect( const SvxAutoCorrect& rCpy )
     aSwFlags( rCpy.aSwFlags ),
 
     pLangTable( new SvxAutoCorrLanguageTable_Impl ),
-    pLastFileTable( new std::map<LanguageType, long> ),
     pCharClass( 0 ), bRunNext( false ),
 
     nFlags( rCpy.nFlags & ~(ChgWordLstLoad|CplSttLstLoad|WrdSttLstLoad)),
@@ -374,7 +372,6 @@ SvxAutoCorrect::~SvxAutoCorrect()
 {
     lcl_ClearTable(*pLangTable);
     delete pLangTable;
-    delete pLastFileTable;
     delete pCharClass;
 }
 
@@ -1616,8 +1613,8 @@ sal_Bool SvxAutoCorrect::CreateLanguageFile( LanguageType eLang, sal_Bool bNewFi
 
     Time nMinTime( 0, 2 ), nAktTime( Time::SYSTEM ), nLastCheckTime( Time::EMPTY );
 
-    std::map<LanguageType, long>::iterator nFndPos = pLastFileTable->find(eLang);
-    if(nFndPos != pLastFileTable->end() &&
+    std::map<LanguageType, long>::iterator nFndPos = aLastFileTable.find(eLang);
+    if(nFndPos != aLastFileTable.end() &&
        (nLastCheckTime.SetTime(nFndPos->second), nLastCheckTime < nAktTime) &&
        nAktTime - nLastCheckTime < nMinTime)
     {
@@ -1629,7 +1626,7 @@ sal_Bool SvxAutoCorrect::CreateLanguageFile( LanguageType eLang, sal_Bool bNewFi
             pLists = new SvxAutoCorrectLanguageLists( *this, sShareDirFile,
                                                         sUserDirFile, eLang );
             pLangTable->Insert( sal_uLong(eLang), pLists );
-            pLastFileTable->erase(nFndPos);
+            aLastFileTable.erase(nFndPos);
         }
     }
     else if( ( FStatHelper::IsDocument( sUserDirFile ) ||
@@ -1640,11 +1637,11 @@ sal_Bool SvxAutoCorrect::CreateLanguageFile( LanguageType eLang, sal_Bool bNewFi
         pLists = new SvxAutoCorrectLanguageLists( *this, sShareDirFile,
                                                     sUserDirFile, eLang );
         pLangTable->Insert( sal_uLong(eLang), pLists );
-        pLastFileTable->erase(nFndPos);
+        aLastFileTable.erase(nFndPos);
     }
     else if( !bNewFile )
     {
-        (*pLastFileTable)[eLang] = nAktTime.GetTime();
+        aLastFileTable[eLang] = nAktTime.GetTime();
     }
     return pLists != 0;
 }

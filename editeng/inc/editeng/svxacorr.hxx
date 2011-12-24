@@ -209,7 +209,7 @@ class EDITENG_DLLPUBLIC SvxAutoCorrect
 
     // all languages in a table
     SvxAutoCorrLanguageTable_Impl* pLangTable;
-    std::map<LanguageType, long>* pLastFileTable;
+    std::map<LanguageType, long> aLastFileTable;
     CharClass* pCharClass;
 
     bool bRunNext;
