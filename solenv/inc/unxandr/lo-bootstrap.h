@@ -31,10 +31,13 @@
 
 #include <jni.h>
 #include <dlfcn.h>
+#include <dirent.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+typedef struct lo_apk_dir lo_apk_dir;
 
 char **lo_dlneeds(const char *library);
 
@@ -48,6 +51,12 @@ int lo_dladdr(void *addr,
 
 void *lo_apkentry(const char *filename,
                   size_t *size);
+
+lo_apk_dir *lo_apk_opendir(const char *dirname);
+
+struct dirent *lo_apk_readdir(lo_apk_dir *dirp);
+
+int lo_apk_closedir(lo_apk_dir *dirp);
 
 int lo_dlcall_argc_argv(void *function,
                         int argc,

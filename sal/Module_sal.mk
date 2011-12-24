@@ -1,4 +1,4 @@
-# -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
+# -*- Mode: makefile; tab-width: 4; indent-tabs-mode: t -*-
 # Version: MPL 1.1 / GPLv3+ / LGPLv3+
 #
 # The contents of this file are subject to the Mozilla Public License Version
@@ -28,12 +28,47 @@
 
 $(eval $(call gb_Module_Module,sal))
 
-$(eval $(call gb_Module_add_subsequentcheck_targets,sal,\
-	CppunitTest_sal_osl_mutex \
-	CppunitTest_sal_osl_pipe \
-	CppunitTest_sal_osl_profile \
-	CppunitTest_sal_osl_setthreadname \
-	CppunitTest_sal_rtl_math \
+$(eval $(call gb_Module_add_targets,sal,\
+	Executable_cppunittester \
+	$(if $(filter $(OS),ANDROID), \
+		Library_lo-bootstrap) \
+	Library_sal \
+	Library_sal_textenc \
+	$(if $(filter $(OS),WNT), \
+		Library_uwinapi) \
+	Package_inc \
+	Package_generated \
+	StaticLibrary_salcpprt \
 ))
+
+$(eval $(call gb_Module_add_check_targets,sal,\
+	CppunitTest_sal_bytesequence \
+	CppunitTest_sal_osl_condition \
+	CppunitTest_sal_osl_file \
+	CppunitTest_sal_osl_module \
+	CppunitTest_sal_osl_mutex \
+	CppunitTest_sal_osl_process \
+	CppunitTest_sal_osl_profile \
+	CppunitTest_sal_osl_security \
+	CppunitTest_sal_osl_setthreadname \
+	CppunitTest_sal_rtl_alloc \
+	CppunitTest_sal_rtl_cipher \
+	CppunitTest_sal_rtl_crc32 \
+	CppunitTest_sal_rtl_doublelock \
+	CppunitTest_sal_rtl_locale \
+	CppunitTest_sal_rtl_math \
+	CppunitTest_sal_rtl_ostringbuffer \
+	CppunitTest_sal_rtl_oustringbuffer \
+	CppunitTest_sal_rtl_strings \
+	CppunitTest_sal_types \
+))
+
+# CppunitTest_sal_osl_pipe has circular dependency on unotest
+# $(eval $(call gb_Module_add_subsequentcheck_targets,sal,\
+	CppunitTest_sal_osl_pipe \
+))
+
+# error when building test-getsystempathfromfileurl.cxx \
+	CppunitTest_sal_osl_getsystempathfromfileurl \
 
 # vim: set noet sw=4 ts=4:

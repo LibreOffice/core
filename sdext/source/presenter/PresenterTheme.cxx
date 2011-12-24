@@ -573,24 +573,7 @@ PresenterTheme::SharedFontDescriptor PresenterTheme::GetFont (
     return SharedFontDescriptor();
 }
 
-
-
-
 //===== FontDescriptor ========================================================
-
-PresenterTheme::FontDescriptor::FontDescriptor (void)
-    : msFamilyName(),
-      msStyleName(),
-      mnSize(12),
-      mnColor(0x00000000),
-      msAnchor(OUString(RTL_CONSTASCII_USTRINGPARAM("Left"))),
-      mnXOffset(0),
-      mnYOffset(0)
-{
-}
-
-
-
 
 PresenterTheme::FontDescriptor::FontDescriptor (
     const ::boost::shared_ptr<FontDescriptor>& rpDescriptor)
@@ -614,9 +597,6 @@ PresenterTheme::FontDescriptor::FontDescriptor (
     }
 }
 
-
-
-
 bool PresenterTheme::FontDescriptor::PrepareFont (
     const Reference<rendering::XCanvas>& rxCanvas)
 {
@@ -632,9 +612,6 @@ bool PresenterTheme::FontDescriptor::PrepareFont (
 
     return mxFont.is();
 }
-
-
-
 
 Reference<rendering::XCanvasFont> PresenterTheme::FontDescriptor::CreateFont (
     const Reference<rendering::XCanvas>& rxCanvas,
@@ -657,9 +634,6 @@ Reference<rendering::XCanvasFont> PresenterTheme::FontDescriptor::CreateFont (
         Sequence<beans::PropertyValue>(),
         geometry::Matrix2D(1,0,0,1));
 }
-
-
-
 
 double PresenterTheme::FontDescriptor::GetCellSizeForDesignSize (
     const Reference<rendering::XCanvas>& rxCanvas,
@@ -687,9 +661,6 @@ double PresenterTheme::FontDescriptor::GetCellSizeForDesignSize (
     const double nScale = (nAscent+nDescent) / nAscent;
     return nDesignSize * nScale;
 }
-
-
-
 
 //===== Theme =================================================================
 

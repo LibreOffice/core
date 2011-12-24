@@ -272,7 +272,7 @@ void OTableHelper::refreshColumns()
     if(!isNew())
     {
         Any aCatalog;
-        if ( m_CatalogName.getLength() )
+        if ( !m_CatalogName.isEmpty() )
             aCatalog <<= m_CatalogName;
 
         ::utl::SharedUNOComponent< XResultSet > xResult( getMetaData()->getColumns(
@@ -330,7 +330,7 @@ const ColumnDesc* OTableHelper::getColumnDescription(const ::rtl::OUString& _sNa
 void OTableHelper::refreshPrimaryKeys(TStringVector& _rNames)
 {
     Any aCatalog;
-    if ( m_CatalogName.getLength() )
+    if ( !m_CatalogName.isEmpty() )
         aCatalog <<= m_CatalogName;
     Reference< XResultSet > xResult = getMetaData()->getPrimaryKeys(aCatalog,m_SchemaName,m_Name);
 
@@ -359,7 +359,7 @@ void OTableHelper::refreshPrimaryKeys(TStringVector& _rNames)
 void OTableHelper::refreshForeignKeys(TStringVector& _rNames)
 {
     Any aCatalog;
-    if ( m_CatalogName.getLength() )
+    if ( !m_CatalogName.isEmpty() )
         aCatalog <<= m_CatalogName;
     Reference< XResultSet > xResult = getMetaData()->getImportedKeys(aCatalog,m_SchemaName,m_Name);
     Reference< XRow > xRow(xResult,UNO_QUERY);
@@ -387,7 +387,7 @@ void OTableHelper::refreshForeignKeys(TStringVector& _rNames)
                 }
 
 
-            if ( sFkName.getLength() && !xRow->wasNull() )
+            if ( !sFkName.isEmpty() && !xRow->wasNull() )
             {
                 if ( sOldFKName != sFkName )
                 {
@@ -446,7 +446,7 @@ void OTableHelper::refreshIndexes()
     {
         // fill indexes
         Any aCatalog;
-        if ( m_CatalogName.getLength() )
+        if ( !m_CatalogName.isEmpty() )
             aCatalog <<= m_CatalogName;
         Reference< XResultSet > xResult = getMetaData()->getIndexInfo(aCatalog,m_SchemaName,m_Name,sal_False,sal_False);
 
@@ -459,10 +459,10 @@ void OTableHelper::refreshIndexes()
             while( xResult->next() )
             {
                 aName = xRow->getString(5);
-                if(aName.getLength())
+                if(!aName.isEmpty())
                     aName += sCatalogSep;
                 aName += xRow->getString(6);
-                if ( aName.getLength() )
+                if ( !aName.isEmpty() )
                 {
                     // don't insert the name if the last one we inserted was the same
                     if (sPreviousRoundName != aName)

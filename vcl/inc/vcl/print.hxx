@@ -677,8 +677,6 @@ class VCL_DLLPUBLIC PrinterOptionsHelper
                                                        );
 };
 
-VCL_DLLPUBLIC bool useSystemPrintDialog();
-
 }
 
 

@@ -160,10 +160,10 @@ ImplFontAttrCache::ImplFontAttrCache( const String& rFileNameURL, const String& 
     ImplDevFontAttributes aDFA;
     for(;;)
     {
-        aCacheFile.ReadByteString( aFontFileURL, RTL_TEXTENCODING_UTF8 );
+        aFontFileURL = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(aCacheFile, RTL_TEXTENCODING_UTF8);
         if( !aFontFileURL.Len() )
             break;
-        aCacheFile.ReadByteString( aDFA.maName, RTL_TEXTENCODING_UTF8 );
+        aDFA.maName = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(aCacheFile, RTL_TEXTENCODING_UTF8);
 
         short n;
         aCacheFile >> n; aDFA.meWeight     = static_cast<FontWeight>(n);
@@ -195,8 +195,8 @@ ImplFontAttrCache::~ImplFontAttrCache()
             {
                 const String rFontFileURL( (*aIter).first );
                 const ImplDevFontAttributes& rDFA( (*aIter).second );
-                aCacheFile.WriteByteString( rFontFileURL, RTL_TEXTENCODING_UTF8 );
-                aCacheFile.WriteByteString( rDFA.maName, RTL_TEXTENCODING_UTF8 );
+                write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(aCacheFile, rFontFileURL, RTL_TEXTENCODING_UTF8);
+                write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(aCacheFile, rDFA.maName, RTL_TEXTENCODING_UTF8);
 
                 aCacheFile << static_cast<short>(rDFA.meWeight);
                 aCacheFile << static_cast<short>(rDFA.meItalic);
@@ -205,13 +205,12 @@ ImplFontAttrCache::~ImplFontAttrCache()
                 aCacheFile << static_cast<short>(rDFA.meFamily);
                 aCacheFile << static_cast<short>(rDFA.mbSymbolFlag != false);
 
-                aCacheFile.WriteByteStringLine( rDFA.maStyleName, RTL_TEXTENCODING_UTF8 );
+                write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(aCacheFile, rDFA.maStyleName, RTL_TEXTENCODING_UTF8);
 
                 ++aIter;
             }
             // EOF Marker
-            String aEmptyStr;
-            aCacheFile.WriteByteString( aEmptyStr, RTL_TEXTENCODING_UTF8 );
+            write_lenPrefixed_uInt8s_FromOString<sal_uInt16>(aCacheFile, rtl::OString());
         }
     }
 }
@@ -515,7 +514,7 @@ bool WinGlyphFallbackSubstititution::HasMissingChars( const ImplFontData* pFace,
         HFONT hOldFont = ::SelectFont( mhDC, hNewFont );
 
         // read CMAP table to update their pCharMap
-        pWinFont->UpdateFromHDC( mhDC );;
+        pWinFont->UpdateFromHDC( mhDC );
 
         // cleanup temporary font
         ::SelectFont( mhDC, hOldFont );
@@ -1769,7 +1768,7 @@ void WinSalGraphics::GetFontMetric( ImplFontMetricData* pMetric, int nFallbackLe
         return;
 
     // device independent font attributes
-    pMetric->meFamily       = ImplFamilyToSal( aWinMetric.tmPitchAndFamily );;
+    pMetric->meFamily       = ImplFamilyToSal( aWinMetric.tmPitchAndFamily );
     pMetric->mbSymbolFlag   = (aWinMetric.tmCharSet == SYMBOL_CHARSET);
     pMetric->meWeight       = ImplWeightToSal( aWinMetric.tmWeight );
     pMetric->mePitch        = ImplMetricPitchToSal( aWinMetric.tmPitchAndFamily );
@@ -2259,7 +2258,7 @@ static bool ImplGetFontAttrFromFile( const String& rFontFileURL,
     rDFA.meWidthType  = WIDTH_DONTKNOW;
     rDFA.meWeight     = WEIGHT_DONTKNOW;
     rDFA.meItalic     = ITALIC_DONTKNOW;
-    rDFA.mePitch      = PITCH_DONTKNOW;;
+    rDFA.mePitch      = PITCH_DONTKNOW;
     rDFA.mbSubsettable= true;
     rDFA.mbEmbeddable = false;
 
@@ -2377,7 +2376,7 @@ bool WinSalGraphics::AddTempDevFont( ImplDevFontList* pFontList,
     aDFA.meWidthType  = WIDTH_DONTKNOW;
     aDFA.meWeight     = WEIGHT_DONTKNOW;
     aDFA.meItalic     = ITALIC_DONTKNOW;
-    aDFA.mePitch      = PITCH_DONTKNOW;;
+    aDFA.mePitch      = PITCH_DONTKNOW;
     aDFA.mbSubsettable= true;
     aDFA.mbEmbeddable = false;
 

@@ -503,6 +503,9 @@ sal_uLong SwASCIIParser::ReadChars()
 void SwASCIIParser::InsertText( const String& rStr )
 {
     pDoc->InsertString( *pPam, rStr );
+    pDoc->UpdateRsid( *pPam, rStr.Len() );
+    pDoc->UpdateParRsid( pPam->GetPoint()->nNode.GetNode().GetTxtNode() );
+
     if( pItemSet && pBreakIt && nScript != ( SCRIPTTYPE_LATIN |
                                              SCRIPTTYPE_ASIAN |
                                              SCRIPTTYPE_COMPLEX ) )

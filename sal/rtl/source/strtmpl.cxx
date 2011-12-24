@@ -106,7 +106,7 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( compare_WithLength )( const IMPL_RTL_STRCOD
 
     --pStr1;
     --pStr2;
-    while( (--nCount >= 0) && (*++pStr1 == *++pStr2) );
+    while( (--nCount >= 0) && (*++pStr1 == *++pStr2) ) ;
 
     if( nCount >= 0 )
         nRet = ((sal_Int32)(IMPL_RTL_USTRCODE( *pStr1 )))

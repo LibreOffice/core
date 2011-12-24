@@ -1015,7 +1015,7 @@ void SfxAcceleratorConfigPage::Apply(const css::uno::Reference< css::ui::XAccele
 
         try
         {
-            if (sCommand.getLength())
+            if (!sCommand.isEmpty())
                 xAccMgr->setKeyEvent(aAWTKey, sCommand);
             else
                 xAccMgr->removeKeyEvent(aAWTKey);
@@ -1233,7 +1233,7 @@ IMPL_LINK( SfxAcceleratorConfigPage, LoadHdl, sfx2::FileDialogHelper*, EMPTYARG 
     if ( ERRCODE_NONE == m_pFileDlg->GetError() )
         sCfgName = m_pFileDlg->GetPath();
 
-    if ( !sCfgName.getLength() )
+    if ( sCfgName.isEmpty() )
         return 0;
 
     GetTabDialog()->EnterWait();
@@ -1317,7 +1317,7 @@ IMPL_LINK( SfxAcceleratorConfigPage, SaveHdl, sfx2::FileDialogHelper*, EMPTYARG 
     if ( ERRCODE_NONE == m_pFileDlg->GetError() )
         sCfgName = m_pFileDlg->GetPath();
 
-    if ( !sCfgName.getLength() )
+    if ( sCfgName.isEmpty() )
         return 0;
 
     GetTabDialog()->EnterWait();
@@ -1358,7 +1358,7 @@ IMPL_LINK( SfxAcceleratorConfigPage, SaveHdl, sfx2::FileDialogHelper*, EMPTYARG 
             // set the correct media type if the storage was new created
             ::rtl::OUString sMediaType;
             xUIConfigProps->getPropertyValue(MEDIATYPE_PROPNAME) >>= sMediaType;
-            if (!sMediaType.getLength())
+            if (sMediaType.isEmpty())
                 xUIConfigProps->setPropertyValue(MEDIATYPE_PROPNAME, css::uno::makeAny(MEDIATYPE_UICONFIG));
 
             xCfgMgr = css::uno::Reference< css::ui::XUIConfigurationManager >(m_xSMGR->createInstance(SERVICE_UICONFIGMGR), css::uno::UNO_QUERY_THROW);

@@ -35,27 +35,35 @@ EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
 
 .INCLUDE :	settings.mk
 
-.IF "$(SYSTEM_CAIRO)" == "YES" || "$(GUIBASE)" == "android"
+.IF "$(SYSTEM_CAIRO)" == "YES"
 all:
     @echo "Not building cairo."
 .ENDIF
 
 # --- Files --------------------------------------------------------
 
-CAIROVERSION=1.8.0
+CAIROVERSION=1.10.2
 
 TARFILE_NAME=$(PRJNAME)-$(CAIROVERSION)
-TARFILE_MD5=4ea70ea87b47e92d318d4e7f5b940f47
+TARFILE_MD5=f101a9e88b783337b20b2e26dfd26d5f
 
 PATCH_FILES=..$/$(TARFILE_NAME).patch
+
+.IF "$(OS)$(COM)" == "WNTMSC"
+PATCH_FILES+= ..$/$(TARFILE_NAME).wntmsc.patch
+.ENDIF
 
 .IF "$(OS)" == "IOS"
 PATCH_FILES+=..$/$(TARFILE_NAME).no-atsui.patch
 PATCH_FILES+=..$/$(TARFILE_NAME).ios.patch
 .ENDIF
 
+.IF "$(OS)" == "ANDROID"
+PATCH_FILES+=..$/$(TARFILE_NAME).android.patch
+.ENDIF
+
 cairo_CFLAGS=$(SOLARINC)
-cairo_LDFLAGS=$(SOLARLIB)
+cairo_LDFLAGS=-L$(SOLARVER)$/$(INPATH)$/lib
 
 cairo_CPPFLAGS=
 
@@ -83,16 +91,16 @@ cairo_LIBS+=$(MINGW_SHARED_LIBSTDCPP)
 
 CONFIGURE_DIR=
 CONFIGURE_ACTION=cp $(SRC_ROOT)$/$(PRJNAME)$/cairo$/dummy_pkg_config . && .$/configure
-CONFIGURE_FLAGS=--disable-xlib --disable-ft --disable-pthread --disable-svg --enable-gtk-doc=no --enable-test-surfaces=no --enable-static=no --build=i586-pc-mingw32 --host=i586-pc-mingw32 PKG_CONFIG=./dummy_pkg_config CC="$(cairo_CC)" LIBS="$(cairo_LIBS)" ZLIB3RDLIB=$(ZLIB3RDLIB) COMPRESS=$(cairo_COMPRESS) OBJDUMP="$(WRAPCMD) objdump"
+CONFIGURE_FLAGS=--disable-valgrind --disable-xlib --disable-ft --disable-pthread --disable-svg --enable-gtk-doc=no --enable-test-surfaces=no --enable-static=no --build=i586-pc-mingw32 --host=i586-pc-mingw32 PKG_CONFIG=./dummy_pkg_config CC="$(cairo_CC)" LIBS="$(cairo_LIBS)" ZLIB3RDLIB=$(ZLIB3RDLIB) COMPRESS=$(cairo_COMPRESS) OBJDUMP="$(WRAPCMD) objdump"
 BUILD_ACTION=$(GNUMAKE)
 BUILD_FLAGS+= -j$(EXTMAXPROCESS)
-BUILD_DIR=$(CONFIGURE_DIR)
+BUILD_DIR=$(CONFIGURE_DIR)$/src
 .IF "$(GUI)$(COM)"=="WNTGCC"
 .EXPORT : PWD
 .ENDIF
 
 .ELSE   # WNT, not GCC
-BUILD_ACTION=$(GNUMAKE) -f Makefile.win32 CFG=release
+BUILD_ACTION=$(GNUMAKE) -f Makefile.win32 CFG=release ZLIB3RDLIB=$(ZLIB3RDLIB)
 BUILD_DIR=
 .ENDIF
 
@@ -111,7 +119,7 @@ CONFIGURE_ACTION=cp $(SRC_ROOT)$/$(PRJNAME)$/cairo$/dummy_pkg_config . && .$/con
 .IF $(MAC_OS_X_VERSION_MIN_REQUIRED) >= 1070
 PATCH_FILES+=..$/$(TARFILE_NAME).no-atsui.patch
 .ENDIF
-CONFIGURE_FLAGS=--enable-static=no --disable-xlib --disable-ft --disable-svg --enable-quartz --enable-quartz-font --enable-gtk-doc=no --enable-test-surfaces=no PKG_CONFIG=./dummy_pkg_config ZLIB3RDLIB=$(ZLIB3RDLIB) COMPRESS=$(cairo_COMPRESS)
+CONFIGURE_FLAGS=--enable-static=no --disable-valgrind --disable-xlib --disable-ft --disable-svg --enable-quartz --enable-quartz-font --enable-gtk-doc=no --enable-test-surfaces=no PKG_CONFIG=./dummy_pkg_config ZLIB3RDLIB=$(ZLIB3RDLIB) COMPRESS=$(cairo_COMPRESS)
 .IF "$(CROSS_COMPILING)"=="YES"
 CONFIGURE_FLAGS+=--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)
 .ENDIF
@@ -119,7 +127,7 @@ cairo_CPPFLAGS+=$(EXTRA_CDEFS)
 cairo_LDFLAGS+=$(EXTRA_LINKFLAGS)
 BUILD_ACTION=$(GNUMAKE)
 BUILD_FLAGS+= -j$(EXTMAXPROCESS)
-BUILD_DIR=$(CONFIGURE_DIR)
+BUILD_DIR=$(CONFIGURE_DIR)$/src
 
 OUT2INC+=src$/cairo-quartz.h
 
@@ -159,15 +167,31 @@ CONFIGURE_ACTION=.$/configure
 .ENDIF
 
 .IF "$(OS)"=="IOS"
-CONFIGURE_FLAGS=--disable-shared --disable-xlib --enable-quartz --enable-quartz-font
+CONFIGURE_FLAGS=--disable-shared
 .ELSE
-CONFIGURE_FLAGS=--disable-static --enable-xlib
+CONFIGURE_FLAGS=--disable-static
 .ENDIF
 
 .IF "$(OS)"=="IOS" || "$(OS)"=="ANDROID"
-CONFIGURE_FLAGS+=--disable-ft PKG_CONFIG=./dummy_pkg_config
+CONFIGURE_FLAGS+=--disable-xlib
+.ELSE
+CONFIGURE_FLAGS+=--enable-xlib
+.ENDIF
+
+.IF "$(OS)"=="IOS"
+CONFIGURE_FLAGS+=--enable-quartz --enable-quartz-font
+.ENDIF
+
+CONFIGURE_FLAGS+=--disable-valgrind
+
+.IF "$(OS)"=="IOS"
+CONFIGURE_FLAGS+=--disable-ft
 .ELSE
 CONFIGURE_FLAGS+=--enable-ft
+.ENDIF
+
+.IF "$(OS)"=="IOS" || "$(OS)"=="ANDROID"
+CONFIGURE_FLAGS+=PKG_CONFIG=./dummy_pkg_config
 .ENDIF
 
 CONFIGURE_FLAGS+=--disable-svg --enable-gtk-doc=no --enable-test-surfaces=no ZLIB3RDLIB=$(ZLIB3RDLIB) COMPRESS=$(cairo_COMPRESS)
@@ -178,7 +202,7 @@ CONFIGURE_FLAGS+=--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)
 
 BUILD_ACTION=$(GNUMAKE)
 BUILD_FLAGS+= -j$(EXTMAXPROCESS)
-BUILD_DIR=$(CONFIGURE_DIR)
+BUILD_DIR=$(CONFIGURE_DIR)$/src
 
 .IF "$(OS)" == "IOS"
 OUT2INC+=src$/cairo-quartz.h
@@ -233,7 +257,7 @@ OUT2BIN+=src$/.libs$/*.dll
 OUT2LIB+=src$/release$/*.lib
 OUT2BIN+=src$/release$/*.dll
 .ENDIF
-.ELIF "$(OS)"=="IOS" || "$(OS)"=="ANDROID"
+.ELIF "$(OS)"=="IOS"
 OUT2LIB+=src$/.libs$/libcairo*.a
 .ELSE
 OUT2LIB+=src$/.libs$/libcairo.so*

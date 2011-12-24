@@ -491,7 +491,7 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
 
 
     // Check result to create a hash code from the user install path
-    if ( aUserInstallPathHashCode.getLength() == 0 )
+    if ( aUserInstallPathHashCode.isEmpty() )
         return IPC_STATUS_BOOTSTRAP_ERROR; // Something completely broken, we cannot create a valid hash code!
 
     pThread->maPipeIdent = pThread->maPipeIdent + aUserInstallPathHashCode;
@@ -790,7 +790,7 @@ void SAL_CALL OfficeIPCThread::run()
                     else if ( aCmdLineArgs->IsWeb() )
                         eFactory = SvtModuleOptions::E_WRITERWEB;
 
-                    if ( pRequest->aOpenList.getLength() )
+                    if ( !pRequest->aOpenList.isEmpty() )
                         pRequest->aModule = aOpt.GetFactoryName( eFactory );
                     else
                         AddURLToStringList( aOpt.GetFactoryEmptyDocumentURL( eFactory ), pRequest->aOpenList );
@@ -907,13 +907,13 @@ static void AddToDispatchList(
     const OUString& aParam,
     const OUString& aFactory )
 {
-    if ( aRequestList.getLength() > 0 )
+    if ( !aRequestList.isEmpty() )
     {
         sal_Int32 nIndex = 0;
         do
         {
             OUString aToken = aRequestList.getToken( 0, '\n', nIndex );
-            if ( aToken.getLength() > 0 )
+            if ( !aToken.isEmpty() )
                 rDispatchList.push_back(
                     DispatchWatcher::DispatchRequest( nType, aToken, cwdUrl, aParam, aFactory ));
         }
@@ -933,7 +933,7 @@ static void AddConversionsToDispatchList(
     DispatchWatcher::RequestType nType;
     OUString aParam( rParam );
 
-    if( rParam.getLength() )
+    if( !rParam.isEmpty() )
     {
         nType = DispatchWatcher::REQUEST_CONVERSION;
         aParam = rParam;
@@ -951,7 +951,7 @@ static void AddConversionsToDispatchList(
     if( !::osl::FileBase::getAbsoluteFileURL( aPWD, rParamOut, aOutDir ) )
         ::osl::FileBase::getSystemPathFromFileURL( aOutDir, aOutDir );
 
-    if( rParamOut.trim().getLength() )
+    if( !rParamOut.trim().isEmpty() )
     {
         aParam += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(";"));
         aParam += aOutDir;
@@ -962,13 +962,13 @@ static void AddConversionsToDispatchList(
         aParam += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ";" )) + aPWD;
     }
 
-    if ( rRequestList.getLength() > 0 )
+    if ( !rRequestList.isEmpty() )
     {
         sal_Int32 nIndex = 0;
         do
         {
             OUString aToken = rRequestList.getToken( 0, '\n', nIndex );
-            if ( aToken.getLength() > 0 )
+            if ( !aToken.isEmpty() )
                 rDispatchList.push_back(
                     DispatchWatcher::DispatchRequest( nType, aToken, cwdUrl, aParam, rFactory ));
         }

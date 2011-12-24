@@ -185,7 +185,7 @@ struct AnnotatingVisitor
                     if (sValue.copy(0,1).equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("#")))
                         aFound = maGradientIdMap.find(sValue.copy(1));
                     else
-                        aFound = maGradientIdMap.find(sValue);;
+                        aFound = maGradientIdMap.find(sValue);
 
                     if( aFound != maGradientIdMap.end() )
                         maGradientVector.back() = maGradientVector[aFound->second];
@@ -223,7 +223,7 @@ struct AnnotatingVisitor
                     if (sValue.copy(0,1).equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("#")))
                         aFound = maGradientIdMap.find(sValue.copy(1));
                     else
-                        aFound = maGradientIdMap.find(sValue);;
+                        aFound = maGradientIdMap.find(sValue);
 
                     if( aFound != maGradientIdMap.end() )
                         maGradientVector.back() = maGradientVector[aFound->second];
@@ -829,7 +829,7 @@ struct AnnotatingVisitor
                 if (sValue.copy(0,1).equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("#")))
                     aFound = maStopIdMap.find(sValue.copy(1));
                 else
-                    aFound = maStopIdMap.find(sValue);;
+                    aFound = maStopIdMap.find(sValue);
 
                 if( aFound != maStopIdMap.end() )
                     io_rGradientStop =  maGradientStopVector[aFound->second];

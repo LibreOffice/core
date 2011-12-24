@@ -68,8 +68,6 @@ public:
     sal_Bool IsRubyEnabled() const;
     sal_Bool IsChangeCaseMapEnabled() const;
     sal_Bool IsDoubleLinesEnabled() const;
-    sal_Bool IsEmphasisMarksEnabled() const;
-    sal_Bool IsVerticalCallOutEnabled() const;
 
     void        SetAll(sal_Bool bSet);
     sal_Bool    IsAnyEnabled() const;

@@ -26,43 +26,16 @@
  *
  ************************************************************************/
 
-#include <com/sun/star/uno/Reference.h>
-#include <sfx2/basedlgs.hxx>
-#include <sfx2/tabdlg.hxx>
-#include <svtools/svtreebx.hxx>
 #include <tools/resary.hxx>
-#include <vcl/image.hxx>
 #include <vcl/fixbrd.hxx>
-#include <vcl/fixed.hxx>
-#include <svx/xtable.hxx>
 
-#include <vector>
+class SfxModule;
+class SfxShell;
 
 // static ----------------------------------------------------------------
 
 sal_Bool            EnableSSO();
 CreateTabPage   GetSSOCreator( void );
-
-// class OfaOptionsTreeListBox -------------------------------------------
-
-class SfxModule;
-class SfxShell;
-class SfxItemSet;
-class XColorList;
-class OfaOptionsTreeListBox : public SvTreeListBox
-{
-    using  SvListView::Collapse;
-
-private:
-    sal_Bool            bInCollapse;
-
-public:
-    OfaOptionsTreeListBox(Window* pParent, const ResId& rResId) :
-        SvTreeListBox( pParent, rResId ), bInCollapse(sal_False) {}
-
-    virtual sal_Bool    Collapse( SvLBoxEntry* pParent );
-    sal_Bool            IsInCollapse()const {return bInCollapse;}
-};
 
 // struct OrderedEntry ---------------------------------------------------
 
@@ -184,16 +157,8 @@ private:
     PushButton      aBackPB;
 
     FixedBorder     aHiddenGB;
-    FixedText       aPageTitleFT;
-    FixedLine       aLine1FL;
-    FixedText       aHelpFT;
-    FixedImage      aHelpImg;
 
-    ImageList       aPageImages;
-
-    ResStringArray  aHelpTextsArr;
-
-    OfaOptionsTreeListBox   aTreeLB;
+    SvTreeListBox   aTreeLB;
 
     String          sTitle;
     String          sNotLoadedError;
@@ -202,18 +167,14 @@ private:
 
     // for the ColorTabPage
     SfxItemSet*     pColorPageItemSet;
-    SvxColorTabPage *mpColorPage;;
+    SvxColorTabPage *mpColorPage;
 
     sal_Bool        bForgetSelection;
     sal_Bool        bExternBrowserActive;
-    sal_Bool        bImageResized;
-    bool            bInSelectHdl_Impl;
     bool            bIsFromExtensionManager;
 
     // check "for the current document only" and set focus to "Western" languages box
     bool            bIsForSetDocumentLanguage;
-
-    Timer           aSelectTimer;
 
     com::sun::star::uno::Reference < com::sun::star::awt::XContainerWindowProvider >
                     m_xContainerWinProvider;
@@ -247,10 +208,9 @@ protected:
     DECL_LINK(BackHdl_Impl, PushButton* );
     DECL_LINK( OKHdl_Impl, Button * );
     DECL_LINK( HintHdl_Impl, Timer * );
-    DECL_LINK( SelectHdl_Impl, Timer * );
+    void SelectHdl_Impl();
 
     virtual long    Notify( NotifyEvent& rNEvt );
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt );
     virtual short   Execute();
 
 public:

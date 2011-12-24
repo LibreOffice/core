@@ -36,7 +36,6 @@
 #include <cppuhelper/weakref.hxx>
 #include <svx/svdtypes.hxx>
 #include <svx/svdlayer.hxx>
-#include <svx/sdrcomment.hxx>
 #include <vector>
 #include <svx/sdrpageuser.hxx>
 #include <svx/sdr/contact/viewobjectcontactredirector.hxx>
@@ -566,14 +565,6 @@ public:
         const sdr::contact::ViewObjectContact& rOriginal,
         const sdr::contact::DisplayInfo& rDisplayInfo,
         bool bEdit );
-
-    //////////////////////////////////////////////////////////////////////////////
-    // sdr::Comment interface
-private:
-    sdr::CommentVector                                  maComments;
-
-public:
-    sal_uInt32 GetCommentCount() const { return maComments.size(); }
 };
 
 typedef tools::WeakReference< SdrPage > SdrPageWeakRef;

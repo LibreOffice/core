@@ -79,19 +79,6 @@ struct ScClipParam
     void setSourceDocID( sal_uInt32 nVal ) { mnSourceDocID = nVal; }
 };
 
-// ============================================================================
-
-struct ScClipRangeNameData
-{
-    ScRangeData::IndexMap       maRangeMap;
-    ::std::vector<ScRangeData*> mpRangeNames; // Don't insert NULL pointers.
-    bool                        mbReplace;
-
-    ScClipRangeNameData();
-    ~ScClipRangeNameData();
-    void insert(sal_uInt16 nOldIndex, sal_uInt16 nNewIndex);
-};
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

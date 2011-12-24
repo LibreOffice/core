@@ -296,88 +296,18 @@ SvStream& operator>>( SvStream& rIStream, Color& rColor )
     DBG_ASSERTWARNING( rIStream.GetVersion(), "Color::>> - Solar-Version not set on rIStream" );
 
     sal_uInt16      nColorName;
-    sal_uInt16      nRed;
-    sal_uInt16      nGreen;
-    sal_uInt16      nBlue;
 
     rIStream >> nColorName;
 
     if ( nColorName & COL_NAME_USER )
     {
-        if ( rIStream.GetCompressMode() == COMPRESSMODE_FULL )
-        {
-            unsigned char   cAry[6];
-            sal_uInt16          i = 0;
+        sal_uInt16 nRed;
+        sal_uInt16 nGreen;
+        sal_uInt16 nBlue;
 
-            nRed    = 0;
-            nGreen  = 0;
-            nBlue   = 0;
-
-            if ( nColorName & COL_RED_2B )
-                i += 2;
-            else if ( nColorName & COL_RED_1B )
-                i++;
-            if ( nColorName & COL_GREEN_2B )
-                i += 2;
-            else if ( nColorName & COL_GREEN_1B )
-                i++;
-            if ( nColorName & COL_BLUE_2B )
-                i += 2;
-            else if ( nColorName & COL_BLUE_1B )
-                i++;
-
-            rIStream.Read( cAry, i );
-            i = 0;
-
-            if ( nColorName & COL_RED_2B )
-            {
-                nRed = cAry[i];
-                nRed <<= 8;
-                i++;
-                nRed |= cAry[i];
-                i++;
-            }
-            else if ( nColorName & COL_RED_1B )
-            {
-                nRed = cAry[i];
-                nRed <<= 8;
-                i++;
-            }
-            if ( nColorName & COL_GREEN_2B )
-            {
-                nGreen = cAry[i];
-                nGreen <<= 8;
-                i++;
-                nGreen |= cAry[i];
-                i++;
-            }
-            else if ( nColorName & COL_GREEN_1B )
-            {
-                nGreen = cAry[i];
-                nGreen <<= 8;
-                i++;
-            }
-            if ( nColorName & COL_BLUE_2B )
-            {
-                nBlue = cAry[i];
-                nBlue <<= 8;
-                i++;
-                nBlue |= cAry[i];
-                i++;
-            }
-            else if ( nColorName & COL_BLUE_1B )
-            {
-                nBlue = cAry[i];
-                nBlue <<= 8;
-                i++;
-            }
-        }
-        else
-        {
-            rIStream >> nRed;
-            rIStream >> nGreen;
-            rIStream >> nBlue;
-        }
+        rIStream >> nRed;
+        rIStream >> nGreen;
+        rIStream >> nBlue;
 
         rColor.mnColor = RGB_COLORDATA( nRed>>8, nGreen>>8, nBlue>>8 );
     }
@@ -441,64 +371,10 @@ SvStream& operator<<( SvStream& rOStream, const Color& rColor )
     nGreen  = (nGreen<<8) + nGreen;
     nBlue   = (nBlue<<8) + nBlue;
 
-    if ( rOStream.GetCompressMode() == COMPRESSMODE_FULL )
-    {
-        unsigned char   cAry[6];
-        sal_uInt16          i = 0;
-
-        if ( nRed & 0x00FF )
-        {
-            nColorName |= COL_RED_2B;
-            cAry[i] = (unsigned char)(nRed & 0xFF);
-            i++;
-            cAry[i] = (unsigned char)((nRed >> 8) & 0xFF);
-            i++;
-        }
-        else if ( nRed & 0xFF00 )
-        {
-            nColorName |= COL_RED_1B;
-            cAry[i] = (unsigned char)((nRed >> 8) & 0xFF);
-            i++;
-        }
-        if ( nGreen & 0x00FF )
-        {
-            nColorName |= COL_GREEN_2B;
-            cAry[i] = (unsigned char)(nGreen & 0xFF);
-            i++;
-            cAry[i] = (unsigned char)((nGreen >> 8) & 0xFF);
-            i++;
-        }
-        else if ( nGreen & 0xFF00 )
-        {
-            nColorName |= COL_GREEN_1B;
-            cAry[i] = (unsigned char)((nGreen >> 8) & 0xFF);
-            i++;
-        }
-        if ( nBlue & 0x00FF )
-        {
-            nColorName |= COL_BLUE_2B;
-            cAry[i] = (unsigned char)(nBlue & 0xFF);
-            i++;
-            cAry[i] = (unsigned char)((nBlue >> 8) & 0xFF);
-            i++;
-        }
-        else if ( nBlue & 0xFF00 )
-        {
-            nColorName |= COL_BLUE_1B;
-            cAry[i] = (unsigned char)((nBlue >> 8) & 0xFF);
-            i++;
-        }
-
-        rOStream << nColorName;
-        rOStream.Write( cAry, i );
-    }
-    else
-    {
-        rOStream << nColorName;
-        rOStream << nRed;
-        rOStream << nGreen;
-        rOStream << nBlue;
-    }
+    rOStream << nColorName;
+    rOStream << nRed;
+    rOStream << nGreen;
+    rOStream << nBlue;
 
     return rOStream;
 }

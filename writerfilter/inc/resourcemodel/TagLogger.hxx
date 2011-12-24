@@ -73,14 +73,18 @@ namespace writerfilter
         void element(const std::string & name);
         void unoPropertySet(uno::Reference<beans::XPropertySet> rPropSet);
 #endif
+#if OSL_DEBUG_LEVEL > 1
         void startElement(const std::string & name);
+#endif
         void attribute(const std::string & name, const std::string & value);
+#if OSL_DEBUG_LEVEL > 1
         void attribute(const std::string & name, const ::rtl::OUString & value);
         void attribute(const std::string & name, sal_uInt32 value);
         void attribute(const std::string & name, const uno::Any aAny);
         void chars(const std::string & chars);
         void chars(const ::rtl::OUString & chars);
         void endElement();
+#endif
 
 #ifdef DEBUG_CONTEXT_HANDLER
         void propertySet(writerfilter::Reference<Properties>::Pointer_t props,

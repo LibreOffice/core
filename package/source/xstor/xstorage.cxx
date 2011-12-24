@@ -4843,13 +4843,13 @@ void SAL_CALL OStorage::setEncryptionAlgorithms( const uno::Sequence< beans::Nam
         try {
             m_pImpl->ReadContents();
         }
-        catch ( uno::RuntimeException& aRuntimeException )
+        catch ( const uno::RuntimeException& aRuntimeException )
         {
             m_pImpl->AddLog( aRuntimeException.Message );
             m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
             throw;
         }
-        catch ( uno::Exception& aException )
+        catch ( const uno::Exception& aException )
         {
             m_pImpl->AddLog( aException.Message );
             m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
@@ -4867,20 +4867,20 @@ void SAL_CALL OStorage::setEncryptionAlgorithms( const uno::Sequence< beans::Nam
             xPackPropSet->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ENCRYPTION_ALGORITHMS_PROPERTY ) ),
                                             uno::makeAny( aAlgorithms ) );
         }
-        catch ( uno::RuntimeException& aRuntimeException )
+        catch ( const uno::RuntimeException& aRuntimeException )
         {
             m_pImpl->AddLog( aRuntimeException.Message );
             m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
             throw;
         }
-        catch( lang::IllegalArgumentException& aIAException )
+        catch( const lang::IllegalArgumentException& aIAException )
         {
             m_pImpl->AddLog( aIAException.Message );
             m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
 
             throw;
         }
-        catch( uno::Exception& aException )
+        catch( const uno::Exception& aException )
         {
             m_pImpl->AddLog( aException.Message );
             m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
@@ -4914,13 +4914,13 @@ uno::Sequence< beans::NamedValue > SAL_CALL OStorage::getEncryptionAlgorithms()
         try {
             m_pImpl->ReadContents();
         }
-        catch ( uno::RuntimeException& aRuntimeException )
+        catch ( const uno::RuntimeException& aRuntimeException )
         {
             m_pImpl->AddLog( aRuntimeException.Message );
             m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
             throw;
         }
-        catch ( uno::Exception& aException )
+        catch ( const uno::Exception& aException )
         {
             m_pImpl->AddLog( aException.Message );
             m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
@@ -4937,13 +4937,13 @@ uno::Sequence< beans::NamedValue > SAL_CALL OStorage::getEncryptionAlgorithms()
         {
             xPackPropSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ENCRYPTION_ALGORITHMS_PROPERTY ) ) ) >>= aResult;
         }
-        catch ( uno::RuntimeException& aRuntimeException )
+        catch ( const uno::RuntimeException& aRuntimeException )
         {
             m_pImpl->AddLog( aRuntimeException.Message );
             m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
             throw;
         }
-        catch( uno::Exception& aException )
+        catch( const uno::Exception& aException )
         {
             m_pImpl->AddLog( aException.Message );
             m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );

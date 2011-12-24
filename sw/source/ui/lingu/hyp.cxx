@@ -113,7 +113,7 @@ sal_Bool SwHyphWrapper::SpellContinue()
         bShowError = sal_False;
         PSH->Push();
         PSH->ClearMark();
-        pView->SpellError( &nLangError );
+        pView->SpellError( nLangError );
         PSH->Combine();
     }
     return GetLast().is();

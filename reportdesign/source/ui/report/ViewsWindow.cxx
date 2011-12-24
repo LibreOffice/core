@@ -738,7 +738,7 @@ void OViewsWindow::collectBoundResizeRect(const TRectangleMap& _rSortRectangles,
                                             getStyleProperty<awt::Size>(xReportDefinition,PROPERTY_PAPERSIZE).Width  - getStyleProperty<sal_Int32>(xReportDefinition,PROPERTY_RIGHTMARGIN),
                                             xSection->getHeight()));
                     }
-                    catch(uno::Exception){}
+                    catch(const uno::Exception &){}
                 }
             }
             else

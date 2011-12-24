@@ -95,34 +95,10 @@ void PresenterFrameworkObserver::RunOnUpdateEnd (
         rAction);
 }
 
-
-
-
-bool PresenterFrameworkObserver::HasResource (
-    const css::uno::Reference<css::drawing::framework::XConfigurationController>&rxController,
-    const css::uno::Reference<css::drawing::framework::XResourceId>& rxResourceId)
-{
-    return rxController.is() && rxController->getResource(rxResourceId).is();
-}
-
-
-
-
 bool PresenterFrameworkObserver::True (void)
 {
     return true;
 }
-
-
-
-
-bool PresenterFrameworkObserver::False (void)
-{
-    return false;
-}
-
-
-
 
 void SAL_CALL PresenterFrameworkObserver::disposing (void)
 {
@@ -130,9 +106,6 @@ void SAL_CALL PresenterFrameworkObserver::disposing (void)
         maAction(false);
     Shutdown();
 }
-
-
-
 
 void PresenterFrameworkObserver::Shutdown (void)
 {

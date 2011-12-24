@@ -359,7 +359,7 @@ void SAL_CALL GeometryHandler::inspect( const uno::Reference< uno::XInterface > 
         if ( xSection.is() )
             lcl_collectFunctionNames( xSection, m_aFunctionNames );
     }
-    catch(uno::Exception)
+    catch(const uno::Exception &)
     {
         throw lang::NullPointerException();
     }
@@ -1607,9 +1607,9 @@ bool GeometryHandler::impl_dialogFilter_nothrow( ::rtl::OUString& _out_rSelected
         if ( bSuccess )
             _out_rSelectedClause = xComposer->getFilter();
     }
-    catch (sdb::SQLContext& e) { aErrorInfo = e; }
-    catch (sdbc::SQLWarning& e) { aErrorInfo = e; }
-    catch (sdbc::SQLException& e) { aErrorInfo = e; }
+    catch (const sdb::SQLContext& e) { aErrorInfo = e; }
+    catch (const sdbc::SQLWarning& e) { aErrorInfo = e; }
+    catch (const sdbc::SQLException& e) { aErrorInfo = e; }
     catch( const uno::Exception& )
     {
         OSL_FAIL( "GeometryHandler::impl_dialogFilter_nothrow: caught an exception!" );

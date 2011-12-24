@@ -55,7 +55,7 @@ void SvClassElement::Load( SvPersistStream & rStm )
         return;
     }
     if( nMask & 0x01 ) rStm >> aAutomation;
-    if( nMask & 0x02 ) rStm.ReadByteString( aPrefix );
+    if( nMask & 0x02 ) aPrefix = read_lenPrefixed_uInt8s_ToOString<sal_uInt16>(rStm);
     if( nMask & 0x04 )
     {
         SvMetaClass * p;
@@ -75,7 +75,7 @@ void SvClassElement::Save( SvPersistStream & rStm )
     // write data
     rStm << nMask;
     if( nMask & 0x01 ) rStm << aAutomation;
-    if( nMask & 0x02 ) rStm.WriteByteString( aPrefix );
+    if( nMask & 0x02 ) write_lenPrefixed_uInt8s_FromOString<sal_uInt16>(rStm, aPrefix);
     if( nMask & 0x04 ) rStm << xClass;
 }
 
@@ -135,7 +135,6 @@ void SvMetaClass::Save( SvPersistStream & rStm )
     if( nMask & 0x10 ) rStm << aAutomation;
 }
 
-#ifdef IDL_COMPILER
 void SvMetaClass::ReadAttributesSvIdl( SvIdlDataBase & rBase,
                                         SvTokenStream & rInStm )
 {
@@ -325,7 +324,7 @@ sal_Bool SvMetaClass::TestAttribute( SvIdlDataBase & rBase, SvTokenStream & rInS
     if ( !rAttr.GetRef() && rAttr.IsA( TYPE( SvMetaSlot ) ) )
     {
         OSL_FAIL( "Neuer Slot : " );
-        OSL_FAIL( rAttr.GetSlotId().GetBuffer() );
+        OSL_FAIL( rAttr.GetSlotId().getIdentifier().GetBuffer() );
     }
 
     for( sal_uLong n = 0; n < aAttrList.Count(); n++ )
@@ -338,8 +337,8 @@ sal_Bool SvMetaClass::TestAttribute( SvIdlDataBase & rBase, SvTokenStream & rInS
             {
                 OSL_FAIL( "Gleicher Name in MetaClass : " );
                 OSL_FAIL( pS->GetName().GetBuffer() );
-                OSL_FAIL( pS->GetSlotId().GetBuffer() );
-                OSL_FAIL( rAttr.GetSlotId().GetBuffer() );
+                OSL_FAIL( pS->GetSlotId().getIdentifier().GetBuffer() );
+                OSL_FAIL( rAttr.GetSlotId().getIdentifier().GetBuffer() );
 
                 rtl::OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM("Attribute's "));
                 aStr.append(pS->GetName());
@@ -358,8 +357,8 @@ sal_Bool SvMetaClass::TestAttribute( SvIdlDataBase & rBase, SvTokenStream & rInS
                 OSL_FAIL( "Gleiche Id in MetaClass : " );
                 OSL_FAIL(rtl::OString::valueOf(static_cast<sal_Int32>(
                     pS->GetSlotId().GetValue())).getStr());
-                OSL_FAIL( pS->GetSlotId().GetBuffer() );
-                OSL_FAIL( rAttr.GetSlotId().GetBuffer() );
+                OSL_FAIL( pS->GetSlotId().getIdentifier().GetBuffer() );
+                OSL_FAIL( rAttr.GetSlotId().getIdentifier().GetBuffer() );
 
                 rtl::OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM("Attribute "));
                 aStr.append(pS->GetName());
@@ -750,7 +749,5 @@ void SvMetaClass::WriteCxx( SvIdlDataBase &, SvStream & rOutStm, sal_uInt16 )
     << "\t" << pSup << "::Notify( rBC, rHint );" << endl
     << '}' << endl;
 }
-
-#endif // IDL_COMPILER
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

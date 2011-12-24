@@ -22,12 +22,12 @@
     - temporarily (!) change the DOCTYPE of your file to read (all on one line)
       <!DOCTYPE Locale SYSTEM "http://cgit.freedesktop.org/libreoffice/core/plain/i18npool/source/localedata/data/locale.dtd">
 
-    - upload it to the form available at http://www.validome.org/
+    - upload it to the form available at http://www.validome.org/xml/
 
     This will validate the file against the HEAD revision of locale.dtd
 
 
-    Please test locale data files either in an --enable-dbgutil build, which
+    Please test locale data files either in an enable-dbgutil build, which
     implements some checks and pops up assertion message boxes if the tests
     fail, or by setting the environment variable OOO_ENABLE_LOCALE_DATA_CHECKS
     to 'Y' or 'Yes' (or any other string starting with 'Y') or '1' before

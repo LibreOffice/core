@@ -1131,7 +1131,7 @@
 						<desc>Determines whether certain settings are applied (display of tab stops, spaces, breaks)</desc>
 						<label>Meta characters</label>
 					</info>
-					<value>true</value>
+					<value>false</value>
 				</prop>
 				<prop oor:name="ParagraphEnd" oor:type="xs:boolean">
 					<!-- OldPath: Writer/Contents/Nonprinting_characters -->
@@ -2810,6 +2810,36 @@
 				</prop>
 			</group>
 		</group>
+        <group oor:name="Comparison">
+            <info>
+                <desc>Contains settings for comparing files.</desc>
+            </info>
+            <prop oor:name="Mode" oor:type="xs:short">
+                <info>
+                    <author>OS</author>
+                    <desc>Defines the Comparison Mode.</desc>
+                </info>
+            </prop>
+
+            <prop oor:name="UseRSID" oor:type="xs:boolean">
+                <info>
+                    <author>OS</author>
+                    <desc>Specifies if RSIDs are used in comparison.</desc>
+                </info>
+            </prop>
+            <prop oor:name="IgnorePieces" oor:type="xs:boolean">
+                <info>
+                    <author>OS</author>
+                    <desc>Specifies if short pieces of matched text are ignored.</desc>
+                </info>
+            </prop>
+            <prop oor:name="IgnoreLength" oor:type="xs:short">
+                <info>
+                    <author>OS</author>
+                    <desc>Defines the length of ignored pieces.</desc>
+                </info>
+            </prop>
+        </group>
 		<group oor:name="Insert">
 			<info>
 				<desc>Specifies the settings for inserting various object types.</desc>

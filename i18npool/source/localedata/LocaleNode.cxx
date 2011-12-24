@@ -594,6 +594,7 @@ void LCCTYPENode::generateCode (const OFileWriter &of) const
 }
 
 
+static OUString sTheCurrencyReplaceTo;
 static OUString sTheCompatibleCurrency;
 
 sal_Int16 LCFormatNode::mnSection = 0;
@@ -603,7 +604,10 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
 {
     OUString str;
     if (mnSection == 0)
+    {
+        sTheCurrencyReplaceTo = OUString();
         sTheCompatibleCurrency = OUString();
+    }
     else if (mnSection >= 2)
         incError("more than 2 LC_FORMAT sections");
     OUString strFrom( getAttr().getValueByName("replaceFrom"));
@@ -612,15 +616,20 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
     if (strFrom.getLength() && !str.getLength())
         incErrorStr("replaceFrom=\"%s\" replaceTo=\"\" is empty replacement.", strFrom);
     // Locale data generator inserts FFFF for LangID, we need to adapt that.
-    if (str.endsWithIgnoreAsciiCaseAsciiL( "-FFFF]", 6))
+    if (str.endsWithIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM( "-FFFF]")))
         incErrorStr("replaceTo=\"%s\" needs FFFF to be adapted to the real LangID value.", str);
     of.writeParameter("replaceTo", str, mnSection);
+    // Remember the replaceTo value for "[CURRENCY]" to check format codes.
+    if (strFrom.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "[CURRENCY]")))
+        sTheCurrencyReplaceTo = str;
     // Remember the currency symbol if present.
     if (str.indexOfAsciiL( "[$", 2) == 0)
     {
         sal_Int32 nHyphen = str.indexOf( '-');
         if (nHyphen >= 3)
+        {
             sTheCompatibleCurrency = str.copy( 2, nHyphen - 2);
+        }
     }
     ::rtl::OUString useLocale =   getAttr().getValueByName("ref");
     if (useLocale.getLength() > 0) {
@@ -756,6 +765,13 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
                         if (aCode.indexOf( aPar1 ) > 0 || aCode.indexOf( aPar2 ) > 0 ||
                                 aCode.indexOf( aPar3 ) > 0 || aCode.indexOf( aPar4 ) > 0)
                             fprintf( stderr, "Warning: FormatCode formatindex=\"%d\" for currency uses parentheses for negative amounts, which probably is not correct for locales not based on en_US.\n", formatindex);
+                    }
+                    // Check if we have replaceTo for "[CURRENCY]" placeholder.
+                    if (sTheCurrencyReplaceTo.isEmpty())
+                    {
+                        OUString aCode( n->getValue());
+                        if (aCode.indexOfAsciiL( RTL_CONSTASCII_STRINGPARAM( "[CURRENCY]")) >= 0)
+                            incErrorInt( "[CURRENCY] replaceTo not found for formatindex=\"%d\".", formatindex);
                     }
                     break;
             }

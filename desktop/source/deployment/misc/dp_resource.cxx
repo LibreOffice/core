@@ -49,7 +49,7 @@ struct OfficeLocale :
         OUString slang(utl::ConfigManager::getLocale());
         //fallback, the locale is currently only set when the user starts the
         //office for the first time.
-        if (slang.getLength() == 0)
+        if (slang.isEmpty())
             slang =  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("en-US"));
         return slang;
     }
@@ -180,7 +180,7 @@ void checkThirdSubtag(::rtl::OUString const & tag)
     checkPrimarySubtag(lang);
     locale.Language = lang;
     OUString country = _sLang.getToken( 0, '-', nIndex );
-    if (country.getLength() > 0)
+    if (!country.isEmpty())
     {
         bool bIsCountry = false;
         checkSecondSubtag(country, bIsCountry);
@@ -193,10 +193,10 @@ void checkThirdSubtag(::rtl::OUString const & tag)
              locale.Variant = country;
         }
     }
-    if (locale.Variant.getLength() == 0)
+    if (locale.Variant.isEmpty())
     {
         OUString variant = _sLang.getToken( 0, '-', nIndex );
-        if (variant.getLength() > 0)
+        if (!variant.isEmpty())
         {
             checkThirdSubtag(variant);
             locale.Variant = variant;

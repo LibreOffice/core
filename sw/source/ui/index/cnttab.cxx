@@ -2441,7 +2441,7 @@ IMPL_LINK(SwTOXEntryTabPage, InsertTokenHdl, PushButton*, pBtn)
     {
         sText.AssignAscii(SwForm::aFormLinkStt);
         eTokenType = TOKEN_LINK_START;
-        sCharStyle = String(SW_RES(STR_POOLCHR_INET_NORMAL));
+        sCharStyle = String(SW_RES(STR_POOLCHR_TOXJUMP));
     }
     else if(pBtn == &aTabPB)
     {
@@ -2505,7 +2505,7 @@ IMPL_LINK(SwTOXEntryTabPage, LevelHdl, SvTreeListBox*, pBox)
 
         // #i21237#
         SwFormTokens aPattern = m_pCurrentForm->GetPattern(nLevel + 1);
-        SwFormTokens::iterator aIt = aPattern.begin();;
+        SwFormTokens::iterator aIt = aPattern.begin();
 
         while(aIt != aPattern.end())
         {

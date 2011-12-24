@@ -49,7 +49,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         if (!options.initOptions(args))
            return (0);
     }
-    catch( IllegalArgument& e)
+    catch(const IllegalArgument& e)
     {
         fprintf(stderr, "Illegal argument: %s\n%s",
             e.m_message.getStr(),

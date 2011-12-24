@@ -458,7 +458,7 @@ Reference< XPropertySet > ODbDataSourceAdministrationHelper::getCurrentDataSourc
         {
             ::rtl::OUString sCurrentDatasource;
             m_aDataSourceOrName >>= sCurrentDatasource;
-            OSL_ENSURE(sCurrentDatasource.getLength(),"No datasource name given!");
+            OSL_ENSURE(!sCurrentDatasource.isEmpty(),"No datasource name given!");
             try
             {
                 if ( m_xDatabaseContext.is() )
@@ -793,7 +793,7 @@ void ODbDataSourceAdministrationHelper::fillDatasourceInfo(const SfxItemSet& _rS
             {
                 ::rtl::OUString sCharSet;
                 implTranslateProperty(pCurrent) >>= sCharSet;
-                if ( sCharSet.getLength() )
+                if ( !sCharSet.isEmpty() )
                     aRelevantSettings.insert(PropertyValue(aTranslation->second, 0, makeAny(sCharSet), PropertyState_DIRECT_VALUE));
             }
             else
@@ -904,7 +904,7 @@ void ODbDataSourceAdministrationHelper::fillDatasourceInfo(const SfxItemSet& _rS
             {
                 ::rtl::OUString sCharSet;
                 aLoop->Value >>= sCharSet;
-                if ( sCharSet.getLength() )
+                if ( !sCharSet.isEmpty() )
                     *pAppendValues = *aLoop;
             }
             else

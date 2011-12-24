@@ -1796,7 +1796,7 @@ void ImpEditEngine::ImpConvert( rtl::OUString &rConvTxt, LanguageType &rConvTxtL
     pEditView->ShowCursor( sal_True, sal_False );
 
     rConvTxt = aRes;
-    if (rConvTxt.getLength())
+    if ( !rConvTxt.isEmpty() )
         rConvTxtLang = nResLang;
 }
 

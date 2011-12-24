@@ -28,6 +28,7 @@
 #ifndef _STREAM_HXX
 #define _STREAM_HXX
 
+#include <limits>
 #include "tools/toolsdllapi.h"
 #include <tools/solar.h>
 #include <tools/string.hxx>
@@ -90,7 +91,6 @@ typedef sal_uInt16 StreamMode;
 #define NUMBERFORMAT_INT_BIGENDIAN      (sal_uInt16)0x0000
 #define NUMBERFORMAT_INT_LITTLEENDIAN   (sal_uInt16)0xFFFF
 
-#define COMPRESSMODE_FULL           (sal_uInt16)0xFFFF
 #define COMPRESSMODE_NONE           (sal_uInt16)0x0000
 #define COMPRESSMODE_ZBITMAP            (sal_uInt16)0x0001
 #define COMPRESSMODE_NATIVE             (sal_uInt16)0x0010
@@ -363,13 +363,6 @@ public:
     SvStream&       operator<<( const unsigned char* pBuf );
     SvStream&       operator<<( SvStream& rStream );
 
-    SvStream&       ReadByteString( UniString& rStr, rtl_TextEncoding eSrcCharSet );
-    SvStream&       ReadByteString( UniString& rStr ) { return ReadByteString( rStr, GetStreamCharSet() ); }
-    SvStream&       ReadByteString( ByteString& rStr );
-    SvStream&       WriteByteString( const UniString& rStr, rtl_TextEncoding eDestCharSet );
-    SvStream&       WriteByteString( const UniString& rStr ) { return WriteByteString( rStr, GetStreamCharSet() ); }
-    SvStream&       WriteByteString( const ByteString& rStr );
-
     SvStream&       WriteNumber( sal_uInt32 nUInt32 );
     SvStream&       WriteNumber( sal_Int32 nInt32 );
 
@@ -384,13 +377,6 @@ public:
     sal_Bool        IsEof() const { return bIsEof; }
     // next Tell() <= nSize
     sal_Bool        SetStreamSize( sal_Size nSize );
-
-                /// Read in the stream to a zero character and put all
-                /// read chracters in the Bytestring. The String interface
-                /// convert the BytString with the given encoding to a String
-    sal_Bool        ReadCString( ByteString& rStr );
-    sal_Bool        ReadCString( String& rStr, rtl_TextEncoding eToEncode );
-    sal_Bool        ReadCString( String& rStr ) { return ReadCString( rStr, GetStreamCharSet()); }
 
     sal_Bool        ReadLine( ByteString& rStr );
     sal_Bool        ReadLine( rtl::OString& rStr );
@@ -421,6 +407,12 @@ public:
 
                 /// Read a line of Unicode
     sal_Bool        ReadUniStringLine( String& rStr );
+                /// Read a 32bit length prefixed sequence of utf-16 if eSrcCharSet==RTL_TEXTENCODING_UNICODE,
+                /// otherwise read a 16bit length prefixed sequence of bytes and convert from eSrcCharSet
+    SvStream&       ReadUniOrByteString( UniString& rStr, rtl_TextEncoding eSrcCharSet );
+                /// Write a 32bit length prefixed sequence of utf-16 if eSrcCharSet==RTL_TEXTENCODING_UNICODE,
+                /// otherwise convert to eSrcCharSet and write a 16bit length prefixed sequence of bytes
+    SvStream&       WriteUniOrByteString( const UniString& rStr, rtl_TextEncoding eDestCharSet );
                 /// Read a line of Unicode if eSrcCharSet==RTL_TEXTENCODING_UNICODE,
                 /// otherwise read a line of Bytecode and convert from eSrcCharSet
     sal_Bool        ReadUniOrByteStringLine( String& rStr, rtl_TextEncoding eSrcCharSet );
@@ -554,11 +546,70 @@ TOOLS_DLLPUBLIC SvStream& endlub( SvStream& rStr );
 
 //Attempt to read nLen 8bit units to an OString, returned rtl::OString's length
 //is number of units successfully read
-TOOLS_DLLPUBLIC rtl::OString read_uInt8s_AsOString(SvStream& rStr, sal_Size nLen);
+TOOLS_DLLPUBLIC rtl::OString read_uInt8s_ToOString(SvStream& rStrm, sal_Size nLen);
 
 //Attempt to read nLen little endian 16bit units to an OUString, returned
 //rtl::OUString's length is number of units successfully read
-TOOLS_DLLPUBLIC rtl::OUString read_LEuInt16s_AsOUString(SvStream& rStr, sal_Size nLen);
+TOOLS_DLLPUBLIC rtl::OUString read_LEuInt16s_ToOUString(SvStream& rStrm, sal_Size nLen);
+
+//Attempt to read 8bit units to an OString until a zero terminator is
+//encountered, returned rtl::OString's length is number of units *definitely*
+//successfully read, check SvStream::good() to see if null terminator was
+//sucessfully read
+TOOLS_DLLPUBLIC rtl::OString read_zeroTerminated_uInt8s_ToOString(SvStream& rStrm);
+
+//Attempt to read 8bit units assuming source encoding eEnc to an OUString until
+//a zero terminator is encountered. Check SvStream::good() to see if null
+//terminator was sucessfully read
+TOOLS_DLLPUBLIC rtl::OUString read_zeroTerminated_uInt8s_ToOUString(SvStream& rStrm, rtl_TextEncoding eEnc);
+
+//Attempt to read a pascal-style length (of type prefix) prefixed sequence of
+//8bit units to an OString, returned rtl::OString's length is number of units
+//successfully read.
+template<typename prefix> rtl::OString read_lenPrefixed_uInt8s_ToOString(SvStream& rStrm)
+{
+    prefix nLen = 0;
+    rStrm >> nLen;
+    return read_uInt8s_ToOString(rStrm, nLen);
+}
+
+//Attempt to read a pascal-style length (of type prefix) prefixed sequence of
+//8bit units to an OUString
+template<typename prefix> rtl::OUString read_lenPrefixed_uInt8s_ToOUString(SvStream& rStrm,
+    rtl_TextEncoding eEnc)
+{
+    return rtl::OStringToOUString(read_lenPrefixed_uInt8s_ToOString<prefix>(rStrm), eEnc);
+}
+
+//Attempt to write a pascal-style length (of type prefix) prefixed sequence of
+//8bit units from an OString, returned value is number of bytes written (including
+//byte-count of prefix)
+template<typename prefix> sal_Size write_lenPrefixed_uInt8s_FromOString(SvStream& rStrm,
+    const rtl::OString &rStr)
+{
+    SAL_WARN_IF(rStr.getLength() > std::numeric_limits<prefix>::max(),
+        "tools.stream",
+        "string too long for prefix count to fit in output type");
+
+    sal_Size nWritten = 0;
+    prefix nLen = std::min<sal_Size>(rStr.getLength(), std::numeric_limits<prefix>::max());
+    rStrm << nLen;
+    if (rStrm.good())
+    {
+        nWritten += sizeof(prefix);
+        nWritten += rStrm.Write(rStr.getStr(), nLen);
+    }
+    return nWritten;
+}
+
+//Attempt to write a pascal-style length (of type prefix) prefixed sequence of
+//8bit units from an OUString, returned value is number of bytes written (including
+//byte-count of prefix)
+template<typename prefix> sal_Size write_lenPrefixed_uInt8s_FromOUString(SvStream& rStrm,
+    const rtl::OUString &rStr, rtl_TextEncoding eEnc)
+{
+    return write_lenPrefixed_uInt8s_FromOString<prefix>(rStrm, rtl::OUStringToOString(rStr, eEnc));
+}
 
 // --------------
 // - FileStream -

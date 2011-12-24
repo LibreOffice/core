@@ -37,10 +37,12 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sc_ucalc, \
 
 $(eval $(call gb_CppunitTest_add_library_objects,sc_ucalc,sc))
 
-$(call gb_CxxObject_get_target,sc/qa/unit/ucalc): $(WORKDIR)/AllLangRes/sc
-$(call gb_CxxObject_get_target,sc/qa/unit/ucalc): $(WORKDIR)/AllLangRes/frm
-$(call gb_CxxObject_get_target,sc/qa/unit/ucalc): $(WORKDIR)/AllLangRes/for
-$(call gb_CxxObject_get_target,sc/qa/unit/ucalc): $(WORKDIR)/AllLangRes/forui
+$(call gb_CxxObject_get_target,sc/qa/unit/ucalc): \
+    $(WORKDIR)/AllLangRes/for \
+    $(WORKDIR)/AllLangRes/forui \
+    $(WORKDIR)/AllLangRes/frm \
+    $(WORKDIR)/AllLangRes/sc \
+    $(call gb_Library_get_target,localedata_en) \
 
 
 $(eval $(call gb_CppunitTest_add_linked_libs,sc_ucalc, \

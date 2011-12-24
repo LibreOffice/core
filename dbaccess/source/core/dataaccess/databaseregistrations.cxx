@@ -218,7 +218,7 @@ namespace dbaccess
         if ( !m_aConfigurationRoot.isValid() )
             throw RuntimeException( ::rtl::OUString(), *this );
 
-        if ( !_rName.getLength() )
+        if ( _rName.isEmpty() )
             throw IllegalArgumentException( ::rtl::OUString(), *this, 1 );
 
         return impl_getNodeForName_throw( _rName, _bMustExist );
@@ -226,7 +226,7 @@ namespace dbaccess
 
     void DatabaseRegistrations::impl_checkValidLocation_throw( const ::rtl::OUString& _rLocation )
     {
-        if ( !_rLocation.getLength() )
+        if ( _rLocation.isEmpty() )
             throw IllegalArgumentException( ::rtl::OUString(), *this, 2 );
 
         INetURLObject aURL( _rLocation );

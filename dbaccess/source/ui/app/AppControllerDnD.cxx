@@ -227,7 +227,7 @@ void OApplicationController::deleteObjects( ElementType _eType, const ::std::vec
             {
                 svtools::QueryDeleteDlg_Impl aDlg( getView(), *aThisRound );
 
-                if ( sDialogPosition.getLength() )
+                if ( !sDialogPosition.isEmpty() )
                     aDlg.SetWindowState( sDialogPosition );
 
                 if ( nObjectsLeft > 1 )
@@ -510,7 +510,7 @@ TransferableHelper* OApplicationController::copyObject()
                     xMetaData = xConnection->getMetaData();
 
                 ::rtl::OUString sName = getContainer()->getQualifiedName( NULL );
-                if ( sName.getLength() )
+                if ( !sName.isEmpty() )
                 {
                     ::rtl::OUString sDataSource = getDatabaseName();
 
@@ -583,7 +583,7 @@ sal_Bool OApplicationController::paste( ElementType _eType,const ::svx::ODataAcc
                 if (CommandType::QUERY == nCommandType)
                     bValidDescriptor = sDataSourceName.getLength() && sCommand.getLength();
                 else if (CommandType::COMMAND == nCommandType)
-                    bValidDescriptor = (0 != sCommand.getLength());
+                    bValidDescriptor = !sCommand.isEmpty();
                 if (!bValidDescriptor)
                 {
                     OSL_FAIL("OApplicationController::paste: invalid descriptor!");
@@ -597,7 +597,7 @@ sal_Bool OApplicationController::paste( ElementType _eType,const ::svx::ODataAcc
                     if ( CommandType::QUERY == nCommandType )
                         sTargetName = sCommand;
 
-                    if ( !sTargetName.getLength() )
+                    if ( sTargetName.isEmpty() )
                     {
                         String sDefaultName = String( ModuleRes( STR_QRY_TITLE ) );
                         sDefaultName = sDefaultName.GetToken( 0, ' ' );
@@ -658,7 +658,7 @@ sal_Bool OApplicationController::paste( ElementType _eType,const ::svx::ODataAcc
 
                 DynamicTableOrQueryNameCheck aNameChecker( getConnection(), CommandType::QUERY );
                 ::dbtools::SQLExceptionInfo aDummy;
-                bool bNeedAskForName =  ( sCommand.getLength() == 0 )
+                bool bNeedAskForName =  ( sCommand.isEmpty() )
                                             /* we did not have a source name, so the target name was auto-generated */
                                     ||  ( !aNameChecker.isNameValid( sTargetName, aDummy ) );
                                             /*  name is invalid in the target DB (e.g. because it already

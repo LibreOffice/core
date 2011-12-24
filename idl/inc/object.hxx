@@ -89,7 +89,6 @@ class SvMetaClass : public SvMetaType
 
     sal_Bool                TestAttribute( SvIdlDataBase & rBase, SvTokenStream & rInStm,
                                      SvMetaAttribute & rAttr ) const;
-#ifdef IDL_COMPILER
     void                WriteSlotStubs( const ByteString & rShellName,
                                         SvSlotElementList & rSlotList,
                                         ByteStringList & rList,
@@ -119,7 +118,6 @@ protected:
                                     sal_Bool bVariable, sal_Bool bWriteTab,
                                     SvIdlDataBase & rBase,
                                     SvStream & rOutStm, sal_uInt16 nTab );
-#endif
 public:
             SV_DECL_META_FACTORY1( SvMetaClass, SvMetaType, 6 )
             SvMetaClass();
@@ -135,7 +133,6 @@ public:
                         GetClassList() const
                         { return aClassList; }
 
-#ifdef IDL_COMPILER
     virtual sal_Bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
     virtual void        WriteSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab );
     virtual void        Write( SvIdlDataBase & rBase, SvStream & rOutStm,
@@ -148,7 +145,6 @@ public:
                                  Table * pTable );
     virtual void        WriteCxx( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab );
     virtual void        WriteHxx( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab );
-#endif
 };
 SV_IMPL_REF(SvMetaClass)
 SV_IMPL_PERSIST_LIST(SvMetaClass,SvMetaClass *)

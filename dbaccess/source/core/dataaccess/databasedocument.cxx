@@ -207,7 +207,7 @@ ODatabaseDocument::ODatabaseDocument(const ::rtl::Reference<ODatabaseModelImpl>&
         // so we can properly finish our initialization then.
         impl_setInitializing();
 
-        if ( m_pImpl->getURL().getLength() )
+        if ( !m_pImpl->getURL().isEmpty() )
         {
             // if the previous incarnation of the DatabaseDocument already had an URL, then creating this incarnation
             // here is effectively loading the document.
@@ -380,7 +380,7 @@ namespace
     static Sequence< PropertyValue > lcl_appendFileNameToDescriptor( const ::comphelper::NamedValueCollection& _rDescriptor, const ::rtl::OUString _rURL )
     {
         ::comphelper::NamedValueCollection aMutableDescriptor( _rDescriptor );
-        if ( _rURL.getLength() )
+        if ( !_rURL.isEmpty() )
         {
             aMutableDescriptor.put( "FileName", _rURL );
             aMutableDescriptor.put( "URL", _rURL );
@@ -723,7 +723,7 @@ void SAL_CALL ODatabaseDocument::recoverFromFile( const ::rtl::OUString& i_Sourc
 {
     DocumentGuard aGuard( *this, DocumentGuard::InitMethod );
 
-    if ( i_SourceLocation.getLength() == 0 )
+    if ( i_SourceLocation.isEmpty() )
         throw IllegalArgumentException( ::rtl::OUString(), *this, 1 );
 
     try
@@ -747,7 +747,7 @@ void SAL_CALL ODatabaseDocument::recoverFromFile( const ::rtl::OUString& i_Sourc
 
         // by definition (of XDocumentRecovery), we're responsible for delivering a fully-initialized document,
         // which includes an attachResource call.
-        const ::rtl::OUString sLogicalDocumentURL( i_SalvagedFile.getLength() ? i_SalvagedFile : i_SourceLocation );
+        const ::rtl::OUString sLogicalDocumentURL( i_SalvagedFile.isEmpty() ?  i_SourceLocation : i_SalvagedFile  );
         impl_attachResource( sLogicalDocumentURL, aMediaDescriptor.getPropertyValues(), aGuard );
         // <- SYNCHRONIZED
     }
@@ -791,8 +791,8 @@ sal_Bool ODatabaseDocument::impl_attachResource( const ::rtl::OUString& i_rLogic
     // if no URL has been provided, the caller was lazy enough to not call our getURL - which is not allowed anymore,
     // now since getURL and getLocation both return the same, so calling one of those should be simple.
     ::rtl::OUString sDocumentURL( i_rLogicalDocumentURL );
-    OSL_ENSURE( sDocumentURL.getLength(), "ODatabaseDocument::impl_attachResource: invalid URL!" );
-    if ( !sDocumentURL.getLength() )
+    OSL_ENSURE( !sDocumentURL.isEmpty(), "ODatabaseDocument::impl_attachResource: invalid URL!" );
+    if ( sDocumentURL.isEmpty() )
         sDocumentURL = getURL();
 
     m_pImpl->setResource( sDocumentURL, i_rMediaDescriptor );
@@ -969,7 +969,7 @@ Reference< XInterface > SAL_CALL ODatabaseDocument::getCurrentSelection(  ) thro
 // XStorable
 sal_Bool SAL_CALL ODatabaseDocument::hasLocation(  ) throw (RuntimeException)
 {
-    return getLocation().getLength() > 0;
+    return !getLocation().isEmpty();
 }
 
 ::rtl::OUString SAL_CALL ODatabaseDocument::getLocation(  ) throw (RuntimeException)
@@ -991,7 +991,7 @@ void SAL_CALL ODatabaseDocument::store(  ) throw (IOException, RuntimeException)
     DocumentGuard aGuard( *this );
 
     ::rtl::OUString sDocumentURL( m_pImpl->getURL() );
-    if ( sDocumentURL.getLength() )
+    if ( !sDocumentURL.isEmpty() )
     {
         if ( m_pImpl->getDocFileLocation() == m_pImpl->getURL() )
             if ( m_pImpl->m_bDocumentReadOnly )
@@ -1003,7 +1003,7 @@ void SAL_CALL ODatabaseDocument::store(  ) throw (IOException, RuntimeException)
 
     // if we have no URL, but did survive the DocumentGuard above, then we've been inited via XLoadable::initNew,
     // i.e. we're based on a temporary storage
-    OSL_ENSURE( m_pImpl->getDocFileLocation().getLength() == 0, "ODatabaseDocument::store: unexpected URL inconsistency!" );
+    OSL_ENSURE( m_pImpl->getDocFileLocation().isEmpty(), "ODatabaseDocument::store: unexpected URL inconsistency!" );
 
     try
     {
@@ -1357,7 +1357,7 @@ void SAL_CALL ODatabaseDocument::removeDocumentEventListener( const Reference< X
 
 void SAL_CALL ODatabaseDocument::notifyDocumentEvent( const ::rtl::OUString& _EventName, const Reference< XController2 >& _ViewController, const Any& _Supplement ) throw (IllegalArgumentException, NoSupportException, RuntimeException)
 {
-    if ( !_EventName.getLength() )
+    if ( _EventName.isEmpty() )
         throw IllegalArgumentException( ::rtl::OUString(), *this, 1 );
 
     // SYNCHRONIZED ->
@@ -1425,7 +1425,7 @@ Reference< XNameAccess > ODatabaseDocument::impl_getDocumentContainer_throw( ODa
         {
             ::rtl::OUString sSupportService;
             aValue >>= sSupportService;
-            if ( sSupportService.getLength() )
+            if ( !sSupportService.isEmpty() )
             {
                 Sequence<Any> aArgs(1);
                 aArgs[0] <<= NamedValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DatabaseDocument")),makeAny(xMy));
@@ -1653,7 +1653,7 @@ void ODatabaseDocument::impl_writeStorage_throw( const Reference< XStorage >& _r
     if ( nDefVersion >= SvtSaveOptions::ODFVER_012 )
         aVersion = ODFVER_012_TEXT;
 
-    if ( aVersion.getLength() )
+    if ( !aVersion.isEmpty() )
     {
         try
         {
@@ -1726,7 +1726,7 @@ Reference< XUIConfigurationManager > SAL_CALL ODatabaseDocument::getUIConfigurat
                 rtl::OUString aMediaType;
                 Reference< XPropertySet > xPropSet( xConfigStorage, UNO_QUERY );
                 Any a = xPropSet->getPropertyValue( INFO_MEDIATYPE );
-                if ( !( a >>= aMediaType ) || ( aMediaType.getLength() == 0 ))
+                if ( !( a >>= aMediaType ) ||  aMediaType.isEmpty() )
                 {
                     a <<= aUIConfigMediaType;
                     xPropSet->setPropertyValue( INFO_MEDIATYPE, a );

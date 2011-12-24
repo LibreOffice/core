@@ -202,15 +202,6 @@ long ControlLayoutData::GetLineCount() const
 
 // -----------------------------------------------------------------------
 
-long Control::GetLineCount() const
-{
-    if( !HasLayoutData() )
-        FillLayoutData();
-    return mpControlData->mpLayoutData ? mpControlData->mpLayoutData->GetLineCount() : 0;
-}
-
-// -----------------------------------------------------------------------
-
 Pair ControlLayoutData::GetLineStartEnd( long nLine ) const
 {
     Pair aPair( -1, -1 );

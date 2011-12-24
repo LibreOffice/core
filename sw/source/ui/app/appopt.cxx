@@ -504,6 +504,7 @@ SfxTabPage* SwModule::CreateTabPage( sal_uInt16 nId, Window* pParent, const SfxI
         case RID_SW_TP_OPTSHDWCRSR:
         case RID_SW_TP_HTML_OPTSHDWCRSR:
         case RID_SW_TP_REDLINE_OPT:
+        case RID_SW_TP_COMPARISON_OPT:
         case RID_SW_TP_OPTLOAD_PAGE:
         case RID_SW_TP_OPTCOMPATIBILITY_PAGE:
         case RID_SW_TP_MAILCONFIG:
@@ -526,7 +527,6 @@ SfxTabPage* SwModule::CreateTabPage( sal_uInt16 nId, Window* pParent, const SfxI
             }
         }
         break;
-#if OSL_DEBUG_LEVEL > 1
         case  RID_SW_TP_OPTTEST_PAGE:
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
@@ -538,7 +538,6 @@ SfxTabPage* SwModule::CreateTabPage( sal_uInt16 nId, Window* pParent, const SfxI
             }
             break;
         }
-#endif
         case  RID_SW_TP_BACKGROUND:
         {
             SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
@@ -564,7 +563,8 @@ SfxTabPage* SwModule::CreateTabPage( sal_uInt16 nId, Window* pParent, const SfxI
         break;
     }
 
-    OSL_ENSURE( pRet, "SwModule::CreateTabPage(): Unknown tabpage id" );
+    if(!pRet)
+        SAL_WARN( "sw", "SwModule::CreateTabPage(): Unknown tabpage id " << nId );
     return pRet;
 }
 

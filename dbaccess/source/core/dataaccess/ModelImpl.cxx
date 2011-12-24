@@ -221,7 +221,7 @@ void DocumentStorageAccess::dispose()
 
 Reference< XStorage > DocumentStorageAccess::impl_openSubStorage_nothrow( const ::rtl::OUString& _rStorageName, sal_Int32 _nDesiredMode )
 {
-    OSL_ENSURE( _rStorageName.getLength(),"ODatabaseModelImpl::impl_openSubStorage_nothrow: Invalid storage name!" );
+    OSL_ENSURE( !_rStorageName.isEmpty(),"ODatabaseModelImpl::impl_openSubStorage_nothrow: Invalid storage name!" );
 
     Reference< XStorage > xStorage;
     try
@@ -576,7 +576,7 @@ namespace
             const TContentPtr& rDefinition( object->second );
             const ::rtl::OUString& rPersistentName( rDefinition->m_aProps.sPersistentName );
 
-            if ( !rPersistentName.getLength() )
+            if ( rPersistentName.isEmpty() )
             {   // it's a logical sub folder used to organize the real objects
                 const ODefinitionContainer_Impl& rSubFoldersObjectDefinitions( dynamic_cast< const ODefinitionContainer_Impl& >( *rDefinition.get() ) );
                 bSomeDocHasMacros = lcl_hasObjectWithMacros_throw( rSubFoldersObjectDefinitions, _rxContainerStorage );
@@ -783,13 +783,13 @@ const Reference< XNumberFormatsSupplier > & ODatabaseModelImpl::getNumberFormats
 
 void ODatabaseModelImpl::setDocFileLocation( const ::rtl::OUString& i_rLoadedFrom )
 {
-    ENSURE_OR_THROW( i_rLoadedFrom.getLength(), "invalid URL" );
+    ENSURE_OR_THROW( !i_rLoadedFrom.isEmpty(), "invalid URL" );
     m_sDocFileLocation = i_rLoadedFrom;
 }
 
 void ODatabaseModelImpl::setResource( const ::rtl::OUString& i_rDocumentURL, const Sequence< PropertyValue >& _rArgs )
 {
-    ENSURE_OR_THROW( i_rDocumentURL.getLength(), "invalid URL" );
+    ENSURE_OR_THROW( !i_rDocumentURL.isEmpty(), "invalid URL" );
 
     ::comphelper::NamedValueCollection aMediaDescriptor( _rArgs );
 #if OSL_DEBUG_LEVEL > 0
@@ -798,7 +798,7 @@ void ODatabaseModelImpl::setResource( const ::rtl::OUString& i_rDocumentURL, con
         ::rtl::OUString sSalvagedFile( aMediaDescriptor.getOrDefault( "SalvagedFile", ::rtl::OUString() ) );
         // If SalvagedFile is an empty string, this indicates "the document is being recovered, but i_rDocumentURL already
         // is the real document URL, not the temporary document location"
-        if ( !sSalvagedFile.getLength() )
+        if ( sSalvagedFile.isEmpty() )
             sSalvagedFile = i_rDocumentURL;
 
         OSL_ENSURE( sSalvagedFile == i_rDocumentURL, "ODatabaseModelImpl::setResource: inconsistency!" );
@@ -854,7 +854,7 @@ Reference< XStorage > ODatabaseModelImpl::getOrCreateRootStorage()
             aSource = m_aMediaDescriptor.get( "Stream" );
             if ( !aSource.hasValue() )
                 aSource = m_aMediaDescriptor.get( "InputStream" );
-            if ( !aSource.hasValue() && m_sDocFileLocation.getLength() )
+            if ( !aSource.hasValue() && !m_sDocFileLocation.isEmpty() )
                 aSource <<= m_sDocFileLocation;
             // TODO: shouldn't we also check URL?
 
@@ -1149,7 +1149,7 @@ TContentPtr& ODatabaseModelImpl::getObjectContainer( ObjectType _eType )
 
 void ODatabaseModelImpl::revokeDataSource() const
 {
-    if ( m_pDBContext && m_sDocumentURL.getLength() )
+    if ( m_pDBContext && !m_sDocumentURL.isEmpty() )
         m_pDBContext->revokeDatabaseDocument( *this );
 }
 
@@ -1294,7 +1294,7 @@ void ODatabaseModelImpl::impl_switchToLogicalURL( const ::rtl::OUString& i_rDocu
     const ::rtl::OUString sOldURL( m_sDocumentURL );
     // update our name, if necessary
     if  (   ( m_sName == m_sDocumentURL )   // our name is our old URL
-        ||  ( !m_sName.getLength() )        // we do not have a name, yet (i.e. are not registered at the database context)
+        ||  ( m_sName.isEmpty() )        // we do not have a name, yet (i.e. are not registered at the database context)
         )
     {
         INetURLObject aURL( i_rDocumentURL );
@@ -1309,13 +1309,13 @@ void ODatabaseModelImpl::impl_switchToLogicalURL( const ::rtl::OUString& i_rDocu
     m_sDocumentURL = i_rDocumentURL;
 
     // update our location, if necessary
-    if  ( m_sDocFileLocation.getLength() == 0 )
+    if  ( m_sDocFileLocation.isEmpty() )
         m_sDocFileLocation = m_sDocumentURL;
 
     // register at the database context, or change registration
     if ( m_pDBContext )
     {
-        if ( sOldURL.getLength() )
+        if ( !sOldURL.isEmpty() )
             m_pDBContext->databaseDocumentURLChange( sOldURL, m_sDocumentURL );
         else
             m_pDBContext->registerDatabaseDocument( *this );

@@ -137,6 +137,9 @@ $(eval $(call gb_CppunitTest_set_args,sc_datapilotfieldobj,\
 # a) explicitly depend on library msword because it is not implied by a link
 #    relation
 # b) explicitly depend on the sc resource files needed at unit-test runtime
-$(call gb_CppunitTest_get_target,sc_datapilotfieldobj) : $(call gb_Library_get_target,scfilt) $(WORKDIR)/AllLangRes/sc
+$(call gb_CppunitTest_get_target,sc_datapilotfieldobj) : \
+    $(WORKDIR)/AllLangRes/sc \
+    $(call gb_Library_get_target,localedata_en) \
+    $(call gb_Library_get_target,scfilt) \
 
 # vim: set noet sw=4 ts=4:

@@ -939,7 +939,7 @@ void SfxDispatchController_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
             {
                 ((::com::sun::star::frame::XStatusListener *)aIt.next())->statusChanged( aEvent );
             }
-            catch( ::com::sun::star::uno::RuntimeException& )
+            catch (const ::com::sun::star::uno::RuntimeException&)
             {
                 aIt.remove();
             }

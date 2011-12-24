@@ -45,7 +45,8 @@ $(eval $(call gb_Library_add_linked_libs,dbaxml,\
     dba \
     dbtools \
     sal \
-	sax \
+    salhelper \
+    sax \
     sfx \
     svl \
     tk \

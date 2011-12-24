@@ -43,7 +43,7 @@ IniParser::IniParser(OUString const & rIniName) throw(com::sun::star::io::IOExce
     oslFileHandle handle=NULL;
     oslFileError fileError = osl_File_E_INVAL;
     try{
-        if (iniUrl.getLength())
+        if (!iniUrl.isEmpty())
             fileError = osl_openFile(iniUrl.pData, &handle, osl_File_OpenFlag_Read);
     }
     catch(::com::sun::star::io::IOException&)
@@ -90,7 +90,7 @@ IniParser::IniParser(OUString const & rIniName) throw(com::sun::star::io::IOExce
                 {
                     sectionName =  OStringToOUString(
                         line.copy(nIndexStart + 1,nIndexEnd - nIndexStart -1).trim(), RTL_TEXTENCODING_ASCII_US );
-                    if (!sectionName.getLength())
+                    if (sectionName.isEmpty())
                         sectionName = OUString(RTL_CONSTASCII_USTRINGPARAM("no name section"));
 
                     ini_Section *aSection = &mAllSection[sectionName];

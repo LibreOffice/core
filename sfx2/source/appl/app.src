@@ -466,7 +466,7 @@ String RID_SVXSTR_GRAFIKLINK
 };
 String STR_SFX_FILTERNAME_ALL
 {
-    Text [ en-US ] = "All files (*.*)" ;
+    Text [ en-US ] = "All files" ;
 };
 String RID_SVXSTR_EDITGRFLINK
 {

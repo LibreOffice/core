@@ -247,7 +247,7 @@ namespace dbaui
                     INetURLObject aURL;
                     aURL.SetSmartURL( sURL );
                     // The password is set only when it is not empty.
-                    if ( sPassword.getLength() > 0 )
+                    if ( !sPassword.isEmpty() )
                         aURL.SetPass( sPassword );
 
                     if ( !sTitle.Len() )

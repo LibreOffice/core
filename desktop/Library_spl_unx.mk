@@ -36,6 +36,7 @@ $(eval $(call gb_Library_add_linked_libs,spl_unx,\
     cppu \
     cppuhelper \
     sal \
+    $(gb_STDLIBS) \
 ))
 
 $(eval $(call gb_Library_set_componentfile,spl_unx,desktop/unx/splash/splash))

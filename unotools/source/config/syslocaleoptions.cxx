@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-
 #include <com/sun/star/uno/Sequence.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/instance.hxx>
@@ -545,12 +544,6 @@ void SvtSysLocaleOptions::SetLocaleConfigString( const OUString& rStr )
     pOptions->SetLocaleString( rStr );
 }
 
-const OUString& SvtSysLocaleOptions::GetUILocaleConfigString() const
-{
-    MutexGuard aGuard( GetMutex() );
-    return pOptions->GetUILocaleString();
-}
-
 void SvtSysLocaleOptions::SetUILocaleConfigString( const OUString& rStr )
 {
     MutexGuard aGuard( GetMutex() );
@@ -658,11 +651,6 @@ void SvtSysLocaleOptions::ConfigurationChanged( utl::ConfigurationBroadcaster* p
 com::sun::star::lang::Locale SvtSysLocaleOptions::GetLocale() const
 {
     return lcl_str_to_locale( GetLocaleConfigString() );
-}
-
-com::sun::star::lang::Locale SvtSysLocaleOptions::GetUILocale() const
-{
-    return lcl_str_to_locale( GetUILocaleConfigString() );
 }
 
 com::sun::star::lang::Locale SvtSysLocaleOptions::GetRealLocale() const

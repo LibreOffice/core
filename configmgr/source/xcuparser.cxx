@@ -493,7 +493,7 @@ void XcuParser::handlePropValue(
             attrLn.equals(RTL_CONSTASCII_STRINGPARAM("external")))
         {
             external = reader.getAttributeValue(true).convertFromUtf8();
-            if (external.getLength() == 0) {
+            if (external.isEmpty()) {
                 throw css::uno::RuntimeException(
                     (rtl::OUString(
                         RTL_CONSTASCII_USTRINGPARAM(
@@ -512,7 +512,7 @@ void XcuParser::handlePropValue(
                  reader.getUrl()),
                 css::uno::Reference< css::uno::XInterface >());
         }
-        if (external.getLength() != 0) {
+        if (!external.isEmpty()) {
             throw css::uno::RuntimeException(
                 (rtl::OUString(
                     RTL_CONSTASCII_USTRINGPARAM(
@@ -522,7 +522,7 @@ void XcuParser::handlePropValue(
         }
         prop->setValue(valueParser_.getLayer(), css::uno::Any());
         state_.push(State(false));
-    } else if (external.getLength() == 0) {
+    } else if (external.isEmpty()) {
         valueParser_.separator_ = separator;
         valueParser_.start(prop);
     } else {

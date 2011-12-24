@@ -98,7 +98,7 @@ void OTableStyleContext::FillPropertySet(
     {
         if ( GetFamily() == XML_STYLE_FAMILY_TABLE_TABLE )
         {
-            if ( sPageStyle.getLength() )
+            if ( !sPageStyle.isEmpty() )
             {
                 uno::Any aAny;
                 aAny <<= sPageStyle;
@@ -107,7 +107,7 @@ void OTableStyleContext::FillPropertySet(
         }
         else if ( GetFamily() == XML_STYLE_FAMILY_TABLE_COLUMN )
         {
-            if ((m_nNumberFormat == -1) && m_sDataStyleName.getLength())
+            if ((m_nNumberFormat == -1) && !m_sDataStyleName.isEmpty())
             {
                 SvXMLNumFormatContext* pStyle = PTR_CAST(SvXMLNumFormatContext,pStyles->FindStyleChildContext(
                     XML_STYLE_FAMILY_DATA_STYLE, m_sDataStyleName, sal_True));
@@ -273,7 +273,7 @@ Reference < XNameContainer >
 ::rtl::OUString OTableStylesContext::GetServiceName( sal_uInt16 nFamily ) const
 {
     rtl::OUString sServiceName = SvXMLStylesContext::GetServiceName(nFamily);
-    if (!sServiceName.getLength())
+    if (sServiceName.isEmpty())
     {
         switch( nFamily )
         {

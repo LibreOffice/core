@@ -264,7 +264,7 @@ Reference< XInterface > SAL_CALL ODatabaseContext::createInstanceWithArguments( 
     ::rtl::OUString sURL = aArgs.getOrDefault( (::rtl::OUString)INFO_POOLURL, ::rtl::OUString() );
 
     Reference< XInterface > xDataSource;
-    if ( sURL.getLength() )
+    if ( !sURL.isEmpty() )
         xDataSource = getObject( sURL );
 
     if ( !xDataSource.is() )
@@ -305,7 +305,7 @@ Reference< XInterface >  ODatabaseContext::getRegisteredObject(const rtl::OUStri
 
     ::rtl::OUString sURL( getDatabaseLocation( _rName ) );
 
-    if ( !sURL.getLength() )
+    if ( sURL.isEmpty() )
         // there is a registration for this name, but no URL
         throw IllegalArgumentException();
 
@@ -428,7 +428,7 @@ void ODatabaseContext::registerObject(const rtl::OUString& _rName, const Referen
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(DatabaseAccessContext_Base::rBHelper.bDisposed);
 
-    if ( !_rName.getLength() )
+    if ( _rName.isEmpty() )
         throw IllegalArgumentException( ::rtl::OUString(), *this, 1 );
 
     Reference< XDocumentDataSource > xDocDataSource( _rxObject, UNO_QUERY );
@@ -437,7 +437,7 @@ void ODatabaseContext::registerObject(const rtl::OUString& _rName, const Referen
         throw IllegalArgumentException( ::rtl::OUString(), *this, 2 );
 
     ::rtl::OUString sURL = xModel->getURL();
-    if ( !sURL.getLength() )
+    if ( sURL.isEmpty() )
         throw IllegalArgumentException( DBACORE_RESSTRING( RID_STR_DATASOURCE_NOT_STORED ), *this, 2 );
 
     registerDatabaseLocation( _rName, sURL );
@@ -501,7 +501,7 @@ void ODatabaseContext::storeTransientProperties( ODatabaseModelImpl& _rModelImpl
     }
     else
     {
-        OSL_ENSURE( ( sDocumentURL.getLength() == 0 ) && ( _rModelImpl.m_sName.getLength() == 0 ),
+        OSL_ENSURE(  sDocumentURL.isEmpty()  &&  _rModelImpl.m_sName.isEmpty() ,
             "ODatabaseContext::storeTransientProperties: a non-empty data source which I do not know?!" );
     }
 }
@@ -614,7 +614,7 @@ Any ODatabaseContext::getByName(const rtl::OUString& _rName) throw( NoSuchElemen
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(DatabaseAccessContext_Base::rBHelper.bDisposed);
-    if ( !_rName.getLength() )
+    if ( _rName.isEmpty() )
         throw NoSuchElementException(_rName, *this);
 
     try

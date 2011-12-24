@@ -122,7 +122,7 @@ void SAL_CALL OBookmarkContainer::insertByName( const ::rtl::OUString& _rName, c
     if (checkExistence(_rName))
         throw ElementExistException();
 
-    if (0 == _rName.getLength())
+    if (_rName.isEmpty())
         throw IllegalArgumentException();
 
     // approve the new object
@@ -151,7 +151,7 @@ void SAL_CALL OBookmarkContainer::removeByName( const ::rtl::OUString& _rName ) 
         checkValid(sal_True);
 
         // check the arguments
-        if (!_rName.getLength())
+        if (_rName.isEmpty())
             throw IllegalArgumentException();
 
         if (!checkExistence(_rName))
@@ -181,7 +181,7 @@ void SAL_CALL OBookmarkContainer::replaceByName( const ::rtl::OUString& _rName, 
     checkValid(sal_True);
 
     // check the arguments
-    if (!_rName.getLength())
+    if (_rName.isEmpty())
         throw IllegalArgumentException();
 
     // do we have such an element?

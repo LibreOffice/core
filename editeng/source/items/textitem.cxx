@@ -73,6 +73,7 @@
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/text/FontEmphasis.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
+#include <editeng/rsiditem.hxx>
 #include <editeng/memberids.hrc>
 #include <editeng/flstitem.hxx>
 #include <editeng/fontitem.hxx>
@@ -157,7 +158,7 @@ TYPEINIT1_FACTORY(SvxScriptTypeItem, SfxUInt16Item, new SvxScriptTypeItem);
 TYPEINIT1_FACTORY(SvxCharRotateItem, SfxUInt16Item, new SvxCharRotateItem(0, sal_False, 0));
 TYPEINIT1_FACTORY(SvxCharScaleWidthItem, SfxUInt16Item, new SvxCharScaleWidthItem(100, 0));
 TYPEINIT1_FACTORY(SvxCharReliefItem, SfxEnumItem, new SvxCharReliefItem(RELIEF_NONE, 0));
-
+TYPEINIT1_FACTORY(SvxRsidItem, SfxUInt32Item, new SvxRsidItem(0, 0));
 
 TYPEINIT1(SvxScriptSetItem, SfxSetItem );
 
@@ -398,16 +399,16 @@ SvStream& SvxFontItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ ) co
     String aStoreFamilyName( GetFamilyName() );
     if( bToBats )
         aStoreFamilyName = String( "StarBats", sizeof("StarBats")-1, RTL_TEXTENCODING_ASCII_US );
-    rStrm.WriteByteString(aStoreFamilyName);
-    rStrm.WriteByteString(GetStyleName());
+    rStrm.WriteUniOrByteString(aStoreFamilyName, rStrm.GetStreamCharSet());
+    rStrm.WriteUniOrByteString(GetStyleName(), rStrm.GetStreamCharSet());
 
     // cach for EditEngine, only set while creating clipboard stream.
     if ( bEnableStoreUnicodeNames )
     {
         sal_uInt32 nMagic = STORE_UNICODE_MAGIC_MARKER;
         rStrm << nMagic;
-        rStrm.WriteByteString( aStoreFamilyName, RTL_TEXTENCODING_UNICODE );
-        rStrm.WriteByteString( GetStyleName(), RTL_TEXTENCODING_UNICODE );
+        rStrm.WriteUniOrByteString( aStoreFamilyName, RTL_TEXTENCODING_UNICODE );
+        rStrm.WriteUniOrByteString( GetStyleName(), RTL_TEXTENCODING_UNICODE );
     }
 
     return rStrm;
@@ -424,10 +425,10 @@ SfxPoolItem* SvxFontItem::Create(SvStream& rStrm, sal_uInt16) const
     rStrm >> eFontTextEncoding;
 
     // UNICODE: rStrm >> aName;
-    rStrm.ReadByteString(aName);
+    rStrm.ReadUniOrByteString(aName, rStrm.GetStreamCharSet());
 
     // UNICODE: rStrm >> aStyle;
-    rStrm.ReadByteString(aStyle);
+    rStrm.ReadUniOrByteString(aStyle, rStrm.GetStreamCharSet());
 
     // Set the "correct" textencoding
     eFontTextEncoding = (sal_uInt8)GetSOLoadTextEncoding( eFontTextEncoding, (sal_uInt16)rStrm.GetVersion() );
@@ -442,8 +443,8 @@ SfxPoolItem* SvxFontItem::Create(SvStream& rStrm, sal_uInt16) const
     rStrm >> nMagic;
     if ( nMagic == STORE_UNICODE_MAGIC_MARKER )
     {
-        rStrm.ReadByteString( aName, RTL_TEXTENCODING_UNICODE );
-        rStrm.ReadByteString( aStyle, RTL_TEXTENCODING_UNICODE );
+        rStrm.ReadUniOrByteString( aName, RTL_TEXTENCODING_UNICODE );
+        rStrm.ReadUniOrByteString( aStyle, RTL_TEXTENCODING_UNICODE );
     }
     else
     {
@@ -2653,7 +2654,7 @@ bool SvxLanguageItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             if(!(rVal >>= aLocale))
                 return sal_False;
 
-            if (aLocale.Language.getLength() || aLocale.Country.getLength())
+            if (!aLocale.Language.isEmpty() || !aLocale.Country.isEmpty())
                 SetValue(MsLangId::convertLocaleToLanguage( aLocale ));
             else
                 SetValue(LANGUAGE_NONE);
@@ -3078,14 +3079,14 @@ bool SvxTwoLinesItem::PutValue( const com::sun::star::uno::Any& rVal,
     case MID_START_BRACKET:
         if( rVal >>= s )
         {
-            cStartBracket = s.getLength() ? s[ 0 ] : 0;
+            cStartBracket = s.isEmpty() ? 0 : s[ 0 ];
             bRet = sal_True;
         }
         break;
     case MID_END_BRACKET:
         if( rVal >>= s )
         {
-            cEndBracket = s.getLength() ? s[ 0 ] : 0;
+            cEndBracket = s.isEmpty() ? 0 : s[ 0 ];
             bRet = sal_True;
         }
         break;
@@ -3740,4 +3741,29 @@ short GetI18NScriptType( sal_uInt16 nItemType )
     return 0;
 }
 
+bool SvxRsidItem::QueryValue( uno::Any& rVal, sal_uInt8 ) const
+{
+    rVal <<= ( (sal_uInt32)GetValue() );
+    return true;
+}
+
+bool SvxRsidItem::PutValue( const uno::Any& rVal, sal_uInt8 )
+{
+    sal_uInt32 nRsid = 0;
+    if( !( rVal >>= nRsid ) )
+        return false;
+
+    SetValue( nRsid );
+    return true;
+}
+
+SfxPoolItem* SvxRsidItem::Clone( SfxItemPool * ) const
+{
+    return new SvxRsidItem( *this );
+}
+
+SfxPoolItem* SvxRsidItem::Create(SvStream& rIn, sal_uInt16 ) const
+{
+    return new SvxRsidItem( rIn, Which() );
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

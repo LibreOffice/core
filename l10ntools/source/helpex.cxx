@@ -48,17 +48,17 @@
 #define STATE_OUTPUTY           0xff
 
 // set of global variables
-ByteString sInputFile;
+rtl::OString sInputFile;
 sal_Bool bEnableExport;
 sal_Bool bMergeMode;
 sal_Bool bErrorLog;
 sal_Bool bUTF8;
-ByteString sPrj;
-ByteString sPrjRoot;
-ByteString sOutputFile;
-ByteString sOutputFileX;
-ByteString sOutputFileY;
-ByteString sSDFFile;
+rtl::OString sPrj;
+rtl::OString sPrjRoot;
+rtl::OString sOutputFile;
+rtl::OString sOutputFileX;
+rtl::OString sOutputFileY;
+rtl::OString sSDFFile;
 
 /*****************************************************************************/
 sal_Bool ParseCommandLine( int argc, char* argv[])
@@ -77,41 +77,36 @@ sal_Bool ParseCommandLine( int argc, char* argv[])
     sal_Bool bInput = sal_False;
 
     // parse command line
-    for( int i = 1; i < argc; i++ ) {
-        if ( ByteString( argv[ i ]).ToUpperAscii() == "-I" ) {
+    for( int i = 1; i < argc; i++ )
+    {
+        rtl::OString aArg(rtl::OString(argv[i]).toAsciiUpperCase());
+        if (aArg.equalsL(RTL_CONSTASCII_STRINGPARAM("-I")))
             nState = STATE_INPUT; // next tokens specifies source files
-        }
-        else if ( ByteString( argv[ i ]).ToUpperAscii()  == "-O" ) {
+        else if (aArg.equalsL(RTL_CONSTASCII_STRINGPARAM("-O")))
             nState = STATE_OUTPUT; // next token specifies the dest file
-        }
-        else if ( ByteString( argv[ i ]).ToUpperAscii()  == "-X" ) {
+        else if (aArg.equalsL(RTL_CONSTASCII_STRINGPARAM("-X")))
             nState = STATE_OUTPUTX; // next token specifies the dest file
-        }
-        else if ( ByteString( argv[ i ]).ToUpperAscii()  == "-Y" ) {
+        else if (aArg.equalsL(RTL_CONSTASCII_STRINGPARAM("-Y" )))
             nState = STATE_OUTPUTY; // next token specifies the dest file
-        }
-        else if ( ByteString( argv[ i ]).ToUpperAscii() == "-P" ) {
+        else if (aArg.equalsL(RTL_CONSTASCII_STRINGPARAM("-P" )))
             nState = STATE_PRJ; // next token specifies the cur. project
-        }
-         else if ( ByteString( argv[ i ]).ToUpperAscii() == "-LF" ) {
+        else if (aArg.equalsL(RTL_CONSTASCII_STRINGPARAM("-LF")))
             nState = STATE_FORCE_LANGUAGES;
-        }
-
-        else if ( ByteString( argv[ i ]).ToUpperAscii() == "-R" ) {
+        else if (aArg.equalsL(RTL_CONSTASCII_STRINGPARAM("-R" )))
             nState = STATE_ROOT; // next token specifies path to project root
-        }
-        else if ( ByteString( argv[ i ]).ToUpperAscii() == "-M" ) {
+        else if (aArg.equalsL(RTL_CONSTASCII_STRINGPARAM("-M" )))
             nState = STATE_SDFFILE; // next token specifies the merge database
-        }
-        else if ( ByteString( argv[ i ]).ToUpperAscii() == "-E" ) {
+        else if (aArg.equalsL(RTL_CONSTASCII_STRINGPARAM("-E" )))
+        {
             nState = STATE_ERRORLOG;
             bErrorLog = sal_False;
         }
-        else if ( ByteString( argv[ i ]).ToUpperAscii() == "-L" ) {
+        else if (aArg.equalsL(RTL_CONSTASCII_STRINGPARAM("-L" )))
             nState = STATE_LANGUAGES;
-        }
-        else {
-            switch ( nState ) {
+        else
+        {
+            switch ( nState )
+            {
                 case STATE_NON: {
                     return sal_False;   // no valid command line
                 }
@@ -200,57 +195,53 @@ int _cdecl main( int argc, char *argv[] )
     }
     //sal_uInt32 startfull = Export::startMessure();
 
-    bool hasInputList = sInputFile.GetBuffer()[0]=='@';
-//    printf("x = %s , y = %s , o = %s\n", sOutputFileX.GetBuffer(),  sOutputFileY.GetBuffer() , sOutputFile.GetBuffer() );
+    bool hasInputList = sInputFile[0]=='@';
     bool hasNoError = true;
 
-    if ( sOutputFile.Len() ){                                               // Merge single file ?
-        //printf("DBG: Inputfile = %s\n",sInputFile.GetBuffer());
+    if ( sOutputFile.getLength() ){                                               // Merge single file ?
         HelpParser aParser( sInputFile, bUTF8 , false );
 
         if ( bMergeMode )
         {
             //sal_uInt64 startreadloc = Export::startMessure();
             MergeDataFile aMergeDataFile(sSDFFile, sInputFile, sal_False);
-            //Export::stopMessure( ByteString("read localize.sdf") , startreadloc );
 
             hasNoError = aParser.Merge( sSDFFile, sOutputFile , Export::sLanguages , aMergeDataFile );
         }
         else
             hasNoError = aParser.CreateSDF( sOutputFile, sPrj, sPrjRoot, sInputFile, new XMLFile( '0' ), "help" );
-    }else if ( sOutputFileX.Len() && sOutputFileY.Len() && hasInputList ) {  // Merge multiple files ?
+    }else if ( sOutputFileX.getLength() && sOutputFileY.getLength() && hasInputList ) {  // Merge multiple files ?
         if ( bMergeMode ){
 
-            ifstream aFStream( sInputFile.Copy( 1 , sInputFile.Len() ).GetBuffer() , ios::in );
+            ifstream aFStream( sInputFile.copy( 1 ).getStr() , ios::in );
 
             if( !aFStream ){
-                cerr << "ERROR: - helpex - Can't open the file " << sInputFile.Copy( 1 , sInputFile.Len() ).GetBuffer() << "\n";
+                cerr << "ERROR: - helpex - Can't open the file " << sInputFile.copy( 1 ).getStr() << "\n";
                 exit(-1);
             }
 
-            vector<ByteString> filelist;
+            vector<rtl::OString> filelist;
             rtl::OStringBuffer filename;
             sal_Char aChar;
             while( aFStream.get( aChar ) )
             {
                 if( aChar == ' ' || aChar == '\n')
-                    filelist.push_back( ByteString( filename.makeStringAndClear().getStr() ) );
+                    filelist.push_back(filename.makeStringAndClear());
                 else
                     filename.append( aChar );
             }
             if( filename.getLength() > 0 )
-                filelist.push_back( ByteString ( filename.makeStringAndClear().getStr() ) );
+                filelist.push_back(filename.makeStringAndClear());
 
             aFStream.close();
-            ByteString sHelpFile(""); // dummy
+            rtl::OString sHelpFile; // dummy
             MergeDataFile aMergeDataFile( sSDFFile, sHelpFile, sal_False );
 
-            //aMergeDataFile.Dump();
             std::vector<ByteString> aLanguages;
             HelpParser::parse_languages( aLanguages , aMergeDataFile );
 
             bool bCreateDir = true;
-            for( vector<ByteString>::iterator pos = filelist.begin() ; pos != filelist.end() ; ++pos )
+            for( vector<rtl::OString>::iterator pos = filelist.begin() ; pos != filelist.end() ; ++pos )
             {
                 sHelpFile = *pos;
                 cout << ".";cout.flush();
@@ -263,7 +254,6 @@ int _cdecl main( int argc, char *argv[] )
     } else
         cerr << "helpex ERROR: Wrong input parameters!\n";
 
-    //Export::stopMessure( ByteString("full cycle") , startfull );
     if( hasNoError )
         return 0;
     else

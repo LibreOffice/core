@@ -29,15 +29,7 @@
 #ifndef __FRAMEWORK_TARGETS_H_
 #define __FRAMEWORK_TARGETS_H_
 
-//_________________________________________________________________________________________________________________
-//  includes
-//_________________________________________________________________________________________________________________
-
 #include <macros/generic.hxx>
-
-//_________________________________________________________________________________________________________________
-//  namespace
-//_________________________________________________________________________________________________________________
 
 namespace framework{
 
@@ -52,7 +44,6 @@ namespace framework{
 #define SPECIALTARGET_ASCII_DEFAULT         "_default"                          // Create a new task or recycle an existing one
 #define SPECIALTARGET_ASCII_BEAMER          "_beamer"                           // special frame in hierarchy
 #define SPECIALTARGET_ASCII_MENUBAR         "_menubar"                          // special target for menubars
-#define SPECIALTARGET_ASCII_HELPAGENT       "_helpagent"                        // special target for the help agent window
 #define SPECIALTARGET_ASCII_HELPTASK        "OFFICE_HELP_TASK"                  // special name for our help task
 
 #define SPECIALTARGET_SELF                  DECLARE_ASCII(SPECIALTARGET_ASCII_SELF       )
@@ -62,7 +53,6 @@ namespace framework{
 #define SPECIALTARGET_DEFAULT               DECLARE_ASCII(SPECIALTARGET_ASCII_DEFAULT    )
 #define SPECIALTARGET_BEAMER                DECLARE_ASCII(SPECIALTARGET_ASCII_BEAMER     )
 #define SPECIALTARGET_MENUBAR               DECLARE_ASCII(SPECIALTARGET_ASCII_MENUBAR    )
-#define SPECIALTARGET_HELPAGENT             DECLARE_ASCII(SPECIALTARGET_ASCII_HELPAGENT  )
 #define SPECIALTARGET_HELPTASK              DECLARE_ASCII(SPECIALTARGET_ASCII_HELPTASK   )
 
 }       //  namespace framework

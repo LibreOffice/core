@@ -732,7 +732,7 @@ IMPL_LINK( ObjectPage, ButtonHdl, Button *, pButton )
     return 0;
 }
 
-bool ObjectPage::GetSelection( ScriptDocument& rDocument, String& rLibName )
+bool ObjectPage::GetSelection( ScriptDocument& rDocument, ::rtl::OUString& rLibName )
 {
     bool bRet = false;
 
@@ -740,8 +740,8 @@ bool ObjectPage::GetSelection( ScriptDocument& rDocument, String& rLibName )
     BasicEntryDescriptor aDesc( aBasicBox.GetEntryDescriptor( pCurEntry ) );
     rDocument = aDesc.GetDocument();
     rLibName = aDesc.GetLibName();
-    if ( !rLibName.Len() )
-        rLibName = String::CreateFromAscii( "Standard" );
+    if ( rLibName.isEmpty() )
+        rLibName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Standard"));
 
     DBG_ASSERT( rDocument.isAlive(), "ObjectPage::GetSelection: no or dead ScriptDocument in the selection!" );
     if ( !rDocument.isAlive() )
@@ -784,11 +784,11 @@ bool ObjectPage::GetSelection( ScriptDocument& rDocument, String& rLibName )
 void ObjectPage::NewModule()
 {
     ScriptDocument aDocument( ScriptDocument::getApplicationScriptDocument() );
-    String aLibName;
+    ::rtl::OUString aLibName;
 
     if ( GetSelection( aDocument, aLibName ) )
     {
-        String aModName;
+        ::rtl::OUString aModName;
         createModImpl( static_cast<Window*>( this ), aDocument,
                     aBasicBox, aLibName, aModName, true );
     }
@@ -797,7 +797,7 @@ void ObjectPage::NewModule()
 void ObjectPage::NewDialog()
 {
     ScriptDocument aDocument( ScriptDocument::getApplicationScriptDocument() );
-    String aLibName;
+    ::rtl::OUString aLibName;
 
     if ( GetSelection( aDocument, aLibName ) )
     {
@@ -809,14 +809,14 @@ void ObjectPage::NewDialog()
 
         if (xNewDlg->Execute() != 0)
         {
-            String aDlgName( xNewDlg->GetObjectName() );
-            if (aDlgName.Len() == 0)
+            ::rtl::OUString aDlgName( xNewDlg->GetObjectName() );
+            if (aDlgName.isEmpty())
                 aDlgName = aDocument.createObjectName( E_DIALOGS, aLibName);
 
             if ( aDocument.hasDialog( aLibName, aDlgName ) )
             {
                 ErrorBox( this, WB_OK | WB_DEF_OK,
-                        String( IDEResId( RID_STR_SBXNAMEALLREADYUSED2 ) ) ).Execute();
+                          ResId::toString( IDEResId( RID_STR_SBXNAMEALLREADYUSED2 ) ) ).Execute();
             }
             else
             {
@@ -933,7 +933,7 @@ LibDialog::LibDialog( Window* pParent )
         aReferenceBox(  this, IDEResId( RID_CB_REF ) ),
         aReplaceBox(    this, IDEResId( RID_CB_REPL ) )
 {
-    SetText( String( IDEResId( RID_STR_APPENDLIBS ) ) );
+    SetText( ResId::toString( IDEResId( RID_STR_APPENDLIBS ) ) );
     FreeResource();
 }
 
@@ -942,16 +942,16 @@ LibDialog::~LibDialog()
 {
 }
 
-void LibDialog::SetStorageName( const String& rName )
+void LibDialog::SetStorageName( const ::rtl::OUString& rName )
 {
-    String aName( IDEResId( RID_STR_FILENAME ) );
+    ::rtl::OUString aName( ResId::toString( IDEResId( RID_STR_FILENAME ) ) );
     aName += rName;
     aStorageName.SetText( aName );
 }
 
 // Helper function
 SbModule* createModImpl( Window* pWin, const ScriptDocument& rDocument,
-    BasicTreeListBox& rBasicBox, const String& rLibName, String aModName, bool bMain )
+    BasicTreeListBox& rBasicBox, const ::rtl::OUString& rLibName, ::rtl::OUString aModName, bool bMain )
 {
     OSL_ENSURE( rDocument.isAlive(), "createModImpl: invalid document!" );
     if ( !rDocument.isAlive() )
@@ -959,11 +959,11 @@ SbModule* createModImpl( Window* pWin, const ScriptDocument& rDocument,
 
     SbModule* pModule = NULL;
 
-    String aLibName( rLibName );
-    if ( !aLibName.Len() )
-        aLibName = String::CreateFromAscii( "Standard" );
+    ::rtl::OUString aLibName( rLibName );
+    if ( aLibName.isEmpty() )
+        aLibName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Standard"));
     rDocument.getOrCreateLibrary( E_SCRIPTS, aLibName );
-    if ( !aModName.Len() )
+    if ( aModName.isEmpty() )
         aModName = rDocument.createObjectName( E_SCRIPTS, aLibName );
 
     boost::scoped_ptr< NewObjectDialog > xNewDlg(
@@ -1011,7 +1011,7 @@ SbModule* createModImpl( Window* pWin, const ScriptDocument& rDocument,
                     if( pBasic && rDocument.isInVBAMode() )
                     {
                         // add the new module in the "Modules" entry
-                        SvLBoxEntry* pLibSubEntry = rBasicBox.FindEntry( pLibEntry, String( IDEResId( RID_STR_NORMAL_MODULES ) ) , OBJ_TYPE_NORMAL_MODULES );
+                        SvLBoxEntry* pLibSubEntry = rBasicBox.FindEntry( pLibEntry, ResId::toString( IDEResId( RID_STR_NORMAL_MODULES ) ) , OBJ_TYPE_NORMAL_MODULES );
                         if( pLibSubEntry )
                         {
                             if( !rBasicBox.IsExpanded( pLibSubEntry ) )
@@ -1040,7 +1040,7 @@ SbModule* createModImpl( Window* pWin, const ScriptDocument& rDocument,
         catch (const container::ElementExistException& )
         {
             ErrorBox( pWin, WB_OK | WB_DEF_OK,
-                    String( IDEResId( RID_STR_SBXNAMEALLREADYUSED2 ) ) ).Execute();
+                      ResId::toString( IDEResId( RID_STR_SBXNAMEALLREADYUSED2 ) ) ).Execute();
         }
         catch (const container::NoSuchElementException& )
         {
@@ -1049,8 +1049,5 @@ SbModule* createModImpl( Window* pWin, const ScriptDocument& rDocument,
     }
     return pModule;
 }
-
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

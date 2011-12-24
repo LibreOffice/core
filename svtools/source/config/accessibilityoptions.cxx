@@ -546,11 +546,6 @@ void SvtAccessibilityOptions::Commit()
 
 // -----------------------------------------------------------------------
 
-sal_Bool SvtAccessibilityOptions::GetIsForDrawings() const
-{
-    OSL_FAIL( "SvtAccessibilityOptions::GetIsForDrawings: is obsolete!" );
-    return sal_False;
-}
 sal_Bool SvtAccessibilityOptions::GetIsForBorders() const
 {
     OSL_FAIL( "SvtAccessibilityOptions::GetIsForBorders: is obsolete!" );

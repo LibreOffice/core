@@ -133,6 +133,19 @@ endif
 endef
 
 # SrsTemplateTarget class
+#
+# This class handles src templates.
+#
+# Templates are src files that contain only macros that are then used
+# from other src files, but these macros contain translatable strings.
+# Because the processing of src files is done in two phases: 1/
+# localization and 2/ merging, templates must be translated
+# independently from the src files that include them. Special care must
+# be taken to ensure that the right file (i.e., the localized one) is
+# included; in order to do that, the templates in the source tree are
+# called foo_tmpl.src, but the localization phase produces foo.src, and
+# these names (i.e., without the _tmpl suffix) must be placed in
+# #include statements in other src files.
 
 define gb_SrsTemplateTarget__command
 	$(call gb_Helper_abbreviate_dirs,\
@@ -140,6 +153,15 @@ define gb_SrsTemplateTarget__command
 	    touch $(1))
 endef
 
+# This machinery ensures that templates are regenerated when switching
+# from localized to unlocalized configuration and back.
+#
+# How it works:
+# We let _get_target depend on _get_update_target, so after they are
+# done, _get_target is newer than _get_update_target. If
+# WITH_LANG changes (from nonempty to empty or the other way around),
+# _get_target and _get_update_target are switched, therefore _get_target
+# is now _older_ than _get_update_target and must be regenerated :-)
 gb_SrsTemplateTarget__get_merged_target = $(call gb_SrsTemplateTarget_get_target,$(1))_merged_last
 gb_SrsTemplateTarget__get_unmerged_target = $(call gb_SrsTemplateTarget_get_target,$(1))_unmerged_last
 
@@ -309,7 +331,6 @@ $(call gb_ResTarget_get_target,%) : $(gb_Helper_MISCDUMMY) | $(gb_ResTarget_RSCT
 			-lip=$(realpath $(gb_ResTarget_DEFIMAGESLOCATION)$(RESLOCATION)/imglst/$(LANGUAGE)) \
 			-lip=$(realpath $(gb_ResTarget_DEFIMAGESLOCATION)$(RESLOCATION)/imglst) \
 			-lip=$(realpath $(gb_ResTarget_DEFIMAGESLOCATION)$(RESLOCATION)/res/$(LANGUAGE)) \
-			-lip=$(realpath $(gb_ResTarget_DEFIMAGESLOCATION)$(RESLOCATION)/res/imagelst) \
 			-lip=$(realpath $(gb_ResTarget_DEFIMAGESLOCATION)$(RESLOCATION)/res) \
 			-lip=$(realpath $(gb_ResTarget_DEFIMAGESLOCATION)$(RESLOCATION)) \
 			-lip=$(gb_ResTarget_DEFIMAGESLOCATION)res/$(LANGUAGE) \

@@ -183,15 +183,15 @@ namespace dbaccess
         if ( aCheck.has( "EventType" ) )
         {
             ::rtl::OUString sEventType = aCheck.getOrDefault( "EventType", ::rtl::OUString() );
-            OSL_ENSURE( sEventType.getLength(), "DocumentEvents::replaceByName: doing a reset via an empty EventType is weird!" );
-            if ( !sEventType.getLength() )
+            OSL_ENSURE( !sEventType.isEmpty(), "DocumentEvents::replaceByName: doing a reset via an empty EventType is weird!" );
+            if ( sEventType.isEmpty() )
                 aEventDescriptor.realloc( 0 );
         }
         if ( aCheck.has( "Script" ) )
         {
             ::rtl::OUString sScript = aCheck.getOrDefault( "Script", ::rtl::OUString() );
-            OSL_ENSURE( sScript.getLength(), "DocumentEvents::replaceByName: doing a reset via an empty Script is weird!" );
-            if ( !sScript.getLength() )
+            OSL_ENSURE( !sScript.isEmpty(), "DocumentEvents::replaceByName: doing a reset via an empty Script is weird!" );
+            if ( sScript.isEmpty() )
                 aEventDescriptor.realloc( 0 );
         }
 

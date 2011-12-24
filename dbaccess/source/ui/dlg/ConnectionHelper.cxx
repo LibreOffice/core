@@ -306,7 +306,7 @@ DBG_NAME(OConnectionHelper)
                     pDbVar = NULL;
                 }
 
-                sal_Bool bOldFashion = sAdabasConfigDir.getLength() && sAdabasWorkDir.getLength();
+                sal_Bool bOldFashion = !(sAdabasConfigDir.isEmpty() || sAdabasWorkDir.isEmpty());
 
                 if(!bOldFashion) // we have a normal adabas installation
                 {    // so we check the local database names in $DBROOT/config
@@ -314,7 +314,7 @@ DBG_NAME(OConnectionHelper)
                     sAdabasWorkDir      = sRootDir;
                 }
 
-                if(sAdabasConfigDir.getLength() && sAdabasWorkDir.getLength() && sRootDir.getLength())
+                if(!(sAdabasConfigDir.isEmpty() || sAdabasWorkDir.isEmpty() || sRootDir.isEmpty()))
                 {
 
                     aInstalledDBs   = getInstalledAdabasDBs(sAdabasConfigDir,sAdabasWorkDir);
@@ -349,7 +349,7 @@ DBG_NAME(OConnectionHelper)
                 // collect all ODBC data source names
                 ::rtl::OUString sCurrDatasource = getURLNoPrefix();
                 ::rtl::OUString sDataSource;
-                if ( getSelectedDataSource(sDataSource,sCurrDatasource) && sDataSource.getLength() )
+                if ( getSelectedDataSource(sDataSource,sCurrDatasource) && !sDataSource.isEmpty() )
                 {
                     setURLNoPrefix(sDataSource);
                     SetRoadmapStateValue(sal_True);
@@ -366,7 +366,7 @@ DBG_NAME(OConnectionHelper)
                 ::rtl::OUString sNewDataSource;
                 HWND hWnd = GetParent()->GetSystemData()->hWnd;
                 sNewDataSource = getAdoDatalink((long)hWnd,sOldDataSource);
-                if ( sNewDataSource.getLength() )
+                if ( !sNewDataSource.isEmpty() )
                 {
                     setURLNoPrefix(sNewDataSource);
                     SetRoadmapStateValue(sal_True);
@@ -411,7 +411,7 @@ DBG_NAME(OConnectionHelper)
                     ODatasourceSelectDialog aSelector(GetParent(), aProfiles, eType);
                     ::rtl::OUString sOldProfile=getURLNoPrefix();
 
-                    if (sOldProfile.getLength())
+                    if (!sOldProfile.isEmpty())
                         aSelector.Select(sOldProfile);
                     else
                         aSelector.Select(xMozillaBootstrap->getDefaultProfile(profileType));

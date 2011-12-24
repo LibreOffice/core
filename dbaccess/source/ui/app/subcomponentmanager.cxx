@@ -499,7 +499,7 @@ namespace dbaui
         ::osl::ClearableMutexGuard aGuard( m_pData->getMutex() );
 
 #if OSL_DEBUG_LEVEL > 0
-        if ( _rName.getLength() )
+        if ( !_rName.isEmpty() )
         {
             // check there does not already exist such a component
             SubComponents::const_iterator existentPos = ::std::find_if(
@@ -561,7 +561,7 @@ namespace dbaui
     bool SubComponentManager::closeSubFrames( const ::rtl::OUString& i_rName, const sal_Int32 _nComponentType )
     {
         ::osl::MutexGuard aGuard( m_pData->getMutex() );
-        ENSURE_OR_RETURN_FALSE( i_rName.getLength(), "SubComponentManager::closeSubFrames: illegal name!" );
+        ENSURE_OR_RETURN_FALSE( !i_rName.isEmpty(), "SubComponentManager::closeSubFrames: illegal name!" );
 
         SubComponents aWorkingCopy( m_pData->m_aComponents );
         for (   SubComponents::const_iterator comp = aWorkingCopy.begin();

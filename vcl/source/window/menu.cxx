@@ -341,7 +341,7 @@ MenuItemData* MenuItemList::SearchItem(
 {
     const vcl::I18nHelper& rI18nHelper = Application::GetSettings().GetUILocaleI18nHelper();
 
-    size_t nListCount = maItemList.size();;
+    size_t nListCount = maItemList.size();
 
     // try character code first
     nDuplicates = GetItemCount( cSelectChar );  // return number of duplicates
@@ -960,7 +960,7 @@ void Menu::ImplInit()
 {
     mnHighlightedItemPos = ITEMPOS_INVALID;
     mpSalMenu       = NULL;
-    nMenuFlags      = 0;
+    nMenuFlags      = MENU_FLAG_SHOWCHECKIMAGES;
     nDefaultItem    = 0;
     //bIsMenuBar      = sal_False;  // this is now set in the ctor, must not be changed here!!!
     nSelectedId     = 0;

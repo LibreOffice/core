@@ -312,8 +312,8 @@ void SAL_CALL OTable::alterColumnByIndex( sal_Int32 /*index*/, const Reference< 
 ::rtl::OUString SAL_CALL OTable::getName() throw(::com::sun::star::uno::RuntimeException)
 {
     // this is only correct for tables who haven't a schema or catalog name
-    OSL_ENSURE(!m_CatalogName.getLength(),"getName(): forgot to overload getName()!");
-    OSL_ENSURE(!m_SchemaName.getLength(),"getName(): forgot to overload getName()!");
+    OSL_ENSURE(m_CatalogName.isEmpty(),"getName(): forgot to overload getName()!");
+    OSL_ENSURE(m_SchemaName.isEmpty(),"getName(): forgot to overload getName()!");
     return m_Name;
 }
 // -----------------------------------------------------------------------------

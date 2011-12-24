@@ -150,7 +150,7 @@ void OCacheSet::fillTableName(const Reference<XPropertySet>& _xTable)  throw(SQL
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OCacheSet::fillTableName" );
     OSL_ENSURE(_xTable.is(),"OCacheSet::fillTableName: PropertySet is empty!");
-    if(!m_aComposedTableName.getLength() && _xTable.is() )
+    if(m_aComposedTableName.isEmpty() && _xTable.is() )
     {
         Reference<XDatabaseMetaData> xMeta(m_xConnection->getMetaData());
         m_aComposedTableName = composeTableName(xMeta

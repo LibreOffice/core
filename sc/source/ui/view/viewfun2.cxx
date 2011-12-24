@@ -89,6 +89,7 @@
 #include "docuno.hxx"
 #include "charthelper.hxx"
 #include "tabbgcolor.hxx"
+#include "clipparam.hxx"
 
 #include <basic/sbstar.hxx>
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -2562,6 +2563,7 @@ void ScViewFunc::MoveTable(
         if(nDestTab==SC_TAB_APPEND)
             nDestTab=pDestDoc->GetTableCount();
         SCTAB nDestTab1=nDestTab;
+        ScClipParam aParam;
         for( sal_uInt16 j=0; j<TheTabs.size(); ++j, ++nDestTab1 )
         {   // insert sheets first and update all references
             rtl::OUString aName;
@@ -2576,7 +2578,10 @@ void ScViewFunc::MoveTable(
                 nErrVal = 0;        // total error
                 break;  // for
             }
+            ScRange aRange( 0, 0, TheTabs[j], MAXCOL, MAXROW, TheTabs[j] );
+            aParam.maRanges.Append(aRange);
         }
+        pDoc->SetClipParam(aParam);
         if ( nErrVal > 0 )
         {
             nDestTab1 = nDestTab;

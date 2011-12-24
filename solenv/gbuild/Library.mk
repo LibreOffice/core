@@ -39,6 +39,8 @@
 #  gb_Library_Library_platform
 #  gb_Library_TARGETS
 
+# doesn't do anything, just used for hooking up component target
+.PHONY: $(call gb_Library__get_final_target,%)
 
 # EVIL: gb_StaticLibrary and gb_Library need the same deliver rule because they are indistinguishable on windows
 .PHONY : $(WORKDIR)/Clean/OutDir/lib/%$(gb_Library_PLAINEXT)
@@ -69,21 +71,47 @@ $(call gb_LinkTarget_set_targettype,$(2),Library)
 $(call gb_LinkTarget_add_defs,$(2),\
 	$(gb_Library_DEFS) \
 )
+$(call gb_Library__get_final_target,$(1)) : $(call gb_Library_get_target,$(1))
 $(call gb_Library_get_target,$(1)) : $(call gb_LinkTarget_get_target,$(2))
 $(call gb_Library_get_clean_target,$(1)) : $(call gb_LinkTarget_get_clean_target,$(2))
 $(call gb_Library_Library_platform,$(1),$(2),$(gb_Library_DLLDIR)/$(call gb_Library_get_dllname,$(1)))
-$$(eval $$(call gb_Module_register_target,$(call gb_Library_get_target,$(1)),$(call gb_Library_get_clean_target,$(1))))
+$$(eval $$(call gb_Module_register_target,$(call gb_Library__get_final_target,$(1)),$(call gb_Library_get_clean_target,$(1))))
 $(call gb_Deliver_add_deliverable,$(call gb_Library_get_target,$(1)),$(call gb_LinkTarget_get_target,$(2)),$(1))
 
 endef
 
+define gb_Library__set_soversion_script
+$(call gb_LinkTarget_get_target,$(call gb_Library_get_linktargetname,$(1))) : \
+	$(3)
+$(call gb_Library_get_target,$(1)) : SOVERSION := $(2)
+$(call gb_Library_get_target,$(1)) : SOVERSIONSCRIPT := $(3)
+$(call gb_Library_get_target,$(1)) \
+$(call gb_Library_get_clean_target,$(1)) : \
+	AUXTARGETS += $(call gb_Library_get_target,$(1)).$(2)
+$(call gb_LinkTarget_add_auxtargets,$(call gb_Library_get_linktargetname,$(1)),\
+	$(call gb_LinkTarget_get_target,$(call gb_Library_get_linktargetname,$(1))).$(2))
+endef
+
+# for libraries that maintain stable ABI: set SOVERSION and version script
+# $(call gb_Library_set_soversion_script,soversion,versionscript)
+define gb_Library_set_soversion_script
+$(if $(2),,$(call gb_Output_error,gb_Library_set_soversion_script: no version))
+$(if $(3),,$(call gb_Output_error,gb_Library_set_soversion_script: no script))
+$(call gb_Library__set_soversion_script_platform,$(1),$(2),$(3))
+endef
+
+# The dependency from workdir component target to outdir library should ensure
+# that gb_CppunitTest_add_component can transitively depend on the library.
+# But the component target also must be delivered, so a new phony target
+# gb_Library__get_final_target has been invented for that purpose...
 define gb_Library_set_componentfile
 $(call gb_ComponentTarget_ComponentTarget,$(2),$(call gb_Library__get_componentprefix,$(1)),\
 	$(call gb_Library_get_runtime_filename,$(if $(MERGELIBS),$(if $(filter $(gb_MERGED_LIBS),$(1)),merged,$(1)),$(1))))
-$(call gb_LinkTarget_get_target,$(call gb_Library_get_linktargetname,$(1))) : \
+$(call gb_Library__get_final_target,$(1)) : \
 	$(call gb_ComponentTarget_get_outdir_target,$(2))
-$(call gb_Library_get_clean_target,$(1)) : $(call gb_ComponentTarget_get_clean_target,$(or $(strip $(3)),$(strip $(2))))
-
+$(call gb_ComponentTarget_get_target,$(2)) :| $(call gb_Library_get_target,$(1))
+$(call gb_Library_get_clean_target,$(1)) : \
+	$(call gb_ComponentTarget_get_clean_target,$(2))
 endef
 
 gb_Library__get_componentprefix = \

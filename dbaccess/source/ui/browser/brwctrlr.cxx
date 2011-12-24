@@ -1760,7 +1760,7 @@ FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId) const
                 Reference< XPropertySet >  xActiveSet(getRowSet(), UNO_QUERY);
                 ::rtl::OUString aFilter = ::comphelper::getString(xActiveSet->getPropertyValue(PROPERTY_FILTER));
                 ::rtl::OUString aHaving = ::comphelper::getString(xActiveSet->getPropertyValue(PROPERTY_HAVING_CLAUSE));
-                if ( aFilter.getLength() || aHaving.getLength() )
+                if ( !(aFilter.isEmpty() && aHaving.isEmpty()) )
                 {
                     xActiveSet->getPropertyValue( PROPERTY_APPLYFILTER ) >>= aReturn.bChecked;
                     aReturn.bEnabled = sal_True;
@@ -1888,7 +1888,7 @@ Reference< XSingleSelectQueryComposer > SbaXDataBrowserController::createParser_
 
         ::rtl::OUString sActiveCommand;
         OSL_VERIFY( xRowSetProps->getPropertyValue( PROPERTY_ACTIVECOMMAND ) >>= sActiveCommand );
-        if ( sActiveCommand.getLength() > 0 )
+        if ( !sActiveCommand.isEmpty() )
         {
             xComposer->setElementaryQuery( sActiveCommand );
         }

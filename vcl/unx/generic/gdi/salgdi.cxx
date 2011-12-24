@@ -494,6 +494,12 @@ BOOL X11SalGraphics::GetDitherPixmap( SalColor nSalColor )
 void X11SalGraphics::GetResolution( sal_Int32 &rDPIX, sal_Int32 &rDPIY ) // const
 {
     const SalDisplay *pDisplay = GetDisplay();
+    if (!pDisplay)
+    {
+        OSL_TRACE("Null display");
+        rDPIX = rDPIY = 96;
+        return;
+    }
 
     rDPIX = pDisplay->GetResolution().A();
     rDPIY = pDisplay->GetResolution().B();

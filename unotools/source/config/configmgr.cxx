@@ -114,6 +114,13 @@ rtl::OUString utl::ConfigManager::getAboutBoxProductVersion() {
             RTL_CONSTASCII_USTRINGPARAM("Product/ooSetupVersionAboutBox")));
 }
 
+rtl::OUString utl::ConfigManager::getAboutBoxProductVersionSuffix() {
+    return getConfigurationString(
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Setup")),
+        rtl::OUString(
+            RTL_CONSTASCII_USTRINGPARAM("Product/ooSetupVersionAboutBoxSuffix")));
+}
+
 rtl::OUString utl::ConfigManager::getDefaultCurrency() {
     return getConfigurationString(
         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Setup")),

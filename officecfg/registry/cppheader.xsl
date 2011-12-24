@@ -94,49 +94,47 @@
     <xsl:text>&#xA;</xsl:text>
     <xsl:text>#include "sal/config.h"&#xA;</xsl:text>
     <xsl:text>&#xA;</xsl:text>
-    <xsl:if test=".//prop/@oor:nillable = 'true'">
-      <xsl:text>#include "boost/optional.hpp"&#xA;</xsl:text>
-    </xsl:if>
-    <xsl:if test=".//prop/@oor:type = 'oor:any'">
-      <xsl:text>#include "com/sun/star/uno/Any.hxx"&#xA;</xsl:text>
-    </xsl:if>
-    <xsl:if test=".//prop/@oor:type = 'xs:hexBinary' or .//prop/@oor:type = 'oor:boolean-list' or .//prop/@oor:type = 'oor:short-list' or .//prop/@oor:type = 'oor:int-list' or .//prop/@oor:type = 'oor:long-list' or .//prop/@oor:type = 'oor:double-list' or .//prop/@oor:type = 'oor:string-list'">
-      <xsl:text>#include "com/sun/star/uno/Sequence.hxx"&#xA;</xsl:text>
-    </xsl:if>
     <xsl:if test=".//prop or .//set">
+      <xsl:if test=".//prop/@oor:nillable = 'true'">
+        <xsl:text>#include "boost/optional.hpp"&#xA;</xsl:text>
+      </xsl:if>
+      <xsl:if test=".//prop/@oor:type = 'oor:any'">
+        <xsl:text>#include "com/sun/star/uno/Any.hxx"&#xA;</xsl:text>
+      </xsl:if>
+      <xsl:if test=".//prop/@oor:type = 'xs:hexBinary' or .//prop/@oor:type = 'oor:boolean-list' or .//prop/@oor:type = 'oor:short-list' or .//prop/@oor:type = 'oor:int-list' or .//prop/@oor:type = 'oor:long-list' or .//prop/@oor:type = 'oor:double-list' or .//prop/@oor:type = 'oor:string-list'">
+        <xsl:text>#include "com/sun/star/uno/Sequence.hxx"&#xA;</xsl:text>
+      </xsl:if>
       <xsl:text>#include "rtl/ustring.h"&#xA;</xsl:text>
       <xsl:text>#include "rtl/ustring.hxx"&#xA;</xsl:text>
-    </xsl:if>
-    <xsl:if test=".//prop/@oor:type = 'xs:short' or .//prop/@oor:type = 'xs:int' or .//prop/@oor:type = 'xs:long' or .//prop/@oor:type = 'xs:hexBinary'">
-      <xsl:text>#include "sal/types.h"&#xA;</xsl:text>
-    </xsl:if>
-    <xsl:if test=".//prop or .//set">
+      <xsl:if test=".//prop/@oor:type = 'xs:short' or .//prop/@oor:type = 'xs:int' or .//prop/@oor:type = 'xs:long' or .//prop/@oor:type = 'xs:hexBinary'">
+        <xsl:text>#include "sal/types.h"&#xA;</xsl:text>
+      </xsl:if>
       <xsl:text>#include "unotools/configuration.hxx"&#xA;</xsl:text>
-    </xsl:if>
-    <xsl:text>&#xA;</xsl:text>
-    <xsl:text>namespace officecfg { namespace </xsl:text>
-    <xsl:value-of select="$ns1"/>
-    <xsl:if test="$ns2">
-      <xsl:text> { namespace </xsl:text>
-      <xsl:value-of select="$ns2"/>
-      <xsl:if test="$ns3">
+      <xsl:text>&#xA;</xsl:text>
+      <xsl:text>namespace officecfg { namespace </xsl:text>
+      <xsl:value-of select="$ns1"/>
+      <xsl:if test="$ns2">
         <xsl:text> { namespace </xsl:text>
-        <xsl:value-of select="$ns3"/>
+        <xsl:value-of select="$ns2"/>
+        <xsl:if test="$ns3">
+          <xsl:text> { namespace </xsl:text>
+          <xsl:value-of select="$ns3"/>
+        </xsl:if>
       </xsl:if>
-    </xsl:if>
-    <xsl:text> {&#xA;</xsl:text>
-    <xsl:text>&#xA;</xsl:text>
-    <xsl:apply-templates select="group">
-      <xsl:with-param name="path" select="$path"/>
-    </xsl:apply-templates>
-    <xsl:if test="$ns2">
-      <xsl:text>} </xsl:text>
-      <xsl:if test="$ns3">
+      <xsl:text> {&#xA;</xsl:text>
+      <xsl:text>&#xA;</xsl:text>
+      <xsl:apply-templates select="group|set|prop">
+        <xsl:with-param name="path" select="$path"/>
+      </xsl:apply-templates>
+      <xsl:if test="$ns2">
         <xsl:text>} </xsl:text>
+        <xsl:if test="$ns3">
+          <xsl:text>} </xsl:text>
+        </xsl:if>
       </xsl:if>
+      <xsl:text>} }&#xA;</xsl:text>
+      <xsl:text>&#xA;</xsl:text>
     </xsl:if>
-    <xsl:text>} }&#xA;</xsl:text>
-    <xsl:text>&#xA;</xsl:text>
     <xsl:text>#endif&#xA;</xsl:text>
   </xsl:template>
 

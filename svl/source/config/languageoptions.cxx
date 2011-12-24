@@ -89,31 +89,6 @@ sal_Bool SvtLanguageOptions::IsJapaneseFindEnabled() const
     return m_pCJKOptions->IsJapaneseFindEnabled();
 }
 //------------------------------------------------------------------------------
-sal_Bool SvtLanguageOptions::IsRubyEnabled() const
-{
-    return m_pCJKOptions->IsRubyEnabled();
-}
-//------------------------------------------------------------------------------
-sal_Bool SvtLanguageOptions::IsChangeCaseMapEnabled() const
-{
-    return m_pCJKOptions->IsChangeCaseMapEnabled();
-}
-//------------------------------------------------------------------------------
-sal_Bool SvtLanguageOptions::IsDoubleLinesEnabled() const
-{
-    return m_pCJKOptions->IsDoubleLinesEnabled();
-}
-//------------------------------------------------------------------------------
-sal_Bool SvtLanguageOptions::IsEmphasisMarksEnabled() const
-{
-    return m_pCJKOptions->IsEmphasisMarksEnabled();
-}
-//------------------------------------------------------------------------------
-sal_Bool SvtLanguageOptions::IsVerticalCallOutEnabled() const
-{
-    return m_pCJKOptions->IsVerticalCallOutEnabled();
-}
-//------------------------------------------------------------------------------
 void SvtLanguageOptions::SetAll( sal_Bool _bSet )
 {
     m_pCJKOptions->SetAll( _bSet );
@@ -140,30 +115,15 @@ void SvtLanguageOptions::SetCTLSequenceChecking( sal_Bool _bEnabled )
 {
     m_pCTLOptions->SetCTLSequenceChecking( _bEnabled );
 }
-//------------------------------------------------------------------------------
-sal_Bool SvtLanguageOptions::IsCTLSequenceChecking() const
-{
-    return m_pCTLOptions->IsCTLSequenceChecking();
-}
 
 void SvtLanguageOptions::SetCTLSequenceCheckingRestricted( sal_Bool _bEnable )
 {
     m_pCTLOptions->SetCTLSequenceCheckingRestricted( _bEnable );
 }
 
-sal_Bool SvtLanguageOptions::IsCTLSequenceCheckingRestricted( void ) const
-{
-    return m_pCTLOptions->IsCTLSequenceCheckingRestricted();
-}
-
 void SvtLanguageOptions::SetCTLSequenceCheckingTypeAndReplace( sal_Bool _bEnable )
 {
     m_pCTLOptions->SetCTLSequenceCheckingTypeAndReplace( _bEnable );
-}
-
-sal_Bool SvtLanguageOptions::IsCTLSequenceCheckingTypeAndReplace() const
-{
-    return m_pCTLOptions->IsCTLSequenceCheckingTypeAndReplace();
 }
 
 //------------------------------------------------------------------------------

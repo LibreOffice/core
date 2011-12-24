@@ -40,6 +40,7 @@ $(eval $(call gb_Library_add_linked_libs,offacc,\
     cppu \
     cppuhelper \
     sal \
+    $(gb_STDLIBS) \
 ))
 
 $(eval $(call gb_Library_set_componentfile,offacc,desktop/source/offacc/offacc))

@@ -249,7 +249,7 @@ void SAL_CALL OMySQLTable::alterColumnByName( const ::rtl::OUString& colName, co
                 else
                 {
                     sal_Int32 nIndex = 0;
-                    if ( sTypeName.getLength() && (nIndex = sTypeName.indexOf(s_sAutoIncrement)) != -1 )
+                    if ( !sTypeName.isEmpty() && (nIndex = sTypeName.indexOf(s_sAutoIncrement)) != -1 )
                     {
                         sTypeName = sTypeName.copy(0,nIndex);
                         descriptor->setPropertyValue(rProp.getNameByIndex(PROPERTY_ID_TYPENAME),makeAny(sTypeName));
@@ -265,13 +265,13 @@ void SAL_CALL OMySQLTable::alterColumnByName( const ::rtl::OUString& colName, co
         xProp->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_DEFAULTVALUE))     >>= sOldDefault;
         descriptor->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_DEFAULTVALUE)) >>= sNewDefault;
 
-        if(sOldDefault.getLength())
+        if(!sOldDefault.isEmpty())
         {
             dropDefaultValue(colName);
-            if(sNewDefault.getLength() && sOldDefault != sNewDefault)
+            if(!sNewDefault.isEmpty() && sOldDefault != sNewDefault)
                 alterDefaultValue(sNewDefault,colName);
         }
-        else if(!sOldDefault.getLength() && sNewDefault.getLength())
+        else if(!sNewDefault.isEmpty())
             alterDefaultValue(sNewDefault,colName);
 
         // now we should look if the name of the column changed

@@ -74,7 +74,7 @@ void OTableKeyHelper::refreshColumns()
             m_pTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_SCHEMANAME)) >>= aSchema;
             m_pTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_NAME))       >>= aTable;
 
-            if ( m_Name.getLength() ) // foreign key
+            if ( !m_Name.isEmpty() ) // foreign key
             {
 
                 Reference< XResultSet > xResult = m_pTable->getMetaData()->getImportedKeys(m_pTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_CATALOGNAME)),

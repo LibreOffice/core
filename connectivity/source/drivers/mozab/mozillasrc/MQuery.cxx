@@ -329,7 +329,7 @@ sal_uInt32 MQuery::InsertLoginInfo(OConnection* _pCon)
     const char *pAddressBook = MTypeConverter::ouStringToCCharStringAscii(nameAB.getStr());
     prefName.Append(pAddressBook);
 
-    if (bindDN.getLength())
+    if (!bindDN.isEmpty())
     {
         nsCAutoString bindPrefName=prefName;
         bindPrefName.Append(NS_LITERAL_CSTRING(".auth.dn"));

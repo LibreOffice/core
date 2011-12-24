@@ -136,7 +136,7 @@ namespace dbaui
         SQLExceptionInfo aInfo;
         try
         {
-            if (bPwdRequired && !sPassword.getLength())
+            if (bPwdRequired && sPassword.isEmpty())
             {   // password required, but empty -> connect using an interaction handler
                 Reference< XCompletedConnection > xConnectionCompletion( _xDataSource, UNO_QUERY_THROW );
 
@@ -201,7 +201,7 @@ namespace dbaui
         }
         else
         {
-            if ( m_sContextInformation.getLength() )
+            if ( !m_sContextInformation.isEmpty() )
             {
                 SQLException aError;
                 aError.Message = m_sContextInformation;

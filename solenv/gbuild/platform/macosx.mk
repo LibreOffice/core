@@ -55,9 +55,9 @@ gb_COMPILERDEFS += \
 gb_CFLAGS := \
 	-isysroot $(gb_SDKDIR) \
 	$(gb_CFLAGS_COMMON) \
-	-Wshadow \
 	-fPIC \
 	-fno-strict-aliasing \
+    #-Wshadow \ break in compiler headers already
 
 gb_CXXFLAGS := \
 	-isysroot $(gb_SDKDIR) \
@@ -149,9 +149,10 @@ gb_LinkTarget__RPATHS := \
 	SDKBIN: \
 	NONE:@__VIA_LIBRARY_PATH__@ \
 
+# $(call gb_LinkTarget__get_installname,libfilename,soversion,layerprefix)
 define gb_LinkTarget__get_installname
-$(if $(2),-install_name '$(2)$(1)',$(error
-    cannot determine -install_name for $(2)))
+$(if $(3),-install_name '$(3)$(1)$(if $(2),.$(2))',
+	$(call gb_Output_error,cannot determine -install_name for $(3)))
 endef
 
 gb_LinkTarget_CFLAGS := $(gb_CFLAGS) $(gb_CFLAGS_WERROR)
@@ -207,13 +208,14 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(foreach extraobjectlist,$(EXTRAOBJECTLISTS),`cat $(extraobjectlist)`) \
 		$(foreach lib,$(LINKED_STATIC_LIBS),$(call gb_StaticLibrary_get_target,$(lib))) \
 		$(LIBS) \
-		-o $(1) \
+		-o $(if $(SOVERSION),$(1).$(SOVERSION),$(1)) \
 		`cat $${DYLIB_FILE}` && \
+	$(if $(SOVERSION),ln -sf $(notdir $(1)).$(SOVERSION) $(1),:) && \
     $(if $(filter Executable,$(TARGETTYPE)), \
         $(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl Executable \
             $(LAYER) $(1) &&) \
 	$(if $(filter Library CppunitTest,$(TARGETTYPE)),\
-		$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl Library $(LAYER) $(1) && \
+		$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl Library $(LAYER) $(if $(SOVERSION),$(1).$(SOVERSION),$(1)) && \
 		ln -sf $(1) $(patsubst %.dylib,%.jnilib,$(1)) &&) \
 	rm -f $${DYLIB_FILE})
 endef
@@ -289,14 +291,18 @@ gb_Library_LAYER := \
 	$(foreach lib,$(gb_Library_UNOVERLIBS),$(lib):URELIB) \
 
 define gb_Library_get_rpath
-$(call gb_LinkTarget__get_installname,$(call gb_Library_get_filename,$(1)),$(call gb_LinkTarget__get_rpath_for_layer,$(call gb_Library_get_layer,$(1))))
+$(call gb_LinkTarget__get_installname,$(call gb_Library_get_filename,$(1)),$(2),$(call gb_LinkTarget__get_rpath_for_layer,$(call gb_Library_get_layer,$(1))))
 endef
 
+# RPATH def is delayed until the link command to get current value of SOVERSION
 define gb_Library_Library_platform
-$(call gb_LinkTarget_get_target,$(2)) : RPATH := $(call gb_Library_get_rpath,$(1))
+$(call gb_LinkTarget_get_target,$(2)) : \
+	RPATH = $$(call gb_Library_get_rpath,$(1),$$(SOVERSION))
 $(call gb_LinkTarget_get_target,$(2)) : LAYER := $(call gb_Library_get_layer,$(1))
 
 endef
+
+gb_Library__set_soversion_script_platform = $(gb_Library__set_soversion_script)
 
 
 # StaticLibrary class
@@ -336,7 +342,12 @@ endef
 
 # CppunitTest class
 
+ifeq ($(CROSS_COMPILING),YES)
+gb_CppunitTest_CPPTESTPRECOMMAND := :
+else
 gb_CppunitTest_CPPTESTPRECOMMAND := $(gb_Helper_set_ld_path)
+endif
+
 gb_CppunitTest_SYSPRE := libtest_
 gb_CppunitTest_EXT := .dylib
 gb_CppunitTest_LIBDIR := $(gb_Helper_OUTDIRLIBDIR)

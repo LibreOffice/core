@@ -52,8 +52,9 @@ if [ -d .git ] ; then
     else
         # space-saving clone from another local workdir
         mkdir clone
+        branch=$(git symbolic-ref HEAD | cut -d"/" -f 3)
         for i in $GIT_REPO_NAMES ; do
-            bin/git-new-workdir $GIT_LINK_SRC/$i clone/$i
+            bin/git-new-workdir $GIT_LINK_SRC/$i clone/$i $branch
             for d in clone/$i/* ; do
                 if [ "${d}" != "clone/$i/git-hooks" ]; then
                     ln -sfn ${d} $(basename ${d})
@@ -269,7 +270,7 @@ if [ "$OXYGENOFFICE_PACK" = "YES" ] ; then
 fi
 
 # Extensions copy
-for pack in $BARCODE_EXTENSION_PACK $DIAGRAM_EXTENSION_PACK $VALIDATOR_EXTENSION_PACK $WATCH_WINDOW_EXTENSION_PACK $NUMBERTEXT_EXTENSION_PACK $HUNART_EXTENSION_PACK $TYPO_EXTENSION_PACK $GOOGLE_DOCS_EXTENSION_PACK $OOOBLOGGER_EXTENSION_PACK $LIGHTPROOF_HU_PACK $LIGHTPROOF_RU_PACK $LIGHTPROOF_EN_US_PACK $SUNTEMPLATES_DE_PACK $SUNTEMPLATES_EN_US_PACK $SUNTEMPLATES_ES_PACK $SUNTEMPLATES_FR_PACK $SUNTEMPLATES_HU_PACK $SUNTEMPLATES_IT_PACK; do
+for pack in $BARCODE_EXTENSION_PACK $DIAGRAM_EXTENSION_PACK $VALIDATOR_EXTENSION_PACK $WATCH_WINDOW_EXTENSION_PACK $NUMBERTEXT_EXTENSION_PACK $HUNART_EXTENSION_PACK $TYPO_EXTENSION_PACK $GOOGLE_DOCS_EXTENSION_PACK $OOOBLOGGER_EXTENSION_PACK $SUNTEMPLATES_DE_PACK $SUNTEMPLATES_EN_US_PACK $SUNTEMPLATES_ES_PACK $SUNTEMPLATES_FR_PACK $SUNTEMPLATES_HU_PACK $SUNTEMPLATES_IT_PACK; do
     check_file $TARFILE_LOCATION/$pack
     packfilename=`echo "$pack" | cut -f 2- -s -d - | cut -f 1 -d _`
     echo "Copy extension: '$pack' as '$packfilename.oxt' ..."

@@ -337,7 +337,7 @@ int SAL_CALL main( int argc, const char* argv[] )
         }
     }
 
-    if( aRegistry.getLength() == 0 )
+    if( aRegistry.isEmpty( ) )
         fprintf( stderr, "Usage: %s -r full-path-to-applicat.rdb\n", app );
 
     //------------------------------------------------------------------

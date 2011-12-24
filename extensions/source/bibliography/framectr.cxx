@@ -450,7 +450,7 @@ void BibFrameController_Impl::dispatch(const util::URL& _rURL, const uno::Sequen
         else if(aCommand.EqualsAscii("Bib/sdbsource"))
         {
             rtl::OUString aURL = pDatMan->CreateDBChangeDialog(pParent);
-            if(aURL.getLength())
+            if(!aURL.isEmpty())
             {
                 try
                 {
@@ -563,7 +563,7 @@ void BibFrameController_Impl::dispatch(const util::URL& _rURL, const uno::Sequen
                 {
                     FeatureStateEvent  aEvent;
                     aEvent.FeatureURL = pObj->aURL;
-                    aEvent.IsEnabled  = 0 != pDatMan->getParser()->getFilter().getLength();
+                    aEvent.IsEnabled  = !pDatMan->getParser()->getFilter().isEmpty();
                     aEvent.Requery    = sal_False;
                     aEvent.Source     = (XDispatch *) this;
                     pObj->xListener->statusChanged( aEvent );
@@ -755,7 +755,7 @@ void BibFrameController_Impl::addStatusListener(
     else if (aURL.Path == C2U("Bib/removeFilter") )
     {
         rtl::OUString aFilterStr=pDatMan->getFilter();
-        aEvent.IsEnabled  = (aFilterStr.getLength() > 0);
+        aEvent.IsEnabled  = !aFilterStr.isEmpty();
     }
     else if(aURL.Path == C2U("Cut"))
     {
@@ -800,7 +800,7 @@ void BibFrameController_Impl::addStatusListener(
                         uno::Any aData = xDataObj->getTransferData( aFlavor );
                         ::rtl::OUString aText;
                         aData >>= aText;
-                        aEvent.IsEnabled  = aText.getLength() > 0;
+                        aEvent.IsEnabled  = !aText.isEmpty();
                     }
                     catch( const uno::Exception& )
                     {
@@ -845,7 +845,7 @@ void BibFrameController_Impl::removeStatusListener(
             BibStatusDispatch *pObj = aStatusListeners[n];
             sal_Bool bFlag=pObj->xListener.is();
             if (!bFlag || (pObj->xListener == aObject &&
-                ( !aURL.Complete.getLength() || pObj->aURL.Path == aURL.Path  )))
+                ( aURL.Complete.isEmpty() || pObj->aURL.Path == aURL.Path  )))
             {
                 aStatusListeners.DeleteAndDestroy( n );
                 break;

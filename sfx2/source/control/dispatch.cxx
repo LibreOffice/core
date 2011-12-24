@@ -36,7 +36,6 @@
 #include <svl/eitem.hxx>
 #include <svl/undo.hxx>
 #include <vcl/wrkwin.hxx>
-#include <svtools/ttprops.hxx>
 #include <stdio.h>
 #include <stdarg.h>
 #include <stdlib.h>  // due to bsearch
@@ -995,91 +994,6 @@ void MappedPut_Impl( SfxAllItemSet &rSet, const SfxPoolItem &rItem )
 #define SFX_USE_BINDINGS 0x8000
 #endif
 
-sal_uInt16 SfxDispatcher::ExecuteFunction( sal_uInt16 nSlot, SfxPoolItem **pArgs,
-                                       sal_uInt16 nMode )
-{
-    if ( !nMode )
-        nMode = pImp->nStandardMode;
-
-    // through Bindings/Interceptor? (then the return value is not exact)
-    sal_Bool bViaBindings = SFX_USE_BINDINGS == ( nMode & SFX_USE_BINDINGS );
-    nMode &= ~sal_uInt16(SFX_USE_BINDINGS);
-    if ( bViaBindings && GetBindings() )
-        return GetBindings()->Execute( nSlot, (const SfxPoolItem **) pArgs, nMode )
-                ? EXECUTE_POSSIBLE
-                : EXECUTE_NO;
-
-    // otherwise through the Dispatcher
-    if ( IsLocked(nSlot) )
-        return 0;
-    SfxShell *pShell = 0;
-    SfxCallMode eCall = SFX_CALLMODE_SYNCHRON;
-    sal_uInt16 nRet = EXECUTE_NO;
-    const SfxSlot *pSlot = 0;
-    if ( GetShellAndSlot_Impl( nSlot, &pShell, &pSlot, sal_False, sal_False ) )
-    {
-        // Feasibility test before
-        if ( pSlot->IsMode( SFX_SLOT_FASTCALL ) ||
-            pShell->CanExecuteSlot_Impl( *pSlot ) )
-                nRet = EXECUTE_POSSIBLE;
-
-        if ( nMode == EXECUTEMODE_ASYNCHRON )
-            eCall = SFX_CALLMODE_ASYNCHRON;
-        else if ( nMode == EXECUTEMODE_DIALOGASYNCHRON && pSlot->IsMode( SFX_SLOT_HASDIALOG ) )
-            eCall = SFX_CALLMODE_ASYNCHRON;
-        else if ( pSlot->GetMode() & SFX_SLOT_ASYNCHRON )
-            eCall = SFX_CALLMODE_ASYNCHRON;
-        if ( pArgs && *pArgs )
-        {
-            SfxAllItemSet aSet( pShell->GetPool() );
-            for ( SfxPoolItem **pArg = pArgs; *pArg; ++pArg )
-                MappedPut_Impl( aSet, **pArg );
-            SfxRequest aReq( nSlot, eCall, aSet );
-            _Execute( *pShell, *pSlot, aReq, eCall );
-        }
-        else
-        {
-            SfxRequest aReq( nSlot, eCall, pShell->GetPool() );
-            _Execute( *pShell, *pSlot, aReq, eCall );
-        }
-    }
-
-    return nRet;
-}
-
-sal_uInt16 SfxDispatcher::ExecuteFunction( sal_uInt16 nSlot, const SfxItemSet& rArgs,
-                                       sal_uInt16 nMode )
-{
-    if ( !nMode )
-        nMode = pImp->nStandardMode;
-
-    // otherwise through the Dispatcher
-    if ( IsLocked(nSlot) )
-        return 0;
-    SfxShell *pShell = 0;
-    SfxCallMode eCall = SFX_CALLMODE_SYNCHRON;
-    sal_uInt16 nRet = EXECUTE_NO;
-    const SfxSlot *pSlot = 0;
-    if ( GetShellAndSlot_Impl( nSlot, &pShell, &pSlot, sal_False, sal_False ) )
-    {
-        // Feasibility test before
-        if ( pSlot->IsMode( SFX_SLOT_FASTCALL ) ||
-            pShell->CanExecuteSlot_Impl( *pSlot ) )
-                nRet = EXECUTE_POSSIBLE;
-
-        if ( nMode == EXECUTEMODE_ASYNCHRON )
-            eCall = SFX_CALLMODE_ASYNCHRON;
-        else if ( nMode == EXECUTEMODE_DIALOGASYNCHRON && pSlot->IsMode( SFX_SLOT_HASDIALOG ) )
-            eCall = SFX_CALLMODE_ASYNCHRON;
-        else if ( pSlot->GetMode() & SFX_SLOT_ASYNCHRON )
-            eCall = SFX_CALLMODE_ASYNCHRON;
-        SfxRequest aReq( nSlot, eCall, rArgs );
-        _Execute( *pShell, *pSlot, aReq, eCall );
-    }
-
-    return nRet;
-}
-
 const SfxSlot* SfxDispatcher::GetSlot( const String& rCommand )
 {
     // Count the number of Shells on the linked Dispatcher
@@ -1454,7 +1368,7 @@ void SfxDispatcher::Update_Impl( sal_Bool bForce )
             com::sun::star::uno::Any aValue = xPropSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" )) );
             aValue >>= xLayoutManager;
         }
-        catch ( com::sun::star::uno::Exception& )
+        catch (const com::sun::star::uno::Exception&)
         {
         }
     }

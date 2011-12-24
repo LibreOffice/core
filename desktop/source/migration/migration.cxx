@@ -103,7 +103,7 @@ static const char XDG_CONFIG_PART[] = "/.config";
     }
     if (xUICommands.is())
     {
-        if ( sCommand.getLength() > 0 )
+        if ( !sCommand.isEmpty() )
         {
             rtl::OUString aStr;
             ::uno::Sequence< beans::PropertyValue > aPropSeq;
@@ -210,7 +210,7 @@ bool MigrationImpl::initializeMigration()
             m_vrMigrations = readMigrationSteps(m_vMigrationsAvailable[nIndex].name);
         }
 
-        bRet = m_aInfo.userdata.getLength() > 0;
+        bRet = !m_aInfo.userdata.isEmpty();
     }
 
     OSL_TRACE( "Migration %s", bRet ? "needed" : "not required" );
@@ -270,7 +270,7 @@ sal_Bool MigrationImpl::doMigration()
         for (sal_uInt32 i=0; i<vModulesInfo.size(); ++i)
         {
             ::rtl::OUString sModuleIdentifier = mapModuleShortNameToIdentifier(vModulesInfo[i].sModuleShortName);
-            if (sModuleIdentifier.getLength()==0)
+            if (sModuleIdentifier.isEmpty())
                 continue;
 
             uno::Sequence< uno::Any > lArgs(2);
@@ -570,7 +570,7 @@ install_info MigrationImpl::findInstallation(const strings_v& rVersions)
             if ( !pXDGCfgHome && aUserInst.endsWithAsciiL( XDG_CONFIG_PART, sizeof( XDG_CONFIG_PART ) - 1 )  )
                 aUserInst = aUserInst.copy( 0, aUserInst.getLength() - sizeof(  XDG_CONFIG_PART ) + 2 ); // remove trailing '.config' ( but leave the terminating '/' )
 #endif
-            if ( aUserInst.getLength() && aUserInst[ aUserInst.getLength()-1 ] != '/' )
+            if ( !aUserInst.isEmpty() && aUserInst[ aUserInst.getLength()-1 ] != '/' )
                 aUserInst += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
 #if defined UNX && ! defined MACOSX
             // tribute to whoever had the "great" idea to use different names on Windows and Unix
@@ -604,7 +604,7 @@ sal_Int32 MigrationImpl::findPreferedMigrationProcess(const migrations_available
     while ( rIter != rAvailableMigrations.end() )
     {
         install_info aInstallInfo = findInstallation(rIter->supported_versions);
-        if (aInstallInfo.productname.getLength() > 0 )
+        if (!aInstallInfo.productname.isEmpty() )
         {
             m_aInfo = aInstallInfo;
             nIndex  = i;
@@ -722,7 +722,7 @@ typedef std::map< rtl::OUString, componentParts > Components;
 
 bool getComponent(rtl::OUString const & path, rtl::OUString * component) {
     OSL_ASSERT(component != 0);
-    if (path.getLength() == 0 || path[0] != '/') {
+    if (path.isEmpty() || path[0] != '/') {
         OSL_TRACE(
             ("configuration migration in/exclude path %s ignored (does not"
              " start with slash)"),
@@ -784,7 +784,7 @@ void MigrationImpl::copyConfig() {
                     rtl::Uri::encode(
                         seg, rtl_UriCharClassPchar, rtl_UriEncodeStrict,
                         RTL_TEXTENCODING_UTF8));
-                if (enc.getLength() == 0 && seg.getLength() != 0) {
+                if (enc.isEmpty() && !seg.isEmpty()) {
                     OSL_TRACE(
                         ("configuration migration component %s ignored (cannot"
                          " be encoded as file path)"),
@@ -932,7 +932,7 @@ void MigrationImpl::runServices()
     migrations_v::const_iterator i_mig  = m_vrMigrations->begin();
     while (i_mig != m_vrMigrations->end())
     {
-        if( i_mig->service.getLength() > 0)
+        if( !i_mig->service.isEmpty())
         {
 
             try
@@ -1034,13 +1034,13 @@ void MigrationImpl::runServices()
                     {
                         ::rtl::OUString sExtension(sToolbarName.copy(nIndex));
                         ::rtl::OUString sToolbarResourceName(sToolbarName.copy(0, nIndex));
-                        if (sToolbarResourceName.getLength()>0 && sExtension.equalsAsciiL(".xml", 4))
+                        if (!sToolbarResourceName.isEmpty() && sExtension.equalsAsciiL(".xml", 4))
                             aModuleInfo.m_vToolbars.push_back(sToolbarResourceName);
                     }
                 }
             }
 
-            if (aModuleInfo.sModuleShortName.getLength()>0)
+            if (!aModuleInfo.sModuleShortName.isEmpty())
                 vModulesInfo.push_back(aModuleInfo);
         }
     }
@@ -1072,7 +1072,7 @@ void MigrationImpl::compareOldAndNewConfig(const ::rtl::OUString& sParent,
                     aProp[i].Value >>= aMigrationItem.m_xPopupMenu;
             }
 
-            if (aMigrationItem.m_sCommandURL.getLength())
+            if (!aMigrationItem.m_sCommandURL.isEmpty())
                 vOldItems.push_back(aMigrationItem);
         }
     }
@@ -1090,7 +1090,7 @@ void MigrationImpl::compareOldAndNewConfig(const ::rtl::OUString& sParent,
                     aProp[i].Value >>= aMigrationItem.m_xPopupMenu;
             }
 
-            if (aMigrationItem.m_sCommandURL.getLength())
+            if (!aMigrationItem.m_sCommandURL.isEmpty())
                 vNewItems.push_back(aMigrationItem);
         }
     }
@@ -1104,7 +1104,7 @@ void MigrationImpl::compareOldAndNewConfig(const ::rtl::OUString& sParent,
         if (pFound != vNewItems.end() && it->m_xPopupMenu.is())
         {
             ::rtl::OUString sName;
-            if (sParent.getLength()>0)
+            if (!sParent.isEmpty())
                 sName = sParent + MENU_SEPERATOR + it->m_sCommandURL;
             else
                 sName = it->m_sCommandURL;
@@ -1137,7 +1137,7 @@ void MigrationImpl::compareOldAndNewConfig(const ::rtl::OUString& sParent,
         if (pFound != vOldItems.end() && it->m_xPopupMenu.is())
         {
             ::rtl::OUString sName;
-            if (sParent.getLength()>0)
+            if (!sParent.isEmpty())
                 sName = sParent + MENU_SEPERATOR + it->m_sCommandURL;
             else
                 sName = it->m_sCommandURL;
@@ -1180,7 +1180,7 @@ void MigrationImpl::mergeOldToNewVersion(const uno::Reference< ui::XUIConfigurat
         do
         {
             ::rtl::OUString sToken = sParentNodeName.getToken(0, '|', nIndex).trim();
-            if (sToken.getLength()<=0)
+            if (sToken.isEmpty())
                 break;
 
             sal_Int32 nCount = xTemp->getCount();
@@ -1223,9 +1223,9 @@ void MigrationImpl::mergeOldToNewVersion(const uno::Reference< ui::XUIConfigurat
             aPropSeq[2].Name = ITEM_DESCRIPTOR_CONTAINER;
             aPropSeq[2].Value <<= it->m_xPopupMenu;
 
-            if (it->m_sPrevSibling.getLength() == 0)
+            if (it->m_sPrevSibling.isEmpty())
                 xTemp->insertByIndex(0, uno::makeAny(aPropSeq));
-            else if (it->m_sPrevSibling.getLength() > 0)
+            else if (!it->m_sPrevSibling.isEmpty())
             {
                 sal_Int32 nCount = xTemp->getCount();
                 sal_Int32 i = 0;
@@ -1334,7 +1334,7 @@ void NewVersionUIInfo::init(const ::std::vector< MigrationModuleInfo >& vModules
     for (sal_uInt32 i=0; i<vModulesInfo.size(); ++i)
     {
         ::rtl::OUString sModuleIdentifier = mapModuleShortNameToIdentifier(vModulesInfo[i].sModuleShortName);
-        if (sModuleIdentifier.getLength() > 0)
+        if (!sModuleIdentifier.isEmpty())
         {
             uno::Reference< ui::XUIConfigurationManager > xCfgManager = xModuleCfgSupplier->getUIConfigurationManager(sModuleIdentifier);
             m_lCfgManagerSeq[i].Name = vModulesInfo[i].sModuleShortName;

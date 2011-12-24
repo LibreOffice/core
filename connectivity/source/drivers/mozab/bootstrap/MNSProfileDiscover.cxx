@@ -200,11 +200,11 @@ namespace connectivity
                             sIsDefault = aValue->sValue;
                         }
                 }
-                if (profileName.getLength() != 0 || profilePath.getLength() != 0)
+                if (!(profileName.isEmpty() && profilePath.isEmpty()))
                 {
 #ifndef MINIMAL_PROFILEDISCOVER
                     sal_Int32 isRelative = 0;
-                    if (sIsRelative.getLength() != 0)
+                    if (!sIsRelative.isEmpty())
                     {
                         isRelative = sIsRelative.toInt32();
                     }
@@ -241,7 +241,7 @@ namespace connectivity
                     m_Product.mProfileList[profileName] = profileItem;
 
                     sal_Int32 isDefault = 0;
-                    if (sIsDefault.getLength() != 0)
+                    if (!sIsDefault.isEmpty())
                     {
                         isDefault = sIsDefault.toInt32();
                     }
@@ -295,7 +295,7 @@ namespace connectivity
         {
             sal_Int32 index=product;
             ProductStruct &m_Product = m_ProductProfileList[index];
-            if (m_Product.mCurrentProfileName.getLength() != 0)
+            if (!m_Product.mCurrentProfileName.isEmpty())
             {
                 //default profile setted in mozilla registry
                 return m_Product.mCurrentProfileName;
@@ -376,7 +376,7 @@ namespace connectivity
             return sal_True;
 #else
             ::rtl::OUString path = getProfilePath(product,profileName);
-            if (!path.getLength())
+            if (path.isEmpty())
                 return sal_True;
 
             // PRUnichar != sal_Unicode in mingw

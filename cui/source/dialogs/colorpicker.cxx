@@ -258,7 +258,7 @@ void HexColorControl::Paste()
                 ::rtl::OUString aText;
                 aData >>= aText;
 
-                if( aText.getLength() && aText.matchAsciiL( "#", 1, 0 ) )
+                if( !aText.isEmpty() && aText.matchAsciiL( "#", 1, 0 ) )
                     aText = aText.copy(1);
 
                 if( aText.getLength() > 6 )

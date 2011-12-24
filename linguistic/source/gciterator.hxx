@@ -43,6 +43,7 @@
 #include <cppuhelper/weakref.hxx>
 #include <osl/mutex.hxx>
 #include <osl/conditn.hxx>
+#include <osl/thread.h>
 #include <rtl/instance.hxx>
 
 #include <map>
@@ -122,7 +123,7 @@ class GrammarCheckingIterator:
     sal_Int32       m_nDocIdCounter;
     sal_Int32       m_nLastEndOfSentencePos;
     osl::Condition  m_aWakeUpThread;
-    osl::Condition  m_aRequestEndThread;
+    oslThread       m_thread;
 
     //! beware of initilization order !
     struct MyMutex : public rtl::Static< osl::Mutex, MyMutex > {};
@@ -131,6 +132,8 @@ class GrammarCheckingIterator:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XBreakIterator > m_xBreakIterator;
     mutable ::com::sun::star::uno::Reference< ::com::sun::star::util::XChangesBatch >  m_xUpdateAccess;
+
+    void TerminateThread();
 
     sal_Int32 NextDocId();
     ::rtl::OUString GetOrCreateDocId( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > &xComp );

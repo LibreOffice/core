@@ -200,7 +200,7 @@ IdContainer * getIdContainer() SAL_THROW( () )
 }
 
 //##################################################################################################
-extern "C" sal_Bool SAL_CALL uno_setCurrentContext(
+extern "C" CPPU_DLLPUBLIC sal_Bool SAL_CALL uno_setCurrentContext(
     void * pCurrentContext,
     rtl_uString * pEnvTypeName, void * pEnvContext )
     SAL_THROW_EXTERN_C()
@@ -248,7 +248,7 @@ extern "C" sal_Bool SAL_CALL uno_setCurrentContext(
     return sal_True;
 }
 //##################################################################################################
-extern "C" sal_Bool SAL_CALL uno_getCurrentContext(
+extern "C" CPPU_DLLPUBLIC sal_Bool SAL_CALL uno_getCurrentContext(
     void ** ppCurrentContext, rtl_uString * pEnvTypeName, void * pEnvContext )
     SAL_THROW_EXTERN_C()
 {

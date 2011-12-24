@@ -51,8 +51,15 @@
 
 #include <memory>
 
+#include <optutil.hxx>
+#include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/uno/Sequence.hxx>
+
+
 using namespace ::com::sun::star;
 using ::rtl::OUStringBuffer;
+using namespace rtl;
+using namespace com::sun::star::uno;
 
 //------------------------------------------------------------------------
 
@@ -65,6 +72,57 @@ SC_SIMPLE_SERVICE_INFO( ScFilterOptionsObj, SCFILTEROPTIONSOBJ_IMPLNAME, SCFILTE
 #define SC_UNONAME_FILTERNAME       "FilterName"
 #define SC_UNONAME_FILTEROPTIONS    "FilterOptions"
 #define SC_UNONAME_INPUTSTREAM      "InputStream"
+
+
+#define DBF_CHAR_SET                "CharSet"
+#define DBF_SEP_PATH_IMPORT         "Office.Calc/Dialogs/DBFImport"
+#define DBF_SEP_PATH_EXPORT         "Office.Calc/Dialogs/DBFExport"
+
+//------------------------------------------------------------------------
+
+static void load_CharSet( rtl_TextEncoding &nCharSet, bool bExport )
+{
+    sal_Int32 nChar = 0;
+    Sequence<Any> aValues;
+    const Any *pProperties;
+    Sequence<OUString> aNames(1);
+    OUString* pNames = aNames.getArray();
+    ScLinkConfigItem aItem( OUString::createFromAscii(
+                                bExport?DBF_SEP_PATH_EXPORT:DBF_SEP_PATH_IMPORT ) );
+
+    pNames[0] = OUString::createFromAscii( DBF_CHAR_SET );
+    aValues = aItem.GetProperties( aNames );
+    pProperties = aValues.getConstArray();
+
+    // Default choice
+    nCharSet = RTL_TEXTENCODING_IBM_850;
+
+    if( pProperties[0].hasValue() )
+    {
+        pProperties[0] >>= nChar;
+        if( nChar >= 0)
+        {
+            nCharSet = (rtl_TextEncoding) nChar;
+        }
+    }
+}
+
+static void save_CharSet( rtl_TextEncoding nCharSet, bool bExport )
+{
+    Sequence<Any> aValues;
+    Any *pProperties;
+    Sequence<OUString> aNames(1);
+    OUString* pNames = aNames.getArray();
+    ScLinkConfigItem aItem( OUString::createFromAscii(
+                                bExport?DBF_SEP_PATH_EXPORT:DBF_SEP_PATH_IMPORT ) );
+
+    pNames[0] = OUString::createFromAscii( DBF_CHAR_SET );
+    aValues = aItem.GetProperties( aNames );
+    pProperties = aValues.getArray();
+    pProperties[0] <<= (sal_Int32) nCharSet;
+
+    aItem.PutProperties(aNames, aValues);
+}
 
 //------------------------------------------------------------------------
 
@@ -250,8 +308,7 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute() throw(uno::RuntimeException)
                 //  dBase import
                 aTitle = ScGlobal::GetRscString( STR_IMPORT_DBF );
             }
-            // common for dBase import/export
-            eEncoding = RTL_TEXTENCODING_IBM_850;
+            load_CharSet( eEncoding, bExport );
             bDBEnc = sal_True;
         }
         else if ( aFilterString == ScDocShell::GetDifFilterName() )
@@ -279,6 +336,7 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute() throw(uno::RuntimeException)
         if ( pDlg->Execute() == RET_OK )
         {
             pDlg->GetImportOptions( aOptions );
+            save_CharSet( aOptions.eCharSet, bExport );
             if ( bAscii )
                 aFilterOptions = aOptions.BuildString();
             else

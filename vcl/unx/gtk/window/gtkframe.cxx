@@ -1328,6 +1328,8 @@ Size GtkSalFrame::calcDefaultSize()
         w = 785;
     if( aScreenSize.Width() >= 1024 )
         w = 920;
+    if( aScreenSize.Width() >= 1280 )
+        w = 1050;
 
     if( aScreenSize.Height() >= 600 )
         h = 550;
@@ -4160,12 +4162,8 @@ gboolean GtkSalFrame::IMHandler::signalIMDeleteSurrounding( GtkIMContext*, gint 
 
 Size GtkSalDisplay::GetScreenSize( int nScreen )
 {
-    GdkScreen *pScreen = gdk_display_get_screen (m_pGdkDisplay, nScreen);
-    if (!pScreen)
-        return Size();
-    else
-        return Size( gdk_screen_get_width (pScreen),
-                     gdk_screen_get_height (pScreen) );
+    Rectangle aRect = m_pSys->GetDisplayScreenPosSizePixel( nScreen );
+    return Size( aRect.GetWidth(), aRect.GetHeight() );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

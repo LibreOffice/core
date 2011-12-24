@@ -159,9 +159,9 @@ namespace sdbtools
                 m_xConnection->getMetaData(), _rName, sCatalog, sSchema, sName, ::dbtools::eInTableDefinitions );
 
             ::rtl::OUString sExtraNameCharacters( m_xConnection->getMetaData()->getExtraNameCharacters() );
-            if  (   ( sCatalog.getLength() && !::dbtools::isValidSQLName( sCatalog, sExtraNameCharacters ) )
-                ||  ( sSchema.getLength() && !::dbtools::isValidSQLName( sSchema, sExtraNameCharacters ) )
-                ||  ( sName.getLength() && !::dbtools::isValidSQLName( sName, sExtraNameCharacters ) )
+            if  (   ( !sCatalog.isEmpty() && !::dbtools::isValidSQLName( sCatalog, sExtraNameCharacters ) )
+                ||  ( !sSchema.isEmpty() && !::dbtools::isValidSQLName( sSchema, sExtraNameCharacters ) )
+                ||  ( !sName.isEmpty() && !::dbtools::isValidSQLName( sName, sExtraNameCharacters ) )
                 )
                 return false;
 

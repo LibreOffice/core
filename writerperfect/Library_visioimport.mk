@@ -48,6 +48,7 @@ $(eval $(call gb_Library_add_linked_libs,visioimport,\
 	tl \
 	utl \
 	xo \
+    $(gb_STDLIBS) \
 ))
 
 $(eval $(call gb_Library_add_linked_static_libs,visioimport,\

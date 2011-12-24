@@ -32,7 +32,9 @@
 #include <editeng/crsditem.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/boxitem.hxx>
+#include <editeng/svxenum.hxx>
 #include <editeng/udlnitem.hxx>
+#include <swmodule.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <docary.hxx>
@@ -48,6 +50,9 @@
 #include <com/sun/star/document/XDocumentProperties.hpp>
 
 #include <vector>
+
+#include <set>
+#include <cctype>
 
 using namespace ::com::sun::star;
 
@@ -189,6 +194,147 @@ public:
     Compare( sal_uLong nDiff, CompareData& rData1, CompareData& rData2 );
 };
 
+class ArrayComparator
+{
+public:
+    virtual bool Compare( int nIdx1, int nIdx2 ) const = 0;
+    virtual int GetLen1() const = 0;
+    virtual int GetLen2() const = 0;
+};
+
+// Consider two lines equal if similar enough (e.g. look like different
+// versions of the same paragraph)
+class LineArrayComparator : public ArrayComparator
+{
+private:
+    int nLen1, nLen2;
+    const CompareData &rData1, &rData2;
+    int nFirst1, nFirst2;
+
+public:
+    LineArrayComparator( const CompareData &rD1, const CompareData &rD2,
+                            int nStt1, int nEnd1, int nStt2, int nEnd2 );
+
+    virtual bool Compare( int nIdx1, int nIdx2 ) const;
+    virtual int GetLen1() const { return nLen1; }
+    virtual int GetLen2() const { return nLen2; }
+};
+
+class WordArrayComparator : public ArrayComparator
+{
+private:
+    const SwTxtNode *pTxtNd1, *pTxtNd2;
+    int *pPos1, *pPos2;
+    int nCnt1, nCnt2;		// number of words
+    const unsigned nMul;
+
+    void CalcPositions( int *pPos, const SwTxtNode *pTxtNd, int &nCnt );
+
+public:
+    WordArrayComparator( const SwTxtNode *pNode1, const SwTxtNode *pNode2 );
+    ~WordArrayComparator();
+
+    virtual bool Compare( int nIdx1, int nIdx2 ) const;
+    virtual int GetLen1() const { return nCnt1; }
+    virtual int GetLen2() const { return nCnt2; }
+    int GetCharSequence( const int *pWordLcs1, const int *pWordLcs2,
+                        int *pSubseq1, int *pSubseq2, int nLcsLen );
+};
+
+class CharArrayComparator : public ArrayComparator
+{
+private:
+    const SwTxtNode *pTxtNd1, *pTxtNd2;
+
+public:
+    CharArrayComparator( const SwTxtNode *pNode1, const SwTxtNode *pNode2 )
+        : pTxtNd1( pNode1 ), pTxtNd2( pNode2 )
+    {
+    }
+
+    virtual bool Compare( int nIdx1, int nIdx2 ) const;
+    virtual int GetLen1() const { return pTxtNd1->GetTxt().Len(); }
+    virtual int GetLen2() const { return pTxtNd2->GetTxt().Len(); }
+};
+
+// Options set in Tools->Options->Writer->Comparison
+struct CmpOptionsContainer
+{
+    SvxCompareMode eCmpMode;
+    int nIgnoreLen;
+    bool bUseRsid;
+} CmpOptions;
+
+class CommonSubseq
+{
+private:
+    int *pData;
+    int nSize;
+
+protected:
+    ArrayComparator &rCmp;
+
+    CommonSubseq( ArrayComparator &rComparator, int nMaxSize )
+        : nSize( nMaxSize ), rCmp( rComparator )
+    {
+        pData = new int[ nSize ];
+    }
+
+    ~CommonSubseq()
+    {
+        delete[] pData;
+    }
+
+    int FindLCS( int *pLcs1 = 0, int *pLcs2 = 0, int nStt1 = 0,
+                    int nEnd1 = 0, int nStt2 = 0, int nEnd2 = 0 );
+
+public:
+    int IgnoreIsolatedPieces( int *pLcs1, int *pLcs2, int nLen1, int nLen2,
+                                int nLcsLen, int nPieceLen );
+};
+
+// Use Hirschberg's algrithm to find LCS in linear space
+class LgstCommonSubseq: public CommonSubseq
+{
+private:
+    static const int CUTOFF = 1<<20; // Stop recursion at this value
+
+    int *pL1, *pL2;
+    int *pBuff1, *pBuff2;
+
+    void FindL( int *pL, int nStt1, int nEnd1, int nStt2, int nEnd2  );
+    int HirschbergLCS( int *pLcs1, int *pLcs2, int nStt1, int nEnd1,
+                                                int nStt2, int nEnd2 );
+
+public:
+    LgstCommonSubseq( ArrayComparator &rComparator );
+    ~LgstCommonSubseq();
+
+    int Find( int *pSubseq1, int *pSubseq2 );
+};
+
+// Find a common subsequence in linear time
+class FastCommonSubseq: private CommonSubseq
+{
+private:
+    static const int CUTOFF = 2056;
+
+    int FindFastCS( int *pSeq1, int *pSeq2, int nStt1, int nEnd1,
+                                             int nStt2, int nEnd2  );
+
+public:
+    FastCommonSubseq( ArrayComparator &rComparator )
+        : CommonSubseq( rComparator, CUTOFF )
+    {
+    }
+
+    int Find( int *pSubseq1, int *pSubseq2 )
+    {
+        return FindFastCS( pSubseq1, pSubseq2, 0, rCmp.GetLen1(),
+                                                0, rCmp.GetLen2() );
+    }
+};
+
 CompareLine::~CompareLine() {}
 
 CompareData::CompareData()
@@ -250,20 +396,16 @@ sal_uLong CompareData::ShowDiffs( const CompareData& rData )
     {
         if( rData.GetChanged( nStt1 ) || GetChanged( nStt2 ) )
         {
+            // Find a region of different lines between two pairs of identical
+            // lines.
             sal_uLong nSav1 = nStt1, nSav2 = nStt2;
             while( nStt1 < nLen1 && rData.GetChanged( nStt1 )) ++nStt1;
             while( nStt2 < nLen2 && GetChanged( nStt2 )) ++nStt2;
 
-            // rData is the original,
-            // "this" recieves the changes
-            if( nSav2 != nStt2 && nSav1 != nStt1 )
-                CheckForChangesInLine( rData, nSav1, nStt1, nSav2, nStt2 );
+            // Check if there are changed lines (only slightly different) and
+            // compare them in detail.
+            CheckForChangesInLine( rData, nSav1, nStt1, nSav2, nStt2 );
 
-            if( nSav2 != nStt2 )
-                ShowInsert( nSav2, nStt2 );
-
-            if( nSav1 != nStt1 )
-                ShowDelete( rData, nSav1, nStt1, nStt2 );
             ++nCnt;
         }
         ++nStt1, ++nStt2;
@@ -968,7 +1110,8 @@ sal_Bool SwCompareLine::CompareNode( const SwNode& rDstNd, const SwNode& rSrcNd 
     switch( rDstNd.GetNodeType() )
     {
     case ND_TEXTNODE:
-        bRet = CompareTxtNd( (SwTxtNode&)rDstNd, (SwTxtNode&)rSrcNd );
+        bRet = CompareTxtNd( (SwTxtNode&)rDstNd, (SwTxtNode&)rSrcNd )
+            && ( !CmpOptions.bUseRsid || ((SwTxtNode&)rDstNd).CompareParRsid( (SwTxtNode&)rSrcNd ) );
         break;
 
     case ND_TABLENODE:
@@ -1136,66 +1279,126 @@ sal_Bool SwCompareLine::ChangesInLine( const SwCompareLine& rLine,
                             SwPaM *& rpInsRing, SwPaM*& rpDelRing ) const
 {
     sal_Bool bRet = sal_False;
+
+    // Only compare textnodes
     if( ND_TEXTNODE == rNode.GetNodeType() &&
         ND_TEXTNODE == rLine.GetNode().GetNodeType() )
     {
-        SwTxtNode& rDestNd = *(SwTxtNode*)rNode.GetTxtNode();
+        SwTxtNode& rDstNd = *(SwTxtNode*)rNode.GetTxtNode();
         const SwTxtNode& rSrcNd = *rLine.GetNode().GetTxtNode();
+        SwDoc* pDstDoc = rDstNd.GetDoc();
 
-        xub_StrLen nDEnd = rDestNd.GetTxt().Len(), nSEnd = rSrcNd.GetTxt().Len();
-        xub_StrLen nStt;
-        xub_StrLen nEnd;
+        int nLcsLen = 0;
 
-        for( nStt = 0, nEnd = Min( nDEnd, nSEnd ); nStt < nEnd; ++nStt )
-            if( rDestNd.GetTxt().GetChar( nStt ) !=
-                rSrcNd.GetTxt().GetChar( nStt ) )
-                break;
+        int nDstLen = rDstNd.GetTxt().Len();
+        int nSrcLen = rSrcNd.GetTxt().Len();
 
-        while( nStt < nDEnd && nStt < nSEnd )
+        int nMinLen = std::min( nDstLen , nSrcLen );
+        int nAvgLen = ( nDstLen + nSrcLen )/2;
+
+        int *pLcsDst = new int[ nMinLen + 1 ];
+        int *pLcsSrc = new int[ nMinLen + 1 ];
+
+        if( CmpOptions.eCmpMode == SVX_CMP_BY_WORD )
         {
-            --nDEnd, --nSEnd;
-            if( rDestNd.GetTxt().GetChar( nDEnd ) !=
-                rSrcNd.GetTxt().GetChar( nSEnd ) )
+            int *pTmpLcsDst = new int[ nMinLen + 1 ];
+            int *pTmpLcsSrc = new int[ nMinLen + 1 ];
+
+            WordArrayComparator aCmp( &rDstNd, &rSrcNd );
+
+            LgstCommonSubseq aSeq( aCmp );
+
+            nLcsLen = aSeq.Find( pTmpLcsDst, pTmpLcsSrc );
+
+            if( CmpOptions.nIgnoreLen )
             {
-                ++nDEnd, ++nSEnd;
-                break;
+                nLcsLen = aSeq.IgnoreIsolatedPieces( pTmpLcsDst, pTmpLcsSrc,
+                                                aCmp.GetLen1(), aCmp.GetLen2(),
+                                                nLcsLen, CmpOptions.nIgnoreLen );
+            }
+
+            nLcsLen = aCmp.GetCharSequence( pTmpLcsDst, pTmpLcsSrc,
+                                            pLcsDst, pLcsSrc, nLcsLen );
+
+            delete[] pTmpLcsDst;
+            delete[] pTmpLcsSrc;
+        }
+        else
+        {
+            CharArrayComparator aCmp( &rDstNd, &rSrcNd );
+            LgstCommonSubseq aSeq( aCmp );
+
+            nLcsLen = aSeq.Find( pLcsDst, pLcsSrc );
+
+            if( CmpOptions.nIgnoreLen )
+            {
+                nLcsLen = aSeq.IgnoreIsolatedPieces( pLcsDst, pLcsSrc, nDstLen,
+                                                    nSrcLen, nLcsLen,
+                                                    CmpOptions.nIgnoreLen );
             }
         }
 
-        if( nStt || !nDEnd || !nSEnd || nDEnd < rDestNd.GetTxt().Len() ||
-            nSEnd < rSrcNd.GetTxt().Len() )
+        // find the sum of the squares of the continuous substrings
+        int nSqSum = 0;
+        int nCnt = 1;
+        for( int i = 0; i < nLcsLen; i++ )
         {
-            // The newly inserted is now between nStt and nDEnd
-            // and the deleted is between nStt and nSEnd
-            SwDoc* pDoc = rDestNd.GetDoc();
-            SwPaM aPam( rDestNd, nDEnd );
-            if( nStt != nDEnd )
+            if( i != nLcsLen - 1 && pLcsDst[i] + 1 == pLcsDst[i + 1]
+                                && pLcsSrc[i] + 1 == pLcsSrc[i + 1] )
+            {
+                nCnt++;
+            }
+            else
+            {
+                nSqSum += nCnt*nCnt;
+                nCnt = 1;
+            }
+        }
+
+        // Don't compare if there aren't enough similarities
+        if ( nAvgLen >= 8 && nSqSum*32 < nAvgLen*nAvgLen )
+        {
+            return sal_False;
+        }
+
+        // Show the differences
+        int nSkip = 0;
+        for( int i = 0; i <= nLcsLen; i++ )
+        {
+            int nDstFrom = i ? (pLcsDst[i - 1] + 1) : 0;
+            int nDstTo = ( i == nLcsLen ) ? nDstLen : pLcsDst[i];
+            int nSrcFrom = i ? (pLcsSrc[i - 1] + 1) : 0;
+            int nSrcTo = ( i == nLcsLen ) ? nSrcLen : pLcsSrc[i];
+
+            SwPaM aPam( rDstNd, nDstTo + nSkip );
+
+            if ( nDstFrom < nDstTo )
             {
                 SwPaM* pTmp = new SwPaM( *aPam.GetPoint(), rpInsRing );
                 if( !rpInsRing )
                     rpInsRing = pTmp;
-
                 pTmp->SetMark();
-                pTmp->GetMark()->nContent = nStt;
+                pTmp->GetMark()->nContent = nDstFrom + nSkip;
             }
 
-            if( nStt != nSEnd )
+            if ( nSrcFrom < nSrcTo )
             {
-                {
-                    ::sw::UndoGuard const ug(pDoc->GetIDocumentUndoRedo());
-                    SwPaM aCpyPam( rSrcNd, nStt );
-                    aCpyPam.SetMark();
-                    aCpyPam.GetPoint()->nContent = nSEnd;
-                    aCpyPam.GetDoc()->CopyRange( aCpyPam, *aPam.GetPoint(),
-                            false );
-                }
+                sal_Bool bUndo = pDstDoc->GetIDocumentUndoRedo().DoesUndo();
+                pDstDoc->GetIDocumentUndoRedo().DoUndo( sal_False );
+                SwPaM aCpyPam( rSrcNd, nSrcFrom );
+                aCpyPam.SetMark();
+                aCpyPam.GetPoint()->nContent = nSrcTo;
+                aCpyPam.GetDoc()->CopyRange( aCpyPam, *aPam.GetPoint(),
+                    false );
+                pDstDoc->GetIDocumentUndoRedo().DoUndo( bUndo );
 
                 SwPaM* pTmp = new SwPaM( *aPam.GetPoint(), rpDelRing );
                 if( !rpDelRing )
                     rpDelRing = pTmp;
 
                 pTmp->SetMark();
-                pTmp->GetMark()->nContent = nDEnd;
+                pTmp->GetMark()->nContent = nDstTo + nSkip;
+                nSkip += nSrcTo - nSrcFrom;
 
                 if( rpInsRing )
                 {
@@ -1204,9 +1407,14 @@ sal_Bool SwCompareLine::ChangesInLine( const SwCompareLine& rLine,
                         *pCorr->GetPoint() = *pTmp->GetMark();
                 }
             }
-            bRet = sal_True;
         }
+
+        delete[] pLcsDst;
+        delete[] pLcsSrc;
+
+        bRet = sal_True;
     }
+
     return bRet;
 }
 
@@ -1381,15 +1589,52 @@ void SwCompareData::CheckForChangesInLine( const CompareData& rData,
                                     sal_uLong& rStt, sal_uLong& rEnd,
                                     sal_uLong& rThisStt, sal_uLong& rThisEnd )
 {
-    while( rStt < rEnd && rThisStt < rThisEnd )
-    {
-        SwCompareLine* pDstLn = (SwCompareLine*)GetLine( rThisStt );
-        SwCompareLine* pSrcLn = (SwCompareLine*)rData.GetLine( rStt );
-        if( !pDstLn->ChangesInLine( *pSrcLn, pInsRing, pDelRing ) )
-            break;
+    LineArrayComparator aCmp( (CompareData&)*this, rData, rThisStt, rThisEnd,
+                              rStt, rEnd );
 
-        ++rStt;
-        ++rThisStt;
+    int nMinLen = std::min( aCmp.GetLen1(), aCmp.GetLen2() );
+    int *pLcsDst = new int[ nMinLen ];
+    int *pLcsSrc = new int[ nMinLen ];
+
+    FastCommonSubseq subseq( aCmp );
+    int nLcsLen = subseq.Find( pLcsDst, pLcsSrc );
+    for (int i = 0; i <= nLcsLen; i++)
+    {
+        // Beginning of inserted lines (inclusive)
+        int nDstFrom = i ? pLcsDst[i - 1] + 1 : 0;
+        // End of inserted lines (exclusive)
+        int nDstTo = ( i == nLcsLen ) ? aCmp.GetLen1() : pLcsDst[i];
+        // Begining of deleted lines (inclusive)
+        int nSrcFrom = i ? pLcsSrc[i - 1] + 1 : 0;
+        // End of deleted lines (exclusive)
+        int nSrcTo = ( i == nLcsLen ) ? aCmp.GetLen2() : pLcsSrc[i];
+
+        if( i )
+        {
+            SwCompareLine* pDstLn = (SwCompareLine*)GetLine( rThisStt + nDstFrom - 1 );
+            SwCompareLine* pSrcLn = (SwCompareLine*)rData.GetLine( rStt + nSrcFrom - 1 );
+
+            // Show differences in detail for lines that
+            // were matched as only slightly different
+            if( !pDstLn->ChangesInLine( *pSrcLn, pInsRing, pDelRing ) )
+            {
+                ShowInsert( rThisStt + nDstFrom - 1, rThisStt + nDstFrom );
+                ShowDelete( rData, rStt + nSrcFrom - 1, rStt + nSrcFrom,
+                                                    rThisStt + nDstFrom );
+            }
+        }
+
+        // Lines missing from source are inserted
+        if( nDstFrom != nDstTo )
+        {
+            ShowInsert( rThisStt + nDstFrom, rThisStt + nDstTo );
+        }
+
+        // Lines missing from destination are deleted
+        if( nSrcFrom != nSrcTo )
+        {
+            ShowDelete( rData, rStt + nSrcFrom, rStt + nSrcTo, rThisStt + nDstTo );
+        }
     }
 }
 
@@ -1536,6 +1781,29 @@ long SwDoc::CompareDoc( const SwDoc& rDoc )
         return 0;
 
     long nRet = 0;
+
+    // Get comparison options
+    CmpOptions.eCmpMode = SW_MOD()->GetCompareMode();
+    if( CmpOptions.eCmpMode == SVX_CMP_AUTO )
+    {
+        if( getRsidRoot() == rDoc.getRsidRoot() )
+        {
+            CmpOptions.eCmpMode = SVX_CMP_BY_CHAR;
+            CmpOptions.bUseRsid = true;
+            CmpOptions.nIgnoreLen = 2;
+        }
+        else
+        {
+            CmpOptions.eCmpMode = SVX_CMP_BY_WORD;
+            CmpOptions.bUseRsid = false;
+            CmpOptions.nIgnoreLen = 3;
+        }
+    }
+    else
+    {
+        CmpOptions.bUseRsid = getRsidRoot() == rDoc.getRsidRoot() && SW_MOD()->IsUseRsid();
+        CmpOptions.nIgnoreLen = SW_MOD()->IsIgnorePieces() ? SW_MOD()->GetPieceLen() : 0;
+    }
 
     GetIDocumentUndoRedo().StartUndo(UNDO_EMPTY, NULL);
     sal_Bool bDocWasModified = IsModified();
@@ -1829,6 +2097,568 @@ long SwDoc::MergeDoc( const SwDoc& rDoc )
     GetIDocumentUndoRedo().EndUndo(UNDO_EMPTY, NULL);
 
     return nRet;
+}
+
+LineArrayComparator::LineArrayComparator( const CompareData &rD1,
+                                            const CompareData &rD2, int nStt1,
+                                            int nEnd1, int nStt2, int nEnd2 )
+    : rData1( rD1 ), rData2( rD2 ), nFirst1( nStt1 ), nFirst2( nStt2 )
+{
+    nLen1 = nEnd1 - nStt1;
+    nLen2 = nEnd2 - nStt2;
+}
+
+bool LineArrayComparator::Compare( int nIdx1, int nIdx2 ) const
+{
+    if( nIdx1 < 0 || nIdx2 < 0 || nIdx1 >= nLen1 || nIdx2 >= nLen2 )
+    {
+        OSL_ENSURE( 0, "Index out of range!" );
+        return false;
+    }
+
+    const SwTxtNode *pTxtNd1 = ( ( SwCompareLine* )rData1.GetLine( nFirst1 + nIdx1 ) )->GetNode().GetTxtNode();
+    const SwTxtNode *pTxtNd2 = ( ( SwCompareLine* )rData2.GetLine( nFirst2 + nIdx2 ) )->GetNode().GetTxtNode();
+
+    if( !pTxtNd1 || !pTxtNd2
+        || ( CmpOptions.bUseRsid && !pTxtNd1->CompareParRsid( *pTxtNd2 ) ) )
+    {
+        return false;
+    }
+
+    int nPar1Len = pTxtNd1->Len();
+    int nPar2Len = pTxtNd2->Len();
+
+    if( std::min( nPar1Len, nPar2Len ) * 3 < std::max( nPar1Len, nPar2Len ) )
+    {
+        return false;
+    }
+
+    int nBorderLen = ( nPar1Len + nPar2Len )/16;
+
+    if( nBorderLen < 3 )
+    {
+        nBorderLen = std::min( 3, std::min( nPar1Len, nPar2Len ) );
+    }
+
+    std::set<unsigned> aHashes;
+    unsigned nHash = 0;
+    unsigned nMul = 251;
+    unsigned nPow = 1;
+    int i;
+
+    for( i = 0; i < nBorderLen - 1; i++ )
+    {
+        nPow *= nMul;
+    }
+    for( i = 0; i < nBorderLen; i++ )
+    {
+        nHash = nHash*nMul + pTxtNd1->GetTxt().GetChar( i );
+    }
+    aHashes.insert( nHash );
+    for( ; i < nPar1Len; i++ )
+    {
+        nHash = nHash - nPow*pTxtNd1->GetTxt().GetChar( i - nBorderLen );
+        nHash = nHash*nMul + pTxtNd1->GetTxt().GetChar( i );
+
+        aHashes.insert( nHash );
+    }
+
+    nHash = 0;
+    for( i = 0; i < nBorderLen; i++ )
+    {
+        nHash = nHash*nMul + pTxtNd2->GetTxt().GetChar( i );
+    }
+
+    if( aHashes.find( nHash ) != aHashes.end() )
+    {
+        return true;
+    }
+
+    for( ; i < nPar2Len; i++ )
+    {
+        nHash = nHash - nPow*pTxtNd2->GetTxt().GetChar( i - nBorderLen );
+        nHash = nHash*nMul + pTxtNd2->GetTxt().GetChar( i );
+        if( aHashes.find( nHash ) != aHashes.end() )
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool CharArrayComparator::Compare( int nIdx1, int nIdx2 ) const
+{
+    if( nIdx1 < 0 || nIdx2 < 0 || nIdx1 >= GetLen1() || nIdx2 >= GetLen2() )
+    {
+        OSL_ENSURE( 0, "Index out of range!" );
+        return false;
+    }
+
+    return ( !CmpOptions.bUseRsid
+            || pTxtNd1->CompareRsid(  *pTxtNd2, nIdx1 + 1, nIdx2 + 1 ) )
+            && pTxtNd1->GetTxt().GetChar( nIdx1 )
+            == pTxtNd2->GetTxt().GetChar( nIdx2 );
+}
+
+WordArrayComparator::WordArrayComparator( const SwTxtNode *pNode1,
+                                            const SwTxtNode *pNode2 )
+    : pTxtNd1( pNode1 ), pTxtNd2( pNode2 ), nMul( 251 )
+{
+    pPos1 = new int[ pTxtNd1->GetTxt().Len() + 1 ];
+    pPos2 = new int[ pTxtNd2->GetTxt().Len() + 1 ];
+
+    CalcPositions( pPos1, pTxtNd1, nCnt1 );
+    CalcPositions( pPos2, pTxtNd2, nCnt2 );
+}
+
+WordArrayComparator::~WordArrayComparator()
+{
+    delete[] pPos1;
+    delete[] pPos2;
+}
+
+bool WordArrayComparator::Compare( int nIdx1, int nIdx2 ) const
+{
+    int nLen = pPos1[ nIdx1 + 1 ] - pPos1[ nIdx1 ];
+    if( nLen != pPos2[ nIdx2 + 1 ] - pPos2[ nIdx2 ] )
+    {
+        return false;
+    }
+    for( int i = 0; i < nLen; i++)
+    {
+        if( pTxtNd1->GetTxt().GetChar( pPos1[ nIdx1 ] + i )
+            != pTxtNd2->GetTxt().GetChar( pPos2[ nIdx2 ] + i )
+            || ( CmpOptions.bUseRsid && !pTxtNd1->CompareRsid( *pTxtNd2,
+                                pPos1[ nIdx1 ] + i, pPos2[ nIdx2 ] + i ) ) )
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
+int WordArrayComparator::GetCharSequence( const int *pWordLcs1,
+            const int *pWordLcs2, int *pSubseq1, int *pSubseq2, int nLcsLen )
+{
+    int nLen = 0;
+    for( int i = 0; i < nLcsLen; i++ )
+    {
+        // Check for hash collisions
+        if( pPos1[ pWordLcs1[i] + 1 ] - pPos1[ pWordLcs1[i] ]
+            != pPos2[ pWordLcs2[i] + 1 ] - pPos2[ pWordLcs2[i] ] )
+        {
+            continue;
+        }
+        for( int j = 0; j < pPos1[pWordLcs1[i]+1] - pPos1[pWordLcs1[i]]; j++)
+        {
+            pSubseq1[ nLen ] = pPos1[ pWordLcs1[i] ] + j;
+            pSubseq2[ nLen ] = pPos2[ pWordLcs2[i] ] + j;
+
+            if( pTxtNd1->GetTxt().GetChar( pPos1[ pWordLcs1[i] ] + j )
+             != pTxtNd2->GetTxt().GetChar( pPos2[ pWordLcs2[i] ] + j ) )
+            {
+                nLen -= j;
+                break;
+            }
+
+            nLen++;
+        }
+    }
+    return nLen;
+}
+
+void WordArrayComparator::CalcPositions( int *pPos, const SwTxtNode *pTxtNd,
+                                         int &nCnt )
+{
+    nCnt = -1;
+    for( int i = 0; i <= pTxtNd->GetTxt().Len(); i++ )
+    {
+        if( i == 0 || i == pTxtNd->GetTxt().Len()
+                    || !isalnum( pTxtNd->GetTxt().GetChar( i - 1 ) )
+                    || !isalnum( pTxtNd->GetTxt().GetChar( i ) ) )
+        { // Begin new word
+            nCnt++;
+            pPos[ nCnt ] = i;
+        }
+    }
+}
+
+
+int CommonSubseq::FindLCS( int *pLcs1, int *pLcs2, int nStt1, int nEnd1,
+                                                    int nStt2, int nEnd2 )
+{
+    int nLen1 = nEnd1 ? nEnd1 - nStt1 : rCmp.GetLen1();
+    int nLen2 = nEnd2 ? nEnd2 - nStt2 : rCmp.GetLen2();
+
+    OSL_ASSERT( nLen1 >= 0 );
+    OSL_ASSERT( nLen2 >= 0 );
+
+    int **pLcs = new int*[ nLen1 + 1 ];
+    pLcs[ 0 ] = pData;
+
+    for( int i = 1; i < nLen1 + 1; i++ )
+        pLcs[ i ] = pLcs[ i - 1 ] + nLen2 + 1;
+
+    for( int i = 0; i <= nLen1; i++ )
+        pLcs[i][0] = 0;
+
+    for( int j = 0; j <= nLen2; j++ )
+        pLcs[0][j] = 0;
+
+    // Find lcs
+    for( int i = 1; i <= nLen1; i++ )
+    {
+        for( int j = 1; j <= nLen2; j++ )
+        {
+            if( rCmp.Compare( nStt1 + i - 1, nStt2 + j - 1 ) )
+                pLcs[i][j] = pLcs[i - 1][j - 1] + 1;
+            else
+                pLcs[i][j] = std::max( pLcs[i][j - 1], pLcs[i - 1][j] );
+        }
+    }
+
+    int nLcsLen = pLcs[ nLen1 ][ nLen2 ];
+
+    // Recover the lcs in the two sequences
+    if( pLcs1 && pLcs2 )
+    {
+        int nIdx1 = nLen1;
+        int nIdx2 = nLen2;
+        int nIdx = nLcsLen - 1;
+
+        while( nIdx1 > 0 && nIdx2 > 0 )
+        {
+            if( pLcs[ nIdx1 ][ nIdx2 ] == pLcs[ nIdx1 - 1 ][ nIdx2 ] )
+                nIdx1--;
+            else if( pLcs[ nIdx1 ][ nIdx2 ] == pLcs[ nIdx1 ][ nIdx2 - 1 ] )
+                nIdx2--;
+            else
+            {
+                nIdx1--, nIdx2--;
+                pLcs1[ nIdx ] = nIdx1 + nStt1;
+                pLcs2[ nIdx ] = nIdx2 + nStt2;
+                nIdx--;
+            }
+        }
+    }
+
+    delete[] pLcs;
+
+    return nLcsLen;
+}
+
+int CommonSubseq::IgnoreIsolatedPieces( int *pLcs1, int *pLcs2, int nLen1,
+                                        int nLen2, int nLcsLen, int nPieceLen )
+{
+    if( !nLcsLen )
+    {
+        return 0;
+    }
+
+    int nNext = 0;
+
+    // Don't ignore text at the beginning of the paragraphs
+    if( pLcs1[ 0 ] == 0 && pLcs2[ 0 ] == 0 )
+    {
+        while( nNext < nLcsLen - 1 && pLcs1[ nNext ] + 1 == pLcs1[ nNext + 1 ]
+                                && pLcs2[ nNext ] + 1 == pLcs2[ nNext + 1 ] )
+        {
+            nNext++;
+        }
+        nNext++;
+    }
+
+    int nCnt = 1;
+
+    for( int i = nNext; i < nLcsLen; i++ )
+    {
+        if( i != nLcsLen - 1 && pLcs1[ i ] + 1 == pLcs1[ i + 1 ]
+                            && pLcs2[ i ] + 1 == pLcs2[ i + 1 ] )
+        {
+            nCnt++;
+        }
+        else
+        {
+            if( nCnt > nPieceLen
+                // Don't ignore text at the end of the paragraphs
+                || ( i == nLcsLen - 1
+                && pLcs1[i] == nLen1 - 1 && pLcs2[i] == nLen2 - 1 ))
+            {
+                for( int j = i + 1 - nCnt; j <= i; j++ )
+                {
+                    pLcs2[ nNext ] = pLcs2[ j ];
+                    pLcs1[ nNext ] = pLcs1[ j ];
+                    nNext++;
+                }
+            }
+            nCnt = 1;
+        }
+    }
+
+    return nNext;
+}
+
+LgstCommonSubseq::LgstCommonSubseq( ArrayComparator &rComparator )
+    : CommonSubseq( rComparator, CUTOFF )
+{
+    pBuff1 = new int[ rComparator.GetLen2() + 1 ];
+    pBuff2 = new int[ rComparator.GetLen2() + 1 ];
+
+    pL1 = new int[ rComparator.GetLen2() + 1 ];
+    pL2 = new int[ rComparator.GetLen2() + 1 ];
+}
+
+LgstCommonSubseq::~LgstCommonSubseq()
+{
+    delete[] pBuff1;
+    delete[] pBuff2;
+
+    delete[] pL1;
+    delete[] pL2;
+}
+
+void LgstCommonSubseq::FindL( int *pL, int nStt1, int nEnd1,
+                                        int nStt2, int nEnd2  )
+{
+    int nLen1 = nEnd1 ? nEnd1 - nStt1 : rCmp.GetLen1();
+    int nLen2 = nEnd2 ? nEnd2 - nStt2 : rCmp.GetLen2();
+
+    int *currL = pBuff1;
+    int *prevL = pBuff2;
+
+    // Avoid memory corruption
+    if( nLen2 > rCmp.GetLen2() )
+    {
+        assert( false );
+        return;
+    }
+
+    memset( pBuff1, 0, sizeof( *pBuff1 ) * ( nLen2 + 1 ) );
+    memset( pBuff2, 0, sizeof( *pBuff2 ) * ( nLen2 + 1 ) );
+
+    // Find lcs
+    for( int i = 1; i <= nLen1; i++ )
+    {
+        for( int j = 1; j <= nLen2; j++ )
+        {
+            if( rCmp.Compare( nStt1 + i - 1, nStt2 + j - 1 ) )
+                currL[j] = prevL[j - 1] + 1;
+            else
+                currL[j] = std::max( currL[j - 1], prevL[j] );
+        }
+        int *tmp = currL;
+        currL = prevL;
+        prevL = tmp;
+    }
+    memcpy( pL, prevL, ( nLen2 + 1 ) * sizeof( *prevL ) );
+}
+
+int LgstCommonSubseq::HirschbergLCS( int *pLcs1, int *pLcs2, int nStt1,
+                                    int nEnd1, int nStt2, int nEnd2 )
+{
+    static int nLen1;
+    static int nLen2;
+    nLen1 = nEnd1 - nStt1;
+    nLen2 = nEnd2 - nStt2;
+
+    if( ( nLen1 + 1 ) * ( nLen2 + 1 ) <= CUTOFF )
+    {
+        if( !nLen1 || !nLen2 )
+        {
+            return 0;
+        }
+        return FindLCS(pLcs1, pLcs2, nStt1, nEnd1, nStt2, nEnd2);
+    }
+
+    int nMid = nLen1/2;
+
+    FindL( pL1, nStt1, nStt1 + nMid, nStt2, nEnd2 );
+    FindL( pL2, nStt1 + nMid, nEnd1, nStt2, nEnd2 );
+
+    int nMaxPos = 0;
+    static int nMaxVal;
+    nMaxVal = -1;
+
+    static int i;
+    for( i = 0; i <= nLen2; i++ )
+    {
+        if( pL1[i] + ( pL2[nLen2] - pL2[i] ) > nMaxVal )
+        {
+            nMaxPos = i;
+            nMaxVal = pL1[i]+( pL2[nLen2] - pL2[i] );
+        }
+    }
+
+    int nRet = HirschbergLCS( pLcs1, pLcs2, nStt1, nStt1 + nMid,
+                                            nStt2, nStt2 + nMaxPos );
+    nRet += HirschbergLCS( pLcs1 + nRet, pLcs2 + nRet, nStt1 + nMid, nEnd1,
+                                                    nStt2 + nMaxPos, nEnd2 );
+
+    return nRet;
+}
+
+int LgstCommonSubseq::Find( int *pSubseq1, int *pSubseq2 )
+{
+    int nStt = 0;
+    int nCutEnd = 0;
+    int nEnd1 = rCmp.GetLen1();
+    int nEnd2 = rCmp.GetLen2();
+
+    // Check for corresponding lines in the beginning of the sequences
+    while( nStt < nEnd1 && nStt < nEnd2 && rCmp.Compare( nStt, nStt ) )
+    {
+        pSubseq1[ nStt ] = nStt;
+        pSubseq2[ nStt ] = nStt;
+        nStt++;
+    }
+
+    pSubseq1 += nStt;
+    pSubseq2 += nStt;
+
+    // Check for corresponding lines in the end of the sequences
+    while( nStt < nEnd1 && nStt < nEnd2
+                        && rCmp.Compare( nEnd1 - 1, nEnd2 - 1 ) )
+    {
+        nCutEnd++;
+        nEnd1--;
+        nEnd2--;
+    }
+
+    int nLen = HirschbergLCS( pSubseq1, pSubseq2, nStt, nEnd1, nStt, nEnd2 );
+
+    for( int i = 0; i < nCutEnd; i++ )
+    {
+        pSubseq1[ nLen + i ] = nEnd1 + i;
+        pSubseq2[ nLen + i ] = nEnd2 + i;
+    }
+
+    return nStt + nLen + nCutEnd;
+}
+
+int FastCommonSubseq::FindFastCS( int *pSeq1, int *pSeq2, int nStt1,
+                                    int nEnd1, int nStt2, int nEnd2  )
+{
+    int nCutBeg = 0;
+    int nCutEnd = 0;
+
+    // Check for corresponding lines in the beginning of the sequences
+    while( nStt1 < nEnd1 && nStt2 < nEnd2 && rCmp.Compare( nStt1, nStt2 ) )
+    {
+        pSeq1[ nCutBeg ] = nStt1++;
+        pSeq2[ nCutBeg ] = nStt2++;
+        nCutBeg++;
+    }
+
+    pSeq1 += nCutBeg;
+    pSeq2 += nCutBeg;
+
+    // Check for corresponding lines in the end of the sequences
+    while( nStt1 < nEnd1 && nStt2 < nEnd2
+                        && rCmp.Compare( nEnd1 - 1, nEnd2 - 1 ) )
+    {
+        nCutEnd++;
+        nEnd1--;
+        nEnd2--;
+    }
+
+    int nLen1 = nEnd1 - nStt1;
+    int nLen2 = nEnd2 - nStt2;
+
+    // Return if a sequence is empty
+    if( nLen1 <= 0 || nLen2 <= 0 )
+    {
+        for( int i = 0; i < nCutEnd; i++ )
+        {
+            pSeq1[ i ] = nEnd1 + i;
+            pSeq2[ i ] = nEnd2 + i;
+        }
+        return nCutBeg + nCutEnd;
+    }
+
+    // Cut to LCS for small values
+    if( nLen1 < 3 || nLen2 < 3 || ( nLen1 + 1 ) * ( nLen2 + 1 ) <= CUTOFF )
+    {
+        int nLcsLen = FindLCS( pSeq1, pSeq2, nStt1, nEnd1, nStt2, nEnd2);
+
+        for( int i = 0; i < nCutEnd; i++ )
+        {
+            pSeq1[ nLcsLen + i ] = nEnd1 + i;
+            pSeq2[ nLcsLen + i ] = nEnd2 + i;
+        }
+        return nCutBeg + nLcsLen + nCutEnd;
+    }
+
+    int nMid1 = nLen1/2;
+    int nMid2 = nLen2/2;
+
+    int nRad;
+    int nPos1 = -1, nPos2 = -1;
+
+    // Find a point of correspondence in the middle of the sequences
+    for( nRad = 0; nRad*nRad < std::min( nMid1, nMid2 ); nRad++ )
+    {
+        // Search to the left and to the right of the middle of the first sequence
+        for( int i = nMid1 - nRad; i <= nMid1 + nRad; i++ )
+        {
+            if( rCmp.Compare( nStt1 + i, nStt2 + nMid2 - nRad ) )
+            {
+                nPos1 = nStt1 + i;
+                nPos2 = nStt2 + nMid2 - nRad;
+                break;
+            }
+            if( rCmp.Compare( nStt1 + i, nStt2 + nMid2 + nRad ) )
+            {
+                nPos1 = nStt1 + i;
+                nPos2 = nStt2 + nMid2 - nRad;
+                break;
+            }
+        }
+        // Search to the left and to the right of the middle of the second sequence
+        for( int i = nMid2 - nRad; i <= nMid2 + nRad; i++ )
+        {
+            if( rCmp.Compare( nStt2 + nMid2 - nRad, nStt2 + i ) )
+            {
+                nPos2 = nStt2 + i;
+                nPos1 = nStt1 + nMid1 - nRad;
+                break;
+            }
+            if( rCmp.Compare( nStt2 + nMid2 - nRad, nStt2 + i ) )
+            {
+                nPos2 = nStt2 + i;
+                nPos1 = nStt1 + nMid1 - nRad;
+                break;
+            }
+        }
+    }
+
+    // return if no point of correspondence found
+    if( nPos1 == -1 )
+    {
+        for( int i = 0; i < nCutEnd; i++ )
+        {
+            pSeq1[ i ] = nEnd1 + i;
+            pSeq2[ i ] = nEnd2 + i;
+        }
+        return nCutBeg + nCutEnd;
+    }
+
+    // Run the same on the sequences to the left of the correspondence point
+    int nLen = FindFastCS( pSeq1, pSeq2, nStt1, nPos1, nStt2, nPos2 );
+
+    pSeq1[ nLen ] = nPos1;
+    pSeq2[ nLen ] = nPos2;
+
+    // Run the same on the sequences to the right of the correspondence point
+    nLen += FindFastCS( pSeq1 + nLen + 1, pSeq2 + nLen + 1,
+                         nPos1 + 1, nEnd1, nPos2 + 1, nEnd2 ) + 1;
+
+    for( int i = 0; i < nCutEnd; i++ )
+    {
+        pSeq1[ nLen + i ] = nEnd1 + i;
+        pSeq2[ nLen + i ] = nEnd2 + i;
+    }
+
+    return nLen + nCutBeg + nCutEnd;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

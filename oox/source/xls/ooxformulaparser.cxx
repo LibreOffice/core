@@ -113,25 +113,6 @@ const FunctionInfo* OOXMLFormulaParserImpl::resolveBadFuncName( const OUString& 
 
 // ============================================================================
 
-class OOXMLFormulaPrinterImpl : public OpCodeProvider
-{
-public:
-    explicit            OOXMLFormulaPrinterImpl( const Reference< XMultiServiceFactory >& rxModelFactory );
-
-private:
-    ApiParserWrapper    maApiParser;
-};
-
-// ----------------------------------------------------------------------------
-
-OOXMLFormulaPrinterImpl::OOXMLFormulaPrinterImpl( const Reference< XMultiServiceFactory >& rxModelFactory ) :
-    OpCodeProvider( rxModelFactory, FILTER_OOXML, BIFF_UNKNOWN, false ),
-    maApiParser( rxModelFactory, *this )
-{
-}
-
-// ============================================================================
-
 Sequence< OUString > OOXMLFormulaParser_getSupportedServiceNames()
 {
     Sequence< OUString > aServiceNames( 1 );

@@ -879,7 +879,7 @@ sal_uLong SwWriter::Write( WriterRef& rxWriter, const String* pRealFileName )
     if ( pDoc && !pOutDoc->getPrinter( false ) )
     {
         const SwPageDesc& rPgDsc = const_cast<const SwDoc *>(pOutDoc)->GetPageDesc( 0 );
-        //const SwPageDesc& rPgDsc = *pOutDoc->GetPageDescFromPool( RES_POOLPAGE_STANDARD );;
+        //const SwPageDesc& rPgDsc = *pOutDoc->GetPageDescFromPool( RES_POOLPAGE_STANDARD );
         const SwFmtFrmSize& rSz = rPgDsc.GetMaster().GetFrmSize();
         // Clipboard-Dokument wird immer ohne Drucker angelegt, so ist
         // der Std.PageDesc immer aug LONG_MAX !! Mappe dann auf DIN A4

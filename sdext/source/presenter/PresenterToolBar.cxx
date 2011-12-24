@@ -509,40 +509,12 @@ void PresenterToolBar::InvalidateArea (
         bSynchronous);
 }
 
-
-
-
-sal_Int32 PresenterToolBar::GetCurrentSlideIndex (void)
-{
-    if (mxSlideShowController.is())
-        return mxSlideShowController->getCurrentSlideIndex();
-    else
-        return -1;
-}
-
-
-
-
-sal_Int32 PresenterToolBar::GetSlideCount (void)
-{
-    if (mxSlideShowController.is())
-        return mxSlideShowController->getSlideCount();
-    else
-        return 0;
-}
-
-
-
-
 void PresenterToolBar::RequestLayout (void)
 {
     mbIsLayoutPending = true;
 
     mpPresenterController->GetPaintManager()->Invalidate(mxWindow);
 }
-
-
-
 
 geometry::RealSize2D PresenterToolBar::GetMinimalSize (void)
 {
@@ -551,24 +523,15 @@ geometry::RealSize2D PresenterToolBar::GetMinimalSize (void)
     return maMinimalSize;
 }
 
-
-
-
 ::rtl::Reference<PresenterController> PresenterToolBar::GetPresenterController (void) const
 {
     return mpPresenterController;
 }
 
-
-
-
 Reference<XComponentContext> PresenterToolBar::GetComponentContext (void) const
 {
     return mxComponentContext;
 }
-
-
-
 
 //-----  lang::XEventListener -------------------------------------------------
 
@@ -579,9 +542,6 @@ void SAL_CALL PresenterToolBar::disposing (const lang::EventObject& rEventObject
         mxWindow = NULL;
 }
 
-
-
-
 //----- XWindowListener -------------------------------------------------------
 
 void SAL_CALL PresenterToolBar::windowResized (const awt::WindowEvent& rEvent)
@@ -591,17 +551,11 @@ void SAL_CALL PresenterToolBar::windowResized (const awt::WindowEvent& rEvent)
     mbIsLayoutPending = true;
 }
 
-
-
-
 void SAL_CALL PresenterToolBar::windowMoved (const awt::WindowEvent& rEvent)
     throw (RuntimeException)
 {
     (void)rEvent;
 }
-
-
-
 
 void SAL_CALL PresenterToolBar::windowShown (const lang::EventObject& rEvent)
     throw (RuntimeException)
@@ -610,20 +564,13 @@ void SAL_CALL PresenterToolBar::windowShown (const lang::EventObject& rEvent)
     mbIsLayoutPending = true;
 }
 
-
-
-
 void SAL_CALL PresenterToolBar::windowHidden (const lang::EventObject& rEvent)
     throw (RuntimeException)
 {
     (void)rEvent;
 }
 
-
-
-
 //----- XPaintListener --------------------------------------------------------
-
 void SAL_CALL PresenterToolBar::windowPaint (const css::awt::PaintEvent& rEvent)
     throw (RuntimeException)
 {
@@ -648,19 +595,12 @@ void SAL_CALL PresenterToolBar::windowPaint (const css::awt::PaintEvent& rEvent)
         xSpriteCanvas->updateScreen(sal_False);
 }
 
-
-
-
 //----- XMouseListener --------------------------------------------------------
-
 void SAL_CALL PresenterToolBar::mousePressed (const css::awt::MouseEvent& rEvent)
     throw(css::uno::RuntimeException)
 {
     CheckMouseOver(rEvent, true, true);
 }
-
-
-
 
 void SAL_CALL PresenterToolBar::mouseReleased (const css::awt::MouseEvent& rEvent)
     throw(css::uno::RuntimeException)
@@ -668,26 +608,17 @@ void SAL_CALL PresenterToolBar::mouseReleased (const css::awt::MouseEvent& rEven
     CheckMouseOver(rEvent, true);
 }
 
-
-
-
 void SAL_CALL PresenterToolBar::mouseEntered (const css::awt::MouseEvent& rEvent)
     throw(css::uno::RuntimeException)
 {
     CheckMouseOver(rEvent, true);
 }
 
-
-
-
 void SAL_CALL PresenterToolBar::mouseExited (const css::awt::MouseEvent& rEvent)
     throw(css::uno::RuntimeException)
 {
     CheckMouseOver(rEvent, false);
 }
-
-
-
 
 //----- XMouseMotionListener --------------------------------------------------
 
@@ -699,18 +630,12 @@ void SAL_CALL PresenterToolBar::mouseMoved (const css::awt::MouseEvent& rEvent)
     CheckMouseOver(rEvent, true);
 }
 
-
-
-
 void SAL_CALL PresenterToolBar::mouseDragged (const css::awt::MouseEvent& rEvent)
     throw (css::uno::RuntimeException)
 {
     ThrowIfDisposed();
     (void)rEvent;
 }
-
-
-
 
 //----- XDrawView -------------------------------------------------------------
 
@@ -724,17 +649,11 @@ void SAL_CALL PresenterToolBar::setCurrentPage (const Reference<drawing::XDrawPa
     }
 }
 
-
-
-
 Reference<drawing::XDrawPage> SAL_CALL PresenterToolBar::getCurrentPage (void)
     throw (RuntimeException)
 {
     return mxCurrentSlide;
 }
-
-
-
 
 //-----------------------------------------------------------------------------
 
@@ -778,9 +697,6 @@ void PresenterToolBar::CreateControls (
         }
     }
 }
-
-
-
 
 void PresenterToolBar::ProcessEntry (
     const Reference<beans::XPropertySet>& rxProperties,
@@ -835,9 +751,6 @@ void PresenterToolBar::ProcessEntry (
             mpCurrentContainerPart->push_back(pElement);
     }
 }
-
-
-
 
 void PresenterToolBar::Layout (
     const Reference<rendering::XCanvas>& rxCanvas)
@@ -916,6 +829,8 @@ void PresenterToolBar::Layout (
     maBoundingBox.X2 = nX + aTotalSize.Width + nTotalHorizontalGap;
     maBoundingBox.Y2 = nY + aTotalSize.Height;
 
+    /* push front or back ? ... */
+
     for (iPart=maElementContainer.begin(), nIndex=0; iPart!=iEnd; ++iPart,++nIndex)
     {
         geometry::RealRectangle2D aBoundingBox(
@@ -935,9 +850,6 @@ void PresenterToolBar::Layout (
     // The whole window has to be repainted.
     mpPresenterController->GetPaintManager()->Invalidate(mxWindow);
 }
-
-
-
 
 geometry::RealSize2D PresenterToolBar::CalculatePartSize (
     const Reference<rendering::XCanvas>& rxCanvas,
@@ -974,9 +886,6 @@ geometry::RealSize2D PresenterToolBar::CalculatePartSize (
     }
     return aTotalSize;
 }
-
-
-
 
 void PresenterToolBar::LayoutPart (
     const Reference<rendering::XCanvas>& rxCanvas,
@@ -1033,9 +942,6 @@ void PresenterToolBar::LayoutPart (
     }
 }
 
-
-
-
 void PresenterToolBar::Paint (
     const awt::Rectangle& rUpdateBox,
     const rendering::ViewState& rViewState)
@@ -1059,9 +965,6 @@ void PresenterToolBar::Paint (
     }
 }
 
-
-
-
 void PresenterToolBar::UpdateSlideNumber (void)
 {
     if( mxSlideShowController.is() )
@@ -1080,9 +983,6 @@ void PresenterToolBar::UpdateSlideNumber (void)
         }
     }
 }
-
-
-
 
 void PresenterToolBar::CheckMouseOver (
     const css::awt::MouseEvent& rEvent,
@@ -1113,9 +1013,6 @@ void PresenterToolBar::CheckMouseOver (
     }
 }
 
-
-
-
 void PresenterToolBar::ThrowIfDisposed (void) const
     throw (::com::sun::star::lang::DisposedException)
 {
@@ -1127,9 +1024,6 @@ void PresenterToolBar::ThrowIfDisposed (void) const
             const_cast<uno::XWeak*>(static_cast<const uno::XWeak*>(this)));
     }
 }
-
-
-
 
 //===== PresenterToolBarView ==================================================
 
@@ -1182,15 +1076,9 @@ PresenterToolBarView::PresenterToolBarView (
     }
 }
 
-
-
-
 PresenterToolBarView::~PresenterToolBarView (void)
 {
 }
-
-
-
 
 void SAL_CALL PresenterToolBarView::disposing (void)
 {
@@ -1212,16 +1100,10 @@ void SAL_CALL PresenterToolBarView::disposing (void)
 
 }
 
-
-
-
 ::rtl::Reference<PresenterToolBar> PresenterToolBarView::GetPresenterToolBar (void) const
 {
     return mpToolBar;
 }
-
-
-
 
 //----- XPaintListener --------------------------------------------------------
 
@@ -1237,9 +1119,6 @@ void SAL_CALL PresenterToolBarView::windowPaint (const css::awt::PaintEvent& rEv
         awt::Rectangle());
 }
 
-
-
-
 //-----  lang::XEventListener -------------------------------------------------
 
 void SAL_CALL PresenterToolBarView::disposing (const lang::EventObject& rEventObject)
@@ -1249,9 +1128,6 @@ void SAL_CALL PresenterToolBarView::disposing (const lang::EventObject& rEventOb
         mxWindow = NULL;
 }
 
-
-
-
 //----- XResourceId -----------------------------------------------------------
 
 Reference<XResourceId> SAL_CALL PresenterToolBarView::getResourceId (void)
@@ -1260,17 +1136,11 @@ Reference<XResourceId> SAL_CALL PresenterToolBarView::getResourceId (void)
     return mxViewId;
 }
 
-
-
-
 sal_Bool SAL_CALL PresenterToolBarView::isAnchorOnly (void)
     throw (RuntimeException)
 {
     return false;
 }
-
-
-
 
 //----- XDrawView -------------------------------------------------------------
 
@@ -1282,17 +1152,11 @@ void SAL_CALL PresenterToolBarView::setCurrentPage (const Reference<drawing::XDr
         xToolBar->setCurrentPage(rxSlide);
 }
 
-
-
-
 Reference<drawing::XDrawPage> SAL_CALL PresenterToolBarView::getCurrentPage (void)
     throw (RuntimeException)
 {
     return NULL;
 }
-
-
-
 
 //===== PresenterToolBar::Element =============================================
 
@@ -1320,9 +1184,6 @@ Element::Element (
         OSL_ASSERT(mpToolBar->GetPresenterController()->GetWindowManager().is());
     }
 }
-
-
-
 
 Element::~Element (void)
 {

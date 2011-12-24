@@ -69,46 +69,7 @@ zu 10-Sekunden fuer die Erzeugung brauchen koennte).
 
 Querverweise
 
-FontList; FontStyleMenu; FontSizeMenu; FontNameBox
-
---------------------------------------------------------------------------
-
-class FontStyleMenu
-
-Beschreibung
-
-Erlaubt die Auswahl eines FontStyles. Mit Fill wird das FontStyleMenu mit
-den Styles zum uebergebenen Font gefuellt. Nachgebildete Styles werden
-immer mit eingefuegt (kann sich aber noch aendern, da vielleicht
-nicht alle Applikationen [StarDraw,Formel,FontWork] mit Syntetic-Fonts
-umgehen koennen). Mit SetCurStyle()/GetCurStyle() kann der aktuelle Fontstyle
-gesetzt/abgefragt werden. Der Stylename muss mit FontList::GetStyleName()
-ermittelt werden. Wenn SetCurStyle() mit einem leeren String aufgerufen wird,
-wird kein Eintrag als aktueller angezeigt (fuer DontKnow). Vor dem Selectaufruf
-wird der ausgewaehlte Style automatisch als aktueller gesetzt und wuerde beim
-naechsten Aufruf auch als aktueller Style angezeigt werden. Deshalb sollte vor
-PopupMenu::Execute() gegebenenfalls mit SetCurStyle() der aktuelle Style
-gesetzt werden. Da die Styles vom ausgewaehlten Font abhaengen, sollte
-nach einer Aenderung des Fontnamen das Menu mit Fill mit den Styles des
-Fonts neu gefuellt werden.
-
-Mit GetCurStyle() kann der ausgewaehlte Style abgefragt
-werden. Mit Check wird der Style gecheckt/uncheckt, welcher aktiv
-ist. Der Stylename muss mit FontList::GetStyleName() ermittelt werden. Vor
-dem Selectaufruf wird der ausgewaehlte Style automatisch gecheckt. Mit
-UncheckAllStyles() koennen alle Fontstyles geuncheckt werden (zum Beispiel
-fuer DontKnow).
-
-Da die Id's und der interne Aufbau des Menus nicht bekannt ist, muss ein
-Select-Handler gesetzt werden, um die Auswahl eines Styles mitzubekommen.
-
-An dieses Menu kann ueber MENU_APPEND weitere Items eingefuegt werden.
-Bei Fill werden nur Items entfernt, die die Id zwischen FONTSTYLEMENU_FIRSTID
-und FONTSTYLEMENU_LASTID haben.
-
-Querverweise
-
-FontList; FontNameMenu; FontSizeMenu; FontStyleBox
+FontList; FontSizeMenu; FontNameBox
 
 --------------------------------------------------------------------------
 
@@ -141,7 +102,7 @@ darstellen, die als Bitmap-Fonts vorhanden sind.
 
 Querverweise
 
-FontList; FontNameMenu; FontStyleMenu; FontSizeBox
+FontList; FontNameMenu; FontSizeBox
 
 *************************************************************************/
 
@@ -167,39 +128,6 @@ public:
 
     void            SetCurName( const XubString& rName );
     const XubString& GetCurName() const { return maCurName; }
-
-    void            SetSelectHdl( const Link& rLink ) { maSelectHdl = rLink; }
-    const Link&     GetSelectHdl() const { return maSelectHdl; }
-    void            SetHighlightHdl( const Link& rLink ) { maHighlightHdl = rLink; }
-    const Link&     GetHighlightHdl() const { return maHighlightHdl; }
-};
-
-// -----------------
-// - FontStyleMenu -
-// -----------------
-
-#define FONTSTYLEMENU_FIRSTID       62000
-#define FONTSTYLEMENU_LASTID        62999
-
-class SVT_DLLPUBLIC FontStyleMenu : public PopupMenu
-{
-private:
-    XubString       maCurStyle;
-    Link            maSelectHdl;
-    Link            maHighlightHdl;
-
-    SVT_DLLPRIVATE sal_Bool         ImplIsAlreadyInserted( const XubString& rStyleName, sal_uInt16 nCount );
-
-public:
-                    FontStyleMenu();
-    virtual         ~FontStyleMenu();
-
-    virtual void    Select();
-    virtual void    Highlight();
-
-    void            Fill( const XubString& rName, const FontList* pList );
-    void            SetCurStyle( const XubString& rStyle );
-    const XubString& GetCurStyle() const { return maCurStyle; }
 
     void            SetSelectHdl( const Link& rLink ) { maSelectHdl = rLink; }
     const Link&     GetSelectHdl() const { return maSelectHdl; }

@@ -194,7 +194,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getTables(
             t.pEnv->DeleteLocalRef((jstring)args[1].l);
             OSL_VERIFY_RES( !isExceptionOccurred( t.pEnv, sal_True ), "Exception occurred!" );
         }
-        if(tableNamePattern.getLength())
+        if(!tableNamePattern.isEmpty())
         {
             t.pEnv->DeleteLocalRef((jstring)args[2].l);
             OSL_VERIFY_RES( !isExceptionOccurred( t.pEnv, sal_True ), "Exception occurred!" );
@@ -374,7 +374,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getIndexInfo(
             t.pEnv->DeleteLocalRef((jstring)args[0].l);
         if(args[1].l)
             t.pEnv->DeleteLocalRef((jstring)args[1].l);
-        if(table.getLength())
+        if(!table.isEmpty())
             t.pEnv->DeleteLocalRef((jstring)args[2].l);
         ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
     }
@@ -413,7 +413,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getBestRowIdentifier
             t.pEnv->DeleteLocalRef((jstring)args[0].l);
         if(args[1].l)
             t.pEnv->DeleteLocalRef((jstring)args[1].l);
-        if(table.getLength())
+        if(!table.isEmpty())
             t.pEnv->DeleteLocalRef((jstring)args[2].l);
         ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
     }
@@ -532,13 +532,13 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getCrossReference(
             t.pEnv->DeleteLocalRef((jstring)args[0].l);
         if(args[1].l)
             t.pEnv->DeleteLocalRef((jstring)args[1].l);
-        if(primaryTable.getLength())
+        if(!primaryTable.isEmpty())
             t.pEnv->DeleteLocalRef((jstring)args[2].l);
         if(foreignCatalog.hasValue())
             t.pEnv->DeleteLocalRef((jstring)args[3].l);
         if(args[4].l)
             t.pEnv->DeleteLocalRef((jstring)args[4].l);
-        if(foreignTable.getLength())
+        if(!foreignTable.isEmpty())
             t.pEnv->DeleteLocalRef((jstring)args[5].l);
         ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
     }
@@ -568,7 +568,7 @@ sal_Bool java_sql_DatabaseMetaData::impl_callBooleanMethod( const char* _pMethod
     if ( m_aLogger.isLoggable( LogLevel::FINEST ) )
     {
         ::rtl::OUString sLoggedResult( sReturn );
-        if ( !sLoggedResult.getLength() )
+        if ( sLoggedResult.isEmpty() )
             sLoggedResult = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "<empty string>" ) );
         m_aLogger.log( LogLevel::FINEST, STR_LOG_META_DATA_RESULT, _pMethodName, sLoggedResult );
     }
@@ -1175,7 +1175,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsANSI92IntermediateSQL(  ) t
 ::rtl::OUString SAL_CALL java_sql_DatabaseMetaData::getURL(  ) throw(SQLException, RuntimeException)
 {
     ::rtl::OUString sURL = m_pConnection->getURL();
-    if ( !sURL.getLength() )
+    if ( sURL.isEmpty() )
     {
         static jmethodID mID(NULL);
         sURL = impl_callStringMethod( "getURL", mID );
@@ -1446,9 +1446,9 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getUDTs(
 
             if(catalog.hasValue())
                 t.pEnv->DeleteLocalRef((jstring)args[0].l);
-            if(schemaPattern.getLength())
+            if(!schemaPattern.isEmpty())
                 t.pEnv->DeleteLocalRef((jstring)args[1].l);
-            if(typeNamePattern.getLength())
+            if(!typeNamePattern.isEmpty())
                 t.pEnv->DeleteLocalRef((jstring)args[2].l);
             if(args[3].l)
                 t.pEnv->DeleteLocalRef((jintArray)args[3].l);

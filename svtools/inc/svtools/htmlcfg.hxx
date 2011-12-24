@@ -93,9 +93,6 @@ public:
 
     sal_Bool        IsNumbersEnglishUS() const;
     void        SetNumbersEnglishUS(sal_Bool bSet);
-
-    void AddListenerLink( const Link& rLink );
-    void RemoveListenerLink( const Link& rLink );
 };
 
 #endif

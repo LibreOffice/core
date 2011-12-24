@@ -51,7 +51,6 @@
 #include <basegfx/polygon/b2dlinegeometry.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
-#include <basegfx/polygon/b2dpolypolygonrasterconverter.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/numeric/ftools.hxx>

@@ -405,7 +405,7 @@ void writeNode(
     case Node::KIND_LOCALIZED_VALUE:
         {
             writeData(handle, RTL_CONSTASCII_STRINGPARAM("<value"));
-            if (name.getLength() != 0) {
+            if (!name.isEmpty()) {
                 writeData(handle, RTL_CONSTASCII_STRINGPARAM(" xml:lang=\""));
                 writeAttributeValue(handle, name);
                 writeData(handle, RTL_CONSTASCII_STRINGPARAM("\""));
@@ -438,7 +438,7 @@ void writeNode(
     case Node::KIND_SET:
         writeData(handle, RTL_CONSTASCII_STRINGPARAM("<node oor:name=\""));
         writeAttributeValue(handle, name);
-        if (node->getTemplateName().getLength() != 0) { // set member
+        if (!node->getTemplateName().isEmpty()) { // set member
             writeData(
                 handle, RTL_CONSTASCII_STRINGPARAM("\" oor:op=\"replace"));
         }
@@ -477,7 +477,7 @@ void writeModifications(
             switch (parent->kind()) {
             case Node::KIND_LOCALIZED_PROPERTY:
                 writeData(handle, RTL_CONSTASCII_STRINGPARAM("<value"));
-                if (nodeName.getLength() != 0) {
+                if (!nodeName.isEmpty()) {
                     writeData(
                         handle, RTL_CONSTASCII_STRINGPARAM(" xml:lang=\""));
                     writeAttributeValue(handle, nodeName);

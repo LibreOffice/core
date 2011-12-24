@@ -285,7 +285,7 @@ void SfxObjectShell::UpdateTime_Impl(
         i_xDocProps->setEditingDuration(newSecs);
         i_xDocProps->setEditingCycles(i_xDocProps->getEditingCycles() + 1);
     }
-    catch (lang::IllegalArgumentException &)
+    catch (const lang::IllegalArgumentException &)
     {
         // ignore overflow
     }
@@ -920,7 +920,7 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
                     bOK = sal_True;
                 }
             }
-            catch ( Exception& )
+            catch (const Exception&)
             {
             }
 

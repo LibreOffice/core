@@ -83,61 +83,9 @@ ModalDialog RID_OFADLG_OPTIONS_TREE
         Size = MAP_APPFONT ( WIDTH_PAGEFRAME, HEIGHT_PAGEFRAME ) ;
         Hide = TRUE;
     };
-    FixedImage IMG_HELP
-    {
-        Pos = MAP_APPFONT ( COL_3_1, ROW_1_1 ) ;
-        Size = MAP_APPFONT ( WIDTH_IMG_HELP, HEIGHT_IMG_HELP ) ;
-        Hide = TRUE;
-    };
-    FixedText FT_PAGE_TITLE
-    {
-        Pos = MAP_APPFONT ( COL_3_3, ROW_1_2 ) ;
-        Size = MAP_APPFONT ( (COL_3_5-COL_3_3), 15 ) ;
-        Hide = TRUE;
-    };
-    FixedLine FL_LINE_1
-    {
-        Pos = MAP_APPFONT ( COL_3_1 , ROW_1_3 ) ;
-        Size = MAP_APPFONT ( (COL_3_5-COL_3_1), 1 ) ;
-        Comment = "Trennlinie" ;
-        Hide = TRUE;
-    };
-    FixedText FT_HELPTEXT
-    {
-        Pos = MAP_APPFONT ( COL_3_3, ROW_1_4 ) ;
-        Size = MAP_APPFONT ( (COL_3_5-COL_3_3), (HEIGHT_PAGEFRAME-ROW_1_4-1) ) ;
-        WordBreak = TRUE;
-        Hide = TRUE;
-    };
     String ST_LOAD_ERROR
     {
         Text [ en-US ] = "The selected module could not be loaded.";
-    };
-    StringArray STR_HELPTEXTS
-    {
-        ItemList [ en-US ] =
-        {
-            < "This dialog is used to define general settings when working with %PRODUCTNAME. Enter your personal data, the defaults to be used when saving documents, and paths to important files. These settings will be saved automatically and used in later sessions as well."; SID_GENERAL_OPTIONS; > ;
-            < "This is where you make settings concerning language and writing aids for your work with %PRODUCTNAME."; SID_LANGUAGE_OPTIONS; > ;
-            < "This is where you configure %PRODUCTNAME for the Internet. You can save your proxy settings." ; SID_INET_DLG; > ;
-            < "This is where you specify various settings for text documents. These settings determine how your text documents are handled in %PRODUCTNAME and are valid for all new %PRODUCTNAME Writer documents. You can also define a few settings for the active text document if you save it afterwards." ; SID_SW_EDITOPTIONS; > ;
-            < "This is where you define the basic settings for %PRODUCTNAME documents in HTML format. For example, you decide which contents should be displayed on the screen or printed, how the pages are scrolled on the screen, in which color keywords are highlighted in the source text and much more." ; SID_SW_ONLINEOPTIONS; > ;
-            < "This is where you define various global settings for spreadsheets. For example, you can define which contents should be displayed and in which direction the cursor will move after you enter data in a cell. You also define sort lists, the number of the decimal places displayed, etc." ; SID_SC_EDITOPTIONS; > ;
-            < "This is where you define the settings that apply to all newly saved presentations. Among other things, you decide which contents are displayed on the slides, which default unit of measure is used, if and how grid alignment is used, and if notes and handouts are always printed." ; SID_SD_EDITOPTIONS; > ;
-            < "This is where you define the settings for drawing documents. Among other things, you determine which contents are displayed on the pages, which scale is used, if and how grid alignment is used, and which contents are printed by default." ; SID_SD_GRAPHIC_OPTIONS; > ;
-            < "This is where you select the print format and print options for all newly saved formula documents. These options take effect when you want to print a formula directly from %PRODUCTNAME Math." ; SID_SM_EDITOPTIONS; > ;
-            < "This is where you specify general default settings for your %PRODUCTNAME Charts. Set the colors you want for all new charts." ; SID_SCH_EDITOPTIONS; > ;
-            < "This is where you define general settings for accessing external data sources."; SID_SB_STARBASEOPTIONS; > ;
-            < "This is where you define general settings for opening and saving documents in external formats. You can control the behavior of macros or OLE objects in Microsoft Office documents or define settings for HTML documents." ; SID_FILTER_DLG; > ;
-        };
-    };
-    Bitmap BMP_ROOT_CLOSED
-    {
-        File = "plus.bmp" ;
-    };
-    Bitmap BMP_ROOT_OPENED
-    {
-        File = "minus.bmp" ;
     };
 };
 
@@ -200,6 +148,7 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
             < "Print" ;       RID_SW_TP_OPTPRINT_PAGE  ; > ;
             < "Table" ;         RID_SW_TP_OPTTABLE_PAGE  ; > ;
             < "Changes" ;    RID_SW_TP_REDLINE_OPT    ; > ;
+            < "Comparison" ; RID_SW_TP_COMPARISON_OPT ; > ;
             < "Compatibility" ; RID_SW_TP_OPTCOMPATIBILITY_PAGE    ; > ;
             < "AutoCaption" ; RID_SW_TP_OPTCAPTION_PAGE ; > ;
             < "Mail Merge E-mail" ; RID_SW_TP_MAILCONFIG ; >;
@@ -303,33 +252,3 @@ String RID_RIDER_SLL_PERSONAL
 {
     Text [ en-US ] = "Personal certificates" ;
 };
-
-#define MASK_COL    MaskColor = Color { Red = 0xFF00; Green = 0x0000; Blue = 0xFF00; } ;
-#define IMGLST_IDLST \
-    IdList = {                      \
-        SID_GENERAL_OPTIONS;        \
-        SID_LANGUAGE_OPTIONS;       \
-        SID_INET_DLG;               \
-        SID_SW_EDITOPTIONS;         \
-        SID_SW_ONLINEOPTIONS;       \
-        SID_SC_EDITOPTIONS;         \
-        SID_SD_EDITOPTIONS;         \
-        SID_SD_GRAPHIC_OPTIONS;     \
-        SID_SM_EDITOPTIONS;         \
-        SID_SCH_EDITOPTIONS;        \
-        SID_SB_STARBASEOPTIONS;     \
-        SID_FILTER_DLG;             \
-    };                              \
-    IdCount = {                     \
-        12;                         \
-    };
-
-ImageList RID_IMGLIST_TREEOPT
-{
-    Prefix = "tr";
-    MASK_COL
-    IMGLST_IDLST
-};
-
-
-

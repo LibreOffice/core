@@ -43,7 +43,7 @@ extern "C" {
     @param  Bytes [in] memory size.
     @return pointer to allocated memory.
  */
-void * SAL_CALL rtl_allocateMemory (
+SAL_DLLPUBLIC void * SAL_CALL rtl_allocateMemory (
     sal_Size Bytes
 ) SAL_THROW_EXTERN_C();
 
@@ -62,7 +62,7 @@ void * SAL_CALL rtl_allocateMemory (
     @param  Bytes [in] new memory size.
     @return pointer to reallocated memory. May differ from Ptr.
  */
-void * SAL_CALL rtl_reallocateMemory (
+SAL_DLLPUBLIC void * SAL_CALL rtl_reallocateMemory (
     void *   Ptr,
     sal_Size Bytes
 ) SAL_THROW_EXTERN_C();
@@ -72,7 +72,7 @@ void * SAL_CALL rtl_reallocateMemory (
     @param  Ptr   [in] pointer to previously allocated memory.
     @return none. Memory is released. Ptr is invalid.
  */
-void SAL_CALL rtl_freeMemory (
+SAL_DLLPUBLIC void SAL_CALL rtl_freeMemory (
     void * Ptr
 ) SAL_THROW_EXTERN_C();
 
@@ -84,7 +84,7 @@ void SAL_CALL rtl_freeMemory (
     @param  Bytes [in] memory size.
     @return pointer to allocated and zero'ed memory.
  */
-void * SAL_CALL rtl_allocateZeroMemory (
+SAL_DLLPUBLIC void * SAL_CALL rtl_allocateZeroMemory (
     sal_Size Bytes
 ) SAL_THROW_EXTERN_C();
 
@@ -94,7 +94,7 @@ void * SAL_CALL rtl_allocateZeroMemory (
     @param  Bytes [in] memory size.
     @return none. Memory is zero'ed and released. Ptr is invalid.
  */
-void SAL_CALL rtl_freeZeroMemory (
+SAL_DLLPUBLIC void SAL_CALL rtl_freeZeroMemory (
     void *   Ptr,
     sal_Size Bytes
 ) SAL_THROW_EXTERN_C();
@@ -121,8 +121,7 @@ typedef struct rtl_arena_st rtl_arena_type;
  *
  *  @see rtl_arena_destroy()
  */
-rtl_arena_type *
-SAL_CALL rtl_arena_create (
+SAL_DLLPUBLIC rtl_arena_type * SAL_CALL rtl_arena_create (
     const char *       pName,
     sal_Size           quantum,
     sal_Size           quantum_cache_max,
@@ -140,8 +139,7 @@ SAL_CALL rtl_arena_create (
  *
  *  @see rtl_arena_create()
  */
-void
-SAL_CALL rtl_arena_destroy (
+SAL_DLLPUBLIC void SAL_CALL rtl_arena_destroy (
     rtl_arena_type * pArena
 ) SAL_THROW_EXTERN_C();
 
@@ -155,8 +153,7 @@ SAL_CALL rtl_arena_destroy (
  *
  *  @see rtl_arena_free()
  */
-void *
-SAL_CALL rtl_arena_alloc (
+SAL_DLLPUBLIC void * SAL_CALL rtl_arena_alloc (
     rtl_arena_type * pArena,
     sal_Size *       pBytes
 ) SAL_THROW_EXTERN_C();
@@ -172,8 +169,7 @@ SAL_CALL rtl_arena_alloc (
  *
  *  @see rtl_arena_alloc()
  */
-void
-SAL_CALL rtl_arena_free (
+SAL_DLLPUBLIC void SAL_CALL rtl_arena_free (
     rtl_arena_type * pArena,
     void *           pAddr,
     sal_Size         nBytes
@@ -203,8 +199,7 @@ typedef struct rtl_cache_st rtl_cache_type;
  *
  *  @see rtl_cache_destroy()
  */
-rtl_cache_type *
-SAL_CALL rtl_cache_create (
+SAL_DLLPUBLIC rtl_cache_type * SAL_CALL rtl_cache_create (
     const char *     pName,
     sal_Size         nObjSize,
     sal_Size         nObjAlign,
@@ -225,8 +220,7 @@ SAL_CALL rtl_cache_create (
  *
  *  @see rtl_cache_create()
  */
-void
-SAL_CALL rtl_cache_destroy (
+SAL_DLLPUBLIC void SAL_CALL rtl_cache_destroy (
     rtl_cache_type * pCache
 ) SAL_THROW_EXTERN_C();
 
@@ -237,8 +231,7 @@ SAL_CALL rtl_cache_destroy (
  *
  *  @return pointer to allocated object, or NULL upon failure.
  */
-void *
-SAL_CALL rtl_cache_alloc (
+SAL_DLLPUBLIC void * SAL_CALL rtl_cache_alloc (
     rtl_cache_type * pCache
 ) SAL_THROW_EXTERN_C();
 
@@ -252,8 +245,7 @@ SAL_CALL rtl_cache_alloc (
  *
  *  @see rtl_cache_alloc()
  */
-void
-SAL_CALL rtl_cache_free (
+SAL_DLLPUBLIC void SAL_CALL rtl_cache_free (
     rtl_cache_type * pCache,
     void *           pObj
 ) SAL_THROW_EXTERN_C();

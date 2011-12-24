@@ -294,7 +294,7 @@ String RID_FILEOPEN_NOTEXISTENTFILE
 
 String STR_FILTERNAME_ALL
 {
-    Text [ en-US ] = "All files (*.*)" ;
+    Text [ en-US ] = "All files" ;
 };
 
 String STR_SVT_ALREADYEXISTOVERWRITE

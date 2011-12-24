@@ -253,7 +253,7 @@ IMPL_LINK( SvxLoadSaveEmbed, ClickSaveHdl_Impl, void *, EMPTYARG )
     {
         aFile.Append( pList->GetName() );
 
-        if( !aFile.getExtension().getLength() )
+        if( aFile.getExtension().isEmpty() )
             aFile.SetExtension( XPropertyList::GetDefaultExt( meType ) );
     }
 

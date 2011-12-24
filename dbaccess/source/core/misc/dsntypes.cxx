@@ -198,7 +198,7 @@ String ODsnTypeCollection::getDatasourcePrefixFromMediaType(const ::rtl::OUStrin
                 sURL = *pIter;
                 break;
             }
-            if ( !sFileExtension.getLength() && _sExtension.getLength() )
+            if ( sFileExtension.isEmpty() && !_sExtension.isEmpty() )
                 sFallbackURL = *pIter;
         }
     }
@@ -329,11 +329,11 @@ bool ODsnTypeCollection::isEmbeddedDatabase( const ::rtl::OUString& _sURL ) cons
             static const ::rtl::OUString s_sValue(RTL_CONSTASCII_USTRINGPARAM("EmbeddedDatabases/DefaultEmbeddedDatabase/Value"));
 
             aInstalled.getNodeValue(s_sValue) >>= sEmbeddedDatabaseURL;
-            if ( sEmbeddedDatabaseURL.getLength() )
+            if ( !sEmbeddedDatabaseURL.isEmpty() )
                 aInstalled.getNodeValue(s_sValue + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")) + sEmbeddedDatabaseURL + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/URL"))) >>= sEmbeddedDatabaseURL;
         }
     }
-    if ( !sEmbeddedDatabaseURL.getLength() )
+    if ( sEmbeddedDatabaseURL.isEmpty() )
         sEmbeddedDatabaseURL = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:embedded:hsqldb"));
     return sEmbeddedDatabaseURL;
 }

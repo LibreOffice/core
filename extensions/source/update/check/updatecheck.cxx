@@ -96,7 +96,7 @@ rtl::OUString getReleaseNote(const UpdateInfo& rInfo, sal_uInt8 pos, bool autoDo
     {
         if( pos == iter->Pos )
         {
-            if( (pos > 2) || !autoDownloadEnabled || ! (iter->URL2.getLength() > 0) )
+            if( (pos > 2) || !autoDownloadEnabled || iter->URL2.isEmpty() )
                 return iter->URL;
         }
         else if( (pos == iter->Pos2) && ((1 == iter->Pos) || (2 == iter->Pos)) && autoDownloadEnabled )
@@ -132,7 +132,7 @@ static inline rtl::OUString getBaseInstallation()
 
 inline bool isObsoleteUpdateInfo(const rtl::OUString& rBuildId)
 {
-    return sal_True != rBuildId.equals(getBuildId()) && rBuildId.getLength() > 0;
+    return sal_True != rBuildId.equals(getBuildId()) && !rBuildId.isEmpty();
 }
 
 
@@ -783,7 +783,7 @@ UpdateCheck::initialize(const uno::Sequence< beans::NamedValue >& rValues,
 
         rtl::OUString aLocalFileName = aModel.getLocalFileName();
 
-        if( aLocalFileName.getLength() > 0 )
+        if( !aLocalFileName.isEmpty() )
         {
             bContinueDownload = true;
 
@@ -830,7 +830,7 @@ UpdateCheck::initialize(const uno::Sequence< beans::NamedValue >& rValues,
             {
                 // Bring-up release note for position 5 ..
                 const rtl::OUString aURL(getReleaseNote(m_aUpdateInfo, 5));
-                if( aURL.getLength() > 0 )
+                if( !aURL.isEmpty() )
                     showReleaseNote(aURL);
 
                 // Data is outdated, probably due to installed update
@@ -934,7 +934,7 @@ UpdateCheck::install()
 #if ( defined LINUX || defined SOLARIS )
             nFlags = 42;
             aParameter = getBaseInstallation();
-            if( aParameter.getLength() > 0 )
+            if( !aParameter.isEmpty() )
                 osl::FileBase::getSystemPathFromFileURL(aParameter, aParameter);
 
             aParameter += UNISTRING(" &");
@@ -1164,7 +1164,7 @@ UpdateCheck::downloadStarted(const rtl::OUString& rLocalFileName, sal_Int64 nFil
 
         // Bring-up release note for position 1 ..
         const rtl::OUString aURL(getReleaseNote(m_aUpdateInfo, 1, aModel->isAutoDownloadEnabled()));
-        if( aURL.getLength() > 0 )
+        if( !aURL.isEmpty() )
             showReleaseNote(aURL);
     }
 }
@@ -1188,7 +1188,7 @@ UpdateCheck::downloadFinished(const rtl::OUString& rLocalFileName)
     // Bring-up release note for position 2 ..
     rtl::Reference< UpdateCheckConfig > rModel = UpdateCheckConfig::get( m_xContext );
     const rtl::OUString aURL(getReleaseNote(aUpdateInfo, 2, rModel->isAutoDownloadEnabled()));
-    if( aURL.getLength() > 0 )
+    if( !aURL.isEmpty() )
         showReleaseNote(aURL);
 }
 
@@ -1226,7 +1226,7 @@ UpdateCheck::showDialog(bool forceCheck)
 {
     osl::ResettableMutexGuard aGuard(m_aMutex);
 
-    bool update_found = m_aUpdateInfo.BuildId.getLength() > 0;
+    bool update_found = !m_aUpdateInfo.BuildId.isEmpty();
     bool bSetUIState = ! m_aUpdateHandler.is();
 
     UpdateState eDialogState = UPDATESTATES_COUNT;
@@ -1319,7 +1319,7 @@ UpdateCheck::setUpdateInfo(const UpdateInfo& aInfo)
     std::vector< ReleaseNote >::iterator iter2 = m_aUpdateInfo.ReleaseNotes.begin();
     while( iter2 != m_aUpdateInfo.ReleaseNotes.end() )
     {
-        if( ((1 == iter2->Pos) || (2 == iter2->Pos)) && autoDownloadEnabled && (iter2->URL2.getLength() > 0))
+        if( ((1 == iter2->Pos) || (2 == iter2->Pos)) && autoDownloadEnabled && !iter2->URL2.isEmpty())
         {
             iter2->URL = iter2->URL2;
             iter2->URL2 = rtl::OUString();
@@ -1466,7 +1466,7 @@ UpdateCheck::getUIState(const UpdateInfo& rInfo)
 {
     UpdateState eUIState = UPDATESTATE_NO_UPDATE_AVAIL;
 
-    if( rInfo.BuildId.getLength() > 0 )
+    if( !rInfo.BuildId.isEmpty() )
     {
         if( rInfo.Sources[0].IsDirect )
             eUIState = UPDATESTATE_UPDATE_AVAIL;
@@ -1515,7 +1515,7 @@ UpdateCheck::storeReleaseNote(sal_Int8 nNum, const rtl::OUString &rURL)
     rc = osl::File::remove( aFilePath );
 
     // don't store empty release notes, but delete old ones
-    if ( rURL.getLength() == 0 )
+    if ( rURL.isEmpty() )
         return true;
 
     osl::File aFile( aFilePath );

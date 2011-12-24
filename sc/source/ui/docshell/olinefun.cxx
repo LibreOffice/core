@@ -310,9 +310,9 @@ sal_Bool ScOutlineDocFunc::AutoOutline( const ScRange& rRange, sal_Bool bRecord,
             SCCOLROW nCol1, nCol2, nRow1, nRow2;
             pTable->GetColArray()->GetRange( nCol1, nCol2 );
             pTable->GetRowArray()->GetRange( nRow1, nRow2 );
-            SCCOL nOutStartCol = static_cast<SCCOL>(nCol1);;
+            SCCOL nOutStartCol = static_cast<SCCOL>(nCol1);
             SCROW nOutStartRow = nRow1;
-            SCCOL nOutEndCol = static_cast<SCCOL>(nCol2);;
+            SCCOL nOutEndCol = static_cast<SCCOL>(nCol2);
             SCROW nOutEndRow = nRow2;
 
             pUndoDoc = new ScDocument( SCDOCMODE_UNDO );

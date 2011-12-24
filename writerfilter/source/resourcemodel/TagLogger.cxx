@@ -156,12 +156,14 @@ namespace writerfilter
 
 #endif
 
+#if OSL_DEBUG_LEVEL > 1
     void TagLogger::startElement(const string & name)
     {
         xmlChar* xmlName = xmlCharStrdup( name.c_str() );
         xmlTextWriterStartElement( pWriter, xmlName );
         xmlFree( xmlName );
     }
+#endif
 
     void TagLogger::attribute(const string & name, const string & value)
     {
@@ -173,6 +175,7 @@ namespace writerfilter
         xmlFree( xmlName );
     }
 
+#if OSL_DEBUG_LEVEL > 1
     void TagLogger::attribute(const string & name, const ::rtl::OUString & value)
     {
         attribute( name, OUStringToOString( value, RTL_TEXTENCODING_ASCII_US ).getStr() );
@@ -230,6 +233,7 @@ namespace writerfilter
     {
         xmlTextWriterEndElement( pWriter );
     }
+#endif
 
 #ifdef DEBUG_CONTEXT_HANDLER
     class PropertySetDumpHandler : public Properties

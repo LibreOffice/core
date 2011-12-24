@@ -196,12 +196,12 @@ sub copy_and_stubify ($)
 {
     my $pc = shift;
 
-    `mkdir -p $destdir/lib/pkgconfig`;
+    `mkdir -p $destdir/usr/lib/pkgconfig`;
     `mkdir -p $destdir/$pc->{libdir}` if (defined $pc->{libdir});
     `mkdir -p $destdir/$pc->{includedir}` if (defined $pc->{includedir});
 
     # copy .pc across - FIXME, may need to re-write paths
-    `cp -a $pc->{_File} $destdir/lib/pkgconfig`;
+    `cp -a $pc->{_File} $destdir/usr/lib/pkgconfig`;
 
     # copy includes across
     my @includes = split (/ /, get_var ($pc, "Cflags"));

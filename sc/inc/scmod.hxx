@@ -256,7 +256,6 @@ SC_DLLPUBLIC    void                    SetAppOptions   ( const ScAppOptions& rO
     SC_DLLPUBLIC sal_Bool   UnregisterRefWindow( sal_uInt16 nSlotId, Window *pWnd );
     SC_DLLPUBLIC sal_Bool   IsAliveRefDlg( sal_uInt16 nSlotId, Window *pWnd );
     SC_DLLPUBLIC Window * Find1RefWindow( sal_uInt16 nSlotId, Window *pWndAncestor );
-    SC_DLLPUBLIC Window * Find1RefWindow( Window *pWndAncestor );
 };
 
 #define SC_MOD() ( *(ScModule**) GetAppData(SHL_CALC) )

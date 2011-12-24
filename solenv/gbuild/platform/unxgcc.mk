@@ -161,10 +161,7 @@ gb_COMPILEROPTFLAGS := $(gb_COMPILERDEFAULTOPTFLAGS)
 gb_LINKEROPTFLAGS := -Wl,-O1
 endif
 
-gb_DEBUG_CFLAGS := -ggdb3 -finline-limit=0 -fno-inline -fno-default-inline
-ifeq ($(HAVE_GCC_DWARF_4),TRUE)
-gb_DEBUG_CFLAGS += -gdwarf-4
-endif
+gb_DEBUG_CFLAGS := -ggdb2 -finline-limit=0 -fno-inline -fno-default-inline
 
 gb_COMPILERNOOPTFLAGS := -O0
 
@@ -209,10 +206,6 @@ gb_LinkTarget_CXXFLAGS := $(gb_CXXFLAGS) $(gb_CXXFLAGS_WERROR)
 ifeq ($(gb_SYMBOL),$(true))
 gb_LinkTarget_CXXFLAGS += -ggdb2
 gb_LinkTarget_CFLAGS += -ggdb2
-ifeq ($(HAVE_GCC_DWARF_4),TRUE)
-gb_LinkTarget_CXXFLAGS += -gdwarf-4
-gb_LinkTarget_CFLAGS += -gdwarf-4
-endif
 endif
 
 # note that `cat $(extraobjectlist)` is needed to build with older gcc versions, e.g. 4.1.2 on SLED10
@@ -223,6 +216,8 @@ $(call gb_Helper_abbreviate_dirs,\
 	$(gb_CXX) \
 		$(if $(filter Library CppunitTest,$(TARGETTYPE)),$(gb_Library_TARGETTYPEFLAGS)) \
 		$(if $(filter Library,$(TARGETTYPE)),$(gb_Library_LTOFLAGS)) \
+		$(if $(SOVERSION),-Wl$(COMMA)--soname=$(notdir $(1)).$(SOVERSION)) \
+		$(if $(SOVERSIONSCRIPT),-Wl$(COMMA)--version-script=$(SOVERSIONSCRIPT))\
 		$(subst \d,$$,$(RPATH)) \
 		$(T_LDFLAGS) \
 		$(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
@@ -234,7 +229,8 @@ $(call gb_Helper_abbreviate_dirs,\
 		-Wl$(COMMA)--start-group $(foreach lib,$(LINKED_STATIC_LIBS),$(call gb_StaticLibrary_get_target,$(lib))) -Wl$(COMMA)--end-group \
 		$(LIBS) \
 		$(patsubst lib%.a,-l%,$(patsubst lib%.so,-l%,$(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_filename,$(lib))))) \
-		-o $(1))
+		-o $(if $(SOVERSION),$(1).$(SOVERSION),$(1)))
+	$(if $(SOVERSION),ln -sf $(notdir $(1)).$(SOVERSION) $(1))
 endef
 
 define gb_LinkTarget__command_staticlink
@@ -316,6 +312,8 @@ define gb_Library_Library_platform
 $(call gb_LinkTarget_get_target,$(2)) : RPATH := $(call gb_Library_get_rpath,$(1))
 
 endef
+
+gb_Library__set_soversion_script_platform = $(gb_Library__set_soversion_script)
 
 
 # StaticLibrary class

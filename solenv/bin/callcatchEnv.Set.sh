@@ -5,3 +5,4 @@ AR="callarchive ${AR:-ar}"
 LINK="callcatcher $CXX"
 LIBMGR="callarchive ${LIBMGR:-ar}"
 export CC CXX AR LINK LIBMGR
+export dbglevel=2

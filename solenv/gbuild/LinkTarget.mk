@@ -338,7 +338,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(foreach object,$(8),$(call gb_GenCObject_get_dep_target,$(object))) \
 		$(foreach object,$(9),$(call gb_GenCxxObject_get_dep_target,$(object))) \
 		) && \
-	$(SOLARENV)/bin/concat-deps.pl $${RESPONSEFILE} > $(1)) && \
+	$(SOLARENV)/bin/concat-deps $${RESPONSEFILE} > $(1)) && \
 	rm -f $${RESPONSEFILE}
 
 endef
@@ -910,7 +910,12 @@ $(call gb_LinkTarget_get_target,$(1)) : DLLTARGET := $(2)
 endef
 
 define gb_LinkTarget_set_auxtargets
-$(call gb_LinkTarget_get_clean_target,$(1)) : AUXTARGETS := $(2)
+$$(call gb_Output_error,\
+ gb_LinkTarget_set_auxtargets: use gb_LinkTarget_add_auxtargets instead.)
+endef
+
+define gb_LinkTarget_add_auxtargets
+$(call gb_LinkTarget_get_clean_target,$(1)) : AUXTARGETS += $(2)
 endef
 
 define gb_LinkTarget__add_internal_headers

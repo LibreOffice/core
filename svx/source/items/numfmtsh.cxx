@@ -809,7 +809,7 @@ short SvxNumberFormatShell::FillEListWithSysCurrencys( SvStrings& rList,short nS
     short           nMyCat      = SELPOS_NONE;
 
     NfIndexTableOffset eOffsetStart=NF_CURRENCY_START;
-    NfIndexTableOffset eOffsetEnd=NF_CURRENCY_END;;
+    NfIndexTableOffset eOffsetEnd=NF_CURRENCY_END;
     long nIndex;
 
     for(nIndex=eOffsetStart;nIndex<=eOffsetEnd;nIndex++)

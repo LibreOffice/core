@@ -334,9 +334,8 @@ SvStream& operator>>( SvStream& rIStream, JobSetup& rJobSetup )
                     rIStream.Seek( nFirstPos + sizeof( ImplOldJobSetupData ) + 4 + sizeof( Impl364JobSetupData ) + pJobData->mnDriverDataLen );
                     while( rIStream.Tell() < nFirstPos + nLen )
                     {
-                        String aKey, aValue;
-                        rIStream.ReadByteString( aKey, RTL_TEXTENCODING_UTF8 );
-                        rIStream.ReadByteString( aValue, RTL_TEXTENCODING_UTF8 );
+                        String aKey = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(rIStream, RTL_TEXTENCODING_UTF8);
+                        String aValue = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(rIStream, RTL_TEXTENCODING_UTF8);
                         if( aKey.EqualsAscii( "COMPAT_DUPLEX_MODE" ) )
                         {
                             if( aValue.EqualsAscii( "DUPLEX_UNKNOWN" ) )
@@ -407,16 +406,24 @@ SvStream& operator<<( SvStream& rOStream, const JobSetup& rJobSetup )
             ::boost::unordered_map< ::rtl::OUString, ::rtl::OUString, ::rtl::OUStringHash >::const_iterator it;
             for( it = pJobData->maValueMap.begin(); it != pJobData->maValueMap.end(); ++it )
             {
-                rOStream.WriteByteString( it->first, RTL_TEXTENCODING_UTF8 );
-                rOStream.WriteByteString( it->second, RTL_TEXTENCODING_UTF8 );
+                write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rOStream, it->first, RTL_TEXTENCODING_UTF8);
+                write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rOStream, it->second, RTL_TEXTENCODING_UTF8);
             }
-            rOStream.WriteByteString( "COMPAT_DUPLEX_MODE" ) ;
+            write_lenPrefixed_uInt8s_FromOString<sal_uInt16>(rOStream, "COMPAT_DUPLEX_MODE");
             switch( pJobData->meDuplexMode )
             {
-            case DUPLEX_UNKNOWN: rOStream.WriteByteString( "DUPLEX_UNKNOWN" );break;
-            case DUPLEX_OFF: rOStream.WriteByteString( "DUPLEX_OFF" );break;
-            case DUPLEX_SHORTEDGE: rOStream.WriteByteString( "DUPLEX_SHORTEDGE" );break;
-            case DUPLEX_LONGEDGE: rOStream.WriteByteString( "DUPLEX_LONGEDGE" );break;
+                case DUPLEX_UNKNOWN:
+                    write_lenPrefixed_uInt8s_FromOString<sal_uInt16>(rOStream, "DUPLEX_UNKNOWN");
+                    break;
+                case DUPLEX_OFF:
+                    write_lenPrefixed_uInt8s_FromOString<sal_uInt16>(rOStream, "DUPLEX_OFF");
+                    break;
+                case DUPLEX_SHORTEDGE:
+                    write_lenPrefixed_uInt8s_FromOString<sal_uInt16>(rOStream, "DUPLEX_SHORTEDGE");
+                    break;
+                case DUPLEX_LONGEDGE:
+                    write_lenPrefixed_uInt8s_FromOString<sal_uInt16>(rOStream, "DUPLEX_LONGEDGE");
+                    break;
             }
             nLen = sal::static_int_cast<sal_uInt16>(rOStream.Tell() - nPos);
             rOStream.Seek( nPos );

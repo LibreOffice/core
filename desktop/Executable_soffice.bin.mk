@@ -43,6 +43,7 @@ $(eval $(call gb_Executable_set_include,$(sofficebin),\
 $(eval $(call gb_Executable_add_linked_libs,$(sofficebin),\
     sal \
     sofficeapp \
+    $(gb_STDLIBS) \
 ))
 
 $(eval $(call gb_Executable_add_cobjects,$(sofficebin),\

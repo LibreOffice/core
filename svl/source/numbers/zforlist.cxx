@@ -1155,7 +1155,6 @@ bool SvNumberFormatter::IsNumberFormat(const String& sString,
     const SvNumberformat* pFormat = (SvNumberformat*) aFTable.Get(F_Index);
     if (!pFormat)
     {
-//      OSL_FAIL("SvNumberFormatter:: Unbekanntes altes Zahlformat (2)");
         ChangeIntl(IniLnge);
         FType = NUMBERFORMAT_NUMBER;
     }
@@ -1168,21 +1167,25 @@ bool SvNumberFormatter::IsNumberFormat(const String& sString,
     }
     bool res;
     short RType = FType;
-                                                        // Ergebnistyp
-                                                        // ohne def-Kennung
-    if (RType == NUMBERFORMAT_TEXT)                         // Zahlzelle ->Stringz.
-        res = false;
+    if (RType == NUMBERFORMAT_TEXT)
+        res = false;        // type text preset => no conversion to number
     else
         res = pStringScanner->IsNumberFormat(sString, RType, fOutNumber, pFormat);
 
-    if (res && !IsCompatible(FType, RType))     // unpassender Typ
+    if (res && !IsCompatible(FType, RType))     // non-matching type
     {
         switch ( RType )
         {
+            case NUMBERFORMAT_DATE :
+                // Preserve ISO 8601 input.
+                if (pStringScanner->MayBeIso8601())
+                    F_Index = GetFormatIndex( NF_DATE_DIN_YYYYMMDD, ActLnge );
+                else
+                    F_Index = GetStandardFormat( RType, ActLnge );
+                break;
             case NUMBERFORMAT_TIME :
-            {
                 if ( pStringScanner->GetDecPos() )
-                {   // 100stel Sekunden
+                {   // 100th seconds
                     if ( pStringScanner->GetAnzNums() > 3 || fOutNumber < 0.0 )
                         F_Index = GetFormatIndex( NF_TIME_HH_MMSS00, ActLnge );
                     else
@@ -1192,7 +1195,6 @@ bool SvNumberFormatter::IsNumberFormat(const String& sString,
                     F_Index = GetFormatIndex( NF_TIME_HH_MMSS, ActLnge );
                 else
                     F_Index = GetStandardFormat( RType, ActLnge );
-            }
             break;
             default:
                 F_Index = GetStandardFormat( RType, ActLnge );
@@ -1435,6 +1437,62 @@ sal_uInt32 SvNumberFormatter::GetStandardFormat( double fNumber, sal_uInt32 nFIn
     }
 }
 
+sal_uInt32 SvNumberFormatter::GetEditFormat( double fNumber, sal_uInt32 nFIndex,
+        short eType, LanguageType eLang, SvNumberformat* pFormat )
+{
+    sal_uInt32 nKey = nFIndex;
+    switch ( eType )
+    {   // #61619# always edit using 4-digit year
+        case NUMBERFORMAT_DATE :
+            if (::rtl::math::approxFloor( fNumber) != fNumber)
+                nKey = GetFormatIndex( NF_DATETIME_SYS_DDMMYYYY_HHMMSS, eLang );
+                // fdo#34977 preserve time when editing even if only date was
+                // displayed.
+                /* FIXME: in case an ISO 8601 format was used, editing should
+                 * also use such. Unfortunately we have no builtin combined
+                 * date+time ISO format defined. Needs also locale data work.
+                 * */
+            else
+            {
+                // Preserve ISO 8601 format.
+                if (    nFIndex == GetFormatIndex( NF_DATE_DIN_YYYYMMDD, eLang) ||
+                        nFIndex == GetFormatIndex( NF_DATE_DIN_YYMMDD, eLang) ||
+                        nFIndex == GetFormatIndex( NF_DATE_DIN_MMDD, eLang) ||
+                        (pFormat && pFormat->IsIso8601( 0 )))
+                    nKey = GetFormatIndex( NF_DATE_DIN_YYYYMMDD, eLang);
+                else
+                    nKey = GetFormatIndex( NF_DATE_SYS_DDMMYYYY, eLang );
+            }
+        break;
+        case NUMBERFORMAT_TIME :
+            if (fNumber < 0.0 || fNumber >= 1.0)
+            {
+                /* XXX NOTE: this is a purely arbitrary value within the limits
+                 * of a signed 16-bit. 32k hours are 3.7 years ... or
+                 * 1903-09-26 if date. */
+                if (fabs( fNumber) * 24 < 0x7fff)
+                    nKey = GetFormatIndex( NF_TIME_HH_MMSS, eLang );
+                    // Preserve duration, use [HH]:MM:SS instead of time.
+                else
+                    nKey = GetFormatIndex( NF_DATETIME_SYS_DDMMYYYY_HHMMSS, eLang );
+                    // Assume that a large value is a datetime with only time
+                    // displayed.
+            }
+            else
+                nKey = GetStandardFormat( fNumber, nFIndex, eType, eLang );
+        break;
+        case NUMBERFORMAT_DATETIME :
+            nKey = GetFormatIndex( NF_DATETIME_SYS_DDMMYYYY_HHMMSS, eLang );
+            /* FIXME: in case an ISO 8601 format was used, editing should
+             * also use such. Unfortunately we have no builtin combined
+             * date+time ISO format defined. Needs also locale data work. */
+        break;
+        default:
+            nKey = GetStandardFormat( fNumber, nFIndex, eType, eLang );
+    }
+    return nKey;
+}
+
 void SvNumberFormatter::GetInputLineString(const double& fOutNumber,
                                            sal_uInt32 nFIndex,
                                            String& sOutString)
@@ -1461,40 +1519,7 @@ void SvNumberFormatter::GetInputLineString(const double& fOutNumber,
         ChangeStandardPrec(INPUTSTRING_PRECISION);
         bPrecChanged = true;
     }
-    sal_uInt32 nKey = nFIndex;
-    switch ( eType )
-    {   // #61619# always edit using 4-digit year
-        case NUMBERFORMAT_DATE :
-            if (::rtl::math::approxFloor( fOutNumber) != fOutNumber)
-                nKey = GetFormatIndex( NF_DATETIME_SYS_DDMMYYYY_HHMMSS, eLang );
-                // fdo#34977 preserve time when editing even if only date was
-                // displayed.
-            else
-                nKey = GetFormatIndex( NF_DATE_SYS_DDMMYYYY, eLang );
-        break;
-        case NUMBERFORMAT_TIME :
-            if (fOutNumber < 0.0 || fOutNumber >= 1.0)
-            {
-                /* XXX NOTE: this is a purely arbitrary value within the limits
-                 * of a signed 16-bit. 32k hours are 3.7 years ... or
-                 * 1903-09-26 if date. */
-                if (fabs( fOutNumber) * 24 < 0x7fff)
-                    nKey = GetFormatIndex( NF_TIME_HH_MMSS, eLang );
-                    // Preserve duration, use [HH]:MM:SS instead of time.
-                else
-                    nKey = GetFormatIndex( NF_DATETIME_SYS_DDMMYYYY_HHMMSS, eLang );
-                    // Assume that a large value is a datetime with only time
-                    // displayed.
-            }
-            else
-                nKey = GetStandardFormat( fOutNumber, nFIndex, eType, eLang );
-        break;
-        case NUMBERFORMAT_DATETIME :
-            nKey = GetFormatIndex( NF_DATETIME_SYS_DDMMYYYY_HHMMSS, eLang );
-        break;
-        default:
-            nKey = GetStandardFormat( fOutNumber, nFIndex, eType, eLang );
-    }
+    sal_uInt32 nKey = GetEditFormat( fOutNumber, nFIndex, eType, eLang, pFormat);
     if ( nKey != nFIndex )
         pFormat = (SvNumberformat*) aFTable.Get( nKey );
     if (pFormat)

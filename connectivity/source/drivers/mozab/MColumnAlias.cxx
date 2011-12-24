@@ -129,7 +129,7 @@ void OColumnAlias::initialize( const ::com::sun::star::uno::Reference< ::com::su
 
                 // normalize in case the config data is corrupted
                 // (what we really don't need is an empty alias ...)
-                if ( 0 == sAssignedAlias.getLength() )
+                if ( sAssignedAlias.isEmpty() )
                       sAssignedAlias = *pProgrammaticNames;
 
                 ::rtl::OString sAsciiProgrammaticName( ::rtl::OUStringToOString( *pProgrammaticNames, RTL_TEXTENCODING_ASCII_US ) );

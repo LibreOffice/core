@@ -312,7 +312,7 @@ static inline OUString getBridgeName(
     SAL_THROW( () )
 {
     OUStringBuffer aBridgeName( 16 );
-    if (rAddPurpose.getLength())
+    if (!rAddPurpose.isEmpty())
     {
         aBridgeName.append( rAddPurpose );
         aBridgeName.append( (sal_Unicode)'_' );
@@ -469,7 +469,7 @@ static Mapping getMediateMapping(
     }
 
     // connect to uno
-    if (rAddPurpose.getLength()) // insert purpose mapping between new ano_uno <-> uno
+    if (!rAddPurpose.isEmpty()) // insert purpose mapping between new ano_uno <-> uno
     {
         // create anonymous uno env
         Environment aAnUno;
@@ -540,7 +540,7 @@ void SAL_CALL uno_getMapping(
     }
 
     // See if an identity mapping does fit.
-    if (!aRet.is() && pFrom == pTo && !aAddPurpose.getLength())
+    if (!aRet.is() && pFrom == pTo && aAddPurpose.isEmpty())
         aRet = createIdentityMapping(pFrom);
 
     if (!aRet.is())
@@ -607,7 +607,7 @@ void SAL_CALL uno_getMappingByName(
 }
 
 //##################################################################################################
-void SAL_CALL uno_registerMapping(
+CPPU_DLLPUBLIC void SAL_CALL uno_registerMapping(
     uno_Mapping ** ppMapping, uno_freeMappingFunc freeMapping,
     uno_Environment * pFrom, uno_Environment * pTo, rtl_uString * pAddPurpose )
     SAL_THROW_EXTERN_C()
@@ -645,7 +645,7 @@ void SAL_CALL uno_registerMapping(
     }
 }
 //##################################################################################################
-void SAL_CALL uno_revokeMapping(
+CPPU_DLLPUBLIC void SAL_CALL uno_revokeMapping(
     uno_Mapping * pMapping )
     SAL_THROW_EXTERN_C()
 {
@@ -670,7 +670,7 @@ void SAL_CALL uno_revokeMapping(
 }
 
 //##################################################################################################
-void SAL_CALL uno_registerMappingCallback(
+CPPU_DLLPUBLIC void SAL_CALL uno_registerMappingCallback(
     uno_getMappingFunc pCallback )
     SAL_THROW_EXTERN_C()
 {
@@ -680,7 +680,7 @@ void SAL_CALL uno_registerMappingCallback(
     rData.aCallbacks.insert( pCallback );
 }
 //##################################################################################################
-void SAL_CALL uno_revokeMappingCallback(
+CPPU_DLLPUBLIC void SAL_CALL uno_revokeMappingCallback(
     uno_getMappingFunc pCallback )
     SAL_THROW_EXTERN_C()
 {

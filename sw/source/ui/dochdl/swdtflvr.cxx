@@ -766,7 +766,7 @@ int SwTransferable::PrepareForCopy( sal_Bool bIsCut )
 {
     int nRet = 1;
     if(!pWrtShell)
-        return 0;;
+        return 0;
 
     String sGrfNm;
     const int nSelection = pWrtShell->GetSelectionType();
@@ -1993,9 +1993,9 @@ int SwTransferable::_PasteDDE( TransferableDataHelper& rData,
         }   // report useful error!!
 
         rtl_TextEncoding eEncoding = DDE_TXT_ENCODING;
-        xStrm->ReadCString( aApp, eEncoding );
-        xStrm->ReadCString( aTopic, eEncoding );
-        xStrm->ReadCString( aItem, eEncoding );
+        aApp = read_zeroTerminated_uInt8s_ToOUString(*xStrm, eEncoding);
+        aTopic = read_zeroTerminated_uInt8s_ToOUString(*xStrm, eEncoding);
+        aItem = read_zeroTerminated_uInt8s_ToOUString(*xStrm, eEncoding);
     }
 
     String aCmd;

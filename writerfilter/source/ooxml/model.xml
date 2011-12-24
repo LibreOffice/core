@@ -22700,6 +22700,21 @@
       <attribute name="uri" tokenid="ooxml:CT_CustomXmlRun_uri"/>
       <attribute name="element" tokenid="ooxml:CT_CustomXmlRun_element"/>
     </resource>
+    <resource name="CT_CustomXmlBlock" resource="Properties" tag="content">
+      <element name="customXmlPr" tokenid="ooxml:CT_CustomXmlBlock_customXmlPr"/>
+      <attribute name="uri" tokenid="ooxml:CT_CustomXmlBlock_uri"/>
+      <attribute name="element" tokenid="ooxml:CT_CustomXmlBlock_element"/>
+    </resource>
+    <resource name="CT_CustomXmlCell" resource="Properties" tag="content">
+      <element name="customXmlPr" tokenid="ooxml:CT_CustomXmlCell_customXmlPr"/>
+      <attribute name="uri" tokenid="ooxml:CT_CustomXmlCell_uri"/>
+      <attribute name="element" tokenid="ooxml:CT_CustomXmlCell_element"/>
+    </resource>
+    <resource name="CT_CustomXmlRow" resource="Properties" tag="content">
+      <element name="customXmlPr" tokenid="ooxml:CT_CustomXmlRow_customXmlPr"/>
+      <attribute name="uri" tokenid="ooxml:CT_CustomXmlRow_uri"/>
+      <attribute name="element" tokenid="ooxml:CT_CustomXmlRow_element"/>
+    </resource>
     <resource name="CT_SmartTagRun" resource="Properties" tag="content">
       <element name="smartTagPr" tokenid="ooxml:CT_SmartTagRun_smartTagPr"/>
       <attribute name="uri" tokenid="ooxml:CT_SmartTagRun_uri"/>

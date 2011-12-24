@@ -933,6 +933,11 @@ void RTFDocumentImpl::replayBuffer(RTFBuffer_t& rBuffer)
         }
         else if (aPair.first == BUFFER_STARTRUN)
             Mapper().startCharacterGroup();
+        else if (aPair.first == BUFFER_TEXT)
+        {
+            sal_uInt8 nValue = aPair.second->getInt();
+            Mapper().text(&nValue, 1);
+        }
         else if (aPair.first == BUFFER_UTEXT)
         {
             OUString aString(aPair.second->getString());
@@ -1000,9 +1005,19 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
                 else
                 {
                     sal_uInt8 sFieldStart[] = { 0x13 };
-                    Mapper().startCharacterGroup();
-                    Mapper().text(sFieldStart, 1);
-                    Mapper().endCharacterGroup();
+                    if (!m_pCurrentBuffer)
+                    {
+                        Mapper().startCharacterGroup();
+                        Mapper().text(sFieldStart, 1);
+                        Mapper().endCharacterGroup();
+                    }
+                    else
+                    {
+                        m_pCurrentBuffer->push_back(make_pair(BUFFER_STARTRUN, RTFValue::Pointer_t()));
+                        RTFValue::Pointer_t pValue(new RTFValue(*sFieldStart));
+                        m_pCurrentBuffer->push_back(make_pair(BUFFER_TEXT, pValue));
+                        m_pCurrentBuffer->push_back(make_pair(BUFFER_ENDRUN, RTFValue::Pointer_t()));
+                    }
                 }
                 m_aStates.top().nDestinationState = DESTINATION_FIELDINSTRUCTION;
             }
@@ -1604,8 +1619,8 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
     // Trivial paragraph flags
     switch (nKeyword)
     {
-        case RTF_KEEP: nParam = NS_sprm::LN_PFKeep; break;
-        case RTF_KEEPN: nParam = NS_sprm::LN_PFKeepFollow; break;
+        case RTF_KEEP: if (m_pCurrentBuffer != &m_aTableBuffer) nParam = NS_sprm::LN_PFKeep; break;
+        case RTF_KEEPN: if (m_pCurrentBuffer != &m_aTableBuffer) nParam = NS_sprm::LN_PFKeepFollow; break;
         case RTF_INTBL: m_pCurrentBuffer = &m_aTableBuffer; nParam = NS_sprm::LN_PFInTable; break;
         case RTF_PAGEBB: nParam = NS_sprm::LN_PFPageBreakBefore; break;
         default: break;
@@ -2782,9 +2797,19 @@ int RTFDocumentImpl::popState()
         if (!m_bEq)
         {
             sal_uInt8 sFieldSep[] = { 0x14 };
-            Mapper().startCharacterGroup();
-            Mapper().text(sFieldSep, 1);
-            Mapper().endCharacterGroup();
+            if (!m_pCurrentBuffer)
+            {
+                Mapper().startCharacterGroup();
+                Mapper().text(sFieldSep, 1);
+                Mapper().endCharacterGroup();
+            }
+            else
+            {
+                m_pCurrentBuffer->push_back(make_pair(BUFFER_STARTRUN, RTFValue::Pointer_t()));
+                RTFValue::Pointer_t pValue(new RTFValue(*sFieldSep));
+                m_pCurrentBuffer->push_back(make_pair(BUFFER_TEXT, pValue));
+                m_pCurrentBuffer->push_back(make_pair(BUFFER_ENDRUN, RTFValue::Pointer_t()));
+            }
         }
     }
     else if (m_aStates.top().nDestinationState == DESTINATION_FIELDRESULT)
@@ -2792,9 +2817,19 @@ int RTFDocumentImpl::popState()
         if (!m_bEq)
         {
             sal_uInt8 sFieldEnd[] = { 0x15 };
-            Mapper().startCharacterGroup();
-            Mapper().text(sFieldEnd, 1);
-            Mapper().endCharacterGroup();
+            if (!m_pCurrentBuffer)
+            {
+                Mapper().startCharacterGroup();
+                Mapper().text(sFieldEnd, 1);
+                Mapper().endCharacterGroup();
+            }
+            else
+            {
+                m_pCurrentBuffer->push_back(make_pair(BUFFER_STARTRUN, RTFValue::Pointer_t()));
+                RTFValue::Pointer_t pValue(new RTFValue(*sFieldEnd));
+                m_pCurrentBuffer->push_back(make_pair(BUFFER_TEXT, pValue));
+                m_pCurrentBuffer->push_back(make_pair(BUFFER_ENDRUN, RTFValue::Pointer_t()));
+            }
         }
         else
             m_bEq = false;

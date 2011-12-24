@@ -72,23 +72,6 @@ using ::rtl::OUStringToOString;
 // no using's for ::oox::vml, that may clash with ::oox::drawingml types
 
 // ============================================================================
-// DrawingML
-// ============================================================================
-
-namespace {
-
-/** Converts the passed 64-bit integer value from the passed unit to EMUs. */
-sal_Int64 lclCalcEmu( const UnitConverter& rUnitConv, sal_Int64 nValue, Unit eFromUnit )
-{
-    return (eFromUnit == UNIT_EMU) ? nValue :
-        static_cast< sal_Int64 >( rUnitConv.scaleValue( static_cast< double >( nValue ), eFromUnit, UNIT_EMU ) + 0.5 );
-}
-
-} // namespace
-
-// ============================================================================
-
-// ============================================================================
 
 ShapeMacroAttacher::ShapeMacroAttacher( const OUString& rMacroName, const Reference< XShape >& rxShape ) :
     VbaMacroAttacherBase( rMacroName ),

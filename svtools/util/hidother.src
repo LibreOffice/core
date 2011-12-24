@@ -49,9 +49,6 @@ hidspecial HID_FILESAVE_DOPLAY                  { HelpID = HID_FILESAVE_DOPLAY; 
 hidspecial HID_FILEOPEN_READONLY                { HelpID = HID_FILEOPEN_READONLY; };
 hidspecial HID_FILEOPEN_VERSION                 { HelpID = HID_FILEOPEN_VERSION; };
 hidspecial HID_FILEOPEN_IMAGE_TEMPLATE          { HelpID = HID_FILEOPEN_IMAGE_TEMPLATE; };
-hidspecial HID_HELPAGENT_WINDOW                 { HelpID = HID_HELPAGENT_WINDOW; };
-
-hidspecial HID_REGISTRATION_DIALOG              { HelpID = HID_REGISTRATION_DIALOG; };
 
 hidspecial HID_PRINTDIALOG_TOFILE               { HelpID = HID_PRINTDIALOG_TOFILE; };
 

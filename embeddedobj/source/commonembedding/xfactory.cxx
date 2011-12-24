@@ -85,7 +85,7 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
                                             uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
                                             1 );
 
-    if ( !sEntName.getLength() )
+    if ( sEntName.isEmpty() )
         throw lang::IllegalArgumentException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Empty element name is provided!\n" )),
                                             uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
                                             2 );
@@ -176,7 +176,7 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
                                             uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
                                             1 );
 
-    if ( !sEntName.getLength() )
+    if ( sEntName.isEmpty() )
         throw lang::IllegalArgumentException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Empty element name is provided!\n" )),
                                             uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
                                             2 );
@@ -189,7 +189,7 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
     uno::Reference< uno::XInterface > xResult;
 
     // find document service name
-    if ( aFilterName.getLength() )
+    if ( !aFilterName.isEmpty() )
     {
         uno::Sequence< beans::NamedValue > aObject = m_aConfigHelper.GetObjectPropsByFilter( aFilterName );
         if ( !aObject.getLength() )
@@ -243,7 +243,7 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
                                             uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
                                             3 );
 
-    if ( !sEntName.getLength() )
+    if ( sEntName.isEmpty() )
         throw lang::IllegalArgumentException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Empty element name is provided!\n" )),
                                             uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
                                             4 );
@@ -295,7 +295,7 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
                                             uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
                                             1 );
 
-    if ( !sEntName.getLength() )
+    if ( sEntName.isEmpty() )
         throw lang::IllegalArgumentException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Empty element name is provided!\n" )),
                                             uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
                                             2 );
@@ -308,7 +308,7 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
     if ( nEntryConnectionMode == embed::EntryInitModes::MEDIA_DESCRIPTOR_INIT )
     {
         ::rtl::OUString aFilterName = m_aConfigHelper.UpdateMediaDescriptorWithFilterName( aTempMedDescr, aObject );
-        if ( !aFilterName.getLength() )
+        if ( aFilterName.isEmpty() )
         // the object must be OOo embedded object, if it is not an exception must be thrown
             throw io::IOException(); // TODO:
     }
@@ -359,14 +359,14 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
         if ( aTempMedDescr[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "URL" ) ) )
             aTempMedDescr[nInd].Value >>= aURL;
 
-    if ( !aURL.getLength() )
+    if ( aURL.isEmpty() )
         throw lang::IllegalArgumentException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "No URL for the link is provided!\n" )),
                                         uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
                                         3 );
 
     ::rtl::OUString aFilterName = m_aConfigHelper.UpdateMediaDescriptorWithFilterName( aTempMedDescr, sal_False );
 
-    if ( aFilterName.getLength() )
+    if ( !aFilterName.isEmpty() )
     {
         uno::Sequence< beans::NamedValue > aObject = m_aConfigHelper.GetObjectPropsByFilter( aFilterName );
         if ( !aObject.getLength() )
@@ -413,7 +413,7 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
                                             uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
                                             1 );
 
-    if ( !sEntName.getLength() )
+    if ( sEntName.isEmpty() )
         throw lang::IllegalArgumentException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Empty element name is provided!\n" )),
                                             uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
                                             2 );
@@ -425,7 +425,7 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
         if ( aTempMedDescr[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "URL" ) ) )
             aTempMedDescr[nInd].Value >>= aURL;
 
-    if ( !aURL.getLength() )
+    if ( aURL.isEmpty() )
         throw lang::IllegalArgumentException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "No URL for the link is provided!\n" )),
                                         uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
                                         3 );
@@ -436,7 +436,7 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
 
     ::rtl::OUString aFilterName = m_aConfigHelper.UpdateMediaDescriptorWithFilterName( aTempMedDescr, aObject );
 
-    if ( aFilterName.getLength() )
+    if ( !aFilterName.isEmpty() )
     {
 
         xResult = uno::Reference< uno::XInterface >(

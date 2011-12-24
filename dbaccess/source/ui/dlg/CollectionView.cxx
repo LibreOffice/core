@@ -127,7 +127,7 @@ Reference< XContent> OCollectionView::getSelectedFolder() const
 IMPL_LINK( OCollectionView, Save_Click, PushButton*, EMPTYARG )
 {
     ::rtl::OUString sName = m_aName.GetText();
-    if ( !sName.getLength() )
+    if ( sName.isEmpty() )
         return 0;
     try
     {
@@ -155,7 +155,7 @@ IMPL_LINK( OCollectionView, Save_Click, PushButton*, EMPTYARG )
             sName = sName.copy(nIndex);
             Reference<XHierarchicalNameContainer> xHier(m_xContent,UNO_QUERY);
             OSL_ENSURE(xHier.is(),"XHierarchicalNameContainer not supported!");
-            if ( sSubFolder.getLength() && xHier.is() )
+            if ( !sSubFolder.isEmpty() && xHier.is() )
             {
                 if ( xHier->hasByHierarchicalName(sSubFolder) )
                 {
@@ -275,7 +275,7 @@ IMPL_LINK( OCollectionView, Dbl_Click_FileView, SvtFileView*, EMPTYARG )
             ::rtl::OUString sSubFolder = m_aView.GetCurrentURL();
             sal_Int32 nIndex = sSubFolder.lastIndexOf('/') + 1;
             sSubFolder = sSubFolder.getToken(0,'/',nIndex);
-            if ( sSubFolder.getLength() )
+            if ( !sSubFolder.isEmpty() )
             {
                 Reference< XContent> xContent;
                 if ( xNameAccess->hasByName(sSubFolder) )

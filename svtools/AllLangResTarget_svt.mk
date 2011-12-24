@@ -64,7 +64,6 @@ $(eval $(call gb_SrsTarget_add_files,svt/res,\
     svtools/source/misc/imagemgr.src \
     svtools/source/misc/langtab.src \
     svtools/source/misc/undo.src \
-    svtools/source/plugapp/testtool.src \
     svtools/source/toolpanel/toolpanel.src \
 ))
 

@@ -81,15 +81,9 @@ public:
     void                    SetValue( BigInt nNewValue );
     void                    SetUserValue( BigInt nNewValue );
     BigInt                  GetValue() const;
-    sal_Bool                    IsValueModified() const;
-
-    void                    SetEmptyValue();
     sal_Bool                    IsEmptyValue() const { return !GetField()->GetText().Len(); }
 
     BigInt                  GetCorrectedValue() const { return mnCorrectedValue; }
-
-    BigInt                  Normalize( BigInt nValue ) const;
-    BigInt                  Denormalize( BigInt nValue ) const;
 };
 
 // ---------------------
@@ -105,12 +99,8 @@ private:
     BigInt          mnFirst;
     BigInt          mnLast;
 
-protected:
-    SAL_DLLPRIVATE void ImplLoadRes( const ResId& rResId );
-
 public:
                     LongCurrencyField( Window* pParent, WinBits nWinStyle );
-                    LongCurrencyField( Window* pParent, const ResId& rResId );
                     ~LongCurrencyField();
 
     long            PreNotify( NotifyEvent& rNEvt );
@@ -138,7 +128,6 @@ class VCL_DLLPUBLIC LongCurrencyBox : public ComboBox, public LongCurrencyFormat
 {
 public:
                     LongCurrencyBox( Window* pParent, WinBits nWinStyle );
-                    LongCurrencyBox( Window* pParent, const ResId& rResId );
                     ~LongCurrencyBox();
 
     long            PreNotify( NotifyEvent& rNEvt );
@@ -147,13 +136,8 @@ public:
     void            Modify();
     void            ReformatAll();
 
-    void            InsertValue( BigInt nValue,
-                                 sal_uInt16 nPos = COMBOBOX_APPEND );
-    void            RemoveValue( BigInt nValue );
     BigInt          GetValue() const
                         { return LongCurrencyFormatter::GetValue(); }
-    BigInt          GetValue( sal_uInt16 nPos ) const;
-    sal_uInt16          GetValuePos( BigInt nValue ) const;
 };
 
 #endif // _LONGCURR_HXX

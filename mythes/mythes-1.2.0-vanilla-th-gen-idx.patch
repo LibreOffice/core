@@ -1,5 +1,5 @@
---- misc/mythes-1.2.0.orig/th_gen_idx.pl
-+++ misc/build/mythes-1.2.0/th_gen_idx.pl
+--- misc/mythes-1.2.2.orig/th_gen_idx.pl
++++ misc/build/mythes-1.2.2/th_gen_idx.pl
 @@ -1,11 +1,32 @@
 -#!/usr/bin/perl
 -
@@ -28,7 +28,7 @@
 +# GNU Lesser General Public License version 3 for more details
 +# (a copy is included in the LICENSE file that accompanied this code).
  #
--# typcially invoked as follows:
+-# typically invoked as follows:
 -# cat th_en_US_new.dat | ./th_gen_idx.pl > th_en_US_new.idx
 +# You should have received a copy of the GNU Lesser General Public License
 +# version 3 along with OpenOffice.org.  If not, see

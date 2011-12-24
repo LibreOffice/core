@@ -276,7 +276,7 @@ namespace dbtools
         const ::rtl::OUString* pDetailFieldsEnd = pDetailFields + m_aDetailFields.getLength();
         for ( ; pDetailFields < pDetailFieldsEnd; ++pDetailFields, ++pMasterFields )
         {
-            if ( !pMasterFields->getLength() || !pDetailFields->getLength() )
+            if ( pMasterFields->isEmpty() || pDetailFields->isEmpty() )
                 continue;
 
             // if not even the master part of the relationship exists in the parent , the
@@ -305,7 +305,7 @@ namespace dbtools
                 {
                     ::rtl::OUString sNewParamName;
                     const ::rtl::OUString sFilterCondition = createFilterConditionFromColumnLink( *pMasterFields, *pDetailFields, sNewParamName );
-                    OSL_PRECOND( sNewParamName.getLength(), "ParameterManager::classifyLinks: createFilterConditionFromColumnLink returned nonsense!" );
+                    OSL_PRECOND( !sNewParamName.isEmpty(), "ParameterManager::classifyLinks: createFilterConditionFromColumnLink returned nonsense!" );
 
                     // remember meta information about this new parameter
                     ::std::pair< ParameterInformation::iterator, bool > aInsertionPos =

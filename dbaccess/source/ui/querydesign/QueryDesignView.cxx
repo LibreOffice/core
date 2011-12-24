@@ -113,7 +113,7 @@ namespace
     ::rtl::OUString quoteTableAlias(sal_Bool _bQuote, const ::rtl::OUString& _sAliasName, const ::rtl::OUString& _sQuote)
     {
         ::rtl::OUString sRet;
-        if ( _bQuote && _sAliasName.getLength() )
+        if ( _bQuote && !_sAliasName.isEmpty() )
         {
             sRet = ::dbtools::quoteName(_sQuote,_sAliasName);
             const static ::rtl::OUString sTableSeparater('.');
@@ -129,7 +129,7 @@ namespace
         if ( _pTableRef )
         {
             sTableRange = ::connectivity::OSQLParseNode::getTableRange(_pTableRef);
-            if ( !sTableRange.getLength() )
+            if ( sTableRange.isEmpty() )
                 _pTableRef->parseNodeToStr(sTableRange,xConnection,NULL,sal_False,sal_False);
         }
         return sTableRange;
@@ -266,7 +266,7 @@ namespace
         ::connectivity::OSQLParseTreeIterator& rParseIter = static_cast<OQueryController&>(_pView->getController()).getParseIterator();
         rParseIter.getColumnRange( pColumnRef, aColumnName, aTableRange );
 
-        if ( aTableRange.getLength() )
+        if ( !aTableRange.isEmpty() )
         {
             OQueryTableWindow*  pSTW = static_cast<OQueryTableView*>(_pView->getTableView())->FindTable( aTableRange );
             bErg = (pSTW && pSTW->ExistsField( aColumnName, _rDragInfo ) );
@@ -351,7 +351,7 @@ namespace
         if ( pData->GetJoinType() != INNER_JOIN && _pEntryTabTo->ExistsAVisitedConn() )
         {
             sal_Bool bBrace = sal_False;
-            if(_rJoin.getLength() && _rJoin.lastIndexOf(')') == (_rJoin.getLength()-1))
+            if(!_rJoin.isEmpty() && _rJoin.lastIndexOf(')') == (_rJoin.getLength()-1))
             {
                 bBrace = sal_True;
                 _rJoin = _rJoin.replaceAt(_rJoin.getLength()-1,1,::rtl::OUString(' '));
@@ -475,7 +475,7 @@ namespace
         if ( pEntryConnData->GetJoinType() == INNER_JOIN && !pEntryConnData->isNatural() )
             return;
 
-        if(!aJoin.getLength())
+        if(aJoin.isEmpty())
         {
             OQueryTableWindow* pEntryTabFrom = static_cast<OQueryTableWindow*>(pEntryConn->GetSourceWin());
             aJoin = BuildJoin(_xConnection,pEntryTabFrom,pEntryTabTo,pEntryConnData);
@@ -544,7 +544,7 @@ namespace
         else if (SQL_ISRULEOR2(pNode,search_condition,boolean_term) &&          // AND/OR-Verknuepfung:
                  pNode->count() == 3)
         {
-            // nur AND Verknüpfung zulassen
+            // nur AND Verknï¿½pfung zulassen
             if (!SQL_ISTOKEN(pNode->getChild(1),AND))
                 eErrorCode = eIllegalJoinCondition;
             else if ( eOk == (eErrorCode = InsertJoinConnection(_pView,pNode->getChild(0), _eJoinType,pLeftTable,pRightTable)) )
@@ -633,7 +633,7 @@ namespace
             {
                 OTableFieldDescRef pEntryField = *aIter;
                 ::rtl::OUString rFieldName = pEntryField->GetField();
-                if ( rFieldName.getLength() && pEntryField->IsVisible() )
+                if ( !rFieldName.isEmpty() && pEntryField->IsVisible() )
                 {
                     aTmpStr = ::rtl::OUString();
                     const ::rtl::OUString rAlias = pEntryField->GetAlias();
@@ -661,7 +661,7 @@ namespace
                         }
                         if ( ( rFieldName.toChar() != '*' ) && ( rFieldName.indexOf( aQuote ) == -1 ) )
                         {
-                            OSL_ENSURE(pEntryField->GetTable().getLength(),"No table field name!");
+                            OSL_ENSURE(!pEntryField->GetTable().isEmpty(),"No table field name!");
                             aTmpStr.append(::dbtools::quoteName(aQuote, rFieldName));
                         }
                         else
@@ -672,7 +672,7 @@ namespace
 
                     if  ( pEntryField->isAggreateFunction() )
                     {
-                        OSL_ENSURE(pEntryField->GetFunction().getLength(),"Functionname darf hier nicht leer sein! ;-(");
+                        OSL_ENSURE(!pEntryField->GetFunction().isEmpty(),"Functionname darf hier nicht leer sein! ;-(");
                         ::rtl::OUStringBuffer aTmpStr2( pEntryField->GetFunction());
                         aTmpStr2.appendAscii("(");
                         aTmpStr2.append(aTmpStr.makeStringAndClear());
@@ -680,7 +680,7 @@ namespace
                         aTmpStr = aTmpStr2;
                     }
 
-                    if (rFieldAlias.getLength()                         &&
+                    if (!rFieldAlias.isEmpty()                         &&
                         (rFieldName.toChar() != '*'                     ||
                         pEntryField->isNumericOrAggreateFunction()      ||
                         pEntryField->isOtherFunction()))
@@ -738,10 +738,10 @@ namespace
                     OTableFieldDescRef  pEntryField = *aIter;
                     aFieldName = pEntryField->GetField();
 
-                    if (!aFieldName.getLength())
+                    if (aFieldName.isEmpty())
                         continue;
                     aCriteria = pEntryField->GetCriteria( i );
-                    if ( aCriteria.getLength() )
+                    if ( !aCriteria.isEmpty() )
                     {
                         // * is not allowed to contain any filter, only when used in combination an aggregate function
                         if ( aFieldName.toChar() == '*' && pEntryField->isNoneFunction() )
@@ -764,14 +764,14 @@ namespace
 
                         if ( pEntryField->isAggreateFunction() || pEntryField->IsGroupBy() )
                         {
-                            if (!aHavingStr.getLength())            // noch keine Kriterien
+                            if (aHavingStr.isEmpty())            // noch keine Kriterien
                                 aHavingStr += ::rtl::OUString('(');         // Klammern
                             else
                                 aHavingStr += C_AND;
 
                             if ( pEntryField->isAggreateFunction() )
                             {
-                                OSL_ENSURE(pEntryField->GetFunction().getLength(),"No function name for aggregate given!");
+                                OSL_ENSURE(!pEntryField->GetFunction().isEmpty(),"No function name for aggregate given!");
                                 aHavingStr += pEntryField->GetFunction();
                                 aHavingStr += ::rtl::OUString('(');         // Klammern
                                 aHavingStr += aWork;
@@ -806,7 +806,7 @@ namespace
                         }
                         else
                         {
-                            if ( !aWhereStr.getLength() )           // noch keine Kriterien
+                            if ( aWhereStr.isEmpty() )           // noch keine Kriterien
                                 aWhereStr += ::rtl::OUString('(');          // Klammern
                             else
                                 aWhereStr += C_AND;
@@ -839,17 +839,17 @@ namespace
                             }
                         }
                     }
-                    // nur einmal für jedes Feld
+                    // nur einmal fï¿½r jedes Feld
                     else if ( !i && pEntryField->isCondition() )
                     {
-                        if (!aWhereStr.getLength())         // noch keine Kriterien
+                        if (aWhereStr.isEmpty())         // noch keine Kriterien
                             aWhereStr += ::rtl::OUString('(');          // Klammern
                         else
                             aWhereStr += C_AND;
                         aWhereStr += pEntryField->GetField();
                     }
                 }
-                if (aWhereStr.getLength())
+                if (!aWhereStr.isEmpty())
                 {
                     aWhereStr += ::rtl::OUString(')');                      // Klammern zu fuer 'AND' Zweig
                     if (rRetStr.getLength())                            // schon Feldbedingungen ?
@@ -858,7 +858,7 @@ namespace
                         rRetStr.append(sal_Unicode('('));
                     rRetStr.append(aWhereStr);
                 }
-                if (aHavingStr.getLength())
+                if (!aHavingStr.isEmpty())
                 {
                     aHavingStr += ::rtl::OUString(')');                     // Klammern zu fuer 'AND' Zweig
                     if (rHavingStr.getLength())                         // schon Feldbedingungen ?
@@ -923,13 +923,13 @@ namespace
                         continue;
                     }
 
-                    if ( bColumnAliasInOrderBy && pEntryField->GetFieldAlias().getLength() )
+                    if ( bColumnAliasInOrderBy && !pEntryField->GetFieldAlias().isEmpty() )
                     {
                         aWorkStr += ::dbtools::quoteName(aQuote, pEntryField->GetFieldAlias());
                     }
                     else if ( pEntryField->isNumericOrAggreateFunction() )
                     {
-                        OSL_ENSURE(pEntryField->GetFunction().getLength(),"Functionname darf hier nicht leer sein! ;-(");
+                        OSL_ENSURE(!pEntryField->GetFunction().isEmpty(),"Functionname darf hier nicht leer sein! ;-(");
                         aWorkStr += pEntryField->GetFunction();
                         aWorkStr +=  ::rtl::OUString('(');
                         aWorkStr += quoteTableAlias(bMulti,pEntryField->GetAlias(),aQuote);
@@ -962,7 +962,7 @@ namespace
                 aWorkStr = sTemp;
             }
 
-            if ( aWorkStr.getLength() )
+            if ( !aWorkStr.isEmpty() )
             {
                 const sal_Int32 nMaxOrder = xMetaData->getMaxColumnsInOrderBy();
                 String sToken(aWorkStr);
@@ -996,7 +996,7 @@ namespace
             OQueryTableConnectionData* pEntryConnData = static_cast<OQueryTableConnectionData*>(pEntryConn->GetData().get());
             if ( pEntryConnData->GetJoinType() == INNER_JOIN && !pEntryConnData->isNatural() )
             {
-                if(_rJoinCrit.getLength())
+                if(!_rJoinCrit.isEmpty())
                     _rJoinCrit += C_AND;
                 _rJoinCrit += BuildJoinCriteria(_xConnection,pEntryConnData->GetConnLineDataList(),pEntryConnData);
             }
@@ -1069,7 +1069,7 @@ namespace
                         ::rtl::OUString aJoin;
                         GetNextJoin(_xConnection,pEntryConn,static_cast<OQueryTableWindow*>(pEntryConn->GetDestWin()),aJoin);
 
-                        if(aJoin.getLength())
+                        if(!aJoin.isEmpty())
                         {
                             // insert tables into table list to avoid double entries
                             OQueryTableWindow* pEntryTabFrom = static_cast<OQueryTableWindow*>(pEntryConn->GetSourceWin());
@@ -1140,7 +1140,7 @@ namespace
             }
         }
 
-        if(aTableListStr.getLength())
+        if(!aTableListStr.isEmpty())
             aTableListStr = aTableListStr.replaceAt(aTableListStr.getLength()-1,1, ::rtl::OUString() );
         return aTableListStr;
     }
@@ -1167,7 +1167,7 @@ namespace
                 OTableFieldDescRef  pEntryField = *aIter;
                 if ( pEntryField->IsGroupBy() )
                 {
-                    OSL_ENSURE(pEntryField->GetField().getLength(),"Kein FieldName vorhanden!;-(");
+                    OSL_ENSURE(!pEntryField->GetField().isEmpty(),"Kein FieldName vorhanden!;-(");
                     ::rtl::OUString sGroupByPart = quoteTableAlias(bMulti,pEntryField->GetAlias(),aQuote);
 
                     // only quote the field name when it isn't calculated
@@ -1204,7 +1204,7 @@ namespace
                     }
                 }
             }
-            if ( aGroupByStr.getLength() )
+            if ( !aGroupByStr.isEmpty() )
             {
                 aGroupByStr = aGroupByStr.replaceAt(aGroupByStr.getLength()-1,1, ::rtl::OUString(' ') );
                 ::rtl::OUString aGroupByStr2(RTL_CONSTASCII_USTRINGPARAM(" GROUP BY "));
@@ -1797,8 +1797,8 @@ namespace
         rParseIter.getColumnRange( pColumnRef, aColumnName, aTableRange );
 
         sal_Bool bFound(sal_False);
-        OSL_ENSURE(aColumnName.getLength(),"Columnname darf nicht leer sein");
-        if (!aTableRange.getLength())
+        OSL_ENSURE(!aColumnName.isEmpty(),"Columnname darf nicht leer sein");
+        if (aTableRange.isEmpty())
         {
             // SELECT column, ...
             bFound = NULL != lcl_findColumnInTables( aColumnName, *pTabList, _raInfo );
@@ -1864,7 +1864,7 @@ namespace
         if ( !checkJoinConditions(_pView,pNode->getChild(0)) || !checkJoinConditions(_pView,pRightTableRef))
             return sal_False;
 
-        // named column join wird später vieleicht noch implementiert
+        // named column join wird spï¿½ter vieleicht noch implementiert
         // SQL_ISRULE(pNode->getChild(4),named_columns_join)
         EJoinType eJoinType = INNER_JOIN;
         bool bNatural = false;
@@ -2143,7 +2143,7 @@ namespace
             return eNoSelectStatement;
 
         ::connectivity::OSQLParseNode* pParseTree = pNode->getChild(2); // selection
-        sal_Bool bFirstField = sal_True;    // bei der Initialisierung muß auf alle Faelle das erste Feld neu aktiviert werden
+        sal_Bool bFirstField = sal_True;    // bei der Initialisierung muï¿½ auf alle Faelle das erste Feld neu aktiviert werden
 
         SqlParseError eErrorCode = eOk;
 
@@ -2767,7 +2767,7 @@ void OQueryDesignView::fillValidFields(const ::rtl::OUString& sAliasName, ComboB
     OSL_ENSURE(pFieldList != NULL, "OQueryDesignView::FillValidFields : What the hell do you think I can do with a NULL-ptr ? This will crash !");
     pFieldList->Clear();
 
-    sal_Bool bAllTables = sAliasName.getLength() == 0;
+    sal_Bool bAllTables = sAliasName.isEmpty();
 
     OJoinTableView::OTableWindowMap* pTabWins = m_pTableView->GetTabWinMap();
     ::rtl::OUString strCurrentPrefix;
@@ -2852,14 +2852,14 @@ sal_Bool OQueryDesignView::checkStatement()
     for(;aIter != aEnd;++aIter)
     {
         OTableFieldDescRef pEntryField = *aIter;
-        if ( pEntryField->GetField().getLength() && pEntryField->IsVisible() )
+        if (!pEntryField->GetField().isEmpty() && pEntryField->IsVisible() )
             ++nFieldcount;
-        else if (pEntryField->GetField().getLength()            &&
+        else if (!pEntryField->GetField().isEmpty()            &&
                 !pEntryField->HasCriteria()                 &&
                 pEntryField->isNoneFunction()               &&
                 pEntryField->GetOrderDir() == ORDER_NONE    &&
                 !pEntryField->IsGroupBy()                   &&
-                !pEntryField->GetFunction().getLength() )
+                pEntryField->GetFunction().isEmpty() )
             rUnUsedFields.push_back(pEntryField);
     }
     if ( !nFieldcount ) // keine Felder sichtbar also zur"uck
@@ -2872,7 +2872,7 @@ sal_Bool OQueryDesignView::checkStatement()
     sal_uInt32 nTabcount        = pTabList->size();
 
     ::rtl::OUString aFieldListStr(GenerateSelectList(this,rFieldList,nTabcount>1));
-    if( !aFieldListStr.getLength() )
+    if( aFieldListStr.isEmpty() )
         return ::rtl::OUString();
     // Ausnahmebehandlung, wenn keine Felder angegeben worden sind
     // Dann darf die Tabpage nicht gewechselt werden
@@ -2883,7 +2883,7 @@ sal_Bool OQueryDesignView::checkStatement()
     const ::std::vector<OTableConnection*>* pConnList = m_pTableView->getTableConnections();
     Reference< XConnection> xConnection = rController.getConnection();
     ::rtl::OUString aTableListStr(GenerateFromClause(xConnection,pTabList,pConnList));
-    OSL_ENSURE(aTableListStr.getLength(), "OQueryDesignView::getStatement() : unerwartet : habe Felder, aber keine Tabellen !");
+    OSL_ENSURE(!aTableListStr.isEmpty(), "OQueryDesignView::getStatement() : unerwartet : habe Felder, aber keine Tabellen !");
     // wenn es Felder gibt, koennen die nur durch Einfuegen aus einer schon existenten Tabelle entstanden sein; wenn andererseits
     // eine Tabelle geloescht wird, verschwinden auch die zugehoerigen Felder -> ergo KANN es das nicht geben, dass Felder
     // existieren, aber keine Tabellen (und aFieldListStr hat schon eine Laenge, das stelle ich oben sicher)
@@ -2894,7 +2894,7 @@ sal_Bool OQueryDesignView::checkStatement()
 
     ::rtl::OUString aJoinCrit;
     GenerateInnerJoinCriterias(xConnection,aJoinCrit,pConnList);
-    if(aJoinCrit.getLength())
+    if(!aJoinCrit.isEmpty())
     {
         ::rtl::OUString aTmp(RTL_CONSTASCII_USTRINGPARAM("( "));
         aTmp += aJoinCrit;
@@ -3455,7 +3455,7 @@ void OQueryDesignView::fillFunctionInfo(  const ::connectivity::OSQLParseNode* p
                     pFunctionName = pFunctionName->getChild(0);
 
                 ::rtl::OUString sFunctionName = pFunctionName->getTokenValue();
-                if ( !sFunctionName.getLength() )
+                if ( sFunctionName.isEmpty() )
                     sFunctionName = ::rtl::OStringToOUString(OSQLParser::TokenIDToStr(pFunctionName->getTokenID()),RTL_TEXTENCODING_UTF8);
 
                 nDataType = OSQLParser::getFunctionReturnType(

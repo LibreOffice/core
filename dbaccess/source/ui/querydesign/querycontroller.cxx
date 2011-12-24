@@ -532,7 +532,7 @@ FeatureState OQueryController::GetState(sal_uInt16 _nId) const
             aReturn.bChecked = m_bGraphicalDesign;
             break;
         case SID_BROWSER_CLEAR_QUERY:
-            aReturn.bEnabled = isEditable() && (m_sStatement.getLength() || !m_vTableData.empty());
+            aReturn.bEnabled = isEditable() && (!m_sStatement.isEmpty() || !m_vTableData.empty());
             break;
         case SID_QUERY_VIEW_FUNCTIONS:
         case SID_QUERY_VIEW_TABLES:
@@ -612,7 +612,7 @@ void OQueryController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >&
             {
                 ::rtl::OUString aErrorMsg;
                 setStatement_fireEvent( getContainer()->getStatement() );
-                if(!m_sStatement.getLength() && m_pSqlIterator)
+                if(m_sStatement.isEmpty() && m_pSqlIterator)
                 {
                     // change the view of the data
                     delete m_pSqlIterator->getParseTree();
@@ -856,9 +856,9 @@ void OQueryController::impl_initialize()
     ::rtl::OUString sCommand;
     m_nCommandType = CommandType::QUERY;
 
-    // °°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°
-    // ° reading parameters
-    // °°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    // ï¿½ reading parameters
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     // legacy parameters first (later overwritten by regular parameters)
     ::rtl::OUString sIndependentSQLCommand;
     if ( rArguments.get_ensureType( "IndependentSQLCommand", sIndependentSQLCommand ) )
@@ -958,7 +958,7 @@ void OQueryController::impl_initialize()
         bForceInitialDesign = true;
     }
 
-    // °°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     if ( !ensureConnected( sal_False ) )
     {   // we have no connection so what else should we do
         m_bGraphicalDesign = sal_False;
@@ -993,7 +993,7 @@ void OQueryController::impl_initialize()
         }
 
         // now if we are to edit an existing view, check whether this is possible
-        if ( m_sName.getLength() )
+        if ( !m_sName.isEmpty() )
         {
             Any aView( xViews->getByName( m_sName ) );
                 // will throw if there is no such view
@@ -1040,8 +1040,8 @@ void OQueryController::impl_initialize()
         ClearUndoManager();
 
         if  (  ( m_bGraphicalDesign )
-            && (  ( !m_sName.getLength() && !editingCommand() )
-               || ( !m_sStatement.getLength() && editingCommand() )
+            && (  ( m_sName.isEmpty() && !editingCommand() )
+               || ( m_sStatement.isEmpty() && editingCommand() )
                )
             )
         {
@@ -1074,7 +1074,7 @@ void OQueryController::onLoadedMenu(const Reference< ::com::sun::star::frame::XL
 ::rtl::OUString OQueryController::getPrivateTitle( ) const
 {
     ::rtl::OUString sName = m_sName;
-    if ( !sName.getLength() )
+    if ( sName.isEmpty() )
     {
         if ( !editingCommand() )
         {
@@ -1281,7 +1281,7 @@ void OQueryController::executeQuery()
     ::rtl::OUString sTranslatedStmt = translateStatement( false );
 
     ::rtl::OUString sDataSourceName = getDataSourceName();
-    if ( sDataSourceName.getLength() && sTranslatedStmt.getLength() )
+    if ( !(sDataSourceName.isEmpty() || sTranslatedStmt.isEmpty()) )
     {
         try
         {
@@ -1375,7 +1375,7 @@ sal_Bool OQueryController::askForNewName(const Reference<XNameAccess>& _xElement
     if(bNew)
     {
         String aDefaultName;
-        if ( ( _bSaveAs && !bNew ) || ( bNew && m_sName.getLength() ) )
+        if ( ( _bSaveAs && !bNew ) || ( bNew && !m_sName.isEmpty() ) )
             aDefaultName = String( m_sName );
         else
         {
@@ -1434,13 +1434,13 @@ bool OQueryController::doSaveAsDoc(sal_Bool _bSaveAs)
         return true;
     }
 
-    if ( !sTranslatedStmt.getLength() )
+    if ( sTranslatedStmt.isEmpty() )
         return false;
 
     // first we need a name for our query so ask the user
     // did we get a name
     ::rtl::OUString sOriginalName( m_sName );
-    if ( !askForNewName( xElements, _bSaveAs ) || !m_sName.getLength() )
+    if ( !askForNewName( xElements, _bSaveAs ) || m_sName.isEmpty() )
         return false;
 
     SQLExceptionInfo aInfo;
@@ -1738,7 +1738,7 @@ static ::rtl::OUString concatComment( const ::rtl::OUString& rQuery, const ::std
     // now set the properties
     setStatement_fireEvent( getContainer()->getStatement(), _bFireStatementChange );
     ::rtl::OUString sTranslatedStmt;
-    if(m_sStatement.getLength() && m_xComposer.is() && m_bEscapeProcessing)
+    if(!m_sStatement.isEmpty() && m_xComposer.is() && m_bEscapeProcessing)
     {
         try
         {
@@ -1765,7 +1765,7 @@ static ::rtl::OUString concatComment( const ::rtl::OUString& rQuery, const ::std
             sTranslatedStmt = ::rtl::OUString();
         }
     }
-    else if(!m_sStatement.getLength())
+    else if(m_sStatement.isEmpty())
     {
         ModuleRes aModuleRes(STR_QRY_NOSELECT);
         String sTmpStr(aModuleRes);
@@ -1814,7 +1814,7 @@ void OQueryController::impl_reset( const bool i_bForceCurrentControllerSettings 
     // get command from the query if a query name was supplied
     if ( !i_bForceCurrentControllerSettings && !editingCommand() )
     {
-        if ( m_sName.getLength() )
+        if ( !m_sName.isEmpty() )
         {
             Reference< XNameAccess > xQueries = getObjectContainer();
             if ( xQueries.is() )
@@ -1870,7 +1870,7 @@ void OQueryController::impl_reset( const bool i_bForceCurrentControllerSettings 
             }
         }
 
-        if ( m_sStatement.getLength() )
+        if ( !m_sStatement.isEmpty() )
         {
             setQueryComposer();
 

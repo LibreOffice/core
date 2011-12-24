@@ -29,6 +29,7 @@
 $(eval $(call gb_Module_Module,ooo))
 
 $(eval $(call gb_Module_add_moduledirs,ooo,\
+    accessibility \
     animations \
     basctl \
     basebmp \
@@ -40,6 +41,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     comphelper \
     configmgr \
     cppcanvas \
+    cppu \
     cui \
     dbaccess \
     desktop \
@@ -73,6 +75,8 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     qadevOOo \
     regexp \
     reportdesign \
+    sal \
+    salhelper \
     sane \
     sax \
     sc \
@@ -113,7 +117,6 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
 
 # these have only migrated subsequentcheck for now
 $(eval $(call gb_Module_add_moduledirs,ooo,\
-    sal \
     ucb \
 ))
 

@@ -482,7 +482,6 @@ Module gid_Module_Root_Files_5
 	gid_File_Lib_Svtmisc,
     gid_File_Lib_Updchkui,
     gid_File_Lib_Updatefeed,
-	gid_File_Lib_Onlinecheck,
 	gid_File_Lib_Cli_Oootypes_Assembly,
 	gid_File_Lib_Policy_Cli_Oootypes_Assembly,
 	gid_File_Lib_Policy_Cli_Oootypes_Config);
@@ -616,7 +615,6 @@ Module gid_Module_Root_Files_6
     gid_File_Share_Registry_Main_Xcd,
     gid_File_Share_Registry_Forcedefault_Xcd,
 	gid_File_Pymailmerge,
-	gid_File_Pymailmerge_msgbox,
     gid_File_Xsl_Common_Measure_Conversion,
 	gid_File_Xsl_Common_Math_Functions,
 	gid_File_Xsl_Export_Common_Body,

@@ -262,7 +262,7 @@ sal_Bool SvxHlinkDlgMarkWnd::RefreshFromDoc( OUString aURL )
         {
             uno::Reference< lang::XComponent > xComp;
 
-            if( aURL.getLength() )
+            if( !aURL.isEmpty() )
             {
                 // load from url
                 uno::Reference< frame::XComponentLoader > xLoader( xDesktop, uno::UNO_QUERY );
@@ -303,12 +303,12 @@ sal_Bool SvxHlinkDlgMarkWnd::RefreshFromDoc( OUString aURL )
                 else
                     mnError = LERR_DOCNOTOPEN;
 
-                if ( aURL.getLength() )
+                if ( !aURL.isEmpty() )
                     xComp->dispose();
             }
             else
             {
-                if( aURL.getLength() )
+                if( !aURL.isEmpty() )
                     mnError=LERR_DOCNOTOPEN;
             }
         }

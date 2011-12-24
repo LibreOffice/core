@@ -497,36 +497,36 @@ static sal_Bool ImpPeekGraphicFormat( SvStream& rStream, String& rFormatExtensio
     //--------------------------- DXF ------------------------------------
     if( !bTest || ( rFormatExtension.CompareToAscii( "DXF", 3 ) == COMPARE_EQUAL ) )
     {
-        bSomethingTested=sal_True;
+        //Binary DXF File Format
+        if( strncmp( (const char*) sFirstBytes, "AutoCAD Binary DXF", 18 ) == 0 )
+        {
+            rFormatExtension = UniString::CreateFromAscii( "DXF", 3 );
+            return sal_True;
+        }
 
+        //ASCII DXF File Format
         i=0;
         while (i<256 && sFirstBytes[i]<=32)
-            i++;
+            ++i;
 
-        if (i<256)
+        if (i<256 && sFirstBytes[i]=='0')
         {
-            if( sFirstBytes[i]=='0' )
-                i++;
-            else
-                i=256;
-        }
-        while( i<256 && sFirstBytes[i]<=32 )
-            i++;
+            ++i;
 
-        if (i+7<256)
-        {
-            if (strncmp((char*)(sFirstBytes+i),"SECTION",7)==0)
+            //only now do we have sufficient data to make a judgement
+            //based on a '0' + 'SECTION' == DXF argument
+            bSomethingTested=sal_True;
+
+            while( i<256 && sFirstBytes[i]<=32 )
+                ++i;
+
+            if (i+7<256 && (strncmp((const char*)(sFirstBytes+i),"SECTION",7)==0))
             {
                 rFormatExtension = UniString::CreateFromAscii( "DXF", 3 );
                 return sal_True;
             }
         }
 
-        if( strncmp( (char*) sFirstBytes, "AutoCAD Binary DXF", 18 ) == 0 )
-        {
-            rFormatExtension = UniString::CreateFromAscii( "DXF", 3 );
-            return sal_True;
-        }
     }
 
     //--------------------------- PCT ------------------------------------
@@ -2034,7 +2034,6 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& 
 
                                     SvMemoryStream aMemStm( 65535, 65535 );
 
-                                    aMemStm.SetCompressMode( COMPRESSMODE_FULL );
                                     ( (GDIMetaFile&) aGraphic.GetGDIMetaFile() ).Write( aMemStm );
 
                                     xActiveDataSource->setOutputStream( ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >(

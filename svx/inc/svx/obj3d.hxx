@@ -118,7 +118,7 @@ private:
  protected:
     virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
 
-    E3dObjList                  maSubList;          // child objekts
+    E3dObjList                  maSubList;          // child objects
 
     basegfx::B3DRange           maLocalBoundVol;    // surrounding volume of the object (from the geometry generation)
     basegfx::B3DHomMatrix       maTransformation;   // local transformation

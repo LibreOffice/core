@@ -194,7 +194,7 @@ namespace dbaccess
                 (   sEventType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Script" ) )
                 ||  sEventType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Service" ) )
                 );
-            bool bNonEmptyScript = sScript.getLength() != 0;
+            bool bNonEmptyScript = !sScript.isEmpty();
 
             OSL_ENSURE( bDispatchScriptURL && bNonEmptyScript,
                 "DocumentEventExecutor::documentEventOccurred: invalid/unsupported script descriptor" );

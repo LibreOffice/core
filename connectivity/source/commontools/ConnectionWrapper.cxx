@@ -214,9 +214,9 @@ void OConnectionWrapper::createUniqueId( const ::rtl::OUString& _rURL
     // first we create the digest we want to have
     rtlDigest aDigest = rtl_digest_create( rtl_Digest_AlgorithmSHA1 );
     rtl_digest_update(aDigest,_rURL.getStr(),_rURL.getLength()*sizeof(sal_Unicode));
-    if ( _rUserName.getLength() )
+    if ( !_rUserName.isEmpty() )
         rtl_digest_update(aDigest,_rUserName.getStr(),_rUserName.getLength()*sizeof(sal_Unicode));
-    if ( _rPassword.getLength() )
+    if ( !_rPassword.isEmpty() )
         rtl_digest_update(aDigest,_rPassword.getStr(),_rPassword.getLength()*sizeof(sal_Unicode));
     // now we need to sort the properties
     PropertyValue* pBegin = _rInfo.getArray();
@@ -248,7 +248,7 @@ void OConnectionWrapper::createUniqueId( const ::rtl::OUString& _rURL
                 }
             }
         }
-        if ( sValue.getLength() > 0 )
+        if ( !sValue.isEmpty() )
         {
             // we don't have to convert this into UTF8 because we don't store on a file system
             rtl_digest_update(aDigest,sValue.getStr(),sValue.getLength()*sizeof(sal_Unicode));

@@ -702,7 +702,7 @@ sal_Bool SAL_CALL IUnknownWrapper_Impl::hasMethod( const OUString& aName )
     catch (...)
     {
         throw RuntimeException(OUSTR("[automation bridge] unexpected exception in "
-            "IUnknownWrapper_Impl::hasMethod !"), Reference<XInterface>());;
+            "IUnknownWrapper_Impl::hasMethod !"), Reference<XInterface>());
     }
     return ret;
 }

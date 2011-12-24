@@ -348,15 +348,15 @@ PyObject *importToGlobal(PyObject *str, PyObject *dict, PyObject *target)
             PyExc_RuntimeError,
             OUStringToOString( buf.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US).getStr() );
     }
-    catch( com::sun::star::script::CannotConvertException & e )
+    catch( const com::sun::star::script::CannotConvertException & e )
     {
         raisePyExceptionWithAny( com::sun::star::uno::makeAny( e ) );
     }
-    catch( com::sun::star::lang::IllegalArgumentException & e )
+    catch( const com::sun::star::lang::IllegalArgumentException & e )
     {
         raisePyExceptionWithAny( com::sun::star::uno::makeAny( e ) );
     }
-    catch( RuntimeException &e )
+    catch( const RuntimeException &e )
     {
         raisePyExceptionWithAny( com::sun::star::uno::makeAny( e ));
     }

@@ -294,8 +294,6 @@ public:
 class VCL_DLLPUBLIC CurrencyFormatter : public NumericFormatter
 {
 private:
-    String                  maCurrencySymbol;
-
     SAL_DLLPRIVATE void     ImplInit();
 
 protected:
@@ -308,7 +306,6 @@ public:
 
     virtual void            Reformat();
 
-    void                    SetCurrencySymbol( const String& rStr );
     String                  GetCurrencySymbol() const;
 
     virtual void            SetValue( sal_Int64 nNewValue );
@@ -386,8 +383,6 @@ public:
     void                    SetDate( const Date& rNewDate );
     void                    SetUserDate( const Date& rNewDate );
     Date                    GetDate() const;
-    Date                    GetRealDate() const;
-    sal_Bool                    IsDateModified() const;
     void                    SetEmptyDate();
     sal_Bool                    IsEmptyDate() const;
     Date                    GetCorrectedDate() const { return maCorrectedDate; }
@@ -506,7 +501,6 @@ class VCL_DLLPUBLIC PatternField : public SpinField, public PatternFormatter
 {
 public:
                             PatternField( Window* pParent, WinBits nWinStyle );
-                            PatternField( Window* pParent, const ResId& rResId );
                             ~PatternField();
 
     virtual long            PreNotify( NotifyEvent& rNEvt );
@@ -622,7 +616,7 @@ protected:
 
 public:
                             CurrencyField( Window* pParent, WinBits nWinStyle );
-                            CurrencyField( Window* pParent, const ResId& rResId );
+
                             ~CurrencyField();
 
     virtual long            PreNotify( NotifyEvent& rNEvt );
@@ -721,7 +715,6 @@ class VCL_DLLPUBLIC PatternBox : public ComboBox, public PatternFormatter
 {
 public:
                             PatternBox( Window* pParent, WinBits nWinStyle );
-                            PatternBox( Window* pParent, const ResId& rResId );
                             ~PatternBox();
 
     virtual long            PreNotify( NotifyEvent& rNEvt );
@@ -730,13 +723,6 @@ public:
     virtual void            Modify();
 
     virtual void            ReformatAll();
-
-    void                    InsertString( const XubString& rStr,
-                                          sal_uInt16 nPos = COMBOBOX_APPEND );
-    void                    RemoveString( const XubString& rStr );
-    using PatternFormatter::GetString;
-    XubString               GetString( sal_uInt16 nPos ) const;
-    sal_uInt16                  GetStringPos( const XubString& rStr ) const;
 };
 
 
@@ -819,13 +805,8 @@ public:
 
     virtual void            ReformatAll();
 
-    sal_Int64               GetValue( sal_uInt16 nPos ) const;
-    sal_uInt16                  GetValuePos( sal_Int64 nValue ) const;
-
-    // Needed, because GetValue() with nPos hide this function
     virtual sal_Int64       GetValue() const;
 };
-
 
 // -----------
 // - DateBox -
@@ -835,7 +816,6 @@ class VCL_DLLPUBLIC DateBox : public ComboBox, public DateFormatter
 {
 public:
                             DateBox( Window* pParent, WinBits nWinStyle );
-                            DateBox( Window* pParent, const ResId& rResId );
                             ~DateBox();
 
     virtual long            PreNotify( NotifyEvent& rNEvt );
@@ -845,12 +825,6 @@ public:
     virtual void            Modify();
 
     virtual void            ReformatAll();
-
-    void                    InsertDate( const Date& rDate, sal_uInt16 nPos = COMBOBOX_APPEND );
-    void                    RemoveDate( const Date& rDate );
-    using DateFormatter::GetDate;
-    Date                    GetDate( sal_uInt16 nPos ) const;
-    sal_uInt16                  GetDatePos( const Date& rDate ) const;
 };
 
 

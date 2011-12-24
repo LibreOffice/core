@@ -113,6 +113,7 @@ $(eval $(call gb_Package_add_file,editeng_inc,inc/editeng/postitem.hxx,editeng/p
 $(eval $(call gb_Package_add_file,editeng_inc,inc/editeng/prntitem.hxx,editeng/prntitem.hxx))
 $(eval $(call gb_Package_add_file,editeng_inc,inc/editeng/protitem.hxx,editeng/protitem.hxx))
 $(eval $(call gb_Package_add_file,editeng_inc,inc/editeng/prszitem.hxx,editeng/prszitem.hxx))
+$(eval $(call gb_Package_add_file,editeng_inc,inc/editeng/rsiditem.hxx,editeng/rsiditem.hxx))
 $(eval $(call gb_Package_add_file,editeng_inc,inc/editeng/scriptspaceitem.hxx,editeng/scriptspaceitem.hxx))
 $(eval $(call gb_Package_add_file,editeng_inc,inc/editeng/scripttypeitem.hxx,editeng/scripttypeitem.hxx))
 $(eval $(call gb_Package_add_file,editeng_inc,inc/editeng/shaditem.hxx,editeng/shaditem.hxx))

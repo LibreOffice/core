@@ -56,7 +56,7 @@ ScChangeTrackingExportHelper::ScChangeTrackingExportHelper(ScXMLExport& rTempExp
     sChangeIDPrefix(RTL_CONSTASCII_USTRINGPARAM(SC_CHANGE_ID_PREFIX))
 {
     pChangeTrack = rExport.GetDocument() ? rExport.GetDocument()->GetChangeTrack() : NULL;
-    pDependings = new ScChangeActionTable();
+    pDependings = new ScChangeActionMap();
 }
 
 ScChangeTrackingExportHelper::~ScChangeTrackingExportHelper()

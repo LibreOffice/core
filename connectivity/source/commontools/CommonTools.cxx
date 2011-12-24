@@ -321,7 +321,7 @@ sal_Bool isValidSQLName(const ::rtl::OUString& rName,const ::rtl::OUString& _rSp
         if(!isCharOk(*pStr,_rSpecials))
             return sal_False;
 
-    if  (   rName.getLength()
+    if  (   !rName.isEmpty()
         &&  (   (rName.toChar() == '_')
             ||  (   (rName.toChar() >= '0')
                 &&  (rName.toChar() <= '9')
@@ -362,7 +362,7 @@ sal_Bool isValidSQLName(const ::rtl::OUString& rName,const ::rtl::OUString& _rSp
 ::rtl::OUString quoteName(const ::rtl::OUString& _rQuote, const ::rtl::OUString& _rName)
 {
     ::rtl::OUString sName = _rName;
-    if(_rQuote.getLength() && _rQuote.toChar() != ' ')
+    if( !_rQuote.isEmpty() && _rQuote.toChar() != ' ')
         sName = _rQuote + _rName + _rQuote;
     return sName;
 }

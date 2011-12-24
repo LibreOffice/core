@@ -585,7 +585,7 @@ void HeaderBar::ImplDrawItem( OutputDevice* pDev,
                 else if ( nBits & HIB_BOTTOM )
                     nArrowY = aRect.Bottom()-HEAD_ARROWSIZE2-1;
                 else
-                    nArrowY = aRect.Top()+((aRect.GetHeight()-HEAD_ARROWSIZE2)/2);;
+                    nArrowY = aRect.Top()+((aRect.GetHeight()-HEAD_ARROWSIZE2)/2);
             }
             nArrowY -= HEAD_ARROWSIZE1-1;
             if ( nBits & HIB_DOWNARROW )

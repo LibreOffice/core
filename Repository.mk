@@ -30,6 +30,7 @@ $(eval $(call gb_Helper_register_executables,NONE, \
     bestreversemap \
     bmp \
     bmpsum \
+    cppunit/cppunittester \
     g2g \
     gencoll_rule \
     genconv_dict \
@@ -41,6 +42,7 @@ $(eval $(call gb_Helper_register_executables,NONE, \
     saxparser \
     so_checksum \
     svidl \
+    typesconfig \
     xml2cmp \
 ))
 
@@ -116,6 +118,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
 	abp \
 	adabas \
 	adabasui \
+	acc \
 	agg \
 	analysis \
 	animcore \
@@ -285,10 +288,12 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
 endif
 
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_URE, \
+    sal_textenc \
 	xmlreader \
 ))
 
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
+	affine_uno \
 	avmediagst \
 	avmediawin \
 	collator_data \
@@ -298,10 +303,12 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 	dict_zh \
 	fileacc \
 	index_data \
+	java_uno_accessbridge \
 	localedata_en \
 	localedata_es \
 	localedata_euro \
 	localedata_others \
+	log_uno \
 	mcnttype \
 	neon \
 	npsoplugin \
@@ -317,10 +324,17 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
     ucpfile \
     unopkgapp \
 	updchk \
+	unsafe_uno \
 	xmlsecurity \
 	xsec_fw \
 	xsec_xmlsec \
 	xstor \
+	$(if $(filter $(OS),ANDROID), \
+		lo-bootstrap \
+	) \
+	$(if $(filter $(OS),WNT), \
+		uwinapi \
+	) \
 ))
 
 ifeq ($(OS),WNT)
@@ -337,7 +351,6 @@ endif
 ifeq ($(OS),IOS)
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
     gcc3_uno \
-    sal_textenc \
 ))
 endif
 
@@ -351,6 +364,7 @@ $(eval $(call gb_Helper_register_libraries,RTLIBS, \
 
 $(eval $(call gb_Helper_register_libraries,RTVERLIBS, \
     cppuhelper \
+	purpenvhelper \
     salhelper \
 ))
 

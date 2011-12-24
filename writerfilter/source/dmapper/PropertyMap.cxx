@@ -30,6 +30,7 @@
 #include <DomainMapper_Impl.hxx>
 #include <ConversionHelper.hxx>
 #include <i18npool/paper.hxx>
+#include <rtl/oustringostreaminserter.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
@@ -632,9 +633,7 @@ bool SectionPropertyMap::HasFooter(bool bFirstPage) const
 
 void SectionPropertyMap::CopyLastHeaderFooter( bool bFirstPage, DomainMapper_Impl& rDM_Impl )
 {
-#if DEBUG
-    clog << "START>>> SectionPropertyMap::CopyLastHeaderFooter()" << endl;
-#endif
+    SAL_INFO("writerfilter", "START>>> SectionPropertyMap::CopyLastHeaderFooter()");
     SectionPropertyMap* pLastContext = rDM_Impl.GetLastSectionContext( );
     if ( pLastContext )
     {
@@ -692,10 +691,7 @@ void SectionPropertyMap::CopyLastHeaderFooter( bool bFirstPage, DomainMapper_Imp
 
                 if ( ( bIsHeader && bCopyHeader ) || ( !bIsHeader && bCopyFooter ) )
                 {
-#if DEBUG
-                    clog << "Copying ";
-                    clog << rtl::OUStringToOString( sName, RTL_TEXTENCODING_UTF8 ).getStr( ) << endl;
-#endif
+                    SAL_INFO("writerfilter", "Copying " << sName);
                     // TODO has to be copied
                     uno::Reference< text::XTextCopy > xTxt;
                     if (xStyle.is())
@@ -711,17 +707,10 @@ void SectionPropertyMap::CopyLastHeaderFooter( bool bFirstPage, DomainMapper_Imp
         }
         catch ( const uno::Exception& e )
         {
-#if DEBUG
-            clog << "An exception occurred in SectionPropertyMap::CopyLastHeaderFooter( ) - ";
-            clog << rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_UTF8 ).getStr( ) << endl;
-#else
-            (void) e;
-#endif
+            SAL_INFO("writerfilter", "An exception occurred in SectionPropertyMap::CopyLastHeaderFooter( ) - " << e.Message);
         }
     }
-#if DEBUG
-    clog << "END>>> SectionPropertyMap::CopyLastHeaderFooter()" << endl;
-#endif
+    SAL_INFO("writerfilter", "END>>> SectionPropertyMap::CopyLastHeaderFooter()");
 }
 
 void SectionPropertyMap::PrepareHeaderFooterProperties( bool bFirstPage )

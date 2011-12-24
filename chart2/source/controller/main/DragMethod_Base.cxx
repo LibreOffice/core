@@ -67,7 +67,7 @@ DragMethod_Base::~DragMethod_Base()
 
 Reference< frame::XModel > DragMethod_Base::getChartModel() const
 {
-    return Reference< frame::XModel >( m_xChartModel );;
+    return Reference< frame::XModel >( m_xChartModel );
 }
 
 rtl::OUString DragMethod_Base::getUndoDescription() const

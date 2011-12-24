@@ -58,6 +58,7 @@ public:
         const sal_Unicode cSep, ::formula::FormulaGrammar::Grammar eGrammar);
 
     static bool getRangeFromToken(ScRange& rRange, const ScTokenRef& pToken, bool bExternal = false);
+    static bool getAbsRangeFromToken(ScRange& rRange, const ScTokenRef& pToken, const ScAddress& rPos, bool bExternal = false);
 
     static void getRangeListFromTokens(ScRangeList& rRangeList, const ::std::vector<ScTokenRef>& pTokens);
 

@@ -223,7 +223,7 @@ Reference< XConnection > SAL_CALL MysqlCDriver::connect(const OUString& url, con
         pCon->construct(url,info);
         m_xConnections.push_back(WeakReferenceHelper(*pCon));
     }
-    catch (sql::SQLException &e)
+    catch (const sql::SQLException &e)
     {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, getDefaultEncoding());
     }

@@ -657,12 +657,14 @@ void XclExpChTrAction::AddDependentContents(
         const XclExpRoot& rRoot,
         ScChangeTrack& rChangeTrack )
 {
-    ScChangeActionTable aActionTable;
-    rChangeTrack.GetDependents( (ScChangeAction*)(&rAction), aActionTable );
-    for( const ScChangeAction* pDepAction = aActionTable.First(); pDepAction; pDepAction = aActionTable.Next() )
-        if( pDepAction->GetType() == SC_CAT_CONTENT )
+    ScChangeActionMap aActionMap;
+    ScChangeActionMap::iterator itChangeAction;
+
+    rChangeTrack.GetDependents( (ScChangeAction*)(&rAction), aActionMap );
+    for( itChangeAction = aActionMap.begin(); itChangeAction != aActionMap.end(); ++itChangeAction )
+        if( itChangeAction->second->GetType() == SC_CAT_CONTENT )
             SetAddAction( new XclExpChTrCellContent(
-                *((const ScChangeActionContent*) pDepAction), rRoot, rIdBuffer ) );
+                *((const ScChangeActionContent*) itChangeAction->second), rRoot, rIdBuffer ) );
 }
 
 void XclExpChTrAction::SetIndex( sal_uInt32& rIndex )

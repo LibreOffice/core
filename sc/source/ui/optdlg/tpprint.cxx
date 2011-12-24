@@ -40,15 +40,6 @@
 
 // -----------------------------------------------------------------------
 
-static sal_uInt16 pPrintOptRanges[] =
-{
-    SID_SCPRINTOPTIONS,
-    SID_SCPRINTOPTIONS,
-    0
-};
-
-// -----------------------------------------------------------------------
-
 ScTpPrintOptions::ScTpPrintOptions( Window*           pParent,
                                     const SfxItemSet& rCoreAttrs )
     :   SfxTabPage      ( pParent,
@@ -64,11 +55,6 @@ ScTpPrintOptions::ScTpPrintOptions( Window*           pParent,
 
 ScTpPrintOptions::~ScTpPrintOptions()
 {
-}
-
-sal_uInt16* ScTpPrintOptions::GetRanges()
-{
-    return pPrintOptRanges;
 }
 
 SfxTabPage* ScTpPrintOptions::Create( Window* pParent, const SfxItemSet& rAttrSet )

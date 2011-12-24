@@ -70,10 +70,10 @@ class ListBox;
 
 struct GalDragParams
 {
-    Region      aDragRegion;
-    sal_uIntPtr     nDragObjPos;
-    String      aThemeName;
-    String      aFileName;
+    Region  aDragRegion;
+    sal_uIntPtr nDragObjPos;
+    rtl::OUString aThemeName;
+    rtl::OUString aFileName;
     SgaObjKind  eObjKind;
 };
 
@@ -99,7 +99,7 @@ class GalleryTheme : public SfxBroadcaster
 private:
 
     GalleryObjectList           aObjectList;
-    String                      aImportName;
+    rtl::OUString               aImportName;
     String                      m_aDestDir;
     SotStorageRef               aSvDrawStorageRef;
     Gallery*                    pParent;
@@ -147,10 +147,10 @@ public:
     SVX_DLLPUBLIC bool          RemoveObject( size_t nPos );
     bool                        ChangeObjectPos( size_t nOldPos, size_t nNewPos );
 
-    SVX_DLLPUBLIC const String& GetName() const;
-    const String&               GetRealName() const;
-    const String&               GetImportName() const { return aImportName; }
-    void                        SetImportName(const String& rImportName) { aImportName = rImportName; }
+    SVX_DLLPUBLIC const rtl::OUString& GetName() const;
+    const rtl::OUString&        GetRealName() const;
+    const rtl::OUString&        GetImportName() const { return aImportName; }
+    void                        SetImportName(const rtl::OUString& rImportName) { aImportName = rImportName; }
 
     const String&               GetDestDir() const { return m_aDestDir; }
     void                        SetDestDir(const String& rDestDir) { m_aDestDir = rDestDir; }

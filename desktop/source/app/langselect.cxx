@@ -79,7 +79,7 @@ static sal_Bool existsURL( OUString const& sURL )
     using namespace osl;
     DirectoryItem aDirItem;
 
-    if (sURL.getLength() != 0)
+    if (!sURL.isEmpty())
         return ( DirectoryItem::get( sURL, aDirItem ) == DirectoryItem::E_None );
 
     return sal_False;
@@ -142,7 +142,7 @@ bool LanguageSelection::prepareLanguage()
         Any aWin16SysLocale = xProp->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("SystemLocale")));
         ::rtl::OUString sWin16SysLocale;
         aWin16SysLocale >>= sWin16SysLocale;
-        if( sWin16SysLocale.getLength())
+        if( !sWin16SysLocale.isEmpty())
             setDefaultLanguage(sWin16SysLocale);
     }
     catch(const Exception&)
@@ -169,7 +169,7 @@ bool LanguageSelection::prepareLanguage()
     bool     bIniLanguage( false );
     OUString aLocaleString = getUserUILanguage();
 
-    if ( aLocaleString.getLength() == 0 )
+    if ( aLocaleString.isEmpty() )
     {
         OUString aEmpty;
 
@@ -203,10 +203,10 @@ bool LanguageSelection::prepareLanguage()
     }
 
     // user further fallbacks for the UI language
-    if ( aLocaleString.getLength() == 0 )
+    if ( aLocaleString.isEmpty() )
         aLocaleString = getLanguageString();
 
-    if ( aLocaleString.getLength() > 0 )
+    if ( !aLocaleString.isEmpty() )
     {
         try
         {
@@ -236,7 +236,7 @@ bool LanguageSelection::prepareLanguage()
 
             OUString sLocale;
             xProp->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("ooSetupSystemLocale"))) >>= sLocale;
-            if ( sLocale.getLength() )
+            if ( !sLocale.isEmpty() )
             {
                 loc = LanguageSelection::IsoStringToLocale(sLocale);
                 MsLangId::setConfiguredSystemLanguage( MsLangId::convertLocaleToLanguage(loc) );
@@ -292,7 +292,7 @@ OUString LanguageSelection::getUserUILanguage()
 {
     // check whether the user has selected a specific language
     OUString aUserLanguage = getUserLanguage();
-    if (aUserLanguage.getLength() > 0 )
+    if (!aUserLanguage.isEmpty() )
     {
         if (isInstalledLanguage(aUserLanguage))
         {
@@ -319,12 +319,12 @@ OUString LanguageSelection::getLanguageString()
 
     // check whether the user has selected a specific language
     OUString aUserLanguage = getUserUILanguage();
-    if (aUserLanguage.getLength() > 0 )
+    if (!aUserLanguage.isEmpty() )
         return aUserLanguage ;
 
     // try to use system default
     aUserLanguage = getSystemLanguage();
-    if (aUserLanguage.getLength() > 0 )
+    if (!aUserLanguage.isEmpty() )
     {
         if (isInstalledLanguage(aUserLanguage, sal_False))
         {

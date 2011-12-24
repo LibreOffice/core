@@ -41,24 +41,11 @@ bool DateHelper::IsInSameYear( const Date& rD1, const Date& rD2 )
 {
     return rD1.GetYear() == rD2.GetYear();
 }
+
 bool DateHelper::IsInSameMonth( const Date& rD1, const Date& rD2 )
 {
     return (rD1.GetYear() == rD2.GetYear())
         && (rD1.GetMonth() == rD2.GetMonth());
-}
-long DateHelper::GetMonthsBetweenDates( Date aD1, Date aD2 )
-{
-    Date aHelp = aD1;
-    long nSign = 1;
-    if( aD1 < aD2 )
-    {
-        aD1 = aD2;
-        aD2 = aHelp;
-        nSign = -1;
-    }
-
-    return nSign*( ( aD1.GetMonth() - aD2.GetMonth() )
-        + ( aD1.GetYear() - aD2.GetYear() )*12 );
 }
 
 Date DateHelper::GetDateSomeMonthsAway( const Date& rD, long nMonthDistance )

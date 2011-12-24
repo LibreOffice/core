@@ -173,7 +173,7 @@ bool writeArgument(HANDLE pipe, char prefix, WCHAR const * argument) {
 }
 
 #ifdef __MINGW32__
-int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE, LPSTR, int )
+int WINAPI WinMain( HINSTANCE, HINSTANCE, LPSTR, int )
 #else
 int WINAPI _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
 #endif

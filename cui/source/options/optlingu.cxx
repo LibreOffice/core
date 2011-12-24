@@ -146,7 +146,7 @@ static sal_Int32 lcl_SeqGetEntryPos(
 
 static void lcl_OpenURL( ::rtl::OUString sURL )
 {
-    if ( sURL.getLength() > 0 )
+    if ( !sURL.isEmpty() )
     {
         localizeWebserviceURI(sURL);
         try
@@ -629,7 +629,7 @@ Sequence< OUString > SvxLinguData_Impl::GetSortedImplNames( sal_Int16 nLang, sal
             case TYPE_GRAMMAR   : aImplName = rInfo.sGrammarImplName; break;
         }
 
-        if (aImplName.getLength()  &&  (lcl_SeqGetIndex( aRes, aImplName) == -1))    // name not yet added
+        if (!aImplName.isEmpty()  &&  (lcl_SeqGetIndex( aRes, aImplName) == -1))    // name not yet added
         {
             DBG_ASSERT( nIdx < aRes.getLength(), "index out of range" );
             if (nIdx < aRes.getLength())
@@ -708,7 +708,7 @@ void lcl_MergeDisplayArray(
             if(rToAdd.xSpell.is())
             {
                 DBG_ASSERT( !pEntry->xSpell.is() &&
-                            pEntry->sSpellImplName.getLength() == 0,
+                            pEntry->sSpellImplName.isEmpty(),
                             "merge conflict" );
                 pEntry->sSpellImplName = rToAdd.sSpellImplName;
                 pEntry->xSpell = rToAdd.xSpell;
@@ -716,7 +716,7 @@ void lcl_MergeDisplayArray(
             if(rToAdd.xGrammar.is())
             {
                 DBG_ASSERT( !pEntry->xGrammar.is() &&
-                            pEntry->sGrammarImplName.getLength() == 0,
+                            pEntry->sGrammarImplName.isEmpty(),
                             "merge conflict" );
                 pEntry->sGrammarImplName = rToAdd.sGrammarImplName;
                 pEntry->xGrammar = rToAdd.xGrammar;
@@ -724,7 +724,7 @@ void lcl_MergeDisplayArray(
             if(rToAdd.xHyph.is())
             {
                 DBG_ASSERT( !pEntry->xHyph.is() &&
-                            pEntry->sHyphImplName.getLength() == 0,
+                            pEntry->sHyphImplName.isEmpty(),
                             "merge conflict" );
                 pEntry->sHyphImplName = rToAdd.sHyphImplName;
                 pEntry->xHyph = rToAdd.xHyph;
@@ -732,7 +732,7 @@ void lcl_MergeDisplayArray(
             if(rToAdd.xThes.is())
             {
                 DBG_ASSERT( !pEntry->xThes.is() &&
-                            pEntry->sThesImplName.getLength() == 0,
+                            pEntry->sThesImplName.isEmpty(),
                             "merge conflict" );
                 pEntry->sThesImplName = rToAdd.sThesImplName;
                 pEntry->xThes = rToAdd.xThes;
@@ -931,7 +931,7 @@ void SvxLinguData_Impl::SetChecked(const Sequence<OUString>& rConfiguredServices
             if (pEntry  &&  !pEntry->bConfigured)
             {
                 const OUString &rSrvcImplName = pConfiguredServices[n];
-                if (rSrvcImplName.getLength()  &&
+                if (!rSrvcImplName.isEmpty()  &&
                     (pEntry->sSpellImplName == rSrvcImplName  ||
                         pEntry->sGrammarImplName  == rSrvcImplName  ||
                         pEntry->sHyphImplName  == rSrvcImplName  ||
@@ -976,7 +976,7 @@ sal_Bool SvxLinguData_Impl::AddRemove(
 
 void SvxLinguData_Impl::Reconfigure( const OUString &rDisplayName, sal_Bool bEnable )
 {
-    DBG_ASSERT( rDisplayName.getLength(), "empty DisplayName" );
+    DBG_ASSERT( !rDisplayName.isEmpty(), "empty DisplayName" );
 
     ServiceInfo_Impl *pInfo = 0;
     ServiceInfo_Impl *pTmp  = 0;
@@ -2261,7 +2261,7 @@ IMPL_LINK( SvxEditModulesDlg, LangSelectHdl_Impl, ListBox *, pBox )
                               pInfo->xSpell->hasLocale( aCurLocale );
                 aImplName = pInfo->sSpellImplName;
             }
-            if (aImplName.getLength() && bIsSuppLang)
+            if (!aImplName.isEmpty() && bIsSuppLang)
             {
                 String aTxt( pInfo->sDisplayName );
                 SvLBoxEntry* pNewEntry = CreateEntry( aTxt, CBCOL_FIRST );
@@ -2305,7 +2305,7 @@ IMPL_LINK( SvxEditModulesDlg, LangSelectHdl_Impl, ListBox *, pBox )
                               pInfo->xGrammar->hasLocale( aCurLocale );
                 aImplName = pInfo->sGrammarImplName;
             }
-            if (aImplName.getLength() && bIsSuppLang)
+            if (!aImplName.isEmpty() && bIsSuppLang)
             {
                 String aTxt( pInfo->sDisplayName );
                 SvLBoxEntry* pNewEntry = CreateEntry( aTxt, CBCOL_FIRST );
@@ -2349,7 +2349,7 @@ IMPL_LINK( SvxEditModulesDlg, LangSelectHdl_Impl, ListBox *, pBox )
                               pInfo->xHyph->hasLocale( aCurLocale );
                 aImplName = pInfo->sHyphImplName;
             }
-            if (aImplName.getLength() && bIsSuppLang)
+            if (!aImplName.isEmpty() && bIsSuppLang)
             {
                 String aTxt( pInfo->sDisplayName );
                 SvLBoxEntry* pNewEntry = CreateEntry( aTxt, CBCOL_FIRST );
@@ -2393,7 +2393,7 @@ IMPL_LINK( SvxEditModulesDlg, LangSelectHdl_Impl, ListBox *, pBox )
                               pInfo->xThes->hasLocale( aCurLocale );
                 aImplName = pInfo->sThesImplName;
             }
-            if (aImplName.getLength() && bIsSuppLang)
+            if (!aImplName.isEmpty() && bIsSuppLang)
             {
                 String aTxt( pInfo->sDisplayName );
                 SvLBoxEntry* pNewEntry = CreateEntry( aTxt, CBCOL_FIRST );

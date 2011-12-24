@@ -712,11 +712,6 @@ sal_Bool SvtHelpOptions::IsWelcomeScreen() const
     return pImp->IsWelcomeScreen();
 }
 
-String SvtHelpOptions::GetLocale() const
-{
-    return pImp->GetLocale();
-}
-
 String SvtHelpOptions::GetSystem() const
 {
     return pImp->GetSystem();

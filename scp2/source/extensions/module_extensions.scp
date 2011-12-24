@@ -117,19 +117,6 @@ Module gid_Module_Optional_Extensions_PDFIMPORT
 End
 #endif
 
-/* ** Lightproof ** */
-
-#ifdef WITH_EXTENSION_LIGHTPROOF
-Module gid_Module_Optional_Extensions_LightProof
-    MOD_NAME_DESC(MODULE_OPTIONAL_EXTENSIONS_LIGHTPROOF);
-    ParentID = gid_Module_Optional_Extensions;
-    Minimal = NO;
-    Default = YES;
-    Styles = ( );
-End
-
-#endif
-
 /* ** Numbertext ** */
 
 #ifdef WITH_EXTENSION_NUMBERTEXT

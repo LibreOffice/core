@@ -56,6 +56,7 @@ $(eval $(call gb_Library_add_linked_static_libs,spell,\
 
 $(eval $(call gb_Library_use_externals,spell,\
 	hunspell \
+	icuuc \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,spell,\

@@ -742,21 +742,22 @@ const SfxPoolItem& ImpEditEngine::GetParaAttrib( sal_uInt16 nPara, sal_uInt16 nW
     return pNode->GetContentAttribs().GetItem( nWhich );
 }
 
-void ImpEditEngine::GetCharAttribs( sal_uInt16 nPara, EECharAttribArray& rLst ) const
+void ImpEditEngine::GetCharAttribs( sal_uInt16 nPara, std::vector<EECharAttrib>& rLst ) const
 {
-    rLst.Remove( 0, rLst.Count() );
+    rLst.clear();
     ContentNode* pNode = aEditDoc.GetObject( nPara );
     if ( pNode )
     {
-        for ( sal_uInt16 nAttr = 0; nAttr < pNode->GetCharAttribs().Count(); nAttr++ )
+        rLst.reserve(pNode->GetCharAttribs().Count());
+        for (size_t i = 0; i < pNode->GetCharAttribs().Count(); ++i)
         {
-            EditCharAttribPtr pAttr = pNode->GetCharAttribs().GetAttribs()[ nAttr ];
+            EditCharAttribPtr pAttr = pNode->GetCharAttribs().GetAttribs()[i];
             EECharAttrib aEEAttr;
             aEEAttr.pAttr = pAttr->GetItem();
             aEEAttr.nPara = nPara;
             aEEAttr.nStart = pAttr->GetStart();
             aEEAttr.nEnd = pAttr->GetEnd();
-            rLst.Insert( aEEAttr, rLst.Count() );
+            rLst.push_back(aEEAttr);
         }
     }
 }

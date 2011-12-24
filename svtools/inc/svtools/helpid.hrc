@@ -115,12 +115,6 @@
 #define HID_FILEOPEN_VERSION                                   "SVT_HID_FILEOPEN_VERSION"
 #define HID_FILEOPEN_IMAGE_TEMPLATE                            "SVT_HID_FILEOPEN_IMAGE_TEMPLATE"
 
-// uniqueid for the helpagent window (testtool)
-#define HID_HELPAGENT_WINDOW                                   "SVT_HID_HELPAGENT_WINDOW"
-
-// registration dialog
-#define HID_REGISTRATION_DIALOG                                "SVT_HID_REGISTRATION_DIALOG"
-
 #define HID_PRINTDIALOG_TOFILE                                 "SVT_HID_PRINTDIALOG_TOFILE"
 
 #define HID_WIZARD_NEXT                                        "SVT_HID_WIZARD_NEXT"

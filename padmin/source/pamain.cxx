@@ -103,7 +103,7 @@ int MyApp::Main()
         if( xFactory.is() )
             setProcessServiceFactory( xFactory );
     }
-    catch( com::sun::star::uno::Exception& rExc)
+    catch( const com::sun::star::uno::Exception& )
     {
     }
 

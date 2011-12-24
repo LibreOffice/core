@@ -302,8 +302,6 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     SW_DLLPRIVATE DECL_LINK( TimeoutHdl, Timer * );
     SW_DLLPRIVATE DECL_LINK( UpdatePercentHdl, GraphicFilter* );
 
-    SW_DLLPRIVATE DECL_LINK( HtmlOptionsHdl, void * );
-
     SW_DLLPRIVATE DECL_LINK( FieldPopupModeEndHdl, FloatingWindow * );
 
     inline long     GetXScroll() const;
@@ -466,7 +464,7 @@ public:
     long        SetVScrollMax(long lMax);
     long        SetHScrollMax(long lMax);
 
-    DECL_LINK( SpellError, LanguageType * );
+    void SpellError(LanguageType eLang);
     sal_Bool            ExecSpellPopup( const Point& rPt );
     void                ExecFieldPopup( const Point& rPt, sw::mark::IFieldmark *fieldBM );
 
@@ -643,8 +641,7 @@ public:
 
     void NotifyDBChanged();
 
-    SfxObjectShellLock & GetTmpSelectionDoc();
-    SfxObjectShellLock & GetOrCreateTmpSelectionDoc();
+    SfxObjectShellLock CreateTmpSelectionDoc();
 
     void        AddTransferable(SwTransferable& rTransferable);
 

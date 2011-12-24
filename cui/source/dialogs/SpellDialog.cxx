@@ -357,7 +357,7 @@ void SpellDialog::UpdateBoxes_Impl()
         aExplainLink.SetURL( pSpellErrorDescription->sExplanationURL );
         aExplainFT.SetText( pSpellErrorDescription->sExplanation );
     }
-    if( pSpellErrorDescription && pSpellErrorDescription->sDialogTitle.getLength() )
+    if( pSpellErrorDescription && !pSpellErrorDescription->sDialogTitle.isEmpty() )
     {
         // use this function to apply the correct image to be used...
         SetTitle_Impl( nAltLanguage );
@@ -400,7 +400,7 @@ void SpellDialog::UpdateBoxes_Impl()
     aIgnoreAllPB.Show( bShowChangeAll );
     aAddToDictMB.Show( bShowChangeAll );
     aIgnoreRulePB.Show( !bShowChangeAll );
-    aIgnoreRulePB.Enable(pSpellErrorDescription && pSpellErrorDescription->sRuleId.getLength());
+    aIgnoreRulePB.Enable(pSpellErrorDescription && !pSpellErrorDescription->sRuleId.isEmpty());
     aAutoCorrPB.Show( bShowChangeAll && rParent.HasAutoCorrection() );
 
 }
@@ -926,7 +926,7 @@ void SpellDialog::SetTitle_Impl(LanguageType nLang)
     {
         String sVendor;
         const SpellErrorDescription* pSpellErrorDescription = aSentenceED.GetAlternatives();
-        if( pSpellErrorDescription && pSpellErrorDescription->sServiceName.getLength() )
+        if( pSpellErrorDescription && !pSpellErrorDescription->sServiceName.isEmpty() )
         {
             uno::Reference< lang::XServiceDisplayName > xDisplayName( pSpellErrorDescription->xGrammarChecker, uno::UNO_QUERY );
             if( xDisplayName.is() )
@@ -998,7 +998,7 @@ void SpellDialog::InitUserDicts()
             {
                 OUString aDictionaryImageUrl( aCfg.GetSpellAndGrammarContextDictionaryImage(
                         xSvcInfo->getImplementationName()) );
-                if (aDictionaryImageUrl.getLength() > 0)
+                if (!aDictionaryImageUrl.isEmpty())
                 {
                     Image aImage( lcl_GetImageFromPngUrl( aDictionaryImageUrl ) );
                     pMenu->SetItemImage( nItemId, aImage );
@@ -1292,7 +1292,7 @@ bool SpellDialog::ApplyChangeAllList_Impl(SpellPortions& rSentence, bool &bHasRe
             rtl::OUString &rString = aStart->sText;
 
             //dots are sometimes part of the spelled word but they are not necessarily part of the replacement
-            bool bDot = rString.getLength() && rString[rString.getLength() - 1] == '.';
+            bool bDot = !rString.isEmpty() && rString[rString.getLength() - 1] == '.';
 
             Reference<XDictionaryEntry> xEntry = xChangeAll->getEntry( rString );
 
@@ -1300,7 +1300,7 @@ bool SpellDialog::ApplyChangeAllList_Impl(SpellPortions& rSentence, bool &bHasRe
             {
                 rString = xEntry->getReplacementText();
 
-                if(bDot && (!rString.getLength() || rString[rString.getLength() - 1] != '.'))
+                if(bDot && (rString.isEmpty() || rString[rString.getLength() - 1] != '.'))
                     rString = rString + rtl::OUString(static_cast<sal_Unicode>('.'));
 
                 aStart->xAlternatives = 0;
@@ -2143,7 +2143,7 @@ IMPL_LINK( SpellDialog, HandleHyperlink, svt::FixedHyperlink*, pHyperlink )
     rtl::OUString sURL=pHyperlink->GetURL();
     rtl::OUString sTitle=GetText();
 
-    if ( ! sURL.getLength() ) // Nothing to do, when the URL is empty
+    if ( sURL.isEmpty() ) // Nothing to do, when the URL is empty
         return 1;
     try
     {

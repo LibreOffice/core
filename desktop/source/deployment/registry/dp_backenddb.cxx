@@ -299,7 +299,7 @@ void BackendDb::writeVectorOfPair(
         if (vecPairs.size() == 0)
             return;
         const OUString sNameSpace = getDbNSName();
-        OSL_ASSERT(sNameSpace.getLength());
+        OSL_ASSERT(!sNameSpace.isEmpty());
         const OUString sPrefix(getNSPrefix() + OUSTR(":"));
         const Reference<css::xml::dom::XDocument> doc = getDocument();
         const Reference<css::xml::dom::XNode> root = doc->getFirstChild();
@@ -457,7 +457,7 @@ void BackendDb::writeSimpleElement(
 {
     try
     {
-        if (value.getLength() == 0)
+        if (value.isEmpty())
             return;
         const OUString sPrefix = getNSPrefix();
         const Reference<css::xml::dom::XDocument> doc = getDocument();

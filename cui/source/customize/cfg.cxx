@@ -481,7 +481,7 @@ OUString GetUIModuleName( const OUString& aModuleId, const uno::Reference< css::
         }
     }
 
-    if ( aModuleUIName.getLength() == 0 )
+    if ( aModuleUIName.isEmpty() )
         aModuleUIName = GetModuleName( aModuleId );
 
     return aModuleUIName;
@@ -613,7 +613,7 @@ ConvertSvxConfigEntry(
     // as an empty string.
     // It will be initialised again later using the command to label map.
     aPropSeq[2].Name = aDescriptorLabel;
-    if ( pEntry->HasChangedName() == sal_False && pEntry->GetCommand().getLength() )
+    if ( pEntry->HasChangedName() == sal_False && !pEntry->GetCommand().isEmpty() )
     {
         sal_Bool isDefaultName = sal_False;
         try
@@ -694,7 +694,7 @@ ConvertToolbarEntry(
     // as an empty string.
     // It will be initialised again later using the command to label map.
     aPropSeq[2].Name = aDescriptorLabel;
-    if ( pEntry->HasChangedName() == sal_False && pEntry->GetCommand().getLength() )
+    if ( pEntry->HasChangedName() == sal_False && !pEntry->GetCommand().isEmpty() )
     {
         sal_Bool isDefaultName = sal_False;
         try
@@ -781,7 +781,7 @@ sal_Bool impl_showKeyConfigTabPage( const css::uno::Reference< css::frame::XFram
         {
             ::rtl::OUString sModuleId = xMM->identify(xFrame);
             if (
-                ( sModuleId.getLength()                 ) &&
+                ( !sModuleId.isEmpty()                 ) &&
                 (!sModuleId.equals(MODULEID_STARTMODULE))
                )
                return sal_True;
@@ -1187,7 +1187,7 @@ bool MenuSaveInData::LoadSubMenus(
 
                     OUString subMenuTitle( rBaseTitle );
 
-                    if ( subMenuTitle.getLength() != 0 )
+                    if ( !subMenuTitle.isEmpty() )
                     {
                         subMenuTitle += OUString(
                             RTL_CONSTASCII_USTRINGPARAM(aMenuSeparatorStr));
@@ -1758,7 +1758,7 @@ void SvxConfigPage::Reset( const SfxItemSet& )
         // if an item to select has been passed in (eg. the ResourceURL for a
         // toolbar) then try to select the SaveInData entry that has that item
         bool bURLToSelectFound = sal_False;
-        if ( m_aURLToSelect.getLength() != 0 )
+        if ( !m_aURLToSelect.isEmpty() )
         {
             if ( pDocData != NULL && pDocData->HasURL( m_aURLToSelect ) )
             {
@@ -3016,9 +3016,9 @@ SvxConfigEntry* SvxMainMenuOrganizerDialog::GetSelectedEntry()
 const OUString&
 SvxConfigEntry::GetHelpText()
 {
-    if ( aHelpText.getLength() == 0 )
+    if ( aHelpText.isEmpty() )
     {
-        if ( aCommand.getLength() )
+        if ( !aCommand.isEmpty() )
         {
             aHelpText = Application::GetHelp()->GetHelpText( aCommand, NULL );
         }
@@ -3688,7 +3688,7 @@ void SvxToolbarConfigPage::Init()
     ReloadTopLevelListBox();
 
     sal_uInt16 nPos = 0;
-    if ( m_aURLToSelect.getLength() != 0 )
+    if ( !m_aURLToSelect.isEmpty() )
     {
         for ( sal_uInt16 i = 0 ; i < aTopLevelListBox.GetEntryCount(); ++i )
         {
@@ -3989,12 +3989,12 @@ SvxEntries* ToolbarSaveInData::GetEntries()
                 uno::Reference< container::XIndexAccess > xToolbarSettings =
                     GetConfigManager()->getSettings( url, sal_False );
 
-                if ( uiname.getLength() == 0 )
+                if ( uiname.isEmpty() )
                 {
                     // try to get the name from m_xPersistentWindowState
                     uiname = GetSystemUIName( url );
 
-                    if ( uiname.getLength() == 0 )
+                    if ( uiname.isEmpty() )
                     {
                         uiname = systemname;
                     }
@@ -4077,12 +4077,12 @@ SvxEntries* ToolbarSaveInData::GetEntries()
                         uno::Reference< container::XIndexAccess > xToolbarSettings =
                             xParentCfgMgr->getSettings( url, sal_False );
 
-                        if ( uiname.getLength() == 0 )
+                        if ( uiname.isEmpty() )
                         {
                             // try to get the name from m_xPersistentWindowState
                             uiname = GetSystemUIName( url );
 
-                            if ( uiname.getLength() == 0 )
+                            if ( uiname.isEmpty() )
                             {
                                 uiname = systemname;
                             }

@@ -74,8 +74,6 @@ public:
     sal_Bool                ImplCreate( const ImpBitmap& rImpBitmap, SalGraphics* pGraphics );
     sal_Bool                ImplCreate( const ImpBitmap& rImpBitmap, sal_uInt16 nNewBitCount );
 
-    void                ImplDestroy();
-
     Size                ImplGetSize() const;
     Size                ImplGetSourceSize() const;
     void                ImplSetSourceSize( const Size&);

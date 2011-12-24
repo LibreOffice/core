@@ -93,20 +93,30 @@ void SwRenderData::DeletePostItData()
     }
 }
 
+SfxObjectShellLock const& SwRenderData::GetTempDocShell() const
+{
+    return m_xTempDocShell;
+}
+void SwRenderData::SetTempDocShell(SfxObjectShellLock const& xShell)
+{
+    m_xTempDocShell = xShell;
+}
+
 bool SwRenderData::NeedNewViewOptionAdjust( const ViewShell& rCompare ) const
 {
     return m_pViewOptionAdjust ? ! m_pViewOptionAdjust->checkShell( rCompare ) : true;
 }
 
 
-void SwRenderData::ViewOptionAdjustStart( ViewShell &rSh, const SwViewOption &rViewOptions, bool bIsTmpSelection )
+void SwRenderData::ViewOptionAdjustStart(
+        ViewShell &rSh, const SwViewOption &rViewOptions)
 {
     if (m_pViewOptionAdjust)
     {
         OSL_FAIL("error: there should be no ViewOptionAdjust active when calling this function" );
     }
     m_pViewOptionAdjust.reset(
-            new SwViewOptionAdjust_Impl( rSh, rViewOptions, bIsTmpSelection ));
+            new SwViewOptionAdjust_Impl( rSh, rViewOptions ));
 }
 
 

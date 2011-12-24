@@ -144,7 +144,7 @@ void Pump::fireError( const  Any & exception )
         {
             static_cast< XStreamListener * > ( iter.next() )->error( exception );
         }
-        catch ( RuntimeException &e )
+        catch ( const RuntimeException &e )
         {
             OString sMessage = OUStringToOString( e.Message , RTL_TEXTENCODING_ASCII_US );
             OSL_ENSURE( !"com.sun.star.comp.stoc.Pump: unexpected exception during calling listeners", sMessage.getStr() );
@@ -173,7 +173,7 @@ void Pump::fireClose()
             {
                 static_cast< XStreamListener * > ( iter.next() )->closed( );
             }
-            catch ( RuntimeException &e )
+            catch ( const RuntimeException &e )
             {
                 OString sMessage = OUStringToOString( e.Message , RTL_TEXTENCODING_ASCII_US );
                 OSL_ENSURE( !"com.sun.star.comp.stoc.Pump: unexpected exception during calling listeners", sMessage.getStr() );
@@ -191,7 +191,7 @@ void Pump::fireStarted()
         {
             static_cast< XStreamListener * > ( iter.next() )->started( );
         }
-        catch ( RuntimeException &e )
+        catch ( const RuntimeException &e )
         {
             OString sMessage = OUStringToOString( e.Message , RTL_TEXTENCODING_ASCII_US );
             OSL_ENSURE( !"com.sun.star.comp.stoc.Pump: unexpected exception during calling listeners", sMessage.getStr() );
@@ -208,7 +208,7 @@ void Pump::fireTerminated()
         {
             static_cast< XStreamListener * > ( iter.next() )->terminated();
         }
-        catch ( RuntimeException &e )
+        catch ( const RuntimeException &e )
         {
             OString sMessage = OUStringToOString( e.Message , RTL_TEXTENCODING_ASCII_US );
             OSL_ENSURE( !"com.sun.star.comp.stoc.Pump: unexpected exception during calling listeners", sMessage.getStr() );
@@ -297,15 +297,15 @@ void Pump::run()
                 osl_yieldThread();
             }
         }
-        catch ( IOException & e )
+        catch ( const IOException & e )
         {
             fireError( makeAny( e ) );
         }
-        catch ( RuntimeException & e )
+        catch ( const RuntimeException & e )
         {
             fireError( makeAny( e ) );
         }
-        catch ( Exception & e )
+        catch ( const Exception & e )
         {
             fireError( makeAny( e ) );
         }
@@ -313,7 +313,7 @@ void Pump::run()
         close();
         fireClose();
     }
-    catch ( com::sun::star::uno::Exception &e )
+    catch ( const com::sun::star::uno::Exception &e )
     {
         // we are the last on the stack.
         // this is to avoid crashing the program, when e.g. a bridge crashes

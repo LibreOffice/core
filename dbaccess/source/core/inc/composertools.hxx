@@ -91,7 +91,7 @@ namespace dbaccess
             #ifdef DBG_UTIL
             OSL_ENSURE( !m_bUsed, "FilterCreator::append: already used up!" );
             #endif
-            if ( lhs.getLength() )
+            if ( !lhs.isEmpty() )
             {
                 if ( m_aBuffer.getLength() )
                     appendNonEmptyToNonEmpty( lhs );

@@ -155,7 +155,7 @@ double SAL_CALL VbaPageSetupBase::getRightMargin() throw (css::uno::RuntimeExcep
     {
     }
 
-    return Millimeter::getInPoints( rightMargin );;
+    return Millimeter::getInPoints( rightMargin );
 }
 
 void SAL_CALL VbaPageSetupBase::setRightMargin( double margin ) throw (css::uno::RuntimeException)
@@ -185,7 +185,7 @@ double SAL_CALL VbaPageSetupBase::getLeftMargin() throw (css::uno::RuntimeExcept
     {
     }
 
-    return Millimeter::getInPoints( leftMargin );;
+    return Millimeter::getInPoints( leftMargin );
 }
 
 void SAL_CALL VbaPageSetupBase::setLeftMargin( double margin ) throw (css::uno::RuntimeException)
@@ -214,7 +214,7 @@ double SAL_CALL VbaPageSetupBase::getHeaderMargin() throw (css::uno::RuntimeExce
     {
     }
 
-    return Millimeter::getInPoints( headerMargin );;
+    return Millimeter::getInPoints( headerMargin );
 }
 
 void SAL_CALL VbaPageSetupBase::setHeaderMargin( double margin ) throw (css::uno::RuntimeException)
@@ -243,7 +243,7 @@ double SAL_CALL VbaPageSetupBase::getFooterMargin() throw (css::uno::RuntimeExce
     {
     }
 
-    return Millimeter::getInPoints( footerMargin );;
+    return Millimeter::getInPoints( footerMargin );
 }
 
 void SAL_CALL VbaPageSetupBase::setFooterMargin( double margin ) throw (css::uno::RuntimeException)

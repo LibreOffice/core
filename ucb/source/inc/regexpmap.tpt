@@ -152,7 +152,6 @@ RegexpMapIterImpl< Val >::RegexpMapIterImpl(RegexpMapImpl< Val > * pTheMap,
 	if (bBegin)
 	{
 		m_nList = -1;
-		m_aIndex = typename List< Val >::iterator();
 		if (!m_pMap->m_pDefault)
 			next();
 	}

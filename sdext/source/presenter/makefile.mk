@@ -72,7 +72,6 @@ SLOFILES=										\
     $(SLO)$/PresenterNotesView.obj				\
     $(SLO)$/PresenterPaintManager.obj			\
     $(SLO)$/PresenterPane.obj					\
-    $(SLO)$/PresenterPaneAnimator.obj			\
     $(SLO)$/PresenterPaneBase.obj				\
     $(SLO)$/PresenterPaneBorderManager.obj		\
     $(SLO)$/PresenterPaneBorderPainter.obj		\
@@ -108,7 +107,11 @@ SHL1DEPN=
 SHL1IMPLIB=		i$(SHL1TARGET)
 SHL1LIBS=		$(SLB)$/$(TARGET).lib
 SHL1DEF=		$(MISC)$/$(SHL1TARGET).def
+.IF "$(GUI)"=="WNT"
+SHL1VERSIONMAP=$(SOLARENV)/src/reg-component.map
+.ELSE # just a quick hack for GCC fdo#42865
 SHL1USE_EXPORTS = name
+.ENDIF
 SHL1RPATH=      OXT
 DEF1NAME=		$(SHL1TARGET)
 

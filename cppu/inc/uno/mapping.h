@@ -28,7 +28,7 @@
 #ifndef _UNO_MAPPING_H_
 #define _UNO_MAPPING_H_
 
-#include <sal/types.h>
+#include <cppu/cppudllapi.h>
 #include <rtl/ustring.h>
 
 
@@ -98,7 +98,7 @@ typedef struct _uno_Mapping
                         in this language environment)
     @param pAddPurpose  additional purpose of mapping (e.g., protocolling); defaults to 0 (none)
 */
-void SAL_CALL uno_getMapping(
+CPPU_DLLPUBLIC void SAL_CALL uno_getMapping(
     struct _uno_Mapping ** ppMapping,
     struct _uno_Environment * pFrom,
     struct _uno_Environment * pTo,
@@ -122,7 +122,7 @@ typedef void (SAL_CALL * uno_getMappingFunc)(
 
     @param pCallback    callback function
 */
-void SAL_CALL uno_registerMappingCallback(
+CPPU_DLLPUBLIC void SAL_CALL uno_registerMappingCallback(
     uno_getMappingFunc pCallback )
     SAL_THROW_EXTERN_C();
 
@@ -130,7 +130,7 @@ void SAL_CALL uno_registerMappingCallback(
 
     @param pCallback    callback function
 */
-void SAL_CALL uno_revokeMappingCallback(
+CPPU_DLLPUBLIC void SAL_CALL uno_revokeMappingCallback(
     uno_getMappingFunc pCallback )
     SAL_THROW_EXTERN_C();
 
@@ -149,7 +149,7 @@ typedef void (SAL_CALL * uno_freeMappingFunc)( struct _uno_Mapping * pMapping );
     @param pTo          destination environment
     @param pAddPurpose  additional purpose string; defaults to 0
 */
-void SAL_CALL uno_registerMapping(
+CPPU_DLLPUBLIC void SAL_CALL uno_registerMapping(
     struct _uno_Mapping ** ppMapping, uno_freeMappingFunc freeMapping,
     struct _uno_Environment * pFrom, struct _uno_Environment * pTo, rtl_uString * pAddPurpose )
     SAL_THROW_EXTERN_C();
@@ -159,7 +159,7 @@ void SAL_CALL uno_registerMapping(
 
     @param pMapping     mapping to be revoked
 */
-void SAL_CALL uno_revokeMapping(
+CPPU_DLLPUBLIC void SAL_CALL uno_revokeMapping(
     struct _uno_Mapping * pMapping )
     SAL_THROW_EXTERN_C();
 
@@ -173,7 +173,7 @@ void SAL_CALL uno_revokeMapping(
                         in this language environment)
     @param pAddPurpose  additional purpose of mapping (e.g., protocolling); defaults to 0 (none)
 */
-void SAL_CALL uno_getMappingByName(
+CPPU_DLLPUBLIC void SAL_CALL uno_getMappingByName(
     struct _uno_Mapping ** ppMapping,
     rtl_uString * pFrom,
     rtl_uString * pTo,

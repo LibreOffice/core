@@ -327,14 +327,6 @@ AC_ARG_ENABLE(ext-languagetool,
         [Enable the LanguageTool extension.])
 )
 
-AC_ARG_ENABLE(ext-lightproof,
-    AS_HELP_STRING([--enable-ext-lightproof],
-        [Enable the Lightproof extension. The enable switch can contain only
-         the desired languages: --enable-lightproof="en hu ru"]),
-    [enable_ext_lightproof="$enableval"],
-    [enable_ext_lightproof=no]
-)
-
 AC_ARG_ENABLE(ext-mysql-connector,
     AS_HELP_STRING([--enable-ext-mysql-connector],
         [Enable the build of the MySQL Connector extension.])
@@ -1592,6 +1584,25 @@ AC_ARG_WITH(lang,
     ],
 ,)
 
+# Kerberos and GSSAPI used only by PostgreSQL as of LibO 3.5
+AC_ARG_WITH(krb5,
+    AS_HELP_STRING([--with-krb5],
+        [Enable MIT Kerberos 5 support in modules that support it.
+         By default automatically enabled on platforms
+         where a good system Kerberos 5 is available.]),
+,)
+#AC_ARG_WITH(system-redland,
+#    AS_HELP_STRING([--with-system-redland],
+#        [Use redland library already on system.]),,
+#    [with_system_redland="$with_system_libs"])
+
+AC_ARG_WITH(gssapi,
+    AS_HELP_STRING([--with-gssapi],
+        [Enable GSSAPI support in modules that support it.
+         By default automatically enabled on platforms
+         where a good system GSSAPI is available.]),
+,)
+
 dnl ===================================================================
 dnl Branding
 dnl ===================================================================
@@ -1880,7 +1891,7 @@ fi
 
 dnl ===================================================================
 dnl Extra check for Windows. Cygwin builds need gcc to build dmake
-dnl although MSVC is used to build other build-time tools and 
+dnl although MSVC is used to build other build-time tools and
 dnl LibreOffice itself.
 dnl ===================================================================
 if test "$build_os" = "cygwin" ; then
@@ -2226,7 +2237,6 @@ if test "$cross_compiling" = "yes"; then
     rm -rf CONF-FOR-BUILD Env.Build.sh
     mkdir CONF-FOR-BUILD
     tar cf - \
-        Makefile.in \
         bin/repo-list.in \
         build_env.in \
         config.guess \
@@ -2262,6 +2272,7 @@ if test "$cross_compiling" = "yes"; then
         2>&1 | sed -e 's/^/    /'
     test -f ./Env.Host.sh 2>/dev/null || exit
     cp Env.Host.sh ../Env.Build.sh
+    cp config.log ../config.Build.log
     . ./Env.Host.sh
     for V in COM GUI GUIBASE OS CPU CPUNAME CC CXX GXX_INCLUDE_PATH MACOSX_DEPLOYMENT_TARGET INPATH OUTPATH \
              SYSTEM_LIBXSLT; do
@@ -2422,15 +2433,6 @@ AC_MSG_CHECKING([whether to build with additional debug utilities])
 if test -n "$enable_dbgutil" && test "$enable_dbgutil" != "no"; then
     PROEXT=""
     PRODUCT=""
-
-    # Compiling with MSVC using --enable-dbgutil (i.e. using the
-    # debugging runtime, and defining _DEBUG when compiling) just
-    # causes too many compilation errors. After having spent some
-    # months slowly fixing them one by one, having reached sw, I give
-    # up. Feel free to try again.
-    if test "$_os" = WINNT -a "$WITH_MINGW" != yes; then
-        AC_MSG_ERROR([Sorry, --enable-dbgutil won't work with MSVC])
-    fi
 
     AC_MSG_RESULT([yes])
     # cppunit and graphite expose STL in public headers
@@ -3325,24 +3327,30 @@ if test "$_os" != "WINNT" -o "$WITH_MINGW" = "yes"; then
     dnl Allow build without AC_CHECK_ALIGNOF, grrr
     m4_pattern_allow([AC_CHECK_ALIGNOF])
     m4_ifdef([AC_CHECK_ALIGNOF],
-      ,
-      [
-         dnl We know that the ALIGNOF_ variables are used only when cross-compiling
-         dnl in sal/typesconfig/makefile.mk...
-         if test "$cross_compiling" = "yes"; then
-            AC_MSG_ERROR([When cross-compiling you must use a recent Autoconf with [AC_][CHECK_ALIGNOF]])
-         fi
-         m4_define([AC_CHECK_ALIGNOF],
-            [
-               AC_MSG_WARN([Cannot determine alignment of $1])
-               AS_TR_SH([ac_cv_alignof_$3])=unknown
-            ])
-      ])
-
-    AC_CHECK_ALIGNOF(short,[#include <stddef.h>])
-    AC_CHECK_ALIGNOF(int,[#include <stddef.h>])
-    AC_CHECK_ALIGNOF(long,[#include <stddef.h>])
-    AC_CHECK_ALIGNOF(double,[#include <stddef.h>])
+        [
+            AC_CHECK_ALIGNOF(short,[#include <stddef.h>])
+            AC_CHECK_ALIGNOF(int,[#include <stddef.h>])
+            AC_CHECK_ALIGNOF(long,[#include <stddef.h>])
+            AC_CHECK_ALIGNOF(double,[#include <stddef.h>])
+        ],
+        [
+            case "$_os-$host_cpu" in
+            Darwin-powerpc)
+                test -z "$ac_cv_alignof_short" && ac_cv_alignof_short=1
+                test -z "$ac_cv_alignof_int" && ac_cv_alignof_int=1
+                test -z "$ac_cv_alignof_long" && ac_cv_alignof_long=1
+                test -z "$ac_cv_alignof_double" && ac_cv_alignof_double=1
+                ;;
+            *)
+                if test -z "$ac_cv_alignof_short" -o \
+                        -z "$ac_cv_alignof_int" -o \
+                        -z "$ac_cv_alignof_long" -o \
+                        -z "$ac_cv_alignof_double"; then
+                   AC_MSG_ERROR([Your Autoconf doesn't have [AC_][CHECK_ALIGNOF]. You need to set the environment variables ac_cv_alignof_short, ac_cv_alignof_int, ac_cv_alignof_long and ac_cv_alignof_double.])
+                fi
+                ;;
+            esac
+        ])
 
     ALIGNOF_SHORT=$ac_cv_alignof_short
     ALIGNOF_INT=$ac_cv_alignof_int
@@ -3824,24 +3832,6 @@ AC_SUBST(HAVE_GCC_VISIBILITY_FEATURE)
 AC_SUBST(HAVE_GCC_VISIBILITY_BROKEN)
 
 dnl ===================================================================
-dnl gcc DWARF-4 support (smaller debug info)
-dnl ===================================================================
-if test "$GCC" = "yes"; then
-    AC_MSG_CHECKING([whether $CC supports -gdwarf-4])
-    save_CFLAGS=$CFLAGS
-    CFLAGS="$CFLAGS -Werror -gdwarf-4"
-    AC_LINK_IFELSE([AC_LANG_PROGRAM([[]], [[ return 0; ]])],[ HAVE_GCC_DWARF_4=TRUE ],[])
-    CFLAGS=$save_CFLAGS
-    if test "$HAVE_GCC_DWARF_4" = "TRUE"; then
-        AC_MSG_RESULT([yes])
-    else
-        AC_MSG_RESULT([no])
-    fi
-fi
-
-AC_SUBST(HAVE_GCC_DWARF_4)
-
-dnl ===================================================================
 dnl allocator
 dnl ===================================================================
 AC_MSG_CHECKING([which memory allocator to use])
@@ -3877,6 +3867,8 @@ fi
 if test "$with_alloc" = "internal" -o -z "$with_alloc"; then
     AC_MSG_RESULT([internal])
 fi
+AC_CHECK_FUNCS(posix_fallocate, HAVE_POSIX_FALLOCATE=YES, [HAVE_POSIX_FALLOCATE=NO])
+AC_SUBST(HAVE_POSIX_FALLOCATE)
 AC_SUBST(ALLOC)
 
 dnl ===================================================================
@@ -5431,11 +5423,50 @@ fi
 dnl ===================================================================
 dnl Check for PostgreSQL stuff
 dnl ===================================================================
-
 if test "x$enable_ext_postgresql_sdbc" = "xyes"; then
     if test "x$enable_extension_integration" = "xyes"; then
       SCPDEFS="$SCPDEFS -DWITH_EXTENSION_POSTGRESQL"
     fi
+
+# if/when anything else than PostgreSQL uses Kerberos,
+# move this out of `test "x$enable_ext_postgresql_sdbc" = "xyes"'
+WITH_KRB5=NO
+WITH_GSSAPI=no
+case "$_os" in
+  Darwin)
+    # MacOS X has system MIT Kerberos 5 since 10.4
+    if test "$with_krb5" != "no"; then
+      WITH_KRB5=YES
+      AC_SEARCH_LIBS(com_err, [krb5 'krb5 -lcrypto -ldes -lasn1 -lroken' com_err 'com_err -lssl -lcrypto'], [],
+                    [AC_MSG_ERROR([could not find function 'com_err' required for Kerberos 5])])
+      AC_SEARCH_LIBS(krb5_sendauth, [krb5 'krb5 -lcrypto -ldes -lasn1 -lroken'], [],
+                    [AC_MSG_ERROR([could not find function 'krb5_sendauth' required for Kerberos 5])])
+    fi
+    if test "$with_gssapi" != "no"; then
+      WITH_GSSAPI=YES
+      AC_SEARCH_LIBS(gss_init_sec_context, [gssapi_krb5 gss 'gssapi -lkrb5 -lcrypto'], [],
+		 		  [AC_MSG_ERROR([could not find function 'gss_init_sec_context' required for GSSAPI])])
+    fi
+   ;;
+  WINNT)
+   if test "$with_krb5" = "yes" || "$with_gssapi" = "yes"; then
+      AC_MSG_ERROR([Refusing to enable MIT Kerberos 5 or GSSAPI on Microsoft Windows.])
+   fi
+  ;;
+  *)
+    if test "$with_krb5" = "yes"; then
+      WITH_KRB5=YES
+      AC_SEARCH_LIBS(com_err, [krb5 'krb5 -lcrypto -ldes -lasn1 -lroken' com_err 'com_err -lssl -lcrypto'], [],
+                    [AC_MSG_ERROR([could not find function 'com_err' required for Kerberos 5])])
+      AC_SEARCH_LIBS(krb5_sendauth, [krb5 'krb5 -lcrypto -ldes -lasn1 -lroken'], [],
+                    [AC_MSG_ERROR([could not find function 'krb5_sendauth' required for Kerberos 5])])
+    fi
+    if test "$with_gssapi" = "yes"; then
+      WITH_GSSAPI=YES
+      AC_SEARCH_LIBS(gss_init_sec_context, [gssapi_krb5 gss 'gssapi -lkrb5 -lcrypto'], [],
+		 		  [AC_MSG_ERROR([could not find function 'gss_init_sec_context' required for GSSAPI])])
+    fi
+esac
 
     AC_MSG_CHECKING([PostgreSQL C interface])
     if test "$with_system_postgresql" = "yes"; then
@@ -5483,6 +5514,8 @@ if test "x$enable_ext_postgresql_sdbc" = "xyes"; then
     fi
     BUILD_POSTGRESQL_SDBC=YES
 fi
+AC_SUBST(WITH_KRB5)
+AC_SUBST(WITH_GSSAPI)
 AC_SUBST(BUILD_POSTGRESQL_SDBC)
 AC_SUBST(SYSTEM_POSTGRESQL)
 AC_SUBST(POSTGRESQL_INC)
@@ -7648,6 +7681,7 @@ dnl Scripting provider for Python extension?
 dnl We always provide this unless we have disabled Python completely
 if test $enable_python = no; then
     ENABLE_SCRIPTING_PYTHON=NO
+    SCPDEFS="$SCPDEFS -DWITHOUT_EXTENSION_SCRIPTING_PYTHON"
 else
     ENABLE_SCRIPTING_PYTHON=YES
 fi
@@ -8079,48 +8113,6 @@ else
     AC_MSG_RESULT([no, do not integrate])
 fi
 AC_SUBST(WITH_EXTENSION_INTEGRATION)
-
-dnl ===================================================================
-dnl Test whether to include Lightproof extensions
-dnl ===================================================================
-AC_MSG_CHECKING([for Lightproof extensions integration (only supported languages displayed)])
-LIGHTPROOF_LANG=
-LIGHTPROOF_HU_PACK=
-LIGHTPROOF_RU_PACK=
-LIGHTPROOF_EN_US_PACK=
-if test "x$enable_ext_lightproof" = "xno" -o "x$enable_extension_integration" = "xno"; then
-    AC_MSG_RESULT([no integration])
-else
-    SCPDEFS="$SCPDEFS -DWITH_EXTENSION_LIGHTPROOF"
-    if test "x$enable_ext_lightproof" = "xyes" -o "x$enable_ext_lightproof" = "x"; then
-        wanted_lightproof="en-US hu ru"
-    else
-        for lang in $enable_ext_lightproof ; do
-            case $lang in
-                en-US|hu|ru)
-                    wanted_lightproof="$wanted_lightproof $lang"
-                    ;;
-                *)
-                    AC_MSG_ERROR([Unknown value for --enable-ext-lightproof: $lang])
-                    ;;
-                esac
-        done
-    fi
-    for lang in $wanted_lightproof ; do
-        LIGHTPROOF_LANG="$LIGHTPROOF_LANG $lang"
-        case $lang in
-            en-US) LIGHTPROOF_EN_US_PACK="0ab55ac8e88f04258f1d3e79e984382f-lightproof-en_US-0.1.oxt" ;;
-            hu) LIGHTPROOF_HU_PACK="76345f925e34fef2d29bade4f29108e9-lightproof-hu_1.3.oxt" ;;
-            ru) LIGHTPROOF_RU_PACK="673860e8649cff2ebdc68bd46f2f7f1a-lightproof-ru_0.1.oxt" ;;
-            *) AC_MSG_ERROR([Unknown value for --enable-ext-lightproof: $lang]) ;;
-        esac
-    done
-    AC_MSG_RESULT([$LIGHTPROOF_LANG])
-fi
-AC_SUBST(LIGHTPROOF_LANG)
-AC_SUBST(LIGHTPROOF_HU_PACK)
-AC_SUBST(LIGHTPROOF_RU_PACK)
-AC_SUBST(LIGHTPROOF_EN_US_PACK)
 
 dnl ===================================================================
 dnl Test whether to include Watch Window extension
@@ -8758,11 +8750,7 @@ if test "$with_system_cairo" = "yes"; then
 else
     AC_MSG_RESULT([no])
 
-    if test $_os = Android; then
-        dnl For Android cairo isn't
-        dnl buildable yet.
-        :
-    elif test $_os = WINNT; then
+    if test $_os = WINNT; then
         dnl We only need cairo for Windows if we
         dnl build librsvg or directx disabled
         if test "$ENABLE_LIBRSVG" != NO -o -z "$ENABLE_DIRECTX"; then

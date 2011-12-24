@@ -52,37 +52,43 @@ typedef void* oslProfile;
     @return 0 if the profile could not be created, otherwise a handle to the profile.
     @deprecated
 */
-oslProfile SAL_CALL osl_openProfile(rtl_uString *strProfileName, oslProfileOption Options);
+SAL_DLLPUBLIC oslProfile SAL_CALL osl_openProfile(
+        rtl_uString *strProfileName, oslProfileOption Options);
 
 /** Deprecated API.
     Close the opened profile an flush all data to the disk.
     @param Profile handle to a opened profile.
     @deprecated
 */
-sal_Bool SAL_CALL osl_closeProfile(oslProfile Profile);
+SAL_DLLPUBLIC sal_Bool SAL_CALL osl_closeProfile(
+        oslProfile Profile);
 
 
 /** Deprecated API.
     @deprecated
 */
-sal_Bool SAL_CALL osl_flushProfile(oslProfile Profile);
+SAL_DLLPUBLIC sal_Bool SAL_CALL osl_flushProfile(
+        oslProfile Profile);
 /** Deprecated API.
     @deprecated
 */
-sal_Bool SAL_CALL osl_readProfileString(oslProfile Profile,
+SAL_DLLPUBLIC sal_Bool SAL_CALL osl_readProfileString(
+                              oslProfile Profile,
                               const sal_Char* pszSection, const sal_Char* pszEntry,
                               sal_Char* pszString, sal_uInt32 MaxLen,
                               const sal_Char* pszDefault);
 /** Deprecated API.
     @deprecated
 */
-sal_Bool SAL_CALL osl_readProfileBool(oslProfile Profile,
+SAL_DLLPUBLIC sal_Bool SAL_CALL osl_readProfileBool(
+                            oslProfile Profile,
                             const sal_Char* pszSection, const sal_Char* pszEntry,
                             sal_Bool Default);
 /** Deprecated API.
     @deprecated
 */
-sal_uInt32 SAL_CALL osl_readProfileIdent(oslProfile Profile,
+SAL_DLLPUBLIC sal_uInt32 SAL_CALL osl_readProfileIdent(
+                              oslProfile Profile,
                               const sal_Char* pszSection, const sal_Char* pszEntry,
                               sal_uInt32 FirstId, const sal_Char* Strings[],
                               sal_uInt32 Default);
@@ -90,19 +96,22 @@ sal_uInt32 SAL_CALL osl_readProfileIdent(oslProfile Profile,
 /** Deprecated API.
     @deprecated
 */
-sal_Bool SAL_CALL osl_writeProfileString(oslProfile Profile,
+SAL_DLLPUBLIC sal_Bool SAL_CALL osl_writeProfileString(
+                               oslProfile Profile,
                                const sal_Char* pszSection, const sal_Char* pszEntry,
                                const sal_Char* pszString);
 /** Deprecated API.
     @deprecated
 */
-sal_Bool SAL_CALL osl_writeProfileBool(oslProfile Profile,
+SAL_DLLPUBLIC sal_Bool SAL_CALL osl_writeProfileBool(
+                             oslProfile Profile,
                              const sal_Char* pszSection, const sal_Char* pszEntry,
                              sal_Bool Value);
 /** Deprecated API.
     @deprecated
 */
-sal_Bool SAL_CALL osl_writeProfileIdent(oslProfile Profile,
+SAL_DLLPUBLIC sal_Bool SAL_CALL osl_writeProfileIdent(
+                              oslProfile Profile,
                               const sal_Char* pszSection, const sal_Char* pszEntry,
                               sal_uInt32 FirstId, const sal_Char* Strings[],
                               sal_uInt32 Value);
@@ -113,8 +122,9 @@ sal_Bool SAL_CALL osl_writeProfileIdent(oslProfile Profile,
     @return False if section or entry could not be found.
     @deprecated
 */
-sal_Bool SAL_CALL osl_removeProfileEntry(oslProfile Profile,
-                               const sal_Char *pszSection, const sal_Char *pszEntry);
+SAL_DLLPUBLIC sal_Bool SAL_CALL osl_removeProfileEntry(
+                           oslProfile Profile,
+                           const sal_Char *pszSection, const sal_Char *pszEntry);
 
 /** Deprecated API.
     Get all entries belonging to the specified section.
@@ -122,8 +132,9 @@ sal_Bool SAL_CALL osl_removeProfileEntry(oslProfile Profile,
     @return Pointer to a array of pointers.
     @deprecated
 */
-sal_uInt32 SAL_CALL osl_getProfileSectionEntries(oslProfile Profile, const sal_Char *pszSection,
-                                    sal_Char* pszBuffer, sal_uInt32 MaxLen);
+SAL_DLLPUBLIC sal_uInt32 SAL_CALL osl_getProfileSectionEntries(
+                            oslProfile Profile, const sal_Char *pszSection,
+                            sal_Char* pszBuffer, sal_uInt32 MaxLen);
 
 /** Deprecated API.
     Get all section entries
@@ -131,7 +142,8 @@ sal_uInt32 SAL_CALL osl_getProfileSectionEntries(oslProfile Profile, const sal_C
     @return Pointer to a array of pointers.
     @deprecated
 */
-sal_uInt32 SAL_CALL osl_getProfileSections(oslProfile Profile, sal_Char* pszBuffer, sal_uInt32 MaxLen);
+SAL_DLLPUBLIC sal_uInt32 SAL_CALL osl_getProfileSections(
+        oslProfile Profile, sal_Char* pszBuffer, sal_uInt32 MaxLen);
 
 #ifdef __cplusplus
 }

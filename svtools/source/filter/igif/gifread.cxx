@@ -257,8 +257,8 @@ sal_Bool GIFReader::ReadExtension()
                     // Appl.-Extension hat Laenge 11
                     if ( cSize == 0x0b )
                     {
-                        rtl::OString aAppId = read_uInt8s_AsOString(rIStm, 8);
-                        rtl::OString aAppCode = read_uInt8s_AsOString(rIStm, 3);
+                        rtl::OString aAppId = read_uInt8s_ToOString(rIStm, 8);
+                        rtl::OString aAppCode = read_uInt8s_ToOString(rIStm, 3);
                         rIStm >> cSize;
 
                         // NetScape-Extension

@@ -104,7 +104,6 @@ public:
     void                    SetSaveRelFSys( sal_Bool b );
     sal_Bool                IsSaveRelFSys() const;
 
-    void                    SetSaveUnpacked( sal_Bool b );
     sal_Bool                IsSaveUnpacked() const;
 
     void                    SetLoadUserSettings(sal_Bool b);
@@ -122,10 +121,8 @@ public:
     void                    SetODFDefaultVersion( ODFDefaultVersion eVersion );
     ODFDefaultVersion       GetODFDefaultVersion() const;
 
-    void                    SetUseSHA1InODF12( sal_Bool bUse );
     sal_Bool                IsUseSHA1InODF12() const;
 
-    void                    SetUseBlowfishInODF12( sal_Bool bUse );
     sal_Bool                IsUseBlowfishInODF12() const;
 
     sal_Bool                IsReadOnly( EOption eOption ) const;

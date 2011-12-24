@@ -70,6 +70,7 @@ $(eval $(call gb_Library_add_linked_libs,qstart_gtk,\
     utl \
     vcl \
     sfx \
+    $(gb_STDLIBS) \
 ))
 
 $(eval $(call gb_Library_use_externals,qstart_gtk,\

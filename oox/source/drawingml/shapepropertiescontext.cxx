@@ -88,6 +88,7 @@ Reference< XFastContextHandler > ShapePropertiesContext::createFastChildContext(
                 mrShape.getServiceName() = sLineShape;
             }
             if( ( nToken >= XML_bentConnector2 && nToken <= XML_bentConnector5 ) ||
+                ( nToken >= XML_curvedConnector2 && nToken <= XML_curvedConnector5 ) ||
                   nToken == XML_straightConnector1 )
             {
                 static const OUString sCustomShape( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.CustomShape" ) );

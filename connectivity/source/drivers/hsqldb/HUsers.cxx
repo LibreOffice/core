@@ -85,7 +85,7 @@ sdbcx::ObjectType OUsers::appendObject( const ::rtl::OUString& _rForName, const 
                 + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" @\"%\" "));
     ::rtl::OUString sPassword;
     descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PASSWORD)) >>= sPassword;
-    if ( sPassword.getLength() )
+    if ( !sPassword.isEmpty() )
     {
         aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" IDENTIFIED BY '"));
         aSql += sPassword;

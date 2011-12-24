@@ -235,7 +235,7 @@ sal_Bool EditTextObject::HasCharAttribs( sal_uInt16 ) const
     return sal_False;
 }
 
-void EditTextObject::GetCharAttribs( sal_uInt16 /*nPara*/, EECharAttribArray& /*rLst*/ ) const
+void EditTextObject::GetCharAttribs( sal_uInt16 /*nPara*/, std::vector<EECharAttrib>& /*rLst*/ ) const
 {
     OSL_FAIL( "Virtual method direct from EditTextObject!" );
 }
@@ -765,7 +765,7 @@ sal_Bool BinTextObject::HasOnlineSpellErrors() const
     for ( sal_uInt16 n = 0; n < aContents.Count(); n++ )
     {
         ContentInfo* p = aContents.GetObject( n );
-        if ( p->GetWrongList() && p->GetWrongList()->Count() )
+        if ( p->GetWrongList() && !p->GetWrongList()->empty() )
             return sal_True;
     }
     return sal_False;
@@ -792,9 +792,9 @@ sal_Bool BinTextObject::HasCharAttribs( sal_uInt16 _nWhich ) const
     return sal_False;
 }
 
-void BinTextObject::GetCharAttribs( sal_uInt16 nPara, EECharAttribArray& rLst ) const
+void BinTextObject::GetCharAttribs( sal_uInt16 nPara, std::vector<EECharAttrib>& rLst ) const
 {
-    rLst.Remove( 0, rLst.Count() );
+    rLst.clear();
     ContentInfo* pC = GetContents().GetObject( nPara );
     if ( pC )
     {
@@ -806,7 +806,7 @@ void BinTextObject::GetCharAttribs( sal_uInt16 nPara, EECharAttribArray& rLst ) 
             aEEAttr.nPara = nPara;
             aEEAttr.nStart = pAttr->GetStart();
             aEEAttr.nEnd = pAttr->GetEnd();
-            rLst.Insert( aEEAttr, rLst.Count() );
+            rLst.push_back(aEEAttr);
         }
     }
 }
@@ -1131,10 +1131,10 @@ void BinTextObject::StoreData( SvStream& rOStream ) const
 
         // Convert CH_FEATURE to CH_FEATURE_OLD
         aText.SearchAndReplaceAll( cFeatureConverted, CH_FEATURE_OLD );
-        rOStream.WriteByteString( aText );
+        write_lenPrefixed_uInt8s_FromOString<sal_uInt16>(rOStream, aText);
 
         // StyleName and Family...
-        rOStream.WriteByteString( rtl::OUStringToOString(pC->GetStyle(), eEncoding) );
+        write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rOStream, pC->GetStyle(), eEncoding);
         rOStream << (sal_uInt16)pC->GetFamily();
 
         // Paragraph attributes ...
@@ -1226,12 +1226,11 @@ void BinTextObject::CreateData( SvStream& rIStream )
         ContentInfo* pC = CreateAndInsertContent();
 
         // The Text...
-        ByteString aByteString;
-        rIStream.ReadByteString( aByteString );
-        pC->GetText() = String( aByteString, eSrcEncoding );
+        rtl::OString aByteString = read_lenPrefixed_uInt8s_ToOString<sal_uInt16>(rIStream);
+        pC->GetText() = rtl::OStringToOUString(aByteString, eSrcEncoding);
 
         // StyleName and Family...
-        rIStream.ReadByteString( pC->GetStyle(), eSrcEncoding );
+        rIStream.ReadUniOrByteString( pC->GetStyle(), eSrcEncoding );
         sal_uInt16 nStyleFamily;
         rIStream >> nStyleFamily;
         pC->GetFamily() = (SfxStyleFamily)nStyleFamily;
@@ -1261,7 +1260,7 @@ void BinTextObject::CreateData( SvStream& rIStream )
             {
                 if ( pItem->Which() == EE_FEATURE_NOTCONV )
                 {
-                    sal_Char cEncodedChar = aByteString.GetChar(nStart);
+                    sal_Char cEncodedChar = aByteString[nStart];
                     sal_Unicode cChar = rtl::OUString(&cEncodedChar, 1,
                         ((SvxCharSetColorItem*)pItem)->GetCharSet()).toChar();
                     pC->GetText().SetChar(nStart, cChar);
@@ -1274,8 +1273,8 @@ void BinTextObject::CreateData( SvStream& rIStream )
                     if ( ( _nWhich >= EE_FEATURE_START ) && ( _nWhich <= EE_FEATURE_END ) )
                     {
                         // Convert CH_FEATURE to CH_FEATURE_OLD
-                        DBG_ASSERT( (sal_uInt8) aByteString.GetChar( nStart ) == CH_FEATURE_OLD, "CreateData: CH_FEATURE expected!" );
-                        if ( (sal_uInt8) aByteString.GetChar( nStart ) == CH_FEATURE_OLD )
+                        DBG_ASSERT( (sal_uInt8) aByteString[nStart] == CH_FEATURE_OLD, "CreateData: CH_FEATURE expected!" );
+                        if ( (sal_uInt8) aByteString[nStart] == CH_FEATURE_OLD )
                             pC->GetText().SetChar( nStart, CH_FEATURE );
                     }
                 }
@@ -1291,7 +1290,7 @@ void BinTextObject::CreateData( SvStream& rIStream )
             const SvxFontItem& rFontItem = (const SvxFontItem&)pC->GetParaAttribs().Get( EE_CHAR_FONTINFO );
             if ( rFontItem.GetCharSet() == RTL_TEXTENCODING_SYMBOL )
             {
-                pC->GetText() = String( aByteString, RTL_TEXTENCODING_SYMBOL );
+                pC->GetText() = rtl::OStringToOUString(aByteString, RTL_TEXTENCODING_SYMBOL);
                 bSymbolPara = sal_True;
             }
         }
@@ -1306,8 +1305,8 @@ void BinTextObject::CreateData( SvStream& rIStream )
                       || ( bSymbolPara && ( rFontItem.GetCharSet() != RTL_TEXTENCODING_SYMBOL ) ) )
                 {
                     // Not correctly converted
-                    ByteString aPart( aByteString, pAttr->GetStart(), pAttr->GetEnd()-pAttr->GetStart() );
-                    String aNew( aPart, rFontItem.GetCharSet() );
+                    rtl::OString aPart(aByteString.copy(pAttr->GetStart(), pAttr->GetEnd()-pAttr->GetStart()));
+                    rtl::OUString aNew(rtl::OStringToOUString(aPart, rFontItem.GetCharSet()));
                     pC->GetText().Erase( pAttr->GetStart(), pAttr->GetEnd()-pAttr->GetStart() );
                     pC->GetText().Insert( aNew, pAttr->GetStart() );
                 }
@@ -1523,10 +1522,10 @@ void BinTextObject::CreateData300( SvStream& rIStream )
         ContentInfo* pC = CreateAndInsertContent();
 
         // The Text...
-        rIStream.ReadByteString( pC->GetText() );
+        rIStream.ReadUniOrByteString( pC->GetText(), rIStream.GetStreamCharSet() );
 
         // StyleName and Family...
-        rIStream.ReadByteString( pC->GetStyle() );
+        rIStream.ReadUniOrByteString( pC->GetStyle(), rIStream.GetStreamCharSet() );
         sal_uInt16 nStyleFamily;
         rIStream >> nStyleFamily;
         pC->GetFamily() = (SfxStyleFamily)nStyleFamily;

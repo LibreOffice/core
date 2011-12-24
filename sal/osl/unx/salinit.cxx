@@ -33,11 +33,11 @@
 
 extern "C" {
 
-void SAL_CALL sal_detail_initialize(int argc, char ** argv) {
+SAL_DLLPUBLIC void SAL_CALL sal_detail_initialize(int argc, char ** argv) {
     osl_setCommandArgs(argc, argv);
 }
 
-void SAL_CALL sal_detail_deinitialize() {}
+SAL_DLLPUBLIC void SAL_CALL sal_detail_deinitialize() {}
 
 }
 

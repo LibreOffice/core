@@ -85,7 +85,7 @@ OptionInfo const * getOptionInfo(
     for ( ; list->m_name != 0; ++list )
     {
         OptionInfo const & option_info = *list;
-        if (opt.getLength() > 0)
+        if (!opt.isEmpty())
         {
             if (opt.equalsAsciiL(
                     option_info.m_name, option_info.m_name_length ) &&
@@ -284,7 +284,7 @@ void printf_package(
     if (id.IsPresent)
         printf_line( OUSTR("Identifier"), id.Value, level );
     OUString version(xPackage->getVersion());
-    if (version.getLength() != 0)
+    if (!version.isEmpty())
         printf_line( OUSTR("Version"), version, level + 1 );
     printf_line( OUSTR("URL"), xPackage->getURL(), level + 1 );
 

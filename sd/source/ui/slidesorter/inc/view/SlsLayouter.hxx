@@ -119,11 +119,6 @@ public:
         const Size& rPreviewModelSize,
         const sal_uInt32 nPageCount);
 
-    /** Change the zoom factor.  This does not change the general layout
-        (number of columns).
-    */
-    void _SetZoom (Fraction nZoomFactor);
-
     /** Return the number of columns.
     */
     sal_Int32 GetColumnCount (void) const;

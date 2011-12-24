@@ -477,7 +477,7 @@ void OCalcTable::fillColumns()
         lcl_GetColumnInfo( m_xSheet, m_xFormats, m_nStartCol + i, m_nStartRow, m_bHasHeaders,
                             aColumnName, eType, bCurrency );
 
-        if ( !aColumnName.getLength() )
+        if ( aColumnName.isEmpty() )
             aColumnName = lcl_GetColumnStr( i );
 
         sal_Int32 nPrecision = 0;   //! ...

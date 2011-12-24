@@ -248,7 +248,7 @@ sal_Bool OCopyTable::LeavePage()
     m_pParent->m_sName = m_edTableName.GetText();
     m_edTableName.SaveValue();
 
-    if(!m_pParent->m_sName.getLength())
+    if(m_pParent->m_sName.isEmpty())
     {
         String sError(ModuleRes(STR_INVALID_TABLE_NAME));
         m_pParent->showError(sError);

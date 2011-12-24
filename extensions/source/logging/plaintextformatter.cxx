@@ -148,7 +148,7 @@ namespace logging
         aLogEntry.appendAscii( buffer );
         aLogEntry.appendAscii( " " );
 
-        if ( _rRecord.SourceClassName.getLength() && _rRecord.SourceMethodName.getLength() )
+        if ( !(_rRecord.SourceClassName.isEmpty() || _rRecord.SourceMethodName.isEmpty()) )
         {
             aLogEntry.append( _rRecord.SourceClassName );
             aLogEntry.appendAscii( "::" );

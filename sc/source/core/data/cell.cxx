@@ -179,6 +179,12 @@ void adjustRangeName(ScToken* pToken, ScDocument& rNewDoc, const ScDocument* pOl
     {
         bNewGlobal = bOldGlobal;
         pRangeData = new ScRangeData(*pOldRangeData, &rNewDoc);
+        ScTokenArray* pRangeNameToken = pRangeData->GetCode();
+        if (rNewDoc.GetPool() != const_cast<ScDocument*>(pOldDoc)->GetPool())
+        {
+            pRangeNameToken->ReadjustAbsolute3DReferences(pOldDoc, &rNewDoc, pRangeData->GetPos(), true);
+        }
+
         bool bInserted;
         if (bNewGlobal)
             bInserted = rNewDoc.GetRangeName()->insert(pRangeData);
@@ -881,6 +887,13 @@ ScFormulaCell::ScFormulaCell( const ScFormulaCell& rCell, ScDocument& rDoc, cons
                     adjustDBRange(pToken, rDoc, rCell.pDocument);
             }
         }
+
+        if (pDocument->GetPool() != rCell.pDocument->GetPool())
+        {
+            pCode->ReadjustAbsolute3DReferences( rCell.pDocument, &rDoc, rCell.aPos);
+        }
+
+        pCode->AdjustAbsoluteRefs( rCell.pDocument, rCell.aPos, aPos );
     }
 
     if( !bCompile )

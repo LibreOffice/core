@@ -81,13 +81,13 @@ namespace cppu
 OUString const & get_this_libpath()
 {
     static OUString s_path;
-    if (0 == s_path.getLength())
+    if (s_path.isEmpty())
     {
         OUString path;
         Module::getUrlFromAddress( reinterpret_cast<oslGenericFunction>(get_this_libpath), path );
         path = path.copy( 0, path.lastIndexOf( '/' ) );
         MutexGuard guard( Mutex::getGlobalMutex() );
-        if (0 == s_path.getLength())
+        if (s_path.isEmpty())
             s_path = path;
     }
     return s_path;
@@ -317,7 +317,7 @@ Reference< registry::XSimpleRegistry > nestRegistries(
     sal_Int32 index;
     Reference< registry::XSimpleRegistry > lastRegistry;
 
-    if(write_rdb.getLength()) // is there a write registry given?
+    if(!write_rdb.isEmpty()) // is there a write registry given?
     {
         lastRegistry.set(xSimRegFac->createInstance(), UNO_QUERY);
 
@@ -533,7 +533,7 @@ Reference< XComponentContext > SAL_CALL bootstrap()
             throw BootstrapException(
                 OUSTR("cannot convert soffice installation path to URL!"));
         }
-        if (path.getLength() > 0 && path[path.getLength() - 1] != '/') {
+        if (!path.isEmpty() && path[path.getLength() - 1] != '/') {
             path += OUSTR("/");
         }
 

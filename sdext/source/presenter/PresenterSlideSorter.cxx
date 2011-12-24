@@ -1201,7 +1201,6 @@ void PresenterSlideSorter::SetVerticalOffset (const double nYOffset)
 void PresenterSlideSorter::GotoSlide (const sal_Int32 nSlideIndex)
 {
     mxSlideShowController->gotoSlideIndex(nSlideIndex);
-    mpPresenterController->HideSlideSorter();
 }
 
 

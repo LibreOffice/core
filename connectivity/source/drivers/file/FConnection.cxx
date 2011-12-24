@@ -158,7 +158,7 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
         m_bDefaultTextEncoding = true;
     }
 
-    if ( aExt.getLength() )
+    if ( !aExt.isEmpty() )
         m_aFilenameExtension = aExt;
 
     try
@@ -449,7 +449,7 @@ void OConnection::throwUrlNotValid(const ::rtl::OUString & _rsUrl,const ::rtl::O
     aError.SQLState = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("S1000"));
     aError.ErrorCode = 0;
     aError.Context = static_cast< XConnection* >(this);
-    if (_rsMessage.getLength())
+    if (!_rsMessage.isEmpty())
         aError.NextException <<= SQLException(_rsMessage, aError.Context, ::rtl::OUString(), 0, Any());
 
     throw aError;

@@ -92,6 +92,8 @@ namespace
         : public rtl::Static< String, Version > {};
     struct AboutBoxVersion
         : public rtl::Static< String, AboutBoxVersion > {};
+    struct AboutBoxVersionSuffix
+        : public rtl::Static< String, AboutBoxVersionSuffix > {};
     struct OOOVendor
         : public rtl::Static< String, OOOVendor > {};
     struct Extension
@@ -108,6 +110,7 @@ void ReplaceProductNameHookProc( String& rStr )
         String rProductName = ProductName::get();
         String rVersion = Version::get();
         String rAboutBoxVersion = AboutBoxVersion::get();
+        String rAboutBoxVersionSuffix = AboutBoxVersionSuffix::get();
         String rExtension = Extension::get();
         String rOOOVendor = OOOVendor::get();
 
@@ -116,6 +119,7 @@ void ReplaceProductNameHookProc( String& rStr )
             rProductName = utl::ConfigManager::getProductName();
             rVersion = utl::ConfigManager::getProductVersion();
             rAboutBoxVersion = utl::ConfigManager::getAboutBoxProductVersion();
+            rAboutBoxVersionSuffix = utl::ConfigManager::getAboutBoxProductVersionSuffix();
             rOOOVendor = utl::ConfigManager::getVendor();
             if ( !rExtension.Len() )
             {
@@ -126,6 +130,7 @@ void ReplaceProductNameHookProc( String& rStr )
         nPro++;
         rStr.SearchAndReplaceAllAscii( "%PRODUCTNAME", rProductName );
         rStr.SearchAndReplaceAllAscii( "%PRODUCTVERSION", rVersion );
+        rStr.SearchAndReplaceAllAscii( "%ABOUTBOXPRODUCTVERSIONSUFFIX", rAboutBoxVersionSuffix );
         rStr.SearchAndReplaceAllAscii( "%ABOUTBOXPRODUCTVERSION", rAboutBoxVersion );
         rStr.SearchAndReplaceAllAscii( "%OOOVENDOR", rOOOVendor );
         rStr.SearchAndReplaceAllAscii( "%PRODUCTEXTENSION", rExtension );
@@ -264,7 +269,7 @@ void ServiceImpl::startExecuteModal(
                 m_parent ? *m_parent : Reference<awt::XWindow>(),
                 m_extensionURL ? *m_extensionURL : OUString() ) );
         myExtMgr->createDialog( false );
-        if (m_initialTitle.getLength() > 0) {
+        if (!m_initialTitle.isEmpty()) {
             myExtMgr->SetText( m_initialTitle );
             m_initialTitle = OUString();
         }

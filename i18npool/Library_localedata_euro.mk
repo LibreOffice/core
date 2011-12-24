@@ -30,6 +30,7 @@ $(eval $(call gb_Library_Library,localedata_euro))
 
 $(eval $(call gb_Library_add_linked_libs,localedata_euro,\
 	localedata_en \
+    $(gb_STDLIBS) \
 ))
 
 $(eval $(call gb_Library_add_generated_exception_objects,localedata_euro,\

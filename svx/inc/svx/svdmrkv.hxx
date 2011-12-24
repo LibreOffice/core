@@ -240,7 +240,7 @@ public:
     void SetCreateMode(sal_Bool bOn=sal_True) { SetEditMode(bOn?SDREDITMODE_CREATE:SDREDITMODE_EDIT); }
     sal_Bool IsCreateMode() const { return eEditMode==SDREDITMODE_CREATE; }
     void SetGluePointEditMode(sal_Bool bOn=sal_True) { SetEditMode(bOn?SDREDITMODE_GLUEPOINTEDIT:eEditMode0); }
-    sal_Bool IsGluePointEditMode() const { return eEditMode==SDREDITMODE_GLUEPOINTEDIT;; }
+    sal_Bool IsGluePointEditMode() const { return eEditMode==SDREDITMODE_GLUEPOINTEDIT; }
 
     void SetDesignMode(sal_Bool bOn=sal_True);
     sal_Bool IsDesignMode() const { return bDesignMode; }

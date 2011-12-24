@@ -222,6 +222,12 @@ enum SvxExtNumType
     SVX_NUM_CHARS_LOWER_LETTER_N
 };
 
+enum SvxCompareMode
+{
+    SVX_CMP_AUTO = 0,
+    SVX_CMP_BY_WORD,
+    SVX_CMP_BY_CHAR
+};
 
 #endif
 

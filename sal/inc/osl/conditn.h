@@ -49,25 +49,25 @@ typedef enum {
     The condition is in the reset-state.
     @returns 0 if condition could not be created.
 */
-oslCondition SAL_CALL osl_createCondition(void);
+SAL_DLLPUBLIC oslCondition SAL_CALL osl_createCondition(void);
 
 /** Free the memory used by the condition.
     @param Condition the condition handle.
 */
-void SAL_CALL osl_destroyCondition(oslCondition Condition);
+SAL_DLLPUBLIC void SAL_CALL osl_destroyCondition(oslCondition Condition);
 
 /** Sets condition to True => wait() will not block, check() returns True.
     NOTE: ALL threads waiting on this condition are unblocked!
     @param Condition handle to a created condition.
     @return False if system-call failed.
 */
-sal_Bool SAL_CALL osl_setCondition(oslCondition Condition);
+SAL_DLLPUBLIC sal_Bool SAL_CALL osl_setCondition(oslCondition Condition);
 
 /** Sets condition to False => wait() will block, check() returns False
     @param Condition handle to a created condition.
     @return False if system-call failed.
 */
-sal_Bool SAL_CALL osl_resetCondition(oslCondition Condition);
+SAL_DLLPUBLIC sal_Bool SAL_CALL osl_resetCondition(oslCondition Condition);
 
 /** Blocks if condition is not set<BR>
     If condition has been destroyed prematurely, wait() will
@@ -76,14 +76,14 @@ sal_Bool SAL_CALL osl_resetCondition(oslCondition Condition);
     @param pTimeout Tiemout value or NULL for infinite waiting
     @return False if system-call failed.
 */
-oslConditionResult SAL_CALL osl_waitCondition(oslCondition Condition, const TimeValue* pTimeout);
+SAL_DLLPUBLIC oslConditionResult SAL_CALL osl_waitCondition(oslCondition Condition, const TimeValue* pTimeout);
 
 /** Queries the state of the condition without blocking.
     @param Condition handle to a created condition.
     @return True: condition is set. <BR>
     False: condition is not set. <BR>
 */
-sal_Bool SAL_CALL osl_checkCondition(oslCondition Condition);
+SAL_DLLPUBLIC sal_Bool SAL_CALL osl_checkCondition(oslCondition Condition);
 
 #ifdef __cplusplus
 }

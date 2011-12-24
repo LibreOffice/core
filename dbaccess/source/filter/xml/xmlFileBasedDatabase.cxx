@@ -87,7 +87,7 @@ OXMLFileBasedDatabase::OXMLFileBasedDatabase( ODBFilter& rImport,
                         sLocation = ::svt::OFileNotation( rImport.GetAbsoluteReference( sFileName ) ).get( ::svt::OFileNotation::N_SYSTEM );
                     }
 
-                    if ( sLocation.getLength() == 0 )
+                    if ( sLocation.isEmpty() )
                         sLocation = sValue;
                 }
                 break;
@@ -99,14 +99,14 @@ OXMLFileBasedDatabase::OXMLFileBasedDatabase( ODBFilter& rImport,
                 sFileTypeExtension = sValue;
                 break;
         }
-        if ( aProperty.Name.getLength() )
+        if ( !aProperty.Name.isEmpty() )
         {
             if ( !aProperty.Value.hasValue() )
                 aProperty.Value <<= sValue;
             rImport.addInfo(aProperty);
         }
     }
-    if ( sLocation.getLength() && sMediaType.getLength() )
+    if ( !(sLocation.isEmpty() || sMediaType.isEmpty()) )
     {
         ::dbaccess::ODsnTypeCollection aTypeCollection(rImport.getORB());
         ::rtl::OUString sURL(aTypeCollection.getDatasourcePrefixFromMediaType(sMediaType,sFileTypeExtension));

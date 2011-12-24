@@ -65,7 +65,7 @@ OUString LibraryContainer::get_libname(
     ::ucbhelper::Content ucb_content( url, xCmdEnv );
     xml_parse( ::xmlscript::importLibrary( import ), ucb_content, xContext );
 
-    if (import.aName.getLength() == 0) {
+    if (import.aName.isEmpty()) {
         throw Exception( StrCannotDetermineLibName::get(),
                          Reference<XInterface>() );
     }

@@ -55,9 +55,6 @@ namespace slideshow
         enum mtf_load_flags {
             /// no flags
             MTF_LOAD_NONE = 0,
-            /// annotate text actions with verbose comments,
-            /// denoting logical and physical text entities.
-            MTF_LOAD_VERBOSE_COMMENTS = 1,
             /// the source of the metafile might be a foreign
             /// application. The metafile is checked against unsupported
             /// content, and, if necessary, returned as a pre-rendererd

@@ -444,7 +444,7 @@ long ImplHandleMouseEvent( Window* pWindow, sal_uInt16 nSVEvent, sal_Bool bMouse
     if ( !pChild && !bMouseLeave )
         return 0;
 
-    // Ein paar Test ausfuehren und Message abfangen oder Status umsetzen
+    // execute a few tests and catch the message or implement the status
     if ( pChild )
     {
         if( pChild->ImplIsAntiparallel() )
@@ -506,8 +506,8 @@ long ImplHandleMouseEvent( Window* pWindow, sal_uInt16 nSVEvent, sal_Bool bMouse
     // determine mouse event data
     if ( nSVEvent == EVENT_MOUSEMOVE )
     {
-        // Testen, ob MouseMove an das gleiche Fenster geht und sich der
-        // Status nicht geaendert hat
+        // check if MouseMove belongs to same window and if the
+        // status did not change
         if ( pChild )
         {
             Point aChildMousePos = pChild->ImplFrameToOutput( aMousePos );
@@ -517,8 +517,8 @@ long ImplHandleMouseEvent( Window* pWindow, sal_uInt16 nSVEvent, sal_Bool bMouse
                  (aChildMousePos.Y() == pWinFrameData->mnLastMouseWinY) &&
                  (nOldCode == pWinFrameData->mnMouseCode) )
             {
-                // Mouse-Pointer neu setzen, da er sich geaendet haben
-                // koennte, da ein Modus umgesetzt wurde
+                // set mouse pointer anew, as it could have changed
+                // due to the mode switch
                 ImplSetMousePointer( pChild );
                 return 0;
             }
@@ -530,15 +530,15 @@ long ImplHandleMouseEvent( Window* pWindow, sal_uInt16 nSVEvent, sal_Bool bMouse
         // mouse click
         nClicks = pWinFrameData->mnClickCount;
 
-        // Gegebenenfalls den Start-Drag-Handler rufen.
-        // Achtung: Muss vor Move gerufen werden, da sonst bei schnellen
-        // Mausbewegungen die Applikationen in den Selektionszustand gehen.
+        // call Start-Drag handler if required
+        // Warning: should be called before Move, as otherwise during
+        // fast mouse movements the applications move to the selection state
         Window* pMouseDownWin = pWinFrameData->mpMouseDownWin;
         if ( pMouseDownWin )
         {
-            // Testen, ob StartDrag-Modus uebereinstimmt. Wir vergleichen nur
-            // den Status der Maustasten, damit man mit Mod1 z.B. sofort
-            // in den Kopiermodus gehen kann.
+            // check for matching StartDrag mode. We only compare
+            // the status of the mouse buttons, such that e. g. Mod1 can
+            // change immediately to the copy mode
             const MouseSettings& rMSettings = pMouseDownWin->GetSettings().GetMouseSettings();
             if ( (nCode & (MOUSE_LEFT | MOUSE_RIGHT | MOUSE_MIDDLE)) ==
                  (rMSettings.GetStartDragCode() & (MOUSE_LEFT | MOUSE_RIGHT | MOUSE_MIDDLE)) )
@@ -622,8 +622,8 @@ long ImplHandleMouseEvent( Window* pWindow, sal_uInt16 nSVEvent, sal_Bool bMouse
                 pWinFrameData->mbInMouseMove = sal_True;
                 pMouseMoveWin->ImplGetWinData()->mbMouseOver = sal_False;
                 pMouseMoveWin->ImplAddDel( &aDelData );
-                // Durch MouseLeave kann auch dieses Fenster zerstoert
-                // werden
+
+                // A MouseLeave can destroy this window
                 if ( pChild )
                     pChild->ImplAddDel( &aDelData2 );
                 if ( !ImplCallPreNotify( aNLeaveEvt ) )
@@ -1712,7 +1712,7 @@ static void ImplHandleMoveResize( Window* pWindow, long nNewWidth, long nNewHeig
 
 static void ImplActivateFloatingWindows( Window* pWindow, sal_Bool bActive )
 {
-    // Zuerst alle ueberlappenden Fenster ueberpruefen
+    // First check all overlapping windows
     Window* pTempWindow = pWindow->ImplGetWindowImpl()->mpFirstOverlap;
     while ( pTempWindow )
     {
@@ -1735,15 +1735,14 @@ IMPL_LINK( Window, ImplAsyncFocusHdl, void*, EMPTYARG )
 {
     ImplGetWindowImpl()->mpFrameData->mnFocusId = 0;
 
-    // Wenn Status erhalten geblieben ist, weil wir den Focus in der
-    // zwischenzeit schon wiederbekommen haben, brauchen wir auch
-    // nichts machen
+    // If the status has been preserved, because we got back the focus
+    // in the meantime, we do nothing
     sal_Bool bHasFocus = ImplGetWindowImpl()->mpFrameData->mbHasFocus || ImplGetWindowImpl()->mpFrameData->mbSysObjFocus;
 
-    // Dann die zeitverzoegerten Funktionen ausfuehren
+    // next execute the delayed functions
     if ( bHasFocus )
     {
-        // Alle FloatingFenster deaktiv zeichnen
+        // redraw all floating windows inactive
         if ( ImplGetWindowImpl()->mpFrameData->mbStartFocusState != bHasFocus )
             ImplActivateFloatingWindows( this, bHasFocus );
 
@@ -1814,8 +1813,8 @@ IMPL_LINK( Window, ImplAsyncFocusHdl, void*, EMPTYARG )
                 }
 
                 // TrackingMode is ended in ImplHandleLoseFocus
-// To avoid problems with the Unix IME
-//                pFocusWin->EndExtTextInput( EXTTEXTINPUT_END_COMPLETE );
+                // To avoid problems with the Unix IME
+                // pFocusWin->EndExtTextInput( EXTTEXTINPUT_END_COMPLETE );
 
                 // XXX #102010# hack for accessibility: do not close the menu,
                 // even after focus lost
@@ -1832,7 +1831,7 @@ IMPL_LINK( Window, ImplAsyncFocusHdl, void*, EMPTYARG )
             }
         }
 
-        // Alle FloatingFenster deaktiv zeichnen
+        // Redraw all floating window inactive
         if ( ImplGetWindowImpl()->mpFrameData->mbStartFocusState != bHasFocus )
             ImplActivateFloatingWindows( this, bHasFocus );
     }
@@ -1846,8 +1845,9 @@ static void ImplHandleGetFocus( Window* pWindow )
 {
     pWindow->ImplGetWindowImpl()->mpFrameData->mbHasFocus = sal_True;
 
-    // Focus-Events zeitverzoegert ausfuehren, damit bei SystemChildFenstern
-    // nicht alles flackert, wenn diese den Focus bekommen
+
+    // execute Focus-Events after a delay, such that SystemChildWindows
+    // do not blink when they receive focus
     if ( !pWindow->ImplGetWindowImpl()->mpFrameData->mnFocusId )
     {
         bool bCallDirect = ImplGetSVData()->mbIsTestTool;
@@ -1868,20 +1868,19 @@ static void ImplHandleLoseFocus( Window* pWindow )
 {
     ImplSVData* pSVData = ImplGetSVData();
 
-    // Wenn Frame den Focus verliert, brechen wir auch ein AutoScroll ab
+    // Abort the autoscroll if the frame loses focus
     if ( pSVData->maWinData.mpAutoScrollWin )
         pSVData->maWinData.mpAutoScrollWin->EndAutoScroll();
 
-    // Wenn Frame den Focus verliert, brechen wir auch ein Tracking ab
+    // Abort tracking if the frame loses focus
     if ( pSVData->maWinData.mpTrackWin )
     {
         if ( pSVData->maWinData.mpTrackWin->ImplGetWindowImpl()->mpFrameWindow == pWindow )
             pSVData->maWinData.mpTrackWin->EndTracking( ENDTRACK_CANCEL );
     }
 
-    // handle FloatingMode
-    // hier beenden wir immer den PopupModus, auch dann, wenn NOFOCUSCLOSE
-    // gesetzt ist, damit wir nicht beim Wechsel noch Fenster stehen lassen
+    // here we always terminate the popupmode, also when NOFOCUSCLOSE
+    // is set, such that we do not show windows during the switch
     if ( pSVData->maWinData.mpFirstFloat )
     {
         if ( !(pSVData->maWinData.mpFirstFloat->GetPopupModeFlags() & FLOATWIN_POPUPMODE_NOAPPFOCUSCLOSE) )
@@ -1890,8 +1889,8 @@ static void ImplHandleLoseFocus( Window* pWindow )
 
     pWindow->ImplGetWindowImpl()->mpFrameData->mbHasFocus = sal_False;
 
-    // Focus-Events zeitverzoegert ausfuehren, damit bei SystemChildFenstern
-    // nicht alles flackert, wenn diese den Focus bekommen
+    // execute Focus-Events after a delay, such that SystemChildWindows
+    // do not flicker when they receive focus
     bool bCallDirect = ImplGetSVData()->mbIsTestTool;
     if ( !pWindow->ImplGetWindowImpl()->mpFrameData->mnFocusId )
     {

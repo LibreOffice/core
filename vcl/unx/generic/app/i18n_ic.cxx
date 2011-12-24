@@ -202,7 +202,7 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame ) :
         maClientData.aText.pUnicodeBuffer   =
             (sal_Unicode*)malloc(PREEDIT_BUFSZ * sizeof(sal_Unicode));
         maClientData.aText.pCharStyle       =
-            (XIMFeedback*)malloc(PREEDIT_BUFSZ * sizeof(XIMFeedback));;
+            (XIMFeedback*)malloc(PREEDIT_BUFSZ * sizeof(XIMFeedback));
         maClientData.aText.nSize            = PREEDIT_BUFSZ;
         maClientData.aText.nCursorPos       = 0;
         maClientData.aText.nLength          = 0;

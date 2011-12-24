@@ -321,7 +321,7 @@ Any Adapter::invoke( const OUString &aFunctionName,
     }
 
     }
-    catch(InvocationTargetException & e )
+    catch( const InvocationTargetException & e )
     {
         if( isLog( cargo, LogLevel::CALL ) )
         {
@@ -332,7 +332,7 @@ Any Adapter::invoke( const OUString &aFunctionName,
         }
         throw;
     }
-    catch( RuntimeException & e )
+    catch( const RuntimeException & e )
     {
         if( cargo && isLog( cargo, LogLevel::CALL ) )
         {
@@ -342,7 +342,7 @@ Any Adapter::invoke( const OUString &aFunctionName,
         }
         throw;
     }
-    catch( CannotConvertException & e )
+    catch( const CannotConvertException & e )
     {
         if( isLog( cargo, LogLevel::CALL ) )
         {
@@ -352,7 +352,7 @@ Any Adapter::invoke( const OUString &aFunctionName,
         }
         throw;
     }
-    catch(  IllegalArgumentException & e )
+    catch( const IllegalArgumentException & e )
     {
         if( isLog( cargo, LogLevel::CALL ) )
         {
@@ -387,7 +387,7 @@ void Adapter::setValue( const OUString & aPropertyName, const Any & value )
         raiseInvocationTargetExceptionWhenNeeded( runtime);
 
     }
-    catch( IllegalArgumentException & exc )
+    catch( const IllegalArgumentException & exc )
     {
         throw InvocationTargetException( exc.Message, *this, com::sun::star::uno::makeAny( exc ) );
     }

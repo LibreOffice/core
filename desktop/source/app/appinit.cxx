@@ -108,7 +108,7 @@ static bool configureUcb(bool bServer, rtl::OUString const & rPortalConnect)
     osl::Security().getUserIdent(aPipe);
 
     rtl::OUStringBuffer aPortal;
-    if (rPortalConnect.getLength() != 0)
+    if (!rPortalConnect.isEmpty())
     {
         aPortal.append(sal_Unicode(','));
         aPortal.append(rPortalConnect);
@@ -181,7 +181,7 @@ static bool configureUcb(bool bServer, rtl::OUString const & rPortalConnect)
     }
 #endif // GNOME_VFS_ENABLED
 
-    return ret;;
+    return ret;
 }
 
 Reference< XMultiServiceFactory > Desktop::CreateApplicationServiceManager()
@@ -238,7 +238,7 @@ void Desktop::RegisterServices( Reference< XMultiServiceFactory >& xSMgr )
         if ( bHeadlessMode )
             Application::EnableHeadlessMode(false);
 
-        if ( conDcp.getLength() > 0 )
+        if ( !conDcp.isEmpty() )
         {
             // accept incoming connections (scripting and one rvp)
             RTL_LOGFILE_CONTEXT( aLog, "desktop (lo119109) desktop::Desktop::createAcceptor()" );
@@ -425,7 +425,7 @@ void Desktop::CreateTemporaryDirectory()
     ::utl::LocalFileHelper::ConvertURLToPhysicalName( aTempBaseURL, aRet );
     ::osl::FileBase::getFileURLFromSystemPath( aRet, aTempPath );
     aTempPath = ::utl::TempFile::SetTempNameBaseDirectory( aTempPath );
-    if ( !aTempPath.getLength() )
+    if ( aTempPath.isEmpty() )
     {
         ::osl::File::getTempDirURL( aTempBaseURL );
 

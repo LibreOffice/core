@@ -40,7 +40,6 @@ namespace oox {
 namespace xls {
 
 class OOXMLFormulaParserImpl;
-class OOXMLFormulaPrinterImpl;
 
 // ============================================================================
 
@@ -96,12 +95,10 @@ public:
 
 private:
     typedef ::boost::shared_ptr< OOXMLFormulaParserImpl >   ParserImplRef;
-    typedef ::boost::shared_ptr< OOXMLFormulaPrinterImpl >  PrinterImplRef;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >
                         mxComponent;
     ParserImplRef       mxParserImpl;       /// Implementation of import parser.
-    PrinterImplRef      mxPrinterImpl;      /// Implementation of export printer.
 };
 
 // ============================================================================

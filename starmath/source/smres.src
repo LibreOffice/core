@@ -1554,7 +1554,7 @@ String RID_SYMBOLFILESSTR
 
 String RID_ALLFILESSTR
 {
-    Text [ en-US ] = "All Files (*.*)" ;
+    Text [ en-US ] = "All files" ;
 };
 
 String RID_ERR_IDENT

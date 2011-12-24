@@ -63,8 +63,6 @@ public:
     void Show (void);
     void Hide (void);
 
-    void SetPriority (const double nPriority);
-
     void Resize (const css::geometry::RealSize2D& rSize);
     css::geometry::RealSize2D GetSize (void) const;
 

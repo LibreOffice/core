@@ -146,7 +146,7 @@ Image SAL_CALL GetImage(
             if ( !!aImage )
                 return aImage;
         }
-        catch ( Exception& )
+        catch (const Exception&)
         {
         }
     }
@@ -214,7 +214,7 @@ Image SAL_CALL GetImage(
                 return SvFileInformationManager::GetImageNoDefault( aObj, bBig );
         }
     }
-    catch ( Exception& )
+    catch (const Exception&)
     {
     }
 

@@ -45,6 +45,7 @@ class SvStringsDtor;
 class SfxPrinter;
 class SwWrtShell;
 class FontList;
+class SwCompareConfig;
 
 class SwContentOptPage : public SfxTabPage
 {
@@ -395,6 +396,32 @@ private:
 
 };
 #endif // DBG_UTIL
+
+class SwCompareOptionsTabPage : public SfxTabPage
+{
+    FixedLine aComparisonFL;
+    RadioButton aAutoRB;
+    RadioButton aWordRB;
+    RadioButton aCharRB;
+
+    FixedLine aSettingsFL;
+    CheckBox aRsidCB;
+    CheckBox aIgnoreCB;
+    NumericField aLenNF;
+
+    SwCompareOptionsTabPage( Window* pParent, const SfxItemSet& rSet );
+    ~SwCompareOptionsTabPage();
+
+    DECL_LINK( ComparisonHdl, RadioButton *pRB);
+    DECL_LINK( IgnoreHdl, CheckBox *pCB);
+
+public:
+
+    static SfxTabPage*	Create( Window* pParent, const SfxItemSet& rAttrSet );
+
+    virtual	sal_Bool    FillItemSet( SfxItemSet& rSet );
+    virtual	void 		Reset( const SfxItemSet& rSet );
+};
 
 #endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

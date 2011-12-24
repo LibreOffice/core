@@ -140,7 +140,7 @@ OUString SAL_CALL CMimeContentType::getParameterValue( const OUString& aName ) t
 
 void SAL_CALL CMimeContentType::init( const OUString& aCntType ) throw( IllegalArgumentException )
 {
-    if ( !aCntType.getLength( ) )
+    if ( aCntType.isEmpty( ) )
         throw IllegalArgumentException( );
 
     m_nPos = 0;
@@ -200,7 +200,7 @@ void SAL_CALL CMimeContentType::type( void )
         throw IllegalArgumentException( );
 
     // parse
-    while(  m_nxtSym.getLength( ) )
+    while(  !m_nxtSym.isEmpty( ) )
     {
         if ( isInRange( m_nxtSym, TOKEN ) )
             m_MediaType += m_nxtSym;
@@ -230,7 +230,7 @@ void SAL_CALL CMimeContentType::subtype( void )
     if ( !isInRange( m_nxtSym, TOKEN ) )
         throw IllegalArgumentException( );
 
-    while( m_nxtSym.getLength( ) )
+    while( !m_nxtSym.isEmpty( ) )
     {
         if ( isInRange( m_nxtSym, TOKEN ) )
             m_MediaSubtype += m_nxtSym;
@@ -252,7 +252,7 @@ void SAL_CALL CMimeContentType::subtype( void )
 
 void SAL_CALL CMimeContentType::trailer( void )
 {
-    while( m_nxtSym.getLength( ) )
+    while( !m_nxtSym.isEmpty( ) )
     {
         if ( m_nxtSym == OUString(RTL_CONSTASCII_USTRINGPARAM("(")) )
         {
@@ -298,7 +298,7 @@ OUString SAL_CALL CMimeContentType::pName( )
 {
     OUString pname;
 
-    while( m_nxtSym.getLength( ) )
+    while( !m_nxtSym.isEmpty( ) )
     {
         if ( isInRange( m_nxtSym, TOKEN ) )
             pname += m_nxtSym;
@@ -332,7 +332,7 @@ OUString SAL_CALL CMimeContentType::pValue( )
         // remove the last quote-sign
         pvalue = pvalue.copy(0, pvalue.getLength() - 1);
 
-        if ( !pvalue.getLength( ) )
+        if ( pvalue.isEmpty( ) )
             throw IllegalArgumentException( );
     }
     else if ( isInRange( m_nxtSym, TOKEN ) ) // unquoted pvalue
@@ -356,7 +356,7 @@ OUString SAL_CALL CMimeContentType::quotedPValue( )
     OUString pvalue;
     sal_Bool bAfterQuoteSign = sal_False;
 
-    while ( m_nxtSym.getLength( ) )
+    while ( !m_nxtSym.isEmpty( ) )
     {
         if ( bAfterQuoteSign && ((m_nxtSym == SPACE)||(m_nxtSym == SEMICOLON) ) )
             break;
@@ -384,7 +384,7 @@ OUString SAL_CALL CMimeContentType::nonquotedPValue( )
 {
     OUString pvalue;
 
-    while ( m_nxtSym.getLength( ) )
+    while ( !m_nxtSym.isEmpty( ) )
     {
         if ( isInRange( m_nxtSym, TOKEN ) )
             pvalue += m_nxtSym;
@@ -404,7 +404,7 @@ OUString SAL_CALL CMimeContentType::nonquotedPValue( )
 
 void SAL_CALL CMimeContentType::comment( void )
 {
-    while ( m_nxtSym.getLength( ) )
+    while ( !m_nxtSym.isEmpty( ) )
     {
         if ( isInRange( m_nxtSym, TOKEN + SPACE ) )
             getSym( );

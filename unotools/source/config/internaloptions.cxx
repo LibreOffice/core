@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-
 #include <deque>
 
 #include <unotools/internaloptions.hxx>
@@ -478,46 +477,10 @@ sal_Bool SvtInternalOptions::SlotCFGEnabled() const
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
-sal_Bool SvtInternalOptions::CrashMailEnabled() const
-{
-    MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pDataContainer->CrashMailEnabled();
-}
-
-//*****************************************************************************************************************
-//  public method
-//*****************************************************************************************************************
 sal_Bool SvtInternalOptions::MailUIEnabled() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pDataContainer->MailUIEnabled();
-}
-
-//*****************************************************************************************************************
-//  public methods
-//*****************************************************************************************************************
-sal_Bool SvtInternalOptions::IsRemoveMenuEntryClose() const
-{
-    MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pDataContainer->IsRemoveMenuEntryClose();
-}
-
-sal_Bool SvtInternalOptions::IsRemoveMenuEntryBackToWebtop() const
-{
-    MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pDataContainer->IsRemoveMenuEntryBackToWebtop();
-}
-
-sal_Bool SvtInternalOptions::IsRemoveMenuEntryNewWebtop() const
-{
-    MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pDataContainer->IsRemoveMenuEntryNewWebtop();
-}
-
-sal_Bool SvtInternalOptions::IsRemoveMenuEntryLogout() const
-{
-    MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pDataContainer->IsRemoveMenuEntryLogout();
 }
 
 OUString SvtInternalOptions::GetCurrentTempURL() const

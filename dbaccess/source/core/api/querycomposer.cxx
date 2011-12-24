@@ -288,7 +288,7 @@ void SAL_CALL OQueryComposer::setFilter( const ::rtl::OUString& filter ) throw(S
     aFilterCreator.append(filter);
 
     m_aFilters.clear();
-    if ( filter.getLength() )
+    if ( !filter.isEmpty() )
         m_aFilters.push_back(filter);
 
     m_xComposer->setFilter( aFilterCreator.getComposedAndClear() );
@@ -306,7 +306,7 @@ void SAL_CALL OQueryComposer::setOrder( const ::rtl::OUString& order ) throw(SQL
     aOrderCreator.append(order);
 
     m_aOrders.clear();
-    if ( order.getLength() )
+    if ( !order.isEmpty() )
         m_aOrders.push_back(order);
 
     m_xComposer->setOrder(aOrderCreator.getComposedAndClear());

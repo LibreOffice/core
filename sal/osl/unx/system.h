@@ -490,7 +490,7 @@ struct tm *gmtime_r(const time_t *timep, struct tm *buffer);
 #endif /* !defined FREEBSD || (__FreeBSD_version < 500112) */
 #if !defined(FREEBSD) || (__FreeBSD_version < 601103)
 struct hostent *gethostbyname_r(const char *name, struct hostent *result,
-                                char *buffer, int buflen, int *h_errnop);
+                                char *buffer, size_t buflen, int *h_errnop);
 #endif /* !defined(FREEBSD) || (__FreeBSD_version < 601103) */
 #endif
 

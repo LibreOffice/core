@@ -128,9 +128,9 @@ namespace dbaui
         if(pFieldDesc)
         {
             _rStr << (sal_Int32)1;
-            _rStr.WriteByteString(pFieldDesc->GetName());
-            _rStr.WriteByteString(pFieldDesc->GetDescription());
-            _rStr.WriteByteString(pFieldDesc->GetHelpText());
+            _rStr.WriteUniOrByteString(pFieldDesc->GetName(), _rStr.GetStreamCharSet());
+            _rStr.WriteUniOrByteString(pFieldDesc->GetDescription(), _rStr.GetStreamCharSet());
+            _rStr.WriteUniOrByteString(pFieldDesc->GetHelpText(), _rStr.GetStreamCharSet());
             double nValue = 0.0;
             Any aValue = pFieldDesc->GetControlDefault();
             if ( aValue >>= nValue )
@@ -141,7 +141,7 @@ namespace dbaui
             else
             {
                 _rStr << sal_Int32(2);
-                _rStr.WriteByteString(::comphelper::getString(aValue));
+                _rStr.WriteUniOrByteString(::comphelper::getString(aValue), _rStr.GetStreamCharSet());
             }
 
             _rStr << pFieldDesc->GetType();
@@ -170,12 +170,12 @@ namespace dbaui
             OFieldDescription* pFieldDesc = new OFieldDescription();
             _rRow.m_pActFieldDescr = pFieldDesc;
             String sValue;
-            _rStr.ReadByteString(sValue);
+            _rStr.ReadUniOrByteString(sValue, _rStr.GetStreamCharSet());
             pFieldDesc->SetName(sValue);
 
-            _rStr.ReadByteString(sValue);
+            _rStr.ReadUniOrByteString(sValue, _rStr.GetStreamCharSet());
             pFieldDesc->SetDescription(sValue);
-            _rStr.ReadByteString(sValue);
+            _rStr.ReadUniOrByteString(sValue, _rStr.GetStreamCharSet());
             pFieldDesc->SetHelpText(sValue);
 
             _rStr >> nValue;
@@ -190,7 +190,7 @@ namespace dbaui
                     break;
                 }
                 case 2:
-                    _rStr.ReadByteString(sValue);
+                    _rStr.ReadUniOrByteString(sValue, _rStr.GetStreamCharSet());
                     aControlDefault <<= ::rtl::OUString(sValue);
                     break;
             }

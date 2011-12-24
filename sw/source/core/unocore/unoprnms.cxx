@@ -781,6 +781,8 @@ const SwPropNameTab aPropNameTab = {
 /* 0742 UNO_NAME_SEPARATOR_LINE_STYLE */ {MAP_CHAR_LEN("SeparatorLineStyle")},
 /* 0743 UNO_NAME_FOOTNOTE_LINE_STYLE */ {MAP_CHAR_LEN("FootnoteLineStyle")},
 /* 0744 UNO_NAME_EMBEDDED_OBJECT */ {MAP_CHAR_LEN("EmbeddedObject")},
+/* 0745 UNO_NAME_RSID */	         {MAP_CHAR_LEN("Rsid")},
+/* 0746 UNO_NAME_PARRSID */	         {MAP_CHAR_LEN("ParRsid")},
 
 // new items in this array must match enum SwPropNameIds
 };

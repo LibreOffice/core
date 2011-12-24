@@ -512,34 +512,34 @@ namespace pcr
     //--------------------------------------------------------------------
     Reference< XPropertySet > EFormsHelper::getOrCreateBindingForModel( const ::rtl::OUString& _rTargetModel, const ::rtl::OUString& _rBindingName ) const SAL_THROW(())
     {
-        OSL_ENSURE( _rBindingName.getLength(), "EFormsHelper::getOrCreateBindingForModel: invalid binding name!" );
+        OSL_ENSURE( !_rBindingName.isEmpty(), "EFormsHelper::getOrCreateBindingForModel: invalid binding name!" );
         return implGetOrCreateBinding( _rTargetModel, _rBindingName );
     }
 
     //--------------------------------------------------------------------
     Reference< XPropertySet > EFormsHelper::implGetOrCreateBinding( const ::rtl::OUString& _rTargetModel, const ::rtl::OUString& _rBindingName ) const SAL_THROW(())
     {
-        OSL_ENSURE( !( !_rTargetModel.getLength() && _rBindingName .getLength() ), "EFormsHelper::implGetOrCreateBinding: no model, but a binding name?" );
+        OSL_ENSURE( !( _rTargetModel.isEmpty() && !_rBindingName.isEmpty() ), "EFormsHelper::implGetOrCreateBinding: no model, but a binding name?" );
 
         Reference< XPropertySet > xBinding;
         try
         {
             ::rtl::OUString sTargetModel( _rTargetModel );
             // determine the model which the binding should belong to
-            if ( !sTargetModel.getLength() )
+            if ( sTargetModel.isEmpty() )
             {
                 ::std::vector< ::rtl::OUString > aModelNames;
                 getFormModelNames( aModelNames );
                 if ( !aModelNames.empty() )
                     sTargetModel = *aModelNames.begin();
-                OSL_ENSURE( sTargetModel.getLength(), "EFormsHelper::implGetOrCreateBinding: unable to obtain a default model!" );
+                OSL_ENSURE( !sTargetModel.isEmpty(), "EFormsHelper::implGetOrCreateBinding: unable to obtain a default model!" );
             }
             Reference< xforms::XModel > xModel( getFormModelByName( sTargetModel ) );
             Reference< XNameAccess > xBindingNames( xModel.is() ? xModel->getBindings() : Reference< XSet >(), UNO_QUERY );
             if ( xBindingNames.is() )
             {
                 // get or create the binding instance
-                if ( _rBindingName.getLength() )
+                if ( !_rBindingName.isEmpty() )
                 {
                     if ( xBindingNames->hasByName( _rBindingName ) )
                         OSL_VERIFY( xBindingNames->getByName( _rBindingName ) >>= xBinding );

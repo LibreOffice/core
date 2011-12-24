@@ -1390,13 +1390,6 @@ void* ComboBox::GetEntryData( sal_uInt16 nPos ) const
 
 // -----------------------------------------------------------------------
 
-void ComboBox::SetTopEntry( sal_uInt16 nPos )
-{
-    mpImplLB->SetTopEntry( nPos + mpImplLB->GetEntryList()->GetMRUCount() );
-}
-
-// -----------------------------------------------------------------------
-
 sal_uInt16 ComboBox::GetTopEntry() const
 {
     sal_uInt16 nPos = GetEntryCount() ? mpImplLB->GetTopEntry() : LISTBOX_ENTRY_NOTFOUND;

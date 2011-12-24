@@ -605,7 +605,7 @@ namespace
                 STR_NO_CLASSNAME,
                 "$classname$", _rDriverClass
              ) );
-        if ( _rDriverClassPath.getLength() )
+        if ( !_rDriverClassPath.isEmpty() )
         {
             const ::rtl::OUString sError2( _aResource.getResourceStringWithSubstitution(
                 STR_NO_CLASSNAME_PATH,
@@ -687,7 +687,7 @@ void java_sql_Connection::loadDriverFromProperties( const ::rtl::OUString& _sDri
             java_sql_SQLException_BASE::st_getMyClass();
             java_lang_Throwable::st_getMyClass();
 
-            if ( !_sDriverClass.getLength() )
+            if ( _sDriverClass.isEmpty() )
             {
                 m_aLogger.log( LogLevel::SEVERE, STR_LOG_NO_DRIVER_CLASS );
                 ::dbtools::throwGenericSQLException(
@@ -700,7 +700,7 @@ void java_sql_Connection::loadDriverFromProperties( const ::rtl::OUString& _sDri
                 m_aLogger.log( LogLevel::INFO, STR_LOG_LOADING_DRIVER, _sDriverClass );
                 // the driver manager holds the class of the driver for later use
                 ::std::auto_ptr< java_lang_Class > pDrvClass;
-                if ( !_sDriverClassPath.getLength() )
+                if ( _sDriverClassPath.isEmpty() )
                 {
                     // if forName didn't find the class it will throw an exception
                     pDrvClass = ::std::auto_ptr< java_lang_Class >(java_lang_Class::forName(_sDriverClass));
@@ -799,7 +799,7 @@ sal_Bool java_sql_Connection::construct(const ::rtl::OUString& url,
     ::comphelper::NamedValueCollection aSettings( info );
     sDriverClass = aSettings.getOrDefault( "JavaDriverClass", sDriverClass );
     sDriverClassPath = aSettings.getOrDefault( "JavaDriverClassPath", sDriverClassPath);
-    if ( !sDriverClassPath.getLength() )
+    if ( sDriverClassPath.isEmpty() )
         sDriverClassPath = impl_getJavaDriverClassPath_nothrow(sDriverClass);
     bAutoRetrievingEnabled = aSettings.getOrDefault( "IsAutoRetrievingEnabled", bAutoRetrievingEnabled );
     sGeneratedValueStatement = aSettings.getOrDefault( "AutoRetrievingStatement", sGeneratedValueStatement );

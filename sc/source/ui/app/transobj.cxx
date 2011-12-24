@@ -61,6 +61,7 @@
 #include "scmod.hxx"
 #include "dragdata.hxx"
 #include "clipdata.hxx"
+#include "clipparam.hxx"
 
 // for InitDocShell
 #include <editeng/paperinf.hxx>
@@ -170,6 +171,9 @@ ScTransferObj::ScTransferObj( ScDocument* pClipDoc, const TransferableObjectDesc
             bFirst = false;
         }
     OSL_ENSURE(!bFirst, "no sheet selected");
+
+    if (!pDoc->GetClipParam().isMultiRange() && nTab1 == nTab2)
+        pDoc->ShrinkToDataArea( nTab1, nCol1, nRow1, nCol2, nRow2 );
 
     //  only limit to used cells if whole sheet was marked
     //  (so empty cell areas can be copied)

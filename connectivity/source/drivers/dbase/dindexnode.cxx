@@ -57,7 +57,7 @@ ONDXKey::ONDXKey(const rtl::OUString& aStr, sal_uInt32 nRec)
     : ONDXKey_BASE(::com::sun::star::sdbc::DataType::VARCHAR)
      ,nRecord(nRec)
 {
-    if (aStr.getLength())
+    if (!aStr.isEmpty())
     {
         xValue = aStr;
         xValue.setBound(sal_True);
@@ -673,7 +673,7 @@ void ONDXNode::Read(SvStream &rStream, ODbaseIndex& rIndex)
     else
     {
         sal_uInt16 nLen = rIndex.getHeader().db_keylen;
-        rtl::OString aBuf = read_uInt8s_AsOString(rStream, nLen);
+        rtl::OString aBuf = read_uInt8s_ToOString(rStream, nLen);
         //get length minus trailing whitespace
         sal_Int32 nContentLen = aBuf.getLength();
         while (nContentLen && aBuf[nContentLen-1] == ' ')
@@ -745,14 +745,14 @@ StringCompare ONDXKey::Compare(const ONDXKey& rKey) const
 
     if (getValue().isNull())
     {
-        if (rKey.getValue().isNull() || (rKey.IsText(getDBType()) && !rKey.getValue().getString().getLength()))
+        if (rKey.getValue().isNull() || (rKey.IsText(getDBType()) && rKey.getValue().getString().isEmpty()))
             eResult = COMPARE_EQUAL;
         else
             eResult = COMPARE_LESS;
     }
     else if (rKey.getValue().isNull())
     {
-        if (getValue().isNull() || (IsText(getDBType()) && !getValue().getString().getLength()))
+        if (getValue().isNull() || (IsText(getDBType()) && getValue().getString().isEmpty()))
             eResult = COMPARE_EQUAL;
         else
             eResult = COMPARE_GREATER;

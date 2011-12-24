@@ -98,7 +98,7 @@ HRESULT doTest()
     args[3]= _variant_t(L"private:factory/swriter");
     args[2]= _variant_t(L"Test");
     args[1]= _variant_t((long) 40);
-    args[0].vt= VT_ARRAY | VT_DISPATCH;;
+    args[0].vt= VT_ARRAY | VT_DISPATCH;
     args[0].parray= ar;
     if (FAILED(hr= dispDesk.InvokeN(L"loadComponentFromURL", args, 4, &varRet)))
     {

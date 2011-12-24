@@ -80,18 +80,18 @@ namespace
             static const ::rtl::OUString s_sMetaData(RTL_CONSTASCII_USTRINGPARAM("MetaData"));
             ::rtl::OUString sParentURLPattern;
             aURLPatternNode.getNodeValue(s_sParentURLPattern) >>= sParentURLPattern;
-            if ( sParentURLPattern.getLength() )
+            if ( !sParentURLPattern.isEmpty() )
                 lcl_readURLPatternNode(_aInstalled,sParentURLPattern,_rInstalledDriver);
 
             ::rtl::OUString sDriverFactory;
             aURLPatternNode.getNodeValue(s_sDriver) >>= sDriverFactory;
-            if ( sDriverFactory.getLength() )
+            if ( !sDriverFactory.isEmpty() )
                 _rInstalledDriver.sDriverFactory = sDriverFactory;
 
             ::rtl::OUString sDriverTypeDisplayName;
             aURLPatternNode.getNodeValue(s_sDriverTypeDisplayName) >>= sDriverTypeDisplayName;
-            OSL_ENSURE(sDriverTypeDisplayName.getLength(),"No valid DriverTypeDisplayName property!");
-            if ( sDriverTypeDisplayName.getLength() )
+            OSL_ENSURE(!sDriverTypeDisplayName.isEmpty(),"No valid DriverTypeDisplayName property!");
+            if ( !sDriverTypeDisplayName.isEmpty() )
                 _rInstalledDriver.sDriverTypeDisplayName = sDriverTypeDisplayName;
 
             lcl_fillValues(aURLPatternNode,s_sProperties,_rInstalledDriver.aProperties);
@@ -124,7 +124,7 @@ void DriversConfigImpl::Load(const uno::Reference< lang::XMultiServiceFactory >&
             {
                 TInstalledDriver aInstalledDriver;
                 lcl_readURLPatternNode(m_aInstalled,*pPatternIter,aInstalledDriver);
-                if ( aInstalledDriver.sDriverFactory.getLength() )
+                if ( !aInstalledDriver.sDriverFactory.isEmpty() )
                     m_aDrivers.insert(TInstalledDrivers::value_type(*pPatternIter,aInstalledDriver));
             }
         } // if ( m_aInstalled.isValid() )

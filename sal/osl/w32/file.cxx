@@ -882,6 +882,13 @@ SAL_CALL osl_unmapFile(void* pAddr, sal_uInt64 /* uLength */)
 
 //#############################################
 oslFileError
+SAL_CALL osl_unmapMappedFile(oslFileHandle /* Handle */, void* pAddr, sal_uInt64 uLength)
+{
+    return osl_unmapFile( pAddr, uLength );
+}
+
+//#############################################
+oslFileError
 SAL_CALL osl_readLine(
     oslFileHandle   Handle,
     sal_Sequence ** ppSequence)

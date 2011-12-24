@@ -47,7 +47,6 @@ public:
     IntroWindow();
     ~IntroWindow();
 
-    void SetBackgroundBitmap( const Bitmap& rBitmap );
     void SetBackgroundBitmap( const BitmapEx& rBitmapEx );
 };
 

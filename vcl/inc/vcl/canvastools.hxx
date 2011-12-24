@@ -81,32 +81,8 @@ namespace vcl
 {
     namespace unotools
     {
-        // Polygon conversions
-        // ===================================================================
-
-        /** Create an XPolyPolygon from VCL/Tools polygon
-         */
-        ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XPolyPolygon2D >
-            VCL_DLLPUBLIC xPolyPolygonFromPolygon( const ::com::sun::star::uno::Reference<
-                                                         ::com::sun::star::rendering::XGraphicDevice >&     xGraphicDevice,
-                                                   const ::Polygon&                                         inputPolygon );
-
-        /** Create an XPolyPolygon from VCL/Tools polyPolygon
-         */
-        ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XPolyPolygon2D >
-            VCL_DLLPUBLIC xPolyPolygonFromPolyPolygon( const ::com::sun::star::uno::Reference<
-                                                             ::com::sun::star::rendering::XGraphicDevice >&     xGraphicDevice,
-                                                       const ::PolyPolygon&                                     inputPolyPolygon );
-
         // Bitmap conversions
         // ===================================================================
-
-        /** Create an XBitmap from VCL Bitmap
-         */
-        ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmap >
-            VCL_DLLPUBLIC xBitmapFromBitmap( const ::com::sun::star::uno::Reference<
-                                                   ::com::sun::star::rendering::XGraphicDevice >&   xGraphicDevice,
-                                             const ::Bitmap&                                        inputBitmap );
 
         /** Create an XBitmap from VCL BitmapEx
          */

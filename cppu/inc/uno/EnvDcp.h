@@ -29,6 +29,7 @@
 #ifndef INCLUDED_uno_EnvDcp_h
 #define INCLUDED_uno_EnvDcp_h
 
+#include <cppu/cppudllapi.h>
 #include "rtl/ustring.h"
 
 #ifdef __cplusplus
@@ -43,7 +44,7 @@ extern "C"
     @param ppEnvTypeName  the OBI type
     @since UDK 3.2.7
 */
-void uno_EnvDcp_getTypeName(rtl_uString const * pEnvDcp, rtl_uString ** ppEnvTypeName);
+CPPU_DLLPUBLIC void uno_EnvDcp_getTypeName(rtl_uString const * pEnvDcp, rtl_uString ** ppEnvTypeName);
 
 
 /** Get the purpose part of an environment descriptor.
@@ -53,7 +54,7 @@ void uno_EnvDcp_getTypeName(rtl_uString const * pEnvDcp, rtl_uString ** ppEnvTyp
     @param ppEnvPurpose   the purpose
     @since UDK 3.2.7
 */
-void uno_EnvDcp_getPurpose (rtl_uString const * pEnvDcp, rtl_uString ** ppEnvPurpose);
+CPPU_DLLPUBLIC void uno_EnvDcp_getPurpose (rtl_uString const * pEnvDcp, rtl_uString ** ppEnvPurpose);
 
 
 #ifdef __cplusplus

@@ -344,31 +344,31 @@ sal_Bool SfxSaveTabPage::FillItemSet( SfxItemSet& rSet )
     }
 
     SvtModuleOptions aModuleOpt;
-    if(pImpl->aDefaultArr[APP_MATH].getLength() &&
+    if(!pImpl->aDefaultArr[APP_MATH].isEmpty() &&
             pImpl->aDefaultArr[APP_MATH] != aModuleOpt.GetFactoryDefaultFilter(SvtModuleOptions::E_MATH))
         aModuleOpt.SetFactoryDefaultFilter(SvtModuleOptions::E_MATH, pImpl->aDefaultArr[APP_MATH]);
 
-    if( pImpl->aDefaultArr[APP_DRAW].getLength() &&
+    if( !pImpl->aDefaultArr[APP_DRAW].isEmpty() &&
             pImpl->aDefaultArr[APP_DRAW] != aModuleOpt.GetFactoryDefaultFilter(SvtModuleOptions::E_DRAW))
             aModuleOpt.SetFactoryDefaultFilter(SvtModuleOptions::E_DRAW, pImpl->aDefaultArr[APP_DRAW]);
 
-    if(pImpl->aDefaultArr[APP_IMPRESS].getLength() &&
+    if(!pImpl->aDefaultArr[APP_IMPRESS].isEmpty() &&
             pImpl->aDefaultArr[APP_IMPRESS] != aModuleOpt.GetFactoryDefaultFilter(SvtModuleOptions::E_IMPRESS))
         aModuleOpt.SetFactoryDefaultFilter(SvtModuleOptions::E_IMPRESS, pImpl->aDefaultArr[APP_IMPRESS]);
 
-    if(pImpl->aDefaultArr[APP_CALC].getLength() &&
+    if(!pImpl->aDefaultArr[APP_CALC].isEmpty() &&
             pImpl->aDefaultArr[APP_CALC] != aModuleOpt.GetFactoryDefaultFilter(SvtModuleOptions::E_CALC))
         aModuleOpt.SetFactoryDefaultFilter(SvtModuleOptions::E_CALC, pImpl->aDefaultArr[APP_CALC]);
 
-    if(pImpl->aDefaultArr[APP_WRITER].getLength() &&
+    if(!pImpl->aDefaultArr[APP_WRITER].isEmpty() &&
             pImpl->aDefaultArr[APP_WRITER] != aModuleOpt.GetFactoryDefaultFilter(SvtModuleOptions::E_WRITER))
         aModuleOpt.SetFactoryDefaultFilter(SvtModuleOptions::E_WRITER, pImpl->aDefaultArr[APP_WRITER]);
 
-    if(pImpl->aDefaultArr[APP_WRITER_WEB].getLength() &&
+    if(!pImpl->aDefaultArr[APP_WRITER_WEB].isEmpty() &&
             pImpl->aDefaultArr[APP_WRITER_WEB] != aModuleOpt.GetFactoryDefaultFilter(SvtModuleOptions::E_WRITERWEB))
         aModuleOpt.SetFactoryDefaultFilter(SvtModuleOptions::E_WRITERWEB, pImpl->aDefaultArr[APP_WRITER_WEB]);
 
-    if(pImpl->aDefaultArr[APP_WRITER_GLOBAL].getLength() &&
+    if(!pImpl->aDefaultArr[APP_WRITER_GLOBAL].isEmpty() &&
             pImpl->aDefaultArr[APP_WRITER_GLOBAL] != aModuleOpt.GetFactoryDefaultFilter(SvtModuleOptions::E_WRITERGLOBAL))
         aModuleOpt.SetFactoryDefaultFilter(SvtModuleOptions::E_WRITERGLOBAL, pImpl->aDefaultArr[APP_WRITER_GLOBAL]);
 
@@ -463,7 +463,7 @@ void SfxSaveTabPage::Reset( const SfxItemSet& )
                     {
                         SequenceAsHashMap aFilter(xList->nextElement());
                         OUString sFilter = aFilter.getUnpackedValueOrDefault(OUString(RTL_CONSTASCII_USTRINGPARAM("Name")),OUString());
-                        if (sFilter.getLength())
+                        if (!sFilter.isEmpty())
                         {
                             sal_Int32 nFlags = aFilter.getUnpackedValueOrDefault(OUString(RTL_CONSTASCII_USTRINGPARAM("Flags")),sal_Int32());
                             lList.push_back(sFilter);
@@ -609,7 +609,7 @@ IMPL_LINK( SfxSaveTabPage, FilterHdl_Impl, ListBox *, pBox )
                 if(pFilters[i] == pImpl->aDefaultArr[nData])
                     sSelect = pUIFilters[i];
             }
-            if(sSelect.getLength())
+            if(!sSelect.isEmpty())
                 aSaveAsLB.SelectEntry(sSelect);
             aSaveAsFI.Show(pImpl->aDefaultReadonlyArr[nData]);
             aSaveAsFT.Enable(!pImpl->aDefaultReadonlyArr[nData]);

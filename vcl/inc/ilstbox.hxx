@@ -447,7 +447,6 @@ public:
     void            Clear();
 
     void            SetEntryFlags( sal_uInt16 nPos, long nFlags );
-    long            GetEntryFlags( sal_uInt16 nPos ) const;
 
     void            SelectEntry( sal_uInt16 nPos, sal_Bool bSelect );
     void            SetNoSelection();

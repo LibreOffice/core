@@ -278,7 +278,7 @@ endef
 # CObject class
 
 define gb_CObject__command
-$(call gb_Output_announce,$(2),$(true),C  ,3)
+$(call gb_Output_announce,$(2).c,$(true),C  ,3)
 $(call gb_Helper_abbreviate_dirs_native,\
 	mkdir -p $(dir $(1)) $(dir $(4)) && \
 	$(gb_CC) \
@@ -296,7 +296,7 @@ endef
 # CxxObject class
 
 define gb_CxxObject__command
-$(call gb_Output_announce,$(2),$(true),CXX,3)
+$(call gb_Output_announce,$(2).cxx,$(true),CXX,3)
 $(call gb_Helper_abbreviate_dirs_native,\
 	mkdir -p $(dir $(1)) $(dir $(4)) && \
 	$(if $(filter YES,$(CXXOBJECT_X64)), $(CXX_X64_BINARY), $(gb_CXX)) \
@@ -359,12 +359,11 @@ $(call gb_Helper_abbreviate_dirs_native,\
 		$(if $(filter YES,$(LIBRARY_X64)), -MACHINE:X64, -MACHINE:IX86) \
 		$(if $(filter YES,$(LIBRARY_X64)), -LIBPATH:$(COMPATH)/lib/amd64 -LIBPATH:$(WINDOWS_SDK_HOME)/lib/x64,) \
 		$(T_LDFLAGS) \
-		$(if $(gb_PRODUCT),,-NODEFAULTLIB) \
 		@$${RESPONSEFILE} \
 		$(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_filename,$(lib))) \
 		$(foreach lib,$(LINKED_STATIC_LIBS),$(call gb_StaticLibrary_get_filename,$(lib))) \
 		$(LIBS) \
-		$(if $(filter-out StaticLibrary,$(TARGETTYPE)),$(if $(gb_PRODUCT),,oldnames.lib $(if $(filter libcmtd,$(LINKED_LIBS)),,msvcrtd.lib) msvcprtd.lib kernel32.lib) user32.lib) \
+		$(if $(filter-out StaticLibrary,$(TARGETTYPE)),user32.lib) \
 		$(if $(DLLTARGET),-out:$(DLLTARGET) -implib:$(1),-out:$(1)); RC=$$?; rm $${RESPONSEFILE} \
 	$(if $(DLLTARGET),; if [ ! -f $(DLLTARGET) ]; then rm -f $(1) && false; fi) \
 	$(if $(filter Executable,$(TARGETTYPE)),; if [ -f $@.manifest ]; then mt.exe $(MTFLAGS) -manifest $@.manifest -outputresource:$@\;1; fi) ; exit $$RC)
@@ -422,7 +421,6 @@ gb_Library_PLAINLIBS_NONE += \
 	shlwapi \
 	user32 \
 	uuid \
-	uwinapi \
 	version \
 	wininet \
 	winmm \
@@ -465,7 +463,7 @@ gb_Library_DLLFILENAMES :=\
 define gb_Library_Library_platform
 $(call gb_LinkTarget_set_dlltarget,$(2),$(3))
 
-$(call gb_LinkTarget_set_auxtargets,$(2),\
+$(call gb_LinkTarget_add_auxtargets,$(2),\
 	$(patsubst %.lib,%.exp,$(call gb_LinkTarget_get_target,$(2))) \
 	$(3).manifest \
 	$(call gb_LinkTarget_get_pdbfile,$(2)) \
@@ -536,7 +534,7 @@ define gb_StaticLibrary_StaticLibrary_platform
 $(call gb_LinkTarget_get_target,$(2)) \
 $(call gb_LinkTarget_get_headers_target,$(2)) : PDBFILE = $(call gb_LinkTarget_get_pdbfile,$(2))
 
-$(call gb_LinkTarget_set_auxtargets,$(2),\
+$(call gb_LinkTarget_add_auxtargets,$(2),\
 	$(call gb_LinkTarget_get_pdbfile,$(2)) \
 )
 
@@ -550,7 +548,7 @@ gb_Executable_TARGETTYPEFLAGS := $(gb_Windows_PE_TARGETTYPEFLAGS)
 gb_Executable_get_rpath :=
 
 define gb_Executable_Executable_platform
-$(call gb_LinkTarget_set_auxtargets,$(2),\
+$(call gb_LinkTarget_add_auxtargets,$(2),\
 	$(patsubst %.exe,%.pdb,$(call gb_LinkTarget_get_target,$(2))) \
 	$(call gb_LinkTarget_get_pdbfile,$(2)) \
 	$(call gb_LinkTarget_get_target,$(2)).manifest \
@@ -584,7 +582,7 @@ gb_CppunitTest_get_libfilename = test_$(1).dll
 define gb_CppunitTest_CppunitTest_platform
 $(call gb_LinkTarget_set_dlltarget,$(2),$(3))
 
-$(call gb_LinkTarget_set_auxtargets,$(2),\
+$(call gb_LinkTarget_add_auxtargets,$(2),\
 	$(patsubst %.lib,%.exp,$(call gb_LinkTarget_get_target,$(2))) \
 	$(3).manifest \
 	$(patsubst %.dll,%.pdb,$(3)) \

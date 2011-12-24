@@ -113,7 +113,7 @@ namespace dbtools
         ensureConstructed( );
 
         rtl_TextEncoding eEncoding = RTL_TEXTENCODING_DONTKNOW;
-        if ( _rIanaName.getLength() )
+        if ( !_rIanaName.isEmpty() )
         {
             // byte string conversion
             ::rtl::OString sMimeByteString( _rIanaName.getStr(), _rIanaName.getLength(), RTL_TEXTENCODING_ASCII_US );

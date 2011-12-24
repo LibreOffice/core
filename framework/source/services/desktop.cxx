@@ -26,10 +26,6 @@
  *
  ************************************************************************/
 
-
-//_________________________________________________________________________________________________________________
-//  my own includes
-//_________________________________________________________________________________________________________________
 #include <loadenv/loadenv.hxx>
 
 #include <loadenv/targethelper.hxx>
@@ -50,9 +46,6 @@
 #include <classes/resource.hrc>
 #include <classes/fwkresid.hxx>
 
-//_________________________________________________________________________________________________________________
-//  interface includes
-//_________________________________________________________________________________________________________________
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/awt/XToolkit.hpp>
@@ -78,9 +71,6 @@
 #include <com/sun/star/document/UpdateDocMode.hpp>
 #include <com/sun/star/frame/XTerminateListener2.hpp>
 
-//_________________________________________________________________________________________________________________
-//  includes of other projects
-//_________________________________________________________________________________________________________________
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/factory.hxx>
@@ -94,23 +84,7 @@
 
 #include <fwkdllapi.h>
 
-//_________________________________________________________________________________________________________________
-//  namespace
-//_________________________________________________________________________________________________________________
-
 namespace framework{
-
-//_________________________________________________________________________________________________________________
-//  non exported const
-//_________________________________________________________________________________________________________________
-
-//_________________________________________________________________________________________________________________
-//  non exported definitions
-//_________________________________________________________________________________________________________________
-
-//_________________________________________________________________________________________________________________
-//  declarations
-//_________________________________________________________________________________________________________________
 
 //*****************************************************************************************************************
 //  XInterface, XTypeProvider, XServiceInfo
@@ -1029,7 +1003,6 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Desktop::findFrame( const ::r
     if (
         (sTargetFrameName==SPECIALTARGET_DEFAULT  )   ||    // valid for dispatches - not for findFrame()!
         (sTargetFrameName==SPECIALTARGET_MENUBAR  )   ||    // valid for dispatches - not for findFrame()!
-        (sTargetFrameName==SPECIALTARGET_HELPAGENT)   ||    // valid for dispatches - not for findFrame()!
         (sTargetFrameName==SPECIALTARGET_PARENT   )   ||    // we have no parent by definition
         (sTargetFrameName==SPECIALTARGET_BEAMER   )         // beamer frames are allowed as child of tasks only -
                                                             // and they exist more then ones. We have no idea which our sub tasks is the right one

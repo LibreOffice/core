@@ -417,7 +417,7 @@ namespace pcr
             }
 
             // read the measurement unit from the configuration
-            if ( sConfigurationLocation.getLength() && sConfigurationProperty.getLength() )
+            if ( !(sConfigurationLocation.isEmpty() || sConfigurationProperty.isEmpty()) )
             {
                 ::utl::OConfigurationTreeRoot aConfigTree( ::utl::OConfigurationTreeRoot::createWithServiceFactory(
                     m_aContext.getLegacyServiceFactory(), sConfigurationLocation, -1, ::utl::OConfigurationTreeRoot::CM_READONLY ) );

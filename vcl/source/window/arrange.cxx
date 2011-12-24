@@ -524,38 +524,6 @@ size_t RowOrColumn::addChild( boost::shared_ptr<WindowArranger> const & i_pChild
     return nIndex;
 }
 
-void RowOrColumn::remove( Window* i_pWindow )
-{
-    if( i_pWindow )
-    {
-        for( std::vector< WindowArranger::Element >::iterator it = m_aElements.begin();
-            it != m_aElements.end(); ++it )
-        {
-            if( it->m_pElement == i_pWindow )
-            {
-                m_aElements.erase( it );
-                return;
-            }
-        }
-    }
-}
-
-void RowOrColumn::remove( boost::shared_ptr<WindowArranger> const & i_pChild )
-{
-    if( i_pChild )
-    {
-        for( std::vector< WindowArranger::Element >::iterator it = m_aElements.begin();
-            it != m_aElements.end(); ++it )
-        {
-            if( it->m_pChild == i_pChild )
-            {
-                m_aElements.erase( it );
-                return;
-            }
-        }
-    }
-}
-
 // ----------------------------------------
 // vcl::LabeledElement
 //-----------------------------------------

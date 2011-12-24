@@ -441,7 +441,7 @@ css::uno::Sequence< ::rtl::OUString > DescriptionInfoset::getSupportedPlaforms()
     {
         ::rtl::OUString aToken = value.getToken( 0, ',', nIndex );
         aToken = aToken.trim();
-        if (aToken.getLength())
+        if (!aToken.isEmpty())
             vec.push_back(aToken);
 
     }
@@ -487,10 +487,10 @@ DescriptionInfoset::getUpdateDownloadUrls() const
     css::uno::Sequence< ::rtl::OUString > aStrListHC = getUrls( ::rtl::OUString(
             RTL_CONSTASCII_USTRINGPARAM( "desc:icon/desc:high-contrast/@xlink:href")));
 
-    if ( bHighContrast && aStrListHC.hasElements() && aStrListHC[0].getLength() )
+    if ( bHighContrast && aStrListHC.hasElements() && !aStrListHC[0].isEmpty() )
         return aStrListHC[0];
 
-    if ( aStrList.hasElements() && aStrList[0].getLength() )
+    if ( aStrList.hasElements() && !aStrList[0].isEmpty() )
         return aStrList[0];
 
     return ::rtl::OUString();
@@ -503,7 +503,7 @@ DescriptionInfoset::getUpdateDownloadUrls() const
     const ::rtl::OUString sURL (getLocalizedHREFAttrFromChild(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
         "/desc:description/desc:update-website")), &bParentExists ));
 
-    if (sURL.getLength() > 0)
+    if (!sURL.isEmpty())
         return ::boost::optional< ::rtl::OUString >(sURL);
     else
         return bParentExists ? ::boost::optional< ::rtl::OUString >(::rtl::OUString()) :
@@ -663,7 +663,7 @@ DescriptionInfoset::getSimpleLicenseAttributes() const
 css::uno::Reference< css::xml::dom::XNode >
 DescriptionInfoset::getLocalizedChild( const ::rtl::OUString & sParent) const
 {
-    if ( ! m_element.is() || !sParent.getLength())
+    if ( ! m_element.is() || sParent.isEmpty())
         return css::uno::Reference< css::xml::dom::XNode > ();
 
     css::uno::Reference< css::xml::dom::XNode > xParent;
@@ -719,7 +719,7 @@ DescriptionInfoset::matchCountryAndLanguage(
     OSL_ASSERT(xParent.is());
     css::uno::Reference<css::xml::dom::XNode> nodeMatch;
 
-    if (officeLocale.Country.getLength())
+    if (!officeLocale.Country.isEmpty())
     {
         const ::rtl::OUString sLangCountry(officeLocale.Language +
             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-")) +

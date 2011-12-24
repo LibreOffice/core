@@ -870,24 +870,6 @@ sal_Bool SfxRequest::IsAPI() const
 }
 
 //--------------------------------------------------------------------
-
-
-bool SfxRequest::IsRecording() const
-
-/*  [Description]
-
-    Returns sal_True if this SfxRequest is to be recorded ie
-    1. Currently a macro is beeing recorded
-    2. This request is even recorded
-    3. the request did not originate from a pure API (for example BASIC),
-    otherwise sal_False.
-*/
-
-{
-    return ( AllowsRecording() && GetMacroRecorder().is() );
-}
-
-//--------------------------------------------------------------------
 void SfxRequest::SetModifier( sal_uInt16 nModi )
 {
     pImp->nModifier = nModi;

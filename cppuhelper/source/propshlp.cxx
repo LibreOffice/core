@@ -311,7 +311,7 @@ void OPropertySetHelper::addPropertyChangeListener(
     {
         // only add listeners if you are not disposed
         // a listener with no name means all properties
-        if( rPropertyName.getLength() )
+        if( !rPropertyName.isEmpty() )
         {
             // get the map table
             IPropertyArrayHelper & rPH = getInfoHelper();
@@ -357,7 +357,7 @@ void OPropertySetHelper::removePropertyChangeListener(
     // all listeners are automaticly released in a dispose call
     if( !rBHelper.bInDispose && !rBHelper.bDisposed )
     {
-        if( rPropertyName.getLength() )
+        if( !rPropertyName.isEmpty() )
         {
             // get the map table
             IPropertyArrayHelper & rPH = getInfoHelper();
@@ -393,7 +393,7 @@ void OPropertySetHelper::addVetoableChangeListener(
     {
         // only add listeners if you are not disposed
         // a listener with no name means all properties
-        if( rPropertyName.getLength() )
+        if( !rPropertyName.isEmpty() )
         {
             // get the map table
             IPropertyArrayHelper & rPH = getInfoHelper();
@@ -437,7 +437,7 @@ void OPropertySetHelper::removeVetoableChangeListener(
     // all listeners are automaticly released in a dispose call
     if( !rBHelper.bInDispose && !rBHelper.bDisposed )
     {
-        if( rPropertyName.getLength() )
+        if( !rPropertyName.isEmpty() )
         {
             // get the map table
             IPropertyArrayHelper & rPH = getInfoHelper();

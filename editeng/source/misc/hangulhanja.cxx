@@ -496,7 +496,7 @@ namespace editeng
         m_nReplacementBaseIndex = 0;
         m_nCurrentStartIndex = m_nCurrentEndIndex = 0;
 
-        bool bRet = 0 != m_sCurrentPortion.getLength();
+        bool bRet = !m_sCurrentPortion.isEmpty();
 
         if (m_eConvType == HHC::eConvHangulHanja && m_bTryBothDirections)
             implGetConversionDirectionForCurrentPortion( m_eCurrentConversionDirection );
@@ -528,7 +528,7 @@ namespace editeng
                     return sal_True;
             }
         }
-        while ( m_sCurrentPortion.getLength() );
+        while ( !m_sCurrentPortion.isEmpty() );
 
         // no more portions
         return sal_False;
@@ -730,7 +730,7 @@ namespace editeng
 
     void HangulHanjaConversion_Impl::implChange( const ::rtl::OUString& _rChangeInto )
     {
-        if( !_rChangeInto.getLength() )
+        if( _rChangeInto.isEmpty() )
             return;
 
         // translate the conversion format into a replacement action
@@ -900,7 +900,7 @@ namespace editeng
             ::rtl::OUString sCurrentUnit( m_pConversionDialog->GetCurrentString() );
             ::rtl::OUString sChangeInto( m_pConversionDialog->GetCurrentSuggestion( ) );
 
-            if( sChangeInto.getLength() )
+            if( !sChangeInto.isEmpty() )
             {
                 // change the current occurrence
                 implChange( sChangeInto );

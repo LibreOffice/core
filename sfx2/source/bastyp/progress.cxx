@@ -158,7 +158,7 @@ SfxProgress::SfxProgress
     bSuspended(sal_True)
 {
     pImp->bRunning = sal_True;
-    pImp->bAllowRescheduling = Application::IsInExecute();;
+    pImp->bAllowRescheduling = Application::IsInExecute();
 
     pImp->xObjSh = pObjSh;
     pImp->aText = rText;

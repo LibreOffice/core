@@ -154,7 +154,7 @@ void ImpSvNumberformatInfo::Save(SvStream& rStream, sal_uInt16 nAnz) const
 {
     for (sal_uInt16 i = 0; i < nAnz; i++)
     {
-        rStream.WriteByteString( sStrArray[i], rStream.GetStreamCharSet() );
+        rStream.WriteUniOrByteString( sStrArray[i], rStream.GetStreamCharSet() );
         short nType = nTypeArray[i];
         switch ( nType )
         {   // der Krampf fuer Versionen vor SV_NUMBERFORMATTER_VERSION_NEW_CURR
@@ -392,7 +392,7 @@ void ImpSvNumFor::Save(SvStream& rStream) const
 {
     rStream << nAnzStrings;
     aI.Save(rStream, nAnzStrings);
-    rStream.WriteByteString( sColorName, rStream.GetStreamCharSet() );
+    rStream.WriteUniOrByteString( sColorName, rStream.GetStreamCharSet() );
 }
 
 void ImpSvNumFor::Load(SvStream& rStream, ImpSvNumberformatScan& rSc,
@@ -402,7 +402,7 @@ void ImpSvNumFor::Load(SvStream& rStream, ImpSvNumberformatScan& rSc,
     rStream >> nAnz;        //! noch nicht direkt nAnzStrings wg. Enlarge
     Enlarge( nAnz );
     aI.Load( rStream, nAnz );
-    rStream.ReadByteString( sColorName, rStream.GetStreamCharSet() );
+    rStream.ReadUniOrByteString( sColorName, rStream.GetStreamCharSet() );
     rLoadedColorName = sColorName;
     pColor = rSc.GetColor(sColorName);
 }
@@ -1768,8 +1768,7 @@ void SvNumberformat::ConvertLanguage( SvNumberFormatter& rConverter,
 void SvNumberformat::LoadString( SvStream& rStream, String& rStr )
 {
     CharSet eStream = rStream.GetStreamCharSet();
-    ByteString aStr;
-    rStream.ReadByteString( aStr );
+    ByteString aStr = read_lenPrefixed_uInt8s_ToOString<sal_uInt16>(rStream);
     sal_Char cStream = NfCurrencyEntry::GetEuroSymbol( eStream );
     if ( aStr.Search( cStream ) == STRING_NOTFOUND )
     {   // simple conversion to unicode
@@ -1829,13 +1828,13 @@ void SvNumberformat::Save( SvStream& rStream, ImpSvNumMultipleWriteHeader& rHdr 
     }
 
     rHdr.StartEntry();
-    rStream.WriteByteString( aFormatstring, rStream.GetStreamCharSet() );
+    rStream.WriteUniOrByteString( aFormatstring, rStream.GetStreamCharSet() );
     rStream << eType << fLimit1 << fLimit2 << (sal_uInt16) eOp1 << (sal_uInt16) eOp2
             << sal_Bool(bOldStandard) << sal_Bool(bIsUsed);
     for (sal_uInt16 i = 0; i < 4; i++)
         NumFor[i].Save(rStream);
     // ab SV_NUMBERFORMATTER_VERSION_NEWSTANDARD
-    rStream.WriteByteString( aComment, rStream.GetStreamCharSet() );
+    rStream.WriteUniOrByteString( aComment, rStream.GetStreamCharSet() );
     rStream << nNewStandardDefined;
     // ab SV_NUMBERFORMATTER_VERSION_NEW_CURR
     rStream << nNewCurrencyVersionId;
@@ -3194,6 +3193,74 @@ void SvNumberformat::ImpAppendEraG( String& OutString,
     }
     else
         OutString += rCal.getDisplayString( CalendarDisplayCode::SHORT_ERA, nNatNum );
+}
+
+bool SvNumberformat::ImpIsIso8601( const ImpSvNumFor& rNumFor )
+{
+    bool bIsIso = false;
+    if ((eType & NUMBERFORMAT_DATE) == NUMBERFORMAT_DATE)
+    {
+        enum State
+        {
+            eNone,
+            eAtYear,
+            eAtSep1,
+            eAtMonth,
+            eAtSep2,
+            eNotIso
+        };
+        State eState = eNone;
+        short const * const pType = rNumFor.Info().nTypeArray;
+        sal_uInt16 nAnz = rNumFor.GetCount();
+        for (sal_uInt16 i=0; i < nAnz && !bIsIso && eState != eNotIso; ++i)
+        {
+            switch ( pType[i] )
+            {
+                case NF_KEY_YY:     // two digits not strictly ISO 8601
+                case NF_KEY_YYYY:
+                    if (eState != eNone)
+                        eState = eNotIso;
+                    else
+                        eState = eAtYear;
+                    break;
+                case NF_KEY_M:      // single digit not strictly ISO 8601
+                case NF_KEY_MM:
+                    if (eState != eAtSep1)
+                        eState = eNotIso;
+                    else
+                        eState = eAtMonth;
+                    break;
+                case NF_KEY_D:      // single digit not strictly ISO 8601
+                case NF_KEY_DD:
+                    if (eState != eAtSep2)
+                        eState = eNotIso;
+                    else
+                        bIsIso = true;
+                    break;
+                case NF_SYMBOLTYPE_STRING:
+                case NF_SYMBOLTYPE_DATESEP:
+                    if (rNumFor.Info().sStrArray[i] == '-')
+                    {
+                        if (eState == eAtYear)
+                            eState = eAtSep1;
+                        else if (eState == eAtMonth)
+                            eState = eAtSep2;
+                        else
+                            eState = eNotIso;
+                    }
+                    else
+                        eState = eNotIso;
+                    break;
+                default:
+                    eState = eNotIso;
+            }
+        }
+    }
+    else
+    {
+       OSL_FAIL( "SvNumberformat::ImpIsIso8601: no date" );
+    }
+    return bIsIso;
 }
 
 bool SvNumberformat::ImpGetDateOutput(double fNumber,

@@ -64,7 +64,7 @@ sdbcx::ObjectType OKeysHelper::createObject(const ::rtl::OUString& _rName)
 {
     sdbcx::ObjectType xRet = NULL;
 
-    if(_rName.getLength())
+    if(!_rName.isEmpty())
     {
         OTableKeyHelper* pRet = new OTableKeyHelper(m_pTable,_rName,m_pTable->getKeyProperties(_rName));
         xRet = pRet;

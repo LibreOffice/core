@@ -297,7 +297,7 @@ sal_Bool OSQLAnalyzer::hasFunctions() const
                 m_bHasSelectionCode = aIter->first->hasCode();
         }
     }
-    return m_bHasSelectionCode;;
+    return m_bHasSelectionCode;
 }
 // -----------------------------------------------------------------------------
 void OSQLAnalyzer::setSelectionEvaluationResult(OValueRefRow& _pRow,const ::std::vector<sal_Int32>& _rColumnMapping)

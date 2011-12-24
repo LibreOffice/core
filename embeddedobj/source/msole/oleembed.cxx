@@ -238,7 +238,7 @@ uno::Reference< embed::XStorage > OleEmbeddedObject::CreateTemporarySubstorage( 
 ::rtl::OUString OleEmbeddedObject::MoveToTemporarySubstream()
 {
     ::rtl::OUString aResult;
-    for ( sal_Int32 nInd = 0; nInd < 32000 && !aResult.getLength(); nInd++ )
+    for ( sal_Int32 nInd = 0; nInd < 32000 && aResult.isEmpty(); nInd++ )
     {
         ::rtl::OUString aName = ::rtl::OUString::valueOf( nInd );
         aName += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TMPSTREAM" ) );
@@ -250,7 +250,7 @@ uno::Reference< embed::XStorage > OleEmbeddedObject::CreateTemporarySubstorage( 
         }
     }
 
-    if ( !aResult.getLength() )
+    if ( aResult.isEmpty() )
         throw uno::RuntimeException();
 
     return aResult;
@@ -278,7 +278,7 @@ sal_Bool OleEmbeddedObject::TryToConvertToOOo()
         ::rtl::OUString aFilterName = OwnView_Impl::GetFilterNameFromExtentionAndInStream( m_xFactory, ::rtl::OUString(), m_xObjectStream->getInputStream() );
 
         // use the solution only for OOXML format currently
-        if ( aFilterName.getLength()
+        if ( !aFilterName.isEmpty()
           && ( aFilterName.equals( ::rtl::OUString ( RTL_CONSTASCII_USTRINGPARAM( "Calc MS Excel 2007 XML" ) ) )
             || aFilterName.equals( ::rtl::OUString ( RTL_CONSTASCII_USTRINGPARAM( "Impress MS PowerPoint 2007 XML" ) ) )
             || aFilterName.equals( ::rtl::OUString ( RTL_CONSTASCII_USTRINGPARAM( "MS Word 2007 XML" ) ) ) ) )
@@ -297,7 +297,7 @@ sal_Bool OleEmbeddedObject::TryToConvertToOOo()
                         aFilterData[nInd].Value >>= aDocServiceName;
             }
 
-            if ( aDocServiceName.getLength() )
+            if ( !aDocServiceName.isEmpty() )
             {
                 // create the model
                 uno::Sequence< uno::Any > aArguments(1);
@@ -342,10 +342,10 @@ sal_Bool OleEmbeddedObject::TryToConvertToOOo()
                 // look for the related embedded object factory
                 ::comphelper::MimeConfigurationHelper aConfigHelper( m_xFactory );
                 ::rtl::OUString aEmbedFactory;
-                if ( aMediaType.getLength() )
+                if ( !aMediaType.isEmpty() )
                     aEmbedFactory = aConfigHelper.GetFactoryNameByMediaType( aMediaType );
 
-                if ( !aEmbedFactory.getLength() )
+                if ( aEmbedFactory.isEmpty() )
                     throw uno::RuntimeException();
 
                 uno::Reference< uno::XInterface > xFact = m_xFactory->createInstance( aEmbedFactory );
@@ -387,7 +387,7 @@ sal_Bool OleEmbeddedObject::TryToConvertToOOo()
         {
             case 4:
             case 3:
-            if ( aTmpStreamName.getLength() && aTmpStreamName != m_aEntryName )
+            if ( !aTmpStreamName.isEmpty() && aTmpStreamName != m_aEntryName )
                 try
                 {
                     if ( m_xParentStorage->hasByName( m_aEntryName ) )
@@ -421,7 +421,7 @@ sal_Bool OleEmbeddedObject::TryToConvertToOOo()
 
             case 1:
             case 0:
-                if ( aStorageName.getLength() )
+                if ( !aStorageName.isEmpty() )
                     try {
                         m_xParentStorage->removeElement( aStorageName );
                     } catch( const uno::Exception& ) { OSL_FAIL( "Can not remove temporary storage!" ); }
@@ -871,10 +871,10 @@ void SAL_CALL OleEmbeddedObject::doVerb( sal_Int32 nVerbID )
             {
                 //Make a RO copy and see if the OS can find something to at
                 //least display the content for us
-                if (!m_aTempDumpURL.getLength())
+                if (m_aTempDumpURL.isEmpty())
                     m_aTempDumpURL = lcl_ExtractObject(m_xFactory, m_xObjectStream);
 
-                if (m_aTempDumpURL.getLength())
+                if (!m_aTempDumpURL.isEmpty())
                 {
                     uno::Reference< ::com::sun::star::system::XSystemShellExecute > xSystemShellExecute( m_xFactory->createInstance(
                         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.system.SystemShellExecute"))),

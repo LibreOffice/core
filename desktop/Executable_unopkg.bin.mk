@@ -45,6 +45,7 @@ $(eval $(call gb_Executable_add_linked_libs,$(unopkgbin),\
     sal \
     tl \
     unopkgapp \
+    $(gb_STDLIBS) \
 ))
 
 $(eval $(call gb_Executable_add_cobjects,$(unopkgbin),\

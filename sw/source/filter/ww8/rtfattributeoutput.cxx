@@ -460,6 +460,7 @@ bool RtfAttributeOutput::StartURL( const String& rUrl, const String& rTarget )
     }
 
     m_aStyles.append("}");
+    m_bHadFieldResult = false;
     return true;
 }
 
@@ -468,7 +469,8 @@ bool RtfAttributeOutput::EndURL()
     OSL_TRACE("%s", OSL_THIS_FUNC);
 
     // close the fldrslt group
-    m_aRunText.append('}');
+    if (m_bHadFieldResult)
+        m_aRunText.append('}');
     // close the field group
     m_aRunText.append('}');
     return true;
@@ -2249,6 +2251,7 @@ void RtfAttributeOutput::TextINetFormat( const SwFmtINetFmt& rURL )
         const SwTxtINetFmt* pTxtAtr = rURL.GetTxtINetFmt();
 
         m_aStyles.append("{" OOO_STRING_SVTOOLS_RTF_FLDRSLT " ");
+        m_bHadFieldResult = true;
         if( pTxtAtr && 0 != ( pFmt = pTxtAtr->GetCharFmt() ))
         {
             sal_uInt16 nStyle = m_rExport.GetId( *pFmt );
@@ -2989,7 +2992,8 @@ RtfAttributeOutput::RtfAttributeOutput( RtfExport &rExport )
     m_bBufferSectionBreaks( false ),
     m_bBufferSectionHeaders( false ),
     m_bLastTable( true ),
-    m_bWroteCellInfo( false )
+    m_bWroteCellInfo( false ),
+    m_bHadFieldResult( false )
 {
     OSL_TRACE("%s", OSL_THIS_FUNC);
 }

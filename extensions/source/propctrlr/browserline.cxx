@@ -434,7 +434,7 @@ namespace pcr
     {
         PushButton& rButton( impl_ensureButton( _bPrimary ) );
 
-        OSL_PRECOND( _rImageURL.getLength(), "OBrowserLine::ShowBrowseButton: use the other version if you don't have an image!" );
+        OSL_PRECOND( !_rImageURL.isEmpty(), "OBrowserLine::ShowBrowseButton: use the other version if you don't have an image!" );
         Image aImage;
         impl_getImagesFromURL_nothrow( _rImageURL, aImage );
 

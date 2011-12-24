@@ -120,7 +120,7 @@ namespace rptui
             if ( xControlModel.is() )
                 setPlaceholderText( getVclWindowPeer( xControlModel.get() ), sDataField );
         }
-        catch (uno::Exception)
+        catch (const uno::Exception &)
         {
             DBG_UNHANDLED_EXCEPTION();
         }

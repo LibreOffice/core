@@ -1153,7 +1153,7 @@ namespace pcr
 
             if ( _rPropertyData.HasPrimaryButton )
             {
-                if ( _rPropertyData.PrimaryButtonImageURL.getLength() )
+                if ( !_rPropertyData.PrimaryButtonImageURL.isEmpty() )
                     rLine.pLine->ShowBrowseButton( _rPropertyData.PrimaryButtonImageURL, true );
                 else if ( _rPropertyData.PrimaryButtonImage.is() )
                     rLine.pLine->ShowBrowseButton( Image( _rPropertyData.PrimaryButtonImage ), true );
@@ -1162,7 +1162,7 @@ namespace pcr
 
                 if ( _rPropertyData.HasSecondaryButton )
                 {
-                    if ( _rPropertyData.SecondaryButtonImageURL.getLength() )
+                    if ( !_rPropertyData.SecondaryButtonImageURL.isEmpty() )
                         rLine.pLine->ShowBrowseButton( _rPropertyData.SecondaryButtonImageURL, false );
                     else if ( _rPropertyData.SecondaryButtonImage.is() )
                         rLine.pLine->ShowBrowseButton( Image( _rPropertyData.SecondaryButtonImage ), false );

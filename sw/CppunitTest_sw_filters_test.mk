@@ -108,6 +108,8 @@ $(eval $(call gb_CppunitTest_set_args,sw_filters_test,\
 
 # we need to explicitly depend on library msword because it is not implied
 # by a link relation
-$(call gb_CppunitTest_get_target,sw_filters_test) : $(call gb_Library_get_target,msword)
+$(call gb_CppunitTest_get_target,sw_filters_test) : \
+    $(call gb_Library_get_target,localedata_en) \
+    $(call gb_Library_get_target,msword) \
 
 # vim: set noet sw=4 ts=4:

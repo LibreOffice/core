@@ -37,6 +37,10 @@ $(eval $(call gb_Executable_add_defs,swriter,\
     -DUNICODE \
 ))
 
+$(eval $(call gb_Executable_add_linked_libs,swriter,\
+    $(gb_STDLIBS) \
+))
+
 $(eval $(call gb_Executable_add_noexception_objects,swriter,\
     desktop/win32/source/applauncher/launcher \
     desktop/win32/source/applauncher/swriter \

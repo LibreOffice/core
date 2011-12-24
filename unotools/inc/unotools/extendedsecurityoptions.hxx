@@ -28,20 +28,12 @@
 #ifndef INCLUDED_unotools_EXTENDEDSECURITYOPTIONS_HXX
 #define INCLUDED_unotools_EXTENDEDSECURITYOPTIONS_HXX
 
-//_________________________________________________________________________________________________________________
-//  includes
-//_________________________________________________________________________________________________________________
-
 #include "unotools/unotoolsdllapi.h"
 #include <sal/types.h>
 #include <osl/mutex.hxx>
 #include <com/sun/star/uno/Sequence.h>
 #include <rtl/ustring.hxx>
 #include <unotools/options.hxx>
-
-//_________________________________________________________________________________________________________________
-//  forward declarations
-//_________________________________________________________________________________________________________________
 
 /*-************************************************************************************************************//**
     @short          forward declaration to our private date container implementation
@@ -51,10 +43,6 @@
 *//*-*************************************************************************************************************/
 
 class SvtExtendedSecurityOptions_Impl;
-
-//_________________________________________________________________________________________________________________
-//  declarations
-//_________________________________________________________________________________________________________________
 
 /*-************************************************************************************************************//**
     @short          collect informations about security features
@@ -70,10 +58,6 @@ class SvtExtendedSecurityOptions_Impl;
 
 class UNOTOOLS_DLLPUBLIC SvtExtendedSecurityOptions: public utl::detail::Options
 {
-    //-------------------------------------------------------------------------------------------------------------
-    //  public methods
-    //-------------------------------------------------------------------------------------------------------------
-
     public:
         // Must be zero based!
         enum OpenHyperlinkMode
@@ -82,10 +66,6 @@ class UNOTOOLS_DLLPUBLIC SvtExtendedSecurityOptions: public utl::detail::Options
             OPEN_WITHSECURITYCHECK,
             OPEN_ALWAYS
         };
-
-        //---------------------------------------------------------------------------------------------------------
-        //  constructor / destructor
-        //---------------------------------------------------------------------------------------------------------
 
         /*-****************************************************************************************************//**
             @short      standard constructor and destructor
@@ -106,20 +86,7 @@ class UNOTOOLS_DLLPUBLIC SvtExtendedSecurityOptions: public utl::detail::Options
          SvtExtendedSecurityOptions();
         virtual ~SvtExtendedSecurityOptions();
 
-        //---------------------------------------------------------------------------------------------------------
-        //  interface
-        //---------------------------------------------------------------------------------------------------------
-
-        sal_Bool                                        IsSecureHyperlink( const rtl::OUString& aURL ) const;
-        com::sun::star::uno::Sequence< rtl::OUString >  GetSecureExtensionList() const;
-
         OpenHyperlinkMode                               GetOpenHyperlinkMode();
-        void                                            SetOpenHyperlinkMode( OpenHyperlinkMode aMode );
-        sal_Bool                                        IsOpenHyperlinkModeReadOnly() const;
-
-    //-------------------------------------------------------------------------------------------------------------
-    //  private methods
-    //-------------------------------------------------------------------------------------------------------------
 
     private:
 

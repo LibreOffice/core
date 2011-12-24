@@ -1366,23 +1366,6 @@ void FuText::ReceiveRequest(SfxRequest& rReq)
     }
 }
 
-
-
-/*************************************************************************
-|*
-|* SpellChecker: Error-LinkHdl
-|*
-\************************************************************************/
-
-IMPL_LINK( FuText, SpellError, void *, nLang )
-{
-    String aError( SvtLanguageTable::GetLanguageString( (LanguageType)(sal_uLong)nLang ) );
-    ErrorHandler::HandleError(* new StringErrorInfo(
-                                ERRCODE_SVX_LINGU_LANGUAGENOTEXISTS, aError) );
-    return 0;
-}
-
-
 void FuText::DoubleClick(const MouseEvent& )
 {
     // Nothing to do

@@ -3,8 +3,8 @@
  *    License: GPLv3
  */
 
-//* define to activate stats reporting on hash usage
-#define HASH_STAT
+/* define to activate stats reporting on hash usage*/
+/* #define HASH_STAT */
 
 /* ===============================================
  * Set-up: defines to identify the system and system related properties
@@ -36,7 +36,9 @@
 #define USE_MEMORY_ALIGNMENT 64 /* big value -> no alignment */
 #endif /* Def __CYGWIN__ */
 
-#ifdef __linux
+#if defined(__linux) || defined(__OpenBSD__) || \
+    defined(__FreeBSD__) || defined(__NetBSD__) || \
+    defined(__DragonFly__)
 #if __BYTE_ORDER == __LITTLE_ENDIAN
 #define CORE_BIG_ENDIAN 0
 #define CORE_LITTLE_ENDIAN 1
@@ -48,7 +50,7 @@
 #define USE_MEMORY_ALIGNMENT 4
 #endif /* __BYTE_ORDER == __BIG_ENDIAN */
 #endif /* !(__BYTE_ORDER == __LITTLE_ENDIAN) */
-#endif /* Def __linux */
+#endif /* Def __linux || Def *BSD */
 
 #ifdef __sun
 #ifdef __sparc
@@ -566,7 +568,6 @@ int cost = 0;
             {
                 hash->collisions += 1;
                 hash->cost += cost;
-//                fprintf(stderr, "key colision %s and %s\n", key, hash_elem->next->key);
             }
 #endif
             hash->array[hashed] = hash_elem;
@@ -678,12 +679,28 @@ int fd;
     return buffer;
 }
 
+static void _cancel_relative(char* base, char** ref_cursor, char** ref_cursor_out, char* end)
+{
+    char* cursor = *ref_cursor;
+    char* cursor_out = *ref_cursor_out;
+
+    do
+    {
+        cursor += 3;
+        while(cursor_out > base && *--cursor_out != '/');
+    }
+    while(cursor + 3 < end && !memcmp(cursor, "/../", 4));
+    *ref_cursor = cursor;
+    *ref_cursor_out = cursor_out;
+}
+
 static int _process(struct hash* dep_hash, char* fn)
 {
 int rc;
 char* buffer;
 char* end;
 char* cursor;
+char* cursor_out;
 char* base;
 int continuation = 0;
 char last_ns = 0;
@@ -697,20 +714,31 @@ off_t size;
      */
     if(!rc)
     {
-        base = cursor = end = buffer;
+        base = cursor_out = cursor = end = buffer;
         end += size;
         while(cursor < end)
         {
             if(*cursor == '\\')
             {
                 continuation = 1;
-                cursor += 1;
+                *cursor_out++ = *cursor++;
+            }
+            else if(*cursor == '/')
+            {
+                if(cursor + 3 < end)
+                {
+                    if(!memcmp(cursor, "/../", 4))
+                    {
+                        _cancel_relative(base, &cursor, &cursor_out, end);
+                    }
+                }
+                *cursor_out++ = *cursor++;
             }
             else if(*cursor == '\n')
             {
                 if(!continuation)
                 {
-                    *cursor = 0;
+                    *cursor_out = 0;
                     if(base < cursor)
                     {
                         /* here we have a complete rule */
@@ -720,7 +748,7 @@ off_t size;
                              * these are the one for which we want to filter
                              * duplicate out
                              */
-                            if(hash_store(dep_hash, base, (int)(cursor - base)))
+                            if(hash_store(dep_hash, base, (int)(cursor_out - base)))
                             {
                                 puts(base);
                                 putc('\n', stdout);
@@ -734,14 +762,14 @@ off_t size;
                         }
                     }
                     cursor += 1;
-                    base = cursor;
+                    base = cursor_out = cursor;
                 }
                 else
                 {
                     /* here we have a '\' followed by \n this is a continuation
                      * i.e not a complete rule yet
                      */
-                    cursor += 1;
+                    *cursor_out++ = *cursor++;
                 }
             }
             else
@@ -752,15 +780,15 @@ off_t size;
                 {
                     last_ns = *cursor;
                 }
-                cursor += 1;
+                *cursor_out++ = *cursor++;
             }
         }
         /* just in case the file did not end with a \n, there may be a pending rule */
-        if(base < cursor)
+        if(base < cursor_out)
         {
             if(last_ns == ':')
             {
-                if(hash_store(dep_hash, base, (int)(cursor - base)))
+                if(hash_store(dep_hash, base, (int)(cursor_out - base)))
                 {
                     puts(base);
                     putc('\n', stdout);

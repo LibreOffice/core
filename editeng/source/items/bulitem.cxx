@@ -64,7 +64,7 @@ void SvxBulletItem::StoreFont( SvStream& rStream, const Font& rFont )
     nTemp = (sal_uInt16)rFont.GetItalic(); rStream << nTemp;
 
     // UNICODE: rStream << rFont.GetName();
-    rStream.WriteByteString(rFont.GetName());
+    rStream.WriteUniOrByteString(rFont.GetName(), rStream.GetStreamCharSet());
 
     rStream << rFont.IsOutline();
     rStream << rFont.IsShadow();
@@ -94,7 +94,7 @@ Font SvxBulletItem::CreateFont( SvStream& rStream, sal_uInt16 nVer )
 
     // UNICODE: rStream >> aName; aFont.SetName( aName );
     String aName;
-    rStream.ReadByteString(aName);
+    rStream.ReadUniOrByteString(aName, rStream.GetStreamCharSet());
     aFont.SetName( aName );
 
     if( nVer == 1 )
@@ -118,57 +118,6 @@ SvxBulletItem::SvxBulletItem( sal_uInt16 _nWhich ) : SfxPoolItem( _nWhich )
 {
     SetDefaultFont_Impl();
     SetDefaults_Impl();
-    nValidMask = 0xFFFF;
-}
-
-// -----------------------------------------------------------------------
-
-SvxBulletItem::SvxBulletItem( sal_uInt8 nNewStyle, const Font& rFont, sal_uInt16 /*nStart*/, sal_uInt16 _nWhich ) : SfxPoolItem( _nWhich )
-{
-    SetDefaults_Impl();
-    nStyle = nNewStyle;
-    aFont  = rFont;
-    nValidMask = 0xFFFF;
-}
-
-// -----------------------------------------------------------------------
-
-SvxBulletItem::SvxBulletItem( const Font& rFont, xub_Unicode cSymb, sal_uInt16 _nWhich ) : SfxPoolItem( _nWhich )
-{
-    SetDefaults_Impl();
-    aFont   = rFont;
-    cSymbol = cSymb;
-    nStyle  = BS_BULLET;
-    nValidMask = 0xFFFF;
-}
-
-// -----------------------------------------------------------------------
-
-SvxBulletItem::SvxBulletItem( const Bitmap& rBmp, sal_uInt16 _nWhich ) : SfxPoolItem( _nWhich )
-{
-    SetDefaults_Impl();
-
-    if( !rBmp.IsEmpty() )
-    {
-        pGraphicObject = new GraphicObject( rBmp );
-        nStyle = BS_BMP;
-    }
-
-    nValidMask = 0xFFFF;
-}
-
-// -----------------------------------------------------------------------
-
-SvxBulletItem::SvxBulletItem( const GraphicObject& rGraphicObject, sal_uInt16 _nWhich ) : SfxPoolItem( _nWhich )
-{
-    SetDefaults_Impl();
-
-    if( ( GRAPHIC_NONE != pGraphicObject->GetType() ) && ( GRAPHIC_DEFAULT != pGraphicObject->GetType() ) )
-    {
-        pGraphicObject = new GraphicObject( rGraphicObject );
-        nStyle = BS_BMP;
-    }
-
     nValidMask = 0xFFFF;
 }
 
@@ -217,10 +166,10 @@ SvxBulletItem::SvxBulletItem( SvStream& rStrm, sal_uInt16 _nWhich ) :
     rStrm >> nScale;
 
     // UNICODE: rStrm >> aPrevText;
-    rStrm.ReadByteString(aPrevText);
+    rStrm.ReadUniOrByteString(aPrevText, rStrm.GetStreamCharSet());
 
     // UNICODE: rStrm >> aFollowText;
-    rStrm.ReadByteString(aFollowText);
+    rStrm.ReadUniOrByteString(aFollowText, rStrm.GetStreamCharSet());
 
     nValidMask = 0xFFFF;
 }
@@ -416,10 +365,10 @@ SvStream& SvxBulletItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) c
     rStrm << nScale;
 
     // UNICODE: rStrm << aPrevText;
-    rStrm.WriteByteString(aPrevText);
+    rStrm.WriteUniOrByteString(aPrevText, rStrm.GetStreamCharSet());
 
     // UNICODE: rStrm << aFollowText;
-    rStrm.WriteByteString(aFollowText);
+    rStrm.WriteUniOrByteString(aFollowText, rStrm.GetStreamCharSet());
 
     return rStrm;
 }
@@ -460,39 +409,6 @@ SfxItemPresentation SvxBulletItem::GetPresentation
         default: ; //prevent warning
     }
     return eRet;
-}
-
-//------------------------------------------------------------------------
-
-Bitmap SvxBulletItem::GetBitmap() const
-{
-    if( pGraphicObject )
-        return pGraphicObject->GetGraphic().GetBitmap();
-    else
-    {
-        const Bitmap aDefaultBitmap;
-        return aDefaultBitmap;
-    }
-}
-
-//------------------------------------------------------------------------
-
-void SvxBulletItem::SetBitmap( const Bitmap& rBmp )
-{
-    if( rBmp.IsEmpty() )
-    {
-        if( pGraphicObject )
-        {
-            delete pGraphicObject;
-            pGraphicObject = NULL;
-        }
-    }
-    else
-    {
-        delete pGraphicObject;
-        pGraphicObject = new GraphicObject( rBmp );
-
-    }
 }
 
 //------------------------------------------------------------------------

@@ -1701,22 +1701,11 @@ SfxObjectShell* SfxMacroLoader::GetObjectShell_Impl()
 
 // -----------------------------------------------------------------------
 void SAL_CALL SfxMacroLoader::dispatchWithNotification( const ::com::sun::star::util::URL&                                                          aURL      ,
-                                                        const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >&            lArgs     ,
+                                                        const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >&            /*lArgs*/ ,
                                                         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchResultListener >& xListener )
               throw (::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-
-    sal_uInt32 nPropertyCount = lArgs.getLength();
-    ::rtl::OUString aReferer;
-    for( sal_uInt32 nProperty=0; nProperty<nPropertyCount; ++nProperty )
-    {
-        if( lArgs[nProperty].Name == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Referer")) )
-        {
-            lArgs[nProperty].Value >>= aReferer;
-            break;
-        }
-    }
 
     ::com::sun::star::uno::Any aAny;
     ErrCode nErr = loadMacro( aURL.Complete, aAny, GetObjectShell_Impl() );
@@ -1747,21 +1736,10 @@ void SAL_CALL SfxMacroLoader::dispatchWithNotification( const ::com::sun::star::
 
 // -----------------------------------------------------------------------
 void SAL_CALL SfxMacroLoader::dispatch( const ::com::sun::star::util::URL&                                               aURL  ,
-                                        const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lArgs )
+                                        const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& /*lArgs*/ )
               throw (::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-
-    sal_uInt32 nPropertyCount = lArgs.getLength();
-    ::rtl::OUString aReferer;
-    for( sal_uInt32 nProperty=0; nProperty<nPropertyCount; ++nProperty )
-    {
-        if( lArgs[nProperty].Name == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Referer")) )
-        {
-            lArgs[nProperty].Value >>= aReferer;
-            break;
-        }
-    }
 
     ::com::sun::star::uno::Any aAny;
     /*ErrCode nErr = */loadMacro( aURL.Complete, aAny, GetObjectShell_Impl() );

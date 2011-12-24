@@ -249,7 +249,7 @@ ConvErr QProToSc::Convert( const ScTokenArray*& pArray, sal_uInt16 /*nLen*/, con
             }
             if( nFmla[ i ] == 0x06 )
             {
-                String aTmp( ScfTools::ReadCString( maIn ), maIn.GetStreamCharSet() );
+                String aTmp(::read_zeroTerminated_uInt8s_ToOUString(maIn, maIn.GetStreamCharSet()));
                 sStringArray[ nStringCount ] = aTmp;
                 nStringCount++;
         SAFEDEC_OR_RET(nRef, aTmp.Len() + 1, ConvErrCount);

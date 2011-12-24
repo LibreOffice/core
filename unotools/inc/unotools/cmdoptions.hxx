@@ -28,10 +28,6 @@
 #ifndef INCLUDED_unotools_CMDOPTIONS_HXX
 #define INCLUDED_unotools_CMDOPTIONS_HXX
 
-//_________________________________________________________________________________________________________________
-//  includes
-//_________________________________________________________________________________________________________________
-
 #include "unotools/unotoolsdllapi.h"
 #include <sal/types.h>
 #include <osl/mutex.hxx>
@@ -40,19 +36,11 @@
 #include <rtl/ustring.hxx>
 #include <unotools/options.hxx>
 
-//_________________________________________________________________________________________________________________
-//  types, enums, ...
-//_________________________________________________________________________________________________________________
-
 /*-************************************************************************************************************//**
     @descr          The method GetList() returns a list of property values.
                     Use follow defines to seperate values by names.
 *//*-*************************************************************************************************************/
 #define CMDOPTIONS_PROPERTYNAME_URL                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "CommandURL" ))
-
-//_________________________________________________________________________________________________________________
-//  forward declarations
-//_________________________________________________________________________________________________________________
 
 /*-************************************************************************************************************//**
     @short          forward declaration to our private date container implementation
@@ -62,10 +50,6 @@
 *//*-*************************************************************************************************************/
 
 class SvtCommandOptions_Impl;
-
-//_________________________________________________________________________________________________________________
-//  declarations
-//_________________________________________________________________________________________________________________
 
 /*-************************************************************************************************************//**
     @short          collect informations about dynamic menus
@@ -81,10 +65,6 @@ class UNOTOOLS_DLLPUBLIC SvtCommandOptions: public utl::detail::Options
 {
     friend class SvtCommandOptions_Impl;
 
-    //-------------------------------------------------------------------------------------------------------------
-    //  public methods
-    //-------------------------------------------------------------------------------------------------------------
-
     public:
 
         enum CmdOption
@@ -92,10 +72,6 @@ class UNOTOOLS_DLLPUBLIC SvtCommandOptions: public utl::detail::Options
             CMDOPTION_DISABLED,
             CMDOPTION_NONE
         };
-
-        //---------------------------------------------------------------------------------------------------------
-        //  constructor / destructor
-        //---------------------------------------------------------------------------------------------------------
 
         /*-****************************************************************************************************//**
             @short      standard constructor and destructor
@@ -115,25 +91,6 @@ class UNOTOOLS_DLLPUBLIC SvtCommandOptions: public utl::detail::Options
 
          SvtCommandOptions();
         virtual ~SvtCommandOptions();
-
-        //---------------------------------------------------------------------------------------------------------
-        //  interface
-        //---------------------------------------------------------------------------------------------------------
-
-        /*-****************************************************************************************************//**
-            @short      clear complete sepcified list
-            @descr      Call this methods to clear the whole list.
-                        To fill it again use AppendItem().
-
-            @seealso    -
-
-            @param      "eMenu" select right menu to clear.
-            @return     -
-
-            @onerror    -
-        *//*-*****************************************************************************************************/
-
-        void Clear( CmdOption eOption );
 
         /*-****************************************************************************************************//**
             @short      return complete specified list
@@ -166,36 +123,6 @@ class UNOTOOLS_DLLPUBLIC SvtCommandOptions: public utl::detail::Options
         sal_Bool Lookup( CmdOption eOption, const ::rtl::OUString& aCommandURL ) const;
 
         /*-****************************************************************************************************//**
-            @short      return complete specified list
-            @descr      Call it to get all entries of an dynamic menu.
-                        We return a list of all nodes with his names and properties.
-
-            @seealso    -
-
-            @param      "eOption" select the list to retrieve.
-            @return     A list of command strings is returned.
-
-            @onerror    We return an empty list.
-        *//*-*****************************************************************************************************/
-
-        ::com::sun::star::uno::Sequence< ::rtl::OUString > GetList( CmdOption eOption ) const;
-
-        /*-****************************************************************************************************//**
-            @short      adds a new command to specified options list
-            @descr      You can add a command to specified options list!
-
-            @seealso    method Clear()
-
-            @param      "eOption"           specifies the command list
-            @param      "sURL"              URL for dispatch
-            @return     -
-
-            @onerror    -
-        *//*-*****************************************************************************************************/
-
-        void AddCommand( CmdOption eOption, const ::rtl::OUString& sURL );
-
-        /*-****************************************************************************************************//**
             @short      register an office frame, which must update its dispatches if
                         the underlying configuration was changed.
 
@@ -211,10 +138,6 @@ class UNOTOOLS_DLLPUBLIC SvtCommandOptions: public utl::detail::Options
         *//*-*****************************************************************************************************/
 
         void EstablisFrameCallback(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame);
-
-    //-------------------------------------------------------------------------------------------------------------
-    //  private methods
-    //-------------------------------------------------------------------------------------------------------------
 
     private:
 
@@ -233,10 +156,6 @@ class UNOTOOLS_DLLPUBLIC SvtCommandOptions: public utl::detail::Options
         *//*-*****************************************************************************************************/
 
         UNOTOOLS_DLLPRIVATE static ::osl::Mutex& GetOwnStaticMutex();
-
-    //-------------------------------------------------------------------------------------------------------------
-    //  private member
-    //-------------------------------------------------------------------------------------------------------------
 
     private:
 

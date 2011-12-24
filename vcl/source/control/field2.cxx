@@ -927,23 +927,6 @@ PatternField::PatternField( Window* pParent, WinBits nWinStyle ) :
 
 // -----------------------------------------------------------------------
 
-PatternField::PatternField( Window* pParent, const ResId& rResId ) :
-    SpinField( WINDOW_PATTERNFIELD )
-{
-    rResId.SetRT( RSC_PATTERNFIELD );
-    WinBits nStyle = ImplInitRes( rResId );
-    ImplInit( pParent, nStyle );
-    SetField( this );
-    SpinField::ImplLoadRes( rResId );
-    PatternFormatter::ImplLoadRes( ResId( (RSHEADER_TYPE *)GetClassRes(), *rResId.GetResMgr() ) );
-    Reformat();
-
-    if ( !(nStyle & WB_HIDE ) )
-        Show();
-}
-
-// -----------------------------------------------------------------------
-
 PatternField::~PatternField()
 {
 }
@@ -1000,24 +983,6 @@ PatternBox::PatternBox( Window* pParent, WinBits nWinStyle ) :
 {
     SetField( this );
     Reformat();
-}
-
-// -----------------------------------------------------------------------
-
-PatternBox::PatternBox( Window* pParent, const ResId& rResId ) :
-    ComboBox( WINDOW_PATTERNBOX )
-{
-    rResId.SetRT( RSC_PATTERNBOX );
-    WinBits nStyle = ImplInitRes( rResId );
-    ImplInit( pParent, nStyle );
-
-    SetField( this );
-    ComboBox::ImplLoadRes( rResId );
-    PatternFormatter::ImplLoadRes( ResId( (RSHEADER_TYPE *)GetClassRes(), *rResId.GetResMgr() ) );
-    Reformat();
-
-    if ( !(nStyle & WB_HIDE ) )
-        Show();
 }
 
 // -----------------------------------------------------------------------
@@ -1086,34 +1051,6 @@ void PatternBox::ReformatAll()
     }
     PatternFormatter::Reformat();
     SetUpdateMode( sal_True );
-}
-
-// -----------------------------------------------------------------------
-
-void PatternBox::InsertString( const XubString& rStr, sal_uInt16 nPos )
-{
-    ComboBox::InsertEntry( ImplPatternReformat( rStr, GetEditMask(), GetLiteralMask(), GetFormatFlags() ), nPos );
-}
-
-// -----------------------------------------------------------------------
-
-void PatternBox::RemoveString( const XubString& rStr )
-{
-    ComboBox::RemoveEntry( ImplPatternReformat( rStr, GetEditMask(), GetLiteralMask(), GetFormatFlags() ) );
-}
-
-// -----------------------------------------------------------------------
-
-XubString PatternBox::GetString( sal_uInt16 nPos ) const
-{
-    return ImplPatternReformat( ComboBox::GetEntry( nPos ), GetEditMask(), GetLiteralMask(), GetFormatFlags() );
-}
-
-// -----------------------------------------------------------------------
-
-sal_uInt16 PatternBox::GetStringPos( const XubString& rStr ) const
-{
-    return ComboBox::GetEntryPos( ImplPatternReformat( rStr, GetEditMask(), GetLiteralMask(), GetFormatFlags() ) );
 }
 
 // =======================================================================
@@ -1935,25 +1872,6 @@ Date DateFormatter::GetDate() const
 
 // -----------------------------------------------------------------------
 
-Date DateFormatter::GetRealDate() const
-{
-    // !!! TH-18.2.99: Wenn wir Zeit haben sollte dieses auch einmal
-    // !!! fuer die Numeric-Klassen eingebaut werden.
-
-    Date aDate( 0, 0, 0 );
-
-    if ( GetField() )
-    {
-        if ( !ImplDateGetValue( GetField()->GetText(), aDate, GetExtDateFormat(sal_True), ImplGetLocaleDataWrapper(), GetCalendarWrapper(), GetFieldSettings() ) )
-            if ( ImplAllowMalformedInput() )
-                aDate = GetInvalidDate();
-    }
-
-    return aDate;
-}
-
-// -----------------------------------------------------------------------
-
 void DateFormatter::SetEmptyDate()
 {
     FormatterBase::SetEmptyFieldValue();
@@ -1978,18 +1896,6 @@ sal_Bool DateFormatter::IsEmptyDate() const
         }
     }
     return bEmpty;
-}
-
-// -----------------------------------------------------------------------
-
-sal_Bool DateFormatter::IsDateModified() const
-{
-    if ( ImplGetEmptyFieldValue() )
-        return !IsEmptyDate();
-    else if ( GetDate() != maFieldDate )
-        return sal_True;
-    else
-        return sal_False;
 }
 
 // -----------------------------------------------------------------------
@@ -2234,26 +2140,6 @@ DateBox::DateBox( Window* pParent, WinBits nWinStyle ) :
 
 // -----------------------------------------------------------------------
 
-DateBox::DateBox( Window* pParent, const ResId& rResId ) :
-    ComboBox( WINDOW_DATEBOX )
-{
-    rResId.SetRT( RSC_DATEBOX );
-    WinBits nStyle = ImplInitRes( rResId );
-    ComboBox::ImplInit( pParent, nStyle );
-    SetField( this );
-    SetText( ImplGetLocaleDataWrapper().getDate( ImplGetFieldDate() ) );
-    ComboBox::ImplLoadRes( rResId );
-    ResMgr* pMgr = rResId.GetResMgr();
-    if( pMgr )
-        DateFormatter::ImplLoadRes( ResId( (RSHEADER_TYPE *)GetClassRes(), *pMgr ) );
-    Reformat();
-
-    if ( !( nStyle & WB_HIDE ) )
-        Show();
-}
-
-// -----------------------------------------------------------------------
-
 DateBox::~DateBox()
 {
 }
@@ -2334,47 +2220,6 @@ void DateBox::ReformatAll()
     }
     DateFormatter::Reformat();
     SetUpdateMode( sal_True );
-}
-
-// -----------------------------------------------------------------------
-
-void DateBox::InsertDate( const Date& rDate, sal_uInt16 nPos )
-{
-    Date aDate = rDate;
-    if ( aDate > GetMax() )
-        aDate = GetMax();
-    else if ( aDate < GetMin() )
-        aDate = GetMin();
-
-    ComboBox::InsertEntry( ImplGetDateAsText( aDate, GetFieldSettings() ), nPos );
-}
-
-// -----------------------------------------------------------------------
-
-void DateBox::RemoveDate( const Date& rDate )
-{
-    ComboBox::RemoveEntry( ImplGetDateAsText( rDate, GetFieldSettings() ) );
-}
-
-// -----------------------------------------------------------------------
-
-Date DateBox::GetDate( sal_uInt16 nPos ) const
-{
-    Date aDate( 0, 0, 0 );
-    ImplDateGetValue( ComboBox::GetEntry( nPos ), aDate, GetExtDateFormat(sal_True), ImplGetLocaleDataWrapper(), GetCalendarWrapper(), GetSettings() );
-    return aDate;
-}
-
-// -----------------------------------------------------------------------
-
-sal_uInt16 DateBox::GetDatePos( const Date& rDate ) const
-{
-    XubString aStr;
-    if ( IsLongFormat() )
-        aStr = ImplGetLocaleDataWrapper().getLongDate( rDate, GetCalendarWrapper(), 1, sal_False, 1, !IsShowDateCentury() );
-    else
-        aStr = ImplGetLocaleDataWrapper().getDate( rDate );
-    return ComboBox::GetEntryPos( aStr );
 }
 
 // -----------------------------------------------------------------------

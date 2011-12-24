@@ -198,7 +198,6 @@ class SvtSecurityOptions_Impl : public ConfigItem
 
         Sequence< SvtSecurityOptions::Certificate > GetTrustedAuthors       (                                                                                       ) const ;
         void                                        SetTrustedAuthors       ( const Sequence< SvtSecurityOptions::Certificate >& rAuthors                           )       ;
-        sal_Bool                                    IsTrustedAuthorsEnabled (                                                                                       )       ;
 
         sal_Bool                IsOptionSet     ( SvtSecurityOptions::EOption eOption                   ) const ;
         sal_Bool                SetOption       ( SvtSecurityOptions::EOption eOption, sal_Bool bValue  )       ;
@@ -968,11 +967,6 @@ void SvtSecurityOptions_Impl::SetTrustedAuthors( const Sequence< SvtSecurityOpti
     }
 }
 
-sal_Bool SvtSecurityOptions_Impl::IsTrustedAuthorsEnabled()
-{
-    return m_bROTrustedAuthors;
-}
-
 sal_Bool SvtSecurityOptions_Impl::IsOptionSet( SvtSecurityOptions::EOption eOption ) const
 {
     sal_Bool*   pValue;
@@ -1138,12 +1132,6 @@ void SvtSecurityOptions::SetTrustedAuthors( const Sequence< Certificate >& rAuth
 {
     MutexGuard aGuard( GetInitMutex() );
     m_pDataContainer->SetTrustedAuthors( rAuthors );
-}
-
-sal_Bool SvtSecurityOptions::IsTrustedAuthorsEnabled()
-{
-    MutexGuard aGuard( GetInitMutex() );
-    return m_pDataContainer->IsTrustedAuthorsEnabled();
 }
 
 bool SvtSecurityOptions::IsOptionSet( EOption eOption ) const

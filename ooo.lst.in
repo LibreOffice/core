@@ -1,7 +1,7 @@
 http://dev-www.libreoffice.org/src
-48a9f787f43a09c0a9b7b00cd1fddbbf-hyphen-2.7.1.tar.gz
+86261f06c097d3e425a2f6d0b0635380-hyphen-2.8.3.tar.gz
 63ddc5116488985e820075e65fbe6aa4-openssl-0.9.8o.tar.gz
-09357cc74975b01714e00c5899ea1881-pixman-0.12.0.tar.gz
+db5ffcd50064421176e8afb7b85fd1a7-pixman-0.24.0.tar.bz2
 0b49ede71c21c0599b0cc19b353a6cb3-README_apache-commons.txt
 e1c178b18f130b40494561f02bc1a948-libexttextcat-3.2.0.tar.bz2
 17410483b5b5f267aa18b7e00b65e6e0-hsqldb_1_8_0.zip
@@ -23,7 +23,7 @@ e1c178b18f130b40494561f02bc1a948-libexttextcat-3.2.0.tar.bz2
 48470d662650c3c074e1c3fabbc67bbd-README_source-9.0.0.7-bj.txt
 48d8169acc35f97e05d8dcdfd45be7f2-lucene-2.3.2.tar.gz
 4a660ce8466c9df01f19036435425c3a-glibc-2.1.3-stub.tar.gz
-4ea70ea87b47e92d318d4e7f5b940f47-cairo-1.8.0.tar.gz
+f101a9e88b783337b20b2e26dfd26d5f-cairo-1.10.2.tar.gz
 599dc4cc65a07ee868cf92a667a913d2-xpdf-3.02.tar.gz
 7740a8ec23878a2f50120e1faa2730f2-libxml2-2.7.6.tar.gz
 7376930b0d3f3d77a685d94c4a3acda8-STLport-4.5-0119.tar.gz
@@ -53,7 +53,7 @@ fdb27bfe2dbe2e7b57ae194d9bf36bab-SampleICC-1.3.2.tar.gz
 f872f4ac066433d8ff92f5e316b36ff9-dejavu-fonts-ttf-2.33.zip
 0981bda6548a8c8233ffce2b6e4b2a23-mysql-connector-c++-1.1.0.tar.gz
 061a9f17323117c9358ed60f33ecff78-postgresql-9.1.1.tar.bz2
-067201ea8b126597670b5eff72e1f66c-mythes-1.2.0.tar.gz
+e1e255dc43dbcbb34cb19e8a0eba90ae-mythes-1.2.2.tar.gz
 3404ab6b1792ae5f16bbd603bd1e1d03-libformula-1.1.7.zip
 3bdf40c0d199af31923e900d082ca2dd-libfonts-1.1.6.zip
 8ce2fcd72becf06c41f7201d15373ed9-librepository-1.1.6.zip
@@ -112,9 +112,6 @@ http://ooo.itc.hu/oxygenoffice/download/libreoffice/
 @HUNART_EXTENSION_PACK@
 @TYPO_EXTENSION_PACK@
 @OOOBLOGGER_EXTENSION_PACK@
-@LIGHTPROOF_EN_US_PACK@
-@LIGHTPROOF_HU_PACK@
-@LIGHTPROOF_RU_PACK@
 @SUNTEMPLATES_DE_PACK@
 @SUNTEMPLATES_EN_US_PACK@
 @SUNTEMPLATES_ES_PACK@

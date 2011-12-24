@@ -155,10 +155,10 @@ OleEmbeddedObject::~OleEmbeddedObject()
         } catch( const uno::Exception& ) {}
     }
 
-    if ( m_aTempURL.getLength() )
+    if ( !m_aTempURL.isEmpty() )
            KillFile_Impl( m_aTempURL, m_xFactory );
 
-    if ( m_aTempDumpURL.getLength() )
+    if ( !m_aTempDumpURL.isEmpty() )
            KillFile_Impl( m_aTempDumpURL, m_xFactory );
 }
 

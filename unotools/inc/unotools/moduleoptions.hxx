@@ -29,10 +29,6 @@
 #ifndef INCLUDED_SVTOOLS_MODULEOPTIONS_HXX
 #define INCLUDED_SVTOOLS_MODULEOPTIONS_HXX
 
-//_________________________________________________________________________________________________________________
-//  includes
-//_________________________________________________________________________________________________________________
-
 #include "unotools/unotoolsdllapi.h"
 #include <salhelper/singletonref.hxx>
 #include <com/sun/star/frame/XModel.hpp>
@@ -41,10 +37,6 @@
 #include <sal/types.h>
 #include <osl/mutex.hxx>
 #include <unotools/options.hxx>
-
-//_________________________________________________________________________________________________________________
-//  const
-//_________________________________________________________________________________________________________________
 
 #define FEATUREFLAG_BASICIDE                0x00000020
 #define FEATUREFLAG_MATH                    0x00000100
@@ -55,10 +47,6 @@
 #define FEATUREFLAG_IMPRESS                 0x00008000
 #define FEATUREFLAG_INSIGHT                 0x00010000
 
-//_________________________________________________________________________________________________________________
-//  forward declarations
-//_________________________________________________________________________________________________________________
-
 /*-************************************************************************************************************//**
     @short          forward declaration to our private date container implementation
     @descr          We use these class as internal member to support small memory requirements.
@@ -66,10 +54,6 @@
                     is faster and smaller then a complete implementation!
 *//*-*************************************************************************************************************/
 class SvtModuleOptions_Impl;
-
-//_________________________________________________________________________________________________________________
-//  declarations
-//_________________________________________________________________________________________________________________
 
 /*-************************************************************************************************************//**
     @short          collect informations about installation state of modules
@@ -85,9 +69,6 @@ class SvtModuleOptions_Impl;
 *//*-*************************************************************************************************************/
 class UNOTOOLS_DLLPUBLIC SvtModuleOptions: public utl::detail::Options
 {
-    //-------------------------------------------------------------------------------------------------------------
-    //  public const declarations!
-    //-------------------------------------------------------------------------------------------------------------
     public:
 
         enum EModule
@@ -126,23 +107,13 @@ class UNOTOOLS_DLLPUBLIC SvtModuleOptions: public utl::detail::Options
 
         };
 
-    //-------------------------------------------------------------------------------------------------------------
-    //  public methods
-    //-------------------------------------------------------------------------------------------------------------
     public:
 
-        //---------------------------------------------------------------------------------------------------------
-        //  constructor / destructor
-        //---------------------------------------------------------------------------------------------------------
          SvtModuleOptions();
         virtual ~SvtModuleOptions();
 
-        //---------------------------------------------------------------------------------------------------------
-        //  interface
-        //---------------------------------------------------------------------------------------------------------
         sal_Bool        IsModuleInstalled         (       EModule          eModule    ) const;
         ::rtl::OUString GetModuleName             (       EModule          eModule    ) const;
-        ::rtl::OUString GetModuleName             (       EFactory         eFactory   ) const;
         ::rtl::OUString GetFactoryName            (       EFactory         eFactory   ) const;
         ::rtl::OUString GetFactoryShortName       (       EFactory         eFactory   ) const;
         ::rtl::OUString GetFactoryStandardTemplate(       EFactory         eFactory   ) const;
@@ -213,9 +184,6 @@ class UNOTOOLS_DLLPUBLIC SvtModuleOptions: public utl::detail::Options
 
         ::rtl::OUString GetDefaultModuleName();
 
-        //---------------------------------------------------------------------------------------------------------
-        //  old interface ...
-        //---------------------------------------------------------------------------------------------------------
         sal_Bool   IsMath     () const;
         sal_Bool   IsChart    () const;
         sal_Bool   IsCalc     () const;
@@ -224,20 +192,11 @@ class UNOTOOLS_DLLPUBLIC SvtModuleOptions: public utl::detail::Options
         sal_Bool   IsImpress  () const;
         sal_Bool   IsBasicIDE () const;
         sal_Bool   IsDataBase () const;
-        sal_uInt32 GetFeatures() const;
 
         ::com::sun::star::uno::Sequence < ::rtl::OUString > GetAllServiceNames();
 
-    //-------------------------------------------------------------------------------------------------------------
-    //  private methods
-    //-------------------------------------------------------------------------------------------------------------
     private:
         UNOTOOLS_DLLPRIVATE static ::osl::Mutex& impl_GetOwnStaticMutex();
-
-    //-------------------------------------------------------------------------------------------------------------
-    //  private member
-    //-------------------------------------------------------------------------------------------------------------
-    private:
 
         /*Attention
 

@@ -39,20 +39,16 @@
 SV_IMPL_META_FACTORY1( SvMetaModule, SvMetaExtern );
 
 SvMetaModule::SvMetaModule()
-#ifdef IDL_COMPILER
     : bImported( sal_False )
     , bIsModified( sal_False )
-#endif
 {
 }
 
-#ifdef IDL_COMPILER
 SvMetaModule::SvMetaModule( const String & rIdlFileName, sal_Bool bImp )
     : aIdlFileName( rIdlFileName )
     , bImported( bImp ), bIsModified( sal_False )
 {
 }
-#endif
 
 #define MODULE_VER      0x0001
 void SvMetaModule::Load( SvPersistStream & rStm )
@@ -69,23 +65,19 @@ void SvMetaModule::Load( SvPersistStream & rStm )
     rStm >> aTypeList;
     rStm >> aAttrList;
     // browser
-    rStm.ReadByteString( aIdlFileName );
-    rStm.ReadByteString( aHelpFileName );
-    rStm.ReadByteString( aSlotIdFile );
-    rStm.ReadByteString( aModulePrefix );
+    rStm.ReadUniOrByteString( aIdlFileName, rStm.GetStreamCharSet() );
+    aHelpFileName = read_lenPrefixed_uInt8s_ToOString<sal_uInt16>(rStm);
+    aSlotIdFile = read_lenPrefixed_uInt8s_ToOString<sal_uInt16>(rStm);
+    aModulePrefix = read_lenPrefixed_uInt8s_ToOString<sal_uInt16>(rStm);
 
     // read compiler data
     sal_uInt16 nCmpLen;
     rStm >> nCmpLen;
-#ifdef IDL_COMPILER
     DBG_ASSERT( (nVer & IDL_WRITE_MASK) == IDL_WRITE_COMPILER,
                 "no idl compiler format" );
     rStm >> aBeginName;
     rStm >> aEndName;
     rStm >> aNextName;
-#else
-    rStm->SeekRel( nCmpLen );
-#endif
 }
 
 void SvMetaModule::Save( SvPersistStream & rStm )
@@ -98,16 +90,15 @@ void SvMetaModule::Save( SvPersistStream & rStm )
     rStm << aTypeList;
     rStm << aAttrList;
     // browser
-    rStm.WriteByteString( aIdlFileName );
-    rStm.WriteByteString( aHelpFileName );
-    rStm.WriteByteString( aSlotIdFile );
-    rStm.WriteByteString( aModulePrefix );
+    rStm.WriteUniOrByteString( aIdlFileName, rStm.GetStreamCharSet() );
+    write_lenPrefixed_uInt8s_FromOString<sal_uInt16>(rStm, aHelpFileName);
+    write_lenPrefixed_uInt8s_FromOString<sal_uInt16>(rStm, aSlotIdFile);
+    write_lenPrefixed_uInt8s_FromOString<sal_uInt16>(rStm, aModulePrefix);
 
     // write compiler data
     sal_uInt16 nCmpLen = 0;
     sal_uLong nLenPos = rStm.Tell();
     rStm << nCmpLen;
-#ifdef IDL_COMPILER
     rStm << aBeginName;
     rStm << aEndName;
     rStm << aNextName;
@@ -116,7 +107,6 @@ void SvMetaModule::Save( SvPersistStream & rStm )
     rStm.Seek( nLenPos );
     rStm << (sal_uInt16)( nPos - nLenPos - sizeof( sal_uInt16 ) );
     rStm.Seek( nPos );
-#endif
 }
 
 sal_Bool SvMetaModule::SetName( const ByteString & rName, SvIdlDataBase * pBase )
@@ -129,7 +119,6 @@ sal_Bool SvMetaModule::SetName( const ByteString & rName, SvIdlDataBase * pBase 
     return SvMetaExtern::SetName( rName );
 }
 
-#ifdef IDL_COMPILER
 sal_Bool SvMetaModule::FillNextName( SvGlobalName * pName )
 {
     *pName = aNextName;
@@ -379,9 +368,9 @@ void SvMetaModule::WriteSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm,
 {
     rOutStm << SvHash_module()->GetName().GetBuffer() << endl
             << '\"';
-    rOutStm.WriteByteString( aBeginName.GetHexName() );
+    rOutStm.WriteUniOrByteString( aBeginName.GetHexName(), rOutStm.GetStreamCharSet() );
     rOutStm << '\"' << endl << '\"';
-    rOutStm.WriteByteString( aEndName.GetHexName() );
+    rOutStm.WriteUniOrByteString( aEndName.GetHexName(), rOutStm.GetStreamCharSet() );
     rOutStm << '\"' << endl;
     SvMetaExtern::WriteSvIdl( rBase, rOutStm, nTab );
 }
@@ -548,7 +537,5 @@ void SvMetaModule::WriteCxx( SvIdlDataBase & rBase, SvStream & rOutStm,
         pClass->WriteCxx( rBase, rOutStm, nTab );
     }
 }
-
-#endif // IDL_COMPILER
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

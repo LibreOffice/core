@@ -714,7 +714,7 @@ void SlideTransitionPane::updateLayout()
     aCtrlSize = maFT_SOUND.GetSizePixel();
     if( bStack )
         aUpperLeft.setY( aUpperLeft.getY() - aCtrlSize.getHeight());
-    aCtrlSize.setWidth( nFTSoundWidth );
+    aCtrlSize.setWidth( nFTSoundWidth - 2 * nOffsetX );
     maFT_SOUND.SetPosSizePixel( aUpperLeft, aCtrlSize );
 
     aUpperLeft.setX( nIndent );
@@ -728,7 +728,7 @@ void SlideTransitionPane::updateLayout()
     aCtrlSize = maFT_SPEED.GetSizePixel();
     if( bStack )
         aUpperLeft.setY( aUpperLeft.getY() - aCtrlSize.getHeight());
-    aCtrlSize.setWidth( nFTSpeedWidth );
+    aCtrlSize.setWidth( nFTSpeedWidth - 2 * nOffsetX );
     maFT_SPEED.SetPosSizePixel( aUpperLeft, aCtrlSize );
 
     // fixed line "Modify Transition"

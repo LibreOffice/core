@@ -334,7 +334,7 @@ namespace
                                                 sTable,
                                                 ::dbtools::eInDataManipulation);
             Any aCatalog;
-            if ( sCatalog.getLength() )
+            if ( !sCatalog.isEmpty() )
                 aCatalog <<= sCatalog;
 
             try

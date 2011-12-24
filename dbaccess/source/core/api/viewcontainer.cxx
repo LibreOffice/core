@@ -153,7 +153,7 @@ ObjectType OViewContainer::appendObject( const ::rtl::OUString& _rForName, const
     else
     {
         ::rtl::OUString sComposedName = ::dbtools::composeTableName( m_xMetaData, descriptor, ::dbtools::eInTableDefinitions, false, false, true );
-        if(!sComposedName.getLength())
+        if(sComposedName.isEmpty())
             ::dbtools::throwFunctionSequenceException(static_cast<XTypeProvider*>(static_cast<OFilteredContainer*>(this)));
 
         ::rtl::OUString sCommand;
@@ -200,7 +200,7 @@ void OViewContainer::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementN
                 sComposedName = ::dbtools::composeTableName( m_xMetaData, sCatalog, sSchema, sTable, sal_True, ::dbtools::eInTableDefinitions );
             }
 
-            if(!sComposedName.getLength())
+            if(sComposedName.isEmpty())
                 ::dbtools::throwFunctionSequenceException(static_cast<XTypeProvider*>(static_cast<OFilteredContainer*>(this)));
 
             ::rtl::OUString aSql(RTL_CONSTASCII_USTRINGPARAM("DROP VIEW "));

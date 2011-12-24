@@ -543,7 +543,7 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
                 }
                 eNewState =
                     aCharStyles.getLength() ?
-                        PropertyState_DIRECT_VALUE : PropertyState_DEFAULT_VALUE;;
+                        PropertyState_DIRECT_VALUE : PropertyState_DEFAULT_VALUE;
                 if(pAny)
                     (*pAny) <<= aCharStyles;
             }
@@ -615,7 +615,7 @@ void setNumberingProperty(const Any& rValue, SwPaM& rPam)
                             SwCharFmt* pCharFmt = 0;
                             for(sal_uInt16 nCharFmt = 0; nCharFmt < nChCount; nCharFmt++)
                             {
-                                SwCharFmt& rChFmt = *((*(pDoc->GetCharFmts()))[nCharFmt]);;
+                                SwCharFmt& rChFmt = *((*(pDoc->GetCharFmts()))[nCharFmt]);
                                 if(rChFmt.GetName() == pNewCharStyles[i])
                                 {
                                     pCharFmt = &rChFmt;

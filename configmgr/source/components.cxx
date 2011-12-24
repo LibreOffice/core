@@ -710,7 +710,7 @@ void Components::parseFileList(
 {
     for (sal_Int32 i = 0;;) {
         rtl::OUString url(urls.getToken(0, ' ', i));
-        if (url.getLength() != 0) {
+        if (!url.isEmpty()) {
             ini.expandMacrosFrom(url); //TODO: detect failure
             Additions * adds = 0;
             if (recordAdditions) {

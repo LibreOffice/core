@@ -135,7 +135,7 @@ namespace dbtools
 
                     case CommandType::TABLE:
                     {
-                        if ( !_rData.sCommand.getLength() )
+                        if ( _rData.sCommand.isEmpty() )
                             break;
 
                         sStatement = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SELECT * FROM " ) );
@@ -166,7 +166,7 @@ namespace dbtools
 
                         // the command used by the query
                         xQuery->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Command" ) ) ) >>= sStatement;
-                        if ( !sStatement.getLength() )
+                        if ( sStatement.isEmpty() )
                             break;
 
                         // use a composer to build a statement from the query filter/order props
@@ -214,7 +214,7 @@ namespace dbtools
                         break;
                 }
 
-                if ( sStatement.getLength() )
+                if ( !sStatement.isEmpty() )
                 {
                     // create an composer
                     Reference< XMultiServiceFactory > xFactory( _rData.xConnection, UNO_QUERY_THROW );

@@ -859,7 +859,7 @@ void WW8Export::AppendFlyInFlys(const sw::Frame& rFrmFmt,
 MSWord_SdrAttrIter::MSWord_SdrAttrIter( MSWordExportBase& rWr,
     const EditTextObject& rEditObj, sal_uInt8 nTyp )
     : MSWordAttrIter( rWr ), pEditObj(&rEditObj), pEditPool(0),
-    aTxtAtrArr( 0, 4 ), aChrTxtAtrArr( 0, 4 ), aChrSetArr( 0, 4 ),
+      aTxtAtrArr(), aChrTxtAtrArr( 0, 4 ), aChrSetArr( 0, 4 ),
     mnTyp(nTyp)
 {
     NextPara( 0 );
@@ -898,29 +898,22 @@ rtl_TextEncoding MSWord_SdrAttrIter::GetNextCharSet() const
 // der erste Parameter in SearchNext() liefert zurueck, ob es ein TxtAtr ist.
 xub_StrLen MSWord_SdrAttrIter::SearchNext( xub_StrLen nStartPos )
 {
-    xub_StrLen nPos;
-    xub_StrLen nMinPos = STRING_MAXLEN;
-    xub_StrLen i;
-
-    for( i = 0; i < aTxtAtrArr.Count(); i++ )
+    sal_uInt16 nMinPos = STRING_MAXLEN;
+    for(std::vector<EECharAttrib>::const_iterator i = aTxtAtrArr.begin(); i < aTxtAtrArr.end(); ++i)
     {
-        const EECharAttrib& rHt = aTxtAtrArr[ i ];
-        nPos = rHt.nStart;  // gibt erstes Attr-Zeichen
+        sal_uInt16 nPos = i->nStart; // gibt erstes Attr-Zeichen
         if( nPos >= nStartPos && nPos <= nMinPos )
         {
             nMinPos = nPos;
-            SetCharSet(rHt, true);
+            SetCharSet(*i, true);
         }
 
+        nPos = i->nEnd;              // gibt letztes Attr-Zeichen + 1
+        if( nPos >= nStartPos && nPos < nMinPos )
         {
-            nPos = rHt.nEnd;        // gibt letztes Attr-Zeichen + 1
-            if( nPos >= nStartPos && nPos < nMinPos )
-            {
-                nMinPos = nPos;
-                SetCharSet(rHt, false);
-            }
+            nMinPos = nPos;
+            SetCharSet(*i, false);
         }
-
     }
     return nMinPos;
 }
@@ -978,7 +971,7 @@ void MSWord_SdrAttrIter::OutAttr( xub_StrLen nSwPos )
 {
     OutParaAttr(true);
 
-    if( aTxtAtrArr.Count() )
+    if(!aTxtAtrArr.empty())
     {
         const SwModify* pOldMod = m_rExport.pOutFmtNode;
         m_rExport.pOutFmtNode = 0;
@@ -987,16 +980,15 @@ void MSWord_SdrAttrIter::OutAttr( xub_StrLen nSwPos )
         const SfxItemPool& rDstPool = m_rExport.pDoc->GetAttrPool();
 
         nTmpSwPos = nSwPos;
-        sal_uInt16 i, nWhich, nSlotId;
-        for( i = 0; i < aTxtAtrArr.Count(); i++ )
+        sal_uInt16 nWhich, nSlotId;
+        for(std::vector<EECharAttrib>::const_iterator i = aTxtAtrArr.begin(); i < aTxtAtrArr.end(); ++i)
         {
-            const EECharAttrib& rHt = aTxtAtrArr[ i ];
-            if (nSwPos >= rHt.nStart && nSwPos < rHt.nEnd)
+            if (nSwPos >= i->nStart && nSwPos < i->nEnd)
             {
-                nWhich = rHt.pAttr->Which();
+                nWhich = i->pAttr->Which();
                 if (nWhich == EE_FEATURE_FIELD)
                 {
-                    OutEEField(*rHt.pAttr);
+                    OutEEField(*(i->pAttr));
                     continue;
                 }
                 else if (nWhich == EE_FEATURE_TAB)
@@ -1014,7 +1006,7 @@ void MSWord_SdrAttrIter::OutAttr( xub_StrLen nSwPos )
                         m_rExport.CollapseScriptsforWordOk(nScript,nWhich))
                     {
                         // use always the SW-Which Id !
-                        SfxPoolItem* pI = rHt.pAttr->Clone();
+                        SfxPoolItem* pI = i->pAttr->Clone();
                         pI->SetWhich( nWhich );
                         m_rExport.AttrOutput().OutputItem( *pI );
                         delete pI;
@@ -1022,7 +1014,7 @@ void MSWord_SdrAttrIter::OutAttr( xub_StrLen nSwPos )
                 }
             }
 
-            if( nSwPos < rHt.nStart )
+            if( nSwPos < i->nStart )
                 break;
         }
 
@@ -1033,18 +1025,13 @@ void MSWord_SdrAttrIter::OutAttr( xub_StrLen nSwPos )
 
 bool MSWord_SdrAttrIter::IsTxtAttr(xub_StrLen nSwPos)
 {
-    for (sal_uInt16 i = 0; i < aTxtAtrArr.Count(); ++i)
+    for (std::vector<EECharAttrib>::const_iterator i = aTxtAtrArr.begin(); i < aTxtAtrArr.end(); ++i)
     {
-        const EECharAttrib& rHt = aTxtAtrArr[ i ];
-        if (nSwPos >= rHt.nStart && nSwPos < rHt.nEnd)
+        if (nSwPos >= i->nStart && nSwPos < i->nEnd)
         {
-            if (
-                 (rHt.pAttr->Which() == EE_FEATURE_FIELD) ||
-                 (rHt.pAttr->Which() == EE_FEATURE_TAB)
-               )
-            {
+            if (i->pAttr->Which() == EE_FEATURE_FIELD ||
+                i->pAttr->Which() == EE_FEATURE_TAB)
                 return true;
-            }
         }
     }
     return false;
@@ -1058,27 +1045,19 @@ bool MSWord_SdrAttrIter::IsTxtAttr(xub_StrLen nSwPos)
 // Es wird mit bDeep gesucht
 const SfxPoolItem* MSWord_SdrAttrIter::HasTextItem(sal_uInt16 nWhich) const
 {
-    const SfxPoolItem* pRet = 0;
     nWhich = sw::hack::TransformWhichBetweenPools(*pEditPool,
         m_rExport.pDoc->GetAttrPool(), nWhich);
     if (nWhich)
     {
-        for (sal_uInt16 i = 0; i < aTxtAtrArr.Count(); ++i)
+        for (std::vector<EECharAttrib>::const_iterator i = aTxtAtrArr.begin(); i < aTxtAtrArr.end(); ++i)
         {
-            const EECharAttrib& rHt = aTxtAtrArr[i];
-            if (
-                 nWhich == rHt.pAttr->Which() && nTmpSwPos >= rHt.nStart &&
-                 nTmpSwPos < rHt.nEnd
-               )
-            {
-                pRet = rHt.pAttr;   // Found
-                break;
-            }
-            else if (nTmpSwPos < rHt.nStart)
-                break;              // dann kommt da nichts mehr
+            if (nWhich == i->pAttr->Which() && nTmpSwPos >= i->nStart && nTmpSwPos < i->nEnd)
+                return i->pAttr;    // Found
+            else if (nTmpSwPos < i->nStart)
+                return NULL;        // dann kommt da nichts mehr
         }
     }
-    return pRet;
+    return NULL;
 }
 
 const SfxPoolItem& MSWord_SdrAttrIter::GetItem( sal_uInt16 nWhich ) const

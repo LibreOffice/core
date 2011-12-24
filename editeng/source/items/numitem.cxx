@@ -219,9 +219,9 @@ SvStream&   SvxNumberFormat::Store(SvStream &rStream, FontToSubsFontConverter pC
 
     rStream << nCharTextDistance;
     rtl_TextEncoding eEnc = osl_getThreadTextEncoding();
-    rStream.WriteByteString(sPrefix, eEnc);
-    rStream.WriteByteString(sSuffix, eEnc);
-    rStream.WriteByteString(sCharStyleName, eEnc);
+    rStream.WriteUniOrByteString(sPrefix, eEnc);
+    rStream.WriteUniOrByteString(sSuffix, eEnc);
+    rStream.WriteUniOrByteString(sCharStyleName, eEnc);
     if(pGraphicBrush)
     {
         rStream << (sal_uInt16)1;

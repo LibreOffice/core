@@ -44,7 +44,7 @@ then
         echo "Found a core dump at ${COREFILE}"
         echo "Stacktrace:"
         GDBCOMMANDFILE=`mktemp`
-        echo "bt" > ${GDBCOMMANDFILE}
+        echo "thread apply all bt" > ${GDBCOMMANDFILE}
         gdb -x $GDBCOMMANDFILE --batch ${OFFICEFILE}.bin ${COREFILE}
         rm ${GDBCOMMANDFILE}
         echo

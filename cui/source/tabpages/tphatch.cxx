@@ -779,7 +779,7 @@ IMPL_LINK( SvxHatchTabPage, ClickSaveHdl_Impl, void *, EMPTYARG )
     {
         aFile.Append( pHatchingList->GetName() );
 
-        if( !aFile.getExtension().getLength() )
+        if( aFile.getExtension().isEmpty() )
             aFile.SetExtension( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "soh" ) ) );
     }
 

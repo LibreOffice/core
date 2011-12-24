@@ -372,22 +372,6 @@ bool Layouter::Rearrange (
     return mpImplementation->Rearrange(rWindowSize, rPageSize, nPageCount);
 }
 
-
-
-
-void Layouter::_SetZoom (Fraction nZoomFactor)
-{
-    OSL_ASSERT(mpWindow);
-
-    MapMode aMapMode (mpWindow->GetMapMode());
-    aMapMode.SetScaleX (nZoomFactor);
-    aMapMode.SetScaleY (nZoomFactor);
-    mpWindow->SetMapMode (aMapMode);
-}
-
-
-
-
 sal_Int32 Layouter::GetColumnCount (void) const
 {
     return mpImplementation->mnColumnCount;

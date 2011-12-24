@@ -247,6 +247,13 @@ public:
 
     ::rtl::OUString encodeStyleName( const ::rtl::OUString& rName,
                                      sal_Bool *pEncoded=0 ) const;
+    /** convert string (hex) to number (sal_uInt32) */
+    static sal_Bool convertHex( sal_uInt32& nVal,
+                              const ::rtl::OUString& rValue );
+
+    /** convert number (sal_uInt32) to string (hex) */
+    static void convertHex( ::rtl::OUStringBuffer& rBuffer,
+                               sal_uInt32 nVal );
 
 };
 

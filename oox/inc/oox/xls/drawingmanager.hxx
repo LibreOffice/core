@@ -81,36 +81,6 @@ struct BiffObjFillModel
 };
 
 // ============================================================================
-
-/** This structure contains text formatting attributes from an OBJ record. */
-struct BiffObjTextModel
-{
-    sal_uInt16          mnTextLen;          /// Length of the text (characters).
-    sal_uInt16          mnFormatSize;       /// Size of the formatting array (bytes).
-    sal_uInt16          mnLinkSize;         /// Size of the linked text formula (bytes).
-    sal_uInt16          mnDefFontId;        /// Font index for default font formatting.
-    sal_uInt16          mnFlags;            /// Additional flags.
-    sal_uInt16          mnOrientation;      /// Text orientation.
-    sal_uInt16          mnButtonFlags;      /// Additional flags for push buttons.
-    sal_uInt16          mnShortcut;         /// Shortcut character.
-    sal_uInt16          mnShortcutEA;       /// East-asian shortcut character.
-
-    explicit            BiffObjTextModel();
-
-    /** Reads text data from a BIFF3/BIFF4 OBJ record. */
-    void                readObj3( BiffInputStream& rStrm );
-    /** Reads text data from a BIFF5 OBJ record. */
-    void                readObj5( BiffInputStream& rStrm );
-    /** Reads text data from a BIFF8 TXO record. */
-    void                readTxo8( BiffInputStream& rStrm );
-
-    /** Returns the horizontal alignment of the text. */
-    sal_uInt8           getHorAlign() const;
-    /** Returns the vertical alignment of the text. */
-    sal_uInt8           getVerAlign() const;
-};
-
-// ============================================================================
 // BIFF drawing objects
 // ============================================================================
 

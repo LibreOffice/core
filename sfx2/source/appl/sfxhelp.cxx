@@ -208,7 +208,7 @@ sal_Bool GetHelpAnchor_Impl( const String& _rURL, String& _rAnchor )
             DBG_ERRORFILE( "Property 'AnchorName' is missing" );
         }
     }
-    catch( ::com::sun::star::uno::Exception& )
+    catch (const ::com::sun::star::uno::Exception&)
     {
     }
 
@@ -445,11 +445,11 @@ SfxHelp::~SfxHelp()
         {
             sIdentifier = xModuleManager->identify( xCurrentFrame );
         }
-        catch ( ::com::sun::star::frame::UnknownModuleException& )
+        catch (const ::com::sun::star::frame::UnknownModuleException&)
         {
             DBG_WARNING( "SfxHelp::getCurrentModuleIdentifier_Impl(): unknown module (help in help?)" );
         }
-        catch ( Exception& )
+        catch (const Exception&)
         {
             DBG_ERRORFILE( "SfxHelp::getCurrentModuleIdentifier_Impl(): exception of XModuleManager::identify()" );
         }
@@ -484,7 +484,7 @@ String SfxHelp::GetHelpModuleName_Impl()
                 }
             }
         }
-        catch ( Exception& )
+        catch (const Exception&)
         {
             DBG_ERRORFILE( "SfxHelp::GetHelpModuleName_Impl(): exception of XNameAccess::getByName()" );
         }
@@ -697,7 +697,7 @@ static bool impl_showOnlineHelp( const String& rURL )
             return true;
         }
     }
-    catch( const Exception& )
+    catch (const Exception&)
     {
     }
     return false;
@@ -866,7 +866,7 @@ void SfxHelp::OpenHelpAgent( const rtl::OString& sHelpId )
                 if ( xHelpDispatch.is() )
                     xHelpDispatch->dispatch( aURL, Sequence< PropertyValue >() );
             }
-            catch( const Exception& )
+            catch (const Exception&)
             {
                 DBG_ERRORFILE( "OpenHelpAgent: caught an exception while executing the dispatch!" );
             }

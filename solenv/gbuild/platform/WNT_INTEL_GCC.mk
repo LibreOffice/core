@@ -97,10 +97,7 @@ ifeq ($(MINGW_GCCLIB_EH),YES)
 gb_LinkTarget_LDFLAGS += -shared-libgcc
 endif
 
-gb_DEBUG_CFLAGS := -ggdb3 -finline-limit=0 -fno-inline -fno-default-inline
-ifeq ($(HAVE_GCC_DWARF_4),TRUE)
-gb_DEBUG_CFLAGS += -gdwarf-4
-endif
+gb_DEBUG_CFLAGS := -ggdb2 -finline-limit=0 -fno-inline -fno-default-inline
 
 gb_STDLIBS := \
 	mingwthrd \
@@ -154,10 +151,6 @@ gb_LinkTarget_CXXFLAGS := $(gb_CXXFLAGS) $(gb_CXXFLAGS_WERROR)
 ifeq ($(gb_SYMBOL),$(true))
 gb_LinkTarget_CXXFLAGS += -ggdb2
 gb_LinkTarget_CFLAGS += -ggdb2
-ifeq ($(HAVE_GCC_DWARF_4),TRUE)
-gb_LinkTarget_CXXFLAGS += -gdwarf-4
-gb_LinkTarget_CFLAGS += -gdwarf-4
-endif
 endif
 
 gb_LinkTarget_INCLUDE +=\
@@ -281,7 +274,6 @@ gb_Library_PLAINLIBS_NONE += \
 	urlmon \
 	user32 \
 	uuid \
-	uwinapi \
 	winmm \
 	version \
 	wininet \
@@ -330,7 +322,7 @@ gb_Library_ILIBEXT := .lib
 define gb_Library_Library_platform
 $(call gb_LinkTarget_set_dlltarget,$(2),$(OUTDIR)/bin/$(notdir $(3)))
 
-$(call gb_LinkTarget_set_auxtargets,$(2),\
+$(call gb_LinkTarget_add_auxtargets,$(2),\
 	$(patsubst %.dll,%.map,$(3)) \
 )
 
@@ -414,7 +406,7 @@ gb_CppunitTest_get_libfilename = test_$(1).dll
 define gb_CppunitTest_CppunitTest_platform
 $(call gb_LinkTarget_set_dlltarget,$(2),$(3))
 
-$(call gb_LinkTarget_set_auxtargets,$(2),\
+$(call gb_LinkTarget_add_auxtargets,$(2),\
 	$(patsubst %.dll,%.map,$(3)) \
 )
 

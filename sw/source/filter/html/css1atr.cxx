@@ -3747,8 +3747,8 @@ SwAttrFnTab aCSS1AttrFnTab = {
 /* RES_CHRATR_RELIEF */             0,
 /* RES_CHRATR_HIDDEN */             0,
 /* RES_CHRATR_OVERLINE */           OutCSS1_SvxOverline,
+/* RES_CHRATR_RSID */               0,
 /* RES_CHRATR_DUMMY1 */             0,
-/* RES_CHRATR_DUMMY2 */             0,
 
 /* RES_TXTATR_REFMARK */            0,
 /* RES_TXTATR_TOXMARK */            0,
@@ -3786,6 +3786,7 @@ SwAttrFnTab aCSS1AttrFnTab = {
 /* RES_PARATR_SNAPTOGRID*/          0, // new
 /* RES_PARATR_CONNECT_TO_BORDER */  0, // new
 /* RES_PARATR_OUTLINELEVEL */       0, // new since cws outlinelevel
+/* RES_PARATR_RSID */               0, // new
 
 /* RES_PARATR_LIST_ID */            0, // new
 /* RES_PARATR_LIST_LEVEL */         0, // new

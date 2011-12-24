@@ -1,0 +1,269 @@
+--- misc/cairo-1.10.2/build/Makefile.win32.features	2010-08-18 09:47:30.000000000 +0200
++++ misc/build/cairo-1.10.2/build/Makefile.win32.features	2011-12-20 09:57:06.428170146 +0100
+@@ -30,7 +30,7 @@
+ CAIRO_HAS_FC_FONT=0
+ CAIRO_HAS_PS_SURFACE=1
+ CAIRO_HAS_PDF_SURFACE=1
+-CAIRO_HAS_SVG_SURFACE=1
++CAIRO_HAS_SVG_SURFACE=0
+ CAIRO_HAS_TEST_SURFACES=0
+ CAIRO_HAS_TEE_SURFACE=0
+ CAIRO_HAS_XML_SURFACE=0
+--- misc/cairo-1.10.2/build/Makefile.win32.common	2009-06-14 23:53:24.000000000 +0200
++++ misc/build/cairo-1.10.2/build/Makefile.win32.common	2009-06-14 23:53:24.000000000 +0200
+@@ -22,24 +22,26 @@
+ OPT := -MD -O2
+ endif
+ 
+-PIXMAN_CFLAGS := -I$(top_srcdir)/../pixman/pixman
+-PIXMAN_LIBS := $(top_builddir)/../pixman/pixman/$(CFG)/pixman-1.lib
++PIXMAN_CFLAGS :=  -I../../../../inc
++PIXMAN_LIBS := ../../../../lib/pixman-1.lib
+ 
+ CAIRO_LIBS =  gdi32.lib msimg32.lib user32.lib
+ ifeq ($(CAIRO_HAS_PNG_FUNCTIONS),1)
+ LIBPNG_CFLAGS += -I$(top_srcdir)/../libpng/
+-CAIRO_LIBS +=  $(top_builddir)/../libpng/libpng.lib
++CAIRO_LIBS += libpng.lib
+ endif
+ ifeq ($(CAIRO_HAS_PS_SURFACE)$(CAIRO_HAS_PDF_SURFACE),00)
+ else
+ ZLIB_CFLAGS += -I$(top_srcdir)/../zlib/
+-CAIRO_LIBS += $(top_builddir)/../zlib/zdll.lib
++CAIRO_LIBS += $(ZLIB3RDLIB)
+ endif
+ 
+ DEFAULT_CFLAGS = -nologo $(MS_MDFLAGS) $(OPT)
+ DEFAULT_CFLAGS += -D_CRT_SECURE_NO_DEPRECATE -D_CRT_NONSTDC_NO_DEPRECATE
+ DEFAULT_CFLAGS += -I. -I$(top_srcdir)
+ DEFAULT_CFLAGS += $(PIXMAN_CFLAGS) $(LIBPNG_CFLAGS) $(ZLIB_CFLAGS)
++DEFAULT_CFLAGS += $(SOLARINC)
++DEFAULT_CFLAGS += -I$(SOLARVER)/$(INPATH)/inc/zlib -I$(SOLARVER)/$(INPATH)/inc/external/libpng -DZLIB_FIX -DDISABLE_SOME_FLOATING_POINT=1
+ 
+ CAIRO_CFLAGS = $(DEFAULT_CFLAGS) $(CFLAGS)
+ 
+@@ -61,7 +63,7 @@
+ 
+ $(CFG)/%.obj: %.c
+ 	@mkdir -p $(CFG)
+-	@$(CC) $(CAIRO_CFLAGS) -c -Fo"$@" $<
++	$(CC) $(CAIRO_CFLAGS) -c -Fo"$@" $<
+ 
+ $(CFG)/%-static.obj: %.c
+ 	@mkdir -p $(CFG)
+--- misc/cairo-1.10.2/build/config.sub	2009-08-14 23:33:32.000000000 +0200
++++ misc/build/cairo-1.10.2/build/config.sub	2009-08-14 23:33:32.000000000 +0200
+@@ -120,7 +120,7 @@
+ # Here we must recognize all the valid KERNEL-OS combinations.
+ maybe_os=`echo $1 | sed 's/^\(.*\)-\([^-]*-[^-]*\)$/\2/'`
+ case $maybe_os in
+-  nto-qnx* | linux-gnu* | linux-dietlibc | linux-newlib* | linux-uclibc* | \
++  nto-qnx* | linux-gnu* | linux-android* | linux-dietlibc | linux-newlib* | linux-uclibc* | \
+   uclinux-uclibc* | uclinux-gnu* | kfreebsd*-gnu* | knetbsd*-gnu* | netbsd*-gnu* | \
+   kopensolaris*-gnu* | \
+   storm-chaos* | os2-emx* | rtmk-nova*)
+@@ -1272,7 +1272,7 @@
+ 	      | -ekkobsd* | -kfreebsd* | -freebsd* | -riscix* | -lynxos* \
+ 	      | -bosx* | -nextstep* | -cxux* | -aout* | -elf* | -oabi* \
+ 	      | -ptx* | -coff* | -ecoff* | -winnt* | -domain* | -vsta* \
+-	      | -udi* | -eabi* | -lites* | -ieee* | -go32* | -aux* \
++	      | -udi* | -linux-androideabi* | -eabi* | -lites* | -ieee* | -go32* | -aux* \
+ 	      | -chorusos* | -chorusrdb* | -cegcc* \
+ 	      | -cygwin* | -pe* | -psos* | -moss* | -proelf* | -rtems* \
+ 	      | -mingw32* | -linux-gnu* | -linux-newlib* | -linux-uclibc* \
+--- misc/cairo-1.10.2/configure	2010-12-25 15:22:57.000000000 +0100
++++ misc/build/cairo-1.10.2/configure	2010-12-25 15:22:57.000000000 +0100
+@@ -19259,61 +19259,11 @@
+ rm -f confcache
+ 
+ 
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for compress in -lz" >&5
+-$as_echo_n "checking for compress in -lz... " >&6; }
+-if test "${ac_cv_lib_z_compress+set}" = set; then :
+-  $as_echo_n "(cached) " >&6
+-else
+-  ac_check_lib_save_LIBS=$LIBS
+-LIBS="-lz  $LIBS"
+-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+-/* end confdefs.h.  */
+-
+-/* Override any GCC internal prototype to avoid an error.
+-   Use char because int might match the return type of a GCC
+-   builtin and then its argument prototype would still apply.  */
+-#ifdef __cplusplus
+-extern "C"
+-#endif
+-char compress ();
+-int
+-main ()
+-{
+-return compress ();
+-  ;
+-  return 0;
+-}
+-_ACEOF
+-if ac_fn_c_try_link "$LINENO"; then :
+-  ac_cv_lib_z_compress=yes
+-else
+-  ac_cv_lib_z_compress=no
+-fi
+-rm -f core conftest.err conftest.$ac_objext \
+-    conftest$ac_exeext conftest.$ac_ext
+-LIBS=$ac_check_lib_save_LIBS
+-fi
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_z_compress" >&5
+-$as_echo "$ac_cv_lib_z_compress" >&6; }
+-if test "x$ac_cv_lib_z_compress" = x""yes; then :
+-  ac_fn_c_check_header_mongrel "$LINENO" "zlib.h" "ac_cv_header_zlib_h" "$ac_includes_default"
+-if test "x$ac_cv_header_zlib_h" = x""yes; then :
+-
+ 	  have_libz=yes
+ 
+ $as_echo "#define HAVE_ZLIB 1" >>confdefs.h
+ 
+ 
+-else
+-  have_libz="no (requires zlib http://www.gzip.org/zlib/)"
+-fi
+-
+-
+-else
+-  have_libz="no (requires zlib http://www.gzip.org/zlib/)"
+-fi
+-
+-
+ { $as_echo "$as_me:${as_lineno-$LINENO}: checking for dlsym in -ldl" >&5
+ $as_echo_n "checking for dlsym in -ldl... " >&6; }
+ if test "${ac_cv_lib_dl_dlsym+set}" = set; then :
+@@ -26427,7 +26367,7 @@
+ 
+   if test "x$png_REQUIRES" = x; then
+     # libpng13 is GnuWin32's libpng-1.2.8 :-(
+-    for l in libpng libpng14 libpng12 libpng13 libpng10; do
++    for l in libpng libpng14 libpng12 libpng15 libpng13 libpng10; do
+       if $PKG_CONFIG --exists $l ; then
+         png_REQUIRES=$l
+         use_png=yes
+@@ -29424,7 +29424,7 @@
+     { $as_echo "$as_me:${as_lineno-$LINENO}: result: $FREETYPE_VERSION - OK" >&5
+ $as_echo "$FREETYPE_VERSION - OK" >&6; }
+ 			   ft_NONPKGCONFIG_CFLAGS=`$FREETYPE_CONFIG --cflags`
+-			   ft_NONPKGCONFIG_LIBS=`$FREETYPE_CONFIG --libs`
++			   ft_NONPKGCONFIG_LIBS=`$FREETYPE_CONFIG --libs | $SED -e 's/-lz//g'`
+     else { $as_echo "$as_me:${as_lineno-$LINENO}: result: $FREETYPE_VERSION - Too old" >&5
+ $as_echo "$FREETYPE_VERSION - Too old" >&6; }
+ 			   use_ft="no ($FREETYPE_VERSION found; version $FREETYPE_MIN_VERSION from release $FREETYPE_MIN_RELEASE required)"
+@@ -29434,7 +29434,7 @@
+     fi
+ 
+   ft_CFLAGS="$FREETYPE_CFLAGS"
+-  ft_LIBS="$FREETYPE_LIBS"
++  ft_LIBS=`echo "$FREETYPE_LIBS" | $SED -e 's/-lz//g'`
+ 
+ 			cairo_cv_ft_use=$use_ft
+ 			cairo_cv_ft_cache_vars=" BASE REQUIRES CFLAGS NONPKGCONFIG_CFLAGS LIBS NONPKGCONFIG_LIBS NONPKGCONFIG_EXTRA_LIBS"
+@@ -30121,7 +30121,7 @@
+ 
+     # The ps backend requires zlib.
+     use_ps=$have_libz
+-    ps_NONPKGCONFIG_LIBS=-lz
++    ps_NONPKGCONFIG_LIBS=$ZLIB3RDLIB
+ 
+ 			cairo_cv_ps_use=$use_ps
+ 			cairo_cv_ps_cache_vars=" BASE REQUIRES CFLAGS NONPKGCONFIG_CFLAGS LIBS NONPKGCONFIG_LIBS NONPKGCONFIG_EXTRA_LIBS"
+@@ -30549,7 +30549,7 @@
+ 
+     # The pdf backend requires zlib.
+     use_pdf=$have_libz
+-    pdf_NONPKGCONFIG_LIBS=-lz
++    pdf_NONPKGCONFIG_LIBS=$ZLIB3RDLIB
+ 
+ 			cairo_cv_pdf_use=$use_pdf
+ 			cairo_cv_pdf_cache_vars=" BASE REQUIRES CFLAGS NONPKGCONFIG_CFLAGS LIBS NONPKGCONFIG_LIBS NONPKGCONFIG_EXTRA_LIBS"
+@@ -32296,7 +32296,7 @@
+ 
+ 
+     use_xml=$have_libz
+-    xml_NONPKGCONFIG_LIBS=-lz
++    xml_NONPKGCONFIG_LIBS=$ZLIB3RDLIB
+ 
+ 			cairo_cv_xml_use=$use_xml
+ 			cairo_cv_xml_cache_vars=" BASE REQUIRES CFLAGS NONPKGCONFIG_CFLAGS LIBS NONPKGCONFIG_LIBS NONPKGCONFIG_EXTRA_LIBS"
+--- misc/cairo-1.10.2/src/cairo-deflate-stream.c	2010-06-18 13:47:12.000000000 +0200
++++ misc/build/cairo-1.10.2/src/cairo-deflate-stream.c	2010-06-18 13:47:12.000000000 +0200
+@@ -37,7 +37,11 @@
+ #include "cairoint.h"
+ #include "cairo-error-private.h"
+ #include "cairo-output-stream-private.h"
++#ifdef ZLIB_FIX
++#include <zlib/zlib.h>
++#else
+ #include <zlib.h>
++#endif
+ 
+ #define BUFFER_SIZE 16384
+ 
+--- misc/cairo-1.10.2/src/cairo-output-stream.c	2010-07-12 10:57:03.000000000 +0200
++++ misc/build/cairo-1.10.2/src/cairo-output-stream.c	2010-07-12 10:57:03.000000000 +0200
+@@ -313,7 +313,11 @@
+ 	d = 0.0;
+ 
+     locale_data = localeconv ();
++#ifdef __ANDROID__
++    decimal_point = ".";
++#else
+     decimal_point = locale_data->decimal_point;
++#endif
+     decimal_point_len = strlen (decimal_point);
+ 
+     assert (decimal_point_len != 0);
+--- misc/cairo-1.10.2/src/cairo-pdf-surface.c	2010-12-25 15:21:34.000000000 +0100
++++ misc/build/cairo-1.10.2/src/cairo-pdf-surface.c	2010-12-25 15:21:34.000000000 +0100
+@@ -57,7 +57,11 @@
+ #include "cairo-type3-glyph-surface-private.h"
+ 
+ #include <time.h>
++#ifdef ZLIB_FIX
++#include <zlib/zlib.h>
++#else
+ #include <zlib.h>
++#endif
+ 
+ /* Issues:
+  *
+--- misc/cairo-1.10.2/src/cairo-ps-surface.c	2010-12-25 15:21:34.000000000 +0100
++++ misc/build/cairo-1.10.2/src/cairo-ps-surface.c	2010-12-25 15:21:34.000000000 +0100
+@@ -72,7 +72,11 @@
+ #include <stdio.h>
+ #include <ctype.h>
+ #include <time.h>
++#ifdef ZLIB_FIX
++#include <zlib/zlib.h>
++#else
+ #include <zlib.h>
++#endif
+ #include <errno.h>
+ 
+ #define DEBUG_PS 0
+--- misc/cairo-1.10.2/src/cairo-ft-font.c	2010-12-25 15:21:34.000000000 +0100
++++ misc/build/cairo-1.10.2/src/cairo-ft-font.c	2010-12-25 15:21:34.000000000 +0100
+@@ -534,16 +534,16 @@
+     ret = FcPatternGetFTFace (pattern, FC_FT_FACE, 0, &font_face);
+     if (ret == FcResultMatch)
+ 	goto DONE;
+-    if (ret == FcResultOutOfMemory)
++    if (ret == 4 /*FcResultOutOfMemory*/)
+ 	return _cairo_error (CAIRO_STATUS_NO_MEMORY);
+ 
+     ret = FcPatternGetString (pattern, FC_FILE, 0, (FcChar8 **) &filename);
+-    if (ret == FcResultOutOfMemory)
++    if (ret == 4 /*FcResultOutOfMemory*/)
+ 	return _cairo_error (CAIRO_STATUS_NO_MEMORY);
+     if (ret == FcResultMatch) {
+ 	/* If FC_INDEX is not set, we just use 0 */
+ 	ret = FcPatternGetInteger (pattern, FC_INDEX, 0, &id);
+-	if (ret == FcResultOutOfMemory)
++	if (ret == 4 /*FcResultOutOfMemory*/)
+ 	    return _cairo_error (CAIRO_STATUS_NO_MEMORY);
+ 
+ 	goto DONE;

@@ -1135,13 +1135,6 @@ namespace
 
 // -----------------------------------------------------------------------
 
-::rtl::OUString SvtUserOptions::GetLocale() const
-{
-    return utl::ConfigManager::getLocale();
-}
-
-// -----------------------------------------------------------------------
-
 void SvtUserOptions::SetCompany( const ::rtl::OUString& rNewToken )
 {
     ::osl::MutexGuard aGuard( GetInitMutex() );

@@ -122,7 +122,7 @@ void FiltersTest::recursiveScan(const rtl::OUString &rFilter, const rtl::OUStrin
             if (bCVE)
                 CPPUNIT_ASSERT(osl::FileBase::E_None == osl::File::remove(sTmpFile));
 
-            fprintf(stderr, "%s,%"SAL_PRIuUINT32"\n",
+            fprintf(stderr, "%s,%" SAL_PRIuUINT32"\n",
                 bRes?"Pass":"Fail",nEndTime-nStartTime);
             if (nExpected == test::indeterminate)
                 continue;

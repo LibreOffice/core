@@ -194,7 +194,7 @@ namespace dbaccess
         SettingsImport::endElement();
 
         const ::rtl::OUString sItemName( getItemName() );
-        ENSURE_OR_RETURN_VOID( sItemName.getLength(), "no item name -> no item value" );
+        ENSURE_OR_RETURN_VOID( !sItemName.isEmpty(), "no item name -> no item value" );
         Any aValue;
         getItemValue( aValue );
         m_rSettings.put( sItemName, aValue );
@@ -210,7 +210,7 @@ namespace dbaccess
         const ::rtl::OUString sValue = aCharacters.makeStringAndClear();
 
         const ::rtl::OUString& rItemType( getItemType() );
-        ENSURE_OR_RETURN_VOID( rItemType.getLength(), "no item type -> no item value" );
+        ENSURE_OR_RETURN_VOID( !rItemType.isEmpty(), "no item type -> no item value" );
 
         if ( ::xmloff::token::IsXMLToken( rItemType, ::xmloff::token::XML_INT ) )
         {

@@ -185,7 +185,6 @@ void SvIdlDataBase::Push( SvMetaObject * pObj )
     GetStack().Push( pObj );
 }
 
-#ifdef IDL_COMPILER
 sal_Bool SvIdlDataBase::FindId( const rtl::OString& rIdName, sal_uLong * pVal )
 {
     if( pIdTable )
@@ -486,7 +485,7 @@ SvMetaAttribute * SvIdlDataBase::ReadKnownAttr
                 for( sal_uLong i = 0; i < aAttrList.Count(); i++ )
                 {
                     SvMetaAttribute * pAttr = aAttrList.GetObject( i );
-                    if( pAttr->GetSlotId() == pTok->GetString() )
+                    if( pAttr->GetSlotId().getIdentifier() == pTok->GetString() )
                         return pAttr;
                 }
             }
@@ -507,12 +506,12 @@ SvMetaAttribute* SvIdlDataBase::SearchKnownAttr
 )
 {
     sal_uLong n;
-    if( FindId( rId, &n ) )
+    if( FindId( rId.getIdentifier(), &n ) )
     {
         for( sal_uLong i = 0; i < aAttrList.Count(); i++ )
         {
             SvMetaAttribute * pAttr = aAttrList.GetObject( i );
-            if( pAttr->GetSlotId() == rId )
+            if( pAttr->GetSlotId().getIdentifier() == rId.getIdentifier() )
                 return pAttr;
         }
     }
@@ -900,7 +899,5 @@ bool SvIdlDataBase::WriteDepFile(
     ::std::for_each(m_DepFiles.begin(), m_DepFiles.end(), WriteDep(rStream));
     return rStream.GetError() == SVSTREAM_OK;
 }
-
-#endif // IDL_COMPILER
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

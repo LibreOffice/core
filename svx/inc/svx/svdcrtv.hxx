@@ -62,8 +62,8 @@ class SVX_DLLPUBLIC SdrCreateView: public SdrDragView
     friend class                SdrPageView;
 
 protected:
-    SdrObject*                  pAktCreate;   // Aktuell in Erzeugung befindliches Objekt
-    SdrPageView*                pCreatePV;    // Hier wurde die Erzeugung gestartet
+    SdrObject*                  pAktCreate;   // Currently in creation of the located object
+    SdrPageView*                pCreatePV;    // Here, the creation is started
     ImplConnectMarkerOverlay*   mpCoMaOverlay;
 
     // for migrating stuff from XOR, use ImpSdrCreateViewExtraData ATM to not need to
@@ -74,10 +74,10 @@ protected:
 
     sal_Int32                       nAutoCloseDistPix;
     sal_Int32                       nFreeHandMinDistPix;
-    sal_uInt32                      nAktInvent;     // Aktuell eingestelltes
-    sal_uInt16                      nAktIdent;      // Obj fuer Neuerzeugung
+    sal_uInt32                      nAktInvent;     // set the current ones
+    sal_uInt16                      nAktIdent;      // Obj for re-creating
 
-    unsigned                    bAutoTextEdit : 1; // Textedit nach dem erzeugen eines Textrahmens starten
+    unsigned                    bAutoTextEdit : 1; // Textedit after we start the creation of a text frame
     unsigned                    b1stPointAsCenter : 1;
     unsigned                    bUseIncompatiblePathCreateInterface : 1;
     unsigned                    bAutoClosePolys : 1;
@@ -116,20 +116,20 @@ public:
     void SetMeasureLayer(const String& rName) { aMeasureLayer=rName; }
     const String& GetMeasureLayer() const { return aMeasureLayer; }
 
-    // Ist der MeasureLayer nicht gesetzt (Leerstring), so
-    // wird der ActiveLayer auch fuer Bemassung verwendet.
+    // If the MeasureLayer is not set (empty string), then
+    // use the active layer for measuring.
     void SetEditMode(SdrViewEditMode eMode) { SdrDragView::SetEditMode(eMode); CheckEdgeMode(); }
     void SetEditMode(sal_Bool bOn=sal_True) { SdrDragView::SetEditMode(bOn); CheckEdgeMode(); }
     void SetCreateMode(sal_Bool bOn=sal_True) { SdrDragView::SetCreateMode(bOn); CheckEdgeMode(); }
     void SetGluePointEditMode(sal_Bool bOn=sal_True) { SdrDragView::SetGluePointEditMode(bOn); CheckEdgeMode(); }
 
-    // Feststellen, ob Textwerkzeug aktiviert
+    // Determine whether a text tool is activated
     sal_Bool IsTextTool() const;
 
-    // Feststellen, ob Objektverbinderwerkzeug aktiviert
+    // Determine whether an object connector tool activated
     sal_Bool IsEdgeTool() const;
 
-    // Feststellen, ob Bemassungswerkzeug aktiviert
+    // Determine whether a measurement tool activated
     sal_Bool IsMeasureTool() const;
 
     void SetCurrentObj(sal_uInt16 nIdent, sal_uInt32 nInvent=SdrInventor);
@@ -142,35 +142,35 @@ public:
     sal_Bool BegCreatePreparedObject(const Point& rPnt, sal_Int16 nMinMov, SdrObject* pPreparedFactoryObject);
     void MovCreateObj(const Point& rPnt);
     sal_Bool EndCreateObj(SdrCreateCmd eCmd);
-    void BckCreateObj();  // z.B. wieder 1 Polygonpunkt zurueck.
+    void BckCreateObj();  // go back one polygon point
     void BrkCreateObj();
     sal_Bool IsCreateObj() const { return pAktCreate!=NULL; }
     SdrObject* GetCreateObj() const { return pAktCreate; }
 
-    // BegCreateCaptionObj() erzeugt ein SdrCaptionObj (Legendenobjekt).
-    // rObjSiz ist die anfaengliche Groesse des Legenden-Textrahmens.
-    // gedraggd wird lediglich die Laenge des Zipfel.
+    // BegCreateCaptionObj() creates a SdrCaptionObj (legend item).
+    // rObjSiz is the initial size of the legend text frame.
+    // only the length of the tip is dragged
     sal_Bool BegCreateCaptionObj(const Point& rPnt, const Size& rObjSiz, OutputDevice* pOut=NULL, short nMinMov=-3, SdrPageView* pPV=NULL);
 
-    // Wenn TextEditAfterCreate auf sal_True steht (das ist der Default),
-    // dann wird nach dem erzeugen eines Textrahmenobjekts (OBJ_TEXT,
+    // If TextEditAfterCreate is sal_True (the default),
+    // then after the creation of a TextFrame object (OBJ_TEXT,
     // OBJ_TEXTEXT, OBJ_OUTLINERTEXT, OBJ_TITLETEXT, OBJ_CAPTION)
-    // automatisch ein TextEdit (SdrObjEditView::SdrBeginTextEdit) gestartet.
+    // automatically start a TextEdit (SdrObjEditView: SdrBeginTextEdit)
     sal_Bool IsTextEditAfterCreate() const { return bAutoTextEdit; }
     void SetTextEditAfterCreate(sal_Bool bOn) { bAutoTextEdit = bOn; }
 
-    // Erzeugen eines Kreises/Rechtecks/Textrahmens wobei der 1. Punkt
-    // nicht die linke obere Ecke, sondern das Zentrum des Objekts vorgibt.
-    // Persistentes Flag. Default=FALSE.
+    // Create a circle / rectangle / text frame with the first Point being
+    // the center of the object instead of the upper-left corner.
+    // Persistent flag. Default = FALSE.
     sal_Bool IsCreate1stPointAsCenter() const { return b1stPointAsCenter; }
     void SetCreate1stPointAsCenter(sal_Bool bOn) { b1stPointAsCenter = bOn; }
 
-    // Fuer Polylines (OBJ_PLIN) und Freihandlinien (OBJ_FREELINE). Ist dieses
-    // Flag sal_True, werden diese beiden Objekttypen implizit geschlossen und in
-    // Polygon (OBJ_POLY) bzw. Freihandflaeche (OBJ_FREEFILL) gewandelt falls
-    // zum Ende des Create die Distanz zwischen Startpunkt und Endpunkt des
-    // Objekts <=n Pixel ist, wobei SetAutoCloseDistPix vorgegeben wird.
-    // Default=TRUE.
+    // For polylines (OBJ_PLIN) and freehand lines (OBJ_FREELINE). If this
+    // Flag is sal_True, these two types of objects are implicitly closed, and
+    // converted to Polygon (OBJ_POLY) or freehand fill (OBJ_FREEFILL) if
+    // the distance between the start point and end point of the
+    // Object <= nAutoCloseDistPix pixels.
+    // Default is TRUE.
     sal_Bool IsAutoClosePolys() const { return bAutoClosePolys; }
     void SetAutoClosePolys(sal_Bool bOn) { bAutoClosePolys=bOn; }
 

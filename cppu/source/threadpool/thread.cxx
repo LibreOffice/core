@@ -30,12 +30,22 @@
 #include <osl/diagnose.h>
 #include <uno/threadpool.h>
 
+#include <com/sun/star/lang/DisposedException.hpp>
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/XInterface.hpp>
 #include <rtl/instance.hxx>
+#include <rtl/ustring.h>
+#include <rtl/ustring.hxx>
 
 #include "thread.hxx"
 #include "jobqueue.hxx"
 #include "threadpool.hxx"
 
+namespace {
+
+namespace css = com::sun::star;
+
+}
 
 using namespace osl;
 extern "C" {
@@ -53,6 +63,8 @@ void SAL_CALL cppu_requestThreadWorker( void *pVoid )
 namespace cppu_threadpool {
 
 // ----------------------------------------------------------------------------------
+    ThreadAdmin::ThreadAdmin(): m_disposed(false) {}
+
     ThreadAdmin::~ThreadAdmin()
     {
 #if OSL_DEBUG_LEVEL > 1
@@ -66,6 +78,15 @@ namespace cppu_threadpool {
     void ThreadAdmin::add( ORequestThread *p )
     {
         MutexGuard aGuard( m_mutex );
+        if( m_disposed )
+        {
+            throw css::lang::DisposedException(
+                rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM(
+                        "cppu_threadpool::ORequestThread created after"
+                        " cppu_threadpool::ThreadAdmin has been disposed")),
+                css::uno::Reference< css::uno::XInterface >());
+        }
         m_lst.push_back( p );
     }
 
@@ -79,6 +100,10 @@ namespace cppu_threadpool {
 
     void ThreadAdmin::join()
     {
+        {
+            MutexGuard aGuard( m_mutex );
+            m_disposed = true;
+        }
         ORequestThread *pCurrent;
         do
         {

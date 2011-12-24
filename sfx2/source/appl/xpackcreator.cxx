@@ -137,7 +137,7 @@ void SAL_CALL OPackageStructureCreator::convertToPackage( const ::rtl::OUString&
                 }
             }
         }
-        catch ( uno::RuntimeException& )
+        catch (const uno::RuntimeException&)
         {
             if ( pTempStream )
                 delete pTempStream;
@@ -147,7 +147,7 @@ void SAL_CALL OPackageStructureCreator::convertToPackage( const ::rtl::OUString&
 
             throw;
         }
-        catch ( io::IOException& )
+        catch (const io::IOException&)
         {
             if ( pTempStream )
                 delete pTempStream;
@@ -157,7 +157,7 @@ void SAL_CALL OPackageStructureCreator::convertToPackage( const ::rtl::OUString&
 
             throw;
         }
-        catch ( uno::Exception& )
+        catch (const uno::Exception&)
         {
         }
 

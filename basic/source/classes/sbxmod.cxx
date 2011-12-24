@@ -2002,7 +2002,7 @@ sal_Bool SbJScriptModule::LoadData( SvStream& rStrm, sal_uInt16 nVer )
 
     // Get the source string
     String aTmp;
-    rStrm.ReadByteString( aTmp, osl_getThreadTextEncoding() );
+    rStrm.ReadUniOrByteString( aTmp, osl_getThreadTextEncoding() );
     aOUSource = aTmp;
     return sal_True;
 }
@@ -2014,7 +2014,7 @@ sal_Bool SbJScriptModule::StoreData( SvStream& rStrm ) const
 
     // Write the source string
     String aTmp = aOUSource;
-    rStrm.WriteByteString( aTmp, osl_getThreadTextEncoding() );
+    rStrm.WriteUniOrByteString( aTmp, osl_getThreadTextEncoding() );
     return sal_True;
 }
 

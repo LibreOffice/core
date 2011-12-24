@@ -844,7 +844,7 @@ Any Runtime::pyObject2Any ( const PyRef & source, enum ConversionMode mode ) con
                 {
                     a = getImpl()->cargo->xTypeConverter->convertTo( a, t );
                 }
-                catch( com::sun::star::uno::Exception & e )
+                catch( const com::sun::star::uno::Exception & e )
                 {
                     throw RuntimeException( e.Message, e.Context );
                 }
@@ -930,7 +930,7 @@ Any Runtime::extractUnoException( const PyRef & excType, const PyRef &excValue, 
             {
                 unoModule = impl->cargo->getUnoModule();
             }
-            catch (Exception ei)
+            catch (const Exception &ei)
             {
                 e=ei;
             }

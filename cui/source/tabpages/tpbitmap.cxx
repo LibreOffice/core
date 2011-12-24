@@ -1021,7 +1021,7 @@ IMPL_LINK( SvxBitmapTabPage, ClickSaveHdl_Impl, void *, EMPTYARG )
     {
         aFile.Append( pBitmapList->GetName() );
 
-        if( !aFile.getExtension().getLength() )
+        if( aFile.getExtension().isEmpty() )
             aFile.SetExtension( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "sob" ) ) );
     }
 

@@ -434,7 +434,7 @@ void OAppDetailPageHelper::describeCurrentSelectionForType( const ElementType _e
             break;
         }
 
-        if ( aObject.Name.getLength() )
+        if ( !aObject.Name.isEmpty() )
         {
             aSelected.push_back( aObject );
         }

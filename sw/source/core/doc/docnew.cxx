@@ -39,6 +39,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
 #include <rtl/logfile.hxx>
+#include <rtl/random.h>
 #include <sfx2/printer.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/frame.hxx>
@@ -430,6 +431,14 @@ SwDoc::SwDoc()
                                              0 );
         pStyleAccess = createStyleManager( &aIgnorableParagraphItems );
     }
+
+    // Initialize the session id of the current document to a random number
+    // smaller than 2^21.
+    static rtlRandomPool aPool = rtl_random_createPool();
+    rtl_random_getBytes( aPool, &nRsid, sizeof ( nRsid ) );
+    nRsid &= ( 1<<21 ) - 1;
+    nRsid++;
+    nRsidRoot = nRsid;
 
     ResetModified();
 }

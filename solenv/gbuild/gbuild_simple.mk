@@ -46,8 +46,6 @@ include $(GBUILDDIR)/BuildDirs.mk
 # I think any use of gbuild_simple.mk is in a sub-make under one that
 # uses gbuild.mk anyway.
 
-# gb_PRODUCT is used by windows.mk to decide which C/C++ runtime to
-# link with.
 ifneq ($(strip $(PRODUCT)$(product)),)
 gb_PRODUCT := $(true)
 else

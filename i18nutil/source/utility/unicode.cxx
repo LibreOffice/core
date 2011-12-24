@@ -324,12 +324,6 @@ unicode::getUnicodeScriptType( const sal_Unicode ch, ScriptTypeList* typeList, s
             typeList[i].value : unknownType;
 }
 
-sal_Bool SAL_CALL
-unicode::isUnicodeScriptType( const sal_Unicode ch, sal_Int16 type) {
-    return ch >= UnicodeScriptType[type][UnicodeScriptTypeFrom] &&
-        ch <= UnicodeScriptType[type][UnicodeScriptTypeTo];
-}
-
 sal_Unicode SAL_CALL
 unicode::getUnicodeScriptStart( UnicodeScript type) {
     return UnicodeScriptType[type][UnicodeScriptTypeFrom];

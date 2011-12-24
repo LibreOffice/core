@@ -364,12 +364,6 @@ sub createMakDepSection     #01.04.2008 13:36
             {
                 $line =~ s/CPP_PROJ=/CPPX_PROJ=/;
                 $line =~ s/-Za/-Ze/;
-                if ( $nonpro )
-                {
-                    # if non product link against debug libraries
-                    $line =~ s/-MD/-MDd/;
-                    $line =~ s/-MT/-MTd/;
-                }
                 push @{$ref_make_file}, $line;
             }
         }
@@ -703,12 +697,6 @@ sub print_flags     #18.04.2008 14:19
         @template = @{$template_hash{$switch}};
         foreach $line(@template)
         {
-            if ( $nonpro )
-            {
-                # if non product link against debug libraries
-                $line =~ s/-MD/-MDd/;
-                $line =~ s/-MT/-MTd/;
-            }
             print MAKFILE $line;
         }
     }

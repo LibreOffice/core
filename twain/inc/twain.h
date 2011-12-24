@@ -1,3 +1,40 @@
+/* This comment added at LibrOffice:
+
+   This file is covered by the "TWAIN License", at the time of this
+   writing in http://www.twain.org/devfiles/readme.txt, which says:
+
+   The TWAIN Working Group grants customer ("Customer") the worldwide,
+   royalty-free, non-exclusive license to reproduce and distribute the
+   software and documentation of the TWAIN toolkit ("TWAIN
+   Toolkit"). The TWAIN Toolkit was designed to be used by third
+   parties to assist them in becoming compliant with the TWAIN
+   standard, but it has not been developed to the standards of a
+   commercial product. Consequently, the TWAIN toolkit is provided AS
+   IS without any warranty. THE TWAIN Working Group disclaims all
+   warranties in the TWAIN toolkit whether implied, express or
+   statutory, including, without limitation, the implied warranties of
+   merchantability, noninfringement of third party rights and fitness
+   for a particular purpose. The TWAIN Working Group disclaims all
+   liability for damages, whether direct, indirect, special,
+   incidental, or consequential, arising from the reproduction,
+   distribution, modification, or other use of the TWAIN Toolkit.
+
+   As a condition of this license, Customer agrees to include in
+   software programs based in whole or in part on the TWAIN Toolkit
+   the following provisions in (i) the header or similar file in such
+   software and (ii) prominently in its documentation and to require
+   its sublicensees to include these provisions in similar locations:
+   The TWAIN Toolkit is distributed as is. The developer and
+   distributors of the TWAIN Toolkit expressly disclaim all implied,
+   express or statutory warranties including, without limitation, the
+   implied warranties of merchantability, noninfringement of third
+   party rights and fitness for a particular purpose. Neither the
+   developers nor the distributors will be liable for damages, whether
+   direct, indirect, special, incidental, or consequential, as a
+   result of the reproduction, modification, distribution or other use
+   of the TWAIN Toolkit.
+*/
+
 /* ======================================================================== *\
 
   Copyright (C) 1991, 1992 TWAIN Working Group: Aldus, Caere, Eastman-Kodak,

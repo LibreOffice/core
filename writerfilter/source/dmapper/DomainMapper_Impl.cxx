@@ -74,6 +74,7 @@
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/string.h>
+#include <rtl/oustringostreaminserter.hxx>
 #include "FieldTypes.hxx"
 #include <oox/mathml/import.hxx>
 
@@ -1005,6 +1006,13 @@ void DomainMapper_Impl::finishParagraph( PropertyMapPtr pPropertyMap )
                 {
                     //handles (8)(9) and completes (6)
                     CheckUnregisteredFrameConversion( );
+
+                    // If different frame properties are set on this paragraph, keep them.
+                    if ( !bIsDropCap && pParaContext->IsFrameMode() )
+                    {
+                        pToBeSavedProperties.reset( new ParagraphProperties(*pParaContext) );
+                        lcl_AddRangeAndStyle(pToBeSavedProperties, xTextAppend, pPropertyMap);
+                    }
                 }
 
             }
@@ -1570,13 +1578,7 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
     }
     catch ( const uno::Exception& e )
     {
-#if DEBUG
-        clog << "Exception when adding shape: ";
-        clog << rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_UTF8 ).getStr( );
-        clog << endl;
-#else
-        (void) e;
-#endif
+        SAL_WARN("writerfilter", "Exception when adding shape: " << e.Message);
     }
 }
 

@@ -132,7 +132,7 @@ namespace dbaui
             ::std::vector< ::rtl::OUString>::const_iterator aIter = m_aCriteria.begin();
             ::std::vector< ::rtl::OUString>::const_iterator aEnd = m_aCriteria.end();
             for(;aIter != aEnd;++aIter)
-                if(aIter->getLength())
+                if(!aIter->isEmpty())
                     break;
             return aIter != aEnd;
         }
@@ -146,12 +146,12 @@ namespace dbaui
     //------------------------------------------------------------------
     inline sal_Bool OTableFieldDesc::IsEmpty()  const
     {
-        sal_Bool bEmpty = (!m_aTableName.getLength()     &&
-                         !m_aAliasName.getLength()       &&
-                         !m_aFieldName.getLength()       &&
-                         !m_aFieldAlias.getLength()      &&
-                         !m_aFunctionName.getLength()    &&
-                         !HasCriteria());
+        sal_Bool bEmpty = (m_aTableName.isEmpty()     &&
+                           m_aAliasName.isEmpty()       &&
+                           m_aFieldName.isEmpty()       &&
+                           m_aFieldAlias.isEmpty()      &&
+                           m_aFunctionName.isEmpty()    &&
+                          !HasCriteria());
         return bEmpty;
     }
     //------------------------------------------------------------------

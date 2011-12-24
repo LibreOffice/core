@@ -29,6 +29,7 @@
 #ifndef INCLUDED_cppu_helper_purpenv_Environment_hxx
 #define INCLUDED_cppu_helper_purpenv_Environment_hxx
 
+#include <cppu/cppudllapi.h>
 #include "uno/environment.h"
 #include "cppu/Enterable.hxx"
 
@@ -40,7 +41,8 @@ namespace cppu { namespace helper { namespace purpenv {
 
     @since UDK 3.2.7
 */
-void Environment_initWithEnterable(uno_Environment * pEnvironment, cppu::Enterable * pEnterable);
+PURPENV_DLLPUBLIC void Environment_initWithEnterable(
+        uno_Environment * pEnvironment, cppu::Enterable * pEnterable);
 
 }}}
 

@@ -26,20 +26,12 @@
  *
  ************************************************************************/
 
-
 #include <tools/rc.h>
 #include <vcl/event.hxx>
 #include <vcl/fixbrd.hxx>
 
-
-
-// =======================================================================
-
 void FixedBorder::ImplInit( Window* pParent, WinBits nStyle )
 {
-    mnType          = FIXEDBORDER_TYPE_DOUBLEOUT;
-    mbTransparent   = sal_True;
-
     nStyle = ImplInitStyle( nStyle );
     Control::ImplInit( pParent, nStyle, NULL );
     ImplInitSettings();
@@ -61,7 +53,7 @@ void FixedBorder::ImplInitSettings()
     Window* pParent = GetParent();
     if ( (pParent->IsChildTransparentModeEnabled() ||
           !(pParent->GetStyle() & WB_CLIPCHILDREN) ) &&
-         !IsControlBackground() && mbTransparent )
+         !IsControlBackground() )
     {
         SetMouseTransparent( sal_True );
         EnableChildTransparentMode( sal_True );
@@ -81,14 +73,6 @@ void FixedBorder::ImplInitSettings()
         else
             SetBackground( pParent->GetBackground() );
     }
-}
-
-// -----------------------------------------------------------------------
-
-FixedBorder::FixedBorder( Window* pParent, WinBits nStyle ) :
-    Control( WINDOW_FIXEDBORDER )
-{
-    ImplInit( pParent, nStyle );
 }
 
 // -----------------------------------------------------------------------
@@ -118,7 +102,7 @@ void FixedBorder::ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
 {
     const StyleSettings&    rStyleSettings = GetSettings().GetStyleSettings();
     Rectangle               aRect( rPos, rSize );
-    sal_uInt16                  nBorderStyle = mnType;
+    sal_uInt16 nBorderStyle = FIXEDBORDER_TYPE_DOUBLEOUT;
 
     if ( (nDrawFlags & WINDOW_DRAW_MONO) ||
          (rStyleSettings.GetOptions() & STYLE_OPTION_MONO) )
@@ -205,29 +189,6 @@ void FixedBorder::DataChanged( const DataChangedEvent& rDCEvt )
          (rDCEvt.GetFlags() & SETTINGS_STYLE) )
     {
         ImplInitSettings();
-        Invalidate();
-    }
-}
-
-// -----------------------------------------------------------------------
-
-void FixedBorder::SetTransparent( sal_Bool bTransparent )
-{
-    if ( mbTransparent != bTransparent )
-    {
-        mbTransparent = bTransparent;
-        ImplInitSettings();
-        Invalidate();
-    }
-}
-
-// -----------------------------------------------------------------------
-
-void FixedBorder::SetBorderType( sal_uInt16 nType )
-{
-    if ( mnType != nType )
-    {
-        mnType = nType;
         Invalidate();
     }
 }

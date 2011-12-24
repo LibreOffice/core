@@ -2437,7 +2437,7 @@ void SvXMLExport::DisposingModel()
 {
     mxModel.clear();
     // Shapes in Writer cannot be named via context menu (#i51726#)
-    meModelType = SvtModuleOptions::E_UNKNOWN_FACTORY;;
+    meModelType = SvtModuleOptions::E_UNKNOWN_FACTORY;
     mxEventListener.clear();
 }
 

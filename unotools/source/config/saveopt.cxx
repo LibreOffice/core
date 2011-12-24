@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-
 #include <unotools/saveopt.hxx>
 #include "rtl/instance.hxx"
 #include <unotools/configmgr.hxx>
@@ -138,12 +137,9 @@ public:
     void                    SetSaveDocView( sal_Bool b );
     void                    SetSaveRelINet( sal_Bool b );
     void                    SetSaveRelFSys( sal_Bool b );
-    void                    SetSaveUnpacked( sal_Bool b );
     void                    EnablePrettyPrinting( sal_Bool _bDoPP );
     void                    SetWarnAlienFormat( sal_Bool _bDoPP );
     void                    SetLoadDocPrinter( sal_Bool bNew );
-    void                    SetUseSHA1InODF12( sal_Bool bUse );
-    void                    SetUseBlowfishInODF12( sal_Bool bUse );
     void                    SetODFDefaultVersion( SvtSaveOptions::ODFDefaultVersion eNew );
 
     sal_Bool                IsReadOnly( SvtSaveOptions::EOption eOption ) const;
@@ -241,15 +237,6 @@ void SvtSaveOptions_Impl::SetSaveRelFSys( sal_Bool b )
     }
 }
 
-void SvtSaveOptions_Impl::SetSaveUnpacked( sal_Bool b )
-{
-    if (!bROSaveUnpacked && bSaveUnpacked!=b)
-    {
-        bSaveUnpacked = b;
-        SetModified();
-    }
-}
-
 void SvtSaveOptions_Impl::EnablePrettyPrinting( sal_Bool _bDoPP )
 {
     if (!bRODoPrettyPrinting && bDoPrettyPrinting!=_bDoPP)
@@ -282,24 +269,6 @@ void SvtSaveOptions_Impl::SetODFDefaultVersion( SvtSaveOptions::ODFDefaultVersio
     if ( !bROODFDefaultVersion && eODFDefaultVersion != eNew )
     {
         eODFDefaultVersion = eNew;
-        SetModified();
-    }
-}
-
-void SvtSaveOptions_Impl::SetUseSHA1InODF12( sal_Bool bUse )
-{
-    if ( !bROUseSHA1InODF12 && bUseSHA1InODF12 != bUse )
-    {
-        bUseSHA1InODF12 = bUse;
-        SetModified();
-    }
-}
-
-void SvtSaveOptions_Impl::SetUseBlowfishInODF12( sal_Bool bUse )
-{
-    if ( !bROUseBlowfishInODF12 && bUseBlowfishInODF12 != bUse )
-    {
-        bUseBlowfishInODF12 = bUse;
         SetModified();
     }
 }
@@ -1000,11 +969,6 @@ sal_Bool SvtSaveOptions::IsSaveRelFSys() const
     return pImp->pSaveOpt->IsSaveRelFSys();
 }
 
-void SvtSaveOptions::SetSaveUnpacked( sal_Bool b )
-{
-    pImp->pSaveOpt->SetSaveUnpacked( b );
-}
-
 sal_Bool SvtSaveOptions::IsSaveUnpacked() const
 {
     return pImp->pSaveOpt->IsSaveUnpacked();
@@ -1060,19 +1024,9 @@ SvtSaveOptions::ODFDefaultVersion SvtSaveOptions::GetODFDefaultVersion() const
     return pImp->pSaveOpt->GetODFDefaultVersion();
 }
 
-void SvtSaveOptions::SetUseSHA1InODF12( sal_Bool bUse )
-{
-    pImp->pSaveOpt->SetUseSHA1InODF12( bUse );
-}
-
 sal_Bool SvtSaveOptions::IsUseSHA1InODF12() const
 {
     return pImp->pSaveOpt->IsUseSHA1InODF12();
-}
-
-void SvtSaveOptions::SetUseBlowfishInODF12( sal_Bool bUse )
-{
-    pImp->pSaveOpt->SetUseBlowfishInODF12( bUse );
 }
 
 sal_Bool SvtSaveOptions::IsUseBlowfishInODF12() const

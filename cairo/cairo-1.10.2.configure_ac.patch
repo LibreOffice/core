@@ -1,0 +1,70 @@
+--- misc/cairo-1.10.2/configure.ac	2010-12-13 17:30:14.000000000 +0100
++++ misc/build/cairo-1.10.2/configure.ac	2010-12-13 17:30:14.000000000 +0100
+@@ -33,13 +33,8 @@
+ 
+ dnl ===========================================================================
+ 
+-AC_CHECK_LIB(z, compress,
+-	 [AC_CHECK_HEADER(zlib.h, [
+ 	  have_libz=yes
+ 	  AC_DEFINE(HAVE_ZLIB, 1, [Define to 1 if you have zlib available])
+-	 ],
+-	 [have_libz="no (requires zlib http://www.gzip.org/zlib/)"])],
+-	 [have_libz="no (requires zlib http://www.gzip.org/zlib/)"])
+
+ AC_CHECK_LIB(dl, dlsym,
+ 	     [have_dlsym=yes; have_dl=yes],
+@@ -279,7 +271,7 @@
+   AC_ARG_VAR([png_REQUIRES], [module name for libpng to search for using pkg-config])
+   if test "x$png_REQUIRES" = x; then
+     # libpng13 is GnuWin32's libpng-1.2.8 :-(
+-    for l in libpng libpng14 libpng12 libpng13 libpng10; do
++    for l in libpng libpng14 libpng12 libpng15 libpng13 libpng10; do
+       if $PKG_CONFIG --exists $l ; then
+         png_REQUIRES=$l
+         use_png=yes
+@@ -455,7 +455,7 @@
+ 	AX_COMPARE_VERSION([$FREETYPE_VERSION], [gt], [$FREETYPE_MIN_VERSION],
+ 			   [AC_MSG_RESULT($FREETYPE_VERSION - OK)
+ 			   ft_NONPKGCONFIG_CFLAGS=`$FREETYPE_CONFIG --cflags`
+-			   ft_NONPKGCONFIG_LIBS=`$FREETYPE_CONFIG --libs`],
++			   ft_NONPKGCONFIG_LIBS=`$FREETYPE_CONFIG --libs | $SED -e 's/-lz//g'`],
+ 			   [AC_MSG_RESULT($FREETYPE_VERSION - Too old)
+ 			   use_ft="no ($FREETYPE_VERSION found; version $FREETYPE_MIN_VERSION from release $FREETYPE_MIN_RELEASE required)"])
+       fi
+@@ -462,7 +462,7 @@
+     fi
+ 
+   ft_CFLAGS="$FREETYPE_CFLAGS"
+-  ft_LIBS="$FREETYPE_LIBS"
++  ft_LIBS=`echo "$FREETYPE_LIBS" | $SED -e 's/-lz//g'`
+ ])
+ 
+ FONTCONFIG_MIN_VERSION=2.2.95
+@@ -505,7 +505,7 @@
+ CAIRO_ENABLE_SURFACE_BACKEND(ps, PostScript, yes, [
+     # The ps backend requires zlib.
+     use_ps=$have_libz
+-    ps_NONPKGCONFIG_LIBS=-lz
++    ps_NONPKGCONFIG_LIBS=$ZLIB3RDLIB
+ ])
+ 
+ dnl ===========================================================================
+@@ -542,7 +542,7 @@
+ CAIRO_ENABLE_SURFACE_BACKEND(pdf, PDF, yes, [
+     # The pdf backend requires zlib.
+     use_pdf=$have_libz
+-    pdf_NONPKGCONFIG_LIBS=-lz
++    pdf_NONPKGCONFIG_LIBS=$ZLIB3RDLIB
+ ])
+ 
+ dnl ===========================================================================
+@@ -623,7 +623,7 @@
+ CAIRO_ENABLE_SURFACE_BACKEND(tee, tee, no)
+ CAIRO_ENABLE_SURFACE_BACKEND(xml, xml, no, [
+     use_xml=$have_libz
+-    xml_NONPKGCONFIG_LIBS=-lz
++    xml_NONPKGCONFIG_LIBS=$ZLIB3RDLIB
+ ])
+ 
+ dnl ===========================================================================

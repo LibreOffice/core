@@ -64,14 +64,14 @@ typedef enum __rtl_RandomError rtlRandomError;
 /** Create a Random Pool.
     @return initialized Random Pool, or NULL upon failure.
  */
-rtlRandomPool SAL_CALL rtl_random_createPool (void) SAL_THROW_EXTERN_C();
+SAL_DLLPUBLIC rtlRandomPool SAL_CALL rtl_random_createPool (void) SAL_THROW_EXTERN_C();
 
 
 /** Destroy a Random Pool.
     @param  Pool [in] a Random Pool.
     @return none. Pool is invalid.
  */
-void SAL_CALL rtl_random_destroyPool (
+SAL_DLLPUBLIC void SAL_CALL rtl_random_destroyPool (
     rtlRandomPool Pool
 ) SAL_THROW_EXTERN_C();
 
@@ -82,7 +82,7 @@ void SAL_CALL rtl_random_destroyPool (
     @param nBufLen [in] the number of bytes to read from the buffer.
     @return rtl_Random_E_None upon success.
  */
-rtlRandomError SAL_CALL rtl_random_addBytes (
+SAL_DLLPUBLIC rtlRandomError SAL_CALL rtl_random_addBytes (
     rtlRandomPool  Pool,
     const void    *Buffer,
     sal_Size       Bytes
@@ -95,7 +95,7 @@ rtlRandomError SAL_CALL rtl_random_addBytes (
     @param nBufLen [in] the number of bytes to write to the buffer.
     @return rtl_Random_E_None upon success.
  */
-rtlRandomError SAL_CALL rtl_random_getBytes (
+SAL_DLLPUBLIC rtlRandomError SAL_CALL rtl_random_getBytes (
     rtlRandomPool  Pool,
     void          *Buffer,
     sal_Size       Bytes

@@ -237,6 +237,14 @@ static void osl_thread_cleanup_Impl (void* pData)
 /*****************************************************************************/
 /* osl_thread_start_Impl */
 /*****************************************************************************/
+#if defined __GNUC__
+#if __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 2)
+#if __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 6)
+#pragma GCC diagnostic push
+#endif
+#pragma GCC diagnostic ignored "-Wshadow"
+#endif
+#endif
 static void* osl_thread_start_Impl (void* pData)
 {
     int terminate;
@@ -260,10 +268,17 @@ static void* osl_thread_start_Impl (void* pData)
     /* Check if thread is started in SUSPENDED state */
     while (pImpl->m_Flags & THREADIMPL_FLAGS_SUSPENDED)
     {
+#ifdef ANDROID
+/* Avoid compiler warning: declaration of '__cleanup' shadows a previous local */
+#define __cleanup __cleanup_2
+#endif
         /* wait until SUSPENDED flag is cleared */
         pthread_cleanup_push (osl_thread_wait_cleanup_Impl, &(pImpl->m_Lock));
         pthread_cond_wait (&(pImpl->m_Cond), &(pImpl->m_Lock));
         pthread_cleanup_pop (0);
+#ifdef ANDROID
+#undef __cleanup
+#endif
     }
 
     /* check for SUSPENDED to TERMINATE state change */
@@ -281,6 +296,11 @@ static void* osl_thread_start_Impl (void* pData)
     pthread_cleanup_pop (1);
     return (0);
 }
+#if defined __GNUC__
+#if __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 6)
+#pragma GCC diagnostic pop
+#endif
+#endif
 
 /*****************************************************************************/
 /* osl_thread_create_Impl */

@@ -455,7 +455,7 @@ Reference< XAggregation > FactoryImpl::createProxy(
 OUString FactoryImpl::getImplementationName()
     throw (RuntimeException)
 {
-    return proxyfac_getImplementationName();;
+    return proxyfac_getImplementationName();
 }
 
 //______________________________________________________________________________

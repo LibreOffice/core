@@ -26,6 +26,12 @@
 #
 #*************************************************************************
 
+# FIXME: this is currently hardcoded to SunStudio.
+# We really don't want to support building with that because of all its
+# bugs that need painful work-arounds; if somebody revives the Solaris
+# port then please make it use GCC instead (there used to be a Solaris/GCC
+# port at some point in the past, see solenv/inc/unxsog{i,s}.mk).
+
 GUI := UNX
 COM := C52
 
@@ -154,7 +160,7 @@ gb_Helper_OUTDIRLIBDIR := $(OUTDIR)/lib
 # CObject class
 
 define gb_CObject__command
-$(call gb_Output_announce,$(2),$(true),C  ,3)
+$(call gb_Output_announce,$(2).c,$(true),C  ,3)
 $(call gb_Helper_abbreviate_dirs,\
 	rm -f $(4) && \
 	mkdir -p $(dir $(1)) $(dir $(4)) && \
@@ -173,7 +179,7 @@ endef
 # CxxObject class
 
 define gb_CxxObject__command
-$(call gb_Output_announce,$(2),$(true),CXX,3)
+$(call gb_Output_announce,$(2).cxx,$(true),CXX,3)
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) $(dir $(4)) && \
 	$(gb_CXX) \
@@ -213,6 +219,7 @@ $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) && \
 	$(gb_CXX) \
 		$(if $(filter Library CppunitTest,$(TARGETTYPE)),$(gb_Library_TARGETTYPEFLAGS)) \
+		$(if $(SOVERSIONSCRIPT),-M $(SOVERSIONSCRIPT)) \
 		$(subst \d,$$,$(RPATH)) \
 		$(T_LDFLAGS) \
 		$(patsubst lib%.so,-l%,$(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_filename,$(lib)))) \
@@ -223,7 +230,8 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(foreach extraobjectlist,$(EXTRAOBJECTLISTS),@$(extraobjectlist)) \
 		$(foreach lib,$(LINKED_STATIC_LIBS),$(call gb_StaticLibrary_get_target,$(lib))) \
 		$(LIBS) \
-		-o $(1))
+		-o $(if $(SOVERSION),$(1).$(SOVERSION),$(1)))
+	$(if $(SOVERSION),ln -sf $(notdir $(1)).$(SOVERSION) $(1))
 endef
 
 define gb_LinkTarget__command_staticlink

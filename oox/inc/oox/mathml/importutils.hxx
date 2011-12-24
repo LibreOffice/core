@@ -104,7 +104,18 @@ while( !stream.atEnd() && stream.currentToken() != CLOSING( element ))
 stream.ensureClosingTag( element );
  @endcode
 
- If there may be just a one type of sub-element, handle it directly without the switch statement.
+ If there may not be a zero number of sub-elements, use a helper bool variable or use a do-while loop.
+
+ Parse an element that may contain an unknown number of sub-elements of the same type:
+ @code
+stream.ensureOpeningTag( element );
+while( !stream.atEnd() && stream.findTag( OPENING( subelement )))
+    {
+    handleSubelement();
+    }
+stream.ensureClosingTag( element );
+ @endcode
+
  If there may not be a zero number of sub-elements, use a helper bool variable or use a do-while loop.
 
  @since 3.5
@@ -198,9 +209,9 @@ public:
     void ensureClosingTag( int token );
     /**
      Tries to find the given token, until either found (returns true) or end of current element.
-     Position in the stream is set to make the tag current.
+     Position in the stream is set to make the tag current (i.e. it will be the next one read).
     */
-    bool recoverAndFindTag( int token );
+    bool findTag( int token );
     /**
      Skips the given element (i.e. reads up to and including the matching closing tag).
     */
@@ -211,7 +222,7 @@ public:
     void handleUnexpectedTag();
 protected:
     Tag checkTag( int token, bool optional );
-    bool recoverAndFindTagInternal( int token, bool silent );
+    bool findTagInternal( int token, bool silent );
     void skipElementInternal( int token, bool silent );
     std::vector< Tag > tags;
     unsigned int pos;

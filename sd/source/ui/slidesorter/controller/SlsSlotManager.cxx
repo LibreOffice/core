@@ -1159,28 +1159,6 @@ void SlotManager::DuplicateSelectedSlides (SfxRequest& rRequest)
             _1));
 }
 
-IMPL_LINK(SlotManager, UserEventCallback, void*, EMPTYARG)
-{
-    if ( ! maCommandQueue.empty())
-    {
-        Command* pCommand = maCommandQueue.front();
-        maCommandQueue.pop();
-
-        if (pCommand != NULL)
-        {
-            // The queue ownes the command that has just been removed from
-            // it.  Therefore it is deleted after it has been executed.
-            (*pCommand)();
-            delete pCommand;
-        }
-    }
-
-    return 1;
-}
-
-
-
-
 void SlotManager::ChangeSlideExclusionState (
     const model::SharedPageDescriptor& rpDescriptor,
     const bool bExcludeSlide)

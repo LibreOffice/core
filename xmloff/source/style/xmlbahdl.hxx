@@ -156,6 +156,18 @@ public:
 };
 
 /**
+    PropertyHandler for the XML-data-type: XML_TYPE_HEX
+*/
+class XMLHexPropHdl : public XMLPropertyHandler
+{
+public:
+    virtual ~XMLHexPropHdl();
+
+    virtual sal_Bool importXML( const ::rtl::OUString& rStrImpValue, ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
+    virtual sal_Bool exportXML( ::rtl::OUString& rStrExpValue, const ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
+};
+
+/**
     PropertyHandler for the XML-data-type: XML_TYPE_STRING
 */
 class XMLStringPropHdl : public XMLPropertyHandler

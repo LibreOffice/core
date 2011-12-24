@@ -26,6 +26,9 @@
  *
  ************************************************************************/
 
+#include "comphelper/processfactory.hxx"
+
+#include "officecfg/Office/Common.hxx"
 
 #include "osl/module.h"
 #include "osl/process.h"
@@ -52,12 +55,12 @@ static oslModule pCloseModule = NULL;
 static SalInstance* tryInstance( const OUString& rModuleBase )
 {
     SalInstance* pInst = NULL;
-
+#ifndef ANDROID
     // Disable gtk3 plugin load except in experimental mode for now.
     if( rModuleBase.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "gtk3" ) ) &&
-        !SalGenericSystem::enableExperimentalFeatures() )
+        !officecfg::Office::Common::Misc::ExperimentalMode::get( comphelper::getProcessComponentContext() ) )
         return NULL;
-
+#endif
     OUStringBuffer aModName( 128 );
     aModName.appendAscii( SAL_DLLPREFIX"vclplug_" );
     aModName.append( rModuleBase );

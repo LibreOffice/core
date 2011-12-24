@@ -31,7 +31,8 @@
 $(eval $(call gb_CppunitTest_CppunitTest,sc_namedrangeobj))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,sc_namedrangeobj, \
-    sc/qa/extras/xrangename \
+    sc/qa/extras/xnamedranges \
+    sc/qa/extras/xnamedrange \
 ))
 
 $(eval $(call gb_CppunitTest_add_linked_libs,sc_namedrangeobj, \
@@ -136,6 +137,9 @@ $(eval $(call gb_CppunitTest_set_args,sc_namedrangeobj,\
 # a) explicitly depend on library msword because it is not implied by a link
 #    relation
 # b) explicitly depend on the sc resource files needed at unit-test runtime
-$(call gb_CppunitTest_get_target,sc_namedrangeobj) : $(call gb_Library_get_target,scfilt) $(WORKDIR)/AllLangRes/sc
+$(call gb_CppunitTest_get_target,sc_namedrangeobj) : \
+    $(WORKDIR)/AllLangRes/sc \
+    $(call gb_Library_get_target,localedata_en) \
+    $(call gb_Library_get_target,scfilt) \
 
 # vim: set noet sw=4 ts=4:

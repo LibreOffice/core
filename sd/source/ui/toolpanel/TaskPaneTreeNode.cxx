@@ -99,7 +99,7 @@ sal_Int32 TreeNode::GetMinimumWidth (void)
             nTotalMinimumWidth = nMinimumWidth;
     }
 
-    return nTotalMinimumWidth;;
+    return nTotalMinimumWidth;
 }
 
 

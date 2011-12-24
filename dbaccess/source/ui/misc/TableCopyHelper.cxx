@@ -133,7 +133,7 @@ void OTableCopyHelper::insertTable( const ::rtl::OUString& i_rSourceDataSource, 
         ::rtl::OUString sTableNameForAppend( GetTableNameForAppend() );
         xWizard->setDestinationTableName( GetTableNameForAppend() );
 
-        bool bAppendToExisting = ( sTableNameForAppend.getLength() != 0 );
+        bool bAppendToExisting = !sTableNameForAppend.isEmpty();
         xWizard->setOperation( bAppendToExisting ? CopyTableOperation::AppendData : CopyTableOperation::CopyDefinitionAndData );
 
         xWizard->execute();

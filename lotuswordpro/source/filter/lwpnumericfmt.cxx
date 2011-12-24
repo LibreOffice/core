@@ -88,7 +88,7 @@ String LwpCurrencyPool::GetCurrencySymbol(sal_uInt16 nFormat)
 */
 sal_Bool LwpCurrencyPool::IsSymbolPost(sal_uInt16 nFormat)
 {
-    return m_aCurrencyInfo[nFormat].bPost;;
+    return m_aCurrencyInfo[nFormat].bPost;
 }
 
 /**

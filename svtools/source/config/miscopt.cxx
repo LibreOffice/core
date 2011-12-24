@@ -26,10 +26,6 @@
  *
  ************************************************************************/
 
-//_________________________________________________________________________________________________________________
-//  includes
-//_________________________________________________________________________________________________________________
-
 #include <svtools/miscopt.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/configitem.hxx>
@@ -49,19 +45,11 @@
 
 #include <list>
 
-//_________________________________________________________________________________________________________________
-//  namespaces
-//_________________________________________________________________________________________________________________
-
 using namespace ::utl                   ;
 using namespace ::rtl                   ;
 using namespace ::osl                   ;
 using namespace ::com::sun::star::uno   ;
 using namespace ::com::sun::star;
-
-//_________________________________________________________________________________________________________________
-//  const
-//_________________________________________________________________________________________________________________
 
 #define ASCII_STR(s)                        OUString( RTL_CONSTASCII_USTRINGPARAM(s) )
 #define ROOTNODE_MISC                       ASCII_STR("Office.Common/Misc")
@@ -94,16 +82,8 @@ using namespace ::com::sun::star;
 
 #define VCL_TOOLBOX_STYLE_FLAT              ((sal_uInt16)0x0004) // from <vcl/toolbox.hxx>
 
-//_________________________________________________________________________________________________________________
-//  private declarations!
-//_________________________________________________________________________________________________________________
-
 class SvtMiscOptions_Impl : public ConfigItem
 {
-    //-------------------------------------------------------------------------------------------------------------
-    //  private member
-    //-------------------------------------------------------------------------------------------------------------
-
     private:
     ::std::list<Link> aList;
     sal_Bool    m_bUseSystemFileDialog;
@@ -125,22 +105,10 @@ class SvtMiscOptions_Impl : public ConfigItem
     sal_Bool    m_bAlwaysAllowSave;
     sal_Bool    m_bExperimentalMode;
 
-    //-------------------------------------------------------------------------------------------------------------
-    //  public methods
-    //-------------------------------------------------------------------------------------------------------------
-
     public:
-
-        //---------------------------------------------------------------------------------------------------------
-        //  constructor / destructor
-        //---------------------------------------------------------------------------------------------------------
 
          SvtMiscOptions_Impl();
         ~SvtMiscOptions_Impl();
-
-        //---------------------------------------------------------------------------------------------------------
-        //  overloaded methods of baseclass
-        //---------------------------------------------------------------------------------------------------------
 
         /*-****************************************************************************************************//**
             @short      called for notify of configmanager
@@ -218,8 +186,6 @@ class SvtMiscOptions_Impl : public ConfigItem
 
         inline sal_Bool IsPluginsEnabled() const
         { return m_bPluginsEnabled; }
-
-        void SetPluginsEnabled( sal_Bool bEnable );
 
         inline sal_Bool IsPluginsEnabledReadOnly() const
         { return m_bIsPluginsEnabledRO; }
@@ -646,13 +612,6 @@ void SvtMiscOptions_Impl::ImplSetSymbolsStyle( bool bValue, sal_Int16 nSet, cons
     }
 }
 
-void SvtMiscOptions_Impl::SetPluginsEnabled( sal_Bool bEnable )
-{
-    m_bPluginsEnabled = bEnable;
-    SetModified();
-    CallListeners();
-}
-
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
@@ -848,24 +807,9 @@ void SvtMiscOptions::SetTryODMADialog( sal_Bool bEnable )
     m_pDataContainer->SetTryODMADialog( bEnable );
 }
 
-sal_Bool SvtMiscOptions::IsTryUseODMADialogReadOnly() const
-{
-    return m_pDataContainer->IsTryUseODMADialogReadOnly();
-}
-
 sal_Bool SvtMiscOptions::IsPluginsEnabled() const
 {
     return m_pDataContainer->IsPluginsEnabled();
-}
-
-void SvtMiscOptions::SetPluginsEnabled( sal_Bool bEnable )
-{
-    m_pDataContainer->SetPluginsEnabled( bEnable );
-}
-
-sal_Bool SvtMiscOptions::IsPluginsEnabledReadOnly() const
-{
-    return m_pDataContainer->IsPluginsEnabledReadOnly();
 }
 
 sal_Int16 SvtMiscOptions::GetSymbolsSize() const
@@ -901,11 +845,6 @@ bool SvtMiscOptions::AreCurrentSymbolsLarge() const
     return ( GetCurrentSymbolsSize() == SFX_SYMBOLS_SIZE_LARGE );
 }
 
-sal_Bool SvtMiscOptions::IsGetSymbolsSizeReadOnly() const
-{
-    return m_pDataContainer->IsGetSymbolsSizeReadOnly();
-}
-
 sal_Int16 SvtMiscOptions::GetSymbolsStyle() const
 {
     return m_pDataContainer->GetSymbolsStyle();
@@ -916,19 +855,9 @@ sal_Int16 SvtMiscOptions::GetCurrentSymbolsStyle() const
     return m_pDataContainer->GetCurrentSymbolsStyle();
 }
 
-OUString SvtMiscOptions::GetCurrentSymbolsStyleName() const
-{
-    return Application::GetSettings().GetStyleSettings().GetCurrentSymbolsStyleName();
-}
-
 void SvtMiscOptions::SetSymbolsStyle( sal_Int16 nSet )
 {
     m_pDataContainer->SetSymbolsStyle( nSet );
-}
-
-sal_Bool SvtMiscOptions::IsGetSymbolsStyleReadOnly() const
-{
-    return m_pDataContainer->IsGetSymbolsStyleReadOnly();
 }
 
 sal_Bool SvtMiscOptions::DisableUICustomization() const
@@ -944,11 +873,6 @@ sal_Int16 SvtMiscOptions::GetToolboxStyle() const
 void SvtMiscOptions::SetToolboxStyle( sal_Int16 nStyle )
 {
     m_pDataContainer->SetToolboxStyle( nStyle, true );
-}
-
-sal_Bool SvtMiscOptions::IsGetToolboxStyleReadOnly() const
-{
-    return m_pDataContainer->IsGetToolboxStyleReadOnly();
 }
 
 sal_Bool SvtMiscOptions::UseSystemPrintDialog() const

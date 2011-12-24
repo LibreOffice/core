@@ -48,6 +48,12 @@ endef
 # creates the target folder of the jar file if it doesn't exist
 # creates the jar file
 # jar program does not remove the target in case of error, so rm it manually
+# XXX: PACKAGEDIRS need special treatment, because sometimes we need to
+# add into the jar another class hierarchy created outside of our class
+# set (e.g., by javamaker). Because jar does not allow two same root dirs
+# when creating the archive, we work around this deficiency by creating
+# the archive with the main class hierarchy and then updating it from
+# the other one(s), which seems to work .-)
 define gb_Jar__command
 	$(call gb_Output_announce,$*,$(true),JAR,3)
 	$(call gb_Helper_abbreviate_dirs_native,\
@@ -59,6 +65,7 @@ define gb_Jar__command
 	mkdir -p $(dir $(2)) && cd $(call gb_Jar_get_workdir,$(1)) && \
 	$(gb_Jar_JARCOMMAND) cfm $(2) $(call gb_Jar_get_manifest_target,$(1)) \
 		META-INF $(PACKAGEROOTS) $(PACKAGEFILES) \
+	$(foreach root,$(PACKAGEDIRS),&& $(gb_Jar_JARCOMMAND) uf $(2) -C $(dir $(root)) $(notdir $(root))) \
 	|| (rm $(2); false) )
 endef
 
@@ -84,6 +91,7 @@ define gb_Jar_Jar
 $(call gb_Jar_get_target,$(1)) : MANIFEST :=
 $(call gb_Jar_get_target,$(1)) : JARCLASSPATH :=
 $(call gb_Jar_get_target,$(1)) : PACKAGEROOTS :=
+$(call gb_Jar_get_target,$(1)) : PACKAGEDIRS :=
 $(call gb_Jar_get_target,$(1)) : PACKAGEFILES :=
 $(call gb_JavaClassSet_JavaClassSet,$(call gb_Jar_get_classsetname,$(1)))
 $(call gb_JavaClassSet_set_classpath,$(call gb_Jar_get_classsetname,$(1)),$(value XCLASSPATH))
@@ -96,11 +104,24 @@ endef
 # source files are forwarded to the ClassSet
 define gb_Jar_add_sourcefile
 $(call gb_JavaClassSet_add_sourcefile,$(call gb_Jar_get_classsetname,$(1)),$(2))
+
 endef
 
-# PACKAGEROOTS is the list of all root folders to pack into the jar (without META-INF as this is added automatically)
+# PACKAGEROOTS is the list of all root folders created by the JavaClassSet to pack into the jar (without META-INF as this is added automatically)
 define gb_Jar_set_packageroot
 $(call gb_Jar_get_target,$(1)) : PACKAGEROOTS := $(2)
+
+endef
+#
+# PACKAGEDIRS is the list of additional root directories to pack into the jar
+define gb_Jar_add_packagedir
+$(call gb_Jar_get_target,$(1)) : PACKAGEDIRS += $(2)
+
+endef
+
+define gb_Jar_add_packagedirs
+$(foreach packagedir,$(2),$(call gb_Jar_add_packagedir,$(1),$(packagedir)))
+
 endef
 
 # PACKAGEFILES is the list of all root files to pack into the jar
@@ -115,16 +136,28 @@ endef
 
 define gb_Jar_add_sourcefiles
 $(foreach sourcefile,$(2),$(call gb_Jar_add_sourcefile,$(1),$(sourcefile)))
+
+endef
+
+define gb_Jar_add_generated_sourcefile
+$(call gb_JavaClassSet_add_generated_sourcefile,$(call gb_Jar_get_classsetname,$(1)),$(2))
+
+endef
+
+define gb_Jar_add_generated_sourcefiles
+$(foreach sourcefile,$(2),$(call gb_Jar_add_generated_sourcefile,$(1),$(sourcefile)))
+
 endef
 
 define gb_JarTest_set_classpath
 $(call gb_JavaClassSet_set_classpath,$(call gb_Jar_get_classsetname,$(1)),$(2))
+
 endef
 
 # JARCLASSPATH is the class path that is written to the manifest of the jar
 define gb_Jar_set_jarclasspath
-
 $(call gb_Jar_get_target,$(1)) : JARCLASSPATH := $(2)
+
 endef
 
 # provide a manifest template containing jar specific information to be written into the manifest
@@ -139,27 +172,33 @@ endef
 # remember: classpath is "inherited" to ClassSet
 define gb_Jar_add_jar
 $(call gb_JavaClassSet_add_jar,$(call gb_Jar_get_classsetname,$(1)),$(2))
+
 endef
 
 define gb_Jar_add_system_jar
 $(call gb_JavaClassSet_add_system_jar,$(call gb_Jar_get_classsetname,$(1)),$(2))
+
 endef
 
 # specify jars with imported modules
 define gb_Jar_add_jars
 $(call gb_JavaClassSet_add_jars,$(call gb_Jar_get_classsetname,$(1)),$(2))
+
 endef
 
 define gb_Jar_add_system_jars
 $(call gb_JavaClassSet_add_system_jars,$(call gb_Jar_get_classsetname,$(1)),$(2))
+
 endef
 
 define gb_Jar_use_external
 $(call gb_JavaClassSet_use_external,$(call gb_Jar_get_classsetname,$(1)),$(2))
+
 endef
 
 define gb_Jar_use_externals
 $(call gb_JavaClassSet_use_externals,$(call gb_Jar_get_classsetname,$(1)),$(2))
+
 endef
 
 # possible directories for jar files containing UNO services 

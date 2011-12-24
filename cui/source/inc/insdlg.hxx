@@ -127,44 +127,6 @@ public:
     virtual short       Execute();
 };
 
-// class SvInsertAppletDialog --------------------------------------------
-
-class SvInsertAppletDialog : public InsertObjectDialog_Impl
-{
-private:
-    FixedText aFtClassfile;
-    Edit aEdClassfile;
-    FixedText aFtClasslocation;
-    Edit aEdClasslocation;
-    PushButton aBtnClass;
-    FixedLine aGbClass;
-    MultiLineEdit aEdAppletOptions;
-    FixedLine aGbAppletOptions;
-    OKButton aOKButton1;
-    CancelButton aCancelButton1;
-    HelpButton aHelpButton1;
-    INetURLObject*      m_pURL;
-    String              m_aClass;
-    String              m_aCommands;
-    String              GetClass() const { return aEdClassfile.GetText(); }
-    String              GetClassLocation() const { return aEdClasslocation.GetText(); }
-    String              GetAppletOptions() const { return aEdAppletOptions.GetText(); }
-
-    void                SetClass( const String &rClass ) { aEdClassfile.SetText(rClass); }
-    void                SetClassLocation( const String &rLocation ) { aEdClasslocation.SetText(rLocation); }
-    void                SetAppletOptions( const String &rOptions ) { aEdAppletOptions.SetText(rOptions); }
-    DECL_LINK(          BrowseHdl, PushButton * );
-
-public:
-                        SvInsertAppletDialog( Window* pParent,
-                            const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xStorage );
-                        SvInsertAppletDialog( Window* pParent,
-                            const com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >& xObj );
-                        ~SvInsertAppletDialog();
-
-    virtual short       Execute();
-};
-
 class SfxInsertFloatingFrameDialog : public InsertObjectDialog_Impl
 {
 private:

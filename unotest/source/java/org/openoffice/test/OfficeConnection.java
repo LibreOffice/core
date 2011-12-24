@@ -67,7 +67,10 @@ public final class OfficeConnection {
                 "--accept=" + description + ";urp",
                 "-env:UserInstallation=" + Argument.get("user"),
                 "-env:UNO_JAVA_JFW_ENV_JREHOME=true");
-            pb.directory(new File(Argument.get("workdir")));
+            String workdirArg = Argument.get("workdir");
+            if (workdirArg != null) {
+                pb.directory(new File(workdirArg));
+            }
             String envArg = Argument.get("env");
             if (envArg != null) {
                 Map<String, String> env = pb.environment();

@@ -116,10 +116,10 @@ OUString XmlChar2OUString( const XML_Char *p )
         try {\
             pThis->call;\
         }\
-        catch( SAXParseException &e ) {\
+        catch( const SAXParseException &e ) {\
             pThis->callErrorHandler( pThis ,  e );\
          }\
-        catch( SAXException &e ) {\
+        catch( const SAXException &e ) {\
             pThis->callErrorHandler( pThis , SAXParseException(\
                                             e.Message, \
                                             e.Context, \
@@ -130,7 +130,7 @@ OUString XmlChar2OUString( const XML_Char *p )
                                             pThis->rDocumentLocator->getColumnNumber()\
                                      ) );\
         }\
-        catch( com::sun::star::uno::RuntimeException &e ) {\
+        catch( const com::sun::star::uno::RuntimeException &e ) {\
             pThis->bExceptionWasThrown = sal_True; \
             pThis->bRTExceptionWasThrown = sal_True; \
             pImpl->rtexception = e; \
@@ -899,12 +899,12 @@ int SaxExpatParser_Impl::callbackExternalEntityRef( XML_Parser parser,
                 XML_CHAR_TO_OUSTRING( publicId ) ,
                 XML_CHAR_TO_OUSTRING( systemId ) );
         }
-        catch( SAXParseException & e )
+        catch( const SAXParseException & e )
         {
             pImpl->exception = e;
             bOK = sal_False;
         }
-        catch( SAXException & e )
+        catch( const SAXException & e )
         {
             pImpl->exception = SAXParseException(
                 e.Message , e.Context , e.WrappedException ,
@@ -929,17 +929,17 @@ int SaxExpatParser_Impl::callbackExternalEntityRef( XML_Parser parser,
         {
             pImpl->parse();
         }
-        catch( SAXParseException & e )
+        catch( const SAXParseException & e )
         {
             pImpl->exception = e;
             bOK = sal_False;
         }
-        catch( IOException &e )
+        catch( const IOException &e )
         {
             pImpl->exception.WrappedException <<= e;
             bOK = sal_False;
         }
-        catch( RuntimeException &e )
+        catch( const RuntimeException &e )
         {
             pImpl->exception.WrappedException <<=e;
             bOK = sal_False;
@@ -998,11 +998,11 @@ void SaxExpatParser_Impl::callErrorHandler( SaxExpatParser_Impl *pImpl ,
             pImpl->bExceptionWasThrown = sal_True;
         }
     }
-    catch( SAXParseException & ex ) {
+    catch( const SAXParseException & ex ) {
         pImpl->exception = ex;
         pImpl->bExceptionWasThrown = sal_True;
     }
-    catch( SAXException & ex ) {
+    catch( const SAXException & ex ) {
         pImpl->exception = SAXParseException(
                                     ex.Message,
                                     ex.Context,

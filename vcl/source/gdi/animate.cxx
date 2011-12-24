@@ -185,16 +185,7 @@ sal_Bool Animation::operator==( const Animation& rAnimation ) const
     return bRet;
 }
 
-// ------------------------------------------------------------------
-
-sal_Bool Animation::IsEmpty() const
-{
-    return( maBitmapEx.IsEmpty() && maList.empty() );
-}
-
-// ------------------------------------------------------------------
-
-void Animation::SetEmpty()
+void Animation::Clear()
 {
     maTimer.Stop();
     mbIsInAnimation = sal_False;
@@ -208,13 +199,6 @@ void Animation::SetEmpty()
     for( size_t i = 0, n = maViewList.size(); i < n; ++i )
         delete maViewList[ i ];
     maViewList.clear();
-}
-
-// -----------------------------------------------------------------------
-
-void Animation::Clear()
-{
-    SetEmpty();
 }
 
 // -----------------------------------------------------------------------
@@ -795,7 +779,6 @@ SvStream& operator<<( SvStream& rOStm, const Animation& rAnimation )
 
     if( nCount )
     {
-        const ByteString    aDummyStr;
         const sal_uInt32    nDummy32 = 0UL;
 
         // Falls keine BitmapEx gesetzt wurde, schreiben wir
@@ -825,7 +808,7 @@ SvStream& operator<<( SvStream& rOStm, const Animation& rAnimation )
             rOStm << nDummy32;  // unbenutzt
             rOStm << nDummy32;  // unbenutzt
             rOStm << nDummy32;  // unbenutzt
-            rOStm.WriteByteString(aDummyStr); // unbenutzt
+            write_lenPrefixed_uInt8s_FromOString<sal_uInt16>(rOStm, rtl::OString()); // dummy
             rOStm << nRest;     // Anzahl der Strukturen, die noch _folgen_
         }
     }
@@ -872,7 +855,6 @@ SvStream& operator>>( SvStream& rIStm, Animation& rAnimation )
     {
         AnimationBitmap aAnimBmp;
         BitmapEx        aBmpEx;
-        ByteString      aDummyStr;
         sal_uInt32          nTmp32;
         sal_uInt16          nTmp16;
         sal_uInt8           cTmp;
@@ -890,7 +872,7 @@ SvStream& operator>>( SvStream& rIStm, Animation& rAnimation )
             rIStm >> nTmp32;    // unbenutzt
             rIStm >> nTmp32;    // unbenutzt
             rIStm >> nTmp32;    // unbenutzt
-            rIStm.ReadByteString(aDummyStr); // unbenutzt
+            read_lenPrefixed_uInt8s_ToOString<sal_uInt16>(rIStm); // unbenutzt
             rIStm >> nTmp16;    // Rest zu lesen
 
             rAnimation.Insert( aAnimBmp );

@@ -847,7 +847,7 @@ void NavigatorTree::UserData::_propertyChanged(const beans::PropertyChangeEvent&
             m_pTree->SetEntryText(pEntry,lcl_getName(xProp));
         }
     }
-    catch(uno::Exception)
+    catch(const uno::Exception &)
     {}
 }
 // -----------------------------------------------------------------------------

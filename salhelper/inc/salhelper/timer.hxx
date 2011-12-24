@@ -32,6 +32,7 @@
 
 #include <salhelper/simplereferenceobject.hxx>
 #include <osl/time.h>
+#include "salhelperdllapi.h"
 
 namespace salhelper
 {
@@ -133,7 +134,7 @@ class TimerManager;
 
 /** Interface for the Timer and handling the event
 */
-class Timer : public salhelper::SimpleReferenceObject
+class SALHELPER_DLLPUBLIC Timer : public salhelper::SimpleReferenceObject
 {
 public:
 
@@ -222,11 +223,11 @@ private:
 
     /** Copy constructor disabled.
      */
-    Timer( const Timer& rTimer );
+    SALHELPER_DLLPRIVATE Timer( const Timer& rTimer );
 
     /** Assignment operator disabled.
      */
-    void SAL_CALL operator=( const Timer& rTimer );
+    SALHELPER_DLLPRIVATE void SAL_CALL operator=( const Timer& rTimer );
 
     friend class TimerManager;
 };

@@ -48,7 +48,11 @@
 
 #include "lo-bootstrap.h"
 
+#pragma GCC diagnostic ignored "-Wdeclaration-after-statement"
+
 #include "android_native_app_glue.c"
+
+#pragma GCC diagnostic warning "-Wdeclaration-after-statement"
 
 #undef LOGI
 #undef LOGW
@@ -132,11 +136,64 @@ struct cdir_end {
 
 /* End of Zip data structures */
 
+static struct cdir_entry *cdir_start;
+static uint16_t cdir_entries;
+
+struct lo_apk_dir {
+    char *folder_path;
+    struct cdir_entry *current_entry;
+    int remaining_entries;
+};
+
+static uint32_t cdir_entry_size (struct cdir_entry *entry)
+{
+    return sizeof(*entry) +
+        letoh16(entry->filename_size) +
+        letoh16(entry->extra_field_size) +
+        letoh16(entry->file_comment_size);
+}
+
+static int
+setup_cdir(void)
+{
+    struct cdir_end *dirend = (struct cdir_end *)((char *) apk_file + apk_file_size - sizeof(*dirend));
+    uint32_t cdir_offset;
+
+    while ((void *)dirend > apk_file &&
+           letoh32(dirend->signature) != CDIR_END_SIG)
+        dirend = (struct cdir_end *)((char *)dirend - 1);
+    if (letoh32(dirend->signature) != CDIR_END_SIG) {
+        LOGE("setup_cdir: Could not find end of central directory record");
+        return 0;
+    }
+
+    cdir_offset = letoh32(dirend->cdir_offset);
+
+    cdir_entries = letoh16(dirend->cdir_entries);
+    cdir_start = (struct cdir_entry *)((char *)apk_file + cdir_offset);
+
+    return 1;
+}
+
+static struct cdir_entry *
+find_cdir_entry (struct cdir_entry *entry, int count, const char *name)
+{
+    size_t name_size = strlen(name);
+    while (count--) {
+        if (letoh16(entry->filename_size) == name_size &&
+            !memcmp(entry->data, name, name_size))
+            return entry;
+        entry = (struct cdir_entry *)((char *)entry + cdir_entry_size(entry));
+    }
+    return NULL;
+}
+
 static void
-engine_handle_cmd(struct android_app* app,
+engine_handle_cmd(struct android_app* state,
                   int32_t cmd)
 {
-    struct engine* engine = (struct engine*)app->userData;
+    (void) state;
+
     switch (cmd) {
     case APP_CMD_SAVE_STATE:
         break;
@@ -163,7 +220,7 @@ read_section(int fd,
         free(result);
         return NULL;
     }
-    if (read(fd, result, shdr->sh_size) < shdr->sh_size) {
+    if (read(fd, result, shdr->sh_size) < (int) shdr->sh_size) {
         close(fd);
         free(result);
         return NULL;
@@ -183,6 +240,7 @@ free_ptrarray(void **pa)
     free(pa);
 }
 
+__attribute__ ((visibility("default")))
 jobjectArray
 Java_org_libreoffice_android_Bootstrap_dlneeds(JNIEnv* env,
                                                jobject clazz,
@@ -190,9 +248,11 @@ Java_org_libreoffice_android_Bootstrap_dlneeds(JNIEnv* env,
 {
     char **needed;
     int n_needed;
-    const jbyte *libName;
+    const char *libName;
     jclass String;
     jobjectArray result;
+
+    (void) clazz;
 
     libName = (*env)->GetStringUTFChars(env, library, NULL);
 
@@ -231,41 +291,55 @@ Java_org_libreoffice_android_Bootstrap_dlneeds(JNIEnv* env,
     return result;
 }
 
+__attribute__ ((visibility("default")))
 jint
 Java_org_libreoffice_android_Bootstrap_dlopen(JNIEnv* env,
                                               jobject clazz,
                                               jstring library)
 {
-    const jbyte *libName = (*env)->GetStringUTFChars(env, library, NULL);
-    void *p = lo_dlopen (libName);
+    const char *libName;
+    void *p;
 
+    (void) clazz;
+
+    libName = (*env)->GetStringUTFChars(env, library, NULL);
+    p = lo_dlopen (libName);
     (*env)->ReleaseStringUTFChars(env, library, libName);
 
     return (jint) p;
 }
 
+__attribute__ ((visibility("default")))
 jint
 Java_org_libreoffice_android_Bootstrap_dlsym(JNIEnv* env,
                                              jobject clazz,
                                              jint handle,
                                              jstring symbol)
 {
-    const jbyte *symName = (*env)->GetStringUTFChars(env, symbol, NULL);
-    void *p = lo_dlsym ((void *) handle, symName);
+    const char *symName;
+    void *p;
 
+    (void) clazz;
+
+    symName = (*env)->GetStringUTFChars(env, symbol, NULL);
+    p = lo_dlsym ((void *) handle, symName);
     (*env)->ReleaseStringUTFChars(env, symbol, symName);
 
     return (jint) p;
 }
 
+__attribute__ ((visibility("default")))
 jint
 Java_org_libreoffice_android_Bootstrap_dlcall(JNIEnv* env,
                                               jobject clazz,
                                               jint function,
                                               jobject argument)
 {
-    jclass StringArray = (*env)->FindClass(env, "[Ljava/lang/String;");
+    jclass StringArray;
 
+    (void) clazz;
+
+    StringArray = (*env)->FindClass(env, "[Ljava/lang/String;");
     if (StringArray == NULL) {
         LOGE("Could not find String[] class");
         return 0;
@@ -297,6 +371,7 @@ Java_org_libreoffice_android_Bootstrap_dlcall(JNIEnv* env,
 //                                    String apkFile,
 //                                    String[] ld_library_path);
 
+__attribute__ ((visibility("default")))
 jboolean
 Java_org_libreoffice_android_Bootstrap_setup__Ljava_lang_String_2Ljava_lang_String_2_3Ljava_lang_String_2
     (JNIEnv* env,
@@ -307,9 +382,11 @@ Java_org_libreoffice_android_Bootstrap_setup__Ljava_lang_String_2Ljava_lang_Stri
 {
     struct stat st;
     int i, n, fd;
-    const jbyte *dataDirPath;
-    const jbyte *apkFilePath;
+    const char *dataDirPath;
+    const char *apkFilePath;
     char *lib_dir;
+
+    (void) clazz;
 
     n = (*env)->GetArrayLength(env, ld_library_path);
 
@@ -326,7 +403,7 @@ Java_org_libreoffice_android_Bootstrap_setup__Ljava_lang_String_2Ljava_lang_Stri
     library_locations[0] = lib_dir;
 
     for (i = 0; i < n; i++) {
-        const jbyte *s = (*env)->GetStringUTFChars(env, (*env)->GetObjectArrayElement(env, ld_library_path, i), NULL);
+        const char *s = (*env)->GetStringUTFChars(env, (*env)->GetObjectArrayElement(env, ld_library_path, i), NULL);
         library_locations[i+1] = strdup(s);
         (*env)->ReleaseStringUTFChars(env, (*env)->GetObjectArrayElement(env, ld_library_path, i), s);
     }
@@ -362,6 +439,9 @@ Java_org_libreoffice_android_Bootstrap_setup__Ljava_lang_String_2Ljava_lang_Stri
 
     (*env)->ReleaseStringUTFChars(env, apkFile, apkFilePath);
 
+    if (!setup_cdir())
+        return JNI_FALSE;
+
     return JNI_TRUE;
 }
 
@@ -369,6 +449,7 @@ Java_org_libreoffice_android_Bootstrap_setup__Ljava_lang_String_2Ljava_lang_Stri
 //                                    Object lo_main_argument,
 //                                    int lo_main_delay);
 
+__attribute__ ((visibility("default")))
 jboolean
 Java_org_libreoffice_android_Bootstrap_setup__ILjava_lang_Object_2I(JNIEnv* env,
                                                                     jobject clazz,
@@ -378,6 +459,8 @@ Java_org_libreoffice_android_Bootstrap_setup__ILjava_lang_Object_2I(JNIEnv* env,
 {
     jclass StringArray;
     int i;
+
+    (void) clazz;
 
     lo_main = lo_main_ptr;
 
@@ -396,7 +479,7 @@ Java_org_libreoffice_android_Bootstrap_setup__ILjava_lang_Object_2I(JNIEnv* env,
     lo_main_argv = malloc(sizeof(char *) * (lo_main_argc+1));
 
     for (i = 0; i < lo_main_argc; i++) {
-        const jbyte *s = (*env)->GetStringUTFChars(env, (*env)->GetObjectArrayElement(env, lo_main_argument, i), NULL);
+        const char *s = (*env)->GetStringUTFChars(env, (*env)->GetObjectArrayElement(env, lo_main_argument, i), NULL);
         lo_main_argv[i] = strdup(s);
         (*env)->ReleaseStringUTFChars(env, (*env)->GetObjectArrayElement(env, lo_main_argument, i), s);
         /* LOGI("argv[%d] = %s", i, lo_main_argv[i]); */
@@ -410,22 +493,31 @@ Java_org_libreoffice_android_Bootstrap_setup__ILjava_lang_Object_2I(JNIEnv* env,
 
 // public static native int getpid();
 
+__attribute__ ((visibility("default")))
 jint
 Java_org_libreoffice_android_Bootstrap_getpid(JNIEnv* env,
                                               jobject clazz)
 {
+    (void) env;
+    (void) clazz;
+
     return getpid();
 }
 
 
 // public static native void system(String cmdline);
 
-jint
+__attribute__ ((visibility("default")))
+void
 Java_org_libreoffice_android_Bootstrap_system(JNIEnv* env,
                                               jobject clazz,
                                               jstring cmdline)
 {
-    const jbyte *s = (*env)->GetStringUTFChars(env, cmdline, NULL);
+    const char *s;
+
+    (void) clazz;
+
+    s = (*env)->GetStringUTFChars(env, cmdline, NULL);
 
     LOGI("system(%s)", s);
 
@@ -436,12 +528,17 @@ Java_org_libreoffice_android_Bootstrap_system(JNIEnv* env,
 
 // public static native void putenv(String string);
 
+__attribute__ ((visibility("default")))
 void
 Java_org_libreoffice_android_Bootstrap_putenv(JNIEnv* env,
                                               jobject clazz,
                                               jstring string)
 {
-    const jbyte *s = (*env)->GetStringUTFChars(env, string, NULL);
+    const char *s;
+
+    (void) clazz;
+
+    s = (*env)->GetStringUTFChars(env, string, NULL);
 
     LOGI("putenv(%s)", s);
 
@@ -450,6 +547,7 @@ Java_org_libreoffice_android_Bootstrap_putenv(JNIEnv* env,
     (*env)->ReleaseStringUTFChars(env, string, s);
 }
 
+__attribute__ ((visibility("default")))
 char **
 lo_dlneeds(const char *library)
 {
@@ -470,7 +568,7 @@ lo_dlneeds(const char *library)
         return NULL;
     }
 
-    if (read(fd, &hdr, sizeof(hdr)) < sizeof(hdr)) {
+    if (read(fd, &hdr, sizeof(hdr)) < (int) sizeof(hdr)) {
         LOGE("lo_dlneeds: Could not read ELF header of %s", library);
         close(fd);
         return NULL;
@@ -483,7 +581,7 @@ lo_dlneeds(const char *library)
         close(fd);
         return NULL;
     }
-    if (read(fd, &shdr, sizeof(shdr)) < sizeof(shdr)) {
+    if (read(fd, &shdr, sizeof(shdr)) < (int) sizeof(shdr)) {
         LOGE("lo_dlneeds: Could not read section header of %s", library);
         close(fd);
         return NULL;
@@ -501,7 +599,7 @@ lo_dlneeds(const char *library)
         return NULL;
     }
     for (i = 0; i < hdr.e_shnum; i++) {
-        if (read(fd, &shdr, sizeof(shdr)) < sizeof(shdr)) {
+        if (read(fd, &shdr, sizeof(shdr)) < (int) sizeof(shdr)) {
             LOGE("lo_dlneeds: Could not read section header of %s", library);
             close(fd);
             return NULL;
@@ -531,14 +629,13 @@ lo_dlneeds(const char *library)
         return NULL;
     }
     for (i = 0; i < hdr.e_shnum; i++) {
-        if (read(fd, &shdr, sizeof(shdr)) < sizeof(shdr)) {
+        if (read(fd, &shdr, sizeof(shdr)) < (int) sizeof(shdr)) {
             LOGE("lo_dlneeds: Could not read section header of %s", library);
             close(fd);
             return NULL;
         }
         if (shdr.sh_type == SHT_DYNAMIC) {
-            int dynoff;
-            int *libnames;
+            size_t dynoff;
 
             /* Count number of DT_NEEDED entries */
             n_needed = 0;
@@ -548,7 +645,7 @@ lo_dlneeds(const char *library)
                 return NULL;
             }
             for (dynoff = 0; dynoff < shdr.sh_size; dynoff += sizeof(dyn)) {
-                if (read(fd, &dyn, sizeof(dyn)) < sizeof(dyn)) {
+                if (read(fd, &dyn, sizeof(dyn)) < (int) sizeof(dyn)) {
                     LOGE("lo_dlneeds: Could not read .dynamic entry of %s", library);
                     close(fd);
                     return NULL;
@@ -569,7 +666,7 @@ lo_dlneeds(const char *library)
                 return NULL;
             }
             for (dynoff = 0; dynoff < shdr.sh_size; dynoff += sizeof(dyn)) {
-                if (read(fd, &dyn, sizeof(dyn)) < sizeof(dyn)) {
+                if (read(fd, &dyn, sizeof(dyn)) < (int) sizeof(dyn)) {
                     LOGE("lo_dlneeds: Could not read .dynamic entry in %s", library);
                     close(fd);
                     free(result);
@@ -595,6 +692,7 @@ lo_dlneeds(const char *library)
     return NULL;
 }
 
+__attribute__ ((visibility("default")))
 void *
 lo_dlopen(const char *library)
 {
@@ -698,6 +796,7 @@ lo_dlopen(const char *library)
     return p;
 }
 
+__attribute__ ((visibility("default")))
 void *
 lo_dlsym(void *handle,
          const char *symbol)
@@ -709,6 +808,7 @@ lo_dlsym(void *handle,
     return p;
 }
 
+__attribute__ ((visibility("default")))
 int
 lo_dladdr(void *addr,
           Dl_info *info)
@@ -736,7 +836,7 @@ lo_dladdr(void *addr,
         void *lo, *hi;
         char file[sizeof(line)];
         file[0] = '\0';
-        if (sscanf(line, "%x-%x %*s %*x %*x:%*x %*d %[^\n]", &lo, &hi, file) == 3) {
+        if (sscanf(line, "%x-%x %*s %*x %*x:%*x %*d %[^\n]", (unsigned *) &lo, (unsigned *) &hi, file) == 3) {
             /* LOGI("got %p-%p: %s", lo, hi, file); */
             if (addr >= lo && addr < hi) {
                 if (info->dli_fbase != lo) {
@@ -762,50 +862,14 @@ lo_dladdr(void *addr,
     return result;
 }
 
-static uint32_t cdir_entry_size (struct cdir_entry *entry)
-{
-    return sizeof(*entry) +
-        letoh16(entry->filename_size) +
-        letoh16(entry->extra_field_size) +
-        letoh16(entry->file_comment_size);
-}
-
-static struct cdir_entry *
-find_cdir_entry (struct cdir_entry *entry, int count, const char *name)
-{
-    size_t name_size = strlen(name);
-    while (count--) {
-        if (letoh16(entry->filename_size) == name_size &&
-            !memcmp(entry->data, name, name_size))
-            return entry;
-        entry = (struct cdir_entry *)((char *)entry + cdir_entry_size(entry));
-    }
-    return NULL;
-}
-
+__attribute__ ((visibility("default")))
 void *
 lo_apkentry(const char *filename,
             size_t *size)
 {
-    struct cdir_end *dirend = (struct cdir_end *)((char *) apk_file + apk_file_size - sizeof(*dirend));
-    uint32_t cdir_offset;
-    uint16_t cdir_entries;
-    struct cdir_entry *cdir_start;
     struct cdir_entry *entry;
     struct local_file_header *file;
     void *data;
-
-    while ((void *)dirend > apk_file &&
-           letoh32(dirend->signature) != CDIR_END_SIG)
-        dirend = (struct cdir_end *)((char *)dirend - 1);
-    if (letoh32(dirend->signature) != CDIR_END_SIG) {
-        LOGE("lo_apkentry: Could not find end of central directory record");
-        return;
-    }
-
-    cdir_offset = letoh32(dirend->cdir_offset);
-    cdir_entries = letoh16(dirend->cdir_entries);
-    cdir_start = (struct cdir_entry *)((char *)apk_file + cdir_offset);
 
     if (*filename == '/')
         filename++;
@@ -831,6 +895,111 @@ lo_apkentry(const char *filename,
     return data;
 }
 
+static lo_apk_dir *
+new_dir(const char *folder_path,
+        struct cdir_entry *start_entry,
+        int remaining_entries)
+{
+    lo_apk_dir *result;
+
+    result = malloc(sizeof(*result));
+    if (result == NULL)
+        return NULL;
+
+    result->folder_path = strdup(folder_path);
+    result->current_entry = start_entry;
+    result->remaining_entries = remaining_entries;
+
+    return result;
+}
+
+
+__attribute__ ((visibility("default")))
+lo_apk_dir *
+lo_apk_opendir(const char *dirname)
+{
+    int count = cdir_entries;
+    struct cdir_entry *entry = cdir_start;
+    size_t name_size = strlen(dirname);
+
+    if (*dirname == '/') {
+        dirname++;
+        if (!dirname[0])
+            return new_dir("", cdir_start, count);
+    }
+
+    while (count--) {
+        if (letoh16(entry->filename_size) >= name_size &&
+            !memcmp(entry->data, dirname, name_size) &&
+            entry->data[name_size] == '/')
+            break;
+        entry = (struct cdir_entry *)((char *)entry + cdir_entry_size(entry));
+    }
+    if (count >= 0)
+        return new_dir(dirname, entry, count+1);
+
+    return NULL;
+}
+
+static int
+path_component_length(const char *path)
+{
+    const char *slash = strchr(path, '/');
+
+    if (slash)
+        return slash - path;
+
+    return strlen(path);
+}
+
+__attribute__ ((visibility("default")))
+struct dirent *
+lo_apk_readdir(lo_apk_dir *dirp)
+{
+    static struct dirent result;
+    size_t folder_size = strlen(dirp->folder_path);
+
+    while (dirp->remaining_entries > 0) {
+        const char *folder_end = dirp->current_entry->data + folder_size;
+        int entry_len;
+
+        if (letoh16(dirp->current_entry->filename_size) > folder_size &&
+            !memcmp(dirp->current_entry->data, dirp->folder_path, folder_size) &&
+            *folder_end == '/' &&
+            (entry_len = path_component_length(folder_end + 1)) < 256) {
+
+            /* Fake an unique inode number; might be used? */
+            result.d_ino = cdir_entries - dirp->remaining_entries + 2;
+
+            result.d_off = 0;
+            result.d_reclen = 0;
+
+            if (folder_end[entry_len] == '/')
+                result.d_type = DT_DIR;
+            else
+                result.d_type = DT_REG;
+
+            memcpy(result.d_name, folder_end + 1, entry_len);
+            result.d_name[entry_len] = '\0';
+            return &result;
+        }
+        dirp->remaining_entries--;
+    }
+
+    return NULL;
+}
+
+__attribute__ ((visibility("default")))
+int
+lo_apk_closedir(lo_apk_dir *dirp)
+{
+    free(dirp->folder_path);
+    free(dirp);
+
+    return 0;
+}
+
+__attribute__ ((visibility("default")))
 int
 lo_dlcall_argc_argv(void *function,
                     int argc,
@@ -1015,19 +1184,25 @@ patch_libgnustl_shared(void)
           &replacement_method_before_arm);
 }
 
+__attribute__ ((visibility("default")))
 void
 Java_org_libreoffice_android_Bootstrap_patch_libgnustl_shared(JNIEnv* env,
                                                               jobject clazz)
 {
+    (void) env;
+    (void) clazz;
+
     patch_libgnustl_shared();
 }
 
+__attribute__ ((visibility("default")))
 JavaVM *
 lo_get_javavm(void)
 {
     return app->activity->vm;
 }
 
+__attribute__ ((visibility("default")))
 void
 android_main(struct android_app* state)
 {

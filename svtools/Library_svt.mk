@@ -49,7 +49,7 @@ $(eval $(call gb_Library_set_include,svt,\
 ))
 
 $(eval $(call gb_Library_add_defs,svt,\
-    -DSVT_DLLIMPLEMENTATION \
+    -DSVT_DLLIMPLEMENTATION -DNOMINMAX\
 ))
 
 $(eval $(call gb_Library_add_linked_libs,svt,\
@@ -205,7 +205,6 @@ $(eval $(call gb_Library_add_exception_objects,svt,\
     svtools/source/misc/embedhlp \
     svtools/source/misc/embedtransfer \
     svtools/source/misc/filechangedchecker \
-    svtools/source/misc/helpagentwindow \
     svtools/source/misc/imagemgr \
     svtools/source/misc/imageresourceaccess \
     svtools/source/misc/imap \
@@ -224,7 +223,6 @@ $(eval $(call gb_Library_add_exception_objects,svt,\
     svtools/source/misc/unitconv \
     svtools/source/misc/wallitem \
     svtools/source/misc/xwindowitem \
-    svtools/source/plugapp/ttprops \
     svtools/source/svhtml/htmlkywd \
     svtools/source/svhtml/htmlout \
     svtools/source/svhtml/htmlsupp \

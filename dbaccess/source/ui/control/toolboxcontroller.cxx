@@ -264,7 +264,7 @@ namespace dbaui
                 URL aUrl;
                 Sequence < PropertyValue > aArgs;
                 aUrl.Complete = m_aCommandURL;
-                OSL_ENSURE(aUrl.Complete.getLength(),"Command is empty!");
+                OSL_ENSURE(!aUrl.Complete.isEmpty(),"Command is empty!");
                 if ( getURLTransformer().is() )
                     getURLTransformer()->parseStrict(aUrl);
                 xDispatch->dispatch(aUrl,aArgs);

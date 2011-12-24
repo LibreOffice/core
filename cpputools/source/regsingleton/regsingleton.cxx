@@ -128,7 +128,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 
                 if (insert_entry)
                 {
-                    if (service.getLength())
+                    if (!service.isEmpty())
                     {
                         Reference< registry::XRegistryKey > xEntry( xKey->openKey( singleton ) );
                         if (! xEntry.is())

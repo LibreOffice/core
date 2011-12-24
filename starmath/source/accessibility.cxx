@@ -1142,7 +1142,7 @@ void SmTextForwarder::FieldClicked(const SvxFieldItem&, sal_uInt16, sal_uInt16)
 
 sal_uInt16 GetSvxEditEngineItemState( EditEngine& rEditEngine, const ESelection& rSel, sal_uInt16 nWhich )
 {
-    EECharAttribArray aAttribs;
+    std::vector<EECharAttrib> aAttribs;
 
     const SfxPoolItem*  pLastItem = NULL;
 
@@ -1172,40 +1172,39 @@ sal_uInt16 GetSvxEditEngineItemState( EditEngine& rEditEngine, const ESelection&
 
         const SfxPoolItem* pParaItem = NULL;
 
-        for( sal_uInt16 nAttrib = 0; nAttrib < aAttribs.Count(); nAttrib++ )
+        for(std::vector<EECharAttrib>::const_iterator i = aAttribs.begin(); i < aAttribs.end(); ++i)
         {
-            struct EECharAttrib aAttrib = aAttribs.GetObject( nAttrib );
-            OSL_ENSURE( aAttrib.pAttr, "GetCharAttribs gives corrupt data" );
+            OSL_ENSURE( i->pAttr, "GetCharAttribs gives corrupt data" );
 
-            const sal_Bool bEmptyPortion = aAttrib.nStart == aAttrib.nEnd;
-            if( (!bEmptyPortion && (aAttrib.nStart >= nEndPos)) || (bEmptyPortion && (aAttrib.nStart > nEndPos)) )
+            const sal_Bool bEmptyPortion = (i->nStart == i->nEnd);
+            if( (!bEmptyPortion && (i->nStart >= nEndPos)) || (bEmptyPortion && (i->nStart > nEndPos)) )
                 break;  // break if we are already behind our selektion
 
-            if( (!bEmptyPortion && (aAttrib.nEnd <= nPos)) || (bEmptyPortion && (aAttrib.nEnd < nPos)) )
+            if( (!bEmptyPortion && (i->nEnd <= nPos)) || (bEmptyPortion && (i->nEnd < nPos)) )
                 continue;   // or if the attribute ends before our selektion
 
-            if( aAttrib.pAttr->Which() != nWhich )
+            if( i->pAttr->Which() != nWhich )
                 continue; // skip if is not the searched item
 
             // if we already found an item
             if( pParaItem )
             {
                 // ... and its different to this one than the state is dont care
-                if( *pParaItem != *aAttrib.pAttr )
+                if( *pParaItem != *(i->pAttr) )
                     return SFX_ITEM_DONTCARE;
             }
             else
             {
-                pParaItem = aAttrib.pAttr;
+                pParaItem = i->pAttr;
             }
 
             if( bEmpty )
                 bEmpty = false;
 
-            if( !bGaps && aAttrib.nStart > nLastEnd )
+            if( !bGaps && i->nStart > nLastEnd )
                 bGaps = true;
 
-            nLastEnd = aAttrib.nEnd;
+            nLastEnd = i->nEnd;
         }
 
         if( !bEmpty && !bGaps && nLastEnd < ( nEndPos - 1 ) )

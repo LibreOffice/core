@@ -225,7 +225,7 @@ Reference< XInterface > SAL_CALL ODocumentContainer::createInstanceWithArguments
         const Sequence< PropertyValue > aCreationArgs( aArgs.getPropertyValues() );
 
         const ODefinitionContainer_Impl& rDefinitions( getDefinitions() );
-        sal_Bool bNew = ( 0 == sPersistentName.getLength() );
+        sal_Bool bNew = sPersistentName.isEmpty();
         if ( bNew )
         {
             const static ::rtl::OUString sBaseName(RTL_CONSTASCII_USTRINGPARAM("Obj"));
@@ -236,7 +236,7 @@ Reference< XInterface > SAL_CALL ODocumentContainer::createInstanceWithArguments
             if ( xElements.is() )
                 sPersistentName = ::dbtools::createUniqueName(xElements,sPersistentName);
 
-            const bool bNeedClassID = ( aClassID.getLength() == 0 ) && ( 0 == sURL.getLength() );
+            const bool bNeedClassID = (0 == aClassID.getLength()) && sURL.isEmpty() ;
             if ( xCopyFrom.is() )
             {
                 Sequence<Any> aIni(2);
@@ -259,9 +259,9 @@ Reference< XInterface > SAL_CALL ODocumentContainer::createInstanceWithArguments
             {
                 if ( bNeedClassID )
                 {
-                    if ( sMediaType.getLength() )
+                    if ( !sMediaType.isEmpty() )
                         ODocumentDefinition::GetDocumentServiceFromMediaType( sMediaType, m_aContext, aClassID );
-                    else if ( sDocServiceName.getLength() )
+                    else if ( !sDocServiceName.isEmpty() )
                     {
                         ::comphelper::MimeConfigurationHelper aConfigHelper( m_aContext.getLegacyServiceFactory() );
                         const Sequence< NamedValue > aProps( aConfigHelper.GetObjectPropsByDocumentName( sDocServiceName ) );
@@ -298,7 +298,7 @@ Reference< XInterface > SAL_CALL ODocumentContainer::createInstanceWithArguments
         }
         xContent = pDocDef.get();
 
-        if ( sURL.getLength() )
+        if ( !sURL.isEmpty() )
         {
             Sequence<Any> aIni(2);
             aIni[0] <<= sURL;
@@ -331,7 +331,7 @@ Reference< XInterface > SAL_CALL ODocumentContainer::createInstanceWithArguments
                 xCopyFrom.set(aValue.Value,UNO_QUERY);
             }
         }
-        OSL_ENSURE(sName.getLength(),"Invalid name for a document container!");
+        OSL_ENSURE(!sName.isEmpty(),"Invalid name for a document container!");
         const ODefinitionContainer_Impl& rDefinitions( getDefinitions() );
         ODefinitionContainer_Impl::const_iterator aFind = rDefinitions.find( sName );
         TContentPtr pElementImpl;
@@ -622,7 +622,7 @@ void SAL_CALL ODocumentContainer::insertByHierarchicalName( const ::rtl::OUStrin
 
 void SAL_CALL ODocumentContainer::removeByHierarchicalName( const ::rtl::OUString& _sName ) throw (NoSuchElementException, WrappedTargetException, RuntimeException)
 {
-    if ( !_sName.getLength() )
+    if ( _sName.isEmpty() )
         throw NoSuchElementException(_sName,*this);
 
     ClearableMutexGuard aGuard(m_aMutex);
@@ -731,7 +731,7 @@ void SAL_CALL ODocumentContainer::removeByName( const ::rtl::OUString& _rName ) 
     ResettableMutexGuard aGuard(m_aMutex);
 
     // check the arguments
-    if (!_rName.getLength())
+    if (_rName.isEmpty())
         throw IllegalArgumentException();
 
     if (!checkExistence(_rName))

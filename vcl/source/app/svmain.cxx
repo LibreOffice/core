@@ -489,10 +489,14 @@ void DeInitVCL()
     pSVData->maAppData.mxMSF.clear();
 
     if( pSVData->mpApp )
+    {
+        sal_uLong nCount = Application::ReleaseSolarMutex();
         // call deinit to deinitialize application class
         // soffice/sfx implementation disposes the global service manager
         // Warning: After this call you can't call uno services
         pSVData->mpApp->DeInit();
+        Application::AcquireSolarMutex(nCount);
+    }
 
     if ( pSVData->maAppData.mpSettings )
     {

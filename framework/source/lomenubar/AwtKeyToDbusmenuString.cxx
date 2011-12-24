@@ -59,7 +59,7 @@ AwtKeyToDbusmenuString (guint16 aKeyCode)
     if (code == 0)
         return NULL;
 
-    return XKeysymToString (code);;
+    return XKeysymToString (code);
 }
 
 

@@ -228,7 +228,7 @@ static OUString makeComponentPath(
         OSL_ASSERT( FileBase::E_None ==
                     FileBase::getSystemPathFromFileURL( rLibName, aComp ) );
         OSL_ASSERT(
-            ! rPath.getLength() ||
+            rPath.isEmpty() ||
             FileBase::E_None ==
               FileBase::getSystemPathFromFileURL( rPath, aComp ) );
     }
@@ -236,7 +236,7 @@ static OUString makeComponentPath(
 
     OUStringBuffer buf( rPath.getLength() + rLibName.getLength() + 12 );
 
-    if (0 != rPath.getLength())
+    if (!rPath.isEmpty())
     {
         buf.append( rPath );
         if (rPath[ rPath.getLength() -1 ] != '/')

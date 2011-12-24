@@ -36,7 +36,7 @@ using namespace cppu;
 extern "C"
 {
 //##################################################################################################
-void SAL_CALL uno_type_any_assign(
+CPPU_DLLPUBLIC void SAL_CALL uno_type_any_assign(
     uno_Any * pDest, void * pSource,
     typelib_TypeDescriptionReference * pType,
     uno_AcquireFunc acquire, uno_ReleaseFunc release )
@@ -53,7 +53,7 @@ void SAL_CALL uno_type_any_assign(
     }
 }
 //##################################################################################################
-void SAL_CALL uno_any_assign(
+CPPU_DLLPUBLIC void SAL_CALL uno_any_assign(
     uno_Any * pDest, void * pSource,
     typelib_TypeDescription * pTypeDescr,
     uno_AcquireFunc acquire, uno_ReleaseFunc release )
@@ -70,7 +70,7 @@ void SAL_CALL uno_any_assign(
     }
 }
 //##################################################################################################
-void SAL_CALL uno_type_any_construct(
+CPPU_DLLPUBLIC void SAL_CALL uno_type_any_construct(
     uno_Any * pDest, void * pSource,
     typelib_TypeDescriptionReference * pType,
     uno_AcquireFunc acquire )
@@ -86,7 +86,7 @@ void SAL_CALL uno_type_any_construct(
     }
 }
 //##################################################################################################
-void SAL_CALL uno_any_construct(
+CPPU_DLLPUBLIC void SAL_CALL uno_any_construct(
     uno_Any * pDest, void * pSource,
     typelib_TypeDescription * pTypeDescr,
     uno_AcquireFunc acquire )
@@ -102,7 +102,7 @@ void SAL_CALL uno_any_construct(
     }
 }
 //##################################################################################################
-void SAL_CALL uno_type_any_constructAndConvert(
+CPPU_DLLPUBLIC void SAL_CALL uno_type_any_constructAndConvert(
     uno_Any * pDest, void * pSource,
     typelib_TypeDescriptionReference * pType,
     uno_Mapping * mapping )
@@ -118,7 +118,7 @@ void SAL_CALL uno_type_any_constructAndConvert(
     }
 }
 //##################################################################################################
-void SAL_CALL uno_any_constructAndConvert(
+CPPU_DLLPUBLIC void SAL_CALL uno_any_constructAndConvert(
     uno_Any * pDest, void * pSource,
     typelib_TypeDescription * pTypeDescr,
     uno_Mapping * mapping )
@@ -134,13 +134,13 @@ void SAL_CALL uno_any_constructAndConvert(
     }
 }
 //##################################################################################################
-void SAL_CALL uno_any_destruct( uno_Any * pValue, uno_ReleaseFunc release )
+CPPU_DLLPUBLIC void SAL_CALL uno_any_destruct( uno_Any * pValue, uno_ReleaseFunc release )
     SAL_THROW_EXTERN_C()
 {
     _destructAny( pValue, release );
 }
 //##################################################################################################
-void SAL_CALL uno_any_clear( uno_Any * pValue, uno_ReleaseFunc release )
+CPPU_DLLPUBLIC void SAL_CALL uno_any_clear( uno_Any * pValue, uno_ReleaseFunc release )
     SAL_THROW_EXTERN_C()
 {
     _destructAny( pValue, release );

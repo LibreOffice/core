@@ -110,9 +110,7 @@ public:
             LanguageType        GetRealLanguage() const;
 
     /// The config string may be empty to denote the SYSTEM locale
-            const ::rtl::OUString&  GetUILocaleConfigString() const;
             void                SetUILocaleConfigString( const ::rtl::OUString& rStr );
-            com::sun::star::lang::Locale GetUILocale() const;
             com::sun::star::lang::Locale GetRealUILocale() const;
             LanguageType        GetRealUILanguage() const;
 

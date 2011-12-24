@@ -71,6 +71,8 @@ SwUndoSplitNode::SwUndoSplitNode( SwDoc* pDoc, const SwPosition& rPos,
         pRedlData = new SwRedlineData( nsRedlineType_t::REDLINE_INSERT, pDoc->GetRedlineAuthor() );
         SetRedlineMode( pDoc->GetRedlineMode() );
     }
+
+    nParRsid = pTxtNd->GetParRsid();
 }
 
 SwUndoSplitNode::~SwUndoSplitNode()
@@ -147,6 +149,8 @@ void SwUndoSplitNode::UndoImpl(::sw::UndoRedoContext & rContext)
                 pDoc->RstTxtAttrs( rPam, sal_True );
                 pHistory->TmpRollback( pDoc, 0, false );
             }
+
+            pDoc->UpdateParRsid( pTNd, nParRsid );
         }
     }
 

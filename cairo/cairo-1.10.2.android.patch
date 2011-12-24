@@ -1,0 +1,13 @@
+--- misc/cairo-1.10.2/build/ltmain.sh
++++ misc/build/cairo-1.10.2/build/ltmain.sh
+@@ -3228,6 +3228,10 @@
+ 	  func_warning "\`-release' is ignored for convenience libraries"
+       else
+ 
++	# Force no versioning suffix for Android
++
++	version_type=none
++
+ 	# Parse the version information argument.
+ 	save_ifs="$IFS"; IFS=':'
+ 	set dummy $vinfo 0 0 0

@@ -134,7 +134,7 @@ angezeigt wird, muss gegebenenfalls noch vom Programm zurueckgesetzt werden.
 
 Querverweise
 
-FontList; FontNameBox; FontSizeBox; FontStyleMenu
+FontList; FontNameBox; FontSizeBox;
 
 --------------------------------------------------------------------------
 

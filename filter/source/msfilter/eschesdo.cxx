@@ -235,7 +235,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
                 pMemStrm->ObjectOwnsMemory( sal_False );
                 sal_uInt8* pBuf = (sal_uInt8*) pMemStrm->GetData();
                 sal_uInt32 nSize = pMemStrm->Seek( STREAM_SEEK_TO_END );
-                aPropOpt.AddOpt( ESCHER_Prop_pihlShape, sal_False, nSize, pBuf, nSize );;
+                aPropOpt.AddOpt( ESCHER_Prop_pihlShape, sal_False, nSize, pBuf, nSize );
             }
             if ( pInteraction->hasInteraction() )
                 aPropOpt.AddOpt( ESCHER_Prop_fPrint, 0x00080008 );
@@ -346,7 +346,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             {
                 mpEscherEx->OpenContainer( ESCHER_SpContainer );
                 ADD_SHAPE( ESCHER_ShpInst_Ellipse, 0xa00 );         // Flags: Connector | HasSpt
-                aPropOpt.CreateFillProperties( rObj.mXPropSet, sal_True );;
+                aPropOpt.CreateFillProperties( rObj.mXPropSet, sal_True );
             }
             else
             {
@@ -1005,7 +1005,7 @@ ImplEESdrObject::ImplEESdrObject( ImplEscherExSdr& rEx,
     {
         // why not declare a const parameter if the object will
         // not be modified?
-        mXShape = uno::Reference< drawing::XShape >::query( ((SdrObject*)&rObj)->getUnoShape() );;
+        mXShape = uno::Reference< drawing::XShape >::query( ((SdrObject*)&rObj)->getUnoShape() );
         Init( rEx );
     }
 }

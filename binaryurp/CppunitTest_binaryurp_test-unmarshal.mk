@@ -33,6 +33,7 @@ $(eval $(call gb_CppunitTest_add_linked_libs,binaryurp_test-unmarshal,\
 	cppuhelper \
 	sal \
 	salhelper \
+    $(gb_STDLIBS) \
 ))
 
 $(eval $(call gb_CppunitTest_add_library_objects,binaryurp_test-unmarshal,\

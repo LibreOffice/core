@@ -257,7 +257,7 @@ IMPL_LINK( OUserAdmin, UserHdl, PushButton *, pButton )
                         sNewPassword = aDlg.GetNewPassword();
                         sOldPassword = aDlg.GetOldPassword();
 
-                        if(sNewPassword.getLength())
+                        if(!sNewPassword.isEmpty())
                             xUser->changePassword(sOldPassword,sNewPassword);
                     }
                 }

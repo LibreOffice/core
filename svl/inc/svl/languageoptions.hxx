@@ -82,11 +82,6 @@ public:
     sal_Bool    IsVerticalTextEnabled() const;
     sal_Bool    IsAsianTypographyEnabled() const;
     sal_Bool    IsJapaneseFindEnabled() const;
-    sal_Bool    IsRubyEnabled() const;
-    sal_Bool    IsChangeCaseMapEnabled() const;
-    sal_Bool    IsDoubleLinesEnabled() const;
-    sal_Bool    IsEmphasisMarksEnabled() const;
-    sal_Bool    IsVerticalCallOutEnabled() const;
     void        SetAll( sal_Bool _bSet );
     sal_Bool    IsAnyEnabled() const;
 
@@ -95,13 +90,10 @@ public:
     sal_Bool    IsCTLFontEnabled() const;
 
     void        SetCTLSequenceChecking( sal_Bool _bEnabled );
-    sal_Bool    IsCTLSequenceChecking() const;
 
     void        SetCTLSequenceCheckingRestricted( sal_Bool _bEnable );
-    sal_Bool    IsCTLSequenceCheckingRestricted( void ) const;
 
     void        SetCTLSequenceCheckingTypeAndReplace( sal_Bool _bEnable );
-    sal_Bool    IsCTLSequenceCheckingTypeAndReplace() const;
 
     sal_Bool    IsReadOnly(EOption eOption) const;
 

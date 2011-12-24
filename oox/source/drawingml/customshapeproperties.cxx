@@ -110,38 +110,6 @@ static OUString GetConnectorShapeType( sal_Int32 nType )
             static const OUString sStraightConnector1 = CREATE_OUSTRING( "mso-spt32" );
             sType = sStraightConnector1;
             } break;
-        case XML_bentConnector2: {
-            static const OUString sBentConnector2 = CREATE_OUSTRING( "mso-spt33" );
-            sType = sBentConnector2;
-            } break;
-        case XML_bentConnector3: {
-            static const OUString sBentConnector3 = CREATE_OUSTRING( "mso-spt34" );
-            sType = sBentConnector3;
-            } break;
-        case XML_bentConnector4: {
-            static const OUString sBentConnector4 = CREATE_OUSTRING( "mso-spt35" );
-            sType = sBentConnector4;
-            } break;
-        case XML_bentConnector5: {
-            static const OUString sBentConnector5 = CREATE_OUSTRING( "mso-spt36" );
-            sType = sBentConnector5;
-            } break;
-        case XML_curvedConnector2: {
-            static const OUString sCurvedConnector2 = CREATE_OUSTRING( "mso-spt37" );
-            sType = sCurvedConnector2;
-            } break;
-        case XML_curvedConnector3: {
-            static const OUString sCurvedConnector3 = CREATE_OUSTRING( "mso-spt38" );
-            sType = sCurvedConnector3;
-            } break;
-        case XML_curvedConnector4: {
-            static const OUString sCurvedConnector4 = CREATE_OUSTRING( "mso-spt39" );
-            sType = sCurvedConnector4;
-            } break;
-        case XML_curvedConnector5: {
-            static const OUString sCurvedConnector5 = CREATE_OUSTRING( "mso-spt40" );
-            sType = sCurvedConnector5;
-            } break;
         default:
             break;
     }

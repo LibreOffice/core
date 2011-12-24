@@ -183,7 +183,7 @@ namespace logging
 
             ::rtl::OUString sServiceName;
             _rxLoggerSettings->getByName( ::rtl::OUString::createFromAscii( _pServiceNameAsciiNodeName ) ) >>= sServiceName;
-            if ( sServiceName.getLength() )
+            if ( !sServiceName.isEmpty() )
             {
                 bool bSuccess = false;
                 if ( aSettings.getLength() )

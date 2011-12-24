@@ -1801,17 +1801,8 @@ TYPEINIT0(ApplicationProperty)
 
 // ------------------------------------------------------------------------
 
-static PropertyHandler* pHandler=NULL;
-
-void Application::Property( ApplicationProperty& rProp )
+void Application::Property( ApplicationProperty& /*rProp*/ )
 {
-    if ( pHandler )
-        pHandler->Property( rProp );
-}
-
-void Application::SetPropertyHandler( PropertyHandler* p )
-{
-    pHandler = p;
 }
 
 void Application::AppEvent( const ApplicationEvent& /*rAppEvent*/ )

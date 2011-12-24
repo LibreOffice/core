@@ -26,10 +26,6 @@
  *
  ************************************************************************/
 
-
-//_________________________________________________________________________________________________________________
-//  my own includes
-//_________________________________________________________________________________________________________________
 #include <services/frame.hxx>
 #include <dispatch/dispatchprovider.hxx>
 
@@ -51,9 +47,6 @@
 #include <services.h>
 #include <properties.h>
 
-//_________________________________________________________________________________________________________________
-//  interface includes
-//_________________________________________________________________________________________________________________
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/task/XJobExecutor.hpp>
@@ -79,9 +72,6 @@
 
 #include <com/sun/star/frame/XTitleChangeBroadcaster.hpp>
 
-//_________________________________________________________________________________________________________________
-//  includes of other projects
-//_________________________________________________________________________________________________________________
 #include <comphelper/sequenceashashmap.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/typeprovider.hxx>
@@ -105,25 +95,9 @@
 
 #include <vcl/menu.hxx>
 
-//_________________________________________________________________________________________________________________
-//  namespace
-//_________________________________________________________________________________________________________________
-
 namespace framework{
 
-//_________________________________________________________________________________________________________________
-//  non exported const
-//_________________________________________________________________________________________________________________
-
-//_________________________________________________________________________________________________________________
-//  non exported definitions
-//_________________________________________________________________________________________________________________
-
 css::uno::WeakReference< css::frame::XFrame > Frame::m_xCloserFrame = css::uno::WeakReference< css::frame::XFrame >();
-
-//_________________________________________________________________________________________________________________
-//  declarations
-//_________________________________________________________________________________________________________________
 
 //*****************************************************************************************************************
 //  XInterface, XTypeProvider, XServiceInfo
@@ -795,8 +769,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Frame::findFrame( const ::rtl
     //-----------------------------------------------------------------------------------------------------
     if (
         (sTargetFrameName==SPECIALTARGET_DEFAULT  )   ||    // valid for dispatches - not for findFrame()!
-        (sTargetFrameName==SPECIALTARGET_MENUBAR  )   ||    // valid for dispatches - not for findFrame()!
-        (sTargetFrameName==SPECIALTARGET_HELPAGENT)         // valid for dispatches - not for findFrame()!
+        (sTargetFrameName==SPECIALTARGET_MENUBAR  )         // valid for dispatches - not for findFrame()!
        )
     {
         return NULL;

@@ -92,9 +92,9 @@ ScDdeLink::ScDdeLink( ScDocument* pD, SvStream& rStream, ScMultipleReadHeader& r
     rHdr.StartEntry();
 
     rtl_TextEncoding eCharSet = rStream.GetStreamCharSet();
-    rStream.ReadByteString( aAppl, eCharSet );
-    rStream.ReadByteString( aTopic, eCharSet );
-    rStream.ReadByteString( aItem, eCharSet );
+    rStream.ReadUniOrByteString( aAppl, eCharSet );
+    rStream.ReadUniOrByteString( aTopic, eCharSet );
+    rStream.ReadUniOrByteString( aItem, eCharSet );
 
     sal_Bool bHasValue;
     rStream >> bHasValue;
@@ -114,9 +114,9 @@ void ScDdeLink::Store( SvStream& rStream, ScMultipleWriteHeader& rHdr ) const
     rHdr.StartEntry();
 
     rtl_TextEncoding eCharSet = rStream.GetStreamCharSet();
-    rStream.WriteByteString( aAppl, eCharSet );
-    rStream.WriteByteString( aTopic, eCharSet );
-    rStream.WriteByteString( aItem, eCharSet );
+    rStream.WriteUniOrByteString( aAppl, eCharSet );
+    rStream.WriteUniOrByteString( aTopic, eCharSet );
+    rStream.WriteUniOrByteString( aItem, eCharSet );
 
     sal_Bool bHasValue = ( pResult != NULL );
     rStream << bHasValue;

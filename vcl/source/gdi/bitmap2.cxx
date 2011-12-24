@@ -280,7 +280,7 @@ sal_Bool Bitmap::ImplReadDIBFileHeader( SvStream& rIStm, sal_uLong& rOffset )
             rIStm >> nTmp16;
             rIStm.SeekRel( 8L );
             rIStm >> nTmp32;
-            rOffset = nTmp32 - 28UL;;
+            rOffset = nTmp32 - 28UL;
             bRet = ( 0x4D42 == nTmp16 );
         }
         else

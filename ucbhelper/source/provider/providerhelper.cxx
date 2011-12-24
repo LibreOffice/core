@@ -185,7 +185,7 @@ sal_Int32 SAL_CALL ContentProviderImplHelper::compareContentIds(
     rtl::OUString aURL1( Id1->getContentIdentifier() );
     rtl::OUString aURL2( Id2->getContentIdentifier() );
 
-    return aURL1.compareTo( aURL2 );;
+    return aURL1.compareTo( aURL2 );
 }
 
 //=========================================================================

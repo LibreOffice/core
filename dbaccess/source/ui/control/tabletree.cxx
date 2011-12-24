@@ -475,7 +475,7 @@ SvLBoxEntry* OTableTreeListBox::implAddEntry(
     const ::rtl::OUString& rSecondName = bCatalogAtStart ? sSchema : sCatalog;
     const sal_Int32 nSecondFolderType  = bCatalogAtStart ? DatabaseObjectContainer::SCHEMA : DatabaseObjectContainer::CATALOG;
 
-    if ( rFirstName.getLength() )
+    if ( !rFirstName.isEmpty() )
     {
         SvLBoxEntry* pFolder = GetEntryPosByName( rFirstName, pParentEntry );
         if ( !pFolder )
@@ -483,7 +483,7 @@ SvLBoxEntry* OTableTreeListBox::implAddEntry(
         pParentEntry = pFolder;
     }
 
-    if ( rSecondName.getLength() )
+    if ( !rSecondName.isEmpty() )
     {
         SvLBoxEntry* pFolder = GetEntryPosByName( rSecondName, pParentEntry );
         if ( !pFolder )
@@ -639,14 +639,14 @@ SvLBoxEntry* OTableTreeListBox::getEntryByQualifiedName( const ::rtl::OUString& 
         SvLBoxEntry* pParent = getAllObjectsEntry();
         SvLBoxEntry* pCat = NULL;
         SvLBoxEntry* pSchema = NULL;
-        if ( sCatalog.getLength() )
+        if ( !sCatalog.isEmpty() )
         {
             pCat = GetEntryPosByName(sCatalog, pParent);
             if ( pCat )
                 pParent = pCat;
         }
 
-        if ( sSchema.getLength() )
+        if ( !sSchema.isEmpty() )
         {
             pSchema = GetEntryPosByName(sSchema, pParent);
             if ( pSchema )

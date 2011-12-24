@@ -360,18 +360,6 @@ void SAL_CALL AttacherAllListener_Impl::disposing(const EventObject& )
 }
 
 
-//========================================================================
-//========================================================================
-//========================================================================
-
-// Create-Methode fuer EventAttacherManager
-Reference< XEventAttacherManager > createEventAttacherManager( const Reference< XIntrospection > & rIntrospection,
-                                                               const Reference< XMultiServiceFactory > & rSMgr )
-    throw( Exception )
-{
-    return new ImplEventAttacherManager( rIntrospection, rSMgr );
-}
-
 // Create-Methode fuer EventAttacherManager
 Reference< XEventAttacherManager > createEventAttacherManager( const Reference< XMultiServiceFactory > & rSMgr )
     throw( Exception )

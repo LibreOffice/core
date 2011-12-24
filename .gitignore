@@ -1,8 +1,11 @@
 # backup and temporary files
 *~
-.*.sw[op]
+.*sw?
 \#*
 .DS_Store
+
+# StGit
+.stgit-edit.txt
 
 # python generated file
 *.pyc
@@ -95,6 +98,7 @@ TAGS
 /external/*/*.exe
 /external/*/*.manifest
 /external/*/*.txt
+/external/*/*.msm
 /moz/zipped/*.zip
 /extras/source/extensions
 
@@ -107,6 +111,10 @@ TAGS
 # compiled python objects for gdb pretty printers
 /solenv/gdb/libreoffice/*.py[co]
 /solenv/gdb/libreoffice/util/*.py[co]
+
+# botstrap generated tool
+/solenv/bin/concat-deps
+/solenv/bin/concat-deps.exe
 
 # test output files
 test/user-template/user/psprint/pspfontcache

@@ -51,7 +51,7 @@ class INetMessageHeader
     ByteString m_aValue;
 
 public:
-    INetMessageHeader (void)
+    INetMessageHeader()
     {}
 
     INetMessageHeader (
@@ -64,7 +64,7 @@ public:
         : m_aName (rHdr.m_aName), m_aValue (rHdr.m_aValue)
     {}
 
-    ~INetMessageHeader (void)
+    ~INetMessageHeader()
     {}
 
     INetMessageHeader& operator= (const INetMessageHeader& rHdr)
@@ -74,22 +74,22 @@ public:
         return *this;
     }
 
-    const ByteString& GetName  (void) const { return m_aName; }
-    const ByteString& GetValue (void) const { return m_aValue; }
+    const ByteString& GetName() const { return m_aName; }
+    const ByteString& GetValue() const { return m_aValue; }
 
     friend SvStream& operator<< (
         SvStream& rStrm, const INetMessageHeader& rHdr)
     {
-        rStrm.WriteByteString (rHdr.m_aName);
-        rStrm.WriteByteString (rHdr.m_aValue);
+        write_lenPrefixed_uInt8s_FromOString<sal_uInt16>(rStrm, rHdr.m_aName);
+        write_lenPrefixed_uInt8s_FromOString<sal_uInt16>(rStrm, rHdr.m_aValue);
         return rStrm;
     }
 
     friend SvStream& operator>> (
         SvStream& rStrm, INetMessageHeader& rHdr)
     {
-        rStrm.ReadByteString (rHdr.m_aName);
-        rStrm.ReadByteString (rHdr.m_aValue);
+        rHdr.m_aName = read_lenPrefixed_uInt8s_ToOString<sal_uInt16>(rStrm);
+        rHdr.m_aValue = read_lenPrefixed_uInt8s_ToOString<sal_uInt16>(rStrm);
         return rStrm;
     }
 };
@@ -108,7 +108,7 @@ class INetMessage
     UniString       m_aDocName;
     SvLockBytesRef  m_xDocLB;
 
-    void ListCleanup_Impl (void);
+    void ListCleanup_Impl();
     void ListCopy (const INetMessage& rMsg);
 
 protected:
@@ -158,8 +158,8 @@ protected:
     virtual SvStream& operator>> (SvStream& rStrm);
 
 public:
-    INetMessage (void) : m_nDocSize(0) {}
-    virtual ~INetMessage (void);
+    INetMessage() : m_nDocSize(0) {}
+    virtual ~INetMessage();
 
     INetMessage (const INetMessage& rMsg)
         : m_nDocSize (rMsg.m_nDocSize),
@@ -178,7 +178,7 @@ public:
         return *this;
     }
 
-    sal_uIntPtr GetHeaderCount (void) const { return m_aHeaderList.size(); }
+    sal_uIntPtr GetHeaderCount() const { return m_aHeaderList.size(); }
 
     UniString GetHeaderName (sal_uIntPtr nIndex) const
     {
@@ -204,13 +204,13 @@ public:
         sal_uIntPtr nIndex = ((sal_uIntPtr)-1)
     );
 
-    sal_uIntPtr GetDocumentSize (void) const { return m_nDocSize; }
+    sal_uIntPtr GetDocumentSize() const { return m_nDocSize; }
     void  SetDocumentSize (sal_uIntPtr nSize) { m_nDocSize = nSize; }
 
-    const UniString& GetDocumentName (void) const { return m_aDocName; }
+    const UniString& GetDocumentName() const { return m_aDocName; }
     void  SetDocumentName (const UniString& rName) { m_aDocName = rName; }
 
-    SvLockBytes* GetDocumentLB (void) const { return m_xDocLB; }
+    SvLockBytes* GetDocumentLB() const { return m_xDocLB; }
     void         SetDocumentLB (SvLockBytes *pDocLB) { m_xDocLB = pDocLB; }
 
     friend SvStream& operator<< (
@@ -260,9 +260,9 @@ protected:
     virtual SvStream& operator>> (SvStream& rStrm);
 
 public:
-    INetRFC822Message (void);
+    INetRFC822Message();
     INetRFC822Message (const INetRFC822Message& rMsg);
-    virtual ~INetRFC822Message (void);
+    virtual ~INetRFC822Message();
 
     INetRFC822Message& operator= (const INetRFC822Message& rMsg);
 
@@ -277,105 +277,105 @@ public:
 
     /** Header fields.
      */
-    UniString GetBCC (void) const
+    UniString GetBCC() const
     {
         return GetHeaderValue_Impl (
             m_nIndex[INETMSG_RFC822_BCC],
             INetMIME::HEADER_FIELD_ADDRESS);
     }
 
-    UniString GetCC (void) const
+    UniString GetCC() const
     {
         return GetHeaderValue_Impl (
             m_nIndex[INETMSG_RFC822_CC],
             INetMIME::HEADER_FIELD_ADDRESS);
     }
 
-    UniString GetComments (void) const
+    UniString GetComments() const
     {
         return GetHeaderValue_Impl (
             m_nIndex[INETMSG_RFC822_COMMENTS],
             INetMIME::HEADER_FIELD_TEXT);
     }
 
-    UniString GetDate (void) const
+    UniString GetDate() const
     {
         return GetHeaderValue_Impl (
             m_nIndex[INETMSG_RFC822_DATE],
             INetMIME::HEADER_FIELD_STRUCTURED);
     }
 
-    UniString GetFrom (void) const
+    UniString GetFrom() const
     {
         return GetHeaderValue_Impl (
             m_nIndex[INETMSG_RFC822_FROM],
             INetMIME::HEADER_FIELD_ADDRESS);
     }
 
-    UniString GetInReplyTo (void) const
+    UniString GetInReplyTo() const
     {
         return GetHeaderValue_Impl (
             m_nIndex[INETMSG_RFC822_IN_REPLY_TO],
             INetMIME::HEADER_FIELD_ADDRESS); // ??? MESSAGE_ID ???
     }
 
-    UniString GetKeywords (void) const
+    UniString GetKeywords() const
     {
         return GetHeaderValue_Impl (
             m_nIndex[INETMSG_RFC822_KEYWORDS],
             INetMIME::HEADER_FIELD_PHRASE);
     }
 
-    UniString GetMessageID (void) const
+    UniString GetMessageID() const
     {
         return GetHeaderValue_Impl (
             m_nIndex[INETMSG_RFC822_MESSAGE_ID],
             INetMIME::HEADER_FIELD_MESSAGE_ID);
     }
 
-    UniString GetReferences (void) const
+    UniString GetReferences() const
     {
         return GetHeaderValue_Impl (
             m_nIndex[INETMSG_RFC822_REFERENCES],
             INetMIME::HEADER_FIELD_ADDRESS);
     }
 
-    UniString GetReplyTo (void) const
+    UniString GetReplyTo() const
     {
         return GetHeaderValue_Impl (
             m_nIndex[INETMSG_RFC822_REPLY_TO],
             INetMIME::HEADER_FIELD_ADDRESS);
     }
 
-    UniString GetReturnPath (void) const
+    UniString GetReturnPath() const
     {
         return GetHeaderValue_Impl (
             m_nIndex[INETMSG_RFC822_RETURN_PATH],
             INetMIME::HEADER_FIELD_ADDRESS);
     }
 
-    UniString GetReturnReceiptTo (void) const
+    UniString GetReturnReceiptTo() const
     {
         return GetHeaderValue_Impl (
             m_nIndex[INETMSG_RFC822_RETURN_RECEIPT_TO],
             INetMIME::HEADER_FIELD_ADDRESS);
     }
 
-    UniString GetSender (void) const
+    UniString GetSender() const
     {
         return GetHeaderValue_Impl (
             m_nIndex[INETMSG_RFC822_SENDER],
             INetMIME::HEADER_FIELD_ADDRESS);
     }
 
-    UniString GetSubject (void) const
+    UniString GetSubject() const
     {
         return GetHeaderValue_Impl (
             m_nIndex[INETMSG_RFC822_SUBJECT],
             INetMIME::HEADER_FIELD_TEXT);
     }
 
-    UniString GetTo (void) const
+    UniString GetTo() const
     {
         return GetHeaderValue_Impl (
             m_nIndex[INETMSG_RFC822_TO],
@@ -430,15 +430,15 @@ class TOOLS_DLLPUBLIC INetMIMEMessage : public INetRFC822Message
 
     INetMIMEMessage*        pParent;
     INetMIMEMessgeList_impl aChildren;
-    ByteString              m_aBoundary;
+    rtl::OString            m_aBoundary;
     sal_Bool                bHeaderParsed;
 
     friend class INetMIMEMessageStream;
 
-    const ByteString& GetMultipartBoundary (void) const { return m_aBoundary; }
-    void SetMultipartBoundary (const ByteString& rBnd) { m_aBoundary = rBnd; }
+    const rtl::OString& GetMultipartBoundary() const { return m_aBoundary; }
+    void SetMultipartBoundary (const rtl::OString& rBnd) { m_aBoundary = rBnd; }
 
-    void CleanupImp (void);
+    void CleanupImp();
     void CopyImp    (const INetMIMEMessage& rMsg);
     void SetHeaderParsed() { bHeaderParsed = sal_True; }
 
@@ -447,9 +447,9 @@ protected:
     virtual SvStream& operator>> (SvStream& rStrm);
 
 public:
-    INetMIMEMessage (void);
+    INetMIMEMessage();
     INetMIMEMessage (const INetMIMEMessage& rMsg);
-    virtual ~INetMIMEMessage (void);
+    virtual ~INetMIMEMessage();
 
     INetMIMEMessage& operator= (const INetMIMEMessage& rMsg);
 
@@ -467,35 +467,35 @@ public:
     /** Header fields.
      */
     void      SetMIMEVersion (const UniString& rVersion);
-    UniString GetMIMEVersion (void) const
+    UniString GetMIMEVersion() const
     {
         return GetHeaderValue (m_nIndex[INETMSG_MIME_VERSION]);
     }
 
-    UniString GetContentDescription (void) const
+    UniString GetContentDescription() const
     {
         return GetHeaderValue (m_nIndex[INETMSG_MIME_CONTENT_DESCRIPTION]);
     }
 
     void      SetContentDisposition (const UniString& rDisposition);
-    UniString GetContentDisposition (void) const
+    UniString GetContentDisposition() const
     {
         return GetHeaderValue (m_nIndex[INETMSG_MIME_CONTENT_DISPOSITION]);
     }
 
-    UniString GetContentID (void) const
+    UniString GetContentID() const
     {
         return GetHeaderValue (m_nIndex[INETMSG_MIME_CONTENT_ID]);
     }
 
     void      SetContentType (const UniString& rType);
-    UniString GetContentType (void) const
+    UniString GetContentType() const
     {
         return GetHeaderValue (m_nIndex[INETMSG_MIME_CONTENT_TYPE]);
     }
 
     void      SetContentTransferEncoding (const UniString& rEncoding);
-    UniString GetContentTransferEncoding (void) const
+    UniString GetContentTransferEncoding() const
     {
         return GetHeaderValue (m_nIndex[INETMSG_MIME_CONTENT_TRANSFER_ENCODING]);
     }
@@ -504,16 +504,16 @@ public:
 
     /** Message container methods.
      */
-    sal_Bool IsContainer (void) const
+    sal_Bool IsContainer() const
     {
         return (IsMessage() || IsMultipart());
     }
-    sal_Bool IsMessage (void) const
+    sal_Bool IsMessage() const
     {
         UniString aType (GetContentType());
         return (aType.CompareIgnoreCaseToAscii("message/", 8) == 0);
     }
-    sal_Bool IsMultipart (void) const
+    sal_Bool IsMultipart() const
     {
         UniString aType (GetContentType());
         return (aType.CompareIgnoreCaseToAscii("multipart/", 10) == 0);
@@ -523,7 +523,7 @@ public:
     {
         return ( nIndex < aChildren.size() ) ? aChildren[ nIndex ] : NULL;
     }
-    INetMIMEMessage* GetParent (void) const { return pParent; }
+    INetMIMEMessage* GetParent() const { return pParent; }
 
     sal_Bool EnableAttachChild (
         INetMessageContainerType eType = INETMSG_MULTIPART_MIXED);

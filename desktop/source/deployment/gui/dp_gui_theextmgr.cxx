@@ -237,7 +237,7 @@ bool TheExtensionManager::checkUpdates( bool /* bShowUpdateOnly */, bool /*bPare
 //------------------------------------------------------------------------------
 bool TheExtensionManager::installPackage( const OUString &rPackageURL, bool bWarnUser )
 {
-    if ( rPackageURL.getLength() == 0 )
+    if ( rPackageURL.isEmpty() )
         return false;
 
     createDialog( false );
@@ -500,7 +500,7 @@ void TheExtensionManager::modified( ::lang::EventObject const & /*rEvt*/ )
     if ( s_ExtMgr.is() )
     {
         OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
-        if ( extensionURL.getLength() )
+        if ( !extensionURL.isEmpty() )
             s_ExtMgr->installPackage( extensionURL, true );
         return s_ExtMgr;
     }
@@ -518,7 +518,7 @@ void TheExtensionManager::modified( ::lang::EventObject const & /*rEvt*/ )
         s_ExtMgr = that;
     }
 
-    if ( extensionURL.getLength() )
+    if ( !extensionURL.isEmpty() )
         s_ExtMgr->installPackage( extensionURL, true );
 
     return s_ExtMgr;

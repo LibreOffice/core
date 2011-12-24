@@ -138,7 +138,7 @@ SvXMLImportContext* OXMLDataSourceSetting::CreateChildContext(
 // -----------------------------------------------------------------------------
 void OXMLDataSourceSetting::EndElement()
 {
-    if ( m_aSetting.Name.getLength() )
+    if ( !m_aSetting.Name.isEmpty() )
     {
         if ( m_bIsList && m_aInfoSequence.getLength() )
             m_aSetting.Value <<= m_aInfoSequence;

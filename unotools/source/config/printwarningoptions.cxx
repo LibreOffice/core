@@ -322,15 +322,6 @@ sal_Bool SvtPrintWarningOptions::IsPaperOrientation() const
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
-sal_Bool SvtPrintWarningOptions::IsNotFound() const
-{
-    MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pDataContainer->IsNotFound();
-}
-
-//*****************************************************************************************************************
-//  public method
-//*****************************************************************************************************************
 sal_Bool SvtPrintWarningOptions::IsTransparency() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
@@ -353,15 +344,6 @@ void SvtPrintWarningOptions::SetPaperOrientation( sal_Bool bState )
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     m_pDataContainer->SetPaperOrientation( bState );
-}
-
-//*****************************************************************************************************************
-//  public method
-//*****************************************************************************************************************
-void SvtPrintWarningOptions::SetNotFound( sal_Bool bState )
-{
-    MutexGuard aGuard( GetOwnStaticMutex() );
-    m_pDataContainer->SetNotFound( bState );
 }
 
 //*****************************************************************************************************************

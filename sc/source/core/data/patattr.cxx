@@ -172,7 +172,7 @@ SfxPoolItem* ScPatternAttr::Create( SvStream& rStream, sal_uInt16 /* nVersion */
     {
         short   eFamDummy;
         pStr = new String;
-        rStream.ReadByteString( *pStr, rStream.GetStreamCharSet() );
+        rStream.ReadUniOrByteString( *pStr, rStream.GetStreamCharSet() );
         rStream >> eFamDummy; // wg. altem Dateiformat
     }
     else
@@ -194,11 +194,11 @@ SvStream& ScPatternAttr::Store(SvStream& rStream, sal_uInt16 /* nItemVersion */)
     rStream << (sal_Bool)sal_True;
 
     if ( pStyle )
-        rStream.WriteByteString( pStyle->GetName(), rStream.GetStreamCharSet() );
+        rStream.WriteUniOrByteString( pStyle->GetName(), rStream.GetStreamCharSet() );
     else if ( pName )                   // wenn Style geloescht ist/war
-        rStream.WriteByteString( *pName, rStream.GetStreamCharSet() );
+        rStream.WriteUniOrByteString( *pName, rStream.GetStreamCharSet() );
     else
-        rStream.WriteByteString( ScGlobal::GetRscString(STR_STYLENAME_STANDARD),
+        rStream.WriteUniOrByteString( ScGlobal::GetRscString(STR_STYLENAME_STANDARD),
                                     rStream.GetStreamCharSet() );
 
     rStream << (short)SFX_STYLE_FAMILY_PARA;  // wg. altem Dateiformat

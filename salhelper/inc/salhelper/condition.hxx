@@ -33,7 +33,7 @@
 
 #include <osl/conditn.h>
 #include <osl/mutex.hxx>
-
+#include "salhelperdllapi.h"
 
 namespace salhelper
 {
@@ -41,7 +41,7 @@ namespace salhelper
     class ConditionWaiter;
 
 
-    class Condition
+    class SALHELPER_DLLPUBLIC Condition
     {
         friend class ConditionModifier;
         friend class ConditionWaiter;
@@ -59,8 +59,8 @@ namespace salhelper
 
 
     private:
-        Condition(Condition &); // not defined
-        void operator =(Condition &); // not defined
+        SALHELPER_DLLPRIVATE Condition(Condition &); // not defined
+        SALHELPER_DLLPRIVATE void operator =(Condition &); // not defined
 
         osl::Mutex&  m_aMutex;
         oslCondition m_aCondition;
@@ -68,7 +68,7 @@ namespace salhelper
 
 
 
-    class ConditionModifier
+    class SALHELPER_DLLPUBLIC ConditionModifier
     {
     public:
 
@@ -78,15 +78,15 @@ namespace salhelper
 
 
     private:
-        ConditionModifier(ConditionModifier &); // not defined
-        void operator =(ConditionModifier &); // not defined
+        SALHELPER_DLLPRIVATE ConditionModifier(ConditionModifier &); // not defined
+        SALHELPER_DLLPRIVATE void operator =(ConditionModifier &); // not defined
 
         Condition& m_aCond;
     };
 
 
 
-    class ConditionWaiter
+    class SALHELPER_DLLPUBLIC ConditionWaiter
     {
     public:
 
@@ -112,8 +112,8 @@ namespace salhelper
 
 
     private:
-        ConditionWaiter(ConditionWaiter &); // not defined
-        void operator =(ConditionWaiter &); // not defined
+        SALHELPER_DLLPRIVATE ConditionWaiter(ConditionWaiter &); // not defined
+        SALHELPER_DLLPRIVATE void operator =(ConditionWaiter &); // not defined
 
         Condition& m_aCond;
     };

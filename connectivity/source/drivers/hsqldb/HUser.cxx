@@ -111,7 +111,7 @@ void OHSQLUser::findPrivilegesAndGrantPrivileges(const ::rtl::OUString& objName,
         case PrivilegeObject::VIEW:
             {
                 Any aCatalog;
-                if ( sCatalog.getLength() )
+                if ( !sCatalog.isEmpty() )
                     aCatalog <<= sCatalog;
                 xRes = xMeta->getTablePrivileges(aCatalog,sSchema,sTable);
             }
@@ -120,7 +120,7 @@ void OHSQLUser::findPrivilegesAndGrantPrivileges(const ::rtl::OUString& objName,
         case PrivilegeObject::COLUMN:
             {
                 Any aCatalog;
-                if ( sCatalog.getLength() )
+                if ( !sCatalog.isEmpty() )
                     aCatalog <<= sCatalog;
                 xRes = xMeta->getColumnPrivileges(aCatalog,sSchema,sTable,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("%")));
             }
@@ -234,7 +234,7 @@ void SAL_CALL OHSQLUser::grantPrivileges( const ::rtl::OUString& objName, sal_In
     ::osl::MutexGuard aGuard(m_aMutex);
 
     ::rtl::OUString sPrivs = getPrivilegeString(objPrivileges);
-    if(sPrivs.getLength())
+    if(!sPrivs.isEmpty())
     {
         ::rtl::OUString sGrant;
         sGrant += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("GRANT "));
@@ -264,7 +264,7 @@ void SAL_CALL OHSQLUser::revokePrivileges( const ::rtl::OUString& objName, sal_I
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OUser_BASE_RBHELPER::rBHelper.bDisposed);
     ::rtl::OUString sPrivs = getPrivilegeString(objPrivileges);
-    if(sPrivs.getLength())
+    if(!sPrivs.isEmpty())
     {
         ::rtl::OUString sGrant;
         sGrant += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("REVOKE "));
@@ -311,35 +311,35 @@ void SAL_CALL OHSQLUser::changePassword( const ::rtl::OUString& /*oldPassword*/,
 
     if((nRights & Privilege::DELETE) == Privilege::DELETE)
     {
-        if(sPrivs.getLength())
+        if(!sPrivs.isEmpty())
             sPrivs += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(","));
         sPrivs += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DELETE"));
     }
 
     if((nRights & Privilege::UPDATE) == Privilege::UPDATE)
     {
-        if(sPrivs.getLength())
+        if(!sPrivs.isEmpty())
             sPrivs += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(","));
         sPrivs += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UPDATE"));
     }
 
     if((nRights & Privilege::ALTER) == Privilege::ALTER)
     {
-        if(sPrivs.getLength())
+        if(!sPrivs.isEmpty())
             sPrivs += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(","));
         sPrivs += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ALTER"));
     }
 
     if((nRights & Privilege::SELECT) == Privilege::SELECT)
     {
-        if(sPrivs.getLength())
+        if(!sPrivs.isEmpty())
             sPrivs += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(","));
         sPrivs += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SELECT"));
     }
 
     if((nRights & Privilege::REFERENCE) == Privilege::REFERENCE)
     {
-        if(sPrivs.getLength())
+        if(!sPrivs.isEmpty())
             sPrivs += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(","));
         sPrivs += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("REFERENCES"));
     }

@@ -255,7 +255,6 @@ public:
     virtual void                AppEvent( const ApplicationEvent& rAppEvent );
 
     virtual void                Property( ApplicationProperty& );
-    void                        SetPropertyHandler( PropertyHandler* pHandler );
 
 #ifndef NO_GETAPPWINDOW
     static WorkWindow*          GetAppWindow();

@@ -82,7 +82,7 @@ namespace abp
     {
         ::rtl::OUString sCurrentName(m_aName.GetText());
 
-        if (0 == sCurrentName.getLength())
+        if (sCurrentName.isEmpty())
             // the name must not be empty
             return sal_False;
 

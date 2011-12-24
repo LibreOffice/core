@@ -153,8 +153,8 @@ namespace abp
         const Reference< XMultiServiceFactory >& _rxORB, const ::rtl::OUString& _sName,
         const ::rtl::OUString& _sURL ) SAL_THROW (( ::com::sun::star::uno::Exception ))
     {
-        OSL_ENSURE( _sName.getLength(), "lcl_registerDataSource: invalid name!" );
-        OSL_ENSURE( _sURL.getLength(), "lcl_registerDataSource: invalid URL!" );
+        OSL_ENSURE( !_sName.isEmpty(), "lcl_registerDataSource: invalid name!" );
+        OSL_ENSURE( !_sURL.isEmpty(), "lcl_registerDataSource: invalid URL!" );
         try
         {
 
@@ -573,7 +573,7 @@ namespace abp
             {
                 SQLException aException;
                   aError >>= aException;
-                  if ( !aException.Message.getLength() )
+                  if ( aException.Message.isEmpty() )
                   {
                     // prepend some context info
                     SQLContext aDetailedError;

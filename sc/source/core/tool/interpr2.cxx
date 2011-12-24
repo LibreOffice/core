@@ -2772,7 +2772,7 @@ void ScInterpreter::ScEuroConvert()
 #define UTF8_TH_MINUS   "\340\270\245\340\270\232"
 
 #define UTF8_STRINGPARAM( ascii )   ascii, static_cast< xub_StrLen >( sizeof( ascii ) - 1 )
-#define UTF8_CREATE( ascii )        ByteString( UTF8_STRINGPARAM( ascii ) )
+#define UTF8_CREATE( ascii )        rtl::OString( RTL_CONSTASCII_STRINGPARAM( ascii ) )
 #define UTF8_APPEND( ascii )        Append( UTF8_STRINGPARAM( ascii ) )
 #define UTF8_PREPEND( ascii )       Insert( UTF8_CREATE( ascii ), 0 )
 

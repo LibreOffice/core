@@ -155,15 +155,15 @@ PackageInformationProvider::getPackageLocation( const rtl::OUString& _sExtension
 {
     rtl::OUString aLocationURL = getPackageLocation( UNISTRING("user"), _sExtensionId );
 
-    if ( aLocationURL.getLength() == 0 )
+    if ( aLocationURL.isEmpty() )
     {
         aLocationURL = getPackageLocation( UNISTRING("shared"), _sExtensionId );
     }
-    if ( aLocationURL.getLength() == 0 )
+    if ( aLocationURL.isEmpty() )
     {
         aLocationURL = getPackageLocation( UNISTRING("bundled"), _sExtensionId );
     }
-    if ( aLocationURL.getLength() )
+    if ( !aLocationURL.isEmpty() )
     {
         ::ucbhelper::Content aContent( aLocationURL, NULL );
         aLocationURL = aContent.getURL();
@@ -189,7 +189,7 @@ PackageInformationProvider::isUpdateAvailable( const rtl::OUString& _sExtensionI
     }
     std::vector<std::pair<uno::Reference<deployment::XPackage>, uno::Any > > errors;
     dp_misc::UpdateInfoMap updateInfoMap;
-    if (_sExtensionId.getLength())
+    if (!_sExtensionId.isEmpty())
     {
         std::vector<uno::Reference<deployment::XPackage> > vecExtensions;
         uno::Reference<deployment::XPackage> extension;
@@ -268,7 +268,7 @@ PackageInformationProvider::isUpdateAvailable( const rtl::OUString& _sExtensionI
             updateVersion = updateVersionUser;
         else
             updateVersion = updateVersionShared;
-        if (updateVersion.getLength())
+        if (!updateVersion.isEmpty())
         {
 
             rtl::OUString aNewEntry[2];

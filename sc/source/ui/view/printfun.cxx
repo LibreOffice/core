@@ -624,7 +624,7 @@ void lcl_FillHFParam( ScPrintHFParam& rParam, const SfxItemSet* pHFSet )
         rParam.nRight = nTmp < 0 ? 0 : sal_uInt16(nTmp);
         rParam.pBorder  = (const SvxBoxItem*)   &pHFSet->Get(ATTR_BORDER);
         rParam.pBack    = (const SvxBrushItem*) &pHFSet->Get(ATTR_BACKGROUND);
-        rParam.pShadow  = (const SvxShadowItem*)&pHFSet->Get(ATTR_SHADOW);;
+        rParam.pShadow  = (const SvxShadowItem*)&pHFSet->Get(ATTR_SHADOW);
 
 //  jetzt doch wieder schon im Dialog:
 //      rParam.nHeight += rParam.nDistance;             // nicht mehr im Dialog ???
@@ -3050,26 +3050,5 @@ void ScPrintFunc::CalcPages()               // berechnet aPageRect und Seiten au
         }
     }
 }
-
-//------------------------------------------------------------------------
-//  class ScJobSetup
-//------------------------------------------------------------------------
-
-ScJobSetup::ScJobSetup( SfxPrinter* pPrinter )
-{
-    eOrientation = pPrinter->GetOrientation();
-    nPaperBin    = pPrinter->GetPaperBin();
-    ePaper       = pPrinter->GetPaper();
-
-    if ( PAPER_USER == ePaper )
-    {
-        aUserSize = pPrinter->GetPaperSize();
-        aUserMapMode = pPrinter->GetMapMode();
-    }
-};
-
-
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -55,10 +55,6 @@
 
 #include <unotools/loghelper.hxx>
 
-//_________________________________________________________________________________________________________________
-// namespaces
-//_________________________________________________________________________________________________________________
-
 using namespace ::std     ;
 using namespace ::utl     ;
 using namespace ::rtl     ;
@@ -68,20 +64,12 @@ using namespace ::com::sun::star::beans ;
 
 namespace css = ::com::sun::star;
 
-//_________________________________________________________________________________________________________________
-// const
-//_________________________________________________________________________________________________________________
-
 namespace {
     static const ::sal_Int32 s_nOffsetURL               = 0;
     static const ::sal_Int32 s_nOffsetFilter            = 1;
     static const ::sal_Int32 s_nOffsetTitle             = 2;
     static const ::sal_Int32 s_nOffsetPassword          = 3;
 }
-
-//_________________________________________________________________________________________________________________
-// private declarations!
-//_________________________________________________________________________________________________________________
 
 struct IMPL_THistoryItem
 {
@@ -122,7 +110,6 @@ public:
     ~SvtHistoryOptions_Impl();
 
     sal_uInt32 GetSize( EHistoryType eHistory );
-    void SetSize( EHistoryType eHistory, sal_uInt32 nSize );
     void Clear( EHistoryType eHistory );
     Sequence< Sequence< PropertyValue > > GetList( EHistoryType eHistory );
     void                                  AppendItem(       EHistoryType eHistory ,
@@ -215,56 +202,6 @@ sal_uInt32 SvtHistoryOptions_Impl::GetSize( EHistoryType eHistory )
     }
 
     return nSize;
-}
-
-//*****************************************************************************************************************
-//  public method
-//  Attention: We return the max. size of our internal lists - That is the capacity not the size!
-//*****************************************************************************************************************
-void SvtHistoryOptions_Impl::SetSize( EHistoryType eHistory, sal_uInt32 nSize )
-{
-    css::uno::Reference< css::beans::XPropertySet > xListAccess(m_xCommonXCU, css::uno::UNO_QUERY);
-    if (! xListAccess.is ())
-        return;
-
-    try
-    {
-        switch( eHistory )
-        {
-        case ePICKLIST:
-            if(nSize!=GetSize(ePICKLIST))
-            {
-                xListAccess->setPropertyValue(s_sPickListSize, css::uno::makeAny(nSize));
-                ::comphelper::ConfigurationHelper::flush(m_xCommonXCU);
-            }
-            break;
-
-        case eHISTORY:
-            if(nSize!=GetSize(eHISTORY))
-            {
-                xListAccess->setPropertyValue(s_sURLHistorySize, css::uno::makeAny(nSize));
-                ::comphelper::ConfigurationHelper::flush(m_xCommonXCU);
-            }
-            break;
-
-        case eHELPBOOKMARKS:
-            if(nSize!=GetSize(eHELPBOOKMARKS))
-            {
-                xListAccess->setPropertyValue(s_sHelpBookmarksSize, css::uno::makeAny(nSize));
-                ::comphelper::ConfigurationHelper::flush(m_xCommonXCU);
-            }
-            break;
-
-        default:
-            break;
-        }
-
-        impl_truncateList (eHistory, nSize);
-    }
-    catch(const css::uno::Exception& ex)
-    {
-        LogHelper::logIt(ex);
-    }
 }
 
 //*****************************************************************************************************************
@@ -655,15 +592,6 @@ sal_uInt32 SvtHistoryOptions::GetSize( EHistoryType eHistory ) const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pDataContainer->GetSize( eHistory );
-}
-
-//*****************************************************************************************************************
-// public method
-//*****************************************************************************************************************
-void SvtHistoryOptions::SetSize( EHistoryType eHistory, sal_uInt32 nSize )
-{
-    MutexGuard aGuard( GetOwnStaticMutex() );
-    m_pDataContainer->SetSize( eHistory, nSize );
 }
 
 //*****************************************************************************************************************

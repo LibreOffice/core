@@ -424,11 +424,6 @@ Point FloatingWindow::ImplCalcPos( Window* pWindow,
                 {
                     if( devRectRTL.Right()-aSize.Width()+1 < aScreenRect.Left() )
                         aPos.X() -= aScreenRect.Left() - devRectRTL.Right() + aSize.Width() - 1;
-                    else if( aPos.X() + aSize.Width() > aScreenRect.Right() )
-                    {
-                        aPos.X() -= aSize.Width()-2; // popup to left instead
-                        aPos.Y() -= 2;
-                    }
                 }
                 else if ( aPos.X()+aSize.Width() > aScreenRect.Right() )
                 {
@@ -688,7 +683,8 @@ void FloatingWindow::StartPopupMode( const Rectangle& rRect, sal_uLong nFlags )
 
     // compute window position according to flags and arrangement
     sal_uInt16 nArrangeIndex;
-    SetPosPixel( ImplCalcPos( this, rRect, nFlags, nArrangeIndex ) );
+    Point aPos = ImplCalcPos( this, rRect, nFlags, nArrangeIndex );
+    SetPosPixel( aPos );
 
     // set data and display window
     // convert maFloatRect to absolute device coordinates

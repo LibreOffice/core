@@ -283,7 +283,7 @@ void ODatabaseImportExport::initialize()
 
     if ( !m_xConnection.is() )
     {   // we need a connection
-        OSL_ENSURE(m_sDataSourceName.getLength(),"There must be a datsource name!");
+        OSL_ENSURE(!m_sDataSourceName.isEmpty(),"There must be a datsource name!");
         Reference<XNameAccess> xDatabaseContext = Reference< XNameAccess >(m_xFactory->createInstance(SERVICE_SDB_DATABASECONTEXT), UNO_QUERY);
         Reference< XEventListener> xEvt((::cppu::OWeakObject*)this,UNO_QUERY);
 
@@ -348,7 +348,7 @@ void ODatabaseImportExport::initialize()
             throw;
         }
     }
-    if ( !m_aFont.Name.getLength() )
+    if ( m_aFont.Name.isEmpty() )
     {
         Font aApplicationFont = OutputDevice::GetDefaultFont(
             DEFAULTFONT_SANS_UNICODE,
@@ -618,7 +618,7 @@ void ORTFImportExport::appendRow(::rtl::OString* pHorzChar,sal_Int32 _nColumnCou
                 Reference<XPropertySet> xColumn(m_xRowSetColumns->getByIndex(i-1),UNO_QUERY_THROW);
                 dbtools::FormattedColumnValue aFormatedValue(aContext,xRowSet,xColumn);
                 ::rtl::OUString sValue = aFormatedValue.getFormattedValue();
-                if ( sValue.getLength() )
+                if ( !sValue.isEmpty() )
                     RTFOutFuncs::Out_String(*m_pStream,sValue,m_eDestEnc);
             }
             catch (Exception&)
@@ -936,7 +936,7 @@ void OHTMLImportExport::WriteTables()
                         Reference<XPropertySet> xColumn(m_xRowSetColumns->getByIndex(i-1),UNO_QUERY_THROW);
                         dbtools::FormattedColumnValue aFormatedValue(aContext,xRowSet,xColumn);
                         ::rtl::OUString sValue = aFormatedValue.getFormattedValue();
-                        if (sValue.getLength())
+                        if (!sValue.isEmpty())
                         {
                             aValue = sValue;
                         }

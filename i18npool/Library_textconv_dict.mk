@@ -40,6 +40,10 @@ $(eval $(call gb_Library_add_api,textconv_dict,\
 	offapi \
 ))
 
+$(eval $(call gb_Library_add_linked_libs,textconv_dict,\
+    $(gb_STDLIBS) \
+))
+
 $(eval $(call gb_Library_add_generated_exception_objects,textconv_dict,\
 	$(subst $(WORKDIR)/,,$(basename $(wildcard $(WORKDIR)/CustomTarget/i18npool/source/textconversion/*.cxx))) \
 ))

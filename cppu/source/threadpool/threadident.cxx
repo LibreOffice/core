@@ -92,7 +92,7 @@ uno_getIdOfCurrentThread( sal_Sequence **ppThreadId )
 }
 
 
-extern "C"   void SAL_CALL uno_releaseIdFromCurrentThread()
+extern "C" void SAL_CALL uno_releaseIdFromCurrentThread()
     SAL_THROW_EXTERN_C()
 {
     IdContainer *p = getIdContainer();
@@ -106,7 +106,7 @@ extern "C"   void SAL_CALL uno_releaseIdFromCurrentThread()
     }
 }
 
-extern "C"  sal_Bool SAL_CALL uno_bindIdToCurrentThread( sal_Sequence *pThreadId )
+extern "C" sal_Bool SAL_CALL uno_bindIdToCurrentThread( sal_Sequence *pThreadId )
     SAL_THROW_EXTERN_C()
 {
     IdContainer *p = getIdContainer();

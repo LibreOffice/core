@@ -322,7 +322,7 @@ void UpdateInstallDialog::setError(INSTALL_ERROR err, ::rtl::OUString const & sE
         m_mle_info.InsertText(OUSTR("\n"));
     m_mle_info.InsertText(sError);
     //Insert more information about the error
-    if (exceptionMessage.getLength())
+    if (!exceptionMessage.isEmpty())
         m_mle_info.InsertText(m_sThisErrorOccurred + exceptionMessage + OUSTR("\n"));
 
     m_mle_info.InsertText(m_sNoInstall);
@@ -383,7 +383,7 @@ void UpdateInstallDialog::Thread::downloadExtensions()
                 continue;
             //We assume that m_aVecUpdateData contains only information about extensions which
             //can be downloaded directly.
-            OSL_ASSERT(curData.sWebsiteURL.getLength() == 0);
+            OSL_ASSERT(curData.sWebsiteURL.isEmpty());
 
             //update the name of the extension which is to be downloaded
             {
@@ -405,9 +405,9 @@ void UpdateInstallDialog::Thread::downloadExtensions()
             {
                 try
                 {
-                    OSL_ENSURE(seqDownloadURLs[j].getLength() > 0, "Download URL is empty!");
+                    OSL_ENSURE(!seqDownloadURLs[j].isEmpty(), "Download URL is empty!");
                     download(seqDownloadURLs[j], curData);
-                    if (curData.sLocalURL.getLength() > 0)
+                    if (!curData.sLocalURL.isEmpty())
                         break;
                 }
                 catch ( cssu::Exception & e )
@@ -425,7 +425,7 @@ void UpdateInstallDialog::Thread::downloadExtensions()
                 if (m_stop) {
                     return;
                 }
-                if (curData.sLocalURL.getLength() == 0)
+                if (curData.sLocalURL.isEmpty())
                 {
                     //Construct a string of all messages contained in the exceptions plus the respective download URLs
                     ::rtl::OUStringBuffer buf(256);
@@ -501,7 +501,7 @@ void UpdateInstallDialog::Thread::installExtensions()
                 }
                 m_abort = xAbortChannel;
             }
-            if (!curData.aUpdateSource.is() && curData.sLocalURL.getLength())
+            if (!curData.aUpdateSource.is() && !curData.sLocalURL.isEmpty())
             {
                 css::beans::NamedValue prop(OUSTR("EXTENSION_UPDATE"), css::uno::makeAny(OUSTR("1")));
                 if (!curData.bIsShared)
@@ -581,7 +581,7 @@ void UpdateInstallDialog::Thread::installExtensions()
 
 void UpdateInstallDialog::Thread::removeTempDownloads()
 {
-    if (m_sDownloadFolder.getLength())
+    if (!m_sDownloadFolder.isEmpty())
     {
         dp_misc::erase_path(m_sDownloadFolder,
             cssu::Reference<css::ucb::XCommandEnvironment>(),false /* no throw: ignore errors */ );

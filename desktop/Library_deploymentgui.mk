@@ -56,6 +56,7 @@ $(eval $(call gb_Library_add_linked_libs,deploymentgui,\
     ucbhelper \
     utl \
     vcl \
+    $(gb_STDLIBS) \
 ))
 
 ifeq ($(OS),WNT)

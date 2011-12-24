@@ -881,7 +881,7 @@ void XMLTextExportPropertySetMapper::ContextFilter(
         if( pHoriOrientRelState && TextContentAnchorType_AT_FRAME == eAnchor )
             pHoriOrientRelState->mnIndex = -1;
         if( pHoriOrientRelFrameState && TextContentAnchorType_AT_FRAME != eAnchor )
-            pHoriOrientRelFrameState->mnIndex = -1;;
+            pHoriOrientRelFrameState->mnIndex = -1;
 
         if( pVertOrientState && TextContentAnchorType_AT_CHARACTER == eAnchor )
             pVertOrientState->mnIndex = -1;
@@ -943,7 +943,7 @@ void XMLTextExportPropertySetMapper::ContextFilter(
         if( pShapeHoriOrientRelState && TextContentAnchorType_AT_FRAME == eAnchor )
             pShapeHoriOrientRelState->mnIndex = -1;
         if( pShapeHoriOrientRelFrameState && TextContentAnchorType_AT_FRAME != eAnchor )
-            pShapeHoriOrientRelFrameState->mnIndex = -1;;
+            pShapeHoriOrientRelFrameState->mnIndex = -1;
 
         if( pShapeVertOrientState && TextContentAnchorType_AT_CHARACTER == eAnchor )
             pShapeVertOrientState->mnIndex = -1;

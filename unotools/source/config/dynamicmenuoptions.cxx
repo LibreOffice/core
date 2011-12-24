@@ -41,20 +41,12 @@
 
 #include <algorithm>
 
-//_________________________________________________________________________________________________________________
-//  namespaces
-//_________________________________________________________________________________________________________________
-
 using namespace ::std                   ;
 using namespace ::utl                   ;
 using namespace ::rtl                   ;
 using namespace ::osl                   ;
 using namespace ::com::sun::star::uno   ;
 using namespace ::com::sun::star::beans ;
-
-//_________________________________________________________________________________________________________________
-//  const
-//_________________________________________________________________________________________________________________
 
 #define ROOTNODE_MENUS                                  OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Common/Menus/"     ))
 #define PATHDELIMITER                                   OUString(RTL_CONSTASCII_USTRINGPARAM("/"                        ))
@@ -77,10 +69,6 @@ using namespace ::com::sun::star::beans ;
 
 #define PATHPREFIX_SETUP                                OUString(RTL_CONSTASCII_USTRINGPARAM("m"                        ))
 #define PATHPREFIX_USER                                 OUString(RTL_CONSTASCII_USTRINGPARAM("u"                        ))
-
-//_________________________________________________________________________________________________________________
-//  private declarations!
-//_________________________________________________________________________________________________________________
 
 /*-****************************************************************************************************************
     @descr  struct to hold information about one menu entry.
@@ -115,7 +103,6 @@ struct SvtDynMenuEntry
 class SvtDynMenu
 {
     public:
-        //---------------------------------------------------------------------------------------------------------
         // append setup written menu entry
         // Don't touch name of entry. It was defined by setup and must be the same everytime!
         // Look for double menu entries here too ... may be some seperator items are supeflous ...
@@ -130,7 +117,6 @@ class SvtDynMenu
             }
         }
 
-        //---------------------------------------------------------------------------------------------------------
         // append user specific menu entry
         // We must find unique name for it by using special prefix
         // and next count of user setted entries!
@@ -148,7 +134,6 @@ class SvtDynMenu
             }
         }
 
-        //---------------------------------------------------------------------------------------------------------
         // the only way to free memory!
         void Clear()
         {
@@ -156,7 +141,6 @@ class SvtDynMenu
             lUserEntries.clear();
         }
 
-        //---------------------------------------------------------------------------------------------------------
         // convert internal list to external format
         // for using it on right menus realy
         // Notice:   We build a property list with 4 entries and set it on result list then.
@@ -212,7 +196,7 @@ class SvtDynMenu
         }
 
     private:
-        //---------------------------------------------------------------------------------------------------------
+
         // search for an entry named "ux" with x=[0..i] inside our menu
         // which has set highest number x. So we can add another user entry.
         sal_Int32 impl_getNextUserEntryNr() const
@@ -244,22 +228,10 @@ class SvtDynMenu
 
 class SvtDynamicMenuOptions_Impl : public ConfigItem
 {
-    //-------------------------------------------------------------------------------------------------------------
-    //  public methods
-    //-------------------------------------------------------------------------------------------------------------
-
     public:
-
-        //---------------------------------------------------------------------------------------------------------
-        //  constructor / destructor
-        //---------------------------------------------------------------------------------------------------------
 
          SvtDynamicMenuOptions_Impl();
         ~SvtDynamicMenuOptions_Impl();
-
-        //---------------------------------------------------------------------------------------------------------
-        //  overloaded methods of baseclass
-        //---------------------------------------------------------------------------------------------------------
 
         /*-****************************************************************************************************//**
             @short      called for notify of configmanager
@@ -292,10 +264,6 @@ class SvtDynamicMenuOptions_Impl : public ConfigItem
 
         virtual void Commit();
 
-        //---------------------------------------------------------------------------------------------------------
-        //  public interface
-        //---------------------------------------------------------------------------------------------------------
-
         /*-****************************************************************************************************//**
             @short      base implementation of public interface for "SvtDynamicMenuOptions"!
             @descr      These class is used as static member of "SvtDynamicMenuOptions" ...
@@ -309,17 +277,7 @@ class SvtDynamicMenuOptions_Impl : public ConfigItem
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        void                                    Clear       (           EDynamicMenuType    eMenu           );
         Sequence< Sequence< PropertyValue > >   GetMenu     (           EDynamicMenuType    eMenu           ) const ;
-        void                                    AppendItem  (           EDynamicMenuType    eMenu           ,
-                                                                const   OUString&           sURL            ,
-                                                                const   OUString&           sTitle          ,
-                                                                const   OUString&           sImageIdentifier,
-                                                                const   OUString&           sTargetName     );
-
-    //-------------------------------------------------------------------------------------------------------------
-    //  private methods
-    //-------------------------------------------------------------------------------------------------------------
 
     private:
 
@@ -392,10 +350,6 @@ class SvtDynamicMenuOptions_Impl : public ConfigItem
         SvtDynMenu  m_aWizardMenu           ;
         SvtDynMenu  m_aHelpBookmarksMenu    ;
 };
-
-//_________________________________________________________________________________________________________________
-//  definitions
-//_________________________________________________________________________________________________________________
 
 //*****************************************************************************************************************
 //  constructor
@@ -624,33 +578,6 @@ void SvtDynamicMenuOptions_Impl::Commit()
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
-void SvtDynamicMenuOptions_Impl::Clear( EDynamicMenuType eMenu )
-{
-    switch( eMenu )
-    {
-        case E_NEWMENU      :   {
-                                    m_aNewMenu.Clear();
-                                    SetModified();
-                                }
-                                break;
-
-        case E_WIZARDMENU   :   {
-                                    m_aWizardMenu.Clear();
-                                    SetModified();
-                                }
-                                break;
-
-        case E_HELPBOOKMARKS :  {
-                                    m_aHelpBookmarksMenu.Clear();
-                                    SetModified();
-                                }
-                                break;
-    }
-}
-
-//*****************************************************************************************************************
-//  public method
-//*****************************************************************************************************************
 Sequence< Sequence< PropertyValue > > SvtDynamicMenuOptions_Impl::GetMenu( EDynamicMenuType eMenu ) const
 {
     Sequence< Sequence< PropertyValue > > lReturn;
@@ -672,39 +599,6 @@ Sequence< Sequence< PropertyValue > > SvtDynamicMenuOptions_Impl::GetMenu( EDyna
                                 break;
     }
     return lReturn;
-}
-
-//*****************************************************************************************************************
-//  public method
-//*****************************************************************************************************************
-void SvtDynamicMenuOptions_Impl::AppendItem(            EDynamicMenuType    eMenu           ,
-                                                const   OUString&           sURL            ,
-                                                const   OUString&           sTitle          ,
-                                                const   OUString&           sImageIdentifier,
-                                                const   OUString&           sTargetName     )
-{
-    SvtDynMenuEntry aItem( sURL, sTitle, sImageIdentifier, sTargetName );
-
-    switch( eMenu )
-    {
-        case E_NEWMENU  :   {
-                                m_aNewMenu.AppendUserEntry( aItem );
-                                SetModified();
-                            }
-                            break;
-
-        case E_WIZARDMENU   :   {
-                                m_aWizardMenu.AppendUserEntry( aItem );
-                                SetModified();
-                            }
-                            break;
-
-        case E_HELPBOOKMARKS :  {
-                                m_aHelpBookmarksMenu.AppendUserEntry( aItem );
-                                SetModified();
-                            }
-                            break;
-    }
 }
 
 //*****************************************************************************************************************
@@ -857,32 +751,10 @@ SvtDynamicMenuOptions::~SvtDynamicMenuOptions()
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
-void SvtDynamicMenuOptions::Clear( EDynamicMenuType eMenu )
-{
-    MutexGuard aGuard( GetOwnStaticMutex() );
-    m_pDataContainer->Clear( eMenu );
-}
-
-//*****************************************************************************************************************
-//  public method
-//*****************************************************************************************************************
 Sequence< Sequence< PropertyValue > > SvtDynamicMenuOptions::GetMenu( EDynamicMenuType eMenu ) const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pDataContainer->GetMenu( eMenu );
-}
-
-//*****************************************************************************************************************
-//  public method
-//*****************************************************************************************************************
-void SvtDynamicMenuOptions::AppendItem(         EDynamicMenuType    eMenu           ,
-                                        const   OUString&           sURL            ,
-                                        const   OUString&           sTitle          ,
-                                        const   OUString&           sImageIdentifier,
-                                        const   OUString&           sTargetName     )
-{
-    MutexGuard aGuard( GetOwnStaticMutex() );
-    m_pDataContainer->AppendItem( eMenu, sURL, sTitle, sImageIdentifier, sTargetName );
 }
 
 namespace

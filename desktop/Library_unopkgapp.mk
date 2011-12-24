@@ -53,6 +53,7 @@ $(eval $(call gb_Library_add_linked_libs,unopkgapp,\
     ucbhelper \
     utl \
     vcl \
+    $(gb_STDLIBS) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,unopkgapp,\

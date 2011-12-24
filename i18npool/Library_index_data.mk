@@ -30,6 +30,10 @@ $(eval $(call gb_Library_Library,index_data))
 
 $(eval $(call gb_Library_add_package_headers,index_data,i18npool_generated))
 
+$(eval $(call gb_Library_add_linked_libs,index_data,\
+    $(gb_STDLIBS) \
+))
+
 $(eval $(call gb_Library_add_generated_exception_objects,index_data,\
 	$(subst $(WORKDIR)/,,$(basename $(wildcard $(WORKDIR)/CustomTarget/i18npool/source/indexentry/*.cxx))) \
 ))

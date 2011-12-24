@@ -188,7 +188,7 @@ void AquaSalObject::setClippedPosSize()
         aClipViewRect.size.height = mnClipHeight;
         aClipPt.x = mnClipX;
         if( mnClipY == 0 )
-            aClipPt.y = mnHeight - mnClipHeight;;
+            aClipPt.y = mnHeight - mnClipHeight;
     }
 
     mpFrame->VCLToCocoa( aClipViewRect, false );

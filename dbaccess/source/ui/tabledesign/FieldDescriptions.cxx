@@ -122,7 +122,7 @@ OFieldDescription::OFieldDescription(const Reference< XPropertySet >& xAffectedC
         if ( _bUseAsDest )
         {
             m_xDest = xAffectedCol;
-            m_xDestInfo = xAffectedCol->getPropertySetInfo();;
+            m_xDestInfo = xAffectedCol->getPropertySetInfo();
         }
         else
         {
@@ -240,7 +240,7 @@ void OFieldDescription::FillFromTypeInfo(const TOTypeInfoSP& _pType,sal_Bool _bF
                         SetScale(::std::min<sal_Int32>(GetScale() ? GetScale() : DEFAULT_NUMERIC_SCALE,_pType->nMaximumScale));
                 }
         }
-        if ( !_pType->aCreateParams.getLength() )
+        if ( _pType->aCreateParams.isEmpty() )
         {
             SetPrecision(_pType->nPrecision);
             SetScale(_pType->nMinimumScale);
@@ -663,7 +663,7 @@ void OFieldDescription::copyColumnSettingsTo(const Reference< XPropertySet >& _r
             _rxColumn->setPropertyValue(PROPERTY_FORMATKEY,makeAny(GetFormatKey()));
         if ( GetHorJustify() != SVX_HOR_JUSTIFY_STANDARD && xInfo->hasPropertyByName(PROPERTY_ALIGN) )
             _rxColumn->setPropertyValue(PROPERTY_ALIGN,makeAny(dbaui::mapTextAllign(GetHorJustify())));
-        if ( GetHelpText().getLength() && xInfo->hasPropertyByName(PROPERTY_HELPTEXT) )
+        if ( !GetHelpText().isEmpty() && xInfo->hasPropertyByName(PROPERTY_HELPTEXT) )
             _rxColumn->setPropertyValue(PROPERTY_HELPTEXT,makeAny(GetHelpText()));
         if ( GetControlDefault().hasValue() && xInfo->hasPropertyByName(PROPERTY_CONTROLDEFAULT) )
             _rxColumn->setPropertyValue(PROPERTY_CONTROLDEFAULT,GetControlDefault());

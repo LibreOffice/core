@@ -284,10 +284,9 @@ sal_uLong DictionaryNeo::loadEntries(const OUString &rMainURL)
                 A2OU( "com.sun.star.ucb.SimpleFileAccess" ) ), uno::UNO_QUERY_THROW );
         xStream = xAccess->openFileRead( rMainURL );
     }
-    catch (uno::Exception & e)
+    catch (const uno::Exception &)
     {
         DBG_ASSERT( 0, "failed to get input stream" );
-        (void) e;
     }
     if (!xStream.is())
         return static_cast< sal_uLong >(-1);
@@ -340,8 +339,7 @@ sal_uLong DictionaryNeo::loadEntries(const OUString &rMainURL)
             // Paste in dictionary without converting
             if(*aWordBuf)
             {
-                ByteString aDummy( aWordBuf );
-                String aText( aDummy, eEnc );
+                rtl::OUString aText(aWordBuf, rtl_str_getLength(aWordBuf), eEnc);
                 uno::Reference< XDictionaryEntry > xEntry =
                         new DicEntry( aText, bNegativ );
                 addEntry_Impl( xEntry , sal_True ); //! don't launch events here
@@ -427,10 +425,9 @@ sal_uLong DictionaryNeo::saveEntries(const OUString &rURL)
                 A2OU( "com.sun.star.ucb.SimpleFileAccess" ) ), uno::UNO_QUERY_THROW );
         xStream = xAccess->openFileReadWrite( rURL );
     }
-    catch (uno::Exception & e)
+    catch (const uno::Exception &)
     {
         DBG_ASSERT( 0, "failed to get input stream" );
-        (void) e;
     }
     if (!xStream.is())
         return static_cast< sal_uLong >(-1);
@@ -442,11 +439,11 @@ sal_uLong DictionaryNeo::saveEntries(const OUString &rURL)
     // Always write as the latest version, i.e. DIC_VERSION_7
     //
     rtl_TextEncoding eEnc = RTL_TEXTENCODING_UTF8;
-    pStream->WriteLine(ByteString (pVerOOo7));
+    pStream->WriteLine(rtl::OString(pVerOOo7));
     if (0 != (nErr = pStream->GetError()))
         return nErr;
     if (nLanguage == LANGUAGE_NONE)
-        pStream->WriteLine(ByteString("lang: <none>"));
+        pStream->WriteLine(rtl::OString(RTL_CONSTASCII_STRINGPARAM("lang: <none>")));
     else
     {
         rtl::OStringBuffer aLine(RTL_CONSTASCII_STRINGPARAM("lang: "));
@@ -456,12 +453,12 @@ sal_uLong DictionaryNeo::saveEntries(const OUString &rURL)
     if (0 != (nErr = pStream->GetError()))
         return nErr;
     if (eDicType == DictionaryType_POSITIVE)
-        pStream->WriteLine(ByteString("type: positive"));
+        pStream->WriteLine(rtl::OString(RTL_CONSTASCII_STRINGPARAM("type: positive")));
     else
-        pStream->WriteLine(ByteString("type: negative"));
+        pStream->WriteLine(rtl::OString(RTL_CONSTASCII_STRINGPARAM("type: negative")));
     if (0 != (nErr = pStream->GetError()))
         return nErr;
-    pStream->WriteLine(ByteString("---"));
+    pStream->WriteLine(rtl::OString(RTL_CONSTASCII_STRINGPARAM("---")));
     if (0 != (nErr = pStream->GetError()))
         return nErr;
     const uno::Reference< XDictionaryEntry > *pEntry = aEntries.getConstArray();

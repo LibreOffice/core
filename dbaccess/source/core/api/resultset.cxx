@@ -287,7 +287,7 @@ void OResultSet::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const
             sal_Int16 nAttributes;
             const_cast<OResultSet*>(this)->getInfoHelper().
                 fillPropertyMembersByHandle(&aPropName, &nAttributes, nHandle);
-            OSL_ENSURE(aPropName.getLength(), "property not found?");
+            OSL_ENSURE(!aPropName.isEmpty(), "property not found?");
 
             // now read the value
             rValue = Reference< XPropertySet >(m_xDelegatorResultSet, UNO_QUERY)->getPropertyValue(aPropName);

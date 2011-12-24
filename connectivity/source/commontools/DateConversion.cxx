@@ -251,7 +251,7 @@ void DBTypeConversion::setValue(const Reference<XColumnUpdate>& xVariant,
                                 sal_Int16 nFieldType,
                                 sal_Int16 nKeyType) throw(::com::sun::star::lang::IllegalArgumentException)
 {
-    if (rString.getLength())
+    if (!rString.isEmpty())
     {
         // Does the String need to be formatted?
         sal_Int16 nTypeClass = nKeyType & ~NumberFormat::DEFINED;

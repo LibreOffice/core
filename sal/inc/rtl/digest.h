@@ -91,7 +91,7 @@ typedef enum __rtl_DigestError rtlDigestError;
     @param  Algorithm [in] digest algorithm.
     @return Digest handle, or 0 upon failure.
  */
-rtlDigest SAL_CALL rtl_digest_create  (
+SAL_DLLPUBLIC rtlDigest SAL_CALL rtl_digest_create  (
     rtlDigestAlgorithm Algorithm
 ) SAL_THROW_EXTERN_C();
 
@@ -101,7 +101,7 @@ rtlDigest SAL_CALL rtl_digest_create  (
     @param    Digest [in] digest handle to be destroyed.
     @return   None.
  */
-void SAL_CALL rtl_digest_destroy (
+SAL_DLLPUBLIC void SAL_CALL rtl_digest_destroy (
     rtlDigest Digest
 ) SAL_THROW_EXTERN_C();
 
@@ -110,7 +110,7 @@ void SAL_CALL rtl_digest_destroy (
     @param  Digest [in] digest handle.
     @return digest algorithm, or rtl_Digest_AlgorithmInvalid upon failure.
  */
-rtlDigestAlgorithm SAL_CALL rtl_digest_queryAlgorithm (
+SAL_DLLPUBLIC rtlDigestAlgorithm SAL_CALL rtl_digest_queryAlgorithm (
     rtlDigest Digest
 ) SAL_THROW_EXTERN_C();
 
@@ -119,7 +119,7 @@ rtlDigestAlgorithm SAL_CALL rtl_digest_queryAlgorithm (
     @param  Digest [in] digest handle.
     @return digest length, or 0 upon failure.
  */
-sal_uInt32 SAL_CALL rtl_digest_queryLength (
+SAL_DLLPUBLIC sal_uInt32 SAL_CALL rtl_digest_queryLength (
     rtlDigest Digest
 ) SAL_THROW_EXTERN_C();
 
@@ -131,7 +131,7 @@ sal_uInt32 SAL_CALL rtl_digest_queryLength (
 
     @return rtl_Digest_E_None upon success.
  */
-rtlDigestError SAL_CALL rtl_digest_init (
+SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_init (
     rtlDigest Digest,
     const sal_uInt8 *pData, sal_uInt32 nDatLen
 ) SAL_THROW_EXTERN_C();
@@ -144,7 +144,7 @@ rtlDigestError SAL_CALL rtl_digest_init (
 
     @return rtl_Digest_E_None upon success.
  */
-rtlDigestError SAL_CALL rtl_digest_update (
+SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_update (
     rtlDigest Digest,
     const void *pData, sal_uInt32 nDatLen
 ) SAL_THROW_EXTERN_C();
@@ -162,7 +162,7 @@ rtlDigestError SAL_CALL rtl_digest_update (
 
     @return rtl_Digest_E_None upon success.
  */
-rtlDigestError SAL_CALL rtl_digest_get (
+SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_get (
     rtlDigest Digest,
     sal_uInt8 *pBuffer, sal_uInt32 nBufLen
 ) SAL_THROW_EXTERN_C();
@@ -182,13 +182,13 @@ rtlDigestError SAL_CALL rtl_digest_get (
 
     @see rtl_digest_create()
  */
-rtlDigest SAL_CALL rtl_digest_createMD2 (void) SAL_THROW_EXTERN_C();
+SAL_DLLPUBLIC rtlDigest SAL_CALL rtl_digest_createMD2 (void) SAL_THROW_EXTERN_C();
 
 
 /** Destroy a MD2 digest handle.
     @see rtl_digest_destroy()
  */
-void SAL_CALL rtl_digest_destroyMD2 (
+SAL_DLLPUBLIC void SAL_CALL rtl_digest_destroyMD2 (
     rtlDigest Digest
 ) SAL_THROW_EXTERN_C();
 
@@ -196,7 +196,7 @@ void SAL_CALL rtl_digest_destroyMD2 (
 /** Update a MD2 digest with given data.
     @see rtl_digest_update()
  */
-rtlDigestError SAL_CALL rtl_digest_updateMD2 (
+SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_updateMD2 (
     rtlDigest Digest,
     const void *pData, sal_uInt32 nDatLen
 ) SAL_THROW_EXTERN_C();
@@ -205,7 +205,7 @@ rtlDigestError SAL_CALL rtl_digest_updateMD2 (
 /** Finalize a MD2 digest and retrieve the digest value.
     @see rtl_digest_get()
  */
-rtlDigestError SAL_CALL rtl_digest_getMD2 (
+SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_getMD2 (
     rtlDigest Digest,
     sal_uInt8 *pBuffer, sal_uInt32 nBufLen
 ) SAL_THROW_EXTERN_C();
@@ -225,7 +225,7 @@ rtlDigestError SAL_CALL rtl_digest_getMD2 (
 
     @return rtl_Digest_E_None upon success.
  */
-rtlDigestError SAL_CALL rtl_digest_MD2 (
+SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_MD2 (
     const void *pData,   sal_uInt32 nDatLen,
     sal_uInt8  *pBuffer, sal_uInt32 nBufLen
 ) SAL_THROW_EXTERN_C();
@@ -245,13 +245,13 @@ rtlDigestError SAL_CALL rtl_digest_MD2 (
 
     @see rtl_digest_create()
  */
-rtlDigest SAL_CALL rtl_digest_createMD5 (void) SAL_THROW_EXTERN_C();
+SAL_DLLPUBLIC rtlDigest SAL_CALL rtl_digest_createMD5 (void) SAL_THROW_EXTERN_C();
 
 
 /** Destroy a MD5 digest handle.
     @see rtl_digest_destroy()
  */
-void SAL_CALL rtl_digest_destroyMD5 (
+SAL_DLLPUBLIC void SAL_CALL rtl_digest_destroyMD5 (
     rtlDigest Digest
 ) SAL_THROW_EXTERN_C();
 
@@ -259,7 +259,7 @@ void SAL_CALL rtl_digest_destroyMD5 (
 /** Update a MD5 digest with given data.
     @see rtl_digest_update()
  */
-rtlDigestError SAL_CALL rtl_digest_updateMD5 (
+SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_updateMD5 (
     rtlDigest Digest,
     const void *pData, sal_uInt32 nDatLen
 ) SAL_THROW_EXTERN_C();
@@ -268,7 +268,7 @@ rtlDigestError SAL_CALL rtl_digest_updateMD5 (
 /** Finalize a MD5 digest and retrieve the digest value.
     @see rtl_digest_get()
  */
-rtlDigestError SAL_CALL rtl_digest_getMD5 (
+SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_getMD5 (
     rtlDigest Digest,
     sal_uInt8 *pBuffer, sal_uInt32 nBufLen
 ) SAL_THROW_EXTERN_C();
@@ -281,7 +281,7 @@ rtlDigestError SAL_CALL rtl_digest_getMD5 (
     @postcond Digest initialized to accept another update sequence.
     @see      rtl_digest_get()
  */
-rtlDigestError SAL_CALL rtl_digest_rawMD5 (
+SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_rawMD5 (
     rtlDigest Digest,
     sal_uInt8 *pBuffer, sal_uInt32 nBufLen
 ) SAL_THROW_EXTERN_C();
@@ -301,7 +301,7 @@ rtlDigestError SAL_CALL rtl_digest_rawMD5 (
 
     @return rtl_Digest_E_None upon success.
  */
-rtlDigestError SAL_CALL rtl_digest_MD5 (
+SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_MD5 (
     const void *pData,   sal_uInt32 nDatLen,
     sal_uInt8  *pBuffer, sal_uInt32 nBufLen
 ) SAL_THROW_EXTERN_C();
@@ -321,13 +321,13 @@ rtlDigestError SAL_CALL rtl_digest_MD5 (
 
     @see rtl_digest_create()
  */
-rtlDigest SAL_CALL rtl_digest_createSHA (void) SAL_THROW_EXTERN_C();
+SAL_DLLPUBLIC rtlDigest SAL_CALL rtl_digest_createSHA (void) SAL_THROW_EXTERN_C();
 
 
 /** Destroy a SHA digest handle.
     @see rtl_digest_destroy()
  */
-void SAL_CALL rtl_digest_destroySHA (
+SAL_DLLPUBLIC void SAL_CALL rtl_digest_destroySHA (
     rtlDigest Digest
 ) SAL_THROW_EXTERN_C();
 
@@ -335,7 +335,7 @@ void SAL_CALL rtl_digest_destroySHA (
 /** Update a SHA digest with given data.
     @see rtl_digest_update()
  */
-rtlDigestError SAL_CALL rtl_digest_updateSHA (
+SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_updateSHA (
     rtlDigest Digest,
     const void *pData, sal_uInt32 nDatLen
 ) SAL_THROW_EXTERN_C();
@@ -344,7 +344,7 @@ rtlDigestError SAL_CALL rtl_digest_updateSHA (
 /** Finalize a SHA digest and retrieve the digest value.
     @see rtl_digest_get()
  */
-rtlDigestError SAL_CALL rtl_digest_getSHA (
+SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_getSHA (
     rtlDigest Digest,
     sal_uInt8 *pBuffer, sal_uInt32 nBufLen
 ) SAL_THROW_EXTERN_C();
@@ -364,7 +364,7 @@ rtlDigestError SAL_CALL rtl_digest_getSHA (
 
     @return rtl_Digest_E_None upon success.
  */
-rtlDigestError SAL_CALL rtl_digest_SHA (
+SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_SHA (
     const void *pData,   sal_uInt32 nDatLen,
     sal_uInt8  *pBuffer, sal_uInt32 nBufLen
 ) SAL_THROW_EXTERN_C();
@@ -384,13 +384,13 @@ rtlDigestError SAL_CALL rtl_digest_SHA (
 
     @see rtl_digest_create()
  */
-rtlDigest SAL_CALL rtl_digest_createSHA1 (void) SAL_THROW_EXTERN_C();
+SAL_DLLPUBLIC rtlDigest SAL_CALL rtl_digest_createSHA1 (void) SAL_THROW_EXTERN_C();
 
 
 /** Destroy a SHA1 digest handle.
     @see rtl_digest_destroy()
  */
-void SAL_CALL rtl_digest_destroySHA1 (
+SAL_DLLPUBLIC void SAL_CALL rtl_digest_destroySHA1 (
     rtlDigest Digest
 ) SAL_THROW_EXTERN_C();
 
@@ -398,7 +398,7 @@ void SAL_CALL rtl_digest_destroySHA1 (
 /** Update a SHA1 digest with given data.
     @see rtl_digest_update()
  */
-rtlDigestError SAL_CALL rtl_digest_updateSHA1 (
+SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_updateSHA1 (
     rtlDigest Digest,
     const void *pData, sal_uInt32 nDatLen
 ) SAL_THROW_EXTERN_C();
@@ -407,7 +407,7 @@ rtlDigestError SAL_CALL rtl_digest_updateSHA1 (
 /** Finalize a SHA1 digest and retrieve the digest value.
     @see rtl_digest_get()
  */
-rtlDigestError SAL_CALL rtl_digest_getSHA1 (
+SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_getSHA1 (
     rtlDigest Digest,
     sal_uInt8 *pBuffer, sal_uInt32 nBufLen
 ) SAL_THROW_EXTERN_C();
@@ -427,7 +427,7 @@ rtlDigestError SAL_CALL rtl_digest_getSHA1 (
 
     @return rtl_Digest_E_None upon success.
  */
-rtlDigestError SAL_CALL rtl_digest_SHA1 (
+SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_SHA1 (
     const void *pData,   sal_uInt32 nDatLen,
     sal_uInt8  *pBuffer, sal_uInt32 nBufLen
 ) SAL_THROW_EXTERN_C();
@@ -447,13 +447,13 @@ rtlDigestError SAL_CALL rtl_digest_SHA1 (
 
     @see rtl_digest_create()
  */
-rtlDigest SAL_CALL rtl_digest_createHMAC_MD5 (void) SAL_THROW_EXTERN_C();
+SAL_DLLPUBLIC rtlDigest SAL_CALL rtl_digest_createHMAC_MD5 (void) SAL_THROW_EXTERN_C();
 
 
 /** Destroy a HMAC_MD5 digest handle.
     @see rtl_digest_destroy()
  */
-void SAL_CALL rtl_digest_destroyHMAC_MD5 (
+SAL_DLLPUBLIC void SAL_CALL rtl_digest_destroyHMAC_MD5 (
     rtlDigest Digest
 ) SAL_THROW_EXTERN_C();
 
@@ -467,7 +467,7 @@ void SAL_CALL rtl_digest_destroyHMAC_MD5 (
 
     @return rtl_Digest_E_None upon success.
  */
-rtlDigestError SAL_CALL rtl_digest_initHMAC_MD5 (
+SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_initHMAC_MD5 (
     rtlDigest Digest,
     const sal_uInt8 *pKeyData, sal_uInt32 nKeyLen
 ) SAL_THROW_EXTERN_C();
@@ -476,7 +476,7 @@ rtlDigestError SAL_CALL rtl_digest_initHMAC_MD5 (
 /** Update a HMAC_MD5 digest with given data.
     @see rtl_digest_update()
  */
-rtlDigestError SAL_CALL rtl_digest_updateHMAC_MD5 (
+SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_updateHMAC_MD5 (
     rtlDigest Digest,
     const void *pData, sal_uInt32 nDatLen
 ) SAL_THROW_EXTERN_C();
@@ -485,7 +485,7 @@ rtlDigestError SAL_CALL rtl_digest_updateHMAC_MD5 (
 /** Finalize a HMAC_MD5 digest and retrieve the digest value.
     @see rtl_digest_get()
  */
-rtlDigestError SAL_CALL rtl_digest_getHMAC_MD5 (
+SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_getHMAC_MD5 (
     rtlDigest Digest,
     sal_uInt8 *pBuffer, sal_uInt32 nBufLen
 ) SAL_THROW_EXTERN_C();
@@ -508,7 +508,7 @@ rtlDigestError SAL_CALL rtl_digest_getHMAC_MD5 (
 
     @return rtl_Digest_E_None upon success.
  */
-rtlDigestError SAL_CALL rtl_digest_HMAC_MD5 (
+SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_HMAC_MD5 (
     const sal_uInt8 *pKeyData, sal_uInt32 nKeyLen,
     const void      *pData,    sal_uInt32 nDatLen,
     sal_uInt8       *pBuffer,  sal_uInt32 nBufLen
@@ -531,13 +531,13 @@ rtlDigestError SAL_CALL rtl_digest_HMAC_MD5 (
 
     @see rtl_digest_create()
  */
-rtlDigest SAL_CALL rtl_digest_createHMAC_SHA1 (void) SAL_THROW_EXTERN_C();
+SAL_DLLPUBLIC rtlDigest SAL_CALL rtl_digest_createHMAC_SHA1 (void) SAL_THROW_EXTERN_C();
 
 
 /** Destroy a HMAC_SHA1 digest handle.
     @see rtl_digest_destroy()
  */
-void SAL_CALL rtl_digest_destroyHMAC_SHA1 (
+SAL_DLLPUBLIC void SAL_CALL rtl_digest_destroyHMAC_SHA1 (
     rtlDigest Digest
 ) SAL_THROW_EXTERN_C();
 
@@ -551,7 +551,7 @@ void SAL_CALL rtl_digest_destroyHMAC_SHA1 (
 
     @return rtl_Digest_E_None upon success.
  */
-rtlDigestError SAL_CALL rtl_digest_initHMAC_SHA1 (
+SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_initHMAC_SHA1 (
     rtlDigest Digest,
     const sal_uInt8 *pKeyData, sal_uInt32 nKeyLen
 ) SAL_THROW_EXTERN_C();
@@ -560,7 +560,7 @@ rtlDigestError SAL_CALL rtl_digest_initHMAC_SHA1 (
 /** Update a HMAC_SHA1 digest with given data.
     @see rtl_digest_update()
  */
-rtlDigestError SAL_CALL rtl_digest_updateHMAC_SHA1 (
+SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_updateHMAC_SHA1 (
     rtlDigest Digest,
     const void *pData, sal_uInt32 nDatLen
 ) SAL_THROW_EXTERN_C();
@@ -569,7 +569,7 @@ rtlDigestError SAL_CALL rtl_digest_updateHMAC_SHA1 (
 /** Finalize a HMAC_SHA1 digest and retrieve the digest value.
     @see rtl_digest_get()
  */
-rtlDigestError SAL_CALL rtl_digest_getHMAC_SHA1 (
+SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_getHMAC_SHA1 (
     rtlDigest Digest,
     sal_uInt8 *pBuffer, sal_uInt32 nBufLen
 ) SAL_THROW_EXTERN_C();
@@ -592,7 +592,7 @@ rtlDigestError SAL_CALL rtl_digest_getHMAC_SHA1 (
 
     @return rtl_Digest_E_None upon success.
  */
-rtlDigestError SAL_CALL rtl_digest_HMAC_SHA1 (
+SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_HMAC_SHA1 (
     const sal_uInt8 *pKeyData, sal_uInt32 nKeyLen,
     const void      *pData,    sal_uInt32 nDatLen,
     sal_uInt8       *pBuffer,  sal_uInt32 nBufLen
@@ -619,7 +619,7 @@ rtlDigestError SAL_CALL rtl_digest_HMAC_SHA1 (
 
     @return rtl_Digest_E_None upon success.
 */
-rtlDigestError SAL_CALL rtl_digest_PBKDF2 (
+SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_PBKDF2 (
     sal_uInt8       *pKeyData , sal_uInt32 nKeyLen,
     const sal_uInt8 *pPassData, sal_uInt32 nPassLen,
     const sal_uInt8 *pSaltData, sal_uInt32 nSaltLen,

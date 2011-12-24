@@ -1910,23 +1910,16 @@ Err:
     return false;
 }
 
-String read_uInt8_PascalString(SvStream& rStrm, rtl_TextEncoding eEnc)
-{
-    sal_uInt8 nLen(0);
-    rStrm >> nLen;
-    return rtl::OStringToOUString(read_uInt8s_AsOString(rStrm, nLen), eEnc);
-}
-
 String read_LEuInt16_PascalString(SvStream& rStrm)
 {
     sal_uInt16 nLen(0);
     rStrm >> nLen;
-    return read_LEuInt16s_AsOUString(rStrm, nLen);
+    return read_LEuInt16s_ToOUString(rStrm, nLen);
 }
 
 String read_uInt8_BeltAndBracesString(SvStream& rStrm, rtl_TextEncoding eEnc)
 {
-    String aRet = read_uInt8_PascalString(rStrm, eEnc);
+    rtl::OUString aRet = read_lenPrefixed_uInt8s_ToOUString<sal_uInt8>(rStrm, eEnc);
     rStrm.SeekRel(sizeof(sal_uInt8)); // skip null-byte at end
     return aRet;
 }
@@ -1968,11 +1961,11 @@ xub_StrLen WW8ScannerBase::WW8ReadString( SvStream& rStrm, String& rStr,
             nLen = USHRT_MAX - 1;
 
         if( bIsUnicode )
-            rStr.Append(String(read_LEuInt16s_AsOUString(rStrm, nLen)));
+            rStr.Append(String(read_LEuInt16s_ToOUString(rStrm, nLen)));
         else
         {
             // Alloc method automatically sets Zero at the end
-            rtl::OString aByteStr = read_uInt8s_AsOString(rStrm, nLen);
+            rtl::OString aByteStr = read_uInt8s_ToOString(rStrm, nLen);
             rStr.Append(String(rtl::OStringToOUString(aByteStr, eEnc)));
         }
         nTotalRead  += nLen;
@@ -3876,7 +3869,7 @@ void WW8ReadSTTBF(bool bVer8, SvStream& rStrm, sal_uInt32 nStart, sal_Int32 nLen
                 {
                     sal_uInt8 nBChar(0);
                     rStrm >> nBChar;
-                    rtl::OString aTmp = read_uInt8s_AsOString(rStrm, nBChar);
+                    rtl::OString aTmp = read_uInt8s_ToOString(rStrm, nBChar);
                     rArray.push_back(rtl::OStringToOUString(aTmp, eCS));
                 }
 
@@ -3909,7 +3902,7 @@ void WW8ReadSTTBF(bool bVer8, SvStream& rStrm, sal_uInt32 nStart, sal_Int32 nLen
                     {
                         sal_uInt8 nBChar(0);
                         rStrm >> nBChar;
-                        rtl::OString aTmp = read_uInt8s_AsOString(rStrm, nBChar);
+                        rtl::OString aTmp = read_uInt8s_ToOString(rStrm, nBChar);
                         pValueArray->push_back(rtl::OStringToOUString(aTmp, eCS));
                     }
                 }
@@ -3935,7 +3928,7 @@ void WW8ReadSTTBF(bool bVer8, SvStream& rStrm, sal_uInt32 nStart, sal_Int32 nLen
                 ++nRead;
                 if (nBChar)
                 {
-                    rtl::OString aTmp = read_uInt8s_AsOString(rStrm, nBChar);
+                    rtl::OString aTmp = read_uInt8s_ToOString(rStrm, nBChar);
                     nRead += aTmp.getLength();
                     rArray.push_back(rtl::OStringToOUString(aTmp, eCS));
                 }

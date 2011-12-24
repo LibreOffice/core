@@ -37,6 +37,10 @@ $(eval $(call gb_Executable_add_defs,sweb,\
     -DUNICODE \
 ))
 
+$(eval $(call gb_Executable_add_linked_libs,sweb,\
+    $(gb_STDLIBS) \
+))
+
 $(eval $(call gb_Executable_add_noexception_objects,sweb,\
     desktop/win32/source/applauncher/launcher \
     desktop/win32/source/applauncher/sweb \

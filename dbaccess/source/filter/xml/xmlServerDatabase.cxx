@@ -87,7 +87,7 @@ OXMLServerDatabase::OXMLServerDatabase( ODBFilter& rImport,
                 break;
         }
     }
-    if ( sType.getLength() )
+    if ( !sType.isEmpty() )
     {
         ::rtl::OUStringBuffer sURL;
         if  (   sType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "sdbc:mysql:jdbc" ) )
@@ -98,12 +98,12 @@ OXMLServerDatabase::OXMLServerDatabase( ODBFilter& rImport,
             sURL.append( sType );
             sURL.append( sal_Unicode( ':' ) );
             sURL.append(sHostName);
-            if ( sPortNumber.getLength() )
+            if ( !sPortNumber.isEmpty() )
             {
                 sURL.appendAscii(":");
                 sURL.append(sPortNumber);
             }
-            if ( sDatabaseName.getLength() )
+            if ( !sDatabaseName.isEmpty() )
             {
                 sURL.appendAscii("/");
                 sURL.append(sDatabaseName);
@@ -113,12 +113,12 @@ OXMLServerDatabase::OXMLServerDatabase( ODBFilter& rImport,
         {
             sURL.appendAscii("jdbc:oracle:thin:@");
             sURL.append(sHostName);
-            if ( sPortNumber.getLength() )
+            if ( !sPortNumber.isEmpty() )
             {
                 sURL.appendAscii(":");
                 sURL.append(sPortNumber);
             }
-            if ( sDatabaseName.getLength() )
+            if ( !sDatabaseName.isEmpty() )
             {
                 sURL.appendAscii(":");
                 sURL.append(sDatabaseName);
@@ -128,7 +128,7 @@ OXMLServerDatabase::OXMLServerDatabase( ODBFilter& rImport,
         {
             sURL.appendAscii("sdbc:address:ldap:");
             sURL.append(sHostName);
-            if ( sPortNumber.getLength() )
+            if ( !sPortNumber.isEmpty() )
             {
                 sURL.appendAscii(":");
                 sURL.append(sPortNumber);
@@ -139,12 +139,12 @@ OXMLServerDatabase::OXMLServerDatabase( ODBFilter& rImport,
             sURL.append(sType);
             sURL.appendAscii(":");
             sURL.append(sHostName);
-            if ( sPortNumber.getLength() )
+            if ( !sPortNumber.isEmpty() )
             {
                 sURL.appendAscii(":");
                 sURL.append(sPortNumber);
             }
-            if ( sDatabaseName.getLength() )
+            if ( !sDatabaseName.isEmpty() )
             {
                 sURL.appendAscii(":");
                 sURL.append(sDatabaseName);

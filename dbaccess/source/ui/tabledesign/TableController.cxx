@@ -328,7 +328,7 @@ sal_Bool OTableController::doSaveDoc(sal_Bool _bSaveAs)
     Reference<XNameAccess> xTables;
     ::rtl::OUString sCatalog, sSchema;
 
-    sal_Bool bNew = (0 == m_sName.getLength());
+    sal_Bool bNew = m_sName.isEmpty();
     bNew = bNew || m_bNew || _bSaveAs;
 
     try
@@ -361,7 +361,7 @@ sal_Bool OTableController::doSaveDoc(sal_Bool _bSaveAs)
         }
 
         // did we get a name
-        if(!m_sName.getLength())
+        if(m_sName.isEmpty())
             return sal_False;
     }
     catch(Exception&)
@@ -972,7 +972,7 @@ sal_Bool OTableController::checkColumns(sal_Bool _bNew) throw(::com::sun::star::
     for(;aIter != aEnd;++aIter)
     {
         OFieldDescription* pFieldDesc = (*aIter)->GetActFieldDescr();
-        if (pFieldDesc && pFieldDesc->GetName().getLength())
+        if (pFieldDesc && !pFieldDesc->GetName().isEmpty())
         {
             bFoundPKey |=  (*aIter)->IsPrimaryKey();
             // first check for duplicate names
@@ -1413,7 +1413,7 @@ void OTableController::assignTable()
 {
     ::rtl::OUString sComposedName;
     // get the table
-    if(m_sName.getLength())
+    if(!m_sName.isEmpty())
     {
         Reference<XNameAccess> xNameAccess;
         Reference<XTablesSupplier> xSup(getConnection(),UNO_QUERY);
@@ -1520,7 +1520,7 @@ void OTableController::reSyncRows()
     for(sal_Int32 i=0;aIter != aEnd;++aIter)
     {
         OFieldDescription* pFieldDesc = (*aIter)->GetActFieldDescr();
-        if (pFieldDesc && pFieldDesc->GetName().getLength() && bCase(sName,pFieldDesc->GetName()))
+        if (pFieldDesc && !pFieldDesc->GetName().isEmpty() && bCase(sName,pFieldDesc->GetName()))
         { // found a second name of _rName so we need another
             sName = _rName + ::rtl::OUString::valueOf(++i);
             aIter = m_vRowList.begin(); // and retry
@@ -1535,14 +1535,14 @@ void OTableController::reSyncRows()
     try
     {
         // get the table
-        if ( m_sName.getLength() && getConnection().is() )
+        if ( !m_sName.isEmpty() && getConnection().is() )
         {
             if ( m_xTable.is() )
                 sTitle = ::dbtools::composeTableName( getConnection()->getMetaData(), m_xTable, ::dbtools::eInDataManipulation, false, false, false );
             else
                 sTitle = m_sName;
         }
-        if ( !sTitle.getLength() )
+        if ( sTitle.isEmpty() )
         {
             String aName = String(ModuleRes(STR_TBL_TITLE));
             sTitle = aName.GetToken(0,' ');
@@ -1572,7 +1572,7 @@ sal_Int32 OTableController::getFirstEmptyRowPosition()
     ::std::vector< ::boost::shared_ptr<OTableRow> >::const_iterator aEnd = m_vRowList.end();
     for(;aIter != aEnd;++aIter)
     {
-        if ( !*aIter || !(*aIter)->GetActFieldDescr() || !(*aIter)->GetActFieldDescr()->GetName().getLength() )
+        if ( !*aIter || !(*aIter)->GetActFieldDescr() || (*aIter)->GetActFieldDescr()->GetName().isEmpty() )
         {
             nRet = aIter - m_vRowList.begin();
             break;

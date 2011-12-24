@@ -80,7 +80,6 @@
 #include "rtl/ref.hxx"
 #include "slideshow.hrc"
 #include "canvas/elapsedtime.hxx"
-#include "canvas/prioritybooster.hxx"
 #include "avmedia/mediawindow.hxx"
 #include  "svtools/colrdlg.hxx"
 

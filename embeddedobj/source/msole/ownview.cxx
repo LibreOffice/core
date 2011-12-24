@@ -109,7 +109,7 @@ OwnView_Impl::~OwnView_Impl()
     } catch( uno::Exception& ) {}
 
     try {
-        if ( m_aNativeTempURL.getLength() )
+        if ( !m_aNativeTempURL.isEmpty() )
             KillFile_Impl( m_aNativeTempURL, m_xFactory );
     } catch( uno::Exception& ) {}
 }
@@ -119,7 +119,7 @@ sal_Bool OwnView_Impl::CreateModelFromURL( const ::rtl::OUString& aFileURL )
 {
     sal_Bool bResult = sal_False;
 
-    if ( aFileURL.getLength() )
+    if ( !aFileURL.isEmpty() )
     {
         try {
             uno::Reference < frame::XComponentLoader > xDocumentLoader(
@@ -129,7 +129,7 @@ sal_Bool OwnView_Impl::CreateModelFromURL( const ::rtl::OUString& aFileURL )
 
             if ( xDocumentLoader.is() )
             {
-                uno::Sequence< beans::PropertyValue > aArgs( m_aFilterName.getLength() ? 5 : 4 );
+                uno::Sequence< beans::PropertyValue > aArgs( m_aFilterName.isEmpty() ? 4 : 5 );
 
                 aArgs[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "URL" ));
                 aArgs[0].Value <<= aFileURL;
@@ -144,7 +144,7 @@ sal_Bool OwnView_Impl::CreateModelFromURL( const ::rtl::OUString& aFileURL )
                 aArgs[3].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "DontEdit" ));
                 aArgs[3].Value <<= sal_True;
 
-                if ( m_aFilterName.getLength() )
+                if ( !m_aFilterName.isEmpty() )
                 {
                     aArgs[4].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "FilterName" ));
                     aArgs[4].Value <<= m_aFilterName;
@@ -217,19 +217,19 @@ sal_Bool OwnView_Impl::CreateModel( sal_Bool bUseNative )
 
     ::rtl::OUString aTypeName;
 
-    if ( aNameWithExtention.getLength() )
+    if ( !aNameWithExtention.isEmpty() )
     {
         ::rtl::OUString aURLToAnalyze =
                 ( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "file:///" ) ) + aNameWithExtention );
         aTypeName = xTypeDetection->queryTypeByURL( aURLToAnalyze );
     }
 
-    uno::Sequence< beans::PropertyValue > aArgs( aTypeName.getLength() ? 3 : 2 );
+    uno::Sequence< beans::PropertyValue > aArgs( aTypeName.isEmpty() ? 2 : 3 );
     aArgs[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "URL" ) );
     aArgs[0].Value <<= ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:stream" ) );
     aArgs[1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "InputStream" ) );
     aArgs[1].Value <<= xInputStream;
-    if ( aTypeName.getLength() )
+    if ( !aTypeName.isEmpty() )
     {
         aArgs[2].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TypeName" ) );
         aArgs[2].Value <<= aTypeName;
@@ -242,7 +242,7 @@ sal_Bool OwnView_Impl::CreateModel( sal_Bool bUseNative )
         if ( aArgs[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "FilterName" ) ) )
             aArgs[nInd].Value >>= aFilterName;
 
-    if ( !aFilterName.getLength() && aTypeName.getLength() )
+    if ( aFilterName.isEmpty() && !aTypeName.isEmpty() )
     {
         // get the default filter name for the type
         uno::Reference< container::XNameAccess > xNameAccess( xTypeDetection, uno::UNO_QUERY_THROW );
@@ -415,7 +415,7 @@ sal_Bool OwnView_Impl::ReadContentsAndGenerateTempFile( const uno::Reference< io
 //--------------------------------------------------------
 void OwnView_Impl::CreateNative()
 {
-    if ( m_aNativeTempURL.getLength() )
+    if ( !m_aNativeTempURL.isEmpty() )
         return;
 
     try
@@ -459,7 +459,7 @@ void OwnView_Impl::CreateNative()
 
                     bOk = ReadContentsAndGenerateTempFile( xSubStream->getInputStream(), sal_True );
 
-                    if ( !bOk && m_aNativeTempURL.getLength() )
+                    if ( !bOk && !m_aNativeTempURL.isEmpty() )
                     {
                         KillFile_Impl( m_aNativeTempURL, m_xFactory );
                         m_aNativeTempURL = ::rtl::OUString();
@@ -470,7 +470,7 @@ void OwnView_Impl::CreateNative()
                 {
                     bOk = ReadContentsAndGenerateTempFile( xSubStream->getInputStream(), sal_False );
 
-                    if ( !bOk && m_aNativeTempURL.getLength() )
+                    if ( !bOk && !m_aNativeTempURL.isEmpty() )
                     {
                         KillFile_Impl( m_aNativeTempURL, m_xFactory );
                         m_aNativeTempURL = ::rtl::OUString();
@@ -532,13 +532,13 @@ sal_Bool OwnView_Impl::Open()
         if ( !bResult && !m_bUseNative )
         {
             // the original storage can not be recognized
-            if ( !m_aNativeTempURL.getLength() )
+            if ( m_aNativeTempURL.isEmpty() )
             {
                 // create a temporary file for the native representation if there is no
                 CreateNative();
             }
 
-            if ( m_aNativeTempURL.getLength() )
+            if ( !m_aNativeTempURL.isEmpty() )
             {
                 bResult = CreateModel( sal_True );
                 if ( bResult )

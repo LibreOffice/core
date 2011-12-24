@@ -414,7 +414,7 @@ static void onInputQueueDestroyed(ANativeActivity* activity, AInputQueue* queue)
     android_app_set_input((struct android_app*)activity->instance, NULL);
 }
 
-void ANativeActivity_onCreate(ANativeActivity* activity,
+__attribute__ ((visibility("default"))) void ANativeActivity_onCreate(ANativeActivity* activity,
         void* savedState, size_t savedStateSize) {
     LOGI("Creating: %p\n", activity);
     activity->callbacks->onDestroy = onDestroy;

@@ -245,13 +245,13 @@ void SAL_CALL OHSQLTable::alterColumnByName( const ::rtl::OUString& colName, con
         xProp->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_DEFAULTVALUE))     >>= sOldDefault;
         descriptor->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_DEFAULTVALUE)) >>= sNewDefault;
 
-        if(sOldDefault.getLength())
+        if(!sOldDefault.isEmpty())
         {
             dropDefaultValue(colName);
-            if(sNewDefault.getLength() && sOldDefault != sNewDefault)
+            if(!sNewDefault.isEmpty() && sOldDefault != sNewDefault)
                 alterDefaultValue(sNewDefault,sNewColumnName);
         }
-        else if(!sOldDefault.getLength() && sNewDefault.getLength())
+        else if(sOldDefault.isEmpty() && !sNewDefault.isEmpty())
             alterDefaultValue(sNewDefault,sNewColumnName);
 
         m_pColumns->refresh();

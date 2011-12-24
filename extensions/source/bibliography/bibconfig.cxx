@@ -194,7 +194,7 @@ BibConfig::BibConfig() :
             {
                 pAssignmentValues[nFieldIdx++] >>= sTempLogical;
                 pAssignmentValues[nFieldIdx++] >>= sTempReal;
-                if(sTempLogical.getLength() && sTempReal.getLength())
+                if(!(sTempLogical.isEmpty() || sTempReal.isEmpty()))
                 {
                     pMapping->aColumnPairs[nSetMapping].sLogicalColumnName = sTempLogical;
                     pMapping->aColumnPairs[nSetMapping++].sRealColumnName = sTempReal;
@@ -290,7 +290,7 @@ void    BibConfig::Commit()
         ClearNodeSet( sPrefix );
 
         while(nFieldAssignment < COLUMN_COUNT &&
-            pMapping->aColumnPairs[nFieldAssignment].sLogicalColumnName.getLength())
+            !pMapping->aColumnPairs[nFieldAssignment].sLogicalColumnName.isEmpty())
         {
             OUString sSubPrefix(sPrefix);
             sSubPrefix += C2U("/_");

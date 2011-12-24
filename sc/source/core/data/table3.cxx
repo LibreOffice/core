@@ -1683,14 +1683,25 @@ public:
 
     void operator() (ScQueryEntry::Item& rItem)
     {
-        // Double-check if the query by date is really appropriate.
-
-        if (rItem.meType != ScQueryEntry::ByDate)
+        if (rItem.meType != ScQueryEntry::ByString && rItem.meType != ScQueryEntry::ByDate)
             return;
 
         sal_uInt32 nIndex = 0;
         bool bNumber = mrDoc.GetFormatTable()->
             IsNumberFormat(rItem.maString, nIndex, rItem.mfVal);
+
+        // Advanced Filter creates only ByString queries that need to be
+        // converted to ByValue if appropriate. rItem.mfVal now holds the value
+        // if bNumber==true.
+
+        if (rItem.meType == ScQueryEntry::ByString)
+        {
+            if (bNumber)
+                rItem.meType = ScQueryEntry::ByValue;
+            return;
+        }
+
+        // Double-check if the query by date is really appropriate.
 
         if (bNumber && ((nIndex % SV_COUNTRY_LANGUAGE_OFFSET) != 0))
         {

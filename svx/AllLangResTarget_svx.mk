@@ -39,7 +39,6 @@ $(eval $(call gb_SrsTarget_SrsTarget,svx/res))
 $(eval $(call gb_SrsTarget_set_include,svx/res,\
     $$(INCLUDE) \
     -I$(OUTDIR)/inc \
-    -I$(WORKDIR)/inc \
     -I$(WORKDIR)/inc/svx \
     -I$(realpath $(SRCDIR)/svx/source/inc) \
     -I$(realpath $(SRCDIR)/svx/source/dialog) \
@@ -98,46 +97,8 @@ $(eval $(call gb_SrsTarget_add_files,svx/res,\
     svx/source/unodraw/unodraw.src \
 ))
 
-$(call gb_SrsPartTarget_get_target,svx/source/fmcomp/gridctrl.src) : $(OUTDIR)/inc/svx/globlmn.hrc
-$(call gb_SrsPartTarget_get_target,svx/source/form/fmexpl.src) : $(OUTDIR)/inc/svx/globlmn.hrc
-$(call gb_SrsPartTarget_get_target,svx/source/form/datanavi.src) : $(OUTDIR)/inc/svx/globlmn.hrc
-$(call gb_SrsPartTarget_get_target,svx/source/form/formshell.src) : $(OUTDIR)/inc/svx/globlmn.hrc
-$(call gb_SrsTarget_get_clean_target,svx/res) : $(OUTDIR)/inc/svx/globlmn.hrc_clean
-
-# hack !!!
-# just a temporary - globlmn.hrc about to be removed!
-
-$(OUTDIR)/inc/svx/globlmn.hrc: $(WORKDIR)/inc/svx/globlmn.hrc
-
-ifeq ($(strip $(WITH_LANG)),)
-$(WORKDIR)/inc/svx/globlmn.hrc : $(realpath $(SRCDIR)/svx/inc/globlmn_tmpl.hrc)
-	echo copying $@
-	-mkdir -p $(WORKDIR)/inc/svx
-	cp $< $@
-	$(call gb_Deliver_deliver, $@, $(OUTDIR)/inc/svx/globlmn.hrc)
-	rm -f $(WORKDIR)/inc/svx/lastrun.mk
-else
--include $(WORKDIR)/inc/svx/lastrun.mk
-ifneq ($(gb_lastrun_globlmn),MERGED)
-.PHONY : $(WORKDIR)/inc/svx/globlmn.hrc
-endif
-$(WORKDIR)/inc/svx/globlmn.hrc : $(realpath $(SRCDIR)/svx/inc/globlmn_tmpl.hrc) $(realpath $(gb_SrsPartMergeTarget_SDFLOCATION)/svx/inc/localize.sdf)
-	echo merging $@
-	-mkdir -p $(WORKDIR)/inc/svx
-	rm -f $(WORKDIR)/inc/svx/lastrun.mk
-	echo gb_lastrun_globlmn:=MERGED > $(WORKDIR)/inc/svx/lastrun.mk
-	$(call gb_Helper_abbreviate_dirs_native, \
-            $(gb_SrsPartMergeTarget_TRANSEXCOMMAND) \
-            -p svx \
-            -i $< -o $@ -m $(realpath $(gb_SrsPartMergeTarget_SDFLOCATION)/svx/inc/localize.sdf) -l all)
-	$(call gb_Deliver_deliver, $@, $(OUTDIR)/inc/svx/globlmn.hrc)
-endif
-
-.PHONY : $(OUTDIR)/inc/svx/globlmn.hrc_clean
-$(OUTDIR)/inc/svx/globlmn.hrc_clean :
-	rm -f $(WORKDIR)/inc/svx/lastrun.mk \
-		 $(WORKDIR)/inc/svx/globlmn.hrc \
-		 $(OUTDIR)/inc/svx/globlmn.hrc \
-
+$(eval $(call gb_SrsTarget_add_templates,svx/res,\
+	svx/inc/globlmn_tmpl.hrc \
+))
 
 # vim: set noet sw=4 ts=4:

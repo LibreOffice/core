@@ -160,7 +160,7 @@ extern "C" JNIEXPORT jobject JNICALL Java_com_sun_star_comp_helper_Bootstrap_cpp
 
         return jlocal;
     }
-    catch (RuntimeException & exc)
+    catch (const RuntimeException & exc)
     {
         jclass c = jni_env->FindClass( "com/sun/star/uno/RuntimeException" );
         if (0 != c)
@@ -171,7 +171,7 @@ extern "C" JNIEXPORT jobject JNICALL Java_com_sun_star_comp_helper_Bootstrap_cpp
             jni_env->ThrowNew( c, cstr.getStr() );
         }
     }
-    catch (Exception & exc)
+    catch (const Exception & exc)
     {
         jclass c = jni_env->FindClass( "com/sun/star/uno/Exception" );
         if (0 != c)

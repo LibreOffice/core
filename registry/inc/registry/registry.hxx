@@ -843,7 +843,7 @@ inline ::rtl::OUString RegistryKey::getName()
         ::rtl::OUString sRet;
         if (m_registry.isValid())
             m_registry.m_pApi->getKeyName(m_hImpl, &sRet.pData);
-        return sRet;;
+        return sRet;
     }
 
 inline RegError RegistryKey::createKey(const ::rtl::OUString& keyName,

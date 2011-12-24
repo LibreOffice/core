@@ -141,42 +141,47 @@ AnimationBaseNode::AnimationBaseNode(
 
             // okay, found a ParagraphTarget with a valid XShape. Does the shape
             // provide the given paragraph?
-            const DocTreeNode& rTreeNode(
-                mpShape->getTreeNodeSupplier().getTreeNode(
-                    aTarget.Paragraph,
-                    DocTreeNode::NODETYPE_LOGICAL_PARAGRAPH ) );
+            if( aTarget.Paragraph >= 0 &&
+                mpShape->getTreeNodeSupplier().getNumberOfTreeNodes(
+                    DocTreeNode::NODETYPE_LOGICAL_PARAGRAPH) > aTarget.Paragraph )
+            {
+                const DocTreeNode& rTreeNode(
+                    mpShape->getTreeNodeSupplier().getTreeNode(
+                        aTarget.Paragraph,
+                        DocTreeNode::NODETYPE_LOGICAL_PARAGRAPH ) );
 
-            // CAUTION: the creation of the subset shape
-            // _must_ stay in the node constructor, since
-            // Slide::prefetchShow() initializes shape
-            // attributes right after animation import (or
-            // the Slide class must be changed).
-            mpShapeSubset.reset(
-                new ShapeSubset( mpShape,
-                                 rTreeNode,
-                                 mpSubsetManager ));
+                // CAUTION: the creation of the subset shape
+                // _must_ stay in the node constructor, since
+                // Slide::prefetchShow() initializes shape
+                // attributes right after animation import (or
+                // the Slide class must be changed).
+                mpShapeSubset.reset(
+                    new ShapeSubset( mpShape,
+                                     rTreeNode,
+                                     mpSubsetManager ));
 
-            // Override NodeContext, and flag this node as
-            // a special independent subset one. This is
-            // important when applying initial attributes:
-            // independent shape subsets must be setup
-            // when the slide starts, since they, as their
-            // name suggest, can have state independent to
-            // the master shape. The following example
-            // might illustrate that: a master shape has
-            // no effect, one of the text paragraphs
-            // within it has an appear effect. Now, the
-            // respective paragraph must be invisible when
-            // the slide is initially shown, and become
-            // visible only when the effect starts.
-            mbIsIndependentSubset = true;
+                // Override NodeContext, and flag this node as
+                // a special independent subset one. This is
+                // important when applying initial attributes:
+                // independent shape subsets must be setup
+                // when the slide starts, since they, as their
+                // name suggest, can have state independent to
+                // the master shape. The following example
+                // might illustrate that: a master shape has
+                // no effect, one of the text paragraphs
+                // within it has an appear effect. Now, the
+                // respective paragraph must be invisible when
+                // the slide is initially shown, and become
+                // visible only when the effect starts.
+                mbIsIndependentSubset = true;
 
-            // already enable subset right here, the
-            // setup of initial shape attributes of
-            // course needs the subset shape
-            // generated, to apply e.g. visibility
-            // changes.
-            mpShapeSubset->enableSubsetShape();
+                // already enable subset right here, the
+                // setup of initial shape attributes of
+                // course needs the subset shape
+                // generated, to apply e.g. visibility
+                // changes.
+                mpShapeSubset->enableSubsetShape();
+            }
         }
     }
 }

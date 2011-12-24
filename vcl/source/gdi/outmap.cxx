@@ -274,7 +274,7 @@ static void ImplCalcMapResolution( const MapMode& rMapMode,
             else
                 rMapRes.mnMapScNumX   = pSVData->maGDIData.mnAppFontX;
             rMapRes.mnMapScDenomX = nDPIX * 40;
-            rMapRes.mnMapScNumY   = pSVData->maGDIData.mnAppFontY;;
+            rMapRes.mnMapScNumY   = pSVData->maGDIData.mnAppFontY;
             rMapRes.mnMapScDenomY = nDPIY * 80;
             }
             break;

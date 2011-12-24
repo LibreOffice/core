@@ -253,23 +253,6 @@ void    SvxHtmlOptions::Commit()
     PutProperties(aNames, aValues);
 }
 
-void SvxHtmlOptions::AddListenerLink( const Link& rLink )
-{
-    pImp->aList.push_back( rLink );
-}
-
-void SvxHtmlOptions::RemoveListenerLink( const Link& rLink )
-{
-    for ( ::std::list<Link>::iterator iter = pImp->aList.begin(); iter != pImp->aList.end(); ++iter )
-    {
-        if ( *iter == rLink )
-        {
-            pImp->aList.erase(iter);
-            break;
-        }
-    }
-}
-
 void SvxHtmlOptions::CallListeners()
 {
     for ( ::std::list<Link>::const_iterator iter = pImp->aList.begin(); iter != pImp->aList.end(); ++iter )

@@ -108,19 +108,6 @@ public:
     virtual ~UndoGuardWithSelection();
 };
 
-class UndoContext
-{
-public:
-    UndoContext(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::document::XUndoManager > & i_undoManager,
-        const ::rtl::OUString& i_undoTitle
-    );
-    ~UndoContext();
-
-private:
-    const ::com::sun::star::uno::Reference< ::com::sun::star::document::XUndoManager >  m_xUndoManager;
-};
-
 class HiddenUndoContext
 {
 public:

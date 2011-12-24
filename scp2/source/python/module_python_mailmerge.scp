@@ -32,7 +32,7 @@
 File gid_File_Pymailmerge
     TXT_FILE_BODY;
     Dir = gid_Brand_Dir_Program;
-	name = "mailmerge.zip";
+    Name = "mailmerge.zip";
     Styles = (ARCHIVE);
 End
 #endif

@@ -114,7 +114,7 @@ namespace dbaccess
             DBG_UNHANDLED_EXCEPTION();
         }
 
-        if ( !sDisplayMessage.getLength() )
+        if ( sDisplayMessage.isEmpty() )
         {
             Exception aExcept;
             _rError >>= aExcept;

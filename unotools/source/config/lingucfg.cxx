@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
@@ -59,15 +57,11 @@ using ::rtl::Uri;
 #define EXPAND_PROTOCOL     "vnd.sun.star.expand:"
 #define FILE_PROTOCOL       "file:///"
 
-///////////////////////////////////////////////////////////////////////////
-
 namespace
 {
     class theSvtLinguConfigItemMutex :
         public rtl::Static< osl::Mutex, theSvtLinguConfigItemMutex > {};
 }
-
-///////////////////////////////////////////////////////////////////////////
 
 static sal_Bool lcl_SetLocale( sal_Int16 &rLanguage, const uno::Any &rVal )
 {
@@ -86,7 +80,6 @@ static sal_Bool lcl_SetLocale( sal_Int16 &rLanguage, const uno::Any &rVal )
     return bSucc;
 }
 
-
 static inline const OUString lcl_LanguageToCfgLocaleStr( sal_Int16 nLanguage )
 {
     OUString aRes;
@@ -95,16 +88,12 @@ static inline const OUString lcl_LanguageToCfgLocaleStr( sal_Int16 nLanguage )
     return aRes;
 }
 
-
 static sal_Int16 lcl_CfgAnyToLanguage( const uno::Any &rVal )
 {
     OUString aTmp;
     rVal >>= aTmp;
     return (aTmp.getLength() == 0) ? LANGUAGE_SYSTEM : MsLangId::convertIsoStringToLanguage( aTmp );
 }
-
-
-//////////////////////////////////////////////////////////////////////
 
 SvtLinguOptions::SvtLinguOptions()
 {
@@ -154,10 +143,6 @@ SvtLinguOptions::SvtLinguOptions()
 
 }
 
-
-//////////////////////////////////////////////////////////////////////
-
-
 class SvtLinguConfigItem : public utl::ConfigItem
 {
     SvtLinguOptions     aOpt;
@@ -198,8 +183,7 @@ public:
     sal_Bool    SetProperty( sal_Int32 nPropertyHandle,
                          const com::sun::star::uno::Any &rValue );
 
-    sal_Bool    GetOptions( SvtLinguOptions &rOptions ) const;
-    sal_Bool    SetOptions( const SvtLinguOptions &rOptions );
+    const SvtLinguOptions& GetOptions() const;
 
     sal_Bool    IsReadOnly( const rtl::OUString &rPropertyName ) const;
     sal_Bool    IsReadOnly( sal_Int32 nPropertyHandle ) const;
@@ -571,26 +555,11 @@ sal_Bool SvtLinguConfigItem::SetProperty( sal_Int32 nPropertyHandle, const uno::
     return bSucc;
 }
 
-
-sal_Bool SvtLinguConfigItem::GetOptions( SvtLinguOptions &rOptions ) const
+const SvtLinguOptions& SvtLinguConfigItem::GetOptions() const
 {
     osl::MutexGuard aGuard(theSvtLinguConfigItemMutex::get());
-
-    rOptions = aOpt;
-    return sal_True;
+    return aOpt;
 }
-
-
-sal_Bool SvtLinguConfigItem::SetOptions( const SvtLinguOptions &rOptions )
-{
-    osl::MutexGuard aGuard(theSvtLinguConfigItemMutex::get());
-
-    aOpt = rOptions;
-    SetModified();
-    NotifyListeners(0);
-    return sal_True;
-}
-
 
 sal_Bool SvtLinguConfigItem::LoadOptions( const uno::Sequence< OUString > &rProperyNames )
 {
@@ -856,7 +825,6 @@ SvtLinguConfig::SvtLinguConfig()
     ++nCfgItemRefCount;
 }
 
-
 SvtLinguConfig::~SvtLinguConfig()
 {
     osl::MutexGuard aGuard(theSvtLinguConfigItemMutex::get());
@@ -872,7 +840,6 @@ SvtLinguConfig::~SvtLinguConfig()
     }
 }
 
-
 SvtLinguConfigItem & SvtLinguConfig::GetConfigItem()
 {
     // Global access, must be guarded (multithreading)
@@ -885,18 +852,15 @@ SvtLinguConfigItem & SvtLinguConfig::GetConfigItem()
     return *pCfgItem;
 }
 
-
 uno::Sequence< OUString > SvtLinguConfig::GetNodeNames( const OUString &rNode )
 {
     return GetConfigItem().GetNodeNames( rNode );
 }
 
-
 uno::Sequence< uno::Any > SvtLinguConfig::GetProperties( const uno::Sequence< OUString > &rNames )
 {
     return GetConfigItem().GetProperties(rNames);
 }
-
 
 sal_Bool SvtLinguConfig::ReplaceSetProperties(
         const OUString &rNode, uno::Sequence< beans::PropertyValue > rValues )
@@ -904,51 +868,35 @@ sal_Bool SvtLinguConfig::ReplaceSetProperties(
     return GetConfigItem().ReplaceSetProperties( rNode, rValues );
 }
 
-
 uno::Any SvtLinguConfig::GetProperty( const OUString &rPropertyName ) const
 {
     return GetConfigItem().GetProperty( rPropertyName );
 }
-
 
 uno::Any SvtLinguConfig::GetProperty( sal_Int32 nPropertyHandle ) const
 {
     return GetConfigItem().GetProperty( nPropertyHandle );
 }
 
-
 sal_Bool SvtLinguConfig::SetProperty( const OUString &rPropertyName, const uno::Any &rValue )
 {
     return GetConfigItem().SetProperty( rPropertyName, rValue );
 }
-
 
 sal_Bool SvtLinguConfig::SetProperty( sal_Int32 nPropertyHandle, const uno::Any &rValue )
 {
     return GetConfigItem().SetProperty( nPropertyHandle, rValue );
 }
 
-
 sal_Bool SvtLinguConfig::GetOptions( SvtLinguOptions &rOptions ) const
 {
-    return GetConfigItem().GetOptions( rOptions );
+    rOptions = GetConfigItem().GetOptions();
+    return sal_True;
 }
-
-
-sal_Bool SvtLinguConfig::SetOptions( const SvtLinguOptions &rOptions )
-{
-    return GetConfigItem().SetOptions( rOptions );
-}
-
 
 sal_Bool SvtLinguConfig::IsReadOnly( const rtl::OUString &rPropertyName ) const
 {
     return GetConfigItem().IsReadOnly( rPropertyName );
-}
-
-sal_Bool SvtLinguConfig::IsReadOnly( sal_Int32 nPropertyHandle ) const
-{
-    return GetConfigItem().IsReadOnly( nPropertyHandle );
 }
 
 sal_Bool SvtLinguConfig::GetElementNamesFor(

@@ -52,7 +52,6 @@ class SvMetaAttribute : public SvMetaReference
     sal_Bool                bNewAttr;
 
 protected:
-#ifdef IDL_COMPILER
     virtual void WriteCSource( SvIdlDataBase & rBase,
                                  SvStream & rOutStm, sal_Bool bSet );
     sal_uLong        MakeSlotValue( SvIdlDataBase & rBase, sal_Bool bVariable ) const;
@@ -63,7 +62,6 @@ protected:
                                       SvTokenStream & rInStm );
     virtual void WriteAttributesSvIdl( SvIdlDataBase & rBase,
                                     SvStream & rOutStm, sal_uInt16 nTab );
-#endif
 public:
             SV_DECL_META_FACTORY1( SvMetaAttribute, SvMetaReference, 2 )
                         SvMetaAttribute();
@@ -106,7 +104,6 @@ public:
     virtual rtl::OString    GetMangleName( sal_Bool bVariable ) const;
 
 
-#ifdef IDL_COMPILER
     virtual sal_Bool        Test( SvIdlDataBase &, SvTokenStream & rInStm );
     virtual sal_Bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
     virtual void        WriteSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab );
@@ -127,7 +124,6 @@ public:
     virtual void        WriteCSV( SvIdlDataBase&, SvStream& );
     void                FillIDTable(Table *pIDTable);
     ByteString              Compare( SvMetaAttribute *pAttr );
-#endif
 };
 SV_IMPL_REF(SvMetaAttribute)
 SV_IMPL_PERSIST_LIST(SvMetaAttribute,SvMetaAttribute *)
@@ -154,7 +150,6 @@ class SvMetaType : public SvMetaExtern
     sal_Bool                        bIsShell;
     char                        cParserChar;
 
-#ifdef IDL_COMPILER
     void    WriteSfxItem( const ByteString & rItemName, SvIdlDataBase & rBase,
                         SvStream & rOutStm );
 protected:
@@ -174,7 +169,6 @@ protected:
     sal_Bool    ReadHeaderSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
     void    WriteHeaderSvIdl( SvIdlDataBase &, SvStream & rOutStm,
                               sal_uInt16 nTab );
-#endif
 public:
             SV_DECL_META_FACTORY1( SvMetaType, SvMetaExtern, 18 )
             SvMetaType();
@@ -215,7 +209,7 @@ public:
     int                 GetCall1() const;
 
     void                SetBasicName(const ByteString& rName)
-                        { aBasicName = rName; }
+                        { aBasicName.setIdentifier(rName); }
 
     const ByteString &      GetBasicName() const;
     ByteString              GetBasicPostfix() const;
@@ -228,7 +222,6 @@ public:
     virtual sal_Bool        SetName( const ByteString & rName, SvIdlDataBase * = NULL );
 
 
-#ifdef IDL_COMPILER
     virtual sal_Bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
     virtual void        WriteSvIdl( SvIdlDataBase & rBase,
                                     SvStream & rOutStm, sal_uInt16 nTab );
@@ -249,7 +242,6 @@ public:
     rtl::OString GetParserString() const;
     void                WriteParamNames( SvIdlDataBase & rBase, SvStream & rOutStm,
                                         const ByteString & rChief );
-#endif
 };
 SV_IMPL_REF(SvMetaType)
 SV_DECL_IMPL_PERSIST_LIST(SvMetaType,SvMetaType *)
@@ -272,12 +264,10 @@ public:
             SV_DECL_META_FACTORY1( SvMetaEnumValue, SvMetaName, 20 )
             SvMetaEnumValue();
 
-#ifdef IDL_COMPILER
     virtual sal_Bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
     virtual void        WriteSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab );
     virtual void        Write( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab,
                                   WriteType, WriteAttribute = 0 );
-#endif
 };
 SV_DECL_IMPL_REF(SvMetaEnumValue)
 SV_DECL_IMPL_PERSIST_LIST(SvMetaEnumValue,SvMetaEnumValue *)
@@ -288,13 +278,11 @@ class SvMetaTypeEnum : public SvMetaType
     SvMetaEnumValueMemberList   aEnumValueList;
     ByteString                      aPrefix;
 protected:
-#ifdef IDL_COMPILER
     virtual void ReadContextSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
     virtual void WriteContextSvIdl( SvIdlDataBase &, SvStream & rOutStm,
                                    sal_uInt16 nTab );
     virtual void WriteContext( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab,
                                   WriteType, WriteAttribute = 0 );
-#endif
 public:
             SV_DECL_META_FACTORY1( SvMetaTypeEnum, SvMetaType, 21 )
             SvMetaTypeEnum();
@@ -305,14 +293,12 @@ public:
     SvMetaEnumValue *   GetObject( sal_uLong n ) const
                         { return aEnumValueList.GetObject( n ); }
 
-#ifdef IDL_COMPILER
     virtual sal_Bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
     virtual void        WriteSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab );
 
     virtual void        Write( SvIdlDataBase & rBase, SvStream & rOutStm,
                                 sal_uInt16 nTab,
                                   WriteType, WriteAttribute = 0 );
-#endif
 };
 SV_DECL_IMPL_REF(SvMetaTypeEnum)
 SV_DECL_IMPL_PERSIST_LIST(SvMetaTypeEnum,SvMetaTypeEnum *)

@@ -164,7 +164,7 @@ have to bother about registering.
 @param module a module handle as is obtained by osl_loadModule
 @return sal_True - the module could be registered for unloading, sal_False otherwise
 */
-sal_Bool SAL_CALL rtl_registerModuleForUnloading( oslModule module);
+SAL_DLLPUBLIC sal_Bool SAL_CALL rtl_registerModuleForUnloading( oslModule module);
 
 /**
 The function revokes the registration of a module. By calling the function for
@@ -177,7 +177,7 @@ there is no need to call this function unless one means to prevent the unloading
 
 @param module a module handle as is obtained by osl_loadModule
 */
-void SAL_CALL rtl_unregisterModuleForUnloading( oslModule module);
+SAL_DLLPUBLIC void SAL_CALL rtl_unregisterModuleForUnloading( oslModule module);
 /**
 This function sets off the unloading mechanism. At first it notifies the
 unloading listeners in order to give them a chance to do cleanup and get
@@ -203,7 +203,7 @@ registered listeners and release the references to factories on notification.
 @param libUnused span of time that a module must be unused to be unloaded. the
 argument is optional.
 */
-void SAL_CALL rtl_unloadUnusedModules( TimeValue* libUnused);
+SAL_DLLPUBLIC void SAL_CALL rtl_unloadUnusedModules( TimeValue* libUnused);
 
 /**
 rtl_addUnloadingListener takes an argument of this type.
@@ -225,7 +225,7 @@ as it has been registered.
 @param this  - a value to distinguish different listener instances
 @return identifier which is used in rtl_removeUnloadingListener
 */
-sal_Int32 SAL_CALL rtl_addUnloadingListener( rtl_unloadingListenerFunc callback, void* _this);
+SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_addUnloadingListener( rtl_unloadingListenerFunc callback, void* _this);
 
 /**
 Listeners (the callback functions) must be unregistered before the listener code
@@ -235,7 +235,7 @@ registered when <code>component_canUnload</code> returns <code>sal_True</code>.
 
 @param cookie is an identifier as returned by <code>rtl_addUnloadingListener</code> function.
 */
-void SAL_CALL rtl_removeUnloadingListener( sal_Int32 cookie );
+SAL_DLLPUBLIC void SAL_CALL rtl_removeUnloadingListener( sal_Int32 cookie );
 
 
 /**
@@ -295,17 +295,17 @@ typedef struct _rtl_StandardModuleCount
 /** Default implementation for <code>rtl_ModuleCount.acquire</code>. Use this function along with
 <code>rtl_StandardModuleCount</code>.
 */
-void rtl_moduleCount_acquire(rtl_ModuleCount * that );
+SAL_DLLPUBLIC void rtl_moduleCount_acquire(rtl_ModuleCount * that );
 /** Default implementation for <code>rtl_ModuleCount.release</code>.
 Use this function along with
 <code>rtl_StandardModuleCount</code>.
 */
-void rtl_moduleCount_release( rtl_ModuleCount * that );
+SAL_DLLPUBLIC void rtl_moduleCount_release( rtl_ModuleCount * that );
 
 /** Default implementation for <code>component_canUnload</code>. Use this function along with
 <code>rtl_StandardModuleCount</code>.
 */
-sal_Bool rtl_moduleCount_canUnload( rtl_StandardModuleCount * that, TimeValue* libUnused);
+SAL_DLLPUBLIC sal_Bool rtl_moduleCount_canUnload( rtl_StandardModuleCount * that, TimeValue* libUnused);
 
 
 #ifdef __cplusplus

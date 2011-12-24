@@ -130,7 +130,7 @@ BackendImpl * BackendImpl::PackageImpl::getMyBackend() const
 //______________________________________________________________________________
 OUString BackendImpl::PackageImpl::getDescription() throw (RuntimeException)
 {
-    if (m_descr.getLength() == 0)
+    if (m_descr.isEmpty())
         return Package::getDescription();
     else
         return m_descr;
@@ -154,7 +154,7 @@ BackendImpl::PackageImpl::PackageImpl(
     initPackageHandler();
 
     sal_Int32 segmEnd = url.getLength();
-    if (url.getLength() > 0 && url[ url.getLength() - 1 ] == '/')
+    if (!url.isEmpty() && url[ url.getLength() - 1 ] == '/')
         --segmEnd;
     sal_Int32 segmStart = (url.lastIndexOf( '/', segmEnd ) + 1);
     if (segmStart < 0)
@@ -207,7 +207,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
     OUString const & identifier, Reference<XCommandEnvironment> const & xCmdEnv )
 {
     OUString mediaType( mediaType_ );
-    if (mediaType.getLength() == 0)
+    if (mediaType.isEmpty())
     {
         // detect media-type:
         ::ucbhelper::Content ucbContent;
@@ -222,7 +222,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
                 mediaType = OUSTR("application/vnd.sun.star.framework-script");
             }
         }
-        if (mediaType.getLength() == 0)
+        if (mediaType.isEmpty())
             throw lang::IllegalArgumentException(
                 StrCannotDetectMediaType::get() + url,
                 static_cast<OWeakObject *>(this), static_cast<sal_Int16>(-1) );

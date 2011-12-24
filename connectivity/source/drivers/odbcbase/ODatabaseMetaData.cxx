@@ -1220,7 +1220,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsANSI92IntermediateSQL(  ) throw(SQL
 ::rtl::OUString SAL_CALL ODatabaseMetaData::getURL(  ) throw(SQLException, RuntimeException)
 {
     ::rtl::OUString aValue = m_pConnection->getURL();
-    if ( !aValue.getLength() )
+    if ( aValue.isEmpty() )
     {
         aValue = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:odbc:"));
         aValue += getURLImpl();

@@ -1051,9 +1051,9 @@ bool openDialogFormula_nothrow( ::rtl::OUString& _in_out_rFormula
             }
         }
     }
-    catch (sdb::SQLContext& e) { aErrorInfo = e; }
-    catch (sdbc::SQLWarning& e) { aErrorInfo = e; }
-    catch (sdbc::SQLException& e) { aErrorInfo = e; }
+    catch (const sdb::SQLContext& e) { aErrorInfo = e; }
+    catch (const sdbc::SQLWarning& e) { aErrorInfo = e; }
+    catch (const sdbc::SQLException& e) { aErrorInfo = e; }
     catch( const uno::Exception& )
     {
         OSL_FAIL( "GeometryHandler::impl_dialogFilter_nothrow: caught an exception!" );

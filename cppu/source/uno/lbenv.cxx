@@ -715,7 +715,7 @@ static void writeLine(
 }
 
 //##############################################################################
-extern "C" void SAL_CALL uno_dumpEnvironment(
+extern "C" CPPU_DLLPUBLIC void SAL_CALL uno_dumpEnvironment(
     void * stream, uno_Environment * pEnv, const sal_Char * pFilter )
     SAL_THROW_EXTERN_C()
 {
@@ -802,7 +802,7 @@ extern "C" void SAL_CALL uno_dumpEnvironment(
 }
 
 //##############################################################################
-extern "C" void SAL_CALL uno_dumpEnvironmentByName(
+extern "C" CPPU_DLLPUBLIC void SAL_CALL uno_dumpEnvironmentByName(
     void * stream, rtl_uString * pEnvDcp, const sal_Char * pFilter )
     SAL_THROW_EXTERN_C()
 {
@@ -1031,7 +1031,7 @@ inline void EnvironmentsData::getRegisteredEnvironments(
           iPos != aName2EnvMap.end(); ++iPos )
     {
         uno_Environment * pWeak = iPos->second;
-        if (!rEnvDcp.getLength() ||
+        if (rEnvDcp.isEmpty() ||
             rEnvDcp.equals( pWeak->pTypeName ))
         {
             ppFound[nSize] = 0;
@@ -1116,7 +1116,7 @@ static uno_Environment * initDefaultEnvironment(
         that->releaseInterface = unoenv_releaseInterface;
 
         OUString envPurpose = cppu::EnvDcp::getPurpose(rEnvDcp);
-        if (envPurpose.getLength())
+        if (!envPurpose.isEmpty())
         {
             rtl::OUString libStem = envPurpose.copy(envPurpose.lastIndexOf(':') + 1);
             libStem += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("_uno_uno") );
@@ -1147,7 +1147,7 @@ static uno_Environment * initDefaultEnvironment(
 }
 
 //##############################################################################
-void SAL_CALL uno_createEnvironment(
+CPPU_DLLPUBLIC void SAL_CALL uno_createEnvironment(
     uno_Environment ** ppEnv, rtl_uString * pEnvDcp, void * pContext )
     SAL_THROW_EXTERN_C()
 {
@@ -1183,7 +1183,7 @@ void SAL_CALL uno_direct_getEnvironment(
 }
 
 //##############################################################################
-void SAL_CALL uno_getRegisteredEnvironments(
+CPPU_DLLPUBLIC void SAL_CALL uno_getRegisteredEnvironments(
     uno_Environment *** pppEnvs, sal_Int32 * pnLen, uno_memAlloc memAlloc,
     rtl_uString * pEnvDcp )
     SAL_THROW_EXTERN_C()

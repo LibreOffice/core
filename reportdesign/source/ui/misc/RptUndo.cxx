@@ -154,7 +154,7 @@ OSectionUndo::~OSectionUndo()
             {
                 comphelper::disposeComponent(xShape);
             }
-            catch(uno::Exception)
+            catch(const uno::Exception &)
             {
                 OSL_FAIL("Exception caught!");
             }

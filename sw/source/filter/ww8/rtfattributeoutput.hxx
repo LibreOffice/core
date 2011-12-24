@@ -529,6 +529,10 @@ private:
      */
     bool m_bWroteCellInfo;
 
+    /*
+     * If we had a field result in the URL.
+     */
+    bool m_bHadFieldResult;
 public:
     RtfAttributeOutput( RtfExport &rExport );
 

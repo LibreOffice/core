@@ -311,7 +311,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
     Reference<XCommandEnvironment> const & xCmdEnv )
 {
     OUString mediaType( mediaType_ );
-    if (mediaType.getLength() == 0)
+    if (mediaType.isEmpty())
     {
         // detect media-type:
         ::ucbhelper::Content ucbContent;
@@ -330,7 +330,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
                                   "vnd.sun.star.configuration-schema");
             }
         }
-        if (mediaType.getLength() == 0)
+        if (mediaType.isEmpty())
             throw lang::IllegalArgumentException(
                 StrCannotDetectMediaType::get() + url,
                 static_cast<OWeakObject *>(this), static_cast<sal_Int16>(-1) );
@@ -396,7 +396,7 @@ void BackendImpl::configmgrini_verify_init(
                 sal_Int32 index = RTL_CONSTASCII_LENGTH("SCHEMA=");
                 do {
                     OUString token( line.getToken( 0, ' ', index ).trim() );
-                    if (token.getLength() > 0) {
+                    if (!token.isEmpty()) {
                         //The  file may not exist anymore if a shared or bundled
                         //extension was removed, but it can still be in the configmgrini.
                         //After running XExtensionManager::synchronize, the configmgrini is
@@ -411,7 +411,7 @@ void BackendImpl::configmgrini_verify_init(
                 sal_Int32 index = RTL_CONSTASCII_LENGTH("DATA=");
                 do {
                     OUString token( line.getToken( 0, ' ', index ).trim() );
-                    if (token.getLength() > 0)
+                    if (!token.isEmpty())
                     {
                         if (token[ 0 ] == '?')
                             token = token.copy( 1 );
@@ -660,7 +660,7 @@ OUString replaceOrigin(
                      RTL_CONSTASCII_STRINGPARAM("origin%"),
                      RTL_CONSTASCII_LENGTH("origin%")) == 0)
         {
-            if (origin.getLength() == 0) {
+            if (origin.isEmpty()) {
                 // encode only once
                 origin = ::rtl::OUStringToOString(
                     encodeForXml( url.copy( 0, url.lastIndexOf( '/' ) ) ),
@@ -683,7 +683,7 @@ OUString replaceOrigin(
     if (write_pos < filtered.getLength())
         filtered.realloc( write_pos );
     rtl::OUString newUrl(url);
-    if (destFolder.getLength())
+    if (!destFolder.isEmpty())
     {
         //get the file name of the xcu and add it to the url of the temporary folder
         sal_Int32 i = url.lastIndexOf('/');

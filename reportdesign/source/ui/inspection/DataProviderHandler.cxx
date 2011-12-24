@@ -75,7 +75,7 @@ DataProviderHandler::DataProviderHandler(uno::Reference< uno::XComponentContext 
         m_xFormComponentHandler.set(m_xContext->getServiceManager()->createInstanceWithContext(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.inspection.FormComponentPropertyHandler")),m_xContext),uno::UNO_QUERY_THROW);
         m_xTypeConverter.set(m_xContext->getServiceManager()->createInstanceWithContext( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.script.Converter" )),m_xContext),uno::UNO_QUERY_THROW);
 
-    }catch(uno::Exception)
+    }catch(const uno::Exception &)
     {
     }
 }
@@ -169,7 +169,7 @@ void SAL_CALL DataProviderHandler::inspect(const uno::Reference< uno::XInterface
             m_xMasterDetails = new OPropertyMediator( m_xDataProvider.get(), m_xReportComponent.get(), aPropertyMediation,sal_True );
         }
     }
-    catch(uno::Exception)
+    catch(const uno::Exception &)
     {
         throw lang::NullPointerException();
     }

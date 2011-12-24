@@ -606,9 +606,9 @@ void OReportSection::impl_adjustObjectSizePosition(sal_Int32 i_nPaperWidth,sal_I
             }
         }
     }
-    catch(uno::Exception)
+    catch(const uno::Exception &)
     {
-        OSL_FAIL("Exception caught: OReportSection::_propertyChanged(");
+        OSL_FAIL("Exception caught: OReportSection::impl_adjustObjectSizePosition()");
     }
 }
 //------------------------------------------------------------------------------

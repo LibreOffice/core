@@ -33,12 +33,12 @@
 static pthread_mutex_t getrtl_mutex = PTHREAD_MUTEX_INITIALIZER;
 
 /* struct passwd differs on some platforms */
-#if defined(MACOSX) || defined(IOS)
+#if defined(MACOSX) || defined(IOS) || defined(OPENBSD)
 
 extern int h_errno;
 
 struct hostent *gethostbyname_r(const char *name, struct hostent *result,
-                                char *buffer, int buflen, int *h_errnop)
+                                char *buffer, size_t buflen, int *h_errnop)
 {
     /* buffer layout:   name\0
      *                  array_of_pointer_to_aliases
@@ -124,7 +124,7 @@ struct hostent *gethostbyname_r(const char *name, struct hostent *result,
 
       return res;
 }
-#endif // OSX || IOS
+#endif // OSX || IOS || OPENBSD
 
 #if defined(MACOSX)
 /*

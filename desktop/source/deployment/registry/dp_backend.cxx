@@ -162,7 +162,7 @@ Reference<deployment::XPackage> PackageRegistryBackend::bindPackage(
         Reference<deployment::XPackage> xPackage( iFind->second );
         if (xPackage.is())
         {
-            if (mediaType.getLength() &&
+            if (!mediaType.isEmpty() &&
                 mediaType != xPackage->getPackageType()->getMediaType())
                 throw lang::IllegalArgumentException
                     (OUSTR("XPackageRegistry::bindPackage: media type does not match"),
@@ -247,7 +247,7 @@ OUString PackageRegistryBackend::createFolder(
 void PackageRegistryBackend::deleteTempFolder(
     OUString const & folderUrl)
 {
-    if (folderUrl.getLength())
+    if (!folderUrl.isEmpty())
     {
         erase_path( folderUrl, Reference<XCommandEnvironment>(),
                     false /* no throw: ignore errors */ );

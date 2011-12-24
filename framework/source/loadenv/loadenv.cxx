@@ -193,24 +193,32 @@ css::uno::Reference< css::lang::XComponent > LoadEnv::loadComponentFromURL(const
         switch(ex.m_nID)
         {
             case LoadEnvException::ID_INVALID_MEDIADESCRIPTOR:
-                    throw css::lang::IllegalArgumentException(
-                            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Optional list of arguments seem to be corrupted.")),
-                            xLoader,
-                            4);
+                throw css::lang::IllegalArgumentException(
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Optional list of arguments seem to be corrupted.")),
+                    xLoader,
+                    4);
 
             case LoadEnvException::ID_UNSUPPORTED_CONTENT:
-                throw css::lang::IllegalArgumentException(
-                    (rtl::OUString(
-                        RTL_CONSTASCII_USTRINGPARAM("Unsupported URL <")) +
-                     sURL +
-                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(">: \"")) +
-                     rtl::OStringToOUString(
-                         ex.m_sMessage, RTL_TEXTENCODING_UTF8) +
-                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\""))),
-                    xLoader, 1);
+            {
+                rtl::OUStringBuffer aMsg;
+                aMsg.appendAscii(RTL_CONSTASCII_STRINGPARAM("Unsupported URL <")).
+                    append(sURL).append('>');
 
-            default: xComponent.clear();
-                    break;
+                if (!ex.m_sMessage.isEmpty())
+                {
+                    aMsg.appendAscii(RTL_CONSTASCII_STRINGPARAM(": \"")).
+                        append(rtl::OStringToOUString(
+                             ex.m_sMessage, RTL_TEXTENCODING_UTF8)).
+                        appendAscii(RTL_CONSTASCII_STRINGPARAM("\""));
+                }
+
+                throw css::lang::IllegalArgumentException(aMsg.makeStringAndClear(),
+                    xLoader, 1);
+            }
+
+            default:
+                xComponent.clear();
+                break;
         }
     }
 

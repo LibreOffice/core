@@ -306,7 +306,7 @@ void SplashScreen::loadConfig()
 
 
     // Determine full screen splash mode
-    _bFullScreenSplash = (( sFullScreenSplash.getLength() > 0 ) &&
+    _bFullScreenSplash = (( !sFullScreenSplash.isEmpty() ) &&
                           ( !sFullScreenSplash.equalsAsciiL( "0", 1 )));
 
     // Try to retrieve the relative values for the progress bar. The current
@@ -314,7 +314,7 @@ void SplashScreen::loadConfig()
     if ( _bFullScreenSplash )
         determineProgressRatioValues( _fXPos, _fYPos, _fWidth, _fHeight );
 
-    if ( sProgressFrameColor.getLength() )
+    if ( !sProgressFrameColor.isEmpty() )
     {
         sal_uInt8 nRed = 0;
         sal_Int32 idx = 0;
@@ -332,7 +332,7 @@ void SplashScreen::loadConfig()
         }
     }
 
-    if ( sProgressBarColor.getLength() )
+    if ( !sProgressBarColor.isEmpty() )
     {
         sal_uInt8 nRed = 0;
         sal_Int32 idx = 0;
@@ -350,12 +350,12 @@ void SplashScreen::loadConfig()
         }
     }
 
-    if( sNativeProgress.getLength() )
+    if( !sNativeProgress.isEmpty() )
     {
         _bNativeProgress = sNativeProgress.toBoolean();
     }
 
-    if ( sSize.getLength() )
+    if ( !sSize.isEmpty() )
     {
         sal_Int32 idx = 0;
         sal_Int32 temp = sSize.getToken( 0, ',', idx ).toInt32();
@@ -369,7 +369,7 @@ void SplashScreen::loadConfig()
     if ( _barheight >= 10 )
         _barspace = 3;  // more space between frame and bar
 
-    if ( sPosition.getLength() )
+    if ( !sPosition.isEmpty() )
     {
         sal_Int32 idx = 0;
         sal_Int32 temp = sPosition.getToken( 0, ',', idx ).toInt32();
@@ -400,7 +400,7 @@ void SplashScreen::SetScreenBitmap(BitmapEx &rBitmap)
     OStringBuffer aStrBuf( 128 );
     OStringBuffer aResBuf( 32 );
     aStrBuf.append( "intro_" );
-    if ( _sAppName.getLength() > 0 )
+    if ( !_sAppName.isEmpty() )
     {
         aStrBuf.append( OUStringToOString(_sAppName, RTL_TEXTENCODING_UTF8) );
         aStrBuf.append( "_" );
@@ -453,7 +453,7 @@ void SplashScreen::determineProgressRatioValues(
         OUString sFullScreenProgressRatio = implReadBootstrapKey(
             OUString::createFromAscii( szFullScreenProgressRatio ) );
 
-        if ( sFullScreenProgressRatio.getLength() > 0 )
+        if ( !sFullScreenProgressRatio.isEmpty() )
         {
             double fRatio = sFullScreenProgressRatio.toDouble();
             sal_Int32 nRatio = sal_Int32( math::round( fRatio, 2 ) * 100 );
@@ -464,7 +464,7 @@ void SplashScreen::determineProgressRatioValues(
                 OUString sFullScreenProgressSize = implReadBootstrapKey(
                     OUString::createFromAscii( szFullScreenProgressSize ) );
 
-                if ( sFullScreenProgressPos.getLength() )
+                if ( !sFullScreenProgressPos.isEmpty() )
                 {
                     sal_Int32 idx = 0;
                     double temp = sFullScreenProgressPos.getToken( 0, ',', idx ).toDouble();
@@ -475,7 +475,7 @@ void SplashScreen::determineProgressRatioValues(
                     }
                 }
 
-                if ( sFullScreenProgressSize.getLength() )
+                if ( !sFullScreenProgressSize.isEmpty() )
                 {
                     sal_Int32 idx = 0;
                     double temp = sFullScreenProgressSize.getToken( 0, ',', idx ).toDouble();

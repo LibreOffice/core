@@ -273,6 +273,7 @@
 #define TP_OPTCOMPATIBILITY_PAGE    (RC_GLOBALS_BEGIN +  103)
 #define TP_MAILCONFIG               (RC_GLOBALS_BEGIN +  104)
 #define TP_TITLEPAGE                (RC_GLOBALS_BEGIN +  105)
+#define TP_COMPARISON_OPT           (RC_GLOBALS_BEGIN +  106)
 //maximum: RC_GLOBALS_BEGIN +  120
 
 

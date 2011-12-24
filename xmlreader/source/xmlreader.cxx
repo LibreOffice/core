@@ -115,11 +115,11 @@ XmlReader::XmlReader(rtl::OUString const & fileUrl)
 }
 
 XmlReader::~XmlReader() {
-    oslFileError e = osl_unmapFile(fileAddress_, fileSize_);
+    oslFileError e = osl_unmapMappedFile(fileHandle_, fileAddress_, fileSize_);
     if (e != osl_File_E_None) {
         SAL_WARN(
             "xmlreader",
-            "osl_unmapFile of \"" << fileUrl_ << "\" failed with " << +e);
+            "osl_unmapMappedFile of \"" << fileUrl_ << "\" failed with " << +e);
     }
     e = osl_closeFile(fileHandle_);
     if (e != osl_File_E_None) {

@@ -147,30 +147,28 @@ sal_Bool SbiImage::Load( SvStream& r, sal_uInt32& nVersion )
           switch( nSign )
         {
             case B_NAME:
-                r.ReadByteString( aName, eCharSet );
+                r.ReadUniOrByteString( aName, eCharSet );
                 break;
             case B_COMMENT:
-                r.ReadByteString( aComment, eCharSet );
+                r.ReadUniOrByteString( aComment, eCharSet );
                 break;
             case B_SOURCE:
             {
                 String aTmp;
-                r.ReadByteString( aTmp, eCharSet );
+                r.ReadUniOrByteString( aTmp, eCharSet );
                 aOUSource = aTmp;
                 break;
             }
-#ifdef EXTENDED_BINARY_MODULES
             case B_EXTSOURCE:
             {
                 for( sal_uInt16 j = 0 ; j < nCount ; j++ )
                 {
                     String aTmp;
-                    r.ReadByteString( aTmp, eCharSet );
+                    r.ReadUniOrByteString( aTmp, eCharSet );
                     aOUSource += aTmp;
                 }
                 break;
             }
-#endif
             case B_PCODE:
                 if( bBadVer ) break;
                 pCode = new char[ nLen ];
@@ -276,14 +274,14 @@ sal_Bool SbiImage::Save( SvStream& r, sal_uInt32 nVer )
     if( aName.Len() && SbiGood( r ) )
     {
         nPos = SbiOpenRecord( r, B_NAME, 1 );
-        r.WriteByteString( aName, eCharSet );
+        r.WriteUniOrByteString( aName, eCharSet );
         SbiCloseRecord( r, nPos );
     }
     // Comment?
     if( aComment.Len() && SbiGood( r ) )
     {
         nPos = SbiOpenRecord( r, B_COMMENT, 1 );
-        r.WriteByteString( aComment, eCharSet );
+        r.WriteUniOrByteString( aComment, eCharSet );
         SbiCloseRecord( r, nPos );
     }
     // Source?
@@ -297,10 +295,9 @@ sal_Bool SbiImage::Save( SvStream& r, sal_uInt32 nVer )
             aTmp = aOUSource.copy( 0, nMaxUnitSize );
         else
             aTmp = aOUSource;
-        r.WriteByteString( aTmp, eCharSet );
+        r.WriteUniOrByteString( aTmp, eCharSet );
         SbiCloseRecord( r, nPos );
 
-#ifdef EXTENDED_BINARY_MODULES
         if( nLen > STRING_MAXLEN )
         {
             sal_Int32 nRemainingLen = nLen - nMaxUnitSize;
@@ -312,11 +309,10 @@ sal_Bool SbiImage::Save( SvStream& r, sal_uInt32 nVer )
                     (nRemainingLen > nMaxUnitSize) ? nMaxUnitSize : nRemainingLen;
                 String aTmp2 = aOUSource.copy( (i+1) * nMaxUnitSize, nCopyLen );
                 nRemainingLen -= nCopyLen;
-                r.WriteByteString( aTmp2, eCharSet );
+                r.WriteUniOrByteString( aTmp2, eCharSet );
             }
             SbiCloseRecord( r, nPos );
         }
-#endif
     }
     // Binary data?
     if( pCode && SbiGood( r ) )

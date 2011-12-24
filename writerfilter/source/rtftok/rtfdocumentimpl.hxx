@@ -135,6 +135,7 @@ namespace writerfilter {
             BUFFER_PROPS,
             BUFFER_CELLEND,
             BUFFER_STARTRUN,
+            BUFFER_TEXT,
             BUFFER_UTEXT,
             BUFFER_ENDRUN,
             BUFFER_PAR

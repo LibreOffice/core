@@ -453,17 +453,17 @@ void Test::testBigStruct() {
     CPPUNIT_ASSERT_EQUAL(guard.p->m11, static_cast< sal_Unicode >(0));
     CPPUNIT_ASSERT_EQUAL(guard.p->m12.getLength(), static_cast< sal_Int32 >(0));
     CPPUNIT_ASSERT_EQUAL(
-        guard.p->m13.getTypeClass(), com::sun::star::uno::TypeClass_VOID);
+        +guard.p->m13.getTypeClass(), +com::sun::star::uno::TypeClass_VOID);
     CPPUNIT_ASSERT_EQUAL(guard.p->m14.hasValue(), sal_False);
     CPPUNIT_ASSERT_EQUAL(guard.p->m15.getLength(), static_cast< sal_Int32 >(0));
     CPPUNIT_ASSERT_EQUAL(
-        guard.p->m16, test::codemaker::cppumaker::HelperEnum_ZERO);
+        +guard.p->m16, +test::codemaker::cppumaker::HelperEnum_ZERO);
     CPPUNIT_ASSERT_EQUAL(guard.p->m17.m1, sal_False);
     CPPUNIT_ASSERT_EQUAL(guard.p->m17.m2.is(), sal_False);
     CPPUNIT_ASSERT_EQUAL(guard.p->m18.is(), sal_False);
     CPPUNIT_ASSERT_EQUAL(guard.p->m19, static_cast< sal_Int8 >(0));
     CPPUNIT_ASSERT_EQUAL(
-        guard.p->m20, test::codemaker::cppumaker::HelperEnum_ZERO);
+        +guard.p->m20, +test::codemaker::cppumaker::HelperEnum_ZERO);
     CPPUNIT_ASSERT_EQUAL(guard.p->m21.getLength(), static_cast< sal_Int32 >(0));
     CPPUNIT_ASSERT_EQUAL(guard.p->m22.getLength(), static_cast< sal_Int32 >(0));
     CPPUNIT_ASSERT_EQUAL(guard.p->m23.getLength(), static_cast< sal_Int32 >(0));
@@ -488,11 +488,11 @@ void Test::testBigStruct() {
     typelib_typedescription_complete(&td);
     fprintf(stdout, "#### 1\n");
     CPPUNIT_ASSERT(td != NULL);
-    CPPUNIT_ASSERT_EQUAL(typelib_TypeClass_STRUCT, td->eTypeClass);
+    CPPUNIT_ASSERT_EQUAL(+typelib_TypeClass_STRUCT, +td->eTypeClass);
     typelib_StructTypeDescription * std =
         reinterpret_cast< typelib_StructTypeDescription * >(td);
-    CPPUNIT_ASSERT_EQUAL(typelib_TypeClass_UNSIGNED_SHORT, std->aBase.ppTypeRefs[3]->eTypeClass); // unsigned short m4;
-    CPPUNIT_ASSERT_EQUAL(typelib_TypeClass_CHAR, std->aBase.ppTypeRefs[10]->eTypeClass); // char m11;
+    CPPUNIT_ASSERT_EQUAL(+typelib_TypeClass_UNSIGNED_SHORT, +std->aBase.ppTypeRefs[3]->eTypeClass); // unsigned short m4;
+    CPPUNIT_ASSERT_EQUAL(+typelib_TypeClass_CHAR, +std->aBase.ppTypeRefs[10]->eTypeClass); // char m11;
 }
 
 void Test::testPolyStruct() {

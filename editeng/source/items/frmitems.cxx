@@ -3443,7 +3443,7 @@ SvxBrushItem::SvxBrushItem( SvStream& rStream, sal_uInt16 nVersion,
         {
             String aRel;
             // UNICODE: rStream >> aRel;
-            rStream.ReadByteString(aRel);
+            rStream.ReadUniOrByteString(aRel, rStream.GetStreamCharSet());
 
             // TODO/MBA: how can we get a BaseURL here?!
             OSL_FAIL("No BaseURL!");
@@ -3456,7 +3456,7 @@ SvxBrushItem::SvxBrushItem( SvStream& rStream, sal_uInt16 nVersion,
         {
             pStrFilter = new String;
             // UNICODE: rStream >> *pStrFilter;
-            rStream.ReadByteString(*pStrFilter);
+            rStream.ReadUniOrByteString(*pStrFilter, rStream.GetStreamCharSet());
         }
 
         rStream >> nPos;
@@ -3649,9 +3649,9 @@ bool SvxBrushItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 {
                     SetGraphicLink(sLink);
                 }
-                if ( sLink.getLength() && eGraphicPos == GPOS_NONE )
+                if ( !sLink.isEmpty() && eGraphicPos == GPOS_NONE )
                     eGraphicPos = GPOS_MM;
-                else if( !sLink.getLength() )
+                else if( sLink.isEmpty() )
                     eGraphicPos = GPOS_NONE;
             }
         }
@@ -3834,12 +3834,12 @@ SvStream& SvxBrushItem::Store( SvStream& rStream , sal_uInt16 /*nItemVersion*/ )
         // TODO/MBA: how to get a BaseURL?!
         String aRel = INetURLObject::GetRelURL( String(), *pStrLink );
         // UNICODE: rStream << aRel;
-        rStream.WriteByteString(aRel);
+        rStream.WriteUniOrByteString(aRel, rStream.GetStreamCharSet());
     }
     if ( pStrFilter )
     {
         // UNICODE: rStream << *pStrFilter;
-        rStream.WriteByteString(*pStrFilter);
+        rStream.WriteUniOrByteString(*pStrFilter, rStream.GetStreamCharSet());
     }
     rStream << (sal_Int8)eGraphicPos;
     return rStream;

@@ -333,7 +333,7 @@ sal_Bool DlgFilterCrit::getCondition(const ListBox& _rField,const ListBox& _rCom
                 if ( xInfo->hasPropertyByName(PROPERTY_TABLENAME) )
                 {
                     xColumn->getPropertyValue(PROPERTY_TABLENAME)   >>= sTableName;
-                    if ( sTableName.getLength() )
+                    if ( !sTableName.isEmpty() )
                     {
                         // properly quote all parts of the table name, so e.g. <schema>.<table> becomes "<schema>"."<table>"
                         ::rtl::OUString aCatlog,aSchema,aTable;
@@ -353,7 +353,7 @@ sal_Bool DlgFilterCrit::getCondition(const ListBox& _rField,const ListBox& _rCom
             {
                 const ::rtl::OUString aQuote    = m_xMetaData.is() ? m_xMetaData->getIdentifierQuoteString() : ::rtl::OUString();
                 _rFilter.Name = ::dbtools::quoteName(aQuote,_rFilter.Name);
-                if ( sTableName.getLength() )
+                if ( !sTableName.isEmpty() )
                 {
                     static ::rtl::OUString sSep(RTL_CONSTASCII_USTRINGPARAM("."));
                     sTableName += sSep;

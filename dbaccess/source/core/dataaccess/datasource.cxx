@@ -381,11 +381,11 @@ Reference<XConnection> OSharedConnectionManager::getConnection( const rtl::OUStr
 
     ::rtl::OUString sUser = user;
     ::rtl::OUString sPassword = password;
-    if ((0 == sUser.getLength()) && (0 == sPassword.getLength()) && (0 != _pDataSource->m_pImpl->m_sUser.getLength()))
+    if ((sUser.isEmpty()) && (sPassword.isEmpty()) && (!_pDataSource->m_pImpl->m_sUser.isEmpty()))
     {   // ease the usage of this method. data source which are intended to have a user automatically
         // fill in the user/password combination if the caller of this method does not specify otherwise
         sUser = _pDataSource->m_pImpl->m_sUser;
-        if (0 != _pDataSource->m_pImpl->m_aPassword.getLength())
+        if (!_pDataSource->m_pImpl->m_aPassword.isEmpty())
             sPassword = _pDataSource->m_pImpl->m_aPassword;
     }
 
@@ -659,11 +659,11 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const ::rtl::O
 
     ::rtl::OUString sUser(_rUid);
     ::rtl::OUString sPwd(_rPwd);
-    if ((0 == sUser.getLength()) && (0 == sPwd.getLength()) && (0 != m_pImpl->m_sUser.getLength()))
+    if ((sUser.isEmpty()) && (sPwd.isEmpty()) && (!m_pImpl->m_sUser.isEmpty()))
     {   // ease the usage of this method. data source which are intended to have a user automatically
         // fill in the user/password combination if the caller of this method does not specify otherwise
         sUser = m_pImpl->m_sUser;
-        if (0 != m_pImpl->m_aPassword.getLength())
+        if (!m_pImpl->m_aPassword.isEmpty())
             sPwd = m_pImpl->m_aPassword;
     }
 
@@ -671,8 +671,8 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const ::rtl::O
     if (xManager.is())
     {
         sal_Int32 nAdditionalArgs(0);
-        if (sUser.getLength()) ++nAdditionalArgs;
-        if (sPwd.getLength()) ++nAdditionalArgs;
+        if (!sUser.isEmpty()) ++nAdditionalArgs;
+        if (!sPwd.isEmpty()) ++nAdditionalArgs;
 
         Sequence< PropertyValue > aUserPwd(nAdditionalArgs);
         sal_Int32 nArgPos = 0;
@@ -682,7 +682,7 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const ::rtl::O
             aUserPwd[ nArgPos ].Value <<= sUser;
             ++nArgPos;
         }
-        if (sPwd.getLength())
+        if (!sPwd.isEmpty())
         {
             aUserPwd[ nArgPos ].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("password"));
             aUserPwd[ nArgPos ].Value <<= sPwd;
@@ -832,7 +832,7 @@ sal_Bool ODatabaseSource::convertFastPropertyValue(Any & rConvertedValue, Any & 
                 const PropertyValue* checkName = aValues.getConstArray();
                 for ( ;checkName != valueEnd; ++checkName )
                 {
-                    if ( !checkName->Name.getLength() )
+                    if ( checkName->Name.isEmpty() )
                         throw IllegalArgumentException();
                 }
 
@@ -1121,7 +1121,7 @@ Reference< XConnection > SAL_CALL ODatabaseSource::connectWithCompletion( const 
     ::rtl::OUString sUser(m_pImpl->m_sUser), sPassword(m_pImpl->m_aPassword);
     sal_Bool bNewPasswordGiven = sal_False;
 
-    if (m_pImpl->m_bPasswordRequired && (0 == sPassword.getLength()))
+    if (m_pImpl->m_bPasswordRequired && sPassword.isEmpty())
     {   // we need a password, but don't have one yet.
         // -> ask the user
 
@@ -1142,7 +1142,7 @@ Reference< XConnection > SAL_CALL ODatabaseSource::connectWithCompletion( const 
         aRequest.HasRealm = aRequest.HasAccount = sal_False;
         aRequest.HasUserName = aRequest.HasPassword = sal_True;
         aRequest.UserName = m_pImpl->m_sUser;
-        aRequest.Password = m_pImpl->m_sFailedPassword.getLength() ? m_pImpl->m_sFailedPassword : m_pImpl->m_aPassword;
+        aRequest.Password = m_pImpl->m_sFailedPassword.isEmpty() ?  m_pImpl->m_aPassword : m_pImpl->m_sFailedPassword;
         OInteractionRequest* pRequest = new OInteractionRequest(makeAny(aRequest));
         Reference< XInteractionRequest > xRequest(pRequest);
         // some knittings
@@ -1262,7 +1262,7 @@ Reference< XNameAccess > SAL_CALL ODatabaseSource::getQueryDefinitions( ) throw(
         {
             ::rtl::OUString sSupportService;
             aValue >>= sSupportService;
-            if ( sSupportService.getLength() )
+            if ( !sSupportService.isEmpty() )
             {
                 Sequence<Any> aArgs(1);
                 aArgs[0] <<= NamedValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DataSource")),makeAny(xMy));

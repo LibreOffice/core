@@ -37,9 +37,12 @@
 #include <string.h>
 #include <tools/mempool.hxx>
 #include <osl/diagnose.h>
+#include <sfx2/docfile.hxx>
 
 #include "token.hxx"
 #include "tokenarray.hxx"
+#include "reftokenhelper.hxx"
+#include "clipparam.hxx"
 #include "compiler.hxx"
 #include <formula/compiler.hrc>
 #include "rechead.hxx"
@@ -48,6 +51,9 @@
 #include "rangeseq.hxx"
 #include "externalrefmgr.hxx"
 #include "document.hxx"
+
+#include <iostream>
+#include <rtl/oustringostreaminserter.hxx>
 
 using ::std::vector;
 
@@ -1805,6 +1811,173 @@ void ScTokenArray::ReadjustRelative3DReferences( const ScAddress& rOldPos,
                     rRef1.CalcAbsIfRel( rOldPos );
                     rRef1.CalcRelFromAbs( rNewPos );
                 }
+            }
+            break;
+            default:
+            {
+                // added to avoid warnings
+            }
+        }
+    }
+}
+
+namespace {
+
+void GetExternalTableData(const ScDocument* pOldDoc, const ScDocument* pNewDoc, const SCTAB nTab, rtl::OUString& rTabName, sal_uInt16& rFileId)
+{
+    rtl::OUString aFileName = pOldDoc->GetFileURL();;
+    std::cout << aFileName << std::endl;
+    rFileId = pNewDoc->GetExternalRefManager()->getExternalFileId(aFileName);
+    rTabName = pOldDoc->GetCopyTabName(nTab);
+    if (rTabName.isEmpty())
+        pOldDoc->GetName(nTab, rTabName);
+    std::cout << "TabName: " << rTabName << std::endl;
+}
+
+bool IsInCopyRange( const ScRange& rRange, const ScDocument* pClipDoc )
+{
+    ScClipParam& rClipParam = const_cast<ScDocument*>(pClipDoc)->GetClipParam();
+    std::cout << "Col: " << rRange.aStart.Col() << "Row: " << rRange.aStart.Row() << "Tab: " << rRange.aStart.Tab() << std::endl;
+    return rClipParam.maRanges.In(rRange);
+}
+
+bool SkipReference(ScToken* pToken, const ScAddress& rPos, const ScDocument* pOldDoc, bool bRangeName)
+{
+    ScRange aRange;
+    if (!ScRefTokenHelper::getAbsRangeFromToken(aRange, pToken, rPos))
+        return true;
+
+    if (bRangeName && aRange.aStart.Tab() == rPos.Tab())
+    {
+        switch (pToken->GetType())
+        {
+            case svDoubleRef:
+                {
+                    ScSingleRefData& rRef = pToken->GetSingleRef2();
+                    if (rRef.IsColRel() || rRef.IsRowRel())
+                        return true;
+                } // fall through
+            case svSingleRef:
+                {
+                    ScSingleRefData& rRef = pToken->GetSingleRef();
+                    if (rRef.IsColRel() || rRef.IsRowRel())
+                        return true;
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    if (IsInCopyRange(aRange, pOldDoc))
+        return true;
+
+    return false;
+}
+
+void AdjustSingleRefData( ScSingleRefData& rRef, const ScAddress& rOldPos, const ScAddress& rNewPos)
+{
+    SCsCOL nCols = rNewPos.Col() - rOldPos.Col();
+    SCsROW nRows = rNewPos.Row() - rOldPos.Row();
+    SCsTAB nTabs = rNewPos.Tab() - rOldPos.Tab();
+
+    if (!rRef.IsColRel())
+        rRef.nCol += nCols;
+
+    if (!rRef.IsRowRel())
+        rRef.nRow += nRows;
+
+    if (!rRef.IsTabRel())
+        rRef.nTab += nTabs;
+}
+
+}
+
+void ScTokenArray::ReadjustAbsolute3DReferences( const ScDocument* pOldDoc, const ScDocument* pNewDoc, const ScAddress& rPos, bool bRangeName )
+{
+    for ( sal_uInt16 j=0; j<nLen; ++j )
+    {
+        switch ( pCode[j]->GetType() )
+        {
+            case svDoubleRef :
+            {
+                if (SkipReference(static_cast<ScToken*>(pCode[j]), rPos, pOldDoc, bRangeName))
+                    continue;
+
+                ScComplexRefData& rRef = static_cast<ScToken*>(pCode[j])->GetDoubleRef();
+                ScSingleRefData& rRef2 = rRef.Ref2;
+                ScSingleRefData& rRef1 = rRef.Ref1;
+
+                if ( (rRef2.IsFlag3D() && !rRef2.IsTabRel()) || (rRef1.IsFlag3D() && !rRef1.IsTabRel()) )
+                {
+                    rtl::OUString aTabName;
+                    sal_uInt16 nFileId;
+                    GetExternalTableData(pOldDoc, pNewDoc, rRef1.nTab, aTabName, nFileId);
+                    pCode[j]->DecRef();
+                    ScExternalDoubleRefToken* pToken = new ScExternalDoubleRefToken(nFileId, aTabName, rRef);
+                    pToken->IncRef();
+                    pCode[j] = pToken;
+                }
+            }
+            break;
+            case svSingleRef :
+            {
+                if (SkipReference(static_cast<ScToken*>(pCode[j]), rPos, pOldDoc, bRangeName))
+                    continue;
+
+                ScSingleRefData& rRef = static_cast<ScToken*>(pCode[j])->GetSingleRef();
+
+                if ( rRef.IsFlag3D() && !rRef.IsTabRel() )
+                {
+                    rtl::OUString aTabName;
+                    sal_uInt16 nFileId;
+                    GetExternalTableData(pOldDoc, pNewDoc, rRef.nTab, aTabName, nFileId);
+                    //replace with ScExternalSingleRefToken and adjust references
+                    pCode[j]->DecRef();
+                    ScExternalSingleRefToken* pToken = new ScExternalSingleRefToken(nFileId, aTabName, rRef);
+                    pToken->IncRef();
+                    pCode[j] = pToken;
+                }
+            }
+            break;
+            default:
+            {
+                // added to avoid warnings
+            }
+        }
+    }
+}
+
+void ScTokenArray::AdjustAbsoluteRefs( const ScDocument* pOldDoc, const ScAddress& rOldPos, const ScAddress& rNewPos)
+{
+    for ( sal_uInt16 j=0; j<nLen; ++j )
+    {
+        switch ( pCode[j]->GetType() )
+        {
+            case svDoubleRef :
+            {
+                if (!SkipReference(static_cast<ScToken*>(pCode[j]), rOldPos, pOldDoc, false))
+                    continue;
+
+                ScComplexRefData& rRef = static_cast<ScToken*>(pCode[j])->GetDoubleRef();
+                ScSingleRefData& rRef2 = rRef.Ref2;
+                ScSingleRefData& rRef1 = rRef.Ref1;
+
+                AdjustSingleRefData( rRef1, rOldPos, rNewPos );
+                AdjustSingleRefData( rRef2, rOldPos, rNewPos );
+
+            }
+            break;
+            case svSingleRef :
+            {
+                if (!SkipReference(static_cast<ScToken*>(pCode[j]), rOldPos, pOldDoc, false))
+                    continue;
+
+                ScSingleRefData& rRef = static_cast<ScToken*>(pCode[j])->GetSingleRef();
+
+                AdjustSingleRefData( rRef, rOldPos, rNewPos );
+
+
             }
             break;
             default:

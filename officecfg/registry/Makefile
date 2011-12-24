@@ -48,10 +48,13 @@ $(if $(1),$(1)/$(if $(2),$(2)/))%.hxx: \
 
 endef
 
-$(eval $(call my_target))
-$(eval $(call my_target,Office))
+# Sort longer paths before their prefixes, as at least GNU Make 3.81 on Mac OS X
+# appears to let % span sub-directories, so that the above rule would produce
+# unexpected results; sorting this way seems to avoid the problem:
 $(eval $(call my_target,Office,DataAccess))
 $(eval $(call my_target,Office,OOoImprovement))
 $(eval $(call my_target,Office,UI))
+$(eval $(call my_target,Office))
 $(eval $(call my_target,TypeDetection))
 $(eval $(call my_target,ucb))
+$(eval $(call my_target))

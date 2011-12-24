@@ -37,6 +37,10 @@ $(eval $(call gb_Executable_add_defs,smath,\
     -DUNICODE \
 ))
 
+$(eval $(call gb_Executable_add_linked_libs,smath,\
+    $(gb_STDLIBS) \
+))
+
 $(eval $(call gb_Executable_add_noexception_objects,smath,\
     desktop/win32/source/applauncher/launcher \
     desktop/win32/source/applauncher/smath \

@@ -99,10 +99,10 @@ extern "C" {
     Diagnostic support
 */
 
-void        SAL_CALL osl_breakDebug(void);
-sal_Bool    SAL_CALL osl_assertFailedLine(const sal_Char* pszFileName, sal_Int32 nLine, const sal_Char* pszMessage);
-void        SAL_CALL osl_trace(const sal_Char* pszFormat, ...);
-sal_Int32   SAL_CALL osl_reportError(sal_uInt32 nType, const sal_Char* pszErrorMessage);
+SAL_DLLPUBLIC void        SAL_CALL osl_breakDebug(void);
+SAL_DLLPUBLIC sal_Bool    SAL_CALL osl_assertFailedLine(const sal_Char* pszFileName, sal_Int32 nLine, const sal_Char* pszMessage);
+SAL_DLLPUBLIC void        SAL_CALL osl_trace(const sal_Char* pszFormat, ...);
+SAL_DLLPUBLIC sal_Int32   SAL_CALL osl_reportError(sal_uInt32 nType, const sal_Char* pszErrorMessage);
 
 /*
     For message delivery
@@ -123,13 +123,13 @@ typedef void (SAL_CALL *pfunc_osl_printDetailedDebugMessage)( const sal_Char * p
 
     The given message handler must be able to cope with a <NULL/> message.
 */
-pfunc_osl_printDebugMessage SAL_CALL osl_setDebugMessageFunc( pfunc_osl_printDebugMessage pNewFunc );
+SAL_DLLPUBLIC pfunc_osl_printDebugMessage SAL_CALL osl_setDebugMessageFunc( pfunc_osl_printDebugMessage pNewFunc );
 
 /** sets a delivery function for detailed message information.
 
     The given message handler must be able to cope with a <NULL/> message.
 */
-pfunc_osl_printDetailedDebugMessage SAL_CALL osl_setDetailedDebugMessageFunc( pfunc_osl_printDetailedDebugMessage pNewFunc );
+SAL_DLLPUBLIC pfunc_osl_printDetailedDebugMessage SAL_CALL osl_setDetailedDebugMessageFunc( pfunc_osl_printDetailedDebugMessage pNewFunc );
 
 #ifdef __cplusplus
 }

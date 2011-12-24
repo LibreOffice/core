@@ -36,10 +36,7 @@
 
 #ifdef DEBUG_DMAPPER_TABLE_HANDLER
 #include <PropertyMapHelper.hxx>
-#endif
-
-#if OSL_DEBUG_LEVEL > 1
-#include <stdio.h>
+#include <rtl/oustringostreaminserter.hxx>
 #endif
 
 namespace writerfilter {
@@ -63,9 +60,7 @@ static void  lcl_printProperties( PropertyMapPtr pProps )
         PropertyNameSupplier& rPropSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
         for( ; aMapIter != aEndIter; ++aMapIter )
         {
-            rtl::OUString aOUStr = rPropSupplier.GetName( aMapIter->first.eId );
-            rtl::OString aOStr(aOUStr.getStr(), aOUStr.getLength(),  RTL_TEXTENCODING_ASCII_US );
-            clog << aOStr.getStr();
+            SAL_INFO("writerfilter", rPropSupplier.GetName(aMapIter->first.eId));
 
             table::BorderLine2 aLine;
             sal_Int32 nColor;

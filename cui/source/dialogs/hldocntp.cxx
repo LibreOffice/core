@@ -204,7 +204,7 @@ void SvxHyperlinkNewDocTp::FillDocumentList ()
             continue;
 
         // Insert into listbox
-        if ( aDocumentUrl.getLength() )
+        if ( !aDocumentUrl.isEmpty() )
         {
             if ( aDocumentUrl.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "private:factory/simpress?slot=6686" ) ) )              // SJ: #106216# do not start
                 aDocumentUrl = String( RTL_CONSTASCII_USTRINGPARAM( "private:factory/simpress" ) ); // the AutoPilot for impress
@@ -460,7 +460,7 @@ IMPL_LINK ( SvxHyperlinkNewDocTp, ClickNewHdl_Impl, void *, EMPTYARG )
 
         INetURLObject   aNewURL( aStrTmp );
 
-        if( aStrName.Len() > 0 && aNewURL.getExtension().getLength() > 0 &&
+        if( aStrName.Len() > 0 && !aNewURL.getExtension().isEmpty() &&
             maLbDocTypes.GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND )
         {
             // get private-url

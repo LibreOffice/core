@@ -162,10 +162,10 @@ void OptimisticSet::construct(const Reference< XResultSet>& _xDriverSet,const ::
     fillJoinedColumns_throw(m_aSqlIterator.getJoinConditions());
 
     const ::rtl::OUString sComposerFilter = m_xComposer->getFilter();
-    if ( i_sRowSetFilter.getLength() || (sComposerFilter.getLength() && sComposerFilter != i_sRowSetFilter) )
+    if ( !i_sRowSetFilter.isEmpty() || (!sComposerFilter.isEmpty() && sComposerFilter != i_sRowSetFilter) )
     {
         FilterCreator aFilterCreator;
-        if ( sComposerFilter.getLength() && sComposerFilter != i_sRowSetFilter )
+        if ( !sComposerFilter.isEmpty() && sComposerFilter != i_sRowSetFilter )
             aFilterCreator.append( sComposerFilter );
         aFilterCreator.append( i_sRowSetFilter );
         aFilterCreator.append( aFilter.makeStringAndClear() );

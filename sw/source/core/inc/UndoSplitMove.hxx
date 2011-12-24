@@ -40,6 +40,7 @@ class SwUndoSplitNode: public SwUndo
     xub_StrLen nCntnt;
     sal_Bool bTblFlag : 1;
     sal_Bool bChkTblStt : 1;
+    sal_uInt32 nParRsid;
 
 public:
     SwUndoSplitNode( SwDoc* pDoc, const SwPosition& rPos, sal_Bool bChkTbl );

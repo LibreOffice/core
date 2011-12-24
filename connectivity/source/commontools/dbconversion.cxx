@@ -469,7 +469,7 @@ namespace dbtools
                 nSecond = (sal_uInt16)_sSQLString.getToken(0,sTimeSep,nIndex).toInt32();
                 nIndex = 0;
                 ::rtl::OUString sNano(_sSQLString.getToken(1,'.',nIndex));
-                if ( sNano.getLength() )
+                if ( !sNano.isEmpty() )
                 {
                     // our time struct only supports hundredth seconds
                     sNano = sNano.copy(0,::std::min<sal_Int32>(sNano.getLength(),2));

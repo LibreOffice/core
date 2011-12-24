@@ -46,31 +46,6 @@
 
 namespace codemaker { namespace cpp {
 
-rtl::OString typeToPrefix(TypeManager const & manager, rtl::OString const & type)
-{
-    RTTypeClass typeclass = manager.getTypeClass(type);
-    if (typeclass == RT_TYPE_INVALID ||
-        typeclass == RT_TYPE_PUBLISHED)
-        return rtl::OString("_");
-
-    static char const * const typeclassPrefix[RT_TYPE_UNION + 1] = {
-        "invalid",    /* RT_TYPE_INVALID, is here only as placeholder */
-        "interface",  /* RT_TYPE_INTERFACE */
-        "module",     /* RT_TYPE_MODULE */
-        "struct",     /* RT_TYPE_STRUCT */
-        "enum",       /* RT_TYPE_ENUM */
-        "exception",  /* RT_TYPE_EXCEPTION */
-        "typedef",    /* RT_TYPE_TYPEDEF */
-        "service",    /* RT_TYPE_SERVICE */
-        "singleton",  /* RT_TYPE_SINGLETON */
-        "object",     /* RT_TYPE_OBJECT */
-        "constants",  /* RT_TYPE_CONSTANTS */
-        "union"       /* RT_TYPE_UNION */
-    };
-
-    return rtl::OString(typeclassPrefix[typeclass]);
-}
-
 rtl::OString scopedCppName(rtl::OString const & type, bool bNoNameSpace,
                            bool shortname)
 {

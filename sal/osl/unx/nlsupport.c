@@ -632,8 +632,7 @@ rtl_TextEncoding osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
     /* search the codeset in our language list */
     if ( codeset != NULL )
     {
-        const unsigned int members = sizeof(_nl_language_list) / sizeof(_pair);
-        language = _pair_search (codeset, _nl_language_list, members);
+        language = _pair_search (codeset, _nl_language_list, SAL_N_ELEMENTS( _nl_language_list ) );
     }
 
     OSL_ASSERT( language && ( RTL_TEXTENCODING_DONTKNOW != language->value ) );
@@ -816,8 +815,7 @@ rtl_TextEncoding osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
     if( _compose_locale( pLocale, locale_buf, 64 ) )
     {
         /* check special handling list (EUC) first */
-        const unsigned int members = sizeof( _full_locale_list ) / sizeof( _pair );
-        language = _pair_search( locale_buf, _full_locale_list, members);
+        language = _pair_search( locale_buf, _full_locale_list, SAL_N_ELEMENTS( _full_locale_list ) );
 
         if( NULL == language )
         {
@@ -830,20 +828,17 @@ rtl_TextEncoding osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
 
             if( NULL != cp )
             {
-                const unsigned int members = sizeof( _locale_extension_list ) / sizeof( _pair );
-                language = _pair_search( cp + 1, _locale_extension_list, members);
+                language = _pair_search( cp + 1, _locale_extension_list, SAL_N_ELEMENTS( _locale_extension_list ) );
             }
         }
 
         /* use iso language code to determine the charset */
         if( NULL == language )
         {
-            const unsigned int members = sizeof( _iso_language_list ) / sizeof( _pair );
-
             /* iso lang codes have 2 charaters */
             locale_buf[2] = '\0';
 
-            language = _pair_search( locale_buf, _iso_language_list, members);
+            language = _pair_search( locale_buf, _iso_language_list, SAL_N_ELEMENTS( _iso_language_list ) );
         }
     }
 

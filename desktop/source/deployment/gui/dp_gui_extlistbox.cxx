@@ -372,7 +372,7 @@ void ExtensionBox_Impl::CalcActiveHeight( const long nPos )
     aSize.Height() = 10000;
 
     rtl::OUString aText( m_vEntries[ nPos ]->m_sErrorText );
-    if ( aText.getLength() )
+    if ( !aText.isEmpty() )
         aText += OUSTR("\n");
     aText += m_vEntries[ nPos ]->m_sDescription;
 

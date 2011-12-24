@@ -223,7 +223,6 @@ public:
     virtual const String&   GetTextString() const;
     virtual void            StopEditEngine( sal_Bool bAll );
     void            InitEditEngine(SfxObjectShell* pObjSh);
-    void            GainFocus();
     void            SetFormulaMode( sal_Bool bSet );
     bool            IsFocus();
     void            MakeDialogEditView();

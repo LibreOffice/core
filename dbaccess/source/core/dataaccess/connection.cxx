@@ -690,7 +690,7 @@ Reference< XInterface > SAL_CALL OConnection::createInstance( const ::rtl::OUStr
     }
     else
     {
-        if ( _sServiceSpecifier.getLength() )
+        if ( !_sServiceSpecifier.isEmpty() )
         {
             TSupportServices::iterator aFind = m_aSupportServices.find(_sServiceSpecifier);
             if ( aFind == m_aSupportServices.end() )

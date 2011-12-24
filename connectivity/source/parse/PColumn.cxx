@@ -115,7 +115,7 @@ OParseColumn::OParseColumn( const ::rtl::OUString& _Name,
             Reference<XPropertySet> xColumn(i_xQueryColumns->getByName(pColumn->getRealName()),UNO_QUERY_THROW);
             ::rtl::OUString sLabel;
             xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_LABEL)) >>= sLabel;
-            if ( sLabel.getLength() )
+            if ( !sLabel.isEmpty() )
                 pColumn->setLabel(sLabel);
         }
     }
@@ -155,7 +155,7 @@ OParseColumn* OParseColumn::createColumnForResultSet( const Reference< XResultSe
         _rxDBMetaData->supportsMixedCaseQuotedIdentifiers()
     );
     const ::rtl::OUString sTableName = _rxResMetaData->getTableName( _nColumnPos );
-    if ( sTableName.getLength() )
+    if ( !sTableName.isEmpty() )
         pColumn->setTableName(  ::dbtools::composeTableName( _rxDBMetaData,
             _rxResMetaData->getCatalogName( _nColumnPos ),
             _rxResMetaData->getSchemaName( _nColumnPos ),

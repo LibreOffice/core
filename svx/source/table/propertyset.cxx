@@ -122,7 +122,7 @@ Property SAL_CALL FastPropertySetInfo::getPropertyByName( const OUString& aName 
 
 sal_Bool SAL_CALL FastPropertySetInfo::hasPropertyByName( const OUString& aName ) throw (RuntimeException)
 {
-    return hasProperty( aName ) != 0 ? sal_True : sal_False;;
+    return hasProperty( aName ) != 0 ? sal_True : sal_False;
 }
 
 // -----------------------------------------------------------------------------

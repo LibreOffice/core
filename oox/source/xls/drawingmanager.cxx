@@ -228,59 +228,6 @@ BiffInputStream& operator>>( BiffInputStream& rStrm, BiffObjFillModel& rModel )
 }
 
 // ============================================================================
-
-BiffObjTextModel::BiffObjTextModel() :
-    mnTextLen( 0 ),
-    mnFormatSize( 0 ),
-    mnLinkSize( 0 ),
-    mnDefFontId( 0 ),
-    mnFlags( 0 ),
-    mnOrientation( BIFF_OBJ_ORIENT_NONE ),
-    mnButtonFlags( 0 ),
-    mnShortcut( 0 ),
-    mnShortcutEA( 0 )
-{
-}
-
-void BiffObjTextModel::readObj3( BiffInputStream& rStrm )
-{
-    rStrm >> mnTextLen;
-    rStrm.skip( 2 );
-    rStrm >> mnFormatSize >> mnDefFontId;
-    rStrm.skip( 2 );
-    rStrm >> mnFlags >> mnOrientation;
-    rStrm.skip( 8 );
-}
-
-void BiffObjTextModel::readObj5( BiffInputStream& rStrm )
-{
-    rStrm >> mnTextLen;
-    rStrm.skip( 2 );
-    rStrm >> mnFormatSize >> mnDefFontId;
-    rStrm.skip( 2 );
-    rStrm >> mnFlags >> mnOrientation;
-    rStrm.skip( 2 );
-    rStrm >> mnLinkSize;
-    rStrm.skip( 2 );
-    rStrm >> mnButtonFlags >> mnShortcut >> mnShortcutEA;
-}
-
-void BiffObjTextModel::readTxo8( BiffInputStream& rStrm )
-{
-    rStrm >> mnFlags >> mnOrientation >> mnButtonFlags >> mnShortcut >> mnShortcutEA >> mnTextLen >> mnFormatSize;
-}
-
-sal_uInt8 BiffObjTextModel::getHorAlign() const
-{
-    return extractValue< sal_uInt8 >( mnFlags, 1, 3 );
-}
-
-sal_uInt8 BiffObjTextModel::getVerAlign() const
-{
-    return extractValue< sal_uInt8 >( mnFlags, 4, 3 );
-}
-
-// ============================================================================
 // BIFF drawing objects
 // ============================================================================
 

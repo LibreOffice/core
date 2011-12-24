@@ -29,10 +29,6 @@
 #ifndef __FRAMEWORK_DISPATCH_DISPATCHPROVIDER_HXX_
 #define __FRAMEWORK_DISPATCH_DISPATCHPROVIDER_HXX_
 
-//_________________________________________________________________________________________________________________
-//  my own includes
-//_________________________________________________________________________________________________________________
-
 #include <services/frame.hxx>
 
 #include <classes/protocolhandlercache.hxx>
@@ -45,28 +41,16 @@
 #include <macros/generic.hxx>
 #include <stdtypes.h>
 
-//_________________________________________________________________________________________________________________
-//  interface includes
-//_________________________________________________________________________________________________________________
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/frame/DispatchDescriptor.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
-//_________________________________________________________________________________________________________________
-//  other includes
-//_________________________________________________________________________________________________________________
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/weakref.hxx>
 
-//_________________________________________________________________________________________________________________
-//  namespace
-//_________________________________________________________________________________________________________________
-
 namespace framework{
-
-//_________________________________________________________________________________________________________________
 
 /**
     @descr          We know some special dispatch objects with diffrent functionality.
@@ -77,15 +61,12 @@ enum EDispatchHelper
 {
     E_DEFAULTDISPATCHER     ,
     E_MENUDISPATCHER        ,
-    E_HELPAGENTDISPATCHER   ,
     E_CREATEDISPATCHER      ,
     E_BLANKDISPATCHER       ,
     E_SELFDISPATCHER        ,
     E_CLOSEDISPATCHER       ,
     E_STARTMODULEDISPATCHER
 };
-
-//_________________________________________________________________________________________________________________
 
 /**
     @short          implement a helper for XDispatchProvider interface
@@ -124,7 +105,6 @@ class DispatchProvider  :   // interfaces
         css::uno::WeakReference< css::frame::XFrame > m_xFrame;
         /// different dispatcher to handle special dispatch calls, protocols or URLs (they will be created on demand.)
         css::uno::Reference< css::frame::XDispatch > m_xMenuDispatcher     ;
-        css::uno::Reference< css::frame::XDispatch > m_xHelpAgentDispatcher;
         /// cache of some other dispatch provider which are registered inside configuration to handle special URL protocols
         HandlerCache m_aProtocolHandlerCache;
 

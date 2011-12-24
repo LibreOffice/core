@@ -56,7 +56,7 @@ typedef void* oslSecurity;
     @see osl_executeProcess
     @see osl_executeApplication
 */
-oslSecurity SAL_CALL osl_getCurrentSecurity(void);
+SAL_DLLPUBLIC oslSecurity SAL_CALL osl_getCurrentSecurity(void);
 
 /** Deprecated API
     Create a security handle for the denoted user.
@@ -69,7 +69,7 @@ oslSecurity SAL_CALL osl_getCurrentSecurity(void);
     @see osl_executeProcess
     @see osl_executeApplication
 */
-oslSecurityError SAL_CALL osl_loginUser(
+SAL_DLLPUBLIC oslSecurityError SAL_CALL osl_loginUser(
     rtl_uString *strUserName,
     rtl_uString *strPasswd,
     oslSecurity *pSecurity
@@ -87,7 +87,7 @@ oslSecurityError SAL_CALL osl_loginUser(
     @see osl_executeProcess
     @see osl_executeApplication
 */
-oslSecurityError SAL_CALL osl_loginUserOnFileServer(
+SAL_DLLPUBLIC oslSecurityError SAL_CALL osl_loginUserOnFileServer(
     rtl_uString *strUserName,
     rtl_uString *strPasswd,
     rtl_uString *strFileServer,
@@ -98,41 +98,47 @@ oslSecurityError SAL_CALL osl_loginUserOnFileServer(
     @param Security [in] the security handle for th user.
     @return True, if the user has adminsitrator rights, otherwise false.
 */
-sal_Bool SAL_CALL osl_isAdministrator(oslSecurity Security);
+SAL_DLLPUBLIC sal_Bool SAL_CALL osl_isAdministrator(
+        oslSecurity Security);
 
 /** Free the security handle, created by osl_loginUser or osl_getCurrentSecurity.
     @param Security [in] the security handle.
     @see osl_loginUser
 */
-void SAL_CALL osl_freeSecurityHandle(oslSecurity Security);
+SAL_DLLPUBLIC void SAL_CALL osl_freeSecurityHandle(
+        oslSecurity Security);
 
 /** Get the login ident for the user of this security handle.
     @param Security [in] the security handle.
     @param strIdent [out] the string that receives the ident on success.
     @return True, if the security handle is valid, otherwise False.
 */
-sal_Bool SAL_CALL osl_getUserIdent(oslSecurity Security, rtl_uString **strIdent);
+SAL_DLLPUBLIC sal_Bool SAL_CALL osl_getUserIdent(
+        oslSecurity Security, rtl_uString **strIdent);
 
 /** Get the login name for the user of this security handle.
     @param Security [in] the security handle.
     @param pszName [out] the string that receives the user name on success.
     @return True, if the security handle is valid, otherwise False.
 */
-sal_Bool SAL_CALL osl_getUserName(oslSecurity Security, rtl_uString **strName);
+SAL_DLLPUBLIC sal_Bool SAL_CALL osl_getUserName(
+        oslSecurity Security, rtl_uString **strName);
 
 /** Get the home directory of the user of this security handle.
     @param Security [in] the security handle.
     @param strDirectory [out] the string that receives the directory path on success.
     @return True, if the security handle is valid, otherwise False.
 */
-sal_Bool SAL_CALL osl_getHomeDir(oslSecurity Security, rtl_uString **strDirectory);
+SAL_DLLPUBLIC sal_Bool SAL_CALL osl_getHomeDir(
+        oslSecurity Security, rtl_uString **strDirectory);
 
 /** Get the directory for configuration data of the user of this security handle.
     @param Security [in] the security handle.
     @param strDirectory [out] the string that receives the directory path on success.
     @return True, if the security handle is valid, otherwise False.
 */
-sal_Bool SAL_CALL osl_getConfigDir(oslSecurity Security, rtl_uString **strDirectory);
+SAL_DLLPUBLIC sal_Bool SAL_CALL osl_getConfigDir(
+        oslSecurity Security, rtl_uString **strDirectory);
 
 
 /** Load Profile of the User
@@ -141,7 +147,8 @@ sal_Bool SAL_CALL osl_getConfigDir(oslSecurity Security, rtl_uString **strDirect
     @return True if the Profile could successfully loaded, False otherwise.
 */
 
-sal_Bool SAL_CALL osl_loadUserProfile(oslSecurity Security);
+SAL_DLLPUBLIC sal_Bool SAL_CALL osl_loadUserProfile(
+        oslSecurity Security);
 
 
 /** Unload a User Profile
@@ -150,7 +157,8 @@ sal_Bool SAL_CALL osl_loadUserProfile(oslSecurity Security);
     @return nothing is returned!
 */
 
-void SAL_CALL osl_unloadUserProfile(oslSecurity Security);
+SAL_DLLPUBLIC void SAL_CALL osl_unloadUserProfile(
+        oslSecurity Security);
 
 #ifdef __cplusplus
 }

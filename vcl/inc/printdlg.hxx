@@ -295,7 +295,6 @@ namespace vcl
         virtual ~PrintDialog();
 
         bool isPrintToFile();
-        int getCopyCount();
         bool isCollate();
         bool isSingleJobs();
 

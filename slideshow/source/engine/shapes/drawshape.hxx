@@ -287,7 +287,6 @@ namespace slideshow
             ViewShape::RenderArgs   getViewRenderArgs() const;
             ::basegfx::B2DRectangle getActualUnitShapeBounds() const;
 
-            void ensureVerboseMtfComments() const;
             bool hasIntrinsicAnimation() const;
             bool hasHyperlinks() const;
             void prepareHyperlinkIndices() const;

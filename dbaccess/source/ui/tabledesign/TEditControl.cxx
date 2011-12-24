@@ -419,16 +419,16 @@ CellController* OTableEditorCtrl::GetController(long nRow, sal_uInt16 nColumnId)
         case FIELD_NAME:
             return new EditCellController( pNameCell );
         case FIELD_TYPE:
-            if (pActFieldDescr && (pActFieldDescr->GetName().getLength() != 0))
+            if (pActFieldDescr && !pActFieldDescr->GetName().isEmpty())
                 return new ListBoxCellController( pTypeCell );
             else return NULL;
         case HELP_TEXT:
-            if (pActFieldDescr && (pActFieldDescr->GetName().getLength() != 0))
+            if (pActFieldDescr && !pActFieldDescr->GetName().isEmpty())
                 return new EditCellController( pHelpTextCell );
             else
                 return NULL;
         case COLUMN_DESCRIPTION:
-            if (pActFieldDescr && (pActFieldDescr->GetName().getLength() != 0))
+            if (pActFieldDescr && !pActFieldDescr->GetName().isEmpty())
                 return new EditCellController( pDescrCell );
             else
                 return NULL;
@@ -1704,7 +1704,7 @@ IMPL_LINK( OTableEditorCtrl, DelayedPaste, void*, /*EMPTYTAG*/ )
         sal_Int32 nFreeFromPos; // ab da nur freie Zeilen
         ::std::vector< ::boost::shared_ptr<OTableRow> >::reverse_iterator aIter = m_pRowList->rbegin();
         for(nFreeFromPos = m_pRowList->size();
-            aIter != m_pRowList->rend() && (!(*aIter) || !(*aIter)->GetActFieldDescr() || !(*aIter)->GetActFieldDescr()->GetName().getLength());
+            aIter != m_pRowList->rend() && (!(*aIter) || !(*aIter)->GetActFieldDescr() || (*aIter)->GetActFieldDescr()->GetName().isEmpty());
             --nFreeFromPos, ++aIter)
             ;
         if (nPastePosition < nFreeFromPos)  // es gibt mindestens eine belegte hinter PastePosition -> ganz nach hinten

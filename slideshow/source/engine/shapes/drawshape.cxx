@@ -270,39 +270,6 @@ namespace slideshow
             }
         }
 
-        void DrawShape::ensureVerboseMtfComments() const
-        {
-            // TODO(F1): Text effects don't currently work for drawing
-            // layer animations.
-
-            // only touch mpCurrMtf, if we're not a DrawingLayer
-            // animation.
-            if( (mnCurrMtfLoadFlags & MTF_LOAD_VERBOSE_COMMENTS) == 0 &&
-                maAnimationFrames.empty() )
-            {
-                ENSURE_OR_THROW( !maSubsetting.hasSubsetShapes(),
-                                  "DrawShape::ensureVerboseMtfComments(): reloading the metafile "
-                                  "with active child subsets will wreak havoc on the view!" );
-                ENSURE_OR_THROW( maSubsetting.getSubsetNode().isEmpty(),
-                                  "DrawShape::ensureVerboseMtfComments(): reloading the metafile "
-                                  "for an ALREADY SUBSETTED shape is not possible!" );
-
-                // re-fetch metafile with comments
-                // note that, in case of shapes without text, the new
-                // metafile might still not provide any useful
-                // subsetting information!
-                mpCurrMtf.reset( new GDIMetaFile );
-                mnCurrMtfLoadFlags |= MTF_LOAD_VERBOSE_COMMENTS;
-                local_getMetaFile_WithSpecialChartHandling(
-                    uno::Reference<lang::XComponent>(mxShape, uno::UNO_QUERY),
-                    mxPage, *mpCurrMtf, mnCurrMtfLoadFlags,
-                    mxComponentContext );
-
-                maSubsetting.reset( maSubsetting.getSubsetNode(),
-                                    mpCurrMtf );
-            }
-        }
-
         ViewShape::RenderArgs DrawShape::getViewRenderArgs() const
         {
             return ViewShape::RenderArgs(
@@ -1326,17 +1293,12 @@ namespace slideshow
 
         DocTreeNode DrawShape::getSubsetNode() const
         {
-            ensureVerboseMtfComments();
-
             // forward to delegate
             return maSubsetting.getSubsetNode();
         }
 
         AttributableShapeSharedPtr DrawShape::getSubset( const DocTreeNode& rTreeNode ) const
         {
-            ENSURE_OR_THROW( (mnCurrMtfLoadFlags & MTF_LOAD_VERBOSE_COMMENTS) != 0,
-                              "DrawShape::getSubset(): subset query on shape with apparently no subsets" );
-
             // forward to delegate
             return maSubsetting.getSubsetShape( rTreeNode );
         }
@@ -1344,9 +1306,6 @@ namespace slideshow
         bool DrawShape::createSubset( AttributableShapeSharedPtr&   o_rSubset,
                                       const DocTreeNode&            rTreeNode )
         {
-            ENSURE_OR_THROW( (mnCurrMtfLoadFlags & MTF_LOAD_VERBOSE_COMMENTS) != 0,
-                              "DrawShape::createSubset(): subset query on shape with apparently no subsets" );
-
             // subset shape already created for this DocTreeNode?
             AttributableShapeSharedPtr pSubset( maSubsetting.getSubsetShape( rTreeNode ) );
 
@@ -1388,9 +1347,6 @@ namespace slideshow
 
         bool DrawShape::revokeSubset( const AttributableShapeSharedPtr& rShape )
         {
-            ENSURE_OR_THROW( (mnCurrMtfLoadFlags & MTF_LOAD_VERBOSE_COMMENTS) != 0,
-                              "DrawShape::createSubset(): subset query on shape with apparently no subsets" );
-
             // flush bounds cache
             maCurrentShapeUnitBounds.reset();
 
@@ -1436,16 +1392,12 @@ namespace slideshow
 
         sal_Int32 DrawShape::getNumberOfTreeNodes( DocTreeNode::NodeType eNodeType ) const // throw ShapeLoadFailedException
         {
-            ensureVerboseMtfComments();
-
             return maSubsetting.getNumberOfTreeNodes( eNodeType );
         }
 
         DocTreeNode DrawShape::getTreeNode( sal_Int32               nNodeIndex,
                                             DocTreeNode::NodeType   eNodeType ) const // throw ShapeLoadFailedException
         {
-            ensureVerboseMtfComments();
-
             if ( hasHyperlinks())
             {
                 prepareHyperlinkIndices();
@@ -1457,8 +1409,6 @@ namespace slideshow
         sal_Int32 DrawShape::getNumberOfSubsetTreeNodes ( const DocTreeNode&    rParentNode,
                                                           DocTreeNode::NodeType eNodeType ) const // throw ShapeLoadFailedException
         {
-            ensureVerboseMtfComments();
-
             return maSubsetting.getNumberOfSubsetTreeNodes( rParentNode, eNodeType );
         }
 
@@ -1466,8 +1416,6 @@ namespace slideshow
                                                   sal_Int32             nNodeIndex,
                                                   DocTreeNode::NodeType eNodeType ) const // throw ShapeLoadFailedException
         {
-            ensureVerboseMtfComments();
-
             return maSubsetting.getSubsetTreeNode( rParentNode, nNodeIndex, eNodeType );
         }
     }

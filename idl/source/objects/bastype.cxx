@@ -37,7 +37,6 @@
 #include <hash.hxx>
 #include <database.hxx>
 
-#ifdef IDL_COMPILER
 static sal_Bool ReadRangeSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm,
                             sal_uLong nMin, sal_uLong nMax, sal_uLong* pValue )
 {
@@ -67,7 +66,6 @@ static sal_Bool ReadRangeSvIdl( SvStringHashEntry * pName, SvTokenStream & rInSt
     rInStm.Seek( nTokPos );
     return sal_False;
 }
-#endif
 
 sal_uInt32 SvUINT32::Read( SvStream & rStm )
 {
@@ -140,7 +138,6 @@ SvStream& operator >> (SvStream & rStm, SvVersion & r )
 }
 
 
-#ifdef IDL_COMPILER
 sal_Bool SvBOOL::ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm )
 {
     sal_uInt32 nTokPos = rInStm.Tell();
@@ -225,19 +222,19 @@ sal_Bool SvIdentifier::WriteSvIdl( SvStringHashEntry * pName,
                                sal_uInt16 /*nTab */ )
 {
     rOutStm << pName->GetName().GetBuffer() << '(';
-    rOutStm << GetBuffer() << ')';
+    rOutStm << getIdentifier().GetBuffer() << ')';
     return sal_True;
 }
 
 SvStream& operator << (SvStream & rStm, const SvIdentifier & r )
 {
-    rStm.WriteByteString( r );
+    write_lenPrefixed_uInt8s_FromOString<sal_uInt16>(rStm, r.getIdentifier());
     return rStm;
 }
 
 SvStream& operator >> (SvStream & rStm, SvIdentifier & r )
 {
-    rStm.ReadByteString( r );
+    r.setIdentifier(read_lenPrefixed_uInt8s_ToOString<sal_uInt16>(rStm));
     return rStm;
 }
 
@@ -249,7 +246,7 @@ sal_Bool SvNumberIdentifier::ReadSvIdl( SvIdlDataBase & rBase,
     if( SvIdentifier::ReadSvIdl( pName, rInStm ) )
     {
         sal_uLong n;
-        if( rBase.FindId( *this, &n ) )
+        if( rBase.FindId( getIdentifier(), &n ) )
         {
             nValue = n;
             return sal_True;
@@ -257,7 +254,7 @@ sal_Bool SvNumberIdentifier::ReadSvIdl( SvIdlDataBase & rBase,
         else
         {
             ByteString aStr ("no value for identifier <");
-            aStr += *this;
+            aStr += getIdentifier();
             aStr += "> ";
             rBase.SetError( aStr, rInStm.GetToken() );
             rBase.WriteError( rInStm );
@@ -284,7 +281,7 @@ sal_Bool SvNumberIdentifier::ReadSvIdl( SvIdlDataBase & rBase,
         else
         {
             ByteString aStr ("no value for identifier <");
-            aStr += *this;
+            aStr += getIdentifier();
             aStr += "> ";
             rBase.SetError( aStr, rInStm.GetToken() );
             rBase.WriteError( rInStm );
@@ -346,13 +343,13 @@ sal_Bool SvString::WriteSvIdl( SvStringHashEntry * pName, SvStream & rOutStm,
 
 SvStream& operator << (SvStream & rStm, const SvString & r )
 {
-    rStm.WriteByteString( r );
+    write_lenPrefixed_uInt8s_FromOString<sal_uInt16>(rStm, r);
     return rStm;
 }
 
 SvStream& operator >> (SvStream & rStm, SvString & r )
 {
-    rStm.ReadByteString( r );
+    r = read_lenPrefixed_uInt8s_ToOString<sal_uInt16>(rStm);
     return rStm;
 }
 
@@ -436,7 +433,5 @@ sal_Bool SvVersion::WriteSvIdl( SvStream & rOutStm )
         << ')';
     return sal_True;
 }
-#endif //IDL_COMPILER
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

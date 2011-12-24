@@ -68,55 +68,16 @@ sub get_release_version($$$$)
     return $release_version;
 }
 
-
-sub generate_lo_piece_blacklist($)
-{
-    my ($blacklist) = @_;
-
-    # FIXME: crazy hacks to copy libreoffice-build without too big and useless subdirectories and to show a progress
-    open (BLACKLIST, ">$blacklist") || die "Can't open $blacklist: $!\n";
-
-    # IMPORTANT: Do not remove .git directories because "git log" is called during "make dist"
-    print BLACKLIST ".git\n";
-    print BLACKLIST ".gitignore\n";
-    print BLACKLIST ".gitattributes\n";
-    print BLACKLIST "autom4te.cache/*\n";
-    print BLACKLIST "autom4te.cache\n";
-    print BLACKLIST "autogen.lastrun\n";
-    print BLACKLIST "clone/*\n";
-    print BLACKLIST "config.log\n";
-    print BLACKLIST "git-hooks\n";
-    print BLACKLIST "Env.Host.sh\n";
-    print BLACKLIST "src/tmp*\n";
-    print BLACKLIST "src/fetch.log\n";
-    print BLACKLIST "src/libreoffice-*.tar.bz2\n";
-    print BLACKLIST "src/????????????????????????????????-*\n";
-    print BLACKLIST "warn\n";
-
-    close BLACKLIST;
-}
-
-# remove symlinks to clone subdir
-sub remove_module_symlinks($$)
-{
-    my ($tempdir, $piece_tarball_name) = @_;
-
-    print STDERR "find $tempdir/$piece_tarball_name -mindepth 1 -maxdepth 1 -type l -exec rm {} \\;\n";
-    system ("find $tempdir/$piece_tarball_name -mindepth 1 -maxdepth 1 -type l -exec rm {} \\;") &&
-        die "Error: can't delete symlinks to clone dir in $tempdir: $!\n";
-}
-
-
 # copy files to temp dir; showing a progress; using a black list
-sub copy_dir_filter_and_show_progress($$$)
+sub copy_dir_filter_and_show_progress($$)
 {
-    my ($source_dir, $target_dir, $blacklist) = @_;
+    my ($source_dir, $target_dir) = @_;
 
     print "Copying \"$source_dir\" -> \"$target_dir\"...";
-    # FIXME: crazy hacks to copy dir with a blacklist and showing a progress
-    system ("tar -cf - -C $source_dir -X $blacklist \.\/ | " .
-            "tar -xf - -C $target_dir --checkpoint 2>&1 | " .
-            "awk '{ ORS=\"\" ; if (++nlines\%50 == 0) printf \".\"; fflush() }'") &&
+    # copy sources from git and show progress
+    system ("cd $source_dir && " .
+            "git archive --format=tar HEAD | " .
+            "  tar -xf - -C $target_dir --checkpoint=500 --checkpoint-action=exec=\"echo -n .\"") &&
         die "Error: copying failed: $!\n";
     print "\n";
 }
@@ -126,18 +87,10 @@ sub copy_dir_filter_and_show_progress($$$)
 sub copy_lo_piece_to_tempdir($$$)
 {
     my ($piece_dir, $piece, $piece_tarball_name) = @_;
-
-
     my $tempdir = tempdir( 'libreoffice-XXXXXX', DIR => File::Spec->tmpdir );
-    my $blacklist = "$tempdir/libreoffice-$piece.copy.blacklist";
 
     mkdir "$tempdir/$piece_tarball_name" || die "Can't create directory \"$tempdir/$piece_tarball_name\": $!\n";
-
-    generate_lo_piece_blacklist($blacklist);
-    copy_dir_filter_and_show_progress("$piece_dir", "$tempdir/$piece_tarball_name", $blacklist);
-    remove_module_symlinks($tempdir, $piece_tarball_name);
-
-    unlink $blacklist;
+    copy_dir_filter_and_show_progress("$piece_dir", "$tempdir/$piece_tarball_name");
 
     return $tempdir;
 }
@@ -146,8 +99,7 @@ sub generate_lo_piece_changelog($$$)
 {
     my ($lo_piece_clone, $lo_piece_release_dir, $piece) = @_;
     print "Generating changelog for $piece...\n";
-    print "1:$lo_piece_clone, 2:$lo_piece_release_dir, 3:$piece\n";
-    # FIXME: crazy hacks to copy dir with a blacklist and showing a progress
+#    print "1:$lo_piece_clone, 2:$lo_piece_release_dir, 3:$piece\n";
     system ("cd $lo_piece_clone && " .
             "git log --date=short --pretty='format:@%cd  %an  <%ae>  [%H]%n%n%s%n%n%e%b' | " .
             "  sed -e 's|^\([^@]\)|\t\1|' -e 's|^@||' >$lo_piece_release_dir/ChangeLog" ) &&
@@ -182,20 +134,19 @@ sub generate_tarball($$$)
     my ($dir, $tarball, $tar_compress_option) = @_;
 
     print "Creating $tarball...";
-    system ("cd $dir && " .
-            "tar -c $tar_compress_option -f $tarball --checkpoint * 2>&1 | awk '{ ORS=\"\" ; if (++nlines\%50 == 0) printf \".\"; fflush() }' && " .
-            "cd - >/dev/null 2>&1") && die "Error: releasing failed: $!\n";
+    # generate the tarball in the current directory; avoid "./" prefix in the stored paths; show progress
+    system ("tar -c $tar_compress_option -f $tarball -C $dir --checkpoint=500 --checkpoint-action=exec=\"echo -n .\" --transform=\"s|^\./||\" .") && 
+        die "Error: releasing failed: $!\n";
     print "\n";
 }
 
-sub generate_md5($$)
+sub generate_md5($)
 {
-    my ($dir, $filename) = @_;
+    my ($filename) = @_;
 
     print "Generating MD5...\n";
-    system ("cd $dir && " .
-            "md5sum $filename >$filename.md5 && " .
-            "cd - >/dev/null 2>&1") && die "Error: releasing failed: $!\n";
+    system ("md5sum $filename >$filename.md5") &&
+        die "Error: releasing failed: $!\n";
 }
 
 sub default_releases_state_file($)
@@ -213,23 +164,6 @@ sub default_releases_state_file($)
     }
 
     return "$releases_state_file";
-}
-
-sub default_releases_archive($)
-{
-    my ($lo_core_dir) = @_;
-
-    my $rootdir = $lo_core_dir;
-    $rootdir =~ s/^(.*?)\/?[^\/]+\/?$/$1/;
-
-    my $releases_archive_dir;
-    if ($rootdir) {
-        $releases_archive_dir = "$rootdir/archive";
-    } else {
-        $releases_archive_dir = "archive";
-    }
-
-    return "$releases_archive_dir";
 }
 
 sub load_releases_state($)
@@ -277,25 +211,6 @@ sub remove_tempdir($)
     system ("rm -rf $tempdir") && die "Error: rm failed: $!\n";
 }
 
-sub save_file($$$)
-{
-    my ($source_dir, $target_dir, $file) = @_;
-
-    unless ( -d "$target_dir" ) {
-        mkdir ("$target_dir") ||
-            die "Can't create directory \"$target_dir\": $!\n";
-    }
-
-    if ( -f "$target_dir/$file" ) {
-        print "Warning: $target_dir/$file already exists and will be replaced\n";
-        unlink ("$target_dir/$file");
-    }
-
-    print "Copying into archive: $target_dir/$file ...\n";
-    copy ("$source_dir/$file", "$target_dir/$file") ||
-        die "Error: Can't copy $source_dir/$file to $target_dir/$file: $!\n";
-}
-
 sub check_if_file_exists($$)
 {
     my ($file, $force) = @_;
@@ -310,24 +225,17 @@ sub check_if_file_exists($$)
     }
 }
 
-sub check_if_tarball_already_released($$$)
+sub check_if_already_released($$$$$$$)
 {
-    my ($tarball, $releases_archive_dir, $force) = @_;
+    my ($lo_core_tarball_name, $p_piece_tarball_name, $force, $bzip2, $xz, $pack_lo_core, $pack_lo_pieces) = @_;
 
-    check_if_file_exists($tarball, $force);
-    check_if_file_exists("$releases_archive_dir/$tarball", $force) if (defined $releases_archive_dir);
-}
-
-sub check_if_already_released($$$$$$$$)
-{
-    my ($lo_core_tarball_name, $p_piece_tarball_name, $releases_archive_dir, $force, $bzip2, $xz, $pack_lo_core, $pack_lo_pieces) = @_;
-
-    check_if_tarball_already_released("$lo_core_tarball_name.tar.gz", $releases_archive_dir, $force) if ($pack_lo_core);
+    check_if_file_exists("$lo_core_tarball_name.tar.bz2", $force)  if ($pack_lo_core && defined $bzip2);
+    check_if_file_exists("$lo_core_tarball_name.tar.xz", $force) if ($pack_lo_core && defined $xz);
 
     if ($pack_lo_pieces) {
         foreach my $tarball_name ( values %{$p_piece_tarball_name} ) {
-            check_if_tarball_already_released("$tarball_name.tar.bz2", $releases_archive_dir, $force) if (defined $bzip2);
-            check_if_tarball_already_released("$tarball_name.tar.xz", $releases_archive_dir, $force) if (defined $xz);
+            check_if_file_exists("$tarball_name.tar.bz2", $force) if (defined $bzip2);
+            check_if_file_exists("$tarball_name.tar.xz", $force) if (defined $xz);
         }
     }
 }
@@ -345,40 +253,31 @@ sub prepare_piece_sources($$$$)
     return $temp_dir;
 }
 
-sub pack_piece_sources($$$$$)
+sub pack_piece_sources($$$$)
 {
-    my ($temp_dir, $md5, $tarball, $tar_compress_option, $releases_archive_dir) = @_;
+    my ($temp_dir, $md5, $tarball, $tar_compress_option) = @_;
 
     generate_tarball($temp_dir, $tarball, $tar_compress_option);
-    generate_md5($temp_dir, $tarball) if (defined $md5);
-
-    save_file($temp_dir, ".", "$tarball");
-    save_file($temp_dir, ".", "$tarball.md5") if (defined $md5);
-    if ( defined $releases_archive_dir ) {
-        save_file($temp_dir, $releases_archive_dir, "$tarball");
-        save_file($temp_dir, $releases_archive_dir, "$tarball.md5") if (defined $md5);
-    }
-    unlink ("$temp_dir/$tarball");
-    unlink ("$temp_dir/$tarball.md5") if (defined $md5);
+    generate_md5($tarball) if (defined $md5);
 }
 
-sub generate_piece_tarball($$$$$$$$)
+sub generate_piece_tarball($$$$$$$)
 {
-    my ($piece_dir, $release_version, $piece, $md5, $bzip2, $xz, $piece_tarball_name, $releases_archive_dir) = @_;
+    my ($piece_dir, $release_version, $piece, $md5, $bzip2, $xz, $piece_tarball_name) = @_;
 
     my $temp_dir = prepare_piece_sources($piece_dir, $release_version, $piece, $piece_tarball_name);
-    pack_piece_sources($temp_dir, $md5, "$piece_tarball_name.tar.bz2", "--bzip2", $releases_archive_dir) if (defined $bzip2);
-    pack_piece_sources($temp_dir, $md5, "$piece_tarball_name.tar.xz", "--xz", $releases_archive_dir) if (defined $xz);
+    pack_piece_sources($temp_dir, $md5, "$piece_tarball_name.tar.bz2", "--bzip2") if (defined $bzip2);
+    pack_piece_sources($temp_dir, $md5, "$piece_tarball_name.tar.xz", "--xz") if (defined $xz);
     remove_tempdir($temp_dir);
 }
 
 
-sub generate_tarballs($$$$$$$$$$$)
+sub generate_tarballs($$$$$$$$$$)
 {
-    my ($source_dir, $releases_archive_dir, $release_version, $md5, $bzip2, $xz, $lo_core_tarball_name, $p_piece_tarball_name, $pack_lo_core, $pack_lo_pieces, $is_lo_core_dir) = @_;
+    my ($source_dir, $release_version, $md5, $bzip2, $xz, $lo_core_tarball_name, $p_piece_tarball_name, $pack_lo_core, $pack_lo_pieces, $is_lo_core_dir) = @_;
 
     if ($pack_lo_core) {
-        generate_piece_tarball($source_dir, $release_version, "core", $md5, $bzip2, $xz, $lo_core_tarball_name, $releases_archive_dir);
+        generate_piece_tarball($source_dir, $release_version, "core", $md5, $bzip2, $xz, $lo_core_tarball_name);
     }
 
     if ($pack_lo_pieces) {
@@ -386,7 +285,7 @@ sub generate_tarballs($$$$$$$$$$$)
         foreach my $piece ( keys %{$p_piece_tarball_name} ) {
             print "\n--- Generating $piece ---\n";
             $piece_dir = "$source_dir/clone/$piece" if ($is_lo_core_dir);
-            generate_piece_tarball($piece_dir, $release_version, $piece, $md5, $bzip2, $xz, $p_piece_tarball_name->{$piece}, $releases_archive_dir);
+            generate_piece_tarball($piece_dir, $release_version, $piece, $md5, $bzip2, $xz, $p_piece_tarball_name->{$piece});
         }
     }
 }
@@ -409,8 +308,6 @@ sub usage()
           "\t--md5: generate md5 sum for the final tarball\n" .
           "\t--bzip2: generate tarballs compressed by bzip2\n" .
           "\t--xz: generate tarballs compressed by xz (default)\n" .
-          "\t--md5: generate md5 sum for the final tarball\n" .
-          "\t--md5: generate md5 sum for the final tarball\n" .
           "\t--version: just print version of the released package but do not\n" .
           "\t\trelease it; the version is affected by the other options, e.g.\n" .
           "\t\t--inc-version\n" .
@@ -436,7 +333,6 @@ my $release_version;
 my $pack_lo_core=1;
 my $pack_lo_pieces=1;
 my $source_dir;
-my $releases_archive_dir;
 my $releases_state_file;
 my $state_config_version;
 my $state_release_version;
@@ -534,7 +430,6 @@ print "Source: $source_dir\n" if ($verbose);
 if ($is_lo_core_dir) {
     # detect some paths
     $releases_state_file = default_releases_state_file($source_dir) unless (defined $releases_state_file);
-    $releases_archive_dir = default_releases_archive($source_dir) unless (defined $releases_archive_dir);
 
     # detect versions
     $config_version = get_config_version($source_dir);
@@ -567,13 +462,13 @@ print "New version       : $release_version\n" if ($verbose);
 if ( defined $get_config_version ) {
     print "$release_version\n";
 } else {
-    check_if_already_released($lo_core_tarball_name, \%piece_tarball_name, $releases_archive_dir, $force, $bzip2, $xz, $pack_lo_core, $pack_lo_pieces);
+    check_if_already_released($lo_core_tarball_name, \%piece_tarball_name, $force, $bzip2, $xz, $pack_lo_core, $pack_lo_pieces);
 
     # give a chance to stop the process
     print ("\nWaiting 3 seconds...\n");
     sleep 3;
 
-    generate_tarballs($source_dir, $releases_archive_dir, $release_version, $md5, $bzip2, $xz, $lo_core_tarball_name, \%piece_tarball_name, $pack_lo_core, $pack_lo_pieces, $is_lo_core_dir);
+    generate_tarballs($source_dir, $release_version, $md5, $bzip2, $xz, $lo_core_tarball_name, \%piece_tarball_name, $pack_lo_core, $pack_lo_pieces, $is_lo_core_dir);
 
     if ( defined $releases_state_file ) {
         save_releases_state($releases_state_file, $config_version, $release_version);

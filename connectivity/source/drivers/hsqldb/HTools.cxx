@@ -48,14 +48,14 @@ namespace connectivity { namespace hsqldb
         const ::rtl::OUString _rSchema, const ::rtl::OUString _rName, bool _bShortForm )
     {
         _inout_rBuffer.appendAscii( " WHERE " );
-        if ( _rCatalog.getLength() )
+        if ( !_rCatalog.isEmpty() )
         {
             _inout_rBuffer.appendAscii( _bShortForm ? "TABLE_CAT" : "TABLE_CATALOG" );
             _inout_rBuffer.appendAscii( " = '" );
             _inout_rBuffer.append     ( _rCatalog );
             _inout_rBuffer.appendAscii( "' AND " );
         }
-        if ( _rSchema.getLength() )
+        if ( !_rSchema.isEmpty() )
         {
             _inout_rBuffer.appendAscii( _bShortForm ? "TABLE_SCHEM" : "TABLE_SCHEMA" );
             _inout_rBuffer.appendAscii( " = '" );

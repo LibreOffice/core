@@ -54,12 +54,12 @@ public:
     TYPEINFO();
     E3dSphereObj(E3dDefaultAttributes& rDefault, const basegfx::B3DPoint& rCenter, const basegfx::B3DVector& r3DSize);
 
-    // FG: Dieser Konstruktor wird nur von MakeObject aus der 3d-Objectfactory beim
-    //     Laden von Dokumenten mit Kugeln aufgerufen. Dieser Konstruktor ruft kein
-    //     CreateSphere auf, er erzeugt also keine Kugel.
+    // FG: This constructor is only called from MakeObject from the 3d-Objectfactory
+    //     when a document with a sphere is loaded.  This constructor does not call
+    //     CreateSphere, or create any spheres.
     E3dSphereObj(int dummy);
 
-    // HorizontalSegments:
+    // horizontal segments:
     sal_uInt32 GetHorizontalSegments() const
         { return ((const Svx3DHorizontalSegmentsItem&)GetObjectItemSet().Get(SDRATTR_3DOBJ_HORZ_SEGS)).GetValue(); }
 
@@ -75,11 +75,11 @@ public:
     const basegfx::B3DPoint& Center() const { return aCenter; }
     const basegfx::B3DVector& Size() const { return aSize; }
 
-    // Lokale Parameter setzen mit Geometrieneuerzeugung
+    // set local parameters when the geometry is recreated
     void SetCenter(const basegfx::B3DPoint& rNew);
     void SetSize(const basegfx::B3DVector& rNew);
 
-    // TakeObjName...() ist fuer die Anzeige in der UI, z.B. "3 Rahmen selektiert".
+    // TakeObjName...() is for displaying in the UI, eg "3 selected frames."
     virtual void TakeObjNameSingul(String& rName) const;
     virtual void TakeObjNamePlural(String& rName) const;
 };

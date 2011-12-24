@@ -350,7 +350,7 @@ void SvxUnoNumberingRules::setNumberingRuleByIndex( const Sequence< beans::Prope
             OUString aStr;
             if( aVal >>= aStr )
             {
-                if(aStr.getLength())
+                if(!aStr.isEmpty())
                 {
                     aFmt.SetBulletChar(aStr[0]);
                 }

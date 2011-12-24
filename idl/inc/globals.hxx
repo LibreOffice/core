@@ -29,7 +29,6 @@
 #ifndef _GLOBALS_HXX
 #define _GLOBALS_HXX
 
-#ifdef IDL_COMPILER
 #include <hash.hxx>
 
 #ifdef ICC
@@ -238,7 +237,6 @@ HASH_INLINE(Description)
 HASH_INLINE(UnoName)
 
 
-#endif // IDL_COMPILER
 #endif // _GLOBALS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

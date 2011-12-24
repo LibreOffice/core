@@ -86,7 +86,7 @@ bool XcdParser::startElement(
         if (nsId == xmlreader::XmlReader::NAMESPACE_NONE &&
             name.equals(RTL_CONSTASCII_STRINGPARAM("dependency")))
         {
-            if (dependency_.getLength() == 0) {
+            if (dependency_.isEmpty()) {
                 xmlreader::Span attrFile;
                 for (;;) {
                     int attrNsId;
@@ -110,7 +110,7 @@ bool XcdParser::startElement(
                         css::uno::Reference< css::uno::XInterface >());
                 }
                 dependency_ = attrFile.convertFromUtf8();
-                if (dependency_.getLength() == 0) {
+                if (dependency_.isEmpty()) {
                     throw css::uno::RuntimeException(
                         (rtl::OUString(
                             RTL_CONSTASCII_USTRINGPARAM(

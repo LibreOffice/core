@@ -1798,22 +1798,12 @@ void SwView::NotifyDBChanged()
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Drucken
+    Printing
  --------------------------------------------------------------------*/
-SfxObjectShellLock & SwView::GetTmpSelectionDoc()
+SfxObjectShellLock SwView::CreateTmpSelectionDoc()
 {
-    return GetViewImpl()->GetTmpSelectionDoc();
-}
-
-SfxObjectShellLock & SwView::GetOrCreateTmpSelectionDoc()
-{
-    SfxObjectShellLock &rxTmpDoc = GetViewImpl()->GetTmpSelectionDoc();
-    if (!rxTmpDoc.Is())
-    {
-        SwXTextView *pImpl = GetViewImpl()->GetUNOObject_Impl();
-        rxTmpDoc = pImpl->BuildTmpSelectionDoc();
-    }
-    return rxTmpDoc;
+    SwXTextView *const pImpl = GetViewImpl()->GetUNOObject_Impl();
+    return pImpl->BuildTmpSelectionDoc();
 }
 
 void SwView::AddTransferable(SwTransferable& rTransferable)

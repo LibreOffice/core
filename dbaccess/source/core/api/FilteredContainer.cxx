@@ -325,7 +325,7 @@ sal_Int32 createWildCardVector(Sequence< ::rtl::OUString >& _rTableFilter, ::std
             // table type restriction which is inherent to the container
             Sequence< ::rtl::OUString > aTableTypeFilter;
             ::rtl::OUString sInherentTableTypeRestriction( getTableTypeRestriction() );
-            if ( sInherentTableTypeRestriction.getLength() )
+            if ( !sInherentTableTypeRestriction.isEmpty() )
             {
                 if ( _rTableTypeFilter.getLength() != 0 )
                 {

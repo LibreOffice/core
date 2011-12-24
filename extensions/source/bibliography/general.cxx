@@ -720,7 +720,7 @@ IMPL_LINK(BibGeneralPage, ScrollHdl, ScrollBar*, pScroll)
         nCurrentOffset = aFixedTexts[0]->GetPosPixel().Y() - aBasePos.Y();
     else
         nCurrentOffset = aFixedTexts[0]->GetPosPixel().X() - aBasePos.X();
-    nOffset = pScroll->IsVisible() ? pScroll->GetThumbPos() + nCurrentOffset : nCurrentOffset;;
+    nOffset = pScroll->IsVisible() ? pScroll->GetThumbPos() + nCurrentOffset : nCurrentOffset;
 
     for(sal_uInt16 i = 0; i < FIELD_COUNT; i++)
     {

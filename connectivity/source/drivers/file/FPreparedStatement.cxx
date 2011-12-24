@@ -530,7 +530,7 @@ void OPreparedStatement::describeColumn(OSQLParseNode* _pParameter,OSQLParseNode
     {
         ::rtl::OUString sColumnName,sTableRange;
         m_aSQLIterator.getColumnRange(_pNode,sColumnName,sTableRange);
-        if ( sColumnName.getLength() )
+        if ( !sColumnName.isEmpty() )
         {
             Reference<XNameAccess> xNameAccess = _xTable->getColumns();
             if(xNameAccess->hasByName(sColumnName))

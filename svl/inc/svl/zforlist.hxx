@@ -595,6 +595,10 @@ public:
     /// Whether nFIndex is a special builtin format
     bool IsSpecialStandardFormat( sal_uInt32 nFIndex, LanguageType eLnge );
 
+    /** Return the corresponding edit format of a format. */
+    sal_uInt32 GetEditFormat( double fNumber, sal_uInt32 nFIndex, short eType,
+            LanguageType eLnge, SvNumberformat* pFormat );
+
     /// Return the reference date
     Date* GetNullDate();
     /// Return the standard decimal precision

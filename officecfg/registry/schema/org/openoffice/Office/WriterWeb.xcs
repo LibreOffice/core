@@ -116,7 +116,7 @@
 						<desc>Determines whether certain settings are applied or not (display of tab stops, spaces, breaks).</desc>
 						<label>Meta characters</label>
 					</info>
-					<value>true</value>
+					<value>false</value>
 				</prop>
 				<prop oor:name="ParagraphEnd" oor:type="xs:boolean">
 					<!-- OldPath: HTML_Editor/Content/Nonprinting_characters -->

@@ -193,7 +193,7 @@ sal_Bool SAL_CALL OCommonStatement::execute(const OUString& sql)
     sal_Bool success = false;
     try {
         success = cppStatement->execute(OUStringToOString(sSqlStatement, m_pConnection->getConnectionSettings().encoding).getStr())? sal_True:sal_False;
-    } catch (sql::SQLException &e) {
+    } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_pConnection->getConnectionEncoding());
     }
     return success;
@@ -216,7 +216,7 @@ Reference< XResultSet > SAL_CALL OCommonStatement::executeQuery(const OUString& 
         std::auto_ptr< sql::ResultSet > rset(cppStatement->executeQuery(OUStringToOString(sSqlStatement, m_pConnection->getConnectionEncoding()).getStr()));
         xResultSet = new OResultSet(this, rset.get(), m_pConnection->getConnectionEncoding());
         rset.release();
-    } catch (sql::SQLException &e) {
+    } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_pConnection->getConnectionEncoding());
     }
     return xResultSet;
@@ -301,7 +301,7 @@ sal_Int32 SAL_CALL OCommonStatement::executeUpdate(const OUString& sql)
     sal_Int32 affectedRows = 0;
     try {
         affectedRows = cppStatement->executeUpdate(OUStringToOString(sSqlStatement, m_pConnection->getConnectionEncoding()).getStr());
-    } catch (sql::SQLException &e) {
+    } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_pConnection->getConnectionEncoding());
     }
     return affectedRows;
@@ -322,7 +322,7 @@ Reference< XResultSet > SAL_CALL OCommonStatement::getResultSet()
         std::auto_ptr< sql::ResultSet > rset(cppStatement->getResultSet());
         xResultSet = new OResultSet(this, rset.get(), m_pConnection->getConnectionEncoding());
         rset.release();
-    } catch (sql::SQLException &e) {
+    } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_pConnection->getConnectionEncoding());
     }
     return xResultSet;

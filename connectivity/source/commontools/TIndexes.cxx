@@ -89,7 +89,7 @@ sdbcx::ObjectType OIndexesHelper::createObject(const ::rtl::OUString& _rName)
         while( xResult->next() )
         {
             sal_Bool bUnique = !xRow->getBoolean(4);
-            if((!aQualifier.getLength() || xRow->getString(5) == aQualifier ) && xRow->getString(6) == aName)
+            if((aQualifier.isEmpty() || xRow->getString(5) == aQualifier ) && xRow->getString(6) == aName)
             {
                 sal_Int32 nClustered = xRow->getShort(7);
                 sal_Bool bPrimarKeyIndex = sal_False;
@@ -160,7 +160,7 @@ sdbcx::ObjectType OIndexesHelper::appendObject( const ::rtl::OUString& _rForName
         ::rtl::OUString aComposedName;
 
         aComposedName = dbtools::composeTableName(m_pTable->getMetaData(),aCatalog,aSchema,aTable,sal_True,::dbtools::eInIndexDefinitions);
-        if ( _rForName.getLength() )
+        if (!_rForName.isEmpty() )
         {
             aSql.append( ::dbtools::quoteName( aQuote, _rForName ) );
             aSql.appendAscii(" ON ");

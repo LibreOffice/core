@@ -131,8 +131,8 @@ String TableListFacade::getSelectedName( String& _out_rAliasName ) const
     try
     {
         Reference< XDatabaseMetaData > xMeta( m_xConnection->getMetaData(), UNO_QUERY_THROW );
-        if (  !aCatalog.getLength()
-            && aSchema.getLength()
+        if (  aCatalog.isEmpty()
+            && !aSchema.isEmpty()
             && xMeta->supportsCatalogsInDataManipulation()
             && !xMeta->supportsSchemasInDataManipulation() )
         {

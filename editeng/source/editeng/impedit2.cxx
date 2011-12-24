@@ -1689,7 +1689,7 @@ void ImpEditEngine::InitScriptTypes( sal_uInt16 nPara )
         while ( pField )
         {
             ::rtl::OUString aFldText( ((EditCharAttribField*)pField)->GetFieldValue() );
-            if ( aFldText.getLength() )
+            if ( !aFldText.isEmpty() )
             {
                 aText.SetChar( pField->GetStart(), aFldText.getStr()[0] );
                 short nFldScriptType = _xBI->getScriptType( aFldText, 0 );
@@ -2288,15 +2288,14 @@ EditPaM ImpEditEngine::ImpConnectParagraphs( ContentNode* pLeft, ContentNode* pR
         pLeft->GetWrongList()->ClearWrongs( nInv, 0xFFFF, pLeft );  // Possibly remove one
         pLeft->GetWrongList()->MarkInvalid( nInv, nEnd+1 );
         // Take over misspelled words
-        sal_uInt16 nRWrongs = pRight->GetWrongList()->Count();
-        for ( sal_uInt16 nW = 0; nW < nRWrongs; nW++ )
+        WrongList* pRWrongs = pRight->GetWrongList();
+        for (WrongList::iterator i = pRWrongs->begin(); i < pRWrongs->end(); ++i)
         {
-            WrongRange aWrong = pRight->GetWrongList()->GetObject( nW );
-            if ( aWrong.nStart != 0 )   // Not a subsequent
+            if (i->nStart != 0)   // Not a subsequent
             {
-                aWrong.nStart = aWrong.nStart + nEnd;
-                aWrong.nEnd = aWrong.nEnd + nEnd;
-                pLeft->GetWrongList()->InsertWrong( aWrong, pLeft->GetWrongList()->Count() );
+                i->nStart = i->nStart + nEnd;
+                i->nEnd = i->nEnd + nEnd;
+                pLeft->GetWrongList()->push_back(*i);
             }
         }
     }
@@ -2761,7 +2760,7 @@ EditPaM ImpEditEngine::ImpInsertText( EditSelection aCurSel, const XubString& rS
             {
                 // now remove the Wrongs (red spell check marks) from both words...
                 WrongList *pWrongs = aCurPaM.GetNode()->GetWrongList();
-                if (pWrongs && pWrongs->HasWrongs())
+                if (pWrongs && !pWrongs->empty())
                     pWrongs->ClearWrongs( aCurWord.Min().GetIndex(), aPaM.GetIndex(), aPaM.GetNode() );
                 // ... and mark both words as 'to be checked again'
                 pPortion->MarkInvalid( aCurWord.Min().GetIndex(), aLine.Len() );
@@ -2858,21 +2857,19 @@ EditPaM ImpEditEngine::ImpInsertParaBreak( const EditPaM& rPaM, sal_Bool bKeepEn
         WrongList* pLWrongs = rPaM.GetNode()->GetWrongList();
         WrongList* pRWrongs = aPaM.GetNode()->GetWrongList();
         // take over misspelled words:
-        sal_uInt16 nLWrongs = pLWrongs->Count();
-        for ( sal_uInt16 nW = 0; nW < nLWrongs; nW++ )
+        for(WrongList::iterator i = pLWrongs->begin(); i < pLWrongs->end(); ++i)
         {
-            WrongRange& rWrong = pLWrongs->GetObject( nW );
             // Correct only if really a word gets overlapped in the process of
             // Spell checking
-            if ( rWrong.nStart > nEnd )
+            if (i->nStart > nEnd)
             {
-                pRWrongs->InsertWrong( rWrong, pRWrongs->Count() );
-                WrongRange& rRWrong = pRWrongs->GetObject( pRWrongs->Count() - 1 );
+                pRWrongs->push_back(*i);
+                WrongRange& rRWrong = pRWrongs->back();
                 rRWrong.nStart = rRWrong.nStart - nEnd;
                 rRWrong.nEnd = rRWrong.nEnd - nEnd;
             }
-            else if ( ( rWrong.nStart < nEnd ) && ( rWrong.nEnd > nEnd ) )
-                rWrong.nEnd = nEnd;
+            else if (i->nStart < nEnd && i->nEnd > nEnd)
+                i->nEnd = nEnd;
         }
         sal_uInt16 nInv = nEnd ? nEnd-1 : nEnd;
         if ( nEnd )

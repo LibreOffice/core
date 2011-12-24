@@ -356,7 +356,7 @@ void SAL_CALL java_sql_PreparedStatement::setObjectWithInfo( sal_Int32 parameter
                             ORowSetValue aValue;
                             aValue.fill(x);
                             const ::rtl::OUString sValue = aValue;
-                            if ( sValue.getLength() )
+                            if ( !sValue.isEmpty() )
                                 pBigDecimal.reset(new java_math_BigDecimal(sValue));
                             else
                                 pBigDecimal.reset(new java_math_BigDecimal(0.0));

@@ -109,7 +109,7 @@ MNameMapper::add( ::rtl::OUString& str, nsIAbDirectory* abook )
     long count =1;
     while ( mDirMap->find( tempStr ) != mDirMap->end() ) {
 
-        tempStr = str + ::rtl::OUString::valueOf(count);;
+        tempStr = str + ::rtl::OUString::valueOf(count);
         count ++;
     }
     str = tempStr;

@@ -987,13 +987,6 @@ void ScInputBarGroup::Resize()
     Invalidate();
 }
 
-
-void ScInputBarGroup::GainFocus()
-{
-    aMultiTextWnd.GrabFocus();
-}
-
-
 void ScInputBarGroup::StopEditEngine( sal_Bool bAll )
 {
     aMultiTextWnd.StopEditEngine( bAll );
@@ -1061,6 +1054,9 @@ IMPL_LINK( ScInputBarGroup, ClickHdl, PushButton*, EMPTYARG )
         aMultiTextWnd.SetNumLines( aMultiTextWnd.GetLastNumExpandedLines() );
     }
     TriggerToolboxLayout();
+    // Restore focus to input line(s) if necessary
+    if (  SC_MOD()->GetInputHdl()->IsTopMode() )
+        aMultiTextWnd.GrabFocus();
     return 0;
 }
 

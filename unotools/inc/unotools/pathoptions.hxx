@@ -102,9 +102,6 @@ public:
     const String&   GetUIConfigPath() const;
     const String&   GetFingerprintPath() const;
 
-    sal_Bool            IsPathReadonly(Pathes ePath)const;
-    const String&   GetPath(Pathes ePath) const;
-
     // set the pathes
     void            SetAddinPath( const String& rPath );
     void            SetAutoCorrectPath( const String& rPath );
@@ -128,7 +125,6 @@ public:
     void            SetTemplatePath( const String& rPath );
     void            SetUserConfigPath( const String& rPath );
     void            SetWorkPath( const String& rPath );
-    void            SetPath( SvtPathOptions::Pathes ePath, const String& rNewPath );
 
     String          SubstituteVariable( const String& rVar ) const;
     String          ExpandMacros( const String& rPath ) const;

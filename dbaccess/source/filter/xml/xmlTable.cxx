@@ -199,7 +199,7 @@ void OXMLTable::EndElement()
             {
                 setProperties(m_xTable);
 
-                if ( m_sStyleName.getLength() )
+                if ( !m_sStyleName.isEmpty() )
                 {
                     const SvXMLStylesContext* pAutoStyles = GetOwnImport().GetAutoStyles();
                     if ( pAutoStyles )

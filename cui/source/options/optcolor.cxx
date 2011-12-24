@@ -1535,7 +1535,7 @@ SvxColorOptionsTabPage::~SvxColorOptionsTabPage()
     if(!bFillItemSetCalled && aColorSchemeLB.GetSavedValue() != aColorSchemeLB.GetSelectEntryPos())
     {
         rtl::OUString sOldScheme =  aColorSchemeLB.GetEntry(aColorSchemeLB.GetSavedValue());
-        if(sOldScheme.getLength())
+        if(!sOldScheme.isEmpty())
         {
             pColorConfig->SetCurrentSchemeName(sOldScheme);
             pExtColorConfig->SetCurrentSchemeName(sOldScheme);

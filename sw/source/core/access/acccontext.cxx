@@ -40,6 +40,7 @@
 #include <viewsh.hxx>
 #include <crsrsh.hxx>
 #include <fesh.hxx>
+#include <wrtsh.hxx>
 #include <txtfrm.hxx>
 #include <ndtxt.hxx>
 #include <pagefrm.hxx>
@@ -1359,6 +1360,10 @@ sal_Bool SwAccessibleContext::Select( SwPaM *pPaM, SdrObject *pObj,
     if( pFEShell )
         pFEShell->FinishOLEObj();
 
+    SwWrtShell* pWrtShell = pCrsrShell->ISA( SwWrtShell )
+                                ? static_cast<SwWrtShell*>( pCrsrShell )
+                                : 0;
+
     sal_Bool bRet = sal_False;
     if( pObj )
     {
@@ -1383,7 +1388,17 @@ sal_Bool SwAccessibleContext::Select( SwPaM *pPaM, SdrObject *pObj,
             bCallShowCrsr = sal_True;
         }
         pCrsrShell->KillPams();
+        if( pWrtShell && pPaM->HasMark() )
+            // We have to do this or SwWrtShell can't figure out that it needs
+            // to kill the selection later, when the user moves the cursor.
+            pWrtShell->SttSelect();
         pCrsrShell->SetSelection( *pPaM );
+        if( pPaM->HasMark() && *pPaM->GetPoint() == *pPaM->GetMark())
+            // Setting a "Selection" that starts and ends at the same spot
+            // should remove the selection rather than create an empty one, so
+            // that we get defined behavior if accessibility sets the cursor
+            // later.
+            pCrsrShell->ClearMark();
         if( bCallShowCrsr )
             pCrsrShell->ShowCrsr();
         bRet = sal_True;

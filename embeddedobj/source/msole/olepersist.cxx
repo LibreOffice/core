@@ -109,7 +109,7 @@ sal_Bool KillFile_Impl( const ::rtl::OUString& aURL, const uno::Reference< lang:
     {
     }
 
-    if ( !aResult.getLength() )
+    if ( aResult.isEmpty() )
         throw uno::RuntimeException(); // TODO: can not create tempfile
 
     return aResult;
@@ -125,7 +125,7 @@ sal_Bool KillFile_Impl( const ::rtl::OUString& aURL, const uno::Reference< lang:
 
     ::rtl::OUString aResult = GetNewTempFileURL_Impl( xFactory );
 
-    if ( aResult.getLength() )
+    if ( !aResult.isEmpty() )
     {
         try {
             uno::Reference < ucb::XSimpleFileAccess > xTempAccess(
@@ -198,7 +198,7 @@ sal_Bool KillFile_Impl( const ::rtl::OUString& aURL, const uno::Reference< lang:
     {
     }
 
-    if ( !aResult.getLength() )
+    if ( aResult.isEmpty() )
         throw io::IOException();
 
     return aResult;
@@ -590,8 +590,8 @@ sal_Bool OleEmbeddedObject::HasVisReplInStream()
 
             uno::Reference< io::XInputStream > xStream;
 
-            OSL_ENSURE( !m_pOleComponent || m_aTempURL.getLength(), "The temporary file must exist if there is a component!\n" );
-            if ( m_aTempURL.getLength() )
+            OSL_ENSURE( !m_pOleComponent || !m_aTempURL.isEmpty(), "The temporary file must exist if there is a component!\n" );
+            if ( !m_aTempURL.isEmpty() )
             {
                 try
                 {
@@ -749,7 +749,7 @@ uno::Reference< io::XStream > OleEmbeddedObject::TryToRetrieveCachedVisualRepres
 
                                 if ( xStream == m_xObjectStream )
                                 {
-                                    if ( m_aTempURL.getLength() )
+                                    if ( !m_aTempURL.isEmpty() )
                                     {
                                         // this is the own stream, so the temporary URL must be cleaned if it exists
                                         KillFile_Impl( m_aTempURL, m_xFactory );
@@ -948,7 +948,7 @@ void OleEmbeddedObject::OnClosed_Impl()
 //------------------------------------------------------
 ::rtl::OUString OleEmbeddedObject::CreateTempURLEmpty_Impl()
 {
-    OSL_ENSURE( !m_aTempURL.getLength(), "The object has already the temporary file!" );
+    OSL_ENSURE( m_aTempURL.isEmpty(), "The object has already the temporary file!" );
     m_aTempURL = GetNewTempFileURL_Impl( m_xFactory );
 
     return m_aTempURL;
@@ -957,7 +957,7 @@ void OleEmbeddedObject::OnClosed_Impl()
 //------------------------------------------------------
 ::rtl::OUString OleEmbeddedObject::GetTempURL_Impl()
 {
-    if ( !m_aTempURL.getLength() )
+    if ( m_aTempURL.isEmpty() )
     {
         RTL_LOGFILE_CONTEXT( aLog, "embeddedobj (mv76033) OleEmbeddedObject::GetTempURL_Impl, tempfile creation" );
 
@@ -1012,7 +1012,7 @@ void OleEmbeddedObject::CreateOleComponentAndLoad_Impl( OleComponent* pOleCompon
         // will be detected later by olecomponent
 
         GetTempURL_Impl();
-        if ( !m_aTempURL.getLength() )
+        if ( m_aTempURL.isEmpty() )
             throw uno::RuntimeException(); // TODO
 
         m_pOleComponent->LoadEmbeddedObject( m_aTempURL );
@@ -1352,7 +1352,7 @@ void SAL_CALL OleEmbeddedObject::setPersistentEntry(
                                             uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
                                             1 );
 
-    if ( !sEntName.getLength() )
+    if ( sEntName.isEmpty() )
         throw lang::IllegalArgumentException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Empty element name is provided!\n" )),
                                             uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
                                             2 );
@@ -1473,7 +1473,7 @@ void SAL_CALL OleEmbeddedObject::setPersistentEntry(
                 if ( lArguments[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "URL" ) ) )
                     lArguments[nInd].Value >>= aURL;
 
-            if ( !aURL.getLength() )
+            if ( aURL.isEmpty() )
                 throw lang::IllegalArgumentException(
                                     ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Empty URL is provided in the media descriptor!\n" )),
                                     uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
@@ -1979,7 +1979,7 @@ void SAL_CALL OleEmbeddedObject::breakLink( const uno::Reference< embed::XStorag
                                             uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
                                             1 );
 
-    if ( !sEntName.getLength() )
+    if ( sEntName.isEmpty() )
         throw lang::IllegalArgumentException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Empty element name is provided!\n" )),
                                             uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
                                             2 );

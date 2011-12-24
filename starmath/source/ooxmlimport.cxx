@@ -116,6 +116,9 @@ OUString SmOoxmlImport::readOMathArg()
             case OPENING( M_TOKEN( d )):
                 ret += handleD();
                 break;
+            case OPENING( M_TOKEN( eqArr )):
+                ret += handleEqArr();
+                break;
             case OPENING( M_TOKEN( f )):
                 ret += handleF();
                 break;
@@ -343,10 +346,14 @@ OUString SmOoxmlImport::handleD()
         closing = STR( " right " ) + closing;
     if( separator == STR( "|" )) // plain "|" would be actually "V" (logical or)
         separator = STR( " mline " );
+    if( opening.isEmpty())
+        opening = STR( "left none " );
+    if( closing.isEmpty())
+        closing = STR( " right none" );
     OUStringBuffer ret;
     ret.append( opening );
     bool first = true;
-    while( stream.currentToken() == OPENING( M_TOKEN( e )))
+    while( stream.findTag( OPENING( M_TOKEN( e ))))
     {
         if( !first )
             ret.append( separator );
@@ -356,6 +363,22 @@ OUString SmOoxmlImport::handleD()
     ret.append( closing );
     stream.ensureClosingTag( M_TOKEN( d ));
     return ret.makeStringAndClear();
+}
+
+OUString SmOoxmlImport::handleEqArr()
+{
+    stream.ensureOpeningTag( M_TOKEN( eqArr ));
+    OUString ret;
+    do
+    { // there must be at least one m:e
+        if( !ret.isEmpty())
+            ret += STR( "#" );
+        ret += STR( " " );
+        ret += readOMathArgInElement( M_TOKEN( e ));
+        ret += STR( " " );
+    } while( !stream.atEnd() && stream.findTag( OPENING( M_TOKEN( e ))));
+    stream.ensureClosingTag( M_TOKEN( eqArr ));
+    return STR( "stack {" ) + ret + STR( "}" );
 }
 
 OUString SmOoxmlImport::handleF()
@@ -385,8 +408,7 @@ OUString SmOoxmlImport::handleF()
     else if( operation == lin )
         return STR( "{" ) + num + STR( "} / {" ) + den + STR( "}" );
     else // noBar
-    { // TODO we write out stack of 3 items as recursive m:f, so merge here back
-      // to 'stack { x # y # z }'
+    {
         return STR( "binom {" ) + num + STR( "} {" ) + den + STR( "}" );
     }
 }
@@ -464,12 +486,12 @@ OUString SmOoxmlImport::handleM()
             if( !row.isEmpty())
                 row += STR( " # " );
             row += readOMathArgInElement( M_TOKEN( e ));
-        } while( !stream.atEnd() && stream.currentToken() == OPENING( M_TOKEN( e )));
+        } while( !stream.atEnd() && stream.findTag( OPENING( M_TOKEN( e ))));
         if( !allrows.isEmpty())
             allrows += STR( " ## " );
         allrows += row;
         stream.ensureClosingTag( M_TOKEN( mr ));
-    } while( !stream.atEnd() && stream.currentToken() == OPENING( M_TOKEN( mr )));
+    } while( !stream.atEnd() && stream.findTag( OPENING( M_TOKEN( mr ))));
     stream.ensureClosingTag( M_TOKEN( m ));
     return STR( "matrix {" ) + allrows + STR( "}" );
 }

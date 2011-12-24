@@ -89,13 +89,13 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
                                             uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
                                             3 );
 
-    if ( !sEntName.getLength() )
+    if ( sEntName.isEmpty() )
         throw lang::IllegalArgumentException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Empty element name is provided!\n" )),
                                             uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
                                             4 );
 
     ::rtl::OUString aEmbedFactory = m_aConfigHelper.GetFactoryNameByClassID( aClassID );
-    if ( !aEmbedFactory.getLength() )
+    if ( aEmbedFactory.isEmpty() )
     {
         // use system fallback
         // TODO: in future users factories can be tested
@@ -132,7 +132,7 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
                                             uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
                                             1 );
 
-    if ( !sEntName.getLength() )
+    if ( sEntName.isEmpty() )
         throw lang::IllegalArgumentException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Empty element name is provided!\n" )),
                                             uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
                                             2 );
@@ -209,11 +209,11 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
         }
     }
 
-    OSL_ENSURE( aMediaType.getLength(), "No media type is specified for the object!" );
-    if ( aMediaType.getLength() && !aEmbedFactory.getLength() )
+    OSL_ENSURE( !aMediaType.isEmpty(), "No media type is specified for the object!" );
+    if ( !aMediaType.isEmpty() && aEmbedFactory.isEmpty() )
         aEmbedFactory = m_aConfigHelper.GetFactoryNameByMediaType( aMediaType );
 
-    if ( aEmbedFactory.getLength() )
+    if ( !aEmbedFactory.isEmpty() )
     {
         uno::Reference< uno::XInterface > xFact = m_xFactory->createInstance( aEmbedFactory );
 
@@ -253,7 +253,7 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
                                             uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
                                             1 );
 
-    if ( !sEntName.getLength() )
+    if ( sEntName.isEmpty() )
         throw lang::IllegalArgumentException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Empty element name is provided!\n" )),
                                             uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
                                             2 );
@@ -264,7 +264,7 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
     // check if there is FilterName
     ::rtl::OUString aFilterName = m_aConfigHelper.UpdateMediaDescriptorWithFilterName( aTempMedDescr, sal_False );
 
-    if ( aFilterName.getLength() )
+    if ( !aFilterName.isEmpty() )
     {
         // the object can be loaded by one of the office application
         uno::Reference< embed::XEmbedObjectCreator > xOOoEmbCreator(
@@ -326,7 +326,7 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
                                             uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
                                             3 );
 
-    if ( !sEntName.getLength() )
+    if ( sEntName.isEmpty() )
         throw lang::IllegalArgumentException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Empty element name is provided!\n" )),
                                             uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
                                             4 );
@@ -370,14 +370,14 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
         if ( aTempMedDescr[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "URL" ) ) )
             aTempMedDescr[nInd].Value >>= aURL;
 
-    if ( !aURL.getLength() )
+    if ( aURL.isEmpty() )
         throw lang::IllegalArgumentException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "No URL for the link is provided!\n" )),
                                         uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
                                         3 );
 
     ::rtl::OUString aFilterName = m_aConfigHelper.UpdateMediaDescriptorWithFilterName( aTempMedDescr, sal_False );
 
-    if ( aFilterName.getLength() )
+    if ( !aFilterName.isEmpty() )
     {
         // the object can be loaded by one of the office application
         uno::Reference< embed::XLinkCreator > xOOoLinkCreator(
@@ -409,7 +409,7 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
                                                     static_cast< ::cppu::OWeakObject* >(this) ),
                                                 3 );
 
-        if ( !sEntName.getLength() )
+        if ( sEntName.isEmpty() )
             throw lang::IllegalArgumentException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Empty element name is provided!\n" )),
                                                 uno::Reference< uno::XInterface >(
                                                     static_cast< ::cppu::OWeakObject* >(this) ),

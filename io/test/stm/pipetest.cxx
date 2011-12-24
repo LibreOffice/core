@@ -190,7 +190,7 @@ sal_Int32 OPipeTest::test(
                 testMultithreading( TestObject );
             }
         }
-        catch( Exception & e )
+        catch( const Exception & e )
         {
             OString s = OUStringToOString( e.Message , RTL_TEXTENCODING_ASCII_US );
             BUILD_ERROR( 0 , s.getStr() );

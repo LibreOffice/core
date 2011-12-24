@@ -931,4 +931,32 @@ OUString SvXMLUnitConverter::encodeStyleName(
     return aBuffer.makeStringAndClear();
 }
 
+/** convert string (hex) to number (sal_uInt32) */
+sal_Bool SvXMLUnitConverter::convertHex( sal_uInt32& nVal,
+                                       const OUString& rValue )
+{
+    if( rValue.getLength() != 8 )
+        return sal_False;
+
+    nVal = 0;
+    for ( int i = 0; i < 8; i++ )
+    {
+        nVal = ( nVal << 4 )
+            | sal::static_int_cast< sal_uInt32 >( lcl_gethex( rValue[i] ) );
+    }
+
+    return sal_True;
+}
+
+/** convert number (sal_uInt32) to string (hex) */
+void SvXMLUnitConverter::convertHex( OUStringBuffer& rBuffer,
+                                        sal_uInt32 nVal )
+{
+    for ( int i = 0; i < 8; i++ )
+    {
+        rBuffer.append( sal_Unicode( aHexTab[ nVal >> 28 ] ) );
+        nVal <<= 4;
+    }
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

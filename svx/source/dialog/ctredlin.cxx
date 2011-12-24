@@ -1338,33 +1338,6 @@ static Size gDiffSize;
 //  class SvxAcceptChgCtr
 //----------------------------------------------------------------------------
 
-SvxAcceptChgCtr::SvxAcceptChgCtr( Window* pParent, WinBits nWinStyle)
-        :   Control(pParent,nWinStyle |WB_DIALOGCONTROL),
-            aTCAccept(this,WB_TABSTOP |WB_DIALOGCONTROL)
-{
-    pTPFilter=new SvxTPFilter(&aTCAccept);
-    pTPView=new SvxTPView(&aTCAccept);
-    aMinSize=pTPView->GetMinSizePixel();
-
-    aTCAccept.InsertPage( TP_VIEW,   pTPView->GetMyName());
-    aTCAccept.InsertPage( TP_FILTER, pTPFilter->GetMyName());
-    aTCAccept.SetTabPage( TP_VIEW,   pTPView);
-    aTCAccept.SetTabPage( TP_FILTER, pTPFilter);
-    aTCAccept.SetHelpId(HID_REDLINING_TABCONTROL);
-
-    aTCAccept.SetTabPageSizePixel(aMinSize);
-    Size aSize=aTCAccept.GetSizePixel();
-
-    gDiffSize.Height()=aSize.Height()-aMinSize.Height();
-    gDiffSize.Width()=aSize.Width()-aMinSize.Width();
-
-
-    pTPFilter->SetRedlinTable(GetViewTable());
-
-    aTCAccept.Show();
-    ShowViewPage();
-}
-
 SvxAcceptChgCtr::SvxAcceptChgCtr( Window* pParent, const ResId& rResId )
         :   Control(pParent,rResId ),
             aTCAccept(this,WB_TABSTOP |WB_DIALOGCONTROL)
@@ -1445,16 +1418,6 @@ void SvxAcceptChgCtr::ShowFilterPage()
 void SvxAcceptChgCtr::ShowViewPage()
 {
     aTCAccept.SetCurPageId(TP_VIEW);
-}
-
-sal_Bool SvxAcceptChgCtr::IsFilterPageVisible()
-{
-    return (aTCAccept.GetCurPageId()==TP_FILTER);
-}
-
-sal_Bool SvxAcceptChgCtr::IsViewPageVisible()
-{
-    return (aTCAccept.GetCurPageId()==TP_VIEW);
 }
 
 SvxTPFilter* SvxAcceptChgCtr::GetFilterPage()

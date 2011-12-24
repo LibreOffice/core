@@ -2911,27 +2911,6 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                     // Over the Portions of the line ...
                     // --------------------------------------------------
                     sal_uInt16 nIndex = pLine->GetStart();
-
-                    // #i108052# When stripping a callback for empty paragraphs is needed. This
-                    // was somehow lost/removed/killed by making the TextPortions with empty
-                    // paragraph to type PORTIONKIND_TAB instead of PORTIONKIND_TEXT. Adding here
-                    // since I could not find out who and why this has changed.
-                    if(bStripOnly && pLine->GetStartPortion() == pLine->GetEndPortion())
-                    {
-                         const Color aOverlineColor(pOutDev->GetOverlineColor());
-                         const Color aTextLineColor(pOutDev->GetTextLineColor());
-
-                        GetEditEnginePtr()->DrawingText(
-                             aTmpPos, String(), 0, 0, 0,
-                             aTmpFont, n, nIndex, 0,
-                             0,
-                             0,
-                             false, true, false, // support for EOL/EOP TEXT comments
-                             0,
-                             aOverlineColor,
-                             aTextLineColor);
-                    }
-
                     for ( sal_uInt16 y = pLine->GetStartPortion(); y <= pLine->GetEndPortion(); y++ )
                     {
                         DBG_ASSERT( pPortion->GetTextPortions().Count(), "Line without Textportion in Paint!" );
@@ -3164,7 +3143,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                                     {
                                         WrongList* pWrongs = pPortion->GetNode()->GetWrongList();
 
-                                        if(pWrongs && pWrongs->HasWrongs())
+                                        if(pWrongs && !pWrongs->empty())
                                         {
                                             sal_uInt16 nStart(nIndex);
                                             sal_uInt16 nEnd(0);
@@ -3388,7 +3367,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
 
                                     }
 
-                                    if ( GetStatus().DoOnlineSpelling() && pPortion->GetNode()->GetWrongList()->HasWrongs() && pTextPortion->GetLen() )
+                                    if ( GetStatus().DoOnlineSpelling() && !pPortion->GetNode()->GetWrongList()->empty() && pTextPortion->GetLen() )
                                     {
                                         {//#105750# adjust LinePos for superscript or subscript text
                                             short _nEsc = aTmpFont.GetEscapement();
@@ -3475,6 +3454,27 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                                             bEndOfLine, bEndOfParagraph,
                                             aOverlineColor, aTextLineColor);
                                     }
+                                }
+                                else if ( bStripOnly )
+                                {
+                                    // #i108052# When stripping, a callback for _empty_ paragraphs is also needed.
+                                    // This was optimized away (by not rendering the space-only tab portion), so do
+                                    // it manually here.
+                                    const bool bEndOfLine(y == pLine->GetEndPortion());
+                                    const bool bEndOfParagraph(bEndOfLine && nLine + 1 == nLines);
+
+                                    const Color aOverlineColor(pOutDev->GetOverlineColor());
+                                    const Color aTextLineColor(pOutDev->GetTextLineColor());
+
+                                    GetEditEnginePtr()->DrawingText(
+                                        aTmpPos, String(), 0, 0, 0,
+                                        aTmpFont, n, nIndex, 0,
+                                        0,
+                                        0,
+                                        bEndOfLine, bEndOfParagraph, false,
+                                        0,
+                                        aOverlineColor,
+                                        aTextLineColor);
                                 }
                             }
                             break;

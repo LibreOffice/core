@@ -276,44 +276,18 @@ ScStyleSheet& ScfTools::MakePageStyleSheet( ScStyleSheetPool& rPool, const Strin
 
 // *** byte string import operations *** --------------------------------------
 
-ByteString ScfTools::ReadCString( SvStream& rStrm )
+rtl::OString ScfTools::read_zeroTerminated_uInt8s_ToOString(SvStream& rStrm, sal_Int32& rnBytesLeft)
 {
-    rtl::OStringBuffer aRet;
-
-    while (1)
-    {
-        sal_Char cChar(0);
-        rStrm >> cChar;
-        if (!cChar)
-            break;
-        aRet.append(cChar);
-    }
-
-    return aRet.makeStringAndClear();
-}
-
-ByteString ScfTools::ReadCString( SvStream& rStrm, sal_Int32& rnBytesLeft )
-{
-    rtl::OStringBuffer aRet;
-
-    while (1)
-    {
-        sal_Char cChar(0);
-        rStrm >> cChar;
-        rnBytesLeft--;
-        if (!cChar)
-            break;
-        aRet.append(cChar);
-    }
-
-    return aRet.makeStringAndClear();
+    rtl::OString aRet(::read_zeroTerminated_uInt8s_ToOString(rStrm));
+    rnBytesLeft -= aRet.getLength(); //we read this number of bytes anyway
+    if (rStrm.good()) //if the stream is happy we read the null terminator as well
+        --rnBytesLeft;
+    return aRet;
 }
 
 void ScfTools::AppendCString( SvStream& rStrm, String& rString, rtl_TextEncoding eTextEnc )
 {
-    ByteString aByteString;
-    rStrm.ReadCString(aByteString);
-    rString += String( aByteString, eTextEnc );
+    rString += ::read_zeroTerminated_uInt8s_ToOUString(rStrm, eTextEnc);
 }
 
 // *** HTML table names <-> named range names *** -----------------------------

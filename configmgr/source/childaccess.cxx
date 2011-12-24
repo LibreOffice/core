@@ -201,7 +201,7 @@ void ChildAccess::bind(
     rtl::Reference< Access > const & parent, rtl::OUString const & name)
     throw ()
 {
-    assert(!parent_.is() && root.is() && parent.is() && name.getLength() != 0);
+    assert(!parent_.is() && root.is() && parent.is() && !name.isEmpty());
     root_ = root;
     parent_ = parent;
     name_ = name;
@@ -272,7 +272,7 @@ namespace
 {
     rtl::OUString lcl_StripSegment(const rtl::OUString &rLocale)
     {
-        sal_Int32 i = rLocale.getLength() ? rLocale.getLength() - 1 : 0;
+        sal_Int32 i = !rLocale.isEmpty() ? rLocale.getLength() - 1 : 0;
         while (i > 0 && rLocale[i] != '-' && rLocale[i] != '_')
             --i;
         return rLocale.copy(0, i);
@@ -301,7 +301,7 @@ css::uno::Any ChildAccess::asValue() {
                     if (child.is())
                         break;
                     rtl::OUString sTmpLocale = lcl_StripSegment(sLocale);
-                    if (!sTmpLocale.getLength())
+                    if (sTmpLocale.isEmpty())
                         break;
                     sLocale = sTmpLocale;
                 }

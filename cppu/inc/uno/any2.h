@@ -28,7 +28,7 @@
 #ifndef _UNO_ANY2_H_
 #define _UNO_ANY2_H_
 
-#include <sal/types.h>
+#include <cppu/cppudllapi.h>
 #include <uno/data.h>
 
 #ifdef __cplusplus
@@ -76,7 +76,7 @@ typedef struct _uno_Any
     @param release          function called each time an interface needs to be released;
                             defaults (0) to uno
 */
-void SAL_CALL uno_any_assign(
+CPPU_DLLPUBLIC void SAL_CALL uno_any_assign(
     uno_Any * pDest, void * pSource,
     struct _typelib_TypeDescription * pTypeDescr,
     uno_AcquireFunc acquire, uno_ReleaseFunc release )
@@ -92,7 +92,7 @@ void SAL_CALL uno_any_assign(
     @param release          function called each time an interface needs to be released;
                             defaults (0) to uno
 */
-void SAL_CALL uno_type_any_assign(
+CPPU_DLLPUBLIC void SAL_CALL uno_type_any_assign(
     uno_Any * pDest, void * pSource,
     struct _typelib_TypeDescriptionReference * pType,
     uno_AcquireFunc acquire, uno_ReleaseFunc release )
@@ -106,7 +106,7 @@ void SAL_CALL uno_type_any_assign(
     @param acquire          function called each time an interface needs to be acquired;
                             defaults (0) to uno
 */
-void SAL_CALL uno_any_construct(
+CPPU_DLLPUBLIC void SAL_CALL uno_any_construct(
     uno_Any * pDest, void * pSource,
     struct _typelib_TypeDescription * pTypeDescr,
     uno_AcquireFunc acquire )
@@ -119,7 +119,7 @@ void SAL_CALL uno_any_construct(
     @param acquire          function called each time an interface needs to be acquired;
                             defaults (0) to uno
 */
-void SAL_CALL uno_type_any_construct(
+CPPU_DLLPUBLIC void SAL_CALL uno_type_any_construct(
     uno_Any * pDest, void * pSource,
     struct _typelib_TypeDescriptionReference * pType,
     uno_AcquireFunc acquire )
@@ -132,7 +132,7 @@ void SAL_CALL uno_type_any_construct(
     @param pTypeDescr       type description of value; defaults (0) to void
     @param mapping          mapping to convert/ map interfaces
 */
-void SAL_CALL uno_any_constructAndConvert(
+CPPU_DLLPUBLIC void SAL_CALL uno_any_constructAndConvert(
     uno_Any * pDest, void * pSource,
     struct _typelib_TypeDescription * pTypeDescr,
     struct _uno_Mapping * mapping )
@@ -144,7 +144,7 @@ void SAL_CALL uno_any_constructAndConvert(
     @param pType            type of value; defaults (0) to void
     @param mapping          mapping to convert/ map interfaces
 */
-void SAL_CALL uno_type_any_constructAndConvert(
+CPPU_DLLPUBLIC void SAL_CALL uno_type_any_constructAndConvert(
     uno_Any * pDest, void * pSource,
     struct _typelib_TypeDescriptionReference * pType,
     struct _uno_Mapping * mapping )
@@ -156,7 +156,7 @@ void SAL_CALL uno_type_any_constructAndConvert(
     @param release          function called each time an interface needs to be released;
                             defaults (0) to uno
 */
-void SAL_CALL uno_any_destruct(
+CPPU_DLLPUBLIC void SAL_CALL uno_any_destruct(
     uno_Any * pValue, uno_ReleaseFunc release )
     SAL_THROW_EXTERN_C();
 
@@ -166,7 +166,7 @@ void SAL_CALL uno_any_destruct(
     @param release          function called each time an interface needs to be released;
                             defaults (0) to uno
 */
-void SAL_CALL uno_any_clear(
+CPPU_DLLPUBLIC void SAL_CALL uno_any_clear(
     uno_Any * pValue, uno_ReleaseFunc release )
     SAL_THROW_EXTERN_C();
 

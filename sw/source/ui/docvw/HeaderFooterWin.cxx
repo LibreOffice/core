@@ -223,6 +223,11 @@ void SwHeaderFooterWin::SetOffset( Point aOffset, long nXLineStart, long nXLineE
     Point aBoxPos( aOffset.X() - aBoxSize.Width() - BOX_DISTANCE,
                    aOffset.Y() - nYFooterOff );
 
+    if ( Application::GetSettings().GetLayoutRTL() )
+    {
+        aBoxPos.setX( aOffset.X() + BOX_DISTANCE );
+    }
+
     // Set the position & Size of the window
     SetPosSizePixel( aBoxPos, aBoxSize );
 
@@ -294,7 +299,6 @@ void SwHeaderFooterWin::Paint( const Rectangle& )
 
     FontMetric aFontMetric = GetFontMetric( GetFont() );
     double nTextOffsetY = aFontMetric.GetHeight() - aFontMetric.GetDescent() + TEXT_PADDING;
-
     Point aTextPos( TEXT_PADDING, nTextOffsetY );
 
     basegfx::B2DHomMatrix aTextMatrix( createScaleTranslateB2DHomMatrix(

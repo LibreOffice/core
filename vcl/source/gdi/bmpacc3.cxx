@@ -294,23 +294,4 @@ void BitmapWriteAccess::FillPolygon( const Polygon& rPoly )
     }
 }
 
-// ------------------------------------------------------------------
-
-void BitmapWriteAccess::DrawPolygon( const Polygon& rPoly )
-{
-    if( mpFillColor )
-        FillPolygon( rPoly );
-
-    if( mpLineColor && ( !mpFillColor || ( *mpFillColor != *mpLineColor ) ) )
-    {
-        const sal_uInt16 nSize = rPoly.GetSize();
-
-        for( sal_uInt16 i = 0, nSize1 = nSize - 1; i < nSize1; i++ )
-            DrawLine( rPoly[ i ], rPoly[ i + 1 ] );
-
-        if( rPoly[ nSize - 1 ] != rPoly[ 0 ] )
-            DrawLine( rPoly[ nSize - 1 ], rPoly[ 0 ] );
-    }
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

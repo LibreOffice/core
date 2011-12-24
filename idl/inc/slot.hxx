@@ -78,7 +78,6 @@ class SvMetaSlot : public SvMetaAttribute
     SvMetaEnumValue* pEnumValue;
     SvString    aUnoName;
 
-#ifdef IDL_COMPILER
     void            WriteSlot( const ByteString & rShellName,
                             sal_uInt16 nCount, const ByteString & rSlotId,
                             SvSlotElementList &rList,
@@ -91,7 +90,6 @@ class SvMetaSlot : public SvMetaAttribute
 
     void            SetEnumValue(SvMetaEnumValue *p)
                     { pEnumValue = p; }
-#endif
 protected:
     void    SetCachable( sal_Bool bSet )
             {
@@ -237,7 +235,6 @@ public:
     void                ResetSlotPointer()
                         { pNextSlot = pLinkedSlot = 0; }
 
-#ifdef IDL_COMPILER
     SvMetaEnumValue*    GetEnumValue() const
                         { return pEnumValue; }
     virtual sal_Bool        Test( SvIdlDataBase &, SvTokenStream & rInStm );
@@ -267,7 +264,6 @@ public:
     virtual void        WriteSrc( SvIdlDataBase & rBase, SvStream & rOutStm,
                                   Table * pIdTable );
     virtual void        WriteCSV( SvIdlDataBase&, SvStream& );
-#endif
 };
 SV_DECL_IMPL_REF(SvMetaSlot)
 SV_DECL_IMPL_PERSIST_LIST(SvMetaSlot,SvMetaSlot *)

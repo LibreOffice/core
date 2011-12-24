@@ -235,7 +235,7 @@ const SwNumRulesWithName& SwNumRulesWithName::operator=(const SwNumRulesWithName
 SwNumRulesWithName::SwNumRulesWithName( SvStream &rStream, sal_uInt16 nVersion )
 {
     CharSet eEncoding = osl_getThreadTextEncoding();
-    rStream.ReadByteString(aName, eEncoding);
+    rStream.ReadUniOrByteString(aName, eEncoding);
 
     char c;
     for(sal_uInt16 n = 0; n < MAXLEVEL; ++n )
@@ -274,7 +274,7 @@ void SwNumRulesWithName::MakeNumRule( SwWrtShell& rSh, SwNumRule& rChg ) const
 void SwNumRulesWithName::Store( SvStream &rStream )
 {
     CharSet eEncoding = osl_getThreadTextEncoding();
-    rStream.WriteByteString(aName, eEncoding);
+    rStream.WriteUniOrByteString(aName, eEncoding);
 
     for( sal_uInt16 n = 0; n < MAXLEVEL; ++n )
     {
@@ -354,9 +354,9 @@ SwNumRulesWithName::_SwNumFmtGlobal::_SwNumFmtGlobal( SvStream& rStream,
             long nL;
             rStream >> cChar;       aFmt.SetStart( (sal_uInt16)cChar );
 
-            rStream.ReadByteString(sStr, eEncoding);
+            rStream.ReadUniOrByteString(sStr, eEncoding);
             aFmt.SetPrefix( sStr );
-            rStream.ReadByteString(sStr, eEncoding);
+            rStream.ReadUniOrByteString(sStr, eEncoding);
             aFmt.SetSuffix( sStr );
             rStream >> nUS;         aFmt.SetNumAdjust( SvxAdjust( nUS ) );
             rStream >> nL;          aFmt.SetLSpace( lNumIndent );
@@ -366,9 +366,9 @@ SwNumRulesWithName::_SwNumFmtGlobal::_SwNumFmtGlobal( SvStream& rStream,
         {
             short nShort;
             rStream >> nUS;         aFmt.SetStart( nUS );
-            rStream.ReadByteString(sStr, eEncoding);
+            rStream.ReadUniOrByteString(sStr, eEncoding);
             aFmt.SetPrefix( sStr );
-            rStream.ReadByteString(sStr, eEncoding);
+            rStream.ReadUniOrByteString(sStr, eEncoding);
             aFmt.SetSuffix( sStr );
             rStream >> nUS;         aFmt.SetNumAdjust( SvxAdjust( nUS ) );
             rStream >> nUS;         aFmt.SetAbsLSpace( nUS );
@@ -385,7 +385,7 @@ SwNumRulesWithName::_SwNumFmtGlobal::_SwNumFmtGlobal( SvStream& rStream,
         sal_uInt16  nPitch;
         String aName;
 
-        rStream.ReadByteString(aName, eEncoding);
+        rStream.ReadUniOrByteString(aName, eEncoding);
         rStream >> nFamily >> nCharSet >> nWidth >> nHeight >> nPitch;
 
         if( aName.Len() )
@@ -411,7 +411,7 @@ SwNumRulesWithName::_SwNumFmtGlobal::_SwNumFmtGlobal( SvStream& rStream,
     {
         sal_uInt16 nItemCount;
         rStream >> nCharPoolId;
-        rStream.ReadByteString(sCharFmtName, eEncoding);
+        rStream.ReadUniOrByteString(sCharFmtName, eEncoding);
         rStream >> nItemCount;
 
         while( nItemCount-- )
@@ -485,15 +485,15 @@ void SwNumRulesWithName::_SwNumFmtGlobal::Store( SvStream& rStream )
                 << aFmt.GetBulletChar()
                 << static_cast<sal_Bool>(aFmt.GetIncludeUpperLevels() > 0)
                 << aFmt.GetStart();
-        rStream.WriteByteString( aFmt.GetPrefix(), eEncoding );
-        rStream.WriteByteString( aFmt.GetSuffix(), eEncoding );
+        rStream.WriteUniOrByteString( aFmt.GetPrefix(), eEncoding );
+        rStream.WriteUniOrByteString( aFmt.GetSuffix(), eEncoding );
         rStream << sal_uInt16( aFmt.GetNumAdjust() )
                 << aFmt.GetAbsLSpace()
                 << aFmt.GetFirstLineOffset()
                 << aFmt.GetCharTextDistance()
                 << aFmt.GetLSpace()
                 << sal_False;//aFmt.IsRelLSpace();
-        rStream.WriteByteString( aName, eEncoding );
+        rStream.WriteUniOrByteString( aName, eEncoding );
         rStream << nFamily
                 << nCharSet
                 << nWidth
@@ -501,7 +501,7 @@ void SwNumRulesWithName::_SwNumFmtGlobal::Store( SvStream& rStream )
                 << nPitch;
     }
     rStream << nCharPoolId;
-    rStream.WriteByteString( sCharFmtName, eEncoding );
+    rStream.WriteUniOrByteString( sCharFmtName, eEncoding );
     rStream << aItems.Count();
 
     for( sal_uInt16 n = aItems.Count(); n; )

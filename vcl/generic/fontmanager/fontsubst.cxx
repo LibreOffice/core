@@ -163,15 +163,17 @@ bool FcPreMatchSubstititution::FindFontSubstitute( FontSelectPattern &rFontSelDa
     const bool bHaveSubstitute = !uselessmatch( rFontSelData, aOut );
 
 #ifdef DEBUG
-    const ByteString aOrigName( rFontSelData.maTargetName, RTL_TEXTENCODING_UTF8 );
-    const ByteString aSubstName( aOut.maSearchName, RTL_TEXTENCODING_UTF8 );
+    const rtl::OString aOrigName(rtl::OUStringToOString(rFontSelData.maTargetName,
+        RTL_TEXTENCODING_UTF8));
+    const rtl::OString aSubstName(rtl::OUStringToOString(aOut.maSearchName,
+        RTL_TEXTENCODING_UTF8));
     printf( "FcPreMatchSubstititution \"%s\" bipw=%d%d%d%d -> ",
-        aOrigName.GetBuffer(), rFontSelData.meWeight, rFontSelData.meItalic,
+        aOrigName.getStr(), rFontSelData.meWeight, rFontSelData.meItalic,
         rFontSelData.mePitch, rFontSelData.meWidthType );
     if( !bHaveSubstitute )
         printf( "no substitute available\n" );
     else
-        printf( "\"%s\" bipw=%d%d%d%d\n", aSubstName.GetBuffer(),
+        printf( "\"%s\" bipw=%d%d%d%d\n", aSubstName.getStr(),
         aOut.meWeight, aOut.meItalic, aOut.mePitch, aOut.meWidthType );
 #endif
 
@@ -205,15 +207,17 @@ bool FcGlyphFallbackSubstititution::FindFontSubstitute( FontSelectPattern& rFont
     const bool bHaveSubstitute = !uselessmatch( rFontSelData, aOut );
 
 #ifdef DEBUG
-    const ByteString aOrigName( rFontSelData.maTargetName, RTL_TEXTENCODING_UTF8 );
-    const ByteString aSubstName( aOut.maSearchName, RTL_TEXTENCODING_UTF8 );
+    const rtl::OString aOrigName(rtl::OUStringToOString(rFontSelData.maTargetName,
+        RTL_TEXTENCODING_UTF8));
+    const rtl::OString aSubstName(rtl::OUStringToOString(aOut.maSearchName,
+        RTL_TEXTENCODING_UTF8));
     printf( "FcGFSubstititution \"%s\" bipw=%d%d%d%d ->",
-        aOrigName.GetBuffer(), rFontSelData.meWeight, rFontSelData.meItalic,
+        aOrigName.getStr(), rFontSelData.meWeight, rFontSelData.meItalic,
         rFontSelData.mePitch, rFontSelData.meWidthType );
     if( !bHaveSubstitute )
         printf( "no substitute available\n" );
     else
-        printf( "\"%s\" bipw=%d%d%d%d\n", aSubstName.GetBuffer(),
+        printf( "\"%s\" bipw=%d%d%d%d\n", aSubstName.getStr(),
         aOut.meWeight, aOut.meItalic, aOut.mePitch, aOut.meWidthType );
 #endif
 

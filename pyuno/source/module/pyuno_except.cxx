@@ -72,17 +72,17 @@ void raisePyExceptionWithAny( const com::sun::star::uno::Any &anyExc )
                 OUStringToOString(buf.makeStringAndClear(),RTL_TEXTENCODING_ASCII_US).getStr() );
         }
     }
-    catch( com::sun::star::lang::IllegalArgumentException & e)
+    catch(const com::sun::star::lang::IllegalArgumentException & e)
     {
         PyErr_SetString( PyExc_SystemError,
                          OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US).getStr() );
     }
-    catch( com::sun::star::script::CannotConvertException & e)
+    catch(const com::sun::star::script::CannotConvertException & e)
     {
         PyErr_SetString( PyExc_SystemError,
                          OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US).getStr() );
     }
-    catch( RuntimeException & e)
+    catch(const RuntimeException & e)
     {
         PyErr_SetString( PyExc_SystemError,
                          OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US).getStr() );

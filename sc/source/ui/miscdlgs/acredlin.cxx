@@ -813,7 +813,6 @@ void ScAcceptChgDlg::UpdateView()
         if(pChanges!=NULL)
             pScChangeAction=pChanges->GetFirst();
     }
-    ScChangeActionTable ActionTable;
     bool bTheFlag = false;
 
     while(pScChangeAction!=NULL)
@@ -1168,7 +1167,7 @@ IMPL_LINK( ScAcceptChgDlg, SelectHandle, SvxRedlinTable*, EMPTYARG )
 }
 
 void ScAcceptChgDlg::GetDependents(  const ScChangeAction* pScChangeAction,
-                                    ScChangeActionTable& aActionTable,
+                                    ScChangeActionMap& aActionMap,
                                     SvLBoxEntry* pEntry)
 {
     ScChangeTrack* pChanges=pDoc->GetChangeTrack();
@@ -1181,17 +1180,17 @@ void ScAcceptChgDlg::GetDependents(  const ScChangeAction* pScChangeAction,
 
         if(pParentAction!=pScChangeAction)
             pChanges->GetDependents((ScChangeAction*) pScChangeAction,
-                        aActionTable,pScChangeAction->IsMasterDelete());
+                        aActionMap,pScChangeAction->IsMasterDelete());
         else
-            pChanges->GetDependents((ScChangeAction*) pScChangeAction,
-                        aActionTable);
+            pChanges->GetDependents( (ScChangeAction*) pScChangeAction,
+                        aActionMap );
     }
     else
         pChanges->GetDependents((ScChangeAction*) pScChangeAction,
-                    aActionTable,pScChangeAction->IsMasterDelete());
+                    aActionMap, pScChangeAction->IsMasterDelete() );
 }
 
-bool ScAcceptChgDlg::InsertContentChildren(ScChangeActionTable* pActionTable,SvLBoxEntry* pParent)
+bool ScAcceptChgDlg::InsertContentChildren(ScChangeActionMap* pActionMap,SvLBoxEntry* pParent)
 {
     bool bTheTestFlag = true;
     ScRedlinData *pEntryData=(ScRedlinData *)(pParent->GetUserData());
@@ -1205,23 +1204,27 @@ bool ScAcceptChgDlg::InsertContentChildren(ScChangeActionTable* pActionTable,SvL
     if ( pScChangeAction->GetType() == SC_CAT_CONTENT &&
             ((const ScChangeActionContent*)pScChangeAction)->IsMatrixOrigin() )
     {
-        pActionTable->Insert( pScChangeAction->GetActionNumber(),
-            (ScChangeAction*) pScChangeAction );
+        pActionMap->insert( ::std::make_pair( pScChangeAction->GetActionNumber(),
+            const_cast<ScChangeAction*>( pScChangeAction ) ) );
         bParentInserted = true;
     }
     SvLBoxEntry* pEntry=NULL;
 
-    const ScChangeActionContent* pCChild=(const ScChangeActionContent*)pActionTable->First();
-    while(pCChild!=NULL)
+    ScChangeActionMap::iterator itChangeAction = pActionMap->begin();
+    while( itChangeAction != pActionMap->end() )
     {
-        if( pCChild->GetState()==SC_CAS_VIRGIN )
+        if( itChangeAction->second->GetState()==SC_CAS_VIRGIN )
             break;
-        pCChild=(const ScChangeActionContent*)pActionTable->Next();
+        ++itChangeAction;
     }
 
-    if(pCChild==NULL) return true;
+    if( itChangeAction == pActionMap->end() )
+        return true;
 
-    SvLBoxEntry* pOriginal=InsertChangeActionContent(pCChild,pParent,RD_SPECIAL_CONTENT);
+    SvLBoxEntry* pOriginal = InsertChangeActionContent(
+        dynamic_cast<const ScChangeActionContent*>( itChangeAction->second ),
+        pParent, RD_SPECIAL_CONTENT );
+
     if(pOriginal!=NULL)
     {
         bTheTestFlag=false;
@@ -1232,16 +1235,17 @@ bool ScAcceptChgDlg::InsertContentChildren(ScChangeActionTable* pActionTable,SvL
         pParentData->bIsRejectable=false;
         pParentData->bDisabled=false;
     }
-    while(pCChild!=NULL)
+    while( itChangeAction != pActionMap->end() )
     {
-        if(pCChild->GetState()==SC_CAS_VIRGIN)
+        if( itChangeAction->second->GetState() == SC_CAS_VIRGIN )
         {
-            pEntry=InsertChangeActionContent(pCChild,pParent,RD_SPECIAL_NONE);
+            pEntry = InsertChangeActionContent( dynamic_cast<const ScChangeActionContent*>( itChangeAction->second ),
+                pParent, RD_SPECIAL_NONE );
 
             if(pEntry!=NULL)
                 bTheTestFlag=false;
         }
-        pCChild=(const ScChangeActionContent*)pActionTable->Next();
+        ++itChangeAction;
     }
 
     if ( !bParentInserted )
@@ -1293,15 +1297,16 @@ bool ScAcceptChgDlg::InsertAcceptedORejected(SvLBoxEntry* pParent)
     return bTheTestFlag;
 }
 
-bool ScAcceptChgDlg::InsertChildren(ScChangeActionTable* pActionTable,SvLBoxEntry* pParent)
+bool ScAcceptChgDlg::InsertChildren(ScChangeActionMap* pActionMap,SvLBoxEntry* pParent)
 {
     ScChangeTrack* pChanges=pDoc->GetChangeTrack();
     bool bTheTestFlag = true;
     SvLBoxEntry* pEntry=NULL;
-    const ScChangeAction* pChild=(const ScChangeAction*)pActionTable->First();
-    while(pChild!=NULL)
+    ScChangeActionMap::iterator itChangeAction;
+
+    for( itChangeAction = pActionMap->begin(); itChangeAction != pActionMap->end(); ++itChangeAction )
     {
-        pEntry=InsertChangeAction(pChild,SC_CAS_VIRGIN,pParent,false,true);
+        pEntry=InsertChangeAction( itChangeAction->second, SC_CAS_VIRGIN, pParent, false, true );
 
         if(pEntry!=NULL)
         {
@@ -1312,30 +1317,28 @@ bool ScAcceptChgDlg::InsertChildren(ScChangeActionTable* pActionTable,SvLBoxEntr
             pEntryData->bIsAcceptable=false;
             pEntryData->bDisabled=true;
 
-            if(pChild->IsDialogParent())
-                Expand(pChanges,pChild,pEntry);
+            if( itChangeAction->second->IsDialogParent() )
+                Expand( pChanges, itChangeAction->second, pEntry );
         }
-        pChild=pActionTable->Next();
     }
     return bTheTestFlag;
 }
 
 bool ScAcceptChgDlg::InsertDeletedChildren(const ScChangeAction* pScChangeAction,
-                                         ScChangeActionTable* pActionTable,SvLBoxEntry* pParent)
+                                         ScChangeActionMap* pActionMap,SvLBoxEntry* pParent)
 {
     ScChangeTrack* pChanges=pDoc->GetChangeTrack();
     bool bTheTestFlag = true;
     SvLBoxEntry* pEntry=NULL;
-    ScChangeActionTable aDelActionTable;
-    const ScChangeAction* pChild=(const ScChangeAction*)pActionTable->First();
+    ScChangeActionMap::iterator itChangeAction;
 
-    while(pChild!=NULL)
+    for( itChangeAction = pActionMap->begin(); itChangeAction != pActionMap->end(); ++itChangeAction )
     {
 
-        if(pScChangeAction!=pChild)
-            pEntry=InsertChangeAction(pChild,SC_CAS_VIRGIN,pParent,false,true);
+        if( pScChangeAction != itChangeAction->second )
+            pEntry = InsertChangeAction( itChangeAction->second, SC_CAS_VIRGIN, pParent, false, true );
         else
-            pEntry=InsertChangeAction(pChild,SC_CAS_VIRGIN,pParent,true,true);
+            pEntry = InsertChangeAction( itChangeAction->second, SC_CAS_VIRGIN, pParent, true, true );
 
         if(pEntry!=NULL)
         {
@@ -1346,10 +1349,9 @@ bool ScAcceptChgDlg::InsertDeletedChildren(const ScChangeAction* pScChangeAction
 
             bTheTestFlag=false;
 
-            if ( pChild->IsDialogParent() )
-                Expand(pChanges,pChild,pEntry);
+            if( itChangeAction->second->IsDialogParent() )
+                Expand( pChanges, itChangeAction->second, pEntry );
         }
-        pChild=pActionTable->Next();
     }
     return bTheTestFlag;
 }
@@ -1362,15 +1364,15 @@ bool ScAcceptChgDlg::Expand(
 
     if(pChanges!=NULL &&pEntry!=NULL &&pScChangeAction!=NULL)
     {
-        ScChangeActionTable aActionTable;
+        ScChangeActionMap aActionMap;
 
-        GetDependents( pScChangeAction,aActionTable,pEntry);
+        GetDependents( pScChangeAction, aActionMap, pEntry );
 
         switch(pScChangeAction->GetType())
         {
             case SC_CAT_CONTENT:
             {
-                InsertContentChildren(&aActionTable,pEntry);
+                InsertContentChildren( &aActionMap, pEntry );
                 bTheTestFlag=!bHasFilterEntry;
                 break;
             }
@@ -1378,18 +1380,18 @@ bool ScAcceptChgDlg::Expand(
             case SC_CAT_DELETE_ROWS:
             case SC_CAT_DELETE_TABS:
             {
-                InsertDeletedChildren(pScChangeAction,&aActionTable,pEntry);
+                InsertDeletedChildren( pScChangeAction, &aActionMap, pEntry );
                 bTheTestFlag=!bHasFilterEntry;
                 break;
             }
             default:
             {
                 if(!bFilter)
-                    bTheTestFlag=InsertChildren(&aActionTable,pEntry);
+                    bTheTestFlag = InsertChildren( &aActionMap, pEntry );
                 break;
             }
         }
-        aActionTable.Clear();
+        aActionMap.clear();
     }
     return bTheTestFlag;
 }
@@ -1401,7 +1403,7 @@ IMPL_LINK( ScAcceptChgDlg, ExpandingHandle, SvxRedlinTable*, pTable )
     SetPointer(Pointer(POINTER_WAIT));
     if(pTable!=NULL && pChanges!=NULL)
     {
-        ScChangeActionTable aActionTable;
+        ScChangeActionMap aActionMap;
         SvLBoxEntry* pEntry=pTheView->GetHdlEntry();
         if(pEntry!=NULL)
         {
@@ -1419,29 +1421,29 @@ IMPL_LINK( ScAcceptChgDlg, ExpandingHandle, SvxRedlinTable*, pTable )
                 {
                     pScChangeAction=(ScChangeAction*) pEntryData->pData;
 
-                    GetDependents( pScChangeAction,aActionTable,pEntry);
+                    GetDependents( pScChangeAction, aActionMap, pEntry );
 
                     switch(pScChangeAction->GetType())
                     {
                         case SC_CAT_CONTENT:
                         {
-                            bTheTestFlag=InsertContentChildren(&aActionTable,pEntry);
+                            bTheTestFlag = InsertContentChildren( &aActionMap, pEntry );
                             break;
                         }
                         case SC_CAT_DELETE_COLS:
                         case SC_CAT_DELETE_ROWS:
                         case SC_CAT_DELETE_TABS:
                         {
-                            bTheTestFlag=InsertDeletedChildren(pScChangeAction,&aActionTable,pEntry);
+                            bTheTestFlag = InsertDeletedChildren( pScChangeAction, &aActionMap, pEntry );
                             break;
                         }
                         default:
                         {
-                            bTheTestFlag=InsertChildren(&aActionTable,pEntry);
+                            bTheTestFlag = InsertChildren( &aActionMap, pEntry );
                             break;
                         }
                     }
-                    aActionTable.Clear();
+                    aActionMap.clear();
 
                 }
                 else
@@ -1470,7 +1472,6 @@ void ScAcceptChgDlg::AppendChanges(ScChangeTrack* pChanges,sal_uLong nStartActio
         SetPointer(Pointer(POINTER_WAIT));
         pTheView->SetUpdateMode(false);
 
-        ScChangeActionTable ActionTable;
         bool bTheFlag = false;
 
         bool bFilterFlag = pTPFilter->IsDate() || pTPFilter->IsRange() ||

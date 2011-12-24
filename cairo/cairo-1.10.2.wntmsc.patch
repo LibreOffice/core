@@ -1,0 +1,56 @@
+--- misc/cairo-1.10.2/src/Makefile.sources	2010-12-25 07:21:34.000000000 -0700
++++ misc/build/cairo-1.10.2/src/Makefile.sources	2011-12-16 08:44:19.209301900 -0700
+@@ -214,7 +214,7 @@
+ cairo_pdf_headers = cairo-pdf.h
+ cairo_pdf_private = cairo-pdf-surface-private.h
+ cairo_pdf_sources = cairo-pdf-surface.c
+-if CAIRO_HAS_PDF_SURFACE
++ifeq ($(CAIRO_HAS_PDF_SURFACE),1)
+ req_cairo_deflate_stream_sources = $(cairo_deflate_stream_sources)
+ endif
+ 
+@@ -248,7 +248,7 @@
+ 	cairo-xlib-surface-private.h \
+ 	cairo-xlib-xrender-private.h \
+ 	$(NULL)
+-if BUILD_XLIB_XCB
++ifeq ($(BUILD_XLIB_XCB),1)
+ cairo_xlib_sources = cairo-xlib-xcb-surface.c
+ else
+ cairo_xlib_sources = \
+@@ -273,7 +273,7 @@
+ 		    cairo-xcb-surface-core.c \
+ 		    cairo-xcb-surface-render.c \
+ 		    $(NULL)
+-if BUILD_XCB_SHM
++ifeq ($(BUILD_XCB_SHM),1)
+ cairo_xcb_sources += \
+ 		    cairo-xcb-shm.c \
+ 		    cairo-xcb-connection-shm.c \
+@@ -322,7 +322,7 @@
+ 		   cairo-gl-gradient.c \
+ 		   cairo-gl-shaders.c \
+ 		   cairo-gl-surface.c
+-if BUILD_PRIVATE_GLEW
++ifeq ($(BUILD_PRIVATE_GLEW),1)
+ cairo_gl_sources += glew/glew.c
+ endif
+ 
+@@ -373,7 +373,7 @@
+ 
+ cairo_script_headers = cairo-script.h
+ cairo_script_sources = cairo-script-surface.c
+-if CAIRO_HAS_SCRIPT_SURFACE
++ifeq ($(CAIRO_HAS_SCRIPT_SURFACE),1)
+ req_cairo_deflate_stream_sources = $(cairo_deflate_stream_sources)
+ endif
+ 
+@@ -383,7 +383,7 @@
+ 
+ cairo_xml_headers = cairo-xml.h
+ cairo_xml_sources = cairo-xml-surface.c
+-if CAIRO_HAS_XML_SURFACE
++ifeq ($(CAIRO_HAS_XML_SURFACE),1)
+ req_cairo_deflate_stream_sources = $(cairo_deflate_stream_sources)
+ endif
+ 

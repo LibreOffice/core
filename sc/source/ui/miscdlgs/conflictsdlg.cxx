@@ -278,7 +278,7 @@ bool ScConflictsFinder::Find()
 
         if ( aOwnActions.size() )
         {
-            ScConflictsListEntry* pEntry = GetEntry( pSharedAction->GetActionNumber(), aOwnActions );;
+            ScConflictsListEntry* pEntry = GetEntry( pSharedAction->GetActionNumber(), aOwnActions );
             ScChangeActionList::iterator aEnd = aOwnActions.end();
             for ( ScChangeActionList::iterator aItr = aOwnActions.begin(); aItr != aEnd; ++aItr )
             {

@@ -146,7 +146,7 @@ static VBAConstantNameMap s_aRegisteredVBAConstants;
         xProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "VBAGlobalConstantName" ) ) ) >>= aConstName;
         return ::rtl::OUStringToOString( aConstName, RTL_TEXTENCODING_ASCII_US );
     }
-    catch( uno::Exception& ) // not supported
+    catch (const uno::Exception&) // not supported
     {
     }
     return ::rtl::OString();
@@ -466,7 +466,7 @@ sal_Bool SfxObjectShell::Close()
             {
                 xCloseable->close( sal_True );
             }
-            catch( Exception& )
+            catch (const Exception&)
             {
                 pImp->bClosing = sal_False;
             }
@@ -762,7 +762,7 @@ namespace
                                         xContext, xStorageDoc )
                                 ,   UNO_QUERY_THROW );
             }
-            catch( const Exception& )
+            catch (const Exception&)
             {
                 DBG_UNHANDLED_EXCEPTION();
             }
@@ -1092,8 +1092,9 @@ Reference<lang::XComponent> SfxObjectShell::CreateAndLoadComponent( const SfxIte
     {
         xComp = xLoader->loadComponentFromURL(aURL, aTarget, 0, aProps);
     }
-    catch( uno::Exception& )
-    {}
+    catch (const uno::Exception&)
+    {
+    }
 
     return xComp;
 }

@@ -50,7 +50,6 @@ void SvMetaObject::Save( SvPersistStream & )
 {
 }
 
-#ifdef IDL_COMPILER
 void SvMetaObject::WriteTab( SvStream & rOutStm, sal_uInt16 nTab )
 {
     while( nTab-- )
@@ -128,8 +127,6 @@ void SvMetaObject::WriteHxx( SvIdlDataBase &, SvStream &, sal_uInt16 /*nTab */ )
 {
 }
 
-#endif
-
 SV_IMPL_META_FACTORY1( SvMetaName, SvMetaObject );
 SvMetaName::SvMetaName()
 {
@@ -178,7 +175,6 @@ sal_Bool SvMetaName::SetName( const ByteString & rName, SvIdlDataBase * )
     return sal_True;
 }
 
-#ifdef IDL_COMPILER
 sal_Bool SvMetaName::ReadNameSvIdl( SvIdlDataBase & rBase,
                                 SvTokenStream & rInStm )
 {
@@ -410,7 +406,6 @@ void SvMetaName::WriteContext( SvIdlDataBase &, SvStream &,
                                  WriteType, WriteAttribute )
 {
 }
-#endif // IDL_COMPILER
 
 SV_IMPL_META_FACTORY1( SvMetaReference, SvMetaName );
 
@@ -507,14 +502,11 @@ SvMetaModule * SvMetaExtern::GetModule() const
 
 const SvGlobalName & SvMetaExtern::GetUUId() const
 {
-#ifdef IDL_COMPILER
     if( aUUId == SvGlobalName() )
         GetModule()->FillNextName( &((SvMetaExtern *)this)->aUUId );
-#endif
     return aUUId;
 }
 
-#ifdef IDL_COMPILER
 void SvMetaExtern::SetModule( SvIdlDataBase & rBase )
 {
     pModule = (SvMetaModule *)rBase.GetStack().Get( TYPE( SvMetaModule ) );
@@ -591,8 +583,5 @@ void SvMetaExtern::WriteAttributes( SvIdlDataBase & rBase, SvStream & rOutStm,
         << rtl::OString::valueOf(static_cast<sal_Int32>(aVersion.GetMinorVersion())).getStr()
         << ")," << endl;
 }
-
-#endif // IDL_COMPILER
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

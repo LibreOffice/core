@@ -141,7 +141,7 @@ void FFDataHandler::lcl_sprm(Sprm & r_Sprm)
         break;
     case NS_ooxml::LN_CT_FFDDList_listEntry:
         {
-            m_DropDownEntries.push_back(r_Sprm.getValue()->getString());;
+            m_DropDownEntries.push_back(r_Sprm.getValue()->getString());
         }
         break;
     case NS_ooxml::LN_CT_FFData_ddList:

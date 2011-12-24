@@ -91,7 +91,11 @@ SHL1STDLIBS=\
 SHL1DEPN=
 SHL1IMPLIB=	i$(SHL1TARGET)
 SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
+.IF "$(GUI)"=="WNT"
+SHL1VERSIONMAP=$(SOLARENV)/src/reg-component.map
+.ELSE # just a quick hack for GCC fdo#42865
 SHL1USE_EXPORTS = name
+.ENDIF
 SHL1RPATH=OXT
 
 DEF1NAME=$(SHL1TARGET)
@@ -152,11 +156,14 @@ $(COMPONENT_DIALOGS) : dialogs$/$$(@:f)
     @@-$(MKDIRHIER) $(@:d)
     $(COPY) $< $@
 
-$(COMPONENT_DESCRIPTION) : $(DESCRIPTION)
+$(COMPONENT_DESCRIPTION) : $(MISC)/descriptions
+
+$(MISC)/descriptions : $(DESCRIPTION)
     $(COPY) description-en-US.txt $(EXTENSIONDIR)
 .IF "$(WITH_LANG)" != ""
     $(COPY) $(MISC)/$(EXTENSIONNAME)_in/description-*.txt $(EXTENSIONDIR)
 .ENDIF
+    $(TOUCH) $@
 
 $(COMPONENT_IMAGES) :  $(SOLARSRC)$/$(RSCDEFIMG)$/desktop$/res$/$$(@:f)
     @@-$(MKDIRHIER) $(@:d)

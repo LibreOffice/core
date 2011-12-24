@@ -91,7 +91,7 @@ ODBTable::ODBTable(connectivity::sdbcx::OCollection* _pTables
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ODBTable::ODBTable" );
     DBG_CTOR(ODBTable, NULL);
     OSL_ENSURE(getMetaData().is(), "ODBTable::ODBTable : invalid conn !");
-    OSL_ENSURE(_rName.getLength(), "ODBTable::ODBTable : name !");
+    OSL_ENSURE(!_rName.isEmpty(), "ODBTable::ODBTable : name !");
     // TODO : think about collecting the privileges here, as we can't ensure that in getFastPropertyValue, where
     // we do this at the moment, the statement needed can be supplied by the connection (for example the SQL-Server
     // ODBC driver does not allow more than one statement per connection, and in getFastPropertyValue it's more

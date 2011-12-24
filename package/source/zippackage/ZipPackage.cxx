@@ -1025,7 +1025,7 @@ void ZipPackage::WriteMimetypeMagicFile( ZipOutputStream& aZipOut )
         aZipOut.write( aType, 0, nBufferLength );
         aZipOut.closeEntry();
     }
-    catch ( ::com::sun::star::io::IOException & r )
+    catch ( const ::com::sun::star::io::IOException & r )
     {
         throw WrappedTargetException(
                 OUString( RTL_CONSTASCII_USTRINGPARAM ( OSL_LOG_PREFIX "Error adding mimetype to the ZipOutputStream!" ) ),
@@ -1419,7 +1419,7 @@ void SAL_CALL ZipPackage::commitChanges()
         {
             xTempSeek->seek( 0 );
         }
-        catch( uno::Exception& r )
+        catch( const uno::Exception& r )
         {
             throw WrappedTargetException( OUString( RTL_CONSTASCII_USTRINGPARAM ( OSL_LOG_PREFIX "Temporary file should be seekable!" ) ),
                     static_cast < OWeakObject * > ( this ), makeAny ( r ) );
@@ -1444,7 +1444,7 @@ void SAL_CALL ZipPackage::commitChanges()
                 // after successful truncation the original file contents are already lost
                 xTruncate->truncate();
             }
-            catch( uno::Exception& r )
+            catch( const uno::Exception& r )
             {
                 throw WrappedTargetException( OUString( RTL_CONSTASCII_USTRINGPARAM ( OSL_LOG_PREFIX "This package is read only!" ) ),
                         static_cast < OWeakObject * > ( this ), makeAny ( r ) );
@@ -1543,7 +1543,7 @@ void SAL_CALL ZipPackage::commitChanges()
                     // if the file is still not corrupted, it can become after the next step
                     aContent.executeCommand ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "transfer" ) ), aAny );
                 }
-                catch ( ::com::sun::star::uno::Exception& r )
+                catch ( const ::com::sun::star::uno::Exception& r )
                 {
                     if ( bCanBeCorrupted )
                         DisconnectFromTargetAndThrowException_Impl( xTempInStream );

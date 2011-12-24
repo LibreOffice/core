@@ -134,7 +134,7 @@ namespace pcr
     {
         Reference< XDataType > xDataType;
 
-        if ( _rName.getLength() )
+        if ( !_rName.isEmpty() )
         {
             Reference< XDataTypeRepository > xRepository = getDataTypeRepository();
             if ( xRepository.is() )
@@ -172,7 +172,7 @@ namespace pcr
         {
             Reference< XDataType > xValidatedAgainst;
 
-            if ( _rName.getLength() )
+            if ( !_rName.isEmpty() )
                 xValidatedAgainst = getDataType( _rName );
 
             if ( xValidatedAgainst.is() )
@@ -295,9 +295,9 @@ namespace pcr
         try
         {
             Reference< XDataTypeRepository > xFromRepository, xToRepository;
-            if ( _rFromModel.getLength() )
+            if ( !_rFromModel.isEmpty() )
                 xFromRepository = getDataTypeRepository( _rFromModel );
-            if ( _rToModel.getLength() )
+            if ( !_rToModel.isEmpty() )
                 xToRepository = getDataTypeRepository( _rToModel );
 
             if ( !xFromRepository.is() || !xToRepository.is() )

@@ -313,7 +313,7 @@ int __cdecl main( int argc, char * argv[] )
             exit(1);
         }
     }
-    catch( IllegalArgument& e)
+    catch(const IllegalArgument& e)
     {
         fprintf(stderr, "Illegal option: %s\n", e.m_message.getStr());
         cleanUp(sal_True);
@@ -496,7 +496,7 @@ int __cdecl main( int argc, char * argv[] )
             }
         }
     }
-    catch( CannotDumpException& e)
+    catch(const CannotDumpException& e)
     {
         fprintf(stderr, "%s ERROR: %s\n",
                 options.getProgramName().getStr(),

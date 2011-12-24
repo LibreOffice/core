@@ -447,7 +447,7 @@ nsresult getTableStringsProxied(const sal_Char* sAbURI, sal_Int32 *nDirectoryTyp
         ODatabaseMetaDataResultSet::ORow aRow(3);
 
         // Insert table into map
-        if ( aTableName.getLength() == 0 )
+        if ( aTableName.isEmpty() )
             aTableName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("AddressBook"));
 
         OSL_TRACE("TableName = >%s<", OUtoCStr( aTableName ) );
@@ -500,7 +500,7 @@ sal_Bool MDatabaseMetaDataHelper::getTableStrings( OConnection*                 
     sAbURI = _pCon->getMozURI();
 
     OSL_TRACE("AbURI = %s", OUtoCStr( sAbURI ) );
-    if ( sAbURI.getLength() == 0 )
+    if ( sAbURI.isEmpty() )
         bGivenURI = sal_False;
     else {
         sAbURIString = ::rtl::OUStringToOString( sAbURI,
@@ -566,7 +566,7 @@ sal_Bool MDatabaseMetaDataHelper::getTableStrings( OConnection*                 
         //Or the given profile name does not found
         //We will reaise a "No Addressbook Directories Exist" error
         if ( xMozillaBootstrap->getProfileCount(m_ProductType) == 0 ||
-            ( m_ProfileName.getLength() && !(xMozillaBootstrap->getProfilePath(m_ProductType,m_ProfileName).getLength())))
+            ( !m_ProfileName.isEmpty() && xMozillaBootstrap->getProfilePath(m_ProductType,m_ProfileName).isEmpty()))
             m_bProfileExists = sal_False;
         else
             if (xMozillaBootstrap->bootupProfile(m_ProductType,m_ProfileName) > 0)
@@ -632,7 +632,7 @@ sal_Bool MDatabaseMetaDataHelper::getTables( OConnection* _pCon,
 
     ::std::vector< ::rtl::OUString > tables;
     ::std::vector< ::rtl::OUString > tabletypes;
-    ::rtl::OUString matchAny = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("%"));;
+    ::rtl::OUString matchAny = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("%"));
 
     if ( !getTableStrings( _pCon, tables,tabletypes ) )
         return sal_False;
@@ -650,7 +650,7 @@ sal_Bool MDatabaseMetaDataHelper::getTables( OConnection* _pCon,
                       ( 0 == types.getLength() ||   //types is null or types include aTableType or types include "%"
                        0 != ::comphelper::findValue( types, aTableType, sal_True ).getLength() ||
                        0 != ::comphelper::findValue( types, matchAny, sal_True ).getLength())) {
-            if ( aTableName.getLength() == 0 ) {
+            if ( aTableName.isEmpty() ) {
                 aTableName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("AddressBook"));
             }
 
@@ -699,7 +699,7 @@ MDatabaseMetaDataHelper::testLDAPConnection( OConnection* _pCon )
         sAbURI = sAbURI.replaceAt( pos, len - pos, ::rtl::OString("") );
     }
     const sal_Unicode* bindDN=nsnull;
-    if (sAbBindDN.getLength() != 0)
+    if (!sAbBindDN.isEmpty())
     {
         bindDN = sAbBindDN.getStr();
     }

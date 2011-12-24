@@ -83,7 +83,6 @@ public:
     void            SetWelcomeScreen( sal_Bool b );
     sal_Bool        IsWelcomeScreen() const;
 
-    String          GetLocale() const;
     String          GetSystem() const;
 };
 

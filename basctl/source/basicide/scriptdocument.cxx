@@ -1311,7 +1311,7 @@ namespace basctl
             ::std::insert_iterator< ::std::set< ::rtl::OUString > >( aUsedNamesCheck, aUsedNamesCheck.begin() ) );
 
         bool bValid = false;
-        sal_uInt16 i = 1;
+        sal_Int32 i = 1;
         while ( !bValid )
         {
             aObjectName = aBaseName;

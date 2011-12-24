@@ -179,7 +179,7 @@ Reference< XResultSet > SAL_CALL java_sql_Statement_Base::getGeneratedValues(  )
         if ( m_pConnection )
         {
             ::rtl::OUString sStmt = m_pConnection->getTransformedGeneratedStatement(m_sSqlStatement);
-            if ( sStmt.getLength() )
+            if ( !sStmt.isEmpty() )
             {
                 m_aLogger.log( LogLevel::FINER, STR_LOG_GENERATED_VALUES_FALLBACK, sStmt );
                 ::comphelper::disposeComponent(m_xGeneratedStatement);

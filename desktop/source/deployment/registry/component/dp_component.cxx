@@ -492,7 +492,7 @@ void BackendImpl::initServiceRdbFiles()
     ::ucbhelper::Content cacheDir( getCachePath(), xCmdEnv );
     ::ucbhelper::Content oldRDB;
     // switch common rdb:
-    if (m_commonRDB_RO.getLength() > 0)
+    if (!m_commonRDB_RO.isEmpty())
     {
         create_ucb_content(
             &oldRDB, makeURL( getCachePath(), m_commonRDB_RO),
@@ -514,7 +514,7 @@ void BackendImpl::initServiceRdbFiles()
         oldRDB = ::ucbhelper::Content();
     }
     // switch native rdb:
-    if (m_nativeRDB_RO.getLength() > 0)
+    if (!m_nativeRDB_RO.isEmpty())
     {
         create_ucb_content(
             &oldRDB, makeURL(getCachePath(), m_nativeRDB_RO),
@@ -538,7 +538,7 @@ void BackendImpl::initServiceRdbFiles()
 
 
     // common rdb for java, native rdb for shared lib components
-    if (m_commonRDB.getLength() > 0) {
+    if (!m_commonRDB.isEmpty()) {
         m_xCommonRDB.set(
             m_xComponentContext->getServiceManager()
             ->createInstanceWithContext(
@@ -548,7 +548,7 @@ void BackendImpl::initServiceRdbFiles()
             makeURL( expandUnoRcUrl(getCachePath()), m_commonRDB ),
             false, true);
     }
-    if (m_nativeRDB.getLength() > 0) {
+    if (!m_nativeRDB.isEmpty()) {
         m_xNativeRDB.set(
             m_xComponentContext->getServiceManager()
             ->createInstanceWithContext(
@@ -565,7 +565,7 @@ void BackendImpl::initServiceRdbFiles_RO()
     const Reference<XCommandEnvironment> xCmdEnv;
 
     // common rdb for java, native rdb for shared lib components
-    if (m_commonRDB_RO.getLength() > 0)
+    if (!m_commonRDB_RO.isEmpty())
     {
         m_xCommonRDB_RO.set(
             m_xComponentContext->getServiceManager()
@@ -577,7 +577,7 @@ void BackendImpl::initServiceRdbFiles_RO()
             sal_True, //read-only
             sal_True); // create data source if necessary
     }
-    if (m_nativeRDB_RO.getLength() > 0)
+    if (!m_nativeRDB_RO.isEmpty())
     {
         m_xNativeRDB_RO.set(
             m_xComponentContext->getServiceManager()
@@ -729,7 +729,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
     Reference<XCommandEnvironment> const & xCmdEnv )
 {
     OUString mediaType(mediaType_);
-    if (mediaType.getLength() == 0 ||
+    if (mediaType.isEmpty() ||
         mediaType.equalsAsciiL(
             RTL_CONSTASCII_STRINGPARAM(
                 "application/vnd.sun.star.uno-component") ) ||
@@ -756,7 +756,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
                         url, OUSTR("RegistrationClassName"), xCmdEnv ))
                     mediaType = OUSTR(
                         "application/vnd.sun.star.uno-component;type=Java");
-                if (mediaType.getLength() == 0)
+                if (mediaType.isEmpty())
                     mediaType = OUSTR(
                         "application/vnd.sun.star.uno-typelibrary;type=Java");
             }
@@ -769,7 +769,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
                 mediaType =
                     OUSTR("application/vnd.sun.star.uno-typelibrary;type=RDB");
         }
-        if (mediaType.getLength() == 0)
+        if (mediaType.isEmpty())
             throw lang::IllegalArgumentException(
                 StrCannotDetectMediaType::get() + url,
                 static_cast<OWeakObject *>(this), static_cast<sal_Int16>(-1) );
@@ -898,7 +898,7 @@ void BackendImpl::unorc_verify_init(
                 sal_Int32 index = sizeof ("UNO_JAVA_CLASSPATH=") - 1;
                 do {
                     OUString token( line.getToken( 0, ' ', index ).trim() );
-                    if (token.getLength() > 0)
+                    if (!token.isEmpty())
                     {
                         if (create_ucb_content(
                                 0, expandUnoRcTerm(token), xCmdEnv,
@@ -919,7 +919,7 @@ void BackendImpl::unorc_verify_init(
                 sal_Int32 index = sizeof ("UNO_TYPES=") - 1;
                 do {
                     OUString token( line.getToken( 0, ' ', index ).trim() );
-                    if (token.getLength() > 0)
+                    if (!token.isEmpty())
                     {
                         if (token[ 0 ] == '?')
                             token = token.copy( 1 );
@@ -953,7 +953,7 @@ void BackendImpl::unorc_verify_init(
                      i >= 0;)
                 {
                     rtl::OUString token(line.getToken(0, ' ', i));
-                    if (token.getLength() != 0)
+                    if (!token.isEmpty())
                     {
                         if (state == 1 &&
                             token.matchAsciiL(
@@ -1054,22 +1054,22 @@ void BackendImpl::unorc_flush( Reference<XCommandEnvironment> const & xCmdEnv )
     // If we duplicated the common or native rdb then we must use those urls
     //otherwise we use those of the original files. That is, m_commonRDB_RO and
     //m_nativeRDB_RO;
-    OUString sCommonRDB(m_commonRDB.getLength() > 0 ? m_commonRDB : m_commonRDB_RO);
-    OUString sNativeRDB(m_nativeRDB.getLength() > 0 ? m_nativeRDB : m_nativeRDB_RO);
+    OUString sCommonRDB(m_commonRDB.isEmpty() ? m_commonRDB_RO : m_commonRDB );
+    OUString sNativeRDB(m_nativeRDB.isEmpty() ? m_nativeRDB_RO : m_nativeRDB );
 
-    if (sCommonRDB.getLength() > 0 || sNativeRDB.getLength() > 0 ||
+    if (!sCommonRDB.isEmpty() || !sNativeRDB.isEmpty() ||
         !m_components.empty())
     {
         buf.append( RTL_CONSTASCII_STRINGPARAM("UNO_SERVICES=") );
         bool space = false;
-        if (sCommonRDB.getLength() > 0)
+        if (!sCommonRDB.isEmpty())
         {
             buf.append( RTL_CONSTASCII_STRINGPARAM("?$ORIGIN/") );
             buf.append( ::rtl::OUStringToOString(
                             sCommonRDB, RTL_TEXTENCODING_ASCII_US ) );
             space = true;
         }
-        if (sNativeRDB.getLength() > 0)
+        if (!sNativeRDB.isEmpty())
         {
             if (space)
             {

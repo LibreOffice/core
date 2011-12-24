@@ -33,6 +33,10 @@ ENABLE_EXCEPTIONS = TRUE
 
 .INCLUDE: settings.mk
 
+.IF "$(HAVE_POSIX_FALLOCATE)" == "YES"
+CDEFS += -DHAVE_POSIX_FALLOCATE
+.ENDIF
+
 SLOFILES = \
     $(SLO)$/bridge.obj \
     $(SLO)$/component.obj \

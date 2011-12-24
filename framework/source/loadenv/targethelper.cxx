@@ -26,19 +26,9 @@
  *
  ************************************************************************/
 
-
-//_______________________________________________
-// own includes
-
 #include <loadenv/targethelper.hxx>
 
-//_______________________________________________
-// namespace
-
 namespace framework{
-
-//_______________________________________________
-// declarations
 
 /*-----------------------------------------------
     05.08.2003 09:08
@@ -71,9 +61,6 @@ sal_Bool TargetHelper::matchSpecialTarget(const ::rtl::OUString& sCheckTarget  ,
 
         case E_MENUBAR :
             return (sCheckTarget.equals(SPECIALTARGET_MENUBAR));
-
-        case E_HELPAGENT :
-            return (sCheckTarget.equals(SPECIALTARGET_HELPAGENT));
 
         case E_HELPTASK :
             return (sCheckTarget.equals(SPECIALTARGET_HELPTASK));

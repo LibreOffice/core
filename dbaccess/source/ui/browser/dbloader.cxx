@@ -283,7 +283,7 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
         {
             xDatabaseDocument.set( getDataSourceOrModel( xDataSource ), UNO_QUERY );
         }
-        else if ( sDataSourceName.getLength() )
+        else if ( !sDataSourceName.isEmpty() )
         {
             ::dbtools::SQLExceptionInfo aError;
             xDataSource.set( getDataSourceByName( sDataSourceName, NULL, m_xServiceFactory, &aError ) );

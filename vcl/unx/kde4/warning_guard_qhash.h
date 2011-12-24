@@ -39,6 +39,8 @@
     shadows a global declaration [-Werror=shadow]
 
     Reported upstream as <https://bugreports.qt.nokia.com/browse/QTBUG-22908>.
+
+    And suggested to be closed, because there is no problem in Qt. This is a workaround, at best.
 */
 
 #ifdef _MSC_VER

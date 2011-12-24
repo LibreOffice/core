@@ -52,9 +52,6 @@ PresenterSprite::PresenterSprite (void)
 {
 }
 
-
-
-
 PresenterSprite::~PresenterSprite (void)
 {
     if (mxSprite.is())
@@ -66,9 +63,6 @@ PresenterSprite::~PresenterSprite (void)
         mxSprite = NULL;
     }
 }
-
-
-
 
 void PresenterSprite::SetFactory (
     const ::css::uno::Reference<css::rendering::XSpriteCanvas>& rxSpriteFactory)
@@ -82,9 +76,6 @@ void PresenterSprite::SetFactory (
     }
 }
 
-
-
-
 ::css::uno::Reference<css::rendering::XCanvas> PresenterSprite::GetCanvas (void)
 {
     ProvideSprite();
@@ -93,9 +84,6 @@ void PresenterSprite::SetFactory (
     else
         return NULL;
 }
-
-
-
 
 void PresenterSprite::Show (void)
 {
@@ -106,28 +94,12 @@ void PresenterSprite::Show (void)
         ProvideSprite();
 }
 
-
-
-
 void PresenterSprite::Hide (void)
 {
     mbIsVisible = false;
     if (mxSprite.is())
         mxSprite->hide();
 }
-
-
-
-
-void PresenterSprite::SetPriority (const double nPriority)
-{
-    mnPriority = nPriority;
-    if (mxSprite.is())
-        mxSprite->setPriority(mnPriority);
-}
-
-
-
 
 void PresenterSprite::Resize (const css::geometry::RealSize2D& rSize)
 {
@@ -138,16 +110,10 @@ void PresenterSprite::Resize (const css::geometry::RealSize2D& rSize)
         ProvideSprite();
 }
 
-
-
-
 css::geometry::RealSize2D PresenterSprite::GetSize (void) const
 {
     return maSize;
 }
-
-
-
 
 void PresenterSprite::MoveTo (const css::geometry::RealPoint2D& rLocation)
 {
@@ -166,16 +132,10 @@ void PresenterSprite::MoveTo (const css::geometry::RealPoint2D& rLocation)
             );
 }
 
-
-
-
 css::geometry::RealPoint2D PresenterSprite::GetLocation (void) const
 {
     return maLocation;
 }
-
-
-
 
 void PresenterSprite::Transform (const css::geometry::AffineMatrix2D& rTransform)
 {
@@ -184,9 +144,6 @@ void PresenterSprite::Transform (const css::geometry::AffineMatrix2D& rTransform
         mxSprite->transform(maTransform);
 }
 
-
-
-
 void PresenterSprite::SetAlpha (const double nAlpha)
 {
     mnAlpha = nAlpha;
@@ -194,17 +151,11 @@ void PresenterSprite::SetAlpha (const double nAlpha)
         mxSprite->setAlpha(mnAlpha);
 }
 
-
-
-
 void PresenterSprite::Update (void)
 {
     if (mxSpriteFactory.is())
         mxSpriteFactory->updateScreen(sal_False);
 }
-
-
-
 
 void PresenterSprite::ProvideSprite (void)
 {
@@ -234,9 +185,6 @@ void PresenterSprite::ProvideSprite (void)
         }
     }
 }
-
-
-
 
 void PresenterSprite::DisposeSprite (void)
 {

@@ -135,30 +135,6 @@ public:
 };
 
 /*************************************************************************
-|* Control for display and selecton of the angle of the corner points
-|* of an object
-\************************************************************************/
-
-class SvxAngleCtl : public SvxRectCtl
-{
-private:
-    void    Initialize();
-
-protected:
-    Font    aFont;
-    Size    aFontSize;
-    sal_Bool    bPositive;
-
-public:
-            SvxAngleCtl( Window* pParent, const ResId& rResId );
-            SvxAngleCtl( Window* pParent, const ResId& rResId, Size aSize );
-
-    void    ChangeMetric()
-                { bPositive = !bPositive; }
-    virtual void Paint( const Rectangle& rRect );
-};
-
-/*************************************************************************
 |* Preview control for the display of bitmaps
 \************************************************************************/
 

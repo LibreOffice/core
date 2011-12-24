@@ -102,7 +102,7 @@ SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg( SfxObjectShell* pDocSh,
         aInputSet.Put( rStyleBase.GetItemSet() );
 
         // need parent-relationship
-        const SfxItemSet* pParentItemSet = rStyleBase.GetItemSet().GetParent();;
+        const SfxItemSet* pParentItemSet = rStyleBase.GetItemSet().GetParent();
         if( pParentItemSet )
             aInputSet.SetParent( pParentItemSet );
 

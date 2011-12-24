@@ -51,7 +51,8 @@ extern "C" {
     the length of the sequence of characters represented by this string,
     excluding the terminating NUL character.
  */
-sal_Int32 SAL_CALL rtl_str_getLength( const sal_Char * str ) SAL_THROW_EXTERN_C();
+SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_str_getLength(
+        const sal_Char * str ) SAL_THROW_EXTERN_C();
 
 /** Compare two strings.
 
@@ -71,7 +72,8 @@ sal_Int32 SAL_CALL rtl_str_getLength( const sal_Char * str ) SAL_THROW_EXTERN_C(
     less than the second string, and a value greater than 0 if the first
     string is greater than the second string.
  */
-sal_Int32 SAL_CALL rtl_str_compare( const sal_Char * first, const sal_Char * second ) SAL_THROW_EXTERN_C();
+SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_str_compare(
+        const sal_Char * first, const sal_Char * second ) SAL_THROW_EXTERN_C();
 
 /** Compare two strings.
 
@@ -98,7 +100,8 @@ sal_Int32 SAL_CALL rtl_str_compare( const sal_Char * first, const sal_Char * sec
     less than the second string, and a value greater than 0 if the first
     string is greater than the second string.
  */
-sal_Int32 SAL_CALL rtl_str_compare_WithLength( const sal_Char * first, sal_Int32 firstLen, const sal_Char * second, sal_Int32 secondLen ) SAL_THROW_EXTERN_C();
+SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_str_compare_WithLength(
+        const sal_Char * first, sal_Int32 firstLen, const sal_Char * second, sal_Int32 secondLen ) SAL_THROW_EXTERN_C();
 
 /** Compare two strings with a maximum count of characters.
 
@@ -129,7 +132,8 @@ sal_Int32 SAL_CALL rtl_str_compare_WithLength( const sal_Char * first, sal_Int32
     is less than the second substring, and a value greater than 0 if the first
     substring is greater than the second substring.
  */
-sal_Int32 SAL_CALL rtl_str_shortenedCompare_WithLength( const sal_Char * first, sal_Int32 firstLen, const sal_Char * second, sal_Int32 secondLen, sal_Int32 shortenedLen ) SAL_THROW_EXTERN_C();
+SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_str_shortenedCompare_WithLength(
+        const sal_Char * first, sal_Int32 firstLen, const sal_Char * second, sal_Int32 secondLen, sal_Int32 shortenedLen ) SAL_THROW_EXTERN_C();
 
 /** Compare two strings from back to front.
 
@@ -156,7 +160,8 @@ sal_Int32 SAL_CALL rtl_str_shortenedCompare_WithLength( const sal_Char * first, 
     compares less than the second string, and a value greater than 0 if the
     first string compares greater than the second string.
  */
-sal_Int32 SAL_CALL rtl_str_reverseCompare_WithLength( const sal_Char * first, sal_Int32 firstLen, const sal_Char * second, sal_Int32 secondLen ) SAL_THROW_EXTERN_C();
+SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_str_reverseCompare_WithLength(
+        const sal_Char * first, sal_Int32 firstLen, const sal_Char * second, sal_Int32 secondLen ) SAL_THROW_EXTERN_C();
 
 /** Compare two strings, ignoring the case of ASCII characters.
 
@@ -177,7 +182,8 @@ sal_Int32 SAL_CALL rtl_str_reverseCompare_WithLength( const sal_Char * first, sa
     less than the second string, and a value greater than 0 if the first
     string is greater than the second string.
  */
-sal_Int32 SAL_CALL rtl_str_compareIgnoreAsciiCase( const sal_Char * first, const sal_Char * second ) SAL_THROW_EXTERN_C();
+SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_str_compareIgnoreAsciiCase(
+        const sal_Char * first, const sal_Char * second ) SAL_THROW_EXTERN_C();
 
 /** Compare two strings, ignoring the case of ASCII characters.
 
@@ -206,7 +212,8 @@ sal_Int32 SAL_CALL rtl_str_compareIgnoreAsciiCase( const sal_Char * first, const
     less than the second string, and a value greater than 0 if the first
     string is greater than the second string.
  */
-sal_Int32 SAL_CALL rtl_str_compareIgnoreAsciiCase_WithLength( const sal_Char * first, sal_Int32 firstLen, const sal_Char * second, sal_Int32 secondLen ) SAL_THROW_EXTERN_C();
+SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_str_compareIgnoreAsciiCase_WithLength(
+        const sal_Char * first, sal_Int32 firstLen, const sal_Char * second, sal_Int32 secondLen ) SAL_THROW_EXTERN_C();
 
 /** Compare two strings with a maximum count of characters, ignoring the case
     of ASCII characters.
@@ -240,7 +247,8 @@ sal_Int32 SAL_CALL rtl_str_compareIgnoreAsciiCase_WithLength( const sal_Char * f
     is less than the second substring, and a value greater than 0 if the first
     substring is greater than the second substring.
  */
-sal_Int32 SAL_CALL rtl_str_shortenedCompareIgnoreAsciiCase_WithLength( const sal_Char * first, sal_Int32 firstLen, const sal_Char * second, sal_Int32 secondLen, sal_Int32 shortenedLen ) SAL_THROW_EXTERN_C();
+SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_str_shortenedCompareIgnoreAsciiCase_WithLength(
+        const sal_Char * first, sal_Int32 firstLen, const sal_Char * second, sal_Int32 secondLen, sal_Int32 shortenedLen ) SAL_THROW_EXTERN_C();
 
 /** Return a hash code for a string.
 
@@ -254,7 +262,8 @@ sal_Int32 SAL_CALL rtl_str_shortenedCompareIgnoreAsciiCase_WithLength( const sal
     @return
     a hash code for the given string.
  */
-sal_Int32 SAL_CALL rtl_str_hashCode( const sal_Char * str ) SAL_THROW_EXTERN_C();
+SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_str_hashCode(
+        const sal_Char * str ) SAL_THROW_EXTERN_C();
 
 /** Return a hash code for a string.
 
@@ -271,7 +280,8 @@ sal_Int32 SAL_CALL rtl_str_hashCode( const sal_Char * str ) SAL_THROW_EXTERN_C()
     @return
     a hash code for the given string.
  */
-sal_Int32 SAL_CALL rtl_str_hashCode_WithLength( const sal_Char * str, sal_Int32 len ) SAL_THROW_EXTERN_C();
+SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_str_hashCode_WithLength(
+        const sal_Char * str, sal_Int32 len ) SAL_THROW_EXTERN_C();
 
 /** Search for the first occurrence of a character within a string.
 
@@ -287,7 +297,8 @@ sal_Int32 SAL_CALL rtl_str_hashCode_WithLength( const sal_Char * str, sal_Int32 
     the index (starting at 0) of the first occurrence of the character in the
     string, or -1 if the character does not occur.
  */
-sal_Int32 SAL_CALL rtl_str_indexOfChar( const sal_Char * str, sal_Char ch ) SAL_THROW_EXTERN_C();
+SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_str_indexOfChar(
+        const sal_Char * str, sal_Char ch ) SAL_THROW_EXTERN_C();
 
 /** Search for the first occurrence of a character within a string.
 
@@ -305,7 +316,8 @@ sal_Int32 SAL_CALL rtl_str_indexOfChar( const sal_Char * str, sal_Char ch ) SAL_
     the index (starting at 0) of the first occurrence of the character in the
     string, or -1 if the character does not occur.
  */
-sal_Int32 SAL_CALL rtl_str_indexOfChar_WithLength( const sal_Char * str, sal_Int32 len, sal_Char ch ) SAL_THROW_EXTERN_C();
+SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_str_indexOfChar_WithLength(
+        const sal_Char * str, sal_Int32 len, sal_Char ch ) SAL_THROW_EXTERN_C();
 
 /** Search for the last occurrence of a character within a string.
 
@@ -322,7 +334,8 @@ sal_Int32 SAL_CALL rtl_str_indexOfChar_WithLength( const sal_Char * str, sal_Int
     string, or -1 if the character does not occur.  The returned value is
     always smaller than the string length.
  */
-sal_Int32 SAL_CALL rtl_str_lastIndexOfChar( const sal_Char * str, sal_Char ch ) SAL_THROW_EXTERN_C();
+SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_str_lastIndexOfChar(
+        const sal_Char * str, sal_Char ch ) SAL_THROW_EXTERN_C();
 
 /** Search for the last occurrence of a character within a string.
 
@@ -341,7 +354,8 @@ sal_Int32 SAL_CALL rtl_str_lastIndexOfChar( const sal_Char * str, sal_Char ch ) 
     string, or -1 if the character does not occur.  The returned value is
     always smaller than the string length.
  */
-sal_Int32 SAL_CALL rtl_str_lastIndexOfChar_WithLength( const sal_Char * str, sal_Int32 len, sal_Char ch ) SAL_THROW_EXTERN_C();
+SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_str_lastIndexOfChar_WithLength(
+        const sal_Char * str, sal_Int32 len, sal_Char ch ) SAL_THROW_EXTERN_C();
 
 /** Search for the first occurrence of a substring within a string.
 
@@ -358,7 +372,8 @@ sal_Int32 SAL_CALL rtl_str_lastIndexOfChar_WithLength( const sal_Char * str, sal
     the index (starting at 0) of the first character of the first occurrence
     of the substring within the string, or -1 if the substring does not occur.
  */
-sal_Int32 SAL_CALL rtl_str_indexOfStr( const sal_Char * str, const sal_Char * subStr ) SAL_THROW_EXTERN_C();
+SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_str_indexOfStr(
+        const sal_Char * str, const sal_Char * subStr ) SAL_THROW_EXTERN_C();
 
 /** Search for the first occurrence of a substring within a string.
 
@@ -382,7 +397,8 @@ sal_Int32 SAL_CALL rtl_str_indexOfStr( const sal_Char * str, const sal_Char * su
     the index (starting at 0) of the first character of the first occurrence
     of the substring within the string, or -1 if the substring does not occur.
  */
-sal_Int32 SAL_CALL rtl_str_indexOfStr_WithLength( const sal_Char * str, sal_Int32 len, const sal_Char * subStr, sal_Int32 subLen ) SAL_THROW_EXTERN_C();
+SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_str_indexOfStr_WithLength(
+        const sal_Char * str, sal_Int32 len, const sal_Char * subStr, sal_Int32 subLen ) SAL_THROW_EXTERN_C();
 
 /** Search for the last occurrence of a substring within a string.
 
@@ -399,7 +415,8 @@ sal_Int32 SAL_CALL rtl_str_indexOfStr_WithLength( const sal_Char * str, sal_Int3
     the index (starting at 0) of the first character of the last occurrence
     of the substring within the string, or -1 if the substring does not occur.
  */
-sal_Int32 SAL_CALL rtl_str_lastIndexOfStr( const sal_Char * str, const sal_Char * subStr ) SAL_THROW_EXTERN_C();
+SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_str_lastIndexOfStr(
+        const sal_Char * str, const sal_Char * subStr ) SAL_THROW_EXTERN_C();
 
 /** Search for the last occurrence of a substring within a string.
 
@@ -423,7 +440,8 @@ sal_Int32 SAL_CALL rtl_str_lastIndexOfStr( const sal_Char * str, const sal_Char 
     the index (starting at 0) of the first character of the first occurrence
     of the substring within the string, or -1 if the substring does not occur.
  */
-sal_Int32 SAL_CALL rtl_str_lastIndexOfStr_WithLength( const sal_Char * str, sal_Int32 len, const sal_Char * subStr, sal_Int32 subLen ) SAL_THROW_EXTERN_C();
+SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_str_lastIndexOfStr_WithLength(
+        const sal_Char * str, sal_Int32 len, const sal_Char * subStr, sal_Int32 subLen ) SAL_THROW_EXTERN_C();
 
 /** Replace all occurrences of a single character within a string.
 
@@ -439,7 +457,8 @@ sal_Int32 SAL_CALL rtl_str_lastIndexOfStr_WithLength( const sal_Char * str, sal_
     @param newChar
     the new character.
  */
-void SAL_CALL rtl_str_replaceChar( sal_Char * str, sal_Char oldChar, sal_Char newChar ) SAL_THROW_EXTERN_C();
+SAL_DLLPUBLIC void SAL_CALL rtl_str_replaceChar(
+        sal_Char * str, sal_Char oldChar, sal_Char newChar ) SAL_THROW_EXTERN_C();
 
 /** Replace all occurrences of a single character within a string.
 
@@ -458,7 +477,8 @@ void SAL_CALL rtl_str_replaceChar( sal_Char * str, sal_Char oldChar, sal_Char ne
     @param newChar
     the new character.
  */
-void SAL_CALL rtl_str_replaceChar_WithLength( sal_Char * str, sal_Int32 len, sal_Char oldChar, sal_Char newChar ) SAL_THROW_EXTERN_C();
+SAL_DLLPUBLIC void SAL_CALL rtl_str_replaceChar_WithLength(
+        sal_Char * str, sal_Int32 len, sal_Char oldChar, sal_Char newChar ) SAL_THROW_EXTERN_C();
 
 /** Convert all ASCII uppercase letters to lowercase within a string.
 
@@ -469,7 +489,8 @@ void SAL_CALL rtl_str_replaceChar_WithLength( sal_Char * str, sal_Int32 len, sal
     @param str
     a null-terminated string.
  */
-void SAL_CALL rtl_str_toAsciiLowerCase( sal_Char * str ) SAL_THROW_EXTERN_C();
+SAL_DLLPUBLIC void SAL_CALL rtl_str_toAsciiLowerCase(
+        sal_Char * str ) SAL_THROW_EXTERN_C();
 
 /** Convert all ASCII uppercase letters to lowercase within a string.
 
@@ -483,7 +504,8 @@ void SAL_CALL rtl_str_toAsciiLowerCase( sal_Char * str ) SAL_THROW_EXTERN_C();
     @param len
     the length of the string.
  */
-void SAL_CALL rtl_str_toAsciiLowerCase_WithLength( sal_Char * str, sal_Int32 len ) SAL_THROW_EXTERN_C();
+SAL_DLLPUBLIC void SAL_CALL rtl_str_toAsciiLowerCase_WithLength(
+        sal_Char * str, sal_Int32 len ) SAL_THROW_EXTERN_C();
 
 /** Convert all ASCII lowercase letters to uppercase within a string.
 
@@ -494,7 +516,8 @@ void SAL_CALL rtl_str_toAsciiLowerCase_WithLength( sal_Char * str, sal_Int32 len
     @param str
     a null-terminated string.
  */
-void SAL_CALL rtl_str_toAsciiUpperCase( sal_Char * str ) SAL_THROW_EXTERN_C();
+SAL_DLLPUBLIC void SAL_CALL rtl_str_toAsciiUpperCase(
+        sal_Char * str ) SAL_THROW_EXTERN_C();
 
 /** Convert all ASCII lowercase letters to uppercase within a string.
 
@@ -508,7 +531,8 @@ void SAL_CALL rtl_str_toAsciiUpperCase( sal_Char * str ) SAL_THROW_EXTERN_C();
     @param len
     the length of the string.
  */
-void SAL_CALL rtl_str_toAsciiUpperCase_WithLength( sal_Char * str, sal_Int32 len ) SAL_THROW_EXTERN_C();
+SAL_DLLPUBLIC void SAL_CALL rtl_str_toAsciiUpperCase_WithLength(
+        sal_Char * str, sal_Int32 len ) SAL_THROW_EXTERN_C();
 
 /** Remove white space from both ends of a string.
 
@@ -522,7 +546,8 @@ void SAL_CALL rtl_str_toAsciiUpperCase_WithLength( sal_Char * str, sal_Int32 len
     @return
     the new length of the string.
  */
-sal_Int32 SAL_CALL rtl_str_trim( sal_Char * str ) SAL_THROW_EXTERN_C();
+SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_str_trim(
+        sal_Char * str ) SAL_THROW_EXTERN_C();
 
 /** Remove white space from both ends of the string.
 
@@ -540,7 +565,8 @@ sal_Int32 SAL_CALL rtl_str_trim( sal_Char * str ) SAL_THROW_EXTERN_C();
     @return
     the new length of the string.
  */
-sal_Int32 SAL_CALL rtl_str_trim_WithLength( sal_Char * str, sal_Int32 len ) SAL_THROW_EXTERN_C();
+SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_str_trim_WithLength(
+        sal_Char * str, sal_Int32 len ) SAL_THROW_EXTERN_C();
 
 /** Create the string representation of a boolean.
 
@@ -560,7 +586,8 @@ sal_Int32 SAL_CALL rtl_str_trim_WithLength( sal_Char * str, sal_Int32 len ) SAL_
     @return
     the length of the string.
  */
-sal_Int32 SAL_CALL rtl_str_valueOfBoolean( sal_Char * str, sal_Bool b ) SAL_THROW_EXTERN_C();
+SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_str_valueOfBoolean(
+        sal_Char * str, sal_Bool b ) SAL_THROW_EXTERN_C();
 #define RTL_STR_MAX_VALUEOFBOOLEAN 6
 
 /** Create the string representation of a character.
@@ -576,7 +603,8 @@ sal_Int32 SAL_CALL rtl_str_valueOfBoolean( sal_Char * str, sal_Bool b ) SAL_THRO
     @return
     the length of the string.
  */
-sal_Int32 SAL_CALL rtl_str_valueOfChar( sal_Char * str, sal_Char ch ) SAL_THROW_EXTERN_C();
+SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_str_valueOfChar(
+        sal_Char * str, sal_Char ch ) SAL_THROW_EXTERN_C();
 #define RTL_STR_MAX_VALUEOFCHAR 2
 
 /** Create the string representation of an integer.
@@ -598,7 +626,8 @@ sal_Int32 SAL_CALL rtl_str_valueOfChar( sal_Char * str, sal_Char ch ) SAL_THROW_
     @return
     the length of the string.
  */
-sal_Int32 SAL_CALL rtl_str_valueOfInt32( sal_Char * str, sal_Int32 i, sal_Int16 radix ) SAL_THROW_EXTERN_C();
+SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_str_valueOfInt32(
+        sal_Char * str, sal_Int32 i, sal_Int16 radix ) SAL_THROW_EXTERN_C();
 #define RTL_STR_MIN_RADIX           2
 #define RTL_STR_MAX_RADIX           36
 #define RTL_STR_MAX_VALUEOFINT32    33
@@ -622,7 +651,8 @@ sal_Int32 SAL_CALL rtl_str_valueOfInt32( sal_Char * str, sal_Int32 i, sal_Int16 
     @return
     the length of the string.
  */
-sal_Int32 SAL_CALL rtl_str_valueOfInt64( sal_Char * str, sal_Int64 l, sal_Int16 radix ) SAL_THROW_EXTERN_C();
+SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_str_valueOfInt64(
+        sal_Char * str, sal_Int64 l, sal_Int16 radix ) SAL_THROW_EXTERN_C();
 #define RTL_STR_MAX_VALUEOFINT64 65
 
 /** Create the string representation of a float.
@@ -640,7 +670,8 @@ sal_Int32 SAL_CALL rtl_str_valueOfInt64( sal_Char * str, sal_Int64 l, sal_Int16 
     @return
     the length of the string.
  */
-sal_Int32 SAL_CALL rtl_str_valueOfFloat( sal_Char * str, float f ) SAL_THROW_EXTERN_C();
+SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_str_valueOfFloat(
+        sal_Char * str, float f ) SAL_THROW_EXTERN_C();
 #define RTL_STR_MAX_VALUEOFFLOAT 15
 
 /** Create the string representation of a double.
@@ -658,7 +689,8 @@ sal_Int32 SAL_CALL rtl_str_valueOfFloat( sal_Char * str, float f ) SAL_THROW_EXT
     @return
     the length of the string.
  */
-sal_Int32 SAL_CALL rtl_str_valueOfDouble( sal_Char * str, double d ) SAL_THROW_EXTERN_C();
+SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_str_valueOfDouble(
+        sal_Char * str, double d ) SAL_THROW_EXTERN_C();
 #define RTL_STR_MAX_VALUEOFDOUBLE 25
 
 /** Interpret a string as a boolean.
@@ -672,7 +704,8 @@ sal_Int32 SAL_CALL rtl_str_valueOfDouble( sal_Char * str, double d ) SAL_THROW_E
     @return
     true if the string is "1" or "true" in any ASCII case, false otherwise.
  */
-sal_Bool SAL_CALL rtl_str_toBoolean( const sal_Char * str ) SAL_THROW_EXTERN_C();
+SAL_DLLPUBLIC sal_Bool SAL_CALL rtl_str_toBoolean(
+        const sal_Char * str ) SAL_THROW_EXTERN_C();
 
 /** Interpret a string as an integer.
 
@@ -690,7 +723,8 @@ sal_Bool SAL_CALL rtl_str_toBoolean( const sal_Char * str ) SAL_THROW_EXTERN_C()
     the integer value represented by the string, or 0 if the string does not
     represent an integer.
  */
-sal_Int32 SAL_CALL rtl_str_toInt32( const sal_Char * str, sal_Int16 radix ) SAL_THROW_EXTERN_C();
+SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_str_toInt32(
+        const sal_Char * str, sal_Int16 radix ) SAL_THROW_EXTERN_C();
 
 /** Interpret a string as a long integer.
 
@@ -708,7 +742,8 @@ sal_Int32 SAL_CALL rtl_str_toInt32( const sal_Char * str, sal_Int16 radix ) SAL_
     the long integer value represented by the string, or 0 if the string does
     not represent a long integer.
  */
-sal_Int64 SAL_CALL rtl_str_toInt64( const sal_Char * str, sal_Int16 radix ) SAL_THROW_EXTERN_C();
+SAL_DLLPUBLIC sal_Int64 SAL_CALL rtl_str_toInt64(
+        const sal_Char * str, sal_Int16 radix ) SAL_THROW_EXTERN_C();
 
 /** Interpret a string as a float.
 
@@ -722,7 +757,8 @@ sal_Int64 SAL_CALL rtl_str_toInt64( const sal_Char * str, sal_Int16 radix ) SAL_
     the float value represented by the string, or 0.0 if the string does not
     represent a float.
  */
-float SAL_CALL rtl_str_toFloat( const sal_Char * str ) SAL_THROW_EXTERN_C();
+SAL_DLLPUBLIC float SAL_CALL rtl_str_toFloat(
+        const sal_Char * str ) SAL_THROW_EXTERN_C();
 
 /** Interpret a string as a double.
 
@@ -736,7 +772,8 @@ float SAL_CALL rtl_str_toFloat( const sal_Char * str ) SAL_THROW_EXTERN_C();
     the float value represented by the string, or 0.0 if the string does not
     represent a double.
  */
-double SAL_CALL rtl_str_toDouble( const sal_Char * str ) SAL_THROW_EXTERN_C();
+SAL_DLLPUBLIC double SAL_CALL rtl_str_toDouble(
+        const sal_Char * str ) SAL_THROW_EXTERN_C();
 
 /* ======================================================================= */
 
@@ -766,7 +803,7 @@ typedef struct _rtl_String
     @param str
     a string.
  */
-void SAL_CALL rtl_string_acquire( rtl_String * str ) SAL_THROW_EXTERN_C();
+SAL_DLLPUBLIC void SAL_CALL rtl_string_acquire( rtl_String * str ) SAL_THROW_EXTERN_C();
 
 /** Decrement the reference count of a string.
 
@@ -775,7 +812,7 @@ void SAL_CALL rtl_string_acquire( rtl_String * str ) SAL_THROW_EXTERN_C();
     @param str
     a string.
  */
-void SAL_CALL rtl_string_release( rtl_String * str ) SAL_THROW_EXTERN_C();
+SAL_DLLPUBLIC void SAL_CALL rtl_string_release( rtl_String * str ) SAL_THROW_EXTERN_C();
 
 /** Allocate a new string containing no characters.
 
@@ -783,7 +820,7 @@ void SAL_CALL rtl_string_release( rtl_String * str ) SAL_THROW_EXTERN_C();
     pointer to the new string.  The pointed-to data must be null or a valid
     string.
  */
-void SAL_CALL rtl_string_new( rtl_String ** newStr ) SAL_THROW_EXTERN_C();
+SAL_DLLPUBLIC void SAL_CALL rtl_string_new( rtl_String ** newStr ) SAL_THROW_EXTERN_C();
 
 /** Allocate a new string containing space for a given number of characters.
 
@@ -798,7 +835,7 @@ void SAL_CALL rtl_string_new( rtl_String ** newStr ) SAL_THROW_EXTERN_C();
     @param len
     the number of characters.
  */
-void SAL_CALL rtl_string_new_WithLength( rtl_String ** newStr, sal_Int32 len ) SAL_THROW_EXTERN_C();
+SAL_DLLPUBLIC void SAL_CALL rtl_string_new_WithLength( rtl_String ** newStr, sal_Int32 len ) SAL_THROW_EXTERN_C();
 
 /** Allocate a new string that contains a copy of another string.
 
@@ -813,7 +850,7 @@ void SAL_CALL rtl_string_new_WithLength( rtl_String ** newStr, sal_Int32 len ) S
     @param value
     a valid string.
  */
-void SAL_CALL rtl_string_newFromString( rtl_String ** newStr, const rtl_String * value ) SAL_THROW_EXTERN_C();
+SAL_DLLPUBLIC void SAL_CALL rtl_string_newFromString( rtl_String ** newStr, const rtl_String * value ) SAL_THROW_EXTERN_C();
 
 /** Allocate a new string that contains a copy of a character array.
 
@@ -828,7 +865,7 @@ void SAL_CALL rtl_string_newFromString( rtl_String ** newStr, const rtl_String *
     @param value
     a null-terminated character array.
  */
-void SAL_CALL rtl_string_newFromStr( rtl_String ** newStr, const sal_Char * value ) SAL_THROW_EXTERN_C();
+SAL_DLLPUBLIC void SAL_CALL rtl_string_newFromStr( rtl_String ** newStr, const sal_Char * value ) SAL_THROW_EXTERN_C();
 
 /** Allocate a new string that contains a copy of a character array.
 
@@ -847,7 +884,7 @@ void SAL_CALL rtl_string_newFromStr( rtl_String ** newStr, const sal_Char * valu
     @param len
     the length of the character array.
  */
-void SAL_CALL rtl_string_newFromStr_WithLength( rtl_String ** newStr, const sal_Char * value, sal_Int32 len ) SAL_THROW_EXTERN_C();
+SAL_DLLPUBLIC void SAL_CALL rtl_string_newFromStr_WithLength( rtl_String ** newStr, const sal_Char * value, sal_Int32 len ) SAL_THROW_EXTERN_C();
 
 /** Assign a new value to a string.
 
@@ -861,7 +898,7 @@ void SAL_CALL rtl_string_newFromStr_WithLength( rtl_String ** newStr, const sal_
     @param rightValue
     a valid string.
  */
-void SAL_CALL rtl_string_assign( rtl_String ** str, rtl_String * rightValue ) SAL_THROW_EXTERN_C();
+SAL_DLLPUBLIC void SAL_CALL rtl_string_assign( rtl_String ** str, rtl_String * rightValue ) SAL_THROW_EXTERN_C();
 
 /** Return the length of a string.
 
@@ -873,7 +910,7 @@ void SAL_CALL rtl_string_assign( rtl_String ** str, rtl_String * rightValue ) SA
     @return
     the length of the string.
  */
-sal_Int32 SAL_CALL rtl_string_getLength( const rtl_String * str ) SAL_THROW_EXTERN_C();
+SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_string_getLength( const rtl_String * str ) SAL_THROW_EXTERN_C();
 
 /** Return a pointer to the underlying character array of a string.
 
@@ -883,7 +920,7 @@ sal_Int32 SAL_CALL rtl_string_getLength( const rtl_String * str ) SAL_THROW_EXTE
     @return
     a pointer to the null-terminated character array.
  */
-sal_Char * SAL_CALL rtl_string_getStr( rtl_String * str ) SAL_THROW_EXTERN_C();
+SAL_DLLPUBLIC sal_Char * SAL_CALL rtl_string_getStr( rtl_String * str ) SAL_THROW_EXTERN_C();
 
 /** Create a new string that is the concatenation of two other strings.
 
@@ -902,7 +939,7 @@ sal_Char * SAL_CALL rtl_string_getStr( rtl_String * str ) SAL_THROW_EXTERN_C();
     @param right
     a valid string.
  */
-void SAL_CALL rtl_string_newConcat( rtl_String ** newStr, rtl_String * left, rtl_String * right ) SAL_THROW_EXTERN_C();
+SAL_DLLPUBLIC void SAL_CALL rtl_string_newConcat( rtl_String ** newStr, rtl_String * left, rtl_String * right ) SAL_THROW_EXTERN_C();
 
 /** Create a new string by replacing a substring of another string.
 
@@ -933,7 +970,8 @@ void SAL_CALL rtl_string_newConcat( rtl_String ** newStr, rtl_String * left, rtl
     @param subStr
     either null or a valid string to be inserted.
  */
-void SAL_CALL rtl_string_newReplaceStrAt( rtl_String ** newStr, rtl_String * str, sal_Int32 idx, sal_Int32 count, rtl_String * subStr ) SAL_THROW_EXTERN_C();
+SAL_DLLPUBLIC void SAL_CALL rtl_string_newReplaceStrAt(
+        rtl_String ** newStr, rtl_String * str, sal_Int32 idx, sal_Int32 count, rtl_String * subStr ) SAL_THROW_EXTERN_C();
 
 /** Create a new string by replacing all occurrences of a single character
     within another string.
@@ -959,7 +997,8 @@ void SAL_CALL rtl_string_newReplaceStrAt( rtl_String ** newStr, rtl_String * str
     @param newChar
     the new character.
  */
-void SAL_CALL rtl_string_newReplace( rtl_String ** newStr, rtl_String * str, sal_Char oldChar, sal_Char newChar ) SAL_THROW_EXTERN_C();
+SAL_DLLPUBLIC void SAL_CALL rtl_string_newReplace(
+        rtl_String ** newStr, rtl_String * str, sal_Char oldChar, sal_Char newChar ) SAL_THROW_EXTERN_C();
 
 /** Create a new string by converting all ASCII uppercase letters to lowercase
     within another string.
@@ -980,7 +1019,8 @@ void SAL_CALL rtl_string_newReplace( rtl_String ** newStr, rtl_String * str, sal
     @param str
     a valid string.
  */
-void SAL_CALL rtl_string_newToAsciiLowerCase( rtl_String ** newStr, rtl_String * str ) SAL_THROW_EXTERN_C();
+SAL_DLLPUBLIC void SAL_CALL rtl_string_newToAsciiLowerCase(
+        rtl_String ** newStr, rtl_String * str ) SAL_THROW_EXTERN_C();
 
 /** Create a new string by converting all ASCII lowercase letters to uppercase
     within another string.
@@ -1001,7 +1041,8 @@ void SAL_CALL rtl_string_newToAsciiLowerCase( rtl_String ** newStr, rtl_String *
     @param str
     a valid string.
  */
-void SAL_CALL rtl_string_newToAsciiUpperCase( rtl_String ** newStr, rtl_String * str ) SAL_THROW_EXTERN_C();
+SAL_DLLPUBLIC void SAL_CALL rtl_string_newToAsciiUpperCase(
+        rtl_String ** newStr, rtl_String * str ) SAL_THROW_EXTERN_C();
 
 /** Create a new string by removing white space from both ends of another
     string.
@@ -1022,7 +1063,8 @@ void SAL_CALL rtl_string_newToAsciiUpperCase( rtl_String ** newStr, rtl_String *
     @param str
     a valid string.
  */
-void SAL_CALL rtl_string_newTrim( rtl_String ** newStr, rtl_String * str ) SAL_THROW_EXTERN_C();
+SAL_DLLPUBLIC void SAL_CALL rtl_string_newTrim(
+        rtl_String ** newStr, rtl_String * str ) SAL_THROW_EXTERN_C();
 
 /** Create a new string by extracting a single token from another string.
 
@@ -1068,7 +1110,8 @@ void SAL_CALL rtl_string_newTrim( rtl_String ** newStr, rtl_String * str ) SAL_T
     @return
     the index of the next token, or -1 if no more tokens follow.
  */
-sal_Int32 SAL_CALL rtl_string_getToken( rtl_String ** newStr , rtl_String * str, sal_Int32 token, sal_Char cTok, sal_Int32 idx ) SAL_THROW_EXTERN_C();
+SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_string_getToken(
+        rtl_String ** newStr , rtl_String * str, sal_Int32 token, sal_Char cTok, sal_Int32 idx ) SAL_THROW_EXTERN_C();
 
 /* ======================================================================= */
 
@@ -1146,7 +1189,8 @@ sal_Int32 SAL_CALL rtl_string_getToken( rtl_String ** newStr , rtl_String * str,
     <http://udk.openoffice.org/cpp/man/spec/textconversion.html> for more
     details.
  */
-void SAL_CALL rtl_uString2String( rtl_String ** newStr, const sal_Unicode * str, sal_Int32 len, rtl_TextEncoding encoding, sal_uInt32 convertFlags ) SAL_THROW_EXTERN_C();
+SAL_DLLPUBLIC void SAL_CALL rtl_uString2String(
+        rtl_String ** newStr, const sal_Unicode * str, sal_Int32 len, rtl_TextEncoding encoding, sal_uInt32 convertFlags ) SAL_THROW_EXTERN_C();
 
 /**
   Converts a Unicode string to a byte string, signalling failure.
@@ -1178,7 +1222,8 @@ void SAL_CALL rtl_uString2String( rtl_String ** newStr, const sal_Unicode * str,
   @return
   True if the conversion succeeded, false otherwise.
  */
-sal_Bool SAL_CALL rtl_convertUStringToString(rtl_String ** pTarget,
+SAL_DLLPUBLIC sal_Bool SAL_CALL rtl_convertUStringToString(
+                                             rtl_String ** pTarget,
                                              sal_Unicode const * pSource,
                                              sal_Int32 nLength,
                                              rtl_TextEncoding nEncoding,

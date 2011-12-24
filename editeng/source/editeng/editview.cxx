@@ -105,7 +105,7 @@ LanguageType lcl_CheckLanguage(
 
         // if the result from language guessing does not provide a 'Country' part
         // try to get it by looking up the locale setting of the office.
-        if (aLocale.Country.getLength() == 0)
+        if ( aLocale.Country.isEmpty( ) )
         {
             lang::Locale aTmpLocale = SvxCreateLocale( nTmpLang );
             if (aTmpLocale.Language == aLocale.Language)
@@ -1056,7 +1056,7 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
                     {
                         OUString aDictionaryImageUrl( aCfg.GetSpellAndGrammarContextDictionaryImage(
                                 xSvcInfo->getImplementationName()) );
-                        if (aDictionaryImageUrl.getLength() > 0)
+                        if (!aDictionaryImageUrl.isEmpty() )
                         {
                             Image aImage( lcl_GetImageFromPngUrl( aDictionaryImageUrl ) );
                             pInsertMenu->SetItemImage( nPos, aImage );

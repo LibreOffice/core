@@ -64,7 +64,6 @@ $(eval $(call gb_Library_add_exception_objects,canvastools,\
 	canvas/source/tools/page \
 	canvas/source/tools/pagemanager \
 	canvas/source/tools/parametricpolypolygon \
-	canvas/source/tools/prioritybooster \
 	canvas/source/tools/propertysethelper \
 	canvas/source/tools/spriteredrawmanager \
 	canvas/source/tools/surface \

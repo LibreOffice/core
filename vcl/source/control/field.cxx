@@ -2160,17 +2160,9 @@ CurrencyFormatter::~CurrencyFormatter()
 
 // -----------------------------------------------------------------------
 
-void CurrencyFormatter::SetCurrencySymbol( const String& rStr )
-{
-    maCurrencySymbol= rStr;
-    ReformatAll();
-}
-
-// -----------------------------------------------------------------------
-
 String CurrencyFormatter::GetCurrencySymbol() const
 {
-    return maCurrencySymbol.Len() ? maCurrencySymbol : ImplGetLocaleDataWrapper().getCurrSymbol();
+    return ImplGetLocaleDataWrapper().getCurrSymbol();
 }
 
 // -----------------------------------------------------------------------
@@ -2241,21 +2233,6 @@ CurrencyField::CurrencyField( Window* pParent, WinBits nWinStyle ) :
 {
     SetField( this );
     Reformat();
-}
-
-// -----------------------------------------------------------------------
-
-CurrencyField::CurrencyField( Window* pParent, const ResId& rResId ) :
-    SpinField( WINDOW_CURRENCYFIELD )
-{
-    rResId.SetRT( RSC_CURRENCYFIELD );
-    WinBits nStyle = ImplInitRes( rResId );
-    SpinField::ImplInit( pParent, nStyle);
-    SetField( this );
-    ImplLoadRes( rResId );
-
-    if ( !(nStyle & WB_HIDE ) )
-        Show();
 }
 
 // -----------------------------------------------------------------------
@@ -2457,22 +2434,6 @@ void CurrencyBox::ReformatAll()
     }
     CurrencyFormatter::Reformat();
     SetUpdateMode( sal_True );
-}
-
-// -----------------------------------------------------------------------
-
-sal_Int64 CurrencyBox::GetValue( sal_uInt16 nPos ) const
-{
-    double nValue = 0;
-    ImplCurrencyGetValue( ComboBox::GetEntry( nPos ), nValue, GetDecimalDigits(), ImplGetLocaleDataWrapper() );
-    return (sal_Int64)nValue;
-}
-
-// -----------------------------------------------------------------------
-
-sal_uInt16 CurrencyBox::GetValuePos( sal_Int64 nValue ) const
-{
-    return ComboBox::GetEntryPos( CreateFieldText( nValue ) );
 }
 
 // -----------------------------------------------------------------------

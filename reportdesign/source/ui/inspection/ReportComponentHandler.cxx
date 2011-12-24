@@ -56,7 +56,7 @@ ReportComponentHandler::ReportComponentHandler(uno::Reference< uno::XComponentCo
     {
         m_xFormComponentHandler.set(m_xContext->getServiceManager()->createInstanceWithContext(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.inspection.FormComponentPropertyHandler")),m_xContext),uno::UNO_QUERY_THROW);
 
-    }catch(uno::Exception)
+    }catch(const uno::Exception &)
     {
     }
 }
@@ -134,7 +134,7 @@ void SAL_CALL ReportComponentHandler::inspect(const uno::Reference< uno::XInterf
             xProp->setPropertyValue(sRowSet,xNameCont->getByName(sRowSet));
         }
     }
-    catch(uno::Exception)
+    catch(const uno::Exception &)
     {
         throw lang::NullPointerException();
     }

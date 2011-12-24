@@ -61,7 +61,7 @@ ScNumFormatAbbrev::ScNumFormatAbbrev(sal_uLong nFormat,
 void ScNumFormatAbbrev::Load( SvStream& rStream, CharSet eByteStrSet )
 {
     sal_uInt16 nSysLang, nLang;
-    rStream.ReadByteString( sFormatstring, eByteStrSet );
+    rStream.ReadUniOrByteString( sFormatstring, eByteStrSet );
     rStream >> nSysLang >> nLang;
     eLnge = (LanguageType) nLang;
     eSysLnge = (LanguageType) nSysLang;
@@ -71,7 +71,7 @@ void ScNumFormatAbbrev::Load( SvStream& rStream, CharSet eByteStrSet )
 
 void ScNumFormatAbbrev::Save( SvStream& rStream, CharSet eByteStrSet ) const
 {
-    rStream.WriteByteString( sFormatstring, eByteStrSet );
+    rStream.WriteUniOrByteString( sFormatstring, eByteStrSet );
     rStream << (sal_uInt16) eSysLnge << (sal_uInt16) eLnge;
 }
 

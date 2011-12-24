@@ -1281,7 +1281,7 @@ void SbaGridControl::DoColumnDrag(sal_uInt16 nColumnPos)
     {
         OSL_FAIL("SbaGridControl::DoColumnDrag : something went wrong while getting the column");
     }
-    if (0 == sField.getLength())
+    if (sField.isEmpty())
         return;
 
     OColumnTransferable* pDataTransfer = new OColumnTransferable(xDataSource, sField, xAffectedField, xActiveConnection, CTF_FIELD_DESCRIPTOR | CTF_COLUMN_DESCRIPTOR);

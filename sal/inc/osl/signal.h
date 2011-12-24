@@ -84,11 +84,14 @@ typedef struct
 */
 typedef oslSignalAction (SAL_CALL *oslSignalHandlerFunction)(void* pData, oslSignalInfo* pInfo);
 
-oslSignalHandler SAL_CALL osl_addSignalHandler(oslSignalHandlerFunction Handler, void* pData);
+SAL_DLLPUBLIC oslSignalHandler SAL_CALL osl_addSignalHandler(
+        oslSignalHandlerFunction Handler, void* pData);
 
-sal_Bool SAL_CALL osl_removeSignalHandler(oslSignalHandler hHandler);
+SAL_DLLPUBLIC sal_Bool SAL_CALL osl_removeSignalHandler(
+        oslSignalHandler hHandler);
 
-oslSignalAction SAL_CALL osl_raiseSignal(sal_Int32 UserSignal, void* UserData);
+SAL_DLLPUBLIC oslSignalAction SAL_CALL osl_raiseSignal(
+        sal_Int32 UserSignal, void* UserData);
 
 /** Enables or disables error reporting
 
@@ -102,7 +105,8 @@ oslSignalAction SAL_CALL osl_raiseSignal(sal_Int32 UserSignal, void* UserData);
     sal_False if previous state of error reporting was disbaled<br>
 */
 
-sal_Bool SAL_CALL osl_setErrorReporting( sal_Bool bEnable );
+SAL_DLLPUBLIC sal_Bool SAL_CALL osl_setErrorReporting(
+        sal_Bool bEnable );
 
 #ifdef __cplusplus
 }

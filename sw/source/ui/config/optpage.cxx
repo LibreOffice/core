@@ -68,6 +68,7 @@
 #include <editeng/fhgtitem.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/langitem.hxx>
+#include <editeng/svxenum.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/bindings.hxx>
@@ -1729,6 +1730,139 @@ void SwRedlineOptionsTabPage::InitFontStyle(SvxFontPrevWindow& rExampleWin)
 }
 
 
+//----------------------------------------------------------
+SwCompareOptionsTabPage::SwCompareOptionsTabPage(  Window* pParent, const SfxItemSet& rSet )
+    : SfxTabPage( pParent, SW_RES( TP_COMPARISON_OPT ), rSet ),
+
+    aComparisonFL(	this, SW_RES( FL_CMP ) ),
+    aAutoRB(		this, SW_RES( RB_AUTO ) ),
+    aWordRB(		this, SW_RES( RB_WORD ) ),
+    aCharRB(		this, SW_RES( RB_CHAR ) ),
+    aSettingsFL(	this, SW_RES( FL_SET ) ),
+    aRsidCB(		this, SW_RES( CB_RSID) ),
+    aIgnoreCB(		this, SW_RES( CB_IGNORE ) ),
+    aLenNF(			this, SW_RES( NF_LEN ) )
+{
+    FreeResource();
+    Link aLnk( LINK( this, SwCompareOptionsTabPage, ComparisonHdl ) );
+    aAutoRB.SetClickHdl( aLnk );
+    aWordRB.SetClickHdl( aLnk );
+    aCharRB.SetClickHdl( aLnk );
+
+    aIgnoreCB.SetClickHdl( LINK( this, SwCompareOptionsTabPage, IgnoreHdl) );
+}
+
+SwCompareOptionsTabPage::~SwCompareOptionsTabPage()
+{
+}
+
+SfxTabPage* SwCompareOptionsTabPage::Create( Window* pParent, const SfxItemSet& rAttrSet )
+{
+    return new SwCompareOptionsTabPage( pParent, rAttrSet );
+}
+
+sal_Bool SwCompareOptionsTabPage::FillItemSet( SfxItemSet& )
+{
+    sal_Bool bRet = sal_False;
+    SwModuleOptions *pOpt = SW_MOD()->GetModuleConfig();
+
+    if( aAutoRB.IsChecked() != aAutoRB.GetSavedValue() ||
+        aWordRB.IsChecked() != aWordRB.GetSavedValue() ||
+        aCharRB.IsChecked() != aCharRB.GetSavedValue() )
+    {
+        SvxCompareMode eCmpMode = SVX_CMP_AUTO;
+
+        if ( aAutoRB.IsChecked() ) eCmpMode = SVX_CMP_AUTO;
+        if ( aWordRB.IsChecked() ) eCmpMode = SVX_CMP_BY_WORD;
+        if ( aCharRB.IsChecked() ) eCmpMode = SVX_CMP_BY_CHAR;
+
+        pOpt->SetCompareMode( eCmpMode );
+        bRet = sal_True;
+    }
+
+    if( aRsidCB.IsChecked() != aRsidCB.GetSavedValue() )
+    {
+        pOpt->SetUseRsid( aRsidCB.IsChecked() );
+        bRet = sal_True;
+    }
+
+    if( aIgnoreCB.IsChecked() != aIgnoreCB.GetSavedValue() )
+    {
+        pOpt->SetIgnorePieces( aIgnoreCB.IsChecked() );
+        bRet = sal_True;
+    }
+
+    if( aLenNF.IsModified() )
+    {
+        pOpt->SetPieceLen( aLenNF.GetValue() );
+        bRet = sal_True;
+    }
+
+    return bRet;
+}
+
+void SwCompareOptionsTabPage::Reset( const SfxItemSet& )
+{
+    SwModuleOptions *pOpt = SW_MOD()->GetModuleConfig();
+
+    SvxCompareMode eCmpMode = pOpt->GetCompareMode();
+    if( eCmpMode == SVX_CMP_AUTO )
+    {
+        aAutoRB.Check();
+        aSettingsFL.Disable();
+        aRsidCB.Disable();
+        aIgnoreCB.Disable();
+        aLenNF.Disable();
+    }
+    else if( eCmpMode == SVX_CMP_BY_WORD )
+    {
+        aWordRB.Check();
+        aSettingsFL.Enable();
+        aRsidCB.Enable();
+        aIgnoreCB.Enable();
+        aLenNF.Enable();
+    }
+    else if( eCmpMode == SVX_CMP_BY_CHAR)
+    {
+        aCharRB.Check();
+        aSettingsFL.Enable();
+        aRsidCB.Enable();
+        aIgnoreCB.Enable();
+        aLenNF.Enable();
+    }
+    aAutoRB.SaveValue();
+    aWordRB.SaveValue();
+    aCharRB.SaveValue();
+
+    aRsidCB.Check( pOpt->IsUseRsid() );
+    aRsidCB.SaveValue();
+
+    aIgnoreCB.Check( pOpt->IsIgnorePieces() );
+    aIgnoreCB.SaveValue();
+
+    aLenNF.Enable( aIgnoreCB.IsChecked() && eCmpMode );
+
+    aLenNF.SetValue( pOpt->GetPieceLen() );
+    aLenNF.SaveValue();
+}
+
+IMPL_LINK( SwCompareOptionsTabPage, ComparisonHdl, RadioButton*, EMPTYARG )
+{
+    bool bChecked = !aAutoRB.IsChecked();
+    aSettingsFL.Enable( bChecked );
+    aRsidCB.Enable( bChecked );
+    aIgnoreCB.Enable( bChecked );
+    aLenNF.Enable( bChecked && aIgnoreCB.IsChecked() );
+
+    return 0;
+}
+
+IMPL_LINK( SwCompareOptionsTabPage, IgnoreHdl, CheckBox*, EMPTYARG )
+{
+    aLenNF.Enable( aIgnoreCB.IsChecked() );
+    return 0;
+}
+
 #ifdef DBG_UTIL
 
 void lcl_SetPosSize(Window& rWin, Point aPos, Size aSize)
@@ -1863,6 +1997,8 @@ IMPL_LINK_INLINE_START( SwTestTabPage, AutoClickHdl, CheckBox *, EMPTYARG )
     return 0;
 }
 IMPL_LINK_INLINE_END( SwTestTabPage, AutoClickHdl, CheckBox *, EMPTYARG )
+
+
 #endif
 
 
