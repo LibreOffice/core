@@ -86,3 +86,15 @@ UDK_3.4 { # OOo 2.3
         _ZN9jvmaccess9ClassPath11doLoadClassERKN3com3sun4star3uno9ReferenceINS4_17XComponentContextEEEPvRKN3rtl8OUStringESE_; # jvmaccess::ClassPath::doLoadClass(com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > const &, void *, rtl::OUString const &, rtl::OUString const &)
         _ZN9jvmaccess9ClassPath17doTranslateToUrlsERKN3com3sun4star3uno9ReferenceINS4_17XComponentContextEEEPvRKN3rtl8OUStringE; # jvmaccess::ClassPath::doTranslateToUrls(com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > const &, void *, rtl::OUString const &)
 } UDK_3.3;
+
+UDK_3.5 { # LibO 3.6
+    global:
+        # jvmaccess/unovirtualmachine.hxx:
+        _ZTIN9jvmaccess17UnoVirtualMachine17CreationExceptionE; # typeinfo for jvmaccess::UnoVirtualMachine::CreationException
+        _ZTSN9jvmaccess17UnoVirtualMachine17CreationExceptionE; # typeinfo name for jvmaccess::UnoVirtualMachine::CreationException
+        _ZTVN9jvmaccess17UnoVirtualMachine17CreationExceptionE; # vtable for jvmaccess::UnoVirtualMachine::CreationException
+        # jvmaccess/virtualmachine.hxx:
+        _ZTIN9jvmaccess14VirtualMachine11AttachGuard17CreationExceptionE; # typeinfo for jvmaccess::VirtualMachine::AttachGuard::CreationException
+        _ZTSN9jvmaccess14VirtualMachine11AttachGuard17CreationExceptionE; # typeinfo name for jvmaccess::VirtualMachine::AttachGuard::CreationException
+        _ZTVN9jvmaccess14VirtualMachine11AttachGuard17CreationExceptionE; # vtable for jvmaccess::VirtualMachine::AttachGuard::CreationException
+} UDK_3.4;

@@ -1,3 +1,4 @@
+# -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,22 +26,15 @@
 #
 #*************************************************************************
 
-PRJ = ..
-PRJNAME = jvmaccess
-TARGET = $(PRJNAME)
+gb_PARTIALBUILD := T
+ifeq ($(strip $(SOLARENV)),)
+include $(dir $(realpath $(firstword $(MAKEFILE_LIST))))/../solenv/gbuild/source_and_rerun.mk
+else
 
-ENABLE_EXCEPTIONS = TRUE
+gb_SourceEnvAndRecurse_STAGE=gbuild
+include $(SOLARENV)/gbuild/gbuild.mk
 
-.INCLUDE: settings.mk
+$(eval $(call gb_Module_make_global_targets,$(shell ls $(dir $(realpath $(firstword $(MAKEFILE_LIST))))/Module*.mk)))
 
-.IF "$(OS)" == "IOS"
-ALL:
-    @echo Nothing done for $(OS)
-.ENDIF
-
-SLOFILES = \
-    $(SLO)$/classpath.obj \
-    $(SLO)$/unovirtualmachine.obj \
-    $(SLO)$/virtualmachine.obj
-
-.INCLUDE: target.mk
+endif
+# vim: set noet sw=4 ts=4:
