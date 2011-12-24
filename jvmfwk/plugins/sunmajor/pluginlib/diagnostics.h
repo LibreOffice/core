@@ -38,7 +38,7 @@
 
 #define JFW_TRACE0(m) SAL_INFO("jfw.level1", m)
 
-#define JFW_TRACE2(m) SAL_INFO("jfw.level2", m);
+#define JFW_TRACE2(m) SAL_INFO("jfw.level2", m)
 
 #endif
 
