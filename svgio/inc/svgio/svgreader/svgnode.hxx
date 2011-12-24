@@ -92,7 +92,7 @@ namespace svgio
             virtual void decomposeSvgNode(drawinglayer::primitive2d::Primitive2DSequence& rTarget, bool bReferenced) const;
 
             /// basic data read access
-            const SVGToken getType() const { return maType; }
+            SVGToken getType() const { return maType; }
             const SvgDocument& getDocument() const { return mrDocument; }
             const SvgNode* getParent() const { if(mpAlternativeParent) return mpAlternativeParent; return mpParent; }
             const SvgNodeVector& getChildren() const { return maChildren; }

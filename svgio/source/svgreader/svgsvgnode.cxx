@@ -153,6 +153,10 @@ namespace svgio
                     }
                     break;
                 }
+                default:
+                {
+                    break;
+                }
             }
         }
 

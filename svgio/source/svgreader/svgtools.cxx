@@ -118,6 +118,7 @@ namespace svgio
                     fTransX = fFreeSpace;
                     break;
                 }
+                default: break;
             }
 
             // evaluate vertical alignment
@@ -144,6 +145,7 @@ namespace svgio
                     fTransY = fFreeSpace;
                     break;
                 }
+                default: break;
             }
 
             // add target translation
@@ -190,6 +192,7 @@ namespace svgio
                             case Unit_cm: fRetval *= 35.43307; break;
                             case Unit_mm: fRetval *= 3.543307; break;
                             case Unit_in: fRetval *= 90.0; break;
+                            default: break;
                         }
 
                         return fRetval;
@@ -237,6 +240,10 @@ namespace svgio
                         }
 
                         return fRetval;
+                        break;
+                    }
+                    default:
+                    {
                         break;
                     }
                 }
@@ -834,8 +841,8 @@ namespace svgio
 
                             if(nPos < nLen)
                             {
-                                const sal_Unicode aChar(rCandidate[nPos]);
-                                const bool bIsPercent(sal_Unicode('%') == aChar);
+                                const sal_Unicode aPercentChar(rCandidate[nPos]);
+                                const bool bIsPercent(sal_Unicode('%') == aPercentChar);
                                 double fG(0.0);
 
                                 if(bIsPercent)
@@ -1325,6 +1332,10 @@ namespace svgio
                             {
                                 bMeetOrSlice = false;
                                 bChanged = true;
+                                break;
+                            }
+                            default:
+                            {
                                 break;
                             }
                         }

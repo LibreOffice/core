@@ -48,7 +48,7 @@ namespace svgio
         {
         }
 
-        void SvgTextPositions::parseTextPositionAttributes(const rtl::OUString& rTokenName, SVGToken aSVGToken, const rtl::OUString& aContent)
+        void SvgTextPositions::parseTextPositionAttributes(const rtl::OUString& /*rTokenName*/, SVGToken aSVGToken, const rtl::OUString& aContent)
         {
             // parse own
             switch(aSVGToken)
@@ -149,6 +149,10 @@ namespace svgio
                     }
                     break;
                 }
+                default:
+                {
+                    break;
+                }
             }
         }
 
@@ -181,7 +185,7 @@ namespace svgio
             }
         };
 
-        bool localTextBreakupHelper::allowChange(sal_uInt32 nCount, basegfx::B2DHomMatrix& rNewTransform, sal_uInt32 nIndex, sal_uInt32 nLength)
+        bool localTextBreakupHelper::allowChange(sal_uInt32 /*nCount*/, basegfx::B2DHomMatrix& rNewTransform, sal_uInt32 /*nIndex*/, sal_uInt32 /*nLength*/)
         {
             const double fRotation(mrSvgTextPosition.consumeRotation());
 
@@ -362,6 +366,10 @@ namespace svgio
                         case TextAnchor_end:
                         {
                             aTextAlign = TextAlign_right;
+                            break;
+                        }
+                        default:
+                        {
                             break;
                         }
                     }

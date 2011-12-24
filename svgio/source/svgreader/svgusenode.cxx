@@ -137,10 +137,14 @@ namespace svgio
                     }
                     break;
                 }
+                default:
+                {
+                    break;
+                }
             }
         }
 
-        void SvgUseNode::decomposeSvgNode(drawinglayer::primitive2d::Primitive2DSequence& rTarget, bool bReferenced) const
+        void SvgUseNode::decomposeSvgNode(drawinglayer::primitive2d::Primitive2DSequence& rTarget, bool /*bReferenced*/) const
         {
             // try to access link to content
             const SvgNode* mpXLink = getDocument().findSvgNodeById(maXLink);

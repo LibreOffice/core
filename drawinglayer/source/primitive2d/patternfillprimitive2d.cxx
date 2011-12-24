@@ -143,7 +143,7 @@ namespace drawinglayer
             return false;
         }
 
-        basegfx::B2DRange PatternFillPrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewInformation) const
+        basegfx::B2DRange PatternFillPrimitive2D::getB2DRange(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             return getMask().getB2DRange();
         }

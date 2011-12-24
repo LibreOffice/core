@@ -162,6 +162,10 @@ namespace svgio
                     }
                     break;
                 }
+                default:
+                {
+                    break;
+                }
             }
         }
 
@@ -194,7 +198,7 @@ namespace svgio
             }
         }
 
-        void SvgImageNode::decomposeSvgNode(drawinglayer::primitive2d::Primitive2DSequence& rTarget, bool bReferenced) const
+        void SvgImageNode::decomposeSvgNode(drawinglayer::primitive2d::Primitive2DSequence& rTarget, bool /*bReferenced*/) const
         {
             // get size range and create path
             const SvgStyleAttributes* pStyle = getSvgStyleAttributes();

@@ -102,10 +102,14 @@ namespace svgio
                     }
                     break;
                 }
+                default:
+                {
+                    break;
+                }
             }
         }
 
-        void SvgPolyNode::decomposeSvgNode(drawinglayer::primitive2d::Primitive2DSequence& rTarget, bool bReferenced) const
+        void SvgPolyNode::decomposeSvgNode(drawinglayer::primitive2d::Primitive2DSequence& rTarget, bool /*bReferenced*/) const
         {
             const SvgStyleAttributes* pStyle = getSvgStyleAttributes();
 

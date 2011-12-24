@@ -94,8 +94,8 @@ namespace drawinglayer
                     else
                     {
                         // get from DXArray
-                        const sal_uInt32 nIndex(static_cast< sal_uInt32 >(nIndex - mpSource->getTextPosition()));
-                        fOffset = mpSource->getDXArray()[nIndex - 1];
+                        const sal_uInt32 nIndex2(static_cast< sal_uInt32 >(nIndex - mpSource->getTextPosition()));
+                        fOffset = mpSource->getDXArray()[nIndex2 - 1];
                     }
 
                     // need offset without FontScale for building the new transformation. The
@@ -183,7 +183,7 @@ namespace drawinglayer
             }
         }
 
-        bool TextBreakupHelper::allowChange(sal_uInt32 nCount, basegfx::B2DHomMatrix& rNewTransform, sal_uInt32 nIndex, sal_uInt32 nLength)
+        bool TextBreakupHelper::allowChange(sal_uInt32 /*nCount*/, basegfx::B2DHomMatrix& /*rNewTransform*/, sal_uInt32 /*nIndex*/, sal_uInt32 /*nLength*/)
         {
             return true;
         }

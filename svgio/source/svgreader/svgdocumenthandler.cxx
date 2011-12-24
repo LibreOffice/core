@@ -500,15 +500,15 @@ namespace svgio
             }
         }
 
-        void SvgDocHdl::ignorableWhitespace( const ::rtl::OUString& aWhitespaces ) throw (xml::sax::SAXException, uno::RuntimeException)
+        void SvgDocHdl::ignorableWhitespace(const ::rtl::OUString& /*aWhitespaces*/) throw (xml::sax::SAXException, uno::RuntimeException)
         {
         }
 
-        void SvgDocHdl::processingInstruction( const ::rtl::OUString& aTarget, const ::rtl::OUString& aData ) throw (xml::sax::SAXException, uno::RuntimeException)
+        void SvgDocHdl::processingInstruction(const ::rtl::OUString& /*aTarget*/, const ::rtl::OUString& /*aData*/) throw (xml::sax::SAXException, uno::RuntimeException)
         {
         }
 
-        void SvgDocHdl::setDocumentLocator( const uno::Reference< xml::sax::XLocator >& xLocator ) throw (xml::sax::SAXException, uno::RuntimeException)
+        void SvgDocHdl::setDocumentLocator(const uno::Reference< xml::sax::XLocator >& /*xLocator*/) throw (xml::sax::SAXException, uno::RuntimeException)
         {
         }
     } // end of namespace svgreader

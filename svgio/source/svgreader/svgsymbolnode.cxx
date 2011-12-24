@@ -83,6 +83,10 @@ namespace svgio
                     setSvgAspectRatio(readSvgAspectRatio(aContent));
                     break;
                 }
+                default:
+                {
+                    break;
+                }
             }
         }
 

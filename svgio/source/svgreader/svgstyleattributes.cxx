@@ -75,6 +75,7 @@ namespace svgio
                 case FontStretch_semi_expanded: aSource = FontStretch_expanded; break;
                 case FontStretch_expanded: aSource = FontStretch_extra_expanded; break;
                 case FontStretch_extra_expanded: aSource = FontStretch_ultra_expanded; break;
+                default: break;
             }
 
             return aSource;
@@ -92,6 +93,7 @@ namespace svgio
                 case FontStretch_expanded: aSource = FontStretch_semi_expanded; break;
                 case FontStretch_extra_expanded: aSource = FontStretch_expanded; break;
                 case FontStretch_ultra_expanded: aSource = FontStretch_extra_expanded; break;
+                default: break;
             }
 
             return aSource;
@@ -109,6 +111,7 @@ namespace svgio
                 case FontWeight_600: aSource = FontWeight_700; break;
                 case FontWeight_700: aSource = FontWeight_800; break;
                 case FontWeight_800: aSource = FontWeight_900; break;
+                default: break;
             }
 
             return aSource;
@@ -126,6 +129,7 @@ namespace svgio
                 case FontWeight_700: aSource = FontWeight_600; break;
                 case FontWeight_800: aSource = FontWeight_700; break;
                 case FontWeight_900: aSource = FontWeight_800; break;
+                default: break;
             }
 
             return aSource;
@@ -146,6 +150,7 @@ namespace svgio
                 case FontWeight_700: nRetval = WEIGHT_BOLD; break;
                 case FontWeight_800: nRetval = WEIGHT_ULTRABOLD; break;
                 case FontWeight_900: nRetval = WEIGHT_BLACK; break;
+                default: break;
             }
 
             return nRetval;
@@ -697,11 +702,11 @@ namespace svgio
                             // check for fill rsults
                             const basegfx::B2DPolyPolygonVector& rLineFillVector(aExtractor.getExtractedLineFills());
 
-                            if(!aExtractor.getExtractedLineFills().empty())
+                            if(!rLineFillVector.empty())
                             {
                                 const basegfx::B2DPolyPolygon aMergedArea(
                                     basegfx::tools::mergeToSinglePolyPolygon(
-                                        aExtractor.getExtractedLineFills()));
+                                        rLineFillVector));
 
                                 if(aMergedArea.count())
                                 {
@@ -883,7 +888,7 @@ namespace svgio
             drawinglayer::primitive2d::Primitive2DSequence& rTarget,
             const drawinglayer::primitive2d::Primitive2DSequence& rMarkerPrimitives,
             const basegfx::B2DHomMatrix& rMarkerTransform,
-            const basegfx::B2DRange& rClipRange,
+            const basegfx::B2DRange& /*rClipRange*/,
             const SvgMarkerNode& rMarker,
             const basegfx::B2DPolygon& rCandidate,
             const sal_uInt32 nIndex) const
@@ -950,9 +955,9 @@ namespace svgio
                             {
                                 pPrepared = pMid;
 
-                                for(sal_uInt32 a(1); a < nMarkerCount - 1; a++)
+                                for(sal_uInt32 b(1); b < nMarkerCount - 1; b++)
                                 {
-                                    add_singleMarker(rTarget, aMarkerPrimitives, aMarkerTransform, aClipRange, *pPrepared, aCandidate, a);
+                                    add_singleMarker(rTarget, aMarkerPrimitives, aMarkerTransform, aClipRange, *pPrepared, aCandidate, b);
                                 }
                             }
                         }
@@ -1161,7 +1166,7 @@ namespace svgio
         {
         }
 
-        void SvgStyleAttributes::parseStyleAttribute(const rtl::OUString& rTokenName, SVGToken aSVGToken, const rtl::OUString& aContent)
+        void SvgStyleAttributes::parseStyleAttribute(const rtl::OUString& /*rTokenName*/, SVGToken aSVGToken, const rtl::OUString& aContent)
         {
             switch(aSVGToken)
             {
@@ -1169,7 +1174,6 @@ namespace svgio
                 {
                     SvgPaint aSvgPaint;
                     rtl::OUString aURL;
-                    bool bUseCurrent(false);
 
                     if(readSvgPaint(aContent, aSvgPaint, aURL))
                     {
@@ -1387,7 +1391,6 @@ namespace svgio
                 }
                 case SVGTokenFont:
                 {
-                    bool bBla = true;
                     break;
                 }
                 case SVGTokenFontFamily:
@@ -1412,7 +1415,6 @@ namespace svgio
                 }
                 case SVGTokenFontSizeAdjust:
                 {
-                    bool bBla = true;
                     break;
                 }
                 case SVGTokenFontStretch:
@@ -1586,12 +1588,10 @@ namespace svgio
                 }
                 case SVGTokenDirection:
                 {
-                    bool bBla = true;
                     break;
                 }
                 case SVGTokenLetterSpacing:
                 {
-                    bool bBla = true;
                     break;
                 }
                 case SVGTokenTextDecoration:
@@ -1629,12 +1629,10 @@ namespace svgio
                 }
                 case SVGTokenUnicodeBidi:
                 {
-                    bool bBla = true;
                     break;
                 }
                 case SVGTokenWordSpacing:
                 {
-                    bool bBla = true;
                     break;
                 }
                 case SVGTokenTextAnchor:
@@ -1753,6 +1751,10 @@ namespace svgio
                 case SVGTokenMarkerEnd:
                 {
                     readLocalUrl(aContent, maMarkerEndXLink);
+                    break;
+                }
+                default:
+                {
                     break;
                 }
             }
@@ -2046,7 +2048,7 @@ namespace svgio
             return SvgNumber(0.0);
         }
 
-        const StrokeLinecap SvgStyleAttributes::getStrokeLinecap() const
+        StrokeLinecap SvgStyleAttributes::getStrokeLinecap() const
         {
             if(maStrokeLinecap != StrokeLinecap_notset)
             {
@@ -2064,7 +2066,7 @@ namespace svgio
             return StrokeLinecap_butt;
         }
 
-        const StrokeLinejoin SvgStyleAttributes::getStrokeLinejoin() const
+        StrokeLinejoin SvgStyleAttributes::getStrokeLinejoin() const
         {
             if(maStrokeLinejoin != StrokeLinejoin_notset)
             {
@@ -2154,7 +2156,7 @@ namespace svgio
             return SvgNumber(12.0);
         }
 
-        const FontStretch SvgStyleAttributes::getFontStretch() const
+        FontStretch SvgStyleAttributes::getFontStretch() const
         {
             if(maFontStretch != FontStretch_notset)
             {
@@ -2186,7 +2188,7 @@ namespace svgio
             return FontStretch_normal;
         }
 
-        const FontStyle SvgStyleAttributes::getFontStyle() const
+        FontStyle SvgStyleAttributes::getFontStyle() const
         {
             if(maFontStyle != FontStyle_notset)
             {
@@ -2204,7 +2206,7 @@ namespace svgio
             return FontStyle_normal;
         }
 
-        const FontWeight SvgStyleAttributes::getFontWeight() const
+        FontWeight SvgStyleAttributes::getFontWeight() const
         {
             if(maFontWeight != FontWeight_notset)
             {
@@ -2236,7 +2238,7 @@ namespace svgio
             return FontWeight_400;
         }
 
-        const TextAlign SvgStyleAttributes::getTextAlign() const
+        TextAlign SvgStyleAttributes::getTextAlign() const
         {
             if(maTextAlign != TextAlign_notset)
             {
@@ -2272,7 +2274,7 @@ namespace svgio
             return 0;
         }
 
-        const TextDecoration SvgStyleAttributes::getTextDecoration() const
+        TextDecoration SvgStyleAttributes::getTextDecoration() const
         {
             const SvgStyleAttributes* pDefining = getTextDecorationDefiningSvgStyleAttributes();
 
@@ -2287,7 +2289,7 @@ namespace svgio
             }
         }
 
-        const TextAnchor SvgStyleAttributes::getTextAnchor() const
+        TextAnchor SvgStyleAttributes::getTextAnchor() const
         {
             if(maTextAnchor != TextAnchor_notset)
             {

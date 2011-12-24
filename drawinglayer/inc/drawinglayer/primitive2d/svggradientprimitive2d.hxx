@@ -173,7 +173,7 @@ namespace drawinglayer
             const SvgGradientEntryVector& getGradientEntries() const { return maGradientEntries; }
             const basegfx::B2DPoint& getStart() const { return maStart; }
             SpreadMethod getSpreadMethod() const { return maSpreadMethod; }
-            const double getOverlapping() const { return mfOverlapping; }
+            double getOverlapping() const { return mfOverlapping; }
 
             /// compare operator
             virtual bool operator==(const SvgGradientHelper& rSvgGradientHelper) const;
@@ -361,7 +361,7 @@ namespace drawinglayer
             const basegfx::BColor& getColorB() const { return maColorB; }
             double getOffsetA() const { return mfOffsetA; }
             double getOffsetB() const { return mfOffsetB; }
-            const double getOverlapping() const { return mfOverlapping; }
+            double getOverlapping() const { return mfOverlapping; }
 
             /// compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
@@ -448,7 +448,7 @@ namespace drawinglayer
             double getScaleB() const { return mfScaleB; }
             const basegfx::B2DVector& getTranslateA() const { return maTranslateA; }
             const basegfx::B2DVector& getTranslateB() const { return maTranslateB; }
-            const double getOverlapping() const { return mfOverlapping; }
+            double getOverlapping() const { return mfOverlapping; }
             bool getTranslateSet() const { return mbTranslateSet; }
 
             /// compare operator

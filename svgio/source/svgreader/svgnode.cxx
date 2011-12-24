@@ -93,7 +93,7 @@ namespace svgio
             }
         }
 
-        void SvgNode::parseAttribute(const rtl::OUString& rTokenName, SVGToken aSVGToken, const rtl::OUString& aContent)
+        void SvgNode::parseAttribute(const rtl::OUString& /*rTokenName*/, SVGToken aSVGToken, const rtl::OUString& aContent)
         {
             switch(aSVGToken)
             {
@@ -129,6 +129,10 @@ namespace svgio
                             setXmlSpace(XmlSpace_preserve);
                         }
                     }
+                    break;
+                }
+                default:
+                {
                     break;
                 }
             }

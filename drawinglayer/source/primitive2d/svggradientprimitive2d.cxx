@@ -809,7 +809,6 @@ namespace drawinglayer
             {
                 // at least two color stops in range [0.0 .. 1.0], sorted, non-null vector, not completely
                 // invisible, width and height to fill are not empty
-                const SvgGradientEntryVector& rEntries = getGradientEntries();
                 const basegfx::B2DRange aPolyRange(getPolyPolygon().getB2DRange());
                 const double fPolyWidth(aPolyRange.getWidth());
                 const double fPolyHeight(aPolyRange.getHeight());
@@ -967,7 +966,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence SvgLinearAtomPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
+        Primitive2DSequence SvgLinearAtomPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             Primitive2DSequence xRetval;
             const double fDelta(getOffsetB() - getOffsetA());

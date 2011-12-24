@@ -165,7 +165,7 @@ namespace svgio
             freeB2DCubicBezierHelper();
         }
 
-        bool pathTextBreakupHelper::allowChange(sal_uInt32 nCount, basegfx::B2DHomMatrix& rNewTransform, sal_uInt32 nIndex, sal_uInt32 nLength)
+        bool pathTextBreakupHelper::allowChange(sal_uInt32 /*nCount*/, basegfx::B2DHomMatrix& rNewTransform, sal_uInt32 nIndex, sal_uInt32 nLength)
         {
             bool bRetval(false);
 
@@ -366,6 +366,10 @@ namespace svgio
                     {
                         maXLink = aContent.copy(1);
                     }
+                    break;
+                }
+                default:
+                {
                     break;
                 }
             }

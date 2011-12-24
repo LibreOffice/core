@@ -67,6 +67,10 @@ namespace svgio
                     maSvgStyleAttributes.readStyle(aContent);
                     break;
                 }
+                default:
+                {
+                    break;
+                }
             }
         }
 

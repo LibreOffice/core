@@ -89,6 +89,10 @@ namespace svgio
                     }
                     break;
                 }
+                default:
+                {
+                    break;
+                }
             }
         }
 
@@ -227,7 +231,7 @@ namespace svgio
             }
         }
 
-        void SvgTextNode::decomposeSvgNode(drawinglayer::primitive2d::Primitive2DSequence& rTarget, bool bReferenced) const
+        void SvgTextNode::decomposeSvgNode(drawinglayer::primitive2d::Primitive2DSequence& rTarget, bool /*bReferenced`*/) const
         {
             // text has a group of child nodes, allowed are SVGTokenCharacter, SVGTokenTspan,
             // SVGTokenTref and SVGTokenTextPath. These increase a given current text position

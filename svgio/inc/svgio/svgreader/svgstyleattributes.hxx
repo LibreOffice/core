@@ -317,11 +317,11 @@ namespace svgio
             void setStrokeDashOffset(const SvgNumber& rStrokeDashOffset = SvgNumber()) { maStrokeDashOffset = rStrokeDashOffset; }
 
             /// StrokeLinecap content
-            const StrokeLinecap getStrokeLinecap() const;
+            StrokeLinecap getStrokeLinecap() const;
             void setStrokeLinecap(const StrokeLinecap aStrokeLinecap = StrokeLinecap_notset) { maStrokeLinecap = aStrokeLinecap; }
 
             /// StrokeLinejoin content
-            const StrokeLinejoin getStrokeLinejoin() const;
+            StrokeLinejoin getStrokeLinejoin() const;
             void setStrokeLinejoin(const StrokeLinejoin aStrokeLinejoin = StrokeLinejoin_notset) { maStrokeLinejoin = aStrokeLinejoin; }
 
             /// StrokeMiterLimit content
@@ -341,32 +341,32 @@ namespace svgio
             void setFontSize(const SvgNumber& rFontSize = SvgNumber()) { maFontSize = rFontSize; }
 
             /// FontStretch content
-            const FontStretch getFontStretch() const;
+            FontStretch getFontStretch() const;
             void setFontStretch(const FontStretch aFontStretch = FontStretch_notset) { maFontStretch = aFontStretch; }
 
             /// FontStyle content
-            const FontStyle getFontStyle() const;
+            FontStyle getFontStyle() const;
             void setFontStyle(const FontStyle aFontStyle = FontStyle_notset) { maFontStyle = aFontStyle; }
 
             /// FontVariant content
-            const FontVariant getFontVariant() const;
+            FontVariant getFontVariant() const;
             void setFontVariant(const FontVariant aFontVariant = FontVariant_notset) { maFontVariant = aFontVariant; }
 
             /// FontWeight content
-            const FontWeight getFontWeight() const;
+            FontWeight getFontWeight() const;
             void setFontWeight(const FontWeight aFontWeight = FontWeight_notset) { maFontWeight = aFontWeight; }
 
             /// TextAlign content
-            const TextAlign getTextAlign() const;
+            TextAlign getTextAlign() const;
             void setTextAlign(const TextAlign aTextAlign = TextAlign_notset) { maTextAlign = aTextAlign; }
 
             /// TextDecoration content
             const SvgStyleAttributes* getTextDecorationDefiningSvgStyleAttributes() const;
-            const TextDecoration getTextDecoration() const;
+            TextDecoration getTextDecoration() const;
             void setTextDecoration(const TextDecoration aTextDecoration = TextDecoration_notset) { maTextDecoration = aTextDecoration; }
 
             /// TextAnchor content
-            const TextAnchor getTextAnchor() const;
+            TextAnchor getTextAnchor() const;
             void setTextAnchor(const TextAnchor aTextAnchor = TextAnchor_notset) { maTextAnchor = aTextAnchor; }
 
             /// Color content
