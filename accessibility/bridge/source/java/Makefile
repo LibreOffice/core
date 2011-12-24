@@ -33,7 +33,7 @@ TARGETDIR := $(WORKDIR)/CustomTarget/accessibility/bridge/inc
 $(TARGETDIR)/WindowsAccessBridgeAdapter.h :
 	mkdir -p $(dir $@) && \
        cd $(call gb_JavaClassSet_get_classdir,$(call gb_Jar_get_classsetname,java_uno_accessbridge)) && \
-       javah -classpath . -o $@ org.openoffice.accessibility.WindowsAccessBridgeAdapter
+       javah -classpath . -o $(call gb_Helper_convert_native,$@) org.openoffice.accessibility.WindowsAccessBridgeAdapter
 
 .DEFAULT_GOAL := all
 .PHONY : all
