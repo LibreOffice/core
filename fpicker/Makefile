@@ -1,3 +1,4 @@
+# -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,47 +26,15 @@
 #
 #*************************************************************************
 
-PRJ=..$/..
+gb_PARTIALBUILD := T
+ifeq ($(strip $(SOLARENV)),)
+include $(dir $(realpath $(firstword $(MAKEFILE_LIST))))/../solenv/gbuild/source_and_rerun.mk
+else
 
-PRJNAME=fpicker
-TARGET=fpicker.uno
-LIBTARGET=NO
-ENABLE_EXCEPTIONS=TRUE
+gb_SourceEnvAndRecurse_STAGE=gbuild
+include $(SOLARENV)/gbuild/gbuild.mk
 
-# --- Settings -----------------------------------------------------
+$(eval $(call gb_Module_make_global_targets,$(shell ls $(dir $(realpath $(firstword $(MAKEFILE_LIST))))/Module*.mk)))
 
-.INCLUDE :  settings.mk
-DLLPRE=
-
-# --- Files --------------------------------------------------------
-
-SLOFILES=	\
-    $(SLO)$/fpicker.obj
-
-SHL1TARGET=	$(TARGET)
-SHL1IMPLIB=	i$(TARGET)
-SHL1OBJS=	$(SLOFILES)
-SHL1STDLIBS=\
-    $(ODMA_LIB_LIB) \
-    $(VCLLIB) \
-    $(SVLLIB) \
-        $(SVTOOLLIB) \
-    $(CPPUHELPERLIB) \
-    $(CPPULIB) \
-    $(SALLIB)
-
-SHL1VERSIONMAP=$(SOLARENV)/src/component.map
-SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
-DEF1NAME=	$(SHL1TARGET)
-
-# --- Targets ------------------------------------------------------
-
-.INCLUDE :	target.mk
-
-ALLTAR : $(MISC)/fpicker.component
-
-$(MISC)/fpicker.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
-        fpicker.component
-    $(XSLTPROC) --nonet --stringparam uri \
-        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
-        $(SOLARENV)/bin/createcomponent.xslt fpicker.component
+endif
+# vim: set noet sw=4 ts=4:

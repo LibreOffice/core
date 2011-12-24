@@ -48,6 +48,9 @@ $(eval $(call gb_Helper_register_executables,NONE, \
 
 $(eval $(call gb_Helper_register_executables,OOO, \
     spadmin.bin \
+	$(if $(filter $(GUIBASE)$(ENABLE_KDE),unxTRUE), \
+		kdefilepicker \
+	) \
 ))
 
 ifeq ($(OS),WNT)
@@ -312,6 +315,8 @@ ifeq ($(OS),WNT)
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 	dnd \
 	dtrans \
+	fop \
+	fps \
 	ftransl \
 	sysdtrans \
 ))
@@ -348,6 +353,8 @@ $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
 	dlgprov \
 	expwrap \
 	fastsax \
+	fpicker \
+	fps_office \
     fsstorage \
 	gdipluscanvas \
     hatchwindowfactory \
@@ -372,6 +379,18 @@ $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
 	vclcanvas \
     writerfilter_uno \
 	writerfilter_debug \
+	$(if $(filter $(GUIBASE),aqua), \
+		fps_aqua \
+	) \
+	$(if $(filter $(OS),WNT), \
+		fps_odma \
+	) \
+	$(if $(filter $(GUIBASE)$(ENABLE_KDE),unxTRUE), \
+		fps_kde \
+	) \
+	$(if $(filter $(GUIBASE)$(ENABLE_KDE4),unxTRUE), \
+		fps_kde4 \
+	) \
 ))
 
 $(eval $(call gb_Helper_register_libraries,UNOLIBS_URE, \
@@ -395,6 +414,9 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
 	ulingu \
 	vclmain \
 	writerperfect \
+	$(if $(filter $(OS),WNT), \
+		odma_lib \
+	) \
 ))
 
 ifeq ($(OS),WNT)

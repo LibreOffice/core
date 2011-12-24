@@ -173,9 +173,9 @@ my_components += \
     component/desktop/source/migration/services/migrationoo3 \
     component/desktop/source/offacc/offacc \
     component/desktop/source/splash/spl \
+    component/fpicker/source/generic/fpicker \
+    component/fpicker/source/office/fps_office \
     dbp \
-    fpicker \
-    fps_office \
     log \
     pcr \
     res \
@@ -285,9 +285,9 @@ my_components += component/xmlsecurity/util/xsec_xmlsec
 
 .IF "$(OS)" == "MACOSX"
 my_components += \
-    fps_aqua \
     macab1 \
     macbe1 \
+    component/fpicker/source/aqua/fps_aqua \
     component/vcl/vcl.macosx
 .END
 
@@ -300,8 +300,6 @@ my_components += \
 .IF "$(OS)" == "WNT"
 my_components += \
     ado \
-    fop \
-    fps \
     smplmail \
     wininetbe1 \
     component/accessibility/bridge/org/openoffice/accessibility/java_uno_accessbridge \
@@ -309,6 +307,8 @@ my_components += \
     component/dtrans/util/dnd \
     component/dtrans/util/ftransl \
     component/dtrans/util/sysdtrans \
+    component/fpicker/util/fop \
+    component/fpicker/util/fps \
     component/vcl/vcl.windows
 .END
 
@@ -343,7 +343,7 @@ my_components += mozbootstrap
 .END
 
 .IF "$(OS)" != "MACOSX" && "$(OS)" != "WNT" && "$(ENABLE_KDE4)" != ""
-my_components += fps_kde4
+my_components += component/fpicker/source/unx/kde4/fps_kde4
 .END
 
 .IF "$(OS)" != "WNT" && "$(OS)" != "ANDROID" && "$(OS)" != "IOS"

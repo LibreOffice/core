@@ -53,6 +53,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     filter \
     forms \
     formula \
+    fpicker \
     framework \
     hwpfilter \
     i18npool \
