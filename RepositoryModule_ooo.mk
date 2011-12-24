@@ -59,6 +59,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     i18nutil \
     idl \
     jvmaccess \
+    jurt \
     lingucomponent \
     linguistic \
     lotuswordpro \

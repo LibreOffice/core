@@ -268,10 +268,19 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
 endif
 
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_URE, \
+    jpipe \
     sal_textenc \
     sunjavaplugin \
 	xmlreader \
 ))
+
+ifeq ($(OS),WNT)
+
+$(eval $(call gb_Helper_register_libraries,PLAINLIBS_URE, \
+    jpipx \
+))
+
+endif
 
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 	affine_uno \

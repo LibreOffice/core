@@ -53,10 +53,10 @@ JAVA_PACKAGES=\
 #        com.sun.star.beans \
 
 JAVA_SRC_FILES_BIN=\
-        $(JAVA_SRC_DIR)$/jurt_src.zip \
         $(JAVA_SRC_DIR)$/juh_src.zip
 
 JAVA_SRC_FILES_PCK=\
+        $(JAVA_SRC_DIR)$/jurt_src.zip \
         $(JAVA_SRC_DIR)$/ridl_src.zip \
         $(JAVA_SRC_DIR)$/unoloader_src.zip
 
