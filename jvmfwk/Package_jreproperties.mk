@@ -25,25 +25,15 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Module_Module,jvmfwk))
+$(eval $(call gb_Package_Package,jvmfwk_jreproperties,$(WORKDIR)/CustomTarget/jvmfwk/plugins/sunmajor/pluginlib))
 
-ifneq ($(SOLAR_JAVA),)
+$(eval $(call gb_Package_add_customtarget,jvmfwk_jreproperties,jvmfwk/plugins/sunmajor/pluginlib))
 
-$(eval $(call gb_Module_add_targets,jvmfwk,\
-    Library_jvmfwk \
-    Library_sunjavaplugin \
-    Package_inc \
-    Package_javavendors \
-    Package_jreproperties \
-    Package_rcfiles \
+$(eval $(call gb_CustomTarget_add_dependencies,jvmfwk/plugins/sunmajor/pluginlib,\
+    jvmfwk/plugins/sunmajor/pluginlib/JREProperties.java \
 ))
 
-ifneq ($(OS),MACOSX)
-$(eval $(call gb_Module_add_targets,jvmfwk,\
-    Executable_javaldx \
-))
-endif
-
-endif
+$(eval $(call gb_Package_add_file,jvmfwk_jreproperties,bin/JREProperties.class,JREProperties.class))
+$(eval $(call gb_Package_add_file,jvmfwk_jreproperties,lib/JREProperties.class,JREProperties.class))
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:

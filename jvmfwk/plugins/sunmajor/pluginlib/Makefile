@@ -25,10 +25,13 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_JavaClassSet_JavaClassSet,jvmfwk_jreproperties))
+include $(GBUILDDIR)/gbuild.mk
 
-$(eval $(call gb_JavaClassSet_add_sourcefiles,jvmfwk_jreproperties,\
-    jvmfwk/plugins/sunmajor/pluginlib/JREProperties.java \
-))
+JREProperties.class : $(SRCDIR)/jvmfwk/plugins/sunmajor/pluginlib/JREProperties.java
+	$(gb_JavaClassSet_JAVACCOMMAND) $(gb_JavaClassSet_JAVACDEBUG) -d $(dir $@) $^
 
-# vim:set shiftwidth=4 softtabstop=4 expandtab:
+.DEFAULT_GOAL := all
+.PHONY : all
+all : JREProperties.class
+
+# vim:set shiftwidth=4 tabstop=4 noexpandtab:
