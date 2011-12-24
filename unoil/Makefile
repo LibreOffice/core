@@ -1,3 +1,4 @@
+# -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,23 +26,15 @@
 #
 #*************************************************************************
 
-PRJ := ..
-PRJNAME := unoil
-TARGET := javamaker
+gb_PARTIALBUILD := T
+ifeq ($(strip $(SOLARENV)),)
+include $(dir $(realpath $(firstword $(MAKEFILE_LIST))))/../solenv/gbuild/source_and_rerun.mk
+else
 
-.INCLUDE: settings.mk
+gb_SourceEnvAndRecurse_STAGE=gbuild
+include $(SOLARENV)/gbuild/gbuild.mk
 
-RDB = $(SOLARBINDIR)$/offapi.rdb
-EXTRA_RDB = $(SOLARBINDIR)$/udkapi.rdb
+$(eval $(call gb_Module_make_global_targets,$(shell ls $(dir $(realpath $(firstword $(MAKEFILE_LIST))))/Module*.mk)))
 
-.INCLUDE: target.mk
-
-.IF "$(SOLAR_JAVA)" != ""
-
-ALLTAR: $(MISC)$/javamaker.done
-
-$(MISC)$/javamaker.done .ERRREMOVE: $(RDB) $(EXTRA_RDB)
-    $(JAVAMAKER) -BUCR -O$(CLASSDIR) $(RDB) -X$(EXTRA_RDB)
-    $(TOUCH) $@
-
-.ENDIF
+endif
+# vim: set noet sw=4 ts=4:
