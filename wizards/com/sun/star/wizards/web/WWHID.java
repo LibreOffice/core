@@ -132,11 +132,7 @@ public interface WWHID
     public static final int HID_BG_BTN_IMG9 = 34200 + 105;
     public static final int HID_BG_BTN_IMG10 = 34200 + 106;
     public static final int HID_BG_BTN_IMG11 = 34200 + 107;
-    public static final int HID_BG_BTN_IMG12 = 34200 + 108;
-    public static final int HID_BG_BTN_IMG13 = 34200 + 109;
-    public static final int HID_BG_BTN_IMG14 = 34200 + 100;
-    public static final int HID_BG_BTN_IMG15 = 34200 + 111;
-    public static final int HID_BG_BTN_IMG16 = 34200 + 112;//   web wizard icons sets dialog
+    public static final int HID_BG_BTN_IMG12 = 34200 + 108;//   web wizard icons sets dialog
     public static final int HID_IS = 41000 + 0;
     public static final int HID_IS_ICONSETS = 41000 + 1;
     public static final int HID_IS_BTN_NONE = 41000 + 2;

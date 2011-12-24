@@ -139,10 +139,10 @@ public class HelpIds
         "HID:WIZARDS_HID_BG_BTN_IMG10",    // HID:34306
         "HID:WIZARDS_HID_BG_BTN_IMG11",    // HID:34307
         "HID:WIZARDS_HID_BG_BTN_IMG12",    // HID:34308
-        "HID:WIZARDS_HID_BG_BTN_IMG13",    // HID:34309
-        "HID:WIZARDS_HID_BG_BTN_IMG14",    // HID:34300
-        "HID:WIZARDS_HID_BG_BTN_IMG15",    // HID:34311
-        "HID:WIZARDS_HID_BG_BTN_IMG16",    // HID:34312
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
         PropertyNames.EMPTY_STRING,
         PropertyNames.EMPTY_STRING,
         PropertyNames.EMPTY_STRING,

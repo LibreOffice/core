@@ -238,14 +238,6 @@ hidspecial HID { HelpID = HID_BG_BTN_IMG10; } ;
 hidspecial HID { HelpID = HID_BG_BTN_IMG11; } ;
 // #define	HID_BG_BTN_IMG12	34308
 hidspecial HID { HelpID = HID_BG_BTN_IMG12; } ;
-// #define	HID_BG_BTN_IMG13	34309
-hidspecial HID { HelpID = HID_BG_BTN_IMG13; } ;
-// #define	HID_BG_BTN_IMG14	34300
-hidspecial HID { HelpID = HID_BG_BTN_IMG14; } ;
-// #define	HID_BG_BTN_IMG15	34311
-hidspecial HID { HelpID = HID_BG_BTN_IMG15; } ;
-// #define	HID_BG_BTN_IMG16	34312
-hidspecial HID { HelpID = HID_BG_BTN_IMG16; } ;
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // Note: Web Wizard continues on 41000 later in this file.

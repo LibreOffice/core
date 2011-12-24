@@ -152,10 +152,6 @@
 #define HID_BG_BTN_IMG10                                   "WIZARDS_HID_BG_BTN_IMG10"
 #define HID_BG_BTN_IMG11                                   "WIZARDS_HID_BG_BTN_IMG11"
 #define HID_BG_BTN_IMG12                                   "WIZARDS_HID_BG_BTN_IMG12"
-#define HID_BG_BTN_IMG13                                   "WIZARDS_HID_BG_BTN_IMG13"
-#define HID_BG_BTN_IMG14                                   "WIZARDS_HID_BG_BTN_IMG14"
-#define HID_BG_BTN_IMG15                                   "WIZARDS_HID_BG_BTN_IMG15"
-#define HID_BG_BTN_IMG16                                   "WIZARDS_HID_BG_BTN_IMG16"
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // Note: Web Wizard continues on 41000 later in this file.
