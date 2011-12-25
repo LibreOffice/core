@@ -877,7 +877,7 @@ uno::Reference< document::XDocumentInfo > SAL_CALL SfxBaseModel::getDocumentInfo
             ((SfxBaseModel*)this)->m_pData->m_xDocumentInfo = xDocInfo;
         } catch (uno::RuntimeException &) {
             throw;
-        } catch (uno::Exception & e) {
+        } catch (const uno::Exception & e) {
             throw lang::WrappedTargetRuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                 "SfxBaseModel::getDocumentInfo: cannot initialize")), *this,
                 uno::makeAny(e));

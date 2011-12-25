@@ -213,7 +213,7 @@ css::uno::Reference< css::uno::XInterface > createBackend(
     } catch (css::uno::RuntimeException &) {
         // Assuming these exceptions are real errors:
         throw;
-    } catch (css::uno::Exception & e) {
+    } catch (const css::uno::Exception & e) {
         // Assuming these exceptions indicate that the service is not installed:
         OSL_TRACE(
             "createInstance(%s) failed with %s",

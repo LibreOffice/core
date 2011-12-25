@@ -596,7 +596,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     {
         std::cout << ex.what() << std::endl;
     }
-    catch(std::exception& ex)
+    catch(const std::exception& ex)
     {
         std::cout << ex.what() << std::endl;
         ShowUsage();

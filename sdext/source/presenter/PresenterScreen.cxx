@@ -511,7 +511,7 @@ void PresenterScreen::SwitchMonitors()
         uno::Any aDisplay;
         aDisplay <<= nNewScreen;
         xProperties->setPropertyValue(A2S("Display"), aDisplay);
-    } catch (const uno::Exception &e) {
+    } catch (const uno::Exception &) {
     }
 }
 
@@ -873,9 +873,8 @@ void PresenterScreen::ProcessComponent (
                 nY+nHeight);
         }
        }
-    catch (Exception& e)
+    catch (const Exception&)
     {
-        (void)e;
         OSL_ASSERT(false);
     }
 }

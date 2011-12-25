@@ -668,7 +668,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 // if the document is a new one then it appeares in the picklist immediatelly
                 // after SaveAs operation triggered from GUI
             }
-            catch( task::ErrorCodeIOException& aErrorEx )
+            catch( const task::ErrorCodeIOException& aErrorEx )
             {
                 nErrorCode = (sal_uInt32)aErrorEx.ErrCode;
             }

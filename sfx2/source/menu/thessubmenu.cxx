@@ -148,9 +148,8 @@ SfxThesSubMenuHelper::SfxThesSubMenuHelper()
                     "com.sun.star.linguistic2.LinguServiceManager" ))), uno::UNO_QUERY_THROW );
         m_xThesarus = m_xLngMgr->getThesaurus();
     }
-    catch (uno::Exception &e)
+    catch (const uno::Exception &)
     {
-        (void) e;
         DBG_ASSERT( 0, "failed to get thesaurus" );
     }
 }
@@ -204,9 +203,8 @@ bool SfxThesSubMenuHelper::GetMeanings(
 
             bHasMoreSynonyms |= i < nMeanings;   // any meaning skipped?
         }
-        catch (uno::Exception &e)
+        catch (const uno::Exception &)
         {
-            (void) e;
             DBG_ASSERT( 0, "failed to get synonyms" );
         }
     }

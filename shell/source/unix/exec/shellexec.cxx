@@ -118,7 +118,7 @@ ShellExec::ShellExec( const Reference< XComponentContext >& xContext ) :
                 m_aDesktopEnvironment = OUStringToOString(aDesktopEnvironment, RTL_TEXTENCODING_ASCII_US);
             }
         }
-    } catch (RuntimeException e) {
+    } catch (const RuntimeException &e) {
     }
 }
 

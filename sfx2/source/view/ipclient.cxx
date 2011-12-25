@@ -279,7 +279,7 @@ void SAL_CALL SfxInPlaceClient_Impl::saveObject()
                 xStatusIndicator = xStatusIndicatorFactory->createStatusIndicator();
                 xPropSet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IndicatorInterception" )), uno::makeAny( xStatusIndicator ));
             }
-            catch ( uno::RuntimeException& e )
+            catch ( const uno::RuntimeException& e )
             {
                 throw e;
             }
@@ -309,7 +309,7 @@ void SAL_CALL SfxInPlaceClient_Impl::saveObject()
             xPropSet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IndicatorInterception" )), uno::makeAny( xStatusIndicator ));
         }
     }
-    catch ( uno::RuntimeException& e )
+    catch ( const uno::RuntimeException& e )
     {
         throw e;
     }
@@ -948,7 +948,7 @@ ErrCode SfxInPlaceClient::DoVerb( long nVerb )
                                             sal_False,
                                             ::rtl::OUString() );
                 }
-                catch( task::ErrorCodeIOException& aErrorEx )
+                catch( const task::ErrorCodeIOException& aErrorEx )
                 {
                     nError = (sal_uInt32)aErrorEx.ErrCode;
                 }

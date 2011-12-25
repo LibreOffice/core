@@ -90,7 +90,7 @@ PresenterConfigurationAccess::PresenterConfigurationAccess (
             maNode <<= mxRoot;
         }
     }
-    catch (Exception& rException)
+    catch (const Exception& rException)
     {
         OSL_TRACE ("caught exception while opening configuration: %s",
             ::rtl::OUStringToOString(rException.Message,
@@ -195,7 +195,7 @@ Any PresenterConfigurationAccess::GetConfigurationNode (
             return rxNode->getByHierarchicalName(sPathToNode);
         }
     }
-    catch (Exception& rException)
+    catch (const Exception& rException)
     {
         OSL_TRACE ("caught exception while getting configuration node %s: %s",
             ::rtl::OUStringToOString(sPathToNode, RTL_TEXTENCODING_UTF8).getStr(),

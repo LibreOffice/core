@@ -365,7 +365,7 @@ void SAL_CALL OLESimpleStorage::insertByName( const ::rtl::OUString& aName, cons
     {
         throw;
     }
-    catch( uno::Exception& e )
+    catch( const uno::Exception& e )
     {
         throw lang::WrappedTargetException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Insert has failed!" ) ),
                                             uno::Reference< uno::XInterface >(),

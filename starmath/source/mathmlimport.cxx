@@ -348,7 +348,7 @@ sal_uLong SmXMLImportWrapper::ReadThroughComponent(
         if ( bEncrypted )
             nError = ERRCODE_SFX_WRONGPASSWORD;
     }
-    catch( xml::sax::SAXException& r )
+    catch( const xml::sax::SAXException& r )
     {
         packages::zip::ZipIOException aBrokenPackage;
         if ( r.WrappedException >>= aBrokenPackage )
@@ -3004,9 +3004,8 @@ void SmXMLImport::SetConfigurationSettings(const Sequence<PropertyValue>& aConfP
                         if ( xInfo->hasPropertyByName( pValues->Name ) )
                             xProps->setPropertyValue( pValues->Name, pValues->Value );
                     }
-                    catch (beans::PropertyVetoException &e)
+                    catch (const beans::PropertyVetoException &)
                     {
-                        (void) e;
                         // dealing with read-only properties here. Nothing to do...
                     }
                     catch( Exception& )

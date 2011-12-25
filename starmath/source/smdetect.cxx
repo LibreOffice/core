@@ -239,7 +239,7 @@ SmFilterDetect::~SmFilterDetect()
                             aTmpFilterName = pFilter->GetName();
                         aTypeName = SfxFilter::GetTypeFromStorage( xStorage, pFilter ? pFilter->IsAllowedAsTemplate() : sal_False, &aTmpFilterName );
                     }
-                    catch( lang::WrappedTargetException& aWrap )
+                    catch( const lang::WrappedTargetException& aWrap )
                     {
                         packages::zip::ZipIOException aZipException;
 

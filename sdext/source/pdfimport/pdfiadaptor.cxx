@@ -163,7 +163,7 @@ sal_Bool SAL_CALL PDFIHybridAdaptor::filter( const uno::Sequence< beans::Propert
                         m_xContext ),
                     uno::UNO_QUERY );
             }
-            catch(uno::Exception& e)
+            catch(const uno::Exception& e)
             {
                 (void)e;
                 OSL_TRACE( "subfilter exception: %s\n",

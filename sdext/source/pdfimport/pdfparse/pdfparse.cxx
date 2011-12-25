@@ -577,7 +577,7 @@ PDFEntry* PDFReader::read( const char* pBuffer, unsigned int nLen )
                  (int)aInfo.length );
         #endif
     }
-    catch( parser_error<const char*, const char*>& rError )
+    catch( const parser_error<const char*, const char*>& rError )
     {
         #if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, "parse error: %s at buffer pos %u\nobject stack:\n",
@@ -657,7 +657,7 @@ PDFEntry* PDFReader::read( const char* pFileName )
                  (int)aInfo.length );
         #endif
     }
-    catch( parser_error< const char*, file_iterator<> >& rError )
+    catch( const parser_error< const char*, file_iterator<> >& rError )
     {
         #if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, "parse error: %s at buffer pos %u\nobject stack:\n",

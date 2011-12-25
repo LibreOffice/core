@@ -134,7 +134,7 @@ void MetadatableTest::test()
     try {
         m2.SetMetadataReference(id1);
         CPPUNIT_ASSERT_MESSAGE("set duplicate succeeded", false);
-    } catch (lang::IllegalArgumentException) { }
+    } catch (const lang::IllegalArgumentException &) { }
     m1.SetMetadataReference(id1);
     CPPUNIT_ASSERT_MESSAGE("set failed (existing)",
             m1.GetMetadataReference() == id1);
@@ -205,7 +205,7 @@ void MetadatableTest::test()
     try {
         mc2.SetMetadataReference(id2);
         CPPUNIT_FAIL("set duplicate succeeded");
-    } catch (lang::IllegalArgumentException) { }
+    } catch (const lang::IllegalArgumentException &) { }
     mc1.SetMetadataReference(id2);
     CPPUNIT_ASSERT_MESSAGE("set failed (existing)",
             mc1.GetMetadataReference() == id2);

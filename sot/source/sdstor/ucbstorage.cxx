@@ -881,7 +881,7 @@ sal_uLong UCBStorageStream_Impl::ReadSourceWriteTemporary()
             } while( aReaded == 32000 );
         }
 #if OSL_DEBUG_LEVEL > 1
-        catch( Exception & e )
+        catch( const Exception & e )
         {
             OSL_FAIL( ::rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
 #else
@@ -924,7 +924,7 @@ sal_uLong UCBStorageStream_Impl::ReadSourceWriteTemporary( sal_uLong aLength )
                 m_bSourceRead = sal_False;
         }
 #if OSL_DEBUG_LEVEL > 1
-        catch( Exception & e )
+        catch( const Exception & e )
         {
             OSL_FAIL( ::rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
 #else
@@ -982,7 +982,7 @@ sal_uLong UCBStorageStream_Impl::GetData( void* pData, sal_uLong nSize )
             memcpy( pData, aData.getArray(), aReaded );
         }
 #if OSL_DEBUG_LEVEL > 1
-        catch( Exception & e )
+        catch( const Exception & e )
         {
             OSL_FAIL( ::rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
 #else
@@ -1990,7 +1990,7 @@ void UCBStorage_Impl::ReadContent()
             }
         }
     }
-    catch ( InteractiveIOException& r )
+    catch ( const InteractiveIOException& r )
     {
         if ( r.Code != IOErrorCode_NOT_EXISTING )
             SetError( ERRCODE_IO_GENERAL );
@@ -2456,7 +2456,7 @@ sal_Int16 UCBStorage_Impl::Commit()
                     SetError( ERRCODE_IO_GENERAL );
                     return COMMIT_RESULT_FAILURE;
                 }
-                catch ( InteractiveIOException& r )
+                catch ( const InteractiveIOException& r )
                 {
                     if ( r.Code == IOErrorCode_ACCESS_DENIED || r.Code == IOErrorCode_LOCKING_VIOLATION )
                         SetError( ERRCODE_IO_ACCESSDENIED );

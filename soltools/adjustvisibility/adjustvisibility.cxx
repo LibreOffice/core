@@ -218,7 +218,7 @@ void adjustVisibility( const std::string& rFile, int fd, bool bVerbose)
         }
         elf_end(pElf);
 
-    } catch (ElfError& e) {
+    } catch (const ElfError& e) {
         close(fd);
         throw;
     }
@@ -302,7 +302,7 @@ int main(int argc, char* argv[])
             processObject(std::string(argv[optind]), bPreserve, bVerbose);
         }
 
-    } catch (std::exception& e) {
+    } catch (const std::exception& e) {
         std::cerr << argv[0] << ": " << e.what() << "\n";
         return 1;
     }
