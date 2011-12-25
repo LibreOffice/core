@@ -293,6 +293,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
 	ira \
 	itg \
 	iti \
+	jdbc \
 	kab1 \
 	kabdrv1 \
     lng \

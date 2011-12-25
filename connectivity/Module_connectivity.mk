@@ -44,6 +44,7 @@ ifneq ($(SOLAR_JAVA),)
 $(eval $(call gb_Module_add_targets,connectivity,\
 	Jar_ConnectivityTools \
 	Jar_sdbc_hsqldb \
+	Library_jdbc \
 ))
 endif
 
