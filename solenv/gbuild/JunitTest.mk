@@ -112,11 +112,22 @@ endef
 define gb_JunitTest_add_jar
 $(call gb_JunitTest_get_target,$(1)) : T_CP := $$(T_CP)$(gb_CLASSPATHSEP)$(2)
 $(call gb_JunitTest_get_target,$(1)) : $(2)
+$(2) :| $(gb_Helper_PHONY)
 
 endef
 
 define gb_JunitTest_add_jars
 $(foreach jar,$(2),$(call gb_JunitTest_add_jar,$(1),$(jar)))
+
+endef
+
+define gb_JunitTest_add_package_dependency
+$(call gb_JavaClassSet_add_package_dependency,$(call gb_JunitTest_get_classsetname,$(1)),$(2))
+
+endef
+
+define gb_JunitTest_add_package_dependencies
+$(call gb_JavaClassSet_add_package_dependencies,$(call gb_JunitTest_get_classsetname,$(1)),$(2))
 
 endef
 
@@ -139,6 +150,8 @@ gb_JunitTest_add_sourcefiles :=
 gb_JunitTest_set_classpath :=
 gb_JunitTest_add_jar :=
 gb_JunitTest_add_jars :=
+gb_JunitTest_add_package_dependency :=
+gb_JunitTest_add_package_dependencies :=
 
 endif # OOO_JUNIT_JAR
 # vim: set noet sw=4:
