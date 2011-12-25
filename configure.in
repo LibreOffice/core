@@ -8282,7 +8282,6 @@ dnl Test whether to include Sun Professional Template Pack
 dnl ===================================================================
 AC_MSG_CHECKING([for Sun Professional Template Pack integration (only supported languages displayed)])
 if test "z$with_sun_templates" = "z" -o "z$with_sun_templates" = "zno" ; then
-    SUNTEMPLATES_LANG=""
     AC_MSG_RESULT([no integration])
 else
     SCPDEFS="$SCPDEFS -DWITH_EXTENSION_SUN_TEMPLATE_PACK"
@@ -8321,7 +8320,6 @@ else
     done
     AC_MSG_RESULT([$SUNTEMPLATES_LANG])
 fi
-AC_SUBST(SUNTEMPLATES_LANG)
 AC_SUBST(SUNTEMPLATES_DE_PACK)
 AC_SUBST(SUNTEMPLATES_EN_US_PACK)
 AC_SUBST(SUNTEMPLATES_ES_PACK)
