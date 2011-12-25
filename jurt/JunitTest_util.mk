@@ -25,32 +25,15 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Module_Module,jurt))
+$(eval $(call gb_JunitTest_JunitTest,jurt_util))
 
-ifneq ($(SOLAR_JAVA),)
-
-$(eval $(call gb_Module_add_targets,jurt,\
-    Jar_jurt \
-    Library_jpipe \
-    Zip_jurt \
+$(eval $(call gb_JunitTest_add_jars,jurt_util,\
+    $(OUTDIR)/bin/OOoRunnerLight.jar \
+    $(OUTDIR)/bin/ridl.jar \
 ))
 
-ifeq ($(OS),WNT)
-$(eval $(call gb_Module_add_targets,jurt,\
-    Library_jpipx \
+$(eval $(call gb_JunitTest_add_sourcefiles,jurt_util,\
+    jurt/test/com/sun/star/lib/util/NativeLibraryLoader_Test \
 ))
-endif
-
-$(eval $(call gb_Module_add_subsequentcheck_targets,jurt,\
-    JunitTest_bridgefactory \
-    JunitTest_connections \
-    JunitTest_java \
-    JunitTest_java_remote \
-    JunitTest_remote \
-    JunitTest_uno \
-    JunitTest_util \
-))
-
-endif
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:
