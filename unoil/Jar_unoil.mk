@@ -27,10 +27,12 @@
 
 $(eval $(call gb_Jar_Jar,unoil))
 
+$(eval $(call gb_Jar_add_package_dependencies,unoil,\
+    unoil_javamaker \
+))
+
 $(eval $(call gb_Jar_add_packagedirs,unoil,\
     $(WORKDIR)/CustomTarget/unoil/javamaker/com \
 ))
-
-$(call gb_Jar_get_target,unoil) : $(call gb_Package_get_target,unoil_javamaker)
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:
