@@ -39,7 +39,7 @@ $(eval $(call gb_CustomTarget_add_dependencies,unoil/climaker,\
 ))
 
 $(eval $(call gb_CustomTarget_add_outdir_dependencies,unoil/climaker,\
-    $(OUTDIR_FOR_BUILD)/bin/climaker \
+    $(OUTDIR_FOR_BUILD)/bin/climaker$(gb_Executable_EXT_for_build) \
     $(OUTDIR)/bin/cli_uretypes.dll \
     $(OUTDIR)/bin/cliuno.snk \
     $(OUTDIR)/bin/offapi.rdb \

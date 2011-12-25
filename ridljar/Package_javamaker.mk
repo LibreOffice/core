@@ -30,7 +30,7 @@ $(eval $(call gb_Package_Package,ridljar_javamaker,$(WORKDIR)/CustomTarget/ridlj
 $(eval $(call gb_Package_add_customtarget,ridljar_javamaker,ridljar/javamaker))
 
 $(eval $(call gb_CustomTarget_add_outdir_dependencies,ridljar/javamaker,\
-    $(OUTDIR_FOR_BUILD)/bin/javamaker \
+    $(OUTDIR_FOR_BUILD)/bin/javamaker$(gb_Executable_EXT_for_build) \
     $(OUTDIR)/bin/udkapi.rdb \
 ))
 

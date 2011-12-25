@@ -30,7 +30,7 @@ $(eval $(call gb_Package_Package,unoil_javamaker,$(WORKDIR)/CustomTarget/unoil/j
 $(eval $(call gb_Package_add_customtarget,unoil_javamaker,unoil/javamaker))
 
 $(eval $(call gb_CustomTarget_add_outdir_dependencies,unoil/javamaker,\
-    $(OUTDIR_FOR_BUILD)/bin/javamaker \
+    $(OUTDIR_FOR_BUILD)/bin/javamaker$(gb_Executable_EXT_for_build) \
     $(OUTDIR)/bin/offapi.rdb \
     $(OUTDIR)/bin/udkapi.rdb \
 ))

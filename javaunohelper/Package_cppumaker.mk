@@ -30,7 +30,7 @@ $(eval $(call gb_Package_Package,javaunohelper_cppumaker,$(WORKDIR)/CustomTarget
 $(eval $(call gb_Package_add_customtarget,javaunohelper_cppumaker,javaunohelper/cppumaker))
 
 $(eval $(call gb_CustomTarget_add_outdir_dependencies,javaunohelper/cppumaker,\
-	$(OUTDIR_FOR_BUILD)/bin/cppumaker \
+	$(OUTDIR_FOR_BUILD)/bin/cppumaker$(gb_Executable_EXT_for_build) \
 	$(OUTDIR)/bin/udkapi.rdb \
 ))
 
