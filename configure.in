@@ -6393,8 +6393,6 @@ elif test "$_os" != "WINNT" -a "$_os" != "Android" -a "$_os" != "iOS"; then
     CFLAGS="$CFLAGS $X_CFLAGS"
     LDFLAGS="$LDFLAGS $X_LDFLAGS $X_LIBS"
     AC_CHECK_LIB(X11, XOpenDisplay, x_libs="-lX11 $X_EXTRA_LIBS", [AC_MSG_ERROR([X Development libraries not found])])
-    dnl Check if the XauDisposeAuth symbol is provided by libXau.
-    AC_CHECK_LIB(Xau, XauDisposeAuth, XAU_LIBS="-lXau", [])
 else
     x_includes="no_x_includes"
     x_libraries="no_x_libraries"
@@ -6420,7 +6418,6 @@ else
     XLIB="$x_libraries"
 fi
 AC_SUBST(XLIB)
-AC_SUBST(XAU_LIBS)
 
 if test "$_os" != "WINNT" -a "$_os" != "Darwin" -a "$_os" != "Android" -a "$_os" != "iOS"; then
     dnl ===================================================================
