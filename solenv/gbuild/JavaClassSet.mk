@@ -29,11 +29,8 @@
 gb_JavaClassSet_JAVACCOMMAND := $(JAVACOMPILER)
 gb_JavaClassSet_JAVACDEBUG :=
 
-# Enforce dependency ordering.
-#
-# This target is used to enforce correct dependency order for possibly
-# generated stuff: generated sources, jars/classdirs etc. Everything but
-# source files depends on it.
+# Enforces correct dependency order for possibly generated stuff:
+# generated sources, jars/classdirs etc.
 gb_JavaClassSet_get_preparation_target = $(WORKDIR)/JavaClassSet/$(1)/prepared
 
 ifneq ($(gb_DEBUGLEVEL),0)
@@ -71,8 +68,8 @@ $(call gb_JavaClassSet_get_preparation_target,%) :
 	mkdir -p $(dir $@) && touch $@
 
 define gb_JavaClassSet_JavaClassSet
-$(call gb_JavaClassSet_get_target,$(1)) : JARDEPS :=
-$(call gb_JavaClassSet_get_target,$(1)) :| $(call gb_JavaClassSet_get_preparation_target,$(1))
+$(call gb_JavaClassSet_get_target,$(1)) : JARDEPS := $(call gb_JavaClassSet_get_preparation_target,$(1))
+$(call gb_JavaClassSet_get_target,$(1)) : $(call gb_JavaClassSet_get_preparation_target,$(1))
 
 endef
 
@@ -116,7 +113,7 @@ define gb_JavaClassSet_add_jar
 $(call gb_JavaClassSet_get_target,$(1)) : $(2)
 $(call gb_JavaClassSet_get_target,$(1)) : T_CP := $$(T_CP)$(gb_CLASSPATHSEP)$(strip $(2))
 $(call gb_JavaClassSet_get_target,$(1)) : JARDEPS += $(2)
-$(2) :| $(call gb_JavaClassSet_get_preparation_target,$(1))
+$(2) :| $(gb_Helper_PHONY)
 
 endef
 
