@@ -299,7 +299,7 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
         {
             xListener->dispatchFinished( aEvent ) ;
         }
-        catch(RuntimeException & e)
+        catch(const RuntimeException & e)
         {
             OSL_TRACE(
             "ScriptProtocolHandler::dispatchWithNotification: caught RuntimeException"
@@ -413,12 +413,12 @@ void ScriptProtocolHandler::createScriptProvider()
                 xFac->createScriptProvider( aContext ), UNO_QUERY_THROW );
         }
     }
-    catch ( RuntimeException & e )
+    catch ( const RuntimeException & e )
     {
         ::rtl::OUString temp = OUSTR( "ScriptProtocolHandler::createScriptProvider(),  " );
         throw RuntimeException( temp.concat( e.Message ), Reference< XInterface >() );
     }
-    catch ( Exception & e )
+    catch ( const Exception & e )
     {
         ::rtl::OUString temp = OUSTR( "ScriptProtocolHandler::createScriptProvider: " );
         throw RuntimeException( temp.concat( e.Message ), Reference< XInterface >() );

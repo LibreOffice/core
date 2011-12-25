@@ -135,9 +135,8 @@ namespace sd
 
             return xCloneNode;
         }
-        catch( Exception& e )
+        catch( Exception& )
         {
-            (void)e;
             OSL_FAIL(
                 (OString("sd::CustomAnimationClonerImpl::Clone(), "
                         "exception caught: ") +
@@ -220,9 +219,8 @@ namespace sd
                 xNode->setUserData( aUserData );
             }
         }
-        catch( Exception& e )
+        catch( Exception& )
         {
-            (void)e;
             OSL_FAIL(
                 (OString("sd::CustomAnimationClonerImpl::transformNode(), "
                         "exception caught: ") +
@@ -295,9 +293,8 @@ namespace sd
                 return makeAny( aEvent );
             }
         }
-        catch( Exception& e )
+        catch( Exception& )
         {
-            (void)e;
             OSL_FAIL(
                 (OString("sd::CustomAnimationClonerImpl::transformValue(), "
                         "exception caught: ") +

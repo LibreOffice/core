@@ -235,10 +235,9 @@ CustomAnimationPane::CustomAnimationPane( ::Window* pParent, ViewShellBase& rBas
         mxView = Reference< XDrawView >::query(mrBase.GetController());
         addListener();
     }
-    catch( Exception& e )
+    catch( Exception& )
     {
-        (void)e;
-        OSL_FAIL( "sd::CustomAnimationPane::CustomAnimationPane(), Exception cought!" );
+        OSL_FAIL( "sd::CustomAnimationPane::CustomAnimationPane(), Exception caught!" );
     }
 
     // get current page and update custom animation list
@@ -1045,7 +1044,7 @@ void CustomAnimationPane::onSelectionChanged()
         }
         catch( Exception& )
         {
-            OSL_FAIL( "sd::CustomAnimationPane::onSelectionChanged(), Exception catched!" );
+            OSL_FAIL( "sd::CustomAnimationPane::onSelectionChanged(), Exception caught!" );
         }
     }
 }
@@ -1275,9 +1274,8 @@ static sal_Bool hasVisibleShape( const Reference< XShape >& xShape )
             return eFillStyle != FillStyle_NONE || eLineStyle != ::com::sun::star::drawing::LineStyle_NONE;
         }
     }
-    catch( Exception& e )
+    catch( Exception& )
     {
-        (void)e;
     }
     return sal_True;
 }
@@ -1773,7 +1771,7 @@ void CustomAnimationPane::onChangeCurrentPage()
     }
     catch( Exception& )
     {
-        OSL_FAIL( "sd::CustomAnimationPane::onChangeCurrentPage(), exception catched!" );
+        OSL_FAIL( "sd::CustomAnimationPane::onChangeCurrentPage(), exception caught!" );
     }
 }
 
@@ -1830,10 +1828,9 @@ bool getTextSelection( const Any& rSelection, Reference< XShape >& xShape, std::
 
         return true;
     }
-    catch( Exception& e )
+    catch( Exception& )
     {
-        (void)e;
-        OSL_FAIL( "sd::CustomAnimationPane::getTextSelection(), exception cought!" );
+        OSL_FAIL( "sd::CustomAnimationPane::getTextSelection(), exception caught!" );
     }
 
     return false;

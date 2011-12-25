@@ -150,9 +150,8 @@ TableDesignPane::TableDesignPane( ::Window* pParent, ViewShellBase& rBase, bool 
         mxTableFamily = Reference< XIndexAccess >( xFamilies->getByName( sFamilyName ), UNO_QUERY_THROW );
 
     }
-    catch( Exception& e )
+    catch( Exception& )
     {
-        (void)e;
         OSL_FAIL( "sd::CustomAnimationPane::CustomAnimationPane(), Exception caught!" );
     }
 

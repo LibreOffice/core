@@ -144,7 +144,7 @@ throw ( lang::IllegalArgumentException, script::CannotConvertException, RuntimeE
                 Reference< XInterface > () );
         }
     }
-    catch ( Exception & e )
+    catch ( const Exception & e )
     {
         OUString temp = OUSTR(
             "ScriptNameResolverImpl::resolve : problem with getPropertyValue" );
@@ -212,7 +212,7 @@ throw ( lang::IllegalArgumentException, script::CannotConvertException, RuntimeE
         {
             filesysURL = getFilesysURL( scriptURI );
         }
-        catch ( lang::IllegalArgumentException & e )
+        catch ( const lang::IllegalArgumentException & e )
         {
             OUString temp = OUSTR( "ScriptNameResolverImpl::resolve: " );
             throw RuntimeException( temp.concat( e.Message ), Reference< XInterface >() );
@@ -245,7 +245,7 @@ throw ( lang::IllegalArgumentException, script::CannotConvertException, RuntimeE
                     filesysScriptStorageID, ::rtl::OUStringToOString(
                         filesysURL, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
         }
-        catch ( RuntimeException & e )
+        catch ( const RuntimeException & e )
         {
             OUString temp = OUSTR( "ScriptNameResolverImpl::resolve: " );
             throw RuntimeException( temp.concat( e.Message ), Reference< XInterface >() );
@@ -292,41 +292,41 @@ throw ( lang::IllegalArgumentException, script::CannotConvertException, RuntimeE
             }
 
         }
-        catch ( css::security::AccessControlException  & e )
+        catch ( css::security::AccessControlException  & )
         {
             // no execute permission
             OSL_TRACE( "ScriptNameResolverImpl::resolve : AccessControlException " );
             continue;
         }
-        catch ( beans::UnknownPropertyException & e )
+        catch ( const beans::UnknownPropertyException & e )
         {
             OUString temp = OUSTR(
                 "ScriptNameResolverImpl::resolve : UnknownPropertyException" );
             throw RuntimeException( temp.concat( e.Message ),
                 Reference< XInterface > () );
         }
-        catch ( beans::PropertyVetoException  & e )
+        catch ( const beans::PropertyVetoException  & e )
         {
             OUString temp = OUSTR(
                 "ScriptNameResolverImpl::resolve : PropertyVetoException " );
             throw RuntimeException( temp.concat( e.Message ),
                 Reference< XInterface > () );
         }
-        catch ( lang::IllegalArgumentException  & e )
+        catch ( const lang::IllegalArgumentException  & e )
         {
             OUString temp = OUSTR(
                 "ScriptNameResolverImpl::resolve : IllegalArgumentException " );
             throw lang::IllegalArgumentException( temp.concat( e.Message ),
                 Reference< XInterface > (), e.ArgumentPosition );
         }
-        catch ( lang::WrappedTargetException & e )
+        catch ( const lang::WrappedTargetException & e )
         {
         OUString temp = OUSTR(
                 "ScriptNameResolverImpl::resolve : WrappedTargetException " );
             throw RuntimeException( temp.concat( e.Message ),
                 Reference< XInterface > () );
         }
-        catch ( Exception & e )
+        catch ( const Exception & e )
         {
             OSL_TRACE(
                 "Exception thrown by storage %d, failed to match uri: %s",
@@ -426,7 +426,7 @@ SAL_THROW ( ( lang::IllegalArgumentException, css::security::AccessControlExcept
             {
                 permissionURI = getFilesysURL( scriptURI );
             }
-            catch ( lang::IllegalArgumentException & e )
+            catch ( const lang::IllegalArgumentException & e )
             {
                 OUString temp = OUSTR( "ScriptNameResolverImpl::resolveFromURI: " );
                 throw RuntimeException( temp.concat( e.Message ), Reference< XInterface >() );
@@ -449,7 +449,7 @@ SAL_THROW ( ( lang::IllegalArgumentException, css::security::AccessControlExcept
         // that information was in the uri
         resolvedScriptInfo = results[ 0 ];
     }
-    catch ( css::security::AccessControlException & ace )
+    catch ( const css::security::AccessControlException & ace )
     {
         OUString temp = OUSTR(
             "ScriptRuntimeManager::resolveURIFromStorageID AccessControlException: " );
@@ -457,7 +457,7 @@ SAL_THROW ( ( lang::IllegalArgumentException, css::security::AccessControlExcept
                                               Reference< XInterface > (),
                                                 ace.LackingPermission );
     }
-    catch ( lang::IllegalArgumentException & iae )
+    catch ( const lang::IllegalArgumentException & iae )
     {
         OUString temp = OUSTR(
             "ScriptRuntimeManager::resolveURIFromStorageID IllegalArgumentException: " );
@@ -465,14 +465,14 @@ SAL_THROW ( ( lang::IllegalArgumentException, css::security::AccessControlExcept
                                               Reference< XInterface > (),
                                               iae.ArgumentPosition );
     }
-    catch ( RuntimeException & re )
+    catch ( const RuntimeException & re )
     {
         OUString temp = OUSTR(
             "ScriptRuntimeManager::resolveURIFromStorageID RuntimeException: " );
         throw RuntimeException( temp.concat( re.Message ),
                                 Reference< XInterface > () );
     }
-    catch ( Exception & e )
+    catch ( const Exception & e )
     {
         OUString temp = OUSTR(
             "ScriptNameResolverImpl::resolveURIFromStorageID : Exception caught - RuntimeException rethrown" );
@@ -520,23 +520,23 @@ const ::rtl::OUString & permissionURI ) SAL_THROW ( ( RuntimeException, css::sec
         Reference< XInterface > xScriptStorage( ScriptStorageManager->getScriptStorage( sid ), UNO_SET_THROW );
         xScriptInfoAccess.set( xScriptStorage, UNO_QUERY_THROW );
     }
-    catch ( lang::IllegalArgumentException & e )
+    catch ( const lang::IllegalArgumentException & e )
     {
         OUString temp = OUSTR( "ScriptNameResolverImpl::getStorageInstance: " );
         throw lang::IllegalArgumentException( temp.concat( e.Message ),
             Reference< XInterface >(), e.ArgumentPosition );
     }
-    catch ( css::security::AccessControlException & e )
+    catch ( const css::security::AccessControlException & e )
     {
         OUString temp = OUSTR( "ScriptNameResolverImpl::getStorageInstance: AccessControlException " );
         throw css::security::AccessControlException( temp.concat( e.Message ), Reference< XInterface >(), e.LackingPermission );
     }
-    catch ( RuntimeException & re )
+    catch ( const RuntimeException & re )
     {
         OUString temp = OUSTR( "ScriptNameResolverImpl::getStorageInstance: " );
         throw RuntimeException( temp.concat( re.Message ), Reference< XInterface >() );
     }
-    catch ( Exception & e )
+    catch ( const Exception & e )
     {
         OUString temp = OUSTR( "ScriptNameResolverImpl::getStorageInstance: " );
         throw RuntimeException( temp.concat( e.Message ), Reference< XInterface >() );

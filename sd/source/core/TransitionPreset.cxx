@@ -215,9 +215,8 @@ bool TransitionPreset::importTransitionPresetList( TransitionPresetList& rList )
 
         return bRet;
     }
-    catch( Exception& e )
+    catch( Exception& )
     {
-        (void)e;
         OSL_FAIL( "sd::TransitionPreset::importResources(), Exception cought!" );
     }
 

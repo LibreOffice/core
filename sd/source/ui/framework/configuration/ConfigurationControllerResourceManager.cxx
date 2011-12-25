@@ -243,7 +243,7 @@ void ConfigurationControllerResourceManager::DeactivateResource (
             {
                 aDescriptor.mxResourceFactory->releaseResource(aDescriptor.mxResource);
             }
-            catch (lang::DisposedException& rException)
+            catch (const lang::DisposedException& rException)
             {
                 if ( ! rException.Context.is()
                     || rException.Context == aDescriptor.mxResourceFactory)

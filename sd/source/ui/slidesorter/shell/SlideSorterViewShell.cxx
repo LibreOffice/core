@@ -165,9 +165,8 @@ SlideSorterViewShell::~SlideSorterViewShell (void)
                 xComponent->dispose();
         }
     }
-    catch( ::com::sun::star::uno::Exception& e )
+    catch( ::com::sun::star::uno::Exception& )
     {
-        (void)e;
         OSL_FAIL("sd::SlideSorterViewShell::~SlideSorterViewShell(), exception caught!" );
     }
     GetFrameView()->Disconnect();

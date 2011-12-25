@@ -243,7 +243,7 @@ void MasterScriptProvider::createPkgProvider()
             xFac->createScriptProvider( location ), UNO_QUERY_THROW );
 
     }
-    catch ( Exception& e )
+    catch ( const Exception& e )
     {
         (void)e;
         OSL_TRACE("Exception creating MasterScriptProvider for uno_packages in context %s: %s",

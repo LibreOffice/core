@@ -122,13 +122,9 @@ ProviderCache::getAllProviders() throw ( RuntimeException )
                     xScriptProvider  = createProvider( h_it->second );
                     providers[ providerIndex++ ] = xScriptProvider;
                 }
-                catch ( Exception& e )
+                catch ( const Exception& )
                 {
-                    ::rtl::OUString temp = OUSTR( "ProviderCache::getAllProviders: failed to create provider, " );
-                    temp.concat( e.Message );
                     DBG_UNHANDLED_EXCEPTION();
-                    //throw RuntimeException( temp.concat( e.Message ),
-                    //    Reference< XInterface >() );
                 }
             }
         }
@@ -187,7 +183,7 @@ ProviderCache::populateCache() throw ( RuntimeException )
             }
         }
     }
-    catch ( Exception &e )
+    catch ( const Exception &e )
     {
         ::rtl::OUString temp = OUSTR(
             "ProviderCache::populateCache: couldn't obtain XSingleComponentFactory for " );
@@ -204,7 +200,7 @@ ProviderCache::createProvider( ProviderDetails& details ) throw ( RuntimeExcepti
         details.provider.set(
             details.factory->createInstanceWithArgumentsAndContext( m_Sctx, m_xContext ), UNO_QUERY_THROW );
     }
-    catch ( RuntimeException& e )
+    catch ( const RuntimeException& e )
     {
         ::rtl::OUString temp(RTL_CONSTASCII_USTRINGPARAM("ProviderCache::createProvider() Error creating provider from factory!!!\n"));
         throw RuntimeException( temp.concat( e.Message ), Reference< XInterface >() );

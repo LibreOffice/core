@@ -375,9 +375,8 @@ sal_Int32 CustomAnimationEffect::getNumberOfSubitems( const Any& aTarget, sal_In
             }
         }
     }
-    catch( Exception& e )
+    catch( Exception& )
     {
-        (void)e;
         nSubItems = 0;
         OSL_FAIL( "sd::CustomAnimationEffect::getNumberOfSubitems(), exception cought!" );
     }
@@ -1112,9 +1111,8 @@ void CustomAnimationEffect::setIterateType( sal_Int16 nIterateType )
 
         checkForText();
     }
-    catch( Exception& e )
+    catch( Exception& )
     {
-        (void)e;
         OSL_FAIL( "sd::CustomAnimationEffect::setIterateType(), Exception cought!" );
     }
 }
@@ -1158,9 +1156,8 @@ void CustomAnimationEffect::setIterateInterval( double fIterateInterval )
             }
         }
     }
-    catch( Exception& e )
+    catch( Exception& )
     {
-        (void)e;
         OSL_FAIL("sd::CustomAnimationEffect::getPath(), exception cought!" );
     }
 
@@ -1187,9 +1184,8 @@ void CustomAnimationEffect::setPath( const ::rtl::OUString& rPath )
             }
         }
     }
-    catch( Exception& e )
+    catch( Exception& )
     {
-        (void)e;
         OSL_FAIL("sd::CustomAnimationEffect::setPath(), exception cought!" );
     }
 }
@@ -1237,9 +1233,8 @@ Any CustomAnimationEffect::getProperty( sal_Int32 nNodeType, const OUString& rAt
             }
         }
     }
-    catch( Exception& e )
+    catch( Exception& )
     {
-        (void)e;
         OSL_FAIL("sd::CustomAnimationEffect::getProperty(), exception cought!" );
     }
 
@@ -1315,9 +1310,8 @@ bool CustomAnimationEffect::setProperty( sal_Int32 nNodeType, const OUString& rA
             }
         }
     }
-    catch( Exception& e )
+    catch( Exception& )
     {
-        (void)e;
         OSL_FAIL("sd::CustomAnimationEffect::setProperty(), exception cought!" );
     }
 
@@ -1374,9 +1368,8 @@ Any CustomAnimationEffect::getColor( sal_Int32 nIndex )
             }
         }
     }
-    catch( Exception& e )
+    catch( Exception& )
     {
-        (void)e;
         OSL_FAIL("sd::CustomAnimationEffect::getColor(), exception cought!" );
     }
 
@@ -1430,9 +1423,8 @@ void CustomAnimationEffect::setColor( sal_Int32 nIndex, const Any& rColor )
             }
         }
     }
-    catch( Exception& e )
+    catch( Exception& )
     {
-        (void)e;
         OSL_FAIL("sd::CustomAnimationEffect::setColor(), exception cought!" );
     }
 }
@@ -1477,9 +1469,8 @@ Any CustomAnimationEffect::getTransformationProperty( sal_Int32 nTransformType, 
             }
         }
     }
-    catch( Exception& e )
+    catch( Exception& )
     {
-        (void)e;
         OSL_FAIL("sd::CustomAnimationEffect::getTransformationProperty(), exception cought!" );
     }
 
@@ -1551,9 +1542,8 @@ bool CustomAnimationEffect::setTransformationProperty( sal_Int32 nTransformType,
             }
         }
     }
-    catch( Exception& e )
+    catch( Exception& )
     {
-        (void)e;
         OSL_FAIL("sd::CustomAnimationEffect::setTransformationProperty(), exception cought!" );
     }
 
@@ -1574,9 +1564,8 @@ void CustomAnimationEffect::createAudio( const ::com::sun::star::uno::Any& rSour
         xAudio->setVolume( fVolume );
         setAudio( xAudio );
     }
-    catch( Exception& e )
+    catch( Exception& )
     {
-        (void)e;
         OSL_FAIL("sd::CustomAnimationEffect::createAudio(), exception cought!" );
     }
 }
@@ -1598,9 +1587,8 @@ static Reference< XCommand > findCommandNode( const Reference< XAnimationNode >&
                 xCommand.set( xNode, UNO_QUERY_THROW );
         }
     }
-    catch( Exception& e )
+    catch( Exception& )
     {
-        (void)e;
         OSL_FAIL("sd::findCommandNode(), exception caught!" );
     }
 
@@ -1631,9 +1619,8 @@ void CustomAnimationEffect::removeAudio()
                 xContainer->removeChild( xChild );
         }
     }
-    catch( Exception& e )
+    catch( Exception& )
     {
-        (void)e;
         OSL_FAIL("sd::CustomAnimationEffect::removeAudio(), exception caught!" );
     }
 
@@ -1652,9 +1639,8 @@ void CustomAnimationEffect::setAudio( const Reference< ::com::sun::star::animati
         if( xContainer.is() && xChild.is() )
             xContainer->appendChild( xChild );
     }
-    catch( Exception& e )
+    catch( Exception& )
     {
-        (void)e;
         OSL_FAIL("sd::CustomAnimationEffect::setAudio(), exception caught!" );
     }
 }
@@ -1679,9 +1665,8 @@ void CustomAnimationEffect::setStopAudio()
 
         mnCommand = EffectCommands::STOPAUDIO;
     }
-    catch( Exception& e )
+    catch( Exception& )
     {
-        (void)e;
         OSL_FAIL("sd::CustomAnimationEffect::setStopAudio(), exception caught!" );
     }
 }
@@ -1959,9 +1944,8 @@ void EffectSequenceHelper::replace( const CustomAnimationEffectPtr& pEffect, con
 
         rebuild();
     }
-    catch( Exception& e )
+    catch( Exception& )
     {
-        (void)e;
         OSL_FAIL( "sd::EffectSequenceHelper::replace(), exception cought!" );
     }
 }
@@ -2116,9 +2100,8 @@ void EffectSequenceHelper::implRebuild()
             mxSequenceRoot->setDuration( makeAny((double)0.0) );
         }
     }
-    catch( Exception& e )
+    catch( Exception& )
     {
-        (void)e;
         OSL_FAIL( "sd::EffectSequenceHelper::rebuild(), exception cought!" );
     }
 }
@@ -2284,9 +2267,8 @@ void stl_process_after_effect_node_func(AfterEffectNode& rNode)
             }
         }
     }
-    catch( Exception& e )
+    catch( Exception& )
     {
-        (void)e;
         OSL_FAIL( "ppt::stl_process_after_effect_node_func::operator(), exception cought!" );
     }
 }
@@ -2736,9 +2718,8 @@ void EffectSequenceHelper::createTextGroupParagraphEffects( CustomAnimationTextG
         }
         notify_listeners();
     }
-    catch( Exception& e )
+    catch( Exception& )
     {
-        (void)e;
         OSL_FAIL("sd::EffectSequenceHelper::createTextGroup(), exception cought!" );
     }
 }
@@ -3131,9 +3112,8 @@ void EffectSequenceHelper::createEffects( const Reference< XAnimationNode >& xNo
             }
         }
     }
-    catch( Exception& e )
+    catch( Exception& )
     {
-        (void)e;
         OSL_FAIL( "sd::EffectSequenceHelper::createEffects(), exception cought!" );
     }
 }
@@ -3193,9 +3173,8 @@ void EffectSequenceHelper::processAfterEffect( const Reference< XAnimationNode >
             }
         }
     }
-    catch( Exception& e )
+    catch( Exception& )
     {
-        (void)e;
         OSL_FAIL( "sd::EffectSequenceHelper::processAfterEffect(), exception cought!" );
     }
 }
@@ -3356,9 +3335,8 @@ void MainSequence::createMainSequence()
         if( xNotifier.is() )
             xNotifier->addChangesListener( mxChangesListener );
     }
-    catch( Exception& e )
+    catch( Exception& )
     {
-        (void)e;
         OSL_FAIL( "sd::MainSequence::create(), exception cought!" );
         return;
     }
@@ -3766,9 +3744,8 @@ InteractiveSequence::InteractiveSequence( const Reference< XTimeContainer >& xSe
             }
         }
     }
-    catch( Exception& e )
+    catch( Exception& )
     {
-        (void)e;
         OSL_FAIL( "sd::InteractiveSequence::InteractiveSequence(), exception cought!" );
         return;
     }

@@ -269,7 +269,7 @@ SdFilterDetect::~SdFilterDetect()
                                 sFilterName = pFilter->GetName();
                             aTypeName = SfxFilter::GetTypeFromStorage( xStorage, pFilter ? pFilter->IsOwnTemplateFormat() : sal_False, &sFilterName );
                         }
-                        catch( lang::WrappedTargetException& aWrap )
+                        catch( const lang::WrappedTargetException& aWrap )
                         {
                             packages::zip::ZipIOException aZipException;
                             if ( ( aWrap.TargetException >>= aZipException ) && aTypeName.Len() )

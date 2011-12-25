@@ -327,7 +327,7 @@ Sequence< Reference< browse::XBrowseNode > > getAllBrowseNodes( const Reference<
         locnBNs[ mspIndex++ ] = Reference< browse::XBrowseNode >( xFac->createScriptProvider( makeAny( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("share")) ) ), UNO_QUERY_THROW );
     }
     // TODO proper exception handling, should throw
-    catch( Exception& e )
+    catch( const Exception& e )
     {
         (void)e;
         OSL_TRACE("Caught Exception %s",

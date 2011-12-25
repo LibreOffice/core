@@ -107,7 +107,7 @@ throw( RuntimeException )
         xInterface.set( m_xContext->getValueByName( buf.makeStringAndClear() ), UNO_QUERY_THROW );
         xScriptInvocation.set( xInterface, UNO_QUERY_THROW );
     }
-    catch ( Exception & e )
+    catch ( const Exception & e )
     {
         OUString temp = OUSTR( "ScriptRuntimeManager::GetScriptRuntime: " );
         throw RuntimeException( temp.concat( e.Message ), Reference< XInterface >() );
@@ -137,7 +137,7 @@ throw( RuntimeException )
         );
         xScriptNameResolver.set( xInterface, UNO_QUERY_THROW );
     }
-    catch ( Exception & e )
+    catch ( const Exception & e )
     {
         OUString temp = OUSTR( "ScriptRuntimeManager::GetScriptNameResolver: " );
         throw RuntimeException( temp.concat( e.Message ), Reference< XInterface >() );
@@ -222,14 +222,14 @@ Any SAL_CALL ScriptRuntimeManager::invoke(
             xEL_ScriptStorageManager->disposing( event );
         }
     }
-    catch ( lang::IllegalArgumentException & iae )
+    catch ( const lang::IllegalArgumentException & iae )
     {
         OUString temp = OUSTR( "ScriptRuntimeManager::invoke IllegalArgumentException: " );
         throw lang::IllegalArgumentException( temp.concat( iae.Message ),
                                               Reference< XInterface > (),
                                               iae.ArgumentPosition );
     }
-    catch ( script::CannotConvertException & cce )
+    catch ( const script::CannotConvertException & cce )
     {
         OUString temp = OUSTR( "ScriptRuntimeManager::invoke CannotConvertException: " );
         throw script::CannotConvertException( temp.concat( cce.Message ),
@@ -237,31 +237,31 @@ Any SAL_CALL ScriptRuntimeManager::invoke(
                                               cce.DestinationTypeClass, cce.Reason,
                                               cce.ArgumentIndex );
     }
-    catch ( reflection::InvocationTargetException & ite )
+    catch ( const reflection::InvocationTargetException & ite )
     {
         OUString temp = OUSTR( "ScriptRuntimeManager::invoke InvocationTargetException: " );
         throw reflection::InvocationTargetException( temp.concat( ite.Message ),
                 Reference< XInterface > (), ite.TargetException );
     }
-    catch ( beans::UnknownPropertyException & e )
+    catch ( const beans::UnknownPropertyException & e )
     {
         OUString temp = OUSTR( "ScriptRuntimeManager::invoke UnknownPropertyException: " );
         throw RuntimeException( temp.concat( e.Message ),
                                 Reference< XInterface > () );
     }
-    catch ( lang::WrappedTargetException  & e )
+    catch ( const lang::WrappedTargetException  & e )
     {
         OUString temp = OUSTR( "ScriptRuntimeManager::invoke WrappedTargetException : " );
         throw RuntimeException( temp.concat( e.Message ),
                                 Reference< XInterface > () );
     }
-    catch ( RuntimeException & re )
+    catch ( const RuntimeException & re )
     {
         OUString temp = OUSTR( "ScriptRuntimeManager::invoke RuntimeException: " );
         throw RuntimeException( temp.concat( re.Message ),
                                 Reference< XInterface > () );
     }
-    catch ( Exception & e )
+    catch ( const Exception & e )
     {
         OUString temp = OUSTR( "ScriptRuntimeManager::invoke Exception: " );
         throw RuntimeException( temp.concat( e.Message ),
@@ -296,7 +296,7 @@ throw( lang::IllegalArgumentException, script::CannotConvertException, RuntimeEx
     {
         resolvedURI = xScriptNameResolver->resolve( scriptURI, invocationCtx );
     }
-    catch ( lang::IllegalArgumentException & iae )
+    catch ( const lang::IllegalArgumentException & iae )
     {
         OUString temp =
             OUSTR( "ScriptRuntimeManager::resolve IllegalArgumentException: " );
@@ -304,7 +304,7 @@ throw( lang::IllegalArgumentException, script::CannotConvertException, RuntimeEx
                                               Reference< XInterface > (),
                                               iae.ArgumentPosition );
     }
-    catch ( script::CannotConvertException & cce )
+    catch ( const script::CannotConvertException & cce )
     {
         OUString temp = OUSTR( "ScriptRuntimeManager::resolve CannotConvertException: " );
         throw script::CannotConvertException( temp.concat( cce.Message ),
@@ -312,7 +312,7 @@ throw( lang::IllegalArgumentException, script::CannotConvertException, RuntimeEx
                                               cce.DestinationTypeClass, cce.Reason,
                                               cce.ArgumentIndex );
     }
-    catch ( RuntimeException & re )
+    catch ( const RuntimeException & re )
     {
         OUString temp = OUSTR( "ScriptRuntimeManager::resolve RuntimeException: " );
         throw RuntimeException( temp.concat( re.Message ),

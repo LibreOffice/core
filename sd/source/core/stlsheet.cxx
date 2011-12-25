@@ -822,7 +822,7 @@ void SAL_CALL SdStyleSheet::dispose(  ) throw (RuntimeException)
         {
             throw;
         }
-        catch (Exception & exc)
+        catch (const Exception & exc)
         {
             throw RuntimeException(
                 OUString( RTL_CONSTASCII_USTRINGPARAM(

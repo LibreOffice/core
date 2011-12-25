@@ -797,10 +797,9 @@ void CustomAnimationList::append( CustomAnimationEffectPtr pEffect )
             mpLastParentEntry = pEntry;
         }
     }
-    catch( Exception& e )
+    catch( Exception& )
     {
-        (void)e;
-        OSL_FAIL("sd::CustomAnimationList::append(), exception catched!" );
+        OSL_FAIL("sd::CustomAnimationList::append(), exception caught!" );
     }
 }
 
@@ -856,7 +855,7 @@ void CustomAnimationList::onSelectionChanged( Any aSelection )
     }
     catch( Exception& )
     {
-        OSL_FAIL( "sd::CustomAnimationList::onSelectionChanged(), Exception catched!" );
+        OSL_FAIL( "sd::CustomAnimationList::onSelectionChanged(), Exception caught!" );
     }
 }
 

@@ -1329,9 +1329,8 @@ sal_Bool FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
                             mxPlayer.set( avmedia::MediaWindow::createPlayer( pInfo->GetBookmark()), uno::UNO_QUERY_THROW );
                             mxPlayer->start();
                         }
-                        catch( uno::Exception& e )
+                        catch( uno::Exception& )
                         {
-                            (void)e;
                         }
                     bAnimated = sal_True;
                 }

@@ -338,9 +338,8 @@ bool AnimationSlideController::getSlideAPI( sal_Int32 nSlideNumber, Reference< X
 
         return true;
     }
-    catch( Exception& e )
+    catch( Exception& )
     {
-        (void)e;
         OSL_FAIL(
             (OString("sd::AnimationSlideController::getSlideAPI(), "
                     "exception caught: ") +
@@ -660,9 +659,8 @@ void SAL_CALL SlideshowImpl::disposing()
         if( mxView.is() )
             mxView->dispose();
     }
-    catch( Exception& e )
+    catch( Exception& )
     {
-        static_cast<void>(e);
         OSL_FAIL(
             (OString("sd::SlideshowImpl::stop(), "
                     "exception caught: ") +
@@ -889,9 +887,8 @@ bool SlideshowImpl::startPreview(
             mpShowWindow->SetPreviewMode();
 
     }
-    catch( Exception& e )
+    catch( Exception& )
     {
-        (void)e;
         OSL_FAIL(
             (OString("sd::SlideshowImpl::startPreview(), "
                      "exception caught: ") +
@@ -1138,9 +1135,8 @@ bool SlideshowImpl::startShow( PresentationSettingsEx* pPresSettings )
 
         setActiveXToolbarsVisible( sal_False );
     }
-    catch( Exception& e )
+    catch( Exception& )
     {
-        (void)e;
         OSL_FAIL(
             (OString("sd::SlideshowImpl::startShow(), "
                      "exception caught: ") +
@@ -1201,9 +1197,8 @@ bool SlideshowImpl::startShowImpl( const Sequence< beans::PropertyValue >& aProp
 
         return true;
     }
-    catch( Exception& e )
+    catch( Exception& )
     {
-        (void)e;
         OSL_FAIL(
             (OString("sd::SlideshowImpl::startShowImpl(), "
                      "exception caught: ") +
@@ -1240,9 +1235,8 @@ void SlideshowImpl::paint( const Rectangle& /* rRect */ )
         // aEvt.UpdateRect = TODO
         mxView->paint( aEvt );
     }
-    catch( Exception& e )
+    catch( Exception& )
     {
-        static_cast<void>(e);
         OSL_FAIL(
             (OString("sd::SlideshowImpl::paint(), "
                     "exception caught: ") +
@@ -1295,9 +1289,8 @@ void SlideshowImpl::removeShapeEvents()
 
         maShapeEventMap.clear();
     }
-    catch( Exception& e )
+    catch( Exception& )
     {
-        (void)e;
         OSL_FAIL(
             (OString("sd::SlideshowImpl::removeShapeEvents(), "
                      "exception caught: ") +
@@ -1331,9 +1324,8 @@ void SlideshowImpl::registerShapeEvents(sal_Int32 nSlideNumber)
             registerShapeEvents( xDrawPage );
         }
     }
-    catch( Exception& e )
+    catch( Exception& )
     {
-        (void)e;
         OSL_FAIL(
             (OString("sd::SlideshowImpl::registerShapeEvents(), "
                      "exception caught: ") +
@@ -1411,9 +1403,8 @@ void SlideshowImpl::registerShapeEvents( Reference< XShapes >& xShapes ) throw( 
             mxShow->setShapeCursor( xShape, awt::SystemPointer::REFHAND );
         }
     }
-    catch( Exception& e )
+    catch( Exception& )
     {
-        static_cast<void>(e);
         OSL_FAIL(
             (OString("sd::SlideshowImpl::registerShapeEvents(), "
                     "exception caught: ") +
@@ -1483,9 +1474,8 @@ void SAL_CALL SlideshowImpl::pause() throw (RuntimeException)
                 mxListenerProxy->paused();
         }
     }
-    catch( Exception& e )
+    catch( Exception& )
     {
-        static_cast<void>(e);
         OSL_FAIL(
             (OString("sd::SlideshowImpl::pause(), "
                     "exception caught: ") +
@@ -1520,9 +1510,8 @@ void SAL_CALL SlideshowImpl::resume() throw (RuntimeException)
             }
         }
     }
-    catch( Exception& e )
+    catch( Exception& )
     {
-        static_cast<void>(e);
         OSL_FAIL(
             (OString("sd::SlideshowImpl::resume(), "
                     "exception caught: ") +
@@ -1586,9 +1575,8 @@ void SlideshowImpl::click( const Reference< XShape >& xShape, const ::com::sun::
             mxPlayer.set(avmedia::MediaWindow::createPlayer(pEvent->maStrBookmark), uno::UNO_QUERY_THROW );
             mxPlayer->start();
         }
-        catch( uno::Exception& e )
+        catch( uno::Exception& )
         {
-            (void)e;
             OSL_FAIL("sd::SlideshowImpl::click(), exception caught!" );
         }
     }
@@ -1943,9 +1931,8 @@ sal_Int32 SlideshowImpl::updateSlideShow (void)
             }
         }
     }
-    catch( Exception& e )
+    catch( Exception& )
     {
-        static_cast<void>(e);
         OSL_FAIL(
             (OString("sd::SlideshowImpl::updateSlideShow(), exception caught: ")
                 + rtl::OUStringToOString(
@@ -2074,10 +2061,9 @@ bool SlideshowImpl::keyInput(const KeyEvent& rKEvt)
             break;
         }
     }
-    catch( Exception& e )
+    catch( Exception& )
     {
         bRet = false;
-        static_cast<void>(e);
         OSL_FAIL(
             (OString("sd::SlideshowImpl::keyInput(), "
                     "exception caught: ") +
@@ -2469,9 +2455,8 @@ Reference< XSlideShow > SlideshowImpl::createSlideShow() const
 
         xShow.set( xInt, UNO_QUERY_THROW );
     }
-    catch( uno::Exception& e )
+    catch( uno::Exception& )
     {
-        (void)e;
         OSL_FAIL(
             (OString("sd::SlideshowImpl::createSlideShow(), "
                      "exception caught: ") +
@@ -2679,9 +2664,8 @@ void SlideshowImpl::resize( const Size& rSize )
         awt::WindowEvent aEvt;
         mxView->windowResized(aEvt);
     }
-    catch( Exception& e )
+    catch( Exception& )
     {
-        static_cast<void>(e);
         OSL_FAIL(
             (OString("sd::SlideshowImpl::resize(), "
                     "exception caught: ") +
@@ -3040,9 +3024,8 @@ void SAL_CALL SlideshowImpl::setUsePen( sal_Bool bMouseAsPen ) throw (RuntimeExc
             mxShow->setProperty( aPenPropSwitchPenMode );
         }
     }
-    catch( Exception& e )
+    catch( Exception& )
     {
-        static_cast<void>(e);
         OSL_FAIL(
             (OString("sd::SlideshowImpl::setUsePen(), "
                     "exception caught: ") +
@@ -3115,9 +3098,8 @@ void SAL_CALL SlideshowImpl::setEraseAllInk(bool bEraseAllInk) throw (RuntimeExc
             aPenPropEraseAllInk.Value <<= bEraseAllInk;
             mxShow->setProperty( aPenPropEraseAllInk );
         }
-        catch( Exception& e )
+        catch( Exception& )
         {
-            static_cast<void>(e);
             OSL_TRACE(
                 (OString("sd::SlideshowImpl::setEraseAllInk(), "
                         "exception caught: ") +
@@ -3336,9 +3318,8 @@ void SlideshowImpl::gotoPreviousSlide (const bool bSkipAllMainSequenceEffects)
             }
         }
     }
-    catch( Exception& e )
+    catch( Exception& )
     {
-        static_cast<void>(e);
         OSL_FAIL(
             (OString("sd::SlideshowImpl::gotoPreviousSlide(), "
                     "exception caught: ") +
@@ -3437,9 +3418,8 @@ void SAL_CALL SlideshowImpl::stopSound(  ) throw (RuntimeException)
             mxPlayer.clear();
         }
     }
-    catch( Exception& e )
+    catch( Exception& )
     {
-        static_cast<void>(e);
         OSL_FAIL(
             (OString("sd::SlideshowImpl::stopSound(), "
                     "exception caught: ") +

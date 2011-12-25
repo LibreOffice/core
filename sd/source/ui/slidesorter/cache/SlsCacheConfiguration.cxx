@@ -134,13 +134,11 @@ CacheConfiguration::CacheConfiguration (void)
             xHierarchy->getByHierarchicalName(sPathToNode),
             UNO_QUERY);
     }
-    catch (RuntimeException &aException)
+    catch (RuntimeException &)
     {
-        (void)aException;
     }
-    catch (Exception &aException)
+    catch (Exception &)
     {
-        (void)aException;
     }
 }
 
@@ -157,9 +155,8 @@ Any CacheConfiguration::GetValue (const ::rtl::OUString& rName)
         {
             aResult = mxCacheNode->getByName(rName);
         }
-        catch (Exception &aException)
+        catch (Exception &)
         {
-            (void)aException;
         }
     }
 

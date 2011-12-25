@@ -221,14 +221,12 @@ void QueueProcessor::ProcessOneRequest (
             }
         }
     }
-    catch (::com::sun::star::uno::RuntimeException &aException)
+    catch (::com::sun::star::uno::RuntimeException &)
     {
-        (void) aException;
         OSL_FAIL("RuntimeException caught in QueueProcessor");
     }
-    catch (::com::sun::star::uno::Exception &aException)
+    catch (::com::sun::star::uno::Exception &)
     {
-        (void) aException;
         OSL_FAIL("Exception caught in QueueProcessor");
     }
 }

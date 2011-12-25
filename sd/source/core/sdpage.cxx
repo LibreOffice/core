@@ -2683,10 +2683,9 @@ SdPage* SdPage::getImplementation( const ::com::sun::star::uno::Reference< ::com
                 return static_cast< SdPage* >( pUnoPage->GetSdrPage() );
         }
     }
-    catch( ::com::sun::star::uno::Exception& e )
+    catch( ::com::sun::star::uno::Exception& )
     {
-        (void)e;
-        OSL_FAIL("sd::SdPage::getImplementation(), exception cathced!" );
+        OSL_FAIL("sd::SdPage::getImplementation(), exception caught!" );
     }
 
     return 0;

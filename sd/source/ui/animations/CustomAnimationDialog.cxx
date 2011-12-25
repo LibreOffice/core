@@ -1818,9 +1818,8 @@ void CustomAnimationEffectTabPage::onSoundPreview()
         mxPlayer.set( avmedia::MediaWindow::createPlayer( aSoundURL ), uno::UNO_QUERY_THROW );
         mxPlayer->start();
     }
-    catch( uno::Exception& e )
+    catch( uno::Exception& )
     {
-        (void)e;
         OSL_FAIL("CustomAnimationEffectTabPage::onSoundPreview(), exception caught!" );
     }
 }

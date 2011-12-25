@@ -66,9 +66,8 @@ UndoAnimation::UndoAnimation( SdDrawDocument* pDoc, SdPage* pThePage )
         if( pThePage->mxAnimationNode.is() )
             mpImpl->mxOldNode = ::sd::Clone( pThePage->getAnimationNode() );
     }
-    catch( Exception& e )
+    catch( Exception& )
     {
-        (void)e;
         OSL_FAIL("sd::UndoAnimation::UndoAnimation(), exception caught!");
     }
 }
@@ -95,9 +94,8 @@ void UndoAnimation::Undo()
 
         mpImpl->mpPage->setAnimationNode( xOldNode );
     }
-    catch( Exception& e )
+    catch( Exception& )
     {
-        (void)e;
         OSL_FAIL("sd::UndoAnimation::Undo(), exception caught!");
     }
 }
@@ -111,9 +109,8 @@ void UndoAnimation::Redo()
             xNewNode = ::sd::Clone( mpImpl->mxNewNode );
         mpImpl->mpPage->setAnimationNode( xNewNode );
     }
-    catch( Exception& e )
+    catch( Exception& )
     {
-        (void)e;
         OSL_FAIL("sd::UndoAnimation::Redo(), exception caught!");
     }
 }

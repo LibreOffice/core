@@ -59,7 +59,7 @@ StorageBridge::StorageBridge( const Reference< XComponentContext >& xContext,
     {
         initStorage();
     }
-    catch ( RuntimeException & re )
+    catch ( const RuntimeException & re )
     {
         OUString temp = OUSTR( "StorageBridge::StorageBridge(salIn32&): " );
         throw RuntimeException( temp.concat( re.Message ), Reference< XInterface >() );
@@ -79,12 +79,12 @@ StorageBridge::initStorage() throw ( ::com::sun::star::uno::RuntimeException )
         Reference< XInterface > xScriptStorage( xScriptStorageManager->getScriptStorage( m_sid ), UNO_SET_THROW );
         m_xScriptInfoAccess.set( xScriptStorage, UNO_QUERY_THROW );
     }
-    catch ( RuntimeException & re )
+    catch ( const RuntimeException & re )
     {
         OUString temp = OUSTR( "StorageBridge::StorageBridge: " );
         throw RuntimeException( temp.concat( re.Message ), Reference< XInterface >() );
     }
-    catch ( Exception & e )
+    catch ( const Exception & e )
     {
         OUString temp = OUSTR( "StorageBridge::StorageBridge: " );
         throw RuntimeException( temp.concat( e.Message ), Reference< XInterface >() );
@@ -102,7 +102,7 @@ throw ( lang::IllegalArgumentException,
     {
         results = m_xScriptInfoAccess->getScriptLogicalNames();
     }
-    catch ( Exception &e )
+    catch ( const Exception &e )
     {
         OUString temp = OUSTR( "StorageBridge::getScriptLogicalNames: " );
         throw RuntimeException( temp.concat( e.Message ), Reference< XInterface >() );
@@ -121,7 +121,7 @@ throw ( lang::IllegalArgumentException, RuntimeException )
     {
         results = m_xScriptInfoAccess->getImplementations( queryURI );
     }
-    catch ( Exception &e )
+    catch ( const Exception &e )
     {
         OUString temp = OUSTR( "StorageBridge::getImplementations: " );
         throw RuntimeException( temp.concat( e.Message ), Reference< XInterface >() );

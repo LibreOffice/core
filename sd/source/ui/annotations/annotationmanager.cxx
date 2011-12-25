@@ -209,9 +209,8 @@ void AnnotationManagerImpl::init()
         addListener();
         mxView = Reference< XDrawView >::query(mrBase.GetController());
     }
-    catch( Exception& e )
+    catch( Exception& )
     {
-        (void)e;
         OSL_FAIL( "sd::AnnotationManagerImpl::AnnotationManagerImpl(), Exception caught!" );
     }
 

@@ -413,9 +413,8 @@ void AnimationExporter::processAfterEffectNodes( const Reference< XAnimationNode
             }
         }
     }
-    catch( Exception& e )
+    catch( Exception& )
     {
-        (void)e;
         OSL_FAIL( "(@CL)AnimationExporter::processAfterEffectNodes(), exception cought!" );
     }
 }
@@ -767,9 +766,8 @@ Reference< XAnimationNode > AnimationExporter::createAfterEffectNodeClone( const
 
         return xCloneNode;
     }
-    catch( Exception& e )
+    catch( Exception& )
     {
-        (void)e;
         OSL_FAIL("(@CL)sd::ppt::AnimationExporter::createAfterEffectNodeClone(), could not create clone!" );
     }
     return xNode;

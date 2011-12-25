@@ -635,9 +635,8 @@ void AnimationImporter::fixMainSequenceTiming( const ::com::sun::star::uno::Refe
             }
         }
     }
-    catch( Exception& e )
+    catch( Exception& )
     {
-        (void)e;
         OSL_FAIL("sd::AnimationImporter::fixMainSequenceTiming(), exception caught!" );
     }
 }
@@ -661,9 +660,8 @@ void AnimationImporter::fixInteractiveSequenceTiming( const ::com::sun::star::un
             xClickNode->setBegin( aBegin );
         }
     }
-    catch( Exception& e )
+    catch( Exception& )
     {
-        (void)e;
         OSL_FAIL("sd::AnimationImporter::fixInteractiveSequenceTiming(), exception caught!" );
     }
 }

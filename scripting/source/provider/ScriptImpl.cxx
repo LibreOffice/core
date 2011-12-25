@@ -75,14 +75,14 @@ throw ( lang::IllegalArgumentException, script::CannotConvertException,
         result = m_RunTimeManager->invoke( m_ScriptURI, anyScriptingContext, aParams,
                                            aOutParamIndex, aOutParam );
     }
-    catch ( lang::IllegalArgumentException & iae )
+    catch ( const lang::IllegalArgumentException & iae )
     {
         ::rtl::OUString temp = OUSTR( "ScriptImpl::invoke IllegalArgumentException : " );
         throw lang::IllegalArgumentException( temp.concat( iae.Message ),
                                               Reference< XInterface > (),
                                               iae.ArgumentPosition );
     }
-    catch ( script::CannotConvertException & cce )
+    catch ( const script::CannotConvertException & cce )
     {
         ::rtl::OUString temp = OUSTR( "ScriptImpl::invoke CannotConvertException : " );
         throw script::CannotConvertException( temp.concat( cce.Message ),
@@ -91,14 +91,14 @@ throw ( lang::IllegalArgumentException, script::CannotConvertException,
                                               cce.Reason,
                                               cce.ArgumentIndex );
     }
-    catch ( reflection::InvocationTargetException & ite )
+    catch ( const reflection::InvocationTargetException & ite )
     {
         ::rtl::OUString temp = OUSTR( "ScriptImpl::invoke InvocationTargetException : " );
         throw reflection::InvocationTargetException( temp.concat( ite.Message ),
                 Reference< XInterface > (),
                 ite.TargetException );
     }
-    catch ( RuntimeException & re )
+    catch ( const RuntimeException & re )
     {
         ::rtl::OUString temp = OUSTR( "ScriptImpl::invoke RuntimeException : " );
         throw RuntimeException( temp.concat( re.Message ),

@@ -872,10 +872,9 @@ void AssistentDlgImpl::ProvideTemplates (void)
         {
             UpdatePreview(sal_True);
         }
-        catch (uno::RuntimeException& e)
+        catch (uno::RuntimeException& )
         {
             // Ignore all exceptions.
-            (void) e;
         }
     }
 }
@@ -1792,9 +1791,8 @@ String AssistentDlgImpl::GetUiTextForCommand (const ::rtl::OUString& sCommandURL
         }
         while(false);
     }
-    catch (com::sun::star::uno::Exception& rException)
+    catch (com::sun::star::uno::Exception& )
     {
-        (void)rException;
     }
 
     return sLabel;
@@ -1849,9 +1847,8 @@ Image AssistentDlgImpl::GetUiIconForCommand (const ::rtl::OUString& sCommandURL)
         }
         while(false);
     }
-    catch (com::sun::star::uno::Exception& rException)
+    catch (com::sun::star::uno::Exception& )
     {
-        (void)rException;
     }
 
     return aIcon;

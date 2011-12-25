@@ -189,9 +189,8 @@ SlideSorterController::~SlideSorterController (void)
         if (xComponent.is())
             xComponent->dispose();
     }
-    catch( uno::Exception& e )
+    catch( uno::Exception& )
     {
-        (void)e;
         OSL_FAIL( "sd::SlideSorterController::~SlideSorterController(), exception caught!" );
     }
 
