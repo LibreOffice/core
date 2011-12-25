@@ -195,7 +195,7 @@ void ParagraphStyleManager::clean()
 void ParagraphStyleManager::write(OdfDocumentHandler *pHandler) const
 {
     for (std::map<WPXString, shared_ptr<ParagraphStyle>, ltstr>::const_iterator iter = mStyleHash.begin();
-            iter != mStyleHash.end(); iter++)
+            iter != mStyleHash.end(); ++iter)
     {
         if (strcmp(iter->second->getName().cstr(), "Standard") == 0)
             continue;
@@ -254,7 +254,7 @@ void SpanStyleManager::clean()
 void SpanStyleManager::write(OdfDocumentHandler *pHandler) const
 {
     for (std::map<WPXString, shared_ptr<SpanStyle>, ltstr>::const_iterator iter = mStyleHash.begin();
-            iter != mStyleHash.end(); iter++)
+            iter != mStyleHash.end(); ++iter)
     {
         (iter->second)->write(pHandler);
     }
