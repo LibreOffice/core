@@ -27,13 +27,8 @@
 
 $(eval $(call gb_Package_Package,jvmfwk_rcfiles,$(SRCDIR)/jvmfwk))
 
-ifeq ($(GUI),WNT)
-$(eval $(call gb_Package_add_file,jvmfwk_rcfiles,bin/sunjavaplugin.ini,plugins/sunmajor/pluginlib/sunjavapluginrc))
-$(eval $(call gb_Package_add_file,jvmfwk_rcfiles,bin/jvmfwk3.ini,source/jvmfwk3rc))
-else
-$(eval $(call gb_Package_add_file,jvmfwk_rcfiles,bin/sunjavapluginrc,plugins/sunmajor/pluginlib/sunjavapluginrc))
-$(eval $(call gb_Package_add_file,jvmfwk_rcfiles,bin/jvmfwk3rc,source/jvmfwk3rc))
-endif
+$(eval $(call gb_Package_add_file,jvmfwk_rcfiles,$(call gb_Helper_get_rcfile,bin/sunjavaplugin),plugins/sunmajor/pluginlib/sunjavapluginrc))
+$(eval $(call gb_Package_add_file,jvmfwk_rcfiles,$(call gb_Helper_get_rcfile,bin/jvmfwk3),source/jvmfwk3rc))
 $(eval $(call gb_Package_add_file,jvmfwk_rcfiles,bin/javasettingsunopkginstall.xml,source/javasettingsunopkginstall.xml))
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:
