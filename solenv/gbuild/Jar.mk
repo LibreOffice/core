@@ -201,6 +201,16 @@ $(call gb_JavaClassSet_use_externals,$(call gb_Jar_get_classsetname,$(1)),$(2))
 
 endef
 
+define gb_Jar_add_package_dependency
+$(call gb_JavaClassSet_add_package_dependency,$(call gb_Jar_get_classsetname,$(1)),$(2))
+
+endef
+
+define gb_Jar_add_package_dependencies
+$(call gb_JavaClassSet_add_package_dependencies,$(call gb_Jar_get_classsetname,$(1)),$(2))
+
+endef
+
 # possible directories for jar files containing UNO services 
 gb_Jar_COMPONENTPREFIXES := \
     OOO:vnd.sun.star.expand:\dLO_JAVA_DIR/ \
@@ -221,6 +231,5 @@ $(call gb_Jar_get_target,$(1)) : \
 $(call gb_Jar_get_clean_target,$(1)) : $(call gb_ComponentTarget_get_clean_target,$(2))
 
 endef
-
 
 # vim: set noet sw=4 ts=4:
