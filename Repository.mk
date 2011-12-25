@@ -266,9 +266,10 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
 	evoab2 \
     exp \
 	file \
-    filterconfig \
-    filtertracer \
-    flash \
+	filterconfig \
+	filtertracer \
+	flash \
+	flat \
     for \
     frm \
     fwe \
