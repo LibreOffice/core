@@ -24,7 +24,6 @@
 # for a copy of the LGPLv3 License.
 #
 #*************************************************************************
-CALL_CDECL=TRUE
 
 #mozilla specific stuff.
 MOZ_LIB=$(SOLARVERSION)$/$(INPATH)$/lib$(UPDMINOREXT)
