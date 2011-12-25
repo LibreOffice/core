@@ -25,34 +25,24 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Module_Module,jurt))
+gb_PARTIALBUILD := T
+include $(GBUILDDIR)/gbuild_simple.mk
 
-ifneq ($(SOLAR_JAVA),)
+done : registry.rdb
+	$(call gb_Helper_execute,javamaker -BUCR -O$(dir .) -nD $< -X$(OUTDIR)/bin/types.rdb) && \
+	touch $@
 
-$(eval $(call gb_Module_add_targets,jurt,\
-    Jar_jurt \
-    Library_jpipe \
-    Zip_jurt \
-))
+# TODO: would it be possible to reuse UnoApiTarget for this?
+registry.rdb : interfaces.urd
+	rm -f $@ && \
+	$(call gb_Helper_execute,regmerge $@ /UCR $<)
 
-ifeq ($(OS),WNT)
-$(eval $(call gb_Module_add_targets,jurt,\
-    Library_jpipx \
-))
-endif
+interfaces.urd : $(SRCDIR)/jurt/test/com/sun/star/lib/uno/protocols/urp/interfaces.idl
+	mkdir urd && \
+	$(call gb_Helper_execute,idlc -O$(dir ./urd) -I$(OUTDIR)/idl -cid -we $<)
 
-$(eval $(call gb_Module_add_subsequentcheck_targets,jurt,\
-    JunitTest_bridgefactory \
-    JunitTest_connections \
-    JunitTest_java \
-    JunitTest_java_remote \
-    JunitTest_remote \
-    JunitTest_uno \
-    JunitTest_urp \
-    JunitTest_util \
-    Package_test_urp \
-))
+.DEFAULT_GOAL := all
+.PHONY : all
+all : done
 
-endif
-
-# vim:set shiftwidth=4 softtabstop=4 expandtab:
+# vim:set shiftwidth=4 tabstop=4 noexpandtab:

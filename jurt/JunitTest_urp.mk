@@ -25,34 +25,24 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Module_Module,jurt))
+$(eval $(call gb_JunitTest_JunitTest,jurt_urp))
 
-ifneq ($(SOLAR_JAVA),)
-
-$(eval $(call gb_Module_add_targets,jurt,\
-    Jar_jurt \
-    Library_jpipe \
-    Zip_jurt \
+$(eval $(call gb_JunitTest_add_package_dependencies,jurt_urp,\
+    jurt_test_urp \
 ))
 
-ifeq ($(OS),WNT)
-$(eval $(call gb_Module_add_targets,jurt,\
-    Library_jpipx \
-))
-endif
-
-$(eval $(call gb_Module_add_subsequentcheck_targets,jurt,\
-    JunitTest_bridgefactory \
-    JunitTest_connections \
-    JunitTest_java \
-    JunitTest_java_remote \
-    JunitTest_remote \
-    JunitTest_uno \
-    JunitTest_urp \
-    JunitTest_util \
-    Package_test_urp \
+$(eval $(call gb_JunitTest_add_jars,jurt_urp,\
+    $(OUTDIR)/bin/OOoRunnerLight.jar \
+    $(OUTDIR)/bin/ridl.jar \
+    $(WORKDIR)/CustomTarget/jurt/test/com/sun/star/lib/uno/protocols/urp \
 ))
 
-endif
+$(eval $(call gb_JunitTest_add_sourcefiles,jurt_urp,\
+    jurt/test/com/sun/star/lib/uno/protocols/urp/Cache_Test \
+    jurt/test/com/sun/star/lib/uno/protocols/urp/Marshaling_Test \
+    jurt/test/com/sun/star/lib/uno/protocols/urp/Protocol_Test \
+    jurt/test/com/sun/star/lib/uno/protocols/urp/TestBridge \
+    jurt/test/com/sun/star/lib/uno/protocols/urp/TestObject \
+))
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:

@@ -25,34 +25,19 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Module_Module,jurt))
+$(eval $(call gb_Package_Package,jurt_test_urp,$(WORKDIR)/CustomTarget/jurt/test/com/sun/star/lib/uno/protocols/urp))
 
-ifneq ($(SOLAR_JAVA),)
+$(eval $(call gb_Package_add_customtarget,jurt_test_urp,jurt/test/com/sun/star/lib/uno/protocols/urp))
 
-$(eval $(call gb_Module_add_targets,jurt,\
-    Jar_jurt \
-    Library_jpipe \
-    Zip_jurt \
+$(eval $(call gb_CustomTarget_add_dependencies,jurt/test/com/sun/star/lib/uno/protocols/urp,\
+    jurt/test/com/sun/star/lib/uno/protocols/urp/interfaces.idl \
 ))
 
-ifeq ($(OS),WNT)
-$(eval $(call gb_Module_add_targets,jurt,\
-    Library_jpipx \
+$(eval $(call gb_CustomTarget_add_outdir_dependencies,jurt/test/com/sun/star/lib/uno/protocols/urp,\
+    $(OUTDIR_FOR_BUILD)/bin/idlc$(gb_Executable_EXT_for_build) \
+    $(OUTDIR_FOR_BUILD)/bin/javamaker$(gb_Executable_EXT_for_build) \
+    $(OUTDIR_FOR_BUILD)/bin/regmerge$(gb_Executable_EXT_for_build) \
+    $(OUTDIR)/bin/types.rdb \
 ))
-endif
-
-$(eval $(call gb_Module_add_subsequentcheck_targets,jurt,\
-    JunitTest_bridgefactory \
-    JunitTest_connections \
-    JunitTest_java \
-    JunitTest_java_remote \
-    JunitTest_remote \
-    JunitTest_uno \
-    JunitTest_urp \
-    JunitTest_util \
-    Package_test_urp \
-))
-
-endif
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:
