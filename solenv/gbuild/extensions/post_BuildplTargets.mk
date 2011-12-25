@@ -117,7 +117,7 @@ build: $(WORKDIR)/bootstrap $(SRCDIR)/src.downloaded $(if $(filter $(INPATH),$(I
 	$(call gb_BuildplTarget_command,instsetoo_native,--all)
 
 cross_toolset: $(WORKDIR)/bootstrap $(SRCDIR)/src.downloaded
-	source $(SRCDIR)/Env.Build.sh && $(call gb_BuildplTarget_command,$@,--all)
+	source $(SRCDIR)/config_build.mk && source $(SRCDIR)/Env.Build.sh && $(call gb_BuildplTarget_command,$@,--all)
 
 # experimental callcatcher target
 # http://www.skynet.ie/~caolan/Packages/callcatcher.html

@@ -2240,6 +2240,7 @@ if test "$cross_compiling" = "yes"; then
         bin/repo-list.in \
         build_env.in \
         config.guess \
+        config_host.mk.in \
         configure \
         ooo.lst.in \
         oowintool \
@@ -2271,8 +2272,11 @@ if test "$cross_compiling" = "yes"; then
         $sub_conf_opts \
         2>&1 | sed -e 's/^/    /'
     test -f ./Env.Host.sh 2>/dev/null || exit
+    test -f ./config_host.mk 2>/dev/null || exit
+    cp config_host.mk ../config_build.mk
     cp Env.Host.sh ../Env.Build.sh
     cp config.log ../config.Build.log
+    . ./config_host.mk
     . ./Env.Host.sh
     for V in COM GUI GUIBASE OS CPU CPUNAME CC CXX GXX_INCLUDE_PATH MACOSX_DEPLOYMENT_TARGET INPATH OUTPATH \
              SYSTEM_LIBXSLT; do
@@ -2295,8 +2299,10 @@ if test "$cross_compiling" = "yes"; then
     done
     )
     test -f CONF-FOR-BUILD/build-config || AC_MSG_ERROR([Running configure script for BUILD system failed, see CONF-FOR-BUILD/config.log])
+    test -f config_build.mk || AC_MSG_ERROR([A file called Env.Build.sh was supposed to have been copied here, but it isn't found])
     test -f Env.Build.sh || AC_MSG_ERROR([A file called Env.Build.sh was supposed to have been copied here, but it isn't found])
     perl -pi -e 's,/CONF-FOR-BUILD,,g' Env.Build.sh
+    perl -pi -e 's,/CONF-FOR-BUILD,,g' config_build.mk
     eval `cat CONF-FOR-BUILD/build-config`
     AC_MSG_RESULT([checking for BUILD platform configuration... done])
     rm -rf CONF-FOR-BUILD
@@ -9746,7 +9752,7 @@ else
     echo > set_soenv.last
 fi
 
-AC_CONFIG_FILES([ooo.lst set_soenv bin/repo-list desktop/scripts/soffice.sh build_env])
+AC_CONFIG_FILES([config_host.mk ooo.lst set_soenv bin/repo-list desktop/scripts/soffice.sh build_env])
 AC_OUTPUT
 
 # make sure this is executable
@@ -9765,6 +9771,6 @@ dnl Run the set_soenv script to setup the Env.Host.sh script that sets
 dnl environment variables for the build.
 chmod +x set_soenv
 
-./set_soenv
+. ./config_host.mk && ./set_soenv
 
 dnl vim:set shiftwidth=4 softtabstop=4 expandtab:

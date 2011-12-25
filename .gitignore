@@ -55,6 +55,8 @@
 /config.log
 /config.status
 /config.parms
+/config_host.mk
+/config_build.mk
 /configure
 /desktop/scripts/soffice.sh
 /makefile.mk

@@ -12,8 +12,8 @@ if [ -z "$SRC_ROOT" ] ; then
    SRC_ROOT=$($bin_dir/lo_find_src_root) || exit 1
 fi
 if [ -z "$SOLARINC" ] ; then
-    if [ -e "$SRC_ROOT/config.mk" ] ; then
-        . "$SRC_ROOT/config.mk"
+    if [ -e "$SRC_ROOT/config_host.mk" ] ; then
+        . "$SRC_ROOT/config_host.mk"
     fi
     if [ -e "$SRC_ROOT/Env.Host.sh" ] ; then
         . "$SRC_ROOT/Env.Host.sh"

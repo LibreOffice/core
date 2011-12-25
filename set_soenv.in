@@ -741,8 +741,8 @@ print "done\n";
 #
 # If the directory does not exist something is strange.
 # 1. LibreOffice build home directory.
-chomp($SRC_ROOT  = `pwd`);
-$SRC_ROOT = PathFormat($SRC_ROOT);
+# SRC_ROOT should already be in the env due to config_host.mk
+$SRC_ROOT = $ENV{"SRC_ROOT"};
 CheckPathExist( $SRC_ROOT );
 
 
@@ -1337,7 +1337,6 @@ open( OUT, ">$SRC_ROOT/$outfile" ) ||
 # Write file header.
 CreateFileHeader( *OUT, $UPD, $platform, "sh/bash/ksh", "#" );
 
-ToFile( "SRC_ROOT",	     $SRC_ROOT,          "e" );
 ToFile( "OOO_SHELL",         $OOO_SHELL,         "e" );
 ToFile( "JAVA_HOME",         $JAVA_HOME,         "e" );
 ToFile( "L10N_MODULE",       $L10N_MODULE,       "e" );
@@ -2134,6 +2133,11 @@ sub CreateFileHeader
    print { $filehandle } "$comment 1. exec $_[3] $newline";
    print { $filehandle } "$comment 2. source $outfile $newline";
    print { $filehandle } "$comment #################################################################";
+   print { $filehandle } $newline;
+   print { $filehandle } 'if test -z "$SRC_ROOT" ; then';
+   print { $filehandle } $newline;
+   print { $filehandle } " . $SRC_ROOT/config_host.mk $newline";
+   print { $filehandle } "fi $newline";
    print { $filehandle } $newline;
 }
 #---------------------------------------------------------

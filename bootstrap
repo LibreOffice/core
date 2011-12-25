@@ -1,5 +1,14 @@
 #!/bin/sh
 
+if test -z "${SRC_ROOT}"; then
+    if test -f ./config_build.mk ; then
+        . ./config_build.mk
+    else
+        if test -f ./config_host.mk ; then
+            . ./config_host.mk
+        fi
+    fi
+fi
 if test -z "${SOLARENV}"; then
     if test -f ./Env.Build.sh ; then
         . ./Env.Build.sh
