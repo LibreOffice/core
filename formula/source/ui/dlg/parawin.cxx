@@ -277,7 +277,7 @@ void ParaWin::SetFunctionDesc(const IFunctionDescription* pFDesc)
     nArgs = 0;
     if ( pFuncDesc!=NULL)
     {
-        if ( pFuncDesc->getDescription().getLength() )
+        if ( !pFuncDesc->getDescription().isEmpty() )
         {
             SetEditDesc(pFuncDesc->getDescription());
         }

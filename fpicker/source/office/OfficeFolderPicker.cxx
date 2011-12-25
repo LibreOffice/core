@@ -133,7 +133,7 @@ sal_Int16 SvtFolderPicker::implExecutePicker( )
 void SvtFolderPicker::prepareExecute()
 {
     // set the default directory
-    if ( m_aDisplayDirectory.getLength() > 0 )
+    if ( !m_aDisplayDirectory.isEmpty() )
         getDialog()->SetPath( m_aDisplayDirectory );
     else
     {

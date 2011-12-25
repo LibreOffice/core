@@ -112,7 +112,7 @@ namespace svt
             createPicker();
 
         // set the title
-        if ( m_aTitle.getLength() > 0 )
+        if ( !m_aTitle.isEmpty() )
             getDialog()->SetText( m_aTitle );
     }
 
@@ -218,7 +218,7 @@ namespace svt
             if ( m_pDlg )
             {
                 // synchronize the help id of the dialog with out help URL property
-                if ( m_sHelpURL.getLength() )
+                if ( !m_sHelpURL.isEmpty() )
                 {   // somebody already set the help URL while we had no dialog yet
                     OControlAccess::setHelpURL( m_pDlg, m_sHelpURL, sal_False );
                 }
@@ -445,7 +445,7 @@ namespace svt
         {
             if ( *pArgument >>= aPropArg )
             {
-                if ( aPropArg.Name.getLength() <= 0)
+                if ( aPropArg.Name.isEmpty())
                     continue;
 
                 sSettingName = aPropArg.Name;
@@ -453,7 +453,7 @@ namespace svt
             }
             else if ( *pArgument >>= aPairArg )
             {
-                if ( aPairArg.Name.getLength() <= 0)
+                if ( aPairArg.Name.isEmpty())
                     continue;
 
                 sSettingName = aPairArg.Name;

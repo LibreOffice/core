@@ -166,13 +166,13 @@ void SvtFilePicker::prepareExecute()
 {
     // set the default directory
     // --**-- doesn't match the spec yet
-    if ( m_aDisplayDirectory.getLength() > 0 || m_aDefaultName.getLength() > 0 )
+    if ( !m_aDisplayDirectory.isEmpty() || !m_aDefaultName.isEmpty() )
     {
-        if ( m_aDisplayDirectory.getLength() > 0 )
+        if ( !m_aDisplayDirectory.isEmpty() )
         {
 
             INetURLObject aPath( m_aDisplayDirectory );
-            if ( m_aDefaultName.getLength() > 0 )
+            if ( !m_aDefaultName.isEmpty() )
             {
                 aPath.insertName( m_aDefaultName );
                 getDialog()->SetHasFilename( true );
@@ -180,7 +180,7 @@ void SvtFilePicker::prepareExecute()
             String sPath = aPath.GetMainURL( INetURLObject::NO_DECODE );
             getDialog()->SetPath( aPath.GetMainURL( INetURLObject::NO_DECODE ) );
         }
-        else if ( m_aDefaultName.getLength() > 0 )
+        else if ( !m_aDefaultName.isEmpty() )
         {
             getDialog()->SetPath( m_aDefaultName );
             getDialog()->SetHasFilename( true );
@@ -235,7 +235,7 @@ void SvtFilePicker::prepareExecute()
     }
 
     // set the default filter
-    if ( m_aCurrentFilter.getLength() > 0 )
+    if ( !m_aCurrentFilter.isEmpty() )
         getDialog()->SetCurFilter( m_aCurrentFilter );
 
 }
@@ -435,7 +435,7 @@ void SvtFilePicker::ensureFilterList( const ::rtl::OUString& _rInitialCurrentFil
         m_pFilterList = new FilterList;
 
         // set the first filter to the current filter
-        if ( ! m_aCurrentFilter.getLength() )
+        if ( m_aCurrentFilter.isEmpty() )
             m_aCurrentFilter = _rInitialCurrentFilter;
     }
 }
@@ -490,7 +490,7 @@ SvtFileDialog* SvtFilePicker::implCreateDialog( Window* _pParent )
     SvtFileDialog* dialog = new SvtFileDialog( _pParent, nBits, nExtraBits );
 
     // Set StandardDir if present
-    if ( m_aStandardDir.getLength() > 0)
+    if ( !m_aStandardDir.isEmpty())
     {
         String sStandardDir = String( m_aStandardDir );
         dialog->SetStandardDir( sStandardDir );
@@ -1081,7 +1081,7 @@ void SAL_CALL SvtFilePicker::initialize( const Sequence< Any >& _rArguments )
                     namedValue.Value >>= sStandardDir;
 
                     // Set the directory for the "back to the default dir" button
-                        if ( sStandardDir.getLength() > 0 )
+                        if ( !sStandardDir.isEmpty() )
                     {
                         m_aStandardDir = sStandardDir;
                     }

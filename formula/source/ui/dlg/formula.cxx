@@ -404,19 +404,19 @@ void FormulaDlg_Impl::PreNotify( NotifyEvent& rNEvt )
         if(pWin!=NULL)
         {
             aActivWinId = pWin->GetUniqueId();
-            if(aActivWinId.getLength()==0)
+            if(aActivWinId.isEmpty())
             {
                 Window* pParent=pWin->GetParent();
                 while(pParent!=NULL)
                 {
                     aActivWinId=pParent->GetUniqueId();
 
-                    if(aActivWinId.getLength()!=0) break;
+                    if(!aActivWinId.isEmpty()) break;
 
                     pParent=pParent->GetParent();
                 }
             }
-            if(aActivWinId.getLength())
+            if(!aActivWinId.isEmpty())
             {
 
                 FormEditData* pData = m_pHelper->getFormEditData();
@@ -861,7 +861,7 @@ void FormulaDlg_Impl::FillControls(sal_Bool &rbNext, sal_Bool &rbPrev)
             aFtEditName.Show();
             pParaWin->Show();
             const rtl::OString aHelpId = pFuncDesc->getHelpId();
-            if ( aHelpId.getLength() )
+            if ( !aHelpId.isEmpty() )
                 pMEdit->SetHelpId(aHelpId);
         }
 
@@ -1284,7 +1284,7 @@ void FormulaDlg_Impl::SaveArg( sal_uInt16 nEd )
         sal_uInt16 i;
         for(i=0;i<=nEd;i++)
         {
-            if ( m_aArguments[i].getLength() == 0 )
+            if ( m_aArguments[i].isEmpty() )
                 m_aArguments[i] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" "));
         }
         if(pParaWin->GetArgument(nEd).Len()!=0)
@@ -1744,14 +1744,14 @@ rtl::OString FormulaDlg_Impl::FindFocusWin(Window *pWin)
     if(pWin->HasFocus())
     {
         aUniqueId=pWin->GetUniqueId();
-        if(aUniqueId.getLength()==0)
+        if(aUniqueId.isEmpty())
         {
             Window* pParent=pWin->GetParent();
             while(pParent!=NULL)
             {
                 aUniqueId=pParent->GetUniqueId();
 
-                if(aUniqueId.getLength()!=0) break;
+                if(!aUniqueId.isEmpty()) break;
 
                 pParent=pParent->GetParent();
             }
@@ -1765,7 +1765,7 @@ rtl::OString FormulaDlg_Impl::FindFocusWin(Window *pWin)
         {
             Window* pChild=pWin->GetChild(i);
             aUniqueId=FindFocusWin(pChild);
-            if(aUniqueId.getLength()>0) break;
+            if(!aUniqueId.isEmpty()) break;
         }
     }
     return aUniqueId;
@@ -1885,7 +1885,7 @@ FormulaDlg::FormulaDlg( SfxBindings* pB, SfxChildWindow* pCW,
                                             ,_pHelper,_pFunctionMgr,_pDlg))
 {
     FreeResource();
-    if(!GetHelpId().getLength())    //Hack which hides the HelpId for a model Dialog in SfxModelessDialog
+    if(GetHelpId().isEmpty())    //Hack which hides the HelpId for a model Dialog in SfxModelessDialog
         SetHelpId(GetUniqueId());   //and will be changed in a UniqueId,
                                     //at this point we reverse it.
     SetText(m_pImpl->aTitle1);

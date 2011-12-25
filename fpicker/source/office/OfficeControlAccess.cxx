@@ -515,7 +515,7 @@ namespace svt
             {
                 ::rtl::OUString aEntry;
                 _rValue >>= aEntry;
-                if ( aEntry.getLength() )
+                if ( !aEntry.isEmpty() )
                     _pListbox->InsertEntry( aEntry );
             }
             break;

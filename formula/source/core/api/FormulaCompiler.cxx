@@ -296,9 +296,9 @@ uno::Sequence< sheet::FormulaToken > FormulaCompiler::OpCodeMap::createSequenceO
                 // Check for existence not needed here, only name-mapping is of
                 // interest.
             }
-            if (!aIntName.getLength())
+            if (aIntName.isEmpty())
                 aIntName = _rCompiler.FindAddInFunction(*pName, !isEnglish());    // bLocalFirst=false for english
-            if (!aIntName.getLength())
+            if (aIntName.isEmpty())
                 pToken->OpCode = getOpCodeUnknown();
             else
             {

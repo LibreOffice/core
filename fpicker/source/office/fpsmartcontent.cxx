@@ -158,7 +158,7 @@ namespace svt
         m_eState = INVALID; // default to INVALID
         m_sURL = _rURL;
 
-        if ( m_sURL.getLength() )
+        if ( !m_sURL.isEmpty() )
         {
             try
             {

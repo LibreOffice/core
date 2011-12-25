@@ -188,7 +188,7 @@ IMPL_LINK( FuncPage, SelHdl, ListBox*, pLb )
         if ( pDesc )
         {
             const rtl::OString sHelpId = pDesc->getHelpId();
-            if ( sHelpId.getLength() )
+            if ( !sHelpId.isEmpty() )
                 aLbFunction.SetHelpId(sHelpId);
         }
         aSelectionLink.Call(this);
