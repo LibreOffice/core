@@ -25,24 +25,15 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Module_Module,ridljar))
+$(eval $(call gb_JunitTest_JunitTest,ridljar_typedesc))
 
-ifneq ($(SOLAR_JAVA),)
-$(eval $(call gb_Module_add_targets,ridljar,\
-    Jar_ridl \
-    Jar_unoloader \
-    Package_javamaker \
-    Zip_ridl \
-    Zip_unoloader \
+$(eval $(call gb_JunitTest_add_jars,ridljar_typedesc,\
+    $(OUTDIR)/bin/OOoRunnerLight.jar \
+    $(OUTDIR)/bin/ridl.jar \
 ))
 
-# unfortunately, these tests depend on qadevOOo, which depends on
-# ridl.jar for build...
-$(eval $(call gb_Module_add_subsequentcheck_targets,ridljar,\
-    JunitTest_typedesc \
-    JunitTest_uno \
-    JunitTest_util \
+$(eval $(call gb_JunitTest_add_sourcefiles,ridljar_typedesc,\
+    ridljar/test/com/sun/star/lib/uno/typedesc/TypeDescription_Test \
 ))
-endif
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:
