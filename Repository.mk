@@ -244,6 +244,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     ctl \
     cui \
     dba \
+    dbase \
     dbaxml \
     dbmm \
     dbp \

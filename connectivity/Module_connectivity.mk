@@ -40,6 +40,7 @@ $(eval $(call gb_Module_add_targets,connectivity,\
 	Library_mysql \
 	Library_file \
 	Library_flat \
+	Library_dbase \
 ))
 
 ifneq ($(SOLAR_JAVA),)
