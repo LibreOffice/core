@@ -27,6 +27,10 @@
 
 $(eval $(call gb_Jar_Jar,ridl))
 
+$(eval $(call gb_Jar_add_package_dependencies,ridl,\
+    ridljar_javamaker \
+))
+
 $(eval $(call gb_Jar_add_jars,ridl,\
     $(WORKDIR)/CustomTarget/ridljar/javamaker/class \
 ))
@@ -65,10 +69,5 @@ $(eval $(call gb_Jar_add_sourcefiles,ridl,\
     ridljar/com/sun/star/uno/Union \
     ridljar/com/sun/star/uno/UnoRuntime \
 ))
-
-# gb_Jar_add_jars adds dependency on all "jars", but the .../class dir
-# is created by a custom target, so there is no visible rule for it,
-# which is something make does not like. We add one to satisfy it.
-$(WORKDIR)/CustomTarget/ridljar/javamaker/class :| $(call gb_Package_get_target,ridljar_javamaker)
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:
