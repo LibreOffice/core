@@ -98,6 +98,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     ucbhelper \
     udkapi \
     unixODBC \
+    UnoControls \
     unotools \
     unoxml \
     uui \

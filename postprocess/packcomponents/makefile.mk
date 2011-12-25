@@ -126,6 +126,7 @@ my_components = \
     component/sw/util/swd \
     component/sw/util/vbaswobj \
     component/toolkit/util/tk \
+    component/UnoControls/util/ctl \
     component/unotools/util/utl \
     component/unoxml/source/rdf/unordf \
     component/unoxml/source/service/unoxml \
@@ -142,7 +143,6 @@ my_components = \
     component/xmlscript/util/xcr \
     component/xmlsecurity/util/xmlsecurity \
     component/xmlsecurity/util/xsec_fw \
-    ctl \
     dbase \
     dbpool2 \
     dbtools \

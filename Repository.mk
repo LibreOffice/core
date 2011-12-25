@@ -124,6 +124,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     charttools \
     chartview \
     cppcanvas \
+    ctl \
     cui \
     dba \
     dbaxml \
