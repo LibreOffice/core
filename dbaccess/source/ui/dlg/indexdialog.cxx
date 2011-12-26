@@ -882,7 +882,7 @@ DBG_NAME(DbaIndexDialog)
         {
             nN = IMG_INDEX_DLG_LC;
         }
-        return ImageList( nN );
+        return ImageList(ModuleRes(nN));
     }
     //------------------------------------------------------------------
     void DbaIndexDialog::resizeControls(const Size& _rDiff)
