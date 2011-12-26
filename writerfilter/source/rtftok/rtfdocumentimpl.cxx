@@ -2057,7 +2057,8 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         case RTF_CF:
             {
                 // NS_sprm::LN_CIco won't work, that would be an index in a static table
-                m_aStates.top().aCharacterAttributes->push_back(make_pair(NS_ooxml::LN_CT_Color_val, pIntValue));
+                RTFValue::Pointer_t pValue(new RTFValue(getColorTable(nParam)));
+                m_aStates.top().aCharacterAttributes->push_back(make_pair(NS_ooxml::LN_CT_Color_val, pValue));
             }
             break;
         case RTF_S:
