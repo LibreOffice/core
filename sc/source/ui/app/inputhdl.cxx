@@ -3413,7 +3413,7 @@ void ScInputHandler::NotifyChange( const ScInputHdlState* pState,
                         if (pData)
                         {
                             pEngine->SetText( *pData );
-                            if ( pInputWin->IsMultiLineInput() )
+                            if ( pInputWin && pInputWin->IsMultiLineInput() )
                                 aString = ScEditUtil::GetMultilineString(*pEngine);
                             else
                                 aString = GetEditText(pEngine);
