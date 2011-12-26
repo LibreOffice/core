@@ -732,8 +732,6 @@ void ScPreview::SetPageNo( long nPage )
 
 long ScPreview::GetFirstPage(SCTAB nTabP)
 {
-    if (nTabP >= static_cast<SCTAB>(nPages.size()) )
-        OSL_FAIL("nPages out ouf bounds, FIX IT");
     SCTAB nDocTabCount = pDocShell->GetDocument()->GetTableCount();
     if (nTabP >= nDocTabCount)
         nTabP = nDocTabCount-1;
@@ -742,6 +740,8 @@ long ScPreview::GetFirstPage(SCTAB nTabP)
     if (nTabP>0)
     {
         CalcPages();
+        if (nTabP >= static_cast<SCTAB>(nPages.size()) )
+            OSL_FAIL("nPages out ouf bounds, FIX IT");
         UpdateDrawView();       // Tabelle evtl. geaendert
 
         for (SCTAB i=0; i<nTabP; i++)
