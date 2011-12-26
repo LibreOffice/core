@@ -1,7 +1,8 @@
+# -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-#
+# 
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -25,51 +26,15 @@
 #
 #*************************************************************************
 
-PRJ = ..
-PRJNAME = ure
-TARGET = source
+gb_PARTIALBUILD := T
+ifeq ($(strip $(SOLARENV)),)
+include $(dir $(realpath $(firstword $(MAKEFILE_LIST))))/../solenv/gbuild/source_and_rerun.mk
+else
 
-ZIP1TARGET = uretest
-ZIP1FLAGS = -r
-ZIP1LIST = uretest
+gb_SourceEnvAndRecurse_STAGE=gbuild
+include $(SOLARENV)/gbuild/gbuild.mk
 
-my_components = \
-    acceptor \
-    component/binaryurp/source/binaryurp \
-    bootstrap \
-    connector \
-    introspection \
-    invocadapt \
-    invocation \
-    namingservice \
-    proxyfac \
-    reflection \
-    stocservices \
-    streams \
-    textinstream \
-    textoutstream \
-    uuresolver
+$(eval $(call gb_Module_make_global_targets,$(shell ls $(dir $(realpath $(firstword $(MAKEFILE_LIST))))/Module*.mk)))
 
-.IF "$(SOLAR_JAVA)" != ""
-
-my_components += \
-    javaloader \
-    javavm \
-    juh
-
-.ENDIF
-
-.INCLUDE: settings.mk
-.INCLUDE: target.mk
-
-ALLTAR : $(MISC)/services.rdb
-
-$(MISC)/services.rdb .ERRREMOVE : $(SOLARENV)/bin/packcomponents.xslt \
-        $(MISC)/services.input $(my_components:^"$(SOLARXMLDIR)/":+".component")
-    $(XSLTPROC) --nonet --stringparam prefix $(SOLARXMLDIR)/ -o $@ \
-        $(SOLARENV)/bin/packcomponents.xslt $(MISC)/services.input
-
-$(MISC)/services.input :
-    echo \
-        '<list>$(my_components:^"<filename>":+".component</filename>")</list>' \
-        > $@
+endif
+# vim: set noet sw=4 ts=4:
