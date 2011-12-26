@@ -172,7 +172,7 @@ void lcl_OutName( OUStringBuffer& rBuffer,
 {
     rBuffer.insert( 0, xNode->getNodeName() );
     OUString sPrefix = xNode->getPrefix();
-    if( sPrefix.getLength() > 0 )
+    if( !sPrefix.isEmpty() )
     {
         rBuffer.insert( 0, sal_Unicode(':') );
         rBuffer.insert( 0, sPrefix );
@@ -193,7 +193,7 @@ void lcl_OutInstance( OUStringBuffer& rBuffer,
         OUString sInstanceName;
         Reference<XEnumeration> xEnum =
             pModel->getInstances()->createEnumeration();
-        while( ( sInstanceName.getLength() == 0 ) && xEnum->hasMoreElements() )
+        while( sInstanceName.isEmpty() && xEnum->hasMoreElements() )
         {
             Sequence<PropertyValue> aValues;
             xEnum->nextElement() >>= aValues;
@@ -370,7 +370,7 @@ OUString Model::getBindingName( const XPropertySet_t& xBinding,
     xBinding->getPropertyValue( OUSTRING("BindingExpression" ) ) >>= sExpression;
 
     OUStringBuffer aBuffer;
-    if( sID.getLength() > 0 )
+    if( !sID.isEmpty() )
     {
         aBuffer.append( sID );
         aBuffer.append( OUSTRING(" (" ));
@@ -867,7 +867,7 @@ OUString lcl_serializeForDisplay( const Reference<XNodeList>& xNodes )
     while( ! xTextInputStream->isEOF() )
     {
         OUString sLine = xTextInputStream->readLine();
-        if( sLine.getLength() > 0
+        if( !sLine.isEmpty()
             && sLine.compareToAscii( "<?xml", 5 ) != 0 )
         {
             aBuffer.append( sLine );
@@ -1024,9 +1024,9 @@ void xforms::setInstanceData(
     OUString sURL;
     bool bURLOnce = false;
     getInstanceData( aSequence, &sID, &xInstance, &sURL, &bURLOnce );
-    const OUString* pID = ( sID.getLength() > 0 ) ? &sID : NULL;
+    const OUString* pID = !sID.isEmpty() ? &sID : NULL;
     const Reference<XDocument>* pInstance = xInstance.is() ? &xInstance : NULL;
-    const OUString* pURL = ( sURL.getLength() > 0 ) ? &sURL : NULL;
+    const OUString* pURL = !sURL.isEmpty() ? &sURL : NULL;
     const bool* pURLOnce = ( bURLOnce && pURL != NULL ) ? &bURLOnce : NULL;
 
     // determine new instance data

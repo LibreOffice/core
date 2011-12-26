@@ -310,7 +310,7 @@ namespace frm
                 // and an active command
                 ::rtl::OUString sActiveCommand;
                 m_xCursorProperties->getPropertyValue( PROPERTY_ACTIVECOMMAND ) >>= sActiveCommand;
-                aState.Enabled &= sActiveCommand.getLength() > 0;
+                aState.Enabled &= !sActiveCommand.isEmpty();
             }
             break;
 
@@ -357,7 +357,7 @@ namespace frm
             {
                 ::rtl::OUString sFilter;
                 m_xCursorProperties->getPropertyValue( PROPERTY_FILTER ) >>= sFilter;
-                if ( sFilter.getLength() )
+                if ( !sFilter.isEmpty() )
                 {
                     aState.State = m_xCursorProperties->getPropertyValue( PROPERTY_APPLYFILTER );
                     aState.Enabled = !impl_isInsertOnlyForm_throw();
@@ -1283,13 +1283,13 @@ namespace frm
     bool FormOperations::impl_isParseable_throw() const
     {
         const_cast< FormOperations* >( this )->impl_ensureInitializedParser_nothrow();
-        return m_xParser.is() && m_xParser->getQuery().getLength();
+        return m_xParser.is() && !m_xParser->getQuery().isEmpty();
     }
 
     //--------------------------------------------------------------------
     bool FormOperations::impl_hasFilterOrOrder_throw() const
     {
-        return impl_isParseable_throw() && ( m_xParser->getFilter().getLength() || m_xParser->getOrder().getLength() );
+        return impl_isParseable_throw() && ( !m_xParser->getFilter().isEmpty() || !m_xParser->getOrder().isEmpty() );
     }
 
     //--------------------------------------------------------------------

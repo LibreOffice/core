@@ -412,7 +412,7 @@ void OImageControlModel::read(const Reference<XObjectInputStream>& _rxInStream) 
             break;
     }
     // Nach dem Lesen die Defaultwerte anzeigen
-    if ( getControlSource().getLength() )
+    if ( !getControlSource().isEmpty() )
     {   // (not if we don't have a control source - the "State" property acts like it is persistent, then
         ::osl::MutexGuard aGuard(m_aMutex); // resetNoBroadcast expects this mutex guarding
         resetNoBroadcast();
@@ -474,7 +474,7 @@ sal_Bool OImageControlModel::impl_handleNewImageURL_lck( ValueChangeInstigator _
     case ImageStoreLink:
     {
         ::rtl::OUString sCommitURL( m_sImageURL );
-        if ( m_sDocumentURL.getLength() )
+        if ( !m_sDocumentURL.isEmpty() )
             sCommitURL = URIHelper::simpleNormalizedMakeRelative( m_sDocumentURL, sCommitURL );
         OSL_ENSURE( m_xColumnUpdate.is(), "OImageControlModel::impl_handleNewImageURL_lck: no bound field, but ImageStoreLink?!" );
         if ( m_xColumnUpdate.is() )
@@ -524,7 +524,7 @@ namespace
 {
     bool lcl_isValidDocumentURL( const ::rtl::OUString& _rDocURL )
     {
-        return ( _rDocURL.getLength() && !_rDocURL.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "private:object" ) ) );
+        return ( !_rDocURL.isEmpty() && !_rDocURL.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "private:object" ) ) );
     }
 }
 
@@ -581,7 +581,7 @@ Any OImageControlModel::translateDbColumnToControlValue()
     case ImageStoreLink:
     {
         ::rtl::OUString sImageLink( m_xColumn->getString() );
-        if ( m_sDocumentURL.getLength() )
+        if ( !m_sDocumentURL.isEmpty() )
             sImageLink = INetURLObject::GetAbsURL( m_sDocumentURL, sImageLink );
         return makeAny( sImageLink );
     }
@@ -800,7 +800,7 @@ void OImageControlControl::implClearGraphics( sal_Bool _bForce )
             ::rtl::OUString sOldImageURL;
             xSet->getPropertyValue( PROPERTY_IMAGE_URL ) >>= sOldImageURL;
 
-            if ( !sOldImageURL.getLength() )
+            if ( sOldImageURL.isEmpty() )
                 // the ImageURL is already empty, so simply setting a new empty one would not suffice
                 // (since it would be ignored)
                 xSet->setPropertyValue( PROPERTY_IMAGE_URL, makeAny( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:emptyImage" ) ) ) );
@@ -976,7 +976,7 @@ void OImageControlControl::mousePressed(const ::com::sun::star::awt::MouseEvent&
             {
                 // but only if our IMAGE_URL property is handled as if it is transient, which is equivalent to
                 // an empty control source
-                if (!hasProperty(PROPERTY_CONTROLSOURCE, xSet) || (::comphelper::getString(xSet->getPropertyValue(PROPERTY_CONTROLSOURCE)).getLength() != 0))
+                if ( !hasProperty(PROPERTY_CONTROLSOURCE, xSet) || !::comphelper::getString(xSet->getPropertyValue(PROPERTY_CONTROLSOURCE)).isEmpty() )
                     return;
             }
 

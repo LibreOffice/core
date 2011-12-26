@@ -350,7 +350,7 @@ namespace frm
                     if ( itemPos != m_aDisplayItemToValueItem.end() )
                     {
                         sItemText = itemPos->second;
-                        if ( sItemText.getLength() )
+                        if ( !sItemText.isEmpty() )
                         {
                             ::dbtools::OPredicateInputController aPredicateInput( maContext.getLegacyServiceFactory(), m_xConnection, getParseContext() );
                             ::rtl::OUString sErrorMessage;
@@ -443,7 +443,7 @@ namespace frm
             aStatement.append( sQuoteChar );
 
             // if the field had an alias in our form's statement, give it this alias in the new statement, too
-            if ( sFieldName.getLength() && ( sFieldName != sRealFieldName ) )
+            if ( !sFieldName.isEmpty() && ( sFieldName != sRealFieldName ) )
             {
                 aStatement.appendAscii(" AS ");
                 aStatement.append( sQuoteChar );
@@ -535,7 +535,7 @@ namespace frm
             // check the text with the SQL-Parser
             ::rtl::OUString aNewText(aText);
             aNewText.trim();
-            if ( aNewText.getLength() )
+            if ( !aNewText.isEmpty() )
             {
                 ::dbtools::OPredicateInputController aPredicateInput( maContext.getLegacyServiceFactory(), m_xConnection, getParseContext() );
                 ::rtl::OUString sErrorMessage;
@@ -642,12 +642,12 @@ namespace frm
                         }
                     }
 
-                    OSL_ENSURE( ( itemPos != m_aDisplayItemToValueItem.end() ) || ( m_aText.getLength() == 0 ),
+                    OSL_ENSURE( ( itemPos != m_aDisplayItemToValueItem.end() ) || m_aText.isEmpty(),
                         "OFilterControl::setText: this text is not in my display list!" );
                     if ( itemPos == m_aDisplayItemToValueItem.end() )
                         m_aText = ::rtl::OUString();
 
-                    if ( m_aText.getLength() == 0)
+                    if ( m_aText.isEmpty() )
                     {
                         while ( xListBox->getSelectedItemPos() >= 0 )
                         {

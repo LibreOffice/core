@@ -227,7 +227,7 @@ void OEditControl::keyPressed(const ::com::sun::star::awt::KeyEvent& e) throw ( 
 
     aTmp = xFormSet->getPropertyValue( PROPERTY_TARGET_URL );
     if (!aTmp.getValueType().equals(::getCppuType((const ::rtl::OUString*)NULL)) ||
-        !getString(aTmp).getLength() )
+        getString(aTmp).isEmpty() )
         return;
 
     Reference<XIndexAccess>  xElements(xParent, UNO_QUERY);
@@ -489,7 +489,7 @@ namespace
                     ::rtl::OString sMessage( "could not transfer the property named '" );
                     sMessage += ::rtl::OString( pSourceProps->Name.getStr(), pSourceProps->Name.getLength(), RTL_TEXTENCODING_ASCII_US );
                     sMessage += ::rtl::OString( "'." );
-                    if ( e.Message.getLength() )
+                    if ( !e.Message.isEmpty() )
                     {
                         sMessage += ::rtl::OString( "\n\nMessage:\n" );
                         sMessage += ::rtl::OString( e.Message.getStr(), e.Message.getLength(), RTL_TEXTENCODING_ASCII_US );
@@ -686,7 +686,7 @@ sal_Bool OEditModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
     aNewValue >>= sNewValue;
 
     if  (   !aNewValue.hasValue()
-        ||  (   !sNewValue.getLength()      // an empty string
+        ||  (   sNewValue.isEmpty()         // an empty string
             &&  m_bEmptyIsNull              // which should be interpreted as NULL
             )
         )
@@ -723,7 +723,7 @@ Any OEditModel::translateDbColumnToControlValue()
     if ( m_pValueFormatter.get() )
     {
         ::rtl::OUString sValue( m_pValueFormatter->getFormattedValue() );
-        if  (   !sValue.getLength()
+        if  (   sValue.isEmpty()
             &&  m_pValueFormatter->getColumn().is()
             &&  m_pValueFormatter->getColumn()->wasNull()
             )

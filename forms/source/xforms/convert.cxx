@@ -386,7 +386,7 @@ namespace
             if ( sFractional.getLength() > 2 )
                 // our precision is HundrethSeconds - it's all a css.util.Time can hold
                 sFractional = sFractional.copy( 0, 2 );
-            if ( sFractional.getLength() )
+            if ( !sFractional.isEmpty() )
             {
                 sal_Int32 nFractional = 0;
                 if ( StringTokenizer( sFractional, 0 ).getNextToken().toInt32( nFractional ) )

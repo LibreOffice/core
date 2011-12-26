@@ -101,7 +101,7 @@ void PathExpression::setExpression( const OUString& rExpression )
 const rtl::OUString PathExpression::_getExpressionForEvaluation() const
 {
     OUString sExpr = ComputedExpression::_getExpressionForEvaluation();
-    if( sExpr.getLength() == 0 )
+    if( sExpr.isEmpty())
         sExpr = OUSTRING(".");
     return sExpr;
 }

@@ -510,7 +510,7 @@ ODatabaseForm::~ODatabaseForm()
     {
         aName = pSuccObj->aName;
         aValue = pSuccObj->aValue;
-        if( pSuccObj->nRepresentation == SUCCESSFUL_REPRESENT_FILE && aValue.getLength() )
+        if( pSuccObj->nRepresentation == SUCCESSFUL_REPRESENT_FILE && !aValue.isEmpty() )
         {
             // Bei File-URLs wird der Dateiname und keine URL uebertragen,
             // weil Netscape dies so macht.
@@ -635,7 +635,7 @@ void ODatabaseForm::AppendComponent(HtmlSuccessfulObjList& rList, const Referenc
     xComponentSet->getPropertyValue(PROPERTY_CLASSID) >>= nClassId;
     ::rtl::OUString aName;
     xComponentSet->getPropertyValue( PROPERTY_NAME ) >>= aName;
-    if( !aName.getLength() && nClassId != FormComponentType::IMAGEBUTTON)
+    if( aName.isEmpty() && nClassId != FormComponentType::IMAGEBUTTON)
         return;
     else    // Name um den Prefix erweitern
         aName = rNamePrefix + aName;
@@ -675,12 +675,12 @@ void ODatabaseForm::AppendComponent(HtmlSuccessfulObjList& rList, const Referenc
                     ::rtl::OUString aRhs = ::rtl::OUString::valueOf( MouseEvt.X );
 
                     // nur wenn ein Name vorhanden ist, kann ein name.x
-                    aLhs += aName.getLength() ? UniString::CreateFromAscii(".x") : UniString::CreateFromAscii("x");
+                    aLhs += !aName.isEmpty() ? UniString::CreateFromAscii(".x") : UniString::CreateFromAscii("x");
                     rList.push_back( HtmlSuccessfulObj(aLhs, aRhs) );
 
                     aLhs = aName;
                     aRhs = ::rtl::OUString::valueOf( MouseEvt.Y );
-                    aLhs += aName.getLength() ? UniString::CreateFromAscii(".y") : UniString::CreateFromAscii("y");
+                    aLhs += !aName.isEmpty() ? UniString::CreateFromAscii(".y") : UniString::CreateFromAscii("y");
                     rList.push_back( HtmlSuccessfulObj(aLhs, aRhs) );
 
                 }
@@ -907,7 +907,7 @@ void ODatabaseForm::AppendComponent(HtmlSuccessfulObjList& rList, const Referenc
             for(i=0; i<nCurCnt; ++i )
             {
                 sal_Int16  nSelPos = pSels[i];
-                if (nSelPos < nValCnt && pVals[nSelPos].getLength())
+                if (nSelPos < nValCnt && !pVals[nSelPos].isEmpty())
                 {
                     aSubValue = pVals[nSelPos];
                 }
@@ -1261,7 +1261,7 @@ sal_Bool ODatabaseForm::executeRowSet(::osl::ResettableMutexGuard& _rClearForNot
     catch(const SQLException& eDb)
     {
         _rClearForNotifies.clear();
-        if (m_sCurrentErrorContext.getLength())
+        if (!m_sCurrentErrorContext.isEmpty())
             onError(eDb, m_sCurrentErrorContext);
         else
             onError(eDb, FRM_RES_STRING(RID_STR_READERROR));
@@ -1303,7 +1303,7 @@ sal_Bool ODatabaseForm::executeRowSet(::osl::ResettableMutexGuard& _rClearForNot
             catch(const SQLException& eDB)
             {
                 _rClearForNotifies.clear();
-                if (m_sCurrentErrorContext.getLength())
+                if (!m_sCurrentErrorContext.isEmpty())
                     onError(eDB, m_sCurrentErrorContext);
                 else
                     onError(eDB, FRM_RES_STRING(RID_STR_READERROR));
@@ -1864,7 +1864,7 @@ PropertyState ODatabaseForm::getPropertyStateByHandle(sal_Int32 nHandle)
             break;
 
         case PROPERTY_ID_FILTER:
-            if ( !m_aFilterManager.getFilterComponent( FilterManager::fcPublicFilter ).getLength() )
+            if ( m_aFilterManager.getFilterComponent( FilterManager::fcPublicFilter ).isEmpty() )
                 eState = PropertyState_DEFAULT_VALUE;
             else
                 eState = PropertyState_DIRECT_VALUE;
@@ -2140,7 +2140,7 @@ void SAL_CALL ODatabaseForm::submit( const Reference<XControl>& Control,
     {
         ::osl::MutexGuard aGuard(m_aMutex);
         // Sind Controls und eine Submit-URL vorhanden?
-        if( !getCount() || !m_aTargetURL.getLength() )
+        if( !getCount() || m_aTargetURL.isEmpty() )
             return;
     }
 
@@ -2541,7 +2541,7 @@ void SAL_CALL ODatabaseForm::setGroup( const Sequence<Reference<XControlModel> >
             continue;
         }
 
-        if (!sGroupName.getLength())
+        if (sGroupName.isEmpty())
             xSet->getPropertyValue(PROPERTY_NAME) >>= sGroupName;
         else
             xSet->setPropertyValue(PROPERTY_NAME, makeAny(sGroupName));
@@ -2715,7 +2715,7 @@ sal_Bool ODatabaseForm::canShareConnection( const Reference< XPropertySet >& _rx
     // both rowsets share are connected to the same data source
     if ( sParentDataSource == sOwnDatasource )
     {
-        if ( 0 != sParentDataSource.getLength() )
+        if ( !sParentDataSource.isEmpty() )
             // and it's really a data source name (not empty)
             bCanShareConnection = sal_True;
         else
@@ -2894,7 +2894,7 @@ void ODatabaseForm::load_impl(sal_Bool bCausedByParentForm, sal_Bool bMoveToFirs
     sal_Bool bConnected = implEnsureConnection();
 
     // we don't have to execute if we do not have a command to execute
-    sal_Bool bExecute = bConnected && m_xAggregateSet.is() && getString(m_xAggregateSet->getPropertyValue(PROPERTY_COMMAND)).getLength();
+    sal_Bool bExecute = bConnected && m_xAggregateSet.is() && !getString(m_xAggregateSet->getPropertyValue(PROPERTY_COMMAND)).isEmpty();
 
     // a database form always uses caching
     // we use starting fetchsize with at least 10 rows

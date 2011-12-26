@@ -455,7 +455,7 @@ void SAL_CALL OComboBoxModel::read(const Reference<stario::XObjectInputStream>& 
 
     // Stringliste muss geleert werden, wenn eine Listenquelle gesetzt ist
     // dieses kann der Fall sein wenn im alive modus gespeichert wird
-    if  (   m_aListSource.getLength()
+    if  (   !m_aListSource.isEmpty()
         &&  !hasExternalListSource()
         )
     {
@@ -469,7 +469,7 @@ void SAL_CALL OComboBoxModel::read(const Reference<stario::XObjectInputStream>& 
         readCommonProperties(_rxInStream);
 
     // Nach dem Lesen die Defaultwerte anzeigen
-    if ( getControlSource().getLength() )
+    if ( !getControlSource().isEmpty() )
     {
         // (not if we don't have a control source - the "State" property acts like it is persistent, then
         resetNoBroadcast();
@@ -500,7 +500,7 @@ void OComboBoxModel::loadData( bool _bForce )
         return;
     }
 
-    if (!m_aListSource.getLength() || m_eListSourceType == ListSourceType_VALUELIST)
+    if (m_aListSource.isEmpty() || m_eListSourceType == ListSourceType_VALUELIST)
         return;
 
     ::utl::SharedUNOComponent< XResultSet > xListCursor;
@@ -548,7 +548,7 @@ void OComboBoxModel::loadData( bool _bForce )
                     }
                 }
 
-                if (!aFieldName.getLength())
+                if (aFieldName.isEmpty())
                     break;
 
                 Reference<XDatabaseMetaData> xMeta = xConnection->getMetaData();
@@ -700,7 +700,7 @@ void OComboBoxModel::onConnectedDbColumn( const Reference< XInterface >& _rxForm
     getPropertyValue( PROPERTY_STRINGITEMLIST ) >>= m_aDesignModeStringItems;
 
     // Daten nur laden, wenn eine Listenquelle angegeben wurde
-    if ( m_aListSource.getLength() && m_xCursor.is() && !hasExternalListSource() )
+    if ( !m_aListSource.isEmpty() && m_xCursor.is() && !hasExternalListSource() )
         loadData( false );
 }
 
@@ -722,7 +722,7 @@ void SAL_CALL OComboBoxModel::reloaded( const EventObject& aEvent ) throw(Runtim
     OBoundControlModel::reloaded(aEvent);
 
     // reload data if we have a list source
-    if ( m_aListSource.getLength() && m_xCursor.is() && !hasExternalListSource() )
+    if ( !m_aListSource.isEmpty() && m_xCursor.is() && !hasExternalListSource() )
         loadData( false );
 }
 
@@ -745,7 +745,7 @@ sal_Bool OComboBoxModel::commitControlValueToDbColumn( bool _bPostReset )
     if ( bModified )
     {
         if  (   !aNewValue.hasValue()
-            ||  (   !sNewValue.getLength()      // an empty string
+            ||  (   sNewValue.isEmpty()         // an empty string
                 &&  m_bEmptyIsNull              // which should be interpreted as NULL
                 )
             )
@@ -814,7 +814,7 @@ Any OComboBoxModel::translateDbColumnToControlValue()
     if ( m_pValueFormatter.get() )
     {
         ::rtl::OUString sValue( m_pValueFormatter->getFormattedValue() );
-        if  (   !sValue.getLength()
+        if  (   sValue.isEmpty()
             &&  m_pValueFormatter->getColumn().is()
             &&  m_pValueFormatter->getColumn()->wasNull()
             )

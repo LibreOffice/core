@@ -178,7 +178,7 @@ namespace frm
         ::std::list< Type > aTypes;
         aTypes.push_back( ::getCppuType( static_cast< sal_Bool* >( NULL ) ) );
 
-        if ( m_sReferenceValue.getLength() )
+        if ( !m_sReferenceValue.isEmpty() )
             aTypes.push_front( ::getCppuType( static_cast< ::rtl::OUString* >( NULL ) ) );
             // push_front, because this is the preferred type
 

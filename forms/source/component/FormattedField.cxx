@@ -278,7 +278,7 @@ void OFormattedControl::keyPressed(const ::com::sun::star::awt::KeyEvent& e) thr
 
     Any aTmp(xFormSet->getPropertyValue( PROPERTY_TARGET_URL ));
     if (!isA(aTmp, static_cast< ::rtl::OUString* >(NULL)) ||
-        !getString(aTmp).getLength() )
+        getString(aTmp).isEmpty() )
         return;
 
     Reference<XIndexAccess>  xElements(xParent, UNO_QUERY);
@@ -981,7 +981,7 @@ void OFormattedModel::read(const Reference<XObjectInputStream>& _rxInStream) thr
 
                 // this property is only to be set if we have no control source : in all other cases the base class did a
                 // reset after it's read and this set the effective value to a default value
-                if ( m_xAggregateSet.is() && ( getControlSource().getLength() == 0 ) )
+                if ( m_xAggregateSet.is() && getControlSource().isEmpty() )
                 {
                     try
                     {
@@ -1029,7 +1029,7 @@ sal_Bool OFormattedModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
         // Leerstring + EmptyIsNull = void
         if  (   !aControlValue.hasValue()
             ||  (   ( aControlValue.getValueType().getTypeClass() == TypeClass_STRING )
-                &&  ( getString( aControlValue ).getLength() == 0 )
+                &&  getString( aControlValue ).isEmpty()
                 &&  m_bEmptyIsNull
                 )
             )

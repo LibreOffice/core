@@ -247,7 +247,7 @@ bool Binding::isValid()
         maMIP.isConstraint() &&
         ( ! maMIP.isRequired() ||
              ( maBindingExpression.hasValue() &&
-               maBindingExpression.getString().getLength() > 0 ) );
+               !maBindingExpression.getString().isEmpty() ) );
 }
 
 bool Binding::isUseful()
@@ -262,7 +262,7 @@ bool Binding::isUseful()
     bool bUseful =
         getModelImpl() == NULL
 //        || msBindingID.getLength() > 0
-        || msTypeName.getLength() > 0
+        || ! msTypeName.isEmpty()
         || ! maReadonly.isEmptyExpression()
         || ! maRelevant.isEmptyExpression()
         || ! maRequired.isEmptyExpression()
@@ -280,14 +280,14 @@ OUString Binding::explainInvalid()
     OUString sReason;
     if( ! maBindingExpression.getNode().is() )
     {
-        sReason = ( maBindingExpression.getExpression().getLength() == 0 )
+        sReason = ( maBindingExpression.getExpression().isEmpty() )
             ? getResource( RID_STR_XFORMS_NO_BINDING_EXPRESSION )
             : getResource( RID_STR_XFORMS_INVALID_BINDING_EXPRESSION );
     }
     else if( ! isValid_DataType() )
     {
         sReason = explainInvalid_DataType();
-        if( sReason.getLength() == 0 )
+        if( sReason.isEmpty() )
         {
             // no explanation given by data type? Then give generic message
             sReason = getResource( RID_STR_XFORMS_INVALID_VALUE,
@@ -299,13 +299,13 @@ OUString Binding::explainInvalid()
         sReason = maMIP.getConstraintExplanation();
     }
     else if( maMIP.isRequired() && maBindingExpression.hasValue() &&
-        ( maBindingExpression.getString().getLength() == 0 )  )
+        maBindingExpression.getString().isEmpty() )
     {
         sReason = getResource( RID_STR_XFORMS_REQUIRED );
     }
     // else: no explanation given; should only happen if data is valid
 
-    OSL_ENSURE( ( sReason.getLength() == 0 ) == isValid(),
+    OSL_ENSURE( sReason.isEmpty() == isValid(),
                 "invalid data should have an explanation!" );
 
     return sReason;
@@ -821,7 +821,7 @@ MIP Binding::getLocalMIP() const
         if( ! aMIP.isConstraint() )
             aMIP.setConstraintExplanation( msExplainConstraint );
     }
-    if( msTypeName.getLength() > 0 )
+    if( !msTypeName.isEmpty() )
         aMIP.setTypeName( msTypeName );
 
     // calculate: only handle presence of calculate; value set elsewhere
@@ -1024,7 +1024,7 @@ void Binding::_checkBindingID()
     if( getModel().is() )
     {
         Reference<XNameAccess> xBindings( getModel()->getBindings(), UNO_QUERY_THROW );
-        if( msBindingID.getLength() == 0 )
+        if( msBindingID.isEmpty() )
         {
             // no binding ID? then make one up!
             OUString sIDPrefix = getResource( RID_STR_XFORMS_BINDING_UI_NAME );

@@ -127,7 +127,7 @@ void OCurrencyModel::implConstruct()
                     bPrependCurrencySymbol = sal_False;
                     break;
             }
-            if (sCurrencySymbol.getLength())
+            if (!sCurrencySymbol.isEmpty())
             {
                 m_xAggregateSet->setPropertyValue(PROPERTY_CURRENCYSYMBOL, makeAny(sCurrencySymbol));
                 m_xAggregateSet->setPropertyValue(PROPERTY_CURRSYM_POSITION, makeAny(bPrependCurrencySymbol));

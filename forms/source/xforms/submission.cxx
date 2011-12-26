@@ -285,7 +285,7 @@ bool Submission::doSubmit( const Reference< XInteractionHandler >& xHandler )
     // construct XXPathObject for submission doc; use bind in preference of ref
     EvaluationContext aEvalContext;
     ComputedExpression aExpression;
-    if( msBind.getLength() != 0 )
+    if( !msBind.isEmpty() )
     {
         Binding* pBinding = Binding::getBinding( mxModel->getBinding(msBind) );
         if( pBinding != NULL )
@@ -295,7 +295,7 @@ bool Submission::doSubmit( const Reference< XInteractionHandler >& xHandler )
         }
         // TODO: else: illegal binding name -> raise error
     }
-    else if( maRef.getExpression().getLength() != 0 )
+    else if( !maRef.getExpression().isEmpty() )
     {
         aExpression.setExpression( maRef.getExpression() );
         aEvalContext = Model::getModel( mxModel )->getEvaluationContext();
@@ -510,7 +510,7 @@ void SAL_CALL Submission::submitWithInteraction(
     Reference< XModel > xModel( mxModel );
     ::rtl::OUString sID( msID );
 
-    if ( !xModel.is() || !msID.getLength() )
+    if ( !xModel.is() || msID.isEmpty() )
         throw RuntimeException(
                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "This is not a valid submission object." ) ),
                 *this
@@ -615,7 +615,7 @@ static sal_Bool _isIgnorable(const Reference< XNode >& aNode)
     if (aNode->getNodeType() == NodeType_TEXT_NODE)
     {
         OUString aTrimmedValue = aNode->getNodeValue().trim();
-        if (aTrimmedValue.getLength() == 0) return sal_True;
+        if (aTrimmedValue.isEmpty()) return sal_True;
     }
 
     return sal_False;

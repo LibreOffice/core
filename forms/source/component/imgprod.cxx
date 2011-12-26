@@ -247,7 +247,7 @@ void ImageProducer::SetImage( const ::rtl::OUString& rPath )
     {
         mpStm = ::svt::GraphicAccess::getImageStream( ::comphelper::getProcessServiceFactory(), maURL );
     }
-    else if( maURL.getLength() )
+    else if( !maURL.isEmpty() )
     {
         SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( maURL, STREAM_STD_READ );
         mpStm = pIStm ? new SvStream( new ImgProdLockBytes( pIStm, sal_True ) ) : NULL;

@@ -75,7 +75,7 @@ const sal_uInt16 COMPATIBLE_HIDDEN  = 0x0008;
 const StringSequence& getColumnTypes()
 {
     static StringSequence aColumnTypes(10);
-    if (!aColumnTypes.getConstArray()[0].getLength())
+    if (aColumnTypes.getConstArray()[0].isEmpty())
     {
         ::rtl::OUString* pNames = aColumnTypes.getArray();
         pNames[TYPE_CHECKBOX]       = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CheckBox" ) );
@@ -218,7 +218,7 @@ OGridColumn::OGridColumn( const comphelper::ComponentContext& _rContext, const :
     DBG_CTOR(OGridColumn,NULL);
 
     // Anlegen des UnoControlModels
-    if ( m_aModelName.getLength() )    // is there a to-be-aggregated model?
+    if ( !m_aModelName.isEmpty() )    // is there a to-be-aggregated model?
     {
         increment( m_refCount );
 

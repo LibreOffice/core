@@ -636,7 +636,7 @@ namespace frm
             readCommonProperties(_rxInStream);
 
         // Nach dem Lesen die Defaultwerte anzeigen
-        if ( getControlSource().getLength() )
+        if ( !getControlSource().isEmpty() )
             // (not if we don't have a control source - the "State" property acts like it is persistent, then
             resetNoBroadcast();
     }
@@ -672,7 +672,7 @@ namespace frm
         );
 
         // outta here if we don't have all pre-requisites
-        if ( !xConnection.is() || !sListSource.getLength() )
+        if ( !xConnection.is() || sListSource.isEmpty() )
         {
             ValueList().swap(m_aBoundValues);
             return;
@@ -743,17 +743,17 @@ namespace frm
                             }
                         }
                     }
-                    if (!aFieldName.getLength())
+                    if (aFieldName.isEmpty())
                         break;
 
                     Reference<XDatabaseMetaData> xMeta = xConnection->getMetaData();
                     ::rtl::OUString aQuote = xMeta->getIdentifierQuoteString();
                     ::rtl::OUString aStatement(RTL_CONSTASCII_USTRINGPARAM("SELECT "));
-                    if (!aBoundFieldName.getLength())   // act like a combobox
+                    if (aBoundFieldName.isEmpty())   // act like a combobox
                         aStatement += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DISTINCT ") );
 
                     aStatement += quoteName(aQuote,aFieldName);
-                    if (aBoundFieldName.getLength())
+                    if (!aBoundFieldName.isEmpty())
                     {
                         aStatement += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(", ") );
                         aStatement += quoteName(aQuote, aBoundFieldName);
@@ -877,7 +877,7 @@ namespace frm
                             aValueList.push_back( aBoundValue );
                         }
 
-                        if ( bUseNULL && ( m_nNULLPos == -1 ) && !aStr.getLength() )
+                        if ( bUseNULL && ( m_nNULLPos == -1 ) && aStr.isEmpty() )
                             m_nNULLPos = sal_Int16( aDisplayList.size() - 1 );
                     }
                 }

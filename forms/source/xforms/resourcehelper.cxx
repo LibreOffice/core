@@ -64,7 +64,7 @@ OUString getResource( sal_uInt16 nResourceId,
                       const OUString& rInfo3 )
 {
     OUString sResource = frm::ResourceManager::loadString( nResourceId );
-    OSL_ENSURE( sResource.getLength() > 0, "resource not found?" );
+    OSL_ENSURE( !sResource.isEmpty(), "resource not found?" );
 
     // use old style String class for search and replace, so we don't have to
     // code this again.

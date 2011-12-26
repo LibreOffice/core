@@ -601,7 +601,7 @@ OControlModel::OControlModel(
         // #i37342#
 {
     DBG_CTOR(OControlModel, NULL);
-    if (_rUnoControlModelTypeName.getLength())  // the is a model we have to aggregate
+    if (!_rUnoControlModelTypeName.isEmpty())  // the is a model we have to aggregate
     {
         increment(m_refCount);
 
@@ -613,7 +613,7 @@ OControlModel::OControlModel(
             {
                 try
                 {
-                    if ( rDefault.getLength() )
+                    if ( !rDefault.isEmpty() )
                         m_xAggregateSet->setPropertyValue( PROPERTY_DEFAULTCONTROL, makeAny( rDefault ) );
                 }
                 catch( const Exception& )
@@ -1392,7 +1392,7 @@ void OBoundControlModel::implInitValuePropertyListening( ) const
     if ( m_bSupportsExternalBinding || m_bSupportsValidation || !m_bCommitable )
     {
         OSL_ENSURE( m_pAggPropMultiplexer, "OBoundControlModel::implInitValuePropertyListening: no multiplexer!" );
-        if ( m_pAggPropMultiplexer && m_sValuePropertyName.getLength() )
+        if ( m_pAggPropMultiplexer && !m_sValuePropertyName.isEmpty() )
             m_pAggPropMultiplexer->addProperty( m_sValuePropertyName );
     }
 }
@@ -1400,18 +1400,18 @@ void OBoundControlModel::implInitValuePropertyListening( ) const
 //-----------------------------------------------------------------------------
 void OBoundControlModel::initOwnValueProperty( const ::rtl::OUString& i_rValuePropertyName )
 {
-    OSL_PRECOND( !m_sValuePropertyName.getLength() && -1 == m_nValuePropertyAggregateHandle,
+    OSL_PRECOND( m_sValuePropertyName.isEmpty() && -1 == m_nValuePropertyAggregateHandle,
         "OBoundControlModel::initOwnValueProperty: value property is already initialized!" );
-    OSL_ENSURE( i_rValuePropertyName.getLength(), "OBoundControlModel::initOwnValueProperty: invalid property name!" );
+    OSL_ENSURE( !i_rValuePropertyName.isEmpty(), "OBoundControlModel::initOwnValueProperty: invalid property name!" );
     m_sValuePropertyName = i_rValuePropertyName;
 }
 
 //-----------------------------------------------------------------------------
 void OBoundControlModel::initValueProperty( const ::rtl::OUString& _rValuePropertyName, sal_Int32 _nValuePropertyExternalHandle )
 {
-    OSL_PRECOND( !m_sValuePropertyName.getLength() && -1 == m_nValuePropertyAggregateHandle,
+    OSL_PRECOND( m_sValuePropertyName.isEmpty() && -1 == m_nValuePropertyAggregateHandle,
         "OBoundControlModel::initValueProperty: value property is already initialized!" );
-    OSL_ENSURE( _rValuePropertyName.getLength(), "OBoundControlModel::initValueProperty: invalid property name!" );
+    OSL_ENSURE( !_rValuePropertyName.isEmpty(), "OBoundControlModel::initValueProperty: invalid property name!" );
     OSL_ENSURE( _nValuePropertyExternalHandle != -1, "OBoundControlModel::initValueProperty: invalid property handle!" );
 
     m_sValuePropertyName = _rValuePropertyName;
@@ -1433,7 +1433,7 @@ void OBoundControlModel::initValueProperty( const ::rtl::OUString& _rValueProper
 //-----------------------------------------------------------------------------
 void OBoundControlModel::suspendValueListening( )
 {
-    OSL_PRECOND( m_sValuePropertyName.getLength(), "OBoundControlModel::suspendValueListening: don't have a value property!" );
+    OSL_PRECOND( !m_sValuePropertyName.isEmpty(), "OBoundControlModel::suspendValueListening: don't have a value property!" );
     OSL_PRECOND( m_pAggPropMultiplexer, "OBoundControlModel::suspendValueListening: I *am* not listening!" );
 
     if ( m_pAggPropMultiplexer )
@@ -1443,7 +1443,7 @@ void OBoundControlModel::suspendValueListening( )
 //-----------------------------------------------------------------------------
 void OBoundControlModel::resumeValueListening( )
 {
-    OSL_PRECOND( m_sValuePropertyName.getLength(), "OBoundControlModel::resumeValueListening: don't have a value property!" );
+    OSL_PRECOND( !m_sValuePropertyName.isEmpty(), "OBoundControlModel::resumeValueListening: don't have a value property!" );
     OSL_PRECOND( m_pAggPropMultiplexer, "OBoundControlModel::resumeValueListening: I *am* not listening at all!" );
     OSL_PRECOND( !m_pAggPropMultiplexer || m_pAggPropMultiplexer->locked(), "OBoundControlModel::resumeValueListening: listening not suspended currently!" );
 
@@ -1554,9 +1554,9 @@ void OBoundControlModel::_propertyChanged( const PropertyChangeEvent& _rEvt ) th
 void OBoundControlModel::startAggregatePropertyListening( const ::rtl::OUString& _rPropertyName )
 {
     OSL_PRECOND( m_pAggPropMultiplexer, "OBoundControlModel::startAggregatePropertyListening: no multiplexer!" );
-    OSL_ENSURE( _rPropertyName.getLength(), "OBoundControlModel::startAggregatePropertyListening: invalid property name!" );
+    OSL_ENSURE( !_rPropertyName.isEmpty(), "OBoundControlModel::startAggregatePropertyListening: invalid property name!" );
 
-    if ( m_pAggPropMultiplexer && _rPropertyName.getLength() )
+    if ( m_pAggPropMultiplexer && !_rPropertyName.isEmpty() )
     {
         m_pAggPropMultiplexer->addProperty( _rPropertyName );
     }
@@ -2036,7 +2036,7 @@ sal_Bool SAL_CALL OBoundControlModel::commit() throw(RuntimeException)
         // in most cases, no action is required: For most derivees, we know the value property of
         // our control (see initValueProperty), and when an external binding is active, we
         // instantly forward all changes in this property to the external binding.
-        if ( !m_sValuePropertyName.getLength() )
+        if ( m_sValuePropertyName.isEmpty() )
             // but for those derivees which did not use this feature, we need an
             // explicit transfer
             transferControlValueToExternal( aLock );
@@ -2337,7 +2337,7 @@ void OBoundControlModel::doSetControlValue( const Any& _rValue )
 {
     OSL_PRECOND( m_xAggregateFastSet.is() && m_xAggregateSet.is(),
         "OBoundControlModel::doSetControlValue: invalid aggregate !" );
-    OSL_PRECOND( m_sValuePropertyName.getLength() || ( m_nValuePropertyAggregateHandle != -1 ),
+    OSL_PRECOND( !m_sValuePropertyName.isEmpty() || ( m_nValuePropertyAggregateHandle != -1 ),
         "OBoundControlModel::doSetControlValue: please override if you have own value property handling!" );
 
     try
@@ -2350,7 +2350,7 @@ void OBoundControlModel::doSetControlValue( const Any& _rValue )
         {
             m_xAggregateFastSet->setFastPropertyValue( m_nValuePropertyAggregateHandle, _rValue );
         }
-        else if ( m_sValuePropertyName.getLength() && m_xAggregateSet.is() )
+        else if ( !m_sValuePropertyName.isEmpty() && m_xAggregateSet.is() )
         {
             m_xAggregateSet->setPropertyValue( m_sValuePropertyName, _rValue );
         }
@@ -2895,7 +2895,7 @@ Any OBoundControlModel::getControlValue( ) const
 {
     OSL_PRECOND( m_xAggregateFastSet.is() && m_xAggregateSet.is(),
         "OBoundControlModel::getControlValue: invalid aggregate !" );
-    OSL_PRECOND( m_sValuePropertyName.getLength() || ( m_nValuePropertyAggregateHandle != -1 ),
+    OSL_PRECOND( !m_sValuePropertyName.isEmpty() || ( m_nValuePropertyAggregateHandle != -1 ),
         "OBoundControlModel::getControlValue: please override if you have own value property handling!" );
 
     // determine the current control value
@@ -2904,7 +2904,7 @@ Any OBoundControlModel::getControlValue( ) const
     {
         aControlValue = m_xAggregateFastSet->getFastPropertyValue( m_nValuePropertyAggregateHandle );
     }
-    else if ( m_sValuePropertyName.getLength() && m_xAggregateSet.is() )
+    else if ( !m_sValuePropertyName.isEmpty() && m_xAggregateSet.is() )
     {
         aControlValue = m_xAggregateSet->getPropertyValue( m_sValuePropertyName );
     }

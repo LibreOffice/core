@@ -402,7 +402,7 @@ void Model::loadInstance( sal_Int32 nInstance )
     getInstanceData( aSequence, NULL, NULL, &sURL, &bOnce );
 
     // if we have a URL, load the document and set it into the instance
-    if( sURL.getLength() > 0 )
+    if( !sURL.isEmpty() )
     {
         try
         {

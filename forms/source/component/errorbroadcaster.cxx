@@ -74,7 +74,7 @@ namespace frm
     void SAL_CALL OErrorBroadcaster::onError( const SQLException& _rException, const ::rtl::OUString& _rContextDescription )
     {
         Any aError;
-        if ( _rContextDescription.getLength() )
+        if ( !_rContextDescription.isEmpty() )
             aError = makeAny( prependErrorInfo( _rException, static_cast< XSQLErrorBroadcaster* >( this ), _rContextDescription ) );
         else
             aError = makeAny( _rException );

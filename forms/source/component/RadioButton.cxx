@@ -168,7 +168,7 @@ void ORadioButtonModel::SetSiblingPropsTo(const ::rtl::OUString& rPropName, cons
     ::rtl::OUString sMyGroup;
     if (hasProperty(PROPERTY_GROUP_NAME, this))
         this->getPropertyValue(PROPERTY_GROUP_NAME) >>= sMyGroup;
-    if (sMyGroup.getLength() == 0)
+    if (sMyGroup.isEmpty())
         sMyGroup = m_aName;
 
     // meine Siblings durchiterieren
@@ -276,9 +276,9 @@ void ORadioButtonModel::setControlSource()
                 xSiblingProperties->getPropertyValue(PROPERTY_GROUP_NAME) >>= sSiblingGroupName;
             xSiblingProperties->getPropertyValue(PROPERTY_NAME) >>= sSiblingName;
 
-            if ((sGroupName.getLength() == 0 && sSiblingGroupName.getLength() == 0 &&   // (no group name
+            if ((sGroupName.isEmpty() && sSiblingGroupName.isEmpty() &&                 // (no group name
                  sName == sSiblingName) ||                                              //  names match) or
-                (sGroupName.getLength() != 0 && sSiblingGroupName.getLength() != 0 &&   // (have group name
+                (!sGroupName.isEmpty() && !sSiblingGroupName.isEmpty() &&               // (have group name
                  sGroupName == sSiblingGroupName))                                      //  they match)
             {
                 setPropertyValue(PROPERTY_CONTROLSOURCE, xSiblingProperties->getPropertyValue(PROPERTY_CONTROLSOURCE));
@@ -358,7 +358,7 @@ void SAL_CALL ORadioButtonModel::read(const Reference<XObjectInputStream>& _rxIn
     setDefaultChecked( (ToggleState)nDefaultChecked );
 
     // Nach dem Lesen die Defaultwerte anzeigen
-    if ( getControlSource().getLength() )
+    if ( !getControlSource().isEmpty() )
         // (not if we don't have a control source - the "State" property acts like it is persistent, then
         resetNoBroadcast();
 }

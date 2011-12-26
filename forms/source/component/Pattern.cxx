@@ -171,7 +171,7 @@ sal_Bool OPatternModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
         aNewValue >>= sNewValue;
 
         if  (   !aNewValue.hasValue()
-            ||  (   !sNewValue.getLength()      // an empty string
+            ||  (   sNewValue.isEmpty()         // an empty string
                 &&  m_bEmptyIsNull              // which should be interpreted as NULL
                 )
             )
@@ -222,7 +222,7 @@ Any OPatternModel::translateDbColumnToControlValue()
     if ( m_pFormattedValue.get() )
     {
         ::rtl::OUString sValue( m_pFormattedValue->getFormattedValue() );
-        if  (   !sValue.getLength()
+        if  (   sValue.isEmpty()
             &&  m_pFormattedValue->getColumn().is()
             &&  m_pFormattedValue->getColumn()->wasNull()
             )

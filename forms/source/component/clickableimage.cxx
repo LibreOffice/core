@@ -279,7 +279,7 @@ namespace frm
                 aURL.Complete =
                     getString(xSet->getPropertyValue(PROPERTY_TARGET_URL));
 
-                if (aURL.Complete.getLength() && (LOCAL_URL_PREFIX == aURL.Complete.getStr()[0]))
+                if (!aURL.Complete.isEmpty() && (LOCAL_URL_PREFIX == aURL.Complete.getStr()[0]))
                 {   // the URL contains a local URL only. Since the URLTransformer does not handle this case correctly
                     // (it can't: it does not know the document URL), we have to take care for this ourself.
                     // The real solution would be to not allow such relative URLs (there is a rule that at runtime, all
@@ -719,7 +719,7 @@ namespace frm
     //------------------------------------------------------------------------------
     void OClickableImageBaseModel::SetURL( const ::rtl::OUString& rURL )
     {
-        if (m_pMedium || !rURL.getLength())
+        if (m_pMedium || rURL.isEmpty())
         {
             // Den Stream am Producer freigeben, bevor das Medium geloscht wird.
             GetImageProducer()->SetImage(String());
@@ -733,7 +733,7 @@ namespace frm
             // we treat an invalid URL like we would treat no URL
             return;
 
-        if (rURL.getLength() && !::svt::GraphicAccess::isSupportedURL( rURL ) )
+        if (!rURL.isEmpty() && !::svt::GraphicAccess::isSupportedURL( rURL ) )
        {
             if (m_pMedium)
                 delete m_pMedium;
@@ -823,7 +823,7 @@ namespace frm
             if( xModel.is() )
             {
                 ::rtl::OUString sReferer( xModel->getURL() );
-                if( sReferer.getLength() )
+                if( !sReferer.isEmpty() )
                     m_pMedium->SetReferer( sReferer );
             }
     #endif

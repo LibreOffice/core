@@ -352,14 +352,14 @@ void SAL_CALL OGroupManager::propertyChange(const PropertyChangeEvent& evt) thro
     if (hasProperty( PROPERTY_GROUP_NAME, xSet ))
         xSet->getPropertyValue( PROPERTY_GROUP_NAME ) >>= sGroupName;
     if (evt.PropertyName == PROPERTY_NAME) {
-        if (sGroupName.getLength() > 0)
+        if (!sGroupName.isEmpty())
             return; // group hasn't changed; ignore this name change.
         // no GroupName; use Name as GroupNme
         evt.OldValue >>= sGroupName;
     }
     else if (evt.PropertyName == PROPERTY_GROUP_NAME) {
         evt.OldValue >>= sGroupName;
-        if (sGroupName.getLength() == 0) {
+        if (sGroupName.isEmpty()) {
             // No prior GroupName; fallback to Nme
             xSet->getPropertyValue( PROPERTY_NAME ) >>= sGroupName;
         }
@@ -516,7 +516,7 @@ void OGroupManager::RemoveElement( const Reference<XPropertySet>& xSet )
     ::rtl::OUString sGroupName;
     if (hasProperty( PROPERTY_GROUP_NAME, xComponent )) {
         xComponent->getPropertyValue( PROPERTY_GROUP_NAME ) >>= sGroupName;
-        if (sGroupName.getLength() == 0)
+        if (sGroupName.isEmpty())
             xComponent->getPropertyValue( PROPERTY_NAME ) >>= sGroupName;
     }
     else

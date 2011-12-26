@@ -197,7 +197,7 @@ namespace xforms
     {
         if ( RID_STR_XFORMS_PATTERN_DOESNT_MATCH == nReason )
         {
-            OSL_ENSURE( m_sPattern.getLength(), "OXSDDataType::_explainInvalid: how can this error occur without a regular expression?" );
+            OSL_ENSURE( !m_sPattern.isEmpty(), "OXSDDataType::_explainInvalid: how can this error occur without a regular expression?" );
             return m_sPattern;
         }
         return ::rtl::OUString();
@@ -241,7 +241,7 @@ namespace xforms
         ::rtl::OUString sConverted = Convert::convertWhitespace( _rValue, m_nWST );
 
         // care for the regular expression
-        if ( m_sPattern.getLength() )
+        if ( !m_sPattern.isEmpty() )
         {
             // ensure our pattern matcher is up to date
             if ( m_bPatternMatcherDirty )
@@ -563,7 +563,7 @@ namespace xforms
             break;
         }
 
-        return _rErrorMessage.getLength() == 0;
+        return _rErrorMessage.isEmpty();
     }
 
     //--------------------------------------------------------------------

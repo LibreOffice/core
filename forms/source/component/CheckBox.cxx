@@ -206,7 +206,7 @@ void SAL_CALL OCheckBoxModel::read(const Reference<stario::XObjectInputStream>& 
     setDefaultChecked( static_cast< ToggleState >( nDefaultChecked ) );
 
     // Nach dem Lesen die Defaultwerte anzeigen
-    if ( getControlSource().getLength() )
+    if ( !getControlSource().isEmpty() )
         // (not if we don't have a control source - the "State" property acts like it is persistent, then
         resetNoBroadcast();
 }

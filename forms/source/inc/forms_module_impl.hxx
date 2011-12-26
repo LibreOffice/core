@@ -113,7 +113,7 @@ namespace FORMS_MODULE_NAMESPACE
         const Reference< XMultiServiceFactory >& _rxServiceManager)
     {
         OSL_ENSURE(_rxServiceManager.is(), "OFormsModule::getComponentFactory : invalid argument (service manager) !");
-        OSL_ENSURE(_rImplementationName.getLength(), "OFormsModule::getComponentFactory : invalid argument (implementation name) !");
+        OSL_ENSURE(!_rImplementationName.isEmpty(), "OFormsModule::getComponentFactory : invalid argument (implementation name) !");
 
         if (!s_pImplementationNames)
         {
