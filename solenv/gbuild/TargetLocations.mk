@@ -41,7 +41,7 @@ gb_PackagePart_get_destinations = \
 	$(OUTDIR)/lib \
 
 gb_PackagePart_get_target = $(OUTDIR)/$(1)
-gb_RdbTarget_get_outdir_target = $(OUTDIR)/xml/$(1).rdb
+gb_Rdb_get_outdir_target = $(OUTDIR)/xml/$(1).rdb
 gb_ResTarget_get_outdir_imagelist_target = $(OUTDIR)/res/img/$(1).ilst
 gb_ResTarget_get_outdir_target = $(OUTDIR)/bin/$(1).res
 gb_Jar_get_outdir_target = $(OUTDIR)/bin/$(1).jar
@@ -106,7 +106,7 @@ gb_Package_get_target = $(WORKDIR)/Package/$(1)
 gb_Pyuno_get_target = $(WORKDIR)/Pyuno/$(1).zip
 gb_Pyuno_get_outdir_target = $(OUTDIR)/bin/$(1).zip
 gb_PyunoFile_get_target = $(WORKDIR)/Pyuno/$(1)/contents/$(2)
-gb_RdbTarget_get_target = $(WORKDIR)/RdbTarget/$(1).rdb
+gb_Rdb_get_target = $(WORKDIR)/Rdb/$(1).rdb
 gb_ResTarget_get_imagelist_target = $(WORKDIR)/ResTarget/$(1).ilst
 gb_ResTarget_get_target = $(WORKDIR)/ResTarget/$(1).res
 gb_SdiTarget_get_target = $(WORKDIR)/SdiTarget/$(1)
@@ -164,7 +164,7 @@ $(eval $(call gb_Helper_make_clean_targets,\
 	PackagePart \
 	Package \
 	Pyuno \
-	RdbTarget \
+	Rdb \
 	ResTarget \
 	SdiTarget \
 	SrsTarget \

@@ -283,7 +283,7 @@ include $(foreach class, \
 	CustomTarget \
 	ExternalLib \
 	Pyuno \
-	RdbTarget \
+	Rdb \
 	CppunitTest \
 	Jar \
 	JavaClassSet \
