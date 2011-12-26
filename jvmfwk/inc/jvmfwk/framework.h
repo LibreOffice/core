@@ -143,7 +143,7 @@ extern "C" {
     <p>
     regcomp -env:UNO_JAVA_JFW_JREHOME=file:///d:/j2re1.4.2
     -env:&quot;UNO_JAVA_JFW_CLASSPATH=d:\\solver\\bin\\classes.jar;d:\\solver\\bin\\jurt.jar&quot;
-    -env:UNO_JAVA_JFW_PLUGIN=file:\\solver\\bin\\sunjavaplugin.dll -register ....
+    -env:UNO_JAVA_JFW_PLUGIN=file:\\solver\\bin\\libsunjavaplugin.dll -register ....
     </p>
     <p>Additionall parameters for the Java VM can be provided. For every parameter
     a seperate bootstrap parameter must be specified. The names are
