@@ -27,6 +27,10 @@
 
 $(eval $(call gb_Library_Library,sunjavaplugin))
 
+$(eval $(call gb_Library_add_defs,sunjavaplugin,\
+    -DJVMFWK_PLUGIN_DLLIMPLEMENTATION \
+))
+
 ifneq ($(JVM_ONE_PATH_CHECK),)
 $(eval $(call gb_Library_add_defs,sunjavaplugin,\
     -DJVM_ONE_PATH_CHECK=\"$(JVM_ONE_PATH_CHECK)\" \

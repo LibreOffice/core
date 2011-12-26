@@ -29,6 +29,7 @@ $(eval $(call gb_Package_Package,jvmfwk_inc,$(SRCDIR)/jvmfwk/inc/jvmfwk))
 
 $(eval $(call gb_Package_add_file,jvmfwk_inc,inc/jvmfwk/framework.h,framework.h))
 $(eval $(call gb_Package_add_file,jvmfwk_inc,inc/jvmfwk/jvmfwkdllapi.h,jvmfwkdllapi.h))
+$(eval $(call gb_Package_add_file,jvmfwk_inc,inc/jvmfwk/jvmfwkplugindllapi.h,jvmfwkplugindllapi.h))
 $(eval $(call gb_Package_add_file,jvmfwk_inc,inc/jvmfwk/vendorplugin.h,vendorplugin.h))
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:
