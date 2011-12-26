@@ -251,7 +251,7 @@ Text [ en-US ] = "Phonetic reading";    \
             Pos = MAP_APPFONT ( IDX_COL1 , 90 ) ;                                     \
             Size = MAP_APPFONT ( 140 , 12 ) ;                                   \
             Hide = TRUE;                                                        \
-            Text [ en-US ] = "~Apply to all similar texts.";                \
+            Text [ en-US ] = "~Apply to all similar texts";                \
         };                                                                      \
         CheckBox CB_CASESENSITIVE                                                \
         {                                                                       \
