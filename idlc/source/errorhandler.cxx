@@ -481,7 +481,7 @@ static OString flagToString(sal_uInt32 flag)
         flagStr += "'attribute'";
     if ( (flag & AF_PROPERTY) == AF_PROPERTY )
         flagStr += "'property'";
-    if ( !flagStr.getLength() )
+    if ( flagStr.isEmpty() )
         flagStr += "'unknown'";
 
     return flagStr;

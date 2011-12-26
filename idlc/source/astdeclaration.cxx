@@ -41,7 +41,7 @@ static OString convertName(const OString& name)
     do
     {
         OString token( name.getToken( 0, ':', nIndex ) );
-        if( token.getLength() )
+        if( !token.isEmpty() )
         {
             nameBuffer.append('/');
             nameBuffer.append( token );
@@ -65,7 +65,7 @@ AstDeclaration::AstDeclaration(NodeType type, const OString& name, AstScope* pSc
         if (pDecl)
         {
             m_scopedName = pDecl->getScopedName();
-            if (m_scopedName.getLength() > 0)
+            if (!m_scopedName.isEmpty())
                 m_scopedName += sGlobal;
             m_scopedName += m_localName;
         }

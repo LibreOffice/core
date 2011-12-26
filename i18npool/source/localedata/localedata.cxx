@@ -417,7 +417,7 @@ oslGenericFunction SAL_CALL lcl_LookupTableHelper::getFunctionSymbolByName(
         Locale aFbLocale = MsLangId::getFallbackLocale( aLocale);
         if (aFbLocale == aLocale)
             bFallback = false;  // may be a "language-only-locale" like Interlingua (ia)
-        else if (aFbLocale.Country.getLength()) {
+        else if (!aFbLocale.Country.isEmpty()) {
             OUStringBuffer aBuf(5);
             aFallback = aBuf.append(aFbLocale.Language).append( under).append(aFbLocale.Country).makeStringAndClear();
         }

@@ -250,7 +250,7 @@ PaperInfo PaperInfo::getSystemDefaultPaper()
 
 #ifdef UNX
     // if set to "use system", get papersize from system
-    if (aLocaleStr.getLength() == 0)
+    if (aLocaleStr.isEmpty())
     {
         static bool bInitialized = false;
         static PaperInfo aInstance(PAPER_A4);
@@ -365,7 +365,7 @@ PaperInfo PaperInfo::getSystemDefaultPaper()
     try
     {
         // if set to "use system", try to get locale from system
-        if (aLocaleStr.getLength() == 0 && xConfigProv.is())
+        if (aLocaleStr.isEmpty() && xConfigProv.is())
         {
             aArgs[ 0 ] <<= CREATE_OUSTRING( "org.openoffice.System/L10N/" );
             xConfigNA.set( xConfigProv->createInstanceWithArguments(
@@ -378,7 +378,7 @@ PaperInfo PaperInfo::getSystemDefaultPaper()
     {
     }
 
-    if (aLocaleStr.getLength() == 0)
+    if (aLocaleStr.isEmpty())
         aLocaleStr = CREATE_OUSTRING("en-US");
 
     // convert locale string to locale struct
@@ -427,7 +427,7 @@ rtl::OString PaperInfo::toPSName(Paper ePaper)
 
 Paper PaperInfo::fromPSName(const rtl::OString &rName)
 {
-    if (!rName.getLength())
+    if (rName.isEmpty())
         return PAPER_USER;
 
     for ( size_t i = 0; i < nTabSize; ++i )

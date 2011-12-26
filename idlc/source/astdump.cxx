@@ -189,7 +189,7 @@ sal_Bool AstService::dump(RegistryKey& rKey)
         case NT_interface:
         case NT_typedef:
             version = TYPEREG_VERSION_1;
-            OSL_ASSERT(superName.getLength() == 0);
+            OSL_ASSERT(superName.isEmpty());
             superName = (*i)->getRelativName();
             break;
 
@@ -205,7 +205,7 @@ sal_Bool AstService::dump(RegistryKey& rKey)
 
         case NT_service_member:
             if (getNodeType() == NT_singleton) {
-                OSL_ASSERT(superName.getLength() == 0);
+                OSL_ASSERT(superName.isEmpty());
                 superName = ((AstServiceMember *)(*i))->
                     getRealService()->getRelativName();
                 break;
@@ -243,9 +243,9 @@ sal_Bool AstService::dump(RegistryKey& rKey)
         getNodeType() == NT_singleton ? RT_TYPE_SINGLETON : RT_TYPE_SERVICE,
         m_bPublished,
         rtl::OStringToOUString(getRelativName(), RTL_TEXTENCODING_UTF8),
-        superName.getLength() == 0 ? 0 : 1, properties, constructors,
+        superName.isEmpty() ? 0 : 1, properties, constructors,
         references);
-    if (superName.getLength() != 0) {
+    if (!superName.isEmpty()) {
         writer.setSuperTypeName(
             0, rtl::OStringToOUString(superName, RTL_TEXTENCODING_UTF8));
     }

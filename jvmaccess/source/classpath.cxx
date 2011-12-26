@@ -74,7 +74,7 @@ void * ::jvmaccess::ClassPath::doTranslateToUrls(
     ::std::vector< jobject > urls;
     for (::sal_Int32 i = 0; i != -1;) {
         ::rtl::OUString url(classPath.getToken(0, ' ', i));
-        if (url.getLength() != 0) {
+        if (!url.isEmpty()) {
             css::uno::Reference< css::uri::XVndSunStarExpandUrlReference >
                 expUrl(
                     css::uri::UriReferenceFactory::create(context)->parse(url),

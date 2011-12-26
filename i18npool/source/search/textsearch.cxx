@@ -642,7 +642,7 @@ SearchResult TextSearch::NSrchBkwrd( const OUString& searchStr, sal_Int32 startP
     OUString aStr( searchStr );
     sal_Int32 nSuchIdx = aStr.getLength();
     sal_Int32 nEnde = endPos;
-    if( nSuchIdx == 0 || sSearchKey.getLength() == 0 || sSearchKey.getLength() > nSuchIdx)
+    if( nSuchIdx == 0 || sSearchKey.isEmpty() || sSearchKey.getLength() > nSuchIdx)
         return aRet;
 
     if (bUsePrimarySrchStr)

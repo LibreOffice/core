@@ -145,7 +145,7 @@ namespace io_acceptor
         struct BeingInAccept guard( &m_bInAccept, sConnectionDescription );
 
         Reference< XConnection > r;
-        if( m_sLastDescription.getLength() &&
+        if( !m_sLastDescription.isEmpty() &&
             m_sLastDescription != sConnectionDescription )
         {
             // instantiate another acceptor for different ports
@@ -154,7 +154,7 @@ namespace io_acceptor
             throw ConnectionSetupException( sMessage, Reference< XInterface > () );
         }
 
-        if( ! m_sLastDescription.getLength() )
+        if( m_sLastDescription.isEmpty() )
         {
             // setup the acceptor
             try

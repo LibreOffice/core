@@ -129,7 +129,7 @@ void SAL_CALL BreakIterator_Unicode::loadICUBreakIterator(const com::sun::star::
 
             OOoRuleBasedBreakIterator *rbi = NULL;
 
-            if (breakRules.getLength() > breakType && breakRules[breakType].getLength() > 0) {
+            if (breakRules.getLength() > breakType && !breakRules[breakType].isEmpty()) {
                 rbi = new OOoRuleBasedBreakIterator(udata_open("OpenOffice", "brk",
                     OUStringToOString(breakRules[breakType], RTL_TEXTENCODING_ASCII_US).getStr(), &status), status);
             } else {

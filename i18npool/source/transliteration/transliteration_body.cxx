@@ -280,7 +280,7 @@ static rtl::OUString transliterate_titlecase_Impl(
     const OUString aText( inStr.copy( startPos, nCount ) );
 
     OUString aRes;
-    if (aText.getLength() > 0)
+    if (!aText.isEmpty())
     {
         Reference< XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
         CharacterClassificationImpl aCharClassImpl( xMSF );

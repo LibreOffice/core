@@ -532,7 +532,7 @@ static
 int should_ignore( OUString s )
 {
         // return true if blank or null
-        return s.compareToAscii(" ")==0 || (s.getLength()>0 && s[0]==0);
+        return s.compareToAscii(" ")==0 || (!s.isEmpty() && s[0]==0);
 }
 
 static

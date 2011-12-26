@@ -848,7 +848,7 @@ rtl::OUString MsLangId::convertLanguageToIsoString( LanguageType nLang,
     rtl::OUString   aLangStr;
     rtl::OUString   aCountry;
     convertLanguageToIsoNames( nLang, aLangStr, aCountry );
-    if ( aCountry.getLength() )
+    if ( !aCountry.isEmpty() )
     {
         rtl::OUStringBuffer aBuf( aLangStr);
         aBuf.append( cSep );
@@ -868,7 +868,7 @@ rtl::OString MsLangId::convertLanguageToIsoByteString( LanguageType nLang,
     rtl::OString  aLangStr;
     rtl::OString  aCountry;
     convertLanguageToIsoNames( nLang, aLangStr, aCountry );
-    if ( aCountry.getLength() )
+    if ( !aCountry.isEmpty() )
     {
         rtl::OStringBuffer aBuf( aLangStr);
         aBuf.append( cSep );
@@ -896,7 +896,7 @@ LanguageType MsLangId::convertIsoNamesToLanguage( const rtl::OUString& rLang,
     {
         if ( aLowerLang.equalsAscii( pEntry->maLangStr ) )
         {
-            if ( !aUpperCountry.getLength() ||
+            if ( aUpperCountry.isEmpty() ||
                  aUpperCountry.equalsAscii( pEntry->maCountry ) )
                 return pEntry->mnLang;
             if ( !pFirstLang )
@@ -953,7 +953,7 @@ LanguageType MsLangId::convertIsoNamesToLanguage( const rtl::OUString& rLang,
 
     //  if only the country is set, look for any entry matching the country
     //  (to allow reading country and language in separate steps, in any order)
-    if ( rCountry.getLength() && !rLang.getLength() )
+    if ( !rCountry.isEmpty() && rLang.isEmpty() )
     {
         const IsoLangEntry* pEntry2 = aImplIsoLangEntries;
         do
@@ -1070,7 +1070,7 @@ LanguageType MsLangId::convertUnxByteStringToLanguage(
     }
 
     //  if there is a glibc modifier, first look for exact match in modifier table
-    if (aAtString.getLength())
+    if (!aAtString.isEmpty())
     {
         // language is lower case in table
         rtl::OString aLowerLang = aLang.toAsciiLowerCase();
@@ -1082,7 +1082,7 @@ LanguageType MsLangId::convertUnxByteStringToLanguage(
             if (( aLowerLang.equals( pGLIBCModifiersEntry->maLangStr ) ) &&
                ( aAtString.equals( pGLIBCModifiersEntry->maAtString ) ))
             {
-                if ( !aUpperCountry.getLength() ||
+                if ( aUpperCountry.isEmpty() ||
                      aUpperCountry.equals( pGLIBCModifiersEntry->maCountry ) )
                {
                     return pGLIBCModifiersEntry->mnLang;

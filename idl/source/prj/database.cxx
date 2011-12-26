@@ -575,7 +575,7 @@ void SvIdlDataBase::WriteError( SvTokenStream & rInStm )
     { // error set
         // search error token
         // error text
-        if( aError.GetText().getLength() )
+        if( !aError.GetText().isEmpty() )
         {
             aErrorText.append(RTL_CONSTASCII_STRINGPARAM("may be <"));
             aErrorText.append(aError.GetText());
@@ -617,7 +617,7 @@ void SvIdlDataBase::WriteError( SvTokenStream & rInStm )
     if( pTok && pTok->IsIdentifier() )
     {
         rtl::OString aN = IDLAPP->pHashTable->GetNearString( pTok->GetString() );
-        if( aN.getLength() )
+        if( !aN.isEmpty() )
             fprintf( stderr, "%s versus %s\n", pTok->GetString().GetBuffer(), aN.getStr() );
     }
 }

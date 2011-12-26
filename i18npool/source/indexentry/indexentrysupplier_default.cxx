@@ -133,7 +133,7 @@ sal_Int16 Index::compare(sal_Unicode c1, sal_Unicode c2)
 sal_Int16 Index::getIndexWeight(const OUString& rIndexEntry)
 {
     sal_Int32 startPos=0;
-    if (skipping_chars.getLength() > 0)
+    if (!skipping_chars.isEmpty())
         while (skipping_chars.indexOf(rIndexEntry[startPos]) >= 0)
             startPos++;
     if (mkey_count > 0) {
@@ -156,7 +156,7 @@ OUString Index::getIndexDescription(const OUString& rIndexEntry)
 {
     sal_Int16 wgt = getIndexWeight(rIndexEntry);
     if (wgt < MAX_KEYS) {
-        if (keys[wgt].desc.getLength())
+        if (!keys[wgt].desc.isEmpty())
             return keys[wgt].desc;
         else if (keys[wgt].key > 0)
             return OUString(&keys[wgt].key, 1);
@@ -174,10 +174,10 @@ void Index::makeIndexKeys(const lang::Locale &rLocale, const OUString &algorithm
 {
     OUString keyStr = LocaleData().getIndexKeysByAlgorithm(rLocale, algorithm);
 
-    if (!keyStr.getLength()) {
+    if (keyStr.isEmpty()) {
         keyStr = LocaleData().getIndexKeysByAlgorithm(LOCALE_EN,
                     LocaleData().getDefaultIndexAlgorithm(LOCALE_EN));
-        if (!keyStr.getLength())
+        if (keyStr.isEmpty())
             throw RuntimeException();
     }
 

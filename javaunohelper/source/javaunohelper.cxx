@@ -265,7 +265,7 @@ Java_com_sun_star_comp_helper_RegistryServiceFactory_createRegistryServiceFactor
 
         // bootstrap
         Reference< lang::XMultiServiceFactory > rMSFac;
-        if (aReadRegFile.getLength() == 0)
+        if (aReadRegFile.isEmpty())
             rMSFac = ::cppu::createRegistryServiceFactory( aWriteRegFile, bReadOnly);
         else
             rMSFac = ::cppu::createRegistryServiceFactory(aWriteRegFile, aReadRegFile, bReadOnly);

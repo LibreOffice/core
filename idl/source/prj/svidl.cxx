@@ -232,7 +232,7 @@ int cdecl main ( int argc, char ** argv)
                 fprintf(stderr, "%s\n", aStr.getStr());
             }
         }
-        if (nExit == 0 && aCommand.m_DepFile.getLength())
+        if (nExit == 0 && !aCommand.m_DepFile.isEmpty())
         {
             DirEntry aDE(aCommand.m_DepFile);
             aDE.ToAbs();
@@ -336,7 +336,7 @@ int cdecl main ( int argc, char ** argv)
                 aErrFile2 = aTmpDocuFile;
             }
         }
-        if (!bErr && aCommand.m_DepFile.getLength())
+        if (!bErr && !aCommand.m_DepFile.isEmpty())
         {
             bErr |= !FileMove_Impl( aCommand.m_DepFile, aTmpDepFile, bDoMove );
             if (bErr) {

@@ -74,7 +74,7 @@ transliteration_Ignore::equals(const OUString& str1, sal_Int32 pos1, sal_Int32 n
 Sequence< OUString > SAL_CALL
 transliteration_Ignore::transliterateRange( const OUString& str1, const OUString& str2 ) throw(RuntimeException)
 {
-        if (str1.getLength() < 1 || str2.getLength() < 1)
+        if (str1.isEmpty() || str2.isEmpty())
             throw RuntimeException();
 
         Sequence< OUString > r(2);
@@ -104,7 +104,7 @@ Sequence< OUString > SAL_CALL
 transliteration_Ignore::transliterateRange( const OUString& str1, const OUString& str2,
         XTransliteration& t1, XTransliteration& t2 ) throw(RuntimeException)
 {
-        if (str1.getLength() < 1 || str2.getLength() < 1)
+        if (str1.isEmpty() || str2.isEmpty())
             throw RuntimeException();
 
         Sequence< sal_Int32 > offset;

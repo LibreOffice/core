@@ -129,13 +129,13 @@ IndexEntrySupplier::getLocaleSpecificIndexEntrySupplier(const Locale& rLocale, c
         else if (xMSF.is()) {
             LocaleData ld;
             aLocale = rLocale;
-            if (rSortAlgorithm.getLength() == 0)
+            if (rSortAlgorithm.isEmpty())
                 aSortAlgorithm = ld.getDefaultIndexAlgorithm( rLocale );
             else
                 aSortAlgorithm = rSortAlgorithm;
 
             OUString module = ld.getIndexModuleByAlgorithm(rLocale, aSortAlgorithm);
-            if (module.getLength() > 0 && createLocaleSpecificIndexEntrySupplier(module))
+            if (!module.isEmpty() && createLocaleSpecificIndexEntrySupplier(module))
                 return xIES;
 
             sal_Int32 l = rLocale.Language.getLength();

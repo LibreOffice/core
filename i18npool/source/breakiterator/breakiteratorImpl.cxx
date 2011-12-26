@@ -231,7 +231,7 @@ sal_Int32 SAL_CALL BreakIteratorImpl::beginOfSentence( const OUString& Text, sal
 {
         if (nStartPos < 0 || nStartPos > Text.getLength())
             return -1;
-        if (Text.getLength() == 0) return 0;
+        if (Text.isEmpty()) return 0;
         return LBI->beginOfSentence(Text, nStartPos, rLocale);
 }
 
@@ -240,7 +240,7 @@ sal_Int32 SAL_CALL BreakIteratorImpl::endOfSentence( const OUString& Text, sal_I
 {
         if (nStartPos < 0 || nStartPos > Text.getLength())
             return -1;
-        if (Text.getLength() == 0) return 0;
+        if (Text.isEmpty()) return 0;
         return LBI->endOfSentence(Text, nStartPos, rLocale);
 }
 

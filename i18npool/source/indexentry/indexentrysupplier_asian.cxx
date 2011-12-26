@@ -104,7 +104,7 @@ IndexEntrySupplier_asian::compareIndexEntry(
 
     // equivalent of phonetic entries does not mean equivalent of index entries.
     // we have to continue comparing index entry here.
-    if (result == 0 && usePhonetic && rPhoneticEntry1.getLength() > 0 &&
+    if (result == 0 && usePhonetic && !rPhoneticEntry1.isEmpty() &&
             rLocale1.Language == rLocale2.Language && rLocale1.Country == rLocale2.Country &&
             rLocale1.Variant == rLocale2.Variant)
         result = collator->compareString(rIndexEntry1, rIndexEntry2);

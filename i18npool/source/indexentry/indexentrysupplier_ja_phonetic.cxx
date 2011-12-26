@@ -55,7 +55,7 @@ OUString SAL_CALL IndexEntrySupplier_ja_phonetic::getIndexKey( const OUString& I
     const OUString& PhoneticEntry, const lang::Locale& rLocale )
     throw (com::sun::star::uno::RuntimeException)
 {
-    return getIndexCharacter( PhoneticEntry.getLength() > 0 ? PhoneticEntry : IndexEntry, rLocale, OUString());
+    return getIndexCharacter( PhoneticEntry.isEmpty() ? IndexEntry : PhoneticEntry , rLocale, OUString());
 }
 
 sal_Int16 SAL_CALL IndexEntrySupplier_ja_phonetic::compareIndexEntry(

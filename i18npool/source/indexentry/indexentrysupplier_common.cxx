@@ -119,7 +119,7 @@ IndexEntrySupplier_Common::getEntry( const OUString& IndexEntry,
     // rLocale for phonetic entry is same as aLocale for algorithm,
     // which means Chinese phonetic will not be used for Japanese algorithm;
     // phonetic entry is not blank.
-    if (usePhonetic && PhoneticEntry.getLength() > 0 && rLocale.Language == aLocale.Language &&
+    if (usePhonetic && !PhoneticEntry.isEmpty() && rLocale.Language == aLocale.Language &&
             rLocale.Country == aLocale.Country && rLocale.Variant == aLocale.Variant)
         return PhoneticEntry;
     else

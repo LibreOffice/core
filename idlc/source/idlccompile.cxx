@@ -145,7 +145,7 @@ OString makeTempName(const OString& prefix)
         }
     }
 
-    if ( uTmpPath.getLength() )
+    if ( !uTmpPath.isEmpty() )
         tmpPath = OUStringToOString(uTmpPath, RTL_TEXTENCODING_UTF8);
 
 #if defined(SAL_W32) || defined(SAL_UNX)
@@ -262,7 +262,7 @@ sal_Int32 compileFile(const OString * pathname)
     {
         filePath = fileName.copy(0, index);
 
-        if ( filePath.getLength() )
+        if ( !filePath.isEmpty() )
         {
             cppArgs.append(" -I\"");
             cppArgs.append(filePath);

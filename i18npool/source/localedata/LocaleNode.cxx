@@ -170,7 +170,7 @@ void print_OUString( const OUString& s )
 
 bool is_empty_string( const OUString& s )
 {
-     return (s.getLength()==0) || (s.getLength()==1 && s[0]=='\n');
+     return s.isEmpty() || (s.getLength()==1 && s[0]=='\n');
 }
 
 void print_indent( int depth )
@@ -384,7 +384,7 @@ void LCCTYPENode::generateCode (const OFileWriter &of) const
 {
     const LocaleNode * sepNode = 0;
     ::rtl::OUString useLocale =   getAttr().getValueByName("ref");
-    if (useLocale.getLength() > 0) {
+    if (!useLocale.isEmpty()) {
         of.writeRefFunction("getLocaleItem_", useLocale);
         return;
     }
@@ -424,14 +424,14 @@ void LCCTYPENode::generateCode (const OFileWriter &of) const
     sepNode = findNode("LongDateMonthSeparator");
     aLDS = sepNode->getValue();
     of.writeParameter("LongDateMonthSeparator", aLDS);
-    if (aLDS.getLength() == 0)
+    if (aLDS.isEmpty())
         fprintf( stderr, "Warning: %s\n",
                 "LongDateMonthSeparator is empty. Usually this is not the case and may lead to concatenated display names like \"Wednesday, May9, 2007\".");
 
     sepNode = findNode("LongDateYearSeparator");
     aLDS = sepNode->getValue();
     of.writeParameter("LongDateYearSeparator", aLDS);
-    if (aLDS.getLength() == 0)
+    if (aLDS.isEmpty())
         fprintf( stderr, "Warning: %s\n",
                 "LongDateYearSeparator is empty. Usually this is not the case and may lead to concatenated display names like \"Wednesday, 2007May 9\".");
 
@@ -613,7 +613,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
     OUString strFrom( getAttr().getValueByName("replaceFrom"));
     of.writeParameter("replaceFrom", strFrom, mnSection);
     str = getAttr().getValueByName("replaceTo");
-    if (strFrom.getLength() && !str.getLength())
+    if (!strFrom.isEmpty() && str.isEmpty())
         incErrorStr("replaceFrom=\"%s\" replaceTo=\"\" is empty replacement.", strFrom);
     // Locale data generator inserts FFFF for LangID, we need to adapt that.
     if (str.endsWithIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM( "-FFFF]")))
@@ -632,7 +632,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
         }
     }
     ::rtl::OUString useLocale =   getAttr().getValueByName("ref");
-    if (useLocale.getLength() > 0) {
+    if (!useLocale.isEmpty()) {
         switch (mnSection)
         {
             case 0:
@@ -720,7 +720,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
                             else
                             {
                                 OUString aRef( pCtype->getAttr().getValueByName("ref"));
-                                if (aRef.getLength() > 0)
+                                if (!aRef.isEmpty())
                                 {
                                     if (!bCtypeIsRef)
                                         fprintf( stderr,
@@ -968,7 +968,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
 void LCCollationNode::generateCode (const OFileWriter &of) const
 {
     ::rtl::OUString useLocale =   getAttr().getValueByName("ref");
-    if (useLocale.getLength() > 0) {
+    if (!useLocale.isEmpty()) {
         of.writeRefFunction("getCollatorImplementation_", useLocale);
         of.writeRefFunction("getCollationOptions_", useLocale);
         return;
@@ -1041,7 +1041,7 @@ void LCCollationNode::generateCode (const OFileWriter &of) const
 void LCSearchNode::generateCode (const OFileWriter &of) const
 {
     ::rtl::OUString useLocale =   getAttr().getValueByName("ref");
-    if (useLocale.getLength() > 0) {
+    if (!useLocale.isEmpty()) {
         of.writeRefFunction("getSearchOptions_", useLocale);
         return;
     }
@@ -1079,7 +1079,7 @@ void LCSearchNode::generateCode (const OFileWriter &of) const
 void LCIndexNode::generateCode (const OFileWriter &of) const
 {
     ::rtl::OUString useLocale =   getAttr().getValueByName("ref");
-    if (useLocale.getLength() > 0) {
+    if (!useLocale.isEmpty()) {
         of.writeRefFunction("getIndexAlgorithm_", useLocale);
         of.writeRefFunction("getUnicodeScripts_", useLocale);
         of.writeRefFunction("getFollowPageWords_", useLocale);
@@ -1239,7 +1239,7 @@ static void lcl_writeAbbrFullNarrArrays( const OFileWriter & of, sal_Int16 nCoun
 void LCCalendarNode::generateCode (const OFileWriter &of) const
 {
     ::rtl::OUString useLocale =   getAttr().getValueByName("ref");
-    if (useLocale.getLength() > 0) {
+    if (!useLocale.isEmpty()) {
         of.writeRefFunction("getAllCalendars_", useLocale);
         return;
     }
@@ -1271,14 +1271,14 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
         const sal_Char *elementTag;
         LocaleNode * daysNode = NULL;
         ::rtl::OUString ref_name = calNode->getChildAt(nChild)->getAttr().getValueByName("ref");
-        if (ref_name.getLength() > 0 && i > 0) {
+        if (!ref_name.isEmpty() && i > 0) {
             for (j = 0; j < i; j++) {
                 str = getChildAt(j)->getAttr().getValueByName("unoid");
                 if (str.equals(ref_name))
                     daysNode = getChildAt(j)->getChildAt(0);
             }
         }
-        if (ref_name.getLength() > 0 && daysNode == NULL) {
+        if (!ref_name.isEmpty() && daysNode == NULL) {
             of.writeParameter("dayRef", OUString(RTL_CONSTASCII_USTRINGPARAM("ref")), i);
             of.writeParameter("dayRefName", ref_name, i);
             nbOfDays[i] = 0;
@@ -1303,14 +1303,14 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
         // Generate Months of Year
         LocaleNode * monthsNode = NULL;
         ref_name = calNode->getChildAt(nChild)->getAttr().getValueByName("ref");
-        if (ref_name.getLength() > 0 && i > 0) {
+        if (!ref_name.isEmpty() && i > 0) {
             for (j = 0; j < i; j++) {
                 str = getChildAt(j)->getAttr().getValueByName("unoid");
                 if (str.equals(ref_name))
                     monthsNode = getChildAt(j)->getChildAt(1);
             }
         }
-        if (ref_name.getLength() > 0 && monthsNode == NULL) {
+        if (!ref_name.isEmpty() && monthsNode == NULL) {
             of.writeParameter("monthRef", OUString(RTL_CONSTASCII_USTRINGPARAM("ref")), i);
             of.writeParameter("monthRefName", ref_name, i);
             nbOfMonths[i] = 0;
@@ -1338,14 +1338,14 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
             --nChild;
         LocaleNode * genitiveMonthsNode = NULL;
         ref_name = calNode->getChildAt(nChild)->getAttr().getValueByName("ref");
-        if (ref_name.getLength() > 0 && i > 0) {
+        if (!ref_name.isEmpty() && i > 0) {
             for (j = 0; j < i; j++) {
                 str = getChildAt(j)->getAttr().getValueByName("unoid");
                 if (str.equals(ref_name))
                     genitiveMonthsNode = getChildAt(j)->getChildAt(1);
             }
         }
-        if (ref_name.getLength() > 0 && genitiveMonthsNode == NULL) {
+        if (!ref_name.isEmpty() && genitiveMonthsNode == NULL) {
             of.writeParameter("genitiveMonthRef", OUString(RTL_CONSTASCII_USTRINGPARAM("ref")), i);
             of.writeParameter("genitiveMonthRefName", ref_name, i);
             nbOfGenitiveMonths[i] = 0;
@@ -1374,14 +1374,14 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
             --nChild;
         LocaleNode * partitiveMonthsNode = NULL;
         ref_name = calNode->getChildAt(nChild)->getAttr().getValueByName("ref");
-        if (ref_name.getLength() > 0 && i > 0) {
+        if (!ref_name.isEmpty() && i > 0) {
             for (j = 0; j < i; j++) {
                 str = getChildAt(j)->getAttr().getValueByName("unoid");
                 if (str.equals(ref_name))
                     partitiveMonthsNode = getChildAt(j)->getChildAt(1);
             }
         }
-        if (ref_name.getLength() > 0 && partitiveMonthsNode == NULL) {
+        if (!ref_name.isEmpty() && partitiveMonthsNode == NULL) {
             of.writeParameter("partitiveMonthRef", OUString(RTL_CONSTASCII_USTRINGPARAM("ref")), i);
             of.writeParameter("partitiveMonthRefName", ref_name, i);
             nbOfPartitiveMonths[i] = 0;
@@ -1406,14 +1406,14 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
         // Generate Era name
         LocaleNode * erasNode = NULL;
         ref_name =   calNode -> getChildAt(nChild) ->getAttr().getValueByName("ref");
-        if (ref_name.getLength() > 0 && i > 0) {
+        if (!ref_name.isEmpty() && i > 0) {
             for (j = 0; j < i; j++) {
                 str = getChildAt(j)->getAttr().getValueByName("unoid");
                 if (str.equals(ref_name))
                     erasNode = getChildAt(j)->getChildAt(2);
             }
         }
-        if (ref_name.getLength() > 0 && erasNode == NULL) {
+        if (!ref_name.isEmpty() && erasNode == NULL) {
             of.writeParameter("eraRef", OUString(RTL_CONSTASCII_USTRINGPARAM("ref")), i);
             of.writeParameter("eraRefName", ref_name, i);
             nbOfEras[i] = 0;
@@ -1554,7 +1554,7 @@ bool isIso4217( const OUString& rStr )
 void LCCurrencyNode :: generateCode (const OFileWriter &of) const
 {
     ::rtl::OUString useLocale =   getAttr().getValueByName("ref");
-    if (useLocale.getLength() > 0) {
+    if (!useLocale.isEmpty()) {
         of.writeRefFunction("getAllCurrencies_", useLocale);
         return;
     }
@@ -1655,7 +1655,7 @@ void LCCurrencyNode :: generateCode (const OFileWriter &of) const
 void LCTransliterationNode::generateCode (const OFileWriter &of) const
 {
     ::rtl::OUString useLocale =   getAttr().getValueByName("ref");
-    if (useLocale.getLength() > 0) {
+    if (!useLocale.isEmpty()) {
         of.writeRefFunction("getTransliterations_", useLocale);
         return;
     }
@@ -1704,7 +1704,7 @@ static NameValuePair ReserveWord[] = {
 void LCMiscNode::generateCode (const OFileWriter &of) const
 {
     ::rtl::OUString useLocale =   getAttr().getValueByName("ref");
-    if (useLocale.getLength() > 0) {
+    if (!useLocale.isEmpty()) {
     of.writeRefFunction("getForbiddenCharacters_", useLocale);
     of.writeRefFunction("getBreakIteratorRules_", useLocale);
     of.writeRefFunction("getReservedWords_", useLocale);
@@ -1730,7 +1730,7 @@ void LCMiscNode::generateCode (const OFileWriter &of) const
                     "Warning: No %s in ReservedWords, using en_US default: \"%s\".\n",
                     ReserveWord[i].name, ReserveWord[i].value);
         str = curNode ? curNode -> getValue() : OUString::createFromAscii(ReserveWord[i].value);
-        if (!str.getLength())
+        if (str.isEmpty())
         {
             ++nError;
             fprintf( stderr, "Error: No content for ReservedWords %s.\n", ReserveWord[i].name);
@@ -1801,7 +1801,7 @@ void LCNumberingLevelNode::generateCode (const OFileWriter &of) const
 {
      of.writeAsciiString("// ---> ContinuousNumbering\n");
     ::rtl::OUString useLocale =   getAttr().getValueByName("ref");
-    if (useLocale.getLength() > 0) {
+    if (!useLocale.isEmpty()) {
     of.writeRefFunction2("getContinuousNumberingLevels_", useLocale);
     return;
     }
@@ -1871,7 +1871,7 @@ void LCOutlineNumberingLevelNode::generateCode (const OFileWriter &of) const
 {
      of.writeAsciiString("// ---> OutlineNumbering\n");
     ::rtl::OUString useLocale =   getAttr().getValueByName("ref");
-    if (useLocale.getLength() > 0) {
+    if (!useLocale.isEmpty()) {
     of.writeRefFunction3("getOutlineNumberingLevels_", useLocale);
     return;
     }

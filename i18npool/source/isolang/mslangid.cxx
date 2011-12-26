@@ -154,7 +154,7 @@ LanguageType MsLangId::resolveSystemLanguageByScriptType( LanguageType nLang, sa
 void MsLangId::convertLanguageToLocale( LanguageType nLang,
         ::com::sun::star::lang::Locale & rLocale )
 {
-    if (rLocale.Variant.getLength())
+    if (!rLocale.Variant.isEmpty())
         rLocale.Variant = rtl::OUString();
     convertLanguageToIsoNames( nLang, rLocale.Language, rLocale.Country);
 }
@@ -184,7 +184,7 @@ LanguageType MsLangId::convertLocaleToLanguage(
         const ::com::sun::star::lang::Locale& rLocale )
 {
     // empty language => LANGUAGE_SYSTEM
-    if (rLocale.Language.getLength() == 0)
+    if (rLocale.Language.isEmpty())
         return LANGUAGE_SYSTEM;
 
     LanguageType nRet = convertIsoNamesToLanguage( rLocale.Language,
@@ -201,7 +201,7 @@ LanguageType MsLangId::convertLocaleToLanguageWithFallback(
             const ::com::sun::star::lang::Locale & rLocale )
 {
     // empty language => LANGUAGE_SYSTEM
-    if (rLocale.Language.getLength() == 0)
+    if (rLocale.Language.isEmpty())
         return lookupFallbackLanguage( LANGUAGE_SYSTEM);
 
     return lookupFallbackLanguage( rLocale);
@@ -221,7 +221,7 @@ LanguageType MsLangId::convertLocaleToLanguageWithFallback(
             const ::com::sun::star::lang::Locale & rLocale )
 {
     // empty language => LANGUAGE_SYSTEM
-    if (rLocale.Language.getLength() == 0)
+    if (rLocale.Language.isEmpty())
         return convertLanguageToLocaleWithFallback( LANGUAGE_SYSTEM);
 
     return lookupFallbackLocale( rLocale);

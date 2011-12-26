@@ -36,7 +36,7 @@ using namespace ::rtl;
 
 sal_Bool isGlobal(const OString& scopedName)
 {
-    if ((scopedName.getLength() == 0) || (scopedName.indexOf(':') == 0))
+    if (scopedName.isEmpty() || (scopedName.indexOf(':') == 0))
     {
         return sal_True;
     }
@@ -124,7 +124,7 @@ AstDeclaration* AstScope::lookupByName(const OString& scopedName)
 {
     AstDeclaration* pDecl = NULL;
     AstScope*       pScope = NULL;
-    if (scopedName.getLength() == 0)
+    if (scopedName.isEmpty())
         return NULL;
 
     // If name starts with "::" start look up in global scope
