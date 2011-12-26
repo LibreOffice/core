@@ -261,7 +261,7 @@ MenuManager::MenuManager(
                         MenuConfiguration::Attributes* pMenuAttributes =
                             (MenuConfiguration::Attributes*)pMenu->GetUserValue( nItemId );
 
-                        if ( pMenuAttributes && pMenuAttributes->aImageId.getLength() > 0 )
+                        if ( pMenuAttributes && !pMenuAttributes->aImageId.isEmpty() )
                         {
                             // Retrieve image id from menu attributes
                             aImage = GetImageFromURL( rFrame, aImageId, false );
@@ -833,7 +833,7 @@ IMPL_LINK( MenuManager, Activate, Menu *, pMenu )
                              pMenuItemHandler->nItemId > END_ITEMID_WINDOWLIST )
                         {
                             ::rtl::OUString aItemCommand = pMenu->GetItemCommand( pMenuItemHandler->nItemId );
-                            if ( !aItemCommand.getLength() )
+                            if ( aItemCommand.isEmpty() )
                             {
                                 const static ::rtl::OUString aSlotString( RTL_CONSTASCII_USTRINGPARAM( "slot:" ));
                                 aItemCommand = aSlotString;
@@ -986,7 +986,7 @@ sal_uInt16 MenuManager::FillItemCommand(::rtl::OUString& _rItemCommand,Menu* _pM
     sal_uInt16 nItemId = _pMenu->GetItemId( _nIndex );
 
     _rItemCommand = _pMenu->GetItemCommand( nItemId );
-    if ( !_rItemCommand.getLength() )
+    if ( _rItemCommand.isEmpty() )
     {
         const static ::rtl::OUString aSlotString( RTL_CONSTASCII_USTRINGPARAM( "slot:" ));
         _rItemCommand = aSlotString;
@@ -1023,7 +1023,7 @@ void MenuManager::FillMenuImages(Reference< XFrame >& _xFrame,Menu* _pMenu,sal_B
                 if ( pMenuAttributes )
                     aImageId = pMenuAttributes->aImageId; // Retrieve image id from menu attributes
 
-                if ( aImageId.getLength() > 0 )
+                if ( !aImageId.isEmpty() )
                 {
                     Image aImage = GetImageFromURL( _xFrame, aImageId, false );
                     if ( !!aImage )

@@ -195,7 +195,7 @@ void CmdImageList::impl_fillCommandToImageNameMap()
                                                 SERVICENAME_UICOMMANDDESCRIPTION ),
                                             UNO_QUERY );
 
-        if ( m_aModuleIdentifier.getLength() > 0 )
+        if ( !m_aModuleIdentifier.isEmpty() )
         {
             // If we have a module identifier - use to retrieve the command image name list from it.
             // Otherwise we will use the global command image list

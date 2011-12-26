@@ -322,7 +322,7 @@ void BackingWindow::prepareRecentFileMenu()
             maRecentFiles.push_back( LoadRecentFile() );
             maRecentFiles.back().aTargetURL = aURL;
 
-            sal_Int32 nArgs = aFilterOpt.getLength() ? 4 : 3;
+            sal_Int32 nArgs = aFilterOpt.isEmpty() ? 3 : 4;
             Sequence< PropertyValue >& rArgsList( maRecentFiles.back().aArgSeq );
             rArgsList.realloc( nArgs );
 
@@ -330,7 +330,7 @@ void BackingWindow::prepareRecentFileMenu()
             rArgsList[nArgs].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FilterName" ));
             rArgsList[nArgs].Value = makeAny( aFilter );
 
-            if( aFilterOpt.getLength() )
+            if( !aFilterOpt.isEmpty() )
             {
                 nArgs--;
                 rArgsList[nArgs].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FilterOptions" ));
@@ -546,7 +546,7 @@ void BackingWindow::initControls()
     {
         comphelper::SequenceAsHashMap aEntryItems( *pNewMenu );
         rtl::OUString sURL( aEntryItems.getUnpackedValueOrDefault( sURLKey, rtl::OUString() ) );
-        if ( sURL.getLength() )
+        if ( !sURL.isEmpty() )
             aFileNewAppsAvailable.insert( sURL );
     }
 

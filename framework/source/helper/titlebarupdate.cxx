@@ -282,7 +282,7 @@ void TitleBarUpdate::impl_updateApplicationID(const css::uno::Reference< css::fr
 
         // Note: If we could retrieve a module id ... everything is OK.
         // UIName and Icon ID are optional values !
-        ::sal_Bool bSuccess = (rInfo.sID.getLength () > 0);
+        ::sal_Bool bSuccess = !rInfo.sID.isEmpty();
         return bSuccess;
     }
     catch(const css::uno::Exception&)

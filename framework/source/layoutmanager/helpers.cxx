@@ -103,7 +103,7 @@ bool isHorizontalDockingArea( const sal_Int32 nDockArea )
         {
             aToolbarName = rtl::OStringToOUString( pToolBox->GetHelpId(), RTL_TEXTENCODING_UTF8 );
             sal_Int32 i = aToolbarName.lastIndexOf( ':' );
-            if (( aToolbarName.getLength() > 0 ) && ( i > 0 ) && (( i+ 1 ) < aToolbarName.getLength() ))
+            if ( !aToolbarName.isEmpty() && ( i > 0 ) && (( i + 1 ) < aToolbarName.getLength() ))
                 aToolbarName = aToolbarName.copy( i+1 ); // Remove ".HelpId:" protocol from toolbar name
             else
               aToolbarName = ::rtl::OUString();

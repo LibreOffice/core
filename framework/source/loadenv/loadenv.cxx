@@ -295,7 +295,7 @@ void LoadEnv::initializeLoading(const ::rtl::OUString&                          
 
     // BTW: Split URL and JumpMark ...
     // Because such mark is an explicit value of the media descriptor!
-    if (m_aURL.Mark.getLength())
+    if (!m_aURL.Mark.isEmpty())
         m_lMediaDescriptor[::comphelper::MediaDescriptor::PROP_JUMPMARK()] <<= m_aURL.Mark;
 
     // By the way: remove the old and deprecated value "FileName" from the descriptor!
@@ -650,7 +650,7 @@ LoadEnv::EContentType LoadEnv::classifyContent(const ::rtl::OUString&           
     //     can detect such protocol schemata too :-)
 
     if(
-        (!sURL.getLength()                                       ) ||
+        (sURL.isEmpty()                                          ) ||
         (ProtocolCheck::isProtocol(sURL,ProtocolCheck::E_UNO    )) ||
         (ProtocolCheck::isProtocol(sURL,ProtocolCheck::E_SLOT   )) ||
         (ProtocolCheck::isProtocol(sURL,ProtocolCheck::E_MACRO  )) ||
@@ -804,7 +804,7 @@ void LoadEnv::impl_detectTypeAndFilter()
         sType = xDetect->queryTypeByDescriptor(lDescriptor, sal_True); /*TODO should deep detection be able for enable/disable it from outside? */
 
     // no valid content -> loading not possible
-    if (!sType.getLength())
+    if (sType.isEmpty())
         throw LoadEnvException(LoadEnvException::ID_UNSUPPORTED_CONTENT);
 
     // SAFE ->
@@ -827,7 +827,7 @@ void LoadEnv::impl_detectTypeAndFilter()
     // => We must try(!) to detect the right filter for this load request.
     // On the other side ... if no filter is available .. ignore it.
     // Then the type information must be enough.
-    if (!sFilter.getLength())
+    if (sFilter.isEmpty())
     {
         // no -> try to find a preferred filter for the detected type.
         // Dont forget to updatet he media descriptor.
@@ -836,7 +836,7 @@ void LoadEnv::impl_detectTypeAndFilter()
         {
             ::comphelper::SequenceAsHashMap lTypeProps(xTypeCont->getByName(sType));
             sFilter = lTypeProps.getUnpackedValueOrDefault(TYPEPROP_PREFERREDFILTER, ::rtl::OUString());
-            if (sFilter.getLength())
+            if (!sFilter.isEmpty())
             {
                 // SAFE ->
                 aWriteLock.lock();
@@ -858,7 +858,7 @@ void LoadEnv::impl_detectTypeAndFilter()
     // has to know, what he is doing .-)
 
     sal_Bool bIsOwnTemplate = sal_False;
-    if (sFilter.getLength())
+    if (!sFilter.isEmpty())
     {
         css::uno::Reference< css::container::XNameAccess > xFilterCont(xSMGR->createInstance(SERVICENAME_FILTERFACTORY), css::uno::UNO_QUERY_THROW);
         try
@@ -892,7 +892,7 @@ sal_Bool LoadEnv::impl_handleContent()
 
     // the type must exist inside the descriptor ... otherwhise this class is implemented wrong :-)
     ::rtl::OUString sType = m_lMediaDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_TYPENAME(), ::rtl::OUString());
-    if (!sType.getLength())
+    if (sType.isEmpty())
         throw LoadEnvException(LoadEnvException::ID_INVALID_MEDIADESCRIPTOR);
 
     // convert media descriptor and URL to right format for later interface call!
@@ -1196,7 +1196,7 @@ css::uno::Reference< css::uno::XInterface > LoadEnv::impl_searchLoader()
     // We need this type information to locate an registered frame loader
     // Without such information we can't work!
     ::rtl::OUString sType = m_lMediaDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_TYPENAME(), ::rtl::OUString());
-    if (!sType.getLength())
+    if (sType.isEmpty())
         throw LoadEnvException(LoadEnvException::ID_INVALID_MEDIADESCRIPTOR);
 
     // try to locate any interested frame loader
@@ -1240,7 +1240,7 @@ css::uno::Reference< css::uno::XInterface > LoadEnv::impl_searchLoader()
 void LoadEnv::impl_jumpToMark(const css::uno::Reference< css::frame::XFrame >& xFrame,
                               const css::util::URL&                            aURL  )
 {
-    if (! aURL.Mark.getLength())
+    if (aURL.Mark.isEmpty())
         return;
 
     css::uno::Reference< css::frame::XDispatchProvider > xProvider(xFrame, css::uno::UNO_QUERY);
@@ -1401,7 +1401,7 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchAlreadyLoaded()
         // Now we are sure, that this task includes the searched document.
         // It's time to activate it. As special feature we try to jump internally
         // if an optional jumpmark is given too.
-        if (m_aURL.Mark.getLength())
+        if (!m_aURL.Mark.isEmpty())
             impl_jumpToMark(xResult, m_aURL);
 
         // bring it to front and make sure it's visible...
@@ -1763,7 +1763,7 @@ void LoadEnv::impl_applyPersistentWindowState(const css::uno::Reference< css::aw
     ::rtl::OUString sFilter = m_lMediaDescriptor.getUnpackedValueOrDefault(
                                     ::comphelper::MediaDescriptor::PROP_FILTERNAME(),
                                     ::rtl::OUString());
-    if (!sFilter.getLength())
+    if (sFilter.isEmpty())
         return;
 
     css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = m_xSMGR;
@@ -1792,7 +1792,7 @@ void LoadEnv::impl_applyPersistentWindowState(const css::uno::Reference< css::aw
         // Do nothing, if no configuration entry exists!
         ::rtl::OUString sWindowState ;
         ::comphelper::ConfigurationHelper::readRelativeKey(xModuleCfg, sModule, OFFICEFACTORY_PROPNAME_WINDOWATTRIBUTES) >>= sWindowState;
-        if (sWindowState.getLength())
+        if (!sWindowState.isEmpty())
         {
             // SOLAR SAFE ->
             SolarMutexGuard aSolarGuard;

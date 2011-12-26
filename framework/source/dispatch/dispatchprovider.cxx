@@ -257,7 +257,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryDeskt
     if (
         (sTargetFrameName==SPECIALTARGET_SELF)  ||
         (sTargetFrameName==SPECIALTARGET_TOP )  ||
-        (sTargetFrameName.getLength()<1      )
+        (sTargetFrameName.isEmpty())
        )
     {
         xDispatcher = implts_searchProtocolHandler(aURL);
@@ -408,7 +408,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryFrame
     else
     if (
         (sTargetName==SPECIALTARGET_SELF)  ||
-        (sTargetName.getLength()<1      )
+        (sTargetName.isEmpty())
        )
     {
         // There exist a hard coded interception for special URLs.

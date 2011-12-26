@@ -269,8 +269,8 @@ void AddonMenuManager::MergeAddonPopupMenus( const Reference< XFrame >& rFrame,
                                             aImageId,
                                             aContext,
                                             aAddonSubMenu );
-            if ( aTitle.getLength() > 0 &&
-                 aURL.getLength() > 0 &&
+            if ( !aTitle.isEmpty() &&
+                 !aURL.isEmpty()   &&
                  aAddonSubMenu.getLength() > 0 &&
                  AddonMenuManager::IsCorrectContext( rModel, aContext ))
             {
@@ -321,7 +321,7 @@ void AddonMenuManager::BuildMenu( PopupMenu*                            pCurrent
     {
         GetMenuEntry( aAddonMenuDefinition[i], aTitle, aURL, aTarget, aImageId, aContext, aAddonSubMenu );
 
-        if ( !IsCorrectContext( rModel, aContext ) || ( !aTitle.getLength() && !aURL.getLength() ))
+        if ( !IsCorrectContext( rModel, aContext ) || ( aTitle.isEmpty() && aURL.isEmpty() ))
             continue;
 
         if ( aURL == ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:separator" )))
@@ -420,7 +420,7 @@ sal_Bool AddonMenuManager::IsCorrectContext( const Reference< XModel >& rModel, 
         }
     }
 
-    return ( aContext.getLength() == 0 );
+    return ( aContext.isEmpty() );
 }
 
 }

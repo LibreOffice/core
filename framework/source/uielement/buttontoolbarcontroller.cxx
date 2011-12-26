@@ -245,7 +245,7 @@ throw (::com::sun::star::uno::RuntimeException)
         if ( m_bInitialized &&
              m_xFrame.is() &&
              m_xServiceManager.is() &&
-             m_aCommandURL.getLength() )
+             !m_aCommandURL.isEmpty() )
         {
             if ( !m_xURLTransformer.is() )
             {

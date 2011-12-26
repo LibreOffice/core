@@ -253,7 +253,7 @@ void SAL_CALL DispatchRecorder::AppendToBuffer( css::uno::Any aValue, ::rtl::OUS
         aValue >>= sVal;
 
         // encode non printable characters or '"' by using the CHR$ function
-        if ( sVal.getLength() )
+        if ( !sVal.isEmpty() )
         {
             const sal_Unicode* pChars = sVal.getStr();
             sal_Bool bInString = sal_False;

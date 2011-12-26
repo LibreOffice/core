@@ -158,7 +158,7 @@ void BmkMenu::Initialize()
     {
         GetMenuEntry( aDynamicMenuEntries[i], aTitle, aURL, aTargetFrame, aImageId );
 
-        if ( !aTitle.getLength() && !aURL.getLength() )
+        if ( aTitle.isEmpty() && aURL.isEmpty() )
             continue;
 
         if ( aURL == ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:separator" )))
@@ -170,7 +170,7 @@ void BmkMenu::Initialize()
 
             if ( bShowMenuImages )
             {
-                if ( aImageId.getLength() > 0 )
+                if ( !aImageId.isEmpty() )
                 {
                     Image aImage = GetImageFromURL( m_xFrame, aImageId, false );
                     if ( !!aImage )

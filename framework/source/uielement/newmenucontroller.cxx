@@ -110,7 +110,7 @@ void NewMenuController::setMenuImages( PopupMenu* pPopupMenu, sal_Bool bSetImage
                 if ( pInfo != m_aAddInfoForItem.end() )
                     aImageId = pInfo->second.aImageId; // Retrieve image id for menu item
 
-                if ( aImageId.getLength() > 0 )
+                if ( !aImageId.isEmpty() )
                 {
                     aImage = GetImageFromURL( xFrame, aImageId, false );
                     if ( !!aImage )
@@ -143,7 +143,7 @@ void NewMenuController::determineAndSetNewDocAccel( PopupMenu* pPopupMenu, const
     sal_Bool      bFound( sal_False );
     rtl::OUString aCommand;
 
-    if ( m_aEmptyDocURL.getLength() > 0 )
+    if ( !m_aEmptyDocURL.isEmpty() )
     {
         // Search for the empty document URL
 
@@ -167,7 +167,7 @@ void NewMenuController::determineAndSetNewDocAccel( PopupMenu* pPopupMenu, const
     {
         // Search for the default module name
         rtl::OUString aDefaultModuleName( SvtModuleOptions().GetDefaultModuleName() );
-        if ( aDefaultModuleName.getLength() > 0 )
+        if ( !aDefaultModuleName.isEmpty() )
         {
             for ( sal_uInt32 i = 0; i < sal_uInt32( nCount ); i++ )
             {
@@ -507,7 +507,7 @@ void NewMenuController::impl_setPopupMenu()
             m_bModuleIdentified = sal_True;
 
             Reference< XNameAccess > xNameAccess( xModuleManager, UNO_QUERY );
-            if (( m_aModuleIdentifier.getLength() > 0 ) && xNameAccess.is() )
+            if ( !m_aModuleIdentifier.isEmpty() && xNameAccess.is() )
             {
                 Sequence< PropertyValue > aSeq;
 

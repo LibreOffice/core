@@ -1403,7 +1403,7 @@ WindowStateConfiguration::WindowStateConfiguration( const Reference< XMultiServi
                 }
             }
 
-            if ( aWindowStateFileStr.getLength() > 0 )
+            if ( !aWindowStateFileStr.isEmpty() )
             {
                 // Create first mapping ModuleIdentifier ==> Window state configuration file
                 m_aModuleToFileHashMap.insert( ModuleToWindowStateFileMap::value_type( aModuleIdentifier, aWindowStateFileStr ));

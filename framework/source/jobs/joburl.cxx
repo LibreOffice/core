@@ -93,7 +93,7 @@ JobURL::JobURL( /*IN*/ const ::rtl::OUString& sURL )
             // check for "event="
             if (
                 (JobURL::implst_split(sToken,JOBURL_EVENT_STR,JOBURL_EVENT_LEN,sPartValue,sPartArguments)) &&
-                (sPartValue.getLength()>0                                                                )
+                (!sPartValue.isEmpty())
                )
             {
                 // set the part value
@@ -105,7 +105,7 @@ JobURL::JobURL( /*IN*/ const ::rtl::OUString& sURL )
             // check for "alias="
             if (
                 (JobURL::implst_split(sToken,JOBURL_ALIAS_STR,JOBURL_ALIAS_LEN,sPartValue,sPartArguments)) &&
-                (sPartValue.getLength()>0                                                                )
+                (!sPartValue.isEmpty())
                )
             {
                 // set the part value
@@ -117,7 +117,7 @@ JobURL::JobURL( /*IN*/ const ::rtl::OUString& sURL )
             // check for "service="
             if (
                 (JobURL::implst_split(sToken,JOBURL_SERVICE_STR,JOBURL_SERVICE_LEN,sPartValue,sPartArguments)) &&
-                (sPartValue.getLength()>0                                                                    )
+                (!sPartValue.isEmpty())
                )
             {
                 // set the part value
@@ -419,7 +419,7 @@ void JobURL::impldbg_checkURL( /*IN*/ const sal_Char*  pURL                 ,
         bOK = (
                 (aURL.isValid()                          ) &&
                 (aURL.getEvent(sEvent)                   ) &&
-                (sEvent.getLength()>0                    ) &&
+                (!sEvent.isEmpty()                       ) &&
                 (sEvent.compareToAscii(pExpectedEvent)==0)
               );
 
@@ -440,9 +440,9 @@ void JobURL::impldbg_checkURL( /*IN*/ const sal_Char*  pURL                 ,
     {
         bOK = (
                 (!aURL.getEvent(sEvent)        ) &&
-                (sEvent.getLength()==0         ) &&
+                (sEvent.isEmpty()              ) &&
                 (!aURL.getEventArgs(sEventArgs)) &&
-                (sEventArgs.getLength()==0     )
+                (sEventArgs.isEmpty()          )
               );
     }
 
@@ -455,7 +455,7 @@ void JobURL::impldbg_checkURL( /*IN*/ const sal_Char*  pURL                 ,
         bOK = (
                 (aURL.isValid()                          ) &&
                 (aURL.getAlias(sAlias)                   ) &&
-                (sAlias.getLength()>0                    ) &&
+                (!sAlias.isEmpty()                       ) &&
                 (sAlias.compareToAscii(pExpectedAlias)==0)
               );
 
@@ -476,9 +476,9 @@ void JobURL::impldbg_checkURL( /*IN*/ const sal_Char*  pURL                 ,
     {
         bOK = (
                 (!aURL.getAlias(sAlias)        ) &&
-                (sAlias.getLength()==0         ) &&
+                (sAlias.isEmpty()              ) &&
                 (!aURL.getAliasArgs(sAliasArgs)) &&
-                (sAliasArgs.getLength()==0     )
+                (sAliasArgs.isEmpty()          )
               );
     }
 
@@ -491,7 +491,7 @@ void JobURL::impldbg_checkURL( /*IN*/ const sal_Char*  pURL                 ,
         bOK = (
                 (aURL.isValid()                              ) &&
                 (aURL.getService(sService)                   ) &&
-                (sService.getLength()>0                      ) &&
+                (!sService.isEmpty()                         ) &&
                 (sService.compareToAscii(pExpectedService)==0)
               );
 
@@ -512,9 +512,9 @@ void JobURL::impldbg_checkURL( /*IN*/ const sal_Char*  pURL                 ,
     {
         bOK = (
                 (!aURL.getService(sService)        ) &&
-                (sService.getLength()==0           ) &&
+                (sService.isEmpty()                ) &&
                 (!aURL.getServiceArgs(sServiceArgs)) &&
-                (sServiceArgs.getLength()==0       )
+                (sServiceArgs.isEmpty()            )
               );
     }
 

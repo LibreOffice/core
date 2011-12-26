@@ -591,7 +591,7 @@ css::uno::Reference< css::io::XStream > StorageHolder::openSubStreamWithFallback
         sNormedPath += sNormedPath.copy(1);
 
     // "/" => "" || "" => "" ?
-    if (sNormedPath.getLength() < 1)
+    if (sNormedPath.isEmpty())
         return ::rtl::OUString();
 
     // "bla" => "bla/"

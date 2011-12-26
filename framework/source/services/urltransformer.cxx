@@ -160,7 +160,7 @@ sal_Bool SAL_CALL URLTransformer::parseStrict( URL& aURL ) throw( RuntimeExcepti
 {
     // Safe impossible cases.
     if  (( &aURL                        ==  NULL    )   ||
-         ( aURL.Complete.getLength()    <   1       )       )
+         ( aURL.Complete.isEmpty() ) )
     {
         return sal_False;
     }
@@ -214,7 +214,7 @@ sal_Bool SAL_CALL URLTransformer::parseSmart(           URL&        aURL        
 {
     // Safe impossible cases.
     if  (( &aURL                            ==  NULL    ) ||
-         ( aURL.Complete.getLength()        <   1       )    )
+         ( aURL.Complete.isEmpty() ) )
     {
         return sal_False;
     }
@@ -279,7 +279,7 @@ sal_Bool SAL_CALL URLTransformer::assemble( URL& aURL ) throw( RuntimeException 
         ::rtl::OUStringBuffer aCompletePath( aURL.Path );
 
         // Concat the name if it is provided, just support a final slash
-        if ( aURL.Name.getLength() > 0 )
+        if ( !aURL.Name.isEmpty() )
         {
             sal_Int32 nIndex = aURL.Path.lastIndexOf( sal_Unicode('/') );
             if ( nIndex == ( aURL.Path.getLength() -1 ))
@@ -312,7 +312,7 @@ sal_Bool SAL_CALL URLTransformer::assemble( URL& aURL ) throw( RuntimeException 
         // Return "URL is assembled".
         return sal_True;
     }
-    else if ( aURL.Protocol.getLength() > 0 )
+    else if ( !aURL.Protocol.isEmpty() )
     {
         // Minimal support for unknown protocols
         ::rtl::OUStringBuffer aBuffer( aURL.Protocol );
@@ -333,7 +333,7 @@ sal_Bool SAL_CALL URLTransformer::assemble( URL& aURL ) throw( RuntimeException 
 {
     // Safe impossible cases.
     if  (( &aURL                        ==  NULL        )   ||
-         ( aURL.Complete.getLength()    <   1           )   ||
+         ( aURL.Complete.isEmpty()                      )   ||
             (( bWithPassword            !=  sal_True    )   &&
              ( bWithPassword            !=  sal_False   )       ) )
     {
@@ -345,7 +345,7 @@ sal_Bool SAL_CALL URLTransformer::assemble( URL& aURL ) throw( RuntimeException 
     sal_Bool bParseResult = parseSmart( aTestURL, aTestURL.Protocol );
     if ( bParseResult )
     {
-        if ( !bWithPassword && aTestURL.Password.getLength() > 0 )
+        if ( !bWithPassword && !aTestURL.Password.isEmpty() )
         {
             // Exchange password text with other placeholder string
             aTestURL.Password = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("<******>"));

@@ -341,7 +341,7 @@ Any ConfigurationAccess_UICommand::getSequenceFromCache( const ::rtl::OUString& 
 
         Sequence< PropertyValue > aPropSeq( 4 );
         aPropSeq[0].Name  = m_aPropLabel;
-        aPropSeq[0].Value = pIter->second.aContextLabel.getLength() ?
+        aPropSeq[0].Value = !pIter->second.aContextLabel.isEmpty() ?
                 makeAny( pIter->second.aContextLabel ): makeAny( pIter->second.aLabel );
         aPropSeq[1].Name  = m_aPropName;
         aPropSeq[1].Value <<= pIter->second.aCommandName;
@@ -738,7 +738,7 @@ throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::la
             }
         }
     }
-    else if ( m_aPrivateResourceURL.getLength() && aName.indexOf( m_aPrivateResourceURL ) == 0 )
+    else if ( !m_aPrivateResourceURL.isEmpty() && aName.indexOf( m_aPrivateResourceURL ) == 0 )
     {
         // special keys to retrieve information about a set of commands
         return m_xGenericUICommands->getByName( aName );

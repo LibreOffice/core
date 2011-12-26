@@ -864,7 +864,7 @@ sal_Bool AddonsOptions_Impl::ReadImages( ImageManager& aImageManager )
         // An user-defined image entry must have an URL. As "ImageIdentifier" has a higher priority
         // we also check if we already have an images association.
         if (( aAddonImageItemNodeValues[0] >>= aURL ) &&
-            aURL.getLength() > 0 &&
+            !aURL.isEmpty() &&
             !HasAssociatedImages( aURL ))
         {
             ::rtl::OUStringBuffer aBuf( aImagesItemNode );
@@ -1091,7 +1091,7 @@ sal_Bool AddonsOptions_Impl::ReadMenuItem( const ::rtl::OUString& aMenuNodeName,
     Sequence< Any >     aMenuItemNodePropValues;
 
     aMenuItemNodePropValues = GetProperties( GetPropertyNamesMenuItem( aAddonMenuItemTreeNode ) );
-    if (( aMenuItemNodePropValues[ OFFSET_MENUITEM_TITLE ] >>= aStrValue ) && aStrValue.getLength() > 0 )
+    if (( aMenuItemNodePropValues[ OFFSET_MENUITEM_TITLE ] >>= aStrValue ) && !aStrValue.isEmpty() )
     {
         aMenuItem[ OFFSET_MENUITEM_TITLE ].Value <<= aStrValue;
 
@@ -1122,7 +1122,7 @@ sal_Bool AddonsOptions_Impl::ReadMenuItem( const ::rtl::OUString& aMenuNodeName,
             aMenuItem[ OFFSET_MENUITEM_SUBMENU ].Value <<= aSubMenuSeq;
             bResult = sal_True;
         }
-        else if (( aMenuItemNodePropValues[ OFFSET_MENUITEM_URL ] >>= aStrValue ) && aStrValue.getLength() > 0 )
+        else if (( aMenuItemNodePropValues[ OFFSET_MENUITEM_URL ] >>= aStrValue ) && !aStrValue.isEmpty() )
         {
             // A simple menu item => read the other properties;
             ::rtl::OUString aMenuImageId;
@@ -1166,7 +1166,7 @@ sal_Bool AddonsOptions_Impl::ReadPopupMenu( const ::rtl::OUString& aPopupMenuNod
 
     aPopupMenuNodePropValues = GetProperties( GetPropertyNamesPopupMenu( aAddonPopupMenuTreeNode ) );
     if (( aPopupMenuNodePropValues[ OFFSET_POPUPMENU_TITLE ] >>= aStrValue ) &&
-         aStrValue.getLength() > 0 )
+         !aStrValue.isEmpty() )
     {
         aPopupMenu[ OFFSET_POPUPMENU_TITLE ].Value <<= aStrValue;
 
@@ -1230,7 +1230,7 @@ sal_Bool AddonsOptions_Impl::ReadToolBarItem( const ::rtl::OUString& aToolBarIte
     aToolBarItemNodePropValues = GetProperties( GetPropertyNamesToolBarItem( aAddonToolBarItemTreeNode ) );
 
     // A toolbar item must have a command URL
-    if (( aToolBarItemNodePropValues[ OFFSET_TOOLBARITEM_URL ] >>= aURL ) && aURL.getLength() > 0 )
+    if (( aToolBarItemNodePropValues[ OFFSET_TOOLBARITEM_URL ] >>= aURL ) && !aURL.isEmpty() )
     {
         if ( aURL.equals( SEPARATOR_URL ))
         {
@@ -1245,7 +1245,7 @@ sal_Bool AddonsOptions_Impl::ReadToolBarItem( const ::rtl::OUString& aToolBarIte
 
             bResult = sal_True;
         }
-        else if (( aToolBarItemNodePropValues[ OFFSET_TOOLBARITEM_TITLE ] >>= aTitle ) && aTitle.getLength() > 0 )
+        else if (( aToolBarItemNodePropValues[ OFFSET_TOOLBARITEM_TITLE ] >>= aTitle ) && !aTitle.isEmpty() )
         {
             // A normal toolbar item must also have title => read the other properties;
             ::rtl::OUString aImageId;
@@ -1384,7 +1384,7 @@ void AddonsOptions_Impl::ReadAndAssociateImages( const ::rtl::OUString& aURL, co
     const char* aExtArray[MAX_NUM_IMAGES] = { "_16", "_26" };
     const char* pBmpExt = ".bmp";
 
-    if ( aImageId.getLength() == 0 )
+    if ( aImageId.isEmpty() )
         return;
 
     bool        bImageFound = true;
@@ -1466,7 +1466,7 @@ AddonsOptions_Impl::ImageEntry* AddonsOptions_Impl::ReadImageData( const ::rtl::
             // has a higher priority.
             aPropertyData[i] >>= aImageURL;
 
-            if ( aImageURL.getLength() > 0 )
+            if ( !aImageURL.isEmpty() )
             {
                 Image aImage;
                 Image aImageNoScale;

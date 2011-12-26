@@ -410,7 +410,7 @@ throw( SAXException, RuntimeException )
                     do
                     {
                         ::rtl::OUString aToken = aTemp.getToken( 0, '+', nIndex );
-                        if ( aToken.getLength() > 0 )
+                        if ( !aToken.isEmpty() )
                         {
                             if ( aToken.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ATTRIBUTE_ITEMSTYLE_TEXT ) ) )
                                 nItemBits |= ::com::sun::star::ui::ItemStyle::TEXT;
@@ -424,7 +424,7 @@ throw( SAXException, RuntimeException )
                 }
             }
 
-            if ( aCommandId.getLength() > 0 )
+            if ( !aCommandId.isEmpty() )
             {
                 Sequence< PropertyValue > aSubMenuProp( 6 );
                 initPropertyCommon( aSubMenuProp, aCommandId, aHelpId, aLabel, nItemBits );
@@ -645,7 +645,7 @@ throw( SAXException, RuntimeException )
                 do
                 {
                     ::rtl::OUString aToken = aTemp.getToken( 0, '+', nIndex );
-                    if ( aToken.getLength() > 0 )
+                    if ( !aToken.isEmpty() )
                     {
                         if ( aToken.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ATTRIBUTE_ITEMSTYLE_TEXT ) ) )
                             nItemBits |= ::com::sun::star::ui::ItemStyle::TEXT;
@@ -660,7 +660,7 @@ throw( SAXException, RuntimeException )
 
         }
 
-        if ( aCommandId.getLength() > 0 )
+        if ( !aCommandId.isEmpty() )
         {
             Sequence< PropertyValue > aSubMenuProp( 6 );
             initPropertyCommon( aSubMenuProp, aCommandId, aHelpId, aLabel, nItemBits );
@@ -702,7 +702,7 @@ throw( SAXException, RuntimeException )
                 do
                 {
                     ::rtl::OUString aToken = aTemp.getToken( 0, '+', nIndex );
-                    if ( aToken.getLength() > 0 )
+                    if ( !aToken.isEmpty() )
                     {
                         if ( aToken.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ATTRIBUTE_ITEMSTYLE_TEXT ) ) )
                             nItemBits |= ::com::sun::star::ui::ItemStyle::TEXT;
@@ -717,7 +717,7 @@ throw( SAXException, RuntimeException )
 
         }
 
-        if ( aCommandId.getLength() > 0 )
+        if ( !aCommandId.isEmpty() )
         {
             Sequence< PropertyValue > aMenuItem( 6 );
             initPropertyCommon( aMenuItem, aCommandId, aHelpId, aLabel, nItemBits );
@@ -885,7 +885,7 @@ throw ( SAXException, RuntimeException )
                     WriteMenuItem( aCommandURL, aLabel, aHelpURL, nItemBits );
                     bSeparator = sal_False;
                 }
-                else if (( aCommandURL.getLength() > 0 ) && !AddonPopupMenu::IsCommandURLPrefix ( aCommandURL ))
+                else if ( !aCommandURL.isEmpty() && !AddonPopupMenu::IsCommandURLPrefix( aCommandURL ))
                 {
                     ::comphelper::AttributeList* pListMenu = new ::comphelper::AttributeList;
                     Reference< XAttributeList > xListMenu( (XAttributeList *)pListMenu , UNO_QUERY );
@@ -919,7 +919,7 @@ throw ( SAXException, RuntimeException )
             {
                 if ( nType == ::com::sun::star::ui::ItemType::DEFAULT )
                 {
-                    if ( aCommandURL.getLength() > 0 )
+                    if ( !aCommandURL.isEmpty() )
                     {
                         bSeparator = sal_False;
                         WriteMenuItem( aCommandURL, aLabel, aHelpURL, nItemBits );
@@ -946,14 +946,14 @@ void OWriteMenuDocumentHandler::WriteMenuItem( const ::rtl::OUString& aCommandUR
                                 m_aAttributeType,
                                 aCommandURL );
 
-    if ( aHelpURL.getLength() > 0 )
+    if ( !aHelpURL.isEmpty() )
     {
         pList->AddAttribute( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_NS_HELPID )),
                              m_aAttributeType,
                              aHelpURL );
     }
 
-    if (( aLabel.getLength() > 0 ) && !( aCommandURL.copy( CMD_PROTOCOL_SIZE ).equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(CMD_PROTOCOL)) ))
+    if ( !aLabel.isEmpty() && !aCommandURL.copy( CMD_PROTOCOL_SIZE ).equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(CMD_PROTOCOL)) )
     {
         pList->AddAttribute( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_NS_LABEL )),
                                 m_aAttributeType,
@@ -968,7 +968,7 @@ void OWriteMenuDocumentHandler::WriteMenuItem( const ::rtl::OUString& aCommandUR
         {
             if ( nStyle & pStyle->nBit )
             {
-                if ( aValue.getLength() )
+                if ( !aValue.isEmpty() )
                     aValue = aValue.concat( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("+") ) );
                 aValue += rtl::OUString::createFromAscii( pStyle->attrName );
             }

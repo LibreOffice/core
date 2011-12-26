@@ -722,7 +722,7 @@ rtl::OUString SubstitutePathVariables::GetWorkPath() const
     }
 
     // fallback in case config layer does not return an useable work dir value.
-    if (aWorkPath.getLength() < 1)
+    if (aWorkPath.isEmpty())
         aWorkPath = GetWorkVariableValue();
 
     return aWorkPath;
@@ -748,7 +748,7 @@ rtl::OUString SubstitutePathVariables::GetWorkVariableValue() const
 
     // fallback to $HOME in case platform dependend config layer does not return
     // an usuable work dir value.
-    if (aWorkPath.getLength() < 1)
+    if (aWorkPath.isEmpty())
     {
         osl::Security aSecurity;
         aSecurity.getHomeDir( aWorkPath );
@@ -785,7 +785,7 @@ rtl::OUString SubstitutePathVariables::GetPathVariableValue() const
         do
         {
             ::rtl::OUString sToken = aPathList.getToken(0, SAL_PATHSEPARATOR, nToken);
-            if (sToken.getLength())
+            if (!sToken.isEmpty())
             {
                 osl::FileBase::getFileURLFromSystemPath( sToken, aTmp );
                 if ( bAppendSep )
@@ -1017,10 +1017,10 @@ throw ( RuntimeException )
         if ( osl::FileBase::getFileURLFromSystemPath( rURL, aTemp ) == osl::FileBase::E_None )
         {
             aTemp = ConvertOSLtoUCBURL( aTemp );
-            if ( aTemp.getLength() )
+            if ( !aTemp.isEmpty() )
             {
                 aURL = INetURLObject( aTemp ).GetMainURL( INetURLObject::NO_DECODE );
-                if( !aURL.getLength() )
+                if( aURL.isEmpty() )
                     return rURL;
             }
             else

@@ -165,7 +165,7 @@ throw ( RuntimeException )
         if ( m_bInitialized &&
              m_xFrame.is() &&
              m_xServiceManager.is() &&
-             m_aCommandURL.getLength() )
+             !m_aCommandURL.isEmpty() )
         {
             xURLTransformer = Reference< XURLTransformer >( m_xServiceManager->createInstance(
                                                                 rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))),

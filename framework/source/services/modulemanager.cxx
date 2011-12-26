@@ -172,7 +172,7 @@ ModuleManager::~ModuleManager()
     if (xWindow.is())
         sModule = implts_identify(xWindow);
 
-    if (sModule.getLength() < 1)
+    if (sModule.isEmpty())
         throw css::frame::UnknownModuleException(
                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Cant find suitable module for the given component.")),
                 static_cast< ::cppu::OWeakObject* >(this));

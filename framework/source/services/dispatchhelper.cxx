@@ -121,7 +121,7 @@ css::uno::Any SAL_CALL DispatchHelper::executeDispatch(
     // check for valid parameters
     if (
         (!xDispatchProvider.is()) ||
-        (sURL.getLength()<1     )
+        (sURL.isEmpty()         )
        )
     {
         return css::uno::Any();

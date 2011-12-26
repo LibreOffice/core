@@ -292,7 +292,7 @@ css::uno::Reference< css::uno::XInterface > ServiceHandler::implts_dispatch( con
         sServiceName = sServiceAndArguments;
     }
 
-    if (!sServiceName.getLength())
+    if (sServiceName.isEmpty())
         return css::uno::Reference< css::uno::XInterface >();
 
     // If a service doesnt support an optional job executor interface - he can't get

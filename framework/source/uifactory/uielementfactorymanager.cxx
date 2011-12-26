@@ -199,7 +199,7 @@ Sequence< Sequence< PropertyValue > > ConfigurationAccess_FactoryManager::getFac
     while ( pIter != m_aFactoryManagerMap.end() )
     {
         rtl::OUString aFactory = pIter->first;
-        if ( aFactory.getLength() > 0 )
+        if ( !aFactory.isEmpty() )
         {
             sal_Int32                 nToken = 0;
             Sequence< PropertyValue > aSeq( 1 );
@@ -507,7 +507,7 @@ throw ( RuntimeException )
     rtl::OUString aServiceSpecifier = m_pConfigAccess->getFactorySpecifierFromTypeNameModule( aType, aName, aModuleId );
 
     aLock.unlock();
-    if ( aServiceSpecifier.getLength() )
+    if ( !aServiceSpecifier.isEmpty() )
         return Reference< XUIElementFactory >( xSManager->createInstance( aServiceSpecifier ), UNO_QUERY );
     else
         return Reference< XUIElementFactory >();

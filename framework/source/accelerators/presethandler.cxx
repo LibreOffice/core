@@ -759,7 +759,7 @@ void PresetHandler::addStorageListener(IStorageListener* pListener)
     aReadLock.unlock();
     // <- SAFE ----------------------------------
 
-    if (!sRelPath.getLength())
+    if (sRelPath.isEmpty())
         return;
 
     switch(eCfgType)
@@ -789,7 +789,7 @@ void PresetHandler::removeStorageListener(IStorageListener* pListener)
     aReadLock.unlock();
     // <- SAFE ----------------------------------
 
-    if (!sRelPath.getLength())
+    if (sRelPath.isEmpty())
         return;
 
     switch(eCfgType)

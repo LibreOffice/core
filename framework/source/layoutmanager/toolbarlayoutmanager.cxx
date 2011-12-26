@@ -821,7 +821,7 @@ long ToolbarLayoutManager::childWindowEvent( VclSimpleEvent* pEvent )
                     aCommand = pToolBox->GetItemCommand( nId );
             }
 
-            if (( aToolbarName.getLength() > 0 ) && ( aCommand.getLength() > 0 ))
+            if ( !aToolbarName.isEmpty() && !aCommand.isEmpty() )
             {
                 ReadGuard aReadLock( m_aLock );
                 ::std::vector< uno::Reference< ui::XUIFunctionListener > > aListenerArray;
@@ -863,7 +863,7 @@ long ToolbarLayoutManager::childWindowEvent( VclSimpleEvent* pEvent )
                 if ( pToolBox )
                 {
                     ::rtl::OUString aToolbarName = retrieveToolbarNameFromHelpURL( pToolBox );
-                    if ( aToolbarName.getLength() > 0 )
+                    if ( !aToolbarName.isEmpty() )
                     {
                         ::rtl::OUStringBuffer aBuf(100);
                         aBuf.appendAscii( "private:resource/toolbar/" );
@@ -1024,13 +1024,13 @@ void ToolbarLayoutManager::implts_createAddonsToolBars()
 
                 ::rtl::OUString aGenericAddonTitle = implts_generateGenericAddonToolbarTitle( i+1 );
 
-                if ( aElement.m_aName.getLength() > 0 )
+                if ( !aElement.m_aName.isEmpty() )
                 {
                     // Reuse a local entry so we are able to use the latest
                     // UI changes for this document.
                     implts_setElementData( aElement, xDockWindow );
                     aElement.m_xUIElement = xUIElement;
-                    if ( aElement.m_aUIName.getLength() == 0 )
+                    if ( aElement.m_aUIName.isEmpty() )
                     {
                         aElement.m_aUIName = aGenericAddonTitle;
                         implts_writeWindowStateData( aElement );
@@ -1043,7 +1043,7 @@ void ToolbarLayoutManager::implts_createAddonsToolBars()
                     aNewToolbar.m_bFloating = true;
                     implts_readWindowStateData( aAddonToolBarName, aNewToolbar );
                     implts_setElementData( aNewToolbar, xDockWindow );
-                    if ( aNewToolbar.m_aUIName.getLength() == 0 )
+                    if ( aNewToolbar.m_aUIName.isEmpty() )
                     {
                         aNewToolbar.m_aUIName = aGenericAddonTitle;
                         implts_writeWindowStateData( aNewToolbar );
@@ -1198,20 +1198,20 @@ void ToolbarLayoutManager::implts_createCustomToolBars( const uno::Sequence< uno
         }
 
         // Only create custom toolbars. Their name have to start with "custom_"!
-        if ( aTbxResName.getLength() > 0 && aTbxResName.indexOf( m_aCustomTbxPrefix ) != -1 )
+        if ( !aTbxResName.isEmpty() && ( aTbxResName.indexOf( m_aCustomTbxPrefix ) != -1 ) )
             implts_createCustomToolBar( aTbxResName, aTbxTitle );
     }
 }
 
 void ToolbarLayoutManager::implts_createCustomToolBar( const rtl::OUString& aTbxResName, const rtl::OUString& aTitle )
 {
-    if ( aTbxResName.getLength() > 0 )
+    if ( !aTbxResName.isEmpty() )
     {
         bool bNotify( false );
         uno::Reference< ui::XUIElement > xUIElement;
         implts_createToolBar( aTbxResName, bNotify, xUIElement );
 
-        if ( aTitle.getLength() != 0 && xUIElement.is() )
+        if ( !aTitle.isEmpty() && xUIElement.is() )
         {
             SolarMutexGuard aGuard;
 
@@ -1336,7 +1336,7 @@ void ToolbarLayoutManager::implts_createToolBar( const ::rtl::OUString& aName, b
             WriteGuard aWriteLock( m_aLock );
 
             UIElement& rElement = impl_findToolbar( aName );
-            if ( rElement.m_aName.getLength() > 0 )
+            if ( !rElement.m_aName.isEmpty() )
             {
                 // Reuse a local entry so we are able to use the latest
                 // UI changes for this document.
@@ -3744,7 +3744,7 @@ throw (uno::RuntimeException)
     aReadLock.unlock();
 
     UIElement aUIDockingElement = implts_findToolbar( e.Source );
-    bool      bWinFound( aUIDockingElement.m_aName.getLength() > 0 );
+    bool bWinFound( !aUIDockingElement.m_aName.isEmpty() );
     uno::Reference< awt::XWindow > xWindow( e.Source, uno::UNO_QUERY );
 
     if ( bWinFound && xWindow.is() )
@@ -3805,7 +3805,7 @@ throw (uno::RuntimeException)
     if ( !bDockingInProgress )
     {
         aUIDockingElement = implts_findToolbar( e.Source );
-        bool bWinFound = ( aUIDockingElement.m_aName.getLength() > 0 );
+        bool bWinFound = ( !aUIDockingElement.m_aName.isEmpty() );
 
         if ( bWinFound && xWindow.is() )
         {
@@ -3941,7 +3941,7 @@ throw (uno::RuntimeException)
     aWriteLock.unlock();
 
     // destroy element
-    if ( aName.getLength() > 0 )
+    if ( !aName.isEmpty() )
     {
         implts_writeWindowStateData( aUIElement );
         destroyToolbar( aName );

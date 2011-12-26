@@ -252,7 +252,7 @@ throw(  SAXException, RuntimeException )
                             {
                                 ::rtl::OUString aColor = xAttribs->getValueByIndex( n );
 
-                                if ( aColor.getLength() > 0 )
+                                if ( !aColor.isEmpty() )
                                 {
                                     if ( aColor.getStr()[0] == '#' )
                                     {

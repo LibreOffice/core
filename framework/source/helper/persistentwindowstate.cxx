@@ -149,7 +149,7 @@ void SAL_CALL PersistentWindowState::frameAction(const css::frame::FrameActionEv
 
     // unknown module -> no configuration available!
     ::rtl::OUString sModuleName = PersistentWindowState::implst_identifyModule(xSMGR, xFrame);
-    if (!sModuleName.getLength())
+    if (sModuleName.isEmpty())
         return;
 
     switch(aEvent.Action)
@@ -312,7 +312,7 @@ void PersistentWindowState::implst_setWindowStateOnWindow(const css::uno::Refere
 {
     if (
         (!xWindow.is()                ) ||
-        ( sWindowState.getLength() < 1)
+        ( sWindowState.isEmpty() )
        )
         return;
 

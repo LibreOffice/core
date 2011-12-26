@@ -227,7 +227,7 @@ throw ( NoSuchElementException, RuntimeException)
             sShort = ::rtl::OUString();
         }
 
-        if (!sShort.getLength())
+        if (sShort.isEmpty())
             throw NoSuchElementException();
         PropertyValue   aArg;
         Sequence< Any > aArgs( 2 );

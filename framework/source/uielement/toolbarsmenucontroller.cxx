@@ -176,7 +176,7 @@ void ToolbarsMenuController::addCommand(
     sal_uInt16        nItemId    = m_xPopupMenu->getItemCount()+1;
 
     rtl::OUString aLabel;
-    if ( rLabel.getLength() == 0 )
+    if ( rLabel.isEmpty() )
         aLabel = getUINameFromCommand( rCommandURL );
     else
         aLabel = rLabel;
@@ -297,7 +297,7 @@ static void fillHashMap( const Sequence< Sequence< ::com::sun::star::beans::Prop
                 pProperties[j].Value >>= aUIName;
         }
 
-        if ( aResourceURL.getLength() > 0 &&
+        if ( !aResourceURL.isEmpty() &&
              rHashMap.find( aResourceURL ) == rHashMap.end() )
             rHashMap.insert( ToolbarHashMap::value_type( aResourceURL, aUIName ));
     }
@@ -322,7 +322,7 @@ Sequence< Sequence< com::sun::star::beans::PropertyValue > > ToolbarsMenuControl
                 xPropSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ResourceURL" ))) >>= aResName;
 
                 if (( nType == ::com::sun::star::ui::UIElementType::TOOLBAR ) &&
-                    ( aResName.getLength() > 0 ))
+                    !aResName.isEmpty() )
                 {
                     ToolBarInfo aToolBarInfo;
 
@@ -411,7 +411,7 @@ void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
             sal_Bool      bHideFromMenu( sal_False );
             sal_Bool      bContextSensitive( sal_False );
             sal_Bool      bVisible( sal_False );
-            if ( aUIName.getLength() == 0 &&
+            if ( aUIName.isEmpty() &&
                  m_xPersistentWindowState.is() )
             {
                 try
@@ -444,7 +444,7 @@ void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
 
             }
 
-            if (( aUIName.getLength() > 0 ) && ( !bHideFromMenu ))
+            if ( !aUIName.isEmpty() && !bHideFromMenu )
             {
                 ToolBarEntry aTbEntry;
                 aTbEntry.aUIName = aUIName;

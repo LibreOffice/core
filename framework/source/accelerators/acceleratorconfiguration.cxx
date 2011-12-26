@@ -186,7 +186,7 @@ void SAL_CALL XMLBasedAcceleratorConfiguration::setKeyEvent(const css::awt::KeyE
         static_cast< ::cppu::OWeakObject* >(this),
         0);
 
-    if (!sCommand.getLength())
+    if (sCommand.isEmpty())
         throw css::lang::IllegalArgumentException(
         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Empty command strings are not allowed here.")),
         static_cast< ::cppu::OWeakObject* >(this),
@@ -226,7 +226,7 @@ css::uno::Sequence< css::awt::KeyEvent > SAL_CALL XMLBasedAcceleratorConfigurati
           css::container::NoSuchElementException,
           css::uno::RuntimeException            )
 {
-    if (!sCommand.getLength())
+    if (sCommand.isEmpty())
         throw css::lang::IllegalArgumentException(
                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Empty command strings are not allowed here.")),
                 static_cast< ::cppu::OWeakObject* >(this),
@@ -263,7 +263,7 @@ css::uno::Sequence< css::uno::Any > SAL_CALL XMLBasedAcceleratorConfiguration::g
     for (i=0; i<c; ++i)
     {
         const ::rtl::OUString& rCommand = lCommandList[i];
-        if (!rCommand.getLength())
+        if (rCommand.isEmpty())
             throw css::lang::IllegalArgumentException(
                     ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Empty command strings are not allowed here.")),
                     static_cast< ::cppu::OWeakObject* >(this),
@@ -292,7 +292,7 @@ void SAL_CALL XMLBasedAcceleratorConfiguration::removeCommandFromAllKeyEvents(co
           css::container::NoSuchElementException,
           css::uno::RuntimeException            )
 {
-    if (!sCommand.getLength())
+    if (sCommand.isEmpty())
         throw css::lang::IllegalArgumentException(
                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Empty command strings are not allowed here.")),
                 static_cast< ::cppu::OWeakObject* >(this),
@@ -643,7 +643,7 @@ AcceleratorCache& XMLBasedAcceleratorConfiguration::impl_getCFG(sal_Bool bWriteA
     ::rtl::OUString                                 sISOLocale;
     xProp->getPropertyValue(LOCALE_KEY) >>= sISOLocale;
 
-    if (!sISOLocale.getLength())
+    if (sISOLocale.isEmpty())
         return ::comphelper::Locale::EN_US();
     return ::comphelper::Locale(sISOLocale);
 }
@@ -757,7 +757,7 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::setKeyEvent(const css::awt::KeyE
                 static_cast< ::cppu::OWeakObject* >(this),
                 0);
 
-    if (!sCommand.getLength())
+    if (sCommand.isEmpty())
                 throw css::lang::IllegalArgumentException(
                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Empty command strings are not allowed here.")),
                 static_cast< ::cppu::OWeakObject* >(this),
@@ -844,7 +844,7 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::removeKeyEvent(const css::awt::K
     if (rPrimaryCache.hasKey(aKeyEvent))
     {
         ::rtl::OUString sDelCommand = rPrimaryCache.getCommandByKey(aKeyEvent);
-        if (sDelCommand.getLength() > 0)
+        if (!sDelCommand.isEmpty())
         {
             ::rtl::OUString sOriginalCommand = rPrimaryCache.getCommandByKey(aKeyEvent);
             if (rSecondaryCache.hasCommand(sOriginalCommand))
@@ -861,7 +861,7 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::removeKeyEvent(const css::awt::K
     else
     {
         ::rtl::OUString sDelCommand = rSecondaryCache.getCommandByKey(aKeyEvent);
-        if (sDelCommand.getLength() > 0)
+        if (!sDelCommand.isEmpty())
             rSecondaryCache.removeKey(aKeyEvent);
     }
 
@@ -874,7 +874,7 @@ css::uno::Sequence< css::awt::KeyEvent > SAL_CALL XCUBasedAcceleratorConfigurati
         css::container::NoSuchElementException,
         css::uno::RuntimeException            )
 {
-    if (!sCommand.getLength())
+    if (sCommand.isEmpty())
         throw css::lang::IllegalArgumentException(
                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Empty command strings are not allowed here.")),
                 static_cast< ::cppu::OWeakObject* >(this),
@@ -938,7 +938,7 @@ css::uno::Sequence< css::uno::Any > SAL_CALL XCUBasedAcceleratorConfiguration::g
     for (i=0; i<c; ++i)
     {
         const ::rtl::OUString& rCommand = lCommandList[i];
-        if (!rCommand.getLength())
+        if (rCommand.isEmpty())
             throw css::lang::IllegalArgumentException(
                     ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Empty command strings are not allowed here.")),
                     static_cast< ::cppu::OWeakObject* >(this),
@@ -971,7 +971,7 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::removeCommandFromAllKeyEvents(co
         css::container::NoSuchElementException,
         css::uno::RuntimeException            )
 {
-    if (!sCommand.getLength())
+    if (sCommand.isEmpty())
         throw css::lang::IllegalArgumentException(
                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Empty command strings are not allowed here.")),
                 static_cast< ::cppu::OWeakObject* >(this),
@@ -1249,7 +1249,7 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::changesOccurred(const css::util:
         {
             ::rtl::OUString sModule;
             sKey = ::utl::extractFirstFromConfigurationPath(sPath, &sPath);
-            if (( sKey.getLength() > 0 ) && ( sPath.getLength() > 0 ))
+            if ( !sKey.isEmpty() && !sPath.isEmpty() )
                 reloadChanged(sPrimarySecondary, sGlobalModules, sModule, sKey);
         }
         else if ( sGlobalModules.equals(CFG_ENTRY_MODULES) )
@@ -1257,7 +1257,7 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::changesOccurred(const css::util:
             ::rtl::OUString sModule = ::utl::extractFirstFromConfigurationPath(sPath, &sPath);
             sKey = ::utl::extractFirstFromConfigurationPath(sPath, &sPath);
 
-            if (( sKey.getLength() > 0 ) && ( sPath.getLength() > 0 ))
+            if ( !sKey.isEmpty() && !sPath.isEmpty() )
             {
                 reloadChanged(sPrimarySecondary, sGlobalModules, sModule, sKey);
             }
@@ -1328,7 +1328,7 @@ void XCUBasedAcceleratorConfiguration::impl_ts_load( sal_Bool bPreferred, const 
             ::rtl::OUString sLocale = *pFound;
             ::rtl::OUString sCommand;
             xCommand->getByName(sLocale) >>= sCommand;
-            if (sCommand.getLength()<1)
+            if (sCommand.isEmpty())
                 continue;
 
             css::awt::KeyEvent aKeyEvent;
@@ -1349,7 +1349,7 @@ void XCUBasedAcceleratorConfiguration::impl_ts_load( sal_Bool bPreferred, const 
 
                 sToken[k] = sKey.getToken(0, '_', nIndex);
                 ::rtl::OUString sTest = sToken[k];
-                if (sToken[k].getLength() < 1)
+                if (sToken[k].isEmpty())
                 {
                     bValid = sal_False;
                     break;
@@ -1604,14 +1604,14 @@ void XCUBasedAcceleratorConfiguration::reloadChanged( const ::rtl::OUString& sPr
 
     if (sPrimarySecondary.equals(CFG_ENTRY_PRIMARY))
     {
-        if (sCommand.getLength() ==0)
+        if (sCommand.isEmpty())
             m_aPrimaryReadCache.removeKey(aKeyEvent);
         else
             m_aPrimaryReadCache.setKeyCommandPair(aKeyEvent, sCommand);
     }
     else if (sPrimarySecondary.equals(CFG_ENTRY_SECONDARY))
     {
-        if (sCommand.getLength() ==0)
+        if (sCommand.isEmpty())
             m_aSecondaryReadCache.removeKey(aKeyEvent);
         else
             m_aSecondaryReadCache.setKeyCommandPair(aKeyEvent, sCommand);
@@ -1685,7 +1685,7 @@ AcceleratorCache& XCUBasedAcceleratorConfiguration::impl_getCFG(sal_Bool bPrefer
     ::rtl::OUString                                 sISOLocale;
     xProp->getPropertyValue(LOCALE_KEY) >>= sISOLocale;
 
-    if (!sISOLocale.getLength())
+    if (sISOLocale.isEmpty())
         return ::comphelper::Locale::EN_US();
     return ::comphelper::Locale(sISOLocale);
 }

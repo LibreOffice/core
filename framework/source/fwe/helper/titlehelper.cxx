@@ -121,7 +121,7 @@ void TitleHelper::setOwner(const css::uno::Reference< css::uno::XInterface >& xO
             return m_sTitle;
 
         // Title seams to be up-to-date. Return it directly.
-        if (m_sTitle.getLength() > 0)
+        if (!m_sTitle.isEmpty())
             return m_sTitle;
 
         // Title seams to be unused till now ... do bootstraping
@@ -377,7 +377,7 @@ void TitleHelper::impl_updateTitleForModel (const css::uno::Reference< css::fram
     if (xURLProvider.is())
         sURL = xURLProvider->getLocation ();
 
-    if (sURL.getLength () > 0)
+    if (!sURL.isEmpty())
     {
         sTitle = impl_convertURL2Title(sURL);
         if (nLeasedNumber != css::frame::UntitledNumbersConst::INVALID_NUMBER)
@@ -588,7 +588,7 @@ void TitleHelper::impl_appendModuleName (::rtl::OUStringBuffer& sTitle)
 
         // An UIname property is an optional value !
         // So please add it to the title in case it does realy exists only.
-        if (sUIName.getLength() > 0)
+        if (!sUIName.isEmpty())
         {
             sTitle.appendAscii (" "    );
             sTitle.append      (sUIName);
@@ -690,10 +690,10 @@ void TitleHelper::impl_setSubTitle (const css::uno::Reference< css::frame::XTitl
         if (aURL.hasExtension(INetURLObject::LAST_SEGMENT))
             sTitle = aURL.getName(INetURLObject::LAST_SEGMENT, sal_True, INetURLObject::DECODE_WITH_CHARSET);
 
-        if ( ! sTitle.getLength() )
+        if ( sTitle.isEmpty() )
             sTitle = aURL.GetHostPort(INetURLObject::DECODE_WITH_CHARSET);
 
-        if ( ! sTitle.getLength() )
+        if ( sTitle.isEmpty() )
             sTitle = aURL.GetURLNoPass(INetURLObject::DECODE_WITH_CHARSET);
     }
 

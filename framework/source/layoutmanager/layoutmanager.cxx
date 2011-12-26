@@ -295,7 +295,7 @@ void LayoutManager::implts_reset( sal_Bool bAttached )
             }
             catch( const Exception& ) {}
 
-            if ( aModuleIdentifier.getLength() && aOldModuleIdentifier != aModuleIdentifier )
+            if ( !aModuleIdentifier.isEmpty() && aOldModuleIdentifier != aModuleIdentifier )
             {
                 Reference< XModuleUIConfigurationManagerSupplier > xModuleCfgSupplier;
                 if ( xServiceManager.is() )
@@ -1706,7 +1706,7 @@ throw (uno::RuntimeException)
     }
     else if ( aElementType.equalsIgnoreAsciiCaseAscii( UIRESOURCETYPE_TOOLBAR ) && m_bVisible )
     {
-        bool bComponentAttached( m_aModuleIdentifier.getLength() > 0 );
+        bool bComponentAttached( !m_aModuleIdentifier.isEmpty() );
         uno::Reference< uno::XInterface > xThis( m_xToolbarManager, uno::UNO_QUERY );
         ToolbarLayoutManager* pToolbarManager = m_pToolbarManager;
         aWriteLock.unlock();

@@ -176,7 +176,7 @@ void SAL_CALL AcceleratorConfigurationReader::startElement(const ::rtl::OUString
 
         // validate command and key event.
         if (
-            (!sCommand.getLength()) ||
+            sCommand.isEmpty() ||
             (aEvent.KeyCode == 0  )
            )
         {

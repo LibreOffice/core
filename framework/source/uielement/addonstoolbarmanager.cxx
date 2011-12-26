@@ -125,10 +125,10 @@ AddonsToolBarManager::~AddonsToolBarManager()
 
 static sal_Bool IsCorrectContext( const ::rtl::OUString& rModuleIdentifier, const ::rtl::OUString& aContextList )
 {
-    if ( aContextList.getLength() == 0 )
+    if ( aContextList.isEmpty() )
         return sal_True;
 
-    if ( rModuleIdentifier.getLength() > 0 )
+    if ( !rModuleIdentifier.isEmpty() )
     {
         sal_Int32 nIndex = aContextList.indexOf( rModuleIdentifier );
         return ( nIndex >= 0 );
@@ -145,7 +145,7 @@ static Image RetrieveImage( Reference< com::sun::star::frame::XFrame >& rFrame,
 {
     Image aImage;
 
-    if ( aImageId.getLength() > 0 )
+    if ( !aImageId.isEmpty() )
     {
         aImage = framework::AddonsOptions().GetImageFromURL( aImageId, bBigImage );
         if ( !!aImage )

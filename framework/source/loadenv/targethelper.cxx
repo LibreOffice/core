@@ -40,7 +40,7 @@ sal_Bool TargetHelper::matchSpecialTarget(const ::rtl::OUString& sCheckTarget  ,
     {
         case E_SELF :
             return (
-                    (!sCheckTarget.getLength()              ) ||
+                    (sCheckTarget.isEmpty()                 ) ||
                     (sCheckTarget.equals(SPECIALTARGET_SELF))
                    );
 
@@ -77,7 +77,7 @@ sal_Bool TargetHelper::isValidNameForFrame(const ::rtl::OUString& sName)
     // some special targets are realy special ones :-)
     // E.g. the are realy used to locate one frame inside the frame tree.
     if (
-        (!sName.getLength()                                 ) ||
+        (sName.isEmpty()                                    ) ||
         (TargetHelper::matchSpecialTarget(sName, E_HELPTASK)) ||
         (TargetHelper::matchSpecialTarget(sName, E_BEAMER)  )
        )

@@ -184,7 +184,7 @@ void SAL_CALL PathSettings::changesOccurred(const css::util::ChangesEvent& aEven
         aChange.Accessor >>= sChanged;
 
         ::rtl::OUString sPath = ::utl::extractFirstFromConfigurationPath(sChanged);
-        if (sPath.getLength())
+        if (!sPath.isEmpty())
         {
             PathSettings::EChangeOp eOp = impl_updatePath(sPath, sal_True);
             if (
@@ -678,7 +678,7 @@ void PathSettings::impl_subst(PathSettings::PathInfo& aPath   ,
         lTemp.push_back(*pIt);
     }
 
-    if (rPath.sWritePath.getLength() > 0)
+    if (!rPath.sWritePath.isEmpty())
         lTemp.push_back(rPath.sWritePath);
 
     ::rtl::OUStringBuffer sPathVal(256);
@@ -703,7 +703,7 @@ OUStringList PathSettings::impl_convertOldStyle2Path(const ::rtl::OUString& sOld
     do
     {
         ::rtl::OUString sToken = sOldStylePath.getToken(0, ';', nToken);
-        if (sToken.getLength())
+        if (!sToken.isEmpty())
             lList.push_back(sToken);
     }
     while(nToken >= 0);

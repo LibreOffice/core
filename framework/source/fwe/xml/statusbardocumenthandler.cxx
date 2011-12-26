@@ -584,7 +584,7 @@ void OWriteStatusBarDocumentHandler::WriteStatusBarDocument() throw
                 nStyle,
                 nWidth );
 
-            if ( aCommandURL.getLength() > 0 )
+            if ( !aCommandURL.isEmpty() )
                 WriteStatusBarItem( aCommandURL, aHelpURL, nOffset, nStyle, nWidth );
         }
     }
@@ -610,7 +610,7 @@ throw ( SAXException, RuntimeException )
     ::comphelper::AttributeList* pList = new ::comphelper::AttributeList;
     Reference< XAttributeList > xList( (XAttributeList *) pList , UNO_QUERY );
 
-    if ( m_aAttributeURL.getLength() == 0 )
+    if (m_aAttributeURL.isEmpty() )
     {
         m_aAttributeURL = m_aXMLXlinkNS;
         m_aAttributeURL += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_URL ));

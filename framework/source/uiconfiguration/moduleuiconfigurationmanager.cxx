@@ -272,7 +272,7 @@ void ModuleUIConfigurationManager::impl_preloadUIElementTypeList( Layer eLayer, 
                     OUString aExtension( aUIElementNames[n].copy( nIndex+1 ));
                     OUString aUIElementName( aUIElementNames[n].copy( 0, nIndex ));
 
-                    if (( aUIElementName.getLength() > 0 ) &&
+                    if (!aUIElementName.isEmpty() &&
                         ( aExtension.equalsIgnoreAsciiCaseAsciiL( "xml", 3 )))
                     {
                         aUIElementData.aResourceURL = aResURLPrefix + aUIElementName;
@@ -302,7 +302,7 @@ void ModuleUIConfigurationManager::impl_requestUIElementData( sal_Int16 nElement
     UIElementType& rElementTypeData = m_aUIElements[eLayer][nElementType];
 
     Reference< XStorage > xElementTypeStorage = rElementTypeData.xStorage;
-    if ( xElementTypeStorage.is() && aUIElementData.aName.getLength() )
+    if ( xElementTypeStorage.is() && !aUIElementData.aName.isEmpty() )
     {
         try
         {
@@ -839,7 +839,7 @@ void SAL_CALL ModuleUIConfigurationManager::initialize( const Sequence< Any >& a
             else if ( i == ::com::sun::star::ui::UIElementType::STATUSBAR )
                 aResourceType = PresetHandler::RESOURCETYPE_STATUSBAR();
 
-            if ( aResourceType.getLength() > 0 )
+            if ( !aResourceType.isEmpty() )
             {
                 m_pStorageHandler[i] = new PresetHandler( m_xServiceManager );
                 m_pStorageHandler[i]->connectToResource( PresetHandler::E_MODULES,

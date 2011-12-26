@@ -319,7 +319,7 @@ void SAL_CALL JobExecutor::elementInserted( const css::container::ContainerEvent
     if (aEvent.Accessor >>= sValue)
     {
         ::rtl::OUString sEvent = ::utl::extractFirstFromConfigurationPath(sValue);
-        if (sEvent.getLength() > 0)
+        if (!sEvent.isEmpty())
         {
             OUStringList::iterator pEvent = m_lEvents.find(sEvent);
             if (pEvent == m_lEvents.end())
@@ -334,7 +334,7 @@ void SAL_CALL JobExecutor::elementRemoved ( const css::container::ContainerEvent
     if (aEvent.Accessor >>= sValue)
     {
         ::rtl::OUString sEvent = ::utl::extractFirstFromConfigurationPath(sValue);
-        if (sEvent.getLength() > 0)
+        if (!sEvent.isEmpty())
         {
             OUStringList::iterator pEvent = m_lEvents.find(sEvent);
             if (pEvent != m_lEvents.end())

@@ -123,7 +123,7 @@ css::uno::Any SAL_CALL ShellJob::execute(const css::uno::Sequence< css::beans::N
     // Command is required as minimum.
     // If it does not exists ... we cant do our job.
     // Deactivate such miss configured job silently .-)
-    if (sRealCommand.getLength() < 1)
+    if (sRealCommand.isEmpty())
         return ShellJob::impl_generateAnswer4Deactivation();
 
     // do it

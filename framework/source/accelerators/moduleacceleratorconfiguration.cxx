@@ -115,7 +115,7 @@ void SAL_CALL ModuleAcceleratorConfiguration::initialize(const css::uno::Sequenc
     m_sModule = lArgs.getUnpackedValueOrDefault(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ModuleIdentifier")), ::rtl::OUString());
     m_sLocale = lArgs.getUnpackedValueOrDefault(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Locale"))          , ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("x-default")));
 
-    if (!m_sModule.getLength())
+    if (m_sModule.isEmpty())
         throw css::uno::RuntimeException(
                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("The module dependend accelerator configuration service was initialized with an empty module identifier!")),
                 static_cast< ::cppu::OWeakObject* >(this));

@@ -113,7 +113,7 @@ rtl::OUString ConfigurationAccess_ControllerFactory::getServiceFromCommandModule
 
     if ( pIter != m_aMenuControllerMap.end() )
         return pIter->second.m_aImplementationName;
-    else if ( rModule.getLength() )
+    else if ( !rModule.isEmpty() )
     {
         // Try to detect if we have a generic popup menu controller
         pIter = m_aMenuControllerMap.find( getHashKeyFromStrings( rCommandURL, rtl::OUString() ));
@@ -134,7 +134,7 @@ rtl::OUString ConfigurationAccess_ControllerFactory::getValueFromCommandModule( 
 
     if ( pIter != m_aMenuControllerMap.end() )
         return pIter->second.m_aValue;
-    else if ( rModule.getLength() )
+    else if ( !rModule.isEmpty() )
     {
         // Try to detect if we have a generic popup menu controller
         pIter = m_aMenuControllerMap.find( getHashKeyFromStrings( rCommandURL, rtl::OUString() ));

@@ -120,7 +120,7 @@ uno::Reference< linguistic2::XLanguageGuessing > LanguageGuessingHelper::GetGues
     {
         try
         {
-            if ( aCmdURL.getLength() > 0 )
+            if ( !aCmdURL.isEmpty() )
             {
                 rtl::OUString aStr;
                 Sequence< PropertyValue > aPropSeq;
@@ -185,7 +185,7 @@ void FillLangItems( std::set< OUString > &rLangItems,
 
     //4--guessed language
     uno::Reference< linguistic2::XLanguageGuessing > xLangGuesser( rLangGuessHelper.GetGuesser() );
-    if ( xLangGuesser.is() && rGuessedTextLang.getLength() > 0)
+    if ( xLangGuesser.is() && !rGuessedTextLang.isEmpty())
     {
         ::com::sun::star::lang::Locale aLocale(xLangGuesser->guessPrimaryLanguage( rGuessedTextLang, 0, rGuessedTextLang.getLength()) );
         LanguageType nLang = MsLangId::convertLocaleToLanguageWithFallback( aLocale );

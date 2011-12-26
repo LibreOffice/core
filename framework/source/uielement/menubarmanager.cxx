@@ -782,8 +782,8 @@ void MenuBarManager::CheckAndAddMenuExtension( Menu* pMenu )
 
     // retrieve menu extension item
     MenuExtensionItem aMenuItem( GetMenuExtension() );
-    if (( aMenuItem.aURL.getLength() > 0 ) &&
-        ( aMenuItem.aLabel.getLength() > 0 ))
+    if (( !aMenuItem.aURL.isEmpty() ) &&
+        ( !aMenuItem.aLabel.isEmpty() ))
     {
         // remove all old window list entries from menu
         sal_uInt16 nNewItemId( 0 );
@@ -925,7 +925,7 @@ IMPL_LINK( MenuBarManager, Activate, Menu *, pMenu )
                             Reference< XDispatch > xMenuItemDispatch;
 
                             ::rtl::OUString aItemCommand = pMenu->GetItemCommand( pMenuItemHandler->nItemId );
-                            if ( !aItemCommand.getLength() )
+                            if ( aItemCommand.isEmpty() )
                             {
                                 aItemCommand = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "slot:" ));
                                 aItemCommand += ::rtl::OUString::valueOf( (sal_Int32)pMenuItemHandler->nItemId );
@@ -1281,7 +1281,7 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
         sal_uInt16 nItemId = FillItemCommand(aItemCommand,pMenu, i );
 
         // Set module identifier when provided from outside
-        if ( rModuleIdentifier.getLength() > 0 )
+        if ( !rModuleIdentifier.isEmpty() )
         {
             m_aModuleIdentifier = rModuleIdentifier;
             m_bModuleIdentified = sal_True;
@@ -1290,7 +1290,7 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
         if (( pMenu->IsMenuBar() || bAccessibilityEnabled ) &&
             ( pMenu->GetItemText( nItemId ).Len() == 0 ))
         {
-            if ( aItemCommand.getLength() > 0 )
+            if ( !aItemCommand.isEmpty() )
                 pMenu->SetItemText( nItemId, RetrieveLabelFromCommand( aItemCommand ));
         }
 
@@ -1425,7 +1425,7 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
                     MenuConfiguration::Attributes* pMenuAttributes =
                         (MenuConfiguration::Attributes*)pMenu->GetUserValue( nItemId );
 
-                    if ( pMenuAttributes && pMenuAttributes->aImageId.getLength() > 0 )
+                    if ( pMenuAttributes && !pMenuAttributes->aImageId.isEmpty() )
                     {
                         // Retrieve image id from menu attributes
                         aImage = GetImageFromURL( m_xFrame, aImageId, false );
@@ -1646,7 +1646,7 @@ void MenuBarManager::RetrieveImageManagers()
     }
 
     Reference< XModuleManager > xModuleManager;
-    if ( m_aModuleIdentifier.getLength() == 0 )
+    if ( m_aModuleIdentifier.isEmpty() )
         xModuleManager.set( getServiceFactory()->createInstance( SERVICENAME_MODULEMANAGER ), UNO_QUERY_THROW );
 
     try
@@ -1794,7 +1794,7 @@ void MenuBarManager::FillMenu(
                         }
 
                         // Use help command to transport module identifier
-                        if ( aModuleIdentifier.getLength() > 0 )
+                        if ( !aModuleIdentifier.isEmpty() )
                             pMenu->SetHelpCommand( nId, aModuleIdentifier );
 
                         ++nId;
@@ -2009,7 +2009,7 @@ sal_uInt16 MenuBarManager::FillItemCommand(::rtl::OUString& _rItemCommand,Menu* 
     sal_uInt16 nItemId = _pMenu->GetItemId( _nIndex );
 
     _rItemCommand = _pMenu->GetItemCommand( nItemId );
-    if ( !_rItemCommand.getLength() )
+    if ( _rItemCommand.isEmpty() )
     {
         const static ::rtl::OUString aSlotString( RTL_CONSTASCII_USTRINGPARAM( "slot:" ));
         _rItemCommand = aSlotString;

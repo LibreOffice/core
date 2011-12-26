@@ -519,7 +519,7 @@ void StatusBarManager::FillStatusBar( const uno::Reference< container::XIndexAcc
                     }
                 }
 
-                if (( nType == ::com::sun::star::ui::ItemType::DEFAULT ) && ( aCommandURL.getLength() > 0 ))
+                if (( nType == ::com::sun::star::ui::ItemType::DEFAULT ) && !aCommandURL.isEmpty() )
                 {
                     rtl::OUString aString( RetrieveLabelFromCommand( aCommandURL ));
                     sal_uInt16        nItemBits( impl_convertItemStyleToItemBits( nStyle ));

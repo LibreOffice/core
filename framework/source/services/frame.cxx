@@ -834,7 +834,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Frame::findFrame( const ::rtl
     else
     if (
         ( sTargetFrameName==SPECIALTARGET_SELF ) ||
-        ( sTargetFrameName.getLength()<1       )
+        ( sTargetFrameName.isEmpty()           )
        )
     {
         xTarget = this;

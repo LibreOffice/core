@@ -76,7 +76,7 @@ void XMLNamespaces::addNamespace( const ::rtl::OUString& aName, const ::rtl::OUS
         }
     }
 
-    if ( aValue.getLength() == 0 && aNamespaceName.getLength() > 0 )
+    if ( aValue.isEmpty() && !aNamespaceName.isEmpty() )
     {
         // namespace should be reseted - as xml draft states this is only allowed
         // for the default namespace - check and throw exception if check fails
@@ -85,7 +85,7 @@ void XMLNamespaces::addNamespace( const ::rtl::OUString& aName, const ::rtl::OUS
     }
     else
     {
-        if ( aNamespaceName.getLength() == 0 )
+        if ( aNamespaceName.isEmpty() )
             m_aDefaultNamespace = aValue;
         else
         {
@@ -142,7 +142,7 @@ void XMLNamespaces::addNamespace( const ::rtl::OUString& aName, const ::rtl::OUS
     else
         aNamespace = m_aDefaultNamespace;
 
-    if ( aNamespace.getLength() > 0 )
+    if ( !aNamespace.isEmpty() )
     {
         aElementName = aNamespace;
         aElementName += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("^"));
@@ -169,7 +169,7 @@ void XMLNamespaces::addNamespace( const ::rtl::OUString& aName, const ::rtl::OUS
 
 ::rtl::OUString XMLNamespaces::getNamespaceValue( const ::rtl::OUString& aNamespace ) const throw( SAXException )
 {
-    if ( aNamespace.getLength() == 0 )
+    if ( aNamespace.isEmpty() )
         return m_aDefaultNamespace;
     else
     {

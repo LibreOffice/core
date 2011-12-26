@@ -112,7 +112,7 @@ void WindowContentFactoryManager::RetrieveTypeNameFromResourceURL( const rtl::OU
         do
         {
             ::rtl::OUString sToken = aTmpStr.getToken( 0, '/', nToken);
-            if ( sToken.getLength() )
+            if ( !sToken.isEmpty() )
             {
                 if ( nPart == 0 )
                     aType = sToken;
@@ -178,9 +178,9 @@ throw (uno::Exception, uno::RuntimeException)
     }
 
     RetrieveTypeNameFromResourceURL( aResourceURL, aType, aName );
-    if ( aType.getLength() > 0 &&
-         aName.getLength() > 0 &&
-         aModuleId.getLength() > 0 )
+    if ( !aType.isEmpty() &&
+         !aName.isEmpty() &&
+         !aModuleId.isEmpty() )
     {
         ::rtl::OUString                   aImplementationName;
         uno::Reference< uno::XInterface > xHolder( static_cast<cppu::OWeakObject*>(this), uno::UNO_QUERY );
@@ -197,7 +197,7 @@ throw (uno::Exception, uno::RuntimeException)
         }
 
         aImplementationName = m_pConfigAccess->getFactorySpecifierFromTypeNameModule( aType, aName, aModuleId );
-        if ( aImplementationName.getLength() > 0 )
+        if ( !aImplementationName.isEmpty() )
         {
             aLock.unlock();
             // UNSAFE

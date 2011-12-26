@@ -165,7 +165,7 @@ css::uno::Any SAL_CALL HelpOnStartup::execute(const css::uno::Sequence< css::bea
 
     // Attention: We are bound to events for openeing any document inside the office.
     // That includes e.g. the help module itself. But we have to do nothing then!
-    if (!sModule.getLength())
+    if (sModule.isEmpty())
         return css::uno::Any();
 
     // check current state of the help module
@@ -177,7 +177,7 @@ css::uno::Any SAL_CALL HelpOnStartup::execute(const css::uno::Sequence< css::bea
     sal_Bool        bShowIt                        = sal_False;
 
     // a)
-    if (!sCurrentHelpURL.getLength())
+    if (sCurrentHelpURL.isEmpty())
         bShowIt = sal_True;
     else
     // b)
@@ -188,7 +188,7 @@ css::uno::Any SAL_CALL HelpOnStartup::execute(const css::uno::Sequence< css::bea
     {
         // retrieve the help URL for the detected application module
         ::rtl::OUString sModuleDependendHelpURL = its_checkIfHelpEnabledAndGetURL(sModule);
-        if (sModuleDependendHelpURL.getLength())
+        if (!sModuleDependendHelpURL.isEmpty())
         {
             // Show this help page.
             // Note: The help window brings itself to front ...
@@ -321,7 +321,7 @@ void SAL_CALL HelpOnStartup::disposing(const css::lang::EventObject& aEvent)
 //-----------------------------------------------
 ::sal_Bool HelpOnStartup::its_isHelpUrlADefaultOne(const ::rtl::OUString& sHelpURL)
 {
-    if (!sHelpURL.getLength())
+    if (sHelpURL.isEmpty())
         return sal_False;
 
     // SAFE ->

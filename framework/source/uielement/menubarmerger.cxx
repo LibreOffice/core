@@ -74,7 +74,7 @@ namespace framework
 */
 bool MenuBarMerger::IsCorrectContext( const ::rtl::OUString& rContext, const ::rtl::OUString& rModuleIdentifier )
 {
-    return (( rContext.getLength() == 0 ) || ( rContext.indexOf( rModuleIdentifier ) >= 0 ));
+    return ( rContext.isEmpty() || ( rContext.indexOf( rModuleIdentifier ) >= 0 ));
 }
 
 void MenuBarMerger::RetrieveReferencePath(
@@ -88,7 +88,7 @@ void MenuBarMerger::RetrieveReferencePath(
     do
     {
         ::rtl::OUString aToken = rReferencePathString.getToken( 0, aDelimiter, nIndex );
-        if ( aToken.getLength() > 0 )
+        if ( !aToken.isEmpty() )
             rReferencePath.push_back( aToken );
     }
     while ( nIndex >= 0 );

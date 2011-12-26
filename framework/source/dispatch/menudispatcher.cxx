@@ -414,7 +414,7 @@ sal_Bool MenuDispatcher::impldbg_checkParameter_addStatusListener( const   uno::
     if  (
             ( &xControl                 ==  NULL    )   ||
             ( &aURL                     ==  NULL    )   ||
-            ( aURL.Complete.getLength() <   1       )
+            ( aURL.Complete.isEmpty()               )
         )
     {
         bOK = sal_False ;
@@ -435,7 +435,7 @@ sal_Bool MenuDispatcher::impldbg_checkParameter_removeStatusListener(  const   u
     if  (
             ( &xControl                 ==  NULL    )   ||
             ( &aURL                     ==  NULL    )   ||
-            ( aURL.Complete.getLength() <   1       )
+            ( aURL.Complete.isEmpty()               )
         )
     {
         bOK = sal_False ;

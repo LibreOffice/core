@@ -361,7 +361,7 @@ FwkTabPage* FwkTabWindow::AddTabPage( sal_Int32 nIndex, const uno::Sequence< bea
     m_TabList.push_back( pEntry );
     sal_uInt16 nIdx = static_cast< sal_uInt16 >( nIndex );
     m_aTabCtrl.InsertPage( nIdx, sTitle );
-    if ( sToolTip.getLength() > 0 )
+    if ( !sToolTip.isEmpty() )
         m_aTabCtrl.SetHelpText( nIdx, sToolTip );
     if ( xImage.is() )
         m_aTabCtrl.SetPageImage( nIdx, Image( xImage ) );

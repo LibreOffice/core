@@ -842,7 +842,7 @@ uno::Sequence< beans::PropertyValue > ToolBarManager::GetPropsForCommand( const 
             m_bModuleIdentified = sal_True;
             m_aModuleIdentifier = xModuleManager->identify( xIfac );
 
-            if ( m_aModuleIdentifier.getLength() > 0 )
+            if ( !m_aModuleIdentifier.isEmpty() )
             {
                 Reference< XNameAccess > xNameAccess( m_xServiceManager->createInstance( SERVICENAME_UICOMMANDDESCRIPTION ), UNO_QUERY );
                 if ( xNameAccess.is() )
@@ -852,7 +852,7 @@ uno::Sequence< beans::PropertyValue > ToolBarManager::GetPropsForCommand( const 
 
         if ( m_xUICommandLabels.is() )
         {
-            if ( rCmdURL.getLength() > 0 )
+            if ( !rCmdURL.isEmpty() )
                 m_xUICommandLabels->getByName( rCmdURL ) >>= aPropSeq;
         }
     }
@@ -1036,7 +1036,7 @@ void ToolBarManager::CreateControllers()
         if ( xSubToolBar.is() && xSubToolBar->opensSubToolbar() )
         {
             rtl::OUString aSubToolBarName = xSubToolBar->getSubToolbarName();
-            if ( aSubToolBarName.getLength() != 0 )
+            if ( !aSubToolBarName.isEmpty() )
             {
                 SubToolBarToSubToolBarControllerMap::iterator pIter =
                     m_aSubToolBarControllerMap.find( aSubToolBarName );
@@ -1333,7 +1333,7 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
                         aProp[i].Value >>= nStyle;
                 }
 
-                if (( nType == ::com::sun::star::ui::ItemType::DEFAULT ) && ( aCommandURL.getLength() > 0 ))
+                if (( nType == ::com::sun::star::ui::ItemType::DEFAULT ) && !aCommandURL.isEmpty() )
                 {
                     ::rtl::OUString aString( RetrieveLabelFromCommand( aCommandURL ));
 
@@ -1342,7 +1342,7 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
                         m_aMenuMap[ nId ] = aMenuDesc;
                     m_pToolBar->InsertItem( nId, aString, nItemBits );
                     m_pToolBar->SetItemCommand( nId, aCommandURL );
-                    if ( aTooltip.getLength() )
+                    if ( !aTooltip.isEmpty() )
                     {
                         m_pToolBar->SetQuickHelpText( nId, aTooltip );
                     }
@@ -1360,7 +1360,7 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
                         m_pToolBar->SetQuickHelpText( nId, sQuickHelp );
                     }
 
-                    if ( aLabel.getLength() > 0 )
+                    if ( !aLabel.isEmpty() )
                     {
                         m_pToolBar->SetItemText( nId, aLabel );
                     }
@@ -1493,7 +1493,7 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
         {
             rtl::OUString aUIName;
             xPropSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "UIName" ))) >>= aUIName;
-            if ( aUIName.getLength() > 0 )
+            if ( !aUIName.isEmpty() )
                 m_pToolBar->SetText( aUIName );
         }
         catch (const Exception&)

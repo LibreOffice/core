@@ -477,7 +477,7 @@ void SpinfieldToolbarController::executeControlCommand( const ::com::sun::star::
     }
 
     // Check values and set members
-    if ( aValue.getLength() > 0 )
+    if ( !aValue.isEmpty() )
     {
         m_bFloat = bFloatValue;
         m_nValue = aValue.toDouble();
@@ -486,17 +486,17 @@ void SpinfieldToolbarController::executeControlCommand( const ::com::sun::star::
         m_pSpinfieldControl->SetText( aOutString );
         notifyTextChanged( aOutString );
     }
-    if ( aMax.getLength() > 0 )
+    if ( !aMax.isEmpty() )
     {
         m_nMax = aMax.toDouble();
         m_bMaxSet = true;
     }
-    if ( aMin.getLength() > 0 )
+    if ( !aMin.isEmpty() )
     {
         m_nMin = aMin.toDouble();
         m_bMinSet = true;
     }
-    if ( aStep.getLength() > 0 )
+    if ( !aStep.isEmpty() )
         m_nStep = aStep.toDouble();
 }
 
@@ -525,7 +525,7 @@ bool SpinfieldToolbarController::impl_getValue(
 
 rtl::OUString SpinfieldToolbarController::impl_formatOutputString( double fValue )
 {
-    if ( m_aOutFormat.getLength() == 0 )
+    if ( m_aOutFormat.isEmpty() )
     {
         if ( m_bFloat )
             return rtl::OUString::valueOf( fValue );

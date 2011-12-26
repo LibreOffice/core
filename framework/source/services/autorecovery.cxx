@@ -1121,7 +1121,7 @@ void AutoRecovery::implts_readConfig()
 //-----------------------------------------------
 void AutoRecovery::implts_specifyDefaultFilterAndExtension(AutoRecovery::TDocumentInfo& rInfo)
 {
-    if (!rInfo.AppModule.getLength())
+    if (rInfo.AppModule.isEmpty())
     {
         throw css::uno::RuntimeException(
                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Cant find out the default filter and its extension, if no application module is known!")),
@@ -1183,7 +1183,7 @@ void AutoRecovery::implts_specifyDefaultFilterAndExtension(AutoRecovery::TDocume
 void AutoRecovery::implts_specifyAppModuleAndFactory(AutoRecovery::TDocumentInfo& rInfo)
 {
     ENSURE_OR_THROW2(
-        rInfo.AppModule.getLength() || rInfo.Document.is(),
+        !rInfo.AppModule.isEmpty() || rInfo.Document.is(),
         "Cant find out the application module nor its factory URL, if no application module (or a suitable) document is known!",
         *this );
 
@@ -1196,7 +1196,7 @@ void AutoRecovery::implts_specifyAppModuleAndFactory(AutoRecovery::TDocumentInfo
     css::uno::Reference< css::frame::XModuleManager > xManager     (xSMGR->createInstance(SERVICENAME_MODULEMANAGER), css::uno::UNO_QUERY_THROW);
     css::uno::Reference< css::container::XNameAccess > xModuleConfig(xManager                                        , css::uno::UNO_QUERY_THROW);
 
-    if (!rInfo.AppModule.getLength())
+    if (rInfo.AppModule.isEmpty())
         rInfo.AppModule = xManager->identify(rInfo.Document);
 
     ::comphelper::SequenceAsHashMap lModuleDescription(xModuleConfig->getByName(rInfo.AppModule));
@@ -1223,9 +1223,9 @@ void AutoRecovery::implts_collectActiveViewNames( AutoRecovery::TDocumentInfo& i
             ::rtl::OUString sViewName;
             if ( xController.is() )
                 sViewName = xController->getViewControllerName();
-            OSL_ENSURE( sViewName.getLength(), "AutoRecovery::implts_collectActiveViewNames: (no XController2 ->) no view name -> no recovery of this view!" );
+            OSL_ENSURE( !sViewName.isEmpty(), "AutoRecovery::implts_collectActiveViewNames: (no XController2 ->) no view name -> no recovery of this view!" );
 
-            if ( sViewName.getLength() )
+            if ( !sViewName.isEmpty() )
                 aViewNames.push_back( sViewName );
         }
     }
@@ -1235,9 +1235,9 @@ void AutoRecovery::implts_collectActiveViewNames( AutoRecovery::TDocumentInfo& i
         ::rtl::OUString sViewName;
         if ( xController.is() )
             sViewName = xController->getViewControllerName();
-        OSL_ENSURE( sViewName.getLength(), "AutoRecovery::implts_collectActiveViewNames: (no XController2 ->) no view name -> no recovery of this view!" );
+        OSL_ENSURE( !sViewName.isEmpty(), "AutoRecovery::implts_collectActiveViewNames: (no XController2 ->) no view name -> no recovery of this view!" );
 
-        if ( sViewName.getLength() )
+        if ( !sViewName.isEmpty() )
             aViewNames.push_back( sViewName );
     }
 
@@ -1726,8 +1726,8 @@ void AutoRecovery::implts_registerDocument(const css::uno::Reference< css::frame
     // Its not realy a full featured office document. It doesnt provide an URL, any filter, a factory URL etcpp.
     // TODO file bug to Basci IDE developers. They must remove the office document API from its service.
     if (
-        (!aNew.OrgURL.getLength()    ) &&
-        (!aNew.FactoryURL.getLength())
+        (aNew.OrgURL.isEmpty()) &&
+        (aNew.FactoryURL.isEmpty())
        )
     {
         OSL_FAIL( "AutoRecovery::implts_registerDocument: this should not happen anymore!" );
@@ -1937,7 +1937,7 @@ void AutoRecovery::implts_markDocumentAsSaved(const css::uno::Reference< css::fr
     else
     {
         rInfo.Title      = lDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_TITLE()     , ::rtl::OUString());
-        if (!rInfo.Title.getLength())
+        if (rInfo.Title.isEmpty())
             rInfo.Title  = lDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_DOCUMENTTITLE(), ::rtl::OUString());
     }
 
@@ -2025,7 +2025,7 @@ void lc_removeLockFile(AutoRecovery::TDocumentInfo& rInfo)
         {
             css::uno::Reference< css::frame::XStorable > xStore(rInfo.Document, css::uno::UNO_QUERY_THROW);
             ::rtl::OUString aURL = xStore->getLocation();
-            if ( aURL.getLength() )
+            if ( !aURL.isEmpty() )
             {
                 ::svt::DocumentLockFile aLockFile( aURL );
                 aLockFile.RemoveFile();
@@ -2333,12 +2333,12 @@ void AutoRecovery::implts_saveOneDoc(const ::rtl::OUString&                     
     // stored with password
     ::comphelper::MediaDescriptor lNewArgs;
     ::rtl::OUString sPassword = lOldArgs.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_PASSWORD(), ::rtl::OUString());
-    if (sPassword.getLength())
+    if (!sPassword.isEmpty())
         lNewArgs[::comphelper::MediaDescriptor::PROP_PASSWORD()] <<= sPassword;
 
     // Further it must be saved using the default file format of that application.
     // Otherwhise we will some data lost.
-    if (rInfo.DefaultFilter.getLength())
+    if (!rInfo.DefaultFilter.isEmpty())
         lNewArgs[::comphelper::MediaDescriptor::PROP_FILTERNAME()] <<= rInfo.DefaultFilter;
 
     // prepare frame/document/mediadescriptor in a way, that it uses OUR progress .-)
@@ -2517,19 +2517,19 @@ AutoRecovery::ETimerType AutoRecovery::implts_openDocs(const DispatchParams& aPa
         if (!bBackupWasTried)
             sLoadBackupURL = rInfo.OldTempURL;
 
-        if (rInfo.OrgURL.getLength())
+        if (!rInfo.OrgURL.isEmpty())
         {
             sLoadOriginalURL = rInfo.OrgURL;
         }
         else
-        if (rInfo.TemplateURL.getLength())
+        if (!rInfo.TemplateURL.isEmpty())
         {
             sLoadOriginalURL = rInfo.TemplateURL;
             lDescriptor[::comphelper::MediaDescriptor::PROP_ASTEMPLATE()]   <<= sal_True;
             lDescriptor[::comphelper::MediaDescriptor::PROP_TEMPLATENAME()] <<= rInfo.TemplateURL;
         }
         else
-        if (rInfo.FactoryURL.getLength())
+        if (!rInfo.FactoryURL.isEmpty())
         {
             sLoadOriginalURL = rInfo.FactoryURL;
             lDescriptor[::comphelper::MediaDescriptor::PROP_ASTEMPLATE()] <<= sal_True;
@@ -2538,14 +2538,14 @@ AutoRecovery::ETimerType AutoRecovery::implts_openDocs(const DispatchParams& aPa
         // A "Salvaged" item must exists every time. The core can make something special then for recovery.
         // Of course it should be the real file name of the original file, in case we load the temp. backup here.
         ::rtl::OUString sURL;
-        if (sLoadBackupURL.getLength())
+        if (!sLoadBackupURL.isEmpty())
         {
             sURL = sLoadBackupURL;
             rInfo.DocumentState |= AutoRecovery::E_TRY_LOAD_BACKUP;
             lDescriptor[::comphelper::MediaDescriptor::PROP_SALVAGEDFILE()] <<= sLoadOriginalURL;
         }
         else
-        if (sLoadOriginalURL.getLength())
+        if (!sLoadOriginalURL.isEmpty())
         {
             sURL = sLoadOriginalURL;
             rInfo.DocumentState |= AutoRecovery::E_TRY_LOAD_ORIGINAL;
@@ -2570,7 +2570,7 @@ AutoRecovery::ETimerType AutoRecovery::implts_openDocs(const DispatchParams& aPa
         {
             rInfo.DocumentState &= ~AutoRecovery::E_TRY_LOAD_BACKUP;
             rInfo.DocumentState &= ~AutoRecovery::E_TRY_LOAD_ORIGINAL;
-            if (sLoadBackupURL.getLength())
+            if (!sLoadBackupURL.isEmpty())
             {
                 rInfo.DocumentState |= AutoRecovery::E_INCOMPLETE;
                 eTimer               = AutoRecovery::E_CALL_ME_BACK;
@@ -2591,7 +2591,7 @@ AutoRecovery::ETimerType AutoRecovery::implts_openDocs(const DispatchParams& aPa
             continue;
         }
 
-        if (rInfo.RealFilter.getLength())
+        if (!rInfo.RealFilter.isEmpty())
         {
             ::comphelper::MediaDescriptor lPatchDescriptor(rInfo.Document->getArgs());
             lPatchDescriptor[::comphelper::MediaDescriptor::PROP_FILTERNAME()] <<= rInfo.RealFilter;
@@ -2780,7 +2780,7 @@ void AutoRecovery::implts_generateNewTempURL(const ::rtl::OUString&             
     // into the configuration and dont create any recovery file on disk.
     // We use the title of the document to make it unique.
     ::rtl::OUStringBuffer sUniqueName;
-    if (rInfo.OrgURL.getLength())
+    if (!rInfo.OrgURL.isEmpty())
     {
         css::uno::Reference< css::util::XURLTransformer > xParser(xSMGR->createInstance(SERVICENAME_URLTRANSFORMER), css::uno::UNO_QUERY);
         css::util::URL aURL;
@@ -2789,7 +2789,7 @@ void AutoRecovery::implts_generateNewTempURL(const ::rtl::OUString&             
         sUniqueName.append(aURL.Name);
     }
     else
-    if (rInfo.FactoryURL.getLength())
+    if (!rInfo.FactoryURL.isEmpty())
         sUniqueName.appendAscii("untitled");
     sUniqueName.appendAscii("_");
 
@@ -2933,7 +2933,7 @@ css::frame::FeatureStateEvent AutoRecovery::implst_createFeatureStateEvent(     
         aInfo.put( CFG_ENTRY_PROP_ORIGINALURL,      pInfo->OrgURL           );
         aInfo.put( CFG_ENTRY_PROP_FACTORYURL,       pInfo->FactoryURL       );
         aInfo.put( CFG_ENTRY_PROP_TEMPLATEURL,      pInfo->TemplateURL      );
-        aInfo.put( CFG_ENTRY_PROP_TEMPURL,          pInfo->OldTempURL.getLength() ? pInfo->OldTempURL : pInfo->NewTempURL );
+        aInfo.put( CFG_ENTRY_PROP_TEMPURL,          pInfo->OldTempURL.isEmpty() ? pInfo->NewTempURL : pInfo->OldTempURL );
         aInfo.put( CFG_ENTRY_PROP_MODULE,           pInfo->AppModule        );
         aInfo.put( CFG_ENTRY_PROP_TITLE,            pInfo->Title            );
         aInfo.put( CFG_ENTRY_PROP_VIEWNAMES,        pInfo->ViewNames        );
@@ -3181,13 +3181,13 @@ void AutoRecovery::implts_backupWorkingEntry(const DispatchParams& aParams)
 
         ::rtl::OUString sSourceURL;
         // Prefer temp file. It contains the changes against the original document!
-        if (rInfo.OldTempURL.getLength())
+        if (!rInfo.OldTempURL.isEmpty())
             sSourceURL = rInfo.OldTempURL;
         else
-        if (rInfo.NewTempURL.getLength())
+        if (!rInfo.NewTempURL.isEmpty())
             sSourceURL = rInfo.NewTempURL;
         else
-        if (rInfo.OrgURL.getLength())
+        if (!rInfo.OrgURL.isEmpty())
             sSourceURL = rInfo.OrgURL;
         else
             continue; // nothing real to save! An unmodified but new created document.
@@ -3628,7 +3628,7 @@ void AutoRecovery::impl_flushALLConfigChanges()
 //-----------------------------------------------
 void AutoRecovery::st_impl_removeFile(const ::rtl::OUString& sURL)
 {
-    if ( ! sURL.getLength())
+    if ( sURL.isEmpty())
         return;
 
     try

@@ -166,7 +166,7 @@ void FontSizeMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
 
         // try to retrieve printer name of document
         aPrinterName = retrievePrinterName( m_xFrame );
-        if ( aPrinterName.getLength() > 0 )
+        if ( !aPrinterName.isEmpty() )
         {
             pInfoPrinter = new Printer( aPrinterName );
             if ( pInfoPrinter && pInfoPrinter->GetDevFontCount() > 0 )

@@ -267,11 +267,11 @@ css::uno::Any SAL_CALL License::execute(const css::uno::Sequence< css::beans::Na
         ResMgr* pResMgr = ResMgr::SearchCreateResMgr("fwe", aLocale);
 
         aLangString = aLocale.Language;
-        if ( aLocale.Country.getLength() != 0 )
+        if ( !aLocale.Country.isEmpty() )
         {
             aLangString += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-"));
             aLangString += aLocale.Country;
-            if ( aLocale.Variant.getLength() != 0 )
+            if ( !aLocale.Variant.isEmpty() )
             {
                 aLangString += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-"));
                 aLangString += aLocale.Variant;

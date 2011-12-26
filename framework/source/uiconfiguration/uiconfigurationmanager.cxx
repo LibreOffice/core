@@ -215,7 +215,7 @@ void UIConfigurationManager::impl_preloadUIElementTypeList( sal_Int16 nElementTy
                     rtl::OUString aExtension( aUIElementNames[n].copy( nIndex+1 ));
                     rtl::OUString aUIElementName( aUIElementNames[n].copy( 0, nIndex ));
 
-                    if (( aUIElementName.getLength() > 0 ) &&
+                    if (!aUIElementName.isEmpty() &&
                         ( aExtension.equalsIgnoreAsciiCaseAsciiL( "xml", 3 )))
                     {
                         aUIElementData.aResourceURL = aResURLPrefix + aUIElementName;
@@ -240,7 +240,7 @@ void UIConfigurationManager::impl_requestUIElementData( sal_Int16 nElementType, 
     UIElementType& rElementTypeData = m_aUIElements[nElementType];
 
     Reference< XStorage > xElementTypeStorage = rElementTypeData.xStorage;
-    if ( xElementTypeStorage.is() && aUIElementData.aName.getLength() )
+    if ( xElementTypeStorage.is() && !aUIElementData.aName.isEmpty() )
     {
         try
         {

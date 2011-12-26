@@ -116,7 +116,7 @@ bool ToolBarMerger::IsCorrectContext(
     const ::rtl::OUString& rContext,
     const ::rtl::OUString& rModuleIdentifier )
 {
-    return (( rContext.getLength() == 0 ) || ( rContext.indexOf( rModuleIdentifier ) >= 0 ));
+    return ( rContext.isEmpty() || ( rContext.indexOf( rModuleIdentifier ) >= 0 ));
 }
 
 /**

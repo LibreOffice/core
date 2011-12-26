@@ -608,7 +608,7 @@ css::uno::Reference< css::frame::XFrame > CloseDispatcher::static_impl_searchRig
     if (sTarget.equalsIgnoreAsciiCaseAscii("_self"))
         return xFrame;
 
-    OSL_ENSURE((sTarget.getLength() < 1), "CloseDispatch used for unexpected target. Magic things will happen now .-)");
+    OSL_ENSURE(sTarget.isEmpty(), "CloseDispatch used for unexpected target. Magic things will happen now .-)");
 
     css::uno::Reference< css::frame::XFrame > xTarget = xFrame;
     while(sal_True)

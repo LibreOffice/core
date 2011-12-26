@@ -267,7 +267,7 @@ throw(  SAXException, RuntimeException )
                                 }
                             }
 
-                            if ( aUIName.getLength() > 0 )
+                            if ( !aUIName.isEmpty() )
                             {
                                 // Try to set UI name as a container property
                                 Reference< XPropertySet > xPropSet( m_rItemContainer, UNO_QUERY );
@@ -387,7 +387,7 @@ throw(  SAXException, RuntimeException )
                                 do
                                 {
                                     ::rtl::OUString aToken  = aTemp.getToken( 0, ' ', nIndex );
-                                    if ( aToken.getLength() > 0 )
+                                    if ( !aToken.isEmpty() )
                                     {
                                         sal_Int32 nHashCode = aToken.hashCode();
                                         if ( nHashCode == m_nHashCode_Style_Radio )
@@ -426,7 +426,7 @@ throw(  SAXException, RuntimeException )
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
-                if ( aCommandURL.getLength() > 0 )
+                if ( !aCommandURL.isEmpty() )
                 {
                     Sequence< PropertyValue > aToolbarItemProp( 7 );
                     aToolbarItemProp[0].Name = m_aCommandURL;
@@ -714,7 +714,7 @@ void OWriteToolBoxDocumentHandler::WriteToolBoxDocument() throw
                          m_aAttributeType,
                          ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( XMLNS_XLINK )) );
 
-    if ( aUIName.getLength() > 0 )
+    if ( !aUIName.isEmpty() )
         pList->AddAttribute( m_aXMLToolbarNS + ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_UINAME )),
                              m_aAttributeType,
                              aUIName );
@@ -775,7 +775,7 @@ throw ( SAXException, RuntimeException )
     ::comphelper::AttributeList* pList = new ::comphelper::AttributeList;
     Reference< XAttributeList > xList( (XAttributeList *) pList , UNO_QUERY );
 
-    if ( m_aAttributeURL.getLength() == 0 )
+    if ( m_aAttributeURL.isEmpty() )
     {
         m_aAttributeURL = m_aXMLXlinkNS;
         m_aAttributeURL += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_URL ));
@@ -784,7 +784,7 @@ throw ( SAXException, RuntimeException )
     // save required attribute (URL)
     pList->AddAttribute( m_aAttributeURL, m_aAttributeType, rCommandURL );
 
-    if ( rLabel.getLength() > 0 )
+    if ( !rLabel.isEmpty() )
     {
         pList->AddAttribute( m_aXMLToolbarNS + ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_TEXT )),
                              m_aAttributeType,
@@ -798,14 +798,14 @@ throw ( SAXException, RuntimeException )
                              ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_BOOLEAN_FALSE )) );
     }
 
-    if ( rHelpURL.getLength() > 0 )
+    if ( !rHelpURL.isEmpty() )
     {
         pList->AddAttribute( m_aXMLToolbarNS + ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_HELPID )),
                              m_aAttributeType,
                              rHelpURL );
     }
 
-    if ( rTooltip.getLength() > 0 )
+    if ( !rTooltip.isEmpty() )
     {
         pList->AddAttribute( m_aXMLToolbarNS + ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_TOOLTIP )),
                              m_aAttributeType,
@@ -821,7 +821,7 @@ throw ( SAXException, RuntimeException )
         {
             if ( nStyle & pStyle->nBit )
             {
-                if ( aValue.getLength() )
+                if ( !aValue.isEmpty() )
                     aValue = aValue.concat( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(" ") ) );
                 aValue += rtl::OUString::createFromAscii( pStyle->attrName );
             }

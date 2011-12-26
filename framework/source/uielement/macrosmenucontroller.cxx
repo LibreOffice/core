@@ -169,7 +169,7 @@ IMPL_STATIC_LINK_NOINSTANCE( MacrosMenuController, ExecuteHdl_Impl, ExecuteInfo*
 
 String MacrosMenuController::RetrieveLabelFromCommand( const String& aCmdURL )
 {
-    sal_Bool bModuleIdentified = m_aModuleIdentifier.getLength() != 0;
+    sal_Bool bModuleIdentified = !m_aModuleIdentifier.isEmpty();
     return framework::RetrieveLabelFromCommand(aCmdURL,m_xServiceManager,m_xUICommandLabels,m_xFrame,m_aModuleIdentifier,bModuleIdentified,"Label");
 }
 

@@ -119,7 +119,7 @@ throw (Exception, RuntimeException)
     }
 
     rtl::OUString aServiceName = m_pConfigAccess->getServiceFromCommandModule( aServiceSpecifier, rtl::OUString() );
-    if ( aServiceName.getLength() > 0 )
+    if ( !aServiceName.isEmpty() )
         return m_xServiceManager->createInstance( aServiceName );
     else
         return Reference< XInterface >();
@@ -189,7 +189,7 @@ throw (Exception, RuntimeException)
         // SAFE
 
 
-        if ( aServiceName.getLength() > 0 )
+        if ( !aServiceName.isEmpty() )
             return xServiceManager->createInstanceWithArguments( aServiceName, aNewArgs );
         else
             return Reference< XInterface >();
@@ -216,7 +216,7 @@ throw (::com::sun::star::uno::RuntimeException)
         m_pConfigAccess->readConfigurationData();
     }
 
-    return ( m_pConfigAccess->getServiceFromCommandModule( aCommandURL, aModuleName ).getLength() > 0 );
+    return ( !m_pConfigAccess->getServiceFromCommandModule( aCommandURL, aModuleName ).isEmpty() );
 }
 
 void SAL_CALL ToolbarControllerFactory::registerController(

@@ -167,7 +167,7 @@ void MenuBarFactory::CreateUIElement(const ::rtl::OUString& ResourceURL
         if ( !bHasSettings )
         {
             rtl::OUString aModuleIdentifier = _xModuleManager->identify( Reference< XInterface >( xFrame, UNO_QUERY ));
-            if ( aModuleIdentifier.getLength() )
+            if ( !aModuleIdentifier.isEmpty() )
             {
                 Reference< ::com::sun::star::ui::XModuleUIConfigurationManagerSupplier > xModuleCfgSupplier(
                     _xServiceManager->createInstance( SERVICENAME_MODULEUICONFIGURATIONMANAGERSUPPLIER ), UNO_QUERY );

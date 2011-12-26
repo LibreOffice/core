@@ -136,7 +136,7 @@ throw ( RuntimeException )
         if ( m_bInitialized &&
              m_xFrame.is() &&
              m_xServiceManager.is() &&
-             m_aCommandURL.getLength() )
+             !m_aCommandURL.isEmpty() )
         {
             xURLTransformer = m_xURLTransformer;
             xDispatch = getDispatchFromCommand( m_aCommandURL );
@@ -146,7 +146,7 @@ throw ( RuntimeException )
         }
     }
 
-    if ( xDispatch.is() && aTargetURL.Complete.getLength() > 0 )
+    if ( xDispatch.is() && !aTargetURL.Complete.isEmpty() )
     {
         // Execute dispatch asynchronously
         ExecuteInfo* pExecuteInfo = new ExecuteInfo;
@@ -321,7 +321,7 @@ uno::Reference< frame::XDispatch > ComplexToolbarController::getDispatchFromComm
 {
     uno::Reference< frame::XDispatch > xDispatch;
 
-    if ( m_bInitialized && m_xFrame.is() && m_xServiceManager.is() && aCommand.getLength() )
+    if ( m_bInitialized && m_xFrame.is() && m_xServiceManager.is() && !aCommand.isEmpty() )
     {
         URLToDispatchMap::const_iterator pIter = m_aListenerMap.find( aCommand );
         if ( pIter != m_aListenerMap.end() )
@@ -335,7 +335,7 @@ uno::Reference< frame::XDispatch > ComplexToolbarController::getDispatchFromComm
 
 const ::com::sun::star::util::URL& ComplexToolbarController::getInitializedURL()
 {
-    if ( m_aURL.Complete.getLength() == 0 )
+    if ( m_aURL.Complete.isEmpty() )
     {
         m_aURL.Complete = m_aCommandURL;
         m_xURLTransformer->parseStrict( m_aURL );

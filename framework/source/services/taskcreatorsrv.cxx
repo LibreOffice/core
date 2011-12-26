@@ -180,7 +180,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL TaskCreatorService::createI
     // to create it's previes frames. They must do it manually by using WindowDescriptor+Toolkit!
     css::uno::Reference< css::frame::XDesktop > xDesktop(xParentFrame, css::uno::UNO_QUERY);
     ::sal_Bool bTopLevelDocumentWindow = (
-                                            (sRightName.getLength () < 1) &&
+                                            sRightName.isEmpty() &&
                                             (
                                                 (! xParentFrame.is() )    ||
                                                 (  xDesktop.is()     )
@@ -323,7 +323,7 @@ css::uno::Reference< css::frame::XFrame > TaskCreatorService::implts_createFrame
     }
 
     // Set it's API name (if there is one from outside)
-    if (sName.getLength())
+    if (!sName.isEmpty())
         xNewFrame->setName( sName );
 
     return xNewFrame;
