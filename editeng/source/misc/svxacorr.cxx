@@ -1482,10 +1482,9 @@ sal_uLong SvxAutoCorrect::AutoCorrect( SvxAutoCorrDoc& rDoc, const String& rTxt,
 SvxAutoCorrectLanguageLists& SvxAutoCorrect::_GetLanguageList(
                                                         LanguageType eLang )
 {
-    boost::ptr_map<LanguageType, SvxAutoCorrectLanguageLists>::iterator nTmpVal = pLangTable->find(eLang);
-    if(nTmpVal != pLangTable->end())
+    if(pLangTable->find(eLang) == pLangTable->end())
         CreateLanguageFile(eLang, sal_True);
-    return *(nTmpVal->second);
+    return *(pLangTable->find(eLang)->second);
 }
 
 void SvxAutoCorrect::SaveCplSttExceptList( LanguageType eLang )
@@ -1526,8 +1525,10 @@ sal_Bool SvxAutoCorrect::AddCplSttException( const String& rNew,
     else
     {
         nTmpVal = pLangTable->find(LANGUAGE_DONTKNOW);
-        if(nTmpVal != pLangTable->end() || CreateLanguageFile(LANGUAGE_DONTKNOW, sal_True))
+        if(nTmpVal != pLangTable->end())
             pLists = nTmpVal->second;
+        else if(CreateLanguageFile(LANGUAGE_DONTKNOW, sal_True))
+            pLists = pLangTable->find(LANGUAGE_DONTKNOW)->second;
     }
     OSL_ENSURE(pLists, "No auto correction data");
     return pLists->AddToCplSttExceptList(rNew);
@@ -1545,8 +1546,10 @@ sal_Bool SvxAutoCorrect::AddWrtSttException( const String& rNew,
     else
     {
         nTmpVal = pLangTable->find(LANGUAGE_DONTKNOW);
-        if(nTmpVal != pLangTable->end() || CreateLanguageFile(LANGUAGE_DONTKNOW, sal_True))
+        if(nTmpVal != pLangTable->end())
             pLists = nTmpVal->second;
+        else if(CreateLanguageFile(LANGUAGE_DONTKNOW, sal_True))
+            pLists = pLangTable->find(LANGUAGE_DONTKNOW)->second;
     }
     OSL_ENSURE(pLists, "keine Autokorrekturdatei");
     return pLists->AddToWrdSttExceptList(rNew);
@@ -1599,7 +1602,7 @@ sal_Bool SvxAutoCorrect::GetPrevAutoCorrWord( SvxAutoCorrDoc& rDoc,
 
 sal_Bool SvxAutoCorrect::CreateLanguageFile( LanguageType eLang, sal_Bool bNewFile )
 {
-    OSL_ENSURE(pLangTable->find(eLang) != pLangTable->end(), "Language already exists ");
+    OSL_ENSURE(pLangTable->find(eLang) == pLangTable->end(), "Language already exists ");
 
     String sUserDirFile( GetAutoCorrFileName( eLang, sal_True, sal_False )),
            sShareDirFile( sUserDirFile );
@@ -1631,7 +1634,8 @@ sal_Bool SvxAutoCorrect::CreateLanguageFile( LanguageType eLang, sal_Bool bNewFi
         pLists = new SvxAutoCorrectLanguageLists( *this, sShareDirFile,
                                                     sUserDirFile, eLang );
         pLangTable->insert(eLang, pLists);
-        aLastFileTable.erase(nFndPos);
+        if (nFndPos != aLastFileTable.end())
+            aLastFileTable.erase(nFndPos);
     }
     else if( !bNewFile )
     {
@@ -1644,8 +1648,10 @@ sal_Bool SvxAutoCorrect::PutText( const String& rShort, const String& rLong,
                                 LanguageType eLang )
 {
     boost::ptr_map<LanguageType, SvxAutoCorrectLanguageLists>::iterator nTmpVal = pLangTable->find(eLang);
-    if(nTmpVal != pLangTable->end() || CreateLanguageFile(eLang))
+    if(nTmpVal != pLangTable->end())
         return nTmpVal->second->PutText(rShort, rLong);
+    if(CreateLanguageFile(eLang))
+        return pLangTable->find(eLang)->second->PutText(rShort, rLong);
     return sal_False;
 }
 
@@ -1741,11 +1747,10 @@ const SvxAutocorrWord* SvxAutoCorrect::SearchWordsInList(
 
     // First search for eLang, then US-English -> English
     // and last in LANGUAGE_DONTKNOW
-    boost::ptr_map<LanguageType, SvxAutoCorrectLanguageLists>::iterator nTmpVal = pLangTable->find(eLang);
-    if(nTmpVal != pLangTable->end() || CreateLanguageFile(eLang, sal_False))
+    if(pLangTable->find(eLang) != pLangTable->end() || CreateLanguageFile(eLang, sal_False))
     {
         //the language is available - so bring it on
-        SvxAutoCorrectLanguageLists* pList = nTmpVal->second;
+        SvxAutoCorrectLanguageLists* pList = pLangTable->find(eLang)->second;
         pRet = lcl_SearchWordsInList(  pList, rTxt, rStt, nEndPos, rDoc );
         if( pRet )
         {
@@ -1758,11 +1763,10 @@ const SvxAutocorrWord* SvxAutoCorrect::SearchWordsInList(
 
     LanguageType nTmpKey1 = eLang & 0x7ff, // the main language in many cases DE
                  nTmpKey2 = eLang & 0x3ff; // otherwise for example EN
-    nTmpVal = pLangTable->find(nTmpKey1);
-    if(nTmpKey1 != eLang && (nTmpVal != pLangTable->end() || CreateLanguageFile(nTmpKey1, sal_False)))
+    if(nTmpKey1 != eLang && (pLangTable->find(nTmpKey1) != pLangTable->end() || CreateLanguageFile(nTmpKey1, sal_False)))
     {
         //the language is available - so bring it on
-        SvxAutoCorrectLanguageLists* pList = nTmpVal->second;
+        SvxAutoCorrectLanguageLists* pList = pLangTable->find(nTmpKey1)->second;
         pRet = lcl_SearchWordsInList( pList, rTxt, rStt, nEndPos, rDoc);
         if( pRet )
         {
@@ -1771,11 +1775,10 @@ const SvxAutocorrWord* SvxAutoCorrect::SearchWordsInList(
         }
     }
 
-    nTmpVal = pLangTable->find(nTmpKey2);
-    if(nTmpKey2 != eLang && (nTmpVal != pLangTable->end() || CreateLanguageFile(nTmpKey2, sal_False)))
+    if(nTmpKey2 != eLang && (pLangTable->find(nTmpKey2) != pLangTable->end() || CreateLanguageFile(nTmpKey2, sal_False)))
     {
         //the language is available - so bring it on
-        SvxAutoCorrectLanguageLists* pList = nTmpVal->second;
+        SvxAutoCorrectLanguageLists* pList = pLangTable->find(nTmpKey2)->second;
         pRet = lcl_SearchWordsInList( pList, rTxt, rStt, nEndPos, rDoc);
         if( pRet )
         {
@@ -1784,11 +1787,10 @@ const SvxAutocorrWord* SvxAutoCorrect::SearchWordsInList(
         }
     }
 
-    nTmpVal = pLangTable->find(LANGUAGE_DONTKNOW);
-    if(nTmpVal != pLangTable->end() || CreateLanguageFile(LANGUAGE_DONTKNOW, sal_False))
+    if(pLangTable->find(LANGUAGE_DONTKNOW) != pLangTable->end() || CreateLanguageFile(LANGUAGE_DONTKNOW, sal_False))
     {
         //the language is available - so bring it on
-        SvxAutoCorrectLanguageLists* pList = nTmpVal->second;
+        SvxAutoCorrectLanguageLists* pList = pLangTable->find(LANGUAGE_DONTKNOW)->second;
         pRet = lcl_SearchWordsInList( pList, rTxt, rStt, nEndPos, rDoc);
         if( pRet )
         {
@@ -1808,40 +1810,36 @@ sal_Bool SvxAutoCorrect::FindInWrdSttExceptList( LanguageType eLang,
                  nTmpKey2 = eLang & 0x3ff; // otherwise for example EN
     String sTemp(sWord);
 
-    boost::ptr_map<LanguageType, SvxAutoCorrectLanguageLists>::iterator nTmpVal = pLangTable->find(eLang);
-    if(nTmpVal != pLangTable->end() || CreateLanguageFile(eLang, sal_False))
+    if(pLangTable->find(eLang) != pLangTable->end() || CreateLanguageFile(eLang, sal_False))
     {
         //the language is available - so bring it on
-        SvxAutoCorrectLanguageLists* pList = nTmpVal->second;
+        SvxAutoCorrectLanguageLists* pList = pLangTable->find(eLang)->second;
         String _sTemp(sWord);
         if(pList->GetWrdSttExceptList()->Seek_Entry(&_sTemp))
             return sal_True;
     }
 
     // If it still could not be found here, then keep on searching
-    nTmpVal = pLangTable->find(nTmpKey1);
-    if(nTmpKey1 != eLang && (nTmpVal != pLangTable->end() || CreateLanguageFile(nTmpKey1, sal_False)))
+    if(nTmpKey1 != eLang && (pLangTable->find(nTmpKey1) != pLangTable->end() || CreateLanguageFile(nTmpKey1, sal_False)))
     {
         //the language is available - so bring it on
-        SvxAutoCorrectLanguageLists* pList = nTmpVal->second;
+        SvxAutoCorrectLanguageLists* pList = pLangTable->find(nTmpKey1)->second;
         if(pList->GetWrdSttExceptList()->Seek_Entry(&sTemp))
             return sal_True;
     }
 
-    nTmpVal = pLangTable->find(nTmpKey2);
-    if(nTmpKey2 != eLang && (nTmpVal != pLangTable->end() || CreateLanguageFile(nTmpKey2, sal_False)))
+    if(nTmpKey2 != eLang && (pLangTable->find(nTmpKey2) != pLangTable->end() || CreateLanguageFile(nTmpKey2, sal_False)))
     {
         //the language is available - so bring it on
-        SvxAutoCorrectLanguageLists* pList = nTmpVal->second;
+        SvxAutoCorrectLanguageLists* pList = pLangTable->find(nTmpKey2)->second;
         if(pList->GetWrdSttExceptList()->Seek_Entry(&sTemp))
             return sal_True;
     }
 
-    nTmpVal = pLangTable->find(LANGUAGE_DONTKNOW);
-    if(nTmpVal != pLangTable->end() || CreateLanguageFile(LANGUAGE_DONTKNOW, sal_False))
+    if(pLangTable->find(LANGUAGE_DONTKNOW) != pLangTable->end() || CreateLanguageFile(LANGUAGE_DONTKNOW, sal_False))
     {
         //the language is available - so bring it on
-        SvxAutoCorrectLanguageLists* pList = nTmpVal->second;
+        SvxAutoCorrectLanguageLists* pList = pLangTable->find(LANGUAGE_DONTKNOW)->second;
         if(pList->GetWrdSttExceptList()->Seek_Entry(&sTemp))
             return sal_True;
     }
@@ -1891,38 +1889,34 @@ sal_Bool SvxAutoCorrect::FindInCplSttExceptList(LanguageType eLang,
                  nTmpKey2 = eLang & 0x3ff; // otherwise for example EN
     String sTemp( sWord );
 
-    boost::ptr_map<LanguageType, SvxAutoCorrectLanguageLists>::iterator nTmpVal = pLangTable->find(eLang);
-    if(nTmpVal != pLangTable->end() || CreateLanguageFile(eLang, sal_False))
+    if(pLangTable->find(eLang) != pLangTable->end() || CreateLanguageFile(eLang, sal_False))
     {
         //the language is available - so bring it on
-        const SvStringsISortDtor* pList = nTmpVal->second->GetCplSttExceptList();
+        const SvStringsISortDtor* pList = pLangTable->find(eLang)->second->GetCplSttExceptList();
         if(bAbbreviation ? lcl_FindAbbreviation(pList, sWord) : pList->Seek_Entry(&sTemp))
             return sal_True;
     }
 
     // If it still could not be found here, then keep on searching
-    nTmpVal = pLangTable->find(nTmpKey1);
-    if(nTmpKey1 != eLang && (nTmpVal != pLangTable->end() || CreateLanguageFile(nTmpKey1, sal_False)))
+    if(nTmpKey1 != eLang && (pLangTable->find(nTmpKey1) != pLangTable->end() || CreateLanguageFile(nTmpKey1, sal_False)))
     {
-        const SvStringsISortDtor* pList = nTmpVal->second->GetCplSttExceptList();
+        const SvStringsISortDtor* pList = pLangTable->find(nTmpKey1)->second->GetCplSttExceptList();
         if(bAbbreviation ? lcl_FindAbbreviation(pList, sWord) : pList->Seek_Entry(&sTemp))
             return sal_True;
     }
 
-    nTmpVal = pLangTable->find(nTmpKey2);
-    if(nTmpKey2 != eLang && (nTmpVal != pLangTable->end() || CreateLanguageFile(nTmpKey2, sal_False)))
+    if(nTmpKey2 != eLang && (pLangTable->find(nTmpKey2) != pLangTable->end() || CreateLanguageFile(nTmpKey2, sal_False)))
     {
         //the language is available - so bring it on
-        const SvStringsISortDtor* pList = nTmpVal->second->GetCplSttExceptList();
+        const SvStringsISortDtor* pList = pLangTable->find(nTmpKey2)->second->GetCplSttExceptList();
         if(bAbbreviation ? lcl_FindAbbreviation(pList, sWord) : pList->Seek_Entry(&sTemp))
             return sal_True;
     }
 
-    nTmpVal = pLangTable->find(LANGUAGE_DONTKNOW);
-    if(nTmpVal != pLangTable->end() || CreateLanguageFile(LANGUAGE_DONTKNOW, sal_False))
+    if(pLangTable->find(LANGUAGE_DONTKNOW) != pLangTable->end() || CreateLanguageFile(LANGUAGE_DONTKNOW, sal_False))
     {
         //the language is available - so bring it on
-        const SvStringsISortDtor* pList = nTmpVal->second->GetCplSttExceptList();
+        const SvStringsISortDtor* pList = pLangTable->find(LANGUAGE_DONTKNOW)->second->GetCplSttExceptList();
         if(bAbbreviation ? lcl_FindAbbreviation(pList, sWord) : pList->Seek_Entry(&sTemp))
             return sal_True;
     }
