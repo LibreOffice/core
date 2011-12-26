@@ -192,6 +192,10 @@ endef
 
 else # !SYSTEM_HUNSPELL
 
+$(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
+	$(if $(filter MSC,$(COM)),libhunspell,hunspell-1.3) \
+))
+
 define gb_LinkTarget__use_hunspell
 $(call gb_LinkTarget_add_defs,$(1),\
 	-DHUNSPELL_STATIC \
@@ -200,8 +204,8 @@ $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
 	-I$(OUTDIR)/inc/hunspell \
 )
-$(call gb_LinkTarget_add_libs,$(1),\
-	$(if $(filter WNT,$(OS)),libhunspell.lib,-lhunspell-1.3) \
+$(call gb_LinkTarget_add_linked_static_libs,$(1),\
+	$(if $(filter MSC,$(COM)),libhunspell,hunspell-1.3) \
 )
 
 endef
