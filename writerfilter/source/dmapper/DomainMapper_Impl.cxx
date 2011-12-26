@@ -3097,10 +3097,13 @@ void DomainMapper_Impl::SetFieldFFData(FFDataHandler::Pointer_t pFFDataHandler)
     dmapper_logger->startElement("setFieldFFData");
 #endif
 
-    FieldContextPtr pContext = m_aFieldStack.top();
-    if (pContext.get())
+    if (m_aFieldStack.size())
     {
-        pContext->setFFDataHandler(pFFDataHandler);
+        FieldContextPtr pContext = m_aFieldStack.top();
+        if (pContext.get())
+        {
+            pContext->setFFDataHandler(pFFDataHandler);
+        }
     }
 
 #ifdef DEBUG_DOMAINMAPPER
