@@ -700,16 +700,10 @@ void ValueSet::ImplDrawSelect()
     if ( !IsReallyVisible() )
         return;
 
-    sal_Bool bFocus = HasFocus();
-    sal_Bool bDrawSel;
+    const bool bFocus = HasFocus();
+    const bool bDrawSel = !( (mbNoSelection && !mbHighlight) || (!mbDrawSelection && mbHighlight) );
 
-    if ( (mbNoSelection && !mbHighlight) || (!mbDrawSelection && mbHighlight) )
-        bDrawSel = sal_False;
-    else
-        bDrawSel = sal_True;
-
-    if ( !bFocus &&
-         ((mbNoSelection && !mbHighlight) || (!mbDrawSelection && mbHighlight)) )
+    if ( !bFocus && !bDrawSel )
     {
         XubString aEmptyStr;
         ImplDrawItemText( aEmptyStr );
