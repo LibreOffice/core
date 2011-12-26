@@ -845,7 +845,7 @@ PermissionCollection AccessController::getEffectivePermissions(
         checkAndClearPostPoned();
         return ret;
     }
-    catch (security::AccessControlException & exc) // wrapped into DeploymentException
+    catch (const security::AccessControlException & exc) // wrapped into DeploymentException
     {
         clearPostPoned(); // safety: exception could have happened before checking postponed?
         OUStringBuffer buf( 64 );

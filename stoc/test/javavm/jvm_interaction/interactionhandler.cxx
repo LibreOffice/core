@@ -153,27 +153,27 @@ sal_Bool test1(const Reference< XMultiServiceFactory > & xMgr )
     {
         anyVM = xVM->getJavaVM( Sequence<sal_Int8>(arId, 16));
     }
-    catch (JavaNotConfiguredException& e)
+    catch (const JavaNotConfiguredException& e)
     {
         OString msg= OUStringToOString(e.Message, osl_getThreadTextEncoding());
         printf("JavaNotConfiguredException: %s\n", msg.getStr());
     }
-    catch (JavaVMCreationFailureException& e)
+    catch (const JavaVMCreationFailureException& e)
     {
         OString msg= OUStringToOString(e.Message, osl_getThreadTextEncoding());
         printf("JavaVMCreationFailureException: %s\n", msg.getStr());
     }
-    catch (MissingJavaRuntimeException& e)
+    catch (const MissingJavaRuntimeException& e)
     {
         OString msg= OUStringToOString(e.Message, osl_getThreadTextEncoding());
         printf("MissingJavaRuntimeException: %s\n", msg.getStr());
     }
-    catch (JavaDisabledException& e)
+    catch (const JavaDisabledException& e)
     {
         OString msg= OUStringToOString(e.Message, osl_getThreadTextEncoding());
         printf("JavaDisabledException: %s\n", msg.getStr());
     }
-    catch (RuntimeException & e)
+    catch (const RuntimeException & e)
     {
         OString msg= OUStringToOString(e.Message, osl_getThreadTextEncoding());
         printf("###RuntimeException: %s\n", msg.getStr());

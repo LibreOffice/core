@@ -543,7 +543,7 @@ InterfaceTypeDescriptionImpl::getBaseTypes() throw (RuntimeException) {
         for (sal_Int32 i = 0; i < _aBaseTypes.getLength(); ++i) {
             try {
                 _xTDMgr->getByHierarchicalName(_aBaseTypes[i]) >>= tds[i];
-            } catch (NoSuchElementException & e) {
+            } catch (const NoSuchElementException & e) {
                 throw RuntimeException(
                     (OUString(
                         RTL_CONSTASCII_USTRINGPARAM(
@@ -571,7 +571,7 @@ InterfaceTypeDescriptionImpl::getOptionalBaseTypes() throw (RuntimeException) {
             try {
                 _xTDMgr->getByHierarchicalName(_aOptionalBaseTypes[i])
                     >>= tds[i];
-            } catch (NoSuchElementException & e) {
+            } catch (const NoSuchElementException & e) {
                 throw RuntimeException(
                     (OUString(
                         RTL_CONSTASCII_USTRINGPARAM(

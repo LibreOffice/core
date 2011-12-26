@@ -183,7 +183,7 @@ static sal_Bool convertTo( const Type & rDestType, const Any & rVal, sal_Bool bE
         aRet = s_xConverter->convertTo( rVal, rDestType );
         bCanConvert = sal_True;
     }
-    catch (Exception & rExc)
+    catch (const Exception & rExc)
     {
         aExcMsg = OUStringToOString( rExc.Message, RTL_TEXTENCODING_ASCII_US );
     }
@@ -237,7 +237,7 @@ static sal_Bool convertTo( const Type & rDestType, const Any & rVal, sal_Bool bE
             aRet2 = s_xConverter->convertTo( aRet, rVal.getValueType() );
             bReConvert = sal_True;
         }
-        catch (Exception & rExc)
+        catch (const Exception & rExc)
         {
             aExcMsg = OUStringToOString( rExc.Message, RTL_TEXTENCODING_ISO_8859_1 );
         }
@@ -690,7 +690,7 @@ SAL_IMPLEMENT_MAIN()
 
         test_Conversion( xMgr );
     }
-    catch (Exception & rExc)
+    catch (const Exception & rExc)
     {
         OSL_FAIL( "### exception occurred!" );
         OString aMsg( OUStringToOString( rExc.Message, RTL_TEXTENCODING_ASCII_US ) );

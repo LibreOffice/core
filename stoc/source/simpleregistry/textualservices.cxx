@@ -328,7 +328,7 @@ void Parser::handleComponent() {
     }
     try {
         attrUri_ = rtl::Uri::convertRelToAbs(reader_.getUrl(), attrUri_);
-    } catch (rtl::MalformedUriException & e) {
+    } catch (const rtl::MalformedUriException & e) {
         throw css::registry::InvalidRegistryException(
             (reader_.getUrl() +
              rtl::OUString(

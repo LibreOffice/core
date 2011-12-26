@@ -81,7 +81,7 @@ FunctionDescription::getExceptions() const {
         css::uno::Any any;
         try {
             any = m_manager->getByHierarchicalName(name);
-        } catch (css::container::NoSuchElementException & e) {
+        } catch (const css::container::NoSuchElementException & e) {
             throw new css::uno::RuntimeException(
                 (rtl::OUString(
                     RTL_CONSTASCII_USTRINGPARAM(

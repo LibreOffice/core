@@ -399,7 +399,7 @@ SAL_IMPLEMENT_MAIN()
 
         Reference< XComponent >( xContext, UNO_QUERY )->dispose();
     }
-    catch (Exception & rExc)
+    catch (const Exception & rExc)
     {
         OSL_FAIL( "### exception occurred!" );
         OString aMsg(

@@ -151,7 +151,7 @@ SAL_IMPLEMENT_MAIN()
 
         bSucc = testJavaVM( xMgr );
     }
-    catch (Exception & rExc)
+    catch (const Exception & rExc)
     {
         OSL_FAIL( "### exception occurred!" );
         OString aMsg( OUStringToOString( rExc.Message, RTL_TEXTENCODING_ASCII_US ) );

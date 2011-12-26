@@ -452,7 +452,7 @@ void SAL_CALL ManagerImpl::insert( const Any & rElement )
                     {
                         xNewTD = xTDEnum->nextTypeDescription();
                     }
-                    catch (container::NoSuchElementException & exc)
+                    catch (const container::NoSuchElementException & exc)
                     {
                         throw lang::IllegalArgumentException(
                             OUSTR("NoSuchElementException occurred: ") +
@@ -473,7 +473,7 @@ void SAL_CALL ManagerImpl::insert( const Any & rElement )
                             {
                                 check( xNewTD, xExistingTD );
                             }
-                            catch (IncompatibleTypeException & exc)
+                            catch (const IncompatibleTypeException & exc)
                             {
                                 throw lang::IllegalArgumentException(
                                     OUSTR("Rejecting types due to "
@@ -488,13 +488,13 @@ void SAL_CALL ManagerImpl::insert( const Any & rElement )
                     }
                 }
             }
-            catch (reflection::NoSuchTypeNameException & exc)
+            catch (const reflection::NoSuchTypeNameException & exc)
             {
                 throw lang::IllegalArgumentException(
                     OUSTR("NoSuchTypeNameException occurred: ") + exc.Message,
                     static_cast<OWeakObject *>(this), -1 /* unknown */ );
             }
-            catch (reflection::InvalidTypeNameException & exc)
+            catch (const reflection::InvalidTypeNameException & exc)
             {
                 throw lang::IllegalArgumentException(
                     OUSTR("InvalidTypeNameException occurred: ") + exc.Message,

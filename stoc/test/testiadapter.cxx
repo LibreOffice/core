@@ -530,7 +530,7 @@ Any XLB_Invocation::invoke( const OUString & rFunctionName,
             bImplementedMethod = false;
         }
     }
-    catch (IllegalArgumentException & rExc)
+    catch (const IllegalArgumentException & rExc)
     {
         // thrown by raiseException() call
         InvocationTargetException aExc;
@@ -905,7 +905,7 @@ sal_Bool raiseException( const Reference<XLanguageBindingTest > & xLBT )
                     aRet.Enum, aRet.String, aRet.Interface, aRet.Any, aRet.Sequence, aRet2 );
                 return sal_False;
             }
-            catch (IllegalArgumentException aExc)
+            catch (const IllegalArgumentException &aExc)
             {
                 OSL_ENSURE( aExc.ArgumentPosition == 5 &&
 //                               aExc.Context == xLBT &&
@@ -938,7 +938,7 @@ sal_Bool raiseException( const Reference<XLanguageBindingTest > & xLBT )
                 return sal_False;
         }
     }
-    catch (Exception & aExc)
+    catch (const Exception & aExc)
     {
         OSL_ENSURE( //aExc.Context == xLBT &&
                      aExc.Message.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("dum dum dum ich tanz im kreis herum...")),
@@ -1058,7 +1058,7 @@ SAL_IMPLEMENT_MAIN()
             }
         }
     }
-    catch (Exception & rExc)
+    catch (const Exception & rExc)
     {
         fprintf( stderr, "> exception occurred: " );
         OString aMsg( OUStringToOString( rExc.Message, RTL_TEXTENCODING_ASCII_US ) );

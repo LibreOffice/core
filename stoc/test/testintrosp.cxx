@@ -1054,7 +1054,7 @@ static sal_Bool test_introsp( Reference< XMultiServiceFactory > xMgr,
                     {
                         xPropSet->setPropertyValue( aPropName, aNewVal );
                     }
-                    catch(UnknownPropertyException e1)
+                    catch(const UnknownPropertyException &)
                     {
                     }
 
@@ -1088,7 +1088,7 @@ static sal_Bool test_introsp( Reference< XMultiServiceFactory > xMgr,
                 {
                     Property aGetProp = xAccess->getProperty( aWDemandedName, nConcepts );
                 }
-                catch (RuntimeException e1)
+                catch (const RuntimeException &)
                 {
                     aErrorStr  = "property \"";
                     aErrorStr += aDemandedName;
@@ -1174,7 +1174,7 @@ static sal_Bool test_introsp( Reference< XMultiServiceFactory > xMgr,
                 Reference< XIdlMethod > xGetMethod = xAccess->getMethod( aWDemandedName, nRealConcepts );
                 TEST_ENSHURE( xGetMethod == rxMethod , aErrorStr.getStr() );
             }
-            catch (RuntimeException e1)
+            catch (const RuntimeException &)
             {
                 aErrorStr  = "method \"";
                 aErrorStr += aDemandedName;
@@ -1237,7 +1237,7 @@ SAL_IMPLEMENT_MAIN()
         bSucc = test_introsp( xMgr, xRefl, xIntrosp );
         fprintf(stderr, "after test_introsp\n" );
     }
-    catch (Exception & rExc)
+    catch (const Exception & rExc)
     {
         OSL_FAIL( "### exception occurred!" );
         OString aMsg( OUStringToOString( rExc.Message, RTL_TEXTENCODING_ASCII_US ) );

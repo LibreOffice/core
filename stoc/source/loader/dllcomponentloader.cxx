@@ -187,7 +187,7 @@ OUString DllComponentLoader::expand_url( OUString const & url )
     {
         return cppu::bootstrap_expandUri( url );
     }
-    catch ( IllegalArgumentException & e )
+    catch ( const IllegalArgumentException & e )
     {
         throw RuntimeException( e.Message, e.Context );
     }

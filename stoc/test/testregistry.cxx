@@ -649,7 +649,7 @@ void test_DefaultRegistry(
     {
         xReg->close();
     }
-    catch(InvalidRegistryException& e)
+    catch(const InvalidRegistryException& e)
     {
         (void)e;
         TEST_ENSHURE(0, OUStringToOString(e.Message,RTL_TEXTENCODING_ASCII_US).getStr());

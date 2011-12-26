@@ -1025,7 +1025,7 @@ static void insert_singletons(
                                     buf.makeStringAndClear(), Reference< XInterface >() );
                             }
                         }
-                        catch (container::NoSuchElementException & exc)
+                        catch (const container::NoSuchElementException & exc)
                         {
                             throw RuntimeException(
                                 OUSTR("cannot get service type description: ") + exc.Message,
@@ -1564,7 +1564,7 @@ void ImplementationRegistration::prepareRegister(
         {
             throw;
         }
-        catch( InvalidRegistryException & e )
+        catch( const InvalidRegistryException & e )
         {
             OUStringBuffer buf;
             buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(
@@ -1575,7 +1575,7 @@ void ImplementationRegistration::prepareRegister(
             throw CannotRegisterImplementationException(
                 buf.makeStringAndClear(), Reference< XInterface > () );
         }
-        catch( MergeConflictException & e )
+        catch( const MergeConflictException & e )
         {
             OUStringBuffer buf;
             buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(

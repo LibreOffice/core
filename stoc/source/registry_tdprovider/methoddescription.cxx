@@ -100,7 +100,7 @@ css::uno::Reference< css::reflection::XTypeDescription > Parameter::getType()
         return css::uno::Reference< css::reflection::XTypeDescription >(
             m_manager->getByHierarchicalName(m_typeName),
             css::uno::UNO_QUERY_THROW);
-    } catch (css::container::NoSuchElementException & e) {
+    } catch (const css::container::NoSuchElementException & e) {
         throw new css::uno::RuntimeException(
             (rtl::OUString(
                 RTL_CONSTASCII_USTRINGPARAM(

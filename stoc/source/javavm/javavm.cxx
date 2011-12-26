@@ -549,7 +549,7 @@ void initVMConfiguration(
     try {
         getINetPropsFromConfig(&jvm, xSMgr, xCtx);
     }
-    catch(css::uno::Exception & exception) {
+    catch(const css::uno::Exception & exception) {
 #if OSL_DEBUG_LEVEL > 1
         rtl::OString message = rtl::OUStringToOString(exception.Message, RTL_TEXTENCODING_ASCII_US);
         OSL_TRACE("javavm.cxx: can not get INetProps cause of >%s<", message.getStr());
@@ -561,7 +561,7 @@ void initVMConfiguration(
     try {
         getDefaultLocaleFromConfig(&jvm, xSMgr,xCtx);
     }
-    catch(css::uno::Exception & exception) {
+    catch(const css::uno::Exception & exception) {
 #if OSL_DEBUG_LEVEL > 1
         rtl::OString message = rtl::OUStringToOString(exception.Message, RTL_TEXTENCODING_ASCII_US);
         OSL_TRACE("javavm.cxx: can not get locale cause of >%s<", message.getStr());
@@ -574,7 +574,7 @@ void initVMConfiguration(
     {
         getJavaPropsFromSafetySettings(&jvm, xSMgr, xCtx);
     }
-    catch(css::uno::Exception & exception) {
+    catch(const css::uno::Exception & exception) {
 #if OSL_DEBUG_LEVEL > 1
         rtl::OString message = rtl::OUStringToOString(exception.Message, RTL_TEXTENCODING_ASCII_US);
         OSL_TRACE("javavm.cxx: couldn't get safety settings because of >%s<", message.getStr());
@@ -1480,7 +1480,7 @@ void JavaVirtualMachine::registerConfigChangesListener()
             if (m_xJavaConfiguration.is())
                 m_xJavaConfiguration->addContainerListener(this);
         }
-    }catch( css::uno::Exception & e)
+    }catch(const css::uno::Exception & e)
     {
 #if OSL_DEBUG_LEVEL > 1
         rtl::OString message = rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US);

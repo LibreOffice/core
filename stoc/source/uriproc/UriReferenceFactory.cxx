@@ -420,7 +420,7 @@ css::uno::Reference< css::uri::XUriReference > Factory::parse(
                     serviceName, m_context);
             } catch (css::uno::RuntimeException &) {
                 throw;
-            } catch (css::uno::Exception & e) {
+            } catch (const css::uno::Exception & e) {
                 throw css::lang::WrappedTargetRuntimeException(
                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("creating service "))
                         + serviceName,

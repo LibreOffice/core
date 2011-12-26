@@ -108,7 +108,7 @@ SAL_IMPLEMENT_MAIN()
                                         compName2,
                                         Reference< XSimpleRegistry >() );
     }
-    catch( CannotRegisterImplementationException& e)
+    catch(const CannotRegisterImplementationException& e)
     {
         TEST_ENSHURE( e.Message.getLength(), OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US).getStr() );
     }

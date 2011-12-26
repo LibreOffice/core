@@ -225,7 +225,7 @@ static void test_proxyfac_(
         Reference< registry::XRegistryKey >(
             xMaster, UNO_QUERY_THROW );
     }
-    catch (lang::DisposedException & exc)
+    catch (const lang::DisposedException & exc)
     {
         if (! exc.Message.equalsAsciiL(
                 RTL_CONSTASCII_STRINGPARAM("my test exception") ))
@@ -328,7 +328,7 @@ SAL_IMPLEMENT_MAIN()
                 xProxyFac );
             uno_dumpEnvironment( stdout, cpp_env.get(), 0 );
         }
-        catch (Exception & rExc)
+        catch (const Exception & rExc)
         {
             (void)rExc;
             OSL_ENSURE(

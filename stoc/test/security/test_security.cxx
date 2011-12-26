@@ -173,7 +173,7 @@ Any user_CurrentContext::getValueByName( OUString const & name )
             check; \
         } \
     } \
-    catch (RuntimeException & exc) \
+    catch (const RuntimeException & exc) \
     { \
         OUStringBuffer buf( 64 ); \
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("[line ") ); \
@@ -513,7 +513,7 @@ SAL_IMPLEMENT_MAIN()
         ::fprintf( stderr, "security test succeeded.\n" );
         return 0;
     }
-    catch (Exception & exc)
+    catch (const Exception & exc)
     {
         OString str( OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
         ::fprintf( stderr, "[security test] error: %s!\n", str.getStr() );

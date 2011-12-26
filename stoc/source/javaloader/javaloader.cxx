@@ -417,7 +417,7 @@ css::uno::Reference<XInterface> SAL_CALL JavaComponentLoader_CreateInstance(cons
             pStaticRef = new css::uno::Reference< XInterface > ( xRet );
         }
     }
-    catch(RuntimeException & runtimeException) {
+    catch(const RuntimeException & runtimeException) {
         OString message = OUStringToOString(runtimeException.Message, RTL_TEXTENCODING_ASCII_US);
         osl_trace("javaloader - could not init javaloader cause of %s", message.getStr());
         throw;

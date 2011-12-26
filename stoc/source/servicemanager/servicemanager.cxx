@@ -982,7 +982,7 @@ void OServiceManager::disposing()
             if( xComp.is() )
                 xComp->dispose();
         }
-        catch (RuntimeException & exc)
+        catch (const RuntimeException & exc)
         {
 #if OSL_DEBUG_LEVEL > 1
             OString str( OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
@@ -1204,7 +1204,7 @@ Reference< XInterface > OServiceManager::createInstanceWithContext(
                 }
             }
         }
-        catch (lang::DisposedException & exc)
+        catch (const lang::DisposedException & exc)
         {
 #if OSL_DEBUG_LEVEL > 1
             OString str( OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
@@ -1268,7 +1268,7 @@ Reference< XInterface > OServiceManager::createInstanceWithArgumentsAndContext(
                 }
             }
         }
-        catch (lang::DisposedException & exc)
+        catch (const lang::DisposedException & exc)
         {
 #if OSL_DEBUG_LEVEL > 1
             OString str( OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );

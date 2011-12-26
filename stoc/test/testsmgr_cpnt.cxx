@@ -258,7 +258,7 @@ extern "C" void SAL_CALL test_ServiceManager()
             // register the services via writeComponentRegInfo (see at end of this file)
             xInst->registerImplementation(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.loader.SharedLibrary")), atUModule2, Reference< XSimpleRegistry >() );
         }
-        catch( CannotRegisterImplementationException e ) {
+        catch(const CannotRegisterImplementationException &) {
             TEST_ENSHURE( 0, "register implementation failed" );
         }
 

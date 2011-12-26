@@ -614,7 +614,7 @@ void Invocation_Impl::setValue( const OUString& PropertyName, const Any& Value )
         {
             throw;
         }
-        catch (Exception & exc)
+        catch (const Exception & exc)
         {
             throw InvocationTargetException(
                 OUString( RTL_CONSTASCII_USTRINGPARAM("exception occurred in setValue(): ") ) +
