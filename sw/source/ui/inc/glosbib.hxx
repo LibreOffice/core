@@ -38,6 +38,8 @@
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
 
+#include <vector>
+
 class SwGlossaryHdl;
 class SvStrings;
 
@@ -82,9 +84,9 @@ class SwGlossaryGroupDlg : public SvxStandardDialog
     PushButton      aDelPB;
     PushButton      aRenamePB;
 
-    SvStrings*      pRemovedArr;
-    SvStrings*      pInsertedArr;
-    SvStrings*      pRenamedArr;
+    std::vector<String*> *pRemovedArr;
+    std::vector<String*> *pInsertedArr;
+    std::vector<String*> *pRenamedArr;
 
     SwGlossaryHdl   *pGlosHdl;
 

@@ -30,8 +30,6 @@
 #undef SW_DLLIMPLEMENTATION
 #endif
 
-
-
 #define _SVSTDARR_STRINGS
 #include <tools/urlobj.hxx>
 #include <tools/stream.hxx>
@@ -146,17 +144,20 @@ SwGlossaryGroupDlg::~SwGlossaryGroupDlg()
 
     if(pInsertedArr)
     {
-        pInsertedArr->DeleteAndDestroy(0, pInsertedArr->Count());
+        for(std::vector<String*>::const_iterator it(pInsertedArr->begin()); it != pInsertedArr->end(); ++it)
+            delete *it;
         delete pInsertedArr;
     }
     if(pRemovedArr)
     {
-        pRemovedArr->DeleteAndDestroy(0, pRemovedArr->Count());
+        for(std::vector<String*>::const_iterator it(pRemovedArr->begin()); it != pRemovedArr->end(); ++it)
+            delete *it;
         delete pRemovedArr;
     }
     if(pRenamedArr)
     {
-        pRenamedArr->DeleteAndDestroy(0, pRenamedArr->Count());
+        for(std::vector<String*>::const_iterator it(pRenamedArr->begin()); it != pRenamedArr->end(); ++it)
+            delete *it;
         delete pRenamedArr;
     }
 
@@ -169,13 +170,11 @@ void SwGlossaryGroupDlg::Apply()
 
     String aActGroup = SwGlossaryDlg::GetCurrGroup();
 
-    if(pRemovedArr && pRemovedArr->Count())
+    if(pRemovedArr)
     {
-        sal_uInt16 nCount = pRemovedArr->Count();
-        for(sal_uInt16 i = 0; i < nCount; ++i)
+        for(std::vector<String*>::const_iterator it(pRemovedArr->begin()); it != pRemovedArr->end(); ++it)
         {
-            const String* pDelEntry = (*pRemovedArr)[i];
-            const String sDelGroup = pDelEntry->GetToken(0, '\t');
+            const String sDelGroup = (*it)->GetToken(0, '\t');
             if( sDelGroup == aActGroup )
             {
                 //when the current group is deleted, the current group has to be relocated
@@ -187,7 +186,7 @@ void SwGlossaryGroupDlg::Apply()
                 }
             }
             String sMsg(SW_RES(STR_QUERY_DELETE_GROUP1));
-            String sTitle(pDelEntry->GetToken(1, '\t'));
+            String sTitle( (*it)->GetToken(1, '\t') );
             if(sTitle.Len())
                 sMsg += sTitle;
             else
@@ -200,29 +199,26 @@ void SwGlossaryGroupDlg::Apply()
 
     }
     //don't rename before there was one
-    if(pRenamedArr && pRenamedArr->Count())
+    if(pRenamedArr)
     {
-        sal_uInt16 nCount = pRenamedArr->Count();
-        for(sal_uInt16 i = 0; i < nCount; ++i)
+        for(std::vector<String*>::const_iterator it(pRenamedArr->begin()); it != pRenamedArr->end(); ++it)
         {
-            String * pEntry = (*pRenamedArr)[i];
             xub_StrLen nStrSttPos = 0;
-            String sOld( pEntry->GetToken(0, RENAME_TOKEN_DELIM, nStrSttPos ) );
-            String sNew( pEntry->GetToken(0, RENAME_TOKEN_DELIM, nStrSttPos) );
-            String sTitle( pEntry->GetToken(0, RENAME_TOKEN_DELIM, nStrSttPos) );
+            String sOld( (*it)->GetToken(0, RENAME_TOKEN_DELIM, nStrSttPos ) );
+            String sNew( (*it)->GetToken(0, RENAME_TOKEN_DELIM, nStrSttPos) );
+            String sTitle( (*it)->GetToken(0, RENAME_TOKEN_DELIM, nStrSttPos) );
             pGlosHdl->RenameGroup(sOld, sNew, sTitle);
-            if(!i)
+            if( it == pRenamedArr->begin() )
                 sCreatedGroup = sNew;
         }
     }
-    if(pInsertedArr && pInsertedArr->Count())
+    if(pInsertedArr)
     {
-        sal_uInt16 nCount = pInsertedArr->Count();
-        for(sal_uInt16 i = 0; i < nCount; ++i)
+        for(std::vector<String*>::const_iterator it(pInsertedArr->begin()); it != pInsertedArr->end(); ++it)
         {
-            String sNewGroup = *(*pInsertedArr)[i];
+            String sNewGroup = **it;
             String sNewTitle = sNewGroup.GetToken(0, GLOS_DELIM);
-            if( *(*pInsertedArr)[i] != aActGroup )
+            if( sNewGroup != aActGroup )
             {
                 pGlosHdl->NewGroup(sNewGroup, sNewTitle);
                 if(!sCreatedGroup.Len())
@@ -264,8 +260,8 @@ IMPL_LINK( SwGlossaryGroupDlg, NewHdl, Button*, EMPTYARG )
     sGroup += String::CreateFromInt32(aPathLB.GetSelectEntryPos());
     OSL_ENSURE(!pGlosHdl->FindGroupName(sGroup), "group already available!");
     if(!pInsertedArr)
-        pInsertedArr = new SvStrings;
-    pInsertedArr->Insert(new String(sGroup), pInsertedArr->Count());
+        pInsertedArr = new std::vector<String*>;
+    pInsertedArr->push_back(new String(sGroup));
     String sTemp(aNameED.GetText());
     sTemp += '\t';
     sTemp += aPathLB.GetSelectEntry();
@@ -294,15 +290,13 @@ IMPL_LINK( SwGlossaryGroupDlg, DeleteHdl, Button*, pButton  )
     String sEntry(pUserData->sGroupName);
     // if the name to be deleted is among the new ones - get rid of it
     sal_Bool bDelete = sal_True;
-    if(pInsertedArr && pInsertedArr->Count())
+    if(pInsertedArr)
     {
-        sal_uInt16 nCount = pInsertedArr->Count();
-        for(sal_uInt16 i = 0; i < nCount; ++i)
+        for(std::vector<String*>::iterator it(pInsertedArr->begin()); it != pInsertedArr->end(); ++it)
         {
-            const String* pTemp = (*pInsertedArr)[i];
-            if(*pTemp == sEntry)
+            if( **it == sEntry )
             {
-                pInsertedArr->Remove(i);
+                pInsertedArr->erase(it);
                 bDelete = sal_False;
                 break;
             }
@@ -312,16 +306,13 @@ IMPL_LINK( SwGlossaryGroupDlg, DeleteHdl, Button*, pButton  )
     // it should probably be renamed?
     if(bDelete)
     {
-        if(pRenamedArr && pRenamedArr->Count())
+        if(pRenamedArr)
         {
-            sal_uInt16 nCount = pRenamedArr->Count();
-            for(sal_uInt16 i = 0; i < nCount; ++i)
+            for(std::vector<String*>::iterator it(pRenamedArr->begin()); it != pRenamedArr->end(); ++it)
             {
-                const String* pTemp = (*pRenamedArr)[i];
-                String sTemp( pTemp->GetToken(0, RENAME_TOKEN_DELIM ));
-                if(sTemp == sEntry)
+                if( (*it)->GetToken(0, RENAME_TOKEN_DELIM) == sEntry )
                 {
-                    pRenamedArr->Remove(i);
+                    pRenamedArr->erase(it);
                     bDelete = sal_False;
                     break;
                 }
@@ -331,11 +322,11 @@ IMPL_LINK( SwGlossaryGroupDlg, DeleteHdl, Button*, pButton  )
     if(bDelete)
     {
         if(!pRemovedArr)
-            pRemovedArr = new SvStrings;
+            pRemovedArr = new std::vector<String*>;
         String sGroupEntry(pUserData->sGroupName);
         sGroupEntry += '\t';
         sGroupEntry += pUserData->sGroupTitle;
-        pRemovedArr->Insert(new String(sGroupEntry), pRemovedArr->Count());
+        pRemovedArr->push_back(new String(sGroupEntry));
     }
     delete pUserData;
     aGroupTLB.GetModel()->Remove(pEntry);
@@ -362,16 +353,14 @@ IMPL_LINK( SwGlossaryGroupDlg, RenameHdl, Button *, EMPTYARG )
 
     // if the name to be renamed is among the new ones - replace
     sal_Bool bDone = sal_False;
-    if(pInsertedArr && pInsertedArr->Count())
+    if(pInsertedArr)
     {
-        sal_uInt16 nCount = pInsertedArr->Count();
-        for(sal_uInt16 i = 0; i < nCount; ++i)
+        for(std::vector<String*>::iterator it(pInsertedArr->begin()); it != pInsertedArr->end(); ++it)
         {
-            const String* pTemp = (*pInsertedArr)[i];
-            if(*pTemp == sEntry)
+            if( **it == sEntry )
             {
-                pInsertedArr->Remove(i);
-                pInsertedArr->Insert(new String(sNewName), pInsertedArr->Count());
+                pInsertedArr->erase(it);
+                pInsertedArr->push_back(new String(sNewName));
                 bDone = sal_True;
                 break;
             }
@@ -380,12 +369,12 @@ IMPL_LINK( SwGlossaryGroupDlg, RenameHdl, Button *, EMPTYARG )
     if(!bDone)
     {
         if(!pRenamedArr)
-            pRenamedArr = new SvStrings;
+            pRenamedArr = new std::vector<String*>;
         sEntry += RENAME_TOKEN_DELIM;
         sEntry += sNewName;
         sEntry += RENAME_TOKEN_DELIM;
         sEntry += sNewTitle;
-        pRenamedArr->Insert(new String(sEntry), pRenamedArr->Count());
+        pRenamedArr->push_back(new String(sEntry));
     }
     delete (GlosBibUserData*)pEntry->GetUserData();
     aGroupTLB.GetModel()->Remove(pEntry);
@@ -467,13 +456,11 @@ sal_Bool SwGlossaryGroupDlg::IsDeleteAllowed(const String &rGroup)
     // as well! Because for non existing region names ReadOnly issues
     // sal_True.
 
-    if(pInsertedArr && pInsertedArr->Count())
+    if(pInsertedArr)
     {
-        sal_uInt16 nCount = pInsertedArr->Count();
-        for(sal_uInt16 i = 0; i < nCount; ++i)
+        for(std::vector<String*>::const_iterator it(pInsertedArr->begin()); it != pInsertedArr->end(); ++it)
         {
-            const String* pTemp = (*pInsertedArr)[i];
-            if(*pTemp == rGroup)
+            if( **it == rGroup )
             {
                 bDel = sal_True;
                 break;
