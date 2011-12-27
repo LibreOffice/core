@@ -38,6 +38,10 @@ ENABLE_EXCEPTIONS=TRUE
 CFLAGS+= -DENABLE_LAYOUT=1 -I../$(PRJ)/layout/inc -I../$(PRJ)/layout/$(INPATH)/inc
 .ENDIF # ENABLE_LAYOUT == TRUE
 
+.IF "$(BUILD_VER_STRING)" != ""
+CFLAGS+= -DBUILD_VER_STRING="$(BUILD_VER_STRING)"
+.ENDIF
+
 # --- Files --------------------------------------------------------
 
 SRS1NAME=dialogs

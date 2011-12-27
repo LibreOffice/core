@@ -231,7 +231,9 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId ) :
     aBuildData.SetFont( aNewFont );
     aBuildData.SetBackground( aWall );
 #ifdef BUILD_VER_STRING
-    String aBuildString( DEFINE_CONST_UNICODE( BUILD_VER_STRING ) );
+#define _STRINGIFY(x) #x
+#define STRINGIFY(x) _STRINGIFY(x)
+    String aBuildString( DEFINE_CONST_UNICODE( STRINGIFY( BUILD_VER_STRING ) ) );
 #else
     String aBuildString;
 #endif
@@ -251,7 +253,13 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId ) :
 
     aCopyrightText.SetText( aCopyrightTextStr );
 
+    // layout fixed text controls
     layoutText( aVersionText, nY, nTextWidth, a6Size );
+    if( aBuildString.Len() > 0 )
+    {
+        nY += ( a6Size.Height() / 2 );
+        layoutText( aBuildData, nY, nTextWidth, a6Size );
+    }
     nY += nCtrlMargin;
 
     // OK-Button-Position (at the bottom and centered)
