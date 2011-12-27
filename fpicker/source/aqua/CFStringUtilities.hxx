@@ -71,6 +71,8 @@ inline void DBG_PRINT_ENTRY(const char * classname, const char * methodname, con
     OSL_TRACE(">>> %s::%s%s%s =", classname, methodname, PARAMFILLER, param1);
 #if OSL_DEBUG_LEVEL > 1
     CFShow(value1);
+#else
+    (void)value1;
 #endif
 }
 
@@ -78,6 +80,8 @@ inline void DBG_PRINT_ENTRY(const char * classname, const char * methodname, con
     OSL_TRACE(">>> %s::%s%s%s =", classname, methodname, PARAMFILLER, param1);
 #if OSL_DEBUG_LEVEL > 1
     NSLog(value1);
+#else
+    (void)value1;
 #endif
 }
 
@@ -145,6 +149,8 @@ inline void DBG_PRINT_EXIT(const char * classname, const char * methodname, cons
     OSL_TRACE("<<< %s::%s%sreturnValue = ", classname, methodname, PARAMFILLER);
 #if OSL_DEBUG_LEVEL > 1
     CFShow(retVal);
+#else
+    (void)retVal;
 #endif
 }
 
@@ -152,6 +158,8 @@ inline void DBG_PRINT_EXIT(const char * classname, const char * methodname, cons
     OSL_TRACE("<<< %s::%s%sreturnValue = ", classname, methodname, PARAMFILLER);
 #if OSL_DEBUG_LEVEL > 1
     NSLog(retVal);
+#else
+    (void)retVal;
 #endif
 }
 
