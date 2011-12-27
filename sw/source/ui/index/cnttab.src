@@ -196,14 +196,14 @@ TabPage TP_TOX_SELECT
     };
     FixedText       FT_LEVEL
     {
-        Pos = MAP_APPFONT ( 130 , 70 ) ;
-        Size = MAP_APPFONT ( 60 , 8 ) ;
+        Pos = MAP_APPFONT ( 130 , 72 ) ;
+        Size = MAP_APPFONT ( 95 , 8 ) ;
         Text [ en-US ] = "Evaluate up to level";
     };
     NumericField    NF_LEVEL
     {
         HelpID = "sw:NumericField:TP_TOX_SELECT:NF_LEVEL";
-        Pos = MAP_APPFONT ( 231 , 72 ) ;
+        Pos = MAP_APPFONT ( 231 , 70 ) ;
         Size = MAP_APPFONT ( 20 , 12 ) ;
         Border = TRUE ;
         TabStop = TRUE ;
