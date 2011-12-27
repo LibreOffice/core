@@ -465,8 +465,9 @@ void ScParameterClassification::GenerateDocumentation()
         if ( xMap->getSymbol(eOp).Len() )
         {
             fprintf( stdout, "%s: ", aEnvVarName);
-            ByteString aStr( xMap->getSymbol(eOp), RTL_TEXTENCODING_UTF8);
-            aStr += "(";
+            rtl::OStringBuffer aStr;
+            aStr.append( rtl::OUStringToOString(rtl::OUString(xMap->getSymbol(eOp).GetBuffer()), RTL_TEXTENCODING_UTF8 ) );
+            aStr.append("(");
             formula::FormulaByteToken aToken( eOp);
             sal_uInt8 nParams = GetMinimumParameters( eOp);
             // preset parameter count according to opcode value, with some
@@ -522,57 +523,57 @@ void ScParameterClassification::GenerateDocumentation()
             for ( sal_uInt16 j=0; j < nParams; ++j )
             {
                 if ( j > 0 )
-                    aStr += ",";
+                    aStr.append(",");
                 Type eType = GetParameterType( &aToken, j);
                 switch ( eType )
                 {
                     case Value :
-                        aStr += " Value";
+                        aStr.append(" Value");
                     break;
                     case Reference :
-                        aStr += " Reference";
+                        aStr.append(" Reference");
                     break;
                     case Array :
-                        aStr += " Array";
+                        aStr.append(" Array");
                     break;
                     case ForceArray :
-                        aStr += " ForceArray";
+                        aStr.append(" ForceArray");
                     break;
                     case ReferenceOrForceArray :
-                        aStr += " ReferenceOrForceArray";
+                        aStr.append(" ReferenceOrForceArray");
                     break;
                     case Bounds :
-                        aStr += " (Bounds, classification error?)";
+                        aStr.append(" (Bounds, classification error?)");
                     break;
                     default:
-                        aStr += " (???, classification error?)";
+                        aStr.append(" (???, classification error?)");
                 }
             }
             if ( HasRepeatParameters( eOp) )
-                aStr += ", ...";
+                aStr.append(", ...");
             if ( nParams )
-                aStr += " ";
-            aStr += ")";
+                aStr.append(" ");
+            aStr.append(")");
             switch ( eOp )
             {
                 case ocZGZ:
-                    aStr += "   // RRI in English resource, but ZGZ in English-only section";
+                    aStr.append("   // RRI in English resource, but ZGZ in English-only section");
                 break;
                 case ocMultiArea:
-                    aStr += "   // e.g. combined first parameter of INDEX() function, not a real function";
+                    aStr.append("   // e.g. combined first parameter of INDEX() function, not a real function");
                 break;
                 case ocBackSolver:
-                    aStr += "   // goal seek via menu, not a real function";
+                    aStr.append("   // goal seek via menu, not a real function");
                 break;
                 case ocTableOp:
-                    aStr += "   // MULTIPLE.OPERATIONS in English resource, but TABLE in English-only section";
+                    aStr.append("   // MULTIPLE.OPERATIONS in English resource, but TABLE in English-only section");
                 break;
                 case ocNoName:
-                    aStr += "   // error function, not a real function";
+                    aStr.append("   // error function, not a real function");
                 break;
                 default:;
             }
-            fprintf( stdout, "%s\n", aStr.GetBuffer());
+            fprintf( stdout, "%s\n", aStr.makeStringAndClear().getStr());
         }
     }
     fflush( stdout);
