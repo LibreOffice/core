@@ -271,6 +271,7 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_URE, \
     jpipe \
     juh \
     juhx \
+    jvmfwk \
     sal_textenc \
     sunjavaplugin \
 	xmlreader \
@@ -399,7 +400,6 @@ $(eval $(call gb_Helper_register_libraries,UNOLIBS_URE, \
 
 $(eval $(call gb_Helper_register_libraries,UNOVERLIBS, \
     cppu \
-    jvmfwk \
     sal \
 ))
 
