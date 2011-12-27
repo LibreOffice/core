@@ -93,7 +93,7 @@ inline void XFListItem::ToXml(IXFStream *pStrm)
     IXFAttrList *pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
 
-    if( GetStyleName().getLength() > 0 )
+    if( !GetStyleName().isEmpty() )
         pAttrList->AddAttribute( A2OUSTR("text:style-name"), GetStyleName() );
 
     if( !m_bIsHeader )

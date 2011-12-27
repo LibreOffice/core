@@ -125,7 +125,7 @@ inline void XFDropcap::ToXml(IXFStream *pStrm)
     pAttrList->AddAttribute(A2OUSTR("style:length"), Int32ToOUString(m_nCharCount) );
     pAttrList->AddAttribute(A2OUSTR("style:lines"), Int32ToOUString(m_nLines) );
     pAttrList->AddAttribute(A2OUSTR("style:distance"), DoubleToOUString(m_fDistance) + A2OUSTR("cm") );
-    if( m_strStyleName.getLength() )
+    if( !m_strStyleName.isEmpty() )
         pAttrList->AddAttribute(A2OUSTR("style:style-name"), m_strStyleName );
     pStrm->StartElement( A2OUSTR("style:drop-cap") );
     pStrm->EndElement( A2OUSTR("style:drop-cap") );

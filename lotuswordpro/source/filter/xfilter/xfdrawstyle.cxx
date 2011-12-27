@@ -250,14 +250,14 @@ void    XFDrawStyle::ToXml(IXFStream *pStrm)
     else
         pAttrList->AddAttribute( A2OUSTR("draw:fill"), A2OUSTR("none") );
 
-    if( m_strArrowStart.getLength()>0 )
+    if( !m_strArrowStart.isEmpty() )
     {
         pAttrList->AddAttribute( A2OUSTR("draw:marker-start"), m_strArrowStart );
         pAttrList->AddAttribute( A2OUSTR("draw:marker-start-width"), DoubleToOUString(m_fArrowStartSize)+A2OUSTR("cm") );
         if( m_bArrowStartCenter )
             pAttrList->AddAttribute( A2OUSTR("draw:draw:marker-start-center"), A2OUSTR("true")  );
     }
-    if( m_strArrowEnd.getLength()>0 )
+    if( !m_strArrowEnd.isEmpty() )
     {
         pAttrList->AddAttribute( A2OUSTR("draw:marker-end"), m_strArrowEnd );
         pAttrList->AddAttribute( A2OUSTR("draw:marker-end-width"), DoubleToOUString(m_fArrowEndSize)+A2OUSTR("cm") );
@@ -286,7 +286,7 @@ void    XFDrawStyle::ToXml(IXFStream *pStrm)
             aStr = A2OUSTR("slant-y");
             break;
         }
-        if (aStr.getLength() > 0)
+        if (!aStr.isEmpty())
         {
             pAttrList->AddAttribute(A2OUSTR("draw:fontwork-style"), aStr);
         }
@@ -309,7 +309,7 @@ void    XFDrawStyle::ToXml(IXFStream *pStrm)
             aStr = A2OUSTR("right");
             break;
         }
-        if (aStr.getLength() > 0)
+        if (!aStr.isEmpty())
         {
             pAttrList->AddAttribute(A2OUSTR("draw:fontwork-adjust"), aStr);
         }
@@ -328,7 +328,7 @@ void    XFDrawStyle::ToXml(IXFStream *pStrm)
             aStr = A2OUSTR("bottom-arc");
             break;
         }
-        if (aStr.getLength() > 0)
+        if (!aStr.isEmpty())
         {
             pAttrList->AddAttribute(A2OUSTR("draw:fontwork-form"), aStr);
         }

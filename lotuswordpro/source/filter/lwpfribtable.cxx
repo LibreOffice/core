@@ -82,7 +82,7 @@ void LwpFribTable::RegisterNewStyle()
     XFParaStyle* pOldStyle = m_pPara->GetXFParaStyle();
     if(HasNextFrib())
     {
-        if (pOldStyle->GetMasterPage().getLength() == 0)
+        if (pOldStyle->GetMasterPage().isEmpty())
             m_StyleName = pOldStyle->GetStyleName();
         else
         {
@@ -138,7 +138,7 @@ void LwpFribTable::XFConvert(XFContentContainer* pCont)
         LwpGlobalMgr* pGlobal = LwpGlobalMgr::GetInstance();
         LwpChangeMgr* pChangeMgr = pGlobal->GetLwpChangeMgr();
         sChangeID = pChangeMgr->GetChangeID(this);
-        if (sChangeID.getLength())
+        if (!sChangeID.isEmpty())
         {
             XFChangeStart* pChangeStart = new XFChangeStart;
             pChangeStart->SetChangeID(sChangeID);
@@ -149,7 +149,7 @@ void LwpFribTable::XFConvert(XFContentContainer* pCont)
 
     if(m_bRevisionFlag)
     {
-        if (sChangeID.getLength())
+        if (!sChangeID.isEmpty())
         {
             XFChangeEnd* pChangeEnd = new XFChangeEnd;
             pChangeEnd->SetChangeID(sChangeID);

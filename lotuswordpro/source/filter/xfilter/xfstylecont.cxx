@@ -118,7 +118,7 @@ IXFStyle*   XFStyleContainer::AddStyle(IXFStyle *pStyle)
     //no matter we want to delete the style or not,XFFont obejct should be saved first.
     ManageStyleFont(pStyle);
 
-    if( pStyle->GetStyleName().getLength()==0 )
+    if( pStyle->GetStyleName().isEmpty() )
         pConStyle = FindSameStyle(pStyle);
 
     if( pConStyle )//such a style has exist:
@@ -128,7 +128,7 @@ IXFStyle*   XFStyleContainer::AddStyle(IXFStyle *pStyle)
     }
     else
     {
-        if( pStyle->GetStyleName().getLength() == 0 )
+        if( pStyle->GetStyleName().isEmpty() )
         {
             name = m_strStyleNamePrefix + Int32ToOUString(m_aStyles.size()+1);
             pStyle->SetStyleName(name);

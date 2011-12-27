@@ -101,9 +101,9 @@ inline void XFAnnotation::ToXml(IXFStream *pStrm)
     IXFAttrList *pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
 
-    if( m_strDate.getLength() )
+    if( !m_strDate.isEmpty() )
         pAttrList->AddAttribute( A2OUSTR("office:create-date"), m_strDate );
-    if( m_strAuthor.getLength() )
+    if( !m_strAuthor.isEmpty() )
         pAttrList->AddAttribute( A2OUSTR("office:author"), m_strAuthor);
     pStrm->StartElement( A2OUSTR("office:annotation") );
 

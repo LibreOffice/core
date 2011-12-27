@@ -217,7 +217,7 @@ void    XFTable::ToXml(IXFStream *pStrm)
     if( !m_bSubTable )
         pAttrList->AddAttribute( A2OUSTR("table:name"), m_strName);
 
-    if( GetStyleName().getLength() )
+    if( !GetStyleName().isEmpty() )
         pAttrList->AddAttribute( A2OUSTR("table:style-name"), GetStyleName() );
 
     if( m_bSubTable )
@@ -242,7 +242,7 @@ void    XFTable::ToXml(IXFStream *pStrm)
             {
                 if( col > lastCol + 2 )
                 {
-                    if( m_strDefColStyle.getLength() > 0 )
+                    if( !m_strDefColStyle.isEmpty() )
                     {
                         pAttrList->AddAttribute( A2OUSTR("table:style-name"), m_strDefColStyle );
                     }
@@ -252,7 +252,7 @@ void    XFTable::ToXml(IXFStream *pStrm)
                 pStrm->EndElement( A2OUSTR("table:table-column") );
             }
 
-            if( style.getLength() > 0 )
+            if( !style.isEmpty() )
             {
                 pAttrList->AddAttribute( A2OUSTR("table:style-name"), style );
             }

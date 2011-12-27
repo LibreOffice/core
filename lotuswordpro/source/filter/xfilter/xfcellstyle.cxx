@@ -205,15 +205,15 @@ void XFCellStyle::ToXml(IXFStream *pStrm)
     rtl::OUString style = GetStyleName();
 
     pAttrList->Clear();
-    if( style.getLength() )
+    if( !style.isEmpty() )
         pAttrList->AddAttribute(A2OUSTR("style:name"),GetStyleName());
-    if( GetParentStyleName().getLength() > 0 )
+    if( !GetParentStyleName().isEmpty() )
         pAttrList->AddAttribute(A2OUSTR("style:parent-style-name"),GetParentStyleName());
 
     pAttrList->AddAttribute(A2OUSTR("style:family"), A2OUSTR("table-cell"));
-    if( m_strParentStyleName.getLength() > 0 )
+    if( !m_strParentStyleName.isEmpty() )
         pAttrList->AddAttribute(A2OUSTR("style:parent-style-name"),m_strParentStyleName);
-    if( m_strDataStyle.getLength()>0 )
+    if( !m_strDataStyle.isEmpty() )
         pAttrList->AddAttribute( A2OUSTR("style:data-style-name"), m_strDataStyle );
 
     pStrm->StartElement(A2OUSTR("style:style"));

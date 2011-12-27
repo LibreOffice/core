@@ -126,7 +126,7 @@ void  LwpFrame::RegisterStyle(XFFrameStyle* pFrameStyle)
 
     //Set frame Name
     OUString aFrameName = m_pLayout->GetName()->str();
-    if(aFrameName.getLength())
+    if(!aFrameName.isEmpty())
     {
         //cause the bug of SODC, the linkframe name can not be "Frame1", so I change the frame name
         /*if(aFrameName.equals(A2OUSTR("Frame1")))
@@ -891,7 +891,7 @@ OUString LwpFrameLayout::GetNextLinkName()
             if (pHolder)
                 aName = pHolder->str();
             //for division name confict
-            if(pLayout->GetStyleName().getLength() > 0)
+            if(!pLayout->GetStyleName().isEmpty())
                 aName = pLayout->GetStyleName();
         }
     }

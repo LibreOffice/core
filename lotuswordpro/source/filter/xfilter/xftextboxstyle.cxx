@@ -78,7 +78,7 @@ void    XFTextBoxStyle::ToXml(IXFStream *pStrm)
 
     pAttrList->Clear();
     pAttrList->AddAttribute( A2OUSTR("style:name"), GetStyleName() );
-    if( GetParentStyleName().getLength() > 0 )
+    if( !GetParentStyleName().isEmpty() )
         pAttrList->AddAttribute(A2OUSTR("style:parent-style-name"),GetParentStyleName());
     pAttrList->AddAttribute( A2OUSTR("style:family"), A2OUSTR("graphics") );
     //parent style name ignore now.

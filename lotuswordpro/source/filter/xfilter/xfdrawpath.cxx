@@ -65,7 +65,7 @@ XFSvgPathEntry::XFSvgPathEntry()
 
 rtl::OUString XFSvgPathEntry::ToString()
 {
-    assert(m_strCommand.getLength()>0);
+    assert(!m_strCommand.isEmpty());
     rtl::OUString str = m_strCommand;
     std::vector<XFPoint>::iterator it;
 

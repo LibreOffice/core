@@ -147,7 +147,7 @@ void    XFRow::ToXml(IXFStream *pStrm)
     IXFAttrList *pAttrList = pStrm->GetAttrList();
 
     pAttrList->Clear();
-    if( GetStyleName().getLength() )
+    if( !GetStyleName().isEmpty() )
         pAttrList->AddAttribute( A2OUSTR("table:style-name"), GetStyleName() );
     if( m_nRepeat )
         pAttrList->AddAttribute( A2OUSTR("table:number-rows-repeated"), Int32ToOUString(m_nRepeat) );

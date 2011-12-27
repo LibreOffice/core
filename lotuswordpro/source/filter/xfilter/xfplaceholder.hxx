@@ -109,10 +109,10 @@ inline void XFHolderStart::ToXml(IXFStream *pStrm)
     IXFAttrList *pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
     pAttrList->AddAttribute( A2OUSTR("text:placeholder-type"),m_strType);
-    if (m_strDesc.getLength()>0)
+    if (!m_strDesc.isEmpty())
         pAttrList->AddAttribute( A2OUSTR("text:description"), m_strDesc);
     pStrm->StartElement( A2OUSTR("text:placeholder") );
-    if( m_strText.getLength()>0)
+    if( !m_strText.isEmpty())
         pStrm->Characters(m_strText);
 }
 

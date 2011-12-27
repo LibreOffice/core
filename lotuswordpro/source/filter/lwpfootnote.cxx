@@ -364,7 +364,7 @@ LwpEnSuperTableLayout* LwpFootnote::FindFootnoteTableLayout()
 
     LwpFoundry* pFoundry = pDivision->GetFoundry();
     OUString strClassName = GetTableClass();
-    if(strClassName.getLength() ==0 )
+    if(strClassName.isEmpty() )
         return NULL;
 
     LwpContent* pContent = NULL;
@@ -511,13 +511,13 @@ void LwpFootnoteOptions::RegisterEndnoteStyle()
     XFEndnoteConfig* pEndnoteConfig = new XFEndnoteConfig();
     pEndnoteConfig->SetStartValue(m_EndnoteDocNumbering.GetStartingNumber() -1);
     OUString message = m_EndnoteDocNumbering.GetLeadingText();
-    if(message.getLength() == 0)
+    if(message.isEmpty())
     {
         message = A2OUSTR("[");//default prefix
     }
     pEndnoteConfig->SetNumPrefix(message);
     message = m_EndnoteDocNumbering.GetTrailingText();
-    if(message.getLength() == 0)
+    if(message.isEmpty())
     {
         message = A2OUSTR("]");//default suffix
     }

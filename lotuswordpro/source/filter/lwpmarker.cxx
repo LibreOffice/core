@@ -301,7 +301,7 @@ void LwpCHBlkMarker::EnumAllKeywords()
     LwpPropList* pProp = GetPropList();
     if (!pProp)
         return;
-    while(name2.getLength()>0)
+    while(!name2.isEmpty())
     {
         name2 = pProp->EnumNamedProperty(name1,value1);
         if ( name1.match(A2OUSTR("LIST"),0) )

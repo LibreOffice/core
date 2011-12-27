@@ -201,7 +201,7 @@ void    XFCell::ToXml(IXFStream *pStrm)
     IXFAttrList *pAttrList = pStrm->GetAttrList();
 
     pAttrList->Clear();
-    if( GetStyleName().getLength() )
+    if( !GetStyleName().isEmpty() )
         pAttrList->AddAttribute( A2OUSTR("table:style-name"), GetStyleName() );
     if( m_nColSpaned>1 )
         pAttrList->AddAttribute( A2OUSTR("table:number-columns-spanned"), Int32ToOUString(m_nColSpaned) );
@@ -212,7 +212,7 @@ void    XFCell::ToXml(IXFStream *pStrm)
         pAttrList->AddAttribute( A2OUSTR("table:value-type"), GetValueType(m_eValueType) );
         pAttrList->AddAttribute( A2OUSTR("table:value"), m_strValue );
     }
-    if( m_strFormula.getLength() > 0 )
+    if( !m_strFormula.isEmpty() )
         pAttrList->AddAttribute( A2OUSTR("table:formula"), m_strFormula );
 
     if( m_bProtect )

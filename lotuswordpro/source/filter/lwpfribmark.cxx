@@ -279,7 +279,7 @@ void LwpFribField::XFConvert(XFContentContainer* pXFPara)
                 ConvertDocFieldEnd(pXFPara,pFieldMark);
             }
         }
-        if(pFieldMark->GetRevisionFlag() && sChangeID.getLength())
+        if(pFieldMark->GetRevisionFlag() && !sChangeID.isEmpty())
         {
             XFChangeEnd* pChangeEnd = new XFChangeEnd;
             pChangeEnd->SetChangeID(sChangeID);
@@ -290,7 +290,7 @@ void LwpFribField::XFConvert(XFContentContainer* pXFPara)
     }
 
     //start marker
-    if(pFieldMark->GetRevisionFlag() &&  sChangeID.getLength())
+    if(pFieldMark->GetRevisionFlag() && !sChangeID.isEmpty())
     {
         XFChangeStart* pChangeStart = new XFChangeStart;
         pChangeStart->SetChangeID(sChangeID);
@@ -301,7 +301,7 @@ void LwpFribField::XFConvert(XFContentContainer* pXFPara)
     {
         OUString sKey1,sKey2;
         pFieldMark->ParseIndex(sKey1,sKey2);
-        if (sKey1.getLength()>0)
+        if (!sKey1.isEmpty())
         {
             XFEntry* pEntry = new XFEntry;
             pEntry->SetEntryType(enumXFEntryAlphabetical);
@@ -313,7 +313,7 @@ void LwpFribField::XFConvert(XFContentContainer* pXFPara)
     {
         OUString sLevel,sText;
         pFieldMark->ParseTOC(sLevel,sText);
-        if (sLevel.getLength()>0 && sText.getLength()>0)
+        if (!sLevel.isEmpty() && !sText.isEmpty())
         {
             XFEntry* pEntry = new XFEntry;
             pEntry->SetEntryType(enumXFEntryTOC);

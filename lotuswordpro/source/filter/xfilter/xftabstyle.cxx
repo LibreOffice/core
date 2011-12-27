@@ -92,7 +92,7 @@ void    XFTabStyle::ToXml(IXFStream *pStrm)
     if( m_eType == enumXFTabChar )
         pAttrList->AddAttribute( A2OUSTR("style:char"), m_strDelimiter );
     //leader char:
-    if( m_strLeader.getLength() )
+    if( !m_strLeader.isEmpty() )
         pAttrList->AddAttribute( A2OUSTR("style:leader-char"), m_strLeader );
 
     pStrm->StartElement( A2OUSTR("style:tab-stop") );

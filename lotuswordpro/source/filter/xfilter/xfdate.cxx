@@ -76,7 +76,7 @@ void    XFDate::ToXml(IXFStream *pStrm)
     IXFAttrList *pAttrList = pStrm->GetAttrList();
 
     pAttrList->Clear();
-    if( GetStyleName().getLength() > 0 )
+    if( !GetStyleName().isEmpty() )
         pAttrList->AddAttribute( A2OUSTR("style:data-style-name"), GetStyleName() );
     if (m_bValued)
         pAttrList->AddAttribute( A2OUSTR("text:date-value"), m_strDate );
@@ -85,7 +85,7 @@ void    XFDate::ToXml(IXFStream *pStrm)
         pAttrList->AddAttribute( A2OUSTR("text:fixed"), A2OUSTR("true") );
 
     pStrm->StartElement( A2OUSTR("text:date") );
-    if (m_strText.getLength()>0)
+    if (!m_strText.isEmpty())
         pStrm->Characters(m_strText);
     pStrm->EndElement( A2OUSTR("text:date") );
 }
@@ -95,7 +95,7 @@ void XFDateStart::ToXml(IXFStream *pStrm)
     IXFAttrList *pAttrList = pStrm->GetAttrList();
 
     pAttrList->Clear();
-    if( GetStyleName().getLength() > 0 )
+    if( !GetStyleName().isEmpty() )
         pAttrList->AddAttribute( A2OUSTR("style:data-style-name"), GetStyleName() );
 /*  if (m_bValued)
         pAttrList->AddAttribute( A2OUSTR("text:date-value"), DateTimeToOUString(m_aDateTime) );

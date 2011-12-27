@@ -161,7 +161,7 @@ inline void XFLineNumberConfig::ToXml(IXFStream *pStrm)
 {
     IXFAttrList *pAttrList = pStrm->GetAttrList();
 
-    if( m_strTextStyle.getLength() > 0 )
+    if( !m_strTextStyle.isEmpty() )
         pAttrList->AddAttribute( A2OUSTR("text:style-name"), m_strTextStyle );
     pAttrList->AddAttribute( A2OUSTR("text:offset"), DoubleToOUString(m_fOffset) + A2OUSTR("cm") );
     pAttrList->AddAttribute( A2OUSTR("style:num-format"), m_strNumFmt );

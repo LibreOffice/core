@@ -136,11 +136,11 @@ void    XFFrame::StartFrame(IXFStream *pStrm)
 {
     IXFAttrList *pAttrList = pStrm->GetAttrList();
 
-    if( GetStyleName().getLength() )
+    if( !GetStyleName().isEmpty() )
         pAttrList->AddAttribute( A2OUSTR("draw:style-name"), GetStyleName() );
 
-    assert(m_strName.getLength()>0);    //name should not be null.
-    if( m_strName.getLength()&&m_isTextBox == sal_False)
+    assert(!m_strName.isEmpty());    //name should not be null.
+    if( !m_strName.isEmpty() && m_isTextBox == sal_False)
         pAttrList->AddAttribute( A2OUSTR("draw:name"), m_strName );
     //anchor type:
     switch( m_eAnchor )
@@ -178,7 +178,7 @@ void    XFFrame::StartFrame(IXFStream *pStrm)
 
     pAttrList->AddAttribute( A2OUSTR("draw:z-index"), Int32ToOUString(m_nZIndex) );
 
-    if( m_strNextLink.getLength() > 0 )
+    if( !m_strNextLink.isEmpty() )
         pAttrList->AddAttribute( A2OUSTR("draw:chain-next-name"), m_strNextLink );
 
     pStrm->StartElement( A2OUSTR("draw:text-box") );

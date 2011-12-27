@@ -72,16 +72,16 @@ XFSection::~XFSection()
 
 void    XFSection::ToXml(IXFStream *pStrm)
 {
-    assert(m_strSectionName.getLength() > 0 );
+    assert(!m_strSectionName.isEmpty() );
 
     IXFAttrList     *pAttrList = pStrm->GetAttrList();
 
     pAttrList->Clear();
     rtl::OUString style = GetStyleName();
-    if( style.getLength() )
+    if( !style.isEmpty() )
         pAttrList->AddAttribute( A2OUSTR("text:style-name"), style);
     //section name
-    if( m_strSectionName.getLength() )
+    if( !m_strSectionName.isEmpty() )
         pAttrList->AddAttribute( A2OUSTR("text:name"), m_strSectionName);
     if( m_bProtected )
         pAttrList->AddAttribute( A2OUSTR("text:protected"), A2OUSTR("true") );
@@ -89,7 +89,7 @@ void    XFSection::ToXml(IXFStream *pStrm)
         pAttrList->AddAttribute( A2OUSTR("text:display"), A2OUSTR("none") );
 
     pStrm->StartElement( A2OUSTR("text:section") );
-    if( m_strSourceLink.getLength() )
+    if( !m_strSourceLink.isEmpty() )
     {
         pAttrList->Clear();
         pAttrList->AddAttribute( A2OUSTR("xlink:href"), m_strSourceLink);

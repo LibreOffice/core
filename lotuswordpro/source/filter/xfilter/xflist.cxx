@@ -79,7 +79,7 @@ void    XFList::ToXml(IXFStream *pStrm)
     assert(NULL!=pAttrList);
 
     pAttrList->Clear();
-    if( GetStyleName().getLength() )
+    if( !GetStyleName().isEmpty() )
         pAttrList->AddAttribute( A2OUSTR("text:style-name"), GetStyleName() );
     if( m_bContinueNumber )
         pAttrList->AddAttribute( A2OUSTR("text:continue-numbering"), A2OUSTR("true") );
@@ -107,7 +107,7 @@ void    XFList::StartList(IXFStream *pStrm, sal_Bool bContinueNumber)
     assert(NULL!=pAttrList);
 
     pAttrList->Clear();
-    if( GetStyleName().getLength() )
+    if( !GetStyleName().isEmpty() )
         pAttrList->AddAttribute( A2OUSTR("text:style-name"), GetStyleName() );
     if( bContinueNumber )
         pAttrList->AddAttribute( A2OUSTR("text:continue-numbering"), A2OUSTR("true") );

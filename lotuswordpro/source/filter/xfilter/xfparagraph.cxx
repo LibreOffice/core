@@ -91,7 +91,7 @@ void    XFParagraph::ToXml(IXFStream *pStrm)
     assert(pAttrList);
 
     pAttrList->Clear();
-    if( GetStyleName().getLength() > 0 )
+    if( !GetStyleName().isEmpty() )
         pAttrList->AddAttribute( A2OUSTR("text:style-name"), GetStyleName() );
     pStrm->StartElement( A2OUSTR("text:p") );
 

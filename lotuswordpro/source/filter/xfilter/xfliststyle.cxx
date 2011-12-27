@@ -143,7 +143,7 @@ void    XFListLevelBullet::ToXml(IXFStream *pStrm)
 
     pAttrList->AddAttribute( A2OUSTR("fo:text-align"), GetAlignName(m_eAlign) );
 
-    if( m_strFontName.getLength() > 0 )
+    if( !m_strFontName.isEmpty() )
     {
         pAttrList->AddAttribute( A2OUSTR("style:font-name"), m_strFontName );
     }
@@ -322,7 +322,7 @@ void XFListStyle::ToXml(IXFStream *pStrm)
 
     pAttrList->Clear();
     pAttrList->AddAttribute( A2OUSTR("style:name"), GetStyleName() );
-    if( GetParentStyleName().getLength() > 0 )
+    if( !GetParentStyleName().isEmpty() )
         pAttrList->AddAttribute(A2OUSTR("style:parent-style-name"),GetParentStyleName());
     pStrm->StartElement( A2OUSTR("text:list-style") );
 

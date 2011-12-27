@@ -131,9 +131,9 @@ public:
     {
         IXFAttrList *pAttrList = pStrm->GetAttrList();
 
-        if( m_strPrefix.getLength() > 0 )
+        if( !m_strPrefix.isEmpty() )
             pAttrList->AddAttribute( A2OUSTR("style:num-prefix"), m_strPrefix );
-        if( m_strSuffix.getLength() > 0 )
+        if( !m_strSuffix.isEmpty() )
             pAttrList->AddAttribute( A2OUSTR("style:num-suffix"), m_strSuffix );
         pAttrList->AddAttribute( A2OUSTR("style:num-format"), m_strFormat );
         if( m_nStartValue != 0 )

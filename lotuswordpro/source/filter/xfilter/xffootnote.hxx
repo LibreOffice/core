@@ -107,10 +107,10 @@ inline void XFFootNote::ToXml(IXFStream *pStrm)
     pStrm->StartElement( A2OUSTR("text:footnote") );
 
     pAttrList->Clear();
-    if( m_strLabel.getLength() )
+    if( !m_strLabel.isEmpty() )
         pAttrList->AddAttribute( A2OUSTR("text:label"), m_strLabel );
     pStrm->StartElement( A2OUSTR("text:footnote-citation") );
-    if( m_strLabel.getLength() )
+    if( !m_strLabel.isEmpty() )
         pStrm->Characters(m_strLabel);
     pStrm->EndElement( A2OUSTR("text:footnote-citation") );
 

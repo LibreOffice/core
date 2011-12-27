@@ -90,11 +90,11 @@ void    XFImage::ToXml(IXFStream *pStrm)
 {
     IXFAttrList *pAttrList = pStrm->GetAttrList();
 
-    if( GetStyleName().getLength() )
+    if( !GetStyleName().isEmpty() )
         pAttrList->AddAttribute( A2OUSTR("draw:style-name"), GetStyleName() );
 
-    assert(m_strName.getLength()>0);    //name should not be null.
-    if( m_strName.getLength() )
+    assert(!m_strName.isEmpty());    //name should not be null.
+    if( !m_strName.isEmpty() )
         pAttrList->AddAttribute( A2OUSTR("draw:name"), m_strName );
     //anchor type:
     switch( m_eAnchor )

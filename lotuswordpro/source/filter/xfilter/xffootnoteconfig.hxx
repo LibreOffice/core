@@ -197,25 +197,25 @@ inline void XFFootnoteConfig::ToXml(IXFStream *pStrm)
     IXFAttrList *pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
 
-    if( m_strCitationStyle.getLength()>0 )
+    if( !m_strCitationStyle.isEmpty() )
         pAttrList->AddAttribute( A2OUSTR("text:citation-style-name"), m_strCitationStyle);
 
-    if( m_strBodyStyle.getLength()>0 )
+    if( !m_strBodyStyle.isEmpty() )
         pAttrList->AddAttribute( A2OUSTR("text:citation-body-style-name"), m_strBodyStyle);
 
-    if( m_strNumPrefix.getLength()>0 )
+    if( !m_strNumPrefix.isEmpty() )
         pAttrList->AddAttribute( A2OUSTR("style:num-prefix"), m_strNumPrefix);
 
-    if( m_strNumSuffix.getLength()>0 )
+    if( !m_strNumSuffix.isEmpty() )
         pAttrList->AddAttribute( A2OUSTR("style:num-suffix"), m_strNumSuffix);
 
-    if( m_strNumFmt.getLength()>0 )
+    if( !m_strNumFmt.isEmpty() )
         pAttrList->AddAttribute( A2OUSTR("style:num-format"), m_strNumFmt);
 
-    if( m_strDefaultStyle.getLength()>0 )
+    if( !m_strDefaultStyle.isEmpty() )
         pAttrList->AddAttribute( A2OUSTR("text:default-style-name"), m_strDefaultStyle);
 
-    if( m_strMasterPage.getLength()>0 )
+    if( !m_strMasterPage.isEmpty() )
         pAttrList->AddAttribute( A2OUSTR("text:master-page-name"), m_strMasterPage);
 
 
@@ -239,14 +239,14 @@ inline void XFFootnoteConfig::ToXml(IXFStream *pStrm)
     if(m_bIsFootnote)
     {
         pStrm->StartElement( A2OUSTR("text:footnotes-configuration") );
-        if( m_strMessageOn.getLength()>0 )
+        if( !m_strMessageOn.isEmpty() )
         {
             pStrm->StartElement( A2OUSTR("text:footnote-continuation-notice-forward") );
             pStrm->Characters(m_strMessageOn);
             pStrm->EndElement( A2OUSTR("text:footnote-continuation-notice-forward") );
         }
 
-        if( m_strMessageFrom.getLength()>0 )
+        if( !m_strMessageFrom.isEmpty() )
         {
             pStrm->StartElement( A2OUSTR("text:footnote-continuation-notice-backward") );
             pStrm->Characters(m_strMessageFrom);

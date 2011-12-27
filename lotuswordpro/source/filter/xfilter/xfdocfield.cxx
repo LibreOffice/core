@@ -159,7 +159,7 @@ void XFTotalEditTime::ToXml(IXFStream *pStrm)
 {
     IXFAttrList *pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
-    if (m_strStyleName.getLength()>0)
+    if (!m_strStyleName.isEmpty())
         pAttrList->AddAttribute( A2OUSTR("style:data-style-name"), m_strStyleName );
     pStrm->StartElement( A2OUSTR("text:editing-duration" ) );
     pStrm->EndElement( A2OUSTR("text:editing-duration") );
@@ -168,7 +168,7 @@ void XFTotalEditTimeStart::ToXml(IXFStream *pStrm)
 {
     IXFAttrList *pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
-    if (m_strStyleName.getLength()>0)
+    if (!m_strStyleName.isEmpty())
         pAttrList->AddAttribute( A2OUSTR("style:data-style-name"), m_strStyleName );
     pStrm->StartElement( A2OUSTR("text:editing-duration" ) );
 }
@@ -180,7 +180,7 @@ void XFCreateTime::ToXml(IXFStream *pStrm)
 {
     IXFAttrList *pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
-    if (m_strStyleName.getLength()>0)
+    if (!m_strStyleName.isEmpty())
         pAttrList->AddAttribute( A2OUSTR("style:data-style-name"), m_strStyleName );
     pStrm->StartElement( A2OUSTR("text:creation-time") );
     pStrm->EndElement( A2OUSTR("text:creation-time") );
@@ -189,7 +189,7 @@ void XFLastEditTime::ToXml(IXFStream *pStrm)
 {
     IXFAttrList *pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
-    if (m_strStyleName.getLength()>0)
+    if (!m_strStyleName.isEmpty())
         pAttrList->AddAttribute( A2OUSTR("style:data-style-name"), m_strStyleName );
     pStrm->StartElement( A2OUSTR("text:modification-time") );
     pStrm->EndElement( A2OUSTR("text:modification-time") );
@@ -199,7 +199,7 @@ void XFCreateTimeStart::ToXml(IXFStream *pStrm)
 {
     IXFAttrList *pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
-    if (m_strStyleName.getLength()>0)
+    if (!m_strStyleName.isEmpty())
         pAttrList->AddAttribute( A2OUSTR("style:data-style-name"), m_strStyleName );
     pStrm->StartElement( A2OUSTR("text:creation-time") );
 }
@@ -208,7 +208,7 @@ void XFLastEditTimeStart::ToXml(IXFStream *pStrm)
 {
     IXFAttrList *pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
-    if (m_strStyleName.getLength()>0)
+    if (!m_strStyleName.isEmpty())
         pAttrList->AddAttribute( A2OUSTR("style:data-style-name"), m_strStyleName );
     pStrm->StartElement( A2OUSTR("text:modification-time") );
 }

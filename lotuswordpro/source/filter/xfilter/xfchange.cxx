@@ -85,7 +85,7 @@ void XFChangeInsert::ToXml(IXFStream *pStrm)
     IXFAttrList *pAttrList = pStrm->GetAttrList();
 
     pAttrList->Clear();
-    if(m_sID.getLength() == 0)
+    if(m_sID.isEmpty())
         return;
     pAttrList->AddAttribute( A2OUSTR("text:id"),m_sID);
 
@@ -105,7 +105,7 @@ void XFChangeDelete::ToXml(IXFStream *pStrm)
     IXFAttrList *pAttrList = pStrm->GetAttrList();
 
     pAttrList->Clear();
-    if(m_sID.getLength() == 0)
+    if(m_sID.isEmpty())
         return;
     pAttrList->AddAttribute( A2OUSTR("text:id"),m_sID);
 
@@ -126,7 +126,7 @@ void XFChange::ToXml(IXFStream *pStrm)
     IXFAttrList *pAttrList = pStrm->GetAttrList();
 
     pAttrList->Clear();
-    if(m_sID.getLength() == 0)
+    if(m_sID.isEmpty())
         return;
     pAttrList->AddAttribute( A2OUSTR("text:change-id"),m_sID);
 
@@ -139,7 +139,7 @@ void XFChangeStart::ToXml(IXFStream *pStrm)
     IXFAttrList *pAttrList = pStrm->GetAttrList();
 
     pAttrList->Clear();
-    if(m_sID.getLength() == 0)
+    if(m_sID.isEmpty())
         return;
     pAttrList->AddAttribute( A2OUSTR("text:change-id"),m_sID);
 
@@ -152,7 +152,7 @@ void XFChangeEnd::ToXml(IXFStream *pStrm)
     IXFAttrList *pAttrList = pStrm->GetAttrList();
 
     pAttrList->Clear();
-    if(m_sID.getLength() == 0)
+    if(m_sID.isEmpty())
         return;
     pAttrList->AddAttribute( A2OUSTR("text:change-id"),m_sID);
 

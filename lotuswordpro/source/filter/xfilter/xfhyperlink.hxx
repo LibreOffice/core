@@ -115,17 +115,17 @@ inline void XFHyperlink::ToXml(IXFStream *pStrm)
 
     pAttrList->AddAttribute( A2OUSTR("xlink:type"), A2OUSTR("simple") );
     pAttrList->AddAttribute( A2OUSTR("xlink:href"), m_strHRef );
-    if( m_strName.getLength() > 0 )
+    if( !m_strName.isEmpty() )
         pAttrList->AddAttribute( A2OUSTR("office:name"), m_strName );
     pAttrList->AddAttribute( A2OUSTR("office:target-frame-name"), m_strFrame );
     pAttrList->AddAttribute( A2OUSTR("xlink:show"), A2OUSTR("replace") );
     pStrm->StartElement( A2OUSTR("text:a") );
 
     pAttrList->Clear();
-    if( GetStyleName().getLength()>0 )
+    if( !GetStyleName().isEmpty() )
         pAttrList->AddAttribute( A2OUSTR("text:style-name"), GetStyleName() );
     pStrm->StartElement( A2OUSTR("text:span") );
-    if( m_strText.getLength() )
+    if( !m_strText.isEmpty() )
         pStrm->Characters(m_strText);
     else
         pStrm->Characters(m_strHRef);

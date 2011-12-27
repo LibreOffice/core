@@ -115,9 +115,9 @@ void    XFTextStyle::ToXml(IXFStream *strm)
     rtl::OUString style = GetStyleName();
 
     pAttrList->Clear();
-    if( style.getLength() )
+    if( !style.isEmpty() )
         pAttrList->AddAttribute(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("style:name")),GetStyleName());
-    if( GetParentStyleName().getLength() > 0 )
+    if( !GetParentStyleName().isEmpty() )
         pAttrList->AddAttribute(A2OUSTR("style:parent-style-name"),GetParentStyleName());
 
     pAttrList->AddAttribute(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("style:family")),A2OUSTR("text") );

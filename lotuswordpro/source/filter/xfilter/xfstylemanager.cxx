@@ -116,7 +116,7 @@ IXFStyle*   XFStyleManager::AddStyle(IXFStyle *pStyle)
 
     if( pStyle->GetStyleFamily() == enumXFStyleText )
     {
-        if( name.getLength() )
+        if( !name.isEmpty() )
         {
             pStyleRet = s_aStdTextStyles.AddStyle(pStyle);
         }
@@ -125,7 +125,7 @@ IXFStyle*   XFStyleManager::AddStyle(IXFStyle *pStyle)
     }
     else if( pStyle->GetStyleFamily() == enumXFStylePara )
     {
-        if( name.getLength() )
+        if( !name.isEmpty() )
         {
             pStyleRet = s_aStdParaStyles.AddStyle(pStyle);
         }

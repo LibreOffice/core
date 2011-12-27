@@ -1193,7 +1193,7 @@ void LwpTableLayout::PostProcessParagraph(XFCell *pCell, sal_uInt16 nRowID, sal_
             sal_Bool bColorMod = sal_False;
             XFNumberStyle* pNumStyle = NULL;
             XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
-            if (sNumfmt.getLength())
+            if (!sNumfmt.isEmpty())
             {
                 pNumStyle = (XFNumberStyle*)pXFStyleManager->FindStyle( sNumfmt);
                 aColor = pNumStyle->GetColor();

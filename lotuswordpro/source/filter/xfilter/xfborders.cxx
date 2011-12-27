@@ -336,31 +336,31 @@ void    XFBorders::ToXml(IXFStream *pStrm)
 {
     IXFAttrList *pAttrList = pStrm->GetAttrList();
 
-    if( m_aBorderLeft.GetLineWidth().getLength() )
+    if( !m_aBorderLeft.GetLineWidth().isEmpty() )
         pAttrList->AddAttribute( A2OUSTR("style:border-line-width-left"), m_aBorderLeft.GetLineWidth() );
-    if( m_aBorderRight.GetLineWidth().getLength() )
+    if( !m_aBorderRight.GetLineWidth().isEmpty() )
         pAttrList->AddAttribute( A2OUSTR("style:border-line-width-right"), m_aBorderRight.GetLineWidth() );
-    if( m_aBorderTop.GetLineWidth().getLength() )
+    if( !m_aBorderTop.GetLineWidth().isEmpty() )
         pAttrList->AddAttribute( A2OUSTR("style:border-line-width-top"), m_aBorderTop.GetLineWidth() );
-    if( m_aBorderBottom.GetLineWidth().getLength() )
+    if( !m_aBorderBottom.GetLineWidth().isEmpty() )
         pAttrList->AddAttribute( A2OUSTR("style:border-line-width-bottom"), m_aBorderBottom.GetLineWidth() );
 
-    if( m_aBorderLeft.ToString().getLength() )
+    if( !m_aBorderLeft.ToString().isEmpty() )
         pAttrList->AddAttribute( A2OUSTR("fo:border-left"), m_aBorderLeft.ToString() );
     else
         pAttrList->AddAttribute( A2OUSTR("fo:border-left"), A2OUSTR("none") );
 
-    if( m_aBorderRight.ToString().getLength() )
+    if( !m_aBorderRight.ToString().isEmpty() )
         pAttrList->AddAttribute( A2OUSTR("fo:border-right"), m_aBorderRight.ToString() );
     else
         pAttrList->AddAttribute( A2OUSTR("fo:border-right"), A2OUSTR("none") );
 
-    if( m_aBorderTop.ToString().getLength() )
+    if( !m_aBorderTop.ToString().isEmpty() )
         pAttrList->AddAttribute( A2OUSTR("fo:border-top"), m_aBorderTop.ToString() );
     else
         pAttrList->AddAttribute( A2OUSTR("fo:border-top"), A2OUSTR("none") );
 
-    if( m_aBorderBottom.ToString().getLength() )
+    if( !m_aBorderBottom.ToString().isEmpty() )
         pAttrList->AddAttribute( A2OUSTR("fo:border-bottom"), m_aBorderBottom.ToString() );
     else
         pAttrList->AddAttribute( A2OUSTR("fo:border-bottom"), A2OUSTR("none") );

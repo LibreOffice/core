@@ -152,7 +152,7 @@ void XFNumberStyle::ToXml_StartElement(IXFStream *pStrm)
     pAttrList->Clear();
 
     pAttrList->AddAttribute( A2OUSTR("style:name"), GetStyleName() );
-    if( GetParentStyleName().getLength() > 0 )
+    if( !GetParentStyleName().isEmpty() )
         pAttrList->AddAttribute(A2OUSTR("style:parent-style-name"),GetParentStyleName());
 
     pAttrList->AddAttribute( A2OUSTR("style:family"), A2OUSTR("data-style") );
@@ -263,7 +263,7 @@ void XFNumberStyle::ToXml_Content(IXFStream *pStrm, sal_Bool nagetive)
 
     if( !nagetive )
     {
-        if( m_strPrefix.getLength()>0 )
+        if( !m_strPrefix.isEmpty() )
         {
             pStrm->StartElement( A2OUSTR("number:text") );
             pStrm->Characters(m_strPrefix);
@@ -272,9 +272,9 @@ void XFNumberStyle::ToXml_Content(IXFStream *pStrm, sal_Bool nagetive)
     }
     else
     {
-        if( m_strNegativePrefix.getLength() == 0 )
+        if( m_strNegativePrefix.isEmpty() )
             m_strNegativePrefix = m_strPrefix;
-        if( m_strNegativePrefix.getLength()>0 )
+        if( !m_strNegativePrefix.isEmpty() )
         {
             pStrm->StartElement( A2OUSTR("number:text") );
             // pStrm->Characters(m_strNegativePrefix);
@@ -291,7 +291,7 @@ void XFNumberStyle::ToXml_Content(IXFStream *pStrm, sal_Bool nagetive)
 
     if( m_eType == enuMXFNumberCurrency && !m_bCurrencySymbolPost )
     {
-        if( m_strCurrencySymbol.getLength() > 0 )
+        if( !m_strCurrencySymbol.isEmpty() )
         {
             pStrm->StartElement( A2OUSTR("number:currency-symbol") );
             pStrm->Characters(m_strCurrencySymbol);
@@ -326,7 +326,7 @@ void XFNumberStyle::ToXml_Content(IXFStream *pStrm, sal_Bool nagetive)
 
     if( m_eType == enuMXFNumberCurrency && m_bCurrencySymbolPost )
     {
-        if( m_strCurrencySymbol.getLength()>0 )
+        if( !m_strCurrencySymbol.isEmpty() )
         {
             pStrm->StartElement( A2OUSTR("number:currency-symbol") );
             pStrm->Characters(m_strCurrencySymbol);
@@ -336,7 +336,7 @@ void XFNumberStyle::ToXml_Content(IXFStream *pStrm, sal_Bool nagetive)
 
     if( !nagetive )
     {
-        if( m_strSuffix.getLength()>0 )
+        if( !m_strSuffix.isEmpty() )
         {
             pStrm->StartElement( A2OUSTR("number:text") );
             pStrm->Characters(m_strSuffix);
@@ -354,9 +354,9 @@ void XFNumberStyle::ToXml_Content(IXFStream *pStrm, sal_Bool nagetive)
     }
     else
     {
-        if( m_strNegativeSuffix.getLength() == 0 )
+        if( m_strNegativeSuffix.isEmpty() )
             m_strNegativeSuffix = m_strSuffix;
-        if( m_strNegativeSuffix.getLength()>0 )
+        if( !m_strNegativeSuffix.isEmpty() )
         {
             pStrm->StartElement( A2OUSTR("number:text") );
             pStrm->Characters(m_strNegativeSuffix);

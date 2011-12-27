@@ -107,10 +107,10 @@ inline void XFEndNote::ToXml(IXFStream *pStrm)
     pStrm->StartElement( A2OUSTR("text:endnote") );
 
     pAttrList->Clear();
-    if( m_strLabel.getLength() )
+    if( !m_strLabel.isEmpty() )
         pAttrList->AddAttribute( A2OUSTR("text:label"), m_strLabel );
     pStrm->StartElement( A2OUSTR("text:endnote-citation") );
-    if( m_strLabel.getLength())
+    if( !m_strLabel.isEmpty())
         pStrm->Characters(m_strLabel);
     pStrm->EndElement( A2OUSTR("text:endnote-citation") );
 

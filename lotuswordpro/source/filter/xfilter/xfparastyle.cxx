@@ -399,13 +399,13 @@ void    XFParaStyle::ToXml(IXFStream *pStrm)
     rtl::OUString style = GetStyleName();
 
     pAttrList->Clear();
-    if( style.getLength() )
+    if( !style.isEmpty() )
         pAttrList->AddAttribute(A2OUSTR("style:name"),GetStyleName());
     pAttrList->AddAttribute(A2OUSTR("style:family"), A2OUSTR("paragraph"));
-    if( GetParentStyleName().getLength() > 0 )
+    if( !GetParentStyleName().isEmpty() )
         pAttrList->AddAttribute(A2OUSTR("style:parent-style-name"),GetParentStyleName());
 
-    if( m_strMasterPage.getLength() > 0 )
+    if( !m_strMasterPage.isEmpty() )
         pAttrList->AddAttribute(A2OUSTR("style:master-page-name"),m_strMasterPage);
     pStrm->StartElement(A2OUSTR("style:style"));
 

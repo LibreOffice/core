@@ -473,7 +473,7 @@ void LwpFribPageNumber::XFConvert(XFContentContainer* pXFPara)
         break;
     }
     OUString styleName = GetStyleName();
-    if (m_aBefText.str().getLength()>0)
+    if (!m_aBefText.str().isEmpty())
     {
         OUString textStr = m_aBefText.str();
         XFTextSpan *pBef = new XFTextSpan(textStr,styleName);
@@ -488,7 +488,7 @@ void LwpFribPageNumber::XFConvert(XFContentContainer* pXFPara)
     }
     else
         pXFPara->Add(pNum);
-    if (m_aAfterText.str().getLength()>0)
+    if (!m_aAfterText.str().isEmpty())
     {
         OUString textStr = m_aAfterText.str();
         XFTextSpan *pAfter = new XFTextSpan(textStr,styleName);

@@ -83,7 +83,7 @@ void    XFEntry::ToXml(IXFStream *pStrm)
     else if( m_eType == enumXFEntryAlphabetical )
     {
         pAttrList->AddAttribute( A2OUSTR("text:key1"), m_strKey1 );
-        if( m_strKey2.getLength()>0 )
+        if( !m_strKey2.isEmpty() )
             pAttrList->AddAttribute( A2OUSTR("text:key2"), m_strKey2 );
 
         if( m_bMainEntry )

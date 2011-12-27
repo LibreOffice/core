@@ -175,7 +175,7 @@ sal_Bool LwpDocument::IsSkippedDivision()
     if (pDiv == NULL)
         return sal_True;
     sDivName = pDiv->GetDivName();
-    if (sDivName.getLength()>0 && !pDiv->IsGotoable())//including toa,scripts division
+    if (!sDivName.isEmpty() && !pDiv->IsGotoable()) //including toa,scripts division
         return sal_True;
     //skip endnote division
     OUString strClassName = pDiv->GetClassName();

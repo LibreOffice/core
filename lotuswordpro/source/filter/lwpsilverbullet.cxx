@@ -464,7 +464,7 @@ sal_Bool LwpSilverBullet::HasName()
     LwpAtomHolder* pName = this->GetName();
     if (pName)
     {
-        return (sal_Bool)(pName->str().getLength() != 0);
+        return (sal_Bool)(!pName->str().isEmpty());
     }
     else
     {

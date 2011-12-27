@@ -234,7 +234,7 @@ OUString LwpFontTableEntry::GetFaceName()
 
 void LwpFontTableEntry::RegisterFontDecl()
 {
-    if(m_FaceName.str().getLength()==0) return;
+    if(m_FaceName.str().isEmpty()) return;
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
     XFFontDecl aFontDecl1( m_FaceName.str(), m_FaceName.str(), false );
     pXFStyleManager->AddFontDecl(aFontDecl1);

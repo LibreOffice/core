@@ -79,11 +79,11 @@ void XFDrawObject::ToXml(IXFStream *pStrm)
 {
     IXFAttrList *pAttrList = pStrm->GetAttrList();
 
-    if( GetStyleName().getLength() )
+    if( !GetStyleName().isEmpty() )
         pAttrList->AddAttribute( A2OUSTR("draw:style-name"), GetStyleName() );
 
-    assert(m_strName.getLength()>0);    //name should not be null.
-    if( m_strName.getLength() )
+    assert(!m_strName.isEmpty());    //name should not be null.
+    if( !m_strName.isEmpty() )
         pAttrList->AddAttribute( A2OUSTR("draw:name"), m_strName );
     //anchor type:
     switch( m_eAnchor )
@@ -127,7 +127,7 @@ void XFDrawObject::ToXml(IXFStream *pStrm)
         strTransform += A2OUSTR("skewY (") + DoubleToOUString(m_fSkewY) + A2OUSTR(" ");
     strTransform = strTransform.trim();
 
-    if( strTransform.getLength() > 0 )
+    if( !strTransform.isEmpty() )
         pAttrList->AddAttribute( A2OUSTR("draw:transform"), strTransform );
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

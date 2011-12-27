@@ -167,7 +167,7 @@ void LwpFribPtr::XFConvert()
                 LwpGlobalMgr* pGlobal = LwpGlobalMgr::GetInstance();
                 LwpChangeMgr* pChangeMgr = pGlobal->GetLwpChangeMgr();
                 sChangeID = pChangeMgr->GetChangeID(pFrib);
-                if (sChangeID.getLength())
+                if (!sChangeID.isEmpty())
                 {
                 /// if (nRevisionType == LwpFrib::REV_INSERT)
                 /// {
@@ -363,7 +363,7 @@ void LwpFribPtr::XFConvert()
             if (nFribType!= FRIB_TAG_TABLE && nFribType != FRIB_TAG_FIELD
                     && nFribType != FRIB_TAG_FRAME)
             {
-                if (sChangeID.getLength())
+                if (!sChangeID.isEmpty())
                 {
                     XFChangeEnd* pChangeEnd = new XFChangeEnd;
                     pChangeEnd->SetChangeID(sChangeID);

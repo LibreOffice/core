@@ -167,7 +167,7 @@ void    XFIndex::ToXml(IXFStream *pStrm)
         strTplName = A2OUSTR("text:table-index-entry-template");
     }
 
-    if( GetStyleName().getLength() > 0 )
+    if( !GetStyleName().isEmpty() )
         pAttrList->AddAttribute( A2OUSTR("text:style-name"), GetStyleName() );
     if( m_bProtect )
         pAttrList->AddAttribute( A2OUSTR("text:protected"), A2OUSTR("true") );
@@ -239,7 +239,7 @@ void    XFIndex::ToXml(IXFStream *pStrm)
     pAttrList->Clear();
     pStrm->StartElement( A2OUSTR("text:index-body") );
     //index-title:
-    if(m_strTitle.getLength())
+    if(!m_strTitle.isEmpty())
     {
         pAttrList->AddAttribute( A2OUSTR("text:name"), m_strTitle + A2OUSTR("_Head") );
         pStrm->StartElement( A2OUSTR("text:index-title") );
@@ -262,7 +262,7 @@ void XFIndexTemplate::ToXml(IXFStream *pStrm)
 
     pAttrList->AddAttribute( A2OUSTR("text:outline-level"), m_nLevel );
     pAttrList->AddAttribute( A2OUSTR("text:style-name"), m_strStyle );
-    if( m_strTagName.getLength() == 0 )
+    if( m_strTagName.isEmpty() )
         m_strTagName = A2OUSTR("text:table-of-content-entry-template");
     pStrm->StartElement( m_strTagName );
 
@@ -273,14 +273,14 @@ void XFIndexTemplate::ToXml(IXFStream *pStrm)
         switch( m_aEntries[i].first )
         {
         case enumXFIndexTemplateChapter:
-            if(m_aEntries[i].second.getLength() > 0)
+            if(!m_aEntries[i].second.isEmpty())
                 pAttrList->AddAttribute( A2OUSTR("text:style-name"), m_aEntries[i].second );
 
             pStrm->StartElement( A2OUSTR("text:index-entry-chapter-number") );
             pStrm->EndElement( A2OUSTR("text:index-entry-chapter-number") );
             break;
         case enumXFIndexTemplateText:
-            if(m_aEntries[i].second.getLength() > 0)
+            if(!m_aEntries[i].second.isEmpty())
                 pAttrList->AddAttribute( A2OUSTR("text:style-name"), m_aEntries[i].second );
 
             pStrm->StartElement( A2OUSTR("text:index-entry-text") );
@@ -290,7 +290,7 @@ void XFIndexTemplate::ToXml(IXFStream *pStrm)
             if( m_eTabType != enumXFTabRight )
                 pAttrList->AddAttribute( A2OUSTR("style:position"), DoubleToOUString(m_fTabLength) + A2OUSTR("cm") );
 
-            if(m_aEntries[i].second.getLength() > 0)
+            if(!m_aEntries[i].second.isEmpty())
                 pAttrList->AddAttribute( A2OUSTR("text:style-name"), m_aEntries[i].second );
 
             switch(m_eTabType)
@@ -314,14 +314,14 @@ void XFIndexTemplate::ToXml(IXFStream *pStrm)
             if( m_eTabType == enumXFTabChar )
                 pAttrList->AddAttribute( A2OUSTR("style:char"), m_strTabDelimiter );
             //leader char:
-            if( m_strTabLeader.getLength() )
+            if( !m_strTabLeader.isEmpty() )
                 pAttrList->AddAttribute( A2OUSTR("style:leader-char"), m_strTabLeader );
 
             pStrm->StartElement( A2OUSTR("text:index-entry-tab-stop") );
             pStrm->EndElement( A2OUSTR("text:index-entry-tab-stop") );
             break;
         case enumXFIndexTemplatePage:
-            if(m_aEntries[i].second.getLength() > 0)
+            if(!m_aEntries[i].second.isEmpty())
                 pAttrList->AddAttribute( A2OUSTR("text:style-name"), m_aEntries[i].second );
 
             pStrm->StartElement( A2OUSTR("text:index-entry-page-number") );

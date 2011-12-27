@@ -97,7 +97,7 @@ void XFRubyStyle::ToXml(IXFStream *pStrm)
     rtl::OUString style = GetStyleName();
 
     pAttrList->Clear();
-    if( style.getLength() )
+    if( !style.isEmpty() )
         pAttrList->AddAttribute(A2OUSTR("style:name"),GetStyleName());
     pAttrList->AddAttribute(A2OUSTR("style:family"), A2OUSTR("ruby"));
     pStrm->StartElement(A2OUSTR("style:style"));
@@ -117,7 +117,7 @@ void XFRubyStyle::ToXml(IXFStream *pStrm)
     {
         sPos =  A2OUSTR("center");
     }
-    if (sPos.getLength()>0)
+    if (!sPos.isEmpty())
         pAttrList->AddAttribute(A2OUSTR("style:ruby-align"),sPos);
 
     OUString sAlign;
@@ -129,7 +129,7 @@ void XFRubyStyle::ToXml(IXFStream *pStrm)
     {
         sAlign =  A2OUSTR("below");
     }
-    if (sAlign.getLength()>0)
+    if (!sAlign.isEmpty())
         pAttrList->AddAttribute(A2OUSTR("style:ruby-position"),sAlign);
 
     pStrm->StartElement(A2OUSTR("style:properties"));

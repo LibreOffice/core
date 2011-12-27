@@ -123,7 +123,7 @@ LwpPropListElement* LwpPropList::GetFirst()
 OUString LwpPropList::EnumNamedProperty(OUString& name,OUString& value)
 {
     LwpPropListElement* pElement;
-    if (name.getLength()==0)
+    if (name.isEmpty())
     {
         pElement = GetFirst();
         if (pElement)

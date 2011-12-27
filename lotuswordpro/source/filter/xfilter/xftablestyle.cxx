@@ -92,7 +92,7 @@ void    XFTableStyle::ToXml(IXFStream *pStrm)
     pAttrList->Clear();
 
     pAttrList->AddAttribute( A2OUSTR("style:name"), GetStyleName() );
-    if( GetParentStyleName().getLength() > 0 )
+    if( !GetParentStyleName().isEmpty() )
         pAttrList->AddAttribute(A2OUSTR("style:parent-style-name"),GetParentStyleName());
     pAttrList->AddAttribute( A2OUSTR("style:family"), A2OUSTR("table") );
     pStrm->StartElement( A2OUSTR("style:style") );

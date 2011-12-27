@@ -318,7 +318,7 @@ void LwpFrib::RegisterStyle(LwpFoundry* pFoundry)
         {
             pStyle = new XFTextStyle();
 
-            if (m_StyleName.getLength()>0)
+            if (!m_StyleName.isEmpty())
             {
                 XFTextStyle* pOldStyle = pXFStyleManager->FindTextStyle(m_StyleName);
                 *pStyle = *pOldStyle;

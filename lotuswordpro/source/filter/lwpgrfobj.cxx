@@ -676,7 +676,7 @@ void LwpGraphicObject::CreateGrafObject()
 
     // set object name
     LwpAtomHolder* pHolder = this->GetName();
-    if ( pHolder && pHolder->str().getLength() )
+    if ( pHolder && !pHolder->str().isEmpty() )
     {
         pImage->SetName(pHolder->str());
     }

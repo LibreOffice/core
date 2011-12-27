@@ -113,7 +113,7 @@ inline void XFArrowStyle::ToXml(IXFStream *pStrm)
     IXFAttrList *pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
 
-    if( m_strName.getLength()>0 )
+    if( !m_strName.isEmpty() )
         pAttrList->AddAttribute( A2OUSTR("draw:name"), m_strName );
     else
         pAttrList->AddAttribute( A2OUSTR("draw:name"), GetStyleName() );

@@ -85,7 +85,7 @@ void XFImageStyle::ToXml(IXFStream *pStrm)
 
     pAttrList->Clear();
     pAttrList->AddAttribute( A2OUSTR("style:name"), GetStyleName() );
-    if( GetParentStyleName().getLength() > 0 )
+    if( !GetParentStyleName().isEmpty() )
         pAttrList->AddAttribute(A2OUSTR("style:parent-style-name"),GetParentStyleName());
     pAttrList->AddAttribute( A2OUSTR("style:family"), A2OUSTR("graphics") );
     //parent style name ignore now.
@@ -169,13 +169,13 @@ void XFImageStyle::ToXml(IXFStream *pStrm)
             protect += A2OUSTR("content");
         if( m_bProtectSize )
         {
-            if( protect.getLength()>0 )
+            if( !protect.isEmpty() )
                 protect += A2OUSTR(" ");
             protect += A2OUSTR("size");
         }
         if( m_bProtectPos )
         {
-            if( protect.getLength()>0 )
+            if( !protect.isEmpty() )
                 protect += A2OUSTR(" ");
             protect += A2OUSTR("position");
         }
