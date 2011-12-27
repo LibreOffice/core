@@ -541,7 +541,7 @@ Reference< XPossibleHyphens > SAL_CALL
     Reference< XPossibleHyphens >   xRes;
 
     sal_Int16 nLanguage = LocaleToLanguage( rLocale );
-    if (nLanguage == LANGUAGE_NONE  || !rWord.getLength())
+    if (nLanguage == LANGUAGE_NONE || rWord.isEmpty())
         return xRes;
 
     // search for entry with that language

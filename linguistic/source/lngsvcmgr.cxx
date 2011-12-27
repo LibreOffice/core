@@ -67,7 +67,7 @@ static sal_Bool lcl_SeqHasString( const uno::Sequence< OUString > &rSeq, const O
     sal_Bool bRes = sal_False;
 
     sal_Int32 nLen = rSeq.getLength();
-    if (nLen == 0 || rText.getLength() == 0)
+    if (nLen == 0 || rText.isEmpty())
         return bRes;
 
     const OUString *pSeq = rSeq.getConstArray();
@@ -528,7 +528,7 @@ void LngSvcMgr::Notify( const uno::Sequence< OUString > &rPropertyNames )
         OUString aKeyText;
         if (nKeyStart != -1)
             aKeyText = rName.copy( nKeyStart + 1 );
-        DBG_ASSERT( aKeyText.getLength() != 0, "unexpected key (lang::Locale) string" );
+        DBG_ASSERT( !aKeyText.isEmpty(), "unexpected key (lang::Locale) string" );
         if (0 == rName.compareTo( aSpellCheckerList, aSpellCheckerList.getLength() ))
         {
             // delete old cached data, needs to be acquired new on demand
@@ -547,7 +547,7 @@ void LngSvcMgr::Notify( const uno::Sequence< OUString > &rPropertyNames )
                     aSvcImplNames = GetLangSvcList( aValues.getConstArray()[0] );
 
                 LanguageType nLang = LANGUAGE_NONE;
-                if (0 != aKeyText.getLength())
+                if (!aKeyText.isEmpty())
                     nLang = MsLangId::convertIsoStringToLanguage( aKeyText );
 
                 GetSpellCheckerDsp_Impl( sal_False );     // don't set service list, it will be done below
@@ -572,7 +572,7 @@ void LngSvcMgr::Notify( const uno::Sequence< OUString > &rPropertyNames )
                     aSvcImplNames = GetLangSvc( aValues.getConstArray()[0] );
 
                 LanguageType nLang = LANGUAGE_NONE;
-                if (0 != aKeyText.getLength())
+                if (!aKeyText.isEmpty())
                     nLang = MsLangId::convertIsoStringToLanguage( aKeyText );
 
                 if (SvtLinguConfig().HasGrammarChecker())
@@ -600,7 +600,7 @@ void LngSvcMgr::Notify( const uno::Sequence< OUString > &rPropertyNames )
                     aSvcImplNames = GetLangSvc( aValues.getConstArray()[0] );
 
                 LanguageType nLang = LANGUAGE_NONE;
-                if (0 != aKeyText.getLength())
+                if (!aKeyText.isEmpty())
                     nLang = MsLangId::convertIsoStringToLanguage( aKeyText );
 
                 GetHyphenatorDsp_Impl( sal_False );   // don't set service list, it will be done below
@@ -625,7 +625,7 @@ void LngSvcMgr::Notify( const uno::Sequence< OUString > &rPropertyNames )
                     aSvcImplNames = GetLangSvcList( aValues.getConstArray()[0] );
 
                 LanguageType nLang = LANGUAGE_NONE;
-                if (0 != aKeyText.getLength())
+                if (!aKeyText.isEmpty())
                     nLang = MsLangId::convertIsoStringToLanguage( aKeyText );
 
                 GetThesaurusDsp_Impl( sal_False );  // don't set service list, it will be done below
@@ -772,7 +772,7 @@ void LngSvcMgr::GetAvailableSpellSvcs_Impl()
                         uno::Reference< XServiceInfo > xInfo( xSvc, uno::UNO_QUERY );
                         if (xInfo.is())
                             aImplName = xInfo->getImplementationName();
-                        DBG_ASSERT( aImplName.getLength(),
+                        DBG_ASSERT( !aImplName.isEmpty(),
                                 "empty implementation name" );
                         uno::Reference< linguistic2::XSupportedLocales > xSuppLoc( xSvc, uno::UNO_QUERY );
                         DBG_ASSERT( xSuppLoc.is(), "interfaces not supported" );
@@ -837,7 +837,7 @@ void LngSvcMgr::GetAvailableGrammarSvcs_Impl()
                         uno::Reference< XServiceInfo > xInfo( xSvc, uno::UNO_QUERY );
                         if (xInfo.is())
                             aImplName = xInfo->getImplementationName();
-                        DBG_ASSERT( aImplName.getLength(),
+                        DBG_ASSERT( !aImplName.isEmpty(),
                                 "empty implementation name" );
                         uno::Reference< linguistic2::XSupportedLocales > xSuppLoc( xSvc, uno::UNO_QUERY );
                         DBG_ASSERT( xSuppLoc.is(), "interfaces not supported" );
@@ -901,7 +901,7 @@ void LngSvcMgr::GetAvailableHyphSvcs_Impl()
                         uno::Reference< XServiceInfo > xInfo( xSvc, uno::UNO_QUERY );
                         if (xInfo.is())
                             aImplName = xInfo->getImplementationName();
-                        DBG_ASSERT( aImplName.getLength(),
+                        DBG_ASSERT( !aImplName.isEmpty(),
                                 "empty implementation name" );
                         uno::Reference< linguistic2::XSupportedLocales > xSuppLoc( xSvc, uno::UNO_QUERY );
                         DBG_ASSERT( xSuppLoc.is(), "interfaces not supported" );
@@ -967,7 +967,7 @@ void LngSvcMgr::GetAvailableThesSvcs_Impl()
                         uno::Reference< XServiceInfo > xInfo( xSvc, uno::UNO_QUERY );
                         if (xInfo.is())
                             aImplName = xInfo->getImplementationName();
-                        DBG_ASSERT( aImplName.getLength(),
+                        DBG_ASSERT( !aImplName.isEmpty(),
                                 "empty implementation name" );
                         uno::Reference< linguistic2::XSupportedLocales > xSuppLoc( xSvc, uno::UNO_QUERY );
                         DBG_ASSERT( xSuppLoc.is(), "interfaces not supported" );
@@ -1570,7 +1570,7 @@ static uno::Sequence< OUString > GetLangSvcList( const uno::Any &rVal )
             for (sal_Int32 j = 0;  j < nSvcs;  ++j)
             {
                 OUString aImplName( pSvcName[j] );
-                DBG_ASSERT( aImplName.getLength(), "service impl-name missing" );
+                DBG_ASSERT( !aImplName.isEmpty(), "service impl-name missing" );
             }
         }
 #endif
@@ -1599,7 +1599,7 @@ static uno::Sequence< OUString > GetLangSvc( const uno::Any &rVal )
     else
     {
         OUString aImplName;
-        if ((rVal >>= aImplName) && aImplName.getLength() != 0)
+        if ((rVal >>= aImplName) && !aImplName.isEmpty())
         {
             aRes.realloc(1);
             aRes.getArray()[0] = aImplName;

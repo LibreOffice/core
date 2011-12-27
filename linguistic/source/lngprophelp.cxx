@@ -262,7 +262,7 @@ void PropertyChgHelper::AddAsPropListener()
         const OUString *pPropName = aPropNames.getConstArray();
         for (sal_Int32 i = 0;  i < nLen;  ++i)
         {
-            if (pPropName[i].getLength())
+            if (!pPropName[i].isEmpty())
                 xPropSet->addPropertyChangeListener( pPropName[i], this );
         }
     }
@@ -276,7 +276,7 @@ void PropertyChgHelper::RemoveAsPropListener()
         const OUString *pPropName = aPropNames.getConstArray();
         for (sal_Int32 i = 0;  i < nLen;  ++i)
         {
-            if (pPropName[i].getLength())
+            if (!pPropName[i].isEmpty())
                 xPropSet->removePropertyChangeListener( pPropName[i], this );
         }
     }

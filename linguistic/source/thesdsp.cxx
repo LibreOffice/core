@@ -126,7 +126,7 @@ Sequence< Reference< XMeaning > > SAL_CALL
     Sequence< Reference< XMeaning > >   aMeanings;
 
     sal_Int16 nLanguage = LocaleToLanguage( rLocale );
-    if (nLanguage == LANGUAGE_NONE  || !rTerm.getLength())
+    if (nLanguage == LANGUAGE_NONE || rTerm.isEmpty())
         return aMeanings;
 
     // search for entry with that language

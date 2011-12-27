@@ -230,7 +230,7 @@ DictionaryNeo::DictionaryNeo(const OUString &rName,
     bIsModified  = bIsActive = sal_False;
     bIsReadonly = !bWriteable;
 
-    if( rMainURL.getLength() > 0 )
+    if( !rMainURL.isEmpty())
     {
         sal_Bool bExists = FileExists( rMainURL );
         if( !bExists )
@@ -271,7 +271,7 @@ sal_uLong DictionaryNeo::loadEntries(const OUString &rMainURL)
     // function should only be called once in order to load entries from file
     bNeedEntries = sal_False;
 
-    if (rMainURL.getLength() == 0)
+    if (rMainURL.isEmpty())
         return 0;
 
     uno::Reference< lang::XMultiServiceFactory > xServiceFactory( comphelper::getProcessServiceFactory() );
@@ -411,7 +411,7 @@ sal_uLong DictionaryNeo::saveEntries(const OUString &rURL)
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    if (rURL.getLength() == 0)
+    if (rURL.isEmpty())
         return 0;
     DBG_ASSERT(!INetURLObject( rURL ).HasError(), "lng : invalid URL");
 
@@ -999,7 +999,7 @@ sal_Bool SAL_CALL DictionaryNeo::hasLocation()
         throw(RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
-    return aMainURL.getLength() > 0;
+    return !aMainURL.isEmpty();
 }
 
 OUString SAL_CALL DictionaryNeo::getLocation()
@@ -1075,7 +1075,7 @@ void SAL_CALL DictionaryNeo::storeToURL(
 DicEntry::DicEntry(const OUString &rDicFileWord,
                    sal_Bool bIsNegativWord)
 {
-    if (rDicFileWord.getLength())
+    if (!rDicFileWord.isEmpty())
         splitDicFileWord( rDicFileWord, aDicWord, aReplacement );
     bIsNegativ = bIsNegativWord;
 }

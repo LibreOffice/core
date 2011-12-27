@@ -109,12 +109,12 @@ static uno::Sequence< rtl::OUString > GetMultiPaths_Impl(
         // 2. all user pathes
         // 3. all internal pathes
         sal_Int32 nMaxEntries = aInternalPaths.getLength() + aUserPaths.getLength();
-        if (aWritablePath.getLength() > 0)
+        if (!aWritablePath.isEmpty())
             ++nMaxEntries;
         aRes.realloc( nMaxEntries );
         rtl::OUString *pRes = aRes.getArray();
         sal_Int32 nCount = 0;   // number of actually added entries
-        if ((nPathFlags & PATH_FLAG_WRITABLE) && aWritablePath.getLength() != 0)
+        if ((nPathFlags & PATH_FLAG_WRITABLE) && !aWritablePath.isEmpty())
             pRes[ nCount++ ] = aWritablePath;
         for (int i = 0;  i < 2;  ++i)
         {
@@ -124,7 +124,7 @@ static uno::Sequence< rtl::OUString > GetMultiPaths_Impl(
             {
                 const bool bAddUser     = &rPathSeq == &aUserPaths     && (nPathFlags & PATH_FLAG_USER);
                 const bool bAddInternal = &rPathSeq == &aInternalPaths && (nPathFlags & PATH_FLAG_INTERNAL);
-                if ((bAddUser || bAddInternal) && pPathSeq[k].getLength() > 0)
+                if ((bAddUser || bAddInternal) && !pPathSeq[k].isEmpty())
                     pRes[ nCount++ ] = pPathSeq[k];
             }
         }

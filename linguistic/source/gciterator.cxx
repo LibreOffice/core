@@ -552,7 +552,7 @@ void GrammarCheckingIterator::DequeueAndCheck()
 
                     sal_Int32 nStartPos = aFPEntryItem.m_nStartIndex;
                     sal_Int32 nSuggestedEnd = GetSuggestedEndOfSentence( aCurTxt, nStartPos, aCurLocale );
-                    DBG_ASSERT( (nSuggestedEnd == 0 && aCurTxt.getLength() == 0) || nSuggestedEnd > nStartPos,
+                    DBG_ASSERT( (nSuggestedEnd == 0 && aCurTxt.isEmpty()) || nSuggestedEnd > nStartPos,
                             "nSuggestedEndOfSentencePos calculation failed?" );
 
                     linguistic2::ProofreadingResult aRes;
@@ -824,7 +824,7 @@ throw (uno::RuntimeException)
         {
             // check in document is checked automatically in the background...
             OUString aDocId = aIt->second;
-            if (m_aCurCheckedDocId.getLength() > 0 && m_aCurCheckedDocId == aDocId)
+            if (!m_aCurCheckedDocId.isEmpty() && m_aCurCheckedDocId == aDocId)
             {
                 // an entry for that document was dequed and is currently being checked.
                 bRes = sal_True;
@@ -1099,7 +1099,7 @@ void GrammarCheckingIterator::SetServiceList(
 
     if (nLanguage != LANGUAGE_NONE && nLanguage != LANGUAGE_DONTKNOW)
     {
-        if (aImplName.getLength() > 0)
+        if (!aImplName.isEmpty())
             m_aGCImplNamesByLang[ nLanguage ] = aImplName;
         else
             m_aGCImplNamesByLang.erase( nLanguage );
@@ -1120,7 +1120,7 @@ uno::Sequence< OUString > GrammarCheckingIterator::GetServiceList(
     if (aIt != m_aGCImplNamesByLang.end())
         aImplName = aIt->second;
 
-    if (aImplName.getLength() > 0)
+    if (!aImplName.isEmpty())
         aRes[0] = aImplName;
     else
         aRes.realloc(0);

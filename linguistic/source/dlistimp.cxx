@@ -698,7 +698,7 @@ void DicList::_CreateDicList()
     sal_Int32 nLen = aActiveDics.getLength();
     for (sal_Int32 i = 0;  i < nLen;  ++i)
     {
-        if (pActiveDic[i].getLength())
+        if (!pActiveDic[i].isEmpty())
         {
             uno::Reference< XDictionary > xDic( getDictionaryByName( pActiveDic[i] ) );
             if (xDic.is())

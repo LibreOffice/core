@@ -141,7 +141,7 @@ size_t ProposalList::Count() const
     size_t nLen = aVec.size();
     for (size_t i = 0;  i < nLen;  ++i)
     {
-        if (aVec[i].getLength() != 0)
+        if (!aVec[i].isEmpty())
             ++nRes;
     }
     return nRes;
@@ -158,7 +158,7 @@ Sequence< OUString > ProposalList::GetSequence() const
     {
         const OUString &rText = aVec[i];
         DBG_ASSERT( nIdx < nCount, "index our of range" );
-        if (nIdx < nCount && rText.getLength() > 0)
+        if (nIdx < nCount && !rText.isEmpty())
             pRes[ nIdx++ ] = rText;
     }
     return aRes;
@@ -191,7 +191,7 @@ sal_Bool SvcListHasLanguage(
     {
         if (pRef[k].is())
         {
-            if (0 == aTmpLocale.Language.getLength())
+            if (aTmpLocale.Language.isEmpty())
                 aTmpLocale = CreateLocale( nLanguage );
             bHasLanguage = pRef[k]->hasLocale( aTmpLocale );
         }
@@ -312,7 +312,7 @@ sal_Bool SpellCheckerDispatcher::isValid_Impl(
 
     sal_Bool bRes = sal_True;
 
-    if (nLanguage == LANGUAGE_NONE  || !rWord.getLength())
+    if (nLanguage == LANGUAGE_NONE || rWord.isEmpty())
         return bRes;
 
     // search for entry with that language
@@ -478,7 +478,7 @@ Reference< XSpellAlternatives > SpellCheckerDispatcher::spell_Impl(
 
     Reference< XSpellAlternatives > xRes;
 
-    if (nLanguage == LANGUAGE_NONE  || !rWord.getLength())
+    if (nLanguage == LANGUAGE_NONE || rWord.isEmpty())
         return xRes;
 
     // search for entry with that language
@@ -688,7 +688,7 @@ Reference< XSpellAlternatives > SpellCheckerDispatcher::spell_Impl(
                     OUString aAddRplcTxt( xTmp->getReplacementText() );
 
                     // replacement text must not be in negative dictionary itself
-                    if (aAddRplcTxt.getLength() &&
+                    if (!aAddRplcTxt.isEmpty() &&
                         !SearchDicList( xDList, aAddRplcTxt, nLanguage, sal_False, sal_True ).is())
                     {
                         aProposalList.Prepend( aAddRplcTxt );

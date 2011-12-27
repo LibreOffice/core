@@ -174,7 +174,7 @@ Sequence< OUString > MergeProposalSeqs(
             const OUString  *pAlt   = j == 0 ? pAlt1 : pAlt2;
             for (i = 0;  i < nCount  &&  nIndex < MAX_PROPOSALS;  i++)
             {
-                if (pAlt[i].getLength() &&
+                if (!pAlt[i].isEmpty() &&
                     (bAllowDuplicates || !SeqHasEntry(aMerged, pAlt[i] )))
                     pMerged[ nIndex++ ] = pAlt[ i ];
             }

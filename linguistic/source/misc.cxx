@@ -381,7 +381,7 @@ sal_uInt8 AddEntryToDic(
 LanguageType LocaleToLanguage( const Locale& rLocale )
 {
     //  empty Locale -> LANGUAGE_NONE
-    if ( rLocale.Language.getLength() == 0 )
+    if ( rLocale.Language.isEmpty() )
         return LANGUAGE_NONE;
 
     return MsLangId::convertLocaleToLanguage( rLocale );
@@ -546,7 +546,7 @@ uno::Reference< XHyphenatedWord > RebuildHyphensAndControlChars(
         uno::Reference< XHyphenatedWord > &rxHyphWord )
 {
     uno::Reference< XHyphenatedWord > xRes;
-    if (rOrigWord.getLength() && rxHyphWord.is())
+    if (!rOrigWord.isEmpty() && rxHyphWord.is())
     {
         sal_Int16    nChgPos = 0,
                  nChgLen = 0;
