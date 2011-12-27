@@ -40,8 +40,8 @@ SORTED_LIST=$(RES)$/img$/sorted.lst
 # (Tango fallbacks to Industrial for the missing icons)
 CUSTOM_IMAGE_SETS=$(WITH_THEMES)
 CUSTOM_IMAGES+=$(foreach,i,$(CUSTOM_IMAGE_SETS) images_$i)
-CUSTOM_PREFERRED_FALLBACK_1*=-c $(SOLARSRC)$/ooo_custom_images$/tango
-CUSTOM_PREFERRED_FALLBACK_2*=-c $(SOLARSRC)$/ooo_custom_images$/industrial
+CUSTOM_PREFERRED_FALLBACK_1*=-c $(SOLARSRC)$/icon-themes$/tango
+CUSTOM_PREFERRED_FALLBACK_2*=-c $(SOLARSRC)$/icon-themes$/industrial
 
 ALLTAR : $(IMAGES) $(CUSTOM_IMAGES) $(COMMONBIN)$/images_brand.zip
 
@@ -61,7 +61,7 @@ $(COMMONBIN)$/images.zip .PHONY: $(RES)$/img$/commandimagelist.ilst
     $(PERL) $(SOLARENV)$/bin$/packimages.pl -g $(SOLARSRC)$/$(RSCDEFIMG) -m $(SOLARSRC)$/$(RSCDEFIMG) -c $(RSCCUSTOMIMG) -l $(SOLARCOMMONRESDIR)$/img -s $(SORTED_LIST) -l $(RES)$/img -o $@
 
 images_% : $(RES)$/img$/commandimagelist.ilst
-    $(PERL) $(SOLARENV)$/bin$/packimages.pl -g $(SOLARSRC)$/$(RSCDEFIMG) -m $(SOLARSRC)$/$(RSCDEFIMG) -c $(RSCCUSTOMIMG) -c $(SOLARSRC)$/ooo_custom_images$/$(@:s/images_//) -c $(MISC)$/$(@:s/images_//) $(CUSTOM_PREFERRED_FALLBACK_1) $(CUSTOM_PREFERRED_FALLBACK_2) -l $(SOLARCOMMONRESDIR)$/img -l $(RES)$/img -s $(SORTED_LIST) -o $(COMMONBIN)$/$@.zip
+    $(PERL) $(SOLARENV)$/bin$/packimages.pl -g $(SOLARSRC)$/$(RSCDEFIMG) -m $(SOLARSRC)$/$(RSCDEFIMG) -c $(RSCCUSTOMIMG) -c $(SOLARSRC)$/icon-themes$/$(@:s/images_//) -c $(MISC)$/$(@:s/images_//) $(CUSTOM_PREFERRED_FALLBACK_1) $(CUSTOM_PREFERRED_FALLBACK_2) -l $(SOLARCOMMONRESDIR)$/img -l $(RES)$/img -s $(SORTED_LIST) -o $(COMMONBIN)$/$@.zip
 
 # make sure to have one to keep packing happy
 $(COMMONBIN)$/images_brand.zip:
