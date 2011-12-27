@@ -951,10 +951,13 @@ sal_Bool Bitmap::ImplScaleFast( const double& rScaleX, const double& rScaleY )
     if( nNewWidth && nNewHeight )
     {
         BitmapReadAccess*   pReadAcc = AcquireReadAccess();
+        if ( !pReadAcc )
+            return sal_False;
+
         Bitmap              aNewBmp( Size( nNewWidth, nNewHeight ), GetBitCount(), &pReadAcc->GetPalette() );
         BitmapWriteAccess*  pWriteAcc = aNewBmp.AcquireWriteAccess();
 
-        if( pReadAcc && pWriteAcc )
+        if( pWriteAcc )
         {
             const long  nScanlineSize = pWriteAcc->GetScanlineSize();
             const long  nNewWidth1 = nNewWidth - 1L;
