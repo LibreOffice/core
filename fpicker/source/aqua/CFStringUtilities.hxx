@@ -67,23 +67,32 @@ inline void DBG_PRINT_ENTRY(const char * classname, const char * methodname, con
     OSL_TRACE(">>> %s::%s%s%s = %s", classname, methodname, PARAMFILLER, param1, OUStringToOString(value1, RTL_TEXTENCODING_UTF8).getStr());
 }
 
-inline void DBG_PRINT_ENTRY(const char * classname, const char * methodname, const char* param1, const CFStringRef value1) {
-    OSL_TRACE(">>> %s::%s%s%s =", classname, methodname, PARAMFILLER, param1);
 #if OSL_DEBUG_LEVEL > 1
+inline void DBG_PRINT_ENTRY(const char * classname, const char * methodname, const char* param1, const CFStringRef value1)
+{
+    OSL_TRACE(">>> %s::%s%s%s =", classname, methodname, PARAMFILLER, param1);
     CFShow(value1);
-#else
-    (void)value1;
-#endif
-}
 
-inline void DBG_PRINT_ENTRY(const char * classname, const char * methodname, const char* param1, const NSString* value1) {
-    OSL_TRACE(">>> %s::%s%s%s =", classname, methodname, PARAMFILLER, param1);
-#if OSL_DEBUG_LEVEL > 1
-    NSLog(value1);
-#else
-    (void)value1;
-#endif
 }
+#else
+inline void DBG_PRINT_ENTRY(const char * classname, const char * methodname, const char* param1, const CFStringRef /* value1 */)
+{
+    OSL_TRACE(">>> %s::%s%s%s =", classname, methodname, PARAMFILLER, param1);
+}
+#endif
+
+#if OSL_DEBUG_LEVEL > 1
+inline void DBG_PRINT_ENTRY(const char * classname, const char * methodname, const char* param1, const NSString* value1)
+{
+    OSL_TRACE(">>> %s::%s%s%s =", classname, methodname, PARAMFILLER, param1);
+    NSLog(value1);
+}
+#else
+inline void DBG_PRINT_ENTRY(const char * classname, const char * methodname, const char* param1, const NSString* /* value1 */)
+{
+    OSL_TRACE(">>> %s::%s%s%s =", classname, methodname, PARAMFILLER, param1);
+}
+#endif
 
 inline void DBG_PRINT_ENTRY(const char * classname, const char * methodname, const char* param1, const int value1) {
     OSL_TRACE(">>> %s::%s%s%s = %d", classname, methodname, PARAMFILLER, param1, value1);
@@ -105,19 +114,22 @@ inline void DBG_PRINT_ENTRY(const char * classname, const char * methodname, con
     OSL_TRACE(">>> %s::%s%s%s = %d%s%s = %s", classname, methodname, PARAMFILLER, param1, value1, PARAMFILLER, param2, value2);
 }
 
-inline void DBG_PRINT_ENTRY(const char * classname, const char * methodname, const char* param1, const int value1, const char* param2, const CFStringRef value2) {
+inline void DBG_PRINT_ENTRY(const char * classname, const char * methodname, const char* param1, const int value1, const char* param2, const CFStringRef value2)
+{
     OSL_TRACE(">>> %s::%s%s%s = %d%s%s =", classname, methodname, PARAMFILLER, param1, value1, PARAMFILLER, param2, value2);
 #if OSL_DEBUG_LEVEL > 1
     CFShow(value2);
 #endif
 }
 
-inline void DBG_PRINT_ENTRY(const char * classname, const char * methodname, const char* param1, const int value1, const char* param2, const NSString* value2) {
+inline void DBG_PRINT_ENTRY(const char * classname, const char * methodname, const char* param1, const int value1, const char* param2, const NSString* value2)
+{
     OSL_TRACE(">>> %s::%s%s%s = %d%s%s =", classname, methodname, PARAMFILLER, param1, value1, PARAMFILLER, param2, value2);
 #if OSL_DEBUG_LEVEL > 1
     NSLog(value2);
-#endif
+#endif}
 }
+
 
 inline void DBG_PRINT_ENTRY(const char * classname, const char * methodname, const char* param1, const rtl::OUString& value1, const char* param2, const rtl::OUString& value2) {
     OSL_TRACE(">>> %s::%s%s%s = %s%s%s = %s", classname, methodname, PARAMFILLER, param1, OUStringToOString(value1, RTL_TEXTENCODING_UTF8).getStr(), PARAMFILLER, param2, OUStringToOString(value2, RTL_TEXTENCODING_UTF8).getStr());
@@ -145,23 +157,31 @@ inline void DBG_PRINT_EXIT(const char * classname, const char * methodname, int 
     OSL_TRACE("<<< %s::%s%sreturnValue = %d", classname, methodname, PARAMFILLER, retVal);
 }
 
-inline void DBG_PRINT_EXIT(const char * classname, const char * methodname, const CFStringRef retVal) {
-    OSL_TRACE("<<< %s::%s%sreturnValue = ", classname, methodname, PARAMFILLER);
 #if OSL_DEBUG_LEVEL > 1
+inline void DBG_PRINT_EXIT(const char * classname, const char * methodname, const CFStringRef retVal)
+{
+    OSL_TRACE("<<< %s::%s%sreturnValue = ", classname, methodname, PARAMFILLER);
     CFShow(retVal);
-#else
-    (void)retVal;
-#endif
 }
-
-inline void DBG_PRINT_EXIT(const char * classname, const char * methodname, const NSString* retVal) {
+#else
+inline void DBG_PRINT_EXIT(const char * classname, const char * methodname, const CFStringRef /* retVal */)
+{
     OSL_TRACE("<<< %s::%s%sreturnValue = ", classname, methodname, PARAMFILLER);
-#if OSL_DEBUG_LEVEL > 1
-    NSLog(retVal);
-#else
-    (void)retVal;
-#endif
 }
+#endif
+
+#if OSL_DEBUG_LEVEL > 1
+inline void DBG_PRINT_EXIT(const char * classname, const char * methodname, const NSString* retVal)
+{
+    OSL_TRACE("<<< %s::%s%sreturnValue = ", classname, methodname, PARAMFILLER);
+    NSLog(retVal);
+}
+#else
+inline void DBG_PRINT_EXIT(const char * classname, const char * methodname, const NSString* /* retVal */ )
+{
+    OSL_TRACE("<<< %s::%s%sreturnValue = ", classname, methodname, PARAMFILLER);
+}
+#endif
 
 inline void DBG_PRINT_EXIT(const char * classname, const char * methodname, const rtl::OUString& retVal) {
     OSL_TRACE("<<< %s::%s%sreturnValue = %s", classname, methodname, PARAMFILLER, OUStringToOString(retVal, RTL_TEXTENCODING_UTF8).getStr());

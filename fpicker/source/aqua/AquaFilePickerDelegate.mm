@@ -59,6 +59,7 @@
 
 - (BOOL)panel:(id)sender shouldShowFilename:(NSString *)filename
 {
+    (void)sender;
     if( filterHelper == NULL )
         return true;
     if( filename == nil )
@@ -68,6 +69,7 @@
 
 - (void)panelSelectionDidChange:(id)sender
 {
+    (void)sender;
     if (filePicker != NULL) {
         ::com::sun::star::ui::dialogs::FilePickerEvent evt;
         filePicker->fileSelectionChanged(evt);
@@ -76,6 +78,8 @@
 
 - (void)panel:(id)sender directoryDidChange:(NSString *)path
 {
+    (void)sender;
+    (void)path;
     if (filePicker != NULL) {
         ::com::sun::star::ui::dialogs::FilePickerEvent evt;
         filePicker->directoryChanged(evt);
