@@ -144,7 +144,7 @@ sal_Bool SwGlossaries::FindGroupName(String & rGroup)
         String sTemp( GetGroupName( i ));
         sal_uInt16 nPath = (sal_uInt16)sTemp.GetToken(1, GLOS_DELIM).ToInt32();
 
-        if( !SWUnoHelper::UCB_IsCaseSensitiveFileName( *(*m_pPathArr)[nPath] )
+        if( !SWUnoHelper::UCB_IsCaseSensitiveFileName( *m_aPathArr[nPath] )
              && rSCmp.isEqual( rGroup, sTemp.GetToken( 0, GLOS_DELIM) ) )
         {
             rGroup = sTemp;
@@ -218,9 +218,9 @@ void SwGlossaries::PutGroupDoc(SwTextBlocks *pBlock) {
 sal_Bool SwGlossaries::NewGroupDoc(String& rGroupName, const String& rTitle)
 {
     sal_uInt16 nNewPath = (sal_uInt16)rGroupName.GetToken(1, GLOS_DELIM).ToInt32();
-    if(nNewPath >= m_pPathArr->Count())
+    if( static_cast<size_t>(nNewPath) >= m_aPathArr.size() )
         return sal_False;
-    String sNewFilePath(*(*m_pPathArr)[nNewPath]);
+    String sNewFilePath(*m_aPathArr[nNewPath]);
     String sNewGroup = lcl_CheckFileName(sNewFilePath, rGroupName.GetToken(0, GLOS_DELIM));
     sNewGroup += GLOS_DELIM;
     sNewGroup += rGroupName.GetToken(1, GLOS_DELIM);
@@ -244,9 +244,9 @@ sal_Bool    SwGlossaries::RenameGroupDoc(
 {
     sal_Bool bRet = sal_False;
     sal_uInt16 nOldPath = (sal_uInt16)rOldGroup.GetToken(1, GLOS_DELIM).ToInt32();
-    if(nOldPath < m_pPathArr->Count())
+    if( static_cast<size_t>(nOldPath) < m_aPathArr.size() )
     {
-        String sOldFileURL(*(*m_pPathArr)[nOldPath]);
+        String sOldFileURL(*m_aPathArr[nOldPath]);
         sOldFileURL += INET_PATH_TOKEN;
         sOldFileURL += rOldGroup.GetToken(0, GLOS_DELIM);
         sOldFileURL += SwGlossaries::GetExtension();
@@ -255,9 +255,9 @@ sal_Bool    SwGlossaries::RenameGroupDoc(
         if(bExist)
         {
             sal_uInt16 nNewPath = (sal_uInt16)rNewGroup.GetToken(1, GLOS_DELIM).ToInt32();
-            if( nNewPath < m_pPathArr->Count())
+            if( static_cast<size_t>(nNewPath) < m_aPathArr.size() )
             {
-                String sNewFilePath(*(*m_pPathArr)[nNewPath]);
+                String sNewFilePath(*m_aPathArr[nNewPath]);
                 String sNewFileName = lcl_CheckFileName(
                                     sNewFilePath, rNewGroup.GetToken(0, GLOS_DELIM));
                 const sal_uInt16 nFileNameLen = sNewFileName.Len();
@@ -304,9 +304,9 @@ sal_Bool    SwGlossaries::RenameGroupDoc(
 sal_Bool SwGlossaries::DelGroupDoc(const String &rName)
 {
     sal_uInt16 nPath = (sal_uInt16)rName.GetToken(1, GLOS_DELIM).ToInt32();
-    if(nPath >= m_pPathArr->Count())
+    if( static_cast<size_t>(nPath) >= m_aPathArr.size() )
         return sal_False;
-    String sFileURL(*(*m_pPathArr)[nPath]);
+    String sFileURL(*m_aPathArr[nPath]);
     String aTmp( rName.GetToken(0, GLOS_DELIM));
     String aName(aTmp);
     aName += GLOS_DELIM;
@@ -324,9 +324,6 @@ sal_Bool SwGlossaries::DelGroupDoc(const String &rName)
     return bRemoved;
 }
 
-/*------------------------------------------------------------------------
-    Description: DTOR
-------------------------------------------------------------------------*/
 SwGlossaries::~SwGlossaries()
 {
     sal_uInt16 nCount = m_pGlosArr? m_pGlosArr->Count() : 0;
@@ -337,14 +334,11 @@ SwGlossaries::~SwGlossaries()
         String *pTmp = (*m_pGlosArr)[i];
         delete pTmp;
     }
-    nCount = m_pPathArr? m_pPathArr->Count() : 0;
-    for(i = 0; i < nCount; ++i)
-    {
-        String *pTmp = (*m_pPathArr)[i];
-        delete pTmp;
-    }
+
+    for(std::vector<String*>::const_iterator it(m_aPathArr.begin()); it != m_aPathArr.end(); ++it)
+        delete *it;
+
     delete m_pGlosArr;
-    delete m_pPathArr;
 
     InvalidateUNOOjects();
 }
@@ -356,9 +350,9 @@ SwTextBlocks* SwGlossaries::GetGlosDoc( const String &rName, sal_Bool bCreate ) 
 {
     sal_uInt16 nPath = (sal_uInt16)rName.GetToken(1, GLOS_DELIM).ToInt32();
     SwTextBlocks *pTmp = 0;
-    if(nPath < m_pPathArr->Count())
+    if( static_cast<size_t>(nPath) < m_aPathArr.size() )
     {
-        String sFileURL(*(*m_pPathArr)[nPath]);
+        String sFileURL(*m_aPathArr[nPath]);
         String aTmp( rName.GetToken(0, GLOS_DELIM));
         aTmp += SwGlossaries::GetExtension();
         sFileURL += INET_PATH_TOKEN;
@@ -395,19 +389,18 @@ SvStrings* SwGlossaries::GetNameList()
     {
         m_pGlosArr = new SvStrings;
         String sExt( SwGlossaries::GetExtension() );
-        for( sal_uInt16 i = 0; i < m_pPathArr->Count(); i++ )
+        for( size_t i = 0; i < m_aPathArr.size(); ++i )
         {
             SvStrings aFiles( 16, 16 );
 
-            SWUnoHelper::UCB_GetFileListOfFolder( *(*m_pPathArr)[i], aFiles,
-                                                    &sExt );
+            SWUnoHelper::UCB_GetFileListOfFolder( *m_aPathArr[i], aFiles, &sExt );
             for( sal_uInt16 nFiles = 0, nFEnd = aFiles.Count();
                     nFiles < nFEnd; ++nFiles )
             {
                 String* pTitle = aFiles[ nFiles ];
                 String sName( pTitle->Copy( 0, pTitle->Len() - sExt.Len() ));
                 sName += GLOS_DELIM;
-                sName += String::CreateFromInt32( i );
+                sName += String::CreateFromInt32( static_cast<sal_Int16>(i) );
                 m_pGlosArr->Insert( new String(sName), m_pGlosArr->Count() );
 
                 // don't need any more these pointers
@@ -426,14 +419,9 @@ SvStrings* SwGlossaries::GetNameList()
     return m_pGlosArr;
 }
 
-/*------------------------------------------------------------------------
-    Description: CTOR
-------------------------------------------------------------------------*/
 SwGlossaries::SwGlossaries() :
-    m_pPathArr(0),
     m_pGlosArr(0)
 {
-    m_pPathArr = new SvStrings;
     UpdateGlosPath(sal_True);
 }
 
@@ -460,18 +448,14 @@ void SwGlossaries::UpdateGlosPath(sal_Bool bFull)
     if (bFull || bPathChanged)
     {
         m_aPath = aNewPath;
-        sal_uInt16 nCount = m_pPathArr? m_pPathArr->Count() : 0;
-        sal_uInt16 i;
 
-        for( i = nCount; i; --i)
-        {
-            String *pTmp = (*m_pPathArr)[i - 1];
-            m_pPathArr->Remove(i - 1);
-            delete pTmp;
-        }
+        for(std::vector<String*>::const_iterator it(m_aPathArr.begin()); it != m_aPathArr.end(); ++it)
+            delete *it;
+        m_aPathArr.clear();
+
         sal_uInt16 nTokenCount = m_aPath.GetTokenCount(SVT_SEARCHPATH_DELIMITER);
         SvStrings aDirArr;
-        for( i = 0; i < nTokenCount; i++ )
+        for( sal_uInt16 i = 0; i < nTokenCount; i++ )
         {
             String sPth(m_aPath.GetToken(i, SVT_SEARCHPATH_DELIMITER));
             sPth = URIHelper::SmartRel2Abs(
@@ -490,7 +474,7 @@ void SwGlossaries::UpdateGlosPath(sal_Bool bFull)
                 m_sErrPath += String(aTemp.GetFull());
             }
             else
-                m_pPathArr->Insert(new String(sPth), m_pPathArr->Count());
+                m_aPathArr.push_back(new String(sPth));
         }
         aDirArr.DeleteAndDestroy(0, aDirArr.Count());
 
@@ -510,7 +494,7 @@ void SwGlossaries::UpdateGlosPath(sal_Bool bFull)
 
         if(m_pGlosArr)
         {
-            for(i = 0; i < m_pGlosArr->Count(); ++i)
+            for(sal_uInt16 i = 0; i < m_pGlosArr->Count(); ++i)
             {
                 delete (String *)(*m_pGlosArr)[i];
             }

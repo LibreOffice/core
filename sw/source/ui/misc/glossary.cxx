@@ -32,7 +32,6 @@
 #endif
 
 #define _SVSTDARR_STRINGSDTOR
-#define _SVSTDARR_STRINGS
 #include <hintids.hxx>
 
 #include <vcl/menu.hxx>
@@ -941,8 +940,8 @@ void SwGlTreeListBox::RequestHelp( const HelpEvent& rHEvt )
             if(!GetParent(pEntry))
             {
                 GroupUserData* pData = (GroupUserData*)pEntry->GetUserData();
-                const SvStrings* pPathArr = ::GetGlossaries()->GetPathArray();
-                if(pPathArr->Count())
+                const std::vector<String*>* pPathArr = ::GetGlossaries()->GetPathArray();
+                if( !pPathArr->empty() )
                 {
                     sMsg = (*(*pPathArr)[pData->nPathIdx]);
                     sMsg += INET_PATH_TOKEN;

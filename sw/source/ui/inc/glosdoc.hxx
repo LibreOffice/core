@@ -66,7 +66,7 @@ class SW_DLLPUBLIC SwGlossaries
     String                  m_aPath;
     String                  m_sOldErrPath;
     String                  m_sErrPath;
-    SvStrings               *m_pPathArr;
+    std::vector<String*>    m_aPathArr;
     SvStrings               *m_pGlosArr;
     sal_Bool                    m_bError;
 
@@ -141,8 +141,8 @@ public:
     void            SaveGroupDoc(const String &rGrpName, const String& rLongName );
     void            UpdateGlosPath(sal_Bool bFull);
     void            ShowError();
-    inline sal_uLong    IsGlosPathErr() { return m_bError; }
-    const SvStrings*    GetPathArray() const {return m_pPathArr;}
+    inline sal_uLong            IsGlosPathErr() { return m_bError; }
+    const std::vector<String*>* GetPathArray() const { return &m_aPathArr; }
 };
 
 

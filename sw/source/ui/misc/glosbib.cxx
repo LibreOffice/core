@@ -30,7 +30,6 @@
 #undef SW_DLLIMPLEMENTATION
 #endif
 
-#define _SVSTDARR_STRINGS
 #include <tools/urlobj.hxx>
 #include <tools/stream.hxx>
 #include <vcl/msgbox.hxx>
@@ -59,7 +58,7 @@
 #define RENAME_TOKEN_DELIM      (sal_Unicode)1
 
 SwGlossaryGroupDlg::SwGlossaryGroupDlg(Window * pParent,
-                        const SvStrings* pPathArr,
+                        const std::vector<String*> *pPathArr,
                         SwGlossaryHdl *pHdl) :
     SvxStandardDialog(pParent, SW_RES(DLG_BIB_BASE)),
     aBibFT(     this, SW_RES(FT_BIB)),
@@ -81,8 +80,6 @@ SwGlossaryGroupDlg::SwGlossaryGroupDlg(Window * pParent,
     pRenamedArr(0),
     pGlosHdl(pHdl)
 {
-    sal_uInt16 i;
-
     FreeResource();
 
     long nTabs[] =
@@ -100,7 +97,8 @@ SwGlossaryGroupDlg::SwGlossaryGroupDlg(Window * pParent,
     aNameED.SetModifyHdl(LINK(this, SwGlossaryGroupDlg, ModifyHdl));
     aPathLB.SetSelectHdl(LINK(this, SwGlossaryGroupDlg, ModifyHdl));
     aRenamePB.SetClickHdl(LINK(this, SwGlossaryGroupDlg, RenameHdl));
-    for( i = 0; i < pPathArr->Count(); i++)
+
+    for( size_t i = 0; i < pPathArr->size(); i++ )
     {
         String sPath(*(*pPathArr)[i]);
         INetURLObject aTempURL(sPath);
@@ -119,7 +117,7 @@ SwGlossaryGroupDlg::SwGlossaryGroupDlg(Window * pParent,
     aPathLB.Enable(sal_True);
 
     const sal_uInt16 nCount = pHdl->GetGroupCnt();
-    for(i = 0; i < nCount; ++i)
+    for( sal_uInt16 i = 0; i < nCount; ++i)
     {
         String sTitle;
         String sGroup = pHdl->GetGroupName(i, &sTitle);

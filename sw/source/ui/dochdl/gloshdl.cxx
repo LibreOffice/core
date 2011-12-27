@@ -38,8 +38,6 @@
 #include <svl/macitem.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/docfile.hxx>
-#define _SVSTDARR_STRINGS
-#include <svl/svstdarr.hxx>
 #include <svl/urihelper.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <poolfmt.hxx>
@@ -138,13 +136,13 @@ void SwGlossaryHdl::SetCurGroup(const String &rGrp, sal_Bool bApi, sal_Bool bAlw
             String sCurBase = aTemp.getBase();
             aTemp.removeSegment();
             const String sCurEntryPath = aTemp.GetMainURL(INetURLObject::NO_DECODE);
-            const SvStrings* pPathArr = rStatGlossaries.GetPathArray();
+            const std::vector<String*> *pPathArr = rStatGlossaries.GetPathArray();
             sal_uInt16 nCurrentPath = USHRT_MAX;
-            for(sal_uInt16 nPath = 0; nPath < pPathArr->Count(); nPath++)
+            for( size_t nPath = 0; nPath < pPathArr->size(); nPath++ )
             {
                 if(sCurEntryPath == *(*pPathArr)[nPath])
                 {
-                    nCurrentPath = nPath;
+                    nCurrentPath = static_cast<sal_uInt16>(nPath);
                     break;
                 }
             }

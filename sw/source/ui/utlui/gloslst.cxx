@@ -291,7 +291,7 @@ void SwGlossaryList::Update()
         ClearGroups();
     }
     SwGlossaries* pGlossaries = ::GetGlossaries();
-    const SvStrings* pPathArr = pGlossaries->GetPathArray();
+    const std::vector<String*>* pPathArr = pGlossaries->GetPathArray();
     String sExt( SwGlossaries::GetExtension() );
     if(!bFilled)
     {
@@ -300,7 +300,7 @@ void SwGlossaryList::Update()
         {
             String sGrpName = pGlossaries->GetGroupName(i);
             sal_uInt16 nPath = (sal_uInt16)sGrpName.GetToken(1, GLOS_DELIM).ToInt32();
-            if(nPath < pPathArr->Count())
+            if( static_cast<size_t>(nPath) < pPathArr->size() )
             {
                 AutoTextGroup* pGroup = new AutoTextGroup;
                 pGroup->sName = sGrpName;
@@ -322,7 +322,7 @@ void SwGlossaryList::Update()
     }
     else
     {
-        for(sal_uInt16 nPath = 0; nPath < pPathArr->Count(); nPath++)
+        for( size_t nPath = 0; nPath < pPathArr->size(); nPath++ )
         {
             SvStringsDtor aFoundGroupNames;
             SvStrings aFiles( 16, 16 );
@@ -341,7 +341,7 @@ void SwGlossaryList::Update()
                 aFoundGroupNames.Insert( new String(sName),
                                             aFoundGroupNames.Count());
                 sName += GLOS_DELIM;
-                sName += String::CreateFromInt32( nPath );
+                sName += String::CreateFromInt32( static_cast<sal_uInt16>(nPath) );
                 AutoTextGroup* pFound = FindGroup( sName );
                 if( !pFound )
                 {
@@ -372,7 +372,7 @@ void SwGlossaryList::Update()
                                                         GLOS_DELIM).ToInt32();
                 // nur die Gruppen werden geprueft, die fuer den
                 // aktuellen Teilpfad registriert sind
-                if(nGroupPath == nPath)
+                if( nGroupPath == static_cast<sal_uInt16>(nPath) )
                 {
                     sal_Bool bFound = sal_False;
                     String sCompareGroup = pGroup->sName.GetToken(0, GLOS_DELIM);

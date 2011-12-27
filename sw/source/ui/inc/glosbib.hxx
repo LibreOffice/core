@@ -41,7 +41,6 @@
 #include <vector>
 
 class SwGlossaryHdl;
-class SvStrings;
 
 class FEdit : public Edit
 {
@@ -104,7 +103,7 @@ protected:
 
 public:
     SwGlossaryGroupDlg(Window * pParent,
-                        const SvStrings* pPathArr,
+                        const std::vector<String*> *pPathArr,
                         SwGlossaryHdl *pGlosHdl);
     ~SwGlossaryGroupDlg();
 
