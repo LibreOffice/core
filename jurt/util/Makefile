@@ -25,40 +25,14 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Module_Module,jurt))
+gb_PARTIALBUID := T
+include $(GBUILDDIR)/gbuild.mk
 
-ifneq ($(SOLAR_JAVA),)
+libjpipe.jnilib :
+	$(SOLARENV)/bin/macosx-create-bundle $(call gb_Library_get_target,jpipe)
 
-$(eval $(call gb_Module_add_targets,jurt,\
-    Jar_jurt \
-    Library_jpipe \
-    Zip_jurt \
-))
+.DEFAULT_GOAL := all
+.PHONY : all
+all : libjpipe.jnilib
 
-ifeq ($(OS),MACOSX)
-$(eval $(call gb_Module_add_targets,jurt,\
-    Package_jnilib \
-))
-endif
-
-ifeq ($(OS),WNT)
-$(eval $(call gb_Module_add_targets,jurt,\
-    Library_jpipx \
-))
-endif
-
-$(eval $(call gb_Module_add_subsequentcheck_targets,jurt,\
-    JunitTest_bridgefactory \
-    JunitTest_connections \
-    JunitTest_java \
-    JunitTest_java_remote \
-    JunitTest_remote \
-    JunitTest_uno \
-    JunitTest_urp \
-    JunitTest_util \
-    Package_test_urp \
-))
-
-endif
-
-# vim:set shiftwidth=4 softtabstop=4 expandtab:
+# vim:set shiftwidth=4 tabstop=4 noexpandtab:

@@ -25,40 +25,14 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Module_Module,jurt))
+$(eval $(call gb_Package_Package,jurt_jnilib,$(WORKDIR)/CustomTarget/jurt/util))
 
-ifneq ($(SOLAR_JAVA),)
+$(eval $(call gb_Package_add_file,lib/$(patsubst %.dylib,%.jnilib,$(call gb_Library_get_filename,jpipe)),,$(patsubst %.dylib,%.jnilib,$(call gb_Library_get_filename,jpipe))))
 
-$(eval $(call gb_Module_add_targets,jurt,\
-    Jar_jurt \
-    Library_jpipe \
-    Zip_jurt \
+$(eval $(call gb_Package_add_customtarget,jurt_jnilib,jurt/util))
+
+$(eval $(call gb_CustomTarget_add_outdir_dependencies,jurt/util,\
+    $(call gb_Library_get_target,jpipe) \
 ))
-
-ifeq ($(OS),MACOSX)
-$(eval $(call gb_Module_add_targets,jurt,\
-    Package_jnilib \
-))
-endif
-
-ifeq ($(OS),WNT)
-$(eval $(call gb_Module_add_targets,jurt,\
-    Library_jpipx \
-))
-endif
-
-$(eval $(call gb_Module_add_subsequentcheck_targets,jurt,\
-    JunitTest_bridgefactory \
-    JunitTest_connections \
-    JunitTest_java \
-    JunitTest_java_remote \
-    JunitTest_remote \
-    JunitTest_uno \
-    JunitTest_urp \
-    JunitTest_util \
-    Package_test_urp \
-))
-
-endif
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:
