@@ -2142,6 +2142,17 @@ const ScDocument* ScExternalRefManager::getSrcDocument(sal_uInt16 nFileId)
         return static_cast<ScDocShell*>(p)->GetDocument();
     }
 
+    itrEnd = maUnsavedDocShells.end();
+    itr = maUnsavedDocShells.find(nFileId);
+    if (itr != itrEnd)
+    {
+        //document is unsaved document
+
+        SfxObjectShell* p = itr->second.maShell;
+        itr->second.maLastAccess = Time( Time::SYSTEM );
+        return static_cast<ScDocShell*>(p)->GetDocument();
+    }
+
     const OUString* pFile = getExternalFileName(nFileId);
     if (!pFile)
         // no file name associated with this ID.
@@ -2356,6 +2367,17 @@ bool ScExternalRefManager::isOwnDocument(const OUString& rFile) const
 
 void ScExternalRefManager::convertToAbsName(OUString& rFile) const
 {
+    // unsaved documents have no AbsName
+    TypeId aType(TYPE(ScDocShell));
+    ScDocShell* pShell = static_cast<ScDocShell*>(SfxObjectShell::GetFirst(&aType, false));
+    while (pShell)
+    {
+        if (rFile == rtl::OUString(pShell->GetName()))
+            return;
+
+        pShell = static_cast<ScDocShell*>(SfxObjectShell::GetNext(*pShell, &aType, false));
+    }
+
     SfxObjectShell* pDocShell = mpDoc->GetDocumentShell();
     rFile = ScGlobal::GetAbsDocName(rFile, pDocShell);
 }
