@@ -257,7 +257,7 @@ extern "C" {
         return pRet;
     }
 
-    SAL_DLLPUBLIC_EXPORT sal_Bool component_canUnload( TimeValue* libUnused)
+    SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_canUnload( TimeValue* libUnused)
     {
         return globalModuleCount.canUnload( &globalModuleCount, libUnused);
     }
