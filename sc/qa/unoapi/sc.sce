@@ -48,7 +48,7 @@
 -o sc.ScDataPilotItemsObj
 -o sc.ScDataPilotTableObj
 -o sc.ScDataPilotTablesObj
-# fdo43312 -o sc.ScDatabaseRangeObj
+-o sc.ScDatabaseRangeObj
 # -o sc.ScDatabaseRangesObj
 # -o sc.ScDocumentConfiguration
 # -o sc.ScDrawPageObj

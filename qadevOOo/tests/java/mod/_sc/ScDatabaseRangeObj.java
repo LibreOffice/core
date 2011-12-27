@@ -170,8 +170,10 @@ public class ScDatabaseRangeObj extends TestCase {
                     "Error getting test object from spreadsheet document", e);
         }
 
-        if (dbRanges.hasByName("dbRange")) {
-            dbRanges.removeByName("dbRange");
+        String dbName = "dbRange";
+
+        if (dbRanges.hasByName(dbName)) {
+            dbRanges.removeByName(dbName);
         }
 
 
@@ -185,22 +187,22 @@ public class ScDatabaseRangeObj extends TestCase {
 
         try {
             // we need to add it
-            dbRanges.addNewByName("dbRanges",new CellRangeAddress((short)0, 0, 0, 0, 5));
+            dbRanges.addNewByName(dbName,new CellRangeAddress((short)0, 0, 0, 0, 5));
 
             xNamed = (XNamed) UnoRuntime.queryInterface(XNamed.class,
                                                         dbrNA.getByName(
-                                                                "dbRange"));
+                                                                dbName));
 
             XCellRangeReferrer aReferrer = (XCellRangeReferrer) UnoRuntime.queryInterface(
                                                    XCellRangeReferrer.class,
-                                                   dbrNA.getByName("dbRange"));
+                                                   dbrNA.getByName(dbName));
             XCellRangeAddressable aRangeA = (XCellRangeAddressable) UnoRuntime.queryInterface(
                                                     XCellRangeAddressable.class,
                                                     aReferrer.getReferredCells());
             aRange = aRangeA.getRangeAddress();
             oObj = (XInterface) AnyConverter.toObject(
                            new Type(XInterface.class),
-                           dbrNA.getByName("dbRange"));
+                           dbrNA.getByName(dbName));
         } catch (com.sun.star.lang.WrappedTargetException e) {
             e.printStackTrace(log);
             throw new StatusException(
