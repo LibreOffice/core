@@ -34,6 +34,11 @@ $(eval $(call gb_Library_add_api,fps_aqua,\
 	udkapi \
 ))
 
+$(eval $(call gb_Library_add_libs,fps_aqua,\
+    -framework Cocoa \
+    -framework CoreFoundation \
+))
+
 $(eval $(call gb_Library_add_linked_libs,fps_aqua,\
 	cppu \
 	cppuhelper \
