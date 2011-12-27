@@ -1783,7 +1783,7 @@ Bitmap OutputDevice::ImplBlend( Bitmap              aBmp,
             aTR.mnDestWidth = aOutSz.Width();
             aTR.mnDestHeight= aOutSz.Height();
 
-            if( !bHMirr || !bVMirr )
+            if( !bHMirr && !bVMirr )
                 bFastBlend = ImplFastBitmapBlending( *pB,*pP,*pA, aTR );
         }
 
