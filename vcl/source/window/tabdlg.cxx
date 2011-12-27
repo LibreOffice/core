@@ -61,12 +61,11 @@ void TabDialog::ImplPosControls()
                 pTabControl = (TabControl*)pChild;
             else if ( pTabControl )
             {
-                long nTxtWidth = pChild->GetCtrlTextWidth( pChild->GetText() );
-                nTxtWidth += IMPL_EXTRA_BUTTON_WIDTH;
+                Size aOptimalSize( pChild->GetOptimalSize( WINDOWSIZE_PREFERRED ) );
+                long nTxtWidth = aOptimalSize.Width();
                 if ( nTxtWidth > aCtrlSize.Width() )
                     aCtrlSize.Width() = nTxtWidth;
-                long nTxtHeight = pChild->GetTextHeight();
-                nTxtHeight += IMPL_EXTRA_BUTTON_HEIGHT;
+                long nTxtHeight = aOptimalSize.Height();
                 if ( nTxtHeight > aCtrlSize.Height() )
                     aCtrlSize.Height() = nTxtHeight;
                 nDownCtrl++;
