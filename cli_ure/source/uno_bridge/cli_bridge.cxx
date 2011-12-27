@@ -359,7 +359,7 @@ void SAL_CALL uno_ext_getMapping(
 
 
 //##################################################################################################
-sal_Bool SAL_CALL component_canUnload( TimeValue * )
+SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_canUnload( TimeValue * )
     SAL_THROW_EXTERN_C()
 {
     return true;

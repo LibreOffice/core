@@ -112,7 +112,7 @@ static struct ImplementationEntry gServiceEntries[] =
 
 extern "C"
 {
-    sal_Bool SAL_CALL component_canUnload( TimeValue *pTime )
+    SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_canUnload( TimeValue *pTime )
     {
         return g_moduleCount.canUnload( &g_moduleCount , pTime );
     }

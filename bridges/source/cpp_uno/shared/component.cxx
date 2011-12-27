@@ -197,7 +197,7 @@ static void SAL_CALL environmentDisposing( uno_Environment * ) SAL_THROW( () )
 
 #ifndef IOS
 
-sal_Bool SAL_CALL component_canUnload(TimeValue * pTime) SAL_THROW_EXTERN_C() {
+SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_canUnload(TimeValue * pTime) SAL_THROW_EXTERN_C() {
     return bridges::cpp_uno::shared::g_moduleCount.canUnload(
         &bridges::cpp_uno::shared::g_moduleCount, pTime);
 }

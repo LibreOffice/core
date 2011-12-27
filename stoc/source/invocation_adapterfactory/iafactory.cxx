@@ -981,7 +981,7 @@ static struct ::cppu::ImplementationEntry g_entries[] =
 
 extern "C"
 {
-sal_Bool SAL_CALL component_canUnload(
+SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_canUnload(
     TimeValue *pTime )
 {
     return ::stoc_invadp::g_moduleCount.canUnload(
