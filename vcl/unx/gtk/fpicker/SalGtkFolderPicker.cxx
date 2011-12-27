@@ -89,7 +89,7 @@ void SAL_CALL SalGtkFolderPicker::setDisplayDirectory( const rtl::OUString& aDir
 
     OString aTxt = unicodetouri( aDirectory );
 
-    if( aTxt.lastIndexOf('/') == aTxt.getLength() - 1 && !aTxt.isEmpty() )
+    if( !aTxt.isEmpty() && aTxt.lastIndexOf('/') == aTxt.getLength() - 1 )
         aTxt = aTxt.copy( 0, aTxt.getLength() - 1 );
 
     OSL_TRACE( "setting path to %s", aTxt.getStr() );
