@@ -92,8 +92,8 @@ class VCL_DLLPUBLIC PDFExtOutDevData : public ExtOutDevData
     sal_Bool                        mbReduceImageResolution;
     sal_Bool                        mbExportFormFields;
     sal_Bool                        mbExportBookmarks;
-    sal_Bool                        mbExportNDests; //i56629
     sal_Bool                        mbExportHiddenSlides;
+    sal_Bool                        mbExportNDests; //i56629
     sal_Int32                       mnFormsFormat;
     sal_Int32                       mnPage;
     com::sun::star::lang::Locale    maDocLocale;
