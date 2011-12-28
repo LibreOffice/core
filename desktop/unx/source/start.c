@@ -249,12 +249,15 @@ get_md5hash( rtl_uString *pText )
     sal_uInt32 md5_key_len = 0;
     sal_uInt8* md5_buf = NULL;
     sal_uInt32 i = 0;
+#if OSL_DEBUG_LEVEL > 1
+    rtl_String *pOut;
+#endif
 
     if ( !pText )
         return NULL;
 
 #if OSL_DEBUG_LEVEL > 1
-    rtl_String *pOut = ustr_to_str( pText );
+    pOut = ustr_to_str( pText );
     fprintf (stderr, "Generate pipe md5 for '%s'\n", pOut->buffer);
     rtl_string_release( pOut );
 #endif

@@ -116,7 +116,7 @@ void FontCache::flush()
     if( ! (aStream.IsOpen() && aStream.IsWritable()) )
     {
 #if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "FontCache::flush: opening cache file %s failed\n", ByteString( m_aCacheFile, osl_getThreadTextEncoding() ).GetBuffer() );
+        fprintf( stderr, "FontCache::flush: opening cache file %s failed\n", rtl::OUStringToOString(m_aCacheFile, osl_getThreadTextEncoding()).getStr() );
 #endif
         return;
     }
@@ -131,7 +131,7 @@ void FontCache::flush()
     {
         const FontDirMap& rDir( dir_it->second.m_aEntries );
 
-        ByteString aDirectory( rManager.getDirectory( dir_it->first ) );
+        rtl::OString aDirectory(rManager.getDirectory(dir_it->first));
         rtl::OStringBuffer aLine(
             RTL_CONSTASCII_STRINGPARAM("FontCacheDirectory:"));
         aLine.append(dir_it->second.m_nTimestamp);
@@ -259,7 +259,7 @@ void FontCache::read()
     if( ! aStream.IsOpen() )
     {
 #if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "FontCache::read: opening cache file %s failed\n", ByteString( m_aCacheFile, osl_getThreadTextEncoding() ).GetBuffer() );
+        fprintf( stderr, "FontCache::read: opening cache file %s failed\n", rtl::OUStringToOString(m_aCacheFile, osl_getThreadTextEncoding()).getStr() );
 #endif
         return;
     }
@@ -270,7 +270,7 @@ void FontCache::read()
     if( !aLine.Equals( CACHE_MAGIC ) )
     {
         #if OSL_DEBUG_LEVEL >1
-        fprintf( stderr, "FontCache::read: cache file %s fails magic test\n", ByteString( m_aCacheFile, osl_getThreadTextEncoding() ).GetBuffer() );
+        fprintf( stderr, "FontCache::read: cache file %s fails magic test\n", rtl::OUStringToOString(m_aCacheFile, osl_getThreadTextEncoding()).getStr() );
         #endif
         return;
     }

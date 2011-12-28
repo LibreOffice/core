@@ -26,6 +26,7 @@
  *
  ************************************************************************/
 
+#include        <sal/types.h>
 #include        <stdio.h>
 #include        <ctype.h>
 #include        "cppdef.h"
@@ -622,7 +623,7 @@ void dumpparm(char* why)
 {
         register int    i;
 
-    fprintf( pCppOut, "dump of %d parameters (%d bytes total) %s\n",
+    fprintf( pCppOut, "dump of %d parameters (%" SAL_PRI_SIZET "u bytes total) %s\n",
             nargs, parmp - parm, why);
         for (i = 0; i < nargs; i++) {
         fprintf( pCppOut, "parm[%d] (%d) = \"%s\"\n",

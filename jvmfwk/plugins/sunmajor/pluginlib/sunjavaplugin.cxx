@@ -692,8 +692,7 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
         }
 #endif
 #if OSL_DEBUG_LEVEL >= 2
-        JFW_TRACE2(OString("VM option: ") + OString(options[n].optionString) +
-                   OString("\n"));
+        JFW_TRACE2("VM option: " << options[n].optionString << "\n");
 #endif
         ++n;
     }

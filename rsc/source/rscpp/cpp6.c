@@ -26,6 +26,7 @@
  *
  ************************************************************************/
 
+#include        <sal/types.h>
 #include        <stdio.h>
 #include        <ctype.h>
 #include        <string.h>
@@ -667,7 +668,7 @@ void dumpdef(char *why)
         fprintf( pCppOut, "CPP symbol table dump %s\n", why);
         for (syp = symtab; syp < &symtab[SBSIZE]; syp++) {
             if ((dp = *syp) != (DEFBUF *) NULL) {
-                fprintf( pCppOut, "symtab[%d]\n", (syp - symtab));
+                fprintf( pCppOut, "symtab[%" SAL_PRI_PTRDIFFT "d]\n", (syp - symtab));
                 do {
                     dumpadef((char *) NULL, dp);
                 } while ((dp = dp->link) != (DEFBUF *) NULL);

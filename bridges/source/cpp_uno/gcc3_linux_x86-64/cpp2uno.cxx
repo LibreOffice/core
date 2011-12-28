@@ -435,7 +435,7 @@ unsigned char * codeSnippet( unsigned char * code,
 #if OSL_DEBUG_LEVEL > 1
     fprintf(stderr,
             "==> codeSnippet, functionIndex=%d%s, vtableOffset=%d\n",
-            nFunctionIndex), (bHasHiddenParam ? "|0x80000000":""), nVtableOffset);
+            nFunctionIndex, (bHasHiddenParam ? "|0x80000000":""), nVtableOffset);
 #endif
 
     return code + codeSnippetSize;
