@@ -674,7 +674,7 @@ int SwCrsrShell::SetCrsr( const Point &rLPt, sal_Bool bOnlyText, bool bBlock )
 
     // Toggle the Header/Footer mode if needed
     bool bInHeaderFooter = pFrm && ( pFrm->IsHeaderFrm() || pFrm->IsFooterFrm() );
-    if ( bInHeaderFooter ^ (bool) IsHeaderFooterEdit() )
+    if ( bInHeaderFooter != IsHeaderFooterEdit() )
         ToggleHeaderFooterEdit();
 
     if( pBlockCrsr && bBlock )
@@ -1315,9 +1315,7 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, sal_Bool bIdleEnd )
         return;             // wenn nicht, dann kein Update !!
     }
 
-    bool bInHeaderFooter = IsInHeaderFooter( );
-    if ( ( bInHeaderFooter && !IsHeaderFooterEdit( ) ) ||
-       ( !bInHeaderFooter && IsHeaderFooterEdit( ) ) )
+    if ( IsInHeaderFooter() != IsHeaderFooterEdit() )
         ToggleHeaderFooterEdit( );
 
     // #i27301#

@@ -42,11 +42,14 @@ class SwEditWin;
 enum FrameControlType
 {
     PageBreak,
-    HeaderFooter
+    Header,
+    Footer
 };
 
 typedef boost::shared_ptr< SwFrameControl > SwFrameControlPtr;
 
+/** A container for the Header/Footer, or PageBreak controls.
+*/
 class SwFrameControlsManager
 {
     private:

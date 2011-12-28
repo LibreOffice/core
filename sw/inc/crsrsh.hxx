@@ -495,6 +495,7 @@ public:
     void SetReadOnlyAvailable( sal_Bool bFlag );
     sal_Bool IsOverReadOnlyPos( const Point& rPt ) const;
 
+    /// Is the rPt point in the header or footer area?
     sal_Bool IsOverHeaderFooterPos( const Point& rPt ) const;
 
     // Methods for aFlyMacroLnk.
