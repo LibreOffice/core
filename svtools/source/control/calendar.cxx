@@ -77,23 +77,6 @@ using namespace ::com::sun::star;
 
 // =======================================================================
 
-struct ImplDateInfo
-{
-    XubString   maText;
-    Color*      mpTextColor;
-    Color*      mpFrameColor;
-    sal_uInt16      mnFlags;
-
-                ImplDateInfo( const XubString& rText ) :
-                    maText( rText )
-                { mpTextColor = mpFrameColor = NULL; mnFlags = 0; }
-                ~ImplDateInfo() { delete mpTextColor; delete mpFrameColor; }
-};
-
-DECLARE_TABLE( ImplDateTable, ImplDateInfo* )
-
-// =======================================================================
-
 static void ImplCalendarSelectDate( Table* pTable, const Date& rDate, sal_Bool bSelect )
 {
     if ( bSelect )
@@ -196,7 +179,6 @@ inline void ImplCalendarClearSelectDate( Table* pTable )
 
 void Calendar::ImplInit( WinBits nWinStyle )
 {
-    mpDateTable             = NULL;
     mpSelectTable           = new Table;
     mpOldSelectTable        = NULL;
     mpRestoreSelectTable    = NULL;
@@ -306,18 +288,6 @@ Calendar::~Calendar()
     delete mpStandardColor;
     delete mpSaturdayColor;
     delete mpSundayColor;
-
-    if ( mpDateTable )
-    {
-        ImplDateInfo* pDateInfo = mpDateTable->First();
-        while ( pDateInfo )
-        {
-            delete pDateInfo;
-            pDateInfo = mpDateTable->Next();
-        }
-
-        delete mpDateTable;
-    }
 
     delete mpSelectTable;
     if ( mpOldSelectTable )
@@ -770,7 +740,6 @@ void Calendar::ImplDrawDate( long nX, long nY,
                              DayOfWeek eDayOfWeek,
                              sal_Bool bBack, sal_Bool bOther, sal_uLong nToday )
 {
-    ImplDateInfo*   pDateInfo;
     Color*          pTextColor = NULL;
     const String&   rDay = *(mpDayText[nDay-1]);
     Rectangle       aDateRect( nX, nY, nX+mnDayWidth-1, nY+mnDayHeight-1 );
@@ -788,16 +757,6 @@ void Calendar::ImplDrawDate( long nX, long nY,
             bSel = sal_True;
     }
 
-    // Dateinfo ermitteln
-    if ( mpDateTable )
-    {
-        pDateInfo = mpDateTable->Get( Date( nDay, nMonth, nYear ).GetDate() );
-        if ( !pDateInfo )
-            pDateInfo = mpDateTable->Get( Date( nDay, nMonth, 0 ).GetDate() );
-    }
-    else
-        pDateInfo = NULL;
-
     // Textfarbe ermitteln
     if ( bSel )
         pTextColor = &maSelColor;
@@ -805,17 +764,12 @@ void Calendar::ImplDrawDate( long nX, long nY,
         pTextColor = &maOtherColor;
     else
     {
-        if ( pDateInfo && pDateInfo->mpTextColor )
-            pTextColor = pDateInfo->mpTextColor;
-        else
-        {
-            if ( eDayOfWeek == SATURDAY )
-                pTextColor = mpSaturdayColor;
-            else if ( eDayOfWeek == SUNDAY )
-                pTextColor = mpSundayColor;
-            if ( !pTextColor )
-                pTextColor = mpStandardColor;
-        }
+        if ( eDayOfWeek == SATURDAY )
+            pTextColor = mpSaturdayColor;
+        else if ( eDayOfWeek == SUNDAY )
+            pTextColor = mpSundayColor;
+        if ( !pTextColor )
+            pTextColor = mpStandardColor;
     }
 
     if ( bFocus )
@@ -824,17 +778,6 @@ void Calendar::ImplDrawDate( long nX, long nY,
     // Font ermitteln
     Font aOldFont = GetFont();
     sal_Bool bBoldFont = sal_False;
-    if ( (mnWinStyle & WB_BOLDTEXT) &&
-         pDateInfo && (pDateInfo->mnFlags & DIB_BOLD) )
-    {
-        bBoldFont = sal_True;
-        Font aFont = aOldFont;
-        if ( aFont.GetWeight() < WEIGHT_BOLD )
-            aFont.SetWeight( WEIGHT_BOLD );
-        else
-            aFont.SetWeight( WEIGHT_NORMAL );
-        SetFont( aFont );
-    }
 
     // Hintergrund ausgeben
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
@@ -876,34 +819,6 @@ void Calendar::ImplDrawDate( long nX, long nY,
         SetLineColor( rStyleSettings.GetWindowTextColor() );
         SetFillColor();
         DrawRect( aDateRect );
-    }
-
-    // Evt. DateInfo ausgeben
-    if ( (mnWinStyle & WB_FRAMEINFO) && pDateInfo && pDateInfo->mpFrameColor )
-    {
-        SetLineColor( *(pDateInfo->mpFrameColor) );
-        SetFillColor();
-        Rectangle aFrameRect( aDateRect );
-        aFrameRect.Left()++;
-        aFrameRect.Top()++;
-        long nFrameWidth = aFrameRect.GetWidth();
-        long nFrameHeight = aFrameRect.GetHeight();
-        long nFrameOff;
-        if ( nFrameWidth < nFrameHeight )
-        {
-            nFrameOff = nFrameHeight-nFrameWidth;
-            aFrameRect.Top() += nFrameOff/2;
-            nFrameOff %= 2;
-            aFrameRect.Bottom() -= nFrameOff;
-        }
-        else if ( nFrameWidth > nFrameHeight )
-        {
-            nFrameOff = nFrameWidth-nFrameHeight;
-            aFrameRect.Left() += nFrameOff/2;
-            nFrameOff %= 2;
-            aFrameRect.Right() -= nFrameOff;
-        }
-        DrawEllipse( aFrameRect );
     }
 
     // Evt. noch FocusRect
@@ -1808,28 +1723,6 @@ void Calendar::RequestHelp( const HelpEvent& rHEvt )
             aPt = OutputToScreenPixel( aDateRect.BottomRight() );
             aDateRect.Right()  = aPt.X();
             aDateRect.Bottom() = aPt.Y();
-
-            if ( (rHEvt.GetMode() & HELPMODE_BALLOON) || (mnWinStyle & WB_QUICKHELPSHOWSDATEINFO) )
-            {
-                ImplDateInfo* pInfo;
-                if ( mpDateTable )
-                {
-                    pInfo = mpDateTable->Get( aDate.GetDate() );
-                    if ( !pInfo )
-                        pInfo = mpDateTable->Get( Date( aDate.GetDay(), aDate.GetMonth(), 0 ).GetDate() );
-                }
-                else
-                    pInfo = NULL;
-                if ( pInfo )
-                {
-                    XubString aStr = pInfo->maText;
-                    if ( aStr.Len() )
-                    {
-                        Help::ShowBalloon( this, rHEvt.GetMousePosPixel(), aDateRect, aStr );
-                        return;
-                    }
-                }
-            }
 
             if ( rHEvt.GetMode() & HELPMODE_QUICK )
             {

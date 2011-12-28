@@ -45,8 +45,6 @@ class HelpEvent;
 class DataChangedEvent;
 class FloatingWindow;
 class PushButton;
-struct ImplDateInfo;
-class ImplDateTable;
 class ImplCFieldFloatWin;
 
 /*************************************************************************
@@ -173,7 +171,6 @@ oder durch Beendigung einer Selektion ausgeloest.
 class SVT_DLLPUBLIC Calendar : public Control
 {
 private:
-    ImplDateTable*  mpDateTable;
     Table*          mpSelectTable;
     Table*          mpOldSelectTable;
     Table*          mpRestoreSelectTable;
