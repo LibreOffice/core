@@ -188,17 +188,17 @@ DBG_NAME(edithdl)
 
 namespace
 {
-    bool lcl_CheckHeaderFooterClick( SwWrtShell& rSh, const Point aDocPos, sal_uInt16 nClicks )
+    static bool lcl_CheckHeaderFooterClick( SwWrtShell& rSh, const Point &rDocPos, sal_uInt16 nClicks )
     {
         bool bRet = false;
 
-        sal_Bool bOverHdrFtr = rSh.IsOverHeaderFooterPos( aDocPos );
+        sal_Bool bOverHdrFtr = rSh.IsOverHeaderFooterPos( rDocPos );
         if ( ( rSh.IsHeaderFooterEdit( ) && !bOverHdrFtr ) ||
              ( !rSh.IsHeaderFooterEdit() && bOverHdrFtr ) )
         {
             bRet = true;
             // Check if there we are in a FlyFrm
-            Point aPt( aDocPos );
+            Point aPt( rDocPos );
             SwPaM aPam( *rSh.GetCurrentShellCursor().GetPoint() );
             rSh.GetLayout()->GetCrsrOfst( aPam.GetPoint(), aPt );
 
@@ -209,7 +209,7 @@ namespace
 
             if ( nClicks == nNbClicks )
             {
-                rSh.SwCrsrShell::SetCrsr( aDocPos );
+                rSh.SwCrsrShell::SetCrsr( rDocPos );
                 bRet = false;
             }
         }
@@ -1288,13 +1288,6 @@ void SwEditWin::ChangeDrawing( sal_uInt8 nDir )
 void SwEditWin::KeyInput(const KeyEvent &rKEvt)
 {
     SwWrtShell &rSh = rView.GetWrtShell();
-
-    // Hide the header/footer separator if not editing a header of footer
-    if ( rSh.IsShowHeaderFooterSeparator( ) && !rSh.IsHeaderFooterEdit() )
-    {
-        rSh.SetShowHeaderFooterSeparator( sal_False );
-        aOverHeaderFooterTimer.Stop();
-    }
 
     if( rKEvt.GetKeyCode().GetCode() == KEY_ESCAPE &&
         pApplyTempl && pApplyTempl->pFormatClipboard )
@@ -2624,23 +2617,6 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
 {
     SwWrtShell &rSh = rView.GetWrtShell();
 
-    // Hide the header/footer separator if not editing a header of footer
-    if ( rSh.IsShowHeaderFooterSeparator( ) && !rSh.IsHeaderFooterEdit() )
-    {
-        const Point aDocPt( PixelToLogic( _rMEvt.GetPosPixel() ) );
-        const SwPageFrm* pPageFrm = rSh.GetLayout()->GetPageAtPos( aDocPt );
-        if ( pPageFrm )
-        {
-            bool bOverHeadFoot = pPageFrm->IsOverHeaderFooterArea( aDocPt );
-
-            if ( !bOverHeadFoot )
-            {
-                rSh.SetShowHeaderFooterSeparator( sal_False );
-                aOverHeaderFooterTimer.Stop();
-            }
-        }
-    }
-
     // We have to check if a context menu is shown and we have an UI
     // active inplace client. In that case we have to ignore the mouse
     // button down event. Otherwise we would crash (context menu has been
@@ -3436,10 +3412,6 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
 {
     MouseEvent rMEvt(_rMEvt);
 
-    // Mouse went out of the edit window: don't show the header/footer marker
-    if ( rMEvt.IsLeaveWindow() )
-        aOverHeaderFooterTimer.Stop();
-
     //ignore key modifiers for format paintbrush
     {
         sal_Bool bExecFormatPaintbrush = pApplyTempl && pApplyTempl->pFormatClipboard
@@ -3832,23 +3804,16 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
             }
             else
                 rView.GetPostItMgr()->SetShadowState(0,false);
-                // no break;
 
-            // Are we over a header or footer area?
-            const SwPageFrm* pPageFrm = rSh.GetLayout()->GetPageAtPos( aDocPt );
-            if ( pPageFrm )
+            // Are we moving from or to header / footer area?
+            if ( !rSh.IsHeaderFooterEdit() )
             {
-                bool bOverHeadFoot = pPageFrm->IsOverHeaderFooterArea( aDocPt );
-                if ( bOverHeadFoot )
-                    aOverHeaderFooterTimer.Start();
-                else
-                {
-                    aOverHeaderFooterTimer.Stop();
-                    if ( !rSh.IsHeaderFooterEdit() && rSh.IsShowHeaderFooterSeparator() )
-                        aOverHeaderFooterTimer.Start();
-                }
+                bool bIsInHF = IsInHeaderFooter( aDocPt );
+                if ( rSh.IsShowHeaderFooterSeparator() != bIsInHF )
+                    ShowHeaderFooterSeparator( bIsInHF );
             }
         }
+        // no break;
         case KEY_SHIFT:
         case KEY_MOD2:
         case KEY_MOD1:
@@ -4607,9 +4572,6 @@ SwEditWin::SwEditWin(Window *pParent, SwView &rMyView):
 
     aKeyInputFlushTimer.SetTimeout( 200 );
     aKeyInputFlushTimer.SetTimeoutHdl(LINK(this, SwEditWin, KeyInputFlushHandler));
-
-    aOverHeaderFooterTimer.SetTimeout( 1000 );
-    aOverHeaderFooterTimer.SetTimeoutHdl(LINK(this, SwEditWin, OverHeaderFooterHandler));
 
     // TemplatePointer for colors should be resetted without
     // selection after single click
@@ -5431,18 +5393,6 @@ IMPL_LINK( SwEditWin, KeyInputTimerHandler, Timer *, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( SwEditWin, OverHeaderFooterHandler, Timer *, EMPTYARG )
-{
-    if ( !GetView().GetWrtShell().IsHeaderFooterEdit() && IsMouseOver() )
-    {
-        // Toggle the Header/Footer separator
-        sal_Bool bShown = GetView().GetWrtShell().IsShowHeaderFooterSeparator( );
-        GetView().GetWrtShell().SetShowHeaderFooterSeparator( !bShown );
-        Invalidate();
-    }
-    return 0;
-}
-
 void SwEditWin::_InitStaticData()
 {
     pQuickHlpData = new QuickHelpData();
@@ -5695,6 +5645,42 @@ void SwEditWin::ShowAutoTextCorrectQuickHelp(
 
     if( pQuickHlpData->aArr.Count() )
         pQuickHlpData->Start( rSh, rWord.Len() );
+}
+
+void SwEditWin::ShowHeaderFooterSeparator( bool bShow )
+{
+    SwWrtShell& rSh = rView.GetWrtShell();
+
+    if ( rSh.IsShowHeaderFooterSeparator() != bShow )
+    {
+        rSh.SetShowHeaderFooterSeparator( bShow );
+        Invalidate();
+    }
+}
+
+bool SwEditWin::IsInHeaderFooter( const Point &rDocPt ) const
+{
+    SwWrtShell &rSh = rView.GetWrtShell();
+    const SwPageFrm* pPageFrm = rSh.GetLayout()->GetPageAtPos( rDocPt );
+
+    if ( pPageFrm && pPageFrm->IsOverHeaderFooterArea( rDocPt ) )
+        return true;
+
+    if ( rSh.IsShowHeaderFooterSeparator() )
+    {
+        SwFrameControlsManager &rMgr = rSh.GetView().GetEditWin().GetFrameControlsManager();
+        Point aPoint( LogicToPixel( rDocPt ) );
+
+        SwFrameControlPtr pControl = rMgr.GetControl( Header, pPageFrm );
+        if ( pControl.get() && pControl->Contains( aPoint ) )
+            return true;
+
+        pControl = rMgr.GetControl( Footer, pPageFrm );
+        if ( pControl.get() && pControl->Contains( aPoint ) )
+            return true;
+    }
+
+    return false;
 }
 
 void SwEditWin::SetUseInputLanguage( sal_Bool bNew )

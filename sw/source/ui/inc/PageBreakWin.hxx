@@ -59,7 +59,8 @@ public:
 
     void UpdatePosition( );
 
-    void ShowAll( bool bShow );
+    virtual void ShowAll( bool bShow );
+    virtual bool Contains( const Point &rDocPt ) const;
 
     const SwPageFrm* GetPageFrame( );
 

@@ -153,8 +153,9 @@ void SwFrameControlsManager::SetHeaderFooterControl( const SwPageFrm* pPageFrm, 
 {
     // Check if we already have the control
     SwFrameControlPtr pControl;
+    FrameControlType eType = bHeader? Header: Footer;
 
-    vector< SwFrameControlPtr >& aControls = m_aControls[HeaderFooter];
+    vector< SwFrameControlPtr >& aControls = m_aControls[eType];
 
     vector< SwFrameControlPtr >::iterator pIt = aControls.begin();
     while ( pIt != aControls.end() && !pControl.get() )
@@ -171,7 +172,7 @@ void SwFrameControlsManager::SetHeaderFooterControl( const SwPageFrm* pPageFrm, 
         SwFrameControlPtr pNewControl( new SwHeaderFooterWin( m_pEditWin, pPageFrm, bHeader ) );
         const SwViewOption* pViewOpt = m_pEditWin->GetView().GetWrtShell().GetViewOptions();
         pNewControl->SetReadonly( pViewOpt->IsReadonly() );
-        AddControl( HeaderFooter, pNewControl );
+        AddControl( eType, pNewControl );
         pControl.swap( pNewControl );
     }
 

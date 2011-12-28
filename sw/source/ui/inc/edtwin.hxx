@@ -100,11 +100,6 @@ friend void     PageNumNotify(  ViewShell* pVwSh,
     Timer           aKeyInputTimer;
     // timer for ANY-KeyInut question without a following KeyInputEvent
     Timer           aKeyInputFlushTimer;
-    /*
-     * timer for showing the Header/Footer separators when the mouse
-     * stays over a header or footer area for several seconds.
-     */
-    Timer           aOverHeaderFooterTimer;
 
     String          aInBuffer;
     LanguageType    eBufferLanguage;
@@ -199,9 +194,6 @@ friend void     PageNumNotify(  ViewShell* pVwSh,
     // timer for overlapping KeyInputs (e.g. for tables)
     DECL_LINK( KeyInputTimerHandler, Timer * );
 
-    // timer for hovering header/footer areas
-    DECL_LINK( OverHeaderFooterHandler, Timer * );
-
     // timer for ApplyTemplates via mouse (in disguise Drag&Drop)
     DECL_LINK( TemplateTimerHdl, Timer* );
 
@@ -235,6 +227,12 @@ protected:
 
     void    ShowAutoTextCorrectQuickHelp( const String& rWord, SvxAutoCorrCfg* pACfg,
                                 SvxAutoCorrect* pACorr, sal_Bool bFromIME = sal_False );
+
+    /// Shows or hides the header & footer separators; only if there is a change.
+    void    ShowHeaderFooterSeparator( bool bShow );
+
+    /// Returns true if in header/footer area, or in the header/footer control.
+    bool    IsInHeaderFooter( const Point &rDocPt ) const;
 public:
 
     void            UpdatePointer(const Point &, sal_uInt16 nButtons = 0);

@@ -58,7 +58,8 @@ public:
     virtual void MouseButtonDown( const MouseEvent& rMEvt );
     virtual void Select( );
 
-    void ShowAll( bool bShow );
+    virtual void ShowAll( bool bShow );
+    virtual bool Contains( const Point &rDocPt ) const;
 
     bool IsHeader() { return m_bIsHeader; };
     bool IsEmptyHeaderFooter( );

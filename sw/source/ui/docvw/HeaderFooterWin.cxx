@@ -78,7 +78,7 @@ using namespace drawinglayer::primitive2d;
 
 namespace
 {
-    basegfx::BColor lcl_GetFillColor( basegfx::BColor aLineColor )
+    static basegfx::BColor lcl_GetFillColor( basegfx::BColor aLineColor )
     {
         basegfx::BColor aHslLine = basegfx::tools::rgb2hsl( aLineColor );
         double nLuminance = aHslLine.getZ() * 2.5;
@@ -90,7 +90,7 @@ namespace
         return basegfx::tools::hsl2rgb( aHslLine );
     }
 
-    basegfx::BColor lcl_GetLighterGradientColor( basegfx::BColor aDarkColor )
+    static basegfx::BColor lcl_GetLighterGradientColor( basegfx::BColor aDarkColor )
     {
         basegfx::BColor aHslDark = basegfx::tools::rgb2hsl( aDarkColor );
         double nLuminance = aHslDark.getZ() * 255 + 20;
@@ -98,7 +98,7 @@ namespace
         return basegfx::tools::hsl2rgb( aHslDark );
     }
 
-    B2DPolygon lcl_GetPolygon( const Rectangle& rRect, bool bHeader )
+    static B2DPolygon lcl_GetPolygon( const Rectangle& rRect, bool bHeader )
     {
         const double nRadius = 3;
         const double nKappa((M_SQRT2 - 1.0) * 4.0 / 3.0);
@@ -248,6 +248,19 @@ void SwHeaderFooterWin::ShowAll( bool bShow )
             m_aFadeTimer.Stop();
         m_aFadeTimer.Start( );
     }
+}
+
+bool SwHeaderFooterWin::Contains( const Point &rDocPt ) const
+{
+    Rectangle aRect( GetPosPixel(), GetSizePixel() );
+    if ( aRect.IsInside( rDocPt ) )
+        return true;
+
+    Rectangle aLineRect( m_pLine->GetPosPixel(), m_pLine->GetSizePixel() );
+    if ( aLineRect.IsInside( rDocPt ) )
+        return true;
+
+    return false;
 }
 
 void SwHeaderFooterWin::Paint( const Rectangle& )

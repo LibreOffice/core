@@ -173,9 +173,8 @@ namespace
         if ( rMEvt.IsLeaveWindow() )
         {
             // don't fade if we just move to the 'button'
-            Rectangle aRect( m_pWin->GetPosPixel(), m_pWin->GetSizePixel() );
             Point aEventPos( GetPosPixel() + rMEvt.GetPosPixel() );
-            if ( !aRect.IsInside( aEventPos ) )
+            if ( !m_pWin->Contains( aEventPos ) )
                 m_pWin->Fade( false );
         }
         else if ( !m_pWin->IsVisible() )
@@ -402,9 +401,8 @@ void SwPageBreakWin::MouseMove( const MouseEvent& rMEvt )
     if ( rMEvt.IsLeaveWindow() )
     {
         // don't fade if we just move to the 'line', or the popup menu is open
-        Rectangle aRect( m_pLine->GetPosPixel(), m_pLine->GetSizePixel() );
         Point aEventPos( GetPosPixel() + rMEvt.GetPosPixel() );
-        if ( !aRect.IsInside( aEventPos ) && !PopupMenu::IsInExecute() )
+        if ( !Contains( aEventPos ) && !PopupMenu::IsInExecute() )
             Fade( false );
     }
     else if ( !IsVisible() )
@@ -502,6 +500,19 @@ void SwPageBreakWin::UpdatePosition( )
 void SwPageBreakWin::ShowAll( bool bShow )
 {
     m_pLine->Show( bShow );
+}
+
+bool SwPageBreakWin::Contains( const Point &rDocPt ) const
+{
+    Rectangle aRect( GetPosPixel(), GetSizePixel() );
+    if ( aRect.IsInside( rDocPt ) )
+        return true;
+
+    Rectangle aLineRect( m_pLine->GetPosPixel(), m_pLine->GetSizePixel() );
+    if ( aLineRect.IsInside( rDocPt ) )
+        return true;
+
+    return false;
 }
 
 const SwPageFrm* SwPageBreakWin::GetPageFrame( )

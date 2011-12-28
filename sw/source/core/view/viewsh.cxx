@@ -94,11 +94,14 @@ TYPEINIT0(ViewShell);
 
 using namespace ::com::sun::star;
 
-void ViewShell::ToggleHeaderFooterEdit( ) {
+void ViewShell::ToggleHeaderFooterEdit()
+{
     bHeaderFooterEdit = !bHeaderFooterEdit;
-    SetShowHeaderFooterSeparator( bHeaderFooterEdit );
+    if ( bHeaderFooterEdit != IsShowHeaderFooterSeparator() )
+        SetShowHeaderFooterSeparator( bHeaderFooterEdit );
+
     // Repaint everything to update the colors of the selected area
-    Paint( VisArea().SVRect() );
+    GetWin()->Invalidate();
 }
 
 //////////////////////////////////////////////////////////////////////////////

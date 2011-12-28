@@ -30,6 +30,7 @@
 
 class SwEditWin;
 class SwFrm;
+struct Point;
 
 /** Class representing a control linked to a SwFrm.
   */
@@ -61,6 +62,9 @@ public:
 
     virtual void SetReadonly( bool bReadonly ) = 0;
     virtual void ShowAll( bool bShow ) = 0;
+
+    /// Returns true if the point is inside the control.
+    virtual bool Contains( const Point &rDocPt ) const = 0;
 };
 
 #endif
