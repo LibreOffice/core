@@ -1398,14 +1398,19 @@ void RtfAttributeOutput::WriteField_Impl( const SwField* pFld, ww::eField /*eTyp
 {
     OSL_TRACE("%s", OSL_THIS_FUNC);
 
-    // NEEDSWORK this has beeen tested only with page numbers
-    m_aRunText.append("{" OOO_STRING_SVTOOLS_RTF_FIELD);
-    m_aRunText.append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FLDINST " ");
-    m_aRunText.append(m_rExport.OutString(rFldCmd, m_rExport.eCurrentEncoding));
-    m_aRunText.append("}{" OOO_STRING_SVTOOLS_RTF_FLDRSLT " ");
+    // If there are no field instructions, don't export it as a field.
+    bool bHasInstructions = rFldCmd.Len() > 0;
+    if (bHasInstructions)
+    {
+        m_aRunText.append("{" OOO_STRING_SVTOOLS_RTF_FIELD);
+        m_aRunText.append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FLDINST " ");
+        m_aRunText.append(m_rExport.OutString(rFldCmd, m_rExport.eCurrentEncoding));
+        m_aRunText.append("}{" OOO_STRING_SVTOOLS_RTF_FLDRSLT " ");
+    }
     if (pFld)
         m_aRunText.append(m_rExport.OutString(pFld->ExpandField(true), m_rExport.eDefaultEncoding));
-    m_aRunText.append("}}");
+    if (bHasInstructions)
+        m_aRunText.append("}}");
 }
 
 void RtfAttributeOutput::WriteBookmarks_Impl( std::vector< rtl::OUString >& rStarts, std::vector< rtl::OUString >& rEnds )
@@ -2933,9 +2938,11 @@ void RtfAttributeOutput::FormatFrameDirection( const SvxFrameDirectionItem& rDir
     }
 }
 
-void RtfAttributeOutput::WriteExpand( const SwField* /*pFld*/ )
+void RtfAttributeOutput::WriteExpand( const SwField* pFld )
 {
-    OSL_TRACE("TODO: %s", OSL_THIS_FUNC);
+    OSL_TRACE("%s", OSL_THIS_FUNC);
+    String sCmd;
+    m_rExport.OutputField(pFld, ww::eUNKNOWN, sCmd);
 }
 
 void RtfAttributeOutput::RefField( const SwField& /*rFld*/, const String& /*rRef*/ )
