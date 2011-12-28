@@ -54,7 +54,7 @@ RtfImportFilter::~RtfImportFilter()
 sal_Bool RtfImportFilter::filter( const uno::Sequence< beans::PropertyValue >& aDescriptor )
     throw (uno::RuntimeException)
 {
-    OSL_TRACE("%s", OSL_THIS_FUNC);
+    SAL_INFO("sw", OSL_THIS_FUNC);
 
     MediaDescriptor aMediaDesc = aDescriptor;
     ::uno::Reference< io::XInputStream > xInputStream =
