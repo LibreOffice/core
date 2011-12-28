@@ -90,7 +90,6 @@ void ScGridOptions::SetDefaults()
 const ScGridOptions& ScGridOptions::operator=( const ScGridOptions& rCpy )
 {
     nFldDrawX       = rCpy.nFldDrawX;       // UINT32
-    nFldDrawX       = rCpy.nFldDrawX;
     nFldDivisionX   = rCpy.nFldDivisionX;
     nFldDrawY       = rCpy.nFldDrawY;
     nFldDivisionY   = rCpy.nFldDivisionY;
@@ -109,7 +108,6 @@ const ScGridOptions& ScGridOptions::operator=( const ScGridOptions& rCpy )
 int ScGridOptions::operator==( const ScGridOptions& rCpy ) const
 {
     return (   nFldDrawX        == rCpy.nFldDrawX
-            && nFldDrawX        == rCpy.nFldDrawX
             && nFldDivisionX    == rCpy.nFldDivisionX
             && nFldDrawY        == rCpy.nFldDrawY
             && nFldDivisionY    == rCpy.nFldDivisionY
