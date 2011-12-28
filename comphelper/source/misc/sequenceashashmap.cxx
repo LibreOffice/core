@@ -243,41 +243,6 @@ const css::uno::Any SequenceAsHashMap::getAsConstAny(::sal_Bool bAsPropertyValue
 }
 
 /*-----------------------------------------------
-    30.07.2007 14:10
------------------------------------------------*/
-const css::uno::Sequence< css::uno::Any > SequenceAsHashMap::getAsConstAnyList(::sal_Bool bAsPropertyValueList) const
-{
-    ::sal_Int32                         i            = 0;
-    ::sal_Int32                         c            = (::sal_Int32)size();
-    css::uno::Sequence< css::uno::Any > lDestination(c);
-    css::uno::Any*                      pDestination = lDestination.getArray();
-
-    for (const_iterator pThis  = begin();
-                        pThis != end()  ;
-                      ++pThis           )
-    {
-        if (bAsPropertyValueList)
-        {
-            css::beans::PropertyValue aProp;
-            aProp.Name      = pThis->first;
-            aProp.Value     = pThis->second;
-            pDestination[i] = css::uno::makeAny(aProp);
-        }
-        else
-        {
-            css::beans::NamedValue aProp;
-            aProp.Name      = pThis->first;
-            aProp.Value     = pThis->second;
-            pDestination[i] = css::uno::makeAny(aProp);
-        }
-
-        ++i;
-    }
-
-    return lDestination;
-}
-
-/*-----------------------------------------------
     04.11.2003 08:30
 -----------------------------------------------*/
 const css::uno::Sequence< css::beans::NamedValue > SequenceAsHashMap::getAsConstNamedValueList() const
@@ -338,63 +303,6 @@ void SequenceAsHashMap::update(const SequenceAsHashMap& rUpdate)
         (*this)[sName] = aValue;
     }
 }
-
-/*-----------------------------------------------
-    04.11.2003 08:30
------------------------------------------------*/
-#if OSL_DEBUG_LEVEL > 1
-void SequenceAsHashMap::dbg_dumpToFile(const char* pFileName,
-                                       const char* pComment ) const
-{
-    if (!pFileName || !pComment)
-        return;
-
-    FILE* pFile = fopen(pFileName, "a");
-    if (!pFile)
-        return;
-
-    ::rtl::OUStringBuffer sBuffer(1000);
-    sBuffer.appendAscii("\n----------------------------------------\n");
-    sBuffer.appendAscii(pComment                                      );
-    sBuffer.appendAscii("\n----------------------------------------\n");
-    sal_Int32 i = 0;
-    for (const_iterator pIt  = begin();
-                        pIt != end()  ;
-                      ++pIt           )
-    {
-        sBuffer.appendAscii("["       );
-        sBuffer.append     (i++       );
-        sBuffer.appendAscii("] "      );
-        sBuffer.appendAscii("\""      );
-        sBuffer.append     (pIt->first);
-        sBuffer.appendAscii("\" = \"" );
-
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xv;
-        ::rtl::OUString                                                       sv;
-        sal_Int32                                                             nv;
-        sal_Bool                                                              bv;
-
-        if (pIt->second >>= sv)
-            sBuffer.append(sv);
-        else
-        if (pIt->second >>= nv)
-            sBuffer.append(nv);
-        else
-        if (pIt->second >>= bv)
-            sBuffer.appendAscii(bv ? "true" : "false");
-        else
-        if (pIt->second >>= xv)
-            sBuffer.appendAscii(xv.is() ? "object" : "null");
-        else
-            sBuffer.appendAscii("???");
-
-        sBuffer.appendAscii("\"\n");
-    }
-
-    fprintf(pFile, ::rtl::OUStringToOString(sBuffer.makeStringAndClear(), RTL_TEXTENCODING_UTF8).getStr());
-    fclose(pFile);
-}
-#endif // OSL_DEBUG_LEVEL > 1
 
 } // namespace comphelper
 

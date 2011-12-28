@@ -61,7 +61,6 @@ public:
 
     // The implementation details
     static ::com::sun::star::uno::Sequence< ::rtl::OUString >   getSupportedServiceNames_Static(void);
-    static ::rtl::OUString                                      getImplementationName_Static();
 
     // XFastSerializer
     virtual void SAL_CALL startDocument(  ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
@@ -182,10 +181,6 @@ private:
     private:
         void sort();
     };
-
-#if DEBUG
-        void printMarkStack( );
-#endif
 
     ::std::stack< boost::shared_ptr< ForMerge > > maMarkStack;
 

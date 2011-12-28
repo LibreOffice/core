@@ -1489,35 +1489,6 @@ IMPL_LINK( XMLFilterListBox, TabBoxScrollHdl_Impl, SvTabListBox*, /* pList */ )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( XMLFilterListBox, HeaderSelect_Impl, HeaderBar*, pBar )
-{
-    if ( pBar && pBar->GetCurItemId() != ITEMID_NAME )
-        return 0;
-
-    HeaderBarItemBits nBits = mpHeaderBar->GetItemBits(ITEMID_TYPE);
-    sal_Bool bUp = ( ( nBits & HIB_UPARROW ) == HIB_UPARROW );
-    SvSortMode eMode = SortAscending;
-
-    if ( bUp )
-    {
-        nBits &= ~HIB_UPARROW;
-        nBits |= HIB_DOWNARROW;
-        eMode = SortDescending;
-    }
-    else
-    {
-        nBits &= ~HIB_DOWNARROW;
-        nBits |= HIB_UPARROW;
-    }
-    mpHeaderBar->SetItemBits( ITEMID_NAME, nBits );
-    SvTreeList* pMod = GetModel();
-    pMod->SetSortMode( eMode );
-    pMod->Resort();
-    return 1;
-}
-
-// -----------------------------------------------------------------------
-
 IMPL_LINK( XMLFilterListBox, HeaderEndDrag_Impl, HeaderBar*, pBar )
 {
     if ( pBar && !pBar->GetCurItemId() )

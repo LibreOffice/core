@@ -71,10 +71,6 @@ DdeTopic::RemoveItem(DdeItem const&)
 DffPropSet::SetPropertyValue(unsigned int, unsigned int) const
 Dialog::Dialog(Window*, ResId const&)
 DirEntry::GetDevice() const
-EECharAttribArray::Insert(EECharAttribArray const*, unsigned short, unsigned short, unsigned short)
-EECharAttribArray::Replace(EECharAttrib const&, unsigned short)
-EECharAttribArray::Replace(EECharAttrib const*, unsigned short, unsigned short)
-EECharAttribArray::_ForEach(unsigned short, unsigned short, unsigned char (*)(EECharAttrib const&, void*), void*)
 EditView::GetSelectionMode() const
 EditView::SetCursor(Cursor const&)
 EditView::SetPointer(Pointer const&)
@@ -566,9 +562,6 @@ SvtGraphicStroke::setMiterLimit(double)
 SvtGraphicStroke::setStartArrow(PolyPolygon const&)
 SvtGraphicStroke::setStrokeWidth(double)
 SvtGraphicStroke::setTransparency(double)
-SvtHelpOptions::decAgentIgnoreURLCounter(rtl::OUString const&)
-SvtHelpOptions::getAgentIgnoreURLCounter(rtl::OUString const&)
-SvtHelpOptions::resetAgentIgnoreURLCounter(rtl::OUString const&)
 SvtIconChoiceCtrl::SvtIconChoiceCtrl(Window*, ResId const&)
 SvtIconWindow_Impl::GetSelectedIconText() const
 SvtListenerIter::First(void* (*)())
@@ -845,6 +838,7 @@ SwpHtStart::Insert(SwTxtAttr const**, unsigned short)
 SwpHtStart::Insert(SwpHtStart const*, unsigned short, unsigned short)
 SwpHtStart::Remove(SwTxtAttr const*&, unsigned short)
 SystemChildWindow::SystemChildWindow(Window*, ResId const&)
+SystemChildWindow::SystemChildWindow(Window*, long, SystemWindowData*, unsigned char)
 TB::NeedsPositioning()
 TESortedPositions::Insert(TESortedPositions const*, unsigned short, unsigned short)
 TESortedPositions::Insert(unsigned long const&, unsigned short&)
@@ -928,8 +922,7 @@ XMLErrors::AddRecord(int, com::sun::star::uno::Sequence<rtl::OUString> const&)
 XMLErrors::AddRecord(int, com::sun::star::uno::Sequence<rtl::OUString> const&, rtl::OUString const&)
 XMLFamilyDataList_Impl::GetPos(XMLFamilyData_Impl const*) const
 XMLFamilyDataList_Impl::Remove(XMLFamilyData_Impl*)
-XMLFilterListBox::LinkStubHeaderSelect_Impl(void*, void*)
-XMLFilterTabDialog::LinkStubCancelHdl(void*, void*)
+XMLFilterTabPageXSLT::LinkStubToggleXSLTImplHdl(void*, void*)
 XMLFontAutoStylePoolNames_Impl::GetPos(rtl::OUString const*) const
 XMLFontAutoStylePoolNames_Impl::Remove(rtl::OUString*)
 XMLFontAutoStylePool_Impl::GetPos(XMLFontAutoStylePoolEntry_Impl const*) const
@@ -1591,7 +1584,6 @@ comphelper::PropertySetHelper::PropertySetHelper()
 comphelper::PropertySetHelper::setInfo(comphelper::PropertySetInfo*)
 comphelper::PropertySetInfo::add(comphelper::PropertyMapEntry*, int)
 comphelper::ResourceBasedEventLogger::ResourceBasedEventLogger(com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> const&, rtl::OUString const&, rtl::OUString const&)
-comphelper::SequenceAsHashMap::getAsConstAnyList(unsigned char) const
 comphelper::ServiceInfoHelper::concatSequences(com::sun::star::uno::Sequence<rtl::OUString> const&, com::sun::star::uno::Sequence<rtl::OUString> const&)
 comphelper::findProperty(com::sun::star::beans::Property&, com::sun::star::uno::Sequence<com::sun::star::beans::Property>&, rtl::OUString const&)
 comphelper::string::isalnumAsciiString(rtl::OUString const&)
@@ -1707,10 +1699,6 @@ framework::ShareableMutex::getShareableOslMutex()
 framework::TabWindow::impl_createFactory(com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> const&)
 framework::UIConfigElementWrapperBase::dispose()
 framework::UIElementWrapperBase::dispose()
-graphite2::Segment::append(graphite2::Segment const&)
-graphite2::Slot::update(int, int, graphite2::Position&)
-graphite2::TtfUtil::GetNameInfo(void const*, int, int, int, int, unsigned long&, unsigned long&)
-graphite2::TtfUtil::GlyfLookup(unsigned short, void const*, void const*, unsigned long, unsigned long, void const*)
 jfw_plugin::VendorBase::createInstance()
 jfw_plugin::VendorBase::getJavaExePaths(int*)
 jvmaccess::ClassPath::doLoadClass(com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> const&, void*, rtl::OUString const&, rtl::OUString const&)
@@ -1752,7 +1740,6 @@ oox::ContainerHelper::insertByIndex(com::sun::star::uno::Reference<com::sun::sta
 oox::GraphicHelper::convertScreenPixelToHmm(com::sun::star::awt::Point const&) const
 oox::ObjectContainer::getObject(rtl::OUString const&) const
 oox::PropertyMap::dump()
-oox::PropertyMap::dumpCode()
 oox::PropertyMap::getProperty(int) const
 oox::PropertySet::getProperties(com::sun::star::uno::Sequence<com::sun::star::uno::Any>&, com::sun::star::uno::Sequence<rtl::OUString> const&) const
 oox::core::FilterBase::getComponentFactory() const
@@ -1903,7 +1890,6 @@ sax::Converter::clearUndefinedChars(rtl::OUString&, rtl::OUString const&)
 sax::Converter::convertAny(com::sun::star::uno::Any&, rtl::OUString const&, rtl::OUString const&)
 sax::Converter::convertDouble(double&, rtl::OUString const&, short)
 sax::Converter::convertNumber64(rtl::OUStringBuffer&, long)
-sax_fastparser::FastSaxSerializer::getImplementationName_Static()
 sax_fastparser::FastSerializerHelper::endElement(char const*)
 sax_fastparser::FastSerializerHelper::singleElement(char const*, ...)
 sax_fastparser::FastSerializerHelper::singleElement(char const*, com::sun::star::uno::Reference<com::sun::star::xml::sax::XFastAttributeList>)
@@ -1973,7 +1959,6 @@ sdr::table::TableLayouter::getRowStart(int) const
 sdr::table::TableLayouter::setColumnWidth(int, int)
 sdr::table::TableLayouter::setRowHeight(int, int)
 sfx2::TaskPaneWrapper::GetChildWindowId()
-slideshow::internal::DrawShapeSubsetting::hasSubsetShapes() const
 slideshow::internal::DrawShapeSubsetting::reset(slideshow::internal::DocTreeNode const&, boost::shared_ptr<GDIMetaFile> const&)
 std::__cxx1998::map<rtl::OUString, OutputStorageWrapper_Impl*, OUStringLess, std::allocator<std::pair<rtl::OUString const, OutputStorageWrapper_Impl*> > >::~map()
 std::__cxx1998::map<rtl::OUString, binfilter::OutputStorageWrapper_Impl*, binfilter::OUStringLess, std::allocator<std::pair<rtl::OUString const, binfilter::OutputStorageWrapper_Impl*> > >::~map()
@@ -2032,7 +2017,6 @@ vcl::PDFExtOutDevData::SetOutlineItemParent(int, int)
 vcl::PDFExtOutDevData::SetOutlineItemText(int, rtl::OUString const&)
 vcl::PDFWriter::DrawPixel(Polygon const&, Color const*)
 vcl::PDFWriterImpl::drawPolyPolygon(PolyPolygon const&, int, bool)
-vcl::PDFWriterImpl::writeG4Stream(BitmapReadAccess*)
 vcl::unx::GtkPrintWrapper::print_operation_set_has_selection(_GtkPrintOperation*, int) const
 vcl::unx::GtkPrintWrapper::print_operation_set_support_selection(_GtkPrintOperation*, int) const
 void ScCompressedArrayIterator<int, unsigned short>::Follow<unsigned char>(ScCompressedArrayIterator<int, unsigned char> const&)
@@ -2040,5 +2024,3 @@ writerfilter::LoggedResourcesHelper::setPrefix(std::basic_string<char, std::char
 writerfilter::PropertiesProtocol::PropertiesProtocol(writerfilter::Properties*, boost::shared_ptr<writerfilter::TagLogger>)
 writerfilter::StreamProtocol::StreamProtocol(writerfilter::Stream*, boost::shared_ptr<writerfilter::TagLogger>)
 writerfilter::TableProtocol::TableProtocol(writerfilter::Table*, boost::shared_ptr<writerfilter::TagLogger>)
-writerfilter::ooxml::OOXMLParserState::getContextCount() const
-writerfilter::propertysetToString(com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> const&)

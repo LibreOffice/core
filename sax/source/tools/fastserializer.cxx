@@ -320,11 +320,6 @@ namespace sax_fastparser {
         return seq;
     }
 
-    OUString FastSaxSerializer::getImplementationName_Static()
-    {
-        return OUString(RTL_CONSTASCII_USTRINGPARAM( SERIALIZER_IMPLEMENTATION_NAME ));
-    }
-
     Sequence< OUString > FastSaxSerializer::getSupportedServiceNames_Static(void)
     {
         Sequence<OUString> aRet(1);
@@ -345,23 +340,6 @@ namespace sax_fastparser {
             maMarkStack.push( pMerge );
         }
     }
-
-#if DEBUG
-    void FastSaxSerializer::printMarkStack( )
-    {
-        ::std::stack< boost::shared_ptr< ForMerge > > aCopy( maMarkStack );
-        int nSize = aCopy.size();
-        int i = 0;
-        while ( !aCopy.empty() )
-        {
-            std::cerr << nSize - i << "\n";
-            aCopy.top( )->print( );
-            std::cerr << "\n";
-            aCopy.pop( );
-            i++;
-        }
-    }
-#endif
 
     void FastSaxSerializer::mergeTopMarks( sax_fastparser::MergeMarksEnum eMergeType )
     {

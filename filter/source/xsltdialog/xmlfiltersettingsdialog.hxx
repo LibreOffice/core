@@ -68,7 +68,6 @@ private:
     HeaderBar*  mpHeaderBar;
 
     DECL_LINK( TabBoxScrollHdl_Impl, SvTabListBox* );
-    DECL_LINK( HeaderSelect_Impl, HeaderBar* );
     DECL_LINK( HeaderEndDrag_Impl, HeaderBar* );
 
     String getEntryString( const filter_info_impl* pInfo ) const;

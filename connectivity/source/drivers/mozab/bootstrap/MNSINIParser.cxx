@@ -109,32 +109,4 @@ IniParser::IniParser(OUString const & rIniName) throw(com::sun::star::io::IOExce
 #endif
 }
 
-#if OSL_DEBUG_LEVEL > 1
-void IniParser::Dump()
-{
-    IniSectionMap::iterator iBegin = mAllSection.begin();
-    IniSectionMap::iterator iEnd = mAllSection.end();
-    for(;iBegin != iEnd;iBegin++)
-    {
-        ini_Section *aSection = &(*iBegin).second;
-        OString sec_name_tmp = OUStringToOString(aSection->sName, RTL_TEXTENCODING_ASCII_US);
-        for(NameValueList::iterator itor=aSection->lList.begin();
-            itor != aSection->lList.end();
-            itor++)
-        {
-                struct ini_NameValue * aValue = &(*itor);
-                OString name_tmp = OUStringToOString(aValue->sName, RTL_TEXTENCODING_ASCII_US);
-                OString value_tmp = OUStringToOString(aValue->sValue, RTL_TEXTENCODING_UTF8);
-                OSL_TRACE(
-                    " section=%s name=%s value=%s\n",
-                                    sec_name_tmp.getStr(),
-                                    name_tmp.getStr(),
-                                    value_tmp.getStr() );
-
-        }
-    }
-
-}
-#endif
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

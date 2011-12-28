@@ -41,9 +41,6 @@ namespace writerfilter
     string WRITERFILTER_RESOURCEMODEL_DLLPUBLIC xmlify(const string & str);
 
 #if OSL_DEBUG_LEVEL > 1
-    string WRITERFILTER_RESOURCEMODEL_DLLPUBLIC propertysetToString
-    (uno::Reference<beans::XPropertySet> const & rProps);
-
     string WRITERFILTER_RESOURCEMODEL_DLLPUBLIC toString(uno::Reference< text::XTextRange > textRange);
     string WRITERFILTER_RESOURCEMODEL_DLLPUBLIC toString(const string & rString);
 #endif

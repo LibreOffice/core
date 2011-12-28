@@ -45,15 +45,6 @@
 #include <com/sun/star/beans/IllegalTypeException.hpp>
 #include "comphelper/comphelperdllapi.h"
 
-// see method dbg_dumpToFile() below!
-#if OSL_DEBUG_LEVEL > 1
-    #ifndef _RTL_USTRBUF_HXX_
-    #include <rtl/ustrbuf.hxx>
-    #endif
-
-    #include <stdio.h>
-#endif
-
 //_______________________________________________
 // namespace
 
@@ -203,24 +194,6 @@ class COMPHELPER_DLLPUBLIC SequenceAsHashMap : public SequenceAsHashMapBase
         const ::com::sun::star::uno::Any getAsConstAny(::sal_Bool bAsPropertyValue) const;
 
         //---------------------------------------
-        /** @short  return this map instance as a
-                    sequence< Any >, which can be
-                    used in const environments only.
-
-            @descr  Its made const to prevent using of the
-                    return value directly as an in/out parameter!
-                    usage: myMethod(stlDequeAdapter.getAsAnyList());
-
-            @param  bAsPropertyValue
-                    switch between using of PropertyValue or NamedValue as
-                    value type.
-
-            @return A const sequence which elements of Any, which
-                    contains all items of this map.
-         */
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > getAsConstAnyList(::sal_Bool bAsPropertyValue) const;
-
-        //---------------------------------------
         /** @short  return this map instance to as a
                     NamedValue sequence, which can be
                     used in const environments only.
@@ -350,29 +323,6 @@ class COMPHELPER_DLLPUBLIC SequenceAsHashMap : public SequenceAsHashMapBase
                     the map containing all items for the update.
          */
         void update(const SequenceAsHashMap& rSource);
-
-        //---------------------------------------
-        /** @short  can be used to generate a file dump of
-                    the current content of this instance.
-
-            @descr  Because the content of STL container
-                    cant be analyzed easy, such dump function
-                    seem to be usefull.
-                    Of course its available in debug versions
-                    only.
-
-            @param  pFileName
-                    a system file name.
-                    (doesnt matter if relativ or absolute)
-
-            @param  pComment
-                    used to mark the dump inside the same log file.
-                    Can be usefull to analyze changes of this
-                    hash map due to the parts of an operation.
-         */
-        #if OSL_DEBUG_LEVEL > 1
-        void dbg_dumpToFile(const char* pFileName, const char* pComment) const;
-        #endif
 };
 
 } // namespace comphelper

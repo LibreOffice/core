@@ -569,11 +569,6 @@ void XMLFilterTestDialog::displayXMLFile( const OUString& rURL )
 {
     ::com::sun::star::uno::Reference< com::sun::star::system::XSystemShellExecute > xSystemShellExecute(comphelper::getProcessServiceFactory()->createInstance(DEFINE_CONST_UNICODE("com.sun.star.system.SystemShellExecute") ), com::sun::star::uno::UNO_QUERY_THROW );
     xSystemShellExecute->execute( rURL, rtl::OUString(),  com::sun::star::system::SystemShellExecuteFlags::DEFAULTS );
-
-//    if( NULL == mpSourceDLG )
-//        mpSourceDLG = new XMLSourceFileDialog( NULL, mrResMgr, mxMSF );
-//
-//    mpSourceDLG->ShowWindow( rURL, mpFilterInfo);
 }
 
 void XMLFilterTestDialog::onImportBrowse()

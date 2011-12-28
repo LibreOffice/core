@@ -38,7 +38,6 @@
 #include <svl/poolitem.hxx>
 
 class filter_info_impl;
-class XMLSourceFileDialog;
 
 class XMLFilterTestDialog : public ModalDialog
 {

@@ -95,9 +95,6 @@ public:
     void            SetHelpAgentRetryLimit( sal_Int32 _nTrials )        { nHelpAgentRetryLimit = _nTrials; SetModified(); }
     sal_Int32       GetHelpAgentRetryLimit( ) const         { return nHelpAgentRetryLimit; }
 
-    sal_Int32       getAgentIgnoreURLCounter( const ::rtl::OUString& _rURL );
-    void            decAgentIgnoreURLCounter( const ::rtl::OUString& _rURL );
-    void            resetAgentIgnoreURLCounter( const ::rtl::OUString& _rURL );
     void            resetAgentIgnoreURLCounter();
 
     void            SetWelcomeScreen( sal_Bool b )          { bWelcomeScreen = b; SetModified(); }
@@ -554,51 +551,6 @@ SvtHelpOptions::SvtHelpOptions()
         svtools::ItemHolder2::holdConfigItem(E_HELPOPTIONS);
     }
     pImp = pOptions;
-}
-
-// -----------------------------------------------------------------------
-
-sal_Int32 SvtHelpOptions_Impl::getAgentIgnoreURLCounter( const ::rtl::OUString& _rURL )
-{
-    ::osl::MutexGuard aGuard(aIgnoreCounterSafety);
-    ConstMapString2IntIterator aMapPos = aURLIgnoreCounters.find(_rURL);
-    if (aURLIgnoreCounters.end() == aMapPos)
-        return GetHelpAgentRetryLimit();
-    return aMapPos->second;
-}
-
-// -----------------------------------------------------------------------
-
-void SvtHelpOptions_Impl::decAgentIgnoreURLCounter( const ::rtl::OUString& _rURL )
-{
-    ::osl::MutexGuard aGuard(aIgnoreCounterSafety);
-    MapString2IntIterator aMapPos = aURLIgnoreCounters.find(_rURL);
-    if (aURLIgnoreCounters.end() == aMapPos)
-    {   // nothing known about this URL 'til now
-        sal_Int32 nLimit = GetHelpAgentRetryLimit();
-        sal_Int32 nIgnoreAgain = nLimit > 0 ? nLimit - 1 : 0;
-        aURLIgnoreCounters[_rURL] = nIgnoreAgain;
-    }
-    else
-    {
-        sal_Int32& rCounter = aMapPos->second;
-        if (rCounter)
-            --rCounter;
-    }
-    SetModified();
-}
-
-// -----------------------------------------------------------------------
-
-void SvtHelpOptions_Impl::resetAgentIgnoreURLCounter( const ::rtl::OUString& _rURL )
-{
-    ::osl::MutexGuard aGuard(aIgnoreCounterSafety);
-    MapString2IntIterator aMapPos = aURLIgnoreCounters.find(_rURL);
-    if (aURLIgnoreCounters.end() != aMapPos)
-    {
-        aURLIgnoreCounters.erase(aMapPos);
-        SetModified();
-    }
 }
 
 // -----------------------------------------------------------------------
