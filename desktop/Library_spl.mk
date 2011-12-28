@@ -52,7 +52,6 @@ $(eval $(call gb_Library_add_linked_libs,spl,\
 $(eval $(call gb_Library_set_componentfile,spl,desktop/source/splash/spl))
 
 $(eval $(call gb_Library_add_exception_objects,spl,\
-    desktop/source/migration/migration \
     desktop/source/splash/services_spl \
     desktop/source/splash/splash \
 ))
