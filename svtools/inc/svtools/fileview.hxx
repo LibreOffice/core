@@ -43,11 +43,8 @@
 #define FILEVIEW_ONLYFOLDER         0x0001
 #define FILEVIEW_MULTISELECTION     0x0002
 
-#define FILEVIEW_SHOW_TITLE         0x0010
-#define FILEVIEW_SHOW_SIZE          0x0020
-#define FILEVIEW_SHOW_DATE          0x0040
-#define FILEVIEW_SHOW_ALL           0x0070
-#define FILEVIEW_SHOW_NONE          0x0080
+#define FILEVIEW_SHOW_ONLYTITLE     0x0010
+#define FILEVIEW_SHOW_NONE          0x0020
 
 class ViewTabListBox_Impl;
 class SvtFileView_Impl;

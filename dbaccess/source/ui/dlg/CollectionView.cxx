@@ -80,7 +80,7 @@ OCollectionView::OCollectionView( Window * pParent
     , m_aFTCurrentPath( this, ModuleRes( FT_EXPLORERFILE_CURRENTPATH ) )
     , m_aNewFolder(     this, ModuleRes( BTN_EXPLORERFILE_NEWFOLDER ) )
     , m_aUp(            this, ModuleRes( BTN_EXPLORERFILE_UP ) )
-    , m_aView(          this, ModuleRes( CTRL_VIEW ) ,FILEVIEW_SHOW_TITLE )
+    , m_aView(          this, ModuleRes( CTRL_VIEW ), FILEVIEW_SHOW_ONLYTITLE )
     , m_aFTName(        this, ModuleRes( FT_EXPLORERFILE_FILENAME ) )
     , m_aName(          this, ModuleRes( ED_EXPLORERFILE_FILENAME ) )
     , m_aFL(            this, ModuleRes( FL_1 ) )
