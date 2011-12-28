@@ -722,24 +722,29 @@ ViewTabListBox_Impl::ViewTabListBox_Impl( Window* pParentWin,
     mbEnableRename      ( sal_True )
 
 {
-    sal_Bool bViewHeader = true;
+    const bool bViewHeader = (nFlags & FILEVIEW_SHOW_NONE) == 0;
     Size aBoxSize = pParentWin->GetSizePixel();
     mpHeaderBar = new HeaderBar( pParentWin, WB_BUTTONSTYLE | WB_BOTTOMBORDER );
     mpHeaderBar->SetPosSizePixel( Point( 0, 0 ), mpHeaderBar->CalcWindowSizePixel() );
 
     HeaderBarItemBits nBits = ( HIB_LEFT | HIB_VCENTER | HIB_CLICKABLE );
-    if ((nFlags & FILEVIEW_SHOW_NONE) == FILEVIEW_SHOW_NONE)
-        bViewHeader = false;
+    if (nFlags & FILEVIEW_SHOW_ONLYTITLE)
+    {
+        long pTabs[] = { 2, 20, 600 };
+        SetTabs(&pTabs[0], MAP_PIXEL);
+
+        mpHeaderBar->InsertItem(COLUMN_TITLE, String(SvtResId(STR_SVT_FILEVIEW_COLUMN_TITLE)), 600, nBits | HIB_UPARROW);
+    }
     else
     {
-        if (nFlags & FILEVIEW_SHOW_TITLE)
-            mpHeaderBar->InsertItem(COLUMN_TITLE, String(SvtResId(STR_SVT_FILEVIEW_COLUMN_TITLE)), 600, nBits | HIB_UPARROW);
-        if (nFlags & FILEVIEW_SHOW_ALL)
-            mpHeaderBar->InsertItem(COLUMN_TYPE, String(SvtResId(STR_SVT_FILEVIEW_COLUMN_TYPE)), 140, nBits);
-        if (nFlags & FILEVIEW_SHOW_SIZE)
-            mpHeaderBar->InsertItem(COLUMN_SIZE, String(SvtResId(STR_SVT_FILEVIEW_COLUMN_SIZE)), 80, nBits);
-        if (nFlags & FILEVIEW_SHOW_DATE)
-            mpHeaderBar->InsertItem(COLUMN_DATE, String(SvtResId(STR_SVT_FILEVIEW_COLUMN_DATE)), 500, nBits);
+        long pTabs[] = { 5, 20, 180, 320, 400, 600 };
+        SetTabs(&pTabs[0], MAP_PIXEL);
+        SetTabJustify(2, AdjustRight); // column "Size"
+
+        mpHeaderBar->InsertItem(COLUMN_TITLE, String(SvtResId(STR_SVT_FILEVIEW_COLUMN_TITLE)), 180, nBits | HIB_UPARROW);
+        mpHeaderBar->InsertItem(COLUMN_TYPE, String(SvtResId(STR_SVT_FILEVIEW_COLUMN_TYPE)), 140, nBits);
+        mpHeaderBar->InsertItem(COLUMN_SIZE, String(SvtResId(STR_SVT_FILEVIEW_COLUMN_SIZE)), 80, nBits);
+        mpHeaderBar->InsertItem(COLUMN_DATE, String(SvtResId(STR_SVT_FILEVIEW_COLUMN_DATE)), 500, nBits);
     }
 
     Size aHeadSize = mpHeaderBar->GetSizePixel();
@@ -748,6 +753,8 @@ ViewTabListBox_Impl::ViewTabListBox_Impl( Window* pParentWin,
     InitHeaderBar( mpHeaderBar );
     SetHighlightRange();
     SetEntryHeight( ROW_HEIGHT );
+    if (nFlags & FILEVIEW_MULTISELECTION)
+        SetSelectionMode( MULTIPLE_SELECTION );
 
     Show();
     if( bViewHeader )
@@ -1211,7 +1218,7 @@ SvtFileView::SvtFileView( Window* pParent, const ResId& rResId,
 
     Control( pParent, rResId )
 {
-    sal_Int8 nFlags = FILEVIEW_SHOW_ALL;
+    sal_Int8 nFlags = 0;
     if ( bOnlyFolder )
         nFlags |= FILEVIEW_ONLYFOLDER;
     if ( bMultiSelection )
@@ -1225,13 +1232,6 @@ SvtFileView::SvtFileView( Window* pParent, const ResId& rResId,
     mpImp->mpView->ForbidEmptyText();
     SetSortColumn( true );
 
-    long pTabs[] = { 5, 20, 180, 320, 400, 600 };
-    mpImp->mpView->SetTabs( &pTabs[0], MAP_PIXEL );
-    mpImp->mpView->SetTabJustify( 2, AdjustRight ); // column "Size"
-
-    if ( bMultiSelection )
-        mpImp->mpView->SetSelectionMode( MULTIPLE_SELECTION );
-
     HeaderBar* pHeaderBar = mpImp->mpView->GetHeaderBar();
     pHeaderBar->SetSelectHdl( LINK( this, SvtFileView, HeaderSelect_Impl ) );
     pHeaderBar->SetEndDragHdl( LINK( this, SvtFileView, HeaderEndDrag_Impl ) );
@@ -1244,26 +1244,10 @@ SvtFileView::SvtFileView( Window* pParent, const ResId& rResId, sal_uInt8 nFlags
     Reference< XInteractionHandler > xInteractionHandler = Reference< XInteractionHandler > (
         ::comphelper::getProcessServiceFactory()->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.uui.InteractionHandler") ) ), UNO_QUERY );
     Reference < XCommandEnvironment > xCmdEnv = new ::ucbhelper::CommandEnvironment( xInteractionHandler, Reference< XProgressHandler >() );
-    mpImp = new SvtFileView_Impl( this, xCmdEnv, nFlags,
-                                  ( nFlags & FILEVIEW_ONLYFOLDER ) == FILEVIEW_ONLYFOLDER );
-    SetSortColumn( true );
 
-    if ( ( nFlags & FILEVIEW_SHOW_ALL ) == FILEVIEW_SHOW_ALL )
-    {
-        long pTabs[] = { 5, 20, 180, 320, 400, 600 };
-        mpImp->mpView->SetTabs( &pTabs[0], MAP_PIXEL );
-        mpImp->mpView->SetTabJustify( 2, AdjustRight ); // column "Size"
-    }
-    else
-    {
-        // show only title
-        long pTabs[] = { 2, 20, 600 };
-        mpImp->mpView->SetTabs( &pTabs[0], MAP_PIXEL );
-    }
-    if ( ( nFlags & FILEVIEW_SHOW_NONE ) == FILEVIEW_SHOW_NONE )
-        SetSortColumn( false );
-    if ( ( nFlags & FILEVIEW_MULTISELECTION ) == FILEVIEW_MULTISELECTION )
-        mpImp->mpView->SetSelectionMode( MULTIPLE_SELECTION );
+    mpImp = new SvtFileView_Impl( this, xCmdEnv, nFlags, nFlags & FILEVIEW_ONLYFOLDER );
+
+    SetSortColumn( (nFlags & FILEVIEW_SHOW_NONE) == 0 );
 
     HeaderBar *pHeaderBar = mpImp->mpView->GetHeaderBar();
     pHeaderBar->SetSelectHdl( LINK( this, SvtFileView, HeaderSelect_Impl ) );
