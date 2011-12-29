@@ -46,6 +46,7 @@
 
 class SvxNumberFormatShell;
 class SvxNumberInfoItem;
+class vector;
 
 //------------------------------------------------------------------------
 
@@ -147,10 +148,10 @@ private:
 #ifdef _SVX_NUMFMT_CXX
     void    Init_Impl();
     void    FillCurrencyBox();
-    void    FillFormatListBox_Impl( SvxDelStrgs& rEntries );
+    void    FillFormatListBox_Impl( std::vector<String*>& rEntries );
     void    UpdateOptions_Impl( sal_Bool bCheckCatChange );
     void    UpdateFormatListBox_Impl( sal_uInt16 bCat, sal_Bool bUpdateEdit );
-    void    DeleteEntryList_Impl( SvxDelStrgs& rEntries );
+    void    DeleteEntryList_Impl( std::vector<String*>& rEntries );
     void    Obstructing();
     void    EnableBySourceFormat_Impl();
     void    SetCategory( sal_uInt16 nPos );

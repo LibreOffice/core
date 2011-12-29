@@ -47,7 +47,6 @@
 class Color;
 class SvNumberFormatter;
 class SvNumberFormatTable;
-class SvStrings;
 class SvStringsDtor;
 class NfCurrencyEntry;
 // enum ------------------------------------------------------------------
@@ -78,15 +77,6 @@ enum SvxNumberValueType
 
 #define NUMBERFORMAT_ENTRY_NEW_CURRENCY     NUMBERFORMAT_ENTRY_NOT_FOUND-1
 
-class SvxDelStrgs: public SvStrings
-{
-
-public:
-        ~SvxDelStrgs() { DeleteAndDestroy(0,Count());}
-
-};
-
-// class SvxNumberFormatShell --------------------------------------------
 
 class SVX_DLLPUBLIC SvxNumberFormatShell
 {
@@ -117,35 +107,35 @@ public:
                                               const String*      pNumStr = NULL );
 
 
-    void                GetInitSettings( sal_uInt16&       nCatLbPos,
-                                        LanguageType& rLangType,
-                                         sal_uInt16&       nFmtLbSelPos,
-                                         SvStrings&    rFmtEntries,
-                                         String&       rPrevString,
-                                         Color*&       rpPrevColor );
+    void                GetInitSettings( sal_uInt16&           nCatLbPos,
+                                         LanguageType&         rLangType,
+                                         sal_uInt16&           nFmtLbSelPos,
+                                         std::vector<String*>& rFmtEntries,
+                                         String&               rPrevString,
+                                         Color*&               rpPrevColor );
 
-    void                CategoryChanged( sal_uInt16     nCatLbPos,
-                                        short&     rFmtSelPos,
-                                         SvStrings& rFmtEntries );
+    void                CategoryChanged( sal_uInt16            nCatLbPos,
+                                         short&                rFmtSelPos,
+                                         std::vector<String*>& rFmtEntries );
 
-    void                LanguageChanged( LanguageType eLangType,
-                                         short&       rFmtSelPos,
-                                         SvStrings&   rFmtEntries );
+    void                LanguageChanged( LanguageType          eLangType,
+                                         short&                rFmtSelPos,
+                                         std::vector<String*>& rFmtEntries );
 
     void                FormatChanged( sal_uInt16  nFmtLbPos,
                                        String& rPreviewStr,
                                        Color*& rpFontColor );
 
-    bool                AddFormat( String&    rFormat,
-                                   xub_StrLen& rErrPos,
-                                   sal_uInt16&    rCatLbSelPos,
-                                   short&     rFmtSelPos,
-                                   SvStrings& rFmtEntries );
+    bool                AddFormat( String&               rFormat,
+                                   xub_StrLen&           rErrPos,
+                                   sal_uInt16&           rCatLbSelPos,
+                                   short&                rFmtSelPos,
+                                   std::vector<String*>& rFmtEntries );
 
-    bool                RemoveFormat( const String& rFormat,
-                                      sal_uInt16&       rCatLbSelPos,
-                                      short&        rFmtSelPos,
-                                      SvStrings&    rFmtEntries );
+    bool                RemoveFormat( const String&         rFormat,
+                                      sal_uInt16&           rCatLbSelPos,
+                                      short&                rFmtSelPos,
+                                      std::vector<String*>& rFmtEntries );
 
     void                MakeFormat( String& rFormat,
                                     bool        bThousand,
@@ -229,31 +219,29 @@ private:
     NfCurrencyEntry*        pCurCurrencyEntry;
     bool                    bBankingSymbol;
     sal_uInt16              nCurCurrencyEntryPos;
-    SvStrings               aCurrencyFormatList;
+    std::vector<String*>    aCurrencyFormatList;
 
 #ifdef _SVX_NUMFMTSH_CXX
-    SVX_DLLPRIVATE short                FillEntryList_Impl( SvStrings& rList );
-    SVX_DLLPRIVATE void                 FillEListWithStd_Impl( SvStrings& rList,sal_uInt16 aPrivCat, short &Pos);
-    SVX_DLLPRIVATE short                FillEListWithFormats_Impl( SvStrings& rList,short nSelPos,
+    SVX_DLLPRIVATE short FillEntryList_Impl( std::vector<String*>& rList );
+    SVX_DLLPRIVATE void  FillEListWithStd_Impl( std::vector<String*>& rList,sal_uInt16 aPrivCat, short &Pos);
+    SVX_DLLPRIVATE short FillEListWithFormats_Impl( std::vector<String*>& rList,short nSelPos,
                                                        NfIndexTableOffset eOffsetStart,
                                                        NfIndexTableOffset eOffsetEnd);
+    SVX_DLLPRIVATE short FillEListWithDateTime_Impl( std::vector<String*>& rList,short nSelPos);
+    SVX_DLLPRIVATE short FillEListWithCurrency_Impl( std::vector<String*>& rList,short nSelPos);
+    SVX_DLLPRIVATE short FillEListWithSysCurrencys( std::vector<String*>& rList,short nSelPos);
+    SVX_DLLPRIVATE short FillEListWithUserCurrencys( std::vector<String*>& rList,short nSelPos);
+    SVX_DLLPRIVATE short FillEListWithUsD_Impl( std::vector<String*>& rList, sal_uInt16 nPrivCat, short Pos );
 
-    SVX_DLLPRIVATE short                FillEListWithDateTime_Impl( SvStrings& rList,short nSelPos);
-
-    SVX_DLLPRIVATE short                FillEListWithCurrency_Impl( SvStrings& rList,short nSelPos);
-    SVX_DLLPRIVATE short                FillEListWithSysCurrencys( SvStrings& rList,short nSelPos);
-    SVX_DLLPRIVATE short                FillEListWithUserCurrencys( SvStrings& rList,short nSelPos);
-
-    SVX_DLLPRIVATE short                               FillEListWithUsD_Impl( SvStrings& rList, sal_uInt16 nPrivCat, short Pos );
     SVX_DLLPRIVATE ::std::vector<sal_uInt32>::iterator GetRemoved_Impl( size_t nKey );
     SVX_DLLPRIVATE bool                                IsRemoved_Impl( size_t nKey );
     SVX_DLLPRIVATE ::std::vector<sal_uInt32>::iterator GetAdded_Impl( size_t nKey );
     SVX_DLLPRIVATE bool                                IsAdded_Impl( size_t nKey );
 
-    SVX_DLLPRIVATE void                 GetPreviewString_Impl( String& rString,
-                                                   Color*& rpColor );
-    SVX_DLLPRIVATE void                 PosToCategory_Impl( sal_uInt16 nPos, short& rCategory );
-    SVX_DLLPRIVATE void                 CategoryToPos_Impl( short nCategory, sal_uInt16& rPos );
+    SVX_DLLPRIVATE void  GetPreviewString_Impl( String& rString,
+                                                Color*& rpColor );
+    SVX_DLLPRIVATE void  PosToCategory_Impl( sal_uInt16 nPos, short& rCategory );
+    SVX_DLLPRIVATE void  CategoryToPos_Impl( short nCategory, sal_uInt16& rPos );
 #endif
 };
 
