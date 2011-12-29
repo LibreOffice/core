@@ -364,7 +364,7 @@ sal_uLong ScDocShell::DBaseImport( const String& rFullFileName, CharSet eCharSet
         if ( nColCount > MAXCOL+1 )
         {
             nColCount = MAXCOL+1;
-            nErr = SCWARN_IMPORT_RANGE_OVERFLOW;    // warning
+            nErr = SCWARN_IMPORT_COLUMN_OVERFLOW;    // warning
         }
 
         uno::Reference<sdbc::XRow> xRow( xRowSet, uno::UNO_QUERY );
