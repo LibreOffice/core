@@ -1889,14 +1889,11 @@ void SwWrtShell::ChangeHeaderOrFooter(
     EndAllAction();
 }
 
-void SwWrtShell::SetShowHeaderFooterSeparator( bool bShow )
+void SwWrtShell::SetShowHeaderFooterSeparator( FrameControlType eControl, bool bShow )
 {
-    ViewShell::SetShowHeaderFooterSeparator( bShow );
+    ViewShell::SetShowHeaderFooterSeparator( eControl, bShow );
     if ( !bShow )
-    {
-        GetView().GetEditWin().GetFrameControlsManager().HideControls( Header );
-        GetView().GetEditWin().GetFrameControlsManager().HideControls( Footer );
-    }
+        GetView().GetEditWin().GetFrameControlsManager().HideControls( eControl );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

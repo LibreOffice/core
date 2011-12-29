@@ -97,10 +97,20 @@ using namespace ::com::sun::star;
 void ViewShell::ToggleHeaderFooterEdit()
 {
     bHeaderFooterEdit = !bHeaderFooterEdit;
-    if ( bHeaderFooterEdit != IsShowHeaderFooterSeparator() )
-        SetShowHeaderFooterSeparator( bHeaderFooterEdit );
+    if ( !bHeaderFooterEdit )
+    {
+        SetShowHeaderFooterSeparator( Header, false );
+        SetShowHeaderFooterSeparator( Footer, false );
+    }
 
-    // Repaint everything to update the colors of the selected area
+    // Avoid corner case
+    if ( !IsShowHeaderFooterSeparator( Header ) &&
+         !IsShowHeaderFooterSeparator( Footer ) )
+    {
+        bHeaderFooterEdit = false;
+    }
+
+    // Repaint everything
     GetWin()->Invalidate();
 }
 

@@ -28,6 +28,7 @@
 #ifndef _FRAMECONTROLSMANAGER_HXX
 #define _FRAMECONTROLSMANAGER_HXX
 
+#include <viewsh.hxx>
 #include <FrameControl.hxx>
 
 #include <boost/shared_ptr.hpp>
@@ -38,13 +39,6 @@
 
 class SwPageFrm;
 class SwEditWin;
-
-enum FrameControlType
-{
-    PageBreak,
-    Header,
-    Footer
-};
 
 typedef boost::shared_ptr< SwFrameControl > SwFrameControlPtr;
 
@@ -71,7 +65,7 @@ class SwFrameControlsManager
         void SetReadonlyControls( bool bReadonly );
 
         // Helper methods
-        void SetHeaderFooterControl( const SwPageFrm* pPageFrm, bool bHeader, Point aOffset );
+        void SetHeaderFooterControl( const SwPageFrm* pPageFrm, FrameControlType eType, Point aOffset );
         void SetPageBreakControl( const SwPageFrm* pPageFrm );
 };
 

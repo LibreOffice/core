@@ -3376,7 +3376,8 @@ void SwColumnFrm::PaintBreak( ) const
                 //      header/footer marker
                 //    * Non-printing characters are shown, as this is more consistent
                 //      with other formatting marks
-                if ( !pGlobalShell->IsShowHeaderFooterSeparator() &&
+                if ( !pGlobalShell->IsShowHeaderFooterSeparator( Header ) &&
+                     !pGlobalShell->IsShowHeaderFooterSeparator( Footer ) &&
                       pGlobalShell->GetViewOptions( )->IsLineBreak( ) )
                 {
                     SwRect aRect( pCnt->Prt() );
@@ -3468,36 +3469,42 @@ void SwPageFrm::PaintDecorators( ) const
             if ( pGlobalShell->GetOut()->GetOutDevType() != OUTDEV_PRINTER &&
                  !pGlobalShell->GetViewOptions()->IsPDFExport() &&
                  !pGlobalShell->IsPreView() &&
-                 pGlobalShell->IsShowHeaderFooterSeparator( ) )
+                 ( pGlobalShell->IsShowHeaderFooterSeparator( Header ) ||
+                   pGlobalShell->IsShowHeaderFooterSeparator( Footer ) ) )
             {
                 bool bRtl = Application::GetSettings().GetLayoutRTL();
-
-                // Header
-                const SwFrm* pHeaderFrm = Lower();
-                if ( !pHeaderFrm->IsHeaderFrm() )
-                    pHeaderFrm = NULL;
-
                 const SwRect& rVisArea = pGlobalShell->VisArea();
                 long nXOff = std::min( aBodyRect.Right(), rVisArea.Right() );
                 if ( bRtl )
                     nXOff = std::max( aBodyRect.Left(), rVisArea.Left() );
 
-                long nHeaderYOff = aBodyRect.Top();
-                Point nOutputOff = rEditWin.LogicToPixel( Point( nXOff, nHeaderYOff ) );
-                rEditWin.GetFrameControlsManager().SetHeaderFooterControl( this, true, nOutputOff );
-
-                // Footer
-                const SwFrm* pFtnContFrm = Lower();
-                while ( pFtnContFrm )
+                // Header
+                if ( pGlobalShell->IsShowHeaderFooterSeparator( Header ) )
                 {
-                    if ( pFtnContFrm->IsFtnContFrm() )
-                        aBodyRect.AddBottom( pFtnContFrm->Frm().Bottom() - aBodyRect.Bottom() );
-                    pFtnContFrm = pFtnContFrm->GetNext();
+                    const SwFrm* pHeaderFrm = Lower();
+                    if ( !pHeaderFrm->IsHeaderFrm() )
+                        pHeaderFrm = NULL;
+
+                    long nHeaderYOff = aBodyRect.Top();
+                    Point nOutputOff = rEditWin.LogicToPixel( Point( nXOff, nHeaderYOff ) );
+                    rEditWin.GetFrameControlsManager().SetHeaderFooterControl( this, Header, nOutputOff );
                 }
 
-                long nFooterYOff = aBodyRect.Bottom();
-                nOutputOff = rEditWin.LogicToPixel( Point( nXOff, nFooterYOff ) );
-                rEditWin.GetFrameControlsManager().SetHeaderFooterControl( this, false, nOutputOff );
+                // Footer
+                if ( pGlobalShell->IsShowHeaderFooterSeparator( Footer ) )
+                {
+                    const SwFrm* pFtnContFrm = Lower();
+                    while ( pFtnContFrm )
+                    {
+                        if ( pFtnContFrm->IsFtnContFrm() )
+                            aBodyRect.AddBottom( pFtnContFrm->Frm().Bottom() - aBodyRect.Bottom() );
+                        pFtnContFrm = pFtnContFrm->GetNext();
+                    }
+
+                    long nFooterYOff = aBodyRect.Bottom();
+                    Point nOutputOff = rEditWin.LogicToPixel( Point( nXOff, nFooterYOff ) );
+                    rEditWin.GetFrameControlsManager().SetHeaderFooterControl( this, Footer, nOutputOff );
+                }
             }
         }
     }

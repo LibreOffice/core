@@ -3808,9 +3808,12 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
             // Are we moving from or to header / footer area?
             if ( !rSh.IsHeaderFooterEdit() )
             {
-                bool bIsInHF = IsInHeaderFooter( aDocPt );
-                if ( rSh.IsShowHeaderFooterSeparator() != bIsInHF )
-                    ShowHeaderFooterSeparator( bIsInHF );
+                FrameControlType eControl;
+                bool bIsInHF = IsInHeaderFooter( aDocPt, eControl );
+                if ( !bIsInHF )
+                    ShowHeaderFooterSeparator( false, false );
+                else
+                    ShowHeaderFooterSeparator( eControl == Header, eControl == Footer );
             }
         }
         // no break;
@@ -5647,37 +5650,51 @@ void SwEditWin::ShowAutoTextCorrectQuickHelp(
         pQuickHlpData->Start( rSh, rWord.Len() );
 }
 
-void SwEditWin::ShowHeaderFooterSeparator( bool bShow )
+void SwEditWin::ShowHeaderFooterSeparator( bool bShowHeader, bool bShowFooter )
 {
     SwWrtShell& rSh = rView.GetWrtShell();
 
-    if ( rSh.IsShowHeaderFooterSeparator() != bShow )
+    if ( ( rSh.IsShowHeaderFooterSeparator( Header ) != bShowHeader ) ||
+         ( rSh.IsShowHeaderFooterSeparator( Footer ) != bShowFooter ) )
     {
-        rSh.SetShowHeaderFooterSeparator( bShow );
+        rSh.SetShowHeaderFooterSeparator( Header, bShowHeader );
+        rSh.SetShowHeaderFooterSeparator( Footer, bShowFooter );
         Invalidate();
     }
 }
 
-bool SwEditWin::IsInHeaderFooter( const Point &rDocPt ) const
+bool SwEditWin::IsInHeaderFooter( const Point &rDocPt, FrameControlType &rControl ) const
 {
     SwWrtShell &rSh = rView.GetWrtShell();
     const SwPageFrm* pPageFrm = rSh.GetLayout()->GetPageAtPos( rDocPt );
 
-    if ( pPageFrm && pPageFrm->IsOverHeaderFooterArea( rDocPt ) )
+    if ( pPageFrm && pPageFrm->IsOverHeaderFooterArea( rDocPt, rControl ) )
         return true;
 
-    if ( rSh.IsShowHeaderFooterSeparator() )
+    if ( rSh.IsShowHeaderFooterSeparator( Header ) || rSh.IsShowHeaderFooterSeparator( Footer ) )
     {
         SwFrameControlsManager &rMgr = rSh.GetView().GetEditWin().GetFrameControlsManager();
         Point aPoint( LogicToPixel( rDocPt ) );
 
-        SwFrameControlPtr pControl = rMgr.GetControl( Header, pPageFrm );
-        if ( pControl.get() && pControl->Contains( aPoint ) )
-            return true;
+        if ( rSh.IsShowHeaderFooterSeparator( Header ) )
+        {
+            SwFrameControlPtr pControl = rMgr.GetControl( Header, pPageFrm );
+            if ( pControl.get() && pControl->Contains( aPoint ) )
+            {
+                rControl = Header;
+                return true;
+            }
+        }
 
-        pControl = rMgr.GetControl( Footer, pPageFrm );
-        if ( pControl.get() && pControl->Contains( aPoint ) )
-            return true;
+        if ( rSh.IsShowHeaderFooterSeparator( Footer ) )
+        {
+            SwFrameControlPtr pControl = rMgr.GetControl( Footer, pPageFrm );
+            if ( pControl.get() && pControl->Contains( aPoint ) )
+            {
+                rControl = Footer;
+                return true;
+            }
+        }
     }
 
     return false;
