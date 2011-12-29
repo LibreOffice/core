@@ -30,6 +30,7 @@
 
 // STL includes
 #include <list>
+#include <vector>
 
 #include <svx/svxids.hrc>
 #include <editeng/memberids.hrc>
@@ -56,8 +57,6 @@
 #include <cellatr.hxx>
 #include <fmtpdsc.hxx>
 #include <pagedesc.hxx>
-#define _SVSTDARR_STRINGS
-#include <svl/svstdarr.hxx>
 #include <viewsh.hxx>
 #include <tabfrm.hxx>
 #include <redline.hxx>
@@ -562,7 +561,7 @@ SwXCell* lcl_CreateXCell(SwFrmFmt* pFmt, sal_Int32 nColumn, sal_Int32 nRow)
     return pXCell;
 }
 
-void lcl_InspectLines(SwTableLines& rLines, SvStrings& rAllNames)
+void lcl_InspectLines(SwTableLines& rLines, std::vector<String*>& rAllNames)
 {
     for( sal_uInt16 i = 0; i < rLines.Count(); i++ )
     {
@@ -572,7 +571,7 @@ void lcl_InspectLines(SwTableLines& rLines, SvStrings& rAllNames)
         {
             SwTableBox* pBox = rBoxes[j];
             if(pBox->GetName().Len() && pBox->getRowSpan() > 0 )
-                rAllNames.Insert(new String(pBox->GetName()), rAllNames.Count());
+                rAllNames.push_back( new String(pBox->GetName()) );
             SwTableLines& rBoxLines = pBox->GetTabLines();
             if(rBoxLines.Count())
             {
@@ -2232,16 +2231,14 @@ uno::Sequence< OUString > SwXTextTable::getCellNames(void) throw( uno::RuntimeEx
         SwTable* pTable = SwTable::FindTable( pFmt );
           // gibts an der Tabelle und an allen Boxen
         SwTableLines& rTblLines = pTable->GetTabLines();
-        SvStrings aAllNames;
+        std::vector<String*> aAllNames;
         lcl_InspectLines(rTblLines, aAllNames);
-        uno::Sequence< OUString > aRet(aAllNames.Count());
+        uno::Sequence< OUString > aRet( static_cast<sal_uInt16>(aAllNames.size()) );
         OUString* pArray = aRet.getArray();
-        for(sal_uInt16 i = aAllNames.Count(); i; i--)
+        for( size_t i = 0; i < aAllNames.size(); ++i)
         {
-            String* pObject = aAllNames.GetObject(i-1);
-            pArray[i - 1] = *pObject;
-            aAllNames.Remove(i - 1);
-            delete pObject;
+            pArray[i] = *aAllNames[i];
+            delete aAllNames[i];
         }
         return aRet;
     }
