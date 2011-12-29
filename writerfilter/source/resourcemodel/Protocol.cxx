@@ -26,7 +26,7 @@
  *
  ************************************************************************/
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG_PROTOCOL
 #include <stdio.h>
 #include <rtl/ustrbuf.hxx>
 #include <resourcemodel/Protocol.hxx>
@@ -213,6 +213,6 @@ void TableProtocol::entry(int pos,
 }
 
 }
-#endif // DEBUG
+#endif // DEBUG_PROTOCOL
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

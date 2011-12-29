@@ -51,8 +51,6 @@ public:
     void attribute(const string & rName, const string & rValue);
     void attribute(const string & rName, sal_uInt32 nValue);
 
-    void setPrefix(const string & rPrefix);
-
 private:
     TagLogger::Pointer_t mpLogger;
     string msPrefix;

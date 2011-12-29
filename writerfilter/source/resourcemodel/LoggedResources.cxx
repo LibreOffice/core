@@ -75,10 +75,6 @@ void LoggedResourcesHelper::attribute(const string & rName, sal_uInt32 nValue)
     mpLogger->attribute(rName, nValue);
 }
 
-void LoggedResourcesHelper::setPrefix(const string & rPrefix)
-{
-    msPrefix = rPrefix;
-}
 #endif
 
 // class: LoggedStream

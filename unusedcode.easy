@@ -2019,7 +2019,3 @@ vcl::PDFWriterImpl::drawPolyPolygon(PolyPolygon const&, int, bool)
 vcl::unx::GtkPrintWrapper::print_operation_set_has_selection(_GtkPrintOperation*, int) const
 vcl::unx::GtkPrintWrapper::print_operation_set_support_selection(_GtkPrintOperation*, int) const
 void ScCompressedArrayIterator<int, unsigned short>::Follow<unsigned char>(ScCompressedArrayIterator<int, unsigned char> const&)
-writerfilter::LoggedResourcesHelper::setPrefix(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)
-writerfilter::PropertiesProtocol::PropertiesProtocol(writerfilter::Properties*, boost::shared_ptr<writerfilter::TagLogger>)
-writerfilter::StreamProtocol::StreamProtocol(writerfilter::Stream*, boost::shared_ptr<writerfilter::TagLogger>)
-writerfilter::TableProtocol::TableProtocol(writerfilter::Table*, boost::shared_ptr<writerfilter::TagLogger>)

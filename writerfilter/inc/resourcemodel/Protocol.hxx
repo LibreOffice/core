@@ -28,7 +28,7 @@
 #ifndef INCLUDE_WRITERFILTER_PROTOCOL_HXX
 #define INCLUDE_WRITERFILTER_PROTOCOL_HXX
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG_PROTOCOL
 
 #include <boost/shared_ptr.hpp>
 #include "WW8ResourceModel.hxx"
@@ -96,7 +96,7 @@ public:
 
 }
 
-#endif // DEBUG
+#endif // DEBUG_PROTOCOL
 #endif // INCLUDE_WRITERFILTER_PROTOCOL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
