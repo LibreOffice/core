@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #include "sal/config.h"
 #include "sal/precppunit.hxx"
 
@@ -736,3 +737,5 @@ namespace
   CPPUNIT_TEST_SUITE_REGISTRATION(ScannerTest);
 } // namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

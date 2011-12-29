@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  *    Copyright (C) 2011 Norbert Thiebaud
  *    License: GPLv3
@@ -878,3 +879,5 @@ char* base_dir;
     }
     return rc;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
