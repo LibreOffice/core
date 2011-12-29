@@ -69,7 +69,17 @@ namespace cppcanvas
 
         // state stack of OutputDevice, to correctly handle
         // push/pop actions
-        typedef ::std::vector< OutDevState >    VectorOfOutDevStates;
+        class VectorOfOutDevStates
+        {
+        public:
+            OutDevState& getState();
+            const OutDevState& getState() const;
+            void pushState(sal_uInt16 nFlags);
+            void popState();
+            void clearStateStack();
+        private:
+            ::std::vector< OutDevState > m_aStates;
+        };
 
         // EMF+
         // TODO: replace?
