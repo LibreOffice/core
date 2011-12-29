@@ -40,7 +40,6 @@
 
 class SvStream;
 struct SfxFrameDescriptor_Impl;
-class SvStrings;
 class SfxFrameDescriptor;
 class Wallpaper;
 typedef SfxFrameDescriptor* SfxFrameDescriptorPtr;
@@ -96,8 +95,6 @@ class SFX2_DLLPUBLIC SfxFrameDescriptor
     sal_Bool                    bHasUI;
     sal_Bool                    bReadOnly;
     SfxFrameDescriptor_Impl* pImp;
-    SvStrings*              pScripts;
-    SvStrings*              pComments;
 
 public:
                             SfxFrameDescriptor();

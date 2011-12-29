@@ -31,8 +31,6 @@
 #include <svl/inetstrm.hxx>
 #include <svl/stritem.hxx>
 
-#define _SVSTDARR_STRINGS
-#include <svl/svstdarr.hxx>
 #include <osl/mutex.hxx>
 
 #include <vcl/menu.hxx>
@@ -101,7 +99,6 @@ SfxAppData_Impl::SfxAppData_Impl( SfxApplication* )
     , pTemplates( 0 )
     , pPool(0)
     , pDisabledSlotList( 0 )
-    , pSecureURLs(0)
     , pSaveOptions( 0 )
     , pUndoOptions( 0 )
     , pHelpOptions( 0 )
@@ -140,7 +137,6 @@ SfxAppData_Impl::~SfxAppData_Impl()
 {
     DeInitDDE();
     delete pTopFrames;
-    delete pSecureURLs;
     delete pBasicManager;
 
     BasicManagerRepository::revokeCreationListener( *pBasMgrListener );

@@ -760,8 +760,6 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
     // Secure-Referers
     if ( SFX_ITEM_SET == rSet.GetItemState(SID_SECURE_URL, sal_True, &pItem))
     {
-        DELETEZ(pAppData_Impl->pSecureURLs);
-
         DBG_ASSERT(pItem->ISA(SfxStringListItem), "StringListItem expected");
         const std::vector<String> &aList = ((SfxStringListItem*)pItem)->GetList();
         sal_uInt32 nCount = aList.size();

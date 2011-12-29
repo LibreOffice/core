@@ -41,7 +41,6 @@
 #include <vector>
 
 class SfxApplication;
-class SvStrings;
 class SfxProgress;
 class SfxChildWinFactArr_Impl;
 class SfxDdeDocTopics_Impl;
@@ -125,7 +124,6 @@ public:
     // global pointers
     SfxItemPool*                        pPool;
     std::vector<sal_uInt16>*            pDisabledSlotList;
-    SvStrings*                          pSecureURLs;
     SvtSaveOptions*                     pSaveOptions;
     SvtUndoOptions*                     pUndoOptions;
     SvtHelpOptions*                     pHelpOptions;

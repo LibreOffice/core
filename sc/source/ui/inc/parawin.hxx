@@ -36,13 +36,6 @@
 #include <vcl/group.hxx>
 #include <svtools/svmedit.hxx>
 #include <vcl/tabpage.hxx>
-
-#ifndef _SVSTDARR_STRINGS
-
-#define _SVSTDARR_STRINGS
-#include <svl/svstdarr.hxx>
-
-#endif
 #include <vcl/tabctrl.hxx>
 
 #include <vector>
@@ -96,7 +89,6 @@ private:
 
         ArgInput        aArgInput[4];
         String          aDefaultString;
-        SvStrings       aParaArray;
         DECL_LINK( ScrollHdl, ScrollBar* );
         DECL_LINK( ModifyHdl, ArgInput* );
         DECL_LINK( GetEdFocusHdl, ArgInput* );
