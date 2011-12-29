@@ -33,7 +33,6 @@
 #include <editeng/eeitem.hxx>
 
 #include <sfx2/app.hxx>
-#define _SVSTDARR_STRINGS
 #include <editeng/boxitem.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/scripttypeitem.hxx>

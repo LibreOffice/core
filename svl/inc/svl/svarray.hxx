@@ -81,7 +81,7 @@
 *           Sortierung mit Hilfe der Object-operatoren "<" und "=="
 *
 * JP 09.10.96:  vordefinierte Arrays:
-*   PtrArr:     SvStrings, SvStringsDtor
+*   PtrArr:     SvStringsDtor
 *   SortArr:    SvStringsSort, SvStringsSortDtor,
 *               SvStringsISort, SvStringsISortDtor
 ***********************************************************************/

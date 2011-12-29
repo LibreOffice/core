@@ -32,12 +32,6 @@
 
 #include "tabbgcolor.hxx"
 
-#ifndef _SVSTDARR_STRINGS
-
-#define _SVSTDARR_STRINGS
-#include <svl/svstdarr.hxx>
-
-#endif
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
 #include <vector>

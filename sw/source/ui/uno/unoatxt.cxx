@@ -28,8 +28,6 @@
 
 
 
-#define _SVSTDARR_STRINGS
-
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <osl/mutex.hxx>
 #include <osl/diagnose.h>

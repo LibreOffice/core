@@ -34,13 +34,6 @@
 #include <tools/color.hxx>
 #include "tabbgcolor.hxx"
 
-#ifndef _SVSTDARR_STRINGS
-
-#define _SVSTDARR_STRINGS
-#include <svl/svstdarr.hxx>
-
-#endif
-
 #include <com/sun/star/uno/Sequence.hxx>
 
 #include <boost/shared_ptr.hpp>

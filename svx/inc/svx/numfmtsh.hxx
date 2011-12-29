@@ -33,9 +33,6 @@
 #include <tools/string.hxx>
 #include <i18npool/lang.h>
 
-#ifndef _SVSTDARR_STRINGS
-#define _SVSTDARR_STRINGS
-#endif
 #include "svx/svxdllapi.h"
 
 #include <svl/svstdarr.hxx>

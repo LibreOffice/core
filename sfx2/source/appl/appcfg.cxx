@@ -47,8 +47,6 @@
 #include <svl/szitem.hxx>
 #include <svl/undo.hxx>
 
-#define _SVSTDARR_STRINGS
-#include <svl/svstdarr.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <sot/exchange.hxx>
 

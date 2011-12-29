@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-#define _SVSTDARR_STRINGS
-
 #include <string.h>
 #include <stdio.h>                      // sscanf
 #include <hintids.hxx>

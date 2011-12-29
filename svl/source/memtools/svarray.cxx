@@ -30,7 +30,6 @@
 #define _SVARRAY_CXX
 
 #define _SVSTDARR_sal_uInt16S
-#define _SVSTDARR_STRINGS
 #define _SVSTDARR_STRINGSDTOR
 #define _SVSTDARR_STRINGSSORT
 #define _SVSTDARR_STRINGSSORTDTOR
@@ -59,7 +58,6 @@ sal_uInt16 SvPtrarr::GetPos( const VoidPtr& aElement ) const
     return ( n >= nA ? USHRT_MAX : n );
 }
 
-SV_IMPL_PTRARR( SvStrings, StringPtr )
 SV_IMPL_PTRARR( SvStringsDtor, StringPtr )
 
 // ---------------- strings -------------------------------------

@@ -38,8 +38,6 @@
 #endif
 #include <hintids.hxx>
 
-#define _SVSTDARR_STRINGS
-#include <svl/svstdarr.hxx>
 #include <svl/stritem.hxx>
 #include <svtools/imap.hxx>
 #include <svtools/htmltokn.h>

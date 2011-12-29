@@ -37,12 +37,6 @@
 #include <svtools/svmedit.hxx>
 #include <vcl/tabpage.hxx>
 
-#ifndef _SVSTDARR_STRINGS
-
-#define _SVSTDARR_STRINGS
-#include <svl/svstdarr.hxx>
-
-#endif
 #include <vcl/tabctrl.hxx>
 #include "parawin.hxx"
 #include <svtools/svtreebx.hxx>

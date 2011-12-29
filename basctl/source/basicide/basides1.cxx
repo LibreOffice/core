@@ -27,8 +27,6 @@
  ************************************************************************/
 
 
-#define _SVSTDARR_STRINGS
-
 #include "ide_pch.hxx"
 
 #define _SOLAR__PRIVATE 1
