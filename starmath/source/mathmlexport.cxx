@@ -1160,7 +1160,7 @@ void SmXMLExport::ExportAttributes(const SmNode *pNode, int nLevel)
 static bool lcl_HasEffectOnMathvariant( const SmTokenType eType )
 {
     return  eType == TBOLD || eType == TNBOLD ||
-            eType == TITALIC || eType == TNBOLD ||
+            eType == TITALIC || eType == TNITALIC ||
             eType == TSANS || eType == TSERIF || eType == TFIXED;
 }
 
