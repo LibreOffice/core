@@ -34,13 +34,11 @@
 
 #define FT_EXPLORERFILE_CURRENTPATH         10
 #define BTN_EXPLORERFILE_NEWFOLDER          11
-#define BTN_EXPLORERFILE_LISTVIEW           12
-#define BTN_EXPLORERFILE_DETAILSVIEW        13
-#define BTN_EXPLORERFILE_UP                 14
-#define BTN_EXPLORERFILE_STANDARD           15
-#define BTN_EXPLORERFILE_OPEN               16
-#define BTN_EXPLORERFILE_CANCEL             17
-#define BTN_EXPLORERFILE_HELP               18
+#define BTN_EXPLORERFILE_UP                 12
+#define BTN_EXPLORERFILE_STANDARD           13
+#define BTN_EXPLORERFILE_OPEN               14
+#define BTN_EXPLORERFILE_CANCEL             15
+#define BTN_EXPLORERFILE_HELP               16
 
 #define IMG_FILEDLG_BTN_UP                  10
 #define IMG_FILEDLG_BTN_STD                 11

@@ -77,22 +77,6 @@ ModalDialog DLG_SVT_EXPLORERFILE
         Pos = MAP_APPFONT ( 59 , 6 ) ;
         QuickHelpText [ en-US ] = "Create New Directory" ;
     };
-    ImageButton BTN_EXPLORERFILE_LISTVIEW
-    {
-        HelpID = "fpicker:ImageButton:DLG_SVT_EXPLORERFILE:BTN_EXPLORERFILE_LISTVIEW";
-        TabStop = FALSE ;
-        Pos = MAP_APPFONT ( 109 , 6 ) ;
-        ButtonImage = Image
-        {
-            ImageBitmap = Bitmap
-            {
-                File = "list.bmp" ;
-            };
-            MASKCOLOR
-        };
-        QuickHelpText [ en-US ] = "List";
-    };
-        HelpID = "fpicker:ImageButton:DLG_SVT_EXPLORERFILE:BTN_EXPLORERFILE_DETAILSVIEW";
     MenuButton BTN_EXPLORERFILE_UP
     {
         HelpID = "fpicker:MenuButton:DLG_SVT_EXPLORERFILE:BTN_EXPLORERFILE_UP";
