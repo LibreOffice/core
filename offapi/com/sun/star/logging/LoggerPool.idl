@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #ifndef __com_sun_star_logging_LoggerPool_idl__
 #define __com_sun_star_logging_LoggerPool_idl__
 
@@ -30,3 +31,5 @@ singleton LoggerPool : XLoggerPool;
 //=============================================================================
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

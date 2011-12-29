@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #ifndef __com_sun_star_xml_xpath_XPathExtension_idl__
 #define __com_sun_star_xml_xpath_XPathExtension_idl__
 #include <com/sun/star/xml/xpath/XXPathExtension.idl>
@@ -10,3 +11,4 @@ module com {  module sun {  module star {  module xml { module xpath {
 };};};};};
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

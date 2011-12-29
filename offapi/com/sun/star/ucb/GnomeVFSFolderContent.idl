@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #ifndef __com_sun_star_ucb_GnomeVFSFolderContent_idl__
 #define __com_sun_star_ucb_GnomeVFSFolderContent_idl__
 
@@ -78,3 +79,5 @@ service GnomeVFSFolderContent
 }; }; }; };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

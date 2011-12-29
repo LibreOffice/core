@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #ifndef __com_sun_star_script_XErrorQuery_idl__
 #define __com_sun_star_script_XErrorQuery_idl__
 
@@ -21,3 +22,5 @@ interface XErrorQuery : ::com::sun::star::uno::XInterface
 
 };  };  };  };
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

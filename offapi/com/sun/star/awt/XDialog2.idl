@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #ifndef __com_sun_star_awt_XDialog2_idl__
 #define __com_sun_star_awt_XDialog2_idl__
 
@@ -31,3 +32,5 @@ published interface XDialog2: com::sun::star::awt::XDialog
 }; }; }; };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
