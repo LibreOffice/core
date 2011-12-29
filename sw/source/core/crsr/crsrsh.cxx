@@ -1316,7 +1316,7 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, sal_Bool bIdleEnd )
     }
 
     if ( IsInHeaderFooter() != IsHeaderFooterEdit() )
-        ToggleHeaderFooterEdit( );
+        ToggleHeaderFooterEdit();
 
     // #i27301#
     SwNotifyAccAboutInvalidTextSelections aInvalidateTextSelections( *this );

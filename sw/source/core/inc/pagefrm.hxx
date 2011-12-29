@@ -28,7 +28,7 @@
 #ifndef _PAGEFRM_HXX
 #define _PAGEFRM_HXX
 
-
+#include <viewsh.hxx>
 #include <svl/svarray.hxx>
 
 #include "ftnboss.hxx"
@@ -359,7 +359,8 @@ public:
     // in case this is am empty page, this function returns the 'reference' page
     const SwPageFrm& GetFormatPage() const;
 
-    bool IsOverHeaderFooterArea( const Point& rPt ) const;
+    /// If in header or footer area, it also indicates the exact area in rControl.
+    bool IsOverHeaderFooterArea( const Point& rPt, FrameControlType &rControl ) const;
 
     // return font used to paint the "empty page" string
     static const Font& GetEmptyPageFont();

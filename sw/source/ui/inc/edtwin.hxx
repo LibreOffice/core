@@ -229,10 +229,10 @@ protected:
                                 SvxAutoCorrect* pACorr, sal_Bool bFromIME = sal_False );
 
     /// Shows or hides the header & footer separators; only if there is a change.
-    void    ShowHeaderFooterSeparator( bool bShow );
+    void    ShowHeaderFooterSeparator( bool bShowHeader, bool bShowFooter );
 
     /// Returns true if in header/footer area, or in the header/footer control.
-    bool    IsInHeaderFooter( const Point &rDocPt ) const;
+    bool    IsInHeaderFooter( const Point &rDocPt, FrameControlType &rControl ) const;
 public:
 
     void            UpdatePointer(const Point &, sal_uInt16 nButtons = 0);

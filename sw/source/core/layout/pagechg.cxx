@@ -2449,7 +2449,7 @@ const SwPageFrm& SwPageFrm::GetFormatPage() const
     return *pRet;
 }
 
-bool SwPageFrm::IsOverHeaderFooterArea( const Point& rPt ) const
+bool SwPageFrm::IsOverHeaderFooterArea( const Point& rPt, FrameControlType &rControl ) const
 {
     long nUpperLimit = 0;
     long nLowerLimit = 0;
@@ -2470,10 +2470,24 @@ bool SwPageFrm::IsOverHeaderFooterArea( const Point& rPt ) const
     SwRect aHeaderArea( Frm().TopLeft(),
            Size( Frm().Width(), nUpperLimit - Frm().Top() ) );
 
-    SwRect aFooterArea( Point( Frm().Left(), nLowerLimit ),
-           Size( Frm().Width(), Frm().Bottom() - nLowerLimit ) );
+    if ( aHeaderArea.IsInside( rPt ) )
+    {
+        rControl = Header;
+        return true;
+    }
+    else
+    {
+        SwRect aFooterArea( Point( Frm().Left(), nLowerLimit ),
+                Size( Frm().Width(), Frm().Bottom() - nLowerLimit ) );
 
-    return aHeaderArea.IsInside( rPt ) || aFooterArea.IsInside( rPt );
+        if ( aFooterArea.IsInside( rPt ) )
+        {
+            rControl = Footer;
+            return true;
+        }
+    }
+
+    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

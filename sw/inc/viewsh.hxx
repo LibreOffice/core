@@ -92,6 +92,12 @@ namespace vcl
     class OldStylePrintAdaptor;
 }
 
+enum FrameControlType
+{
+    PageBreak,
+    Header,
+    Footer
+};
 
 // Define for flags needed in ctor or layers below.
 // Currently the PreView flag is needed for DrawPage.
@@ -156,9 +162,10 @@ class SW_DLLPUBLIC ViewShell : public Ring
     sal_Bool  bEnableSmooth    :1;  // Disable SmoothScroll, e.g. for drag
                                     // of scrollbars.
     sal_Bool  bEndActionByVirDev:1; // Paints from EndAction always via virtual device
-    bool      bShowHeaderFooterSeparator:1;
-    bool      bHeaderFooterEdit:1;
                                     // (e.g. when browsing).
+    bool      bShowHeaderSeparator:1; //< Flag to say that we are showing the header control
+    bool      bShowFooterSeparator:1; //< Flag to say that we are showing the footer control
+    bool      bHeaderFooterEdit:1;  //< Flag to say that we are editing header or footer (according to the bShow(Header|Footer)Separator above)
 
     // boolean, indicating that class in in constructor.
     bool mbInConstructor:1;
@@ -565,10 +572,12 @@ public:
     const SwPostItMgr* GetPostItMgr() const { return (const_cast<ViewShell*>(this))->GetPostItMgr(); }
     SwPostItMgr* GetPostItMgr();
 
-    void ToggleHeaderFooterEdit( );
+    /// Acts both for headers / footers, depending on the bShow(Header|Footer)Separator flags
+    void ToggleHeaderFooterEdit();
+    /// Acts both for headers / footers, depending on the bShow(Header|Footer)Separator flags
     bool IsHeaderFooterEdit() const { return bHeaderFooterEdit; }
-    bool IsShowHeaderFooterSeparator() { return bShowHeaderFooterSeparator; }
-    virtual void SetShowHeaderFooterSeparator( bool bShow ) { bShowHeaderFooterSeparator = bShow; }
+    bool IsShowHeaderFooterSeparator( FrameControlType eControl ) { return (eControl == Header)? bShowHeaderSeparator: bShowFooterSeparator; }
+    virtual void SetShowHeaderFooterSeparator( FrameControlType eControl, bool bShow ) { if ( eControl == Header ) bShowHeaderSeparator = bShow; else bShowFooterSeparator = bShow; }
 };
 
 //---- class CurrShell manages global ShellPointer -------------------
