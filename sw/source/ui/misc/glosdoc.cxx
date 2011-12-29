@@ -31,7 +31,6 @@
 
 #include <com/sun/star/container/XNamed.hpp>
 
-#define _SVSTDARR_STRINGS
 #include <unotools/transliterationwrapper.hxx>
 
 #include <svl/svstdarr.hxx>
@@ -115,7 +114,7 @@ String  SwGlossaries::GetDefName()
 ------------------------------------------------------------------------*/
 sal_uInt16 SwGlossaries::GetGroupCnt()
 {
-    return  GetNameList()->Count();
+    return static_cast<sal_uInt16>(GetNameList()->size());
 }
 
 /*------------------------------------------------------------------------
@@ -156,7 +155,7 @@ sal_Bool SwGlossaries::FindGroupName(String & rGroup)
 
 String SwGlossaries::GetGroupName(sal_uInt16 nGroupId)
 {
-    OSL_ENSURE(nGroupId < m_pGlosArr->Count(), "Textbausteinarray ueberindiziert");
+    OSL_ENSURE(static_cast<size_t>(nGroupId) < m_pGlosArr->size(), "Textbausteinarray ueberindiziert");
     return *(*m_pGlosArr)[nGroupId];
 }
 
@@ -181,23 +180,18 @@ String  SwGlossaries::GetGroupTitle( const String& rGroupName )
 SwTextBlocks* SwGlossaries::GetGroupDoc(const String &rName,
                                         sal_Bool bCreate) const
 {
-        // insert to the list of text blocks if applicable
+    // insert to the list of text blocks if applicable
     if(bCreate && m_pGlosArr)
     {
-        const String aName(rName);
-        const sal_uInt16 nCount = m_pGlosArr->Count();
-        sal_uInt16 i;
-
-        for( i = 0; i < nCount; ++i)
+        std::vector<String*>::const_iterator it(m_pGlosArr->begin());
+        for(; it != m_pGlosArr->end(); ++it)
         {
-            const String *pName = (*m_pGlosArr)[i];
-            if(*pName == aName)
+            if(**it == rName)
                 break;
         }
-        if(i == nCount)
+        if( it == m_pGlosArr->end() )
         {   // block not in the list
-            String *pTmp = new String(aName);
-            m_pGlosArr->Insert(pTmp, m_pGlosArr->Count());
+            m_pGlosArr->push_back(new String(rName));
         }
     }
     return GetGlosDoc( rName, bCreate );
@@ -227,10 +221,7 @@ sal_Bool SwGlossaries::NewGroupDoc(String& rGroupName, const String& rTitle)
     SwTextBlocks *pBlock = GetGlosDoc( sNewGroup );
     if(pBlock)
     {
-        String *pTmp =
-            new String(sNewGroup);
-        SvStrings* pList = GetNameList();
-        pList->Insert(pTmp, pList->Count());
+        GetNameList()->push_back(new String(sNewGroup));
         pBlock->SetName(rTitle);
         PutGroupDoc(pBlock);
         rGroupName = sNewGroup;
@@ -279,11 +270,10 @@ sal_Bool    SwGlossaries::RenameGroupDoc(
                         rNewGroup = sNewFileName.Copy(0, nFileNameLen);
                         rNewGroup += GLOS_DELIM;
                         rNewGroup += String::CreateFromInt32(nNewPath);
-                        String *pTmp = new String(rNewGroup);
                         if(!m_pGlosArr)
                             GetNameList();
                         else
-                            m_pGlosArr->Insert(pTmp, m_pGlosArr->Count());
+                            m_pGlosArr->push_back(new String(rNewGroup));
 
                         sNewFilePath += INET_PATH_TOKEN;
                         sNewFilePath += sNewFileName ;
@@ -326,19 +316,15 @@ sal_Bool SwGlossaries::DelGroupDoc(const String &rName)
 
 SwGlossaries::~SwGlossaries()
 {
-    sal_uInt16 nCount = m_pGlosArr? m_pGlosArr->Count() : 0;
-    sal_uInt16 i;
-
-    for( i = 0; i < nCount; ++i)
+    if( m_pGlosArr )
     {
-        String *pTmp = (*m_pGlosArr)[i];
-        delete pTmp;
+        for(std::vector<String*>::const_iterator it(m_pGlosArr->begin()); it != m_pGlosArr->end(); ++it)
+            delete *it;
+        delete m_pGlosArr;
     }
 
     for(std::vector<String*>::const_iterator it(m_aPathArr.begin()); it != m_aPathArr.end(); ++it)
         delete *it;
-
-    delete m_pGlosArr;
 
     InvalidateUNOOjects();
 }
@@ -383,37 +369,37 @@ SwTextBlocks* SwGlossaries::GetGlosDoc( const String &rName, sal_Bool bCreate ) 
 /*------------------------------------------------------------------------
     Description: access to the list of names; read in if applicable
 ------------------------------------------------------------------------*/
-SvStrings* SwGlossaries::GetNameList()
+std::vector<String*>* SwGlossaries::GetNameList()
 {
     if( !m_pGlosArr )
     {
-        m_pGlosArr = new SvStrings;
+        m_pGlosArr = new std::vector<String*>;
         String sExt( SwGlossaries::GetExtension() );
         for( size_t i = 0; i < m_aPathArr.size(); ++i )
         {
-            SvStrings aFiles( 16, 16 );
+            std::vector<String*> aFiles;
 
             SWUnoHelper::UCB_GetFileListOfFolder( *m_aPathArr[i], aFiles, &sExt );
-            for( sal_uInt16 nFiles = 0, nFEnd = aFiles.Count();
-                    nFiles < nFEnd; ++nFiles )
+            for( std::vector<String*>::const_iterator filesIt(aFiles.begin());
+                 filesIt != aFiles.end(); ++filesIt)
             {
-                String* pTitle = aFiles[ nFiles ];
+                String *pTitle = *filesIt;
                 String sName( pTitle->Copy( 0, pTitle->Len() - sExt.Len() ));
                 sName += GLOS_DELIM;
                 sName += String::CreateFromInt32( static_cast<sal_Int16>(i) );
-                m_pGlosArr->Insert( new String(sName), m_pGlosArr->Count() );
+                m_pGlosArr->push_back( new String(sName) );
 
                 // don't need any more these pointers
                 delete pTitle;
             }
         }
-        if(!m_pGlosArr->Count())
+        if( m_pGlosArr->empty() )
         {
             // the standard block is inside of the path's first part
             String *pTmp = new String( SwGlossaries::GetDefName() );
             (*pTmp) += GLOS_DELIM;
             (*pTmp) += '0';
-            m_pGlosArr->Insert(pTmp, m_pGlosArr->Count());
+            m_pGlosArr->push_back( pTmp );
         }
     }
     return m_pGlosArr;
@@ -432,10 +418,10 @@ SwGlossaries::SwGlossaries() :
 /* --------------------------------------------------
 *   #61050# double paths cause irritation - get rid of it
  * --------------------------------------------------*/
-sal_Bool lcl_FindSameEntry(const SvStrings& rDirArr, const String& rEntryURL)
+sal_Bool lcl_FindSameEntry(const std::vector<String*>& rDirArr, const String& rEntryURL)
 {
-    for(sal_uInt16 i = 0; i < rDirArr.Count(); i++)
-        if(rEntryURL == (*rDirArr.GetObject(i)))
+    for(std::vector<String*>::const_iterator it(rDirArr.begin()); it != rDirArr.end(); ++it)
+        if( **it == rEntryURL )
             return sal_True;
     return sal_False;
 }
@@ -454,7 +440,7 @@ void SwGlossaries::UpdateGlosPath(sal_Bool bFull)
         m_aPathArr.clear();
 
         sal_uInt16 nTokenCount = m_aPath.GetTokenCount(SVT_SEARCHPATH_DELIMITER);
-        SvStrings aDirArr;
+        std::vector<String*> aDirArr;
         for( sal_uInt16 i = 0; i < nTokenCount; i++ )
         {
             String sPth(m_aPath.GetToken(i, SVT_SEARCHPATH_DELIMITER));
@@ -465,7 +451,7 @@ void SwGlossaries::UpdateGlosPath(sal_Bool bFull)
             {
                 continue;
             }
-            aDirArr.Insert(new String(sPth), aDirArr.Count());
+            aDirArr.push_back(new String(sPth));
             if( !FStatHelper::IsFolder( sPth ) )
             {
                 if( m_sErrPath.Len() )
@@ -476,7 +462,8 @@ void SwGlossaries::UpdateGlosPath(sal_Bool bFull)
             else
                 m_aPathArr.push_back(new String(sPth));
         }
-        aDirArr.DeleteAndDestroy(0, aDirArr.Count());
+        for(std::vector<String*>::const_iterator it(aDirArr.begin()); it != aDirArr.end(); ++it)
+            delete *it;
 
         if(!nTokenCount ||
             (m_sErrPath.Len() && (bPathChanged || m_sOldErrPath != m_sErrPath)) )
@@ -494,10 +481,8 @@ void SwGlossaries::UpdateGlosPath(sal_Bool bFull)
 
         if(m_pGlosArr)
         {
-            for(sal_uInt16 i = 0; i < m_pGlosArr->Count(); ++i)
-            {
-                delete (String *)(*m_pGlosArr)[i];
-            }
+            for(std::vector<String*>::const_iterator it(m_pGlosArr->begin()); it != m_pGlosArr->end(); ++it)
+                delete *it;
             DELETEZ(m_pGlosArr);
             GetNameList();
         }
@@ -520,11 +505,9 @@ void SwGlossaries::RemoveFileFromList( const String& rGroup )
 {
     if(m_pGlosArr)
     {
-        const sal_uInt16 nCount = m_pGlosArr->Count();
-        for(sal_uInt16 i = 0; i < nCount; ++i)
+        for(std::vector<String*>::iterator it(m_pGlosArr->begin()); it != m_pGlosArr->end(); ++it)
         {
-            String *pTmp = (*m_pGlosArr)[i];
-            if(*pTmp == rGroup)
+            if(**it == rGroup)
             {
                 rtl::OUString aUName = rGroup;
                 {
@@ -569,8 +552,8 @@ void SwGlossaries::RemoveFileFromList( const String& rGroup )
                     }
                 }
 
-                m_pGlosArr->Remove(i);
-                delete pTmp;
+                delete *it;
+                m_pGlosArr->erase(it);
                 break;
             }
         }

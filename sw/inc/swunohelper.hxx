@@ -32,6 +32,8 @@
 #include <sal/types.h>
 #include "swdllapi.h"
 
+#include <vector>
+
 namespace com { namespace sun { namespace star {
     namespace uno {
         class Any;
@@ -39,7 +41,6 @@ namespace com { namespace sun { namespace star {
 }}}
 
 class String;
-class SvStrings;
 class SvPtrarr;
 
 namespace SWUnoHelper {
@@ -68,7 +69,8 @@ SW_DLLPUBLIC sal_Bool UCB_IsReadOnlyFileName( const String& rURL );
     //          pDateTime != 0 -> returns also the modified date/time of
     //                       the files in a SvPtrarr -->
     //                       !! objects must be deleted from the caller!!
-sal_Bool UCB_GetFileListOfFolder( const String& rURL, SvStrings& rList,
+sal_Bool UCB_GetFileListOfFolder( const String& rURL,
+                                std::vector<String*>& rList,
                                 const String* pExtension = 0,
                                 SvPtrarr* pDateTimeList = 0 );
 

@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-#define _SVSTDARR_STRINGS
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/ucb/XContentIdentifier.hpp>
@@ -204,7 +202,8 @@ sal_Bool UCB_IsDirectory( const String& rURL )
     //          pDateTime != 0 -> returns also the modified date/time of
     //                       the files in a SvPtrarr -->
     //                       !! objects must be deleted from the caller!!
-sal_Bool UCB_GetFileListOfFolder( const String& rURL, SvStrings& rList,
+sal_Bool UCB_GetFileListOfFolder( const String& rURL,
+                                std::vector<String*>& rList,
                                 const String* pExtension,
                                 SvPtrarr* pDateTimeList )
 {
@@ -245,8 +244,7 @@ sal_Bool UCB_GetFileListOfFolder( const String& rURL, SvStrings& rList,
                               sTitle.Equals( *pExtension,
                                           sTitle.Len() - nExtLen, nExtLen )) )
                         {
-                            String* pStr = new String( sTitle );
-                            rList.Insert( pStr, rList.Count() );
+                            rList.push_back( new String(sTitle) );
 
                             if( pDateTimeList )
                             {

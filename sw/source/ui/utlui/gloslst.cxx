@@ -31,7 +31,6 @@
 
 #define _SVSTDARR_STRINGSDTOR
 #define _SVSTDARR_STRINGSISORTDTOR
-#define _SVSTDARR_STRINGS
 #include <svl/svstdarr.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/dialog.hxx>
@@ -49,6 +48,8 @@
 #include <glosdoc.hxx>
 #include <gloslst.hxx>
 #include <swunohelper.hxx>
+
+#include <vector>
 
 #include <utlui.hrc>
 #include <gloslst.hrc>
@@ -325,16 +326,15 @@ void SwGlossaryList::Update()
         for( size_t nPath = 0; nPath < pPathArr->size(); nPath++ )
         {
             SvStringsDtor aFoundGroupNames;
-            SvStrings aFiles( 16, 16 );
+            std::vector<String*> aFiles;
             SvPtrarr aDateTimeArr( 16, 16 );
 
             SWUnoHelper::UCB_GetFileListOfFolder( *(*pPathArr)[nPath], aFiles,
                                                     &sExt, &aDateTimeArr );
-            for( sal_uInt16 nFiles = 0, nFEnd = aFiles.Count();
-                    nFiles < nFEnd; ++nFiles )
+            for( size_t nFiles = 0; nFiles < aFiles.size(); ++nFiles )
             {
                 String* pTitle = aFiles[ nFiles ];
-                ::DateTime* pDT = (::DateTime*) aDateTimeArr[ nFiles ];
+                ::DateTime* pDT = (::DateTime*) aDateTimeArr[ static_cast<sal_uInt16>(nFiles) ];
 
                 String sName( pTitle->Copy( 0, pTitle->Len() - sExt.Len() ));
 

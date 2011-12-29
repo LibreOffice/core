@@ -29,11 +29,9 @@
 #define _GLOSDOC_HXX
 
 #include <tools/string.hxx>
-#include <svl/svarray.hxx>
 #include <com/sun/star/text/XAutoTextGroup.hpp>
 
 class SwTextBlocks;
-class SvStrings;
 class SwDocShell;
 
 #ifndef SW_DECL_SWDOCSHELL_DEFINED
@@ -43,10 +41,7 @@ SV_DECL_REF( SwDocShell )
 #endif
 #include <cppuhelper/weakref.hxx>
 
-#ifndef INCLUDED_VECTOR
 #include <vector>
-#define INCLUDED_VECTOR
-#endif
 #include "swdllapi.h"
 
 typedef ::com::sun::star::uno::WeakReference< ::com::sun::star::text::XAutoTextGroup > AutoTextGroupRef;
@@ -67,11 +62,11 @@ class SW_DLLPUBLIC SwGlossaries
     String                  m_sOldErrPath;
     String                  m_sErrPath;
     std::vector<String*>    m_aPathArr;
-    SvStrings               *m_pGlosArr;
-    sal_Bool                    m_bError;
+    std::vector<String*>   *m_pGlosArr;
+    sal_Bool                m_bError;
 
     SW_DLLPRIVATE SwTextBlocks* GetGlosDoc(const String &rName, sal_Bool bCreate = sal_True) const;
-    SW_DLLPRIVATE SvStrings     *GetNameList();
+    SW_DLLPRIVATE std::vector<String*>* GetNameList();
 
     // implementation in unoatxt.cxx
     SW_DLLPRIVATE void RemoveFileFromList( const String& rGroup );
