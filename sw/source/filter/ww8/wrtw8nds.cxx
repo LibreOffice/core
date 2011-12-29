@@ -245,7 +245,7 @@ xub_StrLen lcl_getMinPos( xub_StrLen pos1, xub_StrLen pos2 )
         min = pos2;
     else if ( pos2 == STRING_NOTFOUND && pos1 != STRING_NOTFOUND )
         min = pos1;
-    else if ( pos2 != STRING_NOTFOUND && pos2 != STRING_NOTFOUND )
+    else if ( pos1 != STRING_NOTFOUND && pos2 != STRING_NOTFOUND )
     {
         if ( pos1 < pos2 )
             min = pos1;
