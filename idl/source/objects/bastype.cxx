@@ -253,10 +253,10 @@ sal_Bool SvNumberIdentifier::ReadSvIdl( SvIdlDataBase & rBase,
         }
         else
         {
-            ByteString aStr ("no value for identifier <");
-            aStr += getString();
-            aStr += "> ";
-            rBase.SetError( aStr, rInStm.GetToken() );
+            rtl::OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM(
+                "no value for identifier <"));
+            aStr.append(getString()).append(RTL_CONSTASCII_STRINGPARAM("> "));
+            rBase.SetError( aStr.makeStringAndClear(), rInStm.GetToken() );
             rBase.WriteError( rInStm );
         }
     }
@@ -280,10 +280,10 @@ sal_Bool SvNumberIdentifier::ReadSvIdl( SvIdlDataBase & rBase,
         }
         else
         {
-            ByteString aStr ("no value for identifier <");
-            aStr += getString();
-            aStr += "> ";
-            rBase.SetError( aStr, rInStm.GetToken() );
+            rtl::OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM(
+                "no value for identifier <"));
+            aStr.append(getString()).append(RTL_CONSTASCII_STRINGPARAM("> "));
+            rBase.SetError( aStr.makeStringAndClear(), rInStm.GetToken() );
             rBase.WriteError( rInStm );
         }
     }

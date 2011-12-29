@@ -47,15 +47,15 @@ class DateTime;
  *=====================================================================*/
 class INetMessageHeader
 {
-    ByteString m_aName;
-    ByteString m_aValue;
+    rtl::OString m_aName;
+    rtl::OString m_aValue;
 
 public:
     INetMessageHeader()
     {}
 
     INetMessageHeader (
-        const ByteString& rName, const ByteString& rValue)
+        const rtl::OString& rName, const rtl::OString& rValue)
         : m_aName (rName), m_aValue (rValue)
     {}
 
@@ -74,8 +74,8 @@ public:
         return *this;
     }
 
-    const ByteString& GetName() const { return m_aName; }
-    const ByteString& GetValue() const { return m_aValue; }
+    const rtl::OString& GetName() const { return m_aName; }
+    const rtl::OString& GetValue() const { return m_aValue; }
 
     friend SvStream& operator<< (
         SvStream& rStrm, const INetMessageHeader& rHdr)

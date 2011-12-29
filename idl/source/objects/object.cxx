@@ -675,10 +675,10 @@ void SvMetaClass::WriteSrc( SvIdlDataBase & rBase, SvStream & rOutStm,
 
 void SvMetaClass::WriteHxx( SvIdlDataBase &, SvStream & rOutStm, sal_uInt16 )
 {
-    ByteString aSuperName( "SvDispatch" );
+    rtl::OString aSuperName(RTL_CONSTASCII_STRINGPARAM("SvDispatch"));
     if( GetSuperClass() )
         aSuperName = GetSuperClass()->GetName().getString();
-    const char * pSup = aSuperName.GetBuffer();
+    const char * pSup = aSuperName.getStr();
 
     rOutStm
     << "class " << GetSvName().GetBuffer()
@@ -700,10 +700,10 @@ void SvMetaClass::WriteHxx( SvIdlDataBase &, SvStream & rOutStm, sal_uInt16 )
 
 void SvMetaClass::WriteCxx( SvIdlDataBase &, SvStream & rOutStm, sal_uInt16 )
 {
-    ByteString aSuperName( "SvDispatch" );
+    rtl::OString aSuperName(RTL_CONSTASCII_STRINGPARAM("SvDispatch"));
     if( GetSuperClass() )
         aSuperName = GetSuperClass()->GetName().getString();
-    const char * pSup = aSuperName.GetBuffer();
+    const char * pSup = aSuperName.getStr();
 
     ByteString name = GetSvName();
     // GetTypeName

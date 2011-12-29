@@ -304,12 +304,12 @@ int INetMessageIStream::GetMsgLine (sal_Char *pData, sal_uIntPtr nSize)
             for (i = 0; i < n; i++)
             {
                 INetMessageHeader aHeader (pSourceMsg->GetHeaderField(i));
-                if (aHeader.GetValue().Len())
+                if (aHeader.GetValue().getLength())
                 {
                     // NYI: Folding long lines.
-                    *pMsgBuffer << (sal_Char*)(aHeader.GetName().GetBuffer());
+                    *pMsgBuffer << aHeader.GetName().getStr();
                     *pMsgBuffer << ": ";
-                    *pMsgBuffer << (sal_Char*)(aHeader.GetValue().GetBuffer());
+                    *pMsgBuffer << aHeader.GetValue().getStr();
                     *pMsgBuffer << "\r\n";
                 }
             }

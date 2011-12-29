@@ -875,13 +875,13 @@ void SvMetaType::SetType( int nT )
     nType = nT;
     if( nType == TYPE_ENUM )
     {
-        aOdlName.setString("short");
+        aOdlName.setString(rtl::OString(RTL_CONSTASCII_STRINGPARAM("short")));
     }
     else if( nType == TYPE_CLASS )
     {
-        ByteString aTmp(C_PREF);
-        aTmp += "Object *";
-        aCName.setString(aTmp);
+        rtl::OStringBuffer aTmp(C_PREF);
+        aTmp.append(RTL_CONSTASCII_STRINGPARAM("Object *"));
+        aCName.setString(aTmp.makeStringAndClear());
     }
 }
 
@@ -1103,7 +1103,7 @@ sal_Bool SvMetaType::ReadHeaderSvIdl( SvIdlDataBase & rBase,
         }
         else
         {
-            ByteString aStr = "wrong typedef: ";
+            rtl::OString aStr(RTL_CONSTASCII_STRINGPARAM("wrong typedef: "));
             rBase.SetError( aStr, rInStm.GetToken() );
             rBase.WriteError( rInStm );
         }
@@ -1173,7 +1173,7 @@ void SvMetaType::Write( SvIdlDataBase & rBase, SvStream & rOutStm,
         // write only enum
         return;
 
-    ByteString name = GetName().getString();
+    rtl::OString name = GetName().getString();
     if( nT == WRITE_ODL || nT == WRITE_C_HEADER || nT == WRITE_CXX_HEADER )
     {
         switch( nType )
@@ -1194,10 +1194,9 @@ void SvMetaType::Write( SvIdlDataBase & rBase, SvStream & rOutStm,
             {
                 if ( nT == WRITE_C_HEADER )
                 {
-                    ByteString aStr = name;
-                    aStr.ToUpperAscii();
-                    rOutStm << "#ifndef " << C_PREF << aStr.GetBuffer() << "_DEF " << endl;
-                    rOutStm << "#define " << C_PREF << aStr.GetBuffer() << "_DEF " << endl;
+                    rtl::OString aStr = name.toAsciiUpperCase();
+                    rOutStm << "#ifndef " << C_PREF << aStr.getStr() << "_DEF " << endl;
+                    rOutStm << "#define " << C_PREF << aStr.getStr() << "_DEF " << endl;
                 }
 
                 WriteTab( rOutStm, nTab );
@@ -1213,7 +1212,7 @@ void SvMetaType::Write( SvIdlDataBase & rBase, SvStream & rOutStm,
             else
                 rOutStm << "enum";
             if( nT != WRITE_ODL && nT != WRITE_C_HEADER)
-                rOutStm << ' ' << name.GetBuffer();
+                rOutStm << ' ' << name.getStr();
 
             rOutStm << endl;
             WriteTab( rOutStm, nTab );
@@ -1223,7 +1222,7 @@ void SvMetaType::Write( SvIdlDataBase & rBase, SvStream & rOutStm,
             rOutStm << '}';
             if( nT == WRITE_ODL || nT == WRITE_C_HEADER )
             {
-                rOutStm << ' ' << C_PREF << name.GetBuffer();
+                rOutStm << ' ' << C_PREF << name.getStr();
             }
             rOutStm << ';' << endl;
 
@@ -1416,27 +1415,26 @@ void SvMetaType::WriteSfxItem(
     const ByteString & rItemName, SvIdlDataBase &, SvStream & rOutStm )
 {
     WriteStars( rOutStm );
-    ByteString aVarName = " a";
-    aVarName += rItemName;
-    aVarName += "_Impl";
+    rtl::OStringBuffer aVarName(RTL_CONSTASCII_STRINGPARAM(" a"));
+    aVarName.append(rItemName).append(RTL_CONSTASCII_STRINGPARAM("_Impl"));
 
-    ByteString  aTypeName = "SfxType";
+    rtl::OStringBuffer aTypeName(RTL_CONSTASCII_STRINGPARAM("SfxType"));
     rtl::OStringBuffer aAttrArray;
     sal_uLong   nAttrCount = MakeSfx( aAttrArray );
-    ByteString  aAttrCount(
+    rtl::OString aAttrCount(
         rtl::OString::valueOf(static_cast<sal_Int32>(nAttrCount)));
-    aTypeName += aAttrCount;
+    aTypeName.append(aAttrCount);
 
-    rOutStm << "extern " << aTypeName.GetBuffer()
-            << aVarName.GetBuffer() << ';' << endl;
+    rOutStm << "extern " << aTypeName.getStr()
+            << aVarName.getStr() << ';' << endl;
 
     // write the implementation part
     rOutStm << "#ifdef SFX_TYPEMAP" << endl
-            << aTypeName.GetBuffer() << aVarName.GetBuffer()
+            << aTypeName.getStr() << aVarName.getStr()
             << " = " << endl;
     rOutStm << '{' << endl
             << "\tTYPE(" << rItemName.GetBuffer() << "), "
-            << aAttrCount.GetBuffer();
+            << aAttrCount.getStr();
     if( nAttrCount )
     {
         rOutStm << ", { ";
@@ -1737,7 +1735,7 @@ void SvMetaType::WriteParamNames( SvIdlDataBase & rBase,
             for( sal_uLong n = 0; n < nAttrCount; n++ )
             {
                 SvMetaAttribute * pA = pAttrList->GetObject( n );
-                ByteString aStr = pA->GetName().getString();
+                rtl::OString aStr = pA->GetName().getString();
                 pA->GetType()->WriteParamNames( rBase, rOutStm, aStr );
                 if( n +1 < nAttrCount )
                     rOutStm << ", ";
@@ -1822,7 +1820,7 @@ void SvMetaEnumValue::Write( SvIdlDataBase &, SvStream & rOutStm, sal_uInt16,
 SV_IMPL_META_FACTORY1( SvMetaTypeEnum, SvMetaType );
 SvMetaTypeEnum::SvMetaTypeEnum()
 {
-    SetBasicName( "Integer" );
+    SetBasicName(rtl::OString(RTL_CONSTASCII_STRINGPARAM("Integer")));
 }
 
 void SvMetaTypeEnum::Load( SvPersistStream & rStm )

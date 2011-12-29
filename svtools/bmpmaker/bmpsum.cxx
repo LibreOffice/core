@@ -328,9 +328,10 @@ void BmpSum::ProcessFileList( const String& rInFileList,
 
                 for( sal_uInt32 n = 0; n < 14; ++n )
                 {
-                    ByteString aLangPath( aReadLine );
-
-                    aLangPath.SearchAndReplace( "enus", aLanguages[ n ] );
+                    rtl::OString aLangPath = comphelper::string::replace(
+                        aReadLine,
+                        rtl::OString(RTL_CONSTASCII_STRINGPARAM("enus")),
+                        rtl::OString(aLanguages[n]));
 
                     DirEntry aTestFile( aLangPath );
 
