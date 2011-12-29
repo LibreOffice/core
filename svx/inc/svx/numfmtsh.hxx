@@ -209,8 +209,6 @@ public:
     sal_uInt16          FindCurrencyTableEntry( const String& rFmtString, bool &bTestBanking );
     bool                IsInTable(sal_uInt16 nPos,bool bTmpBanking,const String &rFmtString);
 
-    void                GetCurrencyFormats(SvStrings& rList);
-
 private:
     static const double     DEFAULT_NUMVALUE;
 

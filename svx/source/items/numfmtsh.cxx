@@ -1622,21 +1622,6 @@ void SvxNumberFormatShell::GetCurrencySymbols( SvStringsDtor& rList, bool bFlag 
     delete pLanguageTable;
 }
 
-void SvxNumberFormatShell::GetCurrencyFormats(SvStrings& aListDtor)
-{
-    if(pCurCurrencyEntry!=NULL)
-    {
-        NfWSStringsDtor aWSStringsDtor;
-        /*sal_uInt16 nDefault = */pFormatter->GetCurrencyFormatStrings( aWSStringsDtor,
-            *pCurCurrencyEntry, bBankingSymbol );
-
-        for(sal_uInt16 i=0;i<aWSStringsDtor.Count();i++)
-        {
-            aListDtor.Insert(new String(*aWSStringsDtor[i]),aListDtor.Count());
-        }
-    }
-}
-
 bool SvxNumberFormatShell::IsBankingSymbol(sal_uInt16 nPos)
 {
     const NfCurrencyTable& rCurrencyTable=SvNumberFormatter::GetTheCurrencyTable();
