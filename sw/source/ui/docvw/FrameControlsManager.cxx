@@ -129,7 +129,7 @@ void SwFrameControlsManager::HideControls( FrameControlType eType )
     while ( pIt != m_aControls[eType].end() )
     {
         ( *pIt )->ShowAll( false );
-        pIt++;
+        ++pIt;
     }
 }
 
@@ -163,7 +163,7 @@ void SwFrameControlsManager::SetHeaderFooterControl( const SwPageFrm* pPageFrm, 
         if ( pToTest->GetPageFrame( ) == pPageFrm &&
              pToTest->IsHeader( ) == bHeader )
             pControl = *pIt;
-        pIt++;
+        ++pIt;
     }
 
     if ( !pControl.get() )
@@ -197,7 +197,7 @@ void SwFrameControlsManager::SetPageBreakControl( const SwPageFrm* pPageFrm )
         SwPageBreakWin* pToTest = dynamic_cast< SwPageBreakWin* >( pIt->get() );
         if ( pToTest->GetPageFrame( ) == pPageFrm )
             pControl = *pIt;
-        pIt++;
+        ++pIt;
     }
 
     if ( !pControl.get() )
