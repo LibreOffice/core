@@ -1177,6 +1177,8 @@ void ExtMgrDialog::Resize()
     Size aUpdBtnSize( m_aUpdateBtn.GetSizePixel() );
     long offsetX;
 
+// last row of the box, lower 4 buttons
+
     Point aPos( RSC_SP_DLG_INNERBORDER_LEFT,
                 aTotalSize.Height() - RSC_SP_DLG_INNERBORDER_BOTTOM - aBtnSize.Height() );
 
@@ -1191,41 +1193,24 @@ void ExtMgrDialog::Resize()
     aPos.X() -= ( RSC_SP_CTRL_GROUP_X + aBtnSize.Width() );
     m_aAddBtn.SetPosPixel( aPos );
 
+// horizontal line above lower buttons
+
     Size aDivSize( aTotalSize.Width(), LINE_SIZE );
     aPos = Point( 0, aPos.Y() - LINE_SIZE - RSC_SP_DLG_INNERBORDER_BOTTOM );
     m_aDivider.SetPosSizePixel( aPos, aDivSize );
 
+// text "get more extensions"
+
     Size aFTSize( m_aGetExtensions.CalcMinimumSize() );
-    aPos = Point( RSC_SP_DLG_INNERBORDER_LEFT, aPos.Y() - RSC_CD_FIXEDTEXT_HEIGHT - 2*RSC_SP_DLG_INNERBORDER_BOTTOM );
+//    aPos = Point( RSC_SP_DLG_INNERBORDER_LEFT, aPos.Y() - RSC_CD_FIXEDTEXT_HEIGHT - 2*RSC_SP_DLG_INNERBORDER_BOTTOM );
+    aPos = Point( RSC_SP_DLG_INNERBORDER_LEFT, aPos.Y() - RSC_CD_PUSHBUTTON_HEIGHT - 2*RSC_SP_DLG_INNERBORDER_BOTTOM );
 
     m_aGetExtensions.SetPosSizePixel( aPos, aFTSize );
 
-    Size aCBSize(m_aBundledCbx.GetSizePixel());
-
-    offsetX = 0.5*(aTotalSize.Width() - RSC_SP_DLG_INNERBORDER_LEFT - RSC_SP_DLG_INNERBORDER_RIGHT - 3*(aCBSize.Width() + RSC_SP_CTRL_GROUP_X) );
-
-    aPos = Point(offsetX, aPos.Y() - RSC_CD_CHECKBOX_HEIGHT - 2*RSC_SP_DLG_INNERBORDER_BOTTOM);
-    m_aBundledCbx.SetPosSizePixel(aPos, aCBSize);
-    aPos.X() = aPos.X() + aCBSize.Width() + 2 * RSC_SP_CTRL_GROUP_X;
-    m_aSharedCbx.SetPosSizePixel(aPos, aCBSize);
-    aPos.X() = aPos.X() + aCBSize.Width() + 2 * RSC_SP_CTRL_GROUP_X;
-    m_aUserCbx.SetPosSizePixel(aPos, aCBSize);
-
-    Size aFTTypeOfExtSize(m_aTypeOfExtTxt.GetSizePixel());
-    aPos = Point(RSC_SP_DLG_INNERBORDER_LEFT , aPos.Y() - RSC_CD_FIXEDTEXT_HEIGHT - 2*RSC_SP_DLG_INNERBORDER_BOTTOM);
-
-    m_aTypeOfExtTxt.SetPosSizePixel(aPos, aFTTypeOfExtSize);
-
-    aPos.X() = RSC_SP_DLG_INNERBORDER_LEFT + aFTTypeOfExtSize.Width();
-    aPos.Y() = aPos.Y() + RSC_CD_FIXEDTEXT_HEIGHT;
-    aDivSize.Width() = aTotalSize.Width() - aFTTypeOfExtSize.Width() - RSC_SP_DLG_INNERBORDER_LEFT - RSC_SP_DLG_INNERBORDER_RIGHT;
-    m_aDivider2.SetPosSizePixel( aPos , aDivSize );
-
-
+// installation progress bar + cancel button , on the right of the text to get extensions
 
     aPos.X() = aTotalSize.Width() - RSC_SP_DLG_INNERBORDER_RIGHT - aBtnSize.Width();
     m_aCancelBtn.SetPosPixel( Point( aPos.X(), aPos.Y() - ((aBtnSize.Height()-aFTSize.Height())/2) ) );
-
 
     // Calc progress height
     long nProgressHeight = aFTSize.Height();
@@ -1257,8 +1242,33 @@ void ExtMgrDialog::Resize()
     aPos.X() = aRect1.Right() + RSC_SP_DLG_INNERBORDER_LEFT;
     m_aProgressText.SetPosSizePixel( aPos, aFTSize );
 
+// checkboxes + text "type of extensions"
+
+    Size aCBSize(m_aBundledCbx.GetSizePixel());
+
+    offsetX = 0.5*(aTotalSize.Width() - RSC_SP_DLG_INNERBORDER_LEFT - RSC_SP_DLG_INNERBORDER_RIGHT - 3*(aCBSize.Width() + RSC_SP_CTRL_GROUP_X) );
+
+    aPos = Point(offsetX, aPos.Y() - RSC_CD_CHECKBOX_HEIGHT - 2*RSC_SP_DLG_INNERBORDER_BOTTOM);
+    m_aBundledCbx.SetPosSizePixel(aPos, aCBSize);
+    aPos.X() = aPos.X() + aCBSize.Width() + 2 * RSC_SP_CTRL_GROUP_X;
+    m_aSharedCbx.SetPosSizePixel(aPos, aCBSize);
+    aPos.X() = aPos.X() + aCBSize.Width() + 2 * RSC_SP_CTRL_GROUP_X;
+    m_aUserCbx.SetPosSizePixel(aPos, aCBSize);
+
+    Size aFTTypeOfExtSize(m_aTypeOfExtTxt.GetSizePixel());
+    aPos = Point(RSC_SP_DLG_INNERBORDER_LEFT , aPos.Y() - RSC_CD_FIXEDTEXT_HEIGHT - 2*RSC_SP_DLG_INNERBORDER_BOTTOM);
+
+    m_aTypeOfExtTxt.SetPosSizePixel(aPos, aFTTypeOfExtSize);
+
+    aPos.X() = RSC_SP_DLG_INNERBORDER_LEFT + aFTTypeOfExtSize.Width();
+    aPos.Y() = aPos.Y() + RSC_CD_FIXEDTEXT_HEIGHT;
+    aDivSize.Width() = aTotalSize.Width() - aFTTypeOfExtSize.Width() - RSC_SP_DLG_INNERBORDER_LEFT - RSC_SP_DLG_INNERBORDER_RIGHT;
+    m_aDivider2.SetPosSizePixel( aPos , aDivSize );
+
+// extension listbox
+
     Size aSize( aTotalSize.Width() - RSC_SP_DLG_INNERBORDER_LEFT - RSC_SP_DLG_INNERBORDER_RIGHT,
-                aTotalSize.Height() - aBtnSize.Height() - LINE_SIZE - aFTSize.Height()
+                aTotalSize.Height() - aBtnSize.Height() - LINE_SIZE - aBtnSize.Height()
                 - aCBSize.Height() - aFTTypeOfExtSize.Height()
                 - RSC_SP_DLG_INNERBORDER_TOP - 5*RSC_SP_DLG_INNERBORDER_BOTTOM );
 
