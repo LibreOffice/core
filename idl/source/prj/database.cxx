@@ -88,7 +88,7 @@ SvMetaTypeMemberList & SvIdlDataBase::GetTypeList()
 SvMetaModule * SvIdlDataBase::GetModule( const rtl::OString& rName )
 {
     for( sal_uLong n = 0; n < aModuleList.Count(); n++ )
-        if( aModuleList.GetObject( n )->GetName().Equals(rName) )
+        if( aModuleList.GetObject( n )->GetName().getString().Equals(rName) )
             return aModuleList.GetObject( n );
     return NULL;
 }
@@ -365,7 +365,7 @@ SvMetaType * SvIdlDataBase::FindType( const SvMetaType * pPType,
 SvMetaType * SvIdlDataBase::FindType( const rtl::OString& rName )
 {
     SvMetaType * pType = aTypeList.First();
-    while( pType && !rName.equals(pType->GetName()) )
+    while( pType && !rName.equals(pType->GetName().getString()) )
         pType = aTypeList.Next();
     return pType;
 }
@@ -416,7 +416,7 @@ SvMetaType * SvIdlDataBase::ReadKnownType( SvTokenStream & rInStm )
         SvMetaType * pType = rList.First();
         while( pType )
         {
-            if( pType->GetName() == aName )
+            if( pType->GetName().getString() == aName )
                 break;
             pType = rList.Next();
         }
@@ -446,7 +446,7 @@ SvMetaType * SvIdlDataBase::ReadKnownType( SvTokenStream & rInStm )
                 return pType;
 
             DBG_ASSERT( aTmpTypeList.First(), "mindestens ein Element" );
-            SvMetaTypeRef xType = new SvMetaType( pType->GetName(), 'h', "dummy" );
+            SvMetaTypeRef xType = new SvMetaType( pType->GetName().getString(), 'h', "dummy" );
             xType->SetRef( pType );
             xType->SetIn( bIn );
             xType->SetOut( bOut );
@@ -485,7 +485,7 @@ SvMetaAttribute * SvIdlDataBase::ReadKnownAttr
                 for( sal_uLong i = 0; i < aAttrList.Count(); i++ )
                 {
                     SvMetaAttribute * pAttr = aAttrList.GetObject( i );
-                    if( pAttr->GetSlotId().getIdentifier() == pTok->GetString() )
+                    if( pAttr->GetSlotId().getString() == pTok->GetString() )
                         return pAttr;
                 }
             }
@@ -506,12 +506,12 @@ SvMetaAttribute* SvIdlDataBase::SearchKnownAttr
 )
 {
     sal_uLong n;
-    if( FindId( rId.getIdentifier(), &n ) )
+    if( FindId( rId.getString(), &n ) )
     {
         for( sal_uLong i = 0; i < aAttrList.Count(); i++ )
         {
             SvMetaAttribute * pAttr = aAttrList.GetObject( i );
-            if( pAttr->GetSlotId().getIdentifier() == rId.getIdentifier() )
+            if( pAttr->GetSlotId().getString() == rId.getString() )
                 return pAttr;
         }
     }
@@ -528,7 +528,7 @@ SvMetaClass * SvIdlDataBase::ReadKnownClass( SvTokenStream & rInStm )
         for( sal_uLong n = 0; n < aClassList.Count(); n++ )
         {
             SvMetaClass * pClass = aClassList.GetObject( n );
-            if( pClass->GetName() == pTok->GetString() )
+            if( pClass->GetName().getString() == pTok->GetString() )
                 return pClass;
         }
 

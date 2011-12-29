@@ -171,7 +171,7 @@ void SvMetaName::Save( SvPersistStream & rStm )
 
 sal_Bool SvMetaName::SetName( const ByteString & rName, SvIdlDataBase * )
 {
-    aName = rName;
+    aName.setString(rName);
     return sal_True;
 }
 
@@ -196,7 +196,7 @@ void SvMetaName::ReadAttributesSvIdl( SvIdlDataBase & rBase,
     sal_uInt32 nTokPos = rInStm.Tell();
     if( aName.ReadSvIdl( SvHash_Name(), rInStm ) )
     {
-        if( !SetName( aName, &rBase ) )
+        if( !SetName( aName.getString(), &rBase ) )
             rInStm.Seek( nTokPos );
     }
     aHelpContext.ReadSvIdl( rBase, SvHash_HelpContext(), rInStm );
@@ -237,7 +237,7 @@ void SvMetaName::WriteDescription( SvStream & rOutStm )
 {
     rOutStm << "<DESCRIPTION>" << endl;
 
-    ByteString aDesc( GetDescription() );
+    ByteString aDesc( GetDescription().getString() );
     sal_uInt16 nPos = aDesc.Search( '\n' );
     while ( nPos != STRING_NOTFOUND )
     {
@@ -389,7 +389,7 @@ void SvMetaName::WriteAttributes( SvIdlDataBase &, SvStream & rOutStm,
     if( GetHelpText().IsSet() )
     {
         WriteTab( rOutStm, nTab );
-        rOutStm << "helpstring(\"" << GetHelpText().GetBuffer() << "\")," << endl;
+        rOutStm << "helpstring(\"" << GetHelpText().getString().GetBuffer() << "\")," << endl;
     }
     if( GetHelpContext().IsSet() )
     {

@@ -222,19 +222,19 @@ sal_Bool SvIdentifier::WriteSvIdl( SvStringHashEntry * pName,
                                sal_uInt16 /*nTab */ )
 {
     rOutStm << pName->GetName().GetBuffer() << '(';
-    rOutStm << getIdentifier().GetBuffer() << ')';
+    rOutStm << getString().GetBuffer() << ')';
     return sal_True;
 }
 
 SvStream& operator << (SvStream & rStm, const SvIdentifier & r )
 {
-    write_lenPrefixed_uInt8s_FromOString<sal_uInt16>(rStm, r.getIdentifier());
+    write_lenPrefixed_uInt8s_FromOString<sal_uInt16>(rStm, r.getString());
     return rStm;
 }
 
 SvStream& operator >> (SvStream & rStm, SvIdentifier & r )
 {
-    r.setIdentifier(read_lenPrefixed_uInt8s_ToOString<sal_uInt16>(rStm));
+    r.setString(read_lenPrefixed_uInt8s_ToOString<sal_uInt16>(rStm));
     return rStm;
 }
 
@@ -246,7 +246,7 @@ sal_Bool SvNumberIdentifier::ReadSvIdl( SvIdlDataBase & rBase,
     if( SvIdentifier::ReadSvIdl( pName, rInStm ) )
     {
         sal_uLong n;
-        if( rBase.FindId( getIdentifier(), &n ) )
+        if( rBase.FindId( getString(), &n ) )
         {
             nValue = n;
             return sal_True;
@@ -254,7 +254,7 @@ sal_Bool SvNumberIdentifier::ReadSvIdl( SvIdlDataBase & rBase,
         else
         {
             ByteString aStr ("no value for identifier <");
-            aStr += getIdentifier();
+            aStr += getString();
             aStr += "> ";
             rBase.SetError( aStr, rInStm.GetToken() );
             rBase.WriteError( rInStm );
@@ -281,7 +281,7 @@ sal_Bool SvNumberIdentifier::ReadSvIdl( SvIdlDataBase & rBase,
         else
         {
             ByteString aStr ("no value for identifier <");
-            aStr += getIdentifier();
+            aStr += getString();
             aStr += "> ";
             rBase.SetError( aStr, rInStm.GetToken() );
             rBase.WriteError( rInStm );
@@ -337,19 +337,19 @@ sal_Bool SvString::WriteSvIdl( SvStringHashEntry * pName, SvStream & rOutStm,
                            sal_uInt16 /*nTab */ )
 {
     rOutStm << pName->GetName().GetBuffer() << "(\"";
-    rOutStm << GetBuffer() << "\")";
+    rOutStm << m_aStr.GetBuffer() << "\")";
     return sal_True;
 }
 
 SvStream& operator << (SvStream & rStm, const SvString & r )
 {
-    write_lenPrefixed_uInt8s_FromOString<sal_uInt16>(rStm, r);
+    write_lenPrefixed_uInt8s_FromOString<sal_uInt16>(rStm, r.getString());
     return rStm;
 }
 
 SvStream& operator >> (SvStream & rStm, SvString & r )
 {
-    r = read_lenPrefixed_uInt8s_ToOString<sal_uInt16>(rStm);
+    r.setString(read_lenPrefixed_uInt8s_ToOString<sal_uInt16>(rStm));
     return rStm;
 }
 

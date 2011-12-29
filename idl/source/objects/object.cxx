@@ -324,24 +324,24 @@ sal_Bool SvMetaClass::TestAttribute( SvIdlDataBase & rBase, SvTokenStream & rInS
     if ( !rAttr.GetRef() && rAttr.IsA( TYPE( SvMetaSlot ) ) )
     {
         OSL_FAIL( "Neuer Slot : " );
-        OSL_FAIL( rAttr.GetSlotId().getIdentifier().GetBuffer() );
+        OSL_FAIL( rAttr.GetSlotId().getString().GetBuffer() );
     }
 
     for( sal_uLong n = 0; n < aAttrList.Count(); n++ )
     {
         SvMetaAttribute * pS = aAttrList.GetObject( n );
-        if( pS->GetName() == rAttr.GetName() )
+        if( pS->GetName().getString() == rAttr.GetName().getString() )
         {
             // values have to match
             if( pS->GetSlotId().GetValue() != rAttr.GetSlotId().GetValue() )
             {
                 OSL_FAIL( "Gleicher Name in MetaClass : " );
-                OSL_FAIL( pS->GetName().GetBuffer() );
-                OSL_FAIL( pS->GetSlotId().getIdentifier().GetBuffer() );
-                OSL_FAIL( rAttr.GetSlotId().getIdentifier().GetBuffer() );
+                OSL_FAIL( pS->GetName().getString().GetBuffer() );
+                OSL_FAIL( pS->GetSlotId().getString().GetBuffer() );
+                OSL_FAIL( rAttr.GetSlotId().getString().GetBuffer() );
 
                 rtl::OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM("Attribute's "));
-                aStr.append(pS->GetName());
+                aStr.append(pS->GetName().getString());
                 aStr.append(RTL_CONSTASCII_STRINGPARAM(" with different id's"));
                 rBase.SetError(aStr.makeStringAndClear(), rInStm.GetToken());
                 rBase.WriteError( rInStm );
@@ -357,13 +357,13 @@ sal_Bool SvMetaClass::TestAttribute( SvIdlDataBase & rBase, SvTokenStream & rInS
                 OSL_FAIL( "Gleiche Id in MetaClass : " );
                 OSL_FAIL(rtl::OString::valueOf(static_cast<sal_Int32>(
                     pS->GetSlotId().GetValue())).getStr());
-                OSL_FAIL( pS->GetSlotId().getIdentifier().GetBuffer() );
-                OSL_FAIL( rAttr.GetSlotId().getIdentifier().GetBuffer() );
+                OSL_FAIL( pS->GetSlotId().getString().GetBuffer() );
+                OSL_FAIL( rAttr.GetSlotId().getString().GetBuffer() );
 
                 rtl::OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM("Attribute "));
-                aStr.append(pS->GetName());
+                aStr.append(pS->GetName().getString());
                 aStr.append(RTL_CONSTASCII_STRINGPARAM(" and Attribute "));
-                aStr.append(rAttr.GetName());
+                aStr.append(rAttr.GetName().getString());
                 aStr.append(RTL_CONSTASCII_STRINGPARAM(" with equal id's"));
                 rBase.SetError(aStr.makeStringAndClear(), rInStm.GetToken());
                 rBase.WriteError( rInStm );
@@ -382,7 +382,7 @@ void SvMetaClass::WriteSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm,
 {
     WriteHeaderSvIdl( rBase, rOutStm, nTab );
     if( aSuperClass.Is() )
-        rOutStm << " : " << aSuperClass->GetName().GetBuffer();
+        rOutStm << " : " << aSuperClass->GetName().getString().GetBuffer();
     rOutStm << endl;
     SvMetaName::WriteSvIdl( rBase, rOutStm, nTab );
     rOutStm << endl;
@@ -392,7 +392,7 @@ void SvMetaClass::Write( SvIdlDataBase & rBase, SvStream & rOutStm,
                         sal_uInt16 nTab,
                          WriteType nT, WriteAttribute )
 {
-    rBase.aIFaceName = GetName();
+    rBase.aIFaceName = GetName().getString();
     switch( nT )
     {
         case WRITE_ODL:
@@ -409,7 +409,7 @@ void SvMetaClass::Write( SvIdlDataBase & rBase, SvStream & rOutStm,
         case WRITE_DOCU:
         {
             rOutStm << "<INTERFACE>" << endl
-                    << GetName().GetBuffer();
+                    << GetName().getString().GetBuffer();
             if ( GetAutomation() )
                 rOutStm << " ( Automation ) ";
             rOutStm << endl;
@@ -573,10 +573,10 @@ void SvMetaClass::WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm )
 {
     WriteStars( rOutStm );
     // define class
-    rOutStm << "#ifdef " << GetName().GetBuffer() << endl;
+    rOutStm << "#ifdef " << GetName().getString().GetBuffer() << endl;
     rOutStm << "#undef ShellClass" << endl;
-    rOutStm << "#undef " << GetName().GetBuffer() << endl;
-    rOutStm << "#define ShellClass " << GetName().GetBuffer() << endl;
+    rOutStm << "#undef " << GetName().getString().GetBuffer() << endl;
+    rOutStm << "#define ShellClass " << GetName().getString().GetBuffer() << endl;
 
     // no slotmaps get written for interfaces
     if( !IsShell() )
@@ -585,7 +585,7 @@ void SvMetaClass::WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm )
         return;
     }
     // write parameter array
-    rOutStm << "SFX_ARGUMENTMAP(" << GetName().GetBuffer() << ')' << endl
+    rOutStm << "SFX_ARGUMENTMAP(" << GetName().getString().GetBuffer() << ')' << endl
         << '{' << endl;
 
     std::vector<sal_uLong> aSuperList;
@@ -614,7 +614,7 @@ void SvMetaClass::WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm )
     rOutStm << endl << "};" << endl << endl;
 
     ByteStringList aStringList;
-    WriteSlotStubs( GetName(), aSlotList, aStringList, rOutStm );
+    WriteSlotStubs( GetName().getString(), aSlotList, aStringList, rOutStm );
     for ( size_t i = 0, n = aStringList.size(); i < n; ++i )
         delete aStringList[ i ];
     aStringList.clear();
@@ -622,18 +622,18 @@ void SvMetaClass::WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm )
     rOutStm << endl;
 
     // write slotmap
-    rOutStm << "SFX_SLOTMAP_ARG(" << GetName().GetBuffer() << ')' << endl
+    rOutStm << "SFX_SLOTMAP_ARG(" << GetName().getString().GetBuffer() << ')' << endl
         << '{' << endl;
 
     // write all attributes
-    WriteSlots( GetName(), 0, aSlotList, rBase, rOutStm );
+    WriteSlots( GetName().getString(), 0, aSlotList, rBase, rOutStm );
     if( nSlotCount )
         Back2Delemitter( rOutStm );
     else
     {
         // at least one dummy
         WriteTab( rOutStm, 1 );
-        rOutStm << "SFX_SLOT_ARG(" << GetName().GetBuffer()
+        rOutStm << "SFX_SLOT_ARG(" << GetName().getString().GetBuffer()
                 << ", 0, 0, "
                 << "SFX_STUB_PTR_EXEC_NONE,"
                 << "SFX_STUB_PTR_STATE_NONE,"
@@ -677,7 +677,7 @@ void SvMetaClass::WriteHxx( SvIdlDataBase &, SvStream & rOutStm, sal_uInt16 )
 {
     ByteString aSuperName( "SvDispatch" );
     if( GetSuperClass() )
-        aSuperName = GetSuperClass()->GetName();
+        aSuperName = GetSuperClass()->GetName().getString();
     const char * pSup = aSuperName.GetBuffer();
 
     rOutStm
@@ -702,7 +702,7 @@ void SvMetaClass::WriteCxx( SvIdlDataBase &, SvStream & rOutStm, sal_uInt16 )
 {
     ByteString aSuperName( "SvDispatch" );
     if( GetSuperClass() )
-        aSuperName = GetSuperClass()->GetName();
+        aSuperName = GetSuperClass()->GetName().getString();
     const char * pSup = aSuperName.GetBuffer();
 
     ByteString name = GetSvName();

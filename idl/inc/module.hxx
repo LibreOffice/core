@@ -68,12 +68,12 @@ public:
                         SvMetaModule();
 
     const String &      GetIdlFileName() const { return aIdlFileName; }
-    const ByteString &      GetModulePrefix() const { return aModulePrefix; }
+    const ByteString &      GetModulePrefix() const { return aModulePrefix.getString(); }
 
     virtual sal_Bool        SetName( const ByteString & rName, SvIdlDataBase * = NULL  );
 
-    const ByteString &      GetHelpFileName() const { return aHelpFileName; }
-    const ByteString &      GetTypeLibFileName() const { return aTypeLibFile; }
+    const ByteString &      GetHelpFileName() const { return aHelpFileName.getString(); }
+    const ByteString &      GetTypeLibFileName() const { return aTypeLibFile.getString(); }
 
     const SvMetaAttributeMemberList & GetAttrList() const { return aAttrList; }
     const SvMetaTypeMemberList & GetTypeList() const { return aTypeList; }

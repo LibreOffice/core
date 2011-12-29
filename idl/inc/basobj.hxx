@@ -153,7 +153,7 @@ public:
 
     virtual sal_Bool                SetName( const ByteString & rName, SvIdlDataBase * = NULL  );
     void                        SetDescription( const ByteString& rText )
-                                { aDescription = rText; }
+                                { aDescription.setString(rText); }
     const SvHelpContext&        GetHelpContext() const { return aHelpContext; }
     virtual const SvString &    GetName() const { return aName; }
     virtual const SvString &    GetHelpText() const { return aHelpText; }
@@ -183,7 +183,7 @@ public:
     const SvString &    GetName() const
                         {
                             return ( !aRef.Is()
-                                    || SvMetaName::GetName().Len() )
+                                    || SvMetaName::GetName().getString().Len() )
                                 ? SvMetaName::GetName()
                                 : aRef->GetName();
                         }
@@ -191,7 +191,7 @@ public:
     const SvString &    GetHelpText() const
                         {
                             return ( !aRef.Is()
-                                    || SvMetaName::GetHelpText().Len() )
+                                    || SvMetaName::GetHelpText().getString().Len() )
                                 ? SvMetaName::GetHelpText()
                                 : aRef->GetHelpText();
                         }
@@ -199,7 +199,7 @@ public:
     const SvString &    GetConfigName() const
                         {
                             return ( !aRef.Is()
-                                    || SvMetaName::GetConfigName().Len() )
+                                    || SvMetaName::GetConfigName().getString().Len() )
                                 ? SvMetaName::GetConfigName()
                                 : aRef->GetConfigName();
                         }
@@ -207,7 +207,7 @@ public:
     const SvString &    GetDescription() const
                         {
                             return ( !aRef.Is()
-                                    || SvMetaName::GetDescription().Len() )
+                                    || SvMetaName::GetDescription().getString().Len() )
                                 ? SvMetaName::GetDescription()
                                 : aRef->GetDescription();
                         }

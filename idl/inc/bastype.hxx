@@ -164,11 +164,11 @@ public:
     SvIdentifier()
     {
     }
-    void setIdentifier(const ByteString & rStr)
+    void setString(const ByteString & rStr)
     {
         m_aStr = rStr;
     }
-    const ByteString& getIdentifier() const
+    const ByteString& getString() const
     {
         return m_aStr;
     }
@@ -204,13 +204,15 @@ public:
 };
 
 
-class SvString : public ByteString
+class SvString
 {
+private:
+    ByteString m_aStr;
 public:
-                SvString(){};
-    SvString &  operator = ( const ByteString & rStr )
-                { ByteString::operator =( rStr ); return *this; }
-    sal_Bool        IsSet() const { return Len() != 0; }
+    SvString() {}
+    void setString(const ByteString &rStr) { m_aStr = rStr; }
+    const ByteString& getString() const { return m_aStr; }
+    sal_Bool IsSet() const { return m_aStr.Len() != 0; }
     friend SvStream& operator << (SvStream &, const SvString &);
     friend SvStream& operator >> (SvStream &, SvString &);
 

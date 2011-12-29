@@ -172,12 +172,12 @@ void SvMetaSlot::Save( SvPersistStream & rStm )
     // create mask
     sal_uInt16 nMask = 0;
     if( aMethod.Is() )          nMask |= 0x0001;
-    if( aGroupId.getIdentifier().Len() )        nMask |= 0x0002;
+    if( aGroupId.getString().Len() )        nMask |= 0x0002;
     if( aHasCoreId.IsSet() )    nMask |= 0x0004;
-    if( aConfigId.getIdentifier().Len() )       nMask |= 0x0008;
-    if( aExecMethod.getIdentifier().Len() )     nMask |= 0x0010;
-    if( aStateMethod.getIdentifier().Len() )    nMask |= 0x0020;
-    if( aDefault.getIdentifier().Len() )        nMask |= 0x0040;
+    if( aConfigId.getString().Len() )       nMask |= 0x0008;
+    if( aExecMethod.getString().Len() )     nMask |= 0x0010;
+    if( aStateMethod.getString().Len() )    nMask |= 0x0020;
+    if( aDefault.getString().Len() )        nMask |= 0x0040;
     if( aPseudoSlots.IsSet() )  nMask |= 0x0080;
     if( aGet.IsSet() )          nMask |= 0x0100;
     if( aSet.IsSet() )          nMask |= 0x0200;
@@ -231,7 +231,7 @@ void SvMetaSlot::Save( SvPersistStream & rStm )
     if( aNoRecord.IsSet() )       nMask |= 0x0004;
     if( aHasDialog.IsSet() )      nMask |= 0x0008;
     if ( aDisableFlags.IsSet() )      nMask |= 0x0010;
-    if( aPseudoPrefix.getIdentifier().Len() )     nMask |= 0x0020;
+    if( aPseudoPrefix.getString().Len() )     nMask |= 0x0020;
     if( aRecordPerSet.IsSet() )   nMask |= 0x0040;
     if( aMenuConfig.IsSet() )     nMask |= 0x0080;
     if( aToolBoxConfig.IsSet() )  nMask |= 0x0100;
@@ -306,9 +306,9 @@ rtl::OString SvMetaSlot::GetMangleName( sal_Bool bVariable ) const
     {
         SvMetaAttribute * pMeth = GetMethod();
         if( pMeth )
-            return pMeth->GetName();
+            return pMeth->GetName().getString();
     }
-    return GetName();
+    return GetName().getString();
 }
 
 /*************************************************************************
@@ -335,32 +335,32 @@ sal_Bool SvMetaSlot::GetHasCoreId() const
 }
 const ByteString & SvMetaSlot::GetGroupId() const
 {
-    if( aGroupId.getIdentifier().Len() || !GetRef() ) return aGroupId.getIdentifier();
+    if( aGroupId.getString().Len() || !GetRef() ) return aGroupId.getString();
     return ((SvMetaSlot *)GetRef())->GetGroupId();
 }
 const ByteString & SvMetaSlot::GetDisableFlags() const
 {
-    if( aDisableFlags.Len() || !GetRef() ) return aDisableFlags;
+    if( aDisableFlags.getString().Len() || !GetRef() ) return aDisableFlags.getString();
     return ((SvMetaSlot *)GetRef())->GetDisableFlags();
 }
 const ByteString & SvMetaSlot::GetConfigId() const
 {
-    if( aConfigId.getIdentifier().Len() || !GetRef() ) return aConfigId.getIdentifier();
+    if( aConfigId.getString().Len() || !GetRef() ) return aConfigId.getString();
     return ((SvMetaSlot *)GetRef())->GetConfigId();
 }
 const ByteString & SvMetaSlot::GetExecMethod() const
 {
-    if( aExecMethod.getIdentifier().Len() || !GetRef() ) return aExecMethod.getIdentifier();
+    if( aExecMethod.getString().Len() || !GetRef() ) return aExecMethod.getString();
     return ((SvMetaSlot *)GetRef())->GetExecMethod();
 }
 const ByteString & SvMetaSlot::GetStateMethod() const
 {
-    if( aStateMethod.getIdentifier().Len() || !GetRef() ) return aStateMethod.getIdentifier();
+    if( aStateMethod.getString().Len() || !GetRef() ) return aStateMethod.getString();
     return ((SvMetaSlot *)GetRef())->GetStateMethod();
 }
 const ByteString & SvMetaSlot::GetDefault() const
 {
-    if( aDefault.getIdentifier().Len() || !GetRef() ) return aDefault.getIdentifier();
+    if( aDefault.getString().Len() || !GetRef() ) return aDefault.getString();
     return ((SvMetaSlot *)GetRef())->GetDefault();
 }
 sal_Bool SvMetaSlot::GetPseudoSlots() const
@@ -451,7 +451,7 @@ sal_Bool SvMetaSlot::GetHasDialog() const
 }
 const ByteString & SvMetaSlot::GetPseudoPrefix() const
 {
-    if( aPseudoPrefix.getIdentifier().Len() || !GetRef() ) return aPseudoPrefix.getIdentifier();
+    if( aPseudoPrefix.getString().Len() || !GetRef() ) return aPseudoPrefix.getString();
     return ((SvMetaSlot *)GetRef())->GetPseudoPrefix();
 }
 sal_Bool SvMetaSlot::GetMenuConfig() const
@@ -499,7 +499,7 @@ sal_Bool SvMetaSlot::GetImageReflection() const
 
 const ByteString& SvMetaSlot::GetUnoName() const
 {
-    if( aUnoName.IsSet() || !GetRef() ) return aUnoName;
+    if( aUnoName.IsSet() || !GetRef() ) return aUnoName.getString();
     return ((SvMetaSlot *)GetRef())->GetUnoName();
 }
 
@@ -653,26 +653,26 @@ void SvMetaSlot::WriteAttributesSvIdl( SvIdlDataBase & rBase,
         aHasCoreId.WriteSvIdl( SvHash_HasCoreId(), rOutStm );
         rOutStm << ';' << endl;
     }
-    if( aGroupId.getIdentifier().Len() )
+    if( aGroupId.getString().Len() )
     {
         WriteTab( rOutStm, nTab );
         aGroupId.WriteSvIdl( SvHash_GroupId(), rOutStm, nTab +1);
         rOutStm << ';' << endl;
     }
-    if( aExecMethod.getIdentifier().Len() )
+    if( aExecMethod.getString().Len() )
     {
         WriteTab( rOutStm, nTab );
         aExecMethod.WriteSvIdl( SvHash_ExecMethod(), rOutStm, nTab +1);
         rOutStm << ';' << endl;
     }
-    if( aStateMethod.getIdentifier().Len() )
+    if( aStateMethod.getString().Len() )
     {
         WriteTab( rOutStm, nTab );
         aStateMethod.WriteSvIdl( SvHash_StateMethod(), rOutStm, nTab +1);
         rOutStm << ';' << endl;
     }
 
-    if( aDisableFlags.Len() )
+    if( aDisableFlags.getString().Len() )
     {
         WriteTab( rOutStm, nTab );
         aDisableFlags.WriteSvIdl( SvHash_DisableFlags(), rOutStm, nTab +1);
@@ -837,13 +837,13 @@ sal_Bool SvMetaSlot::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm )
         if( pKnownSlot )
         {
             SetRef( pKnownSlot );
-            SetName( pKnownSlot->GetName(), &rBase );
+            SetName( pKnownSlot->GetName().getString(), &rBase );
             bOk = SvMetaName::ReadSvIdl( rBase, rInStm );
         }
         else
         {
             rtl::OStringBuffer aStr( "attribute " );
-            aStr.append(pAttr->GetName());
+            aStr.append(pAttr->GetName().getString());
             aStr.append(" is method or variable but not a slot");
             rBase.SetError( aStr.makeStringAndClear(), rInStm.GetToken() );
             rBase.WriteError( rInStm );
@@ -864,19 +864,19 @@ sal_Bool SvMetaSlot::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm )
                 SetRef( pKnownSlot );
 
                   // names may differ, because explicitly given
-                if ( pKnownSlot->GetName() != GetName() )
+                if ( pKnownSlot->GetName().getString() != GetName().getString() )
                 {
                     OSL_FAIL("Illegal definition!");
                     rInStm.Seek( nTokPos );
                     return sal_False;
                 }
 
-                  SetName( pKnownSlot->GetName(), &rBase );
+                  SetName( pKnownSlot->GetName().getString(), &rBase );
             }
             else
             {
                 rtl::OStringBuffer aStr("attribute ");
-                aStr.append(pAttr2->GetName());
+                aStr.append(pAttr2->GetName().getString());
                 aStr.append(" is method or variable but not a slot");
                 rBase.SetError( aStr.makeStringAndClear(), rInStm.GetToken() );
                 rBase.WriteError( rInStm );
@@ -919,7 +919,7 @@ void SvMetaSlot::Write( SvIdlDataBase & rBase,
         if( xM.Is() )
         {
             xM->SetSlotId( GetSlotId() );
-            xM->SetDescription( GetDescription() );
+            xM->SetDescription( GetDescription().getString() );
             xM->Write( rBase, rOutStm, nTab, nT, nA );
             return;
         }
@@ -1008,12 +1008,12 @@ void SvMetaSlot::Insert( SvSlotElementList& rList, const ByteString & rPrefix,
         {
             // create SlotId
             SvMetaEnumValue *enumValue = pEnum->GetObject(n);
-            ByteString aValName = enumValue->GetName();
+            ByteString aValName = enumValue->GetName().getString();
             rtl::OStringBuffer aBuf;
             if( GetPseudoPrefix().Len() )
                 aBuf.append(GetPseudoPrefix());
             else
-                aBuf.append(GetSlotId().getIdentifier());
+                aBuf.append(GetSlotId().getString());
             aBuf.append('_');
             aBuf.append(aValName.Copy(pEnum->GetPrefix().Len()));
 
@@ -1023,7 +1023,7 @@ void SvMetaSlot::Insert( SvSlotElementList& rList, const ByteString & rPrefix,
             for( m=0; m<rBase.GetAttrList().Count(); m++ )
             {
                 SvMetaAttribute * pAttr = rBase.GetAttrList().GetObject( m );
-                if (aSId.equals(pAttr->GetSlotId().getIdentifier()))
+                if (aSId.equals(pAttr->GetSlotId().getString()))
                 {
                     SvMetaSlot* pSlot = PTR_CAST( SvMetaSlot, pAttr );
                     xEnumSlot = pSlot->Clone();
@@ -1039,7 +1039,7 @@ void SvMetaSlot::Insert( SvSlotElementList& rList, const ByteString & rPrefix,
                 if ( rBase.FindId(aSId , &nValue) )
                 {
                     SvNumberIdentifier aId;
-                    aId.setIdentifier(aSId);
+                    aId.setString(aSId);
                     aId.SetValue(nValue);
                     xEnumSlot->SetSlotId(aId);
                 }
@@ -1171,7 +1171,7 @@ void SvMetaSlot::WriteSlot( const ByteString & rShellName, sal_uInt16 nCount,
     rOutStm << rSlotId.GetBuffer() << ',';
     const SvHelpContext& rHlpCtx = GetHelpContext();
     if( rHlpCtx.IsSet() )
-        rOutStm << rHlpCtx.getIdentifier().GetBuffer() << ',';
+        rOutStm << rHlpCtx.getString().GetBuffer() << ',';
     else
         rOutStm << rSlotId.GetBuffer() << ',';
 
@@ -1196,12 +1196,12 @@ void SvMetaSlot::WriteSlot( const ByteString & rShellName, sal_uInt16 nCount,
         WriteTab( rOutStm, 4 );
 
         // SlotId
-        if( GetSlotId().getIdentifier().Len() )
-            rOutStm << pLinkedSlot->GetSlotId().getIdentifier().GetBuffer();
+        if( GetSlotId().getString().Len() )
+            rOutStm << pLinkedSlot->GetSlotId().getString().GetBuffer();
         else
             rOutStm << '0';
         rOutStm << ',';
-        rOutStm << pEnumValue->GetName().GetBuffer();
+        rOutStm << pEnumValue->GetName().getString().GetBuffer();
     }
     else
     {
@@ -1344,7 +1344,7 @@ void SvMetaSlot::WriteSlot( const ByteString & rShellName, sal_uInt16 nCount,
         }
         if( pT )
         {
-            rOutStm << pT->GetName().GetBuffer();
+            rOutStm << pT->GetName().getString().GetBuffer();
             if( !rBase.FindType( pT, rBase.aUsedTypes ) )
                 rBase.aUsedTypes.Append( pT );
         }
@@ -1445,11 +1445,11 @@ sal_uInt16 SvMetaSlot::WriteSlotParamArray( SvIdlDataBase & rBase, SvStream & rO
             SvMetaType * pPType     = pPar->GetType();
             WriteTab( rOutStm, 1 );
             rOutStm << "SFX_ARGUMENT("
-                << pPar->GetSlotId().getIdentifier().GetBuffer() << ',' // SlodId
+                << pPar->GetSlotId().getString().GetBuffer() << ',' // SlodId
                 // parameter name
-                << "\"" << pPar->GetName().GetBuffer() << "\","
+                << "\"" << pPar->GetName().getString().GetBuffer() << "\","
                 // item name
-                << pPType->GetName().GetBuffer() << ")," << endl;
+                << pPType->GetName().getString().GetBuffer() << ")," << endl;
             if( !rBase.FindType( pPType, rBase.aUsedTypes ) )
                 rBase.aUsedTypes.Append( pPType );
         }
@@ -1466,7 +1466,7 @@ sal_uInt16 SvMetaSlot::WriteSlotMap( const ByteString & rShellName, sal_uInt16 n
                                 SvStream & rOutStm )
 {
     // SlotId, if not specified generate from name
-    ByteString slotId = GetSlotId().getIdentifier();
+    ByteString slotId = GetSlotId().getString();
 
     sal_uInt16 nSCount = 0;
     if( IsMethod() )
@@ -1500,13 +1500,13 @@ void SvMetaSlot::WriteSrc( SvIdlDataBase & rBase, SvStream & rOutStm,
             << endl << '{' << endl;
 
         WriteTab( rOutStm, 1 );
-        ByteString aStr = GetConfigName();
+        ByteString aStr = GetConfigName().getString();
         if( !aStr.Len() )
-            aStr = GetName();
+            aStr = GetName().getString();
 
         rOutStm << "SlotName = \"" << aStr.GetBuffer() << "\";" << endl;
 
-        aStr = GetHelpText();
+        aStr = GetHelpText().getString();
         if( aStr.Len() )
         {
             WriteTab( rOutStm, 1 );
@@ -1521,12 +1521,12 @@ void SvMetaSlot::WriteSrc( SvIdlDataBase & rBase, SvStream & rOutStm,
     {
         for( sal_uLong n = 0; n < pEnum->Count(); n++ )
         {
-            ByteString aValName = pEnum->GetObject( n )->GetName();
+            ByteString aValName = pEnum->GetObject( n )->GetName().getString();
             rtl::OStringBuffer aBuf;
             if( GetPseudoPrefix().Len() )
                 aBuf.append(GetPseudoPrefix());
             else
-                aBuf.append(GetSlotId().getIdentifier());
+                aBuf.append(GetSlotId().getString());
             aBuf.append('_');
             aBuf.append(aValName.Copy(pEnum->GetPrefix().Len()));
 
@@ -1550,7 +1550,7 @@ void SvMetaSlot::WriteSrc( SvIdlDataBase & rBase, SvStream & rOutStm,
                 WriteTab( rOutStm, 1 );
                 rOutStm << "SlotName = \"" << aValName.GetBuffer() << "\";" << endl;
 
-                ByteString aStr = GetHelpText();
+                ByteString aStr = GetHelpText().getString();
                 if( aStr.Len() )
                 {
                     WriteTab( rOutStm, 1 );
@@ -1569,7 +1569,7 @@ void SvMetaSlot::WriteHelpId( SvIdlDataBase & rBase, SvStream & rOutStm,
     if( !pTable->IsKeyValid( nSId ) )
     {
         pTable->Insert( nSId, this );
-        rOutStm << "#define " << GetSlotId().getIdentifier().GetBuffer() << '\t'
+        rOutStm << "#define " << GetSlotId().getString().GetBuffer() << '\t'
             << rtl::OString::valueOf(static_cast<sal_Int32>(nSId)).getStr()
             << endl;
     }
@@ -1579,13 +1579,13 @@ void SvMetaSlot::WriteHelpId( SvIdlDataBase & rBase, SvStream & rOutStm,
     {
         for( sal_uLong n = 0; n < pEnum->Count(); n++ )
         {
-            ByteString aValName = pEnum->GetObject( n )->GetName();
+            ByteString aValName = pEnum->GetObject( n )->GetName().getString();
 
             rtl::OStringBuffer aBuf;
             if( GetPseudoPrefix().Len() )
                 aBuf.append(GetPseudoPrefix());
             else
-                aBuf.append(GetSlotId().getIdentifier());
+                aBuf.append(GetSlotId().getString());
             aBuf.append('_');
             aBuf.append(aValName.Copy(pEnum->GetPrefix().Len()));
 
@@ -1624,7 +1624,7 @@ void WriteBool( sal_Bool bSet, SvStream& rStream )
 void SvMetaSlot::WriteCSV( SvIdlDataBase& rBase, SvStream& rStrm )
 {
     rStrm << "PROJECT,";
-    rStrm << GetSlotId().getIdentifier().GetBuffer() << ',';
+    rStrm << GetSlotId().getString().GetBuffer() << ',';
     rStrm
         << rtl::OString::valueOf(
             static_cast<sal_Int32>(GetSlotId().GetValue())).getStr()
@@ -1643,7 +1643,7 @@ void SvMetaSlot::WriteCSV( SvIdlDataBase& rBase, SvStream& rStrm )
     WriteBool( GetToolBoxConfig(), rStrm );
 
     if ( GetSlotType() )
-        rStrm << GetSlotType()->GetName().GetBuffer() << ',';
+        rStrm << GetSlotType()->GetName().getString().GetBuffer() << ',';
     else
         rStrm << ',';
 
@@ -1683,8 +1683,8 @@ void SvMetaSlot::WriteCSV( SvIdlDataBase& rBase, SvStream& rStrm )
 
     if ( GetType()->GetType() != TYPE_METHOD && GetMethod() )
     {
-        rStrm << GetMethod()->GetType()->GetReturnType()->GetName().GetBuffer() << ',';
-        rStrm << GetMethod()->GetName().GetBuffer() << ',';
+        rStrm << GetMethod()->GetType()->GetReturnType()->GetName().getString().GetBuffer() << ',';
+        rStrm << GetMethod()->GetName().getString().GetBuffer() << ',';
     }
     else
     {
@@ -1692,7 +1692,7 @@ void SvMetaSlot::WriteCSV( SvIdlDataBase& rBase, SvStream& rStrm )
     }
 
     rStrm << GetType()->GetSvName().GetBuffer() << ',';
-    rStrm << GetName().GetBuffer() << ',';
+    rStrm << GetName().getString().GetBuffer() << ',';
 
     if ( GetType()->GetType() == TYPE_METHOD || GetMethod() )
     {
