@@ -31,7 +31,7 @@
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/xmlimp.hxx>
 
-class SvStrings;
+class vector;
 
 class SwXMLSectionList : public SvXMLImport
 {
@@ -43,11 +43,11 @@ protected:
                   const ::com::sun::star::uno::Reference<
                     ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 public:
-    SvStrings & rSectionList;
+    std::vector<String*> &rSectionList;
 
     SwXMLSectionList(
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
-        SvStrings & rNewSectionList );
+        std::vector<String*> &rNewSectionList );
 
     virtual ~SwXMLSectionList ( )
         throw();

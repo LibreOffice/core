@@ -26,12 +26,11 @@
  *
  ************************************************************************/
 
-#define _SVSTDARR_STRINGSDTOR
-#define _SVSTDARR_STRINGS
-#include <svl/svstdarr.hxx>
 #include <SwXMLSectionList.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlnmspe.hxx>
+#include <tools/string.hxx>
+#include <vector>
 
 using namespace ::com::sun::star;
 using ::rtl::OUString;
@@ -43,7 +42,7 @@ sal_Char const sXML_np__text[] = "_otext";
 // #110680#
 SwXMLSectionList::SwXMLSectionList(
     const uno::Reference< lang::XMultiServiceFactory > xServiceFactory,
-    SvStrings & rNewSectionList)
+    std::vector<String*> &rNewSectionList)
 :   SvXMLImport( xServiceFactory ),
     rSectionList ( rNewSectionList )
 {
@@ -121,7 +120,7 @@ SvXMLImportContext *SvXMLSectionListContext::CreateChildContext(
                 sName = rAttrValue;
         }
         if ( sName.Len() )
-            rLocalRef.rSectionList.Insert ( new String(sName), rLocalRef.rSectionList.Count() );
+            rLocalRef.rSectionList.push_back( new String(sName) );
     }
 
     pContext = new SvXMLSectionListContext (rLocalRef, nPrefix, rLocalName, xAttrList);

@@ -64,8 +64,8 @@ public:
 
     // read the sections of the document, which is equal to the medium.
     // returns the count of it
-    virtual sal_uInt16 GetSectionList( SfxMedium& rMedium,
-                                SvStrings& rStrings ) const;
+    virtual size_t GetSectionList( SfxMedium& rMedium,
+                                   std::vector<String*>& rStrings ) const;
 };
 
 // die speziellen Writer

@@ -27,10 +27,6 @@
  ************************************************************************/
 
 
-
-
-
-#define _SVSTDARR_STRINGS
 #include <rsc/rscsfx.hxx>
 #include <tools/urlobj.hxx>
 #include <com/sun/star/embed/XStorage.hpp>
@@ -51,7 +47,6 @@
 #include <com/sun/star/packages/zip/ZipIOException.hpp>
 #include <com/sun/star/packages/WrongPasswordException.hpp>
 #include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
-#include <svl/svstdarr.hxx>
 #include <sfx2/docfile.hxx>
 #include <svtools/sfxecode.hxx>
 #include <svl/stritem.hxx>
@@ -1067,8 +1062,8 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, con
 
     // read the sections of the document, which is equal to the medium.
     // returns the count of it
-sal_uInt16 XMLReader::GetSectionList( SfxMedium& rMedium,
-                                    SvStrings& rStrings ) const
+size_t XMLReader::GetSectionList( SfxMedium& rMedium,
+                                  std::vector<String*>& rStrings ) const
 {
     uno::Reference< lang::XMultiServiceFactory > xServiceFactory =
             comphelper::getProcessServiceFactory();
@@ -1095,7 +1090,6 @@ sal_uInt16 XMLReader::GetSectionList( SfxMedium& rMedium,
             if( xXMLParser.is() )
             {
                 // get filter
-                // uno::Reference< xml::sax::XDocumentHandler > xFilter = new SwXMLSectionList( rStrings );
                 uno::Reference< xml::sax::XDocumentHandler > xFilter = new SwXMLSectionList( xServiceFactory, rStrings );
 
                 // connect parser and filter
@@ -1123,7 +1117,7 @@ sal_uInt16 XMLReader::GetSectionList( SfxMedium& rMedium,
             // re throw ?
         }
     }
-    return rStrings.Count();
+    return rStrings.size();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -56,7 +56,6 @@ class SfxItemSet;
 class SfxMedium;
 class SvPtrarr;
 class SvStream;
-class SvStrings;
 class SvxFontItem;
 class SvxMacroTableDtor;
 class SwCntntNode;
@@ -64,6 +63,7 @@ class SwCrsrShell;
 class SwDoc;
 class SwPaM;
 class SwTextBlocks;
+class vector;
 struct SwPosition;
 struct Writer_Impl;
 
@@ -272,8 +272,8 @@ public:
 
     // Read the sections of the document, which is equal to the medium.
     // Returns the count of it
-    virtual sal_uInt16 GetSectionList( SfxMedium& rMedium,
-                                    SvStrings& rStrings ) const;
+    virtual size_t GetSectionList( SfxMedium& rMedium,
+                                   std::vector<String*>& rStrings ) const;
 
     SotStorageRef getSotStorageRef() { return pStg; };
     void setSotStorageRef(SotStorageRef pStgRef) { pStg = pStgRef; };
