@@ -85,7 +85,6 @@
 #include <tools/datetime.hxx>
 #include <tools/urlobj.hxx>
 #include <svx/dataaccessdescriptor.hxx>
-#define _SVSTDARR_STRINGS
 #include <svl/svstdarr.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
@@ -95,6 +94,7 @@
 #include <fmtmeta.hxx> // MetaFieldManager
 #include <switerator.hxx>
 #include <rtl/strbuf.hxx>
+#include <vector>
 
 using ::rtl::OUString;
 using namespace ::com::sun::star;
@@ -2539,32 +2539,30 @@ uno::Sequence< OUString > SwXTextFieldMasters::getElementNames(void)
     const SwFldTypes* pFldTypes = GetDoc()->GetFldTypes();
     sal_uInt16 nCount = pFldTypes->Count();
 
-    SvStrings aFldNames;
+    std::vector<String*> aFldNames;
     String* pString = new String();
-    sal_uInt16 i;
 
-    for( i = 0; i < nCount; i++)
+    for( sal_uInt16 i = 0; i < nCount; i++)
     {
         SwFieldType& rFldType = *((*pFldTypes)[i]);
 
         if (SwXTextFieldMasters::getInstanceName(rFldType, *pString))
         {
-            aFldNames.Insert(pString, aFldNames.Count());
+            aFldNames.push_back(pString);
             pString = new String();
         }
     }
     delete pString;
 
-    uno::Sequence< OUString > aSeq(aFldNames.Count());
+    uno::Sequence< OUString > aSeq( static_cast<sal_uInt16>(aFldNames.size()) );
     OUString* pArray = aSeq.getArray();
-    for(i = 0; i < aFldNames.Count();i++)
+    for(sal_uInt16 i = 0; i < aFldNames.size();i++)
     {
-        pArray[i] = *aFldNames.GetObject(i);
+        pArray[i] = *aFldNames[i];
+        delete aFldNames[i];
     }
-    aFldNames.DeleteAndDestroy(0, aFldNames.Count());
 
     return aSeq;
-
 }
 
 sal_Bool SwXTextFieldMasters::hasByName(const OUString& rName) throw( uno::RuntimeException )
