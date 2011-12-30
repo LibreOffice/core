@@ -2219,6 +2219,47 @@ printf ("hello world\n");
 fi
 AC_SUBST(HAVE_LD_BSYMBOLIC_FUNCTIONS)
 
+dnl Set the ENABLE_DBGUTIL variable
+dnl ===================================================================
+AC_MSG_CHECKING([whether to build with additional debug utilities])
+if test -n "$enable_dbgutil" && test "$enable_dbgutil" != "no"; then
+    PROEXT=""
+    PRODUCT=""
+
+    AC_MSG_RESULT([yes])
+    # cppunit and graphite expose STL in public headers
+    if test "$with_system_cppunit" = "yes"; then
+        AC_MSG_ERROR([--with-system-cppunit conflicts with DBG_UTIL build])
+    else
+        with_system_cppunit=no
+    fi
+    if test "$with_system_graphite" = "yes"; then
+        AC_MSG_ERROR([--with-system-graphite conflicts with DBG_UTIL build])
+    else
+        with_system_graphite=no
+    fi
+    if test "$with_system_mysql_cppconn" = "yes"; then
+        AC_MSG_ERROR([--with-system-mysql-cppconn conflicts with DBG_UTIL build])
+    else
+        with_system_mysql_cppconn=no
+    fi
+    if test $_os = WINNT -a \
+            \( "$enable_mozilla" != no -o \
+               "$enable_build_mozilla" != no \); then
+        # We can't build against the Mozilla stuff if using _DEBUG, will get linking errors
+        # See connectivity/drivers/mozab
+        AC_MSG_WARN([Also disabling Mozilla stuff then])
+        enable_mozilla=no
+        enable_build_mozilla=no
+    fi
+else
+    PRODUCT="full"
+    PROEXT=".pro"
+    AC_MSG_RESULT([no, full product build])
+fi
+AC_SUBST(PRODUCT)
+AC_SUBST(PROEXT)
+
 dnl ===================================================================
 dnl Set up a different compiler to produce tools to run on the build
 dnl machine when doing cross-compilation
@@ -2427,46 +2468,6 @@ else
 fi
 AC_SUBST(ENABLE_DEBUG)
 
-dnl Set the ENABLE_DBGUTIL variable
-dnl ===================================================================
-AC_MSG_CHECKING([whether to build with additional debug utilities])
-if test -n "$enable_dbgutil" && test "$enable_dbgutil" != "no"; then
-    PROEXT=""
-    PRODUCT=""
-
-    AC_MSG_RESULT([yes])
-    # cppunit and graphite expose STL in public headers
-    if test "$with_system_cppunit" = "yes"; then
-        AC_MSG_ERROR([--with-system-cppunit conflicts with DBG_UTIL build])
-    else
-        with_system_cppunit=no
-    fi
-    if test "$with_system_graphite" = "yes"; then
-        AC_MSG_ERROR([--with-system-graphite conflicts with DBG_UTIL build])
-    else
-        with_system_graphite=no
-    fi
-    if test "$with_system_mysql_cppconn" = "yes"; then
-        AC_MSG_ERROR([--with-system-mysql-cppconn conflicts with DBG_UTIL build])
-    else
-        with_system_mysql_cppconn=no
-    fi
-    if test $_os = WINNT -a \
-            \( "$enable_mozilla" != no -o \
-               "$enable_build_mozilla" != no \); then
-        # We can't build against the Mozilla stuff if using _DEBUG, will get linking errors
-        # See connectivity/drivers/mozab
-        AC_MSG_WARN([Also disabling Mozilla stuff then])
-        enable_mozilla=no
-        enable_build_mozilla=no
-    fi
-else
-    PRODUCT="full"
-    PROEXT=".pro"
-    AC_MSG_RESULT([no, full product build])
-fi
-AC_SUBST(PRODUCT)
-AC_SUBST(PROEXT)
 
 dnl Determine whether to use linkoo for the smoketest installation
 dnl ===================================================================
