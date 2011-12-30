@@ -591,6 +591,13 @@ TextBodyPtr Shape::getTextBody()
     return mpTextBody;
 }
 
+void Shape::moveAllToPosition( const Point &rPoint )
+{
+    setPosition( Point( rPoint.X + maPosition.X, rPoint.Y + maPosition.Y ) );
+    for( ::std::vector<ShapePtr>::const_iterator aIt = maChildren.begin(), aEnd = maChildren.end();aIt != aEnd; ++aIt )
+        (*aIt)->moveAllToPosition( rPoint );
+}
+
 void Shape::setMasterTextListStyle( const TextListStylePtr& pMasterTextListStyle )
 {
     OSL_TRACE("set master text list style to shape id: %s", rtl::OUStringToOString(msId, RTL_TEXTENCODING_UTF8 ).getStr());

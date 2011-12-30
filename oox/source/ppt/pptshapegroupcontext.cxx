@@ -41,6 +41,7 @@
 #include "oox/drawingml/customshapegeometry.hxx"
 #include "oox/drawingml/textbodycontext.hxx"
 #include "oox/drawingml/connectorshapecontext.hxx"
+#include "extdrawingfragmenthandler.hxx"
 
 using rtl::OUString;
 using namespace oox::core;
@@ -62,12 +63,15 @@ PPTShapeGroupContext::PPTShapeGroupContext(
 : ShapeGroupContext( rParent, pMasterShapePtr, pGroupShapePtr )
 , mpSlidePersistPtr( pSlidePersistPtr )
 , meShapeLocation( eShapeLocation )
+, pGraphicShape( (PPTShape *)NULL )
 {
 }
 
 Reference< XFastContextHandler > PPTShapeGroupContext::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttribs ) throw (SAXException, RuntimeException)
 {
     Reference< XFastContextHandler > xRet;
+    if( getNamespace( aElementToken ) == NMSP_dsp )
+        aElementToken = NMSP_ppt | getBaseToken( aElementToken );
 
     switch( aElementToken )
     {
@@ -110,7 +114,10 @@ Reference< XFastContextHandler > PPTShapeGroupContext::createFastChildContext( s
         xRet.set( new PPTGraphicShapeContext( *this, mpSlidePersistPtr, mpGroupShapePtr,  oox::drawingml::ShapePtr( new PPTShape( meShapeLocation, "com.sun.star.drawing.GraphicObjectShape" ) ) ) );
         break;
     case PPT_TOKEN( graphicFrame ): // CT_GraphicalObjectFrame
-        xRet.set( new oox::drawingml::GraphicalObjectFrameContext( *this, mpGroupShapePtr, oox::drawingml::ShapePtr( new PPTShape( meShapeLocation, "com.sun.star.drawing.OLE2Shape" ) ), true ) );
+        {
+            pGraphicShape = oox::drawingml::ShapePtr( new PPTShape( meShapeLocation, "com.sun.star.drawing.OLE2Shape" ) );
+            xRet.set( new oox::drawingml::GraphicalObjectFrameContext( *this, mpGroupShapePtr, pGraphicShape, true ) );
+        }
         break;
 
     }
@@ -119,6 +126,25 @@ Reference< XFastContextHandler > PPTShapeGroupContext::createFastChildContext( s
 
 
     return xRet;
+}
+
+void PPTShapeGroupContext::endFastElement( sal_Int32 nElement ) throw (SAXException, RuntimeException)
+{
+    if( nElement == PPT_TOKEN( spTree ) && pGraphicShape )
+    {
+        for( ::std::vector<OUString>::const_iterator aIt = pGraphicShape->getExtDrawings().begin(), aEnd = pGraphicShape->getExtDrawings().end();
+                    aIt != aEnd; ++aIt )
+            {
+                getFilter().importFragment( new ExtDrawingFragmentHandler( getFilter(), getFragmentPathFromRelId( *aIt ),
+                                                                           mpSlidePersistPtr,
+                                                                           meShapeLocation,
+                                                                           mpMasterShapePtr,
+                                                                           mpGroupShapePtr,
+                                                                           pGraphicShape ) );
+
+            }
+        pGraphicShape = oox::drawingml::ShapePtr( (PPTShape *)NULL );
+    }
 }
 
 } }
