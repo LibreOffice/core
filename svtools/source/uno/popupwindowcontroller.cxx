@@ -238,7 +238,11 @@ Reference< awt::XWindow > SAL_CALL PopupWindowController::createPopupWindow() th
         {
                pWin->EnableDocking(true);
             mpImpl->SetPopupWindow(pWin,pToolBox);
-            ::Window::GetDockingManager()->StartPopupMode( pToolBox, pWin, FLOATWIN_POPUPMODE_NOFOCUSCLOSE|FLOATWIN_POPUPMODE_ALLMOUSEBUTTONCLOSE |FLOATWIN_POPUPMODE_NOMOUSEUPCLOSE );
+            ::Window::GetDockingManager()->StartPopupMode( pToolBox, pWin,
+                                                           FLOATWIN_POPUPMODE_GRABFOCUS |
+                                                           FLOATWIN_POPUPMODE_NOFOCUSCLOSE |
+                                                           FLOATWIN_POPUPMODE_ALLMOUSEBUTTONCLOSE |
+                                                           FLOATWIN_POPUPMODE_NOMOUSEUPCLOSE );
         }
     }
     return Reference< awt::XWindow >();
