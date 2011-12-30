@@ -8543,7 +8543,7 @@ void ScTableSheetObj::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pEn
         }
         else if ( pEntry->nWID == SC_WID_UNO_TABCOLOR )
         {
-            sal_Int32 nColor;
+            sal_Int32 nColor = COL_AUTO;
             if ( aValue >>= nColor )
             {
                 const Color aColor( static_cast< ColorData >( nColor ) );
