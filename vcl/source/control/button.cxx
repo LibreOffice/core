@@ -2938,21 +2938,6 @@ Image RadioButton::GetRadioImage( const AllSettings& rSettings, sal_uInt16 nFlag
         pSVData->maCtrlData.mnLastRadioWColor = rStyleSettings.GetWindowColor().GetColor();
         pSVData->maCtrlData.mnLastRadioLColor = rStyleSettings.GetLightColor().GetColor();
 
-        Color pColorAry1[6];
-        Color pColorAry2[6];
-        pColorAry1[0] = Color( 0xC0, 0xC0, 0xC0 );
-        pColorAry1[1] = Color( 0xFF, 0xFF, 0x00 );
-        pColorAry1[2] = Color( 0xFF, 0xFF, 0xFF );
-        pColorAry1[3] = Color( 0x80, 0x80, 0x80 );
-        pColorAry1[4] = Color( 0x00, 0x00, 0x00 );
-        pColorAry1[5] = Color( 0x00, 0xFF, 0x00 );
-        pColorAry2[0] = rStyleSettings.GetFaceColor();
-        pColorAry2[1] = rStyleSettings.GetWindowColor();
-        pColorAry2[2] = rStyleSettings.GetLightColor();
-        pColorAry2[3] = rStyleSettings.GetShadowColor();
-        pColorAry2[4] = rStyleSettings.GetDarkShadowColor();
-        pColorAry2[5] = rStyleSettings.GetWindowTextColor();
-
         ResMgr* pResMgr = ImplGetResMgr();
         pSVData->maCtrlData.mpRadioImgList = new ImageList();
         if( pResMgr )
