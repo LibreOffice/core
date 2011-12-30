@@ -33,6 +33,10 @@ PACKAGE = complex/connectivity
 # --- Settings -----------------------------------------------------
 .INCLUDE: settings.mk
 
+.IF "$(BUILD_TYPE)" == "$(BUILD_TYPE:s/QADEVOOO//)"
+all:
+    @echo "QADEVOO not set. Build skipped"
+.ELSE
 #----- compile .java files -----------------------------------------
 
 JARFILES        = ridl.jar unoil.jar jurt.jar juh.jar java_uno.jar OOoRunner.jar
@@ -65,6 +69,7 @@ ALL :   ALLTAR
 .ELSE
 ALL: 	ALLDEP
 .ENDIF
+.ENDIF # QADEVOOO option
 
 .INCLUDE :  target.mk
 
@@ -76,3 +81,4 @@ run: $(CLASSDIR)$/$(JARTARGET)
 
 run_%: $(CLASSDIR)$/$(JARTARGET)
     +$(AUGMENT_LIBRARY_PATH) java $(RUNNER_CLASSPATH) $(RUNNER_ARGS) -o complex.$(PRJNAME).$(@:s/run_//)
+

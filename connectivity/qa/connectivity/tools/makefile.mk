@@ -38,6 +38,11 @@ all:
     @echo "Java not available. Build skipped"
 .ELSE
 
+.IF "$(BUILD_TYPE)" == "$(BUILD_TYPE:s/QADEVOOO//)"
+all:
+    @echo "QADEVOO not set. Build skipped"
+.ELSE
+
 #----- compile .java files -----------------------------------------
 
 JARFILES        = ridl.jar unoil.jar jurt.jar juh.jar java_uno.jar OOoRunnerLight.jar
@@ -56,6 +61,8 @@ ALL :   ALLTAR
 ALL: 	ALLDEP
 .ENDIF
 
+.ENDIF # QADEVOOO option
 .ENDIF # "$(SOLAR_JAVA)" == ""
 
 .INCLUDE :  target.mk
+
