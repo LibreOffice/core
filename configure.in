@@ -2146,6 +2146,64 @@ AC_SUBST(MAC_OS_X_VERSION_MIN_REQUIRED)
 AC_SUBST(MAC_OS_X_VERSION_MAX_ALLOWED)
 
 dnl ===================================================================
+dnl Windows specific tests and stuff
+dnl ===================================================================
+if test "$_os" = "WINNT"; then
+
+    dnl Include twain scanners
+    BUILD_TYPE="$BUILD_TYPE TWAIN"
+
+    dnl Set the CL_X64 variable if we are building a 64-bit LibreOffice.
+    AC_MSG_CHECKING([whether to build a 64-bit LibreOffice])
+    if test "z$enable_cl_x64" = "z" -o "$enable_cl_x64" = "no"; then
+        CL_X64=""
+        AC_MSG_RESULT([no])
+    else
+        CL_X64="TRUE"
+        AC_MSG_RESULT([yes])
+    fi
+    AC_SUBST(CL_X64)
+
+    AC_MSG_CHECKING([whether to use DirectX])
+    if test "$enable_directx" = "yes" -o "$enable_directx" = ""; then
+        ENABLE_DIRECTX="TRUE"
+        AC_MSG_RESULT([yes])
+    else
+        ENABLE_DIRECTX=""
+        AC_MSG_RESULT([no])
+    fi
+    AC_SUBST(ENABLE_DIRECTX)
+
+    AC_MSG_CHECKING([whether to use ActiveX])
+    if test "$enable_activex" = "yes" -o "$enable_activex" = "TRUE" -o "$enable_activex" = ""; then
+        DISABLE_ACTIVEX=""
+        AC_MSG_RESULT([yes])
+    else
+        DISABLE_ACTIVEX="TRUE"
+        AC_MSG_RESULT([no])
+    fi
+    AC_SUBST(DISABLE_ACTIVEX)
+
+    AC_MSG_CHECKING([whether to use ATL])
+    if test "$enable_atl" = "yes" -o "$enable_atl" = "TRUE"; then
+        DISABLE_ATL=""
+        AC_MSG_RESULT([yes])
+    elif test "$enable_atl" = ""; then
+        if test "$WITH_MINGW" = "yes"; then
+            DISABLE_ATL="TRUE"
+            AC_MSG_RESULT([no])
+        else
+            DISABLE_ATL=""
+            AC_MSG_RESULT([yes])
+        fi
+    else
+        DISABLE_ATL="TRUE"
+        AC_MSG_RESULT([no])
+    fi
+    AC_SUBST(DISABLE_ATL)
+fi
+
+dnl ===================================================================
 dnl  Test the gcc version,  3 is OK
 dnl ===================================================================
 if test \( "$_os" != "WINNT" -o "$WITH_MINGW" = "yes" \) -a "$GCC" = "yes"; then
@@ -2261,6 +2319,195 @@ AC_SUBST(PRODUCT)
 AC_SUBST(PROEXT)
 
 dnl ===================================================================
+dnl  Check which Microsoft C/C++ or MinGW compiler is used for WINNT
+dnl ===================================================================
+SHOWINCLUDES_PREFIX=
+if test "$_os" = "WINNT"; then
+    if test "$WITH_MINGW" != "yes"; then
+        AC_MSG_CHECKING([for a friendly Microsoft C/C++ compiler installation path])
+        if test -z "$with_cl_home"; then
+            vctest=`./oowintool --msvc-productdir`;
+            if test "$CL_X64" = ""; then
+                if test -x "$vctest/bin/cl.exe"; then
+                    with_cl_home=$vctest;
+                fi
+            else
+                if test -x "$vctest/bin/amd64/cl.exe"; then
+                    with_cl_home=$vctest;
+                fi
+            fi
+        else
+            with_cl_home=`cygpath -u "$with_cl_home"`
+        fi
+        with_cl_home=`cygpath -d "$with_cl_home"`
+        with_cl_home=`cygpath -u "$with_cl_home"`
+        AC_MSG_RESULT([$with_cl_home])
+
+        dnl ===========================================================
+        dnl  Check for mspdb80.dll/mspdb100.dll
+        dnl ===========================================================
+        dnl MSVS 2008/10 Compiler
+        if test -n "$with_mspdb_path";then
+            with_mspdb_path=`cygpath -u "$with_mspdb_path"`
+        fi
+        if test -e "$with_mspdb_path/mspdb80.dll" -o -e "$with_mspdb_path/mspdb100.dll"; then
+            MSPDB_PATH="$with_mspdb_path"
+        fi
+        dnl MSVS 2008 case
+        if test -z "$MSPDB_PATH" -a -e "$with_cl_home/../Common7/IDE/mspdb80.dll"; then
+            MSPDB_PATH="$with_cl_home/../Common7/IDE"
+        fi
+        dnl Windows SDK 6.0 case
+        if test -z "$MSPDB_PATH" -a -e "$with_cl_home/bin/mspdb80.dll"; then
+            MSPDB_PATH="$with_cl_home/bin"
+        fi
+        dnl MSVS 2010 case
+        if test -z "$MSPDB_PATH" -a -e "$with_cl_home/../Common7/IDE/mspdb100.dll"; then
+            MSPDB_PATH="$with_cl_home/../Common7/IDE"
+        fi
+
+        if test -z "$MSPDB_PATH";then
+            dnl AC_PATH_PROG only checks if MSPDB_PATH is still empty
+            AC_PATH_PROG(MSPDB_PATH, mspdb80.dll)
+            AC_PATH_PROG(MSPDB_PATH, mspdb100.dll)
+            MSPDB_PATH=`dirname "$MSPDB_PATH"`
+        fi
+
+        if test -z "$MSPDB_PATH"; then
+            AC_MSG_ERROR([You need a mspdb80.dllor mspdb100.dll, make sure it is in the path or use --with-mspdb-path])
+        fi
+        MSPDB_PATH=`cygpath -d "$MSPDB_PATH"`
+        MSPDB_PATH=`cygpath -u "$MSPDB_PATH"`
+        dnl The path needs to be added before cl is called
+        PATH="$MSPDB_PATH:$PATH"
+
+        AC_MSG_CHECKING([the Microsoft C/C++ Compiler])
+        if test -z "$CC"; then
+            if test "$CL_X64" = ""; then
+                if test -x "$with_cl_home/bin/cl.exe"; then
+                    CC="$with_cl_home/bin/cl.exe"
+                fi
+            else
+                if test -x "$with_cl_home/bin/amd64/cl.exe"; then
+                    CC="$with_cl_home/bin/amd64/cl.exe"
+                fi
+            fi
+            if test -z "$CC"; then
+                AC_PATH_PROG(CC, cl.exe)
+            fi
+            # This gives us a posix path with 8.3 filename restrictions
+            CC=`cygpath -d "$CC"`
+            CC=`cygpath -u "$CC"`
+        fi
+
+        if test -n "$CC"; then
+            # Remove /cl.exe from CC case insensitive
+            AC_MSG_RESULT([found ($CC)])
+            if test "$CL_X64" = ""; then
+                COMPATH=`echo $CC | $SED -e 's@\/[[Bb]][[Ii]][[Nn]]\/[[cC]][[lL]]\.[[eE]][[xX]][[eE]].*@@' -e 's@^.* @@'`
+            else
+                if test -n "$with_cl_home"; then
+                    COMPATH=`echo $with_cl_home`
+                fi
+            fi
+            export INCLUDE=`cygpath -d "$COMPATH/Include"`
+            dnl  Check which Microsoft C/C++ compiler is found
+            AC_MSG_CHECKING([the Version of Microsoft C/C++ Compiler])
+            # The following finds Microsoft, matches nn.nn.nnnn then pulls numbers out.
+            CCNUMVER=`$CC 2>&1 | $AWK "/Microsoft/ && /..\\...\\...../ {
+                            x = match( \\\$0, /..\\...\\...../ )
+                            CCversion = substr( \\\$0, RSTART, RLENGTH)
+                            tokencount = split (CCversion,vertoken,\".\")
+                            for ( i = 1 ; i <= tokencount ; i++ ) {
+                                printf (\"%04d\",vertoken[[i]] )
+                            }
+                            }"`
+            if test "$CCNUMVER" -ge "001600000000"; then
+                COMEX=13
+                MSVSVER=2010
+            elif test "$CCNUMVER" -ge "001500000000"; then
+                COMEX=12
+                MSVSVER=2008
+            else
+                AC_MSG_ERROR([Compiler too old. Use Microsoft Visual Studio 2008 or 2010.])
+            fi
+            AC_MSG_RESULT([found compiler version $CCNUMVER (MSVS $MSVSVER).])
+        else
+            AC_MSG_ERROR([Microsoft C/C++ Compiler not found. Use --with-cl-home or set path to cl.exe.])
+        fi
+
+        dnl We need to guess the prefix of the -showIncludes output, it can be
+        dnl localized
+        AC_MSG_CHECKING([the dependency generation prefix (cl.exe -showIncludes)])
+        echo "#include <stdlib.h>" > conftest.c
+        SHOWINCLUDES_PREFIX=`$CC -c -showIncludes conftest.c 2>/dev/null | \
+            grep 'stdlib\.h' | head -n1 | sed 's/ [[[:alpha:]]]:.*//'`
+        rm -f conftest.c conftest.obj
+        if test -z "$SHOWINCLUDES_PREFIX" ; then
+            AC_MSG_ERROR([cannot determine the -showIncludes prefix])
+        else
+            AC_MSG_RESULT(["$SHOWINCLUDES_PREFIX"])
+        fi
+
+        # Check for 64-bit (cross-)compiler to use to build the 64-bit
+        # version of the Explorer extension (and maybe other small
+        # bits, too) needed when installing a 32-bit LibreOffice on a
+        # 64-bit OS. The 64-bit Explorer extension is a feature that
+        # has been present since long in OOo. Don't confuse it with
+        # building LibreOffice itself as 64-bit code, which is
+        # unfished work and highly experimental.
+
+        BUILD_X64=
+        CC_X64_BINARY=
+        LINK_X64_BINARY=
+        LIBMGR_X64_BINARY=
+
+        AC_MSG_CHECKING([for a x64 compiler and libraries for 64bit ActiveX component])
+        if test "$CL_X64" = "" -a -f "$with_cl_home/atlmfc/lib/amd64/atls.lib"; then
+            # Prefer native x64 compiler to cross-compiler, in case we are running
+            # the build on a 64-bit OS.
+            if "$with_cl_home/bin/amd64/cl.exe" -? </dev/null >/dev/null 2>&1; then
+                BUILD_X64=TRUE
+                CC_X64_BINARY="$with_cl_home/bin/amd64/cl.exe"
+                CXX_X64_BINARY="$with_cl_home/bin/amd64/cl.exe"
+                LINK_X64_BINARY="$with_cl_home/bin/amd64/link.exe"
+                LIBMGR_X64_BINARY="$with_cl_home/bin/amd64/lib.exe"
+            elif "$with_cl_home/bin/x86_amd64/cl.exe" -? </dev/null >/dev/null 2>&1; then
+                BUILD_X64=TRUE
+                CC_X64_BINARY="$with_cl_home/bin/x86_amd64/cl.exe"
+                CXX_X64_BINARY="$with_cl_home/bin/x86_amd64/cl.exe"
+                LINK_X64_BINARY="$with_cl_home/bin/x86_amd64/link.exe"
+                LIBMGR_X64_BINARY="$with_cl_home/bin/x86_amd64/lib.exe"
+            fi
+        fi
+        if test "$BUILD_X64" = TRUE; then
+            AC_MSG_RESULT([found])
+        else
+            AC_MSG_RESULT([not found])
+            AC_MSG_WARN([Installation set will not contain the 64-bit Explorer extension])
+        fi
+        AC_SUBST(BUILD_X64)
+
+        # These are passed to the environment through set_soenv.in as usual, and then
+        # used in set_wntx64.mk
+        AC_SUBST(CC_X64_BINARY)
+        AC_SUBST(CXX_X64_BINARY)
+        AC_SUBST(LINK_X64_BINARY)
+        AC_SUBST(LIBMGR_X64_BINARY)
+
+    else
+        AC_MSG_CHECKING([the compiler is MinGW])
+        MACHINE_PREFIX=`$CC -dumpmachine`
+        if echo $MACHINE_PREFIX | grep -q mingw32; then
+            AC_MSG_RESULT([yes])
+        else
+            AC_MSG_ERROR([Compiler is not MinGW.])
+        fi
+    fi
+fi
+AC_SUBST(COMEX)
+AC_SUBST(MSPDB_PATH)
+AC_SUBST(SHOWINCLUDES_PREFIX)
 dnl Set up a different compiler to produce tools to run on the build
 dnl machine when doing cross-compilation
 dnl ===================================================================
@@ -2385,63 +2632,6 @@ fi
 AC_SUBST(ENABLE_CRASHDUMP)
 
 
-dnl ===================================================================
-dnl Windows specific tests and stuff
-dnl ===================================================================
-if test "$_os" = "WINNT"; then
-
-    dnl Include twain scanners
-    BUILD_TYPE="$BUILD_TYPE TWAIN"
-
-    dnl Set the CL_X64 variable if we are building a 64-bit LibreOffice.
-    AC_MSG_CHECKING([whether to build a 64-bit LibreOffice])
-    if test "z$enable_cl_x64" = "z" -o "$enable_cl_x64" = "no"; then
-        CL_X64=""
-        AC_MSG_RESULT([no])
-    else
-        CL_X64="TRUE"
-        AC_MSG_RESULT([yes])
-    fi
-    AC_SUBST(CL_X64)
-
-    AC_MSG_CHECKING([whether to use DirectX])
-    if test "$enable_directx" = "yes" -o "$enable_directx" = ""; then
-        ENABLE_DIRECTX="TRUE"
-        AC_MSG_RESULT([yes])
-    else
-        ENABLE_DIRECTX=""
-        AC_MSG_RESULT([no])
-    fi
-    AC_SUBST(ENABLE_DIRECTX)
-
-    AC_MSG_CHECKING([whether to use ActiveX])
-    if test "$enable_activex" = "yes" -o "$enable_activex" = "TRUE" -o "$enable_activex" = ""; then
-        DISABLE_ACTIVEX=""
-        AC_MSG_RESULT([yes])
-    else
-        DISABLE_ACTIVEX="TRUE"
-        AC_MSG_RESULT([no])
-    fi
-    AC_SUBST(DISABLE_ACTIVEX)
-
-    AC_MSG_CHECKING([whether to use ATL])
-    if test "$enable_atl" = "yes" -o "$enable_atl" = "TRUE"; then
-        DISABLE_ATL=""
-        AC_MSG_RESULT([yes])
-    elif test "$enable_atl" = ""; then
-        if test "$WITH_MINGW" = "yes"; then
-            DISABLE_ATL="TRUE"
-            AC_MSG_RESULT([no])
-        else
-            DISABLE_ATL=""
-            AC_MSG_RESULT([yes])
-        fi
-    else
-        DISABLE_ATL="TRUE"
-        AC_MSG_RESULT([no])
-    fi
-    AC_SUBST(DISABLE_ATL)
-fi
 
 dnl Set the ENABLE_WERROR variable. (Activate --enable-werror)
 dnl ===================================================================
@@ -2856,196 +3046,6 @@ else
     AC_MSG_ERROR([Failed to find some modules])
 fi
 
-dnl ===================================================================
-dnl  Check which Microsoft C/C++ or MinGW compiler is used for WINNT
-dnl ===================================================================
-SHOWINCLUDES_PREFIX=
-if test "$_os" = "WINNT"; then
-    if test "$WITH_MINGW" != "yes"; then
-        AC_MSG_CHECKING([for a friendly Microsoft C/C++ compiler installation path])
-        if test -z "$with_cl_home"; then
-            vctest=`./oowintool --msvc-productdir`;
-            if test "$CL_X64" = ""; then
-                if test -x "$vctest/bin/cl.exe"; then
-                    with_cl_home=$vctest;
-                fi
-            else
-                if test -x "$vctest/bin/amd64/cl.exe"; then
-                    with_cl_home=$vctest;
-                fi
-            fi
-        else
-            with_cl_home=`cygpath -u "$with_cl_home"`
-        fi
-        with_cl_home=`cygpath -d "$with_cl_home"`
-        with_cl_home=`cygpath -u "$with_cl_home"`
-        AC_MSG_RESULT([$with_cl_home])
-
-        dnl ===========================================================
-        dnl  Check for mspdb80.dll/mspdb100.dll
-        dnl ===========================================================
-        dnl MSVS 2008/10 Compiler
-        if test -n "$with_mspdb_path";then
-            with_mspdb_path=`cygpath -u "$with_mspdb_path"`
-        fi
-        if test -e "$with_mspdb_path/mspdb80.dll" -o -e "$with_mspdb_path/mspdb100.dll"; then
-            MSPDB_PATH="$with_mspdb_path"
-        fi
-        dnl MSVS 2008 case
-        if test -z "$MSPDB_PATH" -a -e "$with_cl_home/../Common7/IDE/mspdb80.dll"; then
-            MSPDB_PATH="$with_cl_home/../Common7/IDE"
-        fi
-        dnl Windows SDK 6.0 case
-        if test -z "$MSPDB_PATH" -a -e "$with_cl_home/bin/mspdb80.dll"; then
-            MSPDB_PATH="$with_cl_home/bin"
-        fi
-        dnl MSVS 2010 case
-        if test -z "$MSPDB_PATH" -a -e "$with_cl_home/../Common7/IDE/mspdb100.dll"; then
-            MSPDB_PATH="$with_cl_home/../Common7/IDE"
-        fi
-
-        if test -z "$MSPDB_PATH";then
-            dnl AC_PATH_PROG only checks if MSPDB_PATH is still empty
-            AC_PATH_PROG(MSPDB_PATH, mspdb80.dll)
-            AC_PATH_PROG(MSPDB_PATH, mspdb100.dll)
-            MSPDB_PATH=`dirname "$MSPDB_PATH"`
-        fi
-
-        if test -z "$MSPDB_PATH"; then
-            AC_MSG_ERROR([You need a mspdb80.dllor mspdb100.dll, make sure it is in the path or use --with-mspdb-path])
-        fi
-        MSPDB_PATH=`cygpath -d "$MSPDB_PATH"`
-        MSPDB_PATH=`cygpath -u "$MSPDB_PATH"`
-        dnl The path needs to be added before cl is called
-        PATH="$MSPDB_PATH:$PATH"
-
-        AC_MSG_CHECKING([the Microsoft C/C++ Compiler])
-        if test -z "$CC"; then
-            if test "$CL_X64" = ""; then
-                if test -x "$with_cl_home/bin/cl.exe"; then
-                    CC="$with_cl_home/bin/cl.exe"
-                fi
-            else
-                if test -x "$with_cl_home/bin/amd64/cl.exe"; then
-                    CC="$with_cl_home/bin/amd64/cl.exe"
-                fi
-            fi
-            if test -z "$CC"; then
-                AC_PATH_PROG(CC, cl.exe)
-            fi
-            # This gives us a posix path with 8.3 filename restrictions
-            CC=`cygpath -d "$CC"`
-            CC=`cygpath -u "$CC"`
-        fi
-
-        if test -n "$CC"; then
-            # Remove /cl.exe from CC case insensitive
-            AC_MSG_RESULT([found ($CC)])
-            if test "$CL_X64" = ""; then
-                COMPATH=`echo $CC | $SED -e 's@\/[[Bb]][[Ii]][[Nn]]\/[[cC]][[lL]]\.[[eE]][[xX]][[eE]].*@@' -e 's@^.* @@'`
-            else
-                if test -n "$with_cl_home"; then
-                    COMPATH=`echo $with_cl_home`
-                fi
-            fi
-            export INCLUDE=`cygpath -d "$COMPATH/Include"`
-            dnl  Check which Microsoft C/C++ compiler is found
-            AC_MSG_CHECKING([the Version of Microsoft C/C++ Compiler])
-            # The following finds Microsoft, matches nn.nn.nnnn then pulls numbers out.
-            CCNUMVER=`$CC 2>&1 | $AWK "/Microsoft/ && /..\\...\\...../ {
-                            x = match( \\\$0, /..\\...\\...../ )
-                            CCversion = substr( \\\$0, RSTART, RLENGTH)
-                            tokencount = split (CCversion,vertoken,\".\")
-                            for ( i = 1 ; i <= tokencount ; i++ ) {
-                                printf (\"%04d\",vertoken[[i]] )
-                            }
-                            }"`
-            if test "$CCNUMVER" -ge "001600000000"; then
-                COMEX=13
-                MSVSVER=2010
-            elif test "$CCNUMVER" -ge "001500000000"; then
-                COMEX=12
-                MSVSVER=2008
-            else
-                AC_MSG_ERROR([Compiler too old. Use Microsoft Visual Studio 2008 or 2010.])
-            fi
-            AC_MSG_RESULT([found compiler version $CCNUMVER (MSVS $MSVSVER).])
-        else
-            AC_MSG_ERROR([Microsoft C/C++ Compiler not found. Use --with-cl-home or set path to cl.exe.])
-        fi
-
-        dnl We need to guess the prefix of the -showIncludes output, it can be
-        dnl localized
-        AC_MSG_CHECKING([the dependency generation prefix (cl.exe -showIncludes)])
-        echo "#include <stdlib.h>" > conftest.c
-        SHOWINCLUDES_PREFIX=`$CC -c -showIncludes conftest.c 2>/dev/null | \
-            grep 'stdlib\.h' | head -n1 | sed 's/ [[[:alpha:]]]:.*//'`
-        rm -f conftest.c conftest.obj
-        if test -z "$SHOWINCLUDES_PREFIX" ; then
-            AC_MSG_ERROR([cannot determine the -showIncludes prefix])
-        else
-            AC_MSG_RESULT(["$SHOWINCLUDES_PREFIX"])
-        fi
-
-        # Check for 64-bit (cross-)compiler to use to build the 64-bit
-        # version of the Explorer extension (and maybe other small
-        # bits, too) needed when installing a 32-bit LibreOffice on a
-        # 64-bit OS. The 64-bit Explorer extension is a feature that
-        # has been present since long in OOo. Don't confuse it with
-        # building LibreOffice itself as 64-bit code, which is
-        # unfished work and highly experimental.
-
-        BUILD_X64=
-        CC_X64_BINARY=
-        LINK_X64_BINARY=
-        LIBMGR_X64_BINARY=
-
-        AC_MSG_CHECKING([for a x64 compiler and libraries for 64bit ActiveX component])
-        if test "$CL_X64" = "" -a -f "$with_cl_home/atlmfc/lib/amd64/atls.lib"; then
-            # Prefer native x64 compiler to cross-compiler, in case we are running
-            # the build on a 64-bit OS.
-            if "$with_cl_home/bin/amd64/cl.exe" -? </dev/null >/dev/null 2>&1; then
-                BUILD_X64=TRUE
-                CC_X64_BINARY="$with_cl_home/bin/amd64/cl.exe"
-                CXX_X64_BINARY="$with_cl_home/bin/amd64/cl.exe"
-                LINK_X64_BINARY="$with_cl_home/bin/amd64/link.exe"
-                LIBMGR_X64_BINARY="$with_cl_home/bin/amd64/lib.exe"
-            elif "$with_cl_home/bin/x86_amd64/cl.exe" -? </dev/null >/dev/null 2>&1; then
-                BUILD_X64=TRUE
-                CC_X64_BINARY="$with_cl_home/bin/x86_amd64/cl.exe"
-                CXX_X64_BINARY="$with_cl_home/bin/x86_amd64/cl.exe"
-                LINK_X64_BINARY="$with_cl_home/bin/x86_amd64/link.exe"
-                LIBMGR_X64_BINARY="$with_cl_home/bin/x86_amd64/lib.exe"
-            fi
-        fi
-        if test "$BUILD_X64" = TRUE; then
-            AC_MSG_RESULT([found])
-        else
-            AC_MSG_RESULT([not found])
-            AC_MSG_WARN([Installation set will not contain the 64-bit Explorer extension])
-        fi
-        AC_SUBST(BUILD_X64)
-
-        # These are passed to the environment through set_soenv.in as usual, and then
-        # used in set_wntx64.mk
-        AC_SUBST(CC_X64_BINARY)
-        AC_SUBST(CXX_X64_BINARY)
-        AC_SUBST(LINK_X64_BINARY)
-        AC_SUBST(LIBMGR_X64_BINARY)
-
-    else
-        AC_MSG_CHECKING([the compiler is MinGW])
-        MACHINE_PREFIX=`$CC -dumpmachine`
-        if echo $MACHINE_PREFIX | grep -q mingw32; then
-            AC_MSG_RESULT([yes])
-        else
-            AC_MSG_ERROR([Compiler is not MinGW.])
-        fi
-    fi
-fi
-AC_SUBST(COMEX)
-AC_SUBST(MSPDB_PATH)
-AC_SUBST(SHOWINCLUDES_PREFIX)
 
 dnl ===================================================================
 dnl Check for pkg-config
