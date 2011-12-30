@@ -1659,12 +1659,6 @@ else
 ToFile( "BUILD_NCPUS",          "@BUILD_NCPUS@", "e" );
 ToFile( "GMAKE_PARALLELISM",    "@GMAKE_PARALLELISM@", "e" );
 ToFile( "GMAKE_MODULE_PARALLELISM","@GMAKE_MODULE_PARALLELISM@", "e" );
-ToFile( "SIZEOF_SHORT",         "@SIZEOF_SHORT@", "e" );
-ToFile( "SIZEOF_INT",           "@SIZEOF_INT@",  "e" );
-ToFile( "SIZEOF_LONG",          "@SIZEOF_LONG@", "e" );
-ToFile( "SIZEOF_LONGLONG",      "@SIZEOF_LONGLONG@", "e" );
-ToFile( "SIZEOF_DOUBLE",        "@SIZEOF_DOUBLE@", "e" );
-ToFile( "SIZEOF_POINTER",       "@SIZEOF_POINTER@", "e" );
 ToFile( "ALIGNOF_SHORT",        "@ALIGNOF_SHORT@", "e" );
 ToFile( "ALIGNOF_INT",          "@ALIGNOF_INT@", "e" );
 ToFile( "ALIGNOF_LONG",         "@ALIGNOF_LONG@", "e" );
