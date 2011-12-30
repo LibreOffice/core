@@ -67,7 +67,6 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     package \
     padmin \
     psprint_config \
-    qadevOOo \
     regexp \
     reportdesign \
     sane \
@@ -107,6 +106,14 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     xmlreader \
     xmlscript \
 ))
+
+ifneq ($(SOLAR_JAVA),)
+ ifneq "$(OOO_JUNIT_JAR)" ""
+$(eval $(call gb_Module_add_moduledirs,ooo,\
+    qadevOOo \
+))
+  endif
+endif
 
 # these have only migrated subsequentcheck for now
 $(eval $(call gb_Module_add_moduledirs,ooo,\
