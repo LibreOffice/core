@@ -40,6 +40,8 @@
 #include "oox/drawingml/textrun.hxx"
 #include "oox/drawingml/diagram/diagram.hxx"
 #include "oox/drawingml/fillproperties.hxx"
+#include "oox/ppt/pptshapegroupcontext.hxx"
+#include "oox/ppt/pptshape.hxx"
 
 #include "diagramlayoutatoms.hxx"
 #include "diagramfragmenthandler.hxx"
@@ -53,7 +55,6 @@ using namespace ::com::sun::star;
 namespace oox { namespace drawingml {
 
 namespace dgm {
-
 
 void Connection::dump()
 {
@@ -374,7 +375,7 @@ void importFragment( core::XmlFilterBase& rFilter,
     rFilter.importFragment( rxHandler, xSerializer );
 }
 
-void loadDiagram( const ShapePtr& pShape,
+void loadDiagram( ShapePtr& pShape,
                   core::XmlFilterBase& rFilter,
                   const ::rtl::OUString& rDataModelPath,
                   const ::rtl::OUString& rLayoutPath,
@@ -400,6 +401,10 @@ void loadDiagram( const ShapePtr& pShape,
                        "DiagramData",
                        pShape,
                        xRef);
+        // Pass the info to pShape
+        for( ::std::vector<OUString>::const_iterator aIt = pData->getExtDrawings().begin(), aEnd = pData->getExtDrawings().end();
+                aIt != aEnd; ++aIt )
+                pShape->addExtDrawingRelId( *aIt );
     }
 
     // layout

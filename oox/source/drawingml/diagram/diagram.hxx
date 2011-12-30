@@ -166,6 +166,7 @@ typedef boost::shared_ptr< LayoutNode > LayoutNodePtr;
 class DiagramData
 {
 public:
+    ::std::vector<rtl::OUString>  maExtDrawings;
     typedef std::map< rtl::OUString, dgm::Point* > PointNameMap;
     typedef std::map< rtl::OUString,
                       std::vector<dgm::Point*> >   PointsNameMap;
@@ -188,6 +189,8 @@ public:
         { return maPointNameMap; }
     PointsNameMap & getPointsPresNameMap()
         { return maPointsPresNameMap; }
+    ::std::vector<rtl::OUString> &getExtDrawings()
+        { return maExtDrawings; }
     void dump();
 private:
     FillPropertiesPtr mpFillProperties;

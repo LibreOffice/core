@@ -107,6 +107,7 @@ public:
 
     void                              setChildPosition( com::sun::star::awt::Point nPosition ){ maChPosition = nPosition; }
     void                              setChildSize( com::sun::star::awt::Size aSize ){ maChSize = aSize; }
+    void                              moveAllToPosition( const com::sun::star::awt::Point &rPoint );
 
     void                              setPosition( com::sun::star::awt::Point nPosition ){ maPosition = nPosition; }
     const com::sun::star::awt::Point& getPosition() const { return maPosition; }
@@ -173,6 +174,9 @@ public:
                         getXShape() const { return mxShape; }
 
     virtual void        applyShapeReference( const Shape& rReferencedShape );
+    const ::std::vector<rtl::OUString>&
+                        getExtDrawings() { return maExtDrawings; }
+    void                addExtDrawingRelId( const ::rtl::OUString &rRelId ) { maExtDrawings.push_back( rRelId ); }
 
 protected:
 
@@ -233,6 +237,7 @@ protected:
 
     com::sun::star::awt::Size       maSize;
     com::sun::star::awt::Point      maPosition;
+    ::std::vector<rtl::OUString>    maExtDrawings;
 
 private:
     enum FrameType

@@ -399,10 +399,9 @@ DataModelContext::~DataModelContext()
     mpDataModel->dump();
 }
 
-
 Reference< XFastContextHandler > SAL_CALL
 DataModelContext::createFastChildContext( ::sal_Int32 aElement,
-                                          const Reference< XFastAttributeList >& /*xAttribs*/ )
+                                          const Reference< XFastAttributeList >& xAttribs )
     throw ( SAXException, RuntimeException)
 {
     Reference< XFastContextHandler > xRet;
@@ -426,7 +425,11 @@ DataModelContext::createFastChildContext( ::sal_Int32 aElement,
         // TODO
         return xRet;
     case DGM_TOKEN( extLst ):
-        return xRet;
+    case A_TOKEN( ext ):
+        break;
+    case DSP_TOKEN( dataModelExt ):
+            mpDataModel->getExtDrawings().push_back( xAttribs->getOptionalValue( XML_relId ) );
+        break;
     default:
         break;
     }

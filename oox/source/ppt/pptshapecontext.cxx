@@ -96,6 +96,8 @@ oox::drawingml::ShapePtr findPlaceholder( sal_Int32 nFirstPlaceholder, sal_Int32
 Reference< XFastContextHandler > PPTShapeContext::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttribs ) throw (SAXException, RuntimeException)
 {
     Reference< XFastContextHandler > xRet;
+    if( getNamespace( aElementToken ) == NMSP_dsp )
+        aElementToken = NMSP_ppt | getBaseToken( aElementToken );
 
     switch( aElementToken )
     {
