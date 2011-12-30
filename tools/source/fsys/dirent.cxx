@@ -1418,14 +1418,13 @@ sal_Bool DirEntry::Find( const String& rPfad, char cDelim )
     if ( !cDelim )
             cDelim = SEARCHDELIM(DEFSTYLE)[0];
 
-    sal_uInt16 nTokenCount = rPfad.GetTokenCount( cDelim );
-    sal_Int32 nIndex = 0;
     rtl::OString aThis = rtl::OStringBuffer()
         .append(ACCESSDELIM_C(DEFSTYLE))
         .append(rtl::OUStringToOString(GetFull(),
             osl_getThreadTextEncoding()))
         .makeStringAndClear();
-    for ( sal_uInt16 nToken = 0; nToken < nTokenCount; ++nToken )
+    sal_Int32 nIndex = 0;
+    do
     {
         rtl::OStringBuffer aPath(rtl::OUStringToOString(rPfad,
             osl_getThreadTextEncoding()).getToken( 0, cDelim, nIndex ));
@@ -1445,6 +1444,7 @@ sal_Bool DirEntry::Find( const String& rPfad, char cDelim )
             }
         }
     }
+    while ( nIndex >= 0 );
     return sal_False;
 }
 
