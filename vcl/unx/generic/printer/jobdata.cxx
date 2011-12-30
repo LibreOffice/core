@@ -124,7 +124,7 @@ bool JobData::getStreamBuffer( void*& pData, int& bytes )
     SvMemoryStream aStream;
 
     // write header job data
-    aStream.WriteLine( "JobData 1" );
+    aStream.WriteLine(rtl::OString(RTL_CONSTASCII_STRINGPARAM("JobData 1")));
 
     rtl::OStringBuffer aLine;
 

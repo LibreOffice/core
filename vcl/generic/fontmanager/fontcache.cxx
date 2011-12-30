@@ -122,7 +122,7 @@ void FontCache::flush()
     }
 
     aStream.SetLineDelimiter( LINEEND_LF );
-    aStream.WriteLine( ByteString( CACHE_MAGIC ) );
+    aStream.WriteLine(rtl::OString(RTL_CONSTASCII_STRINGPARAM(CACHE_MAGIC)));
 
     PrintFontManager& rManager( PrintFontManager::get() );
     MultiAtomProvider* pAtoms = rManager.m_pAtoms;
@@ -139,7 +139,7 @@ void FontCache::flush()
         aLine.append(aDirectory);
         if( rDir.empty() && dir_it->second.m_bNoFiles )
             aLine.insert(0, RTL_CONSTASCII_STRINGPARAM("Empty"));
-        aStream.WriteLine(ByteString(aLine.makeStringAndClear()));
+        aStream.WriteLine(aLine.makeStringAndClear());
 
         for( FontDirMap::const_iterator entry_it = rDir.begin(); entry_it != rDir.end(); ++entry_it )
         {
@@ -150,14 +150,14 @@ void FontCache::flush()
 
             aLine.append(RTL_CONSTASCII_STRINGPARAM("File:"));
             aLine.append(entry_it->first);
-            aStream.WriteLine(ByteString(aLine.makeStringAndClear()));
+            aStream.WriteLine(aLine.makeStringAndClear());
 
             int nEntrySize = entry_it->second.m_aEntry.size();
             // write: type;nfonts
             aLine.append(static_cast<sal_Int32>(rEntry.front()->m_eType));
             aLine.append(';');
             aLine.append(static_cast<sal_Int32>(nEntrySize));
-            aStream.WriteLine(ByteString(aLine.makeStringAndClear()));
+            aStream.WriteLine(aLine.makeStringAndClear());
 
             sal_Int32 nSubEntry = 0;
             for( FontCacheEntry::const_iterator it = rEntry.begin(); it != rEntry.end(); ++it, nSubEntry++ )
@@ -182,7 +182,7 @@ void FontCache::flush()
                         aLine.append(OUStringToOString(rAdd, RTL_TEXTENCODING_UTF8));
                     }
                 }
-                aStream.WriteLine(ByteString(aLine.makeStringAndClear()));
+                aStream.WriteLine(aLine.makeStringAndClear());
 
                 const OUString& rPSName( pAtoms->getString( ATOM_PSNAME, (*it)->m_nPSName ) );
                 aLine.append(nSubEntry);
@@ -238,9 +238,9 @@ void FontCache::flush()
                     aLine.append(';');
                     aLine.append(OUStringToOString((*it)->m_aStyleName, RTL_TEXTENCODING_UTF8));
                 }
-                aStream.WriteLine(ByteString(aLine.makeStringAndClear()));
+                aStream.WriteLine(aLine.makeStringAndClear());
             }
-            aStream.WriteLine( ByteString() );
+            aStream.WriteLine(rtl::OString());
         }
     }
     m_bDoFlush = false;

@@ -380,7 +380,7 @@ public:
 
     sal_Bool        ReadLine( ByteString& rStr );
     sal_Bool        ReadLine( rtl::OString& rStr );
-    sal_Bool        WriteLine( const ByteString& rStr );
+    sal_Bool        WriteLine( const rtl::OString& rStr );
     sal_Bool        WriteLines( const ByteString& rStr );
 
     sal_Bool        ReadByteStringLine( String& rStr, rtl_TextEncoding eSrcCharSet );

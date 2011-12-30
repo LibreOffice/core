@@ -899,9 +899,9 @@ sal_Bool SvStream::WriteByteStringLine( const String& rStr, rtl_TextEncoding eDe
     return WriteLine(rtl::OUStringToOString(rStr, eDestCharSet));
 }
 
-sal_Bool SvStream::WriteLine( const ByteString& rStr )
+sal_Bool SvStream::WriteLine(const rtl::OString& rStr)
 {
-    Write( rStr.GetBuffer(), rStr.Len() );
+    Write(rStr.getStr(), rStr.getLength());
     endl(*this);
     return nError == SVSTREAM_OK;
 }
