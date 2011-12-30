@@ -5404,7 +5404,7 @@ void MenuBarWindow::KillActivePopup()
         pActivePopup->Deactivate();
         pActivePopup->bInCallback = sal_False;
         // check for pActivePopup, if stopped by deactivate...
-        if ( pActivePopup && pActivePopup->ImplGetWindow() )
+        if ( pActivePopup->ImplGetWindow() )
         {
             pActivePopup->ImplGetFloatingWindow()->StopExecute();
             pActivePopup->ImplGetFloatingWindow()->doShutdown();
