@@ -9213,6 +9213,9 @@ provide a full junit jar or use --without-junit])
 location (/usr/share/java), specify its pathname via
 --with-junit=..., or disable it via --without-junit])
     fi
+    if test $OOO_JUNIT_JAR != ""; then
+	BUILD_TYPE="$BUILD_TYPE QADEVOOO"
+    fi
 fi
 AC_SUBST(OOO_JUNIT_JAR)
 
