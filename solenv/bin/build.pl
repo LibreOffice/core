@@ -2901,6 +2901,10 @@ sub generate_html_file {
     };
 
     print HTML 'function refreshInfoFrames() {        ' . "\n";
+    print HTML '    if (top.innerFrame.frames[2].location) {' . "\n";
+    print HTML '        var urlquery = location.href.split("?");' . "\n";
+    print HTML '        top.innerFrame.frames[2].location = urlquery[0] + "?initFrame2";' . "\n";
+    print HTML '    }' . "\n";
     print HTML '    var ModuleNameObj = top.innerFrame.frames[2].document.getElementById("ModuleErrors");' . "\n";
     print HTML '    if (ModuleNameObj != null) {' . "\n";
     print HTML '        var ModuleName = ModuleNameObj.getAttribute(\'name\');' . "\n";
@@ -3002,6 +3006,10 @@ sub generate_html_file {
     print HTML '    top.innerFrame.frames[1].document.close();' . "\n";
     print HTML '};' . "\n";
     print HTML 'function Error(Module, Message1, Message2) {' . "\n";
+    print HTML '    if (top.innerFrame.frames[2].location) {' . "\n";
+    print HTML '        var urlquery = location.href.split("?");' . "\n";
+    print HTML '        top.innerFrame.frames[2].location = urlquery[0] + "?initFrame2";' . "\n";
+    print HTML '    }' . "\n";
     print HTML '    if (Module == \'\') {' . "\n";
     print HTML '        if (Message1 != \'\') {' . "\n";
     print HTML '            var erroneous_modules = Message1.split("<br>");' . "\n";
