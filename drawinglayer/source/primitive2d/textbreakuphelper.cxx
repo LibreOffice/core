@@ -41,7 +41,7 @@ namespace drawinglayer
             mpSource(dynamic_cast< const TextSimplePortionPrimitive2D* >(rxSource.get())),
             maTextLayouter(),
             maDecTrans(),
-            mbNoDXArray()
+            mbNoDXArray(false)
         {
             if(mpSource)
             {
