@@ -845,7 +845,9 @@ sub replace_setup_variables
         $value =~ s/\<sourceid\>/$installer::globals::build/;
         $value =~ s/\<updateid\>/$updateid/;
         $value =~ s/\<pkgformat\>/$installer::globals::packageformat/;
+        $ENV{'OOO_VENDOR'} = "" if !defined $ENV{'OOO_VENDOR'};
         $value =~ s/\<vendor\>/$ENV{'OOO_VENDOR'}/;
+        $ENV{'BUILD_VER_STRING'} = "" if !defined $ENV{'BUILD_VER_STRING'};
         $value =~ s/\<buildversion\>/$ENV{'BUILD_VER_STRING'}/;
 
         $oneitem->{'Value'} = $value;
