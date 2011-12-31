@@ -58,7 +58,7 @@ SvxInsRowColDlg::SvxInsRowColDlg(Window* pParent, bool bCol, const rtl::OString&
     bColumn( bCol )
 {
     FreeResource();
-    String aTmp( GetText() );
+    String aTmp;
     if( bColumn )
     {
         aTmp += aCol;

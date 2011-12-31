@@ -35,7 +35,6 @@ ModalDialog DLG_INS_ROW_COL
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 136 , 84 ) ;
-    Text [ en-US ] = "Insert" ;
     Moveable = TRUE ;
     OKButton BT_OK
     {
@@ -110,10 +109,10 @@ ModalDialog DLG_INS_ROW_COL
     };
     String STR_ROW
     {
-        Text [ en-US ] = " Rows" ;
+        Text [ en-US ] = "Insert Rows" ;
     };
     String STR_COL
     {
-        Text [ en-US ] = " Columns" ;
+        Text [ en-US ] = "Insert Columns" ;
     };
 };
