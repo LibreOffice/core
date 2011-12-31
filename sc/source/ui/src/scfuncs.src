@@ -3121,7 +3121,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 3 // Description of Parameter 1
         {
-            Text [ en-US ] = "A value greater than or equal to 1 for which the hyperbolic cosine is to be returned." ;
+            Text [ en-US ] = "A value greater than or equal to 1 for which the inverse hyperbolic cosine is to be returned." ;
         };
     };
      // -=*# Resource for function ARCSINHYP #*=-
