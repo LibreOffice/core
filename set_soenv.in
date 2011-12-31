@@ -49,8 +49,8 @@ my ( $SOLAR_JAVA,
      $CC, $CXX);
 #
 # Platform dependent constant values.
-my ( $COM, $ARCH, $CPU, $CPUNAME, $GUI, $GUIBASE,
-      $OS, $OSVERSION, $OUTPATH, $INPATH, $PATH_SEPERATOR,
+my ( $COM, $ARCH, $CPU,
+      $OS, $OSVERSION, $OUTPATH, $INPATH,
       $DYNAMIC_CRT, $use_shl_versions, $JRELIBDIR,
       $JRETOOLKITDIR, $JRETHREADDIR );
 #
@@ -88,6 +88,12 @@ my ( $oldPATH, $SRC_ROOT, $JAVA_HOME, $JDK, $JAVAFLAGS, $OOO_SHELL,
 #
 my ( $dmake, $build, $mkout, $deliver, $zipdep );
 #
+
+$OS="@OS@";
+$CPU="@CPU@";
+$COM="@COM@";
+$INPATH="@INPATH@";
+$OUTPATH="@OUTPATH@";
 
 #-------------------------------------------------------------
 # IIIa. Initialising constants.
@@ -165,572 +171,447 @@ $TARFILE_LOCATION = "@TARFILE_LOCATION@"; # where to find tarballs with external
 
 # Setting platform dependent constant values.
 if ( $platform =~ m/solaris/ )
-{     print "Setting Solaris specific values... ";
-   if ($platform =~ m/^i[3456]86/)
-   {
-      if ( $CC =~ "gcc") {
-         $OUTPATH        = "unxsogi";
-      } else {
-         $OUTPATH        = "unxsoli4";
-      }
-      $CPU            = "I";
-      $CPUNAME        = "INTEL";
-	  $JRELIBDIR      = $JAVA_HOME.$ds."jre".$ds."lib".$ds."i386";
-	  $JRETOOLKITDIR  = $JAVA_HOME.$ds."jre".$ds."lib".$ds."i386".$ds."xawt";
-	  $JRETHREADDIR   = $JAVA_HOME.$ds."jre".$ds."lib".$ds."i386".$ds."native_threads";
+{
+    print "Setting Solaris specific values... ";
+    if ($platform =~ m/^i[3456]86/)
+    {
+        $JRELIBDIR      = $JAVA_HOME.$ds."jre".$ds."lib".$ds."i386";
+        $JRETOOLKITDIR  = $JAVA_HOME.$ds."jre".$ds."lib".$ds."i386".$ds."xawt";
+        $JRETHREADDIR   = $JAVA_HOME.$ds."jre".$ds."lib".$ds."i386".$ds."native_threads";
+    }
+    else
+    {
+        $JRELIBDIR      = $JAVA_HOME.$ds."jre".$ds."lib".$ds."sparc";
+        $JRETOOLKITDIR  = $JAVA_HOME.$ds."jre".$ds."lib".$ds."sparc".$ds."xawt";
+        $JRETHREADDIR   = $JAVA_HOME.$ds."jre".$ds."lib".$ds."sparc".$ds."native_threads";
+    }
 
-   }
-   else
-   {
-      if ( $CC =~ "gcc") {
-         $OUTPATH        = "unxsogs";
-      } else {
-         $OUTPATH        = "unxsols4";
-      }
-      $CPU            = "S";
-      $CPUNAME        = "SPARC";
-	  $JRELIBDIR      = $JAVA_HOME.$ds."jre".$ds."lib".$ds."sparc";
-	  $JRETOOLKITDIR  = $JAVA_HOME.$ds."jre".$ds."lib".$ds."sparc".$ds."xawt";
-	  $JRETHREADDIR   = $JAVA_HOME.$ds."jre".$ds."lib".$ds."sparc".$ds."native_threads";
-   }
-
-   $COM            = "GCC";
-   $COMPATH        = '@COMPATH@';
-   $GUI            = "UNX";
-   $GUIBASE        = "unx";
-   $INPATH         = $OUTPATH.$PROEXT;
-   $OS             = "SOLARIS";
-   $PATH_SEPERATOR = $ps;
+    $COMPATH        = '@COMPATH@';
 }
 elsif ( $platform =~ m/netbsd/ )
 {
 #Set platform specific values:
-   if ($platform =~ m/^i[3456]86/)
-   {  print "Setting NetBSD x86 specific values... ";
-      $CPU            = "I";
-      $CPUNAME        = "INTEL";
-      $JRELIBDIR      = $JAVA_HOME.$ds."jre".$ds."lib".$ds."i386";
-      $JRETOOLKITDIR  = $JAVA_HOME.$ds."jre".$ds."lib".$ds."i386".$ds."client";
-      $JRETHREADDIR   = $JAVA_HOME.$ds."jre".$ds."lib".$ds."i386".$ds."native_threads";
-   }
-   elsif ($platform =~ m/^x86_64/)
-   {  print "Setting NetBSD x86-64 specific values... ";
-      $CPU            = "X";
-      $CPUNAME        = "X86_64";
-      $JRELIBDIR      = $JAVA_HOME.$ds."jre".$ds."lib".$ds."amd64";
-      $JRETOOLKITDIR  = $JAVA_HOME.$ds."jre".$ds."lib".$ds."amd64".$ds."client";
-      $JRETHREADDIR   = $JAVA_HOME.$ds."jre".$ds."lib".$ds."amd64".$ds."native_threads";
-   }
-   elsif ($platform =~ m/^sparc/)
-   {  print "Setting NetBSD Sparc specific values... ";
-      $CPU            = "S";
-      $CPUNAME        = "SPARC";
-      $JRELIBDIR      = $JAVA_HOME.$ds."jre".$ds."lib".$ds."sparc";
-      $JRETOOLKITDIR  = $JAVA_HOME.$ds."jre".$ds."lib".$ds."sparc".$ds."client";
-      $JRETHREADDIR   = $JAVA_HOME.$ds."jre".$ds."lib".$ds."sparc".$ds."native_threads";
-   }
-   elsif ($platform =~ m/powerpc/)
-   {  print "Setting NetBSD PPC specific values... ";
-      $CPU            = "P";
-      $CPUNAME        = "POWERPC";
-      $JRELIBDIR      = $JAVA_HOME.$ds."jre".$ds."lib".$ds."ppc";
-      $JRETOOLKITDIR  = $JAVA_HOME.$ds."jre".$ds."lib".$ds."ppc".$ds."classic";
-      $JRETHREADDIR   = $JAVA_HOME.$ds."jre".$ds."lib".$ds."ppc".$ds."native_threads";
-   }
-   else
-   { print "Unsupported NetBSD architecture: $platform \n";
-     exit 1;
-   }
+    if ($platform =~ m/^i[3456]86/)
+    {
+        print "Setting NetBSD x86 specific values... ";
+        $JRELIBDIR      = $JAVA_HOME.$ds."jre".$ds."lib".$ds."i386";
+        $JRETOOLKITDIR  = $JAVA_HOME.$ds."jre".$ds."lib".$ds."i386".$ds."client";
+        $JRETHREADDIR   = $JAVA_HOME.$ds."jre".$ds."lib".$ds."i386".$ds."native_threads";
+    }
+    elsif ($platform =~ m/^x86_64/)
+    {
+        print "Setting NetBSD x86-64 specific values... ";
+        $JRELIBDIR      = $JAVA_HOME.$ds."jre".$ds."lib".$ds."amd64";
+        $JRETOOLKITDIR  = $JAVA_HOME.$ds."jre".$ds."lib".$ds."amd64".$ds."client";
+        $JRETHREADDIR   = $JAVA_HOME.$ds."jre".$ds."lib".$ds."amd64".$ds."native_threads";
+    }
+    elsif ($platform =~ m/^sparc/)
+    {
+        print "Setting NetBSD Sparc specific values... ";
+        $JRELIBDIR      = $JAVA_HOME.$ds."jre".$ds."lib".$ds."sparc";
+        $JRETOOLKITDIR  = $JAVA_HOME.$ds."jre".$ds."lib".$ds."sparc".$ds."client";
+        $JRETHREADDIR   = $JAVA_HOME.$ds."jre".$ds."lib".$ds."sparc".$ds."native_threads";
+    }
+    elsif ($platform =~ m/powerpc/)
+    {
+        print "Setting NetBSD PPC specific values... ";
+        $JRELIBDIR      = $JAVA_HOME.$ds."jre".$ds."lib".$ds."ppc";
+        $JRETOOLKITDIR  = $JAVA_HOME.$ds."jre".$ds."lib".$ds."ppc".$ds."classic";
+        $JRETHREADDIR   = $JAVA_HOME.$ds."jre".$ds."lib".$ds."ppc".$ds."native_threads";
+    }
+    else
+    {
+        print "Unsupported NetBSD architecture: $platform \n";
+        exit 1;
+    }
    # General NetBSD settings:
-      $COM            = "GCC";
-      $COMPATH        = '@COMPATH@';
-      $GUI            = "UNX";
-      $GUIBASE        = "unx";
-      $OS             = "NETBSD";
-      $PATH_SEPERATOR = $ps;
-      $OUTPATH        = "unxnbsd";
-      $INPATH         = $OUTPATH.$PROEXT;
+    $COMPATH        = '@COMPATH@';
 }
 elsif ( $platform =~ m/kfreebsd/ )
 {
 # General GNU/kFreeBSD settings:
-      $COM            = "GCC";
-      $COMPATH        = '@COMPATH@';
-      $GUI            = "UNX";
-      $GUIBASE        = "unx";
-      $OS             = "LINUX";
-      $PATH_SEPERATOR = $ps;
+    $COMPATH        = '@COMPATH@';
 
 #Set platform specific values:
-   if ($platform =~ m/^i[3456]86/)
-   {  print "Setting GNU/kFreeBSD x86 specific values... ";
-      $CPU            = "I";
-      $CPUNAME        = "INTEL";
-      $OUTPATH        = "unxkfgi6";
+    if ($platform =~ m/^i[3456]86/)
+    {
+        print "Setting GNU/kFreeBSD x86 specific values... ";
 
-      $JRELIBDIR      = $JAVA_HOME.$ds."jre".$ds."lib".$ds."i386";
-      $JRETOOLKITDIR  = $JAVA_HOME.$ds."jre".$ds."lib".$ds."i386".$ds."client";
-      $JRETHREADDIR   = $JAVA_HOME.$ds."jre".$ds."lib".$ds."i386".$ds."native_threads";
+        $JRELIBDIR      = $JAVA_HOME.$ds."jre".$ds."lib".$ds."i386";
+        $JRETOOLKITDIR  = $JAVA_HOME.$ds."jre".$ds."lib".$ds."i386".$ds."client";
+        $JRETHREADDIR   = $JAVA_HOME.$ds."jre".$ds."lib".$ds."i386".$ds."native_threads";
+    }
+    elsif ($platform =~ m/^x86_64/)
+    {
+        print "Setting GNU/kFreeBSD x86-64 specific values... ";
+        $JRELIBDIR      = $JAVA_HOME.$ds."jre".$ds."lib".$ds."amd64";
+        $JRETOOLKITDIR  = $JAVA_HOME.$ds."jre".$ds."lib".$ds."amd64".$ds."server";
+        $JRETHREADDIR   = $JAVA_HOME.$ds."jre".$ds."lib".$ds."amd64".$ds."native_threads";
+    }
 
-   }
-   elsif ($platform =~ m/^x86_64/)
-   {  print "Setting GNU/kFreeBSD x86-64 specific values... ";
-      $CPU            = "X";
-      $CPUNAME        = "X86_64";
-      $OUTPATH        = "unxkfgx6";
-
-      $JRELIBDIR      = $JAVA_HOME.$ds."jre".$ds."lib".$ds."amd64";
-      $JRETOOLKITDIR  = $JAVA_HOME.$ds."jre".$ds."lib".$ds."amd64".$ds."server";
-      $JRETHREADDIR   = $JAVA_HOME.$ds."jre".$ds."lib".$ds."amd64".$ds."native_threads";
-   }
-
-   $INPATH         = $OUTPATH.$PROEXT;
 }
 elsif ( $platform =~ m/freebsd/ )
-{     $COM            = "GCC";
-      $COMPATH        = '@COMPATH@';
-      $GUI            = "UNX";
-      $GUIBASE        = "unx";
-      $OS             = "FREEBSD";
-      $PATH_SEPERATOR = $ps;
-      $OSVERSION      = '@OSVERSION@';
-      $OUTPATH        = 'unxfbsd';
-   if ($platform =~ m/^(amd64|x86_64)/)
-   {  my ( $JAVA_OS );
-      print "Setting FreeBSD AMD64 specific values... ";
-      $CPU            = "X";
-      $CPUNAME        = "X86_64";
-      $JAVA_OS        = '@JAVA_HOME@';
-      $JAVA_OS        =~ s/.*\///;
-      if ($JAVA_OS =~ m/^linux/)
-      {  $JRELIBDIR      = $JAVA_HOME.$ds."jre".$ds."lib".$ds."i386";
-         $JRETOOLKITDIR  = $JAVA_HOME.$ds."jre".$ds."lib".$ds."i386".$ds."client";
-         $JRETHREADDIR   = $JAVA_HOME.$ds."jre".$ds."lib".$ds."i386".$ds."native_threads";
-      }
-      else
-      {  $JRELIBDIR      = $JAVA_HOME.$ds."jre".$ds."lib".$ds."amd64";
-         $JRETOOLKITDIR  = $JAVA_HOME.$ds."jre".$ds."lib".$ds."amd64".$ds."server";
-         $JRETHREADDIR   = $JAVA_HOME.$ds."jre".$ds."lib".$ds."amd64".$ds."native_threads";
-      }
+{
+    $COMPATH        = '@COMPATH@';
+    $OSVERSION      = '@OSVERSION@';
+    if ($platform =~ m/^(amd64|x86_64)/)
+    {
+        my ( $JAVA_OS );
+        print "Setting FreeBSD AMD64 specific values... ";
+        $JAVA_OS        = '@JAVA_HOME@';
+        $JAVA_OS        =~ s/.*\///;
+        if ($JAVA_OS =~ m/^linux/)
+        {
+            $JRELIBDIR      = $JAVA_HOME.$ds."jre".$ds."lib".$ds."i386";
+            $JRETOOLKITDIR  = $JAVA_HOME.$ds."jre".$ds."lib".$ds."i386".$ds."client";
+            $JRETHREADDIR   = $JAVA_HOME.$ds."jre".$ds."lib".$ds."i386".$ds."native_threads";
+        }
+        else
+        {
+            $JRELIBDIR      = $JAVA_HOME.$ds."jre".$ds."lib".$ds."amd64";
+            $JRETOOLKITDIR  = $JAVA_HOME.$ds."jre".$ds."lib".$ds."amd64".$ds."server";
+            $JRETHREADDIR   = $JAVA_HOME.$ds."jre".$ds."lib".$ds."amd64".$ds."native_threads";
+        }
    }
    elsif ($platform =~ m/^i386/)
-   {  print "Setting FreeBSD x86 specific values... ";
-      $CPU            = "I";
-      $CPUNAME        = "INTEL";
-      $OUTPATH        = "unxfbsdi";
-      $JRELIBDIR      = $JAVA_HOME.$ds."jre".$ds."lib".$ds."i386";
-      $JRETOOLKITDIR  = $JAVA_HOME.$ds."jre".$ds."lib".$ds."i386".$ds."client";
-      $JRETHREADDIR   = $JAVA_HOME.$ds."jre".$ds."lib".$ds."i386".$ds."native_threads";
+   {
+       print "Setting FreeBSD x86 specific values... ";
+       $JRELIBDIR      = $JAVA_HOME.$ds."jre".$ds."lib".$ds."i386";
+       $JRETOOLKITDIR  = $JAVA_HOME.$ds."jre".$ds."lib".$ds."i386".$ds."client";
+       $JRETHREADDIR   = $JAVA_HOME.$ds."jre".$ds."lib".$ds."i386".$ds."native_threads";
    }
    else
-   {  print "Unsupported FreeBSD architecture: $platform \n";
-         exit 1;
+   {
+       print "Unsupported FreeBSD architecture: $platform \n";
+       exit 1;
    }
-      $INPATH         = $OUTPATH.$PROEXT;
 }
 elsif ( $platform =~ m/openbsd/ )
-{     $COM            = "GCC";
-      $COMPATH        = '@COMPATH@';
-      $GUI            = "UNX";
-      $GUIBASE        = "unx";
-      $OS             = "OPENBSD";
-      $PATH_SEPERATOR = $ps;
-      $OSVERSION      = '@OSVERSION@';
-      $OUTPATH        = "unxobsd";
-   if ($platform =~ m/^(amd64|x86_64)/)
-   {
-      print "Setting OpenBSD AMD64 specific values... ";
-      $CPU            = "X";
-      $CPUNAME        = "X86_64";
-      $JRELIBDIR      = $JAVA_HOME.$ds."jre".$ds."lib".$ds."amd64";
-      $JRETOOLKITDIR  = $JAVA_HOME.$ds."jre".$ds."lib".$ds."amd64".$ds."server";
-      $JRETHREADDIR   = $JAVA_HOME.$ds."jre".$ds."lib".$ds."amd64".$ds."native_threads";
-   }
-   elsif ($platform =~ m/^i386/)
-   {  print "Setting OpenBSD x86 specific values... ";
-      $CPU            = "I";
-      $CPUNAME        = "INTEL";
-      $JRELIBDIR      = $JAVA_HOME.$ds."jre".$ds."lib".$ds."i386";
-      $JRETOOLKITDIR  = $JAVA_HOME.$ds."jre".$ds."lib".$ds."i386".$ds."client";
-      $JRETHREADDIR   = $JAVA_HOME.$ds."jre".$ds."lib".$ds."i386".$ds."native_threads";
-   }
-   else
-   {  print "Unsupported OpenBSD architecture: $platform \n";
-         exit 1;
-   }
-      $INPATH         = $OUTPATH.$PROEXT;
+{
+    $COMPATH        = '@COMPATH@';
+    $OSVERSION      = '@OSVERSION@';
+    if ($platform =~ m/^(amd64|x86_64)/)
+    {
+        print "Setting OpenBSD AMD64 specific values... ";
+        $JRELIBDIR      = $JAVA_HOME.$ds."jre".$ds."lib".$ds."amd64";
+        $JRETOOLKITDIR  = $JAVA_HOME.$ds."jre".$ds."lib".$ds."amd64".$ds."server";
+        $JRETHREADDIR   = $JAVA_HOME.$ds."jre".$ds."lib".$ds."amd64".$ds."native_threads";
+    }
+    elsif ($platform =~ m/^i386/)
+    {
+        print "Setting OpenBSD x86 specific values... ";
+        $JRELIBDIR      = $JAVA_HOME.$ds."jre".$ds."lib".$ds."i386";
+        $JRETOOLKITDIR  = $JAVA_HOME.$ds."jre".$ds."lib".$ds."i386".$ds."client";
+        $JRETHREADDIR   = $JAVA_HOME.$ds."jre".$ds."lib".$ds."i386".$ds."native_threads";
+    }
+    else
+    {
+        print "Unsupported OpenBSD architecture: $platform \n";
+        exit 1;
+    }
 }
 elsif ( $platform =~ m/linux/ )
 {
 # General Linux settings:
-      $COM            = "GCC";
-      $COMPATH        = '@COMPATH@';
-      $GUI            = "UNX";
-      $GUIBASE        = "unx";
-      $OS             = "LINUX";
-      $PATH_SEPERATOR = $ps;
+    $COMPATH        = '@COMPATH@';
 
 #Set platform specific values:
-   if ($platform =~ m/^i[3456]86/)
-   {  print "Setting Linux x86 specific values... ";
-      $CPU            = "I";
-      $CPUNAME        = "INTEL";
-
-      if ($JDK =~ m/^[Ii][Bb][Mm]/)
-      { $JRELIBDIR     = $JAVA_HOME.$ds."jre".$ds."bin";
-        $JRETOOLKITDIR = $JAVA_HOME.$ds."jre".$ds."bin".$ds."classic";
-        $JRETHREADDIR  = $JAVA_HOME.$ds."jre".$ds."bin"; }
-
-      elsif ($JDK =~ m/^[Bb][Ee][Aa]/)
-      { $JRELIBDIR     = $JAVA_HOME.$ds."jre".$ds."lib".$ds."i386";
-        $JRETOOLKITDIR  = $JAVA_HOME.$ds."jre".$ds."lib".$ds."i386".$ds."jrockit";
-        $JRETHREADDIR   = $JAVA_HOME.$ds."jre".$ds."lib".$ds."i386".$ds."native_threads"; }
-
-      else {
-      $JRELIBDIR      = $JAVA_HOME.$ds."jre".$ds."lib".$ds."i386";
-      # has both server and client
-      $JRETOOLKITDIR  = $JAVA_HOME.$ds."jre".$ds."lib".$ds."i386".$ds."client";
-      $JRETHREADDIR   = $JAVA_HOME.$ds."jre".$ds."lib".$ds."i386".$ds."native_threads";
-      }
-
-      $OUTPATH     = "unxlngi6";
-   }
-   elsif ($platform =~ m/^x86_64/)
-   {  print "Setting Linux x86-64 specific values... ";
-      $CPU            = "X";
-      $CPUNAME        = "X86_64";
-      $OUTPATH        = "unxlngx6";
-      # Blackdown.org JDK porting project uses `amd64' and `server' in JDK 1.4.2 RC1
-      $JRELIBDIR      = $JAVA_HOME.$ds."jre".$ds."lib".$ds."amd64";
-      # has both server and client
-      $JRETOOLKITDIR  = $JAVA_HOME.$ds."jre".$ds."lib".$ds."amd64".$ds."server";
-      $JRETHREADDIR   = $JAVA_HOME.$ds."jre".$ds."lib".$ds."amd64".$ds."native_threads";
-   }
-   elsif ($platform =~ m/^ia64/)
-   {  print "Setting Linux ia64 specific values... ";
-      $CPU            = "A";
-      $CPUNAME        = "IA64";
-      $OUTPATH        = "unxlnga";
-      $JRELIBDIR      = $JAVA_HOME.$ds."jre".$ds."lib".$ds."ia64";
-      $JRETOOLKITDIR  = $JAVA_HOME.$ds."jre".$ds."lib".$ds."ia64".$ds."server";
-      $JRETHREADDIR   = $JAVA_HOME.$ds."jre".$ds."lib".$ds."ia64".$ds."native_threads";
-   }
-   elsif ($platform =~ m/^sparc/)
-
-   {  print "Setting Linux Sparc specific values... ";
-      $CPU            = "S";
-      $CPUNAME        = "SPARC";
-      $OUTPATH        = "unxlngs";
-      $JRELIBDIR      = $JAVA_HOME.$ds."jre".$ds."lib".$ds."sparc";
-      $JRETOOLKITDIR  = $JAVA_HOME.$ds."jre".$ds."lib".$ds."sparc".$ds."server";
-      $JRETHREADDIR   = $JAVA_HOME.$ds."jre".$ds."lib".$ds."sparc".$ds."native_threads";
-   }
-   elsif ($platform =~ m/^powerpc/)
-   {
-      if (($platform =~ m/^powerpc64/) && ('@SIZEOF_LONG@' eq '8')) {
-         print "Setting Linux PPC64 specific values... ";
-         $OUTPATH = "unxlngppc64";
-         $CPUNAME = "POWERPC64";
-
-         if ( $JDK eq "gcj" ) {
-            $JRELIBDIR      = $JAVA_HOME.$ds."jre".$ds."lib".$ds."ppc64";
-            $JRETOOLKITDIR  = $JAVA_HOME.$ds."jre".$ds."lib".$ds."ppc64".$ds."client";
-            $JRETHREADDIR   = $JAVA_HOME.$ds."jre".$ds."lib".$ds."ppc64".$ds."native_threads";
-         }
-	 # OpenJDK
-	 elsif ($JDK =~ m/sun/) {
-	    $JRELIBDIR      = $JAVA_HOME.$ds."jre".$ds."lib".$ds."ppc64";
-	    $JRETOOLKITDIR  = $JAVA_HOME.$ds."jre".$ds."lib".$ds."ppc64".$ds."server";
-	    $JRETHREADDIR   = $JAVA_HOME.$ds."jre".$ds."lib".$ds."ppc64".$ds."native_threads";
-	 }
-      }
-      else {
-         print "Setting Linux PPC specific values... ";
-         $OUTPATH = "unxlngppc";
-         $CPUNAME = "POWERPC";
-
-         if ( $JDK eq "gcj" ) {
-            $JRELIBDIR      = $JAVA_HOME.$ds."jre".$ds."lib".$ds."ppc";
-            $JRETOOLKITDIR  = $JAVA_HOME.$ds."jre".$ds."lib".$ds."ppc".$ds."client";
-            $JRETHREADDIR   = $JAVA_HOME.$ds."jre".$ds."lib".$ds."ppc".$ds."native_threads"; }
-         elsif ($JDK =~ m/^[Ii][Bb][Mm]/)
-         {  $JRELIBDIR     = $JAVA_HOME.$ds."jre".$ds."lib".$ds."ppc";
-            $JRETOOLKITDIR = $JAVA_HOME.$ds."jre".$ds."lib".$ds."ppc".$ds."classic";
-            $JRETHREADDIR  = $JAVA_HOME.$ds."jre".$ds."lib".$ds."ppc";
-         }
-	 # OpenJDK
-	 elsif ($JDK =~ m/sun/) {
-	    $JRELIBDIR      = $JAVA_HOME.$ds."jre".$ds."lib".$ds."ppc";
-	    $JRETOOLKITDIR  = $JAVA_HOME.$ds."jre".$ds."lib".$ds."ppc".$ds."server";
-	    $JRETHREADDIR   = $JAVA_HOME.$ds."jre".$ds."lib".$ds."ppc".$ds."native_threads";
-	 }
-      }
-
-      $CPU            = "P";
-
-   }
-   elsif ($platform =~ m/^s390/)
-   {
-      if (($platform =~ m/^s390x/) && ('@SIZEOF_LONG@' eq '8')) {
-         print "Setting Linux zSeries specific values... ";
-         $CPUNAME        = "S390X";
-	 $ARCH           = "s390x";
-         $OUTPATH        = "unxlngs390x";
-      }
-      else {
-         print "Setting Linux S/390 specific values... ";
-         $CPUNAME        = "S390";
-	 $ARCH           = "s390";
-         $OUTPATH        = "unxlngs390";
-      }
-      $JRELIBDIR      = $JAVA_HOME.$ds."jre".$ds."lib".$ds.$ARCH;
-      $JRETOOLKITDIR  = $JAVA_HOME.$ds."jre".$ds."lib".$ds.$ARCH.$ds."server";
-      $JRETHREADDIR   = $JAVA_HOME.$ds."jre".$ds."lib".$ds.$ARCH.$ds."native_threads";
-      $CPU            = "3";
-   }
-   elsif ($platform =~ m/^m68k/)
-   {  print "Setting Linux m68k specific values... ";
-      $CPU            = "6";
-      $CPUNAME        = "M68K";
-      $OUTPATH        = "unxlngm68k";
-      $JRELIBDIR      = $JAVA_HOME.$ds."jre".$ds."lib".$ds."m68k";
-      $JRETOOLKITDIR  = $JAVA_HOME.$ds."jre".$ds."lib".$ds."m68k".$ds."server";
-      $JRETHREADDIR   = $JAVA_HOME.$ds."jre".$ds."lib".$ds."m68k".$ds."native_threads";
-   }
-   elsif ($platform =~ m/^hppa/)
-   {  print "Setting Linux hppa specific values... ";
-      $CPU            = "H";
-      $CPUNAME        = "HPPA";
-      $OUTPATH        = "unxlnghppa";
-      $JRELIBDIR      = $JAVA_HOME.$ds."jre".$ds."lib".$ds."hppa";
-      $JRETOOLKITDIR  = $JAVA_HOME.$ds."jre".$ds."lib".$ds."hppa".$ds."server";
-      $JRETHREADDIR   = $JAVA_HOME.$ds."jre".$ds."lib".$ds."hppa".$ds."native_threads";
-      $EPM_FLAGS      = "-a hppa";
-   }
-   elsif ($platform =~ m/^alpha/)
-   {  print "Setting Linux Alpha specific values... ";
-      $CPU            = "L";
-      $CPUNAME        = "AXP";
-      $OUTPATH        = "unxlngaxp";
-      $JRELIBDIR      = $JAVA_HOME.$ds."jre".$ds."lib".$ds."alpha";
-      $JRETOOLKITDIR  = $JAVA_HOME.$ds."jre".$ds."lib".$ds."alpha".$ds."server";
-      $JRETHREADDIR   = $JAVA_HOME.$ds."jre".$ds."lib".$ds."alpha".$ds."native_threads";
-   }
-   elsif ($platform =~ m/^arm.*?l-/)
-   {  print "Setting Linux ARM specific values... ";
-      $CPU            = "R";
-      $CPUNAME        = "ARM";
-      $OUTPATH        = "unxlngr";
-      $JRELIBDIR      = $JAVA_HOME.$ds."jre".$ds."lib".$ds."arm";
-      $JRETOOLKITDIR  = $JAVA_HOME.$ds."jre".$ds."lib".$ds."arm".$ds."server";
-      $JRETHREADDIR   = $JAVA_HOME.$ds."jre".$ds."lib".$ds."arm".$ds."native_threads";
-      $EPM_FLAGS      = "-a arm";
-   }
-   elsif ($platform =~ m/^arm.*-androideabi/)
-   {  print "Setting Android ARM specific values... ";
-      $GUIBASE        = "android";
-      $OS             = "ANDROID";
-      $CPU            = "R";
-      $CPUNAME        = "ARM";
-      $OUTPATH        = "unxandr";
-      $JRELIBDIR      = $JAVA_HOME.$ds."jre".$ds."lib".$ds."arm";
-      $JRETOOLKITDIR  = $JAVA_HOME.$ds."jre".$ds."lib".$ds."arm".$ds."server";
-      $JRETHREADDIR   = $JAVA_HOME.$ds."jre".$ds."lib".$ds."arm".$ds."native_threads";
-      $EPM_FLAGS      = "-a arm";
-   }
-   elsif ($platform =~ m/^mips/)
-   {  print "Setting Linux MIPS specific values... ";
-      $CPU            = "M";
-      $CPUNAME        = "GODSON";
-      $OUTPATH        = "unxlngmips";
-
-      if ('@SIZEOF_LONG@' eq '8') {
-        if ('@WORDS_BIGENDIAN@' ne 'yes') {
-          $EPM_FLAGS = "-a mips64el";
-          if ( $JDK eq "gcj" ) {
-	    $ARCH = "mips64el";
-          }
+    if ($platform =~ m/^i[3456]86/)
+    {
+        print "Setting Linux x86 specific values... ";
+        if ($JDK =~ m/^[Ii][Bb][Mm]/)
+        {
+            $JRELIBDIR     = $JAVA_HOME.$ds."jre".$ds."bin";
+            $JRETOOLKITDIR = $JAVA_HOME.$ds."jre".$ds."bin".$ds."classic";
+            $JRETHREADDIR  = $JAVA_HOME.$ds."jre".$ds."bin";
         }
-        else {
-          $ARCH = "mips64";
+        elsif ($JDK =~ m/^[Bb][Ee][Aa]/)
+        {
+            $JRELIBDIR     = $JAVA_HOME.$ds."jre".$ds."lib".$ds."i386";
+            $JRETOOLKITDIR  = $JAVA_HOME.$ds."jre".$ds."lib".$ds."i386".$ds."jrockit";
+            $JRETHREADDIR   = $JAVA_HOME.$ds."jre".$ds."lib".$ds."i386".$ds."native_threads";
         }
-      }
-      else {
-        if ('@WORDS_BIGENDIAN@' ne 'yes') {
-          $EPM_FLAGS = "-a mipsel";
-	  if ( $JDK =~ m/sun/ && -d "@JAVA_HOME@".$ds."jre".$ds."lib".$ds."mips32" ) {
-	   $ARCH = "mips32"; # Lemote
-	  } else {
-	   $ARCH = "mipsel";
- 	  }
+        else
+        {
+            $JRELIBDIR      = $JAVA_HOME.$ds."jre".$ds."lib".$ds."i386";
+            # has both server and client
+            $JRETOOLKITDIR  = $JAVA_HOME.$ds."jre".$ds."lib".$ds."i386".$ds."client";
+            $JRETHREADDIR   = $JAVA_HOME.$ds."jre".$ds."lib".$ds."i386".$ds."native_threads";
         }
-        else {
-          $ARCH = "mips";
+    }
+    elsif ($platform =~ m/^x86_64/)
+    {
+        print "Setting Linux x86-64 specific values... ";
+        # Blackdown.org JDK porting project uses `amd64' and `server' in JDK 1.4.2 RC1
+        $JRELIBDIR      = $JAVA_HOME.$ds."jre".$ds."lib".$ds."amd64";
+        # has both server and client
+        $JRETOOLKITDIR  = $JAVA_HOME.$ds."jre".$ds."lib".$ds."amd64".$ds."server";
+        $JRETHREADDIR   = $JAVA_HOME.$ds."jre".$ds."lib".$ds."amd64".$ds."native_threads";
+    }
+    elsif ($platform =~ m/^ia64/)
+    {
+        print "Setting Linux ia64 specific values... ";
+        $JRELIBDIR      = $JAVA_HOME.$ds."jre".$ds."lib".$ds."ia64";
+        $JRETOOLKITDIR  = $JAVA_HOME.$ds."jre".$ds."lib".$ds."ia64".$ds."server";
+        $JRETHREADDIR   = $JAVA_HOME.$ds."jre".$ds."lib".$ds."ia64".$ds."native_threads";
+    }
+    elsif ($platform =~ m/^sparc/)
+    {
+        print "Setting Linux Sparc specific values... ";
+        $JRELIBDIR      = $JAVA_HOME.$ds."jre".$ds."lib".$ds."sparc";
+        $JRETOOLKITDIR  = $JAVA_HOME.$ds."jre".$ds."lib".$ds."sparc".$ds."server";
+        $JRETHREADDIR   = $JAVA_HOME.$ds."jre".$ds."lib".$ds."sparc".$ds."native_threads";
+    }
+    elsif ($platform =~ m/^powerpc/)
+    {
+        if (($platform =~ m/^powerpc64/) && ('@SIZEOF_LONG@' eq '8'))
+        {
+            print "Setting Linux PPC64 specific values... ";
+            if ( $JDK eq "gcj" )
+            {
+                $JRELIBDIR      = $JAVA_HOME.$ds."jre".$ds."lib".$ds."ppc64";
+                $JRETOOLKITDIR  = $JAVA_HOME.$ds."jre".$ds."lib".$ds."ppc64".$ds."client";
+                $JRETHREADDIR   = $JAVA_HOME.$ds."jre".$ds."lib".$ds."ppc64".$ds."native_threads";
+            }
+            # OpenJDK
+            elsif ($JDK =~ m/sun/)
+            {
+                $JRELIBDIR      = $JAVA_HOME.$ds."jre".$ds."lib".$ds."ppc64";
+                $JRETOOLKITDIR  = $JAVA_HOME.$ds."jre".$ds."lib".$ds."ppc64".$ds."server";
+                $JRETHREADDIR   = $JAVA_HOME.$ds."jre".$ds."lib".$ds."ppc64".$ds."native_threads";
+            }
         }
-      }
+        else
+        {
+            print "Setting Linux PPC specific values... ";
+            if ( $JDK eq "gcj" )
+            {
+                $JRELIBDIR      = $JAVA_HOME.$ds."jre".$ds."lib".$ds."ppc";
+                $JRETOOLKITDIR  = $JAVA_HOME.$ds."jre".$ds."lib".$ds."ppc".$ds."client";
+                $JRETHREADDIR   = $JAVA_HOME.$ds."jre".$ds."lib".$ds."ppc".$ds."native_threads";
+            }
+            elsif ($JDK =~ m/^[Ii][Bb][Mm]/)
+            {
+                $JRELIBDIR     = $JAVA_HOME.$ds."jre".$ds."lib".$ds."ppc";
+                $JRETOOLKITDIR = $JAVA_HOME.$ds."jre".$ds."lib".$ds."ppc".$ds."classic";
+                $JRETHREADDIR  = $JAVA_HOME.$ds."jre".$ds."lib".$ds."ppc";
+            }
+            # OpenJDK
+            elsif ($JDK =~ m/sun/)
+            {
+                $JRELIBDIR      = $JAVA_HOME.$ds."jre".$ds."lib".$ds."ppc";
+                $JRETOOLKITDIR  = $JAVA_HOME.$ds."jre".$ds."lib".$ds."ppc".$ds."server";
+                $JRETHREADDIR   = $JAVA_HOME.$ds."jre".$ds."lib".$ds."ppc".$ds."native_threads";
+            }
+        }
+    }
+    elsif ($platform =~ m/^s390/)
+    {
+        if (($platform =~ m/^s390x/) && ('@SIZEOF_LONG@' eq '8'))
+        {
+            print "Setting Linux zSeries specific values... ";
+            $ARCH           = "s390x";
+        }
+        else
+        {
+            print "Setting Linux S/390 specific values... ";
+            $ARCH           = "s390";
+        }
+        $JRELIBDIR      = $JAVA_HOME.$ds."jre".$ds."lib".$ds.$ARCH;
+        $JRETOOLKITDIR  = $JAVA_HOME.$ds."jre".$ds."lib".$ds.$ARCH.$ds."server";
+        $JRETHREADDIR   = $JAVA_HOME.$ds."jre".$ds."lib".$ds.$ARCH.$ds."native_threads";
+    }
+    elsif ($platform =~ m/^m68k/)
+    {
+        print "Setting Linux m68k specific values... ";
+        $JRELIBDIR      = $JAVA_HOME.$ds."jre".$ds."lib".$ds."m68k";
+        $JRETOOLKITDIR  = $JAVA_HOME.$ds."jre".$ds."lib".$ds."m68k".$ds."server";
+        $JRETHREADDIR   = $JAVA_HOME.$ds."jre".$ds."lib".$ds."m68k".$ds."native_threads";
+    }
+    elsif ($platform =~ m/^hppa/)
+    {
+        print "Setting Linux hppa specific values... ";
+        $JRELIBDIR      = $JAVA_HOME.$ds."jre".$ds."lib".$ds."hppa";
+        $JRETOOLKITDIR  = $JAVA_HOME.$ds."jre".$ds."lib".$ds."hppa".$ds."server";
+        $JRETHREADDIR   = $JAVA_HOME.$ds."jre".$ds."lib".$ds."hppa".$ds."native_threads";
+        $EPM_FLAGS      = "-a hppa";
+    }
+    elsif ($platform =~ m/^alpha/)
+    {
+        print "Setting Linux Alpha specific values... ";
+        $JRELIBDIR      = $JAVA_HOME.$ds."jre".$ds."lib".$ds."alpha";
+        $JRETOOLKITDIR  = $JAVA_HOME.$ds."jre".$ds."lib".$ds."alpha".$ds."server";
+        $JRETHREADDIR   = $JAVA_HOME.$ds."jre".$ds."lib".$ds."alpha".$ds."native_threads";
+    }
+    elsif ($platform =~ m/^arm.*?l-/)
+    {
+        print "Setting Linux ARM specific values... ";
+        $JRELIBDIR      = $JAVA_HOME.$ds."jre".$ds."lib".$ds."arm";
+        $JRETOOLKITDIR  = $JAVA_HOME.$ds."jre".$ds."lib".$ds."arm".$ds."server";
+        $JRETHREADDIR   = $JAVA_HOME.$ds."jre".$ds."lib".$ds."arm".$ds."native_threads";
+        $EPM_FLAGS      = "-a arm";
+    }
+    elsif ($platform =~ m/^arm.*-androideabi/)
+    {
+        print "Setting Android ARM specific values... ";
+        $JRELIBDIR      = $JAVA_HOME.$ds."jre".$ds."lib".$ds."arm";
+        $JRETOOLKITDIR  = $JAVA_HOME.$ds."jre".$ds."lib".$ds."arm".$ds."server";
+        $JRETHREADDIR   = $JAVA_HOME.$ds."jre".$ds."lib".$ds."arm".$ds."native_threads";
+        $EPM_FLAGS      = "-a arm";
+    }
+    elsif ($platform =~ m/^mips/)
+    {
+        print "Setting Linux MIPS specific values... ";
 
-      $JRELIBDIR      = $JAVA_HOME.$ds."jre".$ds."lib".$ds.$ARCH;
-      if ( $JDK =~ m/sun/ && -d "@JAVA_HOME@".$ds."jre".$ds."lib".$ds."mips32" ) {
-      	$JRETOOLKITDIR  = $JAVA_HOME.$ds."jre".$ds."lib".$ds.$ARCH.$ds."client"; # Lemote
-      } else {
-      	$JRETOOLKITDIR  = $JAVA_HOME.$ds."jre".$ds."lib".$ds.$ARCH.$ds."server";
-      }
-      $JRETHREADDIR   = $JAVA_HOME.$ds."jre".$ds."lib".$ds.$ARCH.$ds."native_threads";
-   }
+        if ('@SIZEOF_LONG@' eq '8')
+        {
+            if ('@WORDS_BIGENDIAN@' ne 'yes')
+            {
+                $EPM_FLAGS = "-a mips64el";
+                if ( $JDK eq "gcj" )
+                {
+                    $ARCH = "mips64el";
+                }
+            }
+            else
+            {
+                $ARCH = "mips64";
+            }
+        }
+        else
+        {
+            if ('@WORDS_BIGENDIAN@' ne 'yes')
+            {
+                $EPM_FLAGS = "-a mipsel";
+                if ( $JDK =~ m/sun/ && -d "@JAVA_HOME@".$ds."jre".$ds."lib".$ds."mips32" )
+                {
+                    $ARCH = "mips32"; # Lemote
+                }
+                else
+                {
+                    $ARCH = "mipsel";
+                }
+            }
+            else
+            {
+                $ARCH = "mips";
+            }
+        }
 
-
-   $INPATH         = $OUTPATH.$PROEXT;
+        $JRELIBDIR      = $JAVA_HOME.$ds."jre".$ds."lib".$ds.$ARCH;
+        if ( $JDK =~ m/sun/ && -d "@JAVA_HOME@".$ds."jre".$ds."lib".$ds."mips32" )
+        {
+            $JRETOOLKITDIR  = $JAVA_HOME.$ds."jre".$ds."lib".$ds.$ARCH.$ds."client"; # Lemote
+        }
+        else
+        {
+            $JRETOOLKITDIR  = $JAVA_HOME.$ds."jre".$ds."lib".$ds.$ARCH.$ds."server";
+        }
+        $JRETHREADDIR   = $JAVA_HOME.$ds."jre".$ds."lib".$ds.$ARCH.$ds."native_threads";
+    }
 }
 elsif ( $platform =~ m/cygwin|mingw32/ )
 {
-      $MSPDB_PATH     = PathFormat('@MSPDB_PATH@');
-      $MIDL_PATH      = PathFormat('@MIDL_PATH@');
-      $CSC_PATH       = PathFormat('@CSC_PATH@');
-      $SHOWINCLUDES_PREFIX = '@SHOWINCLUDES_PREFIX@';
-      $WINDOWS_SDK_HOME      = PathFormat('@WINDOWS_SDK_HOME@');
-      $DIRECTXSDK_LIB = PathFormat('@DIRECTXSDK_LIB@');
-      $USE_DIRECTX5   = "";
-      $DOTNET_FRAMEWORK_HOME = PathFormat('@DOTNET_FRAMEWORK_HOME@');
-      $CPUNAME        = "INTEL";
-      $CPUNAME        = "X86_64" if $CL_X64;
-      $CPU            = "I";
-      $CPU            = "X" if $CL_X64;
-      $GUI            = "WNT";
-      $GUIBASE        = "WIN";
-      $OS             = "WNT";
-      $DYNAMIC_CRT    = "TRUE";
-      $use_shl_versions = "TRUE";
-      $wps = ';' if '@build_os@' eq 'cygwin'; # Windows style path seperator
-  if ( $MINGW eq "yes" )
-  {   print "Setting Windows (MinGW cross-compilation) specific values... ";
+    $MSPDB_PATH     = PathFormat('@MSPDB_PATH@');
+    $MIDL_PATH      = PathFormat('@MIDL_PATH@');
+    $CSC_PATH       = PathFormat('@CSC_PATH@');
+    $SHOWINCLUDES_PREFIX = '@SHOWINCLUDES_PREFIX@';
+    $WINDOWS_SDK_HOME      = PathFormat('@WINDOWS_SDK_HOME@');
+    $DIRECTXSDK_LIB = PathFormat('@DIRECTXSDK_LIB@');
+    $USE_DIRECTX5   = "";
+    $DOTNET_FRAMEWORK_HOME = PathFormat('@DOTNET_FRAMEWORK_HOME@');
+    $DYNAMIC_CRT    = "TRUE";
+    $use_shl_versions = "TRUE";
+    $wps = ';' if '@build_os@' eq 'cygwin'; # Windows style path seperator
+    if ( $MINGW eq "yes" )
+    {
+        print "Setting Windows (MinGW cross-compilation) specific values... ";
 
-      die 'For building natively on Windows we support only MSVC' if ('@build_os@' eq 'cygwin');
+        die 'For building natively on Windows we support only MSVC' if ('@build_os@' eq 'cygwin');
 
-      $PATH_SEPERATOR = ':';
-      $COMPATH        = PathFormat('@COMPATH@/bin');
-      $COMPATH        =~ s/\/bin$//i;
-      $COM            = "GCC";
-      $OUTPATH        = "wntgcci";
-      $OUTPATH        = "wntgccx" if $platform =~ m/^x86_64/;
-      $INPATH         = $OUTPATH.$PROEXT;
-  }
-  else # The MSVC section starts here
-  {   print "Setting Windows (MSVC) specific values... ";
-      $COMPATH        = PathFormat('@COMPATH@');
-      $COM            = "MSC";
-      $OUTPATH        = "wntmsci@COMEX@";
-      $OUTPATH        = "wntmscx@COMEX@" if $CL_X64;
-      $INPATH         = $OUTPATH.$PROEXT;
-      $COMEX          = '@COMEX@';
-      if ( "@DISABLE_ACTIVEX@" ) {
-          $ATL_LIB     = $WINDOWS_SDK_HOME.$ds."lib"; # Doesn't exist for VSE
-          $ATL_INCLUDE = $WINDOWS_SDK_HOME.$ds."include".$ds."atl";
-          $MFC_LIB     = $WINDOWS_SDK_HOME.$ds."lib"; # Doesn't exist for VSE
-          $MFC_INCLUDE = $WINDOWS_SDK_HOME.$ds."include".$ds."mfc";
-      } else {
-          $ATL_LIB     = $COMPATH.$ds."atlmfc".$ds."lib";
-          $ATL_INCLUDE = $COMPATH.$ds."atlmfc".$ds."include";
-          $MFC_LIB     = $COMPATH.$ds."atlmfc".$ds."lib";
-          $MFC_INCLUDE = $WINDOWS_SDK_HOME.$ds."include".$ds."mfc";
-      }
-      if ($CL_X64) {
-          $ATL_LIB     .= $ds."amd64";
-          $MFC_LIB     .= $ds."amd64";
-      }
-      $PATH_SEPERATOR = ';';
-  }
+        $COMPATH        = PathFormat('@COMPATH@/bin');
+        $COMPATH        =~ s/\/bin$//i;
+    }
+    else # The MSVC section starts here
+    {
+        print "Setting Windows (MSVC) specific values... ";
+        $COMPATH        = PathFormat('@COMPATH@');
+        $COMEX          = '@COMEX@';
+        if ( "@DISABLE_ACTIVEX@" )
+        {
+            $ATL_LIB     = $WINDOWS_SDK_HOME.$ds."lib"; # Doesn't exist for VSE
+            $ATL_INCLUDE = $WINDOWS_SDK_HOME.$ds."include".$ds."atl";
+            $MFC_LIB     = $WINDOWS_SDK_HOME.$ds."lib"; # Doesn't exist for VSE
+            $MFC_INCLUDE = $WINDOWS_SDK_HOME.$ds."include".$ds."mfc";
+        }
+        else
+        {
+            $ATL_LIB     = $COMPATH.$ds."atlmfc".$ds."lib";
+            $ATL_INCLUDE = $COMPATH.$ds."atlmfc".$ds."include";
+            $MFC_LIB     = $COMPATH.$ds."atlmfc".$ds."lib";
+            $MFC_INCLUDE = $WINDOWS_SDK_HOME.$ds."include".$ds."mfc";
+        }
+        if ($CL_X64)
+        {
+            $ATL_LIB     .= $ds."amd64";
+            $MFC_LIB     .= $ds."amd64";
+        }
+    }
 }
 elsif ( $platform =~ m/darwin/ )
 {
-    $COM            = "GCC";
     $COMPATH        = '@COMPATH@';
     if ($platform =~ m/^arm/)
     {
         print "Setting values for iOS... ";
-        $CPU            = "R";
-        $CPUNAME        = "ARM";
-        $OUTPATH        = "unxiosr";
-        $GUI            = "UNX";
-        $OS             = "IOS";
-        $GUIBASE        = "cocoatouch";
     }
     elsif ($platform =~ m/^powerpc/)
     {
         print "Setting values for Mac OS X/Darwin on PowerPC... ";
-        $CPU            = "P";
-        $CPUNAME        = "POWERPC";
-        $OUTPATH        = "unxmacxp";
-        $OS             = "MACOSX";
-        $GUI            = "UNX";
-        $GUIBASE        = "aqua";
         $MACOSX_SDK_PATH='@MACOSX_SDK_PATH@';
         $FRAMEWORKSHOME = $MACOSX_SDK_PATH."/System/Library/Frameworks";
     }
     else
     {
         print "Setting values for Mac OS X/Darwin on default x86... ";
-        $CPU            = "I";
-        $CPUNAME        = "INTEL";
-        $OUTPATH        = "unxmacxi";
-        $OS             = "MACOSX";
-        $GUI            = "UNX";
-        $GUIBASE        = "aqua";
         $MACOSX_SDK_PATH='@MACOSX_SDK_PATH@';
         $FRAMEWORKSHOME = $MACOSX_SDK_PATH."/System/Library/Frameworks";
     }
-    $INPATH         = $OUTPATH.$PROEXT;
-    $PATH_SEPERATOR = $ps;
 }
 elsif ( $platform =~ m/dragonfly/ )
 {
-   if ($platform =~ m/^i386/)
-   {  print "Setting DragonFly i386 specific values... ";
-      $CPU            = "I";
-      $CPUNAME        = "INTEL";
-      $JRELIBDIR      = $JAVA_HOME.$ds."jre".$ds."lib".$ds."i386";
-      $JRETOOLKITDIR  = $JAVA_HOME.$ds."jre".$ds."lib".$ds."i386".$ds."client";
-      $JRETHREADDIR   = $JAVA_HOME.$ds."jre".$ds."lib".$ds."i386".$ds."native_threads";
-   }
-   elsif ($platform =~ m/^x86_64/)
-   {  print "Setting DragonFly x86-64 specific values... ";
-      $CPU            = "X";
-      $CPUNAME        = "X86_64";
-      $JRELIBDIR      = $JAVA_HOME.$ds."jre".$ds."lib".$ds."amd64";
-      $JRETOOLKITDIR  = $JAVA_HOME.$ds."jre".$ds."lib".$ds."amd64".$ds."server";
-      $JRETHREADDIR   = $JAVA_HOME.$ds."jre".$ds."lib".$ds."amd64".$ds."native_threads";
-   }
-   else
-   { print "Unsupported DragonFly architecture: $platform \n";
-     exit 1;
-   }
+    if ($platform =~ m/^i386/)
+    {
+        print "Setting DragonFly i386 specific values... ";
+        $JRELIBDIR      = $JAVA_HOME.$ds."jre".$ds."lib".$ds."i386";
+        $JRETOOLKITDIR  = $JAVA_HOME.$ds."jre".$ds."lib".$ds."i386".$ds."client";
+        $JRETHREADDIR   = $JAVA_HOME.$ds."jre".$ds."lib".$ds."i386".$ds."native_threads";
+    }
+    elsif ($platform =~ m/^x86_64/)
+    {
+        print "Setting DragonFly x86-64 specific values... ";
+        $JRELIBDIR      = $JAVA_HOME.$ds."jre".$ds."lib".$ds."amd64";
+        $JRETOOLKITDIR  = $JAVA_HOME.$ds."jre".$ds."lib".$ds."amd64".$ds."server";
+        $JRETHREADDIR   = $JAVA_HOME.$ds."jre".$ds."lib".$ds."amd64".$ds."native_threads";
+    }
+    else
+    {
+        print "Unsupported DragonFly architecture: $platform \n";
+        exit 1;
+    }
    # General DragonFly settings:
-      $COM            = "GCC";
-      $COMPATH        = '@COMPATH@';
-      $GUI            = "UNX";
-      $GUIBASE        = "unx";
-      $OS             = "DRAGONFLY";
-      $PATH_SEPERATOR = $ps;
-      $OUTPATH        = "unxdfly";
-      $INPATH         = $OUTPATH.$PROEXT;
+    $COMPATH        = '@COMPATH@';
 }
 elsif ( $platform =~ m/aix/ )
 {
-   print "Setting AIX PPC specific values... ";
-   $CPU            = "P";
-   $CPUNAME        = "POWERPC";
-   $OUTPATH        = "unxaigppc";
-   $JRELIBDIR      = $JAVA_HOME.$ds."jre".$ds."lib".$ds."ppc";
-   $JRETOOLKITDIR  = $JAVA_HOME.$ds."jre".$ds."lib".$ds."ppc".$ds."classic";
-   $JRETHREADDIR   = $JAVA_HOME.$ds."jre".$ds."lib".$ds."ppc".$ds."native_threads";
-   $COM            = "GCC";
-   $COMPATH        = '@COMPATH@';
-   $GUI            = "UNX";
-   $GUIBASE        = "unx";
-   $INPATH         = $OUTPATH.$PROEXT;
-   $OS             = "AIX";
-   $PATH_SEPERATOR = $ps;
+    print "Setting AIX PPC specific values... ";
+    $JRELIBDIR      = $JAVA_HOME.$ds."jre".$ds."lib".$ds."ppc";
+    $JRETOOLKITDIR  = $JAVA_HOME.$ds."jre".$ds."lib".$ds."ppc".$ds."classic";
+    $JRETHREADDIR   = $JAVA_HOME.$ds."jre".$ds."lib".$ds."ppc".$ds."native_threads";
+    $COMPATH        = '@COMPATH@';
 }
-else {
+else
+{
 	print "\nset_soenv:  Cannot recognize the platform you are building for: $platform.\n";
 	exit 1;
 }
@@ -751,7 +632,8 @@ $OOO_SHELL = '@BASH@';
 
 # ml.exe assembler path for Windows users.
 if ($platform =~ m/cygwin/)
-{  $ASM_PATH = PathFormat('@ASM_HOME@');
+{
+    $ASM_PATH = PathFormat('@ASM_HOME@');
 }
 
 # Check for prebuild mozab libraries if we don't build them # ourselves
@@ -988,7 +870,6 @@ if ($platform =~ m/cygwin/)
 # The general environment path.
 if ($platform =~ m/linux|netbsd|freebsd|aix|solaris|openbsd|dragonfly/)
 {  $PATH              = $cur_dir.
-#                        $ps.'$SOLARVER'.$ds.'$INPATH'.$BIN.
                         $ps.'$SOLARENV'.$ds.'$OUTPATH'.$BIN.
                         $ps.'$SOLARENV'.$BIN;
 
@@ -1018,7 +899,6 @@ elsif ($platform =~ m/cygwin/)
    my ( $tmppath );
 
    $PATH              = $cur_dir.
-#                        $ps.CygFormat($SOLARVER).$ds.$INPATH.$BIN.
                         $ps.CygFormat($SOLARENV).$ds."bin".
                         $ps.CygFormat($SOLARENV).$ds.$OUTPATH.$BIN;
 
@@ -1120,7 +1000,6 @@ elsif ($platform =~ m/mingw32/)
    my ( $tmppath );
 
    $PATH              = $cur_dir.
-#                        $ps.CygFormat($SOLARVER).$ds.$INPATH.$BIN.
                         $ps.CygFormat($SOLARENV).$ds."bin".
                         $ps.CygFormat($SOLARENV).$ds.$OUTPATH.$BIN;
 
@@ -1128,7 +1007,6 @@ elsif ($platform =~ m/mingw32/)
 }
 elsif ($platform =~ m/darwin/)
 {  $PATH              = $cur_dir.
-#                        $ps.'$SOLARVER'.$ds.'$INPATH'.$BIN.
                         $ps.'$SOLARENV'.$ds.'$OUTPATH'.$BIN.
                         $ps.'$SOLARENV'.$BIN;
 
@@ -1439,17 +1317,8 @@ ToFile( "GIT_REPO_NAMES", "@GIT_REPO_NAMES@",  "e" );
 # (c = comment, e = environment variable, a = alias )
 ToFile( "Platform dependent constant values.", $empty, "c" );
 ToFile( "SOLAR_JAVA",        $SOLAR_JAVA,        "e" );
-ToFile( "COM",               $COM,               "e" );
 ToFile( "COMPATH",           $COMPATH,           "e" );
-ToFile( "CPU",               $CPU,               "e" );
-ToFile( "CPUNAME",           $CPUNAME,           "e" );
-ToFile( "GUI",               $GUI,               "e" );
-ToFile( "GUIBASE",           $GUIBASE,           "e" );
-ToFile( "OS",                $OS,                "e" );
 ToFile( "OSVERSION",         $OSVERSION,         "e" );
-ToFile( "OUTPATH",           $OUTPATH,           "e" );
-ToFile( "INPATH",            $INPATH,            "e" );
-ToFile( "PATH_SEPERATOR",    $PATH_SEPERATOR,    "e" );
 ToFile( "COMEX",             $COMEX,             "e" );
 ToFile( "DYNAMIC_CRT",       $DYNAMIC_CRT,       "e" );
 ToFile( "use_shl_versions",  $use_shl_versions,  "e" );
@@ -1596,17 +1465,9 @@ ToFile( "BUILD_PLATFORM",    "@build@",          "e" );
 ToFile( "HOST_PLATFORM",     "@host@",           "e" );
 if ( '@CROSS_COMPILING@' eq 'YES' )
 {
-   ToFile( "COM_FOR_BUILD",     "@COM_FOR_BUILD@",  "e" );
-   ToFile( "GUI_FOR_BUILD",     "@GUI_FOR_BUILD@",  "e" );
-   ToFile( "GUIBASE_FOR_BUILD", "@GUIBASE_FOR_BUILD@", "e" );
-   ToFile( "OS_FOR_BUILD",      "@OS_FOR_BUILD@",   "e" );
-   ToFile( "CPU_FOR_BUILD",     "@CPU_FOR_BUILD@",  "e" );
-   ToFile( "CPUNAME_FOR_BUILD", "@CPUNAME_FOR_BUILD@", "e" );
    ToFile( "CC_FOR_BUILD",      "@CC_FOR_BUILD@",   "e" );
    ToFile( "CXX_FOR_BUILD",     "@CXX_FOR_BUILD@",  "e" );
    ToFile( "GXX_INCLUDE_PATH_FOR_BUILD", "@GXX_INCLUDE_PATH_FOR_BUILD@", "e" );
-   ToFile( "INPATH_FOR_BUILD",  "@INPATH_FOR_BUILD@", "e" );
-   ToFile( "OUTPATH_FOR_BUILD", "@OUTPATH_FOR_BUILD@", "e" );
    ToFile( "MACOSX_DEPLOYMENT_TARGET_FOR_BUILD", "@MACOSX_DEPLOYMENT_TARGET_FOR_BUILD@", "e" );
    ToFile( "SYSTEM_LIBXSLT_FOR_BUILD", "@SYSTEM_LIBXSLT_FOR_BUILD@", "e" );
    ToFile( "OUTDIR_FOR_BUILD",  "@OUTDIR_FOR_BUILD@", "e");
@@ -1616,17 +1477,9 @@ if ( '@CROSS_COMPILING@' eq 'YES' )
 }
 else
 {
-   ToFile( "COM_FOR_BUILD",     $COM,            "e" );
-   ToFile( "GUI_FOR_BUILD",     $GUI,            "e" );
-   ToFile( "GUIBASE_FOR_BUILD", $GUIBASE,        "e" );
-   ToFile( "OS_FOR_BUILD",      $OS,             "e" );
-   ToFile( "CPU_FOR_BUILD",     $CPU,            "e" );
-   ToFile( "CPUNAME_FOR_BUILD", $CPUNAME,        "e" );
    ToFile( "CC_FOR_BUILD",      $CC,             "e" );
    ToFile( "CXX_FOR_BUILD",     $CXX,            "e" );
    ToFile( "GXX_INCLUDE_PATH_FOR_BUILD", PathFormat("@GXX_INCLUDE_PATH@"), "e" );
-   ToFile( "INPATH_FOR_BUILD",  $INPATH,         "e" );
-   ToFile( "OUTPATH_FOR_BUILD", $OUTPATH,        "e" );
    ToFile( "SYSTEM_LIBXSLT_FOR_BUILD", "@SYSTEM_LIBXSLT@", "e" );
    ToFile( "OUTDIR_FOR_BUILD",  $OUTDIR,         "e" );
    ToFile( "PATH_FOR_BUILD",    $PATH,           "e" );

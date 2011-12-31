@@ -2508,6 +2508,354 @@ fi
 AC_SUBST(COMEX)
 AC_SUBST(MSPDB_PATH)
 AC_SUBST(SHOWINCLUDES_PREFIX)
+
+#
+# determine CPI, CPUNAME, GUI, GUIBASE, ...
+#
+case "$host_os" in
+
+aix*)
+    COM=GCC
+    CPU=P
+    CPUNAME=POWERPC
+    GUI=UNX
+    GUIBASE=unx
+    OS=AIX
+    OUTPATH=unxaigppc
+    P_SEP=:
+    ;;
+
+cygwin*)
+    COM=MSC
+    GUI=WNT
+    GUIBASE=WIN
+    OS=WNT
+    P_SEP=";"
+
+    case "$host_cpu" in
+    i*86|x86_64)
+        if test "$CL_X64" = ""; then
+            CPU=X
+            CPUNAME=X86_64
+            OUTPATH=wntmscx$(COMEX)
+        else
+            CPU=I
+            CPUNAME=INTEL
+            OUTPATH=wntmsci$(COMEX)
+        fi
+        ;;
+    *)
+        AC_MSG_ERROR([Unsupported host_cpu $host_cpu for host_os $host_os])
+        ;;
+    esac
+    ;;
+
+darwin*)
+    COM=GCC
+    GUI=UNX
+    GUIBASE="aqua"
+    OS=MACOSX
+    P_SEP=:
+
+    case "$host_cpu" in
+    arm*)
+        CPU=R
+        CPUNAME=ARM
+        GUIBASE=cocoatouch
+        OUTPATH=unxiosr
+        OS=IOS;
+        ;;
+    powerpc*)
+        CPU=P
+        CPUNAME="POWERPC"
+        OUTPATH="unxmacxp"
+        ;;
+    i*86|x86_64)
+        CPU=I
+        CPUNAME=INTEL
+        OUTPATH=unxmacxi
+        ;;
+    *)
+        AC_MSG_ERROR([Unsupported host_cpu $host_cpu for host_os $host_os])
+        ;;
+    esac
+    ;;
+
+dragonfly*)
+    COM=GCC
+    GUI=UNX
+    GUIBASE=unx
+    OS=DRAGONFLY
+    OUTPATH=unxdfly
+    P_SEP=:
+
+    case "$host_cpu" in
+    i*86)
+        CPU=I
+        CPUNAME=INTEL
+        ;;
+    x86_64)
+        CPU=X
+        CPUNAME=X86_64
+        ;;
+    *)
+        AC_MSG_ERROR([Unsupported host_cpu $host_cpu for host_os $host_os])
+        ;;
+    esac
+    ;;
+
+freebsd*)
+    COM=GCC
+    GUI=UNX
+    GUIBASE=unx
+    OS=FREEBSD
+    OUTPATH=unxfbsd
+    P_SEP=:
+
+    case "$host_cpu" in
+    i*86)
+        CPU=I
+        CPUNAME=INTEL
+        OUTPATH=unxfbsdi
+        ;;
+    x86_64)
+        CPU=X
+        CPUNAME=X86_64
+        ;;
+    *)
+        AC_MSG_ERROR([Unsupported host_cpu $host_cpu for host_os $host_os])
+        ;;
+    esac
+    ;;
+
+linux-gnu*)
+    COM=GCC
+    GUI=UNX
+    GUIBASE=unx
+    OS=LINUX
+    P_SEP=:
+
+    case "$host_cpu" in
+
+    alpha)
+        CPU=L
+        CPUNAME=AXP
+        OUTPATH=unxlngaxp
+        ;;
+    armel)
+        CPU=R
+        CPUNAME=ARM
+        OUTPATH=unxlngr
+        ;;
+    armel-androideabi)
+        CPU=R
+        CPUNAME=ARM
+        OUTPATH=unxandr
+        GUIBASE=android
+        ;;
+    hppa)
+        CPU=H
+        CPUNAME=HPPA
+        OUTPATH=unxlnghppa
+        ;;
+    i*86)
+        CPU=I
+        CPUNAME=INTEL
+        OUTPATH=unxlngi6
+        ;;
+    ia64)
+        CPU=A
+        CPUNAME=IA64
+        OUTPATH=unxlnga
+        ;;
+    mips)
+        CPU=M
+        CPUNAME=GODSON
+        OUTPATH=unxlngmips
+        ;;
+    m68k)
+        CPU=6
+        CPUNAME=M68K
+        OUTPATH=unxlngm68k
+        ;;
+    powerpc)
+        CPU=P
+        CPUNAME=POWERPC
+        OUTPATH=unxlngppc
+        ;;
+    powerpc64)
+        CPU=P
+        CPUNAME=POWERPC64
+        OUTPATH=unxlngppc64
+        ;;
+    sparc)
+        CPU=S
+        CPUNAME=SPARC
+        OUTPATH=unxlngs
+        ;;
+    s390)
+        CPU=3
+        CPUNAME=S390
+        OUTPATH=unxlngs390
+        ;;
+    s390x)
+        CPU=3
+        CPUNAME=S390x
+        OUTPATH=unxlngs390x
+        ;;
+    x86_64)
+        CPU=X
+        CPUNAME=X86_64
+        OUTPATH=unxlngx6
+        ;;
+    *)
+        AC_MSG_ERROR([Unsupported host_cpu $host_cpu for host_os $host_os])
+        ;;
+    esac
+    ;;
+
+linux-androideabi*)
+    COM=GCC
+    GUI=UNX
+    GUIBASE=android
+    OS=ANDROID
+    P_SEP=:
+
+    case "$host_cpu" in
+
+    armel)
+        CPU=R
+        CPUNAME=ARM
+        OUTPATH=unxandr
+        ;;
+    *)
+        AC_MSG_ERROR([Unsupported host_cpu $host_cpu for host_os $host_os])
+        ;;
+    esac
+    ;;
+
+mingw*)
+    COM=GCC
+    GUI=WNT
+    GUIBASE=WIN
+    OS=WNT
+    P_SEP=:
+
+    case "$host_cpu" in
+    i*86|x86_64)
+        if test "$CL_X64" = ""; then
+            CPU=X
+            CPUNAME=X86_64
+            OUTPATH=wntgccx$(COMEX)
+        else
+            CPU=I
+            CPUNAME=INTEL
+            OUTPATH=wntgcci$(COMEX)
+        fi
+        ;;
+    *)
+        AC_MSG_ERROR([Unsupported host_cpu $host_cpu for host_os $host_os])
+        ;;
+    esac
+    ;;
+
+*netbsd*)
+
+    COM=GCC
+    GUI=UNX
+    GUIBASE=unx
+    OS=NETBSD
+    OUTPATH=unxnbsd
+    P_SEP=:
+
+    case "$host_cpu" in
+    i*86)
+        CPU=I
+        CPUNAME=INTEL
+        ;;
+    powerpc)
+        CPU=P
+        CPUNAME=POWERPC
+        ;;
+    sparc)
+        CPU=S
+        CPUNAME=SPARC
+        ;;
+    x86_64)
+        CPU=X
+        CPUNAME=X86_64
+        ;;
+    *)
+        AC_MSG_ERROR([Unsupported host_cpu $host_cpu for host_os $host_os])
+        ;;
+    esac
+    ;;
+
+openbsd*)
+    COM=GCC
+    GUI=UNX
+    GUIBASE=unx
+    OS=OPENBSD
+    OUTPATH=unxobsd
+    P_SEP=:
+
+    case "$host_cpu" in
+    i*86)
+        CPU=I
+        CPUNAME=INTEL
+        ;;
+    x86_64)
+        CPU=X
+        CPUNAME=X86_64
+        ;;
+    *)
+        AC_MSG_ERROR([Unsupported host_cpu $host_cpu for host_os $host_os])
+        ;;
+    esac
+    ;;
+
+solaris*)
+
+    COM=GCC
+    GUI=UNX
+    GUIBASE=unx
+    OS=SOLARIS
+    P_SEP=:
+
+    case "$host_cpu" in
+    i*86)
+        CPU=I
+        CPUNAME=INTEL
+        OUTPATH=unxsoli
+        ;;
+    sparc)
+        CPU=S
+        CPUNAME=SPARC
+        OUTPATH=unxsogs
+        ;;
+    *)
+        AC_MSG_ERROR([Unsupported host_cpu $host_cpu for host_os $host_os])
+        ;;
+    esac
+    ;;
+
+*)
+    AC_MSG_ERROR([$host_os operating system is not suitable to build LibreOffice for!])
+    ;;
+esac
+
+INPATH=${OUTPATH}${PROEXT}
+AC_SUBST(COM)
+AC_SUBST(CPU)
+AC_SUBST(CPUNAME)
+AC_SUBST(GUI)
+AC_SUBST(GUIBASE)
+AC_SUBST(INPATH)
+AC_SUBST(OS)
+AC_SUBST(OUTPATH)
+AC_SUBST(P_SEP)
+
+dnl ===================================================================
 dnl Set up a different compiler to produce tools to run on the build
 dnl machine when doing cross-compilation
 dnl ===================================================================
@@ -2591,6 +2939,16 @@ if test "$cross_compiling" = "yes"; then
 else
     CC_FOR_BUILD="$CC"
     CXX_FOR_BUILD="$CXX"
+    CC_FOR_BUILD="$CC"
+    COM_FOR_BUILD="$COM"
+    CPUNAME_FOR_BUILD="$CPUNAME"
+    CPU_FOR_BUILD="$CPU"
+    CXX_FOR_BUILD="$CXX"
+    GUIBASE_FOR_BUILD="$GUIBASE"
+    GUI_FOR_BUILD="$GUI"
+    INPATH_FOR_BUILD="$INPATH"
+    OS_FOR_BUILD="$OS"
+    OUTPATH_FOR_BUILD="$OUTPATH"
 fi
 AC_SUBST(COM_FOR_BUILD)
 AC_SUBST(GUI_FOR_BUILD)
@@ -5476,7 +5834,7 @@ esac
         if test "$_os" = Darwin; then
            supp_path=''
            for d in /Library/PostgreSQL/9.*/bin /sw/opt/postgresql/9.*/bin /opt/local/lib/postgresql9*/bin; do
-            pg_supp_path="$PATH_SEPARATOR$d$pg_supp_path"
+            pg_supp_path="$P_SEP$d$pg_supp_path"
            done
         fi
         AC_PATH_PROG(PGCONFIG, pg_config, ,$PATH$pg_supp_path)
