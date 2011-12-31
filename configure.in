@@ -2561,7 +2561,7 @@ cygwin*)
 
     case "$host_cpu" in
     i*86|x86_64)
-        if test "$CL_X64" = ""; then
+        if test "$CL_X64" != ""; then
             CPU=X
             CPUNAME=X86_64
             OUTPATH=wntmscx$COMEX
@@ -2770,7 +2770,7 @@ mingw*)
 
     case "$host_cpu" in
     i*86|x86_64)
-        if test "$CL_X64" = ""; then
+        if test "$CL_X64" != ""; then
             CPU=X
             CPUNAME=X86_64
             OUTPATH=wntgccx$COMEX
