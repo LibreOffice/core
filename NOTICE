@@ -4,6 +4,9 @@ Copyright 2011 The Apache Software Foundation
 This product includes software developed at
 The Apache Software Foundation (http://www.apache.org/).
 
+As part of the base system this product also includes code
+from Apache Commons and Apache Lucene.
+
 This software contains code derived from the XFree86 Project
 Inc. including code written by Keith Packard from SuSE, Inc,
 and Jim Gettys from Hewlett Packard as headers for the
@@ -58,6 +61,15 @@ Wide Web Consortium under the W3C license. The official
 distribution is available here:
     http://www.w3.org/Math/DTD/
 
+The ucpp preprocessor was written by Thomas Pornin and
+maintained by Louis P. Santillan and is available under
+the "New" BSD license.
+    http://code.google.com/p/ucpp/
+
+Optional LDAP support is available through the comunity
+developed OpenLDAP project:
+    http://www.openldap.org/
+
 The libtextcat module contains fingerprints for the libtextcat
 Library copyrighted by WiseGuys Internet B.V under a BSD-style
 license. More information is available here:
@@ -67,7 +79,32 @@ We use the Tango base icon theme under Public Domain by the
 Tango Desktop Project. More information is available here:
     http://tango.freedesktop.org/
 
-The graphite module is distributed under CPL 0.5 (Common Public License).
-Silgraphite as used by the program is available at
-    http://sourceforge.net/projects/silgraphite/files/silgraphite/2.3.1/silgraphite-2.3.1.tar.gz
+For general convenience swe also include the DejaVu fonts,
+a font family based on the Vera Fonts. More information
+is available here:
+    http://dejavu-fonts.org/
 
+Category B Software
+
+As part of its Third-Party Licensing Policy, Apache products
+normally don't ship copyleft code as part of their releases.
+Still Apache releases can contain optional support for
+binaries from some accepted weak copyleft code bases.
+
+The Open Source SAXON XSLT processor was developed by Michael
+Kay of Saxonica Limited and is available under the MPL.
+	http://saxon.sourceforge.net/
+
+The graphite module is distributed under CPL (Common Public
+License). Silgraphite as used by the program is available
+at:
+    http://sourceforge.net/projects/silgraphite/
+
+Some functionality, in particular the support for
+addressbooks, is available through by Mozilla's Seamonkey
+Project available under the MPL:
+    http://www.seamonkey-project.org/
+    
+Document signing can be provided by Mozilla's Network Security
+Services (NSS). More information about NSS is avalable here:
+     http://www.mozilla.org/projects/security/pki/nss/
