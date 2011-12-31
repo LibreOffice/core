@@ -1,6 +1,6 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ *  Apache OpenOffice - a multi-platform office productivity suite
  *
 
   Derived by beppec56@openoffice.org from various examples
@@ -104,7 +104,7 @@ const char * const TheHeader1[] =
 {
     "/*************************************************************************",
     " *",
-    " *  OpenOffice.org - a multi-platform office productivity suite",
+    " *  Apache OpenOffice - a multi-platform office productivity suite",
     " *",
     " *  sRGB-IEC61966-2.1.hxx",
     " *",
@@ -115,7 +115,7 @@ const char * const TheHeader1[] =
 const char * const TheHeader2[] =
 {
     " *",
-    " * Copyright 2011 Apache OpenOffice.org.",
+    " * Copyright 2012, 2011 Apache OpenOffice.",
     " *",
     " * Licensed under the Apache License, Version 2.0 (the \"License\");",
     " * you may not use this file except in compliance with the License.",
