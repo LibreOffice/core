@@ -19,7 +19,7 @@ PathFormat()
     if test "$host_os" = "cygwin" ; then
         pf_part1=
         pf_conv_to_dos=
-        for pf_part in $formated_path ; do
+        for pf_part in $formatted_path ; do
             if test -z "$pf_part1" ; then
                 pf_part1="$pf_part"
             else
@@ -29,8 +29,8 @@ PathFormat()
         if test "$pf_conv_to_dos" = "yes" ; then
             formatted_path=`cygpath -d "$formatted_path"`
         fi
-        fp_count_colon=`cat "$formattted_path" | grep -c "[:]"`
-        fp_count_slash=`cat "$formattted_path" | grep -c "[/]"`
+        fp_count_colon=`cat "$formatted_path" | grep -c "[:]"`
+        fp_count_slash=`cat "$formatted_path" | grep -c "[/]"`
         if test "$fp_count_slash$fp_count_colon" != "00" ; then
             if test "$fp_count_colon" = "0" ; then
                 formatted_path=`realpath "$formatted_path"`
