@@ -16,7 +16,7 @@ MINGW_EXTERNAL_DLLS=""
 PathFormat()
 {
     formatted_path="$1"
-    if test "$host_os" = "cygwin" ; then
+    if test "$build_os" = "cygwin" ; then
         pf_part1=
         pf_conv_to_dos=
         for pf_part in $formatted_path ; do
@@ -29,8 +29,8 @@ PathFormat()
         if test "$pf_conv_to_dos" = "yes" ; then
             formatted_path=`cygpath -d "$formatted_path"`
         fi
-        fp_count_colon=`cat "$formatted_path" | grep -c "[:]"`
-        fp_count_slash=`cat "$formatted_path" | grep -c "[/]"`
+        fp_count_colon=`echo "$formatted_path" | grep -c "[:]"`
+        fp_count_slash=`echo "$formatted_path" | grep -c "[/]"`
         if test "$fp_count_slash$fp_count_colon" != "00" ; then
             if test "$fp_count_colon" = "0" ; then
                 formatted_path=`realpath "$formatted_path"`
