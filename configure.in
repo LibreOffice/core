@@ -2537,11 +2537,11 @@ cygwin*)
         if test "$CL_X64" = ""; then
             CPU=X
             CPUNAME=X86_64
-            OUTPATH=wntmscx$(COMEX)
+            OUTPATH=wntmscx$COMEX
         else
             CPU=I
             CPUNAME=INTEL
-            OUTPATH=wntmsci$(COMEX)
+            OUTPATH=wntmsci$COMEX
         fi
         ;;
     *)
@@ -2746,11 +2746,11 @@ mingw*)
         if test "$CL_X64" = ""; then
             CPU=X
             CPUNAME=X86_64
-            OUTPATH=wntgccx$(COMEX)
+            OUTPATH=wntgccx$COMEX
         else
             CPU=I
             CPUNAME=INTEL
-            OUTPATH=wntgcci$(COMEX)
+            OUTPATH=wntgcci$COMEX
         fi
         ;;
     *)
