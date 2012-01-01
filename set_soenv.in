@@ -1371,12 +1371,6 @@ if ("@WITH_VC_REDIST@" eq "TRUE") {
 ToFile( "WITH_VC_REDIST", "TRUE",  "e" );
 }
 ToFile( "PERL",              $PERL,              "e" );
-ToFile( "RPM",               "@RPM@",            "e" );
-ToFile( "DPKG",              "@DPKG@",           "e" );
-ToFile( "PKGMK",             "@PKGMK@",          "e" );
-ToFile( "GNUMAKE",           "@GNUMAKE@",        "e" );
-ToFile( "GNUTAR",            "@GNUTAR@",         "e" );
-ToFile( "ANCIENT_BISON",     "@ANCIENT_BISON@",  "e" );
 ToFile( "UPD",               $UPD,               "e" );
 ToFile( "WORK_STAMP",        $WORK_STAMP,        "e" );
 ToFile( "SOLARVER",          $SOLARVER,          "e" );
@@ -1433,15 +1427,6 @@ else
 {  $SYSBASE = '';
 }
 ToFile( "SYSBASE",           "$SYSBASE",         "e" );
-ToFile( "CROSS_COMPILING",   "@CROSS_COMPILING@","e" );
-ToFile( "AR",                "@AR@",             "e" );
-ToFile( "DLLTOOL",           "@DLLTOOL@",        "e" );
-ToFile( "NM",                "@NM@",             "e" );
-ToFile( "OBJDUMP",           "@OBJDUMP@",        "e" );
-ToFile( "PKG_CONFIG",        "@PKG_CONFIG@",     "e" );
-ToFile( "RANLIB",            "@RANLIB@",         "e" );
-ToFile( "STRIP",             "@STRIP@",          "e" );
-ToFile( "WINDRES",           "@WINDRES@",        "e" );
 ToFile( "BUILD_PLATFORM",    "@build@",          "e" );
 ToFile( "HOST_PLATFORM",     "@host@",           "e" );
 if ( '@CROSS_COMPILING@' eq 'YES' )
@@ -1539,7 +1524,6 @@ ToFile( "VERBOSE",           "@VERBOSE@",          "e" );
 if ( '@ENABLE_RPATH@' eq "no" ) {
   ToFile( "LINKFLAGSRUNPATH",'',                   "e" );
 }
-ToFile( "EPM",               "@EPM@",              "e" );
 ToFile( "EPM_FLAGS",         $EPM_FLAGS,           "e" );
 ToFile( "BUILD_EPM",         "@BUILD_EPM@",        "e" );
 ToFile( "GPERF",             "@GPERF@",            "e" );
