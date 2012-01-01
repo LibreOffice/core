@@ -1587,7 +1587,6 @@ ToFile( "LUCENE_ANALYZERS_JAR",   "@LUCENE_ANALYZERS_JAR@",  "e" );
 ToFile( "BSH_JAR",           "@BSH_JAR@",          "e" );
 ToFile( "SAXON_JAR",         "@SAXON_JAR@",        "e" );
 ToFile( "SYSTEM_LIBXSLT",    "@SYSTEM_LIBXSLT@",   "e" );
-ToFile( "XSLTPROC",          "@XSLTPROC@",         "e" );
 ToFile( "NEON_VERSION",      "@NEON_VERSION@",     "e" );
 ToFile( "BUILD_DMAKE",       "@BUILD_DMAKE@",      "e" );
 ToFile( "BUILD_STAX",        "@BUILD_STAX@",       "e" );
