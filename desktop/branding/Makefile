@@ -27,11 +27,11 @@
 
 SRCDIR := $(realpath $(dir $(firstword $(MAKEFILE_LIST)))/../..)
 
-ifndef ABOUT_BITMAP
+ifeq ($(strip $(ABOUT_BITMAP)),)
 ABOUT_BITMAP := $(SRCDIR)/default_images/brand/about.png
 endif
 
-ifndef INTRO_BITMAP
+ifeq ($(strip $(INTRO_BITMAP)),)
 INTRO_BITMAP := $(SRCDIR)/default_images/brand/intro.png
 endif
 
