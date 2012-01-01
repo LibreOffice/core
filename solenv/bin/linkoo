@@ -146,20 +146,27 @@ sub sniff_target($)
 
     opendir ($dirhandle, $build_dir) || die "Can't open $build_dir";
     while ($fname = readdir ($dirhandle)) {
-	$fname =~ /Host.sh$/ || next;
-
-	my $file;
-	open ($file, "$build_dir/$fname") || die "Can't open $build_dir/$fname";
-	while (<$file>) {
-	    /\s*(\S+)\s*=\s*\"(\S+)\"/ || next;
-	    if ($1 eq 'INPATH') {
-		$target = $2;
-	    }
-	    if ($1 eq 'UPD') {
-		$libver = $2;
-	    }
-	}
-	close ($file);
+        if ($fname =~ /Host.sh$/) {
+            my $file;
+            open ($file, "$build_dir/$fname") || die "Can't open $build_dir/$fname";
+            while (<$file>) {
+                /\s*(\S+)\s*=\s*\"(\S+)\"/ || next;
+                if ($1 eq 'UPD') {
+                    $libver = $2;
+                }
+            }
+            close ($file);
+        } elsif ($fname =~ /host.mk$/) {
+            my $file;
+            open ($file, "$build_dir/$fname") || die "Can't open $build_dir/$fname";
+            while (<$file>) {
+                /\s*export\s*(\S+)\s*=\s*\"(\S+)\"/ || next;
+                if ($1 eq 'INPATH') {
+                    $target = $2;
+                }
+            }
+            close ($file);
+        }
     }
 
     closedir ($dirhandle);
@@ -438,3 +445,5 @@ if (!-f "$OOO_INSTALL/" . $brand_program_dir . "/ooenv") {
 evilness ('do');
 
 print "\nlinkoo finished, please don't forget to source ooenv before ./soffice.\n";
+
+# vim:set shiftwidth=4 softtabstop=4 expandtab:
