@@ -1327,7 +1327,6 @@ if ("@WITH_VC_REDIST@" eq "TRUE") {
 ToFile( "WITH_VC_REDIST", "TRUE",  "e" );
 }
 ToFile( "PERL",              $PERL,              "e" );
-ToFile( "UPD",               $UPD,               "e" );
 ToFile( "WORK_STAMP",        $WORK_STAMP,        "e" );
 ToFile( "SOLARVER",          $SOLARVER,          "e" );
 ToFile( "SOLARVERSION",      $SOLARVERSION,      "e" );

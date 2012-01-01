@@ -141,35 +141,10 @@ my @known_duplicates = ( 'db.jar', 'libi18n', 'libnssckbi', 'libnssdbm', 'libsql
 sub sniff_target($)
 {
     my $build_dir = shift;
-    my ($dirhandle, $fname);
     my ($target, $libver, $lang) = ( 'unxlngi6.pro', '680', 'en-US' ); # defaults
 
-    opendir ($dirhandle, $build_dir) || die "Can't open $build_dir";
-    while ($fname = readdir ($dirhandle)) {
-        if ($fname =~ /Host.sh$/) {
-            my $file;
-            open ($file, "$build_dir/$fname") || die "Can't open $build_dir/$fname";
-            while (<$file>) {
-                /\s*(\S+)\s*=\s*\"(\S+)\"/ || next;
-                if ($1 eq 'UPD') {
-                    $libver = $2;
-                }
-            }
-            close ($file);
-        } elsif ($fname =~ /host.mk$/) {
-            my $file;
-            open ($file, "$build_dir/$fname") || die "Can't open $build_dir/$fname";
-            while (<$file>) {
-                /\s*export\s*(\S+)\s*=\s*\"(\S+)\"/ || next;
-                if ($1 eq 'INPATH') {
-                    $target = $2;
-                }
-            }
-            close ($file);
-        }
-    }
-
-    closedir ($dirhandle);
+    chomp($target=`cat $build_dir/config_host.mk | grep INPATH= | sed -e 's/.*=//' | sed -e 's/"//g'`);
+    chomp($libver=`cat $build_dir/config_host.mk | grep UPD= | sed -e 's/.*=//' | sed -e 's/"//g'`);
 
     print "Sniffed target: $target, $libver\n";
 
