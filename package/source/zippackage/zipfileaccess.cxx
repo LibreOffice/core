@@ -77,7 +77,7 @@ OZipFileAccess::~OZipFileAccess()
 // ----------------------------------------------------------------
 uno::Sequence< ::rtl::OUString > OZipFileAccess::GetPatternsFromString_Impl( const ::rtl::OUString& aString )
 {
-    if ( !aString.getLength() )
+    if ( aString.isEmpty() )
         return uno::Sequence< ::rtl::OUString >();
 
     uno::Sequence< ::rtl::OUString > aPattern( 1 );
@@ -131,7 +131,7 @@ sal_Bool OZipFileAccess::StringGoodForPattern_Impl( const ::rtl::OUString& aStri
 
     if ( nInd == 0 )
     {
-        if ( !aPattern[0].getLength() )
+        if ( aPattern[0].isEmpty() )
             return sal_True;
 
         return aString.equals( aPattern[0] );
@@ -145,7 +145,7 @@ sal_Bool OZipFileAccess::StringGoodForPattern_Impl( const ::rtl::OUString& aStri
     {
         for ( sal_Int32 nCurInd = aPattern.getLength() - 2; nCurInd > 0; nCurInd-- )
         {
-            if ( !aPattern[nCurInd].getLength() )
+            if ( aPattern[nCurInd].isEmpty() )
                 continue;
 
             if ( nEndInd == nBeginInd )
@@ -186,7 +186,7 @@ void SAL_CALL OZipFileAccess::initialize( const uno::Sequence< uno::Any >& aArgu
     if ( !aArguments.getLength() )
         throw lang::IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >(), 1 );
 
-    OSL_ENSURE( aArguments.getLength() == 1, "Too meny arguments are provided, only the first one will be used!\n" );
+    OSL_ENSURE( aArguments.getLength() == 1, "Too many arguments are provided, only the first one will be used!\n" );
 
     ::rtl::OUString aParamURL;
     uno::Reference< io::XStream > xStream;

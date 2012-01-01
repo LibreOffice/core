@@ -72,7 +72,7 @@ OStringList_Impl OHierarchyHolder_Impl::GetListPathFromString( const ::rtl::OUSt
     do
     {
         ::rtl::OUString aName = aPath.getToken( 0, '/', nIndex );
-        if ( !aName.getLength() )
+        if ( aName.isEmpty() )
             throw lang::IllegalArgumentException();
 
         aResult.push_back( aName );

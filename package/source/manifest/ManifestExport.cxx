@@ -127,7 +127,7 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > xHa
                 pValue->Value >>= aVersion;
             }
 
-            if ( aPath.getLength() && aMediaType.getLength() && aVersion.getLength() )
+            if ( !aPath.isEmpty() && !aMediaType.isEmpty() && !aVersion.isEmpty() )
                 break;
         }
 
@@ -142,7 +142,7 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > xHa
     sal_Bool bProvideDTD = sal_False;
     sal_Bool bAcceptNonemptyVersion = sal_False;
     sal_Bool bStoreStartKeyGeneration = sal_False;
-    if ( aDocMediaType.getLength() )
+    if ( !aDocMediaType.isEmpty() )
     {
         if ( aDocMediaType.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( MIMETYPE_OASIS_OPENDOCUMENT_TEXT_ASCII ) ) )
           || aDocMediaType.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( MIMETYPE_OASIS_OPENDOCUMENT_TEXT_WEB_ASCII ) ) )
@@ -215,7 +215,7 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > xHa
             {
                 pValue->Value >>= aString;
                 // the version is stored only if it is not empty
-                if ( bAcceptNonemptyVersion && aString.getLength() )
+                if ( bAcceptNonemptyVersion && !aString.isEmpty() )
                     pAttrList->AddAttribute ( sVersionAttribute, sCdataAttribute, aString );
             }
             else if (pValue->Name.equals (sFullPathProperty) )

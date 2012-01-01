@@ -721,7 +721,7 @@ void SAL_CALL ZipPackageStream::setPropertyValue( const OUString& aPropertyName,
 
         if ( aValue >>= sMediaType )
         {
-            if ( sMediaType.getLength() > 0 )
+            if ( !sMediaType.isEmpty() )
             {
                 if ( sMediaType.indexOf ( OUString( RTL_CONSTASCII_USTRINGPARAM ( "text" ) ) ) != -1
                  || sMediaType.equals( OUString( RTL_CONSTASCII_USTRINGPARAM ( "application/vnd.sun.star.oleobject" ) ) ) )

@@ -266,7 +266,7 @@ const sal_Int32 n_ConstBufferSize = 32000;
         ::package::StaticAddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Quiet exception") ) );
     }
 
-    if ( !aTempURL.getLength() )
+    if ( aTempURL.isEmpty() )
         throw uno::RuntimeException(); // TODO: can not create tempfile
 
     return aTempURL;
@@ -323,7 +323,7 @@ OWriteStream_Impl::~OWriteStream_Impl()
 {
     DisposeWrappers();
 
-    if ( m_aTempURL.getLength() )
+    if ( !m_aTempURL.isEmpty() )
     {
         KillFile( m_aTempURL, GetServiceFactory() );
         m_aTempURL = ::rtl::OUString();
@@ -411,7 +411,7 @@ sal_Bool OWriteStream_Impl::IsEncrypted()
     if ( m_bForceEncrypted || m_bHasCachedEncryptionData )
         return sal_True;
 
-    if ( m_aTempURL.getLength() || m_xCacheStream.is() )
+    if ( !m_aTempURL.isEmpty() || m_xCacheStream.is() )
         return sal_False;
 
     GetStreamProperties();
@@ -568,7 +568,7 @@ uno::Reference< lang::XMultiServiceFactory > OWriteStream_Impl::GetServiceFactor
         ::rtl::OUString aTempURL = GetNewTempFileURL( GetServiceFactory() );
 
         try {
-            if ( aTempURL.getLength() && xStream.is() )
+            if ( !aTempURL.isEmpty() && xStream.is() )
             {
                 uno::Reference < ucb::XSimpleFileAccess > xTempAccess(
                                 GetServiceFactory()->createInstance (
@@ -607,7 +607,7 @@ uno::Reference< lang::XMultiServiceFactory > OWriteStream_Impl::GetServiceFactor
         throw;
         }
 
-        if ( aTempURL.getLength() )
+        if ( !aTempURL.isEmpty() )
             CleanCacheStream();
 
         m_aTempURL = aTempURL;
@@ -620,7 +620,7 @@ uno::Reference< lang::XMultiServiceFactory > OWriteStream_Impl::GetServiceFactor
 ::rtl::OUString OWriteStream_Impl::FillTempGetFileName()
 {
     // should try to create cache first, if the amount of contents is too big, the temp file should be taken
-    if ( !m_xCacheStream.is() && !m_aTempURL.getLength() )
+    if ( !m_xCacheStream.is() && m_aTempURL.isEmpty() )
     {
         uno::Reference< io::XInputStream > xOrigStream = m_xPackageStream->getDataStream();
         if ( !xOrigStream.is() )
@@ -653,12 +653,12 @@ uno::Reference< lang::XMultiServiceFactory > OWriteStream_Impl::GetServiceFactor
                 m_xCacheStream = xCacheStream;
                 m_xCacheSeek->seek( 0 );
             }
-            else if ( !m_aTempURL.getLength() )
+            else if ( m_aTempURL.isEmpty() )
             {
                 m_aTempURL = GetNewTempFileURL( GetServiceFactory() );
 
                 try {
-                    if ( m_aTempURL.getLength() )
+                    if ( !m_aTempURL.isEmpty() )
                     {
                         uno::Reference < ucb::XSimpleFileAccess > xTempAccess(
                                         GetServiceFactory()->createInstance (
@@ -710,10 +710,10 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetTempFileAsStream()
 
     if ( !m_xCacheStream.is() )
     {
-        if ( !m_aTempURL.getLength() )
+        if ( m_aTempURL.isEmpty() )
             m_aTempURL = FillTempGetFileName();
 
-        if ( m_aTempURL.getLength() )
+        if ( !m_aTempURL.isEmpty() )
         {
             // the temporary file is not used if the cache is used
             uno::Reference < ucb::XSimpleFileAccess > xTempAccess(
@@ -755,10 +755,10 @@ uno::Reference< io::XInputStream > OWriteStream_Impl::GetTempFileAsInputStream()
 
     if ( !m_xCacheStream.is() )
     {
-        if ( !m_aTempURL.getLength() )
+        if ( m_aTempURL.isEmpty() )
             m_aTempURL = FillTempGetFileName();
 
-        if ( m_aTempURL.getLength() )
+        if ( !m_aTempURL.isEmpty() )
         {
             // the temporary file is not used if the cache is used
             uno::Reference < ucb::XSimpleFileAccess > xTempAccess(
@@ -810,7 +810,7 @@ void OWriteStream_Impl::InsertStreamDirectly( const uno::Reference< io::XInputSt
     if ( m_bHasDataToFlush )
         throw io::IOException();
 
-    OSL_ENSURE( !m_aTempURL.getLength() && !m_xCacheStream.is(), "The temporary must not exist!\n" );
+    OSL_ENSURE( m_aTempURL.isEmpty() && !m_xCacheStream.is(), "The temporary must not exist!\n" );
 
     // use new file as current persistent representation
     // the new file will be removed after it's stream is closed
@@ -912,7 +912,7 @@ void OWriteStream_Impl::Commit()
         m_xCacheSeek = uno::Reference< io::XSeekable >();
 
     }
-    else if ( m_aTempURL.getLength() )
+    else if ( !m_aTempURL.isEmpty() )
     {
         if ( m_pAntiImpl )
             m_pAntiImpl->DeInit();
@@ -999,7 +999,7 @@ void OWriteStream_Impl::Revert()
     if ( !m_bHasDataToFlush )
         return; // nothing to do
 
-    OSL_ENSURE( m_aTempURL.getLength() || m_xCacheStream.is(), "The temporary must exist!\n" );
+    OSL_ENSURE( !m_aTempURL.isEmpty() || m_xCacheStream.is(), "The temporary must exist!\n" );
 
     if ( m_xCacheStream.is() )
     {
@@ -1007,7 +1007,7 @@ void OWriteStream_Impl::Revert()
         m_xCacheSeek = uno::Reference< io::XSeekable >();
     }
 
-    if ( m_aTempURL.getLength() )
+    if ( !m_aTempURL.isEmpty() )
     {
         KillFile( m_aTempURL, GetServiceFactory() );
         m_aTempURL = ::rtl::OUString();
@@ -1391,7 +1391,7 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetStream_Impl( sal_Int32 nStre
     if ( ( nStreamMode & embed::ElementModes::READWRITE ) == embed::ElementModes::READ )
     {
         uno::Reference< io::XInputStream > xInStream;
-        if ( m_xCacheStream.is() || m_aTempURL.getLength() )
+        if ( m_xCacheStream.is() || !m_aTempURL.isEmpty() )
             xInStream = GetTempFileAsInputStream(); //TODO:
         else
             xInStream = m_xPackageStream->getDataStream();
@@ -1412,7 +1412,7 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetStream_Impl( sal_Int32 nStre
     }
     else if ( ( nStreamMode & embed::ElementModes::READWRITE ) == embed::ElementModes::SEEKABLEREAD )
     {
-        if ( !m_xCacheStream.is() && !m_aTempURL.getLength() && !( m_xPackageStream->getDataStream().is() ) )
+        if ( !m_xCacheStream.is() && m_aTempURL.isEmpty() && !( m_xPackageStream->getDataStream().is() ) )
         {
             // The stream does not exist in the storage
             throw io::IOException();
@@ -1443,7 +1443,7 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetStream_Impl( sal_Int32 nStre
         uno::Reference< io::XStream > xStream;
         if ( ( nStreamMode & embed::ElementModes::TRUNCATE ) == embed::ElementModes::TRUNCATE )
         {
-            if ( m_aTempURL.getLength() )
+            if ( !m_aTempURL.isEmpty() )
             {
                 KillFile( m_aTempURL, GetServiceFactory() );
                 m_aTempURL = ::rtl::OUString();
@@ -1463,7 +1463,7 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetStream_Impl( sal_Int32 nStre
         }
         else if ( !m_bHasInsertedStreamOptimization )
         {
-            if ( !m_aTempURL.getLength() && !m_xCacheStream.is() && !( m_xPackageStream->getDataStream().is() ) )
+            if ( m_aTempURL.isEmpty() && !m_xCacheStream.is() && !( m_xPackageStream->getDataStream().is() ) )
             {
                 // The stream does not exist in the storage
                 m_bHasDataToFlush = sal_True;
@@ -1698,10 +1698,10 @@ void OWriteStream_Impl::CommitStreamRelInfo( const uno::Reference< embed::XStora
 
     if ( m_nStorageType == embed::StorageFormats::OFOPXML )
     {
-        OSL_ENSURE( aOrigStreamName.getLength() && aNewStreamName.getLength() && xRelStorage.is(),
+        OSL_ENSURE( !aOrigStreamName.isEmpty() && !aNewStreamName.isEmpty() && xRelStorage.is(),
                     "Wrong relation persistence information is provided!\n" );
 
-        if ( !xRelStorage.is() || !aOrigStreamName.getLength() || !aNewStreamName.getLength() )
+        if ( !xRelStorage.is() || aOrigStreamName.isEmpty() || aNewStreamName.isEmpty() )
             throw uno::RuntimeException();
 
         if ( m_nRelInfoStatus == RELINFO_BROKEN || m_nRelInfoStatus == RELINFO_CHANGED_BROKEN )
@@ -2370,7 +2370,7 @@ void SAL_CALL OWriteStream::writeBytes( const uno::Sequence< sal_Int8 >& aData )
                 m_xSeekable->seek( 0 );
 
                 // it is enough to copy the cached stream, the cache should already contain everything
-                if ( m_pImpl->GetFilledTempFileIfNo( m_xInStream ).getLength() )
+                if ( !m_pImpl->GetFilledTempFileIfNo( m_xInStream ).isEmpty() )
                 {
                     DeInit();
                     // the last position is known and it is differs from the current stream position

@@ -67,7 +67,7 @@ OUString SAL_CALL ZipPackageEntry::getName(  )
 void SAL_CALL ZipPackageEntry::setName( const OUString& aName )
     throw(RuntimeException)
 {
-    if ( pParent && msName.getLength() && pParent->hasByName ( msName ) )
+    if ( pParent && !msName.isEmpty() && pParent->hasByName ( msName ) )
         pParent->removeByName ( msName );
 
     // unfortunately no other exception than RuntimeException can be thrown here
@@ -91,7 +91,7 @@ void ZipPackageEntry::doSetParent ( ZipPackageFolder * pNewParent, sal_Bool bIns
 {
     // xParent = pParent = pNewParent;
     pParent = pNewParent;
-    if ( bInsert && msName.getLength() && !pNewParent->hasByName ( msName ) )
+    if ( bInsert && !msName.isEmpty() && !pNewParent->hasByName ( msName ) )
         pNewParent->doInsertByName ( this, sal_False );
 }
 
@@ -107,7 +107,7 @@ void SAL_CALL ZipPackageEntry::setParent( const uno::Reference< XInterface >& xN
 
     if ( pNewParent != pParent )
     {
-        if ( pParent && msName.getLength() && pParent->hasByName ( msName ) && mbAllowRemoveOnInsert )
+        if ( pParent && !msName.isEmpty() && pParent->hasByName ( msName ) && mbAllowRemoveOnInsert )
             pParent->removeByName( msName );
         doSetParent ( pNewParent, sal_True );
     }

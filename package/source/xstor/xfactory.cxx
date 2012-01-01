@@ -150,7 +150,7 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstanceWithAr
 
     if ( aArguments[0] >>= aURL )
     {
-        if ( !aURL.getLength() )
+        if ( aURL.isEmpty() )
         {
             OSL_FAIL( "Empty URL is provided!\n" );
             throw lang::IllegalArgumentException(); // TODO:
@@ -191,7 +191,7 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstanceWithAr
     {
         if( aArguments[2] >>= aDescr )
         {
-            if ( aURL.getLength() )
+            if ( !aURL.isEmpty() )
             {
                 aPropsToSet.realloc(1);
                 aPropsToSet[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("URL") );

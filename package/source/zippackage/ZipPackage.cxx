@@ -135,7 +135,7 @@ sal_Bool isLocalFile_Impl( ::rtl::OUString aURL )
         }
     }
 
-    return ( aSystemPath.getLength() != 0 );
+    return ( !aSystemPath.isEmpty() );
 }
 
 }
@@ -292,7 +292,7 @@ void ZipPackage::parseManifest()
                                         pDerivedKeySize = &( pValue[j].Value );
                                 }
 
-                                if ( sPath.getLength() && hasByHierarchicalName ( sPath ) )
+                                if ( !sPath.isEmpty() && hasByHierarchicalName ( sPath ) )
                                 {
                                     aAny = getByHierarchicalName( sPath );
                                     uno::Reference < XUnoTunnel > xUnoTunnel;
@@ -505,7 +505,7 @@ void ZipPackage::parseContentType()
                         else
                             aPath = aContentTypeInfo[1][nInd].First;
 
-                        if ( aPath.getLength() && hasByHierarchicalName( aPath ) )
+                        if ( !aPath.isEmpty() && hasByHierarchicalName( aPath ) )
                         {
                             uno::Any aIterAny = getByHierarchicalName( aPath );
                             uno::Reference < lang::XUnoTunnel > xIterTunnel;
@@ -583,7 +583,7 @@ void ZipPackage::getZipFileContents()
                     pCurrent = pCurrent->doGetByName( sTemp ).pFolder;
                 nOldIndex = nIndex+1;
             }
-            if ( nStreamIndex != -1 && sDirName.getLength() )
+            if ( nStreamIndex != -1 && !sDirName.isEmpty() )
                 m_aRecent [ sDirName ] = pCurrent;
         }
         if ( rName.getLength() -1 != nStreamIndex )
@@ -1112,7 +1112,7 @@ void ZipPackage::WriteContentTypes( ZipOutputStream& aZipOut, const vector< uno:
         OSL_ENSURE( ( *aIter )[PKG_MNFST_MEDIATYPE].Name.equals( sMediaType ) && ( *aIter )[PKG_MNFST_FULLPATH].Name.equals( sFullPath ),
                     "The mediatype sequence format is wrong!\n" );
         ( *aIter )[PKG_MNFST_MEDIATYPE].Value >>= aType;
-        if ( aType.getLength() )
+        if ( !aType.isEmpty() )
         {
             // only nonempty type makes sence here
             nSeqLength++;

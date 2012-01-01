@@ -129,7 +129,7 @@ sal_Bool ZipPackageFolder::LookForUnexpectedODF12Streams( const ::rtl::OUString&
             {
                 // the stream is not in META-INF and ist notregistered in manifest.xml,
                 // check whether it is an internal part of the package format
-                if ( aPath.getLength()
+                if ( !aPath.isEmpty()
                   || !rShortName.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "mimetype" ) ) ) )
                 {
                     // if it is not "mimetype" from the root it is not a part of the package
@@ -326,7 +326,7 @@ bool ZipPackageFolder::saveChild( const ::rtl::OUString &rShortName, const Conte
     {
         ::rtl::OUString sTempName = rPath + rShortName + ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "/" ) );
 
-        if ( rInfo.pFolder->GetMediaType().getLength() )
+        if ( !rInfo.pFolder->GetMediaType().isEmpty() )
         {
             aPropSet[PKG_MNFST_MEDIATYPE].Name = sMediaTypeProperty;
             aPropSet[PKG_MNFST_MEDIATYPE].Value <<= rInfo.pFolder->GetMediaType();
@@ -688,7 +688,7 @@ void ZipPackageFolder::saveContents( ::rtl::OUString &rPath, std::vector < uno::
 {
     bool bWritingFailed = false;
 
-    if ( maContents.begin() == maContents.end() && rPath.getLength() && m_nFormat != embed::StorageFormats::OFOPXML )
+    if ( maContents.begin() == maContents.end() && !rPath.isEmpty() && m_nFormat != embed::StorageFormats::OFOPXML )
     {
         // it is an empty subfolder, use workaround to store it
         ZipEntry* pTempEntry = new ZipEntry();
@@ -714,7 +714,7 @@ void ZipPackageFolder::saveContents( ::rtl::OUString &rPath, std::vector < uno::
 
     bool bMimeTypeStreamStored = false;
     ::rtl::OUString aMimeTypeStreamName( RTL_CONSTASCII_USTRINGPARAM( "mimetype" ) );
-    if ( m_nFormat == embed::StorageFormats::ZIP && !rPath.getLength() )
+    if ( m_nFormat == embed::StorageFormats::ZIP && rPath.isEmpty() )
     {
         // let the "mimtype" stream in root folder be stored as the first stream if it is zip format
         ContentHash::iterator aIter = maContents.find ( aMimeTypeStreamName );
