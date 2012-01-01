@@ -529,7 +529,7 @@ void PivotTableField::finalizeImport( const Reference< XDataPilotDescriptor >& r
         xDPField.set( xDPFieldsIA->getByIndex( nDatabaseIdx ), UNO_QUERY_THROW );
         Reference< XNamed > xDPFieldName( xDPField, UNO_QUERY_THROW );
         maDPFieldName = xDPFieldName->getName();
-        OSL_ENSURE( maDPFieldName.getLength() > 0, "PivotTableField::finalizeImport - no field name in source data found" );
+        OSL_ENSURE( !maDPFieldName.isEmpty(), "PivotTableField::finalizeImport - no field name in source data found" );
 
         // try to convert grouping settings
         if( const PivotCacheField* pCacheField = mrPivotTable.getCacheField( mnFieldIndex ) )
@@ -566,14 +566,14 @@ void PivotTableField::finalizeImport( const Reference< XDataPilotDescriptor >& r
 
 void PivotTableField::finalizeDateGroupingImport( const Reference< XDataPilotField >& rxBaseDPField, sal_Int32 nBaseFieldIdx )
 {
-    if( maDPFieldName.getLength() == 0 )    // prevent endless loops if file format is broken
+    if( maDPFieldName.isEmpty() )    // prevent endless loops if file format is broken
     {
         if( const PivotCacheField* pCacheField = mrPivotTable.getCacheField( mnFieldIndex ) )
         {
             if( !pCacheField->isDatabaseField() && pCacheField->hasDateGrouping() && (pCacheField->getGroupBaseField() == nBaseFieldIdx) )
             {
                 maDPFieldName = pCacheField->createDateGroupField( rxBaseDPField );
-                OSL_ENSURE( maDPFieldName.getLength() > 0, "PivotTableField::finalizeDateGroupingImport - cannot create date group field" );
+                OSL_ENSURE( !maDPFieldName.isEmpty(), "PivotTableField::finalizeDateGroupingImport - cannot create date group field" );
             }
         }
     }
@@ -581,7 +581,7 @@ void PivotTableField::finalizeDateGroupingImport( const Reference< XDataPilotFie
 
 void PivotTableField::finalizeParentGroupingImport( const Reference< XDataPilotField >& rxBaseDPField, PivotCacheGroupItemVector& orItemNames )
 {
-    if( maDPFieldName.getLength() == 0 )    // prevent endless loops if file format is broken
+    if( maDPFieldName.isEmpty() )    // prevent endless loops if file format is broken
     {
         if( const PivotCacheField* pCacheField = mrPivotTable.getCacheField( mnFieldIndex ) )
         {
@@ -651,7 +651,7 @@ void PivotTableField::convertPageField( const PTPageFieldModel& rPageField )
                 if( const PivotCacheItem* pSharedItem = pCacheField->getCacheItem( nCacheItem ) )
                 {
                     OUString aSelectedPage = pSharedItem->getName();
-                    if( aSelectedPage.getLength() > 0 )
+                    if( !aSelectedPage.isEmpty() )
                         aPropSet.setProperty( PROP_SelectedPage, aSelectedPage );
                 }
             }
@@ -1361,7 +1361,7 @@ void PivotTable::finalizeImport()
     if( getAddressConverter().validateCellRange( maLocationModel.maRange, true, true ) )
     {
         mpPivotCache = getPivotCaches().importPivotCacheFragment( maDefModel.mnCacheId );
-        if( mpPivotCache && mpPivotCache->isValidDataSource() && (maDefModel.maName.getLength() > 0) )
+        if( mpPivotCache && mpPivotCache->isValidDataSource() && !maDefModel.maName.isEmpty() )
         {
             // clear destination area of the original pivot table
             try
@@ -1461,7 +1461,7 @@ void PivotTable::finalizeParentGroupingImport( const Reference< XDataPilotField 
 Reference< XDataPilotField > PivotTable::getDataPilotField( const OUString& rFieldName ) const
 {
     Reference< XDataPilotField > xDPField;
-    if( (rFieldName.getLength() > 0) && mxDPDescriptor.is() ) try
+    if( !rFieldName.isEmpty() && mxDPDescriptor.is() ) try
     {
         Reference< XNameAccess > xDPFieldsNA( mxDPDescriptor->getDataPilotFields(), UNO_QUERY_THROW );
         xDPField.set( xDPFieldsNA->getByName( rFieldName ), UNO_QUERY );

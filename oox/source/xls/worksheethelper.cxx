@@ -979,7 +979,7 @@ void WorksheetGlobals::finalizeHyperlinkRanges() const
     {
         OUString aUrl = getHyperlinkUrl( *aIt );
         // try to insert URL into each cell of the range
-        if( aUrl.getLength() > 0 )
+        if( !aUrl.isEmpty() )
             for( CellAddress aAddress( getSheetIndex(), aIt->maRange.StartColumn, aIt->maRange.StartRow ); aAddress.Row <= aIt->maRange.EndRow; ++aAddress.Row )
                 for( aAddress.Column = aIt->maRange.StartColumn; aAddress.Column <= aIt->maRange.EndColumn; ++aAddress.Column )
                     insertHyperlink( aAddress, aUrl );
@@ -989,14 +989,14 @@ void WorksheetGlobals::finalizeHyperlinkRanges() const
 OUString WorksheetGlobals::getHyperlinkUrl( const HyperlinkModel& rHyperlink ) const
 {
     OUStringBuffer aUrlBuffer;
-    if( rHyperlink.maTarget.getLength() > 0 )
+    if( !rHyperlink.maTarget.isEmpty() )
         aUrlBuffer.append( getBaseFilter().getAbsoluteUrl( rHyperlink.maTarget ) );
-    if( rHyperlink.maLocation.getLength() > 0 )
+    if( !rHyperlink.maLocation.isEmpty() )
         aUrlBuffer.append( sal_Unicode( '#' ) ).append( rHyperlink.maLocation );
     OUString aUrl = aUrlBuffer.makeStringAndClear();
 
     // convert '#SheetName!A1' to '#SheetName.A1'
-    if( (aUrl.getLength() > 0) && (aUrl[ 0 ] == '#') )
+    if( !aUrl.isEmpty() && (aUrl[ 0 ] == '#') )
     {
         sal_Int32 nSepPos = aUrl.lastIndexOf( '!' );
         if( nSepPos > 0 )
@@ -1006,7 +1006,7 @@ OUString WorksheetGlobals::getHyperlinkUrl( const HyperlinkModel& rHyperlink ) c
             // #i66592# convert sheet names that have been renamed on import
             OUString aSheetName = aUrl.copy( 1, nSepPos - 1 );
             OUString aCalcName = getWorksheets().getCalcSheetName( aSheetName );
-            if( aCalcName.getLength() > 0 )
+            if( !aCalcName.isEmpty() )
                 aUrl = aUrl.replaceAt( 1, nSepPos - 1, aCalcName );
         }
     }
@@ -1316,9 +1316,9 @@ void WorksheetGlobals::finalizeDrawings()
     {
         case FILTER_OOXML:
             // import DML and VML
-            if( maDrawingPath.getLength() > 0 )
+            if( !maDrawingPath.isEmpty() )
                 importOoxFragment( new DrawingFragment( *this, maDrawingPath ) );
-            if( maVmlDrawingPath.getLength() > 0 )
+            if( !maVmlDrawingPath.isEmpty() )
                 importOoxFragment( new VmlDrawingFragment( *this, maVmlDrawingPath ) );
         break;
 

@@ -128,7 +128,7 @@ Reference< XFastContextHandler > PPTGraphicShapeContext::createFastChildContext(
         sal_Int32 nSubType( xAttribs->getOptionalValueToken( XML_type, XML_obj ) );
         mpShapePtr->setSubType( nSubType );
         OUString sIdx( xAttribs->getOptionalValue( XML_idx ) );
-        sal_Bool bHasIdx = sIdx.getLength() > 0;
+        sal_Bool bHasIdx = !sIdx.isEmpty();
         sal_Int32 nIdx = sIdx.toInt32();
         if( xAttribs->hasAttribute( XML_idx ) )
             mpShapePtr->setSubTypeIndex( nIdx );

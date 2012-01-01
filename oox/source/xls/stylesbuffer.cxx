@@ -946,7 +946,7 @@ void Font::importCfRule( BiffInputStream& rStrm )
     OSL_ENSURE( rStrm.getRemaining() >= 118, "Font::importCfRule - missing record data" );
     sal_Int64 nRecPos = rStrm.tell();
     maModel.maName = rStrm.readUniStringBody( rStrm.readuInt8() );
-    maUsedFlags.mbNameUsed = maModel.maName.getLength() > 0;
+    maUsedFlags.mbNameUsed = !maModel.maName.isEmpty();
     OSL_ENSURE( !rStrm.isEof() && (rStrm.tell() <= nRecPos + 64), "Font::importCfRule - font name too long" );
     rStrm.seek( nRecPos + 64 );
     rStrm >> nHeight >> nStyle >> nWeight >> nEscapement >> nUnderline;
@@ -1110,19 +1110,19 @@ void Font::writeToPropertyMap( PropertyMap& rPropMap, FontPropertyType ePropType
     // font name properties
     if( maUsedFlags.mbNameUsed )
     {
-        if( maApiData.maLatinFont.maName.getLength() > 0 )
+        if( !maApiData.maLatinFont.maName.isEmpty() )
         {
             rPropMap[ PROP_CharFontName ]    <<= maApiData.maLatinFont.maName;
             rPropMap[ PROP_CharFontFamily ]  <<= maApiData.maLatinFont.mnFamily;
             rPropMap[ PROP_CharFontCharSet ] <<= maApiData.maLatinFont.mnTextEnc;
         }
-        if( maApiData.maAsianFont.maName.getLength() > 0 )
+        if( !maApiData.maAsianFont.maName.isEmpty() )
         {
             rPropMap[ PROP_CharFontNameAsian ]    <<= maApiData.maAsianFont.maName;
             rPropMap[ PROP_CharFontFamilyAsian ]  <<= maApiData.maAsianFont.mnFamily;
             rPropMap[ PROP_CharFontCharSetAsian ] <<= maApiData.maAsianFont.mnTextEnc;
         }
-        if( maApiData.maCmplxFont.maName.getLength() > 0 )
+        if( !maApiData.maCmplxFont.maName.isEmpty() )
         {
             rPropMap[ PROP_CharFontNameComplex ]    <<= maApiData.maCmplxFont.maName;
             rPropMap[ PROP_CharFontFamilyComplex ]  <<= maApiData.maCmplxFont.mnFamily;
@@ -2809,7 +2809,7 @@ OUString lclGetBuiltinStyleName( sal_Int32 nBuiltinId, const OUString& rName, sa
     aStyleName.appendAscii( spcStyleNamePrefix );
     if( (0 <= nBuiltinId) && (nBuiltinId < snStyleNamesCount) && (sppcStyleNames[ nBuiltinId ][ 0 ] != 0) )
         aStyleName.appendAscii( sppcStyleNames[ nBuiltinId ] );
-    else if( rName.getLength() > 0 )
+    else if( !rName.isEmpty() )
         aStyleName.append( rName );
     else
         aStyleName.append( nBuiltinId );
@@ -2910,7 +2910,7 @@ void CellStyle::createCellStyle()
 {
     // #i1624# #i1768# ignore unnamed user styles
     if( !mbCreated )
-        mbCreated = maFinalName.getLength() == 0;
+        mbCreated = maFinalName.isEmpty();
 
     /*  #i103281# do not create another style of the same name, if it exists
         already. This is needed to prevent that styles pasted from clipboard
@@ -3036,7 +3036,7 @@ void CellStyleBuffer::finalizeImport()
     {
         const CellStyleModel& rModel = (*aIt)->getModel();
         // #i1624# #i1768# ignore unnamed user styles
-        if( rModel.maName.getLength() > 0 )
+        if( !rModel.maName.isEmpty() )
         {
             if( aCellStyles.count( rModel.maName ) > 0 )
                 aConflictNameStyles.push_back( *aIt );
@@ -3114,7 +3114,7 @@ OUString CellStyleBuffer::createCellStyle( const CellStyleRef& rxCellStyle ) con
     {
         rxCellStyle->createCellStyle();
         const OUString& rStyleName = rxCellStyle->getFinalStyleName();
-        if( rStyleName.getLength() > 0 )
+        if( !rStyleName.isEmpty() )
             return rStyleName;
     }
     // on error: fallback to default style
@@ -3423,7 +3423,7 @@ OUString StylesBuffer::createCellStyle( sal_Int32 nXfId ) const
 OUString StylesBuffer::createDxfStyle( sal_Int32 nDxfId ) const
 {
     OUString& rStyleName = maDxfStyles[ nDxfId ];
-    if( rStyleName.getLength() == 0 )
+    if( rStyleName.isEmpty() )
     {
         if( Dxf* pDxf = maDxfs.get( nDxfId ).get() )
         {
@@ -3435,7 +3435,7 @@ OUString StylesBuffer::createDxfStyle( sal_Int32 nDxfId ) const
             pDxf->writeToPropertySet( aPropSet );
         }
         // on error: fallback to default style
-        if( rStyleName.getLength() == 0 )
+        if( rStyleName.isEmpty() )
             rStyleName = maCellStyles.getDefaultStyleName();
     }
     return rStyleName;

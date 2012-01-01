@@ -94,7 +94,7 @@ void Table::finalizeImport()
     // ranges (or tables in their terminology) as Table1, Table2 etc.  We need
     // to import them as named db ranges because they may be referenced by
     // name in formula expressions.
-    if( (maModel.mnId > 0) && (maModel.maDisplayName.getLength() > 0) ) try
+    if( (maModel.mnId > 0) && !maModel.maDisplayName.isEmpty() ) try
     {
         maDBRangeName = maModel.maDisplayName;
         Reference< XDatabaseRange > xDatabaseRange(
@@ -154,7 +154,7 @@ void TableBuffer::insertTableToMaps( const TableRef& rxTable )
 {
     sal_Int32 nTableId = rxTable->getTableId();
     const OUString& rDispName = rxTable->getDisplayName();
-    if( (nTableId > 0) && (rDispName.getLength() > 0) )
+    if( (nTableId > 0) && !rDispName.isEmpty() )
     {
         OSL_ENSURE( !maIdTables.has( nTableId ), "TableBuffer::insertTableToMaps - multiple table identifier" );
         maIdTables[ nTableId ] = rxTable;

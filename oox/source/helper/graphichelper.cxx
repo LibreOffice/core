@@ -293,8 +293,8 @@ Reference< XGraphic > GraphicHelper::importGraphic( const StreamDataSequence& rG
 Reference< XGraphic > GraphicHelper::importEmbeddedGraphic( const OUString& rStreamName ) const
 {
     Reference< XGraphic > xGraphic;
-    OSL_ENSURE( rStreamName.getLength() > 0, "GraphicHelper::importEmbeddedGraphic - empty stream name" );
-    if( rStreamName.getLength() > 0 )
+    OSL_ENSURE( !rStreamName.isEmpty(), "GraphicHelper::importEmbeddedGraphic - empty stream name" );
+    if( !rStreamName.isEmpty() )
     {
         EmbeddedGraphicMap::const_iterator aIt = maEmbeddedGraphics.find( rStreamName );
         if( aIt == maEmbeddedGraphics.end() )

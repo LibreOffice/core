@@ -83,7 +83,7 @@ ContextHandlerRef AxControlPropertyContext::onCreateContext( sal_Int32 nElement,
             if( nElement == AX_TOKEN( picture ) )
             {
                 OUString aPicturePath = getFragmentPathFromRelId( rAttribs.getString( R_TOKEN( id ), OUString() ) );
-                if( aPicturePath.getLength() > 0 )
+                if( !aPicturePath.isEmpty() )
                 {
                     BinaryXInputStream aInStrm( getFilter().openInputStream( aPicturePath ), true );
                     mrModel.importPictureData( mnPropId, aInStrm );
@@ -117,7 +117,7 @@ ContextHandlerRef AxControlFragment::onCreateContext( sal_Int32 nElement, const 
             case XML_persistStreamInit:
             {
                 OUString aFragmentPath = getFragmentPathFromRelId( rAttribs.getString( R_TOKEN( id ), OUString() ) );
-                if( aFragmentPath.getLength() > 0 )
+                if( !aFragmentPath.isEmpty() )
                 {
                     BinaryXInputStream aInStrm( getFilter().openInputStream( aFragmentPath ), true );
                     if( !aInStrm.isEof() )
@@ -136,7 +136,7 @@ ContextHandlerRef AxControlFragment::onCreateContext( sal_Int32 nElement, const 
             case XML_persistStorage:
             {
                 OUString aFragmentPath = getFragmentPathFromRelId( rAttribs.getString( R_TOKEN( id ), OUString() ) );
-                if( aFragmentPath.getLength() > 0 )
+                if( !aFragmentPath.isEmpty() )
                 {
                     Reference< XInputStream > xStrgStrm = getFilter().openInputStream( aFragmentPath );
                     if( xStrgStrm.is() )

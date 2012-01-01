@@ -266,8 +266,8 @@ bool XmlFilterBase::importFragment( const ::rtl::Reference< FragmentHandler >& r
 
     // fragment handler must contain path to fragment stream
     OUString aFragmentPath = rxHandler->getFragmentPath();
-    OSL_ENSURE( aFragmentPath.getLength() > 0, "XmlFilterBase::importFragment - missing fragment path" );
-    if( aFragmentPath.getLength() == 0 )
+    OSL_ENSURE( !aFragmentPath.isEmpty(), "XmlFilterBase::importFragment - missing fragment path" );
+    if( aFragmentPath.isEmpty() )
         return false;
 
     // try to import binary streams (fragment extension must be '.bin')
@@ -343,8 +343,8 @@ Reference<XDocument> XmlFilterBase::importFragment( const ::rtl::OUString& aFrag
     Reference<XDocument> xRet;
 
     // path to fragment stream valid?
-    OSL_ENSURE( aFragmentPath.getLength() > 0, "XmlFilterBase::importFragment - empty fragment path" );
-    if( aFragmentPath.getLength() == 0 )
+    OSL_ENSURE( !aFragmentPath.isEmpty(), "XmlFilterBase::importFragment - empty fragment path" );
+    if( aFragmentPath.isEmpty() )
         return xRet;
 
     // try to open the fragment stream (this may fail - do not assert)
@@ -488,7 +488,7 @@ OUString XmlFilterBase::addRelation( const Reference< XOutputStream > xOutputStr
 static void
 writeElement( FSHelperPtr pDoc, sal_Int32 nXmlElement, const OUString& sValue )
 {
-    if( sValue.getLength() == 0 )
+    if( sValue.isEmpty() )
         return;
     pDoc->startElement( nXmlElement, FSEND );
     pDoc->write( sValue );

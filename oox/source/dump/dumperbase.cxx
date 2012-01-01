@@ -617,7 +617,7 @@ void StringHelper::appendEncString( OUStringBuffer& rStr, const OUString& rData,
 
 void StringHelper::appendToken( OUStringBuffer& rStr, const OUString& rToken, sal_Unicode cSep )
 {
-    if( (rStr.getLength() > 0) && (rToken.getLength() > 0) )
+    if( (rStr.getLength() > 0) && (!rToken.isEmpty()) )
         rStr.append( cSep );
     rStr.append( rToken );
 }
@@ -631,7 +631,7 @@ void StringHelper::appendToken( OUStringBuffer& rStr, sal_Int64 nToken, sal_Unic
 
 void StringHelper::prependToken( OUStringBuffer& rStr, const OUString& rToken, sal_Unicode cSep )
 {
-    if( (rStr.getLength() > 0) && (rToken.getLength() > 0) )
+    if( rStr.getLength() > 0 && !rToken.isEmpty() )
         rStr.insert( 0, cSep );
     rStr.insert( 0, rToken );
 }
@@ -878,7 +878,7 @@ bool StringHelper::convertStringToBool( const OUString& rData )
 OUStringPair StringHelper::convertStringToPair( const OUString& rString, sal_Unicode cSep )
 {
     OUStringPair aPair;
-    if( rString.getLength() > 0 )
+    if( !rString.isEmpty() )
     {
         sal_Int32 nEqPos = rString.indexOf( cSep );
         if( nEqPos < 0 )
@@ -903,7 +903,7 @@ void StringHelper::convertStringToStringList( OUStringVector& orVec, const OUStr
     while( (0 <= nPos) && (nPos < nLen) )
     {
         OUString aToken = getToken( aUnquotedData, nPos, OOX_DUMP_LF );
-        if( !bIgnoreEmpty || (aToken.getLength() > 0) )
+        if( !bIgnoreEmpty || !aToken.isEmpty() )
             orVec.push_back( aToken );
     }
 }
@@ -1058,13 +1058,13 @@ ConfigItemBase::LineType ConfigItemBase::readConfigLine(
         TextInputStream& rStrm, OUString& orKey, OUString& orData ) const
 {
     OUString aLine;
-    while( !rStrm.isEof() && (aLine.getLength() == 0) )
+    while( !rStrm.isEof() && aLine.isEmpty() )
     {
         aLine = rStrm.readLine();
-        if( (aLine.getLength() > 0) && (aLine[ 0 ] == OOX_DUMP_BOM) )
+        if( !aLine.isEmpty() && (aLine[ 0 ] == OOX_DUMP_BOM) )
             aLine = aLine.copy( 1 );
         aLine = StringHelper::trimSpaces( aLine );
-        if( aLine.getLength() > 0 )
+        if( !aLine.isEmpty() )
         {
             // ignore comments (starting with hash or semicolon)
             sal_Unicode cChar = aLine[ 0 ];
@@ -1076,7 +1076,7 @@ ConfigItemBase::LineType ConfigItemBase::readConfigLine(
     OUStringPair aPair = StringHelper::convertStringToPair( aLine );
     orKey = aPair.first;
     orData = aPair.second;
-    return ((orKey.getLength() > 0) && ((orData.getLength() > 0) || !orKey.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "end" ) ))) ?
+    return (!orKey.isEmpty() && (!orData.isEmpty() || !orKey.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "end" ) ))) ?
         LINETYPE_DATA : LINETYPE_END;
 }
 
@@ -1239,7 +1239,7 @@ void MultiList::setNamesFromVec( sal_Int64 nStartKey, const OUStringVector& rNam
 {
     sal_Int64 nKey = nStartKey;
     for( OUStringVector::const_iterator aIt = rNames.begin(), aEnd = rNames.end(); aIt != aEnd; ++aIt, ++nKey )
-        if( !mbIgnoreEmpty || (aIt->getLength() > 0) )
+        if( !mbIgnoreEmpty || !aIt->isEmpty() )
             insertRawName( nKey, *aIt );
 }
 
@@ -1300,7 +1300,7 @@ OUString FlagsList::implGetName( const Config& /*rCfg*/, sal_Int64 nKey ) const
         if( !getFlag( mnIgnore, nMask ) )
         {
             const OUString& rFlagName = aIt->second;
-            bool bOnOff = (rFlagName.getLength() > 0) && (rFlagName[ 0 ] == ':');
+            bool bOnOff = !rFlagName.isEmpty() && rFlagName[ 0 ] == ':';
             bool bFlag = getFlag( nKey, nMask );
             if( bOnOff )
             {
@@ -1309,7 +1309,7 @@ OUString FlagsList::implGetName( const Config& /*rCfg*/, sal_Int64 nKey ) const
             }
             else
             {
-                bool bNegated = (rFlagName.getLength() > 0) && (rFlagName[ 0 ] == '!');
+                bool bNegated = !rFlagName.isEmpty() && rFlagName[ 0 ] == '!';
                 sal_Int32 nBothSep = bNegated ? rFlagName.indexOf( '!', 1 ) : -1;
                 if( bFlag )
                 {
@@ -1383,8 +1383,8 @@ void CombiList::implSetName( sal_Int64 nKey, const OUString& rName )
             {
                 OUStringPair aFilter = StringHelper::convertStringToPair( aPair.second, '~' );
                 ExtItemFormatKey aKey( nKey );
-                if( (aFilter.first.getLength() > 0) && StringHelper::convertStringToInt( aKey.maFilter.first, aFilter.first ) &&
-                    (aFilter.second.getLength() > 0) && StringHelper::convertStringToInt( aKey.maFilter.second, aFilter.second ) )
+                if( !aFilter.first.isEmpty() && StringHelper::convertStringToInt( aKey.maFilter.first, aFilter.first ) &&
+                    !aFilter.second.isEmpty() && StringHelper::convertStringToInt( aKey.maFilter.second, aFilter.second ) )
                 {
                     if( aKey.maFilter.first == 0 )
                         aKey.maFilter.second = 0;
@@ -1443,7 +1443,7 @@ OUString CombiList::implGetName( const Config& rCfg, sal_Int64 nKey ) const
                 default:;
             }
             StringHelper::appendToken( aItem, aValue.makeStringAndClear(), OOX_DUMP_ITEMSEP );
-            if( rItemFmt.maListName.getLength() > 0 )
+            if( !rItemFmt.maListName.isEmpty() )
             {
                 OUString aValueName = rCfg.getName( rItemFmt.maListName, static_cast< sal_Int64 >( nUValue ) );
                 StringHelper::appendToken( aItem, aValueName, OOX_DUMP_ITEMSEP );
@@ -1516,7 +1516,7 @@ SharedConfigData::SharedConfigData( const OUString& rFileName,
     mbPwCancelled( false )
 {
     OUString aFileUrl = InputOutputHelper::convertFileNameToUrl( rFileName );
-    if( aFileUrl.getLength() > 0 )
+    if( !aFileUrl.isEmpty() )
     {
         sal_Int32 nNamePos = InputOutputHelper::getFileNamePos( aFileUrl );
         maConfigPath = aFileUrl.copy( 0, nNamePos );
@@ -1541,7 +1541,7 @@ const OUString* SharedConfigData::getOption( const OUString& rKey ) const
 
 void SharedConfigData::setNameList( const OUString& rListName, const NameListRef& rxList )
 {
-    if( rListName.getLength() > 0 )
+    if( !rListName.isEmpty() )
         maNameLists[ rListName ] = rxList;
 }
 
@@ -1575,7 +1575,7 @@ Sequence< NamedValue > SharedConfigData::requestEncryptionData( ::comphelper::ID
 
 bool SharedConfigData::implIsValid() const
 {
-    return mbLoaded && mxContext.is() && mxRootStrg.get() && (maSysFileName.getLength() > 0);
+    return mbLoaded && mxContext.is() && mxRootStrg.get() && !maSysFileName.isEmpty();
 }
 
 void SharedConfigData::implProcessConfigItemStr(
@@ -1642,7 +1642,7 @@ void SharedConfigData::createUnitConverter( const OUString& rData )
     if( aDataVec.size() >= 2 )
     {
         OUString aFactor = aDataVec[ 1 ];
-        bool bRecip = (aFactor.getLength() > 0) && (aFactor[ 0 ] == '/');
+        bool bRecip = !aFactor.isEmpty() && aFactor[ 0 ] == '/';
         if( bRecip )
             aFactor = aFactor.copy( 1 );
         double fFactor;
@@ -1688,13 +1688,13 @@ void Config::construct( const Config& rParent )
 
 void Config::construct( const sal_Char* pcEnvVar, const FilterBase& rFilter )
 {
-    if( rFilter.getFileUrl().getLength() > 0 )
+    if( !rFilter.getFileUrl().isEmpty() )
         construct( pcEnvVar, rFilter.getComponentContext(), rFilter.getStorage(), rFilter.getFileUrl(), rFilter.getMediaDescriptor() );
 }
 
 void Config::construct( const sal_Char* pcEnvVar, const Reference< XComponentContext >& rxContext, const StorageRef& rxRootStrg, const OUString& rSysFileName, MediaDescriptor& rMediaDesc )
 {
-    if( pcEnvVar && rxRootStrg.get() && (rSysFileName.getLength() > 0) )
+    if( pcEnvVar && rxRootStrg.get() && !rSysFileName.isEmpty() )
         if( const sal_Char* pcFileName = ::getenv( pcEnvVar ) )
             mxCfgData.reset( new SharedConfigData( OUString::createFromAscii( pcFileName ), rxContext, rxRootStrg, rSysFileName, rMediaDesc ) );
 }
@@ -1925,7 +1925,7 @@ void Output::endItem()
     if( mnItemLevel > 0 )
     {
         maLastItem = OUString( maLine.getStr() + mnLastItem );
-        if( (maLastItem.getLength() == 0) && (mnLastItem > 0) && (maLine[ mnLastItem - 1 ] == OOX_DUMP_ITEMSEP) )
+        if( maLastItem.isEmpty() && mnLastItem > 0 && maLine[ mnLastItem - 1 ] == OOX_DUMP_ITEMSEP )
             maLine.setLength( mnLastItem - 1 );
         --mnItemLevel;
     }
@@ -2188,7 +2188,7 @@ void StorageObjectBase::construct( const ObjectBase& rParent )
 
 bool StorageObjectBase::implIsValid() const
 {
-    return mxStrg.get() && (maSysPath.getLength() > 0) && ObjectBase::implIsValid();
+    return mxStrg.get() && !maSysPath.isEmpty() && ObjectBase::implIsValid();
 }
 
 void StorageObjectBase::implDump()
@@ -2286,7 +2286,7 @@ void StorageObjectBase::extractStorage( const StorageRef& rxStrg, const OUString
         return;
 
     // process preferred storages and streams in root storage first
-    if( rStrgPath.getLength() == 0 )
+    if( rStrgPath.isEmpty() )
         for( PreferredItemVector::iterator aIt = maPreferred.begin(), aEnd = maPreferred.end(); aIt != aEnd; ++aIt )
             extractItem( rxStrg, rStrgPath, aIt->maName, rSysPath, aIt->mbStorage, !aIt->mbStorage );
 
@@ -2296,7 +2296,7 @@ void StorageObjectBase::extractStorage( const StorageRef& rxStrg, const OUString
         // skip processed preferred items
         OUString aItemName = aIt.getName();
         bool bFound = false;
-        if( rStrgPath.getLength() == 0 )
+        if( rStrgPath.isEmpty() )
             for( PreferredItemVector::iterator aIIt = maPreferred.begin(), aIEnd = maPreferred.end(); !bFound && (aIIt != aIEnd); ++aIIt )
                 bFound = aIIt->maName == aItemName;
         if( !bFound )
@@ -2651,7 +2651,7 @@ sal_Unicode InputObjectBase::dumpChar( const String& rName, rtl_TextEncoding eTe
     sal_uInt8 nChar;
     *mxStrm >> nChar;
     OUString aChar = OStringToOUString( OString( static_cast< sal_Char >( nChar ) ), eTextEnc );
-    sal_Unicode cChar = (aChar.getLength() > 0) ? aChar[ 0 ] : 0;
+    sal_Unicode cChar = aChar.isEmpty() ? 0 : aChar[ 0 ];
     writeCharItem( rName( "char" ), cChar );
     return cChar;
 }
@@ -2915,7 +2915,7 @@ void TextLineStreamObject::implDumpText( TextInputStream& rTextStrm )
     while( !rTextStrm.isEof() )
     {
         OUString aLine = rTextStrm.readLine();
-        if( !rTextStrm.isEof() || (aLine.getLength() > 0) )
+        if( !rTextStrm.isEof() || !aLine.isEmpty() )
             implDumpLine( aLine, ++nLine );
     }
 }
@@ -3012,7 +3012,7 @@ void XmlStreamObject::implDumpText( TextInputStream& rTextStrm )
                     entirely. */
                 mxOut->writeString( aElem );
                 mxOut->newLine();
-                if( aText.trim().getLength() > 0 )
+                if( !aText.trim().isEmpty() )
                 {
                     mxOut->writeString( aText );
                     mxOut->newLine();

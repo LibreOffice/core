@@ -110,7 +110,7 @@ bool StorageBase::isStorage() const
 
 bool StorageBase::isRootStorage() const
 {
-    return implIsStorage() && (maStorageName.getLength() == 0);
+    return implIsStorage() && maStorageName.isEmpty();
 }
 
 bool StorageBase::isReadOnly() const
@@ -151,9 +151,9 @@ StorageRef StorageBase::openSubStorage( const OUString& rStorageName, bool bCrea
     {
         OUString aElement, aRemainder;
         lclSplitFirstElement( aElement, aRemainder, rStorageName );
-        if( aElement.getLength() > 0 )
+        if( !aElement.isEmpty() )
             xSubStorage = getSubStorage( aElement, bCreateMissing );
-        if( xSubStorage.get() && (aRemainder.getLength() > 0) )
+        if( xSubStorage.get() && !aRemainder.isEmpty() )
             xSubStorage = xSubStorage->openSubStorage( aRemainder, bCreateMissing );
     }
     return xSubStorage;
@@ -164,9 +164,9 @@ Reference< XInputStream > StorageBase::openInputStream( const OUString& rStreamN
     Reference< XInputStream > xInStream;
     OUString aElement, aRemainder;
     lclSplitFirstElement( aElement, aRemainder, rStreamName );
-    if( aElement.getLength() > 0 )
+    if( !aElement.isEmpty() )
     {
-        if( aRemainder.getLength() > 0 )
+        if( !aRemainder.isEmpty() )
         {
             StorageRef xSubStorage = getSubStorage( aElement, false );
             if( xSubStorage.get() )
@@ -192,9 +192,9 @@ Reference< XOutputStream > StorageBase::openOutputStream( const OUString& rStrea
     {
         OUString aElement, aRemainder;
         lclSplitFirstElement( aElement, aRemainder, rStreamName );
-        if( aElement.getLength() > 0 )
+        if( !aElement.isEmpty() )
         {
-            if( aRemainder.getLength() > 0 )
+            if( !aRemainder.isEmpty() )
             {
                 StorageRef xSubStorage = getSubStorage( aElement, true );
                 if( xSubStorage.get() )
@@ -216,8 +216,8 @@ Reference< XOutputStream > StorageBase::openOutputStream( const OUString& rStrea
 void StorageBase::copyToStorage( StorageBase& rDestStrg, const OUString& rElementName )
 {
     OSL_ENSURE( rDestStrg.isStorage() && !rDestStrg.isReadOnly(), "StorageBase::copyToStorage - invalid destination" );
-    OSL_ENSURE( rElementName.getLength() > 0, "StorageBase::copyToStorage - invalid element name" );
-    if( rDestStrg.isStorage() && !rDestStrg.isReadOnly() && (rElementName.getLength() > 0) )
+    OSL_ENSURE( !rElementName.isEmpty(), "StorageBase::copyToStorage - invalid element name" );
+    if( rDestStrg.isStorage() && !rDestStrg.isReadOnly() && !rElementName.isEmpty() )
     {
         StorageRef xSubStrg = openSubStorage( rElementName, false );
         if( xSubStrg.get() )

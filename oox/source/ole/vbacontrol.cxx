@@ -125,7 +125,7 @@ VbaControlNamesSet::VbaControlNamesSet() :
 void VbaControlNamesSet::insertName( const VbaFormControl& rControl )
 {
     OUString aName = rControl.getControlName();
-    if( aName.getLength() > 0 )
+    if( !aName.isEmpty() )
         maCtrlNames.insert( aName );
 }
 
@@ -455,8 +455,8 @@ bool VbaFormControl::convertProperties( const Reference< XControlModel >& rxCtrl
     if( rxCtrlModel.is() && mxSiteModel.get() && mxCtrlModel.get() )
     {
         const OUString& rCtrlName = mxSiteModel->getName();
-        OSL_ENSURE( rCtrlName.getLength() > 0, "VbaFormControl::convertProperties - control without name" );
-        if( rCtrlName.getLength() > 0 )
+        OSL_ENSURE( !rCtrlName.isEmpty(), "VbaFormControl::convertProperties - control without name" );
+        if( !rCtrlName.isEmpty() )
         {
             // convert all properties
             PropertyMap aPropMap;
@@ -785,7 +785,7 @@ bool lclEatKeyword( OUString& rCodeLine, const OUString& rKeyword )
     {
         rCodeLine = rCodeLine.copy( rKeyword.getLength() );
         // success, if code line ends after keyword, or if whitespace follows
-        return (rCodeLine.getLength() == 0) || lclEatWhitespace( rCodeLine );
+        return rCodeLine.isEmpty() || lclEatWhitespace( rCodeLine );
     }
     return false;
 }
@@ -835,11 +835,11 @@ void VbaUserForm::importForm(
 
     // remaining line is the form name
     OUString aFormName = aLine.trim();
-    OSL_ENSURE( aFormName.getLength() > 0, "VbaUserForm::importForm - missing form name" );
+    OSL_ENSURE( !aFormName.isEmpty(), "VbaUserForm::importForm - missing form name" );
     OSL_ENSURE( rModuleName.equalsIgnoreAsciiCase( aFormName ), "VbaUserForm::importFrameStream - form and module name mismatch" );
-    if( aFormName.getLength() == 0 )
+    if( aFormName.isEmpty() )
         aFormName = rModuleName;
-    if( aFormName.getLength() == 0 )
+    if( aFormName.isEmpty() )
         return;
     mxSiteModel.reset( new VbaSiteModel );
     mxSiteModel->importProperty( XML_Name, aFormName );

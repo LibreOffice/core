@@ -95,7 +95,7 @@ bool OleObjectHelper::importOleObject( PropertyMap& rPropMap, const OleObjectInf
     if( rOleObject.mbLinked )
     {
         // linked OLE object - set target URL
-        if( rOleObject.maTargetLink.getLength() > 0 )
+        if( !rOleObject.maTargetLink.isEmpty() )
         {
             rPropMap[ PROP_LinkURL ] <<= rOleObject.maTargetLink;
             bRet = true;
@@ -116,7 +116,7 @@ bool OleObjectHelper::importOleObject( PropertyMap& rPropMap, const OleObjectInf
             OUString aUrl = mxResolver->resolveEmbeddedObjectURL( aObjectId );
             OSL_ENSURE( aUrl.match( maEmbeddedObjScheme ), "OleObjectHelper::importOleObject - unexpected URL scheme" );
             OUString aPersistName = aUrl.copy( maEmbeddedObjScheme.getLength() );
-            if( aPersistName.getLength() > 0 )
+            if( !aPersistName.isEmpty() )
             {
                 rPropMap[ PROP_PersistName ] <<= aPersistName;
                 bRet = true;

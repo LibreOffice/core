@@ -129,9 +129,9 @@ void ChartSpaceConverter::convertFromModel( const Reference< XShapes >& rxExtern
         /*  If the title model is missing, but the chart shows exactly one
             series, the series title is shown as chart title. */
         OUString aAutoTitle = aPlotAreaConv.getAutomaticTitle();
-        if( mrModel.mxTitle.is() || (aAutoTitle.getLength() > 0) )
+        if( mrModel.mxTitle.is() || !aAutoTitle.isEmpty() )
         {
-            if( aAutoTitle.getLength() == 0 )
+            if( aAutoTitle.isEmpty() )
                 aAutoTitle = CREATE_OUSTRING( "Chart Title" );
             Reference< XTitled > xTitled( getChartDocument(), UNO_QUERY_THROW );
             TitleConverter aTitleConv( *this, mrModel.mxTitle.getOrCreate() );
@@ -184,7 +184,7 @@ void ChartSpaceConverter::convertFromModel( const Reference< XShapes >& rxExtern
     }
 
     // embedded drawing shapes
-    if( mrModel.maDrawingPath.getLength() > 0 ) try
+    if( !mrModel.maDrawingPath.isEmpty() ) try
     {
         /*  Get the internal draw page of the chart document, if no external
             drawing page has been passed. */

@@ -129,7 +129,7 @@ bool lclTrimTrailingAsterisks( OUString& rValue )
 bool lclConvertWildcardsToRegExp( OUString& rValue )
 {
     // check existence of the wildcard characters '*' and '?'
-    if( (rValue.getLength() > 0) && ((rValue.indexOf( '*' ) >= 0) || (rValue.indexOf( '?' ) >= 0)) )
+    if( !rValue.isEmpty() && ((rValue.indexOf( '*' ) >= 0) || (rValue.indexOf( '?' ) >= 0)) )
     {
         OUStringBuffer aBuffer;
         aBuffer.ensureCapacity( rValue.getLength() + 5 );
@@ -249,7 +249,7 @@ void DiscreteFilter::importAttribs( sal_Int32 nElement, const AttributeList& rAt
         case XLS_TOKEN( filter ):
         {
             OUString aValue = rAttribs.getXString( XML_val, OUString() );
-            if( aValue.getLength() > 0 )
+            if( !aValue.isEmpty() )
                 maValues.push_back( aValue );
         }
         break;
@@ -276,7 +276,7 @@ void DiscreteFilter::importRecord( sal_Int32 nRecId, SequenceInputStream& rStrm 
         case BIFF12_ID_DISCRETEFILTER:
         {
             OUString aValue = BiffHelper::readString( rStrm );
-            if( aValue.getLength() > 0 )
+            if( !aValue.isEmpty() )
                 maValues.push_back( aValue );
         }
         break;
@@ -384,7 +384,7 @@ void FilterCriterionModel::readBiffData( SequenceInputStream& rStrm )
         {
             rStrm.skip( 8 );
             OUString aValue = BiffHelper::readString( rStrm ).trim();
-            if( aValue.getLength() > 0 )
+            if( !aValue.isEmpty() )
                 maValue <<= aValue;
         }
         break;
@@ -468,7 +468,7 @@ void FilterCriterionModel::readString( BiffInputStream& rStrm, BiffType eBiff, r
             rStrm.readUniStringBody( mnStrLen, true ) :
             rStrm.readCharArrayUC( mnStrLen, eTextEnc, true );
         aValue = aValue.trim();
-        if( aValue.getLength() > 0 )
+        if( !aValue.isEmpty() )
             maValue <<= aValue;
     }
 }
@@ -494,7 +494,7 @@ void CustomFilter::importAttribs( sal_Int32 nElement, const AttributeList& rAttr
             FilterCriterionModel aCriterion;
             aCriterion.mnOperator = rAttribs.getToken( XML_operator, XML_equal );
             OUString aValue = rAttribs.getXString( XML_val, OUString() ).trim();
-            if( (aCriterion.mnOperator == XML_equal) || (aCriterion.mnOperator == XML_notEqual) || (aValue.getLength() > 0) )
+            if( (aCriterion.mnOperator == XML_equal) || (aCriterion.mnOperator == XML_notEqual) || (!aValue.isEmpty()) )
                 aCriterion.maValue <<= aValue;
             appendCriterion( aCriterion );
         }
@@ -554,7 +554,7 @@ ApiFilterSettings CustomFilter::finalizeImport( sal_Int32 /*nMaxCount*/ )
                 bool bNotEqual = nOperator == FilterOperator2::NOT_EQUAL;
                 if( bEqual || bNotEqual )
                 {
-                    if( aValue.getLength() == 0 )
+                    if( aValue.isEmpty() )
                     {
                         // empty comparison string: create empty/not empty filters
                         nOperator = bNotEqual ? FilterOperator2::NOT_EMPTY : FilterOperator2::EMPTY;
@@ -565,7 +565,7 @@ ApiFilterSettings CustomFilter::finalizeImport( sal_Int32 /*nMaxCount*/ )
                         bool bHasLeadingAsterisk = lclTrimLeadingAsterisks( aValue );
                         bool bHasTrailingAsterisk = lclTrimTrailingAsterisks( aValue );
                         // just '***' matches everything, do not create a filter field
-                        bValidOperator = aValue.getLength() > 0;
+                        bValidOperator = !aValue.isEmpty();
                         if( bValidOperator )
                         {
                             if( bHasLeadingAsterisk && bHasTrailingAsterisk )

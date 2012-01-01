@@ -468,7 +468,7 @@ bool LayoutNode::setupShape( const ShapePtr& rShape, const Diagram& rDgm, sal_uI
         // TODO(Q1): apply styling & coloring - taking
         // layout node's styleLbl for both style & color
         // now, but docs are a bit unclear on this
-        if( msStyleLabel.getLength() )
+        if( !msStyleLabel.isEmpty() )
         {
             OSL_TRACE("setting style with label %s",
                       OUSTRING_TO_CSTR( msStyleLabel ) );

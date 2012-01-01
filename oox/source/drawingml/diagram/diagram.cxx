@@ -138,10 +138,10 @@ static sal_Int32 calcDepth( const rtl::OUString& rNodeName,
     const dgm::Connections::const_iterator aEndCxn( rCnx.end() );
     while( aCurrCxn != aEndCxn )
     {
-        if( aCurrCxn->msParTransId.getLength() &&
-            aCurrCxn->msSibTransId.getLength() &&
-            aCurrCxn->msSourceId.getLength() &&
-            aCurrCxn->msDestId.getLength() &&
+        if( !aCurrCxn->msParTransId.isEmpty() &&
+            !aCurrCxn->msSibTransId.isEmpty() &&
+            !aCurrCxn->msSourceId.isEmpty() &&
+            !aCurrCxn->msDestId.isEmpty() &&
             aCurrCxn->mnType != XML_presOf &&
             aCurrCxn->mnType != XML_presParOf &&
             rNodeName == aCurrCxn->msDestId )
@@ -176,7 +176,7 @@ void Diagram::build(  )
                << normalizeDotName(aCurrPoint->msModelId).getStr()
                << "[";
 
-        if( aCurrPoint->msPresentationLayoutName.getLength() )
+        if( !aCurrPoint->msPresentationLayoutName.isEmpty() )
             output << "label=\""
                    << rtl::OUStringToOString(
                        aCurrPoint->msPresentationLayoutName,
@@ -230,7 +230,7 @@ void Diagram::build(  )
 
         OSL_ENSURE(bInserted1,"Diagram::build(): non-unique point model id");
 
-        if( aCurrPoint->msPresentationLayoutName.getLength() )
+        if( !aCurrPoint->msPresentationLayoutName.isEmpty() )
         {
             DiagramData::PointsNameMap::value_type::second_type& rVec=
                 getData()->getPointsPresNameMap()[aCurrPoint->msPresentationLayoutName];
@@ -244,11 +244,11 @@ void Diagram::build(  )
     while( aCurrCxn != aEndCxn )
     {
 #if OSL_DEBUG_LEVEL > 1
-        if( aCurrCxn->msParTransId.getLength() ||
-            aCurrCxn->msSibTransId.getLength() )
+        if( !aCurrCxn->msParTransId.isEmpty() ||
+            !aCurrCxn->msSibTransId.isEmpty() )
         {
-            if( aCurrCxn->msSourceId.getLength() ||
-                aCurrCxn->msDestId.getLength() )
+            if( !aCurrCxn->msSourceId.isEmpty() ||
+                !aCurrCxn->msDestId.isEmpty() )
             {
                 output << "\t"
                        << normalizeDotName(aCurrCxn->msSourceId).getStr()
@@ -279,8 +279,8 @@ void Diagram::build(  )
                        << "\"];" << std::endl;
             }
         }
-        else if( aCurrCxn->msSourceId.getLength() ||
-                 aCurrCxn->msDestId.getLength() )
+        else if( !aCurrCxn->msSourceId.isEmpty() ||
+                 !aCurrCxn->msDestId.isEmpty() )
             output << "\t"
                    << normalizeDotName(aCurrCxn->msSourceId).getStr()
                    << " -> "
@@ -391,7 +391,7 @@ void loadDiagram( ShapePtr& pShape,
     pDiagram->setLayout( pLayout );
 
     // data
-    if( rDataModelPath.getLength() > 0 )
+    if( !rDataModelPath.isEmpty() )
     {
         rtl::Reference< core::FragmentHandler > xRef(
             new DiagramDataFragmentHandler( rFilter, rDataModelPath, pData ));
@@ -408,7 +408,7 @@ void loadDiagram( ShapePtr& pShape,
     }
 
     // layout
-    if( rLayoutPath.getLength() > 0 )
+    if( !rLayoutPath.isEmpty() )
     {
         rtl::Reference< core::FragmentHandler > xRef(
             new DiagramLayoutFragmentHandler( rFilter, rLayoutPath, pLayout ));
@@ -420,7 +420,7 @@ void loadDiagram( ShapePtr& pShape,
     }
 
     // style
-    if( rQStylePath.getLength() > 0 )
+    if( !rQStylePath.isEmpty() )
     {
         rtl::Reference< core::FragmentHandler > xRef(
             new DiagramQStylesFragmentHandler( rFilter, rQStylePath, pDiagram->getStyles() ));
@@ -432,7 +432,7 @@ void loadDiagram( ShapePtr& pShape,
     }
 
     // colors
-    if( rColorStylePath.getLength() > 0 )
+    if( !rColorStylePath.isEmpty() )
     {
         rtl::Reference< core::FragmentHandler > xRef(
             new ColorFragmentHandler( rFilter, rColorStylePath, pDiagram->getColors() ));

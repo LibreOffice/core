@@ -258,11 +258,11 @@ void ShapeBase::finalizeFragmentImport()
 
 OUString ShapeBase::getShapeName() const
 {
-    if( maTypeModel.maShapeName.getLength() > 0 )
+    if( !maTypeModel.maShapeName.isEmpty() )
         return maTypeModel.maShapeName;
 
     OUString aBaseName = mrDrawing.getShapeBaseName( *this );
-    if( aBaseName.getLength() > 0 )
+    if( !aBaseName.isEmpty() )
     {
         sal_Int32 nShapeIdx = mrDrawing.getLocalShapeIndex( getShapeId() );
         if( nShapeIdx > 0 )
@@ -470,7 +470,7 @@ Reference< XShape > ComplexShape::implConvertAndInsert( const Reference< XShapes
             if( xShape.is() )
             {
                 // set the replacement graphic
-                if( aGraphicPath.getLength() > 0 )
+                if( !aGraphicPath.isEmpty() )
                 {
                     Reference< XGraphic > xGraphic = rFilter.getGraphicHelper().importEmbeddedGraphic( aGraphicPath );
                     if( xGraphic.is() )
@@ -487,11 +487,11 @@ Reference< XShape > ComplexShape::implConvertAndInsert( const Reference< XShapes
 
     // try to find registered form control info
     const ControlInfo* pControlInfo = mrDrawing.getControlInfo( maTypeModel.maShapeId );
-    if( pControlInfo && (pControlInfo->maFragmentPath.getLength() > 0) )
+    if( pControlInfo && !pControlInfo->maFragmentPath.isEmpty() )
     {
         OSL_ENSURE( nShapeType == VML_SHAPETYPE_HOSTCONTROL, "ComplexShape::implConvertAndInsert - unexpected shape type" );
         OUString aShapeName = getShapeName();
-        if( aShapeName.getLength() > 0 )
+        if( !aShapeName.isEmpty() )
         {
             OSL_ENSURE( aShapeName == pControlInfo->maName, "ComplexShape::implConvertAndInsert - control name mismatch" );
             // load the control properties from fragment
@@ -518,13 +518,13 @@ Reference< XShape > ComplexShape::implConvertAndInsert( const Reference< XShapes
     }
 
     // try to create a picture object
-    if( aGraphicPath.getLength() > 0 )
+    if( !aGraphicPath.isEmpty() )
     {
         Reference< XShape > xShape = mrDrawing.createAndInsertXShape( CREATE_OUSTRING( "com.sun.star.drawing.GraphicObjectShape" ), rxShapes, rShapeRect );
         if( xShape.is() )
         {
             OUString aGraphicUrl = rFilter.getGraphicHelper().importEmbeddedGraphicObject( aGraphicPath );
-            if( aGraphicUrl.getLength() > 0 )
+            if( !aGraphicUrl.isEmpty() )
             {
                 PropertySet aPropSet( xShape );
                 aPropSet.setProperty( PROP_GraphicURL, aGraphicUrl );

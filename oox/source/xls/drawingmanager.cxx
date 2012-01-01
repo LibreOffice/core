@@ -1317,10 +1317,10 @@ void BiffDrawingBase::finalizeImport()
 Reference< XShape > BiffDrawingBase::createAndInsertXShape( const OUString& rService,
         const Reference< XShapes >& rxShapes, const Rectangle& rShapeRect ) const
 {
-    OSL_ENSURE( rService.getLength() > 0, "BiffDrawingBase::createAndInsertXShape - missing UNO shape service name" );
+    OSL_ENSURE( !rService.isEmpty(), "BiffDrawingBase::createAndInsertXShape - missing UNO shape service name" );
     OSL_ENSURE( rxShapes.is(), "BiffDrawingBase::createAndInsertXShape - missing XShapes container" );
     Reference< XShape > xShape;
-    if( (rService.getLength() > 0) && rxShapes.is() ) try
+    if( !rService.isEmpty() && rxShapes.is() ) try
     {
         xShape.set( getBaseFilter().getModelFactory()->createInstance( rService ), UNO_QUERY_THROW );
         // insert shape into passed shape collection (maybe drawpage or group shape)

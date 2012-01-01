@@ -98,7 +98,7 @@ VbaFilterConfig::VbaFilterConfig( const Reference< XComponentContext >& rxContex
     OSL_ENSURE( rxContext.is(), "VbaFilterConfig::VbaFilterConfig - missing component context" );
     if( rxContext.is() ) try
     {
-        OSL_ENSURE( rConfigCompName.getLength() > 0, "VbaFilterConfig::VbaFilterConfig - invalid configuration component name" );
+        OSL_ENSURE( !rConfigCompName.isEmpty(), "VbaFilterConfig::VbaFilterConfig - invalid configuration component name" );
         OUString aConfigPackage = CREATE_OUSTRING( "org.openoffice.Office." ) + rConfigCompName;
         Reference< XMultiServiceFactory > xFactory( rxContext->getServiceManager(), UNO_QUERY_THROW );
         mxConfigAccess = ConfigurationHelper::openConfig( xFactory, aConfigPackage, ConfigurationHelper::E_READONLY );
@@ -133,7 +133,7 @@ bool VbaFilterConfig::isExportVba() const
 VbaMacroAttacherBase::VbaMacroAttacherBase( const OUString& rMacroName ) :
     maMacroName( rMacroName )
 {
-    OSL_ENSURE( maMacroName.getLength() > 0, "VbaMacroAttacherBase::VbaMacroAttacherBase - empty macro name" );
+    OSL_ENSURE( !maMacroName.isEmpty(), "VbaMacroAttacherBase::VbaMacroAttacherBase - empty macro name" );
 }
 
 VbaMacroAttacherBase::~VbaMacroAttacherBase()
@@ -231,7 +231,7 @@ bool VbaProject::hasDialog( const OUString& rDialogName ) const
 
 void VbaProject::addDummyModule( const OUString& rName, sal_Int32 nType )
 {
-    OSL_ENSURE( rName.getLength() > 0, "VbaProject::addDummyModule - missing module name" );
+    OSL_ENSURE( !rName.isEmpty(), "VbaProject::addDummyModule - missing module name" );
     maDummyModules[ rName ] = nType;
 }
 
@@ -335,8 +335,8 @@ void VbaProject::importVba( StorageBase& rVbaPrjStrg, const GraphicHelper& rGrap
             case VBA_ID_PROJECTNAME:
             {
                 OUString aPrjName = aRecStrm.readCharArrayUC( nRecSize, eTextEnc );
-                OSL_ENSURE( aPrjName.getLength() > 0, "VbaProject::importVba - invalid project name" );
-                if( aPrjName.getLength() > 0 )
+                OSL_ENSURE( !aPrjName.isEmpty(), "VbaProject::importVba - invalid project name" );
+                if( !aPrjName.isEmpty() )
                     maPrjName = aPrjName;
             }
             break;
@@ -348,7 +348,7 @@ void VbaProject::importVba( StorageBase& rVbaPrjStrg, const GraphicHelper& rGrap
             case VBA_ID_MODULENAME:
             {
                 OUString aName = aRecStrm.readCharArrayUC( nRecSize, eTextEnc );
-                OSL_ENSURE( aName.getLength() > 0, "VbaProject::importVba - invalid module name" );
+                OSL_ENSURE( !aName.isEmpty(), "VbaProject::importVba - invalid module name" );
                 OSL_ENSURE( !aModules.has( aName ), "VbaProject::importVba - multiple modules with the same name" );
                 VbaModuleMap::mapped_type& rxModule = aModules[ aName ];
                 rxModule.reset( new VbaModule( mxContext, mxDocModel, aName, eTextEnc, bExecutable ) );
@@ -416,7 +416,7 @@ void VbaProject::importVba( StorageBase& rVbaPrjStrg, const GraphicHelper& rGrap
                 else if( aKey.equalsIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM( "BaseClass" ) ) )
                     nType = ModuleType::FORM;
 
-                if( (nType != ModuleType::UNKNOWN) && (aValue.getLength() > 0) )
+                if( (nType != ModuleType::UNKNOWN) && !aValue.isEmpty() )
                 {
                     OSL_ENSURE( aModules.has( aValue ), "VbaProject::importVba - module not found" );
                     if( VbaModule* pModule = aModules.get( aValue ).get() )

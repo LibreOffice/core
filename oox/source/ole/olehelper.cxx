@@ -676,7 +676,7 @@ sal_Bool MSConvertOCXControls::ReadOCXStorage( SotStorageRef& xOleStg,
         {
             OUString aName = aNameStream.readNulUnicodeArray();
             Reference< XControlModel > xCtlModel( rxFormComp, UNO_QUERY );
-            if ( aName.getLength() && xCtlModel.is() )
+            if ( !aName.isEmpty() && xCtlModel.is() )
             {
                 PropertyMap aPropMap;
                 aPropMap.setProperty( PROP_Name, aName );

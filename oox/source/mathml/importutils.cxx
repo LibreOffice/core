@@ -155,7 +155,7 @@ sal_Unicode XmlStream::AttributeList::attribute( int token, sal_Unicode def ) co
     std::map< int, rtl::OUString >::const_iterator find = attrs.find( token );
     if( find != attrs.end())
     {
-        if( find->second.getLength() >= 1 )
+        if( !find->second.isEmpty() )
         {
 //            if( find->second.getLength() != 1 )
 //                fprintf( stderr, "Cannot convert \'%s\' to sal_Unicode, stripping.\n", CSTR( find->second ));

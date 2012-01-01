@@ -1141,7 +1141,7 @@ void ObjectFormatter::convertNumberFormat( PropertySet& rPropSet, const NumberFo
     if( mxData->mxNumFmts.is() )
     {
         sal_Int32 nPropId = bPercentFormat ? PROP_PercentageNumberFormat : PROP_NumberFormat;
-        if( rNumberFormat.mbSourceLinked || (rNumberFormat.maFormatCode.getLength() == 0) )
+        if( rNumberFormat.mbSourceLinked || rNumberFormat.maFormatCode.isEmpty() )
         {
             rPropSet.setAnyProperty( nPropId, Any() );
         }

@@ -67,7 +67,7 @@ namespace oox { namespace ppt {
             {
                 OUString url;
                 // TODO this is very wrong
-                if ( msSndName.getLength() != 0 )
+                if ( !msSndName.isEmpty() )
                 {
                     // try the builtIn version
                     url = msSndName;
@@ -83,7 +83,7 @@ namespace oox { namespace ppt {
                     url = msLink;
                 }
 #endif
-                if ( url.getLength() != 0 )
+                if ( !url.isEmpty() )
                 {
                     maSlideProperties[ PROP_Sound ] <<= url;
                     maSlideProperties[ PROP_SoundOn ] <<= sal_True;

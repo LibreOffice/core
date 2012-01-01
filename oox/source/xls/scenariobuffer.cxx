@@ -168,7 +168,7 @@ void Scenario::finalizeImport()
         if( !aIt->mbDeleted && rAddrConv.checkCellAddress( aIt->maPos, true ) )
             aRanges.push_back( CellRangeAddress( aIt->maPos.Sheet, aIt->maPos.Column, aIt->maPos.Row, aIt->maPos.Column, aIt->maPos.Row ) );
 
-    if( !aRanges.empty() && (maModel.maName.getLength() > 0) ) try
+    if( !aRanges.empty() && !maModel.maName.isEmpty() ) try
     {
         /*  Find an unused name for the scenario (Calc stores scenario data in
             hidden sheets named after the scenario following the base sheet). */

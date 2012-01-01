@@ -579,9 +579,9 @@ RichStringPhoneticRef RichString::createPhonetic()
 void RichString::createTextPortions( const OString& rText, rtl_TextEncoding eTextEnc, FontPortionModelList& rPortions )
 {
     maTextPortions.clear();
-    sal_Int32 nStrLen = rText.getLength();
-    if( nStrLen > 0 )
+    if( !rText.isEmpty())
     {
+        sal_Int32 nStrLen = rText.getLength();
         // add leading and trailing string position to ease the following loop
         if( rPortions.empty() || (rPortions.front().mnPos > 0) )
             rPortions.insert( rPortions.begin(), FontPortionModel( 0, -1 ) );
@@ -610,9 +610,9 @@ void RichString::createTextPortions( const OString& rText, rtl_TextEncoding eTex
 void RichString::createTextPortions( const OUString& rText, FontPortionModelList& rPortions )
 {
     maTextPortions.clear();
-    sal_Int32 nStrLen = rText.getLength();
-    if( nStrLen > 0 )
+    if( !rText.isEmpty() )
     {
+         sal_Int32 nStrLen = rText.getLength();
         // add leading and trailing string position to ease the following loop
         if( rPortions.empty() || (rPortions.front().mnPos > 0) )
             rPortions.insert( rPortions.begin(), FontPortionModel( 0, -1 ) );
@@ -636,9 +636,9 @@ void RichString::createTextPortions( const OUString& rText, FontPortionModelList
 void RichString::createPhoneticPortions( const ::rtl::OUString& rText, PhoneticPortionModelList& rPortions, sal_Int32 nBaseLen )
 {
     maPhonPortions.clear();
-    sal_Int32 nStrLen = rText.getLength();
-    if( nStrLen > 0 )
+    if( !rText.isEmpty())
     {
+        sal_Int32 nStrLen = rText.getLength();
         // no portions - assign phonetic text to entire base text
         if( rPortions.empty() )
             rPortions.push_back( PhoneticPortionModel( 0, 0, nBaseLen ) );

@@ -52,8 +52,8 @@ void lclMapShapesById( RefMap< OUString, ShapeType >& orMap, const RefVector< Sh
     for( typename RefVector< ShapeType >::const_iterator aIt = rVector.begin(), aEnd = rVector.end(); aIt != aEnd; ++aIt )
     {
         const OUString& rShapeId = (*aIt)->getShapeId();
-        OSL_ENSURE( rShapeId.getLength() > 0, "lclMapShapesById - missing shape identifier" );
-        if( rShapeId.getLength() > 0 )
+        OSL_ENSURE( !rShapeId.isEmpty(), "lclMapShapesById - missing shape identifier" );
+        if( !rShapeId.isEmpty() )
         {
             OSL_ENSURE( orMap.find( rShapeId ) == orMap.end(), "lclMapShapesById - shape identifier already used" );
             orMap[ rShapeId ] = *aIt;

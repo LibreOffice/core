@@ -111,7 +111,7 @@ const FunctionInfo* FormulaFinalizer::getFunctionInfo( ApiToken& orFuncToken )
             // write function op-code to the OPCODE_BAD token
             orFuncToken.OpCode = pLibFuncInfo->mnApiOpCode;
             // if it is an external function, insert programmatic function name
-            if( (orFuncToken.OpCode == OPCODE_EXTERNAL) && (pLibFuncInfo->maExtProgName.getLength() > 0) )
+            if( (orFuncToken.OpCode == OPCODE_EXTERNAL) && (!pLibFuncInfo->maExtProgName.isEmpty()) )
                 orFuncToken.Data <<= pLibFuncInfo->maExtProgName;
             else
                 orFuncToken.Data.clear();   // clear string from OPCODE_BAD
@@ -130,10 +130,10 @@ const FunctionInfo* FormulaFinalizer::getExternCallInfo( ApiToken& orFuncToken, 
     {
         orFuncToken.OpCode = pFuncInfo->mnApiOpCode;
         // programmatic add-in function name
-        if( (pFuncInfo->mnApiOpCode == OPCODE_EXTERNAL) && (pFuncInfo->maExtProgName.getLength() > 0) )
+        if( (pFuncInfo->mnApiOpCode == OPCODE_EXTERNAL) && !pFuncInfo->maExtProgName.isEmpty() )
             orFuncToken.Data <<= pFuncInfo->maExtProgName;
         // name of unsupported function, convert to OPCODE_BAD to preserve the name
-        else if( (pFuncInfo->mnApiOpCode == OPCODE_BAD) && (pFuncInfo->maOoxFuncName.getLength() > 0) )
+        else if( (pFuncInfo->mnApiOpCode == OPCODE_BAD) && !pFuncInfo->maOoxFuncName.isEmpty() )
             orFuncToken.Data <<= pFuncInfo->maOoxFuncName;
         return pFuncInfo;
     }
@@ -146,7 +146,7 @@ const FunctionInfo* FormulaFinalizer::getExternCallInfo( ApiToken& orFuncToken, 
     if( (rECToken.OpCode == OPCODE_NAME) && rECToken.Data.has< sal_Int32 >() )
     {
         OUString aDefName = resolveDefinedName( rECToken.Data.get< sal_Int32 >() );
-        if( aDefName.getLength() > 0 )
+        if( !aDefName.isEmpty() )
         {
             orFuncToken.OpCode = OPCODE_BAD;
             orFuncToken.Data <<= aDefName;
@@ -907,10 +907,10 @@ bool FormulaParserImpl::pushFunctionOperatorToken( const FunctionInfo& rFuncInfo
     if( bOk )
     {
        // create an external add-in call for the passed built-in function
-        if( (rFuncInfo.mnApiOpCode == OPCODE_EXTERNAL) && (rFuncInfo.maExtProgName.getLength() > 0) )
+        if( (rFuncInfo.mnApiOpCode == OPCODE_EXTERNAL) && !rFuncInfo.maExtProgName.isEmpty() )
             getOperandToken( 1, 0, 0 ).Data <<= rFuncInfo.maExtProgName;
         // create a bad token with unsupported function name
-        else if( (rFuncInfo.mnApiOpCode == OPCODE_BAD) && (rFuncInfo.maOoxFuncName.getLength() > 0) )
+        else if( (rFuncInfo.mnApiOpCode == OPCODE_BAD) && !rFuncInfo.maOoxFuncName.isEmpty() )
             getOperandToken( 1, 0, 0 ).Data <<= rFuncInfo.maOoxFuncName;
     }
     return bOk;
@@ -1029,14 +1029,14 @@ bool FormulaParserImpl::pushEmbeddedRefOperand( const DefinedNameBase& rName, bo
     Any aRefAny = rName.getReference( maBaseAddr );
     if( aRefAny.hasValue() )
         return pushAnyOperand( aRefAny, OPCODE_PUSH );
-    if( bPushBadToken && (rName.getModelName().getLength() > 0) && (rName.getModelName()[ 0 ] >= ' ') )
+    if( bPushBadToken && !rName.getModelName().isEmpty() && (rName.getModelName()[ 0 ] >= ' ') )
         return pushValueOperand( rName.getModelName(), OPCODE_BAD );
     return pushBiffErrorOperand( BIFF_ERR_NAME );
 }
 
 bool FormulaParserImpl::pushDefinedNameOperand( const DefinedNameRef& rxDefName )
 {
-    if( !rxDefName || (rxDefName->getModelName().getLength() == 0) )
+    if( !rxDefName || rxDefName->getModelName().isEmpty() )
         return pushBiffErrorOperand( BIFF_ERR_NAME );
     if( rxDefName->isMacroFunction() )
         return pushValueOperand( rxDefName->getModelName(), OPCODE_MACRO );
@@ -2790,7 +2790,7 @@ bool lclExtractRefId( sal_Int32& rnRefId, OUString& rRemainder, const OUString& 
         {
             rnRefId = rFormulaString.copy( 1, nBracketClose - 1 ).toInt32();
             rRemainder = rFormulaString.copy( nBracketClose + 1 );
-            return rRemainder.getLength() > 0;
+            return !rRemainder.isEmpty();
         }
     }
     return false;
@@ -2870,7 +2870,7 @@ ApiTokenSequence FormulaParser::convertNameToFormula( sal_Int32 nTokenIndex ) co
 
 ApiTokenSequence FormulaParser::convertNumberToHyperlink( const OUString& rUrl, double fValue ) const
 {
-    OSL_ENSURE( rUrl.getLength() > 0, "FormulaParser::convertNumberToHyperlink - missing URL" );
+    OSL_ENSURE( !rUrl.isEmpty(), "FormulaParser::convertNumberToHyperlink - missing URL" );
     if( const FunctionInfo* pFuncInfo = getFuncInfoFromBiffFuncId( BIFF_FUNC_HYPERLINK ) )
     {
         ApiTokenSequence aTokens( 6 );

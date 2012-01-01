@@ -132,15 +132,15 @@ void Drawing::registerBlockId( sal_Int32 nBlockId )
 
 void Drawing::registerOleObject( const OleObjectInfo& rOleObject )
 {
-    OSL_ENSURE( rOleObject.maShapeId.getLength() > 0, "Drawing::registerOleObject - missing OLE object shape id" );
+    OSL_ENSURE( !rOleObject.maShapeId.isEmpty(), "Drawing::registerOleObject - missing OLE object shape id" );
     OSL_ENSURE( maOleObjects.count( rOleObject.maShapeId ) == 0, "Drawing::registerOleObject - OLE object already registered" );
     maOleObjects.insert( OleObjectInfoMap::value_type( rOleObject.maShapeId, rOleObject ) );
 }
 
 void Drawing::registerControl( const ControlInfo& rControl )
 {
-    OSL_ENSURE( rControl.maShapeId.getLength() > 0, "Drawing::registerControl - missing form control shape id" );
-    OSL_ENSURE( rControl.maName.getLength() > 0, "Drawing::registerControl - missing form control name" );
+    OSL_ENSURE( !rControl.maShapeId.isEmpty(), "Drawing::registerControl - missing form control shape id" );
+    OSL_ENSURE( !rControl.maName.isEmpty(), "Drawing::registerControl - missing form control name" );
     OSL_ENSURE( maControls.count( rControl.maShapeId ) == 0, "Drawing::registerControl - form control already registered" );
     maControls.insert( ControlInfoMap::value_type( rControl.maShapeId, rControl ) );
 }
@@ -210,10 +210,10 @@ const ControlInfo* Drawing::getControlInfo( const OUString& rShapeId ) const
 Reference< XShape > Drawing::createAndInsertXShape( const OUString& rService,
         const Reference< XShapes >& rxShapes, const Rectangle& rShapeRect ) const
 {
-    OSL_ENSURE( rService.getLength() > 0, "Drawing::createAndInsertXShape - missing UNO shape service name" );
+    OSL_ENSURE( !rService.isEmpty(), "Drawing::createAndInsertXShape - missing UNO shape service name" );
     OSL_ENSURE( rxShapes.is(), "Drawing::createAndInsertXShape - missing XShapes container" );
     Reference< XShape > xShape;
-    if( (rService.getLength() > 0) && rxShapes.is() ) try
+    if( !rService.isEmpty() && rxShapes.is() ) try
     {
         Reference< XMultiServiceFactory > xModelFactory( mrFilter.getModelFactory(), UNO_SET_THROW );
         xShape.set( xModelFactory->createInstance( rService ), UNO_QUERY_THROW );

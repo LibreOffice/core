@@ -123,7 +123,7 @@ bool ExcelFilter::importDocument() throw()
     OOX_DUMP_FILE( ::oox::dump::xlsb::Dumper );
 
     OUString aWorkbookPath = getFragmentPathFromFirstType( CREATE_OFFICEDOC_RELATION_TYPE( "officeDocument" ) );
-    if( aWorkbookPath.getLength() == 0 )
+    if( aWorkbookPath.isEmpty() )
         return false;
 
     /*  Construct the WorkbookGlobals object referred to by every instance of

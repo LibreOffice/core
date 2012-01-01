@@ -119,7 +119,7 @@ const TableStyle& TableProperties::getUsedTableStyle( const ::oox::core::XmlFilt
     else if ( rBase.getTableStyles() )
     {
         const std::vector< TableStyle >& rTableStyles( rBase.getTableStyles()->getTableStyles() );
-        const rtl::OUString aStyleId( getStyleId().getLength() ? getStyleId() : rBase.getTableStyles()->getDefaultStyleId() );
+        const rtl::OUString aStyleId( getStyleId().isEmpty() ? rBase.getTableStyles()->getDefaultStyleId() : getStyleId() );
         std::vector< TableStyle >::const_iterator aIter( rTableStyles.begin() );
         while( aIter != rTableStyles.end() )
         {

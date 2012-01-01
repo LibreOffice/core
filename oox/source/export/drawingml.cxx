@@ -620,7 +620,7 @@ void DrawingML::WriteBlipFill( Reference< XPropertySet > rXPropSet, String sURLP
 
         DBG(printf ("URL: %s\n", OUStringToOString( aURL, RTL_TEXTENCODING_UTF8 ).getStr() ));
 
-        if( !aURL.getLength() )
+        if( aURL.isEmpty() )
             return;
 
         mpFS->startElementNS( nXmlNamespace , XML_blipFill, FSEND );
@@ -762,7 +762,7 @@ void DrawingML::WriteRunProperties( Reference< XPropertySet > rRun, sal_Bool bIs
         mAny >>= eLocale;
 
         OUStringBuffer usLanguageBuffer = eLocale.Language;
-        if( eLocale.Country.getLength() ) {
+        if( !eLocale.Country.isEmpty() ) {
             usLanguageBuffer.appendAscii( "-" );
             usLanguageBuffer.append( eLocale.Country );
         }
@@ -774,7 +774,7 @@ void DrawingML::WriteRunProperties( Reference< XPropertySet > rRun, sal_Bool bIs
     mpFS->startElementNS( XML_a, XML_rPr,
                           XML_b, bold,
                           XML_i, italic,
-                          XML_lang, usLanguage.getLength() ? USS( usLanguage ) : NULL,
+                          XML_lang, usLanguage.isEmpty() ? NULL : USS( usLanguage ),
                           XML_sz, nSize == 1800 ? NULL : IS( nSize ),
                           XML_u, underline,
                           FSEND );
@@ -848,7 +848,7 @@ void DrawingML::WriteRunProperties( Reference< XPropertySet > rRun, sal_Bool bIs
     OUString sURL;
 
     mAny >>= sURL;
-    if( sURL.getLength() ) {
+    if( !sURL.isEmpty() ) {
         OUString sRelId = mpFB->addRelation( mpFS->getOutputStream(),
                               US( "http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink" ),
                               sURL, true );
@@ -937,13 +937,13 @@ void DrawingML::WriteRun( Reference< XTextRange > rRun )
     sal_Bool bIsField = sal_False;
     OUString sText = rRun->getString();
 
-    if( sText.getLength() < 1) {
+    if( sText.isEmpty()) {
         Reference< XPropertySet > xPropSet( rRun, UNO_QUERY );
 
         try {
         if( !xPropSet.is() || !( xPropSet->getPropertyValue( S( "PlaceholderText" ) ) >>= sText ) )
             return;
-        if( sText.getLength() < 1 )
+        if( sText.isEmpty() )
             return;
         }
         catch (const Exception &) {
@@ -1100,7 +1100,7 @@ void DrawingML::WriteParagraphNumbering( Reference< XPropertySet > rXPropSet, sa
                 const char* pAutoNumType = GetAutoNumType( nNumberingType, bSDot, bPBehind, bPBoth );
 
                 if( nLevel >= 0 ) {
-                    if( aGraphicURL.getLength() > 0 ) {
+                    if( !aGraphicURL.isEmpty() ) {
                         OUString sRelId = WriteImage( aGraphicURL );
 
                         mpFS->startElementNS( XML_a, XML_buBlip, FSEND );

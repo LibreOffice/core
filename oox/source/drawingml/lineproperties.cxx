@@ -327,7 +327,7 @@ void lclPushMarkerProperties( ShapePropertyMap& rPropMap,
     }
 
     // push the properties (filled aNamedMarker.Name indicates valid marker)
-    if( aNamedMarker.Name.getLength() > 0 )
+    if( !aNamedMarker.Name.isEmpty() )
     {
         if( bLineEnd )
         {

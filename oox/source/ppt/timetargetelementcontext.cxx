@@ -121,7 +121,7 @@ namespace oox { namespace ppt {
         {
             mpTarget->mnType = XML_inkTgt;
             OUString aId = rAttribs.getString( XML_spid, OUString() );
-            if( aId.getLength() )
+            if( !aId.isEmpty() )
             {
                 mpTarget->msValue = aId;
             }

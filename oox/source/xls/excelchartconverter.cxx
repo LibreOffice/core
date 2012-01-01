@@ -82,7 +82,7 @@ Reference< XDataSequence > ExcelChartConverter::createDataSequence(
     if( rxDataProvider.is() )
     {
         OUString aRangeRep;
-        if( rDataSeq.maFormula.getLength() > 0 )
+        if( !rDataSeq.maFormula.isEmpty() )
         {
             // parse the formula string, create a token sequence
             FormulaParser& rParser = getFormulaParser();
@@ -105,7 +105,7 @@ Reference< XDataSequence > ExcelChartConverter::createDataSequence(
             aRangeRep = FormulaProcessorBase::generateApiArray( aMatrix );
         }
 
-        if( aRangeRep.getLength() > 0 ) try
+        if( !aRangeRep.isEmpty() ) try
         {
             // create the data sequence
             xDataSeq = rxDataProvider->createDataSequenceByRangeRepresentation( aRangeRep );

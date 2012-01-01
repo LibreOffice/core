@@ -155,7 +155,7 @@ OleObjectGraphicDataContext::~OleObjectGraphicDataContext()
 {
     /*  Register the OLE shape at the VML drawing, this prevents that the
         related VML shape converts the OLE object by itself. */
-    if( mrOleObjectInfo.maShapeId.getLength() > 0 )
+    if( !mrOleObjectInfo.maShapeId.isEmpty() )
         if( ::oox::vml::Drawing* pVmlDrawing = getFilter().getVmlDrawing() )
             pVmlDrawing->registerOleObject( mrOleObjectInfo );
 }
@@ -182,7 +182,7 @@ Reference< XFastContextHandler > OleObjectGraphicDataContext::createFastChildCon
                 else
                 {
                     OUString aFragmentPath = getFragmentPathFromRelation( *pRelation );
-                    if( aFragmentPath.getLength() > 0 )
+                    if( !aFragmentPath.isEmpty() )
                         getFilter().importBinaryData( mrOleObjectInfo.maEmbeddedData, aFragmentPath );
                 }
             }

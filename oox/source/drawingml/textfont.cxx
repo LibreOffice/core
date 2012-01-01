@@ -77,7 +77,7 @@ void TextFont::setAttributes( const AttributeList& rAttribs )
 
 void TextFont::assignIfUsed( const TextFont& rTextFont )
 {
-    if( rTextFont.maTypeface.getLength() > 0 )
+    if( !rTextFont.maTypeface.isEmpty() )
         *this = rTextFont;
 }
 
@@ -94,7 +94,7 @@ bool TextFont::implGetFontData( OUString& rFontName, sal_Int16& rnFontPitch, sal
     rFontName = maTypeface;
     rnFontPitch = lclGetFontPitch( extractValue< sal_Int16 >( mnPitch, 0, 4 ) );
     rnFontFamily = lclGetFontFamily( extractValue< sal_Int16 >( mnPitch, 4, 4 ) );
-    return rFontName.getLength() > 0;
+    return !rFontName.isEmpty();
 }
 
 // ============================================================================

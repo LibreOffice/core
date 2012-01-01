@@ -72,7 +72,7 @@ void OOXMLDocPropHandler::InitNew()
 // ------------------------------------------------
 void OOXMLDocPropHandler::AddCustomProperty( const uno::Any& aAny )
 {
-    if ( m_aCustomPropertyName.getLength() )
+    if ( !m_aCustomPropertyName.isEmpty() )
     {
         const uno::Reference< beans::XPropertyContainer > xUserProps =
             m_xDocProp->getUserDefinedProperties();
@@ -164,7 +164,7 @@ util::DateTime OOXMLDocPropHandler::GetDateTimeFromW3CDTF( const ::rtl::OUString
 // ------------------------------------------------
 uno::Sequence< ::rtl::OUString > OOXMLDocPropHandler::GetKeywordsSet( const ::rtl::OUString& aChars )
 {
-    if ( aChars.getLength() )
+    if ( !aChars.isEmpty() )
     {
         uno::Sequence< ::rtl::OUString > aResult( 20 );
         sal_Int32 nCounter = 0;
@@ -181,7 +181,7 @@ uno::Sequence< ::rtl::OUString > OOXMLDocPropHandler::GetKeywordsSet( const ::rt
                 case (sal_Unicode)'\t':
                     // this is a delimiter
                     // unfortunately I did not find any specification for the possible delimiters
-                    if ( aResult[nCounter].getLength() )
+                    if ( !aResult[nCounter].isEmpty() )
                     {
                         if ( nCounter >= aResult.getLength() )
                             aResult.realloc( nCounter + 10 );
@@ -246,7 +246,7 @@ void OOXMLDocPropHandler::UpdateDocStatistic( const ::rtl::OUString& aChars )
             break;
     }
 
-    if ( aName.getLength() )
+    if ( !aName.isEmpty() )
     {
         sal_Bool bFound = sal_False;
         sal_Int32 nLen = aSet.getLength();

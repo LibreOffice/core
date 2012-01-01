@@ -889,7 +889,7 @@ OUString PivotCacheField::createParentGroupField( const Reference< XDataPilotFie
                 Reference< XNamed > xGroupName;
                 OUString aAutoName;
                 Reference< XIndexAccess > xGroupsIA( aGroupInfo.Groups, UNO_QUERY_THROW );
-                for( sal_Int32 nIdx = 0, nCount = xGroupsIA->getCount(); (nIdx < nCount) && (aAutoName.getLength() == 0); ++nIdx ) try
+                for( sal_Int32 nIdx = 0, nCount = xGroupsIA->getCount(); (nIdx < nCount) && (aAutoName.isEmpty()); ++nIdx ) try
                 {
                     Reference< XNameAccess > xItemsNA( xGroupsIA->getByIndex( nIdx ), UNO_QUERY_THROW );
                     if( xItemsNA->hasByName( aFirstItem ) )
@@ -901,17 +901,17 @@ OUString PivotCacheField::createParentGroupField( const Reference< XDataPilotFie
                 catch( Exception& )
                 {
                 }
-                OSL_ENSURE( aAutoName.getLength() > 0, "PivotCacheField::createParentGroupField - cannot find auto-generated group name" );
+                OSL_ENSURE( !aAutoName.isEmpty(), "PivotCacheField::createParentGroupField - cannot find auto-generated group name" );
 
                 // get the real group name from the list of group items
                 OUString aGroupName;
                 if( const PivotCacheItem* pGroupItem = maGroupItems.getCacheItem( static_cast< sal_Int32 >( aIt - aBeg ) ) )
                     aGroupName = pGroupItem->getName();
-                OSL_ENSURE( aGroupName.getLength() > 0, "PivotCacheField::createParentGroupField - cannot find group name" );
-                if( aGroupName.getLength() == 0 )
+                OSL_ENSURE( !aGroupName.isEmpty(), "PivotCacheField::createParentGroupField - cannot find group name" );
+                if( aGroupName.isEmpty() )
                     aGroupName = aAutoName;
 
-                if( xGroupName.is() && (aGroupName.getLength() > 0) )
+                if( xGroupName.is() && !aGroupName.isEmpty() )
                 {
                     // replace the auto-generated group name with the real name
                     if( aAutoName != aGroupName )
@@ -1238,8 +1238,8 @@ void PivotCache::finalizeImport()
         case XML_worksheet:
         {
             // decide whether an external document is used
-            bool bInternal = (maTargetUrl.getLength() == 0) && (maSheetSrcModel.maRelId.getLength() == 0);
-            bool bExternal = maTargetUrl.getLength() > 0;   // relation ID may be empty, e.g. BIFF import
+            bool bInternal = maTargetUrl.isEmpty() && maSheetSrcModel.maRelId.isEmpty();
+            bool bExternal = !maTargetUrl.isEmpty();   // relation ID may be empty, e.g. BIFF import
             OSL_ENSURE( bInternal || bExternal, "PivotCache::finalizeImport - invalid external document URL" );
             if( bInternal )
                 finalizeInternalSheetSource();
@@ -1329,13 +1329,13 @@ void PivotCache::importDConRef( BiffInputStream& rStrm )
 
     // the URL with (required) sheet name and optional URL of an external document
     importDConUrl( rStrm );
-    OSL_ENSURE( maSheetSrcModel.maSheet.getLength() > 0, "PivotCache::importDConRef - missing sheet name" );
+    OSL_ENSURE( !maSheetSrcModel.maSheet.isEmpty(), "PivotCache::importDConRef - missing sheet name" );
 }
 
 void PivotCache::importDConName( BiffInputStream& rStrm )
 {
     maSheetSrcModel.maDefName = (getBiff() == BIFF8) ? rStrm.readUniString() : rStrm.readByteStringUC( false, getTextEncoding() );
-    OSL_ENSURE( maSheetSrcModel.maDefName.getLength() > 0, "PivotCache::importDConName - missing defined name" );
+    OSL_ENSURE( !maSheetSrcModel.maDefName.isEmpty(), "PivotCache::importDConName - missing defined name" );
     importDConUrl( rStrm );
 }
 
@@ -1363,7 +1363,7 @@ void PivotCache::importDConUrl( BiffInputStream& rStrm )
         aEncodedUrl = rStrm.readByteStringUC( false, getTextEncoding() );
     }
 
-    if( aEncodedUrl.getLength() > 0 )
+    if( !aEncodedUrl.isEmpty() )
     {
         OUString aClassName;
         getAddressConverter().parseBiffTargetUrl( aClassName, maTargetUrl, maSheetSrcModel.maSheet, aEncodedUrl, true );
@@ -1376,7 +1376,7 @@ void PivotCache::finalizeInternalSheetSource()
     sal_Int16 nSheet = getWorksheets().getCalcSheetIndex( maSheetSrcModel.maSheet );
 
     // if cache is based on a defined name or table, try to resolve to cell range
-    if( maSheetSrcModel.maDefName.getLength() > 0 )
+    if( !maSheetSrcModel.maDefName.isEmpty() )
     {
         // local or global defined name
         if( const DefinedName* pDefName = getDefinedNames().getByModelName( maSheetSrcModel.maDefName, nSheet ).get() )
@@ -1401,7 +1401,7 @@ void PivotCache::finalizeInternalSheetSource()
         mbValidSource = true;
     }
     // else sheet has been deleted, generate the source data from cache
-    else if( maSheetSrcModel.maSheet.getLength() > 0 )
+    else if( !maSheetSrcModel.maSheet.isEmpty() )
     {
         prepareSourceDataSheet();
         // return here to skip the source range check below
@@ -1419,8 +1419,8 @@ void PivotCache::finalizeExternalSheetSource()
     /*  If pivot cache is based on external sheet data, try to restore sheet
         data from cache records. No support for external defined names or tables,
         sheet name and path to cache records fragment (OOXML only) are required. */
-    bool bHasRelation = (getFilterType() == FILTER_BIFF) || (maDefModel.maRelId.getLength() > 0);
-    if( bHasRelation && (maSheetSrcModel.maDefName.getLength() == 0) && (maSheetSrcModel.maSheet.getLength() > 0) )
+    bool bHasRelation = (getFilterType() == FILTER_BIFF) || !maDefModel.maRelId.isEmpty();
+    if( bHasRelation && maSheetSrcModel.maDefName.isEmpty() && !maSheetSrcModel.maSheet.isEmpty() )
         prepareSourceDataSheet();
 }
 
@@ -1462,7 +1462,7 @@ void PivotCacheBuffer::registerPivotCacheFragment( sal_Int32 nCacheId, const OUS
 {
     OSL_ENSURE( nCacheId >= 0, "PivotCacheBuffer::registerPivotCacheFragment - invalid pivot cache identifier" );
     OSL_ENSURE( maFragmentPaths.count( nCacheId ) == 0, "PivotCacheBuffer::registerPivotCacheFragment - fragment path exists already" );
-    if( (nCacheId >= 0) && (rFragmentPath.getLength() > 0) )
+    if( (nCacheId >= 0) && !rFragmentPath.isEmpty() )
         maFragmentPaths[ nCacheId ] = rFragmentPath;
 }
 

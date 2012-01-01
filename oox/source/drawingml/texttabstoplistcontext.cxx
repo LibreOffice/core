@@ -70,7 +70,7 @@ namespace oox { namespace drawingml {
                 OUString sValue;
                 TabStop aTabStop;
                 sValue = xAttribs->getOptionalValue( XML_pos );
-                if( sValue.getLength() )
+                if( !sValue.isEmpty() )
                 {
                     aTabStop.Position = GetCoordinate( sValue );
                 }

@@ -124,7 +124,7 @@ void lclParseTables( WebPrModel::TablesVector& rTables, const OUString& rTableNa
 {
     rTables.clear();
     OUString aTableNames = rTableNames.trim();
-    while( aTableNames.getLength() > 0 )
+    while( !aTableNames.isEmpty() )
     {
         sal_Int32 nSep = -1;
         // table names are enclosed in double quotes
@@ -139,7 +139,7 @@ void lclParseTables( WebPrModel::TablesVector& rTables, const OUString& rTableNa
                 nSep = aTableNames.indexOf( ',', nEndQuote + 1 );
             // extract text between quote characters
             OUString aTableName = aTableNames.copy( 1, nEndQuote - 1 ).trim();
-            if( aTableName.getLength() > 0 )
+            if( !aTableName.isEmpty() )
                 rTables.push_back( Any( aTableName ) );
             else
                 rTables.push_back( Any() );
@@ -150,7 +150,7 @@ void lclParseTables( WebPrModel::TablesVector& rTables, const OUString& rTableNa
             if( nSep < 0 )
                 nSep = aTableNames.getLength();
             OUString aTableIndex = aTableNames.copy( 0, nSep ).trim();
-            if( (aTableIndex.getLength() > 0) && (aTableIndex[ 0 ] >= '1') && (aTableIndex[ 0 ] <= '9') )
+            if( !aTableIndex.isEmpty() && (aTableIndex[ 0 ] >= '1') && (aTableIndex[ 0 ] <= '9') )
                 rTables.push_back( Any( aTableIndex.toInt32() ) );
             else
                 rTables.push_back( Any() );

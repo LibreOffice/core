@@ -197,8 +197,8 @@ void VbaModule::importDirRecords( BinaryInputStream& rDirStrm )
 #undef OOX_ENSURE_RECORDSIZE
         }
     }
-    OSL_ENSURE( maName.getLength() > 0, "VbaModule::importDirRecords - missing module name" );
-    OSL_ENSURE( maStreamName.getLength() > 0, "VbaModule::importDirRecords - missing module stream name" );
+    OSL_ENSURE( !maName.isEmpty(), "VbaModule::importDirRecords - missing module name" );
+    OSL_ENSURE( !maStreamName.isEmpty(), "VbaModule::importDirRecords - missing module stream name" );
     OSL_ENSURE( mnType != ModuleType::UNKNOWN, "VbaModule::importDirRecords - missing module type" );
     OSL_ENSURE( mnOffset < SAL_MAX_UINT32, "VbaModule::importDirRecords - missing module stream offset" );
 }
@@ -218,7 +218,7 @@ void VbaModule::createEmptyModule( const Reference< XNameContainer >& rxBasicLib
 OUString VbaModule::readSourceCode( StorageBase& rVbaStrg, const Reference< XNameContainer >& rxOleNameOverrides ) const
 {
     OUStringBuffer aSourceCode;
-    if( (maStreamName.getLength() > 0) && (mnOffset != SAL_MAX_UINT32) )
+    if( !maStreamName.isEmpty() && (mnOffset != SAL_MAX_UINT32) )
     {
         BinaryXInputStream aInStrm( rVbaStrg.openInputStream( maStreamName ), true );
         OSL_ENSURE( !aInStrm.isEof(), "VbaModule::readSourceCode - cannot open module stream" );
@@ -280,7 +280,7 @@ void VbaModule::extractOleOverrideFromAttr( const OUString& rAttribute, const Re
 void VbaModule::createModule( const OUString& rVBASourceCode,
         const Reference< XNameContainer >& rxBasicLib, const Reference< XNameAccess >& rxDocObjectNA ) const
 {
-    if( maName.getLength() == 0 )
+    if( maName.isEmpty() )
         return;
 
     // prepare the Basic module

@@ -324,7 +324,7 @@ void OleStorage::implGetElementNames( ::std::vector< OUString >& orElementNames 
 StorageRef OleStorage::implOpenSubStorage( const OUString& rElementName, bool bCreateMissing )
 {
     StorageRef xSubStorage;
-    if( mxStorage.is() && (rElementName.getLength() > 0) )
+    if( mxStorage.is() && !rElementName.isEmpty() )
     {
         try
         {
@@ -376,7 +376,7 @@ Reference< XInputStream > OleStorage::implOpenInputStream( const OUString& rElem
 Reference< XOutputStream > OleStorage::implOpenOutputStream( const OUString& rElementName )
 {
     Reference< XOutputStream > xOutStream;
-    if( mxStorage.is() && (rElementName.getLength() > 0) )
+    if( mxStorage.is() && !rElementName.isEmpty() )
         xOutStream.set( new OleOutputStream( mxContext, mxStorage, rElementName ) );
     return xOutStream;
 }

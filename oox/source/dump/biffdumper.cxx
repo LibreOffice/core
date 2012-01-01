@@ -2359,7 +2359,7 @@ void WorkbookStreamObject::implDumpRecordBody()
                 }
             }
             OUString aName = dumpString( "name", BIFF_STR_8BITLENGTH, BIFF_STR_8BITLENGTH );
-            if( (aName.getLength() > 0) && (aName[ 0 ] == 1) && (rStrm.getRemaining() >= 2) )
+            if( !aName.isEmpty() && (aName[ 0 ] == 1) && (rStrm.getRemaining() >= 2) )
                 getFormulaDumper().dumpNameFormula();
         }
         break;
@@ -4527,7 +4527,7 @@ RootStorageObject::RootStorageObject( const DumperBase& rParent )
 
 void RootStorageObject::implDumpStream( const Reference< XInputStream >& rxStrm, const OUString& rStrgPath, const OUString& rStrmName, const OUString& rSysFileName )
 {
-    if( (rStrgPath.getLength() == 0) && (rStrmName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Book" ) ) || rStrmName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Workbook" ) )) )
+    if( rStrgPath.isEmpty() && (rStrmName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Book" ))  || rStrmName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Workbook" ) )) )
         WorkbookStreamObject( *this, rxStrm, rSysFileName ).dump();
     else if( rStrgPath.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "_SX_DB" ) ) )
         PivotCacheStreamObject( *this, rxStrm, BIFF5, rSysFileName ).dump();

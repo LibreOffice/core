@@ -130,7 +130,7 @@ bool ModelObjectHelper::insertLineMarker( const OUString& rMarkerName, const Pol
 {
     OSL_ENSURE( rMarker.Coordinates.hasElements(), "ModelObjectHelper::insertLineMarker - line marker without coordinates" );
     if( rMarker.Coordinates.hasElements() )
-        return maMarkerContainer.insertObject( rMarkerName, Any( rMarker ), false ).getLength() > 0;
+        return !maMarkerContainer.insertObject( rMarkerName, Any( rMarker ), false ).isEmpty();
     return false;
 }
 
@@ -151,7 +151,7 @@ OUString ModelObjectHelper::insertTransGrandient( const Gradient& rGradient )
 
 OUString ModelObjectHelper::insertFillBitmapUrl( const OUString& rGraphicUrl )
 {
-    if( rGraphicUrl.getLength() > 0 )
+    if( !rGraphicUrl.isEmpty() )
         return maBitmapUrlContainer.insertObject( maBitmapUrlNameBase, Any( rGraphicUrl ), true );
     return OUString();
 }

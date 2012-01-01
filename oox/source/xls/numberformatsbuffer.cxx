@@ -1928,7 +1928,7 @@ void NumberFormat::setPredefinedId( const Locale& rLocale, sal_Int16 nPredefId )
 
 sal_Int32 NumberFormat::finalizeImport( const Reference< XNumberFormats >& rxNumFmts, const Locale& rFromLocale )
 {
-    if( rxNumFmts.is() && (maModel.maFmtCode.getLength() > 0) )
+    if( rxNumFmts.is() && !maModel.maFmtCode.isEmpty() )
         maApiData.mnIndex = lclCreateFormat( rxNumFmts, maModel.maFmtCode, maModel.maLocale, rFromLocale );
     else
         maApiData.mnIndex = lclCreatePredefinedFormat( rxNumFmts, maModel.mnPredefId, maModel.maLocale );
@@ -1960,7 +1960,7 @@ NumberFormatsBuffer::NumberFormatsBuffer( const WorkbookHelper& rHelper ) :
         xConfigNA->getByName( CREATE_OUSTRING( "ooSetupSystemLocale" ) ) >>= maLocaleStr;
 
         // if set to "use system", get locale from system
-        if( maLocaleStr.getLength() == 0 )
+        if( maLocaleStr.isEmpty() )
         {
             aArgs[ 0 ] <<= CREATE_OUSTRING( "org.openoffice.System/L10N/" );
             xConfigNA.set( xConfigProv->createInstanceWithArguments(

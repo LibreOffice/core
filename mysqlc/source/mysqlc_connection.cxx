@@ -139,17 +139,17 @@ void OConnection::construct(const OUString& url, const Sequence< PropertyValue >
     }
 
     token = url.getToken(0, '/', nIndex);
-    if (token.getLength()) {
+    if (!token.isEmpty()) {
         sal_Int32 nIndex1 = 0;
         OUString hostandport = token.getToken(0,':', nIndex1);
-        if (hostandport.getLength()) {
+        if (!hostandport.isEmpty()) {
             aHostName = hostandport;
             hostandport = token.getToken(0, ':', nIndex1);
-            if (hostandport.getLength() && nIndex1) {
+            if (!hostandport.isEmpty() && nIndex1) {
                 nPort = hostandport.toInt32();
             }
             token = url.getToken(0, '/', nIndex);
-            if (token.getLength() && nIndex) {
+            if (!token.isEmpty() && nIndex) {
                 aDbName = token;
             }
         }

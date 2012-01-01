@@ -101,7 +101,7 @@ const sal_uInt32 BIFF_QTREFRESH_ADJUSTCOLWIDTH      = 0x00000002;
 
 void lclAppendWebQueryTableName( OUStringBuffer& rTables, const OUString& rTableName )
 {
-    if( rTableName.getLength() > 0 )
+    if( !rTableName.isEmpty() )
     {
         if( rTables.getLength() > 0 )
             rTables.append( sal_Unicode( ';' ) );
@@ -325,7 +325,7 @@ void QueryTable::finalizeImport()
         if( pWebPr && !pWebPr->mbXml )
         {
             OUString aFileUrl = getBaseFilter().getAbsoluteUrl( pWebPr->maUrl );
-            if( aFileUrl.getLength() > 0 )
+            if( !aFileUrl.isEmpty() )
             {
                 // resolve destination cell range (stored as defined name containing the range)
                 OUString aDefName = maModel.maDefName.replace( ' ', '_' ).replace( '-', '_' );
@@ -341,7 +341,7 @@ void QueryTable::finalizeImport()
                         CellAddress aDestPos( aDestRange.Sheet, aDestRange.StartColumn, aDestRange.StartRow );
                         // find tables mode: entire document, all tables, or specific tables
                         OUString aTables = pWebPr->mbHtmlTables ? lclBuildWebQueryTables( pWebPr->maTables ) : CREATE_OUSTRING( "HTML_all" );
-                        if( aTables.getLength() > 0 ) try
+                        if( !aTables.isEmpty() ) try
                         {
                             PropertySet aDocProps( getDocument() );
                             Reference< XAreaLinks > xAreaLinks( aDocProps.getAnyProperty( PROP_AreaLinks ), UNO_QUERY_THROW );

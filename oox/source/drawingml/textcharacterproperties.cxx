@@ -101,7 +101,7 @@ void TextCharacterProperties::assignUsed( const TextCharacterProperties& rSource
     if( maCharColor.isUsed() )
         rPropMap[ PROP_CharColor ] <<= maCharColor.getColor( rFilter.getGraphicHelper() );
 
-    if( moLang.has() && (moLang.get().getLength() > 0) )
+    if( moLang.has() && !moLang.get().isEmpty() )
     {
         lang::Locale aLocale;
         sal_Int32 nSepPos = moLang.get().indexOf( sal_Unicode( '-' ), 0 );

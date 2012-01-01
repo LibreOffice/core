@@ -542,7 +542,7 @@ void CondFormatRule::finalizeImport( const Reference< XSheetConditionalEntries >
         break;
     }
 
-    if( aReplaceFormula.getLength() > 0 )
+    if( !aReplaceFormula.isEmpty() )
     {
         OUString aAddress, aRanges, aText, aComp;
         sal_Int32 nStrPos = aReplaceFormula.getLength();
@@ -551,17 +551,17 @@ void CondFormatRule::finalizeImport( const Reference< XSheetConditionalEntries >
             switch( aReplaceFormula[ nStrPos + 1 ] )
             {
                 case 'B':       // current base address
-                    if( aAddress.getLength() == 0 )
+                    if( aAddress.isEmpty() )
                         aAddress = FormulaProcessorBase::generateAddress2dString( mrCondFormat.getRanges().getBaseAddress(), false );
                     aReplaceFormula = aReplaceFormula.replaceAt( nStrPos, 2, aAddress );
                 break;
                 case 'R':       // range list of conditional formatting
-                    if( aRanges.getLength() == 0 )
+                    if( aRanges.isEmpty() )
                         aRanges = FormulaProcessorBase::generateRangeList2dString( mrCondFormat.getRanges(), true, ',', true );
                     aReplaceFormula = aReplaceFormula.replaceAt( nStrPos, 2, aRanges );
                 break;
                 case 'T':       // comparison text
-                    if( aText.getLength() == 0 )
+                    if( aText.isEmpty() )
                         // quote the comparison text, and handle embedded quote characters
                         aText = FormulaProcessorBase::generateApiString( maModel.maText );
                     aReplaceFormula = aReplaceFormula.replaceAt( nStrPos, 2, aText );
@@ -579,7 +579,7 @@ void CondFormatRule::finalizeImport( const Reference< XSheetConditionalEntries >
                         OUString::valueOf( static_cast< sal_Int32 >( maModel.mbBottom ? 1 : 0 ) ) );
                 break;
                 case 'C':       // average comparison operator
-                    if( aComp.getLength() == 0 )
+                    if( aComp.isEmpty() )
                         aComp = maModel.mbAboveAverage ?
                             (maModel.mbEqualAverage ? CREATE_OUSTRING( ">=" ) : CREATE_OUSTRING( ">" )) :
                             (maModel.mbEqualAverage ? CREATE_OUSTRING( "<=" ) : CREATE_OUSTRING( "<" ));
@@ -608,7 +608,7 @@ void CondFormatRule::finalizeImport( const Reference< XSheetConditionalEntries >
 
         // style name for the formatting attributes
         OUString aStyleName = getStyles().createDxfStyle( maModel.mnDxfId );
-        if( aStyleName.getLength() > 0 )
+        if( !aStyleName.isEmpty() )
             lclAppendProperty( aProps, CREATE_OUSTRING( "StyleName" ), aStyleName );
 
         // append the new rule

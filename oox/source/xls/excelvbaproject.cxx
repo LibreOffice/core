@@ -103,7 +103,7 @@ void ExcelVbaProject::prepareImport()
             PropertySet aSheetProp( xSheetsEnum->nextElement() );
             OUString aCodeName;
             aSheetProp.getProperty( aCodeName, PROP_CodeName );
-            if( aCodeName.getLength() > 0 )
+            if( !aCodeName.isEmpty() )
             {
                 aUsedCodeNames.insert( aCodeName );
             }

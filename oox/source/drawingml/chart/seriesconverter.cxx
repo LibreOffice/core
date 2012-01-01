@@ -374,7 +374,7 @@ Reference< XLabeledDataSequence > ErrorBarConverter::createLabeledDataSequence( 
             }
         break;
     }
-    OSL_ENSURE( aRole.getLength() > 0, "ErrorBarConverter::createLabeledDataSequence - invalid error bar direction" );
+    OSL_ENSURE( !aRole.isEmpty(), "ErrorBarConverter::createLabeledDataSequence - invalid error bar direction" );
     return lclCreateLabeledDataSequence( *this, mrModel.maSources.get( eSourceType ).get(), aRole );
 }
 
@@ -422,7 +422,7 @@ void TrendlineConverter::convertFromModel( const Reference< XDataSeries >& rxDat
             case XML_power:     aServiceName = CREATE_OUSTRING( "com.sun.star.chart2.PotentialRegressionCurve" );   break;
             default:            OSL_FAIL( "TrendlineConverter::convertFromModel - unknown trendline type" );
         }
-        if( aServiceName.getLength() > 0 )
+        if( !aServiceName.isEmpty() )
         {
             Reference< XRegressionCurve > xRegCurve( createInstance( aServiceName ), UNO_QUERY_THROW );
             PropertySet aPropSet( xRegCurve );

@@ -729,7 +729,7 @@ void AddressConverter::convertToCellRangeList( ApiCellRangeList& orRanges,
     while( (0 <= nPos) && (nPos < nLen) )
     {
         OUString aToken = rString.getToken( 0, ' ', nPos );
-        if( (aToken.getLength() > 0) && convertToCellRange( aRange, aToken, nSheet, true, bTrackOverflow ) )
+        if( !aToken.isEmpty() && convertToCellRange( aRange, aToken, nSheet, true, bTrackOverflow ) )
             orRanges.push_back( aRange );
     }
 }

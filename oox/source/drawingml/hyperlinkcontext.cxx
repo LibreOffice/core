@@ -50,24 +50,24 @@ HyperLinkContext::HyperLinkContext( ContextHandler& rParent,
 {
     OUString sURL, sHref;
     OUString aRelId = xAttributes->getOptionalValue( R_TOKEN( id ) );
-    if ( aRelId.getLength() )
+    if ( !aRelId.isEmpty() )
     {
         OSL_TRACE("OOX: URI rId %s", ::rtl::OUStringToOString (aRelId, RTL_TEXTENCODING_UTF8).pData->buffer);
         sHref = getRelations().getExternalTargetFromRelId( aRelId );
-        if( sHref.getLength() > 0 )
+        if( !sHref.isEmpty() )
         {
             OSL_TRACE("OOX: URI href %s", ::rtl::OUStringToOString (sHref, RTL_TEXTENCODING_UTF8).pData->buffer);
             sURL = getFilter().getAbsoluteUrl( sHref );
         }
     }
     OUString sTooltip = xAttributes->getOptionalValue( R_TOKEN( tooltip ) );
-    if ( sTooltip.getLength() )
+    if ( !sTooltip.isEmpty() )
         maProperties[ PROP_Representation ] <<= sTooltip;
     OUString sFrame = xAttributes->getOptionalValue( R_TOKEN( tgtFrame ) );
-    if( sFrame.getLength() )
+    if( !sFrame.isEmpty() )
         maProperties[ PROP_TargetFrame ] <<= sFrame;
     OUString aAction = xAttributes->getOptionalValue( XML_action );
-    if ( aAction.getLength() )
+    if ( !aAction.isEmpty() )
     {
         // reserved values of the unrestricted string aAction:
         // ppaction://customshow?id=SHOW_ID             // custom presentation
@@ -140,7 +140,7 @@ HyperLinkContext::HyperLinkContext( ContextHandler& rParent,
             }
         }
     }
-    if ( sURL.getLength() )
+    if ( !sURL.isEmpty() )
         maProperties[ PROP_URL ] <<= sURL;
 
     // TODO unhandled

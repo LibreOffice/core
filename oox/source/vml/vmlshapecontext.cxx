@@ -106,7 +106,7 @@ OptValue< DoublePair > lclDecodePercentPair( const AttributeList& rAttribs, sal_
  */
 bool lclDecodeVmlxBool( const OUString& rValue, bool bDefaultForEmpty )
 {
-    if( rValue.getLength() == 0 ) return bDefaultForEmpty;
+    if( rValue.isEmpty() ) return bDefaultForEmpty;
     sal_Int32 nToken = AttributeConversion::decodeToken( rValue );
     // anything else than 't' or 'True' is considered to be false, as specified
     return (nToken == XML_t) || (nToken == XML_True);
@@ -134,7 +134,7 @@ ContextHandlerRef ShapeLayoutContext::onCreateContext( sal_Int32 nElement, const
             while( nIndex >= 0 )
             {
                 OUString aToken = aBlockIds.getToken( 0, ' ', nIndex ).trim();
-                if( aToken.getLength() > 0 )
+                if( !aToken.isEmpty() )
                     mrDrawing.registerBlockId( aToken.toInt32() );
             }
         }
@@ -255,7 +255,7 @@ ShapeTypeContext::ShapeTypeContext( ContextHandler2Helper& rParent, ShapeType& r
     // shape identifier and shape name
     bool bHasOspid = rAttribs.hasAttribute( O_TOKEN( spid ) );
     mrTypeModel.maShapeId = rAttribs.getXString( bHasOspid ? O_TOKEN( spid ) : XML_id, OUString() );
-    OSL_ENSURE( mrTypeModel.maShapeId.getLength() > 0, "ShapeTypeContext::ShapeTypeContext - missing shape identifier" );
+    OSL_ENSURE( !mrTypeModel.maShapeId.isEmpty(), "ShapeTypeContext::ShapeTypeContext - missing shape identifier" );
     // if the o:spid attribute exists, the id attribute contains the user-defined shape name
     if( bHasOspid )
         mrTypeModel.maShapeName = rAttribs.getXString( XML_id, OUString() );

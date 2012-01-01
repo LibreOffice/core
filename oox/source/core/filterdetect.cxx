@@ -223,7 +223,7 @@ OUString FilterDetectDocHandler::getFilterNameFromContentType( const OUString& r
 void FilterDetectDocHandler::parseContentTypesDefault( const AttributeList& rAttribs )
 {
     // only if no overridden part name found
-    if( mrFilterName.getLength() == 0 )
+    if( mrFilterName.isEmpty() )
     {
         // check if target path ends with extension
         OUString aExtension = rAttribs.getString( XML_Extension, OUString() );

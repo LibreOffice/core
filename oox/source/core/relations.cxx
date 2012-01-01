@@ -50,7 +50,7 @@ OUString lclRemoveFileName( const OUString& rPath )
 
 OUString lclAppendFileName( const OUString& rPath, const OUString& rFileName )
 {
-    return (rPath.getLength() == 0) ? rFileName :
+    return rPath.isEmpty() ? rFileName :
         OUStringBuffer( rPath ).append( sal_Unicode( '/' ) ).append( rFileName ).makeStringAndClear();
 }
 
@@ -101,7 +101,7 @@ OUString Relations::getExternalTargetFromFirstType( const OUString& rType ) cons
 OUString Relations::getFragmentPathFromRelation( const Relation& rRelation ) const
 {
     // no target, no fragment path
-    if( rRelation.mbExternal || (rRelation.maTarget.getLength() == 0) )
+    if( rRelation.mbExternal || rRelation.maTarget.isEmpty() )
         return OUString();
 
     // absolute target: return it without leading slash (#i100978)
@@ -109,7 +109,7 @@ OUString Relations::getFragmentPathFromRelation( const Relation& rRelation ) con
         return rRelation.maTarget.copy( 1 );
 
     // empty fragment path: return target
-    if( maFragmentPath.getLength() == 0 )
+    if( maFragmentPath.isEmpty() )
         return rRelation.maTarget;
 
     // resolve relative target path according to base path

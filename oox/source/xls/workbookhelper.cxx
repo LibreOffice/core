@@ -365,7 +365,7 @@ Reference< XNamedRange > WorkbookGlobals::createNamedRangeObject( OUString& orNa
 {
     // create the name and insert it into the Calc document
     Reference< XNamedRange > xNamedRange;
-    if( orName.getLength() > 0 ) try
+    if( !orName.isEmpty() ) try
     {
         // find an unused name
         PropertySet aDocProps( mxDoc );
@@ -387,7 +387,7 @@ Reference< XNamedRange > WorkbookGlobals::createLocalNamedRangeObject( OUString&
 {
     // create the name and insert it into the Calc document
     Reference< XNamedRange > xNamedRange;
-    if( orName.getLength() > 0 ) try
+    if( !orName.isEmpty() ) try
     {
         // find an unused name
         Reference< XIndexAccess > xSheets(mxDoc->getSheets(), UNO_QUERY_THROW);
@@ -418,7 +418,7 @@ Reference< XDatabaseRange > WorkbookGlobals::createDatabaseRangeObject( OUString
 
     // create database range and insert it into the Calc document
     Reference< XDatabaseRange > xDatabaseRange;
-    if( bValidRange && (orName.getLength() > 0) ) try
+    if( bValidRange && !orName.isEmpty() ) try
     {
         // find an unused name
         PropertySet aDocProps( mxDoc );

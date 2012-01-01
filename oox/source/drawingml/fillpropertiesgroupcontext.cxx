@@ -170,7 +170,7 @@ BlipContext::BlipContext( ContextHandler& rParent,
     {
         // internal picture URL
         OUString aFragmentPath = getFragmentPathFromRelId( aAttribs.getString( R_TOKEN( embed ), OUString() ) );
-        if( aFragmentPath.getLength() > 0 )
+        if( !aFragmentPath.isEmpty() )
             mrBlipProps.mxGraphic = getFilter().getGraphicHelper().importEmbeddedGraphic( aFragmentPath );
     }
     else if( aAttribs.hasAttribute( R_TOKEN( link ) ) )

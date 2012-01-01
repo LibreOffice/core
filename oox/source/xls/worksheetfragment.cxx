@@ -224,7 +224,7 @@ WorksheetFragment::WorksheetFragment( const WorksheetHelper& rHelper, const OUSt
 
     // import comments related to this worksheet
     OUString aCommentsFragmentPath = getFragmentPathFromFirstType( CREATE_OFFICEDOC_RELATION_TYPE( "comments" ) );
-    if( aCommentsFragmentPath.getLength() > 0 )
+    if( !aCommentsFragmentPath.isEmpty() )
         importOoxFragment( new CommentsFragment( *this, aCommentsFragmentPath ) );
 }
 
@@ -731,7 +731,7 @@ void WorksheetFragment::importControl( SequenceInputStream& rStrm )
 void WorksheetFragment::importEmbeddedOleData( StreamDataSequence& orEmbeddedData, const OUString& rRelId )
 {
     OUString aFragmentPath = getFragmentPathFromRelId( rRelId );
-    if( aFragmentPath.getLength() > 0 )
+    if( !aFragmentPath.isEmpty() )
         getBaseFilter().importBinaryData( orEmbeddedData, aFragmentPath );
 }
 

@@ -292,7 +292,7 @@ void ControlConverter::convertPicture( PropertyMap& rPropMap, const StreamDataSe
     if( rPicData.hasElements() )
     {
         OUString aGraphicUrl = mrGraphicHelper.importGraphicObject( rPicData );
-        if( aGraphicUrl.getLength() > 0 )
+        if( !aGraphicUrl.isEmpty() )
             rPropMap.setProperty( PROP_ImageURL, aGraphicUrl );
     }
 }
@@ -337,7 +337,7 @@ void ControlConverter::bindToSources( const Reference< XControlModel >& rxCtrlMo
         const OUString& rCtrlSource, const OUString& rRowSource, sal_Int32 nRefSheet ) const
 {
     // value binding
-    if( rCtrlSource.getLength() > 0 ) try
+    if( !rCtrlSource.isEmpty() ) try
     {
         // first check if the XBindableValue interface is supported
         Reference< XBindableValue > xBindable( rxCtrlModel, UNO_QUERY_THROW );
@@ -369,7 +369,7 @@ void ControlConverter::bindToSources( const Reference< XControlModel >& rxCtrlMo
     }
 
     // list entry source
-    if( rRowSource.getLength() > 0 ) try
+    if( !rRowSource.isEmpty() ) try
     {
         // first check if the XListEntrySink interface is supported
         Reference< XListEntrySink > xEntrySink( rxCtrlModel, UNO_QUERY_THROW );
@@ -899,7 +899,7 @@ void AxFontDataModel::exportBinaryModel( BinaryOutputStream& rOutStrm )
 void AxFontDataModel::convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const
 {
     // font name
-    if( maFontData.maFontName.getLength() > 0 )
+    if( !maFontData.maFontName.isEmpty() )
         rPropMap.setProperty( PROP_FontName, maFontData.maFontName );
 
     // font effects
@@ -2637,7 +2637,7 @@ OUString EmbeddedControl::getServiceName() const
 
 bool EmbeddedControl::convertProperties( const Reference< XControlModel >& rxCtrlModel, const ControlConverter& rConv ) const
 {
-    if( mxModel.get() && rxCtrlModel.is() && (maName.getLength() > 0) )
+    if( mxModel.get() && rxCtrlModel.is() && !maName.isEmpty() )
     {
         PropertyMap aPropMap;
         aPropMap.setProperty( PROP_Name, maName );
@@ -2658,7 +2658,7 @@ bool EmbeddedControl::convertProperties( const Reference< XControlModel >& rxCtr
 
 bool EmbeddedControl::convertFromProperties( const Reference< XControlModel >& rxCtrlModel, const ControlConverter& rConv )
 {
-    if( mxModel.get() && rxCtrlModel.is() && (maName.getLength() > 0) )
+    if( mxModel.get() && rxCtrlModel.is() && !maName.isEmpty() )
     {
         PropertySet aPropSet( rxCtrlModel );
         aPropSet.getProperty( maName, PROP_Name );

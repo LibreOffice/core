@@ -955,7 +955,7 @@ template< typename ListType >
 ::boost::shared_ptr< ListType > SharedConfigData::createNameList( const ::rtl::OUString& rListName )
 {
     ::boost::shared_ptr< ListType > xList;
-    if( rListName.getLength() > 0 )
+    if( !rListName.isEmpty() )
     {
         xList.reset( new ListType( *this ) );
         setNameList( rListName, xList );

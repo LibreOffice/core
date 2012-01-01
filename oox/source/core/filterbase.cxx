@@ -102,8 +102,8 @@ DocumentOpenedGuard::DocumentOpenedGuard( const OUString& rUrl )
 {
     UrlPool& rUrlPool = StaticUrlPool::get();
     ::osl::MutexGuard aGuard( rUrlPool.maMutex );
-    mbValid = (rUrl.getLength() == 0) || (rUrlPool.maUrls.count( rUrl ) == 0);
-    if( mbValid && (rUrl.getLength() > 0) )
+    mbValid = rUrl.isEmpty() || (rUrlPool.maUrls.count( rUrl ) == 0);
+    if( mbValid && !rUrl.isEmpty() )
     {
         rUrlPool.maUrls.insert( rUrl );
         maUrl = rUrl;
@@ -114,7 +114,7 @@ DocumentOpenedGuard::~DocumentOpenedGuard()
 {
     UrlPool& rUrlPool = StaticUrlPool::get();
     ::osl::MutexGuard aGuard( rUrlPool.maMutex );
-    if( maUrl.getLength() > 0 )
+    if( !maUrl.isEmpty() )
         rUrlPool.maUrls.erase( maUrl );
 }
 
@@ -334,7 +334,7 @@ OUString FilterBase::getAbsoluteUrl( const OUString& rUrl ) const
     /*  (1) convert all backslashes to slashes, and check that passed URL is
         not empty. */
     OUString aUrl = rUrl.replace( '\\', '/' );
-    if( aUrl.getLength() == 0 )
+    if( aUrl.isEmpty() )
         return aUrl;
 
     /*  (2) add 'file:///' to absolute Windows paths, e.g. convert
@@ -359,7 +359,7 @@ OUString FilterBase::getAbsoluteUrl( const OUString& rUrl ) const
     /*  (5) handle URLs relative to current drive, e.g. the URL '/path1/file1'
         relative to the base URL 'file:///C:/path2/file2' does not result in
         the expected 'file:///C:/path1/file1', but in 'file:///path1/file1'. */
-    if( (aUrl.getLength() >= 1) && (aUrl[ 0 ] == '/') &&
+    if( !aUrl.isEmpty() && (aUrl[ 0 ] == '/') &&
         mxImpl->maFileUrl.match( aFilePrefix ) &&
         lclIsDosDrive( mxImpl->maFileUrl, nFilePrefixLen ) )
     {
@@ -441,8 +441,8 @@ Sequence< NamedValue > FilterBase::requestEncryptionData( ::comphelper::IDocPass
 
 bool FilterBase::importBinaryData( StreamDataSequence& orDataSeq, const OUString& rStreamName )
 {
-    OSL_ENSURE( rStreamName.getLength() > 0, "FilterBase::importBinaryData - empty stream name" );
-    if( rStreamName.getLength() == 0 )
+    OSL_ENSURE( !rStreamName.isEmpty(), "FilterBase::importBinaryData - empty stream name" );
+    if( rStreamName.isEmpty() )
         return false;
 
     // try to open the stream (this may fail - do not assert)
@@ -517,7 +517,7 @@ sal_Bool SAL_CALL FilterBase::filter( const Sequence< PropertyValue >& rMediaDes
     sal_Bool bRet = sal_False;
     setMediaDescriptor( rMediaDescSeq );
     DocumentOpenedGuard aOpenedGuard( mxImpl->maFileUrl );
-    if( aOpenedGuard.isValid() || !mxImpl->maFileUrl.getLength() )
+    if( aOpenedGuard.isValid() || mxImpl->maFileUrl.isEmpty() )
     {
         mxImpl->initializeFilter();
         switch( mxImpl->meDirection )

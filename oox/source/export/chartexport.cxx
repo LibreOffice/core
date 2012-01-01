@@ -383,7 +383,7 @@ OUString lcl_flattenStringSequence( const Sequence< OUString > & rSequence )
     bool bPrecedeWithSpace = false;
     for( sal_Int32 nIndex=0; nIndex<rSequence.getLength(); ++nIndex )
     {
-        if( rSequence[nIndex].getLength())
+        if( !rSequence[nIndex].isEmpty())
         {
             if( bPrecedeWithSpace )
                 aResult.append( static_cast< sal_Unicode >( ' ' ));
@@ -777,7 +777,7 @@ void ChartExport::InitRangeSegmentationProperties( const Reference< chart2::XCha
                 // range, where every row number is noe too large, so that older
                 // version can correctly read those files.
                 msChartAddress = (bBrokenRangeAvailable ? sBrokenRange : sCellRange);
-                if( msChartAddress.getLength() > 0 )
+                if( !msChartAddress.isEmpty() )
                 {
                     // convert format to XML-conform one
                     Reference< chart2::data::XRangeXMLConversion > xConversion( xDataProvider, uno::UNO_QUERY );
@@ -857,7 +857,7 @@ void ChartExport::_ExportContent()
                             //maExportHelper.SetTableNumberList( sTableNumberList );
 
                             // do not include own table if there are external addresses
-                            bIncludeTable = (sChartAddress.getLength() == 0);
+                            bIncludeTable = sChartAddress.isEmpty();
                         }
                         catch( beans::UnknownPropertyException & )
                         {
@@ -1059,7 +1059,7 @@ void ChartExport::exportTitle( Reference< XShape > xShape )
     {
         xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "String" ))) >>= sText;
     }
-    if( sText.getLength() == 0 )
+    if( sText.isEmpty() )
         return;
 
     FSHelperPtr pFS = GetFS();

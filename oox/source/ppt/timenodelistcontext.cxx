@@ -557,17 +557,17 @@ namespace oox { namespace ppt {
                 }
                 OUString aStr;
                 aStr = xAttribs->getOptionalValue( XML_from );
-                if( aStr.getLength() )
+                if( !aStr.isEmpty() )
                 {
                     pNode->setFrom( makeAny( aStr ) );
                 }
                 aStr = xAttribs->getOptionalValue( XML_by );
-                if( aStr.getLength() )
+                if( !aStr.isEmpty() )
                 {
                     pNode->setBy( makeAny( aStr ) );
                 }
                 aStr = xAttribs->getOptionalValue( XML_to );
-                if( aStr.getLength() )
+                if( !aStr.isEmpty() )
                 {
                     pNode->setTo( makeAny( aStr ) );
                 }
@@ -596,7 +596,7 @@ namespace oox { namespace ppt {
 
                         OUString aTest;
                         iter->maValue >>= aTest;
-                        if( aTest.getLength() != 0 )
+                        if( !aTest.isEmpty() )
                         {
                             aValues[i] = iter->maValue;
                         }
@@ -886,7 +886,7 @@ namespace oox { namespace ppt {
                 // TODO
 //              OUString sPrList = xAttribs->getOptionalValue( XML_prLst );
 
-                if( sFilter.getLength() )
+                if( !sFilter.isEmpty() )
                 {
                     SlideTransition aFilter( sFilter );
                     aFilter.setMode( nDir == XML_out ? false : true );

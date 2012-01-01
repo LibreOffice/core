@@ -236,7 +236,7 @@ rtl::OUString GetFormulaParameter( const EnhancedCustomShapeParameter& rParamete
 static EnhancedCustomShapeParameter GetAdjCoordinate( CustomShapeProperties& rCustomShapeProperties, const::rtl::OUString& rValue, sal_Bool bNoSymbols = sal_True )
 {
     com::sun::star::drawing::EnhancedCustomShapeParameter aRet;
-    if ( rValue.getLength() )
+    if ( !rValue.isEmpty() )
     {
         sal_Bool    bConstant = sal_True;
         sal_Int32   nConstant = -1;
@@ -412,7 +412,7 @@ static EnhancedCustomShapeParameter GetAdjCoordinate( CustomShapeProperties& rCu
             sal_Unicode n = rValue[ 0 ];
             if ( ( n == '+' ) || ( n == '-' ) )
             {
-                if ( rValue.getLength() > 0 )
+                if ( !rValue.isEmpty() )
                     n = rValue[ 1 ];
             }
             if ( ( n >= '0' ) && ( n <= '9' ) )
@@ -483,7 +483,7 @@ static rtl::OUString convertToOOEquation( CustomShapeProperties& rCustomShapePro
     do
     {
         rtl::OUString aToken( rSource.getToken( 0, ' ', nIndex ) );
-        if ( aToken.getLength() )
+        if ( !aToken.isEmpty() )
             aTokens.push_back( aToken );
     }
     while ( nIndex >= 0 );

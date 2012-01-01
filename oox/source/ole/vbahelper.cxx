@@ -45,9 +45,9 @@ using ::rtl::OUStringBuffer;
 /*static*/ OUString VbaHelper::getBasicScriptUrl(
         const OUString& rLibraryName, const OUString& rModuleName, const OUString& rMacroName )
 {
-    OSL_ENSURE( rLibraryName.getLength() > 0, "VbaHelper::getBasicScriptUrl - library name is empty" );
-    OSL_ENSURE( rModuleName.getLength() > 0, "VbaHelper::getBasicScriptUrl - module name is empty" );
-    OSL_ENSURE( rMacroName.getLength() > 0, "VbaHelper::getBasicScriptUrl - macro name is empty" );
+    OSL_ENSURE( !rLibraryName.isEmpty(), "VbaHelper::getBasicScriptUrl - library name is empty" );
+    OSL_ENSURE( !rModuleName.isEmpty(), "VbaHelper::getBasicScriptUrl - module name is empty" );
+    OSL_ENSURE( !rMacroName.isEmpty(), "VbaHelper::getBasicScriptUrl - macro name is empty" );
     const sal_Unicode cDot = '.';
     return OUStringBuffer().
         appendAscii( RTL_CONSTASCII_STRINGPARAM( "vnd.sun.star.script:" ) ).
@@ -78,7 +78,7 @@ using ::rtl::OUStringBuffer;
     {
         rKey = rKeyValue.copy( 0, nEqSignPos ).trim();
         rValue = rKeyValue.copy( nEqSignPos + 1 ).trim();
-        return (rKey.getLength() > 0) && (rValue.getLength() > 0);
+        return !rKey.isEmpty() && !rValue.isEmpty();
     }
     return false;
 }

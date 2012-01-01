@@ -1654,7 +1654,7 @@ void FormControlStreamObject::implDump()
     if( mbReadGuid )
         maProgId = cfg().getStringOption( dumpGuid(), OUString() );
 
-    if( (maProgId.getLength() > 0) && !mxStrm->isEof() )
+    if( !maProgId.isEmpty() && !mxStrm->isEof() )
     {
         if( maProgId.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Forms.CommandButton.1" ) ) )
             AxCommandButtonObject( *this ).dump();
@@ -2191,7 +2191,7 @@ void VbaDirStreamObject::implDumpRecordBody()
             dumpByteString( "description" );
         break;
         case 0x002B:
-            if( maCurrStream.getLength() > 0 )
+            if( !maCurrStream.isEmpty() )
                 mrVbaData.maStrmOffsets[ maCurrStream ] = mnCurrOffset;
             maCurrStream = OUString();
             mnCurrOffset = 0;
@@ -2283,7 +2283,7 @@ VbaStorageObject::VbaStorageObject( const ObjectBase& rParent, const StorageRef&
 
 void VbaStorageObject::implDumpStream( const Reference< XInputStream >& rxStrm, const OUString& rStrgPath, const OUString& rStrmName, const OUString& rSysFileName )
 {
-    if( (rStrgPath.getLength() == 0) && rStrmName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "dir" ) ) )
+    if( rStrgPath.isEmpty() && rStrmName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "dir" ) ) )
         VbaDirStreamObject( *this, rxStrm, rSysFileName, mrVbaData ).dump();
     else if( mrVbaData.isModuleStream( rStrmName ) )
         VbaModuleStreamObject( *this, rxStrm, rSysFileName, mrVbaData, mrVbaData.getStreamOffset( rStrmName ) ).dump();
@@ -2317,7 +2317,7 @@ VbaProjectStorageObject::VbaProjectStorageObject( const ObjectBase& rParent, con
 
 void VbaProjectStorageObject::implDumpStream( const Reference< XInputStream >& rxStrm, const OUString& rStrgPath, const OUString& rStrmName, const OUString& rSysFileName )
 {
-    if( (rStrgPath.getLength() == 0) && rStrmName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "PROJECT" ) ) )
+    if( rStrgPath.isEmpty() && rStrmName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "PROJECT" ) ) )
         TextLineStreamObject( *this, rxStrm, maVbaData.meTextEnc, rSysFileName ).dump();
     else
         OleStorageObject::implDumpStream( rxStrm, rStrgPath, rStrmName, rSysFileName );

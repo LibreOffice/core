@@ -100,7 +100,7 @@ TextParagraphPropertiesContext::TextParagraphPropertiesContext( ContextHandler& 
     if ( xAttribs->hasAttribute( XML_indent ) )
     {
         sValue = xAttribs->getOptionalValue( XML_indent );
-        mrTextParagraphProperties.getFirstLineIndentation() = boost::optional< sal_Int32 >( sValue.getLength() == 0 ? 0 : GetCoordinate( sValue ) );
+        mrTextParagraphProperties.getFirstLineIndentation() = boost::optional< sal_Int32 >( sValue.isEmpty() ? 0 : GetCoordinate( sValue ) );
     }
 
   // ST_TextIndentLevelType
@@ -123,14 +123,14 @@ TextParagraphPropertiesContext::TextParagraphPropertiesContext( ContextHandler& 
     if ( xAttribs->hasAttribute( XML_marL ) )
     {
         sValue = xAttribs->getOptionalValue( XML_marL );
-        mrTextParagraphProperties.getParaLeftMargin() = boost::optional< sal_Int32 >( sValue.getLength() == 0 ? 0 : GetCoordinate( sValue ) );
+        mrTextParagraphProperties.getParaLeftMargin() = boost::optional< sal_Int32 >( sValue.isEmpty() ? 0 : GetCoordinate( sValue ) );
     }
 
     // ParaRightMargin
     if ( xAttribs->hasAttribute( XML_marR ) )
     {
         sValue = xAttribs->getOptionalValue( XML_marR );
-        sal_Int32 nMarR  = ( sValue.getLength() == 0 ? 0 : GetCoordinate( sValue ) );
+        sal_Int32 nMarR  = sValue.isEmpty() ? 0 : GetCoordinate( sValue ) ;
         rPropertyMap[ PROP_ParaRightMargin ] <<= nMarR;
     }
 

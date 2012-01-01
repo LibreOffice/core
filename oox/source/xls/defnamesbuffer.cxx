@@ -244,7 +244,7 @@ DefinedNameBase::DefinedNameBase( const WorkbookHelper& rHelper ) :
 
 const OUString& DefinedNameBase::getUpcaseModelName() const
 {
-    if( maUpModelName.getLength() == 0 )
+    if( maUpModelName.isEmpty() )
         maUpModelName = lclGetUpcaseModelName( maModel.maName );
     return maUpModelName;
 }
@@ -279,7 +279,7 @@ Any DefinedNameBase::getReference( const CellAddress& rBaseAddr ) const
 
 ApiTokenSequence DefinedNameBase::importOoxFormula( sal_Int16 nBaseSheet )
 {
-    return (maModel.maFormula.getLength() > 0) ?
+    return (!maModel.maFormula.isEmpty()) ?
         getFormulaParser().importFormula( CellAddress( nBaseSheet, 0, 0 ), maModel.maFormula ) :
         getFormulaParser().convertErrorToFormula( BIFF_ERR_NAME );
 }

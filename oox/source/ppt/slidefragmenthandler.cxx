@@ -64,7 +64,7 @@ SlideFragmentHandler::SlideFragmentHandler( XmlFilterBase& rFilter, const OUStri
 , meShapeLocation( eShapeLocation )
 {
     OUString aVMLDrawingFragmentPath = getFragmentPathFromFirstType( CREATE_OFFICEDOC_RELATION_TYPE( "vmlDrawing" ) );
-    if( aVMLDrawingFragmentPath.getLength() > 0 )
+    if( !aVMLDrawingFragmentPath.isEmpty() )
         getFilter().importFragment( new oox::vml::DrawingFragment(
             getFilter(), aVMLDrawingFragmentPath, *pPersistPtr->getDrawing() ) );
 }
@@ -177,7 +177,7 @@ void SlideFragmentHandler::finalizeImport()
         Reference< XDrawPage > xSlide( mpSlidePersistPtr->getPage() );
         PropertySet aSlideProp( xSlide );
         aSlideProp.setProperties( maSlideProperties );
-        if ( maSlideName.getLength() )
+        if ( !maSlideName.isEmpty() )
         {
             Reference< XNamed > xNamed( xSlide, UNO_QUERY );
             if( xNamed.is() )

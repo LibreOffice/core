@@ -174,7 +174,7 @@ sal_Bool SAL_CALL PowerPointImport::filter( const Sequence< PropertyValue >& rDe
 
 const oox::drawingml::table::TableStyleListPtr PowerPointImport::getTableStyles()
 {
-    if ( !mpTableStyleList && maTableStyleListPath.getLength() )
+    if ( !mpTableStyleList && !maTableStyleListPath.isEmpty() )
     {
         mpTableStyleList = oox::drawingml::table::TableStyleListPtr( new oox::drawingml::table::TableStyleList() );
         importFragment( new oox::drawingml::table::TableStyleListFragmentHandler(

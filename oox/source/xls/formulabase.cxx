@@ -907,13 +907,13 @@ void FunctionProviderImpl::initFunc( const FunctionData& rFuncData, sal_uInt8 nM
 
     if( getFlag( rFuncData.mnFlags, FUNCFLAG_MACROCALL ) )
     {
-        OSL_ENSURE( xFuncInfo->maOoxFuncName.getLength() > 0, "FunctionProviderImpl::initFunc - missing OOXML function name" );
+        OSL_ENSURE( !xFuncInfo->maOoxFuncName.isEmpty(), "FunctionProviderImpl::initFunc - missing OOXML function name" );
         OSL_ENSURE( !getFlag( rFuncData.mnFlags, FUNCFLAG_MACROCALLODF ), "FunctionProviderImpl::initFunc - unexpected flag FUNCFLAG_MACROCALLODF" );
         xFuncInfo->maBiffMacroName = CREATE_OUSTRING( "_xlfn." ) + xFuncInfo->maOoxFuncName;
     }
     else if( getFlag( rFuncData.mnFlags, FUNCFLAG_MACROCALLODF ) )
     {
-        OSL_ENSURE( xFuncInfo->maOdfFuncName.getLength() > 0, "FunctionProviderImpl::initFunc - missing ODF function name" );
+        OSL_ENSURE( !xFuncInfo->maOdfFuncName.isEmpty(), "FunctionProviderImpl::initFunc - missing ODF function name" );
         xFuncInfo->maBiffMacroName = CREATE_OUSTRING( "_xlfnodf." ) + xFuncInfo->maOdfFuncName;
     }
 
@@ -937,15 +937,15 @@ void FunctionProviderImpl::initFunc( const FunctionData& rFuncData, sal_uInt8 nM
 
     // insert the function info into the member maps
     maFuncs.push_back( xFuncInfo );
-    if( xFuncInfo->maOdfFuncName.getLength() > 0 )
+    if( !xFuncInfo->maOdfFuncName.isEmpty() )
         maOdfFuncs[ xFuncInfo->maOdfFuncName ] = xFuncInfo;
-    if( xFuncInfo->maOoxFuncName.getLength() > 0 )
+    if( !xFuncInfo->maOoxFuncName.isEmpty() )
         maOoxFuncs[ xFuncInfo->maOoxFuncName ] = xFuncInfo;
     if( xFuncInfo->mnBiff12FuncId != NOID )
         maBiff12Funcs[ xFuncInfo->mnBiff12FuncId ] = xFuncInfo;
     if( xFuncInfo->mnBiffFuncId != NOID )
         maBiffFuncs[ xFuncInfo->mnBiffFuncId ] = xFuncInfo;
-    if( xFuncInfo->maBiffMacroName.getLength() > 0 )
+    if( !xFuncInfo->maBiffMacroName.isEmpty() )
         maMacroFuncs[ xFuncInfo->maBiffMacroName ] = xFuncInfo;
 }
 
@@ -1185,7 +1185,7 @@ bool OpCodeProviderImpl::initOpCode( sal_Int32& ornOpCode, const ApiTokenMap& rT
     if( aIt != rTokenMap.end() )
     {
         ornOpCode = aIt->second.OpCode;
-        if( rOoxName.getLength() > 0 )
+        if( !rOoxName.isEmpty() )
         {
             FormulaOpCodeMapEntry aEntry;
             aEntry.Name = rOoxName;
@@ -1217,7 +1217,7 @@ bool OpCodeProviderImpl::initOpCode( sal_Int32& ornOpCode, const ApiTokenMap& rT
 bool OpCodeProviderImpl::initFuncOpCode( FunctionInfo& orFuncInfo, const ApiTokenMap& rFuncTokenMap )
 {
     bool bIsValid = false;
-    if( orFuncInfo.maOdfFuncName.getLength() > 0 )
+    if( !orFuncInfo.maOdfFuncName.isEmpty() )
     {
         ApiTokenMap::const_iterator aIt = rFuncTokenMap.find( orFuncInfo.maOdfFuncName );
         if( aIt != rFuncTokenMap.end() )
@@ -1234,7 +1234,7 @@ bool OpCodeProviderImpl::initFuncOpCode( FunctionInfo& orFuncInfo, const ApiToke
 
             if( bIsValid && (orFuncInfo.mnApiOpCode == OPCODE_EXTERNAL) )
             {
-                bIsValid = (aIt->second.Data >>= orFuncInfo.maExtProgName) && (orFuncInfo.maExtProgName.getLength() > 0);
+                bIsValid = (aIt->second.Data >>= orFuncInfo.maExtProgName) && !orFuncInfo.maExtProgName.isEmpty();
                 OSL_ENSURE( bIsValid,
                     OStringBuffer( "OpCodeProviderImpl::initFuncOpCode - no programmatical name for external function \"" ).
                     append( OUStringToOString( orFuncInfo.maOdfFuncName, RTL_TEXTENCODING_ASCII_US ) ).
@@ -1242,7 +1242,7 @@ bool OpCodeProviderImpl::initFuncOpCode( FunctionInfo& orFuncInfo, const ApiToke
             }
 
             // add to parser map, if OOXML function name exists
-            if( bIsValid && (orFuncInfo.maOoxFuncName.getLength() > 0) )
+            if( bIsValid && !orFuncInfo.maOoxFuncName.isEmpty() )
             {
                 // create the parser map entry
                 FormulaOpCodeMapEntry aEntry;
@@ -1254,7 +1254,7 @@ bool OpCodeProviderImpl::initFuncOpCode( FunctionInfo& orFuncInfo, const ApiToke
         else
         {
             // ignore entries for functions unknown by Calc *and* by Excel
-            bIsValid = orFuncInfo.maOoxFuncName.getLength() == 0;
+            bIsValid = orFuncInfo.maOoxFuncName.isEmpty();
         }
     }
     else if( orFuncInfo.mnBiffFuncId == BIFF_FUNC_EXTERNCALL )
@@ -1262,7 +1262,7 @@ bool OpCodeProviderImpl::initFuncOpCode( FunctionInfo& orFuncInfo, const ApiToke
         orFuncInfo.mnApiOpCode = OPCODE_EXTERNAL;
         bIsValid = true;
     }
-    else if( orFuncInfo.maOoxFuncName.getLength() > 0 )
+    else if( !orFuncInfo.maOoxFuncName.isEmpty() )
     {
         orFuncInfo.mnApiOpCode = OPCODE_BAD;
         bIsValid = true;
@@ -1284,7 +1284,7 @@ bool OpCodeProviderImpl::initFuncOpCodes( const ApiTokenMap& rIntFuncTokenMap, c
         // insert the function info into the maps
         if( xFuncInfo->mnApiOpCode != OPCODE_NONAME )
         {
-            if( (xFuncInfo->mnApiOpCode == OPCODE_EXTERNAL) && (xFuncInfo->maExtProgName.getLength() > 0) )
+            if( (xFuncInfo->mnApiOpCode == OPCODE_EXTERNAL) && !xFuncInfo->maExtProgName.isEmpty() )
                 maExtProgFuncs[ xFuncInfo->maExtProgName ] = xFuncInfo;
             else
                 maOpCodeFuncs[ xFuncInfo->mnApiOpCode ] = xFuncInfo;
@@ -1499,7 +1499,7 @@ OUString FormulaProcessorBase::generateApiAddressString( const CellAddress& rAdd
     OUString aCellName;
     PropertySet aCellProp( getCellFromDoc( rAddress ) );
     aCellProp.getProperty( aCellName, PROP_AbsoluteName );
-    OSL_ENSURE( aCellName.getLength() > 0, "FormulaProcessorBase::generateApiAddressString - cannot create cell address string" );
+    OSL_ENSURE( !aCellName.isEmpty(), "FormulaProcessorBase::generateApiAddressString - cannot create cell address string" );
     return aCellName;
 }
 
@@ -1508,7 +1508,7 @@ OUString FormulaProcessorBase::generateApiRangeString( const CellRangeAddress& r
     OUString aRangeName;
     PropertySet aRangeProp( getCellRangeFromDoc( rRange ) );
     aRangeProp.getProperty( aRangeName, PROP_AbsoluteName );
-    OSL_ENSURE( aRangeName.getLength() > 0, "FormulaProcessorBase::generateApiRangeString - cannot create cell range string" );
+    OSL_ENSURE( !aRangeName.isEmpty(), "FormulaProcessorBase::generateApiRangeString - cannot create cell range string" );
     return aRangeName;
 }
 
@@ -1518,7 +1518,7 @@ OUString FormulaProcessorBase::generateApiRangeListString( const ApiCellRangeLis
     for( ApiCellRangeList::const_iterator aIt = rRanges.begin(), aEnd = rRanges.end(); aIt != aEnd; ++aIt )
     {
         OUString aRangeName = generateApiRangeString( *aIt );
-        if( aRangeName.getLength() > 0 )
+        if( !aRangeName.isEmpty() )
         {
             if( aBuffer.getLength() > 0 )
                 aBuffer.append( API_TOKEN_SEP );
@@ -1671,7 +1671,7 @@ void FormulaProcessorBase::convertStringToStringList(
         ApiTokenSequence& orTokens, sal_Unicode cStringSep, bool bTrimLeadingSpaces ) const
 {
     OUString aString;
-    if( extractString( aString, orTokens ) && (aString.getLength() > 0) )
+    if( extractString( aString, orTokens ) && !aString.isEmpty() )
     {
         ::std::vector< ApiToken > aNewTokens;
         sal_Int32 nPos = 0;

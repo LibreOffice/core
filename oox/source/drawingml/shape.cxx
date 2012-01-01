@@ -210,12 +210,12 @@ void Shape::addShape(
     try
     {
         rtl::OUString sServiceName( msServiceName );
-        if( sServiceName.getLength() )
+        if( !sServiceName.isEmpty() )
         {
             basegfx::B2DHomMatrix aMatrix( aTransformation );
             Reference< XShape > xShape( createAndInsert( rFilterBase, sServiceName, pTheme, rxShapes, pShapeRect, sal_False, aMatrix ) );
 
-            if( pShapeMap && msId.getLength() )
+            if( pShapeMap && !msId.isEmpty() )
             {
                 (*pShapeMap)[ msId ] = shared_from_this();
             }
@@ -429,7 +429,7 @@ Reference< XShape > Shape::createAndInsert(
     Reference< XPropertySet > xSet( mxShape, UNO_QUERY );
     if( mxShape.is() && xSet.is() )
     {
-        if( msName.getLength() )
+        if( !msName.isEmpty() )
         {
             Reference< container::XNamed > xNamed( mxShape, UNO_QUERY );
             if( xNamed.is() )
@@ -618,13 +618,13 @@ OUString Shape::finalizeServiceName( XmlFilterBase& rFilter, const OUString& rSe
 
             // get the path to the representation graphic
             OUString aGraphicPath;
-            if( mxOleObjectInfo->maShapeId.getLength() > 0 )
+            if( !mxOleObjectInfo->maShapeId.isEmpty() )
                 if( ::oox::vml::Drawing* pVmlDrawing = rFilter.getVmlDrawing() )
                     if( const ::oox::vml::ShapeBase* pVmlShape = pVmlDrawing->getShapes().getShapeById( mxOleObjectInfo->maShapeId, true ) )
                         aGraphicPath = pVmlShape->getGraphicPath();
 
             // import and store the graphic
-            if( aGraphicPath.getLength() > 0 )
+            if( !aGraphicPath.isEmpty() )
             {
                 Reference< graphic::XGraphic > xGraphic = rFilter.getGraphicHelper().importEmbeddedGraphic( aGraphicPath );
                 if( xGraphic.is() )
@@ -644,8 +644,8 @@ void Shape::finalizeXShape( XmlFilterBase& rFilter, const Reference< XShapes >& 
     {
         case FRAMETYPE_CHART:
         {
-            OSL_ENSURE( mxChartShapeInfo->maFragmentPath.getLength() > 0, "Shape::finalizeXShape - missing chart fragment" );
-            if( mxShape.is() && (mxChartShapeInfo->maFragmentPath.getLength() > 0) ) try
+            OSL_ENSURE( !mxChartShapeInfo->maFragmentPath.isEmpty(), "Shape::finalizeXShape - missing chart fragment" );
+            if( mxShape.is() && !mxChartShapeInfo->maFragmentPath.isEmpty() ) try
             {
                 // set the chart2 OLE class ID at the OLE shape
                 PropertySet aShapeProp( mxShape );

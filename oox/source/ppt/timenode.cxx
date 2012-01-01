@@ -232,7 +232,7 @@ namespace oox { namespace ppt {
         OSL_ENSURE( xNode.is(), "null node passed" );
 
         try {
-            if( msId.getLength() )
+            if( !msId.isEmpty() )
             {
                 pSlide->getAnimNodesMap()[ msId ] = xNode;
             }

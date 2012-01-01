@@ -217,7 +217,7 @@ void SheetDataContext::onEndElement()
         if( !mbHasFormula )
         {
             // no formula created: try to set the cell value
-            if( maCellValue.getLength() > 0 ) switch( maCellData.mnCellType )
+            if( !maCellValue.isEmpty() ) switch( maCellData.mnCellType )
             {
                 case XML_n:
                     mrSheetData.setValueCell( maCellData, maCellValue.toDouble() );
@@ -247,7 +247,7 @@ void SheetDataContext::onEndElement()
                 mrSheetData.setBlankCell( maCellData );
             }
         }
-        else if( maCellValue.getLength() > 0 ) switch( maCellData.mnCellType )
+        else if( !maCellValue.isEmpty() ) switch( maCellData.mnCellType )
         {
             case XML_n:
                 /* Set the pre-loaded value */

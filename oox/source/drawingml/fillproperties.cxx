@@ -310,7 +310,7 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
 
                     OUString aGraphicUrl = rGraphicHelper.createGraphicObject( maBlipProps.mxGraphic );
                     // push bitmap or named bitmap to property map
-                    if( (aGraphicUrl.getLength() > 0) && rPropMap.setProperty( SHAPEPROP_FillBitmapUrl, aGraphicUrl ) )
+                    if( !aGraphicUrl.isEmpty() && rPropMap.setProperty( SHAPEPROP_FillBitmapUrl, aGraphicUrl ) )
                         eFillStyle = FillStyle_BITMAP;
 
                     // set other bitmap properties, if bitmap has been inserted into the map
@@ -404,7 +404,7 @@ void GraphicProperties::pushToPropMap( PropertyMap& rPropMap, const GraphicHelpe
         }
 
         OUString aGraphicUrl = rGraphicHelper.createGraphicObject( xGraphic );
-        if( aGraphicUrl.getLength() > 0 )
+        if( !aGraphicUrl.isEmpty() )
             rPropMap[ PROP_GraphicURL ] <<= aGraphicUrl;
 
         // cropping

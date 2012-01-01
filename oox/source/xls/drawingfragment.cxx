@@ -104,13 +104,13 @@ Shape::Shape( const WorksheetHelper& rHelper, const AttributeList& rAttribs, con
     WorksheetHelper( rHelper )
 {
     OUString aMacro = rAttribs.getXString( XML_macro, OUString() );
-    if( aMacro.getLength() > 0 )
+    if( !aMacro.isEmpty() )
         maMacroName = getFormulaParser().importMacroName( aMacro );
 }
 
 void Shape::finalizeXShape( XmlFilterBase& rFilter, const Reference< XShapes >& rxShapes )
 {
-    if( (maMacroName.getLength() > 0) && mxShape.is() )
+    if( !maMacroName.isEmpty() && mxShape.is() )
     {
         VbaMacroAttacherRef xAttacher( new ShapeMacroAttacher( maMacroName, mxShape ) );
         getBaseFilter().getVbaProject().registerMacroAttacher( xAttacher );
@@ -436,7 +436,7 @@ OUString VmlDrawing::getShapeBaseName( const ::oox::vml::ShapeBase& rShape ) con
 
 bool VmlDrawing::convertClientAnchor( Rectangle& orShapeRect, const OUString& rShapeAnchor ) const
 {
-    if( rShapeAnchor.getLength() == 0 )
+    if( rShapeAnchor.isEmpty() )
         return false;
     ShapeAnchor aAnchor( *this );
     aAnchor.importVmlAnchor( rShapeAnchor );
@@ -450,7 +450,7 @@ Reference< XShape > VmlDrawing::createAndInsertClientXShape( const ::oox::vml::S
     // simulate the legacy drawing controls with OLE form controls
     OUString aShapeName = rShape.getShapeName();
     const ::oox::vml::ClientData* pClientData = rShape.getClientData();
-    if( (aShapeName.getLength() > 0) && pClientData )
+    if( !aShapeName.isEmpty() && pClientData )
     {
         Rectangle aShapeRect = rShapeRect;
         const ::oox::vml::TextBox* pTextBox = rShape.getTextBox();
@@ -603,10 +603,10 @@ Reference< XShape > VmlDrawing::createAndInsertClientXShape( const ::oox::vml::S
             Reference< XShape > xShape = createAndInsertXControlShape( aControl, rxShapes, aShapeRect, nCtrlIndex );
 
             // control shape macro
-            if( xShape.is() && (nCtrlIndex >= 0) && (pClientData->maFmlaMacro.getLength() > 0) )
+            if( xShape.is() && (nCtrlIndex >= 0) && !pClientData->maFmlaMacro.isEmpty() )
             {
                 OUString aMacroName = getFormulaParser().importMacroName( pClientData->maFmlaMacro );
-                if( aMacroName.getLength() > 0 )
+                if( !aMacroName.isEmpty() )
                 {
                     Reference< XIndexContainer > xFormIC = getControlForm().getXForm();
                     VbaMacroAttacherRef xAttacher( new VmlControlMacroAttacher( aMacroName, xFormIC, nCtrlIndex, pClientData->mnObjType, pClientData->mnDropStyle ) );
@@ -642,7 +642,7 @@ void VmlDrawing::notifyXShapeInserted( const Reference< XShape >& rxShape,
             aPropSet.setProperty( PROP_Printable, pClientData->mbPrintObject );
 
             // control source links
-            if( (pClientData->maFmlaLink.getLength() > 0) || (pClientData->maFmlaRange.getLength() > 0) )
+            if( !pClientData->maFmlaLink.isEmpty() || !pClientData->maFmlaRange.isEmpty() )
                 maControlConv.bindToSources( xCtrlModel, pClientData->maFmlaLink, pClientData->maFmlaRange, getSheetIndex() );
         }
         catch( Exception& )
@@ -656,7 +656,7 @@ void VmlDrawing::notifyXShapeInserted( const Reference< XShape >& rxShape,
 sal_uInt32 VmlDrawing::convertControlTextColor( const OUString& rTextColor ) const
 {
     // color attribute not present or 'auto' - use passed default color
-    if( (rTextColor.getLength() == 0) || rTextColor.equalsIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM( "auto" ) ) )
+    if( rTextColor.isEmpty() || rTextColor.equalsIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM( "auto" ) ) )
         return AX_SYSCOLOR_WINDOWTEXT;
 
     if( rTextColor[ 0 ] == '#' )

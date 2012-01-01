@@ -112,7 +112,7 @@ ExternalName::ExternalName( const ExternalLink& rParentLink ) :
 void ExternalName::importDefinedName( const AttributeList& rAttribs )
 {
     maModel.maName = rAttribs.getXString( XML_name, OUString() );
-    OSL_ENSURE( maModel.maName.getLength() > 0, "ExternalName::importDefinedName - empty name" );
+    OSL_ENSURE( !maModel.maName.isEmpty(), "ExternalName::importDefinedName - empty name" );
     // zero-based index into sheet list of externalBook
     maModel.mnSheet = rAttribs.getInteger( XML_sheetId, -1 );
 }
@@ -120,7 +120,7 @@ void ExternalName::importDefinedName( const AttributeList& rAttribs )
 void ExternalName::importDdeItem( const AttributeList& rAttribs )
 {
     maModel.maName = rAttribs.getXString( XML_name, OUString() );
-    OSL_ENSURE( maModel.maName.getLength() > 0, "ExternalName::importDdeItem - empty name" );
+    OSL_ENSURE( !maModel.maName.isEmpty(), "ExternalName::importDdeItem - empty name" );
     maExtNameModel.mbOleObj     = false;
     maExtNameModel.mbStdDocName = rAttribs.getBool( XML_ole, false );
     maExtNameModel.mbNotify     = rAttribs.getBool( XML_advise, false );
@@ -135,7 +135,7 @@ void ExternalName::importValues( const AttributeList& rAttribs )
 void ExternalName::importOleItem( const AttributeList& rAttribs )
 {
     maModel.maName = rAttribs.getXString( XML_name, OUString() );
-    OSL_ENSURE( maModel.maName.getLength() > 0, "ExternalName::importOleItem - empty name" );
+    OSL_ENSURE( !maModel.maName.isEmpty(), "ExternalName::importOleItem - empty name" );
     maExtNameModel.mbOleObj    = true;
     maExtNameModel.mbNotify    = rAttribs.getBool( XML_advise, false );
     maExtNameModel.mbPreferPic = rAttribs.getBool( XML_preferPic, false );
@@ -145,7 +145,7 @@ void ExternalName::importOleItem( const AttributeList& rAttribs )
 void ExternalName::importExternalName( SequenceInputStream& rStrm )
 {
     rStrm >> maModel.maName;
-    OSL_ENSURE( maModel.maName.getLength() > 0, "ExternalName::importExternalName - empty name" );
+    OSL_ENSURE( !maModel.maName.isEmpty(), "ExternalName::importExternalName - empty name" );
 }
 
 void ExternalName::importExternalNameFlags( SequenceInputStream& rStrm )
@@ -233,7 +233,7 @@ void ExternalName::importExternalName( BiffInputStream& rStrm )
     maModel.maName = (getBiff() == BIFF8) ?
         rStrm.readUniStringBody( rStrm.readuInt8() ) :
         rStrm.readByteStringUC( false, getTextEncoding() );
-    OSL_ENSURE( maModel.maName.getLength() > 0, "ExternalName::importExternalName - empty name" );
+    OSL_ENSURE( !maModel.maName.isEmpty(), "ExternalName::importExternalName - empty name" );
 
     // load cell references that are stored in hidden external names (seen in BIFF3-BIFF4)
     bool bHiddenRef = (getBiff() <= BIFF4) && (maModel.maName.getLength() > 1) && (maModel.maName[ 0 ] == '\x01') && (rStrm.getRemaining() > 2);
@@ -347,7 +347,7 @@ sal_Int32 ExternalName::getSheetCacheIndex() const
 
 bool ExternalName::getDdeItemInfo( DDEItemInfo& orItemInfo ) const
 {
-    if( (mrParentLink.getLinkType() == LINKTYPE_DDE) && (maModel.maName.getLength() > 0) )
+    if( (mrParentLink.getLinkType() == LINKTYPE_DDE) && !maModel.maName.isEmpty() )
     {
         orItemInfo.Item = maModel.maName;
         orItemInfo.Results = ContainerHelper::matrixToSequenceSequence( maResults );
@@ -358,7 +358,7 @@ bool ExternalName::getDdeItemInfo( DDEItemInfo& orItemInfo ) const
 
 bool ExternalName::getDdeLinkData( OUString& orDdeServer, OUString& orDdeTopic, OUString& orDdeItem )
 {
-    if( (mrParentLink.getLinkType() == LINKTYPE_DDE) && (maModel.maName.getLength() > 0) )
+    if( (mrParentLink.getLinkType() == LINKTYPE_DDE) && !maModel.maName.isEmpty() )
     {
         // try to create a DDE link and to set the imported link results
         if( !mbDdeLinkCreated ) try
@@ -620,7 +620,7 @@ void ExternalLink::importExternSheet( BiffInputStream& rStrm )
             maCalcSheets.push_back( getWorksheets().getCalcSheetIndex( aSheetName ) );
         break;
         case LINKTYPE_EXTERNAL:
-            insertExternalSheet( (aSheetName.getLength() > 0) ? aSheetName : WorksheetBuffer::getBaseFileName( maTargetUrl ) );
+            insertExternalSheet( aSheetName.isEmpty() ? WorksheetBuffer::getBaseFileName( maTargetUrl ) : aSheetName);
         break;
         default:;
     }
@@ -648,7 +648,7 @@ void ExternalLink::importExternalBook( BiffInputStream& rStrm )
 
     // parse the encoded URL
     OUString aDummySheetName = parseBiffTargetUrl( aTarget );
-    OSL_ENSURE( aDummySheetName.getLength() == 0, "ExternalLink::importExternalBook - sheet name in encoded URL" );
+    OSL_ENSURE( aDummySheetName.isEmpty(), "ExternalLink::importExternalBook - sheet name in encoded URL" );
     (void)aDummySheetName;  // prevent compiler warning
 
     // load external sheet names and create the sheet caches in the Calc document
@@ -819,7 +819,7 @@ void ExternalLink::setExternalTargetUrl( const OUString& rTargetUrl, const OUStr
     if( rTargetType == OOX_TARGETTYPE_EXTLINK )
     {
         maTargetUrl = getBaseFilter().getAbsoluteUrl( rTargetUrl );
-        if( maTargetUrl.getLength() > 0 )
+        if( !maTargetUrl.isEmpty() )
             meLinkType = LINKTYPE_EXTERNAL;
     }
     else if( rTargetType == OOX_TARGETTYPE_LIBRARY )
@@ -845,7 +845,7 @@ void ExternalLink::setDdeOleTargetUrl( const OUString& rClassName, const OUStrin
 {
     maClassName = rClassName;
     maTargetUrl = rTargetUrl;
-    meLinkType = ((maClassName.getLength() > 0) && (maTargetUrl.getLength() > 0)) ? eLinkType : LINKTYPE_UNKNOWN;
+    meLinkType = (maClassName.isEmpty() || maTargetUrl.isEmpty()) ?  LINKTYPE_UNKNOWN : eLinkType;
     OSL_ENSURE( meLinkType == eLinkType, "ExternalLink::setDdeOleTargetUrl - missing classname or target" );
 }
 
@@ -863,9 +863,9 @@ OUString ExternalLink::parseBiffTargetUrl( const OUString& rBiffTargetUrl )
     switch( getAddressConverter().parseBiffTargetUrl( aClassName, aTargetUrl, aSheetName, rBiffTargetUrl ) )
     {
         case BIFF_TARGETTYPE_URL:
-            if( aTargetUrl.getLength() == 0 )
+            if( aTargetUrl.isEmpty() )
             {
-                meLinkType = (aSheetName.getLength() > 0) ? LINKTYPE_INTERNAL : LINKTYPE_SELF;
+                meLinkType = aSheetName.isEmpty() ? LINKTYPE_SELF : LINKTYPE_INTERNAL;
             }
             else if( (aTargetUrl.getLength() == 1) && (aTargetUrl[ 0 ] == ':') )
             {
@@ -879,12 +879,12 @@ OUString ExternalLink::parseBiffTargetUrl( const OUString& rBiffTargetUrl )
         break;
 
         case BIFF_TARGETTYPE_SAMESHEET:
-            OSL_ENSURE( (aTargetUrl.getLength() == 0) && (aSheetName.getLength() == 0), "ExternalLink::parseBiffTargetUrl - unexpected target or sheet name" );
+            OSL_ENSURE( aTargetUrl.isEmpty() && aSheetName.isEmpty(), "ExternalLink::parseBiffTargetUrl - unexpected target or sheet name" );
             meLinkType = LINKTYPE_SAME;
         break;
 
         case BIFF_TARGETTYPE_LIBRARY:
-            OSL_ENSURE( aSheetName.getLength() == 0, "ExternalLink::parseBiffTargetUrl - unexpected sheet name" );
+            OSL_ENSURE( aSheetName.isEmpty(), "ExternalLink::parseBiffTargetUrl - unexpected sheet name" );
             setExternalTargetUrl( aTargetUrl, OOX_TARGETTYPE_LIBRARY );
         break;
 
@@ -900,7 +900,7 @@ OUString ExternalLink::parseBiffTargetUrl( const OUString& rBiffTargetUrl )
 
 void ExternalLink::insertExternalSheet( const OUString& rSheetName )
 {
-    OSL_ENSURE( rSheetName.getLength() > 0, "ExternalLink::insertExternalSheet - empty sheet name" );
+    OSL_ENSURE( !rSheetName.isEmpty(), "ExternalLink::insertExternalSheet - empty sheet name" );
     if( mxDocLink.is() )
     {
         Reference< XExternalSheetCache > xSheetCache = mxDocLink->addSheetCache( rSheetName, false );

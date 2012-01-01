@@ -87,7 +87,7 @@ sal_Int32 TextRun::insertAt(
 
                 if ( !aTextCharacterProps.maSymbolFont.getFontData( aSymbolFontName, nSymbolFontPitch, nSymbolFontFamily, rFilterBase ) )
                     xText->insertString( xStart, getText(), sal_False );
-                else if ( getText().getLength() )
+                else if ( !getText().isEmpty() )
                 {   // !!#i113673<<<
                     sal_Int16 nLatinFontPitch = 0, nLatinFontFamily = 0;
                     aTextCharacterProps.maLatinFont.getFontData( aLatinFontName, nLatinFontPitch, nLatinFontFamily, rFilterBase );

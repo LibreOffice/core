@@ -109,11 +109,11 @@ Sequence< Reference< XFormattedString > > TextConverter::createStringSequence(
         if( mrModel.mxDataSeq.is() && !mrModel.mxDataSeq->maData.empty() )
             mrModel.mxDataSeq->maData.begin()->second >>= aString;
         // no linked string -> fall back to default string
-        if( aString.getLength() == 0 )
+        if( aString.isEmpty() )
             aString = rDefaultText;
 
         // create formatted string object
-        if( aString.getLength() > 0 )
+        if( !aString.isEmpty() )
         {
             Reference< XFormattedString > xFmtStr = appendFormattedString( aStringVec, aString, false );
             PropertySet aPropSet( xFmtStr );

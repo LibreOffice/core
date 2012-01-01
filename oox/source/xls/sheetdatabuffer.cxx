@@ -724,7 +724,7 @@ void SheetDataBuffer::finalizeTableOperation( const CellRangeAddress& rRange, co
 {
     sal_Int16 nSheet = getSheetIndex();
     bool bOk = false;
-    if( !rModel.mbRef1Deleted && (rModel.maRef1.getLength() > 0) && (rRange.StartColumn > 0) && (rRange.StartRow > 0) )
+    if( !rModel.mbRef1Deleted && !rModel.maRef1.isEmpty() && (rRange.StartColumn > 0) && (rRange.StartRow > 0) )
     {
         CellRangeAddress aOpRange = rRange;
         CellAddress aRef1;

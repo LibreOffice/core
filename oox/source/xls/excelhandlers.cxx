@@ -98,7 +98,7 @@ const sal_uInt16 BIFF_BOF_WORKSPACE         = 0x0100;   /// BIFF3-BIFF8 workspac
 BiffFragmentHandler::BiffFragmentHandler( const FilterBase& rFilter, const OUString& rStrmName )
 {
     // do not automatically close the root stream (indicated by empty stream name)
-    bool bRootStrm = rStrmName.getLength() == 0;
+    bool bRootStrm = rStrmName.isEmpty();
     mxXInStrm.reset( new BinaryXInputStream( rFilter.openInputStream( rStrmName ), !bRootStrm ) );
     mxBiffStrm.reset( new BiffInputStream( *mxXInStrm ) );
 }

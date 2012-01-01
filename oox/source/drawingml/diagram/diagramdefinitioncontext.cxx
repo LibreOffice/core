@@ -48,7 +48,7 @@ DiagramDefinitionContext::DiagramDefinitionContext( ContextHandler& rParent,
     OSL_TRACE( "OOX: DiagramDefinitionContext::DiagramDefinitionContext()" );
     mpLayout->setDefStyle( xAttributes->getOptionalValue( XML_defStyle ) );
     OUString sValue = xAttributes->getOptionalValue( XML_minVer );
-    if( sValue.getLength() == 0 )
+    if( sValue.isEmpty() )
     {
         sValue = CREATE_OUSTRING( "http://schemas.openxmlformats.org/drawingml/2006/diagram" );
     }

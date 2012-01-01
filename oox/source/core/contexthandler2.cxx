@@ -183,7 +183,7 @@ void ContextHandler2Helper::processCollectedChars()
         OUString aChars = rInfo.maChars.makeStringAndClear();
         if( mbEnableTrimSpace && rInfo.mbTrimSpaces )
             aChars = aChars.trim();
-        if( aChars.getLength() > 0 )
+        if( !aChars.isEmpty() )
             onCharacters( aChars );
     }
 }

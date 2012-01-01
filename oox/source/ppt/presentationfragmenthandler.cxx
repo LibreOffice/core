@@ -170,7 +170,7 @@ void PresentationFragmentHandler::finalizeImport()
                 xSlide = xDrawPages->insertNewByIndex( nSlide );
 
             OUString aSlideFragmentPath = getFragmentPathFromRelId( maSlidesVector[ nSlide ] );
-            if( aSlideFragmentPath.getLength() > 0 )
+            if( !aSlideFragmentPath.isEmpty() )
             {
                 SlidePersistPtr pMasterPersistPtr;
                 SlidePersistPtr pSlidePersistPtr( new SlidePersist( rFilter, sal_False, sal_False, xSlide,
@@ -180,12 +180,12 @@ void PresentationFragmentHandler::finalizeImport()
 
                 // importing the corresponding masterpage/layout
                 OUString aLayoutFragmentPath = xSlideFragmentHandler->getFragmentPathFromFirstType( CREATE_OFFICEDOC_RELATION_TYPE( "slideLayout" ) );
-                if ( aLayoutFragmentPath.getLength() > 0 )
+                if ( !aLayoutFragmentPath.isEmpty() )
                 {
                     // importing layout
                     RelationsRef xLayoutRelations = rFilter.importRelations( aLayoutFragmentPath );
                     OUString aMasterFragmentPath = xLayoutRelations->getFragmentPathFromFirstType( CREATE_OFFICEDOC_RELATION_TYPE( "slideMaster" ) );
-                    if( aMasterFragmentPath.getLength() )
+                    if( !aMasterFragmentPath.isEmpty() )
                     {
                         // check if the corresponding masterpage+layout has already been imported
                         std::vector< SlidePersistPtr >& rMasterPages( rFilter.getMasterPages() );
@@ -219,7 +219,7 @@ void PresentationFragmentHandler::finalizeImport()
 
                             // set the correct theme
                             OUString aThemeFragmentPath = xMasterFragmentHandler->getFragmentPathFromFirstType( CREATE_OFFICEDOC_RELATION_TYPE( "theme" ) );
-                            if( aThemeFragmentPath.getLength() > 0 )
+                            if( !aThemeFragmentPath.isEmpty() )
                             {
                                 std::map< OUString, oox::drawingml::ThemePtr >& rThemes( rFilter.getThemes() );
                                 std::map< OUString, oox::drawingml::ThemePtr >::iterator aIter2( rThemes.find( aThemeFragmentPath ) );
@@ -268,7 +268,7 @@ void PresentationFragmentHandler::finalizeImport()
 
                 // now importing the notes page
                 OUString aNotesFragmentPath = xSlideFragmentHandler->getFragmentPathFromFirstType( CREATE_OFFICEDOC_RELATION_TYPE( "notesSlide" ) );
-                if( aNotesFragmentPath.getLength() > 0 )
+                if( !aNotesFragmentPath.isEmpty() )
                 {
                     Reference< XPresentationPage > xPresentationPage( xSlide, UNO_QUERY );
                     if ( xPresentationPage.is() )

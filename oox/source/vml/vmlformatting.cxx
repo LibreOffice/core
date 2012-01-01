@@ -81,7 +81,7 @@ bool lclExtractDouble( double& orfValue, sal_Int32& ornEndPos, const OUString& r
     {
         orValue1 = rValue.trim();
     }
-    return (orValue1.getLength() > 0) && (orValue2.getLength() > 0);
+    return !orValue1.isEmpty() && !orValue2.isEmpty();
 }
 
 /*static*/ bool ConversionHelper::decodeBool( const OUString& rValue )
@@ -93,7 +93,7 @@ bool lclExtractDouble( double& orfValue, sal_Int32& ornEndPos, const OUString& r
 
 /*static*/ double ConversionHelper::decodePercent( const OUString& rValue, double fDefValue )
 {
-    if( rValue.getLength() == 0 )
+    if( rValue.isEmpty() )
         return fDefValue;
 
     double fValue = 0.0;
@@ -115,7 +115,7 @@ bool lclExtractDouble( double& orfValue, sal_Int32& ornEndPos, const OUString& r
         const OUString& rValue, sal_Int32 nRefValue, bool bPixelX, bool bDefaultAsPixel )
 {
     // default for missing values is 0
-    if( rValue.getLength() == 0 )
+    if( rValue.isEmpty() )
         return 0;
 
     // TODO: according to spec, value may contain "auto"
@@ -164,7 +164,7 @@ bool lclExtractDouble( double& orfValue, sal_Int32& ornEndPos, const OUString& r
     {
         fValue *= nRefValue / 100.0;
     }
-    else if( bDefaultAsPixel || (aUnit.getLength() > 0) )   // default as EMU and no unit -> do nothing
+    else if( bDefaultAsPixel || !aUnit.isEmpty() )   // default as EMU and no unit -> do nothing
     {
         OSL_FAIL( "ConversionHelper::decodeMeasureToEmu - unknown measure unit" );
         fValue = nRefValue;
@@ -552,7 +552,7 @@ void FillModel::pushToPropMap( ShapePropertyMap& rPropMap, const GraphicHelper& 
             case XML_tile:
             case XML_frame:
             {
-                if( moBitmapPath.has() && moBitmapPath.get().getLength() > 0 )
+                if( moBitmapPath.has() && !moBitmapPath.get().isEmpty() )
                 {
                     aFillProps.maBlipProps.mxGraphic = rGraphicHelper.importEmbeddedGraphic( moBitmapPath.get() );
                     if( aFillProps.maBlipProps.mxGraphic.is() )

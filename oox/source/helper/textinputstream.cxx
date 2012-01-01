@@ -181,7 +181,7 @@ OUString TextInputStream::readToChar( sal_Unicode cChar, bool bIncludeChar )
             a character that has been buffered in the previous call. */
         OUString aString = createFinalString( mxTextStrm->readString( aDelimiters, sal_False ) );
         // remove last character from string and remember it for next call
-        if( !bIncludeChar && (aString.getLength() > 0) && (aString[ aString.getLength() - 1 ] == cChar) )
+        if( !bIncludeChar && !aString.isEmpty() && (aString[ aString.getLength() - 1 ] == cChar) )
         {
             mcPendingChar = cChar;
             aString = aString.copy( 0, aString.getLength() - 1 );

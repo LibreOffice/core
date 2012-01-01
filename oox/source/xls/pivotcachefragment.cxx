@@ -208,7 +208,7 @@ void PivotCacheDefinitionFragment::finalizeImport()
     if( mrPivotCache.isValidDataSource() && mrPivotCache.isBasedOnDummySheet() )
     {
         OUString aRecFragmentPath = getRelations().getFragmentPathFromRelId( mrPivotCache.getRecordsRelId() );
-        if( aRecFragmentPath.getLength() > 0 )
+        if( !aRecFragmentPath.isEmpty() )
         {
             sal_Int16 nSheet = mrPivotCache.getSourceRange().Sheet;
             WorksheetGlobalsRef xSheetGlob = WorksheetHelper::constructGlobals( *this, ISegmentProgressBarRef(), SHEETTYPE_WORKSHEET, nSheet );

@@ -454,7 +454,7 @@ void PageSettings::finalizeImport()
 void PageSettings::importPictureData( const Relations& rRelations, const OUString& rRelId )
 {
     OUString aPicturePath = rRelations.getFragmentPathFromRelId( rRelId );
-    if( aPicturePath.getLength() > 0 )
+    if( !aPicturePath.isEmpty() )
         maModel.maGraphicUrl = getBaseFilter().getGraphicHelper().importEmbeddedGraphicObject( aPicturePath );
 }
 
@@ -613,7 +613,7 @@ HeaderFooterParser::HeaderFooterParser( const WorkbookHelper& rHelper ) :
 
 double HeaderFooterParser::parse( const Reference< XHeaderFooterContent >& rxContext, const OUString& rData )
 {
-    if( !rxContext.is() || (rData.getLength() == 0) ||
+    if( !rxContext.is() || rData.isEmpty() ||
             !maPortions[ HF_LEFT ].initialize( rxContext->getLeftText() ) ||
             !maPortions[ HF_CENTER ].initialize( rxContext->getCenterText() ) ||
             !maPortions[ HF_RIGHT ].initialize( rxContext->getRightText() ) )
@@ -949,7 +949,7 @@ void HeaderFooterParser::appendField( const Reference< XTextContent >& rxContent
 
 void HeaderFooterParser::convertFontName( const OUString& rName )
 {
-    if( rName.getLength() > 0 )
+    if( !rName.isEmpty() )
     {
         // single dash is document default font
         if( (rName.getLength() == 1) && (rName[ 0 ] == '-') )
@@ -967,7 +967,7 @@ void HeaderFooterParser::convertFontStyle( const OUString& rStyle )
     while( (0 <= nPos) && (nPos < nLen) )
     {
         OString aToken = OUStringToOString( rStyle.getToken( 0, ' ', nPos ), RTL_TEXTENCODING_UTF8 ).toAsciiLowerCase();
-        if( aToken.getLength() > 0 )
+        if( !aToken.isEmpty() )
         {
             if( maBoldNames.count( aToken ) > 0 )
                 maFontModel.mbBold = true;
@@ -1211,7 +1211,7 @@ void PageSettingsConverter::writePageSettingsProperties(
     aPropMap[ PROP_FooterHeight ]          <<= maFooterData.mnHeight;
     aPropMap[ PROP_FooterBodyDistance ]    <<= maFooterData.mnBodyDist;
     // background image
-    if( rModel.maGraphicUrl.getLength() > 0 )
+    if( !rModel.maGraphicUrl.isEmpty() )
     {
         aPropMap[ PROP_BackGraphicURL ] <<= rModel.maGraphicUrl;
         aPropMap[ PROP_BackGraphicLocation ] <<= ::com::sun::star::style::GraphicLocation_TILED;
@@ -1225,8 +1225,8 @@ void PageSettingsConverter::convertHeaderFooterData(
         const OUString rOddContent, const OUString rEvenContent, bool bUseEvenContent,
         double fPageMargin, double fContentMargin )
 {
-    bool bHasOddContent  = rOddContent.getLength() > 0;
-    bool bHasEvenContent = bUseEvenContent && (rEvenContent.getLength() > 0);
+    bool bHasOddContent  = !rOddContent.isEmpty();
+    bool bHasEvenContent = bUseEvenContent && !rEvenContent.isEmpty();
 
     sal_Int32 nOddHeight  = bHasOddContent  ? writeHeaderFooter( rPropSet, orHFData.mnRightPropId, rOddContent  ) : 0;
     sal_Int32 nEvenHeight = bHasEvenContent ? writeHeaderFooter( rPropSet, orHFData.mnLeftPropId,  rEvenContent ) : 0;
@@ -1262,9 +1262,9 @@ void PageSettingsConverter::convertHeaderFooterData(
 sal_Int32 PageSettingsConverter::writeHeaderFooter(
         PropertySet& rPropSet, sal_Int32 nPropId, const OUString& rContent )
 {
-    OSL_ENSURE( rContent.getLength() > 0, "PageSettingsConverter::writeHeaderFooter - empty h/f string found" );
+    OSL_ENSURE( !rContent.isEmpty(), "PageSettingsConverter::writeHeaderFooter - empty h/f string found" );
     sal_Int32 nHeight = 0;
-    if( rContent.getLength() > 0 )
+    if( !rContent.isEmpty() )
     {
         Reference< XHeaderFooterContent > xHFContent( rPropSet.getAnyProperty( nPropId ), UNO_QUERY );
         if( xHFContent.is() )

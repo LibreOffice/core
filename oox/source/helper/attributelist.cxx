@@ -172,49 +172,49 @@ OptValue< OUString > AttributeList::getXString( sal_Int32 nAttrToken ) const
 OptValue< double > AttributeList::getDouble( sal_Int32 nAttrToken ) const
 {
     OUString aValue = mxAttribs->getOptionalValue( nAttrToken );
-    bool bValid = aValue.getLength() > 0;
+    bool bValid = !aValue.isEmpty();
     return OptValue< double >( bValid, bValid ? AttributeConversion::decodeDouble( aValue ) : 0.0 );
 }
 
 OptValue< sal_Int32 > AttributeList::getInteger( sal_Int32 nAttrToken ) const
 {
     OUString aValue = mxAttribs->getOptionalValue( nAttrToken );
-    bool bValid = aValue.getLength() > 0;
+    bool bValid = !aValue.isEmpty();
     return OptValue< sal_Int32 >( bValid, bValid ? AttributeConversion::decodeInteger( aValue ) : 0 );
 }
 
 OptValue< sal_uInt32 > AttributeList::getUnsigned( sal_Int32 nAttrToken ) const
 {
     OUString aValue = mxAttribs->getOptionalValue( nAttrToken );
-    bool bValid = aValue.getLength() > 0;
+    bool bValid = !aValue.isEmpty();
     return OptValue< sal_uInt32 >( bValid, AttributeConversion::decodeUnsigned( aValue ) );
 }
 
 OptValue< sal_Int64 > AttributeList::getHyper( sal_Int32 nAttrToken ) const
 {
     OUString aValue = mxAttribs->getOptionalValue( nAttrToken );
-    bool bValid = aValue.getLength() > 0;
+    bool bValid = !aValue.isEmpty();
     return OptValue< sal_Int64 >( bValid, bValid ? AttributeConversion::decodeHyper( aValue ) : 0 );
 }
 
 OptValue< sal_Int32 > AttributeList::getIntegerHex( sal_Int32 nAttrToken ) const
 {
     OUString aValue = mxAttribs->getOptionalValue( nAttrToken );
-    bool bValid = aValue.getLength() > 0;
+    bool bValid = !aValue.isEmpty();
     return OptValue< sal_Int32 >( bValid, bValid ? AttributeConversion::decodeIntegerHex( aValue ) : 0 );
 }
 
 OptValue< sal_uInt32 > AttributeList::getUnsignedHex( sal_Int32 nAttrToken ) const
 {
     OUString aValue = mxAttribs->getOptionalValue( nAttrToken );
-    bool bValid = aValue.getLength() > 0;
+    bool bValid = !aValue.isEmpty();
     return OptValue< sal_uInt32 >( bValid, bValid ? AttributeConversion::decodeUnsignedHex( aValue ) : 0 );
 }
 
 OptValue< sal_Int64 > AttributeList::getHyperHex( sal_Int32 nAttrToken ) const
 {
     OUString aValue = mxAttribs->getOptionalValue( nAttrToken );
-    bool bValid = aValue.getLength() > 0;
+    bool bValid = !aValue.isEmpty();
     return OptValue< sal_Int64 >( bValid, bValid ? AttributeConversion::decodeHyperHex( aValue ) : 0 );
 }
 

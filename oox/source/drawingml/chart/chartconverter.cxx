@@ -148,7 +148,7 @@ Reference< XDataSequence > ChartConverter::createDataSequence( const Reference< 
             aRangeRep = lclGenerateApiArray( aMatrix );
         }
 
-        if( aRangeRep.getLength() > 0 ) try
+        if( !aRangeRep.isEmpty() ) try
         {
             // create the data sequence
             xDataSeq = rxDataProvider->createDataSequenceByRangeRepresentation( aRangeRep );

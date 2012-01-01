@@ -130,7 +130,7 @@ bool ShapePropertyMap::setAnyProperty( ShapePropertyId ePropId, const Any& rValu
 bool ShapePropertyMap::setLineMarker( sal_Int32 nPropId, const Any& rValue )
 {
     NamedValue aNamedMarker;
-    if( (rValue >>= aNamedMarker) && (aNamedMarker.Name.getLength() > 0) )
+    if( (rValue >>= aNamedMarker) && !aNamedMarker.Name.isEmpty() )
     {
         // push line marker explicitly
         if( !maShapePropInfo.mbNamedLineMarker )
@@ -154,7 +154,7 @@ bool ShapePropertyMap::setLineDash( sal_Int32 nPropId, const Any& rValue )
     if( rValue.has< LineDash >() )
     {
         OUString aDashName = mrModelObjHelper.insertLineDash( rValue.get< LineDash >() );
-        return (aDashName.getLength() > 0) && setProperty( nPropId, aDashName );
+        return !aDashName.isEmpty() && setProperty( nPropId, aDashName );
     }
 
     return false;
@@ -170,7 +170,7 @@ bool ShapePropertyMap::setFillGradient( sal_Int32 nPropId, const Any& rValue )
     if( rValue.has< Gradient >() )
     {
         OUString aGradientName = mrModelObjHelper.insertFillGradient( rValue.get< Gradient >() );
-        return (aGradientName.getLength() > 0) && setProperty( nPropId, aGradientName );
+        return !aGradientName.isEmpty() && setProperty( nPropId, aGradientName );
     }
 
     return false;
@@ -182,7 +182,7 @@ bool ShapePropertyMap::setGradientTrans( sal_Int32 nPropId, const Any& rValue )
     if( rValue.has< Gradient >() )
     {
         OUString aGradientName = mrModelObjHelper.insertTransGrandient( rValue.get< Gradient >() );
-        return ( aGradientName.getLength() > 0 ) && setProperty( nPropId, aGradientName );
+        return !aGradientName.isEmpty()  && setProperty( nPropId, aGradientName );
     }
 
     return false;
@@ -198,7 +198,7 @@ bool ShapePropertyMap::setFillBitmapUrl( sal_Int32 nPropId, const Any& rValue )
     if( rValue.has< OUString >() )
     {
         OUString aBitmapUrlName = mrModelObjHelper.insertFillBitmapUrl( rValue.get< OUString >() );
-        return (aBitmapUrlName.getLength() > 0) && setProperty( nPropId, aBitmapUrlName );
+        return !aBitmapUrlName.isEmpty() && setProperty( nPropId, aBitmapUrlName );
     }
 
     return false;

@@ -200,25 +200,25 @@ void WorkbookFragment::finalizeImport()
 
     // read the theme substream
     OUString aThemeFragmentPath = getFragmentPathFromFirstType( CREATE_OFFICEDOC_RELATION_TYPE( "theme" ) );
-    if( aThemeFragmentPath.getLength() > 0 )
+    if( !aThemeFragmentPath.isEmpty() )
         importOoxFragment( new ThemeFragmentHandler( getFilter(), aThemeFragmentPath, getTheme() ) );
     xGlobalSegment->setPosition( 0.25 );
 
     // read the styles substream (requires finalized theme buffer)
     OUString aStylesFragmentPath = getFragmentPathFromFirstType( CREATE_OFFICEDOC_RELATION_TYPE( "styles" ) );
-    if( aStylesFragmentPath.getLength() > 0 )
+    if( !aStylesFragmentPath.isEmpty() )
         importOoxFragment( new StylesFragment( *this, aStylesFragmentPath ) );
     xGlobalSegment->setPosition( 0.5 );
 
     // read the shared string table substream (requires finalized styles buffer)
     OUString aSstFragmentPath = getFragmentPathFromFirstType( CREATE_OFFICEDOC_RELATION_TYPE( "sharedStrings" ) );
-    if( aSstFragmentPath.getLength() > 0 )
+    if( !aSstFragmentPath.isEmpty() )
         importOoxFragment( new SharedStringsFragment( *this, aSstFragmentPath ) );
     xGlobalSegment->setPosition( 0.75 );
 
     // read the connections substream
     OUString aConnFragmentPath = getFragmentPathFromFirstType( CREATE_OFFICEDOC_RELATION_TYPE( "connections" ) );
-    if( aConnFragmentPath.getLength() > 0 )
+    if( !aConnFragmentPath.isEmpty() )
         importOoxFragment( new ConnectionsFragment( *this, aConnFragmentPath ) );
     xGlobalSegment->setPosition( 1.0 );
 
@@ -240,8 +240,8 @@ void WorkbookFragment::finalizeImport()
         {
             // get fragment path of the sheet
             OUString aFragmentPath = getFragmentPathFromRelation( *pRelation );
-            OSL_ENSURE( aFragmentPath.getLength() > 0, "WorkbookFragment::finalizeImport - cannot access sheet fragment" );
-            if( aFragmentPath.getLength() > 0 )
+            OSL_ENSURE( !aFragmentPath.isEmpty(), "WorkbookFragment::finalizeImport - cannot access sheet fragment" );
+            if( !aFragmentPath.isEmpty() )
             {
                 double fSegmentLength = getProgressBar().getFreeLength() / (nWorksheetCount - nWorksheet);
                 ISegmentProgressBarRef xSheetSegment = getProgressBar().createSegment( fSegmentLength );
@@ -306,7 +306,7 @@ void WorkbookFragment::finalizeImport()
 
     // open the VBA project storage
     OUString aVbaFragmentPath = getFragmentPathFromFirstType( CREATE_MSOFFICE_RELATION_TYPE( "vbaProject" ) );
-    if( aVbaFragmentPath.getLength() > 0 )
+    if( !aVbaFragmentPath.isEmpty() )
     {
         Reference< XInputStream > xInStrm = getBaseFilter().openInputStream( aVbaFragmentPath );
         if( xInStrm.is() )
@@ -358,7 +358,7 @@ void WorkbookFragment::importPivotCache( SequenceInputStream& rStrm )
 void WorkbookFragment::importExternalLinkFragment( ExternalLink& rExtLink )
 {
     OUString aFragmentPath = getFragmentPathFromRelId( rExtLink.getRelId() );
-    if( aFragmentPath.getLength() > 0 )
+    if( !aFragmentPath.isEmpty() )
         importOoxFragment( new ExternalLinkFragment( *this, aFragmentPath, rExtLink ) );
 }
 

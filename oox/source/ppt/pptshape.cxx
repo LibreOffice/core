@@ -133,7 +133,7 @@ void PPTShape::addShape(
     try
     {
         rtl::OUString sServiceName( msServiceName );
-        if( sServiceName.getLength() )
+        if( !sServiceName.isEmpty() )
         {
             oox::drawingml::TextListStylePtr aMasterTextListStyle;
             Reference< lang::XMultiServiceFactory > xServiceFact( rFilterBase.getModel(), UNO_QUERY_THROW );
@@ -274,7 +274,7 @@ void PPTShape::addShape(
                 OSL_TRACE("placeholder id: %s", pPlaceholder.get() ? rtl::OUStringToOString(pPlaceholder->getId(), RTL_TEXTENCODING_UTF8 ).getStr() : "not found");
             }
 
-            if ( sServiceName.getLength() )
+            if ( !sServiceName.isEmpty() )
             {
             // use style from master slide for placeholders only, otherwise use slide's style, which might be the default style from presentation
                 if ( !aMasterTextListStyle.get() )
@@ -301,7 +301,7 @@ void PPTShape::addShape(
                         rtl::OUString aTitleText;
                         Reference< XTextRange > xText( xShape, UNO_QUERY_THROW );
                         aTitleText = xText->getString();
-                        if ( aTitleText.getLength() && ( aTitleText.getLength() < 64 ) )    // just a magic value, but we don't want to set slide names which are too long
+                        if ( !aTitleText.isEmpty() && ( aTitleText.getLength() < 64 ) )    // just a magic value, but we don't want to set slide names which are too long
                         {
                             Reference< container::XNamed > xName( rSlidePersist.getPage(), UNO_QUERY_THROW );
                             xName->setName( aTitleText );
@@ -312,7 +312,7 @@ void PPTShape::addShape(
 
                     }
                 }
-                if( pShapeMap && msId.getLength() )
+                if( pShapeMap && !msId.isEmpty() )
                 {
                     (*pShapeMap)[ msId ] = shared_from_this();
                 }
