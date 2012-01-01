@@ -14,14 +14,12 @@ http://svn.apache.org/repos/asf/incubator/ooo/trunk/ext_sources/
 17410483b5b5f267aa18b7e00b65e6e0-hsqldb_1_8_0.zip
 1756c4fa6c616ae15973c104cd8cb256-Adobe-Core35_AFMs-314.tar.gz
 1f24ab1d39f4a51faf22244c94a6203f-xmlsec1-1.2.14.tar.gz
-24be19595acad0a2cae931af77a0148a-LICENSE_source-9.0.0.7-bj.html
 284e768eeda0e2898b0d5bf7e26a016e-raptor-1.4.18.tar.gz
 2a177023f9ea8ec8bd00837605c5df1b-jakarta-tomcat-5.0.30-src.tar.gz
 2ae988b339daec234019a7066f96733e-commons-lang-2.3-src.tar.gz
 2c9b0f83ed5890af02c0df1c1776f39b-commons-httpclient-3.1-src.tar.gz
 2f6ecca935948f7db92d925d88d0d078-icu4c-4_0_1-src.tgz
 3c219630e4302863a9a83d0efde889db-commons-logging-1.1.1-src.tar.gz
-48470d662650c3c074e1c3fabbc67bbd-README_source-9.0.0.7-bj.txt
 48d8169acc35f97e05d8dcdfd45be7f2-lucene-2.3.2.tar.gz
 7740a8ec23878a2f50120e1faa2730f2-libxml2-2.7.6.tar.gz
 ecb2e37e45c9933e2a963cabe03670ab-curl-7.19.7.tar.gz
@@ -47,14 +45,16 @@ a2c10c04f396a9ce72894beb18b4e1f9-jpeg-8c.tar.gz
 c735eab2d659a96e5a594c9e8541ad63-zlib-1.2.5.tar.gz
 0168229624cfac409e766913506961a8-ucpp-1.3.2.tar.gz
 # Libraries with category B license
-8294d6c42e3553229af9934c5c0ed997-stax-api-1.0-2-sources.jar
-a4d9b30810a434a3ed39fc0003bbd637-LICENSE_stax-api-1.0-2-sources.html
-fb7ba5c2182be4e73748859967455455-README_stax-api-1.0-2-sources.txt
 a169ab152209200a7bad29a275cb0333-seamonkey-1.1.14.source.tar.gz
 68dd2e8253d9a7930e9fd50e2d7220d0-hunspell-1.2.9.tar.gz
 48a9f787f43a09c0a9b7b00cd1fddbbf-hyphen-2.7.1.tar.gz
 b92261a5679276c400555004937af965-nss-3.12.6-with-nspr-4.8.4.tar.gz
 ada24d37d8d638b3d8a9985e80bc2978-source-9.0.0.7-bj.zip
+24be19595acad0a2cae931af77a0148a-LICENSE_source-9.0.0.7-bj.html
+48470d662650c3c074e1c3fabbc67bbd-README_source-9.0.0.7-bj.txt
+8294d6c42e3553229af9934c5c0ed997-stax-api-1.0-2-sources.jar
+a4d9b30810a434a3ed39fc0003bbd637-LICENSE_stax-api-1.0-2-sources.html
+fb7ba5c2182be4e73748859967455455-README_stax-api-1.0-2-sources.txt
 99d94103662a8d0b571e247a77432ac5-rhino1_7R3.zip
 377a60170e5185eb63d3ed2fae98e621-README_silgraphite-2.3.1.txt
 d35724900f6a4105550293686688bbb3-silgraphite-2.3.1.tar.gz
