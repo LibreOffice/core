@@ -1223,7 +1223,6 @@ ToFile( "ANT_LIB",           PathFormat("@ANT_LIB@"), "e" );
 ToFile( "ANT",               PathFormat("@ANT@"), "e" );
 ToFile( "JDKLIB",            $JAVA_LIB,          "e" );
 ToFile( "ASM_PATH",          $ASM_PATH,          "e" );
-ToFile( "ML_EXE",            "@ML_EXE@",         "e" );
 ToFile( "FRAMEWORKSHOME",    $FRAMEWORKSHOME,    "e" );
 ToFile( "Empty",             $empty,             "n" );
 
@@ -1232,20 +1231,6 @@ ToFile( "Empty",             $empty,             "n" );
 # (c = comment, e = environment variable, a = alias )
 ToFile( "Platform independent constant values.", $empty, "c" );
 # Languages
-ToFile( "WITH_LANG",         "@WITH_LANG@",      "e" );
-ToFile( "WITH_LANG_LIST",    "@WITH_LANG_LIST@", "e" );
-ToFile( "PROGRESSBARCOLOR",  "@PROGRESSBARCOLOR@",   "e" );
-ToFile( "PROGRESSSIZE",      "@PROGRESSSIZE@",       "e" );
-ToFile( "PROGRESSPOSITION",  "@PROGRESSPOSITION@",   "e" );
-ToFile( "PROGRESSFRAMECOLOR","@PROGRESSFRAMECOLOR@", "e" );
-ToFile( "STARTCENTER_LEFT_BITMAP",      "@STARTCENTER_LEFT_BITMAP@",      "e" );
-ToFile( "STARTCENTER_RIGHT_BITMAP",     "@STARTCENTER_RIGHT_BITMAP@",     "e" );
-ToFile( "STARTCENTER_RTL_LEFT_BITMAP",  "@STARTCENTER_RTL_LEFT_BITMAP@",  "e" );
-ToFile( "STARTCENTER_RTL_RIGHT_BITMAP", "@STARTCENTER_RTL_RIGHT_BITMAP@", "e" );
-ToFile( "STARTCENTER_SPACE_BITMAP",     "@STARTCENTER_SPACE_BITMAP@",     "e" );
-ToFile( "OOO_VENDOR",        "@OOO_VENDOR@",     "e" );
-ToFile( "OOODMAKEMODE",      "YES",              "e" );
-ToFile( "PRODUCTVERSION",    "@PRODUCTVERSION@", "e" );
 ToFile( "WITH_POOR_HELP_LOCALIZATIONS", $WITH_POOR_HELP_LOCALIZATIONS, "e" );
 
 if ("@ENABLE_DEBUG@" eq "TRUE") {
@@ -1254,44 +1239,15 @@ ToFile( "debug",             "true",             "e" );
 if ("@ENABLE_WERROR@" eq "FALSE") {
 ToFile( "EXTERNAL_WARNINGS_NOT_ERRORS", "TRUE",  "e" );
 }
-ToFile( "PRODUCT",           "@PRODUCT@",        "e" );
 ToFile( "PROEXT",            $PROEXT,            "e" );
-ToFile( "WITH_COMPAT_OOWRAPPERS", "@WITH_COMPAT_OOWRAPPERS@", "e" );
-ToFile( "UNIXWRAPPERNAME",   "@UNIXWRAPPERNAME@","e" );
-ToFile( "PRODUCTNAME",       "@PRODUCTNAME@",    "e" );
-ToFile( "INSTALLDIRNAME",    "@INSTALLDIRNAME@", "e" );
-ToFile( "PREFIXDIR",         "@PREFIXDIR@",      "e" );
-ToFile( "INSTALLDIR",        "@INSTALLDIR@",     "e" );
-ToFile( "LIBDIR",            "@LIBDIR@",         "e" );
-ToFile( "DATADIR",           "@DATADIR@",        "e" );
-ToFile( "MANDIR",            "@MANDIR@",         "e" );
-ToFile( "DOCDIR",            "@DOCDIR@",          "e" );
-ToFile( "DO_FETCH_TARBALLS", "@DO_FETCH_TARBALLS@", "e" );
-ToFile( "BUILD_MOZAB",       "@BUILD_MOZAB@",    "e" );
 ToFile( "PREBUILD_MOZAB",    $PREBUILD_MOZAB,    "e" );
 ToFile( "MOZILLA_VERSION",   $MOZILLA_VERSION,   "e" );
 ToFile( "DEFAULT_MOZILLA_TOOLKIT", $MOZILLA_TOOLKIT, "e" );
-ToFile( "SYSTEM_MOZILLA_HEADERS",  "@SYSTEM_MOZILLA_HEADERS@", "e" );
-ToFile( "MOZILLABUILD",  "@MOZILLABUILD@", "e" );
-ToFile( "BUILD_VER_STRING",  "@BUILD_VER_STRING@", "e" );
 if ($platform =~ m/linux/ && $platform =~ m/powerpc/) {
 ToFile( "JITC_PROCESSOR_TYPE","6",                 "e" );
 }
-ToFile( "DEFAULT_TO_ENGLISH_FOR_PACKING",  "yes", "e" );
-ToFile( "SPLIT_APP_MODULES", "@SPLIT_APP_MODULES@","e" );
-ToFile( "SPLIT_OPT_FEATURES","@SPLIT_OPT_FEATURES@","e" );
-ToFile( "WITH_THEMES",       "@WITH_THEMES@",      "e");
-ToFile( "WITH_HELPPACK_INTEGRATION",       "@WITH_HELPPACK_INTEGRATION@",      "e");
-ToFile( "WITH_EXTENSION_INTEGRATION",       "@WITH_EXTENSION_INTEGRATION@",      "e");
-ToFile( "MOC",               "@MOC@",              "e" );
-ToFile( "MOC4",              "@MOC4@",             "e" );
-ToFile( "KDE_HAVE_GLIB",     "@KDE_HAVE_GLIB@",    "e" );
-ToFile( "PSPRINT",           "TRUE",             "e" );
-ToFile( "MKDEPENDSOLVER",    "TRUE",             "e" );
 ToFile( "nodep",             "@nodep@",          "e" );
 ToFile( "TARFILE_LOCATION",  $TARFILE_LOCATION,  "e" );
-ToFile( "GIT_LINK_SRC", "@GIT_LINK_SRC@",  "e" );
-ToFile( "GIT_REPO_NAMES", "@GIT_REPO_NAMES@",  "e" );
 
 #
 # Writing the platform dependent constant values to file.
@@ -1389,7 +1345,6 @@ if ( $JDK ne "gcj" ) {
 else {
    ToFile( "JAVACISGCJ",       '@JAVACISGCJ@',      "e" );
 }
-ToFile( "AWTLIB",           '@AWTLIB@',          "e" );
 if ( '@JDK@' ne '' )
 {
    ToFile( "JDK",             "@JDK@",           "e" );
@@ -1402,7 +1357,6 @@ if ( '@JDK@' ne '' )
    ToFile( "JAVADOC",         PathFormat("@JAVADOC@"), "e" );
    ToFile( "JVM_ONE_PATH_CHECK", "@JVM_ONE_PATH_CHECK@", "e" );
 }
-ToFile( "SCPDEFS",           '@SCPDEFS@',        "e" );
 ToFile( "SOLAREXTRAINC",     $SOLAREXTRAINC,     "e" );
 ToFile( "SOLAREXTRALIB",     $SOLAREXTRALIB,     "e" );
 if ( '@CROSS_COMPILING@' eq 'YES' )
@@ -1453,120 +1407,14 @@ else
    ToFile( "SOLARLIB_FOR_BUILD", $SOLARLIB,      "e" );
    ToFile( "WORKDIR_FOR_BUILD", $WORKDIR,        "e" );
 }
-ToFile( "BUILD_NCPUS",          "@BUILD_NCPUS@", "e" );
-ToFile( "GMAKE_PARALLELISM",    "@GMAKE_PARALLELISM@", "e" );
-ToFile( "GMAKE_MODULE_PARALLELISM","@GMAKE_MODULE_PARALLELISM@", "e" );
-ToFile( "ALIGNOF_SHORT",        "@ALIGNOF_SHORT@", "e" );
-ToFile( "ALIGNOF_INT",          "@ALIGNOF_INT@", "e" );
-ToFile( "ALIGNOF_LONG",         "@ALIGNOF_LONG@", "e" );
-ToFile( "ALIGNOF_DOUBLE",       "@ALIGNOF_DOUBLE@", "e" );
-ToFile( "WORDS_BIGENDIAN",      "@WORDS_BIGENDIAN@", "e" );
-ToFile( "HAVE_GCC_NO_LONG_DOUBLE", "@HAVE_GCC_NO_LONG_DOUBLE@", "e" );
-ToFile( "HAVE_GCC_AVX", "@HAVE_GCC_AVX@", "e" );
-ToFile( "HAVE_GCC_VISIBILITY_FEATURE",
-		"@HAVE_GCC_VISIBILITY_FEATURE@", "e" );
-ToFile( "HAVE_GCC_VISIBILITY_BROKEN",
-        "@HAVE_GCC_VISIBILITY_BROKEN@", "e" );
-ToFile( "HAVE_LD_HASH_STYLE","@HAVE_LD_HASH_STYLE@","e" );
-ToFile( "WITH_LINKER_HASH_STYLE","@WITH_LINKER_HASH_STYLE@","e" );
-ToFile( "HAVE_LD_BSYMBOLIC_FUNCTIONS",
-		"@HAVE_LD_BSYMBOLIC_FUNCTIONS@","e" );
-ToFile( "HAVE_THREADSAFE_STATICS", "@HAVE_THREADSAFE_STATICS@", "e" );
-ToFile( "HAVE_CXX0X",        "@HAVE_CXX0X@",     "e" );
 ToFile( "CXX",               $CXX,               "e" );
-ToFile( "MINGWCXX",          "@MINGWCXX@",       "e" );
-ToFile( "MINGWSTRIP",        "@MINGWSTRIP@",     "e" );
-ToFile( "WITH_STLPORT",      "@WITH_STLPORT@", "e" );
-ToFile( "ALLOC",             "@ALLOC@",          "e" );
-ToFile( "DISABLE_LINKOO",    "@DISABLE_LINKOO@",    "e" );
-ToFile( "DISABLE_STRIP",     "@DISABLE_STRIP@",     "e" );
-ToFile( "CL_X64",            "@CL_X64@",            "e");
-ToFile( "WITH_MYSPELL_DICTS","@WITH_MYSPELL_DICTS@","e");
-ToFile( "DICT_SYSTEM_DIR",   "@DICT_SYSTEM_DIR@",  "e");
-ToFile( "HYPH_SYSTEM_DIR",   "@HYPH_SYSTEM_DIR@",  "e");
-ToFile( "THES_SYSTEM_DIR",   "@THES_SYSTEM_DIR@",  "e");
-ToFile( "WITH_LDAP",         "@WITH_LDAP@",        "e" );
-ToFile( "WITH_OPENLDAP",     "@WITH_OPENLDAP@",    "e" );
-ToFile( "WITH_MOZILLA",      "@WITH_MOZILLA@",     "e" );
-ToFile( "SYSTEM_MOZILLA",    "@SYSTEM_MOZILLA@",   "e" );
-ToFile( "MOZ_FLAVOUR",       "@MOZ_FLAVOUR@",      "e" );
-ToFile( "MOZ_INC",           "@MOZ_INC@",          "e" );
-ToFile( "MOZ_LIB",           "@MOZ_LIB@",          "e" );
-ToFile( "MOZ_LIB_XPCOM",     "@MOZ_LIB_XPCOM@",    "e" );
-ToFile( "OOOP_GALLERY_PACK", "@OOOP_GALLERY_PACK@","e" );
-ToFile( "OOOP_TEMPLATES_PACK", "@OOOP_TEMPLATES_PACK@","e" );
-ToFile( "OOOP_FONTS_PACK",   "@OOOP_FONTS_PACK@","e" );
-ToFile( "OOOP_SAMPLES_PACK", "@OOOP_SAMPLES_PACK@","e" );
-ToFile( "CT2N_EXTENSION_PACK", "@CT2N_EXTENSION_PACK@","e" );
-ToFile( "BARCODE_EXTENSION_PACK", "@BARCODE_EXTENSION_PACK@","e" );
-ToFile( "DIAGRAM_EXTENSION_PACK", "@DIAGRAM_EXTENSION_PACK@","e" );
-ToFile( "VALIDATOR_EXTENSION_PACK", "@VALIDATOR_EXTENSION_PACK@","e" );
-ToFile( "WATCH_WINDOW_EXTENSION_PACK", "@WATCH_WINDOW_EXTENSION_PACK@","e" );
-ToFile( "NUMBERTEXT_EXTENSION_PACK", "@NUMBERTEXT_EXTENSION_PACK@","e" );
-ToFile( "HUNART_EXTENSION_PACK", "@HUNART_EXTENSION_PACK@","e" );
-ToFile( "TYPO_EXTENSION_PACK", "@TYPO_EXTENSION_PACK@","e" );
-ToFile( "GOOGLE_DOCS_EXTENSION_PACK", "@GOOGLE_DOCS_EXTENSION_PACK@","e" );
-ToFile( "OOOBLOGGER_EXTENSION_PACK", "@OOOBLOGGER_EXTENSION_PACK@","e" );
-ToFile( "SUNTEMPLATES_DE_PACK", "@SUNTEMPLATES_DE_PACK@","e" );
-ToFile( "SUNTEMPLATES_EN_US_PACK", "@SUNTEMPLATES_EN_US_PACK@","e" );
-ToFile( "SUNTEMPLATES_ES_PACK", "@SUNTEMPLATES_ES_PACK@","e" );
-ToFile( "SUNTEMPLATES_FR_PACK", "@SUNTEMPLATES_FR_PACK@","e" );
-ToFile( "SUNTEMPLATES_HU_PACK", "@SUNTEMPLATES_HU_PACK@","e" );
-ToFile( "SUNTEMPLATES_IT_PACK", "@SUNTEMPLATES_IT_PACK@","e" );
-ToFile( "WITH_FONTS",        "@WITH_FONTS@",       "e" );
-ToFile( "WITH_AGFA_MONOTYPE_FONTS",  "@WITH_AGFA_MONOTYPE_FONTS@", "e" );
-ToFile( "WITHOUT_AFMS",      "@WITHOUT_AFMS@",     "e" );
-ToFile( "WITHOUT_PPDS",      "@WITHOUT_PPDS@",     "e" );
-ToFile( "WITH_BINFILTER",    "@WITH_BINFILTER@",   "e" );
-ToFile( "BUILD_TYPE",        "$BUILD_TYPE",       "e" );
-ToFile( "MINGW_EXTERNAL_DLLS","@MINGW_EXTERNAL_DLLS@","e");
-ToFile( "VERBOSE",           "@VERBOSE@",          "e" );
+ToFile( "BUILD_TYPE",        "$BUILD_TYPE",      "e" );
 if ( '@ENABLE_RPATH@' eq "no" ) {
   ToFile( "LINKFLAGSRUNPATH",'',                   "e" );
 }
 ToFile( "EPM_FLAGS",         $EPM_FLAGS,           "e" );
-ToFile( "BUILD_EPM",         "@BUILD_EPM@",        "e" );
-ToFile( "GPERF",             "@GPERF@",            "e" );
-ToFile( "PKGFORMAT",         "@PKGFORMAT@",        "e" );
-ToFile( "DISABLE_PYTHON",    "@DISABLE_PYTHON@",   "e" );
-ToFile( "SYSTEM_PYTHON",     "@SYSTEM_PYTHON@",    "e" );
-ToFile( "PYTHON",            "@PYTHON@",           "e" );
-ToFile( "ICU_MAJOR",         "@ICU_MAJOR@",        "e" );
-ToFile( "ICU_MINOR",         "@ICU_MINOR@",        "e" );
-ToFile( "ICU_MICRO",         "@ICU_MICRO@",        "e" );
-ToFile( "ICU_RECLASSIFIED_CLOSE_PARENTHESIS", "@ICU_RECLASSIFIED_CLOSE_PARENTHESIS@", "e" );
-ToFile( "XRANDR_DLOPEN",     "@XRANDR_DLOPEN@",    "e" );
-ToFile( "USE_FT_EMBOLDEN",   "@USE_FT_EMBOLDEN@",  "e" );
-ToFile( "WITH_EXTRA_GALLERY","@WITH_EXTRA_GALLERY@",      "e" );
-ToFile( "WITH_EXTRA_TEMPLATE","@WITH_EXTRA_TEMPLATE@",      "e" );
-ToFile( "WITH_EXTRA_SAMPLE", "@WITH_EXTRA_SAMPLE@",      "e" );
-ToFile( "WITH_EXTRA_FONT",   "@WITH_EXTRA_FONT@",      "e" );
-ToFile( "OXYGENOFFICE_PACK","@OXYGENOFFICE_PACK@","e" );
-ToFile( "DB_LIB",            "@DB_LIB@",           "e" );
-ToFile( "DB_CPPLIB",         "@DB_CPPLIB@",        "e" );
-ToFile( "MYSQL_INC",         "@MYSQL_INC@",        "e" );
-ToFile( "MYSQL_LIB",         "@MYSQL_LIB@",        "e" );
-ToFile( "MYSQL_DEFINES",     "@MYSQL_DEFINES@",    "e" );
-ToFile( "LIBMYSQL_PATH",     "@LIBMYSQL_PATH@",    "e" );
-ToFile( "SYSTEM_LIBXSLT",    "@SYSTEM_LIBXSLT@",   "e" );
-ToFile( "NEON_VERSION",      "@NEON_VERSION@",     "e" );
-ToFile( "BUILD_DMAKE",       "@BUILD_DMAKE@",      "e" );
-ToFile( "BUILD_STAX",        "@BUILD_STAX@",       "e" );
-ToFile( "BUILD_UNOWINREG",   "@BUILD_UNOWINREG@",  "e" );
-ToFile( "USE_XINERAMA",      "@USE_XINERAMA@",     "e" );
-ToFile( "XINERAMA_LINK",     "@XINERAMA_LINK@",    "e" );
-ToFile( "WITH_KRB5",         "@WITH_KRB5@",        "e" );
-ToFile( "WITH_GSSAPI",       "@WITH_GSSAPI@",      "e" );
-ToFile( "BUILD_POSTGRESQL_SDBC",   "@BUILD_POSTGRESQL_SDBC@", "e" );
-ToFile( "POSTGRESQL_INC",    "@POSTGRESQL_INC@",   "e" );
-ToFile( "POSTGRESQL_LIB",    "@POSTGRESQL_LIB@",   "e" );
-ToFile( "HAVE_GETOPT",       "@HAVE_GETOPT@",      "e" );
-ToFile( "HAVE_READDIR_R",    "@HAVE_READDIR_R@",   "e" );
-ToFile( "HAVE_POSIX_FALLOCATE",    "@HAVE_POSIX_FALLOCATE@",   "e" );
-ToFile( "HYPHEN_LIB",        "@HYPHEN_LIB@",       "e" );
 ToFile( "GXX_INCLUDE_PATH",  PathFormat("@GXX_INCLUDE_PATH@"), "e" );
 ToFile( "COMMON_BUILD_TOOLS",$COMMON_BUILD_TOOLS,  "e" );
-ToFile( "MERGELIBS",         "@MERGELIBS@",           "e" );
 
 if ($platform !~ m/cygwin/) {
    if ( !defined $ENV{"TMPDIR"} || $ENV{"TMPDIR"} eq "" ) {
@@ -1607,7 +1455,6 @@ if ($platform =~ m/solaris|darwin|freebsd/)
 {
   ToFile( "GNUPATCH",   "@GNUPATCH@",	"e");
 }
-ToFile( "GNUCOPY",	"@GNUCP@",	"e");
 
 ToFile( "ENV_SCRIPT", "$outfile", "e" );
 #

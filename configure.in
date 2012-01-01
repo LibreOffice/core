@@ -6598,6 +6598,8 @@ dnl ===================================================================
 SYSTEM_GENBRK=
 SYSTEM_GENCCODE=
 SYSTEM_GENCMN=
+# x_ICU us used to comment-out ICU_MAJOR/MINOR/MICRO in config_host.mk
+x_ICU=
 ICU_MAJOR=
 ICU_MINOR=
 ICU_MICRO=
@@ -6652,10 +6654,13 @@ if test "$with_system_icu" = "yes"; then
     MINGW_EXTERNAL_DLLS="$MINGW_EXTERNAL_DLLS icui18n$ICU_MAJOR$ICU_MINOR.dll icuuc$ICU_MAJOR$ICU_MINOR.dll icudata$ICU_MAJOR$ICU_MINOR.dll"
 else
     AC_MSG_RESULT([internal])
+    x_ICU=[\#]
     SYSTEM_ICU="NO"
     ICU_RECLASSIFIED_CLOSE_PARENTHESIS="YES"
     BUILD_TYPE="$BUILD_TYPE ICU"
 fi
+
+AC_SUBST(x_ICU)
 AC_SUBST(SYSTEM_ICU)
 AC_SUBST(SYSTEM_GENBRK)
 AC_SUBST(SYSTEM_GENCCODE)
