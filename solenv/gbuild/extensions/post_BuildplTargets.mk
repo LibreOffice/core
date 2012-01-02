@@ -124,7 +124,8 @@ cross_toolset: $(WORKDIR)/bootstrap $(SRCDIR)/src.downloaded
 findunusedcode:
 	@which callcatcher > /dev/null 2>&1 || \
 	    (echo "callcatcher not installed" && false)
-	@sed -e s,$(INPATH),callcatcher,g $(SRCDIR)/Env.Host.sh > $(SRCDIR)/Env.callcatcher.sh
+	@sed -e s,$(INPATH),callcatcher,g $(SRCDIR)/config_host.mk > $(SRCDIR)/config_host_callcatcher.mk
+	@sed -e s,config_host,config_host_callcatcher,g $(SRCDIR)/Env.Host.sh > $(SRCDIR)/Env.callcatcher.sh
 	@mkdir -p $(SRCDIR)/solenv/callcatcher/bin && \
 	    ln -sf $(SRCDIR)/solenv/$(INPATH)/bin/dmake \
 		$(SRCDIR)/solenv/callcatcher/bin/dmake && \
