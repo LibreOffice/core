@@ -171,17 +171,17 @@ SwHeaderFooterWin::SwHeaderFooterWin( SwEditWin* pEditWin, const SwPageFrm* pPag
     m_pPopupMenu = new PopupMenu( SW_RES( MN_HEADERFOOTER_BUTTON ) );
 
     // Rewrite the menu entries' text
-    String sType = SW_RESSTR( STR_FOOTER );
     if ( m_bIsHeader )
-        sType = SW_RESSTR( STR_HEADER );
-    SwRewriter aRewriter;
-    aRewriter.AddRule( String::CreateFromAscii( "$1" ), sType );
+    {
+        m_pPopupMenu->SetItemText( FN_HEADERFOOTER_EDIT, SW_RESSTR( STR_FORMAT_HEADER ) );
+        m_pPopupMenu->SetItemText( FN_HEADERFOOTER_DELETE, SW_RESSTR( STR_DELETE_HEADER ) );
+    }
+    else
+    {
+        m_pPopupMenu->SetItemText( FN_HEADERFOOTER_EDIT, SW_RESSTR( STR_FORMAT_FOOTER ) );
+        m_pPopupMenu->SetItemText( FN_HEADERFOOTER_DELETE, SW_RESSTR( STR_DELETE_FOOTER ) );
+    }
 
-    String aText = m_pPopupMenu->GetItemText( FN_HEADERFOOTER_EDIT );
-    m_pPopupMenu->SetItemText( FN_HEADERFOOTER_EDIT, aRewriter.Apply( aText ) );
-
-    aText = m_pPopupMenu->GetItemText( FN_HEADERFOOTER_DELETE );
-    m_pPopupMenu->SetItemText( FN_HEADERFOOTER_DELETE, aRewriter.Apply( aText ) );
     SetPopupMenu( m_pPopupMenu );
 
     m_aFadeTimer.SetTimeout( 50 );
