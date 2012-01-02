@@ -49,8 +49,8 @@ my ( $SOLAR_JAVA,
      $CC, $CXX);
 #
 # Platform dependent constant values.
-my ( $COM, $ARCH, $CPU,
-      $OS, $OSVERSION, $OUTPATH, $INPATH,
+my ( $ARCH,
+      $OSVERSION, $OUTPATH, $INPATH,
       $DYNAMIC_CRT, $use_shl_versions, $JRELIBDIR,
       $JRETOOLKITDIR, $JRETHREADDIR );
 #
@@ -76,7 +76,7 @@ my ( $oldPATH, $SRC_ROOT, $JAVA_HOME, $JDK, $JAVAFLAGS, $OOO_SHELL,
      $COMP_ENV, $ILIB, $JAVAHOME, $WINDOWS_SDK_HOME, $DIRECTXSDK_LIB, $DOTNET_FRAMEWORK_HOME,
      $USE_DIRECTX5, $ATL_LIB, $ATL_INCLUDE, $MFC_LIB, $MFC_INCLUDE, $TMPDIR,
      $COMMON_BUILD_TOOLS, $WIN_GREP, $WIN_FIND, $WIN_LS,
-     $WIN_GNUCOPY, $WIN_TOUCH, $MOZILLA_VERSION, $MOZILLA_TOOLKIT, $PREBUILD_MOZAB, $MOZILLABUILD,
+     $WIN_GNUCOPY, $WIN_TOUCH,
      $PROEXT, $TARFILE_LOCATION, $GNUMAKE,
      $PYTHON, $SYSTEM_PYTHON, $SYSTEM_MOZILLA, $EPM_FLAGS,
      $MACOSX_SDK_PATH,
@@ -89,9 +89,6 @@ my ( $oldPATH, $SRC_ROOT, $JAVA_HOME, $JDK, $JAVAFLAGS, $OOO_SHELL,
 my ( $dmake, $build, $mkout, $deliver, $zipdep );
 #
 
-$OS="@OS@";
-$CPU="@CPU@";
-$COM="@COM@";
 $INPATH="@INPATH@";
 $OUTPATH="@OUTPATH@";
 
@@ -125,8 +122,6 @@ $JAVAFLAGS 		= '@JAVAFLAGS@';
 $MINGW          = '@WITH_MINGW@';    # use MinGW for Windows build
 $CC             = '@CC@';            # C compiler
 $CXX            = '@CXX@';           # C++ compiler
-$MOZILLA_VERSION	= '@MOZILLA_VERSION@'; # mozilla version to use to build mozilla
-$MOZILLA_TOOLKIT	= '@MOZILLA_TOOLKIT@'; # GUI toolkit to use to build mozilla
 $PROEXT         = "@PROEXT@";
 $EPM_FLAGS	= "";
 $CL_X64 = '@CL_X64@';
@@ -634,62 +629,6 @@ $OOO_SHELL = '@BASH@';
 if ($platform =~ m/cygwin/)
 {
     $ASM_PATH = PathFormat('@ASM_HOME@');
-}
-
-# Check for prebuild mozab libraries if we don't build them # ourselves
-# and we're also not using the external system mozilla installation.
-#
-# FIXME! This check should be done in configure and not here, but
-# the $OS, $COM, $CPU variables are not yet present there.
-#
-if ( "@WITH_MOZILLA@" eq "YES" and "@BUILD_MOZAB@" ne "TRUE" and "@SYSTEM_MOZILLA@" ne "YES" )
-{
-   print("Checking for prebuilt Mozilla libraries ...");
-   my $mozbinfile = $SRC_ROOT."/moz/zipped/";
-   $mozbinfile .= $OS.$COM.$CPU;
-   if ( -e $mozbinfile."inc.zip"
-        and -e $mozbinfile."lib.zip"
-        and -e $mozbinfile."runtime.zip" )
-   {   print " found.\n";
-       $PREBUILD_MOZAB = "YES";
-   }
-   else
-   {   print " not found!\n\n";
-       print "If you don\'t use the system mozilla and also not build the needed\n";
-       print "mozilla libraries yourself you have to provide the needed files\n";
-       print "$OS$COM$CPU\{inc,lib,runtime\}.zip in moz/zipped/ .\n";
-       print "These files can be found here:\n";
-       print "  <http://dev-www.libreoffice.org/mozilla/>.\n\n";
-       die;
-   }
-   if ( $OS eq 'WNT' ) {
-       my $ext_msvc = $SRC_ROOT."/external/msvcp80";
-       chomp( $ext_msvc = qx{cygpath -d "$ext_msvc"} );
-       print("Checking for MSVC 2005 runtime needed for the prebuilt Mozilla ...");
-       if ( -e $ext_msvc."/Microsoft.VC80.CRT.manifest" and
-               -e $ext_msvc."/msvcp80.dll" and
-               -e $ext_msvc."/msvcr80.dll" ) 
-       {
-           print " found.\n";
-       }
-       else
-       {   print " not found!\n\n";
-           print "For the pre-built Mozilla libraries, you need MSVC 2005 runtime\n";
-           print "files Microsoft.VC80.CRT.manifest, msvcp80.dll, and msvcr80.dll\n";
-           print "in external/msvcp80.\n\n";
-           print "You can get them by installing:\n";
-           print "  <http://download.microsoft.com/download/8/B/4/8B42259F-5D70-43F4-AC2E-4B208FD8D66A/vcredist_x86.EXE>.\n";
-           print "and copying the abovementioned files from:\n";
-           print "  c:/windows/winsxs/x86_Microsoft.VC80.CRT_1fc8b3b9a1e18e3b_8.0.50727.4053_x-ww_e6967989/\n";
-           print "and\n";
-           print "  c:/windows/winsxs/manifests/x86_Microsoft.VC80.CRT_1fc8b3b9a1e18e3b_8.0.50727.4053_x-ww_e6967989.manifest\n\n";
-           die;
-       }
-    }
-}
-else
-{
-   $PREBUILD_MOZAB = "";
 }
 
 #
@@ -1240,9 +1179,6 @@ if ("@ENABLE_WERROR@" eq "FALSE") {
 ToFile( "EXTERNAL_WARNINGS_NOT_ERRORS", "TRUE",  "e" );
 }
 ToFile( "PROEXT",            $PROEXT,            "e" );
-ToFile( "PREBUILD_MOZAB",    $PREBUILD_MOZAB,    "e" );
-ToFile( "MOZILLA_VERSION",   $MOZILLA_VERSION,   "e" );
-ToFile( "DEFAULT_MOZILLA_TOOLKIT", $MOZILLA_TOOLKIT, "e" );
 if ($platform =~ m/linux/ && $platform =~ m/powerpc/) {
 ToFile( "JITC_PROCESSOR_TYPE","6",                 "e" );
 }

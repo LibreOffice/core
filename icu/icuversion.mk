@@ -25,14 +25,14 @@
 #
 #*************************************************************************
 # major
-.IF "$(ICU_MAJOR)" = ""
+.IF "$(ICU_MAJOR)" == ""
 ICU_MAJOR=4
 .ENDIF
 # minor
-.IF "$(ICU_MINOR)" = ""
+.IF "$(ICU_MINOR)" == ""
 ICU_MINOR=4
 .ENDIF
 # micro
-.IF "$(ICU_MICRO)" = ""
+.IF "$(ICU_MICRO)" == ""
 ICU_MICRO=2
 .ENDIF
