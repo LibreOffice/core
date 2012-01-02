@@ -125,7 +125,6 @@ TabPage OFA_TP_MISC
         Pos = MAP_APPFONT( COL1, ROW6 );
         Size = MAP_APPFONT( WHOLE_WIDTH, RSC_CD_CHECKBOX_HEIGHT );
         Text [ en-US ] = "Show ODMA DMS dialogs first";
-        Text [ en-GB ] = "Show ODMA DMS dialogues first";
     };
     FixedLine FL_PRINTDLG
     {
