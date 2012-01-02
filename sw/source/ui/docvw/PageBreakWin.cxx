@@ -477,15 +477,9 @@ void SwPageBreakWin::UpdatePosition( )
     {
         long nRight = std::min( nPgRight + aBtnSize.getWidth() - ARROW_WIDTH / 2, aVisArea.Right() );
         nBtnLeft = nRight - aBtnSize.getWidth();
-        if ( IsVisible() )
-           nLineRight = nBtnLeft;
     }
     else
-    {
         nBtnLeft = std::max( nPgLeft - aBtnSize.Width() + ARROW_WIDTH / 2, aVisArea.Left() );
-        if ( IsVisible() )
-           nLineLeft = nBtnLeft + aBtnSize.Width();
-    }
 
     // Set the button position
     Point aBtnPos( nBtnLeft, nYLineOffset - aBtnSize.Height() / 2 );
