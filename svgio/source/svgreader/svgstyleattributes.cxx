@@ -203,7 +203,7 @@ namespace svgio
                         aId = aId + *mrOwner.getClass();
                         pNew = rDocument.findSvgStyleAttributesById(aId);
 
-                        if(!pNew)
+                        if(!pNew && rClassStr.getLength())
                         {
                             aId = rClassStr + aId;
 
@@ -213,6 +213,10 @@ namespace svgio
                     else if(mrOwner.getId())
                     {
                         pNew = rDocument.findSvgStyleAttributesById(*mrOwner.getId());
+                    }
+                    else if(rClassStr.getLength())
+                    {
+                        pNew = rDocument.findSvgStyleAttributesById(rClassStr);
                     }
 
                     if(pNew)

@@ -41,13 +41,13 @@ namespace svgio
         {
         private:
             // the complete SVG Document
-            SvgDocument         maDocument;
+            SvgDocument                     maDocument;
 
             // current node for parsing
-            SvgNode*            mpTarget;
+            SvgNode*                        mpTarget;
 
-            /// bitfield
-            bool                mbValidToken : 1;
+            // text collector string stack for css styles
+            std::vector< rtl::OUString >    maCssContents;
 
         public:
             SvgDocHdl(const rtl::OUString& rAbsolutePath);

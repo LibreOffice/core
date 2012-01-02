@@ -51,9 +51,6 @@ namespace svgio
 
         const SvgStyleAttributes* SvgClipPathNode::getSvgStyleAttributes() const
         {
-            static rtl::OUString aClassStr(rtl::OUString::createFromAscii("clip-path"));
-            maSvgStyleAttributes.checkForCssStyle(aClassStr);
-
             return &maSvgStyleAttributes;
         }
 

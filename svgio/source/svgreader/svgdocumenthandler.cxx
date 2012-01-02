@@ -125,7 +125,8 @@ namespace svgio
     {
         SvgDocHdl::SvgDocHdl(const rtl::OUString& aAbsolutePath)
         :   maDocument(aAbsolutePath),
-            mpTarget(0)
+            mpTarget(0),
+            maCssContents()
         {
         }
 
@@ -137,17 +138,20 @@ namespace svgio
                 OSL_ENSURE(false, "SvgDocHdl destructed with active target (!)");
                 delete mpTarget;
             }
+            OSL_ENSURE(!maCssContents.size(), "SvgDocHdl destructed with active css style stack entry (!)");
 #endif
         }
 
         void SvgDocHdl::startDocument(  ) throw (xml::sax::SAXException, uno::RuntimeException)
         {
             OSL_ENSURE(!mpTarget, "Already a target at document start (!)");
+            OSL_ENSURE(!maCssContents.size(), "SvgDocHdl startDocument with active css style stack entry (!)");
         }
 
         void SvgDocHdl::endDocument(  ) throw (xml::sax::SAXException, uno::RuntimeException)
         {
             OSL_ENSURE(!mpTarget, "Still a target at document end (!)");
+            OSL_ENSURE(!maCssContents.size(), "SvgDocHdl endDocument with active css style stack entry (!)");
         }
 
         void SvgDocHdl::startElement( const ::rtl::OUString& aName, const uno::Reference< xml::sax::XAttributeList >& xAttribs ) throw (xml::sax::SAXException, uno::RuntimeException)
@@ -294,8 +298,14 @@ namespace svgio
                     /// styles (as stylesheets)
                     case SVGTokenStyle:
                     {
-                        mpTarget = new SvgStyleNode(maDocument, mpTarget);
+                        SvgStyleNode* pNew = new SvgStyleNode(maDocument, mpTarget);
+                        mpTarget = pNew;
                         mpTarget->parseAttributes(xAttribs);
+
+                        if(pNew->isTextCss())
+                        {
+                            maCssContents.push_back(rtl::OUString());
+                        }
                         break;
                     }
 
@@ -355,6 +365,7 @@ namespace svgio
             {
                 const SVGToken aSVGToken(StrToSVGToken(aName));
                 SvgNode* pWhitespaceCheck(SVGTokenText == aSVGToken ? mpTarget : 0);
+                SvgStyleNode* pCssStyle(SVGTokenStyle == aSVGToken ? static_cast< SvgStyleNode* >(mpTarget) : 0);
 
                 switch(aSVGToken)
                 {
@@ -427,6 +438,21 @@ namespace svgio
                     }
                 }
 
+                if(pCssStyle && pCssStyle->isTextCss())
+                {
+                    // css style parsing
+                    if(maCssContents.size())
+                    {
+                        // need to interpret css styles and remember them as StyleSheets
+                        pCssStyle->addCssStyleSheet(*(maCssContents.end() - 1));
+                        maCssContents.pop_back();
+                    }
+                    else
+                    {
+                        OSL_ENSURE(false, "Closing CssStyle, but no collector string on stack (!)");
+                    }
+                }
+
                 if(pWhitespaceCheck)
                 {
                     // cleanup read strings
@@ -480,12 +506,20 @@ namespace svgio
 
                             if(rSvgStyleNode.isTextCss())
                             {
-                                // need to interpret css styles and remember them as StyleSheets
-                                const ::rtl::OUString aTrimmedChars(aChars.trim());
-
-                                if(aTrimmedChars.getLength())
+                                // collect characters for css style
+                                if(maCssContents.size())
                                 {
-                                    rSvgStyleNode.addCssStyleSheet(aTrimmedChars);
+                                    const ::rtl::OUString aTrimmedChars(aChars.trim());
+
+                                    if(aTrimmedChars.getLength())
+                                    {
+                                        std::vector< rtl::OUString >::iterator aString(maCssContents.end() - 1);
+                                        (*aString) += aTrimmedChars;
+                                    }
+                                }
+                                else
+                                {
+                                    OSL_ENSURE(false, "Closing CssStyle, but no collector string on stack (!)");
                                 }
                             }
                             break;

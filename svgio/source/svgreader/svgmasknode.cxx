@@ -60,9 +60,6 @@ namespace svgio
 
         const SvgStyleAttributes* SvgMaskNode::getSvgStyleAttributes() const
         {
-            static rtl::OUString aClassStr(rtl::OUString::createFromAscii("mask"));
-            maSvgStyleAttributes.checkForCssStyle(aClassStr);
-
             return &maSvgStyleAttributes;
         }
 
