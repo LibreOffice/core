@@ -6371,7 +6371,6 @@ Please recompile $tmp with --enable-ldap or use --with-openldap.])
 
 elif test "$enable_mozilla" = "no"; then
     AC_MSG_RESULT([none])
-    x_MOZ=[\#]
     WITH_MOZILLA=NO
 else
     AC_MSG_RESULT([internal])
@@ -6536,7 +6535,6 @@ These files can be found at <http://dev-www.libreoffice.org/mozilla/>
         fi
     fi
 fi
-AC_SUBST(x_MOZ)
 AC_SUBST(BUILD_MOZAB)
 AC_SUBST(PREBUILT_MOZAB)
 AC_SUBST(MOZILLABUILD)
