@@ -287,20 +287,21 @@ TypeDescriptor_Init_Impl::~TypeDescriptor_Init_Impl() SAL_THROW( () )
 
     if( pWeakMap )
     {
-        sal_Int32 nSize = pWeakMap->size();
-        typelib_TypeDescriptionReference ** ppTDR = new typelib_TypeDescriptionReference *[ nSize ];
+        std::vector< typelib_TypeDescriptionReference * > ppTDR;
         // save al weak references
         WeakMap_Impl::const_iterator aIt = pWeakMap->begin();
-        sal_Int32 i = 0;
         while( aIt != pWeakMap->end() )
         {
-            typelib_typedescriptionreference_acquire( ppTDR[i++] = (*aIt).second );
+            ppTDR.push_back( (*aIt).second );
+            typelib_typedescriptionreference_acquire( ppTDR.back() );
             ++aIt;
         }
 
-        for( i = 0; i < nSize; i++ )
+        for( std::vector< typelib_TypeDescriptionReference * >::iterator i(
+                 ppTDR.begin() );
+             i != ppTDR.end(); ++i )
         {
-            typelib_TypeDescriptionReference * pTDR = ppTDR[i];
+            typelib_TypeDescriptionReference * pTDR = *i;
             OSL_ASSERT( pTDR->nRefCount > pTDR->nStaticRefCount );
             pTDR->nRefCount -= pTDR->nStaticRefCount;
 
@@ -311,8 +312,6 @@ TypeDescriptor_Init_Impl::~TypeDescriptor_Init_Impl() SAL_THROW( () )
             }
             typelib_typedescriptionreference_release( pTDR );
         }
-
-        delete [] ppTDR;
 
 #if OSL_DEBUG_LEVEL > 1
         aIt = pWeakMap->begin();
