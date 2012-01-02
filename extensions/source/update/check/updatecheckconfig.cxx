@@ -236,8 +236,7 @@ rtl::OUString UpdateCheckConfig::getAllUsersDirectory()
     if( ! FAILED( SHGetSpecialFolderPathW( NULL, szPath, CSIDL_COMMON_DOCUMENTS, true ) ) )
     {
         aRet = rtl::OUString( reinterpret_cast< sal_Unicode * >(szPath) );
-        osl::FileBase::RC rc;
-        rc = osl::FileBase::getFileURLFromSystemPath( aRet, aRet );
+        osl::FileBase::getFileURLFromSystemPath( aRet, aRet );
     }
 #else
     osl::FileBase::getTempDirURL(aRet);
