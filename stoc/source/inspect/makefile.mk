@@ -48,7 +48,8 @@ SHL1TARGET=	$(TARGET)
 SHL1STDLIBS= \
         $(CPPULIB)		\
         $(CPPUHELPERLIB)	\
-        $(SALLIB)
+        $(SALLIB)               \
+        $(SALHELPERLIB)
 
 SHL1VERSIONMAP = $(SOLARENV)/src/component.map
 SHL1RPATH=URELIB

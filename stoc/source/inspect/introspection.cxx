@@ -40,6 +40,7 @@
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/typeprovider.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 
 #include <com/sun/star/uno/DeploymentException.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
@@ -64,6 +65,7 @@
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 
+#include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/strbuf.hxx>
 #include <boost/unordered_map.hpp>
@@ -143,9 +145,6 @@ sal_Bool isDerivedFrom( Reference<XIdlClass> xToTestClass, Reference<XIdlClass> 
 // Entspricht dem alten IntrospectionAccessImpl, bildet jetzt den statischen
 // Anteil des neuen Instanz-bezogenen ImplIntrospectionAccess
 
-// ACHTUNG !!! Von Hand refcounten !!!
-
-
 // Hashtable fuer die Suche nach Namen
 struct hashName_Impl
 {
@@ -186,7 +185,7 @@ LowerToExactNameMap;
 
 
 class ImplIntrospectionAccess;
-class IntrospectionAccessStatic_Impl
+class IntrospectionAccessStatic_Impl: public salhelper::SimpleReferenceObject
 {
     friend class ImplIntrospection;
     friend class ImplIntrospectionAccess;
@@ -254,10 +253,6 @@ class IntrospectionAccessStatic_Impl
     void checkInterfaceArraySize( Sequence< Reference<XInterface> >& rSeq, Reference<XInterface>*& rpInterfaceArray,
         sal_Int32 iNextIndex );
 
-    // RefCount
-    sal_Int32 nRefCount;
-
-
 public:
     IntrospectionAccessStatic_Impl( Reference< XIdlReflection > xCoreReflection_ );
     ~IntrospectionAccessStatic_Impl()
@@ -266,14 +261,6 @@ public:
     }
     sal_Int32 getPropertyIndex( const OUString& aPropertyName ) const;
     sal_Int32 getMethodIndex( const OUString& aMethodName ) const;
-
-    void acquire() { nRefCount++; }
-    void release()
-    {
-        nRefCount--;
-        if( nRefCount <= 0 )
-            delete this;
-    }
 
     // Methoden von XIntrospectionAccess (ALT, jetzt nur Impl)
     void setPropertyValue(const Any& obj, const OUString& aPropertyName, const Any& aValue) const;
@@ -314,13 +301,7 @@ IntrospectionAccessStatic_Impl::IntrospectionAccessStatic_Impl( Reference< XIdlR
 
     // Method-Daten
     mnMethCount = 0;
-
-    // Eigenens RefCounting
-    nRefCount = 0;
 }
-
-// Von Hand refcounten !!!
-
 
 sal_Int32 IntrospectionAccessStatic_Impl::getPropertyIndex( const OUString& aPropertyName ) const
 {
@@ -738,7 +719,7 @@ class ImplIntrospectionAdapter :
     const Any& mrInspectedObject;
 
     // Statische Daten der Introspection
-    IntrospectionAccessStatic_Impl* mpStaticImpl;
+    rtl::Reference< IntrospectionAccessStatic_Impl > mpStaticImpl;
 
     // Objekt als Interface
     Reference<XInterface> mxIface;
@@ -754,8 +735,8 @@ class ImplIntrospectionAdapter :
 
 public:
     ImplIntrospectionAdapter( ImplIntrospectionAccess* pAccess_,
-        const Any& obj, IntrospectionAccessStatic_Impl* pStaticImpl_ );
-    ~ImplIntrospectionAdapter();
+        const Any& obj,
+        rtl::Reference< IntrospectionAccessStatic_Impl > const & pStaticImpl_ );
 
     // Methoden von XInterface
     virtual Any SAL_CALL queryInterface( const Type& rType ) throw( RuntimeException );
@@ -833,11 +814,10 @@ public:
 };
 
 ImplIntrospectionAdapter::ImplIntrospectionAdapter( ImplIntrospectionAccess* pAccess_,
-    const Any& obj, IntrospectionAccessStatic_Impl* pStaticImpl_ )
+    const Any& obj,
+    rtl::Reference< IntrospectionAccessStatic_Impl > const & pStaticImpl_ )
         : mpAccess( pAccess_), mrInspectedObject( obj ), mpStaticImpl( pStaticImpl_ )
 {
-    mpStaticImpl->acquire();
-
     // Objekt als Interfaceholen
     TypeClass eType = mrInspectedObject.getValueType().getTypeClass();
     if( eType == TypeClass_INTERFACE )
@@ -852,11 +832,6 @@ ImplIntrospectionAdapter::ImplIntrospectionAdapter( ImplIntrospectionAccess* pAc
         mxObjEnumerationAccess = Reference<XEnumerationAccess>::query( mxIface );
         mxObjIdlArray = Reference<XIdlArray>::query( mxIface );
     }
-}
-
-ImplIntrospectionAdapter::~ImplIntrospectionAdapter()
-{
-    mpStaticImpl->release();
 }
 
 // Methoden von XInterface
@@ -908,10 +883,10 @@ class ImplIntrospectionAccess : IntrospectionAccessHelper
     Reference<XInterface> mxIface;
 
     // Statische Daten der Introspection
-    IntrospectionAccessStatic_Impl* mpStaticImpl;
+    rtl::Reference< IntrospectionAccessStatic_Impl > mpStaticImpl;
 
     // Adapter-Implementation
-    ImplIntrospectionAdapter* mpAdapter;
+    rtl::Reference< ImplIntrospectionAdapter > mpAdapter;
 
     // Letzte Sequence, die bei getProperties geliefert wurde (Optimierung)
     Sequence<Property> maLastPropertySeq;
@@ -922,8 +897,7 @@ class ImplIntrospectionAccess : IntrospectionAccessHelper
     sal_Int32 mnLastMethodConcept;
 
 public:
-    ImplIntrospectionAccess( const Any& obj, IntrospectionAccessStatic_Impl* pStaticImpl_ );
-    ~ImplIntrospectionAccess();
+    ImplIntrospectionAccess( const Any& obj, rtl::Reference< IntrospectionAccessStatic_Impl > const & pStaticImpl_ );
 
     // Methoden von XIntrospectionAccess
     virtual sal_Int32 SAL_CALL getSuppliedMethodConcepts(void)
@@ -956,11 +930,9 @@ public:
 };
 
 ImplIntrospectionAccess::ImplIntrospectionAccess
-    ( const Any& obj, IntrospectionAccessStatic_Impl* pStaticImpl_ )
-        : maInspectedObject( obj ), mpStaticImpl( pStaticImpl_ ), mpAdapter( NULL )
+    ( const Any& obj, rtl::Reference< IntrospectionAccessStatic_Impl > const & pStaticImpl_ )
+        : maInspectedObject( obj ), mpStaticImpl( pStaticImpl_ )
 {
-    mpStaticImpl->acquire();
-
     // Objekt als Interface merken, wenn moeglich
     TypeClass eType = maInspectedObject.getValueType().getTypeClass();
     if( eType == TypeClass_INTERFACE )
@@ -969,16 +941,6 @@ ImplIntrospectionAccess::ImplIntrospectionAccess
     mnLastPropertyConcept = -1;
     mnLastMethodConcept = -1;
 }
-
-ImplIntrospectionAccess::~ImplIntrospectionAccess()
-{
-    mpStaticImpl->release();
-
-    // Eigene Referenz loslassen
-    if (mpAdapter)
-        mpAdapter->release();
-}
-
 
 //***************************************************
 //*** Implementation von ImplIntrospectionAdapter ***
@@ -1440,13 +1402,10 @@ Reference<XInterface> SAL_CALL ImplIntrospectionAccess::queryAdapter( const Type
     throw( IllegalTypeException, RuntimeException )
 {
     // Gibt es schon einen Adapter?
-    if( !mpAdapter )
+    if( !mpAdapter.is() )
     {
         ((ImplIntrospectionAccess*)this)->mpAdapter =
             new ImplIntrospectionAdapter( this, maInspectedObject, mpStaticImpl );
-
-        // Selbst eine Referenz halten
-        mpAdapter->acquire();
     }
 
     Reference<XInterface> xRet;
@@ -1543,29 +1502,11 @@ struct hashIntrospectionAccessCache_Impl
 typedef boost::unordered_map
 <
     hashIntrospectionKey_Impl,
-    IntrospectionAccessStatic_Impl*,
+    rtl::Reference< IntrospectionAccessStatic_Impl >,
     hashIntrospectionAccessCache_Impl,
     hashIntrospectionAccessCache_Impl
 >
-IntrospectionAccessCacheMap_Impl;
-
-class IntrospectionAccessCacheMap : public IntrospectionAccessCacheMap_Impl
-{
-public:
-     ~IntrospectionAccessCacheMap()
-     {
-         IntrospectionAccessCacheMap::iterator iter = begin();
-         IntrospectionAccessCacheMap::iterator stop = this->end();
-         while( iter != stop )
-         {
-
-            (*iter).second->release();
-            (*iter).second = NULL;
-            ++iter;
-        }
-    }
-};
-
+IntrospectionAccessCacheMap;
 
 // For XTypeProvider
 struct hashTypeProviderKey_Impl
@@ -1642,27 +1583,11 @@ size_t TypeProviderAccessCache_Impl::operator()(const hashTypeProviderKey_Impl &
 typedef boost::unordered_map
 <
     hashTypeProviderKey_Impl,
-    IntrospectionAccessStatic_Impl*,
+    rtl::Reference< IntrospectionAccessStatic_Impl >,
     TypeProviderAccessCache_Impl,
     TypeProviderAccessCache_Impl
 >
-TypeProviderAccessCacheMap_Impl;
-
-class TypeProviderAccessCacheMap : public TypeProviderAccessCacheMap_Impl
-{
-public:
-     ~TypeProviderAccessCacheMap()
-     {
-         TypeProviderAccessCacheMap::iterator iter = begin();
-         TypeProviderAccessCacheMap::iterator stop = this->end();
-         while( iter != stop )
-         {
-            (*iter).second->release();
-            (*iter).second = NULL;
-            ++iter;
-        }
-    }
-};
+TypeProviderAccessCacheMap;
 
 //*************************
 //*** ImplIntrospection ***
@@ -1682,8 +1607,7 @@ class ImplIntrospection : public XIntrospection
     friend class ImplMVCIntrospection;
 
     // Implementation der Introspection.
-    // ACHTUNG: RefCounting von Hand !!!
-    IntrospectionAccessStatic_Impl* implInspect(const Any& aToInspectObj);
+    rtl::Reference< IntrospectionAccessStatic_Impl > implInspect(const Any& aToInspectObj);
 
     // Save XMultiServiceFactory from createComponent
     Reference<XMultiServiceFactory> m_xSMgr;
@@ -1923,15 +1847,15 @@ Reference<XIntrospectionAccess> ImplIntrospection::inspect(const Any& aToInspect
             Any aRealInspectObj;
             aRealInspectObj <<= xIdlClass;
 
-            IntrospectionAccessStatic_Impl* pStaticImpl = implInspect( aRealInspectObj );
-            if( pStaticImpl )
+            rtl::Reference< IntrospectionAccessStatic_Impl > pStaticImpl( implInspect( aRealInspectObj ) );
+            if( pStaticImpl.is() )
                 xAccess = new ImplIntrospectionAccess( aRealInspectObj, pStaticImpl );
         }
     }
     else
     {
-        IntrospectionAccessStatic_Impl* pStaticImpl = implInspect( aToInspectObj );
-        if( pStaticImpl )
+        rtl::Reference< IntrospectionAccessStatic_Impl > pStaticImpl( implInspect( aToInspectObj ) );
+        if( pStaticImpl.is() )
             xAccess = new ImplIntrospectionAccess( aToInspectObj, pStaticImpl );
     }
 
@@ -1991,7 +1915,7 @@ Reference<XIdlClass> TypeToIdlClass( const Type& rType, const Reference< XMultiS
 }
 
 // Implementation der Introspection.
-IntrospectionAccessStatic_Impl* ImplIntrospection::implInspect(const Any& aToInspectObj)
+rtl::Reference< IntrospectionAccessStatic_Impl > ImplIntrospection::implInspect(const Any& aToInspectObj)
 {
     MutexGuard aGuard( m_mutex );
 
@@ -2022,7 +1946,7 @@ IntrospectionAccessStatic_Impl* ImplIntrospection::implInspect(const Any& aToIns
     TypeProviderAccessCacheMap& aTPCache = *mpTypeProviderCache;
 
     // Pointer auf ggf. noetige neue IntrospectionAccess-Instanz
-    IntrospectionAccessStatic_Impl* pAccess = NULL;
+    rtl::Reference< IntrospectionAccessStatic_Impl > pAccess;
 
     // Pruefen: Ist schon ein passendes Access-Objekt gecached?
     Sequence< Reference<XIdlClass> >    SupportedClassSeq;
@@ -2087,10 +2011,6 @@ IntrospectionAccessStatic_Impl* ImplIntrospection::implInspect(const Any& aToIns
                 // Neue Instanz anlegen und unter dem gegebenen Key einfuegen
                 pAccess = new IntrospectionAccessStatic_Impl( mxCoreReflection );
 
-                // RefCount von Hand erhoehen, muss beim Entfernen
-                // aus der Hashtable wieder released werden
-                pAccess->acquire();
-
                 // Groesse begrenzen, alten Eintrag wieder rausschmeissen
                 if( mnTPCacheEntryCount > INTROSPECTION_CACHE_MAX_SIZE )
                 {
@@ -2104,11 +2024,6 @@ IntrospectionAccessStatic_Impl* ImplIntrospection::implInspect(const Any& aToIns
                             toDelete = iter;
                         ++iter;
                     }
-
-                    // Gefundenen Eintrag entfernen
-                    if( (*toDelete).second )
-                        (*toDelete).second->release();
-                    (*toDelete).second = NULL;
                     aTPCache.erase( toDelete );
                 }
                 else
@@ -2139,10 +2054,6 @@ IntrospectionAccessStatic_Impl* ImplIntrospection::implInspect(const Any& aToIns
             // Neue Instanz anlegen und unter dem gegebenen Key einfuegen
             pAccess = new IntrospectionAccessStatic_Impl( mxCoreReflection );
 
-            // RefCount von Hand erhoehen, muss beim Entfernen
-            // aus der Hashtable wieder released werden
-            pAccess->acquire();
-
             // Groesse begrenzen, alten Eintrag wieder rausschmeissen
             if( mnCacheEntryCount > INTROSPECTION_CACHE_MAX_SIZE )
             {
@@ -2156,11 +2067,6 @@ IntrospectionAccessStatic_Impl* ImplIntrospection::implInspect(const Any& aToIns
                         toDelete = iter;
                     ++iter;
                 }
-
-                // Gefundenen Eintrag entfernen
-                if( (*toDelete).second )
-                    (*toDelete).second->release();
-                (*toDelete).second = NULL;
                 aCache.erase( toDelete );
             }
             else
@@ -2187,7 +2093,7 @@ IntrospectionAccessStatic_Impl* ImplIntrospection::implInspect(const Any& aToIns
     sal_Int32* pPropertyConceptArray;
     sal_Int32 i;
 
-    if( !pAccess )
+    if( !pAccess.is() )
         pAccess = new IntrospectionAccessStatic_Impl( mxCoreReflection );
 
     // Referenzen auf wichtige Daten von pAccess
@@ -2427,7 +2333,7 @@ IntrospectionAccessStatic_Impl* ImplIntrospection::implInspect(const Any& aToIns
 
                         // Methoden katalogisieren
                         // Alle (?) Methoden von XInterface filtern, damit z.B. nicht 
-                        // vom Scripting aus aquire oder release gerufen werden kann
+                        // vom Scripting aus acquire oder release gerufen werden kann
                         if( rxMethod_i->getDeclaringClass()->equals( mxInterfaceClass ) )
                         {
                             // XInterface-Methoden sind hiermit einmal beruecksichtigt
