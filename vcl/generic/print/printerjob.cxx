@@ -578,7 +578,7 @@ PrinterJob::InitPaperSize (const JobData& rJobSetup)
 {
     int nRes = rJobSetup.m_aContext.getRenderResolution ();
 
-    String aPaper;
+    rtl::OUString aPaper;
     int nWidth, nHeight;
     rJobSetup.m_aContext.getPageSize (aPaper, nWidth, nHeight);
 

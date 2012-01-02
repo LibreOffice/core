@@ -47,6 +47,7 @@
 #endif
 
 #include "rtl/ustring.hxx"
+#include "comphelper/string.hxx"
 
 #include "osl/module.h"
 
@@ -86,19 +87,19 @@ typedef int(*faxFunction)(String&);
 static faxFunction pFaxNrFunction           = NULL;
 }
 
-static String getPdfDir( const PrinterInfo& rInfo )
+static rtl::OUString getPdfDir( const PrinterInfo& rInfo )
 {
-    String aDir;
+    rtl::OUString aDir;
     sal_Int32 nIndex = 0;
     while( nIndex != -1 )
     {
-        OUString aToken( rInfo.m_aFeatures.getToken( 0, ',', nIndex ) );
+        rtl::OUString aToken( rInfo.m_aFeatures.getToken( 0, ',', nIndex ) );
         if( ! aToken.compareToAscii( "pdf=", 4 ) )
         {
             sal_Int32 nPos = 0;
             aDir = aToken.getToken( 1, '=', nPos );
-            if( ! aDir.Len() )
-                aDir = String( ByteString( getenv( "HOME" ) ), osl_getThreadTextEncoding() );
+            if( aDir.isEmpty() && getenv( "HOME" ) )
+                aDir = rtl::OUString( getenv( "HOME" ), strlen( getenv( "HOME" ) ), osl_getThreadTextEncoding() );
             break;
         }
     }
@@ -137,7 +138,7 @@ static void copyJobDataToJobSetup( ImplJobSetup* pJobSetup, JobData& rData )
     pJobSetup->meOrientation    = (Orientation)(rData.m_eOrientation == orientation::Landscape ? ORIENTATION_LANDSCAPE : ORIENTATION_PORTRAIT);
 
     // copy page size
-    String aPaper;
+    OUString aPaper;
     int width, height;
 
     rData.m_aContext.getPageSize( aPaper, width, height );
@@ -235,20 +236,19 @@ static bool passFileToCommandLine( const String& rFilename, const String& rComma
     bool bSuccess = false;
 
     rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
-    ByteString aCmdLine(rtl::OUStringToOString(rCommandLine, aEncoding));
+    rtl::OString aCmdLine(rtl::OUStringToOString(rCommandLine, aEncoding));
     rtl::OString aFilename(rtl::OUStringToOString(rFilename, aEncoding));
 
-    bool bPipe = aCmdLine.Search( "(TMP)" ) != STRING_NOTFOUND ? false : true;
+    bool bPipe = aCmdLine.indexOf( "(TMP)" ) != -1 ? false : true;
 
     // setup command line for exec
     if( ! bPipe )
-        while( aCmdLine.SearchAndReplace( "(TMP)", aFilename ) != STRING_NOTFOUND )
-            ;
+        aCmdLine = comphelper::string::replace( aCmdLine, rtl::OString("(TMP)"), aFilename );
 
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "%s commandline: \"%s\"\n",
              bPipe ? "piping to" : "executing",
-             aCmdLine.GetBuffer() );
+             aCmdLine.getStr() );
     struct stat aStat;
     if( stat( aFilename.getStr(), &aStat ) )
         fprintf( stderr, "stat( %s ) failed\n", aFilename.getStr() );
@@ -258,7 +258,7 @@ static bool passFileToCommandLine( const String& rFilename, const String& rComma
     if( ! ( argv[ 0 ] = getenv( "SHELL" ) ) )
         argv[ 0 ] = "/bin/sh";
     argv[ 1 ] = "-c";
-    argv[ 2 ] = aCmdLine.GetBuffer();
+    argv[ 2 ] = aCmdLine.getStr();
     argv[ 3 ] = 0;
 
     bool bHavePipes = false;
@@ -301,7 +301,7 @@ static bool passFileToCommandLine( const String& rFilename, const String& rComma
                 dup2( fd[0], STDIN_FILENO );
         }
         execv( argv[0], const_cast<char**>(argv) );
-        fprintf( stderr, "failed to execute \"%s\"\n", aCmdLine.GetBuffer() );
+        fprintf( stderr, "failed to execute \"%s\"\n", aCmdLine.getStr() );
         _exit( 1 );
     }
     else
@@ -487,8 +487,8 @@ void SalGenericInstance::GetPrinterQueueInfo( ImplPrnQueueList* pList )
         sal_Int32 nIndex = 0;
         while( nIndex != -1 )
         {
-            String aToken( rInfo.m_aFeatures.getToken( 0, ',', nIndex ) );
-            if( aToken.CompareToAscii( "pdf=", 4 ) == COMPARE_EQUAL )
+            rtl::OUString aToken( rInfo.m_aFeatures.getToken( 0, ',', nIndex ) );
+            if( aToken.matchAsciiL( RTL_CONSTASCII_STRINGPARAM("pdf=") ) )
             {
                 pInfo->maLocation = getPdfDir( rInfo );
                 break;
@@ -774,7 +774,7 @@ void PspSalInfoPrinter::GetPageInfo(
     if( aData.m_pParser )
     {
 
-        String aPaper;
+        OUString aPaper;
         int width, height;
         int left = 0, top = 0, right = 0, bottom = 0;
         int nDPI = aData.m_aContext.getRenderResolution();
@@ -808,7 +808,7 @@ sal_uLong PspSalInfoPrinter::GetPaperBinCount( const ImplJobSetup* pJobSetup )
     JobData aData;
     JobData::constructFromStreamBuffer( pJobSetup->mpDriverData, pJobSetup->mnDriverDataLen, aData );
 
-    const PPDKey* pKey = aData.m_pParser ? aData.m_pParser->getKey( String( RTL_CONSTASCII_USTRINGPARAM( "InputSlot" ) ) ): NULL;
+    const PPDKey* pKey = aData.m_pParser ? aData.m_pParser->getKey( OUString( RTL_CONSTASCII_USTRINGPARAM( "InputSlot" ) ) ): NULL;
     return pKey ? pKey->countValues() : 0;
 }
 
@@ -817,10 +817,10 @@ rtl::OUString PspSalInfoPrinter::GetPaperBinName( const ImplJobSetup* pJobSetup,
     JobData aData;
     JobData::constructFromStreamBuffer( pJobSetup->mpDriverData, pJobSetup->mnDriverDataLen, aData );
 
-    String aRet;
+    OUString aRet;
     if( aData.m_pParser )
     {
-        const PPDKey* pKey = aData.m_pParser ? aData.m_pParser->getKey( String( RTL_CONSTASCII_USTRINGPARAM( "InputSlot" ) ) ): NULL;
+        const PPDKey* pKey = aData.m_pParser ? aData.m_pParser->getKey( OUString( RTL_CONSTASCII_USTRINGPARAM( "InputSlot" ) ) ): NULL;
         if( ! pKey || nPaperBin >= (sal_uLong)pKey->countValues() )
             aRet = aData.m_pParser->getDefaultInputSlot();
         else
@@ -848,8 +848,8 @@ sal_uLong PspSalInfoPrinter::GetCapabilities( const ImplJobSetup* pJobSetup, sal
             JobData aData;
             JobData::constructFromStreamBuffer( pJobSetup->mpDriverData, pJobSetup->mnDriverDataLen, aData );
 
-            const PPDKey* pKey = aData.m_pParser ? aData.m_pParser->getKey( String( RTL_CONSTASCII_USTRINGPARAM( "Collate" ) ) ) : NULL;
-            const PPDValue* pVal = pKey ? pKey->getValue( String( RTL_CONSTASCII_USTRINGPARAM( "True" ) ) ) : NULL;
+            const PPDKey* pKey = aData.m_pParser ? aData.m_pParser->getKey( OUString( RTL_CONSTASCII_USTRINGPARAM( "Collate" ) ) ) : NULL;
+            const PPDValue* pVal = pKey ? pKey->getValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "True" ) ) ) : NULL;
 
             // PPDs don't mention the number of possible collated copies.
             // so let's guess as many as we want ?

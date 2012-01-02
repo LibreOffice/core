@@ -1969,10 +1969,10 @@ int PPDContext::getRenderResolution() const
 
 // -------------------------------------------------------------------
 
-void PPDContext::getPageSize( String& rPaper, int& rWidth, int& rHeight ) const
+void PPDContext::getPageSize( rtl::OUString& rPaper, int& rWidth, int& rHeight ) const
 {
     // initialize to reasonable default, if parser is not set
-    rPaper  = String( RTL_CONSTASCII_USTRINGPARAM( "A4" ) );
+    rPaper  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "A4" ) );
     rWidth  = 595;
     rHeight = 842;
     if( m_pParser )

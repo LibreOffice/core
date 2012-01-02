@@ -1188,26 +1188,26 @@ PrinterGfx::DrawEPS( const Rectangle& rBoundingBox, void* pPtr, sal_uInt32 nSize
     // first search the BoundingBox of the EPS data
     SvMemoryStream aStream( pPtr, nSize, STREAM_READ );
     aStream.Seek( STREAM_SEEK_TO_BEGIN );
-    ByteString aLine;
+    rtl::OString aLine;
 
     rtl::OString aDocTitle;
     double fLeft = 0, fRight = 0, fTop = 0, fBottom = 0;
     bool bEndComments = false;
     while( ! aStream.IsEof()
            && ( ( fLeft == 0 && fRight == 0 && fTop == 0 && fBottom == 0 ) ||
-                ( aDocTitle.getLength() == 0 && bEndComments == false ) )
+                ( aDocTitle.isEmpty() && bEndComments == false ) )
            )
     {
         aStream.ReadLine( aLine );
-        if( aLine.Len() > 1 && aLine.GetChar( 0 ) == '%' )
+        if( aLine.getLength() > 1 && aLine[0] == '%' )
         {
-            char cChar = aLine.GetChar(1);
+            char cChar = aLine[1];
             if( cChar == '%' )
             {
-                if( aLine.CompareIgnoreCaseToAscii( "%%BoundingBox:", 14 ) == COMPARE_EQUAL )
+                if( comphelper::string::matchIgnoreAsciiCaseL( aLine, RTL_CONSTASCII_STRINGPARAM("%%BoundingBox:") )  )
                 {
                     aLine = WhitespaceToSpace( comphelper::string::getToken(aLine, 1, ':') );
-                    if( aLine.Len() && aLine.Search( "atend" ) == STRING_NOTFOUND )
+                    if( !aLine.isEmpty() && aLine.indexOf( "atend" ) == -1 )
                     {
                         fLeft   = StringToDouble( GetCommandLineToken( 0, aLine ) );
                         fBottom = StringToDouble( GetCommandLineToken( 1, aLine ) );
@@ -1215,9 +1215,9 @@ PrinterGfx::DrawEPS( const Rectangle& rBoundingBox, void* pPtr, sal_uInt32 nSize
                         fTop    = StringToDouble( GetCommandLineToken( 3, aLine ) );
                     }
                 }
-                else if( aLine.CompareIgnoreCaseToAscii( "%%Title:", 8 ) == COMPARE_EQUAL )
-                    aDocTitle = WhitespaceToSpace( aLine.Copy( 8 ) );
-                else if( aLine.CompareIgnoreCaseToAscii( "%%EndComments", 13 ) == COMPARE_EQUAL )
+                else if( comphelper::string::matchIgnoreAsciiCaseL( aLine, RTL_CONSTASCII_STRINGPARAM("%%Title:") ) )
+                    aDocTitle = WhitespaceToSpace( aLine.copy( 8 ) );
+                else if( comphelper::string::matchIgnoreAsciiCaseL( aLine, RTL_CONSTASCII_STRINGPARAM("%%EndComments") ) )
                     bEndComments = true;
             }
             else if( cChar == ' ' || cChar == '\t' || cChar == '\r' || cChar == '\n' )

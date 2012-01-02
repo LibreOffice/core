@@ -78,7 +78,7 @@ static void copyJobDataToJobSetup( ImplJobSetup* pJobSetup, JobData& rData )
     pJobSetup->meOrientation    = (Orientation)(rData.m_eOrientation == orientation::Landscape ? ORIENTATION_LANDSCAPE : ORIENTATION_PORTRAIT);
 
     // copy page size
-    String aPaper;
+    OUString aPaper;
     int width, height;
 
     rData.m_aContext.getPageSize( aPaper, width, height );

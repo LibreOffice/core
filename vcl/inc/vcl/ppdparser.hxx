@@ -34,6 +34,7 @@
 
 #include "tools/string.hxx"
 #include "tools/stream.hxx"
+#include "rtl/string.hxx"
 
 #include "vcl/dllapi.h"
 
@@ -309,7 +310,7 @@ public:
 
     // width, height in points, paper will contain the name of the selected
     // paper after the call
-    void getPageSize( String& rPaper, int& rWidth, int& rHeight ) const;
+    void getPageSize( rtl::OUString& rPaper, int& rWidth, int& rHeight ) const;
 };
 
 } // namespace
