@@ -217,8 +217,6 @@ TabPage RID_OFAPAGE_AUTOFMT_APPLY
     };
     String ST_RIGHT_MARGIN
     {
-         //        Text [ norwegian_wrong ] = "+++Combine single line paragraphs at" ;
-         //        Text [ swedish_wrong ] = ~Kombinera enradiga stycken B738vid " ;
         Text [ en-US ] = "Combine single line paragraphs if length greater than" ;
     };
     String STR_NUM

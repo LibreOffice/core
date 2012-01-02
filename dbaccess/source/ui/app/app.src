@@ -304,7 +304,6 @@ String RID_STR_FORMS_HELP_TEXT
 
 String RID_STR_REPORT_HELP_TEXT
 {
-    Text [ de ] ="Erstellen Sie einen Bericht, indem Sie die Datensatzquelle, Steuerelemente und Steuerelementeigenschaften angeben." ;
     Text [ en-US ] = "Create a report by specifying the record source, controls, and control properties." ;
 };
 
