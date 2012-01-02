@@ -12,10 +12,11 @@
  		$(LN) -f $(INSTSONAME) $@; \
  	else\
  		$(LDSHARED) $(LDFLAGS) -o $@ $(LIBRARY_OBJS) $(SHLIBS) $(LIBC) $(LIBM) $(LDLAST); \
-@@ -907,6 +907,7 @@
+@@ -907,6 +907,8 @@
  	export PATH; PATH="`pwd`:$$PATH"; \
  	export PYTHONPATH; PYTHONPATH="`pwd`/Lib"; \
  	export DYLD_FRAMEWORK_PATH; DYLD_FRAMEWORK_PATH="`pwd`"; \
++	export LD_LIBRARY_PATH; LD_LIBRARY_PATH="`pwd`${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"; \
 +	export LIBPATH; LIBPATH="`pwd`${LIBPATH:+:$LIBPATH}"; \
  	export EXE; EXE="$(BUILDEXE)"; \
  	cd $(srcdir)/Lib/$(PLATDIR); ./regen
