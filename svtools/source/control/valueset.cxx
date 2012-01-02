@@ -1033,35 +1033,34 @@ sal_Bool ValueSet::ImplScroll( const Point& rPos )
 
 size_t ValueSet::ImplGetItem( const Point& rPos, sal_Bool bMove ) const
 {
-    if ( mpNoneItem )
+    if ( mpNoneItem && mpNoneItem->maRect.IsInside( rPos ) )
     {
-        if ( mpNoneItem->maRect.IsInside( rPos ) )
-            return VALUESET_ITEM_NONEITEM;
+        return VALUESET_ITEM_NONEITEM;
     }
 
-    Point     aDefPos;
-    Rectangle aWinRect( aDefPos, maVirDev.GetOutputSizePixel() );
+    const Rectangle aWinRect( Point(), maVirDev.GetOutputSizePixel() );
 
-    size_t nItemCount = mpImpl->mpItemList->size();
-    for ( size_t i = 0; i < nItemCount; i++ )
+    if ( aWinRect.IsInside( rPos ) )
     {
-        ValueSetItem* pItem = (*mpImpl->mpItemList)[ i ];
-        if ( pItem->maRect.IsInside( rPos ) )
+        // The point is inside the ValueSet window,
+        // let's find the containing item.
+        const size_t nItemCount = mpImpl->mpItemList->size();
+        for ( size_t i = 0; i < nItemCount; ++i )
         {
-            if ( aWinRect.IsInside( rPos ) )
+            ValueSetItem *const pItem = (*mpImpl->mpItemList)[ i ];
+            if ( pItem->maRect.IsInside( rPos ) )
+            {
                 return i;
-            else
-                return VALUESET_ITEM_NOTFOUND;
+            }
         }
-    }
 
-    // Wenn Spacing gesetzt ist, wird der vorher selektierte
-    // Eintrag zurueckgegeben, wenn die Maus noch nicht das Fenster
-    // verlassen hat
-    if ( bMove && mnSpacing && mnHighItemId )
-    {
-        if ( aWinRect.IsInside( rPos ) )
+        // Wenn Spacing gesetzt ist, wird der vorher selektierte
+        // Eintrag zurueckgegeben, wenn die Maus noch nicht das Fenster
+        // verlassen hat
+        if ( bMove && mnSpacing && mnHighItemId )
+        {
             return GetItemPos( mnHighItemId );
+        }
     }
 
     return VALUESET_ITEM_NOTFOUND;
