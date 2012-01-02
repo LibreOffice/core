@@ -301,13 +301,22 @@ String STR_FOOTER_TITLE
     Text [ en-US ] = "Footer (%1)" ;
 };
 
-String STR_HEADER
+String STR_DELETE_HEADER
 {
-    Text [ en-US ] = "Header" ;
+    Text [ en-US ] = "Delete Header..." ;
 };
 
-String STR_FOOTER
+String STR_FORMAT_HEADER
 {
-    Text [ en-US ] = "Footer" ;
+    Text [ en-US ] = "Format Header..." ;
 };
 
+String STR_DELETE_FOOTER
+{
+    Text [ en-US ] = "Delete Footer..." ;
+};
+
+String STR_FORMAT_FOOTER
+{
+    Text [ en-US ] = "Format Footer..." ;
+};
