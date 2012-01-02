@@ -229,23 +229,23 @@ void SvxSimpleTable::Paint( const Rectangle& rRect )
     }
     bPaintFlag=sal_True;
 }
-void SvxSimpleTable::InsertHeaderEntry(const XubString& rText,sal_uInt16 nCol,
-                                       HeaderBarItemBits nBits)
+void SvxSimpleTable::InsertHeaderEntry(const rtl::OUString& rText,
+    sal_uInt16 nCol, HeaderBarItemBits nBits)
 {
-    xub_StrLen nEnd = rText.Search( sal_Unicode( '\t' ) );
-    if( nEnd == STRING_NOTFOUND )
+    sal_Int32 nEnd = rText.indexOf( sal_Unicode( '\t' ) );
+    if( nEnd == -1 )
     {
         aHeaderBar.InsertItem(nHeaderItemId++, rText, 0, nBits, nCol);
     }
     else
     {
-        xub_StrLen nCount = rText.GetTokenCount( sal_Unicode( '\t' ) );
-
-        for( xub_StrLen i=0; i<nCount; i++ )
+        sal_Int32 nIndex = 0;
+        do
         {
-            String  aString=rText.GetToken(i, sal_Unicode( '\t' ) );
+            rtl::OUString aString = rText.getToken(0, '\t', nIndex);
             aHeaderBar.InsertItem(nHeaderItemId++, aString, 0, nBits, nCol);
         }
+        while ( nIndex >= 0 );
     }
     SetTabs();
 }

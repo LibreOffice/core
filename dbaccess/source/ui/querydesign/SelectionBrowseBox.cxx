@@ -33,6 +33,9 @@
 #include "querycontroller.hxx"
 #include "QueryTableView.hxx"
 #include "browserids.hxx"
+#include <comphelper/extract.hxx>
+#include <comphelper/stl_types.hxx>
+#include <comphelper/string.hxx>
 #include <comphelper/types.hxx>
 #include "TableFieldInfo.hxx"
 #include "dbu_qry.hrc"
@@ -44,8 +47,6 @@
 #include <vcl/msgbox.hxx>
 #include "QueryDesignFieldUndoAct.hxx"
 #include <svx/dbexch.hrc>
-#include <comphelper/stl_types.hxx>
-#include <comphelper/extract.hxx>
 #include "sqlmessage.hxx"
 #include "UITools.hxx"
 #include <osl/diagnose.h>
@@ -78,7 +79,7 @@ namespace
         if ( !bAsterix )
         {
             String sName = _sFieldName;
-            xub_StrLen nTokenCount = sName.GetTokenCount('.');
+            xub_StrLen nTokenCount = comphelper::string::getTokenCount(sName, '.');
             if (    (nTokenCount == 2 && sName.GetToken(1,'.').GetChar(0) == '*' )
                 ||  (nTokenCount == 3 && sName.GetToken(2,'.').GetChar(0) == '*' ) )
             {
@@ -150,7 +151,7 @@ OSelectionBrowseBox::OSelectionBrowseBox( Window* pParent )
     SetTitleFont(aTitleFont);
 
     String aTxt(ModuleRes(STR_QUERY_SORTTEXT));
-    xub_StrLen nCount = aTxt.GetTokenCount();
+    xub_StrLen nCount = comphelper::string::getTokenCount(aTxt, ';');
     xub_StrLen nIdx = 0;
     for (; nIdx < nCount; nIdx++)
         m_pOrderCell->InsertEntry(aTxt.GetToken(nIdx));
@@ -198,7 +199,7 @@ void OSelectionBrowseBox::initialize()
             ,IParseContext::KEY_INTERSECTION
         };
 
-        String sGroup = m_aFunctionStrings.GetToken(m_aFunctionStrings.GetTokenCount() - 1);
+        String sGroup = m_aFunctionStrings.GetToken(comphelper::string::getTokenCount(m_aFunctionStrings, ';') - 1);
         m_aFunctionStrings = m_aFunctionStrings.GetToken(0);
 
         for (size_t i = 0; i < SAL_N_ELEMENTS(eFunctions); ++i)
@@ -213,7 +214,7 @@ void OSelectionBrowseBox::initialize()
         // Diese Funktionen stehen nur unter CORE zur Verf�gung
         if ( lcl_SupportsCoreSQLGrammar(xConnection) )
         {
-            xub_StrLen nCount   = m_aFunctionStrings.GetTokenCount();
+            xub_StrLen nCount = comphelper::string::getTokenCount(m_aFunctionStrings, ';');
             for (xub_StrLen nIdx = 0; nIdx < nCount; nIdx++)
                 m_pFunctionCell->InsertEntry(m_aFunctionStrings.GetToken(nIdx));
         }
@@ -829,7 +830,7 @@ sal_Bool OSelectionBrowseBox::saveField(const String& _sFieldName,OTableFieldDes
                     aSelEntry->SetField(sParameters);
                     if ( aSelEntry->IsGroupBy() )
                     {
-                        sOldLocalizedFunctionName = m_aFunctionStrings.GetToken(m_aFunctionStrings.GetTokenCount()-1);
+                        sOldLocalizedFunctionName = m_aFunctionStrings.GetToken(comphelper::string::getTokenCount(m_aFunctionStrings, ';')-1);
                         aSelEntry->SetGroupBy(sal_False);
                     }
 
@@ -957,7 +958,7 @@ sal_Bool OSelectionBrowseBox::SaveModified()
 
                         sal_uInt16 nPos = m_pFieldCell->GetEntryPos(aFieldName);
                         String aAliasName = pEntry->GetAlias();
-                        if ( nPos != COMBOBOX_ENTRY_NOTFOUND && !aAliasName.Len() && aFieldName.GetTokenCount('.') > 1 )
+                        if ( nPos != COMBOBOX_ENTRY_NOTFOUND && !aAliasName.Len() && comphelper::string::getTokenCount(aFieldName, '.') > 1 )
                         { // special case, we have a table field so we must cut the table name
                             String sTableAlias = aFieldName.GetToken(0,'.');
                             pEntry->SetAlias(sTableAlias);
@@ -1051,7 +1052,7 @@ sal_Bool OSelectionBrowseBox::SaveModified()
                     sal_uInt16 nPos = m_pFunctionCell->GetSelectEntryPos();
                     // Diese Funktionen stehen nur unter CORE zur Verf�gung
                     String sFunctionName        = m_pFunctionCell->GetEntry(nPos);
-                    String sGroupFunctionName   = m_aFunctionStrings.GetToken(m_aFunctionStrings.GetTokenCount()-1);
+                    String sGroupFunctionName   = m_aFunctionStrings.GetToken(comphelper::string::getTokenCount(m_aFunctionStrings, ';')-1);
                     sal_Bool bGroupBy = sal_False;
                     if ( sGroupFunctionName.Equals(sFunctionName) ) // check if the function name is GROUP
                     {
@@ -2229,7 +2230,7 @@ String OSelectionBrowseBox::GetCellText(long nRow, sal_uInt16 nColId) const
         case BROW_FUNCTION_ROW:
             // we always show the group function at first
             if ( pEntry->IsGroupBy() )
-                aText = m_aFunctionStrings.GetToken(m_aFunctionStrings.GetTokenCount()-1);
+                aText = m_aFunctionStrings.GetToken(comphelper::string::getTokenCount(m_aFunctionStrings, ';')-1);
             else if ( pEntry->isNumericOrAggreateFunction() )
                 aText = pEntry->GetFunction();
             break;
@@ -2293,7 +2294,7 @@ sal_Bool OSelectionBrowseBox::GetFunctionName(sal_uInt32 _nFunctionTokenId,Strin
             break;
         default:
             {
-                xub_StrLen nCount = m_aFunctionStrings.GetTokenCount();
+                xub_StrLen nCount = comphelper::string::getTokenCount(m_aFunctionStrings, ';');
                 xub_StrLen i;
                 for ( i = 0; i < nCount-1; i++) // Gruppierung wird nicht mit gez"ahlt
                 {
@@ -2372,7 +2373,7 @@ void OSelectionBrowseBox::SetCellContents(sal_Int32 nRow, sal_uInt16 nColId, con
         case BROW_FUNCTION_ROW:
         {
             String sOldFunctionName   = pEntry->GetFunction();
-            String sGroupFunctionName = m_aFunctionStrings.GetToken(m_aFunctionStrings.GetTokenCount()-1);
+            String sGroupFunctionName = m_aFunctionStrings.GetToken(comphelper::string::getTokenCount(m_aFunctionStrings, ';')-1);
             pEntry->SetFunction(strNewText);
             // first reset this two member
             sal_Int32 nFunctionType = pEntry->GetFunctionType();
@@ -2745,7 +2746,7 @@ void OSelectionBrowseBox::setFunctionCell(OTableFieldDescRef& _pEntry)
                 m_pFunctionCell->InsertEntry(m_aFunctionStrings.GetToken(2)); // 2 -> COUNT
             else
             {
-                xub_StrLen nCount = m_aFunctionStrings.GetTokenCount();
+                xub_StrLen nCount = comphelper::string::getTokenCount(m_aFunctionStrings, ';');
                 if ( _pEntry->isNumeric() )
                     --nCount;
                 for (xub_StrLen nIdx = 1; nIdx < nCount; nIdx++)

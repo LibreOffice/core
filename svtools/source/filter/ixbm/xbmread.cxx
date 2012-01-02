@@ -227,13 +227,13 @@ sal_Bool XBMReader::ParseData( SvStream* pInStm, const ByteString& aLastLine, XB
 
         if( aLine.Len() )
         {
-            const sal_uInt16 nCount = aLine.GetTokenCount( ',' );
+            const sal_Int32 nCount = comphelper::string::getTokenCount(aLine, ',');
 
-            for( sal_uInt16 i = 0; ( i < nCount ) && ( nRow < nHeight ); i++ )
+            for( sal_Int32 i = 0; ( i < nCount ) && ( nRow < nHeight ); ++i )
             {
                 const rtl::OString aToken(comphelper::string::getToken(aLine,i, ','));
                 const sal_Int32 nLen = aToken.getLength();
-                sal_Bool                bProcessed = sal_False;
+                sal_Bool bProcessed = sal_False;
 
                 nBit = nDigits = nValue = 0;
 

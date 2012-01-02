@@ -2178,7 +2178,7 @@ bool HTMLParser::ParseMetaOptionsImpl(
         case HTML_META_CREATED:
         case HTML_META_CHANGED:
             if ( i_xDocProps.is() && aContent.Len() &&
-                 aContent.GetTokenCount() == 2 )
+                 comphelper::string::getTokenCount(aContent, ';') == 2 )
             {
                 Date aDate( (sal_uLong)aContent.GetToken(0).ToInt32() );
                 Time aTime( (sal_uLong)aContent.GetToken(1).ToInt32() );

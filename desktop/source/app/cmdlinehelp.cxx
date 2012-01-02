@@ -153,7 +153,7 @@ namespace desktop
                 rtl::OUStringToOString(aHelpMessage_version, RTL_TEXTENCODING_ASCII_US).getStr(),
                 rtl::OUStringToOString(aHelpMessage_head, RTL_TEXTENCODING_ASCII_US).getStr());
         // merge left and right column
-        sal_Int32 n = aHelpMessage_left.GetTokenCount ('\n');
+        sal_Int32 n = comphelper::string::getTokenCount(aHelpMessage_left, '\n');
         rtl::OString bsLeft(rtl::OUStringToOString(aHelpMessage_left,
             RTL_TEXTENCODING_ASCII_US));
         ByteString bsRight(rtl::OUStringToOString(aHelpMessage_right,

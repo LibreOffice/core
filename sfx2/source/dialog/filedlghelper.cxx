@@ -1984,7 +1984,7 @@ void FileDialogHelper_Impl::saveConfig()
                 aValue = xDlg->getValue( ExtendedFilePickerElementIds::CHECKBOX_SELECTION, 0 );
                 sal_Bool bSelection = sal_True;
                 aValue >>= bSelection;
-                if ( aUserData.GetTokenCount(' ') < 3 )
+                if ( comphelper::string::getTokenCount(aUserData, ' ') < 3 )
                     aUserData.Append(' ');
                 aUserData.SetToken( 2, ' ', String::CreateFromInt32( (sal_Int32) bSelection ) );
                 bWriteConfig = sal_True;

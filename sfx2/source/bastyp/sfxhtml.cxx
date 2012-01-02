@@ -47,6 +47,7 @@
 #include <sfx2/sfxhtml.hxx>
 
 #include <com/sun/star/beans/XPropertyContainer.hpp>
+#include <comphelper/string.hxx>
 
 #include <vector>
 
@@ -357,7 +358,7 @@ double SfxHTMLParser::GetTableDataOptionsValNum( sal_uInt32& nNumForm,
         rFormatter.GetFormatForLanguageIfBuiltIn( 0, eParseLang );
     double fVal;
     rFormatter.IsNumberFormat( aValStr, nParseForm, fVal );
-    if ( aNumStr.GetTokenCount( ';' ) > 2 )
+    if ( comphelper::string::getTokenCount(aNumStr, ';') > 2 )
     {
         eNumLang = (LanguageType)aNumStr.GetToken( 1, ';' ).ToInt32();
         xub_StrLen nPos = aNumStr.Search( ';' );

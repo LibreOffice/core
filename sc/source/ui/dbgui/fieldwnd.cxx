@@ -27,6 +27,7 @@
  ************************************************************************/
 
 
+#include <comphelper/string.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/svapp.hxx>
@@ -503,7 +504,7 @@ void ScDPFieldControlBase::DrawBackground( OutputDevice& rDev )
         support hard line breaks here. This part will draw each line of the
         text for itself. */
 
-    xub_StrLen nTokenCnt = GetText().GetTokenCount('\n');
+    xub_StrLen nTokenCnt = comphelper::string::getTokenCount(GetText(), '\n');
     long nY = (aSize.Height() - nTokenCnt * rDev.GetTextHeight()) / 2;
     for( xub_StrLen nToken = 0, nStringIx = 0; nToken < nTokenCnt; ++nToken )
     {

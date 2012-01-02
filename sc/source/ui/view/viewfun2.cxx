@@ -30,6 +30,7 @@
 // INCLUDE ---------------------------------------------------------------
 
 #include "scitems.hxx"
+#include <comphelper/string.hxx>
 #include <editeng/eeitem.hxx>
 
 #include <sfx2/app.hxx>
@@ -977,7 +978,7 @@ void ScViewFunc::SetPrintRanges( sal_Bool bEntireSheet, const String* pPrint,
             if ( pPrint->Len() )
             {
                 const sal_Unicode sep = ScCompiler::GetNativeSymbol(ocSep).GetChar(0);
-                sal_uInt16 nTCount = pPrint->GetTokenCount(sep);
+                sal_uInt16 nTCount = comphelper::string::getTokenCount(*pPrint, sep);
                 for (sal_uInt16 i=0; i<nTCount; i++)
                 {
                     String aToken = pPrint->GetToken(i, sep);

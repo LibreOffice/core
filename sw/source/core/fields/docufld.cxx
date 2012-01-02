@@ -1418,7 +1418,7 @@ void SwHiddenTxtField::Evaluate(SwDoc* pDoc)
             bValid = sal_True;
         }
         else if(sTmpName.Search('\"') == STRING_NOTFOUND &&
-            sTmpName.GetTokenCount('.') > 2)
+            comphelper::string::getTokenCount(sTmpName, '.') > 2)
         {
             ::ReplacePoint(sTmpName);
             if(sTmpName.GetChar(0) == '[' && sTmpName.GetChar(sTmpName.Len()-1) == ']')

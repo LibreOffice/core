@@ -26,6 +26,7 @@
  *
  ************************************************************************/
 
+#include <comphelper/string.hxx>
 #include <sal/macros.h>
 #include <rtl/strbuf.hxx>
 #include <com/sun/star/embed/XTransactedObject.hpp>
@@ -431,8 +432,8 @@ sal_Bool SvXMLGraphicHelper::ImplGetStreamNames( const ::rtl::OUString& rURLStr,
 
     if( aURLStr.Len() )
     {
-        aURLStr = aURLStr.GetToken( aURLStr.GetTokenCount( ':' ) - 1, ':' );
-        const sal_uInt32 nTokenCount = aURLStr.GetTokenCount( '/' );
+        aURLStr = aURLStr.GetToken( comphelper::string::getTokenCount(aURLStr, ':') - 1, ':' );
+        const sal_uInt32 nTokenCount = comphelper::string::getTokenCount(aURLStr, '/');
 
         if( 1 == nTokenCount )
         {

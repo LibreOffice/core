@@ -34,6 +34,7 @@
 
 using namespace std;
 using comphelper::string::getToken;
+using comphelper::string::getTokenCount;
 
 namespace
 {
@@ -200,7 +201,7 @@ MergeDataFile::MergeDataFile(
     {
         xub_StrLen nToks;
         aInputStream.ReadLine( sLine );
-        nToks = sLine.GetTokenCount( '\t' );
+        nToks = getTokenCount(sLine, '\t');
         if ( nToks == 15 )
         {
             // Skip all wrong filenames

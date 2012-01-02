@@ -42,6 +42,7 @@
 #include <basic/sbmod.hxx>
 #include <unotools/intlwrapper.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/string.hxx>
 
 #include <basic/sbuno.hxx>
 #include <basic/basmgr.hxx>
@@ -1049,12 +1050,12 @@ void BasicManager::LoadOldBasicManager( SotStorage& rStorage )
     {
         String aCurStorageName( aStorName );
         INetURLObject aCurStorage( aCurStorageName, INET_PROT_FILE );
-        sal_uInt16 nLibs = aLibs.GetTokenCount( LIB_SEP );
-        for ( sal_uInt16 nLib = 0; nLib < nLibs; nLib++ )
+        sal_Int32 nLibs = comphelper::string::getTokenCount(aLibs, LIB_SEP);
+        for ( sal_Int32 nLib = 0; nLib < nLibs; nLib++ )
         {
-            String aLibInfo( aLibs.GetToken( nLib, LIB_SEP ) );
+            String aLibInfo(comphelper::string::getToken(aLibs, nLib, LIB_SEP));
             // TODO: Remove == 2
-            DBG_ASSERT( ( aLibInfo.GetTokenCount( LIBINFO_SEP ) == 2 ) || ( aLibInfo.GetTokenCount( LIBINFO_SEP ) == 3 ), "Ungueltige Lib-Info!" );
+            DBG_ASSERT( ( comphelper::string::getTokenCount(aLibInfo, LIBINFO_SEP) == 2 ) || ( comphelper::string::getTokenCount(aLibInfo, LIBINFO_SEP) == 3 ), "Ungueltige Lib-Info!" );
             String aLibName( aLibInfo.GetToken( 0, LIBINFO_SEP ) );
             String aLibAbsStorageName( aLibInfo.GetToken( 1, LIBINFO_SEP ) );
             String aLibRelStorageName( aLibInfo.GetToken( 2, LIBINFO_SEP ) );
@@ -1895,11 +1896,11 @@ ErrCode BasicManager::ExecuteMacro( String const& i_fullyQualifiedName, String c
 
         sQuotedArgs = '(';
 
-        sal_uInt16 nCount = sArgs.GetTokenCount(',');
-        for ( sal_uInt16 n=0; n<nCount; ++n )
+        sal_Int32 nCount = comphelper::string::getTokenCount(sArgs, ',');
+        for (sal_Int32 n=0; n < nCount; ++n)
         {
             sQuotedArgs += '\"';
-            sQuotedArgs += sArgs.GetToken( n, ',' );
+            sQuotedArgs += comphelper::string::getToken(sArgs, n, ',');
             sQuotedArgs += '\"';
             if ( n<nCount-1 )
                 sQuotedArgs += ',';

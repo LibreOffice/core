@@ -29,7 +29,7 @@
 
 #undef SC_DLLIMPLEMENTATION
 
-//------------------------------------------------------------------
+#include <comphelper/string.hxx>
 #include <vcl/msgbox.hxx>
 
 #include "global.hxx"
@@ -327,7 +327,7 @@ void ScTpUserLists::MakeListStr( String& rListStr )
 
     aInputStr.ConvertLineEnd( LINEEND_LF );
 
-    xub_StrLen nToken=rListStr.GetTokenCount(LF);
+    xub_StrLen nToken = comphelper::string::getTokenCount(rListStr, LF);
 
     for(xub_StrLen i=0;i<nToken;i++)
     {

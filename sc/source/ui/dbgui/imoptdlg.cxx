@@ -32,6 +32,7 @@
 #include "imoptdlg.hxx"
 #include "scresid.hxx"
 #include "imoptdlg.hrc"
+#include <comphelper/string.hxx>
 #include <rtl/tencinfo.h>
 
 static const sal_Char pStrFix[] = "FIX";
@@ -53,7 +54,7 @@ ScImportOptions::ScImportOptions( const String& rStr )
     eCharSet = RTL_TEXTENCODING_DONTKNOW;
     bSaveAsShown = sal_True;    // "true" if not in string (after CSV import)
     bQuoteAllText = false;
-    xub_StrLen nTokenCount = rStr.GetTokenCount(',');
+    xub_StrLen nTokenCount = comphelper::string::getTokenCount(rStr, ',');
     if ( nTokenCount >= 3 )
     {
         // first 3 tokens: common

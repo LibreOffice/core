@@ -263,7 +263,7 @@ ScConditionMode lclGetCondModeFromPos( sal_uInt16 nLbPos )
 void lclGetFormulaFromStringList( String& rFmlaStr, const String& rStringList, sal_Unicode cFmlaSep )
 {
     rFmlaStr.Erase();
-    xub_StrLen nTokenCnt = rStringList.GetTokenCount( '\n' );
+    xub_StrLen nTokenCnt = comphelper::string::getTokenCount(rStringList, '\n');
     for( xub_StrLen nToken = 0, nStringIx = 0; nToken < nTokenCnt; ++nToken )
     {
         String aToken( rStringList.GetToken( 0, '\n', nStringIx ) );

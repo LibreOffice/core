@@ -31,8 +31,7 @@
 
 
 
-//------------------------------------------------------------------
-
+#include <comphelper/string.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
@@ -196,7 +195,7 @@ void ScLinkedAreaDlg::InitFromOldLink( const String& rFile, const String& rFilte
 
     UpdateSourceRanges();
 
-    xub_StrLen nRangeCount = rSource.GetTokenCount();
+    xub_StrLen nRangeCount = comphelper::string::getTokenCount(rSource, ';');
     for ( xub_StrLen i=0; i<nRangeCount; i++ )
     {
         String aRange = rSource.GetToken(i);

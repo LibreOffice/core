@@ -37,6 +37,7 @@
 #include <com/sun/star/util/MeasureUnit.hpp>
 #include <com/sun/star/inspection/PropertyControlType.hpp>
 /** === end UNO includes === **/
+#include <comphelper/string.hxx>
 #include <rtl/math.hxx>
 #include <sfx2/objsh.hxx>
 
@@ -1172,7 +1173,7 @@ namespace pcr
         //..............................................................
         StlSyntaxSequence< ::rtl::OUString > lcl_convertMultiLineToList( const String& _rCompsedTextWithLineBreaks )
         {
-            xub_StrLen nLines( _rCompsedTextWithLineBreaks.GetTokenCount( '\n' ) );
+            xub_StrLen nLines( comphelper::string::getTokenCount(_rCompsedTextWithLineBreaks, '\n') );
             StlSyntaxSequence< ::rtl::OUString > aStrings( nLines );
             StlSyntaxSequence< ::rtl::OUString >::iterator stringItem = aStrings.begin();
             for ( xub_StrLen token = 0; token < nLines; ++token, ++stringItem )
@@ -1271,7 +1272,7 @@ namespace pcr
         if (aStr.Len()>0)
         {
             long nDiff=0;
-            sal_Int32 nCount = aStr.GetTokenCount('\n');
+            sal_Int32 nCount = comphelper::string::getTokenCount(aStr, '\n');
 
             String aInput = aStr.GetToken(0,'\n' );
 

@@ -1294,7 +1294,7 @@ INetMIMEMessageStream::GetMsgEncoding (const String& rContentType)
     {
         if (rContentType.CompareIgnoreCaseToAscii ("text/plain", 10) == 0)
         {
-            if (rContentType.GetTokenCount ('=') > 1)
+            if (comphelper::string::getTokenCount(rContentType, '=') > 1)
             {
                 String aCharset (rContentType.GetToken (1, '='));
                 aCharset = comphelper::string::stripStart(aCharset, ' ');

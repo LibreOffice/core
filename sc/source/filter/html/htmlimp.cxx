@@ -32,6 +32,7 @@
 //------------------------------------------------------------------------
 
 #include "scitems.hxx"
+#include <comphelper/string.hxx>
 #include <editeng/eeitem.hxx>
 
 #include <editeng/lrspitem.hxx>
@@ -224,7 +225,7 @@ String ScHTMLImport::GetHTMLRangeNameList( ScDocument* pDoc, const String& rOrig
     String aNewName;
     ScRangeName* pRangeNames = pDoc->GetRangeName();
     ScRangeList aRangeList;
-    xub_StrLen nTokenCnt = rOrigName.GetTokenCount( ';' );
+    xub_StrLen nTokenCnt = comphelper::string::getTokenCount(rOrigName, ';');
     xub_StrLen nStringIx = 0;
     for( xub_StrLen nToken = 0; nToken < nTokenCnt; nToken++ )
     {

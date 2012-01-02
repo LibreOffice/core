@@ -40,6 +40,7 @@
 #include <mmoutputpage.hxx>
 #include <mmconfigitem.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/string.hxx>
 #include "com/sun/star/mail/XSmtpService.hpp"
 #include "com/sun/star/mail/MailServiceType.hpp"
 #include <rtl/ref.hxx>
@@ -600,7 +601,7 @@ void  SwSendMailDialog::IterateMails()
         if(pCurrentMailDescriptor->sCC.getLength())
         {
             String sTokens( pCurrentMailDescriptor->sCC );
-            sal_uInt16 nTokens = sTokens.GetTokenCount( ';' );
+            sal_uInt16 nTokens = comphelper::string::getTokenCount(sTokens, ';');
             xub_StrLen nPos = 0;
             for( sal_uInt16 nToken = 0; nToken < nTokens; ++nToken)
             {
@@ -612,7 +613,7 @@ void  SwSendMailDialog::IterateMails()
         if(pCurrentMailDescriptor->sBCC.getLength())
         {
             String sTokens( pCurrentMailDescriptor->sBCC );
-            sal_uInt16 nTokens = sTokens.GetTokenCount( ';' );
+            sal_uInt16 nTokens = comphelper::string::getTokenCount(sTokens, ';');
             xub_StrLen nPos = 0;
             for( sal_uInt16 nToken = 0; nToken < nTokens; ++nToken)
             {

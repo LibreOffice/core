@@ -378,7 +378,7 @@ bool SwDDEFieldType::PutValue( const uno::Any& rVal, sal_uInt16 nWhichId )
     if( nPart )
     {
         String sTmp, sCmd( GetCmd() );
-        while(3 > sCmd.GetTokenCount(sfx2::cTokenSeperator))
+        while(3 > comphelper::string::getTokenCount(sCmd, sfx2::cTokenSeperator))
             sCmd += sfx2::cTokenSeperator;
         sCmd.SetToken( nPart-1, sfx2::cTokenSeperator, ::GetString( rVal, sTmp ) );
         SetCmd( sCmd );

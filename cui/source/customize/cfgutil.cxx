@@ -58,11 +58,12 @@
 #include "cuires.hrc"
 #include <sfx2/app.hxx>
 #include <sfx2/minfitem.hxx>
-#include <comphelper/processfactory.hxx>
 #include <comphelper/documentinfo.hxx>
+#include <comphelper/processfactory.hxx>
+#include <comphelper/sequenceashashmap.hxx>
+#include <comphelper/string.hxx>
 #include <svtools/imagemgr.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <comphelper/sequenceashashmap.hxx>
 #include <unotools/configmgr.hxx>
 #include "dialmgr.hxx"
 #include <svl/stritem.hxx>
@@ -1204,7 +1205,7 @@ void SfxConfigGroupListBox_Impl::SelectMacro( const String& rBasic,
     aBasicName += ' ';
     aBasicName += pImp->m_sMacros;
     String aLib, aModule, aMethod;
-    sal_uInt16 nCount = rMacro.GetTokenCount('.');
+    sal_uInt16 nCount = comphelper::string::getTokenCount(rMacro, '.');
     aMethod = rMacro.GetToken( nCount-1, '.' );
     if ( nCount > 2 )
     {

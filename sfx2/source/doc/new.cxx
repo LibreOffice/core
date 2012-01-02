@@ -26,6 +26,7 @@
  *
  ************************************************************************/
 
+#include <comphelper/string.hxx>
 #include <sfx2/new.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/msgbox.hxx>
@@ -550,7 +551,7 @@ SfxNewFileDialog_Impl::SfxNewFileDialog_Impl(
     }
 
     String &rExtra = pAntiImplP->GetExtraData();
-    sal_uInt16 nTokCount = rExtra.GetTokenCount( '|' );
+    sal_Int32 nTokCount = comphelper::string::getTokenCount(rExtra, '|');
     if( nTokCount > 0 && nFlags )
         MORE_BTN(SetState( rExtra.GetToken( 0, '|' ) == 'Y' ));
     if( nTokCount > 1 && nFlags )

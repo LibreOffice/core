@@ -432,7 +432,7 @@ FmFormObj& FmFormObj::operator= (const FmFormObj& rObj)
 //------------------------------------------------------------------
 namespace
 {
-    String lcl_getFormComponentAccessPath(const Reference< XInterface >& _xElement, Reference< XInterface >& _rTopLevelElement)
+    rtl::OUString lcl_getFormComponentAccessPath(const Reference< XInterface >& _xElement, Reference< XInterface >& _rTopLevelElement)
     {
         Reference< ::com::sun::star::form::XFormComponent> xChild(_xElement, UNO_QUERY);
         Reference< ::com::sun::star::container::XIndexAccess> xParent;
@@ -471,7 +471,7 @@ namespace
 Reference< XInterface >  FmFormObj::ensureModelEnv(const Reference< XInterface > & _rSourceContainer, const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >  _rTopLevelDestContainer)
 {
     Reference< XInterface >  xTopLevelSouce;
-    String sAccessPath = lcl_getFormComponentAccessPath(_rSourceContainer, xTopLevelSouce);
+    rtl::OUString sAccessPath = lcl_getFormComponentAccessPath(_rSourceContainer, xTopLevelSouce);
     if (!xTopLevelSouce.is())
         // somthing went wrong, maybe _rSourceContainer isn't part of a valid forms hierarchy
         return Reference< XInterface > ();
@@ -480,9 +480,11 @@ Reference< XInterface >  FmFormObj::ensureModelEnv(const Reference< XInterface >
     Reference< XIndexContainer >  xSourceContainer(xTopLevelSouce, UNO_QUERY);
     DBG_ASSERT(xSourceContainer.is(), "FmFormObj::ensureModelEnv : the top level source is invalid !");
 
-    for (xub_StrLen i=0; i<sAccessPath.GetTokenCount('\\'); ++i)
+    sal_Int32 nTokIndex = 0;
+    do
     {
-        sal_uInt16 nIndex = (sal_uInt16)sAccessPath.GetToken(i, '\\').ToInt32();
+        rtl::OUString aToken = sAccessPath.getToken( 0, '\\', nTokIndex );
+        sal_uInt16 nIndex = (sal_uInt16)aToken.toInt32();
 
         // get the DSS of the source form (we have to find an aquivalent for)
         DBG_ASSERT(nIndex<xSourceContainer->getCount(), "FmFormObj::ensureModelEnv : invalid access path !");
@@ -604,6 +606,7 @@ Reference< XInterface >  FmFormObj::ensureModelEnv(const Reference< XInterface >
         xSourceContainer = Reference< XIndexContainer > (xSourceForm, UNO_QUERY);
         DBG_ASSERT(xDestContainer.is() && xSourceContainer.is(), "FmFormObj::ensureModelEnv : invalid container !");
     }
+    while ( nTokIndex >= 0 );
 
     return Reference< XInterface > (xDestContainer, UNO_QUERY);
 }

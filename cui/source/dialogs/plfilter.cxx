@@ -29,6 +29,7 @@
 #include <set>
 #include <map>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/string.hxx>
 
 #include <tools/debug.hxx>
 #include <vcl/stdtext.hxx>
@@ -76,7 +77,7 @@ void fillNetscapePluginFilters( Sequence< rtl::OUString >& rPluginNames, Sequenc
             StrSet& rTypes = aMap[ rDescr.Description ];
             String aExtension( rDescr.Extension );
 
-            for ( sal_uInt16 nCnt = aExtension.GetTokenCount( ';' ); nCnt--; )
+            for ( sal_uInt16 nCnt = comphelper::string::getTokenCount(aExtension,  ';'); nCnt--; )
             {
                 // no default plugins anymore
                 String aExt( aExtension.GetToken( nCnt, ';' ) );

@@ -32,6 +32,7 @@
 //----------------------------------------------------------------------------
 
 #include "rangelst.hxx"
+#include <comphelper/string.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/viewsh.hxx>
 #include <vcl/wrkwin.hxx>
@@ -163,7 +164,7 @@ bool ScFormulaReferenceHelper::ParseWithNames( ScRangeList& rRanges, const Strin
 
     ScAddress::Details aDetails(pDoc->GetAddressConvention(), 0, 0);
     ScRangeUtil aRangeUtil;
-    xub_StrLen nTokenCnt = rStr.GetTokenCount();
+    xub_StrLen nTokenCnt = comphelper::string::getTokenCount(rStr, ';');
     for( xub_StrLen nToken = 0; nToken < nTokenCnt; ++nToken )
     {
         ScRange aRange;

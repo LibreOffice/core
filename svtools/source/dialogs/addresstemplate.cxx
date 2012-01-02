@@ -34,14 +34,15 @@
 #include <svtools/helpid.hrc>
 #include <svtools/svtdata.hxx>
 #include <tools/debug.hxx>
+#include <comphelper/extract.hxx>
+#include <comphelper/interaction.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/stl_types.hxx>
+#include <comphelper/string.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/waitobj.hxx>
 #include <vcl/msgbox.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <comphelper/extract.hxx>
-#include <comphelper/interaction.hxx>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -180,10 +181,14 @@ public:
         // first collect all known programmatic names
         StringBag aKnownNames;
 
-        String sLogicalFieldNames( SvtResId( STR_LOCAGICAL_FIELD_NAMES ) );
-        sal_Int32 nTokenCount = sLogicalFieldNames.GetTokenCount(';');
-        for (sal_Int32 i = 0; i<nTokenCount; ++i)
-            aKnownNames.insert(sLogicalFieldNames.GetToken((sal_uInt16)i, ';'));
+        rtl::OUString sLogicalFieldNames(ResId::toString(SvtResId(STR_LOCAGICAL_FIELD_NAMES)));
+        sal_Int32 nIndex = 0;
+        do
+        {
+            rtl::OUString aToken = sLogicalFieldNames.getToken(0, ';', nIndex);
+            aKnownNames.insert(aToken);
+        }
+        while ( nIndex >= 0);
 
         // loop throuzh the given names
         const AliasProgrammaticPair* pFields = _rFields.getConstArray();
@@ -685,13 +690,13 @@ void AssignmentPersistentData::Commit()
         implScrollFields(0, sal_False, sal_False);
 
         // the logical names
-        String sLogicalFieldNames(SvtResId(STR_LOCAGICAL_FIELD_NAMES));
-        sal_Int32 nAdjustedTokenCount = sLogicalFieldNames.GetTokenCount(';') + (m_pImpl->bOddFieldNumber ? 1 : 0);
+        rtl::OUString sLogicalFieldNames(ResId::toString(SvtResId(STR_LOCAGICAL_FIELD_NAMES)));
+        sal_Int32 nAdjustedTokenCount = comphelper::string::getTokenCount(sLogicalFieldNames, ';') + (m_pImpl->bOddFieldNumber ? 1 : 0);
         DBG_ASSERT(nAdjustedTokenCount == (sal_Int32)m_pImpl->aFieldLabels.size(),
             "AddressBookSourceDialog::AddressBookSourceDialog: inconsistence between logical and UI field names!");
         m_pImpl->aLogicalFieldNames.reserve(nAdjustedTokenCount);
         for (sal_Int32 i = 0; i<nAdjustedTokenCount; ++i)
-            m_pImpl->aLogicalFieldNames.push_back(sLogicalFieldNames.GetToken((sal_uInt16)i, ';'));
+            m_pImpl->aLogicalFieldNames.push_back(comphelper::string::getToken(sLogicalFieldNames, i, ';'));
 
         PostUserEvent(LINK(this, AddressBookSourceDialog, OnDelayedInitialize));
             // so the dialog will at least show up before we do the loading of the

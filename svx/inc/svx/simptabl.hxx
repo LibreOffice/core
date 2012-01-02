@@ -106,7 +106,7 @@ public:
 
     void UpdateViewSize();
 
-    void            InsertHeaderEntry(const XubString& rText,
+    void            InsertHeaderEntry(const rtl::OUString& rText,
                             sal_uInt16 nCol=HEADERBAR_APPEND,
                             HeaderBarItemBits nBits = HIB_STDSTYLE);
 

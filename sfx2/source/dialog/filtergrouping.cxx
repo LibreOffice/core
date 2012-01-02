@@ -489,7 +489,7 @@ namespace sfx2
         DBG_ASSERT( _rWildCard.GetBuffer()[0] != s_cWildcardSeparator,
             "AppendWildcardToDescriptor::AppendWildcardToDescriptor: wildcard already separated!" );
 
-        aWildCards.reserve( _rWildCard.GetTokenCount( s_cWildcardSeparator ) );
+        aWildCards.reserve( comphelper::string::getTokenCount(_rWildCard, s_cWildcardSeparator) );
 
         const sal_Unicode* pTokenLoop = _rWildCard.GetBuffer();
         const sal_Unicode* pTokenLoopEnd = pTokenLoop + _rWildCard.Len();

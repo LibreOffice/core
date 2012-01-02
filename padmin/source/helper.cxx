@@ -39,6 +39,7 @@
 #include <com/sun/star/ui/dialogs/XControlAccess.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/string.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/confignode.hxx>
 #include <vcl/unohelp.hxx>
@@ -117,7 +118,7 @@ void padmin::FindFiles( const String& rDirectory, ::std::list< String >& rResult
                 aStatus.getFileType() == FileStatus::Link )
             {
                 String aFileName = aStatus.getFileName();
-                int nToken = rSuffixes.GetTokenCount( ';' );
+                int nToken = comphelper::string::getTokenCount(rSuffixes, ';');
                 while( nToken-- )
                 {
                     String aSuffix = rSuffixes.GetToken( nToken, ';' );

@@ -1162,8 +1162,7 @@ SgfFontOne::SgfFontOne()
 
 void SgfFontOne::ReadOne( const rtl::OString& rID, ByteString& Dsc )
 {
-    sal_uInt16 i,j,n;
-    rtl::OString s;
+    sal_uInt16 i,j;
 
     if ( Dsc.Len() < 4 || ( Dsc.GetChar( 0 ) != '(' ) )
         return;
@@ -1185,10 +1184,10 @@ void SgfFontOne::ReadOne( const rtl::OString& rID, ByteString& Dsc )
     Dsc.Erase(i,j);
 
     IFID = (sal_uInt32)rID.toInt32();
-    n=Dsc.GetTokenCount(' ');
-    for (i=0;i<n;i++)
+    sal_Int32 nTokenCount = comphelper::string::getTokenCount(Dsc, ' ');
+    for (sal_Int32 nIdx = 0; nIdx < nTokenCount; ++nIdx)
     {
-        s = comphelper::string::getToken(Dsc, i,' ');
+        rtl::OString s = comphelper::string::getToken(Dsc, nIdx, ' ');
         if (!s.isEmpty())
         {
             s = s.toAsciiUpperCase();

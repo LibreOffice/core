@@ -89,6 +89,7 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <comphelper/extract.hxx>
+#include <comphelper/string.hxx>
 #include <toolkit/unohlp.hxx>
 #include <vcl/virdev.hxx>
 #include <rtl/crc.h>
@@ -781,7 +782,7 @@ sal_Bool EscherPropertyContainer::GetLineArrow( const sal_Bool bLineStart,
                     else if ( aApiName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Arrow" ) ) )
                         reLineEnd = ESCHER_LineArrowEnd;
                 }
-                else if ( aArrowStartName.GetTokenCount( ' ' ) == 2 )
+                else if ( comphelper::string::getTokenCount(aArrowStartName, ' ') == 2 )
                 {
                     sal_Bool b = sal_True;
                     String aArrowName( aArrowStartName.GetToken( 0, ' ' ) );

@@ -50,6 +50,7 @@
 #include <connectivity/CommonTools.hxx>
 #include "DriverSettings.hxx"
 #include "dbadmin.hxx"
+#include <comphelper/string.hxx>
 #include <comphelper/types.hxx>
 
 #include <com/sun/star/ui/dialogs/XFolderPicker.hpp>
@@ -110,13 +111,13 @@ DBG_NAME(OTextConnectionHelper)
     {
         DBG_CTOR(OTextConnectionHelper,NULL);
 
-        xub_StrLen nCnt = m_aFieldSeparatorList.GetTokenCount( '\t' );
+        xub_StrLen nCnt = comphelper::string::getTokenCount(m_aFieldSeparatorList, '\t');
         xub_StrLen i;
 
         for( i = 0 ; i < nCnt ; i += 2 )
             m_aFieldSeparator.InsertEntry( m_aFieldSeparatorList.GetToken( i, '\t' ) );
 
-        nCnt = m_aTextSeparatorList.GetTokenCount( '\t' );
+        nCnt = comphelper::string::getTokenCount(m_aTextSeparatorList, '\t');
         for( i=0 ; i<nCnt ; i+=2 )
             m_aTextSeparator.InsertEntry( m_aTextSeparatorList.GetToken( i, '\t' ) );
         m_aTextSeparator.InsertEntry(m_aTextNone);
@@ -512,7 +513,7 @@ DBG_NAME(OTextConnectionHelper)
     void OTextConnectionHelper::SetSeparator( ComboBox& rBox, const String& rList, const String& rVal )
     {
         char    nTok = '\t';
-        xub_StrLen  nCnt(rList.GetTokenCount( nTok ));
+        xub_StrLen  nCnt(comphelper::string::getTokenCount(rList, nTok));
         xub_StrLen  i;
 
         for( i=0 ; i<nCnt ; i+=2 )

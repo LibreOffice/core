@@ -34,6 +34,7 @@
 #include <algorithm>
 #include <memory>
 
+#include <comphelper/string.hxx>
 #include <svtools/colorcfg.hxx>
 #include <svl/smplhint.hxx>
 #include <sal/macros.h>
@@ -1079,7 +1080,7 @@ void ScCsvGrid::ImplDrawCellText( const Point& rPos, const String& rText )
     /*  #i60296# If string contains mixed script types, the space character
         U+0020 may be drawn with a wrong width (from non-fixed-width Asian or
         Complex font). Now we draw every non-space portion separately. */
-    xub_StrLen nTokenCount = aPlainText.GetTokenCount( ' ' );
+    xub_StrLen nTokenCount = comphelper::string::getTokenCount(aPlainText, ' ');
     xub_StrLen nCharIx = 0;
     for( xub_StrLen nToken = 0; nToken < nTokenCount; ++nToken )
     {

@@ -1988,7 +1988,7 @@ void SvNumberformat::ImpGetOutputStdToPrecision(double& rNumber, String& rOutStr
             rtl_math_StringFormat_F, nPrecision /*2*/,
             GetFormatter().GetNumDecimalSep().GetChar(0), true );
     if (rOutString.GetChar(0) == '-' &&
-        rOutString.GetTokenCount('0') == rOutString.Len())
+        comphelper::string::getTokenCount(rOutString, '0') == rOutString.Len())
         rOutString.EraseLeadingChars('-');            // nicht -0
 
     ImpTransliterate( rOutString, NumFor[0].GetNatNum() );
@@ -3856,7 +3856,7 @@ bool SvNumberformat::ImpGetNumberOutput(double fNumber,
             sStr.Erase( nPoint, 1 );            //  . herausnehmen
         }
         if (bSign &&
-            (sStr.Len() == 0 || sStr.GetTokenCount('0') == sStr.Len()+1))   // nur 00000
+            (sStr.Len() == 0 || comphelper::string::getTokenCount(sStr, '0') == sStr.Len()+1))   // nur 00000
             bSign = false;              // nicht -0.00
     }                                   // End of != FLAG_STANDARD_IN_FORMAT
 

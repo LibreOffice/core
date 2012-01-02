@@ -119,7 +119,7 @@ ODatabaseImportExport::ODatabaseImportExport(const ::svx::ODataAccessDescriptor&
     osl_incrementInterlockedCount( &m_refCount );
     impl_initFromDescriptor( _aDataDescriptor, false );
 
-    xub_StrLen nCount = rExchange.GetTokenCount(char(11));
+    xub_StrLen nCount = comphelper::string::getTokenCount(rExchange, char(11));
     if( nCount > SBA_FORMAT_SELECTION_COUNT && rExchange.GetToken(4).Len())
     {
         m_pRowMarker = new sal_Int32[nCount-SBA_FORMAT_SELECTION_COUNT];
@@ -421,7 +421,7 @@ sal_Bool ORTFImportExport::Write()
     ByteString aFontNr;
 
     (*m_pStream)    << "{\\fonttbl";
-    xub_StrLen nTokenCount = aFonts.GetTokenCount();
+    xub_StrLen nTokenCount = comphelper::string::getTokenCount(aFonts, ';');
     for(sal_uInt32 j=0;j<nTokenCount;++j)
     {
         (*m_pStream) << "\\f";

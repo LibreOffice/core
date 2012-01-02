@@ -877,7 +877,7 @@ sal_Bool SvtPathOptions::SearchFile( String& rIniFile, Pathes ePath )
         return sal_False;
     }
 
-    String aIniFile = pImp->SubstVar( rIniFile );
+    rtl::OUString aIniFile = pImp->SubstVar( rIniFile );
     sal_Bool bRet = sal_False;
 
     switch ( ePath )
@@ -887,9 +887,14 @@ sal_Bool SvtPathOptions::SearchFile( String& rIniFile, Pathes ePath )
             // path is a URL
             bRet = sal_True;
             INetURLObject aObj( GetUserConfigPath() );
-            xub_StrLen i, nCount = aIniFile.GetTokenCount( '/' );
-            for ( i = 0; i < nCount; ++i )
-                aObj.insertName( aIniFile.GetToken( i, '/' ) );
+
+            sal_Int32 nIniIndex = 0;
+            do
+            {
+                rtl::OUString aToken = aIniFile.getToken( 0, '/', nIniIndex );
+                aObj.insertName(aToken);
+            }
+            while ( nIniIndex >= 0 );
 
             if ( !::utl::UCBContentHelper::Exists( aObj.GetMainURL( INetURLObject::NO_DECODE ) ) )
             {
@@ -906,7 +911,7 @@ sal_Bool SvtPathOptions::SearchFile( String& rIniFile, Pathes ePath )
 
         default:
         {
-            String aPath;
+            rtl::OUString aPath;
             switch ( ePath )
             {
                 case PATH_ADDIN:        aPath = GetAddinPath();         break;
@@ -936,11 +941,11 @@ sal_Bool SvtPathOptions::SearchFile( String& rIniFile, Pathes ePath )
                 case PATH_COUNT: /*-Wall???*/ break;
             }
 
-            sal_uInt16 j, nIdx = 0, nTokenCount = aPath.GetTokenCount( SEARCHPATH_DELIMITER );
-            for ( j = 0; j < nTokenCount; ++j )
+            sal_Int32 nPathIndex = 0;
+            do
             {
                 sal_Bool bIsURL = sal_True;
-                String aPathToken = aPath.GetToken( 0, SEARCHPATH_DELIMITER, nIdx );
+                rtl::OUString aPathToken = aPath.getToken( 0, SEARCHPATH_DELIMITER, nPathIndex );
                 INetURLObject aObj( aPathToken );
                 if ( aObj.HasError() )
                 {
@@ -961,9 +966,14 @@ sal_Bool SvtPathOptions::SearchFile( String& rIniFile, Pathes ePath )
                     }
                 }
 
-                xub_StrLen i, nCount = aIniFile.GetTokenCount( '/' );
-                for ( i = 0; i < nCount; ++i )
-                    aObj.insertName( aIniFile.GetToken( i, '/' ) );
+                sal_Int32 nIniIndex = 0;
+                do
+                {
+                    rtl::OUString aToken = aIniFile.getToken( 0, '/', nIniIndex );
+                    aObj.insertName(aToken);
+                }
+                while ( nIniIndex >= 0 );
+
                 bRet = ::utl::UCBContentHelper::Exists( aObj.GetMainURL( INetURLObject::NO_DECODE ) );
 
                 if ( bRet )
@@ -976,6 +986,7 @@ sal_Bool SvtPathOptions::SearchFile( String& rIniFile, Pathes ePath )
                     break;
                 }
             }
+            while ( nPathIndex >= 0 );
         }
     }
 

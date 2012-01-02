@@ -34,6 +34,7 @@
 
 using namespace std;
 using comphelper::string::getToken;
+using comphelper::string::getTokenCount;
 
 //
 // class LngParser
@@ -256,7 +257,7 @@ sal_Bool LngParser::Merge(
                 nPos ++;
                 sLanguagesDone = "";
             }
-            else if ( sLine.GetTokenCount( '=' ) > 1 )
+            else if ( getTokenCount(sLine, '=') > 1 )
             {
                 ByteString sLang = getToken(sLine, 0, '=');
                 sLang = comphelper::string::stripStart(sLang, ' ');

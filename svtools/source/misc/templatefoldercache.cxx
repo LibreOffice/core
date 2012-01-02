@@ -686,14 +686,13 @@ namespace svt
 
         // the template directories from the config
         const SvtPathOptions aPathOptions;
-        String      aDirs = aPathOptions.GetTemplatePath();
-        sal_uInt16  nDirs = aDirs.GetTokenCount( ';' );
+        rtl::OUString aDirs = aPathOptions.GetTemplatePath();
 
-        m_aCurrentState.reserve( nDirs );
         // loop through all the root-level template folders
-        for ( sal_uInt16 i=0; i<nDirs; ++i)
+        sal_Int32 nIndex = 0;
+        do
         {
-            String sTemplatePath( aDirs.GetToken( i, ';' ) );
+            String sTemplatePath( aDirs.getToken(0, ';', nIndex) );
             sTemplatePath = aPathOptions.ExpandMacros( sTemplatePath );
             // create a new entry
             m_aCurrentState.push_back( new TemplateContent( INetURLObject( sTemplatePath ) ) );
@@ -703,6 +702,7 @@ namespace svt
             if ( !implReadFolder( *aCurrentRoot ) )
                 return sal_False;
         }
+        while ( nIndex >= 0 );
 
         // normalize the array (which basically means "sort it")
         normalize( m_aCurrentState );

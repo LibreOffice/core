@@ -74,6 +74,7 @@ using ::rtl::OString;
 using ::rtl::OStringBuffer;
 using ::rtl::OStringToOUString;
 using comphelper::string::getToken;
+using comphelper::string::getTokenCount;
 
 /*************** F o r w a r d s *****************************************/
 /*************** G l o b a l e   V a r i a b l e n **********************/
@@ -1154,7 +1155,7 @@ void RscCompiler::PreprocessSrsFile( const RscCmdLine::OutputFile& rOutputFile,
 
         while( aIStm.ReadLine( aLine ) )
         {
-            if( ( aLine.GetTokenCount( '=' ) == 2 ) &&
+            if( ( getTokenCount(aLine, '=') == 2 ) &&
                 ( getToken(aLine, 0, '=').indexOf("File") != -1 ) )
             {
                 rtl::OString aBaseFileName( getToken(getToken(aLine, 1, '"'), 0, '.') );

@@ -523,7 +523,7 @@ void HelpParser::MakeDir( const ByteString& sPath )
     ByteString sTPath( sPath );
     rtl::OString sDelimiter(rtl::OUStringToOString(DirEntry::GetAccessDelimiter(), RTL_TEXTENCODING_ASCII_US));
     sTPath.SearchAndReplaceAll( sDelimiter , rtl::OString('/') );
-    sal_uInt16 cnt = sTPath.GetTokenCount( '/' );
+    sal_uInt16 cnt = comphelper::string::getTokenCount(sTPath, '/');
     rtl::OStringBuffer sCreateDir;
     for (sal_uInt16 i = 0; i < cnt; ++i)
     {

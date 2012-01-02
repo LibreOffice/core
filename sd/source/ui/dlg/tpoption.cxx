@@ -690,7 +690,7 @@ String SdTpOptionsMisc::GetScale( sal_Int32 nX, sal_Int32 nY )
 
 sal_Bool SdTpOptionsMisc::SetScale( const String& aScale, sal_Int32& rX, sal_Int32& rY )
 {
-    if( aScale.GetTokenCount( TOKEN ) != 2 )
+    if( comphelper::string::getTokenCount(aScale, TOKEN) != 2 )
         return( sal_False );
 
     rtl::OUString aTmp(aScale.GetToken( 0, TOKEN ));

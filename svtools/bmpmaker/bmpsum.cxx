@@ -428,10 +428,10 @@ void BmpSum::ProcessFileList( const String& rInFileList,
 
                     aFileName.SearchAndReplaceAll( '\\', '/' );
 
-                    sal_uInt16  nTokenCount = aFileName.GetTokenCount( '/' );
+                    sal_Int32 nTokenCount = comphelper::string::getTokenCount(aFileName, '/');
                     DirEntry    aNewDir( aBaseDir );
 
-                    for( sal_uInt16 n = 0; ( n < nTokenCount - 1 ); n++ )
+                    for (sal_Int32 n = 0; ( n < nTokenCount - 1 ); ++n)
                     {
                         aNewDir += DirEntry( comphelper::string::getToken(aFileName, n, '/') );
                         aNewDir.MakeDir();

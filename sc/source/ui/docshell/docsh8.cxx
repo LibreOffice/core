@@ -531,7 +531,7 @@ void lcl_GetColumnTypes( ScDocShell& rDocShell,
         {
             pDoc->GetString( nCol, nFirstRow, nTab, aString );
             aString.ToUpperAscii();
-            xub_StrLen nToken = aString.GetTokenCount( ',' );
+            xub_StrLen nToken = comphelper::string::getTokenCount(aString, ',');
             if ( nToken > 1 )
             {
                 aFieldName = aString.GetToken( 0, ',' );

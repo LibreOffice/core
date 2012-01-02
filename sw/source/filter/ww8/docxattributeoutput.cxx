@@ -41,6 +41,7 @@
 #include "charfmt.hxx"
 #include "breakit.hxx"
 
+#include <comphelper/string.hxx>
 #include <oox/token/tokens.hxx>
 #include <oox/export/drawingml.hxx>
 #include <oox/export/utils.hxx>
@@ -754,7 +755,7 @@ void DocxAttributeOutput::DoWriteCmd( String& rCmd )
 void DocxAttributeOutput::CmdField_Impl( FieldInfos& rInfos )
 {
     m_pSerializer->startElementNS( XML_w, XML_r, FSEND );
-    xub_StrLen nNbToken = rInfos.sCmd.GetTokenCount( '\t' );
+    xub_StrLen nNbToken = comphelper::string::getTokenCount(rInfos.sCmd, '\t');
 
     for ( xub_StrLen i = 0; i < nNbToken; i++ )
     {

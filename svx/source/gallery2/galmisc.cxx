@@ -30,6 +30,7 @@
 #include <unotools/streamwrap.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/string.hxx>
 #include <ucbhelper/content.hxx>
 #include <tools/resmgr.hxx>
 #include <tools/urlobj.hxx>
@@ -232,7 +233,7 @@ String GetReducedString( const INetURLObject& rURL, sal_uIntPtr nMaxLen )
 {
     String aReduced( rURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS ) );
 
-    aReduced = aReduced.GetToken( aReduced.GetTokenCount( '/' ) - 1, '/' );
+    aReduced = aReduced.GetToken( comphelper::string::getTokenCount(aReduced, '/') - 1, '/' );
 
     if( INET_PROT_PRIV_SOFFICE != rURL.GetProtocol() )
     {
@@ -261,7 +262,7 @@ String GetSvDrawStreamNameFromURL( const INetURLObject& rSvDrawObjURL )
     String aRet;
 
     if( rSvDrawObjURL.GetProtocol() == INET_PROT_PRIV_SOFFICE &&
-        String(rSvDrawObjURL.GetMainURL( INetURLObject::NO_DECODE )).GetTokenCount( '/' ) == 3 )
+        comphelper::string::getTokenCount(rSvDrawObjURL.GetMainURL( INetURLObject::NO_DECODE ), '/') == 3 )
     {
         aRet = String(rSvDrawObjURL.GetMainURL( INetURLObject::NO_DECODE )).GetToken( 2, '/' );
     }

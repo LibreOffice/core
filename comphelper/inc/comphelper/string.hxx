@@ -280,8 +280,9 @@ COMPHELPER_DLLPUBLIC rtl::OString strip(const rtl::OString &rIn,
 COMPHELPER_DLLPUBLIC rtl::OUString strip(const rtl::OUString &rIn,
     sal_Unicode c);
 
-/** Returns a token in the OString
+/** Returns a token in an OString
 
+  @param    rIn         the input OString
   @param    token       the number of the token to return
   @param    cTok        the character which seperate the tokens.
   @return   the token   if token is negative or doesn't exist an empty token
@@ -294,8 +295,9 @@ COMPHELPER_DLLPUBLIC inline rtl::OString getToken(const rtl::OString &rIn,
     return rIn.getToken(nToken, cTok, nIndex);
 }
 
-/** Returns a token in the OUString
+/** Returns a token in an OUString
 
+  @param    rIn         the input OUString
   @param    token       the number of the token to return
   @param    cTok        the character which seperate the tokens.
   @return   the token   if token is negative or doesn't exist an empty token
@@ -307,6 +309,22 @@ COMPHELPER_DLLPUBLIC inline rtl::OUString getToken(const rtl::OUString &rIn,
     sal_Int32 nIndex = 0;
     return rIn.getToken(nToken, cTok, nIndex);
 }
+
+/** Returns number of tokens in an OUString
+
+  @param    rIn     the input OString
+  @param    cTok    the character which seperate the tokens.
+  @return   the number of tokens
+*/
+COMPHELPER_DLLPUBLIC sal_Int32 getTokenCount(const rtl::OString &rIn, sal_Char cTok);
+
+/** Returns number of tokens in an OUString
+
+  @param    rIn     the input OUString
+  @param    cTok    the character which seperate the tokens.
+  @return   the number of tokens
+*/
+COMPHELPER_DLLPUBLIC sal_Int32 getTokenCount(const rtl::OUString &rIn, sal_Unicode cTok);
 
 /**
   Match against a substring appearing in another string.

@@ -33,6 +33,7 @@
 #define SC_RANGELST_CXX         //fuer ICC
 
 #include <stdlib.h>             // qsort
+#include <comphelper/string.hxx>
 #include <unotools/collatorwrapper.hxx>
 
 #include "rangelst.hxx"
@@ -179,7 +180,7 @@ sal_uInt16 ScRangeList::Parse( const String& rStr, ScDocument* pDoc, sal_uInt16 
         }
         else
             nTab = 0;
-        sal_uInt16 nTCount = rStr.GetTokenCount( cDelimiter );
+        sal_uInt16 nTCount = comphelper::string::getTokenCount(rStr, cDelimiter);
         for ( sal_uInt16 i=0; i<nTCount; i++ )
         {
             aOne = rStr.GetToken( i, cDelimiter );

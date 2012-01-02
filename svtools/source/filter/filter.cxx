@@ -29,6 +29,7 @@
 
 #include <osl/mutex.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/string.hxx>
 #include <ucbhelper/content.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <tools/urlobj.hxx>
@@ -66,7 +67,6 @@
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/localfilehelper.hxx>
-#include <comphelper/processfactory.hxx>
 #include <rtl/bootstrap.hxx>
 #include <rtl/instance.hxx>
 #include <vector>
@@ -86,6 +86,9 @@
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
+
+using comphelper::string::getTokenCount;
+using comphelper::string::getToken;
 
 typedef ::std::vector< GraphicFilter* > FilterList_impl;
 static FilterList_impl* pFilterHdlList = NULL;
@@ -1634,11 +1637,11 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const String& rPath,
     {
         ImpFilterLibCacheEntry* pFilter = NULL;
 
-        // find first filter in filter pathes
-        xub_StrLen i, nTokenCount = aFilterPath.GetTokenCount( ';' );
+        // find first filter in filter paths
+        sal_Int32 i, nTokenCount = getTokenCount(aFilterPath, ';');
         ImpFilterLibCache &rCache = Cache::get();
         for( i = 0; ( i < nTokenCount ) && ( pFilter == NULL ); i++ )
-            pFilter = rCache.GetFilter( aFilterPath.GetToken(i), aFilterName );
+            pFilter = rCache.GetFilter( getToken(aFilterPath, i, ';'), aFilterName );
         if( !pFilter )
             nStatus = GRFILTER_FILTERERROR;
         else
@@ -2055,10 +2058,10 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& 
         }
         else
         {
-            xub_StrLen i, nTokenCount = aFilterPath.GetTokenCount( ';' );
+            sal_Int32 i, nTokenCount = getTokenCount(aFilterPath, ';');
             for ( i = 0; i < nTokenCount; i++ )
             {
-                String aPhysicalName( ImpCreateFullFilterPath( aFilterPath.GetToken( i ), aFilterName ) );
+                String aPhysicalName( ImpCreateFullFilterPath( getToken(aFilterPath, i, ';'), aFilterName ) );
                 osl::Module aLibrary( aPhysicalName );
 
                 PFilterCall pFunc = (PFilterCall) aLibrary.getFunctionSymbol( UniString::CreateFromAscii( EXPORT_FUNCTION_NAME ) );

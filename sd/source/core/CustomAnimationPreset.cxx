@@ -40,6 +40,7 @@
 #include <tools/urlobj.hxx>
 #include <unotools/streamwrap.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/string.hxx>
 #include <unotools/pathoptions.hxx>
 #include <tools/stream.hxx>
 
@@ -214,7 +215,7 @@ Reference< XAnimationNode > CustomAnimationPreset::create( const rtl::OUString& 
 UStringList CustomAnimationPreset::getProperties() const
 {
     String aProperties( maProperty );
-    sal_uInt16 nTokens = aProperties.GetTokenCount();
+    sal_uInt16 nTokens = comphelper::string::getTokenCount(aProperties, ';');
     sal_uInt16 nToken;
     UStringList aPropertyList;
     for( nToken = 0; nToken < nTokens; nToken++ )
@@ -228,7 +229,7 @@ bool CustomAnimationPreset::hasProperty( const OUString& rProperty )const
 {
     String aProperties( maProperty );
     String aProperty( rProperty );
-    sal_uInt16 nTokens = aProperties.GetTokenCount();
+    sal_uInt16 nTokens = comphelper::string::getTokenCount(aProperties, ';');
     sal_uInt16 nToken;
     for( nToken = 0; nToken < nTokens; nToken++ )
     {

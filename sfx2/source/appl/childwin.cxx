@@ -33,6 +33,7 @@
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
+#include <comphelper/string.hxx>
 #include <cppuhelper/implbase1.hxx>
 
 #include <sfx2/childwin.hxx>
@@ -111,7 +112,7 @@ class DisposeListener : public ::cppu::WeakImplHelper1< ::com::sun::star::lang::
 
 sal_Bool GetPosSizeFromString( const String& rStr, Point& rPos, Size& rSize )
 {
-    if ( rStr.GetTokenCount('/') != 4 )
+    if ( comphelper::string::getTokenCount(rStr, '/') != 4 )
         return sal_False;
 
     xub_StrLen nIdx = 0;
@@ -134,7 +135,7 @@ sal_Bool GetSplitSizeFromString( const String& rStr, Size& rSize )
     {
         String aStr = rStr.Copy( nIndex+1 );
 
-        sal_Int32 nCount = aStr.GetTokenCount(';');
+        sal_Int32 nCount = comphelper::string::getTokenCount(aStr, ';');
         if ( nCount != 2 )
             return sal_False;
 

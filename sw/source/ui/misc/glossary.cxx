@@ -51,6 +51,7 @@
 #include <unocrsr.hxx>
 #include <unotools.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/string.hxx>
 #include <ucbhelper/content.hxx>
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
@@ -667,7 +668,7 @@ IMPL_LINK( SwGlossaryDlg, BibHdl, Button *, EMPTYARG )
         //check if at least one glossary path is write enabled
         SvtPathOptions aPathOpt;
         String sGlosPath( aPathOpt.GetAutoTextPath() );
-        sal_uInt16 nPaths = sGlosPath.GetTokenCount(';');
+        sal_uInt16 nPaths = comphelper::string::getTokenCount(sGlosPath, ';');
         sal_Bool bIsWritable = sal_False;
         for(sal_uInt16 nPath = 0; nPath < nPaths; nPath++)
         {

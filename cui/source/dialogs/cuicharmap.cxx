@@ -292,7 +292,7 @@ SvxCharMapData::SvxCharMapData( SfxModalDialog* pDialog, sal_Bool bOne_, ResMgr*
         aDeleteBtn.Hide();
     }
 
-    String aDefStr( aFont.GetName() );
+    rtl::OUString aDefStr( aFont.GetName() );
     String aLastName;
     int nCount = mpDialog->GetDevFontCount();
     for ( int i = 0; i < nCount; i++ )
@@ -311,9 +311,10 @@ SvxCharMapData::SvxCharMapData( SfxModalDialog* pDialog, sal_Bool bOne_, ResMgr*
     bool bFound = (aFontLB.GetEntryPos( aDefStr ) == LISTBOX_ENTRY_NOTFOUND );
     if( !bFound )
     {
-        for ( xub_StrLen i = 0; i < aDefStr.GetTokenCount(); ++i )
+        sal_Int32 nIndex = 0;
+        do
         {
-            String aToken = aDefStr.GetToken(i);
+            rtl::OUString aToken = aDefStr.getToken(0, ';', nIndex);
             if ( aFontLB.GetEntryPos( aToken ) != LISTBOX_ENTRY_NOTFOUND )
             {
                 aDefStr = aToken;
@@ -321,6 +322,7 @@ SvxCharMapData::SvxCharMapData( SfxModalDialog* pDialog, sal_Bool bOne_, ResMgr*
                 break;
             }
         }
+        while ( nIndex >= 0 );
     }
 
     if ( bFound )

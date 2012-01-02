@@ -40,9 +40,10 @@
 #include <svtools/embedtransfer.hxx>
 #include <svtools/insdlg.hxx>
 #include <unotools/tempfile.hxx>
-#include <comphelper/storagehelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <comphelper/storagehelper.hxx>
+#include <comphelper/string.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <sot/filelist.hxx>
 #include <svx/svxdlg.hxx>
@@ -2078,15 +2079,15 @@ int SwTransferable::_PasteDDE( TransferableDataHelper& rData,
             if( ( rData.HasFormat( SOT_FORMATSTR_ID_SYLK ) ||
                   rData.HasFormat( SOT_FORMATSTR_ID_SYLK_BIGCAPS ) ) &&
                 aExpand.Len() &&
-                 ( 1 < aExpand.GetTokenCount( '\n' ) ||
-                       aExpand.GetTokenCount( '\t' )) )
+                 ( 1 < comphelper::string::getTokenCount(aExpand, '\n') ||
+                       comphelper::string::getTokenCount(aExpand, '\t') ) )
             {
                 String sTmp( aExpand );
-                xub_StrLen nRows = sTmp.GetTokenCount( '\n' );
+                xub_StrLen nRows = comphelper::string::getTokenCount(sTmp, '\n');
                 if( nRows )
                     --nRows;
                 sTmp = sTmp.GetToken( 0, '\n' );
-                xub_StrLen nCols = sTmp.GetTokenCount( '\t' );
+                xub_StrLen nCols = comphelper::string::getTokenCount(sTmp, '\t');
 
                 // at least one column & row must be there
                 if( !nRows || !nCols )
@@ -2101,7 +2102,7 @@ int SwTransferable::_PasteDDE( TransferableDataHelper& rData,
                     SwInsertTableOptions( tabopts::SPLIT_LAYOUT, 1 ), // TODO MULTIHEADER
                     pDDETyp, nRows, nCols );
             }
-            else if( 1 < aExpand.GetTokenCount( '\n' ) )
+            else if( 1 < comphelper::string::getTokenCount(aExpand, '\n') )
             {
                 // multiple paragraphs -> insert a protected section
                 if( rWrtShell.HasSelection() )

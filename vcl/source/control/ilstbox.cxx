@@ -2703,7 +2703,7 @@ sal_Bool ImplListBox::HandleWheelAsCursorTravel( const CommandEvent& rCEvt )
 
 // -----------------------------------------------------------------------
 
-void ImplListBox::SetMRUEntries( const XubString& rEntries, xub_Unicode cSep )
+void ImplListBox::SetMRUEntries( const rtl::OUString& rEntries, xub_Unicode cSep )
 {
     sal_Bool bChanges = GetEntryList()->GetMRUCount() ? sal_True : sal_False;
 
@@ -2712,10 +2712,10 @@ void ImplListBox::SetMRUEntries( const XubString& rEntries, xub_Unicode cSep )
         maLBWindow.RemoveEntry( --n );
 
     sal_uInt16 nMRUCount = 0;
-    sal_uInt16 nEntries = rEntries.GetTokenCount( cSep );
-    for ( sal_uInt16 nEntry = 0; nEntry < nEntries; nEntry++ )
+    sal_Int32 nIndex = 0;
+    do
     {
-        XubString aEntry = rEntries.GetToken( nEntry, cSep );
+        XubString aEntry = rEntries.getToken( 0, cSep, nIndex );
         // Accept only existing entries
         if ( GetEntryList()->FindEntry( aEntry ) != LISTBOX_ENTRY_NOTFOUND )
         {
@@ -2724,6 +2724,7 @@ void ImplListBox::SetMRUEntries( const XubString& rEntries, xub_Unicode cSep )
             bChanges = sal_True;
         }
     }
+    while ( nIndex >= 0 );
 
     if ( bChanges )
     {
@@ -2735,7 +2736,7 @@ void ImplListBox::SetMRUEntries( const XubString& rEntries, xub_Unicode cSep )
 
 // -----------------------------------------------------------------------
 
-XubString ImplListBox::GetMRUEntries( xub_Unicode cSep ) const
+rtl::OUString ImplListBox::GetMRUEntries( sal_Unicode cSep ) const
 {
     String aEntries;
     for ( sal_uInt16 n = 0; n < GetEntryList()->GetMRUCount(); n++ )

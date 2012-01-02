@@ -34,7 +34,9 @@
 #include "scuiimoptdlg.hxx"
 #include "scresid.hxx"
 #include "imoptdlg.hrc"
+#include <comphelper/string.hxx>
 #include <rtl/tencinfo.h>
+
 //========================================================================
 // ScDelimiterTable
 //========================================================================
@@ -45,7 +47,7 @@ public:
         ScDelimiterTable( const String& rDelTab )
             :   theDelTab ( rDelTab ),
                 cSep      ( '\t' ),
-                nCount    ( rDelTab.GetTokenCount('\t') ),
+                nCount    ( comphelper::string::getTokenCount(rDelTab, '\t') ),
                 nIter     ( 0 )
             {}
 

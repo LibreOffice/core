@@ -39,6 +39,7 @@
 #include <com/sun/star/form/XForm.hpp>
 #include <com/sun/star/form/FormComponentType.hpp>
 #include <com/sun/star/awt/XTextLayoutConstrains.hpp>
+#include <comphelper/string.hxx>
 #include <hintids.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
@@ -184,7 +185,7 @@ void lcl_html_outEvents( SvStream& rStrm,
             continue;
 
         String sListener( pDescs[i].ListenerType );
-        xub_StrLen nTok = sListener.GetTokenCount( '.' );
+        xub_StrLen nTok = comphelper::string::getTokenCount(sListener, '.');
         if( nTok )
             sListener = sListener.GetToken( nTok-1, '.' );
         String sMethod( pDescs[i].EventMethod );

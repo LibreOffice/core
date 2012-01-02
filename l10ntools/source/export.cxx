@@ -37,6 +37,7 @@
 #include <comphelper/string.hxx>
 
 using comphelper::string::getToken;
+using comphelper::string::getTokenCount;
 
 extern "C" { int yyerror( const char * ); }
 extern "C" { int YYWarning( const char * ); }
@@ -791,8 +792,8 @@ int Export::Execute( int nToken, const char * pToken )
                 nListIndex = 0;
                 nListLevel = 0;
             }
-            if (( sToken.Search( "{" ) != STRING_NOTFOUND ) &&
-                ( sToken.GetTokenCount( '{' ) > sToken.GetTokenCount( '}' )))
+            if ( (sToken.Search( "{" ) != STRING_NOTFOUND) &&
+                ( getTokenCount(sToken, '{') > getTokenCount(sToken, '}') ))
             {
                 Parse( LEVELUP, "" );
             }
@@ -888,7 +889,7 @@ int Export::Execute( int nToken, const char * pToken )
             if ( nList ) {
                 SetChildWithText();
                 ByteString sEntry(getToken(sToken, 1, '\"'));
-                if ( sToken.GetTokenCount( '\"' ) > 3 )
+                if ( getTokenCount(sToken, '\"') > 3 )
                     sEntry += "\"";
                 if ( sEntry == "\\\"" )
                     sEntry = "\"";
@@ -1527,13 +1528,13 @@ ByteString Export::GetText( const ByteString &rSource, int nToken )
             sTmp = comphelper::string::remove(sTmp, '\r');
 
             while ( sTmp.SearchAndReplace( "\\\\\"", "-=<[BSlashBSlashHKom]>=-\"" )
-                != STRING_NOTFOUND ) {};
+                != STRING_NOTFOUND ) {}
             while ( sTmp.SearchAndReplace( "\\\"", "-=<[Hochkomma]>=-" )
-                != STRING_NOTFOUND ) {};
+                != STRING_NOTFOUND ) {}
             while ( sTmp.SearchAndReplace( "\\", "-=<[0x7F]>=-" )
-                != STRING_NOTFOUND ) {};
+                != STRING_NOTFOUND ) {}
             while ( sTmp.SearchAndReplace( "\\0x7F", "-=<[0x7F]>=-" )
-                != STRING_NOTFOUND ) {};
+                != STRING_NOTFOUND ) {}
 
             sal_uInt16 nStart = 0;
             sal_uInt16 nState = TXT_STATE_MACRO;
@@ -1542,7 +1543,8 @@ ByteString Export::GetText( const ByteString &rSource, int nToken )
             nStart = 1;
 
 
-            for ( sal_uInt16 i = nStart; i < sTmp.GetTokenCount( '\"' ); i++ ) {
+            for ( sal_uInt16 i = nStart; i < getTokenCount(sTmp, '\"'); ++i )
+            {
                 ByteString sToken = getToken(sTmp, i, '\"');
                 if ( sToken.Len()) {
                     if ( nState == TXT_STATE_TEXT ) {

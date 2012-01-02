@@ -139,7 +139,7 @@ private:
     sal_uIntPtr                     nLastFileNumber;
     sal_Bool                        bMultiPath;
 
-    void                        ImplLoad( const String& rMultiPath );
+    void                        ImplLoad( const rtl::OUString& rMultiPath );
     void                        ImplLoadSubDirs( const INetURLObject& rBaseURL, sal_Bool& rbIsReadOnly );
     void                        ImplLoadImports();
     void                        ImplWriteImportList();
@@ -151,7 +151,7 @@ private:
     GalleryTheme*               ImplGetCachedTheme( const GalleryThemeEntry* pThemeEntry );
     void                        ImplDeleteCachedTheme( GalleryTheme* pTheme );
 
-                                SVX_DLLPUBLIC Gallery( const String& rMultiPath );
+                                SVX_DLLPUBLIC Gallery( const rtl::OUString& rMultiPath );
                                 SVX_DLLPUBLIC ~Gallery();
 
 public:

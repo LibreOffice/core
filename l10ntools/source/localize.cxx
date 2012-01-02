@@ -276,10 +276,11 @@ const ByteString SourceTreeLocalizer::GetProjectRootRel()
 
     sCur.SearchAndReplaceAll( sDelimiter, "/" );
     sCur = comphelper::string::stripStart(sCur, '/');
-    sal_uLong nCount = sCur.GetTokenCount( '/' );
+    sal_Int32 nCount = comphelper::string::getTokenCount(sCur, '/');
 
     ByteString sProjectRootRel;
-    for ( sal_uLong i = 0; i < nCount; i++ ) {
+    for (sal_Int32 i = 0; i < nCount; ++i)
+    {
         if ( sProjectRootRel.Len())
             sProjectRootRel += sDelimiter;
         sProjectRootRel += "..";

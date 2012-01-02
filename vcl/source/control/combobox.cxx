@@ -54,7 +54,7 @@ inline sal_uLong ImplCreateKey( sal_uInt16 nPos )
 
 static void lcl_GetSelectedEntries( Table& rSelectedPos, const XubString& rText, xub_Unicode cTokenSep, const ImplEntryList* pEntryList )
 {
-    for( xub_StrLen n = rText.GetTokenCount( cTokenSep ); n; )
+    for (xub_StrLen n = comphelper::string::getTokenCount(rText, cTokenSep); n;)
     {
         XubString aToken = rText.GetToken( --n, cTokenSep );
         aToken = comphelper::string::strip(aToken, ' ');

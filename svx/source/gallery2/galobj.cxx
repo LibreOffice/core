@@ -32,6 +32,7 @@
 #include <sfx2/docfac.hxx>
 
 #include <comphelper/classids.hxx>
+#include <comphelper/string.hxx>
 #include <unotools/pathoptions.hxx>
 
 #include <tools/rcid.h>
@@ -196,7 +197,7 @@ const String SgaObject::GetTitle() const
     String aReturnValue( aTitle );
     if ( !getenv( "GALLERY_SHOW_PRIVATE_TITLE" ) )
     {
-        if ( aReturnValue.GetTokenCount( ':' ) == 3 )
+        if ( comphelper::string::getTokenCount(aReturnValue, ':') == 3 )
         {
             String      aPrivateInd  ( aReturnValue.GetToken( 0, ':' ) );
             String      aResourceName( aReturnValue.GetToken( 1, ':' ) );

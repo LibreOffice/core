@@ -51,8 +51,9 @@
 #include "optpath.hrc"
 #include <cuires.hrc>
 #include "helpid.hrc"
-#include <comphelper/processfactory.hxx>
 #include <comphelper/configurationhelper.hxx>
+#include <comphelper/processfactory.hxx>
+#include <comphelper/string.hxx>
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -158,7 +159,7 @@ static String getCfgName_Impl( sal_uInt16 _nHandle )
 String Convert_Impl( const String& rValue )
 {
     char cDelim = MULTIPATH_DELIMITER;
-    sal_uInt16 nCount = rValue.GetTokenCount( cDelim );
+    sal_uInt16 nCount = comphelper::string::getTokenCount(rValue, cDelim);
     String aReturn;
     for ( sal_uInt16 i=0; i<nCount ; ++i )
     {
@@ -437,8 +438,8 @@ IMPL_LINK( SvxPathTabPage, StandardHdl_Impl, PushButton *, EMPTYARG )
             GetPathList( pPathImpl->nRealId, sInternal, sUser, sWritable, bReadOnly );
 
             sal_uInt16 i;
-            sal_uInt16 nOldCount = aOldPath.GetTokenCount( MULTIPATH_DELIMITER );
-            sal_uInt16 nIntCount = sInternal.GetTokenCount( MULTIPATH_DELIMITER );
+            sal_uInt16 nOldCount = comphelper::string::getTokenCount(aOldPath, MULTIPATH_DELIMITER);
+            sal_uInt16 nIntCount = comphelper::string::getTokenCount(sInternal, MULTIPATH_DELIMITER);
             for ( i = 0; i < nOldCount; ++i )
             {
                 bool bFound = false;
@@ -457,7 +458,7 @@ IMPL_LINK( SvxPathTabPage, StandardHdl_Impl, PushButton *, EMPTYARG )
             }
 
             String sUserPath, sWritablePath;
-            nOldCount = sTemp.GetTokenCount( MULTIPATH_DELIMITER );
+            nOldCount = comphelper::string::getTokenCount(sTemp, MULTIPATH_DELIMITER);
             for ( i = 0; nOldCount > 0 && i < nOldCount - 1; ++i )
             {
                 if ( sUserPath.Len() > 0 )
@@ -590,7 +591,7 @@ IMPL_LINK( SvxPathTabPage, PathHdl_Impl, PushButton *, EMPTYARG )
                 String sFullPath;
                 String sNewPath = pMultiDlg->GetPath();
                 char cDelim = MULTIPATH_DELIMITER;
-                sal_uInt16 nCount = sNewPath.GetTokenCount( cDelim );
+                sal_uInt16 nCount = comphelper::string::getTokenCount(sNewPath, cDelim);
                 if ( nCount > 0 )
                 {
                     sal_uInt16 i = 0;
@@ -824,7 +825,7 @@ void SvxPathTabPage::SetPathList(
         {
             // save user paths
             char cDelim = MULTIPATH_DELIMITER;
-            sal_uInt16 nCount = _rUserPath.GetTokenCount( cDelim );
+            sal_uInt16 nCount = comphelper::string::getTokenCount(_rUserPath, cDelim);
             Sequence< ::rtl::OUString > aPathSeq( nCount );
             ::rtl::OUString* pArray = aPathSeq.getArray();
             for ( sal_uInt16 i = 0; i < nCount; ++i )

@@ -43,6 +43,7 @@
 #include "com/sun/star/mail/MailServiceProvider.hpp"
 #include "com/sun/star/mail/XSmtpService.hpp"
 #include <comphelper/processfactory.hxx>
+#include <comphelper/string.hxx>
 #include <vcl/msgbox.hxx>
 #include <sfx2/passwd.hxx>
 
@@ -87,10 +88,10 @@ String  CallSaveAsDialog(String& rFilter)
 bool CheckMailAddress( const ::rtl::OUString& rMailAddress )
 {
     String sAddress(rMailAddress);
-    if(!(sAddress.GetTokenCount('@') == 2))
+    if (!(comphelper::string::getTokenCount(sAddress, '@') == 2))
         return false;
     sAddress = sAddress.GetToken(1, '@');
-    if(sAddress.GetTokenCount('.') < 2)
+    if (comphelper::string::getTokenCount(sAddress, '.') < 2)
         return false;
     if(sAddress.GetToken( 0, '.').Len() < 2 || sAddress.GetToken( 1, '.').Len() < 2)
         return false;
@@ -444,7 +445,7 @@ void SwAddressPreview::DrawText_Impl(
     }
     sal_Int32 nHeight = GetTextHeight();
     String sAddress(rAddress);
-    sal_uInt16 nTokens = sAddress.GetTokenCount('\n');
+    sal_uInt16 nTokens = comphelper::string::getTokenCount(sAddress, '\n');
     Point aStart = rTopLeft;
     //put it away from the border
     aStart.Move( 2, 2);

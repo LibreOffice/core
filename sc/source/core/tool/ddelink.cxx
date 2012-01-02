@@ -27,6 +27,7 @@
  ************************************************************************/
 
 
+#include <comphelper/string.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/bindings.hxx>
 #include <svl/zforlist.hxx>
@@ -152,10 +153,10 @@ sfx2::SvBaseLink::UpdateResult ScDdeLink::DataChanged(
     SCSIZE nRows = 1;
     if (aLinkStr.Len())
     {
-        nRows = static_cast<SCSIZE>(aLinkStr.GetTokenCount( '\n' ));
+        nRows = static_cast<SCSIZE>(comphelper::string::getTokenCount(aLinkStr, '\n'));
         aLine = aLinkStr.GetToken( 0, '\n' );
         if (aLine.Len())
-            nCols = static_cast<SCSIZE>(aLine.GetTokenCount( '\t' ));
+            nCols = static_cast<SCSIZE>(comphelper::string::getTokenCount(aLine, '\t'));
     }
 
     if (!nRows || !nCols)               // keine Daten

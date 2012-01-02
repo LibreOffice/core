@@ -28,6 +28,7 @@
 
 
 #include "srchdlg.hxx"
+#include <comphelper/string.hxx>
 #include "sfx2/sfxresid.hxx"
 #include <sfx2/sfxuno.hxx>
 
@@ -97,7 +98,7 @@ void SearchDialog::LoadConfig()
         if ( aUserItem >>= aTemp )
         {
             String sUserData( aTemp );
-            DBG_ASSERT( sUserData.GetTokenCount() == 5, "invalid config data" );
+            DBG_ASSERT( comphelper::string::getTokenCount(sUserData, ';') == 5, "invalid config data" );
             xub_StrLen nIdx = 0;
             String sSearchText = sUserData.GetToken( 0, ';', nIdx );
             m_aWholeWordsBox.Check( sUserData.GetToken( 0, ';', nIdx ).ToInt32() == 1 );

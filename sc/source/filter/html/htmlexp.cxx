@@ -32,6 +32,7 @@
 // INCLUDE ---------------------------------------------------------------
 
 #include "scitems.hxx"
+#include <comphelper/string.hxx>
 #include <editeng/eeitem.hxx>
 
 #include <rtl/tencinfo.h>
@@ -396,7 +397,7 @@ void ScHTMLExport::WriteHeader()
         << OOO_STRING_SVTOOLS_HTML_thead << "," << OOO_STRING_SVTOOLS_HTML_tbody << "," << OOO_STRING_SVTOOLS_HTML_tfoot << ","
         << OOO_STRING_SVTOOLS_HTML_tablerow << "," << OOO_STRING_SVTOOLS_HTML_tableheader << ","
         << OOO_STRING_SVTOOLS_HTML_tabledata << "," << OOO_STRING_SVTOOLS_HTML_parabreak << " { " << sFontFamily;
-    xub_StrLen nFonts = aHTMLStyle.aFontFamilyName.GetTokenCount( ';' );
+    xub_StrLen nFonts = comphelper::string::getTokenCount(aHTMLStyle.aFontFamilyName, ';');
     if ( nFonts == 1 )
     {
         rStrm << '\"';
@@ -1127,7 +1128,7 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
         {
             aStr.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_face).
                 append(RTL_CONSTASCII_STRINGPARAM("=\""));
-            xub_StrLen nFonts = rFontItem.GetFamilyName().GetTokenCount( ';' );
+            xub_StrLen nFonts = comphelper::string::getTokenCount(rFontItem.GetFamilyName(), ';');
             if ( nFonts == 1 )
             {
                 rtl::OString aTmpStr = HTMLOutFuncs::ConvertStringToHTML(

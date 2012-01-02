@@ -37,10 +37,11 @@
 #include <tools/resary.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
-#include <comphelper/sequenceashashmap.hxx>
 #include <unotools/pathoptions.hxx>
-#include <comphelper/processfactory.hxx>
 #include <comphelper/componentcontext.hxx>
+#include <comphelper/processfactory.hxx>
+#include <comphelper/sequenceashashmap.hxx>
+#include <comphelper/string.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
@@ -585,7 +586,7 @@ void SfxDocTplService_Impl::getDirList()
     // TODO/LATER: let use service, register listener
     INetURLObject   aURL;
     String          aDirs = SvtPathOptions().GetTemplatePath();
-    sal_uInt16          nCount = aDirs.GetTokenCount( C_DELIM );
+    sal_uInt16  nCount = comphelper::string::getTokenCount(aDirs, C_DELIM);
 
     maTemplateDirs = Sequence< OUString >( nCount );
 

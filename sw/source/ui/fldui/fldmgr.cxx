@@ -41,6 +41,7 @@
 #include <com/sun/star/uri/XUriReferenceFactory.hpp>
 #include <com/sun/star/uri/XVndSunStarScriptUrl.hpp>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/string.hxx>
 #include <editeng/unolingu.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <sfx2/dispatch.hxx>
@@ -1352,7 +1353,7 @@ sal_Bool SwFldMgr::InsertFld(  const SwInsertFld_Data& rData )
         case TYP_DROPDOWN :
         {
             pFld = new SwDropDownField(pCurShell->GetFldType( 0, RES_DROPDOWN ));
-            xub_StrLen nTokenCount = rData.sPar2.GetTokenCount(DB_DELIM);
+            xub_StrLen nTokenCount = comphelper::string::getTokenCount(rData.sPar2, DB_DELIM);
             Sequence<OUString> aEntries(nTokenCount);
             OUString* pArray = aEntries.getArray();
             for(xub_StrLen nToken = 0; nToken < nTokenCount; nToken++)
@@ -1516,7 +1517,7 @@ void SwFldMgr::UpdateCurFld(sal_uLong nFormat,
             break;
         case TYP_DROPDOWN:
         {
-            xub_StrLen nTokenCount = sPar2.GetTokenCount(DB_DELIM);
+            xub_StrLen nTokenCount = comphelper::string::getTokenCount(sPar2, DB_DELIM);
             Sequence<OUString> aEntries(nTokenCount);
             OUString* pArray = aEntries.getArray();
             for(xub_StrLen nToken = 0; nToken < nTokenCount; nToken++)

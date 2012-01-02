@@ -33,6 +33,7 @@
 #include <createaddresslistdialog.hxx>
 #include <customizeaddresslistdialog.hxx>
 #include <mmconfigitem.hxx>
+#include <comphelper/string.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/msgbox.hxx>
 #include <svtools/controldims.hrc>
@@ -416,7 +417,7 @@ SwCreateAddressListDialog::SwCreateAddressListDialog(
             if(bRead)
             {
                 //header line
-                xub_StrLen nHeaders = sLine.GetTokenCount('\t');
+                xub_StrLen nHeaders = comphelper::string::getTokenCount(sLine, '\t');
                 xub_StrLen nIndex = 0;
                 for( xub_StrLen nToken = 0; nToken < nHeaders; ++nToken)
                 {
@@ -434,7 +435,7 @@ SwCreateAddressListDialog::SwCreateAddressListDialog(
             {
                 ::std::vector<OUString> aNewData;
                 //analyze data line
-                xub_StrLen nDataCount = sLine.GetTokenCount('\t');
+                xub_StrLen nDataCount = comphelper::string::getTokenCount(sLine, '\t');
                 xub_StrLen nIndex = 0;
                 for( xub_StrLen nToken = 0; nToken < nDataCount; ++nToken)
                 {

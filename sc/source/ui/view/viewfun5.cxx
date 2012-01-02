@@ -55,8 +55,9 @@
 #include <svtools/transfer.hxx>
 #include <vcl/graph.hxx>
 
-#include <comphelper/storagehelper.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/storagehelper.hxx>
+#include <comphelper/string.hxx>
 
 #include <sot/formats.hxx>
 #define SOT_FORMATSTR_ID_STARCALC_CURRENT   SOT_FORMATSTR_ID_STARCALC_50
@@ -656,10 +657,10 @@ bool ScViewFunc::PasteLink( const uno::Reference<datatransfer::XTransferable>& r
 
             if (aDataStr.Len())
             {
-                nRows = aDataStr.GetTokenCount( '\n' );
+                nRows = comphelper::string::getTokenCount(aDataStr, '\n');
                 String aLine = aDataStr.GetToken( 0, '\n' );
                 if (aLine.Len())
-                    nCols = aLine.GetTokenCount( '\t' );
+                    nCols = comphelper::string::getTokenCount(aLine, '\t');
             }
         }
     }

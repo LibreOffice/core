@@ -80,7 +80,10 @@
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
+#include <comphelper/interaction.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/string.hxx>
+
 #include <osl/file.h>
 #include <vcl/waitobj.hxx>
 
@@ -88,7 +91,6 @@
 #include "com/sun/star/ucb/InteractiveAugmentedIOException.hpp"
 #include "fpinteraction.hxx"
 #include <osl/process.h>
-#include <comphelper/interaction.hxx>
 
 #include <algorithm>
 #include <functional>
@@ -324,41 +326,38 @@ namespace
     }
 
     //---------------------------------------------------------------------
-    void    convertStringListToUrls( const String& _rColonSeparatedList, ::std::vector< String >& _rTokens, bool _bFinalSlash )
+    void    convertStringListToUrls( const rtl::OUString& _rColonSeparatedList, ::std::vector< String >& _rTokens )
     {
-        const sal_Unicode s_cSeparator =
+        const sal_Unicode cSeparator =
 #if defined(WNT)
             ';'
 #else
             ':'
 #endif
             ;
-        xub_StrLen nTokens = _rColonSeparatedList.GetTokenCount( s_cSeparator );
-        _rTokens.resize( 0 ); _rTokens.reserve( nTokens );
-        for ( xub_StrLen i=0; i<nTokens; ++i )
+        sal_Int32 nIndex = 0;
+        do
         {
             // the current token in the list
-            String sCurrentToken = _rColonSeparatedList.GetToken( i, s_cSeparator );
-            if ( !sCurrentToken.Len() )
-                continue;
-
-            INetURLObject aCurrentURL;
-
-            String sURL;
-            if ( ::utl::LocalFileHelper::ConvertPhysicalNameToURL( sCurrentToken, sURL ) )
-                aCurrentURL = INetURLObject( sURL );
-            else
+            rtl::OUString sCurrentToken = _rColonSeparatedList.getToken( 0, cSeparator, nIndex );
+            if ( !sCurrentToken.isEmpty() )
             {
-                // smart URL parsing, assuming FILE protocol
-                aCurrentURL = INetURLObject( sCurrentToken, INET_PROT_FILE );
-            }
+                INetURLObject aCurrentURL;
 
-            if ( _bFinalSlash )
-                aCurrentURL.setFinalSlash( );
-            else
+                String sURL;
+                if ( ::utl::LocalFileHelper::ConvertPhysicalNameToURL( sCurrentToken, sURL ) )
+                    aCurrentURL = INetURLObject( sURL );
+                else
+                {
+                    // smart URL parsing, assuming FILE protocol
+                    aCurrentURL = INetURLObject( sCurrentToken, INET_PROT_FILE );
+                }
+
                 aCurrentURL.removeFinalSlash( );
-            _rTokens.push_back( aCurrentURL.GetMainURL( INetURLObject::NO_DECODE ) );
+                _rTokens.push_back( aCurrentURL.GetMainURL( INetURLObject::NO_DECODE ) );
+            }
         }
+        while ( nIndex >= 0 );
     }
 
     //---------------------------------------------------------------------
@@ -2234,7 +2233,7 @@ void SvtFileDialog::implInitializeSpecialURLLists( )
     {
         ::rtl::OUString sFavouritesList;
         if ( getEnvironmentValue( "PathFavourites", sFavouritesList ) )
-            convertStringListToUrls( sFavouritesList, aFavourites, false );
+            convertStringListToUrls( sFavouritesList, aFavourites );
     }
 
     DBG_ASSERT( _pImp->_pBtnStandard, "SvtFileDialog::implInitializeSpecialURLLists: how this?" );
@@ -3305,7 +3304,7 @@ void SvtFileDialog::appendDefaultExtension(String& _rFileName,
 
     if ( ! aType.EqualsAscii(FILEDIALOG_FILTER_ALL) )
     {
-        sal_uInt16 nWildCard = aType.GetTokenCount( FILEDIALOG_DEF_EXTSEP );
+        sal_uInt16 nWildCard = comphelper::string::getTokenCount(aType, FILEDIALOG_DEF_EXTSEP);
         sal_uInt16 nIndex, nPos = 0;
 
         for ( nIndex = 0; nIndex < nWildCard; nIndex++ )

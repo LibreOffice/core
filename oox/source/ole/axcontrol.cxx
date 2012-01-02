@@ -55,6 +55,7 @@
 #include <com/sun/star/style/VerticalAlignment.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>
+#include <comphelper/string.hxx>
 #include <rtl/tencinfo.h>
 #include "oox/helper/attributelist.hxx"
 #include "oox/helper/binaryinputstream.hxx"
@@ -2519,7 +2520,7 @@ HtmlSelectModel::importBinaryModel( BinaryInputStream& rInStrm )
     std::vector< sal_Int16 > selectedIndices;
 
     // Ultra hacky parser for the info
-    sal_Int32 nTokenCount = data.GetTokenCount( '\n' );
+    sal_Int32 nTokenCount = comphelper::string::getTokenCount(data, '\n');
 
     for ( sal_Int32 nToken = 0; nToken < nTokenCount; ++nToken )
     {
@@ -2532,7 +2533,7 @@ HtmlSelectModel::importBinaryModel( BinaryInputStream& rInStrm )
         // skip first and last lines, no data there
         else if ( nToken < nTokenCount - 1)
         {
-            if ( sLine.GetTokenCount( '>' ) )
+            if ( comphelper::string::getTokenCount(sLine, '>') )
             {
                 String displayValue  = sLine.GetToken( 1, '>' );
                 if ( displayValue.Len() )

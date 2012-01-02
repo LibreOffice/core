@@ -34,9 +34,9 @@
 #include "impex.hxx"
 #include "scuiasciiopt.hxx"
 #include "asciiopt.hrc"
+#include <comphelper/string.hxx>
 #include <rtl/tencinfo.h>
 #include <unotools/transliterationwrapper.hxx>
-// ause
 #include "editutil.hxx"
 
 #include <optutil.hxx>
@@ -69,7 +69,7 @@ using ::rtl::OUString;
 void lcl_FillCombo( ComboBox& rCombo, const String& rList, sal_Unicode cSelect )
 {
     xub_StrLen i;
-    xub_StrLen nCount = rList.GetTokenCount('\t');
+    xub_StrLen nCount = comphelper::string::getTokenCount(rList, '\t');
     for ( i=0; i<nCount; i+=2 )
         rCombo.InsertEntry( rList.GetToken(i,'\t') );
 
@@ -92,7 +92,7 @@ sal_Unicode lcl_CharFromCombo( ComboBox& rCombo, const String& rList )
     String aStr = rCombo.GetText();
     if ( aStr.Len() )
     {
-        xub_StrLen nCount = rList.GetTokenCount('\t');
+        xub_StrLen nCount = comphelper::string::getTokenCount(rList, '\t');
         for ( xub_StrLen i=0; i<nCount; i+=2 )
         {
             if ( ScGlobal::GetpTransliteration()->isEqual( aStr, rList.GetToken(i,'\t') ) )
@@ -405,7 +405,7 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,String aDatName,
     aLbCustomLang.SelectLanguage(static_cast<LanguageType>(nLanguage), true);
 
     // *** column type ListBox ***
-    xub_StrLen nCount = aColumnUser.GetTokenCount();
+    xub_StrLen nCount = comphelper::string::getTokenCount(aColumnUser, ';');
     for (xub_StrLen i=0; i<nCount; i++)
         aLbType.InsertEntry( aColumnUser.GetToken( i ) );
 

@@ -80,6 +80,7 @@ SHL1STDLIBS+= \
     $(UNOTOOLSLIB)      \
     $(TOOLSLIB)			\
     $(UCBHELPERLIB)		\
+    $(COMPHELPERLIB)	\
     $(CPPUHELPERLIB)	\
     $(CPPULIB)			\
     $(SALLIB)           \

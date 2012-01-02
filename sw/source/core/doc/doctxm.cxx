@@ -30,7 +30,7 @@
 
 #include <limits.h>
 #include <hintids.hxx>
-
+#include <comphelper/string.hxx>
 #define _SVSTDARR_STRINGSSORT
 #include <svl/svstdarr.hxx>
 #include <editeng/langitem.hxx>
@@ -1266,7 +1266,7 @@ void SwTOXBaseSection::UpdateTemplate( const SwTxtNode* pOwnChapterNode )
     for(sal_uInt16 i = 0; i < MAXLEVEL; i++)
     {
         String sTmpStyleNames = GetStyleNames(i);
-        sal_uInt16 nTokenCount = sTmpStyleNames.GetTokenCount(TOX_STYLE_DELIMITER);
+        sal_uInt16 nTokenCount = comphelper::string::getTokenCount(sTmpStyleNames, TOX_STYLE_DELIMITER);
         for( sal_uInt16 nStyle = 0; nStyle < nTokenCount; ++nStyle )
         {
             SwTxtFmtColl* pColl = pDoc->FindTxtFmtCollByName(

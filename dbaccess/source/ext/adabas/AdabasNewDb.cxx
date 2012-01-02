@@ -45,6 +45,7 @@
 #include <toolkit/unohlp.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <comphelper/extract.hxx>
+#include <comphelper/string.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <com/sun/star/sdbc/SQLException.hpp>
@@ -652,7 +653,7 @@ IMPL_LINK( OAdabasNewDbDlg, PwdClickHdl, Button *, pButton )
     {
         String sPwd = aDlg.GetPassword().ToUpperAscii();
         // no space in password allowed
-        if ( sPwd.GetTokenCount(' ') == 1 )
+        if ( comphelper::string::getTokenCount(sPwd, ' ') == 1 )
         {
             if(pButton == &m_PB_CONPWD)
             {

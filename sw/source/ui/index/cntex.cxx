@@ -49,6 +49,7 @@
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
+#include <comphelper/string.hxx>
 #include <wrtsh.hxx>
 #include <view.hxx>
 #include <cnttab.hxx>
@@ -263,7 +264,7 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
                     String sLevel;
                     if(bOn)
                         sLevel = rDesc.GetStyleNames(i);
-                    sal_uInt16 nStyles = sLevel.GetTokenCount(TOX_STYLE_DELIMITER);
+                    sal_uInt16 nStyles = comphelper::string::getTokenCount(sLevel, TOX_STYLE_DELIMITER);
                     uno::Sequence<OUString> aStyles(nStyles);
                     OUString* pArr = aStyles.getArray();
                     for(sal_uInt16 nStyle = 0; nStyle < nStyles; nStyle++)

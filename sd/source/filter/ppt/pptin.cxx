@@ -433,7 +433,7 @@ sal_Bool ImplSdPPTImport::Import()
                                             sal_uInt32 nPageNumber = 0;
                                             String aString( pHyperlink->aSubAdress );
                                             rtl::OString aStringAry[ 3 ];
-                                            sal_uInt16 nTokenCount = aString.GetTokenCount( ',' );
+                                            sal_uInt16 nTokenCount = comphelper::string::getTokenCount(aString, ',');
                                             if ( nTokenCount > 3 )
                                                 nTokenCount = 3;
                                             sal_uInt16 nToken;
@@ -1943,7 +1943,7 @@ String ImplSdPPTImport::ReadSound(sal_uInt32 nSoundRef) const
                         if ( SeekToRec( rStCtrl, PPT_PST_SoundData, nStrLen, &aSoundDataRecHd, 0 ) )
                         {
                             String          aGalleryDir( SvtPathOptions().GetGalleryPath() );
-                            INetURLObject   aGalleryUserSound( aGalleryDir.GetToken( aGalleryDir.GetTokenCount( ';' ) - 1 ) );
+                            INetURLObject   aGalleryUserSound( aGalleryDir.GetToken( comphelper::string::getTokenCount(aGalleryDir, ';') - 1 ) );
 
                             aGalleryUserSound.Append( aRetval );
                             sal_uInt32 nSoundDataLen = aSoundDataRecHd.nRecLen;

@@ -49,6 +49,7 @@
 #include <flddat.hxx>
 #include <cellatr.hxx>
 #include <ndindex.hxx>
+#include <comphelper/string.hxx>
 
 const sal_Unicode cRelTrenner = ',';
 const sal_Unicode cRelKennung = '';        // CTRL-R
@@ -647,7 +648,7 @@ String SwTableFormula::ScanString( FnScanFormel fnFormel, const SwTable& rTbl,
 
                 // falls im Namen schon die Punkte enthalten sind,
                 // treten diese immer paarig auf!!! (A1.1.1 !!)
-                if( (sTblNm.GetTokenCount( '.' ) - 1 ) & 1 )
+                if( (comphelper::string::getTokenCount(sTblNm, '.') - 1) & 1 )
                 {
                     sTblNm.Erase( nTrenner - nStt );
 
@@ -1065,7 +1066,7 @@ void SwTableFormula::_SplitMergeBoxNm( const SwTable& rTbl, String& rNewStr,
     if( STRING_NOTFOUND != nTrenner &&
         // falls im Namen schon die Punkte enthalten sind,
         // treten diese immer paarig auf!!! (A1.1.1 !!)
-        (pTblNmBox->GetTokenCount( '.' ) - 1 ) & 1 )
+        (comphelper::string::getTokenCount(*pTblNmBox, '.') - 1) & 1 )
     {
         sTblNm = pTblNmBox->Copy( 0, nTrenner );
         pTblNmBox->Erase( 0, nTrenner + 1);// den Punkt entfernen

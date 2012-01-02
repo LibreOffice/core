@@ -52,6 +52,7 @@ public:
     void testStripEnd();
     void testStrip();
     void testToken();
+    void testTokenCount();
     void testDecimalStringToNumber();
     void testIsdigitAsciiString();
     void testIsalnumAsciiString();
@@ -68,6 +69,7 @@ public:
     CPPUNIT_TEST(testStripEnd);
     CPPUNIT_TEST(testStrip);
     CPPUNIT_TEST(testToken);
+    CPPUNIT_TEST(testTokenCount);
     CPPUNIT_TEST(testDecimalStringToNumber);
     CPPUNIT_TEST(testIsdigitAsciiString);
     CPPUNIT_TEST(testIsalnumAsciiString);
@@ -514,6 +516,21 @@ void TestString::testToken()
 
     aOut = ::comphelper::string::getToken(aIn, 3, '.');
     CPPUNIT_ASSERT(aOut.isEmpty());
+}
+
+void TestString::testTokenCount()
+{
+    ::rtl::OString aIn(RTL_CONSTASCII_STRINGPARAM("10.11.12"));
+    sal_Int32 nOut;
+
+    nOut = ::comphelper::string::getTokenCount(aIn, '.');
+    CPPUNIT_ASSERT(nOut == 3);
+
+    nOut = ::comphelper::string::getTokenCount(aIn, 'X');
+    CPPUNIT_ASSERT(nOut == 1);
+
+    nOut = ::comphelper::string::getTokenCount(rtl::OString(), 'X');
+    CPPUNIT_ASSERT(nOut == 0);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(TestString);

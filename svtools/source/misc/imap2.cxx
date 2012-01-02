@@ -303,7 +303,8 @@ void ImageMap::ImpReadCERNLine( const rtl::OString& rLine, const String& rBaseUR
         }
         else if ( ( aToken == "polygon" ) || ( aToken == "poly" ) )
         {
-            const sal_uInt16    nCount = aStr.GetTokenCount( '(' ) - 1;
+            const sal_uInt16 nCount = comphelper::string::getTokenCount(aStr,
+                '(') - 1;
             Polygon         aPoly( nCount );
             String          aURL;
 
@@ -448,7 +449,8 @@ void ImageMap::ImpReadNCSALine( const rtl::OString& rLine, const String& rBaseUR
         }
         else if ( aToken == "poly" )
         {
-            const sal_uInt16    nCount = aStr.GetTokenCount( ',' ) - 1;
+            const sal_uInt16 nCount = comphelper::string::getTokenCount(aStr,
+                ',') - 1;
             const String    aURL( ImpReadNCSAURL( &pStr, rBaseURL ) );
             Polygon         aPoly( nCount );
 

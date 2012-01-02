@@ -50,15 +50,15 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
-#include <comphelper/processfactory.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <rtl/ustring.hxx>
 
-
-#include <comphelper/storagehelper.hxx>
-#include <comphelper/synchronousdispatch.hxx>
 #include <comphelper/configurationhelper.hxx>
+#include <comphelper/processfactory.hxx>
 #include <comphelper/sequenceasvector.hxx>
+#include <comphelper/storagehelper.hxx>
+#include <comphelper/string.hxx>
+#include <comphelper/synchronousdispatch.hxx>
 
 #include <vcl/wrkwin.hxx>
 #include <svl/intitem.hxx>
@@ -733,7 +733,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
         else if ( nSID == SID_OPENTEMPLATE )
         {
             aPath = SvtPathOptions().GetTemplatePath();
-            sal_Int32 nTokenCount = aPath.GetTokenCount( ';' );
+            sal_Int32 nTokenCount = comphelper::string::getTokenCount(aPath, ';');
             aPath = aPath.GetToken(
                 sal::static_int_cast< xub_StrLen >(
                     nTokenCount ? ( nTokenCount - 1 ) : 0 ),

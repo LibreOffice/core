@@ -1005,9 +1005,9 @@ SearchTabPage_Impl::SearchTabPage_Impl( Window* pParent, SfxHelpIndexWindow_Impl
             bChecked = ( 1 == aUserData.GetToken(1).ToInt32() ) ? sal_True : sal_False;
             aScopeCB.Check( bChecked );
 
-            for ( sal_uInt16 i = 2; i < aUserData.GetTokenCount(); ++i )
+            for ( sal_uInt16 i = 2; i < comphelper::string::getTokenCount(aUserData, ';'); ++i )
             {
-                String aToken = aUserData.GetToken(i);
+                String aToken = aUserData.GetToken(i, ';');
                 aSearchED.InsertEntry( INetURLObject::decode(
                     aToken, '%', INetURLObject::DECODE_WITH_CHARSET ) );
             }
@@ -2967,7 +2967,7 @@ void SfxHelpWindow_Impl::LoadConfig()
         if ( aUserItem >>= aTemp )
         {
             aUserData = String( aTemp );
-            DBG_ASSERT( aUserData.GetTokenCount() == 6, "invalid user data" );
+            DBG_ASSERT( comphelper::string::getTokenCount(aUserData, ';') == 6, "invalid user data" );
             sal_uInt16 nIdx = 0;
             nIndexSize = aUserData.GetToken( 0, ';', nIdx ).ToInt32();
             nTextSize = aUserData.GetToken( 0, ';', nIdx ).ToInt32();
@@ -3068,7 +3068,7 @@ IMPL_LINK( SfxHelpWindow_Impl, OpenHdl, SfxHelpIndexWindow_Impl* , EMPTYARG )
     {
         String aId;
         String aAnchor = String('#');
-        if ( aEntry.GetTokenCount( '#' ) == 2 )
+        if ( comphelper::string::getTokenCount(aEntry, '#') == 2 )
         {
             aId = aEntry.GetToken( 0, '#' );
             aAnchor += aEntry.GetToken( 1, '#' );

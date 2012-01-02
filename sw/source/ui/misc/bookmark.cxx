@@ -194,7 +194,7 @@ sal_uInt16 BookmarkCombo::GetSelEntryPos(sal_uInt16 nPos) const
 {
     sal_Unicode cSep = GetMultiSelectionSeparator();
 
-    sal_uInt16 nCnt = GetText().GetTokenCount(cSep);
+    sal_uInt16 nCnt = comphelper::string::getTokenCount(GetText(), cSep);
 
     for (; nPos < nCnt; nPos++)
     {

@@ -439,7 +439,7 @@ void SwGlossaries::UpdateGlosPath(sal_Bool bFull)
             delete *it;
         m_aPathArr.clear();
 
-        sal_uInt16 nTokenCount = m_aPath.GetTokenCount(SVT_SEARCHPATH_DELIMITER);
+        sal_uInt16 nTokenCount = comphelper::string::getTokenCount(m_aPath, SVT_SEARCHPATH_DELIMITER);
         std::vector<String*> aDirArr;
         for( sal_uInt16 i = 0; i < nTokenCount; i++ )
         {

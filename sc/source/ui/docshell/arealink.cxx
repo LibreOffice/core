@@ -31,6 +31,7 @@
 
 // INCLUDE ---------------------------------------------------------
 
+#include <comphelper/string.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/fcontnr.hxx>
@@ -300,7 +301,7 @@ sal_Bool ScAreaLink::Refresh( const String& rNewFile, const String& rNewFilter,
     // find total size of source area
     SCCOL nWidth = 0;
     SCROW nHeight = 0;
-    xub_StrLen nTokenCnt = aTempArea.GetTokenCount( ';' );
+    xub_StrLen nTokenCnt = comphelper::string::getTokenCount(aTempArea, ';');
     xub_StrLen nStringIx = 0;
     xub_StrLen nToken;
 

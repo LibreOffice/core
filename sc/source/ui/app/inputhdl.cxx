@@ -801,8 +801,8 @@ void ScInputHandler::ShowTipCursor()
                                 }
                                 if( bFlag )
                                 {
-                                    sal_uInt16 nCountSemicolon = aNew.GetTokenCount(cSep)-1;
-                                    sal_uInt16 nCountDot = aNew.GetTokenCount(cSheetSep)-1;
+                                    sal_uInt16 nCountSemicolon = comphelper::string::getTokenCount(aNew, cSep) - 1;
+                                    sal_uInt16 nCountDot = comphelper::string::getTokenCount(aNew, cSheetSep) - 1;
                                     sal_uInt16 nStartPosition = 0;
                                     sal_uInt16 nEndPosition = 0;
 
@@ -1045,8 +1045,8 @@ void ScInputHandler::UseFormulaData()
                             }
                             if( bFlag )
                             {
-                                sal_uInt16 nCountSemicolon = aNew.GetTokenCount(cSep)-1;
-                                sal_uInt16 nCountDot = aNew.GetTokenCount(cSheetSep)-1;
+                                sal_uInt16 nCountSemicolon = comphelper::string::getTokenCount(aNew, cSep) - 1;
+                                sal_uInt16 nCountDot = comphelper::string::getTokenCount(aNew, cSheetSep) - 1;
                                 sal_uInt16 nStartPosition = 0;
                                 sal_uInt16 nEndPosition = 0;
 

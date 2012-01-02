@@ -60,10 +60,11 @@
 #include <com/sun/star/ucb/AuthenticationRequest.hpp>
 /** === end UNO includes === **/
 
+#include <comphelper/guarding.hxx>
 #include <comphelper/interaction.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/sequence.hxx>
-#include <comphelper/guarding.hxx>
+#include <comphelper/string.hxx>
 #include <connectivity/DriversConfig.hxx>
 #include <connectivity/dbexception.hxx>
 #include <osl/file.hxx>
@@ -525,7 +526,7 @@ String ODbDataSourceAdministrationHelper::getConnectionURL() const
                 SFX_ITEMSET_GET(*m_pItemSetHelper->getOutputSet(), pHostName, SfxStringItem, DSID_CONN_HOSTNAME, sal_True);
                 sNewUrl = lcl_createHostWithPort(pHostName,NULL);
                 String sUrl = pCollection->cutPrefix(pUrlItem->GetValue());
-                if ( sUrl.GetTokenCount(':') == 1 )
+                if ( comphelper::string::getTokenCount(sUrl, ':') == 1 )
                     sNewUrl += String::CreateFromAscii(":");
 
                 sNewUrl += sUrl;

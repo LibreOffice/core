@@ -36,6 +36,8 @@
 #include "xistream.hxx"
 #include "xlroot.hxx"
 
+#include <comphelper/string.hxx>
+
 using namespace ::formula;
 
 // Function data ==============================================================
@@ -680,7 +682,7 @@ void XclTokenArrayHelper::ConvertStringToList( ScTokenArray& rScTokArr, sal_Unic
     if( GetString( aString, rScTokArr ) )
     {
         rScTokArr.Clear();
-        xub_StrLen nTokenCnt = aString.GetTokenCount( cStringSep );
+        xub_StrLen nTokenCnt = comphelper::string::getTokenCount(aString, cStringSep);
         xub_StrLen nStringIx = 0;
         for( xub_StrLen nToken = 0; nToken < nTokenCnt; ++nToken )
         {

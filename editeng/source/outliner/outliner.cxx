@@ -27,6 +27,7 @@
  ************************************************************************/
 
 
+#include <comphelper/string.hxx>
 #include <svl/intitem.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/editview.hxx>
@@ -410,7 +411,7 @@ void Outliner::SetText( const XubString& rText, Paragraph* pPara )
         if( aText.GetChar( aText.Len()-1 ) == '\x0A' )
             aText.Erase( aText.Len()-1, 1 ); // Delete the last break
 
-        sal_uInt16 nCount = aText.GetTokenCount( '\x0A' );
+        sal_uInt16 nCount = comphelper::string::getTokenCount(aText, '\x0A');
         sal_uInt16 nPos = 0;
         sal_uInt16 nInsPos = nPara+1;
         while( nCount > nPos )

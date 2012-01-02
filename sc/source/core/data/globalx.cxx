@@ -45,6 +45,7 @@
 #include <com/sun/star/i18n/XOrdinalSuffix.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/string.hxx>
 #include <unotools/localedatawrapper.hxx>
 
 
@@ -60,7 +61,7 @@ void ScGlobal::InitAddIns()
     String aMultiPath = aPathOpt.GetAddinPath();
     if ( aMultiPath.Len() > 0 )
     {
-        xub_StrLen nTokens = aMultiPath.GetTokenCount( ';' );
+        xub_StrLen nTokens = comphelper::string::getTokenCount(aMultiPath, ';');
         xub_StrLen nIndex = 0;
         for ( xub_StrLen j=0; j<nTokens; j++ )
         {

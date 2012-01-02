@@ -33,6 +33,7 @@
 #include "macroass.hxx"
 
 #include <basic/basmgr.hxx>
+#include <comphelper/string.hxx>
 #include <dialmgr.hxx>
 #include <svx/dialogs.hrc>
 #define _SVSTDARR_STRINGSDTOR
@@ -134,7 +135,7 @@ String ConvertToUIName_Impl( SvxMacro *pMacro )
     String aEntry;
     if ( ! pMacro->GetLanguage().EqualsAscii("JavaScript") )
     {
-        sal_uInt16 nCount = aName.GetTokenCount('.');
+        sal_uInt16 nCount = comphelper::string::getTokenCount(aName, '.');
         aEntry = aName.GetToken( nCount-1, '.' );
         if ( nCount > 2 )
         {

@@ -26,7 +26,7 @@
  *
  ************************************************************************/
 
-// include ---------------------------------------------------------------
+#include <comphelper/string.hxx>
 #include <tools/shl.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/module.hxx>
@@ -424,7 +424,7 @@ void SvxCaptionTabPage::SetupAnsatz_Impl( sal_uInt16 nType )
 
         case AZ_HORIZONTAL:
         aLB_ANSATZ_REL.Clear();
-        nCnt = aStrHorzList.GetTokenCount();
+        nCnt = comphelper::string::getTokenCount(aStrHorzList, ';');
         for( nIdx=0 ; nIdx<nCnt ; nIdx++ )
             aLB_ANSATZ_REL.InsertEntry( aStrHorzList.GetToken(nIdx) );
         aLB_ANSATZ_REL.SelectEntryPos( nAnsatzRelPos );
@@ -438,7 +438,7 @@ void SvxCaptionTabPage::SetupAnsatz_Impl( sal_uInt16 nType )
 
         case AZ_VERTIKAL:
         aLB_ANSATZ_REL.Clear();
-        nCnt = aStrVertList.GetTokenCount();
+        nCnt = comphelper::string::getTokenCount(aStrVertList, ';');
         for( nIdx=0 ; nIdx<nCnt ; nIdx++ )
             aLB_ANSATZ_REL.InsertEntry( aStrVertList.GetToken(nIdx) );
         aLB_ANSATZ_REL.SelectEntryPos( nAnsatzRelPos );

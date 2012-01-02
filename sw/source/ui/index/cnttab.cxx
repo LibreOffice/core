@@ -30,7 +30,7 @@
 #undef SW_DLLIMPLEMENTATION
 #endif
 
-
+#include <comphelper/string.hxx>
 #include <rsc/rscsfx.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/help.hxx>
@@ -759,7 +759,7 @@ SwAddStylesDlg_Impl::SwAddStylesDlg_Impl(Window* pParent,
     for(i = 0; i < MAXLEVEL; ++i)
     {
         String sStyles(rStringArr[i]);
-        for(sal_uInt16 nToken = 0; nToken < sStyles.GetTokenCount(TOX_STYLE_DELIMITER); nToken++)
+        for(sal_uInt16 nToken = 0; nToken < comphelper::string::getTokenCount(sStyles, TOX_STYLE_DELIMITER); nToken++)
         {
             String sTmp(sStyles.GetToken(nToken, TOX_STYLE_DELIMITER));
             SvLBoxEntry* pEntry = rTLB.InsertEntry(sTmp);

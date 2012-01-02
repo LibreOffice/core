@@ -1072,7 +1072,7 @@ Size SmViewShell::GetTextLineSize(OutputDevice& rDevice, const String& rLine)
 
     String aText;
     Size   aSize(rDevice.GetTextWidth(rLine), rDevice.GetTextHeight());
-    sal_uInt16 nTabs = rLine.GetTokenCount('\t');
+    sal_uInt16 nTabs = comphelper::string::getTokenCount(rLine, '\t');
 
     if (nTabs > 0)
     {
@@ -1104,7 +1104,7 @@ Size SmViewShell::GetTextSize(OutputDevice& rDevice, const String& rText, long M
     String  aLine;
     Size    TextSize;
     String  aText;
-    sal_uInt16  nLines = rText.GetTokenCount('\n');
+    sal_uInt16  nLines = comphelper::string::getTokenCount(rText, '\n');
 
     for (sal_uInt16 i = 0; i < nLines; i++)
     {
@@ -1164,7 +1164,7 @@ void SmViewShell::DrawTextLine(OutputDevice& rDevice, const Point& rPosition, co
 
     String  aText;
     Point   aPoint (rPosition);
-    sal_uInt16  nTabs = rLine.GetTokenCount('\t');
+    sal_uInt16 nTabs = comphelper::string::getTokenCount(rLine, '\t');
 
     if (nTabs > 0)
     {
@@ -1191,7 +1191,7 @@ void SmViewShell::DrawText(OutputDevice& rDevice, const Point& rPosition, const 
 {
     RTL_LOGFILE_CONTEXT( aLog, "starmath: SmViewShell::DrawText" );
 
-    sal_uInt16  nLines = rText.GetTokenCount('\n');
+    sal_uInt16 nLines = comphelper::string::getTokenCount(rText, '\n');
     Point   aPoint (rPosition);
     Size    aSize;
     String  aLine;

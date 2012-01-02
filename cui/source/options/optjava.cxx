@@ -43,6 +43,7 @@
 #include <svtools/imagemgr.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/string.hxx>
 #include <ucbhelper/contentbroker.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
@@ -1061,7 +1062,7 @@ void SvxJavaClassPathDlg::SetClassPath( const String& _rPath )
         m_sOldPath = _rPath;
     m_aPathList.Clear();
     xub_StrLen i, nIdx = 0;
-    xub_StrLen nCount = _rPath.GetTokenCount( CLASSPATH_DELIMITER );
+    xub_StrLen nCount = comphelper::string::getTokenCount(_rPath, CLASSPATH_DELIMITER);
     for ( i = 0; i < nCount; ++i )
     {
         String sToken = _rPath.GetToken( 0, CLASSPATH_DELIMITER, nIdx );

@@ -44,6 +44,7 @@
 #include <svl/cjkoptions.hxx>
 #include <com/sun/star/i18n/TransliterationModules.hpp>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/string.hxx>
 #include <svx/svxdlg.hxx>
 #include <sal/macros.h>
 
@@ -139,7 +140,7 @@ FmSearchDialog::FmSearchDialog(Window* pParent, const UniString& sInitialText, c
     fmscInitial.nContext = nInitialContext;
     m_lnkContextSupplier.Call(&fmscInitial);
     DBG_ASSERT(fmscInitial.xCursor.is(), "FmSearchDialog::FmSearchDialog : invalid data supplied by ContextSupplier !");
-    DBG_ASSERT(fmscInitial.strUsedFields.GetTokenCount(';') == (xub_StrLen)fmscInitial.arrFields.size(),
+    DBG_ASSERT(comphelper::string::getTokenCount(fmscInitial.strUsedFields, ';') == (xub_StrLen)fmscInitial.arrFields.size(),
         "FmSearchDialog::FmSearchDialog : invalid data supplied by ContextSupplied !");
 #if (OSL_DEBUG_LEVEL > 1) || defined DBG_UTIL
     for (sal_Int32 i=0; i<(sal_Int32)fmscInitial.arrFields.size(); ++i)
@@ -189,7 +190,7 @@ FmSearchDialog::FmSearchDialog(Window* pParent, const UniString& sInitialText, c
 
     if (fmscInitial.sFieldDisplayNames.Len() != 0)
     {   // use the display names if supplied
-        DBG_ASSERT(fmscInitial.sFieldDisplayNames.GetTokenCount() == fmscInitial.strUsedFields.GetTokenCount(),
+        DBG_ASSERT(comphelper::string::getTokenCount(fmscInitial.sFieldDisplayNames, ';') == comphelper::string::getTokenCount(fmscInitial.strUsedFields, ';'),
             "FmSearchDialog::FmSearchDialog : invalid initial context description !");
         Init(fmscInitial.sFieldDisplayNames, sInitialText);
     }
@@ -278,8 +279,8 @@ void FmSearchDialog::Init(const UniString& strVisibleFields, const UniString& sI
     m_lbPosition.SelectEntryPos(MATCHING_ANYWHERE);
 
     // the field listbox
-    for (sal_uInt16 i=0; i<strVisibleFields.GetTokenCount(';'); ++i)
-        m_lbField.InsertEntry(strVisibleFields.GetToken(i, ';'));
+    for (sal_Int32 i=0; i < comphelper::string::getTokenCount(strVisibleFields, ';'); ++i)
+        m_lbField.InsertEntry(comphelper::string::getToken(strVisibleFields, i, ';'));
 
 
     m_pConfig = new FmSearchConfigItem;
@@ -575,15 +576,17 @@ void FmSearchDialog::InitContext(sal_Int16 nContext)
     if (fmscContext.sFieldDisplayNames.Len() != 0)
     {
         // use the display names if supplied
-        DBG_ASSERT(fmscContext.sFieldDisplayNames.GetTokenCount() == fmscContext.strUsedFields.GetTokenCount(),
+        DBG_ASSERT(comphelper::string::getTokenCount(fmscContext.sFieldDisplayNames, ';') == comphelper::string::getTokenCount(fmscContext.strUsedFields, ';'),
             "FmSearchDialog::InitContext : invalid context description supplied !");
-        for (xub_StrLen i=0; i<fmscContext.sFieldDisplayNames.GetTokenCount(); ++i)
-            m_lbField.InsertEntry(fmscContext.sFieldDisplayNames.GetToken(i));
+        for (sal_Int32 i=0; i < comphelper::string::getTokenCount(fmscContext.sFieldDisplayNames, ';'); ++i)
+            m_lbField.InsertEntry(comphelper::string::getToken(fmscContext.sFieldDisplayNames, i, ';'));
     }
     else
+    {
         // else use the field names
-        for (xub_StrLen i=0; i<fmscContext.strUsedFields.GetTokenCount(); ++i)
-            m_lbField.InsertEntry(fmscContext.strUsedFields.GetToken(i));
+        for (sal_Int32 i=0; i < comphelper::string::getTokenCount(fmscContext.strUsedFields, ';'); ++i)
+            m_lbField.InsertEntry(comphelper::string::getToken(fmscContext.strUsedFields, i, ';'));
+    }
 
     if (nContext < (sal_Int32)m_arrContextFields.size() && m_arrContextFields[nContext].Len())
     {

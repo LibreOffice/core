@@ -48,8 +48,8 @@
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 
 #include <comphelper/configurationhelper.hxx>
-
 #include <comphelper/processfactory.hxx>
+#include <comphelper/string.hxx>
 
 #include <unotools/loghelper.hxx>
 
@@ -178,10 +178,11 @@ SvtPrintOptions_Impl::SvtPrintOptions_Impl(const OUString& rConfigRoot)
 
         if (m_xCfg.is())
         {
-            UniString  sTmp = UniString(rConfigRoot);
-            xub_StrLen nTokenCount = sTmp.GetTokenCount('/');
-            sTmp = sTmp.GetToken(nTokenCount - 1, '/');
-            m_xCfg->getByName(OUString(sTmp.GetBuffer())) >>= m_xNode;
+            using comphelper::string::getTokenCount;
+            using comphelper::string::getToken;
+            sal_Int32 nTokenCount = getTokenCount(rConfigRoot, '/');
+            rtl::OUString sTok = getToken(rConfigRoot, nTokenCount - 1, '/');
+            m_xCfg->getByName(sTok) >>= m_xNode;
         }
     }
     catch (const css::uno::Exception& ex)

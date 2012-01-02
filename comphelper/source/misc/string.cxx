@@ -240,6 +240,35 @@ rtl::OUString strip(const rtl::OUString &rIn, sal_Unicode c)
     return stripEnd(stripStart(rIn, c), c);
 }
 
+namespace
+{
+    template <typename T, typename C> sal_Int32 tmpl_getTokenCount(const T &rIn,
+        C cTok)
+    {
+        // Empty String: TokenCount by Definition is 0
+        if (rIn.isEmpty())
+            return 0;
+
+        sal_Int32 nTokCount = 1;
+        for (sal_Int32 i = 0; i < rIn.getLength(); ++i)
+        {
+            if (rIn[i] == cTok)
+                ++nTokCount;
+        }
+        return nTokCount;
+    }
+}
+
+sal_Int32 getTokenCount(const rtl::OString &rIn, sal_Char cTok)
+{
+    return tmpl_getTokenCount<rtl::OString, sal_Char>(rIn, cTok);
+}
+
+sal_Int32 getTokenCount(const rtl::OUString &rIn, sal_Unicode cTok)
+{
+    return tmpl_getTokenCount<rtl::OUString, sal_Unicode>(rIn, cTok);
+}
+
 sal_uInt32 decimalStringToNumber(
     ::rtl::OUString const & str )
 {

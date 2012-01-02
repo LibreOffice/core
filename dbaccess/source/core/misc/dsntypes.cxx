@@ -40,6 +40,7 @@
 #include "core_resource.hxx"
 #include "core_resource.hrc"
 #include <comphelper/documentconstants.hxx>
+#include <comphelper/string.hxx>
 
 //.........................................................................
 namespace dbaccess
@@ -55,7 +56,7 @@ namespace dbaccess
     {
         void lcl_extractHostAndPort(const String& _sUrl,String& _sHostname,sal_Int32& _nPortNumber)
         {
-            if ( _sUrl.GetTokenCount(':') >= 2 )
+            if ( comphelper::string::getTokenCount(_sUrl, ':') >= 2 )
             {
                 _sHostname      = _sUrl.GetToken(0,':');
                 _nPortNumber    = _sUrl.GetToken(1,':').ToInt32();
@@ -229,14 +230,14 @@ void ODsnTypeCollection::extractHostNamePort(const ::rtl::OUString& _rDsn,String
     if ( _rDsn.matchIgnoreAsciiCaseAsciiL("jdbc:oracle:thin:",sizeof("jdbc:oracle:thin:")-1) )
     {
         lcl_extractHostAndPort(sUrl,_rsHostname,_nPortNumber);
-        if ( !_rsHostname.Len() && sUrl.GetTokenCount(':') == 2 )
+        if ( !_rsHostname.Len() && comphelper::string::getTokenCount(sUrl, ':') == 2 )
         {
             _nPortNumber = -1;
             _rsHostname = sUrl.GetToken(0,':');
         }
         if ( _rsHostname.Len() )
-            _rsHostname = _rsHostname.GetToken(_rsHostname.GetTokenCount('@') - 1,'@');
-        _sDatabaseName = sUrl.GetToken(sUrl.GetTokenCount(':') - 1,':');
+            _rsHostname = _rsHostname.GetToken(comphelper::string::getTokenCount(_rsHostname, '@') - 1, '@');
+        _sDatabaseName = sUrl.GetToken(comphelper::string::getTokenCount(sUrl, ':') - 1, ':');
     }
     else if ( _rDsn.matchIgnoreAsciiCaseAsciiL("sdbc:address:ldap:",sizeof("sdbc:address:ldap:")-1) )
     {
@@ -244,17 +245,17 @@ void ODsnTypeCollection::extractHostNamePort(const ::rtl::OUString& _rDsn,String
     }
     else if ( _rDsn.matchIgnoreAsciiCaseAsciiL("sdbc:adabas:",sizeof("sdbc:adabas:")-1) )
     {
-        if ( sUrl.GetTokenCount(':') == 2 )
+        if ( comphelper::string::getTokenCount(sUrl, ':') == 2 )
             _rsHostname = sUrl.GetToken(0,':');
-        _sDatabaseName = sUrl.GetToken(sUrl.GetTokenCount(':') - 1,':');
+        _sDatabaseName = sUrl.GetToken(comphelper::string::getTokenCount(sUrl, ':') - 1, ':');
     }
     else if ( _rDsn.matchIgnoreAsciiCaseAsciiL("sdbc:mysql:mysqlc:",sizeof("sdbc:mysql:mysqlc:")-1) || _rDsn.matchIgnoreAsciiCaseAsciiL("sdbc:mysql:jdbc:",sizeof("sdbc:mysql:jdbc:")-1) )
     {
         lcl_extractHostAndPort(sUrl,_rsHostname,_nPortNumber);
 
-        if ( _nPortNumber == -1 && !_rsHostname.Len() && sUrl.GetTokenCount('/') == 2 )
+        if ( _nPortNumber == -1 && !_rsHostname.Len() && comphelper::string::getTokenCount(sUrl, '/') == 2 )
             _rsHostname = sUrl.GetToken(0,'/');
-        _sDatabaseName = sUrl.GetToken(sUrl.GetTokenCount('/') - 1,'/');
+        _sDatabaseName = sUrl.GetToken(comphelper::string::getTokenCount(sUrl, '/') - 1, '/');
     }
     else if ( _rDsn.matchIgnoreAsciiCaseAsciiL("sdbc:ado:access:Provider=Microsoft.ACE.OLEDB.12.0;DATA SOURCE=",sizeof("sdbc:ado:access:Provider=Microsoft.ACE.OLEDB.12.0;DATA SOURCE=")-1)
          || _rDsn.matchIgnoreAsciiCaseAsciiL("sdbc:ado:access:PROVIDER=Microsoft.Jet.OLEDB.4.0;DATA SOURCE=",sizeof("sdbc:ado:access:PROVIDER=Microsoft.Jet.OLEDB.4.0;DATA SOURCE=")-1))

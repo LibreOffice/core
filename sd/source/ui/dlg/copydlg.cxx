@@ -32,6 +32,7 @@
 #endif
 
 #include "copydlg.hxx"
+#include <comphelper/string.hxx>
 #include <svx/dlgutil.hxx>
 #include <sfx2/module.hxx>
 #include <svx/xcolit.hxx>
@@ -167,7 +168,7 @@ IMPL_LINK( CopyDlg, Reset, void*, EMPTYARG )
     const SfxPoolItem* pPoolItem = NULL;
     String aStr( GetExtraData() );
 
-    if( aStr.GetTokenCount( TOKEN ) < 8 )
+    if (comphelper::string::getTokenCount(aStr, TOKEN) < 8)
     {
         if( SFX_ITEM_SET == mrOutAttrs.GetItemState( ATTR_COPY_NUMBER, sal_True, &pPoolItem ) )
             maNumFldCopies.SetValue( ( ( const SfxUInt16Item* ) pPoolItem )->GetValue() );

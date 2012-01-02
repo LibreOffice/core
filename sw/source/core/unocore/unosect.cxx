@@ -64,6 +64,7 @@
 #include <fmtcntnt.hxx>
 #include <editeng/lrspitem.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <comphelper/string.hxx>
 
 
 using namespace ::com::sun::star;
@@ -734,7 +735,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
                         pSectionData->SetType(FILE_LINK_SECTION);
                     }
                     String sSectLink(pSectionData->GetLinkFileName());
-                    while (3 < sSectLink.GetTokenCount(sfx2::cTokenSeperator))
+                    while (3 < comphelper::string::getTokenCount(sSectLink, sfx2::cTokenSeperator))
                     {
                         sSectLink += sfx2::cTokenSeperator;
                     }

@@ -51,41 +51,38 @@ namespace svt
         }
 
         //-----------------------------------------------------------------
-        void lcl_convertStringListToUrls( const String& _rColonSeparatedList, ::std::vector< String >& _rTokens, bool _bFinalSlash )
+        void lcl_convertStringListToUrls( const rtl::OUString& _rColonSeparatedList, ::std::vector< String >& _rTokens )
         {
-            const sal_Unicode s_cSeparator =
+            const sal_Unicode cSeparator =
     #if defined(WNT)
                 ';'
     #else
                 ':'
     #endif
                 ;
-            xub_StrLen nTokens = _rColonSeparatedList.GetTokenCount( s_cSeparator );
-            _rTokens.resize( 0 ); _rTokens.reserve( nTokens );
-            for ( xub_StrLen i=0; i<nTokens; ++i )
+            sal_Int32 nIndex = 0;
+            do
             {
                 // the current token in the list
-                String sCurrentToken = _rColonSeparatedList.GetToken( i, s_cSeparator );
-                if ( !sCurrentToken.Len() )
-                    continue;
-
-                INetURLObject aCurrentURL;
-
-                String sURL;
-                if ( ::utl::LocalFileHelper::ConvertPhysicalNameToURL( sCurrentToken, sURL ) )
-                    aCurrentURL = INetURLObject( sURL );
-                else
+                rtl::OUString sCurrentToken = _rColonSeparatedList.getToken( 0, cSeparator, nIndex );
+                if ( !sCurrentToken.isEmpty() )
                 {
-                    // smart URL parsing, assuming FILE protocol
-                    aCurrentURL = INetURLObject( sCurrentToken, INET_PROT_FILE );
-                }
+                    INetURLObject aCurrentURL;
 
-                if ( _bFinalSlash )
+                    String sURL;
+                    if ( ::utl::LocalFileHelper::ConvertPhysicalNameToURL( sCurrentToken, sURL ) )
+                        aCurrentURL = INetURLObject( sURL );
+                    else
+                    {
+                        // smart URL parsing, assuming FILE protocol
+                        aCurrentURL = INetURLObject( sCurrentToken, INET_PROT_FILE );
+                    }
+
                     aCurrentURL.setFinalSlash( );
-                else
-                    aCurrentURL.removeFinalSlash( );
-                _rTokens.push_back( aCurrentURL.GetMainURL( INetURLObject::NO_DECODE ) );
+                    _rTokens.push_back( aCurrentURL.GetMainURL( INetURLObject::NO_DECODE ) );
+                }
             }
+            while ( nIndex >= 0 );
         }
 
     }
@@ -175,7 +172,7 @@ namespace svt
             // append a final slash. This ensures that when we later on check
             // for unrestricted paths, we don't allow paths like "/home/user35" just because
             // "/home/user3" is allowed - with the final slash, we make it "/home/user3/".
-            lcl_convertStringListToUrls( sRestrictedPathList, m_aUnrestrictedURLs, true );
+            lcl_convertStringListToUrls( sRestrictedPathList, m_aUnrestrictedURLs );
     }
 
     RestrictedPaths::~RestrictedPaths() {}

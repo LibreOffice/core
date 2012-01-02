@@ -30,6 +30,7 @@
 #include <string>
 #include <stdlib.h>
 #include <hintids.hxx>
+#include <comphelper/string.hxx>
 #include <rtl/logfile.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/inputctx.hxx>
@@ -1144,7 +1145,7 @@ bool lcl_IsOwnDocument( SwView& rView )
 
 void SwView::ReadUserData( const String &rUserData, sal_Bool bBrowse )
 {
-    if ( rUserData.GetTokenCount() > 1 &&
+    if ( comphelper::string::getTokenCount(rUserData, ';') > 1 &&
         //Fuer Dokumente ohne Layout nur im OnlineLayout oder beim
         //Forward/Backward
          (!pWrtShell->IsNewLayout() || pWrtShell->GetViewOptions()->getBrowseMode() || bBrowse) )

@@ -27,7 +27,7 @@
  ************************************************************************/
 
 
-
+#include <comphelper/string.hxx>
 #include <sot/formats.hxx>
 #include <vcl/msgbox.hxx>
 #include <svtools/valueset.hxx>
@@ -1123,7 +1123,7 @@ String GalleryBrowser2::GetItemText( const GalleryTheme& rTheme, const SgaObject
         if( !aTitle.Len() )
         {
             aTitle = aURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS );
-            aTitle = aTitle.GetToken( aTitle.GetTokenCount( '/' ) - 1, '/' );
+            aTitle = aTitle.GetToken( comphelper::string::getTokenCount(aTitle, '/') - 1, '/' );
         }
 
         aRet += aTitle;

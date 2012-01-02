@@ -29,6 +29,7 @@
 
 
 #include <hintids.hxx>
+#include <comphelper/string.hxx>
 #include <tools/stream.hxx>
 #include <tools/resid.hxx>
 #include <sfx2/app.hxx>
@@ -65,7 +66,7 @@ SW_DLLPUBLIC String MakeSender()
 
     String sRet;
     String sSenderToken(SW_RES(STR_SENDER_TOKENS));
-    xub_StrLen nSttPos = 0, nTokenCount = sSenderToken.GetTokenCount(';');
+    xub_StrLen nSttPos = 0, nTokenCount = comphelper::string::getTokenCount(sSenderToken, ';');
     sal_Bool bLastLength = sal_True;
     for( xub_StrLen i = 0; i < nTokenCount; i++ )
     {

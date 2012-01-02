@@ -93,6 +93,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/stl_types.hxx>
+#include <comphelper/string.hxx>
 #include <connectivity/dbtools.hxx>
 #include <cppuhelper/servicefactory.hxx>
 #include <osl/mutex.hxx>
@@ -424,10 +425,10 @@ namespace
                 const Type* pCurrentListeners = pCurrentArray->getConstArray();
                 for (j=0; j<pCurrentArray->getLength(); ++j, ++pCurrentListeners)
                 {
-                    UniString aListener = (*pCurrentListeners).getTypeName();
-                    xub_StrLen nTokens = aListener.GetTokenCount('.');
+                    rtl::OUString aListener = (*pCurrentListeners).getTypeName();
+                    sal_Int32 nTokens = comphelper::string::getTokenCount(aListener, '.');
                     if (nTokens)
-                        aListener = aListener.GetToken(nTokens - 1, '.');
+                        aListener = comphelper::string::getToken(aListener, nTokens - 1, '.');
 
                     if (aListener == pCurrent->ListenerType.getStr())
                         // the current ScriptEventDescriptor doesn't match the current listeners class

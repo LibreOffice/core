@@ -29,7 +29,7 @@
 
 #include <osl/mutex.hxx>
 #include <comphelper/processfactory.hxx>
-
+#include <comphelper/string.hxx>
 
 #include <com/sun/star/script/XEventAttacher.hpp>
 #include <com/sun/star/script/XAllListener.hpp>
@@ -218,7 +218,7 @@ void BasicScriptListener_Impl::firing_impl( const ScriptEvent& aScriptEvent, Any
         String aMacro( aScriptEvent.ScriptCode );
         String aLibName;
         String aLocation;
-        if( aMacro.GetTokenCount( '.' ) == 3 )
+        if( comphelper::string::getTokenCount(aMacro, '.') == 3 )
         {
             sal_uInt16 nLast = 0;
             ::rtl::OUString aFullLibName = aMacro.GetToken( 0, '.', nLast );

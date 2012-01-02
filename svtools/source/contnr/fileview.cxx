@@ -145,9 +145,8 @@ namespace
 void FilterMatch::createWildCardFilterList(const String& _rFilterList,::std::vector< WildCard >& _rFilters)
 {
     if( _rFilterList.Len() )
-    {// filter is given
-        xub_StrLen nCount = _rFilterList.GetTokenCount();
-        _rFilters.reserve( nCount );
+    {
+        // filter is given
         xub_StrLen nIndex = 0;
         OUString sToken;
         do

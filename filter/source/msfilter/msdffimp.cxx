@@ -40,6 +40,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <unotools/streamwrap.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/string.hxx>
 #include <sot/exchange.hxx>
 #include <sot/storinfo.hxx>
 #include <vcl/cvtgrf.hxx>
@@ -3973,7 +3974,7 @@ bool SvxMSDffManager::ReadObjText(SvStream& rSt, SdrObject* pObj)
                 rOutliner.SetText( aText, rOutliner.GetParagraph( 0 ) );
 
                 // SHIFT-Ret ersetzen im Outliner
-                if(aText.GetTokenCount(0x0B) > 1)
+                if (comphelper::string::getTokenCount(aText, 0x0B) > 1)
                 {
                     sal_uInt32 nParaCount = rOutliner.GetParagraphCount();
                     for(sal_uInt16 a=0;a<nParaCount;a++)

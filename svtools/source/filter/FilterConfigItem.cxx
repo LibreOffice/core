@@ -31,6 +31,7 @@
 #include <tools/debug.hxx>
 #include <unotools/configmgr.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/string.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
@@ -47,21 +48,24 @@ using namespace ::com::sun::star::awt       ;   // Size
 using namespace ::com::sun::star::container ;   //
 using namespace ::com::sun::star::task      ;   // XStatusIndicator
 
-static sal_Bool ImpIsTreeAvailable( Reference< XMultiServiceFactory >& rXCfgProv, const String& rTree )
+static sal_Bool ImpIsTreeAvailable( Reference< XMultiServiceFactory >& rXCfgProv, const rtl::OUString& rTree )
 {
-    sal_Bool    bAvailable = rTree.Len() != 0;
+    sal_Bool bAvailable = !rTree.isEmpty();
     if ( bAvailable )
     {
-        xub_StrLen  nTokenCount = rTree.GetTokenCount( (sal_Unicode)'/' );
-        xub_StrLen  i = 0;
+        using comphelper::string::getTokenCount;
+        using comphelper::string::getToken;
 
-        if ( rTree.GetChar( 0 ) == (sal_Unicode)'/' )
-            i++;
-        if ( rTree.GetChar( rTree.Len() - 1 ) == (sal_Unicode)'/' )
-            nTokenCount--;
+        sal_Int32 nTokenCount = getTokenCount(rTree, '/');
+        sal_Int32 i = 0;
+
+        if ( rTree[0] == '/' )
+            ++i;
+        if ( rTree[rTree.getLength() - 1] == '/' )
+            --nTokenCount;
 
         Any aAny;
-        aAny <<= (OUString)rTree.GetToken( i++, (sal_Unicode)'/' );
+        aAny <<= getToken(rTree, i++, '/');
 
         // creation arguments: nodepath
         PropertyValue aPathArgument;
@@ -78,7 +82,7 @@ static sal_Bool ImpIsTreeAvailable( Reference< XMultiServiceFactory >& rXCfgProv
                 OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationAccess" ) ),
                     aArguments );
         }
-        catch ( ::com::sun::star::uno::Exception& )
+        catch (const ::com::sun::star::uno::Exception&)
         {
             bAvailable = sal_False;
         }
@@ -93,7 +97,7 @@ static sal_Bool ImpIsTreeAvailable( Reference< XMultiServiceFactory >& rXCfgProv
                     bAvailable = sal_False;
                 else
                 {
-                    String aNode( rTree.GetToken( i, (sal_Unicode)'/' ) );
+                    rtl::OUString aNode( getToken(rTree, i, '/') );
                     if ( !xHierarchicalNameAccess->hasByHierarchicalName( aNode ) )
                         bAvailable = sal_False;
                     else
@@ -131,7 +135,7 @@ void FilterConfigItem::ImpInitTree( const String& rSubTree )
         OUString sTree(
             OUString(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.")) +
             rSubTree);
-        if ( ImpIsTreeAvailable( xCfgProv, String( sTree ) ) )
+        if ( ImpIsTreeAvailable(xCfgProv, sTree) )
         {
             Any aAny;
             // creation arguments: nodepath

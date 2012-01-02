@@ -36,6 +36,7 @@
 #include "gsicheck.hxx"
 
 using comphelper::string::getToken;
+using comphelper::string::getTokenCount;
 
 #define MAX_GID_LID_LEN 250
 
@@ -74,9 +75,9 @@ sal_Bool LanguageOK( ByteString aLang )
     if (isdigitAsciiString(aLang))
         return sal_True;
 
-    if ( aLang.GetTokenCount( '-' ) == 1 )
+    if ( getTokenCount(aLang, '-') == 1 )
         return islowerAsciiString(aLang);
-    else if ( aLang.GetTokenCount( '-' ) == 2 )
+    else if ( getTokenCount(aLang, '-') == 2 )
     {
         ByteString aTok0( getToken(aLang, 0, '-') );
         ByteString aTok1( getToken(aLang, 1, '-') );
@@ -145,7 +146,7 @@ GSILine::GSILine( const ByteString &rLine, sal_uLong nLine )
                 , bOK( sal_True )
                 , bFixed ( sal_False )
 {
-    if ( rLine.GetTokenCount( '\t' ) == 15 )
+    if ( getTokenCount(rLine, '\t') == 15 )
     {
         aFormat = FORMAT_SDF;
         aUniqId = getToken(rLine, 0, '\t');
@@ -465,7 +466,7 @@ sal_Bool GSIBlock::IsUTF8( const ByteString &aTestee, sal_Bool bFixTags, sal_uIn
             nAfterID += 7;
             nAfterID = nAfterID + aDelimiter.getLength();
         }
-        else if ( aID.GetTokenCount( '.' ) > 1 )
+        else if ( getTokenCount(aID, '.') > 1 )
         {   // test for old KeyIDs       5 to 6 digits followed by a dot   '44373.'
             bNewId = sal_False;
             nErrorPos = 1;

@@ -64,6 +64,7 @@
 #include <SwStyleNameMapper.hxx>
 #include <unoevtlstnr.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <comphelper/string.hxx>
 
 
 using namespace ::com::sun::star;
@@ -2663,7 +2664,7 @@ throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
 
     const String& rStyles =
         rTOXBase.GetStyleNames(static_cast<sal_uInt16>(nIndex));
-    const sal_uInt16 nStyles = rStyles.GetTokenCount(TOX_STYLE_DELIMITER);
+    const sal_uInt16 nStyles = comphelper::string::getTokenCount(rStyles, TOX_STYLE_DELIMITER);
     uno::Sequence<OUString> aStyles(nStyles);
     OUString* pStyles = aStyles.getArray();
     String aString;

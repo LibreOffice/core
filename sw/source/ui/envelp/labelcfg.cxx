@@ -31,6 +31,7 @@
 #include <swtypes.hxx>
 #include <labelcfg.hxx>
 #include <labimp.hxx>
+#include <comphelper/string.hxx>
 #include <unotools/configpathes.hxx>
 
 #include <unomid.h>
@@ -89,7 +90,7 @@ SwLabRec* lcl_CreateSwLabRec(Sequence<Any>& rValues, const OUString& rManufactur
                     //except for the continuous flag ('C'/'S')
                     pValues[nProp] >>= sTmp;
                     String sMeasure(sTmp);
-                    sal_uInt16 nTokenCount = sMeasure.GetTokenCount(';');
+                    sal_uInt16 nTokenCount = comphelper::string::getTokenCount(sMeasure, ';');
                     for(sal_uInt16 i = 0; i < nTokenCount; i++)
                     {
                         String sToken(sMeasure.GetToken(i, ';' ));

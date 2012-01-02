@@ -32,6 +32,7 @@
 // INCLUDE ---------------------------------------------------------------
 
 #include "scitems.hxx"
+#include <comphelper/string.hxx>
 #include <editeng/eeitem.hxx>
 
 #include <sfx2/app.hxx>
@@ -870,7 +871,7 @@ void ScPreviewShell::WriteUserData(String& rData, sal_Bool /* bBrowse */)
 
 void ScPreviewShell::ReadUserData(const String& rData, sal_Bool /* bBrowse */)
 {
-    xub_StrLen nCount = rData.GetTokenCount();
+    xub_StrLen nCount = comphelper::string::getTokenCount(rData, ';');
     if (nCount)
     {
         xub_StrLen nIndex = 0;

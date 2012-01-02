@@ -44,9 +44,10 @@
 #include <docstat.hxx>
 #include <editsh.hxx>
 #include <viewsh.hxx>
-#include <comphelper/types.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <comphelper/string.hxx>
+#include <comphelper/types.hxx>
 #include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/util/DateTimeRange.hpp>
 #include <com/sun/star/util/DateTime.hpp>
@@ -2444,7 +2445,7 @@ sal_uInt16 lcl_GetIdByName( String& rName, String& rTypeName )
     else if(rTypeName.EqualsAscii("DataBase"))
     {
         rName.Erase( 0, RTL_CONSTASCII_LENGTH( "DataBase." ));
-        sal_uInt16 nDotCount = rName.GetTokenCount('.');
+        sal_uInt16 nDotCount = comphelper::string::getTokenCount(rName, '.');
         if( 2 <= nDotCount )
         {
             // #i51815#

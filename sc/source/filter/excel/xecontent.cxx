@@ -34,6 +34,7 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/sheet/XAreaLinks.hpp>
 #include <com/sun/star/sheet/XAreaLink.hpp>
+#include <comphelper/string.hxx>
 #include <sfx2/objsh.hxx>
 #include <tools/urlobj.hxx>
 #include <svl/itemset.hxx>
@@ -1046,7 +1047,7 @@ XclExpDV::XclExpDV( const XclExpRoot& rRoot, sal_uLong nScHandle ) :
                         Data validity is BIFF8 only (important for the XclExpString object).
                         Excel uses the NUL character as string list separator. */
                     mxString1.reset( new XclExpString( EXC_STR_8BITLENGTH ) );
-                    xub_StrLen nTokenCnt = aString.GetTokenCount( '\n' );
+                    xub_StrLen nTokenCnt = comphelper::string::getTokenCount(aString, '\n');
                     xub_StrLen nStringIx = 0;
                     for( xub_StrLen nToken = 0; nToken < nTokenCnt; ++nToken )
                     {
@@ -1282,7 +1283,7 @@ XclExpWebQuery::XclExpWebQuery(
     mbEntireDoc( false )
 {
     // comma separated list of HTML table names or indexes
-    xub_StrLen nTokenCnt = rSource.GetTokenCount( ';' );
+    xub_StrLen nTokenCnt = comphelper::string::getTokenCount(rSource, ';');
     String aNewTables, aAppendTable;
     xub_StrLen nStringIx = 0;
     bool bExitLoop = false;

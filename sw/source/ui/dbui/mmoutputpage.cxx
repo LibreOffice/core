@@ -973,7 +973,7 @@ IMPL_LINK(SwMailMergeOutputPage, SendTypeHdl_Impl, ListBox*, pBox)
         //do nothing if the user has removed the name - the warning will come early enough
         if(sAttach.Len())
         {
-            xub_StrLen nTokenCount = sAttach.GetTokenCount( '.' );
+            xub_StrLen nTokenCount = comphelper::string::getTokenCount(sAttach, '.');
             if( 2 > nTokenCount)
             {
                 sAttach += '.';
@@ -1123,7 +1123,7 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
         if(RET_OK == aQuery.Execute())
         {
             String sAttach(aQuery.GetValue());
-            xub_StrLen nTokenCount = sAttach.GetTokenCount( '.' );
+            xub_StrLen nTokenCount = comphelper::string::getTokenCount(sAttach, '.');
             if( 2 > nTokenCount)
             {
                 sAttach += '.';
@@ -1263,7 +1263,7 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
             sBody = m_sBody;
             aDesc.sAttachmentURL = aName.GetValue();
             String sAttachment(m_aAttachmentED.GetText());
-            xub_StrLen nTokenCount = sAttachment.GetTokenCount( '.' );
+            xub_StrLen nTokenCount = comphelper::string::getTokenCount(sAttachment, '.');
             if( 2 > nTokenCount)
             {
                 sAttachment += '.';

@@ -41,6 +41,8 @@
 
 #include <cstdarg>
 
+#include <comphelper/string.hxx>
+
 #include "plugin/impl.hxx"
 
 #include "osl/mutex.hxx"
@@ -85,10 +87,10 @@ const Sequence< ::rtl::OUString >& PluginManager::getAdditionalSearchPaths()
         String aPluginPath( aOptions.GetPluginPath() );
         if( aPluginPath.Len() )
         {
-            sal_uInt16 nPaths = aPluginPath.GetTokenCount( ';' );
+            sal_Int32 nPaths = comphelper::string::getTokenCount(aPluginPath, ';');
             aPaths.realloc( nPaths );
             for( sal_uInt16 i = 0; i < nPaths; i++ )
-                aPaths.getArray()[i] = aPluginPath.GetToken( i, ';' );
+                aPaths.getArray()[i] = comphelper::string::getToken(aPluginPath, i, ';');
         }
     }
 

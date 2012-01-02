@@ -44,8 +44,8 @@
 #include <com/sun/star/sheet/FormulaLanguage.hpp>
 #include <com/sun/star/sheet/FormulaMapGroup.hpp>
 #include <comphelper/processfactory.hxx>
-#include <unotools/transliterationwrapper.hxx>
 #include <comphelper/string.hxx>
+#include <unotools/transliterationwrapper.hxx>
 #include <tools/urlobj.hxx>
 #include <rtl/math.hxx>
 #include <ctype.h>
@@ -3369,7 +3369,7 @@ void ScCompiler::AutoCorrectParsedSymbol()
                && (GetCharTableFlags( c2, c2p ) & SC_COMPILER_C_CHAR_VALUE) )
         {
             xub_StrLen nXcount;
-            if ( (nXcount = aCorrectedSymbol.GetTokenCount( cx )) > 1 )
+            if ( (nXcount = comphelper::string::getTokenCount(aCorrectedSymbol, cx)) > 1 )
             {   // x => *
                 xub_StrLen nIndex = 0;
                 sal_Unicode c = mxSymbols->getSymbol(ocMul).GetChar(0);
@@ -3378,7 +3378,7 @@ void ScCompiler::AutoCorrectParsedSymbol()
                     nIndex++;
                 bCorrected = true;
             }
-            if ( (nXcount = aCorrectedSymbol.GetTokenCount( cX )) > 1 )
+            if ( (nXcount = comphelper::string::getTokenCount(aCorrectedSymbol, cX)) > 1 )
             {   // X => *
                 xub_StrLen nIndex = 0;
                 sal_Unicode c = mxSymbols->getSymbol(ocMul).GetChar(0);
@@ -3399,7 +3399,7 @@ void ScCompiler::AutoCorrectParsedSymbol()
                 aDoc = aSymbol.Copy( 0, nPosition + 2 );
                 aSymbol.Erase( 0, nPosition + 2 );
             }
-            xub_StrLen nRefs = aSymbol.GetTokenCount( ':' );
+            xub_StrLen nRefs = comphelper::string::getTokenCount(aSymbol, ':');
             bool bColons;
             if ( nRefs > 2 )
             {   // duplicated or too many ':'? B:2::C10 => B2:C10

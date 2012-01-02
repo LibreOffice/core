@@ -69,6 +69,7 @@
 #include "ViewSettingsSequenceDefines.hxx"
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/string.hxx>
 #include <com/sun/star/container/XNameContainer.hpp>
 
 using namespace com::sun::star;
@@ -2251,7 +2252,7 @@ void ScViewData::ReadUserData(const String& rData)
     if (!rData.Len())       // Leerer String kommt bei "neu Laden"
         return;             // dann auch ohne Assertion beenden
 
-    xub_StrLen nCount = rData.GetTokenCount(';');
+    xub_StrLen nCount = comphelper::string::getTokenCount(rData, ';');
     if ( nCount <= 2 )
     {
         //  beim Reload in der Seitenansicht sind evtl. die Preview-UserData
@@ -2307,10 +2308,10 @@ void ScViewData::ReadUserData(const String& rData)
             maTabData[nPos] = new ScViewDataTable;
 
         sal_Unicode cTabSep = 0;
-        if (aTabOpt.GetTokenCount(SC_OLD_TABSEP) >= 11)
+        if (comphelper::string::getTokenCount(aTabOpt, SC_OLD_TABSEP) >= 11)
             cTabSep = SC_OLD_TABSEP;
 #ifndef SC_LIMIT_ROWS
-        else if (aTabOpt.GetTokenCount(SC_NEW_TABSEP) >= 11)
+        else if (comphelper::string::getTokenCount(aTabOpt, SC_NEW_TABSEP) >= 11)
             cTabSep = SC_NEW_TABSEP;
         // '+' ist nur erlaubt, wenn wir mit Zeilen > 8192 umgehen koennen
 #endif

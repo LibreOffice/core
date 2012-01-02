@@ -34,6 +34,7 @@
 #include "impex.hxx"
 #include "asciiopt.hxx"
 #include "asciiopt.hrc"
+#include <comphelper/string.hxx>
 #include <rtl/tencinfo.h>
 #include <unotools/transliterationwrapper.hxx>
 // ause
@@ -198,7 +199,7 @@ sal_Bool ScAsciiOptions::operator==( const ScAsciiOptions& rCmp ) const
 
 void ScAsciiOptions::ReadFromString( const String& rString )
 {
-    xub_StrLen nCount = rString.GetTokenCount(',');
+    xub_StrLen nCount = comphelper::string::getTokenCount(rString, ',');
     String aToken;
     xub_StrLen nSub;
     xub_StrLen i;
@@ -215,7 +216,7 @@ void ScAsciiOptions::ReadFromString( const String& rString )
         aToken = rString.GetToken(0,',');
         if ( aToken.EqualsAscii(pStrFix) )
             bFixedLen = sal_True;
-        nSub = aToken.GetTokenCount('/');
+        nSub = comphelper::string::getTokenCount(aToken, '/');
         for ( i=0; i<nSub; i++ )
         {
             String aCode = aToken.GetToken( i, '/' );
@@ -271,7 +272,7 @@ void ScAsciiOptions::ReadFromString( const String& rString )
         delete[] pColFormat;
 
         aToken = rString.GetToken(4,',');
-        nSub = aToken.GetTokenCount('/');
+        nSub = comphelper::string::getTokenCount(aToken, '/');
         nInfoCount = nSub / 2;
         if (nInfoCount)
         {

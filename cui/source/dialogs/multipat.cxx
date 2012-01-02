@@ -38,6 +38,7 @@
 #include "multipat.hrc"
 #include <cuires.hrc>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/string.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/ui/dialogs/XFolderPicker.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
@@ -283,7 +284,7 @@ String SvxMultiPathDialog::GetPath() const
 void SvxMultiPathDialog::SetPath( const String& rPath )
 {
     sal_Unicode cDelim = pImpl->bIsClassPathMode ? CLASSPATH_DELIMITER : SVT_SEARCHPATH_DELIMITER;
-    sal_uInt16 nPos, nCount = rPath.GetTokenCount( cDelim );
+    sal_uInt16 nPos, nCount = comphelper::string::getTokenCount(rPath, cDelim);
 
     for ( sal_uInt16 i = 0; i < nCount; ++i )
     {

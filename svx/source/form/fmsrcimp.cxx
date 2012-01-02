@@ -886,11 +886,11 @@ void FmSearchEngine::Init(const ::rtl::OUString& sVisibleFields)
 
 
         ::rtl::OUString sCurrentField;
-        UniString sVis(sVisibleFields.getStr());
-        xub_StrLen nLen = sVis.GetTokenCount();
-        for (xub_StrLen i=0; i<nLen; ++i)
+        ::rtl::OUString sVis(sVisibleFields.getStr());
+        sal_Int32 nIndex = 0;
+        do
         {
-            sCurrentField = sVis.GetToken(i);
+            sCurrentField = sVis.getToken(0, ';' , nIndex);
 
             // in der Feld-Sammlung suchen
             sal_Int32 nFoundIndex = -1;
@@ -907,6 +907,7 @@ void FmSearchEngine::Init(const ::rtl::OUString& sVisibleFields)
             DBG_ASSERT(nFoundIndex != -1, "FmSearchEngine::Init : Invalid field name were given !");
             m_arrFieldMapping.push_back(nFoundIndex);
         }
+        while ( nIndex >= 0 );
     }
     catch (const Exception&)
     {

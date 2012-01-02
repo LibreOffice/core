@@ -27,6 +27,7 @@
  ************************************************************************/
 
 
+#include <comphelper/string.hxx>
 #include <tools/vcompat.hxx>
 #include <ucbhelper/content.hxx>
 #include <unotools/ucbstreamhelper.hxx>
@@ -178,7 +179,7 @@ public:
 // - Gallery -
 // -----------
 
-Gallery::Gallery( const String& rMultiPath )
+Gallery::Gallery( const rtl::OUString& rMultiPath )
 :       nReadTextEncoding   ( osl_getThreadTextEncoding() )
 ,       nLastFileNumber     ( 0 )
 ,       bMultiPath          ( sal_False )
@@ -221,9 +222,9 @@ Gallery* Gallery::GetGalleryInstance()
 
 // ------------------------------------------------------------------------
 
-void Gallery::ImplLoad( const String& rMultiPath )
+void Gallery::ImplLoad( const rtl::OUString& rMultiPath )
 {
-    const sal_uInt16    nTokenCount = rMultiPath.GetTokenCount( ';' );
+    const sal_Int32 nTokenCount = comphelper::string::getTokenCount(rMultiPath, ';');
     sal_Bool        bIsReadOnlyDir;
 
     bMultiPath = ( nTokenCount > 0 );
@@ -236,11 +237,11 @@ void Gallery::ImplLoad( const String& rMultiPath )
 
     if( bMultiPath )
     {
-        aRelURL = INetURLObject( rMultiPath.GetToken( 0, ';' ) );
+        aRelURL = INetURLObject( comphelper::string::getToken(rMultiPath, 0, ';') );
 
-        for( sal_uInt16 i = 0UL; i < nTokenCount; i++ )
+        for( sal_Int32 i = 0; i < nTokenCount; ++i )
         {
-            aCurURL = INetURLObject(rMultiPath.GetToken( i, ';' ));
+            aCurURL = INetURLObject(comphelper::string::getToken(rMultiPath, i, ';'));
 
             ImplLoadSubDirs( aCurURL, bIsReadOnlyDir );
 

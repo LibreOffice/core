@@ -36,6 +36,7 @@
 #include <com/sun/star/geometry/RealPoint2D.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/document/XEventBroadcaster.hpp>
+#include <comphelper/string.hxx>
 #include <svx/svxids.hrc>
 #include <vcl/menu.hxx>
 #include <vcl/msgbox.hxx>
@@ -488,7 +489,7 @@ void AnnotationManagerImpl::ExecuteReplyToAnnotation( SfxRequest& rReq )
         aStr.Append( sQuote );
         aStr.Append( String(RTL_CONSTASCII_USTRINGPARAM("\"\n") ) );
 
-        sal_uInt16 nParaCount = aStr.GetTokenCount( '\n' );
+        sal_uInt16 nParaCount = comphelper::string::getTokenCount(aStr, '\n');
         for( sal_uInt16 nPara = 0; nPara < nParaCount; nPara++ )
             pOutliner->Insert( aStr.GetToken( nPara, '\n' ), LIST_APPEND, -1 );
 

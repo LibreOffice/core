@@ -40,6 +40,7 @@
 #include <com/sun/star/uri/XUriReferenceFactory.hpp>
 #include <com/sun/star/uri/XVndSunStarScriptUrl.hpp>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/string.hxx>
 #include <com/sun/star/embed/VerbAttributes.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 
@@ -368,7 +369,7 @@ void SdTPAction::Reset( const SfxItemSet& rAttrs )
 
         case presentation::ClickAction_DOCUMENT:
         {
-            if( aFileName.GetTokenCount( DOCUMENT_TOKEN ) == 2 )
+            if( comphelper::string::getTokenCount(aFileName, DOCUMENT_TOKEN) == 2 )
                 aLbTreeDocument.SelectEntry( aFileName.GetToken( 1, DOCUMENT_TOKEN ) );
         }
         break;
@@ -778,7 +779,7 @@ void SdTPAction::SetEditText( String const & rStr )
     switch( eCA )
     {
         case presentation::ClickAction_DOCUMENT:
-            if( rStr.GetTokenCount( DOCUMENT_TOKEN ) == 2 )
+            if( comphelper::string::getTokenCount(rStr, DOCUMENT_TOKEN) == 2 )
                 aText = rStr.GetToken( 0, DOCUMENT_TOKEN );
 
             // fallthrough inteded

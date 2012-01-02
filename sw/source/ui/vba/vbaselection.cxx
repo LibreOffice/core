@@ -35,6 +35,7 @@
 #include <com/sun/star/text/XTextTableCursor.hpp>
 #include <com/sun/star/text/ControlCharacter.hpp>
 #include <com/sun/star/table/XCell.hpp>
+#include <comphelper/string.hxx>
 #include <ooo/vba/word/WdUnits.hpp>
 #include <ooo/vba/word/WdMovementType.hpp>
 #include <ooo/vba/word/WdGoToItem.hpp>
@@ -1002,7 +1003,7 @@ void SwVbaSelection::GetSelectedCellRange( rtl::OUString& sTLName, rtl::OUString
     if( xTextTableCursor.is() )
     {
         String sRange( xTextTableCursor->getRangeName() );
-        if( sRange.GetTokenCount(':') > 0 )
+        if( comphelper::string::getTokenCount(sRange, ':') > 0 )
         {
             sTLName = sRange.GetToken(0, ':');
             sBRName = sRange.GetToken(1, ':');

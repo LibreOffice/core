@@ -32,6 +32,7 @@
 //----------------------------------------------------------------------------
 #include <rangelst.hxx>
 
+#include <comphelper/string.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svl/stritem.hxx>
 #include <vcl/msgbox.hxx>
@@ -397,7 +398,7 @@ sal_Bool ScPrintAreasDlg::Impl_CheckRefStrings()
 
         ScAddress aAddr;
         ScRange aRange;
-        xub_StrLen nSepCount = aStrPrintArea.GetTokenCount(sep);
+        xub_StrLen nSepCount = comphelper::string::getTokenCount(aStrPrintArea, sep);
         for ( xub_StrLen i = 0; i < nSepCount && bPrintAreaOk; ++i )
         {
             String aOne = aStrPrintArea.GetToken(i, sep);

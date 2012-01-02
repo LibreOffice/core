@@ -119,7 +119,7 @@ String InsertLabEnvText( SwWrtShell& rSh, SwFldMgr& rFldMgr, const String& rText
 
                     // Database fields must contain at least 3 points!
                     String sDBName( sTmpText.Copy( 1, sTmpText.Len() - 2));
-                    sal_uInt16 nCnt = sDBName.GetTokenCount('.');
+                    sal_uInt16 nCnt = comphelper::string::getTokenCount(sDBName, '.');
                     if (nCnt >= 3)
                     {
                         ::ReplacePoint(sDBName, sal_True);

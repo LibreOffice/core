@@ -36,6 +36,7 @@
 #include <optutil.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <comphelper/string.hxx>
 #include "miscuno.hxx"
 
 using namespace com::sun::star::uno;
@@ -74,7 +75,7 @@ static void load_FixedWidthList(ScCsvSplits &aSplits)
         sSplits = String( sFixedWidthLists );
 
         // String ends with a semi-colon so there is no 'int' after the last one.
-        xub_StrLen n = sSplits.GetTokenCount() - 1;
+        xub_StrLen n = comphelper::string::getTokenCount(sSplits, ';') - 1;
         for (xub_StrLen i = 0; i < n; ++i)
             aSplits.Insert( sSplits.GetToken(i).ToInt32() );
     }

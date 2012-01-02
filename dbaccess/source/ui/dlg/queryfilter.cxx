@@ -40,6 +40,7 @@
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
+#include <comphelper/string.hxx>
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>
 #include "moduledbu.hxx"
@@ -225,7 +226,7 @@ DlgFilterCrit::~DlgFilterCrit()
 sal_Int32 DlgFilterCrit::GetOSQLPredicateType( const String& _rSelectedPredicate ) const
 {
     sal_Int32 nPredicateIndex = -1;
-    for ( xub_StrLen i=0; i<aSTR_COMPARE_OPERATORS.GetTokenCount(); ++i)
+    for ( xub_StrLen i=0; i < comphelper::string::getTokenCount(aSTR_COMPARE_OPERATORS, ';'); ++i)
         if ( aSTR_COMPARE_OPERATORS.GetToken(i) == _rSelectedPredicate )
         {
             nPredicateIndex = i;
@@ -733,7 +734,7 @@ IMPL_LINK( DlgFilterCrit, ListSelectHdl, ListBox *, pListBox )
 
         if(eColumnSearch  == ColumnSearch::FULL)
         {
-            for(xub_StrLen i=0;i<aSTR_COMPARE_OPERATORS.GetTokenCount();i++)
+            for(xub_StrLen i=0;i < comphelper::string::getTokenCount(aSTR_COMPARE_OPERATORS, ';');i++)
                 pComp->InsertEntry(aSTR_COMPARE_OPERATORS.GetToken(i));
         }
         else if(eColumnSearch == ColumnSearch::CHAR)
@@ -746,7 +747,7 @@ IMPL_LINK( DlgFilterCrit, ListSelectHdl, ListBox *, pListBox )
             xub_StrLen i;
             for( i = 0; i < 6; i++ )
                 pComp->InsertEntry(aSTR_COMPARE_OPERATORS.GetToken(i));
-            for(i=8;i<aSTR_COMPARE_OPERATORS.GetTokenCount();i++)
+            for(i=8; i < comphelper::string::getTokenCount(aSTR_COMPARE_OPERATORS, ';'); ++i)
                 pComp->InsertEntry(aSTR_COMPARE_OPERATORS.GetToken(i));
         }
         else

@@ -907,7 +907,7 @@ sal_Bool OFlatTable::readLine(sal_Int32& _rnCurrentPos)
         return sal_False;
 
     QuotedTokenizedString sLine = m_aCurrentLine; // check if the string continues on next line
-    while( (sLine.GetString().GetTokenCount(m_cStringDelimiter) % 2) != 1 )
+    while( (comphelper::string::getTokenCount(sLine.GetString(), m_cStringDelimiter) % 2) != 1 )
     {
         m_pFileStream->ReadByteStringLine(sLine,nEncoding);
         if ( !m_pFileStream->IsEof() )

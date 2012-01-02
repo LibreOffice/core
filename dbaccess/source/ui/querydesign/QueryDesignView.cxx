@@ -43,6 +43,8 @@
 #include "SelectionBrowseBox.hxx"
 #include "dbu_qry.hrc"
 #include <unotools/configmgr.hxx>
+#include <comphelper/extract.hxx>
+#include <comphelper/string.hxx>
 #include <comphelper/types.hxx>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbexception.hxx>
@@ -56,7 +58,6 @@
 #include "ConnectionLineData.hxx"
 #include "QTableConnectionData.hxx"
 #include "dbustrings.hrc"
-#include <comphelper/extract.hxx>
 #include "UITools.hxx"
 #include "querycontainerwindow.hxx"
 #include "QueryTableView.hxx"
@@ -966,7 +967,7 @@ namespace
             {
                 const sal_Int32 nMaxOrder = xMetaData->getMaxColumnsInOrderBy();
                 String sToken(aWorkStr);
-                if ( nMaxOrder && nMaxOrder < sToken.GetTokenCount(',') )
+                if ( nMaxOrder && nMaxOrder < comphelper::string::getTokenCount(sToken, ',') )
                     eErrorCode = eStatementTooLong;
                 else
                 {
@@ -3056,7 +3057,7 @@ OSQLParseNode* OQueryDesignView::getPredicateTreeFromEntry(OTableFieldDescRef pE
         if ( !sFunction.Len() )
             sFunction = pEntry->GetField();
 
-        if(sFunction.GetTokenCount('(') > 1)
+        if (comphelper::string::getTokenCount(sFunction, '(') > 1)
             sFunction = sFunction.GetToken(0,'('); // this should be the name of the function
 
         sal_Int32 nType = ::connectivity::OSQLParser::getFunctionReturnType(sFunction,&rParser.getContext());
