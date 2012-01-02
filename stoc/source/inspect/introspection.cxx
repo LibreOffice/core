@@ -29,12 +29,8 @@
 
 #include <string.h>
 
-// Schalter fuer Introspection-Caching
-#define USE_INTROSPECTION_CACHE
-
-#ifdef USE_INTROSPECTION_CACHE
 #define INTROSPECTION_CACHE_MAX_SIZE 100
-#endif
+
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 #include <osl/thread.h>
@@ -1491,8 +1487,6 @@ OUString ImplIntrospectionAccess::getExactName( const OUString& rApproximateName
 
 //-----------------------------------------------------------------------------
 
-#ifdef USE_INTROSPECTION_CACHE
-
 struct hashIntrospectionKey_Impl
 {
     Sequence< Reference<XIdlClass> >    aIdlClasses;
@@ -1670,9 +1664,6 @@ public:
     }
 };
 
-#endif
-
-
 //*************************
 //*** ImplIntrospection ***
 //*************************
@@ -1711,12 +1702,10 @@ class ImplIntrospection : public XIntrospection
     Reference<XIdlClass> mxAggregationClass;
     sal_Bool mbDisposed;
 
-#ifdef USE_INTROSPECTION_CACHE
     sal_uInt16 mnCacheEntryCount;
     sal_uInt16 mnTPCacheEntryCount;
     IntrospectionAccessCacheMap* mpCache;
     TypeProviderAccessCacheMap* mpTypeProviderCache;
-#endif
 
 public:
     ImplIntrospection( const Reference<XMultiServiceFactory> & rXSMgr );
@@ -1760,12 +1749,10 @@ ImplIntrospection::ImplIntrospection( const Reference<XMultiServiceFactory> & rX
     : OComponentHelper( m_mutex )
     , m_xSMgr( rXSMgr )
 {
-#ifdef USE_INTROSPECTION_CACHE
     mnCacheEntryCount = 0;
     mnTPCacheEntryCount = 0;
     mpCache = NULL;
     mpTypeProviderCache = NULL;
-#endif
 
     // Spezielle Klassen holen
 //  Reference< XInterface > xServiceIface = m_xSMgr->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.reflection.CoreReflection")) );
@@ -1809,13 +1796,11 @@ void ImplIntrospection::dispose() throw(::com::sun::star::uno::RuntimeException)
 {
     OComponentHelper::dispose();
 
-#ifdef USE_INTROSPECTION_CACHE
     // Cache loeschen
     delete mpCache;
     mpCache = NULL;
     delete mpTypeProviderCache;
     mpTypeProviderCache = NULL;
-#endif
 
     mxElementAccessClass = NULL;
     mxNameContainerClass = NULL;
@@ -2028,7 +2013,6 @@ IntrospectionAccessStatic_Impl* ImplIntrospection::implInspect(const Any& aToIns
             return NULL;
     }
 
-#ifdef USE_INTROSPECTION_CACHE
     // Haben wir schon eine Cache-Instanz
     if( !mpCache )
         mpCache = new IntrospectionAccessCacheMap;
@@ -2039,10 +2023,6 @@ IntrospectionAccessStatic_Impl* ImplIntrospection::implInspect(const Any& aToIns
 
     // Pointer auf ggf. noetige neue IntrospectionAccess-Instanz
     IntrospectionAccessStatic_Impl* pAccess = NULL;
-#else
-    // Pointer auf ggf. noetige neue IntrospectionAccess-Instanz
-    IntrospectionAccessStatic_Impl* pAccess = new IntrospectionAccessStatic_Impl( mxCoreReflection );
-#endif
 
     // Pruefen: Ist schon ein passendes Access-Objekt gecached?
     Sequence< Reference<XIdlClass> >    SupportedClassSeq;
@@ -2090,7 +2070,6 @@ IntrospectionAccessStatic_Impl* ImplIntrospection::implInspect(const Any& aToIns
         xImplClass = TypeToIdlClass( aToInspectObj.getValueType(), m_xSMgr );
     }
 
-#ifdef USE_INTROSPECTION_CACHE
     if( xTypeProvider.is() )
     {
         Sequence< sal_Int8 > aImpIdSeq = xTypeProvider->getImplementationId();
@@ -2199,7 +2178,6 @@ IntrospectionAccessStatic_Impl* ImplIntrospection::implInspect(const Any& aToIns
             return (*aIt).second;
         }
     }
-#endif
 
     // Kein Access gecached -> neu anlegen
     Property* pAllPropArray;
