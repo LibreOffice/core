@@ -33,7 +33,7 @@ $(eval $(call gb_Extension_add_file,nlpsolver,components.rdb,$(SRCDIR)/nlpsolver
 $(eval $(call gb_Extension_add_file,nlpsolver,nlpsolver.jar,$(OUTDIR)/bin/nlpsolver.jar))
 $(eval $(call gb_Extension_add_file,nlpsolver,EvolutionarySolver.jar,$(OUTDIR)/bin/EvolutionarySolver.jar))
 
-$(eval $(foreach trans, $(wildcard $(SRCDIR)/nlpsolver/src/locale/*.properties), \
+$(eval $(foreach trans, $(wildcard $(SRCDIR)/nlpsolver/src/locale/*), \
 	$(eval $(call gb_Extension_add_file,nlpsolver,locale/$(notdir $(trans)),$(trans)))))
 $(eval $(call gb_Extension_add_file,nlpsolver,help/en/com.sun.star.comp.Calc.NLPSolver/Options.xhp, \
 	$(SRCDIR)/nlpsolver/help/en/com.sun.star.comp.Calc.NLPSolver/Options.xhp))
