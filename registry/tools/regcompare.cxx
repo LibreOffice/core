@@ -62,7 +62,7 @@ public:
     std::string const & getRegName1() const { return m_regName1; }
     std::string const & getRegName2() const { return m_regName2; }
 
-    bool isStartKeyValid() const { return (m_startKey.getLength() > 0); }
+    bool isStartKeyValid() const { return (!m_startKey.isEmpty()); }
     OUString const & getStartKey() const { return m_startKey; }
     bool matchedWithExcludeKey( const OUString& keyName) const;
 
@@ -323,55 +323,55 @@ static OString getFieldAccess(RTFieldAccess fieldAccess)
     }
     if ( (fieldAccess & RT_ACCESS_READONLY) == RT_ACCESS_READONLY )
     {
-        ret += OString(ret.getLength() > 0 ? ",READONLY" : "READONLY");
+        ret += OString(ret.isEmpty() ? "READONLY" : ",READONLY");
     }
     if ( (fieldAccess & RT_ACCESS_OPTIONAL) == RT_ACCESS_OPTIONAL )
     {
-        ret += OString(ret.getLength() > 0 ? ",OPTIONAL" : "OPTIONAL");
+        ret += OString(ret.isEmpty() ? "OPTIONAL" : ",OPTIONAL");
     }
     if ( (fieldAccess & RT_ACCESS_MAYBEVOID) == RT_ACCESS_MAYBEVOID )
     {
-        ret += OString(ret.getLength() > 0 ? ",MAYBEVOID" : "MAYBEVOID");
+        ret += OString(ret.isEmpty() ? "MAYBEVOID" : ",MAYBEVOID");
     }
     if ( (fieldAccess & RT_ACCESS_BOUND) == RT_ACCESS_BOUND )
     {
-        ret += OString(ret.getLength() > 0 ? ",BOUND" : "BOUND");
+        ret += OString(ret.isEmpty() ? "BOUND" : ",BOUND");
     }
     if ( (fieldAccess & RT_ACCESS_CONSTRAINED) == RT_ACCESS_CONSTRAINED )
     {
-        ret += OString(ret.getLength() > 0 ? ",CONSTRAINED" : "CONSTRAINED");
+        ret += OString(ret.isEmpty() ? "CONSTRAINED" : ",CONSTRAINED");
     }
     if ( (fieldAccess & RT_ACCESS_TRANSIENT) == RT_ACCESS_TRANSIENT )
     {
-        ret += OString(ret.getLength() > 0 ? ",TRANSIENT" : "TRANSIENT");
+        ret += OString(ret.isEmpty() ? "TRANSIENT" : ",TRANSIENT");
     }
     if ( (fieldAccess & RT_ACCESS_MAYBEAMBIGUOUS) == RT_ACCESS_MAYBEAMBIGUOUS )
     {
-        ret += OString(ret.getLength() > 0 ? ",MAYBEAMBIGUOUS" : "MAYBEAMBIGUOUS");
+        ret += OString(ret.isEmpty() ? "MAYBEAMBIGUOUS" : ",MAYBEAMBIGUOUS");
     }
     if ( (fieldAccess & RT_ACCESS_MAYBEDEFAULT) == RT_ACCESS_MAYBEDEFAULT )
     {
-        ret += OString(ret.getLength() > 0 ? ",MAYBEDEFAULT" : "MAYBEDEFAULT");
+        ret += OString(ret.isEmpty() ? "MAYBEDEFAULT" : ",MAYBEDEFAULT");
     }
     if ( (fieldAccess & RT_ACCESS_REMOVEABLE) == RT_ACCESS_REMOVEABLE )
     {
-        ret += OString(ret.getLength() > 0 ? ",REMOVEABLE" : "REMOVEABLE");
+        ret += OString(ret.isEmpty() ? "REMOVEABLE" : ",REMOVEABLE");
     }
     if ( (fieldAccess & RT_ACCESS_ATTRIBUTE) == RT_ACCESS_ATTRIBUTE )
     {
-        ret += OString(ret.getLength() > 0 ? ",ATTRIBUTE" : "ATTRIBUTE");
+        ret += OString(ret.isEmpty() ? "ATTRIBUTE" : ",ATTRIBUTE");
     }
     if ( (fieldAccess & RT_ACCESS_PROPERTY) == RT_ACCESS_PROPERTY )
     {
-        ret += OString(ret.getLength() > 0 ? ",PROPERTY" : "PROPERTY");
+        ret += OString(ret.isEmpty() ? "PROPERTY" : ",PROPERTY");
     }
     if ( (fieldAccess & RT_ACCESS_CONST) == RT_ACCESS_CONST )
     {
-        ret += OString(ret.getLength() > 0 ? ",CONST" : "CONST");
+        ret += OString(ret.isEmpty() ? "CONST" : ",CONST");
     }
     if ( (fieldAccess & RT_ACCESS_READWRITE) == RT_ACCESS_READWRITE )
     {
-        ret += OString(ret.getLength() > 0 ? ",READWRITE" : "READWRITE");
+        ret += OString(ret.isEmpty() ? "READWRITE" : ",READWRITE");
     }
     return ret;
 }

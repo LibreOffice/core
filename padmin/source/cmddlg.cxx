@@ -344,7 +344,7 @@ void RTSCommandPage::save()
             aToken.compareToAscii( "external_dialog" )
           )
         {
-            if( aToken.getLength() )
+            if( !aToken.isEmpty() )
             {
                 if( aFeatures.Len() )
                     aFeatures += ',';

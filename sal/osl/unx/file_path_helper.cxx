@@ -135,7 +135,7 @@
     rtl::OUString base(rtl_uString_getStr(const_cast<rtl_uString*>(pustrBasePath)));
     rtl::OUString rel(const_cast<rtl_uString*>(pustrRelPath));
 
-    if (base.getLength() > 0)
+    if (!base.isEmpty())
         osl_systemPathEnsureSeparator(&base.pData);
 
     base += rel;

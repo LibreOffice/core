@@ -193,7 +193,7 @@ namespace osl_Security
             bRes = aSec.getUserName( strGetName );
 
             sal_Int32 nPos = -1;
-            if (strName.getLength() > 0)
+            if (!strName.isEmpty())
             {
                 nPos = strGetName.indexOf(strName);
             }

@@ -61,7 +61,7 @@ public:
     std::string const & getTypeReg() const
         { return m_typeRegName; }
     bool hasBase() const
-        { return (m_base.getLength() > 0); }
+        { return (!m_base.isEmpty()); }
     const OString & getBase() const
         { return m_base; }
     bool forceOutput() const

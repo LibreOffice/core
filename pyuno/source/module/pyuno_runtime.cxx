@@ -955,7 +955,7 @@ Any Runtime::extractUnoException( const PyRef & excType, const PyRef &excValue, 
         else
         {
             str = OUString(RTL_CONSTASCII_USTRINGPARAM("Could not load uno.py, no stacktrace available"));
-            if ( e.Message.getLength() > 0 )
+            if ( !e.Message.isEmpty() )
             {
                 str += OUString (RTL_CONSTASCII_USTRINGPARAM(" (Error loading uno.py: "));
                 str += e.Message;
@@ -997,7 +997,7 @@ Any Runtime::extractUnoException( const PyRef & excType, const PyRef &excValue, 
             buf.appendAscii( "Couldn't convert exception value to a string" );
         }
         buf.appendAscii( ", traceback follows\n" );
-        if( str.getLength() > 0 )
+        if( !str.isEmpty() )
         {
             buf.append( str );
             buf.appendAscii( "\n" );

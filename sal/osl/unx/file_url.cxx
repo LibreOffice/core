@@ -151,7 +151,7 @@ namespace {
 oslFileError getSystemPathFromFileUrl(
     rtl::OUString const & url, rtl::OUString * path, bool homeAbbreviation)
 {
-    OSL_ASSERT(path != 0 && path->getLength() == 0);
+    OSL_ASSERT(path != 0 && path->isEmpty());
 
     sal_Unicode const * p = url.getStr();
     sal_Unicode const * end = p + url.getLength();
@@ -677,7 +677,7 @@ oslFileError osl_getAbsoluteFileURL(rtl_uString*  ustrBaseDirURL, rtl_uString* u
 
         rc = (FileBase::RC) osl_getAbsoluteFileURL_impl_(unresolved_path, resolved_path);
 
-        if (base.getLength() > 0)
+        if (!base.isEmpty())
         {
             resolved_path += rtl::OUString( UNICHAR_SLASH );
             resolved_path += base;

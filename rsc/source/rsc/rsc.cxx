@@ -223,13 +223,13 @@ RscCmdLine::RscCmdLine( int argc, char ** argv, RscError * pEH )
                 const rtl::OString aSysSearchDir( (*ppStr)+5 );
 
                 // ignore empty -lip= arguments that we get lots of these days
-                if (aSysSearchDir.getLength())
+                if (!aSysSearchDir.isEmpty())
                 {
                     DirEntry aSysDir(rtl::OStringToOUString(aSysSearchDir, RTL_TEXTENCODING_ASCII_US));
                     m_aOutputFiles.back().aSysSearchDirs.push_back(
                         rtl::OUStringToOString(aSysDir.GetFull(), RTL_TEXTENCODING_ASCII_US) );
                     rtl::OString aLangSearchPath = m_aOutputFiles.back().aLangSearchPath;
-                    if( aLangSearchPath.getLength() )
+                    if( !aLangSearchPath.isEmpty() )
                     {
                         aLangSearchPath = aLangSearchPath +
                         rtl::OUStringToOString(DirEntry::GetSearchDelimiter(), RTL_TEXTENCODING_ASCII_US);
@@ -290,7 +290,7 @@ RscCmdLine::RscCmdLine( int argc, char ** argv, RscError * pEH )
             }
             else if( !rsc_strnicmp( (*ppStr) + 1, "lg", 2 ) )
             {
-                if( m_aOutputFiles.back().aLangName.getLength() )
+                if( !m_aOutputFiles.back().aLangName.isEmpty() )
                     m_aOutputFiles.push_back( OutputFile() );
                 m_aOutputFiles.back().aLangName = rtl::OString((*ppStr)+3);
             }
@@ -314,7 +314,7 @@ RscCmdLine::RscCmdLine( int argc, char ** argv, RscError * pEH )
         ::std::list<OutputFile>::iterator it;
         for( it = m_aOutputFiles.begin(); it != m_aOutputFiles.end(); ++it )
         {
-            if( ! it->aOutputRc.getLength() )
+            if( it->aOutputRc.isEmpty() )
                 it->aOutputRc  = ::OutputFile( *aInputList.front(), "rc"  );
         }
         if( ! bOutputSrsIsSet )
@@ -396,7 +396,7 @@ RscCompiler::RscCompiler( RscCmdLine * pLine, RscTypCont * pTypCont )
     pCL = pLine;
     pTC = pTypCont;
 
-    if( pCL->aOutputLst.getLength() )
+    if( !pCL->aOutputLst.isEmpty() )
     {
         if ( NULL == (fListing = fopen( pCL->aOutputLst.getStr(), "w" )) )
             pTC->pEH->FatalError( ERR_OPENFILE, RscId(), pCL->aOutputLst.getStr() );
@@ -418,13 +418,13 @@ RscCompiler::~RscCompiler()
 
     if( fExitFile )
         fclose( fExitFile );
-    if( aTmpOutputHxx.getLength() )
+    if( !aTmpOutputHxx.isEmpty() )
         unlink( aTmpOutputHxx.getStr() );
-    if( aTmpOutputCxx.getLength() )
+    if( !aTmpOutputCxx.isEmpty() )
         unlink( aTmpOutputCxx.getStr() );
-    if( aTmpOutputRcCtor.getLength() )
+    if( !aTmpOutputRcCtor.isEmpty() )
         unlink( aTmpOutputRcCtor.getStr() );
-    if( aTmpOutputSrc.getLength() )
+    if( !aTmpOutputSrc.isEmpty() )
         unlink( aTmpOutputSrc.getStr() );
 }
 
@@ -512,7 +512,7 @@ ERRTYPE RscCompiler::Start()
 *************************************************************************/
 void RscCompiler::EndCompile()
 {
-    if( pCL->aOutputSrs.getLength() && (pCL->nCommands & NOLINK_FLAG) )
+    if( !pCL->aOutputSrs.isEmpty() && (pCL->nCommands & NOLINK_FLAG) )
     {
         pTC->pEH->StdOut( "Writing file ", RscVerbosityVerbose );
         pTC->pEH->StdOut( pCL->aOutputSrs.getStr(), RscVerbosityVerbose );
@@ -546,7 +546,7 @@ void RscCompiler::EndCompile()
         };
     }
 
-    if ( aTmpOutputHxx.getLength() )
+    if ( !aTmpOutputHxx.isEmpty() )
     {
         pTC->pEH->StdOut( "Writing file ", RscVerbosityVerbose );
         pTC->pEH->StdOut( pCL->aOutputHxx.getStr(), RscVerbosityVerbose );
@@ -559,7 +559,7 @@ void RscCompiler::EndCompile()
         aTmpOutputHxx = rtl::OString();
     }
 
-    if( aTmpOutputCxx.getLength() )
+    if( !aTmpOutputCxx.isEmpty() )
     {
         pTC->pEH->StdOut( "Writing file ", RscVerbosityVerbose );
         pTC->pEH->StdOut( pCL->aOutputCxx.getStr(), RscVerbosityVerbose );
@@ -572,7 +572,7 @@ void RscCompiler::EndCompile()
         aTmpOutputCxx = rtl::OString();
     }
 
-    if( aTmpOutputRcCtor.getLength() )
+    if( !aTmpOutputRcCtor.isEmpty() )
     {
         pTC->pEH->StdOut( "Writing file ", RscVerbosityVerbose );
         pTC->pEH->StdOut( pCL->aOutputRcCtor.getStr(), RscVerbosityVerbose );
@@ -585,7 +585,7 @@ void RscCompiler::EndCompile()
         aTmpOutputRcCtor = rtl::OString();
     }
 
-    if( aTmpOutputSrc.getLength() )
+    if( !aTmpOutputSrc.isEmpty() )
     {
         // kopiere von TMP auf richtigen Namen
         unlink( pCL->aOutputSrc.getStr() );   // Zieldatei loeschen
@@ -594,7 +594,7 @@ void RscCompiler::EndCompile()
         aTmpOutputSrc = rtl::OString();
     }
 
-    if( pCL->aTouchFile.getLength() )
+    if( !pCL->aTouchFile.isEmpty() )
     {
         FILE* fp = fopen( pCL->aTouchFile.getStr(), "w" );
         if( fp )
@@ -823,7 +823,7 @@ ERRTYPE RscCompiler::Link()
                 OSL_TRACE("temporary rc file: %s", aRcTmp.getStr());
 
                 OUString sOilDirUrl;
-                if(pCL->aILDir.getLength())
+                if(!pCL->aILDir.isEmpty())
                     sOilDirUrl = lcl_getAbsoluteUrl(sPwdUrl, pCL->aILDir);
                 else
                     sOilDirUrl = sTempDirUrl;
@@ -884,7 +884,7 @@ ERRTYPE RscCompiler::Link()
             aContext.pCmdLine = pCL;
 
             // create empty sys list
-            if( aContext.aOutputSysList.getLength() )
+            if( !aContext.aOutputSysList.isEmpty() )
             {
                 FILE* pSysListFile = fopen( aContext.aOutputSysList.getStr(), "wb" );
 
@@ -955,7 +955,7 @@ ERRTYPE RscCompiler::Link()
     }
 
     // hxx-Datei schreiben
-    if( pCL->aOutputHxx.getLength() && aError.IsOk() )
+    if( !pCL->aOutputHxx.isEmpty() && aError.IsOk() )
     {
         aTmpOutputHxx = ::GetTmpFileName();
         if ( NULL == (fExitFile = foutput = fopen( aTmpOutputHxx.getStr(), "w" )) )
@@ -971,7 +971,7 @@ ERRTYPE RscCompiler::Link()
     }
 
     // cxx-Datei schreiben
-    if( pCL->aOutputCxx.getLength() && aError.IsOk() )
+    if( !pCL->aOutputCxx.isEmpty() && aError.IsOk() )
     {
         aTmpOutputCxx = ::GetTmpFileName();
         if ( NULL == (fExitFile = foutput = fopen( aTmpOutputCxx.getStr(), "w" )) )
@@ -980,7 +980,7 @@ ERRTYPE RscCompiler::Link()
         pTC->pEH->StdOut( "Generating .cxx file\n" );
 
         rtl::OString aHxx = pCL->aOutputHxx;
-        if( !aHxx.getLength() )
+        if( aHxx.isEmpty() )
         {
             UniString aUniOutputCxx( pCL->aOutputCxx, RTL_TEXTENCODING_ASCII_US );
             aHxx = rtl::OStringBuffer(rtl::OUStringToOString(DirEntry(aUniOutputCxx).GetBase(),
@@ -995,7 +995,7 @@ ERRTYPE RscCompiler::Link()
     }
 
     // RcCtor-Datei schreiben
-    if( pCL->aOutputRcCtor.getLength() && aError.IsOk() )
+    if( !pCL->aOutputRcCtor.isEmpty() && aError.IsOk() )
     {
         aTmpOutputRcCtor = ::GetTmpFileName();
         if ( NULL == (fExitFile = foutput = fopen( aTmpOutputRcCtor.getStr(), "w" )) )
@@ -1011,7 +1011,7 @@ ERRTYPE RscCompiler::Link()
     }
 
     // src-Datei schreiben
-    if( pCL->aOutputSrc.getLength() && aError.IsOk() )
+    if( !pCL->aOutputSrc.isEmpty() && aError.IsOk() )
     {
         aTmpOutputSrc = ::GetTmpFileName();
         if ( NULL == (fExitFile = foutput = fopen( aTmpOutputSrc.getStr(), "w" )) )
@@ -1145,7 +1145,7 @@ void RscCompiler::PreprocessSrsFile( const RscCmdLine::OutputFile& rOutputFile,
     SvFileStream                aIStm( rSrsInPath.GetFull(), STREAM_READ );
     SvFileStream                aOStm( rSrsOutPath.GetFull(), STREAM_WRITE | STREAM_TRUNC );
     ::std::vector< rtl::OString > aMissingImages;
-    FILE*                       pSysListFile = rContext.aOutputSysList.getLength() ? fopen( rContext.aOutputSysList.getStr(), "ab" ) : NULL;
+    FILE*                       pSysListFile = rContext.aOutputSysList.isEmpty() ? NULL : fopen( rContext.aOutputSysList.getStr(), "ab" );
 
     if( !aIStm.GetError() && !aOStm.GetError() )
     {

@@ -181,7 +181,7 @@ namespace rtl_DoubleLocking
 
                 CPPUNIT_ASSERT_MESSAGE(
                     "Gregorian::get() failed, wrong value expected.",
-                    aStr.getLength() != 0
+                    !aStr.isEmpty()
                     );
             }
 

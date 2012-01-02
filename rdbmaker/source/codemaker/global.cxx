@@ -130,7 +130,7 @@ sal_Bool FileStream::isValid()
 
 void FileStream::open(const OString& name, FileAccessMode mode)
 {
-    if ( name.getLength() > 0 )
+    if ( !name.isEmpty() )
     {
         m_name = name;
         m_pFile = fopen(m_name.getStr(), checkAccessMode(mode));

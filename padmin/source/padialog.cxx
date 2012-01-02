@@ -278,7 +278,7 @@ void PADialog::UpdateDefPrt()
 void PADialog::UpdateText()
 {
     OUString aDev( getSelectedDevice() );
-    if( aDev.getLength() )
+    if( !aDev.isEmpty() )
     {
         const PrinterInfo& rInfo = m_rPIManager.getPrinterInfo( aDev );
         String aDriver( rInfo.m_aPrinterName );
@@ -722,7 +722,7 @@ void PADialog::UpdateDevice()
         while( nIndex != -1 && ! bAutoQueue )
         {
             OUString aToken( rInfo.m_aFeatures.getToken( 0, ',', nIndex ) );
-            if( aToken.getLength() )
+            if( !aToken.isEmpty() )
             {
                 if( aToken.compareToAscii( "autoqueue" ) == 0 )
                     bAutoQueue = true;

@@ -145,7 +145,7 @@ void RscLangEnum::Init( RscNameTable& rNames )
     }
 
     rtl::OString aEnvIsoTokens = getenv( "RSC_LANG_ISO" );
-    if ( aEnvIsoTokens.getLength() )
+    if ( !aEnvIsoTokens.isEmpty() )
     {
         rtl::OString aIsoToken;
         sal_uInt16 nTokenCounter = 0;
@@ -153,7 +153,7 @@ void RscLangEnum::Init( RscNameTable& rNames )
         while ( bOneMore )
         {
             aIsoToken = comphelper::string::getToken(aEnvIsoTokens, nTokenCounter, ' ');
-            if ( aIsoToken.getLength() )
+            if ( !aIsoToken.isEmpty() )
             {
                 SetConstant( rNames.Put( aIsoToken.getStr(), CONSTNAME, mnLangId ), mnLangId );
                 if ( ! GetLangId( aIsoToken ))

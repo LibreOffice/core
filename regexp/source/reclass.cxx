@@ -755,7 +755,7 @@ Regexpr::Regexpr( const ::com::sun::star::util::SearchOptions & rOptions,
   }
 
   if ( rOptions.searchString == NULL ||
-       rOptions.searchString.getLength() <= 0) {
+       rOptions.searchString.isEmpty()) {
     return;
   }
 

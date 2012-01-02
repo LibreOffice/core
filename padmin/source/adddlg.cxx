@@ -165,7 +165,7 @@ void APChooseDriverPage::updateDrivers( bool bRefresh, const rtl::OUString& rSel
     for( std::list< rtl::OUString >::const_iterator it = aDrivers.begin(); it != aDrivers.end(); ++it )
     {
         rtl::OUString aDriver( psp::PPDParser::getPPDPrinterName( *it ) );
-        if( aDriver.getLength() )
+        if( !aDriver.isEmpty() )
         {
             int nPos = m_aDriverBox.InsertEntry( aDriver );
             m_aDriverBox.SetEntryData( nPos, new String( *it ) );
@@ -567,7 +567,7 @@ APOldPrinterPage::APOldPrinterPage( AddPrinterDialog* pParent )
 
         aValue = aConfig.ReadKey( "PageSize", aDefPageSize );
         int nLeft, nRight, nTop, nBottom;
-        if( aValue.getLength() &&
+        if( !aValue.isEmpty() &&
             aInfo.m_pParser->getMargins( rtl::OStringToOUString(aValue, aEncoding),
                                          nLeft, nRight, nTop, nBottom ) )
         {

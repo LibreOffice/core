@@ -99,12 +99,12 @@ static sal_uInt32 getLangIdAndShortenLocale( RscTypCont* pTypCont,
 {
     rtl::OStringBuffer aLangStr( 64 );
     aLangStr.append( rLang.toAsciiLowerCase() );
-    if( rCountry.getLength() )
+    if( !rCountry.isEmpty() )
     {
         aLangStr.append( '-' );
         aLangStr.append( rCountry.toAsciiUpperCase() );
     }
-    if( rVariant.getLength() )
+    if( !rVariant.isEmpty() )
     {
         aLangStr.append( '-' );
         aLangStr.append( rVariant );
@@ -116,9 +116,9 @@ static sal_uInt32 getLangIdAndShortenLocale( RscTypCont* pTypCont,
         pTypCont->AddLanguage( aL.getStr() );
         nRet = GetLangId( aL );
     }
-    if( rVariant.getLength() )
+    if( !rVariant.isEmpty() )
         rVariant = rtl::OString();
-    else if( rCountry.getLength() )
+    else if( !rCountry.isEmpty() )
         rCountry = rtl::OString();
     else
         rLang = rtl::OString();
@@ -154,7 +154,7 @@ rtl::OString RscTypCont::ChangeLanguage(const rtl::OString& rNewLang)
     do
     {
         aLangFallbacks.push_back(getLangIdAndShortenLocale( this, aLg, aCountry, aVariant ) );
-    } while( aLg.getLength() );
+    } while( !aLg.isEmpty() );
 
     if( bAppendEnUsFallback )
     {
@@ -838,7 +838,7 @@ ERRTYPE RscTypCont::WriteCxx( FILE * fOutput, sal_uLong nFileKey,
     ERRTYPE         aError;
     fprintf( fOutput, "#include <string.h>\n" );
     WriteInc( fOutput, nFileKey );
-    if( rHxxName.getLength() )
+    if( !rHxxName.isEmpty() )
         fprintf( fOutput, "#include \"%s\"\n", rHxxName.getStr() );
     fprintf( fOutput, "\n\n" );
 

@@ -335,7 +335,7 @@ int __cdecl main( int argc, char * argv[] )
         }
     }
 
-    if ( bootReg.getLength() )
+    if ( !bootReg.isEmpty() )
     {
         pTypeMgr = new SpecialTypeManager();
         useSpecial = sal_True;
@@ -429,7 +429,7 @@ int __cdecl main( int argc, char * argv[] )
                 tmpName = typeName.copy( lastIndex+1 );
                 if (tmpName == "*")
                 {
-                    if (bootReg.getLength())
+                    if (!bootReg.isEmpty())
                     {
                         fprintf(stderr, "%s ERROR: %s\n",
                                 options.getProgramName().getStr(),
@@ -443,7 +443,7 @@ int __cdecl main( int argc, char * argv[] )
                     } else
                     {
                         tmpName = typeName.copy(0, typeName.lastIndexOf('.')).replace('.', '/');
-                        if (tmpName.getLength() == 0)
+                        if (tmpName.isEmpty())
                             tmpName = "/";
                         else
                             tmpName.replace('.', '/');
@@ -476,7 +476,7 @@ int __cdecl main( int argc, char * argv[] )
         {
         } else
         {
-            if (!bootReg.getLength())
+            if (bootReg.isEmpty())
             {
                 // produce all types
                 if (!produceAllTypes("/", typeMgr, typeDependencies, &options, sal_True,

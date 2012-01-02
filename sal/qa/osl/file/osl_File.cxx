@@ -953,7 +953,7 @@ namespace osl_FileBase
         // sStr = rtl::OUStringToOString(suStr, RTL_TEXTENCODING_UTF8);
         // printf("UTF8: %s\n", sStr.getStr() );
 
-        if (_sAssumeResultStr.getLength() > 0)
+        if (!_sAssumeResultStr.isEmpty())
         {
             sal_Bool bStrAreEqual = _sAssumeResultStr.equals(sStr);
             CPPUNIT_ASSERT_MESSAGE( "Assumption is wrong",

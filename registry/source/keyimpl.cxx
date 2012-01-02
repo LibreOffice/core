@@ -105,7 +105,7 @@ RegError ORegKey::openSubKeys(const OUString& keyName, RegKeyHandle** phOpenSubK
     *pnSubKeys = 0;
 
     ORegKey* pKey = this;
-    if ( keyName.getLength() )
+    if ( !keyName.isEmpty() )
     {
         _ret = openKey(keyName, (RegKeyHandle*)&pKey);
         if (_ret != REG_NO_ERROR)
@@ -148,7 +148,7 @@ RegError ORegKey::openSubKeys(const OUString& keyName, RegKeyHandle** phOpenSubK
     }
 
     *phOpenSubKeys = (RegKeyHandle*)pSubKeys;
-    if (keyName.getLength())
+    if (!keyName.isEmpty())
     {
         (void) releaseKey(pKey);
     }
@@ -169,7 +169,7 @@ RegError ORegKey::getKeyNames(const OUString& keyName,
     *pnSubKeys = 0;
 
     ORegKey* pKey = this;
-    if (keyName.getLength())
+    if (!keyName.isEmpty())
     {
         _ret = openKey(keyName, (RegKeyHandle*)&pKey);
         if (_ret != REG_NO_ERROR)
@@ -208,7 +208,7 @@ RegError ORegKey::getKeyNames(const OUString& keyName,
     }
 
     *pSubKeyNames = pSubKeys;
-    if (keyName.getLength())
+    if (!keyName.isEmpty())
     {
         releaseKey(pKey);
     }
@@ -982,7 +982,7 @@ RegError ORegKey::getKeyType(const OUString& name, RegKeyType* pKeyType) const
 
     REG_GUARD(m_pRegistry->m_mutex);
 
-    if ( name.getLength() )
+    if ( !name.isEmpty() )
     {
         ORegKey* pThis = const_cast< ORegKey* >(this);
 
@@ -999,7 +999,7 @@ RegError ORegKey::getKeyType(const OUString& name, RegKeyType* pKeyType) const
 RegError ORegKey::getResolvedKeyName(const OUString& keyName,
                                      OUString& resolvedName)
 {
-    if (keyName.getLength() == 0)
+    if (keyName.isEmpty())
         return REG_INVALID_KEYNAME;
 
     resolvedName = getFullPath(keyName);
@@ -1059,7 +1059,7 @@ OStoreDirectory ORegKey::getStoreDir()
 }
 
 OUString ORegKey::getFullPath(OUString const & path) const {
-    OSL_ASSERT(m_name.getLength() != 0 && path.getLength() != 0);
+    OSL_ASSERT(!m_name.isEmpty() && !path.isEmpty());
     OUStringBuffer b(m_name);
     if (b.getLength() > 0 && b[b.getLength() - 1] == '/') {
         if (path[0] == '/') {

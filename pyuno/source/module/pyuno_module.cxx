@@ -270,7 +270,7 @@ static PyObject* getComponentContext (PyObject*, PyObject*)
         else
         {
             OUString iniFile;
-            if( !path.getLength() )
+            if( path.isEmpty() )
             {
                 PyErr_SetString(
                     PyExc_RuntimeError, "osl_getUrlFromAddress fails, that's why I cannot find ini "

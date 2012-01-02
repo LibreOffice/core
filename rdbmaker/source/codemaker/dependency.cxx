@@ -60,7 +60,7 @@ sal_Bool TypeDependency::insert(const OString& type, const OString& depend, sal_
 {
     sal_Bool ret =  sal_False;
 
-    if (type.getLength() > 0 && depend.getLength() > 0)
+    if (!type.isEmpty() && !depend.isEmpty())
     {
         if (m_pImpl->m_dependencies.count(type) > 0)
         {
@@ -87,7 +87,7 @@ sal_Bool TypeDependency::insert(const OString& type, const OString& depend, sal_
 
 TypeUsingSet TypeDependency::getDependencies(const OString& type)
 {
-    if (type.getLength() > 0)
+    if (!type.isEmpty())
     {
         if (m_pImpl->m_dependencies.count(type) > 0)
         {
@@ -100,7 +100,7 @@ TypeUsingSet TypeDependency::getDependencies(const OString& type)
 
 sal_Bool TypeDependency::hasDependencies(const OString& type)
 {
-    if (type.getLength() > 0)
+    if (!type.isEmpty())
     {
         if (m_pImpl->m_dependencies.count(type) > 0)
         {
@@ -150,7 +150,7 @@ static sal_Bool checkFieldDependencies(TypeManager& typeMgr, TypeDependency& dep
     {
         fieldType = reader.getFieldType(i);
 
-        if (fieldType.getLength() > 0)
+        if (!fieldType.isEmpty())
         {
             dependencies.insert(type, fieldType, TYPEUSE_MEMBER);
             checkTypeDependencies(typeMgr, dependencies, fieldType);

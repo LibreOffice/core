@@ -275,7 +275,7 @@ Bootstrap_Impl::Bootstrap_Impl( OUString const & rIniName )
 #endif /* OSL_DEBUG_LEVEL > 1 */
 
     oslFileHandle handle;
-    if (_iniName.getLength() &&
+    if (!_iniName.isEmpty() &&
         osl_File_E_None == osl_openFile(_iniName.pData, &handle, osl_File_OpenFlag_Read))
     {
         rtl::ByteSequence seq;
@@ -379,9 +379,9 @@ Bootstrap_Impl * BootstrapMap::getIni(
 }
 
 void BootstrapMap::setBaseIniUri(rtl::OUString const & uri) {
-    OSL_ASSERT(uri.getLength() != 0);
+    OSL_ASSERT(!uri.isEmpty());
     osl::MutexGuard g(mutex_);
-    OSL_ASSERT(baseIniUri_.getLength() == 0 && baseIni_ == 0);
+    OSL_ASSERT(baseIniUri_.isEmpty() && baseIni_ == 0);
     baseIniUri_ = uri;
 }
 
@@ -389,7 +389,7 @@ Bootstrap_Impl * BootstrapMap::getBaseIni() {
     osl::MutexGuard g(mutex_);
     if (baseIni_ == 0) {
         rtl::OUString uri;
-        if (baseIniUri_.getLength() == 0) {
+        if (baseIniUri_.isEmpty()) {
             if (CommandLineParameters::get().get(
                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("INIFILENAME")),
                     &uri))
@@ -779,7 +779,7 @@ rtl::OUString expandMacros(
                 for (int j = 0; j < n; ++j) {
                     seg[j] = expandMacros(file, seg[j], mode, requestStack);
                 }
-                if (n == 3 && seg[1].getLength() == 0) {
+                if (n == 3 && seg[1].isEmpty()) {
                     // For backward compatibility, treat ${file::key} the same
                     // as just ${file:key}:
                     seg[1] = seg[2];

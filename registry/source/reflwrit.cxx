@@ -838,7 +838,7 @@ void TypeWriter::createBlop()
     }
 
     // create CP entry for doku
-    if (m_doku.getLength())
+    if (!m_doku.isEmpty())
     {
         pInfo = new CPInfo(CP_TAG_UTF8_NAME, pInfo);
         pInfo->m_value.aUtf8 = m_doku.getStr();
@@ -846,7 +846,7 @@ void TypeWriter::createBlop()
     }
 
     // create CP entry for idl source filename
-    if (m_fileName.getLength())
+    if (!m_fileName.isEmpty())
     {
         pInfo = new CPInfo(CP_TAG_UTF8_NAME, pInfo);
         pInfo->m_value.aUtf8 = m_fileName.getStr();
@@ -884,7 +884,7 @@ void TypeWriter::createBlop()
 
             pBuffer += writeUINT16(pBuffer, m_fields[i].m_access);
 
-            if (m_fields[i].m_name.getLength())
+            if (!m_fields[i].m_name.isEmpty())
             {
                 pInfo = new CPInfo(CP_TAG_UTF8_NAME, pInfo);
                 pInfo->m_value.aUtf8 = m_fields[i].m_name.getStr();
@@ -892,7 +892,7 @@ void TypeWriter::createBlop()
             }
             pBuffer += writeUINT16(pBuffer, cpIndexName);
 
-            if (m_fields[i].m_typeName.getLength())
+            if (!m_fields[i].m_typeName.isEmpty())
             {
                 pInfo = new CPInfo(CP_TAG_UTF8_NAME, pInfo);
                 pInfo->m_value.aUtf8 = m_fields[i].m_typeName.getStr();
@@ -908,7 +908,7 @@ void TypeWriter::createBlop()
             }
             pBuffer += writeUINT16(pBuffer, cpIndexValue);
 
-            if (m_fields[i].m_doku.getLength())
+            if (!m_fields[i].m_doku.isEmpty())
             {
                 pInfo = new CPInfo(CP_TAG_UTF8_NAME, pInfo);
                 pInfo->m_value.aUtf8 = m_fields[i].m_doku.getStr();
@@ -916,7 +916,7 @@ void TypeWriter::createBlop()
             }
             pBuffer += writeUINT16(pBuffer, cpIndexDoku2);
 
-            if (m_fields[i].m_fileName.getLength())
+            if (!m_fields[i].m_fileName.isEmpty())
             {
                 pInfo = new CPInfo(CP_TAG_UTF8_NAME, pInfo);
                 pInfo->m_value.aUtf8 = m_fields[i].m_fileName.getStr();
@@ -970,7 +970,7 @@ void TypeWriter::createBlop()
                 pBuffer,
                 sal::static_int_cast< sal_uInt16 >(m_methods[i].m_mode));
 
-            if (m_methods[i].m_name.getLength())
+            if (!m_methods[i].m_name.isEmpty())
             {
                 pInfo = new CPInfo(CP_TAG_UTF8_NAME, pInfo);
                 pInfo->m_value.aUtf8 = m_methods[i].m_name.getStr();
@@ -979,7 +979,7 @@ void TypeWriter::createBlop()
             pBuffer += writeUINT16(pBuffer, cpIndexName);
             cpIndexName = 0;
 
-            if (m_methods[i].m_returnTypeName.getLength())
+            if (!m_methods[i].m_returnTypeName.isEmpty())
             {
                 pInfo = new CPInfo(CP_TAG_UTF8_NAME, pInfo);
                 pInfo->m_value.aUtf8 = m_methods[i].m_returnTypeName.getStr();
@@ -987,7 +987,7 @@ void TypeWriter::createBlop()
             }
             pBuffer += writeUINT16(pBuffer, cpIndexReturn);
 
-            if (m_methods[i].m_doku.getLength())
+            if (!m_methods[i].m_doku.isEmpty())
             {
                 pInfo = new CPInfo(CP_TAG_UTF8_NAME, pInfo);
                 pInfo->m_value.aUtf8 = m_methods[i].m_doku.getStr();
@@ -1001,7 +1001,7 @@ void TypeWriter::createBlop()
 
             for (j = 0; j < m_methods[i].m_paramCount; j++)
             {
-                if (m_methods[i].m_params[j].m_typeName.getLength())
+                if (!m_methods[i].m_params[j].m_typeName.isEmpty())
                 {
                     pInfo = new CPInfo(CP_TAG_UTF8_NAME, pInfo);
                     pInfo->m_value.aUtf8 = m_methods[i].m_params[j].m_typeName.getStr();
@@ -1015,7 +1015,7 @@ void TypeWriter::createBlop()
                     sal::static_int_cast< sal_uInt16 >(
                         m_methods[i].m_params[j].m_mode));
 
-                if (m_methods[i].m_params[j].m_name.getLength())
+                if (!m_methods[i].m_params[j].m_name.isEmpty())
                 {
                     pInfo = new CPInfo(CP_TAG_UTF8_NAME, pInfo);
                     pInfo->m_value.aUtf8 = m_methods[i].m_params[j].m_name.getStr();
@@ -1029,7 +1029,7 @@ void TypeWriter::createBlop()
 
             for (j = 0; j < m_methods[i].m_excCount; j++)
             {
-                if (m_methods[i].m_excNames[j].getLength())
+                if (!m_methods[i].m_excNames[j].isEmpty())
                 {
                     pInfo = new CPInfo(CP_TAG_UTF8_NAME, pInfo);
                     pInfo->m_value.aUtf8 = m_methods[i].m_excNames[j].getStr();
@@ -1070,7 +1070,7 @@ void TypeWriter::createBlop()
             cpIndexName = 0;
             cpIndexDoku2 = 0;
 
-            if (m_references[i].m_name.getLength())
+            if (!m_references[i].m_name.isEmpty())
             {
                 pInfo = new CPInfo(CP_TAG_UTF8_NAME, pInfo);
                 pInfo->m_value.aUtf8 = m_references[i].m_name.getStr();
@@ -1078,7 +1078,7 @@ void TypeWriter::createBlop()
             }
             pBuffer += writeUINT16(pBuffer, cpIndexName);
 
-            if (m_references[i].m_doku.getLength())
+            if (!m_references[i].m_doku.isEmpty())
             {
                 pInfo = new CPInfo(CP_TAG_UTF8_NAME, pInfo);
                 pInfo->m_value.aUtf8 = m_references[i].m_doku.getStr();

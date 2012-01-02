@@ -191,10 +191,10 @@ Reference< XInterface > CreateInstance( const Reference< XComponentContext > & c
 
         // pythonhome+pythonpath must be set before Py_Initialize(), otherwise there appear warning on the console
         // sadly, there is no api for setting the pythonpath, we have to use the environment variable
-        if( pythonHome.getLength() )
+        if( !pythonHome.isEmpty() )
             setPythonHome( pythonHome );
 
-        if( pythonPath.getLength() )
+        if( !pythonPath.isEmpty() )
             prependPythonPath( pythonPath );
 
 #if WNT

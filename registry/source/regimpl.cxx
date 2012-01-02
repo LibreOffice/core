@@ -481,7 +481,7 @@ RegError ORegistry::initRegistry(const OUString& regName, RegAccessMode accessMo
         m_readOnly = sal_True;
     }
 
-    if (0 == regName.getLength() &&
+    if (regName.isEmpty() &&
         store_AccessCreate == sAccessMode)
     {
         errCode = rRegFile.createInMemory();
@@ -555,7 +555,7 @@ RegError ORegistry::destroyRegistry(const OUString& regName)
 {
     REG_GUARD(m_mutex);
 
-    if (regName.getLength())
+    if (!regName.isEmpty())
     {
         ORegistry* pReg = new ORegistry();
 
@@ -589,7 +589,7 @@ RegError ORegistry::destroyRegistry(const OUString& regName)
             m_file.close();
             m_isOpen = sal_False;
 
-            if (m_name.getLength())
+            if (!m_name.isEmpty())
             {
                 OUString systemName;
                 if ( FileBase::getSystemPathFromFileURL(m_name, systemName) != FileBase::E_None )
@@ -653,7 +653,7 @@ RegError ORegistry::createKey(RegKeyHandle hKey, const OUString& keyName,
 
     *phNewKey = NULL;
 
-    if ( !keyName.getLength() )
+    if ( keyName.isEmpty() )
         return REG_INVALID_KEYNAME;
 
     REG_GUARD(m_mutex);
@@ -683,7 +683,7 @@ RegError ORegistry::createKey(RegKeyHandle hKey, const OUString& keyName,
     do
     {
         token = sFullKeyName.getToken( 0, '/', nIndex );
-        if (token.getLength())
+        if (!token.isEmpty())
         {
             if (rStoreDir.create(pKey->getStoreFile(), sFullPath.getStr(), token, KEY_MODE_CREATE))
             {
@@ -714,7 +714,7 @@ RegError ORegistry::openKey(RegKeyHandle hKey, const OUString& keyName,
 
     *phOpenKey = NULL;
 
-    if ( !keyName.getLength() )
+    if ( keyName.isEmpty() )
     {
         return REG_INVALID_KEYNAME;
     }
@@ -795,7 +795,7 @@ RegError ORegistry::closeKey(RegKeyHandle hKey)
 RegError ORegistry::deleteKey(RegKeyHandle hKey, const OUString& keyName)
 {
     ORegKey* pKey = static_cast< ORegKey* >(hKey);
-    if ( !keyName.getLength() )
+    if ( keyName.isEmpty() )
         return REG_INVALID_KEYNAME;
 
     REG_GUARD(m_mutex);
@@ -811,7 +811,7 @@ RegError ORegistry::eraseKey(ORegKey* pKey, const OUString& keyName)
 {
     RegError _ret = REG_NO_ERROR;
 
-    if ( !keyName.getLength() )
+    if ( keyName.isEmpty() )
     {
         return REG_INVALID_KEYNAME;
     }
@@ -1361,7 +1361,7 @@ RegError ORegistry::loadAndSaveKeys(ORegKey* pTargetKey,
     if(pTargetKey->getName().getLength() > 1)
         sFullPath += pTargetKey->getName();
     sFullPath += sRelPath;
-    if (sRelPath.getLength() > 1 || sFullPath.getLength() == 0)
+    if (sRelPath.getLength() > 1 || sFullPath.isEmpty())
         sFullPath += ROOT;
 
     OUString sFullKeyName = sFullPath;

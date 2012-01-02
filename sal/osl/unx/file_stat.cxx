@@ -199,8 +199,8 @@ namespace /* private */
             return osl_File_E_INVAL;
 
         file_path = rtl::OUString(pImpl->m_ustrFilePath);
-        OSL_ASSERT(file_path.getLength() > 0);
-        if (file_path.getLength() <= 0)
+        OSL_ASSERT(!file_path.isEmpty());
+        if (file_path.isEmpty())
             return osl_File_E_INVAL;
 
         pStat->uValidFields = 0;
