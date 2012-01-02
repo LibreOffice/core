@@ -67,16 +67,23 @@ while ( <INFILE> )
         my $title          = defined $14 ? $14 : '';
         my $timestamp      = defined $15 ? $15 : '';
         @path = split ( "\\\\" , $file );
-        $key = $path[-3] . "_" . $path[-2] . "_" . $path[-1] . "#" . $gid . ".";
+        if (defined $path[-3])
+        {
+            $key = $path[-3] . "_" . $path[-2] . "_" . $path[-1] . "#" . $gid . ".";
+        }
+        else
+        {
+            $key = $prj . "_" . $path[-2] . "_" . $path[-1] . "#" . $gid . ".";
+        }
         if (length($lid)) {$key .= $lid . ".";}
         if (length($type)) {$key .= $type . ".";}
         # replace non-word characters to _ just as in po files in source keys
         $key =~ s|[^\w#\./]|_|g;
         # ISO 639 private use code
-	$lang = "qtz";
-	if ( $text ne "") {$text = makekeyidstr(keyidgen($key . "text"),$text);}
-	if ( $quickhelptext ne "") {$quickhelptext = makekeyidstr(keyidgen($key . "quickhelptext"),$quickhelptext);}
-	if ( $title ne "") {$title = makekeyidstr(keyidgen($key . "title"),$title);}
+        $lang = "qtz";
+        if ( $text ne "") {$text = makekeyidstr(keyidgen($key . "text"),$text);}
+        if ( $quickhelptext ne "") {$quickhelptext = makekeyidstr(keyidgen($key . "quickhelptext"),$quickhelptext);}
+        if ( $title ne "") {$title = makekeyidstr(keyidgen($key . "title"),$title);}
         print OUTFILE "$prj\t$file\t$dummy\t$type\t$gid\t$lid\t$helpid\t$platform\t$width\t$lang\t$text\t$helptext\t$quickhelptext\t$title\t$timestamp\n";
     }
 }
