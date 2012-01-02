@@ -7340,6 +7340,7 @@ elif $GNUCP --version 2>/dev/null | grep "GNU fileutils" >/dev/null 2>/dev/null;
 else
     case "$build_os" in
     darwin*|netbsd*|openbsd*|freebsd*|dragonfly*|aix*)
+        x_GNUCP=[\#]
         GNUCP=''
         AC_MSG_RESULT([no gnucp found - using the system's cp command])
         ;;
@@ -7351,6 +7352,7 @@ fi
 
 AC_SUBST(GNUPATCH)
 AC_SUBST(GNUCP)
+AC_SUBST(x_GNUCP)
 
 dnl ***************************************
 dnl testing assembler path
