@@ -24,10 +24,15 @@
 # for a copy of the LGPLv3 License.
 #
 #*************************************************************************
-# major 
-ICU_MAJOR*=4
-# minor 
-ICU_MINOR*=4
-# micro 
-ICU_MICRO*=2
-
+# major
+.IF "$(ICU_MAJOR)" = ""
+ICU_MAJOR=4
+.ENDIF
+# minor
+.IF "$(ICU_MINOR)" = ""
+ICU_MINOR=4
+.ENDIF
+# micro
+.IF "$(ICU_MICRO)" = ""
+ICU_MICRO=2
+.ENDIF
