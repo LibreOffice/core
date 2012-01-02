@@ -38,7 +38,7 @@ $(strip $(if $(call gb_Rdb__is_old_component_target,$(component))\
 endef
 
 define gb_Rdb__command
-$(call gb_Helper_abbreviate_dirs,\
+$(call gb_Helper_abbreviate_dirs_native,\
 	mkdir -p $(dir $@) && \
 	(\
 		echo '<list>' && \
@@ -56,7 +56,7 @@ $(call gb_Rdb_get_target,%) :
 .PHONY : $(call gb_Rdb_get_clean_target,%)
 $(call gb_Rdb_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),RDB,1)
-	$(call gb_Helper_abbreviate_dirs,\
+	$(call gb_Helper_abbreviate_dirs_native,\
 		rm -f $(call gb_Rdb_get_outdir_target,$*) $(call gb_Rdb_get_target,$*))
 
 $(call gb_Rdb_get_outdir_target,%) :
