@@ -2750,7 +2750,7 @@ linux-androideabi*)
 
     case "$host_cpu" in
 
-    armel)
+    arm|armel)
         CPU=R
         CPUNAME=ARM
         OUTPATH=unxandr
