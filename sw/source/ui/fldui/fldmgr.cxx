@@ -1352,7 +1352,7 @@ sal_Bool SwFldMgr::InsertFld(  const SwInsertFld_Data& rData )
         case TYP_DROPDOWN :
         {
             pFld = new SwDropDownField(pCurShell->GetFldType( 0, RES_DROPDOWN ));
-            xub_StrLen nTokenCount = rData.sPar2.Len() ? rData.sPar2.GetTokenCount(DB_DELIM) : 0;
+            xub_StrLen nTokenCount = rData.sPar2.GetTokenCount(DB_DELIM);
             Sequence<OUString> aEntries(nTokenCount);
             OUString* pArray = aEntries.getArray();
             for(xub_StrLen nToken = 0; nToken < nTokenCount; nToken++)
@@ -1516,7 +1516,7 @@ void SwFldMgr::UpdateCurFld(sal_uLong nFormat,
             break;
         case TYP_DROPDOWN:
         {
-            xub_StrLen nTokenCount = sPar2.Len() ? sPar2.GetTokenCount(DB_DELIM) : 0;
+            xub_StrLen nTokenCount = sPar2.GetTokenCount(DB_DELIM);
             Sequence<OUString> aEntries(nTokenCount);
             OUString* pArray = aEntries.getArray();
             for(xub_StrLen nToken = 0; nToken < nTokenCount; nToken++)
