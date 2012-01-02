@@ -59,14 +59,8 @@ namespace xml = css::xml ;
 static bool
 getBootstrapData(
     uno::Sequence< ::rtl::OUString > & rRepositoryList,
-    ::rtl::OUString & rBuildID,
     ::rtl::OUString & rInstallSetID)
 {
-    rBuildID = UNISTRING( "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE("version") ":ProductBuildid}" );
-    rtl::Bootstrap::expandMacros( rBuildID );
-    if ( rBuildID.isEmpty() )
-        return false;
-
     rInstallSetID = UNISTRING( "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE("version") ":UpdateID}" );
     rtl::Bootstrap::expandMacros( rInstallSetID );
     if ( rInstallSetID.isEmpty() )
@@ -103,15 +97,14 @@ checkForUpdates(
     rtl::Bootstrap::get(UNISTRING("_ARCH"), myArch);
 
     uno::Sequence< ::rtl::OUString > aRepositoryList;
-    ::rtl::OUString aBuildID;
     ::rtl::OUString aInstallSetID;
 
-    if( ! ( getBootstrapData(aRepositoryList, aBuildID, aInstallSetID) && (aRepositoryList.getLength() > 0) ) )
+    if( ! ( getBootstrapData(aRepositoryList, aInstallSetID) && (aRepositoryList.getLength() > 0) ) )
         return false;
 
     return checkForUpdates( o_rUpdateInfo, rxContext, rxInteractionHandler, rUpdateInfoProvider,
             myOS, myArch,
-            aRepositoryList, aBuildID, aInstallSetID );
+            aRepositoryList, aInstallSetID );
 }
 
 bool
@@ -123,7 +116,6 @@ checkForUpdates(
     const rtl::OUString &rOS,
     const rtl::OUString &rArch,
     const uno::Sequence< rtl::OUString > &rRepositoryList,
-    const rtl::OUString &rBuildID,
     const rtl::OUString &rInstallSetID )
 {
     if( !rxContext.is() )
@@ -155,9 +147,7 @@ checkForUpdates(
         aBuffer.append( rOS );
         aBuffer.appendAscii("\' and inst:arch=\'");
         aBuffer.append( rArch );
-        aBuffer.appendAscii("\' and inst:buildid>");
-        aBuffer.append( rBuildID );
-        aBuffer.appendAscii("]");
+        aBuffer.appendAscii("\']");
 
         rtl::OUString aXPathExpression = aBuffer.makeStringAndClear();
 

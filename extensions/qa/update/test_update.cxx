@@ -131,7 +131,6 @@ protected:
                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Linux" ) ),
                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "x86" ) ),
                     m_aRepositoryList,
-                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "100" ) ),
                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "InstallSetID" ) ) ) )
         {
             CPPUNIT_ASSERT( aInfo.Sources.size() == 1 );
