@@ -31,7 +31,6 @@
 //#include "cuilib.hxx"
 
 #include <osl/module.hxx>
-#include <tools/string.hxx>
 
 SfxAbstractDialogFactory* SfxAbstractDialogFactory::Create()
 {

@@ -30,7 +30,6 @@
 #define _SDRHITTESTHELPER_HXX
 
 #include "svx/svxdllapi.h"
-#include <tools/string.hxx>
 #include <tools/gen.hxx>
 
 /////////////////////////////////////////////////////////////////////

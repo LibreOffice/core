@@ -27,7 +27,7 @@
  ************************************************************************/
 
 
-#include <tools/string.hxx>
+#include <osl/thread.h>
 
 #include <xmloff/xmlscripti.hxx>
 #include "sdxmlimp_impl.hxx"

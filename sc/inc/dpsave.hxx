@@ -39,7 +39,6 @@
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
-#include <tools/string.hxx>
 
 #include "scdllapi.h"
 

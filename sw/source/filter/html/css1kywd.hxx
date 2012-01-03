@@ -29,7 +29,7 @@
 #ifndef _CSS1KYWD_HXX
 #define _CSS1KYWD_HXX
 
-#include <tools/string.hxx>
+#include <sal/types.h>
 
 #ifndef CSS1_CONSTASCII_DECL
 #define CSS1_CONSTASCII_DECL( n, s ) n[sizeof(s)]

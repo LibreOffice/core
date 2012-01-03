@@ -30,6 +30,7 @@
 #include <algorithm>
 #include <functional>
 #include <SwNumberTree.hxx>
+#include <osl/diagnose.h>
 
 using std::vector;
 using std::find;

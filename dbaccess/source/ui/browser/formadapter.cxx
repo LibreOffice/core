@@ -33,7 +33,6 @@
 #include <comphelper/types.hxx>
 #include <comphelper/enumhelper.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <tools/string.hxx>
 #include "dbu_brw.hrc"
 #include "dbustrings.hrc"
 #include <cppuhelper/typeprovider.hxx>

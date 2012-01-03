@@ -33,7 +33,6 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlmetai.hxx>
 #include <xmloff/nmspmap.hxx>
-#include <tools/string.hxx>
 
 
 using namespace ::com::sun::star;

@@ -30,7 +30,6 @@
 #define SC_FORMEL_HXX
 
 #include <tools/solar.h>
-#include <tools/string.hxx>
 
 #include <compiler.hxx>
 #include <global.hxx>

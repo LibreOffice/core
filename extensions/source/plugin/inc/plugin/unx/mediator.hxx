@@ -30,7 +30,6 @@
 
 #include <string.h>
 #include <stdarg.h>
-#include <tools/string.hxx>
 #include <tools/link.hxx>
 #include <osl/pipe.hxx>
 #include <osl/mutex.hxx>

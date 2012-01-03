@@ -37,6 +37,7 @@
 #include <rscstr.hxx>
 #include <rscarray.hxx>
 #include <rscdef.hxx>
+#include <tools/string.hxx>
 
 #include <vector>
 #include <map>

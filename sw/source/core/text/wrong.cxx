@@ -28,7 +28,6 @@
 
 
 
-#include <tools/string.hxx>
 #include "swtypes.hxx"
 #include "txttypes.hxx"
 

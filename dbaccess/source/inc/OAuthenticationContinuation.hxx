@@ -35,7 +35,7 @@
 #include <com/sun/star/ucb/RememberAuthentication.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 
-#include <tools/string.hxx>
+#include <rtl/ustring.hxx>
 #include <comphelper/interaction.hxx>
 
 

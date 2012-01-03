@@ -31,7 +31,6 @@
 #include <framework/fwedllapi.h>
 #include <svl/svarray.hxx>
 #include <vcl/bitmap.hxx>
-#include <tools/string.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
 #ifndef _COM_SUN_STAR_IO_XOUPUTSTREAM_HPP_
 #include <com/sun/star/io/XOutputStream.hpp>

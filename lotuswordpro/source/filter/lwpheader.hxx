@@ -78,7 +78,6 @@
 #include <sal/config.h>
 
 #include <rtl/ustring.hxx>
-#include <tools/string.hxx>
 #include <memory.h>
 
 

@@ -28,7 +28,6 @@
 #ifndef _SFX_SFXRESID_HXX
 #define _SFX_SFXRESID_HXX
 
-#include <tools/string.hxx>
 #include "sfx2/dllapi.h"
 #include <tools/resid.hxx>
 

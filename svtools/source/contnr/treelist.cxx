@@ -28,7 +28,6 @@
 
 #include <svtools/treelist.hxx>
 
-
 DBG_NAME(SvListEntry);
 
 SvListEntry::SvListEntry()

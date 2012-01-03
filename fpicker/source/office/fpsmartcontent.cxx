@@ -39,7 +39,6 @@
 #include <ucbhelper/commandenvironment.hxx>
 #include <tools/solar.h>
 #include <tools/debug.hxx>
-#include <tools/string.hxx>
 
 //........................................................................
 namespace svt

@@ -34,7 +34,6 @@
 #include <tools/link.hxx>
 #include <vcl/image.hxx>
 #include <vector>
-#include <tools/string.hxx>
 
 #include "DrawDocShell.hxx"
 #include "MasterPageContainer.hxx"

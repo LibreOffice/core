@@ -28,7 +28,6 @@
 
 
 #include <unotools/syslocale.hxx>
-#include <tools/string.hxx>
 #include <unotools/syslocaleoptions.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <comphelper/processfactory.hxx>

@@ -27,12 +27,12 @@
  ************************************************************************/
 
 #include <tools/debug.hxx>
+#include <osl/thread.h>
 #include <com/sun/star/awt/FontFamily.hpp>
 #include <com/sun/star/awt/FontPitch.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/SizeType.hpp>
-#include <tools/string.hxx>
 #include <xmloff/XMLFontStylesContext.hxx>
 #include <xmloff/txtprmap.hxx>
 #include <xmloff/xmlimp.hxx>

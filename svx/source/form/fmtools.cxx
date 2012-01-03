@@ -91,7 +91,6 @@
 #include <svl/stritem.hxx>
 #include <toolkit/unohlp.hxx>
 #include <tools/debug.hxx>
-#include <tools/string.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/svapp.hxx>
 

@@ -52,7 +52,6 @@
 #include <xmlsec/base64.h>
 #include <xmlsec/strings.h>
 
-#include <tools/string.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/servicefactory.hxx>
@@ -62,6 +61,7 @@
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <vector>
 #include "boost/scoped_array.hpp"
+#include <osl/thread.h>
 
 #include "secerror.hxx"
 

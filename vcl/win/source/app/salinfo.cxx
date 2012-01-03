@@ -31,7 +31,6 @@
 #include "rtl/ustrbuf.hxx"
 
 #include "tools/debug.hxx"
-#include "tools/string.hxx"
 
 #include "vcl/window.hxx"
 

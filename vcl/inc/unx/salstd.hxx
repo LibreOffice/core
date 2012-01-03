@@ -31,7 +31,6 @@
 
 // -=-= includes -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <tools/ref.hxx>
-#include <tools/string.hxx>
 #include <tools/gen.hxx>
 #include <vcl/sv.h>
 

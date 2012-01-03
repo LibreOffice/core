@@ -30,7 +30,6 @@
 
 #include "unotools/unotoolsdllapi.h"
 #include <unotools/configitem.hxx>
-#include <tools/string.hxx>
 #include <osl/mutex.hxx>
 #include <unotools/options.hxx>
 

@@ -29,7 +29,6 @@
 #ifndef _SD_UNOKYWDS_HXX_
 #define _SD_UNOKYWDS_HXX_
 
-#include <tools/string.hxx>
 #include <tools/solar.h>
 
 #ifndef SD_DEFINE_KEYWORDS

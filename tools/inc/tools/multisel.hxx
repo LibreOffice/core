@@ -30,7 +30,7 @@
 
 #include "tools/toolsdllapi.h"
 #include <tools/gen.hxx>
-#include <tools/string.hxx>
+#include <rtl/ustring.hxx>
 
 #include <vector>
 #include <set>

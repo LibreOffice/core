@@ -29,7 +29,6 @@
 #ifndef _SV_PRNTYPES_HXX
 #define _SV_PRNTYPES_HXX
 
-#include <tools/string.hxx>
 #include <vcl/sv.h>
 #include <i18npool/paper.hxx>
 

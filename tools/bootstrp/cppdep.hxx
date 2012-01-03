@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include <tools/string.hxx>
 #include <vector>
 #define PATH_SEP ":"
 #define DIR_SEP "/"

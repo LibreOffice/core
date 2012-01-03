@@ -29,7 +29,7 @@
 #ifndef _EXTENSIONS_PROPCTRLR_PROPLINELISTENER_HXX_
 #define _EXTENSIONS_PROPCTRLR_PROPLINELISTENER_HXX_
 
-#include <tools/string.hxx>
+#include <rtl/ustring.hxx>
 
 //........................................................................
 namespace pcr

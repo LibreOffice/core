@@ -47,7 +47,6 @@
 
 #include <comphelper/stl_types.hxx>
 #include <tools/link.hxx>
-#include <tools/string.hxx>
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/implbase3.hxx>
 #include <comphelper/uno3.hxx>

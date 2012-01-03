@@ -29,8 +29,6 @@
 #ifndef _XMLOFF_XMLKYWD_HXX
 #define _XMLOFF_XMLKYWD_HXX
 
-#include <tools/string.hxx>
-
 /*
  * THIS FILE IS DEPRECATED. IT IS SUPERSEDED BY XMLTOKEN.HXX.
  *

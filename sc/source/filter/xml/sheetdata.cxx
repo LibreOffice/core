@@ -29,10 +29,10 @@
 
 // INCLUDE ---------------------------------------------------------------
 
+#include <rtl/ustring.hxx>
 #include <xmloff/families.hxx>
 #include <xmloff/xmlaustp.hxx>
 #include <xmloff/nmspmap.hxx>
-#include <tools/string.hxx>
 
 #include "sheetdata.hxx"
 

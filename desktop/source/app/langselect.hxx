@@ -28,7 +28,6 @@
 
 #include <list>
 #include <sal/types.h>
-#include <tools/string.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/resid.hxx>
 #include <com/sun/star/lang/Locale.hpp>

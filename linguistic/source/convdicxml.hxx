@@ -39,7 +39,6 @@
 #include <xmloff/xmlimp.hxx>
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/interfacecontainer.h>
-#include <tools/string.hxx>
 #include <rtl/ustring.hxx>
 #include "linguistic/misc.hxx"
 #include "defs.hxx"

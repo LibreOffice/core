@@ -51,7 +51,6 @@
 #include <com/sun/star/util/XChangesNotifier.hpp>
 #include <comphelper/processfactory.hxx>
 #include <rtl/ustring.hxx>
-#include <tools/string.hxx>
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;

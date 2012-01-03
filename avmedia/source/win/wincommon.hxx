@@ -33,7 +33,6 @@
 #include <rtl/ustring.hxx>
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>
-#include <tools/string.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/weak.hxx>

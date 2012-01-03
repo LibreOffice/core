@@ -40,7 +40,6 @@
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <cppuhelper/factory.hxx>
 #include <tools/link.hxx>
-#include <tools/string.hxx>
 
 class SfxObjectFactory;
 class SfxFilterMatcher;

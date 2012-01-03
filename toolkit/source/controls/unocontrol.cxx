@@ -39,7 +39,6 @@
 #include <rtl/memory.h>
 #include <rtl/uuid.h>
 #include <osl/mutex.hxx>
-#include <tools/string.hxx>
 #include <tools/table.hxx>
 #include <tools/date.hxx>
 #include <tools/debug.hxx>

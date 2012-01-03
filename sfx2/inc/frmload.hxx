@@ -53,7 +53,6 @@
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/factory.hxx>
 #include <tools/link.hxx>
-#include <tools/string.hxx>
 #include <comphelper/componentcontext.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 

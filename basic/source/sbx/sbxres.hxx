@@ -29,7 +29,7 @@
 #ifndef _SBXRES_HXX
 #define _SBXRES_HXX
 
-#include <tools/string.hxx>
+#include <rtl/ustring.hxx>
 
 // Currently there are no resources provided in the SVTOOLS-Project.
 // Because it is non-critical resources (BASIC-Keywords),

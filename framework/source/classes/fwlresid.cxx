@@ -28,7 +28,6 @@
 
 
 #include "classes/fwlresid.hxx"
-#include <tools/string.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 

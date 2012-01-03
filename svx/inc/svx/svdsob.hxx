@@ -32,10 +32,6 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <tools/stream.hxx>
 
-#ifndef _STRING_H
-#include <tools/string.hxx> //wg. memset
-#define _STRING_H
-#endif
 #include "svx/svxdllapi.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

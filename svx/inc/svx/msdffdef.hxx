@@ -32,7 +32,6 @@
 
 #include <tools/solar.h>
 #include <tools/stream.hxx>
-#include <tools/string.hxx>
 #include <tools/gen.hxx>
 #include "svx/svxdllapi.h"
 

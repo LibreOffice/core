@@ -38,7 +38,6 @@
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
 /** === end UNO includes === **/
 
-#include <tools/string.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/listenernotification.hxx>
 

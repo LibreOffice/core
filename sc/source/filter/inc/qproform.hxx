@@ -32,7 +32,6 @@
 
 #include <sal/config.h>
 #include "formel.hxx"
-#include <tools/string.hxx>
 #include "qpro.hxx"
 
 #include <compiler.hxx>

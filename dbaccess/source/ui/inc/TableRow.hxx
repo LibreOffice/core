@@ -29,7 +29,6 @@
 #define DBAUI_TABLEROW_HXX
 
 #include <comphelper/stl_types.hxx>
-#include <tools/string.hxx>
 #include <tools/stream.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include "TypeInfo.hxx"

@@ -35,9 +35,6 @@
 #include "SchXMLSeries2Context.hxx"
 #include "SchXMLTools.hxx"
 #include <tools/debug.hxx>
-#ifdef DBG_UTIL
-#include <tools/string.hxx>
-#endif
 
 #include <comphelper/processfactory.hxx>
 #include "xmloff/xmlnmspe.hxx"

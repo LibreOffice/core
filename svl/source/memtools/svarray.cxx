@@ -47,7 +47,6 @@
 #define _SVSTDARR_XUB_STRLEN
 
 #include <svl/svstdarr.hxx>
-#include <tools/string.hxx>
 #include <tools/debug.hxx>
 
 SV_IMPL_VARARR(SvPtrarr,VoidPtr)

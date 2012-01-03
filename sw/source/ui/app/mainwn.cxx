@@ -31,7 +31,6 @@
 
 #include <mdiexp.hxx>
 #include <tools/shl.hxx>
-#include <tools/string.hxx>
 #include <svl/svstdarr.hxx>
 #include <sfx2/progress.hxx>
 #include <tools/resid.hxx>

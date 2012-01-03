@@ -200,7 +200,6 @@ bool ShapeTypeHandler::AddShapeTypeList (int nDescriptorCount,
 
 
 
-#include <tools/string.hxx>
 long ShapeTypeHandler::GetSlotId (const OUString& aServiceName) const
 {
     tServiceNameToSlotId::iterator I (maServiceNameToSlotId.find (aServiceName));

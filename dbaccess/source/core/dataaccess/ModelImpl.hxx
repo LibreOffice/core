@@ -79,7 +79,6 @@
 #include <cppuhelper/weakref.hxx>
 #include <sfx2/docmacromode.hxx>
 #include <sfx2/docstoragemodifylistener.hxx>
-#include <tools/string.hxx>
 #include <unotools/sharedunocomponent.hxx>
 #include <osl/mutex.hxx>
 #include <rtl/ref.hxx>

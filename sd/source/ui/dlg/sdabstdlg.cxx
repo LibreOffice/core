@@ -30,7 +30,7 @@
 #include "sdabstdlg.hxx"
 
 #include <osl/module.hxx>
-#include <tools/string.hxx>
+#include <rtl/ustring.hxx>
 #include <vcl/unohelp.hxx>
 
 typedef SdAbstractDialogFactory* (__LOADONCALLAPI *SdFuncPtrCreateDialogFactory)();

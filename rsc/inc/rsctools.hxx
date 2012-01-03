@@ -35,8 +35,9 @@ class  RscPtrPtr;
 #include <stdlib.h>
 #endif
 #include <stdio.h>
-#include <tools/string.hxx>
 #include <vector>
+#include <tools/solar.h>
+#include <rtl/ustring.hxx>
 
 /******************* T y p e s *******************************************/
 // Zeichensatz

@@ -30,7 +30,6 @@
 #define _HTMLFLY_HXX
 
 #include <tools/solar.h>
-#include <tools/string.hxx>
 
 #include <svl/svarray.hxx>
 

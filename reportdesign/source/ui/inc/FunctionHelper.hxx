@@ -35,7 +35,6 @@
 #include <com/sun/star/report/meta/XFunctionDescription.hpp>
 #include <vector>
 #include <boost/shared_ptr.hpp>
-#include <tools/string.hxx>
 #include <comphelper/stl_types.hxx>
 
 

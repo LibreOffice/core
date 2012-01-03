@@ -32,7 +32,6 @@
 #include <tools/solar.h>
 #include <tools/gen.hxx>
 #include <limits.h>       // USHRT_MAX
-#include <tools/string.hxx>
 
 class SwTxtNode;
 class SwIndex;

@@ -36,7 +36,6 @@
 #define _INPUTHDL_CXX
 
 #include <tools/solar.h>
-#include <tools/string.hxx>
 #include <svl/solar.hrc>
 #include <tools/rtti.hxx>
 #include <string.h>

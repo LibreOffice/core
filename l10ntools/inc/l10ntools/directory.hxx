@@ -2,7 +2,6 @@
 #include <vector>
 #include <algorithm>
 #include <rtl/ustring.hxx>
-#include <tools/string.hxx>
 
 #ifdef WNT
 #else

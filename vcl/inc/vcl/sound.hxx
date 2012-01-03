@@ -31,7 +31,6 @@
 
 #include <vcl/dllapi.h>
 #include <vcl/sndstyle.hxx>
-#include <tools/string.hxx>
 #include <tools/link.hxx>
 
 class Window;

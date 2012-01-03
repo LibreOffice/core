@@ -36,7 +36,6 @@
 #define SC_PROGRESS_CXX
 
 #include <tools/solar.h>
-#include <tools/string.hxx>
 #include <rtl/textenc.h>
 #include <sal/types.h>
 #include <sal/config.h>

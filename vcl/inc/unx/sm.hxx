@@ -29,6 +29,7 @@
 #define _VCL_SM_HXX
 
 #include <rtl/string.hxx>
+#include <rtl/ustring.hxx>
 #include "tools/link.hxx"
 #include "unx/salunx.h"
 #include <X11/SM/SMlib.h>

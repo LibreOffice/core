@@ -32,7 +32,6 @@
 #include <boost/ptr_container/ptr_vector.hpp>
 
 #include <tools/link.hxx>
-#include <tools/string.hxx>
 #include <com/sun/star/awt/ImageStatus.hpp>
 #include <com/sun/star/awt/XImageConsumer.hpp>
 #include <com/sun/star/awt/XImageProducer.hpp>

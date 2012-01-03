@@ -41,7 +41,6 @@
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <com/sun/star/xml/sax/XParser.hpp>
 
-#include <tools/string.hxx>
 class SvStringsDtor;
 
 using namespace ::com::sun::star::xml::sax;

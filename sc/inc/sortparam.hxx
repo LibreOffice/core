@@ -30,7 +30,6 @@
 #define SC_SORTPARAM_HXX
 
 #include "address.hxx"
-#include <tools/string.hxx>
 #include <tools/solar.h>
 #include <com/sun/star/lang/Locale.hpp>
 #include "scdllapi.h"

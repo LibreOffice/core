@@ -28,7 +28,6 @@
 #ifndef _RSCALL_H
 #define _RSCALL_H
 
-#include <tools/string.hxx>
 #include <rsctools.hxx>
 #include <rscerror.h>
 #include <rscdef.hxx>

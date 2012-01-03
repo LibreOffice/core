@@ -30,7 +30,6 @@
 #define _EXTENSIONS_FORMSCTRLR_STRINGDEFINE_HXX_
 
 #include <rtl/ustring.hxx>
-#include <tools/string.hxx>
 
 //............................................................................
 namespace pcr

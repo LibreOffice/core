@@ -30,7 +30,6 @@
 
 #include <framework/fwedllapi.h>
 #include <svl/svarray.hxx>
-#include <tools/string.hxx>
 #include <tools/stream.hxx>
 #include <vcl/status.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>

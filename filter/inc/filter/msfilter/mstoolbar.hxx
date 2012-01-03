@@ -31,7 +31,6 @@
 #ifndef _MSTOOLBAR_HXX
 #define _MSTOOLBAR_HXX
 #include "filter/msfilter/msfilterdllapi.h"
-#include <tools/string.hxx>
 #include <sot/storage.hxx>
 #include <ostream>
 #include <memory>

@@ -29,7 +29,7 @@
 #ifndef FORMULA_EXTERNALREFERENCEHELPER_HXX
 #define FORMULA_EXTERNALREFERENCEHELPER_HXX
 
-#include <tools/string.hxx>
+#include <rtl/ustring.hxx>
 #include "formula/formuladllapi.h"
 
 namespace formula

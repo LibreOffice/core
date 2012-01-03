@@ -29,7 +29,6 @@
 #ifndef _FMSRCCF_HXX_
 #define _FMSRCCF_HXX_
 
-#include <tools/string.hxx>
 #include <unotools/configvaluecontainer.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include "svx/svxdllapi.h"

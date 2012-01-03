@@ -34,7 +34,6 @@
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
-#include <tools/string.hxx>
 #include <cppuhelper/implbase1.hxx> // helper for implementations
 #include <cppuhelper/implbase2.hxx> // helper for implementations
 #include <cppuhelper/implbase3.hxx> // helper for implementations

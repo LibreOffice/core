@@ -40,7 +40,7 @@
 #include <com/sun/star/form/binding/XListEntrySource.hpp>
 /** === end UNO includes === **/
 #include <osl/mutex.hxx>
-#include <tools/string.hxx>
+#include <rtl/ustring.hxx>
 #include <comphelper/listenernotification.hxx>
 
 #include <vector>

@@ -43,7 +43,6 @@
 #include <usr/services.hxx>
 #include <vcl/svapp.hxx>
 #include <usr/ustring.hxx>
-#include <tools/string.hxx>
 #include <osl/conditn.hxx>
 
 #include <smart/com/sun/star/test/XSimpleTest.hxx>

@@ -29,8 +29,8 @@
 #ifndef _DBAUI_CHARSETS_HXX_
 #define _DBAUI_CHARSETS_HXX_
 
-#include <tools/string.hxx>
 #include <connectivity/dbcharset.hxx>
+#include <rtl/ustring.hxx>
 #include <svx/txenctab.hxx>
 
 //.........................................................................

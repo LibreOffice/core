@@ -33,7 +33,6 @@
 #ifndef _VECTOR_
 #include <vector>
 #endif
-#include <tools/string.hxx>
 #include "QEnumTypes.hxx"
 
 #include <memory>

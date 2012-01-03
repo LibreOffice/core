@@ -28,7 +28,6 @@
 #ifndef SW_MVSAVE_HXX
 #define SW_MVSAVE_HXX
 
-#include <tools/string.hxx>
 #include <vcl/keycod.hxx>
 #include <svl/svarray.hxx>
 #include <IDocumentMarkAccess.hxx>

@@ -45,7 +45,6 @@
 #include "osl/file.hxx"
 #include "osl/module.hxx"
 
-#include "tools/string.hxx"
 #include "tools/debug.hxx"
 #include "tools/stream.hxx"
 

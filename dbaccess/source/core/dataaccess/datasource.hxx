@@ -47,7 +47,6 @@
 #include "apitools.hxx"
 #include "bookmarkcontainer.hxx"
 #include <rtl/ref.hxx>
-#include <tools/string.hxx>
 #include <connectivity/CommonTools.hxx>
 #include <comphelper/broadcasthelper.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>

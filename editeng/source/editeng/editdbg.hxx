@@ -30,7 +30,6 @@
 #define _EDITDBG_HXX
 
 #include <svl/solar.hrc>
-#include <tools/string.hxx>
 #include <stdio.h>
 
 class EditEngine;

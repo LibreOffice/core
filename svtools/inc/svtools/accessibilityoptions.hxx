@@ -30,7 +30,6 @@
 
 #include "svtools/svtdllapi.h"
 #include <unotools/configitem.hxx>
-#include <tools/string.hxx>
 #include <svl/brdcst.hxx>
 #include <svl/lstner.hxx>
 #include <unotools/options.hxx>

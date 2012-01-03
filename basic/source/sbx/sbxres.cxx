@@ -29,6 +29,8 @@
 
 #include "sbxres.hxx"
 
+#include <rtl/ustring.hxx>
+
 static const char* pSbxRes[] = {
     "Empty",
     "Null",

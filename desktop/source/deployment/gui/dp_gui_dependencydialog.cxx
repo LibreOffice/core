@@ -36,7 +36,6 @@
 #include "tools/gen.hxx"
 #include "tools/resid.hxx"
 #include "tools/solar.h"
-#include "tools/string.hxx"
 #include "vcl/dialog.hxx"
 
 #include "dp_gui.hrc"

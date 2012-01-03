@@ -67,7 +67,6 @@
 #include "SfxDocumentMetaData.hxx"
 #include "rtl/ustrbuf.hxx"
 #include "tools/debug.hxx"
-#include "tools/string.hxx" // for DBG
 #include "tools/datetime.hxx"
 #include "osl/mutex.hxx"
 #include "cppuhelper/basemutex.hxx"

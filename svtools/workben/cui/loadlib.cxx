@@ -31,7 +31,6 @@
 #include <string.h>
 #include <stdlib.h>
 
-#include <tools/string.hxx>
 #include <osl/module.h>
 #include <rtl/ustring.hxx>
 

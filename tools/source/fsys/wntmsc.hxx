@@ -41,7 +41,6 @@
 #include <windows.h>
 #include <tools/solar.h>
 
-#include <tools/string.hxx>
 #include <rtl/strbuf.hxx>
 
 //--------------------------------------------------------------------

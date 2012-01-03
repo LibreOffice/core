@@ -33,7 +33,7 @@
 #endif
 
 #include <l10ntools/directory.hxx>
-#include "tools/string.hxx"
+#include <rtl/ustring.hxx>
 #include <iostream>
 #include <vector>
 #include <algorithm>

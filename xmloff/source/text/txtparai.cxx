@@ -31,7 +31,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <tools/debug.hxx>
 
-#include <tools/string.hxx>
 #include <svl/svarray.hxx>
 #include <com/sun/star/text/XTextFrame.hpp>
 #include <com/sun/star/text/XTextCursor.hpp>

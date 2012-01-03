@@ -29,7 +29,6 @@
 #define _URLOBJ_HXX
 
 #include "tools/toolsdllapi.h"
-#include <tools/string.hxx>
 #include "com/sun/star/uno/Reference.hxx"
 #include "rtl/string.h"
 #include "rtl/ustrbuf.hxx"

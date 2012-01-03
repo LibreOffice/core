@@ -33,7 +33,6 @@
 #include "rtl/instance.hxx"
 #include <tools/solar.h>
 #include <tools/rtti.hxx>               // for RTTI of SwIndexReg
-#include <tools/string.hxx>             // for xub_StrLen
 #include <swdllapi.h>
 
 // Maximum index in IndexArray (for testing on overflows).

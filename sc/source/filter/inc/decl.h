@@ -31,7 +31,6 @@
 #define SC_DECL_H
 
 #include <tools/solar.h>
-#include <tools/string.hxx>
 
 enum WKTYP { eWK_UNKNOWN = -2, eWK_1 = 0, eWK_2, eWK3, eWK4, eWK_Error, eWK123 };
 typedef void ( BEARBFKT )( void );

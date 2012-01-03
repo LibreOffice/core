@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include <tools/string.hxx>
 #include <rtl/ustrbuf.hxx>
 #include "propimp0.hxx"
 #include <com/sun/star/drawing/LineDash.hpp>

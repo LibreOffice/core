@@ -31,7 +31,6 @@
 
 #include <set>
 #include <vector>
-#include <tools/string.hxx>
 #include <swdllapi.h>
 #include <SwNumberTreeTypes.hxx>
 
