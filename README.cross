@@ -324,6 +324,7 @@ Windows. (Trying to cross-compile from Windows will probably drive you
 insane.)
 
 Here is my autogen.lastrun for Android, when cross-compiling from Mac OS X:
+
 SYSBASE=/Users/tml/android-ndk-r7/platforms/android-9/arch-arm
 CC=ccache /Users/tml/android-ndk-r7/toolchains/arm-linux-androideabi-4.4.3/prebuilt/darwin-x86/bin/arm-linux-androideabi-gcc -march=armv7-a -mfloat-abi=softfp -mthumb -mfpu=neon -Wl,--fix-cortex-a8 --sysroot /Users/tml/android-ndk-r7/platforms/android-9/arch-arm -L/Users/tml/android-ndk-r7/sources/cxx-stl/gnu-libstdc++/libs/armeabi-v7a
 CXX=ccache /Users/tml/android-ndk-r7/toolchains/arm-linux-androideabi-4.4.3/prebuilt/darwin-x86/bin/arm-linux-androideabi-g++ -march=armv7-a -mfloat-abi=softfp -mthumb -mfpu=neon -Wl,--fix-cortex-a8 --sysroot /Users/tml/android-ndk-r7/platforms/android-9/arch-arm -I /Users/tml/android-ndk-r7/sources/cxx-stl/gnu-libstdc++/include -I/Users/tml/android-ndk-r7/sources/cxx-stl/gnu-libstdc++/libs/armeabi-v7a/include -L/Users/tml/android-ndk-r7/sources/cxx-stl/gnu-libstdc++/libs/armeabi-v7a -fexceptions -frtti
@@ -344,7 +345,8 @@ CXX_FOR_BUILD=ccache /Xcode3/usr/bin/g++-4.0 -mmacosx-version-min=10.4
 --without-myspell-dicts
 --with-java
 
-And here is the autogen.lastrun for Android when cross-compiling from Linux:
+And here is my autogen.lastrun for Android when cross-compiling from Linux:
+
 SYSBASE=/home/tml/android-ndk-r7/platforms/android-9/arch-arm
 CC=ccache /home/tml/android-ndk-r7/toolchains/arm-linux-androideabi-4.4.3/prebuilt/linux-x86/bin/arm-linux-androideabi-gcc -march=armv7-a -mfloat-abi=softfp -mthumb -mfpu=neon -Wl,--fix-cortex-a8 --sysroot /home/tml/android-ndk-r7/platforms/android-9/arch-arm -L/home/tml/android-ndk-r7/sources/cxx-stl/gnu-libstdc++/libs/armeabi-v7a
 CXX=ccache /home/tml/android-ndk-r7/toolchains/arm-linux-androideabi-4.4.3/prebuilt/linux-x86/bin/arm-linux-androideabi-g++ -march=armv7-a -mfloat-abi=softfp -mthumb -mfpu=neon -Wl,--fix-cortex-a8 --sysroot /home/tml/android-ndk-r7/platforms/android-9/arch-arm -I /home/tml/android-ndk-r7/sources/cxx-stl/gnu-libstdc++/include -I/home/tml/android-ndk-r7/sources/cxx-stl/gnu-libstdc++/libs/armeabi-v7a/include -L/home/tml/android-ndk-r7/sources/cxx-stl/gnu-libstdc++/libs/armeabi-v7a -fexceptions -frtti
@@ -364,6 +366,41 @@ CXX_FOR_BUILD=ccache g++
 --with-max-jobs=1
 --without-helppack-integration
 --without-myspell-dicts
+
+There is no "app" you could run yet that would use LibreOffice code,
+but you can build some non-interactive unit tests and run them on the
+emulator (or, presumably, on a device, although I haven't tested that
+as I don't have any Android device...) The simple unit tests will
+succeed, the complex one still fails.
+
+To build the complex unit test (for Calc functionality; invokes the
+"ucalc" unit test code from sc) source the environment (. Env.Host.sh)
+and cd to android/qa/sc and run a "make". The Makefile here is
+completely manually written, this stuff is so experimental it doesn't
+make sense yet to try to integrate with the normal gbuild
+mechanism.
+
+Then to run it, "make install" followed by "make run". You most likely
+want to have an "adb logcat" running in another window, and you
+probably also want to have set the stdout and stderr of app processes
+to be redirected to logcat ("adb shell stop; adb shell setprop
+log.redirect-stdio true; adb shell start").
+
+Unfortunately you might notice that the command line passed to "adb
+shell am start" is too long (actually, not "command line" as such, but
+the length of the so-called "extra" arguments passed to the action, or
+something like that, see Android bug
+http://code.google.com/p/android/issues/detail?id=23351 , so you need
+to shorten it somehow... for instance by creating a symlink to
+/data/data/org.libreoffice.android.qa.sc in /system and using that
+shorter path snippet in all places instead of the longer one on the
+"adb shell am start" command line then...
+
+To debug, do manually what "make run" would do, adding args "-e
+lo-main-delay 20" to the command line, and when the app has started,
+run ndk-gdb. Unfortunately the gdb in NDK r7 is broken, use the one in
+the NDK build with newer versions of gcc and gdb from
+http://code.google.com/p/mingw-and-ndk/ instead.
 
 
 PowerPC Mac OS X
