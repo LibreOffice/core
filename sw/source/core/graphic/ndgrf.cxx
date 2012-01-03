@@ -52,6 +52,7 @@
 #include <editsh.hxx>
 #include <pam.hxx>
 
+#include <rtl/oustringostreaminserter.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
@@ -881,10 +882,10 @@ SwCntntNode* SwGrfNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
                 delete pStrm;
             }
         }
-        catch (const uno::Exception&)
+        catch (const uno::Exception& e)
         {
             // #i48434#
-            OSL_FAIL( "<SwGrfNode::MakeCopy(..)> - unhandled exception!" );
+            SAL_WARN("sw", "<SwGrfNode::MakeCopy(..)> - unhandled exception!" << e.Message);
         }
     }
     else
