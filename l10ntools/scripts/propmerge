@@ -63,7 +63,9 @@ close (SDFFILE);
 
 foreach my $lang (keys %languages) {
     my $locfilename = $options{i};
+    $lang =~ s/-/_/;
     $locfilename =~ s/en_US\.properties/$lang.properties/;
+    $lang =~ s/_/-/;
     open (INFILE, "<$options{i}") || die "propmerge: cannot open source file: $options{i}";    
     open (OUTFILE, ">$locfilename") || die "propmerge: cannot open output file: $locfilename";
     while (<INFILE>) {
