@@ -212,7 +212,6 @@ $(eval $(call gb_Library_add_exception_objects,svt,\
     svtools/source/java/javacontext \
     svtools/source/java/javainteractionhandler \
     svtools/source/misc/acceleratorexecute \
-    svtools/source/misc/chartprettypainter \
     svtools/source/misc/cliplistener \
     svtools/source/misc/dialogclosedlistener \
     svtools/source/misc/dialogcontrolling \

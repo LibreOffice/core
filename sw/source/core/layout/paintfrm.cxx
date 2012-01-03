@@ -90,7 +90,7 @@
 // <--
 
 #include <ndole.hxx>
-#include <svtools/chartprettypainter.hxx>
+#include <svx/charthelper.hxx>
 #include <PostItMgr.hxx>
 #include <tools/color.hxx>
 #include <vcl/svapp.hxx>
@@ -3546,7 +3546,7 @@ void SwFlyFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
         if( pNoTNd )
         {
             SwOLENode* pOLENd = const_cast<SwOLENode*>(pNoTNd->GetOLENode());
-            if( pOLENd && ChartPrettyPainter::IsChart( pOLENd->GetOLEObj().GetObject() ) )
+            if( pOLENd && ChartHelper::IsChart( pOLENd->GetOLEObj().GetObject() ) )
                 bIsChart = true;
         }
     }

@@ -61,8 +61,6 @@
 #include <com/sun/star/rendering/TexturingMode.hpp>
 #include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
 #include <vclhelperbufferdevice.hxx>
-#include <drawinglayer/primitive2d/chartprimitive2d.hxx>
-#include <helperchartrenderer.hxx>
 #include <drawinglayer/primitive2d/wrongspellprimitive2d.hxx>
 #include <helperwrongspellrenderer.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
@@ -2089,26 +2087,6 @@ namespace drawinglayer
                     // UnifiedTransparencePrimitive2D
                     impRenderUnifiedTransparencePrimitive2D(static_cast< const primitive2d::UnifiedTransparencePrimitive2D& >(rCandidate));
 
-                    break;
-                }
-                case PRIMITIVE2D_ID_CHARTPRIMITIVE2D :
-                {
-                    // chart primitive in canvas renderer; restore original DrawMode during call
-                    // since the evtl. used ChartPrettyPainter will use the MapMode
-                    const primitive2d::ChartPrimitive2D& rChartPrimitive = static_cast< const primitive2d::ChartPrimitive2D& >(rCandidate);
-                       mpOutputDevice->Push(PUSH_MAPMODE);
-                    mpOutputDevice->SetMapMode(maOriginalMapMode);
-
-                    if(!renderChartPrimitive2D(
-                        rChartPrimitive,
-                        *mpOutputDevice,
-                        getViewInformation2D()))
-                    {
-                        // fallback to decomposition (MetaFile)
-                        process(rChartPrimitive.get2DDecomposition(getViewInformation2D()));
-                    }
-
-                    mpOutputDevice->Pop();
                     break;
                 }
                 case PRIMITIVE2D_ID_WRONGSPELLPRIMITIVE2D :

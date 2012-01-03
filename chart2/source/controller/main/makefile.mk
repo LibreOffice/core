@@ -55,7 +55,6 @@ SLOFILES =  \
             $(SLO)$/ChartController_Position.obj \
             $(SLO)$/ChartController_Tools.obj \
             $(SLO)$/ChartFrameloader.obj \
-            $(SLO)$/ChartRenderer.obj \
             $(SLO)$/CommandDispatchContainer.obj \
             $(SLO)$/CommandDispatch.obj \
             $(SLO)$/ControllerCommandDispatch.obj \

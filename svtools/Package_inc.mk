@@ -41,7 +41,6 @@ $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/asynclink.hxx,svtools/
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/brwbox.hxx,svtools/brwbox.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/brwhead.hxx,svtools/brwhead.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/calendar.hxx,svtools/calendar.hxx))
-$(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/chartprettypainter.hxx,svtools/chartprettypainter.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/cliplistener.hxx,svtools/cliplistener.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/colctrl.hxx,svtools/colctrl.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/collatorres.hxx,svtools/collatorres.hxx))

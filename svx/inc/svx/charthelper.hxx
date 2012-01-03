@@ -19,38 +19,37 @@
  *
  *************************************************************/
 
+#ifndef CHARTHELPER_HXX
+#define CHARTHELPER_HXX
 
-
-#ifndef INCLUDED_DRAWINGLAYER_PROCESSOR2D_HELPERCHARTRENDER_HXX
-#define INCLUDED_DRAWINGLAYER_PROCESSOR2D_HELPERCHARTRENDER_HXX
-
-#include <sal/types.h>
-
-//////////////////////////////////////////////////////////////////////////////
-// predefines
-
-class OutputDevice;
-
-namespace drawinglayer { namespace primitive2d { class ChartPrimitive2D; }}
-namespace drawinglayer { namespace geometry { class ViewInformation2D; }}
+#include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/uno/Sequence.hxx>
+#include <basegfx/range/b2drange.hxx>
+#include <svx/svxdllapi.h>
+#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
-// support chart PrettyPrinter usage from primitives
+// predeclarations
 
-namespace drawinglayer
+namespace svt { class EmbeddedObjectRef; }
+
+//////////////////////////////////////////////////////////////////////////////
+
+class SVX_DLLPUBLIC ChartHelper
 {
-    // #i101811#
-    // Added current ViewInformation2D to take evtl. changed
-    // ObjectTransformation into account
-    bool renderChartPrimitive2D(
-        const primitive2d::ChartPrimitive2D& rChartCandidate,
-        OutputDevice& rOutputDevice,
-        const geometry::ViewInformation2D& rViewInformation2D);
+public:
+    // test if given reference is a chart
+    static bool IsChart(const svt::EmbeddedObjectRef& xObjRef);
 
-} // end of namespace drawinglayer
+    // try to access rXModel in case of a chart to to get the chart content
+    // as sequence of primitives. Return range of primitives (chart size) in rRange;
+    // it will be used to embed the chart to the SdrObject transformation. This
+    // allows to define possible distances between chart and SDrObject bounds here
+    static drawinglayer::primitive2d::Primitive2DSequence tryToGetChartContentAsPrimitive2DSequence(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rXModel,
+        basegfx::B2DRange& rRange);
+};
 
 //////////////////////////////////////////////////////////////////////////////
 
-#endif // INCLUDED_DRAWINGLAYER_PROCESSOR2D_HELPERCHARTRENDER_HXX
-
-// eof
+#endif //CHARTHELPER_HXX

@@ -94,7 +94,6 @@ $(eval $(call gb_Library_add_exception_objects,drawinglayer,\
 	drawinglayer/source/primitive2d/backgroundcolorprimitive2d \
 	drawinglayer/source/primitive2d/bitmapprimitive2d \
 	drawinglayer/source/primitive2d/borderlineprimitive2d \
-	drawinglayer/source/primitive2d/chartprimitive2d \
 	drawinglayer/source/primitive2d/controlprimitive2d \
 	drawinglayer/source/primitive2d/cropprimitive2d \
 	drawinglayer/source/primitive2d/discretebitmapprimitive2d \
@@ -164,7 +163,6 @@ $(eval $(call gb_Library_add_exception_objects,drawinglayer,\
 	drawinglayer/source/processor2d/vclhelperbitmaprender \
 	drawinglayer/source/processor2d/vclhelperbufferdevice \
 	drawinglayer/source/processor2d/vclprocessor2d \
-	drawinglayer/source/processor2d/helperchartrenderer \
 	drawinglayer/source/processor2d/helperwrongspellrenderer \
 	drawinglayer/source/processor2d/vclpixelprocessor2d \
 	drawinglayer/source/processor2d/vclmetafileprocessor2d \

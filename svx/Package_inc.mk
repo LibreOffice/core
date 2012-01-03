@@ -27,6 +27,7 @@
 
 $(eval $(call gb_Package_Package,svx_inc,$(SRCDIR)/svx/inc))
 
+$(eval $(call gb_Package_add_file,svx_inc,inc/svx/charthelper.hxx,svx/charthelper.hxx))
 $(eval $(call gb_Package_add_file,svx_inc,inc/svx/sxsoitm.hxx,svx/sxsoitm.hxx))
 $(eval $(call gb_Package_add_file,svx_inc,inc/svx/sdshtitm.hxx,svx/sdshtitm.hxx))
 $(eval $(call gb_Package_add_file,svx_inc,inc/svx/polysc3d.hxx,svx/polysc3d.hxx))

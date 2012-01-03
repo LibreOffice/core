@@ -78,7 +78,7 @@
 #include <svx/svdetc.hxx>
 #include <svx/svdview.hxx>
 #include "unomlstr.hxx"
-#include <svtools/chartprettypainter.hxx>
+#include <svx/charthelper.hxx>
 #include <svx/sdr/contact/viewcontactofsdrole2obj.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/sdr/properties/oleproperties.hxx>
@@ -2185,7 +2185,7 @@ sal_Bool SdrOle2Obj::IsChart() const
 {
     if ( !m_bTypeAsked )
     {
-        m_bChart = ChartPrettyPainter::IsChart(xObjRef);
+        m_bChart = ChartHelper::IsChart(xObjRef);
         m_bTypeAsked = true;
     }
     return m_bChart;

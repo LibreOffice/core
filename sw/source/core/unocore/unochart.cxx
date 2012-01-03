@@ -34,7 +34,7 @@
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <svl/zforlist.hxx>     // SvNumberFormatter
-#include <svtools/chartprettypainter.hxx>
+#include <svx/charthelper.hxx>
 
 #include <tools/link.hxx>
 
@@ -99,7 +99,7 @@ void SwChartHelper::DoUpdateAllCharts( SwDoc* pDoc )
     {
         aIdx++;
         if (0 != ( pONd = aIdx.GetNode().GetOLENode() ) &&
-            ChartPrettyPainter::IsChart( pONd->GetOLEObj().GetObject() ) )
+            ChartHelper::IsChart( pONd->GetOLEObj().GetObject() ) )
         {
             // Load the object and set modified
 

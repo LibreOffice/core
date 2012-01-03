@@ -59,7 +59,6 @@
 #include <drawinglayer/primitive2d/graphicprimitive2d.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <drawinglayer/primitive2d/pagepreviewprimitive2d.hxx>
-#include <helperchartrenderer.hxx>
 #include <drawinglayer/primitive2d/epsprimitive2d.hxx>
 #include <basegfx/polygon/b2dlinegeometry.hxx>
 
@@ -74,11 +73,6 @@
 // for Control printing
 
 #include <com/sun/star/beans/XPropertySet.hpp>
-
-//////////////////////////////////////////////////////////////////////////////
-// for current chart PrettyPrinting support
-
-#include <drawinglayer/primitive2d/chartprimitive2d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 // for StructureTagPrimitive support in sd's unomodel.cxx
@@ -1977,21 +1971,6 @@ namespace drawinglayer
                 {
                     // use default point array pocessing
                     RenderPointArrayPrimitive2D(static_cast< const primitive2d::PointArrayPrimitive2D& >(rCandidate));
-                    break;
-                }
-                case PRIMITIVE2D_ID_CHARTPRIMITIVE2D :
-                {
-                    // ChartPrimitive2D
-                    const primitive2d::ChartPrimitive2D& rChartPrimitive = static_cast< const primitive2d::ChartPrimitive2D& >(rCandidate);
-
-                    if(!renderChartPrimitive2D(
-                        rChartPrimitive,
-                        *mpOutputDevice,
-                        getViewInformation2D()))
-                    {
-                        // fallback to decomposition (MetaFile)
-                        process(rChartPrimitive.get2DDecomposition(getViewInformation2D()));
-                    }
                     break;
                 }
                 case PRIMITIVE2D_ID_STRUCTURETAGPRIMITIVE2D :

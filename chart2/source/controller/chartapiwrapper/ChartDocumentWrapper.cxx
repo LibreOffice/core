@@ -51,7 +51,6 @@
 #include "AreaWrapper.hxx"
 #include "WrappedAddInProperty.hxx"
 #include "WrappedIgnoreProperty.hxx"
-#include "ChartRenderer.hxx"
 #include <com/sun/star/chart2/XTitled.hpp>
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
@@ -1360,12 +1359,6 @@ uno::Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::createInstance(
             }
         }
 
-        bServiceFound = true;
-    }
-    else if( aServiceSpecifier.equals( CHART_RENDERER_SERVICE_IMPLEMENTATION_NAME ) )
-    {
-        Reference< lang::XUnoTunnel > xChartRenderer( new ChartRenderer( m_spChart2ModelContact->getChartModel() ) );
-        xResult.set( xChartRenderer );
         bServiceFound = true;
     }
     else if( aServiceSpecifier.equals( C2U("com.sun.star.comp.chart2.DataSeriesWrapper") ) )

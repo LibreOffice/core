@@ -44,8 +44,6 @@
 #include <com/sun/star/awt/XWindow2.hpp>
 #include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
 #include <drawinglayer/primitive2d/pagepreviewprimitive2d.hxx>
-#include <drawinglayer/primitive2d/chartprimitive2d.hxx>
-#include <helperchartrenderer.hxx>
 #include <helperwrongspellrenderer.hxx>
 #include <drawinglayer/primitive2d/fillhatchprimitive2d.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
@@ -445,26 +443,6 @@ namespace drawinglayer
                     // restore DrawMode
                     mpOutputDevice->SetDrawMode(nOriginalDrawMode);
 
-                    break;
-                }
-                case PRIMITIVE2D_ID_CHARTPRIMITIVE2D :
-                {
-                    // chart primitive in pixel renderer; restore original DrawMode during call
-                    // since the evtl. used ChartPrettyPainter will use the MapMode
-                    const primitive2d::ChartPrimitive2D& rChartPrimitive = static_cast< const primitive2d::ChartPrimitive2D& >(rCandidate);
-                       mpOutputDevice->Push(PUSH_MAPMODE);
-                    mpOutputDevice->SetMapMode(maOriginalMapMode);
-
-                    if(!renderChartPrimitive2D(
-                        rChartPrimitive,
-                        *mpOutputDevice,
-                        getViewInformation2D()))
-                    {
-                        // fallback to decomposition (MetaFile)
-                        process(rChartPrimitive.get2DDecomposition(getViewInformation2D()));
-                    }
-
-                    mpOutputDevice->Pop();
                     break;
                 }
                 case PRIMITIVE2D_ID_FILLHATCHPRIMITIVE2D :

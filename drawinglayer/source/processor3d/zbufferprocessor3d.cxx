@@ -132,7 +132,7 @@ namespace
             aRetval = BitmapEx(aContent, aAlpha);
 
             // #i101811# set PrefMapMode and PrefSize at newly created Bitmap
-            aRetval.SetPrefMapMode(MAP_100TH_MM);
+            aRetval.SetPrefMapMode(MAP_PIXEL);
             aRetval.SetPrefSize(Size(nWidth, nHeight));
         }
 
