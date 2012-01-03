@@ -82,8 +82,6 @@ enum SvEmbeddedObjectTypes
     SV_EMBEDDED_FRAME
 };
 
-const sal_Char sObjectReplacements[] = "ObjectReplacements/";
-
 // ---------------------------------------------------------------------
 
 SwNoTxtNode *SwXMLTextParagraphExport::GetNoTxtNode(
