@@ -145,6 +145,13 @@ void SAL_CALL OSLInputStreamWrapper::closeInput() throw( stario::NotConnectedExc
 /*************************************************************************/
 // stario::XOutputStream
 //------------------------------------------------------------------------------
+
+OSLOutputStreamWrapper::OSLOutputStreamWrapper(osl::File & _rFile):
+    rFile(_rFile)
+{}
+
+OSLOutputStreamWrapper::~OSLOutputStreamWrapper() {}
+
 void SAL_CALL OSLOutputStreamWrapper::writeBytes(const staruno::Sequence< sal_Int8 >& aData) throw( stario::NotConnectedException, stario::BufferSizeExceededException, staruno::RuntimeException )
 {
     sal_uInt64 nWritten;

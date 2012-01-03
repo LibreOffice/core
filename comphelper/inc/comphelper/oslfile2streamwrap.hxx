@@ -65,17 +65,20 @@ public:
 // FmUnoOutStream,
 // Datensenke fuer Files
 //==================================================================
-class COMPHELPER_DLLPUBLIC OSLOutputStreamWrapper : public ::cppu::WeakImplHelper1<stario::XOutputStream>
+class OSLOutputStreamWrapper : public ::cppu::WeakImplHelper1<stario::XOutputStream>
 {
-    ::osl::File&        rFile;
-
 public:
-    OSLOutputStreamWrapper(::osl::File& _rFile) :rFile(_rFile) { }
+    COMPHELPER_DLLPUBLIC OSLOutputStreamWrapper(::osl::File& _rFile);
+
+private:
+    virtual ~OSLOutputStreamWrapper();
 
 // stario::XOutputStream
     virtual void SAL_CALL writeBytes(const staruno::Sequence< sal_Int8 >& aData) throw(stario::NotConnectedException, stario::BufferSizeExceededException, staruno::RuntimeException);
     virtual void SAL_CALL flush() throw(stario::NotConnectedException, stario::BufferSizeExceededException, staruno::RuntimeException);
     virtual void SAL_CALL closeOutput() throw(stario::NotConnectedException, stario::BufferSizeExceededException, staruno::RuntimeException);
+
+    ::osl::File&        rFile;
 };
 
 }   // namespace comphelper
