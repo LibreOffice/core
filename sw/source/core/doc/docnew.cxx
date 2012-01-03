@@ -1119,14 +1119,9 @@ SfxObjectShell* SwDoc::CreateCopy(bool bCallInitNew ) const
 {
     SwDoc* pRet = new SwDoc;
 
-    pRet->ReplaceDefaults(*this);
-
-    pRet->ReplaceCompatabilityOptions(*this);
-
-    pRet->ReplaceStyles(*this);
-
-    // we have to use pointer here, since the callee has to decide whether SfxObjectShellLock or SfxObjectShellRef should be used
-    // sometimes the object will be returned with refcount set to 0 ( if no DoInitNew is done )
+    // we have to use pointer here, since the callee has to decide whether
+    // SfxObjectShellLock or SfxObjectShellRef should be used sometimes the
+    // object will be returned with refcount set to 0 ( if no DoInitNew is done )
     SfxObjectShell* pRetShell = new SwDocShell( pRet, SFX_CREATE_MODE_STANDARD );
     if( bCallInitNew )
     {
@@ -1135,6 +1130,12 @@ SfxObjectShell* SwDoc::CreateCopy(bool bCallInitNew ) const
     }
 
     pRet->acquire();
+
+    pRet->ReplaceDefaults(*this);
+
+    pRet->ReplaceCompatabilityOptions(*this);
+
+    pRet->ReplaceStyles(*this);
 
     //copy content
     pRet->Paste( *this );
