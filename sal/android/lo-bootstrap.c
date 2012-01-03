@@ -903,12 +903,16 @@ new_dir(const char *folder_path,
     lo_apk_dir *result;
 
     result = malloc(sizeof(*result));
-    if (result == NULL)
+    if (result == NULL) {
+        LOGE("lo_apk_opendir: Out of memory");
         return NULL;
+    }
 
     result->folder_path = strdup(folder_path);
     result->current_entry = start_entry;
     result->remaining_entries = remaining_entries;
+
+    LOGI("new_dir(%s,%p,%d) = %p", folder_path, start_entry, remaining_entries, result);
 
     return result;
 }
@@ -918,38 +922,43 @@ __attribute__ ((visibility("default")))
 lo_apk_dir *
 lo_apk_opendir(const char *dirname)
 {
+    const char *dn = dirname;
     int count = cdir_entries;
     struct cdir_entry *entry = cdir_start;
-    size_t name_size = strlen(dirname);
+    size_t name_size;
 
-    if (*dirname == '/') {
-        dirname++;
-        if (!dirname[0])
+    if (*dn == '/') {
+        dn++;
+        if (!dn[0])
             return new_dir("", cdir_start, count);
     }
 
+    name_size = strlen(dn);
     while (count--) {
         if (letoh16(entry->filename_size) >= name_size &&
-            !memcmp(entry->data, dirname, name_size) &&
+            !memcmp(entry->data, dn, name_size) &&
             entry->data[name_size] == '/')
             break;
         entry = (struct cdir_entry *)((char *)entry + cdir_entry_size(entry));
     }
     if (count >= 0)
-        return new_dir(dirname, entry, count+1);
+        return new_dir(dn, entry, count+1);
+
+    LOGI("lo_apk_opendir(%s) = NULL", dirname);
 
     return NULL;
 }
 
 static int
-path_component_length(const char *path)
+path_component_length(const char *path,
+                      const char *path_end)
 {
-    const char *slash = strchr(path, '/');
+    const char *p = path;
+    while (p < path_end &&
+           *p != '/')
+        p++;
 
-    if (slash)
-        return slash - path;
-
-    return strlen(path);
+    return p - path;
 }
 
 __attribute__ ((visibility("default")))
@@ -959,32 +968,38 @@ lo_apk_readdir(lo_apk_dir *dirp)
     static struct dirent result;
     size_t folder_size = strlen(dirp->folder_path);
 
-    while (dirp->remaining_entries > 0) {
-        const char *folder_end = dirp->current_entry->data + folder_size;
+    while (dirp->remaining_entries-- > 0) {
+        struct cdir_entry *entry = dirp->current_entry;
+        const char *folder_end = entry->data + folder_size;
         int entry_len;
 
-        if (letoh16(dirp->current_entry->filename_size) > folder_size &&
-            !memcmp(dirp->current_entry->data, dirp->folder_path, folder_size) &&
+        dirp->current_entry = (struct cdir_entry *)((char *)entry + cdir_entry_size(entry));
+
+        if (letoh16(entry->filename_size) > folder_size &&
+            !memcmp(entry->data, dirp->folder_path, folder_size) &&
             *folder_end == '/' &&
-            (entry_len = path_component_length(folder_end + 1)) < 256) {
+            (entry_len = path_component_length(folder_end + 1, entry->data + entry->filename_size)) < 256) {
 
             /* Fake an unique inode number; might be used? */
-            result.d_ino = cdir_entries - dirp->remaining_entries + 2;
+            result.d_ino = cdir_entries - dirp->remaining_entries + 1;
 
             result.d_off = 0;
             result.d_reclen = 0;
 
-            if (folder_end[entry_len] == '/')
+            if (folder_end[1 + entry_len] == '/')
                 result.d_type = DT_DIR;
             else
                 result.d_type = DT_REG;
 
             memcpy(result.d_name, folder_end + 1, entry_len);
             result.d_name[entry_len] = '\0';
+
+            LOGI("lo_apk_readdir(%p) = %s:%s", dirp, result.d_type == DT_DIR ? "DIR" : "REG", result.d_name);
             return &result;
         }
-        dirp->remaining_entries--;
     }
+
+    LOGI("lo_apk_readdir(%p) = NULL", dirp);
 
     return NULL;
 }
@@ -996,7 +1011,71 @@ lo_apk_closedir(lo_apk_dir *dirp)
     free(dirp->folder_path);
     free(dirp);
 
+    LOGI("lo_apk_closedir(%p)", dirp);
+
     return 0;
+}
+
+static int
+new_stat(const char *path,
+         struct stat *statp,
+         struct cdir_entry *entry,
+         int mode,
+         int fake_ino)
+{
+    memset(statp, 0, sizeof(*statp));
+    statp->st_mode = mode | S_IRUSR | S_IRGRP | S_IROTH;
+    statp->st_nlink = 1;
+    if (entry != NULL)
+        statp->st_size = entry->uncompressed_size;
+    else
+        statp->st_size = 0;
+    statp->st_blksize = 512;
+    if (statp->st_size == 0)
+        statp->st_blocks = 0;
+    else
+        statp->st_blocks = (statp->st_size - 1) / statp->st_blksize + 1;
+    /* Leave timestamps at zero for now? */
+    statp->st_ino = fake_ino;
+
+    LOGI("lo_apk_lstat(%s) = { st_mode=%o, st_size=%lld, st_ino=%lld }", path, statp->st_mode, statp->st_size, statp->st_ino);
+
+    return 0;
+}
+
+__attribute__ ((visibility("default")))
+int
+lo_apk_lstat(const char *path,
+             struct stat *statp)
+{
+    const char *pn = path;
+    int count = cdir_entries;
+    struct cdir_entry *entry = cdir_start;
+    size_t name_size;
+
+    if (*pn == '/') {
+        pn++;
+        if (!pn[0])
+            return new_stat(path, statp, NULL, S_IFDIR, 1);
+    }
+
+    name_size = strlen(pn);
+    while (count--) {
+        if (letoh16(entry->filename_size) >= name_size &&
+            !memcmp(entry->data, pn, name_size) &&
+            (letoh16(entry->filename_size) == name_size || entry->data[name_size] == '/'))
+            break;
+        entry = (struct cdir_entry *)((char *)entry + cdir_entry_size(entry));
+    }
+    if (count >= 0) {
+        if (letoh16(entry->filename_size) == name_size)
+            return new_stat(path, statp, entry, S_IFREG, cdir_entries - count + 1);
+        else
+            return new_stat(path, statp, entry, S_IFDIR, cdir_entries - count + 1);
+    }
+
+    errno = ENOENT;
+    return -1;
 }
 
 __attribute__ ((visibility("default")))

@@ -58,6 +58,8 @@ struct dirent *lo_apk_readdir(lo_apk_dir *dirp);
 
 int lo_apk_closedir(lo_apk_dir *dirp);
 
+int lo_apk_lstat(const char *path, struct stat *statp);
+
 int lo_dlcall_argc_argv(void *function,
                         int argc,
                         const char **argv);
