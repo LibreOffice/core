@@ -914,7 +914,7 @@ SAL_CALL osl_openFile( rtl_uString* ustrFileURL, oslFileHandle* pHandle, sal_uIn
      * we should mmap it from the .apk file
      */
     if (!(uFlags & osl_File_OpenFlag_Write) &&
-        strncmp (buffer, "/assets/", strlen ("/assets/")) == 0)
+        strncmp (buffer, "/assets/", sizeof ("/assets/") - 1) == 0)
     {
         void *address;
         size_t size;
