@@ -2517,6 +2517,9 @@ if test "$_os" = "WINNT"; then
             else
                 AC_MSG_ERROR([Compiler too old. Use Microsoft Visual Studio 2008 or 2010.])
             fi
+            PathFormat "$COMPATH"
+            COMPATH="$formatted_path"
+
             AC_MSG_RESULT([found compiler version $CCNUMVER (MSVS $MSVSVER).])
         else
             AC_MSG_ERROR([Microsoft C/C++ Compiler not found. Use --with-cl-home or set path to cl.exe.])
@@ -2585,6 +2588,7 @@ if test "$_os" = "WINNT"; then
         AC_MSG_CHECKING([the compiler is MinGW])
         MACHINE_PREFIX=`$CC -dumpmachine`
         if echo $MACHINE_PREFIX | grep -q mingw32; then
+            COMPATH=`echo "$COMPATH" | sed -e 's,/bin$,,'`
             AC_MSG_RESULT([yes])
         else
             AC_MSG_ERROR([Compiler is not MinGW.])
@@ -2735,17 +2739,13 @@ linux-gnu*)
     arm*)
         CPU=R
         CPUNAME=ARM
+        EPM_FLAGS="-a arm"
         OUTPATH=unxlngr
-        ;;
-    armel-androideabi)
-        CPU=R
-        CPUNAME=ARM
-        OUTPATH=unxandr
-        GUIBASE=android
         ;;
     hppa)
         CPU=H
         CPUNAME=HPPA
+        EPM_FLAGS="-a hppa"
         OUTPATH=unxlnghppa
         ;;
     i*86)
@@ -2761,6 +2761,25 @@ linux-gnu*)
     mips)
         CPU=M
         CPUNAME=GODSON
+        EPM_FLAGS="-a mips"
+        OUTPATH=unxlngmips
+        ;;
+    mips64)
+        CPU=M
+        CPUNAME=GODSON
+        EPM_FLAGS="-a mips64"
+        OUTPATH=unxlngmips
+        ;;
+    mips64el)
+        CPU=M
+        CPUNAME=GODSON
+        EPM_FLAGS="-a mips64el"
+        OUTPATH=unxlngmips
+        ;;
+    mipsel)
+        CPU=M
+        CPUNAME=GODSON
+        EPM_FLAGS="-a mipsel"
         OUTPATH=unxlngmips
         ;;
     m68k)
@@ -2941,6 +2960,7 @@ INPATH=${OUTPATH}${PROEXT}
 AC_SUBST(COM)
 AC_SUBST(CPU)
 AC_SUBST(CPUNAME)
+AC_SUBST(EMP_FLAGS)
 AC_SUBST(GUI)
 AC_SUBST(GUIBASE)
 AC_SUBST(INPATH)
@@ -10072,6 +10092,7 @@ WITH_LANG_LIST=`echo $WITH_LANG | sed "s/ALL/$ALL_LANGS/"`
 # this variable is used only by bin/distro-install-* helper scripts
 # they need a real list of languages
 test -z "$WITH_LANG_LIST" && WITH_LANG_LIST="en-US"
+test -z "$WITH_LANG" || BUILD_TYPE="$BUILD_TYPE TRANSLATIONS"
 AC_SUBST(ALL_LANGS)
 AC_SUBST(WITH_LANG)
 AC_SUBST(WITH_LANG_LIST)
@@ -10494,6 +10515,29 @@ if test -z "$COMPATH"; then
     AC_MSG_ERROR([No compiler found.])
 fi
 AC_SUBST(COMPATH)
+
+if test "$build_os" = "cygwin" ; then
+    if test "$DISABLE_ACTIVEX" = "YES" ; then
+        ATL_LIB="$WINDOWS_SDK_HOME/lib"; # Doesn't exist for VSE
+        ATL_INCLUDE="$WINDOWS_SDK_HOME/include".$ds."atl";
+        MFC_LIB="$WINDOWS_SDK_HOME/lib"; # Doesn't exist for VSE
+        MFC_INCLUDE="$WINDOWS_SDK_HOME/include/mfc";
+    else
+        ATL_LIB="$COMPATH/atlmfc/lib";
+        ATL_INCLUDE="$COMPATH/atlmfc/include";
+        MFC_LIB="$COMPATH/atlmfc/lib";
+        MFC_INCLUDE="$WINDOWS_SDK_HOME/include/mfc";
+    fi
+    if test "$CL_X64" = "YES" ; then
+        ATL_LIB="$ATL_LIB/amd64"
+        MFC_LIB="$MFC_LIB/amd64"
+    fi
+fi
+
+AC_SUBST(ATL_INCLUDE)
+AC_SUBST(ATL_LIB)
+AC_SUBST(MFC_INCLUDE)
+AC_SUBST(MFC_LIB)
 
 AC_SUBST(BUILD_TYPE)
 

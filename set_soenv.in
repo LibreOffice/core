@@ -35,7 +35,7 @@ use File::Basename;
 #
 my ( $outfile, $newline, $comment,
      $ds, $ps,
-     $wps, $cur_dir, $par_dir, $I, $L, $tmp, $MINGW,
+     $wps, $cur_dir, $par_dir, $I, $L, $tmp,
      $platform,
      $empty,
      $warnfile, $Warning, $result, $unsetvars, $exportvars);
@@ -49,8 +49,8 @@ my ( $SOLAR_JAVA,
      $CC, $CXX);
 #
 # Platform dependent constant values.
-my ( $ARCH,
-      $OSVERSION, $OUTPATH, $INPATH,
+my (
+      $OUTPATH, $INPATH,
       $DYNAMIC_CRT, $use_shl_versions );
 #
 #-------------------------------------------
@@ -66,18 +66,18 @@ my ( $USR, $ETC, $BIN, $LIB, $LIB64, $INC, $INCLUDE, $DEV, $OPT, $LOCAL, $SOLENV
 # Environment variables.
 my ( $oldPATH, $SRC_ROOT, $JAVA_HOME, $JDK, $JAVAFLAGS, $OOO_SHELL,
      $L10N_MODULE, $WITH_POOR_HELP_LOCALIZATIONS,
-     $UPD, $WORK_STAMP, $gb_REPOS, $BUILD_TYPE,
+     $UPD, $WORK_STAMP,
      $SOLARSRC, $SOLARVER, $SOLARVERSION, $WORKDIR, $OUTDIR, $SOLARENV, $SOLARDEFIMG,
      $DMAKEROOT, $CLASSPATH, $XCLASSPATH, $COMPATH,
      $MSPDB_PATH, $MIDL_PATH, $CSC_PATH, $SHOWINCLUDES_PREFIX,
      $PATH, $SOLAREXTRAINC, $SOLAREXTRALIB, $SOLARLIB,
-     $SOLARINC, $FRAMEWORKSHOME, $COMEX, $PERL,
+     $SOLARINC, $FRAMEWORKSHOME, $PERL,
      $COMP_ENV, $ILIB, $JAVAHOME, $WINDOWS_SDK_HOME, $DIRECTXSDK_LIB, $DOTNET_FRAMEWORK_HOME,
-     $USE_DIRECTX5, $ATL_LIB, $ATL_INCLUDE, $MFC_LIB, $MFC_INCLUDE, $TMPDIR,
+     $USE_DIRECTX5, $TMPDIR,
      $COMMON_BUILD_TOOLS, $WIN_GREP, $WIN_FIND, $WIN_LS,
      $WIN_GNUCOPY, $WIN_TOUCH,
      $PROEXT, $TARFILE_LOCATION, $GNUMAKE,
-     $PYTHON, $SYSTEM_PYTHON, $SYSTEM_MOZILLA, $EPM_FLAGS,
+     $PYTHON, $SYSTEM_PYTHON, $SYSTEM_MOZILLA,
      $MACOSX_SDK_PATH,
      $SYSBASE);
 #
@@ -90,7 +90,7 @@ my ( $dmake, $build, $mkout, $deliver, $zipdep );
 
 $INPATH="@INPATH@";
 $OUTPATH="@OUTPATH@";
-
+$COMPATH="@COMPATH@";
 #-------------------------------------------------------------
 # IIIa. Initialising constants.
 #-------------------------------------------------------------
@@ -118,11 +118,9 @@ if ($SYSTEM_PYTHON eq "NO") {
 $SYSTEM_MOZILLA = '@SYSTEM_MOZILLA@';
 $JDK 		= '@JDK@';
 $JAVAFLAGS 		= '@JAVAFLAGS@';
-$MINGW          = '@WITH_MINGW@';    # use MinGW for Windows build
 $CC             = '@CC@';            # C compiler
 $CXX            = '@CXX@';           # C++ compiler
 $PROEXT         = "@PROEXT@";
-$EPM_FLAGS	= "";
 $CL_X64 = '@CL_X64@';
 $GNUMAKE        = "@GNUMAKE@";
 
@@ -164,93 +162,7 @@ $comment              = "#";           # UNIX script comment character
 $TARFILE_LOCATION = "@TARFILE_LOCATION@"; # where to find tarballs with external sources
 
 # Setting platform dependent constant values.
-if ( $platform =~ m/solaris/ )
-{
-    $COMPATH        = '@COMPATH@';
-}
-elsif ( $platform =~ m/netbsd/ )
-{
-    $COMPATH        = '@COMPATH@';
-}
-elsif ( $platform =~ m/kfreebsd/ )
-{
-# General GNU/kFreeBSD settings:
-    $COMPATH        = '@COMPATH@';
-
-}
-elsif ( $platform =~ m/freebsd/ )
-{
-    $COMPATH        = '@COMPATH@';
-    $OSVERSION      = '@OSVERSION@';
-}
-elsif ( $platform =~ m/openbsd/ )
-{
-    $COMPATH        = '@COMPATH@';
-    $OSVERSION      = '@OSVERSION@';
-}
-elsif ( $platform =~ m/linux/ )
-{
-# General Linux settings:
-    $COMPATH        = '@COMPATH@';
-
-#Set platform specific values:
-    if ($platform =~ m/^i[3456]86/)
-    {
-    }
-    elsif ($platform =~ m/^x86_64/)
-    {
-    }
-    elsif ($platform =~ m/^ia64/)
-    {
-    }
-    elsif ($platform =~ m/^sparc/)
-    {
-    }
-    elsif ($platform =~ m/^powerpc/)
-    {
-    }
-    elsif ($platform =~ m/^s390/)
-    {
-    }
-    elsif ($platform =~ m/^m68k/)
-    {
-    }
-    elsif ($platform =~ m/^hppa/)
-    {
-        $EPM_FLAGS      = "-a hppa";
-    }
-    elsif ($platform =~ m/^alpha/)
-    {
-    }
-    elsif ($platform =~ m/^arm.*?l-/)
-    {
-        $EPM_FLAGS      = "-a arm";
-    }
-    elsif ($platform =~ m/^arm.*-androideabi/)
-    {
-        $EPM_FLAGS      = "-a arm";
-    }
-    elsif ($platform =~ m/^mips/)
-    {
-        print "Setting Linux MIPS specific values... ";
-
-        if ('@SIZEOF_LONG@' eq '8')
-        {
-            if ('@WORDS_BIGENDIAN@' ne 'yes')
-            {
-                $EPM_FLAGS = "-a mips64el";
-            }
-        }
-        else
-        {
-            if ('@WORDS_BIGENDIAN@' ne 'yes')
-            {
-                $EPM_FLAGS = "-a mipsel";
-            }
-        }
-    }
-}
-elsif ( $platform =~ m/cygwin|mingw32/ )
+if ( $platform =~ m/cygwin|mingw32/ )
 {
     $MSPDB_PATH     = PathFormat('@MSPDB_PATH@');
     $MIDL_PATH      = PathFormat('@MIDL_PATH@');
@@ -263,44 +175,9 @@ elsif ( $platform =~ m/cygwin|mingw32/ )
     $DYNAMIC_CRT    = "TRUE";
     $use_shl_versions = "TRUE";
     $wps = ';' if '@build_os@' eq 'cygwin'; # Windows style path seperator
-    if ( $MINGW eq "yes" )
-    {
-        print "Setting Windows (MinGW cross-compilation) specific values... ";
-
-        die 'For building natively on Windows we support only MSVC' if ('@build_os@' eq 'cygwin');
-
-        $COMPATH        = PathFormat('@COMPATH@/bin');
-        $COMPATH        =~ s/\/bin$//i;
-    }
-    else # The MSVC section starts here
-    {
-        print "Setting Windows (MSVC) specific values... ";
-        $COMPATH        = PathFormat('@COMPATH@');
-        $COMEX          = '@COMEX@';
-        if ( "@DISABLE_ACTIVEX@" )
-        {
-            $ATL_LIB     = $WINDOWS_SDK_HOME.$ds."lib"; # Doesn't exist for VSE
-            $ATL_INCLUDE = $WINDOWS_SDK_HOME.$ds."include".$ds."atl";
-            $MFC_LIB     = $WINDOWS_SDK_HOME.$ds."lib"; # Doesn't exist for VSE
-            $MFC_INCLUDE = $WINDOWS_SDK_HOME.$ds."include".$ds."mfc";
-        }
-        else
-        {
-            $ATL_LIB     = $COMPATH.$ds."atlmfc".$ds."lib";
-            $ATL_INCLUDE = $COMPATH.$ds."atlmfc".$ds."include";
-            $MFC_LIB     = $COMPATH.$ds."atlmfc".$ds."lib";
-            $MFC_INCLUDE = $WINDOWS_SDK_HOME.$ds."include".$ds."mfc";
-        }
-        if ($CL_X64)
-        {
-            $ATL_LIB     .= $ds."amd64";
-            $MFC_LIB     .= $ds."amd64";
-        }
-    }
 }
 elsif ( $platform =~ m/darwin/ )
 {
-    $COMPATH        = '@COMPATH@';
     if ($platform =~ m/^arm/)
     {
         print "Setting values for iOS... ";
@@ -318,20 +195,7 @@ elsif ( $platform =~ m/darwin/ )
         $FRAMEWORKSHOME = $MACOSX_SDK_PATH."/System/Library/Frameworks";
     }
 }
-elsif ( $platform =~ m/dragonfly/ )
-{
-    # General DragonFly settings:
-    $COMPATH        = '@COMPATH@';
-}
-elsif ( $platform =~ m/aix/ )
-{
-    $COMPATH        = '@COMPATH@';
-}
-else
-{
-	print "\nset_soenv:  Cannot recognize the platform you are building for: $platform.\n";
-	exit 1;
-}
+
 print "done\n";
 
 #
@@ -824,18 +688,6 @@ else
 {  AddWarning( "set_soenv", "$platform not configured for system dependant include dir" );
 }
 
-$gb_REPOS = $SRC_ROOT;
-$BUILD_TYPE = "@BUILD_TYPE@";
-
-if ('@WITH_LANG@' ne "")
-{
-    $BUILD_TYPE = "@BUILD_TYPE@ TRANSLATIONS";
-}
-else
-{
-    $BUILD_TYPE = "@BUILD_TYPE@";
-}
-
 #
 # F. Setting the different aliases.
 #
@@ -896,9 +748,6 @@ ToFile( "TARFILE_LOCATION",  $TARFILE_LOCATION,  "e" );
 # (c = comment, e = environment variable, a = alias )
 ToFile( "Platform dependent constant values.", $empty, "c" );
 ToFile( "SOLAR_JAVA",        $SOLAR_JAVA,        "e" );
-ToFile( "COMPATH",           $COMPATH,           "e" );
-ToFile( "OSVERSION",         $OSVERSION,         "e" );
-ToFile( "COMEX",             $COMEX,             "e" );
 ToFile( "DYNAMIC_CRT",       $DYNAMIC_CRT,       "e" );
 ToFile( "use_shl_versions",  $use_shl_versions,  "e" );
 
@@ -924,10 +773,6 @@ if ( $platform =~ m/cygwin/ )
    ToFile( "WINDOWS_SDK_HOME",  $WINDOWS_SDK_HOME,  "e" );
    ToFile( "DIRECTXSDK_LIB",    $DIRECTXSDK_LIB,    "e" );
    ToFile( "USE_DIRECTX5",      $USE_DIRECTX5,      "e" );
-   ToFile( "ATL_LIB",           $ATL_LIB,           "e" );
-   ToFile( "ATL_INCLUDE",       $ATL_INCLUDE,       "e" );
-   ToFile( "MFC_LIB",           $MFC_LIB,         "e" );
-   ToFile( "MFC_INCLUDE",       $MFC_INCLUDE,       "e" );
    ToFile( "DISABLE_ACTIVEX",   "@DISABLE_ACTIVEX@","e" );
    ToFile( "DISABLE_ATL",   "@DISABLE_ATL@","e" );
    ToFile( "INCLUDE",           "",                 "e" );
@@ -1048,11 +893,9 @@ else
    ToFile( "WORKDIR_FOR_BUILD", $WORKDIR,        "e" );
 }
 ToFile( "CXX",               $CXX,               "e" );
-ToFile( "BUILD_TYPE",        "$BUILD_TYPE",      "e" );
 if ( '@ENABLE_RPATH@' eq "no" ) {
   ToFile( "LINKFLAGSRUNPATH",'',                   "e" );
 }
-ToFile( "EPM_FLAGS",         $EPM_FLAGS,           "e" );
 ToFile( "GXX_INCLUDE_PATH",  PathFormat("@GXX_INCLUDE_PATH@"), "e" );
 ToFile( "COMMON_BUILD_TOOLS",$COMMON_BUILD_TOOLS,  "e" );
 
