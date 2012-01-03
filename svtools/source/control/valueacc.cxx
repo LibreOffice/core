@@ -444,7 +444,7 @@ uno::Reference< accessibility::XAccessible > SAL_CALL ValueSetAcc::getAccessible
         {
             ValueSetItem* pItem = (*mpParent->mpImpl->mpItemList)[ nItemPos ];
 
-            if( ( pItem->meType != VALUESETITEM_SPACE ) && !pItem->maRect.IsEmpty() )
+            if( !pItem->maRect.IsEmpty() )
                xRet = pItem->GetAccessible( mbIsTransientChildrenDisabled );
         }
     }

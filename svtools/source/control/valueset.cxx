@@ -213,9 +213,6 @@ void ValueSet::ImplInitScrollBar()
 
 void ValueSet::ImplFormatItem( ValueSetItem* pItem )
 {
-    if ( pItem->meType == VALUESETITEM_SPACE )
-        return;
-
     Rectangle aRect = pItem->maRect;
     WinBits nStyle = GetStyle();
     if ( nStyle & WB_ITEMBORDER )
@@ -1078,14 +1075,7 @@ ValueSetItem* ValueSet::ImplGetItem( size_t nPos )
 
 ValueSetItem* ValueSet::ImplGetFirstItem()
 {
-    for ( size_t i = 0, nItemCount = mpImpl->mpItemList->size(); i < nItemCount; ++i ) {
-        ValueSetItem* pItem = (*mpImpl->mpItemList)[ i ];
-        if ( pItem->meType != VALUESETITEM_SPACE ) {
-            return pItem;
-        }
-    }
-
-    return NULL;
+    return mpImpl->mpItemList->size() ? (*mpImpl->mpItemList)[ 0 ] : NULL;
 }
 
 // -----------------------------------------------------------------------
@@ -1098,7 +1088,7 @@ sal_uInt16 ValueSet::ImplGetVisibleItemCount() const
     {
         ValueSetItem* pItem = (*mpImpl->mpItemList)[ n ];
 
-        if( pItem->meType != VALUESETITEM_SPACE && !pItem->maRect.IsEmpty() )
+        if( !pItem->maRect.IsEmpty() )
             nRet++;
     }
 
@@ -1116,7 +1106,7 @@ ValueSetItem* ValueSet::ImplGetVisibleItem( sal_uInt16 nVisiblePos )
     {
         ValueSetItem* pItem = (*mpImpl->mpItemList)[ n ];
 
-        if( ( pItem->meType != VALUESETITEM_SPACE ) && !pItem->maRect.IsEmpty() && ( nVisiblePos == nFoundPos++ ) )
+        if( !pItem->maRect.IsEmpty() && ( nVisiblePos == nFoundPos++ ) )
             pRet = pItem;
     }
 
@@ -1181,7 +1171,7 @@ void ValueSet::ImplTracking( const Point& rPos, sal_Bool bRepeat )
     }
 
     ValueSetItem* pItem = ImplGetItem( ImplGetItem( rPos ) );
-    if ( pItem && (pItem->meType != VALUESETITEM_SPACE) )
+    if ( pItem )
     {
         if( GetStyle() & WB_MENUSTYLEVALUESET )
             mbHighlight = sal_True;
@@ -1209,7 +1199,7 @@ void ValueSet::ImplEndTracking( const Point& rPos, sal_Bool bCancel )
     else
         pItem = ImplGetItem( ImplGetItem( rPos ) );
 
-    if ( pItem && (pItem->meType != VALUESETITEM_SPACE) )
+    if ( pItem )
     {
         SelectItem( pItem->mnId );
         if ( !mbSelection && !(GetStyle() & WB_NOPOINTERFOCUS) )
@@ -1236,7 +1226,7 @@ void ValueSet::MouseButtonDown( const MouseEvent& rMEvt )
         if ( mbSelection )
         {
             mbHighlight = sal_True;
-            if ( pItem && (pItem->meType != VALUESETITEM_SPACE) )
+            if ( pItem )
             {
                 mnOldItemId  = mnSelItemId;
                 mnHighItemId = mnSelItemId;
@@ -1247,7 +1237,7 @@ void ValueSet::MouseButtonDown( const MouseEvent& rMEvt )
         }
         else
         {
-            if ( pItem && (pItem->meType != VALUESETITEM_SPACE) && !rMEvt.IsMod2() )
+            if ( pItem && !rMEvt.IsMod2() )
             {
                 if ( rMEvt.GetClicks() == 1 )
                 {
@@ -1341,67 +1331,44 @@ void ValueSet::KeyInput( const KeyEvent& rKEvt )
     switch ( rKEvt.GetKeyCode().GetCode() )
     {
         case KEY_HOME:
-            if ( mpNoneItem )
-                nItemPos = VALUESET_ITEM_NONEITEM;
-            else
-            {
-                nItemPos = 0;
-                while ( ImplGetItem( nItemPos )->meType == VALUESETITEM_SPACE )
-                    nItemPos++;
-            }
+            nItemPos = mpNoneItem ? VALUESET_ITEM_NONEITEM : 0;
             break;
 
         case KEY_END:
             nItemPos = nLastItem;
-            while ( ImplGetItem( nItemPos )->meType == VALUESETITEM_SPACE )
-            {
-                if ( nItemPos == 0 )
-                    nItemPos = VALUESET_ITEM_NONEITEM;
-                else
-                    nItemPos--;
-            }
             break;
 
         case KEY_LEFT:
         case KEY_RIGHT:
             if ( rKEvt.GetKeyCode().GetCode()==KEY_LEFT )
             {
-                do
+                if ( nCalcPos == VALUESET_ITEM_NONEITEM )
+                    nItemPos = nLastItem;
+                else if ( !nCalcPos )
                 {
-                    if ( nCalcPos == VALUESET_ITEM_NONEITEM )
-                        nItemPos = nLastItem;
-                    else if ( !nCalcPos )
-                    {
-                        if ( mpNoneItem )
-                            nItemPos = VALUESET_ITEM_NONEITEM;
-                        else
-                            nItemPos = nLastItem;
-                    }
+                    if ( mpNoneItem )
+                        nItemPos = VALUESET_ITEM_NONEITEM;
                     else
-                        nItemPos = nCalcPos-1;
-                    nCalcPos = nItemPos;
+                        nItemPos = nLastItem;
                 }
-                while ( ImplGetItem( nItemPos )->meType == VALUESETITEM_SPACE );
+                else
+                    nItemPos = nCalcPos-1;
             }
             else
             {
-                do
+                if ( nCalcPos == VALUESET_ITEM_NONEITEM )
+                    nItemPos = 0;
+                else if ( nCalcPos == nLastItem )
                 {
-                    if ( nCalcPos == VALUESET_ITEM_NONEITEM )
-                        nItemPos = 0;
-                    else if ( nCalcPos == nLastItem )
-                    {
-                        if ( mpNoneItem )
-                            nItemPos = VALUESET_ITEM_NONEITEM;
-                        else
-                            nItemPos = 0;
-                    }
+                    if ( mpNoneItem )
+                        nItemPos = VALUESET_ITEM_NONEITEM;
                     else
-                        nItemPos = nCalcPos+1;
-                    nCalcPos = nItemPos;
+                        nItemPos = 0;
                 }
-                while ( ImplGetItem( nItemPos )->meType == VALUESETITEM_SPACE );
+                else
+                    nItemPos = nCalcPos+1;
             }
+            nCalcPos = nItemPos;
             break;
 
         case KEY_UP:
@@ -1411,41 +1378,37 @@ void ValueSet::KeyInput( const KeyEvent& rKEvt )
                 ( !rKEvt.GetKeyCode().IsShift() && !rKEvt.GetKeyCode().IsMod1() && !rKEvt.GetKeyCode().IsMod2() ) )
             {
                 const size_t nLineCount = ( ( KEY_UP == rKEvt.GetKeyCode().GetCode() ) ? 1 : mnVisLines );
-                do
+                if ( nCalcPos == VALUESET_ITEM_NONEITEM )
                 {
-                    if ( nCalcPos == VALUESET_ITEM_NONEITEM )
+                    if ( nLastItem+1 <= mnCols )
+                        nItemPos = mnCurCol;
+                    else
+                        nItemPos = lcl_gotoLastLine(nLastItem, mnCols, mnCurCol);
+                }
+                else if ( nCalcPos >= mnCols ) // we can go up
+                {
+                    if ( nCalcPos >= ( nLineCount * mnCols ) )
+                        nItemPos = nCalcPos - ( nLineCount * mnCols );
+                    else
+                        // Go to the first line. This can only happen for KEY_PAGEUP
+                        nItemPos = nCalcPos % mnCols;
+                }
+                else // wrap around
+                {
+                    if ( mpNoneItem )
+                    {
+                        mnCurCol  = nCalcPos%mnCols;
+                        nItemPos = VALUESET_ITEM_NONEITEM;
+                    }
+                    else
                     {
                         if ( nLastItem+1 <= mnCols )
-                            nItemPos = mnCurCol;
+                            nItemPos = nCalcPos;
                         else
-                            nItemPos = lcl_gotoLastLine(nLastItem, mnCols, mnCurCol);
+                            nItemPos = lcl_gotoLastLine(nLastItem, mnCols, nCalcPos);
                     }
-                    else if ( nCalcPos >= mnCols ) // we can go up
-                    {
-                        if ( nCalcPos >= ( nLineCount * mnCols ) )
-                            nItemPos = nCalcPos - ( nLineCount * mnCols );
-                        else
-                            // Go to the first line. This can only happen for KEY_PAGEUP
-                            nItemPos = nCalcPos % mnCols;
-                    }
-                    else // wrap around
-                    {
-                        if ( mpNoneItem )
-                        {
-                            mnCurCol  = nCalcPos%mnCols;
-                            nItemPos = VALUESET_ITEM_NONEITEM;
-                        }
-                        else
-                        {
-                            if ( nLastItem+1 <= mnCols )
-                                nItemPos = nCalcPos;
-                            else
-                                nItemPos = lcl_gotoLastLine(nLastItem, mnCols, nCalcPos);
-                        }
-                    }
-                    nCalcPos = nItemPos;
                 }
-                while ( ImplGetItem( nItemPos )->meType == VALUESETITEM_SPACE );
+                nCalcPos = nItemPos;
             }
             else
                 Control::KeyInput( rKEvt );
@@ -1459,33 +1422,29 @@ void ValueSet::KeyInput( const KeyEvent& rKEvt )
                 ( !rKEvt.GetKeyCode().IsShift() && !rKEvt.GetKeyCode().IsMod1() && !rKEvt.GetKeyCode().IsMod2() ) )
             {
                 const long nLineCount = ( ( KEY_DOWN == rKEvt.GetKeyCode().GetCode() ) ? 1 : mnVisLines );
-                do
+                if ( nCalcPos == VALUESET_ITEM_NONEITEM )
+                    nItemPos = mnCurCol;
+                else if ( nCalcPos + mnCols <= nLastItem ) // we can go down
                 {
-                    if ( nCalcPos == VALUESET_ITEM_NONEITEM )
-                        nItemPos = mnCurCol;
-                    else if ( nCalcPos + mnCols <= nLastItem ) // we can go down
-                    {
-                        if ( nCalcPos + ( nLineCount * mnCols ) <= nLastItem )
-                            nItemPos = nCalcPos + ( nLineCount * mnCols );
-                        else
-                            // Go to the last line. This can only happen for KEY_PAGEDOWN
-                            nItemPos = lcl_gotoLastLine(nLastItem, mnCols, nCalcPos);
-                    }
-                    else // wrap around
-                    {
-                        {
-                            if ( mpNoneItem )
-                            {
-                                mnCurCol  = nCalcPos%mnCols;
-                                nItemPos = VALUESET_ITEM_NONEITEM;
-                            }
-                            else
-                                nItemPos = nCalcPos%mnCols;
-                        }
-                    }
-                    nCalcPos = nItemPos;
+                    if ( nCalcPos + ( nLineCount * mnCols ) <= nLastItem )
+                        nItemPos = nCalcPos + ( nLineCount * mnCols );
+                    else
+                        // Go to the last line. This can only happen for KEY_PAGEDOWN
+                        nItemPos = lcl_gotoLastLine(nLastItem, mnCols, nCalcPos);
                 }
-                while ( ImplGetItem( nItemPos )->meType == VALUESETITEM_SPACE );
+                else // wrap around
+                {
+                    {
+                        if ( mpNoneItem )
+                        {
+                            mnCurCol  = nCalcPos%mnCols;
+                            nItemPos = VALUESET_ITEM_NONEITEM;
+                        }
+                        else
+                            nItemPos = nCalcPos%mnCols;
+                    }
+                }
+                nCalcPos = nItemPos;
             }
             else
                 Control::KeyInput( rKEvt );
@@ -2007,8 +1966,6 @@ void ValueSet::SelectItem( sal_uInt16 nItemId )
     {
         nItemPos = GetItemPos( nItemId );
         if ( nItemPos == VALUESET_ITEM_NOTFOUND )
-            return;
-        if ( (*mpImpl->mpItemList)[ nItemPos ]->meType == VALUESETITEM_SPACE )
             return;
     }
 
