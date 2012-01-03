@@ -1814,7 +1814,7 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdComTlb(FuncDesc& aFuncDesc,
     if (dispparams.cNamedArgs > 0 &&
         ! (dispparams.cNamedArgs == 1 &&
            (aFuncDesc->invkind == INVOKE_PROPERTYPUT ||
-            aFuncDesc->invkind == INVOKE_PROPERTYPUT)))
+            aFuncDesc->invkind == INVOKE_PROPERTYPUTREF)))
     {
         //set up an array containing the member and parameter names
         //which is then used in ITypeInfo::GetIDsOfNames
