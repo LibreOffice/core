@@ -1073,7 +1073,7 @@ sal_Bool SvStream::ReadCsvLine( String& rStr, sal_Bool bEmbeddedLineBreak,
             {
                 if (nQuotes)
                 {
-                    if (bTabSep && *p == '\t')
+                    if (bTabSep && *p == '\t' && (nQuotes % 2) != 0)
                     {
                         // When tab-delimited, tab char ends quoted sequence
                         // even if we haven't reached the end quote.  Doing
