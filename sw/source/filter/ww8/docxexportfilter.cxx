@@ -32,6 +32,7 @@
 #include "docxexport.hxx"
 
 #include <docsh.hxx>
+#include <editsh.hxx>
 #include <pam.hxx>
 #include <unotxdoc.hxx>
 
@@ -61,6 +62,12 @@ bool DocxExportFilter::exportDocument()
     SwDoc *pDoc = pTxtDoc->GetDocShell()->GetDoc();
     if ( !pDoc )
         return false;
+
+    // update layout (if present), for SwWriteTable
+    ViewShell* pViewShell = NULL;
+    pDoc->GetEditShell(&pViewShell);
+    if (pViewShell != NULL)
+        pViewShell->CalcLayout();
 
     // get SwPaM*
     // FIXME so far we get SwPaM for the entire document; probably we should
