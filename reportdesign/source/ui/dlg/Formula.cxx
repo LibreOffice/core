@@ -71,7 +71,7 @@ FormulaDialog::FormulaDialog(Window* pParent
     ,m_nStart(0)
     ,m_nEnd(1)
 {
-    if ( _sFormula.getLength() > 0 )
+    if ( !_sFormula.isEmpty() )
     {
         if ( _sFormula.getStr()[0] != '=' )
             m_sFormula += String(_sFormula);
@@ -235,7 +235,7 @@ IMPL_LINK( FormulaDialog, OnClickHdl, OAddFieldWindow* ,_pAddFieldDlg)
         ::svx::ODataAccessDescriptor aDescriptor(aValue);
         ::rtl::OUString sName;
         aDescriptor[ ::svx::daColumnName ] >>= sName;
-        if ( sName.getLength() )
+        if ( !sName.isEmpty() )
         {
             sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("[")) + sName + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("]"));
             m_pEdit->SetText(sName);

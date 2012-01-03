@@ -215,7 +215,7 @@ bool GeometryHandler::impl_isDataField(const ::rtl::OUString& _sName) const
     ::rtl::OUString sName;
     _rControlValue >>= sName;
 
-    if ( !sName.getLength() )
+    if ( sName.isEmpty() )
         return sName;
 
     ReportFormula aParser( sName );
@@ -390,7 +390,7 @@ uno::Any SAL_CALL GeometryHandler::getPropertyValue(const ::rtl::OUString & Prop
                     case FUNCTION:
                         if ( isDefaultFunction(sDataField,sDataField) )
                             aPropertyValue <<= sDataField;
-                        else if ( !sDataField.getLength() )
+                        else if ( sDataField.isEmpty() )
                             aPropertyValue = uno::Any();
                         break;
                     case COUNTER:
@@ -426,7 +426,7 @@ uno::Any SAL_CALL GeometryHandler::getPropertyValue(const ::rtl::OUString & Prop
                             aPropertyValue <<= (PROPERTY_ID_FORMULALIST == nId ? m_sDefaultFunction : m_sScope);
                         break;
                     case USER_DEF_FUNCTION:
-                        if ( sDataField.getLength() && PROPERTY_ID_FORMULALIST == nId )
+                        if ( !sDataField.isEmpty() && PROPERTY_ID_FORMULALIST == nId )
                             aPropertyValue = aDataField;
                         break;
                     case COUNTER:
@@ -487,7 +487,7 @@ void SAL_CALL GeometryHandler::setPropertyValue(const ::rtl::OUString & Property
                 m_sScope = m_sDefaultFunction = ::rtl::OUString();
                 m_xFunction.clear();
                 const sal_uInt32 nOldDataFieldType = m_nDataFieldType;
-                if ( sDataField.getLength() )
+                if ( !sDataField.isEmpty() )
                 {
                     if ( isDefaultFunction(sDataField,sDataField,uno::Reference< report::XFunctionsSupplier>(),true) )
                         m_nDataFieldType = FUNCTION;
@@ -526,7 +526,7 @@ void SAL_CALL GeometryHandler::setPropertyValue(const ::rtl::OUString & Property
             {
                 bHandled = true;
                 ::rtl::OUString sFunction;
-                if ( !(Value >>= sFunction) || !sFunction.getLength() )
+                if ( !(Value >>= sFunction) || sFunction.isEmpty() )
                 {
                     if ( m_nDataFieldType == FUNCTION )
                     {
@@ -1484,15 +1484,15 @@ void SAL_CALL GeometryHandler::actuatingPropertyChanged(const ::rtl::OUString & 
                         _rxInspectorUI->enablePropertyUI(PROPERTY_DATAFIELD,sal_True);
                         _rxInspectorUI->enablePropertyUI(PROPERTY_FORMULALIST,sal_False);
                         _rxInspectorUI->enablePropertyUI(PROPERTY_SCOPE,sal_False);
-                        OSL_ENSURE(m_sDefaultFunction.getLength() == 0,"Why is the m_sDefaultFunction set?");
-                        OSL_ENSURE(m_sScope.getLength() == 0,"Why is the m_sScope set?");
+                        OSL_ENSURE(m_sDefaultFunction.isEmpty(),"Why is the m_sDefaultFunction set?");
+                        OSL_ENSURE(m_sScope.isEmpty(),"Why is the m_sScope set?");
                         break;
                     case FUNCTION:
                         _rxInspectorUI->rebuildPropertyUI(PROPERTY_DATAFIELD);
                         _rxInspectorUI->rebuildPropertyUI(PROPERTY_FORMULALIST);
                         _rxInspectorUI->enablePropertyUI(PROPERTY_DATAFIELD,sal_True);
-                        _rxInspectorUI->enablePropertyUI(PROPERTY_FORMULALIST,m_sDefaultFunction.getLength() != 0);
-                        _rxInspectorUI->enablePropertyUI(PROPERTY_SCOPE,m_sScope.getLength() != 0);
+                        _rxInspectorUI->enablePropertyUI(PROPERTY_FORMULALIST,!m_sDefaultFunction.isEmpty());
+                        _rxInspectorUI->enablePropertyUI(PROPERTY_SCOPE,!m_sScope.isEmpty());
                         break;
                     case USER_DEF_FUNCTION:
                         _rxInspectorUI->enablePropertyUI(PROPERTY_DATAFIELD,sal_False);
@@ -1515,7 +1515,7 @@ void SAL_CALL GeometryHandler::actuatingPropertyChanged(const ::rtl::OUString & 
                 {
                     ::rtl::OUString sValue;
                     m_xReportComponent->getPropertyValue( PROPERTY_DATAFIELD ) >>= sValue;
-                    bEnable = sValue.getLength() != 0;
+                    bEnable = !sValue.isEmpty();
                 }
                 _rxInspectorUI->enablePropertyUI(PROPERTY_FORMULALIST,bEnable);
                 if ( bEnable )
@@ -1684,7 +1684,7 @@ void GeometryHandler::impl_fillFormulaList_nothrow(::std::vector< ::rtl::OUStrin
     const SfxFilter* pFilter = SfxFilter::GetDefaultFilter( aMimeHelper.GetDocServiceNameFromMediaType(_sMimetype) );
     if ( pFilter )
         sRet = pFilter->GetUIName();
-    if ( !sRet.getLength() )
+    if ( sRet.isEmpty() )
         sRet = _sMimetype;
     return sRet;
 }
@@ -1702,7 +1702,7 @@ void GeometryHandler::impl_fillMimeTypes_nothrow(::std::vector< ::rtl::OUString 
             for(;pIter != pEnd; ++pIter)
             {
                 const ::rtl::OUString sDocName( impl_ConvertMimeTypeToUI_nothrow(*pIter) );
-                if ( sDocName.getLength() )
+                if ( !sDocName.isEmpty() )
                     _out_rList.push_back(sDocName);
             }
         }
@@ -1752,7 +1752,7 @@ uno::Reference< report::XFunctionsSupplier> GeometryHandler::fillScope_throw(::r
     const uno::Reference< report::XReportComponent> xSourceReportComponent(m_xReportComponent,uno::UNO_QUERY_THROW);
     const uno::Reference< report::XSection> xSection(xSourceReportComponent->getParent(),uno::UNO_QUERY_THROW);
     const uno::Reference< report::XReportDefinition> xReportDefinition = xSection->getReportDefinition();
-    if ( !m_sScope.getLength() )
+    if ( m_sScope.isEmpty() )
     {
         const uno::Reference< report::XGroup> xGroup(xSection->getGroup(),uno::UNO_QUERY);
         if ( xGroup.is() )
@@ -1777,7 +1777,7 @@ uno::Reference< report::XFunctionsSupplier> GeometryHandler::fillScope_throw(::r
                 xReturn = xGroup2.get();
             }
         }
-        if ( !m_sScope.getLength() )
+        if ( m_sScope.isEmpty() )
         {
             xReturn = xReportDefinition.get();
             _rsNamePostFix = m_sScope = xReportDefinition->getName();
@@ -2070,7 +2070,7 @@ void GeometryHandler::impl_initFieldList_nothrow( uno::Sequence< ::rtl::OUString
         OSL_VERIFY( xFormSet->getPropertyValue( PROPERTY_COMMAND ) >>= sObjectName );
         // when there is no command we don't need to ask for columns
         uno::Reference<sdbc::XConnection> xCon(m_xContext->getValueByName( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ActiveConnection"))) ,uno::UNO_QUERY);
-        if ( sObjectName.getLength() && xCon.is() )
+        if ( !sObjectName.isEmpty() && xCon.is() )
         {
             sal_Int32 nObjectType = sdb::CommandType::COMMAND;
             OSL_VERIFY( xFormSet->getPropertyValue( PROPERTY_COMMANDTYPE ) >>= nObjectType );
@@ -2162,7 +2162,7 @@ void GeometryHandler::impl_setCounterFunction_throw()
     sFunctionName += sNamePostFix;
     const ::rtl::OUString sQuotedFunctionName = lcl_getQuotedFunctionName(sFunctionName);
     ::rtl::OUString sScope;
-    if ( !(sFunctionName.getLength() && m_aFunctionNames.find(sQuotedFunctionName) != m_aFunctionNames.end() && impl_isCounterFunction_throw(sQuotedFunctionName,sScope)) )
+    if ( !(!sFunctionName.isEmpty() && m_aFunctionNames.find(sQuotedFunctionName) != m_aFunctionNames.end() && impl_isCounterFunction_throw(sQuotedFunctionName,sScope)) )
         impl_createFunction(sFunctionName,::rtl::OUString(),m_aCounterFunction);
 
     OBlocker aBlocker(m_bIn);
@@ -2173,7 +2173,7 @@ sal_uInt32 GeometryHandler::impl_getDataFieldType_throw(const ::rtl::OUString& _
 {
     sal_uInt32 nDataFieldType = UNDEF_DATA;
     ::rtl::OUString sDataField;
-    if ( _sDataField.getLength() )
+    if ( !_sDataField.isEmpty() )
         sDataField = _sDataField;
     else
     {
@@ -2182,7 +2182,7 @@ sal_uInt32 GeometryHandler::impl_getDataFieldType_throw(const ::rtl::OUString& _
         aDataField >>= sDataField;
     }
 
-    if ( sDataField.getLength() )
+    if ( !sDataField.isEmpty() )
     {
         if ( impl_isDataField(sDataField) )
             nDataFieldType = DATA_OR_FORMULA;

@@ -84,7 +84,7 @@ using namespace ::comphelper;
             if ( xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_LABEL) )
                 xColumn->getPropertyValue(PROPERTY_LABEL) >>= sLabel;
             o_aColumnList.push_back( ColumnInfo(*pEntries,sLabel) );
-            if ( sLabel.getLength() )
+            if ( !sLabel.isEmpty() )
                 _rListBox.InsertEntry( sLabel );
             else
                 _rListBox.InsertEntry( *pEntries );
@@ -535,7 +535,7 @@ String OFieldExpressionControl::GetCellText( long nRow, sal_uInt16 /*nColId*/ ) 
             {
                 if ( aIter->sColumnName == sExpression )
                 {
-                    if ( aIter->sLabel.getLength() )
+                    if ( !aIter->sLabel.isEmpty() )
                         sExpression = aIter->sLabel;
                     break;
                 }

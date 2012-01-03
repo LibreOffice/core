@@ -788,7 +788,7 @@ FeatureState OReportController::GetState(sal_uInt16 _nId) const
             break;
         case SID_FM_ADD_FIELD:
             aReturn.bEnabled = isConnected() && isEditable() && m_xReportDefinition.is()
-                && m_xReportDefinition->getCommand().getLength();
+                && !m_xReportDefinition->getCommand().isEmpty();
             aReturn.bChecked = getDesignView() && getDesignView()->isAddFieldVisible();
             break;
         case SID_SHOW_PROPERTYBROWSER:
@@ -1372,7 +1372,7 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
                 URL aUrl = getURLForId(_nId);
                 sal_Int32 nIndex = 1;
                 ::rtl::OUString sType = aUrl.Complete.getToken(0,'.',nIndex);
-                if ( nIndex == -1 || !sType.getLength() )
+                if ( nIndex == -1 || sType.isEmpty() )
                 {
                     switch(_nId)
                     {
@@ -1678,7 +1678,7 @@ void OReportController::impl_initialize( )
     const ::comphelper::NamedValueCollection& rArguments( getInitParams() );
 
     rArguments.get_ensureType( (::rtl::OUString)PROPERTY_REPORTNAME, m_sName );
-    if ( !m_sName.getLength() )
+    if ( m_sName.isEmpty() )
         rArguments.get_ensureType( "DocumentTitle", m_sName );
 
     try
@@ -1707,7 +1707,7 @@ void OReportController::impl_initialize( )
             ::rtl::OUString sHierarchicalDocumentName;
             sHierarchicalDocumentName = aDescriptor.getUnpackedValueOrDefault(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HierarchicalDocumentName")),sHierarchicalDocumentName);
 
-            if ( !sHierarchicalDocumentName.getLength() && getConnection().is() )
+            if ( sHierarchicalDocumentName.isEmpty() && getConnection().is() )
             {
                 uno::Reference<sdbcx::XTablesSupplier> xTablesSup(getConnection(),uno::UNO_QUERY_THROW);
                 uno::Reference<container::XNameAccess> xTables = xTablesSup->getTables();
@@ -2869,7 +2869,7 @@ uno::Reference<frame::XModel> OReportController::executeReport()
     if ( m_xReportDefinition.is() )
     {
         sal_uInt16 nErrorId = RID_ERR_NO_COMMAND;
-        bool bEnabled = m_xReportDefinition->getCommand().getLength() != 0;
+        bool bEnabled = !m_xReportDefinition->getCommand().isEmpty();
         if ( bEnabled )
         {
             bEnabled = false;
@@ -2955,7 +2955,7 @@ uno::Reference<frame::XModel> OReportController::executeReport()
                     aThirdMessage.Context = aWrapped.Context;
                 }
 
-                if ( aThirdMessage.Message.getLength() )
+                if ( !aThirdMessage.Message.isEmpty() )
                     aSecondMessage.NextException <<= aThirdMessage;
                 aFirstMessage.NextException <<= aSecondMessage;
 
@@ -3157,7 +3157,7 @@ void OReportController::createControl(const Sequence< PropertyValue >& _aArgs,co
         pNewControl = SdrObjFactory::MakeNewObject( ReportInventor, _nObjectId, pSectionWindow->getReportSection().getPage(),m_aReportModel.get() );
         xShapeProp.set(pNewControl->getUnoShape(),uno::UNO_QUERY);
         ::rtl::OUString sCustomShapeType = getDesignView()->GetInsertObjString();
-        if ( !sCustomShapeType.getLength() )
+        if ( sCustomShapeType.isEmpty() )
             sCustomShapeType = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("diamond"));
         pSectionWindow->getReportSection().createDefault(sCustomShapeType,pNewControl);
         pNewControl->SetLogicRect(Rectangle(3000,500,6000,3500)); // switch height and width
@@ -3211,7 +3211,7 @@ void OReportController::createControl(const Sequence< PropertyValue >& _aArgs,co
             xUnoProp->setPropertyValue(PROPERTY_BORDER,xShapeProp->getPropertyValue(PROPERTY_CONTROLBORDER));
 
 
-        if ( xInfo->hasPropertyByName(PROPERTY_DATAFIELD) && _sFunction.getLength() )
+        if ( xInfo->hasPropertyByName(PROPERTY_DATAFIELD) && !_sFunction.isEmpty() )
         {
             ReportFormula aFunctionFormula( ReportFormula::Expression, _sFunction );
             xUnoProp->setPropertyValue( PROPERTY_DATAFIELD, uno::makeAny( aFunctionFormula.getCompleteFormula() ) );
@@ -3222,7 +3222,7 @@ void OReportController::createControl(const Sequence< PropertyValue >& _aArgs,co
             xUnoProp->setPropertyValue( PROPERTY_FORMATKEY, uno::makeAny( nFormatKey ) );
 
         ::rtl::OUString sUrl = aMap.getUnpackedValueOrDefault(PROPERTY_IMAGEURL,::rtl::OUString());
-        if ( sUrl.getLength() && xInfo->hasPropertyByName(PROPERTY_IMAGEURL) )
+        if ( !sUrl.isEmpty() && xInfo->hasPropertyByName(PROPERTY_IMAGEURL) )
             xUnoProp->setPropertyValue( PROPERTY_IMAGEURL, uno::makeAny( sUrl ) );
 
         pObj->CreateMediator(sal_True);
@@ -3383,9 +3383,9 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
 
                 uno::Reference< container::XNameAccess > xColumns;
                 uno::Reference< sdbc::XConnection > xConnection( getConnection() );
-                if ( sCommand.getLength() && nCommandType != -1 && sColumnName.getLength() && xConnection.is() )
+                if ( !sCommand.isEmpty() && nCommandType != -1 && !sColumnName.isEmpty() && xConnection.is() )
                 {
-                    if ( !xReportDefinition->getCommand().getLength() )
+                    if ( xReportDefinition->getCommand().isEmpty() )
                     {
                         xReportDefinition->setCommand(sCommand);
                         xReportDefinition->setCommandType(nCommandType);
@@ -3540,7 +3540,7 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
                     {
                         uno::Reference< report::XReportComponent> xShapePropLabel(pObjs[0]->getUnoShape(),uno::UNO_QUERY_THROW);
                         uno::Reference< report::XReportComponent> xShapePropTextField(pObjs[1]->getUnoShape(),uno::UNO_QUERY_THROW);
-                        if ( sLabel.getLength() )
+                        if ( !sLabel.isEmpty() )
                             xShapePropTextField->setName(sLabel);
                         awt::Point aPosLabel = xShapePropLabel->getPosition();
                         awt::Point aPosTextField = xShapePropTextField->getPosition();
@@ -4337,7 +4337,7 @@ embed::VisualRepresentation SAL_CALL OReportController::getPreferredVisualRepres
 // -----------------------------------------------------------------------------
 uno::Reference< container::XNameAccess > OReportController::getColumns() const
 {
-    if ( !m_xColumns.is() && m_xReportDefinition.is() && m_xReportDefinition->getCommand().getLength() )
+    if ( !m_xColumns.is() && m_xReportDefinition.is() && !m_xReportDefinition->getCommand().isEmpty() )
     {
         m_xColumns = dbtools::getFieldsByCommandDescriptor(getConnection(),m_xReportDefinition->getCommandType(),m_xReportDefinition->getCommand(),m_xHoldAlive);
     }

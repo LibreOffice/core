@@ -180,7 +180,7 @@ void OXMLTable::EndElement()
     {
         if ( m_xSection.is() )
         {
-            if ( m_sStyleName.getLength() )
+            if ( !m_sStyleName.isEmpty() )
             {
                 const SvXMLStylesContext* pAutoStyles = GetImport().GetAutoStyles();
                 if ( pAutoStyles )

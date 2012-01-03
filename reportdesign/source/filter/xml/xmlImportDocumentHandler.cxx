@@ -227,7 +227,7 @@ void SAL_CALL ImportDocumentHandler::startElement(const ::rtl::OUString & _sName
                         break;
                 }
             }
-            if ( !sDetailField.getLength() )
+            if ( sDetailField.isEmpty() )
                 sDetailField = sMasterField;
             m_aMasterFields.push_back(sMasterField);
             m_aDetailFields.push_back(sDetailField);

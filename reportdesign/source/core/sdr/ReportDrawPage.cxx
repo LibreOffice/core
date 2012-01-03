@@ -78,7 +78,7 @@ uno::Reference< drawing::XShape >  OReportDrawPage::_CreateShape( SdrObject *pOb
     {
         bool bChangeOrientation = false;
         ::rtl::OUString sServiceName = pBaseObj->getServiceName();
-        OSL_ENSURE(sServiceName.getLength(),"No Service Name given!");
+        OSL_ENSURE(!sServiceName.isEmpty(),"No Service Name given!");
 
         if ( pObj->ISA(OUnoObject) )
         {

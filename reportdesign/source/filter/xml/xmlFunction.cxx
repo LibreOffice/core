@@ -88,7 +88,7 @@ OXMLFunction::OXMLFunction( ORptFilter& _rImport
                     m_xFunction->setPreEvaluated(sValue == s_sTRUE);
                     break;
                 case XML_TOK_INITIAL_FORMULA:
-                    if ( sValue.getLength() )
+                    if ( !sValue.isEmpty() )
                         m_xFunction->setInitialFormula(beans::Optional< ::rtl::OUString>(sal_True,ORptFilter::convertFormula(sValue)));
                     break;
                 case XML_TOK_DEEP_TRAVERSING:

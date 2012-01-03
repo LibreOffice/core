@@ -174,11 +174,11 @@ void SAL_CALL ExportDocumentHandler::startElement(const ::rtl::OUString & _sName
             pList->AddAttribute(lcl_createAttribute(XML_NP_RPT,XML_COMMAND_TYPE),sValue.makeStringAndClear());
         }
         const ::rtl::OUString sComamnd = m_xDatabaseDataProvider->getCommand();
-        if ( sComamnd.getLength() )
+        if ( !sComamnd.isEmpty() )
             pList->AddAttribute(lcl_createAttribute(XML_NP_RPT,XML_COMMAND),sComamnd);
 
         const ::rtl::OUString sFilter( m_xDatabaseDataProvider->getFilter() );
-        if ( sFilter.getLength() )
+        if ( !sFilter.isEmpty() )
             pList->AddAttribute(lcl_createAttribute(XML_NP_RPT,XML_FILTER),sFilter);
 
         const sal_Bool bEscapeProcessing( m_xDatabaseDataProvider->getEscapeProcessing() );
@@ -339,7 +339,7 @@ void SAL_CALL ExportDocumentHandler::initialize( const uno::Sequence< uno::Any >
     // set ourself as delegator
     m_xProxy->setDelegator( *this );
     const ::rtl::OUString sCommand = m_xDatabaseDataProvider->getCommand();
-    if ( sCommand.getLength() )
+    if ( !sCommand.isEmpty() )
         m_aColumns = ::dbtools::getFieldNamesByCommandDescriptor(m_xDatabaseDataProvider->getActiveConnection()
                     ,m_xDatabaseDataProvider->getCommandType()
                     ,sCommand);
@@ -351,7 +351,7 @@ void SAL_CALL ExportDocumentHandler::initialize( const uno::Sequence< uno::Any >
         uno::Sequence< ::rtl::OUString > aColumnNames = xDataProvider->getColumnDescriptions();
         for(sal_Int32 i = 0 ; i < aColumnNames.getLength();++i)
         {
-            if ( aColumnNames[i].getLength() )
+            if ( !aColumnNames[i].isEmpty() )
             {
                 sal_Int32 nCount = m_aColumns.getLength();
                 m_aColumns.realloc(nCount+1);

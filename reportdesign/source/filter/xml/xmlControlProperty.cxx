@@ -156,7 +156,7 @@ SvXMLImportContext* OXMLControlProperty::CreateChildContext(
 // -----------------------------------------------------------------------------
 void OXMLControlProperty::EndElement()
 {
-    if ( m_aSetting.Name.getLength() && m_xControl.is() )
+    if ( !m_aSetting.Name.isEmpty() && m_xControl.is() )
     {
         if ( m_bIsList && !m_aSequence.getLength() )
             m_aSetting.Value <<= m_aSequence;

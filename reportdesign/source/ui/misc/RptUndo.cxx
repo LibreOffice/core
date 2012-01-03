@@ -289,7 +289,7 @@ OGroupSectionUndo::OGroupSectionUndo(OReportModel& _rMod,sal_uInt16 _nSlot
 //----------------------------------------------------------------------------
 String OGroupSectionUndo::GetComment() const
 {
-    if ( !m_sName.getLength() )
+    if ( m_sName.isEmpty() )
     {
         try
         {

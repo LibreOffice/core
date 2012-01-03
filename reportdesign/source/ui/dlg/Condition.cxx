@@ -589,7 +589,7 @@ void Condition::impl_setCondition( const ::rtl::OUString& _rConditionFormula )
     // LHS and RHS, matched below
     ::rtl::OUString sLHS, sRHS;
 
-    if ( _rConditionFormula.getLength() )
+    if ( !_rConditionFormula.isEmpty() )
     {
         // the unprefixed expression which forms the condition
         ReportFormula aFormula( _rConditionFormula );

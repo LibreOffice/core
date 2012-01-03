@@ -771,7 +771,7 @@ void OReportDefinition::init()
         {
             ::rtl::OUString sMediaType;
             xStorProps->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MediaType"))) >>= sMediaType;
-            if ( !sMediaType.getLength() )
+            if ( sMediaType.isEmpty() )
                 xStorProps->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MediaType")),uno::makeAny(MIMETYPE_OASIS_OPENDOCUMENT_REPORT));
         }
         m_pImpl->m_pObjectContainer.reset( new comphelper::EmbeddedObjectContainer(m_pImpl->m_xStorage , static_cast<cppu::OWeakObject*>(this) ) );
@@ -1479,7 +1479,7 @@ void SAL_CALL OReportDefinition::storeToStorage( const uno::Reference< embed::XS
         static const ::rtl::OUString sPropName(RTL_CONSTASCII_USTRINGPARAM("MediaType"));
         ::rtl::OUString sOldMediaType;
         xProp->getPropertyValue(sPropName) >>= sOldMediaType;
-        if ( !xProp->getPropertyValue(sPropName).hasValue() || !sOldMediaType.getLength() || MIMETYPE_OASIS_OPENDOCUMENT_REPORT != sOldMediaType )
+        if ( !xProp->getPropertyValue(sPropName).hasValue() || sOldMediaType.isEmpty() || MIMETYPE_OASIS_OPENDOCUMENT_REPORT != sOldMediaType )
             xProp->setPropertyValue( sPropName, uno::makeAny(MIMETYPE_OASIS_OPENDOCUMENT_REPORT) );
     }
 
@@ -1827,7 +1827,7 @@ void SAL_CALL OReportDefinition::load( const uno::Sequence< beans::PropertyValue
     uno::Any aStorageSource;
     if ( xStream.is() )
         aStorageSource <<= aStorageSource;
-    else if ( sURL.getLength() )
+    else if ( !sURL.isEmpty() )
         aStorageSource <<= sURL;
     else
         throw lang::IllegalArgumentException(

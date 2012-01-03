@@ -223,10 +223,10 @@ void OXMLFixedContent::EndElement()
 void OXMLFixedContent::Characters( const ::rtl::OUString& rChars )
 {
     m_sLabel += rChars;
-    if ( rChars.getLength() )
+    if ( !rChars.isEmpty() )
     {
         static const ::rtl::OUString s_Quote(RTL_CONSTASCII_USTRINGPARAM("\""));
-        if ( m_sPageText.getLength() )
+        if ( !m_sPageText.isEmpty() )
         {
             static const ::rtl::OUString s_sStringConcat(RTL_CONSTASCII_USTRINGPARAM(" & "));
             m_sPageText += s_sStringConcat;

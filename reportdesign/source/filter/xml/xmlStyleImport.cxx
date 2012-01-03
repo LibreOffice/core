@@ -117,7 +117,7 @@ void OControlStyleContext::FillPropertySet(const Reference< XPropertySet > & rPr
     {
         if ( GetFamily() == XML_STYLE_FAMILY_TABLE_CELL )
         {
-            if ((m_nNumberFormat == -1) && m_sDataStyleName.getLength())
+            if ((m_nNumberFormat == -1) && !m_sDataStyleName.isEmpty())
             {
                 SvXMLNumFormatContext* pStyle = const_cast< SvXMLNumFormatContext*>(dynamic_cast<const SvXMLNumFormatContext*>(pStyles->FindStyleChildContext(
                     XML_STYLE_FAMILY_DATA_STYLE, m_sDataStyleName, sal_False)));
@@ -370,7 +370,7 @@ Reference < XNameContainer >
                 OSL_FAIL("OReportStylesContext::CreateStyleStyleChildContext: Unknown style family. PLease check.");
                 break;
         }
-        if( !xStyles.is() && sName.getLength() && GetOwnImport().GetModel().is() )
+        if( !xStyles.is() && !sName.isEmpty() && GetOwnImport().GetModel().is() )
         {
             Reference< XStyleFamiliesSupplier > xFamiliesSupp(
                                             GetOwnImport().GetModel(), UNO_QUERY );
@@ -407,7 +407,7 @@ Reference < XNameContainer >
 ::rtl::OUString OReportStylesContext::GetServiceName( sal_uInt16 nFamily ) const
 {
     rtl::OUString sServiceName = SvXMLStylesContext::GetServiceName(nFamily);
-    if (!sServiceName.getLength())
+    if (sServiceName.isEmpty())
     {
         switch( nFamily )
         {

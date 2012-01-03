@@ -456,7 +456,7 @@ void SAL_CALL DataProviderHandler::actuatingPropertyChanged(const ::rtl::OUStrin
         if ( NewValue != OldValue )
         {
             uno::Reference< report::XReportDefinition> xReport = m_xReportComponent->getSection()->getReportDefinition();
-            bool bDoEnableMasterDetailFields = xReport.is() && xReport->getCommand().getLength() && m_xDataProvider->getCommand().getLength();
+            bool bDoEnableMasterDetailFields = xReport.is() && !xReport->getCommand().isEmpty() && !m_xDataProvider->getCommand().isEmpty();
             InspectorUI->enablePropertyUIElements( PROPERTY_DETAILFIELDS, inspection::PropertyLineElement::PrimaryButton, bDoEnableMasterDetailFields );
             InspectorUI->enablePropertyUIElements( PROPERTY_MASTERFIELDS, inspection::PropertyLineElement::PrimaryButton, bDoEnableMasterDetailFields );
 

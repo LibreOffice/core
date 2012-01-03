@@ -267,7 +267,7 @@ const SvXMLEnumMapEntry* OXMLHelper::GetCommandTypeOptions()
 #define PROPERTY_ID_FONTTYPE         16
 void OXMLHelper::copyStyleElements(const bool _bOld,const ::rtl::OUString& _sStyleName,const SvXMLStylesContext* _pAutoStyles,const uno::Reference<beans::XPropertySet>& _xProp)
 {
-    if ( !_xProp.is() || !_sStyleName.getLength() || !_pAutoStyles )
+    if ( !_xProp.is() || _sStyleName.isEmpty() || !_pAutoStyles )
         return;
     XMLPropStyleContext* pAutoStyle = PTR_CAST(XMLPropStyleContext,_pAutoStyles->FindStyleChildContext(XML_STYLE_FAMILY_TABLE_CELL,_sStyleName));
     if ( pAutoStyle )
@@ -318,7 +318,7 @@ void OXMLHelper::copyStyleElements(const bool _bOld,const ::rtl::OUString& _sSty
             xProp->getPropertyValue(PROPERTY_CHARWORDMODE) >>=  aFont.WordLineMode;
             xProp->getPropertyValue(PROPERTY_FONTTYPE) >>=          aFont.Type;
             uno::Reference<report::XReportControlFormat> xReportControlModel(_xProp,uno::UNO_QUERY);
-            if ( xReportControlModel.is() && aFont.Name.getLength() )
+            if ( xReportControlModel.is() && !aFont.Name.isEmpty() )
             {
                 try
                 {

@@ -61,7 +61,7 @@ void OXMLAutoStylePoolP::exportStyleAttributes(
                     rtl::OUString sAttrValue;
                     if ( i->maValue >>= sAttrValue )
                     {
-                        if ( sAttrValue.getLength() )
+                        if ( !sAttrValue.isEmpty() )
                         {
                             rORptExport.AddAttribute(
                                 aPropMapper->GetEntryNameSpace(i->mnIndex),

@@ -169,14 +169,14 @@ using namespace formula;
 void adjustSectionName(const uno::Reference< report::XGroup >& _xGroup,sal_Int32 _nPos)
 {
     OSL_ENSURE(_xGroup.is(),"Group is NULL -> GPF");
-    if ( _xGroup->getHeaderOn() && !_xGroup->getHeader()->getName().getLength() )
+    if ( _xGroup->getHeaderOn() && _xGroup->getHeader()->getName().isEmpty() )
     {
         ::rtl::OUString sName = String(ModuleRes(RID_STR_GROUPHEADER));
         sName += ::rtl::OUString::valueOf(_nPos);
         _xGroup->getHeader()->setName(sName);
     }
 
-    if ( _xGroup->getFooterOn() && !_xGroup->getFooter()->getName().getLength()  )
+    if ( _xGroup->getFooterOn() && _xGroup->getFooter()->getName().isEmpty() )
     {
         ::rtl::OUString sName = String(ModuleRes(RID_STR_GROUPFOOTER));
         sName += ::rtl::OUString::valueOf(_nPos);

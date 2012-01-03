@@ -223,7 +223,7 @@ long ODesignView::PreNotify( NotifyEvent& rNEvt )
                     const KeyCode& rCode = pKeyEvent->GetKeyCode();
                     util::URL aUrl;
                     aUrl.Complete = m_pAccel->findCommand(svt::AcceleratorExecute::st_VCLKey2AWTKey(rCode));
-                    if ( !aUrl.Complete.getLength() || !m_rController.isCommandEnabled( aUrl.Complete ) )
+                    if ( aUrl.Complete.isEmpty() || !m_rController.isCommandEnabled( aUrl.Complete ) )
                         nRet = 0L;
                 }
             }

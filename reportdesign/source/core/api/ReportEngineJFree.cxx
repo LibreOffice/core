@@ -257,7 +257,7 @@ void SAL_CALL OReportEngineJFree::setStatusIndicator( const uno::Reference< task
             // create job factory and initialize
             const ::rtl::OUString sReportEngineServiceName = ::dbtools::getDefaultReportEngineServiceName(xFactory);
             uno::Reference<task::XJob> xJob(m_xContext->getServiceManager()->createInstanceWithContext(sReportEngineServiceName,m_xContext),uno::UNO_QUERY_THROW);
-            if ( m_xReport->getCommand().getLength() )
+            if ( !m_xReport->getCommand().isEmpty() )
             {
                 xJob->execute(aConvertedProperties);
                 if ( xStorageProp.is() )
@@ -267,10 +267,10 @@ void SAL_CALL OReportEngineJFree::setStatusIndicator( const uno::Reference< task
             }
 
             uno::Reference<embed::XTransactedObject> xTransact(xOut,uno::UNO_QUERY);
-            if ( sOutputName.getLength() && xTransact.is() )
+            if ( !sOutputName.isEmpty() && xTransact.is() )
                 xTransact->commit();
 
-            if ( !sOutputName.getLength() )
+            if ( sOutputName.isEmpty() )
                 throw lang::IllegalArgumentException();
         }
         catch(const uno::Exception& e)
@@ -297,7 +297,7 @@ uno::Reference< frame::XModel > SAL_CALL OReportEngineJFree::createDocumentAlive
 {
     uno::Reference< frame::XModel > xModel;
     ::rtl::OUString sOutputName = getNewOutputName(); // starts implicite the report generator
-    if ( sOutputName.getLength() )
+    if ( !sOutputName.isEmpty() )
     {
         ::osl::MutexGuard aGuard(m_aMutex);
         ::connectivity::checkDisposed(ReportEngineBase::rBHelper.bDisposed);

@@ -364,7 +364,7 @@ void ORptExport::exportFunction(const uno::Reference< XFunction>& _xFunction)
 {
     exportFormula(XML_FORMULA,_xFunction->getFormula());
     beans::Optional< ::rtl::OUString> aInitial = _xFunction->getInitialFormula();
-    if ( aInitial.IsPresent && aInitial.Value.getLength() )
+    if ( aInitial.IsPresent && !aInitial.Value.isEmpty() )
         exportFormula(XML_INITIAL_FORMULA ,aInitial.Value );
     AddAttribute( XML_NAMESPACE_REPORT, XML_NAME , _xFunction->getName() );
     if ( _xFunction->getPreEvaluated() )
@@ -391,7 +391,7 @@ void ORptExport::exportMasterDetailFields(const Reference<XReportComponent>& _xR
         for(;pIter != pEnd;++pIter,++pDetailFieldsIter)
         {
             AddAttribute( XML_NAMESPACE_REPORT, XML_MASTER , *pIter );
-            if ( pDetailFieldsIter->getLength() )
+            if ( !pDetailFieldsIter->isEmpty() )
                 AddAttribute( XML_NAMESPACE_REPORT, XML_DETAIL , *pDetailFieldsIter );
             SvXMLElementExport aPair(*this,XML_NAMESPACE_REPORT, XML_MASTER_DETAIL_FIELD, sal_True, sal_True);
         }
@@ -494,7 +494,7 @@ void ORptExport::exportReportElement(const Reference<XReportControlModel>& _xRep
     }
 
     ::rtl::OUString sExpr = _xReportElement->getConditionalPrintExpression();
-    if ( sExpr.getLength() )
+    if ( !sExpr.isEmpty() )
     {
         exportFormula(XML_FORMULA,sExpr);
         SvXMLElementExport aPrintExpr(*this,XML_NAMESPACE_REPORT, XML_CONDITIONAL_PRINT_EXPRESSION, sal_True, sal_True);
@@ -757,7 +757,7 @@ void ORptExport::exportSection(const Reference<XSection>& _xSection,bool bHeader
     SvXMLElementExport aComponents(*this,XML_NAMESPACE_TABLE, XML_TABLE, sal_True, sal_True);
 
     ::rtl::OUString sExpr = _xSection->getConditionalPrintExpression();
-    if ( sExpr.getLength() )
+    if ( !sExpr.isEmpty() )
     {
         exportFormula(XML_FORMULA,sExpr);
         SvXMLElementExport aPrintExpr(*this,XML_NAMESPACE_REPORT, XML_CONDITIONAL_PRINT_EXPRESSION, sal_True, sal_False);
@@ -915,7 +915,7 @@ void ORptExport::exportContainer(const Reference< XSection>& _xSection)
                             {
                                 eToken = XML_IMAGE;
                                 ::rtl::OUString sTargetLocation = xImage->getImageURL();
-                                if ( sTargetLocation.getLength() )
+                                if ( !sTargetLocation.isEmpty() )
                                 {
                                     sTargetLocation = GetRelativeReference(sTargetLocation);
                                     AddAttribute(XML_NAMESPACE_FORM, XML_IMAGE_DATA,sTargetLocation);
@@ -1097,7 +1097,7 @@ sal_Bool ORptExport::exportGroup(const Reference<XReportDefinition>& _xReportDef
                         AddAttribute(XML_NAMESPACE_REPORT, XML_RESET_PAGE_NUMBER, XML_TRUE );
 
                     ::rtl::OUString sExpression = xGroup->getExpression();
-                    if ( sExpression.getLength() )
+                    if ( !sExpression.isEmpty() )
                     {
                         static ::rtl::OUString s_sQuote(RTL_CONSTASCII_USTRINGPARAM("\"\""));
                         sal_Int32 nIndex = sExpression.indexOf('"');
@@ -1165,7 +1165,7 @@ void ORptExport::exportAutoStyle(XPropertySet* _xProp,const Reference<XFormatted
         try
         {
             const awt::FontDescriptor aFont = xFormat->getFontDescriptor();
-            OSL_ENSURE(aFont.Name.getLength(),"No Font Name !");
+            OSL_ENSURE(!aFont.Name.isEmpty(),"No Font Name !");
             GetFontAutoStylePool()->Add(aFont.Name,aFont.StyleName,aFont.Family,aFont.Pitch,aFont.CharSet );
         }
         catch(beans::UnknownPropertyException&)
@@ -1286,11 +1286,11 @@ void ORptExport::exportReportAttributes(const Reference<XReportDefinition>& _xRe
             AddAttribute(XML_NAMESPACE_REPORT, XML_COMMAND_TYPE,sValue.makeStringAndClear());
 
         ::rtl::OUString sComamnd = _xReport->getCommand();
-        if ( sComamnd.getLength() )
+        if ( !sComamnd.isEmpty() )
             AddAttribute(XML_NAMESPACE_REPORT, XML_COMMAND, sComamnd);
 
         ::rtl::OUString sFilter( _xReport->getFilter() );
-        if ( sFilter.getLength() )
+        if ( !sFilter.isEmpty() )
             AddAttribute( XML_NAMESPACE_REPORT, XML_FILTER, sFilter );
 
         AddAttribute(XML_NAMESPACE_OFFICE, XML_MIMETYPE,_xReport->getMimeType());
@@ -1300,10 +1300,10 @@ void ORptExport::exportReportAttributes(const Reference<XReportDefinition>& _xRe
             AddAttribute( XML_NAMESPACE_REPORT, XML_ESCAPE_PROCESSING, ::xmloff::token::GetXMLToken( XML_FALSE ) );
 
         ::rtl::OUString sName = _xReport->getCaption();
-        if ( sName.getLength() )
+        if ( !sName.isEmpty() )
             AddAttribute(XML_NAMESPACE_OFFICE, XML_CAPTION,sName);
         sName = _xReport->getName();
-        if ( sName.getLength() )
+        if ( !sName.isEmpty() )
             AddAttribute(XML_NAMESPACE_DRAW, XML_NAME,sName);
     }
 }
@@ -1449,7 +1449,7 @@ void ORptExport::exportParagraph(const Reference< XReportControlModel >& _xRepor
             {
                 ::rtl::OUString sToken = sFieldData.getToken( 0, '&', nIndex );
                 sToken = sToken.trim();
-                if ( sToken.getLength() )
+                if ( !sToken.isEmpty() )
                 {
                     if ( sToken == s_sPageNumber )
                     {
@@ -1589,9 +1589,9 @@ void ORptExport::exportGroupsExpressionAsFunction(const Reference< XGroups>& _xG
                     default:
                         ;
                 }
-                if ( !sFunctionName.getLength() )
+                if ( sFunctionName.isEmpty() )
                     sFunctionName = sFunction + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_")) + sExpression;
-                if ( sFunction.getLength() )
+                if ( !sFunction.isEmpty() )
                 {
                     sal_Unicode pReplaceChars[] = { '(',')',';',',','+','-','[',']','/','*'};
                     for(sal_uInt32 j= 0; j < SAL_N_ELEMENTS(pReplaceChars);++j)
@@ -1603,10 +1603,10 @@ void ORptExport::exportGroupsExpressionAsFunction(const Reference< XGroups>& _xG
                     sFunction += sExpression;
                     sFunction += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("]"));
 
-                    if ( sPrefix.getLength() )
+                    if ( !sPrefix.isEmpty() )
                         sFunction += sPrefix;
                     sFunction += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(")"));
-                    if ( sPostfix.getLength() )
+                    if ( !sPostfix.isEmpty() )
                         sFunction += sPostfix;
                     xFunction->setFormula(sFunction);
                     exportFunction(xFunction);

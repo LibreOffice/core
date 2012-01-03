@@ -207,7 +207,7 @@ void OXMLCell::EndElement()
                 m_pContainer->addCell(xShape.get());
         }
     }
-    if ( m_pCell != this && m_sText.getLength() )
+    if ( m_pCell != this && !m_sText.isEmpty() )
     {
         ORptFilter& rImport = GetOwnImport();
         Reference<XMultiServiceFactory> xFactor(rImport.GetModel(),uno::UNO_QUERY);
@@ -222,7 +222,7 @@ void OXMLCell::EndElement()
         m_pContainer->addCell(m_xComponent);
     }
     // check if we have a FixedLine
-    else if ( m_sStyleName.getLength() && !m_xComponent.is() && m_pCell == this )
+    else if ( !m_sStyleName.isEmpty() && !m_xComponent.is() && m_pCell == this )
     {
         ORptFilter& rImport = GetOwnImport();
         Reference<XMultiServiceFactory> xFactor(rImport.GetModel(),uno::UNO_QUERY);
@@ -265,10 +265,10 @@ void OXMLCell::setComponent(const uno::Reference< report::XReportComponent >& _x
 // -----------------------------------------------------------------------------
 void OXMLCell::Characters( const ::rtl::OUString& rChars )
 {
-    if ( rChars.getLength() )
+    if ( !rChars.isEmpty() )
     {
         static const ::rtl::OUString s_Quote(RTL_CONSTASCII_USTRINGPARAM("\""));
-        if ( m_sText.getLength() )
+        if ( !m_sText.isEmpty() )
         {
             static const ::rtl::OUString s_sStringConcat(RTL_CONSTASCII_USTRINGPARAM(" & "));
             m_sText += s_sStringConcat;

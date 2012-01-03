@@ -262,7 +262,7 @@ void PropBrw::implDetachController()
             OSL_VERIFY( m_xBrowserController->getViewData() >>= sCurrentPage );
         }
 
-        if ( !sCurrentPage.getLength() )
+        if ( sCurrentPage.isEmpty() )
             sCurrentPage = m_sLastActivePage;
     }
     catch( const Exception& )
@@ -509,7 +509,7 @@ void PropBrw::Update( OSectionView* pNewView )
             m_bInitialStateChange = sal_False;
             // and additionally, we want to show the page which was active during
             // our previous incarnation
-            if ( m_sLastActivePage.getLength() && m_xBrowserController.is() )
+            if ( !m_sLastActivePage.isEmpty() && m_xBrowserController.is() )
             {
                 try
                 {

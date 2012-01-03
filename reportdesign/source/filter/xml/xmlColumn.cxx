@@ -134,7 +134,7 @@ SvXMLImportContext* OXMLRowColumn::CreateChildContext(
 // -----------------------------------------------------------------------------
 void OXMLRowColumn::fillStyle(const ::rtl::OUString& _sStyleName)
 {
-    if ( _sStyleName.getLength() )
+    if ( !_sStyleName.isEmpty() )
     {
         const SvXMLStylesContext* pAutoStyles = GetOwnImport().GetAutoStyles();
         if ( pAutoStyles )

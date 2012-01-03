@@ -193,7 +193,7 @@ bool OSectionWindow::setGroupSectionTitle(const uno::Reference< report::XGroup>&
     {
         ::rtl::OUString sExpression = _xGroup->getExpression();
         ::rtl::OUString sLabel = getViewsWindow()->getView()->getReportView()->getController().getColumnLabel_throw(sExpression);
-        if ( sLabel.getLength() )
+        if ( !sLabel.isEmpty() )
         {
             sExpression = sLabel;
         }

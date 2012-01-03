@@ -77,9 +77,9 @@ OXMLMasterFields::OXMLMasterFields( ORptFilter& rImport,
                 break;
         }
     }
-    if ( !sDetailField.getLength() )
+    if ( sDetailField.isEmpty() )
         sDetailField = sMasterField;
-    if ( sMasterField.getLength() )
+    if ( !sMasterField.isEmpty() )
         m_pReport->addMasterDetailPair(::std::pair< ::rtl::OUString,::rtl::OUString >(sMasterField,sDetailField));
 }
 // -----------------------------------------------------------------------------

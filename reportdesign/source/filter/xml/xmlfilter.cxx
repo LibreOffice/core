@@ -502,7 +502,7 @@ sal_Bool ORptFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
         }
     }
 
-    if ( sFileName.getLength() != 0 )
+    if ( !sFileName.isEmpty() )
     {
         uno::Reference<XComponent> xCom(GetModel(),UNO_QUERY);
 

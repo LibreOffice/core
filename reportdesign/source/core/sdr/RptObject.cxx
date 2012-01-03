@@ -629,7 +629,7 @@ OUnoObject::OUnoObject(const ::rtl::OUString& _sComponentName
           ,m_nObjectType(_nObjectType)
 {
     DBG_CTOR( rpt_OUnoObject, NULL);
-    if ( rModelName.getLength() )
+    if ( !rModelName.isEmpty() )
         impl_initializeModel_nothrow();
 }
 //----------------------------------------------------------------------------
@@ -643,11 +643,9 @@ OUnoObject::OUnoObject(const uno::Reference< report::XReportComponent>& _xCompon
     DBG_CTOR( rpt_OUnoObject, NULL);
     impl_setUnoShape( uno::Reference< uno::XInterface >( _xComponent, uno::UNO_QUERY ) );
 
-    if ( rModelName.getLength() )
+    if ( !rModelName.isEmpty() )
         impl_initializeModel_nothrow();
 
-    if ( rModelName.getLength() )
-        impl_initializeModel_nothrow();
 }
 //----------------------------------------------------------------------------
 OUnoObject::~OUnoObject()

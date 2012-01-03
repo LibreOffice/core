@@ -95,7 +95,7 @@ namespace rptui
             {
                 sDataField = xControlModel->getDataField();
 
-                if ( sDataField.getLength() )
+                if ( !sDataField.isEmpty() )
                 {
                     ReportFormula aFormula( sDataField );
                     bool bSet = true;
@@ -103,7 +103,7 @@ namespace rptui
                     {
                         const ::rtl::OUString sColumnName = aFormula.getFieldName();
                         ::rtl::OUString sLabel = m_rReportController.getColumnLabel_throw(sColumnName);
-                        if ( sLabel.getLength() )
+                        if ( !sLabel.isEmpty() )
                         {
                             ::rtl::OUStringBuffer aBuffer;
                             aBuffer.appendAscii( "=" );

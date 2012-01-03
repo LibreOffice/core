@@ -303,7 +303,7 @@ namespace
             ::rtl::OUString sLabel;
             if ( xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_LABEL) )
                 xColumn->getPropertyValue(PROPERTY_LABEL) >>= sLabel;
-            if ( sLabel.getLength() )
+            if ( !sLabel.isEmpty() )
                 _rListBox.InsertEntry( sLabel,NULL,sal_False,LIST_APPEND,new ColumnInfo(*pEntries,sLabel) );
             else
                 _rListBox.InsertEntry( *pEntries,NULL,sal_False,LIST_APPEND,new ColumnInfo(*pEntries,sLabel) );
@@ -350,7 +350,7 @@ void OAddFieldWindow::Update()
 
             // add the columns to the list
             uno::Reference< sdbc::XConnection> xCon = getConnection();
-            if ( xCon.is() && m_aCommandName.getLength() )
+            if ( xCon.is() && !m_aCommandName.isEmpty() )
                 m_xColumns = dbtools::getFieldsByCommandDescriptor( xCon, GetCommandType(), GetCommand(), m_xHoldAlive );
             if ( m_xColumns.is() )
             {
@@ -369,7 +369,7 @@ void OAddFieldWindow::Update()
             aTitle.AppendAscii(" ");
             aTitle += m_aCommandName.getStr();
             SetText( aTitle );
-            if ( m_aCommandName.getLength() )
+            if ( !m_aCommandName.isEmpty() )
             {
                 for (sal_uInt16 i = 0; i < nItemCount; ++i)
                 {
@@ -470,7 +470,7 @@ void OAddFieldWindow::_elementInserted( const container::ContainerEvent& _rEvent
             ::rtl::OUString sLabel;
             if ( xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_LABEL) )
                 xColumn->getPropertyValue(PROPERTY_LABEL) >>= sLabel;
-            if ( sLabel.getLength() )
+            if ( !sLabel.isEmpty() )
                 m_pListBox->InsertEntry( sLabel,NULL,sal_False,LIST_APPEND,new ColumnInfo(sName,sLabel) );
             else
                 m_pListBox->InsertEntry( sName,NULL,sal_False,LIST_APPEND,new ColumnInfo(sName,sLabel) );

@@ -59,7 +59,7 @@ ORptTypeDetection::ORptTypeDetection(Reference< XComponentContext > const & xCon
     ::comphelper::SequenceAsHashMap aTemp(Descriptor);
     ::rtl::OUString sTemp = aTemp.getUnpackedValueOrDefault(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("URL")),::rtl::OUString());
 
-    if ( sTemp.getLength() )
+    if ( !sTemp.isEmpty() )
     {
         INetURLObject aURL(sTemp);
         if ( aURL.GetExtension().equalsIgnoreAsciiCaseAscii("orp") )
