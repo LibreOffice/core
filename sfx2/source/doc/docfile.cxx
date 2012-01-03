@@ -66,7 +66,6 @@
 #include <com/sun/star/ucb/TransferInfo.hpp>
 #include <com/sun/star/ucb/OpenCommandArgument2.hpp>
 #include <com/sun/star/ucb/OpenMode.hpp>
-#include <com/sun/star/ucb/NameClashException.hpp>
 #include <com/sun/star/logging/XSimpleLogRing.hpp>
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
