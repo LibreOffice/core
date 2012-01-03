@@ -31,6 +31,7 @@
 #include <rtfexport.hxx>
 
 #include <docsh.hxx>
+#include <editsh.hxx>
 #include <unotxdoc.hxx>
 
 #include <comphelper/mediadescriptor.hxx>
@@ -71,6 +72,12 @@ sal_Bool RtfExportFilter::filter( const uno::Sequence< beans::PropertyValue >& a
     if ( !pDoc ) {
         return sal_False;
     }
+
+    // fdo#37161 - update layout (if present), for SwWriteTable
+    ViewShell* pViewShell = NULL;
+    pDoc->GetEditShell(&pViewShell);
+    if (pViewShell != NULL)
+        pViewShell->CalcLayout();
 
     // get SwPaM*
     // we get SwPaM for the entire document; copy&paste is handled internally, not via UNO
