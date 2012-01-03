@@ -7,15 +7,16 @@ files, so that they run in a sandboxed environment like that of
 whatever eventual end-user Android apps there will be that use LO
 code.
 
-Sure, we could quite easily build unit tests as plain Android
-executables, push them to the device or emulator with adb and run them
-from adb shell, but that would not be a good test as the environment
-would be completely different. They would run as root, and not
-sandboxed. We have no intent to require LibreOffice code to be used
-only on "rooted" devices etc.
+Sure, we could quite easily build unit tests as plain Linux
+executables (built against the Android libraries, of course, not
+GNU/Linux ones), push them to the device or emulator with adb and run
+them from adb shell, but that would not be a good test as the
+environment such processs run in is completely different from that in
+which real end-user apps with GUI etc run. We have no intent to
+require LibreOffice code to be used only on "rooted" devices etc.
 
 All Android apps are basically Java programs. They run "in" a Dalvik
-virtual machine. Yes, you can also have apps where your code is only
+virtual machine. Yes, you can also have apps where *your* code is only
 native code, written in a compiled language like C or C++. But also
 also such apps are actually started by system-provided Java
 bootstrapping code (NativeActivity) running in a Dalvik VM.
@@ -30,13 +31,13 @@ out how to manually construct an .apk that is properly signed so that
 it will run in the emulator. (I don't have any Android device...) I
 only know how to let the SDK Ant tooling do it...
 
-A LO Android app would work would something like this:
+At this stage, the plan is that a LO Android app will work would
+something like this:
 
-We have a top Java bootstrapping class
-org.libreoffice.android.Bootstrap that loads a small helper native
-library liblo-bootstrap.so that implements JNI wrappers for dlopen(),
-dlsym(), and ELF header scanning coresponding to looking for DT_NEEDED
-entries with readelf.
+We have a Java class org.libreoffice.android.Bootstrap that that loads
+a small helper native library liblo-bootstrap.so that implements JNI
+wrappers for dlopen(), dlsym(), and ELF header scanning coresponding
+to looking for DT_NEEDED entries with readelf.
 
 The Java code then loads the actual native library that corresponds to
 the LibreOffice-related "program" we want to run. For unit tests, a
