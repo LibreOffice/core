@@ -31,6 +31,7 @@
 #include "dp_resource.h"
 #include "osl/module.hxx"
 #include "osl/mutex.hxx"
+#include <tools/resmgr.hxx>
 #include "rtl/ustring.h"
 #include "cppuhelper/implbase1.hxx"
 #include "unotools/configmgr.hxx"

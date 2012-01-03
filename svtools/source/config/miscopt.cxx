@@ -33,7 +33,6 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <tools/link.hxx>
-#include <tools/wldcrd.hxx>
 
 #include <rtl/logfile.hxx>
 #include <rtl/instance.hxx>

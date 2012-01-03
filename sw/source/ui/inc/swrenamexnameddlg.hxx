@@ -39,7 +39,6 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/container/XNamed.hpp>
-#include <tools/resary.hxx>
 #include <swunodef.hxx>
 
 class SwRenameXNamedDlg : public ModalDialog

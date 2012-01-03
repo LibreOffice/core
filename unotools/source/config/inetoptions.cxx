@@ -28,7 +28,6 @@
 
 #include <unotools/inetoptions.hxx>
 #include "rtl/instance.hxx"
-#include <tools/wldcrd.hxx>
 
 #include <algorithm>
 #include <map>

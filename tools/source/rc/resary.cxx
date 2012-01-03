@@ -28,6 +28,7 @@
 
 
 #define _TOOLS_RESARY_CXX
+#include <tools/resmgr.hxx>
 #include <tools/resary.hxx>
 #include <tools/rcid.h>
 

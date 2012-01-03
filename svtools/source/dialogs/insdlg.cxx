@@ -35,7 +35,6 @@
 #include <svtools/sores.hxx>
 #include <svtools/svtdata.hxx>
 
-#include <tools/rc.hxx>
 #include <unotools/configmgr.hxx>
 #include <sot/clsids.hxx>
 #include <sot/stg.hxx>

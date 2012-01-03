@@ -29,10 +29,10 @@
 #ifndef _SV_BITMAP_HXX
 #define _SV_BITMAP_HXX
 
+#include <tools/link.hxx>
 #include <vcl/sv.h>
 #include <vcl/dllapi.h>
 #include <vcl/mapmod.hxx>
-#include <tools/rc.hxx>
 #include <vcl/region.hxx>
 #include <vcl/scopedbitmapaccess.hxx>
 

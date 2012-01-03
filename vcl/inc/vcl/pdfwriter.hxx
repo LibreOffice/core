@@ -41,6 +41,7 @@
 
 #include "com/sun/star/io/XOutputStream.hpp"
 #include "com/sun/star/beans/XMaterialHolder.hpp"
+#include "com/sun/star/lang/Locale.hpp"
 
 #include <boost/scoped_ptr.hpp>
 

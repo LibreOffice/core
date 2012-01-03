@@ -33,7 +33,6 @@
 #include <vcl/metaact.hxx>
 #include <tools/rcid.h>
 #include <tools/resid.hxx>
-#include <tools/resmgr.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <svl/solar.hrc>
 #include <vcl/salbtype.hxx>

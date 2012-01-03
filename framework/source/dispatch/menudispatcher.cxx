@@ -55,7 +55,6 @@
 #include <vcl/syswin.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/svapp.hxx>
-#include <tools/resmgr.hxx>
 #include <tools/rcid.h>
 #include <osl/mutex.hxx>
 #include <toolkit/helper/vclunohelper.hxx>

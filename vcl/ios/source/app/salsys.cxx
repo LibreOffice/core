@@ -27,8 +27,6 @@
  ************************************************************************/
 
 
-#include "tools/rc.hxx"
-
 #include "rtl/ustrbuf.hxx"
 
 #include "vcl/button.hxx"

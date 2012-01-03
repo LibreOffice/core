@@ -30,7 +30,6 @@
 #include <boost/scoped_ptr.hpp>
 
 #include <vcl/msgbox.hxx>
-#include <tools/resary.hxx>
 #include <svl/lstner.hxx>
 #include <basic/basmgr.hxx>
 #include <basic/sbmod.hxx>

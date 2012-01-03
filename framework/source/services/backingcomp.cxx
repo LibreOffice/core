@@ -62,7 +62,6 @@
 #include <vcl/keycod.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/svapp.hxx>
-#include <tools/resmgr.hxx>
 #include <rtl/ustrbuf.hxx>
 
 #include <svl/solar.hrc>

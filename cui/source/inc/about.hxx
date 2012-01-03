@@ -30,7 +30,6 @@
 
 // include ---------------------------------------------------------------
 
-#include <tools/resary.hxx>
 #include <vcl/button.hxx>
 #include <vcl/accel.hxx>
 #include <svtools/svmedit.hxx>

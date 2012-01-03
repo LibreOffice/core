@@ -32,7 +32,6 @@
 #include "tools/debug.hxx"
 
 #include "tools/rc.h"
-#include "tools/resary.hxx"
 
 #include "vcl/field.hxx"
 #include "vcl/event.hxx"

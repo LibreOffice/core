@@ -34,7 +34,6 @@
 #include "View.hxx"
 
 #include <tools/debug.hxx>
-#include <tools/wldcrd.hxx>
 #include <comphelper/enumhelper.hxx>
 #include <comphelper/types.hxx>
 #include <connectivity/dbtools.hxx>

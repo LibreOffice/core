@@ -46,7 +46,6 @@
 
 #include "resourceprovider.hxx"
 
-#include <tools/rc.hxx>
 #include <osl/file.hxx>
 #include "CFStringUtilities.hxx"
 #include "NSString_OOoAdditions.hxx"

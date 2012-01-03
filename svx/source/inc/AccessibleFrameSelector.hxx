@@ -37,6 +37,7 @@
 #include <com/sun/star/accessibility/XAccessibleComponent.hpp>
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
 #include <tools/resary.hxx>
+#include <tools/rc.hxx>
 #include <cppuhelper/implbase5.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <comphelper/accessibleeventnotifier.hxx>

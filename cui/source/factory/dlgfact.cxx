@@ -29,7 +29,6 @@
 #include "align.hxx" //add for SvxAlignmentTabPage
 #include "dlgfact.hxx"
 
-#include <tools/rc.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/request.hxx>

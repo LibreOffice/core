@@ -34,7 +34,6 @@
 // include ---------------------------------------------------------------
 
 #include <svx/dialmgr.hxx>
-#include <tools/rc.hxx>
 #include <svl/solar.hrc>
 #include <vcl/svapp.hxx>
 

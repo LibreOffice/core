@@ -29,7 +29,6 @@
 #if ! defined INCLUDED_DP_RESOURCE_H
 #define INCLUDED_DP_RESOURCE_H
 
-#include "tools/resmgr.hxx"
 #include "tools/string.hxx"
 #include "tools/resid.hxx"
 #include "com/sun/star/lang/Locale.hpp"

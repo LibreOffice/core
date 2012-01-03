@@ -41,7 +41,6 @@
 #include <osl/security.hxx>
 #include <rtl/ref.hxx>
 
-#include <tools/resmgr.hxx>
 #include <unotools/bootstrap.hxx>
 #include <svl/languageoptions.hxx>
 #include <unotools/syslocaleoptions.hxx>

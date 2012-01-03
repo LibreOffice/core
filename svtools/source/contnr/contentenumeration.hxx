@@ -38,6 +38,7 @@
 #include <ucbhelper/content.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/datetime.hxx>
+#include <tools/string.hxx>
 #include <vcl/image.hxx>
 
 class IUrlFilter;

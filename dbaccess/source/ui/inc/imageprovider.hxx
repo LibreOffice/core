@@ -36,6 +36,7 @@
 #include <com/sun/star/sdb/application/DatabaseObject.hpp>
 /** === end UNO includes === **/
 
+#include <tools/string.hxx>
 #include <boost/shared_ptr.hpp>
 
 //........................................................................

@@ -41,7 +41,6 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/string.hxx>
-#include <tools/wldcrd.hxx>
 #include <tools/diagnose_ex.h>
 
 #include <list>

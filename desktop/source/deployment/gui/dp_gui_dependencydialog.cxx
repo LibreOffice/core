@@ -35,7 +35,6 @@
 #include "rtl/ustring.hxx"
 #include "tools/gen.hxx"
 #include "tools/resid.hxx"
-#include "tools/resmgr.hxx"
 #include "tools/solar.h"
 #include "tools/string.hxx"
 #include "vcl/dialog.hxx"

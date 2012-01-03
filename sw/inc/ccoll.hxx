@@ -38,7 +38,6 @@
 #include <svtools/svtabbx.hxx>
 
 #include <vcl/lstbox.hxx>
-#include <tools/resary.hxx>
 #include "swdllapi.h"
 #include "cmdid.h"
 

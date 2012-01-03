@@ -28,6 +28,7 @@
 #ifndef _SWUI_CCOLL_HXX
 #define _SWUI_CCOLL_HXX
 
+#include <tools/resary.hxx>
 #include "ccoll.hxx"
 
 class SwWrtShell;

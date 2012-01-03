@@ -32,7 +32,6 @@
 #include "iodlgimp.hxx"
 #include "svtools/headbar.hxx"
 #include <tools/debug.hxx>
-#include <tools/wldcrd.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/msgbox.hxx>

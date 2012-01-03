@@ -32,7 +32,6 @@
 #endif
 
 #include <sfx2/objsh.hxx>
-#include <tools/rc.hxx>
 #include "sddlgfact.hxx"
 #include "strings.hrc"
 #include "BreakDlg.hxx"

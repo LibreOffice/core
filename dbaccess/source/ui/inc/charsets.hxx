@@ -30,7 +30,6 @@
 #define _DBAUI_CHARSETS_HXX_
 
 #include <tools/string.hxx>
-#include <tools/rc.hxx>
 #include <connectivity/dbcharset.hxx>
 #include <svx/txenctab.hxx>
 

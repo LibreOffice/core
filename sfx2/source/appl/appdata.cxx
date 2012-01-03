@@ -27,7 +27,6 @@
  ************************************************************************/
 
 #include <tools/config.hxx>
-#include <svl/inetstrm.hxx>
 #include <svl/stritem.hxx>
 
 #include <osl/mutex.hxx>

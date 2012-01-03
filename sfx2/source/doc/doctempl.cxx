@@ -32,7 +32,6 @@
 #include <osl/mutex.hxx>
 #include <osl/thread.hxx>
 
-#include <tools/resary.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <unotools/localedatawrapper.hxx>

@@ -53,7 +53,6 @@
 
 #include <unotools/configmgr.hxx>
 #include <tools/urlobj.hxx>
-#include <tools/wldcrd.hxx>
 #include <unotools/saveopt.hxx>
 #include <svtools/helpopt.hxx>
 #include <unotools/undoopt.hxx>

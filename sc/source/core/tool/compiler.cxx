@@ -36,7 +36,6 @@
 #include <svl/zforlist.hxx>
 #include <sal/macros.h>
 #include <tools/rcid.h>
-#include <tools/rc.hxx>
 #include <tools/solar.h>
 #include <unotools/charclass.hxx>
 #include <com/sun/star/lang/Locale.hpp>

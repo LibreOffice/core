@@ -41,7 +41,6 @@
 #include <com/sun/star/frame/XTitle.hpp>
 #include <osl/mutex.hxx>
 
-#include <tools/resary.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/svapp.hxx>

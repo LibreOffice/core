@@ -42,7 +42,6 @@
 #include <svl/itempool.hxx>
 #include <svl/rectitem.hxx>
 #include <tools/debug.hxx>
-#include <tools/wldcrd.hxx>
 
 #include <tools/urlobj.hxx>
 #include <tools/config.hxx>

@@ -53,7 +53,6 @@
 #include <comphelper/processfactory.hxx>
 #include <toolkit/awt/vclxdevice.hxx>
 #include <vcl/svapp.hxx>
-#include <tools/resmgr.hxx>
 #include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star::io;

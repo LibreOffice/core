@@ -37,7 +37,6 @@
 #include <svtools/svtools.hrc>
 #include <unotools/saveopt.hxx>
 #include <unotools/localisationoptions.hxx>
-#include <tools/resary.hxx>
 #include <svl/intitem.hxx>
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>

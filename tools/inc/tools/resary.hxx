@@ -28,9 +28,10 @@
 #ifndef _TOOLS_RESARY_HXX
 #define _TOOLS_RESARY_HXX
 
+#include <vector>
 #include "tools/toolsdllapi.h"
+#include <tools/string.hxx>
 #include <tools/resid.hxx>
-#include <tools/rc.hxx>
 
 // ---------------------
 // - ImplResStringItem -
