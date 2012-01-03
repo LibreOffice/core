@@ -37,7 +37,6 @@
 #include <svtools/svtools.hrc>
 #include <unotools/saveopt.hxx>
 #include <unotools/localisationoptions.hxx>
-#include <tools/config.hxx>
 #include <tools/resary.hxx>
 #include <tools/urlobj.hxx>
 #include <svl/intitem.hxx>

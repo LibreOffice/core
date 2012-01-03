@@ -35,7 +35,6 @@
 
 #include <tools/string.hxx>
 #include <tools/errcode.hxx>
-#include <tools/bigint.hxx>
 
 // class SfxContentHelper ------------------------------------------------
 

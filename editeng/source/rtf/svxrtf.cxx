@@ -28,7 +28,6 @@
 
 
 #include <ctype.h>
-#include <tools/datetime.hxx>
 #include <rtl/tencinfo.h>
 #include <svl/itemiter.hxx>
 #include <svl/whiter.hxx>

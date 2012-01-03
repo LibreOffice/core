@@ -72,10 +72,7 @@
 #include <rtl/ustring.hxx>
 
 #include <vcl/image.hxx>
-#include <tools/color.hxx>
 #include <rtl/ref.hxx>
-
-#include <vector>
 
 namespace framework
 {

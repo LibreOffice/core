@@ -30,7 +30,6 @@
 #define _PAD_COMMANDDLG_HXX_
 
 #include <vcl/dialog.hxx>
-#include <tools/config.hxx>
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/group.hxx>

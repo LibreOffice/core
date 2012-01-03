@@ -42,7 +42,6 @@
 #include <comphelper/servicehelper.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <vcl/unohelp.hxx>
-#include <tools/color.hxx>
 #include <comphelper/accessibleeventnotifier.hxx>
 #include <vcl/svapp.hxx>
 

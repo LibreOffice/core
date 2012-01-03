@@ -58,7 +58,6 @@
 #include <tools/ref.hxx>
 #include <tools/link.hxx>
 #include <tools/time.hxx>
-#include <tools/date.hxx>
 #include <svl/svarray.hxx>
 #include <vcl/sv.h>
 #include <vcl/timer.hxx>

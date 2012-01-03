@@ -35,7 +35,6 @@
 #include "cell.hxx"
 #include <tools/string.hxx>
 
-#include <tools/color.hxx>
 #include "flttypes.hxx"
 #include "ftools.hxx"
 #include "qprostyle.hxx"

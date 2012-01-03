@@ -31,7 +31,6 @@
 #include <list>
 #include <rtl/ustring.hxx>
 #include <vcl/dialog.hxx>
-#include <tools/config.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>

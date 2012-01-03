@@ -40,7 +40,6 @@
 #include <comphelper/sequenceashashmap.hxx>
 
 #include <sot/exchange.hxx>
-#include <tools/config.hxx>
 #include <basic/sbmeth.hxx>
 #include <basic/basmgr.hxx>
 #include <basic/sbstar.hxx>

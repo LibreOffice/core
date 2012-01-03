@@ -34,7 +34,6 @@
 #include <hash.hxx>
 #include <lex.hxx>
 #include <globals.hxx>
-#include <tools/bigint.hxx>
 #include <rtl/strbuf.hxx>
 
 rtl::OString SvToken::GetTokenAsString() const

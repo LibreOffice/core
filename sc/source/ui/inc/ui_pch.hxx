@@ -54,7 +54,6 @@
 #include <tools/resmgr.hxx>
 #include <tools/gen.hxx>
 #include <tools/fract.hxx>
-#include <tools/date.hxx>
 #include <tools/time.hxx>
 #include <vcl/keycod.hxx>
 #include <vcl/keycodes.hxx>

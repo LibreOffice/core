@@ -96,7 +96,6 @@
 #include <unotools/viewoptions.hxx>
 #include <svtools/svtdata.hxx>
 #include <tools/urlobj.hxx>
-#include <tools/cachestr.hxx>
 #include <unotools/streamhelper.hxx>
 #include <svtools/imagemgr.hxx>
 #include <svtools/miscopt.hxx>

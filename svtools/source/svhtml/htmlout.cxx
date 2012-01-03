@@ -30,7 +30,6 @@
 #include <tools/urlobj.hxx>
 #include <svl/zformat.hxx>
 #include <svl/macitem.hxx>
-#include <tools/cachestr.hxx>
 #include <vcl/svapp.hxx>
 #include <svl/zforlist.hxx>
 

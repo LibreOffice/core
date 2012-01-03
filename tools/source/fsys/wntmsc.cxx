@@ -42,7 +42,6 @@
 #include <tools/debug.hxx>
 #include <tools/wldcrd.hxx>
 #include <tools/fsys.hxx>
-#include <tools/bigint.hxx>
 #include <vector>
 
 int Sys2SolarError_Impl( int nSysErr );

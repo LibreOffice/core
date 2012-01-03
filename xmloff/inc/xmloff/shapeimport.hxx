@@ -38,7 +38,6 @@
 #include <com/sun/star/drawing/HomogenMatrix.hpp>
 #include <com/sun/star/drawing/ProjectionMode.hpp>
 #include <com/sun/star/drawing/ShadeMode.hpp>
-#include <tools/color.hxx>
 #include <xmloff/uniref.hxx>
 #include <xmloff/xmlictxt.hxx>
 

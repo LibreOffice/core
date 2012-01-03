@@ -32,8 +32,8 @@
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/style/NumberingType.hpp>
 #include <ooxml/resourceids.hxx>
-#include <tools/color.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <tools/color.hxx>
 #include <algorithm>
 #include <functional>
 

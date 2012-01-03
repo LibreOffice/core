@@ -27,7 +27,6 @@
  ************************************************************************/
 
 #include "export.hxx"
-#include <tools/datetime.hxx>
 #include <stdio.h>
 #include <osl/time.h>
 #include <osl/process.h>

@@ -34,7 +34,6 @@
 #include <com/sun/star/frame/XLoadable.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <comphelper/processfactory.hxx>
-#include <tools/config.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <tools/urlobj.hxx>

@@ -41,10 +41,8 @@
 #include <vcl/bmpacc.hxx>
 #include <editeng/eeitem.hxx>
 #include <svl/itemset.hxx>
-#include <tools/config.hxx>
 #include <unotools/cacheoptions.hxx>
 #include <svl/whiter.hxx>
-#include <tools/bigint.hxx>
 #include "editeng/fontitem.hxx"
 #include <editeng/colritem.hxx>
 #include <editeng/fhgtitem.hxx>

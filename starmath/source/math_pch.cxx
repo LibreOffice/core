@@ -63,7 +63,6 @@
 #include <sfx2/shell.hxx>
 #include <sal/types.h>
 #include <sal/config.h>
-#include <tools/date.hxx>
 #include <vcl/accel.hxx>
 #include <tools/resid.hxx>
 #include <tools/rc.hxx>
@@ -138,7 +137,6 @@
 #include <sfx2/sfx.hrc>
 #include <svl/memberid.hrc>
 #include <vcl/syswin.hxx>
-#include <tools/datetime.hxx>
 #include <tools/wldcrd.hxx>
 #include <parse.hxx>
 #include <types.hxx>

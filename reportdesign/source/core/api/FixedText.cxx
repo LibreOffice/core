@@ -33,6 +33,7 @@
 #include "core_resource.hxx"
 #include <comphelper/sequence.hxx>
 #include "Tools.hxx"
+#include <tools/color.hxx>
 #include <tools/debug.hxx>
 #include <comphelper/property.hxx>
 #include "FormatCondition.hxx"

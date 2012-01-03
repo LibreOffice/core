@@ -36,7 +36,6 @@
 #include "flat/EConnection.hxx"
 #include "flat/EColumns.hxx"
 #include <osl/thread.h>
-#include <tools/config.hxx>
 #include <svl/zforlist.hxx>
 #include <rtl/math.hxx>
 #include <stdio.h>      //sprintf

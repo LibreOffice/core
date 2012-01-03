@@ -36,7 +36,6 @@
 #include "com/sun/star/container/XContainer.hpp"
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/Locale.hpp>
-#include <tools/color.hxx>
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/interfacecontainer.h>
 

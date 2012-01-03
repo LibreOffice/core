@@ -35,7 +35,6 @@
 #include <vcl/window.hxx>
 #include <swrect.hxx>
 
-#include <tools/datetime.hxx>
 #include <tools/date.hxx>
 
 #include <vcl/lineinfo.hxx>

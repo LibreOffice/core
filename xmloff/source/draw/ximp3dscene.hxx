@@ -34,7 +34,6 @@
 #include <xmloff/nmspmap.hxx>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <tools/rtti.hxx>
-#include <tools/color.hxx>
 #include <ximpshap.hxx>
 
 //////////////////////////////////////////////////////////////////////////////

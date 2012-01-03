@@ -63,7 +63,6 @@
 
 #include <ucbhelper/content.hxx>
 #include <osl/module.h>
-#include <tools/config.hxx>
 
 #include <stdio.h>
 #include <osl/thread.hxx>

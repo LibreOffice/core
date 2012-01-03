@@ -29,7 +29,6 @@
 #ifndef _WMFWR_HXX
 #define _WMFWR_HXX
 
-#include <tools/bigint.hxx>
 #include <tools/debug.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/graph.hxx>

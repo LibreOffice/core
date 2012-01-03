@@ -59,7 +59,6 @@
 #include <algorithm>
 #include <memory>
 #include <tools/urlobj.hxx>
-#include <tools/datetime.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <unotools/localfilehelper.hxx>

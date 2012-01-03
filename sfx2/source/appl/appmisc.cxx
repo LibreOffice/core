@@ -41,7 +41,6 @@
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/XFramesSupplier.hpp>
 #include <com/sun/star/uno/Reference.h>
-#include <tools/config.hxx>
 #include <tools/rcid.h>
 #include <osl/mutex.hxx>
 #include <unotools/configmgr.hxx>

@@ -47,7 +47,6 @@
 
 //_______________________________________
 // other includes
-#include <tools/datetime.hxx>
 #include <rtl/ustring.hxx>
 
 //_______________________________________

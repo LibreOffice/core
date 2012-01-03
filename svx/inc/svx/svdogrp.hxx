@@ -29,7 +29,6 @@
 #ifndef _SVDOGRP_HXX
 #define _SVDOGRP_HXX
 
-#include <tools/datetime.hxx>
 #include <svx/svdobj.hxx>
 #include "svx/svxdllapi.h"
 

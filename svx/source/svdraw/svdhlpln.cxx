@@ -28,7 +28,6 @@
 
 
 #include <svx/svdhlpln.hxx>
-#include <tools/color.hxx>
 
 #include <vcl/outdev.hxx>
 #include <vcl/window.hxx>

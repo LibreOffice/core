@@ -105,7 +105,6 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/viewsh.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <tools/color.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/shl.hxx>
 #include <tools/urlobj.hxx>

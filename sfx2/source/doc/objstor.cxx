@@ -80,7 +80,6 @@
 #include <unotools/securityoptions.hxx>
 #include <cppuhelper/weak.hxx>
 #include <comphelper/processfactory.hxx>
-#include <tools/cachestr.hxx>
 #include <unotools/streamwrap.hxx>
 
 #include <unotools/saveopt.hxx>

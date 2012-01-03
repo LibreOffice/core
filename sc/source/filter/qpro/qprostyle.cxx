@@ -36,7 +36,6 @@
 #include "qpro.hxx"
 #include "qprostyle.hxx"
 
-#include <tools/color.hxx>
 #include <scitems.hxx>
 #include <svx/algitem.hxx>
 #include <editeng/udlnitem.hxx>

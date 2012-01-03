@@ -48,8 +48,6 @@
 
 #include <vcl/timer.hxx>
 
-#include <tools/date.hxx>
-
 //.........................................................................
 namespace frm
 {

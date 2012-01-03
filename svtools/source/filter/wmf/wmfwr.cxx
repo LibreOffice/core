@@ -34,6 +34,7 @@
 #include "emfwr.hxx"
 #include <rtl/crc.h>
 #include <rtl/tencinfo.h>
+#include <tools/bigint.hxx>
 #include <tools/tenccvt.hxx>
 #include <osl/endian.h>
 #include <i18nutil/unicode.hxx> //unicode::getUnicodeScriptType

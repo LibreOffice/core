@@ -37,7 +37,6 @@
 #include "drawdoc.hxx"
 #include "app.hrc"
 #include <vcl/bitmap.hxx>
-#include <tools/color.hxx>
 
 namespace sd { namespace toolpanel { namespace controls {
 

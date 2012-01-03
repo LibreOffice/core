@@ -32,7 +32,6 @@
 
 #include <rtl/strbuf.hxx>
 #include <rtl/tencinfo.h>
-#include <tools/datetime.hxx>
 #include <tools/inetmime.hxx>
 
 namespace unnamed_tools_inetmime {} using namespace unnamed_tools_inetmime;

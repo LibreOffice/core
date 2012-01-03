@@ -27,6 +27,7 @@
  ************************************************************************/
 
 #include <stdio.h>
+#include <tools/config.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
 #include <rtsetup.hrc>

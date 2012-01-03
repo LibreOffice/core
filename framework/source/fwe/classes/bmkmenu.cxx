@@ -53,7 +53,6 @@
 //_________________________________________________________________________________________________________________
 //  includes of other projects
 //_________________________________________________________________________________________________________________
-#include <tools/config.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/dynamicmenuoptions.hxx>
 #include <svtools/menuoptions.hxx>

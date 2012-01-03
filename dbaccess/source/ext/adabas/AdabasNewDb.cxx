@@ -34,7 +34,6 @@
 #include <sfx2/passwd.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/stream.hxx>
-#include <tools/bigint.hxx>
 #include <tools/debug.hxx>
 #include "Acomponentmodule.hxx"
 #include <unotools/tempfile.hxx>

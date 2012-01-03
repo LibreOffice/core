@@ -41,7 +41,6 @@
 #include "DrawDocShell.hxx"
 #include "vectdlg.hxx"
 #include "vectdlg.hrc"
-#include <tools/config.hxx>
 #include <vcl/bmpacc.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/metaact.hxx>

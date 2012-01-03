@@ -31,7 +31,6 @@
 
 #include <stdio.h>
 #include <tools/urlobj.hxx>
-#include <tools/config.hxx>
 #include <svtools/ehdl.hxx>
 #include <unotools/startoptions.hxx>
 #include <svl/itempool.hxx>

@@ -64,7 +64,6 @@
 #include <svl/poolitem.hxx>
 #include <tools/time.hxx>
 #include <svl/solar.hrc>
-#include <tools/date.hxx>
 #include <svl/brdcst.hxx>
 #include <svx/svxids.hrc>
 #include <svl/memberid.hrc>

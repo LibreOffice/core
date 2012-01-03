@@ -29,7 +29,6 @@
 
 #include <vcl/sv.h>
 #include <tools/stream.hxx>
-#include <tools/bigint.hxx>
 #include <tools/poly.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/metaact.hxx>

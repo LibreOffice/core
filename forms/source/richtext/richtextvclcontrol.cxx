@@ -32,9 +32,6 @@
 #include <svl/itemset.hxx>
 #include <svl/languageoptions.hxx>
 #if OSL_DEBUG_LEVEL > 0
-    #ifndef _TOOLS_TEMPFILE_HXX
-    #include <tools/tempfile.hxx>
-    #endif
     #ifndef _UNTOOLS_UCBSTREAMHELPER_HXX
     #include <unotools/ucbstreamhelper.hxx>
     #endif

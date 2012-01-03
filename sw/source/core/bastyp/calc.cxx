@@ -46,7 +46,6 @@
 #include <editeng/unolingu.hxx>
 #include <editeng/scripttypeitem.hxx>
 #include <unotools/useroptions.hxx>
-#include <tools/datetime.hxx>
 #include <svl/zforlist.hxx>
 #include <swmodule.hxx>
 #include <doc.hxx>

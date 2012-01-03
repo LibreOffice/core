@@ -52,7 +52,6 @@
 
 
 #include <editeng/unoprnms.hxx>
-#include <tools/color.hxx>
 #include <rtl/math.hxx>
 #include <svx/svdocirc.hxx>
 #include <svx/svdopath.hxx>

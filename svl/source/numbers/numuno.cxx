@@ -29,7 +29,6 @@
 
 #define _ZFORLIST_DECLARE_TABLE
 
-#include <tools/color.hxx>
 #include <tools/debug.hxx>
 #include <comphelper/servicehelper.hxx>
 

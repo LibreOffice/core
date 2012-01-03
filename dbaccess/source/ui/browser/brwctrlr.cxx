@@ -91,7 +91,6 @@
 #include <sfx2/sfx.hrc>
 #include <svx/fmsearch.hxx>
 #include <svx/svxdlg.hxx>
-#include <tools/color.hxx>
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>
 #include <vcl/msgbox.hxx>

@@ -39,7 +39,6 @@
 #include <vcl/field.hxx>
 
 #include <vcl/button.hxx>
-#include <tools/date.hxx>
 #include <tools/ref.hxx>
 #include <svtools/editbrowsebox.hxx>
 #include <osl/mutex.hxx>

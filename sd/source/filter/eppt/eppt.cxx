@@ -29,7 +29,6 @@
 #include <eppt.hxx>
 #include "epptdef.hxx"
 #include <tools/globname.hxx>
-#include <tools/datetime.hxx>
 #include <tools/poly.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/bmpacc.hxx>

@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include <tools/cachestr.hxx>
 #include <tools/config.hxx>
 #include <svl/inetstrm.hxx>
 #include <svl/stritem.hxx>

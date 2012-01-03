@@ -29,7 +29,6 @@
 #include <osl/file.hxx>
 #include <rtl/bootstrap.hxx>
 #include <rtl/ustring.hxx>
-#include <tools/datetime.hxx>
 #include <unotools/configmgr.hxx>
 
 #include <comphelper/processfactory.hxx>

@@ -36,7 +36,6 @@
 #include <sot/storage.hxx>
 #include <tools/gen.hxx>
 #include <tools/stream.hxx>
-#include <tools/datetime.hxx>
 
 #include <tools/string.hxx>
 

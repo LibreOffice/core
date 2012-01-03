@@ -90,7 +90,6 @@
 #include <com/sun/star/document/MacroExecMode.hpp>
 #include <com/sun/star/ucb/XContent.hpp>
 
-#include <tools/cachestr.hxx>
 #include <osl/mutex.hxx>
 #include <comphelper/sequence.hxx>
 #include <framework/documentundoguard.hxx>

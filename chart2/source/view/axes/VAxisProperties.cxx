@@ -34,7 +34,6 @@
 #include "DiagramHelper.hxx"
 #include "ChartModelHelper.hxx"
 
-#include <tools/color.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/chart/ChartAxisArrangeOrderType.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>

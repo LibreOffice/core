@@ -31,9 +31,6 @@
 
 #include <com/sun/star/office/XAnnotation.hpp>
 
-#include <tools/datetime.hxx>
-#include <tools/date.hxx>
-
 #include <vcl/ctrl.hxx>
 #include <vcl/lineinfo.hxx>
 #include <vcl/floatwin.hxx>

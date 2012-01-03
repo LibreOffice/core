@@ -40,7 +40,6 @@
 #include <svl/whiter.hxx>
 #include <svl/style.hxx>
 #include <editeng/editstat.hxx>
-#include <tools/config.hxx>
 #include <vcl/cursor.hxx>
 #include <editeng/unotext.hxx>
 

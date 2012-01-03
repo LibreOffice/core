@@ -45,7 +45,6 @@
 #include <editeng/editids.hrc>
 #include <editeng/editrids.hrc>
 #include <vcl/vclenum.hxx>
-#include <tools/bigint.hxx>
 #include <tools/tenccvt.hxx>
 
 #include <rtl/ustring.hxx>

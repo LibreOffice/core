@@ -36,6 +36,7 @@
 #include "vcl/msgbox.hxx"
 #include "vcl/strhelper.hxx"
 
+#include <tools/config.hxx>
 #include <osl/thread.h>
 #include <rtl/strbuf.hxx>
 #include <comphelper/string.hxx>

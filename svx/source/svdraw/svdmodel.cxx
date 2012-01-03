@@ -83,7 +83,6 @@
 #include <editeng/colritem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <svl/style.hxx>
-#include <tools/bigint.hxx>
 #include <editeng/numitem.hxx>
 #include <editeng/bulitem.hxx>
 #include <editeng/outlobj.hxx>

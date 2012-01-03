@@ -34,7 +34,6 @@
 #include <com/sun/star/util/XFlushable.hpp>
 
 #include <stdlib.h>
-#include <tools/config.hxx>
 #include <vcl/sound.hxx>
 #include <vcl/msgbox.hxx>
 #include <tools/string.hxx>

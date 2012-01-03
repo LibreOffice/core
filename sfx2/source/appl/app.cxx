@@ -36,7 +36,6 @@
 #include <sfx2/app.hxx>
 #include <sfx2/frame.hxx>
 #include <tools/simplerm.hxx>
-#include <tools/config.hxx>
 #include <basic/basrdll.hxx>
 #include <basic/sbmeth.hxx>
 #include <basic/sbmod.hxx>

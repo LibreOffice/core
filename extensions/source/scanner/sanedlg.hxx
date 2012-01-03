@@ -29,7 +29,6 @@
 #define _SVT_SANEDLG_HXX
 
 #include <vcl/dialog.hxx>
-#include <tools/config.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>

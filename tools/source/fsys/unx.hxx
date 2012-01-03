@@ -54,7 +54,6 @@
 #define LOWER(aString)  (aString.Lower())
 
 #include <time.h>
-#include <tools/datetime.hxx>
 
 inline Time Unx2Time( time_t nTime )
 {

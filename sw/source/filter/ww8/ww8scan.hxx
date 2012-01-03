@@ -37,7 +37,6 @@
 #include <list>
 #include <algorithm>
 #include <tools/solar.h>        // UINTXX
-#include <tools/datetime.hxx>
 #include <tools/stream.hxx>
 #include <tools/string.hxx>
 #include "hash_wrap.hxx"

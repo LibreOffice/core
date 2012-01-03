@@ -32,7 +32,6 @@
 #include <tools/stream.hxx>
 #include <tools/debug.hxx>
 #include <vcl/outdev.hxx>
-#include <tools/config.hxx>
 #include <svtools/filter.hxx>
 #include "FilterConfigCache.hxx"
 #include <unotools/ucbstreamhelper.hxx>

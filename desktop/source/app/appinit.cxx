@@ -55,7 +55,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/bootstrap.hxx>
 #include <tools/debug.hxx>
-#include <tools/tempfile.hxx>
 #include <ucbhelper/configurationkeys.hxx>
 
 #include <cppuhelper/bootstrap.hxx>

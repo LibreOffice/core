@@ -36,6 +36,7 @@
 #include <svl/numuno.hxx>
 #include <rtl/math.hxx>
 #include <i18npool/mslangid.hxx>
+#include <tools/color.hxx>
 #include <tools/debug.hxx>
 #include <rtl/ustrbuf.hxx>
 

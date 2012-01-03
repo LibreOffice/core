@@ -40,6 +40,7 @@
 #include "vcl/svapp.hxx"
 #include "vcl/mnemonic.hxx"
 
+#include "tools/config.hxx"
 #include "tools/urlobj.hxx"
 
 #include "osl/file.hxx"

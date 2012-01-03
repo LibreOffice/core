@@ -31,7 +31,6 @@
 
 #include "sb.hxx"
 #include <tools/rcid.h>
-#include <tools/config.hxx>
 #include <tools/stream.hxx>
 #include <tools/errinf.hxx>
 #include <basic/sbx.hxx>

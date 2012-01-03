@@ -38,7 +38,6 @@
 #include "ChartTypeHelper.hxx"
 #include "ThreeDHelper.hxx"
 #include <editeng/unoprnms.hxx>
-#include <tools/color.hxx>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/drawing/ProjectionMode.hpp>

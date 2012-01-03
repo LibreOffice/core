@@ -32,6 +32,7 @@
 #include "core_resource.hrc"
 #include "core_resource.hxx"
 #include <comphelper/sequence.hxx>
+#include <tools/color.hxx>
 #include <tools/debug.hxx>
 #include <connectivity/dbtools.hxx>
 #include <comphelper/property.hxx>

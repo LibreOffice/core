@@ -27,7 +27,6 @@
  ************************************************************************/
 
 #include <propread.hxx>
-#include <tools/bigint.hxx>
 #include "tools/debug.hxx"
 #include "rtl/tencinfo.h"
 #include "rtl/textenc.h"

@@ -27,7 +27,6 @@
  ************************************************************************/
 
 #include <svl/style.hxx>
-#include <tools/bigint.hxx>
 #include <svx/xlnwtit.hxx>
 #include <svx/xlnedwit.hxx>
 #include <svx/xlnstwit.hxx>

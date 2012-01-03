@@ -39,7 +39,6 @@
 
 #include "osl/mutex.hxx"
 #include <com/sun/star/uno/Sequence.hxx>
-#include "tools/datetime.hxx"
 #include "svl/zforlist.hxx"
 #include "vcl/svapp.hxx"
 

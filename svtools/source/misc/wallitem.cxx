@@ -39,7 +39,6 @@
 #include <tools/string.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/stream.hxx>
-#include <tools/color.hxx>
 
 #include <vcl/graph.hxx>
 #include <vcl/svapp.hxx>

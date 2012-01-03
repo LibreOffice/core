@@ -33,7 +33,6 @@
 #include <svl/zforlist.hxx>
 #include <tools/string.hxx>
 #include <vcl/vclenum.hxx>
-#include <tools/color.hxx>
 
 
 #include <vector>

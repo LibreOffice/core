@@ -67,7 +67,6 @@
 #include <svx/unoshape.hxx>
 #include <svx/svdpagv.hxx>
 #include <swerror.h>
-#include <tools/cachestr.hxx>
 #include <shellio.hxx>
 #include <ndtxt.hxx>
 #include <SwStyleNameMapper.hxx>

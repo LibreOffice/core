@@ -38,7 +38,6 @@
 #include <com/sun/star/presentation/XPresentation.hpp>
 #include <com/sun/star/presentation/XPresentationSupplier.hpp>
 #include <tools/debug.hxx>
-#include <tools/color.hxx>
 #include <vcl/window.hxx>
 #include <rtl/textenc.h>
 #include <rtl/locale.h>

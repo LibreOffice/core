@@ -29,11 +29,6 @@
 
 #include <comphelper/string.hxx>
 
-#ifndef _BIGINT_HXX
-#define _TOOLS_BIGINT
-#include "tools/bigint.hxx"
-#endif
-
 #include "tools/debug.hxx"
 
 #include "tools/rc.h"

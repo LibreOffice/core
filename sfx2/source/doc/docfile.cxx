@@ -72,7 +72,6 @@
 #include <com/sun/star/security/DocumentSignatureInformation.hpp>
 #include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
 #include <tools/zcodec.hxx>
-#include <tools/cachestr.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/tempfile.hxx>
 #include <comphelper/processfactory.hxx>

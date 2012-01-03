@@ -29,7 +29,6 @@
 #define _FLTINI_HXX
 
 #include <shellio.hxx>
-#include <tools/color.hxx>
 
 class SwNumRuleTbl;
 class SwDoc;

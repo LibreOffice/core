@@ -57,7 +57,6 @@
 #include <unotools/intlwrapper.hxx>
 
 #include <unotools/configmgr.hxx>
-#include <tools/config.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/msgbox.hxx>
 #include <svl/intitem.hxx>

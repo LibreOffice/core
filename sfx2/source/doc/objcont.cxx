@@ -35,7 +35,6 @@
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/document/XStandaloneDocumentInfo.hpp>
 #include <com/sun/star/beans/XFastPropertySet.hpp>
-#include <tools/cachestr.hxx>
 #include <vcl/msgbox.hxx>
 #include <svl/style.hxx>
 #include <vcl/wrkwin.hxx>
