@@ -290,8 +290,8 @@ void SwNumFmt::SetCharFmt( SwCharFmt* pChFmt)
 
 void SwNumFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 {
-    // dann suche mal in dem Doc nach dem NumRules-Object, in dem dieses
-    // NumFormat gesetzt ist. Das Format muss es nicht geben!
+    // Look for the NumRules object in the Doc where this NumFormat is set.
+    // The format does not need to exist!
     const SwCharFmt* pFmt = 0;
     sal_uInt16 nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0;
     switch( nWhich )
@@ -407,7 +407,7 @@ SwNumRule::SwNumRule( const String& rNm,
     meDefaultNumberFormatPositionAndSpaceMode( eDefaultNumberFormatPositionAndSpaceMode ),
     msDefaultListId()
 {
-    if( !nRefCount++ )          // zum erstmal, also initialisiern
+    if( !nRefCount++ )          // for the first time, initialize
     {
         SwNumFmt* pFmt;
         sal_uInt8 n;
@@ -485,7 +485,7 @@ SwNumRule::SwNumRule( const String& rNm,
         }
     }
     memset( aFmts, 0, sizeof( aFmts ));
-    OSL_ENSURE( sName.Len(), "NumRule ohne Namen!" );
+    OSL_ENSURE( sName.Len(), "NumRule without a namen!" );
 }
 
 SwNumRule::SwNumRule( const SwNumRule& rNumRule )
@@ -522,16 +522,16 @@ SwNumRule::~SwNumRule()
         pNumRuleMap->erase(GetName());
     }
 
-    if( !--nRefCount )          // der letzte macht die Tuer zu
+    if( !--nRefCount )          // the last one closes the door (?)
     {
-            // Nummerierung:
+            // Numbering:
             SwNumFmt** ppFmts = (SwNumFmt**)SwNumRule::aBaseFmts;
             int n;
 
             for( n = 0; n < MAXLEVEL; ++n, ++ppFmts )
                 delete *ppFmts, *ppFmts = 0;
 
-            // Gliederung:
+            // Listing:
             for( n = 0; n < MAXLEVEL; ++n, ++ppFmts )
                 delete *ppFmts, *ppFmts = 0;
 
@@ -553,7 +553,7 @@ void SwNumRule::CheckCharFmts( SwDoc* pDoc )
         if( aFmts[ n ] && 0 != ( pFmt = aFmts[ n ]->GetCharFmt() ) &&
             pFmt->GetDoc() != pDoc )
         {
-            // dann kopieren!
+            // copy
             SwNumFmt* pNew = new SwNumFmt( *aFmts[ n ] );
             pNew->SetCharFmt( pDoc->CopyCharFmt( *pFmt ) );
             delete aFmts[ n ];
@@ -677,7 +677,7 @@ String SwNumRule::MakeNumString( const SwNumberTree::tNumberVector & rNumVector,
             if( !IsContinusNum() &&
                 // - do not include upper levels, if level isn't numbered.
                 rMyNFmt.GetNumberingType() != SVX_NUM_NUMBER_NONE &&
-                rMyNFmt.GetIncludeUpperLevels() )  // nur der eigene Level ?
+                rMyNFmt.GetIncludeUpperLevels() )  // Just the own level?
             {
                 sal_uInt8 n = rMyNFmt.GetIncludeUpperLevels();
                 if( 1 < n )
@@ -694,7 +694,7 @@ String SwNumRule::MakeNumString( const SwNumberTree::tNumberVector & rNumVector,
                 const SwNumFmt& rNFmt = Get( i );
                 if( SVX_NUM_NUMBER_NONE == rNFmt.GetNumberingType() )
                 {
-                    // Soll aus 1.1.1 --> 2. NoNum --> 1..1 oder 1.1 ??
+                    // Should 1.1.1 --> 2. NoNum --> 1..1 or 1.1 ??
                     //                 if( i != rNum.nMyLevel )
                     //                    aStr += aDotStr;
                     continue;
@@ -708,13 +708,12 @@ String SwNumRule::MakeNumString( const SwNumberTree::tNumberVector & rNumVector,
                         aStr += rNFmt.GetNumStr( rNumVector[ i ] );
                 }
                 else
-                    aStr += '0';        // alle 0-Level sind eine 0
+                    aStr += '0';        // all 0 level are a 0
                 if( i != nLevel && aStr.Len() )
                     aStr += aDotStr;
             }
 
-            //JP 14.12.99: the type dont have any number, so dont append
-            //              the Post-/Prefix String
+            // The type don't have any number, so don't append the post-/prefix string
             if( bInclStrings && !bOnlyArabic &&
                 SVX_NUM_CHAR_SPECIAL != rMyNFmt.GetNumberingType() &&
                 SVX_NUM_BITMAP != rMyNFmt.GetNumberingType() )
@@ -827,11 +826,11 @@ String SwNumRule::MakeRefNumString( const SwNodeNum& rNodeNum,
     return aRefNumStr;
 }
 
-//  ----- Copy-Methode vom SwNumRule ------
+//  ----- Copy method from SwNumRule ------
 
-    // eine Art Copy-Constructor, damit die Num-Formate auch an den
-    // richtigen CharFormaten eines Dokumentes haengen !!
-    // (Kopiert die NumFormate und returnt sich selbst)
+    // A kind of copy constructor, so that the num formats are attached
+    // to the right CharFormats of a Document.
+    // Copies the NumFormats and returns itself.
 SwNumRule& SwNumRule::CopyNumRule( SwDoc* pDoc, const SwNumRule& rNumRule )
 {
     for( sal_uInt16 n = 0; n < MAXLEVEL; ++n )
@@ -839,9 +838,8 @@ SwNumRule& SwNumRule::CopyNumRule( SwDoc* pDoc, const SwNumRule& rNumRule )
         Set( n, rNumRule.aFmts[ n ] );
         if( aFmts[ n ] && aFmts[ n ]->GetCharFmt() &&
             USHRT_MAX == pDoc->GetCharFmts()->GetPos( aFmts[n]->GetCharFmt() ))
-            // ueber unterschiedliche Dokumente kopieren, dann
-            // kopiere das entsprechende Char-Format ins neue
-            // Dokument.
+            // If we copy across different Documents, then copy the
+            // corresponding CharFormat into the new Document.
             aFmts[n]->SetCharFmt( pDoc->CopyCharFmt( *aFmts[n]->
                                         GetCharFmt() ) );
     }
