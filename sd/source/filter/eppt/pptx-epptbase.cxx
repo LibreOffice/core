@@ -35,7 +35,6 @@
 #include <tools/datetime.hxx>
 #include <tools/poly.hxx>
 #include <tools/stream.hxx>
-#include <tools/zcodec.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/bmpacc.hxx>
 #include <vcl/gradient.hxx>

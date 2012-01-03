@@ -32,7 +32,6 @@
 #include <stdlib.h>
 
 #include "osl/module.hxx"
-#include "tools/solarmutex.hxx"
 
 #include "unx/salunx.h"
 #include "unx/saldata.hxx"
