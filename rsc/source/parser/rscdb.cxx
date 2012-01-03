@@ -35,7 +35,6 @@
 
 #include <tools/fsys.hxx>
 #include <tools/rc.h>
-#include <tools/isofallback.hxx>
 #include <rtl/strbuf.hxx>
 #include <sal/macros.h>
 

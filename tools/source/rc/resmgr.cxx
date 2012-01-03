@@ -51,8 +51,6 @@
 #include <i18npool/mslangid.hxx>
 #include <tools/simplerm.hxx>
 
-#include <tools/isofallback.hxx>
-
 #include <functional>
 #include <algorithm>
 #include <boost/unordered_map.hpp>

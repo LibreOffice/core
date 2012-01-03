@@ -95,7 +95,6 @@ $(eval $(call gb_Library_add_exception_objects,tl,\
     tools/source/misc/extendapplicationenvironment \
     tools/source/misc/getprocessworkingdir \
     tools/source/misc/solarmutex \
-    tools/source/rc/isofallback \
     tools/source/rc/rc \
     tools/source/rc/resary \
     tools/source/rc/resmgr \
