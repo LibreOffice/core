@@ -51,8 +51,7 @@ my ( $SOLAR_JAVA,
 # Platform dependent constant values.
 my ( $ARCH,
       $OSVERSION, $OUTPATH, $INPATH,
-      $DYNAMIC_CRT, $use_shl_versions, $JRELIBDIR,
-      $JRETOOLKITDIR, $JRETHREADDIR );
+      $DYNAMIC_CRT, $use_shl_versions );
 #
 #-------------------------------------------
 # IIc. Declaring the environment variables.
@@ -71,7 +70,7 @@ my ( $oldPATH, $SRC_ROOT, $JAVA_HOME, $JDK, $JAVAFLAGS, $OOO_SHELL,
      $SOLARSRC, $SOLARVER, $SOLARVERSION, $WORKDIR, $OUTDIR, $SOLARENV, $SOLARDEFIMG,
      $DMAKEROOT, $CLASSPATH, $XCLASSPATH, $COMPATH,
      $MSPDB_PATH, $MIDL_PATH, $CSC_PATH, $SHOWINCLUDES_PREFIX,
-     $PATH, $SOLAREXTRAINC, $SOLAREXTRALIB, $SOLARLIB, $JAVALIB,
+     $PATH, $SOLAREXTRAINC, $SOLAREXTRALIB, $SOLARLIB,
      $SOLARINC, $FRAMEWORKSHOME, $COMEX, $PERL,
      $COMP_ENV, $ILIB, $JAVAHOME, $WINDOWS_SDK_HOME, $DIRECTXSDK_LIB, $DOTNET_FRAMEWORK_HOME,
      $USE_DIRECTX5, $ATL_LIB, $ATL_INCLUDE, $MFC_LIB, $MFC_INCLUDE, $TMPDIR,
@@ -167,59 +166,10 @@ $TARFILE_LOCATION = "@TARFILE_LOCATION@"; # where to find tarballs with external
 # Setting platform dependent constant values.
 if ( $platform =~ m/solaris/ )
 {
-    print "Setting Solaris specific values... ";
-    if ($platform =~ m/^i[3456]86/)
-    {
-        $JRELIBDIR      = $JAVA_HOME.$ds."jre".$ds."lib".$ds."i386";
-        $JRETOOLKITDIR  = $JAVA_HOME.$ds."jre".$ds."lib".$ds."i386".$ds."xawt";
-        $JRETHREADDIR   = $JAVA_HOME.$ds."jre".$ds."lib".$ds."i386".$ds."native_threads";
-    }
-    else
-    {
-        $JRELIBDIR      = $JAVA_HOME.$ds."jre".$ds."lib".$ds."sparc";
-        $JRETOOLKITDIR  = $JAVA_HOME.$ds."jre".$ds."lib".$ds."sparc".$ds."xawt";
-        $JRETHREADDIR   = $JAVA_HOME.$ds."jre".$ds."lib".$ds."sparc".$ds."native_threads";
-    }
-
     $COMPATH        = '@COMPATH@';
 }
 elsif ( $platform =~ m/netbsd/ )
 {
-#Set platform specific values:
-    if ($platform =~ m/^i[3456]86/)
-    {
-        print "Setting NetBSD x86 specific values... ";
-        $JRELIBDIR      = $JAVA_HOME.$ds."jre".$ds."lib".$ds."i386";
-        $JRETOOLKITDIR  = $JAVA_HOME.$ds."jre".$ds."lib".$ds."i386".$ds."client";
-        $JRETHREADDIR   = $JAVA_HOME.$ds."jre".$ds."lib".$ds."i386".$ds."native_threads";
-    }
-    elsif ($platform =~ m/^x86_64/)
-    {
-        print "Setting NetBSD x86-64 specific values... ";
-        $JRELIBDIR      = $JAVA_HOME.$ds."jre".$ds."lib".$ds."amd64";
-        $JRETOOLKITDIR  = $JAVA_HOME.$ds."jre".$ds."lib".$ds."amd64".$ds."client";
-        $JRETHREADDIR   = $JAVA_HOME.$ds."jre".$ds."lib".$ds."amd64".$ds."native_threads";
-    }
-    elsif ($platform =~ m/^sparc/)
-    {
-        print "Setting NetBSD Sparc specific values... ";
-        $JRELIBDIR      = $JAVA_HOME.$ds."jre".$ds."lib".$ds."sparc";
-        $JRETOOLKITDIR  = $JAVA_HOME.$ds."jre".$ds."lib".$ds."sparc".$ds."client";
-        $JRETHREADDIR   = $JAVA_HOME.$ds."jre".$ds."lib".$ds."sparc".$ds."native_threads";
-    }
-    elsif ($platform =~ m/powerpc/)
-    {
-        print "Setting NetBSD PPC specific values... ";
-        $JRELIBDIR      = $JAVA_HOME.$ds."jre".$ds."lib".$ds."ppc";
-        $JRETOOLKITDIR  = $JAVA_HOME.$ds."jre".$ds."lib".$ds."ppc".$ds."classic";
-        $JRETHREADDIR   = $JAVA_HOME.$ds."jre".$ds."lib".$ds."ppc".$ds."native_threads";
-    }
-    else
-    {
-        print "Unsupported NetBSD architecture: $platform \n";
-        exit 1;
-    }
-   # General NetBSD settings:
     $COMPATH        = '@COMPATH@';
 }
 elsif ( $platform =~ m/kfreebsd/ )
@@ -227,83 +177,16 @@ elsif ( $platform =~ m/kfreebsd/ )
 # General GNU/kFreeBSD settings:
     $COMPATH        = '@COMPATH@';
 
-#Set platform specific values:
-    if ($platform =~ m/^i[3456]86/)
-    {
-        print "Setting GNU/kFreeBSD x86 specific values... ";
-
-        $JRELIBDIR      = $JAVA_HOME.$ds."jre".$ds."lib".$ds."i386";
-        $JRETOOLKITDIR  = $JAVA_HOME.$ds."jre".$ds."lib".$ds."i386".$ds."client";
-        $JRETHREADDIR   = $JAVA_HOME.$ds."jre".$ds."lib".$ds."i386".$ds."native_threads";
-    }
-    elsif ($platform =~ m/^x86_64/)
-    {
-        print "Setting GNU/kFreeBSD x86-64 specific values... ";
-        $JRELIBDIR      = $JAVA_HOME.$ds."jre".$ds."lib".$ds."amd64";
-        $JRETOOLKITDIR  = $JAVA_HOME.$ds."jre".$ds."lib".$ds."amd64".$ds."server";
-        $JRETHREADDIR   = $JAVA_HOME.$ds."jre".$ds."lib".$ds."amd64".$ds."native_threads";
-    }
-
 }
 elsif ( $platform =~ m/freebsd/ )
 {
     $COMPATH        = '@COMPATH@';
     $OSVERSION      = '@OSVERSION@';
-    if ($platform =~ m/^(amd64|x86_64)/)
-    {
-        my ( $JAVA_OS );
-        print "Setting FreeBSD AMD64 specific values... ";
-        $JAVA_OS        = '@JAVA_HOME@';
-        $JAVA_OS        =~ s/.*\///;
-        if ($JAVA_OS =~ m/^linux/)
-        {
-            $JRELIBDIR      = $JAVA_HOME.$ds."jre".$ds."lib".$ds."i386";
-            $JRETOOLKITDIR  = $JAVA_HOME.$ds."jre".$ds."lib".$ds."i386".$ds."client";
-            $JRETHREADDIR   = $JAVA_HOME.$ds."jre".$ds."lib".$ds."i386".$ds."native_threads";
-        }
-        else
-        {
-            $JRELIBDIR      = $JAVA_HOME.$ds."jre".$ds."lib".$ds."amd64";
-            $JRETOOLKITDIR  = $JAVA_HOME.$ds."jre".$ds."lib".$ds."amd64".$ds."server";
-            $JRETHREADDIR   = $JAVA_HOME.$ds."jre".$ds."lib".$ds."amd64".$ds."native_threads";
-        }
-   }
-   elsif ($platform =~ m/^i386/)
-   {
-       print "Setting FreeBSD x86 specific values... ";
-       $JRELIBDIR      = $JAVA_HOME.$ds."jre".$ds."lib".$ds."i386";
-       $JRETOOLKITDIR  = $JAVA_HOME.$ds."jre".$ds."lib".$ds."i386".$ds."client";
-       $JRETHREADDIR   = $JAVA_HOME.$ds."jre".$ds."lib".$ds."i386".$ds."native_threads";
-   }
-   else
-   {
-       print "Unsupported FreeBSD architecture: $platform \n";
-       exit 1;
-   }
 }
 elsif ( $platform =~ m/openbsd/ )
 {
     $COMPATH        = '@COMPATH@';
     $OSVERSION      = '@OSVERSION@';
-    if ($platform =~ m/^(amd64|x86_64)/)
-    {
-        print "Setting OpenBSD AMD64 specific values... ";
-        $JRELIBDIR      = $JAVA_HOME.$ds."jre".$ds."lib".$ds."amd64";
-        $JRETOOLKITDIR  = $JAVA_HOME.$ds."jre".$ds."lib".$ds."amd64".$ds."server";
-        $JRETHREADDIR   = $JAVA_HOME.$ds."jre".$ds."lib".$ds."amd64".$ds."native_threads";
-    }
-    elsif ($platform =~ m/^i386/)
-    {
-        print "Setting OpenBSD x86 specific values... ";
-        $JRELIBDIR      = $JAVA_HOME.$ds."jre".$ds."lib".$ds."i386";
-        $JRETOOLKITDIR  = $JAVA_HOME.$ds."jre".$ds."lib".$ds."i386".$ds."client";
-        $JRETHREADDIR   = $JAVA_HOME.$ds."jre".$ds."lib".$ds."i386".$ds."native_threads";
-    }
-    else
-    {
-        print "Unsupported OpenBSD architecture: $platform \n";
-        exit 1;
-    }
 }
 elsif ( $platform =~ m/linux/ )
 {
@@ -313,145 +196,38 @@ elsif ( $platform =~ m/linux/ )
 #Set platform specific values:
     if ($platform =~ m/^i[3456]86/)
     {
-        print "Setting Linux x86 specific values... ";
-        if ($JDK =~ m/^[Ii][Bb][Mm]/)
-        {
-            $JRELIBDIR     = $JAVA_HOME.$ds."jre".$ds."bin";
-            $JRETOOLKITDIR = $JAVA_HOME.$ds."jre".$ds."bin".$ds."classic";
-            $JRETHREADDIR  = $JAVA_HOME.$ds."jre".$ds."bin";
-        }
-        elsif ($JDK =~ m/^[Bb][Ee][Aa]/)
-        {
-            $JRELIBDIR     = $JAVA_HOME.$ds."jre".$ds."lib".$ds."i386";
-            $JRETOOLKITDIR  = $JAVA_HOME.$ds."jre".$ds."lib".$ds."i386".$ds."jrockit";
-            $JRETHREADDIR   = $JAVA_HOME.$ds."jre".$ds."lib".$ds."i386".$ds."native_threads";
-        }
-        else
-        {
-            $JRELIBDIR      = $JAVA_HOME.$ds."jre".$ds."lib".$ds."i386";
-            # has both server and client
-            $JRETOOLKITDIR  = $JAVA_HOME.$ds."jre".$ds."lib".$ds."i386".$ds."client";
-            $JRETHREADDIR   = $JAVA_HOME.$ds."jre".$ds."lib".$ds."i386".$ds."native_threads";
-        }
     }
     elsif ($platform =~ m/^x86_64/)
     {
-        print "Setting Linux x86-64 specific values... ";
-        # Blackdown.org JDK porting project uses `amd64' and `server' in JDK 1.4.2 RC1
-        $JRELIBDIR      = $JAVA_HOME.$ds."jre".$ds."lib".$ds."amd64";
-        # has both server and client
-        $JRETOOLKITDIR  = $JAVA_HOME.$ds."jre".$ds."lib".$ds."amd64".$ds."server";
-        $JRETHREADDIR   = $JAVA_HOME.$ds."jre".$ds."lib".$ds."amd64".$ds."native_threads";
     }
     elsif ($platform =~ m/^ia64/)
     {
-        print "Setting Linux ia64 specific values... ";
-        $JRELIBDIR      = $JAVA_HOME.$ds."jre".$ds."lib".$ds."ia64";
-        $JRETOOLKITDIR  = $JAVA_HOME.$ds."jre".$ds."lib".$ds."ia64".$ds."server";
-        $JRETHREADDIR   = $JAVA_HOME.$ds."jre".$ds."lib".$ds."ia64".$ds."native_threads";
     }
     elsif ($platform =~ m/^sparc/)
     {
-        print "Setting Linux Sparc specific values... ";
-        $JRELIBDIR      = $JAVA_HOME.$ds."jre".$ds."lib".$ds."sparc";
-        $JRETOOLKITDIR  = $JAVA_HOME.$ds."jre".$ds."lib".$ds."sparc".$ds."server";
-        $JRETHREADDIR   = $JAVA_HOME.$ds."jre".$ds."lib".$ds."sparc".$ds."native_threads";
     }
     elsif ($platform =~ m/^powerpc/)
     {
-        if (($platform =~ m/^powerpc64/) && ('@SIZEOF_LONG@' eq '8'))
-        {
-            print "Setting Linux PPC64 specific values... ";
-            if ( $JDK eq "gcj" )
-            {
-                $JRELIBDIR      = $JAVA_HOME.$ds."jre".$ds."lib".$ds."ppc64";
-                $JRETOOLKITDIR  = $JAVA_HOME.$ds."jre".$ds."lib".$ds."ppc64".$ds."client";
-                $JRETHREADDIR   = $JAVA_HOME.$ds."jre".$ds."lib".$ds."ppc64".$ds."native_threads";
-            }
-            # OpenJDK
-            elsif ($JDK =~ m/sun/)
-            {
-                $JRELIBDIR      = $JAVA_HOME.$ds."jre".$ds."lib".$ds."ppc64";
-                $JRETOOLKITDIR  = $JAVA_HOME.$ds."jre".$ds."lib".$ds."ppc64".$ds."server";
-                $JRETHREADDIR   = $JAVA_HOME.$ds."jre".$ds."lib".$ds."ppc64".$ds."native_threads";
-            }
-        }
-        else
-        {
-            print "Setting Linux PPC specific values... ";
-            if ( $JDK eq "gcj" )
-            {
-                $JRELIBDIR      = $JAVA_HOME.$ds."jre".$ds."lib".$ds."ppc";
-                $JRETOOLKITDIR  = $JAVA_HOME.$ds."jre".$ds."lib".$ds."ppc".$ds."client";
-                $JRETHREADDIR   = $JAVA_HOME.$ds."jre".$ds."lib".$ds."ppc".$ds."native_threads";
-            }
-            elsif ($JDK =~ m/^[Ii][Bb][Mm]/)
-            {
-                $JRELIBDIR     = $JAVA_HOME.$ds."jre".$ds."lib".$ds."ppc";
-                $JRETOOLKITDIR = $JAVA_HOME.$ds."jre".$ds."lib".$ds."ppc".$ds."classic";
-                $JRETHREADDIR  = $JAVA_HOME.$ds."jre".$ds."lib".$ds."ppc";
-            }
-            # OpenJDK
-            elsif ($JDK =~ m/sun/)
-            {
-                $JRELIBDIR      = $JAVA_HOME.$ds."jre".$ds."lib".$ds."ppc";
-                $JRETOOLKITDIR  = $JAVA_HOME.$ds."jre".$ds."lib".$ds."ppc".$ds."server";
-                $JRETHREADDIR   = $JAVA_HOME.$ds."jre".$ds."lib".$ds."ppc".$ds."native_threads";
-            }
-        }
     }
     elsif ($platform =~ m/^s390/)
     {
-        if (($platform =~ m/^s390x/) && ('@SIZEOF_LONG@' eq '8'))
-        {
-            print "Setting Linux zSeries specific values... ";
-            $ARCH           = "s390x";
-        }
-        else
-        {
-            print "Setting Linux S/390 specific values... ";
-            $ARCH           = "s390";
-        }
-        $JRELIBDIR      = $JAVA_HOME.$ds."jre".$ds."lib".$ds.$ARCH;
-        $JRETOOLKITDIR  = $JAVA_HOME.$ds."jre".$ds."lib".$ds.$ARCH.$ds."server";
-        $JRETHREADDIR   = $JAVA_HOME.$ds."jre".$ds."lib".$ds.$ARCH.$ds."native_threads";
     }
     elsif ($platform =~ m/^m68k/)
     {
-        print "Setting Linux m68k specific values... ";
-        $JRELIBDIR      = $JAVA_HOME.$ds."jre".$ds."lib".$ds."m68k";
-        $JRETOOLKITDIR  = $JAVA_HOME.$ds."jre".$ds."lib".$ds."m68k".$ds."server";
-        $JRETHREADDIR   = $JAVA_HOME.$ds."jre".$ds."lib".$ds."m68k".$ds."native_threads";
     }
     elsif ($platform =~ m/^hppa/)
     {
-        print "Setting Linux hppa specific values... ";
-        $JRELIBDIR      = $JAVA_HOME.$ds."jre".$ds."lib".$ds."hppa";
-        $JRETOOLKITDIR  = $JAVA_HOME.$ds."jre".$ds."lib".$ds."hppa".$ds."server";
-        $JRETHREADDIR   = $JAVA_HOME.$ds."jre".$ds."lib".$ds."hppa".$ds."native_threads";
         $EPM_FLAGS      = "-a hppa";
     }
     elsif ($platform =~ m/^alpha/)
     {
-        print "Setting Linux Alpha specific values... ";
-        $JRELIBDIR      = $JAVA_HOME.$ds."jre".$ds."lib".$ds."alpha";
-        $JRETOOLKITDIR  = $JAVA_HOME.$ds."jre".$ds."lib".$ds."alpha".$ds."server";
-        $JRETHREADDIR   = $JAVA_HOME.$ds."jre".$ds."lib".$ds."alpha".$ds."native_threads";
     }
     elsif ($platform =~ m/^arm.*?l-/)
     {
-        print "Setting Linux ARM specific values... ";
-        $JRELIBDIR      = $JAVA_HOME.$ds."jre".$ds."lib".$ds."arm";
-        $JRETOOLKITDIR  = $JAVA_HOME.$ds."jre".$ds."lib".$ds."arm".$ds."server";
-        $JRETHREADDIR   = $JAVA_HOME.$ds."jre".$ds."lib".$ds."arm".$ds."native_threads";
         $EPM_FLAGS      = "-a arm";
     }
     elsif ($platform =~ m/^arm.*-androideabi/)
     {
-        print "Setting Android ARM specific values... ";
-        $JRELIBDIR      = $JAVA_HOME.$ds."jre".$ds."lib".$ds."arm";
-        $JRETOOLKITDIR  = $JAVA_HOME.$ds."jre".$ds."lib".$ds."arm".$ds."server";
-        $JRETHREADDIR   = $JAVA_HOME.$ds."jre".$ds."lib".$ds."arm".$ds."native_threads";
         $EPM_FLAGS      = "-a arm";
     }
     elsif ($platform =~ m/^mips/)
@@ -463,14 +239,6 @@ elsif ( $platform =~ m/linux/ )
             if ('@WORDS_BIGENDIAN@' ne 'yes')
             {
                 $EPM_FLAGS = "-a mips64el";
-                if ( $JDK eq "gcj" )
-                {
-                    $ARCH = "mips64el";
-                }
-            }
-            else
-            {
-                $ARCH = "mips64";
             }
         }
         else
@@ -478,31 +246,8 @@ elsif ( $platform =~ m/linux/ )
             if ('@WORDS_BIGENDIAN@' ne 'yes')
             {
                 $EPM_FLAGS = "-a mipsel";
-                if ( $JDK =~ m/sun/ && -d "@JAVA_HOME@".$ds."jre".$ds."lib".$ds."mips32" )
-                {
-                    $ARCH = "mips32"; # Lemote
-                }
-                else
-                {
-                    $ARCH = "mipsel";
-                }
-            }
-            else
-            {
-                $ARCH = "mips";
             }
         }
-
-        $JRELIBDIR      = $JAVA_HOME.$ds."jre".$ds."lib".$ds.$ARCH;
-        if ( $JDK =~ m/sun/ && -d "@JAVA_HOME@".$ds."jre".$ds."lib".$ds."mips32" )
-        {
-            $JRETOOLKITDIR  = $JAVA_HOME.$ds."jre".$ds."lib".$ds.$ARCH.$ds."client"; # Lemote
-        }
-        else
-        {
-            $JRETOOLKITDIR  = $JAVA_HOME.$ds."jre".$ds."lib".$ds.$ARCH.$ds."server";
-        }
-        $JRETHREADDIR   = $JAVA_HOME.$ds."jre".$ds."lib".$ds.$ARCH.$ds."native_threads";
     }
 }
 elsif ( $platform =~ m/cygwin|mingw32/ )
@@ -575,34 +320,11 @@ elsif ( $platform =~ m/darwin/ )
 }
 elsif ( $platform =~ m/dragonfly/ )
 {
-    if ($platform =~ m/^i386/)
-    {
-        print "Setting DragonFly i386 specific values... ";
-        $JRELIBDIR      = $JAVA_HOME.$ds."jre".$ds."lib".$ds."i386";
-        $JRETOOLKITDIR  = $JAVA_HOME.$ds."jre".$ds."lib".$ds."i386".$ds."client";
-        $JRETHREADDIR   = $JAVA_HOME.$ds."jre".$ds."lib".$ds."i386".$ds."native_threads";
-    }
-    elsif ($platform =~ m/^x86_64/)
-    {
-        print "Setting DragonFly x86-64 specific values... ";
-        $JRELIBDIR      = $JAVA_HOME.$ds."jre".$ds."lib".$ds."amd64";
-        $JRETOOLKITDIR  = $JAVA_HOME.$ds."jre".$ds."lib".$ds."amd64".$ds."server";
-        $JRETHREADDIR   = $JAVA_HOME.$ds."jre".$ds."lib".$ds."amd64".$ds."native_threads";
-    }
-    else
-    {
-        print "Unsupported DragonFly architecture: $platform \n";
-        exit 1;
-    }
-   # General DragonFly settings:
+    # General DragonFly settings:
     $COMPATH        = '@COMPATH@';
 }
 elsif ( $platform =~ m/aix/ )
 {
-    print "Setting AIX PPC specific values... ";
-    $JRELIBDIR      = $JAVA_HOME.$ds."jre".$ds."lib".$ds."ppc";
-    $JRETOOLKITDIR  = $JAVA_HOME.$ds."jre".$ds."lib".$ds."ppc".$ds."classic";
-    $JRETHREADDIR   = $JAVA_HOME.$ds."jre".$ds."lib".$ds."ppc".$ds."native_threads";
     $COMPATH        = '@COMPATH@';
 }
 else
@@ -973,10 +695,6 @@ if ($platform =~ m/solaris/)
                         $L.$USR_OPENWIN.$LIB.
                         $L.$XLIB;
 
-   $JAVALIB          =  $L.$JAVA_HOME.$LIB.
-                        $L.$JRELIBDIR.
-                        $L.$JRETOOLKITDIR.
-                        $L.$JRETHREADDIR;
 }
 elsif ($platform =~ m/linux|netbsd|aix|freebsd|openbsd|dragonfly/)
 {  $SOLARLIB          = $L.$par_dir.$LIB.
@@ -989,11 +707,6 @@ elsif ($platform =~ m/linux|netbsd|aix|freebsd|openbsd|dragonfly/)
    if ( $XLIB ne "/usr/lib" && $XLIB ne "/usr/lib64" && $XLIB ne "no_x_libraries" ) {
       $SOLARLIB       .= $L.$XLIB;
    }
-   $JAVALIB           = '';
-   $JAVALIB          .= $L.$JAVA_HOME.$LIB64 if (-d $JAVA_HOME.$LIB64);
-   $JAVALIB          .= $L.$JRELIBDIR if (-d $JRELIBDIR);
-   $JAVALIB          .= $L.$JRETOOLKITDIR if (-d $JRETOOLKITDIR);
-   $JAVALIB          .= $L.$JRETHREADDIR if (-d $JRETHREADDIR);;
 }
 elsif ($platform =~ m/cygwin|mingw32/)
 {  $SOLARLIB          = $L.$par_dir.$LIB.
@@ -1304,7 +1017,6 @@ else
    ToFile( "PATH",           $PATH,              "e" );
 }
 ToFile( "SOLARLIB",          $SOLARLIB,          "e" );
-ToFile( "JAVALIB",           $JAVALIB,           "e" );
 ToFile( "SOLARINC",          $SOLARINC,          "e" );
 ToFile( "COMP_ENV",          $COMP_ENV,          "e" );
 ToFile( "JAVAHOME",          $JAVAHOME,          "e" );
