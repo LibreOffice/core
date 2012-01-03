@@ -35,7 +35,6 @@
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>
 #include <tools/string.hxx>
-#include <tools/urlobj.hxx>
 #include <vcl/salbtype.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/metaact.hxx>

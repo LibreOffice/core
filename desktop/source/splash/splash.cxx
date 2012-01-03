@@ -30,7 +30,6 @@
 #include "splash.hxx"
 #include <stdio.h>
 #include <unotools/bootstrap.hxx>
-#include <tools/urlobj.hxx>
 #include <tools/stream.hxx>
 #include <sfx2/sfx.hrc>
 #include <vcl/svapp.hxx>

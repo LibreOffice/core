@@ -62,7 +62,6 @@
 #include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/sdbc/XResultSetUpdate.hpp>
-#include <tools/urlobj.hxx>
 #include <tools/diagnose_ex.h>
 
 #include <svl/intitem.hxx>

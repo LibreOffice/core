@@ -39,7 +39,6 @@
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include "SalAquaPicker.hxx"
-#include <tools/urlobj.hxx>
 #include <osl/file.hxx>
 #include "CFStringUtilities.hxx"
 #include "NSString_OOoAdditions.hxx"

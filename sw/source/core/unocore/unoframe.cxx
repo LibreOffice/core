@@ -110,7 +110,6 @@
 #include <poolfmt.hxx>
 #include <pagedesc.hxx>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
-#include <tools/urlobj.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <fmtfollowtextflow.hxx>
 #include <fmtwrapinfluenceonobjpos.hxx>

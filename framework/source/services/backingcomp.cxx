@@ -63,7 +63,6 @@
 #include <vcl/wrkwin.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/resmgr.hxx>
-#include <tools/urlobj.hxx>
 #include <rtl/ustrbuf.hxx>
 
 #include <svl/solar.hrc>

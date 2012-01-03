@@ -52,7 +52,6 @@
 
 #include <vcl/menu.hxx>
 #include <vcl/svapp.hxx>
-#include <tools/urlobj.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/logfile.hxx>
 

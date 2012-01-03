@@ -61,7 +61,6 @@
 #include <unotextbodyhf.hxx>
 #include <fmthdft.hxx>
 #include <fmtpdsc.hxx>
-#include <tools/urlobj.hxx>
 #include <poolfmt.hrc>
 #include <poolfmt.hxx>
 #include "unoevent.hxx"

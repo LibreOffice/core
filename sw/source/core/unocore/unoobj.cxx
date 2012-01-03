@@ -52,7 +52,6 @@
 #include <sfx2/linkmgr.hxx>
 #include <docary.hxx>
 #include <paratr.hxx>
-#include <tools/urlobj.hxx>
 #include <pam.hxx>
 #include <tools/cachestr.hxx>
 #include <shellio.hxx>

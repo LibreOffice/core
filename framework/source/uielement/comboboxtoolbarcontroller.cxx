@@ -56,7 +56,6 @@
 #include <vcl/mnemonic.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/combobox.hxx>
-#include <tools/urlobj.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

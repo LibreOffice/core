@@ -34,7 +34,6 @@
 #include <editeng/editstat.hxx>
 #include <eerdll.hxx>
 #include <editeng/flditem.hxx>
-#include <tools/urlobj.hxx>
 #include <svx/svxacorr.hxx>
 #include <tools/fsys.hxx>
 #include <svx/xpoly.hxx>

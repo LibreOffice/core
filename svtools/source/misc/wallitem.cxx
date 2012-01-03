@@ -37,7 +37,6 @@
 #include <tools/stream.hxx>
 #include <tools/debug.hxx>
 #include <tools/string.hxx>
-#include <tools/urlobj.hxx>
 #include <tools/stream.hxx>
 
 #include <vcl/graph.hxx>

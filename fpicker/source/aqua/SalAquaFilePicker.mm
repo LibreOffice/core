@@ -44,7 +44,6 @@
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
-#include <tools/urlobj.hxx>
 #include "resourceprovider.hxx"
 
 #include <tools/rc.hxx>

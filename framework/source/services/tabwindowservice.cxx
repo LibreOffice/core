@@ -49,7 +49,6 @@
 //_________________________________________________________________________________________________________________
 
 #include <toolkit/helper/vclunohelper.hxx>
-#include <tools/urlobj.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <vcl/svapp.hxx>
 

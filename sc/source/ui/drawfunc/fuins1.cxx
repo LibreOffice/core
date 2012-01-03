@@ -38,7 +38,6 @@
 #include <svl/stritem.hxx>
 #include <svtools/miscopt.hxx>
 #include <vcl/msgbox.hxx>
-#include <tools/urlobj.hxx>
 #include <avmedia/mediawindow.hxx>
 #include <vcl/svapp.hxx>
 

@@ -59,7 +59,6 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/tools/canvastools.hxx>
 #include <vcl/help.hxx>
-#include <tools/urlobj.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/saveopt.hxx>
 #include <sfx2/bindings.hxx>

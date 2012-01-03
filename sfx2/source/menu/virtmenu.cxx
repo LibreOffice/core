@@ -36,7 +36,6 @@
 #include <com/sun/star/frame/XFramesSupplier.hpp>
 #include <comphelper/processfactory.hxx>
 #include <toolkit/unohlp.hxx>
-#include <tools/urlobj.hxx>
 
 #include "virtmenu.hxx"
 #include <sfx2/msgpool.hxx>

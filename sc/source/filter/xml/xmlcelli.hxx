@@ -34,7 +34,6 @@
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <com/sun/star/table/XCell.hpp>
-#include <tools/time.hxx>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>

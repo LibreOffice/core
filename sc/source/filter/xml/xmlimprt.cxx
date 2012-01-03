@@ -87,7 +87,6 @@
 #include <com/sun/star/document/XActionLockable.hpp>
 #include <com/sun/star/util/NumberFormat.hpp>
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
-#include <tools/urlobj.hxx>
 #include <com/sun/star/sheet/XNamedRanges.hpp>
 #include <com/sun/star/sheet/NamedRangeFlag.hpp>
 #include <com/sun/star/sheet/XNamedRange.hpp>

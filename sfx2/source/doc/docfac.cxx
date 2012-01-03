@@ -36,7 +36,6 @@
 #include <comphelper/processfactory.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/moduleoptions.hxx>
-#include <tools/urlobj.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <comphelper/sequenceashashmap.hxx>

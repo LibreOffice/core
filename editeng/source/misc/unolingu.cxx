@@ -33,7 +33,6 @@
 #include <list>
 #include <memory>
 #include <editeng/unolingu.hxx>
-#include <tools/urlobj.hxx>
 #include <rtl/logfile.hxx>
 #include <unotools/pathoptions.hxx>
 #include <com/sun/star/frame/XModel.hpp>

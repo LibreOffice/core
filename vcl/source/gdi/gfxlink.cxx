@@ -29,7 +29,6 @@
 
 #include <osl/file.h>
 #include <tools/vcompat.hxx>
-#include <tools/urlobj.hxx>
 #include <tools/debug.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/tempfile.hxx>

@@ -61,7 +61,6 @@
 #include "com/sun/star/task/XInteractionApprove.hpp"
 #include "com/sun/star/ucb/UnsupportedCommandException.hpp"
 #include "boost/bind.hpp"
-#include "tools/urlobj.hxx"
 #include "unotools/tempfile.hxx"
 
 #include "osl/file.hxx"

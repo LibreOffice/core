@@ -28,7 +28,6 @@
 
 
 #include <hintids.hxx>
-#include <tools/urlobj.hxx>
 
 #include <osl/diagnose.h>
 #include <tools/link.hxx>

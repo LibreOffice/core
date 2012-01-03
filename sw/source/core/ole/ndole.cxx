@@ -41,7 +41,6 @@
 #include <cppuhelper/implbase2.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <hintids.hxx>
-#include <tools/urlobj.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/linkmgr.hxx>

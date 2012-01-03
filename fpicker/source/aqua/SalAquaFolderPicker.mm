@@ -45,7 +45,6 @@
 #include <vcl/svapp.hxx>
 #include "SalAquaFolderPicker.hxx"
 
-#include <tools/urlobj.hxx>
 #include <iostream>
 
 #include "resourceprovider.hxx"

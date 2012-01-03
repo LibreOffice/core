@@ -28,7 +28,6 @@
 
 
 #include <hintids.hxx>
-#include <tools/urlobj.hxx>
 #include <vcl/cmdevt.hxx>
 #include <unotools/charclass.hxx>
 #include <comphelper/processfactory.hxx>

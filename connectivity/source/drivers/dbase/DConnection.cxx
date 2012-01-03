@@ -32,7 +32,6 @@
 #include "dbase/DCatalog.hxx"
 #include "dbase/DDriver.hxx"
 #include <com/sun/star/lang/DisposedException.hpp>
-#include <tools/urlobj.hxx>
 #include "dbase/DPreparedStatement.hxx"
 #include "dbase/DStatement.hxx"
 #include <tools/debug.hxx>

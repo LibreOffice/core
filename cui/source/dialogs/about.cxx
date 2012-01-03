@@ -32,7 +32,6 @@
 #include <vcl/msgbox.hxx>
 
 #include <tools/stream.hxx>
-#include <tools/urlobj.hxx>
 #include <rtl/bootstrap.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/bootstrap.hxx>

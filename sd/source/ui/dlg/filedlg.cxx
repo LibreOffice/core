@@ -41,7 +41,6 @@
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #include <vcl/msgbox.hxx>
 #include <sal/types.h>
-#include <tools/urlobj.hxx>
 #include <osl/thread.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>

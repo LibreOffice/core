@@ -36,7 +36,6 @@
 #include <vcl/combobox.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/lstbox.hxx>
-#include <tools/urlobj.hxx>
 #include <svl/stritem.hxx>
 #include <svl/eitem.hxx>
 #include <svtools/transfer.hxx>

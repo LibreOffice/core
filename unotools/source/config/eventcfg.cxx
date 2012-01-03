@@ -37,7 +37,6 @@
 #include <cppuhelper/weakref.hxx>
 
 #include <boost/unordered_map.hpp>
-#include <tools/urlobj.hxx>
 #include <rtl/ustrbuf.hxx>
 
 #include <itemholder1.hxx>

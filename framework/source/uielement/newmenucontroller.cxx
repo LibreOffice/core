@@ -56,7 +56,6 @@
 //_________________________________________________________________________________________________________________
 #include <vcl/svapp.hxx>
 #include <vcl/i18nhelp.hxx>
-#include <tools/urlobj.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <osl/file.hxx>

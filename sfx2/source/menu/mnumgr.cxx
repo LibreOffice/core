@@ -47,7 +47,6 @@
 #include <comphelper/processfactory.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/lingucfg.hxx>
-#include <tools/urlobj.hxx>
 #include <unotools/pathoptions.hxx>
 #include <svl/stritem.hxx>
 #include <toolkit/helper/vclunohelper.hxx>

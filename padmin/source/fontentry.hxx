@@ -40,8 +40,6 @@
 #include "vcl/group.hxx"
 #include "vcl/fontmanager.hxx"
 
-#include "tools/urlobj.hxx"
-
 namespace padmin {
 
     class FontImportDialog :

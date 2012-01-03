@@ -27,7 +27,6 @@
  ************************************************************************/
 
 #include <osl/mutex.hxx>
-#include <tools/urlobj.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/awt/PosSize.hpp>

@@ -42,8 +42,6 @@
 #include <tools/string.hxx>
 #include <tools/table.hxx>
 #include <tools/date.hxx>
-#include <tools/time.hxx>
-#include <tools/urlobj.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/svapp.hxx>

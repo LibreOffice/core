@@ -43,7 +43,6 @@
 #include <com/sun/star/sheet/XCellRangeAddressable.hpp>
 #include <com/sun/star/sheet/XDatabaseRanges.hpp>
 #include <com/sun/star/sheet/XDatabaseRange.hpp>
-#include <tools/urlobj.hxx>
 #include "FDatabaseMetaDataResultSet.hxx"
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <comphelper/types.hxx>

@@ -34,7 +34,6 @@
 #include <svl/lstner.hxx>
 #include <basic/basmgr.hxx>
 #include <basic/sbmod.hxx>
-#include <tools/urlobj.hxx>
 #include <basic/sbx.hxx>
 #include <sot/storage.hxx>
 #include <unotools/securityoptions.hxx>

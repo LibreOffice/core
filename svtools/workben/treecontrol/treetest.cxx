@@ -48,7 +48,6 @@
 #include <com/sun/star/awt/XControlContainer.hpp>
 #include <com/sun/star/view/SelectionType.hpp>
 
-#include <tools/urlobj.hxx>
 #include <vcl/image.hxx>
 #include <vcl/graph.hxx>
 

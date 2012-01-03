@@ -43,7 +43,6 @@
 #include <tools/time.hxx>
 #include <tools/datetime.hxx>
 #include <tools/ref.hxx>
-#include <tools/urlobj.hxx>
 #include <swdllapi.h>
 #include <swtypes.hxx>
 #include <docfac.hxx>   // SwDocFac

@@ -45,7 +45,6 @@
 #include <vcl/settings.hxx>
 #include <svl/intitem.hxx>
 #include <editeng/colritem.hxx>
-#include <tools/urlobj.hxx>
 
 #include <svx/dialogs.hrc>
 #include <svx/svdtrans.hxx>

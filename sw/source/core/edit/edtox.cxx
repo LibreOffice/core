@@ -31,8 +31,6 @@
 #include <com/sun/star/util/SearchFlags.hpp>
 #include <com/sun/star/i18n/TransliterationModules.hpp>
 
-#include <tools/urlobj.hxx>
-
 #include <svl/fstathelper.hxx>
 
 #include <svtools/txtcmp.hxx>

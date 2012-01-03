@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include <tools/urlobj.hxx>
 #include <tools/debug.hxx>
 #include <tools/fsys.hxx>
 #include <tools/string.hxx>

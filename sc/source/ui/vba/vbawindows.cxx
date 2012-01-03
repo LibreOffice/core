@@ -33,7 +33,6 @@
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <cppuhelper/implbase3.hxx>
 
-#include <tools/urlobj.hxx>
 #include "vbawindow.hxx"
 #include "vbaglobals.hxx"
 

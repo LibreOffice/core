@@ -28,7 +28,6 @@
 
 
 
-#include <tools/urlobj.hxx>
 #include <swacorr.hxx>
 #include <swblocks.hxx>
 #include "SwXMLTextBlocks.hxx"

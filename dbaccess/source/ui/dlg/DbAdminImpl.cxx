@@ -73,7 +73,6 @@
 #include <svl/itempool.hxx>
 #include <svl/poolitem.hxx>
 #include <svl/stritem.hxx>
-#include <tools/urlobj.hxx>
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>
 #include <typelib/typedescription.hxx>

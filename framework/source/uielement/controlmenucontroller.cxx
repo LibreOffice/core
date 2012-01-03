@@ -53,7 +53,6 @@
 #include <vcl/menu.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/i18nhelp.hxx>
-#include <tools/urlobj.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/strbuf.hxx>
 #include <svl/solar.hrc>

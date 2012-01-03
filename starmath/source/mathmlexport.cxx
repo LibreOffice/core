@@ -56,7 +56,6 @@
 #include <sfx2/frame.hxx>
 #include <sfx2/docfile.hxx>
 #include <osl/diagnose.h>
-#include <tools/urlobj.hxx>
 #include <svtools/sfxecode.hxx>
 #include <unotools/saveopt.hxx>
 #include <svl/stritem.hxx>

@@ -65,7 +65,6 @@
 #include <ucbhelper/commandenvironment.hxx>
 #include "finteraction.hxx"
 #include <connectivity/CommonTools.hxx>
-#include <tools/urlobj.hxx>
 #include <sfx2/docfilt.hxx>
 #include "dsnItem.hxx"
 #if defined(WNT)

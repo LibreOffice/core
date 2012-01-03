@@ -46,7 +46,6 @@
 //  includes of other projects
 //_________________________________________________________________________________________________________________
 #include <rtl/ustrbuf.hxx>
-#include <tools/urlobj.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <vcl/wrkwin.hxx>

@@ -47,7 +47,6 @@
 #include "callbacks.hxx"
 #include <unotools/datetime.hxx>
 #include <tools/date.hxx>
-#include <tools/time.hxx>
 #include <tools/datetime.hxx>
 
 //.........................................................................

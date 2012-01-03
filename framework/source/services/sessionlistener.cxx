@@ -39,7 +39,6 @@
 
 
 #include <vcl/svapp.hxx>
-#include <tools/urlobj.hxx>
 #include <unotools/tempfile.hxx>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XComponent.hpp>

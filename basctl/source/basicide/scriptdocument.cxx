@@ -65,7 +65,6 @@
 #include <unotools/collatorwrapper.hxx>
 
 #include <tools/diagnose_ex.h>
-#include <tools/urlobj.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/documentinfo.hxx>

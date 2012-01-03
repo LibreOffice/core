@@ -38,7 +38,6 @@
 #include <sfx2/bindings.hxx>
 #include <svl/stritem.hxx>
 #include <svl/eitem.hxx>
-#include <tools/urlobj.hxx>
 #include <svl/whiter.hxx>
 #include <svl/intitem.hxx>
 #include <tools/shl.hxx>

@@ -38,7 +38,6 @@
 #endif
 #include <svl/svstdarr.hxx>
 #endif
-#include <tools/urlobj.hxx>
 #include <sfx2/sfxhtml.hxx>
 #include <svl/macitem.hxx>
 #include <editeng/svxenum.hxx>

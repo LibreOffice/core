@@ -31,7 +31,6 @@
 #include <sfx2/sfxuno.hxx>
 #include "newhelp.hxx"
 #include <tools/debug.hxx>
-#include <tools/urlobj.hxx>
 #include <com/sun/star/frame/XNotifyingDispatch.hpp>
 
 using namespace ::com::sun::star::beans;

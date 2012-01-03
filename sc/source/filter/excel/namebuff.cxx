@@ -29,7 +29,6 @@
 
 #include "namebuff.hxx"
 
-#include <tools/urlobj.hxx>
 #include <string.h>
 
 #include "rangenam.hxx"

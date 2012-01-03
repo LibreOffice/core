@@ -50,6 +50,7 @@
 
 #include "tools/stream.hxx"
 #include "tools/color.hxx"
+#include "tools/urlobj.hxx"
 
 #include "osl/file.hxx"
 

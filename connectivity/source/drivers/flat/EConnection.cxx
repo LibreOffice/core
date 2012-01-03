@@ -31,7 +31,6 @@
 #include "flat/ECatalog.hxx"
 #include "flat/EDriver.hxx"
 #include <com/sun/star/lang/DisposedException.hpp>
-#include <tools/urlobj.hxx>
 #include "flat/EPreparedStatement.hxx"
 #include "flat/EStatement.hxx"
 #include <comphelper/extract.hxx>

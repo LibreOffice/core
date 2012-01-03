@@ -35,7 +35,6 @@
 #include <svx/svdogrp.hxx>
 
 #include <sfx2/lnkbase.hxx>
-#include <tools/urlobj.hxx>
 
 #include <svl/urihelper.hxx>
 

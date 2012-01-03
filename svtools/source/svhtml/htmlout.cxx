@@ -27,7 +27,6 @@
  ************************************************************************/
 
 
-#include <tools/urlobj.hxx>
 #include <svl/zformat.hxx>
 #include <svl/macitem.hxx>
 #include <vcl/svapp.hxx>

@@ -47,7 +47,6 @@
 #include <svl/eitem.hxx>
 
 #include <unotools/charclass.hxx>
-#include <tools/urlobj.hxx>
 #include <tools/diagnose_ex.h>
 
 #include "formdlgs.hrc"

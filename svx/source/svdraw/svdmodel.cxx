@@ -40,7 +40,6 @@
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 
-#include <tools/urlobj.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 
 #include <tools/string.hxx>

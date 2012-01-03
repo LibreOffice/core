@@ -43,7 +43,6 @@
 #include <basic/sbx.hxx>
 #include <svl/zforlist.hxx>
 #include <vcl/msgbox.hxx>
-#include <tools/urlobj.hxx>
 #include <rtl/math.hxx>
 
 #include "validat.hxx"

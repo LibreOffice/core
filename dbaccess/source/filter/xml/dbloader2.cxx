@@ -75,7 +75,6 @@
 #include <toolkit/awt/vclxwindow.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/diagnose_ex.h>
-#include <tools/urlobj.hxx>
 #include <ucbhelper/commandenvironment.hxx>
 #include <ucbhelper/content.hxx>
 #include <ucbhelper/contentbroker.hxx>

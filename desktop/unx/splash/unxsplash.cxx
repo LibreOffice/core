@@ -30,7 +30,6 @@
 #include <stdio.h>
 #include <unotools/bootstrap.hxx>
 #include <osl/process.h>
-#include <tools/urlobj.hxx>
 #include <tools/stream.hxx>
 #include <sfx2/sfx.hrc>
 #include <com/sun/star/registry/XRegistryKey.hpp>

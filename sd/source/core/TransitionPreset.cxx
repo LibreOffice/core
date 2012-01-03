@@ -36,7 +36,6 @@
 #include <com/sun/star/animations/AnimationNodeType.hpp>
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
-#include <tools/urlobj.hxx>
 #include <unotools/streamwrap.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/pathoptions.hxx>

@@ -58,7 +58,6 @@
 #include <ucbhelper/configurationkeys.hxx>
 
 #include <cppuhelper/bootstrap.hxx>
-#include <tools/urlobj.hxx>
 #include <tools/rcid.h>
 
 #include <rtl/logfile.hxx>

@@ -29,7 +29,6 @@
 #ifndef _SV_IMPGRAPH_HXX
 #define _SV_IMPGRAPH_HXX
 
-#include <tools/urlobj.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/animate.hxx>

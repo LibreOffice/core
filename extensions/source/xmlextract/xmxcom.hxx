@@ -34,7 +34,6 @@
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>
 #include <tools/string.hxx>
-#include <tools/urlobj.hxx>
 #include <cppuhelper/implbase1.hxx>
 
 #include <com/sun/star/uno/Reference.h>

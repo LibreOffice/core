@@ -53,7 +53,6 @@
 #include <sfx2/docfile.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/uno/XNamingService.hpp>
-#include <tools/urlobj.hxx>
 #include <xmloff/DocumentSettingsContext.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmlmetai.hxx>

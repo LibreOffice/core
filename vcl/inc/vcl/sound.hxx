@@ -33,7 +33,6 @@
 #include <vcl/sndstyle.hxx>
 #include <tools/string.hxx>
 #include <tools/link.hxx>
-#include <tools/time.hxx>
 
 class Window;
 class Timer;

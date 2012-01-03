@@ -53,7 +53,6 @@
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/mnemonic.hxx>
-#include <tools/urlobj.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::awt;

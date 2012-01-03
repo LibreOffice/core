@@ -30,7 +30,6 @@
 #define _SDINTERN_HXX
 
 #include <stdio.h>
-#include <tools/urlobj.hxx>
 #include <svtools/ehdl.hxx>
 #include <unotools/startoptions.hxx>
 #include <svl/itempool.hxx>

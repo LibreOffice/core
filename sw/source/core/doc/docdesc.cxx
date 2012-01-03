@@ -34,7 +34,6 @@
 #include <editeng/lrspitem.hxx>
 #include <editeng/paperinf.hxx>
 #include "editeng/frmdiritem.hxx"
-#include <tools/urlobj.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/printer.hxx>
 #include <unotools/localedatawrapper.hxx>

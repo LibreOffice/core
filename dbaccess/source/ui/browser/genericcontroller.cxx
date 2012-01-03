@@ -52,7 +52,6 @@
 
 #include <sal/macros.h>
 #include <vcl/waitobj.hxx>
-#include <tools/urlobj.hxx>
 #include <svl/urihelper.hxx>
 #include "datasourceconnector.hxx"
 #include <unotools/moduleoptions.hxx>

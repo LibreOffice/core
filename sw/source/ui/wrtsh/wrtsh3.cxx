@@ -39,7 +39,6 @@
 #include <com/sun/star/form/FormButtonType.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <svx/htmlmode.hxx>
-#include <tools/urlobj.hxx>
 #include "wrtsh.hxx"
 #include "view.hxx"
 #include "IMark.hxx"

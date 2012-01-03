@@ -36,7 +36,6 @@
 #include <xmloff/xmlaustp.hxx>
 #include <xmloff/xmlstyle.hxx>
 #include <com/sun/star/frame/XModel.hpp>
-#include <tools/time.hxx>
 #include <com/sun/star/util/DateTime.hpp>
 #include "xmlsubti.hxx"
 #include "global.hxx"

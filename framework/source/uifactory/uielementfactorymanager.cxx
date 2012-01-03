@@ -52,7 +52,6 @@
 //_________________________________________________________________________________________________________________
 #include <rtl/ustrbuf.hxx>
 #include <cppuhelper/weak.hxx>
-#include <tools/urlobj.hxx>
 #include <vcl/svapp.hxx>
 #include <rtl/logfile.hxx>
 

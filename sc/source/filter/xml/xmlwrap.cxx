@@ -40,7 +40,6 @@
 #include <svl/itemset.hxx>
 #include <svl/stritem.hxx>
 #include <sfx2/sfxsids.hrc>
-#include <tools/urlobj.hxx>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/xml/sax/XErrorHandler.hpp>

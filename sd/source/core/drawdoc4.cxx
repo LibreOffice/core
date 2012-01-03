@@ -30,7 +30,6 @@
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 
-#include <tools/urlobj.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/dispatch.hxx>
 #include "Outliner.hxx"

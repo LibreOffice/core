@@ -47,7 +47,6 @@
 #include <editeng/editobj.hxx>
 #include <svx/fmglob.hxx>
 #include <svx/svdouno.hxx>
-#include <tools/urlobj.hxx>
 #include <sot/formats.hxx>
 #include <svl/urlbmk.hxx>
 #include <editeng/outliner.hxx>

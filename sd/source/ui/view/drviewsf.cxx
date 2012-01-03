@@ -48,7 +48,6 @@
 #include <svx/svddef.hxx>
 #include <svx/fmglob.hxx>
 #include <svx/svdouno.hxx>
-#include <tools/urlobj.hxx>
 #include <svx/fmshell.hxx>
 #include <svl/cjkoptions.hxx>
 

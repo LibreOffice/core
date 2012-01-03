@@ -74,7 +74,6 @@
 #include <toolkit/unohlp.hxx>
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>
-#include <tools/urlobj.hxx>
 #include <unotools/bootstrap.hxx>
 #include <vcl/mnemonic.hxx>
 #include <vcl/svapp.hxx>

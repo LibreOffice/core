@@ -28,7 +28,6 @@
 
 
 #define _SV_FIELCTRL_CXX
-#include <tools/urlobj.hxx>
 #include <svtools/svtdata.hxx>
 #include <svtools/filectrl.hxx>
 #include <filectrl.hrc>

@@ -35,7 +35,6 @@
 #include "helpid.hrc"
 
 #include <algorithm>
-#include <tools/urlobj.hxx>
 #include <vcl/controllayout.hxx>
 #include <vcl/msgbox.hxx>
 #include <unotools/lingucfg.hxx>

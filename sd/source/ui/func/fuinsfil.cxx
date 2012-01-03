@@ -44,7 +44,6 @@
 #include <sot/formats.hxx>
 #include <svl/urihelper.hxx>
 #include <editeng/forbiddencharacterstable.hxx>
-#include <tools/urlobj.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/fcontnr.hxx>

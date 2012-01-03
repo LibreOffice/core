@@ -41,7 +41,6 @@
 #include <basic/sbuno.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zforlist.hxx>
-#include <tools/urlobj.hxx>
 #include <rtl/logfile.hxx>
 #include <stdlib.h>
 #include <string.h>

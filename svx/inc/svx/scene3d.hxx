@@ -31,7 +31,6 @@
 
 #include <svx/camera3d.hxx>
 #include <tools/b3dtrans.hxx>
-#include <tools/time.hxx>
 #include <svx/svxdllapi.h>
 #include <svx/obj3d.hxx>
 

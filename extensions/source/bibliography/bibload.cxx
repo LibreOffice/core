@@ -29,7 +29,6 @@
 
 
 #include <osl/mutex.hxx>
-#include <tools/urlobj.hxx>
 #include <tools/diagnose_ex.h>
 #include <cppuhelper/weak.hxx>
 #include <svl/itemprop.hxx>

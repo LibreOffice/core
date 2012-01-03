@@ -43,7 +43,6 @@
 #include <comphelper/processfactory.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/i18nhelp.hxx>
-#include <tools/urlobj.hxx>
 #include <rtl/ustrbuf.hxx>
 #include "helper/mischelper.hxx"
 #include "helpid.hrc"

@@ -44,7 +44,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
 #include <svl/macitem.hxx>
-#include <tools/urlobj.hxx>
 #include <svtools/htmlout.hxx>
 #include <svtools/htmltokn.h>
 #include <svtools/htmlkywd.hxx>

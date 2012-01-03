@@ -32,7 +32,6 @@
 
 #include <sfx2/lnkbase.hxx>
 #include <fmtfld.hxx>
-#include <tools/urlobj.hxx>
 #include <vcl/msgbox.hxx>
 #include <svl/itempool.hxx>
 #include <unotools/useroptions.hxx>

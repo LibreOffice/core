@@ -64,7 +64,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/i18nhelp.hxx>
 #include <vcl/image.hxx>
-#include <tools/urlobj.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <toolkit/unohlp.hxx>
 #include <vcl/window.hxx>

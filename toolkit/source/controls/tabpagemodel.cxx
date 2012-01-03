@@ -55,7 +55,6 @@
 #include <map>
 #include <algorithm>
 #include <functional>
-#include "tools/urlobj.hxx"
 #include "osl/file.hxx"
 
 #include <com/sun/star/beans/XPropertySet.hpp>

@@ -26,6 +26,7 @@
  *
  ************************************************************************/
 #include "dbloader2.hxx"
+#include <tools/urlobj.hxx>
 #include <comphelper/sequence.hxx>
 // -------------------------------------------------------------------------
 namespace rptxml

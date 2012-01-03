@@ -27,7 +27,6 @@
  ************************************************************************/
 
 #include <comphelper/processfactory.hxx>
-#include <tools/urlobj.hxx>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>

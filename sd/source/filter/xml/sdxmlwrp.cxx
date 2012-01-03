@@ -35,7 +35,6 @@
 #include <comphelper/processfactory.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
-#include <tools/urlobj.hxx>
 #include "drawdoc.hxx"
 #include <unotools/streamwrap.hxx>
 #include <svx/xmlgrhlp.hxx>

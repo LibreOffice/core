@@ -46,7 +46,6 @@
 #include <svtools/svtabbx.hxx>
 #include <svl/itemset.hxx>
 #include "doclinkdialog.hxx"
-#include <tools/urlobj.hxx>
 #include <unotools/localfilehelper.hxx>
 #include "optHeaderTabListbox.hxx"
 #include <sfx2/docfilt.hxx>

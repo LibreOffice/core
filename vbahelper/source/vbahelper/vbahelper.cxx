@@ -68,7 +68,6 @@
 #include <rtl/math.hxx>
 #include <sfx2/viewsh.hxx>
 #include <math.h>
-#include <tools/urlobj.hxx>
 #include <osl/file.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
 #include <toolkit/helper/vclunohelper.hxx>

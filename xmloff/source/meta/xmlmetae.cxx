@@ -30,8 +30,6 @@
 #include <tools/debug.hxx>
 #include <tools/inetdef.hxx>
 #include <i18npool/mslangid.hxx>
-#include <tools/urlobj.hxx>
-#include <tools/time.hxx>
 #include <rtl/ustrbuf.hxx>
 
 #include <xmloff/xmlmetae.hxx>

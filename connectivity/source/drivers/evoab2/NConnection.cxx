@@ -31,7 +31,6 @@
 #include "NCatalog.hxx"
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/sdbc/TransactionIsolation.hpp>
-#include <tools/urlobj.hxx>
 #include "NPreparedStatement.hxx"
 #include "NStatement.hxx"
 #include <comphelper/extract.hxx>

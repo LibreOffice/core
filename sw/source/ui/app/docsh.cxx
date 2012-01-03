@@ -33,7 +33,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/jobset.hxx>
-#include <tools/urlobj.hxx>
 #include <svl/whiter.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/eitem.hxx>

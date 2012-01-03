@@ -28,7 +28,6 @@
 
 
 #include <osl/mutex.hxx>
-#include <tools/urlobj.hxx>
 #include <cppuhelper/weak.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <com/sun/star/awt/XWindow.hpp>

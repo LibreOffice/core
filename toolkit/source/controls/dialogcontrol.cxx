@@ -55,7 +55,6 @@
 #include <cppuhelper/implbase1.hxx>
 #include <algorithm>
 #include <functional>
-#include "tools/urlobj.hxx"
 #include "osl/file.hxx"
 
 #include <vcl/tabctrl.hxx>

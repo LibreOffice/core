@@ -107,7 +107,6 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/shl.hxx>
-#include <tools/urlobj.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/waitobj.hxx>
 #include <osl/mutex.hxx>

@@ -41,7 +41,6 @@
 
 #include "optcomp.hrc"
 #include "globals.hrc"
-#include <tools/urlobj.hxx>
 #include <unotools/configmgr.hxx>
 #include <vcl/msgbox.hxx>
 #include <sfx2/docfile.hxx>

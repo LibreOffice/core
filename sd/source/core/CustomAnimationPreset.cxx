@@ -37,7 +37,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/presentation/EffectPresetClass.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
-#include <tools/urlobj.hxx>
 #include <unotools/streamwrap.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>

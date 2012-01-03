@@ -100,7 +100,6 @@
 #include <com/sun/star/presentation/AnimationEffect.hpp>
 #include <com/sun/star/presentation/AnimationSpeed.hpp>
 #include <com/sun/star/presentation/ClickAction.hpp>
-#include <tools/urlobj.hxx>
 #include <svx/sdr/contact/viewobjectcontact.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>

@@ -31,7 +31,6 @@
 
 #include <tools/gen.hxx>
 #include <vcl/window.hxx>
-#include <tools/svborder.hxx>
 
 /********************** SvResizeHelper ***********************************
 *************************************************************************/

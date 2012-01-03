@@ -50,7 +50,6 @@
 #include <ndgrf.hxx>
 #include "xmlexp.hxx"
 #include "xmltexte.hxx"
-#include <tools/urlobj.hxx>
 #include <SwAppletImpl.hxx>
 
 #define _SVSTDARR_ULONGS

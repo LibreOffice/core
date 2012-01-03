@@ -31,7 +31,6 @@
 
 #include <sfx2/ctrlitem.hxx>
 #include <sfx2/dockwin.hxx>
-#include <tools/urlobj.hxx>
 #include <avmedia/avmediadllapi.h>
 
 // -----------

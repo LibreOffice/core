@@ -39,7 +39,6 @@
 #include "callbacks.hxx"
 #include "xmloff/xmlnmspe.hxx"
 #include <tools/date.hxx>
-#include <tools/time.hxx>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/util/DateTime.hpp>

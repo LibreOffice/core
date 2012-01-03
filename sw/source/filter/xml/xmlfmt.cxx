@@ -29,7 +29,6 @@
 
 
 #include <rtl/ustrbuf.hxx>
-#include <tools/urlobj.hxx>
 
 #ifndef _SVSTDARR_STRINGSSORT_DECL
 #define _SVSTDARR_STRINGSSORT

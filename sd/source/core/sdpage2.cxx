@@ -35,7 +35,6 @@
 #include <editeng/outliner.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <svx/svdotext.hxx>
-#include <tools/urlobj.hxx>
 #include <editeng/outlobj.hxx>
 #include <svl/urihelper.hxx>
 #include <editeng/xmlcnitm.hxx>

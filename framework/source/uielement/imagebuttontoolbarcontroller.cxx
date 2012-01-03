@@ -54,7 +54,6 @@
 #include <osl/mutex.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/ucbstreamhelper.hxx>
-#include <tools/urlobj.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/mnemonic.hxx>
 #include <vcl/window.hxx>

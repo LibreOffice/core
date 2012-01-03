@@ -46,7 +46,6 @@
 
 #include <comphelper/processfactory.hxx>
 
-#include <tools/urlobj.hxx>
 #include <unotools/bootstrap.hxx>
 
 #include <ucbhelper/content.hxx>

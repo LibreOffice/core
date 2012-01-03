@@ -31,7 +31,6 @@
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <basic/basrdll.hxx>
-#include <tools/urlobj.hxx>
 #include <svl/macitem.hxx>
 #include <basic/sbxfac.hxx>
 #include <basic/sbx.hxx>

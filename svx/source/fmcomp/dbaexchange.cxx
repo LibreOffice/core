@@ -38,7 +38,6 @@
 #include <sot/exchange.hxx>
 #include <comphelper/propertysetinfo.hxx>
 #include "fmprop.hrc"
-#include <tools/urlobj.hxx>
 
 //........................................................................
 namespace svx

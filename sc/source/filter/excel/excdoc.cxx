@@ -42,7 +42,6 @@
 #include <svl/zformat.hxx>
 #include <sot/storage.hxx>
 #include <sfx2/objsh.hxx>
-#include <tools/urlobj.hxx>
 #include <rtl/ustring.hxx>
 
 #include "cell.hxx"

@@ -48,7 +48,6 @@
 #include <com/sun/star/task/XJob.hpp>
 
 #include <tools/debug.hxx>
-#include <tools/urlobj.hxx>
 #include <unotools/useroptions.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/sharedunocomponent.hxx>

@@ -53,7 +53,6 @@
 #include <basegfx/tools/canvastools.hxx>
 #include <cppcanvas/spritecanvas.hxx>
 #include <vcl/help.hxx>
-#include <tools/urlobj.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/saveopt.hxx>
 #include <sfx2/bindings.hxx>

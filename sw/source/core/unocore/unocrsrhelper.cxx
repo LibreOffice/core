@@ -60,7 +60,6 @@
 #include <cntfrm.hxx>
 #include <pagefrm.hxx>
 #include <svl/eitem.hxx>
-#include <tools/urlobj.hxx>
 #include <docary.hxx>
 #include <swtable.hxx>
 #include <tox.hxx>

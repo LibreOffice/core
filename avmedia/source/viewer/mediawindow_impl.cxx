@@ -35,7 +35,6 @@
 #include <algorithm>
 #include <cmath>
 #include <osl/mutex.hxx>
-#include <tools/time.hxx>
 #include <vcl/svapp.hxx>
 #ifdef UNX
 #include <vcl/sysdata.hxx>

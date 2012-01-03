@@ -45,7 +45,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/strbuf.hxx>
 #include <sal/log.hxx>
-#include <tools/urlobj.hxx>
 #include <rtl/instance.hxx>
 #include <rtl/bootstrap.hxx>
 #include <i18npool/mslangid.hxx>

@@ -81,7 +81,6 @@
 #include <unotools/cmdoptions.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <toolkit/unohlp.hxx>
-#include <tools/urlobj.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <osl/mutex.hxx>

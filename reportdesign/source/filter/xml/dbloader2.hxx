@@ -30,7 +30,6 @@
 #define RPTXML_DBLOADER2_HXX
 
 #include <toolkit/helper/vclunohelper.hxx>
-#include <tools/urlobj.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
 #include <com/sun/star/task/XStatusIndicatorFactory.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>

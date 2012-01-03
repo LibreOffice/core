@@ -29,7 +29,6 @@
 
 #include "acceptor.hxx"
 #include <unotools/bootstrap.hxx>
-#include <tools/urlobj.hxx>
 #include <tools/stream.hxx>
 #include <vcl/svapp.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>

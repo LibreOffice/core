@@ -30,7 +30,6 @@
 
 #include <cmdid.h>
 #include <hintids.hxx>
-#include <tools/urlobj.hxx>
 #include <vcl/msgbox.hxx>
 #include <svl/stritem.hxx>
 #include <svl/whiter.hxx>

@@ -31,7 +31,6 @@
 #include <unotools/tempfile.hxx>
 #include <osl/file.hxx>
 #include <unotools/configmgr.hxx>
-#include <tools/urlobj.hxx>
 #include <tools/debug.hxx>
 
 namespace css = com::sun::star;

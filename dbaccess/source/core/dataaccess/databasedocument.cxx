@@ -91,7 +91,6 @@
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>
 #include <tools/errcode.hxx>
-#include <tools/urlobj.hxx>
 
 #include <boost/bind.hpp>
 

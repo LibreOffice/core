@@ -28,7 +28,6 @@
 
 #include <osl/mutex.hxx>
 #include <tools/diagnose_ex.h>
-#include <tools/urlobj.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/io/XPersistObject.hpp>
 #include <com/sun/star/sdbc/ResultSetType.hpp>

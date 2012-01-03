@@ -28,7 +28,6 @@
 
 #include <unicode/uscript.h>
 #include <i18npool/lang.h>
-#include <tools/urlobj.hxx>
 #include <tools/debug.hxx>
 #include <tools/fsys.hxx>
 #include <tools/stream.hxx>

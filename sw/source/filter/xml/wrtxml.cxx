@@ -43,7 +43,6 @@
 #include <svx/xmlgrhlp.hxx>
 #include <svx/xmleohlp.hxx>
 #include <unotools/saveopt.hxx>
-#include <tools/urlobj.hxx>
 #include <svl/stritem.hxx>
 #include <sfx2/frame.hxx>
 #include <sfx2/docfile.hxx>

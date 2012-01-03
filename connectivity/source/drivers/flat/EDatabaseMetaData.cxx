@@ -36,7 +36,6 @@
 #include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/sdbcx/XIndexesSupplier.hpp>
-#include <tools/urlobj.hxx>
 #include "FDatabaseMetaDataResultSet.hxx"
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <comphelper/extract.hxx>

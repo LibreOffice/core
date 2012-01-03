@@ -28,7 +28,6 @@
 
 
 #include <rsc/rscsfx.hxx>
-#include <tools/urlobj.hxx>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <comphelper/processfactory.hxx>

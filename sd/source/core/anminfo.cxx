@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include <tools/urlobj.hxx>
 #include <svl/smplhint.hxx>
 #include "svx/xtable.hxx"
 #include <svx/svdopath.hxx>

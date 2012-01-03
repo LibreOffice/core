@@ -48,7 +48,6 @@
 #include <comphelper/processfactory.hxx>
 #include <ucbhelper/content.hxx>
 
-#include <tools/urlobj.hxx>
 #include <tools/stream.hxx>
 #include <unotools/bootstrap.hxx>
 #include <unotools/streamwrap.hxx>

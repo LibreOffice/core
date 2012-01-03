@@ -31,7 +31,6 @@
 
 // includes *****************************************************************
 #include <tools/string.hxx>
-#include <tools/urlobj.hxx>
 
 #include <vcl/combobox.hxx>
 #include <svtools/acceleratorexecute.hxx>

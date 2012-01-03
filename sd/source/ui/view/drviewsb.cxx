@@ -33,7 +33,6 @@
 #include <sfx2/msgpool.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svx/hlnkitem.hxx>
-#include <tools/urlobj.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/flditem.hxx>
 #include <vcl/msgbox.hxx>

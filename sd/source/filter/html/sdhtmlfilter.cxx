@@ -29,7 +29,6 @@
 
 #include <unotools/localfilehelper.hxx>
 #include <tools/errinf.hxx>
-#include <tools/urlobj.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/virdev.hxx>

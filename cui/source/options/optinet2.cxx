@@ -49,7 +49,6 @@
 #include <unotools/bootstrap.hxx>
 #include <vcl/help.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <tools/urlobj.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/securityoptions.hxx>
 #include <unotools/localfilehelper.hxx>

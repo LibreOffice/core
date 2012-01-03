@@ -33,7 +33,6 @@
 #include <unotools/configmgr.hxx>
 #include <tools/debug.hxx>
 #include <tools/resmgr.hxx>
-#include <tools/urlobj.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <osl/mutex.hxx>

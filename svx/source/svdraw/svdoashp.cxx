@@ -33,7 +33,6 @@
 #include <ucbhelper/contentbroker.hxx>
 #include <unotools/datetime.hxx>
 #include <sfx2/lnkbase.hxx>
-#include <tools/urlobj.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/drawing/XCustomShapeEngine.hpp>

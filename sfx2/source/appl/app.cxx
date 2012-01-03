@@ -35,7 +35,6 @@
 
 #include <sfx2/app.hxx>
 #include <sfx2/frame.hxx>
-#include <tools/simplerm.hxx>
 #include <basic/basrdll.hxx>
 #include <basic/sbmeth.hxx>
 #include <basic/sbmod.hxx>
@@ -49,7 +48,6 @@
 #include <svtools/ehdl.hxx>
 
 #include <svl/svdde.hxx>
-#include <tools/urlobj.hxx>
 #include <unotools/tempfile.hxx>
 #include <osl/file.hxx>
 

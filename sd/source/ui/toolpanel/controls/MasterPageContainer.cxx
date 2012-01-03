@@ -50,7 +50,6 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <comphelper/processfactory.hxx>
-#include <tools/urlobj.hxx>
 #include <sfx2/app.hxx>
 #include <svx/svdpage.hxx>
 #include "DrawDocShell.hxx"

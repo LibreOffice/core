@@ -29,7 +29,6 @@
 
 #include "propacc.hxx"
 
-#include <tools/urlobj.hxx>
 #include <tools/errcode.hxx>
 #include <svl/svarray.hxx>
 #include <basic/sbstar.hxx>

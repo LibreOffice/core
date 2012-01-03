@@ -49,7 +49,6 @@
 #include <com/sun/star/sdbcx/XViewsSupplier.hpp>
 #include <com/sun/star/sdb/XQueryDefinitionsSupplier.hpp>
 #include <com/sun/star/sdbcx/XDrop.hpp>
-#include <tools/urlobj.hxx>
 #include <unotools/ucbhelper.hxx>
 #include "dlgsave.hxx"
 #include <comphelper/types.hxx>

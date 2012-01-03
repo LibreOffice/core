@@ -67,7 +67,6 @@
 #include <svl/stritem.hxx>
 
 #include <tools/string.hxx>
-#include <tools/urlobj.hxx>
 #include <rtl/math.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/charclass.hxx>

@@ -47,7 +47,6 @@
 #include <tools/table.hxx>
 #include <tools/date.hxx>
 #include <tools/time.hxx>
-#include <tools/urlobj.hxx>
 #include <tools/debug.hxx>
 #include <toolkit/helper/property.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
