@@ -47,6 +47,10 @@
  #include <osl/thread.h>
  #endif
 
+ #ifdef ANDROID
+ #include <lo-bootstrap.h>
+ #endif
+
  //###########################
  inline rtl::OString OUStringToOString(const rtl_uString* s)
  {
@@ -80,7 +84,24 @@
  int access_u(const rtl_uString* pustrPath, int mode)
  {
 #ifndef MACOSX // not MACOSX
-    return access(OUStringToOString(pustrPath).getStr(), mode);
+    const char *path = OUStringToOString(pustrPath).getStr();
+#ifdef ANDROID
+    if (strncmp(path, "/assets", sizeof("/assets")-1) == 0 &&
+        (path[sizeof("/assets")-1] == '\0' ||
+         path[sizeof("/assets")-1] == '/'))
+    {
+        struct stat stat;
+        if (lo_apk_lstat(path, &stat) == -1)
+            return -1;
+        if (mode & W_OK)
+        {
+            errno = EACCES;
+            return -1;
+        }
+        return 0;
+    }
+#endif
+    return access(path, mode);
 #else
     return access(macxp_resolveAliasAndConvert(pustrPath).getStr(), mode);
 #endif
@@ -114,7 +135,14 @@
   int lstat_u(const rtl_uString* pustrPath, struct stat* buf)
  {
 #ifndef MACOSX  // not MACOSX
-    return lstat(OUStringToOString(pustrPath).getStr(), buf);
+    const char *path = OUStringToOString(pustrPath).getStr();
+#ifdef ANDROID
+    if (strncmp(path, "/assets", sizeof("/assets")-1) == 0 &&
+        (path[sizeof("/assets")-1] == '\0' ||
+         path[sizeof("/assets")-1] == '/'))
+        return lo_apk_lstat(path, buf);
+#endif
+    return lstat(path, buf);
 #else
     return lstat(macxp_resolveAliasAndConvert(pustrPath).getStr(), buf);
 #endif

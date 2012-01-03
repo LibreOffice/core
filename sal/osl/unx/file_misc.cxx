@@ -53,6 +53,10 @@
 
 #include <algorithm>
 
+#ifdef ANDROID
+#include <lo-bootstrap.h>
+#endif
+
 /************************************************************************
  *   ToDo
  *
@@ -70,6 +74,15 @@ typedef struct
 {
     rtl_uString* ustrPath;           /* holds native directory path */
     DIR*         pDirStruct;
+#ifdef ANDROID
+    enum Kind
+    {
+        KIND_DIRENT = 1,
+        KIND_ASSETS = 2
+    };
+    int eKind;
+    lo_apk_dir*  pApkDirStruct;
+#endif
 } oslDirectoryImpl;
 
 DirectoryItem_Impl::DirectoryItem_Impl(
@@ -169,33 +182,64 @@ oslFileError SAL_CALL osl_openDirectory(rtl_uString* ustrDirectoryURL, oslDirect
 #endif /* MACOSX */
      )
     {
-        /* open directory */
-        DIR *pdir = opendir( path );
-
-        if( pdir )
+#ifdef ANDROID
+        if( strncmp( path, "/assets/", sizeof( "/assets/" ) - 1) == 0 )
         {
-            /* create and initialize impl structure */
-            oslDirectoryImpl* pDirImpl = (oslDirectoryImpl*) rtl_allocateMemory( sizeof(oslDirectoryImpl) );
+            lo_apk_dir *pdir = lo_apk_opendir( path );
 
-            if( pDirImpl )
+            if( pdir )
             {
-                pDirImpl->pDirStruct = pdir;
-                pDirImpl->ustrPath = ustrSystemPath;
+                oslDirectoryImpl* pDirImpl = (oslDirectoryImpl*) rtl_allocateMemory( sizeof(oslDirectoryImpl) );
 
-                *pDirectory = (oslDirectory) pDirImpl;
-                return osl_File_E_None;
-            }
-            else
-            {
-                errno = ENOMEM;
-                closedir( pdir );
+                if( pDirImpl )
+                    {
+                        pDirImpl->eKind = oslDirectoryImpl::KIND_ASSETS;
+                        pDirImpl->pApkDirStruct = pdir;
+                        pDirImpl->ustrPath = ustrSystemPath;
+
+                        *pDirectory = (oslDirectory) pDirImpl;
+                        return osl_File_E_None;
+                    }
+                else
+                    {
+                        errno = ENOMEM;
+                        lo_apk_closedir( pdir );
+                    }
             }
         }
         else
-        {
-#ifdef DEBUG_OSL_FILE
-            perror ("osl_openDirectory"); fprintf (stderr, path);
 #endif
+        {
+            /* open directory */
+            DIR *pdir = opendir( path );
+
+            if( pdir )
+            {
+                /* create and initialize impl structure */
+                oslDirectoryImpl* pDirImpl = (oslDirectoryImpl*) rtl_allocateMemory( sizeof(oslDirectoryImpl) );
+
+                if( pDirImpl )
+                {
+                    pDirImpl->pDirStruct = pdir;
+                    pDirImpl->ustrPath = ustrSystemPath;
+#ifdef ANDROID
+                    pDirImpl->eKind = oslDirectoryImpl::KIND_DIRENT;
+#endif
+                    *pDirectory = (oslDirectory) pDirImpl;
+                    return osl_File_E_None;
+                }
+                else
+                {
+                    errno = ENOMEM;
+                    closedir( pdir );
+                }
+            }
+            else
+            {
+#ifdef DEBUG_OSL_FILE
+                perror ("osl_openDirectory"); fprintf (stderr, path);
+#endif
+            }
         }
     }
 
@@ -218,10 +262,17 @@ oslFileError SAL_CALL osl_closeDirectory( oslDirectory Directory )
     if( NULL == pDirImpl )
         return osl_File_E_INVAL;
 
-    /* close directory */
-    if( closedir( pDirImpl->pDirStruct ) )
+#ifdef ANDROID
+    if( pDirImpl->eKind == oslDirectoryImpl::KIND_ASSETS )
     {
-        err = oslTranslateFileError(OSL_FET_ERROR, errno);
+        if (lo_apk_closedir( pDirImpl->pApkDirStruct ))
+            err = osl_File_E_IO;
+    }
+    else
+#endif
+    {
+        if( closedir( pDirImpl->pDirStruct ) )
+            err = oslTranslateFileError(OSL_FET_ERROR, errno);
     }
 
     /* cleanup members */
@@ -272,7 +323,16 @@ oslFileError SAL_CALL osl_getNextDirectoryItem(oslDirectory Directory, oslDirect
     if ((NULL == Directory) || (NULL == pItem))
         return osl_File_E_INVAL;
 
-    pEntry = osl_readdir_impl_(pDirImpl->pDirStruct, sal_True);
+#ifdef ANDROID
+    if( pDirImpl->eKind == oslDirectoryImpl::KIND_ASSETS )
+    {
+        pEntry = lo_apk_readdir(pDirImpl->pApkDirStruct);
+    }
+    else
+#endif
+    {
+        pEntry = osl_readdir_impl_(pDirImpl->pDirStruct, sal_True);
+    }
 
     if (NULL == pEntry)
         return osl_File_E_NOENT;
