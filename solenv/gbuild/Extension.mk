@@ -36,6 +36,9 @@ endif
 gb_Extension_XRMEXTARGET := $(call gb_Executable_get_target,xrmex)
 gb_Extension_XRMEXCOMMAND := \
 	$(gb_Helper_set_ld_path) $(gb_Extension_XRMEXTARGET)
+gb_Extension_PROPMERGETARGET := $(call gb_Executable_get_target,propmerge)
+gb_Extension_PROPMERGECOMMAND := \
+	$(PERL) $(gb_Extension_PROPMERGETARGET)
 gb_Extension_SDFLOCATION := $(SRCDIR)/translations/$(INPATH)/misc/sdf/
 # does not contain en-US because it is special cased in gb_Extension_Extension
 gb_Extension_LANGS := $(filter-out en-US,$(gb_WITH_LANG))
@@ -117,5 +120,20 @@ $(call gb_Extension_get_workdir,$(1))/$(2) : $(3)
 	cp -f $$< $$@
 
 endef
+
+# localize .properties file
+# source file is copied to $(WORKDIR)
+define gb_Extension_localize_properties
+$(call gb_Extension_get_target,$(1)) : FILES += $(2) $(foreach lang,$(subst -,_,$(gb_Extension_LANGS)),$(subst en_US,$(lang),$(2)))
+$(call gb_Extension_get_target,$(1)) : SDF2 := $(gb_Extension_SDFLOCATION)$(subst $(SRCDIR),,$(dir $(3)))localize.sdf
+$(call gb_Extension_get_target,$(1)) : $(call gb_Extension_get_workdir,$(1))/$(2)
+$(call gb_Extension_get_workdir,$(1))/$(2) : $(3)
+	$(call gb_Output_announce,$(2),$(true),PRP,3)
+	mkdir -p $$(dir $$@)
+	cp -f $$< $$@
+	$(gb_Extension_PROPMERGECOMMAND) -i $$@ -m $$(SDF2)
+
+endef
+#	$(call gb_Output_announce,$@,$(true),PRP,3)
 
 # vim: set noet sw=4 ts=4:
