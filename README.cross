@@ -367,11 +367,20 @@ CXX_FOR_BUILD=ccache g++
 --without-helppack-integration
 --without-myspell-dicts
 
-There is no "app" you could run yet that would use LibreOffice code,
-but you can build some non-interactive unit tests and run them on the
-emulator (or, presumably, on a device, although I haven't tested that
-as I don't have any Android device...) The simple unit tests will
-succeed, the complex one still fails.
+There is no interactive end-user "app" you could run yet that would
+use LibreOffice code, but you can build some non-interactive unit
+tests and run them on the emulator (or, presumably,
+on a device, although I haven't tested that as I don't have any
+Android device...)  The simple unit tests will succeed, the complex
+one still fails. 
+
+These unit tests *are* proper "apps" from Android'd point of view, but
+they don't have any GUI and thus don't take part in the normal Android
+message passing and Android thinks they are stuck and offers to kill
+them...
+
+The activity used for these apps is in android/Bootstrap. See
+README.Android.
 
 To build the complex unit test (for Calc functionality; invokes the
 "ucalc" unit test code from sc) source the environment (. Env.Host.sh)
@@ -380,11 +389,11 @@ completely manually written, this stuff is so experimental it doesn't
 make sense yet to try to integrate with the normal gbuild
 mechanism.
 
-Then to run it, "make install" followed by "make run". You most likely
-want to have an "adb logcat" running in another window, and you
-probably also want to have set the stdout and stderr of app processes
-to be redirected to logcat ("adb shell stop; adb shell setprop
-log.redirect-stdio true; adb shell start").
+Then to run the unit test, do "make install" followed by "make
+run". You most likely want to have an "adb logcat" running in another
+window, and you probably also want to have set the stdout and stderr
+of app processes to be redirected to logcat ("adb shell stop; adb
+shell setprop log.redirect-stdio true; adb shell start").
 
 Unfortunately you might notice that the command line passed to "adb
 shell am start" is too long (actually, not "command line" as such, but
@@ -392,15 +401,22 @@ the length of the so-called "extra" arguments passed to the action, or
 something like that, see Android bug
 http://code.google.com/p/android/issues/detail?id=23351 , so you need
 to shorten it somehow... for instance by creating a symlink to
-/data/data/org.libreoffice.android.qa.sc in /system and using that
-shorter path snippet in all places instead of the longer one on the
-"adb shell am start" command line then...
+/data/data/org.libreoffice.android.qa.sc in /system: "adb remount; adb
+shell ln -s /data/data/org.libreoffice.android.qa.sc /system/sc" and
+then use that shorter path /system/sc snippet in all places instead of
+the longer /data/data/org.libreoffice.android.qa.sc on the "adb shell
+am start" command line.
 
 To debug, do manually what "make run" would do, adding args "-e
 lo-main-delay 20" to the command line, and when the app has started,
 run ndk-gdb. Unfortunately the gdb in NDK r7 is broken, use the one in
 the NDK build with newer versions of gcc and gdb from
 http://code.google.com/p/mingw-and-ndk/ instead.
+
+Running strace on the unit test in progress is often useful to find
+out what is going wrong. Pass something like -e lo-strace '-tt -f -e
+trace=file,process,network -o /system/sc/strace.out' to the am start
+command line.
 
 
 PowerPC Mac OS X
