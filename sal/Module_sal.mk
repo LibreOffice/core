@@ -29,7 +29,8 @@
 $(eval $(call gb_Module_Module,sal))
 
 $(eval $(call gb_Module_add_targets,sal,\
-	Executable_cppunittester \
+	$(if $(filter $(OS),IOS),,\
+		Executable_cppunittester) \
 	$(if $(filter $(OS),ANDROID), \
 		Library_lo-bootstrap) \
 	Library_sal \
