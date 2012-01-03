@@ -202,7 +202,7 @@ void ValueSet::ImplInitScrollBar()
         }
         else
         {
-            // Wegen Einstellungsaenderungen passen wir hier die Breite an
+            // adapt the width because of the changed settings
             long nScrBarWidth = GetSettings().GetStyleSettings().GetScrollBarSize();
             mpScrBar->SetPosSizePixel( 0, 0, nScrBarWidth, 0, WINDOW_POSSIZE_WIDTH );
         }
@@ -347,21 +347,20 @@ void ValueSet::Format()
     long        nNoneSpace;
     ScrollBar*  pDelScrBar = NULL;
 
-    // Scrolling beruecksichtigen
+    // consider the scrolling
     if ( nStyle & WB_VSCROLL )
         ImplInitScrollBar();
     else
     {
         if ( mpScrBar )
         {
-            // ScrollBar erst spaeter zerstoeren, damit keine rekursiven
-            // Aufrufe entstehen koennen
+            // delete ScrollBar not until later, to prevent recursive calls
             pDelScrBar = mpScrBar;
             mpScrBar = NULL;
         }
     }
 
-    // Item-Offset berechnen
+    // calculate item offset
     if ( nStyle & WB_ITEMBORDER )
     {
         if ( nStyle & WB_DOUBLEBORDER )
@@ -373,7 +372,7 @@ void ValueSet::Format()
         nOff = 0;
     nSpace = mnSpacing;
 
-    // Groesse beruecksichtigen, wenn NameField vorhanden
+    // consider size, if NameField does exist
     if ( nStyle & WB_NAMEFIELD )
     {
         mnTextOffset = aWinSize.Height()-nTxtHeight-NAME_OFFSET;
@@ -388,7 +387,7 @@ void ValueSet::Format()
     else
         mnTextOffset = 0;
 
-    // Offset und Groesse beruecksichtigen, wenn NoneField vorhanden
+    // consider offset and size, if NoneField does exist
     if ( nStyle & WB_NONEFIELD )
     {
         nNoneHeight = nTxtHeight+nOff;
@@ -408,12 +407,12 @@ void ValueSet::Format()
         }
     }
 
-    // Breite vom ScrollBar berechnen
+    // calculate ScrollBar width
     long nScrBarWidth = 0;
     if ( mpScrBar )
         nScrBarWidth = mpScrBar->GetSizePixel().Width()+SCRBAR_OFFSET;
 
-    // Spaltenanzahl berechnen
+    // calculate number of columns
     if ( !mnUserCols )
     {
         if ( mnUserItemWidth )
@@ -428,7 +427,7 @@ void ValueSet::Format()
     else
         mnCols = mnUserCols;
 
-    // Zeilenanzahl berechnen
+    // calculate number of rows
     mbScroll = sal_False;
     mnLines = (long)mpImpl->mpItemList->size() / mnCols;
     if ( mpImpl->mpItemList->size() % mnCols )
@@ -457,7 +456,7 @@ void ValueSet::Format()
             mnFirstLine = (sal_uInt16)(mnLines-mnVisLines);
     }
 
-    // Itemgroessen berechnen
+    // calculate item size
     long nColSpace  = (mnCols-1)*nSpace;
     long nLineSpace = ((mnVisLines-1)*nSpace)+nNoneSpace;
     long nItemWidth;
@@ -487,7 +486,7 @@ void ValueSet::Format()
     maVirDev.SetBackground( GetBackground() );
     maVirDev.SetOutputSizePixel( aWinSize, sal_True );
 
-    // Bei zu kleinen Items machen wir nichts
+    // nothing is changed in case of too small items
     long nMinHeight = 2;
     if ( nStyle & WB_ITEMBORDER )
         nMinHeight = 4;
@@ -513,15 +512,15 @@ void ValueSet::Format()
     }
     else
     {
-        // Frame-Style ermitteln
+        // determine Frame-Style
         if ( nStyle & WB_DOUBLEBORDER )
             mnFrameStyle = FRAME_DRAW_DOUBLEIN;
         else
             mnFrameStyle = FRAME_DRAW_IN;
 
-        // Selektionsfarben und -breiten ermitteln
-        // Gegebenenfalls die Farben anpassen, damit man die Selektion besser
-        // erkennen kann
+        // determine selected color and width
+        // if necessary change the colors, to make the selection
+        // better detectable
         const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
         Color aHighColor( rStyleSettings.GetHighlightColor() );
         if ( ((aHighColor.GetRed() > 0x80) || (aHighColor.GetGreen() > 0x80) ||
@@ -532,15 +531,14 @@ void ValueSet::Format()
         else
             mbBlackSel = sal_False;
 
-        // Wenn die Items groesser sind, dann die Selektion doppelt so breit
-        // zeichnen
+        // draw the selection with double width if the items are bigger
         if ( (nStyle & WB_DOUBLEBORDER) &&
              ((nItemWidth >= 25) && (nItemHeight >= 20)) )
             mbDoubleSel = sal_True;
         else
             mbDoubleSel = sal_False;
 
-        // Calculate offsets
+        // calculate offsets
         long nStartX;
         long nStartY;
         if ( mbFullMode )
@@ -556,12 +554,12 @@ void ValueSet::Format()
             nStartY = 0;
         }
 
-        // Items berechnen und zeichnen
+        // calculate and draw items
         maVirDev.SetLineColor();
         long x = nStartX;
         long y = nStartY;
 
-        // NoSelection-Field erzeugen und anzeigen
+        // create NoSelection field and show it
         if ( nStyle & WB_NONEFIELD )
         {
             if ( !mpNoneItem )
@@ -636,7 +634,7 @@ void ValueSet::Format()
             }
         }
 
-        // ScrollBar anordnen, Werte setzen und anzeigen
+        // arrange ScrollBar, set values and show it
         if ( mpScrBar )
         {
             Point   aPos( aWinSize.Width()-nScrBarWidth+SCRBAR_OFFSET, 0 );
@@ -659,10 +657,10 @@ void ValueSet::Format()
         }
     }
 
-    // Jetzt haben wir formatiert und warten auf das naechste
+    // waiting for the next since the formatting is finished
     mbFormat = sal_False;
 
-    // ScrollBar loeschen
+    // delete ScrollBar
     delete pDelScrBar;
 }
 
@@ -677,7 +675,7 @@ void ValueSet::ImplDrawItemText( const XubString& rText )
     long    nTxtWidth = GetTextWidth( rText );
     long    nTxtOffset = mnTextOffset;
 
-    // Rechteck loeschen und Text ausgeben
+    // delete rectangle and show text
     if ( GetStyle() & WB_FLATVALUESET )
     {
         const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
@@ -741,7 +739,7 @@ void ValueSet::ImplDrawSelect()
         if ( pItem->maRect.IsEmpty() )
             continue;
 
-        // Selection malen
+        // draw selection
         const StyleSettings&    rStyleSettings = GetSettings().GetStyleSettings();
         Rectangle               aRect = pItem->maRect;
         Control::SetFillColor();
@@ -770,7 +768,7 @@ void ValueSet::ImplDrawSelect()
             }
         }
 
-        // Selectionsausgabe festlegen
+        // specify selection output
         WinBits nStyle = GetStyle();
         if ( nStyle & WB_MENUSTYLEVALUESET )
         {
@@ -912,15 +910,15 @@ void ValueSet::ImplHighlightItem( sal_uInt16 nItemId, sal_Bool bIsSelection )
 {
     if ( mnHighItemId != nItemId )
     {
-        // Alten merken, um vorherige Selektion zu entfernen
+        // remember the old item to delete the previous selection
         sal_uInt16 nOldItem = mnHighItemId;
         mnHighItemId = nItemId;
 
-        // Wenn keiner selektiert ist, dann Selektion nicht malen
+        // don't draw the selection if nothing is selected
         if ( !bIsSelection && mbNoSelection )
             mbDrawSelection = sal_False;
 
-        // Neu ausgeben und alte Selection wegnehmen
+        // remove the old selection and draw the new one
         ImplHideSelect( nOldItem );
         ImplDrawSelect();
         mbDrawSelection = sal_True;
@@ -958,7 +956,7 @@ void ValueSet::ImplDraw()
     else
         DrawOutDev( aDefPos, aSize, aDefPos, aSize, maVirDev );
 
-    // Trennlinie zum Namefield zeichnen
+    // draw parting line to the Namefield
     if ( GetStyle() & WB_NAMEFIELD )
     {
         if ( !(GetStyle() & WB_FLATVALUESET) )
@@ -1055,9 +1053,8 @@ size_t ValueSet::ImplGetItem( const Point& rPos, sal_Bool bMove ) const
             }
         }
 
-        // Wenn Spacing gesetzt ist, wird der vorher selektierte
-        // Eintrag zurueckgegeben, wenn die Maus noch nicht das Fenster
-        // verlassen hat
+        // return the previously selected item if spacing is set and
+        // the mouse hasn't left the window yet
         if ( bMove && mnSpacing && mnHighItemId )
         {
             return GetItemPos( mnHighItemId );
@@ -1206,7 +1203,7 @@ void ValueSet::ImplEndTracking( const Point& rPos, sal_Bool bCancel )
 {
     ValueSetItem* pItem;
 
-    // Bei Abbruch, den alten Status wieder herstellen
+    // restore the old status in case of termination
     if ( bCancel )
         pItem = NULL;
     else
@@ -1275,7 +1272,7 @@ void ValueSet::MouseButtonDown( const MouseEvent& rMEvt )
 
 void ValueSet::MouseButtonUp( const MouseEvent& rMEvt )
 {
-    // Wegen SelectionMode
+    // because of SelectionMode
     if ( rMEvt.IsLeft() && mbSelection )
         ImplEndTracking( rMEvt.GetPosPixel(), sal_False );
     else
@@ -1286,7 +1283,7 @@ void ValueSet::MouseButtonUp( const MouseEvent& rMEvt )
 
 void ValueSet::MouseMove( const MouseEvent& rMEvt )
 {
-    // Wegen SelectionMode
+    // because of SelectionMode
     if ( mbSelection || (GetStyle() & WB_MENUSTYLEVALUESET) )
         ImplTracking( rMEvt.GetPosPixel(), sal_False );
     Control::MouseMove( rMEvt );
@@ -1857,7 +1854,7 @@ void ValueSet::RemoveItem( sal_uInt16 nItemId )
         mpImpl->mpItemList->erase( it );
     }
 
-    // Variablen zuruecksetzen
+    // reset variables
     if ( (mnHighItemId == nItemId) || (mnSelItemId == nItemId) )
     {
         mnCurCol        = 0;
@@ -1878,7 +1875,7 @@ void ValueSet::Clear()
 {
     ImplDeleteItems();
 
-    // Variablen zuruecksetzen
+    // reset variables
     mnFirstLine     = 0;
     mnCurCol        = 0;
     mnOldItemId     = 0;
@@ -2029,7 +2026,7 @@ void ValueSet::SelectItem( sal_uInt16 nItemId )
             bNewOut = sal_False;
         bNewLine = sal_False;
 
-        // Gegebenenfalls in den sichtbaren Bereich scrollen
+        // if necessary scroll to the visible area
         if ( mbScroll && nItemId )
         {
             sal_uInt16 nNewLine = (sal_uInt16)(nItemPos / mnCols);
@@ -2049,14 +2046,13 @@ void ValueSet::SelectItem( sal_uInt16 nItemId )
         {
             if ( bNewLine )
             {
-                // Falls sich der sichtbare Bereich geaendert hat,
-                // alles neu ausgeben
+                // redraw everything if the visible area has changed
                 mbFormat = sal_True;
                 ImplDraw();
             }
             else
             {
-                // alte Selection wegnehmen und neue ausgeben
+                // remove old selection and draw the new one
                 ImplHideSelect( nOldItem );
                 ImplDrawSelect();
             }
@@ -2356,25 +2352,24 @@ sal_Bool ValueSet::StartDrag( const CommandEvent& rCEvt, Region& rRegion )
     if ( rCEvt.GetCommand() != COMMAND_STARTDRAG )
         return sal_False;
 
-    // Gegebenenfalls eine vorhandene Aktion abbrechen
+    // if necessary abort an existing action
     EndSelection();
 
-    // Testen, ob angeklickte Seite selektiert ist. Falls dies nicht
-    // der Fall ist, setzen wir ihn als aktuellen Eintrag. Falls Drag and
-    // Drop auch mal ueber Tastatur ausgeloest werden kann, testen wir
-    // dies nur bei einer Mausaktion.
+    // Check out if the the clicked on page is selected. If this is not the
+    // case set it as the current item. We only check mouse actions since
+    // drag-and-drop can also be triggered by the keyboard
     sal_uInt16 nSelId;
     if ( rCEvt.IsMouseEvent() )
         nSelId = GetItemId( rCEvt.GetMousePosPixel() );
     else
         nSelId = mnSelItemId;
 
-    // Falls kein Eintrag angeklickt wurde, starten wir kein Dragging
+    // don't activate dragging if no item was clicked on
     if ( !nSelId )
         return sal_False;
 
-    // Testen, ob Seite selektiertiert ist. Falls nicht, als aktuelle
-    // Seite setzen und Select rufen.
+    // Check out if the page was selected. If not set as current page and
+    // call select.
     if ( nSelId != mnSelItemId )
     {
         SelectItem( nSelId );
@@ -2384,7 +2379,7 @@ sal_Bool ValueSet::StartDrag( const CommandEvent& rCEvt, Region& rRegion )
 
     Region aRegion;
 
-    // Region zuweisen
+    // assign region
     rRegion = aRegion;
 
     return sal_True;
@@ -2467,7 +2462,7 @@ Size ValueSet::CalcWindowSizePixel( const Size& rItemSize, sal_uInt16 nDesireCol
             aSize.Height() += 8;
     }
 
-    // Evt. ScrollBar-Breite aufaddieren
+    // sum possible ScrollBar width
     aSize.Width() += GetScrollWidth();
 
     return aSize;
