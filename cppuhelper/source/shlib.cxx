@@ -487,6 +487,7 @@ Reference< XInterface > SAL_CALL loadSharedLibComponentFactory(
             Reference< XInterface >() );
     }
 #else
+    (void) rPath;
     oslModule lib;
     OUString aModulePath(OUSTR("MAIN"));
     if (! osl_getModuleHandle( NULL, &lib))
