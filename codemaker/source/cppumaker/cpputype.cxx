@@ -715,10 +715,10 @@ void CppuType::dumpComprehensiveGetCppuType(FileStream& o)
 
     OString sType = m_typeName.copy(m_typeName.lastIndexOf('/') + 1);
     OString sStaticTypeClass = "the" + sType + "Type";
-    o << indent() << "struct " << sStaticTypeClass << " : public rtl::StaticWithInit< ::com::sun::star::uno::Type, " << sStaticTypeClass << " >\n";
+    o << indent() << "struct " << sStaticTypeClass << " : public rtl::StaticWithInit< ::com::sun::star::uno::Type *, " << sStaticTypeClass << " >\n";
     o << indent() << "{\n";
     inc();
-    o << indent() << "::com::sun::star::uno::Type operator()() const\n";
+    o << indent() << "::com::sun::star::uno::Type * operator()() const\n";
     o << indent() << "{\n";
     inc();
 
@@ -807,9 +807,8 @@ void CppuType::dumpComprehensiveGetCppuType(FileStream& o)
     o << indent() << "typelib_typedescription_release( pTD );\n"
       << indent() << "// End inline typedescription generation\n\n";
 
-    o << indent() << "::com::sun::star::uno::Type the_staticType( "
-      << getTypeClass(m_typeName) << ", sTypeName );\n";
-    o << indent() << "return the_staticType;\n";
+    o << indent() << "return new ::com::sun::star::uno::Type( "
+      << getTypeClass(m_typeName) << ", sTypeName ); // leaked\n";
 
     dec();
     o << indent() << "}\n";
@@ -824,7 +823,7 @@ void CppuType::dumpComprehensiveGetCppuType(FileStream& o)
     o << " }\n\n";
 
     dumpGetCppuTypePreamble(o);
-    o  << indent() << "return detail::" << sStaticTypeClass << "::get();\n";
+    o  << indent() << "return *detail::" << sStaticTypeClass << "::get();\n";
     dumpGetCppuTypePostamble(o);
 }
 
@@ -1633,10 +1632,10 @@ void InterfaceType::dumpComprehensiveGetCppuType(FileStream& o)
 
     OString sType = m_typeName.copy(m_typeName.lastIndexOf('/') + 1);
     OString sStaticTypeClass = "the" + sType + "Type";
-    o << indent() << "struct " << sStaticTypeClass << " : public rtl::StaticWithInit< ::com::sun::star::uno::Type, " << sStaticTypeClass << " >\n";
+    o << indent() << "struct " << sStaticTypeClass << " : public rtl::StaticWithInit< ::com::sun::star::uno::Type *, " << sStaticTypeClass << " >\n";
     o << indent() << "{\n";
     inc();
-    o << indent() << "::com::sun::star::uno::Type operator()() const\n";
+    o << indent() << "::com::sun::star::uno::Type * operator()() const\n";
     o << indent() << "{\n";
 
     inc();
@@ -1710,10 +1709,8 @@ void InterfaceType::dumpComprehensiveGetCppuType(FileStream& o)
       << ("typelib_typedescription_release( (typelib_TypeDescription*)pTD"
           " );\n\n");
 
-    o << indent() << "::com::sun::star::uno::Type the_staticType( "
-      << getTypeClass(m_typeName) << ", sTypeName );\n";
-
-    o << indent() << "return the_staticType;\n";
+    o << indent() << "return new ::com::sun::star::uno::Type( "
+      << getTypeClass(m_typeName) << ", sTypeName ); // leaked\n";
 
     dec();
 
@@ -1728,7 +1725,7 @@ void InterfaceType::dumpComprehensiveGetCppuType(FileStream& o)
     o << " }\n\n";
 
     dumpGetCppuTypePreamble(o);
-    o  << indent() << "const ::com::sun::star::uno::Type &rRet = detail::" << sStaticTypeClass << "::get();\n";
+    o  << indent() << "const ::com::sun::star::uno::Type &rRet = *detail::" << sStaticTypeClass << "::get();\n";
 
     o << indent() << "// End inline typedescription generation\n";
 
@@ -2915,7 +2912,7 @@ void StructureType::dumpComprehensiveGetCppuType(FileStream & out)
     out << indent();
     if (isPolymorphic())
         dumpTemplateHead(out);
-    out << "struct " << sStaticTypeClass << " : public rtl::StaticWithInit< ::com::sun::star::uno::Type, ";
+    out << "struct " << sStaticTypeClass << " : public rtl::StaticWithInit< ::com::sun::star::uno::Type *, ";
     out << sStaticTypeClass;
     if (isPolymorphic())
         dumpTemplateParameters(out);
@@ -2923,7 +2920,7 @@ void StructureType::dumpComprehensiveGetCppuType(FileStream & out)
 
     out << indent() << "{\n";
     inc();
-    out << indent() << "::com::sun::star::uno::Type operator()() const\n";
+    out << indent() << "::com::sun::star::uno::Type * operator()() const\n";
     out << indent() << "{\n";
 
     inc();
@@ -3050,9 +3047,8 @@ void StructureType::dumpComprehensiveGetCppuType(FileStream & out)
     out << indent() << "::typelib_typedescription_register(&the_newType);\n";
     out << indent() << "::typelib_typedescription_release(the_newType);\n";
 
-    out << indent() << "::com::sun::star::uno::Type the_staticType("
-        << getTypeClass(m_typeName) << ", the_name);\n";
-    out << indent() << "return the_staticType;\n";
+    out << indent() << "return new ::com::sun::star::uno::Type("
+        << getTypeClass(m_typeName) << ", the_name); // leaked\n";
     dec();
     out << indent() << "}\n";
     dec();
@@ -3065,7 +3061,7 @@ void StructureType::dumpComprehensiveGetCppuType(FileStream & out)
     out << " }\n\n";
 
     dumpGetCppuTypePreamble(out);
-    out  << indent() << "return detail::" << sStaticTypeClass;
+    out  << indent() << "return *detail::" << sStaticTypeClass;
     if (isPolymorphic())
         dumpTemplateParameters(out);
     out  << "::get();\n";
@@ -3683,10 +3679,10 @@ void EnumType::dumpComprehensiveGetCppuType(FileStream& o)
 
     OString sType = m_typeName.copy(m_typeName.lastIndexOf('/') + 1);
     OString sStaticTypeClass = "the" + sType + "Type";
-    o << indent() << "struct " << sStaticTypeClass << " : public rtl::StaticWithInit< ::com::sun::star::uno::Type, " << sStaticTypeClass << " >\n";
+    o << indent() << "struct " << sStaticTypeClass << " : public rtl::StaticWithInit< ::com::sun::star::uno::Type *, " << sStaticTypeClass << " >\n";
     o << indent() << "{\n";
     inc();
-    o << indent() << "::com::sun::star::uno::Type operator()() const\n";
+    o << indent() << "::com::sun::star::uno::Type * operator()() const\n";
     o << indent() << "{\n";
 
     inc();
@@ -3740,9 +3736,8 @@ void EnumType::dumpComprehensiveGetCppuType(FileStream& o)
     o << indent() << "typelib_typedescription_release( pTD );\n"
       << indent() << "// End inline typedescription generation\n\n";
 
-    o << indent() << "::com::sun::star::uno::Type the_staticType( "
-      << getTypeClass(m_typeName) << ", sTypeName );\n";
-    o << indent() << "return the_staticType;\n";
+    o << indent() << "return new ::com::sun::star::uno::Type( "
+      << getTypeClass(m_typeName) << ", sTypeName ); // leaked\n";
 
     dec();
     o << indent() << "}\n";
@@ -3756,7 +3751,7 @@ void EnumType::dumpComprehensiveGetCppuType(FileStream& o)
     o << " }\n\n";
 
     dumpGetCppuTypePreamble(o);
-    o  << indent() << "return detail::" << sStaticTypeClass << "::get();\n";
+    o  << indent() << "return *detail::" << sStaticTypeClass << "::get();\n";
     dumpGetCppuTypePostamble(o);
 }
 
