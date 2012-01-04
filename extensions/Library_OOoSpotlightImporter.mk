@@ -44,8 +44,9 @@ $(eval $(call gb_Library_add_ldflags,OOoSpotlightImporter,\
 	-framework CoreFoundation \
 	-framework Foundation \
 	-framework CoreServices \
-	-bundle \
 ))
+#	-bundle \
+
 
 $(eval $(call gb_Library_use_external,OOoSpotlightImporter,zlib))
 
