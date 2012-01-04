@@ -49,12 +49,6 @@ ifneq ($(origin CXX),default)
 gb_CXX := $(CXX)
 endif
 
-gb_OSDEFS := \
-	-DWINVER=0x0500 \
-	-D_WIN32_IE=0x0500 \
-	-DWIN32 \
-	-DWNT \
-
 gb_COMPILERDEFS := \
 	-DMSC \
 	-D_CRT_NON_CONFORMING_SWPRINTFS \

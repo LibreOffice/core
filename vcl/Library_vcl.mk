@@ -53,7 +53,7 @@ $(eval $(call gb_Library_set_include,vcl,\
 ))
 
 $(eval $(call gb_Library_add_defs,vcl,\
-    -DVCL_DLLIMPLEMENTATION -DNOMINMAX \
+    -DVCL_DLLIMPLEMENTATION \
     -DCUI_DLL_NAME=\"$(call gb_Library_get_runtime_filename,cui)\" \
     -DDLLPOSTFIX=$(gb_Library_DLLPOSTFIX) \
 ))

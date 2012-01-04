@@ -31,4 +31,12 @@ gb_Helper_OUTDIRLIBDIR := $(OUTDIR)/bin
 
 gb_MKTEMP := mktemp --tmpdir=$(gb_TMPDIR) gbuild.XXXXXX
 
+gb_OSDEFS := \
+	-DWINVER=0x0500 \
+	-D_WIN32_IE=0x0500 \
+	-DWIN32 \
+	-DWNT \
+	-DNOMINMAX \
+
+
 # vim:set noexpandtab:

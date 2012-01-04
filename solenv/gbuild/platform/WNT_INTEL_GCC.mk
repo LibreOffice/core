@@ -36,12 +36,6 @@ include $(GBUILDDIR)/platform/windows.mk
 
 gb_RC := $(WINDRES)
 
-gb_OSDEFS := \
-	-DWINVER=0x0500 \
-	-D_WIN32_IE=0x0500 \
-	-DWIN32 \
-	-DWNT \
-
 ifeq ($(GXX_INCLUDE_PATH),)
 GXX_INCLUDE_PATH=$(COMPATH)/include/c++/$(shell gcc -dumpversion)
 endif

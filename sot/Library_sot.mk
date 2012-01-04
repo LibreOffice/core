@@ -42,7 +42,7 @@ $(eval $(call gb_Library_add_api,sot,\
 ))
 
 $(eval $(call gb_Library_add_defs,sot,\
-    -DSOT_DLLIMPLEMENTATION -DNOMINMAX\
+    -DSOT_DLLIMPLEMENTATION \
 ))
 
 $(eval $(call gb_Library_add_linked_libs,sot,\

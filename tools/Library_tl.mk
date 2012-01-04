@@ -38,7 +38,7 @@ $(eval $(call gb_Library_set_include,tl,\
 ))
 
 $(eval $(call gb_Library_add_defs,tl,\
-    -DTOOLS_DLLIMPLEMENTATION -DNOMINMAX\
+    -DTOOLS_DLLIMPLEMENTATION \
 ))
 
 $(eval $(call gb_Library_add_api,tl,\

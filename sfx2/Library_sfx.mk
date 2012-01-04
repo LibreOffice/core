@@ -53,7 +53,7 @@ $(eval $(call gb_Library_set_include,sfx,\
 ))
 
 $(eval $(call gb_Library_add_defs,sfx,\
-    -DSFX2_DLLIMPLEMENTATION -DNOMINMAX \
+    -DSFX2_DLLIMPLEMENTATION \
 ))
 
 ifeq ($(ENABLE_SYSTRAY_GTK),TRUE)
