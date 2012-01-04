@@ -1317,6 +1317,21 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, sal_Bool bIdleEnd )
 
     if ( IsInHeaderFooter() != IsHeaderFooterEdit() )
         ToggleHeaderFooterEdit();
+    sal_Bool bInHeader= sal_True;
+    if ( IsInHeaderFooter( &bInHeader ) )
+    {
+        if ( IsShowHeaderFooterSeparator( Header ) && !bInHeader )
+        {
+            SetShowHeaderFooterSeparator( Footer, true );
+            SetShowHeaderFooterSeparator( Header, false );
+        }
+        else if ( IsShowHeaderFooterSeparator( Footer ) && bInHeader )
+        {
+            SetShowHeaderFooterSeparator( Header, true );
+            SetShowHeaderFooterSeparator( Footer, false );
+        }
+    }
+
 
     // #i27301#
     SwNotifyAccAboutInvalidTextSelections aInvalidateTextSelections( *this );
