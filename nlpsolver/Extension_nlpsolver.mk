@@ -33,10 +33,12 @@ $(eval $(call gb_Extension_add_file,nlpsolver,components.rdb,$(SRCDIR)/nlpsolver
 $(eval $(call gb_Extension_add_file,nlpsolver,nlpsolver.jar,$(OUTDIR)/bin/nlpsolver.jar))
 $(eval $(call gb_Extension_add_file,nlpsolver,EvolutionarySolver.jar,$(OUTDIR)/bin/EvolutionarySolver.jar))
 
-$(eval $(foreach trans, $(wildcard $(SRCDIR)/nlpsolver/src/locale/*en_US.default), \
-	$(eval $(call gb_Extension_add_file,nlpsolver,locale/$(notdir $(trans)),$(trans)))))
-$(eval $(foreach trans, $(wildcard $(SRCDIR)/nlpsolver/src/locale/*en_US.properties), \
-	$(eval $(call gb_Extension_localize_properties,nlpsolver,locale/$(notdir $(trans)),$(trans)))))
+$(eval $(call gb_Extension_add_file,nlpsolver,locale/NLPSolverCommon_en_US.default,$(SRCDIR)/nlpsolver/src/locale/NLPSolverCommon_en_US.default))
+$(eval $(call gb_Extension_add_file,nlpsolver,locale/NLPSolverStatusDialog_en_US.default,$(SRCDIR)/nlpsolver/src/locale/NLPSolverStatusDialog_en_US.default))
+
+$(eval $(call gb_Extension_localize_properties,nlpsolver,locale/NLPSolverCommon_en_US.properties,$(SRCDIR)/nlpsolver/src/locale/NLPSolverCommon_en_US.properties))
+$(eval $(call gb_Extension_localize_properties,nlpsolver,locale/NLPSolverStatusDialog_en_US.properties,$(SRCDIR)/nlpsolver/src/locale/NLPSolverStatusDialog_en_US.properties))
+
 $(eval $(call gb_Extension_add_file,nlpsolver,help/en/com.sun.star.comp.Calc.NLPSolver/Options.xhp, \
 	$(SRCDIR)/nlpsolver/help/en/com.sun.star.comp.Calc.NLPSolver/Options.xhp))
 $(eval $(call gb_Extension_add_file,nlpsolver,help/en/com.sun.star.comp.Calc.NLPSolver/Usage.xhp, \
