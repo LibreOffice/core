@@ -27,6 +27,7 @@
  ************************************************************************/
 
 #include "sal/config.h"
+#include "rtl/ustring.hxx"
 
 #include <cassert>
 
@@ -500,17 +501,15 @@ static void ChildStatusProc(void *pData)
 
             if (! INIT_GROUPS(data.m_name, data.m_gid) || (setuid(data.m_uid) != 0))
                 OSL_TRACE("Failed to change uid and guid, errno=%d (%s)", errno, strerror(errno));
-#if defined(LINUX) || defined (FREEBSD) || defined(NETBSD) || defined(OPENBSD) || defined(IOS) || defined(DRAGONFLY)
-            unsetenv("HOME");
-#else
-            putenv("HOME=");
-#endif
+
+            const rtl::OUString envVar(RTL_CONSTASCII_USTRINGPARAM("HOME"));
+            osl_clearEnvironment(envVar.pData);
         }
 
-          if (data.m_pszDir)
-              chstatus = chdir(data.m_pszDir);
+        if (data.m_pszDir)
+            chstatus = chdir(data.m_pszDir);
 
-           if (chstatus == 0 && ((data.m_uid == (uid_t)-1) || ((data.m_uid == getuid()) && (data.m_gid == getgid()))))
+        if (chstatus == 0 && ((data.m_uid == (uid_t)-1) || ((data.m_uid == getuid()) && (data.m_gid == getgid()))))
         {
             int i;
             for (i = 0; data.m_pszEnv[i] != NULL; i++)
