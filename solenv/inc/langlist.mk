@@ -76,7 +76,6 @@ ko \
 kok \
 ks \
 ku \
-ky \
 ky-CN \
 lb \
 lo \
