@@ -141,63 +141,6 @@ void SAL_CALL OInputStreamHelper::closeInput()
     m_xLockBytes = NULL;
 }
 
-/*************************************************************************/
-//------------------------------------------------------------------------------
-void SAL_CALL OOutputStreamHelper::acquire() throw ()
-{
-    OutputStreamHelper_Base::acquire();
-}
-
-//------------------------------------------------------------------------------
-void SAL_CALL OOutputStreamHelper::release() throw ()
-{
-    OutputStreamHelper_Base::release();
-}
-// stario::XOutputStream
-//------------------------------------------------------------------------------
-void SAL_CALL OOutputStreamHelper::writeBytes(const staruno::Sequence< sal_Int8 >& aData)
-    throw (stario::NotConnectedException, stario::BufferSizeExceededException, stario::IOException, staruno::RuntimeException)
-{
-    ::osl::MutexGuard aGuard( m_aMutex );
-    if (!m_xLockBytes.Is())
-        throw stario::NotConnectedException(::rtl::OUString(), static_cast<staruno::XWeak*>(this));
-
-    sal_Size nWritten;
-    ErrCode nError = m_xLockBytes->WriteAt( m_nActPos, aData.getConstArray(), aData.getLength(), &nWritten );
-    // FIXME  nWritten could be truncated on 64-bit arches
-    m_nActPos += (sal_uInt32)nWritten;
-
-    if (nError != ERRCODE_NONE ||
-        sal::static_int_cast<sal_Int32>(nWritten) != aData.getLength())
-    {
-        throw stario::IOException(::rtl::OUString(),static_cast<staruno::XWeak*>(this));
-    }
-}
-
-//------------------------------------------------------------------
-void SAL_CALL OOutputStreamHelper::flush()
-    throw (stario::NotConnectedException, stario::BufferSizeExceededException, stario::IOException, staruno::RuntimeException)
-{
-    ::osl::MutexGuard aGuard( m_aMutex );
-    if (!m_xLockBytes.Is())
-        throw stario::NotConnectedException(::rtl::OUString(), static_cast<staruno::XWeak*>(this));
-
-    ErrCode nError = m_xLockBytes->Flush();
-    if (nError != ERRCODE_NONE)
-        throw stario::IOException(::rtl::OUString(),static_cast<staruno::XWeak*>(this));
-}
-
-//------------------------------------------------------------------
-void SAL_CALL OOutputStreamHelper::closeOutput(  )
-    throw(stario::NotConnectedException, stario::BufferSizeExceededException, stario::IOException, staruno::RuntimeException)
-{
-    ::osl::MutexGuard aGuard( m_aMutex );
-    if (!m_xLockBytes.Is())
-        throw stario::NotConnectedException(::rtl::OUString(), static_cast<staruno::XWeak*>(this));
-
-    m_xLockBytes = NULL;
-}
-
 } // namespace utl
 
 

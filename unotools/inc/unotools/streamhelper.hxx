@@ -29,11 +29,9 @@
 
 #ifndef _UNOTOOLS_STREAMHELPER_HXX_
 #define _UNOTOOLS_STREAMHELPER_HXX_
-#include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 #include <osl/mutex.hxx>
-#include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase2.hxx>
 #include <tools/stream.hxx>
 
@@ -79,35 +77,6 @@ public:
     virtual void SAL_CALL seek( sal_Int64 location ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
     virtual sal_Int64 SAL_CALL getPosition(  ) throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
     virtual sal_Int64 SAL_CALL getLength(  ) throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
-};
-
-/**
- * The helper implementation for a using output streams based on SvLockBytes.
- *
- * @author  Dirk Grobler
- * @since   00/28/03
- */
-typedef ::cppu::WeakImplHelper1<stario::XOutputStream> OutputStreamHelper_Base;
-    // needed for some compilers
-class UNOTOOLS_DLLPUBLIC OOutputStreamHelper : public OutputStreamHelper_Base
-{
-    ::osl::Mutex    m_aMutex;
-    SvLockBytesRef  m_xLockBytes;
-    sal_uInt32      m_nActPos;
-
-public:
-    OOutputStreamHelper(const SvLockBytesRef& _xLockBytes, sal_uInt32 _nPos = 0)
-        :m_xLockBytes(_xLockBytes)
-        ,m_nActPos(_nPos){}
-
-// staruno::XInterface
-    virtual void SAL_CALL acquire() throw ();
-    virtual void SAL_CALL release() throw ();
-
-// stario::XOutputStream
-    virtual void SAL_CALL writeBytes( const staruno::Sequence< sal_Int8 >& aData ) throw(stario::NotConnectedException, stario::BufferSizeExceededException, stario::IOException, staruno::RuntimeException);
-    virtual void SAL_CALL flush(  ) throw(stario::NotConnectedException, stario::BufferSizeExceededException, stario::IOException, staruno::RuntimeException);
-    virtual void SAL_CALL closeOutput(  ) throw(stario::NotConnectedException, stario::BufferSizeExceededException, stario::IOException, staruno::RuntimeException);
 };
 
 }   // namespace utl
