@@ -138,20 +138,9 @@ void ScRefTokenHelper::compileRangeRepresentation(
 
 void singleRefToAddr(const ScSingleRefData& rRef, ScAddress& rAddr)
 {
-    if (rRef.IsColRel())
-        rAddr.SetCol(rRef.nRelCol);
-    else
-        rAddr.SetCol(rRef.nCol);
-
-    if (rRef.IsRowRel())
-        rAddr.SetRow(rRef.nRelRow);
-    else
-        rAddr.SetRow(rRef.nRow);
-
-    if (rRef.IsTabRel())
-        rAddr.SetTab(rRef.nRelTab);
-    else
-        rAddr.SetTab(rRef.nTab);
+    rAddr.SetCol(rRef.nCol);
+    rAddr.SetRow(rRef.nRow);
+    rAddr.SetTab(rRef.nTab);
 }
 
 bool ScRefTokenHelper::getRangeFromToken(ScRange& rRange, const ScTokenRef& pToken, bool bExternal)
