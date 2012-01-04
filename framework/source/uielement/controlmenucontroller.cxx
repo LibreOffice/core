@@ -115,7 +115,7 @@
 #define SID_FM_IMAGEBUTTON                  (SID_FMSLOTS_START + 12)
 #define SID_FM_FILECONTROL                  (SID_FMSLOTS_START + 13)
 
-sal_Int16 nConvertSlots[] =
+static sal_Int16 nConvertSlots[] =
 {
     SID_FM_CONVERTTO_EDIT,
     SID_FM_CONVERTTO_BUTTON,
@@ -139,7 +139,7 @@ sal_Int16 nConvertSlots[] =
     SID_FM_CONVERTTO_SPINBUTTON
 };
 
-sal_Int16 nCreateSlots[] =
+static sal_Int16 nCreateSlots[] =
 {
     SID_FM_EDIT,
     SID_FM_PUSHBUTTON,
