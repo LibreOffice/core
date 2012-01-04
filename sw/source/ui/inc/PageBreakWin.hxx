@@ -48,6 +48,8 @@ class SwPageBreakWin : public MenuButton, public SwFrameControl
     Timer                 m_aFadeTimer;
     bool                  m_bDestroyed;
 
+    const Point*          m_pMousePt;
+
 public:
     SwPageBreakWin( SwEditWin* pEditWin, const SwPageFrm* pPageFrm );
     ~SwPageBreakWin( );
@@ -57,7 +59,7 @@ public:
     virtual void MouseMove( const MouseEvent& rMEvt );
     virtual void Activate( );
 
-    void UpdatePosition( );
+    void UpdatePosition( const Point* pEvtPt = NULL );
 
     virtual void ShowAll( bool bShow );
     virtual bool Contains( const Point &rDocPt ) const;
