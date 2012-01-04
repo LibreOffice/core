@@ -1985,6 +1985,7 @@ $(eval $(call gb_UnoApiTarget_add_idlfiles,offapi,offapi/com/sun/star/chart2/dat
 	XNumericalDataSequence \
 	XRangeHighlighter \
 	XRangeXMLConversion \
+	XSheetDataProvider \
 	XTextualDataSequence \
 ))
 $(eval $(call gb_UnoApiTarget_add_idlfiles,offapi,offapi/com/sun/star/configuration,\
