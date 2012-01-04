@@ -68,59 +68,22 @@ using namespace drawinglayer::primitive2d;
 
 namespace
 {
-    static B2DPolygon lcl_CreatePolygon( B2DRectangle aBounds, bool bMirror )
+    static B2DPolygon lcl_CreatePolygon( B2DRectangle aBounds )
     {
         B2DPolygon aRetval;
         const double nRadius = 1;
         const double nKappa((M_SQRT2 - 1.0) * 4.0 / 3.0);
 
-        // Create the top left corner
+        // Create the top right corner
         {
-            B2DPoint aTLCorner = aBounds.getMinimum();
-            B2DPoint aStart( 0.0, nRadius );
-            B2DPoint aEnd( nRadius, 0.0 );
-            aRetval.append( aStart );
-            aRetval.appendBezierSegment(
-                    interpolate( aStart, aTLCorner, nKappa ),
-                    interpolate( aEnd, aTLCorner, nKappa ),
-                    aEnd );
+            B2DPoint aTMCorner( aBounds.getWidth(), 0.0 );
+            aRetval.append( aTMCorner );
         }
 
-        // Create the top right angle
+        // Create the bottom right corner
         {
-            B2DPoint aTMCorner( aBounds.getWidth() - ARROW_WIDTH, 0.0 );
-            B2DPoint aStart = aTMCorner + B2DVector( - nRadius, 0.0 );
-            B2DVector aEndVect( double( ARROW_WIDTH ), aBounds.getHeight() / 2.0 );
-            aEndVect.setLength( nRadius );
-            B2DPoint aEnd = aTMCorner + aEndVect;
-            aRetval.append( aStart );
-            aRetval.appendBezierSegment(
-                    interpolate( aStart, aTMCorner, nKappa ),
-                    interpolate( aEnd, aTMCorner, nKappa ),
-                    aEnd );
-        }
-
-        // Create the right corner
-        {
-            B2DPoint aMRCorner( aBounds.getWidth(), aBounds.getHeight() / 2.0 );
-            B2DVector aStartVect( double( - ARROW_WIDTH ), - aBounds.getHeight() / 2.0 );
-            aStartVect.setLength( nRadius );
-            B2DPoint aStart = aMRCorner + aStartVect;
-            B2DVector aEndVect( double( - ARROW_WIDTH ), aBounds.getHeight() / 2.0 );
-            aEndVect.setLength( nRadius );
-            B2DPoint aEnd = aMRCorner + aEndVect;
-            aRetval.append( aStart );
-            aRetval.appendBezierSegment(
-                    interpolate( aStart, aMRCorner, nKappa ),
-                    interpolate( aEnd, aMRCorner, nKappa ),
-                    aEnd );
-        }
-
-        // Create the bottom right angle
-        {
-            B2DPoint aBMCorner( aBounds.getWidth() - ARROW_WIDTH, aBounds.getHeight() );
-            B2DVector aStartVect( double( ARROW_WIDTH ), - aBounds.getHeight() / 2.0 );
-            aStartVect.setLength( nRadius );
+            B2DPoint aBMCorner( aBounds.getWidth(), aBounds.getHeight() );
+            B2DVector aStartVect( 0.0, - nRadius );
             B2DPoint aStart = aBMCorner + aStartVect;
             B2DPoint aEnd = aBMCorner + B2DVector( - nRadius, 0.0 );
             aRetval.append( aStart );
@@ -142,13 +105,10 @@ namespace
                     aEnd );
         }
 
-        aRetval.setClosed( true );
-
-        if ( bMirror )
+        // Create the top left corner
         {
-            B2DHomMatrix bRotMatrix = createRotateAroundPoint(
-                    aBounds.getCenterX(), aBounds.getCenterY(), M_PI );
-            aRetval.transform( bRotMatrix );
+            B2DPoint aTLCorner = aBounds.getMinimum();
+            aRetval.append( aTLCorner );
         }
 
         return aRetval;
@@ -178,7 +138,12 @@ namespace
                 m_pWin->Fade( false );
         }
         else if ( !m_pWin->IsVisible() )
+        {
             m_pWin->Fade( true );
+        }
+
+        Point* pPtr = new Point( rMEvt.GetPosPixel() );
+        m_pWin->UpdatePosition( pPtr );
     }
 
     void SwBreakDashedLine::MouseButtonDown( const MouseEvent& rMEvt )
@@ -199,7 +164,8 @@ SwPageBreakWin::SwPageBreakWin( SwEditWin* pEditWin, const SwPageFrm* pPageFrm )
     m_pLine( NULL ),
     m_bIsAppearing( false ),
     m_nFadeRate( 100 ),
-    m_bDestroyed( false )
+    m_bDestroyed( false ),
+    m_pMousePt( NULL )
 {
     // Use pixels for the rest of the drawing
     SetMapMode( MapMode ( MAP_PIXEL ) );
@@ -224,6 +190,7 @@ SwPageBreakWin::~SwPageBreakWin( )
 
     delete m_pPopupMenu;
     delete m_pLine;
+    delete m_pMousePt;
 }
 
 void SwPageBreakWin::Paint( const Rectangle& )
@@ -255,7 +222,7 @@ void SwPageBreakWin::Paint( const Rectangle& )
     B2DRectangle aBRect( double( aRect.Left() ), double( aRect.Top( ) ),
            double( aRect.Right() ), double( aRect.Bottom( ) ) );
     bool bMirror = ( bShowOnRight && !bRtl ) || ( !bShowOnRight && bRtl );
-    B2DPolygon aPolygon = lcl_CreatePolygon( aBRect, bMirror );
+    B2DPolygon aPolygon = lcl_CreatePolygon( aBRect );
 
     // Create the polygon primitives
     aSeq[0] = Primitive2DReference( new PolyPolygonColorPrimitive2D(
@@ -401,7 +368,7 @@ void SwPageBreakWin::MouseMove( const MouseEvent& rMEvt )
     if ( rMEvt.IsLeaveWindow() )
     {
         // don't fade if we just move to the 'line', or the popup menu is open
-        Point aEventPos( GetPosPixel() + rMEvt.GetPosPixel() );
+        Point aEventPos( rMEvt.GetPosPixel() + rMEvt.GetPosPixel() );
         if ( !Contains( aEventPos ) && !PopupMenu::IsInExecute() )
             Fade( false );
     }
@@ -433,8 +400,16 @@ bool SwPageBreakWin::ShowOnRight( )
     return bOnRight;
 }
 
-void SwPageBreakWin::UpdatePosition( )
+void SwPageBreakWin::UpdatePosition( const Point* pEvtPt )
 {
+    if ( pEvtPt != NULL )
+    {
+        if ( pEvtPt == m_pMousePt )
+            return;
+        delete m_pMousePt;
+        m_pMousePt = pEvtPt;
+    }
+
     const SwPageFrm* pPageFrm = GetPageFrame();
     const SwFrm* pPrevPage = pPageFrm->GetPrev();
     while ( pPrevPage && ( pPrevPage->Frm().Top( ) == pPageFrm->Frm().Top( ) ) )
@@ -471,18 +446,17 @@ void SwPageBreakWin::UpdatePosition( )
 
     long nLineLeft = std::max( nPgLeft, aVisArea.Left() );
     long nLineRight = std::min( nPgRight, aVisArea.Right() );
-    long nBtnLeft = nPgLeft;
+    long nBtnLeft = nLineLeft;
 
-    if ( ShowOnRight( ) )
+    if ( m_pMousePt )
     {
-        long nRight = std::min( nPgRight + aBtnSize.getWidth() - ARROW_WIDTH / 2, aVisArea.Right() );
-        nBtnLeft = nRight - aBtnSize.getWidth();
+        nBtnLeft = nLineLeft + m_pMousePt->X();
+        if ( ( nBtnLeft + aBtnSize.getWidth() ) > nLineRight )
+            nBtnLeft = nLineRight - aBtnSize.getWidth();
     }
-    else
-        nBtnLeft = std::max( nPgLeft - aBtnSize.Width() + ARROW_WIDTH / 2, aVisArea.Left() );
 
     // Set the button position
-    Point aBtnPos( nBtnLeft, nYLineOffset - aBtnSize.Height() / 2 );
+    Point aBtnPos( nBtnLeft, nYLineOffset + 1 );
     SetPosSizePixel( aBtnPos, aBtnSize );
 
     // Set the line position
