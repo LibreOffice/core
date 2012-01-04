@@ -16003,7 +16003,7 @@ void CustomShapeProperties::initializePresetsMap1()
         aStringSequence[79] = CREATE_OUSTRING ("?15 +?75 -0");
         aStringSequence[80] = CREATE_OUSTRING ("?26 +?76 -0");
         aStringSequence[81] = CREATE_OUSTRING ("?26 +0-?38 ");
-        aStringSequence[82] = CREATE_OUSTRING ("min(logwidth,logheight)/50");
+        aStringSequence[82] = CREATE_OUSTRING ("min(logwidth,logheight)/2");
         aStringSequence[83] = CREATE_OUSTRING ("logheight");
         aStringSequence[84] = CREATE_OUSTRING ("logwidth");
         aPropertyMap [PROP_Equations] <<= aStringSequence;

@@ -693,9 +693,9 @@ void CustomShapeProperties::initializePresetsMap6()
         aStringSequence[13] = CREATE_OUSTRING ("logwidth+0-?12 ");
         aStringSequence[14] = CREATE_OUSTRING ("logheight");
         aStringSequence[15] = CREATE_OUSTRING ("logwidth");
-        aStringSequence[16] = CREATE_OUSTRING ("min(logwidth,logheight)/80");
-        aStringSequence[17] = CREATE_OUSTRING ("min(logwidth,logheight)/64");
-        aStringSequence[18] = CREATE_OUSTRING ("min(logwidth,logheight)/56");
+        aStringSequence[16] = CREATE_OUSTRING ("min(logwidth,logheight)/32");
+        aStringSequence[17] = CREATE_OUSTRING ("min(logwidth,logheight)/16");
+        aStringSequence[18] = CREATE_OUSTRING ("min(logwidth,logheight)/8");
         aPropertyMap [PROP_Equations] <<= aStringSequence;
     }
     {
