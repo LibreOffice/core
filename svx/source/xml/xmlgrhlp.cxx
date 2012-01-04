@@ -50,6 +50,7 @@
 
 #include "svtools/filter.hxx"
 #include "svx/xmlgrhlp.hxx"
+#include "svx/xmleohlp.hxx"
 
 #include <algorithm>
 
@@ -434,29 +435,19 @@ sal_Bool SvXMLGraphicHelper::ImplGetStreamNames( const ::rtl::OUString& rURLStr,
     if( aURLStr.Len() )
     {
         aURLStr = aURLStr.GetToken( comphelper::string::getTokenCount(aURLStr, ':') - 1, ':' );
+
         const sal_uInt32 nTokenCount = comphelper::string::getTokenCount(aURLStr, '/');
 
         if( 1 == nTokenCount )
         {
             rPictureStorageName = String( RTL_CONSTASCII_USTRINGPARAM( XML_GRAPHICSTORAGE_NAME ) );
             rPictureStreamName = aURLStr;
-            bRet = sal_True;
-        }
-        else if( 2 == nTokenCount )
-        {
-            rPictureStorageName = aURLStr.GetToken( 0, '/' );
-
-            DBG_ASSERT( rPictureStorageName.getLength() &&
-                       rPictureStorageName.getStr()[ 0 ] != '#',
-                       "invalid relative URL" );
-
-            rPictureStreamName = aURLStr.GetToken( 1, '/' );
-            bRet = sal_True;
         }
         else
-        {
-            SAL_WARN("svx", "SvXMLGraphicHelper::ImplInsertGraphicURL: invalid scheme: " << rURLStr);
-        }
+            SvXMLEmbeddedObjectHelper::splitObjectURL(aURLStr, rPictureStorageName, rPictureStreamName);
+
+        bRet = !rPictureStreamName.isEmpty();
+        SAL_WARN_IF(!bRet, "svx", "SvXMLGraphicHelper::ImplInsertGraphicURL: invalid scheme: " << rURLStr);
     }
 
     return bRet;

@@ -1211,10 +1211,10 @@ void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::
 
                     if ( pOleNode )
                     {
-                        svt::EmbeddedObjectRef xObj = pOleNode->GetOLEObj().GetObject();
+                        svt::EmbeddedObjectRef &rObj = pOleNode->GetOLEObj().GetObject();
 
                         ::rtl::OUString aMediaType;
-                        xObj.SetGraphic( aGraphic, aMediaType );
+                        rObj.SetGraphic( aGraphic, aMediaType );
                     }
                 }
             }

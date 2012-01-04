@@ -206,6 +206,48 @@ void SAL_CALL SvXMLEmbeddedObjectHelper::disposing()
     Flush();
 }
 
+
+void SvXMLEmbeddedObjectHelper::splitObjectURL(::rtl::OUString aURLNoPar,
+    ::rtl::OUString& rContainerStorageName,
+    ::rtl::OUString& rObjectStorageName)
+{
+    DBG_ASSERT( '#' != aURLNoPar[0], "invalid object URL" );
+
+    sal_Int32 _nPos = aURLNoPar.lastIndexOf( '/' );
+    if( -1 == _nPos )
+    {
+        rContainerStorageName = ::rtl::OUString();
+        rObjectStorageName = aURLNoPar;
+    }
+    else
+    {
+        //eliminate 'superfluous' slashes at start and end
+        //#i103076# load objects with all allowed xlink:href syntaxes
+        {
+            //eliminate './' at start
+            sal_Int32 nStart = 0;
+            sal_Int32 nCount = aURLNoPar.getLength();
+            if( 0 == aURLNoPar.compareToAscii( "./", 2 ) )
+            {
+                nStart = 2;
+                nCount -= 2;
+            }
+
+            //eliminate '/' at end
+            sal_Int32 nEnd = aURLNoPar.lastIndexOf( '/' );
+            if( nEnd == aURLNoPar.getLength()-1 && nEnd != (nStart-1) )
+                nCount--;
+
+            aURLNoPar = aURLNoPar.copy( nStart, nCount );
+        }
+
+        _nPos = aURLNoPar.lastIndexOf( '/' );
+        if( _nPos >= 0 )
+            rContainerStorageName = aURLNoPar.copy( 0, _nPos );
+        rObjectStorageName = aURLNoPar.copy( _nPos+1 );
+    }
+}
+
 // -----------------------------------------------------------------------------
 
 sal_Bool SvXMLEmbeddedObjectHelper::ImplGetStorageNames(
@@ -308,41 +350,7 @@ sal_Bool SvXMLEmbeddedObjectHelper::ImplGetStorageNames(
     }
     else
     {
-        DBG_ASSERT( '#' != aURLNoPar[0], "invalid object URL" );
-
-        sal_Int32 _nPos = aURLNoPar.lastIndexOf( '/' );
-        if( -1 == _nPos )
-        {
-            rContainerStorageName = ::rtl::OUString();
-            rObjectStorageName = aURLNoPar;
-        }
-        else
-        {
-            //eliminate 'superfluous' slashes at start and end
-            //#i103076# load objects with all allowed xlink:href syntaxes
-            {
-                //eliminate './' at start
-                sal_Int32 nStart = 0;
-                sal_Int32 nCount = aURLNoPar.getLength();
-                if( 0 == aURLNoPar.compareToAscii( "./", 2 ) )
-                {
-                    nStart = 2;
-                    nCount -= 2;
-                }
-
-                //eliminate '/' at end
-                sal_Int32 nEnd = aURLNoPar.lastIndexOf( '/' );
-                if( nEnd == aURLNoPar.getLength()-1 && nEnd != (nStart-1) )
-                    nCount--;
-
-                aURLNoPar = aURLNoPar.copy( nStart, nCount );
-            }
-
-            _nPos = aURLNoPar.lastIndexOf( '/' );
-            if( _nPos >= 0 )
-                rContainerStorageName = aURLNoPar.copy( 0, _nPos );
-            rObjectStorageName = aURLNoPar.copy( _nPos+1 );
-        }
+        splitObjectURL(aURLNoPar, rContainerStorageName, rObjectStorageName);
     }
 
     if( -1 != rContainerStorageName.indexOf( '/' ) )
