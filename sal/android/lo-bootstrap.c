@@ -1241,10 +1241,9 @@ patch(const char *symbol,
         return;
     }
 
-    /* Poke a "b replacement_code" into it instead */
-    *((unsigned *) code) =
-        (0xEA000000  |
-         ((((int) replacement_code - ((int) code + 8)) / 4) & 0x00FFFFFF));
+    /* Poke in a jump to replacement_code instead */
+    ((unsigned *) code)[0] = 0xe51ff004; /* ldr pc, [pc, #-4] */
+    ((unsigned *) code)[1] = (unsigned) replacement_code;
 }
 
 static void
