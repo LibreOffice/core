@@ -26,15 +26,20 @@
 # instead of those above.
 #
 
-$(eval $(call gb_AllLangResTarget_AllLangResTarget,san))
+$(eval $(call gb_AllLangResTarget_AllLangResTarget,scn))
 
-$(eval $(call gb_AllLangResTarget_set_reslocation,san,extensions/source/scanner))
+$(eval $(call gb_AllLangResTarget_set_reslocation,scn,extensions/source/scanner))
 
-$(eval $(call gb_AllLangResTarget_add_srs,san,\
+$(eval $(call gb_AllLangResTarget_add_srs,scn,\
 	scn/res \
 ))
 
 $(eval $(call gb_SrsTarget_SrsTarget,scn/res))
+
+$(eval $(call gb_SrsTarget_set_include,scn/res,\
+	$$(INCLUDE) \
+	-I$(SRCDIR)/extensions/source/scanner \
+))
 
 $(eval $(call gb_SrsTarget_add_files,scn/res,\
 	extensions/source/scanner/grid.src \
