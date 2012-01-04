@@ -187,8 +187,7 @@ SvtAcceleratorConfiguration::~SvtAcceleratorConfiguration()
                 INetURLObject aObj( aUserConfig );
                 aObj.insertName( String::CreateFromAscii("GlobalKeyBindings.xml") );
                 SvStream* pStream = ::utl::UcbStreamHelper::CreateStream( aObj.GetMainURL( INetURLObject::NO_DECODE ), STREAM_STD_READWRITE|STREAM_TRUNC );
-                ::utl::OOutputStreamWrapper aHelper( *pStream );
-                com::sun::star::uno::Reference < ::com::sun::star::io::XOutputStream > xOut( &aHelper );
+                com::sun::star::uno::Reference < ::com::sun::star::io::XOutputStream > xOut( new utl::OOutputStreamWrapper( *pStream ) );
                 pImp->Commit( xOut );
                 delete pStream;
             }

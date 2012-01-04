@@ -110,23 +110,24 @@ public:
 //==================================================================
 typedef ::cppu::WeakImplHelper1<stario::XOutputStream> OutputStreamWrapper_Base;
     // needed for some compilers
-class UNOTOOLS_DLLPUBLIC OOutputStreamWrapper : public OutputStreamWrapper_Base
+class OOutputStreamWrapper : public OutputStreamWrapper_Base
 {
-protected:
-    // TODO: thread safety!
-    SvStream&       rStream;
-
 public:
-    OOutputStreamWrapper(SvStream& _rStream) :rStream(_rStream) { }
+    UNOTOOLS_DLLPUBLIC OOutputStreamWrapper(SvStream& _rStream);
+
+protected:
+    virtual ~OOutputStreamWrapper();
 
 // stario::XOutputStream
     virtual void SAL_CALL writeBytes(const staruno::Sequence< sal_Int8 >& aData) throw(stario::NotConnectedException, stario::BufferSizeExceededException, staruno::RuntimeException);
     virtual void SAL_CALL flush() throw(stario::NotConnectedException, stario::BufferSizeExceededException, staruno::RuntimeException);
     virtual void SAL_CALL closeOutput() throw(stario::NotConnectedException, stario::BufferSizeExceededException, staruno::RuntimeException);
 
-protected:
     /// throws an exception according to the error flag of m_pSvStream
     void checkError() const;
+
+    // TODO: thread safety!
+    SvStream&       rStream;
 };
 
 //==================================================================
@@ -137,12 +138,15 @@ typedef ::cppu::ImplHelper1 <   ::com::sun::star::io::XSeekable
 /** helper class for wrapping an SvStream into an <type scope="com.sun.star.io">XOutputStream</type>
     which is seekable (i.e. supports the <type scope="com.sun.star.io">XSeekable</type> interface).
 */
-class UNOTOOLS_DLLPUBLIC OSeekableOutputStreamWrapper
+class OSeekableOutputStreamWrapper
                 :public OOutputStreamWrapper
                 ,public OSeekableOutputStreamWrapper_Base
 {
 public:
-    OSeekableOutputStreamWrapper(SvStream& _rStream);
+    UNOTOOLS_DLLPUBLIC OSeekableOutputStreamWrapper(SvStream& _rStream);
+
+private:
+    virtual ~OSeekableOutputStreamWrapper();
 
     // disambiguate XInterface
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& _rType ) throw (::com::sun::star::uno::RuntimeException);

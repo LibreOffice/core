@@ -223,7 +223,13 @@ sal_Int64 SAL_CALL OSeekableInputStreamWrapper::getLength(  ) throw (IOException
 //==================================================================
 //= OOutputStreamWrapper
 //==================================================================
-//------------------------------------------------------------------------------
+
+OOutputStreamWrapper::OOutputStreamWrapper(SvStream& _rStream):
+    rStream(_rStream)
+{}
+
+OOutputStreamWrapper::~OOutputStreamWrapper() {}
+
 void SAL_CALL OOutputStreamWrapper::writeBytes(const staruno::Sequence< sal_Int8 >& aData) throw( stario::NotConnectedException, stario::BufferSizeExceededException, staruno::RuntimeException )
 {
     sal_uInt32 nWritten = rStream.Write(aData.getConstArray(),aData.getLength());
@@ -264,6 +270,8 @@ OSeekableOutputStreamWrapper::OSeekableOutputStreamWrapper(SvStream& _rStream)
     :OOutputStreamWrapper(_rStream)
 {
 }
+
+OSeekableOutputStreamWrapper::~OSeekableOutputStreamWrapper() {}
 
 //------------------------------------------------------------------------------
 Any SAL_CALL OSeekableOutputStreamWrapper::queryInterface( const Type& _rType ) throw (RuntimeException)
