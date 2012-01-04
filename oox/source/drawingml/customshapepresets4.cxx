@@ -7628,7 +7628,7 @@ void CustomShapeProperties::initializePresetsMap4()
         aStringSequence[4] = CREATE_OUSTRING ("logheight*?0 /100000");
         aStringSequence[5] = CREATE_OUSTRING ("?1 *?3 /100000");
         aStringSequence[6] = CREATE_OUSTRING ("logwidth+0-?5 ");
-        aStringSequence[7] = CREATE_OUSTRING ("min(logwidth,logheight)/56");
+        aStringSequence[7] = CREATE_OUSTRING ("min(logwidth,logheight)/8");
         aStringSequence[8] = CREATE_OUSTRING ("0+?7 -0");
         aStringSequence[9] = CREATE_OUSTRING ("5400000*1/14");
         aStringSequence[10] = CREATE_OUSTRING ("?7 *tan(pi*(?9 )/10800000)");
