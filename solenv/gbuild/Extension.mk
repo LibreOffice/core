@@ -98,11 +98,11 @@ define gb_Extension_Extension
 $(call gb_Extension_get_target,$(1)) : FILES := META-INF description.xml registration
 $(call gb_Extension_get_target,$(1)) : LOCATION := $(SRCDIR)/$(2)
 $(call gb_Extension_get_target,$(1)) : PRJNAME := $(firstword $(subst /, ,$(2)))
-$(call gb_Extension_get_target,$(1)) : \
-	SDF := $(gb_Extension_SDFLOCATION)$(2)/localize.sdf
-$(call gb_Extension_get_workdir,$(1))/description.xml : \
-	$(SRCDIR)/$(2)/description.xml \
-	$(if $(gb_WITH_LANG),$(gb_Extension_SDFLOCATION)$(2)/localize.sdf)
+$(call gb_Extension_get_workdir,$(1))/description.xml : $(SRCDIR)/$(2)/description.xml
+ifneq ($(strip $(gb_WITH_LANG)),)
+$(call gb_Extension_get_target,$(1)) : SDF := $(gb_Extension_SDFLOCATION)$(2)/localize.sdf
+$(call gb_Extension_get_workdir,$(1))/description.xml : $$(SDF)
+endif
 $(call gb_Extension_add_file,$(1),description-en-US.txt,$(SRCDIR)/$(2)/description-en-US.txt)
 $(eval $(call gb_Module_register_target,$(call gb_Extension_get_outdir_target,$(1)),$(call gb_Extension_get_clean_target,$(1))))
 $(call gb_Deliver_add_deliverable,$(call gb_Extension_get_outdir_target,$(1)),$(call gb_Extension_get_target,$(1)),$(1))
@@ -124,14 +124,16 @@ endef
 # localize .properties file
 # source file is copied to $(WORKDIR)
 define gb_Extension_localize_properties
+ifneq ($(strip $(gb_WITH_LANG)),)
 $(call gb_Extension_get_target,$(1)) : FILES += $(2) $(foreach lang,$(subst -,_,$(gb_Extension_LANGS)),$(subst en_US,$(lang),$(2)))
 $(call gb_Extension_get_target,$(1)) : SDF2 := $(gb_Extension_SDFLOCATION)$(subst $(SRCDIR),,$(dir $(3)))localize.sdf
 $(call gb_Extension_get_target,$(1)) : $(call gb_Extension_get_workdir,$(1))/$(2)
 $(call gb_Extension_get_workdir,$(1))/$(2) : $(3)
-	$(call gb_Output_announce,$(2),$(true),PRP,3)
+	$$(call gb_Output_announce,$(2),$(true),PRP,3)
 	mkdir -p $$(dir $$@)
 	cp -f $$< $$@
 	$(gb_Extension_PROPMERGECOMMAND) -i $$@ -m $$(SDF2)
+endif
 
 endef
 #	$(call gb_Output_announce,$@,$(true),PRP,3)
