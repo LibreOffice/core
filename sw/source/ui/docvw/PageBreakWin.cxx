@@ -142,8 +142,11 @@ namespace
             m_pWin->Fade( true );
         }
 
-        Point* pPtr = new Point( rMEvt.GetPosPixel() );
-        m_pWin->UpdatePosition( pPtr );
+        if ( !rMEvt.IsSynthetic() )
+        {
+            Point* pPtr = new Point( rMEvt.GetPosPixel() );
+            m_pWin->UpdatePosition( pPtr );
+        }
     }
 
     void SwBreakDashedLine::MouseButtonDown( const MouseEvent& rMEvt )
@@ -450,7 +453,14 @@ void SwPageBreakWin::UpdatePosition( const Point* pEvtPt )
     if ( m_pMousePt )
     {
         nBtnLeft = nLineLeft + m_pMousePt->X();
-        if ( ( nBtnLeft + aBtnSize.getWidth() ) > nLineRight )
+
+        if ( Application::GetSettings().GetLayoutRTL() )
+        {
+            nBtnLeft -= aBtnSize.getWidth();
+            if ( nBtnLeft < nLineLeft )
+                nBtnLeft = nLineLeft;
+        }
+        else if ( ( nBtnLeft + aBtnSize.getWidth() ) > nLineRight )
             nBtnLeft = nLineRight - aBtnSize.getWidth();
     }
 
