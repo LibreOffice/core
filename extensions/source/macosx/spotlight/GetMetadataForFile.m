@@ -48,11 +48,12 @@ typedef int NSColorRenderingIntent;
    and return it as a dictionary
    ----------------------------------------------------------------------------- */
 
-Boolean GetMetadataForFile(void* /*thisInterface*/,
+Boolean GetMetadataForFile(void* thisInterface,
 			   CFMutableDictionaryRef attributes, 
 			   CFStringRef contentTypeUTI,
 			   CFStringRef pathToFile)
 {
+    (void) thisInterface; /* unused */
     /* Pull any available metadata from the file at the specified path */
     /* Return the attribute keys and attribute values in the dict */
     /* Return TRUE if successful, FALSE if there was no data provided */
