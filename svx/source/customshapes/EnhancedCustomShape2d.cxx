@@ -1643,10 +1643,10 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
                         const Point aControl(GetPoint( seqCoordinates[ rSrcPt++ ], sal_True, sal_True ));
                         const Point aEnd(GetPoint( seqCoordinates[ rSrcPt++ ], sal_True, sal_True ));
 
+                        DBG_ASSERT(aNewB2DPolygon.count(), "EnhancedCustomShape2d::CreateSubPath: Error in adding control point (!)");
                         basegfx::B2DPoint aStartPointB2D( aNewB2DPolygon.getB2DPoint(aNewB2DPolygon.count() - 1 ) );
                         Point aStartPoint( aStartPointB2D.getX(), aStartPointB2D.getY() );
 
-                        DBG_ASSERT(aNewB2DPolygon.count(), "EnhancedCustomShape2d::CreateSubPath: Error in adding control point (!)");
                         aNewB2DPolygon.appendBezierSegment(
                             basegfx::B2DPoint(aStartPoint.X() + 2.0*(aControl.X() - aStartPoint.X())/3.0, aStartPoint.Y() + 2.0*(aControl.Y() - aStartPoint.Y())/3.0),
                             basegfx::B2DPoint(aEnd.X() + 2.0*(aControl.X() - aEnd.X())/3.0, aEnd.Y() + 2.0*(aControl.Y() - aEnd.Y())/3.0),
