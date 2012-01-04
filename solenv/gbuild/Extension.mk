@@ -134,6 +134,5 @@ $(call gb_Extension_get_workdir,$(1))/$(2) : $(3)
 	$(gb_Extension_PROPMERGECOMMAND) -i $$@ -m $$(SDF2)
 
 endef
-#	$(call gb_Output_announce,$@,$(true),PRP,3)
 
 # vim: set noet sw=4 ts=4:
