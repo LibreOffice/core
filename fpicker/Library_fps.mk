@@ -63,7 +63,7 @@ $(eval $(call gb_Library_add_linked_libs,fps,\
 
 ifeq ($(COM),MSC)
 $(eval $(call gb_Library_add_libs,fps,\
-	Delayimp.lib /DELAYLOAD:shell32.dll
+	Delayimp.lib /DELAYLOAD:shell32.dll \
 ))
 endif
 
