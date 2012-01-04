@@ -42,6 +42,9 @@
 #include "reftokenhelper.hxx"
 #include "chartlis.hxx"
 #include "stlalgorithm.hxx"
+#include "tokenuno.hxx"
+
+#include "formula/opcode.hxx"
 
 #include <sfx2/objsh.hxx>
 #include <tools/table.hxx>
@@ -2100,6 +2103,134 @@ uno::Reference< sheet::XRangeSelection > SAL_CALL ScChart2DataProvider::getRange
     if( xModel.is())
         xResult.set( xModel->getCurrentController(), uno::UNO_QUERY );
 
+    return xResult;
+}
+
+sal_Bool SAL_CALL ScChart2DataProvider::createDataSequenceByFormulaTokensPossible(
+    const Sequence<sheet::FormulaToken>& aTokens )
+        throw (uno::RuntimeException)
+{
+    if (aTokens.getLength() <= 0)
+        return false;
+
+    ScTokenArray aCode;
+    if (!ScTokenConversion::ConvertToTokenArray(*m_pDocument, aCode, aTokens))
+        return false;
+
+    sal_uInt16 n = aCode.GetLen();
+    if (!n)
+        return false;
+
+    const formula::FormulaToken* pFirst = aCode.First();
+    const formula::FormulaToken* pLast = aCode.GetArray()[n-1];
+    for (const formula::FormulaToken* p = aCode.First(); p; p = aCode.Next())
+    {
+        switch (p->GetType())
+        {
+            case svSep:
+            {
+                switch (p->GetOpCode())
+                {
+                    case ocSep:
+                        // separators are allowed.
+                    break;
+                    case ocOpen:
+                        if (p != pFirst)
+                            // open paran is allowed only as the first token.
+                            return false;
+                    break;
+                    case ocClose:
+                        if (p != pLast)
+                            // close paren is allowed only as the last token.
+                            return false;
+                    break;
+                    default:
+                        return false;
+                }
+            }
+            break;
+            case svSingleRef:
+            case svDoubleRef:
+            case svExternalSingleRef:
+            case svExternalDoubleRef:
+            break;
+            default:
+                return false;
+        }
+    }
+
+    return true;
+}
+
+Reference<chart2::data::XDataSequence> SAL_CALL
+ScChart2DataProvider::createDataSequenceByFormulaTokens(
+    const Sequence<sheet::FormulaToken>& aTokens )
+        throw (lang::IllegalArgumentException, uno::RuntimeException)
+{
+    Reference<chart2::data::XDataSequence> xResult;
+    if (aTokens.getLength() <= 0)
+        return xResult;
+
+    ScTokenArray aCode;
+    if (!ScTokenConversion::ConvertToTokenArray(*m_pDocument, aCode, aTokens))
+        return xResult;
+
+    sal_uInt16 n = aCode.GetLen();
+    if (!n)
+        return xResult;
+
+    vector<ScTokenRef> aRefTokens;
+    const formula::FormulaToken* pFirst = aCode.First();
+    const formula::FormulaToken* pLast = aCode.GetArray()[n-1];
+    for (const formula::FormulaToken* p = aCode.First(); p; p = aCode.Next())
+    {
+        switch (p->GetType())
+        {
+            case svSep:
+            {
+                switch (p->GetOpCode())
+                {
+                    case ocSep:
+                        // separators are allowed.
+                    break;
+                    case ocOpen:
+                        if (p != pFirst)
+                            // open paran is allowed only as the first token.
+                            throw lang::IllegalArgumentException();
+                    break;
+                    case ocClose:
+                        if (p != pLast)
+                            // close paren is allowed only as the last token.
+                            throw lang::IllegalArgumentException();
+                    break;
+                    default:
+                        throw lang::IllegalArgumentException();
+                }
+            }
+            break;
+            case svSingleRef:
+            case svDoubleRef:
+            case svExternalSingleRef:
+            case svExternalDoubleRef:
+            {
+                ScTokenRef pNew(static_cast<const ScToken*>(p->Clone()));
+                aRefTokens.push_back(pNew);
+            }
+            break;
+            default:
+                throw lang::IllegalArgumentException();
+        }
+    }
+
+    if (aRefTokens.empty())
+        return xResult;
+
+    shrinkToDataRange(m_pDocument, aRefTokens);
+
+    // ScChart2DataSequence manages the life cycle of pRefTokens.
+    vector<ScTokenRef>* pRefTokens = new vector<ScTokenRef>();
+    pRefTokens->swap(aRefTokens);
+    xResult.set(new ScChart2DataSequence(m_pDocument, this, pRefTokens, m_bIncludeHiddenCells));
     return xResult;
 }
 

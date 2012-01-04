@@ -31,6 +31,8 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/chart2/data/XDataProvider.hpp>
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
+#include <com/sun/star/chart2/data/XSheetDataProvider.hpp>
+
 #include "oox/core/filterbase.hxx"
 #include "oox/drawingml/chart/datasourcemodel.hxx"
 #include "oox/helper/containerhelper.hxx"
@@ -79,40 +81,51 @@ Reference< XDataSequence > ExcelChartConverter::createDataSequence(
         const Reference< XDataProvider >& rxDataProvider, const DataSequenceModel& rDataSeq )
 {
     Reference< XDataSequence > xDataSeq;
-    if( rxDataProvider.is() )
+    if (!rxDataProvider.is())
+        return xDataSeq;
+
+    Reference<XSheetDataProvider> xSheetProvider(rxDataProvider, UNO_QUERY);
+    if (!xSheetProvider.is())
+        return xDataSeq;
+
+    if (!rDataSeq.maFormula.isEmpty())
     {
-        OUString aRangeRep;
-        if( !rDataSeq.maFormula.isEmpty() )
-        {
-            // parse the formula string, create a token sequence
-            FormulaParser& rParser = getFormulaParser();
-            CellAddress aBaseAddr( getCurrentSheetIndex(), 0, 0 );
-            ApiTokenSequence aTokens = rParser.importFormula( aBaseAddr, rDataSeq.maFormula );
+        // parse the formula string, create a token sequence
+        FormulaParser& rParser = getFormulaParser();
+        CellAddress aBaseAddr( getCurrentSheetIndex(), 0, 0 );
+        ApiTokenSequence aTokens = rParser.importFormula( aBaseAddr, rDataSeq.maFormula );
 
-            // create a range list from the token sequence
-            ApiCellRangeList aRanges;
-            rParser.extractCellRangeList( aRanges, aTokens, false );
-            aRangeRep = rParser.generateApiRangeListString( aRanges );
-        }
-        else if( !rDataSeq.maData.empty() )
-        {
-            // create a single-row array from constant source data
-            Matrix< Any > aMatrix( rDataSeq.maData.size(), 1 );
-            Matrix< Any >::iterator aMIt = aMatrix.begin();
-            // TODO: how to handle missing values in the map?
-            for( DataSequenceModel::AnyMap::const_iterator aDIt = rDataSeq.maData.begin(), aDEnd = rDataSeq.maData.end(); aDIt != aDEnd; ++aDIt, ++aMIt )
-                *aMIt = aDIt->second;
-            aRangeRep = FormulaProcessorBase::generateApiArray( aMatrix );
-        }
-
-        if( !aRangeRep.isEmpty() ) try
+        try
         {
             // create the data sequence
-            xDataSeq = rxDataProvider->createDataSequenceByRangeRepresentation( aRangeRep );
+            xDataSeq = xSheetProvider->createDataSequenceByFormulaTokens(aTokens);
         }
-        catch( Exception& )
+        catch (Exception&)
         {
             OSL_FAIL( "ExcelChartConverter::createDataSequence - cannot create data sequence" );
+        }
+    }
+    else if (!rDataSeq.maData.empty())
+    {
+        // create a single-row array from constant source data
+        Matrix< Any > aMatrix( rDataSeq.maData.size(), 1 );
+        Matrix< Any >::iterator aMIt = aMatrix.begin();
+        // TODO: how to handle missing values in the map?
+        for( DataSequenceModel::AnyMap::const_iterator aDIt = rDataSeq.maData.begin(), aDEnd = rDataSeq.maData.end(); aDIt != aDEnd; ++aDIt, ++aMIt )
+            *aMIt = aDIt->second;
+        OUString aRangeRep = FormulaProcessorBase::generateApiArray( aMatrix );
+
+        if (!aRangeRep.isEmpty())
+        {
+            try
+            {
+                // create the data sequence
+                xDataSeq = rxDataProvider->createDataSequenceByRangeRepresentation( aRangeRep );
+            }
+            catch (Exception&)
+            {
+                OSL_FAIL( "ExcelChartConverter::createDataSequence - cannot create data sequence" );
+            }
         }
     }
     return xDataSeq;

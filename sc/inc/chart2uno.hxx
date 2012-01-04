@@ -38,6 +38,7 @@
 #include <svl/lstner.hxx>
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
 #include <com/sun/star/chart2/data/XDataProvider.hpp>
+#include <com/sun/star/chart2/data/XSheetDataProvider.hpp>
 #include <com/sun/star/chart2/data/XRangeXMLConversion.hpp>
 #include <com/sun/star/chart2/data/XDataSource.hpp>
 #include <com/sun/star/chart2/data/XDataSequence.hpp>
@@ -50,8 +51,7 @@
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <cppuhelper/implbase2.hxx>
-#include <cppuhelper/implbase4.hxx>
-#include <cppuhelper/implbase6.hxx>
+#include <cppuhelper/implbase5.hxx>
 #include <cppuhelper/implbase7.hxx>
 #include <rtl/ustring.hxx>
 #include <svl/itemprop.hxx>
@@ -69,8 +69,9 @@ class ScDocument;
 // DataProvider ==============================================================
 
 class ScChart2DataProvider : public
-                ::cppu::WeakImplHelper4<
+                ::cppu::WeakImplHelper5<
                     ::com::sun::star::chart2::data::XDataProvider,
+                    ::com::sun::star::chart2::data::XSheetDataProvider,
                     ::com::sun::star::chart2::data::XRangeXMLConversion,
                     ::com::sun::star::beans::XPropertySet,
                     ::com::sun::star::lang::XServiceInfo>,
@@ -109,6 +110,17 @@ public:
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XRangeSelection > SAL_CALL getRangeSelection()
         throw (::com::sun::star::uno::RuntimeException);
+
+    // XSheetDataProvider ----------------------------------------------------
+
+    virtual sal_Bool SAL_CALL createDataSequenceByFormulaTokensPossible(
+        const ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::FormulaToken >& aTokens )
+            throw (::com::sun::star::uno::RuntimeException);
+
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSequence >
+        SAL_CALL createDataSequenceByFormulaTokens(
+            const ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::FormulaToken >& aTokens )
+                throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
 
     // XRangeXMLConversion ---------------------------------------------------
 
