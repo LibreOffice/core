@@ -47,6 +47,7 @@
 #include "postit.hxx"
 #include "attrib.hxx"
 #include "dbdata.hxx"
+#include "reftokenhelper.hxx"
 
 #include "docsh.hxx"
 #include "docfunc.hxx"
@@ -160,6 +161,12 @@ public:
      */
     void testToggleRefFlag();
 
+    /**
+     * Test to make sure correct precedent / dependent cells are obtained when
+     * preparing to jump to them.
+     */
+    void testJumpToPrecedentsDependents();
+
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testCollator);
     CPPUNIT_TEST(testInput);
@@ -187,6 +194,7 @@ public:
     CPPUNIT_TEST(testCopyPaste);
     CPPUNIT_TEST(testMergedCells);
     CPPUNIT_TEST(testUpdateReference);
+    CPPUNIT_TEST(testJumpToPrecedentsDependents);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -2875,6 +2883,90 @@ void Test::testUpdateReference()
     m_pDoc->DeleteTab(0);
 }
 
+namespace {
+
+bool hasRange(const std::vector<ScTokenRef>& rRefTokens, const ScRange& rRange)
+{
+    std::vector<ScTokenRef>::const_iterator it = rRefTokens.begin(), itEnd = rRefTokens.end();
+    for (; it != itEnd; ++it)
+    {
+        const ScTokenRef& p = *it;
+        if (!ScRefTokenHelper::isRef(p) || ScRefTokenHelper::isExternalRef(p))
+            continue;
+
+        switch (p->GetType())
+        {
+            case formula::svSingleRef:
+            {
+                ScSingleRefData aData = p->GetSingleRef();
+                if (rRange.aStart != rRange.aEnd)
+                    break;
+
+                ScAddress aThis(aData.nCol, aData.nRow, aData.nTab);
+                if (aThis == rRange.aStart)
+                    return true;
+            }
+            break;
+            case formula::svDoubleRef:
+            {
+                ScComplexRefData aData = p->GetDoubleRef();
+                ScRange aThis(aData.Ref1.nCol, aData.Ref1.nRow, aData.Ref1.nTab, aData.Ref2.nCol, aData.Ref2.nRow, aData.Ref2.nTab);
+                if (aThis == rRange)
+                    return true;
+            }
+            break;
+            default:
+                ;
+        }
+    }
+    return false;
+}
+
+}
+
+void Test::testJumpToPrecedentsDependents()
+{
+    // Precedent is another cell that the cell references, while dependent is
+    // another cell that references it.
+    m_pDoc->InsertTab(0, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Test")));
+
+    m_pDoc->SetString(2, 0, 0, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("=A1+A2+B3"))); // C1
+    m_pDoc->SetString(2, 1, 0, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("=A1")));       // C2
+    m_pDoc->CalcAll();
+
+    std::vector<ScTokenRef> aRefTokens;
+    ScDocFunc& rDocFunc = m_xDocShRef->GetDocFunc();
+
+    {
+        // C1's precedent should be A1:A2,B3.
+        ScRangeList aRange(ScRange(2, 0, 0));
+        rDocFunc.DetectiveCollectAllPreds(aRange, aRefTokens);
+        CPPUNIT_ASSERT_MESSAGE("A1:A2 should be a precedent of C1.",
+                               hasRange(aRefTokens, ScRange(0, 0, 0, 0, 1, 0)));
+        CPPUNIT_ASSERT_MESSAGE("B3 should be a precedent of C1.",
+                               hasRange(aRefTokens, ScRange(1, 2, 0)));
+    }
+
+    {
+        // C2's precedent should be A1 only.
+        ScRangeList aRange(ScRange(2, 1, 0));
+        rDocFunc.DetectiveCollectAllPreds(aRange, aRefTokens);
+        CPPUNIT_ASSERT_MESSAGE("there should only be one reference token.",
+                               aRefTokens.size() == 1);
+        CPPUNIT_ASSERT_MESSAGE("A1 should be a precedent of C1.",
+                               hasRange(aRefTokens, ScRange(0, 0, 0)));
+    }
+
+    {
+        // A1's dependent should be C1:C2.
+        ScRangeList aRange(ScRange(0, 0, 0));
+        rDocFunc.DetectiveCollectAllSuccs(aRange, aRefTokens);
+        CPPUNIT_ASSERT_MESSAGE("C1:C2 should be the only dependent of A1.",
+                               aRefTokens.size() == 1 && hasRange(aRefTokens, ScRange(2, 0, 0, 2, 1, 0)));
+    }
+
+    m_pDoc->DeleteTab(0);
+}
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
 
