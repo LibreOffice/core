@@ -485,7 +485,7 @@ SwNumRule::SwNumRule( const String& rNm,
         }
     }
     memset( aFmts, 0, sizeof( aFmts ));
-    OSL_ENSURE( sName.Len(), "NumRule without a namen!" );
+    OSL_ENSURE( sName.Len(), "NumRule without a name!" );
 }
 
 SwNumRule::SwNumRule( const SwNumRule& rNumRule )
@@ -531,7 +531,7 @@ SwNumRule::~SwNumRule()
             for( n = 0; n < MAXLEVEL; ++n, ++ppFmts )
                 delete *ppFmts, *ppFmts = 0;
 
-            // Listing:
+            // Outline:
             for( n = 0; n < MAXLEVEL; ++n, ++ppFmts )
                 delete *ppFmts, *ppFmts = 0;
 
@@ -713,7 +713,8 @@ String SwNumRule::MakeNumString( const SwNumberTree::tNumberVector & rNumVector,
                     aStr += aDotStr;
             }
 
-            // The type don't have any number, so don't append the post-/prefix string
+            // The type doesn't have any number, so don't append
+            // the post-/prefix string
             if( bInclStrings && !bOnlyArabic &&
                 SVX_NUM_CHAR_SPECIAL != rMyNFmt.GetNumberingType() &&
                 SVX_NUM_BITMAP != rMyNFmt.GetNumberingType() )
@@ -826,7 +827,7 @@ String SwNumRule::MakeRefNumString( const SwNodeNum& rNodeNum,
     return aRefNumStr;
 }
 
-//  ----- Copy method from SwNumRule ------
+//  ----- Copy method of SwNumRule ------
 
     // A kind of copy constructor, so that the num formats are attached
     // to the right CharFormats of a Document.

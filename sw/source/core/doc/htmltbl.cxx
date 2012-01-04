@@ -231,8 +231,8 @@ SwHTMLTableLayout::~SwHTMLTableLayout()
 // The border width are calculated like in Netscape:
 // Outer border: BORDER + CELLSPACING + CELLPADDING
 // Inner border: CELLSPACING + CELLPADDING
-// However, we respect the border width in SW if bSwBorders is set, so that we don't
-// wrap wrongly.
+// However, we respect the border width in SW if bSwBorders is set,
+// so that we don't wrap wrongly.
 // We also need to respect the distance to the content. Even if
 // only the opposite side has a border.
 sal_uInt16 SwHTMLTableLayout::GetLeftCellSpace( sal_uInt16 nCol, sal_uInt16 nColSpan,
@@ -373,7 +373,7 @@ sal_uInt16 SwHTMLTableLayout::GetBrowseWidthByTabFrm(
     {
         // If the table is located within a self-created frame, the anchor's
         // width is relevant not the frame's width.
-        // For paragraph-bound frames we don't respect paragraph feeds.
+        // For paragraph-bound frames we don't respect paragraph indents.
         const SwFrm *pAnchor = ((const SwFlyFrm *)pUpper)->GetAnchorFrm();
         if( pAnchor->IsTxtFrm() )
             nWidth = pAnchor->Frm().Width();
@@ -622,8 +622,8 @@ void SwHTMLTableLayout::AutoLayoutPass1()
                 sal_Bool bRelWidth = pCell->IsPrcWidthOption();
                 sal_uInt16 nWidth = pCell->GetWidthOption();
 
-                // A NOWRAP option applys to text and tables, but is
-                // not being taken over for fixed cell width.
+                // A NOWRAP option applies to text and tables, but is
+                // not applied for fixed cell width.
                 // Instead, the stated cell width behaves like a minimal
                 // width.
                 if( pCell->HasNoWrapOption() )
@@ -734,7 +734,8 @@ void SwHTMLTableLayout::AutoLayoutPass1()
             //                  max = absmin    max = absmin
             //
             // (*) Netscape uses the minimum width without a break before
-            // the last graphic here. We don't have that (yet?), so we leave it set to width.
+            //     the last graphic here. We don't have that (yet?),
+            //     so we leave it set to width.
 
             if( pColumn->GetWidthOption() && !pColumn->IsRelWidthOption() )
             {
@@ -768,7 +769,7 @@ void SwHTMLTableLayout::AutoLayoutPass1()
         }
         else if( USHRT_MAX!=nMinColSpan )
         {
-            // Something can be !=0, because it is altered by the constraints.
+            // Can be anything != 0, because it is altered by the constraints.
             pColumn->SetMinMax( MINLAY, MINLAY );
 
             // the next columns need not to be processed
@@ -852,7 +853,7 @@ void SwHTMLTableLayout::AutoLayoutPass1()
                     pColumn->AddToMin( nDiff );
 
                     OSL_ENSURE( pColumn->GetMax() >= pColumn->GetMin(),
-                            "Why is the SColumn suddenly too narrow?" );
+                            "Why is the Column suddenly too narrow?" );
 
                     nMin += nDiff;
                     nMinD -= nDiff;
@@ -889,16 +890,12 @@ void SwHTMLTableLayout::AutoLayoutPass1()
             // of the column.
             // Thus, the width ratio among the columns is correct.
             //
-            // Furthermore, a factor is calculated that says by how much the cell
-            // has gotten wider than the minimum width.
+            // Furthermore, a factor is calculated that says by how much the
+            // cell has gotten wider than the minimum width.
             //
-            //
-            // Ausserdem wird der Faktor berechnet, um den die Zelle dadurch
-            // breiter gworden ist als die Minmalbreite.
-            //
-            // In the second step the calculated widths are divided by this factor.
-            // Thereby a cell's width is preserved and serves as a basis for
-            // the other cells.
+            // In the second step the calculated widths are divided by this
+            // factor.  Thereby a cell's width is preserved and serves as a
+            // basis for the other cells.
             // We only change the maximum widths here!
 
             sal_uLong nAbsMin = 0;  // absolute minimum width of all widths with relative width
@@ -978,10 +975,10 @@ void SwHTMLTableLayout::AutoLayoutPass1()
 
             // If there are percentages left we distribute them to the columns
             // that don't have a width setting. Like in Netscape we distribute
-            // the remaining percentages according to the ratio of the maximum width
-            // of the affected columns.
-            // For the maximum widths we also take the fixed-width columns into account.
-            // Is that correct?
+            // the remaining percentages according to the ratio of the maximum
+            // width of the affected columns.
+            // For the maximum widths we also take the fixed-width columns
+            // into account.  Is that correct?
             if( nRel < 100 && nRelCols < nCols )
             {
                 sal_uInt16 nRelLeft = 100 - nRel;
@@ -1087,8 +1084,8 @@ void SwHTMLTableLayout::AutoLayoutPass2( sal_uInt16 nAbsAvail, sal_uInt16 nRelAv
     // of the table in the parser and for each _Resize call.
     nLastResizeAbsAvail = nAbsAvail;
 
-    // Step 1: The available space is readjusted for the left/right border, eventual filler cells
-    // and distances.
+    // Step 1: The available space is readjusted for the left/right border,
+    // possibly existing filler cells and distances.
 
     // Distance to the content and border
     sal_uInt16 nAbsLeftFill = 0, nAbsRightFill = 0;
@@ -1104,8 +1101,8 @@ void SwHTMLTableLayout::AutoLayoutPass2( sal_uInt16 nAbsAvail, sal_uInt16 nRelAv
     {
         if( IsTopTable() )
         {
-            // For the top table we always respect the borders, because we never go
-            // below the table's minimum width.
+            // For the top table we always respect the borders, because we
+            // never go below the table's minimum width.
             nAbsAvail -= (nLeftMargin + nRightMargin);
         }
         else if( GetMin() + nLeftMargin + nRightMargin <= nAbsAvail )
@@ -1156,9 +1153,9 @@ void SwHTMLTableLayout::AutoLayoutPass2( sal_uInt16 nAbsAvail, sal_uInt16 nRelAv
             // The absolute width is equal to the given percentage of
             // the available width.
             // Top tables only get a relative width if the available space
-            // is *really bigger* than the minimum width.
+            // is *strictly larger* than the minimum width.
             //
-            // CAUTION: We need the "really bigger" because changing from a
+            // CAUTION: We need the "strictly larger" because changing from a
             // relative width to an absolute width by resizing would lead
             // to an infinite loop.
             //
@@ -1198,12 +1195,13 @@ void SwHTMLTableLayout::AutoLayoutPass2( sal_uInt16 nAbsAvail, sal_uInt16 nRelAv
         nAbsTabWidth = nAbsAvail;
 
 
-    // Step 3: Identify the column width and, if applicable, the absolute and relative table widths.
+    // Step 3: Identify the column width and, if applicable, the absolute
+    // and relative table widths.
     if( (!IsTopTable() && nMin > (sal_uLong)nAbsAvail) ||
         nMin > MAX_TABWIDTH )
     {
         // If
-        // - a table's minimum is larger than the available space, or
+        // - a inner table's minimum is larger than the available space, or
         // - a top table's minimum is larger than USHORT_MAX the table
         // has to be adapted to the available space or USHORT_MAX.
         // We preserve the widths' ratio amongst themselves, however.
@@ -1423,8 +1421,8 @@ void SwHTMLTableLayout::AutoLayoutPass2( sal_uInt16 nAbsAvail, sal_uInt16 nRelAv
     }
     else
     {
-        // Proportionately distribute the space that extends over the minimum width
-        // among the columns.
+        // Proportionately distribute the space that extends over the minimum
+        // width among the columns.
         if( !nAbsTabWidth )
             nAbsTabWidth = nAbsAvail;
         if( nAbsTabWidth < nMin )
@@ -1631,7 +1629,7 @@ void SwHTMLTableLayout::SetWidths( sal_Bool bCallPass2, sal_uInt16 nAbsAvail,
     }
 
     // Step 2: If we have a top table, we adapt the formats of the
-    // non-content-boxes. Because they are not know in the HTML table
+    // non-content-boxes. Because they are not known in the HTML table
     // due to garbage collection there, we need the iterate over the
     // whole table.
     // We also adapt the table frame format. For nested tables we set the
@@ -1646,7 +1644,7 @@ void SwHTMLTableLayout::SetWidths( sal_Bool bCallPass2, sal_uInt16 nAbsAvail,
 
         // Lock the table format when altering it, or else the box formats
         // are altered again.
-        // Also, we need to preserve an eventual percent setting.
+        // Also, we need to preserve a percent setting if it exists.
         SwFrmFmt *pFrmFmt = pSwTable->GetFrmFmt();
         ((SwTable *)pSwTable)->LockModify();
         SwFmtFrmSize aFrmSize( pFrmFmt->GetFrmSize() );
@@ -1657,7 +1655,8 @@ void SwHTMLTableLayout::SetWidths( sal_Bool bCallPass2, sal_uInt16 nAbsAvail,
         pFrmFmt->SetFmtAttr( aFrmSize );
         ((SwTable *)pSwTable)->UnlockModify();
 
-        // If the table is located in a frame, we also need to adapt the frame's width.
+        // If the table is located in a frame, we also need to adapt the
+        // frame's width.
         if( MayBeInFlyFrame() )
         {
             SwFrmFmt *pFlyFrmFmt = FindFlyFrmFmt();
