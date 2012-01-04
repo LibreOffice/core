@@ -39,7 +39,7 @@ sub Usage()
         "\n",
         "langid - a hackish utility to lookup lang.h language defines and LangIDs,\n",
         "isolang.cxx ISO639/ISO3166 mapping, locale data files, langtab.src language\n",
-        "listbox entries, postset.mk, file_ooo.scp registry name, globals.pm and\n",
+        "listbox entries, langlist.mk, file_ooo.scp registry name, globals.pm and\n",
         "msi-encodinglist.txt\n\n",
 
         "Usage: $0 [--single] {language string} | {LangID} | {primarylanguage sublanguage} | {language-country}\n\n",
@@ -402,7 +402,7 @@ sub main()
             # completelangiso=af ar as-IN ... zu
             grepFile(
                 '^\s*completelangiso\s*=\s*(\s*([a-z]{2,3})(-[A-Z][A-Z])?)*' . $langcoun . '',
-                "$SRC_ROOT", "solenv", "inc/postset.mk",
+                "$SRC_ROOT", "solenv", "inc/langlist.mk",
                 # needs a duplicated pair of backslashes to produce a literal \\
                 ('^\s*completelangiso\s*=', '^\s*$', '^\s*' . $langcoun . '\s*\\\\*$'));
 
