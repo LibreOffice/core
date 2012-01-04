@@ -40,8 +40,10 @@ $(eval $(call gb_Library_add_api,directx9canvas,\
     udkapi \
 ))
 
+# clear NOMINMAX because GdiplusTypes.h uses those macros :(
 $(eval $(call gb_Library_add_defs,directx9canvas,\
 	-DDIRECTX_VERSION=0x0900 \
+	-UNOMINMAX \
 ))
 
 $(eval $(call gb_Library_add_linked_libs,directx9canvas,\

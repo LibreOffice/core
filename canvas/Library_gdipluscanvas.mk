@@ -40,8 +40,10 @@ $(eval $(call gb_Library_add_api,gdipluscanvas,\
     udkapi \
 ))
 
+# clear NOMINMAX because GdiplusTypes.h uses those macros :(
 $(eval $(call gb_Library_add_defs,gdipluscanvas,\
 	-DDIRECTX_VERSION=0x0900 \
+	-UNOMINMAX \
 ))
 
 ifneq ($(strip $(VERBOSE)$(verbose)),)
