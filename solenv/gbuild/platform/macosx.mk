@@ -158,7 +158,7 @@ endef
 gb_LinkTarget_CFLAGS := $(gb_CFLAGS) $(gb_CFLAGS_WERROR)
 gb_LinkTarget_CXXFLAGS := $(gb_CXXFLAGS) $(gb_CXXFLAGS_WERROR)
 gb_LinkTarget_OBJCXXFLAGS := $(gb_CXXFLAGS) $(gb_CXXFLAGS_WERROR) $(gb_OBJCXXFLAGS)
-gb_LinkTarget_OBJCFLAGS := $(gb_CFLAGS) $(gb_OBJCFLAGS) $(gb_COMPILEROPTFLAGS)
+gb_LinkTarget_OBJCFLAGS := $(gb_CFLAGS) $(gb_CFLAGS_WERROR) $(gb_OBJCFLAGS) $(gb_COMPILEROPTFLAGS)
 
 ifeq ($(gb_SYMBOL),$(true))
 gb_LinkTarget_CFLAGS += -g
