@@ -160,8 +160,8 @@ namespace
             SwPageBreakWin* m_pWin;
 
         public:
-            SwBreakDashedLine( Window* pParent, const BColor& rColor, SwPageBreakWin* pWin ) :
-                SwDashedLine( pParent, rColor ),
+            SwBreakDashedLine( Window* pParent, Color& ( *pColorFn )(), SwPageBreakWin* pWin ) :
+                SwDashedLine( pParent, pColorFn ),
                 m_pWin( pWin ) {};
 
             virtual void MouseMove( const MouseEvent& rMEvt );
@@ -206,8 +206,7 @@ SwPageBreakWin::SwPageBreakWin( SwEditWin* pEditWin, const SwPageFrm* pPageFrm )
     SetMapMode( MapMode ( MAP_PIXEL ) );
 
     // Create the line control
-    BColor aColor = SwViewOption::GetPageBreakColor().getBColor();
-    m_pLine = new SwBreakDashedLine( GetEditWin(), aColor, this );
+    m_pLine = new SwBreakDashedLine( GetEditWin(), &SwViewOption::GetPageBreakColor, this );
 
     // Create the popup menu
     m_pPopupMenu = new PopupMenu( SW_RES( MN_PAGEBREAK_BUTTON ) );
