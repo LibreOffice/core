@@ -51,6 +51,7 @@ checkForUpdates(
     const rtl::OUString &rOS,
     const rtl::OUString &rArch,
     const ::com::sun::star::uno::Sequence< rtl::OUString > &rRepositoryList,
+    const rtl::OUString &rGitID,
     const rtl::OUString &rInstallID
 );
 

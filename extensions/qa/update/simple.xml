@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <inst:description xmlns:inst="http://update.libreoffice.org/description">
-  <inst:id>LibreOffice_3.4</inst:id>
-  <inst:version>3.4.2</inst:version>
-  <inst:buildid>102</inst:buildid>
+  <inst:id>LibreOffice 3.5.0 Beta2</inst:id>
+  <inst:version>3.5.0 Beta2</inst:version>
+  <inst:gitid>123456-abcdef-1a2b3c-4d5e6f</inst:gitid>
   <inst:os>Linux</inst:os>
   <inst:arch>x86</inst:arch>
 
