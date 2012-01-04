@@ -36,9 +36,9 @@
 #include <svx/sdr/contact/objectcontacttools.hxx>
 #include <vcl/svapp.hxx>
 
-SwDashedLine::SwDashedLine( Window* pParent, const basegfx::BColor& rColor ) :
+SwDashedLine::SwDashedLine( Window* pParent, Color& ( *pColorFn )() ) :
     FixedLine( pParent, WB_DIALOGCONTROL | WB_HORZ ),
-    m_aColor( rColor )
+    m_pColorFn( pColorFn )
 {
 }
 
@@ -69,7 +69,7 @@ void SwDashedLine::Paint( const Rectangle& )
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
 
     std::vector< double > aStrokePattern;
-    basegfx::BColor aColor = m_aColor;
+    basegfx::BColor aColor = m_pColorFn().getBColor();
     if ( rSettings.GetHighContrastMode( ) )
     {
         // Only a solid line in high contrast mode
@@ -103,7 +103,7 @@ void SwDashedLine::Paint( const Rectangle& )
     drawinglayer::primitive2d::PolyPolygonStrokePrimitive2D * pLine =
             new drawinglayer::primitive2d::PolyPolygonStrokePrimitive2D (
                 basegfx::B2DPolyPolygon( aPolygon ),
-                drawinglayer::attribute::LineAttribute( m_aColor ),
+                drawinglayer::attribute::LineAttribute( m_pColorFn().getBColor() ),
                 drawinglayer::attribute::StrokeAttribute( aStrokePattern ) );
 
     aSeq[ aSeq.getLength() - 1 ] = drawinglayer::primitive2d::Primitive2DReference( pLine );

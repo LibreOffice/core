@@ -35,10 +35,10 @@
   */
 class SwDashedLine : public FixedLine
 {
-    basegfx::BColor m_aColor;
+    Color& (*m_pColorFn)();
 
 public:
-    SwDashedLine( Window* pParent, const basegfx::BColor& rColor );
+    SwDashedLine( Window* pParent, Color& ( *pColorFn )() );
     ~SwDashedLine( );
 
     virtual void Paint( const Rectangle& rRect );

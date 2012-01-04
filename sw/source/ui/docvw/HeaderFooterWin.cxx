@@ -163,8 +163,7 @@ SwHeaderFooterWin::SwHeaderFooterWin( SwEditWin* pEditWin, const SwPageFrm* pPag
     SetMapMode( MapMode ( MAP_PIXEL ) );
 
     // Create the line control
-    basegfx::BColor aColor = SwViewOption::GetHeaderFooterMarkColor().getBColor();
-    m_pLine = new SwDashedLine( GetEditWin(), aColor );
+    m_pLine = new SwDashedLine( GetEditWin(), &SwViewOption::GetHeaderFooterMarkColor );
     m_pLine->SetZOrder( this, WINDOW_ZORDER_BEFOR );
 
     // Create and set the PopupMenu
