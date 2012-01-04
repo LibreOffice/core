@@ -966,9 +966,11 @@ void lcl_syncFlags(ScFlatBoolColSegments& rColSegments, ScFlatBoolRowSegments& r
 {
     using ::sal::static_int_cast;
 
-    pRowFlags->AndValue(0, MAXROW, static_int_cast<sal_uInt8>(~nFlagMask));
+    sal_uInt8 nFlagMaskComplement = static_int_cast<sal_uInt8>(~nFlagMask);
+
+    pRowFlags->AndValue(0, MAXROW, nFlagMaskComplement);
     for (SCCOL i = 0; i <= MAXCOL; ++i)
-        pColFlags[i] &= static_int_cast<sal_uInt8>(~nFlagMask);
+        pColFlags[i] &= nFlagMaskComplement;
 
     {
         // row hidden flags.
@@ -981,7 +983,7 @@ void lcl_syncFlags(ScFlatBoolColSegments& rColSegments, ScFlatBoolRowSegments& r
                 break;
 
             if (aData.mbValue)
-                pRowFlags->OrValue(nRow, aData.mnRow2, static_int_cast<sal_uInt8>(nFlagMask));
+                pRowFlags->OrValue(nRow, aData.mnRow2, nFlagMask);
 
             nRow = aData.mnRow2 + 1;
         }
@@ -1014,16 +1016,18 @@ void ScTable::SyncColRowFlags()
 {
     using ::sal::static_int_cast;
 
+    sal_uInt8 nManualBreakComplement = static_int_cast<sal_uInt8>(~CR_MANUALBREAK);
+
     // Manual breaks.
-    pRowFlags->AndValue(0, MAXROW, static_int_cast<sal_uInt8>(~CR_MANUALBREAK));
+    pRowFlags->AndValue(0, MAXROW, nManualBreakComplement);
     for (SCCOL i = 0; i <= MAXCOL; ++i)
-        pColFlags[i] &= static_int_cast<sal_uInt8>(~CR_MANUALBREAK);
+        pColFlags[i] &= nManualBreakComplement;
 
     if (!maRowManualBreaks.empty())
     {
         for (set<SCROW>::const_iterator itr = maRowManualBreaks.begin(), itrEnd = maRowManualBreaks.end();
               itr != itrEnd; ++itr)
-            pRowFlags->OrValue(*itr, static_int_cast<sal_uInt8>(CR_MANUALBREAK));
+            pRowFlags->OrValue(*itr, CR_MANUALBREAK);
     }
 
     if (!maColManualBreaks.empty())
