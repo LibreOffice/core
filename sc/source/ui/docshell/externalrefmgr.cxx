@@ -2683,8 +2683,8 @@ sal_uInt32 ScExternalRefManager::getMappedNumberFormat(sal_uInt16 nFileId, sal_u
 
 void ScExternalRefManager::transformUnsavedRefToSavedRef( SfxObjectShell* pShell )
 {
-    for(DocShellMap::iterator itr = maUnsavedDocShells.begin();
-            itr != maUnsavedDocShells.end(); ++itr)
+    DocShellMap::iterator itr = maUnsavedDocShells.begin();
+    while( itr != maUnsavedDocShells.end() )
     {
         if (&(itr->second.maShell) == pShell)
         {
@@ -2692,6 +2692,7 @@ void ScExternalRefManager::transformUnsavedRefToSavedRef( SfxObjectShell* pShell
             rtl::OUString aFileURL = pShell->GetMedium()->GetURLObject().GetMainURL(INetURLObject::DECODE_TO_IURI);
             switchSrcFile(itr->first, aFileURL, rtl::OUString());
             EndListening(*pShell);
+            maUnsavedDocShells.erase(itr++);
         }
     }
 }
