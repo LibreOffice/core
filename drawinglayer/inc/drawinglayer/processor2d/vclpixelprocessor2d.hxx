@@ -43,11 +43,6 @@ namespace drawinglayer
         class DRAWINGLAYER_DLLPUBLIC VclPixelProcessor2D : public VclProcessor2D
         {
         private:
-            /*  The Pixel renderer resets the original MapMode from the OutputDevice.
-                For some situations it is necessary to get it again, so it is rescued here
-             */
-            MapMode                             maOriginalMapMode;
-
         protected:
             /*  the local processor for BasePrinitive2D-Implementation based primitives,
                 called from the common process()-implementation
@@ -60,9 +55,6 @@ namespace drawinglayer
                 const geometry::ViewInformation2D& rViewInformation,
                 OutputDevice& rOutDev);
             virtual ~VclPixelProcessor2D();
-
-            /// data read access
-            const MapMode& getOriginalMapMode() const { return maOriginalMapMode; }
         };
     } // end of namespace processor2d
 } // end of namespace drawinglayer

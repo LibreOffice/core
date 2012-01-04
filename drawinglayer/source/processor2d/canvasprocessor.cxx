@@ -2134,7 +2134,6 @@ namespace drawinglayer
             const geometry::ViewInformation2D& rViewInformation,
             OutputDevice& rOutDev)
         :   BaseProcessor2D(rViewInformation),
-            maOriginalMapMode(rOutDev.GetMapMode()),
             mpOutputDevice(&rOutDev),
             mxCanvas(rOutDev.GetCanvas()),
             maViewState(),

@@ -70,8 +70,7 @@ namespace drawinglayer
     namespace processor2d
     {
         VclPixelProcessor2D::VclPixelProcessor2D(const geometry::ViewInformation2D& rViewInformation, OutputDevice& rOutDev)
-        :   VclProcessor2D(rViewInformation, rOutDev),
-            maOriginalMapMode(rOutDev.GetMapMode())
+        :   VclProcessor2D(rViewInformation, rOutDev)
         {
             // prepare maCurrentTransformation matrix with viewTransformation to target directly to pixels
             maCurrentTransformation = rViewInformation.getObjectToViewTransformation();

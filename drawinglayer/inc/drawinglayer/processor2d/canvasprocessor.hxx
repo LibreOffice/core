@@ -73,10 +73,6 @@ namespace drawinglayer
         class DRAWINGLAYER_DLLPUBLIC canvasProcessor2D : public BaseProcessor2D
         {
         private:
-            // The Pixel renderer resets the original MapMode from the OutputDevice.
-            // For some situations it is necessary to get it again, so it is rescued here
-            MapMode                                                 maOriginalMapMode;
-
             // the (current) destination OutDev and canvas
             OutputDevice*                                           mpOutputDevice;
             com::sun::star::uno::Reference< com::sun::star::rendering::XCanvas >    mxCanvas;
