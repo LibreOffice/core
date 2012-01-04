@@ -84,14 +84,14 @@
  int access_u(const rtl_uString* pustrPath, int mode)
  {
 #ifndef MACOSX // not MACOSX
-    const char *path = OUStringToOString(pustrPath).getStr();
+    rtl::OString fn = OUStringToOString(pustrPath);
 #ifdef ANDROID
-    if (strncmp(path, "/assets", sizeof("/assets")-1) == 0 &&
-        (path[sizeof("/assets")-1] == '\0' ||
-         path[sizeof("/assets")-1] == '/'))
+    if (strncmp(fn.getStr(), "/assets", sizeof("/assets")-1) == 0 &&
+        (fn.getStr()[sizeof("/assets")-1] == '\0' ||
+         fn.getStr()[sizeof("/assets")-1] == '/'))
     {
         struct stat stat;
-        if (lo_apk_lstat(path, &stat) == -1)
+        if (lo_apk_lstat(fn.getStr(), &stat) == -1)
             return -1;
         if (mode & W_OK)
         {
@@ -101,7 +101,7 @@
         return 0;
     }
 #endif
-    return access(path, mode);
+    return access(fn.getStr(), mode);
 #else
     return access(macxp_resolveAliasAndConvert(pustrPath).getStr(), mode);
 #endif
@@ -135,14 +135,14 @@
   int lstat_u(const rtl_uString* pustrPath, struct stat* buf)
  {
 #ifndef MACOSX  // not MACOSX
-    const char *path = OUStringToOString(pustrPath).getStr();
+    rtl::OString fn = OUStringToOString(pustrPath);
 #ifdef ANDROID
-    if (strncmp(path, "/assets", sizeof("/assets")-1) == 0 &&
-        (path[sizeof("/assets")-1] == '\0' ||
-         path[sizeof("/assets")-1] == '/'))
-        return lo_apk_lstat(path, buf);
+    if (strncmp(fn.getStr(), "/assets", sizeof("/assets")-1) == 0 &&
+        (fn.getStr()[sizeof("/assets")-1] == '\0' ||
+         fn.getStr()[sizeof("/assets")-1] == '/'))
+        return lo_apk_lstat(fn.getStr(), buf);
 #endif
-    return lstat(path, buf);
+    return lstat(fn.getStr(), buf);
 #else
     return lstat(macxp_resolveAliasAndConvert(pustrPath).getStr(), buf);
 #endif
