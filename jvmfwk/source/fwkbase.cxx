@@ -72,7 +72,7 @@ namespace {
 
 rtl::OString getVendorSettingsPath(rtl::OUString const & sURL)
 {
-    if (sURL.getLength() == 0)
+    if (sURL.isEmpty())
         return rtl::OString();
     rtl::OUString sSystemPathSettings;
     if (osl_getSystemPathFromFileURL(sURL.pData,
@@ -119,14 +119,14 @@ VendorSettings::VendorSettings():
                          "VendorSettings::VendorSettings() (fwkbase.cxx)");
     //Prepare the xml document and context
     OString sSettingsPath = getVendorSettingsPath(m_xmlDocVendorSettingsFileUrl);
-    if (sSettingsPath.getLength() == 0)
+    if (sSettingsPath.isEmpty())
     {
         OString sMsg("[Java framework] A vendor settings file was not specified."
                "Check the bootstrap parameter " UNO_JAVA_JFW_VENDOR_SETTINGS ".");
         OSL_FAIL(sMsg.getStr());
         throw FrameworkException(JFW_E_CONFIGURATION, sMsg);
     }
-    if (sSettingsPath.getLength() > 0)
+    if (!sSettingsPath.isEmpty())
     {
         m_xmlDocVendorSettings = xmlParseFile(sSettingsPath.getStr());
         if (m_xmlDocVendorSettings == NULL)
@@ -174,7 +174,7 @@ std::vector<PluginLibrary> VendorSettings::getPluginData()
             //create the file URL to the library
             OUString sUrl = findPlugin(
                 m_xmlDocVendorSettingsFileUrl, sTextLibrary);
-            if (sUrl.getLength() == 0)
+            if (sUrl.isEmpty())
             {
                 OString sPlugin = OUStringToOString(
                     sTextLibrary, osl_getThreadTextEncoding());
@@ -193,7 +193,7 @@ std::vector<PluginLibrary> VendorSettings::getPluginData()
 
 VersionInfo VendorSettings::getVersionInformation(const rtl::OUString & sVendor)
 {
-    OSL_ASSERT(sVendor.getLength() > 0);
+    OSL_ASSERT(!sVendor.isEmpty());
     VersionInfo aVersionInfo;
     OString osVendor = OUStringToOString(sVendor, RTL_TEXTENCODING_UTF8);
     //Get minVersion
@@ -303,7 +303,7 @@ std::vector<OUString> VendorSettings::getSupportedVendors()
 
 OUString VendorSettings::getPluginLibrary(const OUString& sVendor)
 {
-    OSL_ASSERT(sVendor.getLength() > 0);
+    OSL_ASSERT(!sVendor.isEmpty());
 
     OString sExcMsg("[Java framework] Error in function getPluginLibrary (fwkbase.cxx).");
     OString sVendorsPath = getVendorSettingsPath(m_xmlDocVendorSettingsFileUrl);
@@ -327,7 +327,7 @@ OUString VendorSettings::getPluginLibrary(const OUString& sVendor)
 
     //make an absolute file url from the relative plugin URL
     OUString sUrl = findPlugin(m_xmlDocVendorSettingsFileUrl, xmlCharPlugin);
-    if (sUrl.getLength() == 0)
+    if (sUrl.isEmpty())
     {
         OString sPlugin = OUStringToOString(
             xmlCharPlugin, osl_getThreadTextEncoding());
@@ -616,7 +616,7 @@ rtl::OUString getApplicationClassPath()
     OSL_ASSERT(getMode() == JFW_MODE_APPLICATION);
     rtl::OUString retVal;
     rtl::OUString sParams = BootParams::getClasspathUrls();
-    if (sParams.getLength() == 0)
+    if (sParams.isEmpty())
         return retVal;
 
     rtl::OUStringBuffer buf;
@@ -625,13 +625,13 @@ rtl::OUString getApplicationClassPath()
     do
     {
         ::rtl::OUString token( sParams.getToken( 0, ' ', index ).trim() );
-        if (token.getLength())
+        if (!token.isEmpty())
         {
             ::rtl::OUString systemPathElement;
             oslFileError rc = osl_getSystemPathFromFileURL(
                 token.pData, &systemPathElement.pData );
             OSL_ASSERT( rc == osl_File_E_None );
-            if (rc == osl_File_E_None && systemPathElement.getLength() > 0)
+            if (rc == osl_File_E_None && !systemPathElement.isEmpty())
             {
                 if (buf.getLength() > 0)
                     buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(
@@ -652,14 +652,14 @@ rtl::OString makeClassPathOption(OUString const & sUserClassPath)
     char szSep[] = {SAL_PATHSEPARATOR,0};
 
     // append all user selected jars to the class path
-    if (sUserClassPath.getLength() > 0)
+    if (!sUserClassPath.isEmpty())
         sBufCP.append(sUserClassPath);
 
     //append all jar libraries and components to the class path
     OUString sAppCP = getApplicationClassPath();
-    if (sAppCP.getLength())
+    if (!sAppCP.isEmpty())
     {
-        if (sUserClassPath.getLength())
+        if (!sUserClassPath.isEmpty())
             sBufCP.appendAscii(szSep);
         sBufCP.append(sAppCP);
     }
@@ -689,7 +689,7 @@ rtl::OString getInstallSettingsPath()
 
 rtl::OString getSettingsPath( const rtl::OUString & sURL)
 {
-    if (sURL.getLength() == 0)
+    if (sURL.isEmpty())
         return rtl::OString();
     rtl::OUString sPath;
     if (osl_getSystemPathFromFileURL(sURL.pData,

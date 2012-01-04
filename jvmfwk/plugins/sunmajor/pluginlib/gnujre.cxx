@@ -164,7 +164,7 @@ bool GnuInfo::initialize(vector<pair<OUString, OUString> > props)
         }
         else if (!bAccess && sAccessProperty.equals(i->first))
         {
-            if (i->second.getLength() > 0)
+            if (!i->second.isEmpty())
             {
                 m_bAccessibility = true;
                 bAccess = true;
@@ -177,11 +177,11 @@ bool GnuInfo::initialize(vector<pair<OUString, OUString> > props)
     if (!bVersion || !bVendor || !bHome)
         return false;
 
-    if (!m_sJavaHome.getLength())
+    if (m_sJavaHome.isEmpty())
         m_sJavaHome = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("file:///usr/lib"));
 
     // init m_sRuntimeLibrary
-    OSL_ASSERT(m_sHome.getLength());
+    OSL_ASSERT(!m_sHome.isEmpty());
     //call virtual function to get the possible paths to the runtime library.
 
     int size = 0;
@@ -266,7 +266,7 @@ bool GnuInfo::initialize(vector<pair<OUString, OUString> > props)
         return false;
 
     // init m_sLD_LIBRARY_PATH
-    OSL_ASSERT(m_sHome.getLength());
+    OSL_ASSERT(!m_sHome.isEmpty());
     size = 0;
     char const * const * arLDPaths = getLibraryPaths( & size);
     vector<OUString> ld_paths = getVectorFromCharArray(arLDPaths, size);

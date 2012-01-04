@@ -222,7 +222,7 @@ extern FILE *GetNextFile()
 /*****************************************************************************/
 {
     // look for next valid filename in input file list
-    if ( sTempFile.getLength())
+    if ( !sTempFile.isEmpty())
     {
         fclose( pTempFile );
         String sTemp(rtl::OStringToOUString(sTempFile,
@@ -941,7 +941,7 @@ int Export::Execute( int nToken, const char * pToken )
                         }
                         else
                         {
-                            if (pResData->sText[ sLangIndex ].getLength())
+                            if (!pResData->sText[ sLangIndex ].isEmpty())
                             {
                                 rtl::OStringBuffer sError(RTL_CONSTASCII_STRINGPARAM("Language "));
                                 sError.append(sLangIndex);
@@ -963,7 +963,7 @@ int Export::Execute( int nToken, const char * pToken )
                             PrepareTextToMerge( sOrig, STRING_TYP_HELPTEXT, sLangIndex, pResData );
                         else
                         {
-                            if (pResData->sHelpText[ sLangIndex ].getLength())
+                            if (!pResData->sHelpText[ sLangIndex ].isEmpty())
                             {
                                 rtl::OStringBuffer sError(RTL_CONSTASCII_STRINGPARAM("Language "));
                                 sError.append(sLangIndex);
@@ -980,7 +980,7 @@ int Export::Execute( int nToken, const char * pToken )
                             PrepareTextToMerge( sOrig, STRING_TYP_QUICKHELPTEXT, sLangIndex, pResData );
                         else
                         {
-                            if (pResData->sQuickHelpText[ sLangIndex ].getLength())
+                            if (!pResData->sQuickHelpText[ sLangIndex ].isEmpty())
                             {
                                 rtl::OStringBuffer sError(RTL_CONSTASCII_STRINGPARAM("Language "));
                                 sError.append(sLangIndex);
@@ -997,7 +997,7 @@ int Export::Execute( int nToken, const char * pToken )
                             PrepareTextToMerge( sOrig, STRING_TYP_TITLE, sLangIndex, pResData );
                         else
                         {
-                            if ( pResData->sTitle[ sLangIndex ].getLength())
+                            if ( !pResData->sTitle[ sLangIndex ].isEmpty())
                             {
                                 rtl::OStringBuffer sError(RTL_CONSTASCII_STRINGPARAM("Language "));
                                 sError.append(sLangIndex);
@@ -1160,13 +1160,13 @@ sal_Bool Export::WriteData( ResData *pResData, sal_Bool bCreateNew )
 
        // mandatory to export: en-US
 
-     if (( pResData->sText[ SOURCE_LANGUAGE ].getLength())
+     if (( !pResData->sText[ SOURCE_LANGUAGE ].isEmpty())
         ||
-        (  pResData->sHelpText[ SOURCE_LANGUAGE ].getLength())
+        (  !pResData->sHelpText[ SOURCE_LANGUAGE ].isEmpty())
         ||
-        (  pResData->sQuickHelpText[ SOURCE_LANGUAGE ].getLength())
+        (  !pResData->sQuickHelpText[ SOURCE_LANGUAGE ].isEmpty())
          ||
-        (  pResData->sTitle[ SOURCE_LANGUAGE ].getLength()))
+        (  !pResData->sTitle[ SOURCE_LANGUAGE ].isEmpty()))
 
        {
         ByteString sGID = pResData->sGId;
@@ -1187,25 +1187,25 @@ sal_Bool Export::WriteData( ResData *pResData, sal_Bool bCreateNew )
         for( unsigned int n = 0; n < aLanguages.size(); n++ ){
             sCur = aLanguages[ n ];
                 if ( !sCur.EqualsIgnoreCaseAscii("x-comment") ){
-                    if (pResData->sText[ sCur ].getLength())
+                    if (!pResData->sText[ sCur ].isEmpty())
                         sXText = pResData->sText[ sCur ];
                     else {
                         sXText = pResData->sText[ SOURCE_LANGUAGE ];
                     }
 
-                    if (pResData->sHelpText[ sCur ].getLength())
+                    if (!pResData->sHelpText[ sCur ].isEmpty())
                         sXHText = pResData->sHelpText[ sCur ];
                     else {
                         sXHText = pResData->sHelpText[ SOURCE_LANGUAGE ];
                     }
 
-                    if (pResData->sQuickHelpText[ sCur ].getLength())
+                    if (!pResData->sQuickHelpText[ sCur ].isEmpty())
                         sXQHText = pResData->sQuickHelpText[ sCur ];
                     else {
                         sXQHText = pResData->sQuickHelpText[ SOURCE_LANGUAGE ];
                     }
 
-                    if (pResData->sTitle[ sCur ].getLength())
+                    if (!pResData->sTitle[ sCur ].isEmpty())
                         sXTitle = pResData->sTitle[ sCur ];
                     else
                         sXTitle = pResData->sTitle[ SOURCE_LANGUAGE ];
@@ -1215,7 +1215,7 @@ sal_Bool Export::WriteData( ResData *pResData, sal_Bool bCreateNew )
 
                     if ( !sXHText.Len())
                     {
-                        if (pResData->sHelpText[ SOURCE_LANGUAGE ].getLength())
+                        if (!pResData->sHelpText[ SOURCE_LANGUAGE ].isEmpty())
                             sXHText = pResData->sHelpText[ SOURCE_LANGUAGE ];
                     }
                 }
@@ -1334,7 +1334,7 @@ sal_Bool Export::WriteExportList( ResData *pResData, ExportList *pExportList,
         for (unsigned int n = 0; n < aLanguages.size(); ++n)
         {
             sCur = aLanguages[ n ];
-            if ((*pEntry)[ SOURCE_LANGUAGE ].getLength())
+            if (!(*pEntry)[ SOURCE_LANGUAGE ].isEmpty())
             {
                 if ( bEnableExport )
                 {
@@ -1344,7 +1344,7 @@ sal_Bool Export::WriteExportList( ResData *pResData, ExportList *pExportList,
                     if( rTyp.EqualsIgnoreCaseAscii("pairedlist") )
                     {
                         sLID = GetPairedListID( sText );
-                        if ((*pEntry)[ sCur ].getLength())
+                        if (!(*pEntry)[ sCur ].isEmpty())
                             sText = (*pEntry)[ sCur ];
                         sText = GetPairedListString( sText );
                     }

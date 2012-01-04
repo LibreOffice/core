@@ -52,7 +52,7 @@ rtl::OString getElement(::rtl::OString const & docPath,
                         xmlChar const * pathExpression, bool bThrowIfEmpty)
 {
     //Prepare the xml document and context
-    OSL_ASSERT(docPath.getLength() > 0);
+    OSL_ASSERT(!docPath.isEmpty());
      jfw::CXmlDocPtr doc(xmlParseFile(docPath.getStr()));
     if (doc == NULL)
         throw FrameworkException(
@@ -234,7 +234,7 @@ NodeJava::NodeJava(Layer layer):
 
     if (USER_OR_INSTALL == m_layer)
     {
-        if (BootParams::getInstallData().getLength() > 0)
+        if (!BootParams::getInstallData().isEmpty())
             m_layer = INSTALL;
         else
             m_layer = USER;
@@ -995,7 +995,7 @@ void CNodeJavaInfo::loadFromNode(xmlDoc * pDoc, xmlNode * pJavaInfo)
         cur = cur->next;
     }
 
-    if (sVendor.getLength() == 0)
+    if (sVendor.isEmpty())
         m_bEmptyNode = true;
     //Get the javainfo attributes
     CXmlCharPtr sVendorUpdate;
@@ -1158,7 +1158,7 @@ MergedSettings::MergedSettings():
     //shared data.
     const ::rtl::OUString sInstall = BootParams::getInstallData();
 
-    if (sInstall.getLength() == 0)
+    if (sInstall.isEmpty())
     {
         NodeJava sharedSettings(NodeJava::SHARED);
         sharedSettings.load();

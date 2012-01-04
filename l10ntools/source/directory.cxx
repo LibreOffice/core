@@ -183,7 +183,7 @@ void Directory::readDirectory( const rtl::OUString& sFullpath )
     struct dirent   *dirp;
     DIR             *dir;
 
-    if( sFullpath.getLength() < 1 ) return;
+    if(sFullpath.isEmpty()) return;
 
     rtl::OString   sFullpathext = rtl::OUStringToOString( sFullpath , RTL_TEXTENCODING_UTF8 );
 

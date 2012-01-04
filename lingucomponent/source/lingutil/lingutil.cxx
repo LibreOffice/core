@@ -145,7 +145,7 @@ std::vector< SvtLinguConfigDictionaryEntry > GetOldStyleDics( const char *pDicTy
     }
 
 
-    if (aFormatName.getLength() == 0 || aDicExtension.Len() == 0)
+    if (aFormatName.isEmpty() || aDicExtension.Len() == 0)
         return aRes;
 
     // set of languages to remember the language where it is already

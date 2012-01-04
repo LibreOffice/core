@@ -327,7 +327,7 @@ Sequence < Reference < ::com::sun::star::linguistic2::XMeaning > > SAL_CALL Thes
 
     sal_Int16 nLanguage = LocaleToLanguage( rLocale );
 
-    if (nLanguage == LANGUAGE_NONE || !rTerm.getLength())
+    if (nLanguage == LANGUAGE_NONE || rTerm.isEmpty())
         return noMeanings;
 
     if (!hasLocale( rLocale ))

@@ -116,7 +116,7 @@ OString getPluginJarPath(
             //but this does not harm. 1.5.0-beta < 1.5.0
             sName = sName2;
         }
-        if (sName.getLength())
+        if (!sName.isEmpty())
         {
             sName = sLocation + OUSTR("/lib/") + sName;
             OSL_VERIFY(
@@ -140,7 +140,7 @@ OString getPluginJarPath(
                 sPath = sPath1 + OUString::createFromAscii(sep) + sPath2;
             }
         }
-        OSL_ASSERT(sPath.getLength());
+        OSL_ASSERT(!sPath.isEmpty());
     }
     ret = rtl::OUStringToOString(sPath, osl_getThreadTextEncoding());
 
@@ -167,7 +167,7 @@ JavaInfo* createJavaInfo(const rtl::Reference<VendorBase> & info)
     pInfo->nRequirements = info->needsRestart() ? JFW_REQUIRE_NEEDRESTART : 0;
     rtl::OUStringBuffer buf(1024);
     buf.append(info->getRuntimeLibrary());
-    if (info->getLibraryPaths().getLength() > 0)
+    if (!info->getLibraryPaths().isEmpty())
     {
         buf.appendAscii("\n");
         buf.append(info->getLibraryPaths());
@@ -239,8 +239,8 @@ javaPluginError jfw_plugin_getAllJavaInfos(
     OUString ouMinVer(sMinVersion);
     OUString ouMaxVer(sMaxVersion);
 
-    OSL_ASSERT(ouVendor.getLength() > 0);
-    if (ouVendor.getLength() == 0)
+    OSL_ASSERT(!ouVendor.isEmpty());
+    if (ouVendor.isEmpty())
         return JFW_PLUGIN_E_INVALID_ARG;
 
     JavaInfo** arInfo = NULL;
@@ -258,7 +258,7 @@ javaPluginError jfw_plugin_getAllJavaInfos(
         if (ouVendor.equals(cur->getVendor()) == sal_False)
             continue;
 
-        if (ouMinVer.getLength() > 0)
+        if (!ouMinVer.isEmpty())
         {
             try
             {
@@ -276,7 +276,7 @@ javaPluginError jfw_plugin_getAllJavaInfos(
             }
         }
 
-        if (ouMaxVer.getLength() > 0)
+        if (!ouMaxVer.isEmpty())
         {
             try
             {
@@ -358,8 +358,8 @@ javaPluginError jfw_plugin_getJavaInfoByPath(
     if (!path || !sVendor || !sMinVersion || !sMaxVersion || !ppInfo)
         return JFW_PLUGIN_E_INVALID_ARG;
     OUString ouPath(path);
-    OSL_ASSERT(ouPath.getLength() > 0);
-    if (ouPath.getLength() == 0)
+    OSL_ASSERT(!ouPath.isEmpty());
+    if (ouPath.isEmpty())
         return JFW_PLUGIN_E_INVALID_ARG;
 
     //nLenlist contains the number of element in arExcludeList.
@@ -372,8 +372,8 @@ javaPluginError jfw_plugin_getJavaInfoByPath(
     OUString ouMinVer(sMinVersion);
     OUString ouMaxVer(sMaxVersion);
 
-    OSL_ASSERT(ouVendor.getLength() > 0);
-    if (ouVendor.getLength() == 0)
+    OSL_ASSERT(!ouVendor.isEmpty());
+    if (ouVendor.isEmpty())
         return JFW_PLUGIN_E_INVALID_ARG;
 
     rtl::Reference<VendorBase> aVendorInfo = getJREInfoByPath(ouPath);
@@ -384,7 +384,7 @@ javaPluginError jfw_plugin_getJavaInfoByPath(
     if (ouVendor.equals(aVendorInfo->getVendor()) == sal_False)
         return JFW_PLUGIN_E_NO_JRE;
 
-    if (ouMinVer.getLength() > 0)
+    if (!ouMinVer.isEmpty())
     {
         int nRes = 0;
         try
@@ -404,7 +404,7 @@ javaPluginError jfw_plugin_getJavaInfoByPath(
             return JFW_PLUGIN_E_FAILED_VERSION;
     }
 
-    if (ouMaxVer.getLength() > 0)
+    if (!ouMaxVer.isEmpty())
     {
         int nRes = 0;
         try
@@ -676,7 +676,7 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
         {
             char sep[] =  {SAL_PATHSEPARATOR, 0};
             OString sAddPath = getPluginJarPath(pInfo->sVendor, pInfo->sLocation,pInfo->sVersion);
-            if (sAddPath.getLength())
+            if (!sAddPath.isEmpty())
                 sClassPathOption = sClassPath + rtl::OString(sep) + sAddPath;
             else
                 sClassPathOption = sClassPath;
@@ -776,7 +776,7 @@ javaPluginError jfw_plugin_existJRE(const JavaInfo *pInfo, sal_Bool *exist)
         return JFW_PLUGIN_E_INVALID_ARG;
     ::rtl::OUString sLocation(pInfo->sLocation);
 
-    if (sLocation.getLength() == 0)
+    if (sLocation.isEmpty())
         return JFW_PLUGIN_E_INVALID_ARG;
     ::osl::DirectoryItem item;
     ::osl::File::RC rc_item = ::osl::DirectoryItem::get(sLocation, item);

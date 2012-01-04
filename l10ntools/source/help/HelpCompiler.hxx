@@ -115,7 +115,7 @@ namespace fs
             rtl::OString tmp(rtl::OUStringToOString(data, RTL_TEXTENCODING_UTF8));
             return std::string(tmp.getStr());
         }
-        bool empty() const { return data.getLength() == 0; }
+        bool empty() const { return data.isEmpty(); }
         path operator/(const std::string &in) const
         {
             path ret(*this);

@@ -378,7 +378,7 @@ bool getJavaProps(const OUString & exePath,
 {
     bool ret = false;
 
-    OSL_ASSERT( exePath.getLength() > 0);
+    OSL_ASSERT(!exePath.isEmpty());
     OUString usStartDir;
     //We need to set the CLASSPATH in case the office is started from
     //a different directory. The JREProperties.class is expected to reside
@@ -465,7 +465,7 @@ bool getJavaProps(const OUString & exePath,
             continue;
         JFW_TRACE2("[Java framework]:\" " << sLine << " \".\n");
         sLine = sLine.trim();
-        if (sLine.getLength() == 0)
+        if (sLine.isEmpty())
             continue;
         //The JREProperties class writes key value pairs, separated by '='
         sal_Int32 index = sLine.indexOf('=', 0);
@@ -512,7 +512,7 @@ bool decodeOutput(const rtl::OString& s, rtl::OUString* out)
     do
     {
         OString aToken = s.getToken( 0, ' ', nIndex );
-        if (aToken.getLength())
+        if (!aToken.isEmpty())
         {
             for (sal_Int32 i = 0; i < aToken.getLength(); ++i)
             {
@@ -742,7 +742,7 @@ bool getJREInfoFromBinPath(
                     sHome = OUString(sBinPath.getStr(), index - 1);
                 }
             }
-            if (sHome.getLength() > 0)
+            if (!sHome.isEmpty())
             {
                 ret = getJREInfoByPath(sHome, vecInfos);
                 if (ret)
@@ -870,7 +870,7 @@ rtl::Reference<VendorBase> getJREInfoByPath(
 
     OUString sResolvedDir = resolveDirPath(path);
     // If this path is invalid then there is no chance to find a JRE here
-    if (sResolvedDir.getLength() == 0)
+    if (sResolvedDir.isEmpty())
         return 0;
 
     //check if the directory path is good, that is a JRE was already recognized.
@@ -917,7 +917,7 @@ rtl::Reference<VendorBase> getJREInfoByPath(
 
             sFilePath = resolveFilePath(sFullPath);
 
-            if (sFilePath.getLength() == 0)
+            if (sFilePath.isEmpty())
             {
                 //The file path (to java exe) is not valid
                 cit_path ifull = find(vecBadPaths.begin(), vecBadPaths.end(), sFullPath);
@@ -1010,7 +1010,7 @@ rtl::Reference<VendorBase> getJREInfoByPath(
         }
     }
 
-    if (sVendorName.getLength() > 0)
+    if (!sVendorName.isEmpty())
     {
         //find the creator func for the respective vendor name
         for ( sal_Int32 c = 0;
@@ -1075,7 +1075,7 @@ void createJavaInfoFromPath(vector<rtl::Reference<VendorBase> >& vecInfos)
             OUString usTokenUrl;
             if(File::getFileURLFromSystemPath(usToken, usTokenUrl) == File::E_None)
             {
-                if(usTokenUrl.getLength())
+                if(!usTokenUrl.isEmpty())
                 {
                     OUString usBin;
                     // "."
@@ -1096,7 +1096,7 @@ void createJavaInfoFromPath(vector<rtl::Reference<VendorBase> >& vecInfos)
                     {
                         usBin = usTokenUrl;
                     }
-                    if(usBin.getLength())
+                    if(!usBin.isEmpty())
                     {
                         getJREInfoFromBinPath(usBin, vecInfos);
                     }

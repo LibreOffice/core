@@ -190,7 +190,7 @@ MergeDataFile::MergeDataFile(
     ByteString sLine;
     const ByteString sHACK("HACK");
     const ::rtl::OString sFileNormalized(lcl_NormalizeFilename(sFile));
-    const bool isFileEmpty = sFileNormalized.getLength();
+    const bool isFileEmpty = !sFileNormalized.isEmpty();
 
     if( !aInputStream.IsOpen() )
     {

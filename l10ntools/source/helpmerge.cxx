@@ -200,7 +200,7 @@ bool HelpParser::CreateSDF(
                   sBuffer.append( GSI_SEQUENCE4 );      //"\t\t\t\t";
                 sBuffer.append( sOUTimeStamp );
                 rtl::OString sOut(rtl::OUStringToOString(sBuffer.makeStringAndClear().getStr() , RTL_TEXTENCODING_UTF8));
-                if( data.getLength() > 0 )
+                if( !data.isEmpty() )
                     aSDFStream.WriteLine( sOut );
                 pXMLElement=NULL;
             }else fprintf(stdout,"\nDBG: NullPointer in HelpParser::CreateSDF , Language %s\n",sCur.GetBuffer() );

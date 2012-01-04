@@ -510,7 +510,7 @@ javaFrameworkError SAL_CALL jfw_findAndSelectJRE(JavaInfo **pInfo)
                 JavaInfo* pJInfo = arInfos[ii];
 
                 //We remember the very first installation in aCurrentInfo
-                if (aCurrentInfo.getLocation().getLength() == 0)
+                if (aCurrentInfo.getLocation().isEmpty())
                         aCurrentInfo = pJInfo;
                 // compare features
                 // If the user does not require any features (nFeatureFlags = 0)
@@ -588,7 +588,7 @@ javaFrameworkError SAL_CALL jfw_findAndSelectJRE(JavaInfo **pInfo)
                     if (aInfo)
                     {
                         //We remember the very first installation in aCurrentInfo
-                        if (aCurrentInfo.getLocation().getLength() == 0)
+                        if (aCurrentInfo.getLocation().isEmpty())
                             aCurrentInfo = aInfo;
                         // compare features
                         // If the user does not require any features (nFeatureFlags = 0)
