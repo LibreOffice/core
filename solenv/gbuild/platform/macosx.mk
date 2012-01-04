@@ -84,7 +84,7 @@ endif
 # (see toolkit module for a case where it is necessary to do it this way)
 gb_OBJCXXFLAGS := -x objective-c++ -fobjc-exceptions
 
-gb_OBJCFLAGS := -x objective-c
+gb_OBJCFLAGS := -x objective-c -fobjc-exceptions
 
 gb_LinkTarget_LDFLAGS := \
 	-Wl,-syslibroot,$(gb_SDKDIR) \
