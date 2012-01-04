@@ -3341,15 +3341,16 @@ void SwPageFrm::PaintBreak( ) const
             if ( pFirstFrm && pFirstFrm->IsTabFrm() )
                 pFlowFrm = static_cast< const SwTabFrm* >( pFirstFrm );
 
-            if ( pFlowFrm && pFlowFrm->IsPageBreak( sal_True ) )
+            SwWrtShell* pWrtSh = dynamic_cast< SwWrtShell* >( pGlobalShell );
+            if ( pWrtSh )
             {
-                SwWrtShell* pWrtSh = dynamic_cast< SwWrtShell* >( pGlobalShell );
-                if ( pWrtSh )
-                {
-                    SwEditWin& rEditWin = pWrtSh->GetView().GetEditWin();
-                    SwFrameControlsManager& rMngr = rEditWin.GetFrameControlsManager();
+                SwEditWin& rEditWin = pWrtSh->GetView().GetEditWin();
+                SwFrameControlsManager& rMngr = rEditWin.GetFrameControlsManager();
+
+                if ( pFlowFrm && pFlowFrm->IsPageBreak( sal_True ) )
                     rMngr.SetPageBreakControl( this );
-                }
+                else
+                    rMngr.RemoveControlsByType( PageBreak, this );
             }
         }
         SwLayoutFrm::PaintBreak( );
