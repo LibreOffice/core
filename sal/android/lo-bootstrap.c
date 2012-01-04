@@ -46,6 +46,8 @@
 
 #include <android/log.h>
 
+#include "uthash.h"
+
 #include "lo-bootstrap.h"
 
 #pragma GCC diagnostic ignored "-Wdeclaration-after-statement"
@@ -139,13 +141,33 @@ struct cdir_end {
 static struct cdir_entry *cdir_start;
 static uint16_t cdir_entries;
 
-struct lo_apk_dir {
-    char *folder_path;
-    struct cdir_entry *current_entry;
-    int remaining_entries;
+/* Data structure to turn Zip's list in arbitrary order of
+ * hierarchical pathnames (not necessarily including entries for
+ * directories) into an actual hierarchical directory tree, so that we
+ * can iterate over directory entries properly in the dirent style
+ * functions.
+ */
+
+typedef struct direntry *direntry;
+
+struct direntry {
+    UT_hash_handle hh;
+    enum { REGULAR, DIRECTORY } kind;
+    int ino;
+    union {
+        struct cdir_entry *file;
+        direntry subdir;
+    };
 };
 
-static uint32_t cdir_entry_size (struct cdir_entry *entry)
+struct lo_apk_dir {
+    direntry cur;
+};
+
+static direntry assets = NULL;
+
+static uint32_t
+cdir_entry_size(struct cdir_entry *entry)
 {
     return sizeof(*entry) +
         letoh16(entry->filename_size) +
@@ -176,7 +198,7 @@ setup_cdir(void)
 }
 
 static struct cdir_entry *
-find_cdir_entry (struct cdir_entry *entry, int count, const char *name)
+find_cdir_entry(struct cdir_entry *entry, int count, const char *name)
 {
     size_t name_size = strlen(name);
     while (count--) {
@@ -186,6 +208,65 @@ find_cdir_entry (struct cdir_entry *entry, int count, const char *name)
         entry = (struct cdir_entry *)((char *)entry + cdir_entry_size(entry));
     }
     return NULL;
+}
+
+static void
+handle_one_asset(struct cdir_entry *entry)
+{
+    /* In the .apk there are no initial slashes */
+    const char *p = entry->data + sizeof("assets/")-1;
+    const char *z = entry->data + entry->filename_size;
+    direntry *dir = &assets;
+    static int ino = 1;
+
+    while (p < z) {
+        const char *q = p;
+        direntry old, new;
+
+        while (q < z && *q != '/')
+            q++;
+        HASH_FIND(hh, *dir, p, (unsigned)(q - p), old);
+        if (*q == '/') {
+            if (old == NULL) {
+                new = malloc(sizeof(*new));
+                new->ino = ino++;
+                new->kind = DIRECTORY;
+                new->subdir = NULL;
+                HASH_ADD_KEYPTR(hh, *dir, p, (unsigned)(q - p), new);
+                dir = &new->subdir;
+            } else {
+                dir = &old->subdir;
+            }
+            p = q + 1;
+        } else {
+            if (old == NULL) {
+                new = malloc(sizeof(*new));
+                new->ino = ino++;
+                new->kind = REGULAR;
+                new->file = entry;
+                HASH_ADD_KEYPTR(hh, *dir, p, (unsigned)(q - p), new);
+            } else {
+                LOGE("duplicate entry in apk: %.*s", entry->filename_size, entry->data);
+            }
+            p = q;
+        }
+        (void) dir;
+    }
+}
+
+static int
+setup_assets_tree(void)
+{
+    int count = cdir_entries;
+    struct cdir_entry *entry = cdir_start;
+
+    while (count--) {
+        if (letoh16(entry->filename_size) >= sizeof("assets/")-1 &&
+            memcmp(entry->data, "assets/", sizeof("assets/")-1) == 0)
+            handle_one_asset(entry);
+        entry = (struct cdir_entry *)((char *)entry + cdir_entry_size(entry));
+    }
+    return 1;
 }
 
 static void
@@ -440,6 +521,9 @@ Java_org_libreoffice_android_Bootstrap_setup__Ljava_lang_String_2Ljava_lang_Stri
     (*env)->ReleaseStringUTFChars(env, apkFile, apkFilePath);
 
     if (!setup_cdir())
+        return JNI_FALSE;
+
+    if (!setup_assets_tree())
         return JNI_FALSE;
 
     return JNI_TRUE;
@@ -895,70 +979,50 @@ lo_apkentry(const char *filename,
     return data;
 }
 
-static lo_apk_dir *
-new_dir(const char *folder_path,
-        struct cdir_entry *start_entry,
-        int remaining_entries)
-{
-    lo_apk_dir *result;
-
-    result = malloc(sizeof(*result));
-    if (result == NULL) {
-        LOGE("lo_apk_opendir: Out of memory");
-        return NULL;
-    }
-
-    result->folder_path = strdup(folder_path);
-    result->current_entry = start_entry;
-    result->remaining_entries = remaining_entries;
-
-    LOGI("new_dir(%s,%p,%d) = %p", folder_path, start_entry, remaining_entries, result);
-
-    return result;
-}
-
-
 __attribute__ ((visibility("default")))
 lo_apk_dir *
 lo_apk_opendir(const char *dirname)
 {
-    const char *dn = dirname;
-    int count = cdir_entries;
-    struct cdir_entry *entry = cdir_start;
-    size_t name_size;
+    /* In the .apk there are no initial slashes, but the parameter passed to
+     * us does have it.
+     */
+    const char *p = dirname + sizeof("/assets/")-1;
+    direntry dir = assets;
 
-    if (*dn == '/') {
-        dn++;
-        if (!dn[0])
-            return new_dir("", cdir_start, count);
+    if (!*p) {
+        lo_apk_dir *result = malloc(sizeof(*result));
+        result->cur = assets;
+        return result;
     }
 
-    name_size = strlen(dn);
-    while (count--) {
-        if (letoh16(entry->filename_size) >= name_size &&
-            !memcmp(entry->data, dn, name_size) &&
-            entry->data[name_size] == '/')
-            break;
-        entry = (struct cdir_entry *)((char *)entry + cdir_entry_size(entry));
+    while (1) {
+        const char *q = p;
+        direntry entry;
+
+        while (*q && *q != '/')
+            q++;
+
+        HASH_FIND(hh, dir, p, (unsigned)(q - p), entry);
+
+        if (entry == NULL) {
+            errno = ENOENT;
+            return NULL;
+        }
+
+        if (entry->kind != DIRECTORY) {
+            errno = ENOTDIR;
+            return NULL;
+        }
+
+        if (!q[0] || !q[1]) {
+            lo_apk_dir *result = malloc(sizeof(*result));
+            result->cur = entry->subdir;
+            return result;
+        }
+
+        dir = entry->subdir;
+        p = q + 1;
     }
-    if (count >= 0)
-        return new_dir(dn, entry, count+1);
-
-    LOGI("lo_apk_opendir(%s) = NULL", dirname);
-
-    return NULL;
-}
-
-static int
-path_component_length(const char *path,
-                      const char *path_end)
-{
-    const char *p = path;
-    while (p < path_end &&
-           *p != '/')
-        p++;
-
-    return p - path;
 }
 
 __attribute__ ((visibility("default")))
@@ -966,49 +1030,35 @@ struct dirent *
 lo_apk_readdir(lo_apk_dir *dirp)
 {
     static struct dirent result;
-    size_t folder_size = strlen(dirp->folder_path);
 
-    while (dirp->remaining_entries-- > 0) {
-        struct cdir_entry *entry = dirp->current_entry;
-        const char *folder_end = entry->data + folder_size;
-        int entry_len;
-
-        dirp->current_entry = (struct cdir_entry *)((char *)entry + cdir_entry_size(entry));
-
-        if (letoh16(entry->filename_size) > folder_size &&
-            !memcmp(entry->data, dirp->folder_path, folder_size) &&
-            *folder_end == '/' &&
-            (entry_len = path_component_length(folder_end + 1, entry->data + entry->filename_size)) < 256) {
-
-            /* Fake an unique inode number; might be used? */
-            result.d_ino = cdir_entries - dirp->remaining_entries + 1;
-
-            result.d_off = 0;
-            result.d_reclen = 0;
-
-            if (folder_end[1 + entry_len] == '/')
-                result.d_type = DT_DIR;
-            else
-                result.d_type = DT_REG;
-
-            memcpy(result.d_name, folder_end + 1, entry_len);
-            result.d_name[entry_len] = '\0';
-
-            LOGI("lo_apk_readdir(%p) = %s:%s", dirp, result.d_type == DT_DIR ? "DIR" : "REG", result.d_name);
-            return &result;
-        }
+    if (dirp->cur == NULL) {
+        LOGI("lo_apk_readdir(%p) = NULL", dirp);
+        return NULL;
     }
 
-    LOGI("lo_apk_readdir(%p) = NULL", dirp);
+    result.d_ino = dirp->cur->ino;
+    result.d_off = 0;
+    result.d_reclen = 0;
 
-    return NULL;
+    if (dirp->cur->kind == DIRECTORY)
+        result.d_type = DT_DIR;
+    else
+        result.d_type = DT_REG;
+
+    memcpy(result.d_name, dirp->cur->hh.key, dirp->cur->hh.keylen);
+    result.d_name[dirp->cur->hh.keylen] = '\0';
+
+    dirp->cur = dirp->cur->hh.next;
+
+    LOGI("lo_apk_readdir(%p) = %s:%s", dirp, result.d_type == DT_DIR ? "DIR" : "REG", result.d_name);
+
+    return &result;
 }
 
 __attribute__ ((visibility("default")))
 int
 lo_apk_closedir(lo_apk_dir *dirp)
 {
-    free(dirp->folder_path);
     free(dirp);
 
     LOGI("lo_apk_closedir(%p)", dirp);
