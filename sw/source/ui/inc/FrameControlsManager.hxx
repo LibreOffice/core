@@ -61,6 +61,7 @@ class SwFrameControlsManager
         std::vector< SwFrameControlPtr >& GetControls( FrameControlType eType );
         void AddControl( FrameControlType eType, SwFrameControlPtr pControl );
         void RemoveControls( const SwFrm* pFrm );
+        void RemoveControlsByType( FrameControlType eType, const SwFrm* pFrm );
         void HideControls( FrameControlType eType );
         void SetReadonlyControls( bool bReadonly );
 

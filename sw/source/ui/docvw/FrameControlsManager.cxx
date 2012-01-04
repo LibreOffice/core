@@ -122,6 +122,14 @@ void SwFrameControlsManager::RemoveControls( const SwFrm* pFrm )
     }
 }
 
+void SwFrameControlsManager::RemoveControlsByType( FrameControlType eType, const SwFrm* pFrm )
+{
+    vector< SwFrameControlPtr >& aVect = m_aControls[eType];
+    aVect.erase( remove_if( aVect.begin(),
+                            aVect.end(),
+                            FramePredicate( pFrm ) ), aVect.end() );
+}
+
 
 void SwFrameControlsManager::HideControls( FrameControlType eType )
 {
