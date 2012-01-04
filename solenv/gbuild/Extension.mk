@@ -39,6 +39,9 @@ gb_Extension_XRMEXCOMMAND := \
 gb_Extension_PROPMERGETARGET := $(call gb_Executable_get_target,propmerge)
 gb_Extension_PROPMERGECOMMAND := \
 	$(PERL) $(gb_Extension_PROPMERGETARGET)
+gb_Extension_HELPEXTARGET := $(call gb_Executable_get_target,helpex)
+gb_Extension_HELPEXCOMMAND := \
+	$(gb_Helper_set_ld_path) $(gb_Extension_HELPEXTARGET)
 gb_Extension_SDFLOCATION := $(SRCDIR)/translations/$(INPATH)/misc/sdf/
 # does not contain en-US because it is special cased in gb_Extension_Extension
 gb_Extension_LANGS := $(filter-out en-US,$(gb_WITH_LANG))
@@ -130,11 +133,31 @@ $(call gb_Extension_get_target,$(1)) : SDF2 := $(gb_Extension_SDFLOCATION)$(subs
 $(call gb_Extension_get_target,$(1)) : $$(SDF2)
 $(call gb_Extension_get_target,$(1)) : $(call gb_Extension_get_workdir,$(1))/$(2)
 $(call gb_Extension_get_workdir,$(1))/$(2) : $(3)
-	$$(call gb_Output_announce,$(2),$(true),PRP,3)
+	$(call gb_Output_announce,$(2),$(true),PRP,3)
 	mkdir -p $$(dir $$@)
 	cp -f $$< $$@
 	$(gb_Extension_PROPMERGECOMMAND) -i $$@ -m $$(SDF2)
 endif
+
+endef
+
+# localize extension help
+define gb_Extension_localize_help
+ifneq ($(strip $(gb_WITH_LANG)),)
+$(call gb_Extension_get_target,$(1)) : FILES += $(foreach lang,$(gb_Extension_LANGS),$(subst lang,$(lang),$(2)))
+$(call gb_Extension_get_target,$(1)) : SDF3 := $(realpath $(gb_Extension_SDFLOCATION)$(subst $(SRCDIR),,$(dir $(3)))localize.sdf)
+$(call gb_Extension_get_target,$(1)) : $$(SDF3)
+$(foreach lang,$(gb_Extension_LANGS),$(call gb_Extension_localize_help_onelang,$(1),$(subst lang,$(lang),$(2)),$(3),$(lang)))
+endif
+
+endef
+
+define gb_Extension_localize_help_onelang
+$(call gb_Extension_get_target,$(1)) : $(call gb_Extension_get_workdir,$(1))/$(2)
+$(call gb_Extension_get_workdir,$(1))/$(2) : $(3)
+	$(call gb_Output_announce,$(2),$(true),XHP,3)
+	mkdir -p $$(dir $$@)
+	$(gb_Extension_HELPEXCOMMAND) -i $$< -o $$@ -l $(4) -m $$(SDF3)
 
 endef
 
