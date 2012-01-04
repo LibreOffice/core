@@ -28,7 +28,7 @@
 # instead of those above.
 #
 
-$(eval $(call gb_Library_Library,OOoSpotlightImporter))
+$(eval $(call gb_Library_Bundle,OOoSpotlightImporter))
 
 $(eval $(call gb_Library_add_objcobjects,OOoSpotlightImporter,\
 	extensions/source/macosx/spotlight/GetMetadataForFile \
@@ -45,8 +45,6 @@ $(eval $(call gb_Library_add_ldflags,OOoSpotlightImporter,\
 	-framework Foundation \
 	-framework CoreServices \
 ))
-#	-bundle \
-
 
 $(eval $(call gb_Library_use_external,OOoSpotlightImporter,zlib))
 
