@@ -240,6 +240,7 @@ bool MsLangId::isRightToLeft( LanguageType nLang )
         case LANGUAGE_KASHMIRI            & LANGUAGE_MASK_PRIMARY :
         case LANGUAGE_SINDHI              & LANGUAGE_MASK_PRIMARY :
         case LANGUAGE_UIGHUR_CHINA        & LANGUAGE_MASK_PRIMARY :
+        case LANGUAGE_USER_KYRGYZ_CHINA   & LANGUAGE_MASK_PRIMARY :
             return true;
 
         default:
@@ -344,6 +345,7 @@ sal_Int16 MsLangId::getScriptType( LanguageType nLang )
         case LANGUAGE_USER_MAITHILI_INDIA:
         case LANGUAGE_UIGHUR_CHINA:
         case LANGUAGE_USER_LIMBU:
+        case LANGUAGE_USER_KYRGYZ_CHINA:
             nScript = ::com::sun::star::i18n::ScriptType::COMPLEX;
             break;
 

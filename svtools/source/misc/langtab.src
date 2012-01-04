@@ -343,6 +343,7 @@ StringArray STR_ARR_SVT_LANGUAGE_TABLE
         < "Vili" ; LANGUAGE_USER_VILI ; > ;
         < "KeyID" ; LANGUAGE_USER_KEYID ; > ;
         < "Pali Latin" ; LANGUAGE_USER_PALI_LATIN ; > ;
+        < "Kyrgyz (China)" ; LANGUAGE_USER_KYRGYZ_CHINA ; > ;
     };
 };
 

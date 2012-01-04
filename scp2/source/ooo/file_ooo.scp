@@ -683,6 +683,7 @@ File gid_File_Share_Registry_Ctl_Xcd
     Name (he) = "ctl.xcd";
     Name (hi) = "ctl.xcd";
     Name (km) = "ctl.xcd";
+    Name (ky-CN) = "ctl.xcd";
     Name (lo) = "ctl.xcd";
     Name (my) = "ctl.xcd";
     Name (ne) = "ctl.xcd";

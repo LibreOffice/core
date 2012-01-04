@@ -537,6 +537,7 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_USER_ARAGONESE             0x0665
 #define LANGUAGE_USER_KEYID                 0x0666  /* key id pseudolanguage */
 #define LANGUAGE_USER_PALI_LATIN            0x0667
+#define LANGUAGE_USER_KYRGYZ_CHINA          0x0668  /* not derived from LANGUAGE_KIRGHIZ as these may be different scripts, see http://www.omniglot.com/writing/kirghiz.htm */
 
 #endif /* INCLUDED_I18NPOOL_LANG_H */
 
