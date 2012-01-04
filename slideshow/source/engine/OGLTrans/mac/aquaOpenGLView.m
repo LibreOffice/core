@@ -154,6 +154,7 @@ typedef int NSColorRenderingIntent;
 
 - (void) _surfaceNeedsUpdate:(NSNotification*)notification
 {
+    (void) notification; // unused
     [self update];
 }
 
