@@ -78,6 +78,11 @@ typedef int NSColorRenderingIntent;
 
 - (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qualifiedName attributes:(NSDictionary *)attributeDict
 {
+    (void) parser; // unused
+    (void) namespaceURI; // FIXME this should not be ignored but should be used
+                         // instead of text: prefix in the comparison below!
+    (void) qualifiedName; // unused
+    (void) attributeDict; // unused
     // all text content is stored inside <text:p> elements
     if ([elementName isEqualToString:@"text:p"] == YES) {
         runningTextContent = [NSMutableString new];
@@ -92,6 +97,10 @@ typedef int NSColorRenderingIntent;
 
 - (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName 
 {
+    (void) parser; // unused
+    (void) elementName; // unused
+    (void) namespaceURI; // unused
+    (void) qName; // unused
     if (shouldReadCharacters == TRUE) {
         if (textContent == nil) {
             textContent = [NSMutableString new];
@@ -109,6 +118,7 @@ typedef int NSColorRenderingIntent;
 
 - (void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string
 {
+    (void) parser; // unused
     if (shouldReadCharacters == NO) {
         return;
     }
@@ -138,6 +148,7 @@ typedef int NSColorRenderingIntent;
 
 - (void)parserDidEndDocument:(NSXMLParser *)parser
 {
+    (void) parser; // unused
     if (textContent != nil && [textContent length] > 0) {
         [mdiValues setObject:[NSString stringWithString:textContent] forKey:(NSString*)kMDItemTextContent];
         [textContent release];

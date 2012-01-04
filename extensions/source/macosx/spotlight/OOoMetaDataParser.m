@@ -48,6 +48,7 @@ static NSDictionary *metaXML2MDIKeys;
     if (isInitialized == NO) {
         //set up the meta elements with only one value
         NSMutableSet *temp = [NSMutableSet new];
+//FIXME these should use namespace URIs and not prefixes
         [temp addObject:@"dc:title"];
         [temp addObject:@"dc:description"];
         [temp addObject:@"meta:user-defined"];
@@ -121,6 +122,10 @@ static NSDictionary *metaXML2MDIKeys;
 
 - (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qualifiedName attributes:(NSDictionary *)attributeDict
 {
+    (void) parser; // unused
+    (void) namespaceURI; // FIXME this should not be ignored but should be used
+                         // instead of meta: prefix in the comparison below!
+    (void) qualifiedName; // unused
 //    NSLog(@"<%@>", elementName);
     if ([singleValueXMLElements containsObject:elementName] == YES) {
         shouldReadCharacters = YES;
@@ -146,6 +151,9 @@ static NSDictionary *metaXML2MDIKeys;
 
 - (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName 
 {
+    (void) parser; // unused
+    (void) namespaceURI; // unused
+    (void) qName; // unused
 //    NSLog(@"</%@>", elementName);
     if (shouldReadCharacters == YES) {
         NSString *mdiName = nil;
@@ -190,6 +198,7 @@ static NSDictionary *metaXML2MDIKeys;
 
 - (void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string
 {
+    (void) parser; // unused
 //    NSLog(@"%@", string);
     if (shouldReadCharacters == NO) {
         return;

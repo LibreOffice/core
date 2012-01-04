@@ -93,10 +93,10 @@ int ZCALLBACK ferror_file_func OF((
    voidpf stream));
 
 
-voidpf ZCALLBACK fopen_file_func (opaque, filename, mode)
-   voidpf opaque;
-   const char* filename;
-   int mode;
+voidpf ZCALLBACK fopen_file_func(
+   voidpf /*opaque*/,
+   const char* filename,
+   int mode)
 {
     FILE* file = NULL;
     const char* mode_fopen = NULL;
@@ -115,11 +115,11 @@ voidpf ZCALLBACK fopen_file_func (opaque, filename, mode)
 }
 
 
-uLong ZCALLBACK fread_file_func (opaque, stream, buf, size)
-   voidpf opaque;
-   voidpf stream;
-   void* buf;
-   uLong size;
+uLong ZCALLBACK fread_file_func(
+   voidpf /*opaque*/,
+   voidpf stream,
+   void* buf,
+   uLong size)
 {
     uLong ret;
     ret = (uLong)fread(buf, 1, (size_t)size, (FILE *)stream);
@@ -127,31 +127,31 @@ uLong ZCALLBACK fread_file_func (opaque, stream, buf, size)
 }
 
 
-uLong ZCALLBACK fwrite_file_func (opaque, stream, buf, size)
-   voidpf opaque;
-   voidpf stream;
-   const void* buf;
-   uLong size;
+uLong ZCALLBACK fwrite_file_func(
+   voidpf /*opaque*/,
+   voidpf stream,
+   const void* buf,
+   uLong size)
 {
     uLong ret;
     ret = (uLong)fwrite(buf, 1, (size_t)size, (FILE *)stream);
     return ret;
 }
 
-long ZCALLBACK ftell_file_func (opaque, stream)
-   voidpf opaque;
-   voidpf stream;
+long ZCALLBACK ftell_file_func(
+   voidpf /*opaque*/,
+   voidpf stream)
 {
     long ret;
     ret = ftell((FILE *)stream);
     return ret;
 }
 
-long ZCALLBACK fseek_file_func (opaque, stream, offset, origin)
-   voidpf opaque;
-   voidpf stream;
-   uLong offset;
-   int origin;
+long ZCALLBACK fseek_file_func(
+   voidpf /*opaque*/,
+   voidpf stream,
+   uLong offset,
+   int origin)
 {
     int fseek_origin=0;
     long ret;
@@ -173,18 +173,18 @@ long ZCALLBACK fseek_file_func (opaque, stream, offset, origin)
     return ret;
 }
 
-int ZCALLBACK fclose_file_func (opaque, stream)
-   voidpf opaque;
-   voidpf stream;
+int ZCALLBACK fclose_file_func(
+   voidpf /*opaque*/,
+   voidpf stream)
 {
     int ret;
     ret = fclose((FILE *)stream);
     return ret;
 }
 
-int ZCALLBACK ferror_file_func (opaque, stream)
-   voidpf opaque;
-   voidpf stream;
+int ZCALLBACK ferror_file_func(
+   voidpf /*opaque*/,
+   voidpf stream)
 {
     int ret;
     ret = ferror((FILE *)stream);
