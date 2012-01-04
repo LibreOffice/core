@@ -42,12 +42,14 @@
 #include <svx/svdocapt.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/objsh.hxx>
+#include <sfx2/docfile.hxx>
 #include <svl/poolcach.hxx>
 #include <unotools/saveopt.hxx>
 #include <svl/zforlist.hxx>
 #include <unotools/charclass.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <tools/tenccvt.hxx>
+#include <tools/urlobj.hxx>
 
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/script/vba/XVBACompatibility.hpp>
@@ -96,6 +98,9 @@
 
 #include <map>
 #include <limits>
+
+#include <rtl/oustringostreaminserter.hxx>
+#include <iostream>
 
 using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;
@@ -178,6 +183,14 @@ bool ScDocument::GetName( SCTAB nTab, rtl::OUString& rName ) const
         }
     rName = rtl::OUString();
     return false;
+}
+
+rtl::OUString ScDocument::GetCopyTabName( SCTAB nTab ) const
+{
+    if (nTab < static_cast<SCTAB>(maTabNames.size()))
+        return maTabNames[nTab];
+    else
+        return rtl::OUString();
 }
 
 bool ScDocument::SetCodeName( SCTAB nTab, const rtl::OUString& rName )
@@ -1675,6 +1688,7 @@ void ScDocument::InitUndoSelected( ScDocument* pSrcDoc, const ScMarkData& rTabSe
 
         xPoolHelper = pSrcDoc->xPoolHelper;
 
+
         rtl::OUString aString;
         for (SCTAB nTab = 0; nTab <= rTabSelection.GetLastSelected(); nTab++)
             if ( rTabSelection.GetTableSelect( nTab ) )
@@ -1694,9 +1708,9 @@ void ScDocument::InitUndoSelected( ScDocument* pSrcDoc, const ScMarkData& rTabSe
             }
     }
     else
-        {
+    {
         OSL_FAIL("InitUndo");
-        }
+    }
 }
 
 
@@ -1708,6 +1722,12 @@ void ScDocument::InitUndo( ScDocument* pSrcDoc, SCTAB nTab1, SCTAB nTab2,
         Clear();
 
         xPoolHelper = pSrcDoc->xPoolHelper;
+        if (pSrcDoc->pShell->GetMedium())
+        {
+            maFileURL = pSrcDoc->pShell->GetMedium()->GetURLObject().GetMainURL(INetURLObject::DECODE_TO_IURI);
+            std::cout << "SfxMedium: " << maFileURL << std::endl;
+            std::cout << "GetName: " << rtl::OUString(pSrcDoc->pShell->GetName()) << std::endl;
+        }
 
         rtl::OUString aString;
         if ( nTab2 >= static_cast<SCTAB>(maTabs.size()))
@@ -1893,6 +1913,31 @@ void ScDocument::CopyToClip(const ScClipParam& rClipParam,
         pClipDoc = SC_MOD()->GetClipDoc();
     }
 
+    if (pShell->GetMedium())
+    {
+        pClipDoc->maFileURL = pShell->GetMedium()->GetURLObject().GetMainURL(INetURLObject::DECODE_TO_IURI);
+        // for unsaved files use the title name and adjust during save of file
+        if (pClipDoc->maFileURL.isEmpty())
+            pClipDoc->maFileURL = pShell->GetName();
+    }
+    else
+    {
+        pClipDoc->maFileURL = pShell->GetName();
+    }
+
+    //init maTabNames
+    for (TableContainer::iterator itr = maTabs.begin(); itr != maTabs.end(); ++itr)
+    {
+        if( *itr )
+        {
+            rtl::OUString aTabName;
+            (*itr)->GetName(aTabName);
+            pClipDoc->maTabNames.push_back(aTabName);
+        }
+        else
+            pClipDoc->maTabNames.push_back(rtl::OUString());
+    }
+
     pClipDoc->aDocName = aDocName;
     pClipDoc->SetClipParam(rClipParam);
     ScRange aClipRange = rClipParam.getWholeRange();
@@ -1943,6 +1988,31 @@ void ScDocument::CopyTabToClip(SCCOL nCol1, SCROW nRow1,
 {
     if (!bIsClip)
     {
+        if (pShell->GetMedium())
+        {
+            pClipDoc->maFileURL = pShell->GetMedium()->GetURLObject().GetMainURL(INetURLObject::DECODE_TO_IURI);
+            // for unsaved files use the title name and adjust during save of file
+            if (pClipDoc->maFileURL.isEmpty())
+                pClipDoc->maFileURL = pShell->GetName();
+        }
+        else
+        {
+            pClipDoc->maFileURL = pShell->GetName();
+        }
+
+        //init maTabNames
+        for (TableContainer::iterator itr = maTabs.begin(); itr != maTabs.end(); ++itr)
+        {
+            if( *itr )
+            {
+                rtl::OUString aTabName;
+                (*itr)->GetName(aTabName);
+                pClipDoc->maTabNames.push_back(aTabName);
+            }
+            else
+                pClipDoc->maTabNames.push_back(rtl::OUString());
+        }
+
         PutInOrder( nCol1, nCol2 );
         PutInOrder( nRow1, nRow2 );
         if (!pClipDoc)
@@ -2111,116 +2181,6 @@ void ScDocument::MergeNumberFormatter(ScDocument* pSrcDoc)
                  pThisFormatter->MergeFormatter(*(pOtherFormatter));
         if (pExchangeList->Count() > 0)
             pFormatExchangeList = pExchangeList;
-    }
-}
-
-void ScDocument::CopyRangeNamesFromClip(ScDocument* pClipDoc, ScClipRangeNameData& rRangeNames)
-{
-    if (!pClipDoc->pRangeName)
-        return;
-
-    ScClipRangeNameData aClipRangeNames;
-
-    ScRangeName::const_iterator itr = pClipDoc->pRangeName->begin();
-    ScRangeName::const_iterator itrEnd = pClipDoc->pRangeName->end();
-    for (; itr != itrEnd; ++itr)        //! DB-Bereiche Pivot-Bereiche auch
-    {
-        /*  Copy only if the name doesn't exist in this document.
-            If it exists we use the already existing name instead,
-            another possibility could be to create new names if
-            documents differ.
-            A proper solution would ask the user how to proceed.
-            The adjustment of the indices in the formulas is done later.
-        */
-        const ScRangeData* pExistingData = GetRangeName()->findByUpperName(itr->first);
-        if (pExistingData)
-        {
-            sal_uInt16 nOldIndex = itr->second->GetIndex();
-            sal_uInt16 nNewIndex = pExistingData->GetIndex();
-            aClipRangeNames.insert(nOldIndex, nNewIndex);
-            if ( !aClipRangeNames.mbReplace )
-                aClipRangeNames.mbReplace = ( nOldIndex != nNewIndex );
-        }
-        else
-        {
-            ScRangeData* pData = new ScRangeData( *itr->second );
-            pData->SetDocument(this);
-            if ( pRangeName->findByIndex( pData->GetIndex() ) )
-                pData->SetIndex(0);     // need new index, done in Insert
-            if ( pRangeName->insert(pData) )
-            {
-                aClipRangeNames.mpRangeNames.push_back(pData);
-                sal_uInt16 nOldIndex = itr->second->GetIndex();
-                sal_uInt16 nNewIndex = pData->GetIndex();
-                aClipRangeNames.insert(nOldIndex, nNewIndex);
-                if ( !aClipRangeNames.mbReplace )
-                    aClipRangeNames.mbReplace = ( nOldIndex != nNewIndex );
-            }
-            else
-            {   // must be an overflow
-                pData = NULL;
-                aClipRangeNames.insert(itr->second->GetIndex(), 0);
-                aClipRangeNames.mbReplace = true;
-            }
-        }
-    }
-    rRangeNames = aClipRangeNames;
-}
-
-void ScDocument::UpdateRangeNamesInFormulas(
-    ScClipRangeNameData& rRangeNames, const ScRangeList& rDestRanges, const ScMarkData& rMark,
-    SCCOL nXw, SCROW nYw)
-{
-    // nXw and nYw are the extra width and height of the destination range
-    // extended due to presence of merged cell(s).
-
-    if (!rRangeNames.mbReplace)
-        return;
-
-    // first update all inserted named formulas if they contain other
-    // range names and used indices changed
-    for (size_t i = 0, n = rRangeNames.mpRangeNames.size(); i < n; ++i)        //! DB-Bereiche Pivot-Bereiche auch
-    {
-        rRangeNames.mpRangeNames[i]->ReplaceRangeNamesInUse(rRangeNames.maRangeMap);
-    }
-    // then update the formulas, they might need just the updated range names
-    for ( size_t nRange = 0, n = rDestRanges.size(); nRange < n; ++nRange )
-    {
-        const ScRange* pRange = rDestRanges[nRange];
-        SCCOL nCol1 = pRange->aStart.Col();
-        SCROW nRow1 = pRange->aStart.Row();
-        SCCOL nCol2 = pRange->aEnd.Col();
-        SCROW nRow2 = pRange->aEnd.Row();
-
-        SCCOL nC1 = nCol1;
-        SCROW nR1 = nRow1;
-        SCCOL nC2 = nC1 + nXw;
-        if (nC2 > nCol2)
-            nC2 = nCol2;
-        SCROW nR2 = nR1 + nYw;
-        if (nR2 > nRow2)
-            nR2 = nRow2;
-        do
-        {
-            do
-            {
-                ScMarkData::const_iterator itr = rMark.begin(), itrEnd = rMark.end();
-                for (; itr != itrEnd; ++itr)
-                {
-                    if ( maTabs[*itr] )
-                        maTabs[*itr]->ReplaceRangeNamesInUse(nC1, nR1,
-                            nC2, nR2, rRangeNames.maRangeMap);
-                }
-                nC1 = nC2 + 1;
-                nC2 = Min((SCCOL)(nC1 + nXw), nCol2);
-            } while (nC1 <= nCol2);
-            nC1 = nCol1;
-            nC2 = nC1 + nXw;
-            if (nC2 > nCol2)
-                nC2 = nCol2;
-            nR1 = nR2 + 1;
-            nR2 = Min((SCROW)(nR1 + nYw), nRow2);
-        } while (nR1 <= nRow2);
     }
 }
 
@@ -2428,9 +2388,6 @@ void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMar
 
             NumFmtMergeHandler aNumFmtMergeHdl(this, pClipDoc);
 
-            ScClipRangeNameData aClipRangeNames;
-            CopyRangeNamesFromClip(pClipDoc, aClipRangeNames);
-
             SCCOL nAllCol1 = rDestRange.aStart.Col();
             SCROW nAllRow1 = rDestRange.aStart.Row();
             SCCOL nAllCol2 = rDestRange.aEnd.Col();
@@ -2587,8 +2544,6 @@ void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMar
 
             bInsertingFromOtherDoc = false;
 
-            UpdateRangeNamesInFormulas(aClipRangeNames, *pDestRanges, rMark, nXw, nYw);
-
             // Listener aufbauen nachdem alles inserted wurde
             StartListeningFromClip( nAllCol1, nAllRow1, nAllCol2, nAllRow2, rMark, nInsFlag );
             // nachdem alle Listener aufgebaut wurden, kann gebroadcastet werden
@@ -2630,9 +2585,6 @@ void ScDocument::CopyMultiRangeFromClip(
     SetAutoCalc( false );   // avoid multiple recalculations
 
     NumFmtMergeHandler aNumFmtMergeHdl(this, pClipDoc);
-
-    ScClipRangeNameData aClipRangeNames;
-    CopyRangeNamesFromClip(pClipDoc, aClipRangeNames);
 
     SCCOL nCol1 = rDestPos.Col();
     SCROW nRow1 = rDestPos.Row();
@@ -2728,9 +2680,6 @@ void ScDocument::CopyMultiRangeFromClip(
 
     ScRangeList aRanges;
     aRanges.Append(aDestRange);
-    SCCOL nCols = aDestRange.aEnd.Col() - aDestRange.aStart.Col() + 1;
-    SCROW nRows = aDestRange.aEnd.Row() - aDestRange.aStart.Row() + 1;
-    UpdateRangeNamesInFormulas(aClipRangeNames, aRanges, rMark, nCols-1, nRows-1);
 
     // Listener aufbauen nachdem alles inserted wurde
     StartListeningFromClip(aDestRange.aStart.Col(), aDestRange.aStart.Row(),

@@ -136,11 +136,16 @@ void ScRefTokenHelper::compileRangeRepresentation(
         rRefTokens.clear();
 }
 
+namespace {
+
+//may return a relative address
 void singleRefToAddr(const ScSingleRefData& rRef, ScAddress& rAddr)
 {
     rAddr.SetCol(rRef.nCol);
     rAddr.SetRow(rRef.nRow);
     rAddr.SetTab(rRef.nTab);
+}
+
 }
 
 bool ScRefTokenHelper::getRangeFromToken(ScRange& rRange, const ScTokenRef& pToken, bool bExternal)

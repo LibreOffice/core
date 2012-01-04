@@ -44,6 +44,7 @@
 #include "viewdata.hxx"
 #include "tabvwsh.hxx"
 #include "sc.hrc"
+#include "globstr.hrc"
 
 #include "sfx2/app.hxx"
 #include "sfx2/docfilt.hxx"
@@ -61,6 +62,7 @@
 #include "tools/urlobj.hxx"
 #include "unotools/ucbhelper.hxx"
 #include "unotools/localfilehelper.hxx"
+#include "vcl/msgbox.hxx"
 
 #include <memory>
 #include <algorithm>
@@ -2092,13 +2094,28 @@ const ScDocument* ScExternalRefManager::getInMemorySrcDocument(sal_uInt16 nFileI
     while (pShell)
     {
         SfxMedium* pMedium = pShell->GetMedium();
-        if (pMedium)
+        if (pMedium && pMedium->GetName().Len())
         {
             OUString aName = pMedium->GetName();
             // TODO: We should make the case sensitivity platform dependent.
             if (pFileName->equalsIgnoreAsciiCase(aName))
             {
                 // Found !
+                pSrcDoc = pShell->GetDocument();
+                break;
+            }
+        }
+        else
+        {
+            // handle unsaved documents here
+            OUString aName = pShell->GetName();
+            if (pFileName->equalsIgnoreAsciiCase(aName))
+            {
+                // Found !
+                SrcShell aSrcDoc;
+                aSrcDoc.maShell = pShell;
+                maUnsavedDocShells.insert(DocShellMap::value_type(nFileId, aSrcDoc));
+                StartListening(*pShell);
                 pSrcDoc = pShell->GetDocument();
                 break;
             }
@@ -2121,6 +2138,17 @@ const ScDocument* ScExternalRefManager::getSrcDocument(sal_uInt16 nFileId)
     if (itr != itrEnd)
     {
         // document already loaded.
+
+        SfxObjectShell* p = itr->second.maShell;
+        itr->second.maLastAccess = Time( Time::SYSTEM );
+        return static_cast<ScDocShell*>(p)->GetDocument();
+    }
+
+    itrEnd = maUnsavedDocShells.end();
+    itr = maUnsavedDocShells.find(nFileId);
+    if (itr != itrEnd)
+    {
+        //document is unsaved document
 
         SfxObjectShell* p = itr->second.maShell;
         itr->second.maLastAccess = Time( Time::SYSTEM );
@@ -2341,6 +2369,17 @@ bool ScExternalRefManager::isOwnDocument(const OUString& rFile) const
 
 void ScExternalRefManager::convertToAbsName(OUString& rFile) const
 {
+    // unsaved documents have no AbsName
+    TypeId aType(TYPE(ScDocShell));
+    ScDocShell* pShell = static_cast<ScDocShell*>(SfxObjectShell::GetFirst(&aType, false));
+    while (pShell)
+    {
+        if (rFile == rtl::OUString(pShell->GetName()))
+            return;
+
+        pShell = static_cast<ScDocShell*>(SfxObjectShell::GetNext(*pShell, &aType, false));
+    }
+
     SfxObjectShell* pDocShell = mpDoc->GetDocumentShell();
     rFile = ScGlobal::GetAbsDocName(rFile, pDocShell);
 }
@@ -2642,6 +2681,51 @@ sal_uInt32 ScExternalRefManager::getMappedNumberFormat(sal_uInt16 nFileId, sal_u
         return itrNumFmt->second;
 
     return nNumFmt;
+}
+
+void ScExternalRefManager::transformUnsavedRefToSavedRef( SfxObjectShell* pShell )
+{
+    DocShellMap::iterator itr = maUnsavedDocShells.begin();
+    while( itr != maUnsavedDocShells.end() )
+    {
+        if (&(itr->second.maShell) == pShell)
+        {
+            // found that the shell is marked as unsaved
+            rtl::OUString aFileURL = pShell->GetMedium()->GetURLObject().GetMainURL(INetURLObject::DECODE_TO_IURI);
+            switchSrcFile(itr->first, aFileURL, rtl::OUString());
+            EndListening(*pShell);
+            maUnsavedDocShells.erase(itr++);
+        }
+    }
+}
+
+void ScExternalRefManager::Notify( SfxBroadcaster&, const SfxHint& rHint )
+{
+    if ( rHint.ISA( SfxEventHint ) )
+    {
+        sal_uLong nEventId = ((SfxEventHint&)rHint).GetEventId();
+        switch ( nEventId )
+        {
+            case SFX_EVENT_PREPARECLOSEDOC:
+                {
+                    SfxObjectShell* pObjShell = static_cast<const SfxEventHint&>( rHint ).GetObjShell();
+                    ScDocShell* pDocShell = static_cast< ScDocShell* >( pObjShell );
+                    WarningBox aBox(  pDocShell->GetActiveDialogParent(), WinBits( WB_OK ),
+                                        ScGlobal::GetRscString( STR_CLOSE_WITH_UNSAVED_REFS ) );
+                    aBox.Execute();
+                }
+                break;
+            case SFX_EVENT_SAVEDOCDONE:
+            case SFX_EVENT_SAVEASDOCDONE:
+                {
+                    SfxObjectShell* pObjShell = static_cast<const SfxEventHint&>( rHint ).GetObjShell();
+                    transformUnsavedRefToSavedRef(pObjShell);
+                }
+                break;
+            default:
+                break;
+        }
+    }
 }
 
 IMPL_LINK(ScExternalRefManager, TimeOutHdl, AutoTimer*, pTimer)
