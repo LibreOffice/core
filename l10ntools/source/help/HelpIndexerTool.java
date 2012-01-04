@@ -185,21 +185,11 @@ public class HelpIndexerTool
 
         try
         {
-            Date start = new Date();
             Analyzer analyzer = aLanguageStr.equals("ja") ? (Analyzer)new CJKAnalyzer() : (Analyzer)new StandardAnalyzer();
             IndexWriter writer = new IndexWriter( aIndexDir, analyzer, true );
-            if( !bExtensionMode )
-                System.out.println( "Lucene: Indexing to directory '" + aIndexDir + "'..." );
             int nRet = indexDocs( writer, aModule, bExtensionMode, aCaptionFilesDir, aContentFilesDir );
             if( nRet != -1 )
-            {
-                if( !bExtensionMode )
-                {
-                    System.out.println();
-                    System.out.println( "Optimizing ..." );
-                }
                 writer.optimize();
-            }
             writer.close();
 
             boolean bCfsFileOk = true;
@@ -229,8 +219,6 @@ public class HelpIndexerTool
                 if( nRet == -1 )
                     deleteRecursively( aIndexDir );
 
-                if( bCfsFileOk && bSegmentFileOk )
-                    System.out.println( "Zipping ..." );
                 File aDirToZipFile = new File( aDirToZipStr );
                 createZipFile( aDirToZipFile, aTargetZipFileStr );
                 deleteRecursively( aDirToZipFile );
@@ -247,10 +235,6 @@ public class HelpIndexerTool
                 System.out.println( "segment file check failed, terminating..." );
                 System.exit( -1 );
             }
-
-            Date end = new Date();
-            if( !bExtensionMode )
-                System.out.println(end.getTime() - start.getTime() + " total milliseconds");
         }
         catch (IOException e)
         {
@@ -288,8 +272,6 @@ public class HelpIndexerTool
         HashSet aContentFilesHashSet = new HashSet( aContentFilesList );
 
         // Loop over caption files and find corresponding content file
-        if( !bExtensionMode )
-            System.out.println( "Indexing, adding files" );
         int nCaptionFilesLen = aCaptionFiles.length;
         for( int i = 0 ; i < nCaptionFilesLen ; i++ )
         {
@@ -298,9 +280,6 @@ public class HelpIndexerTool
             File aContentFile = null;
             if( aContentFilesHashSet.contains( aCaptionFileStr ) )
                 aContentFile = new File( aContentFilesDir, aCaptionFileStr );
-
-            if( !bExtensionMode )
-                System.out.print( "." );
             writer.addDocument( HelpFileDocument.Document( aModule, aCaptionFile, aContentFile ) );
         }
 
@@ -314,8 +293,6 @@ public class HelpIndexerTool
                 // Not already handled in caption files loop
                 File aCaptionFile = null;
                 File aContentFile = new File( aContentFilesDir, aContentFileStr );
-                if( !bExtensionMode )
-                    System.out.print( "." );
                 writer.addDocument( HelpFileDocument.Document( aModule, aCaptionFile, aContentFile ) );
             }
         }

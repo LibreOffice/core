@@ -483,22 +483,10 @@ void HelpLinker::link() throw( HelpProcessingException )
     if ( (!bExtensionMode || bIndexForExtension) && !helpFiles.empty())
         initIndexerPreProcessor();
 
-    if( !bExtensionMode )
-    {
-        std::cout << "Making " << outputFile.native_file_string() <<
-            " from " << helpFiles.size() << " input files" << std::endl;
-    }
-
     // here we start our loop over the hzip files.
     HashSet::iterator end = helpFiles.end();
     for (HashSet::iterator iter = helpFiles.begin(); iter != end; ++iter)
     {
-        if( !bExtensionMode )
-        {
-            std::cout << ".";
-            std::cout.flush();
-        }
-
         // process one file
         // streamTable contains the streams in the hzip file
         StreamTable streamTable;
@@ -671,8 +659,6 @@ void HelpLinker::link() throw( HelpProcessingException )
         }
 
     } // while loop over hzip files ending
-    if( !bExtensionMode )
-        std::cout << std::endl;
 
     } // try
     catch( const HelpProcessingException& )
@@ -1040,7 +1026,6 @@ void HelpLinker::main( std::vector<std::string> &args,
 
 int main(int argc, char**argv)
 {
-    sal_uInt32 starttime = osl_getGlobalTimer();
     std::vector<std::string> args;
     for (int i = 1; i < argc; ++i)
         args.push_back(std::string(argv[i]));
@@ -1055,8 +1040,6 @@ int main(int argc, char**argv)
         std::cerr << e.m_aErrorMsg;
         exit(1);
     }
-    sal_uInt32 endtime = osl_getGlobalTimer();
-    std::cout << "time taken was " << (endtime-starttime)/1000.0 << " seconds" << std::endl;
     return 0;
 }
 

@@ -581,13 +581,11 @@ XMLFile& XMLFile::operator=(const XMLFile& obj){
                 LangHashMap* newelem = new LangHashMap();
                 for(LangHashMap::iterator pos2=elem->begin(); pos2!=elem->end();++pos2){
                     (*newelem)[ pos2->first ] = new XMLElement( *pos2->second );
-                    printf("*");
                 }
                 (*XMLStrings)[ pos->first ] = newelem;
             }
         }
     }
-    printf("done!\n");
     return *this;
 }
 
