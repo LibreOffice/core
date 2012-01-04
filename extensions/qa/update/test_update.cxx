@@ -121,8 +121,8 @@ protected:
             CPPUNIT_FAIL( "Wrong type of the entry." );
     }
 
-    // test the checkForUpdates() method
-    void testCheckForUpdates()
+    // test the checkForUpdates() method - update is available
+    void testCheckUpdateAvailable()
     {
         UpdateInfo aInfo;
         rtl::Reference< UpdateCheck > aController( UpdateCheck::get() );
@@ -131,6 +131,7 @@ protected:
                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Linux" ) ),
                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "x86" ) ),
                     m_aRepositoryList,
+                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "111111-222222-333333-444444" ) ),
                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "InstallSetID" ) ) ) )
         {
             CPPUNIT_ASSERT( aInfo.Sources.size() == 1 );
@@ -140,9 +141,29 @@ protected:
             CPPUNIT_FAIL( "Calling checkForUpdates() failed." );
     }
 
+    // test the checkForUpdates() method - we are up-to-date
+    void testCheckUpToDate()
+    {
+        UpdateInfo aInfo;
+        rtl::Reference< UpdateCheck > aController( UpdateCheck::get() );
+
+        if ( checkForUpdates( aInfo, m_xContext, aController->getInteractionHandler(), m_xProvider,
+                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Linux" ) ),
+                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "x86" ) ),
+                    m_aRepositoryList,
+                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "123456-abcdef-1a2b3c-4d5e6f" ) ),
+                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "InstallSetID" ) ) ) )
+        {
+            CPPUNIT_ASSERT( aInfo.Sources.size() == 0 );
+        }
+        else
+            CPPUNIT_FAIL( "Calling checkForUpdates() failed." );
+    }
+
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testGetUpdateInformationEnumeration);
-    CPPUNIT_TEST(testCheckForUpdates);
+    CPPUNIT_TEST(testCheckUpdateAvailable);
+    CPPUNIT_TEST(testCheckUpToDate);
     CPPUNIT_TEST_SUITE_END();
 
 private:
