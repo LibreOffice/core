@@ -45,6 +45,6 @@ $(eval $(call gb_SrsTarget_add_files,reportdesign/res,\
     reportdesign/source/core/resource/strings.src \
 ))
 
-$(call gb_SrsTarget_get_target,reportdesign/res) :| $(OUTDIR)/inc/svx/globlmn.hrc
+$(call gb_SrsTemplateTarget_get_target,reportdesign/res) : $(call gb_Package_get_target,svx_globlmn_hrc)
 
 # vim: set noet sw=4 ts=4:
