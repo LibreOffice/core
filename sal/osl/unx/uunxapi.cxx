@@ -113,6 +113,20 @@
  {
 #ifndef MACOSX // not MACOSX
     rtl::OString fn = OUStringToOString(pustrFileName);
+#ifdef ANDROID
+    if (strncmp(fn.getStr(), "/assets", sizeof("/assets")-1) == 0 &&
+        (fn.getStr()[sizeof("/assets")-1] == '\0' ||
+         fn.getStr()[sizeof("/assets")-1] == '/'))
+    {
+        if (access_u(pustrFileName, F_OK) == -1)
+            return sal_False;
+
+        rtl_uString silly(*pustrFileName);
+        rtl_uString_assign(ppustrResolvedName, &silly);
+
+        return sal_True;
+    }
+#endif
 #else
     rtl::OString fn = macxp_resolveAliasAndConvert(pustrFileName);
 #endif
