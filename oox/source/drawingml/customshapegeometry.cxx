@@ -338,7 +338,7 @@ static EnhancedCustomShapeParameter GetAdjCoordinate( CustomShapeProperties& rCu
                 nIntVal += 2;
             case XML_ssd2 :  // */ ss 1.0 2.0
             {
-                nIntVal += '2';
+                nIntVal += 2;
 
                 CustomShapeGuide aGuide;
                 aGuide.maName = rValue;
