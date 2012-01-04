@@ -82,13 +82,8 @@ USE_64:=1
 .ENDIF                  # "$(OS)$(COM)"=="LINUXGCC"
 
 .IF "$(OS)"=="MACOSX"
-.IF "$(EXTRA_CFLAGS)"!=""
-CPP:=gcc -E $(EXTRA_CFLAGS)
-CXX:=g++ $(EXTRA_CFLAGS)
-CC:=gcc $(EXTRA_CFLAGS)
-MACOS_SDK_DIR*=$(MACDEVSDK)
-.EXPORT : CPP MACOS_SDK_DIR
-.ENDIF # "$(EXTRA_CFLAGS)"!=""
+MACOS_SDK_DIR:=$(MACOSX_SDK_PATH)
+.EXPORT : MACOS_SDK_DIR
 .ENDIF # "$(OS)"=="MACOSX"
 
 OUT2LIB=mozilla/dist/out/lib/*$(DLLPOST) mozilla/dist/out/lib/libcrmf.a
