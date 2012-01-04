@@ -26,76 +26,74 @@
  *
  ************************************************************************/
 
- #ifndef _OSL_UUNXAPI_HXX_
- #define _OSL_UUNXAPI_HXX_
+#ifndef _OSL_UUNXAPI_HXX_
+#define _OSL_UUNXAPI_HXX_
 
- #ifndef _OSL_UUNXAPI_H_
- #include "uunxapi.h"
- #endif
+#ifndef _OSL_UUNXAPI_H_
+#include "uunxapi.h"
+#endif
 
- #ifndef _RTL_USTRING_HXX_
- #include <rtl/ustring.hxx>
- #endif
+#ifndef _RTL_USTRING_HXX_
+#include <rtl/ustring.hxx>
+#endif
 
- namespace osl
- {
+namespace osl
+{
 
-     /***********************************
-      osl::access
+    /***********************************
+     osl::access
 
-      @see access
-      **********************************/
+     @see access
+     **********************************/
 
-     inline int access(const rtl::OUString& ustrPath, int mode)
-      {
-         return access_u(ustrPath.pData, mode);
-       }
-
-     /***********************************
-      osl::realpath
-
-      @descr
-      The return value differs from the
-      realpath function
-
-      @returns sal_True on success else
-      sal_False
-
-      @see realpath
-      **********************************/
-
-     inline sal_Bool realpath(
-         const rtl::OUString& ustrFileName,
-        rtl::OUString& ustrResolvedName)
+    inline int access(const rtl::OUString& ustrPath, int mode)
      {
-         return realpath_u(ustrFileName.pData, &ustrResolvedName.pData);
-      }
-
-
-     /***********************************
-      osl::lstat
-
-      @see lstat
-      **********************************/
-
-      inline int lstat(const rtl::OUString& ustrPath, struct stat& buf)
-      {
-           return lstat_u(ustrPath.pData, &buf);
+        return access_u(ustrPath.pData, mode);
       }
 
     /***********************************
-          osl::mkdir
-          @see mkdir
-          **********************************/
-    inline int mkdir(const rtl::OUString& aPath, mode_t aMode)
+     osl::realpath
+
+     @descr
+     The return value differs from the
+     realpath function
+
+     @returns sal_True on success else
+     sal_False
+
+     @see realpath
+     **********************************/
+
+    inline sal_Bool realpath(
+        const rtl::OUString& ustrFileName,
+       rtl::OUString& ustrResolvedName)
     {
-        return mkdir_u(aPath.pData, aMode);
-    }
-
- } // end namespace osl
+        return realpath_u(ustrFileName.pData, &ustrResolvedName.pData);
+     }
 
 
- #endif /* _OSL_UUNXAPI_HXX_ */
+    /***********************************
+     osl::lstat
 
+     @see lstat
+     **********************************/
+
+     inline int lstat(const rtl::OUString& ustrPath, struct stat& buf)
+     {
+          return lstat_u(ustrPath.pData, &buf);
+     }
+
+   /***********************************
+         osl::mkdir
+         @see mkdir
+         **********************************/
+   inline int mkdir(const rtl::OUString& aPath, mode_t aMode)
+   {
+       return mkdir_u(aPath.pData, aMode);
+   }
+
+} // end namespace osl
+
+#endif /* _OSL_UUNXAPI_HXX_ */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
