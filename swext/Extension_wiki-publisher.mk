@@ -61,4 +61,8 @@ $(eval $(call gb_Extension_add_file,wiki-publisher,help/en-US/com.sun.wiki-publi
 $(eval $(call gb_Extension_add_file,wiki-publisher,help/en-US/com.sun.wiki-publisher/wikisettings.xhp,$(WIKISRC)/help/wikisettings.xhp))
 $(eval $(call gb_Extension_add_file,wiki-publisher,license/THIRDPARTYLICENSEREADME.html,$(WIKISRC)/src/THIRDPARTYLICENSEREADME.html))
 $(eval $(call gb_Extension_add_file,wiki-publisher,templates/MediaWiki/mediawiki.ott,$(WIKISRC)/src/filter/mediawiki.ott))
-
+$(eval $(call gb_Extension_localize_help,wiki-publisher,help/lang/com.sun.wiki-publisher/wikisend.xhp,$(WIKISRC)/help/wikisend.xhp))
+$(eval $(call gb_Extension_localize_help,wiki-publisher,help/lang/com.sun.wiki-publisher/wikiformats.xhp,$(WIKISRC)/help/wikiformats.xhp))
+$(eval $(call gb_Extension_localize_help,wiki-publisher,help/lang/com.sun.wiki-publisher/wikiaccount.xhp,$(WIKISRC)/help/wikiaccount.xhp))
+$(eval $(call gb_Extension_localize_help,wiki-publisher,help/lang/com.sun.wiki-publisher/wiki.xhp,$(WIKISRC)/help/wiki.xhp))
+$(eval $(call gb_Extension_localize_help,wiki-publisher,help/lang/com.sun.wiki-publisher/wikisettings.xhp,$(WIKISRC)/help/wikisettings.xhp))
