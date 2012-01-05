@@ -446,7 +446,7 @@ void FastSaxParser::parseStream( const InputSource& maStructSource) throw (SAXEx
         throw SAXException( OUString( RTL_CONSTASCII_USTRINGPARAM( "No input source" ) ), Reference< XInterface >(), Any() );
 
     entity.maConverter.setInputStream( entity.maStructSource.aInputStream );
-    if( entity.maStructSource.sEncoding.getLength() )
+    if( !entity.maStructSource.sEncoding.isEmpty() )
         entity.maConverter.setEncoding( OUStringToOString( entity.maStructSource.sEncoding, RTL_TEXTENCODING_ASCII_US ) );
 
     // create parser with proper encoding
@@ -776,7 +776,7 @@ void FastSaxParser::callbackStartElement( const XML_Char* pwName, const XML_Char
         // #158414# second: fill attribute list with other attributes
         for( ::std::vector< AttributeData >::const_iterator aIt = aAttribs.begin(), aEnd = aAttribs.end(); aIt != aEnd; ++aIt )
         {
-            if( aIt->maPrefix.getLength() > 0 )
+            if( !aIt->maPrefix.isEmpty() )
             {
                 sal_Int32 nAttributeToken = GetTokenWithPrefix( aIt->maPrefix, aIt->maName );
                 if( nAttributeToken != FastToken::DONTKNOW )
@@ -798,7 +798,7 @@ void FastSaxParser::callbackStartElement( const XML_Char* pwName, const XML_Char
         splitName( pwName, pPrefix, nPrefixLen, pName, nNameLen );
         if( nPrefixLen > 0 )
             nElementToken = GetTokenWithPrefix( pPrefix, nPrefixLen, pName, nNameLen );
-        else if( rEntity.maContextStack.top()->maNamespace.getLength() > 0 )
+        else if( !rEntity.maContextStack.top()->maNamespace.isEmpty() )
             nElementToken = GetTokenWithNamespaceURL( rEntity.maContextStack.top()->maNamespace, pName, nNameLen );
         else
             nElementToken = GetToken( pName );

@@ -183,7 +183,7 @@ namespace basprov
                 }
             }
 
-            if ( aFileURL.getLength() )
+            if ( !aFileURL.isEmpty() )
             {
                 osl::DirectoryItem aFileItem;
                 osl::FileStatus aFileStatus( osl_FileStatus_Mask_FileURL );
@@ -385,7 +385,7 @@ namespace basprov
             sProjectName = pBasicMgr->GetName();
 
         ::rtl::OUString aLibrary;
-        if ( sProjectName.getLength() && aDescription.match( sProjectName ) )
+        if ( !sProjectName.isEmpty() && aDescription.match( sProjectName ) )
         {
             OSL_TRACE("LibraryName %s is part of the url %s",
                 rtl::OUStringToOString( sProjectName, RTL_TEXTENCODING_UTF8 ).getStr(),
@@ -402,7 +402,7 @@ namespace basprov
         if ( nIndex != -1 )
             aMethod = aDescription.getToken( 0, (sal_Unicode)'.', nIndex );
 
-        if ( aLibrary.getLength() != 0 && aModule.getLength() != 0 && aMethod.getLength() != 0 && aLocation.getLength() != 0 )
+        if ( !aLibrary.isEmpty() && !aModule.isEmpty() && !aMethod.isEmpty() && !aLocation.isEmpty() )
         {
 
             if ( pBasicMgr )

@@ -1252,7 +1252,7 @@ void SAXWriter::characters(const OUString& aChars)  throw(SAXException, RuntimeE
     }
 
     sal_Bool bThrowException(sal_False);
-    if( aChars.getLength() )
+    if( !aChars.isEmpty() )
     {
         if( m_bIsCDATA )
             bThrowException = !mp_SaxWriterHelper->writeString( aChars, sal_False, sal_False );

@@ -406,7 +406,7 @@ static ::rtl::OUString aResourceResolverPropName(RTL_CONSTASCII_USTRINGPARAM("Re
                         continue;
 
                     ::rtl::OUString sDocURL = xModel->getURL();
-                    if ( sDocURL.getLength() == 0 )
+                    if ( sDocURL.isEmpty() )
                     {
                         ::comphelper::NamedValueCollection aModelArgs( xModel->getArgs() );
                         sDocURL = aModelArgs.getOrDefault( "Title", sDocURL );
@@ -738,7 +738,7 @@ static ::rtl::OUString aResourceResolverPropName(RTL_CONSTASCII_USTRINGPARAM("Re
                 xCtrlMod = createDialogModelForBasic();
             else
             {
-                OSL_ENSURE( URL.getLength(), "DialogProviderImpl::getDialog: no URL!" );
+                OSL_ENSURE( !URL.isEmpty(), "DialogProviderImpl::getDialog: no URL!" );
                 xCtrlMod = createDialogModel( URL );
             }
         }

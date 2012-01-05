@@ -396,8 +396,8 @@ eventMethodToDescriptor( const ::rtl::OUString& rEventMethod, ScriptEventDescrip
 
     // Only create an ScriptEventDescriptor for an event we can translate
     // or emulate
-    if ( sMethodName.getLength()
-         && sTypeName.getLength()
+    if ( !sMethodName.isEmpty()
+         && !sTypeName.isEmpty()
          && ( infos.find( sMethodName ) != infos.end() ) )
     {
         // just fill in CodeName, when the event fires the other

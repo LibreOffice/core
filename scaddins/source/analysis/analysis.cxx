@@ -1227,7 +1227,7 @@ STRING SAL_CALL AnalysisAddIn::getComplex( double fR, double fI, const ANY& rSuf
         case uno::TypeClass_STRING:
             {
             const STRING*   pSuff = ( const STRING* ) rSuff.getValue();
-            bi = pSuff->compareToAscii( "i" ) == 0 || pSuff->getLength() == 0;
+            bi = pSuff->compareToAscii( "i" ) == 0 || pSuff->isEmpty();
             if( !bi && pSuff->compareToAscii( "j" ) != 0 )
                 THROW_IAE;
             }

@@ -93,7 +93,7 @@ sal_Int32 XMLFile2UTFConverter::readAndConvert( Sequence<sal_Int8> &seq , sal_In
                   // read more !
                   continue;
                 }
-                if( scanForEncoding( seq ) || m_sEncoding.getLength() ) {
+                if( scanForEncoding( seq ) || !m_sEncoding.isEmpty() ) {
                     // initialize decoding
                     initializeDecoding();
                 }
@@ -340,7 +340,7 @@ sal_Bool XMLFile2UTFConverter::scanForEncoding( Sequence< sal_Int8 > &seq )
 void XMLFile2UTFConverter::initializeDecoding()
 {
 
-    if( m_sEncoding.getLength() )
+    if( !m_sEncoding.isEmpty() )
     {
         rtl_TextEncoding encoding = rtl_getTextEncodingFromMimeCharset( m_sEncoding.getStr() );
         if( encoding != RTL_TEXTENCODING_UTF8 )

@@ -157,7 +157,7 @@ namespace sax_fastparser {
 
         writeBytes(toUnoSequence(aOpeningBracket));
 
-        if (Namespace.getLength())
+        if (!Namespace.isEmpty())
         {
             write(Namespace);
             writeBytes(toUnoSequence(aColon));
@@ -191,7 +191,7 @@ namespace sax_fastparser {
 
         writeBytes(toUnoSequence(aOpeningBracketAndSlash));
 
-        if (Namespace.getLength())
+        if (!Namespace.isEmpty())
         {
             write(Namespace);
             writeBytes(toUnoSequence(aColon));
@@ -227,7 +227,7 @@ namespace sax_fastparser {
 
         writeBytes(toUnoSequence(aOpeningBracket));
 
-        if (Namespace.getLength())
+        if (!Namespace.isEmpty())
         {
             write(Namespace);
             writeBytes(toUnoSequence(aColon));

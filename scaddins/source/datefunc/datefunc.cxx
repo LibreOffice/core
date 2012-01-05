@@ -517,7 +517,7 @@ OUString SAL_CALL ScaDateAddIn::getProgrammaticCategoryName(
         }
     }
 
-    if( !aRet.getLength() )
+    if( aRet.isEmpty() )
         aRet = STR_FROM_ANSI( "Add-In" );
     return aRet;
 }

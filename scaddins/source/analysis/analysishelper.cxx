@@ -1987,7 +1987,7 @@ void ComplexList::Append( const SEQSEQ( STRING )& r, ComplListAppendHandl eAH ) 
         {
             const STRING&   rStr = rList[ n2 ];
 
-            if( rStr.getLength() )
+            if( !rStr.isEmpty() )
                 Append( new Complex( rStr ) );
             else if( bEmpty0 )
                 Append( new Complex( 0.0 ) );
@@ -2014,7 +2014,7 @@ void ComplexList::Append( const SEQ( ANY )& aMultPars, ComplListAppendHandl eAH 
                 {
                 const STRING*       pStr = ( const STRING* ) r.getValue();
 
-                if( pStr->getLength() )
+                if( !pStr->isEmpty() )
                     Append( new Complex( *( STRING* ) r.getValue() ) );
                 else if( bEmpty0 )
                     Append( new Complex( 0.0 ) );
@@ -2781,7 +2781,7 @@ sal_Bool ScaAnyConverter::getDouble(
         case uno::TypeClass_STRING:
         {
             const OUString* pString = static_cast< const OUString* >( rAny.getValue() );
-            if( pString->getLength() )
+            if( !pString->isEmpty() )
                 rfResult = convertToDouble( *pString );
             else
                 bContainsVal = sal_False;

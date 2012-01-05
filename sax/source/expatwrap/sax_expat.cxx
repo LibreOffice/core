@@ -472,7 +472,7 @@ void SaxExpatParser::parseStream(   const InputSource& structSource)
     }
 
     entity.converter.setInputStream( entity.structSource.aInputStream );
-    if( entity.structSource.sEncoding.getLength() )
+    if( !entity.structSource.sEncoding.isEmpty() )
     {
         entity.converter.setEncoding(
             OUStringToOString( entity.structSource.sEncoding , RTL_TEXTENCODING_ASCII_US ) );

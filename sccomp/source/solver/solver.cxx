@@ -395,7 +395,7 @@ void SAL_CALL SolverComponent::solve() throw(uno::RuntimeException)
 
     xModel->unlockControllers();
 
-    if ( maStatus.getLength() )
+    if ( !maStatus.isEmpty() )
         return;
 
     //

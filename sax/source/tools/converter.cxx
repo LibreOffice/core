@@ -1038,7 +1038,7 @@ bool Converter::convertDuration(util::Duration& rDuration,
     sal_Int32 nPos(0);
 
     bool bIsNegativeDuration(false);
-    if (string.getLength() && (sal_Unicode('-') == string[0]))
+    if (!string.isEmpty() && (sal_Unicode('-') == string[0]))
     {
         bIsNegativeDuration = true;
         ++nPos;

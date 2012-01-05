@@ -302,7 +302,7 @@ throw ( provider::ScriptFrameworkErrorException,
 
     if ( sfUri->hasParameter( langKey ) == sal_False ||
          sfUri->hasParameter( locKey ) == sal_False ||
-         ( sfUri->getName().getLength() == 0  ) )
+         ( sfUri->getName().isEmpty()  ) )
     {
         ::rtl::OUString errorMsg = OUSTR( "Incorrect format for Script URI: " );
         errorMsg = errorMsg.concat( scriptURI );
@@ -551,7 +551,7 @@ MasterScriptProvider::insertByName( const ::rtl::OUString& aName, const Any& aEl
             throw lang::IllegalArgumentException( OUSTR("Couldn't convert to XPackage"),
                                                       Reference < XInterface > (), 2 );
         }
-        if ( !aName.getLength() )
+        if ( aName.isEmpty() )
         {
             throw lang::IllegalArgumentException( OUSTR("Name not set!!"),
                                                       Reference < XInterface > (), 1 );
@@ -625,7 +625,7 @@ MasterScriptProvider::removeByName( const ::rtl::OUString& Name ) throw ( contai
    }
    else
    {
-        if ( !Name.getLength() )
+        if ( Name.isEmpty() )
         {
             throw lang::IllegalArgumentException( OUSTR("Name not set!!"),
                                                       Reference < XInterface > (), 1 );
@@ -730,7 +730,7 @@ MasterScriptProvider::hasByName( const ::rtl::OUString& aName ) throw (RuntimeEx
    }
    else
    {
-        if ( !aName.getLength() )
+        if ( aName.isEmpty() )
         {
             throw lang::IllegalArgumentException( OUSTR("Name not set!!"),
                                                       Reference < XInterface > (), 1 );

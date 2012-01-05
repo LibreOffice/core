@@ -198,7 +198,7 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
                    // this is not an argument to be passed to script, so
                    // ignore.
                    if ( lArgs[ index ].Name.compareToAscii("Referer") != 0  ||
-                        lArgs[ index ].Name.getLength() == 0 )
+                        lArgs[ index ].Name.isEmpty() )
                    {
                        inArgs.realloc( ++argCount );
                        inArgs[ argCount - 1 ] = lArgs[ index ].Value;

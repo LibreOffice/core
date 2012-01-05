@@ -226,7 +226,7 @@ namespace basprov
                 if ( xModel.is() )
                 {
                     sDocURL = xModel->getURL();
-                    if ( sDocURL.getLength() == 0 )
+                    if ( sDocURL.isEmpty() )
                     {
                         Sequence < PropertyValue > aProps = xModel->getArgs();
                         sal_Int32 nProps = aProps.getLength();

@@ -855,7 +855,7 @@ void StringResourcePersistenceImpl::implInitializeCommonParameters
         ::rtl::OUString errorMsg(RTL_CONSTASCII_USTRINGPARAM("XInitialization::initialize: Expected NameBase string"));
         throw IllegalArgumentException( errorMsg, Reference< XInterface >(), 3 );
     }
-    if( m_aNameBase.getLength() == 0 )
+    if( m_aNameBase.isEmpty() )
         m_aNameBase = aNameBaseDefaultStr;
 
     bool bCommentOk = (aArguments[4] >>= m_aComment);
@@ -1854,14 +1854,14 @@ bool StringResourcePersistenceImpl::implLoadLocale( LocaleItem* )
     aRetStr += aLocale.Language;
 
     ::rtl::OUString aCountry  = aLocale.Country;
-    if( aCountry.getLength() )
+    if( !aCountry.isEmpty() )
     {
         aRetStr += aUnder;
         aRetStr += aCountry;
     }
 
     ::rtl::OUString aVariant  = aLocale.Variant;
-    if( aVariant.getLength() )
+    if( !aVariant.isEmpty() )
     {
         aRetStr += aUnder;
         aRetStr += aVariant;
@@ -1873,7 +1873,7 @@ bool StringResourcePersistenceImpl::implLoadLocale( LocaleItem* )
     ( LocaleItem* pLocaleItem, const ::rtl::OUString& aNameBase )
 {
     ::rtl::OUString aFileName = aNameBase;
-    if( aFileName.getLength() == 0 )
+    if( aFileName.isEmpty() )
         aFileName = aNameBaseDefaultStr;
 
     aFileName += implGetNameScemeForLocaleItem( pLocaleItem );
@@ -2089,7 +2089,7 @@ bool StringResourcePersistenceImpl::implReadPropertiesFile
                 }
 
                 // Ignore lines with empty keys
-                if( 0 == aResourceID.getLength() )
+                if( aResourceID.isEmpty() )
                     continue;
 
                 // Scan value
