@@ -2569,7 +2569,7 @@ dnl ===================================================================
    elif test "$_os" = "OS2"; then
       DEFAULT_TO_STLPORT="yes" 
    elif test "$_os" = "FreeBSD"; then
-      DEFAULT_TO_STLPORT="no"
+      DEFAULT_TO_STLPORT="yes"
    fi
    if test "$DEFAULT_TO_STLPORT" = "yes"; then
       AC_MSG_RESULT([stlport])
