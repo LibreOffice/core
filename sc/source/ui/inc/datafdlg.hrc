@@ -30,7 +30,7 @@
 #define BTN_DATAFORM_NEW          1
 #define BTN_DATAFORM_DELETE       2
 #define BTN_DATAFORM_RESTORE      3
-#define BTN_DATAFORM_LAST         4
+#define BTN_DATAFORM_PREV         4
 #define BTN_DATAFORM_NEXT         5
 #define BTN_DATAFORM_CLOSE        6
 #define WND_DATAFORM_SCROLLBAR    7

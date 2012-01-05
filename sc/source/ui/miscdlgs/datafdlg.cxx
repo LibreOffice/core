@@ -51,7 +51,7 @@ ScDataFormDlg::ScDataFormDlg( Window* pParent, ScTabViewShell*  pTabViewShellOri
     aBtnNew          ( this, ScResId( BTN_DATAFORM_NEW ) ),
     aBtnDelete          ( this, ScResId( BTN_DATAFORM_DELETE ) ),
     aBtnRestore          ( this, ScResId( BTN_DATAFORM_RESTORE ) ),
-    aBtnLast          ( this, ScResId( BTN_DATAFORM_LAST ) ),
+    aBtnPrev          ( this, ScResId( BTN_DATAFORM_PREV ) ),
     aBtnNext          ( this, ScResId( BTN_DATAFORM_NEXT ) ),
     aBtnClose          ( this, ScResId( BTN_DATAFORM_CLOSE ) ),
     aSlider         ( this, ScResId( WND_DATAFORM_SCROLLBAR ) ),
@@ -222,7 +222,7 @@ ScDataFormDlg::ScDataFormDlg( Window* pParent, ScTabViewShell*  pTabViewShellOri
     aSlider.Show();
 
     aBtnNew.SetClickHdl     ( HDL(Impl_NewHdl)    );
-    aBtnLast.SetClickHdl    ( HDL(Impl_LastHdl)    );
+    aBtnPrev.SetClickHdl    ( HDL(Impl_PrevHdl)    );
     aBtnNext.SetClickHdl    ( HDL(Impl_NextHdl)    );
 
     aBtnRestore.SetClickHdl     ( HDL(Impl_RestoreHdl)    );
@@ -311,7 +311,7 @@ IMPL_LINK( ScDataFormDlg, Impl_NewHdl, PushButton*, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( ScDataFormDlg, Impl_LastHdl, PushButton*, EMPTYARG )
+IMPL_LINK( ScDataFormDlg, Impl_PrevHdl, PushButton*, EMPTYARG )
 {
     if (pDoc)
     {
@@ -386,7 +386,6 @@ void ScDataFormDlg::SetButtonState()
     if ( aCurrentRow > nEndRow )
     {
         aBtnDelete.Enable( false );
-        aBtnLast.Enable( true );
         aBtnNext.Enable( false );
     }
     else
@@ -395,7 +394,9 @@ void ScDataFormDlg::SetButtonState()
         aBtnNext.Enable( true );
     }
     if ( 1 == aCurrentRow )
-        aBtnLast.Enable( false );
+        aBtnPrev.Enable( false );
+    else
+        aBtnPrev.Enable( true );
 
     aBtnRestore.Enable( false );
     if ( maEdits.size()>=1 && !maEdits.is_null(0) )
