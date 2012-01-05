@@ -61,6 +61,7 @@ public:
     SfxItemPropertyMap_Impl(){}
     SfxItemPropertyMap_Impl( const SfxItemPropertyMap_Impl* pSource );
 };
+
 SfxItemPropertyMap_Impl::SfxItemPropertyMap_Impl( const SfxItemPropertyMap_Impl* pSource )
 {
     this->SfxItemPropertyHashMap_t::operator=( *pSource );
@@ -78,8 +79,8 @@ SfxItemPropertyMap::SfxItemPropertyMap( const SfxItemPropertyMapEntry* pEntries 
     }
 }
 
-SfxItemPropertyMap::SfxItemPropertyMap( const SfxItemPropertyMap* pSource ) :
-    m_pImpl( new SfxItemPropertyMap_Impl( pSource->m_pImpl ) )
+SfxItemPropertyMap::SfxItemPropertyMap( const SfxItemPropertyMap& rSource ) :
+    m_pImpl( new SfxItemPropertyMap_Impl( rSource.m_pImpl ) )
 {
 }
 
@@ -344,7 +345,7 @@ Reference<XPropertySetInfo>
     SfxItemPropertySet::getPropertySetInfo() const
 {
     if( !m_xInfo.is() )
-        m_xInfo = new SfxItemPropertySetInfo( &m_aMap );
+        m_xInfo = new SfxItemPropertySetInfo( m_aMap );
     return m_xInfo;
 }
 
@@ -353,10 +354,10 @@ struct SfxItemPropertySetInfo_Impl
     SfxItemPropertyMap*         m_pOwnMap;
 };
 
-SfxItemPropertySetInfo::SfxItemPropertySetInfo(const SfxItemPropertyMap *pMap ) :
+SfxItemPropertySetInfo::SfxItemPropertySetInfo(const SfxItemPropertyMap &rMap ) :
     m_pImpl( new SfxItemPropertySetInfo_Impl )
 {
-    m_pImpl->m_pOwnMap = new SfxItemPropertyMap( pMap );
+    m_pImpl->m_pOwnMap = new SfxItemPropertyMap( rMap );
 }
 
 SfxItemPropertySetInfo::SfxItemPropertySetInfo(const SfxItemPropertyMapEntry *pEntries ) :

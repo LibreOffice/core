@@ -306,7 +306,7 @@ sal_uInt16 GetFieldTypeMId( const OUString& rProperty, const SwFieldType& rTyp )
         nId = USHRT_MAX;
     else
     {
-        const SfxItemPropertySimpleEntry* pEntry = pSet->getPropertyMap()->getByName(rProperty);
+        const SfxItemPropertySimpleEntry* pEntry = pSet->getPropertyMap().getByName(rProperty);
         nId = pEntry ? pEntry->nWID : USHRT_MAX;
     }
     return nId;
@@ -1869,7 +1869,7 @@ void SwXTextField::setPropertyValue(const OUString& rPropertyName, const uno::An
     SwField* pField = (SwField*)GetField();
     const SfxItemPropertySet* _pPropSet = aSwMapProvider.GetPropertySet(
                                 lcl_GetPropertyMapOfService( m_nServiceId));
-    const SfxItemPropertySimpleEntry*   pEntry = _pPropSet->getPropertyMap()->getByName(rPropertyName);
+    const SfxItemPropertySimpleEntry*   pEntry = _pPropSet->getPropertyMap().getByName(rPropertyName);
 
     if (!pEntry)
         throw beans::UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
@@ -2028,11 +2028,11 @@ uno::Any SwXTextField::getPropertyValue(const OUString& rPropertyName)
     const SwField* pField = GetField();
     const SfxItemPropertySet* _pPropSet = aSwMapProvider.GetPropertySet(
                                 lcl_GetPropertyMapOfService( m_nServiceId));
-    const SfxItemPropertySimpleEntry*   pEntry = _pPropSet->getPropertyMap()->getByName(rPropertyName);
+    const SfxItemPropertySimpleEntry*   pEntry = _pPropSet->getPropertyMap().getByName(rPropertyName);
     if(!pEntry )
     {
         const SfxItemPropertySet* _pParaPropSet = aSwMapProvider.GetPropertySet(PROPERTY_MAP_PARAGRAPH_EXTENSIONS);
-        pEntry = _pParaPropSet->getPropertyMap()->getByName(rPropertyName);
+        pEntry = _pParaPropSet->getPropertyMap().getByName(rPropertyName);
     }
     if (!pEntry)
         throw beans::UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );

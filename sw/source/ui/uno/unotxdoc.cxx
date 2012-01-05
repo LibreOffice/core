@@ -1837,7 +1837,7 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName,
     SolarMutexGuard aGuard;
     if(!IsValid())
         throw RuntimeException();
-    const SfxItemPropertySimpleEntry*  pEntry = pPropSet->getPropertyMap()->getByName( rPropertyName);
+    const SfxItemPropertySimpleEntry*  pEntry = pPropSet->getPropertyMap().getByName( rPropertyName);
 
     if(!pEntry)
         throw UnknownPropertyException();
@@ -2009,7 +2009,7 @@ Any SwXTextDocument::getPropertyValue(const OUString& rPropertyName)
     SolarMutexGuard aGuard;
     if(!IsValid())
         throw RuntimeException();
-    const SfxItemPropertySimpleEntry*  pEntry = pPropSet->getPropertyMap()->getByName( rPropertyName);
+    const SfxItemPropertySimpleEntry*  pEntry = pPropSet->getPropertyMap().getByName( rPropertyName);
 
     if(!pEntry)
         throw UnknownPropertyException();
@@ -2259,7 +2259,7 @@ PropertyState SAL_CALL SwXTextDocument::getPropertyState( const OUString& rPrope
     PropertyState eRet = PropertyState_DIRECT_VALUE;
     if(!IsValid())
         throw RuntimeException();
-    const SfxItemPropertySimpleEntry*  pEntry = pPropSet->getPropertyMap()->getByName( rPropertyName);
+    const SfxItemPropertySimpleEntry*  pEntry = pPropSet->getPropertyMap().getByName( rPropertyName);
 
     if(!pEntry)
         throw UnknownPropertyException();
@@ -2291,7 +2291,7 @@ void SAL_CALL SwXTextDocument::setPropertyToDefault( const OUString& rPropertyNa
     SolarMutexGuard aGuard;
     if(!IsValid())
         throw RuntimeException();
-    const SfxItemPropertySimpleEntry*  pEntry = pPropSet->getPropertyMap()->getByName( rPropertyName);
+    const SfxItemPropertySimpleEntry*  pEntry = pPropSet->getPropertyMap().getByName( rPropertyName);
     if(!pEntry)
         throw UnknownPropertyException();
     switch(pEntry->nWID)
@@ -2306,7 +2306,7 @@ Any SAL_CALL SwXTextDocument::getPropertyDefault( const OUString& rPropertyName 
     SolarMutexGuard aGuard;
     if(!IsValid())
         throw RuntimeException();
-    const SfxItemPropertySimpleEntry*  pEntry = pPropSet->getPropertyMap()->getByName( rPropertyName);
+    const SfxItemPropertySimpleEntry*  pEntry = pPropSet->getPropertyMap().getByName( rPropertyName);
     if(!pEntry)
         throw UnknownPropertyException();
     Any aAny;

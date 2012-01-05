@@ -1274,9 +1274,9 @@ void SwAccessibleParagraph::_getDefaultAttributesImpl(
     // build-up sequence containing the run attributes <rDefAttrSeq>
     tAccParaPropValMap aDefAttrSeq;
     {
-        const SfxItemPropertyMap* pPropMap =
+        const SfxItemPropertyMap& rPropMap =
                     aSwMapProvider.GetPropertySet( PROPERTY_MAP_TEXT_CURSOR )->getPropertyMap();
-        PropertyEntryVector_t aPropertyEntries = pPropMap->getPropertyEntries();
+        PropertyEntryVector_t aPropertyEntries = rPropMap.getPropertyEntries();
         PropertyEntryVector_t::const_iterator aPropIt = aPropertyEntries.begin();
         while ( aPropIt != aPropertyEntries.end() )
         {
@@ -1505,9 +1505,9 @@ void SwAccessibleParagraph::_getRunAttributesImpl(
             uno::Sequence< ::rtl::OUString > aDummy;
             _getDefaultAttributesImpl( aDummy, aDefAttrSeq, true ); // #i82637#
 
-            const SfxItemPropertyMap* pPropMap =
+            const SfxItemPropertyMap& rPropMap =
                     aSwMapProvider.GetPropertySet( PROPERTY_MAP_TEXT_CURSOR )->getPropertyMap();
-            PropertyEntryVector_t aPropertyEntries = pPropMap->getPropertyEntries();
+            PropertyEntryVector_t aPropertyEntries = rPropMap.getPropertyEntries();
             PropertyEntryVector_t::const_iterator aPropIt = aPropertyEntries.begin();
             while ( aPropIt != aPropertyEntries.end() )
             {

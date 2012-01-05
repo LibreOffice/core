@@ -669,7 +669,7 @@ void SAL_CALL SvxUnoTextField::setPropertyValue( const OUString& aPropertyName, 
     if( mpImpl == NULL )
         throw uno::RuntimeException();
 
-    const SfxItemPropertySimpleEntry* pMap = mpPropSet->getPropertyMap()->getByName( aPropertyName );
+    const SfxItemPropertySimpleEntry* pMap = mpPropSet->getPropertyMap().getByName( aPropertyName );
     if ( !pMap )
         throw beans::UnknownPropertyException();
 
@@ -838,7 +838,7 @@ uno::Any SAL_CALL SvxUnoTextField::getPropertyValue( const OUString& PropertyNam
 
     uno::Any aValue;
 
-    const SfxItemPropertySimpleEntry* pMap = mpPropSet->getPropertyMap()->getByName( PropertyName );
+    const SfxItemPropertySimpleEntry* pMap = mpPropSet->getPropertyMap().getByName( PropertyName );
     if ( !pMap )
         throw beans::UnknownPropertyException();
 

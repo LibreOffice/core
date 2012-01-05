@@ -65,7 +65,7 @@ public:
 
 SwSearchProperties_Impl::SwSearchProperties_Impl() :
     nArrLen(0),
-    aPropertyEntries( aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_CURSOR)->getPropertyMap()->getPropertyEntries())
+    aPropertyEntries( aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_CURSOR)->getPropertyMap().getPropertyEntries())
 {
     nArrLen = aPropertyEntries.size();
     pValueArr = new beans::PropertyValue*[nArrLen];
@@ -555,7 +555,7 @@ void SwXTextSearch::setPropertyValue(const OUString& rPropertyName, const uno::A
         lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException )
 {
     SolarMutexGuard aGuard;
-    const SfxItemPropertySimpleEntry*  pEntry = m_pPropSet->getPropertyMap()->getByName(rPropertyName);
+    const SfxItemPropertySimpleEntry*  pEntry = m_pPropSet->getPropertyMap().getByName(rPropertyName);
     if(pEntry)
     {
         if ( pEntry->nFlags & beans::PropertyAttribute::READONLY)
@@ -588,7 +588,7 @@ uno::Any SwXTextSearch::getPropertyValue(const OUString& rPropertyName) throw( b
     SolarMutexGuard aGuard;
     uno::Any aRet;
 
-    const SfxItemPropertySimpleEntry*  pEntry = m_pPropSet->getPropertyMap()->getByName(rPropertyName);
+    const SfxItemPropertySimpleEntry*  pEntry = m_pPropSet->getPropertyMap().getByName(rPropertyName);
     sal_Bool bSet = sal_False;
     if(pEntry)
     {

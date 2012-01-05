@@ -1604,7 +1604,7 @@ void SAL_CALL ScModelObj::setPropertyValue(
         //  Recalculation after loading is handled separately.
         bool bHardRecalc = !pDoc->IsImportingXML();
 
-        sal_Bool bOpt = ScDocOptionsHelper::setPropertyValue( aNewOpt, *aPropSet.getPropertyMap(), aPropertyName, aValue );
+        sal_Bool bOpt = ScDocOptionsHelper::setPropertyValue( aNewOpt, aPropSet.getPropertyMap(), aPropertyName, aValue );
         if (bOpt)
         {
             // done...
@@ -1738,7 +1738,7 @@ uno::Any SAL_CALL ScModelObj::getPropertyValue( const rtl::OUString& aPropertyNa
     {
         ScDocument* pDoc = pDocShell->GetDocument();
         const ScDocOptions& rOpt = pDoc->GetDocOptions();
-        aRet = ScDocOptionsHelper::getPropertyValue( rOpt, *aPropSet.getPropertyMap(), aPropertyName );
+        aRet = ScDocOptionsHelper::getPropertyValue( rOpt, aPropSet.getPropertyMap(), aPropertyName );
         if ( aRet.hasValue() )
         {
             // done...

@@ -80,7 +80,7 @@ void SAL_CALL SwXTextDefaults::setPropertyValue( const OUString& rPropertyName, 
     SolarMutexGuard aGuard;
     if (!m_pDoc)
         throw RuntimeException();
-    const SfxItemPropertySimpleEntry *pMap = m_pPropSet->getPropertyMap()->getByName( rPropertyName );
+    const SfxItemPropertySimpleEntry *pMap = m_pPropSet->getPropertyMap().getByName( rPropertyName );
     if (!pMap)
         throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
     if ( pMap->nFlags & PropertyAttribute::READONLY)
@@ -146,7 +146,7 @@ Any SAL_CALL SwXTextDefaults::getPropertyValue( const OUString& rPropertyName )
     SolarMutexGuard aGuard;
     if (!m_pDoc)
         throw RuntimeException();
-    const SfxItemPropertySimpleEntry *pMap = m_pPropSet->getPropertyMap()->getByName( rPropertyName );
+    const SfxItemPropertySimpleEntry *pMap = m_pPropSet->getPropertyMap().getByName( rPropertyName );
     if (!pMap)
         throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
     Any aRet;
@@ -192,7 +192,7 @@ PropertyState SAL_CALL SwXTextDefaults::getPropertyState( const OUString& rPrope
     PropertyState eRet = PropertyState_DIRECT_VALUE;
     if (!m_pDoc)
         throw RuntimeException();
-    const SfxItemPropertySimpleEntry *pMap = m_pPropSet->getPropertyMap()->getByName( rPropertyName );
+    const SfxItemPropertySimpleEntry *pMap = m_pPropSet->getPropertyMap().getByName( rPropertyName );
     if (!pMap)
         throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
 
@@ -223,7 +223,7 @@ void SAL_CALL SwXTextDefaults::setPropertyToDefault( const OUString& rPropertyNa
 {
     if (!m_pDoc)
         throw RuntimeException();
-    const SfxItemPropertySimpleEntry *pMap = m_pPropSet->getPropertyMap()->getByName( rPropertyName );
+    const SfxItemPropertySimpleEntry *pMap = m_pPropSet->getPropertyMap().getByName( rPropertyName );
     if (!pMap)
         throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
     if ( pMap->nFlags & PropertyAttribute::READONLY)
@@ -238,7 +238,7 @@ Any SAL_CALL SwXTextDefaults::getPropertyDefault( const OUString& rPropertyName 
 {
     if (!m_pDoc)
         throw RuntimeException();
-    const SfxItemPropertySimpleEntry *pMap = m_pPropSet->getPropertyMap()->getByName( rPropertyName );
+    const SfxItemPropertySimpleEntry *pMap = m_pPropSet->getPropertyMap().getByName( rPropertyName );
     if (!pMap)
         throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
     Any aRet;

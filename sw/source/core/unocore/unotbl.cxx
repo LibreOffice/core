@@ -1073,7 +1073,7 @@ void SwXCell::setPropertyValue(const OUString& rPropertyName, const uno::Any& aV
         else
         {
             const SfxItemPropertySimpleEntry* pEntry =
-                m_pPropSet->getPropertyMap()->getByName(rPropertyName);
+                m_pPropSet->getPropertyMap().getByName(rPropertyName);
             if( !pEntry )
             {
                 beans::UnknownPropertyException aEx;
@@ -1105,7 +1105,7 @@ uno::Any SwXCell::getPropertyValue(const OUString& rPropertyName)
     if(IsValid())
     {
         const SfxItemPropertySimpleEntry* pEntry =
-                                    m_pPropSet->getPropertyMap()->getByName(rPropertyName);
+                                    m_pPropSet->getPropertyMap().getByName(rPropertyName);
         if( !pEntry )
         {
             beans::UnknownPropertyException aEx;
@@ -1340,7 +1340,7 @@ void SwXTextTableRow::setPropertyValue(const OUString& rPropertyName,
         if(pLn)
         {
             const SfxItemPropertySimpleEntry* pEntry =
-                m_pPropSet->getPropertyMap()->getByName(rPropertyName);
+                m_pPropSet->getPropertyMap().getByName(rPropertyName);
             SwDoc* pDoc = pFmt->GetDoc();
             if (!pEntry)
                 throw beans::UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
@@ -1400,7 +1400,7 @@ uno::Any SwXTextTableRow::getPropertyValue(const OUString& rPropertyName) throw(
         if(pLn)
         {
             const SfxItemPropertySimpleEntry* pEntry =
-                                    m_pPropSet->getPropertyMap()->getByName(rPropertyName);
+                                    m_pPropSet->getPropertyMap().getByName(rPropertyName);
             if (!pEntry)
                 throw beans::UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
 
@@ -1755,7 +1755,7 @@ void SwXTextTableCursor::setPropertyValue(const OUString& rPropertyName,
         lcl_FormatTable((SwFrmFmt*)pTblNode->GetTable().GetFrmFmt());
         SwUnoTableCrsr* pTblCrsr = dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr);
         const SfxItemPropertySimpleEntry* pEntry =
-                                    m_pPropSet->getPropertyMap()->getByName(rPropertyName);
+                                    m_pPropSet->getPropertyMap().getByName(rPropertyName);
         if(pEntry)
         {
             if ( pEntry->nFlags & beans::PropertyAttribute::READONLY)
@@ -1817,7 +1817,7 @@ uno::Any SwXTextTableCursor::getPropertyValue(const OUString& rPropertyName)
         lcl_FormatTable((SwFrmFmt*)pTblNode->GetTable().GetFrmFmt());
         SwUnoTableCrsr* pTblCrsr = dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr);
         const SfxItemPropertySimpleEntry* pEntry =
-                                    m_pPropSet->getPropertyMap()->getByName(rPropertyName);
+                                    m_pPropSet->getPropertyMap().getByName(rPropertyName);
         if(pEntry)
         {
             pTblCrsr->MakeBoxSels();
@@ -3001,7 +3001,7 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName,
     if(!aValue.hasValue())
         throw lang::IllegalArgumentException();
     const SfxItemPropertySimpleEntry* pEntry =
-                                m_pPropSet->getPropertyMap()->getByName(rPropertyName);
+                                m_pPropSet->getPropertyMap().getByName(rPropertyName);
     if( !pEntry )
         throw lang::IllegalArgumentException();
     if(pFmt)
@@ -3207,7 +3207,7 @@ uno::Any SwXTextTable::getPropertyValue(const OUString& rPropertyName) throw( be
     uno::Any aRet;
     SwFrmFmt* pFmt = GetFrmFmt();
     const SfxItemPropertySimpleEntry* pEntry =
-                                m_pPropSet->getPropertyMap()->getByName(rPropertyName);
+                                m_pPropSet->getPropertyMap().getByName(rPropertyName);
     if(pFmt)
     {
         if (!pEntry)
@@ -3773,7 +3773,7 @@ void SwXCellRange::setPropertyValue(const OUString& rPropertyName,
         /* ASK OLIVER
         lcl_FormatTable(pFmt);*/
         const SfxItemPropertySimpleEntry* pEntry =
-                                    m_pPropSet->getPropertyMap()->getByName(rPropertyName);
+                                    m_pPropSet->getPropertyMap().getByName(rPropertyName);
         if(pEntry)
         {
             if ( pEntry->nFlags & beans::PropertyAttribute::READONLY)
@@ -3898,7 +3898,7 @@ uno::Any SwXCellRange::getPropertyValue(const OUString& rPropertyName) throw( be
         /* ASK OLIVER
         lcl_FormatTable(pFmt);*/
         const SfxItemPropertySimpleEntry* pEntry =
-                                    m_pPropSet->getPropertyMap()->getByName(rPropertyName);
+                                    m_pPropSet->getPropertyMap().getByName(rPropertyName);
         if(pEntry)
         {
             switch(pEntry->nWID )

@@ -196,7 +196,7 @@ void SAL_CALL PluginObject::disposing( const com::sun::star::lang::EventObject& 
 
 uno::Reference< beans::XPropertySetInfo > SAL_CALL PluginObject::getPropertySetInfo() throw( ::com::sun::star::uno::RuntimeException )
 {
-    static uno::Reference< beans::XPropertySetInfo > xInfo = new SfxItemPropertySetInfo( &maPropMap );
+    static uno::Reference< beans::XPropertySetInfo > xInfo = new SfxItemPropertySetInfo( maPropMap );
     return xInfo;
 }
 

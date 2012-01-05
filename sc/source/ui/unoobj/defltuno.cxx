@@ -129,7 +129,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDocDefaultsObj::getPropertySe
 {
     SolarMutexGuard aGuard;
     static uno::Reference<beans::XPropertySetInfo> aRef = new SfxItemPropertySetInfo(
-                                                                        &aPropertyMap );
+                                                                        aPropertyMap );
     return aRef;
 }
 

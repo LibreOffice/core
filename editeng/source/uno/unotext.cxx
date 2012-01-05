@@ -1919,7 +1919,7 @@ void SvxPropertyValuesToItemSet(
     const beans::PropertyValue *pProps = rPropertyVaules.getConstArray();
     for (sal_Int32 i = 0;  i < nProps;  ++i)
     {
-        const SfxItemPropertySimpleEntry *pEntry = pPropSet->getPropertyMap()->getByName( pProps[i].Name );
+        const SfxItemPropertySimpleEntry *pEntry = pPropSet->getPropertyMap().getByName( pProps[i].Name );
         if (pEntry)
         {
             // Note: there is no need to take special care of the properties

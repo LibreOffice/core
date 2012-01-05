@@ -94,7 +94,7 @@ class SVL_DLLPUBLIC SfxItemPropertyMap
     SfxItemPropertyMap_Impl* m_pImpl;
 public:
     SfxItemPropertyMap( const SfxItemPropertyMapEntry* pEntries );
-    SfxItemPropertyMap( const SfxItemPropertyMap* pSource );
+    SfxItemPropertyMap( const SfxItemPropertyMap& rSource );
     ~SfxItemPropertyMap();
 
     const SfxItemPropertySimpleEntry*  getByName( const ::rtl::OUString &rName ) const;
@@ -156,9 +156,7 @@ public:
 
     com::sun::star::uno::Reference<com::sun::star::beans::XPropertySetInfo>
         getPropertySetInfo() const;
-    const SfxItemPropertyMap*
-        getPropertyMap() const {return &m_aMap;}
-
+    const SfxItemPropertyMap& getPropertyMap() const {return m_aMap;}
 };
 
 struct SfxItemPropertySetInfo_Impl;
@@ -168,7 +166,7 @@ class SVL_DLLPUBLIC SfxItemPropertySetInfo : public
     SfxItemPropertySetInfo_Impl* m_pImpl;
 
 public:
-    SfxItemPropertySetInfo(const SfxItemPropertyMap *pMap );
+    SfxItemPropertySetInfo(const SfxItemPropertyMap &rMap );
     SfxItemPropertySetInfo(const SfxItemPropertyMapEntry *pEntries );
     virtual ~SfxItemPropertySetInfo();
 

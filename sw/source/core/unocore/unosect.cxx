@@ -588,7 +588,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
          nProperty++)
     {
         SfxItemPropertySimpleEntry const*const pEntry =
-            m_rPropSet.getPropertyMap()->getByName(pPropertyNames[nProperty]);
+            m_rPropSet.getPropertyMap().getByName(pPropertyNames[nProperty]);
         if (!pEntry)
         {
             throw beans::UnknownPropertyException(
@@ -992,7 +992,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
         nProperty++)
     {
         SfxItemPropertySimpleEntry const*const pEntry =
-            m_rPropSet.getPropertyMap()->getByName(pPropertyNames[nProperty]);
+            m_rPropSet.getPropertyMap().getByName(pPropertyNames[nProperty]);
         if (!pEntry)
         {
             throw beans::UnknownPropertyException(
@@ -1419,7 +1419,7 @@ throw (beans::UnknownPropertyException, uno::RuntimeException)
     {
         pStates[i] = beans::PropertyState_DEFAULT_VALUE;
         SfxItemPropertySimpleEntry const*const pEntry =
-            m_pImpl->m_rPropSet.getPropertyMap()->getByName( pNames[i]);
+            m_pImpl->m_rPropSet.getPropertyMap().getByName( pNames[i]);
         if (!pEntry)
         {
             throw beans::UnknownPropertyException(
@@ -1495,7 +1495,7 @@ throw (beans::UnknownPropertyException, uno::RuntimeException)
     }
 
     SfxItemPropertySimpleEntry const*const pEntry =
-        m_pImpl->m_rPropSet.getPropertyMap()->getByName(rPropertyName);
+        m_pImpl->m_rPropSet.getPropertyMap().getByName(rPropertyName);
     if (!pEntry)
     {
         throw beans::UnknownPropertyException(
@@ -1639,7 +1639,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     uno::Any aRet;
     SwSectionFmt *const pFmt = m_pImpl->GetSectionFmt();
     SfxItemPropertySimpleEntry const*const pEntry =
-        m_pImpl->m_rPropSet.getPropertyMap()->getByName(rPropertyName);
+        m_pImpl->m_rPropSet.getPropertyMap().getByName(rPropertyName);
     if (!pEntry)
     {
         throw beans::UnknownPropertyException(

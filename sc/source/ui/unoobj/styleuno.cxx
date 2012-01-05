@@ -1322,7 +1322,7 @@ const SfxItemSet* ScStyleObj::GetStyleItemSet_Impl( const ::rtl::OUString& rProp
                 return &((const SvxSetItem&)pStyle->GetItemSet().Get(ATTR_PAGE_FOOTERSET)).GetItemSet();
             }
         }
-        pEntry = pPropSet->getPropertyMap()->getByName( rPropName );
+        pEntry = pPropSet->getPropertyMap().getByName( rPropName );
         if ( pEntry )
         {
             rpResultEntry = pEntry;
@@ -1395,8 +1395,8 @@ void SAL_CALL ScStyleObj::setPropertyToDefault( const rtl::OUString& aPropertyNa
 {
     SolarMutexGuard aGuard;
 
-    const SfxItemPropertyMap* pMap = pPropSet->getPropertyMap();
-    const SfxItemPropertySimpleEntry* pEntry = pMap->getByName( aPropertyName );
+    const SfxItemPropertyMap& rMap = pPropSet->getPropertyMap();
+    const SfxItemPropertySimpleEntry* pEntry = rMap.getByName( aPropertyName );
     if ( !pEntry )
         throw beans::UnknownPropertyException();
 
@@ -1512,10 +1512,10 @@ void SAL_CALL ScStyleObj::setPropertyValues( const uno::Sequence< rtl::OUString 
         const rtl::OUString* pNames = aPropertyNames.getConstArray();
         const uno::Any* pValues = aValues.getConstArray();
 
-        const SfxItemPropertyMap* pPropertyMap = pPropSet->getPropertyMap();
+        const SfxItemPropertyMap& rPropertyMap = pPropSet->getPropertyMap();
         for (sal_Int32 i = 0; i < nCount; i++)
         {
-            const SfxItemPropertySimpleEntry*  pEntry = pPropertyMap->getByName( pNames[i] );
+            const SfxItemPropertySimpleEntry*  pEntry = rPropertyMap.getByName( pNames[i] );
             SetOnePropertyValue( pNames[i], pEntry, &pValues[i] );
         }
     }
@@ -1620,10 +1620,10 @@ void SAL_CALL ScStyleObj::setPropertiesToDefault( const uno::Sequence<rtl::OUStr
     {
         const rtl::OUString* pNames = aPropertyNames.getConstArray();
 
-        const SfxItemPropertyMap* pPropertyMap = pPropSet->getPropertyMap();
+        const SfxItemPropertyMap& rPropertyMap = pPropSet->getPropertyMap();
         for (sal_Int32 i = 0; i < nCount; i++)
         {
-            const SfxItemPropertySimpleEntry*  pEntry = pPropertyMap->getByName( pNames[i] );
+            const SfxItemPropertySimpleEntry*  pEntry = rPropertyMap.getByName( pNames[i] );
             SetOnePropertyValue( pNames[i], pEntry, NULL );
         }
     }
@@ -1666,7 +1666,7 @@ void SAL_CALL ScStyleObj::setPropertyValue(
 {
     SolarMutexGuard aGuard;
 
-    const SfxItemPropertySimpleEntry*  pEntry = pPropSet->getPropertyMap()->getByName( aPropertyName );
+    const SfxItemPropertySimpleEntry*  pEntry = pPropSet->getPropertyMap().getByName( aPropertyName );
     if ( !pEntry )
         throw beans::UnknownPropertyException();
 

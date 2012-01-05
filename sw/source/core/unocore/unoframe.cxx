@@ -935,7 +935,7 @@ void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::
 {
     SolarMutexGuard aGuard;
     SwFrmFmt* pFmt = GetFrmFmt();
-    const :: SfxItemPropertySimpleEntry* pEntry = m_pPropSet->getPropertyMap()->getByName(rPropertyName);
+    const :: SfxItemPropertySimpleEntry* pEntry = m_pPropSet->getPropertyMap().getByName(rPropertyName);
 
     if (!pEntry)
         throw beans::UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
@@ -1403,7 +1403,7 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
     SolarMutexGuard aGuard;
     uno::Any aAny;
     SwFrmFmt* pFmt = GetFrmFmt();
-    const SfxItemPropertySimpleEntry* pEntry = m_pPropSet->getPropertyMap()->getByName(rPropertyName);
+    const SfxItemPropertySimpleEntry* pEntry = m_pPropSet->getPropertyMap().getByName(rPropertyName);
     if (!pEntry)
         throw beans::UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
 
@@ -1738,7 +1738,7 @@ uno::Sequence< beans::PropertyState > SwXFrame::getPropertyStates(
         const SwAttrSet& rFmtSet = pFmt->GetAttrSet();
         for(int i = 0; i < aPropertyNames.getLength(); i++)
         {
-            const SfxItemPropertySimpleEntry* pEntry = m_pPropSet->getPropertyMap()->getByName(pNames[i]);
+            const SfxItemPropertySimpleEntry* pEntry = m_pPropSet->getPropertyMap().getByName(pNames[i]);
             if (!pEntry)
                 throw beans::UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + pNames[i], static_cast < cppu::OWeakObject * > ( this ) );
 
@@ -1795,7 +1795,7 @@ void SwXFrame::setPropertyToDefault( const OUString& rPropertyName )
     SwFrmFmt* pFmt = GetFrmFmt();
     if(pFmt)
     {
-        const SfxItemPropertySimpleEntry* pEntry = m_pPropSet->getPropertyMap()->getByName(rPropertyName);
+        const SfxItemPropertySimpleEntry* pEntry = m_pPropSet->getPropertyMap().getByName(rPropertyName);
         if (!pEntry)
             throw beans::UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
         if ( pEntry->nFlags & beans::PropertyAttribute::READONLY)
@@ -1892,7 +1892,7 @@ uno::Any SwXFrame::getPropertyDefault( const OUString& rPropertyName )
     SwFrmFmt* pFmt = GetFrmFmt();
     if(pFmt)
     {
-        const SfxItemPropertySimpleEntry* pEntry = m_pPropSet->getPropertyMap()->getByName(rPropertyName);
+        const SfxItemPropertySimpleEntry* pEntry = m_pPropSet->getPropertyMap().getByName(rPropertyName);
         if(pEntry)
         {
             if ( pEntry->nWID < RES_FRMATR_END )

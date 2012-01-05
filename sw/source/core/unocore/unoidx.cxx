@@ -578,7 +578,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
     SolarMutexGuard aGuard;
 
     SfxItemPropertySimpleEntry const*const pEntry =
-        m_pImpl->m_rPropSet.getPropertyMap()->getByName(rPropertyName);
+        m_pImpl->m_rPropSet.getPropertyMap().getByName(rPropertyName);
     if (!pEntry)
     {
         throw beans::UnknownPropertyException(
@@ -894,7 +894,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
 
     uno::Any aRet;
     SfxItemPropertySimpleEntry const*const pEntry =
-        m_pImpl->m_rPropSet.getPropertyMap()->getByName(rPropertyName);
+        m_pImpl->m_rPropSet.getPropertyMap().getByName(rPropertyName);
     if (!pEntry)
     {
         throw beans::UnknownPropertyException(
@@ -2094,7 +2094,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
     SolarMutexGuard aGuard;
 
     SfxItemPropertySimpleEntry const*const pEntry =
-        m_pImpl->m_rPropSet.getPropertyMap()->getByName(rPropertyName);
+        m_pImpl->m_rPropSet.getPropertyMap().getByName(rPropertyName);
     if (!pEntry)
     {
         throw beans::UnknownPropertyException(
@@ -2219,7 +2219,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
 
     uno::Any aRet;
     SfxItemPropertySimpleEntry const*const pEntry =
-        m_pImpl->m_rPropSet.getPropertyMap()->getByName(rPropertyName);
+        m_pImpl->m_rPropSet.getPropertyMap().getByName(rPropertyName);
     if (!pEntry)
     {
         throw beans::UnknownPropertyException(

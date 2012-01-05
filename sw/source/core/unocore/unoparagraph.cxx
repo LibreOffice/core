@@ -394,12 +394,12 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
     SwCursor aCursor( aPos, 0, false );
     const OUString* pPropertyNames = rPropertyNames.getConstArray();
     const uno::Any* pValues = rValues.getConstArray();
-    SfxItemPropertyMap const*const pMap = m_rPropSet.getPropertyMap();
+    const SfxItemPropertyMap &rMap = m_rPropSet.getPropertyMap();
     SwParaSelection aParaSel( aCursor );
     for (sal_Int32 nProp = 0; nProp < rPropertyNames.getLength(); nProp++)
     {
         SfxItemPropertySimpleEntry const*const pEntry =
-            pMap->getByName( pPropertyNames[nProp] );
+            rMap.getByName( pPropertyNames[nProp] );
         if (!pEntry)
         {
             throw beans::UnknownPropertyException(
@@ -454,12 +454,12 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     SwPaM aPam( aPos );
     uno::Any* pValues = aValues.getArray();
     const OUString* pPropertyNames = rPropertyNames.getConstArray();
-    SfxItemPropertyMap const*const pMap = m_rPropSet.getPropertyMap();
+    const SfxItemPropertyMap &rMap = m_rPropSet.getPropertyMap();
     const SwAttrSet& rAttrSet( rTxtNode.GetSwAttrSet() );
     for (sal_Int32 nProp = 0; nProp < rPropertyNames.getLength(); nProp++)
     {
         SfxItemPropertySimpleEntry const*const pEntry =
-            pMap->getByName( pPropertyNames[nProp] );
+            rMap.getByName( pPropertyNames[nProp] );
         if (!pEntry)
         {
             throw beans::UnknownPropertyException(
@@ -566,7 +566,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     beans::SetPropertyTolerantFailed *pFailed = aFailed.getArray();
 
     // get entry to start with
-    SfxItemPropertyMap const*const pPropMap =
+    const SfxItemPropertyMap &rPropMap =
         m_pImpl->m_rPropSet.getPropertyMap();
 
     OUString sTmp;
@@ -580,7 +580,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
             pFailed[ nFailed ].Name = pProp[i];
 
             SfxItemPropertySimpleEntry const*const pEntry =
-                pPropMap->getByName( pProp[i] );
+                rPropMap.getByName( pProp[i] );
             if (!pEntry)
             {
                 pFailed[ nFailed++ ].Result  =
@@ -687,7 +687,7 @@ throw (uno::RuntimeException)
     sal_Int32 nIdx = 0;
 
     // get entry to start with
-    SfxItemPropertyMap const*const pPropMap = m_rPropSet.getPropertyMap();
+    const SfxItemPropertyMap &rPropMap = m_rPropSet.getPropertyMap();
 
     for (sal_Int32 i = 0;  i < nProps;  ++i)
     {
@@ -699,7 +699,7 @@ throw (uno::RuntimeException)
             rResult.Name = pProp[i];
 
             SfxItemPropertySimpleEntry const*const pEntry =
-                pPropMap->getByName( pProp[i] );
+                rPropMap.getByName( pProp[i] );
             if (!pEntry)  // property available?
             {
                 rResult.Result =
@@ -922,7 +922,7 @@ throw (beans::UnknownPropertyException, uno::RuntimeException)
 
     const SwAttrSet* pSet = 0;
     SfxItemPropertySimpleEntry const*const pEntry =
-        m_pImpl->m_rPropSet.getPropertyMap()->getByName(rPropertyName);
+        m_pImpl->m_rPropSet.getPropertyMap().getByName(rPropertyName);
     if (!pEntry)
     {
         throw beans::UnknownPropertyException(
@@ -948,7 +948,7 @@ throw (beans::UnknownPropertyException, uno::RuntimeException)
     const OUString* pNames = PropertyNames.getConstArray();
     uno::Sequence< beans::PropertyState > aRet(PropertyNames.getLength());
     beans::PropertyState* pStates = aRet.getArray();
-    SfxItemPropertyMap const*const pMap = m_pImpl->m_rPropSet.getPropertyMap();
+    const SfxItemPropertyMap &rMap = m_pImpl->m_rPropSet.getPropertyMap();
     const SwAttrSet* pSet = 0;
     sal_Bool bAttrSetFetched = sal_False;
 
@@ -956,7 +956,7 @@ throw (beans::UnknownPropertyException, uno::RuntimeException)
             ++i, ++pStates, ++pNames)
     {
         SfxItemPropertySimpleEntry const*const pEntry =
-            pMap->getByName( *pNames );
+            rMap.getByName( *pNames );
         if (!pEntry)
         {
             throw beans::UnknownPropertyException(
@@ -999,7 +999,7 @@ throw (beans::UnknownPropertyException, uno::RuntimeException)
     // select paragraph
     SwParaSelection aParaSel( aCursor );
     SfxItemPropertySimpleEntry const*const pEntry =
-        m_pImpl->m_rPropSet.getPropertyMap()->getByName( rPropertyName );
+        m_pImpl->m_rPropSet.getPropertyMap().getByName( rPropertyName );
     if (!pEntry)
     {
         throw beans::UnknownPropertyException(
@@ -1069,7 +1069,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     }
 
     SfxItemPropertySimpleEntry const*const pEntry =
-        m_pImpl->m_rPropSet.getPropertyMap()->getByName(rPropertyName);
+        m_pImpl->m_rPropSet.getPropertyMap().getByName(rPropertyName);
     if (!pEntry)
     {
         throw beans::UnknownPropertyException(

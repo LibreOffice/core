@@ -1853,7 +1853,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
 {
     uno::Any aAny;
     SfxItemPropertySimpleEntry const*const pEntry =
-        rPropSet.getPropertyMap()->getByName(rPropertyName);
+        rPropSet.getPropertyMap().getByName(rPropertyName);
 
     if (!pEntry)
     {
@@ -1892,7 +1892,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
 {
     SwDoc *const pDoc = rPaM.GetDoc();
     SfxItemPropertySimpleEntry const*const pEntry =
-        rPropSet.getPropertyMap()->getByName(rPropertyName);
+        rPropSet.getPropertyMap().getByName(rPropertyName);
     if (!pEntry)
     {
         throw beans::UnknownPropertyException(
@@ -1930,7 +1930,7 @@ throw (beans::UnknownPropertyException, uno::RuntimeException)
     const OUString* pNames = rPropertyNames.getConstArray();
     uno::Sequence< beans::PropertyState > aRet(rPropertyNames.getLength());
     beans::PropertyState* pStates = aRet.getArray();
-    SfxItemPropertyMap const*const pMap = rPropSet.getPropertyMap();
+    const SfxItemPropertyMap &rMap = rPropSet.getPropertyMap();
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     ::std::auto_ptr<SfxItemSet> pSet;
     ::std::auto_ptr<SfxItemSet> pSetParent;
@@ -1939,7 +1939,7 @@ throw (beans::UnknownPropertyException, uno::RuntimeException)
     for (sal_Int32 i = 0, nEnd = rPropertyNames.getLength(); i < nEnd; i++)
     {
         SfxItemPropertySimpleEntry const*const pEntry =
-                pMap->getByName( pNames[i] );
+                rMap.getByName( pNames[i] );
         if(!pEntry)
         {
             if (pNames[i].equalsAsciiL( SW_PROP_NAME(UNO_NAME_IS_SKIP_HIDDEN_TEXT)) ||
@@ -2078,7 +2078,7 @@ throw (beans::UnknownPropertyException, uno::RuntimeException)
 {
     SwDoc & rDoc = *rPaM.GetDoc();
     SfxItemPropertySimpleEntry const*const pEntry =
-        rPropSet.getPropertyMap()->getByName(rPropertyName);
+        rPropSet.getPropertyMap().getByName(rPropertyName);
     if (!pEntry)
     {
         throw beans::UnknownPropertyException(
@@ -2119,7 +2119,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
         uno::RuntimeException)
 {
     SfxItemPropertySimpleEntry const*const pEntry =
-        rPropSet.getPropertyMap()->getByName(rPropertyName);
+        rPropSet.getPropertyMap().getByName(rPropertyName);
     if (!pEntry)
     {
         throw beans::UnknownPropertyException(
@@ -2389,7 +2389,7 @@ throw (beans::UnknownPropertyException, uno::RuntimeException)
         for (sal_Int32 i = 0; i < nCount; i++)
         {
             SfxItemPropertySimpleEntry const*const  pEntry =
-                m_pImpl->m_rPropSet.getPropertyMap()->getByName( pNames[i] );
+                m_pImpl->m_rPropSet.getPropertyMap().getByName( pNames[i] );
             if (!pEntry)
             {
                 if (pNames[i].equalsAsciiL(
@@ -2461,7 +2461,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
         for (sal_Int32 i = 0; i < nCount; i++)
         {
             SfxItemPropertySimpleEntry const*const pEntry =
-                m_pImpl->m_rPropSet.getPropertyMap()->getByName( pNames[i] );
+                m_pImpl->m_rPropSet.getPropertyMap().getByName( pNames[i] );
             if (!pEntry)
             {
                 if (pNames[i].equalsAsciiL(

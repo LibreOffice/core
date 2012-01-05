@@ -1064,7 +1064,7 @@ class SwStyleProperties_Impl
     sal_uInt32                  nArrLen;
 
 public:
-    SwStyleProperties_Impl(const SfxItemPropertyMap* _pMap);
+    SwStyleProperties_Impl(const SfxItemPropertyMap& rMap);
     ~SwStyleProperties_Impl();
 
     sal_Bool    SetProperty(const ::rtl::OUString& rName, uno::Any aVal);
@@ -1077,8 +1077,8 @@ public:
 
 };
 
-SwStyleProperties_Impl::SwStyleProperties_Impl(const SfxItemPropertyMap* pMap) :
-    aPropertyEntries( pMap->getPropertyEntries() ),
+SwStyleProperties_Impl::SwStyleProperties_Impl(const SfxItemPropertyMap& rMap) :
+    aPropertyEntries( rMap.getPropertyEntries() ),
     nArrLen(0)
 {
     nArrLen = aPropertyEntries.size();
@@ -2092,7 +2092,7 @@ void SAL_CALL SwXStyle::SetPropertyValues_Impl(
             ;
     }
     const SfxItemPropertySet* pPropSet = aSwMapProvider.GetPropertySet(nPropSetId);
-    const SfxItemPropertyMap *pMap = pPropSet->getPropertyMap();
+    const SfxItemPropertyMap &rMap = pPropSet->getPropertyMap();
 
     if(rPropertyNames.getLength() != rValues.getLength())
         throw lang::IllegalArgumentException();
@@ -2116,7 +2116,7 @@ void SAL_CALL SwXStyle::SetPropertyValues_Impl(
 
     for(sal_Int16 nProp = 0; nProp < rPropertyNames.getLength(); nProp++)
     {
-        const SfxItemPropertySimpleEntry* pEntry = pMap->getByName( pNames[nProp]);
+        const SfxItemPropertySimpleEntry* pEntry = rMap.getByName( pNames[nProp]);
 
         if(!pEntry ||
            (!bIsConditional && pNames[nProp].equalsAsciiL(SW_PROP_NAME(UNO_NAME_PARA_STYLE_CONDITIONS))))
@@ -2366,7 +2366,7 @@ uno::Sequence< uno::Any > SAL_CALL SwXStyle::GetPropertyValues_Impl(
             ;
     }
     const SfxItemPropertySet* pPropSet = aSwMapProvider.GetPropertySet(nPropSetId);
-    const SfxItemPropertyMap *pMap = pPropSet->getPropertyMap();
+    const SfxItemPropertyMap &rMap = pPropSet->getPropertyMap();
 
     const OUString* pNames = rPropertyNames.getConstArray();
     uno::Sequence< uno::Any > aRet(rPropertyNames.getLength());
@@ -2375,7 +2375,7 @@ uno::Sequence< uno::Any > SAL_CALL SwXStyle::GetPropertyValues_Impl(
     SfxStyleSheetBase* pBase = 0;
     for(sal_Int32 nProp = 0; nProp < rPropertyNames.getLength(); nProp++)
     {
-        const SfxItemPropertySimpleEntry* pEntry = pMap->getByName( pNames[nProp]);
+        const SfxItemPropertySimpleEntry* pEntry = rMap.getByName( pNames[nProp]);
         if(!pEntry ||
            (!bIsConditional && pNames[nProp].equalsAsciiL(SW_PROP_NAME(UNO_NAME_PARA_STYLE_CONDITIONS))))
             throw beans::UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + pNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
@@ -2577,13 +2577,13 @@ uno::Sequence< beans::PropertyState > SwXStyle::getPropertyStates(
                     ;
             }
             const SfxItemPropertySet* pPropSet = aSwMapProvider.GetPropertySet(nPropSetId);
-            const SfxItemPropertyMap *pMap = pPropSet->getPropertyMap();
+            const SfxItemPropertyMap &rMap = pPropSet->getPropertyMap();
 
             SfxItemSet aSet = xStyle->GetItemSet();
             for(sal_Int32 i = 0; i < rPropertyNames.getLength(); i++)
             {
                 const String& rPropName = pNames[i];
-                const SfxItemPropertySimpleEntry* pEntry = pMap->getByName( rPropName);
+                const SfxItemPropertySimpleEntry* pEntry = rMap.getByName( rPropName);
                 if(!pEntry)
                     throw beans::UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropName, static_cast < cppu::OWeakObject * > ( this ) );
                 if( FN_UNO_NUM_RULES ==  pEntry->nWID ||
@@ -2696,7 +2696,7 @@ void SAL_CALL SwXStyle::setPropertiesToDefault( const uno::Sequence< OUString >&
             ;
     }
     const SfxItemPropertySet* pPropSet = aSwMapProvider.GetPropertySet(nPropSetId);
-    const SfxItemPropertyMap *pMap = pPropSet->getPropertyMap();
+    const SfxItemPropertyMap &rMap = pPropSet->getPropertyMap();
 
     const OUString* pNames = aPropertyNames.getConstArray();
 
@@ -2704,7 +2704,7 @@ void SAL_CALL SwXStyle::setPropertiesToDefault( const uno::Sequence< OUString >&
     {
         for( sal_Int32 nProp = 0, nEnd = aPropertyNames.getLength(); nProp < nEnd; nProp++ )
         {
-            const SfxItemPropertySimpleEntry* pEntry = pMap->getByName( pNames[nProp] );
+            const SfxItemPropertySimpleEntry* pEntry = rMap.getByName( pNames[nProp] );
             if( !pEntry )
                 throw beans::UnknownPropertyException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is unknown: " ) ) + pNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
             if ( pEntry->nWID == FN_UNO_FOLLOW_STYLE || pEntry->nWID == FN_UNO_NUM_RULES )
@@ -2862,14 +2862,14 @@ uno::Sequence< uno::Any > SAL_CALL SwXStyle::getPropertyDefaults( const uno::Seq
                         ;
                 }
                 const SfxItemPropertySet* pPropSet = aSwMapProvider.GetPropertySet(nPropSetId);
-                const SfxItemPropertyMap* pMap = pPropSet->getPropertyMap();
+                const SfxItemPropertyMap& rMap = pPropSet->getPropertyMap();
 
                 const SfxItemSet &rSet = xStyle->GetItemSet(), *pParentSet = rSet.GetParent();
                 const OUString *pNames = aPropertyNames.getConstArray();
                 uno::Any *pRet = aRet.getArray();
                 for ( sal_Int32 i = 0 ; i < nCount; i++)
                 {
-                    const SfxItemPropertySimpleEntry* pEntry = pMap->getByName( pNames[i] );
+                    const SfxItemPropertySimpleEntry* pEntry = rMap.getByName( pNames[i] );
                     if ( !pEntry )
                         throw beans::UnknownPropertyException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + pNames[i], static_cast < cppu::OWeakObject * > ( this ) );
 
@@ -2968,7 +2968,7 @@ void SAL_CALL SwXPageStyle::SetPropertyValues_Impl(
     const OUString* pNames = rPropertyNames.getConstArray();
     const uno::Any* pValues = rValues.getConstArray();
     const SfxItemPropertySet* pPropSet = aSwMapProvider.GetPropertySet(PROPERTY_MAP_PAGE_STYLE);
-    const SfxItemPropertyMap*   pMap = pPropSet->getPropertyMap();
+    const SfxItemPropertyMap& rMap = pPropSet->getPropertyMap();
     SwStyleBase_Impl aBaseImpl(*GetDoc(), GetStyleName());
     if(GetBasePool())
     {
@@ -2985,7 +2985,7 @@ void SAL_CALL SwXPageStyle::SetPropertyValues_Impl(
 
     for(sal_Int16 nProp = 0; nProp < rPropertyNames.getLength(); nProp++)
     {
-        const SfxItemPropertySimpleEntry* pEntry = pMap->getByName( pNames[nProp] );
+        const SfxItemPropertySimpleEntry* pEntry = rMap.getByName( pNames[nProp] );
         if (!pEntry)
             throw beans::UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + pNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
         if ( pEntry->nFlags & beans::PropertyAttribute::READONLY)
@@ -3227,12 +3227,12 @@ uno::Sequence< uno::Any > SAL_CALL SwXPageStyle::GetPropertyValues_Impl(
 
     uno::Any* pRet = aRet.getArray();
     const SfxItemPropertySet* pPropSet = aSwMapProvider.GetPropertySet(PROPERTY_MAP_PAGE_STYLE);
-    const SfxItemPropertyMap*   pMap = pPropSet->getPropertyMap();
+    const SfxItemPropertyMap& rMap = pPropSet->getPropertyMap();
     SwStyleBase_Impl aBase(*GetDoc(), GetStyleName());
     SfxStyleSheetBase* pBase = 0;
     for(sal_Int32 nProp = 0; nProp < nLength; nProp++)
     {
-        const SfxItemPropertySimpleEntry* pEntry = pMap->getByName( pNames[nProp] );
+        const SfxItemPropertySimpleEntry* pEntry = rMap.getByName( pNames[nProp] );
         if (!pEntry)
             throw beans::UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + pNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
 
@@ -3915,7 +3915,7 @@ uno::Sequence< uno::Any > SwXAutoStyle::GetPropertyValues_Impl(
     }
 
     const SfxItemPropertySet* pPropSet = aSwMapProvider.GetPropertySet(nPropSetId);
-    const SfxItemPropertyMap *pMap = pPropSet->getPropertyMap();
+    const SfxItemPropertyMap& rMap = pPropSet->getPropertyMap();
     const OUString* pNames = rPropertyNames.getConstArray();
 
     sal_Int32 nLen = rPropertyNames.getLength();
@@ -3927,7 +3927,7 @@ uno::Sequence< uno::Any > SwXAutoStyle::GetPropertyValues_Impl(
     for( sal_Int32 i = 0; i < nLen; ++i )
     {
         const String& rPropName = pNames[i];
-        const SfxItemPropertySimpleEntry* pEntry = pMap->getByName(rPropName);
+        const SfxItemPropertySimpleEntry* pEntry = rMap.getByName(rPropName);
         if(!pEntry)
             throw beans::UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropName, static_cast < cppu::OWeakObject * > ( this ) );
         else if ( RES_TXTATR_AUTOFMT == pEntry->nWID || RES_AUTO_STYLE == pEntry->nWID )
@@ -4035,12 +4035,12 @@ uno::Sequence< beans::PropertyState > SwXAutoStyle::getPropertyStates(
     }
 
     const SfxItemPropertySet* pPropSet = aSwMapProvider.GetPropertySet(nPropSetId);
-    const SfxItemPropertyMap *pMap = pPropSet->getPropertyMap();
+    const SfxItemPropertyMap& rMap = pPropSet->getPropertyMap();
     SfxItemSet& rSet = *pSet.get();
     for(sal_Int32 i = 0; i < rPropertyNames.getLength(); i++)
     {
         const String& rPropName = pNames[i];
-        const SfxItemPropertySimpleEntry* pEntry = pMap->getByName(rPropName);
+        const SfxItemPropertySimpleEntry* pEntry = rMap.getByName(rPropName);
         if(!pEntry)
             throw beans::UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropName, static_cast < cppu::OWeakObject * > ( this ) );
         pStates[i] = pPropSet->getPropertyState(*pEntry, rSet );
@@ -4086,8 +4086,8 @@ uno::Sequence< beans::PropertyValue > SwXAutoStyle::getProperties() throw (uno::
     }
 
     const SfxItemPropertySet* pPropSet = aSwMapProvider.GetPropertySet(nPropSetId);
-    const SfxItemPropertyMap *pMap = pPropSet->getPropertyMap();
-    PropertyEntryVector_t aPropVector = pMap->getPropertyEntries();
+    const SfxItemPropertyMap &rMap = pPropSet->getPropertyMap();
+    PropertyEntryVector_t aPropVector = rMap.getPropertyEntries();
 
     SfxItemSet& rSet = *pSet.get();
     SfxItemIter aIter(rSet);

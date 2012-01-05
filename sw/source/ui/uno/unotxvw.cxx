@@ -921,7 +921,7 @@ void SAL_CALL SwXTextView::setPropertyValue(
     throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    const SfxItemPropertySimpleEntry* pEntry = m_pPropSet->getPropertyMap()->getByName( rPropertyName );
+    const SfxItemPropertySimpleEntry* pEntry = m_pPropSet->getPropertyMap().getByName( rPropertyName );
     if (!pEntry)
         throw UnknownPropertyException();
     else if (pEntry->nFlags & PropertyAttribute::READONLY)
@@ -959,7 +959,7 @@ uno::Any SAL_CALL SwXTextView::getPropertyValue(
 
     Any aRet;
 
-    const SfxItemPropertySimpleEntry* pEntry = m_pPropSet->getPropertyMap()->getByName( rPropertyName );
+    const SfxItemPropertySimpleEntry* pEntry = m_pPropSet->getPropertyMap().getByName( rPropertyName );
     if (!pEntry)
         throw UnknownPropertyException();
     else

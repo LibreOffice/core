@@ -1389,8 +1389,8 @@ void ScViewFunc::ApplySelectionPattern( const ScPatternAttr& rAttr,
     {
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aProperties;
         sal_Int32 nCount = 0;
-        const SfxItemPropertyMap* pMap = ScCellObj::GetCellPropertyMap();
-        PropertyEntryVector_t aPropVector = pMap->getPropertyEntries();
+        const SfxItemPropertyMap& rMap = ScCellObj::GetCellPropertyMap();
+        PropertyEntryVector_t aPropVector = rMap.getPropertyEntries();
         for ( sal_uInt16 nWhich = ATTR_PATTERN_START; nWhich <= ATTR_PATTERN_END; ++nWhich )
         {
             const SfxPoolItem* pItem = 0;

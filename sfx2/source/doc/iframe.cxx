@@ -206,7 +206,7 @@ void SAL_CALL IFrameObject::disposing( const com::sun::star::lang::EventObject& 
 
 uno::Reference< beans::XPropertySetInfo > SAL_CALL IFrameObject::getPropertySetInfo() throw( ::com::sun::star::uno::RuntimeException )
 {
-    static uno::Reference< beans::XPropertySetInfo > xInfo = new SfxItemPropertySetInfo( &maPropMap );
+    static uno::Reference< beans::XPropertySetInfo > xInfo = new SfxItemPropertySetInfo( maPropMap );
     return xInfo;
 }
 

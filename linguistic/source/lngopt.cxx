@@ -237,7 +237,7 @@ Reference< XPropertySetInfo > SAL_CALL LinguProps::getPropertySetInfo()
     MutexGuard  aGuard( GetLinguMutex() );
 
     static Reference< XPropertySetInfo > aRef =
-            new SfxItemPropertySetInfo( &aPropertyMap );
+            new SfxItemPropertySetInfo( aPropertyMap );
     return aRef;
 }
 

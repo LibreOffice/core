@@ -1147,7 +1147,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     }
 
     SfxItemPropertySimpleEntry const*const pEntry =
-        m_pImpl->m_rPropSet.getPropertyMap()->getByName(rPropertyName);
+        m_pImpl->m_rPropSet.getPropertyMap().getByName(rPropertyName);
     if (!pEntry)
     {
         beans::UnknownPropertyException aExcept;
@@ -1308,14 +1308,14 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
         // now set the properties
         SfxItemPropertySet const*const pParaPropSet =
             aSwMapProvider.GetPropertySet(PROPERTY_MAP_PARAGRAPH);
-        SfxItemPropertyMap const*const pParagraphMap =
+        const SfxItemPropertyMap &rParagraphMap =
             pParaPropSet->getPropertyMap();
 
         const beans::PropertyValue* pValues = rProperties.getConstArray();
 
         for (sal_Int32 nProp = 0; nProp < rProperties.getLength(); ++nProp)
         {
-            if (!pParagraphMap->getByName(pValues[nProp].Name))
+            if (!rParagraphMap.getByName(pValues[nProp].Name))
             {
                 bIllegalException = true;
                 break;
@@ -1415,7 +1415,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
 
     if (rCharacterAndParagraphProperties.getLength())
     {
-        SfxItemPropertyMap const*const pCursorMap =
+        const SfxItemPropertyMap &rCursorMap =
             aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_CURSOR)
                 ->getPropertyMap();
         beans::PropertyValue const*const pValues =
@@ -1425,7 +1425,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
         const sal_Int32 nLen(rCharacterAndParagraphProperties.getLength());
         for (sal_Int32 nProp = 0; nProp < nLen; ++nProp)
         {
-            if (!pCursorMap->getByName( pValues[nProp].Name ))
+            if (!rCursorMap.getByName( pValues[nProp].Name ))
             {
                 bIllegalException = true;
                 break;

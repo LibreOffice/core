@@ -644,7 +644,7 @@ void SwXAutoTextGroup::setPropertyValue(
          lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    const SfxItemPropertySimpleEntry*   pEntry = pPropSet->getPropertyMap()->getByName( rPropertyName );
+    const SfxItemPropertySimpleEntry*   pEntry = pPropSet->getPropertyMap().getByName( rPropertyName );
 
     if(!pEntry)
         throw beans::UnknownPropertyException();
@@ -674,7 +674,7 @@ uno::Any SwXAutoTextGroup::getPropertyValue(const OUString& rPropertyName)
     throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
     SolarMutexGuard aGuard;
-    const SfxItemPropertySimpleEntry*   pEntry = pPropSet->getPropertyMap()->getByName( rPropertyName);
+    const SfxItemPropertySimpleEntry*   pEntry = pPropSet->getPropertyMap().getByName( rPropertyName);
 
     if(!pEntry)
         throw beans::UnknownPropertyException();

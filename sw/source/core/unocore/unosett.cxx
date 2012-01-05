@@ -341,7 +341,7 @@ void SwXFootnoteProperties::setPropertyValue(const OUString& rPropertyName, cons
     SolarMutexGuard aGuard;
     if(pDoc)
     {
-        const SfxItemPropertySimpleEntry*  pEntry = m_pPropertySet->getPropertyMap()->getByName( rPropertyName );
+        const SfxItemPropertySimpleEntry*  pEntry = m_pPropertySet->getPropertyMap().getByName( rPropertyName );
         if(pEntry)
         {
             if ( pEntry->nFlags & PropertyAttribute::READONLY)
@@ -464,7 +464,7 @@ uno::Any SwXFootnoteProperties::getPropertyValue(const OUString& rPropertyName)
     uno::Any aRet;
     if(pDoc)
     {
-        const SfxItemPropertySimpleEntry*  pEntry = m_pPropertySet->getPropertyMap()->getByName( rPropertyName );
+        const SfxItemPropertySimpleEntry*  pEntry = m_pPropertySet->getPropertyMap().getByName( rPropertyName );
         if(pEntry)
         {
             const SwFtnInfo& rFtnInfo = pDoc->GetFtnInfo();
@@ -652,7 +652,7 @@ void SwXEndnoteProperties::setPropertyValue(const OUString& rPropertyName, const
     SolarMutexGuard aGuard;
     if(pDoc)
     {
-        const SfxItemPropertySimpleEntry*  pEntry = m_pPropertySet->getPropertyMap()->getByName( rPropertyName );
+        const SfxItemPropertySimpleEntry*  pEntry = m_pPropertySet->getPropertyMap().getByName( rPropertyName );
         if(pEntry)
         {
             if ( pEntry->nFlags & PropertyAttribute::READONLY)
@@ -730,7 +730,7 @@ uno::Any SwXEndnoteProperties::getPropertyValue(const OUString& rPropertyName)
     uno::Any aRet;
     if(pDoc)
     {
-        const SfxItemPropertySimpleEntry*  pEntry = m_pPropertySet->getPropertyMap()->getByName( rPropertyName );
+        const SfxItemPropertySimpleEntry*  pEntry = m_pPropertySet->getPropertyMap().getByName( rPropertyName );
         if(pEntry)
         {
             const SwEndNoteInfo& rEndInfo = pDoc->GetEndNoteInfo();
@@ -884,7 +884,7 @@ void SwXLineNumberingProperties::setPropertyValue(
     SolarMutexGuard aGuard;
     if(pDoc)
     {
-        const SfxItemPropertySimpleEntry*  pEntry = m_pPropertySet->getPropertyMap()->getByName( rPropertyName );
+        const SfxItemPropertySimpleEntry*  pEntry = m_pPropertySet->getPropertyMap().getByName( rPropertyName );
         if(pEntry)
         {
             if ( pEntry->nFlags & PropertyAttribute::READONLY)
@@ -1003,7 +1003,7 @@ Any SwXLineNumberingProperties::getPropertyValue(const OUString& rPropertyName)
     Any aRet;
     if(pDoc)
     {
-        const SfxItemPropertySimpleEntry*  pEntry = m_pPropertySet->getPropertyMap()->getByName( rPropertyName );
+        const SfxItemPropertySimpleEntry*  pEntry = m_pPropertySet->getPropertyMap().getByName( rPropertyName );
         if(pEntry)
         {
             const SwLineNumberInfo& rInfo = pDoc->GetLineNumberInfo();
@@ -2483,7 +2483,7 @@ void SwXTextColumns::setPropertyValue( const OUString& rPropertyName, const Any&
         throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException,
             WrappedTargetException, RuntimeException)
 {
-    const SfxItemPropertySimpleEntry*  pEntry = m_pPropSet->getPropertyMap()->getByName( rPropertyName );
+    const SfxItemPropertySimpleEntry*  pEntry = m_pPropSet->getPropertyMap().getByName( rPropertyName );
     if (!pEntry)
         throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
     if ( pEntry->nFlags & PropertyAttribute::READONLY)
@@ -2558,7 +2558,7 @@ void SwXTextColumns::setPropertyValue( const OUString& rPropertyName, const Any&
 Any SwXTextColumns::getPropertyValue( const OUString& rPropertyName )
         throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
-    const SfxItemPropertySimpleEntry*  pEntry = m_pPropSet->getPropertyMap()->getByName( rPropertyName );
+    const SfxItemPropertySimpleEntry*  pEntry = m_pPropSet->getPropertyMap().getByName( rPropertyName );
     if (!pEntry)
         throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
 

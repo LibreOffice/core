@@ -290,7 +290,7 @@ const SfxItemPropertySimpleEntry* SvxItemPropertySet::getPropertyMapEntry(const 
 uno::Reference< beans::XPropertySetInfo >  SvxItemPropertySet::getPropertySetInfo() const
 {
     if( !m_xInfo.is() )
-        m_xInfo = new SfxItemPropertySetInfo( &m_aPropertyMap );
+        m_xInfo = new SfxItemPropertySetInfo( m_aPropertyMap );
     return m_xInfo;
 }
 

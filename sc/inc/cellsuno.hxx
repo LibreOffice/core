@@ -223,7 +223,7 @@ protected:
     const ScMarkData*       GetMarkData();
 
     // GetItemPropertyMap for derived classes must contain all entries, including base class
-    virtual const SfxItemPropertyMap* GetItemPropertyMap();
+    virtual const SfxItemPropertyMap& GetItemPropertyMap();
     virtual ::com::sun::star::beans::PropertyState GetOnePropertyState(
                                 sal_uInt16 nItemWhich, const SfxItemPropertySimpleEntry* pEntry );
     virtual void            GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntry,
@@ -618,7 +618,7 @@ private:
 
 protected:
     const ScRange&          GetRange() const    { return aRange; }
-    virtual const SfxItemPropertyMap* GetItemPropertyMap();
+    virtual const SfxItemPropertyMap& GetItemPropertyMap();
     virtual void GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntry,
                                 ::com::sun::star::uno::Any& )
                                 throw(::com::sun::star::uno::RuntimeException);
@@ -840,7 +840,7 @@ private:
     com::sun::star::table::CellContentType GetResultType_Impl();
 
 protected:
-    virtual const SfxItemPropertyMap* GetItemPropertyMap();
+    virtual const SfxItemPropertyMap& GetItemPropertyMap();
     virtual void GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntry,
                                 ::com::sun::star::uno::Any& )
                                 throw(::com::sun::star::uno::RuntimeException);
@@ -851,7 +851,7 @@ protected:
 
 public:
     static const SvxItemPropertySet* GetEditPropertySet();
-    static const SfxItemPropertyMap* GetCellPropertyMap();
+    static const SfxItemPropertyMap& GetCellPropertyMap();
 
                             ScCellObj(ScDocShell* pDocSh, const ScAddress& rP);
     virtual                 ~ScCellObj();
@@ -1021,7 +1021,7 @@ private:
     void                    PrintAreaUndo_Impl( ScPrintRangeSaver* pOldRanges );
 
 protected:
-    virtual const SfxItemPropertyMap* GetItemPropertyMap();
+    virtual const SfxItemPropertyMap& GetItemPropertyMap();
     virtual void GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntry,
                                 ::com::sun::star::uno::Any& )
                                 throw(::com::sun::star::uno::RuntimeException);
@@ -1256,7 +1256,7 @@ private:
     const SfxItemPropertySet*       pColPropSet;
 
 protected:
-    virtual const SfxItemPropertyMap* GetItemPropertyMap();
+    virtual const SfxItemPropertyMap& GetItemPropertyMap();
     virtual void GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntry,
                                 ::com::sun::star::uno::Any& )
                                 throw(::com::sun::star::uno::RuntimeException);
@@ -1307,7 +1307,7 @@ private:
     const SfxItemPropertySet*       pRowPropSet;
 
 protected:
-    virtual const SfxItemPropertyMap* GetItemPropertyMap();
+    virtual const SfxItemPropertyMap& GetItemPropertyMap();
     virtual void GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntry,
                                 ::com::sun::star::uno::Any& )
                                 throw(::com::sun::star::uno::RuntimeException);

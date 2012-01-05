@@ -416,10 +416,10 @@ uno::Sequence< uno::Any > SAL_CALL SwXTextPortion::GetPropertyValues_Impl(
         SfxItemSet *pSet = 0;
         // get startting pount fo the look-up, either the provided one or else
         // from the beginning of the map
-        const SfxItemPropertyMap*   pMap = m_pPropSet->getPropertyMap();
+        const SfxItemPropertyMap& rMap = m_pPropSet->getPropertyMap();
         for(sal_Int32 nProp = 0; nProp < nLength; nProp++)
         {
-            const SfxItemPropertySimpleEntry* pEntry = pMap->getByName(pPropertyNames[nProp]);
+            const SfxItemPropertySimpleEntry* pEntry = rMap.getByName(pPropertyNames[nProp]);
             if(pEntry)
             {
                 GetPropertyValue( pValues[nProp], *pEntry, pUnoCrsr, pSet );
@@ -455,10 +455,10 @@ void SAL_CALL SwXTextPortion::SetPropertyValues_Impl(
     {
         const OUString* pPropertyNames = rPropertyNames.getConstArray();
         const uno::Any* pValues = rValues.getConstArray();
-        const SfxItemPropertyMap* pMap = m_pPropSet->getPropertyMap();
+        const SfxItemPropertyMap& rMap = m_pPropSet->getPropertyMap();
         for(sal_Int32 nProp = 0; nProp < rPropertyNames.getLength(); nProp++)
         {
-            const SfxItemPropertySimpleEntry* pEntry = pMap->getByName(pPropertyNames[nProp]);
+            const SfxItemPropertySimpleEntry* pEntry = rMap.getByName(pPropertyNames[nProp]);
             if (!pEntry)
                 throw beans::UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + pPropertyNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
             if ( pEntry->nFlags & beans::PropertyAttribute::READONLY)
@@ -541,7 +541,7 @@ uno::Sequence< beans::SetPropertyTolerantFailed > SAL_CALL SwXTextPortion::setPr
     uno::Sequence< beans::SetPropertyTolerantFailed > aFailed( nProps );
     beans::SetPropertyTolerantFailed *pFailed = aFailed.getArray();
 
-    const SfxItemPropertyMap* pPropMap = m_pPropSet->getPropertyMap();
+    const SfxItemPropertyMap& rPropMap = m_pPropSet->getPropertyMap();
 
     OUString sTmp;
     for (sal_Int32 i = 0;  i < nProps;  ++i)
@@ -550,7 +550,7 @@ uno::Sequence< beans::SetPropertyTolerantFailed > SAL_CALL SwXTextPortion::setPr
         {
             pFailed[ nFailed ].Name    = pProp[i];
 
-            const SfxItemPropertySimpleEntry* pEntry = pPropMap->getByName( pProp[i] );
+            const SfxItemPropertySimpleEntry* pEntry = rPropMap.getByName( pProp[i] );
             if (!pEntry)
                 pFailed[ nFailed++ ].Result  = beans::TolerantPropertySetResultType::UNKNOWN_PROPERTY;
             else
@@ -633,7 +633,7 @@ uno::Sequence< beans::GetDirectPropertyTolerantResult > SAL_CALL SwXTextPortion:
 
     SfxItemSet *pSet = 0;
 
-    const SfxItemPropertyMap* pPropMap = m_pPropSet->getPropertyMap();
+    const SfxItemPropertyMap& rPropMap = m_pPropSet->getPropertyMap();
 
     uno::Sequence< beans::PropertyState > aPropertyStates =
         SwUnoCursorHelper::GetPropertyStates(
@@ -658,7 +658,7 @@ uno::Sequence< beans::GetDirectPropertyTolerantResult > SAL_CALL SwXTextPortion:
             }
             else
             {
-                  const SfxItemPropertySimpleEntry* pEntry = pPropMap->getByName( pProp[i] );
+                  const SfxItemPropertySimpleEntry* pEntry = rPropMap.getByName( pProp[i] );
                 aResult.State  = pPropertyStates[i];
 
                 aResult.Result = beans::TolerantPropertySetResultType::UNKNOWN_FAILURE;

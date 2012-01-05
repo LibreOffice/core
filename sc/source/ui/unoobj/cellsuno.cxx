@@ -1790,7 +1790,7 @@ void SAL_CALL ScCellRangesBase::clearContents( sal_Int32 nContentFlags ) throw(u
 
 // XPropertyState
 
-const SfxItemPropertyMap* ScCellRangesBase::GetItemPropertyMap()
+const SfxItemPropertyMap& ScCellRangesBase::GetItemPropertyMap()
 {
     return pPropSet->getPropertyMap();
 }
@@ -1880,9 +1880,9 @@ beans::PropertyState SAL_CALL ScCellRangesBase::getPropertyState( const rtl::OUS
     if ( aRanges.empty() )
         throw uno::RuntimeException();
 
-    const SfxItemPropertyMap* pMap = GetItemPropertyMap();     // from derived class
+    const SfxItemPropertyMap& rMap = GetItemPropertyMap();     // from derived class
     sal_uInt16 nItemWhich = 0;
-    const SfxItemPropertySimpleEntry* pEntry  = pMap->getByName( aPropertyName );
+    const SfxItemPropertySimpleEntry* pEntry  = rMap.getByName( aPropertyName );
     lcl_GetPropertyWhich( pEntry, nItemWhich );
     return GetOnePropertyState( nItemWhich, pEntry );
 }
@@ -1893,14 +1893,14 @@ uno::Sequence<beans::PropertyState> SAL_CALL ScCellRangesBase::getPropertyStates
 {
     SolarMutexGuard aGuard;
 
-    const SfxItemPropertyMap* pPropertyMap = GetItemPropertyMap();     // from derived class
+    const SfxItemPropertyMap& rPropertyMap = GetItemPropertyMap();     // from derived class
 
     uno::Sequence<beans::PropertyState> aRet(aPropertyNames.getLength());
     beans::PropertyState* pStates = aRet.getArray();
     for(sal_Int32 i = 0; i < aPropertyNames.getLength(); i++)
     {
         sal_uInt16 nItemWhich = 0;
-        const SfxItemPropertySimpleEntry* pEntry  = pPropertyMap->getByName( aPropertyNames[i] );
+        const SfxItemPropertySimpleEntry* pEntry  = rPropertyMap.getByName( aPropertyNames[i] );
         lcl_GetPropertyWhich( pEntry, nItemWhich );
         pStates[i] = GetOnePropertyState(nItemWhich, pEntry);
     }
@@ -1913,9 +1913,9 @@ void SAL_CALL ScCellRangesBase::setPropertyToDefault( const rtl::OUString& aProp
     SolarMutexGuard aGuard;
     if ( pDocShell )
     {
-        const SfxItemPropertyMap* pPropertyMap = GetItemPropertyMap();     // from derived class
+        const SfxItemPropertyMap& rPropertyMap = GetItemPropertyMap();     // from derived class
         sal_uInt16 nItemWhich = 0;
-        const SfxItemPropertySimpleEntry* pEntry  = pPropertyMap->getByName( aPropertyName );
+        const SfxItemPropertySimpleEntry* pEntry  = rPropertyMap.getByName( aPropertyName );
         lcl_GetPropertyWhich( pEntry, nItemWhich );
         if ( nItemWhich )               // item wid (from map or special case)
         {
@@ -1967,8 +1967,8 @@ uno::Any SAL_CALL ScCellRangesBase::getPropertyDefault( const rtl::OUString& aPr
     if ( pDocShell )
     {
         ScDocument* pDoc = pDocShell->GetDocument();
-        const SfxItemPropertyMap* pPropertyMap = GetItemPropertyMap();     // from derived class
-        const SfxItemPropertySimpleEntry* pEntry = pPropertyMap->getByName( aPropertyName );
+        const SfxItemPropertyMap& rPropertyMap = GetItemPropertyMap();     // from derived class
+        const SfxItemPropertySimpleEntry* pEntry = rPropertyMap.getByName( aPropertyName );
         if ( pEntry )
         {
             if ( IsScItemWid( pEntry->nWID ) )
@@ -2189,8 +2189,8 @@ void SAL_CALL ScCellRangesBase::setPropertyValue(
     if ( !pDocShell || aRanges.empty() )
         throw uno::RuntimeException();
 
-    const SfxItemPropertyMap* pPropertyMap = GetItemPropertyMap();     // from derived class
-    const SfxItemPropertySimpleEntry* pEntry = pPropertyMap->getByName( aPropertyName );
+    const SfxItemPropertyMap& rPropertyMap = GetItemPropertyMap();     // from derived class
+    const SfxItemPropertySimpleEntry* pEntry = rPropertyMap.getByName( aPropertyName );
     if ( !pEntry )
         throw beans::UnknownPropertyException();
 
@@ -2376,8 +2376,8 @@ uno::Any SAL_CALL ScCellRangesBase::getPropertyValue( const rtl::OUString& aProp
     if ( !pDocShell || aRanges.empty() )
         throw uno::RuntimeException();
 
-    const SfxItemPropertyMap* pPropertyMap = GetItemPropertyMap();     // from derived class
-    const SfxItemPropertySimpleEntry* pEntry = pPropertyMap->getByName( aPropertyName );
+    const SfxItemPropertyMap& rPropertyMap = GetItemPropertyMap();     // from derived class
+    const SfxItemPropertySimpleEntry* pEntry = rPropertyMap.getByName( aPropertyName );
     if ( !pEntry )
         throw beans::UnknownPropertyException();
 
@@ -2582,7 +2582,7 @@ void SAL_CALL ScCellRangesBase::setPropertyValues( const uno::Sequence< rtl::OUS
 
     if ( pDocShell && nCount )
     {
-        const SfxItemPropertyMap* pPropertyMap = GetItemPropertyMap();      // from derived class
+        const SfxItemPropertyMap& rPropertyMap = GetItemPropertyMap();      // from derived class
         const rtl::OUString* pNames = aPropertyNames.getConstArray();
         const uno::Any* pValues = aValues.getConstArray();
 
@@ -2594,7 +2594,7 @@ void SAL_CALL ScCellRangesBase::setPropertyValues( const uno::Sequence< rtl::OUS
             // first loop: find all properties in map, but handle only CellStyle
             // (CellStyle must be set before any other cell properties)
 
-            const SfxItemPropertySimpleEntry* pEntry = pPropertyMap->getByName( pNames[i] );
+            const SfxItemPropertySimpleEntry* pEntry = rPropertyMap.getByName( pNames[i] );
             pEntryArray[i] = pEntry;
             if (pEntry)
             {
@@ -2669,13 +2669,13 @@ uno::Sequence<uno::Any> SAL_CALL ScCellRangesBase::getPropertyValues(
 {
     SolarMutexGuard aGuard;
 
-    const SfxItemPropertyMap* pPropertyMap = GetItemPropertyMap();     // from derived class
+    const SfxItemPropertyMap& rPropertyMap = GetItemPropertyMap();     // from derived class
 
     uno::Sequence<uno::Any> aRet(aPropertyNames.getLength());
     uno::Any* pProperties = aRet.getArray();
     for(sal_Int32 i = 0; i < aPropertyNames.getLength(); i++)
     {
-        const SfxItemPropertySimpleEntry* pEntry = pPropertyMap->getByName( aPropertyNames[i] );
+        const SfxItemPropertySimpleEntry* pEntry = rPropertyMap.getByName( aPropertyNames[i] );
         GetOnePropertyValue( pEntry, pProperties[i] );
     }
     return aRet;
@@ -2732,7 +2732,7 @@ uno::Sequence< beans::SetPropertyTolerantFailed > SAL_CALL ScCellRangesBase::set
         uno::Sequence < beans::SetPropertyTolerantFailed > aReturns(nCount);
         beans::SetPropertyTolerantFailed* pReturns = aReturns.getArray();
 
-        const SfxItemPropertyMap* pPropertyMap = GetItemPropertyMap();     // from derived class
+        const SfxItemPropertyMap& rPropertyMap = GetItemPropertyMap();     // from derived class
         const rtl::OUString* pNames = aPropertyNames.getConstArray();
         const uno::Any* pValues = aValues.getConstArray();
 
@@ -2744,7 +2744,7 @@ uno::Sequence< beans::SetPropertyTolerantFailed > SAL_CALL ScCellRangesBase::set
             // first loop: find all properties in map, but handle only CellStyle
             // (CellStyle must be set before any other cell properties)
 
-            const SfxItemPropertySimpleEntry* pEntry = pPropertyMap->getByName( pNames[i] );
+            const SfxItemPropertySimpleEntry* pEntry = rPropertyMap.getByName( pNames[i] );
             pMapArray[i] = pEntry;
             if (pEntry)
             {
@@ -2852,11 +2852,11 @@ uno::Sequence< beans::GetPropertyTolerantResult > SAL_CALL ScCellRangesBase::get
     uno::Sequence < beans::GetPropertyTolerantResult > aReturns(nCount);
     beans::GetPropertyTolerantResult* pReturns = aReturns.getArray();
 
-    const SfxItemPropertyMap* pPropertyMap = GetItemPropertyMap();     // from derived class
+    const SfxItemPropertyMap& rPropertyMap = GetItemPropertyMap();     // from derived class
 
     for(sal_Int32 i = 0; i < nCount; i++)
     {
-        const SfxItemPropertySimpleEntry* pEntry = pPropertyMap->getByName( aPropertyNames[i] );
+        const SfxItemPropertySimpleEntry* pEntry = rPropertyMap.getByName( aPropertyNames[i] );
         if (!pEntry)
         {
             pReturns[i].Result = beans::TolerantPropertySetResultType::UNKNOWN_PROPERTY;
@@ -2882,12 +2882,12 @@ uno::Sequence< beans::GetDirectPropertyTolerantResult > SAL_CALL ScCellRangesBas
     uno::Sequence < beans::GetDirectPropertyTolerantResult > aReturns(nCount);
     beans::GetDirectPropertyTolerantResult* pReturns = aReturns.getArray();
 
-    const SfxItemPropertyMap* pPropertyMap = GetItemPropertyMap();     // from derived class
+    const SfxItemPropertyMap& rPropertyMap = GetItemPropertyMap();     // from derived class
 
     sal_Int32 j = 0;
     for(sal_Int32 i = 0; i < nCount; i++)
     {
-        const SfxItemPropertySimpleEntry* pEntry = pPropertyMap->getByName( aPropertyNames[i] );
+        const SfxItemPropertySimpleEntry* pEntry = rPropertyMap.getByName( aPropertyNames[i] );
         if (!pEntry)
         {
             pReturns[i].Result = beans::TolerantPropertySetResultType::UNKNOWN_PROPERTY;
@@ -6010,7 +6010,7 @@ void ScCellRangeObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEnt
     }
 }
 
-const SfxItemPropertyMap* ScCellRangeObj::GetItemPropertyMap()
+const SfxItemPropertyMap& ScCellRangeObj::GetItemPropertyMap()
 {
     return pRangePropSet->getPropertyMap();
 }
@@ -6052,7 +6052,8 @@ const SvxItemPropertySet* ScCellObj::GetEditPropertySet()
 {
     return lcl_GetEditPropertySet();
 }
-const SfxItemPropertyMap* ScCellObj::GetCellPropertyMap()
+
+const SfxItemPropertyMap& ScCellObj::GetCellPropertyMap()
 {
     return lcl_GetCellPropertySet()->getPropertyMap();
 }
@@ -6762,7 +6763,7 @@ void ScCellObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntry,
     }
 }
 
-const SfxItemPropertyMap* ScCellObj::GetItemPropertyMap()
+const SfxItemPropertyMap& ScCellObj::GetItemPropertyMap()
 {
     return pCellPropSet->getPropertyMap();
 }
@@ -8682,7 +8683,7 @@ void ScTableSheetObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEn
     }
 }
 
-const SfxItemPropertyMap* ScTableSheetObj::GetItemPropertyMap()
+const SfxItemPropertyMap& ScTableSheetObj::GetItemPropertyMap()
 {
     return pSheetPropSet->getPropertyMap();
 }
@@ -8960,7 +8961,7 @@ void ScTableColumnObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pE
     }
 }
 
-const SfxItemPropertyMap* ScTableColumnObj::GetItemPropertyMap()
+const SfxItemPropertyMap& ScTableColumnObj::GetItemPropertyMap()
 {
     return pColPropSet->getPropertyMap();
 }
@@ -9117,7 +9118,7 @@ void ScTableRowObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntr
     }
 }
 
-const SfxItemPropertyMap* ScTableRowObj::GetItemPropertyMap()
+const SfxItemPropertyMap& ScTableRowObj::GetItemPropertyMap()
 {
     return pRowPropSet->getPropertyMap();
 }
