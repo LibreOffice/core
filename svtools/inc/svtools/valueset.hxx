@@ -54,24 +54,23 @@ class ValueItemAcc;
 
 /*************************************************************************
 
-Beschreibung
+Description
 ============
 
 class ValueSet
 
-Diese Klasse erlaubt die Auswahl eines Items. Dabei werden die Items
-nebeneinander dargestellt. Die Auswahl der Items kann zum Beispiel bei
-Farben oder Mustern uebersichtlicher sein, als in ListBox-Form. Es kann
-angegeben werden, wieviele Spalten das Control anzeigen soll und ob die
-Items umrandet werden sollen oder nicht. Optional kann auch ein
-NoSelection-Feld oder ein Namenfeld angezeigt werden. An Items werden
-standardmaessig Image, und Color unterstuetzt. Falls InsertItem()
-nur mit einer ID aufgerufen wird, kann man die Items auch selber malen.
-Dazu muss dann jedoch der UserDraw-Handler ueberlagert werden. Bei
-UserDraw-Items, wie auch bei allen anderen Items kann der Beschreibungstext
-auch hinterher gesetzt bzw. umgesetzt werden.
+This class allows the selection of an item. In the process items are
+drawn side by side. The selection of items can be more clear than in a
+ListBox shape for example in case of colors or samples.
+The amount of columns drawn by the control and wether the items
+should be encircled can be specified. Optional a NoSelection or name
+field could be shown. By default image and color items are supported.
+Items could be drawn by oneself if InsertItem() is only called with
+an ID. To achieve this the UserDraw handler needs to be overloaded. The
+description text could be specified afterwards in case of UserDraw
+and any other items.
 
-Querverweise
+Cross references
 
 class ListBox
 
@@ -79,129 +78,118 @@ class ListBox
 
 WinBits
 
-WB_RADIOSEL         Wenn dieses Flag gesetzt wird, wird im ValueSet die
-                    Selektion so gezeichnet, wie bei einem ImageRadioButton.
-                    Dies ist jedoch nur sinnvoll, wenn die Images min. 8 Pixel
-                    in horizontaler und vertikaler Richtung kleiner sind
-                    als der Item-Bereich, WB_DOUBLEBORDER gesetzt ist und
-                    als Color COL_WINDOWWORKSPACE gesetzt ist.
+WB_RADIOSEL         If set the selection will be drawn like an
+                    ImageRadioButton. This does only make sense if the image
+                    is at least 8 pixel smaller on each side than the item
+                    and also WB_DOUBLEBORDER is set and as color
+                    COL_WINDOWWORKSPACE is specified.
 WB_FLATVALUESET     Flat Look (if you set WB_ITEMBORDER or WB_DOUBLEBORDER,
                     then you get extra border space, but the Borders
                     aren't painted),
-WB_ITEMBORDER       Die Items werden umrandet
-WB_DOUBLEBORDER     Die Items werden doppelt umrandet. Zusaetzlich muss
-                    WB_ITEMBORDER gesetzt werden, ansonsten hat dieses
-                    WinBit keine Auswirkung. Gebraucht wird dies, wenn man
-                    Items mit weissem Hintergrund hat, da sonst der 3D Effekt
-                    nicht mehr sichtbar ist.
-WB_NAMEFIELD        Es gibt ein Namensfeld, wo der Name eines Items
-                    mit angezeigt wird
-WB_NONEFIELD        Es gibt ein NoSelection-Feld. Dieses kann selektiert
-                    werden, wenn bei SelectItem 0 uebergeben wird. Bei
-                    GetSelectItemId() wird entsprechend 0 zurueckgegeben
-                    wenn dieses Feld selektiert ist, bzw. keines selektiert
-                    wurde. Dieses Feld zeigt den Text an, der mit SetText()
-                    gesetzt wurde, bzw. keinen, wenn kein Text gesetzt
-                    wurde. Mit SetNoSelection() kann die Selektion ganz
-                    ausgeschaltet werden.
-WB_VSCROLL          Es wird immer ein ScrollBar angezeigt. Wenn dieses Flag
-                    gesetzt wird, muss auch immer mit SetLineCount() die
-                    sichtbare Anzahl der Zeilen eingestellt werden.
-WB_BORDER           Um das Fenster wird ein Border gezeichnet.
-WB_NOPOINTERFOCUS   Der Focus wird sich nicht geholt, wenn mit der Maus in
-                    das Control geklickt wird.
-WB_TABSTOP          Mit der TabTaste kann in das ValueSet gesprungen werden.
-WB_NOTABSTOP        Mit der TabTaste kann nicht in das ValueSet gesprungen
-                    werden.
+WB_ITEMBORDER       Items will be bordered
+WB_DOUBLEBORDER     Items will be bordered twice. Additionally WB_ITEMBORDER
+                    has to be set, as otherwise this WinBit wouldn't have any
+                    effect. It is needed if there are items with a white
+                    background, since otherwise the 3D effect wouldn't be
+                    recognizable.
+WB_NAMEFIELD        There is a namefield, where the name of an item will be
+                    shown.
+WB_NONEFIELD        There is a NoSelection field which can be selected if
+                    0 is passed along with SelectItem. Respectively
+                    GetSelectItemId() returns 0 if this field or nothing
+                    is selected. This field shows the text which is specified
+                    by SetText() respectively no one, if no text was set. With
+                    SetNoSelection() the selection can be disabled.
+WB_VSCROLL          A scroolbar will be always shown. The visible number of
+                    lines have to be specified with SetLineCount() if this
+                    flag is set.
+WB_BORDER           A border will be drawn around the window.
+WB_NOPOINTERFOCUS   The focus won't be gathered, if the control was pressed by
+                    the mouse.
+WB_TABSTOP          It is possible to jump into the ValueSet with the tab key.
+WB_NOTABSTOP        It is not possible to jump into the ValueSet with the
+                    tab key.
 WB_NO_DIRECTSELECT  Cursor travelling doesn't call select immediately. To
                     execute the selection <RETURN> has to be pressed.
 --------------------------------------------------------------------------
 
-Die Anzahl der Spalten muss entweder mit SetColCount() oder mit SetItemWidth()
-eingestellt werden. Wenn mit SetColCount() die Anzahl der Spalten eingestellt
-wird, wird die Breite der Items aus der sichtbaren Breite berechnet. Wenn
-die Items eine feste Breite haben sollen, sollte die Breite der Items
-mit SetItemWidth() eingestellt werden. Die Anzahl der Spalten wird
-dann aus der sichtbaren Breite berechnet.
+The number of columns must be either set with SetColCount() or
+SetItemWidth(). If the number of colums is specified by SetColCount()
+the width of the items will be calculated by the visible range.
+If the items should have a static width, it has to be specified
+with SetItemWidth(). In this case the number of columns will be calculated
+by the visible range.
 
-Die Anzahl der Zeilen ergibt sich durch Anzahl der Items / Anzahl der
-Spalten. Die Anzahl der sichtbaren Zeilen muss entweder mit SetLineCount()
-oder mit SetItemWidth() eingestellt werden. Wenn mit SetLineCount() die
-Anzahl der sichtbaren Zeilen eingestellt wird, wird die Hoehe der Items
-aus der sichtbaren Hoehe berechnet. Wenn die Items eine feste Hoehe haben
-sollen, sollte die Hoehe der Items mit SetItemHeight() eingestellt werden.
-Die Anzahl der sichtbaren Zeilen wird dann aus der sichtbaren Hoehe berechnet.
-Wenn weder mit SetLineCount() noch mit SetItemHeight() die Anzahl der
-sichtbaren Zeilen eingestellt wird, werden alle Zeilen dargestellt. Die
-Hoehe der Items wird dann aus der sichtbaren Hoehe berechnet. Wenn mit
-SetLineCount() oder mit SetItemHeight() die Anzahl der sichtbaren
-Zeilen gesetzt wird, scrollt das ValueSet automatisch, wenn mehr Zeilen
-vorhanden sind, als sichtbar sind. Wenn scrollen auch ueber einen
-ScrollBar moeglich sein soll muss WB_VSCROLL gesetzt werden.
+The number of rows is given by the number of items / number of columns. The
+number of visible rows must either specified by SetLineCount() or
+SetItemWidth(). If the number of visible rows is specified by SetLineCount(),
+the height of the items will be calculated from the visible height. If the
+items should have a fixed height it has to be specified with SetItemHeight().
+In this case the number of visible rows is then calculated from the visible
+height. If the number of visible rows is neither specified by SetLineCount()
+nor by SetItemHeight() all rows will be shown. The height of the items will
+be calculated by the visible height. If the number of visible rows is
+specified by SetLineCount() or SetItemHeight() ValueSet does scroll
+automatically when more lines are available, as are visible. If scrolling
+should be also possible with a ScrollBar  WB_VSCROLL needs to be set.
 
-Mit SetExtraSpacing() kann der Abstand zwischen den Items vergroessert
-werden. Der Abstand wird in Pixeln angegeben der zusaetzlich zwischen 2 Items
-(sowohl in x wie auch in y) dargestellt werden soll.
+The distance between the items can be increased by SetExtraSpacing(). The
+distance, which will be shown between two items (both in x and in y), is
+measured in pixels.
 
-Mit CalcWindowSizePixel() kann die genaue Fenstergroesse fuer eine bestimmte
-Itemgroesse berechnet werden. Dazu muessen vorher aber alle relevanten
-Daten (Spaltenanzahl/...) gesetzt werden und falls keine Zeilenanzahl
-eingestellt wird, muessen auch alle Items eingefuegt werden. Falls das
-Window mit WB_BORDER/Border=sal_True erzeugt wurde, muss die Groesse mit
-SetOutputSizePixel() gesetzt werden, im anderen Fall koennen auch die
-anderen Groessen-Methoden benutzt werden. Mit CalcItemSize() laesst sich
-die innere und aeussere Groesse eines Items berechnen (dabei wird der
-optional mit SetExtraSpacing() eingestellte Freiraum nicht mit eingerechnet).
+The exact window size for a specific item size can be calculated by
+CalcWindowSizePixel(). To do this all relevant data (number of columns/...)
+have to be specified and if no number of rows was set, all items need to
+be inserted. If the window was created with WB_BORDER/Border=sal_True the
+size has to be specified with SetOutputSizePixel(). In other cases different
+size-methods can be used. With CalcItemSize() the inner and outer size of
+an item could be calculated (for this the free space defined by
+SetExtraSpacing() will not be included).
 
-Mit SetColor() kann die Hintergrundfarbe eingestellt werden, mit der Image
-oder UserDraw-Items hinterlegt werden. Wenn keine Farbe eingestellt wird,
-wird der Hintergrund in der gleichen Farbe hinterlegt wie andere
-Fenster (WindowColor).
+The background color could be specified by SetColor(), with which the image
+or UserDraw items will be underlayed. If no color is specified the the color
+of other windows (WindowColor) will be used for the background.
 
 --------------------------------------------------------------------------
 
-Da die Ausgabeflaeche vorberechnet wird, sollten erst alle Items eingefuegt
-werden und dann erst Show() aufgerufen werden. Wenn dies nicht gemacht wird,
-erscheint das erste Paint etwas langsamer. Deshalb sollte, wenn dieses
-Control aus der Resource geladen wird und das Control erst im Programm
-mit Items versorgt wird, mit Hide = sal_True geladen werden und im Programm
-dann mit Show() angezeigt werden.
+At first all items should be inserted and only then Show() should be called
+since the output area will be precomputed. If this is not done the first
+Paint will appear a little bit slower. Therefore the Control, if it is loaded
+from the resource and only supplied with items during runtime, should be
+loaded with Hide = sal_True and then displayed with Show().
 
-Bei einem sichbaren Control kann die Erzeugung der neuen Ausgabeflaeche
-vor dem Paint aktiviert werden, indem Format() aufgerufen wird.
-
---------------------------------------------------------------------------
-
-Wenn man ein Drag and Drop aus dem ValueSet heraus starten will, muss
-der Command-Handler ueberlagert werden. Aus diesem muss dann StartDrag
-aufgerufen werden. Wenn diese Methode sal_True zurueckliefert, kann mit
-ExecuteDrag() der Drag-Vorgang gestartet werden, ansonsten sollte keine
-Verarbeitung stattfinden. Diese Methode sorgt dafuer, das das ValueSet
-seine Verarbeitung abbricht und gegebenenfalls den Eintrag selektiert. Es
-muss daher damit gerechnet werden, das innerhalb dieser Funktion der
-Select-Handler gerufen werden kann.
-
-Fuer das Droppen muss man QueryDrop() und Drop() ueberlagern und sollte
-in diesen Methoden ShowDropPos() und HideDropPos() aufrufen. Im QueryDrop-
-Handler ruft man ShowDropPos() auf, um die Einfuegeposition anzuzeigen.
-ShowDropPos() scollt auch gegebenenfalls das ValueSet, wenn die ueber-
-gebene Position sich am Fensterrand befindet. Ausserdem liefert
-ShowDropPos() die Position zurueck, an der das Item dann eingefuegt werden
-soll, bzw. welche Einfuegeposition angezeigt wurde. Falls keine Einfuege-
-Position ermittelt werden kann, wird VALUESET_ITEM_NOTFOUND zurueckgegeben.
-Wenn beim Draggen das Fenster verlassen wird oder der Dragvorgang beendet
-wird, sollte in jedem Fall HideDropPos() gerufen werden.
+In case of a visible Control the creation of the new output area could be
+activated before Paint by calling Format().
 
 --------------------------------------------------------------------------
 
-Diese Klasse befindet sich zur Zeit noch in den SV-Tools. Deshalb muss das
-ValueSet zur Zeit als Control aus der Resource geladen werden und die
-gewuenschten WinBits (vor Show) mit SetStyle() gesetzt werden.
+If Drag and Drop will be called from the ValueSet the Command-Handler has to
+be overloaded. From this StartDrag needs to be called. If this method returns
+sal_True the drag-process could be initiated by  ExecuteDrag(), otherwise no
+processing will take place. This method makes sure that ValueSet stops its
+processing and as appropriate selects the entry. Therefore the calling of
+Select-Handler within this function must be expected.
+
+For dropping QueryDrop() and Drop() need to be overloaded and ShowDropPos()
+and HideDropPos() should be called within these methods.
+To show the insertion point ShowDropPos() has to be called within the
+QueryDrop-Handler. ShowDropPos() also scrolls the ValueSet if the passed
+position is located at the window border. Furthermore ShowDropPos() returns
+the position, at which the item should be inserted respectively which
+insertion point was shown. If no insertion point was determined
+VALUESET_ITEM_NOTFOUND will be returned. If the window was left during dragging
+or the drag process is terminated HideDropPos() should be called in any case.
+
+--------------------------------------------------------------------------
+
+This class is currently still in the SV-Tools. That's why the ValueSet needs
+to be loaded as a Control out of the resource and the desired WinBits have
+to be set (before Show) with SetStyle().
 
 *************************************************************************/
 
 // ------------------
-// - ValueSet-Typen -
+// - ValueSet types -
 // ------------------
 
 #define WB_RADIOSEL             ((WinBits)0x00008000)
