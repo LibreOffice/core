@@ -3115,13 +3115,15 @@ if test "$test_cups" = "yes"; then
 fi
 
 
-# check for fontconfig support
-AC_MSG_CHECKING([whether we need fontconfig])
+# fontconfig checks
 if test "z$test_fontconfig" = "zyes"; then
-    AC_MSG_RESULT([yes])
     PKG_CHECK_MODULES([FONTCONFIG], [fontconfig >= 2.2.0])
 else
-    AC_MSG_RESULT([no])
+    case "$BUILD_TYPE" in
+    *FONTCONFIG*)
+        FONTCONFIG_LIBS="-lfontconfig"
+        ;;
+    esac
 fi
 AC_SUBST(FONTCONFIG_CFLAGS)
 AC_SUBST(FONTCONFIG_LIBS)
@@ -5451,6 +5453,12 @@ dnl ===================================================================
 if test  "$test_freetype" = "yes"; then
     AC_MSG_CHECKING([whether freetype is available])
     PKG_CHECK_MODULES( FREETYPE, freetype2 >= 2.0 )
+else
+    case "$BUILD_TYPE" in
+    *FREETYPE*)
+        FREETYPE_LIBS="-lfreetype"
+        ;;
+    esac
 fi
 AC_SUBST(FREETYPE_CFLAGS)
 AC_SUBST(FREETYPE_LIBS)
