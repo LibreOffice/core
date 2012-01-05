@@ -20,6 +20,15 @@
  	      | -mingw32* | -linux-gnu* | -linux-newlib* | -linux-uclibc* \
 --- misc/build/fontconfig-2.8.0/configure
 +++ misc/build/fontconfig-2.8.0/configure
+@@ -8718,7 +8718,7 @@
+ 	*Sun\ F*)			# Sun Fortran 8.3
+ 	  tmp_sharedflag='-G' ;;
+ 	esac
+-	archive_cmds='$CC '"$tmp_sharedflag""$tmp_addflag"' $libobjs $deplibs $compiler_flags ${wl}-soname $wl$soname -o $lib'
++	archive_cmds='$CC '"$tmp_sharedflag""$tmp_addflag"' $libobjs $deplibs $compiler_flags -o $lib'
+ 
+         if test "x$supports_anon_versioning" = xyes; then
+           archive_expsym_cmds='echo "{ global:" > $output_objdir/$libname.ver~
 @@ -14073,7 +14073,7 @@
  		no)
  			;;
