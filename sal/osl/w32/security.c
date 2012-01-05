@@ -368,12 +368,14 @@ sal_Bool SAL_CALL osl_getUserIdent(oslSecurity Security, rtl_uString **strIdent)
                 DWORD dwSidRev=SID_REVISION;
                 DWORD dwCounter;
                 DWORD dwSidSize;
+                PUCHAR pSSACount;
 
                 /* obtain SidIdentifierAuthority */
                 psia=GetSidIdentifierAuthority(pSid);
 
                 /* obtain sidsubauthority count */
-                dwSubAuthorities=min(*GetSidSubAuthorityCount(pSid), 5);
+                pSSACount = GetSidSubAuthorityCount(pSid);
+                dwSubAuthorities = (*pSSACount < 5) ? *pSSACount : 5;
 
                 /* buffer length: S-SID_REVISION- + identifierauthority- + subauthorities- + NULL */
                 Ident=malloc(88*sizeof(sal_Char));
@@ -424,7 +426,10 @@ sal_Bool SAL_CALL osl_getUserIdent(oslSecurity Security, rtl_uString **strIdent)
             sal_Unicode     *Ident;
 
             WNetGetUserA(NULL, NULL, &needed);
-            needed = max( 16 , needed );
+            if (needed < 16)
+            {
+                needed = 16;
+            }
             Ident=malloc(needed*sizeof(sal_Unicode));
 
             if (WNetGetUserW(NULL, Ident, &needed) != NO_ERROR)
