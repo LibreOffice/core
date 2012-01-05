@@ -128,7 +128,7 @@ static void FilterWhiteSpace( String& rStr )
     if (!rStr.Len())
         return;
 
-    rtl::OUStringBuffer aRet(rStr);
+    rtl::OUStringBuffer aRet;
 
     for (xub_StrLen i = 0; i < rStr.Len(); ++i)
     {
