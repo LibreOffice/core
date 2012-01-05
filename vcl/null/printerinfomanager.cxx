@@ -39,11 +39,30 @@ using ::rtl::OString;
 using ::rtl::OStringToOUString;
 using ::rtl::OUStringHash;
 
+PrinterInfoManager& PrinterInfoManager::get()
+{
+    SalData* pSalData = GetSalData();
+    if( ! pSalData->m_pPIManager )
+        pSalData->m_pPIManager = new PrinterInfoManager();
+    return *pSalData->m_pPIManager;
+}
+
 void PrinterInfoManager::release()
 {
     SalData* pSalData = GetSalData();
     delete pSalData->m_pPIManager;
     pSalData->m_pPIManager = NULL;
+}
+
+PrinterInfoManager::PrinterInfoManager( Type eType ) :
+    m_pQueueInfo( NULL ),
+    m_eType( eType ),
+    m_bUseIncludeFeature( false ),
+    m_bUseJobPatch( true ),
+    m_aSystemDefaultPaper( RTL_CONSTASCII_USTRINGPARAM( "A4" ) ),
+    m_bDisableCUPS( false )
+{
+    initSystemDefaultPaper();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

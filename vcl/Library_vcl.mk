@@ -437,8 +437,16 @@ $(eval $(call gb_Library_add_defs,vcl,\
     -D_XSALSET_LIBNAME=\"$(call gb_Library_get_runtime_filename,spa)\" \
 ))
 $(eval $(call gb_Library_add_exception_objects,vcl,\
+    vcl/generic/fontmanager/fontcache \
+    vcl/generic/fontmanager/fontconfig \
+    vcl/generic/fontmanager/fontmanager \
     vcl/unx/generic/plugadapt/salplug \
+    vcl/unx/generic/printer/ppdparser \
     vcl/null/printerinfomanager \
+))
+$(eval $(call gb_Library_use_externals,vcl,\
+	fontconfig \
+	freetype \
 ))
 endif
 
