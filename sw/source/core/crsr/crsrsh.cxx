@@ -1315,22 +1315,22 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, sal_Bool bIdleEnd )
         return;             // wenn nicht, dann kein Update !!
     }
 
-    if ( IsInHeaderFooter() != IsHeaderFooterEdit() )
-        ToggleHeaderFooterEdit();
     sal_Bool bInHeader= sal_True;
     if ( IsInHeaderFooter( &bInHeader ) )
     {
-        if ( IsShowHeaderFooterSeparator( Header ) && !bInHeader )
+        if ( !bInHeader )
         {
             SetShowHeaderFooterSeparator( Footer, true );
             SetShowHeaderFooterSeparator( Header, false );
         }
-        else if ( IsShowHeaderFooterSeparator( Footer ) && bInHeader )
+        else
         {
             SetShowHeaderFooterSeparator( Header, true );
             SetShowHeaderFooterSeparator( Footer, false );
         }
     }
+    if ( IsInHeaderFooter() != IsHeaderFooterEdit() )
+        ToggleHeaderFooterEdit();
 
 
     // #i27301#
