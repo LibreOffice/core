@@ -919,9 +919,8 @@ sal_Bool SdrOle2Obj::UpdateLinkURL_Impl()
                         if ( nCurState != embed::EmbedStates::LOADED )
                             xObjRef->changeState( nCurState );
                     }
-                    catch( ::com::sun::star::uno::Exception& e )
+                    catch( ::com::sun::star::uno::Exception& )
                     {
-                        (void)e;
                         OSL_FAIL(
                             (OString("SdrOle2Obj::UpdateLinkURL_Impl(), "
                                     "exception caught: ") +
@@ -962,9 +961,8 @@ void SdrOle2Obj::BreakFileLink_Impl()
                 DisconnectFileLink_Impl();
                 mpImpl->maLinkURL = String();
             }
-            catch( ::com::sun::star::uno::Exception& e )
+            catch( ::com::sun::star::uno::Exception& )
             {
-                (void)e;
                 OSL_FAIL(
                     (OString("SdrOle2Obj::BreakFileLink_Impl(), "
                             "exception caught: ") +
@@ -1014,9 +1012,8 @@ void SdrOle2Obj::CheckFileLink_Impl()
                 }
             }
         }
-        catch( ::com::sun::star::uno::Exception& e )
+        catch( ::com::sun::star::uno::Exception& )
         {
-            (void)e;
             OSL_FAIL(
                 (OString("SdrOle2Obj::CheckFileLink_Impl(), "
                         "exception caught: ") +
@@ -1099,9 +1096,8 @@ void SdrOle2Obj::Connect_Impl()
 
             }
         }
-        catch( ::com::sun::star::uno::Exception& e )
+        catch( ::com::sun::star::uno::Exception& )
         {
-            (void)e;
             OSL_FAIL(
                 (OString("SdrOle2Obj::Connect_Impl(), "
                         "exception caught: ") +
@@ -1187,9 +1183,8 @@ void SdrOle2Obj::RemoveListeners_Impl()
                 }
             }
         }
-        catch( ::com::sun::star::uno::Exception& e )
+        catch( ::com::sun::star::uno::Exception& )
         {
-            (void)e;
             OSL_FAIL(
                 (OString("SdrOle2Obj::RemoveListeners_Impl(), "
                         "exception caught: ") +
@@ -1270,9 +1265,8 @@ void SdrOle2Obj::Disconnect_Impl()
             GetSdrGlobalData().GetOLEObjCache().RemoveObj(this);
         }
     }
-    catch( ::com::sun::star::uno::Exception& e )
+    catch( ::com::sun::star::uno::Exception& )
     {
-        (void)e;
         OSL_FAIL(
             (OString("SdrOle2Obj::Disconnect_Impl(), "
                     "exception caught: ") +
@@ -1328,9 +1322,8 @@ void SdrOle2Obj::SetModel(SdrModel* pNewModel)
             }
             DBG_ASSERT( aTmp.getLength(), "Copying embedded object failed!" );
         }
-        catch( ::com::sun::star::uno::Exception& e )
+        catch( ::com::sun::star::uno::Exception& )
         {
-            (void)e;
             OSL_FAIL(
                 (OString("SdrOle2Obj::SetModel(), "
                         "exception caught: ") +
@@ -1886,9 +1879,8 @@ sal_Bool SdrOle2Obj::Unload( const uno::Reference< embed::XEmbeddedObject >& xOb
             xObj->changeState( embed::EmbedStates::LOADED );
             bResult = sal_True;
         }
-        catch( ::com::sun::star::uno::Exception& e )
+        catch( ::com::sun::star::uno::Exception& )
         {
-            (void)e;
             OSL_FAIL(
                 (OString("SdrOle2Obj::Unload=(), "
                         "exception caught: ") +

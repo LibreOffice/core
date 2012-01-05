@@ -899,9 +899,9 @@ void AssignmentPersistentData::Commit()
                     aTableNames = m_xCurrentDatasourceTables->getElementNames();
             }
         }
-        catch(SQLContext& e) { aException <<= e; }
-        catch(SQLWarning& e) { aException <<= e; }
-        catch(SQLException& e) { aException <<= e; }
+        catch(const SQLContext& e) { aException <<= e; }
+        catch(const SQLWarning& e) { aException <<= e; }
+        catch(const SQLException& e) { aException <<= e; }
         catch(Exception&)
         {
             OSL_FAIL("AddressBookSourceDialog::resetTables: could not retrieve the table!");

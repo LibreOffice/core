@@ -578,7 +578,7 @@ basegfx::B2DPolyPolygon SdrObjCustomShape::GetLineGeometry( const SdrObjCustomSh
                 aRetval = basegfx::tools::adaptiveSubdivideByAngle(aRetval);
             }
         }
-        catch ( const com::sun::star::lang::IllegalArgumentException )
+        catch ( const com::sun::star::lang::IllegalArgumentException & )
         {
         }
     }

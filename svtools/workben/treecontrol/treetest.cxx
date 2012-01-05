@@ -358,7 +358,7 @@ int SAL_CALL main( int argc, char **argv )
         xInterface = Reference< XInterface >(
             resolver->resolve( sConnectionString ), UNO_QUERY );
     }
-    catch ( Exception& e )
+    catch ( const Exception& e )
     {
         printf("Error: cannot establish a connection using '%s':\n       %s\n",
                OUStringToOString(sConnectionString, RTL_TEXTENCODING_ASCII_US).getStr(),
@@ -382,7 +382,7 @@ int SAL_CALL main( int argc, char **argv )
         rtl::Reference< DirectoryTree >(
             new DirectoryTree( xComponentContext ) )->display(ustrFileURL);
     }
-    catch( Exception& e )
+    catch( const Exception& e )
     {
         printf("Error: exception caught during test:\n       %s\n",
                OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US).getStr());

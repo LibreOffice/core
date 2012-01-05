@@ -221,7 +221,7 @@ void SvxDrawPage::dispose()
             // notify subclasses to do their dispose
             disposing();
         }
-        catch(::com::sun::star::uno::Exception& e)
+        catch(const ::com::sun::star::uno::Exception& e)
         {
             // catch exception and throw again but signal that
             // the object was disposed. Dispose should be called

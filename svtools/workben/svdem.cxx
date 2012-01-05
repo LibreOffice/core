@@ -254,7 +254,7 @@ void MyApp::Main()
 
         Execute();
     }
-    catch ( com::sun::star::uno::Exception & e )
+    catch ( const com::sun::star::uno::Exception & e )
     {
         fprintf( stderr, "Error during bootstrapping servicemanager: %s\n" ,
                  rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );

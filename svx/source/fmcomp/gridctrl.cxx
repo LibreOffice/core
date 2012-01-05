@@ -3323,9 +3323,8 @@ sal_Bool DbGridControl::SaveRow()
             xUpdateCursor->updateRow();
         bSuccess = sal_True;
     }
-    catch(SQLException& e)
+    catch(SQLException&)
     {
-        (void)e; // make compiler happy
         EndCursorAction();
         m_bUpdating = sal_False;
         return sal_False;

@@ -1142,7 +1142,7 @@ uno::Sequence< ::rtl::OUString > SAL_CALL FSStorage::getElementNames()
             }
         }
     }
-    catch( ucb::InteractiveIOException& r )
+    catch( const ucb::InteractiveIOException& r )
     {
         if ( r.Code == ucb::IOErrorCode_NOT_EXISTING )
             OSL_FAIL( "The folder does not exist!\n" );

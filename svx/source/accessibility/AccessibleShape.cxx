@@ -661,7 +661,7 @@ sal_Int32 SAL_CALL AccessibleShape::getForeground (void)
             aColor >>= nColor;
         }
     }
-    catch (::com::sun::star::beans::UnknownPropertyException)
+    catch (const ::com::sun::star::beans::UnknownPropertyException &)
     {
         // Ignore exception and return default color.
     }
@@ -687,7 +687,7 @@ sal_Int32 SAL_CALL AccessibleShape::getBackground (void)
             aColor >>= nColor;
         }
     }
-    catch (::com::sun::star::beans::UnknownPropertyException)
+    catch (const ::com::sun::star::beans::UnknownPropertyException &)
     {
         // Ignore exception and return default color.
     }
@@ -1008,7 +1008,7 @@ void AccessibleShape::ViewForwarderChanged (ChangeType aChangeType,
                 nIndex += 1;
             }
         }
-        catch (beans::UnknownPropertyException)
+        catch (const beans::UnknownPropertyException &)
         {
             // We throw our own exception that is a bit more informative.
             throw uno::RuntimeException (::rtl::OUString (

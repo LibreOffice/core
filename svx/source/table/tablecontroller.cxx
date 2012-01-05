@@ -609,9 +609,8 @@ void SvxTableController::onInsert( sal_uInt16 nSId, const SfxItemSet* pArgs )
         StartSelection( aStart );
         UpdateSelection( aEnd );
     }
-    catch( Exception& e )
+    catch( Exception& )
     {
-        (void)e;
         OSL_FAIL("svx::SvxTableController::onInsert(), exception caught!");
     }
 }
@@ -900,9 +899,8 @@ void SvxTableController::SetTableStyle( const SfxItemSet* pArgs )
                         }
                     }
                 }
-                catch( Exception& e )
+                catch( Exception& )
                 {
-                    (void)e;
                     OSL_FAIL( "svx::SvxTableController::SetTableStyle(), exception caught!" );
                 }
             }
@@ -911,9 +909,8 @@ void SvxTableController::SetTableStyle( const SfxItemSet* pArgs )
                 pModel->EndUndo();
         }
     }
-    catch( Exception& e )
+    catch( Exception& )
     {
-        (void)e;
         OSL_FAIL( "svx::SvxTableController::SetTableStyle(), exception caught!" );
     }
 }
@@ -1637,9 +1634,8 @@ void SvxTableController::checkCell( CellPos& rPos )
         if( rPos.mnRow >= mxTable->getRowCount() )
             rPos.mnRow = mxTable->getRowCount()-1;
     }
-    catch( Exception& e )
+    catch( Exception& )
     {
-        (void)e;
         OSL_FAIL("sdr::table::SvxTableController::checkCell(), exception caught!" );
     }
 }
@@ -1656,9 +1652,8 @@ void SvxTableController::findMergeOrigin( CellPos& rPos )
             ::findMergeOrigin( mxTable, rPos.mnCol, rPos.mnRow, rPos.mnCol, rPos.mnRow );
         }
     }
-    catch( Exception& e )
+    catch( Exception& )
     {
-        (void)e;
         OSL_FAIL("sdr::table::SvxTableController::findMergeOrigin(), exception caught!" );
     }
 }

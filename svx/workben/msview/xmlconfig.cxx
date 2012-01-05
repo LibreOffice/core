@@ -339,7 +339,7 @@ void load_config( const OUString& rPath )
         // finally, parser the stream
         xParser->parseStream( aParserInput );
     }
-    catch( Exception& r )
+    catch( Exception& )
     {
         OSL_FAIL(
             (rtl::OString("load_config(), "
@@ -347,8 +347,6 @@ void load_config( const OUString& rPath )
              rtl::OUStringToOString(
                  comphelper::anyToString( cppu::getCaughtException() ),
                  RTL_TEXTENCODING_UTF8 )).getStr() );
-
-        (void)r;
     }
 }
 

@@ -130,7 +130,7 @@ void DescriptionGenerator::Initialize (::rtl::OUString sPrefix)
                 msDescription.append (
                     OUString(RTL_CONSTASCII_USTRINGPARAM("<no style>")) );
         }
-        catch (::com::sun::star::beans::UnknownPropertyException)
+        catch (const ::com::sun::star::beans::UnknownPropertyException &)
         {
             msDescription.append (
                 OUString(RTL_CONSTASCII_USTRINGPARAM("<unknown>")) );
@@ -291,7 +291,7 @@ void DescriptionGenerator::AddColor (const OUString& sPropertyName,
 
         msDescription.append (lookUpColorName(nValue));
     }
-    catch (::com::sun::star::beans::UnknownPropertyException)
+    catch (const ::com::sun::star::beans::UnknownPropertyException &)
     {
         msDescription.append (
             OUString(RTL_CONSTASCII_USTRINGPARAM("<unknown>")) );
@@ -317,7 +317,7 @@ void DescriptionGenerator::AddInteger (const OUString& sPropertyName,
             msDescription.append (nValue);
         }
     }
-    catch (::com::sun::star::beans::UnknownPropertyException)
+    catch (const ::com::sun::star::beans::UnknownPropertyException &)
     {
         msDescription.append (
             OUString(RTL_CONSTASCII_USTRINGPARAM("<unknown>")) );
@@ -353,7 +353,7 @@ void DescriptionGenerator::AddString (const OUString& sPropertyName,
                 msDescription.append (sValue);
         }
     }
-    catch (::com::sun::star::beans::UnknownPropertyException)
+    catch (const ::com::sun::star::beans::UnknownPropertyException &)
     {
         msDescription.append (
             OUString(RTL_CONSTASCII_USTRINGPARAM("<unknown>")) );
@@ -440,7 +440,7 @@ void DescriptionGenerator::AddFillStyle (const OUString& sPropertyName,
             }
         }
     }
-    catch (::com::sun::star::beans::UnknownPropertyException)
+    catch (const ::com::sun::star::beans::UnknownPropertyException &)
     {
         msDescription.append (
             OUString(RTL_CONSTASCII_USTRINGPARAM("<unknown>")) );

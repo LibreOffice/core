@@ -120,9 +120,8 @@ bool ChartPrettyPainter::DoPrettyPaintChart( uno::Reference< frame::XModel > xCh
             }
         }
     }
-    catch( uno::Exception& e )
+    catch( uno::Exception& )
     {
-        (void)e;
         OSL_FAIL( "Chart cannot be painted pretty!" );
     }
     return false;
