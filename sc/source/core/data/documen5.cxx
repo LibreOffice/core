@@ -297,8 +297,8 @@ void ScDocument::SetChartRanges( const rtl::OUString& rChartName, const ::std::v
         for( sal_Int32 nN=0; nN<nCount; nN++ )
         {
             ScRangeList aScRangeList( rRangesVector[nN] );
-            rtl::OUString sRangeStr; // This range must be in Calc A1 format.
-            aScRangeList.Format( sRangeStr, SCR_ABS_3D, this );
+            rtl::OUString sRangeStr;
+            aScRangeList.Format( sRangeStr, SCR_ABS_3D, this, GetAddressConvention() );
             aRangeStrings[nN]=sRangeStr;
         }
         ScChartHelper::SetChartRanges( xChartDoc, aRangeStrings );

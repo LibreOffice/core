@@ -248,7 +248,6 @@ void ScChartHelper::SetChartRanges( const uno::Reference< chart2::XChartDocument
 
             if( xLabel.is())
             {
-                // the range string must be in Calc A1 format.
                 uno::Reference< chart2::data::XDataSequence > xNewSeq(
                     xDataProvider->createDataSequenceByRangeRepresentation( rRanges[nRange++] ));
 
@@ -264,7 +263,6 @@ void ScChartHelper::SetChartRanges( const uno::Reference< chart2::XChartDocument
 
             if( xValues.is())
             {
-                // the range string must be in Calc A1 format.
                 uno::Reference< chart2::data::XDataSequence > xNewSeq(
                     xDataProvider->createDataSequenceByRangeRepresentation( rRanges[nRange++] ));
 
