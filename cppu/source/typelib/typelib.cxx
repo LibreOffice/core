@@ -199,11 +199,6 @@ typedef list< typelib_TypeDescription * > TypeDescriptionList_Impl;
 // # of cached elements
 static sal_Int32 nCacheSize = 256;
 
-//-----------------------------------------------------------------------------
-/**
- * All members must set initial to 0 and no constructor is needed. So it
- * doesn't care, when this class is static initialized.<BR>
- */
 struct TypeDescriptor_Init_Impl
 {
     //sal_Bool          bDesctructorCalled;
@@ -233,6 +228,19 @@ struct TypeDescriptor_Init_Impl
     sal_Int32           nInterfaceTypeDescriptionCount;
     sal_Int32           nTypeDescriptionReferenceCount;
 #endif
+
+    TypeDescriptor_Init_Impl():
+        pWeakMap(0), pCallbacks(0), pCache(0), pMutex(0)
+#if OSL_DEBUG_LEVEL > 1
+        , nTypeDescriptionCount(0), nCompoundTypeDescriptionCount(0),
+        nUnionTypeDescriptionCount(0), nIndirectTypeDescriptionCount(0),
+        nArrayTypeDescriptionCount(0), nEnumTypeDescriptionCount(0),
+        nInterfaceMethodTypeDescriptionCount(0),
+        nInterfaceAttributeTypeDescriptionCount(0),
+        nInterfaceTypeDescriptionCount(0), nTypeDescriptionReferenceCount(0)
+#endif
+    {}
+
     ~TypeDescriptor_Init_Impl() SAL_THROW( () );
 };
 //__________________________________________________________________________________________________
