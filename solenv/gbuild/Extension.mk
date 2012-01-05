@@ -127,15 +127,18 @@ endef
 # localize .properties file
 # source file is copied to $(WORKDIR)
 define gb_Extension_localize_properties
+$(call gb_Extension_get_target,$(1)) : FILES += $(2)
 ifneq ($(strip $(gb_WITH_LANG)),)
-$(call gb_Extension_get_target,$(1)) : FILES += $(2) $(foreach lang,$(subst -,_,$(gb_Extension_LANGS)),$(subst en_US,$(lang),$(2)))
+$(call gb_Extension_get_target,$(1)) : FILES += $(foreach lang,$(subst -,_,$(gb_Extension_LANGS)),$(subst en_US,$(lang),$(2)))
 $(call gb_Extension_get_target,$(1)) : SDF2 := $(gb_Extension_SDFLOCATION)$(subst $(SRCDIR),,$(dir $(3)))localize.sdf
 $(call gb_Extension_get_target,$(1)) : $$(SDF2)
+endif
 $(call gb_Extension_get_target,$(1)) : $(call gb_Extension_get_workdir,$(1))/$(2)
 $(call gb_Extension_get_workdir,$(1))/$(2) : $(3)
 	$$(call gb_Output_announce,$(2),$(true),PRP,3)
 	mkdir -p $$(dir $$@)
 	cp -f $$< $$@
+ifneq ($(strip $(gb_WITH_LANG)),)
 	$(gb_Extension_PROPMERGECOMMAND) -i $$@ -m $$(SDF2)
 endif
 
