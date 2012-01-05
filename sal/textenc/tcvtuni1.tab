@@ -54,28 +54,6 @@ static ImplTextEncodingData const aImplUTF7TextEncodingData
             | RTL_TEXTENCODING_INFO_MIME };
     /* SCRIPT_UNICODE, pc code page 850 */
 
-static ImplTextEncodingData const aImplUTF8TextEncodingData
-    = { { NULL,
-          &ImplConvertUtf8ToUnicode,
-          &ImplConvertUnicodeToUtf8,
-          &ImplCreateUtf8ToUnicodeContext,
-          &ImplDestroyContext,
-          &ImplResetUtf8ToUnicodeContext,
-          &ImplCreateUnicodeToUtf8Context,
-          &ImplDestroyContext,
-          &ImplResetUnicodeToUtf8Context },
-        1,
-        6,
-        1,
-        0,
-        "iso8859-1",
-        "utf-8",
-        RTL_TEXTENCODING_INFO_ASCII
-            | RTL_TEXTENCODING_INFO_UNICODE
-            | RTL_TEXTENCODING_INFO_MULTIBYTE
-            | RTL_TEXTENCODING_INFO_MIME };
-    /* SCRIPT_UNICODE, pc code page 850 */
-
 static char aImplJavaUtf8TextConverterTag;
     /* The value of this tag is irrelevant.  Only its address != NULL is used to
        distinguish between RTL_TEXTENCODING_UTF8 and

@@ -28,6 +28,8 @@
 
 #include "sal/config.h"
 
+#include <cassert>
+
 #include "sal/types.h"
 
 #ifndef INCLUDED_RTL_TEXTENC_TENCHELP_H
@@ -128,9 +130,15 @@ static sal_uInt16 const aImplDoubleByteIdentifierTab[1] = { 0 };
 extern "C" SAL_DLLPUBLIC_EXPORT ImplTextEncodingData const *
     sal_getFullTextEncodingData( rtl_TextEncoding nEncoding )
 {
+    assert(
+        nEncoding != RTL_TEXTENCODING_ASCII_US &&
+        nEncoding != RTL_TEXTENCODING_ISO_8859_1 &&
+        nEncoding != RTL_TEXTENCODING_MS_1252 &&
+        nEncoding != RTL_TEXTENCODING_UTF8);
+        // handled by Impl_getTextEncodingData
     static ImplTextEncodingData const * const aData[]
         = { NULL, /* DONTKNOW */
-            &aImplMS1252TextEncodingData, /* MS_1252 */
+            NULL, /* MS_1252, see above */
             &aImplAPPLEROMANTextEncodingData, /* APPLE_ROMAN */
             &aImplIBM437TextEncodingData, /* IBM_437 */
             &aImplIBM850TextEncodingData, /* IBM_850 */
@@ -140,8 +148,8 @@ extern "C" SAL_DLLPUBLIC_EXPORT ImplTextEncodingData const *
             &aImplIBM865TextEncodingData, /* IBM_865 */
             NULL, /* reserved (SYSTEM) */
             &aImplSYMBOLTextEncodingData, /* SYMBOL */
-            &aImplUSASCIITextEncodingData, /* ASCII_US */
-            &aImplISO88591TextEncodingData, /* ISO_8859_1 */
+            NULL, /* ASCII_US, see above */
+            NULL, /* ISO_8859_1, see above */
             &aImplISO88592TextEncodingData, /* ISO_8859_2 */
             &aImplISO88593TextEncodingData, /* ISO_8859_3 */
             &aImplISO88594TextEncodingData, /* ISO_8859_4 */
@@ -205,7 +213,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT ImplTextEncodingData const *
             &aImplIso2022CnTextEncodingData, /* ISO_2022_CN */
             &aImplKOI8RTextEncodingData, /* KOI8_R */
             &aImplUTF7TextEncodingData, /* UTF7 */
-            &aImplUTF8TextEncodingData, /* UTF8 */
+            NULL, /* UTF8, see above */
             &aImplISO885910TextEncodingData, /* ISO_8859_10 */
             &aImplISO885913TextEncodingData, /* ISO_8859_13 */
             &aImplEUCKRTextEncodingData, /* EUC_KR */
