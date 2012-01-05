@@ -847,7 +847,7 @@ Reference< XDataSequence > XclImpChSourceLink::CreateDataSequence( const OUStrin
     if( xDataProv.is() && mxTokenArray )
     {
         ScCompiler aComp( GetDocPtr(), ScAddress(), *mxTokenArray );
-        aComp.SetGrammar( ::formula::FormulaGrammar::GRAM_ENGLISH );
+        aComp.SetGrammar(GetDoc().GetGrammar());
         OUStringBuffer aRangeRep;
         aComp.CreateStringFromTokenArray( aRangeRep );
         try

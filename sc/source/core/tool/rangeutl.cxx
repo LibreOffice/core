@@ -834,13 +834,13 @@ static void lcl_appendCellAddress(
         rBuf.append(sal_Unicode('.'));
 
         String aAddr;
-        rCell.Format(aAddr, SCA_ABS, NULL, ::formula::FormulaGrammar::CONV_OOO);
+        rCell.Format(aAddr, SCA_ABS, NULL, pDoc->GetAddressConvention());
         rBuf.append(aAddr);
     }
     else
     {
         String aAddr;
-        rCell.Format(aAddr, SCA_ABS_3D, pDoc, ::formula::FormulaGrammar::CONV_OOO);
+        rCell.Format(aAddr, SCA_ABS_3D, pDoc, pDoc->GetAddressConvention());
         rBuf.append(aAddr);
     }
 }
@@ -869,7 +869,7 @@ static void lcl_appendCellRangeAddress(
         rBuf.append(sal_Unicode('.'));
 
         String aAddr;
-        rCell1.Format(aAddr, SCA_ABS, NULL, ::formula::FormulaGrammar::CONV_OOO);
+        rCell1.Format(aAddr, SCA_ABS, NULL, pDoc->GetAddressConvention());
         rBuf.append(aAddr);
 
         rBuf.appendAscii(":");
@@ -881,7 +881,7 @@ static void lcl_appendCellRangeAddress(
             rBuf.append(sal_Unicode('.'));
         }
 
-        rCell2.Format(aAddr, SCA_ABS, NULL, ::formula::FormulaGrammar::CONV_OOO);
+        rCell2.Format(aAddr, SCA_ABS, NULL, pDoc->GetAddressConvention());
         rBuf.append(aAddr);
     }
     else
@@ -890,7 +890,7 @@ static void lcl_appendCellRangeAddress(
         aRange.aStart = rCell1;
         aRange.aEnd   = rCell2;
         String aAddr;
-        aRange.Format(aAddr, SCR_ABS_3D, pDoc, ::formula::FormulaGrammar::CONV_OOO);
+        aRange.Format(aAddr, SCR_ABS_3D, pDoc, pDoc->GetAddressConvention());
         rBuf.append(aAddr);
     }
 }
@@ -898,7 +898,8 @@ static void lcl_appendCellRangeAddress(
 void ScRangeStringConverter::GetStringFromXMLRangeString( OUString& rString, const OUString& rXMLRange, ScDocument* pDoc )
 {
     FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
-    const sal_Unicode cSep = ' ', cSepNew = ';';
+    const sal_Unicode cSep = ' ';
+    const sal_Unicode cSepNew = ScCompiler::GetNativeSymbol(ocSep).GetChar(0);
     const sal_Unicode cQuote = '\'';
 
     OUStringBuffer aRetStr;

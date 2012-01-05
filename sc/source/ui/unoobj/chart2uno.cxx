@@ -2071,16 +2071,10 @@ uno::Reference< chart2::data::XDataSequence > SAL_CALL
     if(!m_pDocument || (aRangeRepresentation.getLength() == 0))
         return xResult;
 
-    // Note: the range representation must be in Calc A1 format, with English
-    // function names and ';' as the union operator in case of multiple
-    // ranges. The import filters use this method to pass data ranges, and
-    // they have no idea what the current formula syntax is. In the future we
-    // should add another method to allow the client code to directly pass
-    // tokens representing ranges.
-
     vector<ScTokenRef> aRefTokens;
+    const sal_Unicode cSep = ScCompiler::GetNativeSymbol(ocSep).GetChar(0);
     ScRefTokenHelper::compileRangeRepresentation(
-        aRefTokens, aRangeRepresentation, m_pDocument, ';', FormulaGrammar::GRAM_ENGLISH);
+        aRefTokens, aRangeRepresentation, m_pDocument, cSep, m_pDocument->GetGrammar());
     if (aRefTokens.empty())
         return xResult;
 
