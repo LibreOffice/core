@@ -133,7 +133,7 @@ $(call gb_Extension_get_target,$(1)) : SDF2 := $(gb_Extension_SDFLOCATION)$(subs
 $(call gb_Extension_get_target,$(1)) : $$(SDF2)
 $(call gb_Extension_get_target,$(1)) : $(call gb_Extension_get_workdir,$(1))/$(2)
 $(call gb_Extension_get_workdir,$(1))/$(2) : $(3)
-	$(call gb_Output_announce,$(2),$(true),PRP,3)
+	$$(call gb_Output_announce,$(2),$(true),PRP,3)
 	mkdir -p $$(dir $$@)
 	cp -f $$< $$@
 	$(gb_Extension_PROPMERGECOMMAND) -i $$@ -m $$(SDF2)
