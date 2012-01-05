@@ -171,24 +171,6 @@ Impl_getTextEncodingData(rtl_TextEncoding nEncoding) SAL_THROW_EXTERN_C()
             return &aImplUTF8TextEncodingData; break;
         case RTL_TEXTENCODING_ISO_8859_1:
             return &aImplISO88591TextEncodingData; break;
-
-#ifndef TOOLS_STRING_MISSUSE
-// ----------------------------------------------
-// These are here temporarily since they are used in error
-// all over the place
-// ----------------------------------------------
-        case RTL_TEXTENCODING_IBM_850:
-            return &aImplIBM850TextEncodingData; break;
-        case RTL_TEXTENCODING_IBM_857:
-            return &aImplIBM857TextEncodingData; break;
-        case RTL_TEXTENCODING_IBM_860:
-            return &aImplIBM860TextEncodingData; break;
-        case RTL_TEXTENCODING_IBM_861:
-            return &aImplIBM861TextEncodingData; break;
-        case RTL_TEXTENCODING_IBM_863:
-            return &aImplIBM863TextEncodingData; break;
-// ----------------------------------------------
-#endif
         default:
             return FullTextEncodingDataSingleton::get().get(nEncoding);
     }
