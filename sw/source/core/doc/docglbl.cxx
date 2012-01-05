@@ -339,7 +339,7 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const String& rPath, bool bOutline, c
                     xDocSh->DoSaveAs( *pTmpMed );
                     xDocSh->DoSaveCompleted( pTmpMed );
 
-                    // We do not insert a FileLinkSection at the error
+                    // do not insert a FileLinkSection in case of error
                     if( xDocSh->GetError() )
                         sFileName.Erase();
                 }

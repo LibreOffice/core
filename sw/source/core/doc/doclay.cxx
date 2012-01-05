@@ -319,7 +319,7 @@ void SwDoc::DelLayoutFmt( SwFrmFmt *pFmt )
             DeleteSection( pNode );
         }
 
-        // Delete the character for character-bound FlyFrames (if necessary)
+        // Delete the character for FlyFrames anchored as char (if necessary)
         const SwFmtAnchor& rAnchor = pFmt->GetAnchor();
         if ((FLY_AS_CHAR == rAnchor.GetAnchorId()) && rAnchor.GetCntntAnchor())
         {
@@ -351,11 +351,11 @@ void SwDoc::DelLayoutFmt( SwFrmFmt *pFmt )
 |*
 |*  SwDoc::CopyLayoutFmt()
 |*
-|*  Description: Copies the stated format (pSrc) to pDest and returns pDest.
+|*  Copies the stated format (pSrc) to pDest and returns pDest.
 |*  If there's no pDest, it is created.
 |*  If the source format is located in another document, also copy correctly
 |*  in this case.
-|*  The chaos::Anchor attribute's position is always set 0!
+|*  The Anchor attribute's position is always set to 0!
 |*
 |*************************************************************************/
 SwFrmFmt *SwDoc::CopyLayoutFmt( const SwFrmFmt& rSource,
@@ -427,7 +427,7 @@ SwFrmFmt *SwDoc::CopyLayoutFmt( const SwFrmFmt& rSource,
         SwNodeIndex aIdx( GetNodes().GetEndOfAutotext() );
         SwStartNode* pSttNd = GetNodes().MakeEmptySection( aIdx, SwFlyStartNode );
 
-        // Set the chaos::Anchor/CntntIndex first.
+        // Set the Anchor/CntntIndex first.
         // Within the copying part, we can access the values (DrawFmt in Headers and Footers)
         aIdx = *pSttNd;
         SwFmtCntnt aAttr( rSource.GetCntnt() );
@@ -941,7 +941,7 @@ SwDrawFrmFmt* SwDoc::Insert( const SwPaM &rRg,
         pFmt->SetFmtAttr( aAnch );
     }
 
-    // For character-bound Draws we set the attribute in the paragraph
+    // For Draws anchored as character we set the attribute in the paragraph
     if ( FLY_AS_CHAR == eAnchorId )
     {
         xub_StrLen nStt = rRg.GetPoint()->nContent.GetIndex();
@@ -1021,7 +1021,7 @@ void SwDoc::GetAllFlyFmts( SwPosFlyFrms& rPosFlyFmts,
     SwPosFlyFrm *pFPos = 0;
     SwFrmFmt *pFly;
 
-    // collect all paragraph-bound
+    // collect all anchored somehow to paragraphs
     for( sal_uInt16 n = 0; n < GetSpzFrmFmts()->Count(); ++n )
     {
         pFly = (*GetSpzFrmFmts())[ n ];
@@ -1046,8 +1046,8 @@ void SwDoc::GetAllFlyFmts( SwPosFlyFrms& rPosFlyFmts,
         }
     }
 
-    // No Layout or just a part, then it was the page-bound FlyFrames only if we
-    // "wish" something is done completely.
+    // If we don't have a layout we can't get page anchored FlyFrames.
+    // Also, page anchored FlyFrames are only returned if no range is specified.
     if( !GetCurrentViewShell() || pCmpRange )   //swmod 071108//swmod 071225
         return;
 
@@ -1077,8 +1077,8 @@ void SwDoc::GetAllFlyFmts( SwPosFlyFrms& rPosFlyFmts,
                     if ( !pCntntFrm )
                     {
                         // Oops! An empty page.
-                        // In order not to loose the whole frame (RTF) we look for the
-                        // last Cntnt before the page.
+                        // In order not to loose the whole frame (RTF) we
+                        // look for the last Cntnt before the page.
                         SwPageFrm *pPrv = (SwPageFrm*)pPage->GetPrev();
                         while ( !pCntntFrm && pPrv )
                         {
@@ -1162,7 +1162,7 @@ lcl_InsertLabel(SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
 
     sal_Bool bTable = sal_False;    // To save some code.
 
-    // Because we get by the TxtColl's name, we need to create the field first.
+    // Get the field first, beause we retrieve the TxtColl via the field's name
     OSL_ENSURE( nId == USHRT_MAX  || nId < rDoc.GetFldTypes()->Count(),
             "FldType index out of bounds." );
     SwFieldType *pType = (nId != USHRT_MAX) ? (*rDoc.GetFldTypes())[nId] : NULL;
@@ -1234,7 +1234,7 @@ lcl_InsertLabel(SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
 
                 // Get the FlyFrame's Format and decouple the Layout.
                 SwFrmFmt *pOldFmt = rDoc.GetNodes()[nNdIdx]->GetFlyFmt();
-                OSL_ENSURE( pOldFmt, "Couldn't find the Format's Fly." );
+                OSL_ENSURE( pOldFmt, "Couldn't find the Fly's Format." );
                 // #i115719#
                 // <title> and <description> attributes are lost when calling <DelFrms()>.
                 // Thus, keep them and restore them after the calling <MakeFrms()>
@@ -1883,7 +1883,7 @@ IMPL_LINK( SwDoc, DoIdleJobs, Timer *, pTimer )
                 // So the "backgorund update" should always be carried out
                 /* && !pStartSh->GetViewOptions()->IsFldName()*/ )
         {
-            // chaos::Action brackets!
+            //  Action brackets!
             GetUpdtFlds().SetInUpdateFlds( sal_True );
 
             pTmpRoot->StartAllAction();
@@ -2137,7 +2137,7 @@ void SwDoc::SetAllUniqueFlyNames()
         }
     }
 
-    // Found a new document, but not a page-bound Frame/DrawObjects
+    // Found a new document, but not a page anchored Frame/DrawObjects
     // that are anchored to another Node.
     if( bLoadedFlag )
         SetLoaded( sal_True );
