@@ -129,10 +129,12 @@ findunusedcode:
 	@mkdir -p $(SRCDIR)/solenv/callcatcher/bin && \
 	    ln -sf $(SRCDIR)/solenv/$(INPATH)/bin/dmake \
 		$(SRCDIR)/solenv/callcatcher/bin/dmake && \
+	    source $(SRCDIR)/config_host_callcatcher.mk && \
 	    source $(SRCDIR)/Env.callcatcher.sh && \
 	    source $(SRCDIR)/solenv/bin/callcatchEnv.Set.sh && \
 	    $(call gb_BuildplTarget_command,instsetoo_native,--all)
-	@source $(SRCDIR)/Env.callcatcher.sh && \
+	@source $(SRCDIR)/config_host_callcatcher.mk && \
+            source $(SRCDIR)/Env.callcatcher.sh && \
 	    callanalyse \
 		$$WORKDIR/LinkTarget/*/* \
 		*/$$OUTPATH/bin/* \
