@@ -8509,8 +8509,11 @@ void ScTableSheetObj::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pEn
             sal_Int32 nColor = COL_AUTO;
             if (aValue >>= nColor)
             {
-                if (static_cast<ColorData>(nColor) != COL_AUTO)
-                    pDoc->SetTabBgColor(nTab, Color(static_cast<ColorData>(nColor)));
+                const Color aColor(static_cast<ColorData>(nColor));
+                if (aColor != pDoc->GetTabBgColor(nTab))
+                {
+                    aFunc.SetTabBgColor(nTab, aColor, true, true);
+                }
             }
         }
         else if ( pEntry->nWID == SC_WID_UNO_CODENAME )
