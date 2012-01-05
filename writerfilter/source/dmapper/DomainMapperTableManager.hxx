@@ -50,6 +50,7 @@ class DomainMapperTableManager : public DomainMapperTableManager_Base_t
     sal_Int32       m_nHeaderRepeat; //counter of repeated headers - if == -1 then the repeating stops
     sal_Int32       m_nTableWidth; //might be set directly or has to be calculated from the column positions
     bool            m_bOOXML;
+    bool            m_bImplicitMerges;
     ::rtl::OUString m_sTableStyleName;
     PropertyMapPtr  m_pTableStyleTextProperies;
 
@@ -63,7 +64,7 @@ class DomainMapperTableManager : public DomainMapperTableManager_Base_t
 
 public:
 
-    DomainMapperTableManager(bool bOOXML);
+    DomainMapperTableManager(bool bOOXML, bool bImplicitMerges);
     virtual ~DomainMapperTableManager();
 
     // use this method to avoid adding the properties for the table

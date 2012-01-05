@@ -48,7 +48,7 @@ using namespace ::com::sun::star;
 using namespace ::std;
 
 
-DomainMapperTableManager::DomainMapperTableManager(bool bOOXML) :
+DomainMapperTableManager::DomainMapperTableManager(bool bOOXML, bool bImplicitMerges) :
     m_nRow(0),
     m_nCell(0),
     m_nGridSpan(1),
@@ -56,6 +56,7 @@ DomainMapperTableManager::DomainMapperTableManager(bool bOOXML) :
     m_nHeaderRepeat(0),
     m_nTableWidth(0),
     m_bOOXML( bOOXML ),
+    m_bImplicitMerges(bImplicitMerges),
     m_pTablePropsHandler( new TablePropertiesHandler( bOOXML ) )
 {
     m_pTablePropsHandler->SetTableManager( this );
@@ -437,12 +438,12 @@ void DomainMapperTableManager::endOfRowAction()
     for( ; aGridSpanIter != pCurrentSpans->end(); ++aGridSpanIter)
         nGrids += *aGridSpanIter;
 
+    //determine table width
+    double nFullWidth = m_nTableWidth;
+    //the positions have to be distibuted in a range of 10000
+    const double nFullWidthRelative = 10000.;
     if( pTableGrid->size() == nGrids )
     {
-        //determine table width
-        double nFullWidth = m_nTableWidth;
-        //the positions have to be distibuted in a range of 10000
-        const double nFullWidthRelative = 10000.;
         uno::Sequence< text::TableColumnSeparator > aSeparators( m_nCell - 1 );
         text::TableColumnSeparator* pSeparators = aSeparators.getArray();
         sal_Int16 nLastRelPos = 0;
@@ -469,6 +470,33 @@ void DomainMapperTableManager::endOfRowAction()
         TablePropertyMapPtr pPropMap( new TablePropertyMap );
         pPropMap->Insert( PROP_TABLE_COLUMN_SEPARATORS, false, uno::makeAny( aSeparators ) );
 
+#ifdef DEBUG_DOMAINMAPPER
+        dmapper_logger->startElement("rowProperties");
+        pPropMap->dumpXml( dmapper_logger );
+        dmapper_logger->endElement();
+#endif
+        insertRowProps(pPropMap);
+    }
+    else if (m_bImplicitMerges)
+    {
+        // More grid than cells definitions? Then take the last ones.
+        // This feature is used by the RTF implicit horizontal cell merges.
+        uno::Sequence< text::TableColumnSeparator > aSeparators(m_nCell - 1);
+        text::TableColumnSeparator* pSeparators = aSeparators.getArray();
+
+        sal_Int16 nSum = 0;
+        sal_uInt32 nPos = 0;
+        // Ignoring the i=0 case means we assume that the width of the last cell matches the table width
+        for (int i = m_nCell; i > 1; i--)
+        {
+            nSum += (*pTableGrid.get())[pTableGrid->size() - i]; // Size of the current cell
+            pSeparators[nPos].Position = nSum * nFullWidthRelative / nFullWidth; // Relative position
+            pSeparators[nPos].IsVisible = sal_True;
+            nPos++;
+        }
+
+        TablePropertyMapPtr pPropMap( new TablePropertyMap );
+        pPropMap->Insert( PROP_TABLE_COLUMN_SEPARATORS, false, uno::makeAny( aSeparators ) );
 #ifdef DEBUG_DOMAINMAPPER
         dmapper_logger->startElement("rowProperties");
         pPropMap->dumpXml( dmapper_logger );
