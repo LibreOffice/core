@@ -25,8 +25,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef com_sun_star_chart_XAxis_idl
-#define com_sun_star_chart_XAxis_idl
+#ifndef com_sun_star_chart2_XAxis_idl
+#define com_sun_star_chart2_XAxis_idl
 
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/beans/XPropertySet.idl>
