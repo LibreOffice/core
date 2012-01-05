@@ -2212,7 +2212,7 @@ ScChart2DataProvider::createDataSequenceByFormulaTokens(
             case svExternalSingleRef:
             case svExternalDoubleRef:
             {
-                ScTokenRef pNew(static_cast<const ScToken*>(p->Clone()));
+                ScTokenRef pNew(static_cast<ScToken*>(p->Clone()));
                 aRefTokens.push_back(pNew);
             }
             break;
