@@ -58,7 +58,7 @@ private:
     PushButton      aBtnNew;
     PushButton      aBtnDelete;
     PushButton      aBtnRestore;
-    PushButton      aBtnLast;
+    PushButton      aBtnPrev;
     PushButton      aBtnNext;
     PushButton      aBtnClose;
     ScrollBar       aSlider;
@@ -89,7 +89,7 @@ private:
 
     // Handler:
     DECL_LINK( Impl_NewHdl,     PushButton*    );
-    DECL_LINK( Impl_LastHdl,    PushButton*    );
+    DECL_LINK( Impl_PrevHdl,    PushButton*    );
     DECL_LINK( Impl_NextHdl,    PushButton*    );
 
     DECL_LINK( Impl_RestoreHdl, PushButton*    );

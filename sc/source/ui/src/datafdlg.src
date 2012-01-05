@@ -63,12 +63,12 @@ ModalDialog RID_SCDLG_DATAFORM
         TabStop = TRUE ;
         Text [ en-US ] = "Restore" ;
     };
-    PushButton BTN_DATAFORM_LAST
+    PushButton BTN_DATAFORM_PREV
     {
         Pos = MAP_APPFONT ( 135 , 82 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
-        Text [ en-US ] = "Last Record" ;
+        Text [ en-US ] = "Previous Record" ;
     };
     PushButton BTN_DATAFORM_NEXT
     {
