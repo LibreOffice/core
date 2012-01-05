@@ -56,6 +56,7 @@ copy-stuff:
 #
 	for F in $(strip \
 		  avmedialo \
+		  basebmplo \
 		  basegfxlo \
 		  bootstrap.uno \
 		  canvastoolslo \
