@@ -26,27 +26,30 @@
  *
  ************************************************************************/
 
-#include "tenchelp.h"
-#include "unichars.h"
+#include "sal/config.h"
+
 #include "rtl/textcvt.h"
 #include "sal/types.h"
 
-static sal_Bool ImplGetUndefinedAsciiMultiByte(sal_uInt32 nFlags,
-                                               sal_Char * pBuf,
+#include "tenchelp.hxx"
+#include "unichars.hxx"
+
+static bool ImplGetUndefinedAsciiMultiByte(sal_uInt32 nFlags,
+                                               char * pBuf,
                                                sal_Size nMaxLen);
 
-static sal_Bool ImplGetInvalidAsciiMultiByte(sal_uInt32 nFlags,
-                                             sal_Char * pBuf,
+static bool ImplGetInvalidAsciiMultiByte(sal_uInt32 nFlags,
+                                             char * pBuf,
                                              sal_Size nMaxLen);
 
 static int ImplIsUnicodeIgnoreChar(sal_Unicode c, sal_uInt32 nFlags);
 
-sal_Bool ImplGetUndefinedAsciiMultiByte(sal_uInt32 nFlags,
-                                        sal_Char * pBuf,
+bool ImplGetUndefinedAsciiMultiByte(sal_uInt32 nFlags,
+                                        char * pBuf,
                                         sal_Size nMaxLen)
 {
     if (nMaxLen == 0)
-        return sal_False;
+        return false;
     switch (nFlags & RTL_UNICODETOTEXT_FLAGS_UNDEFINED_MASK)
     {
     case RTL_UNICODETOTEXT_FLAGS_UNDEFINED_0:
@@ -62,15 +65,15 @@ sal_Bool ImplGetUndefinedAsciiMultiByte(sal_uInt32 nFlags,
         *pBuf = 0x5F;
         break;
     }
-    return sal_True;
+    return true;
 }
 
-sal_Bool ImplGetInvalidAsciiMultiByte(sal_uInt32 nFlags,
-                                      sal_Char * pBuf,
+bool ImplGetInvalidAsciiMultiByte(sal_uInt32 nFlags,
+                                      char * pBuf,
                                       sal_Size nMaxLen)
 {
     if (nMaxLen == 0)
-        return sal_False;
+        return false;
     switch (nFlags & RTL_UNICODETOTEXT_FLAGS_UNDEFINED_MASK)
     {
     case RTL_UNICODETOTEXT_FLAGS_INVALID_0:
@@ -86,7 +89,7 @@ sal_Bool ImplGetInvalidAsciiMultiByte(sal_uInt32 nFlags,
         *pBuf = 0x5F;
         break;
     }
-    return sal_True;
+    return true;
 }
 
 int ImplIsUnicodeIgnoreChar( sal_Unicode c, sal_uInt32 nFlags )
@@ -112,28 +115,26 @@ sal_Unicode ImplGetUndefinedUnicodeChar(sal_uChar cChar, sal_uInt32 nFlags)
 
 /* ----------------------------------------------------------------------- */
 
-sal_Bool
-ImplHandleUndefinedUnicodeToTextChar(ImplTextConverterData const * pData,
+bool
+ImplHandleUndefinedUnicodeToTextChar(ImplTextConverterData const *,
                                      sal_Unicode const ** ppSrcBuf,
                                      sal_Unicode const * pEndSrcBuf,
-                                     sal_Char ** ppDestBuf,
-                                     sal_Char const * pEndDestBuf,
+                                     char ** ppDestBuf,
+                                     char const * pEndDestBuf,
                                      sal_uInt32 nFlags,
                                      sal_uInt32 * pInfo)
 {
     sal_Unicode c = **ppSrcBuf;
-
-    (void) pData; /* unused */
 
     /* Should the private character map to one byte */
     if ( (c >= RTL_TEXTCVT_BYTE_PRIVATE_START) && (c <= RTL_TEXTCVT_BYTE_PRIVATE_END) )
     {
         if ( nFlags & RTL_UNICODETOTEXT_FLAGS_PRIVATE_MAPTO0 )
         {
-            **ppDestBuf = (sal_Char)(sal_uChar)(c-RTL_TEXTCVT_BYTE_PRIVATE_START);
+            **ppDestBuf = (char)(sal_uChar)(c-RTL_TEXTCVT_BYTE_PRIVATE_START);
             (*ppDestBuf)++;
             (*ppSrcBuf)++;
-            return sal_True;
+            return true;
         }
     }
 
@@ -141,7 +142,7 @@ ImplHandleUndefinedUnicodeToTextChar(ImplTextConverterData const * pData,
     if ( ImplIsUnicodeIgnoreChar( c, nFlags ) )
     {
         (*ppSrcBuf)++;
-        return sal_True;
+        return true;
     }
 
     /* Surrogates Characters should result in */
@@ -151,7 +152,7 @@ ImplHandleUndefinedUnicodeToTextChar(ImplTextConverterData const * pData,
         if ( *ppSrcBuf == pEndSrcBuf )
         {
             *pInfo |= RTL_UNICODETOTEXT_INFO_ERROR | RTL_UNICODETOTEXT_INFO_SRCBUFFERTOSMALL;
-            return sal_False;
+            return false;
         }
 
         c = *((*ppSrcBuf)+1);
@@ -163,12 +164,12 @@ ImplHandleUndefinedUnicodeToTextChar(ImplTextConverterData const * pData,
             if ( (nFlags & RTL_UNICODETOTEXT_FLAGS_INVALID_MASK) == RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR )
             {
                 *pInfo |= RTL_UNICODETOTEXT_INFO_ERROR;
-                return sal_False;
+                return false;
             }
             else if ( (nFlags & RTL_UNICODETOTEXT_FLAGS_INVALID_MASK) == RTL_UNICODETOTEXT_FLAGS_INVALID_IGNORE )
             {
                 (*ppSrcBuf)++;
-                return sal_True;
+                return true;
             }
             else if (ImplGetInvalidAsciiMultiByte(nFlags,
                                                   *ppDestBuf,
@@ -176,13 +177,13 @@ ImplHandleUndefinedUnicodeToTextChar(ImplTextConverterData const * pData,
             {
                 ++*ppSrcBuf;
                 ++*ppDestBuf;
-                return sal_True;
+                return true;
             }
             else
             {
                 *pInfo |= RTL_UNICODETOTEXT_INFO_ERROR
                               | RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL;
-                return sal_False;
+                return false;
             }
         }
     }
@@ -191,7 +192,7 @@ ImplHandleUndefinedUnicodeToTextChar(ImplTextConverterData const * pData,
     if ( (nFlags & RTL_UNICODETOTEXT_FLAGS_UNDEFINED_MASK) == RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR )
     {
         *pInfo |= RTL_UNICODETOTEXT_INFO_ERROR;
-        return sal_False;
+        return false;
     }
     else if ( (nFlags & RTL_UNICODETOTEXT_FLAGS_UNDEFINED_MASK) == RTL_UNICODETOTEXT_FLAGS_UNDEFINED_IGNORE )
         (*ppSrcBuf)++;
@@ -206,10 +207,10 @@ ImplHandleUndefinedUnicodeToTextChar(ImplTextConverterData const * pData,
     {
         *pInfo |= RTL_UNICODETOTEXT_INFO_ERROR
                       | RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL;
-        return sal_False;
+        return false;
     }
 
-    return sal_True;
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

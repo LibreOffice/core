@@ -26,17 +26,18 @@
  *
  ************************************************************************/
 
+#include "sal/config.h"
 
-#include "context.h"
-#include "converter.h"
-#include "convertsinglebytetobmpunicode.hxx"
-#include "unichars.h"
+#include <cstddef>
 
 #include "osl/diagnose.h"
 #include "rtl/textcvt.h"
 #include "sal/types.h"
 
-#include <cstddef>
+#include "context.hxx"
+#include "converter.hxx"
+#include "convertsinglebytetobmpunicode.hxx"
+#include "unichars.hxx"
 
 sal_Size rtl_textenc_convertSingleByteToBmpUnicode(
     ImplTextConverterData const * data, void *, sal_Char const * srcBuf,

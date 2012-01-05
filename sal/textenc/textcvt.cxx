@@ -26,19 +26,22 @@
  *
  ************************************************************************/
 
+#include "sal/config.h"
+
 #include "rtl/textcvt.h"
-#include "gettextencodingdata.h"
-#include "tenchelp.h"
+
+#include "gettextencodingdata.hxx"
+#include "tenchelp.hxx"
 
 /* ======================================================================= */
 
-static sal_Size ImplDummyToUnicode( const sal_Char* pSrcBuf, sal_Size nSrcBytes,
+static sal_Size ImplDummyToUnicode( const char* pSrcBuf, sal_Size nSrcBytes,
                                     sal_Unicode* pDestBuf, sal_Size nDestChars,
                                     sal_uInt32 nFlags, sal_uInt32* pInfo,
                                     sal_Size* pSrcCvtBytes )
 {
     sal_Unicode*        pEndDestBuf;
-    const sal_Char*     pEndSrcBuf;
+    const char*     pEndSrcBuf;
 
     if ( ((nFlags & RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_MASK) == RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR) ||
          ((nFlags & RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_MASK) == RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR) )
@@ -72,11 +75,11 @@ static sal_Size ImplDummyToUnicode( const sal_Char* pSrcBuf, sal_Size nSrcBytes,
 /* ----------------------------------------------------------------------- */
 
 static sal_Size ImplUnicodeToDummy( const sal_Unicode* pSrcBuf, sal_Size nSrcChars,
-                                    sal_Char* pDestBuf, sal_Size nDestBytes,
+                                    char* pDestBuf, sal_Size nDestBytes,
                                     sal_uInt32 nFlags, sal_uInt32* pInfo,
                                     sal_Size* pSrcCvtChars )
 {
-    sal_Char*               pEndDestBuf;
+    char*               pEndDestBuf;
     const sal_Unicode*      pEndSrcBuf;
 
     if ( ((nFlags & RTL_UNICODETOTEXT_FLAGS_UNDEFINED_MASK) == RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR) )
@@ -97,7 +100,7 @@ static sal_Size ImplUnicodeToDummy( const sal_Unicode* pSrcBuf, sal_Size nSrcCha
             break;
         }
 
-        *pDestBuf = (sal_Char)(sal_uChar)(*pSrcBuf & 0x00FF);
+        *pDestBuf = (char)(sal_uChar)(*pSrcBuf & 0x00FF);
         pDestBuf++;
         pSrcBuf++;
     }
@@ -119,10 +122,8 @@ rtl_TextToUnicodeConverter SAL_CALL rtl_createTextToUnicodeConverter( rtl_TextEn
 
 /* ----------------------------------------------------------------------- */
 
-void SAL_CALL rtl_destroyTextToUnicodeConverter( rtl_TextToUnicodeConverter hContext )
-{
-    (void) hContext; /* unused */
-}
+void SAL_CALL rtl_destroyTextToUnicodeConverter( rtl_TextToUnicodeConverter )
+{}
 
 /* ----------------------------------------------------------------------- */
 
@@ -144,7 +145,7 @@ void SAL_CALL rtl_destroyTextToUnicodeContext( rtl_TextToUnicodeConverter hConve
 {
     const ImplTextConverter* pConverter = (const ImplTextConverter*)hConverter;
     if ( pConverter && hContext && pConverter->mpDestroyTextToUnicodeContext )
-        pConverter->mpDestroyTextToUnicodeContext( (void*)hContext );
+        pConverter->mpDestroyTextToUnicodeContext( hContext );
 }
 
 /* ----------------------------------------------------------------------- */
@@ -154,14 +155,14 @@ void SAL_CALL rtl_resetTextToUnicodeContext( rtl_TextToUnicodeConverter hConvert
 {
     const ImplTextConverter* pConverter = (const ImplTextConverter*)hConverter;
     if ( pConverter && hContext && pConverter->mpResetTextToUnicodeContext )
-        pConverter->mpResetTextToUnicodeContext( (void*)hContext );
+        pConverter->mpResetTextToUnicodeContext( hContext );
 }
 
 /* ----------------------------------------------------------------------- */
 
 sal_Size SAL_CALL rtl_convertTextToUnicode( rtl_TextToUnicodeConverter hConverter,
                                             rtl_TextToUnicodeContext hContext,
-                                            const sal_Char* pSrcBuf, sal_Size nSrcBytes,
+                                            const char* pSrcBuf, sal_Size nSrcBytes,
                                             sal_Unicode* pDestBuf, sal_Size nDestChars,
                                             sal_uInt32 nFlags, sal_uInt32* pInfo,
                                             sal_Size* pSrcCvtBytes )
@@ -178,7 +179,7 @@ sal_Size SAL_CALL rtl_convertTextToUnicode( rtl_TextToUnicodeConverter hConverte
     }
 
     return pConverter->mpConvertTextToUnicodeProc( pConverter->mpConvertData,
-                                                   (void*)hContext,
+                                                   hContext,
                                                    pSrcBuf, nSrcBytes,
                                                    pDestBuf, nDestChars,
                                                    nFlags, pInfo,
@@ -198,10 +199,8 @@ rtl_UnicodeToTextConverter SAL_CALL rtl_createUnicodeToTextConverter( rtl_TextEn
 
 /* ----------------------------------------------------------------------- */
 
-void SAL_CALL rtl_destroyUnicodeToTextConverter( rtl_UnicodeToTextConverter hConverter )
-{
-    (void) hConverter; /* unused */
-}
+void SAL_CALL rtl_destroyUnicodeToTextConverter( rtl_UnicodeToTextConverter )
+{}
 
 /* ----------------------------------------------------------------------- */
 
@@ -223,7 +222,7 @@ void SAL_CALL rtl_destroyUnicodeToTextContext( rtl_UnicodeToTextConverter hConve
 {
     const ImplTextConverter* pConverter = (const ImplTextConverter*)hConverter;
     if ( pConverter && hContext && pConverter->mpDestroyUnicodeToTextContext )
-        pConverter->mpDestroyUnicodeToTextContext( (void*)hContext );
+        pConverter->mpDestroyUnicodeToTextContext( hContext );
 }
 
 /* ----------------------------------------------------------------------- */
@@ -233,7 +232,7 @@ void SAL_CALL rtl_resetUnicodeToTextContext( rtl_UnicodeToTextConverter hConvert
 {
     const ImplTextConverter* pConverter = (const ImplTextConverter*)hConverter;
     if ( pConverter && hContext && pConverter->mpResetUnicodeToTextContext )
-        pConverter->mpResetUnicodeToTextContext( (void*)hContext );
+        pConverter->mpResetUnicodeToTextContext( hContext );
 }
 
 /* ----------------------------------------------------------------------- */
@@ -241,7 +240,7 @@ void SAL_CALL rtl_resetUnicodeToTextContext( rtl_UnicodeToTextConverter hConvert
 sal_Size SAL_CALL rtl_convertUnicodeToText( rtl_UnicodeToTextConverter hConverter,
                                             rtl_UnicodeToTextContext hContext,
                                             const sal_Unicode* pSrcBuf, sal_Size nSrcChars,
-                                            sal_Char* pDestBuf, sal_Size nDestBytes,
+                                            char* pDestBuf, sal_Size nDestBytes,
                                             sal_uInt32 nFlags, sal_uInt32* pInfo,
                                             sal_Size* pSrcCvtChars )
 {
@@ -257,7 +256,7 @@ sal_Size SAL_CALL rtl_convertUnicodeToText( rtl_UnicodeToTextConverter hConverte
     }
 
     return pConverter->mpConvertUnicodeToTextProc( pConverter->mpConvertData,
-                                                   (void*)hContext,
+                                                   hContext,
                                                    pSrcBuf, nSrcChars,
                                                    pDestBuf, nDestBytes,
                                                    nFlags, pInfo,

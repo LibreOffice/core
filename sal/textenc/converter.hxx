@@ -26,30 +26,36 @@
  *
  ************************************************************************/
 
-#ifndef INCLUDED_RTL_TEXTENC_CONTEXT_H
-#define INCLUDED_RTL_TEXTENC_CONTEXT_H
+#ifndef INCLUDED_SAL_TEXTENC_CONVERTER_HXX
+#define INCLUDED_SAL_TEXTENC_CONVERTER_HXX
+
+#include "sal/config.h"
 
 #include "sal/types.h"
 
-#if defined __cplusplus
-extern "C" {
-#endif /* __cpluscplus */
-
-typedef struct
+enum ImplBadInputConversionAction
 {
-    sal_Unicode m_nHighSurrogate;
-} ImplUnicodeToTextContext;
+    IMPL_BAD_INPUT_STOP,
+    IMPL_BAD_INPUT_CONTINUE,
+    IMPL_BAD_INPUT_NO_OUTPUT
+};
 
-void * ImplCreateUnicodeToTextContext(void) SAL_THROW_EXTERN_C();
+ImplBadInputConversionAction
+ImplHandleBadInputTextToUnicodeConversion(
+    bool bUndefined, bool bMultiByte, char cByte, sal_uInt32 nFlags,
+    sal_Unicode ** pDestBufPtr, sal_Unicode * pDestBufEnd, sal_uInt32 * pInfo);
 
-void ImplResetUnicodeToTextContext(void * pContext) SAL_THROW_EXTERN_C();
+ImplBadInputConversionAction
+ImplHandleBadInputUnicodeToTextConversion(bool bUndefined,
+                                          sal_uInt32 nUtf32,
+                                          sal_uInt32 nFlags,
+                                          char ** pDestBufPtr,
+                                          char * pDestBufEnd,
+                                          sal_uInt32 * pInfo,
+                                          char const * pPrefix,
+                                          sal_Size nPrefixLen,
+                                          bool * pPrefixWritten);
 
-void ImplDestroyContext(void * pContext) SAL_THROW_EXTERN_C();
-
-#if defined __cplusplus
-}
-#endif /* __cpluscplus */
-
-#endif /* INCLUDED_RTL_TEXTENC_CONTEXT_H */
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

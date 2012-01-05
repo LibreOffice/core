@@ -26,17 +26,16 @@
  *
  ************************************************************************/
 
-#ifndef INCLUDED_RTL_TEXTENC_CONVERTEUCTW_H
-#define INCLUDED_RTL_TEXTENC_CONVERTEUCTW_H
+#ifndef INCLUDED_SAL_TEXTENC_CONVERTEUCTW_HXX
+#define INCLUDED_SAL_TEXTENC_CONVERTEUCTW_HXX
 
-#include "tenchelp.h"
+#include "sal/config.h"
+
 #include "sal/types.h"
 
-#if defined __cplusplus
-extern "C" {
-#endif /* __cpluscplus */
+#include "tenchelp.hxx"
 
-typedef struct
+struct ImplEucTwConverterData
 {
     sal_uInt16 const * m_pCns116431992ToUnicodeData;
     sal_Int32 const * m_pCns116431992ToUnicodeRowOffsets;
@@ -44,38 +43,32 @@ typedef struct
     sal_uInt8 const * m_pUnicodeToCns116431992Data;
     sal_Int32 const * m_pUnicodeToCns116431992PageOffsets;
     sal_Int32 const * m_pUnicodeToCns116431992PlaneOffsets;
-} ImplEucTwConverterData;
+};
 
-void * ImplCreateEucTwToUnicodeContext(void) SAL_THROW_EXTERN_C();
+void * ImplCreateEucTwToUnicodeContext();
 
-void ImplResetEucTwToUnicodeContext(void * pContext) SAL_THROW_EXTERN_C();
+void ImplResetEucTwToUnicodeContext(void * pContext);
 
 sal_Size ImplConvertEucTwToUnicode(ImplTextConverterData const * pData,
                                    void * pContext,
-                                   sal_Char const * pSrcBuf,
+                                   char const * pSrcBuf,
                                    sal_Size nSrcBytes,
                                    sal_Unicode * pDestBuf,
                                    sal_Size nDestChars,
                                    sal_uInt32 nFlags,
                                    sal_uInt32 * pInfo,
-                                   sal_Size * pSrcCvtBytes)
-    SAL_THROW_EXTERN_C();
+                                   sal_Size * pSrcCvtBytes);
 
 sal_Size ImplConvertUnicodeToEucTw(ImplTextConverterData const * pData,
                                    void * pContext,
                                    sal_Unicode const * pSrcBuf,
                                    sal_Size nSrcChars,
-                                   sal_Char * pDestBuf,
+                                   char * pDestBuf,
                                    sal_Size nDestBytes,
                                    sal_uInt32 nFlags,
                                    sal_uInt32 * pInfo,
-                                   sal_Size * pSrcCvtChars)
-    SAL_THROW_EXTERN_C();
+                                   sal_Size * pSrcCvtChars);
 
-#if defined __cplusplus
-}
-#endif /* __cpluscplus */
-
-#endif /* INCLUDED_RTL_TEXTENC_CONVERTEUCTW_H */
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

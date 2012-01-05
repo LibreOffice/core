@@ -26,40 +26,18 @@
  *
  ************************************************************************/
 
-#ifndef INCLUDED_RTL_TEXTENC_UNICHARS_H
-#define INCLUDED_RTL_TEXTENC_UNICHARS_H
+#ifndef INCLUDED_SAL_TEXTENC_GETTEXTENCODINGDATA_HXX
+#define INCLUDED_SAL_TEXTENC_GETTEXTENCODINGDATA_HXX
 
-#include "sal/types.h"
+#include "sal/config.h"
 
-#if defined __cplusplus
-extern "C" {
-#endif /* __cpluscplus */
+#include "rtl/textenc.h"
 
-#define RTL_TEXTENC_UNICODE_REPLACEMENT_CHARACTER 0xFFFD
+#include "tenchelp.hxx"
 
-int ImplIsNoncharacter(sal_uInt32 nUtf32) SAL_THROW_EXTERN_C();
+ImplTextEncodingData const *
+Impl_getTextEncodingData(rtl_TextEncoding nEncoding);
 
-int ImplIsControlOrFormat(sal_uInt32 nUtf32) SAL_THROW_EXTERN_C();
-
-int ImplIsHighSurrogate(sal_uInt32 nUtf32) SAL_THROW_EXTERN_C();
-
-int ImplIsLowSurrogate(sal_uInt32 nUtf32) SAL_THROW_EXTERN_C();
-
-int ImplIsPrivateUse(sal_uInt32 nUtf32) SAL_THROW_EXTERN_C();
-
-int ImplIsZeroWidth(sal_uInt32 nUtf32) SAL_THROW_EXTERN_C();
-
-sal_uInt32 ImplGetHighSurrogate(sal_uInt32 nUtf32) SAL_THROW_EXTERN_C();
-
-sal_uInt32 ImplGetLowSurrogate(sal_uInt32 nUtf32) SAL_THROW_EXTERN_C();
-
-sal_uInt32 ImplCombineSurrogates(sal_uInt32 nHigh, sal_uInt32 nLow)
-    SAL_THROW_EXTERN_C();
-
-#if defined __cplusplus
-}
-#endif /* __cpluscplus */
-
-#endif /* INCLUDED_RTL_TEXTENC_UNICHARS_H */
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

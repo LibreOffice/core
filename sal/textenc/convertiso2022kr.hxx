@@ -26,56 +26,49 @@
  *
  ************************************************************************/
 
-#ifndef INCLUDED_RTL_TEXTENC_CONVERTISO2022KR_H
-#define INCLUDED_RTL_TEXTENC_CONVERTISO2022KR_H
+#ifndef INCLUDED_SAL_TEXTENC_CONVERTISO2022KR_HXX
+#define INCLUDED_SAL_TEXTENC_CONVERTISO2022KR_HXX
 
-#include "tenchelp.h"
+#include "sal/config.h"
+
 #include "sal/types.h"
 
-#if defined __cplusplus
-extern "C" {
-#endif /* __cpluscplus */
+#include "tenchelp.hxx"
 
-typedef struct
+struct ImplIso2022KrConverterData
 {
     ImplDBCSToUniLeadTab const * m_pKsX1001ToUnicodeData;
     ImplUniToDBCSHighTab const * m_pUnicodeToKsX1001Data;
-} ImplIso2022KrConverterData;
+};
 
-void * ImplCreateIso2022KrToUnicodeContext(void) SAL_THROW_EXTERN_C();
+void * ImplCreateIso2022KrToUnicodeContext();
 
-void ImplResetIso2022KrToUnicodeContext(void * pContext) SAL_THROW_EXTERN_C();
+void ImplResetIso2022KrToUnicodeContext(void * pContext);
 
 sal_Size ImplConvertIso2022KrToUnicode(ImplTextConverterData const * pData,
                                        void * pContext,
-                                       sal_Char const * pSrcBuf,
+                                       char const * pSrcBuf,
                                        sal_Size nSrcBytes,
                                        sal_Unicode * pDestBuf,
                                        sal_Size nDestChars,
                                        sal_uInt32 nFlags,
                                        sal_uInt32 * pInfo,
-                                       sal_Size * pSrcCvtBytes)
-    SAL_THROW_EXTERN_C();
+                                       sal_Size * pSrcCvtBytes);
 
-void * ImplCreateUnicodeToIso2022KrContext(void) SAL_THROW_EXTERN_C();
+void * ImplCreateUnicodeToIso2022KrContext();
 
-void ImplResetUnicodeToIso2022KrContext(void * pContext) SAL_THROW_EXTERN_C();
+void ImplResetUnicodeToIso2022KrContext(void * pContext);
 
 sal_Size ImplConvertUnicodeToIso2022Kr(ImplTextConverterData const * pData,
                                        void * pContext,
                                        sal_Unicode const * pSrcBuf,
                                        sal_Size nSrcChars,
-                                       sal_Char * pDestBuf,
+                                       char * pDestBuf,
                                        sal_Size nDestBytes,
                                        sal_uInt32 nFlags,
                                        sal_uInt32 * pInfo,
-                                       sal_Size * pSrcCvtChars)
-    SAL_THROW_EXTERN_C();
+                                       sal_Size * pSrcCvtChars);
 
-#if defined __cplusplus
-}
-#endif /* __cpluscplus */
-
-#endif /* INCLUDED_RTL_TEXTENC_CONVERTISO2022KR_H */
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

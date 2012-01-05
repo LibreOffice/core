@@ -26,9 +26,12 @@
  *
  ************************************************************************/
 
-#include "tenchelp.h"
-#include "unichars.h"
+#include "sal/config.h"
+
 #include "rtl/textcvt.h"
+
+#include "tenchelp.hxx"
+#include "unichars.hxx"
 
 /* ======================================================================= */
 
@@ -39,8 +42,8 @@
 
 /* ======================================================================= */
 
-sal_Size ImplDBCSToUnicode( const ImplTextConverterData* pData, void* pContext,
-                            const sal_Char* pSrcBuf, sal_Size nSrcBytes,
+sal_Size ImplDBCSToUnicode( const ImplTextConverterData* pData, void*,
+                            const char* pSrcBuf, sal_Size nSrcBytes,
                             sal_Unicode* pDestBuf, sal_Size nDestChars,
                             sal_uInt32 nFlags, sal_uInt32* pInfo,
                             sal_Size* pSrcCvtBytes )
@@ -52,9 +55,7 @@ sal_Size ImplDBCSToUnicode( const ImplTextConverterData* pData, void* pContext,
     const ImplDBCSConvertData*  pConvertData = (const ImplDBCSConvertData*)pData;
     const ImplDBCSToUniLeadTab* pLeadTab = pConvertData->mpToUniLeadTab;
     sal_Unicode*                pEndDestBuf;
-    const sal_Char*             pEndSrcBuf;
-
-    (void) pContext; /* unused */
+    const char*             pEndSrcBuf;
 
     *pInfo = 0;
     pEndDestBuf = pDestBuf+nDestChars;
@@ -221,9 +222,9 @@ sal_Size ImplDBCSToUnicode( const ImplTextConverterData* pData, void* pContext,
 
 /* ----------------------------------------------------------------------- */
 
-sal_Size ImplUnicodeToDBCS( const ImplTextConverterData* pData, void* pContext,
+sal_Size ImplUnicodeToDBCS( const ImplTextConverterData* pData, void*,
                             const sal_Unicode* pSrcBuf, sal_Size nSrcChars,
-                            sal_Char* pDestBuf, sal_Size nDestBytes,
+                            char* pDestBuf, sal_Size nDestBytes,
                             sal_uInt32 nFlags, sal_uInt32* pInfo,
                             sal_Size* pSrcCvtChars )
 {
@@ -234,16 +235,14 @@ sal_Size ImplUnicodeToDBCS( const ImplTextConverterData* pData, void* pContext,
     const ImplUniToDBCSHighTab* pHighEntry;
     const ImplDBCSConvertData*  pConvertData = (const ImplDBCSConvertData*)pData;
     const ImplUniToDBCSHighTab* pHighTab = pConvertData->mpToDBCSHighTab;
-    sal_Char*                   pEndDestBuf;
+    char*                   pEndDestBuf;
     const sal_Unicode*          pEndSrcBuf;
 
-    sal_Bool bCheckRange = (pConvertData->mnLeadStart != 0
-                            || pConvertData->mnLeadEnd != 0xFF);
+    bool bCheckRange =
+        pConvertData->mnLeadStart != 0 || pConvertData->mnLeadEnd != 0xFF;
         /* this statement has the effect that this extra check is only done for
            EUC-KR, which uses the MS-949 tables, but does not support the full
            range of MS-949 */
-
-    (void) pContext; /* unused */
 
     *pInfo = 0;
     pEndDestBuf = pDestBuf+nDestBytes;
@@ -319,7 +318,7 @@ sal_Size ImplUnicodeToDBCS( const ImplTextConverterData* pData, void* pContext,
                 && c <= RTL_TEXTCVT_BYTE_PRIVATE_END)
             {
                 if ( nFlags & RTL_UNICODETOTEXT_FLAGS_PRIVATE_MAPTO0 )
-                    cConv = (sal_Char)(sal_uChar)(c & 0xFF);
+                    cConv = static_cast< char >(static_cast< unsigned char >(c & 0xFF));
             }
         }
 
@@ -358,7 +357,7 @@ sal_Size ImplUnicodeToDBCS( const ImplTextConverterData* pData, void* pContext,
                 break;
             }
 
-            *pDestBuf = (sal_Char)(sal_uChar)(cConv & 0xFF);
+            *pDestBuf = static_cast< char >(static_cast< unsigned char >(cConv & 0xFF));
             pDestBuf++;
         }
         else
@@ -369,9 +368,9 @@ sal_Size ImplUnicodeToDBCS( const ImplTextConverterData* pData, void* pContext,
                 break;
             }
 
-            *pDestBuf = (sal_Char)(sal_uChar)((cConv >> 8) & 0xFF);
+            *pDestBuf = static_cast< char >(static_cast< unsigned char >((cConv >> 8) & 0xFF));
             pDestBuf++;
-            *pDestBuf = (sal_Char)(sal_uChar)(cConv & 0xFF);
+            *pDestBuf = static_cast< char >(static_cast< unsigned char >(cConv & 0xFF));
             pDestBuf++;
         }
 
@@ -390,8 +389,8 @@ sal_Size ImplUnicodeToDBCS( const ImplTextConverterData* pData, void* pContext,
 /* ----------------------------------------------------------------------- */
 
 sal_Size ImplEUCJPToUnicode( const ImplTextConverterData* pData,
-                             void* pContext,
-                             const sal_Char* pSrcBuf, sal_Size nSrcBytes,
+                             void*,
+                             const char* pSrcBuf, sal_Size nSrcBytes,
                              sal_Unicode* pDestBuf, sal_Size nDestChars,
                              sal_uInt32 nFlags, sal_uInt32* pInfo,
                              sal_Size* pSrcCvtBytes )
@@ -404,9 +403,7 @@ sal_Size ImplEUCJPToUnicode( const ImplTextConverterData* pData,
     const ImplDBCSToUniLeadTab* pLeadTab;
     const ImplEUCJPConvertData* pConvertData = (const ImplEUCJPConvertData*)pData;
     sal_Unicode*                pEndDestBuf;
-    const sal_Char*             pEndSrcBuf;
-
-    (void) pContext; /* unused */
+    const char*             pEndSrcBuf;
 
     *pInfo = 0;
     pEndDestBuf = pDestBuf+nDestChars;
@@ -555,9 +552,9 @@ sal_Size ImplEUCJPToUnicode( const ImplTextConverterData* pData,
 /* ----------------------------------------------------------------------- */
 
 sal_Size ImplUnicodeToEUCJP( const ImplTextConverterData* pData,
-                             void* pContext,
+                             void*,
                              const sal_Unicode* pSrcBuf, sal_Size nSrcChars,
-                             sal_Char* pDestBuf, sal_Size nDestBytes,
+                             char* pDestBuf, sal_Size nDestBytes,
                              sal_uInt32 nFlags, sal_uInt32* pInfo,
                              sal_Size* pSrcCvtChars )
 {
@@ -568,10 +565,8 @@ sal_Size ImplUnicodeToEUCJP( const ImplTextConverterData* pData,
     const ImplUniToDBCSHighTab* pHighEntry;
     const ImplUniToDBCSHighTab* pHighTab;
     const ImplEUCJPConvertData* pConvertData = (const ImplEUCJPConvertData*)pData;
-    sal_Char*                   pEndDestBuf;
+    char*                   pEndDestBuf;
     const sal_Unicode*          pEndSrcBuf;
-
-    (void) pContext; /* unused */
 
     *pInfo = 0;
     pEndDestBuf = pDestBuf+nDestBytes;
@@ -652,7 +647,7 @@ sal_Size ImplUnicodeToEUCJP( const ImplTextConverterData* pData,
                 break;
             }
 
-            *pDestBuf = (sal_Char)(sal_uChar)(cConv & 0xFF);
+            *pDestBuf = static_cast< char >(static_cast< unsigned char >(cConv & 0xFF));
             pDestBuf++;
         }
         /* DoubleByte */
@@ -664,9 +659,9 @@ sal_Size ImplUnicodeToEUCJP( const ImplTextConverterData* pData,
                 break;
             }
 
-            *pDestBuf = (sal_Char)(sal_uChar)((cConv >> 8) & 0xFF);
+            *pDestBuf = static_cast< char >(static_cast< unsigned char >((cConv >> 8) & 0xFF));
             pDestBuf++;
-            *pDestBuf = (sal_Char)(sal_uChar)(cConv & 0xFF);
+            *pDestBuf = static_cast< char >(static_cast< unsigned char >(cConv & 0xFF));
             pDestBuf++;
         }
         else
@@ -677,11 +672,11 @@ sal_Size ImplUnicodeToEUCJP( const ImplTextConverterData* pData,
                 break;
             }
 
-            *pDestBuf = (sal_Char)(sal_uChar)((cConv >> 16) & 0xFF);
+            *pDestBuf = static_cast< char >(static_cast< unsigned char >((cConv >> 16) & 0xFF));
             pDestBuf++;
-            *pDestBuf = (sal_Char)(sal_uChar)((cConv >> 8) & 0xFF);
+            *pDestBuf = static_cast< char >(static_cast< unsigned char >((cConv >> 8) & 0xFF));
             pDestBuf++;
-            *pDestBuf = (sal_Char)(sal_uChar)(cConv & 0xFF);
+            *pDestBuf = static_cast< char >(static_cast< unsigned char >(cConv & 0xFF));
             pDestBuf++;
         }
 

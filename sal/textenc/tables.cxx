@@ -29,21 +29,12 @@
 #include "sal/config.h"
 
 #include <cassert>
+#include <cstddef>
 
+#include "rtl/textenc.h"
 #include "sal/types.h"
 
-#ifndef INCLUDED_RTL_TEXTENC_TENCHELP_H
-#include "tenchelp.h"
-#endif
-
-#ifndef _RTL_TEXTENC_H
-#include "rtl/textenc.h"
-#endif
-
-#ifndef INCLUDED_STDDEF_H
-#include <stddef.h>
-#define INCLUDED_STDDEF_H
-#endif
+#include "tenchelp.hxx"
 
 #define NOTABUNI_START 0xFF
 #define NOTABUNI_END 0x00

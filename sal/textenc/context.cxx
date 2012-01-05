@@ -26,25 +26,27 @@
  *
  ************************************************************************/
 
-#include "context.h"
-#include "rtl/alloc.h"
+#include "sal/config.h"
 
-void * ImplCreateUnicodeToTextContext(void)
+#include "context.hxx"
+
+void * ImplCreateUnicodeToTextContext()
 {
-    void * pContext = rtl_allocateMemory(sizeof (ImplUnicodeToTextContext));
-    ((ImplUnicodeToTextContext *) pContext)->m_nHighSurrogate = 0;
+    ImplUnicodeToTextContext * pContext = new ImplUnicodeToTextContext;
+    pContext->m_nHighSurrogate = 0;
     return pContext;
 }
 
 void ImplResetUnicodeToTextContext(void * pContext)
 {
     if (pContext)
-        ((ImplUnicodeToTextContext *) pContext)->m_nHighSurrogate = 0;
+        static_cast< ImplUnicodeToTextContext * >(pContext)->m_nHighSurrogate =
+            0;
 }
 
 void ImplDestroyContext(void * pContext)
 {
-    rtl_freeMemory(pContext);
+    delete static_cast< ImplUnicodeToTextContext * >(pContext);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -26,24 +26,33 @@
  *
  ************************************************************************/
 
-#ifndef INCLUDED_RTL_TEXTENC_GETTEXTENCODINGDATA_H
-#define INCLUDED_RTL_TEXTENC_GETTEXTENCODINGDATA_H
+#ifndef INCLUDED_SAL_TEXTENC_UNICHARS_HXX
+#define INCLUDED_SAL_TEXTENC_UNICHARS_HXX
 
-#include "tenchelp.h"
-#include "rtl/textenc.h"
+#include "sal/config.h"
+
 #include "sal/types.h"
 
-#if defined __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+#define RTL_TEXTENC_UNICODE_REPLACEMENT_CHARACTER 0xFFFD
 
-ImplTextEncodingData const *
-Impl_getTextEncodingData(rtl_TextEncoding nEncoding) SAL_THROW_EXTERN_C();
+bool ImplIsNoncharacter(sal_uInt32 nUtf32);
 
-#if defined __cplusplus
-}
-#endif /* __cplusplus */
+bool ImplIsControlOrFormat(sal_uInt32 nUtf32);
 
-#endif /* INCLUDED_RTL_TEXTENC_GETTEXTENCODINGDATA_H */
+bool ImplIsHighSurrogate(sal_uInt32 nUtf32);
+
+bool ImplIsLowSurrogate(sal_uInt32 nUtf32);
+
+bool ImplIsPrivateUse(sal_uInt32 nUtf32);
+
+bool ImplIsZeroWidth(sal_uInt32 nUtf32);
+
+sal_uInt32 ImplGetHighSurrogate(sal_uInt32 nUtf32);
+
+sal_uInt32 ImplGetLowSurrogate(sal_uInt32 nUtf32);
+
+sal_uInt32 ImplCombineSurrogates(sal_uInt32 nHigh, sal_uInt32 nLow);
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

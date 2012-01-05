@@ -26,49 +26,54 @@
  *
  ************************************************************************/
 
-#include "converteuctw.h"
-#include "context.h"
-#include "converter.h"
-#include "tenchelp.h"
-#include "unichars.h"
-#include "rtl/alloc.h"
+#include "sal/config.h"
+
 #include "rtl/textcvt.h"
 #include "sal/types.h"
 
-typedef enum
+#include "context.hxx"
+#include "converter.hxx"
+#include "converteuctw.hxx"
+#include "tenchelp.hxx"
+#include "unichars.hxx"
+
+namespace {
+
+enum ImplEucTwToUnicodeState
 {
     IMPL_EUC_TW_TO_UNICODE_STATE_0,
     IMPL_EUC_TW_TO_UNICODE_STATE_1,
     IMPL_EUC_TW_TO_UNICODE_STATE_2_1,
     IMPL_EUC_TW_TO_UNICODE_STATE_2_2,
     IMPL_EUC_TW_TO_UNICODE_STATE_2_3
-} ImplEucTwToUnicodeState;
+};
 
-typedef struct
+struct ImplEucTwToUnicodeContext
 {
     ImplEucTwToUnicodeState m_eState;
-    sal_Int32 m_nPlane; /* 0--15 */
-    sal_Int32 m_nRow; /* 0--93 */
-} ImplEucTwToUnicodeContext;
+    sal_Int32 m_nPlane; // 0--15
+    sal_Int32 m_nRow; // 0--93
+};
 
-void * ImplCreateEucTwToUnicodeContext(void)
+}
+
+void * ImplCreateEucTwToUnicodeContext()
 {
-    void * pContext = rtl_allocateMemory(sizeof (ImplEucTwToUnicodeContext));
-    ((ImplEucTwToUnicodeContext *) pContext)->m_eState
-        = IMPL_EUC_TW_TO_UNICODE_STATE_0;
+    ImplEucTwToUnicodeContext * pContext = new ImplEucTwToUnicodeContext;
+    pContext->m_eState = IMPL_EUC_TW_TO_UNICODE_STATE_0;
     return pContext;
 }
 
 void ImplResetEucTwToUnicodeContext(void * pContext)
 {
     if (pContext)
-        ((ImplEucTwToUnicodeContext *) pContext)->m_eState
+        static_cast< ImplEucTwToUnicodeContext * >(pContext)->m_eState
             = IMPL_EUC_TW_TO_UNICODE_STATE_0;
 }
 
 sal_Size ImplConvertEucTwToUnicode(ImplTextConverterData const * pData,
                                    void * pContext,
-                                   sal_Char const * pSrcBuf,
+                                   char const * pSrcBuf,
                                    sal_Size nSrcBytes,
                                    sal_Unicode * pDestBuf,
                                    sal_Size nDestChars,
@@ -77,13 +82,13 @@ sal_Size ImplConvertEucTwToUnicode(ImplTextConverterData const * pData,
                                    sal_Size * pSrcCvtBytes)
 {
     sal_uInt16 const * pCns116431992Data
-        = ((ImplEucTwConverterData const *) pData)->
+        = static_cast< ImplEucTwConverterData const * >(pData)->
               m_pCns116431992ToUnicodeData;
     sal_Int32 const * pCns116431992RowOffsets
-        = ((ImplEucTwConverterData const *) pData)->
+        = static_cast< ImplEucTwConverterData const * >(pData)->
               m_pCns116431992ToUnicodeRowOffsets;
     sal_Int32 const * pCns116431992PlaneOffsets
-        = ((ImplEucTwConverterData const *) pData)->
+        = static_cast< ImplEucTwConverterData const * >(pData)->
               m_pCns116431992ToUnicodePlaneOffsets;
     ImplEucTwToUnicodeState eState = IMPL_EUC_TW_TO_UNICODE_STATE_0;
     sal_Int32 nPlane = 0;
@@ -95,14 +100,14 @@ sal_Size ImplConvertEucTwToUnicode(ImplTextConverterData const * pData,
 
     if (pContext)
     {
-        eState = ((ImplEucTwToUnicodeContext *) pContext)->m_eState;
-        nPlane = ((ImplEucTwToUnicodeContext *) pContext)->m_nPlane;
-        nRow = ((ImplEucTwToUnicodeContext *) pContext)->m_nRow;
+        eState = static_cast< ImplEucTwToUnicodeContext * >(pContext)->m_eState;
+        nPlane = static_cast< ImplEucTwToUnicodeContext * >(pContext)->m_nPlane;
+        nRow = static_cast< ImplEucTwToUnicodeContext * >(pContext)->m_nRow;
     }
 
     for (; nConverted < nSrcBytes; ++nConverted)
     {
-        sal_Bool bUndefined = sal_True;
+        bool bUndefined = true;
         sal_uInt32 nChar = *(sal_uChar const *) pSrcBuf++;
         switch (eState)
         {
@@ -121,7 +126,7 @@ sal_Size ImplConvertEucTwToUnicode(ImplTextConverterData const * pData,
                 eState = IMPL_EUC_TW_TO_UNICODE_STATE_2_1;
             else
             {
-                bUndefined = sal_False;
+                bUndefined = false;
                 goto bad_input;
             }
             break;
@@ -134,7 +139,7 @@ sal_Size ImplConvertEucTwToUnicode(ImplTextConverterData const * pData,
             }
             else
             {
-                bUndefined = sal_False;
+                bUndefined = false;
                 goto bad_input;
             }
             break;
@@ -143,11 +148,11 @@ sal_Size ImplConvertEucTwToUnicode(ImplTextConverterData const * pData,
             if (nChar >= 0xA1 && nChar <= 0xB0)
             {
                 nPlane = nChar - 0xA1;
-                ++eState;
+                eState = IMPL_EUC_TW_TO_UNICODE_STATE_2_2;
             }
             else
             {
-                bUndefined = sal_False;
+                bUndefined = false;
                 goto bad_input;
             }
             break;
@@ -156,11 +161,11 @@ sal_Size ImplConvertEucTwToUnicode(ImplTextConverterData const * pData,
             if (nChar >= 0xA1 && nChar <= 0xFE)
             {
                 nRow = nChar - 0xA1;
-                ++eState;
+                eState = IMPL_EUC_TW_TO_UNICODE_STATE_2_3;
             }
             else
             {
-                bUndefined = sal_False;
+                bUndefined = false;
                 goto bad_input;
             }
             break;
@@ -170,7 +175,7 @@ sal_Size ImplConvertEucTwToUnicode(ImplTextConverterData const * pData,
                 goto transform;
             else
             {
-                bUndefined = sal_False;
+                bUndefined = false;
                 goto bad_input;
             }
             break;
@@ -229,7 +234,7 @@ sal_Size ImplConvertEucTwToUnicode(ImplTextConverterData const * pData,
 
     bad_input:
         switch (ImplHandleBadInputTextToUnicodeConversion(
-                    bUndefined, sal_True, 0, nFlags, &pDestBufPtr, pDestBufEnd,
+                    bUndefined, true, 0, nFlags, &pDestBufPtr, pDestBufEnd,
                     &nInfo))
         {
         case IMPL_BAD_INPUT_STOP:
@@ -260,8 +265,8 @@ sal_Size ImplConvertEucTwToUnicode(ImplTextConverterData const * pData,
             nInfo |= RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL;
         else
             switch (ImplHandleBadInputTextToUnicodeConversion(
-                        sal_False, sal_True, 0, nFlags, &pDestBufPtr,
-                        pDestBufEnd, &nInfo))
+                        false, true, 0, nFlags, &pDestBufPtr, pDestBufEnd,
+                        &nInfo))
             {
             case IMPL_BAD_INPUT_STOP:
             case IMPL_BAD_INPUT_CONTINUE:
@@ -276,9 +281,9 @@ sal_Size ImplConvertEucTwToUnicode(ImplTextConverterData const * pData,
 
     if (pContext)
     {
-        ((ImplEucTwToUnicodeContext *) pContext)->m_eState = eState;
-        ((ImplEucTwToUnicodeContext *) pContext)->m_nPlane = nPlane;
-        ((ImplEucTwToUnicodeContext *) pContext)->m_nRow = nRow;
+        static_cast< ImplEucTwToUnicodeContext * >(pContext)->m_eState = eState;
+        static_cast< ImplEucTwToUnicodeContext * >(pContext)->m_nPlane = nPlane;
+        static_cast< ImplEucTwToUnicodeContext * >(pContext)->m_nRow = nRow;
     }
     if (pInfo)
         *pInfo = nInfo;
@@ -292,26 +297,26 @@ sal_Size ImplConvertUnicodeToEucTw(ImplTextConverterData const * pData,
                                    void * pContext,
                                    sal_Unicode const * pSrcBuf,
                                    sal_Size nSrcChars,
-                                   sal_Char * pDestBuf,
+                                   char * pDestBuf,
                                    sal_Size nDestBytes,
                                    sal_uInt32 nFlags,
                                    sal_uInt32 * pInfo,
                                    sal_Size * pSrcCvtChars)
 {
     sal_uInt8 const * pCns116431992Data
-        = ((ImplEucTwConverterData const *) pData)->
+        = static_cast< ImplEucTwConverterData const * >(pData)->
               m_pUnicodeToCns116431992Data;
     sal_Int32 const * pCns116431992PageOffsets
-        = ((ImplEucTwConverterData const *) pData)->
+        = static_cast< ImplEucTwConverterData const * >(pData)->
               m_pUnicodeToCns116431992PageOffsets;
     sal_Int32 const * pCns116431992PlaneOffsets
-        = ((ImplEucTwConverterData const *) pData)->
+        = static_cast< ImplEucTwConverterData const * >(pData)->
               m_pUnicodeToCns116431992PlaneOffsets;
     sal_Unicode nHighSurrogate = 0;
     sal_uInt32 nInfo = 0;
     sal_Size nConverted = 0;
-    sal_Char * pDestBufPtr = pDestBuf;
-    sal_Char * pDestBufEnd = pDestBuf + nDestBytes;
+    char * pDestBufPtr = pDestBuf;
+    char * pDestBufEnd = pDestBuf + nDestBytes;
 
     if (pContext)
         nHighSurrogate
@@ -319,7 +324,7 @@ sal_Size ImplConvertUnicodeToEucTw(ImplTextConverterData const * pData,
 
     for (; nConverted < nSrcChars; ++nConverted)
     {
-        sal_Bool bUndefined = sal_True;
+        bool bUndefined = true;
         sal_uInt32 nChar = *pSrcBuf++;
         if (nHighSurrogate == 0)
         {
@@ -333,19 +338,19 @@ sal_Size ImplConvertUnicodeToEucTw(ImplTextConverterData const * pData,
             nChar = ImplCombineSurrogates(nHighSurrogate, nChar);
         else
         {
-            bUndefined = sal_False;
+            bUndefined = false;
             goto bad_input;
         }
 
         if (ImplIsLowSurrogate(nChar) || ImplIsNoncharacter(nChar))
         {
-            bUndefined = sal_False;
+            bUndefined = false;
             goto bad_input;
         }
 
         if (nChar < 0x80)
             if (pDestBufPtr != pDestBufEnd)
-                *pDestBufPtr++ = (sal_Char) nChar;
+                *pDestBufPtr++ = static_cast< char >(nChar);
             else
                 goto no_output;
         else
@@ -373,11 +378,11 @@ sal_Size ImplConvertUnicodeToEucTw(ImplTextConverterData const * pData,
                 goto no_output;
             if (nPlane != 1)
             {
-                *pDestBufPtr++ = (sal_Char) (unsigned char) 0x8E;
-                *pDestBufPtr++ = (sal_Char) (0xA0 + nPlane);
+                *pDestBufPtr++ = static_cast< char >(static_cast< unsigned char >(0x8E));
+                *pDestBufPtr++ = static_cast< char >(0xA0 + nPlane);
             }
-            *pDestBufPtr++ = (sal_Char) (0xA0 + pCns116431992Data[nOffset++]);
-            *pDestBufPtr++ = (sal_Char) (0xA0 + pCns116431992Data[nOffset]);
+            *pDestBufPtr++ = static_cast< char >(0xA0 + pCns116431992Data[nOffset++]);
+            *pDestBufPtr++ = static_cast< char >(0xA0 + pCns116431992Data[nOffset]);
         }
         nHighSurrogate = 0;
         continue;
@@ -420,7 +425,7 @@ sal_Size ImplConvertUnicodeToEucTw(ImplTextConverterData const * pData,
         if ((nFlags & RTL_UNICODETOTEXT_FLAGS_FLUSH) != 0)
             nInfo |= RTL_UNICODETOTEXT_INFO_SRCBUFFERTOSMALL;
         else
-            switch (ImplHandleBadInputUnicodeToTextConversion(sal_False,
+            switch (ImplHandleBadInputUnicodeToTextConversion(false,
                                                               0,
                                                               nFlags,
                                                               &pDestBufPtr,

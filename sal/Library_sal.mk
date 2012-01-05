@@ -119,10 +119,6 @@ $(eval $(call gb_Library_add_exception_objects,sal,\
 	sal/rtl/source/ustrbuf \
 	sal/rtl/source/ustring \
 	sal/rtl/source/uuid \
-	sal/textenc/textenc \
-))
-$(eval $(call gb_Library_add_cobjects,sal,\
-	sal/osl/all/filepath \
 	sal/textenc/context \
 	sal/textenc/converter \
 	sal/textenc/tcvtbyte \
@@ -130,7 +126,11 @@ $(eval $(call gb_Library_add_cobjects,sal,\
 	sal/textenc/tenchelp \
 	sal/textenc/tencinfo \
 	sal/textenc/textcvt \
+	sal/textenc/textenc \
 	sal/textenc/unichars \
+))
+$(eval $(call gb_Library_add_cobjects,sal,\
+	sal/osl/all/filepath \
 ))
 
 ifeq ($(GUI),UNX)

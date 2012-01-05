@@ -26,19 +26,20 @@
  *
  ************************************************************************/
 
+#include "sal/config.h"
+
 #include "sal/types.h"
-#include "rtl/alloc.h"
 #include "rtl/textcvt.h"
 
-#include "converter.h"
-#include "tenchelp.h"
-#include "unichars.h"
+#include "converter.hxx"
+#include "tenchelp.hxx"
+#include "unichars.hxx"
 
 struct ImplUtf8ToUnicodeContext
 {
     sal_uInt32 nUtf32;
     int nShift;
-    sal_Bool bCheckBom;
+    bool bCheckBom;
 };
 
 struct ImplUnicodeToUtf8Context
@@ -46,9 +47,9 @@ struct ImplUnicodeToUtf8Context
     sal_Unicode nHighSurrogate; /* 0xFFFF: write BOM */
 };
 
-void * ImplCreateUtf8ToUnicodeContext(void)
+void * ImplCreateUtf8ToUnicodeContext()
 {
-    void * p = rtl_allocateMemory(sizeof (struct ImplUtf8ToUnicodeContext));
+    ImplUtf8ToUnicodeContext * p = new ImplUtf8ToUnicodeContext;
     ImplResetUtf8ToUnicodeContext(p);
     return p;
 }
@@ -57,13 +58,13 @@ void ImplResetUtf8ToUnicodeContext(void * pContext)
 {
     if (pContext != NULL)
     {
-        ((struct ImplUtf8ToUnicodeContext *) pContext)->nShift = -1;
-        ((struct ImplUtf8ToUnicodeContext *) pContext)->bCheckBom = sal_True;
+        static_cast< ImplUtf8ToUnicodeContext * >(pContext)->nShift = -1;
+        static_cast< ImplUtf8ToUnicodeContext * >(pContext)->bCheckBom = true;
     }
 }
 
 sal_Size ImplConvertUtf8ToUnicode(ImplTextConverterData const * pData,
-                                  void * pContext, sal_Char const * pSrcBuf,
+                                  void * pContext, char const * pSrcBuf,
                                   sal_Size nSrcBytes, sal_Unicode * pDestBuf,
                                   sal_Size nDestChars, sal_uInt32 nFlags,
                                   sal_uInt32 * pInfo, sal_Size * pSrcCvtBytes)
@@ -81,7 +82,7 @@ sal_Size ImplConvertUtf8ToUnicode(ImplTextConverterData const * pData,
     int bJavaUtf8 = pData != NULL;
     sal_uInt32 nUtf32 = 0;
     int nShift = -1;
-    sal_Bool bCheckBom = sal_True;
+    bool bCheckBom = true;
     sal_uInt32 nInfo = 0;
     sal_uChar const * pSrcBufPtr = (sal_uChar const *) pSrcBuf;
     sal_uChar const * pSrcBufEnd = pSrcBufPtr + nSrcBytes;
@@ -90,15 +91,15 @@ sal_Size ImplConvertUtf8ToUnicode(ImplTextConverterData const * pData,
 
     if (pContext != NULL)
     {
-        nUtf32 = ((struct ImplUtf8ToUnicodeContext *) pContext)->nUtf32;
-        nShift = ((struct ImplUtf8ToUnicodeContext *) pContext)->nShift;
-        bCheckBom = ((struct ImplUtf8ToUnicodeContext *) pContext)->bCheckBom;
+        nUtf32 = static_cast< ImplUtf8ToUnicodeContext * >(pContext)->nUtf32;
+        nShift = static_cast< ImplUtf8ToUnicodeContext * >(pContext)->nShift;
+        bCheckBom = static_cast< ImplUtf8ToUnicodeContext * >(pContext)->bCheckBom;
     }
 
     while (pSrcBufPtr < pSrcBufEnd)
     {
-        sal_Bool bUndefined = sal_False;
-        int bConsume = sal_True;
+        bool bUndefined = false;
+        int bConsume = true;
         sal_uInt32 nChar = *pSrcBufPtr++;
         if (nShift < 0)
             if (nChar <= 0x7F)
@@ -176,29 +177,29 @@ sal_Size ImplConvertUtf8ToUnicode(ImplTextConverterData const * pData,
                     goto no_output;
             else
             {
-                bUndefined = sal_True;
+                bUndefined = true;
                 goto bad_input;
             }
         }
         nShift = -1;
-        bCheckBom = sal_False;
+        bCheckBom = false;
         continue;
 
     bad_input:
         switch (ImplHandleBadInputTextToUnicodeConversion(
-                    bUndefined, sal_True, 0, nFlags, &pDestBufPtr, pDestBufEnd,
+                    bUndefined, true, 0, nFlags, &pDestBufPtr, pDestBufEnd,
                     &nInfo))
         {
         case IMPL_BAD_INPUT_STOP:
             nShift = -1;
-            bCheckBom = sal_False;
+            bCheckBom = false;
             if (!bConsume)
                 --pSrcBufPtr;
             break;
 
         case IMPL_BAD_INPUT_CONTINUE:
             nShift = -1;
-            bCheckBom = sal_False;
+            bCheckBom = false;
             if (!bConsume)
                 --pSrcBufPtr;
             continue;
@@ -223,13 +224,13 @@ sal_Size ImplConvertUtf8ToUnicode(ImplTextConverterData const * pData,
             nInfo |= RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL;
         else
             switch (ImplHandleBadInputTextToUnicodeConversion(
-                        sal_False, sal_True, 0, nFlags, &pDestBufPtr,
-                        pDestBufEnd, &nInfo))
+                        false, true, 0, nFlags, &pDestBufPtr, pDestBufEnd,
+                        &nInfo))
             {
             case IMPL_BAD_INPUT_STOP:
             case IMPL_BAD_INPUT_CONTINUE:
                 nShift = -1;
-                bCheckBom = sal_False;
+                bCheckBom = false;
                 break;
 
             case IMPL_BAD_INPUT_NO_OUTPUT:
@@ -240,20 +241,20 @@ sal_Size ImplConvertUtf8ToUnicode(ImplTextConverterData const * pData,
 
     if (pContext != NULL)
     {
-        ((struct ImplUtf8ToUnicodeContext *) pContext)->nUtf32 = nUtf32;
-        ((struct ImplUtf8ToUnicodeContext *) pContext)->nShift = nShift;
-        ((struct ImplUtf8ToUnicodeContext *) pContext)->bCheckBom = bCheckBom;
+        static_cast< ImplUtf8ToUnicodeContext * >(pContext)->nUtf32 = nUtf32;
+        static_cast< ImplUtf8ToUnicodeContext * >(pContext)->nShift = nShift;
+        static_cast< ImplUtf8ToUnicodeContext * >(pContext)->bCheckBom = bCheckBom;
     }
     if (pInfo != NULL)
         *pInfo = nInfo;
     if (pSrcCvtBytes != NULL)
-        *pSrcCvtBytes = (sal_Char const *) pSrcBufPtr - pSrcBuf;
+        *pSrcCvtBytes = reinterpret_cast< char const * >(pSrcBufPtr) - pSrcBuf;
     return pDestBufPtr - pDestBuf;
 }
 
-void * ImplCreateUnicodeToUtf8Context(void)
+void * ImplCreateUnicodeToUtf8Context()
 {
-    void * p = rtl_allocateMemory(sizeof (struct ImplUnicodeToUtf8Context));
+    ImplUnicodeToUtf8Context * p = new ImplUnicodeToUtf8Context;
     ImplResetUnicodeToUtf8Context(p);
     return p;
 }
@@ -261,12 +262,12 @@ void * ImplCreateUnicodeToUtf8Context(void)
 void ImplResetUnicodeToUtf8Context(void * pContext)
 {
     if (pContext != NULL)
-        ((struct ImplUnicodeToUtf8Context *) pContext)->nHighSurrogate = 0xFFFF;
+        static_cast< ImplUnicodeToUtf8Context * >(pContext)->nHighSurrogate = 0xFFFF;
 }
 
 sal_Size ImplConvertUnicodeToUtf8(ImplTextConverterData const * pData,
                                   void * pContext, sal_Unicode const * pSrcBuf,
-                                  sal_Size nSrcChars, sal_Char * pDestBuf,
+                                  sal_Size nSrcChars, char * pDestBuf,
                                   sal_Size nDestBytes, sal_uInt32 nFlags,
                                   sal_uInt32 * pInfo, sal_Size* pSrcCvtChars)
 {
@@ -275,12 +276,12 @@ sal_Size ImplConvertUnicodeToUtf8(ImplTextConverterData const * pData,
     sal_uInt32 nInfo = 0;
     sal_Unicode const * pSrcBufPtr = pSrcBuf;
     sal_Unicode const * pSrcBufEnd = pSrcBufPtr + nSrcChars;
-    sal_Char * pDestBufPtr = pDestBuf;
-    sal_Char * pDestBufEnd = pDestBufPtr + nDestBytes;
+    char * pDestBufPtr = pDestBuf;
+    char * pDestBufEnd = pDestBufPtr + nDestBytes;
 
     if (pContext != NULL)
         nHighSurrogate
-            = ((struct ImplUnicodeToUtf8Context *) pContext)->nHighSurrogate;
+            = static_cast< ImplUnicodeToUtf8Context * >(pContext)->nHighSurrogate;
 
     if (nHighSurrogate == 0xFFFF)
     {
@@ -290,9 +291,9 @@ sal_Size ImplConvertUnicodeToUtf8(ImplTextConverterData const * pData,
             if (pDestBufEnd - pDestBufPtr >= 3)
             {
                 /* Write BOM (U+FEFF) as UTF-8: */
-                *pDestBufPtr++ = (sal_Char) (unsigned char) 0xEF;
-                *pDestBufPtr++ = (sal_Char) (unsigned char) 0xBB;
-                *pDestBufPtr++ = (sal_Char) (unsigned char) 0xBF;
+                *pDestBufPtr++ = static_cast< char >(static_cast< unsigned char >(0xEF));
+                *pDestBufPtr++ = static_cast< char >(static_cast< unsigned char >(0xBB));
+                *pDestBufPtr++ = static_cast< char >(static_cast< unsigned char >(0xBF));
             }
             else
             {
@@ -325,32 +326,32 @@ sal_Size ImplConvertUnicodeToUtf8(ImplTextConverterData const * pData,
 
         if (nChar <= 0x7F && (!bJavaUtf8 || nChar != 0))
             if (pDestBufPtr != pDestBufEnd)
-                *pDestBufPtr++ = (sal_Char) nChar;
+                *pDestBufPtr++ = static_cast< char >(nChar);
             else
                 goto no_output;
         else if (nChar <= 0x7FF)
             if (pDestBufEnd - pDestBufPtr >= 2)
             {
-                *pDestBufPtr++ = (sal_Char) (0xC0 | (nChar >> 6));
-                *pDestBufPtr++ = (sal_Char) (0x80 | (nChar & 0x3F));
+                *pDestBufPtr++ = static_cast< char >(0xC0 | (nChar >> 6));
+                *pDestBufPtr++ = static_cast< char >(0x80 | (nChar & 0x3F));
             }
             else
                 goto no_output;
         else if (nChar <= 0xFFFF)
             if (pDestBufEnd - pDestBufPtr >= 3)
             {
-                *pDestBufPtr++ = (sal_Char) (0xE0 | (nChar >> 12));
-                *pDestBufPtr++ = (sal_Char) (0x80 | ((nChar >> 6) & 0x3F));
-                *pDestBufPtr++ = (sal_Char) (0x80 | (nChar & 0x3F));
+                *pDestBufPtr++ = static_cast< char >(0xE0 | (nChar >> 12));
+                *pDestBufPtr++ = static_cast< char >(0x80 | ((nChar >> 6) & 0x3F));
+                *pDestBufPtr++ = static_cast< char >(0x80 | (nChar & 0x3F));
             }
             else
                 goto no_output;
         else if (pDestBufEnd - pDestBufPtr >= 4)
         {
-            *pDestBufPtr++ = (sal_Char) (0xF0 | (nChar >> 18));
-            *pDestBufPtr++ = (sal_Char) (0x80 | ((nChar >> 12) & 0x3F));
-            *pDestBufPtr++ = (sal_Char) (0x80 | ((nChar >> 6) & 0x3F));
-            *pDestBufPtr++ = (sal_Char) (0x80 | (nChar & 0x3F));
+            *pDestBufPtr++ = static_cast< char >(0xF0 | (nChar >> 18));
+            *pDestBufPtr++ = static_cast< char >(0x80 | ((nChar >> 12) & 0x3F));
+            *pDestBufPtr++ = static_cast< char >(0x80 | ((nChar >> 6) & 0x3F));
+            *pDestBufPtr++ = static_cast< char >(0x80 | (nChar & 0x3F));
         }
         else
             goto no_output;
@@ -358,7 +359,7 @@ sal_Size ImplConvertUnicodeToUtf8(ImplTextConverterData const * pData,
         continue;
 
     bad_input:
-        switch (ImplHandleBadInputUnicodeToTextConversion(sal_False, 0, nFlags,
+        switch (ImplHandleBadInputUnicodeToTextConversion(false, 0, nFlags,
                                                           &pDestBufPtr,
                                                           pDestBufEnd, &nInfo,
                                                           NULL, 0, NULL))
@@ -390,8 +391,7 @@ sal_Size ImplConvertUnicodeToUtf8(ImplTextConverterData const * pData,
         if ((nFlags & RTL_UNICODETOTEXT_FLAGS_FLUSH) != 0)
             nInfo |= RTL_UNICODETOTEXT_INFO_SRCBUFFERTOSMALL;
         else
-            switch (ImplHandleBadInputUnicodeToTextConversion(sal_False, 0,
-                                                              nFlags,
+            switch (ImplHandleBadInputUnicodeToTextConversion(false, 0, nFlags,
                                                               &pDestBufPtr,
                                                               pDestBufEnd,
                                                               &nInfo, NULL, 0,
@@ -410,7 +410,7 @@ sal_Size ImplConvertUnicodeToUtf8(ImplTextConverterData const * pData,
 
  done:
     if (pContext != NULL)
-        ((struct ImplUnicodeToUtf8Context *) pContext)->nHighSurrogate
+        static_cast< ImplUnicodeToUtf8Context * >(pContext)->nHighSurrogate
             = nHighSurrogate;
     if (pInfo != NULL)
         *pInfo = nInfo;

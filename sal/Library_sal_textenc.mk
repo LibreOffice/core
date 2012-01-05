@@ -39,11 +39,6 @@ $(eval $(call gb_Library_add_defs,sal_textenc,\
 ))
 
 $(eval $(call gb_Library_add_exception_objects,sal_textenc,\
-	sal/textenc/convertsinglebytetobmpunicode \
-	sal/textenc/tables \
-))
-
-$(eval $(call gb_Library_add_cobjects,sal_textenc,\
 	sal/textenc/context \
 	sal/textenc/convertbig5hkscs \
 	sal/textenc/converter \
@@ -52,6 +47,8 @@ $(eval $(call gb_Library_add_cobjects,sal_textenc,\
 	sal/textenc/convertiso2022cn \
 	sal/textenc/convertiso2022jp \
 	sal/textenc/convertiso2022kr \
+	sal/textenc/convertsinglebytetobmpunicode \
+	sal/textenc/tables \
 	sal/textenc/tcvtbyte \
 	sal/textenc/tcvtmb \
 	sal/textenc/tcvtutf7 \

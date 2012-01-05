@@ -26,14 +26,17 @@
  *
  ************************************************************************/
 
-#include "converter.h"
-#include "tenchelp.h"
-#include "unichars.h"
+#include "sal/config.h"
+
 #include "rtl/textcvt.h"
 #include "sal/types.h"
 
+#include "converter.hxx"
+#include "tenchelp.hxx"
+#include "unichars.hxx"
+
 ImplBadInputConversionAction ImplHandleBadInputTextToUnicodeConversion(
-    sal_Bool bUndefined, sal_Bool bMultiByte, sal_Char cByte, sal_uInt32 nFlags,
+    bool bUndefined, bool bMultiByte, char cByte, sal_uInt32 nFlags,
     sal_Unicode ** pDestBufPtr, sal_Unicode * pDestBufEnd, sal_uInt32 * pInfo)
 {
     *pInfo |= bUndefined
@@ -69,9 +72,9 @@ ImplBadInputConversionAction ImplHandleBadInputTextToUnicodeConversion(
         else
             return IMPL_BAD_INPUT_NO_OUTPUT;
 
-    default: /* RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_DEFAULT,
-                RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_DEFAULT,
-                RTL_TEXTTOUNICODE_FLAGS_INVALID_DEFAULT */
+    default: // RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_DEFAULT,
+             // RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_DEFAULT,
+             // RTL_TEXTTOUNICODE_FLAGS_INVALID_DEFAULT
         if (*pDestBufPtr != pDestBufEnd)
         {
             *(*pDestBufPtr)++ = RTL_TEXTENC_UNICODE_REPLACEMENT_CHARACTER;
@@ -83,20 +86,20 @@ ImplBadInputConversionAction ImplHandleBadInputTextToUnicodeConversion(
 }
 
 ImplBadInputConversionAction
-ImplHandleBadInputUnicodeToTextConversion(sal_Bool bUndefined,
+ImplHandleBadInputUnicodeToTextConversion(bool bUndefined,
                                           sal_uInt32 nUtf32,
                                           sal_uInt32 nFlags,
-                                          sal_Char ** pDestBufPtr,
-                                          sal_Char * pDestBufEnd,
+                                          char ** pDestBufPtr,
+                                          char * pDestBufEnd,
                                           sal_uInt32 * pInfo,
-                                          sal_Char const * pPrefix,
+                                          char const * pPrefix,
                                           sal_Size nPrefixLen,
-                                          sal_Bool * pPrefixWritten)
+                                          bool * pPrefixWritten)
 {
-    /* TODO! RTL_UNICODETOTEXT_FLAGS_UNDEFINED_REPLACE
-             RTL_UNICODETOTEXT_FLAGS_UNDEFINED_REPLACESTR */
+    // TODO! RTL_UNICODETOTEXT_FLAGS_UNDEFINED_REPLACE
+    // RTL_UNICODETOTEXT_FLAGS_UNDEFINED_REPLACESTR
 
-    sal_Char cReplace;
+    char cReplace;
 
     if (bUndefined)
     {
@@ -131,7 +134,7 @@ ImplHandleBadInputUnicodeToTextConversion(sal_Bool bUndefined,
     case RTL_UNICODETOTEXT_FLAGS_UNDEFINED_IGNORE:
     case RTL_UNICODETOTEXT_FLAGS_INVALID_IGNORE:
         if (pPrefixWritten)
-            *pPrefixWritten = sal_False;
+            *pPrefixWritten = false;
         return IMPL_BAD_INPUT_CONTINUE;
 
     case RTL_UNICODETOTEXT_FLAGS_UNDEFINED_0:
@@ -141,8 +144,8 @@ ImplHandleBadInputUnicodeToTextConversion(sal_Bool bUndefined,
 
     case RTL_UNICODETOTEXT_FLAGS_UNDEFINED_QUESTIONMARK:
     case RTL_UNICODETOTEXT_FLAGS_INVALID_QUESTIONMARK:
-    default: /* RTL_UNICODETOTEXT_FLAGS_UNDEFINED_DEFAULT,
-                RTL_UNICODETOTEXT_FLAGS_INVALID_DEFAULT */
+    default: // RTL_UNICODETOTEXT_FLAGS_UNDEFINED_DEFAULT,
+             // RTL_UNICODETOTEXT_FLAGS_INVALID_DEFAULT
         cReplace = '?';
         break;
 
@@ -157,7 +160,7 @@ ImplHandleBadInputUnicodeToTextConversion(sal_Bool bUndefined,
             *(*pDestBufPtr)++ = *pPrefix++;
         *(*pDestBufPtr)++ = cReplace;
         if (pPrefixWritten)
-            *pPrefixWritten = sal_True;
+            *pPrefixWritten = true;
         return IMPL_BAD_INPUT_CONTINUE;
     }
     else

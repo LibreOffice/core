@@ -25,20 +25,13 @@
  *
  ************************************************************************/
 
-#ifndef INCLUDED_RTL_TEXTENC_CONTEXT_H
-#include "context.h"
-#endif
-#ifndef INCLUDED_RTL_TEXTENC_CONVERTGB18030_H
-#include "convertgb18030.h"
-#endif
+#include "sal/config.h"
 
-#ifndef _RTL_TENCINFO_H
 #include "rtl/tencinfo.h"
-#endif
-#ifndef _RTL_TEXTENC_H
 #include "rtl/textenc.h"
-#endif
 
+#include "context.hxx"
+#include "convertgb18030.hxx"
 #include "generate/gb180302000.tab"
 
 static ImplGb18030ConverterData const aImplGb18030ConvertData

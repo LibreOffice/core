@@ -25,22 +25,14 @@
  *
  ************************************************************************/
 
-#ifndef INCLUDED_RTL_TEXTENC_CONTEXT_H
-#include "context.h"
-#endif
-#ifndef INCLUDED_RTL_TEXTENC_CONVERTISO2022JP_H
-#include "convertiso2022jp.h"
-#endif
-#ifndef INCLUDED_RTL_TEXTENC_TENCHELP_H
-#include "tenchelp.h"
-#endif
+#include "sal/config.h"
 
-#ifndef _RTL_TENCINFO_H
 #include "rtl/tencinfo.h"
-#endif
-#ifndef _RTL_TEXTENC_H
 #include "rtl/textenc.h"
-#endif
+
+#include "context.hxx"
+#include "convertiso2022jp.hxx"
+#include "tenchelp.hxx"
 
 static ImplIso2022JpConverterData const aImplIso2022JpConvertData
     = { aJIS0208UniLeadTab, /* from tcvtjp6.tab */

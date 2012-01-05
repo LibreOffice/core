@@ -25,12 +25,14 @@
  *
  ************************************************************************/
 
-#include "context.h"
-#include "convertsinglebytetobmpunicode.hxx"
-#include "tenchelp.h"
+#include "sal/config.h"
 
 #include "rtl/tencinfo.h"
-#include <sal/macros.h>
+#include "sal/macros.h"
+
+#include "context.hxx"
+#include "convertsinglebytetobmpunicode.hxx"
+#include "tenchelp.hxx"
 
 namespace {
 

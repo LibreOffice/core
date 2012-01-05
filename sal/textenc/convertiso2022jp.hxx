@@ -26,59 +26,49 @@
  *
  ************************************************************************/
 
-#ifndef INCLUDED_RTL_TEXTENC_CONVERTBIG5HKSCS_H
-#define INCLUDED_RTL_TEXTENC_CONVERTBIG5HKSCS_H
+#ifndef INCLUDED_SAL_TEXTENC_CONVERTISO2022JP_HXX
+#define INCLUDED_SAL_TEXTENC_CONVERTISO2022JP_HXX
 
-#include "tenchelp.h"
+#include "sal/config.h"
+
 #include "sal/types.h"
 
-#if defined __cplusplus
-extern "C" {
-#endif /* __cpluscplus */
+#include "tenchelp.hxx"
 
-typedef struct
+struct ImplIso2022JpConverterData
 {
-    sal_uInt16 const * m_pBig5Hkscs2001ToUnicodeData;
-    sal_Int32 const * m_pBig5Hkscs2001ToUnicodeRowOffsets;
-    ImplDBCSToUniLeadTab const * m_pBig5ToUnicodeData;
-    sal_uInt16 const * m_pUnicodeToBig5Hkscs2001Data;
-    sal_Int32 const * m_pUnicodeToBig5Hkscs2001PageOffsets;
-    sal_Int32 const * m_pUnicodeToBig5Hkscs2001PlaneOffsets;
-    ImplUniToDBCSHighTab const * m_pUnicodeToBig5Data;
-    ImplDBCSEUDCData const * m_pEudcData;
-    int m_nEudcCount;
-} ImplBig5HkscsConverterData;
+    ImplDBCSToUniLeadTab const * m_pJisX0208ToUnicodeData;
+    ImplUniToDBCSHighTab const * m_pUnicodeToJisX0208Data;
+};
 
-void * ImplCreateBig5HkscsToUnicodeContext(void) SAL_THROW_EXTERN_C();
+void * ImplCreateIso2022JpToUnicodeContext();
 
-void ImplResetBig5HkscsToUnicodeContext(void * pContext) SAL_THROW_EXTERN_C();
+void ImplResetIso2022JpToUnicodeContext(void * pContext);
 
-sal_Size ImplConvertBig5HkscsToUnicode(ImplTextConverterData const * pData,
+sal_Size ImplConvertIso2022JpToUnicode(ImplTextConverterData const * pData,
                                        void * pContext,
-                                       sal_Char const * pSrcBuf,
+                                       char const * pSrcBuf,
                                        sal_Size nSrcBytes,
                                        sal_Unicode * pDestBuf,
                                        sal_Size nDestChars,
                                        sal_uInt32 nFlags,
                                        sal_uInt32 * pInfo,
-                                       sal_Size * pSrcCvtBytes)
-    SAL_THROW_EXTERN_C();
+                                       sal_Size * pSrcCvtBytes);
 
-sal_Size ImplConvertUnicodeToBig5Hkscs(ImplTextConverterData const * pData,
+void * ImplCreateUnicodeToIso2022JpContext();
+
+void ImplResetUnicodeToIso2022JpContext(void * pContext);
+
+sal_Size ImplConvertUnicodeToIso2022Jp(ImplTextConverterData const * pData,
                                        void * pContext,
                                        sal_Unicode const * pSrcBuf,
                                        sal_Size nSrcChars,
-                                       sal_Char * pDestBuf,
+                                       char * pDestBuf,
                                        sal_Size nDestBytes,
                                        sal_uInt32 nFlags,
                                        sal_uInt32 * pInfo,
-                                       sal_Size * pSrcCvtChars)
-    SAL_THROW_EXTERN_C();
+                                       sal_Size * pSrcCvtChars);
 
-#if defined __cplusplus
-}
-#endif /* __cpluscplus */
-
-#endif /* INCLUDED_RTL_TEXTENC_CONVERTBIG5HKSCS_H */
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

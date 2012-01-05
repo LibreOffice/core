@@ -26,38 +26,45 @@
  *
  ************************************************************************/
 
-#include "convertbig5hkscs.h"
-#include "context.h"
-#include "converter.h"
-#include "tenchelp.h"
-#include "unichars.h"
-#include "osl/diagnose.h"
-#include "rtl/alloc.h"
+#include "sal/config.h"
+
+#include <cassert>
+
 #include "rtl/textcvt.h"
 #include "sal/types.h"
 
-typedef struct
-{
-    sal_Int32 m_nRow; /* 0--255; 0 means none */
-} ImplBig5HkscsToUnicodeContext;
+#include "context.hxx"
+#include "convertbig5hkscs.hxx"
+#include "converter.hxx"
+#include "tenchelp.hxx"
+#include "unichars.hxx"
 
-void * ImplCreateBig5HkscsToUnicodeContext(void)
+namespace {
+
+struct ImplBig5HkscsToUnicodeContext
 {
-    void * pContext
-        = rtl_allocateMemory(sizeof (ImplBig5HkscsToUnicodeContext));
-    ((ImplBig5HkscsToUnicodeContext *) pContext)->m_nRow = 0;
+    sal_Int32 m_nRow; // 0--255; 0 means none
+};
+
+}
+
+void * ImplCreateBig5HkscsToUnicodeContext()
+{
+    ImplBig5HkscsToUnicodeContext * pContext =
+        new ImplBig5HkscsToUnicodeContext;
+    pContext->m_nRow = 0;
     return pContext;
 }
 
 void ImplResetBig5HkscsToUnicodeContext(void * pContext)
 {
     if (pContext)
-        ((ImplBig5HkscsToUnicodeContext *) pContext)->m_nRow = 0;
+        static_cast< ImplBig5HkscsToUnicodeContext * >(pContext)->m_nRow = 0;
 }
 
 sal_Size ImplConvertBig5HkscsToUnicode(ImplTextConverterData const * pData,
                                        void * pContext,
-                                       sal_Char const * pSrcBuf,
+                                       char const * pSrcBuf,
                                        sal_Size nSrcBytes,
                                        sal_Unicode * pDestBuf,
                                        sal_Size nDestChars,
@@ -66,13 +73,13 @@ sal_Size ImplConvertBig5HkscsToUnicode(ImplTextConverterData const * pData,
                                        sal_Size * pSrcCvtBytes)
 {
     sal_uInt16 const * pBig5Hkscs2001Data
-        = ((ImplBig5HkscsConverterData const *) pData)->
+        = static_cast< ImplBig5HkscsConverterData const * >(pData)->
               m_pBig5Hkscs2001ToUnicodeData;
     sal_Int32 const * pBig5Hkscs2001RowOffsets
-        = ((ImplBig5HkscsConverterData const *) pData)->
+        = static_cast< ImplBig5HkscsConverterData const * >(pData)->
               m_pBig5Hkscs2001ToUnicodeRowOffsets;
     ImplDBCSToUniLeadTab const * pBig5Data
-        = ((ImplBig5HkscsConverterData const *) pData)->
+        = static_cast< ImplBig5HkscsConverterData const * >(pData)->
               m_pBig5ToUnicodeData;
     sal_Int32 nRow = 0;
     sal_uInt32 nInfo = 0;
@@ -81,11 +88,11 @@ sal_Size ImplConvertBig5HkscsToUnicode(ImplTextConverterData const * pData,
     sal_Unicode * pDestBufEnd = pDestBuf + nDestChars;
 
     if (pContext)
-        nRow = ((ImplBig5HkscsToUnicodeContext *) pContext)->m_nRow;
+        nRow = static_cast< ImplBig5HkscsToUnicodeContext * >(pContext)->m_nRow;
 
     for (; nConverted < nSrcBytes; ++nConverted)
     {
-        sal_Bool bUndefined = sal_True;
+        bool bUndefined = true;
         sal_uInt32 nChar = *(sal_uChar const *) pSrcBuf++;
         if (nRow == 0)
             if (nChar < 0x80)
@@ -97,7 +104,7 @@ sal_Size ImplConvertBig5HkscsToUnicode(ImplTextConverterData const * pData,
                 nRow = nChar;
             else
             {
-                bUndefined = sal_False;
+                bUndefined = false;
                 goto bad_input;
             }
         else
@@ -125,16 +132,16 @@ sal_Size ImplConvertBig5HkscsToUnicode(ImplTextConverterData const * pData,
                         nUnicode = pBig5Data[nRow].mpToUniTrailTab[nChar - n];
                         if (nUnicode == 0)
                             nUnicode = 0xFFFF;
-                        OSL_VERIFY(!ImplIsHighSurrogate(nUnicode));
+                        assert(!ImplIsHighSurrogate(nUnicode));
                     }
                 }
                 if (nUnicode == 0xFFFF)
                 {
                     ImplDBCSEUDCData const * p
-                        = ((ImplBig5HkscsConverterData const *) pData)->
+                        = static_cast< ImplBig5HkscsConverterData const * >(pData)->
                               m_pEudcData;
                     sal_uInt32 nCount
-                        = ((ImplBig5HkscsConverterData const *) pData)->
+                        = static_cast< ImplBig5HkscsConverterData const * >(pData)->
                               m_nEudcCount;
                     sal_uInt32 i;
                     for (i = 0; i < nCount; ++i)
@@ -186,7 +193,7 @@ sal_Size ImplConvertBig5HkscsToUnicode(ImplTextConverterData const * pData,
                         }
                         ++p;
                     }
-                    OSL_VERIFY(!ImplIsHighSurrogate(nUnicode));
+                    assert(!ImplIsHighSurrogate(nUnicode));
                 }
                 if (nUnicode == 0xFFFF)
                     goto bad_input;
@@ -211,14 +218,14 @@ sal_Size ImplConvertBig5HkscsToUnicode(ImplTextConverterData const * pData,
             }
             else
             {
-                bUndefined = sal_False;
+                bUndefined = false;
                 goto bad_input;
             }
         continue;
 
     bad_input:
         switch (ImplHandleBadInputTextToUnicodeConversion(
-                    bUndefined, sal_True, 0, nFlags, &pDestBufPtr, pDestBufEnd,
+                    bUndefined, true, 0, nFlags, &pDestBufPtr, pDestBufEnd,
                     &nInfo))
         {
         case IMPL_BAD_INPUT_STOP:
@@ -249,8 +256,8 @@ sal_Size ImplConvertBig5HkscsToUnicode(ImplTextConverterData const * pData,
             nInfo |= RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL;
         else
             switch (ImplHandleBadInputTextToUnicodeConversion(
-                        sal_False, sal_True, 0, nFlags, &pDestBufPtr,
-                        pDestBufEnd, &nInfo))
+                        false, true, 0, nFlags, &pDestBufPtr, pDestBufEnd,
+                        &nInfo))
             {
             case IMPL_BAD_INPUT_STOP:
             case IMPL_BAD_INPUT_CONTINUE:
@@ -264,7 +271,7 @@ sal_Size ImplConvertBig5HkscsToUnicode(ImplTextConverterData const * pData,
     }
 
     if (pContext)
-        ((ImplBig5HkscsToUnicodeContext *) pContext)->m_nRow = nRow;
+        static_cast< ImplBig5HkscsToUnicodeContext * >(pContext)->m_nRow = nRow;
     if (pInfo)
         *pInfo = nInfo;
     if (pSrcCvtBytes)
@@ -277,29 +284,29 @@ sal_Size ImplConvertUnicodeToBig5Hkscs(ImplTextConverterData const * pData,
                                        void * pContext,
                                        sal_Unicode const * pSrcBuf,
                                        sal_Size nSrcChars,
-                                       sal_Char * pDestBuf,
+                                       char * pDestBuf,
                                        sal_Size nDestBytes,
                                        sal_uInt32 nFlags,
                                        sal_uInt32 * pInfo,
                                        sal_Size * pSrcCvtChars)
 {
     sal_uInt16 const * pBig5Hkscs2001Data
-        = ((ImplBig5HkscsConverterData const *) pData)->
+        = static_cast< ImplBig5HkscsConverterData const * >(pData)->
               m_pUnicodeToBig5Hkscs2001Data;
     sal_Int32 const * pBig5Hkscs2001PageOffsets
-        = ((ImplBig5HkscsConverterData const *) pData)->
+        = static_cast< ImplBig5HkscsConverterData const * >(pData)->
               m_pUnicodeToBig5Hkscs2001PageOffsets;
     sal_Int32 const * pBig5Hkscs2001PlaneOffsets
-        = ((ImplBig5HkscsConverterData const *) pData)->
+        = static_cast< ImplBig5HkscsConverterData const * >(pData)->
               m_pUnicodeToBig5Hkscs2001PlaneOffsets;
     ImplUniToDBCSHighTab const * pBig5Data
-        = ((ImplBig5HkscsConverterData const *) pData)->
+        = static_cast< ImplBig5HkscsConverterData const * >(pData)->
               m_pUnicodeToBig5Data;
     sal_Unicode nHighSurrogate = 0;
     sal_uInt32 nInfo = 0;
     sal_Size nConverted = 0;
-    sal_Char * pDestBufPtr = pDestBuf;
-    sal_Char * pDestBufEnd = pDestBuf + nDestBytes;
+    char * pDestBufPtr = pDestBuf;
+    char * pDestBufEnd = pDestBuf + nDestBytes;
 
     if (pContext)
         nHighSurrogate
@@ -307,7 +314,7 @@ sal_Size ImplConvertUnicodeToBig5Hkscs(ImplTextConverterData const * pData,
 
     for (; nConverted < nSrcChars; ++nConverted)
     {
-        sal_Bool bUndefined = sal_True;
+        bool bUndefined = true;
         sal_uInt32 nChar = *pSrcBuf++;
         if (nHighSurrogate == 0)
         {
@@ -321,19 +328,19 @@ sal_Size ImplConvertUnicodeToBig5Hkscs(ImplTextConverterData const * pData,
             nChar = ImplCombineSurrogates(nHighSurrogate, nChar);
         else
         {
-            bUndefined = sal_False;
+            bUndefined = false;
             goto bad_input;
         }
 
         if (ImplIsLowSurrogate(nChar) || ImplIsNoncharacter(nChar))
         {
-            bUndefined = sal_False;
+            bUndefined = false;
             goto bad_input;
         }
 
         if (nChar < 0x80)
             if (pDestBufPtr != pDestBufEnd)
-                *pDestBufPtr++ = (sal_Char) nChar;
+                *pDestBufPtr++ = static_cast< char >(nChar);
             else
                 goto no_output;
         else
@@ -374,10 +381,10 @@ sal_Size ImplConvertUnicodeToBig5Hkscs(ImplTextConverterData const * pData,
             if (nBytes == 0)
             {
                 ImplDBCSEUDCData const * p
-                    = ((ImplBig5HkscsConverterData const *) pData)->
+                    = static_cast< ImplBig5HkscsConverterData const * >(pData)->
                           m_pEudcData;
                 sal_uInt32 nCount
-                    = ((ImplBig5HkscsConverterData const *) pData)->
+                    = static_cast< ImplBig5HkscsConverterData const * >(pData)->
                           m_nEudcCount;
                 sal_uInt32 i;
                 for (i = 0; i < nCount; ++i) {
@@ -412,8 +419,8 @@ sal_Size ImplConvertUnicodeToBig5Hkscs(ImplTextConverterData const * pData,
                 goto bad_input;
             if (pDestBufEnd - pDestBufPtr >= 2)
             {
-                *pDestBufPtr++ = (sal_Char) (nBytes >> 8);
-                *pDestBufPtr++ = (sal_Char) (nBytes & 0xFF);
+                *pDestBufPtr++ = static_cast< char >(nBytes >> 8);
+                *pDestBufPtr++ = static_cast< char >(nBytes & 0xFF);
             }
             else
                 goto no_output;
@@ -459,7 +466,7 @@ sal_Size ImplConvertUnicodeToBig5Hkscs(ImplTextConverterData const * pData,
         if ((nFlags & RTL_UNICODETOTEXT_FLAGS_FLUSH) != 0)
             nInfo |= RTL_UNICODETOTEXT_INFO_SRCBUFFERTOSMALL;
         else
-            switch (ImplHandleBadInputUnicodeToTextConversion(sal_False,
+            switch (ImplHandleBadInputUnicodeToTextConversion(false,
                                                               0,
                                                               nFlags,
                                                               &pDestBufPtr,

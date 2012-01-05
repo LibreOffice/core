@@ -26,13 +26,12 @@
  *
  ************************************************************************/
 
-#include "tenchelp.h"
-#include "unichars.h"
+#include "sal/config.h"
 
-#ifndef _RTL_ALLOC_H
-#include "rtl/alloc.h"
-#endif
 #include "rtl/textcvt.h"
+
+#include "tenchelp.hxx"
+#include "unichars.hxx"
 
 /* ======================================================================= */
 
@@ -101,34 +100,33 @@ static sal_uChar const aImplMustShiftTab[128] =
 
 /* ----------------------------------------------------------------------- */
 
-typedef struct
+struct ImplUTF7ToUCContextData
 {
     int                     mbShifted;
     int                     mbFirst;
     int                     mbWroteOne;
     sal_uInt32              mnBitBuffer;
     sal_uInt32              mnBufferBits;
-} ImplUTF7ToUCContextData;
+};
 
 /* ----------------------------------------------------------------------- */
 
-void* ImplUTF7CreateUTF7TextToUnicodeContext( void )
+void* ImplUTF7CreateUTF7TextToUnicodeContext()
 {
-    ImplUTF7ToUCContextData* pContextData;
-    pContextData = (ImplUTF7ToUCContextData*)rtl_allocateMemory( sizeof( ImplUTF7ToUCContextData ) );
+    ImplUTF7ToUCContextData* pContextData = new ImplUTF7ToUCContextData;
     pContextData->mbShifted         = sal_False;
     pContextData->mbFirst           = sal_False;
     pContextData->mbWroteOne        = sal_False;
     pContextData->mnBitBuffer       = 0;
     pContextData->mnBufferBits      = 0;
-    return (void*)pContextData;
+    return pContextData;
 }
 
 /* ----------------------------------------------------------------------- */
 
 void ImplUTF7DestroyTextToUnicodeContext( void* pContext )
 {
-    rtl_freeMemory( pContext );
+    delete static_cast< ImplUTF7ToUCContextData * >(pContext);
 }
 
 /* ----------------------------------------------------------------------- */
@@ -145,8 +143,8 @@ void ImplUTF7ResetTextToUnicodeContext( void* pContext )
 
 /* ----------------------------------------------------------------------- */
 
-sal_Size ImplUTF7ToUnicode( const ImplTextConverterData* pData, void* pContext,
-                            const sal_Char* pSrcBuf, sal_Size nSrcBytes,
+sal_Size ImplUTF7ToUnicode( const ImplTextConverterData*, void* pContext,
+                            const char* pSrcBuf, sal_Size nSrcBytes,
                             sal_Unicode* pDestBuf, sal_Size nDestChars,
                             sal_uInt32 nFlags, sal_uInt32* pInfo,
                             sal_Size* pSrcCvtBytes )
@@ -163,9 +161,7 @@ sal_Size ImplUTF7ToUnicode( const ImplTextConverterData* pData, void* pContext,
     sal_uInt32                  nBitBufferTemp;
     sal_uInt32                  nBufferBits;
     sal_Unicode*                pEndDestBuf;
-    const sal_Char*             pEndSrcBuf;
-
-    (void) pData; /* unused */
+    const char*             pEndSrcBuf;
 
 /* !!! Implementation not finnished !!!
     if ( pContextData )
@@ -403,30 +399,29 @@ sal_Size ImplUTF7ToUnicode( const ImplTextConverterData* pData, void* pContext,
 
 /* ======================================================================= */
 
-typedef struct
+struct ImplUTF7FromUCContextData
 {
     int                     mbShifted;
     sal_uInt32              mnBitBuffer;
     sal_uInt32              mnBufferBits;
-} ImplUTF7FromUCContextData;
+};
 
 /* ----------------------------------------------------------------------- */
 
-void* ImplUTF7CreateUnicodeToTextContext( void )
+void* ImplUTF7CreateUnicodeToTextContext()
 {
-    ImplUTF7FromUCContextData* pContextData;
-    pContextData = (ImplUTF7FromUCContextData*)rtl_allocateMemory( sizeof( ImplUTF7FromUCContextData ) );
+    ImplUTF7FromUCContextData* pContextData = new ImplUTF7FromUCContextData;
     pContextData->mbShifted         = sal_False;
     pContextData->mnBitBuffer       = 0;
     pContextData->mnBufferBits      = 0;
-    return (void*)pContextData;
+    return pContextData;
 }
 
 /* ----------------------------------------------------------------------- */
 
 void ImplUTF7DestroyUnicodeToTextContext( void* pContext )
 {
-    rtl_freeMemory( pContext );
+    delete static_cast< ImplUTF7FromUCContextData * >(pContext);
 }
 
 /* ----------------------------------------------------------------------- */
@@ -441,10 +436,10 @@ void ImplUTF7ResetUnicodeToTextContext( void* pContext )
 
 /* ----------------------------------------------------------------------- */
 
-sal_Size ImplUnicodeToUTF7( const ImplTextConverterData* pData, void* pContext,
+sal_Size ImplUnicodeToUTF7( const ImplTextConverterData*, void* pContext,
                             const sal_Unicode* pSrcBuf, sal_Size nSrcChars,
-                            sal_Char* pDestBuf, sal_Size nDestBytes,
-                            sal_uInt32 nFlags, sal_uInt32* pInfo,
+                            char* pDestBuf, sal_Size nDestBytes,
+                            sal_uInt32, sal_uInt32* pInfo,
                             sal_Size* pSrcCvtChars )
 {
     ImplUTF7FromUCContextData*  pContextData = (ImplUTF7FromUCContextData*)pContext;
@@ -455,11 +450,8 @@ sal_Size ImplUnicodeToUTF7( const ImplTextConverterData* pData, void* pContext,
     sal_uInt32                  nBitBuffer;
     sal_uInt32                  nBitBufferTemp;
     sal_uInt32                  nBufferBits;
-    sal_Char*                   pEndDestBuf;
+    char*                   pEndDestBuf;
     const sal_Unicode*          pEndSrcBuf;
-
-    (void) pData; /* unused */
-    (void) nFlags; /* unused */
 
 /* !!! Implementation not finnished !!!
     if ( pContextData )
@@ -568,7 +560,7 @@ sal_Size ImplUnicodeToUTF7( const ImplTextConverterData* pData, void* pContext,
                     *pInfo |= RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL;
                     break;
                 }
-                *pDestBuf = (sal_Char)(sal_uChar)c;
+                *pDestBuf = static_cast< char >(static_cast< unsigned char >(c));
                 pDestBuf++;
             }
 

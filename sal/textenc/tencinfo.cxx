@@ -26,35 +26,27 @@
  *
  ************************************************************************/
 
+#include "sal/config.h"
+
+#include <cstddef>
+#include <cstring>
+
 #include "rtl/tencinfo.h"
-#include "gettextencodingdata.h"
-#include "tenchelp.h"
 
-#ifndef _RTL_ALLOC_H
-#include "rtl/alloc.h"
-#endif
-
-#ifndef INCLUDED_STDDEF_H
-#include <stddef.h>
-#define INCLUDED_STDDEF_H
-#endif
-#ifndef INCLUDED_STRING_H
-#include <string.h>
-#define INCLUDED_STRING_H
-#endif
+#include "gettextencodingdata.hxx"
+#include "tenchelp.hxx"
 
 sal_Bool SAL_CALL rtl_isOctetTextEncoding(rtl_TextEncoding nEncoding)
 {
-    return (sal_Bool)
-        (nEncoding > RTL_TEXTENCODING_DONTKNOW
-         && (nEncoding <= RTL_TEXTENCODING_ADOBE_DINGBATS)
-             /* always update this! */
-         && nEncoding != 9); /* RTL_TEXTENCODING_SYSTEM */
+    return
+        nEncoding > RTL_TEXTENCODING_DONTKNOW
+        && nEncoding != 9 // RTL_TEXTENCODING_SYSTEM
+        && nEncoding <= RTL_TEXTENCODING_ADOBE_DINGBATS; // always update this!
 }
 
 /* ======================================================================= */
 
-static void Impl_toAsciiLower( const sal_Char* pName, sal_Char* pBuf )
+static void Impl_toAsciiLower( const char* pName, char* pBuf )
 {
     while ( *pName )
     {
@@ -73,7 +65,7 @@ static void Impl_toAsciiLower( const sal_Char* pName, sal_Char* pBuf )
 
 /* ----------------------------------------------------------------------- */
 
-static void Impl_toAsciiLowerAndRemoveNonAlphanumeric( const sal_Char* pName, sal_Char* pBuf )
+static void Impl_toAsciiLowerAndRemoveNonAlphanumeric( const char* pName, char* pBuf )
 {
     while ( *pName )
     {
@@ -100,35 +92,35 @@ static void Impl_toAsciiLowerAndRemoveNonAlphanumeric( const sal_Char* pName, sa
 /* ----------------------------------------------------------------------- */
 
 /* pMatchStr must match with all characters in pCompStr */
-static sal_Bool Impl_matchString( const sal_Char* pCompStr, const sal_Char* pMatchStr )
+static bool Impl_matchString( const char* pCompStr, const char* pMatchStr )
 {
     /* We test only for end in MatchStr, because the last 0 character from */
     /* pCompStr is unequal a character in MatchStr, so the loop terminates */
     while ( *pMatchStr )
     {
         if ( *pCompStr != *pMatchStr )
-            return sal_False;
+            return false;
 
         pCompStr++;
         pMatchStr++;
     }
 
-    return sal_True;
+    return true;
 }
 
 /* ======================================================================= */
 
-typedef struct
+struct ImplStrCharsetDef
 {
-    const sal_Char*             mpCharsetStr;
+    const char*             mpCharsetStr;
     rtl_TextEncoding            meTextEncoding;
-} ImplStrCharsetDef;
+};
 
-typedef struct
+struct ImplStrFirstPartCharsetDef
 {
-    const sal_Char*             mpCharsetStr;
+    const char*             mpCharsetStr;
     const ImplStrCharsetDef*    mpSecondPartTab;
-} ImplStrFirstPartCharsetDef;
+};
 
 /* ======================================================================= */
 
@@ -142,41 +134,41 @@ sal_Bool SAL_CALL rtl_getTextEncodingInfo( rtl_TextEncoding eTextEncoding, rtl_T
         /* HACK: For not implemented encoding, because not all
            calls handle the errors */
         if ( pEncInfo->StructSize < 5 )
-            return sal_False;
+            return false;
         pEncInfo->MinimumCharSize = 1;
 
         if ( pEncInfo->StructSize < 6 )
-            return sal_True;
+            return true;
         pEncInfo->MaximumCharSize = 1;
 
         if ( pEncInfo->StructSize < 7 )
-            return sal_True;
+            return true;
         pEncInfo->AverageCharSize = 1;
 
         if ( pEncInfo->StructSize < 12 )
-            return sal_True;
+            return true;
         pEncInfo->Flags = 0;
 
-        return sal_False;
+        return false;
     }
 
     if ( pEncInfo->StructSize < 5 )
-        return sal_False;
+        return false;
     pEncInfo->MinimumCharSize = pData->mnMinCharSize;
 
     if ( pEncInfo->StructSize < 6 )
-        return sal_True;
+        return true;
     pEncInfo->MaximumCharSize = pData->mnMaxCharSize;
 
     if ( pEncInfo->StructSize < 7 )
-        return sal_True;
+        return true;
     pEncInfo->AverageCharSize = pData->mnAveCharSize;
 
     if ( pEncInfo->StructSize < 12 )
-        return sal_True;
+        return true;
     pEncInfo->Flags = pData->mnInfoFlags;
 
-    return sal_True;
+    return true;
 }
 
 /* ======================================================================= */
@@ -213,7 +205,7 @@ rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromWindowsCharset( sal_uInt8 nWinC
 
 /* ----------------------------------------------------------------------- */
 
-rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromUnixCharset( const sal_Char* pUnixCharset )
+rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromUnixCharset( const char* pUnixCharset )
 {
     /* See <ftp://ftp.x.org/pub/DOCS/registry>, section 14 ("Font Charset
      * (Registry and Encoding) Names").
@@ -424,14 +416,14 @@ rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromUnixCharset( const sal_Char* pU
     };
 
     rtl_TextEncoding    eEncoding = RTL_TEXTENCODING_DONTKNOW;
-    sal_Char*           pBuf;
-    sal_Char*           pTempBuf;
+    char*           pBuf;
+    char*           pTempBuf;
     sal_uInt32          nBufLen = strlen( pUnixCharset )+1;
-    const sal_Char*     pFirstPart;
-    const sal_Char*     pSecondPart;
+    const char*     pFirstPart;
+    const char*     pSecondPart;
 
     /* Alloc Buffer and map to lower case */
-    pBuf = (char*)rtl_allocateMemory( nBufLen );
+    pBuf = new char[nBufLen];
     Impl_toAsciiLower( pUnixCharset, pBuf );
 
     /* Search FirstPart */
@@ -481,14 +473,14 @@ rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromUnixCharset( const sal_Char* pU
         }
     }
 
-    rtl_freeMemory( pBuf );
+    delete[] pBuf;
 
     return eEncoding;
 }
 
 /* ----------------------------------------------------------------------- */
 
-rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromMimeCharset( const sal_Char* pMimeCharset )
+rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromMimeCharset( const char* pMimeCharset )
 {
     /* All Identifiers are in lower case and contain only alphanumeric */
     /* characters. The function search for the first equal string in */
@@ -758,12 +750,12 @@ rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromMimeCharset( const sal_Char* pM
     };
 
     rtl_TextEncoding            eEncoding = RTL_TEXTENCODING_DONTKNOW;
-    sal_Char*                   pBuf;
+    char*                   pBuf;
     const ImplStrCharsetDef*    pData = aVIPMimeCharsetTab;
     sal_uInt32                  nBufLen = strlen( pMimeCharset )+1;
 
     /* Alloc Buffer and map to lower case and remove non alphanumeric chars */
-    pBuf = (char*)rtl_allocateMemory( nBufLen );
+    pBuf = new char[nBufLen];
     Impl_toAsciiLowerAndRemoveNonAlphanumeric( pMimeCharset, pBuf );
 
     /* Search for equal in the VIP table */
@@ -794,7 +786,7 @@ rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromMimeCharset( const sal_Char* pM
         }
     }
 
-    rtl_freeMemory( pBuf );
+    delete[] pBuf;
 
     return eEncoding;
 }
@@ -812,13 +804,13 @@ sal_uInt8 SAL_CALL rtl_getBestWindowsCharsetFromTextEncoding( rtl_TextEncoding e
 
 /* ----------------------------------------------------------------------- */
 
-const sal_Char* SAL_CALL rtl_getBestUnixCharsetFromTextEncoding( rtl_TextEncoding eTextEncoding  )
+const char* SAL_CALL rtl_getBestUnixCharsetFromTextEncoding( rtl_TextEncoding eTextEncoding  )
 {
     const ImplTextEncodingData* pData = Impl_getTextEncodingData( eTextEncoding );
     if ( pData )
-        return (sal_Char const *) pData->mpBestUnixCharset;
+        return (char const *) pData->mpBestUnixCharset;
     else if( eTextEncoding == RTL_TEXTENCODING_UNICODE )
-        return (sal_Char const *) "iso10646-1";
+        return (char const *) "iso10646-1";
     else
         return 0;
 }
@@ -833,11 +825,11 @@ char const * SAL_CALL rtl_getMimeCharsetFromTextEncoding(rtl_TextEncoding
                p->mpBestMimeCharset : NULL;
 }
 
-const sal_Char* SAL_CALL rtl_getBestMimeCharsetFromTextEncoding( rtl_TextEncoding eTextEncoding )
+const char* SAL_CALL rtl_getBestMimeCharsetFromTextEncoding( rtl_TextEncoding eTextEncoding )
 {
     const ImplTextEncodingData* pData = Impl_getTextEncodingData( eTextEncoding );
     if ( pData )
-        return (sal_Char const *) pData->mpBestMimeCharset;
+        return (char const *) pData->mpBestMimeCharset;
     else
         return 0;
 }

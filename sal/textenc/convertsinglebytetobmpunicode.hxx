@@ -26,14 +26,16 @@
  *
  ************************************************************************/
 
-#ifndef INCLUDED_sal_textenc_convertsinglebytetobmpunicode_hxx
-#define INCLUDED_sal_textenc_convertsinglebytetobmpunicode_hxx
+#ifndef INCLUDED_SAL_TEXTENC_CONVERTSINGLEBYTETOBMPUNICODE_HXX
+#define INCLUDED_SAL_TEXTENC_CONVERTSINGLEBYTETOBMPUNICODE_HXX
 
-#include "tenchelp.h"
+#include "sal/config.h"
+
+#include <cstddef>
 
 #include "sal/types.h"
 
-#include <cstddef>
+#include "tenchelp.hxx"
 
 /// @HTML
 

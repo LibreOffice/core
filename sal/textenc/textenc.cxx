@@ -26,25 +26,27 @@
  *
  ************************************************************************/
 
+/* TODO! This file should not be called textenc.c, because it is not the
+   implementation of rtl/textenc.h.  Rather, it should be called
+   gettextencodingdata.c. */
+
 #include "sal/config.h"
 
 #include <cstdlib>
 
-/* TODO! This file should not be called textenc.c, because it is not the
-   implementation of rtl/textenc.h.  Rather, it should be called
-   gettextencodingdata.c. */
-#include "context.h"
-#include "gettextencodingdata.h"
-#include "tenchelp.h"
-#include "rtl/textenc.h"
-#include <sal/macros.h>
 #include "boost/noncopyable.hpp"
 #include "osl/diagnose.h"
 #include "osl/module.hxx"
 #include "rtl/instance.hxx"
+#include "rtl/textenc.h"
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
+#include "sal/macros.h"
 #include "sal/types.h"
+
+#include "context.hxx"
+#include "gettextencodingdata.hxx"
+#include "tenchelp.hxx"
 
 #ifndef INCLUDED_STDDEF_H
 #include <stddef.h>
@@ -421,7 +423,7 @@ struct FullTextEncodingDataSingleton:
 }
 
 ImplTextEncodingData const *
-Impl_getTextEncodingData(rtl_TextEncoding nEncoding) SAL_THROW_EXTERN_C()
+Impl_getTextEncodingData(rtl_TextEncoding nEncoding)
 {
     switch(nEncoding)
     {

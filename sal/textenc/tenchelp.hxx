@@ -26,16 +26,14 @@
  *
  ************************************************************************/
 
-#ifndef INCLUDED_RTL_TEXTENC_TENCHELP_H
-#define INCLUDED_RTL_TEXTENC_TENCHELP_H
+#ifndef INCLUDED_SAL_TEXTENC_TENCHELP_HXX
+#define INCLUDED_SAL_TEXTENC_TENCHELP_HXX
+
+#include "sal/config.h"
 
 #include "rtl/tencinfo.h"
 #include "rtl/textenc.h"
 #include "sal/types.h"
-
-#if defined __cplusplus
-extern "C" {
-#endif /* __cplusplus */
 
 #define RTL_TEXTCVT_BYTE_PRIVATE_START 0xF100
 #define RTL_TEXTCVT_BYTE_PRIVATE_END 0xF1FF
@@ -49,7 +47,7 @@ typedef void ImplTextConverterData;
 typedef
 sal_Size (* ImplConvertToUnicodeProc)(ImplTextConverterData const * pData,
                                       void * pContext,
-                                      sal_Char const * pSrcBuf,
+                                      char const * pSrcBuf,
                                       sal_Size nSrcBytes,
                                       sal_Unicode * pDestBuf,
                                       sal_Size nDestChars,
@@ -62,7 +60,7 @@ sal_Size (* ImplConvertToTextProc)(ImplTextConverterData const * pData,
                                    void * pContext,
                                    sal_Unicode const * pSrcBuf,
                                    sal_Size nSrcChars,
-                                   sal_Char * pDestBuf,
+                                   char * pDestBuf,
                                    sal_Size nDestBytes,
                                    sal_uInt32 nFlags,
                                    sal_uInt32 * pInfo,
@@ -80,7 +78,7 @@ typedef void (* ImplDestroyUnicodeContextProc)(void * pContext);
 
 typedef void (* ImplResetUnicodeContextProc)(void * pContext);
 
-typedef struct
+struct ImplTextConverter
 {
     ImplTextConverterData const * mpConvertData;
     ImplConvertToUnicodeProc mpConvertTextToUnicodeProc;
@@ -91,13 +89,13 @@ typedef struct
     ImplCreateUnicodeContextProc mpCreateUnicodeToTextContext;
     ImplDestroyUnicodeContextProc mpDestroyUnicodeToTextContext;
     ImplResetUnicodeContextProc mpResetUnicodeToTextContext;
-} ImplTextConverter;
+};
 
 /* ----------------------------- */
 /* - TextEncoding - Structures - */
 /* ----------------------------- */
 
-typedef struct
+struct ImplTextEncodingData
 {
     ImplTextConverter maConverter;
     sal_uInt8 mnMinCharSize;
@@ -107,22 +105,22 @@ typedef struct
     char const * mpBestUnixCharset;
     char const * mpBestMimeCharset;
     sal_uInt32 mnInfoFlags;
-} ImplTextEncodingData;
+};
 
 /* ----------------------------------- */
 /* - TextConverter - Byte-Structures - */
 /* ----------------------------------- */
 
-typedef struct
+struct ImplUniCharTabData
 {
     sal_uInt16                      mnUniChar;
     sal_uChar                       mnChar;
     sal_uChar                       mnChar2;
         // to cater for mappings like MS1258 with 1--2 bytes per Unicode char,
         // 0 if unused
-} ImplUniCharTabData;
+};
 
-typedef struct
+struct ImplByteConvertData
 {
     const sal_uInt16*               mpToUniTab1;
     const sal_uInt16*               mpToUniTab2;
@@ -138,13 +136,13 @@ typedef struct
     sal_uInt16                      mnToCharStart2;
     sal_uInt16                      mnToCharEnd2;
     sal_uInt16                      mnToCharExCount;
-} ImplByteConvertData;
+};
 
 /* ----------------------------------- */
 /* - TextConverter - DBCS-Structures - */
 /* ----------------------------------- */
 
-typedef struct
+struct ImplDBCSEUDCData
 {
     sal_uChar                       mnLeadStart;
     sal_uChar                       mnLeadEnd;
@@ -158,24 +156,24 @@ typedef struct
     sal_uInt16                      mnTrailRangeCount;
     sal_uInt16                      mnUniStart;
     sal_uInt16                      mnUniEnd;
-} ImplDBCSEUDCData;
+};
 
-typedef struct
+struct ImplDBCSToUniLeadTab
 {
     sal_uInt16                      mnUniChar;
     sal_uInt8                       mnTrailStart;
     sal_uInt8                       mnTrailEnd;
     const sal_uInt16*               mpToUniTrailTab;
-} ImplDBCSToUniLeadTab;
+};
 
-typedef struct
+struct ImplUniToDBCSHighTab
 {
     sal_uInt8                       mnLowStart;
     sal_uInt8                       mnLowEnd;
     const sal_uInt16*               mpToUniTrailTab;
-} ImplUniToDBCSHighTab;
+};
 
-typedef struct
+struct ImplDBCSConvertData
 {
     const ImplDBCSToUniLeadTab*     mpToUniLeadTab;
     const ImplUniToDBCSHighTab*     mpToDBCSHighTab;
@@ -185,19 +183,19 @@ typedef struct
     sal_uChar                       mnTrailEnd;
     const ImplDBCSEUDCData*         mpEUDCTab;
     sal_uInt16                      mnEUDCCount;
-} ImplDBCSConvertData;
+};
 
 /* ---------------------------------- */
 /* - TextConverter - EUC-Structures - */
 /* ---------------------------------- */
 
-typedef struct
+struct ImplEUCJPConvertData
 {
     const ImplDBCSToUniLeadTab*     mpJIS0208ToUniLeadTab;
     const ImplDBCSToUniLeadTab*     mpJIS0212ToUniLeadTab;
     const ImplUniToDBCSHighTab*     mpUniToJIS0208HighTab;
     const ImplUniToDBCSHighTab*     mpUniToJIS0212HighTab;
-} ImplEUCJPConvertData;
+};
 
 /* --------------------------------- */
 /* - TextConverter - HelpFunctions - */
@@ -205,68 +203,68 @@ typedef struct
 
 sal_Unicode ImplGetUndefinedUnicodeChar(sal_uChar cChar, sal_uInt32 nFlags);
 
-sal_Bool
+bool
 ImplHandleUndefinedUnicodeToTextChar(ImplTextConverterData const * pData,
                                      sal_Unicode const ** ppSrcBuf,
                                      sal_Unicode const * pEndSrcBuf,
-                                     sal_Char ** ppDestBuf,
-                                     sal_Char const * pEndDestBuf,
+                                     char ** ppDestBuf,
+                                     char const * pEndDestBuf,
                                      sal_uInt32 nFlags,
                                      sal_uInt32 * pInfo);
-    /* sal_True means 'continue,' sal_False means 'break' */
+    /* true means 'continue,' false means 'break' */
 
 /* ----------------------------- */
 /* - TextConverter - Functions - */
 /* ----------------------------- */
 
 sal_Size ImplSymbolToUnicode( const ImplTextConverterData* pData, void* pContext,
-                              const sal_Char* pSrcBuf, sal_Size nSrcBytes,
+                              const char* pSrcBuf, sal_Size nSrcBytes,
                               sal_Unicode* pDestBuf, sal_Size nDestChars,
                               sal_uInt32 nFlags, sal_uInt32* pInfo, sal_Size* pSrcCvtBytes );
 sal_Size ImplUnicodeToSymbol( const ImplTextConverterData* pData, void* pContext,
                               const sal_Unicode* pSrcBuf, sal_Size nSrcChars,
-                              sal_Char* pDestBuf, sal_Size nDestBytes,
+                              char* pDestBuf, sal_Size nDestBytes,
                               sal_uInt32 nFlags, sal_uInt32* pInfo, sal_Size* pSrcCvtChars );
 sal_Size ImplCharToUnicode( const ImplTextConverterData* pData, void* pContext,
-                            const sal_Char* pSrcBuf, sal_Size nSrcBytes,
+                            const char* pSrcBuf, sal_Size nSrcBytes,
                             sal_Unicode* pDestBuf, sal_Size nDestChars,
                             sal_uInt32 nFlags, sal_uInt32* pInfo, sal_Size* pSrcCvtBytes );
 /** For those encodings only with unicode range of 0x80 to 0xFF. */
 sal_Size ImplUpperCharToUnicode( const ImplTextConverterData* pData, void* pContext,
-                            const sal_Char* pSrcBuf, sal_Size nSrcBytes,
+                            const char* pSrcBuf, sal_Size nSrcBytes,
                             sal_Unicode* pDestBuf, sal_Size nDestChars,
                             sal_uInt32 nFlags, sal_uInt32* pInfo, sal_Size* pSrcCvtBytes );
 sal_Size ImplUnicodeToChar( const ImplTextConverterData* pData, void* pContext,
                             const sal_Unicode* pSrcBuf, sal_Size nSrcChars,
-                            sal_Char* pDestBuf, sal_Size nDestBytes,
+                            char* pDestBuf, sal_Size nDestBytes,
                             sal_uInt32 nFlags, sal_uInt32* pInfo, sal_Size* pSrcCvtChars );
 sal_Size ImplDBCSToUnicode( const ImplTextConverterData* pData, void* pContext,
-                            const sal_Char* pSrcBuf, sal_Size nSrcBytes,
+                            const char* pSrcBuf, sal_Size nSrcBytes,
                             sal_Unicode* pDestBuf, sal_Size nDestChars,
                             sal_uInt32 nFlags, sal_uInt32* pInfo,
                             sal_Size* pSrcCvtBytes );
 sal_Size ImplUnicodeToDBCS( const ImplTextConverterData* pData, void* pContext,
                             const sal_Unicode* pSrcBuf, sal_Size nSrcChars,
-                            sal_Char* pDestBuf, sal_Size nDestBytes,
+                            char* pDestBuf, sal_Size nDestBytes,
                             sal_uInt32 nFlags, sal_uInt32* pInfo,
                             sal_Size* pSrcCvtChars );
 sal_Size ImplEUCJPToUnicode( const ImplTextConverterData* pData,
                              void* pContext,
-                             const sal_Char* pSrcBuf, sal_Size nSrcBytes,
+                             const char* pSrcBuf, sal_Size nSrcBytes,
                              sal_Unicode* pDestBuf, sal_Size nDestChars,
                              sal_uInt32 nFlags, sal_uInt32* pInfo,
                              sal_Size* pSrcCvtBytes );
 sal_Size ImplUnicodeToEUCJP( const ImplTextConverterData* pData,
                              void* pContext,
                              const sal_Unicode* pSrcBuf, sal_Size nSrcChars,
-                             sal_Char* pDestBuf, sal_Size nDestBytes,
+                             char* pDestBuf, sal_Size nDestBytes,
                              sal_uInt32 nFlags, sal_uInt32* pInfo,
                              sal_Size* pSrcCvtChars );
 void* ImplUTF7CreateUTF7TextToUnicodeContext( void );
 void ImplUTF7DestroyTextToUnicodeContext( void* pContext );
 void ImplUTF7ResetTextToUnicodeContext( void* pContext );
 sal_Size ImplUTF7ToUnicode( const ImplTextConverterData* pData, void* pContext,
-                            const sal_Char* pSrcBuf, sal_Size nSrcBytes,
+                            const char* pSrcBuf, sal_Size nSrcBytes,
                             sal_Unicode* pDestBuf, sal_Size nDestChars,
                             sal_uInt32 nFlags, sal_uInt32* pInfo,
                             sal_Size* pSrcCvtBytes );
@@ -275,31 +273,25 @@ void ImplUTF7DestroyUnicodeToTextContext( void* pContext );
 void ImplUTF7ResetUnicodeToTextContext( void* pContext );
 sal_Size ImplUnicodeToUTF7( const ImplTextConverterData* pData, void* pContext,
                             const sal_Unicode* pSrcBuf, sal_Size nSrcChars,
-                            sal_Char* pDestBuf, sal_Size nDestBytes,
+                            char* pDestBuf, sal_Size nDestBytes,
                             sal_uInt32 nFlags, sal_uInt32* pInfo,
                             sal_Size* pSrcCvtChars );
 
-void * ImplCreateUtf8ToUnicodeContext(void) SAL_THROW_EXTERN_C();
-void ImplResetUtf8ToUnicodeContext(void * pContext) SAL_THROW_EXTERN_C();
+void * ImplCreateUtf8ToUnicodeContext(void);
+void ImplResetUtf8ToUnicodeContext(void * pContext);
 sal_Size ImplConvertUtf8ToUnicode(ImplTextConverterData const * pData,
-                                  void * pContext, sal_Char const * pSrcBuf,
+                                  void * pContext, char const * pSrcBuf,
                                   sal_Size nSrcBytes, sal_Unicode * pDestBuf,
                                   sal_Size nDestChars, sal_uInt32 nFlags,
-                                  sal_uInt32 * pInfo, sal_Size * pSrcCvtBytes)
-    SAL_THROW_EXTERN_C();
-void * ImplCreateUnicodeToUtf8Context(void) SAL_THROW_EXTERN_C();
-void ImplResetUnicodeToUtf8Context(void * pContext) SAL_THROW_EXTERN_C();
+                                  sal_uInt32 * pInfo, sal_Size * pSrcCvtBytes);
+void * ImplCreateUnicodeToUtf8Context(void);
+void ImplResetUnicodeToUtf8Context(void * pContext);
 sal_Size ImplConvertUnicodeToUtf8(ImplTextConverterData const * pData,
                                   void * pContext, sal_Unicode const * pSrcBuf,
-                                  sal_Size nSrcChars, sal_Char * pDestBuf,
+                                  sal_Size nSrcChars, char * pDestBuf,
                                   sal_Size nDestBytes, sal_uInt32 nFlags,
-                                  sal_uInt32 * pInfo, sal_Size* pSrcCvtChars)
-    SAL_THROW_EXTERN_C();
+                                  sal_uInt32 * pInfo, sal_Size* pSrcCvtChars);
 
-#if defined __cplusplus
-}
-#endif /* __cplusplus */
-
-#endif /* INCLUDED_RTL_TEXTENC_TENCHELP_H */
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

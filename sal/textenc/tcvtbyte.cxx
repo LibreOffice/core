@@ -26,8 +26,11 @@
  *
  ************************************************************************/
 
-#include "tenchelp.h"
+#include "sal/config.h"
+
 #include "rtl/textcvt.h"
+
+#include "tenchelp.hxx"
 
 /* ======================================================================= */
 
@@ -39,11 +42,11 @@ sal_uInt16 const * ImplGetReplaceString(sal_Unicode c);
 
 /* ----------------------------------------------------------------------- */
 
-typedef struct
+struct ImplReplaceCharData
 {
     sal_uInt16      mnUniChar;
     sal_uInt16      mnReplaceChar;
-} ImplReplaceCharData;
+};
 
 static ImplReplaceCharData const aImplRepCharTab[] =
 {
@@ -372,11 +375,11 @@ sal_uInt16 ImplGetReplaceChar( sal_Unicode c )
 
 /* ----------------------------------------------------------------------- */
 
-typedef struct
+struct ImplReplaceCharStrData
 {
     sal_uInt16      mnUniChar;
     sal_uInt16      maReplaceChars[IMPL_MAX_REPLACECHAR];
-} ImplReplaceCharStrData;
+};
 
 static ImplReplaceCharStrData const aImplRepCharStrTab[] =
 {
@@ -466,20 +469,16 @@ const sal_uInt16* ImplGetReplaceString( sal_Unicode c )
 
 /* ======================================================================= */
 
-sal_Size ImplSymbolToUnicode( const ImplTextConverterData* pData,
-                              void* pContext,
-                              const sal_Char* pSrcBuf, sal_Size nSrcBytes,
+sal_Size ImplSymbolToUnicode( const ImplTextConverterData*,
+                              void*,
+                              const char* pSrcBuf, sal_Size nSrcBytes,
                               sal_Unicode* pDestBuf, sal_Size nDestChars,
-                              sal_uInt32 nFlags, sal_uInt32* pInfo,
+                              sal_uInt32, sal_uInt32* pInfo,
                               sal_Size* pSrcCvtBytes )
 {
     sal_uChar               c;
     sal_Unicode*            pEndDestBuf;
-    const sal_Char*         pEndSrcBuf;
-
-    (void) pData; /* unused */
-    (void) pContext; /* unused */
-    (void) nFlags; /* unused */
+    const char*         pEndSrcBuf;
 
     *pInfo = 0;
     pEndDestBuf = pDestBuf+nDestChars;
@@ -509,17 +508,15 @@ sal_Size ImplSymbolToUnicode( const ImplTextConverterData* pData,
 /* ----------------------------------------------------------------------- */
 
 sal_Size ImplUnicodeToSymbol( const ImplTextConverterData* pData,
-                              void* pContext,
+                              void*,
                               const sal_Unicode* pSrcBuf, sal_Size nSrcChars,
-                              sal_Char* pDestBuf, sal_Size nDestBytes,
+                              char* pDestBuf, sal_Size nDestBytes,
                               sal_uInt32 nFlags, sal_uInt32* pInfo,
                               sal_Size* pSrcCvtChars )
 {
     sal_Unicode             c;
-    sal_Char*               pEndDestBuf;
+    char*               pEndDestBuf;
     const sal_Unicode*      pEndSrcBuf;
-
-    (void) pContext; /* unused */
 
     *pInfo = 0;
     pEndDestBuf = pDestBuf+nDestBytes;
@@ -535,7 +532,7 @@ sal_Size ImplUnicodeToSymbol( const ImplTextConverterData* pData,
         c = *pSrcBuf;
         if ( (c >= 0xF000) && (c <= 0xF0FF) )
         {
-            *pDestBuf = (sal_Char)(sal_uChar)(c-0xF000);
+            *pDestBuf = static_cast< char >(static_cast< unsigned char >(c-0xF000));
             pDestBuf++;
             pSrcBuf++;
         }
@@ -544,7 +541,7 @@ sal_Size ImplUnicodeToSymbol( const ImplTextConverterData* pData,
         // these values
         else if ( c <= 0x00FF )
         {
-            *pDestBuf = (sal_Char)(sal_uChar)c;
+            *pDestBuf = static_cast< char >(static_cast< unsigned char >(c));
             pDestBuf++;
             pSrcBuf++;
         }
@@ -576,8 +573,8 @@ sal_Size ImplUnicodeToSymbol( const ImplTextConverterData* pData,
 /* ======================================================================= */
 
 sal_Size ImplCharToUnicode( const ImplTextConverterData* pData,
-                            void* pContext,
-                            const sal_Char* pSrcBuf, sal_Size nSrcBytes,
+                            void*,
+                            const char* pSrcBuf, sal_Size nSrcBytes,
                             sal_Unicode* pDestBuf, sal_Size nDestChars,
                             sal_uInt32 nFlags, sal_uInt32* pInfo,
                             sal_Size* pSrcCvtBytes )
@@ -586,9 +583,7 @@ sal_Size ImplCharToUnicode( const ImplTextConverterData* pData,
     sal_Unicode                 cConv;
     const ImplByteConvertData*  pConvertData = (const ImplByteConvertData*)pData;
     sal_Unicode*                pEndDestBuf;
-    const sal_Char*             pEndSrcBuf;
-
-    (void) pContext; /* unused */
+    const char*             pEndSrcBuf;
 
     *pInfo = 0;
     pEndDestBuf = pDestBuf+nDestChars;
@@ -642,20 +637,17 @@ sal_Size ImplCharToUnicode( const ImplTextConverterData* pData,
 /* ----------------------------------------------------------------------- */
 
 sal_Size ImplUpperCharToUnicode( const ImplTextConverterData* pData,
-                            void* pContext,
-                            const sal_Char* pSrcBuf, sal_Size nSrcBytes,
+                            void*,
+                            const char* pSrcBuf, sal_Size nSrcBytes,
                             sal_Unicode* pDestBuf, sal_Size nDestChars,
-                            sal_uInt32 nFlags, sal_uInt32* pInfo,
+                            sal_uInt32, sal_uInt32* pInfo,
                             sal_Size* pSrcCvtBytes )
 {
     sal_uChar                   c;
     sal_Unicode                 cConv;
     const ImplByteConvertData*  pConvertData = (const ImplByteConvertData*)pData;
     sal_Unicode*                pEndDestBuf;
-    const sal_Char*             pEndSrcBuf;
-
-    (void) pContext; /* unused */
-    (void) nFlags;   /* unused */
+    const char*             pEndSrcBuf;
 
     *pInfo = 0;
     pEndDestBuf = pDestBuf+nDestChars;
@@ -688,24 +680,24 @@ sal_Size ImplUpperCharToUnicode( const ImplTextConverterData* pData,
 
 // Writes 0--2 characters to dest:
 static int ImplConvertUnicodeCharToChar(
-    const ImplByteConvertData* pConvertData, sal_Unicode c, sal_Char * dest )
+    const ImplByteConvertData* pConvertData, sal_Unicode c, char * dest )
 {
     const ImplUniCharTabData*   pToCharExTab;
 
     if ( c < 0x80 )
     {
-        dest[0] = (sal_Char)c;
+        dest[0] = static_cast< char >(c);
         return 1;
     }
     if ( (c >= pConvertData->mnToCharStart1) && (c <= pConvertData->mnToCharEnd1) )
     {
-        dest[0] = (sal_Char)pConvertData->mpToCharTab1[c-pConvertData->mnToCharStart1];
+        dest[0] = static_cast< char >(pConvertData->mpToCharTab1[c-pConvertData->mnToCharStart1]);
         if ( dest[0] != 0 )
             return 1;
     }
     else if ( (c >= pConvertData->mnToCharStart2) && (c <= pConvertData->mnToCharEnd2) )
     {
-        dest[0] = (sal_Char)pConvertData->mpToCharTab2[c-pConvertData->mnToCharStart2];
+        dest[0] = static_cast< char >(pConvertData->mpToCharTab2[c-pConvertData->mnToCharStart2]);
         if ( dest[0] != 0 )
             return 1;
     }
@@ -737,12 +729,12 @@ static int ImplConvertUnicodeCharToChar(
                     nLow = nMid+1;
                 else
                 {
-                    dest[0] = (sal_Char)pCharExData->mnChar;
+                    dest[0] = static_cast< char >(pCharExData->mnChar);
                     if ( pCharExData->mnChar2 == 0 )
                         return 1;
                     else
                     {
-                        dest[1] = (sal_Char)pCharExData->mnChar2;
+                        dest[1] = static_cast< char >(pCharExData->mnChar2);
                         return 2;
                     }
                 }
@@ -756,23 +748,21 @@ static int ImplConvertUnicodeCharToChar(
 /* ----------------------------------------------------------------------- */
 
 sal_Size ImplUnicodeToChar( const ImplTextConverterData* pData,
-                            void* pContext,
+                            void*,
                             const sal_Unicode* pSrcBuf, sal_Size nSrcChars,
-                            sal_Char* pDestBuf, sal_Size nDestBytes,
+                            char* pDestBuf, sal_Size nDestBytes,
                             sal_uInt32 nFlags, sal_uInt32* pInfo,
                             sal_Size* pSrcCvtChars )
 {
     sal_Unicode                 c;
     const ImplByteConvertData*  pConvertData = (const ImplByteConvertData*)pData;
-    sal_Char*                   pEndDestBuf;
+    char*                   pEndDestBuf;
     const sal_Unicode*          pEndSrcBuf;
     int                         i;
     int                         n;
     sal_uInt16                  cTemp;
-    sal_Char                    aTempBuf[IMPL_MAX_REPLACECHAR+2];
+    char                    aTempBuf[IMPL_MAX_REPLACECHAR+2];
     const sal_uInt16*           pReplace;
-
-    (void) pContext; /* unused */
 
     *pInfo = 0;
     pEndDestBuf = pDestBuf+nDestBytes;
@@ -782,7 +772,7 @@ sal_Size ImplUnicodeToChar( const ImplTextConverterData* pData,
         c = *pSrcBuf;
         if ( c < 0x80 )
         {
-            aTempBuf[0] = (sal_Char)c;
+            aTempBuf[0] = static_cast< char >(c);
             n = 1;
         }
         else

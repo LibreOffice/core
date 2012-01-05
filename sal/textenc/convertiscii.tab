@@ -25,12 +25,14 @@
  *
  ************************************************************************/
 
-#include "tenchelp.h"
+#include "sal/config.h"
+
+#include <cstddef>
 
 #include "rtl/tencinfo.h"
 #include "sal/types.h"
 
-#include <stddef.h>
+#include "tenchelp.hxx"
 
 /* Conversion tables for the Devanagari version of ISCII (IS 13194:1991).
  *
