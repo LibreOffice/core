@@ -1076,40 +1076,6 @@ void TableLayouter::UpdateBorderLayout()
 }
 
 // -----------------------------------------------------------------------------
-/*
-void TableLayouter::SetLayoutToModel()
-{
-    const sal_Int32 nRowCount = getRowCount();
-    const sal_Int32 nColCount = getColumnCount();
-
-    try
-    {
-        sal_Int32 nOldSize = 0;
-
-        Reference< XIndexAccess > xRows( mxTable->getRows(), UNO_QUERY_THROW );
-        for( sal_Int32 nRow = 0; nRow < nRowCount; nRow++ )
-        {
-            Reference< XPropertySet > xRowSet( xRows->getByIndex( nRow ), UNO_QUERY_THROW );
-            xRowSet->getPropertyValue( msSize ) >>= nOldSize;
-            if( maRows[nRow].mnSize != nOldSize )
-                xRowSet->setPropertyValue( msSize, Any( maRows[nRow].mnSize )  );
-        }
-
-        for( sal_Int32 nCol = 0; nCol < nColCount; nCol++ )
-        {
-            Reference< XPropertySet > xColSet( getColumnByIndex( nCol ), UNO_QUERY_THROW );
-            xColSet->getPropertyValue( msSize ) >>= nOldSize;
-            if( maColumns[nCol].mnSize != nOldSize )
-                xColSet->setPropertyValue( msSize, Any( maColumns[nCol].mnSize )  );
-        }
-    }
-    catch( Exception& )
-    {
-        OSL_FAIL("sdr::table::TableLayouter::SetLayoutToModel(), exception caught!");
-    }
-}
-*/
-// -----------------------------------------------------------------------------
 
 void TableLayouter::DistributeColumns( ::Rectangle& rArea, sal_Int32 nFirstCol, sal_Int32 nLastCol )
 {
@@ -1225,72 +1191,6 @@ sal_Int32 TableLayouter::getRowStart( sal_Int32 nRow ) const
     else
         return 0;
 }
-
-// -----------------------------------------------------------------------------
-
-/*
-sal_Int32 TableLayouter::detectInsertedOrRemovedRows()
-{
-    sal_Int32 nHeightChange = 0;
-
-    try
-    {
-        Reference< XIndexAccess > xRows( mxTable->getRows(), UNO_QUERY_THROW );
-        std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > >::iterator oldIter( mxRows.begin() );
-        sal_Int32 nCount = xRows->getCount();
-        for( sal_Int32 nRow = 0; nRow < nCount; nRow++ )
-        {
-            Reference< XInterface > xRow( xRows->getByIndex(nRow), UNO_QUERY );
-
-            std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > >::iterator searchIter = mxRows.end();
-            if( oldIter != mxRows.end() )
-                searchIter = std::find( oldIter,mxRows.end(), xRow );
-
-            if( searchIter == mxRows.end() )
-            {
-                // new row
-                Reference< XPropertySet > xSet( xRow, UNO_QUERY_THROW );
-                sal_Int32 nSize = 0;
-                xSet->getPropertyValue( msSize ) >>= nSize;
-                nHeightChange += nSize;
-            }
-            else if( searchIter == oldIter )
-            {
-                // no change
-                oldIter++;
-            }
-            else
-            {
-                // rows removed
-                do
-                {
-                    Reference< XPropertySet > xSet( (*oldIter), UNO_QUERY_THROW );
-                    sal_Int32 nSize = 0;
-                    xSet->getPropertyValue( msSize ) >>= nSize;
-                    nHeightChange -= nSize;
-                }
-                while( oldIter++ != searchIter );
-            }
-        }
-
-        while( oldIter != mxRows.end() )
-        {
-            // rows removed
-            Reference< XPropertySet > xSet( (*oldIter++), UNO_QUERY_THROW );
-            sal_Int32 nSize = 0;
-            xSet->getPropertyValue( msSize ) >>= nSize;
-            nHeightChange -= nSize;
-        }
-    }
-    catch( Exception& e )
-    {
-        (void)e;
-        OSL_FAIL("svx::TableLayouter::detectInsertedOrRemovedRows(), exception caught!");
-    }
-
-    return nHeightChange;
-}
-*/
 
 // -----------------------------------------------------------------------------
 

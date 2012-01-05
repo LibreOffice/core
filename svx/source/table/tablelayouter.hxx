@@ -67,13 +67,6 @@ public:
     TableLayouter( const TableModelRef& xTableModel );
     virtual ~TableLayouter();
 
-    /** this checks if new rows are inserted or old rows where removed.
-        This can be used to grow or shrink the table shape in this case.
-        @returns
-            the height difference
-    sal_Int32 detectInsertedOrRemovedRows();
-    */
-
     /** try to fit the table into the given rectangle.
         If the rectangle is to small, it will be grown to fit the table.
 
@@ -84,10 +77,6 @@ public:
         if bFitWidth or bFitHeight is set, the model is changed.
     */
     void LayoutTable( ::Rectangle& rRectangle, bool bFitWidth, bool bFitHeight );
-
-    /** after a call to LayoutTable, this method can be used to set the new
-        column and row sizes back to the model. */
-//  void SetLayoutToModel();
 
     void UpdateBorderLayout();
 

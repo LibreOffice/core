@@ -123,35 +123,6 @@ SvxDrawPage::~SvxDrawPage() throw()
 // XInterface
 void SvxDrawPage::release() throw()
 {
-/*
-    uno::Reference< uno::XInterface > x( xDelegator );
-    if (! x.is())
-    {
-        if (osl_decrementInterlockedCount( &m_refCount ) == 0)
-        {
-            if (! mrBHelper.bDisposed)
-            {
-                uno::Reference< uno::XInterface > xHoldAlive( (uno::XWeak*)this );
-                // First dispose
-                try
-                {
-                    dispose();
-                }
-                catch(::com::sun::star::uno::Exception&)
-                {
-                    // release should not throw exceptions
-                }
-
-                // only the alive ref holds the object
-                OSL_ASSERT( m_refCount == 1 );
-                // destroy the object if xHoldAlive decrement the refcount to 0
-                return;
-            }
-        }
-        // restore the reference count
-        osl_incrementInterlockedCount( &m_refCount );
-    }
-*/
     OWeakAggObject::release();
 }
 
@@ -269,23 +240,6 @@ void SAL_CALL SvxDrawPage::removeEventListener( const ::com::sun::star::uno::Ref
 
 void SvxDrawPage::Notify( SfxBroadcaster&, const SfxHint& /*rHint*/ )
 {
-/*
-    if( mpModel )
-    {
-        const SdrHint* pSdrHint = PTR_CAST( SdrHint, &rHint );
-        if( pSdrHint )
-        {
-            switch( pSdrHint->GetKind() )
-            {
-            case HINT_MODELCLEARED:
-                dispose();
-                break;
-            default:
-                break;
-            }
-        }
-    }
-*/
 }
 
 //----------------------------------------------------------------------
