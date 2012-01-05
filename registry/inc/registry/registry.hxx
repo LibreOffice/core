@@ -652,26 +652,25 @@ public:
 
     friend class Registry;
 public:
+    /// @cond INTERNAL
+
     /** Constructor, which initialize a RegistryKey with registry and an valid key handle.
 
         This constructor is internal only.
-        @internal
     */
     inline RegistryKey(Registry&    registry,
                        RegKeyHandle hKey);
 
     /** returns the internal key handle.
-
-        @internal
      */
     RegKeyHandle getKeyHandle() const { return m_hImpl; }
 
 protected:
     /** sets the internal registry on which this key should work.
-
-        @internal
      */
     inline void setRegistry(Registry& registry);
+
+    /// @endcond
 
     /// stores the registry on which this key works
     Registry        m_registry;
@@ -787,6 +786,7 @@ inline RegistryKey::RegistryKey()
     : m_hImpl(NULL)
     { }
 
+/// @cond INTERNAL
 inline RegistryKey::RegistryKey(Registry& registry, RegKeyHandle hKey)
     : m_registry(registry)
     , m_hImpl(hKey)
@@ -794,6 +794,7 @@ inline RegistryKey::RegistryKey(Registry& registry, RegKeyHandle hKey)
         if (m_hImpl)
             m_registry.m_pApi->acquireKey(m_hImpl);
     }
+/// @endcond
 
 inline RegistryKey::RegistryKey(const RegistryKey& toCopy)
     : m_registry(toCopy.m_registry)
@@ -803,10 +804,12 @@ inline RegistryKey::RegistryKey(const RegistryKey& toCopy)
             m_registry.m_pApi->acquireKey(m_hImpl);
     }
 
+/// @cond INTERNAL
 inline void RegistryKey::setRegistry(Registry& registry)
     {
         m_registry = registry;
     }
+/// @endcond
 
 inline RegistryKey::~RegistryKey()
     {

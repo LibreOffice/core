@@ -59,7 +59,7 @@ typedef enum
      */
     rtl_UriCharClassNone,
 
-    /** The RFC 2732 <uric> char class.
+    /** The RFC 2732 @<uric> char class.
 
         @descr
         The 'valid' characters are !$&'()*+,-./:;=?@[]_~ plus digits and
@@ -67,35 +67,35 @@ typedef enum
      */
     rtl_UriCharClassUric,
 
-    /** The RFC 2396 <uric_no_slash> char class.
+    /** The RFC 2396 @<uric_no_slash> char class.
 
         @descr
         The 'valid' characters are !$&'()*+,-.:;=?@_~ plus digits and letters.
      */
     rtl_UriCharClassUricNoSlash,
 
-    /** The RFC 2396 <rel_segment> char class.
+    /** The RFC 2396 @<rel_segment> char class.
 
         @descr
         The 'valid' characters are !$&'()*+,-.;=@_~ plus digits and letters.
      */
     rtl_UriCharClassRelSegment,
 
-    /** The RFC 2396 <reg_name> char class.
+    /** The RFC 2396 @<reg_name> char class.
 
         @descr
         The 'valid' characters are !$&'()*+,-.:;=@_~ plus digits and letters.
      */
     rtl_UriCharClassRegName,
 
-    /** The RFC 2396 <userinfo> char class.
+    /** The RFC 2396 @<userinfo> char class.
 
         @descr
         The 'valid' characters are !$&'()*+,-.:;=_~ plus digits and letters.
      */
     rtl_UriCharClassUserinfo,
 
-    /** The RFC 2396 <pchar> char class.
+    /** The RFC 2396 @<pchar> char class.
 
         @descr
         The 'valid' characters are !$&'()*+,-.:=@_~ plus digits and letters.
@@ -304,7 +304,7 @@ SAL_DLLPUBLIC void SAL_CALL rtl_uriDecode(
 
 /** Convert a relative URI reference into an absolute one.
 
-    A URI reference is a URI plus an optional <"#" fragment> part.
+    A URI reference is a URI plus an optional @<"#" fragment> part.
 
     This function uses the algorithm described in RFC 2396, section 5.2, with
     the following clarifications:  (1) Backwards-compatible relative URIs
@@ -323,7 +323,7 @@ SAL_DLLPUBLIC void SAL_CALL rtl_uriDecode(
     An absolute, hierarchical URI reference that serves as the base URI.  If it
     has to be inspected (i.e., pRelUriRef is not an absolute URI already), and
     if it either is not an absolute URI (i.e., does not begin with a
-    <scheme ":"> part) or has a path that is non-empty but does not start
+    @<scheme ":"> part) or has a path that is non-empty but does not start
     with "/", an exception will be signaled.
 
     @param pRelUriRef

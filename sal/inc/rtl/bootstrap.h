@@ -35,7 +35,6 @@ extern "C" {
 #endif
 
 /**
-   @HTML
    @file
 
    The described concept provides a platform independent way to access

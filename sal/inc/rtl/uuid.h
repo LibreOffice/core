@@ -33,7 +33,6 @@
 #include <rtl/string.h>
 
 /**
-   @HTML
    @file
    Specification (from draft-leach-uuids-guids-01.txt )
 

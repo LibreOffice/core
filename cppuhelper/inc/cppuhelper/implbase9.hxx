@@ -33,7 +33,8 @@
 
 namespace cppu
 {
-    /** @internal */
+    /// @cond INTERNAL
+
     struct class_data9
     {
         sal_Int16 m_nTypes;
@@ -43,7 +44,6 @@ namespace cppu
         type_entry m_typeEntries[ 9 + 1 ];
     };
 
-    /** @internal */
     template< typename Ifc1, typename Ifc2, typename Ifc3, typename Ifc4, typename Ifc5, typename Ifc6, typename Ifc7, typename Ifc8, typename Ifc9, typename Impl >
     struct ImplClassData9
     {
@@ -63,15 +63,16 @@ namespace cppu
                     { { Ifc7::static_type }, ((sal_IntPtr)(Ifc7 *) (Impl *) 16) - 16 },
                     { { Ifc8::static_type }, ((sal_IntPtr)(Ifc8 *) (Impl *) 16) - 16 },
                     { { Ifc9::static_type }, ((sal_IntPtr)(Ifc9 *) (Impl *) 16) - 16 },
-                    { { ::com::sun::star::lang::XTypeProvider::static_type }, ((sal_IntPtr)(::com::sun::star::lang::XTypeProvider *) (Impl *) 16) - 16 }
+                    { { com::sun::star::lang::XTypeProvider::static_type }, ((sal_IntPtr)(com::sun::star::lang::XTypeProvider *) (Impl *) 16) - 16 }
                 }
             };
             return reinterpret_cast< class_data * >(&s_cd);
         }
     };
 
+    /// @endcond
 
-    /** Implementation helper implementing interface ::com::sun::star::lang::XTypeProvider
+    /** Implementation helper implementing interface com::sun::star::lang::XTypeProvider
         and method XInterface::queryInterface(), but no reference counting.
 
         @derive
@@ -81,22 +82,21 @@ namespace cppu
     */
     template< class Ifc1, class Ifc2, class Ifc3, class Ifc4, class Ifc5, class Ifc6, class Ifc7, class Ifc8, class Ifc9 >
     class SAL_NO_VTABLE ImplHelper9
-        : public ::com::sun::star::lang::XTypeProvider
+        : public com::sun::star::lang::XTypeProvider
         , public Ifc1, public Ifc2, public Ifc3, public Ifc4, public Ifc5, public Ifc6, public Ifc7, public Ifc8, public Ifc9
     {
-        /** @internal */
         struct cd : public rtl::StaticAggregate< class_data, ImplClassData9< Ifc1, Ifc2, Ifc3, Ifc4, Ifc5, Ifc6, Ifc7, Ifc8, Ifc9, ImplHelper9<Ifc1, Ifc2, Ifc3, Ifc4, Ifc5, Ifc6, Ifc7, Ifc8, Ifc9> > > {};
     public:
-        virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( ::com::sun::star::uno::Type const & rType ) throw (::com::sun::star::uno::RuntimeException)
+        virtual com::sun::star::uno::Any SAL_CALL queryInterface( com::sun::star::uno::Type const & rType ) throw (com::sun::star::uno::RuntimeException)
             { return ImplHelper_query( rType, cd::get(), this ); }
-        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes() throw (::com::sun::star::uno::RuntimeException)
+        virtual com::sun::star::uno::Sequence< com::sun::star::uno::Type > SAL_CALL getTypes() throw (com::sun::star::uno::RuntimeException)
             { return ImplHelper_getTypes( cd::get() ); }
-        virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (::com::sun::star::uno::RuntimeException)
+        virtual com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (com::sun::star::uno::RuntimeException)
             { return ImplHelper_getImplementationId( cd::get() ); }
     };
-    /** Implementation helper implementing interfaces ::com::sun::star::lang::XTypeProvider and
-        ::com::sun::star::uno::XInterface which supports weak mechanism to be held weakly
-        (supporting ::com::sun::star::uno::XWeak thru ::cppu::OWeakObject).
+    /** Implementation helper implementing interfaces com::sun::star::lang::XTypeProvider and
+        com::sun::star::uno::XInterface which supports weak mechanism to be held weakly
+        (supporting com::sun::star::uno::XWeak thru ::cppu::OWeakObject).
 
         @derive
         Inherit from this class giving your interface(s) to be implemented as template argument(s).
@@ -105,28 +105,27 @@ namespace cppu
     template< class Ifc1, class Ifc2, class Ifc3, class Ifc4, class Ifc5, class Ifc6, class Ifc7, class Ifc8, class Ifc9 >
     class SAL_NO_VTABLE WeakImplHelper9
         : public OWeakObject
-        , public ::com::sun::star::lang::XTypeProvider
+        , public com::sun::star::lang::XTypeProvider
         , public Ifc1, public Ifc2, public Ifc3, public Ifc4, public Ifc5, public Ifc6, public Ifc7, public Ifc8, public Ifc9
     {
-        /** @internal */
         struct cd : public rtl::StaticAggregate< class_data, ImplClassData9< Ifc1, Ifc2, Ifc3, Ifc4, Ifc5, Ifc6, Ifc7, Ifc8, Ifc9, WeakImplHelper9<Ifc1, Ifc2, Ifc3, Ifc4, Ifc5, Ifc6, Ifc7, Ifc8, Ifc9> > > {};
     public:
-        virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( ::com::sun::star::uno::Type const & rType ) throw (::com::sun::star::uno::RuntimeException)
+        virtual com::sun::star::uno::Any SAL_CALL queryInterface( com::sun::star::uno::Type const & rType ) throw (com::sun::star::uno::RuntimeException)
             { return WeakImplHelper_query( rType, cd::get(), this, (OWeakObject *)this ); }
         virtual void SAL_CALL acquire() throw ()
             { OWeakObject::acquire(); }
         virtual void SAL_CALL release() throw ()
             { OWeakObject::release(); }
-        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes() throw (::com::sun::star::uno::RuntimeException)
+        virtual com::sun::star::uno::Sequence< com::sun::star::uno::Type > SAL_CALL getTypes() throw (com::sun::star::uno::RuntimeException)
             { return WeakImplHelper_getTypes( cd::get() ); }
-        virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (::com::sun::star::uno::RuntimeException)
+        virtual com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (com::sun::star::uno::RuntimeException)
             { return ImplHelper_getImplementationId( cd::get() ); }
     };
-    /** Implementation helper implementing interfaces ::com::sun::star::lang::XTypeProvider and
-        ::com::sun::star::uno::XInterface which supports weak mechanism to be held weakly
-        (supporting ::com::sun::star::uno::XWeak thru ::cppu::OWeakAggObject).
+    /** Implementation helper implementing interfaces com::sun::star::lang::XTypeProvider and
+        com::sun::star::uno::XInterface which supports weak mechanism to be held weakly
+        (supporting com::sun::star::uno::XWeak thru ::cppu::OWeakAggObject).
         In addition, it supports also aggregation meaning object of this class can be aggregated
-        (::com::sun::star::uno::XAggregation thru ::cppu::OWeakAggObject).
+        (com::sun::star::uno::XAggregation thru ::cppu::OWeakAggObject).
         If a delegator is set (this object is aggregated), then incoming queryInterface()
         calls are delegated to the delegator object. If the delegator does not support the
         demanded interface, it calls queryAggregation() on its aggregated objects.
@@ -138,34 +137,33 @@ namespace cppu
     template< class Ifc1, class Ifc2, class Ifc3, class Ifc4, class Ifc5, class Ifc6, class Ifc7, class Ifc8, class Ifc9 >
     class SAL_NO_VTABLE WeakAggImplHelper9
         : public OWeakAggObject
-        , public ::com::sun::star::lang::XTypeProvider
+        , public com::sun::star::lang::XTypeProvider
         , public Ifc1, public Ifc2, public Ifc3, public Ifc4, public Ifc5, public Ifc6, public Ifc7, public Ifc8, public Ifc9
     {
-        /** @internal */
         struct cd : public rtl::StaticAggregate< class_data, ImplClassData9< Ifc1, Ifc2, Ifc3, Ifc4, Ifc5, Ifc6, Ifc7, Ifc8, Ifc9, WeakAggImplHelper9<Ifc1, Ifc2, Ifc3, Ifc4, Ifc5, Ifc6, Ifc7, Ifc8, Ifc9> > > {};
     public:
-        virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( ::com::sun::star::uno::Type const & rType ) throw (::com::sun::star::uno::RuntimeException)
+        virtual com::sun::star::uno::Any SAL_CALL queryInterface( com::sun::star::uno::Type const & rType ) throw (com::sun::star::uno::RuntimeException)
             { return OWeakAggObject::queryInterface( rType ); }
-        virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( ::com::sun::star::uno::Type const & rType ) throw (::com::sun::star::uno::RuntimeException)
+        virtual com::sun::star::uno::Any SAL_CALL queryAggregation( com::sun::star::uno::Type const & rType ) throw (com::sun::star::uno::RuntimeException)
             { return WeakAggImplHelper_queryAgg( rType, cd::get(), this, (OWeakAggObject *)this ); }
         virtual void SAL_CALL acquire() throw ()
             { OWeakAggObject::acquire(); }
         virtual void SAL_CALL release() throw ()
             { OWeakAggObject::release(); }
-        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes() throw (::com::sun::star::uno::RuntimeException)
+        virtual com::sun::star::uno::Sequence< com::sun::star::uno::Type > SAL_CALL getTypes() throw (com::sun::star::uno::RuntimeException)
             { return WeakAggImplHelper_getTypes( cd::get() ); }
-        virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (::com::sun::star::uno::RuntimeException)
+        virtual com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (com::sun::star::uno::RuntimeException)
             { return ImplHelper_getImplementationId( cd::get() ); }
     };
-    /** Implementation helper implementing interfaces ::com::sun::star::lang::XTypeProvider and
-        ::com::sun::star::uno::XInterface inherting from a BaseClass.
+    /** Implementation helper implementing interfaces com::sun::star::lang::XTypeProvider and
+        com::sun::star::uno::XInterface inherting from a BaseClass.
         All acquire() and release() calls are delegated to the BaseClass. Upon queryInterface(),
         if a demanded interface is not supported by this class directly, the request is
         delegated to the BaseClass.
 
         @attention
-        The BaseClass has to be complete in a sense, that ::com::sun::star::uno::XInterface
-        and ::com::sun::star::lang::XTypeProvider are implemented properly.  The
+        The BaseClass has to be complete in a sense, that com::sun::star::uno::XInterface
+        and com::sun::star::lang::XTypeProvider are implemented properly.  The
         BaseClass must have at least one ctor that can be called with six or
         fewer arguments, of which none is of non-const reference type.
 
@@ -178,7 +176,6 @@ namespace cppu
         : public BaseClass
         , public Ifc1, public Ifc2, public Ifc3, public Ifc4, public Ifc5, public Ifc6, public Ifc7, public Ifc8, public Ifc9
     {
-        /** @internal */
         struct cd : public rtl::StaticAggregate< class_data, ImplClassData9< Ifc1, Ifc2, Ifc3, Ifc4, Ifc5, Ifc6, Ifc7, Ifc8, Ifc9, ImplInheritanceHelper9<BaseClass, Ifc1, Ifc2, Ifc3, Ifc4, Ifc5, Ifc6, Ifc7, Ifc8, Ifc9> > > {};
     protected:
         template< typename T1 >
@@ -209,9 +206,9 @@ namespace cppu
             BaseClass(arg1, arg2, arg3, arg4, arg5, arg6) {}
     public:
         ImplInheritanceHelper9() {}
-        virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( ::com::sun::star::uno::Type const & rType ) throw (::com::sun::star::uno::RuntimeException)
+        virtual com::sun::star::uno::Any SAL_CALL queryInterface( com::sun::star::uno::Type const & rType ) throw (com::sun::star::uno::RuntimeException)
             {
-                ::com::sun::star::uno::Any aRet( ImplHelper_queryNoXInterface( rType, cd::get(), this ) );
+                com::sun::star::uno::Any aRet( ImplHelper_queryNoXInterface( rType, cd::get(), this ) );
                 if (aRet.hasValue())
                     return aRet;
                 return BaseClass::queryInterface( rType );
@@ -220,20 +217,20 @@ namespace cppu
             { BaseClass::acquire(); }
         virtual void SAL_CALL release() throw ()
             { BaseClass::release(); }
-        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes() throw (::com::sun::star::uno::RuntimeException)
+        virtual com::sun::star::uno::Sequence< com::sun::star::uno::Type > SAL_CALL getTypes() throw (com::sun::star::uno::RuntimeException)
             { return ImplInhHelper_getTypes( cd::get(), BaseClass::getTypes() ); }
-        virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (::com::sun::star::uno::RuntimeException)
+        virtual com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (com::sun::star::uno::RuntimeException)
             { return ImplHelper_getImplementationId( cd::get() ); }
     };
-    /** Implementation helper implementing interfaces ::com::sun::star::lang::XTypeProvider and
-        ::com::sun::star::uno::XInterface inherting from a BaseClass.
+    /** Implementation helper implementing interfaces com::sun::star::lang::XTypeProvider and
+        com::sun::star::uno::XInterface inherting from a BaseClass.
         All acquire(),  release() and queryInterface() calls are delegated to the BaseClass.
         Upon queryAggregation(), if a demanded interface is not supported by this class directly,
         the request is delegated to the BaseClass.
 
         @attention
-        The BaseClass has to be complete in a sense, that ::com::sun::star::uno::XInterface,
-        ::com::sun::star::uno::XAggregation and ::com::sun::star::lang::XTypeProvider
+        The BaseClass has to be complete in a sense, that com::sun::star::uno::XInterface,
+        com::sun::star::uno::XAggregation and com::sun::star::lang::XTypeProvider
         are implemented properly.  The BaseClass must have at least one ctor
         that can be called with six or fewer arguments, of which none is of
         non-const reference type.
@@ -247,7 +244,6 @@ namespace cppu
         : public BaseClass
         , public Ifc1, public Ifc2, public Ifc3, public Ifc4, public Ifc5, public Ifc6, public Ifc7, public Ifc8, public Ifc9
     {
-        /** @internal */
         struct cd : public rtl::StaticAggregate< class_data, ImplClassData9< Ifc1, Ifc2, Ifc3, Ifc4, Ifc5, Ifc6, Ifc7, Ifc8, Ifc9, AggImplInheritanceHelper9<BaseClass, Ifc1, Ifc2, Ifc3, Ifc4, Ifc5, Ifc6, Ifc7, Ifc8, Ifc9> > > {};
     protected:
         template< typename T1 >
@@ -278,11 +274,11 @@ namespace cppu
             BaseClass(arg1, arg2, arg3, arg4, arg5, arg6) {}
     public:
         AggImplInheritanceHelper9() {}
-        virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( ::com::sun::star::uno::Type const & rType ) throw (::com::sun::star::uno::RuntimeException)
+        virtual com::sun::star::uno::Any SAL_CALL queryInterface( com::sun::star::uno::Type const & rType ) throw (com::sun::star::uno::RuntimeException)
             { return BaseClass::queryInterface( rType ); }
-        virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( ::com::sun::star::uno::Type const & rType ) throw (::com::sun::star::uno::RuntimeException)
+        virtual com::sun::star::uno::Any SAL_CALL queryAggregation( com::sun::star::uno::Type const & rType ) throw (com::sun::star::uno::RuntimeException)
             {
-                ::com::sun::star::uno::Any aRet( ImplHelper_queryNoXInterface( rType, cd::get(), this ) );
+                com::sun::star::uno::Any aRet( ImplHelper_queryNoXInterface( rType, cd::get(), this ) );
                 if (aRet.hasValue())
                     return aRet;
                 return BaseClass::queryAggregation( rType );
@@ -291,9 +287,9 @@ namespace cppu
             { BaseClass::acquire(); }
         virtual void SAL_CALL release() throw ()
             { BaseClass::release(); }
-        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes() throw (::com::sun::star::uno::RuntimeException)
+        virtual com::sun::star::uno::Sequence< com::sun::star::uno::Type > SAL_CALL getTypes() throw (com::sun::star::uno::RuntimeException)
             { return ImplInhHelper_getTypes( cd::get(), BaseClass::getTypes() ); }
-        virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (::com::sun::star::uno::RuntimeException)
+        virtual com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (com::sun::star::uno::RuntimeException)
             { return ImplHelper_getImplementationId( cd::get() ); }
     };
 }

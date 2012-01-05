@@ -33,8 +33,6 @@
 #include <rtl/ustring.hxx>
 #include <rtl/byteseq.hxx>
 
-/** @HTML
- */
 namespace osl
 {
     enum __osl_socket_NoCopy { SAL_NO_COPY };

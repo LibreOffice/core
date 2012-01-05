@@ -59,9 +59,9 @@ enum rtl_math_StringFormat
      */
     rtl_math_StringFormat_Automatic,
 
-    /** @internal
-     */
+    /** @cond INTERNAL */
     rtl_math_StringFormat_FORCE_EQUAL_SIZE = SAL_MAX_ENUM
+    /** @endcond */
 };
 
 /** Status for rtl_math_stringToDouble and rtl_math_uStringToDouble.
@@ -76,9 +76,9 @@ enum rtl_math_ConversionStatus
      */
     rtl_math_ConversionStatus_OutOfRange,
 
-    /** @internal
-     */
+    /** @cond INTERNAL */
     rtl_math_ConversionStatus_FORCE_EQUAL_SIZE = SAL_MAX_ENUM
+    /** @endcond */
 };
 
 /** Rounding modes for rtl_math_round.
@@ -117,9 +117,9 @@ enum rtl_math_RoundingMode
      */
     rtl_math_RoundingMode_HalfEven,
 
-    /** @internal
-     */
+    /** @cond INTERNAL */
     rtl_math_RoundingMode_FORCE_EQUAL_SIZE = SAL_MAX_ENUM
+    /** @endcond */
 };
 
 /** Special decimal places constants for rtl_math_doubleToString and

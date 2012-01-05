@@ -66,19 +66,17 @@ public:
     */
     inline static Environment getCurrent(rtl::OUString const & typeName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(CPPU_STRINGIFY(CPPU_ENV)))) SAL_THROW( () );
 
+    /// @cond INTERNAL
     // these are here to force memory de/allocation to sal lib.
-    /** @internal */
     inline static void * SAL_CALL operator new ( size_t nSize ) SAL_THROW( () )
         { return ::rtl_allocateMemory( nSize ); }
-    /** @internal */
     inline static void SAL_CALL operator delete ( void * pMem ) SAL_THROW( () )
         { ::rtl_freeMemory( pMem ); }
-    /** @internal */
     inline static void * SAL_CALL operator new ( size_t, void * pMem ) SAL_THROW( () )
         { return pMem; }
-    /** @internal */
     inline static void SAL_CALL operator delete ( void *, void * ) SAL_THROW( () )
         {}
+    /// @endcond
 
     /** Constructor: acquires given environment
 

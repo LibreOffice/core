@@ -44,10 +44,6 @@ extern "C" {
 #define OSL_INVALID_PORT (-1)
 #define OSL_INVALID_IPX_SOCKET_NO   0xffffffff
 
-/**@HTML
-
-*/
-
 /**
     Opaque datatype SocketAddr.
 */

@@ -39,7 +39,6 @@
 namespace cppu
 {
 
-/** @internal */
 class OWeakConnectionPoint;
 
 /** Base class to implement an UNO object supporting weak references, i.e. the object can be held
@@ -52,7 +51,6 @@ class OWeakConnectionPoint;
 */
 class CPPUHELPER_DLLPUBLIC OWeakObject : public ::com::sun::star::uno::XWeak
 {
-    /** @internal */
     friend class OWeakConnectionPoint;
 
 protected:
@@ -77,30 +75,30 @@ protected:
     */
     oslInterlockedCount m_refCount;
 
+    /// @cond INTERNAL
+
     /** Container of all weak reference listeners and the connection point from the weak reference.
-        @internal
     */
     OWeakConnectionPoint * m_pWeakConnectionPoint;
 
     /** reserved for future use. do not use.
-        @internal
     */
     void * m_pReserved;
 
+    /// @endcond
+
 public:
+    /// @cond INTERNAL
     // these are here to force memory de/allocation to sal lib.
-    /** @internal */
     inline static void * SAL_CALL operator new( size_t nSize ) SAL_THROW( () )
         { return ::rtl_allocateMemory( nSize ); }
-    /** @internal */
     inline static void SAL_CALL operator delete( void * pMem ) SAL_THROW( () )
         { ::rtl_freeMemory( pMem ); }
-    /** @internal */
     inline static void * SAL_CALL operator new( size_t, void * pMem ) SAL_THROW( () )
         { return pMem; }
-    /** @internal */
     inline static void SAL_CALL operator delete( void *, void * ) SAL_THROW( () )
         {}
+    /// @endcond
 
 #ifdef _MSC_VER
     /** Default Constructor.  Sets the reference count to zero.

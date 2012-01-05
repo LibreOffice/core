@@ -251,7 +251,7 @@ inline double acosh(double fValue)
 /** Test equality of two values with an accuracy of the magnitude of the
     given values scaled by 2^-48 (4 bits roundoff stripped).
 
-    @ATTENTION
+    @attention
     approxEqual( value!=0.0, 0.0 ) _never_ yields true.
  */
 inline bool approxEqual(double a, double b)

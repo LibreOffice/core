@@ -320,6 +320,8 @@ template< typename T > inline ::com::sun::star::uno::Type const &
 getTypeFavourUnsigned(::com::sun::star::uno::Sequence< T > const *);
     // defined in com/sun/star/uno/Sequence.hxx
 
+/// @cond INTERNAL
+
 /**
    A working replacement for getCppuType (see there).
 
@@ -328,8 +330,6 @@ getTypeFavourUnsigned(::com::sun::star::uno::Sequence< T > const *);
    as the getCppuType template, in that it returns correct results for the UNO
    type CHAR but not for the UNO type UNSIGNED SHORT.  Additionally, it also
    returns the intended results for sequence types.
-
-   @internal
 
    @since UDK 3.2.3
 */
@@ -347,8 +347,6 @@ getTypeFavourChar(T const *) {
    type CHAR but not for the UNO type UNSIGNED SHORT.  Additionally, it also
    returns the intended results for sequence types.
 
-   @internal
-
    @since UDK 3.2.3
 */
 inline ::com::sun::star::uno::Type const &
@@ -365,13 +363,13 @@ getTypeFavourChar(::sal_Unicode const *) {
    type CHAR but not for the UNO type UNSIGNED SHORT.  Additionally, it also
    returns the intended results for sequence types.
 
-   @internal
-
    @since UDK 3.2.3
 */
 template< typename T > inline ::com::sun::star::uno::Type const &
 getTypeFavourChar(::com::sun::star::uno::Sequence< T > const *);
     // defined in com/sun/star/uno/Sequence.hxx
+
+/// @endcond
 
 }
 

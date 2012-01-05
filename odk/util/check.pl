@@ -174,133 +174,18 @@ if (-d "$StartDir") {
 
     #check cpp docu, it is only a first and simple check
     # improvement required
-    print "check cpp docu: ";
-    if (-d "$StartDir/docs/cpp/ref") {
-    if (! -e "$StartDir/docs/cpp/ref/index.html") {
-        print "\nERROR: \"$StartDir/docs/cpp/ref/index.html\" is missing\n";
-        $return++;
-    }
-    if (! -d "$StartDir/docs/cpp/ref/index-files") {
-        print "\nERROR: \"$StartDir/docs/cpp/ref/index-files\" is missing\n";
-        $return++;
-    }
-    if (! -e "$StartDir/docs/cpp/ref/index-files/index-10.html") {
-        print "\nERROR: \"$StartDir/docs/cpp/ref/index-files/index-10.html\" is missing\n";
-        $return++;
-    }
-
-    # The commented out types from cppuhelper are missed by autodoc due to
-    # CPPUHELPER_DLLPUBLIC annotations:
-    my @dir_list = ( "com","com/sun","com/sun/star","com/sun/star/uno",
-             "com/sun/star/uno/Any","com/sun/star/uno/Type",
-             "com/sun/star/uno/Array",#"com/sun/star/uno/WeakReferenceHelper",
-             "com/sun/star/uno/Reference","com/sun/star/uno/WeakReference",
-             "com/sun/star/uno/Environment","com/sun/star/uno/Sequence",
-             "com/sun/star/uno/BaseReference","com/sun/star/uno/Mapping",
-             "com/sun/star/uno/ContextLayer","com/sun/star/uno/TypeDescription",
-             "osl","osl/File","osl/Pipe","osl/FileStatus","osl/FileBase",
-             "osl/Guard","osl/Mutex","osl/VolumeInfo","osl/GetGlobalMutex",
-             "osl/Security","osl/Profile","osl/DatagramSocket","osl/SocketAddr",
-             "osl/StreamPipe","osl/ResettableGuard","osl/AcceptorSocket",
-             "osl/ClearableGuard","osl/VolumeDevice","rtl","rtl/Uri","rtl/math",
-             "rtl/OUStringHash","rtl/MalformedUriException","rtl/OUStringBuffer",
-             "rtl/OUString","rtl/Reference","rtl/ByteSequence","rtl/OLocale",
-             "rtl/Logfile","rtl/OString","rtl/IReference","rtl/OStringBuffer",
-             "rtl/OStringHash","_typelib_CompoundTypeDescription","cppu",
-             "cppu/ContextEntry_Init","cppu/ImplInheritanceHelper10",
-             "cppu/ImplInheritanceHelper11","cppu/ImplInheritanceHelper12",
-             "cppu/WeakAggImplHelper1","cppu/WeakAggImplHelper2",
-             "cppu/WeakAggImplHelper3","cppu/WeakAggImplHelper4",
-             "cppu/WeakAggImplHelper5","cppu/WeakAggImplHelper6",
-             "cppu/WeakAggImplHelper7","cppu/WeakAggImplHelper8",
-             "cppu/WeakAggImplHelper9",
-             #"cppu/OMultiTypeInterfaceContainerHelperInt32","cppu/AccessControl",
-             #"cppu/OPropertyArrayHelper",
-             "cppu/ImplHelper1","cppu/ImplHelper2",
-             "cppu/ImplHelper3","cppu/ImplHelper4","cppu/ImplHelper5",
-             "cppu/ImplHelper6","cppu/ImplHelper7","cppu/ImplHelper8",
-             "cppu/ImplHelper9","cppu/WeakComponentImplHelper10",
-             "cppu/WeakComponentImplHelper11","cppu/WeakComponentImplHelper12",
-             #"cppu/UnoUrl",
-             "cppu/WeakComponentImplHelper1",
-             "cppu/WeakComponentImplHelper2","cppu/WeakComponentImplHelper3",
-             "cppu/WeakComponentImplHelper4","cppu/WeakComponentImplHelper5",
-             "cppu/WeakComponentImplHelper6","cppu/WeakComponentImplHelper7",
-             "cppu/WeakComponentImplHelper8","cppu/WeakComponentImplHelper9",
-             #"cppu/OInterfaceIteratorHelper",
-             #"cppu/OMultiTypeInterfaceContainerHelper","cppu/UnoUrlDescriptor",
-             #"cppu/IPropertyArrayHelper",
-             "cppu/OBroadcastHelperVar",
-             #"cppu/OComponentHelper","cppu/OWeakAggObject",
-             "cppu/ImplementationEntry","cppu/WeakImplHelper10",
-             "cppu/WeakImplHelper11","cppu/WeakImplHelper12",
-             #"cppu/OPropertySetHelper",
-             "cppu/ImplHelper10","cppu/ImplHelper11",
-             "cppu/ImplHelper12","cppu/WeakAggImplHelper10",
-             "cppu/WeakAggImplHelper11","cppu/WeakAggImplHelper12",
-             "cppu/ImplInheritanceHelper1","cppu/ImplInheritanceHelper2",
-             "cppu/ImplInheritanceHelper3","cppu/ImplInheritanceHelper4",
-             "cppu/ImplInheritanceHelper5","cppu/ImplInheritanceHelper6",
-             "cppu/ImplInheritanceHelper7","cppu/ImplInheritanceHelper8",
-             "cppu/ImplInheritanceHelper9",#"cppu/OTypeCollection",
-             "cppu/WeakAggComponentImplHelper10",
-             "cppu/WeakAggComponentImplHelper11",
-             "cppu/WeakAggComponentImplHelper12",
-             "cppu/WeakAggComponentImplHelper1",
-             "cppu/WeakAggComponentImplHelper2",
-             "cppu/WeakAggComponentImplHelper3",
-             "cppu/WeakAggComponentImplHelper4",
-             "cppu/WeakAggComponentImplHelper5",
-             "cppu/WeakAggComponentImplHelper6",
-             "cppu/WeakAggComponentImplHelper7",
-             "cppu/WeakAggComponentImplHelper8",
-             "cppu/WeakAggComponentImplHelper9",
-             "cppu/OMultiTypeInterfaceContainerHelperVar",
-             #"cppu/OInterfaceContainerHelper","cppu/OImplementationId",
-             "cppu/AggImplInheritanceHelper1","cppu/AggImplInheritanceHelper2",
-             "cppu/AggImplInheritanceHelper3","cppu/AggImplInheritanceHelper4",
-             "cppu/AggImplInheritanceHelper5","cppu/AggImplInheritanceHelper6",
-             "cppu/AggImplInheritanceHelper7","cppu/AggImplInheritanceHelper8",
-             "cppu/AggImplInheritanceHelper9","cppu/AggImplInheritanceHelper10",
-             "cppu/AggImplInheritanceHelper11","cppu/AggImplInheritanceHelper12",
-             "cppu/WeakImplHelper1","cppu/WeakImplHelper2","cppu/WeakImplHelper3",
-             "cppu/WeakImplHelper4","cppu/WeakImplHelper5","cppu/WeakImplHelper6",
-             "cppu/WeakImplHelper7","cppu/WeakImplHelper8","cppu/WeakImplHelper9",
-             #"cppu/OWeakObject",
-             "__store_FindData","_rtl_StandardModuleCount",
-             "RTUik","RTConstValue","_typelib_TypeDescriptionReference",
-             "_typelib_InterfaceMethodTypeDescription","store","RegistryKey",
-             "_typelib_Union_Init","_sal_Sequence","_typelib_Parameter_Init",
-             "_typelib_TypeDescription","_uno_Environment",
-             "_typelib_InterfaceAttributeTypeDescription",
-             "_rtl_ModuleCount","_uno_ExtEnvironment",
-             "_typelib_IndirectTypeDescription",
-             "Registry_Api","_oslFileStatus",
-             "_typelib_InterfaceMemberTypeDescription","RegistryValueList",
-             "RegistryTypeWriter_Api","_rtl_TextEncodingInfo",
-             "namespace_anonymous_1",
-             "_oslVolumeInfo","_uno_Interface",
-             "_typelib_InterfaceTypeDescription","_uno_Mapping","Registry",
-             "RegistryTypeReader_Api","_typelib_Uik",
-             "_typelib_ArrayTypeDescription",
-             "RegistryKeyArray","RegistryTypeReader","RegistryKeyNames",
-             "RTConstValueUnion","_typelib_UnionTypeDescription","_uno_Any",
-             "RegistryTypeWriter","_rtl_Locale","_typelib_CompoundMember_Init",
-             "_typelib_EnumTypeDescription","_typelib_MethodParameter");
-
-    foreach $i (@dir_list)
-    {
-        if (! -d "$StartDir/docs/cpp/ref/names/$i") {
-        $return++;
-        print "\nERROR: \"$StartDir/docs/cpp/ref/names/$i\" is missing\n";
+    if ($ENV{'DOXYGEN'} ne '') {
+        print "check cpp docu: ";
+        if (-d "$StartDir/docs/cpp/ref") {
+            if (! -e "$StartDir/docs/cpp/ref/index.html") {
+                print "\nERROR: \"$StartDir/docs/cpp/ref/index.html\" is missing\n";
+                $return++;
+            }
         } else {
-        print "+";
+            $return++;
         }
+        print "\n";
     }
-    } else {
-    $return++;
-    }
-    print "\n";
 
     #check java docu, it is only a first and simple check
     # improvement required

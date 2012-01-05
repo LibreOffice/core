@@ -39,8 +39,6 @@
 extern "C" {
 #endif
 
-/// @HTML
-
 /**
    Creates a type reader working on a binary blob that represents a UNOIDL type.
 

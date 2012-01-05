@@ -57,40 +57,38 @@ namespace uno
     so the sequence keeps a handle to its data.  To keep value semantics,
     copies are only generated if the sequence is to be modified (new handle).
 
-    @tplparam E element type of sequence
+    @tparam E element type of sequence
 */
 template< class E >
 class Sequence
 {
     /** sequence handle
-        @internal
     */
     uno_Sequence * _pSequence;
 
 public:
+    /// @cond INTERNAL
+
     // these are here to force memory de/allocation to sal lib.
-    /** @internal */
     inline static void * SAL_CALL operator new ( ::size_t nSize )
         SAL_THROW( () )
         { return ::rtl_allocateMemory( nSize ); }
-    /** @internal */
     inline static void SAL_CALL operator delete ( void * pMem )
         SAL_THROW( () )
         { ::rtl_freeMemory( pMem ); }
-    /** @internal */
     inline static void * SAL_CALL operator new ( ::size_t, void * pMem )
         SAL_THROW( () )
         { return pMem; }
-    /** @internal */
     inline static void SAL_CALL operator delete ( void *, void * )
         SAL_THROW( () )
         {}
 
     /** Static pointer to typelib type of sequence.
         Don't use directly, call getCppuType().
-        @internal
     */
     static typelib_TypeDescriptionReference * s_pType;
+
+    /// @endcond
 
     /** typedefs the element type of the sequence
     */
@@ -252,8 +250,9 @@ inline ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL toUnoSequence(
     There are cases (involving templates) where uses of getCppuType are known to
     not compile.  Use cppu::UnoType or cppu::getTypeFavourUnsigned instead.
 
-    @tplparam E element type of sequence
-    @param dummy typed pointer for function signature
+    The dummy parameter is just a typed pointer for function signature.
+
+    @tparam E element type of sequence
     @return type of IDL sequence
 */
 template< class E >
@@ -268,7 +267,7 @@ SAL_CALL getCppuType( const ::com::sun::star::uno::Sequence< E > * )
 
     @attention
     the given element type must be the same as the template argument type!
-    @tplparam E element type of sequence
+    @tparam E element type of sequence
     @param rElementType element type of sequence
     @return type of IDL sequence
 */
@@ -280,7 +279,8 @@ SAL_CALL getCppuSequenceType( const ::com::sun::star::uno::Type & rElementType )
 /** Gets the meta type of IDL sequence< char >.
     This function has been introduced due to ambiguities with unsigned short.
 
-    @param dummy typed pointer for function signature
+    The dummy parameter is just a typed pointer for function signature.
+
     @return type of IDL sequence< char >
 */
 inline const ::com::sun::star::uno::Type &

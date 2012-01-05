@@ -166,24 +166,21 @@ enum __ByteSequence_NoAcquire
 class ByteSequence
 {
     /** sequence handle
-        @internal
     */
     sal_Sequence * _pSequence;
 
 public:
+    /// @cond INTERNAL
     // these are here to force memory de/allocation to sal lib.
-    /** @internal */
     inline static void * SAL_CALL operator new ( size_t nSize ) SAL_THROW( () )
         { return ::rtl_allocateMemory( nSize ); }
-    /** @internal */
     inline static void SAL_CALL operator delete ( void * pMem ) SAL_THROW( () )
         { ::rtl_freeMemory( pMem ); }
-    /** @internal */
     inline static void * SAL_CALL operator new ( size_t, void * pMem ) SAL_THROW( () )
         { return pMem; }
-    /** @internal */
     inline static void SAL_CALL operator delete ( void *, void * ) SAL_THROW( () )
         {}
+    /// @endcond
 
     /** Default constructor: Creates an empty sequence.
     */

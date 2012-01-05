@@ -100,6 +100,7 @@ enum RTTypeClass {
      */
     RT_TYPE_UNION,
 
+    /// @cond INTERNAL
     /**
        Flag for published entities.
 
@@ -111,11 +112,10 @@ enum RTTypeClass {
        addition changes the underlying type of this enumeration for any C/C++
        compiler.)
 
-       @internal
-
        @since UDK 3.2.0
      */
     RT_TYPE_PUBLISHED = 0x4000
+    /// @endcond
 };
 
 /** specifies the type for the field access.

@@ -121,13 +121,13 @@ typedef void (SAL_CALL *pfunc_osl_printDetailedDebugMessage)( const sal_Char * p
     The function set here is ignored if a function for detailed message information
     (pfunc_osl_printDetailedDebugMessage) has been set.
 
-    The given message handler must be able to cope with a <NULL/> message.
+    The given message handler must be able to cope with a null message.
 */
 SAL_DLLPUBLIC pfunc_osl_printDebugMessage SAL_CALL osl_setDebugMessageFunc( pfunc_osl_printDebugMessage pNewFunc );
 
 /** sets a delivery function for detailed message information.
 
-    The given message handler must be able to cope with a <NULL/> message.
+    The given message handler must be able to cope with a null message.
 */
 SAL_DLLPUBLIC pfunc_osl_printDetailedDebugMessage SAL_CALL osl_setDetailedDebugMessageFunc( pfunc_osl_printDetailedDebugMessage pNewFunc );
 

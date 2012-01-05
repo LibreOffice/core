@@ -40,8 +40,7 @@
 namespace rtl
 {
 
-/** @HTML
-    A string buffer implements a mutable sequence of characters.
+/** A string buffer implements a mutable sequence of characters.
     <p>
     String buffers are safe for use by multiple threads. The methods
     are synchronized where necessary so that all the operations on any
@@ -576,7 +575,7 @@ public:
         string buffer.
 
         @param      offset   the offset.
-        @param      ch       a character array.
+        @param      str      a character array.
         @return     this string buffer.
      */
     OUStringBuffer & insert( sal_Int32 offset, const sal_Unicode * str )
@@ -598,7 +597,7 @@ public:
         string buffer.
 
         @param      offset   the offset.
-        @param      ch       a character array.
+        @param      str      a character array.
         @param      len     the number of characters to append.
         @return     this string buffer.
      */
@@ -645,7 +644,7 @@ public:
         string buffer.
 
         @param      offset   the offset.
-        @param      ch       a <code>char</code>.
+        @param      c        a <code>char</code>.
         @return     this string buffer.
 
         @since LibreOffice 3.6
@@ -669,7 +668,7 @@ public:
         string buffer.
 
         @param      offset   the offset.
-        @param      ch       a <code>char</code>.
+        @param      c        a <code>char</code>.
         @return     this string buffer.
      */
     OUStringBuffer & insert(sal_Int32 offset, sal_Unicode c)
@@ -691,7 +690,8 @@ public:
         string buffer.
 
         @param      offset   the offset.
-        @param      b        an <code>sal_Int32</code>.
+        @param      i        an <code>sal_Int32</code>.
+        @param      radix    the radix.
         @return     this string buffer.
         @exception  StringIndexOutOfBoundsException  if the offset is invalid.
      */
@@ -715,7 +715,8 @@ public:
         string buffer.
 
         @param      offset   the offset.
-        @param      b        a <code>long</code>.
+        @param      l        a <code>long</code>.
+        @param      radix    the radix.
         @return     this string buffer.
         @exception  StringIndexOutOfBoundsException  if the offset is invalid.
      */
@@ -739,7 +740,7 @@ public:
         string buffer.
 
         @param      offset   the offset.
-        @param      b        a <code>float</code>.
+        @param      f        a <code>float</code>.
         @return     this string buffer.
         @exception  StringIndexOutOfBoundsException  if the offset is invalid.
      */
@@ -763,7 +764,7 @@ public:
         string buffer.
 
         @param      offset   the offset.
-        @param      b        a <code>double</code>.
+        @param      d        a <code>double</code>.
         @return     this string buffer.
         @exception  StringIndexOutOfBoundsException  if the offset is invalid.
      */

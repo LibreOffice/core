@@ -88,7 +88,7 @@ typedef const sal_Char * (SAL_CALL * component_getDescriptionFunc)(void);
 
 /** Function pointer declaration.
 
-    @obsolete component_writeInfo should no longer be used in new components
+    @deprecated component_writeInfo should no longer be used in new components
 
     Function writes component registry info, at least writing the supported service names.
 

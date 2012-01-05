@@ -37,7 +37,7 @@
 namespace cppu
 {
 
-/** Helper class to implement ::com::sun::star::lang::XTypeProvider.  Construct a static object
+/** Helper class to implement com::sun::star::lang::XTypeProvider.  Construct a static object
     of this class with your UNO object's supported types.
 */
 class CPPUHELPER_DLLPUBLIC OTypeCollection
@@ -45,19 +45,17 @@ class CPPUHELPER_DLLPUBLIC OTypeCollection
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > _aTypes;
 
 public:
+    /// @cond INTERNAL
     // these are here to force memory de/allocation to sal lib.
-    /** @internal */
     inline static void * SAL_CALL operator new( size_t nSize ) SAL_THROW( () )
         { return ::rtl_allocateMemory( nSize ); }
-    /** @internal */
     inline static void SAL_CALL operator delete( void * pMem ) SAL_THROW( () )
         { ::rtl_freeMemory( pMem ); }
-    /** @internal */
     inline static void * SAL_CALL operator new( size_t, void * pMem ) SAL_THROW( () )
         { return pMem; }
-    /** @internal */
     inline static void SAL_CALL operator delete( void *, void * ) SAL_THROW( () )
         {}
+    /// @endcond
 
     inline OTypeCollection( const OTypeCollection & rCollection )
         SAL_THROW( () )
@@ -186,33 +184,31 @@ public:
         { return _aTypes; }
 };
 
-/** Helper class to implement ::com::sun::star::lang::XTypeProvider.  Construct a static object
+/** Helper class to implement com::sun::star::lang::XTypeProvider.  Construct a static object
     of this class for your UNO object's implementation id.
 */
 class CPPUHELPER_DLLPUBLIC OImplementationId
 {
-    /** @internal */
     mutable ::com::sun::star::uno::Sequence< sal_Int8 > * _pSeq;
-    /** @internal */
     sal_Bool _bUseEthernetAddress;
 
 public:
+    /// @cond INTERNAL
+
     // these are here to force memory de/allocation to sal lib.
-    /** @internal */
     inline static void * SAL_CALL operator new( size_t nSize ) SAL_THROW( () )
         { return ::rtl_allocateMemory( nSize ); }
-    /** @internal */
     inline static void SAL_CALL operator delete( void * pMem ) SAL_THROW( () )
         { ::rtl_freeMemory( pMem ); }
-    /** @internal */
     inline static void * SAL_CALL operator new( size_t, void * pMem ) SAL_THROW( () )
         { return pMem; }
-    /** @internal */
     inline static void SAL_CALL operator delete( void *, void * ) SAL_THROW( () )
         {}
 
-    /** @internal */
     ~OImplementationId() SAL_THROW( () );
+
+    /// @endcond
+
     /** Constructor.
 
         @param bUseEthernetAddress whether an ethernet mac address should be taken into account

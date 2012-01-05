@@ -31,6 +31,7 @@
 
 #include "uno/dispatcher.h"
 
+/// @cond INTERNAL
 
 namespace com
 {
@@ -45,7 +46,7 @@ namespace uno
     subject to changes.
 
     @see uno_Interface
-    @internal
+    @attention
               not for public use!
 */
 class UnoInterfaceReference
@@ -171,6 +172,8 @@ inline void UnoInterfaceReference::dispatch(
 }
 }
 }
+
+/// @endcond
 
 #endif
 

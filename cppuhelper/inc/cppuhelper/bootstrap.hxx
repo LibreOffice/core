@@ -198,11 +198,10 @@ private:
 CPPUHELPER_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
 SAL_CALL bootstrap();
 
+/// @cond INTERNAL
 /**
  * Helper function to expand vnd.sun.star.expand URLs in contexts where no
  * properly bootstrapped UNO is (yet) available.
- *
- * @internal
  *
  * @param uri
  * Some URI (but not a URI reference).
@@ -219,6 +218,7 @@ SAL_CALL bootstrap();
  */
 CPPUHELPER_DLLPUBLIC ::rtl::OUString
 SAL_CALL bootstrap_expandUri(::rtl::OUString const & uri);
+/// @endcond
 
 } // end namespace cppu
 

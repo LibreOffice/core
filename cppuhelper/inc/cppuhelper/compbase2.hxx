@@ -43,12 +43,12 @@ namespace cppu
 #pragma disable_warn
 #endif
 
-    /** Implementation helper supporting ::com::sun::star::lang::XTypeProvider and
-        ::com::sun::star::lang::XComponent.
+    /** Implementation helper supporting com::sun::star::lang::XTypeProvider and
+        com::sun::star::lang::XComponent.
 
         Upon disposing objects of this class, sub-classes receive a disposing()
         call.  Objects of this class can be held weakly, i.e. by a
-        ::com::sun::star::uno::WeakReference.
+        com::sun::star::uno::WeakReference.
 
         @attention
         The life-cycle of the passed mutex reference has to be longer than objects of this class.
@@ -63,7 +63,6 @@ namespace cppu
         , public ::com::sun::star::lang::XTypeProvider
         , public Ifc1, public Ifc2
     {
-        /** @internal */
         struct cd : public rtl::StaticAggregate< class_data, ImplClassData2 < Ifc1, Ifc2, WeakComponentImplHelper2<Ifc1, Ifc2> > > {};
     public:
         inline WeakComponentImplHelper2( ::osl::Mutex & rMutex ) throw ()
@@ -106,7 +105,6 @@ namespace cppu
         , public ::com::sun::star::lang::XTypeProvider
         , public Ifc1, public Ifc2
     {
-        /** @internal */
         struct cd : public rtl::StaticAggregate< class_data, ImplClassData2 < Ifc1, Ifc2, PartialWeakComponentImplHelper2<Ifc1, Ifc2> > > {};
     public:
         inline PartialWeakComponentImplHelper2( ::osl::Mutex & rMutex ) throw ()
@@ -125,12 +123,12 @@ namespace cppu
     };
 
 
-    /** Implementation helper supporting ::com::sun::star::lang::XTypeProvider and
-        ::com::sun::star::lang::XComponent.
+    /** Implementation helper supporting com::sun::star::lang::XTypeProvider and
+        com::sun::star::lang::XComponent.
 
         Upon disposing objects of this class, sub-classes receive a disposing()
         call.  Objects of this class can be held weakly, i.e. by a
-        ::com::sun::star::uno::WeakReference.  Object of this class can be
+        com::sun::star::uno::WeakReference.  Object of this class can be
         aggregated, i.e. incoming queryInterface() calls are delegated.
 
         @attention
@@ -148,7 +146,6 @@ namespace cppu
         , public ::com::sun::star::lang::XTypeProvider
         , public Ifc1, public Ifc2
     {
-        /** @internal */
         struct cd : public rtl::StaticAggregate< class_data, ImplClassData2 < Ifc1, Ifc2, WeakAggComponentImplHelper2<Ifc1, Ifc2> > > {};
     public:
         inline WeakAggComponentImplHelper2( ::osl::Mutex & rMutex ) throw ()

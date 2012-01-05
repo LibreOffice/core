@@ -106,12 +106,12 @@ protected:
     */
     virtual void SAL_CALL disposing();
 
-    /** @internal */
+    /// @cond INTERNAL
     OBroadcastHelper    rBHelper;
+    /// @endcond
+
 private:
-    /** @internal */
     inline OComponentHelper( const OComponentHelper & ) SAL_THROW( () );
-    /** @internal */
     inline OComponentHelper & operator = ( const OComponentHelper & ) SAL_THROW( () );
 };
 

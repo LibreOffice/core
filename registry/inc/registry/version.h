@@ -35,8 +35,6 @@
 extern "C" {
 #endif
 
-/// @HTML
-
 /**
    The version of a binary blob that represents a UNOIDL type.
 

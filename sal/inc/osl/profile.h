@@ -118,7 +118,6 @@ SAL_DLLPUBLIC sal_Bool SAL_CALL osl_writeProfileIdent(
 
 /** Deprecated API.
     Acquire the mutex, block if already acquired by another thread.
-    @param Profile handle to a opened profile.
     @return False if section or entry could not be found.
     @deprecated
 */
@@ -128,7 +127,6 @@ SAL_DLLPUBLIC sal_Bool SAL_CALL osl_removeProfileEntry(
 
 /** Deprecated API.
     Get all entries belonging to the specified section.
-    @param Profile handle to a opened profile.
     @return Pointer to a array of pointers.
     @deprecated
 */
@@ -138,7 +136,6 @@ SAL_DLLPUBLIC sal_uInt32 SAL_CALL osl_getProfileSectionEntries(
 
 /** Deprecated API.
     Get all section entries
-    @param Profile handle to a opened profile.
     @return Pointer to a array of pointers.
     @deprecated
 */

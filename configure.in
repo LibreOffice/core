@@ -1501,6 +1501,18 @@ AC_ARG_WITH(perl-home,
     ],
 ,)
 
+AC_ARG_WITH(
+    [doxygen],
+    AS_HELP_STRING(
+        [--with-doxygen],
+        [Specifies the doxygen executable to use when generating ODK C/C++
+         documentation. --without-doxygen disables generation of ODK C/C++
+         documentation. Not relevant in the --disable-odk case.])
+    [
+                          Usage:     --with-doxygen=<absolute path to doxygen executable>
+    ],,
+    [with_doxygen=yes])
+
 AC_ARG_WITH(cl-home,
     AS_HELP_STRING([--with-cl-home],
         [For Windows NT users, please supply the path for the Microsoft C/C++
@@ -9887,6 +9899,29 @@ location (/usr/share/java), specify its pathname via
     fi
 fi
 AC_SUBST(OOO_JUNIT_JAR)
+
+if test "$enable_odk" = no; then
+    unset DOXYGEN
+else
+    if test "$with_doxygen" = no; then
+        AC_MSG_CHECKING([for doxygen])
+        unset DOXYGEN
+        AC_MSG_RESULT([no])
+    else
+        if test "$with_doxygen" = yes; then
+            AC_PATH_PROG([DOXYGEN], [doxygen])
+            if test -z "$DOXYGEN"; then
+                AC_MSG_RESULT([no])
+                AC_MSG_ERROR([doxygen not found in \$PATH; specify its pathname via --with-doxygen=..., or disable its use via --without-doxygen])
+            fi
+        else
+            AC_MSG_CHECKING([for doxygen])
+            DOXYGEN=$with_doxygen
+            AC_MSG_RESULT([$DOXYGEN])
+        fi
+    fi
+fi
+AC_SUBST([DOXYGEN])
 
 dnl ===================================================================
 dnl Product version

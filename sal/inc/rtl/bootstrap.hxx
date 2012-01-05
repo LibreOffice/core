@@ -36,9 +36,7 @@ namespace rtl
     {
         void * _handle;
 
-        /** @internal */
         inline Bootstrap( Bootstrap const & ); // not impl
-        /** @internal */
         inline Bootstrap & operator = ( Bootstrap const & ); // not impl
 
     public:
@@ -74,9 +72,9 @@ namespace rtl
 
         /** Sets a bootstrap parameter.
 
-            @param pName
+            @param name
                    name of bootstrap parameter
-            @param pValue
+            @param value
                    value of bootstrap parameter
 
             @see rtl_bootstrap_set()

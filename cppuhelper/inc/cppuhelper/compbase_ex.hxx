@@ -34,13 +34,13 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include "cppuhelperdllapi.h"
 
+/// @cond INTERNAL
 
 namespace cppu
 {
 
 /** Implementation helper base class for components. Inherits from ::cppu::OWeakObject and
     ::com::sun::star::lang::XComponent.
-    @internal
 */
 class CPPUHELPER_DLLPUBLIC SAL_NO_VTABLE WeakComponentImplHelperBase
     : public ::cppu::OWeakObject
@@ -94,7 +94,6 @@ public:
 
 /** Implementation helper base class for components. Inherits from ::cppu::OWeakAggObject and
     ::com::sun::star::lang::XComponent.
-    @internal
 */
 class CPPUHELPER_DLLPUBLIC SAL_NO_VTABLE WeakAggComponentImplHelperBase
     : public ::cppu::OWeakAggObject
@@ -142,7 +141,6 @@ public:
 };
 
 /** WeakComponentImplHelper
-    @internal
 */
 CPPUHELPER_DLLPUBLIC ::com::sun::star::uno::Any SAL_CALL WeakComponentImplHelper_query(
     ::com::sun::star::uno::Type const & rType,
@@ -151,14 +149,12 @@ CPPUHELPER_DLLPUBLIC ::com::sun::star::uno::Any SAL_CALL WeakComponentImplHelper
     ::cppu::WeakComponentImplHelperBase * pBase )
     SAL_THROW( (::com::sun::star::uno::RuntimeException) );
 /** WeakComponentImplHelper
-    @internal
 */
 CPPUHELPER_DLLPUBLIC ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL WeakComponentImplHelper_getTypes(
     class_data * cd )
     SAL_THROW( (::com::sun::star::uno::RuntimeException) );
 
 /** WeakAggComponentImplHelper
-    @internal
 */
 CPPUHELPER_DLLPUBLIC ::com::sun::star::uno::Any SAL_CALL WeakAggComponentImplHelper_queryAgg(
     ::com::sun::star::uno::Type const & rType,
@@ -167,13 +163,14 @@ CPPUHELPER_DLLPUBLIC ::com::sun::star::uno::Any SAL_CALL WeakAggComponentImplHel
     ::cppu::WeakAggComponentImplHelperBase * pBase )
     SAL_THROW( (::com::sun::star::uno::RuntimeException) );
 /** WeakAggComponentImplHelper
-    @internal
 */
 CPPUHELPER_DLLPUBLIC ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL WeakAggComponentImplHelper_getTypes(
     class_data * cd )
     SAL_THROW( (::com::sun::star::uno::RuntimeException) );
 
 }
+
+/// @endcond
 
 #endif
 

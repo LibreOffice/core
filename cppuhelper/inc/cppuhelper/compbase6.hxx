@@ -43,12 +43,12 @@ namespace cppu
 #pragma disable_warn
 #endif
 
-    /** Implementation helper supporting ::com::sun::star::lang::XTypeProvider and
-        ::com::sun::star::lang::XComponent.
+    /** Implementation helper supporting com::sun::star::lang::XTypeProvider and
+        com::sun::star::lang::XComponent.
 
         Upon disposing objects of this class, sub-classes receive a disposing()
         call.  Objects of this class can be held weakly, i.e. by a
-        ::com::sun::star::uno::WeakReference.
+        com::sun::star::uno::WeakReference.
 
         @attention
         The life-cycle of the passed mutex reference has to be longer than objects of this class.
@@ -63,7 +63,6 @@ namespace cppu
         , public ::com::sun::star::lang::XTypeProvider
         , public Ifc1, public Ifc2, public Ifc3, public Ifc4, public Ifc5, public Ifc6
     {
-        /** @internal */
         struct cd : public rtl::StaticAggregate< class_data, ImplClassData6 < Ifc1, Ifc2, Ifc3, Ifc4, Ifc5, Ifc6, WeakComponentImplHelper6<Ifc1, Ifc2, Ifc3, Ifc4, Ifc5, Ifc6> > > {};
     public:
         inline WeakComponentImplHelper6( ::osl::Mutex & rMutex ) throw ()
@@ -106,7 +105,6 @@ namespace cppu
         , public ::com::sun::star::lang::XTypeProvider
         , public Ifc1, public Ifc2, public Ifc3, public Ifc4, public Ifc5, public Ifc6
     {
-        /** @internal */
         struct cd : public rtl::StaticAggregate< class_data, ImplClassData6 < Ifc1, Ifc2, Ifc3, Ifc4, Ifc5, Ifc6, PartialWeakComponentImplHelper6<Ifc1, Ifc2, Ifc3, Ifc4, Ifc5, Ifc6> > > {};
     public:
         inline PartialWeakComponentImplHelper6( ::osl::Mutex & rMutex ) throw ()
@@ -124,12 +122,12 @@ namespace cppu
             { return ImplHelper_getImplementationId( cd::get() ); }
     };
 
-    /** Implementation helper supporting ::com::sun::star::lang::XTypeProvider and
-        ::com::sun::star::lang::XComponent.
+    /** Implementation helper supporting com::sun::star::lang::XTypeProvider and
+        com::sun::star::lang::XComponent.
 
         Upon disposing objects of this class, sub-classes receive a disposing()
         call.  Objects of this class can be held weakly, i.e. by a
-        ::com::sun::star::uno::WeakReference.  Object of this class can be
+        com::sun::star::uno::WeakReference.  Object of this class can be
         aggregated, i.e. incoming queryInterface() calls are delegated.
 
         @attention
@@ -147,7 +145,6 @@ namespace cppu
         , public ::com::sun::star::lang::XTypeProvider
         , public Ifc1, public Ifc2, public Ifc3, public Ifc4, public Ifc5, public Ifc6
     {
-        /** @internal */
         struct cd : public rtl::StaticAggregate< class_data, ImplClassData6 < Ifc1, Ifc2, Ifc3, Ifc4, Ifc5, Ifc6, WeakAggComponentImplHelper6<Ifc1, Ifc2, Ifc3, Ifc4, Ifc5, Ifc6> > > {};
     public:
         inline WeakAggComponentImplHelper6( ::osl::Mutex & rMutex ) throw ()

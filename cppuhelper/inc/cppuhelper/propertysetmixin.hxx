@@ -44,8 +44,6 @@
 #include "sal/types.h"
 #include "cppuhelperdllapi.h"
 
-/// @HTML
-
 namespace com { namespace sun { namespace star {
     namespace beans {
         class XPropertyChangeListener;

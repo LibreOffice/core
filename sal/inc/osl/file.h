@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-/** @HTML */
-
 #ifndef _OSL_FILE_H_
 #define _OSL_FILE_H_
 
@@ -1216,7 +1214,7 @@ typedef void (SAL_CALL *oslDirectoryCreationCallbackFunc)(void* pData, rtl_uStri
     [in] The absolute file URL of the directory path to create.
     A relative file URL will not be accepted.
 
-    @param aDirectoryCreationFunc
+    @param aDirectoryCreationCallbackFunc
     [in] Pointer to a function that will be called synchronously
     for each sub directory that was created. The value of this
     parameter may be NULL, in this case notifications will not be
@@ -1517,12 +1515,12 @@ typedef sal_uInt32 (SAL_CALL *oslCalcTextWidthFunc)( rtl_uString *ustrText );
     @param pustrCompacted [out]
     Receives the compacted system path on output
 
-    @param pfnCalcWidth [in]
+    @param pCalcWidth [in]
     Function ptr that calculates the width of a string. Can be zero.
 
     @param uMaxWidth [in]
-    Maximum width allowed that is retunrned from pfnCalcWidth.
-    If pfnCalcWidth is zero the character count is assumed as width.
+    Maximum width allowed that is retunrned from pCalcWidth.
+    If pCalcWidth is zero the character count is assumed as width.
 
     @return
     osl_File_E_None on success<br>
@@ -1587,7 +1585,7 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_setFileTime(
 
 /** Retrieves the file URL of the system's temporary directory path
 
-    @param pustrTempDirURL[out]
+    @param[out] pustrTempDirURL
     On success receives the URL of system's temporary directory path.
 
     @return
@@ -1610,6 +1608,16 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_getTempDirURL(
     it, the file will be automatically removed on close else the caller is
     responsible for removing the file on success.
 
+    Description of the different pHandle, ppustrTempFileURL parameter combinations.
+    pHandle is 0 and ppustrTempDirURL is 0 - this combination is invalid
+    pHandle is not 0 and ppustrTempDirURL is 0 - a handle to the open file
+    will be returned on success and the file will be automatically removed on close.
+    pHandle is 0 and ppustrTempDirURL is not 0 - the name of the file will be returned,
+    the caller is responsible for opening, closing and removing the file.
+    pHandle is not 0 and ppustrTempDirURL is not 0 - a handle to the open file as well as
+    the file name will be returned, the caller is responsible for closing and removing
+    the file.
+
     @param  pustrDirectoryURL [in]
     Specifies the full qualified URL where the temporary file should be created.
     If pustrDirectoryURL is 0 the path returned by osl_getTempDirURL will be used.
@@ -1625,17 +1633,6 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_getTempDirURL(
     If ppustrTempFileURL is not 0 the caller receives the name of the created
     file and is responsible for removing the file, in this case
     *ppustrTempFileURL must be 0 or must point to a valid rtl_uString.
-
-    @descr
-    Description of the different pHandle, ppustrTempFileURL parameter combinations.
-    pHandle is 0 and ppustrTempDirURL is 0 - this combination is invalid
-    pHandle is not 0 and ppustrTempDirURL is 0 - a handle to the open file
-    will be returned on success and the file will be automatically removed on close.
-    pHandle is 0 and ppustrTempDirURL is not 0 - the name of the file will be returned,
-    the caller is responsible for opening, closing and removing the file.
-    pHandle is not 0 and ppustrTempDirURL is not 0 - a handle to the open file as well as
-    the file name will be returned, the caller is responsible for closing and removing
-    the file.
 
     @return
     osl_File_E_None   on success

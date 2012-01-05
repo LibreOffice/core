@@ -77,20 +77,16 @@ public:
         rtl::OUString const & rBaseUriRef, rtl::OUString const & rRelUriRef);
 
 private:
-    /** not implemented
-        @internal */
+    /** not implemented */
     Uri();
 
-    /** not implemented
-        @internal */
+    /** not implemented */
     Uri(Uri &);
 
-    /** not implemented
-        @internal */
+    /** not implemented */
     ~Uri();
 
-    /** not implemented
-        @internal */
+    /** not implemented */
     void operator =(Uri);
 };
 

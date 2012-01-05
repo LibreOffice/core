@@ -39,7 +39,7 @@ namespace cppu
 
 /** Compares demanded type to given template argument types.
 
-    @tplparam Interface1 interface type
+    @tparam Interface1 interface type
     @param rType demanded type
     @param p1 interface pointer
     @return acquired interface of demanded type or empty Any
@@ -57,8 +57,8 @@ inline ::com::sun::star::uno::Any SAL_CALL queryInterface(
 }
 /** Compares demanded type to given template argument types.
 
-    @tplparam Interface1 interface type
-    @tplparam Interface2 interface type
+    @tparam Interface1 interface type
+    @tparam Interface2 interface type
     @param rType demanded type
     @param p1 interface pointer
     @param p2 interface pointer
@@ -79,9 +79,9 @@ inline ::com::sun::star::uno::Any SAL_CALL queryInterface(
 }
 /** Compares demanded type to given template argument types.
 
-    @tplparam Interface1 interface type
-    @tplparam Interface2 interface type
-    @tplparam Interface3 interface type
+    @tparam Interface1 interface type
+    @tparam Interface2 interface type
+    @tparam Interface3 interface type
     @param rType demanded type
     @param p1 interface pointer
     @param p2 interface pointer
@@ -105,10 +105,10 @@ inline ::com::sun::star::uno::Any SAL_CALL queryInterface(
 }
 /** Compares demanded type to given template argument types.
 
-    @tplparam Interface1 interface type
-    @tplparam Interface2 interface type
-    @tplparam Interface3 interface type
-    @tplparam Interface4 interface type
+    @tparam Interface1 interface type
+    @tparam Interface2 interface type
+    @tparam Interface3 interface type
+    @tparam Interface4 interface type
     @param rType demanded type
     @param p1 interface pointer
     @param p2 interface pointer
@@ -135,11 +135,11 @@ inline ::com::sun::star::uno::Any SAL_CALL queryInterface(
 }
 /** Compares demanded type to given template argument types.
 
-    @tplparam Interface1 interface type
-    @tplparam Interface2 interface type
-    @tplparam Interface3 interface type
-    @tplparam Interface4 interface type
-    @tplparam Interface5 interface type
+    @tparam Interface1 interface type
+    @tparam Interface2 interface type
+    @tparam Interface3 interface type
+    @tparam Interface4 interface type
+    @tparam Interface5 interface type
     @param rType demanded type
     @param p1 interface pointer
     @param p2 interface pointer
@@ -169,12 +169,12 @@ inline ::com::sun::star::uno::Any SAL_CALL queryInterface(
 }
 /** Compares demanded type to given template argument types.
 
-    @tplparam Interface1 interface type
-    @tplparam Interface2 interface type
-    @tplparam Interface3 interface type
-    @tplparam Interface4 interface type
-    @tplparam Interface5 interface type
-    @tplparam Interface6 interface type
+    @tparam Interface1 interface type
+    @tparam Interface2 interface type
+    @tparam Interface3 interface type
+    @tparam Interface4 interface type
+    @tparam Interface5 interface type
+    @tparam Interface6 interface type
     @param rType demanded type
     @param p1 interface pointer
     @param p2 interface pointer
@@ -209,13 +209,13 @@ inline ::com::sun::star::uno::Any SAL_CALL queryInterface(
 }
 /** Compares demanded type to given template argument types.
 
-    @tplparam Interface1 interface type
-    @tplparam Interface2 interface type
-    @tplparam Interface3 interface type
-    @tplparam Interface4 interface type
-    @tplparam Interface5 interface type
-    @tplparam Interface6 interface type
-    @tplparam Interface7 interface type
+    @tparam Interface1 interface type
+    @tparam Interface2 interface type
+    @tparam Interface3 interface type
+    @tparam Interface4 interface type
+    @tparam Interface5 interface type
+    @tparam Interface6 interface type
+    @tparam Interface7 interface type
     @param rType demanded type
     @param p1 interface pointer
     @param p2 interface pointer
@@ -253,14 +253,14 @@ inline ::com::sun::star::uno::Any SAL_CALL queryInterface(
 }
 /** Compares demanded type to given template argument types.
 
-    @tplparam Interface1 interface type
-    @tplparam Interface2 interface type
-    @tplparam Interface3 interface type
-    @tplparam Interface4 interface type
-    @tplparam Interface5 interface type
-    @tplparam Interface6 interface type
-    @tplparam Interface7 interface type
-    @tplparam Interface8 interface type
+    @tparam Interface1 interface type
+    @tparam Interface2 interface type
+    @tparam Interface3 interface type
+    @tparam Interface4 interface type
+    @tparam Interface5 interface type
+    @tparam Interface6 interface type
+    @tparam Interface7 interface type
+    @tparam Interface8 interface type
     @param rType demanded type
     @param p1 interface pointer
     @param p2 interface pointer
@@ -301,15 +301,15 @@ inline ::com::sun::star::uno::Any SAL_CALL queryInterface(
 }
 /** Compares demanded type to given template argument types.
 
-    @tplparam Interface1 interface type
-    @tplparam Interface2 interface type
-    @tplparam Interface3 interface type
-    @tplparam Interface4 interface type
-    @tplparam Interface5 interface type
-    @tplparam Interface6 interface type
-    @tplparam Interface7 interface type
-    @tplparam Interface8 interface type
-    @tplparam Interface9 interface type
+    @tparam Interface1 interface type
+    @tparam Interface2 interface type
+    @tparam Interface3 interface type
+    @tparam Interface4 interface type
+    @tparam Interface5 interface type
+    @tparam Interface6 interface type
+    @tparam Interface7 interface type
+    @tparam Interface8 interface type
+    @tparam Interface9 interface type
     @param rType demanded type
     @param p1 interface pointer
     @param p2 interface pointer
@@ -353,16 +353,16 @@ inline ::com::sun::star::uno::Any SAL_CALL queryInterface(
 }
 /** Compares demanded type to given template argument types.
 
-    @tplparam Interface1 interface type
-    @tplparam Interface2 interface type
-    @tplparam Interface3 interface type
-    @tplparam Interface4 interface type
-    @tplparam Interface5 interface type
-    @tplparam Interface6 interface type
-    @tplparam Interface7 interface type
-    @tplparam Interface8 interface type
-    @tplparam Interface9 interface type
-    @tplparam Interface10 interface type
+    @tparam Interface1 interface type
+    @tparam Interface2 interface type
+    @tparam Interface3 interface type
+    @tparam Interface4 interface type
+    @tparam Interface5 interface type
+    @tparam Interface6 interface type
+    @tparam Interface7 interface type
+    @tparam Interface8 interface type
+    @tparam Interface9 interface type
+    @tparam Interface10 interface type
     @param rType demanded type
     @param p1 interface pointer
     @param p2 interface pointer
@@ -409,17 +409,17 @@ inline ::com::sun::star::uno::Any SAL_CALL queryInterface(
 }
 /** Compares demanded type to given template argument types.
 
-    @tplparam Interface1 interface type
-    @tplparam Interface2 interface type
-    @tplparam Interface3 interface type
-    @tplparam Interface4 interface type
-    @tplparam Interface5 interface type
-    @tplparam Interface6 interface type
-    @tplparam Interface7 interface type
-    @tplparam Interface8 interface type
-    @tplparam Interface9 interface type
-    @tplparam Interface10 interface type
-    @tplparam Interface11 interface type
+    @tparam Interface1 interface type
+    @tparam Interface2 interface type
+    @tparam Interface3 interface type
+    @tparam Interface4 interface type
+    @tparam Interface5 interface type
+    @tparam Interface6 interface type
+    @tparam Interface7 interface type
+    @tparam Interface8 interface type
+    @tparam Interface9 interface type
+    @tparam Interface10 interface type
+    @tparam Interface11 interface type
     @param rType demanded type
     @param p1 interface pointer
     @param p2 interface pointer
@@ -471,18 +471,18 @@ inline ::com::sun::star::uno::Any SAL_CALL queryInterface(
 }
 /** Compares demanded type to given template argument types.
 
-    @tplparam Interface1 interface type
-    @tplparam Interface2 interface type
-    @tplparam Interface3 interface type
-    @tplparam Interface4 interface type
-    @tplparam Interface5 interface type
-    @tplparam Interface6 interface type
-    @tplparam Interface7 interface type
-    @tplparam Interface8 interface type
-    @tplparam Interface9 interface type
-    @tplparam Interface10 interface type
-    @tplparam Interface11 interface type
-    @tplparam Interface12 interface type
+    @tparam Interface1 interface type
+    @tparam Interface2 interface type
+    @tparam Interface3 interface type
+    @tparam Interface4 interface type
+    @tparam Interface5 interface type
+    @tparam Interface6 interface type
+    @tparam Interface7 interface type
+    @tparam Interface8 interface type
+    @tparam Interface9 interface type
+    @tparam Interface10 interface type
+    @tparam Interface11 interface type
+    @tparam Interface12 interface type
     @param rType demanded type
     @param p1 interface pointer
     @param p2 interface pointer

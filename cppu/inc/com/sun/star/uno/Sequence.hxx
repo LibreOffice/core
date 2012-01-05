@@ -45,9 +45,10 @@ namespace star
 namespace uno
 {
 
-//______________________________________________________________________________
+/// @cond INTERNAL
 template< class E >
 typelib_TypeDescriptionReference * Sequence< E >::s_pType = 0;
+/// @endcond
 
 //______________________________________________________________________________
 template< class E >

@@ -379,9 +379,9 @@ namespace rtl {
     ...
     </pre>
 
-    @tplparam T
+    @tparam T
               variable's type
-    @tplparam Unique
+    @tparam Unique
               Implementation trick to make the inner static holder unique,
               using the outer class
               (the one that derives from this base class)
@@ -439,9 +439,9 @@ private:
     ...
     </pre>
 
-    @tplparam T
+    @tparam T
               variable's type
-    @tplparam Unique
+    @tparam Unique
               Implementation trick to make the inner static holder unique,
               using the outer class
               (the one that derives from this base class)
@@ -523,9 +523,9 @@ private:
 /** Helper class for a late-initialized static aggregate, e.g. an array,
     implementing the double-checked locking pattern correctly.
 
-    @tplparam T
+    @tparam T
               aggregate's element type
-    @tplparam InitAggregate
+    @tparam InitAggregate
               initializer functor class
 */
 #if (__GNUC__ >= 4)
@@ -580,16 +580,16 @@ public:
     ...
     </pre>
 
-    @tplparam T
+    @tparam T
               variable's type
-    @tplparam InitData
+    @tparam InitData
               initializer functor class
-    @tplparam Unique
+    @tparam Unique
               Implementation trick to make the inner static holder unique,
               using the outer class
               (the one that derives from this base class).
               Default is InitData (common practice).
-    @tplparam Data
+    @tparam Data
               Initializer functor's return type.
               Default is T (common practice).
 */

@@ -47,7 +47,7 @@ namespace salhelper{
 
 /** @short  template for implementing singleton classes.
 
-    @descr  Such classes can be instanciated everytimes they
+            Such classes can be instanciated everytimes they
             are needed. But the internal wrapped object will
             be created one times only. Of course its used
             resources are referenced one times only too.
@@ -100,7 +100,7 @@ class SingletonRef
 
         /** @short  standard ctor.
 
-            @descr  The internal wrapped object is created only,
+                    The internal wrapped object is created only,
                     if its ref count was 0. Otherwhise this method
                     does nothing ... except increasing of the internal
                     ref count!
@@ -124,7 +124,7 @@ class SingletonRef
 
         /** @short  standard dtor.
 
-            @descr  The internal wrapped object is removed only,
+                    The internal wrapped object is removed only,
                     if its ref count wil be 0. Otherwhise this method
                     does nothing ... except decreasing of the internal
                     ref count!
@@ -178,7 +178,7 @@ class SingletonRef
 
         /** @short  creates an own mutex for guarding static contents.
 
-            @descr  The global mutex the osl library is used one times
+                    The global mutex the osl library is used one times
                     only to create an own static mutex, which can be used
                     next time to guard own static member operations.
          */

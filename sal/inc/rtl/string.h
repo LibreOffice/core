@@ -781,9 +781,8 @@ SAL_DLLPUBLIC double SAL_CALL rtl_str_toDouble(
 #   pragma pack(push, 8)
 #endif
 
+/** @cond INTERNAL */
 /** The implementation of a byte string.
-
-    @internal
  */
 typedef struct _rtl_String
 {
@@ -791,6 +790,7 @@ typedef struct _rtl_String
     sal_Int32           length;
     sal_Char            buffer[1];
 } rtl_String;
+/** @endcond */
 
 #if defined(SAL_W32)
 #pragma pack(pop)

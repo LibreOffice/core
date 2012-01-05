@@ -229,14 +229,15 @@ public:
     }
 };
 
-/** @internal
-    Enables boost::mem_fn and boost::bind to recognize Reference.
+/// @cond INTERNAL
+/** Enables boost::mem_fn and boost::bind to recognize Reference.
 */
 template <typename T>
 inline T * get_pointer( Reference<T> const& r )
 {
     return r.get();
 }
+/// @endcond
 
 } // namespace rtl
 

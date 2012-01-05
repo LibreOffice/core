@@ -60,18 +60,16 @@ class Mapping
 
 public:
     // these are here to force memory de/allocation to sal lib.
-    /** @internal */
+    /// @cond INTERNAL
     inline static void * SAL_CALL operator new ( size_t nSize ) SAL_THROW( () )
         { return ::rtl_allocateMemory( nSize ); }
-    /** @internal */
     inline static void SAL_CALL operator delete ( void * pMem ) SAL_THROW( () )
         { ::rtl_freeMemory( pMem ); }
-    /** @internal */
     inline static void * SAL_CALL operator new ( size_t, void * pMem ) SAL_THROW( () )
         { return pMem; }
-    /** @internal */
     inline static void SAL_CALL operator delete ( void *, void * ) SAL_THROW( () )
         {}
+    /// @endcond
 
     /** Holds a mapping from the specified source to the specified destination by environment
         type names.
@@ -305,7 +303,7 @@ inline void * Mapping::mapInterface(
 
     Maps an binary C UNO interface to be used in the currently used compiler environment.
 
-    @tplparam C interface type
+    @tparam C interface type
     @param ppRet inout returned interface pointer
     @param pUnoI binary C UNO interface
     @return true if successful, false otherwise
@@ -328,7 +326,7 @@ inline sal_Bool mapToCpp( Reference< C > * ppRet, uno_Interface * pUnoI ) SAL_TH
 
     Maps an UNO interface of the currently used compiler environment to binary C UNO.
 
-    @tplparam C interface type
+    @tparam C interface type
     @param ppRet inout returned interface pointer
     @param x interface reference
     @return true if successful, false otherwise

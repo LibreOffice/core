@@ -28,11 +28,14 @@
 #ifndef _CPPUHELPER_IMPLBASE_EX_PRE_HXX_
 #define _CPPUHELPER_IMPLBASE_EX_PRE_HXX_
 
-/** @internal */
+/// @cond INTERNAL
+
 #define __IFC_EX_TYPE_INIT_NAME( class_cast, ifc_name ) \
 { { ifc_name::static_type }, ((sal_IntPtr)(ifc_name *) class_cast 16) - 16 }
-/** @internal */
+
 #define __IFC_EX_TYPE_INIT( class_cast, N ) __IFC_EX_TYPE_INIT_NAME( class_cast, Ifc##N )
+
+/// @endcond
 
 #endif
 

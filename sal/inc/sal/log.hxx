@@ -43,12 +43,12 @@
 // this code can be called from other sal code without causing endless
 // recursion.
 
-/// @internal
+/// @cond INTERNAL
+
 extern "C" SAL_DLLPUBLIC void SAL_CALL sal_detail_log(
     enum sal_detail_LogLevel level, char const * area, char const * where,
     char const * message);
 
-/// @internal
 namespace sal { namespace detail {
 
 inline void SAL_CALL log(
@@ -127,7 +127,6 @@ inline char const * unwrapStream(StreamIgnore const &) {
 
 } }
 
-/// @internal
 #define SAL_DETAIL_LOG_STREAM(condition, level, area, where, stream) \
     do { \
         if (condition) { \
@@ -146,6 +145,8 @@ inline char const * unwrapStream(StreamIgnore const &) {
             } \
         } \
     } while (false)
+
+/// @endcond
 
 /** A simple macro to create a "file and line number" string.
 

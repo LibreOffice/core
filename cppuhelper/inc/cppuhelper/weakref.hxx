@@ -41,7 +41,6 @@ namespace star
 namespace uno
 {
 
-/** @internal */
 class OWeakRefListener;
 
 /** The WeakReferenceHelper holds a weak reference to an object. This object must implement
@@ -115,14 +114,15 @@ public:
     void SAL_CALL clear() SAL_THROW( () );
 
 protected:
-    /** @internal */
+    /// @cond INTERNAL
     OWeakRefListener * m_pImpl;
+    /// @endcond
 };
 
 /** The WeakReference<> holds a weak reference to an object. This object must implement
     the ::com::sun::star::uno::XWeak interface.  The implementation is thread safe.
 
-    @tplparam interface_type type of interface
+    @tparam interface_type type of interface
 */
 template< class interface_type >
 class WeakReference : public WeakReferenceHelper

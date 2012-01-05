@@ -46,8 +46,6 @@ namespace cppu {
 class CPPUHELPER_DLLPUBLIC UnoUrlDescriptor
 {
 public:
-    /** @internal
-     */
     class Impl;
 
     /** Construct a descriptor from a string representation.
@@ -60,9 +58,9 @@ public:
      */
     explicit UnoUrlDescriptor(rtl::OUString const & rDescriptor);
 
-    /** @internal
-     */
+    /// @cond INTERNAL
     explicit UnoUrlDescriptor(std::auto_ptr< Impl > & rImpl);
+    /// @endcond
 
     UnoUrlDescriptor(UnoUrlDescriptor const & rOther);
 

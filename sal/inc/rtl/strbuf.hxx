@@ -41,9 +41,7 @@
 namespace rtl
 {
 
-/** @HTML
-
-    A string buffer implements a mutable sequence of characters.
+/** A string buffer implements a mutable sequence of characters.
     <p>
     String buffers are safe for use by multiple threads. The methods
     are synchronized where necessary so that all the operations on any

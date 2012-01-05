@@ -41,12 +41,13 @@
    @deprecated
 */
 
+/// @cond INTERNAL
+
 namespace cppu
 {
 
 /** Struct used for inline template implementation helpers: type entries.
     Not for public use.
-    @internal
 */
 struct Type_Offset
 {
@@ -59,7 +60,6 @@ struct Type_Offset
 };
 /** Struct used for inline template implementation helpers: class data of implementation.
     Not for public use.
-    @internal
 */
 struct CPPUHELPER_DLLPUBLIC ClassDataBase
 {
@@ -104,7 +104,6 @@ struct CPPUHELPER_DLLPUBLIC ClassDataBase
     is binary compatible with this one to be casted and used uniform. The size of the varying array
     is set in ClassDataBase::nType2Offset (base class).
     Not for public use.
-    @internal
 */
 struct CPPUHELPER_DLLPUBLIC ClassData : public ClassDataBase
 {
@@ -148,7 +147,6 @@ struct CPPUHELPER_DLLPUBLIC ClassData : public ClassDataBase
 
 /** Shared mutex for implementation helper initialization.
     Not for public use.
-    @internal
 */
 CPPUHELPER_DLLPUBLIC ::osl::Mutex & SAL_CALL getImplHelperInitMutex(void) SAL_THROW( () );
 }
@@ -171,8 +169,6 @@ CPPUHELPER_DLLPUBLIC ::osl::Mutex & SAL_CALL getImplHelperInitMutex(void) SAL_TH
     __DEF_IMPLHELPER_PRE( N )
     __IFC_WRITEOFFSET( 1 ) __IFC_WRITEOFFSET( 2 ) __IFC_WRITEOFFSET( 3 ), ... up to N
     __DEF_IMPLHELPER_POST( N )
-
-    @internal
 */
 #define __DEF_IMPLHELPER_PRE( N ) \
 namespace cppu \
@@ -200,13 +196,11 @@ protected: \
             { \
                 char * pBase = (char *)this;
 /** Implementation helper macro: have a look at __DEF_IMPLHELPER_PRE
-    @internal
 */
 #define __IFC_WRITEOFFSET( N ) \
                 rCD.writeTypeOffset( ::getCppuType( (const ::com::sun::star::uno::Reference< Ifc##N > *)0 ), \
                                      (char *)(Ifc##N *)this - pBase );
 /** Implementation helper macro: have a look at __DEF_IMPLHELPER_PRE
-    @internal
 */
 #define __DEF_IMPLHELPER_POST_A( N ) \
                 rCD.bOffsetsInit = sal_True; \
@@ -274,7 +268,6 @@ public: \
 };
 
 /** Implementation helper macro: have a look at __DEF_IMPLHELPER_PRE
-    @internal
 */
 #define __DEF_IMPLHELPER_POST_B( N ) \
 template< __CLASS_IFC##N > \
@@ -284,18 +277,19 @@ ClassData##N WeakImplHelper##N< __IFC##N >::s_aCD = ClassData##N( 1 ); \
 template< __CLASS_IFC##N > \
 ClassData##N WeakAggImplHelper##N< __IFC##N >::s_aCD = ClassData##N( 2 );
 /** Implementation helper macro: have a look at __DEF_IMPLHELPER_PRE
-    @internal
 */
 #define __DEF_IMPLHELPER_POST_C( N ) \
 }
 //==================================================================================================
 /** Implementation helper macro: have a look at __DEF_IMPLHELPER_PRE
-    @internal
 */
 #define __DEF_IMPLHELPER_POST( N ) \
 __DEF_IMPLHELPER_POST_A( N ) \
 __DEF_IMPLHELPER_POST_B( N ) \
 __DEF_IMPLHELPER_POST_C( N )
+
+/// @endcond
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

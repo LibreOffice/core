@@ -34,7 +34,7 @@
 
 #include "sal/types.h"
 
-/** @internal */
+/** @cond INTERNAL */
 
 /* This header makes available replacements working in both C and C++ for the
    obsolete osl/diagnose.h functionality that in turn is used from both C and
@@ -105,6 +105,8 @@ SAL_DLLPUBLIC void SAL_CALL sal_detail_logFormat(
     SAL_DETAIL_LOG_FORMAT( \
         SAL_DETAIL_ENABLE_LOG_WARN && (condition), SAL_DETAIL_LOG_LEVEL_WARN, \
         area, SAL_DETAIL_WHERE, __VA_ARGS__)
+
+/** @endcond */
 
 #endif
 

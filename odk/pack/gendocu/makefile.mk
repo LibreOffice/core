@@ -68,38 +68,40 @@ JAVA_BEAN_SRC_FILES=\
         $(JAVA_SRC_DIR)$/com$/sun$/star$/beans$/OfficeConnection.java \
         $(JAVA_SRC_DIR)$/com$/sun$/star$/beans$/OfficeWindow.java
 
-AUTODOCPARAMS= -lg c++ \
-        -p sal $(INCOUT) -t sal -t osl -t rtl \
-        -p store $(INCOUT) -t store \
-        -p registry $(INCOUT) -t registry \
-        -p cppu $(INCOUT) -t cppu -t com -t typelib -t uno \
-        -p cppuhelper $(INCOUT) -t cppuhelper \
-        -p salhelper $(INCOUT) -t salhelper \
-        -p bridges $(INCOUT) -t bridges
-
 JAVADOCPARAMS= -use -splitindex -windowtitle "Java UNO Runtime Reference" -header $(JAVADOCREFNAME) -d $(DESTDIRGENJAVAREF) -sourcepath $(JAVA_SRC_DIR) -classpath $(SOLARBINDIR)$/ridl.jar -linkoffline ../../common/ref ./uno -linkoffline http://java.sun.com/j2se/1.4.1/docs/api ./java $(JAVA_PACKAGES)
 
 JAVADOCLOG = $(MISC)$/javadoc_log.txt
 
-.IF "$(SOLAR_JAVA)"!=""
-all: \
-    $(CPP_DOCU_INDEX_FILE) \
-    $(JAVA_DOCU_INDEX_FILE)
+all :
 
-.ELSE
-all: $(CPP_DOCU_INDEX_FILE)
-.ENDIF
+.IF "$(DOXYGEN)" != ""
+all : $(CPP_DOCU_INDEX_FILE)
+.END
 
+.IF "$(SOLAR_JAVA)" != ""
+all : $(JAVA_DOCU_INDEX_FILE)
+.END
 
-$(CPP_DOCU_CLEANUP_FLAG) : $(INCLUDELIST) $(PRJ)$/docs$/cpp$/ref$/cpp.css
+$(CPP_DOCU_CLEANUP_FLAG) : $(INCLUDELIST) Doxyfile main.dox
     @@-$(MY_DELETE_RECURSIVE) $(DESTDIRGENCPPREF)
     $(TOUCH) $@
 
-$(CPP_DOCU_INDEX_FILE) : $(CPP_DOCU_CLEANUP_FLAG)
-    -$(MKDIRHIER) $(@:d)        
-    $(MY_AUTODOC) -html $(DESTDIRGENCPPREF) -name $(CPPDOCREFNAME) $(AUTODOCPARAMS)
-    -rm $(@:d:d)$/cpp.css
-    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $(PRJ)$/docs$/cpp$/ref$/cpp.css $(MY_TEXTCOPY_TARGETPRE) $(@:d:d)$/cpp.css
+.IF "$(VERBOSE)" == "TRUE"
+MY_QUIET = NO
+.ELSE
+MY_QUIET = YES
+.END
+
+$(CPP_DOCU_INDEX_FILE) .ERRREMOVE : $(CPP_DOCU_CLEANUP_FLAG)
+    -$(MKDIRHIER) $(@:d)
+    $(SED) \
+        -e 's!^INPUT = %$$!INPUT = main.dox $(INCLUDETOPDIRLIST) $(INCLUDEFILELIST)!' \
+        -e 's!^OUTPUT_DIRECTORY = %$$!OUTPUT_DIRECTORY = $(DESTDIRGENCPPREF)!' \
+        -e 's!^PROJECT_BRIEF = %$$!PROJECT_BRIEF = $(CPPDOCREFNAME)!' \
+        -e 's!^QUIET = %$$!QUIET = $(MY_QUIET)!' \
+        -e 's!^STRIP_FROM_PATH = %$$!STRIP_FROM_PATH = $(SOLARINCDIR)!' \
+        Doxyfile > $(MISC)/Doxyfile
+    $(DOXYGEN) $(MISC)/Doxyfile
 
 $(JAVA_SRC_FILES) : $(SOLARCOMMONBINDIR)$/$$(@:f)
     -$(MKDIRHIER) $(@:d)        

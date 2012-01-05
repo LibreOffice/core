@@ -75,14 +75,13 @@ namespace rtl
 class OString
 {
 public:
-    /** @internal */
+    /// @cond INTERNAL
     rtl_String * pData;
+    /// @endcond
 
 private:
-    /** @internal */
     class DO_NOT_ACQUIRE;
 
-    /** @internal */
     OString( rtl_String * value, DO_NOT_ACQUIRE * )
     {
         pData = value;

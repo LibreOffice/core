@@ -66,24 +66,21 @@ enum UnoType_NoAcquire
 class Type
 {
     /** the C typelib reference pointer
-        @internal
     */
     typelib_TypeDescriptionReference * _pType;
 
 public:
+    /// @cond INTERNAL
     // these are here to force memory de/allocation to sal lib.
-    /** @internal */
     inline static void * SAL_CALL operator new ( size_t nSize ) SAL_THROW( () )
         { return ::rtl_allocateMemory( nSize ); }
-    /** @internal */
     inline static void SAL_CALL operator delete ( void * pMem ) SAL_THROW( () )
         { ::rtl_freeMemory( pMem ); }
-    /** @internal */
     inline static void * SAL_CALL operator new ( size_t, void * pMem ) SAL_THROW( () )
         { return pMem; }
-    /** @internal */
     inline static void SAL_CALL operator delete ( void *, void * ) SAL_THROW( () )
         {}
+    /// @endcond
 
     /** Default Constructor: Type is set to void.
     */
@@ -222,7 +219,8 @@ public:
     There are cases (involving templates) where uses of getCppuType are known to
     not compile.  Use cppu::UnoType or cppu::getTypeFavourUnsigned instead.
 
-    @param dummy typed pointer for function signature
+    The dummy parameter is just a typed pointer for function signature.
+
     @return type of IDL type "type"
 */
 inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const ::com::sun::star::uno::Type * ) SAL_THROW( () );
@@ -252,7 +250,8 @@ inline const ::com::sun::star::uno::Type & SAL_CALL getBooleanCppuType() SAL_THR
     There are cases (involving templates) where uses of getCppuType are known to
     not compile.  Use cppu::UnoType or cppu::getTypeFavourUnsigned instead.
 
-    @param dummy typed pointer for function signature
+    The dummy parameter is just a typed pointer for function signature.
+
     @return type of IDL type boolean
 */
 inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const sal_Bool * ) SAL_THROW( () );
@@ -261,7 +260,8 @@ inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const sal_Bool 
     There are cases (involving templates) where uses of getCppuType are known to
     not compile.  Use cppu::UnoType or cppu::getTypeFavourUnsigned instead.
 
-    @param dummy typed pointer for function signature
+    The dummy parameter is just a typed pointer for function signature.
+
     @return type of IDL type boolean
 */
 inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType(
@@ -283,7 +283,8 @@ inline const ::com::sun::star::uno::Type & SAL_CALL getCppuCharType() SAL_THROW(
     There are cases (involving templates) where uses of getCppuType are known to
     not compile.  Use cppu::UnoType or cppu::getTypeFavourUnsigned instead.
 
-    @param dummy typed pointer for function signature
+    The dummy parameter is just a typed pointer for function signature.
+
     @return type of IDL type byte
 */
 inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const sal_Int8 * ) SAL_THROW( () );
@@ -293,7 +294,8 @@ inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const sal_Int8 
     There are cases (involving templates) where uses of getCppuType are known to
     not compile.  Use cppu::UnoType or cppu::getTypeFavourUnsigned instead.
 
-    @param dummy typed pointer for function signature
+    The dummy parameter is just a typed pointer for function signature.
+
     @return type of IDL type string
 */
 inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const ::rtl::OUString * ) SAL_THROW( () );
@@ -303,7 +305,8 @@ inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const ::rtl::OU
     There are cases (involving templates) where uses of getCppuType are known to
     not compile.  Use cppu::UnoType or cppu::getTypeFavourUnsigned instead.
 
-    @param dummy typed pointer for function signature
+    The dummy parameter is just a typed pointer for function signature.
+
     @return type of IDL type short
 */
 inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const sal_Int16 * ) SAL_THROW( () );
@@ -313,7 +316,8 @@ inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const sal_Int16
     There are cases (involving templates) where uses of getCppuType are known to
     not compile.  Use cppu::UnoType or cppu::getTypeFavourUnsigned instead.
 
-    @param dummy typed pointer for function signature
+    The dummy parameter is just a typed pointer for function signature.
+
     @return type of IDL type unsigned short
 */
 inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const sal_uInt16 * ) SAL_THROW( () );
@@ -323,7 +327,8 @@ inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const sal_uInt1
     There are cases (involving templates) where uses of getCppuType are known to
     not compile.  Use cppu::UnoType or cppu::getTypeFavourUnsigned instead.
 
-    @param dummy typed pointer for function signature
+    The dummy parameter is just a typed pointer for function signature.
+
     @return type of IDL type long
 */
 inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const sal_Int32 * ) SAL_THROW( () );
@@ -333,7 +338,8 @@ inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const sal_Int32
     There are cases (involving templates) where uses of getCppuType are known to
     not compile.  Use cppu::UnoType or cppu::getTypeFavourUnsigned instead.
 
-    @param dummy typed pointer for function signature
+    The dummy parameter is just a typed pointer for function signature.
+
     @return type of IDL type unsigned long
 */
 inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const sal_uInt32 * ) SAL_THROW( () );
@@ -343,7 +349,8 @@ inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const sal_uInt3
     There are cases (involving templates) where uses of getCppuType are known to
     not compile.  Use cppu::UnoType or cppu::getTypeFavourUnsigned instead.
 
-    @param dummy typed pointer for function signature
+    The dummy parameter is just a typed pointer for function signature.
+
     @return type of IDL type hyper
 */
 inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const sal_Int64 * ) SAL_THROW( () );
@@ -353,7 +360,8 @@ inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const sal_Int64
     There are cases (involving templates) where uses of getCppuType are known to
     not compile.  Use cppu::UnoType or cppu::getTypeFavourUnsigned instead.
 
-    @param dummy typed pointer for function signature
+    The dummy parameter is just a typed pointer for function signature.
+
     @return type of IDL type unsigned hyper
 */
 inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const sal_uInt64 * ) SAL_THROW( () );
@@ -363,7 +371,8 @@ inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const sal_uInt6
     There are cases (involving templates) where uses of getCppuType are known to
     not compile.  Use cppu::UnoType or cppu::getTypeFavourUnsigned instead.
 
-    @param dummy typed pointer for function signature
+    The dummy parameter is just a typed pointer for function signature.
+
     @return type of IDL type float
 */
 inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const float * ) SAL_THROW( () );
@@ -373,7 +382,8 @@ inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const float * )
     There are cases (involving templates) where uses of getCppuType are known to
     not compile.  Use cppu::UnoType or cppu::getTypeFavourUnsigned instead.
 
-    @param dummy typed pointer for function signature
+    The dummy parameter is just a typed pointer for function signature.
+
     @return type of IDL type double
 */
 inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const double * ) SAL_THROW( () );

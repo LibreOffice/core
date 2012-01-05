@@ -202,8 +202,8 @@ public:
         If a com::sun::star::lang::DisposedException occurs which relates to
         the called listener, then that listener is removed from the container.
 
-        @tpl ListenerT listener type
-        @tpl FuncT unary functor type, let your compiler deduce this for you
+        @tparam ListenerT listener type
+        @tparam FuncT unary functor type, let your compiler deduce this for you
         @param func unary functor object expecting an argument of type
                     ::com::sun::star::uno::Reference<ListenerT>
     */
@@ -218,18 +218,18 @@ public:
         If a com::sun::star::lang::DisposedException occurs which relates to
         the called listener, then that listener is removed from the container.
 
-        @tpl ListenerT UNO event listener type, let your compiler deduce this for you
-        @tpl EventT event type, let your compiler deduce this for you
+        @tparam ListenerT UNO event listener type, let your compiler deduce this for you
+        @tparam EventT event type, let your compiler deduce this for you
         @param NotificationMethod
             Pointer to a method of a ListenerT interface.
         @param Event
             Event to notify to all contained listeners
 
-        @example
-<pre>
-    awt::PaintEvent aEvent( static_cast< ::cppu::OWeakObject* >( this ), ... );
+        Example:
+@code
+    awt::PaintEvent aEvent( static_cast< cppu::OWeakObject* >( this ), ... );
     listeners.notifyEach( &XPaintListener::windowPaint, aEvent );
-</pre>
+@endcode
     */
     template< typename ListenerT, typename EventT >
     inline void notifyEach( void ( SAL_CALL ListenerT::*NotificationMethod )( const EventT& ), const EventT& Event );

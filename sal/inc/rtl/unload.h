@@ -33,7 +33,6 @@
 #include <osl/interlck.h>
 #include <osl/module.h>
 
-///@HTML
 /** @file
 The API enables an effective way of unloading libraries in a centralized way.
 The mechanism ensures that used libraries are not unloaded. This prevents

@@ -35,8 +35,7 @@
 extern "C" {
 #endif
 
-/** @HTML
-    Allocates a new <code>String</code> that contains characters from
+/** Allocates a new <code>String</code> that contains characters from
     the character array argument.
 
     The <code>count</code> argument specifies

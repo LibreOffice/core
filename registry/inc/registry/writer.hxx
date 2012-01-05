@@ -41,8 +41,6 @@
 
 namespace typereg {
 
-/// @HTML
-
 /**
    A type writer working on a binary blob that represents a UNOIDL type.
 
@@ -135,9 +133,7 @@ public:
 
        @param typeName the type name of the field
 
-       @param valueType the type of the value of the field
-
-       @param valueValue the value of the value of the field
+       @param value the value of the field
 
        @exception std::bad_alloc is raised if an out-of-memory condition occurs
      */
@@ -243,8 +239,6 @@ public:
 
     /**
        Sets the data of a reference of this type writer.
-
-       @param handle a handle on a type writer
 
        @param index a valid index into the range of references of this type
        writer

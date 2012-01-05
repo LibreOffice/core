@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-/** @HTML */
-
 #ifndef _OSL_MODULE_H_
 #define _OSL_MODULE_H_
 
@@ -71,12 +69,14 @@ typedef void ( SAL_CALL *oslGenericFunction )( void );
 
 /** Load a shared library or module.
     @param strModuleName denotes the name of the module to be loaded.
+    @param nRtldMode denotes the mode.
     @return NULL if the module could not be loaded, otherwise a handle to the module.
 */
 SAL_DLLPUBLIC oslModule SAL_CALL osl_loadModule(rtl_uString *strModuleName, sal_Int32 nRtldMode);
 
 /** Load a shared library or module.
     @param pModuleName denotes the name of the module to be loaded.
+    @param nRtldMode denotes the mode.
     @return NULL if the module could not be loaded, otherwise a handle to the module.
     @since UDK 3.6
 */
@@ -190,7 +190,7 @@ SAL_DLLPUBLIC oslGenericFunction SAL_CALL osl_getFunctionSymbol(
     @param Module
     [in] a module handle as returned by osl_loadModule or osl_getModuleHandle
 
-    @param pFunctionSymbolName
+    @param pSymbol
     [in] Name of the function that will be looked up.
 
     @return

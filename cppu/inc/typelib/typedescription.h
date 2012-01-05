@@ -407,7 +407,6 @@ typedef struct _typelib_InterfaceAttributeTypeDescription
     typelib_TypeDescriptionReference **         ppSetExceptions;
 } typelib_InterfaceAttributeTypeDescription;
 
-/// @HTML
 /** Type description of an interface.
 
     <p>Not all members are always initialized (not yet initialized members being
@@ -871,12 +870,13 @@ CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_revokeCallback(
 /*----------------------------------------------------------------------------*/
 /*----------------------------------------------------------------------------*/
 
+/// @cond INTERNAL
+
 /** Returns true, if the type description reference may lose the type description. Otherwise
     pType is a valid pointer and cannot be discarded through the lifetime of this reference.
     Remark: If the pWeakObj of the type is set too, you can avoid the call of
     ...getDescription(...) and use the description directly. pWeakObj == 0 means, that the
     description is not initialized.
-    @internal
 */
 #define TYPELIB_TYPEDESCRIPTIONREFERENCE_ISREALLYWEAK( eTypeClass ) \
     ((eTypeClass) == typelib_TypeClass_INTERFACE_METHOD || \
@@ -885,7 +885,6 @@ CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_revokeCallback(
 /** Gets a description from the reference. The description may not be locked by this call.
     You must use the TYPELIB_DANGER_RELEASE macro to release the description fetched with
     this macro.
-    @internal
 */
 #define TYPELIB_DANGER_GET( ppDescription, pTypeRef ) \
 { \
@@ -908,13 +907,14 @@ CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_revokeCallback(
 }
 
 /** Releases the description previouse fetched by TYPELIB_DANGER_GET.
-    @internal
 */
 #define TYPELIB_DANGER_RELEASE( pDescription ) \
 { \
     if (TYPELIB_TYPEDESCRIPTIONREFERENCE_ISREALLYWEAK( (pDescription)->eTypeClass )) \
         typelib_typedescription_release( pDescription ); \
 }
+
+/// @endcond
 
 /** Creates a type description reference. This is a weak reference not holding the description.
     If the description is already registered, the previous one is returned.

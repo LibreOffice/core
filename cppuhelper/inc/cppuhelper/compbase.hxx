@@ -35,8 +35,8 @@
    @deprecated
 */
 
-//==================================================================================================
-/** @internal */
+/// @cond INTERNAL
+
 #define __DEF_COMPIMPLHELPER_A( N ) \
 namespace cppu \
 { \
@@ -95,23 +95,21 @@ public: \
         { return getClassData( s_aCD ).getImplementationId(); } \
 };
 
-//==================================================================================================
-/** @internal */
 #define __DEF_COMPIMPLHELPER_B( N ) \
 template< __CLASS_IFC##N > \
 ClassData##N WeakComponentImplHelper##N< __IFC##N >::s_aCD = ClassData##N( 4 ); \
 template< __CLASS_IFC##N > \
 ClassData##N WeakAggComponentImplHelper##N< __IFC##N >::s_aCD = ClassData##N( 3 );
-//==================================================================================================
-/** @internal */
+
 #define __DEF_COMPIMPLHELPER_C( N ) \
 }
-//==================================================================================================
-/** @internal */
+
 #define __DEF_COMPIMPLHELPER( N ) \
 __DEF_COMPIMPLHELPER_A( N ) \
 __DEF_COMPIMPLHELPER_B( N ) \
 __DEF_COMPIMPLHELPER_C( N )
+
+/// @endcond
 
 #endif
 

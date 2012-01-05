@@ -102,9 +102,7 @@ protected:
     */
     ::com::sun::star::uno::WeakReferenceHelper xDelegator;
 private:
-    /** @internal */
     OWeakAggObject( const OWeakAggObject & rObj ) SAL_THROW( () );
-    /** @internal */
     OWeakAggObject & operator = ( const OWeakAggObject & rObj ) SAL_THROW( () );
 };
 

@@ -55,19 +55,17 @@ namespace uno
 class Any : public uno_Any
 {
 public:
+    /// @cond INTERNAL
     // these are here to force memory de/allocation to sal lib.
-    /** @internal */
     inline static void * SAL_CALL operator new ( size_t nSize ) SAL_THROW( () )
         { return ::rtl_allocateMemory( nSize ); }
-    /** @internal */
     inline static void SAL_CALL operator delete ( void * pMem ) SAL_THROW( () )
         { ::rtl_freeMemory( pMem ); }
-    /** @internal */
     inline static void * SAL_CALL operator new ( size_t, void * pMem ) SAL_THROW( () )
         { return pMem; }
-    /** @internal */
     inline static void SAL_CALL operator delete ( void *, void * ) SAL_THROW( () )
         {}
+    /// @endcond
 
     /** Default constructor: Any holds no value; its type is void.
     */
@@ -263,7 +261,7 @@ private:
 
 /** Template function to generically construct an any from a C++ value.
 
-    @tplparam C value type
+    @tparam C value type
     @param value a value
     @return an any
 */
@@ -279,7 +277,7 @@ class Type;
 
 /** Template binary <<= operator to set the value of an any.
 
-    @tplparam C value type
+    @tparam C value type
     @param rAny destination any (left side)
     @param value source value (right side)
 */
@@ -294,7 +292,7 @@ inline void SAL_CALL operator <<= ( Any & rAny, bool const & value )
     If the any does not contain a value that can be assigned without data loss, then this
     operation will fail returning false.
 
-    @tplparam C value type
+    @tparam C value type
     @param rAny source any (left side)
     @param value destination value (right side)
     @return true if assignment was possible without data loss
@@ -307,7 +305,7 @@ inline sal_Bool SAL_CALL operator >>= ( const Any & rAny, C & value ) SAL_THROW(
     This operator can be implemented as template member function, if all supported compilers
     can cope with template member functions.
 
-    @tplparam C value type
+    @tparam C value type
     @param rAny another any (left side)
     @param value a value (right side)
     @return true if values are equal, false otherwise
@@ -319,7 +317,7 @@ inline sal_Bool SAL_CALL operator == ( const Any & rAny, const C & value ) SAL_T
     This operator can be implemented as template member function, if all supported compilers
     can cope with template member functions.
 
-    @tplparam C value type
+    @tparam C value type
     @param rAny another any (left side)
     @param value a value (right side)
     @return true if values are unequal, false otherwise
@@ -373,7 +371,8 @@ inline sal_Bool SAL_CALL operator == ( const Any & rAny, const BaseReference & v
     There are cases (involving templates) where uses of getCppuType are known to
     not compile.  Use cppu::UnoType or cppu::getTypeFavourUnsigned instead.
 
-    @param dummy typed pointer for function signature
+    The dummy parameter is just a typed pointer for function signature.
+
     @return type of IDL type any
 */
 inline const ::com::sun::star::uno::Type & SAL_CALL getCppuType( const ::com::sun::star::uno::Any * ) SAL_THROW( () )

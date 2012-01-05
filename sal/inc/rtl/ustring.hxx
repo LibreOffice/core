@@ -76,14 +76,13 @@ namespace rtl
 class OUString
 {
 public:
-    /** @internal */
+    /// @cond INTERNAL
     rtl_uString * pData;
+    /// @endcond
 
 private:
-    /** @internal */
     class DO_NOT_ACQUIRE{};
 
-    /** @internal */
     OUString( rtl_uString * value, DO_NOT_ACQUIRE * )
     {
         pData = value;
@@ -123,10 +122,11 @@ public:
 
     /** New OUString from OUString data without acquiring it.  Takeover of ownership.
 
+        The SAL_NO_ACQUIRE dummy parameter is only there to distinguish this
+        from other constructors.
+
         @param str
                OUString data
-        @param dummy
-               SAL_NO_ACQUIRE to distinguish from other ctors
     */
     inline OUString( rtl_uString * str, __sal_NoAcquire ) SAL_THROW( () )
         { pData = str; }
@@ -666,7 +666,8 @@ public:
       equal as asciiStrLength.
       This function can't be used for language specific comparison.
 
-      @param    str         the object (substring) to be compared.
+      @param    asciiStr    the object (substring) to be compared.
+      @param    asciiStrLength the length of asciiStr.
       @param    fromIndex   the index to start the comparion from.
                             The index must be greater or equal than 0
                             and less or equal as the string length.
@@ -715,7 +716,7 @@ public:
 
       @param asciiStr a sequence of at least asciiStrLength ASCII characters
           (bytes in the range 0x00--0x7F)
-      @param asciiStrLen the length of asciiStr; must be non-negative
+      @param asciiStrLength the length of asciiStr; must be non-negative
       @return true if this string ends with asciiStr; otherwise, false is
       returned
 
@@ -736,7 +737,7 @@ public:
 
       @param asciiStr a sequence of at least asciiStrLength ASCII characters
           (bytes in the range 0x00--0x7F)
-      @param asciiStrLen the length of asciiStr; must be non-negative
+      @param asciiStrLength the length of asciiStr; must be non-negative
       @return true if this string ends with asciiStr, ignoring the case of ASCII
       letters ("A"--"Z" and "a"--"z"); otherwise, false is returned
      */

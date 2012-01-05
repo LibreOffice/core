@@ -61,9 +61,9 @@ SAL_DLLPUBLIC oslSecurity SAL_CALL osl_getCurrentSecurity(void);
 /** Deprecated API
     Create a security handle for the denoted user.
     Try to log in the user on the local system.
-    @param strzUserName [in] denotes the name of the user to logg in.
-    @param strPasswd [in] the password for this user.
-    @param pSecurity [out] returns the security handle if user could be logged in.
+    @param[in] strzUserName denotes the name of the user to logg in.
+    @param[in] strPasswd the password for this user.
+    @param[out] pSecurity returns the security handle if user could be logged in.
     @return osl_Security_E_None if user could be logged in, otherwise an error-code.
     @see osl_freeSecurityHandle
     @see osl_executeProcess
@@ -78,10 +78,10 @@ SAL_DLLPUBLIC oslSecurityError SAL_CALL osl_loginUser(
 /** Create a security handle for the denoted user.
     Try to log in the user on the denoted file server. On success the homedir will be
     the maped drive on this server.
-    @param strUserName [in] denotes the name of the user to logg in.
-    @param strPasswd [in] the password for this user.
-    @param strFileServer [in] denotes the file server on wich the user is logged in.
-    @param pSecurity [out] returns the security handle if user could be logged in.
+    @param[in] strUserName denotes the name of the user to logg in.
+    @param[in] strPasswd the password for this user.
+    @param[in] strFileServer denotes the file server on wich the user is logged in.
+    @param[out] pSecurity returns the security handle if user could be logged in.
     @return osl_Security_E_None if user could be logged in, otherwise an error-code.
     @see osl_freeSecurityHandle
     @see osl_executeProcess
@@ -95,46 +95,46 @@ SAL_DLLPUBLIC oslSecurityError SAL_CALL osl_loginUserOnFileServer(
     );
 
 /** Query if the user who is denotes by this security has administrator rigths.
-    @param Security [in] the security handle for th user.
+    @param[in] Security the security handle for th user.
     @return True, if the user has adminsitrator rights, otherwise false.
 */
 SAL_DLLPUBLIC sal_Bool SAL_CALL osl_isAdministrator(
         oslSecurity Security);
 
 /** Free the security handle, created by osl_loginUser or osl_getCurrentSecurity.
-    @param Security [in] the security handle.
+    @param[in] Security the security handle.
     @see osl_loginUser
 */
 SAL_DLLPUBLIC void SAL_CALL osl_freeSecurityHandle(
         oslSecurity Security);
 
 /** Get the login ident for the user of this security handle.
-    @param Security [in] the security handle.
-    @param strIdent [out] the string that receives the ident on success.
+    @param[in] Security the security handle.
+    @param[out] strIdent the string that receives the ident on success.
     @return True, if the security handle is valid, otherwise False.
 */
 SAL_DLLPUBLIC sal_Bool SAL_CALL osl_getUserIdent(
         oslSecurity Security, rtl_uString **strIdent);
 
 /** Get the login name for the user of this security handle.
-    @param Security [in] the security handle.
-    @param pszName [out] the string that receives the user name on success.
+    @param[in] Security the security handle.
+    @param[out] strName the string that receives the user name on success.
     @return True, if the security handle is valid, otherwise False.
 */
 SAL_DLLPUBLIC sal_Bool SAL_CALL osl_getUserName(
         oslSecurity Security, rtl_uString **strName);
 
 /** Get the home directory of the user of this security handle.
-    @param Security [in] the security handle.
-    @param strDirectory [out] the string that receives the directory path on success.
+    @param[in] Security the security handle.
+    @param[out] strDirectory the string that receives the directory path on success.
     @return True, if the security handle is valid, otherwise False.
 */
 SAL_DLLPUBLIC sal_Bool SAL_CALL osl_getHomeDir(
         oslSecurity Security, rtl_uString **strDirectory);
 
 /** Get the directory for configuration data of the user of this security handle.
-    @param Security [in] the security handle.
-    @param strDirectory [out] the string that receives the directory path on success.
+    @param[in] Security the security handle.
+    @param[out] strDirectory the string that receives the directory path on success.
     @return True, if the security handle is valid, otherwise False.
 */
 SAL_DLLPUBLIC sal_Bool SAL_CALL osl_getConfigDir(
@@ -143,7 +143,7 @@ SAL_DLLPUBLIC sal_Bool SAL_CALL osl_getConfigDir(
 
 /** Load Profile of the User
     Implemented just for Windows
-    @param oslSecurity Security [in] previously fetch Security of the User
+    @param[in] Security previously fetch Security of the User
     @return True if the Profile could successfully loaded, False otherwise.
 */
 
@@ -153,7 +153,7 @@ SAL_DLLPUBLIC sal_Bool SAL_CALL osl_loadUserProfile(
 
 /** Unload a User Profile
     Implemented just for Windows
-    @param oslSecurity Security [in] previously fetch Security of the User
+    @param[in] Security previously fetch Security of the User
     @return nothing is returned!
 */
 

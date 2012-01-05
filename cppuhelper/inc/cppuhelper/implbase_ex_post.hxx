@@ -28,8 +28,8 @@
 #ifndef _CPPUHELPER_IMPLBASE_EX_POST_HXX_
 #define _CPPUHELPER_IMPLBASE_EX_POST_HXX_
 
+/// @cond INTERNAL
 
-/** @internal */
 #define __DEF_CLASS_DATA_INIT_EX( N, class_cast ) \
 { \
 N +1, sal_False, sal_False, \
@@ -40,7 +40,6 @@ __IFC_EX_TYPE_INIT_NAME( class_cast, ::com::sun::star::lang::XTypeProvider ) \
 } \
 }
 
-/** @internal */
 #define __DEF_IMPLHELPER_EX( N ) \
 namespace cppu \
 { \
@@ -171,7 +170,6 @@ class_data##N AggImplInheritanceHelper##N< BaseClass, __IFC##N >::s_cd = \
 __DEF_CLASS_DATA_INIT_EX( N, (AggImplInheritanceHelper##N< BaseClass, __IFC##N > *) ); \
 }
 
-/** @internal */
 #define __DEF_COMPIMPLHELPER_EX( N ) \
 namespace cppu \
 { \
@@ -228,6 +226,8 @@ template< __CLASS_IFC##N > \
 class_data##N WeakAggComponentImplHelper##N< __IFC##N >::s_cd = \
 __DEF_CLASS_DATA_INIT_EX( N, (WeakAggComponentImplHelper##N< __IFC##N > *) ); \
 }
+
+/// @endcond
 
 #endif
 

@@ -42,8 +42,9 @@
 #include "sal/log.hxx"
 #include "sal/types.h"
 
+/// @cond INTERNAL
+
 namespace osl {
-/// @internal
 namespace detail {
 
 struct ObjectRegistryData;
@@ -53,27 +54,22 @@ struct ObjectRegistryData;
 
 extern "C" {
 
-/** @internal */
 SAL_DLLPUBLIC bool SAL_CALL osl_detail_ObjectRegistry_storeAddresses(
         char const* pName )
     SAL_THROW_EXTERN_C();
 
-/** @internal */
 SAL_DLLPUBLIC bool SAL_CALL osl_detail_ObjectRegistry_checkObjectCount(
     ::osl::detail::ObjectRegistryData const& rData, ::std::size_t nExpected )
     SAL_THROW_EXTERN_C();
 
-/** @internal */
 SAL_DLLPUBLIC void SAL_CALL osl_detail_ObjectRegistry_registerObject(
     ::osl::detail::ObjectRegistryData & rData, void const* pObj )
     SAL_THROW_EXTERN_C();
 
-/** @internal */
 SAL_DLLPUBLIC void SAL_CALL osl_detail_ObjectRegistry_revokeObject(
     ::osl::detail::ObjectRegistryData & rData, void const* pObj )
     SAL_THROW_EXTERN_C();
 
-/** @internal */
 SAL_DLLPUBLIC ::osl::Mutex & SAL_CALL osl_detail_ObjectRegistry_getMutex()
     SAL_THROW_EXTERN_C();
 
@@ -81,7 +77,6 @@ SAL_DLLPUBLIC ::osl::Mutex & SAL_CALL osl_detail_ObjectRegistry_getMutex()
 
 namespace osl {
 
-/// @internal
 namespace detail {
 
 struct VoidPtrHash : ::std::unary_function<void const*, ::std::size_t> {
@@ -162,8 +157,8 @@ private:
     objects instead of just counting them.  This enables you to iterate over
     leaking objects in your debugger.
 
-    @tpl InheritingClassT binds the template instance to that class
-    @internal Use at own risk.
+    @tparam InheritingClassT binds the template instance to that class
+    @attention Use at own risk.
               For now this is just public (yet unpublished) API and may change
               in the future!
 */
@@ -197,6 +192,8 @@ private:
 };
 
 } // namespace osl
+
+/// @endcond
 
 #endif // ! defined(OSL_DIAGNOSE_HXX_INCLUDED)
 

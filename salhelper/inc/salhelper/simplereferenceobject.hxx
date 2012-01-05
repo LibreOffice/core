@@ -75,7 +75,7 @@ class SALHELPER_DLLPUBLIC SimpleReferenceObject
 public:
     inline SimpleReferenceObject() SAL_THROW(()): m_nCount(0) {}
 
-    /** @ATTENTION
+    /** @attention
         The results are undefined if, for any individual instance of
         SimpleReferenceObject, the total number of calls to acquire() exceeds
         the total number of calls to release() by a platform dependent amount
@@ -113,14 +113,14 @@ private:
     oslInterlockedCount m_nCount;
 
     /** not implemented
-        @internal
      */
     SALHELPER_DLLPRIVATE SimpleReferenceObject(SimpleReferenceObject &);
 
     /** not implemented
-        @internal
      */
     SALHELPER_DLLPRIVATE void operator =(SimpleReferenceObject);
+
+    /// @cond INTERNAL
 
 #ifdef _MSC_VER
 /* We can't now have these private with MSVC2008 at least, it leads to
@@ -129,14 +129,14 @@ private:
 protected:
 #endif
     /** not implemented (see general class documentation)
-        @internal
      */
     static void * operator new[](std::size_t);
 
     /** not implemented (see general class documentation)
-        @internal
      */
     static void operator delete[](void * pPtr);
+
+    /// @endcond
 };
 
 }

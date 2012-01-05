@@ -37,6 +37,8 @@
 
 #include <cstddef>
 
+/// @cond INTERNAL
+
 //######################################################
 // This is no general purpose STL allocator but one
 // necessary to use STL for some implementation but
@@ -49,7 +51,6 @@
 
 namespace rtl {
 
-/** @internal */
 template<class T>
 class Allocator
 {
@@ -156,14 +157,12 @@ public:
 // references above) that's why the operators below
 // return always true or false
 
-/** @internal */
 template<class T, class U>
 inline bool operator== (const Allocator<T>&, const Allocator<U>&) SAL_THROW(())
 {
     return true;
 }
 
-/** @internal */
 template<class T, class U>
 inline bool operator!= (const Allocator<T>&, const Allocator<U>&) SAL_THROW(())
 {
@@ -172,22 +171,20 @@ inline bool operator!= (const Allocator<T>&, const Allocator<U>&) SAL_THROW(())
 
 } /* namespace rtl */
 
-//######################################################
 /** REQUIRED BY STLPort (see stlport '_alloc.h'):
     Hack for compilers that do not support member
     template classes (e.g. MSVC 6)
-
-    @internal
 */
 namespace _STL
 {
-    /** @internal */
     template<class T, class U>
     inline ::rtl::Allocator<U> & __stl_alloc_rebind (::rtl::Allocator<T> & a, U const *)
     {
         return (::rtl::Allocator<U>&)(a);
     }
 }
+
+/// @endcond
 
 #endif /* INCLUDED_RTL_ALLOCATOR_HXX */
 

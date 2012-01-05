@@ -77,11 +77,9 @@ inline bool SAL_CALL setCurrentContext(
 class ContextLayer
 {
     /** this C++ environment type name.
-        @internal
     */
     ::rtl::OUString m_aEnvTypeName;
     /** previous context
-        @internal
     */
     Reference< XCurrentContext > m_xPreviousContext;
 
