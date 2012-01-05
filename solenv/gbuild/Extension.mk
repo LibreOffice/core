@@ -36,7 +36,7 @@ endif
 gb_Extension_XRMEXTARGET := $(call gb_Executable_get_target,xrmex)
 gb_Extension_XRMEXCOMMAND := \
 	$(gb_Helper_set_ld_path) $(gb_Extension_XRMEXTARGET)
-gb_Extension_PROPMERGETARGET := $(call gb_Executable_get_target,propmerge)
+gb_Extension_PROPMERGETARGET := $(OUTDIR)/bin/propmerge
 gb_Extension_PROPMERGECOMMAND := \
 	$(PERL) $(gb_Extension_PROPMERGETARGET)
 gb_Extension_HELPEXTARGET := $(call gb_Executable_get_target,helpex)
