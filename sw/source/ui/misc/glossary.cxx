@@ -449,25 +449,23 @@ IMPL_LINK_INLINE_END( SwGlossaryDlg, NameDoubleClick, SvTreeListBox*, pBox )
 
 IMPL_LINK( SwGlossaryDlg, EnableHdl, Menu *, pMn )
 {
+    SvLBoxEntry* pEntry = aCategoryBox.FirstSelected();
+
     const String aEditText(aNameED.GetText());
     const sal_Bool bHasEntry = aEditText.Len() && aShortNameEdit.GetText().Len();
     const sal_Bool bExists = 0 != DoesBlockExist(aEditText, aShortNameEdit.GetText());
+    const sal_Bool bIsGroup = pEntry && !aCategoryBox.GetParent(pEntry);
     pMn->EnableItem(FN_GL_DEFINE, bSelection && bHasEntry && !bExists);
     pMn->EnableItem(FN_GL_DEFINE_TEXT, bSelection && bHasEntry && !bExists);
-    pMn->EnableItem(FN_GL_COPY_TO_CLIPBOARD, bExists);
-    pMn->EnableItem(FN_GL_REPLACE, bSelection && bExists && !bIsOld );
-    pMn->EnableItem(FN_GL_REPLACE_TEXT, bSelection && bExists && !bIsOld );
-    pMn->EnableItem(FN_GL_EDIT, bExists );
-    pMn->EnableItem(FN_GL_RENAME, bExists  );
-    pMn->EnableItem(FN_GL_DELETE, bExists  );
-    pMn->EnableItem(FN_GL_MACRO, bExists && !bIsOld  &&
+    pMn->EnableItem(FN_GL_COPY_TO_CLIPBOARD, bExists && !bIsGroup);
+    pMn->EnableItem(FN_GL_REPLACE, bSelection && bExists && !bIsGroup && !bIsOld );
+    pMn->EnableItem(FN_GL_REPLACE_TEXT, bSelection && bExists && !bIsGroup && !bIsOld );
+    pMn->EnableItem(FN_GL_EDIT, bExists && !bIsGroup );
+    pMn->EnableItem(FN_GL_RENAME, bExists && !bIsGroup );
+    pMn->EnableItem(FN_GL_DELETE, bExists && !bIsGroup );
+    pMn->EnableItem(FN_GL_MACRO, bExists && !bIsGroup && !bIsOld &&
                                     !pGlossaryHdl->IsReadOnly() );
-
-    SvLBoxEntry* pEntry = aCategoryBox.FirstSelected();
-    sal_Bool bEnable = sal_False;
-    if ( pEntry )
-        bEnable = !aCategoryBox.GetParent( pEntry ) && !bIsOld && !pGlossaryHdl->IsReadOnly();
-    pMn->EnableItem( FN_GL_IMPORT, bEnable );
+    pMn->EnableItem( FN_GL_IMPORT, bIsGroup && !bIsOld && !pGlossaryHdl->IsReadOnly() );
     return 1;
 }
 
