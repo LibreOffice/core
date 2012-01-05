@@ -119,22 +119,13 @@ $(eval $(call gb_Library_add_exception_objects,sal,\
 	sal/rtl/source/ustrbuf \
 	sal/rtl/source/ustring \
 	sal/rtl/source/uuid \
-	sal/textenc/convertsinglebytetobmpunicode \
 	sal/textenc/textenc \
 ))
 $(eval $(call gb_Library_add_cobjects,sal,\
 	sal/osl/all/filepath \
 	sal/textenc/context \
-	sal/textenc/convertbig5hkscs \
 	sal/textenc/converter \
-	sal/textenc/converteuctw \
-	sal/textenc/convertgb18030 \
-	sal/textenc/convertiso2022cn \
-	sal/textenc/convertiso2022jp \
-	sal/textenc/convertiso2022kr \
 	sal/textenc/tcvtbyte \
-	sal/textenc/tcvtmb \
-	sal/textenc/tcvtutf7 \
 	sal/textenc/tcvtutf8 \
 	sal/textenc/tenchelp \
 	sal/textenc/tencinfo \

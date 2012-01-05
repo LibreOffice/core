@@ -133,6 +133,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT ImplTextEncodingData const *
     assert(
         nEncoding != RTL_TEXTENCODING_ASCII_US &&
         nEncoding != RTL_TEXTENCODING_ISO_8859_1 &&
+        nEncoding != RTL_TEXTENCODING_JAVA_UTF8 &&
         nEncoding != RTL_TEXTENCODING_MS_1252 &&
         nEncoding != RTL_TEXTENCODING_UTF8);
         // handled by Impl_getTextEncodingData
@@ -227,7 +228,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT ImplTextEncodingData const *
             &aImplTis620TextEncodingData, /* TIS_620 */
             &aImplKoi8UTextEncodingData, /* KOI8_U */
             &aImplIsciiDevanagariTextEncodingData, /* ISCII_DEVANAGARI */
-            &aImplJavaUtf8TextEncodingData, /* JAVA_UTF8 */
+            NULL, /* JAVA_UTF8, see above */
             &adobeStandardEncodingData, /* ADOBE_STANDARD */
             &adobeSymbolEncodingData, /* ADOBE_SYMBOL */
             &aImplPT154TextEncodingData }; /* PT154 */

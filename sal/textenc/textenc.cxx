@@ -339,6 +339,29 @@ static ImplTextEncodingData const aImplUTF8TextEncodingData
             | RTL_TEXTENCODING_INFO_MIME };
     /* SCRIPT_UNICODE, pc code page 850 */
 
+static char aImplJavaUtf8TextConverterTag;
+    /* The value of this tag is irrelevant.  Only its address != NULL is used to
+       distinguish between RTL_TEXTENCODING_UTF8 and
+       RTL_TEXTENCODING_JAVA_UTF8. */
+
+static ImplTextEncodingData const aImplJavaUtf8TextEncodingData
+    = { { &aImplJavaUtf8TextConverterTag,
+          &ImplConvertUtf8ToUnicode,
+          &ImplConvertUnicodeToUtf8,
+          &ImplCreateUtf8ToUnicodeContext,
+          &ImplDestroyContext,
+          &ImplResetUtf8ToUnicodeContext,
+          &ImplCreateUnicodeToUtf8Context,
+          &ImplDestroyContext,
+          &ImplResetUnicodeToUtf8Context },
+        1,
+        3,
+        1,
+        0,
+        NULL,
+        NULL,
+        RTL_TEXTENCODING_INFO_UNICODE | RTL_TEXTENCODING_INFO_MULTIBYTE };
+
 namespace {
 
 #if defined IOS
@@ -408,6 +431,8 @@ Impl_getTextEncodingData(rtl_TextEncoding nEncoding) SAL_THROW_EXTERN_C()
             return &aImplMS1252TextEncodingData; break;
         case RTL_TEXTENCODING_UTF8:
             return &aImplUTF8TextEncodingData; break;
+        case RTL_TEXTENCODING_JAVA_UTF8:
+            return &aImplJavaUtf8TextEncodingData; break;
         case RTL_TEXTENCODING_ISO_8859_1:
             return &aImplISO88591TextEncodingData; break;
         default:

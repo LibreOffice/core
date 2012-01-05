@@ -55,7 +55,6 @@ $(eval $(call gb_Library_add_cobjects,sal_textenc,\
 	sal/textenc/tcvtbyte \
 	sal/textenc/tcvtmb \
 	sal/textenc/tcvtutf7 \
-	sal/textenc/tcvtutf8 \
 	sal/textenc/tenchelp \
 	sal/textenc/unichars \
 ))
