@@ -44,6 +44,7 @@ $(eval $(call gb_Library_add_defs,fps,\
 ))
 
 $(eval $(call gb_Library_add_linked_libs,fps,\
+	comphelper \
 	cppu \
 	cppuhelper \
 	sal \
