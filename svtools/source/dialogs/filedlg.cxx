@@ -34,7 +34,7 @@ PathDialog::PathDialog( Window* _pParent, WinBits nStyle, sal_Bool bCreateDir ) 
     ModalDialog( _pParent, WB_STDMODAL | nStyle )
 {
     pImpFileDlg = new ImpSvFileDlg;
-    pImpFileDlg->CreateDialog( this, nStyle, WINDOW_PATHDIALOG, bCreateDir );
+    pImpFileDlg->CreatePathDialog(this, bCreateDir);
 }
 
 PathDialog::~PathDialog()
@@ -70,25 +70,6 @@ long PathDialog::OK()
         return aOKHdlLink.Call( this );
     else
         return sal_True;
-}
-
-FileDialog::~FileDialog()
-{
-}
-
-void FileDialog::FileSelect()
-{
-    aFileHdlLink.Call( this );
-}
-
-void FileDialog::FilterSelect()
-{
-    aFilterHdlLink.Call( this );
-}
-
-UniString FileDialog::GetFilterType( sal_uInt16 nPos ) const
-{
-  return ((ImpFileDialog*)pImpFileDlg->GetDialog())->GetFilterType( nPos );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

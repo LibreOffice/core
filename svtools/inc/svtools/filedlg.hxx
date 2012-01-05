@@ -26,8 +26,8 @@
  *
  ************************************************************************/
 
-#ifndef _SVT_FILEDLG_HXX
-#define _SVT_FILEDLG_HXX
+#ifndef SVT_FILEDLG_HXX
+#define SVT_FILEDLG_HXX
 
 #include "svtools/svtdllapi.h"
 
@@ -43,10 +43,8 @@ class ImpSvFileDlg;
 class SVT_DLLPUBLIC PathDialog : public ModalDialog
 {
 private:
-    friend class FileDialog;    // Imp...
-
     ImpSvFileDlg*       pImpFileDlg;    // Implementation
-    Link                aOKHdlLink;     // Link zum OK-Handler
+    Link                aOKHdlLink;     // Link to OK-Handler
 
 protected:
     UniString           aDfltExt;       // Default - Extension
@@ -67,26 +65,6 @@ public:
     virtual short       Execute();
 };
 
-// --------------
-// - SvFileDialog -
-// --------------
-
-class SVT_DLLPUBLIC FileDialog : public PathDialog
-{
-private:
-    Link                aFileHdlLink;   // Link zum FileSelect-Handler
-    Link                aFilterHdlLink; // Link zum FilterSelect-Handler
-
-public:
-                        ~FileDialog();
-
-    virtual void        FileSelect();
-    virtual void        FilterSelect();
-
-    const UniString&        GetDefaultExt() const { return aDfltExt; }
-    UniString               GetFilterType( sal_uInt16 nPos ) const;
-};
-
-#endif  // _FILEDLG_HXX
+#endif  // FILEDLG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

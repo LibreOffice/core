@@ -26,8 +26,8 @@
  *
  ************************************************************************/
 
-#ifndef _FILEDLG2_HXX
-#define _FILEDLG2_HXX
+#ifndef FILEDLG2_HXX
+#define FILEDLG2_HXX
 
 #include <tools/debug.hxx>
 #include <tools/fsys.hxx>
@@ -126,69 +126,6 @@ public:
 
 };
 
-
-class ImpFileDialog : public ImpPathDialog
-{
-private:
-    FixedText*          pFileTitel;
-    ListBox*            pFileList;
-    FixedText*          pTypeTitel;
-    ListBox*            pTypeList;
-
-    WildCard            aMask;          // aktuelle Maske
-
-    ImpFilterList       aFilterList;    // Filterliste
-    sal_uInt16              nCurFilter;     // aktueller Filter
-
-    sal_Bool                bOpen;          // sal_True = Open; sal_False = SAVEAS
-
-protected:
-    void                InitControls();
-
-    String              ExtendFileName( DirEntry aEntry ) const;
-
-    DECL_LINK(          SelectHdl, ListBox * );
-    DECL_LINK(          DblClickHdl, ListBox * );
-    DECL_LINK(          ClickHdl, Button * );
-
-    virtual void        UpdateEntries( const sal_Bool bWithDirs );
-    sal_Bool                IsFileOk( const DirEntry& rDirEntry );
-
-public:
-                        ImpFileDialog( PathDialog* pDlg, WinBits nStyle, RESOURCE_TYPE nType );
-    virtual             ~ImpFileDialog();
-
-    size_t              GetFilterCount() const  { return aFilterList.size(); }
-    inline String       GetFilterName( size_t nPos ) const;
-    inline String       GetFilterType( size_t nPos ) const;
-
-    virtual void        SetPath( const String& rPath );
-    virtual void        SetPath( const Edit& rEdit );
-    virtual String      GetPath() const;
-
-    virtual void        PreExecute();
-
-    FileDialog*     GetFileDialog() const { return (FileDialog*)GetPathDialog(); }
-};
-
-inline String ImpFileDialog::GetFilterName( size_t nPos ) const
-{
-    String aName;
-    if ( nPos < aFilterList.size() ) {
-        aName = aFilterList[ nPos ]->aName;
-    }
-    return aName;
-}
-
-inline String ImpFileDialog::GetFilterType( size_t nPos ) const
-{
-    String aFilterMask;
-    if ( nPos < aFilterList.size() ) {
-        aFilterMask = aFilterList[ nPos ]->aMask;
-    }
-    return aFilterMask;
-}
-
 class ImpSvFileDlg
 {
 private:
@@ -199,13 +136,13 @@ public:
                     ~ImpSvFileDlg()     { delete pDlg; }
 
     ImpPathDialog*  GetDialog() const   { return pDlg; }
-    void            CreateDialog( PathDialog* pCreateFrom, WinBits nStyle, RESOURCE_TYPE nType, sal_Bool bCreate );
+    void            CreatePathDialog(PathDialog* pCreateFrom, bool bCreate);
 
     void            SetOkButtonText( const String& rText ) { pDlg->SetOkButtonText( rText ); }  // ihr habts ja nicht anders gewollt
     void            SetCancelButtonText( const String& rText ) { pDlg->SetCancelButtonText( rText ); }
 
 };
 
-#endif // _FILEDLG2_HXX
+#endif // FILEDLG2_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
