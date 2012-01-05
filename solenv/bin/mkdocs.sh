@@ -20,10 +20,7 @@ shopt -s expand_aliases
 DOXYGEN_PROJECT_PREFIX="LibreOffice"
 
 # suck setup
-BINDIR=`dirname $0`
-. $BINDIR/setup
-
-. ./*.Set.sh
+. ./Env.Host.sh
 
 # get list of modules in build order - bah, blows RAM & disk, static list below
 INPUT_PROJECTS="o3tl basegfx basebmp comphelper svl vcl canvas cppcanvas oox svtools goodies drawinglayer xmloff slideshow sfx2 editeng svx writerfilter cui chart2 dbaccess sd starmath sc sw"
