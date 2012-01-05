@@ -38,6 +38,7 @@
 #include "docsh.hxx"
 #include "miscdlgs.hrc"
 #include "rangenam.hxx"
+#include "viewdata.hxx"
 
 
 //==================================================================
@@ -62,7 +63,9 @@ ScNamePasteDlg::ScNamePasteDlg( Window * pParent, ScDocShell* pShell, bool )
         aRangeMap.insert(aTemp, new ScRangeName(*itr->second));
     }
 
-    mpTable = new ScRangeManagerTable(&maCtrl, aRangeMap);
+    ScViewData* pViewData = pShell->GetViewData();
+    ScAddress aPos(pViewData->GetCurX(), pViewData->GetCurY(), pViewData->GetTabNo());
+    mpTable = new ScRangeManagerTable(&maCtrl, aRangeMap, aPos);
 
     maBtnPaste.SetClickHdl( LINK( this, ScNamePasteDlg, ButtonHdl) );
     maBtnPasteAll.SetClickHdl( LINK( this, ScNamePasteDlg, ButtonHdl));

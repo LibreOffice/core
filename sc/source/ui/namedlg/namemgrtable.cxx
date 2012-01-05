@@ -57,11 +57,12 @@ String createEntryString(const ScRangeNameLine& rLine)
     return aRet;
 }
 
-ScRangeManagerTable::ScRangeManagerTable( Window* pWindow, boost::ptr_map<rtl::OUString, ScRangeName>& rRangeMap ):
+ScRangeManagerTable::ScRangeManagerTable( Window* pWindow, boost::ptr_map<rtl::OUString, ScRangeName>& rRangeMap, const ScAddress& rPos ):
     SvTabListBox( pWindow, WB_SORT | WB_HSCROLL | WB_CLIPCHILDREN | WB_TABSTOP ),
     maHeaderBar( pWindow, WB_BUTTONSTYLE | WB_BOTTOMBORDER ),
     maGlobalString( ScGlobal::GetRscString(STR_GLOBAL_SCOPE)),
-    mrRangeMap( rRangeMap )
+    mrRangeMap( rRangeMap ),
+    maPos( rPos )
 {
     Size aBoxSize( pWindow->GetOutputSizePixel() );
 
@@ -172,7 +173,7 @@ void ScRangeManagerTable::CheckForFormulaString()
             GetLine( aLine, pEntry);
             const ScRangeData* pData = findRangeData( aLine );
             rtl::OUString aFormulaString;
-            pData->GetSymbol(aFormulaString);
+            pData->GetSymbol(aFormulaString, maPos);
             SetEntryText(aFormulaString, pEntry, 1);
             maCalculatedFormulaEntries.insert( std::pair<SvLBoxEntry*, bool>(pEntry, true) );
         }

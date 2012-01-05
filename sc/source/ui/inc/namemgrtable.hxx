@@ -31,6 +31,7 @@
 #include <vcl/ctrl.hxx>
 
 #include "scresid.hxx"
+#include "address.hxx"
 
 #include <vector>
 #include <boost/ptr_container/ptr_map.hpp>
@@ -71,6 +72,7 @@ private:
     // otherwise opening the dialog with a lot of range names is extremelly slow because
     // we would calculate all formula strings during opening
     std::map<SvLBoxEntry*, bool> maCalculatedFormulaEntries;
+    const ScAddress maPos;
 
     void GetLine(ScRangeNameLine& aLine, SvLBoxEntry* pEntry);
     void Init();
@@ -78,7 +80,7 @@ private:
     const ScRangeData* findRangeData(const ScRangeNameLine& rLine);
 
 public:
-    ScRangeManagerTable( Window* pParent, boost::ptr_map<rtl::OUString, ScRangeName>& aTabRangeNames );
+    ScRangeManagerTable( Window* pParent, boost::ptr_map<rtl::OUString, ScRangeName>& aTabRangeNames, const ScAddress& rPos );
     virtual ~ScRangeManagerTable();
 
     void addEntry( const ScRangeNameLine& rLine, bool bSetCurEntry = true );
