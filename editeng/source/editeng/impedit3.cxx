@@ -3291,7 +3291,8 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                                                 aTmpFont.SetEscapement( 0 );
                                                 aTmpFont.SetPropr( 100 );
                                                 aTmpFont.SetPhysFont( pOutDev );
-                                                rtl::OUStringBuffer aBlanks = comphelper::string::padToLength( aBlanks, (sal_Int32) nTextLen, ' ' );
+                                                rtl::OUStringBuffer aBlanks;
+                                                comphelper::string::padToLength( aBlanks, (sal_Int32) nTextLen, ' ' );
                                                 Point aUnderlinePos( aOutPos );
                                                 if ( nOrientation )
                                                     aUnderlinePos = lcl_ImplCalcRotatedPos( aTmpPos, aOrigin, nSin, nCos );
