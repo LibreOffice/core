@@ -949,63 +949,65 @@ sal_Bool Bitmap::ImplScaleFast( const double& rScaleX, const double& rScaleY )
     const Size  aSizePix( GetSizePixel() );
     const long  nNewWidth = FRound( aSizePix.Width() * rScaleX );
     const long  nNewHeight = FRound( aSizePix.Height() * rScaleY );
-    sal_Bool        bRet = sal_False;
+    sal_Bool    bRet = sal_False;
 
     if( nNewWidth && nNewHeight )
     {
         BitmapReadAccess*   pReadAcc = AcquireReadAccess();
-        Bitmap              aNewBmp( Size( nNewWidth, nNewHeight ), GetBitCount(), &pReadAcc->GetPalette() );
-        BitmapWriteAccess*  pWriteAcc = aNewBmp.AcquireWriteAccess();
 
-        if( pReadAcc && pWriteAcc )
+        if(pReadAcc)
         {
-            const long  nScanlineSize = pWriteAcc->GetScanlineSize();
-            const long  nNewWidth1 = nNewWidth - 1L;
-            const long  nNewHeight1 = nNewHeight - 1L;
-            const long  nWidth = pReadAcc->Width();
-            const long  nHeight = pReadAcc->Height();
-            long*       pLutX = new long[ nNewWidth ];
-            long*       pLutY = new long[ nNewHeight ];
+            Bitmap              aNewBmp( Size( nNewWidth, nNewHeight ), GetBitCount(), &pReadAcc->GetPalette() );
+            BitmapWriteAccess*  pWriteAcc = aNewBmp.AcquireWriteAccess();
 
-            if( nNewWidth1 && nNewHeight1 )
+            if( pWriteAcc )
             {
-                long        nX, nY, nMapY, nActY = 0L;
+                const long  nScanlineSize = pWriteAcc->GetScanlineSize();
+                const long  nNewWidth1 = nNewWidth - 1L;
+                const long  nNewHeight1 = nNewHeight - 1L;
+                const long  nWidth = pReadAcc->Width();
+                const long  nHeight = pReadAcc->Height();
+                long*       pLutX = new long[ nNewWidth ];
+                long*       pLutY = new long[ nNewHeight ];
 
-                for( nX = 0L; nX < nNewWidth; nX++ )
-                    pLutX[ nX ] = nX * nWidth / nNewWidth;
-
-                for( nY = 0L; nY < nNewHeight; nY++ )
-                    pLutY[ nY ] = nY * nHeight / nNewHeight;
-
-                while( nActY < nNewHeight )
+                if( nNewWidth1 && nNewHeight1 )
                 {
-                    nMapY = pLutY[ nActY ];
+                    long        nX, nY, nMapY, nActY = 0L;
 
                     for( nX = 0L; nX < nNewWidth; nX++ )
-                        pWriteAcc->SetPixel( nActY, nX, pReadAcc->GetPixel( nMapY , pLutX[ nX ] ) );
+                        pLutX[ nX ] = nX * nWidth / nNewWidth;
 
-                    while( ( nActY < nNewHeight1 ) && ( pLutY[ nActY + 1 ] == nMapY ) )
+                    for( nY = 0L; nY < nNewHeight; nY++ )
+                        pLutY[ nY ] = nY * nHeight / nNewHeight;
+
+                    while( nActY < nNewHeight )
                     {
-                        memcpy( pWriteAcc->GetScanline( nActY + 1L ),
-                                 pWriteAcc->GetScanline( nActY ), nScanlineSize );
+                        nMapY = pLutY[ nActY ];
+
+                        for( nX = 0L; nX < nNewWidth; nX++ )
+                            pWriteAcc->SetPixel( nActY, nX, pReadAcc->GetPixel( nMapY , pLutX[ nX ] ) );
+
+                        while( ( nActY < nNewHeight1 ) && ( pLutY[ nActY + 1 ] == nMapY ) )
+                        {
+                            memcpy( pWriteAcc->GetScanline( nActY + 1L ),
+                                    pWriteAcc->GetScanline( nActY ), nScanlineSize );
+                            nActY++;
+                        }
                         nActY++;
                     }
 
-                    nActY++;
+                    bRet = sal_True;
+                    aNewBmp.ReleaseAccess( pWriteAcc );
                 }
 
-                bRet = sal_True;
+                delete[] pLutX;
+                delete[] pLutY;
             }
+            ReleaseAccess( pReadAcc );
 
-            delete[] pLutX;
-            delete[] pLutY;
+            if( bRet )
+                ImplAssignWithSize( aNewBmp );
         }
-
-        ReleaseAccess( pReadAcc );
-        aNewBmp.ReleaseAccess( pWriteAcc );
-
-        if( bRet )
-            ImplAssignWithSize( aNewBmp );
     }
 
     return bRet;
