@@ -52,9 +52,6 @@
 #include "externalrefmgr.hxx"
 #include "document.hxx"
 
-#include <iostream>
-#include <rtl/oustringostreaminserter.hxx>
-
 using ::std::vector;
 
 #include <com/sun/star/sheet/ComplexReference.hpp>
@@ -1831,13 +1828,11 @@ void GetExternalTableData(const ScDocument* pOldDoc, const ScDocument* pNewDoc, 
     rTabName = pOldDoc->GetCopyTabName(nTab);
     if (rTabName.isEmpty())
         pOldDoc->GetName(nTab, rTabName);
-    std::cout << "TabName: " << rTabName << std::endl;
 }
 
 bool IsInCopyRange( const ScRange& rRange, const ScDocument* pClipDoc )
 {
     ScClipParam& rClipParam = const_cast<ScDocument*>(pClipDoc)->GetClipParam();
-    std::cout << "Col: " << rRange.aStart.Col() << "Row: " << rRange.aStart.Row() << "Tab: " << rRange.aStart.Tab() << std::endl;
     return rClipParam.maRanges.In(rRange);
 }
 
