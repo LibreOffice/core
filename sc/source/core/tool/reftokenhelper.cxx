@@ -146,25 +146,6 @@ void singleRefToAddr(const ScSingleRefData& rRef, ScAddress& rAddr)
     rAddr.SetTab(rRef.nTab);
 }
 
-//returns an absolute address in reference to rPos
-void singleRefToAbsAddr(const ScSingleRefData& rRef, ScAddress& rAddr, const ScAddress& rPos)
-{
-    if (rRef.IsColRel())
-        rAddr.SetCol(rRef.nRelCol + rPos.Col());
-    else
-        rAddr.SetCol(rRef.nCol);
-
-    if (rRef.IsRowRel())
-        rAddr.SetRow(rRef.nRelRow + rPos.Row());
-    else
-        rAddr.SetRow(rRef.nRow);
-
-    if (rRef.IsTabRel())
-        rAddr.SetTab(rRef.nRelTab + rPos.Tab());
-    else
-        rAddr.SetTab(rRef.nTab);
-}
-
 }
 
 bool ScRefTokenHelper::getRangeFromToken(ScRange& rRange, const ScTokenRef& pToken, bool bExternal)
@@ -194,41 +175,6 @@ bool ScRefTokenHelper::getRangeFromToken(ScRange& rRange, const ScTokenRef& pTok
             const ScComplexRefData& rRefData = pToken->GetDoubleRef();
             singleRefToAddr(rRefData.Ref1, rRange.aStart);
             singleRefToAddr(rRefData.Ref2, rRange.aEnd);
-            return true;
-        }
-        default:
-            ; // do nothing
-    }
-    return false;
-}
-
-bool ScRefTokenHelper::getAbsRangeFromToken(ScRange& rRange, const ScTokenRef& pToken, const ScAddress& rPos, bool bExternal)
-{
-    StackVar eType = pToken->GetType();
-    switch (pToken->GetType())
-    {
-        case svSingleRef:
-        case svExternalSingleRef:
-        {
-            if ((eType == svExternalSingleRef && !bExternal) ||
-                (eType == svSingleRef && bExternal))
-                return false;
-
-            const ScSingleRefData& rRefData = pToken->GetSingleRef();
-            singleRefToAbsAddr(rRefData, rRange.aStart, rPos);
-            rRange.aEnd = rRange.aStart;
-            return true;
-        }
-        case svDoubleRef:
-        case svExternalDoubleRef:
-        {
-            if ((eType == svExternalDoubleRef && !bExternal) ||
-                (eType == svDoubleRef && bExternal))
-                return false;
-
-            const ScComplexRefData& rRefData = pToken->GetDoubleRef();
-            singleRefToAbsAddr(rRefData.Ref1, rRange.aStart, rPos);
-            singleRefToAbsAddr(rRefData.Ref2, rRange.aEnd, rPos);
             return true;
         }
         default:

@@ -1823,7 +1823,6 @@ namespace {
 void GetExternalTableData(const ScDocument* pOldDoc, const ScDocument* pNewDoc, const SCTAB nTab, rtl::OUString& rTabName, sal_uInt16& rFileId)
 {
     rtl::OUString aFileName = pOldDoc->GetFileURL();;
-    std::cout << aFileName << std::endl;
     rFileId = pNewDoc->GetExternalRefManager()->getExternalFileId(aFileName);
     rTabName = pOldDoc->GetCopyTabName(nTab);
     if (rTabName.isEmpty())
@@ -1839,7 +1838,9 @@ bool IsInCopyRange( const ScRange& rRange, const ScDocument* pClipDoc )
 bool SkipReference(ScToken* pToken, const ScAddress& rPos, const ScDocument* pOldDoc, bool bRangeName)
 {
     ScRange aRange;
-    if (!ScRefTokenHelper::getAbsRangeFromToken(aRange, pToken, rPos))
+
+    pToken->CalcAbsIfRel(rPos);
+    if (!ScRefTokenHelper::getRangeFromToken(aRange, pToken))
         return true;
 
     if (bRangeName && aRange.aStart.Tab() == rPos.Tab())
