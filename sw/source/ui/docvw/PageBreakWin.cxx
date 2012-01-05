@@ -125,7 +125,6 @@ namespace
                 m_pWin( pWin ) {};
 
             virtual void MouseMove( const MouseEvent& rMEvt );
-            virtual void MouseButtonDown( const MouseEvent& rMEvt );
     };
 
     void SwBreakDashedLine::MouseMove( const MouseEvent& rMEvt )
@@ -146,16 +145,6 @@ namespace
         {
             Point* pPtr = new Point( rMEvt.GetPosPixel() );
             m_pWin->UpdatePosition( pPtr );
-        }
-    }
-
-    void SwBreakDashedLine::MouseButtonDown( const MouseEvent& rMEvt )
-    {
-        sal_uInt16 nItemId = m_pWin->GetPopupMenu()->Execute( this, rMEvt.GetPosPixel() );
-        if ( nItemId )
-        {
-            m_pWin->SetCurItemId( nItemId );
-            m_pWin->Select();
         }
     }
 }
@@ -452,14 +441,10 @@ void SwPageBreakWin::UpdatePosition( const Point* pEvtPt )
 
     if ( m_pMousePt )
     {
-        nBtnLeft = nLineLeft + m_pMousePt->X();
+        nBtnLeft = nLineLeft + m_pMousePt->X() - aBtnSize.getWidth() / 2;
 
-        if ( Application::GetSettings().GetLayoutRTL() )
-        {
-            nBtnLeft -= aBtnSize.getWidth();
-            if ( nBtnLeft < nLineLeft )
-                nBtnLeft = nLineLeft;
-        }
+        if ( nBtnLeft < nLineLeft )
+            nBtnLeft = nLineLeft;
         else if ( ( nBtnLeft + aBtnSize.getWidth() ) > nLineRight )
             nBtnLeft = nLineRight - aBtnSize.getWidth();
     }
