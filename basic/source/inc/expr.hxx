@@ -199,10 +199,8 @@ protected:
 public:
     SbiExpression( SbiParser*, SbiExprType = SbSTDEXPR,
         SbiExprMode eMode = EXPRMODE_STANDARD, const KeywordSymbolInfo* pKeywordSymbolInfo = NULL ); // parsing Ctor
-    SbiExpression( SbiParser*, const String& );
     SbiExpression( SbiParser*, double, SbxDataType = SbxDOUBLE );
     SbiExpression( SbiParser*, const SbiSymDef&, SbiExprList* = NULL );
-    SbiExpression( SbiParser*, SbiToken );        // special expr with special tokens
    ~SbiExpression();
     String& GetName()               { return aArgName;            }
     void SetBased()                 { bBased = sal_True;              }

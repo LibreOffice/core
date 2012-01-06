@@ -65,15 +65,6 @@ SbiExpression::SbiExpression( SbiParser* p, double n, SbxDataType t )
     pExpr->Optimize();
 }
 
-SbiExpression::SbiExpression( SbiParser* p, const String& r )
-{
-    pParser = p;
-    pNext = NULL;
-    bError = bByVal = bBased = bBracket = sal_False;
-    eCurExpr = SbOPERAND;
-    pExpr = new SbiExprNode( pParser, r );
-}
-
 SbiExpression::SbiExpression( SbiParser* p, const SbiSymDef& r, SbiExprList* pPar )
 {
     pParser = p;
@@ -81,15 +72,6 @@ SbiExpression::SbiExpression( SbiParser* p, const SbiSymDef& r, SbiExprList* pPa
     bError = bByVal = bBased = bBracket = sal_False;
     eCurExpr = SbOPERAND;
     pExpr = new SbiExprNode( pParser, r, SbxVARIANT, pPar );
-}
-
-SbiExpression::SbiExpression( SbiParser* p, SbiToken t )
-{
-    pParser = p;
-    pNext = NULL;
-    bError = bByVal = bBased = bBracket = sal_False;
-    eCurExpr = SbOPERAND;
-    pExpr = new SbiExprNode( pParser, NULL, t, NULL );
 }
 
 SbiExpression::~SbiExpression()
