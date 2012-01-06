@@ -148,7 +148,6 @@ SCP1FILES +=                           \
              folder_ooo.par            \
              folderitem_ooo.par        \
              windowscustomaction_ooo.par \
-             vc_redist.par             \
              mingw_dlls.par            \
              registryitem_writer.par   \
              folderitem_writer.par     \
