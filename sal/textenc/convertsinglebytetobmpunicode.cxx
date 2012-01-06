@@ -64,17 +64,17 @@ sal_Size rtl_textenc_convertSingleByteToBmpUnicode(
         *destBufPtr++ = c;
         continue;
     bad_input:
-        switch (ImplHandleBadInputTextToUnicodeConversion(
+        switch (sal::detail::textenc::handleBadInputTextToUnicodeConversion(
                     undefined, false, b, flags, &destBufPtr, destBufEnd,
                     &infoFlags))
         {
-        case IMPL_BAD_INPUT_STOP:
+        case sal::detail::textenc::BAD_INPUT_STOP:
             break;
 
-        case IMPL_BAD_INPUT_CONTINUE:
+        case sal::detail::textenc::BAD_INPUT_CONTINUE:
             continue;
 
-        case IMPL_BAD_INPUT_NO_OUTPUT:
+        case sal::detail::textenc::BAD_INPUT_NO_OUTPUT:
             goto no_output;
         }
         break;
@@ -152,19 +152,19 @@ sal_Size rtl_textenc_convertBmpUnicodeToSingleByte(
         highSurrogate = 0;
         continue;
     bad_input:
-        switch (ImplHandleBadInputUnicodeToTextConversion(
+        switch (sal::detail::textenc::handleBadInputUnicodeToTextConversion(
                     undefined, c, flags, &destBufPtr, destBufEnd, &infoFlags, 0,
                     0, 0))
         {
-        case IMPL_BAD_INPUT_STOP:
+        case sal::detail::textenc::BAD_INPUT_STOP:
             highSurrogate = 0;
             break;
 
-        case IMPL_BAD_INPUT_CONTINUE:
+        case sal::detail::textenc::BAD_INPUT_CONTINUE:
             highSurrogate = 0;
             continue;
 
-        case IMPL_BAD_INPUT_NO_OUTPUT:
+        case sal::detail::textenc::BAD_INPUT_NO_OUTPUT:
             goto no_output;
         }
         break;
@@ -182,16 +182,16 @@ sal_Size rtl_textenc_convertBmpUnicodeToSingleByte(
         if ((flags & RTL_UNICODETOTEXT_FLAGS_FLUSH) != 0) {
             infoFlags |= RTL_UNICODETOTEXT_INFO_SRCBUFFERTOSMALL;
         } else {
-            switch (ImplHandleBadInputUnicodeToTextConversion(
+            switch (sal::detail::textenc::handleBadInputUnicodeToTextConversion(
                         false, 0, flags, &destBufPtr, destBufEnd, &infoFlags, 0,
                         0, 0))
             {
-            case IMPL_BAD_INPUT_STOP:
-            case IMPL_BAD_INPUT_CONTINUE:
+            case sal::detail::textenc::BAD_INPUT_STOP:
+            case sal::detail::textenc::BAD_INPUT_CONTINUE:
                 highSurrogate = 0;
                 break;
 
-            case IMPL_BAD_INPUT_NO_OUTPUT:
+            case sal::detail::textenc::BAD_INPUT_NO_OUTPUT:
                 infoFlags |= RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL;
                 break;
             }

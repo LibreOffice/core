@@ -41,7 +41,6 @@ $(eval $(call gb_Library_add_defs,sal_textenc,\
 $(eval $(call gb_Library_add_exception_objects,sal_textenc,\
 	sal/textenc/context \
 	sal/textenc/convertbig5hkscs \
-	sal/textenc/converter \
 	sal/textenc/converteuctw \
 	sal/textenc/convertgb18030 \
 	sal/textenc/convertiso2022cn \

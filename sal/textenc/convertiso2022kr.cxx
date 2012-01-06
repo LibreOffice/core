@@ -215,19 +215,19 @@ sal_Size ImplConvertIso2022KrToUnicode(void const * pData,
         continue;
 
     bad_input:
-        switch (ImplHandleBadInputTextToUnicodeConversion(
+        switch (sal::detail::textenc::handleBadInputTextToUnicodeConversion(
                     bUndefined, true, 0, nFlags, &pDestBufPtr, pDestBufEnd,
                     &nInfo))
         {
-        case IMPL_BAD_INPUT_STOP:
+        case sal::detail::textenc::BAD_INPUT_STOP:
             eState = IMPL_ISO_2022_KR_TO_UNICODE_STATE_ASCII;
             break;
 
-        case IMPL_BAD_INPUT_CONTINUE:
+        case sal::detail::textenc::BAD_INPUT_CONTINUE:
             eState = IMPL_ISO_2022_KR_TO_UNICODE_STATE_ASCII;
             continue;
 
-        case IMPL_BAD_INPUT_NO_OUTPUT:
+        case sal::detail::textenc::BAD_INPUT_NO_OUTPUT:
             goto no_output;
         }
         break;
@@ -246,16 +246,16 @@ sal_Size ImplConvertIso2022KrToUnicode(void const * pData,
         if ((nFlags & RTL_TEXTTOUNICODE_FLAGS_FLUSH) == 0)
             nInfo |= RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL;
         else
-            switch (ImplHandleBadInputTextToUnicodeConversion(
+            switch (sal::detail::textenc::handleBadInputTextToUnicodeConversion(
                         false, true, 0, nFlags, &pDestBufPtr, pDestBufEnd,
                         &nInfo))
             {
-            case IMPL_BAD_INPUT_STOP:
-            case IMPL_BAD_INPUT_CONTINUE:
+            case sal::detail::textenc::BAD_INPUT_STOP:
+            case sal::detail::textenc::BAD_INPUT_CONTINUE:
                 eState = IMPL_ISO_2022_KR_TO_UNICODE_STATE_ASCII;
                 break;
 
-            case IMPL_BAD_INPUT_NO_OUTPUT:
+            case sal::detail::textenc::BAD_INPUT_NO_OUTPUT:
                 nInfo |= RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOSMALL;
                 break;
             }
@@ -443,28 +443,23 @@ sal_Size ImplConvertUnicodeToIso2022Kr(void const * pData,
             continue;
 
         bad_input:
-            switch (ImplHandleBadInputUnicodeToTextConversion(
-                        bUndefined,
-                        nChar,
-                        nFlags,
-                        &pDestBufPtr,
-                        pDestBufEnd,
-                        &nInfo,
-                        "\x0F", // SI
+            switch (sal::detail::textenc::handleBadInputUnicodeToTextConversion(
+                        bUndefined, nChar, nFlags, &pDestBufPtr, pDestBufEnd,
+                        &nInfo, "\x0F" /* SI */,
                         eSet == IMPL_UNICODE_TO_ISO_2022_KR_SET_ASCII ? 0 : 1,
                         &bWritten))
             {
-            case IMPL_BAD_INPUT_STOP:
+            case sal::detail::textenc::BAD_INPUT_STOP:
                 nHighSurrogate = 0;
                 break;
 
-            case IMPL_BAD_INPUT_CONTINUE:
+            case sal::detail::textenc::BAD_INPUT_CONTINUE:
                 if (bWritten)
                     eSet = IMPL_UNICODE_TO_ISO_2022_KR_SET_ASCII;
                 nHighSurrogate = 0;
                 continue;
 
-            case IMPL_BAD_INPUT_NO_OUTPUT:
+            case sal::detail::textenc::BAD_INPUT_NO_OUTPUT:
                 goto no_output;
             }
             break;
@@ -485,30 +480,25 @@ sal_Size ImplConvertUnicodeToIso2022Kr(void const * pData,
             if ((nFlags & RTL_UNICODETOTEXT_FLAGS_FLUSH) != 0)
                 nInfo |= RTL_UNICODETOTEXT_INFO_SRCBUFFERTOSMALL;
             else
-                switch (ImplHandleBadInputUnicodeToTextConversion(
-                            false,
-                            0,
-                            nFlags,
-                            &pDestBufPtr,
-                            pDestBufEnd,
-                            &nInfo,
-                            "\x0F", // SI
-                            eSet == IMPL_UNICODE_TO_ISO_2022_KR_SET_ASCII ?
-                                0 : 1,
+                switch (sal::detail::textenc::handleBadInputUnicodeToTextConversion(
+                            false, 0, nFlags, &pDestBufPtr, pDestBufEnd, &nInfo,
+                            "\x0F" /* SI */,
+                            (eSet == IMPL_UNICODE_TO_ISO_2022_KR_SET_ASCII
+                             ? 0 : 1),
                             &bWritten))
                 {
-                case IMPL_BAD_INPUT_STOP:
+                case sal::detail::textenc::BAD_INPUT_STOP:
                     nHighSurrogate = 0;
                     bFlush = false;
                     break;
 
-                case IMPL_BAD_INPUT_CONTINUE:
+                case sal::detail::textenc::BAD_INPUT_CONTINUE:
                     if (bWritten)
                         eSet = IMPL_UNICODE_TO_ISO_2022_KR_SET_ASCII;
                     nHighSurrogate = 0;
                     break;
 
-                case IMPL_BAD_INPUT_NO_OUTPUT:
+                case sal::detail::textenc::BAD_INPUT_NO_OUTPUT:
                     nInfo |= RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL;
                     break;
                 }

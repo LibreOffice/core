@@ -35,7 +35,8 @@
 #include "tenchelp.hxx"
 #include "unichars.hxx"
 
-ImplBadInputConversionAction ImplHandleBadInputTextToUnicodeConversion(
+sal::detail::textenc::BadInputConversionAction
+sal::detail::textenc::handleBadInputTextToUnicodeConversion(
     bool bUndefined, bool bMultiByte, char cByte, sal_uInt32 nFlags,
     sal_Unicode ** pDestBufPtr, sal_Unicode * pDestBufEnd, sal_uInt32 * pInfo)
 {
@@ -55,22 +56,22 @@ ImplBadInputConversionAction ImplHandleBadInputTextToUnicodeConversion(
     case RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR:
     case RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR:
         *pInfo |= RTL_TEXTTOUNICODE_INFO_ERROR;
-        return IMPL_BAD_INPUT_STOP;
+        return BAD_INPUT_STOP;
 
     case RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_IGNORE:
     case RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_IGNORE:
     case RTL_TEXTTOUNICODE_FLAGS_INVALID_IGNORE:
-        return IMPL_BAD_INPUT_CONTINUE;
+        return BAD_INPUT_CONTINUE;
 
     case RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_MAPTOPRIVATE:
         if (*pDestBufPtr != pDestBufEnd)
         {
             *(*pDestBufPtr)++ = RTL_TEXTCVT_BYTE_PRIVATE_START
                 | ((sal_uChar) cByte);
-            return IMPL_BAD_INPUT_CONTINUE;
+            return BAD_INPUT_CONTINUE;
         }
         else
-            return IMPL_BAD_INPUT_NO_OUTPUT;
+            return BAD_INPUT_NO_OUTPUT;
 
     default: // RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_DEFAULT,
              // RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_DEFAULT,
@@ -78,23 +79,18 @@ ImplBadInputConversionAction ImplHandleBadInputTextToUnicodeConversion(
         if (*pDestBufPtr != pDestBufEnd)
         {
             *(*pDestBufPtr)++ = RTL_TEXTENC_UNICODE_REPLACEMENT_CHARACTER;
-            return IMPL_BAD_INPUT_CONTINUE;
+            return BAD_INPUT_CONTINUE;
         }
         else
-            return IMPL_BAD_INPUT_NO_OUTPUT;
+            return BAD_INPUT_NO_OUTPUT;
     }
 }
 
-ImplBadInputConversionAction
-ImplHandleBadInputUnicodeToTextConversion(bool bUndefined,
-                                          sal_uInt32 nUtf32,
-                                          sal_uInt32 nFlags,
-                                          char ** pDestBufPtr,
-                                          char * pDestBufEnd,
-                                          sal_uInt32 * pInfo,
-                                          char const * pPrefix,
-                                          sal_Size nPrefixLen,
-                                          bool * pPrefixWritten)
+sal::detail::textenc::BadInputConversionAction
+sal::detail::textenc::handleBadInputUnicodeToTextConversion(
+    bool bUndefined, sal_uInt32 nUtf32, sal_uInt32 nFlags, char ** pDestBufPtr,
+    char * pDestBufEnd, sal_uInt32 * pInfo, char const * pPrefix,
+    sal_Size nPrefixLen, bool * pPrefixWritten)
 {
     // TODO! RTL_UNICODETOTEXT_FLAGS_UNDEFINED_REPLACE
     // RTL_UNICODETOTEXT_FLAGS_UNDEFINED_REPLACESTR
@@ -129,13 +125,13 @@ ImplHandleBadInputUnicodeToTextConversion(bool bUndefined,
     case RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR:
     case RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR:
         *pInfo |= RTL_UNICODETOTEXT_INFO_ERROR;
-        return IMPL_BAD_INPUT_STOP;
+        return BAD_INPUT_STOP;
 
     case RTL_UNICODETOTEXT_FLAGS_UNDEFINED_IGNORE:
     case RTL_UNICODETOTEXT_FLAGS_INVALID_IGNORE:
         if (pPrefixWritten)
             *pPrefixWritten = false;
-        return IMPL_BAD_INPUT_CONTINUE;
+        return BAD_INPUT_CONTINUE;
 
     case RTL_UNICODETOTEXT_FLAGS_UNDEFINED_0:
     case RTL_UNICODETOTEXT_FLAGS_INVALID_0:
@@ -161,10 +157,10 @@ ImplHandleBadInputUnicodeToTextConversion(bool bUndefined,
         *(*pDestBufPtr)++ = cReplace;
         if (pPrefixWritten)
             *pPrefixWritten = true;
-        return IMPL_BAD_INPUT_CONTINUE;
+        return BAD_INPUT_CONTINUE;
     }
     else
-        return IMPL_BAD_INPUT_NO_OUTPUT;
+        return BAD_INPUT_NO_OUTPUT;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

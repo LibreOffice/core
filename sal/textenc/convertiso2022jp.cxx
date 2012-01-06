@@ -252,19 +252,19 @@ sal_Size ImplConvertIso2022JpToUnicode(void const * pData,
         continue;
 
     bad_input:
-        switch (ImplHandleBadInputTextToUnicodeConversion(
+        switch (sal::detail::textenc::handleBadInputTextToUnicodeConversion(
                     bUndefined, true, 0, nFlags, &pDestBufPtr, pDestBufEnd,
                     &nInfo))
         {
-        case IMPL_BAD_INPUT_STOP:
+        case sal::detail::textenc::BAD_INPUT_STOP:
             eState = IMPL_ISO_2022_JP_TO_UNICODE_STATE_ASCII;
             break;
 
-        case IMPL_BAD_INPUT_CONTINUE:
+        case sal::detail::textenc::BAD_INPUT_CONTINUE:
             eState = IMPL_ISO_2022_JP_TO_UNICODE_STATE_ASCII;
             continue;
 
-        case IMPL_BAD_INPUT_NO_OUTPUT:
+        case sal::detail::textenc::BAD_INPUT_NO_OUTPUT:
             goto no_output;
         }
         break;
@@ -283,16 +283,16 @@ sal_Size ImplConvertIso2022JpToUnicode(void const * pData,
         if ((nFlags & RTL_TEXTTOUNICODE_FLAGS_FLUSH) == 0)
             nInfo |= RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL;
         else
-            switch (ImplHandleBadInputTextToUnicodeConversion(
+            switch (sal::detail::textenc::handleBadInputTextToUnicodeConversion(
                         false, true, 0, nFlags, &pDestBufPtr, pDestBufEnd,
                         &nInfo))
             {
-            case IMPL_BAD_INPUT_STOP:
-            case IMPL_BAD_INPUT_CONTINUE:
+            case sal::detail::textenc::BAD_INPUT_STOP:
+            case sal::detail::textenc::BAD_INPUT_CONTINUE:
                 eState = IMPL_ISO_2022_JP_TO_UNICODE_STATE_ASCII;
                 break;
 
-            case IMPL_BAD_INPUT_NO_OUTPUT:
+            case sal::detail::textenc::BAD_INPUT_NO_OUTPUT:
                 nInfo |= RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOSMALL;
                 break;
             }
@@ -485,28 +485,21 @@ sal_Size ImplConvertUnicodeToIso2022Jp(void const * pData,
         continue;
 
     bad_input:
-        switch (ImplHandleBadInputUnicodeToTextConversion(
-                    bUndefined,
-                    nChar,
-                    nFlags,
-                    &pDestBufPtr,
-                    pDestBufEnd,
-                    &nInfo,
-                    "\x1B(B",
-                    b0208 ? 3 : 0,
-                    &bWritten))
+        switch (sal::detail::textenc::handleBadInputUnicodeToTextConversion(
+                    bUndefined, nChar, nFlags, &pDestBufPtr, pDestBufEnd,
+                    &nInfo, "\x1B(B", b0208 ? 3 : 0, &bWritten))
         {
-        case IMPL_BAD_INPUT_STOP:
+        case sal::detail::textenc::BAD_INPUT_STOP:
             nHighSurrogate = 0;
             break;
 
-        case IMPL_BAD_INPUT_CONTINUE:
+        case sal::detail::textenc::BAD_INPUT_CONTINUE:
             if (bWritten)
                 b0208 = false;
             nHighSurrogate = 0;
             continue;
 
-        case IMPL_BAD_INPUT_NO_OUTPUT:
+        case sal::detail::textenc::BAD_INPUT_NO_OUTPUT:
             goto no_output;
         }
         break;
@@ -527,29 +520,22 @@ sal_Size ImplConvertUnicodeToIso2022Jp(void const * pData,
             if ((nFlags & RTL_UNICODETOTEXT_FLAGS_FLUSH) != 0)
                 nInfo |= RTL_UNICODETOTEXT_INFO_SRCBUFFERTOSMALL;
             else
-                switch (ImplHandleBadInputUnicodeToTextConversion(
-                            false,
-                            0,
-                            nFlags,
-                            &pDestBufPtr,
-                            pDestBufEnd,
-                            &nInfo,
-                            "\x1B(B",
-                            b0208 ? 3 : 0,
-                            &bWritten))
+                switch (sal::detail::textenc::handleBadInputUnicodeToTextConversion(
+                            false, 0, nFlags, &pDestBufPtr, pDestBufEnd, &nInfo,
+                            "\x1B(B", b0208 ? 3 : 0, &bWritten))
                 {
-                case IMPL_BAD_INPUT_STOP:
+                case sal::detail::textenc::BAD_INPUT_STOP:
                     nHighSurrogate = 0;
                     bFlush = false;
                     break;
 
-                case IMPL_BAD_INPUT_CONTINUE:
+                case sal::detail::textenc::BAD_INPUT_CONTINUE:
                     if (bWritten)
                         b0208 = false;
                     nHighSurrogate = 0;
                     break;
 
-                case IMPL_BAD_INPUT_NO_OUTPUT:
+                case sal::detail::textenc::BAD_INPUT_NO_OUTPUT:
                     nInfo |= RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL;
                     break;
                 }

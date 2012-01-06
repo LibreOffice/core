@@ -640,6 +640,8 @@ PRIVATE_textenc { # LibreOffice 3.6
     global:
         _ZN3sal6detail7textenc20convertCharToUnicodeEPKvPvPKcmPtmjPjPm;
         _ZN3sal6detail7textenc20convertUnicodeToCharEPKvPvPKtmPcmjPjPm;
+        _ZN3sal6detail7textenc37handleBadInputTextToUnicodeConversionEbbcjPPtS2_Pj;
+        _ZN3sal6detail7textenc37handleBadInputUnicodeToTextConversionEbjjPPcS2_PjPKcmPb;
 };
 
 # Unique libstdc++ symbols:

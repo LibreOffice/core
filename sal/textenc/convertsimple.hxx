@@ -35,15 +35,15 @@
 #include "sal/saldllapi.h"
 #include "sal/types.h"
 
+// Internal, non-stable ABI
+
 namespace sal { namespace detail { namespace textenc {
 
-// internal, non-stable ABI
 sal_Size SAL_DLLPUBLIC convertCharToUnicode(
     void const * pData, void * pContext, char const * pSrcBuf,
     sal_Size nSrcBytes, sal_Unicode * pDestBuf, sal_Size nDestChars,
     sal_uInt32 nFlags, sal_uInt32 * pInfo, sal_Size * pSrcCvtBytes);
 
-// internal, non-stable ABI
 sal_Size SAL_DLLPUBLIC convertUnicodeToChar(
     void const * pData, void * pContext, sal_Unicode const * pSrcBuf,
     sal_Size nSrcChars, char * pDestBuf, sal_Size nDestBytes, sal_uInt32 nFlags,
