@@ -142,6 +142,7 @@
 #include "AccessibilityHints.hxx"
 #include "appoptio.hxx"
 #include "attrib.hxx"
+#include "hintwin.hxx"
 
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 
@@ -307,7 +308,7 @@ ScTabView::ScTabView( Window* pParent, ScDocShell& rDocSh, ScTabViewShell* pView
     aCornerButton( pFrameWin, &aViewData, false ),
     aTopButton( pFrameWin, &aViewData, sal_True ),
     aScrollBarBox( pFrameWin, WB_SIZEABLE ),
-    pInputHintWindow( NULL ),
+    mpInputHintWindow( NULL ),
     pPageBreakData( NULL ),
     pBrushDocument( NULL ),
     pDrawBrushSet( NULL ),
@@ -390,7 +391,7 @@ void ScTabView::DoResize( const Point& rOffset, const Size& rSize, bool bInner )
 {
     HideListBox();
 
-    bool bHasHint = ( pInputHintWindow != NULL );
+    bool bHasHint = HasHintWindow();
     if (bHasHint)
         RemoveHintWindow();
 
@@ -1300,7 +1301,7 @@ IMPL_LINK( ScTabView, ScrollHdl, ScrollBar*, pScroll )
 
 void ScTabView::ScrollX( long nDeltaX, ScHSplitPos eWhich, bool bUpdBars )
 {
-    sal_Bool bHasHint = ( pInputHintWindow != NULL );
+    bool bHasHint = HasHintWindow();
     if (bHasHint)
         RemoveHintWindow();
 
@@ -1389,7 +1390,7 @@ void ScTabView::ScrollX( long nDeltaX, ScHSplitPos eWhich, bool bUpdBars )
 
 void ScTabView::ScrollY( long nDeltaY, ScVSplitPos eWhich, bool bUpdBars )
 {
-    sal_Bool bHasHint = ( pInputHintWindow != NULL );
+    bool bHasHint = HasHintWindow();
     if (bHasHint)
         RemoveHintWindow();
 

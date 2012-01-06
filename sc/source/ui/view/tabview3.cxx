@@ -359,7 +359,6 @@ void ScTabView::CellContentChanged()
     rBindings.Invalidate( SID_HYPERLINK_GETLINK );
 
     InvalidateAttribs();                    // Attribut-Updates
-    TestHintWindow();                       // Eingabemeldung (Gueltigkeit)
 
     aViewData.GetViewShell()->UpdateInputHandler();
 }
@@ -470,6 +469,135 @@ void ScTabView::CursorPosChanged()
     aViewData.SetTabStartCol( SC_TABSTART_NONE );
 }
 
+namespace {
+
+Point calcHintWindowPosition(
+    const Point& rCellPos, const Size& rCellSize, const Size& rFrameWndSize, const Size& rHintWndSize)
+{
+    const long nMargin = 20;
+
+    long nMLeft = rCellPos.X();
+    long nMRight = rFrameWndSize.Width() - rCellPos.X() - rCellSize.Width();
+    long nMTop = rCellPos.Y();
+    long nMBottom = rFrameWndSize.Height() - rCellPos.Y() - rCellSize.Height();
+
+    // First, see if we can fit the entire hint window in the visible region.
+
+    if (nMRight - nMargin >= rHintWndSize.Width())
+    {
+        // Right margin is wide enough.
+        if (rFrameWndSize.Height() >= rHintWndSize.Height())
+        {
+            // The frame has enough height.  Take it.
+            Point aPos = rCellPos;
+            aPos.X() += rCellSize.Width() + nMargin;
+            if (aPos.Y() + rHintWndSize.Height() > rFrameWndSize.Height())
+            {
+                // Push the hint window up a bit to make it fit.
+                aPos.Y() = rFrameWndSize.Height() - rHintWndSize.Height();
+            }
+            return aPos;
+        }
+    }
+
+    if (nMBottom - nMargin >= rHintWndSize.Height())
+    {
+        // Bottom margin is high enough.
+        if (rFrameWndSize.Width() >= rHintWndSize.Width())
+        {
+            // The frame has enough width.  Take it.
+            Point aPos = rCellPos;
+            aPos.Y() += rCellSize.Height() + nMargin;
+            if (aPos.X() + rHintWndSize.Width() > rFrameWndSize.Width())
+            {
+                // Move the hint window to the left to make it fit.
+                aPos.X() = rFrameWndSize.Width() - rHintWndSize.Width();
+            }
+            return aPos;
+        }
+    }
+
+    if (nMLeft - nMargin >= rHintWndSize.Width())
+    {
+        // Left margin is wide enough.
+        if (rFrameWndSize.Height() >= rHintWndSize.Height())
+        {
+            // The frame is high enough.  Take it.
+            Point aPos = rCellPos;
+            aPos.X() -= rHintWndSize.Width() + nMargin;
+            if (aPos.Y() + rHintWndSize.Height() > rFrameWndSize.Height())
+            {
+                // Push the hint window up a bit to make it fit.
+                aPos.Y() = rFrameWndSize.Height() - rHintWndSize.Height();
+            }
+            return aPos;
+        }
+    }
+
+    if (nMTop - nMargin >= rHintWndSize.Height())
+    {
+        // Top margin is high enough.
+        if (rFrameWndSize.Width() >= rHintWndSize.Width())
+        {
+            // The frame is wide enough.  Take it.
+            Point aPos = rCellPos;
+            aPos.Y() -= rHintWndSize.Height() + nMargin;
+            if (aPos.X() + rHintWndSize.Width() > rFrameWndSize.Width())
+            {
+                // Move the hint window to the left to make it fit.
+                aPos.X() = rFrameWndSize.Width() - rHintWndSize.Width();
+            }
+            return aPos;
+        }
+    }
+
+    // The popup doesn't fit in any direction in its entirety.  Do our best.
+
+    if (nMRight - nMargin >= rHintWndSize.Width())
+    {
+        // Right margin is good enough.
+        Point aPos = rCellPos;
+        aPos.X() += nMargin;
+        aPos.Y() = 0;
+        return aPos;
+    }
+
+    if (nMBottom - nMargin >= rHintWndSize.Height())
+    {
+        // Bottom margin is good enough.
+        Point aPos = rCellPos;
+        aPos.Y() += nMargin + rCellSize.Height();
+        aPos.X() = 0;
+        return aPos;
+    }
+
+    if (nMLeft - nMargin >= rHintWndSize.Width())
+    {
+        // Left margin is good enough.
+        Point aPos = rCellPos;
+        aPos.X() -= rHintWndSize.Width() + nMargin;
+        aPos.Y() = 0;
+        return aPos;
+    }
+
+    if (nMTop - nMargin >= rHintWndSize.Height())
+    {
+        // Top margin is good enough.
+        Point aPos = rCellPos;
+        aPos.Y() -= rHintWndSize.Height() + nMargin;
+        aPos.X() = 0;
+        return aPos;
+    }
+
+    // None of the above.  Hopeless.  At least try not to cover the current
+    // cell.
+    Point aPos = rCellPos;
+    aPos.X() += rCellSize.Width();
+    return aPos;
+}
+
+}
+
 void ScTabView::TestHintWindow()
 {
     //  show input help window and list drop-down button for validity
@@ -492,10 +620,10 @@ void ScTabView::TestHintWindow()
         {
             //! Abfrage, ob an gleicher Stelle !!!!
 
-            DELETEZ(pInputHintWindow);
+            mpInputHintWindow.reset();
 
             ScSplitPos eWhich = aViewData.GetActivePart();
-            Window* pWin = pGridWin[eWhich];
+            ScGridWindow* pWin = pGridWin[eWhich];
             SCCOL nCol = aViewData.GetCurX();
             SCROW nRow = aViewData.GetCurY();
             Point aPos = aViewData.GetScrPos( nCol, nRow, eWhich );
@@ -505,52 +633,23 @@ void ScTabView::TestHintWindow()
                  nRow >= aViewData.GetPosY(WhichV(eWhich)) &&
                  aPos.X() < aWinSize.Width() && aPos.Y() < aWinSize.Height() )
             {
-                aPos += pWin->GetPosPixel();                                // Position auf Frame
-                long nSizeXPix;
-                long nSizeYPix;
-                aViewData.GetMergeSizePixel( nCol, nRow, nSizeXPix, nSizeYPix );
-
                 // HintWindow anlegen, bestimmt seine Groesse selbst
-                pInputHintWindow = new ScHintWindow( pFrameWin, aTitle, aMessage );
-                Size aHintSize = pInputHintWindow->GetSizePixel();
-                Size aFrameWinSize = pFrameWin->GetOutputSizePixel();
+                mpInputHintWindow.reset(new ScHintWindow(pWin, aTitle, aMessage));
+                Size aHintWndSize = mpInputHintWindow->GetSizePixel();
+                long nCellSizeX = 0;
+                long nCellSizeY = 0;
+                aViewData.GetMergeSizePixel(nCol, nRow, nCellSizeX, nCellSizeY);
 
-                // passende Position finden
-                //  erster Versuch: unter dem Cursor
-                Point aHintPos( aPos.X() + nSizeXPix / 2, aPos.Y() + nSizeYPix + 3 );
-                if ( aHintPos.Y() + aHintSize.Height() > aFrameWinSize.Height() )
-                {
-                    // zweiter Versuch: rechts vom Cursor
-                    aHintPos = Point( aPos.X() + nSizeXPix + 3, aPos.Y() + nSizeYPix / 2 );
-                    if ( aHintPos.X() + aHintSize.Width() > aFrameWinSize.Width() )
-                    {
-                        // dritter Versuch: ueber dem Cursor
-                        aHintPos = Point( aPos.X() + nSizeXPix / 2,
-                                            aPos.Y() - aHintSize.Height() - 3 );
-                        if ( aHintPos.Y() < 0 )
-                        {
-                            // oben und unten kein Platz - dann Default und abschneiden
-                            aHintPos = Point( aPos.X() + nSizeXPix / 2, aPos.Y() + nSizeYPix + 3 );
-                            aHintSize.Height() = aFrameWinSize.Height() - aHintPos.Y();
-                            pInputHintWindow->SetSizePixel( aHintSize );
-                        }
-                    }
-                }
+                Point aHintPos = calcHintWindowPosition(
+                    aPos, Size(nCellSizeX,nCellSizeY), aWinSize, aHintWndSize);
 
-                //  X anpassen
-                if ( aHintPos.X() + aHintSize.Width() > aFrameWinSize.Width() )
-                    aHintPos.X() = aFrameWinSize.Width() - aHintSize.Width();
-                //  Y anpassen
-                if ( aHintPos.Y() + aHintSize.Height() > aFrameWinSize.Height() )
-                    aHintPos.Y() = aFrameWinSize.Height() - aHintSize.Height();
-
-                pInputHintWindow->SetPosPixel( aHintPos );
-                pInputHintWindow->ToTop();
-                pInputHintWindow->Show();
+                mpInputHintWindow->SetPosPixel( aHintPos );
+                mpInputHintWindow->ToTop();
+                mpInputHintWindow->Show();
             }
         }
         else
-            DELETEZ(pInputHintWindow);
+            mpInputHintWindow.reset();
 
         // list drop-down button
         if ( pData && pData->HasSelectionList() )
@@ -560,16 +659,21 @@ void ScTabView::TestHintWindow()
         }
     }
     else
-        DELETEZ(pInputHintWindow);
+        mpInputHintWindow.reset();
 
     for ( sal_uInt16 i=0; i<4; i++ )
         if ( pGridWin[i] && pGridWin[i]->IsVisible() )
             pGridWin[i]->UpdateListValPos( bListValButton, aListValPos );
 }
 
+bool ScTabView::HasHintWindow() const
+{
+    return mpInputHintWindow.get() != NULL;
+}
+
 void ScTabView::RemoveHintWindow()
 {
-    DELETEZ(pInputHintWindow);
+    mpInputHintWindow.reset();
 }
 
 
@@ -938,6 +1042,7 @@ void ScTabView::MoveCursorAbs( SCsCOL nCurX, SCsROW nCurY, ScFollowMode eMode,
     }
 
     ShowAllCursors();
+    TestHintWindow();
 }
 
 void ScTabView::MoveCursorRel( SCsCOL nMovX, SCsROW nMovY, ScFollowMode eMode,

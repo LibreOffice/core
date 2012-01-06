@@ -36,6 +36,9 @@
 #include "viewutil.hxx"
 #include "select.hxx"
 
+#include <boost/noncopyable.hpp>
+#include <boost/scoped_ptr.hpp>
+
 class ScEditEngineDefaulter;
 class ScGridWindow;
 class ScOutlineWindow;
@@ -89,7 +92,7 @@ public:
 
 // ---------------------------------------------------------------------------
 
-class ScTabView
+class ScTabView : boost::noncopyable
 {
 private:
     enum BlockMode { None = 0, Normal = 1, Own = 2 };
@@ -129,7 +132,7 @@ private:
     ScCornerButton      aTopButton;
     ScrollBarBox        aScrollBarBox;
 
-    ScHintWindow*       pInputHintWindow;       // Eingabemeldung bei Gueltigkeit
+    boost::scoped_ptr<ScHintWindow> mpInputHintWindow; // popup window for data validation
 
     ScPageBreakData*    pPageBreakData;         // fuer Seitenumbruch-Modus
     std::vector<ScHighlightEntry>   maHighlightRanges;
@@ -243,7 +246,7 @@ public:
 
     void            HideListBox();
 
-    bool            HasHintWindow() const   { return pInputHintWindow != NULL; }
+    bool            HasHintWindow() const;
     void            RemoveHintWindow();
     void            TestHintWindow();
 
