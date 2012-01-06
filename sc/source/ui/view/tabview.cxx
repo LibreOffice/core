@@ -1301,10 +1301,6 @@ IMPL_LINK( ScTabView, ScrollHdl, ScrollBar*, pScroll )
 
 void ScTabView::ScrollX( long nDeltaX, ScHSplitPos eWhich, bool bUpdBars )
 {
-    bool bHasHint = HasHintWindow();
-    if (bHasHint)
-        RemoveHintWindow();
-
     SCCOL nOldX = aViewData.GetPosX(eWhich);
     SCsCOL nNewX = static_cast<SCsCOL>(nOldX) + static_cast<SCsCOL>(nDeltaX);
     if ( nNewX < 0 )
@@ -1384,16 +1380,11 @@ void ScTabView::ScrollX( long nDeltaX, ScHSplitPos eWhich, bool bUpdBars )
 
     SetNewVisArea();            // MapMode muss schon gesetzt sein
 
-    if (bHasHint)
-        TestHintWindow();       // neu positionieren
+    TestHintWindow();
 }
 
 void ScTabView::ScrollY( long nDeltaY, ScVSplitPos eWhich, bool bUpdBars )
 {
-    bool bHasHint = HasHintWindow();
-    if (bHasHint)
-        RemoveHintWindow();
-
     SCROW nOldY = aViewData.GetPosY(eWhich);
     SCsROW nNewY = static_cast<SCsROW>(nOldY) + static_cast<SCsROW>(nDeltaY);
     if ( nNewY < 0 )
@@ -1474,8 +1465,7 @@ void ScTabView::ScrollY( long nDeltaY, ScVSplitPos eWhich, bool bUpdBars )
 
     SetNewVisArea();            // MapMode muss schon gesetzt sein
 
-    if (bHasHint)
-        TestHintWindow();       // neu positionieren
+    TestHintWindow();
 }
 
 void ScTabView::ScrollLines( long nDeltaX, long nDeltaY )
