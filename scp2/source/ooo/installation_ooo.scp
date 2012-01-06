@@ -32,7 +32,6 @@ Installation gid_Installation_Ooo
     ProductVersion = "${PRODUCTVERSION}";
     ProductExtension = "${PRODUCTEXTENSION}";
     UserDirProductVersion = "${USERDIRPRODUCTVERSION}";
-    JavaVersion = "${JAVAVERSION}";
     SxwFormatName = "OpenOffice.org";
     SxwFormatVersion = "1.1";
     VendorName = "OpenOffice.org";

@@ -2011,19 +2011,6 @@ sub add_variables_from_inc_to_hashref
             }
         }
     }
-
-    # Allowing different Java versions for Windows and Unix. Instead of "JAVAVERSION"
-    # the property "WINDOWSJAVAVERSION" has to be used, if it is set.
-
-    if ( $installer::globals::iswindowsbuild )
-    {
-        if (( exists($allvariables->{'WINDOWSJAVAVERSION'})) && ( $allvariables->{'WINDOWSJAVAVERSION'} ne "" ))
-        {
-            $allvariables->{'JAVAVERSION'} = $allvariables->{'WINDOWSJAVAVERSION'};
-            $infoline = "Changing value of property \"JAVAVERSION\" to $allvariables->{'JAVAVERSION'} (property \"WINDOWSJAVAVERSION\").\n";
-            push( @installer::globals::globallogfileinfo, $infoline);
-        }
-    }
 }
 
 ##############################################

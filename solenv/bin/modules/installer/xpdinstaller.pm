@@ -377,14 +377,7 @@ sub get_applicationmodule_value
 
 sub get_isjavamodule_value
 {
-    my ( $module ) = @_;
-
     my $value = "false";
-
-    my $styles = "";
-    if ( $module->{'Styles'} ) { $styles = $module->{'Styles'}; }
-    if ( $styles =~ /\bJAVAMODULE\b/ ) { $value = "true"; }
-
     return $value;
 }
 

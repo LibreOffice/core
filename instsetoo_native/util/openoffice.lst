@@ -127,7 +127,7 @@ LibreOffice_Dev
             REGISTRYLAYERNAME LayerDev
             SERVICETAG_URN urn:uuid:1680b00d-e45c-11de-82d6-080020a9ed93
             UPDATEURL http://update.libreoffice.org/check.php
-            ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,javaversion2.dat,userland.txt
+            ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,userland.txt
             ADDSYSTEMINTEGRATION 1
             EVAL
             FILEFORMATNAME OpenOffice.org
