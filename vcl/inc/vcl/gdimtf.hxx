@@ -161,7 +161,6 @@ public:
     sal_Bool        operator!=( const GDIMetaFile& rMtf ) const { return !( *this == rMtf ); }
 
     void            Clear();
-    sal_Bool        IsEqual( const GDIMetaFile& rMtf ) const;
     sal_Bool        Mirror( sal_uLong nMirrorFlags );
     void            Move( long nX, long nY );
     // additional Move method getting specifics how to handle MapMode( MAP_PIXEL )
@@ -186,7 +185,6 @@ public:
                     );
 
     void            Convert( MtfConversion eConversion );
-    void            ReplaceColors( const Color& rSearchColor,  const Color& rReplaceColor, sal_uLong nTol = 0 );
     void            ReplaceColors( const Color* pSearchColors, const Color* rReplaceColors,
                                    sal_uLong nColorCount, sal_uLong* pTols = NULL );
 
@@ -206,10 +204,7 @@ public:
     void            Stop();
 
     void            WindStart();
-    void            WindEnd();
-    void            Wind( size_t nAction );
     void            WindPrev();
-    void            WindNext();
 
     size_t          GetActionSize() const;
 
@@ -223,8 +218,6 @@ public:
     MetaAction*     GetAction( size_t nAction ) const;
     MetaAction*     GetCurAction() const { return GetAction( nCurrentActionElement ); }
     MetaAction*     ReplaceAction( MetaAction* pAction, size_t nAction );
-
-    sal_Bool        SaveStatus();
 
     const Size&     GetPrefSize() const { return aPrefSize; }
     void            SetPrefSize( const Size& rSize ) { aPrefSize = rSize; }

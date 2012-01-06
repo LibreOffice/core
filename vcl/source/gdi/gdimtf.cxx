@@ -292,34 +292,6 @@ sal_Bool GDIMetaFile::operator==( const GDIMetaFile& rMtf ) const
 
 // ------------------------------------------------------------------------
 
-sal_Bool GDIMetaFile::IsEqual( const GDIMetaFile& rMtf ) const
-{
-    const size_t nObjCount = aList.size();
-    sal_Bool        bRet = sal_False;
-
-    if( this == &rMtf )
-        bRet = sal_True;
-    else if( rMtf.GetActionSize()  == nObjCount &&
-             rMtf.GetPrefSize()    == aPrefSize &&
-             rMtf.GetPrefMapMode() == aPrefMapMode )
-    {
-        bRet = sal_True;
-
-        for( size_t n = 0; n < nObjCount; n++ )
-        {
-            if( !aList[ n ]->IsEqual( *(rMtf.GetAction( n )) ) )
-            {
-                bRet = sal_False;
-                break;
-            }
-        }
-    }
-
-    return bRet;
-}
-
-// ------------------------------------------------------------------------
-
 void GDIMetaFile::Clear()
 {
     if( bRecord )
@@ -735,36 +707,11 @@ void GDIMetaFile::WindStart()
 
 // ------------------------------------------------------------------------
 
-void GDIMetaFile::WindEnd()
-{
-    if( !bRecord )
-        nCurrentActionElement = aList.empty() ? 0 : (aList.size() - 1);
-}
-
-// ------------------------------------------------------------------------
-
-void GDIMetaFile::Wind( size_t nActionPos )
-{
-    if( !bRecord )
-        nCurrentActionElement = nActionPos < aList.size() ? nActionPos : nCurrentActionElement;
-}
-
-// ------------------------------------------------------------------------
-
 void GDIMetaFile::WindPrev()
 {
     if( !bRecord )
         if ( nCurrentActionElement > 0 )
             --nCurrentActionElement;
-}
-
-// ------------------------------------------------------------------------
-
-void GDIMetaFile::WindNext()
-{
-    if( !bRecord )
-        if ( nCurrentActionElement + 1 < aList.size() )
-            ++nCurrentActionElement;
 }
 
 // ------------------------------------------------------------------------
@@ -825,42 +772,6 @@ void GDIMetaFile::RemoveAction( size_t nPos )
 
     if( pPrev )
         pPrev->RemoveAction( nPos );
-}
-
-// ------------------------------------------------------------------------
-
-sal_Bool GDIMetaFile::SaveStatus()
-{
-    if ( bRecord )
-    {
-        if ( bPause )
-            Linker( pOutDev, sal_True );
-
-        AddAction( new MetaLineColorAction( pOutDev->GetLineColor(),
-                                            pOutDev->IsLineColor() ) );
-        AddAction( new MetaFillColorAction( pOutDev->GetFillColor(),
-                                            pOutDev->IsFillColor() ) );
-        AddAction( new MetaFontAction( pOutDev->GetFont() ) );
-        AddAction( new MetaTextColorAction( pOutDev->GetTextColor() ) );
-        AddAction( new MetaTextFillColorAction( pOutDev->GetTextFillColor(),
-                                                pOutDev->IsTextFillColor() ) );
-        AddAction( new MetaTextLineColorAction( pOutDev->GetTextLineColor(),
-                                                pOutDev->IsTextLineColor() ) );
-        AddAction( new MetaOverlineColorAction( pOutDev->GetOverlineColor(),
-                                                pOutDev->IsOverlineColor() ) );
-        AddAction( new MetaTextAlignAction( pOutDev->GetTextAlign() ) );
-        AddAction( new MetaRasterOpAction( pOutDev->GetRasterOp() ) );
-        AddAction( new MetaMapModeAction( pOutDev->GetMapMode() ) );
-        AddAction( new MetaClipRegionAction( pOutDev->GetClipRegion(),
-                                             pOutDev->IsClipRegion() ) );
-
-        if ( bPause )
-            Linker( pOutDev, sal_False );
-
-        return sal_True;
-    }
-    else
-        return sal_False;
 }
 
 // ------------------------------------------------------------------------
@@ -2487,13 +2398,6 @@ void GDIMetaFile::Convert( MtfConversion eConversion )
 
         ImplExchangeColors( ImplColConvertFnc, &aColParam, ImplBmpConvertFnc, &aBmpParam );
     }
-}
-
-// ------------------------------------------------------------------------
-
-void GDIMetaFile::ReplaceColors( const Color& rSearchColor, const Color& rReplaceColor, sal_uLong nTol )
-{
-    ReplaceColors( &rSearchColor, &rReplaceColor, 1, &nTol );
 }
 
 // ------------------------------------------------------------------------
