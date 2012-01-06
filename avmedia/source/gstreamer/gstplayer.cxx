@@ -112,7 +112,7 @@ Player::~Player()
 
 static gboolean gst_pipeline_bus_callback( GstBus *, GstMessage *message, gpointer data )
 {
-    Player* pPlayer = (Player *) data;
+    Player* pPlayer = static_cast<Player*>(data);
 
     pPlayer->processMessage( message );
 
@@ -121,7 +121,7 @@ static gboolean gst_pipeline_bus_callback( GstBus *, GstMessage *message, gpoint
 
 static GstBusSyncReply gst_pipeline_bus_sync_handler( GstBus *, GstMessage * message, gpointer data )
 {
-    Player* pPlayer = (Player *) data;
+    Player* pPlayer = static_cast<Player*>(data);
 
     return pPlayer->processSyncMessage( message );
 }
