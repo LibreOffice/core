@@ -578,9 +578,6 @@ sal_Bool SvxInternalLink::Connect( sfx2::SvBaseLink* pLink )
         MsLangId::convertLanguageToLocale( LANGUAGE_SYSTEM, aLocale );
         CharClass aCC( aLocale );
 
-        String sNm( sTopic ), sTmp;
-        aCC.toLower( sNm );
-
         TypeId aType( TYPE(SfxObjectShell) );
 
         sal_Bool bFirst = sal_True;
@@ -602,6 +599,7 @@ sal_Bool SvxInternalLink::Connect( sfx2::SvBaseLink* pLink )
             pShell = SfxObjectShell::GetFirst( &aType, sal_False );
         }
 
+        String sTmp;
         while( pShell )
         {
             if( !sTmp.Len() )
