@@ -46,7 +46,7 @@ $(eval $(call gb_Executable_add_linked_libs,nsplugin,\
 	cppu \
 	cppuhelper \
 	sal \
-	$(if $(filter $(GUI),UNX), \
+	$(if $(filter $(OS),LINUX), \
 		dl \
 	) \
 	$(if $(filter $(OS),SOLARIS), \
