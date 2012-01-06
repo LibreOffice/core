@@ -170,8 +170,6 @@ ScTabView::~ScTabView()
 
     aViewData.KillEditView();           // solange GridWin's noch existieren
 
-    DELETEZ(pInputHintWindow);
-
     if (pDrawView)
     {
         for (i=0; i<4; i++)
