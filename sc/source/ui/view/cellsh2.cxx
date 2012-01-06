@@ -911,6 +911,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                             aData.ResetError();                         // reset only bShowError
 
                         pTabViewShell->SetValidation( aData );
+                        pTabViewShell->TestHintWindow();
                         rReq.Done( *pOutSet );
                     }
                     //after end execute from !IsModalInputMode, it is safer to delay deleting
