@@ -195,11 +195,6 @@ sal_Bool SbiExprNode::IsNumber()
     return sal_Bool( eNodeType == SbxNUMVAL );
 }
 
-sal_Bool SbiExprNode::IsString()
-{
-    return sal_Bool( eNodeType == SbxSTRVAL );
-}
-
 sal_Bool SbiExprNode::IsVariable()
 {
     return sal_Bool( eNodeType == SbxVARVAL );

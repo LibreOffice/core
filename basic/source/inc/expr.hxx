@@ -122,7 +122,6 @@ class SbiExprNode {                  // operators (and operands)
     sal_Bool  IsNew()
         { return sal_Bool( eNodeType == SbxNEW ); }
     sal_Bool  IsNumber();
-    sal_Bool  IsString();
     sal_Bool  IsLvalue();               // sal_True, if usable as Lvalue
     void  GenElement( SbiOpcode );
     void  BaseInit( SbiParser* p ); // help function for Ctor, from 17.12.95
