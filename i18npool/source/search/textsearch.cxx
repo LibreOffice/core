@@ -741,11 +741,16 @@ SearchResult TextSearch::RESrchFrwrd( const OUString& searchStr,
     if( !pRegexMatcher->find( startPos, nIcuErr))
         return aRet;
 
-    aRet.subRegExpressions = 1;
+    const int nGroupCount = pRegexMatcher->groupCount();
+    aRet.subRegExpressions = nGroupCount + 1;
     aRet.startOffset.realloc( aRet.subRegExpressions);
     aRet.endOffset.realloc( aRet.subRegExpressions);
     aRet.startOffset[0] = pRegexMatcher->start( nIcuErr);
     aRet.endOffset[0]   = pRegexMatcher->end( nIcuErr);
+    for( int i = 1; i <= nGroupCount; ++i) {
+        aRet.startOffset[i] = pRegexMatcher->start( i, nIcuErr);
+        aRet.endOffset[i]   = pRegexMatcher->end( i, nIcuErr);
+    }
 
     return aRet;
 }
@@ -765,21 +770,34 @@ SearchResult TextSearch::RESrchBkwrd( const OUString& searchStr,
 
     // use the ICU RegexMatcher to find the matches
     // TODO: use ICU's backward searching once it becomes available
+    //       as its replacement using forward search is not as good as the real thing
     UErrorCode nIcuErr = U_ZERO_ERROR;
     const IcuUniString aSearchTargetStr( searchStr.getStr(), startPos);
     pRegexMatcher->reset( aSearchTargetStr);
     if( !pRegexMatcher->find( endPos, nIcuErr))
         return aRet;
 
-    aRet.subRegExpressions = 1;
+    // find the last match
+    int nLastPos = 0;
+    do {
+        nLastPos = pRegexMatcher->start( nIcuErr);
+    } while( pRegexMatcher->find( nLastPos + 1, nIcuErr));
+
+    // find last match again to get its details
+    pRegexMatcher->find( nLastPos, nIcuErr);
+
+    // fill in the details of the last match
+    const int nGroupCount = pRegexMatcher->groupCount();
+    aRet.subRegExpressions = nGroupCount + 1;
     aRet.startOffset.realloc( aRet.subRegExpressions);
     aRet.endOffset.realloc( aRet.subRegExpressions);
-
-    do {
-        // NOTE: backward search seems to be expected to have startOfs/endOfs inverted!
-        aRet.startOffset[0] = pRegexMatcher->end( nIcuErr);
-        aRet.endOffset[0]   = pRegexMatcher->start( nIcuErr);
-    } while( pRegexMatcher->find( aRet.endOffset[0]+1, nIcuErr));
+    // NOTE: existing users of backward search seem to expect startOfs/endOfs being inverted!
+    aRet.startOffset[0] = pRegexMatcher->end( nIcuErr);
+    aRet.endOffset[0]   = pRegexMatcher->start( nIcuErr);
+    for( int i = 1; i <= nGroupCount; ++i) {
+        aRet.startOffset[i] = pRegexMatcher->end( i, nIcuErr);
+        aRet.endOffset[i]   = pRegexMatcher->start( i, nIcuErr);
+    }
 
     return aRet;
 }
