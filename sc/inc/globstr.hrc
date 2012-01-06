@@ -600,8 +600,9 @@
 #define STR_ERR_NAME_INVALID        464
 
 #define STR_UNSAVED_EXT_REF         465
+#define STR_CLOSE_WITH_UNSAVED_REFS 466
 
-#define STR_COUNT                   466
+#define STR_COUNT                   467
 
 
 #endif

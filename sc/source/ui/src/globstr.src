@@ -1855,5 +1855,9 @@ Resource RID_GLOBSTR
     {
         Text [ en-US ] = "This Document contains external references to unsaved documents.\n\nDo you want to continue?";
     };
+    String STR_CLOSE_WITH_UNSAVED_REFS
+    {
+        Text [ en-US ] = "This Document is referenced by another document and not yet saved. Closing it without saving will result in data loss.";
+    };
 };
 

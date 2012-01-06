@@ -44,6 +44,7 @@
 #include "viewdata.hxx"
 #include "tabvwsh.hxx"
 #include "sc.hrc"
+#include "globstr.hrc"
 
 #include "sfx2/app.hxx"
 #include "sfx2/docfilt.hxx"
@@ -61,6 +62,7 @@
 #include "tools/urlobj.hxx"
 #include "unotools/ucbhelper.hxx"
 #include "unotools/localfilehelper.hxx"
+#include "vcl/msgbox.hxx"
 
 #include <memory>
 #include <algorithm>
@@ -2704,6 +2706,15 @@ void ScExternalRefManager::Notify( SfxBroadcaster&, const SfxHint& rHint )
         sal_uLong nEventId = ((SfxEventHint&)rHint).GetEventId();
         switch ( nEventId )
         {
+            case SFX_EVENT_PREPARECLOSEDOC:
+                {
+                    SfxObjectShell* pObjShell = static_cast<const SfxEventHint&>( rHint ).GetObjShell();
+                    ScDocShell* pDocShell = static_cast< ScDocShell* >( pObjShell );
+                    WarningBox aBox(  pDocShell->GetActiveDialogParent(), WinBits( WB_OK ),
+                                        ScGlobal::GetRscString( STR_CLOSE_WITH_UNSAVED_REFS ) );
+                    aBox.Execute();
+                }
+                break;
             case SFX_EVENT_SAVEDOCDONE:
             case SFX_EVENT_SAVEASDOCDONE:
                 {
