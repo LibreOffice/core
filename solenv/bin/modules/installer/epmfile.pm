@@ -2956,12 +2956,6 @@ sub put_childprojects_into_installset
 
     my $sourcefile = "";
 
-    # Finding the modules defined in scp (with flag JAVAMODULE, ADAMODULE, ...)
-    # Getting name of package from scp-Module
-    # Copy file into installation set
-    # Create xpd file and put it into xpd directory
-    # xpd file has to be created completely from module and package itself (-> no packagelist!)
-
     # Adding additional required packages (freetype).
     # This package names are stored in global array @installer::globals::requiredpackages
 

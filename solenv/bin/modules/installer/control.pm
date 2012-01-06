@@ -483,8 +483,7 @@ sub set_addchildprojects
 {
     my ($allvariables) = @_;
 
-    if (( $allvariables->{'ADAPRODUCT'} ) ||
-        ( $allvariables->{'UREPRODUCT'} ) ||
+    if (( $allvariables->{'UREPRODUCT'} ) ||
         ( $allvariables->{'ADDREQUIREDPACKAGES'} )) { $installer::globals::addchildprojects = 1; }
 
     if ( $installer::globals::patch )

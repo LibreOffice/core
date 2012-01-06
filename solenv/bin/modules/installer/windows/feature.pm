@@ -388,8 +388,6 @@ sub create_feature_table
             # Java and Ada only, if the correct settings are set
             my $styles = "";
             if ( $onefeature->{'Styles'} ) { $styles = $onefeature->{'Styles'}; }
-            if ( $styles =~ /\bJAVAMODULE\b/ )  { next; }
-            if (( $styles =~ /\bADAMODULE\b/ ) && ( ! ($allvariableshashref->{'ADAPRODUCT'} ))) { next; }
 
             # Controlling the language!
             # Only language independent feature or feature with the correct language will be included into the table

@@ -1754,33 +1754,9 @@ sub add_childprojects
     }
 
     # Content for InstallUISequence table
-    # InstallAdabas &gm_o_Adabas=3 825
-    # InstallJava &gm_o_Java=3 827
 
     my $number = "";
     my $featurename = "";
-
-    if ( $allvariables->{'ADAPRODUCT'} )
-    {
-        $number = get_free_number_in_uisequence_table($installuitable);
-        $featurename = get_feature_name("_Adabas", $featuretable);
-        $line = "InstallAdabas\t\&$featurename\=3 And Not Installed And Not PATCH\t$number\n";
-        push(@{$installuitable} ,$line);
-        installer::remover::remove_leading_and_ending_whitespaces(\$line);
-        $infoline = "Added $line into table $installuitablename\n";
-        push(@installer::globals::logfileinfo, $infoline);
-    }
-
-    if ( $allvariables->{'ADAPRODUCT'} )
-    {
-        $number = get_free_number_in_uisequence_table($installuitable) + 4;
-        $featurename = get_feature_name("_Adabas", $featuretable);
-        $line = "MaintenanceAdabas\t\&$featurename\=3 And Installed And Not PATCH\t$number\n";
-        push(@{$installuitable} ,$line);
-        installer::remover::remove_leading_and_ending_whitespaces(\$line);
-        $infoline = "Added $line into table $installuitablename\n";
-        push(@installer::globals::logfileinfo, $infoline);
-    }
 
     if ( $allvariables->{'UREPRODUCT'} )
     {
