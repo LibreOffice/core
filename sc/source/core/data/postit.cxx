@@ -109,7 +109,7 @@ void ScCaptionUtil::SetCaptionUserData( SdrCaptionObj& rCaption, const ScAddress
     ScDrawObjData* pObjData = ScDrawLayer::GetObjData( &rCaption, true );
     OSL_ENSURE( pObjData, "ScCaptionUtil::SetCaptionUserData - missing drawing object user data" );
     pObjData->maStart = rPos;
-    pObjData->mbNote = true;
+    pObjData->meType = ScDrawObjData::CellNote;
 }
 
 void ScCaptionUtil::SetDefaultItems( SdrCaptionObj& rCaption, ScDocument& rDoc )
