@@ -73,7 +73,6 @@ use installer::windows::font;
 use installer::windows::icon;
 use installer::windows::idtglobal;
 use installer::windows::inifile;
-use installer::windows::java;
 use installer::windows::media;
 use installer::windows::mergemodule;
 use installer::windows::msiglobal;
