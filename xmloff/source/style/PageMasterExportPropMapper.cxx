@@ -151,14 +151,8 @@ void XMLPropertyStateBuffer::ContextFilter( ::std::vector< XMLPropertyState >& )
             pPMMarginLeft->maValue >>= nLeft;
             pPMMarginRight->maValue >>= nRight;
 
-            if ((nTop == nBottom) && (nBottom == nLeft) && (nLeft == nRight))
-            {
-                lcl_RemoveState( pPMMarginTop );
-                lcl_RemoveState( pPMMarginBottom );
-                lcl_RemoveState( pPMMarginLeft );
-                lcl_RemoveState( pPMMarginRight );
-            }
-            else
+            // Don't remove the Margin Left,Right,Top,Bottom for backward compatibility
+            if ((nTop != nBottom) || (nBottom != nLeft) || (nLeft != nRight))
                 lcl_RemoveState( pPMMarginAll );
         }
         else
