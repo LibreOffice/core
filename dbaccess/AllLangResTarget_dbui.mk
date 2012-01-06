@@ -92,6 +92,6 @@ $(eval $(call gb_SrsTarget_add_templates,dbaccess/dbui,\
     dbaccess/source/ui/inc/toolbox_tmpl.hrc \
 ))
 
-$(call gb_SrsTarget_get_target,dbaccess/dbui) :| $(OUTDIR)/inc/svx/globlmn.hrc
+$(call gb_SrsTemplateTarget_get_target,dbaccess/dbui) : $(call gb_Package_get_target,svx_globlmn_hrc)
 
 # vim: set noet sw=4 ts=4:

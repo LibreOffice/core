@@ -42,7 +42,7 @@ bool checkForUpdates(
 );
 
 // The same as above, that does not read the info from bootstrap
-bool
+SAL_DLLPUBLIC_EXPORT bool
 checkForUpdates(
     UpdateInfo& o_rUpdateInfo,
     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > & rxContext,

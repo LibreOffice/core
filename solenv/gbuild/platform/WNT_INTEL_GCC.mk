@@ -265,10 +265,12 @@ gb_Library_PLAINLIBS_NONE += \
 	oleaut32 \
 	shell32 \
 	shlwapi \
+	urlmon \
 	user32 \
 	uuid \
 	winmm \
 	version \
+	wininet \
 	winspool \
 	ws2_32 \
 

@@ -84,7 +84,7 @@ endif
 # (see toolkit module for a case where it is necessary to do it this way)
 gb_OBJCXXFLAGS := -x objective-c++ -fobjc-exceptions
 
-gb_OBJCFLAGS := -x objective-c
+gb_OBJCFLAGS := -x objective-c -fobjc-exceptions
 
 gb_LinkTarget_LDFLAGS := \
 	-Wl,-syslibroot,$(gb_SDKDIR) \
@@ -187,6 +187,7 @@ $(call gb_Helper_abbreviate_dirs,\
 	DYLIB_FILE=`$(gb_MKTEMP)` && \
 	$(PERL) $(SOLARENV)/bin/macosx-dylib-link-list.pl \
 		$(if $(filter Executable,$(TARGETTYPE)),$(gb_Executable_TARGETTYPEFLAGS)) \
+		$(if $(filter Bundle,$(TARGETTYPE)),$(gb_Bundle_TARGETTYPEFLAGS)) \
 		$(if $(filter Library CppunitTest,$(TARGETTYPE)),$(gb_Library_TARGETTYPEFLAGS)) \
 		$(if $(filter Library,$(TARGETTYPE)),$(gb_Library_LTOFLAGS)) \
 		$(subst \d,$$,$(RPATH)) \
@@ -194,6 +195,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(patsubst lib%.dylib,-l%,$(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_filename,$(lib)))) > $${DYLIB_FILE} && \
 	$(gb_CXX) \
 		$(if $(filter Executable,$(TARGETTYPE)),$(gb_Executable_TARGETTYPEFLAGS)) \
+		$(if $(filter Bundle,$(TARGETTYPE)),$(gb_Bundle_TARGETTYPEFLAGS)) \
 		$(if $(filter Library CppunitTest,$(TARGETTYPE)),$(gb_Library_TARGETTYPEFLAGS)) \
 		$(if $(filter Library,$(TARGETTYPE)),$(gb_Library_LTOFLAGS)) \
 		$(subst \d,$$,$(RPATH)) \
@@ -214,7 +216,7 @@ $(call gb_Helper_abbreviate_dirs,\
     $(if $(filter Executable,$(TARGETTYPE)), \
         $(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl Executable \
             $(LAYER) $(1) &&) \
-	$(if $(filter Library CppunitTest,$(TARGETTYPE)),\
+	$(if $(filter Library Bundle CppunitTest,$(TARGETTYPE)),\
 		$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl Library $(LAYER) $(if $(SOVERSION),$(1).$(SOVERSION),$(1)) && \
 		ln -sf $(1) $(patsubst %.dylib,%.jnilib,$(1)) &&) \
 	rm -f $${DYLIB_FILE})
@@ -237,7 +239,7 @@ endef
 
 define gb_LinkTarget__command
 $(call gb_Output_announce,$(2),$(true),LNK,4)
-$(if $(filter Library CppunitTest Executable,$(TARGETTYPE)),$(call gb_LinkTarget__command_dynamiclink,$(1),$(2)))
+$(if $(filter Library Bundle CppunitTest Executable,$(TARGETTYPE)),$(call gb_LinkTarget__command_dynamiclink,$(1),$(2)))
 $(if $(filter StaticLibrary,$(TARGETTYPE)),$(call gb_LinkTarget__command_staticlink,$(1)))
 endef
 
@@ -246,6 +248,7 @@ endef
 
 gb_Library_DEFS :=
 gb_Library_TARGETTYPEFLAGS := -dynamiclib -single_module
+gb_Bundle_TARGETTYPEFLAGS := -bundle
 gb_Library_SYSPRE := lib
 gb_Library_UNOVERPRE := $(gb_Library_SYSPRE)uno_
 gb_Library_PLAINEXT := .dylib
@@ -284,6 +287,7 @@ gb_Library_LAYER := \
 	$(foreach lib,$(gb_Library_OOOLIBS),$(lib):OOO) \
 	$(foreach lib,$(gb_Library_PLAINLIBS_URE),$(lib):URELIB) \
 	$(foreach lib,$(gb_Library_PLAINLIBS_OOO),$(lib):OOO) \
+	$(foreach lib,$(gb_Library_PLAINLIBS_NONE),$(lib):NONE) \
 	$(foreach lib,$(gb_Library_RTLIBS),$(lib):OOO) \
 	$(foreach lib,$(gb_Library_RTVERLIBS),$(lib):URELIB) \
 	$(foreach lib,$(gb_Library_UNOLIBS_URE),$(lib):URELIB) \
@@ -304,6 +308,14 @@ endef
 
 gb_Library__set_soversion_script_platform = $(gb_Library__set_soversion_script)
 
+# bundle is a special kind of library that exists only on Darwin/OSX
+# set the TARGETTYPE to Bundle, and clear install_name(RPATH)
+define gb_Library_Bundle
+$(call gb_Library_Library,$(1))
+$(call gb_LinkTarget_set_targettype,$(call gb_Library_get_linktargetname,$(1)),Bundle)
+$(call gb_LinkTarget_get_target,$(call gb_Library_get_linktargetname,$(1))) : \
+	RPATH :=
+endef
 
 # StaticLibrary class
 

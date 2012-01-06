@@ -29,6 +29,7 @@
 #include "GroupsSorting.hrc"
 #include <connectivity/dbtools.hxx>
 #include <svtools/editbrowsebox.hxx>
+#include <svtools/imgdef.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XContainerListener.hpp>
 #include <com/sun/star/report/GroupOn.hpp>
@@ -40,11 +41,6 @@
 #include "rptui_slotid.hrc"
 #include "ModuleHelper.hxx"
 #include "helpids.hrc"
-
-#include <svx/globlmn.hrc>
-#include <svx/svxids.hrc>
-#include <svtools/imgdef.hxx>
-
 #include "GroupExchange.hxx"
 #include "UITools.hxx"
 #include "UndoActions.hxx"

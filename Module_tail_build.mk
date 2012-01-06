@@ -27,19 +27,28 @@ $(eval $(call gb_Module_Module,tail_end))
 $(eval $(call gb_Module_add_moduledirs,tail_end,\
     accessibility \
     animations \
+    avmedia \
     basctl \
+    basic \
     bean \
+    canvas \
     chart2 \
+    cppcanvas \
     cui \
     dbaccess \
     desktop \
     dtrans \
+    drawinglayer \
+    editeng \
     eventattacher \
+    extensions \
     fileaccess \
     filter \
     forms \
     formula \
+    framework \
     hwpfilter \
+    idl \
     lingucomponent \
     linguistic \
     lotuswordpro \
@@ -55,8 +64,10 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
     sccomp \
     scripting \
     sd \
+    sfx2 \
     slideshow \
     starmath \
+    svx \
     sw \
     swext \
     UnoControls \
@@ -67,6 +78,7 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
     writerfilter \
     writerperfect \
     xmerge \
+    xmloff \
     xmlsecurity \
 ))
 

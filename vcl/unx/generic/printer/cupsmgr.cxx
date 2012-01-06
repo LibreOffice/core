@@ -481,7 +481,7 @@ void CUPSManager::runDests()
         // all* first
         http_t* p_http;
         if( (p_http=m_pCUPSWrapper->httpConnectEncrypt(
-                 m_pCUPSWrapper->cupsServer(), 
+                 m_pCUPSWrapper->cupsServer(),
                  m_pCUPSWrapper->ippPort(),
                  m_pCUPSWrapper->cupsEncryption())) != NULL )
         {

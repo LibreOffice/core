@@ -85,6 +85,7 @@ namespace uno = com::sun::star::uno ;
 #define PROPERTY_DEFAULT_TEXT   UNISTRING("DefaultText")
 #define PROPERTY_SHOW_MENUICON  UNISTRING("MenuIconVisible")
 
+extern "C" bool SAL_CALL WNT_hasInternetConnection();
 //------------------------------------------------------------------------------
 
 // Returns the URL of the release note for the given position
@@ -267,9 +268,11 @@ private:
     /* Used to avoid dialup login windows (on platforms we know how to double this) */
     inline bool hasInternetConnection() const
     {
-        if(m_pHasInternetConnection != NULL )
-            return (sal_True == m_pHasInternetConnection());
+#ifdef WNT
+        return WNT_hasInternetConnection();
+#else
         return true;
+#endif
     }
 
     /* Creates a new instance of UpdateInformationProvider and returns this instance */
@@ -295,10 +298,6 @@ protected:
     osl::Condition& m_aCondition;
 
 private:
-
-//    const
-    OnlineCheckFunc m_pHasInternetConnection;
-
     const uno::Reference<uno::XComponentContext> m_xContext;
     uno::Reference<deployment::XUpdateInformationProvider> m_xProvider;
 };
@@ -373,30 +372,8 @@ private:
 UpdateCheckThread::UpdateCheckThread( osl::Condition& rCondition,
                                       const uno::Reference<uno::XComponentContext>& xContext ) :
     m_aCondition(rCondition),
-    m_pHasInternetConnection(NULL),
     m_xContext(xContext)
 {
-
-#ifdef WNT
-    rtl::OUString aPath;
-    if( osl_getExecutableFile(&aPath.pData) == osl_Process_E_None )
-    {
-        sal_uInt32 lastIndex = aPath.lastIndexOf('/');
-        if ( lastIndex > 0 )
-        {
-            aPath = aPath.copy( 0, lastIndex+1 );
-            aPath  += UNISTRING( "onlinecheck" );
-        }
-
-        if ( m_aModule.load(aPath) )
-        {
-            m_pHasInternetConnection =
-                reinterpret_cast < OnlineCheckFunc > (
-                    m_aModule.getFunctionSymbol( UNISTRING("hasInternetConnection")));
-        }
-    }
-#endif
-
     createSuspended();
 
     // actually run the thread

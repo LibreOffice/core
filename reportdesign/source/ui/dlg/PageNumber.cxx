@@ -35,8 +35,6 @@
 #include "RptDef.hxx"
 #include "helpids.hrc"
 #include <vcl/msgbox.hxx>
-#include <svx/globlmn.hrc>
-#include <svx/svxids.hrc>
 #include "UITools.hxx"
 #include "uistrings.hrc"
 #include "ReportController.hxx"

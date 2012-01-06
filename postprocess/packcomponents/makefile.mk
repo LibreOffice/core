@@ -165,28 +165,29 @@ my_components = \
 
 .IF "$(BUILD_TYPE)" != "$(BUILD_TYPE:s/DESKTOP//)"
 my_components += \
-    abp \
-    bib \
     component/desktop/source/deployment/deployment \
     component/desktop/source/deployment/gui/deploymentgui \
     component/desktop/source/migration/services/migrationoo2 \
     component/desktop/source/migration/services/migrationoo3 \
     component/desktop/source/offacc/offacc \
     component/desktop/source/splash/spl \
+    component/extensions/source/abpilot/abp \
+    component/extensions/source/bibliography/bib \
+    component/extensions/source/dbpilots/dbp \
+    component/extensions/source/logging/log \
+    component/extensions/source/propctrlr/pcr \
+    component/extensions/source/resource/res \
+    component/extensions/source/scanner/scn \
+    component/extensions/source/update/check/updchk.uno \
+    component/extensions/source/update/feed/updatefeed \
+    component/extensions/source/update/ui/updchk \
+    component/extensions/source/xmlextract/xmx \
     component/fpicker/source/generic/fpicker \
     component/fpicker/source/office/fps_office \
-    dbp \
-    log \
-    pcr \
-    res \
-    scn \
     syssh \
     tvhlp1 \
     ucpchelp1 \
-    updatefeed \
-    updchk \
-    updchk.uno \
-    xmx
+
 .ENDIF
 
 .IF "$(DISABLE_PYTHON)" != "TRUE"
@@ -268,11 +269,11 @@ my_components += \
 .END
 
 .IF "$(WITH_LDAP)" == "YES"
-my_components += ldapbe2
+my_components += component/extensions/source/config/ldap/ldapbe2
 .END
 
 .IF "$(WITH_MOZILLA)" != "NO"
-my_components += pl
+my_components += component/extensions/source/plugin/pl
 .END
 
 .IF "$(ENABLE_XMLSEC)" == "YES"
@@ -321,7 +322,7 @@ my_components += \
 .IF "$(OS)" == "WNT" && "$(DISABLE_ATL)" == ""
 my_components += \
     emser \
-    oleautobridge
+    component/extensions/source/ole/oleautobridge
 .END
 
 .IF "$(OS)" == "WNT" && "$(ENABLE_DIRECTX)" != ""

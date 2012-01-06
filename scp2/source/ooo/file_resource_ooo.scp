@@ -68,7 +68,7 @@ STD_RES_FILE( gid_File_Res_Pdffilter, pdffilter)
 
 #ifdef UNX
 
-STD_RES_FILE( gid_File_Res_San, san )
+STD_RES_FILE( gid_File_Res_San, scn )
 
 #endif
 

@@ -58,7 +58,7 @@ public:
     virtual void SAL_CALL cancel() = 0;
 };
 
-class UpdateCheck :
+class SAL_DLLPUBLIC_EXPORT UpdateCheck :
     public UpdateCheckConfigListener,
     public IActionListener,
     public DownloadInteractionHandler,
@@ -107,35 +107,35 @@ public:
     bool hasOfficeUpdate() const { return (m_aUpdateInfo.BuildId.getLength() > 0); }
 
     // DownloadInteractionHandler
-    virtual bool downloadTargetExists(const rtl::OUString& rFileName);
-    virtual void downloadStalled(const rtl::OUString& rErrorMessage);
-    virtual void downloadProgressAt(sal_Int8 nProcent);
-    virtual void downloadStarted(const rtl::OUString& rLocalFileName, sal_Int64 nFileSize);
-    virtual void downloadFinished(const rtl::OUString& rLocalFileName);
+    SAL_DLLPUBLIC_EXPORT virtual bool downloadTargetExists(const rtl::OUString& rFileName);
+    SAL_DLLPUBLIC_EXPORT virtual void downloadStalled(const rtl::OUString& rErrorMessage);
+    SAL_DLLPUBLIC_EXPORT virtual void downloadProgressAt(sal_Int8 nProcent);
+    SAL_DLLPUBLIC_EXPORT virtual void downloadStarted(const rtl::OUString& rLocalFileName, sal_Int64 nFileSize);
+    SAL_DLLPUBLIC_EXPORT virtual void downloadFinished(const rtl::OUString& rLocalFileName);
     // checks if the download target already exists and asks user what to do next
-    virtual bool checkDownloadDestination( const rtl::OUString& rFile );
+    SAL_DLLPUBLIC_EXPORT virtual bool checkDownloadDestination( const rtl::OUString& rFile );
 
     // Cancels the download action (and resumes checking if enabled)
     void cancelDownload();
 
     // Returns the XInteractionHandler of the UpdateHandler instance if present (and visible)
-    com::sun::star::uno::Reference< com::sun::star::task::XInteractionHandler > getInteractionHandler() const;
+    SAL_DLLPUBLIC_EXPORT com::sun::star::uno::Reference< com::sun::star::task::XInteractionHandler > getInteractionHandler() const;
 
     // UpdateCheckConfigListener
-    virtual void autoCheckStatusChanged(bool enabled);
-    virtual void autoCheckIntervalChanged();
+    SAL_DLLPUBLIC_EXPORT virtual void autoCheckStatusChanged(bool enabled);
+    SAL_DLLPUBLIC_EXPORT virtual void autoCheckIntervalChanged();
 
     // IActionListener
-    void cancel();
-    void download();
-    void install();
-    void pause();
-    void resume();
-    void closeAfterFailure();
+    SAL_DLLPUBLIC_EXPORT void cancel();
+    SAL_DLLPUBLIC_EXPORT void download();
+    SAL_DLLPUBLIC_EXPORT void install();
+    SAL_DLLPUBLIC_EXPORT void pause();
+    SAL_DLLPUBLIC_EXPORT void resume();
+    SAL_DLLPUBLIC_EXPORT void closeAfterFailure();
 
     // rtl::IReference
-    virtual oslInterlockedCount SAL_CALL acquire() SAL_THROW(());
-    virtual oslInterlockedCount SAL_CALL release() SAL_THROW(());
+    SAL_DLLPUBLIC_EXPORT virtual oslInterlockedCount SAL_CALL acquire() SAL_THROW(());
+    SAL_DLLPUBLIC_EXPORT virtual oslInterlockedCount SAL_CALL release() SAL_THROW(());
 
 private:
 

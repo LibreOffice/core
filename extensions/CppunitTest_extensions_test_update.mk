@@ -1,3 +1,4 @@
+# -*- Mode: makefile; tab-width: 4; indent-tabs-mode: t -*-
 #
 # Version: MPL 1.1 / GPLv3+ / LGPLv3+
 #
@@ -28,16 +29,11 @@
 $(eval $(call gb_CppunitTest_CppunitTest,extensions_test_update))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,extensions_test_update, \
-	extensions/source/update/check/download \
-	extensions/source/update/check/updatecheck \
-	extensions/source/update/check/updatecheckconfig \
-	extensions/source/update/check/updatehdl \
-	extensions/source/update/check/updateprotocol \
-	\
 	extensions/qa/update/test_update \
 ))
 
 $(eval $(call gb_CppunitTest_add_linked_libs,extensions_test_update, \
+	updchk \
 	cppu \
 	cppuhelper \
 	sal \
@@ -46,11 +42,18 @@ $(eval $(call gb_CppunitTest_add_linked_libs,extensions_test_update, \
 	$(gb_STDLIBS) \
 ))
 
+ifeq ($(OS),WNT)
+$(eval $(call gb_CppunitTest_add_linked_libs,extensions_test_update,\
+	shell32 \
+	ole32 \
+))
+endif
+
 $(eval $(call gb_CppunitTest_use_external,extensions_test_update,curl))
 
 $(eval $(call gb_CppunitTest_set_include,extensions_test_update,\
 	$$(INCLUDE) \
-	-I$(realpath $(SRCDIR)/extensions/inc) \
+	-I$(SRCDIR)/extensions/inc \
 	-I$(OUTDIR)/inc \
 ))
 
@@ -67,13 +70,13 @@ $(eval $(call gb_CppunitTest_add_type_rdbs,extensions_test_update,\
 
 $(eval $(call gb_CppunitTest_add_components,extensions_test_update,\
     configmgr/source/configmgr \
+    extensions/source/update/feed/updatefeed \
     unoxml/source/service/unoxml \
 ))
 
 $(eval $(call gb_CppunitTest_add_old_components,extensions_test_update,\
     ucb1 \
     ucpfile1 \
-    updatefeed \
 ))
 
 $(eval $(call gb_CppunitTest_set_args,extensions_test_update,\

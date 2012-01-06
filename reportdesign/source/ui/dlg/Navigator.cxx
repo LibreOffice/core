@@ -40,8 +40,6 @@
 #include <com/sun/star/report/XFormattedField.hpp>
 #include <com/sun/star/report/XImageControl.hpp>
 #include <com/sun/star/report/XShape.hpp>
-#include <svx/globlmn.hrc>
-#include <svx/svxids.hrc>
 #include "helpids.hrc"
 #include "RptResId.hrc"
 #include "rptui_slotid.hrc"

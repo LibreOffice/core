@@ -107,4 +107,6 @@ $(eval $(call gb_SrsTarget_add_templates,sd/res,\
     sd/source/ui/app/toolbox2_tmpl.src \
 ))
 
+$(call gb_SrsTemplateTarget_get_target,sd/res) : $(call gb_Package_get_target,svx_globlmn_hrc)
+
 # vim: set noet sw=4 ts=4:

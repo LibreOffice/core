@@ -69,9 +69,7 @@ gb_RCDEFS := \
 gb_RCFLAGS := \
 	 -V
 
-# FIXME: When porting to Windows64, we should use only:
-# /c /Cp
-gb_AFLAGS := /c /Cp /coff /safeseh
+gb_AFLAGS := /c /Cp
 
 gb_CFLAGS := \
 	-Gd \
@@ -201,7 +199,6 @@ gb_LinkTarget_NOEXCEPTIONFLAGS := \
 	-DEXCEPTIONS_OFF \
 
 gb_LinkTarget_LDFLAGS := \
-	-MACHINE:IX86 \
 	-MANIFEST \
 	$(patsubst %,-LIBPATH:%,$(filter-out .,$(subst ;, ,$(subst \,/,$(ILIB))))) \
 
@@ -296,13 +293,14 @@ define gb_CxxObject__command
 $(call gb_Output_announce,$(2).cxx,$(true),CXX,3)
 $(call gb_Helper_abbreviate_dirs_native,\
 	mkdir -p $(dir $(1)) $(dir $(4)) && \
-	$(gb_CXX) \
+	$(if $(filter YES,$(CXXOBJECT_X64)), $(CXX_X64_BINARY), $(gb_CXX)) \
 		$(DEFS) \
 		$(T_CXXFLAGS) \
 		-Fd$(PDBFILE) \
 		$(gb_COMPILERDEPFLAGS) \
 		-I$(realpath $(dir $(3))) \
 		$(INCLUDE_STL) $(INCLUDE) \
+		$(if $(filter YES,$(CXXOBJECT_X64)), -U_X86_ -D_AMD64_,) \
 		-c $(realpath $(3)) \
 		-Fo$(1)) $(call gb_create_deps,$(1),$(4),$(realpath $(3)))
 endef
@@ -347,11 +345,13 @@ $(call gb_Helper_abbreviate_dirs_native,\
 		$(foreach object,$(ASMOBJECTS),$(call gb_AsmObject_get_target,$(object))) \
 		$(foreach extraobjectlist,$(EXTRAOBJECTLISTS),$(shell cat $(extraobjectlist))) \
 		$(NATIVERES))) && \
-	$(gb_LINK) \
+	$(if $(filter YES,$(LIBRARY_X64)), $(LINK_X64_BINARY), $(gb_LINK)) \
 		$(if $(filter Library CppunitTest,$(TARGETTYPE)),$(gb_Library_TARGETTYPEFLAGS)) \
 		$(if $(filter StaticLibrary,$(TARGETTYPE)),$(gb_StaticLibrary_TARGETTYPEFLAGS)) \
 		$(if $(filter Executable,$(TARGETTYPE)),$(gb_Executable_TARGETTYPEFLAGS)) \
 		$(if $(filter YES,$(TARGETGUI)), -SUBSYSTEM:WINDOWS, -SUBSYSTEM:CONSOLE) \
+		$(if $(filter YES,$(LIBRARY_X64)), -MACHINE:X64, -MACHINE:IX86) \
+		$(if $(filter YES,$(LIBRARY_X64)), -LIBPATH:$(COMPATH)/lib/amd64 -LIBPATH:$(WINDOWS_SDK_HOME)/lib/x64,) \
 		$(T_LDFLAGS) \
 		@$${RESPONSEFILE} \
 		$(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_filename,$(lib))) \
@@ -370,7 +370,6 @@ gb_Windows_PE_TARGETTYPEFLAGS := \
     -opt:noref \
     -incremental:no \
     -debug \
-    -safeseh \
 	-nxcompat \
 	-dynamicbase \
 
@@ -417,6 +416,7 @@ gb_Library_PLAINLIBS_NONE += \
 	user32 \
 	uuid \
 	version \
+	wininet \
 	winmm \
 	winspool \
 	ws2_32 \

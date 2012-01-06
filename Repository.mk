@@ -97,8 +97,28 @@ endif
 
 endif
 
+ifneq ($(WITH_MOZILLA),NO)
+$(eval $(call gb_Helper_register_executables,OOO,\
+	nspugin \
+	pluginapp.bin \
+))
+$(eval $(call gb_Helper_register_libraries,OOOLIBS, \
+	pl \
+))
+endif # WITH_MOZILLA
+
+
+ifeq ($(OS),MACOSX)
+
+$(eval $(call gb_Helper_register_libraries,PLAINLIBS_NONE, \
+    OOoSpotlightImporter \
+))
+
+endif
+
 $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
 	PptImporter \
+	abp \
 	adabas \
 	adabasui \
 	acc \
@@ -107,6 +127,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
 	animcore \
 	basctl \
 	basebmp \
+	bib \
 	canvastools \
 	communi \
 	date \
@@ -132,6 +153,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     dba \
     dbaxml \
     dbmm \
+	dbp \
     dbtools \
     dbu \
     deploymentmisc \
@@ -179,6 +201,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
 	iti \
     lng \
 	lnth \
+	log \
     lwpft \
 	MacOSXSpell \
     merged \
@@ -187,10 +210,12 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
 	msworks \
 	odfflatxml \
     offacc \
+	pcr \
 	pdffilter \
 	placeware \
 	protocolhandler \
     qstart_gtk \
+	res \
     resourcemodel \
     rpt \
     rptui \
@@ -201,6 +226,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     sc \
     scd \
     scfilt \
+    scn \
     scui \
     sd \
     sdbt \
@@ -231,6 +257,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     tl \
     unordf \
     unoxml \
+    updatecheckui \
     utl \
 	uui \
     vbahelper \
@@ -249,6 +276,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     xcr \
 	xmlfa \
 	xmlfd \
+	xmx \
     xo \
     xof \
 	xsltdlg \
@@ -287,6 +315,7 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 	log_uno \
 	mcnttype \
 	neon \
+	npsoplugin \
 	package2 \
     reg \
 	scriptframe \
@@ -298,6 +327,7 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
     ucb \
     ucpfile \
     unopkgapp \
+	updchk \
 	unsafe_uno \
 	xmlsecurity \
 	xsec_fw \
@@ -318,6 +348,8 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 	fop \
 	fps \
 	ftransl \
+	so_activex \
+	so_activex_x64 \
 	sysdtrans \
 ))
 endif
@@ -373,6 +405,7 @@ $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
     slideshow \
     stocservices \
 	stringresource \
+	updatefeed \
 	vbaevents \
     vbaobj \
     vbaswobj \
@@ -392,6 +425,19 @@ $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
 		fps_kde4 \
 	) \
 ))
+
+ifeq ($(OS),WNT)
+$(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
+	oleautobridge \
+	oleautobridge2 \
+))
+endif
+
+ifeq ($(WITH_LDAP),YES)
+$(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
+	ldapbe2 \
+))
+endif
 
 $(eval $(call gb_Helper_register_libraries,UNOLIBS_URE, \
 	binaryurp \
