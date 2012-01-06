@@ -35,7 +35,6 @@
 
 #include <cmdid.h>
 #include <hintids.hxx>
-#include <tools/ref.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/drawitem.hxx>
 #include <svx/xtable.hxx>               // XColorList

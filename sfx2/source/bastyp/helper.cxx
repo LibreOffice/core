@@ -46,7 +46,6 @@
 #include <unotools/localedatawrapper.hxx>
 #include <rtl/strbuf.hxx>
 
-#include <tools/ref.hxx>
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/datetime.hxx>

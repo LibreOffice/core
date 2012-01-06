@@ -29,6 +29,7 @@
 #ifndef _SVDIBROW_HXX
 #define _SVDIBROW_HXX
 
+#include <tools/contnr.hxx>
 #include <svtools/brwbox.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/floatwin.hxx>

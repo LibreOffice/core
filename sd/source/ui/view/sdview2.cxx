@@ -32,7 +32,6 @@
 
 #include <vector>
 #include <com/sun/star/embed/XEmbedPersist.hpp>
-#include <tools/ref.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/msgbox.hxx>
 #include <svx/svdetc.hxx>

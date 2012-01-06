@@ -27,8 +27,6 @@
  ************************************************************************/
 
 
-#include <tools/ref.hxx>
-
 #include <hintids.hxx>
 #include <fesh.hxx>
 #include <doc.hxx>

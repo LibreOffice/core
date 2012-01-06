@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include <tools/ref.hxx>
 #include <tools/shl.hxx>
 #include <tools/debug.hxx>
 #include <vcl/msgbox.hxx>

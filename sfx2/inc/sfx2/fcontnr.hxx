@@ -40,6 +40,8 @@
 #include <sfx2/docfilt.hxx>
 #include <sfx2/sfxdefs.hxx>
 
+#include <tools/ref.hxx>
+
 #include <boost/utility.hpp>
 
 class Window;

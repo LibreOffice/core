@@ -30,7 +30,6 @@
 #define _SALSTD_HXX
 
 // -=-= includes -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <tools/ref.hxx>
 #include <tools/gen.hxx>
 #include <vcl/sv.h>
 

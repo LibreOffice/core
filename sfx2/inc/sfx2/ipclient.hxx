@@ -35,7 +35,6 @@
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 
-#include <tools/ref.hxx>
 #include <tools/gen.hxx>
 
 #include <sfx2/objsh.hxx>

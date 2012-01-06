@@ -28,7 +28,6 @@
 
 // include ---------------------------------------------------------------
 
-#include <tools/ref.hxx>
 #include <tools/shl.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/menu.hxx>

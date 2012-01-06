@@ -30,7 +30,6 @@
 #define _XMLITMPR_HXX
 
 #include <tools/solar.h>
-#include <tools/ref.hxx>
 #include "xmlitmap.hxx"
 #include <vector>
 

@@ -31,7 +31,6 @@
 #   pragma hdrstop
 #endif
 
-#include <tools/ref.hxx>
 #include <tools/stream.hxx>
 #include <svtools/filter.hxx>
 #include <svtools/FilterConfigItem.hxx>

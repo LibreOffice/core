@@ -27,7 +27,6 @@
  ************************************************************************/
 
 #include <string>
-#include <tools/ref.hxx>
 #include <tools/shl.hxx>
 #include <svl/intitem.hxx>
 #include <svl/eitem.hxx>

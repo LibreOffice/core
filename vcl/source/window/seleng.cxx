@@ -27,7 +27,6 @@
  ************************************************************************/
 
 
-#include <tools/ref.hxx>
 #include <vcl/window.hxx>
 #include <vcl/seleng.hxx>
 #include <tools/debug.hxx>

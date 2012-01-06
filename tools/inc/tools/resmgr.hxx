@@ -31,7 +31,6 @@
 #include "tools/toolsdllapi.h"
 #include <i18npool/lang.h>
 #include <tools/string.hxx>
-#include <tools/ref.hxx>
 #include <tools/resid.hxx>
 #include <com/sun/star/lang/Locale.hpp>
 

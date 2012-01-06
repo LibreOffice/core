@@ -44,6 +44,7 @@
 #include <vcl/mnemonicengine.hxx>
 #include <vcl/quickselectionengine.hxx>
 #include <tools/gen.hxx>
+#include <tools/list.hxx>
 #include <svtools/treelist.hxx>
 #include <svl/svarray.hxx>
 #include <svtools/transfer.hxx>

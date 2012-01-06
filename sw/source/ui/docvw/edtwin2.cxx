@@ -27,7 +27,6 @@
  ************************************************************************/
 
 #include <comphelper/string.hxx>
-#include <tools/ref.hxx>
 #include <hintids.hxx>
 
 #include <doc.hxx>

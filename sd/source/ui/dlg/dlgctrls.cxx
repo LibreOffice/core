@@ -27,7 +27,6 @@
  ************************************************************************/
 
 
-#include <tools/ref.hxx>
 #include <tools/debug.hxx>
 
 #include "strings.hrc"

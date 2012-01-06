@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include <tools/ref.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/objsh.hxx>
 #include <vcl/msgbox.hxx>

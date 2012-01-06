@@ -40,6 +40,7 @@
 
 #include <cppuhelper/implbase2.hxx>
 
+#include <tools/list.hxx>
 
 class UnoTreeListEntry;
 class TreeControlPeer;

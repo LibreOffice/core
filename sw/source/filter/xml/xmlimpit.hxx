@@ -30,7 +30,6 @@
 
 #include <limits.h>
 #include <tools/solar.h>
-#include <tools/ref.hxx>
 
 
 #include <com/sun/star/xml/sax/XAttributeList.hpp>

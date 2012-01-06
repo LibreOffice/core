@@ -27,7 +27,6 @@
  ************************************************************************/
 
 
-#include <tools/ref.hxx>
 #include <tools/rc.h>
 
 #include <vcl/svapp.hxx>

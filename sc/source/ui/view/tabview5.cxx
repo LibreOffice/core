@@ -41,7 +41,6 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/objsh.hxx>
-#include <tools/ref.hxx>
 
 #include "tabview.hxx"
 #include "tabvwsh.hxx"

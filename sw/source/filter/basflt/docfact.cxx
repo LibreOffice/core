@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include <tools/ref.hxx>
 #include <shellio.hxx>
 #include <doc.hxx>
 #include <node.hxx>

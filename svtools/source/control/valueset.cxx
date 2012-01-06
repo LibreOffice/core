@@ -27,6 +27,7 @@
  ************************************************************************/
 
 #include <tools/debug.hxx>
+#include <tools/list.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/scrbar.hxx>
