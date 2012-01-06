@@ -917,13 +917,13 @@ void BasicIDEShell::GetState(SfxItemSet &rSet)
             break;
             case SID_CHOOSE_CONTROLS:
             case SID_DIALOG_TESTMODE:
-            case SID_INSERT_RADIO:
-            case SID_INSERT_CHECK:
-            case SID_INSERT_LIST:
-            case SID_INSERT_COMBO:
-            case SID_INSERT_VSCROLL:
-            case SID_INSERT_HSCROLL:
-            case SID_INSERT_SPIN:
+            case SID_INSERT_FORM_RADIO:
+            case SID_INSERT_FORM_CHECK:
+            case SID_INSERT_FORM_LIST:
+            case SID_INSERT_FORM_COMBO:
+            case SID_INSERT_FORM_VSCROLL:
+            case SID_INSERT_FORM_HSCROLL:
+            case SID_INSERT_FORM_SPIN:
             {
                 if( !pCurWin || !pCurWin->IsA( TYPE( DialogWindow ) ) )
                     rSet.DisableItem( nWh );

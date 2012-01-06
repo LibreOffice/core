@@ -402,13 +402,13 @@ void DialogWindow::GetState( SfxItemSet& rSet )
                     rSet.DisableItem( nWh );
             }
             break;
-            case SID_INSERT_RADIO:
-            case SID_INSERT_CHECK:
-            case SID_INSERT_LIST:
-            case SID_INSERT_COMBO:
-            case SID_INSERT_VSCROLL:
-            case SID_INSERT_HSCROLL:
-            case SID_INSERT_SPIN:
+            case SID_INSERT_FORM_RADIO:
+            case SID_INSERT_FORM_CHECK:
+            case SID_INSERT_FORM_LIST:
+            case SID_INSERT_FORM_COMBO:
+            case SID_INSERT_FORM_VSCROLL:
+            case SID_INSERT_FORM_HSCROLL:
+            case SID_INSERT_FORM_SPIN:
             {
                 if ( !bIsCalc || IsReadOnly() )
                     rSet.DisableItem( nWh );
@@ -454,31 +454,31 @@ void DialogWindow::ExecuteCommand( SfxRequest& rReq )
                     pBindings->Invalidate( SID_DOC_MODIFIED );
             }
             break;
-        case SID_INSERT_RADIO:
+        case SID_INSERT_FORM_RADIO:
             GetEditor()->SetMode( DLGED_INSERT );
             GetEditor()->SetInsertObj( OBJ_DLG_FORMRADIO );
             break;
-        case SID_INSERT_CHECK:
+        case SID_INSERT_FORM_CHECK:
             GetEditor()->SetMode( DLGED_INSERT );
             GetEditor()->SetInsertObj( OBJ_DLG_FORMCHECK );
             break;
-        case SID_INSERT_LIST:
+        case SID_INSERT_FORM_LIST:
             GetEditor()->SetMode( DLGED_INSERT );
             GetEditor()->SetInsertObj( OBJ_DLG_FORMLIST );
             break;
-        case SID_INSERT_COMBO:
+        case SID_INSERT_FORM_COMBO:
             GetEditor()->SetMode( DLGED_INSERT );
             GetEditor()->SetInsertObj( OBJ_DLG_FORMCOMBO );
             break;
-        case SID_INSERT_SPIN:
+        case SID_INSERT_FORM_SPIN:
             GetEditor()->SetMode( DLGED_INSERT );
             GetEditor()->SetInsertObj( OBJ_DLG_FORMSPIN );
             break;
-        case SID_INSERT_VSCROLL:
+        case SID_INSERT_FORM_VSCROLL:
             GetEditor()->SetMode( DLGED_INSERT );
             GetEditor()->SetInsertObj( OBJ_DLG_FORMVSCROLL );
             break;
-        case SID_INSERT_HSCROLL:
+        case SID_INSERT_FORM_HSCROLL:
             GetEditor()->SetMode( DLGED_INSERT );
             GetEditor()->SetInsertObj( OBJ_DLG_FORMHSCROLL );
             break;

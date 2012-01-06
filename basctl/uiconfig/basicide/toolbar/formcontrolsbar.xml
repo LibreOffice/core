@@ -12,5 +12,4 @@
  <toolbar:toolbaritem xlink:href=".uno:InsertFormHScroll" toolbar:helpid="helpid:10146"  toolbar:style="radio" />
  <toolbar:toolbarbreak/>
  <toolbar:toolbaritem xlink:href=".uno:InsertFormSpin" toolbar:helpid="helpid:10146"  toolbar:style="radio" />
- <toolbar:toolbarbreak/>
 </toolbar:toolbar>
