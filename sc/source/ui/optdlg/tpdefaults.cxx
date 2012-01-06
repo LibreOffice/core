@@ -35,6 +35,9 @@
 #include "scmod.hxx"
 #include "docoptio.hxx"
 
+#define INIT_SHEETS_MIN 1
+#define INIT_SHEETS_MAX 1024
+
 ScTpDefaultsOptions::ScTpDefaultsOptions(Window *pParent, const SfxItemSet &rCoreAttrs) :
     SfxTabPage(pParent, ScResId(RID_SCPAGE_DEFAULTS), rCoreAttrs),
     aFLInitSpreadSheet ( this, ScResId( FL_INIT_SPREADSHEET ) ),
@@ -46,6 +49,8 @@ ScTpDefaultsOptions::ScTpDefaultsOptions(Window *pParent, const SfxItemSet &rCor
     const ScTpCalcItem& rItem = static_cast<const ScTpCalcItem&>(
         rCoreAttrs.Get(GetWhich(SID_SCDOCOPTIONS)));
     mpLocalOptions.reset(new ScDocOptions(rItem.GetDocOptions()));
+
+    aEdNSheets.SetModifyHdl( LINK(this, ScTpDefaultsOptions, NumModifiedHdl) );
 }
 
 ScTpDefaultsOptions::~ScTpDefaultsOptions()
@@ -75,11 +80,27 @@ sal_Bool ScTpDefaultsOptions::FillItemSet(SfxItemSet &rCoreAttrs)
 void ScTpDefaultsOptions::Reset(const SfxItemSet& /*rCoreAttrs*/)
 {
     aEdNSheets.SetValue( static_cast<sal_uInt16>(mpLocalOptions->GetInitTabCount()) );
+    CheckNumSheets();
 }
 
 int ScTpDefaultsOptions::DeactivatePage(SfxItemSet* /*pSet*/)
 {
     return KEEP_PAGE;
+}
+
+void ScTpDefaultsOptions::CheckNumSheets()
+{
+    sal_Int64 nVal = aEdNSheets.GetValue();
+    if (nVal > INIT_SHEETS_MAX)
+        aEdNSheets.SetValue(INIT_SHEETS_MAX);
+    if (nVal < INIT_SHEETS_MIN)
+        aEdNSheets.SetValue(INIT_SHEETS_MIN);
+}
+
+IMPL_LINK( ScTpDefaultsOptions, NumModifiedHdl, NumericField*, EMPTYARG )
+{
+    CheckNumSheets();
+    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
