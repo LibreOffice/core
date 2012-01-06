@@ -47,7 +47,9 @@ CAIROVERSION=1.10.2
 TARFILE_NAME=$(PRJNAME)-$(CAIROVERSION)
 TARFILE_MD5=f101a9e88b783337b20b2e26dfd26d5f
 
-PATCH_FILES=..$/$(TARFILE_NAME).patch
+PATCH_FILES=\
+    ..$/cairo-1.10.2.patch \
+    ..$/cairo.dlsym.lcdfilter.patch
 
 .IF "$(OS)$(COM)" == "WNTMSC"
 PATCH_FILES+= ..$/$(TARFILE_NAME).wntmsc.patch
