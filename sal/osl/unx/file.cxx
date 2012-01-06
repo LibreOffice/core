@@ -1045,13 +1045,16 @@ SAL_CALL osl_closeFile( oslFileHandle Handle )
 {
     FileHandle_Impl* pImpl = static_cast<FileHandle_Impl*>(Handle);
 
+    if (pImpl == 0)
+        return osl_File_E_INVAL;
+
     if (pImpl->m_kind == FileHandle_Impl::KIND_MEM)
     {
         delete pImpl;
         return osl_File_E_None;
     }
 
-    if ((pImpl == 0) || (pImpl->m_fd < 0))
+    if (pImpl->m_fd < 0)
         return osl_File_E_INVAL;
 
     (void) pthread_mutex_lock (&(pImpl->m_mutex));
@@ -1238,6 +1241,9 @@ oslFileError
 SAL_CALL osl_unmapMappedFile (oslFileHandle Handle, void* pAddr, sal_uInt64 uLength)
 {
     FileHandle_Impl * pImpl = static_cast<FileHandle_Impl*>(Handle);
+
+    if (pImpl == 0)
+        return osl_File_E_INVAL;
 
     if (pImpl->m_kind == FileHandle_Impl::KIND_FD)
         return unmapFile (pAddr, uLength);
