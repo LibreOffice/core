@@ -143,7 +143,7 @@ void ImplUTF7ResetTextToUnicodeContext( void* pContext )
 
 /* ----------------------------------------------------------------------- */
 
-sal_Size ImplUTF7ToUnicode( const ImplTextConverterData*, void* pContext,
+sal_Size ImplUTF7ToUnicode( const void*, void* pContext,
                             const char* pSrcBuf, sal_Size nSrcBytes,
                             sal_Unicode* pDestBuf, sal_Size nDestChars,
                             sal_uInt32 nFlags, sal_uInt32* pInfo,
@@ -436,7 +436,7 @@ void ImplUTF7ResetUnicodeToTextContext( void* pContext )
 
 /* ----------------------------------------------------------------------- */
 
-sal_Size ImplUnicodeToUTF7( const ImplTextConverterData*, void* pContext,
+sal_Size ImplUnicodeToUTF7( const void*, void* pContext,
                             const sal_Unicode* pSrcBuf, sal_Size nSrcChars,
                             char* pDestBuf, sal_Size nDestBytes,
                             sal_uInt32, sal_uInt32* pInfo,

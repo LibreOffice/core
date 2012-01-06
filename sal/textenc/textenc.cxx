@@ -32,6 +32,7 @@
 
 #include "sal/config.h"
 
+#include <cstddef>
 #include <cstdlib>
 
 #include "boost/noncopyable.hpp"
@@ -44,14 +45,9 @@
 #include "sal/macros.h"
 #include "sal/types.h"
 
-#include "context.hxx"
 #include "gettextencodingdata.hxx"
+#include "tcvtutf8.hxx"
 #include "tenchelp.hxx"
-
-#ifndef INCLUDED_STDDEF_H
-#include <stddef.h>
-#define INCLUDED_STDDEF_H
-#endif
 
 #define NOTABUNI_START 0xFF
 #define NOTABUNI_END 0x00
@@ -324,10 +320,10 @@ static ImplTextEncodingData const aImplUTF8TextEncodingData
           &ImplConvertUtf8ToUnicode,
           &ImplConvertUnicodeToUtf8,
           &ImplCreateUtf8ToUnicodeContext,
-          &ImplDestroyContext,
+          &ImplDestroyUtf8ToUnicodeContext,
           &ImplResetUtf8ToUnicodeContext,
           &ImplCreateUnicodeToUtf8Context,
-          &ImplDestroyContext,
+          &ImplDestroyUnicodeToUtf8Context,
           &ImplResetUnicodeToUtf8Context },
         1,
         6,
@@ -351,10 +347,10 @@ static ImplTextEncodingData const aImplJavaUtf8TextEncodingData
           &ImplConvertUtf8ToUnicode,
           &ImplConvertUnicodeToUtf8,
           &ImplCreateUtf8ToUnicodeContext,
-          &ImplDestroyContext,
+          &ImplDestroyUtf8ToUnicodeContext,
           &ImplResetUtf8ToUnicodeContext,
           &ImplCreateUnicodeToUtf8Context,
-          &ImplDestroyContext,
+          &ImplDestroyUnicodeToUtf8Context,
           &ImplResetUnicodeToUtf8Context },
         1,
         3,

@@ -71,7 +71,12 @@ void ImplResetEucTwToUnicodeContext(void * pContext)
             = IMPL_EUC_TW_TO_UNICODE_STATE_0;
 }
 
-sal_Size ImplConvertEucTwToUnicode(ImplTextConverterData const * pData,
+void ImplDestroyEucTwToUnicodeContext(void * pContext)
+{
+    delete static_cast< ImplEucTwToUnicodeContext * >(pContext);
+}
+
+sal_Size ImplConvertEucTwToUnicode(void const * pData,
                                    void * pContext,
                                    char const * pSrcBuf,
                                    sal_Size nSrcBytes,
@@ -293,7 +298,7 @@ sal_Size ImplConvertEucTwToUnicode(ImplTextConverterData const * pData,
     return pDestBufPtr - pDestBuf;
 }
 
-sal_Size ImplConvertUnicodeToEucTw(ImplTextConverterData const * pData,
+sal_Size ImplConvertUnicodeToEucTw(void const * pData,
                                    void * pContext,
                                    sal_Unicode const * pSrcBuf,
                                    sal_Size nSrcChars,

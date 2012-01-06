@@ -44,7 +44,7 @@ void ImplResetUnicodeToTextContext(void * pContext)
             0;
 }
 
-void ImplDestroyContext(void * pContext)
+void ImplDestroyUnicodeToTextContext(void * pContext)
 {
     delete static_cast< ImplUnicodeToTextContext * >(pContext);
 }

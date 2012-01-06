@@ -42,7 +42,7 @@
 
 /* ======================================================================= */
 
-sal_Size ImplDBCSToUnicode( const ImplTextConverterData* pData, void*,
+sal_Size ImplDBCSToUnicode( const void* pData, void*,
                             const char* pSrcBuf, sal_Size nSrcBytes,
                             sal_Unicode* pDestBuf, sal_Size nDestChars,
                             sal_uInt32 nFlags, sal_uInt32* pInfo,
@@ -222,7 +222,7 @@ sal_Size ImplDBCSToUnicode( const ImplTextConverterData* pData, void*,
 
 /* ----------------------------------------------------------------------- */
 
-sal_Size ImplUnicodeToDBCS( const ImplTextConverterData* pData, void*,
+sal_Size ImplUnicodeToDBCS( const void* pData, void*,
                             const sal_Unicode* pSrcBuf, sal_Size nSrcChars,
                             char* pDestBuf, sal_Size nDestBytes,
                             sal_uInt32 nFlags, sal_uInt32* pInfo,
@@ -388,7 +388,7 @@ sal_Size ImplUnicodeToDBCS( const ImplTextConverterData* pData, void*,
 
 /* ----------------------------------------------------------------------- */
 
-sal_Size ImplEUCJPToUnicode( const ImplTextConverterData* pData,
+sal_Size ImplEUCJPToUnicode( const void* pData,
                              void*,
                              const char* pSrcBuf, sal_Size nSrcBytes,
                              sal_Unicode* pDestBuf, sal_Size nDestChars,
@@ -551,7 +551,7 @@ sal_Size ImplEUCJPToUnicode( const ImplTextConverterData* pData,
 
 /* ----------------------------------------------------------------------- */
 
-sal_Size ImplUnicodeToEUCJP( const ImplTextConverterData* pData,
+sal_Size ImplUnicodeToEUCJP( const void* pData,
                              void*,
                              const sal_Unicode* pSrcBuf, sal_Size nSrcChars,
                              char* pDestBuf, sal_Size nDestBytes,

@@ -30,7 +30,6 @@
 #include "rtl/tencinfo.h"
 #include "rtl/textenc.h"
 
-#include "context.hxx"
 #include "convertiso2022jp.hxx"
 #include "tenchelp.hxx"
 
@@ -43,10 +42,10 @@ static ImplTextEncodingData const aImplIso2022JpTextEncodingData
           &ImplConvertIso2022JpToUnicode,
           &ImplConvertUnicodeToIso2022Jp,
           &ImplCreateIso2022JpToUnicodeContext,
-          &ImplDestroyContext,
+          &ImplDestroyIso2022JpToUnicodeContext,
           &ImplResetIso2022JpToUnicodeContext,
           &ImplCreateUnicodeToIso2022JpContext,
-          &ImplDestroyContext,
+          &ImplDestroyUnicodeToIso2022JpContext,
           &ImplResetUnicodeToIso2022JpContext },
         1,
         8,

@@ -42,7 +42,7 @@ void * ImplCreateUnicodeToTextContext();
 
 void ImplResetUnicodeToTextContext(void * pContext);
 
-void ImplDestroyContext(void * pContext);
+void ImplDestroyUnicodeToTextContext(void * pContext);
 
 #endif
 

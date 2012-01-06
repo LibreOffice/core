@@ -32,6 +32,7 @@
 #include "rtl/textcvt.h"
 
 #include "converter.hxx"
+#include "tcvtutf8.hxx"
 #include "tenchelp.hxx"
 #include "unichars.hxx"
 
@@ -63,11 +64,15 @@ void ImplResetUtf8ToUnicodeContext(void * pContext)
     }
 }
 
-sal_Size ImplConvertUtf8ToUnicode(ImplTextConverterData const * pData,
-                                  void * pContext, char const * pSrcBuf,
-                                  sal_Size nSrcBytes, sal_Unicode * pDestBuf,
-                                  sal_Size nDestChars, sal_uInt32 nFlags,
-                                  sal_uInt32 * pInfo, sal_Size * pSrcCvtBytes)
+void ImplDestroyUtf8ToUnicodeContext(void * pContext)
+{
+    delete static_cast< ImplUtf8ToUnicodeContext * >(pContext);
+}
+
+sal_Size ImplConvertUtf8ToUnicode(
+    void const * pData, void * pContext, char const * pSrcBuf,
+    sal_Size nSrcBytes, sal_Unicode * pDestBuf, sal_Size nDestChars,
+    sal_uInt32 nFlags, sal_uInt32 * pInfo, sal_Size * pSrcCvtBytes)
 {
     /*
        This function is very liberal with the UTF-8 input.  Accepted are:
@@ -265,11 +270,15 @@ void ImplResetUnicodeToUtf8Context(void * pContext)
         static_cast< ImplUnicodeToUtf8Context * >(pContext)->nHighSurrogate = 0xFFFF;
 }
 
-sal_Size ImplConvertUnicodeToUtf8(ImplTextConverterData const * pData,
-                                  void * pContext, sal_Unicode const * pSrcBuf,
-                                  sal_Size nSrcChars, char * pDestBuf,
-                                  sal_Size nDestBytes, sal_uInt32 nFlags,
-                                  sal_uInt32 * pInfo, sal_Size* pSrcCvtChars)
+void ImplDestroyUnicodeToUtf8Context(void * pContext)
+{
+    delete static_cast< ImplUnicodeToUtf8Context * >(pContext);
+}
+
+sal_Size ImplConvertUnicodeToUtf8(
+    void const * pData, void * pContext, sal_Unicode const * pSrcBuf,
+    sal_Size nSrcChars, char * pDestBuf, sal_Size nDestBytes, sal_uInt32 nFlags,
+    sal_uInt32 * pInfo, sal_Size * pSrcCvtChars)
 {
     int bJavaUtf8 = pData != NULL;
     sal_Unicode nHighSurrogate = 0xFFFF;

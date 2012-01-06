@@ -469,7 +469,7 @@ const sal_uInt16* ImplGetReplaceString( sal_Unicode c )
 
 /* ======================================================================= */
 
-sal_Size ImplSymbolToUnicode( const ImplTextConverterData*,
+sal_Size ImplSymbolToUnicode( const void*,
                               void*,
                               const char* pSrcBuf, sal_Size nSrcBytes,
                               sal_Unicode* pDestBuf, sal_Size nDestChars,
@@ -507,7 +507,7 @@ sal_Size ImplSymbolToUnicode( const ImplTextConverterData*,
 
 /* ----------------------------------------------------------------------- */
 
-sal_Size ImplUnicodeToSymbol( const ImplTextConverterData* pData,
+sal_Size ImplUnicodeToSymbol( const void* pData,
                               void*,
                               const sal_Unicode* pSrcBuf, sal_Size nSrcChars,
                               char* pDestBuf, sal_Size nDestBytes,
@@ -572,7 +572,7 @@ sal_Size ImplUnicodeToSymbol( const ImplTextConverterData* pData,
 
 /* ======================================================================= */
 
-sal_Size ImplCharToUnicode( const ImplTextConverterData* pData,
+sal_Size ImplCharToUnicode( const void* pData,
                             void*,
                             const char* pSrcBuf, sal_Size nSrcBytes,
                             sal_Unicode* pDestBuf, sal_Size nDestChars,
@@ -636,7 +636,7 @@ sal_Size ImplCharToUnicode( const ImplTextConverterData* pData,
 
 /* ----------------------------------------------------------------------- */
 
-sal_Size ImplUpperCharToUnicode( const ImplTextConverterData* pData,
+sal_Size ImplUpperCharToUnicode( const void* pData,
                             void*,
                             const char* pSrcBuf, sal_Size nSrcBytes,
                             sal_Unicode* pDestBuf, sal_Size nDestChars,
@@ -747,7 +747,7 @@ static int ImplConvertUnicodeCharToChar(
 
 /* ----------------------------------------------------------------------- */
 
-sal_Size ImplUnicodeToChar( const ImplTextConverterData* pData,
+sal_Size ImplUnicodeToChar( const void* pData,
                             void*,
                             const sal_Unicode* pSrcBuf, sal_Size nSrcChars,
                             char* pDestBuf, sal_Size nDestBytes,

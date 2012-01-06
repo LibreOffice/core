@@ -30,7 +30,6 @@
 #include "rtl/tencinfo.h"
 #include "rtl/textenc.h"
 
-#include "context.hxx"
 #include "convertiso2022cn.hxx"
 #include "tenchelp.hxx"
 
@@ -53,10 +52,10 @@ static ImplTextEncodingData const aImplIso2022CnTextEncodingData
           &ImplConvertIso2022CnToUnicode,
           &ImplConvertUnicodeToIso2022Cn,
           &ImplCreateIso2022CnToUnicodeContext,
-          &ImplDestroyContext,
+          &ImplDestroyIso2022CnToUnicodeContext,
           &ImplResetIso2022CnToUnicodeContext,
           &ImplCreateUnicodeToIso2022CnContext,
-          &ImplDestroyContext,
+          &ImplDestroyUnicodeToIso2022CnContext,
           &ImplResetUnicodeToIso2022CnContext },
         1,
         8,

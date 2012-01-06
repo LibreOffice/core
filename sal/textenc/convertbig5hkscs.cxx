@@ -62,7 +62,12 @@ void ImplResetBig5HkscsToUnicodeContext(void * pContext)
         static_cast< ImplBig5HkscsToUnicodeContext * >(pContext)->m_nRow = 0;
 }
 
-sal_Size ImplConvertBig5HkscsToUnicode(ImplTextConverterData const * pData,
+void ImplDestroyBig5HkscsToUnicodeContext(void * pContext)
+{
+    delete static_cast< ImplBig5HkscsToUnicodeContext * >(pContext);
+}
+
+sal_Size ImplConvertBig5HkscsToUnicode(void const * pData,
                                        void * pContext,
                                        char const * pSrcBuf,
                                        sal_Size nSrcBytes,
@@ -280,7 +285,7 @@ sal_Size ImplConvertBig5HkscsToUnicode(ImplTextConverterData const * pData,
     return pDestBufPtr - pDestBuf;
 }
 
-sal_Size ImplConvertUnicodeToBig5Hkscs(ImplTextConverterData const * pData,
+sal_Size ImplConvertUnicodeToBig5Hkscs(void const * pData,
                                        void * pContext,
                                        sal_Unicode const * pSrcBuf,
                                        sal_Size nSrcChars,

@@ -50,7 +50,9 @@ void * ImplCreateBig5HkscsToUnicodeContext();
 
 void ImplResetBig5HkscsToUnicodeContext(void * pContext);
 
-sal_Size ImplConvertBig5HkscsToUnicode(ImplTextConverterData const * pData,
+void ImplDestroyBig5HkscsToUnicodeContext(void * pContext);
+
+sal_Size ImplConvertBig5HkscsToUnicode(void const * pData,
                                        void * pContext,
                                        char const * pSrcBuf,
                                        sal_Size nSrcBytes,
@@ -60,7 +62,7 @@ sal_Size ImplConvertBig5HkscsToUnicode(ImplTextConverterData const * pData,
                                        sal_uInt32 * pInfo,
                                        sal_Size * pSrcCvtBytes);
 
-sal_Size ImplConvertUnicodeToBig5Hkscs(ImplTextConverterData const * pData,
+sal_Size ImplConvertUnicodeToBig5Hkscs(void const * pData,
                                        void * pContext,
                                        sal_Unicode const * pSrcBuf,
                                        sal_Size nSrcChars,

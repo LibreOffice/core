@@ -116,7 +116,7 @@ sal_Unicode ImplGetUndefinedUnicodeChar(sal_uChar cChar, sal_uInt32 nFlags)
 /* ----------------------------------------------------------------------- */
 
 bool
-ImplHandleUndefinedUnicodeToTextChar(ImplTextConverterData const *,
+ImplHandleUndefinedUnicodeToTextChar(void const *,
                                      sal_Unicode const ** ppSrcBuf,
                                      sal_Unicode const * pEndSrcBuf,
                                      char ** ppDestBuf,

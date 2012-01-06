@@ -98,7 +98,12 @@ void ImplResetIso2022CnToUnicodeContext(void * pContext)
     }
 }
 
-sal_Size ImplConvertIso2022CnToUnicode(ImplTextConverterData const * pData,
+void ImplDestroyIso2022CnToUnicodeContext(void * pContext)
+{
+    delete static_cast< ImplIso2022CnToUnicodeContext * >(pContext);
+}
+
+sal_Size ImplConvertIso2022CnToUnicode(void const * pData,
                                        void * pContext,
                                        char const * pSrcBuf,
                                        sal_Size nSrcBytes,
@@ -445,6 +450,11 @@ void ImplResetUnicodeToIso2022CnContext(void * pContext)
     }
 }
 
+void ImplDestroyUnicodeToIso2022CnContext(void * pContext)
+{
+    delete static_cast< ImplUnicodeToIso2022CnContext * >(pContext);
+}
+
 static sal_uInt32 ImplIso2022CnTranslateTo2312(ImplUniToDBCSHighTab const *
                                                    pGb2312Data,
                                                sal_uInt32 nChar)
@@ -489,7 +499,7 @@ ImplIso2022CnTranslateTo116431(sal_uInt8 const * pCns116431992Data,
                | (0x20 + pCns116431992Data[nOffset + 1]);
 }
 
-sal_Size ImplConvertUnicodeToIso2022Cn(ImplTextConverterData const * pData,
+sal_Size ImplConvertUnicodeToIso2022Cn(void const * pData,
                                        void * pContext,
                                        sal_Unicode const * pSrcBuf,
                                        sal_Size nSrcChars,

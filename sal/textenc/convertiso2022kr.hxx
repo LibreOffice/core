@@ -45,7 +45,9 @@ void * ImplCreateIso2022KrToUnicodeContext();
 
 void ImplResetIso2022KrToUnicodeContext(void * pContext);
 
-sal_Size ImplConvertIso2022KrToUnicode(ImplTextConverterData const * pData,
+void ImplDestroyIso2022KrToUnicodeContext(void * pContext);
+
+sal_Size ImplConvertIso2022KrToUnicode(void const * pData,
                                        void * pContext,
                                        char const * pSrcBuf,
                                        sal_Size nSrcBytes,
@@ -59,7 +61,9 @@ void * ImplCreateUnicodeToIso2022KrContext();
 
 void ImplResetUnicodeToIso2022KrContext(void * pContext);
 
-sal_Size ImplConvertUnicodeToIso2022Kr(ImplTextConverterData const * pData,
+void ImplDestroyUnicodeToIso2022KrContext(void * pContext);
+
+sal_Size ImplConvertUnicodeToIso2022Kr(void const * pData,
                                        void * pContext,
                                        sal_Unicode const * pSrcBuf,
                                        sal_Size nSrcChars,

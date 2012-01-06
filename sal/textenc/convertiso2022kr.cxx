@@ -85,7 +85,12 @@ void ImplResetIso2022KrToUnicodeContext(void * pContext)
             = IMPL_ISO_2022_KR_TO_UNICODE_STATE_ASCII;
 }
 
-sal_Size ImplConvertIso2022KrToUnicode(ImplTextConverterData const * pData,
+void ImplDestroyIso2022KrToUnicodeContext(void * pContext)
+{
+    delete static_cast< ImplIso2022KrToUnicodeContext * >(pContext);
+}
+
+sal_Size ImplConvertIso2022KrToUnicode(void const * pData,
                                        void * pContext,
                                        char const * pSrcBuf,
                                        sal_Size nSrcBytes,
@@ -288,7 +293,12 @@ void ImplResetUnicodeToIso2022KrContext(void * pContext)
     }
 }
 
-sal_Size ImplConvertUnicodeToIso2022Kr(ImplTextConverterData const * pData,
+void ImplDestroyUnicodeToIso2022KrContext(void * pContext)
+{
+    delete static_cast< ImplUnicodeToIso2022KrContext * >(pContext);
+}
+
+sal_Size ImplConvertUnicodeToIso2022Kr(void const * pData,
                                        void * pContext,
                                        sal_Unicode const * pSrcBuf,
                                        sal_Size nSrcChars,

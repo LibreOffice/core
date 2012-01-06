@@ -110,8 +110,8 @@ struct BmpUnicodeToSingleByteConverterData {
 
    @see ImplConvertToUnicodeProc
  */
-extern "C" sal_Size rtl_textenc_convertSingleByteToBmpUnicode(
-    ImplTextConverterData const * data, void * context, sal_Char const * srcBuf,
+sal_Size rtl_textenc_convertSingleByteToBmpUnicode(
+    void const * data, void * context, sal_Char const * srcBuf,
     sal_Size srcBytes, sal_Unicode * destBuf, sal_Size destChars,
     sal_uInt32 flags, sal_uInt32 * info, sal_Size * srcCvtBytes);
 
@@ -120,8 +120,8 @@ extern "C" sal_Size rtl_textenc_convertSingleByteToBmpUnicode(
 
    @see ImplConvertToTextProc
  */
-extern "C" sal_Size rtl_textenc_convertBmpUnicodeToSingleByte(
-    ImplTextConverterData const * data, void * context,
+sal_Size rtl_textenc_convertBmpUnicodeToSingleByte(
+    void const * data, void * context,
     sal_Unicode const * srcBuf, sal_Size srcChars, sal_Char * destBuf,
     sal_Size destBytes, sal_uInt32 flags, sal_uInt32 * info,
     sal_Size * srcCvtChars);

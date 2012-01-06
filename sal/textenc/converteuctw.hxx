@@ -33,8 +33,6 @@
 
 #include "sal/types.h"
 
-#include "tenchelp.hxx"
-
 struct ImplEucTwConverterData
 {
     sal_uInt16 const * m_pCns116431992ToUnicodeData;
@@ -49,7 +47,9 @@ void * ImplCreateEucTwToUnicodeContext();
 
 void ImplResetEucTwToUnicodeContext(void * pContext);
 
-sal_Size ImplConvertEucTwToUnicode(ImplTextConverterData const * pData,
+void ImplDestroyEucTwToUnicodeContext(void * pContext);
+
+sal_Size ImplConvertEucTwToUnicode(void const * pData,
                                    void * pContext,
                                    char const * pSrcBuf,
                                    sal_Size nSrcBytes,
@@ -59,7 +59,7 @@ sal_Size ImplConvertEucTwToUnicode(ImplTextConverterData const * pData,
                                    sal_uInt32 * pInfo,
                                    sal_Size * pSrcCvtBytes);
 
-sal_Size ImplConvertUnicodeToEucTw(ImplTextConverterData const * pData,
+sal_Size ImplConvertUnicodeToEucTw(void const * pData,
                                    void * pContext,
                                    sal_Unicode const * pSrcBuf,
                                    sal_Size nSrcChars,

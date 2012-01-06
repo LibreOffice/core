@@ -33,8 +33,6 @@
 
 #include "sal/types.h"
 
-#include "tenchelp.hxx"
-
 struct ImplGb180302000ToUnicodeRange
 {
     sal_Int32 m_nNonRangeDataIndex;
@@ -63,7 +61,9 @@ void * ImplCreateGb18030ToUnicodeContext();
 
 void ImplResetGb18030ToUnicodeContext(void * pContext);
 
-sal_Size ImplConvertGb18030ToUnicode(ImplTextConverterData const * pData,
+void ImplDestroyGb18030ToUnicodeContext(void * pContext);
+
+sal_Size ImplConvertGb18030ToUnicode(void const * pData,
                                      void * pContext,
                                      char const * pSrcBuf,
                                      sal_Size nSrcBytes,
@@ -73,7 +73,7 @@ sal_Size ImplConvertGb18030ToUnicode(ImplTextConverterData const * pData,
                                      sal_uInt32 * pInfo,
                                      sal_Size * pSrcCvtBytes);
 
-sal_Size ImplConvertUnicodeToGb18030(ImplTextConverterData const * pData,
+sal_Size ImplConvertUnicodeToGb18030(void const * pData,
                                      void * pContext,
                                      sal_Unicode const * pSrcBuf,
                                      sal_Size nSrcChars,

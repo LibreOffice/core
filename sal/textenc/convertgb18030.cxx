@@ -69,7 +69,12 @@ void ImplResetGb18030ToUnicodeContext(void * pContext)
             = IMPL_GB_18030_TO_UNICODE_STATE_0;
 }
 
-sal_Size ImplConvertGb18030ToUnicode(ImplTextConverterData const * pData,
+void ImplDestroyGb18030ToUnicodeContext(void * pContext)
+{
+    delete static_cast< ImplGb18030ToUnicodeContext * >(pContext);
+}
+
+sal_Size ImplConvertGb18030ToUnicode(void const * pData,
                                      void * pContext,
                                      char const * pSrcBuf,
                                      sal_Size nSrcBytes,
@@ -284,7 +289,7 @@ sal_Size ImplConvertGb18030ToUnicode(ImplTextConverterData const * pData,
     return pDestBufPtr - pDestBuf;
 }
 
-sal_Size ImplConvertUnicodeToGb18030(ImplTextConverterData const * pData,
+sal_Size ImplConvertUnicodeToGb18030(void const * pData,
                                      void * pContext,
                                      sal_Unicode const * pSrcBuf,
                                      sal_Size nSrcChars,
