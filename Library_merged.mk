@@ -21,26 +21,16 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-
 $(eval $(call gb_Library_Library,merged))
 
-$(eval $(call gb_Library_add_linked_libs,merged,$(filter-out $(gb_MERGED_LIBS),\
-	avmedia \
+$(eval $(call gb_Library_add_linked_libs,merged,\
 	basegfx \
-	canvastools \
 	comphelper \
-	cppcanvas \
 	cppu \
 	cppuhelper \
-	drawinglayer \
-	editeng \
 	fwe \
 	i18nisolang1 \
 	i18npaper \
-	i18nutil \
-	jvmfwk \
-	lng \
-	fwe \
 	sal \
 	salhelper \
 	sax \
@@ -49,28 +39,24 @@ $(eval $(call gb_Library_add_linked_libs,merged,$(filter-out $(gb_MERGED_LIBS),\
 	sot \
 	svl \
 	svt \
-	svx \
-	svxcore \
 	tk \
 	tl \
 	ucbhelper \
 	utl \
 	vcl \
-	xo \
 	xcr \
 	$(gb_STDLIBS) \
-)))
+))
 
 $(eval $(call gb_Library_use_externals,merged,\
-	icui18n \
+	berkeleydb \
 	icuuc \
-	jpeg \
-	libxml2 \
 	zlib \
 ))
 
+# gb_MERGEDLIBS is defined in solenv/gbuild/extensions/pre_MergedLibsList.mk
 $(eval $(call gb_Library_add_library_objects,merged,\
-	$(gb_CORE_LIBS) \
+	$(gb_MERGEDLIBS) \
 ))
 
 ifeq ($(OS),WNT)
@@ -82,14 +68,6 @@ $(eval $(call gb_Library_add_linked_libs,merged,\
 	shell32 \
 	user32 \
 	uuid \
-))
-endif
-
-# something is missing here for sure
-ifeq ($(OS),MACOSX)
-$(eval $(call gb_Library_add_linked_libs,merged,\
-	objc \
-	Cocoa \
 ))
 endif
 

@@ -46,17 +46,6 @@ CXXFLAGS ?= $(gb_COMPILEROPTFLAGS)
 OBJCXXFLAGS ?= $(gb_COMPILEROPTFLAGS)
 endif
 
-# if enabled we link all of these libraries into one larger, merged library
-# for which we can do a lot more optimisation, and which is faster to read
-# from disk.
-ifeq ($(MERGELIBS),TRUE)
-# list of libraries which are always loaded, thus we can merge them into one
-# they have to be from tail_build, so we could link against merged library
-gb_CORE_LIBS := \
-	uui \
-
-endif
-
 # Overview of dependencies and tasks of LinkTarget
 #
 # target                      task                         depends on
@@ -357,8 +346,10 @@ mv $${TEMPFILE} $(call gb_LinkTarget_get_objects_list,$(2))
 
 endef
 
+# If object files from this library are merged, create just empty file
 $(call gb_LinkTarget_get_target,%) : $(call gb_LinkTarget_get_headers_target,%) $(gb_Helper_MISCDUMMY)
-	$(call gb_LinkTarget__command,$@,$*)
+	$(if $(filter $*,$(foreach lib,$(gb_MERGEDLIBS),$(call gb_Library_get_linktargetname,$(lib)))), \
+		touch $@, $(call gb_LinkTarget__command,$@,$*))
 	$(call gb_LinkTarget__command_objectlist,$@,$*)
 
 ifeq ($(gb_FULLDEPS),$(true))
@@ -639,11 +630,9 @@ $$(eval $$(call gb_Output_info,currently known libraries are: $(sort $(gb_Librar
 $$(eval $$(call gb_Output_error,Cannot link against library/libraries $$(filter-out $(gb_Library_KNOWNLIBS),$(2)). Libraries must be registered in Repository.mk))
 endif
 
-ifeq ($(MERGELIBS),TRUE)
-gb_LINKED_LIBS := $(if $(filter $(gb_CORE_LIBS),$(2)),merged $(filter-out $(gb_CORE_LIBS),$(2)),$(2))
-else
-gb_LINKED_LIBS := $(2)
-endif
+gb_LINKED_LIBS := $(if $(filter $(gb_MERGEDLIBS),$(2)), \
+	$(if $(filter $(1),$(foreach lib,$(gb_MERGEDLIBS),$(call gb_Library_get_linktargetname,$(lib)))),, merged)) \
+	$(filter-out $(gb_MERGEDLIBS),$(2))
 
 $(call gb_LinkTarget_get_target,$(1)) : LINKED_LIBS += $$(gb_LINKED_LIBS)
 

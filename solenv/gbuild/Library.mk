@@ -106,7 +106,7 @@ endef
 # gb_Library__get_final_target has been invented for that purpose...
 define gb_Library_set_componentfile
 $(call gb_ComponentTarget_ComponentTarget,$(2),$(call gb_Library__get_componentprefix,$(1)),\
-	$(call gb_Library_get_runtime_filename,$(if $(MERGELIBS),$(if $(filter $(gb_MERGED_LIBS),$(1)),merged,$(1)),$(1))))
+	$(call gb_Library_get_runtime_filename,$(if $(filter $(1),$(gb_MERGEDLIBS)),merged,$(1))))
 $(call gb_Library__get_final_target,$(1)) : \
 	$(call gb_ComponentTarget_get_outdir_target,$(2))
 $(call gb_ComponentTarget_get_target,$(2)) :| $(call gb_Library_get_target,$(1))
