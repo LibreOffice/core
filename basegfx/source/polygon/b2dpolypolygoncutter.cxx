@@ -282,7 +282,7 @@ namespace basegfx
                                 bOnEdge = false;
                             }
                         }
-                        while(bOnEdge && pPNa2 != &rPNa && pPNa2 != &rPNa);
+                        while(bOnEdge && pPNa2 != &rPNa && pPNb2 != &rPNb);
 
                         if(bOnEdge)
                         {
@@ -408,7 +408,7 @@ namespace basegfx
                                 bOnEdge = false;
                             }
                         }
-                        while(bOnEdge && pPNa2 != &rPNa && pPNa2 != &rPNa);
+                        while(bOnEdge && pPNa2 != &rPNa && pPNb2 != &rPNb);
 
                         if(bOnEdge)
                         {
