@@ -25,51 +25,51 @@
  *
  *************************************************************************/
 
-#define VER_FIRSTYEAR	2000
+#define VER_FIRSTYEAR    2000
 
 #include <windows.h>
 #include "version.hrc"
 
 // -----------------------------------------------------------------------
-// 				version information
+//                 version information
 // -----------------------------------------------------------------------
 
 VS_VERSION_INFO VERSIONINFO
-	FILEVERSION    VERSION, SUBVERSION, MICROVERSION, VERVARIANT
-	PRODUCTVERSION VERSION, SUBVERSION, MICROVERSION, VERVARIANT
-	FILEFLAGSMASK 0x3F
-	FILEFLAGS
+    FILEVERSION    VERSION, SUBVERSION, MICROVERSION, VERVARIANT
+    PRODUCTVERSION VERSION, SUBVERSION, MICROVERSION, VERVARIANT
+    FILEFLAGSMASK 0x3F
+    FILEFLAGS
 #if defined(DEBUG)
-	VS_FF_DEBUG |
+    VS_FF_DEBUG |
 #endif
 #ifdef VER_PREL
-	VS_FF_PRERELEASE |
+    VS_FF_PRERELEASE |
 #endif
-	0
-	FILEOS VOS_NT_WINDOWS32
-	FILETYPE VFT_APP
-	{
-		BLOCK "StringFileInfo"
-		{
-			BLOCK "040904E4"
-			{
-				// International StringTable
-                VALUE "CompanyName", 		PPS(RES_APP_VENDOR) "\0"
-				VALUE "FileDescription",	"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\0"
-				VALUE "FileVersion",		PPS(VER_LEVEL) "\0"
-				VALUE "ProductVersion",		PPS(VER_LEVEL) "\0"
-				VALUE "ProductName",		"LibreOffice\0"
-				VALUE "OriginalFilename",	PPS(RES_APP_NAME) ".exe\0"
-				VALUE "InternalName", 		PPS(RES_APP_NAME) "\0"
-				VALUE "LegalCopyright", 	S_CRIGHT " LibreOffice contributors and/or their affiliates. All rights reserved.\0"
-			}
-		}
+    0
+    FILEOS VOS_NT_WINDOWS32
+    FILETYPE VFT_APP
+    {
+        BLOCK "StringFileInfo"
+        {
+            BLOCK "040904E4"
+            {
+                // International StringTable
+                VALUE "CompanyName",      PPS(RES_APP_VENDOR) "\0"
+                VALUE "FileDescription",  "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\0"
+                VALUE "FileVersion",      PPS(VER_LEVEL) "\0"
+                VALUE "ProductVersion",   PPS(VER_LEVEL) "\0"
+                VALUE "ProductName",      "LibreOffice\0"
+                VALUE "OriginalFilename", PPS(RES_APP_NAME) ".exe\0"
+                VALUE "InternalName",     PPS(RES_APP_NAME) "\0"
+                VALUE "LegalCopyright",   S_CRIGHT " LibreOffice contributors and/or their affiliates. All rights reserved.\0"
+            }
+        }
 
-		BLOCK "VarFileInfo"
-		{
-			VALUE "Translation", 0x0409, 1252
-		}
-	}
+        BLOCK "VarFileInfo"
+        {
+            VALUE "Translation", 0x0409, 1252
+        }
+    }
 
 1 ICON PPS(RES_APP_ICON)
 2 ICON "icons/oasis-text.ico"
@@ -111,4 +111,3 @@ VS_VERSION_INFO VERSIONINFO
 38 ICON "icons/database.ico"
 39 ICON "icons/formula.ico"
 40 ICON "icons/oxt-extension.ico"
-
