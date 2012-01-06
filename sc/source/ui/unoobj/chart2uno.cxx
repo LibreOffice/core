@@ -2068,7 +2068,7 @@ uno::Reference< chart2::data::XDataSequence > SAL_CALL
     uno::Reference< chart2::data::XDataSequence > xResult;
 
     OSL_ENSURE( m_pDocument, "No Document -> no createDataSequenceByRangeRepresentation" );
-    if(!m_pDocument || (aRangeRepresentation.getLength() == 0))
+    if(!m_pDocument || aRangeRepresentation.isEmpty())
         return xResult;
 
     vector<ScTokenRef> aRefTokens;
@@ -2237,7 +2237,7 @@ rtl::OUString SAL_CALL ScChart2DataProvider::convertRangeToXML( const rtl::OUStr
     if (!m_pDocument)
         return aRet;
 
-    if (!sRangeRepresentation.getLength())
+    if (sRangeRepresentation.isEmpty())
         // Empty data range is allowed.
         return aRet;
 

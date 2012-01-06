@@ -226,7 +226,7 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
                 }
 
                 ScMacroInfo* pInfo = ScDrawLayer::GetMacroInfo( pObj );
-                if ( pInfo && (pInfo->GetHlink().getLength() > 0) )
+                if ( pInfo && !pInfo->GetHlink().isEmpty() )
                     ScGlobal::OpenURL( pInfo->GetHlink(), String::EmptyString() );
             }
             break;
@@ -306,7 +306,7 @@ void ScDrawShell::ExecuteMacroAssign( SdrObject* pObj, Window* pWin )
 {
     SvxMacroItem aItem ( SFX_APP()->GetPool().GetWhich( SID_ATTR_MACROITEM ) );
     ScMacroInfo* pInfo = ScDrawLayer::GetMacroInfo( pObj, sal_True );
-    if ( pInfo->GetMacro().getLength() > 0 )
+    if ( !pInfo->GetMacro().isEmpty() )
     {
         SvxMacroTableDtor aTab;
         String sMacro(  pInfo->GetMacro() );

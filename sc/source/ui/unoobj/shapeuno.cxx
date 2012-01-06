@@ -1427,7 +1427,7 @@ public:
 
         if ( aName == SC_EVENTACC_ONCLICK )
         {
-            if ( pInfo && (pInfo->GetMacro().getLength() > 0) )
+            if ( pInfo && !pInfo->GetMacro().isEmpty() )
             {
                 aProperties.realloc( 2 );
                 aProperties[ 0 ].Name = SC_EVENTACC_EVENTTYPE;

@@ -544,7 +544,7 @@ XclExpOcxControlObj::XclExpOcxControlObj( XclExpObjectManager& rObjMgr, Referenc
 
     // #i51348# name of the control, may overwrite shape name
     OUString aCtrlName;
-    if( aCtrlProp.GetProperty( aCtrlName, CREATE_OUSTRING( "Name" ) ) && (aCtrlName.getLength() > 0) )
+    if( aCtrlProp.GetProperty( aCtrlName, CREATE_OUSTRING( "Name" ) ) && !aCtrlName.isEmpty() )
         aPropOpt.AddOpt( ESCHER_Prop_wzName, aCtrlName );
 
     // meta file
@@ -693,7 +693,7 @@ XclExpTbxControlObj::XclExpTbxControlObj( XclExpObjectManager& rRoot, Reference<
 
     // #i51348# name of the control, may overwrite shape name
     OUString aCtrlName;
-    if( aCtrlProp.GetProperty( aCtrlName, CREATE_OUSTRING( "Name" ) ) && (aCtrlName.getLength() > 0) )
+    if( aCtrlProp.GetProperty( aCtrlName, CREATE_OUSTRING( "Name" ) ) && !aCtrlName.isEmpty() )
         aPropOpt.AddOpt( ESCHER_Prop_wzName, aCtrlName );
 
     // write DFF property set to stream
@@ -717,7 +717,7 @@ XclExpTbxControlObj::XclExpTbxControlObj( XclExpObjectManager& rRoot, Reference<
         mrEscherEx.UpdateDffFragmentEnd();
 
         sal_uInt16 nXclFont = EXC_FONT_APP;
-        if( aString.getLength() > 0 )
+        if( !aString.isEmpty() )
         {
             XclFontData aFontData;
             GetFontPropSetHelper().ReadFontProperties( aFontData, aCtrlProp, EXC_FONTPROPSET_CONTROL );
@@ -815,7 +815,7 @@ XclExpTbxControlObj::XclExpTbxControlObj( XclExpObjectManager& rRoot, Reference<
             OUString aDefText;
             if( aCtrlProp.GetProperty( aStringList, CREATE_OUSTRING( "StringItemList" ) ) &&
                 aCtrlProp.GetProperty( aDefText, CREATE_OUSTRING( "Text" ) ) &&
-                aStringList.getLength() && aDefText.getLength() )
+                aStringList.getLength() && !aDefText.isEmpty() )
             {
                 const OUString* pBegin = aStringList.getConstArray();
                 const OUString* pEnd = pBegin + aStringList.getLength();
@@ -1253,7 +1253,7 @@ XclExpNote::XclExpNote( const XclExpRoot& rRoot, const ScAddress& rScPos,
 
                     // AutoFill style would change if Postit.cxx object creation values are changed
                     OUString aCol(((XFillColorItem &)GETITEM(aItemSet, XFillColorItem , XATTR_FILLCOLOR)).GetValue());
-                    mbAutoFill  = !aCol.getLength() && (GETITEMVALUE(aItemSet, XFillStyleItem, XATTR_FILLSTYLE, sal_uLong) == XFILL_SOLID);
+                    mbAutoFill  = aCol.isEmpty() && (GETITEMVALUE(aItemSet, XFillStyleItem, XATTR_FILLSTYLE, sal_uLong) == XFILL_SOLID);
                     mbAutoLine  = true;
                     mbRowHidden = (rRoot.GetDoc().RowHidden(maScPos.Row(),maScPos.Tab()));
                     mbColHidden = (rRoot.GetDoc().ColHidden(maScPos.Col(),maScPos.Tab()));
@@ -1435,7 +1435,7 @@ XclExpShapeObj::XclExpShapeObj( XclExpObjectManager& rRoot, ::com::sun::star::un
     if( SdrObject* pSdrObj = ::GetSdrObjectFromXShape( xShape ) )
     {
         ScMacroInfo* pInfo = ScDrawLayer::GetMacroInfo( pSdrObj );
-        if ( pInfo && pInfo->GetMacro().getLength() )
+        if ( pInfo && !pInfo->GetMacro().isEmpty() )
 // FIXME ooo330-m2: XclControlHelper::GetXclMacroName was removed in upstream sources; they started to call XclTools::GetXclMacroName instead; is this enough? it has only one parameter
 //            SetMacroLink( XclControlHelper::GetXclMacroName( pInfo->GetMacro(), rRoot.GetDocShell() ) );
             SetMacroLink( XclTools::GetXclMacroName( pInfo->GetMacro() ) );

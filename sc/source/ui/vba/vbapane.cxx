@@ -134,7 +134,7 @@ ScVbaPane::SmallScroll( const uno::Any& Down, const uno::Any& Up, const uno::Any
         else
             messageBuffer += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Error getting parameter: ToLeft\n" ));
     }
-    if( messageBuffer.getLength() > 0 )
+    if( !messageBuffer.isEmpty() )
         throw(uno::RuntimeException( messageBuffer, uno::Reference< uno::XInterface >() ) );
 
     sal_Int32 newStartRow = visibleRange.StartRow + downRows;
@@ -189,7 +189,7 @@ ScVbaPane::LargeScroll( const uno::Any& Down, const uno::Any& Up, const uno::Any
         else
             messageBuffer += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Error getting parameter: ToLeft\n" ));
     }
-    if( messageBuffer.getLength() > 0 )
+    if( !messageBuffer.isEmpty() )
         throw(uno::RuntimeException( messageBuffer, uno::Reference< uno::XInterface >() ) );
 
     sal_Int32 newStartRow = visibleRange.StartRow + (downPages * vertPageSize );

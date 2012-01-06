@@ -124,7 +124,7 @@ void ScSolverUtil::GetImplementations( uno::Sequence<rtl::OUString>& rImplNames,
                         if ( xDesc.is() )
                             sDescription = xDesc->getComponentDescription();
 
-                        if ( !sDescription.getLength() )
+                        if ( sDescription.isEmpty() )
                             sDescription = sName;          // use implementation name if no description available
 
                         rImplNames.realloc( nCount+1 );

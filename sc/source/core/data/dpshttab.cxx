@@ -236,7 +236,7 @@ void ScSheetSourceDesc::SetSourceRange(const ScRange& rRange)
 
 const ScRange& ScSheetSourceDesc::GetSourceRange() const
 {
-    if (maRangeName.getLength())
+    if (!maRangeName.isEmpty())
     {
         // Obtain the source range from the range name first.
         maSourceRange = ScRange();
@@ -276,7 +276,7 @@ const OUString& ScSheetSourceDesc::GetRangeName() const
 
 bool ScSheetSourceDesc::HasRangeName() const
 {
-    return maRangeName.getLength() > 0;
+    return !maRangeName.isEmpty();
 }
 
 void ScSheetSourceDesc::SetQueryParam(const ScQueryParam& rParam)

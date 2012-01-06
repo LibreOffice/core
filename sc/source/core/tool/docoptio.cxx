@@ -161,7 +161,7 @@ void ScDocOptions::ResetFormulaSeparators()
     const OUString& rDecSep  = rLocaleData.getNumDecimalSep();
     const OUString& rListSep = rLocaleData.getListSep();
 
-    if (!rDecSep.getLength() || !rListSep.getLength())
+    if (rDecSep.isEmpty() || rListSep.isEmpty())
         // Something is wrong.  Stick with the default separators.
         return;
 
@@ -509,21 +509,21 @@ ScDocCfg::ScDocCfg() :
                 case SCFORMULAOPT_SEP_ARG:
                 {
                     OUString aSep;
-                    if ((pValues[nProp] >>= aSep) && aSep.getLength())
+                    if ((pValues[nProp] >>= aSep) && !aSep.isEmpty())
                         SetFormulaSepArg(aSep);
                 }
                 break;
                 case SCFORMULAOPT_SEP_ARRAY_ROW:
                 {
                     OUString aSep;
-                    if ((pValues[nProp] >>= aSep) && aSep.getLength())
+                    if ((pValues[nProp] >>= aSep) && !aSep.isEmpty())
                         SetFormulaSepArrayRow(aSep);
                 }
                 break;
                 case SCFORMULAOPT_SEP_ARRAY_COL:
                 {
                     OUString aSep;
-                    if ((pValues[nProp] >>= aSep) && aSep.getLength())
+                    if ((pValues[nProp] >>= aSep) && !aSep.isEmpty())
                         SetFormulaSepArrayCol(aSep);
                 }
                 break;

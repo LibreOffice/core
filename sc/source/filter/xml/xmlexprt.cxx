@@ -1890,7 +1890,7 @@ void ScXMLExport::AddStyleFromCells(const uno::Reference<beans::XPropertySet>& x
         xPropStates.clear();
     if (nNumberFormat == -1)
         xProperties->getPropertyValue(SC_NUMBERFORMAT) >>= nNumberFormat;
-    if (sStyleName.getLength())
+    if (!sStyleName.isEmpty())
     {
         if (xPropStates.size())
         {
@@ -2210,7 +2210,7 @@ void ScXMLExport::_ExportAutoStyles()
                         Reference<beans::XPropertySet> xShapeProperties( pDrawObj->getUnoShape(), uno::UNO_QUERY );
                         if (xShapeProperties.is())
                         {
-                            if ( aNoteIter->maStyleName.getLength() )
+                            if ( !aNoteIter->maStyleName.isEmpty() )
                             {
                                 std::vector<XMLPropertyState> xPropStates(xShapeMapper->Filter(xShapeProperties));
                                 rtl::OUString sParent;
@@ -2218,7 +2218,7 @@ void ScXMLExport::_ExportAutoStyles()
                                 GetAutoStylePool()->AddNamed(sName, XML_STYLE_FAMILY_SD_GRAPHICS_ID, sParent, xPropStates);
                                 GetAutoStylePool()->RegisterName(XML_STYLE_FAMILY_SD_GRAPHICS_ID, sName);
                             }
-                            if ( aNoteIter->maTextStyle.getLength() )
+                            if ( !aNoteIter->maTextStyle.isEmpty() )
                             {
                                 std::vector<XMLPropertyState> xPropStates(
                                     GetTextParagraphExport()->GetParagraphPropertyMapper()->Filter(xShapeProperties));
@@ -2744,7 +2744,7 @@ void ScXMLExport::WriteTable(sal_Int32 nTable, const Reference<sheet::XSpreadshe
     table::CellRangeAddress aColumnHeaderRange;
     bool bHasColumnHeader;
     GetColumnRowHeader(bHasColumnHeader, aColumnHeaderRange, bHasRowHeader, aRowHeaderRange, sPrintRanges);
-    if( sPrintRanges.getLength() )
+    if( !sPrintRanges.isEmpty() )
         AddAttribute( XML_NAMESPACE_TABLE, XML_PRINT_RANGES, sPrintRanges );
     else if (!pDoc->IsPrintEntireSheet(static_cast<SCTAB>(nTable)))
         AddAttribute( XML_NAMESPACE_TABLE, XML_PRINT, XML_FALSE);
@@ -2966,7 +2966,7 @@ void ScXMLExport::WriteCell(ScMyCell& aCell, sal_Int32 nEqualCellCount)
                 else
                 {
                     if (GetCellText(aCell, aCellPos))
-                        if (aCell.sStringValue.getLength())
+                        if (!aCell.sStringValue.isEmpty())
                         {
                             AddAttribute(sAttrValueType, XML_STRING);
                             AddAttribute(sAttrStringValue, aCell.sStringValue);
@@ -3073,7 +3073,7 @@ void ScXMLExport::ExportShape(const uno::Reference < drawing::XShape >& xShape, 
                                 if ( rRangeList.Is() )
                                 {
                                     ScRangeStringConverter::GetStringFromRangeList( sRanges, rRangeList, pDoc, FormulaGrammar::CONV_OOO );
-                                    if ( sRanges.getLength() > 0 )
+                                    if ( !sRanges.isEmpty() )
                                     {
                                         bIsChart = true;
                                         SvXMLAttributeList* pAttrList = new SvXMLAttributeList();
@@ -3089,7 +3089,7 @@ void ScXMLExport::ExportShape(const uno::Reference < drawing::XShape >& xShape, 
                         }
                     }
 
-                    if ( sRanges.getLength() == 0 )
+                    if ( sRanges.isEmpty() )
                     {
                         uno::Reference< frame::XModel > xChartModel;
                         if( ( xShapeProps->getPropertyValue( sPropModel ) >>= xChartModel ) &&
@@ -3134,7 +3134,7 @@ void ScXMLExport::ExportShape(const uno::Reference < drawing::XShape >& xShape, 
 
         std::auto_ptr< SvXMLElementExport > pDrawA;
         // enlose shapes with <draw:a> element only if sHlink contains something
-        if ( sHlink.getLength() > 0 )
+        if ( !sHlink.isEmpty() )
         {
             // need to get delete the attributes that are pre-loaded
             // for the shape export ( otherwise they will become
@@ -3237,7 +3237,7 @@ void ScXMLExport::WriteAreaLink( const ScMyCell& rMyCell )
         AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
         AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, GetRelativeReference(rAreaLink.sURL) );
         AddAttribute( XML_NAMESPACE_TABLE, XML_FILTER_NAME, rAreaLink.sFilter );
-        if( rAreaLink.sFilterOptions.getLength() )
+        if( !rAreaLink.sFilterOptions.isEmpty() )
             AddAttribute( XML_NAMESPACE_TABLE, XML_FILTER_OPTIONS, rAreaLink.sFilterOptions );
         OUStringBuffer sValue;
         ::sax::Converter::convertNumber( sValue, rAreaLink.GetColCount() );
@@ -3259,7 +3259,7 @@ void ScXMLExport::exportAnnotationMeta( const uno::Reference < drawing::XShape >
     if (pCurrentCell && pCurrentCell->xNoteShape.is() && pCurrentCell->xNoteShape.get() == xShape.get() && pCurrentCell->xAnnotation.is())
     {
         rtl::OUString sAuthor(pCurrentCell->xAnnotation->getAuthor());
-        if (sAuthor.getLength())
+        if (!sAuthor.isEmpty())
         {
             SvXMLElementExport aCreatorElem( *this, XML_NAMESPACE_DC,
                                                 XML_CREATOR, true,
@@ -3635,15 +3635,15 @@ void ScXMLExport::WriteTableSource()
                             xLinkProps->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_FILTER))) >>= sFilter;
                             xLinkProps->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_FILTOPT))) >>= sFilterOptions;
                             xLinkProps->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_REFDELAY))) >>= nRefresh;
-                            if (sLink.getLength())
+                            if (!sLink.isEmpty())
                             {
                                 AddAttribute(XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE);
                                 AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, GetRelativeReference(sLink));
-                                if (sTableName.getLength())
+                                if (!sTableName.isEmpty())
                                     AddAttribute(XML_NAMESPACE_TABLE, XML_TABLE_NAME, sTableName);
-                                if (sFilter.getLength())
+                                if (!sFilter.isEmpty())
                                     AddAttribute(XML_NAMESPACE_TABLE, XML_FILTER_NAME, sFilter);
-                                if (sFilterOptions.getLength())
+                                if (!sFilterOptions.isEmpty())
                                     AddAttribute(XML_NAMESPACE_TABLE, XML_FILTER_OPTIONS, sFilterOptions);
                                 if (nMode != sheet::SheetLinkMode_NORMAL)
                                     AddAttribute(XML_NAMESPACE_TABLE, XML_MODE, XML_COPY_RESULTS_ONLY);
@@ -3798,7 +3798,7 @@ void ScXMLExport::WriteNamedRange(ScRangeName* pRangeName)
                 sBufferRangeType.append(GetXMLToken(XML_PRINT_RANGE));
             }
             rtl::OUString sRangeType = sBufferRangeType.makeStringAndClear();
-            if (sRangeType.getLength())
+            if (!sRangeType.isEmpty())
                 AddAttribute(XML_NAMESPACE_TABLE, XML_RANGE_USABLE_AS, sRangeType);
             SvXMLElementExport aElemNR(*this, XML_NAMESPACE_TABLE, XML_NAMED_RANGE, true, true);
 

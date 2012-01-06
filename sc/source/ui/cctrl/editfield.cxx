@@ -62,7 +62,7 @@ ScDoubleField::ScDoubleField( Window* pParent, const ResId& rResId ) :
 bool ScDoubleField::GetValue( double& rfValue ) const
 {
     rtl::OUString aStr(comphelper::string::strip(GetText(), ' '));
-    bool bOk = aStr.getLength() > 0;
+    bool bOk = !aStr.isEmpty();
     if( bOk )
     {
         rtl_math_ConversionStatus eStatus;

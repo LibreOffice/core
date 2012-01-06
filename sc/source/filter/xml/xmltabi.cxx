@@ -378,7 +378,7 @@ void ScXMLTableContext::EndElement()
 
     ScMyTables& rTables = rImport.GetTables();
     SCTAB nCurTab = rTables.GetCurrentSheet();
-    if (sPrintRanges.getLength())
+    if (!sPrintRanges.isEmpty())
     {
         Reference< sheet::XPrintAreas > xPrintAreas(
             rTables.GetCurrentXSheet(), UNO_QUERY);

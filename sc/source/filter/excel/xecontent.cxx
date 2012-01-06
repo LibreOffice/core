@@ -506,12 +506,12 @@ void XclExpHyperlink::WriteEmbeddedData( XclExpStream& rStrm )
 
 void XclExpHyperlink::SaveXml( XclExpXmlStream& rStrm )
 {
-    OUString sId = msTarget.getLength() ? rStrm.addRelation( rStrm.GetCurrentStream()->getOutputStream(),
+    OUString sId = !msTarget.isEmpty() ? rStrm.addRelation( rStrm.GetCurrentStream()->getOutputStream(),
             XclXmlUtils::ToOUString( "http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink" ),
             msTarget, true ) : OUString();
     rStrm.GetCurrentStream()->singleElement( XML_hyperlink,
             XML_ref,                XclXmlUtils::ToOString( maScPos ).getStr(),
-            FSNS( XML_r, XML_id ),  sId.getLength()
+            FSNS( XML_r, XML_id ),  !sId.isEmpty()
                                        ? XclXmlUtils::ToOString( sId ).getStr()
                                        : NULL,
             XML_location,           mxTextMark.get() != NULL
@@ -1151,13 +1151,13 @@ void XclExpDV::SaveXml( XclExpXmlStream& rStrm )
             XML_sqref,              XclXmlUtils::ToOString( maScRanges ).getStr(),
             XML_type,               lcl_GetValidationType( mnFlags ),
             FSEND );
-    if( msFormula1.getLength() )
+    if( !msFormula1.isEmpty() )
     {
         rWorksheet->startElement( XML_formula1, FSEND );
         rWorksheet->writeEscaped( msFormula1 );
         rWorksheet->endElement( XML_formula1 );
     }
-    if( msFormula2.getLength() )
+    if( !msFormula2.isEmpty() )
     {
         rWorksheet->startElement( XML_formula2, FSEND );
         rWorksheet->writeEscaped( msFormula2 );

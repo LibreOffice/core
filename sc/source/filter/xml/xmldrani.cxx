@@ -563,7 +563,7 @@ SvXMLImportContext *ScXMLSourceSQLContext::CreateChildContext( sal_uInt16 nPrefi
 
     if ( nPrefix == XML_NAMESPACE_FORM )
     {
-        if (IsXMLToken(rLName, XML_CONNECTION_RESOURCE) && (sDBName.getLength() == 0))
+        if (IsXMLToken(rLName, XML_CONNECTION_RESOURCE) && sDBName.isEmpty())
         {
             pContext = new ScXMLConResContext( GetScImport(), nPrefix,
                                                           rLName, xAttrList, pDatabaseRangeContext);
@@ -578,7 +578,7 @@ SvXMLImportContext *ScXMLSourceSQLContext::CreateChildContext( sal_uInt16 nPrefi
 
 void ScXMLSourceSQLContext::EndElement()
 {
-    if (sDBName.getLength())
+    if (!sDBName.isEmpty())
         pDatabaseRangeContext->SetDatabaseName(sDBName);
 }
 
@@ -631,7 +631,7 @@ SvXMLImportContext *ScXMLSourceTableContext::CreateChildContext( sal_uInt16 nPre
 
     if ( nPrefix == XML_NAMESPACE_FORM )
     {
-        if (IsXMLToken(rLName, XML_CONNECTION_RESOURCE) && (sDBName.getLength() == 0))
+        if (IsXMLToken(rLName, XML_CONNECTION_RESOURCE) && sDBName.isEmpty())
         {
             pContext = new ScXMLConResContext( GetScImport(), nPrefix,
                                                           rLName, xAttrList, pDatabaseRangeContext);
@@ -646,7 +646,7 @@ SvXMLImportContext *ScXMLSourceTableContext::CreateChildContext( sal_uInt16 nPre
 
 void ScXMLSourceTableContext::EndElement()
 {
-    if (sDBName.getLength())
+    if (!sDBName.isEmpty())
         pDatabaseRangeContext->SetDatabaseName(sDBName);
 }
 
@@ -699,7 +699,7 @@ SvXMLImportContext *ScXMLSourceQueryContext::CreateChildContext( sal_uInt16 nPre
 
     if ( nPrefix == XML_NAMESPACE_FORM )
     {
-        if (IsXMLToken(rLName, XML_CONNECTION_RESOURCE) && (sDBName.getLength() == 0))
+        if (IsXMLToken(rLName, XML_CONNECTION_RESOURCE) && sDBName.isEmpty())
         {
             pContext = new ScXMLConResContext( GetScImport(), nPrefix,
                                                           rLName, xAttrList, pDatabaseRangeContext);
@@ -714,7 +714,7 @@ SvXMLImportContext *ScXMLSourceQueryContext::CreateChildContext( sal_uInt16 nPre
 
 void ScXMLSourceQueryContext::EndElement()
 {
-    if (sDBName.getLength())
+    if (!sDBName.isEmpty())
         pDatabaseRangeContext->SetDatabaseName(sDBName);
 }
 
@@ -743,7 +743,7 @@ ScXMLConResContext::ScXMLConResContext( ScXMLImport& rImport,
                 sConRes = sValue;
         }
     }
-    if (sConRes.getLength())
+    if (!sConRes.isEmpty())
         pDatabaseRangeContext->SetConnectionRessource(sConRes);
 }
 

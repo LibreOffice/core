@@ -142,7 +142,7 @@ void ScChangeTrackingExportHelper::WriteChangeInfo(const ScChangeAction* pAction
     }
 
     rtl::OUString sComment(pAction->GetComment());
-    if (sComment.getLength())
+    if (!sComment.isEmpty())
     {
         SvXMLElementExport aElemC(rExport, XML_NAMESPACE_TEXT, XML_P, true, false);
         bool bPrevCharWasSpace(true);
@@ -279,7 +279,7 @@ void ScChangeTrackingExportHelper::SetValueAttributes(const double& fValue, cons
         rtl::OUStringBuffer sBuffer;
         ::sax::Converter::convertDouble(sBuffer, fValue);
         rtl::OUString sNumValue(sBuffer.makeStringAndClear());
-        if (sNumValue.getLength())
+        if (!sNumValue.isEmpty())
             rExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_VALUE, sNumValue);
     }
 }
@@ -305,7 +305,7 @@ void ScChangeTrackingExportHelper::WriteStringCell(const ScBaseCell* pCell)
         rtl::OUString sOUString(sString);
         rExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_VALUE_TYPE, XML_STRING);
         SvXMLElementExport aElemC(rExport, XML_NAMESPACE_TABLE, XML_CHANGE_TRACK_TABLE_CELL, true, true);
-        if (sOUString.getLength())
+        if (!sOUString.isEmpty())
         {
             SvXMLElementExport aElemP(rExport, XML_NAMESPACE_TEXT, XML_P, true, false);
             bool bPrevCharWasSpace(true);
@@ -392,7 +392,7 @@ void ScChangeTrackingExportHelper::WriteFormulaCell(const ScBaseCell* pCell, con
             pFormulaCell->GetString(sCellValue);
             rtl::OUString sOUValue(sCellValue);
             SvXMLElementExport aElemC(rExport, XML_NAMESPACE_TABLE, XML_CHANGE_TRACK_TABLE_CELL, true, true);
-            if (sOUValue.getLength())
+            if (!sOUValue.isEmpty())
             {
                 SvXMLElementExport aElemP(rExport, XML_NAMESPACE_TEXT, XML_P, true, false);
                 bool bPrevCharWasSpace(true);

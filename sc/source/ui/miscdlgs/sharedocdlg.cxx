@@ -137,11 +137,11 @@ void ScShareDocumentDlg::UpdateView()
                     if ( pUsersData[i].getLength() > SHARED_EDITTIME_ID )
                     {
                         String aUser;
-                        if ( pUsersData[i][SHARED_OOOUSERNAME_ID].getLength() )
+                        if ( !pUsersData[i][SHARED_OOOUSERNAME_ID].isEmpty() )
                         {
                             aUser = pUsersData[i][SHARED_OOOUSERNAME_ID];
                         }
-                        else if ( pUsersData[i][SHARED_SYSUSERNAME_ID].getLength() )
+                        else if ( !pUsersData[i][SHARED_SYSUSERNAME_ID].isEmpty() )
                         {
                             aUser = pUsersData[i][SHARED_SYSUSERNAME_ID];
                         }

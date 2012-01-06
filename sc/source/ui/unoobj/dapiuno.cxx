@@ -425,7 +425,7 @@ void SAL_CALL ScDataPilotTablesObj::insertNewByName( const OUString& aNewName,
     if (!xDescriptor.is()) return;
 
     // inserting with already existing name?
-    if ( aNewName.getLength() && hasByName( aNewName ) )
+    if ( !aNewName.isEmpty() && hasByName( aNewName ) )
         throw RuntimeException();       // no other exceptions specified
 
     sal_Bool bDone = false;
@@ -2708,7 +2708,7 @@ Reference< XDataPilotField > SAL_CALL ScDataPilotFieldObj::createNameGroup( cons
     }
 
     // if new grouping field has been created (on first group), return it
-    if( sNewDim.getLength() > 0 )
+    if( !sNewDim.isEmpty() )
     {
         Reference< XNameAccess > xFields(mrParent.getDataPilotFields(), UNO_QUERY);
         if (xFields.is())
@@ -2925,7 +2925,7 @@ void SAL_CALL ScDataPilotFieldGroupsObj::replaceByName( const OUString& rName, c
 {
     SolarMutexGuard aGuard;
 
-    if( rName.getLength() == 0 )
+    if( rName.isEmpty() )
         throw IllegalArgumentException();
 
     ScFieldGroups::iterator aIt = implFindByName( rName );
@@ -2948,7 +2948,7 @@ void SAL_CALL ScDataPilotFieldGroupsObj::insertByName( const OUString& rName, co
 {
     SolarMutexGuard aGuard;
 
-    if( rName.getLength() == 0 )
+    if( rName.isEmpty() )
         throw IllegalArgumentException();
 
     ScFieldGroups::iterator aIt = implFindByName( rName );
@@ -2972,7 +2972,7 @@ void SAL_CALL ScDataPilotFieldGroupsObj::removeByName( const OUString& rName )
 {
     SolarMutexGuard aGuard;
 
-    if( rName.getLength() == 0 )
+    if( rName.isEmpty() )
         throw IllegalArgumentException();
 
     ScFieldGroups::iterator aIt = implFindByName( rName );
@@ -3118,7 +3118,7 @@ void SAL_CALL ScDataPilotFieldGroupObj::replaceByName( const OUString& rName, co
 
     // it should be possible to quickly rename an item -> accept string or XNamed
     OUString aNewName = lclExtractMember( rElement );
-    if( (rName.getLength() == 0) || (aNewName.getLength() == 0) )
+    if( rName.isEmpty() || aNewName.isEmpty() )
         throw IllegalArgumentException();
     if( rName == aNewName )
         return;
@@ -3143,7 +3143,7 @@ void SAL_CALL ScDataPilotFieldGroupObj::insertByName( const OUString& rName, con
     SolarMutexGuard aGuard;
 
     // we will ignore the passed element and just try to insert the name
-    if( rName.getLength() == 0 )
+    if( rName.isEmpty() )
         throw IllegalArgumentException();
 
     ScFieldGroupMembers& rMembers = mrParent.getFieldGroup( maGroupName ).maMembers;
@@ -3159,7 +3159,7 @@ void SAL_CALL ScDataPilotFieldGroupObj::removeByName( const OUString& rName )
 {
     SolarMutexGuard aGuard;
 
-    if( rName.getLength() == 0 )
+    if( rName.isEmpty() )
         throw IllegalArgumentException();
     ScFieldGroupMembers& rMembers = mrParent.getFieldGroup( maGroupName ).maMembers;
     ScFieldGroupMembers::iterator aIt = ::std::find( rMembers.begin(), rMembers.end(), rName );

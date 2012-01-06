@@ -184,7 +184,7 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
                 if ( aValue >>= sPrinterName )
                 {
                     // #i75610# if the name is empty, do nothing (don't create any printer)
-                    if ( sPrinterName.getLength() != 0 && pDocShell->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
+                    if ( !sPrinterName.isEmpty() && pDocShell->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
                     {
                         SfxPrinter* pPrinter = pDocShell->GetPrinter();
                         if (pPrinter)

@@ -232,7 +232,7 @@ void ScMyTables::SetTableStyle(const rtl::OUString& sStyleName)
 {
     //these uno calls are a bit difficult to remove, XMLTableStyleContext::FillPropertySet uses
     //SvXMLImportPropertyMapper::FillPropertySet
-    if ( sStyleName.getLength() )
+    if ( !sStyleName.isEmpty() )
     {
         // #i57869# All table style properties for all sheets are now applied here,
         // before importing the contents.

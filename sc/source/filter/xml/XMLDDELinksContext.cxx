@@ -127,9 +127,9 @@ SvXMLImportContext *ScXMLDDELinkContext::CreateChildContext( sal_uInt16 nPrefix,
 void ScXMLDDELinkContext::CreateDDELink()
 {
     if (GetScImport().GetDocument() &&
-        sApplication.getLength() &&
-        sTopic.getLength() &&
-        sItem.getLength())
+        !sApplication.isEmpty() &&
+        !sTopic.isEmpty() &&
+        !sItem.isEmpty())
     {
         String sAppl(sApplication);
         String sTop(sTopic);

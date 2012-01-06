@@ -330,7 +330,7 @@ sal_Int16 SAL_CALL
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
-    if (!msDescription.getLength())
+    if (msDescription.isEmpty())
     {
         OUString sDescription(createAccessibleDescription());
 
@@ -356,10 +356,10 @@ OUString SAL_CALL
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
-    if (!msName.getLength())
+    if (msName.isEmpty())
     {
         OUString sName(createAccessibleName());
-        OSL_ENSURE(sName.getLength(), "We should give always a name.");
+        OSL_ENSURE(!sName.isEmpty(), "We should give always a name.");
 
         if (msName != sName)
         {

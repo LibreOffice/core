@@ -251,9 +251,9 @@ void ScDocument::SetAnonymousDBData(SCTAB nTab, ScDBData* pDBData)
 
 bool ScDocument::ValidTabName( const rtl::OUString& rName )
 {
-    sal_Int32 nLen = rName.getLength();
-    if (!nLen)
+    if (rName.isEmpty())
         return false;
+    sal_Int32 nLen = rName.getLength();
 
 #if 1
     // Restrict sheet names to what Excel accepts.

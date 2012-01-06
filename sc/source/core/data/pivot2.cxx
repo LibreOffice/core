@@ -73,7 +73,7 @@ ScDPLabelData::Member::Member() :
 
 OUString ScDPLabelData::Member::getDisplayName() const
 {
-    if (maLayoutName.getLength())
+    if (!maLayoutName.isEmpty())
         return maLayoutName;
 
     return maName;
@@ -92,7 +92,7 @@ ScDPLabelData::ScDPLabelData( const String& rName, SCCOL nCol, bool bIsValue ) :
 
 OUString ScDPLabelData::getDisplayName() const
 {
-    if (maLayoutName.getLength())
+    if (!maLayoutName.isEmpty())
         return maLayoutName;
 
     return maName;

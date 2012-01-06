@@ -429,7 +429,7 @@ public:
     }
     void visitElem( long nCol, long nRow, const rtl::OUString& elem )
     {
-        if ( elem.getLength() )
+        if ( !elem.isEmpty() )
             mpDoc->PutCell( (SCCOL) nCol, (SCROW) nRow, 0,
                                         new ScStringCell( elem ) );
     }

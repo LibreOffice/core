@@ -1014,11 +1014,11 @@ void ScDocShell::Execute( SfxRequest& rReq )
                                             uno::Sequence< ::rtl::OUString > aData = aLockFile.GetLockData();
                                             if ( aData.getLength() > LOCKFILE_SYSUSERNAME_ID )
                                             {
-                                                if ( aData[LOCKFILE_OOOUSERNAME_ID].getLength() > 0 )
+                                                if ( !aData[LOCKFILE_OOOUSERNAME_ID].isEmpty() )
                                                 {
                                                     aUserName = aData[LOCKFILE_OOOUSERNAME_ID];
                                                 }
-                                                else if ( aData[LOCKFILE_SYSUSERNAME_ID].getLength() > 0 )
+                                                else if ( !aData[LOCKFILE_SYSUSERNAME_ID].isEmpty() )
                                                 {
                                                     aUserName = aData[LOCKFILE_SYSUSERNAME_ID];
                                                 }

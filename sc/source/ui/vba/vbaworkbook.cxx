@@ -346,7 +346,7 @@ ScVbaWorkbook::SaveAs( const rtl::OUString& FileName, const uno::Any& FileFormat
     //if the input parameter "FileName" takes the form as "MyFile", we need to get the current directory and combine the current directory and the file name
     INetURLObject aFileNameURL( aURL );
     aURL = aFileNameURL.GetMainURL( INetURLObject::NO_DECODE );
-    if ( aURL.getLength() == 0 )
+    if ( aURL.isEmpty() )
     {
         uno::Reference< excel::XApplication > xApplication ( Application(),uno::UNO_QUERY_THROW );
         rtl::OUString aPathStr = xApplication->getDefaultFilePath();

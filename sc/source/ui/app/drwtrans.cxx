@@ -180,7 +180,7 @@ ScDrawTransferObj::ScDrawTransferObj( SdrModel* pClipModel, ScDocShell* pContain
                             {
                                 aAny = xPropSet->getPropertyValue( sPropTargetURL );
                                 rtl::OUString sTmp;
-                                if ( (aAny >>= sTmp) && sTmp.getLength() )
+                                if ( (aAny >>= sTmp) && !sTmp.isEmpty() )
                                 {
                                     String aUrl = sTmp;
                                     String aAbs;
@@ -200,7 +200,7 @@ ScDrawTransferObj::ScDrawTransferObj( SdrModel* pClipModel, ScDocShell* pContain
                                     if(xInfo->hasPropertyByName( sPropLabel ))
                                     {
                                         aAny = xPropSet->getPropertyValue( sPropLabel );
-                                        if ( (aAny >>= sTmp) && sTmp.getLength() )
+                                        if ( (aAny >>= sTmp) && !sTmp.isEmpty() )
                                         {
                                             aLabel = String(sTmp);
                                         }

@@ -3291,7 +3291,7 @@ SdrObject* XclImpDffConverter::CreateSdrObject( const XclImpTbxObjBase& rTbxObj,
     SdrObjectPtr xSdrObj;
 
     OUString aServiceName = rTbxObj.GetServiceName();
-    if( SupportsOleObjects() && (aServiceName.getLength() > 0) ) try
+    if( SupportsOleObjects() && !aServiceName.isEmpty() ) try
     {
         // create the form control from scratch
         Reference< XFormComponent > xFormComp( ScfApiHelper::CreateInstance( GetDocShell(), aServiceName ), UNO_QUERY_THROW );

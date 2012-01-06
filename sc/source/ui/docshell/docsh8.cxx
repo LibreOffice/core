@@ -1153,7 +1153,7 @@ sal_uLong ScDocShell::DBaseExport( const String& rFullFileName, CharSet eCharSet
                         SCERR_EXPORT_FIELDWIDTH), sPosition, sEncoding,
                     ERRCODE_BUTTON_OK | ERRCODE_MSG_ERROR);
         }
-        else if ( aException.Message.getLength() )
+        else if ( !aException.Message.isEmpty() )
             nErr = *new StringErrorInfo( (SCERR_EXPORT_SQLEXCEPTION), aException.Message, ERRCODE_BUTTON_OK | ERRCODE_MSG_ERROR);
         else
             nErr = SCERR_EXPORT_DATA;

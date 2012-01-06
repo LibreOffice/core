@@ -1150,7 +1150,7 @@ sal_Bool lcl_PutDataArray( ScDocShell& rDocShell, const ScRange& rRange,
                 {
                     rtl::OUString aUStr;
                     rElement >>= aUStr;
-                    if ( aUStr.getLength() )
+                    if ( !aUStr.isEmpty() )
                         pDoc->PutCell( nDocCol, nDocRow, nTab, new ScStringCell( aUStr ) );
                 }
                 else
@@ -4419,7 +4419,7 @@ void SAL_CALL ScCellRangesObj::insertByName( const rtl::OUString& aName, const u
             SetNewRanges(aNew);
             bDone = sal_True;
 
-            if ( aName.getLength() && nAddCount == 1 )
+            if ( !aName.isEmpty() && nAddCount == 1 )
             {
                 //  if a name is given, also insert into list of named entries
                 //  (only possible for a single range)
@@ -5072,7 +5072,7 @@ void ScCellRangeObj::SetArrayFormula_Impl( const rtl::OUString& rFormula,
     if (pDocSh)
     {
         ScDocFunc aFunc(*pDocSh);
-        if ( rFormula.getLength() )
+        if ( !rFormula.isEmpty() )
         {
             if ( ScTableSheetObj::getImplementation( (cppu::OWeakObject*)this ) )
             {

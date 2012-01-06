@@ -1209,7 +1209,7 @@ bool ScTokenArray::AddFormulaToken(const com::sun::star::sheet::FormulaToken& _a
                             }
                             else if( aApiExtRef.Reference >>= aName )
                             {
-                                if( aName.getLength() > 0 )
+                                if( !aName.isEmpty() )
                                     AddExternalName( nFileId, aName );
                                 else
                                     bError = true;

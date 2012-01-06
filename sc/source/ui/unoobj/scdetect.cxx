@@ -832,7 +832,7 @@ static sal_Bool lcl_MayBeDBase( SvStream& rStream )
             lDescriptor[nIndexOfTemplateFlag].Value <<= bOpenAsTemplate;
     }
 
-    if ( aDocumentTitle.getLength() )
+    if ( !aDocumentTitle.isEmpty() )
     {
         // the title was set here
         if ( nIndexOfDocumentTitle == -1 )

@@ -311,10 +311,10 @@ void ScXMLExportDataPilot::WriteFieldReference(ScDPSaveDimension* pDim)
                 sValueStr = GetXMLToken(XML_INDEX);
                 break;
         }
-        if (sValueStr.getLength())
+        if (!sValueStr.isEmpty())
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_TYPE, sValueStr);
 
-        if (pRef->ReferenceField.getLength())
+        if (!pRef->ReferenceField.isEmpty())
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_FIELD_NAME, pRef->ReferenceField);
 
         if (pRef->ReferenceItemType == sheet::DataPilotFieldReferenceItemType::NAMED)
@@ -334,7 +334,7 @@ void ScXMLExportDataPilot::WriteFieldReference(ScDPSaveDimension* pDim)
                 sValueStr = GetXMLToken(XML_NEXT);
                 break;
             }
-            if (sValueStr.getLength())
+            if (!sValueStr.isEmpty())
                 rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_MEMBER_TYPE, sValueStr);
         }
         SvXMLElementExport aElemDPFR(rExport, XML_NAMESPACE_TABLE, XML_DATA_PILOT_FIELD_REFERENCE, true, true);
@@ -366,11 +366,11 @@ void ScXMLExportDataPilot::WriteSortInfo(ScDPSaveDimension* pDim)
             break;
             case sheet::DataPilotFieldSortMode::DATA:
             sValueStr = GetXMLToken(XML_DATA);
-            if (pSortInfo->Field.getLength())
+            if (!pSortInfo->Field.isEmpty())
                 rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DATA_FIELD, pSortInfo->Field);
             break;
         }
-        if (sValueStr.getLength())
+        if (!sValueStr.isEmpty())
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_SORT_MODE, sValueStr);
         SvXMLElementExport aElemDPLSI(rExport, XML_NAMESPACE_TABLE, XML_DATA_PILOT_SORT_INFO, true, true);
     }
@@ -396,7 +396,7 @@ void ScXMLExportDataPilot::WriteAutoShowInfo(ScDPSaveDimension* pDim)
             sValueStr = GetXMLToken(XML_FROM_BOTTOM);
             break;
         }
-        if (sValueStr.getLength())
+        if (!sValueStr.isEmpty())
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DISPLAY_MEMBER_MODE, sValueStr);
 
         rtl::OUStringBuffer sBuffer;
@@ -432,7 +432,7 @@ void ScXMLExportDataPilot::WriteLayoutInfo(ScDPSaveDimension* pDim)
             sValueStr = GetXMLToken(XML_OUTLINE_SUBTOTALS_BOTTOM);
             break;
         }
-        if (sValueStr.getLength())
+        if (!sValueStr.isEmpty())
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_LAYOUT_MODE, sValueStr);
         SvXMLElementExport aElemDPLLI(rExport, XML_NAMESPACE_TABLE, XML_DATA_PILOT_LAYOUT_INFO, true, true);
     }
@@ -698,7 +698,7 @@ void ScXMLExportDataPilot::WriteDimension(ScDPSaveDimension* pDim, const ScDPDim
     rtl::OUString sValueStr;
     ScXMLConverter::GetStringFromOrientation( sValueStr,
         (sheet::DataPilotFieldOrientation) pDim->GetOrientation() );
-    if( sValueStr.getLength() )
+    if( !sValueStr.isEmpty() )
         rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_ORIENTATION, sValueStr );
     if (pDim->GetOrientation() == sheet::DataPilotFieldOrientation_PAGE)
         if (pDim->HasCurrentPage())

@@ -76,7 +76,7 @@ bool lclFillListBox( ListBoxType& rLBox, const Sequence< OUString >& rStrings, s
     {
         for( const OUString* pEnd = pStr + rStrings.getLength(); pStr != pEnd; ++pStr )
         {
-            if( pStr->getLength() )
+            if( !pStr->isEmpty() )
                 rLBox.InsertEntry( *pStr );
             else
             {
@@ -96,7 +96,7 @@ bool lclFillListBox( ListBoxType& rLBox, const vector<ScDPLabelData::Member>& rM
     for (; itr != itrEnd; ++itr)
     {
         OUString aName = itr->getDisplayName();
-        if (aName.getLength())
+        if (!aName.isEmpty())
             rLBox.InsertEntry(aName);
         else
         {
@@ -316,7 +316,7 @@ void ScDPFunctionDlg::Init( const ScDPLabelData& rLabelData, const ScDPFuncData&
         break;
         default:
         {
-            if( mbEmptyItem && !rFuncData.maFieldRef.ReferenceItemName.getLength() )
+            if( mbEmptyItem && rFuncData.maFieldRef.ReferenceItemName.isEmpty() )
             {
                 // select special "(empty)" entry added before other items
                 maLbBaseItem.SelectEntryPos( SC_BASEITEM_USER_POS );

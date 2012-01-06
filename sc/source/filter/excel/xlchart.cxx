@@ -1040,7 +1040,7 @@ void XclChPropSetHelper::WriteLineProperties(
     if( eApiStyle == cssd::LineStyle_DASH )
     {
         OUString aDashName = rDashTable.InsertObject( ::com::sun::star::uno::makeAny( aApiDash ) );
-        if( aDashName.getLength() )
+        if( !aDashName.isEmpty() )
             aDashNameAny <<= aDashName;
     }
 
@@ -1105,7 +1105,7 @@ void XclChPropSetHelper::WriteEscherProperties( ScfPropertySet& rPropSet,
                         if( pGradItem->QueryValue( aGradientAny, MID_FILLGRADIENT ) )
                         {
                             OUString aGradName = rGradientTable.InsertObject( aGradientAny );
-                            if( aGradName.getLength() )
+                            if( !aGradName.isEmpty() )
                             {
                                 namespace cssd = ::com::sun::star::drawing;
                                 ScfPropSetHelper& rGradHlp = GetGradientHelper( ePropMode );
@@ -1123,7 +1123,7 @@ void XclChPropSetHelper::WriteEscherProperties( ScfPropertySet& rPropSet,
                         if( pBmpItem->QueryValue( aBitmapAny, MID_GRAFURL ) )
                         {
                             OUString aBmpName = rBitmapTable.InsertObject( aBitmapAny );
-                            if( aBmpName.getLength() )
+                            if( !aBmpName.isEmpty() )
                             {
                                 namespace cssd = ::com::sun::star::drawing;
                                 /*  #i71810# Caller decides whether to use a CHPICFORMAT record for bitmap mode.

@@ -206,12 +206,12 @@ sal_Bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
 
                    ScMacroInfo* pInfo = ScDrawLayer::GetMacroInfo( pObj, true );
                    // For interoperability favour links over macros if both are defined
-                   if ( pInfo->GetHlink().getLength() > 0 )
+                   if ( !pInfo->GetHlink().isEmpty() )
                    {
                        OSL_TRACE("** Got URL");
                        sURL = pInfo->GetHlink();
                    }
-                   else if ( pInfo->GetMacro().getLength() > 0 )
+                   else if ( !pInfo->GetMacro().isEmpty() )
                    {
                        SfxObjectShell* pObjSh = SfxObjectShell::Current();
                        if ( pObjSh && SfxApplication::IsXScriptURL( pInfo->GetMacro() ) )

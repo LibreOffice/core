@@ -109,7 +109,7 @@ SvXMLImportContext *ScXMLTableSourceContext::CreateChildContext( sal_uInt16 nPre
 
 void ScXMLTableSourceContext::EndElement()
 {
-    if (sLink.getLength())
+    if (!sLink.isEmpty())
     {
         uno::Reference <sheet::XSheetLinkable> xLinkable (GetScImport().GetTables().GetCurrentXSheet(), uno::UNO_QUERY);
         ScDocument* pDoc(GetScImport().GetDocument());

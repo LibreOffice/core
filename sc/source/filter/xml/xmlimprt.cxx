@@ -2205,7 +2205,7 @@ void ScXMLImport::SetChangeTrackingViewSettings(const com::sun::star::uno::Seque
                 else if (sName.compareToAscii("ShowChangesByRangesList") == 0)
                 {
                     rtl::OUString sRanges;
-                    if ((rChangeProps[i].Value >>= sRanges) && sRanges.getLength())
+                    if ((rChangeProps[i].Value >>= sRanges) && !sRanges.isEmpty())
                     {
                         ScRangeList aRangeList;
                         ScRangeStringConverter::GetRangeListFromString(
@@ -2463,7 +2463,7 @@ void ScXMLImport::SetType(uno::Reference <beans::XPropertySet>& rProperties,
                                 rProperties->setPropertyValue( sNumberFormat, uno::makeAny(xNumberFormatTypes->getStandardFormat(nCellType, aLocale)) );
                             }
                         }
-                        else if (rCurrency.getLength() && sCurrentCurrency.getLength())
+                        else if (!rCurrency.isEmpty() && !sCurrentCurrency.isEmpty())
                         {
                             if (!sCurrentCurrency.equals(rCurrency))
                                 if (!IsCurrencySymbol(rNumberFormat, sCurrentCurrency, rCurrency))
@@ -2479,7 +2479,7 @@ void ScXMLImport::SetType(uno::Reference <beans::XPropertySet>& rProperties,
         }
         else
         {
-            if ((nCellType == util::NumberFormat::CURRENCY) && rCurrency.getLength() && sCurrentCurrency.getLength() &&
+            if ((nCellType == util::NumberFormat::CURRENCY) && !rCurrency.isEmpty() && !sCurrentCurrency.isEmpty() &&
                 !sCurrentCurrency.equals(rCurrency) && !IsCurrencySymbol(rNumberFormat, sCurrentCurrency, rCurrency))
                 rProperties->setPropertyValue( sNumberFormat, uno::makeAny(SetCurrencySymbol(rNumberFormat, rCurrency)));
         }
@@ -2501,7 +2501,7 @@ void ScXMLImport::AddStyleRange(const table::CellRangeAddress& rCellRange)
 
 void ScXMLImport::SetStyleToRanges()
 {
-    if (sPrevStyleName.getLength())
+    if (!sPrevStyleName.isEmpty())
     {
         uno::Reference <beans::XPropertySet> xProperties (xSheetCellRanges, uno::UNO_QUERY);
         if (xProperties.is())
@@ -2555,31 +2555,31 @@ void ScXMLImport::SetStyleToRanges()
 void ScXMLImport::SetStyleToRange(const ScRange& rRange, const rtl::OUString* pStyleName,
                                   const sal_Int16 nCellType, const rtl::OUString* pCurrency)
 {
-    if (!sPrevStyleName.getLength())
+    if (sPrevStyleName.isEmpty())
     {
         nPrevCellType = nCellType;
         if (pStyleName)
             sPrevStyleName = *pStyleName;
         if (pCurrency)
             sPrevCurrency = *pCurrency;
-        else if (sPrevCurrency.getLength())
+        else if (!sPrevCurrency.isEmpty())
             sPrevCurrency = sEmpty;
     }
     else if ((nCellType != nPrevCellType) ||
         ((pStyleName && !pStyleName->equals(sPrevStyleName)) ||
-        (!pStyleName && sPrevStyleName.getLength())) ||
+        (!pStyleName && !sPrevStyleName.isEmpty())) ||
         ((pCurrency && !pCurrency->equals(sPrevCurrency)) ||
-        (!pCurrency && sPrevCurrency.getLength())))
+        (!pCurrency && !sPrevCurrency.isEmpty())))
     {
         SetStyleToRanges();
         nPrevCellType = nCellType;
         if (pStyleName)
             sPrevStyleName = *pStyleName;
-        else if(sPrevStyleName.getLength())
+        else if(!sPrevStyleName.isEmpty())
             sPrevStyleName = sEmpty;
         if (pCurrency)
             sPrevCurrency = *pCurrency;
-        else if(sPrevCurrency.getLength())
+        else if(!sPrevCurrency.isEmpty())
             sPrevCurrency = sEmpty;
     }
     table::CellRangeAddress aCellRange;
@@ -3111,7 +3111,7 @@ void ScXMLImport::ExtractFormulaNamespaceGrammar(
         external formula parser. This prevents that the range operator in
         conjunction with defined names is confused as namespaces prefix, e.g.
         in the expression 'table:A1' where 'table' is a named reference. */
-    if( ((nNsId & XML_NAMESPACE_UNKNOWN_FLAG) != 0) && (rFormulaNmsp.getLength() > 0) &&
+    if( ((nNsId & XML_NAMESPACE_UNKNOWN_FLAG) != 0) && !rFormulaNmsp.isEmpty() &&
         GetDocument()->GetFormulaParserPool().hasFormulaParser( rFormulaNmsp ) )
     {
         reGrammar = FormulaGrammar::GRAM_EXTERNAL;

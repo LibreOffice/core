@@ -63,7 +63,7 @@ ScVbaHyperlink::ScVbaHyperlink( const uno::Reference< XHelperInterface >& rxAnch
     // extract parameters, Address must not be empty
     UrlComponents aUrlComp;
     OUString aTextToDisplay;
-    if( !(rAddress >>= aUrlComp.first) || (aUrlComp.first.getLength() == 0) )
+    if( !(rAddress >>= aUrlComp.first) || aUrlComp.first.isEmpty() )
         throw uno::RuntimeException( OUString( RTL_CONSTASCII_USTRINGPARAM( "Cannot get address" ) ), uno::Reference< uno::XInterface >() );
     rSubAddress >>= aUrlComp.second;
     rScreenTip >>= maScreenTip;
@@ -80,13 +80,13 @@ ScVbaHyperlink::ScVbaHyperlink( const uno::Reference< XHelperInterface >& rxAnch
         mxCell.set( xUnoRange->getCellByPosition( 0, 0 ), uno::UNO_SET_THROW );
         uno::Reference< text::XText > xText( mxCell, uno::UNO_QUERY_THROW );
         // use cell text or URL if no TextToDisplay has been passed
-        if( aTextToDisplay.getLength() == 0 )
+        if( aTextToDisplay.isEmpty() )
         {
             aTextToDisplay = xText->getString();
-            if( aTextToDisplay.getLength() == 0 )
+            if( aTextToDisplay.isEmpty() )
             {
                 OUStringBuffer aBuffer( aUrlComp.first );
-                if( aUrlComp.second.getLength() > 0 )
+                if( !aUrlComp.second.isEmpty() )
                     aBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM( " - " ) ).append( aUrlComp.second );
                 aTextToDisplay = aBuffer.makeStringAndClear();
             }
@@ -229,7 +229,7 @@ void ScVbaHyperlink::setUrlComponents( const UrlComponents& rUrlComp ) throw (un
 {
     ensureTextField();
     OUStringBuffer aUrl( rUrlComp.first );
-    if( rUrlComp.second.getLength() > 0 )
+    if( !rUrlComp.second.isEmpty() )
         aUrl.append( sal_Unicode( '#' ) ).append( rUrlComp.second );
     mxTextField->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "URL" ) ), uno::Any( aUrl.makeStringAndClear() ) );
 }

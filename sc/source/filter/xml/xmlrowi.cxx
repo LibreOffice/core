@@ -186,7 +186,7 @@ void ScXMLTableRowContext::EndElement()
                 uno::Reference <beans::XPropertySet> xRowProperties(xColumnRowRange->getRows(), uno::UNO_QUERY);
                 if (xRowProperties.is())
                 {
-                    if (sStyleName.getLength())
+                    if (!sStyleName.isEmpty())
                     {
                         XMLTableStylesContext *pStyles((XMLTableStylesContext *)rXMLImport.GetAutoStyles());
                         if ( pStyles )

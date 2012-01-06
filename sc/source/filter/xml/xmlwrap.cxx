@@ -131,7 +131,7 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(uno::Reference<lang::XMultiSe
             uno::Reference < container::XNameAccess > xAccess( xStorage, uno::UNO_QUERY );
             if ( xAccess->hasByName(sDocName) && xStorage->isStreamElement( sDocName) )
                 xDocStream = xStorage->openStreamElement( sDocName, embed::ElementModes::READ );
-            else if (sOldDocName.getLength() && xAccess->hasByName(sOldDocName) && xStorage->isStreamElement( sOldDocName) )
+            else if (!sOldDocName.isEmpty() && xAccess->hasByName(sOldDocName) && xStorage->isStreamElement( sOldDocName) )
             {
                 xDocStream = xStorage->openStreamElement( sOldDocName, embed::ElementModes::READ );
                 sStream = sOldDocName;
@@ -228,7 +228,7 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(uno::Reference<lang::XMultiSe
             sErr += ',';
             sErr += String::CreateFromInt32( r.ColumnNumber );
 
-            if( sDocName.getLength() )
+            if( !sDocName.isEmpty() )
             {
                 nReturn = *new TwoStringErrorInfo(
                                 (bMustBeSuccessfull ? SCERR_IMPORT_FILE_ROWCOL
@@ -419,7 +419,7 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly, ErrCode& nError)
             else
                 aName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "dummyObjectName" ));
 
-            if( aName.getLength() )
+            if( !aName.isEmpty() )
             {
                 sPropName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StreamRelPath"));
                 xInfoSet->setPropertyValue( sPropName, uno::makeAny( aName ) );
@@ -828,7 +828,7 @@ sal_Bool ScXMLImportWrapper::Export(sal_Bool bStylesOnly)
                     aName = pDocHierarchItem->GetValue();
             }
 
-            if( aName.getLength() )
+            if( !aName.isEmpty() )
             {
                 sPropName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StreamRelPath"));
                 xInfoSet->setPropertyValue( sPropName, uno::makeAny( aName ) );

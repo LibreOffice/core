@@ -380,7 +380,7 @@ void SAL_CALL ScVbaControlObjectBase::setOnAction( const OUString& rMacroName ) 
     try { xEventMgr->revokeScriptEvent( nIndex, maListenerType, maEventMethod, OUString() ); } catch( uno::Exception& ) {}
 
     // if a macro name has been passed, try to attach it to the event
-    if( rMacroName.getLength() > 0 )
+    if( !rMacroName.isEmpty() )
     {
         MacroResolvedInfo aResolvedMacro = resolveVBAMacro( getSfxObjShell( mxModel ), rMacroName );
         if( !aResolvedMacro.mbFound )

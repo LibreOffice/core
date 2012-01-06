@@ -3571,7 +3571,7 @@ sal_Int8 ScGridWindow::AcceptPrivateDrop( const AcceptDropEvent& rEvt )
                     {
                         sheet::DataPilotTableHeaderData aSourceData;
                         pDPObj->GetHeaderPositionData( ScAddress( nCol, nRow, aSourceRange.aStart.Tab() ), aSourceData );
-                        if ( aSourceData.Dimension != aDestData.Dimension || !aSourceData.MemberName.getLength() )
+                        if ( aSourceData.Dimension != aDestData.Dimension || aSourceData.MemberName.isEmpty() )
                             bValid = false;     // empty (subtotal) or different field
                     }
 

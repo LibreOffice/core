@@ -100,7 +100,7 @@ rtl::OUString SAL_CALL ScVbaPageSetup::getPrintArea() throw (css::uno::RuntimeEx
 void SAL_CALL ScVbaPageSetup::setPrintArea( const rtl::OUString& rAreas ) throw (css::uno::RuntimeException)
 {
     uno::Reference< sheet::XPrintAreas > xPrintAreas( mxSheet, uno::UNO_QUERY_THROW );
-    if( rAreas.getLength() == 0 ||
+    if( rAreas.isEmpty() ||
         rAreas.equalsIgnoreAsciiCase ( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FALSE")) ) )
     {
         // print the whole sheet

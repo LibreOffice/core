@@ -205,7 +205,7 @@ void ScDPLayoutDlg::Init(bool bNewOutput)
         aRbInPos.Enable();
         const ScSheetSourceDesc* p = xDlgDPObject->GetSheetDesc();
         OUString aRangeName = p->GetRangeName();
-        if (aRangeName.getLength())
+        if (!aRangeName.isEmpty())
             aEdInPos.SetText(aRangeName);
         else
         {
@@ -393,7 +393,7 @@ void ScDPLayoutDlg::InitFieldWindow( const vector<PivotField>& rFields, ScDPFiel
             if (pData)
             {
                 OUString aStr = pData->maLayoutName;
-                if (!aStr.getLength())
+                if (aStr.isEmpty())
                 {
                     sal_uInt16 nInitMask = pInitArr->back()->mnFuncMask;
                     aStr = GetFuncString(nInitMask, pData->mbIsValue);
@@ -489,7 +489,7 @@ void ScDPLayoutDlg::AddField( size_t nFromIndex, ScDPFieldType eToType, const Po
             ScDPLabelData* p = GetLabelData(fData.mnCol);
             OUString aStr = p->maLayoutName;
             sal_uInt16 nMask = fData.mnFuncMask;
-            if (!aStr.getLength())
+            if (aStr.isEmpty())
             {
                 aStr = GetFuncString(nMask);
                 aStr += p->maName;
@@ -561,7 +561,7 @@ void ScDPLayoutDlg::AppendField(size_t nFromIndex, ScDPFieldType eToType)
             ScDPLabelData* p = GetLabelData(aFuncData.mnCol);
             OUString aStr = p->maLayoutName;
             sal_uInt16 nMask = aFuncData.mnFuncMask;
-            if (!aStr.getLength())
+            if (aStr.isEmpty())
             {
                 aStr = GetFuncString(nMask);
                 aStr += p->maName;
@@ -648,7 +648,7 @@ void ScDPLayoutDlg::MoveField( ScDPFieldType eFromType, size_t nFromIndex, ScDPF
                         ScDPLabelData* p = GetLabelData(fData.mnCol);
                         OUString aStr = p->maLayoutName;
                         sal_uInt16 nMask = fData.mnFuncMask;
-                        if (!aStr.getLength())
+                        if (aStr.isEmpty())
                         {
                             aStr = GetFuncString(nMask);
                             aStr += p->maName;
@@ -704,7 +704,7 @@ void ScDPLayoutDlg::MoveField( ScDPFieldType eFromType, size_t nFromIndex, ScDPF
                     ScDPLabelData* p = GetLabelData(fData.mnCol);
                     OUString aStr = p->maLayoutName;
                     sal_uInt16 nMask = fData.mnFuncMask;
-                    if (!aStr.getLength())
+                    if (aStr.isEmpty())
                     {
                         aStr = GetFuncString(nMask);
                         aStr += p->maName;
@@ -789,7 +789,7 @@ void ScDPLayoutDlg::MoveFieldToEnd( ScDPFieldType eFromType, size_t nFromIndex, 
                         ScDPLabelData* p = GetLabelData(fData.mnCol);
                         OUString aStr = p->maLayoutName;
                         sal_uInt16 nMask = fData.mnFuncMask;
-                        if (!aStr.getLength())
+                        if (aStr.isEmpty())
                         {
                             aStr = GetFuncString(nMask);
                             aStr += p->maName;
@@ -840,7 +840,7 @@ void ScDPLayoutDlg::MoveFieldToEnd( ScDPFieldType eFromType, size_t nFromIndex, 
                     ScDPLabelData* p = GetLabelData(fData.mnCol);
                     OUString aStr = p->maLayoutName;
                     sal_uInt16 nMask = fData.mnFuncMask;
-                    if (!aStr.getLength())
+                    if (aStr.isEmpty())
                     {
                         aStr = GetFuncString(nMask);
                         aStr += p->maName;
@@ -1015,11 +1015,11 @@ void ScDPLayoutDlg::NotifyDoubleClick( ScDPFieldType eType, size_t nFieldIndex )
                         if (!pDFData)
                             continue;
 
-                        if (!pDFData->maName.getLength())
+                        if (pDFData->maName.isEmpty())
                             continue;
 
                         OUString aLayoutName = pDFData->maLayoutName;
-                        if (!aLayoutName.getLength())
+                        if (aLayoutName.isEmpty())
                         {
                             // No layout name exists.  Use the stock name.
                             sal_uInt16 nMask = (*aIt)->mnFuncMask;
@@ -1058,7 +1058,7 @@ void ScDPLayoutDlg::NotifyDoubleClick( ScDPFieldType eType, size_t nFieldIndex )
 
                         ScDPLabelData* p = GetLabelData(aDataArr[nFieldIndex]->mnCol);
                         OUString aStr = p->maLayoutName;
-                        if (!aStr.getLength())
+                        if (aStr.isEmpty())
                         {
                             // Layout name is not available.  Use default name.
                             aStr = GetFuncString (aDataArr[nFieldIndex]->mnFuncMask);

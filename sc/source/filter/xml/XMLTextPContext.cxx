@@ -191,7 +191,7 @@ void ScXMLTextPContext::Characters( const ::rtl::OUString& rChars )
         // For the first call to an empty context, copy (ref-counted) the OUString.
         // The OUStringBuffer is used only if there is more complex content.
 
-        if ( !pContentBuffer && sSimpleContent.getLength() == 0 )
+        if ( !pContentBuffer && sSimpleContent.isEmpty() )
             sSimpleContent = rChars;
         else
         {

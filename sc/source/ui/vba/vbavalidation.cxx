@@ -302,9 +302,9 @@ ScVbaValidation::Add( const uno::Any& Type, const uno::Any& AlertStyle, const un
         xCond->setOperator( conOperator );
     }
 
-    if ( sFormula1.getLength() )
+    if ( !sFormula1.isEmpty() )
         xCond->setFormula1( sFormula1 );
-    if ( sFormula2.getLength() )
+    if ( !sFormula2.isEmpty() )
         xCond->setFormula2( sFormula2 );
 
     lcl_setValidationProps( m_xRange, xProps );

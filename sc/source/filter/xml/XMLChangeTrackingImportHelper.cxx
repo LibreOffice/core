@@ -79,7 +79,7 @@ ScBaseCell* ScMyCellInfo::CreateCell(ScDocument* pDoc)
 {
     if (pDoc)
     {
-        if (!pCell && sFormula.getLength() && sFormulaAddress.getLength())
+        if (!pCell && !sFormula.isEmpty() && !sFormulaAddress.isEmpty())
         {
             ScAddress aPos;
             sal_Int32 nOffset(0);

@@ -200,11 +200,11 @@ void ScNameDefDlg::AddPushed()
     rtl::OUString aName = maEdName.GetText();
     rtl::OUString aExpression = maEdRange.GetText();
 
-    if (!aName.getLength())
+    if (aName.isEmpty())
     {
         return;
     }
-    if (!aScope.getLength())
+    if (aScope.isEmpty())
     {
         return;
     }

@@ -2730,7 +2730,7 @@ ScVbaRange::getNumberFormat() throw ( script::BasicErrorException, uno::RuntimeE
     }
     NumFormatHelper numFormat( mxRange );
     rtl::OUString sFormat = numFormat.getNumberFormatString();
-    if ( sFormat.getLength() > 0 )
+    if ( !sFormat.isEmpty() )
         return uno::makeAny( sFormat );
     return aNULL();
 }
@@ -3077,7 +3077,7 @@ ScVbaRange::AddComment( const uno::Any& Text ) throw (uno::RuntimeException)
     ::rtl::OUString aNoteText;
     if( Text.hasValue() && !(Text >>= aNoteText) )
         throw uno::RuntimeException();
-    if( aNoteText.getLength() == 0 )
+    if( aNoteText.isEmpty() )
         aNoteText = ::rtl::OUString( sal_Unicode( ' ' ) );
 
     // try to create a new annotation
@@ -3096,7 +3096,7 @@ ScVbaRange::getComment() throw (uno::RuntimeException)
     // intentional behavior to return a null object if no
     // comment defined
     uno::Reference< excel::XComment > xComment( new ScVbaComment( this, mxContext, getUnoModel(), mxRange ) );
-    if ( !xComment->Text( uno::Any(), uno::Any(), uno::Any() ).getLength() )
+    if ( xComment->Text( uno::Any(), uno::Any(), uno::Any() ).isEmpty() )
         return NULL;
     return xComment;
 
@@ -3178,7 +3178,7 @@ ScVbaRange::Replace( const ::rtl::OUString& What, const ::rtl::OUString& Replace
     }
 
     // sanity check required params
-    if ( !What.getLength()  )
+    if ( What.isEmpty()  )
         throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Range::Replace, missing params" )) , uno::Reference< uno::XInterface >() );
     rtl::OUString sWhat = VBAToRegexp( What);
     // #TODO #FIXME SearchFormat & ReplacesFormat are not processed
@@ -3267,7 +3267,7 @@ ScVbaRange::Find( const uno::Any& What, const uno::Any& After, const uno::Any& L
     // string.
     if( What >>= sWhat )
     {
-        if( !sWhat.getLength() )
+        if( sWhat.isEmpty() )
             throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Range::Find, missing params" )) , uno::Reference< uno::XInterface >() );
     }
     else if( What >>= nWhat )
@@ -4312,7 +4312,7 @@ ScVbaRange::ApplicationRange( const uno::Reference< uno::XComponentContext >& xC
     // Single param Range
     rtl::OUString sRangeName;
     Cell1 >>= sRangeName;
-    if ( Cell1.hasValue() && !Cell2.hasValue() && sRangeName.getLength() )
+    if ( Cell1.hasValue() && !Cell2.hasValue() && !sRangeName.isEmpty() )
     {
         const static rtl::OUString sNamedRanges( RTL_CONSTASCII_USTRINGPARAM("NamedRanges"));
         uno::Reference< beans::XPropertySet > xPropSet( getCurrentExcelDoc(xContext), uno::UNO_QUERY_THROW );
@@ -4632,7 +4632,7 @@ ScVbaRange::AutoFilter( const uno::Any& Field, const uno::Any& Criteria1, const 
             {
                 Criteria1 >>= sCriteria1;
                 sTabFilts[0].IsNumeric = bCritHasNumericValue;
-                if ( bHasCritValue && sCriteria1.getLength() )
+                if ( bHasCritValue && !sCriteria1.isEmpty() )
                     lcl_setTableFieldsFromCriteria( sCriteria1, xDescProps, sTabFilts[0]  );
                 else
                     bAll = true;
@@ -4663,7 +4663,7 @@ ScVbaRange::AutoFilter( const uno::Any& Field, const uno::Any& Criteria1, const 
         {
             // if its a bottom/top Ten(Percent/Value) and there
             // is no value specified for critera1 set it to 10
-            if ( !bCritHasNumericValue && !sCriteria1.getLength() && ( nOperator != excel::XlAutoFilterOperator::xlOr ) && ( nOperator != excel::XlAutoFilterOperator::xlAnd ) )
+            if ( !bCritHasNumericValue && sCriteria1.isEmpty() && ( nOperator != excel::XlAutoFilterOperator::xlOr ) && ( nOperator != excel::XlAutoFilterOperator::xlAnd ) )
             {
                 sTabFilts[0].IsNumeric = sal_True;
                 sTabFilts[0].NumericValue = 10;
@@ -4709,7 +4709,7 @@ ScVbaRange::AutoFilter( const uno::Any& Field, const uno::Any& Criteria1, const 
 
                 if ( Criteria2 >>= sCriteria2 )
                 {
-                    if ( sCriteria2.getLength() > 0 )
+                    if ( !sCriteria2.isEmpty() )
                     {
                         uno::Reference< beans::XPropertySet > xProps;
                         lcl_setTableFieldsFromCriteria( sCriteria2, xProps,  sTabFilts[1] );

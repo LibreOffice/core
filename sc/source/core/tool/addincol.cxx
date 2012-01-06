@@ -1345,7 +1345,7 @@ sal_Bool ScUnoAddInCollection::FillFunctionDescFromData( const ScUnoAddInFuncDat
             rDesc.pDefArgFlags[nArg].bSuppress = false;
 
             // no empty names...
-            if ( rDesc.ppDefArgNames[nArg]->getLength() == 0 )
+            if ( rDesc.ppDefArgNames[nArg]->isEmpty() )
             {
                 String aDefName( RTL_CONSTASCII_USTRINGPARAM("arg") );
                 aDefName += String::CreateFromInt32( nArg+1 );

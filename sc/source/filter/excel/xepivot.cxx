@@ -730,7 +730,7 @@ void XclExpPivotCache::Save( XclExpStream& rStrm )
     // SXVS
     XclExpUInt16Record( EXC_ID_SXVS, EXC_SXVS_SHEET ).Save( rStrm );
 
-    if (maSrcRangeName.getLength())
+    if (!maSrcRangeName.isEmpty())
         // DCONNAME
         WriteDConName(rStrm);
     else

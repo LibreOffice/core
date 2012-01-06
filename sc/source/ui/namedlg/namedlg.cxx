@@ -281,7 +281,7 @@ bool ScNameDlg::IsNameValid()
     rtl::OUString aName = maEdName.GetText();
     aName = aName.trim();
 
-    if (!aName.getLength())
+    if (aName.isEmpty())
         return false;
 
     ScRangeName* pRangeName = GetRangeName( aScope );

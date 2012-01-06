@@ -778,7 +778,7 @@ void ScInputHandler::ShowTipCursor()
                     nNextFStart = aHelper.GetFunctionStart( aSelText, nLeftParentPos, sal_True);
                     if( aHelper.GetNextFunc( aSelText, false, nNextFStart, &nNextFEnd, &ppFDesc, &aArgs ) )
                     {
-                        if( ppFDesc->getFunctionName().getLength() )
+                        if( !ppFDesc->getFunctionName().isEmpty() )
                         {
                             nArgPos = aHelper.GetArgStart( aSelText, nNextFStart, 0 );
                             nArgs = static_cast<sal_uInt16>(ppFDesc->getParameterCount());
@@ -1022,7 +1022,7 @@ void ScInputHandler::UseFormulaData()
                 nNextFStart = aHelper.GetFunctionStart( aFormula, nLeftParentPos, sal_True);
                 if( aHelper.GetNextFunc( aFormula, false, nNextFStart, &nNextFEnd, &ppFDesc, &aArgs ) )
                 {
-                    if( ppFDesc->getFunctionName().getLength() )
+                    if( !ppFDesc->getFunctionName().isEmpty() )
                     {
                         nArgPos = aHelper.GetArgStart( aFormula, nNextFStart, 0 );
                         nArgs = static_cast<sal_uInt16>(ppFDesc->getParameterCount());
@@ -3443,7 +3443,7 @@ void ScInputHandler::NotifyChange( const ScInputHdlState* pState,
                             pActiveViewSh->GetViewData()->GetDocument()->
                                 GetRangeAtBlock( ScRange( rSPos, rEPos ), &aPosStr );
 
-                        if ( !aPosStr.getLength() )           // kein Name -> formatieren
+                        if ( aPosStr.isEmpty() )           // kein Name -> formatieren
                         {
                             sal_uInt16 nFlags = 0;
                             if( aAddrDetails.eConv == formula::FormulaGrammar::CONV_XL_R1C1 )

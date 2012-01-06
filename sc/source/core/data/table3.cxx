@@ -316,7 +316,7 @@ bool ScTable::IsSortCollatorGlobal() const
 
 void ScTable::InitSortCollator( const ScSortParam& rPar )
 {
-    if ( rPar.aCollatorLocale.Language.getLength() )
+    if ( !rPar.aCollatorLocale.Language.isEmpty() )
     {
         if ( !pSortCollator || IsSortCollatorGlobal() )
             pSortCollator = new CollatorWrapper( pDocument->GetServiceManager() );

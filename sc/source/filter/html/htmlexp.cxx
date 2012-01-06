@@ -376,7 +376,7 @@ void ScHTMLExport::WriteHeader()
         OUT_LF();
 
         //----------------------------------------------------------
-        if (xDocProps->getPrintedBy().getLength())
+        if (!xDocProps->getPrintedBy().isEmpty())
         {
             OUT_COMMENT( GLOBSTR( STR_DOC_INFO ) );
             String aStrOut( GLOBSTR( STR_DOC_PRINTED ) );

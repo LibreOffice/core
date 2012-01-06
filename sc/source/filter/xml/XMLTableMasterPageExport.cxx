@@ -88,23 +88,23 @@ void XMLTableMasterPageExport::exportHeaderFooter(const com::sun::star::uno::Ref
                                                 XML_DISPLAY, XML_FALSE );
             SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_STYLE,
                                       aName, sal_True, sal_True );
-            if (sCenter.getLength() && !sLeft.getLength() && !sRight.getLength())
+            if (!sCenter.isEmpty() && sLeft.isEmpty() && sRight.isEmpty())
                 exportHeaderFooterContent( xCenter, false, false );
             else
             {
-                if (sLeft.getLength())
+                if (!sLeft.isEmpty())
                 {
                     SvXMLElementExport aSubElem( GetExport(), XML_NAMESPACE_STYLE,
                                                 XML_REGION_LEFT, sal_True, sal_True );
                     exportHeaderFooterContent( xLeft, false, false );
                 }
-                if (sCenter.getLength())
+                if (!sCenter.isEmpty())
                 {
                     SvXMLElementExport aSubElem( GetExport(), XML_NAMESPACE_STYLE,
                                                 XML_REGION_CENTER, sal_True, sal_True );
                     exportHeaderFooterContent( xCenter, false, false );
                 }
-                if (sRight.getLength())
+                if (!sRight.isEmpty())
                 {
                     SvXMLElementExport aSubElem( GetExport(), XML_NAMESPACE_STYLE,
                                                 XML_REGION_RIGHT, sal_True, sal_True );

@@ -3241,7 +3241,7 @@ void ScInterpreter::ScUnicode()
     if ( MustHaveParamCount( GetByte(), 1 ) )
     {
         const rtl::OUString& rStr = GetString();
-        if (rStr.getLength() <= 0)
+        if (rStr.isEmpty())
             PushIllegalParameter();
         else
         {

@@ -205,7 +205,7 @@ void ScDrawShell::GetDrawFuncState( SfxItemSet& rSet )      // Funktionen disabl
     {
         SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
         ScMacroInfo* pInfo = ScDrawLayer::GetMacroInfo( pObj );
-        if ( !pInfo || (pInfo->GetHlink().getLength() == 0) )
+        if ( !pInfo || pInfo->GetHlink().isEmpty() )
         {
             rSet.DisableItem( SID_DRAW_HLINK_DELETE );
             rSet.DisableItem( SID_OPEN_HYPERLINK );

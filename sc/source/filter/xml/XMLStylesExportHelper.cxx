@@ -138,7 +138,7 @@ bool ScMyValidationsContainer::AddValidation(const uno::Any& aTempAny,
         sheet::ValidationType aValidationType;
         xPropertySet->getPropertyValue(sTYPE) >>= aValidationType;
         if (bShowErrorMessage || bShowImputMessage || aValidationType != sheet::ValidationType_ANY ||
-            sErrorMessage.getLength() || sErrorTitle.getLength() || sImputMessage.getLength() || sImputTitle.getLength())
+            !sErrorMessage.isEmpty() || !sErrorTitle.isEmpty() || !sImputMessage.isEmpty() || !sImputTitle.isEmpty())
         {
             ScMyValidation aValidation;
             aValidation.sErrorMessage = sErrorMessage;
@@ -227,10 +227,10 @@ rtl::OUString ScMyValidationsContainer::GetCondition(ScXMLExport& rExport, const
             }
         }
         if (aValidation.aValidationType != sheet::ValidationType_LIST &&
-            (aValidation.sFormula1.getLength() ||
+            (!aValidation.sFormula1.isEmpty() ||
             (aValidation.aOperator == sheet::ConditionOperator_BETWEEN &&
             aValidation.aOperator == sheet::ConditionOperator_NOT_BETWEEN &&
-            aValidation.sFormula2.getLength())))
+            !aValidation.sFormula2.isEmpty())))
         {
             if (aValidation.aValidationType != sheet::ValidationType_TEXT_LEN)
                 sCondition += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" and "));
@@ -292,7 +292,7 @@ rtl::OUString ScMyValidationsContainer::GetCondition(ScXMLExport& rExport, const
             if (aValidation.aValidationType == sheet::ValidationType_TEXT_LEN)
                 sCondition = rtl::OUString();
     }
-    if (sCondition.getLength())
+    if (!sCondition.isEmpty())
     {
         const formula::FormulaGrammar::Grammar eGrammar = rExport.GetDocument()->GetStorageGrammar();
         sal_uInt16 nNamespacePrefix = (eGrammar == formula::FormulaGrammar::GRAM_ODFF ? XML_NAMESPACE_OF : XML_NAMESPACE_OOOC);
@@ -313,7 +313,7 @@ void ScMyValidationsContainer::WriteMessage(ScXMLExport& rExport,
     const rtl::OUString& sTitle, const rtl::OUString& sOUMessage,
     const bool bShowMessage, const bool bIsHelpMessage)
 {
-    if (sTitle.getLength())
+    if (!sTitle.isEmpty())
         rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_TITLE, sTitle);
     if (bShowMessage)
         rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DISPLAY, XML_TRUE);
@@ -324,7 +324,7 @@ void ScMyValidationsContainer::WriteMessage(ScXMLExport& rExport,
         pMessage = new SvXMLElementExport(rExport, XML_NAMESPACE_TABLE, XML_HELP_MESSAGE, true, true);
     else
         pMessage = new SvXMLElementExport(rExport, XML_NAMESPACE_TABLE, XML_ERROR_MESSAGE, true, true);
-    if (sOUMessage.getLength())
+    if (!sOUMessage.isEmpty())
     {
         sal_Int32 i(0);
         rtl::OUStringBuffer sTemp;
@@ -363,7 +363,7 @@ void ScMyValidationsContainer::WriteValidations(ScXMLExport& rExport)
         {
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_NAME, aItr->sName);
             rtl::OUString sCondition(GetCondition(rExport, *aItr));
-            if (sCondition.getLength())
+            if (!sCondition.isEmpty())
             {
                 rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_CONDITION, sCondition);
                 if (aItr->bIgnoreBlanks)
@@ -390,11 +390,11 @@ void ScMyValidationsContainer::WriteValidations(ScXMLExport& rExport)
             }
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_BASE_CELL_ADDRESS, GetBaseCellAddress(rExport.GetDocument(), aItr->aBaseCell));
             SvXMLElementExport aElemV(rExport, XML_NAMESPACE_TABLE, XML_CONTENT_VALIDATION, true, true);
-            if (aItr->bShowImputMessage || aItr->sImputMessage.getLength() || aItr->sImputTitle.getLength())
+            if (aItr->bShowImputMessage || !aItr->sImputMessage.isEmpty() || !aItr->sImputTitle.isEmpty())
             {
                 WriteMessage(rExport, aItr->sImputTitle, aItr->sImputMessage, aItr->bShowImputMessage, true);
             }
-            if (aItr->bShowErrorMessage || aItr->sErrorMessage.getLength() || aItr->sErrorTitle.getLength())
+            if (aItr->bShowErrorMessage || !aItr->sErrorMessage.isEmpty() || !aItr->sErrorTitle.isEmpty())
             {
                 switch (aItr->aAlertStyle)
                 {

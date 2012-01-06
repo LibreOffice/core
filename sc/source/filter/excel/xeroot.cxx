@@ -256,7 +256,7 @@ uno::Sequence< beans::NamedValue > XclExpRoot::GenerateEncryptionData( const ::r
 {
     uno::Sequence< beans::NamedValue > aEncryptionData;
 
-    if ( aPass.getLength() > 0 && aPass.getLength() < 16 )
+    if ( !aPass.isEmpty() && aPass.getLength() < 16 )
     {
         TimeValue aTime;
         osl_getSystemTime( &aTime );

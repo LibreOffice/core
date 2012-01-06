@@ -264,7 +264,7 @@ ScVbaWorksheets::Add( const uno::Any& Before, const uno::Any& After,
             Before >>= aStringSheet;
     }
 
-    if (!aStringSheet.getLength() && After.hasValue() )
+    if (aStringSheet.isEmpty() && After.hasValue() )
     {
             if ( After >>= xBeforeAfterSheet )
             aStringSheet = xBeforeAfterSheet->getName();
@@ -272,7 +272,7 @@ ScVbaWorksheets::Add( const uno::Any& Before, const uno::Any& After,
             After >>= aStringSheet;
         bBefore = false;
     }
-    if (!aStringSheet.getLength())
+    if (aStringSheet.isEmpty())
     {
         uno::Reference< excel::XApplication > xApplication( Application(), uno::UNO_QUERY_THROW );
         aStringSheet = xApplication->getActiveWorkbook()->getActiveSheet()->getName();

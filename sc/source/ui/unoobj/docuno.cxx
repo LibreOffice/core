@@ -1711,7 +1711,7 @@ void SAL_CALL ScModelObj::setPropertyValue(
         {
             rtl::OUString aObjName;
             aValue >>= aObjName;
-            if ( aObjName.getLength() )
+            if ( !aObjName.isEmpty() )
                 pDoc->RestoreChartListener( aObjName );
         }
 

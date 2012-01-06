@@ -1571,7 +1571,7 @@ void ScDBFunc::DataPilotInput( const ScAddress& rPos, const String& rString )
                 aData.SetGrandTotalName(rString);
                 bChange = true;
             }
-            else if (aPosData.Dimension >= 0 && aPosData.MemberName.getLength() > 0)
+            else if (aPosData.Dimension >= 0 && !aPosData.MemberName.isEmpty())
             {
                 bool bDataLayout = false;
                 OUString aDimName = pDPObj->GetDimName(static_cast<long>(aPosData.Dimension), bDataLayout);
@@ -1880,7 +1880,7 @@ sal_Bool ScDBFunc::DataPilotMove( const ScRange& rSource, const ScAddress& rDest
             {
                 sheet::DataPilotTableHeaderData aSourceData;
                 pDPObj->GetHeaderPositionData( ScAddress( nCol, nRow, rSource.aStart.Tab() ), aSourceData );
-                if ( aSourceData.Dimension == aDestData.Dimension && aSourceData.MemberName.getLength() )
+                if ( aSourceData.Dimension == aDestData.Dimension && !aSourceData.MemberName.isEmpty() )
                 {
                     if ( aMembersSet.find( aSourceData.MemberName ) == aMembersSet.end() )
                     {

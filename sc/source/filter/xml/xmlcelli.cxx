@@ -177,7 +177,7 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
             break;
             case XML_TOK_TABLE_ROW_CELL_ATTR_VALUE:
             {
-                if (sValue.getLength())
+                if (!sValue.isEmpty())
                 {
                     ::sax::Converter::convertDouble(fValue, sValue);
                     bIsEmpty = false;
@@ -186,7 +186,7 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
             break;
             case XML_TOK_TABLE_ROW_CELL_ATTR_DATE_VALUE:
             {
-                if (sValue.getLength() && rXMLImport.SetNullDateOnUnitConverter())
+                if (!sValue.isEmpty() && rXMLImport.SetNullDateOnUnitConverter())
                 {
                     rXMLImport.GetMM100UnitConverter().convertDateTime(fValue, sValue);
                     bIsEmpty = false;
@@ -195,7 +195,7 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
             break;
             case XML_TOK_TABLE_ROW_CELL_ATTR_TIME_VALUE:
             {
-                if (sValue.getLength())
+                if (!sValue.isEmpty())
                 {
                     ::sax::Converter::convertDuration(fValue, sValue);
                     bIsEmpty = false;
@@ -204,7 +204,7 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
             break;
             case XML_TOK_TABLE_ROW_CELL_ATTR_STRING_VALUE:
             {
-                if (sValue.getLength())
+                if (!sValue.isEmpty())
                 {
                     OSL_ENSURE(!pOUTextValue, "here should be only one string value");
                     pOUTextValue.reset(sValue);
@@ -214,7 +214,7 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
             break;
             case XML_TOK_TABLE_ROW_CELL_ATTR_BOOLEAN_VALUE:
             {
-                if (sValue.getLength())
+                if (!sValue.isEmpty())
                 {
                     if ( IsXMLToken(sValue, XML_TRUE) )
                         fValue = 1.0;
@@ -228,7 +228,7 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
             break;
             case XML_TOK_TABLE_ROW_CELL_ATTR_FORMULA:
             {
-                if (sValue.getLength())
+                if (!sValue.isEmpty())
                 {
                     OSL_ENSURE(!pOUFormula, "here should be only one formula");
                     rtl::OUString aFormula, aFormulaNmsp;
@@ -529,13 +529,13 @@ void ScXMLTableRowCellContext::SetContentValidation(com::sun::star::uno::Referen
             uno::Reference<beans::XPropertySet> xPropertySet(xPropSet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_VALIXML))), uno::UNO_QUERY);
             if (xPropertySet.is())
             {
-                if (aValidation.sErrorMessage.getLength())
+                if (!aValidation.sErrorMessage.isEmpty())
                     xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_ERRMESS)), uno::makeAny(aValidation.sErrorMessage));
-                if (aValidation.sErrorTitle.getLength())
+                if (!aValidation.sErrorTitle.isEmpty())
                     xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_ERRTITLE)), uno::makeAny(aValidation.sErrorTitle));
-                if (aValidation.sImputMessage.getLength())
+                if (!aValidation.sImputMessage.isEmpty())
                     xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_INPMESS)), uno::makeAny(aValidation.sImputMessage));
-                if (aValidation.sImputTitle.getLength())
+                if (!aValidation.sImputTitle.isEmpty())
                     xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_INPTITLE)), uno::makeAny(aValidation.sImputTitle));
                 xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_SHOWERR)), uno::makeAny(aValidation.bShowErrorMessage));
                 xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_SHOWINP)), uno::makeAny(aValidation.bShowImputMessage));
@@ -572,7 +572,7 @@ void ScXMLTableRowCellContext::SetContentValidation(com::sun::star::uno::Referen
 void ScXMLTableRowCellContext::SetCellProperties(const uno::Reference<table::XCellRange>& xCellRange,
                                                 const table::CellAddress& aCellAddress)
 {
-    if (CellExists(aCellAddress) && pContentValidationName && pContentValidationName->getLength())
+    if (CellExists(aCellAddress) && pContentValidationName && !pContentValidationName->isEmpty())
     {
         sal_Int32 nBottom = aCellAddress.Row + nRepeatedRows - 1;
         sal_Int32 nRight = aCellAddress.Column + nCellsRepeated - 1;
@@ -589,7 +589,7 @@ void ScXMLTableRowCellContext::SetCellProperties(const uno::Reference<table::XCe
 
 void ScXMLTableRowCellContext::SetCellProperties(const uno::Reference<table::XCell>& xCell)
 {
-    if (pContentValidationName && pContentValidationName->getLength())
+    if (pContentValidationName && !pContentValidationName->isEmpty())
     {
         uno::Reference <beans::XPropertySet> xProperties (xCell, uno::UNO_QUERY);
         if (xProperties.is())
@@ -663,7 +663,7 @@ void ScXMLTableRowCellContext::SetAnnotation(const table::CellAddress& aCellAddr
             }
         }
     }
-    else if( mxAnnotationData->maSimpleText.getLength() > 0 )
+    else if( !mxAnnotationData->maSimpleText.isEmpty() )
     {
         // create note from simple text
         pNote = ScNoteUtil::CreateNoteFromString( *pDoc, aPos,
@@ -734,8 +734,8 @@ void ScXMLTableRowCellContext::SetDetectiveObj( const table::CellAddress& rPosit
 // core implementation
 void ScXMLTableRowCellContext::SetCellRangeSource( const table::CellAddress& rPosition )
 {
-    if( CellExists(rPosition) && pCellRangeSource  && pCellRangeSource->sSourceStr.getLength() &&
-        pCellRangeSource->sFilterName.getLength() && pCellRangeSource->sURL.getLength() )
+    if( CellExists(rPosition) && pCellRangeSource  && !pCellRangeSource->sSourceStr.isEmpty() &&
+        !pCellRangeSource->sFilterName.isEmpty() && !pCellRangeSource->sURL.isEmpty() )
     {
         ScDocument* pDoc = rXMLImport.GetDocument();
         if (pDoc)
@@ -827,7 +827,7 @@ void ScXMLTableRowCellContext::EndElement()
                 bool bWasEmpty = bIsEmpty;
 //              uno::Reference <table::XCell> xCell;
                 table::CellAddress aCurrentPos( aCellPos );
-                if ((pContentValidationName && pContentValidationName->getLength()) ||
+                if ((pContentValidationName && !pContentValidationName->isEmpty()) ||
                     mxAnnotationData.get() || pDetectiveObjVec || pCellRangeSource)
                     bIsEmpty = false;
 
@@ -899,11 +899,11 @@ void ScXMLTableRowCellContext::EndElement()
                                                 if ( bDoIncrement )
                                                 {
                                                     ScFormulaCell* pFCell = static_cast<ScFormulaCell*>(pCell);
-                                                    if (pOUTextValue && pOUTextValue->getLength())
+                                                    if (pOUTextValue && !pOUTextValue->isEmpty())
                                                         pFCell->SetHybridString( *pOUTextValue );
-                                                    else if (pOUTextContent && pOUTextContent->getLength())
+                                                    else if (pOUTextContent && !pOUTextContent->isEmpty())
                                                         pFCell->SetHybridString( *pOUTextContent );
-                                                    else if ( i > 0 && pOUText && pOUText->getLength() )
+                                                    else if ( i > 0 && pOUText && !pOUText->isEmpty() )
                                                         pFCell->SetHybridString( *pOUText );
                                                     else
                                                         bDoIncrement = false;
@@ -929,11 +929,11 @@ void ScXMLTableRowCellContext::EndElement()
                                                 LockSolarMutex();
                                                 ScBaseCell* pNewCell = NULL;
                                                 ScDocument* pDoc = rXMLImport.GetDocument();
-                                                if (pOUTextValue && pOUTextValue->getLength())
+                                                if (pOUTextValue && !pOUTextValue->isEmpty())
                                                     pNewCell = ScBaseCell::CreateTextCell( *pOUTextValue, pDoc );
-                                                else if (pOUTextContent && pOUTextContent->getLength())
+                                                else if (pOUTextContent && !pOUTextContent->isEmpty())
                                                     pNewCell = ScBaseCell::CreateTextCell( *pOUTextContent, pDoc );
-                                                else if ( i > 0 && pOUText && pOUText->getLength() )
+                                                else if ( i > 0 && pOUText && !pOUText->isEmpty() )
                                                     pNewCell = ScBaseCell::CreateTextCell( *pOUText, pDoc );
 
                                                 bDoIncrement = pNewCell != NULL;
@@ -1099,7 +1099,7 @@ void ScXMLTableRowCellContext::EndElement()
                                     // temporary formula string as string tokens
                                     ScTokenArray* pCode = new ScTokenArray;
                                     pCode->AddStringXML( aText );
-                                    if( (eGrammar == formula::FormulaGrammar::GRAM_EXTERNAL) && (aFormulaNmsp.getLength() > 0) )
+                                    if( (eGrammar == formula::FormulaGrammar::GRAM_EXTERNAL) && !aFormulaNmsp.isEmpty() )
                                         pCode->AddStringXML( aFormulaNmsp );
 
                                     pDoc->IncXMLImportedFormulaCount( aText.getLength() );
@@ -1133,7 +1133,7 @@ void ScXMLTableRowCellContext::EndElement()
                                 ScBaseCell* pCell = rXMLImport.GetDocument()->GetCell( aScAddress );
                                 if ( pCell && pCell->GetCellType() == CELLTYPE_FORMULA )
                                 {
-                                    if (bFormulaTextResult && pOUTextValue && pOUTextValue->getLength())
+                                    if (bFormulaTextResult && pOUTextValue && !pOUTextValue->isEmpty())
                                         static_cast<ScFormulaCell*>(pCell)->SetHybridString( *pOUTextValue );
                                     else
                                         static_cast<ScFormulaCell*>(pCell)->SetHybridDouble( fValue );

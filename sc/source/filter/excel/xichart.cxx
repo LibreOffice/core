@@ -1655,7 +1655,7 @@ Reference< XRegressionCurve > XclImpChSerTrendLine::CreateRegressionCurve() cons
         break;
     }
     Reference< XRegressionCurve > xRegCurve;
-    if( aService.getLength() > 0 )
+    if( !aService.isEmpty() )
         xRegCurve.set( ScfApiHelper::CreateInstance( aService ), UNO_QUERY );
 
     // trend line formatting

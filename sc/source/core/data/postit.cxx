@@ -658,7 +658,7 @@ void ScPostIt::CreateCaptionFromInitData( const ScAddress& rPos ) const
                 ScCaptionInitData& rInitData = *maNoteData.mxInitData;
 
                 // transfer ownership of outliner object to caption, or set simple text
-                OSL_ENSURE( rInitData.mxOutlinerObj.get() || (rInitData.maSimpleText.getLength() > 0),
+                OSL_ENSURE( rInitData.mxOutlinerObj.get() || !rInitData.maSimpleText.isEmpty(),
                     "ScPostIt::CreateCaptionFromInitData - need either outliner para object or simple text" );
                 if( rInitData.mxOutlinerObj.get() )
                     maNoteData.mpCaption->SetOutlinerParaObject( rInitData.mxOutlinerObj.release() );
@@ -818,7 +818,7 @@ SdrCaptionObj* ScNoteUtil::CreateTempCaption(
     rDrawPage.InsertObject( pCaption );
 
     // clone the edit text object, unless user text is present, then set this text
-    if( pNoteCaption && (rUserText.getLength() == 0) )
+    if( pNoteCaption && rUserText.isEmpty() )
     {
         if( OutlinerParaObject* pOPO = pNoteCaption->GetOutlinerParaObject() )
             pCaption->SetOutlinerParaObject( new OutlinerParaObject( *pOPO ) );
@@ -900,7 +900,7 @@ ScPostIt* ScNoteUtil::CreateNoteFromString(
         bool bShown, bool bAlwaysCreateCaption )
 {
     ScPostIt* pNote = 0;
-    if( rNoteText.getLength() > 0 )
+    if( !rNoteText.isEmpty() )
     {
         ScNoteData aNoteData( bShown );
         aNoteData.mxInitData.reset( new ScCaptionInitData );

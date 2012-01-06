@@ -611,7 +611,7 @@ void ScXMLAutoStylePoolP::exportStyleAttributes(
                     if (i->maValue >>= nNumberFormat)
                     {
                         rtl::OUString sAttrValue(rScXMLExport.getDataStyleName(nNumberFormat));
-                        if (sAttrValue.getLength())
+                        if (!sAttrValue.isEmpty())
                         {
                             GetExport().AddAttribute(
                                 aPropMapper->GetEntryNameSpace(i->mnIndex),

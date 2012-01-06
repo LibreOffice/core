@@ -680,7 +680,7 @@ void XclImpPivotCache::ReadPivotCacheStream( XclImpStream& rStrm )
 
     if( mbSelfRef )
     {
-        if (!maSrcRangeName.getLength())
+        if (maSrcRangeName.isEmpty())
         {
             // try to find internal sheet containing the source data
             nScTab = GetTabInfo().GetScTabFromXclName( maTabName );
@@ -881,7 +881,7 @@ bool XclImpPivotCache::IsRefreshOnLoad() const
 
 bool XclImpPivotCache::IsValid() const
 {
-    if (maSrcRangeName.getLength())
+    if (!maSrcRangeName.isEmpty())
         return true;
 
     return maSrcRange.IsValid();
@@ -1417,7 +1417,7 @@ void XclImpPivotTable::Convert()
     // create source descriptor
     ScSheetSourceDesc aDesc(GetDocPtr());
     const OUString& rSrcName = mxPCache->GetSourceRangeName();
-    if (rSrcName.getLength())
+    if (!rSrcName.isEmpty())
         // Range name is the data source.
         aDesc.SetRangeName(rSrcName);
     else

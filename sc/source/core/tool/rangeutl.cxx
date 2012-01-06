@@ -374,9 +374,9 @@ void ScRangeStringConverter::AssignString(
 {
     if( bAppendStr )
     {
-        if( rNewStr.getLength() )
+        if( !rNewStr.isEmpty() )
         {
-            if( rString.getLength() )
+            if( !rString.isEmpty() )
                 rString += rtl::OUString(cSeperator);
             rString += rNewStr;
         }
@@ -570,7 +570,7 @@ sal_Bool ScRangeStringConverter::GetRangeListFromString(
         sal_Unicode cQuote )
 {
     sal_Bool bRet = sal_True;
-    OSL_ENSURE( rRangeListStr.getLength(), "ScXMLConverter::GetRangeListFromString - empty string!" );
+    OSL_ENSURE( !rRangeListStr.isEmpty(), "ScXMLConverter::GetRangeListFromString - empty string!" );
     sal_Int32 nOffset = 0;
     while( nOffset >= 0 )
     {
@@ -668,7 +668,7 @@ sal_Bool ScRangeStringConverter::GetRangeListFromString(
         sal_Unicode cQuote )
 {
     sal_Bool bRet = sal_True;
-    OSL_ENSURE( rRangeListStr.getLength(), "ScXMLConverter::GetRangeListFromString - empty string!" );
+    OSL_ENSURE( !rRangeListStr.isEmpty(), "ScXMLConverter::GetRangeListFromString - empty string!" );
     table::CellRangeAddress aRange;
     sal_Int32 nOffset = 0;
     while( nOffset >= 0 )
@@ -920,7 +920,7 @@ void ScRangeStringConverter::GetStringFromXMLRangeString( OUString& rString, con
             OUString aBeginCell = aToken.copy(0, nSepPos);
             OUString aEndCell   = aToken.copy(nSepPos+1);
 
-            if (!aBeginCell.getLength() || !aEndCell.getLength())
+            if (aBeginCell.isEmpty() || aEndCell.isEmpty())
                 // both cell addresses must exist for this to work.
                 continue;
 

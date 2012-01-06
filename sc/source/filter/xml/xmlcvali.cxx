@@ -354,7 +354,7 @@ void ScXMLContentValidationContext::GetCondition( ScMyImportValidation& rValidat
     rValidation.aValidationType = sheet::ValidationType_ANY;    // default if no condition is given
     rValidation.aOperator = sheet::ConditionOperator_NONE;
 
-    if( sCondition.getLength() > 0 )
+    if( !sCondition.isEmpty() )
     {
         // extract leading namespace from condition string
         OUString aCondition, aConditionNmsp;

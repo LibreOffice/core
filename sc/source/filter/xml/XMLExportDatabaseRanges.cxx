@@ -264,11 +264,11 @@ private:
             case sheet::DataImportMode_NONE : break;
             case sheet::DataImportMode_QUERY :
             {
-                if (sDatabaseName.getLength())
+                if (!sDatabaseName.isEmpty())
                     mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DATABASE_NAME, sDatabaseName);
                 mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_QUERY_NAME, aParam.aStatement);
                 SvXMLElementExport aElemID(mrExport, XML_NAMESPACE_TABLE, XML_DATABASE_SOURCE_QUERY, true, true);
-                if (sConRes.getLength())
+                if (!sConRes.isEmpty())
                 {
                     mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, sConRes );
                     SvXMLElementExport aElemCR(mrExport, XML_NAMESPACE_FORM, XML_CONNECTION_RESOURCE, true, true);
@@ -277,11 +277,11 @@ private:
             break;
             case sheet::DataImportMode_TABLE :
             {
-                if (sDatabaseName.getLength())
+                if (!sDatabaseName.isEmpty())
                     mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DATABASE_NAME, sDatabaseName);
                 mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_TABLE_NAME, aParam.aStatement);
                 SvXMLElementExport aElemID(mrExport, XML_NAMESPACE_TABLE, XML_DATABASE_SOURCE_TABLE, true, true);
-                if (sConRes.getLength())
+                if (!sConRes.isEmpty())
                 {
                     mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, sConRes );
                     SvXMLElementExport aElemCR(mrExport, XML_NAMESPACE_FORM, XML_CONNECTION_RESOURCE, true, true);
@@ -290,13 +290,13 @@ private:
             break;
             case sheet::DataImportMode_SQL :
             {
-                if (sDatabaseName.getLength())
+                if (!sDatabaseName.isEmpty())
                     mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DATABASE_NAME, sDatabaseName);
                 mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_SQL_STATEMENT, aParam.aStatement);
                 if (!aParam.bNative)
                     mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_PARSE_SQL_STATEMENT, XML_TRUE);
                 SvXMLElementExport aElemID(mrExport, XML_NAMESPACE_TABLE, XML_DATABASE_SOURCE_SQL, true, true);
-                if (sConRes.getLength())
+                if (!sConRes.isEmpty())
                 {
                     mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, sConRes );
                     SvXMLElementExport aElemCR(mrExport, XML_NAMESPACE_FORM, XML_CONNECTION_RESOURCE, true, true);

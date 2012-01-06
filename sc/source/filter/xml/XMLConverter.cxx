@@ -635,7 +635,7 @@ void ScXMLConditionHelper::parseCondition(
                 if( (pcString < pcEnd) && (*pcString == '(') )
                 {
                     rParseResult.maOperand1 = lclGetExpression( ++pcString, pcEnd, ')' );
-                    if( rParseResult.maOperand1.getLength() > 0 )
+                    if( !rParseResult.maOperand1.isEmpty() )
                         rParseResult.meToken = pCondInfo->meToken;
                 }
             break;
@@ -645,10 +645,10 @@ void ScXMLConditionHelper::parseCondition(
                 if( (pcString < pcEnd) && (*pcString == '(') )
                 {
                     rParseResult.maOperand1 = lclGetExpression( ++pcString, pcEnd, ',' );
-                    if( rParseResult.maOperand1.getLength() > 0 )
+                    if( !rParseResult.maOperand1.isEmpty() )
                     {
                         rParseResult.maOperand2 = lclGetExpression( pcString, pcEnd, ')' );
-                        if( rParseResult.maOperand2.getLength() > 0 )
+                        if( !rParseResult.maOperand2.isEmpty() )
                             rParseResult.meToken = pCondInfo->meToken;
                     }
                 }

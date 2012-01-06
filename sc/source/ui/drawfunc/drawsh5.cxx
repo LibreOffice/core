@@ -90,7 +90,7 @@ void ScDrawShell::GetHLinkState( SfxItemSet& rSet )             //  Hyperlink
     {
         SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
         ScMacroInfo* pInfo = ScDrawLayer::GetMacroInfo( pObj );
-        if ( pInfo && (pInfo->GetHlink().getLength() > 0) )
+        if ( pInfo && !pInfo->GetHlink().isEmpty() )
         {
             aHLinkItem.SetURL( pInfo->GetHlink() );
             aHLinkItem.SetInsertMode(HLINK_FIELD);
@@ -122,7 +122,7 @@ void ScDrawShell::GetHLinkState( SfxItemSet& rSet )             //  Hyperlink
                     if(xInfo->hasPropertyByName( sPropLabel ))
                     {
                         aAny = xPropSet->getPropertyValue( sPropLabel );
-                        if ( (aAny >>= sTmp) && sTmp.getLength() )
+                        if ( (aAny >>= sTmp) && !sTmp.isEmpty() )
                         {
                             aHLinkItem.SetName(sTmp);
                         }
@@ -131,7 +131,7 @@ void ScDrawShell::GetHLinkState( SfxItemSet& rSet )             //  Hyperlink
                     if(xInfo->hasPropertyByName( sPropTargetURL ))
                     {
                         aAny = xPropSet->getPropertyValue( sPropTargetURL );
-                        if ( (aAny >>= sTmp) && sTmp.getLength() )
+                        if ( (aAny >>= sTmp) && !sTmp.isEmpty() )
                         {
                             aHLinkItem.SetURL(sTmp);
                         }
@@ -140,7 +140,7 @@ void ScDrawShell::GetHLinkState( SfxItemSet& rSet )             //  Hyperlink
                     if(xInfo->hasPropertyByName( sPropTargetFrame ))
                     {
                         aAny = xPropSet->getPropertyValue( sPropTargetFrame );
-                        if ( (aAny >>= sTmp) && sTmp.getLength() )
+                        if ( (aAny >>= sTmp) && !sTmp.isEmpty() )
                         {
                             aHLinkItem.SetTargetFrame(sTmp);
                         }

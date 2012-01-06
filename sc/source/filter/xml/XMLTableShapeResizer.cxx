@@ -72,7 +72,7 @@ void ScMyOLEFixer::CreateChartListener(ScDocument* pDoc,
     if (!pDoc)
         return;
 
-    if (!rRangeList.getLength())
+    if (rRangeList.isEmpty())
     {
         pDoc->AddOLEObjectToCollection(rName);
         return;
@@ -80,7 +80,7 @@ void ScMyOLEFixer::CreateChartListener(ScDocument* pDoc,
 
     OUString aRangeStr;
     ScRangeStringConverter::GetStringFromXMLRangeString(aRangeStr, rRangeList, pDoc);
-    if (!aRangeStr.getLength())
+    if (aRangeStr.isEmpty())
     {
         pDoc->AddOLEObjectToCollection(rName);
         return;

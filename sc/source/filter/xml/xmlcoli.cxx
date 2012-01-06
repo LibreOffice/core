@@ -135,7 +135,7 @@ void ScXMLTableColContext::EndElement()
             uno::Reference <beans::XPropertySet> xColumnProperties(xColumnRowRange->getColumns(), uno::UNO_QUERY);
             if (xColumnProperties.is())
             {
-                if (sStyleName.getLength())
+                if (!sStyleName.isEmpty())
                 {
                     XMLTableStylesContext *pStyles = (XMLTableStylesContext *)rXMLImport.GetAutoStyles();
                     if ( pStyles )
@@ -166,7 +166,7 @@ void ScXMLTableColContext::EndElement()
 
     // #i57915# ScXMLImport::SetStyleToRange can't handle empty style names.
     // The default for a column if there is no attribute is the style "Default" (programmatic API name).
-    if ( !sCellStyleName.getLength() )
+    if ( sCellStyleName.isEmpty() )
         sCellStyleName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Default" ));
 
     GetScImport().GetTables().AddColCount(nColCount);

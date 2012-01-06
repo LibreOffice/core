@@ -364,7 +364,7 @@ ScMyStylesSet::iterator ScMyStylesImportHelper::GetIterator(const rtl::OUString*
 void ScMyStylesImportHelper::AddDefaultRange(const ScRange& rRange)
 {
     OSL_ENSURE(aRowDefaultStyle != aCellStyles.end(), "no row default style");
-    if (!aRowDefaultStyle->sStyleName.getLength())
+    if (aRowDefaultStyle->sStyleName.isEmpty())
     {
         SCCOL nStartCol(rRange.aStart.Col());
         SCCOL nEndCol(rRange.aEnd.Col());
@@ -434,7 +434,7 @@ void ScMyStylesImportHelper::AddSingleRange(const ScRange& rRange)
 
 void ScMyStylesImportHelper::AddRange()
 {
-    if (pPrevStyleName && pPrevStyleName->getLength())
+    if (pPrevStyleName && !pPrevStyleName->isEmpty())
         AddSingleRange(aPrevRange);
     else
         AddDefaultRange(aPrevRange);

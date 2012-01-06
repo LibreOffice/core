@@ -53,7 +53,7 @@ ScVbaChartObject::ScVbaChartObject( const css::uno::Reference< ov::XHelperInterf
 
 rtl::OUString ScVbaChartObject::getPersistName()
 {
-    if ( !sPersistName.getLength() )
+    if ( sPersistName.isEmpty() )
         sPersistName = xNamed->getName();
     return sPersistName;
 }

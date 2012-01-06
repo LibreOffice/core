@@ -246,7 +246,7 @@ void ScSolverOptionsDialog::FillListBox()
         rtl::OUString aVisName;
         if ( xDesc.is() )
             aVisName = xDesc->getPropertyDescription( aPropName );
-        if ( !aVisName.getLength() )
+        if ( aVisName.isEmpty() )
             aVisName = aPropName;
         aDescriptions[nPos].nPosition = nPos;
         aDescriptions[nPos].aDescription = aVisName;

@@ -879,7 +879,7 @@ IMPL_LINK( ScTPValidationError, ClickSearchHdl, PushButton*, EMPTYARG )
 
     Application::SetDefDialogParent( pOld );
 
-    if ( aScriptURL != NULL && aScriptURL.getLength() != 0 )
+    if ( aScriptURL != NULL && !aScriptURL.isEmpty() )
     {
         aEdtTitle.SetText( aScriptURL );
     }

@@ -448,7 +448,7 @@ void ScXMLDataPilotTableContext::EndElement()
             if (bSourceCellRange)
             {
                 ScSheetSourceDesc aSheetDesc(pDoc);
-                if (sSourceRangeName.getLength())
+                if (!sSourceRangeName.isEmpty())
                     // Range name takes precedence.
                     aSheetDesc.SetRangeName(sSourceRangeName);
                 else
@@ -462,7 +462,7 @@ void ScXMLDataPilotTableContext::EndElement()
 
     pDPSave->SetRowGrand(maRowGrandTotal.mbVisible);
     pDPSave->SetColumnGrand(maColGrandTotal.mbVisible);
-    if (maRowGrandTotal.maDisplayName.getLength())
+    if (!maRowGrandTotal.maDisplayName.isEmpty())
         // TODO: Right now, we only support one grand total name for both
         // column and row totals.  Take the value from the row total for
         // now.
@@ -976,7 +976,7 @@ ScXMLDataPilotFieldContext::ScXMLDataPilotFieldContext( ScXMLImport& rImport,
     if (bHasName)
     {
         pDim = new ScDPSaveDimension(String(sName), bDataLayout);
-        if (aDisplayName.getLength())
+        if (!aDisplayName.isEmpty())
             pDim->SetLayoutName(aDisplayName);
     }
 }
@@ -1058,7 +1058,7 @@ void ScXMLDataPilotFieldContext::EndElement()
             aInfo.Start = fStart;
             aInfo.End = fEnd;
             aInfo.Step = fStep;
-            if (sGroupSource.getLength())
+            if (!sGroupSource.isEmpty())
             {
                 ScDPSaveGroupDimension aGroupDim(sGroupSource, sName);
                 if (nGroupPart)
@@ -1418,7 +1418,7 @@ SvXMLImportContext *ScXMLDataPilotSubTotalsContext::CreateChildContext( sal_uInt
 void ScXMLDataPilotSubTotalsContext::EndElement()
 {
     pDataPilotField->SetSubTotals(pFunctions, nFunctionCount);
-    if (maDisplayName.getLength())
+    if (!maDisplayName.isEmpty())
         pDataPilotField->SetSubTotalName(maDisplayName);
 }
 
@@ -1615,7 +1615,7 @@ void ScXMLDataPilotMemberContext::EndElement()
     if (bHasName)   // #i53407# don't check sName, empty name is allowed
     {
         ScDPSaveMember* pMember = new ScDPSaveMember(String(sName));
-        if (maDisplayName.getLength())
+        if (!maDisplayName.isEmpty())
             pMember->SetLayoutName(maDisplayName);
         pMember->SetIsVisible(bDisplay);
         pMember->SetShowDetails(bDisplayDetails);
@@ -1847,7 +1847,7 @@ SvXMLImportContext *ScXMLDataPilotGroupMemberContext::CreateChildContext( sal_uI
 
 void ScXMLDataPilotGroupMemberContext::EndElement()
 {
-    if (sName.getLength())
+    if (!sName.isEmpty())
         pDataPilotGroup->AddMember(sName);
 }
 

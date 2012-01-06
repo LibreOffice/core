@@ -196,7 +196,7 @@ void ScFuncDesc::Clear()
         aSig.append(*pFuncName);
 
         ::rtl::OUString aParamList = GetParamList();
-        if( aParamList.getLength() )
+        if( !aParamList.isEmpty() )
         {
             aSig.appendAscii( "( " );
             aSig.append(aParamList);
@@ -226,14 +226,14 @@ void ScFuncDesc::Clear()
 
         if ( nArgCount > 0 && aIter != aEnd )
         {
-            bool bLastArg = ( aIter->getLength() == 0 );
+            bool bLastArg = aIter->isEmpty();
 
             while( aIter != aEnd && !bLastArg )
             {
                 aFormula.append( *(aIter) );
                 if ( aIter != (aEnd-1) )
                 {
-                    bLastArg = !( (aIter+1)->getLength() > 0 );
+                    bLastArg = (aIter+1)->isEmpty();
                     if ( !bLastArg )
                         aFormula.append( sep );
                 }
@@ -324,7 +324,7 @@ void ScFuncDesc::initArgumentInfo()  const
         ScUnoAddInCollection& rAddIns = *ScGlobal::GetAddInCollection();
         ::rtl::OUString aIntName(rAddIns.FindFunction( *pFuncName, true ));         // pFuncName is upper-case
 
-        if ( aIntName.getLength() )
+        if ( !aIntName.isEmpty() )
         {
             // GetFuncData with bComplete=true loads the component and updates
             // the global function list if needed.
@@ -471,7 +471,7 @@ ScFunctionList::ScFunctionList() :
                 pDesc->pDefArgFlags[j].bOptional = false;
                 pDesc->pDefArgFlags[j].bSuppress = false;
                 pAddInFuncData->getParamDesc( aArgName, aArgDesc, j+1 );
-                if ( aArgName.getLength() )
+                if ( !aArgName.isEmpty() )
                     pDesc->ppDefArgNames[j] = new ::rtl::OUString( aArgName );
                 else
                 {
@@ -497,7 +497,7 @@ ScFunctionList::ScFunctionList() :
                             break;
                     }
                 }
-                if ( aArgDesc.getLength() )
+                if ( !aArgDesc.isEmpty() )
                     pDesc->ppDefArgDescs[j] = new ::rtl::OUString( aArgDesc );
                 else
                 {
@@ -617,7 +617,7 @@ const formula::IFunctionManager* ScFunctionCategory::getFunctionManager() const
 
 ::rtl::OUString ScFunctionCategory::getName() const
 {
-    if ( !m_sName.getLength() )
+    if ( m_sName.isEmpty() )
         m_sName = ScFunctionMgr::GetCategoryName(m_nCategory+1);
     return m_sName;
 }

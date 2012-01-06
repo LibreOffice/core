@@ -2201,7 +2201,7 @@ SfxObjectShellRef ScExternalRefManager::loadSrcDocument(sal_uInt16 nFileId, OUSt
         return NULL;
 
     OUString aOptions = pFileData->maFilterOptions;
-    if ( pFileData->maFilterName.getLength() )
+    if ( !pFileData->maFilterName.isEmpty() )
         rFilter = pFileData->maFilterName;      // don't overwrite stored filter with guessed filter
     else
         ScDocumentLoader::GetFilterName(aFile, rFilter, aOptions, true, false);;
@@ -2274,7 +2274,7 @@ bool ScExternalRefManager::isFileLoadable(const OUString& rFile) const
     if (isOwnDocument(rFile))
         return false;
     rtl::OUString aPhysical;
-    if (utl::LocalFileHelper::ConvertURLToPhysicalName(rFile, aPhysical) && aPhysical.getLength())
+    if (utl::LocalFileHelper::ConvertURLToPhysicalName(rFile, aPhysical) && !aPhysical.isEmpty())
     {
         // #i114504# try IsFolder/Exists only for file URLs
 
@@ -2307,7 +2307,7 @@ void ScExternalRefManager::maybeLinkExternalFile(sal_uInt16 nFileId)
     }
     // If a filter was already set (for example, loading the cached table),
     // don't call GetFilterName which has to access the source file.
-    if (!aFilter.getLength())
+    if (aFilter.isEmpty())
         ScDocumentLoader::GetFilterName(*pFileName, aFilter, aOptions, true, false);
     sfx2::LinkManager* pLinkMgr = mpDoc->GetLinkManager();
     ScExternalRefLink* pLink = new ScExternalRefLink(mpDoc, nFileId, aFilter);

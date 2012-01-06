@@ -152,7 +152,7 @@ ScVbaFileDialog::Show( ) throw (::com::sun::star::uno::RuntimeException)
                     if ( aObj.GetProtocol() == INET_PROT_FILE )
                     {
                         aTemp = aObj.PathToFileName();
-                        m_sSelectedItems[i] = aTemp.getLength() > 0 ? aTemp : m_sSelectedItems[i];
+                        m_sSelectedItems[i] = aTemp.isEmpty() ? m_sSelectedItems[i] : aTemp;
                     }
                 }
             }

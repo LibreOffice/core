@@ -718,7 +718,7 @@ bool ScTable::SearchAndReplace(
             com::sun::star::util::SearchOptions aSearchOptions = rSearchItem.GetSearchOptions();
             aSearchOptions.Locale = *ScGlobal::GetLocale();
 
-            if (!aSearchOptions.searchString.getLength())
+            if (aSearchOptions.searchString.isEmpty())
             {
                 // Search for empty cells.
                 return SearchAndReplaceEmptyCells(rSearchItem, rCol, rRow, rMark, rMatchedRanges, rUndoStr, pUndoDoc);

@@ -308,7 +308,7 @@ ScXMLExternalRefCellContext::ScXMLExternalRefCellContext(
             break;
             case XML_TOK_TABLE_ROW_CELL_ATTR_VALUE:
             {
-                if (sValue.getLength())
+                if (!sValue.isEmpty())
                 {
                     ::sax::Converter::convertDouble(mfCellValue, sValue);
                     mbIsNumeric = true;
@@ -318,7 +318,7 @@ ScXMLExternalRefCellContext::ScXMLExternalRefCellContext(
             break;
             case XML_TOK_TABLE_ROW_CELL_ATTR_DATE_VALUE:
             {
-                if (sValue.getLength() && mrScImport.SetNullDateOnUnitConverter())
+                if (!sValue.isEmpty() && mrScImport.SetNullDateOnUnitConverter())
                 {
                     mrScImport.GetMM100UnitConverter().convertDateTime(mfCellValue, sValue);
                     mbIsNumeric = true;
@@ -328,7 +328,7 @@ ScXMLExternalRefCellContext::ScXMLExternalRefCellContext(
             break;
             case XML_TOK_TABLE_ROW_CELL_ATTR_TIME_VALUE:
             {
-                if (sValue.getLength())
+                if (!sValue.isEmpty())
                 {
                     ::sax::Converter::convertDuration(mfCellValue, sValue);
                     mbIsNumeric = true;
@@ -338,7 +338,7 @@ ScXMLExternalRefCellContext::ScXMLExternalRefCellContext(
             break;
             case XML_TOK_TABLE_ROW_CELL_ATTR_STRING_VALUE:
             {
-                if (sValue.getLength())
+                if (!sValue.isEmpty())
                 {
                     maCellString = sValue;
                     mbIsNumeric = false;
@@ -348,7 +348,7 @@ ScXMLExternalRefCellContext::ScXMLExternalRefCellContext(
             break;
             case XML_TOK_TABLE_ROW_CELL_ATTR_BOOLEAN_VALUE:
             {
-                if (sValue.getLength())
+                if (!sValue.isEmpty())
                 {
                     mfCellValue = IsXMLToken(sValue, XML_TRUE) ? 1.0 : 0.0;
                     mbIsNumeric = true;
@@ -379,7 +379,7 @@ SvXMLImportContext* ScXMLExternalRefCellContext::CreateChildContext(
 
 void ScXMLExternalRefCellContext::EndElement()
 {
-    if (maCellString.getLength())
+    if (!maCellString.isEmpty())
         mbIsEmpty = false;
 
     for (sal_Int32 i = 0; i < mnRepeatCount; ++i, ++mrExternalRefInfo.mnCol)

@@ -194,7 +194,7 @@ IMPL_LINK( ScTpFormulaOptions, SepModifyHdl, Edit*, pEdit )
         pEdit->SetText(aStr);
     }
 
-    if ((!IsValidSeparator(aStr) || !IsValidSeparatorSet()) && maOldSepValue.getLength())
+    if ((!IsValidSeparator(aStr) || !IsValidSeparatorSet()) && !maOldSepValue.isEmpty())
         // Invalid separator.  Restore the old value.
         pEdit->SetText(maOldSepValue);
 

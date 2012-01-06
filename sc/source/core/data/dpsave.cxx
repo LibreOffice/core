@@ -1203,7 +1203,7 @@ void ScDPSaveData::BuildAllDimensionMembers(ScDPTableData* pData)
     for (iter = aDimList.begin(); iter != aDimList.end(); ++iter)
     {
         const ::rtl::OUString& rDimName = iter->GetName();
-        if (!rDimName.getLength())
+        if (rDimName.isEmpty())
             // empty dimension name. It must be data layout.
             continue;
 

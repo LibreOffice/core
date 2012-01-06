@@ -1619,7 +1619,7 @@ getFileNameFromDoc( const ScDocument* pDoc )
         uno::Reference< frame::XModel > xModel( pShell->GetModel(), uno::UNO_QUERY );
         if( xModel.is() )
         {
-            if( xModel->getURL().getLength() )
+            if( !xModel->getURL().isEmpty() )
             {
                 INetURLObject aURL( xModel->getURL() );
                 sFileName = aURL.GetLastName();

@@ -539,7 +539,7 @@ ShapeInteractionHelper::PopulateShapeInteractionInfo( XclExpObjectManager& rObjM
          sHyperLink = pInfo->GetHlink();
          sMacro = pInfo->GetMacro();
       }
-      if (  sHyperLink.getLength() > 0 )
+      if (  !sHyperLink.isEmpty() )
       {
          pMemStrm = new SvMemoryStream();
          XclExpStream tmpStream( *pMemStrm, rObjMgr.GetRoot() );
@@ -549,7 +549,7 @@ ShapeInteractionHelper::PopulateShapeInteractionInfo( XclExpObjectManager& rObjM
          XclExpHyperlink hExpHlink( rObjMgr.GetRoot(), aUrlField, dummyAddress );
          hExpHlink.WriteEmbeddedData( tmpStream );
       }
-      if ( ( sHyperLink.getLength() > 0 ) || ( sMacro.getLength() > 0 ) )
+      if ( !sHyperLink.isEmpty() || !sMacro.isEmpty() )
           rHostAppData.SetInteractionInfo( new InteractionInfo( pMemStrm, true ) );
    }
    catch( Exception& )

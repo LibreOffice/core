@@ -136,7 +136,7 @@ ScVbaNames::Add( const css::uno::Any& Name ,
         Name >>= sName;
     else if ( NameLocal.hasValue() )
         NameLocal >>= sName;
-    if ( sName.getLength() != 0 )
+    if ( !sName.isEmpty() )
     {
         sal_Int32 nTokenIndex = sName.indexOf('!');
         if ( nTokenIndex >= 0 )

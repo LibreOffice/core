@@ -109,7 +109,7 @@ void lcl_ChartInit( const uno::Reference < embed::XEmbeddedObject >& xObj, ScVie
     ScDocument* pScDoc = pDocShell->GetDocument();
 
     rtl::OUString aRangeString( rRangeParam );
-    if ( !aRangeString.getLength() )
+    if ( aRangeString.isEmpty() )
     {
         SCCOL nCol1 = 0;
         SCROW nRow1 = 0;
@@ -137,7 +137,7 @@ void lcl_ChartInit( const uno::Reference < embed::XEmbeddedObject >& xObj, ScVie
         }
     }
 
-    if ( aRangeString.getLength() )
+    if ( !aRangeString.isEmpty() )
     {
         // connect to Calc data (if no range string, leave chart alone, with its own data)
 

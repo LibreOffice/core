@@ -118,7 +118,7 @@ void SAL_CALL ScSheetEventsObj::replaceByName( const rtl::OUString& aName, const
             }
         }
     }
-    if (aScript.getLength())
+    if (!aScript.isEmpty())
         aNewEvents.SetScript( nEvent, &aScript );
     else
         aNewEvents.SetScript( nEvent, NULL );       // reset

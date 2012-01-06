@@ -563,7 +563,7 @@ ScXMLTrackedChangesContext::ScXMLTrackedChangesContext( ScXMLImport& rImport,
         {
             if (IsXMLToken(aLocalName, XML_PROTECTION_KEY))
             {
-                if (sValue.getLength())
+                if (!sValue.isEmpty())
                 {
                     uno::Sequence<sal_Int8> aPass;
                     ::sax::Converter::decodeBase64(aPass, sValue);
@@ -1297,7 +1297,7 @@ void ScXMLChangeCellContext::EndElement()
         {
             if (!bFormula)
             {
-                if (sText.getLength() && bString)
+                if (!sText.isEmpty() && bString)
                     rOldCell = new ScStringCell(sText);
                 else
                     rOldCell = new ScValueCell(fValue);

@@ -656,7 +656,7 @@ XclExpStream& operator<<( XclExpStream& rStrm, const XclPTFieldExtInfo& rInfo )
             << rInfo.mnShowField
             << EXC_SXVDEX_FORMAT_NONE;
 
-    if (rInfo.mpFieldTotalName.get() && rInfo.mpFieldTotalName->getLength() > 0)
+    if (rInfo.mpFieldTotalName.get() && !rInfo.mpFieldTotalName->isEmpty())
     {
         rtl::OUString aFinalName = *rInfo.mpFieldTotalName;
         if (aFinalName.getLength() >= 254)

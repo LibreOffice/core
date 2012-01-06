@@ -86,7 +86,7 @@ ScParserFactoryMap::ScParserFactoryMap() :
 
             // store factory in the map
             OUString aNamespace = xParser->getSupportedNamespace();
-            if( aNamespace.getLength() > 0 )
+            if( !aNamespace.isEmpty() )
                 maFactories[ aNamespace ] = xCompFactory;
         }
         catch( Exception& )

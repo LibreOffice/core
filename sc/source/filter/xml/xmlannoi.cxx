@@ -182,7 +182,7 @@ void ScXMLAnnotationContext::EndElement()
 
     mrAnnotationData.maAuthor = maAuthorBuffer.makeStringAndClear();
     mrAnnotationData.maCreateDate = maCreateDateBuffer.makeStringAndClear();
-    if (!mrAnnotationData.maCreateDate.getLength())
+    if (mrAnnotationData.maCreateDate.isEmpty())
         mrAnnotationData.maCreateDate = maCreateDateStringBuffer.makeStringAndClear();
     mrAnnotationData.maSimpleText = maTextBuffer.makeStringAndClear();
 

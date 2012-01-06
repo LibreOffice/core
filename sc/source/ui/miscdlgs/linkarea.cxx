@@ -157,7 +157,7 @@ void ScLinkedAreaDlg::LoadDocument( const rtl::OUString& rFile, const String& rF
         aSourceRef.Clear();
     }
 
-    if ( rFile.getLength() )
+    if ( !rFile.isEmpty() )
     {
         WaitObject aWait( this );
 

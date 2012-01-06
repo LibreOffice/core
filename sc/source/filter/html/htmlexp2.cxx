@@ -239,7 +239,7 @@ void ScHTMLExport::WriteImage( String& rLinkName, const Graphic& rGrf,
         HTMLOutFuncs::Out_String( rStrm, URIHelper::simpleNormalizedMakeRelative(
                     aBaseURL,
                     rLinkName ), eDestEnc ) << '\"';
-        if ( rImgOptions.getLength() )
+        if ( !rImgOptions.isEmpty() )
             rStrm << rImgOptions.getStr();
         rStrm << '>' << sNewLine << GetIndentStr();
     }

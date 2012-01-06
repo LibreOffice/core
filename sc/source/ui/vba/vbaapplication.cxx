@@ -546,7 +546,7 @@ ScVbaApplication::setStatusBar( const uno::Any& _statusbar ) throw (uno::Runtime
     if( _statusbar >>= sText )
     {
         setDisplayStatusBar( sal_True );
-        if ( sText.getLength() )
+        if ( !sText.isEmpty() )
             xStatusIndicator->start( sText, 100 );
         else
             xStatusIndicator->end();        // restore normal state for empty text
@@ -1502,7 +1502,7 @@ ScVbaApplication::GetOpenFilename(const uno::Any& FileFilter, const uno::Any& Fi
                 if ( aObj.GetProtocol() == INET_PROT_FILE )
                 {
                     rtl::OUString aTemp = aObj.PathToFileName();
-                    aSelectedFiles[i] = aTemp.getLength() > 0 ? aTemp : aSelectedFiles[i];
+                    aSelectedFiles[i] = aTemp.isEmpty() ? aSelectedFiles[i] : aTemp ;
                 }
             }
             if ( bMultiSelect )
@@ -1641,10 +1641,10 @@ ScVbaApplication::GetSaveAsFilename( const ::com::sun::star::uno::Any& InitialFi
                         sal_Int32 nSemicolonID = 0;
                         ::rtl::OUString sFirstFilter = sSelectedFilters.getToken( 0, ';' , nSemicolonID );
                         ::rtl::OUString sFileExtension = aURLObj.GetExtension();
-                        if ( sFileExtension.getLength() == 0 )
+                        if ( sFileExtension.isEmpty() )
                         {
                             sFileExtension = sFirstFilter.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("*.*")) ? sFileExtension : sFirstFilter.copy( sFirstFilter.indexOfAsciiL("*.", 2) + 2 );
-                            aPathStr = sFileExtension.getLength() == 0 ? aPathStr : aPathStr + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".")) + sFileExtension;
+                            aPathStr = sFileExtension.isEmpty() ? aPathStr : aPathStr + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".")) + sFileExtension;
                         }
                         else
                         {
@@ -1673,8 +1673,8 @@ ScVbaApplication::GetSaveAsFilename( const ::com::sun::star::uno::Any& InitialFi
                             {
                                 sFileExtension = sFirstFilter.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("*.*")) ? rtl::OUString()
                                                                                  : sFirstFilter.copy( sFirstFilter.indexOfAsciiL("*.", 2) + 2 );
-                                aPathStr = sFileExtension.getLength() == 0 ? aPathStr
-                                                                          : aPathStr + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".")) + sFileExtension;
+                                aPathStr = sFileExtension.isEmpty() ? aPathStr
+                                                                    : aPathStr + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".")) + sFileExtension;
                             }
                         }
                     }

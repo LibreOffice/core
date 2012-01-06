@@ -370,7 +370,7 @@ bool XclControlHelper::FillMacroDescriptor( ScriptEventDescriptor& rDescriptor,
 String XclControlHelper::ExtractFromMacroDescriptor(
         const ScriptEventDescriptor& rDescriptor, XclTbxEventType eEventType, SfxObjectShell* /*pShell*/ )
 {
-    if( (rDescriptor.ScriptCode.getLength() > 0) &&
+    if( (!rDescriptor.ScriptCode.isEmpty()) &&
             rDescriptor.ScriptType.equalsIgnoreAsciiCaseAscii( "Script" ) &&
             rDescriptor.ListenerType.equalsAscii( spTbxListenerData[ eEventType ].mpcListenerType ) &&
             rDescriptor.EventMethod.equalsAscii( spTbxListenerData[ eEventType ].mpcEventMethod ) )

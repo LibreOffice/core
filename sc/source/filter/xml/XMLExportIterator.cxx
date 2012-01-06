@@ -756,7 +756,7 @@ void ScMyNotEmptyCellsIterator::HasAnnotation(ScMyCell& aCell)
             if (aCell.xAnnotation.is() && xSimpleText.is())
             {
                 aCell.sAnnotationText = xSimpleText->getString();
-                if (aCell.sAnnotationText.getLength())
+                if (!aCell.sAnnotationText.isEmpty())
                     aCell.bHasAnnotation = true;
             }
             aAnnotations.erase(aItr);

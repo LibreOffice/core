@@ -399,13 +399,13 @@ void XMLTableStyleContext::GetConditionalFormat(uno::Any& aAny,
         const rtl::OUString& sTempCondition,
         const rtl::OUString& sApplyStyle, const rtl::OUString& sBaseCell) const
 {
-    if (sTempCondition.getLength() && sApplyStyle.getLength())
+    if (!sTempCondition.isEmpty() && !sApplyStyle.isEmpty())
     {
         uno::Reference<sheet::XSheetConditionalEntries> xConditionalEntries(aAny, uno::UNO_QUERY);
         if (xConditionalEntries.is())
         {
             uno::Sequence<beans::PropertyValue> aProps;
-            if (sBaseCell.getLength())
+            if (!sBaseCell.isEmpty())
                 SetBaseCellAddress(aProps, sBaseCell);
             SetStyle(aProps, sApplyStyle);
 
@@ -540,7 +540,7 @@ void XMLTableStyleContext::FillPropertySet(
         }
         else if (GetFamily() == XML_STYLE_FAMILY_TABLE_TABLE)
         {
-            if (sPageStyle.getLength())
+            if (!sPageStyle.isEmpty())
                 AddProperty(CTF_SC_MASTERPAGENAME, uno::makeAny(GetImport().GetStyleDisplayName( XML_STYLE_FAMILY_MASTER_PAGE, sPageStyle )));
         }
     }
@@ -601,7 +601,7 @@ XMLPropertyState* XMLTableStyleContext::FindProperty(const sal_Int16 nContextID)
 
 sal_Int32 XMLTableStyleContext::GetNumberFormat()
 {
-    if (nNumberFormat < 0 && sDataStyleName.getLength())
+    if (nNumberFormat < 0 && !sDataStyleName.isEmpty())
     {
         const SvXMLNumFormatContext* pStyle = static_cast<const SvXMLNumFormatContext*>(
             pStyles->FindStyleChildContext(XML_STYLE_FAMILY_DATA_STYLE, sDataStyleName, sal_True));
@@ -808,7 +808,7 @@ uno::Reference < XNameContainer >
             }
             break;
         }
-        if( !xStyles.is() && sName.getLength() && GetScImport().GetModel().is() )
+        if( !xStyles.is() && !sName.isEmpty() && GetScImport().GetModel().is() )
         {
             uno::Reference< XStyleFamiliesSupplier > xFamiliesSupp(
                                             GetScImport().GetModel(), UNO_QUERY );
@@ -851,7 +851,7 @@ uno::Reference < XNameContainer >
 OUString XMLTableStylesContext::GetServiceName( sal_uInt16 nFamily ) const
 {
     rtl::OUString sServiceName(SvXMLStylesContext::GetServiceName(nFamily));
-    if (!sServiceName.getLength())
+    if (sServiceName.isEmpty())
     {
         switch( nFamily )
         {

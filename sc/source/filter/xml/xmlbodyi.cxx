@@ -280,7 +280,7 @@ void ScXMLBodyContext::EndElement()
             pProtection->setProtected(true);
 
             uno::Sequence<sal_Int8> aPass;
-            if (sPassword.getLength())
+            if (!sPassword.isEmpty())
             {
                 ::sax::Converter::decodeBase64(aPass, sPassword);
                 pProtection->setPasswordHash(aPass, meHash1, meHash2);
