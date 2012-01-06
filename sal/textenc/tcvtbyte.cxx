@@ -30,6 +30,7 @@
 
 #include "rtl/textcvt.h"
 
+#include "handleundefinedunicodetotextchar.hxx"
 #include "tcvtbyte.hxx"
 #include "tenchelp.hxx"
 
@@ -69,7 +70,7 @@ sal_Size ImplSymbolToUnicode( const void*,
     return (nDestChars - (pEndDestBuf-pDestBuf));
 }
 
-sal_Size ImplUnicodeToSymbol( const void* pData,
+sal_Size ImplUnicodeToSymbol( const void*,
                               void*,
                               const sal_Unicode* pSrcBuf, sal_Size nSrcChars,
                               char* pDestBuf, sal_Size nDestBytes,
@@ -117,13 +118,9 @@ sal_Size ImplUnicodeToSymbol( const void* pData,
 
             /* Handle undefined and surrogates characters */
             /* (all surrogates characters are undefined) */
-            if (!ImplHandleUndefinedUnicodeToTextChar(pData,
-                                                      &pSrcBuf,
-                                                      pEndSrcBuf,
-                                                      &pDestBuf,
-                                                      pEndDestBuf,
-                                                      nFlags,
-                                                      pInfo))
+            if (!sal::detail::textenc::handleUndefinedUnicodeToTextChar(
+                    &pSrcBuf, pEndSrcBuf, &pDestBuf, pEndDestBuf, nFlags,
+                    pInfo))
                 break;
         }
     }

@@ -28,19 +28,9 @@
 
 #include "sal/config.h"
 
-#include <cassert>
-
 #include "sal/types.h"
 
 #include "unichars.hxx"
-
-bool ImplIsNoncharacter(sal_uInt32 nUtf32)
-{
-    // All code points that are noncharacters, as of Unicode 3.1.1:
-    return (nUtf32 >= 0xFDD0 && nUtf32 <= 0xFDEF)
-           || (nUtf32 & 0xFFFF) >= 0xFFFE
-           || nUtf32 > 0x10FFFF;
-}
 
 bool ImplIsControlOrFormat(sal_uInt32 nUtf32)
 {
@@ -86,18 +76,6 @@ bool ImplIsControlOrFormat(sal_uInt32 nUtf32)
            || (nUtf32 >= 0xE0020 && nUtf32 <= 0xE007F);
 }
 
-bool ImplIsHighSurrogate(sal_uInt32 nUtf32)
-{
-    // All code points that are high-surrogates, as of Unicode 3.1.1.
-    return nUtf32 >= 0xD800 && nUtf32 <= 0xDBFF;
-}
-
-bool ImplIsLowSurrogate(sal_uInt32 nUtf32)
-{
-    // All code points that are low-surrogates, as of Unicode 3.1.1.
-    return nUtf32 >= 0xDC00 && nUtf32 <= 0xDFFF;
-}
-
 bool ImplIsPrivateUse(sal_uInt32 nUtf32)
 {
     // All code points of
@@ -117,24 +95,6 @@ bool ImplIsZeroWidth(sal_uInt32 nUtf32)
            || nUtf32 == 0x200C // ZERO WIDTH NON-JOINER
            || nUtf32 == 0x200D // ZERO WIDTH JOINER
            || nUtf32 == 0xFEFF; // ZEOR WIDTH NO-BREAK SPACE
-}
-
-sal_uInt32 ImplGetHighSurrogate(sal_uInt32 nUtf32)
-{
-    assert(nUtf32 >= 0x10000);
-    return ((nUtf32 - 0x10000) >> 10) | 0xD800;
-}
-
-sal_uInt32 ImplGetLowSurrogate(sal_uInt32 nUtf32)
-{
-    assert(nUtf32 >= 0x10000);
-    return ((nUtf32 - 0x10000) & 0x3FF) | 0xDC00;
-}
-
-sal_uInt32 ImplCombineSurrogates(sal_uInt32 nHigh, sal_uInt32 nLow)
-{
-    assert(ImplIsHighSurrogate(nHigh) && ImplIsLowSurrogate(nLow));
-    return (((nHigh & 0x3FF) << 10) | (nLow & 0x3FF)) + 0x10000;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

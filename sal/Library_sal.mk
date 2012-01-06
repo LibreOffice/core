@@ -121,8 +121,8 @@ $(eval $(call gb_Library_add_exception_objects,sal,\
 	sal/rtl/source/uuid \
 	sal/textenc/converter \
 	sal/textenc/convertsimple \
+    sal/textenc/handleundefinedunicodetotextchar \
 	sal/textenc/tcvtutf8 \
-	sal/textenc/tenchelp \
 	sal/textenc/tencinfo \
 	sal/textenc/textcvt \
 	sal/textenc/textenc \

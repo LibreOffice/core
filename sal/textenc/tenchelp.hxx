@@ -32,8 +32,11 @@
 #include "sal/config.h"
 
 #include "rtl/tencinfo.h"
+#include "rtl/textcvt.h"
 #include "rtl/textenc.h"
 #include "sal/types.h"
+
+#include "unichars.hxx"
 
 #define RTL_TEXTCVT_BYTE_PRIVATE_START 0xF100
 #define RTL_TEXTCVT_BYTE_PRIVATE_END 0xF1FF
@@ -199,17 +202,14 @@ struct ImplEUCJPConvertData
 /* - TextConverter - HelpFunctions - */
 /* --------------------------------- */
 
-sal_Unicode ImplGetUndefinedUnicodeChar(sal_uChar cChar, sal_uInt32 nFlags);
-
-bool
-ImplHandleUndefinedUnicodeToTextChar(void const * pData,
-                                     sal_Unicode const ** ppSrcBuf,
-                                     sal_Unicode const * pEndSrcBuf,
-                                     char ** ppDestBuf,
-                                     char const * pEndDestBuf,
-                                     sal_uInt32 nFlags,
-                                     sal_uInt32 * pInfo);
-    /* true means 'continue,' false means 'break' */
+inline sal_Unicode ImplGetUndefinedUnicodeChar(
+    sal_uChar cChar, sal_uInt32 nFlags)
+{
+    return ((nFlags & RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_MASK)
+                   == RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_MAPTOPRIVATE) ?
+               RTL_TEXTCVT_BYTE_PRIVATE_START + cChar :
+               RTL_TEXTENC_UNICODE_REPLACEMENT_CHARACTER;
+}
 
 /* ----------------------------- */
 /* - TextConverter - Functions - */

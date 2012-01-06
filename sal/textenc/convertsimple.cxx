@@ -33,6 +33,7 @@
 #include "sal/types.h"
 
 #include "convertsimple.hxx"
+#include "handleundefinedunicodetotextchar.hxx"
 #include "tenchelp.hxx"
 
 #define IMPL_MAX_REPLACECHAR 5
@@ -657,13 +658,9 @@ sal_Size sal::detail::textenc::convertUnicodeToChar(
                     /* (all surrogates characters are undefined) */
                     if ( n == 0 )
                     {
-                        if (ImplHandleUndefinedUnicodeToTextChar(pData,
-                                                                 &pSrcBuf,
-                                                                 pEndSrcBuf,
-                                                                 &pDestBuf,
-                                                                 pEndDestBuf,
-                                                                 nFlags,
-                                                                 pInfo))
+                        if (sal::detail::textenc::handleUndefinedUnicodeToTextChar(
+                                &pSrcBuf, pEndSrcBuf, &pDestBuf, pEndDestBuf,
+                                nFlags, pInfo))
                             continue;
                         else
                             break;

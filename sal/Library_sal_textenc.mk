@@ -51,8 +51,6 @@ $(eval $(call gb_Library_add_exception_objects,sal_textenc,\
 	sal/textenc/tcvtbyte \
 	sal/textenc/tcvtmb \
 	sal/textenc/tcvtutf7 \
-	sal/textenc/tenchelp \
-	sal/textenc/unichars \
 ))
 
 # vim: set noet sw=4 ts=4:

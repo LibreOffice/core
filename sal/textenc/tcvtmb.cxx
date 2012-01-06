@@ -30,6 +30,7 @@
 
 #include "rtl/textcvt.h"
 
+#include "handleundefinedunicodetotextchar.hxx"
 #include "tenchelp.hxx"
 #include "unichars.hxx"
 
@@ -336,13 +337,9 @@ sal_Size ImplUnicodeToDBCS( const void* pData, void*,
 
             /* Handle undefined and surrogates characters */
             /* (all surrogates characters are undefined) */
-            if (ImplHandleUndefinedUnicodeToTextChar(pData,
-                                                     &pSrcBuf,
-                                                     pEndSrcBuf,
-                                                     &pDestBuf,
-                                                     pEndDestBuf,
-                                                     nFlags,
-                                                     pInfo))
+            if (sal::detail::textenc::handleUndefinedUnicodeToTextChar(
+                    &pSrcBuf, pEndSrcBuf, &pDestBuf, pEndDestBuf, nFlags,
+                    pInfo))
                 continue;
             else
                 break;
@@ -624,13 +621,9 @@ sal_Size ImplUnicodeToEUCJP( const void* pData,
 
                     /* Handle undefined and surrogates characters */
                     /* (all surrogates characters are undefined) */
-                    if (ImplHandleUndefinedUnicodeToTextChar(pData,
-                                                             &pSrcBuf,
-                                                             pEndSrcBuf,
-                                                             &pDestBuf,
-                                                             pEndDestBuf,
-                                                             nFlags,
-                                                             pInfo))
+                    if (sal::detail::textenc::handleUndefinedUnicodeToTextChar(
+                            &pSrcBuf, pEndSrcBuf, &pDestBuf, pEndDestBuf,
+                            nFlags, pInfo))
                         continue;
                     else
                         break;

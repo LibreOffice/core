@@ -636,10 +636,11 @@ PRIVATE_1.2 { # LibreOffice 3.5
         sal_detail_logFormat;
 } PRIVATE_1.1;
 
-PRIVATE_textenc { # LibreOffice 3.6
+PRIVATE_textenc.1 { # LibreOffice 3.6
     global:
         _ZN3sal6detail7textenc20convertCharToUnicodeEPKvPvPKcmPtmjPjPm;
         _ZN3sal6detail7textenc20convertUnicodeToCharEPKvPvPKtmPcmjPjPm;
+        _ZN3sal6detail7textenc32handleUndefinedUnicodeToTextCharEPPKtS3_PPcPKcjPj;
         _ZN3sal6detail7textenc37handleBadInputTextToUnicodeConversionEbbcjPPtS2_Pj;
         _ZN3sal6detail7textenc37handleBadInputUnicodeToTextConversionEbjjPPcS2_PjPKcmPb;
 };
