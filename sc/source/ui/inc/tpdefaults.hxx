@@ -52,6 +52,10 @@ private:
     explicit ScTpDefaultsOptions(Window* pParent, const SfxItemSet& rCoreAttrs);
     virtual ~ScTpDefaultsOptions();
 
+    void CheckNumSheets();
+
+    DECL_LINK( NumModifiedHdl, NumericField* );
+
 private:
     FixedLine     aFLInitSpreadSheet;
     FixedText     aFtNSheets;
