@@ -159,7 +159,7 @@ ScDataFormDlg::ScDataFormDlg( Window* pParent, ScTabViewShell*  pTabViewShellOri
                 nEndRow = nStartRow;
         }
 
-        aCurrentRow = nStartRow + 1;
+        nCurrentRow = nStartRow + 1;
 
         String  aFieldName;
 
@@ -213,7 +213,7 @@ ScDataFormDlg::ScDataFormDlg( Window* pParent, ScTabViewShell*  pTabViewShellOri
         aSlider.SetSizePixel(nScrollSize);
     }
 
-    FillCtrls(aCurrentRow);
+    FillCtrls(nCurrentRow);
 
     aSlider.SetPageSize( 10 );
     aSlider.SetVisibleSize( 1 );
@@ -246,9 +246,9 @@ void ScDataFormDlg::FillCtrls(SCROW /*nCurrentRow*/)
     {
         if (!maEdits.is_null(i))
         {
-            if (aCurrentRow<=nEndRow)
+            if (nCurrentRow<=nEndRow)
             {
-                pDoc->GetString( i + nStartCol, aCurrentRow, nTab, aFieldName );
+                pDoc->GetString( i + nStartCol, nCurrentRow, nTab, aFieldName );
                 maEdits[i].SetText(aFieldName);
             }
             else
@@ -256,10 +256,10 @@ void ScDataFormDlg::FillCtrls(SCROW /*nCurrentRow*/)
         }
     }
 
-    if (aCurrentRow <= nEndRow)
+    if (nCurrentRow <= nEndRow)
     {
         OUStringBuffer aBuf;
-        aBuf.append(static_cast<sal_Int32>(aCurrentRow - nStartRow));
+        aBuf.append(static_cast<sal_Int32>(nCurrentRow - nStartRow));
         aBuf.appendAscii(" / ");
         aBuf.append(static_cast<sal_Int32>(nEndRow - nStartRow));
         aFixedText.SetText(aBuf.makeStringAndClear());
@@ -267,7 +267,7 @@ void ScDataFormDlg::FillCtrls(SCROW /*nCurrentRow*/)
     else
         aFixedText.SetText(String(ScResId(STR_NEW_RECORD)));
 
-    aSlider.SetThumbPos(aCurrentRow-nStartRow-1);
+    aSlider.SetThumbPos(nCurrentRow-nStartRow-1);
 }
 
 IMPL_LINK( ScDataFormDlg, Impl_DataModifyHdl, Edit*, pEdit)
@@ -295,15 +295,15 @@ IMPL_LINK( ScDataFormDlg, Impl_NewHdl, PushButton*, EMPTYARG )
 
         if ( bHasData )
         {
-            pTabViewShell->DataFormPutData( aCurrentRow , nStartRow , nStartCol , nEndRow , nEndCol , maEdits , aColLength );
-            aCurrentRow++;
-            if (aCurrentRow >= nEndRow + 2)
+            pTabViewShell->DataFormPutData( nCurrentRow , nStartRow , nStartCol , nEndRow , nEndCol , maEdits , aColLength );
+            nCurrentRow++;
+            if (nCurrentRow >= nEndRow + 2)
             {
                     nEndRow ++ ;
                     aSlider.SetRange( Range( 0, nEndRow - nStartRow + 1) );
             }
             SetButtonState();
-            FillCtrls(aCurrentRow);
+            FillCtrls(nCurrentRow);
             pDocSh->SetDocumentModified();
             pDocSh->PostPaintGridAll();
             }
@@ -315,11 +315,11 @@ IMPL_LINK( ScDataFormDlg, Impl_PrevHdl, PushButton*, EMPTYARG )
 {
     if (pDoc)
     {
-        if ( aCurrentRow > nStartRow +1 )
-            aCurrentRow--;
+        if ( nCurrentRow > nStartRow +1 )
+            nCurrentRow--;
 
         SetButtonState();
-        FillCtrls(aCurrentRow);
+        FillCtrls(nCurrentRow);
     }
     return 0;
 }
@@ -328,11 +328,11 @@ IMPL_LINK( ScDataFormDlg, Impl_NextHdl, PushButton*, EMPTYARG )
 {
     if (pDoc)
     {
-        if ( aCurrentRow <= nEndRow)
-            aCurrentRow++;
+        if ( nCurrentRow <= nEndRow)
+            nCurrentRow++;
 
         SetButtonState();
-        FillCtrls(aCurrentRow);
+        FillCtrls(nCurrentRow);
     }
     return 0;
 }
@@ -341,7 +341,7 @@ IMPL_LINK( ScDataFormDlg, Impl_RestoreHdl, PushButton*, EMPTYARG )
 {
     if (pDoc)
     {
-        FillCtrls(aCurrentRow);
+        FillCtrls(nCurrentRow);
     }
     return 0;
 }
@@ -352,14 +352,14 @@ IMPL_LINK( ScDataFormDlg, Impl_DeleteHdl, PushButton*, EMPTYARG )
     ScDocShell* pDocSh = pViewData->GetDocShell();
     if (pDoc)
     {
-        ScRange aRange(nStartCol, aCurrentRow, nTab, nEndCol, aCurrentRow, nTab);
+        ScRange aRange(nStartCol, nCurrentRow, nTab, nEndCol, nCurrentRow, nTab);
         pDoc->DeleteRow(aRange);
         nEndRow--;
 
         SetButtonState();
         pDocSh->GetUndoManager()->Clear();
 
-        FillCtrls(aCurrentRow);
+        FillCtrls(nCurrentRow);
         pDocSh->SetDocumentModified();
         pDocSh->PostPaintGridAll();
     }
@@ -375,15 +375,15 @@ IMPL_LINK( ScDataFormDlg, Impl_CloseHdl, PushButton*, EMPTYARG )
 IMPL_LINK( ScDataFormDlg, Impl_ScrollHdl, ScrollBar*, EMPTYARG )
 {
     long nOffset = aSlider.GetThumbPos();
-    aCurrentRow = nStartRow + nOffset + 1;
+    nCurrentRow = nStartRow + nOffset + 1;
     SetButtonState();
-    FillCtrls(aCurrentRow);
+    FillCtrls(nCurrentRow);
     return 0;
 }
 
 void ScDataFormDlg::SetButtonState()
 {
-    if ( aCurrentRow > nEndRow )
+    if (nCurrentRow > nEndRow)
     {
         aBtnDelete.Enable( false );
         aBtnNext.Enable( false );
@@ -393,7 +393,8 @@ void ScDataFormDlg::SetButtonState()
         aBtnDelete.Enable( true );
         aBtnNext.Enable( true );
     }
-    if ( 1 == aCurrentRow )
+
+    if (nCurrentRow == nStartRow + 1)
         aBtnPrev.Enable( false );
     else
         aBtnPrev.Enable( true );
