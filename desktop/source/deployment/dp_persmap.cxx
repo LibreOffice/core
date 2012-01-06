@@ -293,6 +293,10 @@ void PersistentMap::put( OString const & key, OString const & value )
     typedef std::pair<t_string2string_map::iterator,bool> InsertRC;
     InsertRC r = m_entries.insert( t_string2string_map::value_type(key,value));
     m_bIsDirty = r.second;
+    // HACK: flush now as the extension manager does not seem
+    //       to properly destruct this object in some situations
+    if( m_bIsDirty)
+        flush();
 }
 
 //______________________________________________________________________________
