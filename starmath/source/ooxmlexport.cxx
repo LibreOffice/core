@@ -324,6 +324,7 @@ void SmOoxmlExport::HandleAttribute( const SmAttributNode* pNode, int nLevel )
         case TWIDETILDE:
         case TWIDEHAT:
         case TWIDEVEC:
+        case TBAR:
         {
             m_pSerializer->startElementNS( XML_m, XML_acc, FSEND );
             m_pSerializer->startElementNS( XML_m, XML_accPr, FSEND );
@@ -337,7 +338,6 @@ void SmOoxmlExport::HandleAttribute( const SmAttributNode* pNode, int nLevel )
             m_pSerializer->endElementNS( XML_m, XML_acc );
             break;
         }
-        case TBAR:
         case TOVERLINE:
         case TUNDERLINE:
             m_pSerializer->startElementNS( XML_m, XML_bar, FSEND );
