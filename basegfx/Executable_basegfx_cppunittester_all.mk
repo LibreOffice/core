@@ -61,7 +61,6 @@ $(eval $(call gb_Executable_add_exception_objects,basegfx_cppunittester_all, \
 	basegfx/test/basegfxtools \
 	basegfx/test/clipstate \
 	basegfx/test/genericclipper \
-	basegfx/test/testtools \
 ))
 
 $(eval $(call gb_Executable_add_api,basegfx_cppunittester_all, \

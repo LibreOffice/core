@@ -36,7 +36,6 @@ $(eval $(call gb_CppunitTest_add_exception_objects,basegfx_test, \
 	basegfx/test/basegfxtools \
 	basegfx/test/clipstate \
 	basegfx/test/genericclipper \
-	basegfx/test/testtools \
 ))
 
 $(eval $(call gb_CppunitTest_add_linked_libs,basegfx_test, \
@@ -45,11 +44,6 @@ $(eval $(call gb_CppunitTest_add_linked_libs,basegfx_test, \
 	cppuhelper \
 	sal \
     $(gb_STDLIBS) \
-))
-
-$(eval $(call gb_CppunitTest_set_include,basegfx_test,\
-	$$(INCLUDE) \
-	-I$(OUTDIR)/inc/offuh \
 ))
 
 $(eval $(call gb_CppunitTest_add_api,basegfx_test,\
