@@ -753,14 +753,14 @@ sal_uInt16 SAL_CALL Hyphenator::capitalType(const OUString& aTerm, CharClass * p
 OUString SAL_CALL Hyphenator::makeLowerCase(const OUString& aTerm, CharClass * pCC)
 {
     if (pCC)
-        return pCC->toLower_rtl(aTerm, 0, aTerm.getLength());
+        return pCC->lowercase(aTerm);
     return aTerm;
 }
 
 OUString SAL_CALL Hyphenator::makeUpperCase(const OUString& aTerm, CharClass * pCC)
 {
     if (pCC)
-        return pCC->toUpper_rtl(aTerm, 0, aTerm.getLength());
+        return pCC->uppercase(aTerm);
     return aTerm;
 }
 
@@ -772,9 +772,9 @@ OUString SAL_CALL Hyphenator::makeInitCap(const OUString& aTerm, CharClass * pCC
     {
         OUString bTemp = aTerm.copy(0,1);
         if (tlen > 1)
-            return ( pCC->toUpper_rtl(bTemp, 0, 1) + pCC->toLower_rtl(aTerm,1,(tlen-1)) );
+            return ( pCC->uppercase(bTemp, 0, 1) + pCC->lowercase(aTerm,1,(tlen-1)) );
 
-        return pCC->toUpper_rtl(bTemp, 0, 1);
+        return pCC->uppercase(bTemp, 0, 1);
     }
     return aTerm;
 }

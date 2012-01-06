@@ -643,7 +643,7 @@ sal_uInt16 SAL_CALL Thesaurus::capitalType(const OUString& aTerm, CharClass * pC
 OUString SAL_CALL Thesaurus::makeLowerCase(const OUString& aTerm, CharClass * pCC)
 {
     if (pCC)
-        return pCC->toLower_rtl(aTerm, 0, aTerm.getLength());
+        return pCC->lowercase(aTerm);
     return aTerm;
 }
 
@@ -651,7 +651,7 @@ OUString SAL_CALL Thesaurus::makeLowerCase(const OUString& aTerm, CharClass * pC
 OUString SAL_CALL Thesaurus::makeUpperCase(const OUString& aTerm, CharClass * pCC)
 {
     if (pCC)
-        return pCC->toUpper_rtl(aTerm, 0, aTerm.getLength());
+        return pCC->uppercase(aTerm);
     return aTerm;
 }
 
@@ -664,11 +664,11 @@ OUString SAL_CALL Thesaurus::makeInitCap(const OUString& aTerm, CharClass * pCC)
         OUString bTemp = aTerm.copy(0,1);
         if (tlen > 1)
         {
-            return ( pCC->toUpper_rtl(bTemp, 0, 1)
-                     + pCC->toLower_rtl(aTerm,1,(tlen-1)) );
+            return ( pCC->uppercase(bTemp, 0, 1)
+                     + pCC->lowercase(aTerm,1,(tlen-1)) );
         }
 
-        return pCC->toUpper_rtl(bTemp, 0, 1);
+        return pCC->uppercase(bTemp, 0, 1);
     }
     return aTerm;
 }

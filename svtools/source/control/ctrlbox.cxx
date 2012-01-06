@@ -1517,11 +1517,10 @@ void FontStyleBox::Modify()
 
     if ( GetEntryPos( aStr ) == COMBOBOX_ENTRY_NOTFOUND )
     {
-        aChrCls.toUpper( aStr );
+        aStr = aChrCls.uppercase(aStr);
         for ( sal_uInt16 i = 0; i < nEntryCount; i++ )
         {
-            XubString aEntryText = GetEntry( i );
-            aChrCls.toUpper( aEntryText );
+            XubString aEntryText = aChrCls.uppercase(GetEntry(i));
 
             if ( aStr == aEntryText )
             {

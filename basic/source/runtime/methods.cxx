@@ -158,7 +158,7 @@ static long GetDayDiff( const Date& rDate )
     return nDiffDays;
 }
 
-static CharClass& GetCharClass( void )
+static const CharClass& GetCharClass( void )
 {
     static sal_Bool bNeedsInit = sal_True;
     static ::com::sun::star::lang::Locale aLocale;
@@ -1136,9 +1136,9 @@ RTLFUNC(LCase)
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
     else
     {
-        CharClass& rCharClass = GetCharClass();
+        const CharClass& rCharClass = GetCharClass();
         String aStr( rPar.Get(1)->GetString() );
-        rCharClass.toLower( aStr );
+        aStr = rCharClass.lowercase(aStr);
         rPar.Get(0)->PutString( aStr );
     }
 }
@@ -1681,9 +1681,9 @@ RTLFUNC(UCase)
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
     else
     {
-        CharClass& rCharClass = GetCharClass();
+        const CharClass& rCharClass = GetCharClass();
         String aStr( rPar.Get(1)->GetString() );
-        rCharClass.toUpper( aStr );
+        aStr = rCharClass.uppercase( aStr );
         rPar.Get(0)->PutString( aStr );
     }
 }
@@ -3907,8 +3907,8 @@ RTLFUNC(StrConv)
     sal_Int32 nType = 0;
     if ( (nConversion & 0x03) == 3 ) //  vbProperCase
     {
-        CharClass& rCharClass = GetCharClass();
-        aOldStr = rCharClass.toTitle( aOldStr.ToLowerAscii(), 0, nOldLen );
+        const CharClass& rCharClass = GetCharClass();
+        aOldStr = rCharClass.titlecase( aOldStr.ToLowerAscii(), 0, nOldLen );
     }
     else if ( (nConversion & 0x01) == 1 ) // vbUpperCase
         nType |= ::com::sun::star::i18n::TransliterationModules_LOWERCASE_UPPERCASE;

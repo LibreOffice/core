@@ -140,7 +140,7 @@ static void CreateFilterArr()
 //----------------------------------------------------------------
 inline String ToUpper_Impl( const String &rStr )
 {
-    return SvtSysLocale().GetCharClass().upper( rStr );
+    return SvtSysLocale().GetCharClass().uppercase( rStr );
 }
 
 //----------------------------------------------------------------

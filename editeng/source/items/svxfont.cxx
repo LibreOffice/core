@@ -130,13 +130,13 @@ XubString SvxFont::CalcCaseMap( const XubString &rTxt ) const
         case SVX_CASEMAP_KAPITAELCHEN:
         case SVX_CASEMAP_VERSALIEN:
         {
-            aCharClass.toUpper( aTxt );
+            aTxt = aCharClass.uppercase( aTxt );
             break;
         }
 
         case SVX_CASEMAP_GEMEINE:
         {
-            aCharClass.toLower( aTxt );
+            aTxt = aCharClass.lowercase( aTxt );
             break;
         }
         case SVX_CASEMAP_TITEL:
@@ -155,7 +155,7 @@ XubString SvxFont::CalcCaseMap( const XubString &rTxt ) const
                     if( bBlank )
                     {
                         String aTemp( aTxt.GetChar( i ) );
-                        aCharClass.toUpper( aTemp );
+                        aTemp = aCharClass.uppercase( aTemp );
                         aTxt.Replace( i, 1, aTemp );
                     }
                     bBlank = sal_False;

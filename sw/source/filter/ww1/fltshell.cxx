@@ -1050,7 +1050,7 @@ SwFltShell& SwFltShell::operator << ( const String& rStr )
 
 void SwFltShell::ConvertUStr( String& rInOut )
 {
-    GetAppCharClass().toUpper( rInOut );
+    rInOut = GetAppCharClass().uppercase( rInOut );
 }
 
 // QuoteString() wandelt CRs abhaengig von nFieldIniFlags in '\n' oder "\0x0d"

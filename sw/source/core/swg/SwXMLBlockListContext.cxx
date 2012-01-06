@@ -108,7 +108,7 @@ SwXMLBlockContext::SwXMLBlockContext(
         {
             if ( IsXMLToken ( aLocalName, XML_ABBREVIATED_NAME ) )
             {
-                aShort = rCC.upper(rAttrValue);
+                aShort = rCC.uppercase(rAttrValue);
             }
             else if ( IsXMLToken ( aLocalName, XML_NAME ) )
             {

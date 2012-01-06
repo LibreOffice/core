@@ -1041,7 +1041,7 @@ sal_uInt16 SwHTMLWriter::GetCSS1Selector( const SwFmt *pFmt, rtl::OString& rToke
             rClass.Erase( 0, nPos+1 );
         }
 
-        GetAppCharClass().toLower( rClass );
+        rClass = GetAppCharClass().lowercase( rClass );
         while( STRING_NOTFOUND != rClass.SearchAndReplace( '.', '-' ) )
             ;
         while( STRING_NOTFOUND != rClass.SearchAndReplace( ' ', '-' ) )

@@ -151,7 +151,7 @@ sal_uInt16 SwImpBlocks::GetCount() const
 // Case Insensitive
 sal_uInt16 SwImpBlocks::GetIndex( const String& rShort ) const
 {
-    String s( GetAppCharClass().upper( rShort ) );
+    String s( GetAppCharClass().uppercase( rShort ) );
     sal_uInt16 nHash = Hash( s );
     for( sal_uInt16 i = 0; i < aNames.Count(); i++ )
     {
@@ -380,7 +380,7 @@ sal_uInt16 SwTextBlocks::Rename( sal_uInt16 n, const String* s, const String* l 
         else if( 0 == ( nErr = pImp->OpenFile( sal_False )))
         {
             // Vorher den neuen Eintrag in die Liste setzen!
-            GetAppCharClass().toUpper( aNew );
+            aNew = GetAppCharClass().uppercase( aNew );
              nErr = pImp->Rename( n, aNew, aLong );
             if( !nErr )
             {
@@ -465,8 +465,7 @@ sal_Bool SwTextBlocks::BeginPutDoc( const String& s, const String& l )
         }
         if( bOk )
         {
-            String aNew( s );
-            GetAppCharClass().toUpper( aNew );
+            String aNew = GetAppCharClass().uppercase(s);
             nErr = pImp->BeginPutDoc( aNew, l );
         }
         if( nErr )
@@ -522,8 +521,7 @@ sal_uInt16 SwTextBlocks::PutText( const String& rShort, const String& rName,
         }
         if( bOk )
         {
-            String aNew( rShort );
-            GetAppCharClass().toUpper( aNew );
+            String aNew = GetAppCharClass().uppercase( rShort );
             nErr = pImp->PutText( aNew, rName, rTxt );
             pImp->nCur = (sal_uInt16) -1;
             if( !nErr )

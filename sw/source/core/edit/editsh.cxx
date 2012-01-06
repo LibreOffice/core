@@ -612,7 +612,7 @@ String SwEditShell::Calculate()
             String aStr = pTxtNd->GetExpandTxt( nStt, pEnd->nContent.
                                                 GetIndex() - nStt );
 
-            rCC.toLower( aStr );
+            aStr = rCC.lowercase( aStr );
 
             sal_Unicode ch;
             sal_Bool    bValidFlds = sal_False;

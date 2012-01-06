@@ -115,7 +115,7 @@ SwTOXInternational::~SwTOXInternational()
 
 String SwTOXInternational::ToUpper( const String& rStr, xub_StrLen nPos ) const
 {
-    return pCharClass->toUpper( rStr, nPos, 1 );
+    return pCharClass->uppercase( rStr, nPos, 1 );
 }
 inline sal_Bool SwTOXInternational::IsNumeric( const String& rStr ) const
 {

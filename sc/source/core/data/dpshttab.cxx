@@ -246,7 +246,7 @@ const ScRange& ScSheetSourceDesc::GetSourceRange() const
             if (!pRangeName)
                 break;
 
-            OUString aUpper = ScGlobal::pCharClass->upper(maRangeName);
+            OUString aUpper = ScGlobal::pCharClass->uppercase(maRangeName);
             const ScRangeData* pData = pRangeName->findByUpperName(aUpper);
             if (!pData)
                 break;

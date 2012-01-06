@@ -106,8 +106,8 @@ ScUnoAddInFuncData::ScUnoAddInFuncData( const String& rNam, const String& rLoc,
     else
         pArgDescs = NULL;
 
-    ScGlobal::pCharClass->toUpper(aUpperName);
-    ScGlobal::pCharClass->toUpper(aUpperLocal);
+    aUpperName = ScGlobal::pCharClass->uppercase(aUpperName);
+    aUpperLocal = ScGlobal::pCharClass->uppercase(aUpperLocal);
 }
 
 ScUnoAddInFuncData::~ScUnoAddInFuncData()
@@ -670,8 +670,7 @@ sal_Bool ScUnoAddInCollection::GetCalcName( const String& rExcelName, String& rR
     if (!bInitialized)
         Initialize();
 
-    String aUpperCmp = rExcelName;
-    ScGlobal::pCharClass->toUpper(aUpperCmp);
+    rtl::OUString aUpperCmp = ScGlobal::pCharClass->uppercase(rExcelName);
 
     for (long i=0; i<nFuncCount; i++)
     {
@@ -684,7 +683,7 @@ sal_Bool ScUnoAddInCollection::GetCalcName( const String& rExcelName, String& rR
             {
                 const sheet::LocalizedName* pArray = rSequence.getConstArray();
                 for ( long nName=0; nName<nSeqLen; nName++)
-                    if ( ScGlobal::pCharClass->upper( pArray[nName].Name ) == aUpperCmp )
+                    if ( ScGlobal::pCharClass->uppercase( pArray[nName].Name ) == aUpperCmp )
                     {
                         //! store upper case for comparing?
 

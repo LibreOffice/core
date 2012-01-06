@@ -85,8 +85,7 @@ void ScUserListData::InitTokens()
             if (nLen)
             {
                 OUString aSub(p0, nLen);
-                String aUpStr = aSub;
-                ScGlobal::pCharClass->toUpper(aUpStr);
+                String aUpStr = ScGlobal::pCharClass->uppercase(aSub);
                 maSubStrings.push_back(new SubStr(aSub, aUpStr));
             }
             bFirst = true;
@@ -96,8 +95,7 @@ void ScUserListData::InitTokens()
     if (nLen)
     {
         OUString aSub(p0, nLen);
-        String aUpStr = aSub;
-        ScGlobal::pCharClass->toUpper(aUpStr);
+        String aUpStr = ScGlobal::pCharClass->uppercase(aSub);
         maSubStrings.push_back(new SubStr(aSub, aUpStr));
     }
 }
@@ -141,8 +139,7 @@ bool ScUserListData::GetSubIndex(const OUString& rSubStr, sal_uInt16& rIndex) co
     }
 
     // When that fails, do a case insensitive search.
-    String aTmp = rSubStr;
-    ScGlobal::pCharClass->toUpper(aTmp);
+    String aTmp = ScGlobal::pCharClass->uppercase(rSubStr);
     OUString aUpStr = aTmp;
     itr = ::std::find_if(
         maSubStrings.begin(), maSubStrings.end(), FindByName(aUpStr, true));

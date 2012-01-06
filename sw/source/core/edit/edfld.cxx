@@ -171,7 +171,7 @@ void SwEditShell::RemoveFldType(sal_uInt16 nResId, const String& rStr)
     const sal_uInt16 nSize = pFldTypes->Count();
     const CharClass& rCC = GetAppCharClass();
 
-    String aTmp( rCC.lower( rStr ));
+    String aTmp( rCC.lowercase( rStr ));
 
     for(sal_uInt16 i = 0; i < nSize; ++i)
     {
@@ -179,7 +179,7 @@ void SwEditShell::RemoveFldType(sal_uInt16 nResId, const String& rStr)
         SwFieldType* pFldType = (*pFldTypes)[i];
         if( pFldType->Which() == nResId )
         {
-            if( aTmp.Equals( rCC.lower( pFldType->GetName() ) ))
+            if( aTmp.Equals( rCC.lowercase( pFldType->GetName() ) ))
             {
                 GetDoc()->RemoveFldType(i);
                 return;

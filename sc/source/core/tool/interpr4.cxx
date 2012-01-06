@@ -2489,7 +2489,7 @@ void ScInterpreter::ScExternal()
     sal_uInt16 nIndex;
     sal_uInt8 nParamCount = GetByte();
     String aUnoName;
-    String aFuncName( ScGlobal::pCharClass->upper( pCur->GetExternal() ) );
+    String aFuncName( ScGlobal::pCharClass->uppercase( pCur->GetExternal() ) );
     if (ScGlobal::GetFuncCollection()->SearchFunc(aFuncName, nIndex))
     {
         FuncData* pFuncData = (FuncData*)ScGlobal::GetFuncCollection()->At(nIndex);

@@ -1487,7 +1487,7 @@ void ScDPLayoutDlg::UpdateSrcRange()
         ScRangeName* pRangeName = pDoc->GetRangeName();
         if (pRangeName)
         {
-            OUString aUpper = ScGlobal::pCharClass->upper(aSrcStr);
+            OUString aUpper = ScGlobal::pCharClass->uppercase(aSrcStr);
             const ScRangeData* pData = pRangeName->findByUpperName(aUpper);
             if (pData)
             {

@@ -1404,8 +1404,8 @@ short SvNumberformat::ImpNextSymbol(String& rString,
                     {
                         const String aNatNum(RTL_CONSTASCII_USTRINGPARAM("NATNUM"));
                         const String aDBNum(RTL_CONSTASCII_USTRINGPARAM("DBNUM"));
-                        String aUpperNatNum( rChrCls().toUpper( rString, nPos-1, aNatNum.Len() ) );
-                        String aUpperDBNum( rChrCls().toUpper( rString, nPos-1, aDBNum.Len() ) );
+                        String aUpperNatNum( rChrCls().uppercase( rString, nPos-1, aNatNum.Len() ) );
+                        String aUpperDBNum( rChrCls().uppercase( rString, nPos-1, aDBNum.Len() ) );
                         sal_Unicode cUpper = aUpperNatNum.GetChar(0);
                         sal_Int32 nNatNumNum = rString.Copy( nPos-1+aNatNum.Len() ).ToInt32();
                         sal_Unicode cDBNum = rString.GetChar( nPos-1+aDBNum.Len() );
@@ -1466,7 +1466,7 @@ short SvNumberformat::ImpNextSymbol(String& rString,
                 }
                 else
                 {
-                    sal_Unicode cUpper = rChrCls().toUpper( rString, nPos-1, 1 ).GetChar(0);
+                    sal_Unicode cUpper = rChrCls().uppercase(rString, nPos-1, 1)[0];
                     if (cUpper == rKeywords[NF_KEY_H].GetChar(0)    ||  // H
                         cUpper == rKeywords[NF_KEY_MI].GetChar(0)   ||  // M
                         cUpper == rKeywords[NF_KEY_S].GetChar(0)    )   // S

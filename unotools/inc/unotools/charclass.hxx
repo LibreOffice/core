@@ -170,14 +170,22 @@ public:
 
     // Wrapper implementations of class CharacterClassification
 
-    String toUpper( const String& rStr, xub_StrLen nPos, xub_StrLen nCount ) const;
-    String toLower( const String& rStr, xub_StrLen nPos, xub_StrLen nCount ) const;
-    String toTitle( const String& rStr, xub_StrLen nPos, xub_StrLen nCount ) const;
+    ::rtl::OUString uppercase( const ::rtl::OUString& rStr, sal_Int32 nPos, sal_Int32 nCount ) const;
+    ::rtl::OUString lowercase( const ::rtl::OUString& rStr, sal_Int32 nPos, sal_Int32 nCount ) const;
+    ::rtl::OUString titlecase( const ::rtl::OUString& rStr, sal_Int32 nPos, sal_Int32 nCount ) const;
 
-    ::rtl::OUString toUpper_rtl( const ::rtl::OUString& rStr, sal_Int32 nPos, sal_Int32 nCount ) const;
-    ::rtl::OUString toLower_rtl( const ::rtl::OUString& rStr, sal_Int32 nPos, sal_Int32 nCount ) const;
-        // use the postfix because compilers could get confused by the both similar versions
-        // (me thinks they shouldn't, but in fact MSCV 6 does)
+    ::rtl::OUString uppercase( const ::rtl::OUString& _rStr ) const
+    {
+        return uppercase(_rStr, 0, _rStr.getLength());
+    }
+    ::rtl::OUString lowercase( const ::rtl::OUString& _rStr ) const
+    {
+        return lowercase(_rStr, 0, _rStr.getLength());
+    }
+    ::rtl::OUString titlecase( const ::rtl::OUString& _rStr ) const
+    {
+        return titlecase(_rStr, 0, _rStr.getLength());
+    }
 
     sal_Int16 getType( const String& rStr, xub_StrLen nPos ) const;
     sal_Int16 getCharacterDirection( const String& rStr, xub_StrLen nPos ) const;
@@ -215,34 +223,6 @@ public:
     sal_Bool isNumeric( const String& rStr ) const;
     sal_Bool isAlphaNumeric( const String& rStr ) const;
     sal_Bool isLetterNumeric( const String& rStr ) const;
-
-    void toUpper( rtl::OUString& rStr ) const;
-    void toUpper( String& rStr ) const
-    {
-        rStr = toUpper( rStr, 0, rStr.Len() );
-    }
-    void toLower( rtl::OUString& rStr ) const;
-    void toLower( String& rStr ) const
-    {
-        rStr = toLower( rStr, 0, rStr.Len() );
-    }
-    inline  String upper( const String& rStr ) const
-    {
-        return toUpper( rStr, 0, rStr.Len() );
-    }
-    inline  String lower( const String& rStr ) const
-    {
-        return toLower( rStr, 0, rStr.Len() );
-    }
-
-    const ::rtl::OUString&  toUpper_rtl( ::rtl::OUString& _rStr ) const
-    {
-        return _rStr = toUpper_rtl( _rStr, 0, _rStr.getLength() );
-    }
-    const ::rtl::OUString&  toLower_rtl( ::rtl::OUString& _rStr ) const
-    {
-        return _rStr = toLower_rtl( _rStr, 0, _rStr.getLength() );
-    }
 };
 
 #endif // _UNOTOOLS_CHARCLASS_HXX

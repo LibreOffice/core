@@ -54,10 +54,10 @@ using namespace ::com::sun::star;
 namespace
 {
 
-    static ::sw::mark::DdeBookmark* lcl_FindDdeBookmark(const IDocumentMarkAccess& rMarkAccess, const String& rName, bool bCaseSensitive)
+    static ::sw::mark::DdeBookmark* lcl_FindDdeBookmark(const IDocumentMarkAccess& rMarkAccess, const rtl::OUString& rName, bool bCaseSensitive)
     {
         //Iterating over all bookmarks, checking DdeBookmarks
-        const ::rtl::OUString sNameLc = bCaseSensitive ? rName : GetAppCharClass().lower(rName);
+        const ::rtl::OUString sNameLc = bCaseSensitive ? rName : GetAppCharClass().lowercase(rName);
         for(IDocumentMarkAccess::const_iterator_t ppMark = rMarkAccess.getMarksBegin();
             ppMark != rMarkAccess.getMarksEnd();
             ppMark++)
@@ -66,7 +66,7 @@ namespace
             {
                 if (
                     (bCaseSensitive && (pBkmk->GetName() == sNameLc)) ||
-                    (!bCaseSensitive && GetAppCharClass().lower(pBkmk->GetName()) == String(sNameLc))
+                    (!bCaseSensitive && GetAppCharClass().lowercase(pBkmk->GetName()) == sNameLc)
                    )
                 {
                     return pBkmk;
@@ -96,10 +96,10 @@ sal_Bool lcl_FindSection( const SwSectionFmtPtr& rpSectFmt, void* pArgs, bool bC
     {
         String sNm( (bCaseSensitive)
                 ? pSect->GetSectionName()
-                : GetAppCharClass().lower( pSect->GetSectionName() ));
+                : String(GetAppCharClass().lowercase( pSect->GetSectionName() )));
         String sCompare( (bCaseSensitive)
                 ? pItem->m_Item
-                : GetAppCharClass().lower( pItem->m_Item ) );
+                : String(GetAppCharClass().lowercase( pItem->m_Item ) ));
         if( sNm == sCompare )
         {
             // found, so get the data
@@ -131,7 +131,7 @@ sal_Bool lcl_FindSectionCaseInsensitive( const SwSectionFmtPtr& rpSectFmt, void*
 sal_Bool lcl_FindTable( const SwFrmFmtPtr& rpTableFmt, void* pArgs )
 {
     _FindItem * const pItem( static_cast<_FindItem*>(pArgs) );
-    String sNm( GetAppCharClass().lower( rpTableFmt->GetName() ));
+    String sNm( GetAppCharClass().lowercase( rpTableFmt->GetName() ));
     if (sNm.Equals( pItem->m_Item ))
     {
         SwTable* pTmpTbl;
@@ -154,7 +154,7 @@ sal_Bool lcl_FindTable( const SwFrmFmtPtr& rpTableFmt, void* pArgs )
 
 
 
-bool SwDoc::GetData( const String& rItem, const String& rMimeType,
+bool SwDoc::GetData( const rtl::OUString& rItem, const String& rMimeType,
                      uno::Any & rValue ) const
 {
     // search for bookmarks and sections case senstive at first. If nothing is found then try again case insensitive
@@ -166,7 +166,7 @@ bool SwDoc::GetData( const String& rItem, const String& rMimeType,
             return SwServerObject(*pBkmk).GetData(rValue, rMimeType);
 
         // Do we already have the Item?
-        String sItem( bCaseSensitive ? rItem : GetAppCharClass().lower(rItem));
+        String sItem( bCaseSensitive ? rItem : GetAppCharClass().lowercase(rItem));
         _FindItem aPara( sItem );
         ((SwSectionFmts&)*pSectionFmtTbl).ForEach( 0, pSectionFmtTbl->Count(),
                                                     bCaseSensitive ? lcl_FindSectionCaseSensitive : lcl_FindSectionCaseInsensitive, &aPara );
@@ -180,7 +180,7 @@ bool SwDoc::GetData( const String& rItem, const String& rMimeType,
         bCaseSensitive = false;
     }
 
-    _FindItem aPara( GetAppCharClass().lower( rItem ));
+    _FindItem aPara( GetAppCharClass().lowercase( rItem ));
     ((SwFrmFmts*)pTblFrmFmtTbl)->ForEach( 0, pTblFrmFmtTbl->Count(),
                                             lcl_FindTable, &aPara );
     if( aPara.pTblNd )
@@ -193,7 +193,7 @@ bool SwDoc::GetData( const String& rItem, const String& rMimeType,
 
 
 
-bool SwDoc::SetData( const String& rItem, const String& rMimeType,
+bool SwDoc::SetData( const rtl::OUString& rItem, const String& rMimeType,
                      const uno::Any & rValue )
 {
     // search for bookmarks and sections case senstive at first. If nothing is found then try again case insensitive
@@ -205,7 +205,7 @@ bool SwDoc::SetData( const String& rItem, const String& rMimeType,
             return SwServerObject(*pBkmk).SetData(rMimeType, rValue);
 
         // Do we already have the Item?
-        String sItem( bCaseSensitive ? rItem : GetAppCharClass().lower(rItem));
+        String sItem( bCaseSensitive ? rItem : GetAppCharClass().lowercase(rItem));
         _FindItem aPara( sItem );
         pSectionFmtTbl->ForEach( 0, pSectionFmtTbl->Count(), bCaseSensitive ? lcl_FindSectionCaseSensitive : lcl_FindSectionCaseInsensitive, &aPara );
         if( aPara.pSectNd )
@@ -218,7 +218,7 @@ bool SwDoc::SetData( const String& rItem, const String& rMimeType,
         bCaseSensitive = false;
     }
 
-    String sItem(GetAppCharClass().lower(rItem));
+    String sItem(GetAppCharClass().lowercase(rItem));
     _FindItem aPara( sItem );
     pTblFrmFmtTbl->ForEach( 0, pTblFrmFmtTbl->Count(), lcl_FindTable, &aPara );
     if( aPara.pTblNd )
@@ -231,7 +231,7 @@ bool SwDoc::SetData( const String& rItem, const String& rMimeType,
 
 
 
-::sfx2::SvLinkSource* SwDoc::CreateLinkSource(const String& rItem)
+::sfx2::SvLinkSource* SwDoc::CreateLinkSource(const rtl::OUString& rItem)
 {
     SwServerObject* pObj = NULL;
 
@@ -252,7 +252,7 @@ bool SwDoc::SetData( const String& rItem, const String& rMimeType,
         if(pObj)
             return pObj;
 
-        _FindItem aPara(bCaseSensitive ? rItem : GetAppCharClass().lower(rItem));
+        _FindItem aPara(bCaseSensitive ? rItem : GetAppCharClass().lowercase(rItem));
         // sections
         ((SwSectionFmts&)*pSectionFmtTbl).ForEach(0, pSectionFmtTbl->Count(), bCaseSensitive ? lcl_FindSectionCaseSensitive : lcl_FindSectionCaseInsensitive, &aPara);
         if(aPara.pSectNd
@@ -270,7 +270,7 @@ bool SwDoc::SetData( const String& rItem, const String& rMimeType,
         bCaseSensitive = false;
     }
 
-    _FindItem aPara( GetAppCharClass().lower(rItem) );
+    _FindItem aPara( GetAppCharClass().lowercase(rItem) );
     // tables
     ((SwFrmFmts*)pTblFrmFmtTbl)->ForEach(0, pTblFrmFmtTbl->Count(), lcl_FindTable, &aPara);
     if(aPara.pTblNd
@@ -306,13 +306,13 @@ sal_Bool SwDoc::SelectServerObj( const String& rStr, SwPaM*& rpPam,
         sal_Bool bWeiter = sal_False;
         String sName( sItem.Copy( 0, nPos ) );
         String sCmp( sItem.Copy( nPos + 1 ));
-        rCC.toLower( sItem );
+        sItem = rCC.lowercase( sItem );
 
         _FindItem aPara( sName );
 
         if( sCmp.EqualsAscii( pMarkToTable ) )
         {
-            rCC.toLower( sName );
+            sName = rCC.lowercase( sName );
             ((SwFrmFmts*)pTblFrmFmtTbl)->ForEach( 0, pTblFrmFmtTbl->Count(),
                                                     lcl_FindTable, &aPara );
             if( aPara.pTblNd )
@@ -390,7 +390,7 @@ sal_Bool SwDoc::SelectServerObj( const String& rStr, SwPaM*& rpPam,
         }
 
         //
-        _FindItem aPara( bCaseSensitive ? sItem : rCC.lower( sItem ) );
+        _FindItem aPara( bCaseSensitive ? sItem : String(rCC.lowercase( sItem )) );
 
         if( pSectionFmtTbl->Count() )
         {

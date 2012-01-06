@@ -82,7 +82,7 @@ ScDBData::ScDBData( const ::rtl::OUString& rName,
     bAutoFilter (false),
     bModified   (false)
 {
-    ScGlobal::pCharClass->toUpper(aUpper);
+    aUpper = ScGlobal::pCharClass->uppercase(aUpper);
 }
 
 ScDBData::ScDBData( const ScDBData& rData ) :
@@ -137,7 +137,7 @@ ScDBData::ScDBData( const ::rtl::OUString& rName, const ScDBData& rData ) :
     bAutoFilter         (rData.bAutoFilter),
     bModified           (rData.bModified)
 {
-    ScGlobal::pCharClass->toUpper(aUpper);
+    aUpper = ScGlobal::pCharClass->uppercase(aUpper);
 }
 
 ScDBData& ScDBData::operator= (const ScDBData& rData)

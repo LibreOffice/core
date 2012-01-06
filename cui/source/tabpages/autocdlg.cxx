@@ -1390,7 +1390,7 @@ IMPL_LINK(OfaAutocorrReplacePage, ModifyHdl, Edit*, pEdt)
     sal_Bool bShort = pEdt == &aShortED;
     const String rEntry = pEdt->GetText();
     const String rRepString = aReplaceED.GetText();
-    String aWordStr( pCharClass->lower( rEntry ));
+    String aWordStr( pCharClass->lowercase( rEntry ));
 
     if(bShort)
     {
@@ -1415,7 +1415,7 @@ IMPL_LINK(OfaAutocorrReplacePage, ModifyHdl, Edit*, pEdt)
                 }
                 else
                 {
-                    pCharClass->toLower( aTestStr );
+                    aTestStr = pCharClass->lowercase( aTestStr );
                     if(aTestStr.Search(aWordStr)==0 && !bTmpSelEntry)
                     {
                         aReplaceTLB.MakeVisible(pEntry);

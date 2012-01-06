@@ -5604,9 +5604,9 @@ void QuickHelpData::FillStrArr( SwWrtShell& rSh, const String& rWord )
                         upper++;
                 }
                 if (lower == letters)
-                    aMatch = rCC.lower( rS );
+                    aMatch = rCC.lowercase( rS );
                 else if (upper == letters)
-                    aMatch = rCC.upper( rS );
+                    aMatch = rCC.uppercase( rS );
                 else // mixed case - use what we have
                     aMatch = rS;
 

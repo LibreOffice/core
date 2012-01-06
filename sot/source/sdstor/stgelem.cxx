@@ -247,9 +247,8 @@ static String ToUpperUnicode( const String & rStr )
     static rtl::OUString aEN(RTL_CONSTASCII_USTRINGPARAM("en"));
     static rtl::OUString aUS(RTL_CONSTASCII_USTRINGPARAM("US"));
     static CharClass aCC( com::sun::star::lang::Locale( aEN, aUS, rtl::OUString() ) );
-    return aCC.toUpper( rStr, 0, rStr.Len() );
+    return aCC.uppercase( rStr );
 }
-
 
 sal_Bool StgEntry::SetName( const String& rName )
 {

@@ -2926,7 +2926,7 @@ sal_Bool ScViewFunc::InsertName( const String& rName, const String& rSymbol,
         pDoc->CompileNameFormula( sal_True );   // CreateFormulaString
 
         // input available yet? Then remove beforehand (=change)
-        ScRangeData* pData = pList->findByUpperName(ScGlobal::pCharClass->upper(rName));
+        ScRangeData* pData = pList->findByUpperName(ScGlobal::pCharClass->uppercase(rName));
         if (pData)
         {                                   // take old Index
             pNewEntry->SetIndex(pData->GetIndex());

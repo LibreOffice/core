@@ -188,7 +188,7 @@ void ScCompiler::DeInit()
 bool ScCompiler::IsEnglishSymbol( const String& rName )
 {
     // function names are always case-insensitive
-    String aUpper( ScGlobal::pCharClass->upper( rName ) );
+    String aUpper( ScGlobal::pCharClass->uppercase( rName ) );
 
     // 1. built-in function name
     OpCode eOp = ScCompiler::GetEnglishOpCode( aUpper );
@@ -3533,7 +3533,7 @@ inline bool lcl_UpperAsciiOrI18n( String& rUpper, const String& rOrg, FormulaGra
     }
     else
     {
-        rUpper = ScGlobal::pCharClass->upper( rOrg );
+        rUpper = ScGlobal::pCharClass->uppercase( rOrg );
         return false;
     }
 }
@@ -3673,7 +3673,7 @@ bool ScCompiler::NextNewToken( bool bInArray )
 
         // User defined names and such do need i18n upper also in ODF.
         if (bAsciiUpper)
-            aUpper = ScGlobal::pCharClass->upper( aOrg );
+            aUpper = ScGlobal::pCharClass->uppercase( aOrg );
 
         if (IsNamedRange( aUpper ))
             return true;
@@ -3702,7 +3702,7 @@ bool ScCompiler::NextNewToken( bool bInArray )
     // Provide single token information and continue. Do not set an error, that
     // would prematurely end compilation. Simple unknown names are handled by
     // the interpreter.
-    ScGlobal::pCharClass->toLower( aUpper );
+    aUpper = ScGlobal::pCharClass->lowercase( aUpper );
     ScRawToken aToken;
     aToken.SetString( aUpper.GetBuffer() );
     aToken.NewOpCode( ocBad );

@@ -590,8 +590,7 @@ sal_Bool SvxInternalLink::Connect( sfx2::SvBaseLink* pLink )
                 nUpdateMode = pItem->GetValue();
         }
 
-        String sNmURL( lcl_DDE_RelToAbs( sTopic, sReferer ) );
-        aCC.toLower( sNmURL );
+        String sNmURL(aCC.lowercase(lcl_DDE_RelToAbs(sTopic, sReferer)));
 
         if ( !pShell )
         {
@@ -609,7 +608,7 @@ sal_Bool SvxInternalLink::Connect( sfx2::SvBaseLink* pLink )
             }
 
 
-            aCC.toLower( sTmp );
+            sTmp = aCC.lowercase( sTmp );
             if( sTmp == sNmURL )  // we want these
             {
                 pFndShell = pShell;

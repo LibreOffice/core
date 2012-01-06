@@ -215,7 +215,7 @@ bool ScAreaLink::FindExtRange( ScRange& rRange, ScDocument* pSrcDoc, const Strin
     ScRangeName* pNames = pSrcDoc->GetRangeName();
     if (pNames)         // benannte Bereiche
     {
-        const ScRangeData* p = pNames->findByUpperName(ScGlobal::pCharClass->upper(rAreaName));
+        const ScRangeData* p = pNames->findByUpperName(ScGlobal::pCharClass->uppercase(rAreaName));
         if (p && p->IsValidReference(rRange))
             bFound = true;
     }

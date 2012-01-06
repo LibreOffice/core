@@ -174,7 +174,7 @@ bool ScNameDefDlg::IsNameValid()
         maBtnAdd.Disable();
         return false;
     }
-    else if (pRangeName->findByUpperName(ScGlobal::pCharClass->upper(aName)))
+    else if (pRangeName->findByUpperName(ScGlobal::pCharClass->uppercase(aName)))
     {
         maFtInfo.SetControlBackground(GetSettings().GetStyleSettings().GetHighlightColor());
         maFtInfo.SetText(maErrNameInUse);

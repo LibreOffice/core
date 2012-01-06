@@ -435,7 +435,7 @@ sal_Bool SvxAutoCorrect::FnCptlSttWrd( SvxAutoCorrDoc& rDoc, const String& rTxt,
             {
                 sal_Unicode cSave = rTxt.GetChar( nSttPos );
                 String sChar( cSave );
-                rCC.toLower( sChar );
+                sChar = rCC.lowercase( sChar );
                 if( sChar.GetChar(0) != cSave && rDoc.ReplaceRange( nSttPos, 1, sChar ))
                 {
                     if( SaveWordWrdSttLst & nFlags )
@@ -883,7 +883,7 @@ sal_Bool SvxAutoCorrect::FnCptlSttSntnc( SvxAutoCorrDoc& rDoc,
         {
             // valid separator -> replace
             String sChar( *pWordStt );
-            rCC.toUpper( sChar );
+            sChar = rCC.uppercase( sChar );
             return  sChar != *pWordStt &&
                     rDoc.ReplaceRange( xub_StrLen( pWordStt - pStart ), 1, sChar );
         }
@@ -1059,7 +1059,7 @@ sal_Bool SvxAutoCorrect::FnCptlSttSntnc( SvxAutoCorrDoc& rDoc,
     sal_Unicode cSave = *pWordStt;
     nSttPos = sal::static_int_cast< xub_StrLen >( pWordStt - rTxt.GetBuffer() );
     String sChar( cSave );
-    rCC.toUpper( sChar );
+    sChar = rCC.uppercase( sChar );
     sal_Bool bRet = sChar.GetChar(0) != cSave && rDoc.ReplaceRange( nSttPos, 1, sChar );
 
     // Parahaps someone wants to have the word
@@ -1087,8 +1087,8 @@ bool SvxAutoCorrect::FnCorrectCapsLock( SvxAutoCorrDoc& rDoc, const String& rTxt
         return false;
 
     String aConverted;
-    aConverted.Append( rCC.upper(rTxt.GetChar(nSttPos)) );
-    aConverted.Append( rCC.lower(rTxt.GetChar(nSttPos+1)) );
+    aConverted.Append( rCC.uppercase(rtl::OUString(rTxt.GetChar(nSttPos))) );
+    aConverted.Append( rCC.lowercase(rtl::OUString(rTxt.GetChar(nSttPos+1))) );
 
     for (xub_StrLen i = nSttPos+2; i < nEndPos; ++i)
     {
@@ -1098,7 +1098,7 @@ bool SvxAutoCorrect::FnCorrectCapsLock( SvxAutoCorrDoc& rDoc, const String& rTxt
 
         if ( IsUpperLetter(rCC.getCharacterType(rTxt, i)) )
             // Another uppercase letter.  Convert it.
-            aConverted.Append( rCC.lower(rTxt.GetChar(i)) );
+            aConverted.Append( rCC.lowercase(String(rTxt.GetChar(i))) );
         else
             // This is not an alphabetic letter.  Leave it as-is.
             aConverted.Append(rTxt.GetChar(i));

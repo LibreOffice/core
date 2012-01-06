@@ -453,7 +453,7 @@ namespace
 {
     void ConvertUFName( String& rName )
     {
-        GetAppCharClass().toUpper( rName );
+        rName = GetAppCharClass().uppercase( rName );
     }
 }
 

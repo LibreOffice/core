@@ -3013,8 +3013,7 @@ bool ScTable::RefVisible(ScFormulaCell* pCell)
 void ScTable::GetUpperCellString(SCCOL nCol, SCROW nRow, rtl::OUString& rStr)
 {
     GetInputString(nCol, nRow, rStr);
-    rStr = rStr.trim();
-    ScGlobal::pCharClass->toUpper(rStr);
+    rStr = ScGlobal::pCharClass->uppercase(rStr.trim());
 }
 
 

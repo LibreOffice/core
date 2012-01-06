@@ -668,7 +668,7 @@ bool ImpSvNumberInputScan::GetCurrency( const String& rString, xub_StrLen& nPos,
         {   // if no format specified the currency of the initialized formatter
             LanguageType eLang = (pFormat ? pFormat->GetLanguage() :
                 pFormatter->GetLanguage());
-            aUpperCurrSymbol = pFormatter->GetCharClass()->upper(
+            aUpperCurrSymbol = pFormatter->GetCharClass()->uppercase(
                 SvNumberFormatter::GetCurrencyEntry( eLang ).GetSymbol() );
         }
         if ( StringContains( aUpperCurrSymbol, rString, nPos ) )
@@ -683,7 +683,7 @@ bool ImpSvNumberInputScan::GetCurrency( const String& rString, xub_StrLen& nPos,
             {
                 if ( aSymbol.Len() <= rString.Len() - nPos )
                 {
-                    pFormatter->GetCharClass()->toUpper( aSymbol );
+                    aSymbol = pFormatter->GetCharClass()->uppercase(aSymbol);
                     if ( StringContains( aSymbol, rString, nPos ) )
                     {
                         nPos = nPos + aSymbol.Len();
@@ -719,13 +719,13 @@ bool ImpSvNumberInputScan::GetTimeAmPm( const String& rString, xub_StrLen& nPos 
     {
         const CharClass* pChr = pFormatter->GetCharClass();
         const LocaleDataWrapper* pLoc = pFormatter->GetLocaleData();
-        if ( StringContains( pChr->upper( pLoc->getTimeAM() ), rString, nPos ) )
+        if ( StringContains( pChr->uppercase( pLoc->getTimeAM() ), rString, nPos ) )
         {
             nAmPm = 1;
             nPos = nPos + pLoc->getTimeAM().Len();
             return true;
         }
-        else if ( StringContains( pChr->upper( pLoc->getTimePM() ), rString, nPos ) )
+        else if ( StringContains( pChr->uppercase( pLoc->getTimePM() ), rString, nPos ) )
         {
             nAmPm = -1;
             nPos = nPos + pLoc->getTimePM().Len();
@@ -2456,8 +2456,8 @@ void ImpSvNumberInputScan::InitText()
     pUpperAbbrevMonthText = new String[nElems];
     for ( j=0; j<nElems; j++ )
     {
-        pUpperMonthText[j] = pChrCls->upper( xElems[j].FullName );
-        pUpperAbbrevMonthText[j] = pChrCls->upper( xElems[j].AbbrevName );
+        pUpperMonthText[j] = pChrCls->uppercase( xElems[j].FullName );
+        pUpperAbbrevMonthText[j] = pChrCls->uppercase( xElems[j].AbbrevName );
     }
 
     delete [] pUpperGenitiveMonthText;
@@ -2469,8 +2469,8 @@ void ImpSvNumberInputScan::InitText()
     pUpperGenitiveAbbrevMonthText = new String[nElems];
     for ( j=0; j<nElems; j++ )
     {
-        pUpperGenitiveMonthText[j] = pChrCls->upper( xElems[j].FullName );
-        pUpperGenitiveAbbrevMonthText[j] = pChrCls->upper( xElems[j].AbbrevName );
+        pUpperGenitiveMonthText[j] = pChrCls->uppercase( xElems[j].FullName );
+        pUpperGenitiveAbbrevMonthText[j] = pChrCls->uppercase( xElems[j].AbbrevName );
         if (!bScanGenitiveMonths &&
                 (pUpperGenitiveMonthText[j] != pUpperMonthText[j] ||
                  pUpperGenitiveAbbrevMonthText[j] != pUpperAbbrevMonthText[j]))
@@ -2486,8 +2486,8 @@ void ImpSvNumberInputScan::InitText()
     pUpperPartitiveAbbrevMonthText = new String[nElems];
     for ( j=0; j<nElems; j++ )
     {
-        pUpperPartitiveMonthText[j] = pChrCls->upper( xElems[j].FullName );
-        pUpperPartitiveAbbrevMonthText[j] = pChrCls->upper( xElems[j].AbbrevName );
+        pUpperPartitiveMonthText[j] = pChrCls->uppercase( xElems[j].FullName );
+        pUpperPartitiveAbbrevMonthText[j] = pChrCls->uppercase( xElems[j].AbbrevName );
         if (!bScanPartitiveMonths &&
                 (pUpperPartitiveMonthText[j] != pUpperGenitiveMonthText[j] ||
                  pUpperPartitiveAbbrevMonthText[j] != pUpperGenitiveAbbrevMonthText[j]))
@@ -2502,8 +2502,8 @@ void ImpSvNumberInputScan::InitText()
     pUpperAbbrevDayText = new String[nElems];
     for ( j=0; j<nElems; j++ )
     {
-        pUpperDayText[j] = pChrCls->upper( xElems[j].FullName );
-        pUpperAbbrevDayText[j] = pChrCls->upper( xElems[j].AbbrevName );
+        pUpperDayText[j] = pChrCls->uppercase( xElems[j].FullName );
+        pUpperAbbrevDayText[j] = pChrCls->uppercase( xElems[j].AbbrevName );
     }
 
     bTextInitialized = true;
@@ -2568,7 +2568,7 @@ bool ImpSvNumberInputScan::IsNumberFormat(
     else
     {
         // NoMoreUpperNeeded, all comparisons on UpperCase
-        aString = pFormatter->GetCharClass()->upper( rString );
+        aString = pFormatter->GetCharClass()->uppercase( rString );
         // convert native number to ASCII if necessary
         TransformInput( aString );
         res = IsNumberFormatMain( aString, fOutNumber, pFormat );

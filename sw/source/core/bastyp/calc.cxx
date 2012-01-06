@@ -277,7 +277,7 @@ SwCalc::SwCalc( SwDoc& rD )
 
     sCurrSym = pLclData->getCurrSymbol();
     sCurrSym.EraseLeadingChars().EraseTrailingChars();
-    pCharClass->toLower( sCurrSym );
+    sCurrSym  = pCharClass->lowercase( sCurrSym );
 
 static sal_Char const
     sNType0[] = "false",
@@ -484,8 +484,7 @@ String SwCalc::GetStrResult( double nValue, sal_Bool )
 
 SwCalcExp* SwCalc::VarInsert( const String &rStr )
 {
-    String aStr( rStr );
-    pCharClass->toLower( aStr );
+    String aStr = pCharClass->lowercase( rStr );
     return VarLook( aStr, 1 );
 }
 
@@ -499,8 +498,7 @@ SwCalcExp* SwCalc::VarLook( const String& rStr, sal_uInt16 ins )
     aErrExpr.nValue.SetVoidValue(false);
 
     sal_uInt16 ii = 0;
-    String aStr( rStr );
-    pCharClass->toLower( aStr );
+    String aStr = pCharClass->lowercase( rStr );
 
     SwHash* pFnd = Find( aStr, VarTable, TBLSZ, &ii );
 
@@ -577,7 +575,7 @@ SwCalcExp* SwCalc::VarLook( const String& rStr, sal_uInt16 ins )
            OSL_ENSURE(sColumnName.Len(), "DB-Spaltenname fehlt!");
 
             String sDBNum( SwFieldType::GetTypeStr(TYP_DBSETNUMBERFLD) );
-            pCharClass->toLower(sDBNum);
+            sDBNum = pCharClass->lowercase(sDBNum);
 
             // Hier nochmal initialisieren, da das nicht mehr in docfld
             // fuer Felder != RES_DBFLD geschieht. Z.B. wenn ein Expressionfield
@@ -657,8 +655,7 @@ void SwCalc::VarChange( const String& rStr, double nValue )
 
 void SwCalc::VarChange( const String& rStr, const SwSbxValue& rValue )
 {
-    String aStr( rStr );
-    pCharClass->toLower( aStr );
+    String aStr = pCharClass->lowercase( rStr );
 
     sal_uInt16 nPos = 0;
     SwCalcExp* pFnd = (SwCalcExp*)Find( aStr, VarTable, TBLSZ, &nPos );
@@ -741,9 +738,7 @@ if( !nUseOld )
             String aName( sCommand.Copy( nRealStt, static_cast<xub_StrLen>(aRes.EndPos) - nRealStt ));
             //#101436#: the variable may contain a database name it must not be converted to lower case
             // instead all further comparisons must be done case-insensitive
-            //pCharClass->toLower( aName );
-            String sLowerCaseName(aName);
-            pCharClass->toLower( sLowerCaseName );
+            String sLowerCaseName = pCharClass->lowercase( aName );
             // Currency-Symbol abfangen
             if( sLowerCaseName == sCurrSym )
             {
@@ -1070,7 +1065,7 @@ else
                             --nCommandPos;
 
                         String aStr( sCommand.Copy( nStt, nCommandPos-nStt ));
-                        pCharClass->toLower( aStr );
+                        aStr = pCharClass->lowercase( aStr );
 
 
                         // Currency-Symbol abfangen

@@ -169,7 +169,7 @@ ScImportExport::ScImportExport( ScDocument* p, const String& rPos )
     ScRangeName* pRange = pDoc->GetRangeName();
     if( pRange )
     {
-        const ScRangeData* pData = pRange->findByUpperName(ScGlobal::pCharClass->upper(aPos));
+        const ScRangeData* pData = pRange->findByUpperName(ScGlobal::pCharClass->uppercase(aPos));
         if (pData)
         {
             if( pData->HasType( RT_REFAREA )

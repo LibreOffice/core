@@ -4573,7 +4573,7 @@ void ScDocFunc::CreateOneName( ScRangeName& rList,
             ScRange( nX1, nY1, nTab, nX2, nY2, nTab ).Format( aContent, SCR_ABS_3D, pDoc );
 
             bool bInsert = false;
-            ScRangeData* pOld = rList.findByUpperName(ScGlobal::pCharClass->upper(aName));
+            ScRangeData* pOld = rList.findByUpperName(ScGlobal::pCharClass->uppercase(aName));
             if (pOld)
             {
                 String aOldStr;

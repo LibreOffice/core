@@ -1767,7 +1767,7 @@ SvStringsDtor& SwDoc::FindUsedDBs( const SvStringsDtor& rAllDBNames,
     const CharClass& rCC = GetAppCharClass();
     String  sFormel( rFormel);
 #ifndef UNX
-    rCC.toUpper( sFormel );
+    sFormel = rCC.uppercase( sFormel );
 #endif
 
     xub_StrLen nPos;
@@ -2490,7 +2490,7 @@ void SwDocUpdtFld::InsertFldType( const SwFieldType& rType )
     {
         SetFieldsDirty( sal_True );
         // look up and remove from the hash table
-        GetAppCharClass().toLower( sFldName );
+        sFldName = GetAppCharClass().lowercase( sFldName );
         sal_uInt16 n;
 
         SwHash* pFnd = Find( sFldName, GetFldTypeTable(), TBLSZ, &n );
@@ -2521,7 +2521,7 @@ void SwDocUpdtFld::RemoveFldType( const SwFieldType& rType )
     {
         SetFieldsDirty( sal_True );
         // look up and remove from the hash table
-        GetAppCharClass().toLower( sFldName );
+        sFldName = GetAppCharClass().lowercase( sFldName );
         sal_uInt16 n;
 
         SwHash* pFnd = Find( sFldName, GetFldTypeTable(), TBLSZ, &n );

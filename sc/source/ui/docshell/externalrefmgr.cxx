@@ -91,7 +91,7 @@ class TabNameSearchPredicate : public unary_function<ScExternalRefCache::TableNa
 {
 public:
     explicit TabNameSearchPredicate(const OUString& rSearchName) :
-        maSearchName(ScGlobal::pCharClass->upper(rSearchName))
+        maSearchName(ScGlobal::pCharClass->uppercase(rSearchName))
     {
     }
 
@@ -518,7 +518,7 @@ const OUString* ScExternalRefCache::getRealTableName(sal_uInt16 nFileId, const O
 
     const DocItem& rDoc = itrDoc->second;
     TableNameIndexMap::const_iterator itrTabId = rDoc.maTableNameIndex.find(
-        ScGlobal::pCharClass->upper(rTabName));
+        ScGlobal::pCharClass->uppercase(rTabName));
     if (itrTabId == rDoc.maTableNameIndex.end())
     {
         // the specified table is not in cache.
@@ -539,7 +539,7 @@ const OUString* ScExternalRefCache::getRealRangeName(sal_uInt16 nFileId, const O
 
     const DocItem& rDoc = itrDoc->second;
     NamePairMap::const_iterator itr = rDoc.maRealRangeNameMap.find(
-        ScGlobal::pCharClass->upper(rRangeName));
+        ScGlobal::pCharClass->uppercase(rRangeName));
     if (itr == rDoc.maRealRangeNameMap.end())
         // range name not found.
         return NULL;
@@ -559,7 +559,7 @@ ScExternalRefCache::TokenRef ScExternalRefCache::getCellData(
 
     const DocItem& rDoc = itrDoc->second;
     TableNameIndexMap::const_iterator itrTabId = rDoc.maTableNameIndex.find(
-        ScGlobal::pCharClass->upper(rTabName));
+        ScGlobal::pCharClass->uppercase(rTabName));
     if (itrTabId == rDoc.maTableNameIndex.end())
     {
         // the specified table is not in cache.
@@ -587,7 +587,7 @@ ScExternalRefCache::TokenArrayRef ScExternalRefCache::getCellRangeData(
     DocItem& rDoc = itrDoc->second;
 
     TableNameIndexMap::iterator itrTabId = rDoc.maTableNameIndex.find(
-        ScGlobal::pCharClass->upper(rTabName));
+        ScGlobal::pCharClass->uppercase(rTabName));
     if (itrTabId == rDoc.maTableNameIndex.end())
         // the specified table is not in cache.
         return TokenArrayRef();
@@ -695,7 +695,7 @@ ScExternalRefCache::TokenArrayRef ScExternalRefCache::getRangeNameTokens(sal_uIn
 
     RangeNameMap& rMap = pDoc->maRangeNames;
     RangeNameMap::const_iterator itr = rMap.find(
-        ScGlobal::pCharClass->upper(rName));
+        ScGlobal::pCharClass->uppercase(rName));
     if (itr == rMap.end())
         return TokenArrayRef();
 
@@ -708,7 +708,7 @@ void ScExternalRefCache::setRangeNameTokens(sal_uInt16 nFileId, const OUString& 
     if (!pDoc)
         return;
 
-    String aUpperName = ScGlobal::pCharClass->upper(rName);
+    String aUpperName = ScGlobal::pCharClass->uppercase(rName);
     RangeNameMap& rMap = pDoc->maRangeNames;
     rMap.insert(RangeNameMap::value_type(aUpperName, pArray));
     pDoc->maRealRangeNameMap.insert(NamePairMap::value_type(aUpperName, rName));
@@ -729,7 +729,7 @@ void ScExternalRefCache::setCellData(sal_uInt16 nFileId, const OUString& rTabNam
 
     // See if the table by this name already exists.
     TableNameIndexMap::iterator itrTabName = rDoc.maTableNameIndex.find(
-        ScGlobal::pCharClass->upper(rTabName));
+        ScGlobal::pCharClass->uppercase(rTabName));
     if (itrTabName == rDoc.maTableNameIndex.end())
         // Table not found.  Maybe the table name or the file id is wrong ???
         return;
@@ -760,7 +760,7 @@ void ScExternalRefCache::setCellRangeData(sal_uInt16 nFileId, const ScRange& rRa
     // Now, find the table position of the first table to cache.
     const String& rFirstTabName = rData.front().maTableName;
     TableNameIndexMap::iterator itrTabName = rDoc.maTableNameIndex.find(
-        ScGlobal::pCharClass->upper(rFirstTabName));
+        ScGlobal::pCharClass->uppercase(rFirstTabName));
     if (itrTabName == rDoc.maTableNameIndex.end())
     {
         // table index not found.
@@ -844,7 +844,7 @@ void ScExternalRefCache::initializeDoc(sal_uInt16 nFileId, const vector<OUString
     for (vector<OUString>::const_iterator itr = rTabNames.begin(), itrEnd = rTabNames.end();
           itr != itrEnd; ++itr)
     {
-        TableName aNameItem(ScGlobal::pCharClass->upper(*itr), *itr);
+        TableName aNameItem(ScGlobal::pCharClass->uppercase(*itr), *itr);
         aNewTabNames.push_back(aNameItem);
     }
     pDoc->maTableNames.swap(aNewTabNames);
@@ -950,7 +950,7 @@ bool ScExternalRefCache::hasCacheTable(sal_uInt16 nFileId, const OUString& rTabN
     if (!pDoc)
         return false;
 
-    String aUpperName = ScGlobal::pCharClass->upper(rTabName);
+    String aUpperName = ScGlobal::pCharClass->uppercase(rTabName);
     vector<TableName>::const_iterator itrBeg = pDoc->maTableNames.begin(), itrEnd = pDoc->maTableNames.end();
     vector<TableName>::const_iterator itr = ::std::find_if(
         itrBeg, itrEnd, TabNameSearchPredicate(aUpperName));
@@ -986,7 +986,7 @@ bool ScExternalRefCache::setCacheTableReferenced( sal_uInt16 nFileId, const OUSt
     if (pDoc)
     {
         size_t nIndex = 0;
-        String aTabNameUpper = ScGlobal::pCharClass->upper( rTabName);
+        String aTabNameUpper = ScGlobal::pCharClass->uppercase( rTabName);
         if (lcl_getTableDataIndex( pDoc->maTableNameIndex, aTabNameUpper, nIndex))
         {
             size_t nStop = ::std::min( nIndex + nSheets, pDoc->maTables.size());
@@ -1171,7 +1171,7 @@ ScExternalRefCache::TableTypeRef ScExternalRefCache::getCacheTable(sal_uInt16 nF
     DocItem& rDoc = *pDoc;
 
     size_t nIndex;
-    String aTabNameUpper = ScGlobal::pCharClass->upper(rTabName);
+    String aTabNameUpper = ScGlobal::pCharClass->uppercase(rTabName);
     if (lcl_getTableDataIndex(rDoc.maTableNameIndex, aTabNameUpper, nIndex))
     {
         // specified table found.
@@ -2006,7 +2006,7 @@ ScExternalRefCache::TokenArrayRef ScExternalRefManager::getDoubleRefTokensFromSr
     vector<ScExternalRefCache::SingleRangeData> aCacheData;
     aCacheData.reserve(nTabSpan+1);
     aCacheData.push_back(ScExternalRefCache::SingleRangeData());
-    aCacheData.back().maTableName = ScGlobal::pCharClass->upper(rTabName);
+    aCacheData.back().maTableName = ScGlobal::pCharClass->uppercase(rTabName);
 
     for (SCTAB i = 1; i < nTabSpan + 1; ++i)
     {
@@ -2016,7 +2016,7 @@ ScExternalRefCache::TokenArrayRef ScExternalRefManager::getDoubleRefTokensFromSr
             break;
 
         aCacheData.push_back(ScExternalRefCache::SingleRangeData());
-        aCacheData.back().maTableName = ScGlobal::pCharClass->upper(aTabName);
+        aCacheData.back().maTableName = ScGlobal::pCharClass->uppercase(aTabName);
     }
 
     aRange.aStart.SetTab(nTab1);
@@ -2032,7 +2032,7 @@ ScExternalRefCache::TokenArrayRef ScExternalRefManager::getRangeNameTokensFromSr
     sal_uInt16 nFileId, const ScDocument* pSrcDoc, OUString& rName)
 {
     ScRangeName* pExtNames = pSrcDoc->GetRangeName();
-    String aUpperName = ScGlobal::pCharClass->upper(rName);
+    String aUpperName = ScGlobal::pCharClass->uppercase(rName);
     const ScRangeData* pRangeData = pExtNames->findByUpperName(aUpperName);
     if (!pRangeData)
         return ScExternalRefCache::TokenArrayRef();

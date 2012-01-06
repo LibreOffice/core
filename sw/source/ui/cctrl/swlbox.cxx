@@ -159,9 +159,9 @@ String SwComboBox::GetText() const
     String aTxt( ComboBox::GetText() );
 
     if(nStyle & CBS_LOWER)
-        GetAppCharClass().toLower( aTxt );
+        aTxt = GetAppCharClass().lowercase( aTxt );
     else if( nStyle & CBS_UPPER )
-        GetAppCharClass().toUpper( aTxt );
+        aTxt = GetAppCharClass().uppercase( aTxt );
 
     return aTxt;
 }

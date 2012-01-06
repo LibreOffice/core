@@ -46,9 +46,9 @@ using ::std::vector;
 
 namespace {
 
-void lcl_toUpper(OUString& rStr)
+void lcl_uppercase(OUString& rStr)
 {
-    rStr = ScGlobal::pCharClass->toUpper(rStr.trim(), 0, static_cast<xub_StrLen>(rStr.getLength()));
+    rStr = ScGlobal::pCharClass->uppercase(rStr.trim());
 }
 
 bool lcl_createStarQuery(ScQueryParamBase* pParam, const ScDBRangeBase* pDBRef, const ScDBRangeBase* pQueryRef)
@@ -83,7 +83,7 @@ bool lcl_createStarQuery(ScQueryParamBase* pParam, const ScDBRangeBase* pDBRef, 
         {
             // For all entries after the first one, check the and/or connector in the first column.
             aCellStr = pQueryRef->getString(0, nRow);
-            lcl_toUpper(aCellStr);
+            lcl_uppercase(aCellStr);
             if ( aCellStr.equals(ScGlobal::GetRscString(STR_TABLE_UND)) )
             {
                 rEntry.eConnect = SC_AND;
@@ -114,7 +114,7 @@ bool lcl_createStarQuery(ScQueryParamBase* pParam, const ScDBRangeBase* pDBRef, 
         {
             // equality, non-equality operator in the 3rd column.
             aCellStr = pQueryRef->getString(2, nRow);
-            lcl_toUpper(aCellStr);
+            lcl_uppercase(aCellStr);
             const sal_Unicode* p = aCellStr.getStr();
             if (p[0] == sal_Unicode('<'))
             {
@@ -192,7 +192,7 @@ bool lcl_createExcelQuery(
             while (nCol < nCols)
             {
                 aCellStr = pQueryRef->getString(nCol, nRow);
-                ScGlobal::pCharClass->toUpper( aCellStr );
+                aCellStr = ScGlobal::pCharClass->uppercase( aCellStr );
                 if (aCellStr.Len() > 0)
                 {
                     if (nIndex < nNewEntries)
@@ -347,7 +347,7 @@ SCCOL ScDBInternalRange::findFieldColumn(const OUString& rStr, sal_uInt16* pErr)
     const ScAddress& s = maRange.aStart;
     const ScAddress& e = maRange.aEnd;
     OUString aUpper = rStr;
-    lcl_toUpper(aUpper);
+    lcl_uppercase(aUpper);
 
     SCCOL nDBCol1 = s.Col();
     SCROW nDBRow1 = s.Row();
@@ -365,7 +365,7 @@ SCCOL ScDBInternalRange::findFieldColumn(const OUString& rStr, sal_uInt16* pErr)
         sal_uInt16 nErr = getDoc()->GetStringForFormula( aLook, aCellStr );
         if (pErr)
             *pErr = nErr;
-        lcl_toUpper(aCellStr);
+        lcl_uppercase(aCellStr);
         bFound = ScGlobal::GetpTransliteration()->isEqual(aCellStr, aUpper);
         if (!bFound)
             aLook.IncCol();
@@ -461,11 +461,11 @@ SCCOL ScDBExternalRange::findFieldColumn(const OUString& rStr, sal_uInt16* pErr)
         pErr = 0;
 
     OUString aUpper = rStr;
-    lcl_toUpper(aUpper);
+    lcl_uppercase(aUpper);
     for (SCCOL i = 0; i < mnCols; ++i)
     {
         OUString aUpperVal = mpMatrix->GetString(i, 0);
-        lcl_toUpper(aUpperVal);
+        lcl_uppercase(aUpperVal);
         if (aUpper.equals(aUpperVal))
             return i;
     }

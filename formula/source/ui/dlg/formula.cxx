@@ -477,8 +477,7 @@ xub_StrLen FormulaDlg_Impl::GetFunctionPos(xub_StrLen nPos)
 
     xub_StrLen nFuncPos=STRING_NOTFOUND;    //@ Testwise
     sal_Bool   bFlag=sal_False;
-    String aFormString = pMEdit->GetText();
-    m_aFormulaHelper.GetCharClass()->toUpper( aFormString );
+    String aFormString = m_aFormulaHelper.GetCharClass()->uppercase(pMEdit->GetText());
 
     if ( m_aTokenList.getLength() )
     {

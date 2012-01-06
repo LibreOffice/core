@@ -292,7 +292,7 @@ bool ScNameDlg::IsNameValid()
         maFtInfo.SetText(maErrInvalidNameStr);
         return false;
     }
-    else if (pRangeName && pRangeName->findByUpperName(ScGlobal::pCharClass->upper(aName)))
+    else if (pRangeName && pRangeName->findByUpperName(ScGlobal::pCharClass->uppercase(aName)))
     {
         maFtInfo.SetControlBackground(GetSettings().GetStyleSettings().GetHighlightColor());
         maFtInfo.SetText(maErrNameInUse);
@@ -345,7 +345,7 @@ void ScNameDlg::CalcCurTableAssign( String& aAssign, ScRangeData* pRangeData )
 void ScNameDlg::ShowOptions(const ScRangeNameLine& rLine)
 {
     ScRangeName* pRangeName = GetRangeName(rLine.aScope);
-    ScRangeData* pData = pRangeName->findByUpperName(ScGlobal::pCharClass->upper(rLine.aName));
+    ScRangeData* pData = pRangeName->findByUpperName(ScGlobal::pCharClass->uppercase(rLine.aName));
     if (pData)
     {
         UpdateChecks(pData);
@@ -380,7 +380,7 @@ void ScNameDlg::RemovePushed()
     for (std::vector<ScRangeNameLine>::iterator itr = maEntries.begin(); itr != maEntries.end(); ++itr)
     {
         ScRangeName* pRangeName = GetRangeName(itr->aScope);
-        ScRangeData* pData = pRangeName->findByUpperName(ScGlobal::pCharClass->upper(itr->aName));
+        ScRangeData* pData = pRangeName->findByUpperName(ScGlobal::pCharClass->uppercase(itr->aName));
         OSL_ENSURE(pData, "table and model should be in sync");
         // be safe and check for possible problems
         if (pData)
@@ -423,7 +423,7 @@ void ScNameDlg::NameModified()
     rtl::OUString aNewScope = maLbScope.GetSelectEntry();
 
     ScRangeName* pOldRangeName = GetRangeName( aOldScope );
-    ScRangeData* pData = pOldRangeName->findByUpperName( ScGlobal::pCharClass->upper(aOldName) );
+    ScRangeData* pData = pOldRangeName->findByUpperName( ScGlobal::pCharClass->uppercase(aOldName) );
     ScRangeName* pNewRangeName = GetRangeName( aNewScope );
     OSL_ENSURE(pData, "model and table should be in sync");
     // be safe and check for range data

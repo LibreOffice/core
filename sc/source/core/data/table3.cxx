@@ -881,7 +881,7 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
             {
                 GetString( nGroupCol[i], nStartRow, aSubString );
                 if ( bIgnoreCase )
-                    *pCompString[i] = ScGlobal::pCharClass->upper( aSubString );
+                    *pCompString[i] = ScGlobal::pCharClass->uppercase( aSubString );
                 else
                     *pCompString[i] = aSubString;
             }                                                   // aSubString bleibt auf dem letzten stehen
@@ -903,7 +903,7 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
                         {
                             GetString( nGroupCol[i], nRow, aString );
                             if (bIgnoreCase)
-                                ScGlobal::pCharClass->toUpper( aString );
+                                aString = ScGlobal::pCharClass->uppercase(aString);
                             //  wenn sortiert, ist "leer" eine eigene Gruppe
                             //  sonst sind leere Zellen unten erlaubt
                             bChanged = ( ( !aString.isEmpty() || rParam.bDoSort ) &&
@@ -997,7 +997,7 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
                         {
                             GetString( nGroupCol[i], nRow, aSubString );
                             if ( bIgnoreCase )
-                                *pCompString[i] = ScGlobal::pCharClass->upper( aSubString );
+                                *pCompString[i] = ScGlobal::pCharClass->uppercase( aSubString );
                             else
                                 *pCompString[i] = aSubString;
                         }
@@ -1928,7 +1928,7 @@ bool ScTable::CreateExcelQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow
             while (nCol <= nCol2)
             {
                 GetInputString( nCol, nRow, aCellStr );
-                ScGlobal::pCharClass->toUpper( aCellStr );
+                aCellStr = ScGlobal::pCharClass->uppercase(aCellStr);
                 if (!aCellStr.isEmpty())
                 {
                     if (nIndex < nNewEntries)

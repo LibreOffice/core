@@ -499,8 +499,7 @@ void ScStyleSheetPool::CreateStandardStyles()
 
 ScStyleSheet* ScStyleSheetPool::FindCaseIns( const String& rName, SfxStyleFamily eFam )
 {
-    String aUpSearch = rName;
-    ScGlobal::pCharClass->toUpper(aUpSearch);
+    String aUpSearch = ScGlobal::pCharClass->uppercase(rName);
 
     sal_uInt32 nCount = aStyles.size();
     for (sal_uInt32 n=0; n<nCount; n++)
@@ -508,8 +507,7 @@ ScStyleSheet* ScStyleSheetPool::FindCaseIns( const String& rName, SfxStyleFamily
         SfxStyleSheetBase* pStyle = aStyles[n].get();
         if ( pStyle->GetFamily() == eFam )
         {
-            String aUpName = pStyle->GetName();
-            ScGlobal::pCharClass->toUpper(aUpName);
+            String aUpName = ScGlobal::pCharClass->uppercase(pStyle->GetName());
             if (aUpName == aUpSearch)
                 return (ScStyleSheet*)pStyle;
         }

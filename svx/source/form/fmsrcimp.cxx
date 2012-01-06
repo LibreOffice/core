@@ -511,7 +511,7 @@ FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchWildcard(const ::rtl::OUStri
 
         if (!GetCaseSensitive())
             // norm the string
-            m_aCharacterClassficator.toLower_rtl(sCurrentCheck);
+            sCurrentCheck = m_aCharacterClassficator.lowercase(sCurrentCheck);
 
         // jetzt ist der Test einfach ...
         bFound = aSearchExpression.Matches(sCurrentCheck);
@@ -991,7 +991,7 @@ void FmSearchEngine::SearchNextImpl()
     ::rtl::OUString strSearchExpression(m_strSearchExpression); // brauche ich non-const
     if (!GetCaseSensitive())
         // norm the string
-        m_aCharacterClassficator.toLower_rtl(strSearchExpression);
+        strSearchExpression = m_aCharacterClassficator.lowercase(strSearchExpression);
 
     if (!m_bRegular && !m_bLevenshtein)
     {   // 'normale' Suche fuehre ich auf jeden Fall ueber WildCards durch, muss aber vorher je nach Modus den ::rtl::OUString anpassen

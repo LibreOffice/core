@@ -276,40 +276,23 @@ sal_Bool CharClass::isLetterNumeric( const String& rStr ) const
     }
 }
 
-void CharClass::toUpper( rtl::OUString& rStr ) const
-{
-    rStr = toUpper_rtl(rStr, 0, rStr.getLength());
-}
-
-String CharClass::toUpper( const String& rStr, xub_StrLen nPos, xub_StrLen nCount ) const
-{
-    return toUpper_rtl(rStr, nPos, nCount);
-}
-
-String CharClass::toLower( const String& rStr, xub_StrLen nPos, xub_StrLen nCount ) const
-{
-    return toLower_rtl(::rtl::OUString(rStr), nPos, nCount);
-}
-
-
-String CharClass::toTitle( const String& rStr, xub_StrLen nPos, xub_StrLen nCount ) const
+rtl::OUString CharClass::titlecase(const rtl::OUString& rStr, sal_Int32 nPos, sal_Int32 nCount) const
 {
     try
     {
         if ( xCC.is() )
             return xCC->toTitle( rStr, nPos, nCount, getLocale() );
         else
-            return rStr.Copy( nPos, nCount );
+            return rStr.copy( nPos, nCount );
     }
     catch ( const Exception& )
     {
-        DBG_ERRORFILE( "toTitle: Exception caught!" );
-        return rStr.Copy( nPos, nCount );
+        DBG_ERRORFILE( "titlecase: Exception caught!" );
+        return rStr.copy( nPos, nCount );
     }
 }
 
-
-::rtl::OUString CharClass::toUpper_rtl( const ::rtl::OUString& rStr, sal_Int32 nPos, sal_Int32 nCount ) const
+::rtl::OUString CharClass::uppercase( const ::rtl::OUString& rStr, sal_Int32 nPos, sal_Int32 nCount ) const
 {
     try
     {
@@ -320,13 +303,12 @@ String CharClass::toTitle( const String& rStr, xub_StrLen nPos, xub_StrLen nCoun
     }
     catch ( const Exception& )
     {
-        DBG_ERRORFILE( "toUpper: Exception caught!" );
+        DBG_ERRORFILE( "uppercase: Exception caught!" );
         return rStr.copy( nPos, nCount );
     }
 }
 
-
-::rtl::OUString CharClass::toLower_rtl( const ::rtl::OUString& rStr, sal_Int32 nPos, sal_Int32 nCount ) const
+::rtl::OUString CharClass::lowercase( const ::rtl::OUString& rStr, sal_Int32 nPos, sal_Int32 nCount ) const
 {
     try
     {
@@ -337,11 +319,10 @@ String CharClass::toTitle( const String& rStr, xub_StrLen nPos, xub_StrLen nCoun
     }
     catch ( const Exception& )
     {
-        DBG_ERRORFILE( "toLower: Exception caught!" );
+        DBG_ERRORFILE( "lowercase: Exception caught!" );
         return rStr.copy( nPos, nCount );
     }
 }
-
 
 sal_Int16 CharClass::getType( const String& rStr, xub_StrLen nPos ) const
 {

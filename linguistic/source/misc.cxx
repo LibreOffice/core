@@ -653,7 +653,7 @@ String ToLower( const String &rText, sal_Int16 nLanguage )
 
     CharClass &rCC = lcl_GetCharClass();
     rCC.setLocale( CreateLocale( nLanguage ) );
-    return rCC.lower( rText );
+    return rCC.lowercase( rText );
 }
 
 
@@ -663,7 +663,7 @@ String ToUpper( const String &rText, sal_Int16 nLanguage )
 
     CharClass &rCC = lcl_GetCharClass();
     rCC.setLocale( CreateLocale( nLanguage ) );
-    return rCC.upper( rText );
+    return rCC.uppercase( rText );
 }
 
 
@@ -673,7 +673,7 @@ String ToTitle( const String &rText, sal_Int16 nLanguage )
 
     CharClass &rCC = lcl_GetCharClass();
     rCC.setLocale( CreateLocale( nLanguage ) );
-    return rCC.toTitle( rText, 0, rText.Len() );
+    return rCC.titlecase(rText);
 }
 
 
@@ -683,7 +683,7 @@ sal_Unicode ToLower( const sal_Unicode cChar, sal_Int16 nLanguage )
 
     CharClass &rCC = lcl_GetCharClass();
     rCC.setLocale( CreateLocale( nLanguage ) );
-    return rCC.lower( cChar ).GetChar(0);
+    return rCC.lowercase( rtl::OUString(cChar) )[0];
 }
 
 
@@ -693,7 +693,7 @@ sal_Unicode ToUpper( const sal_Unicode cChar, sal_Int16 nLanguage )
 
     CharClass &rCC = lcl_GetCharClass();
     rCC.setLocale( CreateLocale( nLanguage ) );
-    return rCC.upper( cChar ).GetChar(0);
+    return rCC.uppercase( rtl::OUString(cChar) )[0];
 }
 
 // sorted(!) array of unicode ranges for code points that are exclusively(!) used as numbers

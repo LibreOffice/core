@@ -866,8 +866,7 @@ IMPL_LINK( SwNewGlosNameDlg, Modify, Edit *, pBox )
 IMPL_LINK( SwNewGlosNameDlg, Rename, Button *, EMPTYARG )
 {
     SwGlossaryDlg* pDlg = (SwGlossaryDlg*)GetParent();
-    String sNew = aNewShort.GetText();
-    GetAppCharClass().toUpper(sNew);
+    String sNew = GetAppCharClass().uppercase(aNewShort.GetText());
     if( pDlg->pGlossaryHdl->HasShortName(aNewShort.GetText())
         && sNew != aOldShort.GetText() )
     {

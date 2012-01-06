@@ -840,7 +840,7 @@ sal_uInt16 SwAutoFormat::GetDigitLevel( const SwTxtNode& rNd, xub_StrLen& rPos,
             sal_Bool bIsUpper =
                 0 != ( i18n::KCharacterType::UPPER &
                                         rCC.getCharacterType( rTxt, nPos ));
-            sal_Unicode cLow = rCC.toLower( rTxt, nPos, 1 ).GetChar(0), cNumTyp;
+            sal_Unicode cLow = rCC.lowercase(rTxt, nPos, 1)[0], cNumTyp;
             int eTmpScan;
 
             // roemische Zeichen sind "mdclxvi". Da man aber eher mal eine

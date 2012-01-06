@@ -808,7 +808,7 @@ sal_Bool SvXMLNumFmtExport::WriteTextWithCurrency_Impl( const OUString& rString,
     pFormatter->GetCompatibilityCurrency( sCurString, sDummy );
 
     pCharClass->setLocale( rLocale );
-    String sUpperStr = pCharClass->upper(rString);
+    String sUpperStr = pCharClass->uppercase(rString);
     xub_StrLen nPos = lcl_FindSymbol( sUpperStr, sCurString );
     if ( nPos != STRING_NOTFOUND )
     {

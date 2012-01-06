@@ -326,7 +326,7 @@ ScParameterClassification::GetExternalParameterType( const formula::FormulaToken
     // similar to ScInterpreter::ScExternal()
     sal_uInt16 nIndex;
     String aUnoName;
-    String aFuncName( ScGlobal::pCharClass->upper( pToken->GetExternal()));
+    String aFuncName( ScGlobal::pCharClass->uppercase( pToken->GetExternal()));
     if ( ScGlobal::GetFuncCollection()->SearchFunc( aFuncName, nIndex) )
     {
         FuncData* pFuncData = (FuncData*)ScGlobal::GetFuncCollection()->At(

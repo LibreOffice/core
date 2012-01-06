@@ -58,13 +58,12 @@ using ::std::set;
 
 // STATIC DATA -----------------------------------------------------------
 
-namespace {
-
-void lcl_toUpper(OUString& rStr)
+namespace
 {
-    rStr = ScGlobal::pCharClass->toUpper(rStr.trim(), 0, static_cast<sal_uInt16>(rStr.getLength()));
-}
-
+    void lcl_uppercase(OUString& rStr)
+    {
+        rStr = ScGlobal::pCharClass->uppercase(rStr.trim());
+    }
 }
 
 ScDocumentIterator::ScDocumentIterator( ScDocument* pDocument,
@@ -825,9 +824,9 @@ bool ScDBQueryDataIterator::DataAccessMatrix::isValidQuery(SCROW nRow, const ScM
                 // Equality check first.
 
                 OUString aMatStr = rMat.GetString(nField, nRow);
-                lcl_toUpper(aMatStr);
+                lcl_uppercase(aMatStr);
                 OUString aQueryStr = rEntry.GetQueryItem().maString;
-                lcl_toUpper(aQueryStr);
+                lcl_uppercase(aQueryStr);
                 bool bDone = false;
                 switch (rEntry.eOp)
                 {

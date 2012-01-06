@@ -52,7 +52,7 @@ sal_Bool lcl_FillRangeFromName( ScRange& rRange, ScDocShell* pDocSh, const Strin
         ScRangeName* pNames = pDoc->GetRangeName();
         if (pNames)
         {
-            const ScRangeData* pData = pNames->findByUpperName(ScGlobal::pCharClass->upper(rName));
+            const ScRangeData* pData = pNames->findByUpperName(ScGlobal::pCharClass->uppercase(rName));
             if (pData)
             {
                 if ( pData->IsValidReference( rRange ) )
