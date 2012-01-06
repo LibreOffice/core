@@ -119,7 +119,6 @@ $(eval $(call gb_Library_add_exception_objects,sal,\
 	sal/rtl/source/ustrbuf \
 	sal/rtl/source/ustring \
 	sal/rtl/source/uuid \
-	sal/textenc/context \
 	sal/textenc/converter \
 	sal/textenc/tcvtbyte \
 	sal/textenc/tcvtutf8 \
