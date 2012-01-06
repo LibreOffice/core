@@ -1235,16 +1235,6 @@ sub copy_child_projects_into_installset
     my $sourcefile = "";
     my $destdir = "";
 
-    # adding Java
-
-    if ( $allvariables->{'JAVAPRODUCT'} )
-    {
-        $sourcefile = $installer::globals::javafile->{'sourcepath'};
-        $destdir = $installdir . $installer::globals::separator . $installer::globals::javafile->{'Subdir'};
-        if ( ! -d $destdir) { installer::systemactions::create_directory($destdir); }
-        installer::systemactions::copy_one_file($sourcefile, $destdir);
-    }
-
     if ( $allvariables->{'UREPRODUCT'} )
     {
         $sourcefile = $installer::globals::urefile->{'sourcepath'};

@@ -892,7 +892,6 @@ sub create_files_table
 
         my $styles = "";
         if ( $onefile->{'Styles'} ) { $styles = $onefile->{'Styles'}; }
-        if (( $styles =~ /\bJAVAFILE\b/ ) && ( ! ($allvariables->{'JAVAPRODUCT'} ))) { next; }
 
         $file{'Component_'} = get_file_component_name($onefile, $filesref);
         $file{'File'} = generate_unique_filename_for_filetable($onefile, $file{'Component_'}, $uniquefilenamehashref);

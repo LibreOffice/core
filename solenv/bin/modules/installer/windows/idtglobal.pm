@@ -1682,10 +1682,8 @@ sub add_childprojects
     my $infoline = "";
     my $line = "";
 
-    $installer::globals::javafile = installer::worker::return_first_item_with_special_flag($filesref ,"JAVAFILE");
     $installer::globals::urefile = installer::worker::return_first_item_with_special_flag($filesref ,"UREFILE");
 
-    if (( $installer::globals::javafile eq "" ) && ( $allvariables->{'JAVAPRODUCT'} )) { installer::exiter::exit_program("ERROR: No JAVAFILE found in files collector!", "add_childprojects"); }
     if (( $installer::globals::urefile eq "" ) && ( $allvariables->{'UREPRODUCT'} )) { installer::exiter::exit_program("ERROR: No UREFILE found in files collector!", "add_childprojects"); }
 
     # Content for Directory table
@@ -1724,12 +1722,6 @@ sub add_childprojects
     my $subjavadir = "";
     my $suburedir = "";
 
-    if ( $allvariables->{'JAVAPRODUCT'} )
-    {
-        $dirname = get_directory_name_from_file($installer::globals::javafile);
-        $subjavadir = include_subdirname_into_directory_table($dirname, $directorytable, $directorytablename, $installer::globals::javafile);
-    }
-
     if ( $allvariables->{'UREPRODUCT'} )
     {
         $dirname = get_directory_name_from_file($installer::globals::urefile);
@@ -1739,32 +1731,13 @@ sub add_childprojects
     # Content for the Component table
     # The Java and Ada components have new directories
 
-    if ( $allvariables->{'JAVAPRODUCT'} ) { include_subdir_into_componenttable($subjavadir, $installer::globals::javafile, $componenttable); }
     if ( $allvariables->{'UREPRODUCT'} ) { include_subdir_into_componenttable($suburedir, $installer::globals::urefile, $componenttable); }
 
     # Content for CustomAction table
 
-    if ( $allvariables->{'JAVAPRODUCT'} )
-    {
-        $line = "InstallJava\t98\tSystemFolder\t[SourceDir]$installer::globals::javafile->{'Subdir'}\\$installer::globals::javafile->{'Name'} \/qb REBOOT=Suppress SPONSORS=0 DISABLEAD=1\n";
-        push(@{$customactiontable} ,$line);
-        installer::remover::remove_leading_and_ending_whitespaces(\$line);
-        $infoline = "Added $line into table $customactiontablename\n";
-        push(@installer::globals::logfileinfo, $infoline);
-    }
-
     if ( $allvariables->{'UREPRODUCT'} )
     {
         $line = "InstallUre\t98\tSystemFolder\t$installer::globals::urefile->{'Subdir'}\\$installer::globals::urefile->{'Name'} /S\n";
-        push(@{$customactiontable} ,$line);
-        installer::remover::remove_leading_and_ending_whitespaces(\$line);
-        $infoline = "Added $line into table $customactiontablename\n";
-        push(@installer::globals::logfileinfo, $infoline);
-    }
-
-    if ( $allvariables->{'JAVAPRODUCT'} )
-    {
-        $line = "MaintenanceJava\t82\t$installer::globals::javafile->{'uniquename'}\t\/qb REBOOT=Suppress SPONSORS=0 DISABLEAD=1\n";
         push(@{$customactiontable} ,$line);
         installer::remover::remove_leading_and_ending_whitespaces(\$line);
         $infoline = "Added $line into table $customactiontablename\n";
@@ -1798,35 +1771,11 @@ sub add_childprojects
         push(@installer::globals::logfileinfo, $infoline);
     }
 
-    if ( $allvariables->{'JAVAPRODUCT'} )
-    {
-        $number = get_free_number_in_uisequence_table($installuitable) + 2;
-        $featurename = get_feature_name("_Java", $featuretable);
-        if ( $featurename ) { $line = "InstallJava\t\&$featurename\=3 And Not Installed And JAVAPATH\=\"\" And Not PATCH\t$number\n"; }
-        else { $line = "InstallJava\tNot Installed And JAVAPATH\=\"\" And Not PATCH\t$number\n"; } # feature belongs to root
-        push(@{$installuitable} ,$line);
-        installer::remover::remove_leading_and_ending_whitespaces(\$line);
-        $infoline = "Added $line into table $installuitablename\n";
-        push(@installer::globals::logfileinfo, $infoline);
-    }
-
     if ( $allvariables->{'ADAPRODUCT'} )
     {
         $number = get_free_number_in_uisequence_table($installuitable) + 4;
         $featurename = get_feature_name("_Adabas", $featuretable);
         $line = "MaintenanceAdabas\t\&$featurename\=3 And Installed And Not PATCH\t$number\n";
-        push(@{$installuitable} ,$line);
-        installer::remover::remove_leading_and_ending_whitespaces(\$line);
-        $infoline = "Added $line into table $installuitablename\n";
-        push(@installer::globals::logfileinfo, $infoline);
-    }
-
-    if ( $allvariables->{'JAVAPRODUCT'} )
-    {
-        $number = get_free_number_in_uisequence_table($installuitable) + 6;
-        $featurename = get_feature_name("_Java", $featuretable);
-        if ( $featurename ) { $line = "MaintenanceJava\t\&$featurename\=3 And Installed And JAVAPATH\=\"\" And Not PATCH\t$number\n"; }
-        else { $line = "MaintenanceJava\tInstalled And JAVAPATH\=\"\" And Not PATCH\t$number\n"; } # feature belongs to root
         push(@{$installuitable} ,$line);
         installer::remover::remove_leading_and_ending_whitespaces(\$line);
         $infoline = "Added $line into table $installuitablename\n";

@@ -425,10 +425,6 @@ BEGIN
     $localinstalldirset = 0;
     $localinstalldir = "";
 
-    $javafilename = "";
-    $javafilename2 = "";
-    $javafilename3 = "";
-    $javafile = "";
     $urefile = "";
 
     $postprocess_specialepm = 0;

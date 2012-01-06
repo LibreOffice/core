@@ -222,40 +222,28 @@ SCP1FILES += \
 .ENDIF
 
 # ------------------------------------------------------------------------
-# OpenOffice.org with JRE
-
-SCP2LINK_PRODUCT_TYPE=osl
-SCP2TARGET = setup_osljre
-SCP2FILES  = $(SCP1FILES) \
-             module_java.par
-
-.IF "$(GUI)"=="WNT"
-SCP2FILES += file_jre_ooo.par
-.ENDIF
-
-# ------------------------------------------------------------------------
 # URE
 
 .IF "$(OS)" != "MACOSX"
-SCP3LINK_PRODUCT_TYPE = osl
-SCP3TARGET = ure
-SCP3FILES = ure_standalone.par  \
+SCP2LINK_PRODUCT_TYPE = osl
+SCP2TARGET = ure
+SCP2FILES = ure_standalone.par  \
             ure.par
 .ENDIF
 
 # ------------------------------------------------------------------------
 # SDK
 
-SCP4LINK_PRODUCT_TYPE = osl
-SCP4TARGET = sdkoo
-SCP4FILES = sdkoo.par
+SCP3LINK_PRODUCT_TYPE = osl
+SCP3TARGET = sdkoo
+SCP3FILES = sdkoo.par
 
 # ------------------------------------------------------------------------
 # Test
 
-SCP5LINK_PRODUCT_TYPE = osl
-SCP5TARGET = test
-SCP5FILES = smoketest.par
+SCP4LINK_PRODUCT_TYPE = osl
+SCP4TARGET = test
+SCP4FILES = smoketest.par
 
 # --- target -------------------------------------------------------------
 .INCLUDE :  target.mk

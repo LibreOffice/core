@@ -2064,8 +2064,6 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
             {
                 # Adding child projects to installation dynamically (also in feature table)
                 installer::windows::idtglobal::add_childprojects($languageidtdir, $filesinproductlanguageresolvedarrayref, $allvariableshashref);
-                # setting Java variables for Java products
-                if ( $allvariableshashref->{'JAVAPRODUCT'} ) { installer::windows::java::update_java_tables($languageidtdir, $allvariableshashref); }
             }
 
             # Then the language specific msi database can be created

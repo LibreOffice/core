@@ -2962,14 +2962,6 @@ sub put_childprojects_into_installset
     # Create xpd file and put it into xpd directory
     # xpd file has to be created completely from module and package itself (-> no packagelist!)
 
-    if ( $allvariables->{'JAVAPRODUCT'} )
-    {
-        # Collect all modules with flag "JAVAMODULE"
-        my $allmodules = collect_modules_with_style("JAVAMODULE", $modulesarrayref);
-        $allmodules = remove_modules_without_package($allmodules);
-        copy_childproject_files($allmodules, $sopackpath, $destdir, $modulesarrayref, $allvariables, "jre", $includepatharrayref, 1);
-    }
-
     # Adding additional required packages (freetype).
     # This package names are stored in global array @installer::globals::requiredpackages
 

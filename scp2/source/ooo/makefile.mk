@@ -328,7 +328,6 @@ PARFILES=                          \
         module_lang_template.par   \
         module_helppack.par        \
         module_help_template.par   \
-        module_java.par            \
         module_systemint.par       \
         profile_ooo.par            \
         profileitem_ooo.par        \
@@ -341,7 +340,6 @@ PARFILES=                          \
 
 .IF "$(GUI)"=="WNT"
 PARFILES +=                        \
-        file_jre_ooo.par           \
         folder_ooo.par             \
         folderitem_ooo.par         \
         registryitem_ooo.par       \
@@ -356,7 +354,6 @@ ULFFILES=                          \
         module_ooo.ulf             \
         module_langpack.ulf        \
         module_helppack.ulf        \
-        module_java.ulf            \
         registryitem_ooo.ulf       \
         module_systemint.ulf
 
