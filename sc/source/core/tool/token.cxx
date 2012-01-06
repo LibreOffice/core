@@ -1944,7 +1944,7 @@ void ScTokenArray::ReadjustAbsolute3DReferences( const ScDocument* pOldDoc, cons
     }
 }
 
-void ScTokenArray::AdjustAbsoluteRefs( const ScDocument* pOldDoc, const ScAddress& rOldPos, const ScAddress& rNewPos)
+void ScTokenArray::AdjustAbsoluteRefs( const ScDocument* pOldDoc, const ScAddress& rOldPos, const ScAddress& rNewPos, bool bRangeName)
 {
     for ( sal_uInt16 j=0; j<nLen; ++j )
     {
@@ -1959,8 +1959,11 @@ void ScTokenArray::AdjustAbsoluteRefs( const ScDocument* pOldDoc, const ScAddres
                 ScSingleRefData& rRef2 = rRef.Ref2;
                 ScSingleRefData& rRef1 = rRef.Ref1;
 
-                AdjustSingleRefData( rRef1, rOldPos, rNewPos );
-                AdjustSingleRefData( rRef2, rOldPos, rNewPos );
+                // for range names only adjust if all parts are absolute
+                if (!bRangeName || !(rRef1.IsColRel() || rRef1.IsRowRel() || rRef1.IsTabRel()))
+                    AdjustSingleRefData( rRef1, rOldPos, rNewPos );
+                if (!bRangeName || !(rRef2.IsColRel() || rRef2.IsRowRel() || rRef2.IsTabRel()))
+                    AdjustSingleRefData( rRef2, rOldPos, rNewPos );
 
             }
             break;
@@ -1971,7 +1974,9 @@ void ScTokenArray::AdjustAbsoluteRefs( const ScDocument* pOldDoc, const ScAddres
 
                 ScSingleRefData& rRef = static_cast<ScToken*>(pCode[j])->GetSingleRef();
 
-                AdjustSingleRefData( rRef, rOldPos, rNewPos );
+                // for range names only adjust if all parts are absolute
+                if (!bRangeName || !(rRef.IsColRel() || rRef.IsRowRel() || rRef.IsTabRel()))
+                    AdjustSingleRefData( rRef, rOldPos, rNewPos );
 
 
             }

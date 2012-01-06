@@ -109,7 +109,7 @@ public:
     /**
      * Make all absolute references pointing to the copied range if the range is copied too
      */
-    void AdjustAbsoluteRefs( const ScDocument* pOldDoc, const ScAddress& rOldPos, const ScAddress& rNewPos );
+    void AdjustAbsoluteRefs( const ScDocument* pOldDoc, const ScAddress& rOldPos, const ScAddress& rNewPos, bool bRangeName = false );
 };
 
 #endif // SC_TOKENARRAY_HXX

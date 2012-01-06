@@ -183,6 +183,7 @@ void adjustRangeName(ScToken* pToken, ScDocument& rNewDoc, const ScDocument* pOl
         if (rNewDoc.GetPool() != const_cast<ScDocument*>(pOldDoc)->GetPool())
         {
             pRangeNameToken->ReadjustAbsolute3DReferences(pOldDoc, &rNewDoc, pRangeData->GetPos(), true);
+            pRangeNameToken->AdjustAbsoluteRefs(pOldDoc, aOldPos, aNewPos, true);
         }
 
         bool bInserted;
