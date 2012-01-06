@@ -139,10 +139,6 @@ class SessionListener :   // interfaces
         FWK_DECLARE_XTYPEPROVIDER
         DECLARE_XSERVICEINFO
 
-        #ifdef ENABLE_AUTODOC_FIX
-        ;
-        #endif
-
         //---------------------------------------
 
         /** @short  initialize new instance of this class.
