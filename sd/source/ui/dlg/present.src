@@ -86,8 +86,8 @@ ModalDialog DLG_START_PRESENTATION
     {
         HelpID = "sd:ListBox:DLG_START_PRESENTATION:LB_DIAS";
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 82, 24 ) ;
-        Size = MAP_APPFONT ( 111, 80 ) ;
+        Pos = MAP_APPFONT ( 96, 24 ) ;
+        Size = MAP_APPFONT ( 97, 80 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
          //DDExtraWidth = TRUE;
