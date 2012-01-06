@@ -31,6 +31,7 @@
 #define _UNOTOOLS_CHARCLASS_HXX
 
 #include <ctype.h>      // isdigit(), isalpha()
+#include <boost/noncopyable.hpp>
 #include <tools/string.hxx>
 #include <tools/solar.h>
 #include <com/sun/star/i18n/KCharacterType.hpp>
@@ -74,16 +75,12 @@ const sal_Int32 nCharClassNumericTypeMask =
     ::com::sun::star::i18n::KCharacterType::BASE_FORM;
 
 
-class UNOTOOLS_DLLPUBLIC CharClass
+class UNOTOOLS_DLLPUBLIC CharClass : private boost::noncopyable
 {
     ::com::sun::star::lang::Locale  aLocale;
     ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XCharacterClassification >    xCC;
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xSMgr;
     mutable ::osl::Mutex        aMutex;
-
-                                // not implemented, prevent usage
-                                CharClass( const CharClass& );
-            CharClass&          operator=( const CharClass& );
 
 public:
     /// Preferred ctor with service manager specified
