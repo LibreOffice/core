@@ -417,8 +417,7 @@ namespace svt
             // initialize them with their (local) names
             while ( nChildren-- )
             {
-                String sURL;
-                m_rStorage.ReadUniOrByteString( sURL, m_rStorage.GetStreamCharSet() );
+                String sURL = m_rStorage.ReadUniOrByteString(m_rStorage.GetStreamCharSet());
                 sURL = m_xOfficeInstDirs->makeAbsoluteURL( sURL );
                 INetURLObject aChildURL( sURL );
                 rChildren.push_back( new TemplateContent( aChildURL ) );
@@ -735,8 +734,7 @@ namespace svt
         m_aPreviousState.reserve( nRootDirectories );
         while ( nRootDirectories-- )
         {
-            String sURL;
-            m_pCacheStream->ReadUniOrByteString( sURL, m_pCacheStream->GetStreamCharSet() );
+            String sURL = m_pCacheStream->ReadUniOrByteString(m_pCacheStream->GetStreamCharSet());
             // #116281# Keep office installtion relocatable. Never store
             // any direct references to office installation directory.
             sURL = getOfficeInstDirs()->makeAbsoluteURL( sURL );

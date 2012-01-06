@@ -190,8 +190,7 @@ std::vector<sal_uInt16>* SfxApplication::GetDisabledSlotList_Impl()
         if( bSlots && bSlotsEnabled )
         {
             // Read Slot file
-            String aTitle;
-            pStream->ReadUniOrByteString(aTitle, pStream->GetStreamCharSet());
+            String aTitle  = pStream->ReadUniOrByteString(pStream->GetStreamCharSet());
             if ( aTitle.CompareToAscii("SfxSlotFile" ) == COMPARE_EQUAL )
             {
                 sal_uInt16 nCount;
@@ -206,7 +205,7 @@ std::vector<sal_uInt16>* SfxApplication::GetDisabledSlotList_Impl()
                     pList->push_back( nSlot );
                 }
 
-                pStream->ReadUniOrByteString(aTitle, pStream->GetStreamCharSet());
+                aTitle = pStream->ReadUniOrByteString(pStream->GetStreamCharSet());
                 if ( aTitle.CompareToAscii("END" ) != COMPARE_EQUAL || pStream->GetError() )
                 {
                     // Read failed

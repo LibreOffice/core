@@ -1106,8 +1106,7 @@ sal_Bool lcl_ReadSbxVariable( SbxVariable& rVar, SvStream* pStrm,
         case SbxSTRING:
         case SbxLPSTR:
                 {
-                String aStr;
-                pStrm->ReadUniOrByteString( aStr, osl_getThreadTextEncoding() );
+                String aStr = pStrm->ReadUniOrByteString(osl_getThreadTextEncoding());
                 rVar.PutString( aStr );
                 }
                 break;

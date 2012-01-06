@@ -424,10 +424,10 @@ SfxPoolItem* SvxFontItem::Create(SvStream& rStrm, sal_uInt16) const
     rStrm >> eFontTextEncoding;
 
     // UNICODE: rStrm >> aName;
-    rStrm.ReadUniOrByteString(aName, rStrm.GetStreamCharSet());
+    aName = rStrm.ReadUniOrByteString(rStrm.GetStreamCharSet());
 
     // UNICODE: rStrm >> aStyle;
-    rStrm.ReadUniOrByteString(aStyle, rStrm.GetStreamCharSet());
+    aStyle = rStrm.ReadUniOrByteString(rStrm.GetStreamCharSet());
 
     // Set the "correct" textencoding
     eFontTextEncoding = (sal_uInt8)GetSOLoadTextEncoding( eFontTextEncoding, (sal_uInt16)rStrm.GetVersion() );
@@ -442,8 +442,8 @@ SfxPoolItem* SvxFontItem::Create(SvStream& rStrm, sal_uInt16) const
     rStrm >> nMagic;
     if ( nMagic == STORE_UNICODE_MAGIC_MARKER )
     {
-        rStrm.ReadUniOrByteString( aName, RTL_TEXTENCODING_UNICODE );
-        rStrm.ReadUniOrByteString( aStyle, RTL_TEXTENCODING_UNICODE );
+        aName = rStrm.ReadUniOrByteString( RTL_TEXTENCODING_UNICODE );
+        aStyle = rStrm.ReadUniOrByteString( RTL_TEXTENCODING_UNICODE );
     }
     else
     {

@@ -401,8 +401,8 @@ sal_Bool SwBoxAutoFmt::Load( SvStream& rStream, const SwAfVersions& rVersions, s
         sal_uInt16 eSys, eLge;
         // --- from 680/dr25 on: store strings as UTF-8
         CharSet eCharSet = (nVer >= AUTOFORMAT_ID_680DR25) ? RTL_TEXTENCODING_UTF8 : rStream.GetStreamCharSet();
-        rStream.ReadUniOrByteString( sNumFmtString, eCharSet )
-                >> eSys >> eLge;
+        sNumFmtString = rStream.ReadUniOrByteString( eCharSet );
+        rStream >> eSys >> eLge;
         eSysLanguage = (LanguageType) eSys;
         eNumFmtLanguage = (LanguageType) eLge;
         if ( eSysLanguage == LANGUAGE_SYSTEM )      // von alten Versionen (Calc)
@@ -780,7 +780,7 @@ sal_Bool SwTableAutoFmt::Load( SvStream& rStream, const SwAfVersions& rVersions 
         sal_Bool b;
         // --- from 680/dr25 on: store strings as UTF-8
         CharSet eCharSet = (nVal >= AUTOFORMAT_ID_680DR25) ? RTL_TEXTENCODING_UTF8 : rStream.GetStreamCharSet();
-        rStream.ReadUniOrByteString( aName, eCharSet );
+        aName = rStream.ReadUniOrByteString( eCharSet );
         if( AUTOFORMAT_DATA_ID_552 <= nVal )
         {
             rStream >> nStrResId;
@@ -830,7 +830,7 @@ sal_Bool SwTableAutoFmt::LoadOld( SvStream& rStream, sal_uInt16 aLoadVer[] )
     if( bRet && ( AUTOFORMAT_OLD_DATA_ID == nVal ))
     {
         sal_Bool b;
-        rStream.ReadUniOrByteString( aName, rStream.GetStreamCharSet() );
+        aName = rStream.ReadUniOrByteString( rStream.GetStreamCharSet() );
         rStream >> b; bInclFont = b;
         rStream >> b; bInclJustify = b;
         rStream >> b; bInclFrame = b;

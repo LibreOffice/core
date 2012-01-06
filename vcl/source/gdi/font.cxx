@@ -780,8 +780,8 @@ SvStream& operator>>( SvStream& rIStm, Impl_Font& rImpl_Font )
     sal_Bool            bTmp;
     sal_uInt8           nTmp8;
 
-    rIStm.ReadUniOrByteString( rImpl_Font.maFamilyName, rIStm.GetStreamCharSet() );
-    rIStm.ReadUniOrByteString( rImpl_Font.maStyleName, rIStm.GetStreamCharSet() );
+    rImpl_Font.maFamilyName = rIStm.ReadUniOrByteString(rIStm.GetStreamCharSet());
+    rImpl_Font.maStyleName = rIStm.ReadUniOrByteString(rIStm.GetStreamCharSet());
     rIStm >> rImpl_Font.maSize;
 
     rIStm >> nTmp16; rImpl_Font.meCharSet = (rtl_TextEncoding) nTmp16;

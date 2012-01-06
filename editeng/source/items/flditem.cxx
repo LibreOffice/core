@@ -735,7 +735,7 @@ void SvxExtFileField::Load( SvPersistStream & rStm )
     sal_uInt16 nType, nFormat;
 
     // UNICODE: rStm >> aFile;
-    rStm.ReadUniOrByteString(aFile, rStm.GetStreamCharSet());
+    aFile = rStm.ReadUniOrByteString(rStm.GetStreamCharSet());
 
     rStm >> nType;
     rStm >> nFormat;

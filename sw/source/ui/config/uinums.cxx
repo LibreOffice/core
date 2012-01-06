@@ -235,7 +235,7 @@ const SwNumRulesWithName& SwNumRulesWithName::operator=(const SwNumRulesWithName
 SwNumRulesWithName::SwNumRulesWithName( SvStream &rStream, sal_uInt16 nVersion )
 {
     CharSet eEncoding = osl_getThreadTextEncoding();
-    rStream.ReadUniOrByteString(aName, eEncoding);
+    aName = rStream.ReadUniOrByteString(eEncoding);
 
     char c;
     for(sal_uInt16 n = 0; n < MAXLEVEL; ++n )
@@ -354,9 +354,9 @@ SwNumRulesWithName::_SwNumFmtGlobal::_SwNumFmtGlobal( SvStream& rStream,
             long nL;
             rStream >> cChar;       aFmt.SetStart( (sal_uInt16)cChar );
 
-            rStream.ReadUniOrByteString(sStr, eEncoding);
+            sStr = rStream.ReadUniOrByteString(eEncoding);
             aFmt.SetPrefix( sStr );
-            rStream.ReadUniOrByteString(sStr, eEncoding);
+            sStr = rStream.ReadUniOrByteString(eEncoding);
             aFmt.SetSuffix( sStr );
             rStream >> nUS;         aFmt.SetNumAdjust( SvxAdjust( nUS ) );
             rStream >> nL;          aFmt.SetLSpace( lNumIndent );
@@ -366,9 +366,9 @@ SwNumRulesWithName::_SwNumFmtGlobal::_SwNumFmtGlobal( SvStream& rStream,
         {
             short nShort;
             rStream >> nUS;         aFmt.SetStart( nUS );
-            rStream.ReadUniOrByteString(sStr, eEncoding);
+            sStr = rStream.ReadUniOrByteString(eEncoding);
             aFmt.SetPrefix( sStr );
-            rStream.ReadUniOrByteString(sStr, eEncoding);
+            sStr = rStream.ReadUniOrByteString(eEncoding);
             aFmt.SetSuffix( sStr );
             rStream >> nUS;         aFmt.SetNumAdjust( SvxAdjust( nUS ) );
             rStream >> nUS;         aFmt.SetAbsLSpace( nUS );
@@ -385,7 +385,7 @@ SwNumRulesWithName::_SwNumFmtGlobal::_SwNumFmtGlobal( SvStream& rStream,
         sal_uInt16  nPitch;
         String aName;
 
-        rStream.ReadUniOrByteString(aName, eEncoding);
+        aName = rStream.ReadUniOrByteString(eEncoding);
         rStream >> nFamily >> nCharSet >> nWidth >> nHeight >> nPitch;
 
         if( aName.Len() )
@@ -411,7 +411,7 @@ SwNumRulesWithName::_SwNumFmtGlobal::_SwNumFmtGlobal( SvStream& rStream,
     {
         sal_uInt16 nItemCount;
         rStream >> nCharPoolId;
-        rStream.ReadUniOrByteString(sCharFmtName, eEncoding);
+        sCharFmtName = rStream.ReadUniOrByteString(eEncoding);
         rStream >> nItemCount;
 
         while( nItemCount-- )

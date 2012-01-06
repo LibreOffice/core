@@ -1278,7 +1278,7 @@ void MetaTextAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
 {
     COMPAT( rIStm );
     rIStm   >> maPt;
-    rIStm.ReadUniOrByteString( maStr, pData->meActualCharSet );
+    maStr = rIStm.ReadUniOrByteString(pData->meActualCharSet);
     rIStm   >> mnIndex;
     rIStm   >> mnLen;
 
@@ -1435,7 +1435,7 @@ void MetaTextArrayAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
 
     COMPAT( rIStm );
     rIStm   >> maStartPt;
-    rIStm.ReadUniOrByteString( maStr, pData->meActualCharSet );
+    maStr = rIStm.ReadUniOrByteString(pData->meActualCharSet);
     rIStm   >> mnIndex;
     rIStm   >> mnLen;
     rIStm   >> nAryLen;
@@ -1575,7 +1575,7 @@ void MetaStretchTextAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
 {
     COMPAT( rIStm );
     rIStm   >> maPt;
-    rIStm.ReadUniOrByteString( maStr, pData->meActualCharSet );
+    maStr = rIStm.ReadUniOrByteString(pData->meActualCharSet);
     rIStm   >> mnWidth;
     rIStm   >> mnIndex;
     rIStm   >> mnLen;
@@ -1668,7 +1668,7 @@ void MetaTextRectAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
 {
     COMPAT( rIStm );
     rIStm   >> maRect;
-    rIStm.ReadUniOrByteString( maStr, pData->meActualCharSet );
+    maStr = rIStm.ReadUniOrByteString(pData->meActualCharSet);
     rIStm   >> mnStyle;
 
     if ( aCompat.GetVersion() >= 2 )                            // Version 2

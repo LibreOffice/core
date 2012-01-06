@@ -147,24 +147,21 @@ sal_Bool SbiImage::Load( SvStream& r, sal_uInt32& nVersion )
           switch( nSign )
         {
             case B_NAME:
-                r.ReadUniOrByteString( aName, eCharSet );
+                aName = r.ReadUniOrByteString(eCharSet);
                 break;
             case B_COMMENT:
-                r.ReadUniOrByteString( aComment, eCharSet );
+                aComment = r.ReadUniOrByteString(eCharSet );
                 break;
             case B_SOURCE:
             {
-                String aTmp;
-                r.ReadUniOrByteString( aTmp, eCharSet );
-                aOUSource = aTmp;
+                aOUSource = r.ReadUniOrByteString(eCharSet);
                 break;
             }
             case B_EXTSOURCE:
             {
                 for( sal_uInt16 j = 0 ; j < nCount ; j++ )
                 {
-                    String aTmp;
-                    r.ReadUniOrByteString( aTmp, eCharSet );
+                    String aTmp = r.ReadUniOrByteString(eCharSet);
                     aOUSource += aTmp;
                 }
                 break;

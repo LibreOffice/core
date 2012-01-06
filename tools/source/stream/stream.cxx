@@ -1489,36 +1489,37 @@ SvStream& SvStream::operator<< ( SvStream& rStream )
 
 // -----------------------------------------------------------------------
 
-SvStream& SvStream::ReadUniOrByteString( UniString& rStr, rtl_TextEncoding eSrcCharSet )
+String SvStream::ReadUniOrByteString( rtl_TextEncoding eSrcCharSet )
 {
     // read UTF-16 string directly from stream ?
     if (eSrcCharSet == RTL_TEXTENCODING_UNICODE)
     {
-        sal_uInt32 nLen;
+        String aStr;
+        sal_uInt32 nLen(0);
         operator>> (nLen);
         if (nLen)
         {
-            if (nLen > STRING_MAXLEN) {
+            if (nLen > STRING_MAXLEN)
+            {
                 SetError(SVSTREAM_GENERALERROR);
-                return *this;
+                return aStr;
             }
-            sal_Unicode *pStr = rStr.AllocBuffer(
+            sal_Unicode *pStr = aStr.AllocBuffer(
                 static_cast< xub_StrLen >(nLen));
             BOOST_STATIC_ASSERT(STRING_MAXLEN <= SAL_MAX_SIZE / 2);
             Read( pStr, nLen << 1 );
 
             if (bSwap)
+            {
                 for (sal_Unicode *pEnd = pStr + nLen; pStr < pEnd; pStr++)
                     SwapUShort(*pStr);
+            }
         }
-        else
-            rStr.Erase();
 
-        return *this;
+        return aStr;
     }
 
-    rStr = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(*this, eSrcCharSet);
-    return *this;
+    return read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(*this, eSrcCharSet);
 }
 
 // -----------------------------------------------------------------------

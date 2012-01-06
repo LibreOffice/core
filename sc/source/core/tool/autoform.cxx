@@ -803,7 +803,7 @@ sal_Bool ScAutoFormatData::Load( SvStream& rStream, const ScAfVersions& rVersion
                 RTL_TEXTENCODING_UTF8);
         }
         else
-            rStream.ReadUniOrByteString( aName, rStream.GetStreamCharSet() );
+            aName = rStream.ReadUniOrByteString( rStream.GetStreamCharSet() );
 
         if( AUTOFORMAT_DATA_ID_552 <= nVer )
         {
@@ -844,7 +844,7 @@ sal_Bool ScAutoFormatData::LoadOld( SvStream& rStream, const ScAfVersions& rVers
     bRet = (rStream.GetError() == 0);
     if (bRet && (nVal == AUTOFORMAT_OLD_DATA_ID))
     {
-        rStream.ReadUniOrByteString( aName, rStream.GetStreamCharSet() );
+        aName = rStream.ReadUniOrByteString( rStream.GetStreamCharSet() );
         sal_Bool b;
         rStream >> b; bIncludeFont = b;
         rStream >> b; bIncludeJustify = b;

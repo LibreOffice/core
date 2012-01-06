@@ -131,13 +131,13 @@ SfxPoolItem*    SvxHyperlinkItem::Create( SvStream &rStrm, sal_uInt16 /*nItemVer
 
     // simple data-types
     // UNICODE: rStrm >> pNew->sName;
-    rStrm.ReadUniOrByteString(pNew->sName, rStrm.GetStreamCharSet());
+    pNew->sName = rStrm.ReadUniOrByteString(rStrm.GetStreamCharSet());
 
     // UNICODE: rStrm >> pNew->sURL;
-    rStrm.ReadUniOrByteString(pNew->sURL, rStrm.GetStreamCharSet());
+    pNew->sURL = rStrm.ReadUniOrByteString(rStrm.GetStreamCharSet());
 
     // UNICODE: rStrm >> pNew->sTarget;
-    rStrm.ReadUniOrByteString(pNew->sTarget, rStrm.GetStreamCharSet());
+    pNew->sTarget = rStrm.ReadUniOrByteString(rStrm.GetStreamCharSet());
 
     rStrm >> nType;
     pNew->eType = (SvxLinkInsertMode) nType;
@@ -149,7 +149,7 @@ SfxPoolItem*    SvxHyperlinkItem::Create( SvStream &rStrm, sal_uInt16 /*nItemVer
     {
         // new data
         // UNICODE: rStrm >> pNew->sIntName;
-        rStrm.ReadUniOrByteString(pNew->sIntName, rStrm.GetStreamCharSet());
+        pNew->sIntName = rStrm.ReadUniOrByteString(rStrm.GetStreamCharSet());
 
         // macro-events
         rStrm >> pNew->nMacroEvents;
@@ -164,10 +164,10 @@ SfxPoolItem*    SvxHyperlinkItem::Create( SvStream &rStrm, sal_uInt16 /*nItemVer
 
             rStrm >> nCurKey;
             // UNICODE: rStrm >> aLibName;
-            rStrm.ReadUniOrByteString(aLibName, rStrm.GetStreamCharSet());
+            aLibName = rStrm.ReadUniOrByteString(rStrm.GetStreamCharSet());
 
             // UNICODE: rStrm >> aMacName;
-            rStrm.ReadUniOrByteString(aMacName, rStrm.GetStreamCharSet());
+            aMacName = rStrm.ReadUniOrByteString(rStrm.GetStreamCharSet());
 
             pNew->SetMacro( nCurKey, SvxMacro( aMacName, aLibName, STARBASIC ) );
         }
@@ -181,10 +181,10 @@ SfxPoolItem*    SvxHyperlinkItem::Create( SvStream &rStrm, sal_uInt16 /*nItemVer
             rStrm >> nCurKey;
 
             // UNICODE: rStrm >> aLibName;
-            rStrm.ReadUniOrByteString(aLibName, rStrm.GetStreamCharSet());
+            aLibName = rStrm.ReadUniOrByteString(rStrm.GetStreamCharSet());
 
             // UNICODE: rStrm >> aMacName;
-            rStrm.ReadUniOrByteString(aMacName, rStrm.GetStreamCharSet());
+            aMacName = rStrm.ReadUniOrByteString(rStrm.GetStreamCharSet());
 
             rStrm >> nScriptType;
 

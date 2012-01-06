@@ -96,8 +96,8 @@ SvStream& operator>>( SvStream& rIStm, TransferableObjectDescriptor& rObjDesc )
     rIStm >> rObjDesc.maSize.Height();
     rIStm >> rObjDesc.maDragStartPos.X();
     rIStm >> rObjDesc.maDragStartPos.Y();
-    rIStm.ReadUniOrByteString( rObjDesc.maTypeName, osl_getThreadTextEncoding() );
-    rIStm.ReadUniOrByteString( rObjDesc.maDisplayName, osl_getThreadTextEncoding() );
+    rObjDesc.maTypeName = rIStm.ReadUniOrByteString(osl_getThreadTextEncoding());
+    rObjDesc.maDisplayName = rIStm.ReadUniOrByteString(osl_getThreadTextEncoding());
     rIStm >> nSig1 >> nSig2;
 
     rObjDesc.mnViewAspect = static_cast< sal_uInt16 >( nViewAspect );

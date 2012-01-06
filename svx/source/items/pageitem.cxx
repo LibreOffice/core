@@ -245,13 +245,12 @@ bool SvxPageItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 
 SfxPoolItem* SvxPageItem::Create( SvStream& rStream, sal_uInt16 ) const
 {
-    XubString sStr;
     sal_uInt8 eType;
     sal_Bool bLand;
     sal_uInt16 nUse;
 
     // UNICODE: rStream >> sStr;
-    rStream.ReadUniOrByteString( sStr, rStream.GetStreamCharSet() );
+    XubString sStr = rStream.ReadUniOrByteString( rStream.GetStreamCharSet() );
 
     rStream >> eType;
     rStream >> bLand;

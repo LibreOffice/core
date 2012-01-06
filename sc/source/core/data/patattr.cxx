@@ -172,7 +172,7 @@ SfxPoolItem* ScPatternAttr::Create( SvStream& rStream, sal_uInt16 /* nVersion */
     {
         short   eFamDummy;
         pStr = new String;
-        rStream.ReadUniOrByteString( *pStr, rStream.GetStreamCharSet() );
+        *pStr = rStream.ReadUniOrByteString( rStream.GetStreamCharSet() );
         rStream >> eFamDummy; // wg. altem Dateiformat
     }
     else

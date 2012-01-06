@@ -93,8 +93,7 @@ Font SvxBulletItem::CreateFont( SvStream& rStream, sal_uInt16 nVer )
     rStream >> nTemp; aFont.SetItalic((FontItalic)nTemp);
 
     // UNICODE: rStream >> aName; aFont.SetName( aName );
-    String aName;
-    rStream.ReadUniOrByteString(aName, rStream.GetStreamCharSet());
+    String aName = rStream.ReadUniOrByteString(rStream.GetStreamCharSet());
     aFont.SetName( aName );
 
     if( nVer == 1 )
@@ -166,10 +165,10 @@ SvxBulletItem::SvxBulletItem( SvStream& rStrm, sal_uInt16 _nWhich ) :
     rStrm >> nScale;
 
     // UNICODE: rStrm >> aPrevText;
-    rStrm.ReadUniOrByteString(aPrevText, rStrm.GetStreamCharSet());
+    aPrevText = rStrm.ReadUniOrByteString(rStrm.GetStreamCharSet());
 
     // UNICODE: rStrm >> aFollowText;
-    rStrm.ReadUniOrByteString(aFollowText, rStrm.GetStreamCharSet());
+    aFollowText = rStrm.ReadUniOrByteString(rStrm.GetStreamCharSet());
 
     nValidMask = 0xFFFF;
 }

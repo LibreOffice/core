@@ -3441,9 +3441,8 @@ SvxBrushItem::SvxBrushItem( SvStream& rStream, sal_uInt16 nVersion,
 
         if ( nDoLoad & LOAD_LINK )
         {
-            String aRel;
             // UNICODE: rStream >> aRel;
-            rStream.ReadUniOrByteString(aRel, rStream.GetStreamCharSet());
+            String aRel = rStream.ReadUniOrByteString(rStream.GetStreamCharSet());
 
             // TODO/MBA: how can we get a BaseURL here?!
             OSL_FAIL("No BaseURL!");
@@ -3456,7 +3455,7 @@ SvxBrushItem::SvxBrushItem( SvStream& rStream, sal_uInt16 nVersion,
         {
             pStrFilter = new String;
             // UNICODE: rStream >> *pStrFilter;
-            rStream.ReadUniOrByteString(*pStrFilter, rStream.GetStreamCharSet());
+            *pStrFilter = rStream.ReadUniOrByteString(rStream.GetStreamCharSet());
         }
 
         rStream >> nPos;

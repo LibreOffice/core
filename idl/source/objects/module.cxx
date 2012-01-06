@@ -65,7 +65,7 @@ void SvMetaModule::Load( SvPersistStream & rStm )
     rStm >> aTypeList;
     rStm >> aAttrList;
     // browser
-    rStm.ReadUniOrByteString( aIdlFileName, rStm.GetStreamCharSet() );
+    aIdlFileName = rStm.ReadUniOrByteString( rStm.GetStreamCharSet() );
     aHelpFileName.setString(read_lenPrefixed_uInt8s_ToOString<sal_uInt16>(rStm));
     aSlotIdFile.setString(read_lenPrefixed_uInt8s_ToOString<sal_uInt16>(rStm));
     aModulePrefix.setString(read_lenPrefixed_uInt8s_ToOString<sal_uInt16>(rStm));

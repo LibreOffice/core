@@ -2001,9 +2001,7 @@ sal_Bool SbJScriptModule::LoadData( SvStream& rStrm, sal_uInt16 nVer )
         return sal_False;
 
     // Get the source string
-    String aTmp;
-    rStrm.ReadUniOrByteString( aTmp, osl_getThreadTextEncoding() );
-    aOUSource = aTmp;
+    aOUSource = rStrm.ReadUniOrByteString( osl_getThreadTextEncoding() );
     return sal_True;
 }
 

@@ -93,9 +93,9 @@ ScDdeLink::ScDdeLink( ScDocument* pD, SvStream& rStream, ScMultipleReadHeader& r
     rHdr.StartEntry();
 
     rtl_TextEncoding eCharSet = rStream.GetStreamCharSet();
-    rStream.ReadUniOrByteString( aAppl, eCharSet );
-    rStream.ReadUniOrByteString( aTopic, eCharSet );
-    rStream.ReadUniOrByteString( aItem, eCharSet );
+    aAppl = rStream.ReadUniOrByteString( eCharSet );
+    aTopic = rStream.ReadUniOrByteString( eCharSet );
+    aItem = rStream.ReadUniOrByteString( eCharSet );
 
     sal_Bool bHasValue;
     rStream >> bHasValue;
