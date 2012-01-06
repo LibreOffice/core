@@ -260,7 +260,6 @@ bool HelpParser::Merge( const ByteString &rSDFFile, const ByteString &rDestinati
     DirEntry aFile( sXmlFile );
 
     XMLFile* xmlfile = ( aParser.Execute( aFile.GetFull() , sOUHelpFile, new XMLFile( '0' ) ) );
-    printf("Dest file %s\n",rDestinationFile.GetBuffer());
     hasNoError = MergeSingleFile( xmlfile , aMergeDataFile , rLanguage , rDestinationFile );
     delete xmlfile;
     if( !sUsedTempFile.EqualsIgnoreCaseAscii( "" ) ){
