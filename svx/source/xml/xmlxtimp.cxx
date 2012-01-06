@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <com/sun/star/document/XGraphicObjectResolver.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>

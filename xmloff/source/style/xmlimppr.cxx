@@ -43,8 +43,6 @@
 #include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 #include "xmloff/xmlerror.hxx"
-#include <tools/debug.hxx>
-
 #include "xmloff/contextid.hxx"
 
 // STL includes

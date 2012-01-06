@@ -28,7 +28,6 @@
 
 
 #define _SVT_WIZDLG_CXX
-#include <tools/debug.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/button.hxx>
 #include <vcl/tabpage.hxx>

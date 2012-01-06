@@ -32,7 +32,6 @@
 #include "tabledatawindow.hxx"
 #include "mousefunction.hxx"
 
-#include <tools/debug.hxx>
 #include <vcl/event.hxx>
 #include <vcl/cursor.hxx>
 

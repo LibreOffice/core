@@ -41,7 +41,6 @@
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmluconv.hxx>
-#include <tools/debug.hxx>
 #include <rtl/ustring.hxx>
 
 

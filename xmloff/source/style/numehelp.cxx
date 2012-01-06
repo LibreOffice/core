@@ -40,7 +40,6 @@
 #include <com/sun/star/util/NumberFormat.hpp>
 #include <sax/tools/converter.hxx>
 #include <rtl/math.hxx>
-#include <tools/debug.hxx>
 #include <rtl/ustrbuf.hxx>
 
 using namespace com::sun::star;

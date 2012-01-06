@@ -27,7 +27,6 @@
  ************************************************************************/
 
 #include <osl/mutex.hxx>
-#include <tools/debug.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <sot/exchange.hxx>
 #include <sot/storage.hxx>

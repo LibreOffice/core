@@ -27,7 +27,6 @@
  ************************************************************************/
 
 
-#include <tools/debug.hxx>
 #include <com/sun/star/drawing/XLayerSupplier.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>

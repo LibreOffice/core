@@ -29,7 +29,6 @@
 #ifndef _EMFWR_HXX
 #define _EMFWR_HXX
 
-#include <tools/debug.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/gdimtf.hxx>

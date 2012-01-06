@@ -30,7 +30,6 @@
 
 #include <memory>
 
-#include <tools/debug.hxx>
 #include <osl/module.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/viewfrm.hxx>

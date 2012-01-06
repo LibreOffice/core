@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include <tools/debug.hxx>
 #include <com/sun/star/xml/AttributeData.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/memory.h>

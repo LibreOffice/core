@@ -37,7 +37,6 @@
 #include <cppuhelper/implbase1.hxx> // helper for implementations
 #include <cppuhelper/implbase3.hxx> // helper for implementations
 #include <cppuhelper/interfacecontainer.h>
-#include <tools/debug.hxx>
 
 #include <vector>
 #include <memory>

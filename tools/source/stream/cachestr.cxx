@@ -27,7 +27,6 @@
  ************************************************************************/
 
 
-#include <tools/debug.hxx>
 #include <tools/stream.hxx>
 #include <tools/cachestr.hxx>
 #include <tools/tempfile.hxx>

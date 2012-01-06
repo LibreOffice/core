@@ -30,7 +30,6 @@
 #include <com/sun/star/xml/sax/XParser.hpp>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <tools/debug.hxx>
 
 #include "typedetectionimport.hxx"
 #include "xmlfiltersettingsdialog.hxx"

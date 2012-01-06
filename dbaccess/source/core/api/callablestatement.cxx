@@ -30,7 +30,6 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/property.hxx>
-#include <tools/debug.hxx>
 #include "dbastrings.hrc"
 #include <rtl/logfile.hxx>
 

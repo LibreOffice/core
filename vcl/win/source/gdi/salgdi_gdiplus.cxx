@@ -31,7 +31,6 @@
 #include <string.h>
 
 #include <svsys.h>
-#include <tools/debug.hxx>
 
 #include <win/wincomp.hxx>
 #include <win/saldata.hxx>

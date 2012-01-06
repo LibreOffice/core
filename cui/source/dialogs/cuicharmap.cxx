@@ -32,7 +32,6 @@
 
 #define _CUI_CHARMAP_CXX_
 #include <tools/shl.hxx>
-#include <tools/debug.hxx>
 #include <vcl/sound.hxx>
 #include <vcl/svapp.hxx>
 #include <svtools/colorcfg.hxx>

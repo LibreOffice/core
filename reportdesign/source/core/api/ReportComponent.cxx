@@ -31,7 +31,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <tools/debug.hxx>
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/awt/FontWidth.hpp>
 #include "ReportControlModel.hxx"

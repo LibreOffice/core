@@ -29,7 +29,6 @@
 #include "headless/svpelement.hxx"
 
 #include <basebmp/scanlineformats.hxx>
-#include <tools/debug.hxx>
 #include <osl/diagnose.h>
 
 #if defined WITH_SVP_LISTENING

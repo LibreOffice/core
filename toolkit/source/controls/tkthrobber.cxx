@@ -30,7 +30,6 @@
 #include "toolkit/helper/property.hxx"
 #include "toolkit/helper/unopropertyarrayhelper.hxx"
 #include <cppuhelper/typeprovider.hxx>
-#include <tools/debug.hxx>
 
 //........................................................................
 namespace toolkit

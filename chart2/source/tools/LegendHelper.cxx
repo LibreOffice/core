@@ -34,7 +34,6 @@
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XLegend.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <tools/debug.hxx>
 
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;

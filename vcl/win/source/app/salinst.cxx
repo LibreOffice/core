@@ -37,7 +37,6 @@
 #include <osl/mutex.hxx>
 
 #include <tools/solarmutex.hxx>
-#include <tools/debug.hxx>
 
 #include <vcl/timer.hxx>
 #include <vcl/apptypes.hxx>

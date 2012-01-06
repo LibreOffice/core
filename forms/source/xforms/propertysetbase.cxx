@@ -35,7 +35,7 @@
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-#include <tools/debug.hxx>
+#include <tools/solar.h>
 
 #include <vector>
 

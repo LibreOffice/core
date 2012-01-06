@@ -35,7 +35,6 @@
 #include <com/sun/star/chart/TimeUnit.hpp>
 
 #include <rtl/math.hxx>
-#include <tools/debug.hxx>
 #include <limits>
 
 //.............................................................................

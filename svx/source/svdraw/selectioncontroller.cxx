@@ -27,7 +27,6 @@
  ************************************************************************/
 
 
-#include <tools/debug.hxx>
 #include <svx/selectioncontroller.hxx>
 
 namespace sdr

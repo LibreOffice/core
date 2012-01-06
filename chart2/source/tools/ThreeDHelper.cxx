@@ -38,8 +38,6 @@
 #include <com/sun/star/chart2/XDiagram.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 
-#include <tools/debug.hxx>
-
 //.............................................................................
 namespace chart
 {

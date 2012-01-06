@@ -55,8 +55,6 @@
 #include <vcl/menu.hxx>
 #include <vcl/svapp.hxx>
 
-#include <tools/debug.hxx>
-
 using ::com::sun::star::uno::RuntimeException;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Type;

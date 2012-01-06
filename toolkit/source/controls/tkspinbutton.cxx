@@ -33,7 +33,6 @@
 
 
 #include <cppuhelper/typeprovider.hxx>
-#include <tools/debug.hxx>
 
 //........................................................................
 namespace toolkit

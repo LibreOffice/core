@@ -34,8 +34,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>
 
-#include <tools/debug.hxx>
-
 #include <sax/tools/converter.hxx>
 
 #include "XMLIndexTemplateContext.hxx"

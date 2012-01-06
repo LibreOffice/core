@@ -28,7 +28,6 @@
 
 
 #define _SVTREEBX_CXX
-#include <tools/debug.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/view/SelectionType.hpp>

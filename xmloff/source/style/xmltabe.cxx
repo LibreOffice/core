@@ -27,7 +27,6 @@
  ************************************************************************/
 
 
-#include <tools/debug.hxx>
 #include <com/sun/star/style/TabStop.hpp>
 #include <com/sun/star/style/TabAlign.hpp>
 #include <rtl/ustrbuf.hxx>

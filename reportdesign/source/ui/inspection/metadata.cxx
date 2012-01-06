@@ -28,7 +28,6 @@
 #include "metadata.hxx"
 #include <svtools/localresaccess.hxx>
 #include "com/sun/star/inspection/XPropertyHandler.hpp"
-#include <tools/debug.hxx>
 #include <comphelper/extract.hxx>
 #include "helpids.hrc"
 #include "RptResId.hrc"

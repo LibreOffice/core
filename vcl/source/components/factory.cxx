@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include <tools/debug.hxx>
 #include <osl/mutex.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <uno/dispatcher.h> // declaration of generic uno interface

@@ -27,7 +27,6 @@
  ************************************************************************/
 
 #include "optiongrouplayouter.hxx"
-#include <tools/debug.hxx>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>

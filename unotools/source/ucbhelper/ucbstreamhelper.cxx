@@ -38,7 +38,6 @@
 
 #include <ucbhelper/contentbroker.hxx>
 #include <ucbhelper/content.hxx>
-#include <tools/debug.hxx>
 #include <unotools/streamwrap.hxx>
 
 using namespace ::com::sun::star::uno;

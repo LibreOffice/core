@@ -31,7 +31,6 @@
 
 #include <limits.h>
 #include <tools/shl.hxx>
-#include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
 #include <editeng/editrids.hrc>
 #include <editeng/paperinf.hxx>

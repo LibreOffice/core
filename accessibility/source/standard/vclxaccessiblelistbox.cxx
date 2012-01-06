@@ -35,7 +35,6 @@
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
-#include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/unohelp.hxx>

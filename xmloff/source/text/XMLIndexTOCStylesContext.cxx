@@ -39,7 +39,6 @@
 #include <xmloff/xmltoken.hxx>
 #include <sax/tools/converter.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <tools/debug.hxx>
 #include <rtl/ustring.hxx>
 
 

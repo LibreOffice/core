@@ -33,8 +33,6 @@
 
 #include <com/sun/star/uno/Any.hxx>
 
-#include <tools/debug.hxx>
-
 #include <sax/tools/converter.hxx>
 
 #include <xmloff/xmluconv.hxx>

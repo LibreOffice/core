@@ -33,7 +33,6 @@
 #include "dbastrings.hrc"
 #include <connectivity/dbtools.hxx>
 #include <comphelper/extract.hxx>
-#include <tools/debug.hxx>
 
 
 using namespace connectivity;

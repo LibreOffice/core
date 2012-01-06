@@ -28,7 +28,6 @@
 
 
 #include <tools/shl.hxx>
-#include <tools/debug.hxx>
 
 #include <com/sun/star/i18n/DirectionProperty.hpp>
 

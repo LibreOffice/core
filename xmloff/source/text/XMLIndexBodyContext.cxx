@@ -32,7 +32,6 @@
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/txtimp.hxx>
-#include <tools/debug.hxx>
 #include <rtl/ustring.hxx>
 
 using ::rtl::OUString;

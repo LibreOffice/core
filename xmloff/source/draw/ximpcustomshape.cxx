@@ -44,7 +44,6 @@
 #include <xmloff/xmluconv.hxx>
 #include "xexptran.hxx"
 #include "xmloff/xmlerror.hxx"
-#include <tools/debug.hxx>
 #include <com/sun/star/drawing/Direction3D.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterType.hpp>

@@ -42,7 +42,6 @@
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/txtimp.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <tools/debug.hxx>
 
 
 

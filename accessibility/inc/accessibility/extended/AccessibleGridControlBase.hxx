@@ -31,7 +31,6 @@
 #define ACCESSIBILITY_EXT_ACCESSIBLEGRIDCONTROLBASE_HXX
 
 #include <svtools/accessibletable.hxx>
-#include <tools/debug.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/gen.hxx>
 #include <vcl/svapp.hxx>

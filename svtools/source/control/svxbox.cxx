@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
 #include <svtools/svxbox.hxx>
 #include <unotools/charclass.hxx>

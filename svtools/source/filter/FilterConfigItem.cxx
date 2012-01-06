@@ -28,7 +28,6 @@
 
 #include <svtools/FilterConfigItem.hxx>
 
-#include <tools/debug.hxx>
 #include <unotools/configmgr.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>

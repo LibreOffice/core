@@ -34,7 +34,6 @@
 #include <svtools/printoptions.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/configitem.hxx>
-#include <tools/debug.hxx>
 #include <vcl/print.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>

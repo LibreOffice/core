@@ -71,7 +71,6 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolygonclipper.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
-#include <tools/debug.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/localfilehelper.hxx>

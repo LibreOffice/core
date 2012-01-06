@@ -41,7 +41,6 @@
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <sax/tools/converter.hxx>
-#include <tools/debug.hxx>
 #include <rtl/ustring.hxx>
 
 

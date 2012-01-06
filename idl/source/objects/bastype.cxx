@@ -27,8 +27,6 @@
  ************************************************************************/
 
 
-#include <tools/debug.hxx>
-
 #include <limits.h>
 #include <ctype.h>
 #include <bastype.hxx>

@@ -32,8 +32,6 @@
 
 #include <rtl/strbuf.hxx>
 
-#include <tools/debug.hxx>
-
 #include <object.hxx>
 #include <globals.hxx>
 #include <database.hxx>

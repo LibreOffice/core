@@ -33,7 +33,6 @@
 
 #include <comphelper/accessiblewrapper.hxx>
 #include <osl/mutex.hxx>
-#include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
 
 #include <svx/AccessibleTableShape.hxx>

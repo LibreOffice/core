@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include <tools/debug.hxx>
 #include <svx/svdobj.hxx>
 #include "shapelist.hxx"
 

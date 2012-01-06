@@ -27,8 +27,6 @@
  ************************************************************************/
 
 
-#include <tools/debug.hxx>
-
 #include <svl/listener.hxx>
 #include <svl/listeneriter.hxx>
 #include <svl/broadcast.hxx>

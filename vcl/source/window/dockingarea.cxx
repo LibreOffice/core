@@ -27,8 +27,6 @@
  ************************************************************************/
 
 
-#include <tools/debug.hxx>
-
 #include <vcl/dockingarea.hxx>
 #include <vcl/syswin.hxx>
 #include <vcl/menu.hxx>

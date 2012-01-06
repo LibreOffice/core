@@ -35,7 +35,6 @@
 #include <vcl/scrbar.hxx>
 #include <map>
 #include <tools/shl.hxx>
-#include <tools/debug.hxx>
 #include "svx/svxdllapi.h"
 
 // define ----------------------------------------------------------------

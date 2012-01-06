@@ -38,7 +38,6 @@
 #include <windows.h>
 #endif
 
-#include <tools/debug.hxx>
 #include <tools/fsys.hxx>
 #include <tools/stream.hxx>
 

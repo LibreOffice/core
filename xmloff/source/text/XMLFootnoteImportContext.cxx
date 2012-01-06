@@ -31,7 +31,6 @@
 #include "XMLFootnoteImportContext.hxx"
 
 #include <rtl/ustring.hxx>
-#include <tools/debug.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/txtimp.hxx>
 #include <xmloff/nmspmap.hxx>

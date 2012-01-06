@@ -32,7 +32,6 @@
 #include <stack>
 #include <cppuhelper/weak.hxx>
 #include <rtl/ustring.hxx>
-#include <tools/debug.hxx>
 #include <tools/stream.hxx>
 #include <tools/string.hxx>
 #include <vcl/salbtype.hxx>

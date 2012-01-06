@@ -41,9 +41,6 @@
 #include <com/sun/star/xsd/WhiteSpaceTreatment.hpp>
 #include <com/sun/star/xforms/XDataTypeRepository.hpp>
 
-#include <tools/debug.hxx>
-
-
 using rtl::OUString;
 using com::sun::star::uno::Reference;
 using com::sun::star::uno::Any;

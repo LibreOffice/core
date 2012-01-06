@@ -28,7 +28,6 @@
 
 
 #include <tools/time.hxx>
-#include <tools/debug.hxx>
 
 #include <vcl/svapp.hxx>
 #include <vcl/timer.hxx>

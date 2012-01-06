@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include <tools/debug.hxx>
 #include <svl/cntnrsrt.hxx>
 #include <tools/fontenum.hxx>
 #include "xmloff/xmlnmspe.hxx"

@@ -33,8 +33,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 
-#include <tools/debug.hxx>
-
 #include <xmloff/xmlmetai.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/nmspmap.hxx>

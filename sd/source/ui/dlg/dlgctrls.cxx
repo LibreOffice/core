@@ -27,8 +27,6 @@
  ************************************************************************/
 
 
-#include <tools/debug.hxx>
-
 #include "strings.hrc"
 #include "dlgctrls.hxx"
 #include "sdresid.hxx"

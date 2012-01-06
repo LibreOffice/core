@@ -51,7 +51,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/instance.hxx>
 #include <cppuhelper/weak.hxx>
-#include <tools/debug.hxx>
 
 //_________________________________________________________________________________________________________________
 //  Defines

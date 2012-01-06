@@ -42,7 +42,6 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlmetae.hxx>
 #include "PropertySetMerger.hxx"
-#include <tools/debug.hxx>
 
 #include <unotools/docinfohelper.hxx>
 

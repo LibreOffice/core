@@ -33,8 +33,6 @@
 // header for define DELETEZ
 #include <tools/solar.h>
 
-#include <tools/debug.hxx>
-
 //.............................................................................
 namespace chart
 {

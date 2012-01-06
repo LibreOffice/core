@@ -30,7 +30,6 @@
 #include <com/sun/star/awt/MouseEvent.hpp>
 #include <com/sun/star/awt/KeyModifier.hpp>
 #include <com/sun/star/awt/MouseButton.hpp>
-#include <tools/debug.hxx>
 #include <vcl/event.hxx>
 
 /** inits this vcl KeyEvent with all settings from the given awt event **/

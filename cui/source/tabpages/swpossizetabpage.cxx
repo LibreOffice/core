@@ -33,7 +33,6 @@
 #include <svx/anchorid.hxx>
 #include <svl/aeitem.hxx>
 #include <svx/swframevalidation.hxx>
-#include <tools/debug.hxx>
 #include <cuires.hrc>
 #include <swpossizetabpage.hrc>
 #include <svx/htmlmode.hxx>

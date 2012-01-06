@@ -29,7 +29,6 @@
 #ifndef FILEDLG2_HXX
 #define FILEDLG2_HXX
 
-#include <tools/debug.hxx>
 #include <tools/fsys.hxx>
 #include <vcl/button.hxx>
 #include <vcl/unohelp.hxx>

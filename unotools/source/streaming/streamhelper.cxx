@@ -27,7 +27,6 @@
  ************************************************************************/
 
 #include <unotools/streamhelper.hxx>
-#include <tools/debug.hxx>
 
 namespace utl
 {

@@ -40,7 +40,6 @@
 #ifndef __RTL_USTRING_
 #include <rtl/ustring.hxx>
 #endif
-#include <tools/debug.hxx>
 #include <tools/stream.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase2.hxx>

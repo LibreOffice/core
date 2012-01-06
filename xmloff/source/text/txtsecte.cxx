@@ -28,7 +28,6 @@
 
 
 #include <xmloff/txtparae.hxx>
-#include <tools/debug.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 

@@ -33,7 +33,6 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/util/XLocalizedAliases.hpp>
 #include <com/sun/star/lang/XLocalizable.hpp>
-#include <tools/debug.hxx>
 
 #include "bibmod.hxx"
 #include "bibresid.hxx"

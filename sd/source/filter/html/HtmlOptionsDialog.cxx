@@ -54,7 +54,6 @@ using namespace com::sun::star::ui::dialogs;
 
 #include "pres.hxx"
 #include "sdabstdlg.hxx"
-#include "tools/debug.hxx"
 class SdHtmlOptionsDialog : public cppu::WeakImplHelper5
 <
     XExporter,

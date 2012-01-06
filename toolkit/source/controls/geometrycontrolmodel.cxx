@@ -35,7 +35,6 @@
 #include <comphelper/sequence.hxx>
 #include <toolkit/controls/eventcontainer.hxx>
 #include <toolkit/helper/property.hxx>
-#include <tools/debug.hxx>
 #include <algorithm>
 #include <functional>
 #include <comphelper/sequence.hxx>

@@ -32,7 +32,6 @@
 #include <com/sun/star/plugin/PluginMode.hpp>
 #include <com/sun/star/awt/XControl.hpp>
 
-#include <tools/debug.hxx>
 #include <rtl/ustring.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <svtools/miscopt.hxx>

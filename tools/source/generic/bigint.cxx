@@ -32,7 +32,6 @@
 
 #include <tools/bigint.hxx>
 #include <tools/string.hxx>
-#include <tools/debug.hxx>
 
 #include <string.h>
 #include <ctype.h>

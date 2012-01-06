@@ -28,7 +28,6 @@
 
 
 #include <tools/urlobj.hxx>
-#include <tools/debug.hxx>
 
 #include <unotools/localfilehelper.hxx>
 #include <unotools/ucbstreamhelper.hxx>

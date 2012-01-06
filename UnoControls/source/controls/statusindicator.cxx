@@ -38,7 +38,6 @@
 #include <com/sun/star/awt/InvalidateStyle.hpp>
 #include <com/sun/star/awt/WindowAttribute.hpp>
 #include <cppuhelper/typeprovider.hxx>
-#include <tools/debug.hxx>
 
 //____________________________________________________________________________________________________________
 //  includes of my project

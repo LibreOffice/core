@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include <tools/debug.hxx>
 #include <rtl/ustring.hxx>
 #include <svl/svarray.hxx>
 #include <xmloff/xmltkmap.hxx>

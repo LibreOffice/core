@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include <tools/debug.hxx>
 #include <com/sun/star/io/XActiveDataControl.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/xml/sax/XParser.hpp>

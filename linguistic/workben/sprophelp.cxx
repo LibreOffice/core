@@ -32,7 +32,6 @@
 
 #include "sprophelp.hxx"
 #include "linguistic/lngprops.hxx"
-#include <tools/debug.hxx>
 
 #include <com/sun/star/linguistic2/LinguServiceEvent.hpp>
 #include <com/sun/star/linguistic2/LinguServiceEventFlags.hpp>

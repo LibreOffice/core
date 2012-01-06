@@ -28,7 +28,6 @@
 
 
 #include "FunctionHelper.hxx"
-#include <tools/debug.hxx>
 
 // =============================================================================
 namespace rptui

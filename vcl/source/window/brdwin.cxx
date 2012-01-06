@@ -44,8 +44,6 @@
 #include <vcl/edit.hxx>
 #include <vcl/metric.hxx>
 
-#include <tools/debug.hxx>
-
 using namespace ::com::sun::star::uno;
 
 // useful caption height for title bar buttons

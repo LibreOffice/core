@@ -46,8 +46,6 @@
 #include <com/sun/star/util/XUpdatable.hpp>
 #include <com/sun/star/xforms/XModel.hpp>
 
-#include <tools/debug.hxx>
-
 
 using rtl::OUString;
 using com::sun::star::xml::sax::XAttributeList;

@@ -27,8 +27,6 @@
  ************************************************************************/
 
 
-#include <tools/debug.hxx>
-
 #include <vcl/bitmap.hxx>
 
 #include <svdata.hxx>

@@ -50,8 +50,6 @@
 #include <osl/module.h>
 #include <osl/mutex.hxx>
 
-#include <tools/debug.hxx>
-
 #include "unx/kde/kdedata.hxx"
 #include "unx/i18n_im.hxx"
 #include "unx/i18n_xkb.hxx"

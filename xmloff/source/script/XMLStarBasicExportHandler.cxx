@@ -29,7 +29,6 @@
 #include "XMLStarBasicExportHandler.hxx"
 
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <tools/debug.hxx>
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/nmspmap.hxx>

@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include <tools/debug.hxx>
 #include "STLPropertySet.hxx"
 
 using namespace com::sun::star::beans;

@@ -42,7 +42,6 @@
 
 // header for define RET_OK
 #include <vcl/msgbox.hxx>
-#include <tools/debug.hxx>
 
 //for auto_ptr
 #include <memory>

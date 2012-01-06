@@ -29,7 +29,6 @@
 #define _MSOCXIMEX_HXX
 
 #include <sot/storage.hxx>
-#include <tools/debug.hxx>
 
 #include "filter/msfilter/msfilterdllapi.h"
 

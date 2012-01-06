@@ -27,7 +27,6 @@
  ************************************************************************/
 
 
-#include <tools/debug.hxx>
 #include <tools/stream.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/window.hxx>

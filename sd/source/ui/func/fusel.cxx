@@ -47,7 +47,6 @@
 #include <sfx2/dispatch.hxx>
 #include <tools/urlobj.hxx>
 #include <sfx2/docfile.hxx>
-#include <tools/debug.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/flditem.hxx>
 

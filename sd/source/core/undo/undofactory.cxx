@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-#include <tools/debug.hxx>
-
 #include "undo/undofactory.hxx"
 #include "undo/undoobjects.hxx"
 

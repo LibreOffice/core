@@ -29,7 +29,6 @@
 
 #define _SOT_OBJECT_CXX
 
-#include <tools/debug.hxx>
 #include <sot/object.hxx>
 #include <sot/factory.hxx>
 

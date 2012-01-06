@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include <tools/debug.hxx>
 #include "undo/undomanager.hxx"
 
 using namespace sd;

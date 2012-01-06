@@ -27,7 +27,6 @@
  ************************************************************************/
 
 #include <tools/shl.hxx>
-#include <tools/debug.hxx>
 #include <vcl/msgbox.hxx>
 
 #include <cuires.hrc>

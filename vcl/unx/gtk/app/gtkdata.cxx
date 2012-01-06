@@ -53,7 +53,6 @@
 #include <osl/thread.h>
 #include <osl/process.h>
 
-#include <tools/debug.hxx>
 #include "unx/i18n_im.hxx"
 #include "unx/i18n_xkb.hxx"
 #include <unx/wmadaptor.hxx>

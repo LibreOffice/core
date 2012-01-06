@@ -27,7 +27,6 @@
  ************************************************************************/
 
 
-#include <tools/debug.hxx>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 
 #include <cppuhelper/factory.hxx>

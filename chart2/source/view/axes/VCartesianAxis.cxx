@@ -44,7 +44,6 @@
 
 #include <rtl/math.hxx>
 #include <tools/color.hxx>
-#include <tools/debug.hxx>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <editeng/unoprnms.hxx>

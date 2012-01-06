@@ -31,7 +31,6 @@
 
 #include <osl/file.hxx>
 #include <tools/tempfile.hxx>
-#include <tools/debug.hxx>
 
 #include "sot/stg.hxx"
 #include "stgelem.hxx"

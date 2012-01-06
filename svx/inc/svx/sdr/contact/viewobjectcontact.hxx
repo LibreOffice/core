@@ -32,7 +32,6 @@
 #include <sal/types.h>
 
 #include <vector>
-#include <tools/debug.hxx>
 #include <tools/gen.hxx>
 #include "svx/svxdllapi.h"
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>

@@ -47,7 +47,6 @@
 
 #include <osl/diagnose.h>
 #include <rtl/process.h>
-#include <tools/debug.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/localfilehelper.hxx>

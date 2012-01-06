@@ -27,8 +27,6 @@
  ************************************************************************/
 
 
-#include <tools/debug.hxx>
-
 #include "vcl/svapp.hxx"
 #include "vcl/font.hxx"
 

@@ -35,7 +35,6 @@
 #include <com/sun/star/container/XSet.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <osl/diagnose.h>
-#include <tools/debug.hxx>
 
 #include <cppuhelper/factory.hxx>
 #include <uno/lbnames.h>

@@ -29,7 +29,6 @@
 #include "formcontrolfont.hxx"
 #include "property.hrc"
 #include "property.hxx"
-#include <tools/debug.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/types.hxx>
 #include <tools/color.hxx>

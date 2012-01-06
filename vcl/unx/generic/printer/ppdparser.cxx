@@ -38,7 +38,6 @@
 #include "vcl/helper.hxx"
 #include "vcl/svapp.hxx"
 #include "cupsmgr.hxx"
-#include "tools/debug.hxx"
 #include "tools/urlobj.hxx"
 #include "tools/stream.hxx"
 #include "tools/zcodec.hxx"

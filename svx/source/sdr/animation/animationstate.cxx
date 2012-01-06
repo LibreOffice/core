@@ -27,7 +27,6 @@
  ************************************************************************/
 
 #include <svx/sdr/animation/animationstate.hxx>
-#include <tools/debug.hxx>
 #include <svx/sdr/contact/viewobjectcontact.hxx>
 #include <svx/sdr/animation/objectanimator.hxx>
 #include <svx/sdr/contact/objectcontact.hxx>

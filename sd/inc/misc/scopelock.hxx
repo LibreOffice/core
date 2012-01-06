@@ -29,6 +29,8 @@
 #ifndef _SD_SCOPELOCK_HXX
 #define _SD_SCOPELOCK_HXX
 
+#include <sal/types.h>
+
 namespace sd
 {
 

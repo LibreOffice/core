@@ -54,7 +54,6 @@
 #include <rtl/strbuf.hxx>
 #include <osl/file.hxx>
 #include <osl/thread.h>
-#include <tools/debug.hxx>
 #include <rtl/logfile.hxx>
 
 #include "seinitializer_nssimpl.hxx"

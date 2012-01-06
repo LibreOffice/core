@@ -27,7 +27,6 @@
  ************************************************************************/
 
 #include <com/sun/star/uno/Reference.h>
-#include <tools/debug.hxx>
 #include <osl/mutex.hxx>
 
 #include "nthesdta.hxx"

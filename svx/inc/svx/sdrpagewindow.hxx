@@ -29,7 +29,6 @@
 #ifndef _SDRPAGEWINDOW_HXX
 #define _SDRPAGEWINDOW_HXX
 
-#include <tools/debug.hxx>
 #include <com/sun/star/awt/XWindowListener.hpp>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/awt/XControlContainer.hpp>

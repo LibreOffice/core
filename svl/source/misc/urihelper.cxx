@@ -57,7 +57,6 @@
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
-#include <tools/debug.hxx>
 #include <tools/inetmime.hxx>
 #include <ucbhelper/contentbroker.hxx>
 #include <unotools/charclass.hxx>

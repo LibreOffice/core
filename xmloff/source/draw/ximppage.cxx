@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-#include <tools/debug.hxx>
-
 #include <com/sun/star/geometry/RealPoint2D.hpp>
 #include <com/sun/star/text/XTextCursor.hpp>
 #include <com/sun/star/util/DateTime.hpp>

@@ -30,7 +30,6 @@
 #include <string.h>
 #include <stdio.h>
 #include <tools/stream.hxx>
-#include <tools/debug.hxx>
 #include <vcl/outdev.hxx>
 #include <svtools/filter.hxx>
 #include "FilterConfigCache.hxx"

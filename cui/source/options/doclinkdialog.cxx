@@ -32,7 +32,6 @@
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 
 #include <cuires.hrc>
-#include <tools/debug.hxx>
 #include <svl/filenotation.hxx>
 #include <vcl/msgbox.hxx>
 #include <ucbhelper/content.hxx>

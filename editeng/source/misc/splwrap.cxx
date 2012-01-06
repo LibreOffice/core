@@ -31,7 +31,6 @@
 #include <vcl/wrkwin.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/msgbox.hxx>
-#include <tools/debug.hxx>
 #include <svtools/langtab.hxx>
 
 #ifndef __RSC

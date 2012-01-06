@@ -35,7 +35,6 @@
 #include "dialmgr.hxx"
 
 #include <sfx2/tabdlg.hxx>
-#include <tools/debug.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/button.hxx>

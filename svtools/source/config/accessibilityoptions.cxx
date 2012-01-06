@@ -31,7 +31,6 @@
 #include "configitems/accessibilityoptions_const.hxx"
 
 #include <unotools/configmgr.hxx>
-#include <tools/debug.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 

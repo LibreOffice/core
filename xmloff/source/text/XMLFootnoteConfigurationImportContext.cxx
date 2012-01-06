@@ -32,8 +32,6 @@
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 
-#include <tools/debug.hxx>
-
 #include <sax/tools/converter.hxx>
 
 #include <xmloff/nmspmap.hxx>

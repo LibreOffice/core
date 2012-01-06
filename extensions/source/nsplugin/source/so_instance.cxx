@@ -37,7 +37,6 @@
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 #include <com/sun/star/presentation/XPresentation.hpp>
 #include <com/sun/star/presentation/XPresentationSupplier.hpp>
-#include <tools/debug.hxx>
 #include <vcl/window.hxx>
 #include <rtl/textenc.h>
 #include <rtl/locale.h>

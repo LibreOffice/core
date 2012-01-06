@@ -35,8 +35,6 @@
 #include <comphelper/processfactory.hxx>
 
 #include <tools/stream.hxx>
-#include <tools/debug.hxx>
-#include <tools/stream.hxx>
 
 #include <vcl/graph.hxx>
 #include <vcl/svapp.hxx>

@@ -27,7 +27,6 @@
  ************************************************************************/
 
 #include <string.h>
-#include <tools/debug.hxx>
 #include <rtl/instance.hxx>
 #include "psputil.hxx"
 

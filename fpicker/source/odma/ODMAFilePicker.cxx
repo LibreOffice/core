@@ -30,8 +30,6 @@
 
 #include "ODMAFilePicker.hxx"
 
-#include <tools/debug.hxx>
-
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/StringPair.hpp>
 #include <com/sun/star/ui/dialogs/FilePreviewImageFormats.hpp>

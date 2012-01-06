@@ -47,7 +47,6 @@
 #include <com/sun/star/presentation/XPresentationSupplier.hpp>
 #include <com/sun/star/document/XEventBroadcaster.hpp>
 #include <boost/bind.hpp>
-#include <tools/debug.hxx>
 
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 

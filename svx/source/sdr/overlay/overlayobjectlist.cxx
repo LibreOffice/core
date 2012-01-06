@@ -28,7 +28,6 @@
 
 #include <svx/sdr/overlay/overlayobjectlist.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
-#include <tools/debug.hxx>
 #include <vcl/outdev.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 

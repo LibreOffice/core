@@ -44,7 +44,6 @@
 #include <xmloff/maptype.hxx>
 #include <xmloff/xmlnumi.hxx>
 #include <xmloff/txtprmap.hxx>
-#include <tools/debug.hxx>
 
 #include <vector>
 

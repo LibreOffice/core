@@ -29,7 +29,6 @@
 #include "abpfinalpage.hxx"
 #include "addresssettings.hxx"
 #include "abspilot.hxx"
-#include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <unotools/pathoptions.hxx>

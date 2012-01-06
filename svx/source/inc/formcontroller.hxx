@@ -84,7 +84,6 @@
 #include <comphelper/stl_types.hxx>
 #include <connectivity/sqlparse.hxx>
 #include <cppuhelper/propshlp.hxx>
-#include <tools/debug.hxx>
 #include <vcl/timer.hxx>
 
 #if ! defined(INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_22)

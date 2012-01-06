@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>

@@ -36,7 +36,6 @@
 #include "SchXMLTools.hxx"
 #include "transporttypes.hxx"
 #include "XMLStringBufferImportContext.hxx"
-#include <tools/debug.hxx>
 #include <rtl/math.hxx>
 #include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>

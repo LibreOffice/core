@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include <tools/debug.hxx>
 #include <sot/formats.hxx>
 #include <tools/stream.hxx>
 

@@ -28,7 +28,6 @@
 
 
 #define _SOT_FORMATS_INCLUDE_SYSTEMFORMATS
-#include <tools/debug.hxx>
 #include <tools/solar.h>
 
 #include <sot/exchange.hxx>

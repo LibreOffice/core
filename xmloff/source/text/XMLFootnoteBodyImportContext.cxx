@@ -31,7 +31,6 @@
 #ifndef _RTL_USTRING
 #include <rtl/ustring.hxx>
 #endif
-#include <tools/debug.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/txtimp.hxx>
 #include <xmloff/nmspmap.hxx>

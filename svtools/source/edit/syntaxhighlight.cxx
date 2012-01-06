@@ -31,7 +31,6 @@
 
 #include <unotools/charclass.hxx>
 #include <comphelper/string.hxx>
-#include <tools/debug.hxx>
 
 // ##########################################################################
 // ATTENTION: all these words needs to be in small caps

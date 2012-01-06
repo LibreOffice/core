@@ -39,7 +39,6 @@
 
 #include <osl/diagnose.h>
 #include <salhelper/simplereferenceobject.hxx>
-#include <tools/debug.hxx>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/beans/MethodConcept.hpp>
 #include <com/sun/star/beans/PropertyConcept.hpp>

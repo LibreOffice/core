@@ -36,7 +36,6 @@
 #include <comphelper/processfactory.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/streamwrap.hxx>
-#include <tools/debug.hxx>
 #include "comphelper/anytostring.hxx"
 #include "cppuhelper/exc_hlp.hxx"
 #include "rtl/ref.hxx"

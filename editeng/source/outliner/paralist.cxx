@@ -33,6 +33,7 @@
 #include <editeng/numdef.hxx>
 
 #include <osl/diagnose.h>
+#include <tools/debug.hxx>
 
 DBG_NAME(Paragraph)
 

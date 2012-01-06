@@ -29,8 +29,6 @@
 #include "tablegeometry.hxx"
 #include "tablecontrol_impl.hxx"
 
-#include <tools/debug.hxx>
-
 //......................................................................................................................
 namespace svt { namespace table
 {

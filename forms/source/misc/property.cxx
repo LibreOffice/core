@@ -31,7 +31,6 @@
 
 #include "property.hrc"
 #include <cppuhelper/queryinterface.hxx>
-#include <tools/debug.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
 #include <algorithm>

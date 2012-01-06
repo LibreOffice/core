@@ -27,7 +27,6 @@
  ************************************************************************/
 
 
-#include <tools/debug.hxx>
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/presentation/AnimationEffect.hpp>

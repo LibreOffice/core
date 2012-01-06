@@ -31,7 +31,6 @@
 
 #include <cppuhelper/weak.hxx>
 #include <rtl/ustring.hxx>
-#include <tools/debug.hxx>
 #include <tools/stream.hxx>
 #include <cppuhelper/implbase1.hxx>
 

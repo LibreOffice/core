@@ -27,8 +27,6 @@
  ************************************************************************/
 
 
-#include <tools/debug.hxx>
-
 #include <vcl/wrkwin.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/introwin.hxx>

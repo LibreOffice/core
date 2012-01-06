@@ -30,7 +30,6 @@
 
 #include <tools/gen.hxx>
 #include <tools/string.hxx>
-#include <tools/debug.hxx>
 
 #include <svl/brdcst.hxx>
 

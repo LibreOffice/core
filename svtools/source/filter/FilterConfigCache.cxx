@@ -28,7 +28,6 @@
 
 #include "FilterConfigCache.hxx"
 #include <svtools/filter.hxx>
-#include <tools/debug.hxx>
 #include <com/sun/star/uno/Any.h>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/uno/Exception.hpp>

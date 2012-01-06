@@ -42,7 +42,6 @@
 
 #include <comphelper/processfactory.hxx>
 
-#include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
 
 #include <com/sun/star/io/XActiveDataSource.hpp>

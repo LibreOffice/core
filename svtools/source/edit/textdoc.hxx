@@ -33,7 +33,6 @@
 #include <svtools/textdata.hxx>
 #include <svtools/txtattr.hxx>
 
-#include <tools/debug.hxx>
 #include <tools/string.hxx>
 
 typedef TextCharAttrib* TextCharAttribPtr;

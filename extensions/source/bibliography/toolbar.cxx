@@ -32,7 +32,6 @@
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <datman.hxx>
-#include <tools/debug.hxx>
 #include <svx/svxids.hrc>
 #include <svtools/miscopt.hxx>
 #include <svtools/imgdef.hxx>

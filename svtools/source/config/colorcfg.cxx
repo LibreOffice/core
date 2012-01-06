@@ -32,7 +32,6 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <tools/debug.hxx>
 #include <unotools/configitem.hxx>
 #include <unotools/configpathes.hxx>
 #include <com/sun/star/uno/Sequence.h>

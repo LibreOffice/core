@@ -32,7 +32,6 @@
 #include "convert.hxx"
 
 #include <com/sun/star/xsd/WhiteSpaceTreatment.hpp>
-#include <tools/debug.hxx>
 #include <tools/datetime.hxx>
 #include <rtl/math.hxx>
 

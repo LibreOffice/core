@@ -27,7 +27,6 @@
  ************************************************************************/
 
 // include ---------------------------------------------------------------
-#include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/msgbox.hxx>
 #include <sfx2/filedlghelper.hxx>

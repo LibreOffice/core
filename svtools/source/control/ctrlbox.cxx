@@ -28,7 +28,6 @@
 
 
 #define _CTRLBOX_CXX
-#include <tools/debug.hxx>
 #include <tools/stream.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/field.hxx>

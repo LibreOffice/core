@@ -36,7 +36,6 @@
 #include <com/sun/star/xml/sax/XParser.hpp>
 #include <unotools/configmgr.hxx>
 #include <unotools/configitem.hxx>
-#include <tools/debug.hxx>
 
 #include <osl/mutex.hxx>
 #include <tools/string.hxx>

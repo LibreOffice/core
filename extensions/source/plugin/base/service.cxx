@@ -42,7 +42,6 @@
 #include <cstdarg>
 
 #include <plugin/impl.hxx>
-#include <tools/debug.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/container/XSet.hpp>

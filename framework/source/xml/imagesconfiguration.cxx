@@ -47,7 +47,6 @@
 
 #include <comphelper/processfactory.hxx>
 #include <unotools/streamwrap.hxx>
-#include <tools/debug.hxx>
 
 //_________________________________________________________________________________________________________________
 //  namespace

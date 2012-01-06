@@ -47,7 +47,6 @@
 /** === end UNO includes === **/
 
 #include <rtl/ustring.hxx>
-#include <tools/debug.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/implbase3.hxx>

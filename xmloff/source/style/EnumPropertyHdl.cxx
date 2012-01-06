@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include <tools/debug.hxx>
 #include <xmloff/EnumPropertyHdl.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <comphelper/extract.hxx>

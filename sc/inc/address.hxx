@@ -32,7 +32,6 @@
 #include <tools/stream.hxx>
 #include <tools/string.hxx>
 #include <tools/solar.h>
-#include <tools/debug.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <osl/endian.h>
 

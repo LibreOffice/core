@@ -35,8 +35,6 @@
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmluconv.hxx>
 
-#include <tools/debug.hxx>
-
 #include <com/sun/star/chart/ChartLegendPosition.hpp>
 #include <com/sun/star/chart/ChartLegendExpansion.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>

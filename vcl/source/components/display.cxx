@@ -39,7 +39,6 @@
 #include <cppuhelper/implbase4.hxx>
 
 #include <vector>
-#include <tools/debug.hxx>
 
 
 using ::rtl::OUString;

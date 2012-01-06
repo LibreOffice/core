@@ -29,7 +29,6 @@
 
 #define _TASKBAR_CXX
 
-#include <tools/debug.hxx>
 #include <vcl/floatwin.hxx>
 
 #include <svtools/taskbar.hxx>

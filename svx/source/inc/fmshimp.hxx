@@ -63,7 +63,6 @@
 #include "svx/fmtools.hxx"
 #include "svx/fmsrccfg.hxx"
 #include <osl/mutex.hxx>
-#include <tools/debug.hxx>
 #include <cppuhelper/component.hxx>
 #include <comphelper/stl_types.hxx>
 #include <comphelper/container.hxx>

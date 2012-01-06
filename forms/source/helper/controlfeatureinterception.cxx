@@ -29,10 +29,6 @@
 #include "controlfeatureinterception.hxx"
 #include "urltransformer.hxx"
 
-/** === begin UNO includes === **/
-/** === end UNO includes === **/
-#include <tools/debug.hxx>
-
 //........................................................................
 namespace frm
 {

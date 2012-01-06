@@ -32,7 +32,6 @@
 #include "stgole.hxx"
 #include "sot/storinfo.hxx"     // Read/WriteClipboardFormat()
 
-#include <tools/debug.hxx>
 #if defined(_MSC_VER) && (_MSC_VER>=1400)
 #pragma warning(disable: 4342)
 #endif

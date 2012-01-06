@@ -56,7 +56,6 @@
 #include <i18npool/mslangid.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/resmgr.hxx>
-#include <tools/debug.hxx>
 #include <tools/wldcrd.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/bootstrap.hxx>

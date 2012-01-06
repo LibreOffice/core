@@ -31,7 +31,6 @@
 #define ACCESSIBILITY_EXT_ACCESSIBLEBROWSEBOXBASE_HXX
 
 #include <svtools/AccessibleBrowseBoxObjType.hxx>
-#include <tools/debug.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/gen.hxx>
 #include <vcl/svapp.hxx>

@@ -37,7 +37,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/instance.hxx>
 #include <sal/macros.h>
-#include <tools/debug.hxx>
 
 #if OSL_DEBUG_LEVEL > 1
 #include <stdio.h>

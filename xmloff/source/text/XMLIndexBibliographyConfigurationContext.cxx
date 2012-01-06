@@ -38,7 +38,6 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <sax/tools/converter.hxx>
-#include <tools/debug.hxx>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>

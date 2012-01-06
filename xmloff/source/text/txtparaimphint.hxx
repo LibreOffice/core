@@ -30,7 +30,6 @@
 
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <tools/debug.hxx>
 #include <svl/svarray.hxx>
 #include <xmloff/xmlimp.hxx>
 #include "XMLTextFrameContext.hxx"

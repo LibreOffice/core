@@ -35,7 +35,6 @@
 #include <tools/urlobj.hxx>
 #include <osl/file.h>
 #include <vcl/stdtext.hxx>
-#include <tools/debug.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;

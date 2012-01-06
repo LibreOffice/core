@@ -31,7 +31,6 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 
-#include <tools/debug.hxx>
 #include <vcl/stdtext.hxx>
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>

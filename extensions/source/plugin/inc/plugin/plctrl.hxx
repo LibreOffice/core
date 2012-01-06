@@ -28,8 +28,6 @@
 #ifndef __PLCTRL_HXX
 #define __PLCTRL_HXX
 
-#include <tools/debug.hxx>
-
 #include <cppuhelper/weak.hxx>
 #include <plugin/multiplx.hxx>
 #include <com/sun/star/beans/PropertyValues.hpp>
