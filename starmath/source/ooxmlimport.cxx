@@ -191,6 +191,9 @@ OUString SmOoxmlImport::handleAcc()
     OUString acc;
     switch( accChr )
     {
+        case MS_BAR:
+            acc = STR( "bar" );
+            break;
         case MS_CHECK:
             acc = STR( "check" );
             break;
@@ -256,7 +259,7 @@ OUString SmOoxmlImport::handleBar()
     OUString e = readOMathArgInElement( M_TOKEN( e ));
     stream.ensureClosingTag( M_TOKEN( bar ));
     if( topbot == top )
-        return STR( "bar {" ) + e + STR( "}" );
+        return STR( "overline {" ) + e + STR( "}" );
     else
         return STR( "underline {" ) + e + STR( "}" );
 }
