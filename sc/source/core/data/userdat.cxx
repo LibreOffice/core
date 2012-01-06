@@ -70,7 +70,7 @@ ScDrawObjData::ScDrawObjData() :
     SdrObjUserData( SC_DRAWLAYER, SC_UD_OBJDATA, 0 ),
     maStart( ScAddress::INITIALIZE_INVALID ),
     maEnd( ScAddress::INITIALIZE_INVALID ),
-    mbNote( false )
+    meType( DrawingObject )
 {
 }
 

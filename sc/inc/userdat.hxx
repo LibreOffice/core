@@ -59,11 +59,13 @@ public:
 class ScDrawObjData : public SdrObjUserData
 {
 public:
+    enum Type { CellNote, ValidationCircle, DrawingObject };
+
     ScAddress           maStart;
     ScAddress           maEnd;
     Point               maStartOffset;
     Point               maEndOffset;
-    bool                mbNote;
+    Type                meType;
     Rectangle           maLastRect;
 
     explicit            ScDrawObjData();

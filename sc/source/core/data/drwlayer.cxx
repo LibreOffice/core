@@ -610,7 +610,7 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, ScDrawObjData& rData, bool bNegati
     if( !pDoc )
         return;
 
-    if( rData.mbNote )
+    if (rData.meType == ScDrawObjData::CellNote)
     {
         OSL_ENSURE( rData.maStart.IsValid(), "ScDrawLayer::RecalcPos - invalid position for cell note" );
         /*  #i109372# On insert/remove rows/columns/cells: Updating the caption
@@ -636,13 +636,12 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, ScDrawObjData& rData, bool bNegati
     SCROW nRow2 = rData.maEnd.Row();
     SCTAB nTab2 = rData.maEnd.Tab();
 
-    // validation circle
-    bool bCircle = pObj->ISA( SdrCircObj );
     // detective arrow
     bool bArrow = pObj->IsPolyObj() && (pObj->GetPointCount() == 2);
 
-    if( bCircle )
+    if (rData.meType == ScDrawObjData::ValidationCircle)
     {
+        // Validation circle for detective.
         rData.maLastRect = pObj->GetLogicRect();
 
         Point aPos( pDoc->GetColOffset( nCol1, nTab1 ), pDoc->GetRowOffset( nRow1, nTab1 ) );
@@ -1835,13 +1834,13 @@ ScDrawObjData* ScDrawLayer::GetObjDataTab( SdrObject* pObj, SCTAB nTab )
 bool ScDrawLayer::IsNoteCaption( SdrObject* pObj )
 {
     ScDrawObjData* pData = pObj ? GetObjData( pObj ) : 0;
-    return pData && pData->mbNote;
+    return pData && pData->meType == ScDrawObjData::CellNote;
 }
 
 ScDrawObjData* ScDrawLayer::GetNoteCaptionData( SdrObject* pObj, SCTAB nTab )
 {
     ScDrawObjData* pData = pObj ? GetObjDataTab( pObj, nTab ) : 0;
-    return (pData && pData->mbNote) ? pData : 0;
+    return (pData && pData->meType == ScDrawObjData::CellNote) ? pData : 0;
 }
 
 ScIMapInfo* ScDrawLayer::GetIMapInfo( SdrObject* pObj )

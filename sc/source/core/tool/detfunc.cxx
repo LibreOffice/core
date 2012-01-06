@@ -681,6 +681,7 @@ void ScDetectiveFunc::DrawCircle( SCCOL nCol, SCROW nRow, ScDetectiveData& rData
     ScDrawObjData* pData = ScDrawLayer::GetObjData( pCircle, sal_True );
     pData->maStart.Set( nCol, nRow, nTab);
     pData->maEnd.SetInvalid();
+    pData->meType = ScDrawObjData::ValidationCircle;
 
     Modified();
 }
