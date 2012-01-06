@@ -343,6 +343,7 @@ PARFILES +=                        \
         folder_ooo.par             \
         folderitem_ooo.par         \
         registryitem_ooo.par       \
+        vc_redist.par              \
         mingw_dlls.par             \
         windowscustomaction_ooo.par
 .ENDIF
