@@ -215,27 +215,6 @@ ImplHandleUndefinedUnicodeToTextChar(void const * pData,
 /* - TextConverter - Functions - */
 /* ----------------------------- */
 
-sal_Size ImplSymbolToUnicode( const void* pData, void* pContext,
-                              const char* pSrcBuf, sal_Size nSrcBytes,
-                              sal_Unicode* pDestBuf, sal_Size nDestChars,
-                              sal_uInt32 nFlags, sal_uInt32* pInfo, sal_Size* pSrcCvtBytes );
-sal_Size ImplUnicodeToSymbol( const void* pData, void* pContext,
-                              const sal_Unicode* pSrcBuf, sal_Size nSrcChars,
-                              char* pDestBuf, sal_Size nDestBytes,
-                              sal_uInt32 nFlags, sal_uInt32* pInfo, sal_Size* pSrcCvtChars );
-sal_Size ImplCharToUnicode( const void* pData, void* pContext,
-                            const char* pSrcBuf, sal_Size nSrcBytes,
-                            sal_Unicode* pDestBuf, sal_Size nDestChars,
-                            sal_uInt32 nFlags, sal_uInt32* pInfo, sal_Size* pSrcCvtBytes );
-/** For those encodings only with unicode range of 0x80 to 0xFF. */
-sal_Size ImplUpperCharToUnicode( const void* pData, void* pContext,
-                            const char* pSrcBuf, sal_Size nSrcBytes,
-                            sal_Unicode* pDestBuf, sal_Size nDestChars,
-                            sal_uInt32 nFlags, sal_uInt32* pInfo, sal_Size* pSrcCvtBytes );
-sal_Size ImplUnicodeToChar( const void* pData, void* pContext,
-                            const sal_Unicode* pSrcBuf, sal_Size nSrcChars,
-                            char* pDestBuf, sal_Size nDestBytes,
-                            sal_uInt32 nFlags, sal_uInt32* pInfo, sal_Size* pSrcCvtChars );
 sal_Size ImplDBCSToUnicode( const void* pData, void* pContext,
                             const char* pSrcBuf, sal_Size nSrcBytes,
                             sal_Unicode* pDestBuf, sal_Size nDestChars,

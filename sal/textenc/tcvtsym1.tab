@@ -25,6 +25,10 @@
  *
  ************************************************************************/
 
+#include "sal/config.h"
+
+#include "tcvtbyte.hxx"
+
 /* Symbol Font Encodings */
 
 static ImplTextEncodingData const aImplSYMBOLTextEncodingData

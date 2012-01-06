@@ -25,6 +25,11 @@
  *
  ************************************************************************/
 
+#include "sal/config.h"
+
+#include "convertsimple.hxx"
+#include "tenchelp.hxx"
+
 /* ======================================================================= */
 
 /* This file contain the tables for all 1 byte charsets, for the */
@@ -123,8 +128,8 @@ static ImplByteConvertData const aImplMS874ByteCvtData =
 
 static ImplTextEncodingData const aImplMS874TextEncodingData
     = { { &aImplMS874ByteCvtData,
-          ImplCharToUnicode,
-          ImplUnicodeToChar,
+          sal::detail::textenc::convertCharToUnicode,
+          sal::detail::textenc::convertUnicodeToChar,
           NULL,
           NULL,
           NULL,
@@ -175,8 +180,8 @@ static ImplByteConvertData const aImplTis620ByteCvtData =
 
 static ImplTextEncodingData const aImplTis620TextEncodingData
     = { { &aImplTis620ByteCvtData,
-          ImplCharToUnicode,
-          ImplUnicodeToChar,
+          sal::detail::textenc::convertCharToUnicode,
+          sal::detail::textenc::convertUnicodeToChar,
           NULL,
           NULL,
           NULL,
@@ -418,8 +423,8 @@ static ImplByteConvertData const aImplMS1258ByteCvtData =
 
 static ImplTextEncodingData const aImplMS1258TextEncodingData
     = { { &aImplMS1258ByteCvtData,
-          ImplCharToUnicode,
-          ImplUnicodeToChar,
+          sal::detail::textenc::convertCharToUnicode,
+          sal::detail::textenc::convertUnicodeToChar,
           NULL,
           NULL,
           NULL,

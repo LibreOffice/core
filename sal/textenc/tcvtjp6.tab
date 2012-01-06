@@ -25,6 +25,11 @@
  *
  ************************************************************************/
 
+#include "sal/config.h"
+
+#include "convertsimple.hxx"
+#include "tenchelp.hxx"
+
 /* ======================================================================= */
 
 /* This file contain the information tables for all japanese charsets: */
@@ -2577,7 +2582,7 @@ static ImplByteConvertData const aImplJISX0201ByteCvtData =
 static ImplTextEncodingData const aImplJISX0201TextEncodingData
     = { { &aImplJISX0201ByteCvtData,
           NULL,
-          ImplUnicodeToChar,
+          sal::detail::textenc::convertUnicodeToChar,
           NULL,
           NULL,
           NULL,

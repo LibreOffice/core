@@ -34,8 +34,6 @@
 #include "rtl/textenc.h"
 #include "sal/types.h"
 
-#include "tenchelp.hxx"
-
 #define NOTABUNI_START 0xFF
 #define NOTABUNI_END 0x00
 

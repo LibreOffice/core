@@ -25,6 +25,12 @@
  *
  ************************************************************************/
 
+#include "sal/config.h"
+
+#include "convertsimple.hxx"
+#include "tcvtbyte.hxx"
+#include "tenchelp.hxx"
+
 /* ======================================================================= */
 
 /* This file contain the tables for all 1 byte charsets, for the */
@@ -189,7 +195,7 @@ static ImplByteConvertData const aImplIBM437ByteCvtData =
 static ImplTextEncodingData const aImplIBM437TextEncodingData
     = { { &aImplIBM437ByteCvtData,
           ImplUpperCharToUnicode,
-          ImplUnicodeToChar,
+          sal::detail::textenc::convertUnicodeToChar,
           NULL,
           NULL,
           NULL,
@@ -323,7 +329,7 @@ static ImplByteConvertData const aImplIBM850ByteCvtData =
 static ImplTextEncodingData const aImplIBM850TextEncodingData
     = { { &aImplIBM850ByteCvtData,
           ImplUpperCharToUnicode,
-          ImplUnicodeToChar,
+          sal::detail::textenc::convertUnicodeToChar,
           NULL,
           NULL,
           NULL,
@@ -496,7 +502,7 @@ static ImplByteConvertData const aImplIBM860ByteCvtData =
 static ImplTextEncodingData const aImplIBM860TextEncodingData
     = { { &aImplIBM860ByteCvtData,
           ImplUpperCharToUnicode,
-          ImplUnicodeToChar,
+          sal::detail::textenc::convertUnicodeToChar,
           NULL,
           NULL,
           NULL,
@@ -671,7 +677,7 @@ static ImplByteConvertData const aImplIBM861ByteCvtData =
 static ImplTextEncodingData const aImplIBM861TextEncodingData
     = { { &aImplIBM861ByteCvtData,
           ImplUpperCharToUnicode,
-          ImplUnicodeToChar,
+          sal::detail::textenc::convertUnicodeToChar,
           NULL,
           NULL,
           NULL,
@@ -846,7 +852,7 @@ static ImplByteConvertData const aImplIBM863ByteCvtData =
 static ImplTextEncodingData const aImplIBM863TextEncodingData
     = { { &aImplIBM863ByteCvtData,
           ImplUpperCharToUnicode,
-          ImplUnicodeToChar,
+          sal::detail::textenc::convertUnicodeToChar,
           NULL,
           NULL,
           NULL,
@@ -1021,7 +1027,7 @@ static ImplByteConvertData const aImplIBM865ByteCvtData =
 static ImplTextEncodingData const aImplIBM865TextEncodingData
     = { { &aImplIBM865ByteCvtData,
           ImplUpperCharToUnicode,
-          ImplUnicodeToChar,
+          sal::detail::textenc::convertUnicodeToChar,
           NULL,
           NULL,
           NULL,
@@ -1148,8 +1154,8 @@ static ImplByteConvertData const aImplISO885914ByteCvtData =
 
 static ImplTextEncodingData const aImplISO885914TextEncodingData
     = { { &aImplISO885914ByteCvtData,
-          ImplCharToUnicode,
-          ImplUnicodeToChar,
+          sal::detail::textenc::convertCharToUnicode,
+          sal::detail::textenc::convertUnicodeToChar,
           NULL,
           NULL,
           NULL,
@@ -1250,8 +1256,8 @@ static ImplByteConvertData const aImplISO885915ByteCvtData =
 
 static ImplTextEncodingData const aImplISO885915TextEncodingData
     = { { &aImplISO885915ByteCvtData,
-          ImplCharToUnicode,
-          ImplUnicodeToChar,
+          sal::detail::textenc::convertCharToUnicode,
+          sal::detail::textenc::convertUnicodeToChar,
           NULL,
           NULL,
           NULL,
@@ -1391,7 +1397,7 @@ static ImplByteConvertData const aImplAPPLEICELANDByteCvtData =
 static ImplTextEncodingData const aImplAPPLEICELANDTextEncodingData
     = { { &aImplAPPLEICELANDByteCvtData,
           ImplUpperCharToUnicode,
-          ImplUnicodeToChar,
+          sal::detail::textenc::convertUnicodeToChar,
           NULL,
           NULL,
           NULL,
@@ -1538,7 +1544,7 @@ static ImplByteConvertData const aImplAPPLEROMANByteCvtData =
 static ImplTextEncodingData const aImplAPPLEROMANTextEncodingData
     = { { &aImplAPPLEROMANByteCvtData,
           ImplUpperCharToUnicode,
-          ImplUnicodeToChar,
+          sal::detail::textenc::convertUnicodeToChar,
           NULL,
           NULL,
           NULL,

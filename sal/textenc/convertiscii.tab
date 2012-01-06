@@ -32,6 +32,7 @@
 #include "rtl/tencinfo.h"
 #include "sal/types.h"
 
+#include "convertsimple.hxx"
 #include "tenchelp.hxx"
 
 /* Conversion tables for the Devanagari version of ISCII (IS 13194:1991).
@@ -97,8 +98,8 @@ static ImplByteConvertData const aImplIsciiDevanagariConvertData
 
 static ImplTextEncodingData const aImplIsciiDevanagariTextEncodingData
     = { { &aImplIsciiDevanagariConvertData,
-          &ImplCharToUnicode,
-          &ImplUnicodeToChar,
+          &sal::detail::textenc::convertCharToUnicode,
+          &sal::detail::textenc::convertUnicodeToChar,
           NULL,
           NULL,
           NULL,

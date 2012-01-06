@@ -32,8 +32,8 @@
 
 #include "context.hxx"
 #include "convertbig5hkscs.hxx"
-
 #include "generate/big5hkscs2001.tab"
+#include "tenchelp.hxx"
 
 static ImplBig5HkscsConverterData const aImplBig5HkscsConvertData
     = { aImplBig5Hkscs2001ToUnicodeData,

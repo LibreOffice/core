@@ -45,7 +45,9 @@
 #include "sal/macros.h"
 #include "sal/types.h"
 
+#include "convertsimple.hxx"
 #include "gettextencodingdata.hxx"
+#include "tcvtbyte.hxx"
 #include "tcvtutf8.hxx"
 #include "tenchelp.hxx"
 
@@ -183,8 +185,8 @@ static ImplByteConvertData const aImplMS1252ByteCvtData =
 
 static ImplTextEncodingData const aImplMS1252TextEncodingData
     = { { &aImplMS1252ByteCvtData,
-          ImplCharToUnicode,
-          ImplUnicodeToChar,
+          sal::detail::textenc::convertCharToUnicode,
+          sal::detail::textenc::convertUnicodeToChar,
           NULL,
           NULL,
           NULL,
@@ -248,8 +250,8 @@ static ImplByteConvertData const aImplISO88591ByteCvtData =
 
 static ImplTextEncodingData const aImplISO88591TextEncodingData
     = { { &aImplISO88591ByteCvtData,
-          ImplCharToUnicode,
-          ImplUnicodeToChar,
+          sal::detail::textenc::convertCharToUnicode,
+          sal::detail::textenc::convertUnicodeToChar,
           NULL,
           NULL,
           NULL,
@@ -296,8 +298,8 @@ static ImplByteConvertData const aImplUSASCIIByteCvtData =
 
 static ImplTextEncodingData const aImplUSASCIITextEncodingData
     = { { &aImplUSASCIIByteCvtData,
-          ImplCharToUnicode,
-          ImplUnicodeToChar,
+          sal::detail::textenc::convertCharToUnicode,
+          sal::detail::textenc::convertUnicodeToChar,
           NULL,
           NULL,
           NULL,
