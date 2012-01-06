@@ -32,7 +32,6 @@
 #include "app.hrc"
 #include "MasterPageContainer.hxx"
 #include "MasterPageDescriptor.hxx"
-#include <tools/link.hxx>
 #include <set>
 
 namespace {

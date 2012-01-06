@@ -41,7 +41,6 @@
 #include <com/sun/star/drawing/framework/XConfigurationChangeListener.hpp>
 #include <osl/mutex.hxx>
 #include <cppuhelper/compbase2.hxx>
-#include <tools/link.hxx>
 #include <boost/function.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <boost/shared_ptr.hpp>

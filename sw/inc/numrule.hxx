@@ -28,7 +28,6 @@
 #ifndef _NUMRULE_HXX
 #define _NUMRULE_HXX
 
-#include <tools/link.hxx>
 #include <tools/gen.hxx>
 #include <tools/string.hxx>
 #include <editeng/svxenum.hxx>

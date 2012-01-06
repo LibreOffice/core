@@ -56,7 +56,6 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
-#include <tools/link.hxx>
 #include <vcl/svapp.hxx>
 #include <com/sun/star/io/XSeekable.hpp>
 // #i73788#

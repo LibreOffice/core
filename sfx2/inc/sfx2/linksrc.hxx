@@ -31,6 +31,7 @@
 #include "sal/config.h"
 #include "sfx2/dllapi.h"
 
+#include <tools/link.hxx>
 #include <tools/ref.hxx>
 #include <tools/rtti.hxx>
 #include <com/sun/star/io/XInputStream.hpp>

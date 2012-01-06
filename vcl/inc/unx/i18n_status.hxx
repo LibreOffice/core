@@ -30,7 +30,6 @@
 #define _SAL_I18N_STATUS_HXX
 
 #include <tools/string.hxx>
-#include <tools/link.hxx>
 #include <tools/gen.hxx>
 
 #include <rtl/ustring.hxx>

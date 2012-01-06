@@ -30,7 +30,6 @@
 #define _FORMS_EDITBASE_HXX_
 
 #include "FormComponent.hxx"
-#include <tools/link.hxx>
 #include <com/sun/star/util/XNumberFormatter.hpp>
 #include <com/sun/star/awt/XFocusListener.hpp>
 #include <com/sun/star/awt/XKeyListener.hpp>

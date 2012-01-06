@@ -41,7 +41,6 @@
 
 #include <comphelper/proparrhlp.hxx>
 #include <cppuhelper/implbase7.hxx>
-#include <tools/link.hxx>
 
 //.........................................................................
 namespace frm

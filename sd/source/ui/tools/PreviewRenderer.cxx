@@ -39,7 +39,6 @@
 #include <svx/svdoutl.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/editstat.hxx>
-#include <tools/link.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/diagnose_ex.h>
 #include <svx/sdr/contact/viewobjectcontact.hxx>

@@ -83,7 +83,6 @@
 #include <comphelper/namedvaluecollection.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/pathoptions.hxx>
-#include <tools/link.hxx>
 #include <tools/string.hxx>
 #include <tools/diagnose_ex.h>
 #include <unotools/tempfile.hxx>

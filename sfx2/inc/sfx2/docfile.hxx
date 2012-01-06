@@ -43,6 +43,7 @@
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <tools/link.hxx>
 #include <tools/stream.hxx>
 #include <tools/string.hxx>
 #include <svl/lstner.hxx>

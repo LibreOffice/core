@@ -59,7 +59,6 @@
 #include <osl/security.hxx>
 #include <osl/file.hxx>
 #include <rtl/bootstrap.hxx>
-#include <tools/link.hxx>
 #ifdef UNX // need symlink
 #include <unistd.h>
 #include <errno.h>

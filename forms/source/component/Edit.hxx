@@ -31,6 +31,7 @@
 
 #include "EditBase.hxx"
 
+#include <tools/link.hxx>
 #include <cppuhelper/implbase3.hxx>
 
 namespace dbtools { class FormattedColumnValue; }

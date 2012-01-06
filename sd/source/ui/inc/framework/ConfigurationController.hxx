@@ -42,7 +42,6 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <cppuhelper/compbase2.hxx>
-#include <tools/link.hxx>
 #include <rtl/ref.hxx>
 
 #include <boost/scoped_ptr.hpp>

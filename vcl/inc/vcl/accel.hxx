@@ -31,6 +31,7 @@
 
 #include <vcl/sv.h>
 #include <vcl/dllapi.h>
+#include <tools/link.hxx>
 #include <tools/resid.hxx>
 #include <tools/rc.hxx>
 #include <vcl/keycod.hxx>

@@ -37,7 +37,6 @@
 #include <com/sun/star/awt/XWindow.hpp>
 #include <cppuhelper/implbase1.hxx>
 #include <comphelper/uno3.hxx>
-#include <tools/link.hxx>
 #include <memory>
 
 namespace {

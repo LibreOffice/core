@@ -63,7 +63,6 @@ namespace com
         }
     }
 }
-#include <tools/link.hxx>
 #include <tools/ref.hxx>
 #include <tools/string.hxx>
 #include <svl/brdcst.hxx>

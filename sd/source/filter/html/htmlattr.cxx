@@ -33,7 +33,6 @@
 
 #include "htmlattr.hxx"
 #include "htmlex.hxx"
-#include <tools/link.hxx>
 #include <vcl/decoview.hxx>
 
 

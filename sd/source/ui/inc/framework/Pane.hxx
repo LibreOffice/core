@@ -36,7 +36,6 @@
 #include <com/sun/star/drawing/framework/TabBarButton.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <cppuhelper/compbase3.hxx>
-#include <tools/link.hxx>
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
 

@@ -91,8 +91,6 @@
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
-#include <tools/link.hxx>
-
 #include <com/sun/star/document/XViewDataSupplier.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 

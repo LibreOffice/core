@@ -28,6 +28,7 @@
 #ifndef _SW_TYPEDETECT_HXX
 #define _SW_TYPEDETECT_HXX
 
+#include <tools/solar.h>
 #include <rtl/ustring.hxx>
 #include <osl/diagnose.h>
 #include <com/sun/star/document/XExtendedFilterDetection.hpp>
@@ -38,7 +39,6 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <cppuhelper/factory.hxx>
-#include <tools/link.hxx>
 
 class SfxMedium;
 

@@ -32,7 +32,6 @@
 #include <tools/rc.hxx>
 #include <tools/rcid.h>
 #include <tools/resid.hxx>
-#include <tools/link.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
 

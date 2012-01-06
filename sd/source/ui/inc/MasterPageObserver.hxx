@@ -31,7 +31,6 @@
 
 #include "tools/SdGlobalResourceContainer.hxx"
 #include <osl/mutex.hxx>
-#include <tools/link.hxx>
 #include <memory>
 #include <set>
 

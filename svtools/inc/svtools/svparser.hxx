@@ -30,6 +30,7 @@
 #define _SVPARSER_HXX
 
 #include "svtools/svtdllapi.h"
+#include <tools/link.hxx>
 #include <tools/string.hxx>
 #include <tools/ref.hxx>
 #include <rtl/textenc.h>

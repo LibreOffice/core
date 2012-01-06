@@ -86,7 +86,6 @@
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
-#include <tools/link.hxx>
 #include <vcl/svapp.hxx>
 
 #include <com/sun/star/lang/XComponent.hpp>

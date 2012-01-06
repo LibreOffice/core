@@ -38,8 +38,6 @@
 #include <svl/zforlist.hxx>     // SvNumberFormatter
 #include <svtools/chartprettypainter.hxx>
 
-#include <tools/link.hxx>
-
 #include <XMLRangeHelper.hxx>
 #include <unochart.hxx>
 #include <swtable.hxx>

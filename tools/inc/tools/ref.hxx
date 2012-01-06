@@ -30,7 +30,6 @@
 
 #include "tools/toolsdllapi.h"
 #include <tools/list.hxx>
-#include <tools/link.hxx>
 
 //=========================================================================
 

@@ -31,6 +31,7 @@
 
 #include <stgcache.hxx>
 #include <stgelem.hxx>
+#include <tools/link.hxx>
 #include <tools/string.hxx>
 
 class StgFATStrm;

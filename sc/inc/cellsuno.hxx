@@ -33,6 +33,7 @@
 #include "rangelst.hxx"         // ScRangeList
 
 #include "formula/grammar.hxx"
+#include <tools/link.hxx>
 #include <svl/lstner.hxx>
 #include <svl/listener.hxx>
 #include <svl/itemprop.hxx>

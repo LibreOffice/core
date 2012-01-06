@@ -36,8 +36,6 @@
 
 #include <cppuhelper/implbase2.hxx>
 
-#include <tools/link.hxx>
-
 class VCLBitmapCreator : public ::cppu::WeakImplHelper2<
                                                 ::com::sun::star::lang::XSingleServiceFactory,
                                                 ::com::sun::star::lang::XServiceInfo >

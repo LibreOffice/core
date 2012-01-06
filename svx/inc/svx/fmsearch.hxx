@@ -43,7 +43,6 @@
 #include <vcl/edit.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/lstbox.hxx>
-#include <tools/link.hxx>
 #include <comphelper/uno3.hxx>
 #include <comphelper/stl_types.hxx>
 #include <tools/string.hxx>

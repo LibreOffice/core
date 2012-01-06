@@ -31,7 +31,6 @@
 
 #include <tools/stream.hxx>
 #include <tools/string.hxx>
-#include <tools/link.hxx>
 #include "tools/toolsdllapi.h"
 
 // -----------------

@@ -35,7 +35,6 @@
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <tools/link.hxx>
 #include <osl/mutex.hxx>
 #include <unotools/streamwrap.hxx>
 #include <comphelper/processfactory.hxx>

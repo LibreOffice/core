@@ -31,6 +31,7 @@
 
 #include "ShellFactory.hxx"
 #include "ViewShellManager.hxx"
+#include <tools/link.hxx>
 #include <map>
 
 class FrameView;

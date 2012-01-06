@@ -31,7 +31,6 @@
 
 #include <rtl/ref.hxx>
 #include <salhelper/simplereferenceobject.hxx>
-#include <tools/link.hxx>
 #include "docoptio.hxx"
 
 class ScDocument;

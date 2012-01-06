@@ -30,7 +30,6 @@
 #define SD_VIEW_SHELL_MANAGER_HXX
 
 #include "ShellFactory.hxx"
-#include <tools/link.hxx>
 #include <memory>
 #include <vector>
 #include <boost/shared_ptr.hpp>

@@ -32,6 +32,7 @@
 #include "sfx2/dllapi.h"
 #include "sal/types.h"
 #include "rtl/strbuf.hxx"
+#include <tools/link.hxx>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/uno/Reference.h>

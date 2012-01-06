@@ -27,7 +27,6 @@
  ************************************************************************/
 #ifndef _SWMODULE_HXX
 #define _SWMODULE_HXX
-#include <tools/link.hxx>
 #include <tools/string.hxx>
 #include <tools/fldunit.hxx>
 #include <svl/lstner.hxx>
