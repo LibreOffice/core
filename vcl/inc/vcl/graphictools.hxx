@@ -153,50 +153,6 @@ public:
     // mutators
     /// Set path to stroke
     void    setPath             ( const Polygon& );
-    /** Set the polygon that is put at the start of the line
-
-        The polygon has to be in a special normalized position, and
-        already scaled to the desired size: the center of the stroked
-        path will meet the given polygon at (0,0) from negative y
-        values. Thus, an arrow would have its baseline on the x axis,
-        going upwards to positive y values. Furthermore, the polygon
-        also has to be scaled appropriately: the width of the joining
-        stroke is defined to be SvtGraphicStroke::normalizedArrowWidth
-        (0x10000), i.e. ranging from x=-0x8000 to x=0x8000. If your
-        arrow does have this width, it will fit every stroke with
-        every stroke width exactly.
-     */
-    void    setStartArrow       ( const PolyPolygon& );
-    /** Set the polygon that is put at the end of the line
-
-        The polygon has to be in a special normalized position, and
-        already scaled to the desired size: the center of the stroked
-        path will meet the given polygon at (0,0) from negative y
-        values. Thus, an arrow would have its baseline on the x axis,
-        going upwards to positive y values. Furthermore, the polygon
-        also has to be scaled appropriately: the width of the joining
-        stroke is defined to be SvtGraphicStroke::normalizedArrowWidth
-        (0x10000), i.e. ranging from x=-0x8000 to x=0x8000. If your
-        arrow does have this width, it will fit every stroke with
-        every stroke width exactly.
-     */
-    void    setEndArrow         ( const PolyPolygon& );
-    /** Set stroke transparency
-
-        @param fTrans
-        The transparency, ranging from 0.0 (opaque) to 1.0 (fully translucent)
-     */
-    void    setTransparency     ( double fTrans );
-    /// Set width of the stroke
-    void    setStrokeWidth      ( double );
-    /// Set the style in which open stroke ends are drawn
-    void    setCapType          ( CapType );
-    /// Set the style in which the stroke segments are joined
-    void    setJoinType         ( JoinType );
-    /// Set the maximum length of mitered joins
-    void    setMiterLimit       ( double );
-    /// Set the array of "on" and "off" lengths for stroke dashing
-    void    setDashArray        ( const DashArray& );
 
 private:
     // friends
@@ -359,21 +315,9 @@ public:
         @return true, if texture is tiled, false, if output only once.
      */
     bool            isTiling            () const;
-    /// Get type of hatch used
-    HatchType       getHatchType        () const;
-    /// Get color used for drawing the hatch
-    Color           getHatchColor       () const;
     /// Get type of gradient used
     GradientType    getGradientType     () const;
-    /// Get start color of the gradient
-    Color           getGradient1stColor () const;
-    /// Get end color of the gradient
-    Color           getGradient2ndColor () const;
-    /** Get the numbers of steps to render the gradient.
 
-        @return the step count. gradientStepsInfinite means infinitely many.
-    */
-    int             getGradientStepCount() const;
     /** Get the texture graphic used
 
         The Graphic object returned is used to fill the geometry, if
@@ -386,37 +330,6 @@ public:
     // mutators
     /// Set path to fill
     void    setPath             ( const PolyPolygon& rPath );
-    /// Set color used for solid fills
-    void    setFillColor        ( Color aFillColor );
-    /** Set stroke transparency
-
-        @param fTransparency
-        The transparency, ranging from 0.0 (opaque) to 1.0 (fully translucent)
-     */
-    void    setTransparency     ( double fTransparency );
-    /// Set fill rule used
-    void    setFillRule         ( FillRule aFillRule );
-    /** Set fill type used
-
-        Currently, only one of the fill types can be used
-        simultaneously. If you specify e.g. FillRule::fillGradient,
-        hatching, texture and solid fill color are ignored.
-     */
-    void    setFillType         ( FillType aFillType );
-    /// Set transformation applied to hatch, gradient or texture during fill
-    void    setTransform        ( const Transform& pTransform );
-    /** Set state of texture tiling
-
-        @param bTiling
-        If set to true, texture is tiled, if set to false, texture is output only once.
-     */
-    void    setTiling           ( bool bTiling = true );
-    /// Set type of hatch used
-    void    setHatchType        ( HatchType aHatchType );
-    /// Set color used for drawing the hatch
-    void    setHatchColor       ( Color aHatchColor );
-    /// Set the texture graphic used
-    void    setGraphic          ( const Graphic& rGraphic );
 
 private:
     // friends

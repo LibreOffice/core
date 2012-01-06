@@ -262,46 +262,6 @@ void SvtGraphicStroke::setPath( const Polygon& rPoly )
     maPath = rPoly;
 }
 
-void SvtGraphicStroke::setStartArrow( const PolyPolygon& rPoly )
-{
-    maStartArrow = rPoly;
-}
-
-void SvtGraphicStroke::setEndArrow( const PolyPolygon& rPoly )
-{
-    maEndArrow = rPoly;
-}
-
-void SvtGraphicStroke::setTransparency( double fTrans )
-{
-    mfTransparency = fTrans;
-}
-
-void SvtGraphicStroke::setStrokeWidth( double fWidth )
-{
-    mfStrokeWidth = fWidth;
-}
-
-void SvtGraphicStroke::setCapType( CapType eType )
-{
-    maCapType = eType;
-}
-
-void SvtGraphicStroke::setJoinType( JoinType eType )
-{
-    maJoinType = eType;
-}
-
-void SvtGraphicStroke::setMiterLimit( double fMiterLimit )
-{
-    mfMiterLimit = fMiterLimit;
-}
-
-void SvtGraphicStroke::setDashArray( const DashArray& rDashArray )
-{
-    maDashArray = rDashArray;
-}
-
 SvStream& operator<<( SvStream& rOStm, const SvtGraphicStroke& rClass )
 {
     VersionCompat aCompat( rOStm, STREAM_WRITE, 1 );
@@ -442,34 +402,9 @@ bool SvtGraphicFill::isTiling() const
     return mbTiling;
 }
 
-SvtGraphicFill::HatchType SvtGraphicFill::getHatchType() const
-{
-    return maHatchType;
-}
-
-Color SvtGraphicFill::getHatchColor() const
-{
-    return maHatchColor;
-}
-
 SvtGraphicFill::GradientType SvtGraphicFill::getGradientType() const
 {
     return maGradientType;
-}
-
-Color SvtGraphicFill::getGradient1stColor() const
-{
-    return maGradient1stColor;
-}
-
-Color SvtGraphicFill::getGradient2ndColor() const
-{
-    return maGradient2ndColor;
-}
-
-int SvtGraphicFill::getGradientStepCount() const
-{
-    return maGradientStepCount;
 }
 
 void SvtGraphicFill::getGraphic( Graphic& rGraphic ) const
@@ -480,51 +415,6 @@ void SvtGraphicFill::getGraphic( Graphic& rGraphic ) const
 void SvtGraphicFill::setPath( const PolyPolygon& rPath )
 {
     maPath = rPath;
-}
-
-void SvtGraphicFill::setFillColor( Color aFillColor )
-{
-    maFillColor = aFillColor;
-}
-
-void SvtGraphicFill::setTransparency( double fTransparency )
-{
-    mfTransparency = fTransparency;
-}
-
-void SvtGraphicFill::setFillRule( FillRule aFillRule )
-{
-    maFillRule = aFillRule;
-}
-
-void SvtGraphicFill::setFillType( FillType aFillType )
-{
-    maFillType = aFillType;
-}
-
-void SvtGraphicFill::setTransform( const Transform& rTransform )
-{
-    maFillTransform = rTransform;
-}
-
-void SvtGraphicFill::setTiling( bool bTiling )
-{
-    mbTiling = bTiling;
-}
-
-void SvtGraphicFill::setHatchType( HatchType aHatchType )
-{
-    maHatchType = aHatchType;
-}
-
-void SvtGraphicFill::setHatchColor( Color aHatchColor )
-{
-    maHatchColor = aHatchColor;
-}
-
-void SvtGraphicFill::setGraphic( const Graphic& rGraphic )
-{
-    maFillGraphic = rGraphic;
 }
 
 SvStream& operator<<( SvStream& rOStm, const SvtGraphicFill& rClass )
