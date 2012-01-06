@@ -319,14 +319,7 @@ public:
     virtual void        Select();
     virtual void        DoubleClick();
 
-    void                InsertItem( sal_uInt16 nItemId, const Image& rImage,
-                                    long nSize, HeaderBarItemBits nBits = HIB_STDSTYLE,
-                                    sal_uInt16 nPos = HEADERBAR_APPEND );
     void                InsertItem( sal_uInt16 nItemId, const XubString& rText,
-                                    long nSize, HeaderBarItemBits nBits = HIB_STDSTYLE,
-                                    sal_uInt16 nPos = HEADERBAR_APPEND );
-    void                InsertItem( sal_uInt16 nItemId,
-                                    const Image& rImage, const XubString& rText,
                                     long nSize, HeaderBarItemBits nBits = HIB_STDSTYLE,
                                     sal_uInt16 nPos = HEADERBAR_APPEND );
     void                RemoveItem( sal_uInt16 nItemId );
@@ -357,9 +350,7 @@ public:
     void                SetItemText( sal_uInt16 nItemId, const XubString& rText );
     XubString           GetItemText( sal_uInt16 nItemId ) const;
 
-    void                SetHelpText( sal_uInt16 nItemId, const XubString& rText );
     XubString           GetHelpText( sal_uInt16 nItemId ) const;
-    void                SetHelpId( sal_uInt16 nItemId, const rtl::OString& nHelpId );
     rtl::OString        GetHelpId( sal_uInt16 nItemId ) const;
 
     Size                CalcWindowSizePixel() const;

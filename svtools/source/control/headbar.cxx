@@ -1216,33 +1216,6 @@ void HeaderBar::DoubleClick()
 
 // -----------------------------------------------------------------------
 
-void HeaderBar::InsertItem( sal_uInt16 nItemId, const Image& rImage,
-                            long nSize, HeaderBarItemBits nBits, sal_uInt16 nPos )
-{
-    DBG_ASSERT( nItemId, "HeaderBar::InsertItem(): ItemId == 0" );
-    DBG_ASSERT( GetItemPos( nItemId ) == HEADERBAR_ITEM_NOTFOUND,
-                "HeaderBar::InsertItem(): ItemId already exists" );
-
-    // Item anlegen und in die Liste einfuegen
-    ImplHeadItem* pItem = new ImplHeadItem;
-    pItem->mnId         = nItemId;
-    pItem->mnBits       = nBits;
-    pItem->mnSize       = nSize;
-    pItem->maImage      = rImage;
-    if ( nPos < mpItemList->size() ) {
-        ImplHeadItemList::iterator it = mpItemList->begin();
-        ::std::advance( it, nPos );
-        mpItemList->insert( it, pItem );
-    } else {
-        mpItemList->push_back( pItem );
-    }
-
-    // Ausgabe updaten
-    ImplUpdate( nPos, sal_True );
-}
-
-// -----------------------------------------------------------------------
-
 void HeaderBar::InsertItem( sal_uInt16 nItemId, const XubString& rText,
                             long nSize, HeaderBarItemBits nBits, sal_uInt16 nPos )
 {
@@ -1255,36 +1228,6 @@ void HeaderBar::InsertItem( sal_uInt16 nItemId, const XubString& rText,
     pItem->mnId         = nItemId;
     pItem->mnBits       = nBits;
     pItem->mnSize       = nSize;
-    pItem->maText       = rText;
-    if ( nPos < mpItemList->size() ) {
-        ImplHeadItemList::iterator it = mpItemList->begin();
-        ::std::advance( it, nPos );
-        mpItemList->insert( it, pItem );
-    } else {
-        mpItemList->push_back( pItem );
-    }
-
-    // Ausgabe updaten
-    ImplUpdate( nPos, sal_True );
-}
-
-// -----------------------------------------------------------------------
-
-void HeaderBar::InsertItem( sal_uInt16 nItemId,
-                            const Image& rImage, const XubString& rText,
-                            long nSize, HeaderBarItemBits nBits,
-                            sal_uInt16 nPos )
-{
-    DBG_ASSERT( nItemId, "HeaderBar::InsertItem(): ItemId == 0" );
-    DBG_ASSERT( GetItemPos( nItemId ) == HEADERBAR_ITEM_NOTFOUND,
-                "HeaderBar::InsertItem(): ItemId already exists" );
-
-    // Item anlegen und in die Liste einfuegen
-    ImplHeadItem* pItem = new ImplHeadItem;
-    pItem->mnId         = nItemId;
-    pItem->mnBits       = nBits;
-    pItem->mnSize       = nSize;
-    pItem->maImage      = rImage;
     pItem->maText       = rText;
     if ( nPos < mpItemList->size() ) {
         ImplHeadItemList::iterator it = mpItemList->begin();
@@ -1492,15 +1435,6 @@ XubString HeaderBar::GetItemText( sal_uInt16 nItemId ) const
 
 // -----------------------------------------------------------------------
 
-void HeaderBar::SetHelpText( sal_uInt16 nItemId, const XubString& rText )
-{
-    sal_uInt16 nPos = GetItemPos( nItemId );
-    if ( nPos != HEADERBAR_ITEM_NOTFOUND )
-        (*mpItemList)[ nPos ]->maHelpText = rText;
-}
-
-// -----------------------------------------------------------------------
-
 XubString HeaderBar::GetHelpText( sal_uInt16 nItemId ) const
 {
     sal_uInt16 nPos = GetItemPos( nItemId );
@@ -1518,15 +1452,6 @@ XubString HeaderBar::GetHelpText( sal_uInt16 nItemId ) const
     }
     else
         return XubString();
-}
-
-// -----------------------------------------------------------------------
-
-void HeaderBar::SetHelpId( sal_uInt16 nItemId, const rtl::OString& rHelpId )
-{
-    sal_uInt16 nPos = GetItemPos( nItemId );
-    if ( nPos != HEADERBAR_ITEM_NOTFOUND )
-        (*mpItemList)[ nPos ]->maHelpId = rHelpId;
 }
 
 // -----------------------------------------------------------------------
