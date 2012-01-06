@@ -67,7 +67,7 @@ private:
     ScTabViewShell* pTabViewShell;
     ScDocument*     pDoc;
     sal_uInt16      aColLength;
-    SCROW           aCurrentRow;
+    SCROW           nCurrentRow;
     SCCOL           nStartCol;
     SCCOL           nEndCol;
     SCROW           nStartRow;
