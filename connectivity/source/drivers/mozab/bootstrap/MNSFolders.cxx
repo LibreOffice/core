@@ -56,7 +56,15 @@ namespace
         ::osl::Security   aSecurity;
         ::rtl::OUString   aConfigPath;
 
+    #if defined(XP_WIN) || defined(MACOSX)
         aSecurity.getConfigDir( aConfigPath );
+    #else
+        //This is to find the dir under which .mozilla/.thunderbird is created.
+        //mozilla doesn't honour XDG_CONFIG_HOME, so raw home dir required here
+        //not xdg-config dir
+        aSecurity.getHomeDir( aConfigPath );
+    #endif
+
         return aConfigPath + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
     }
 
