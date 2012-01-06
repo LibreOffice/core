@@ -1,0 +1,56 @@
+--- misc/cairo-1.10.2/src/cairo-ft-font.c	2012-01-06 09:09:21.500373823 +0000
++++ misc/build/cairo-1.10.2/src/cairo-ft-font.c	2012-01-06 09:31:01.645238786 +0000
+@@ -59,6 +59,8 @@
+ 
+ #if HAVE_FT_LIBRARY_SETLCDFILTER
+ #include FT_LCD_FILTER_H
++#elif HAVE_DLFCN_H
++#include <dlfcn.h>
+ #endif
+ 
+ /* Fontconfig version older than 2.6 didn't have these options */
+@@ -1217,6 +1219,26 @@
+     return CAIRO_STATUS_SUCCESS;
+ }
+ 
++static void try_FT_Library_SetLcdFilter( FT_Library library,
++    int lcd_filter )
++{
++#if HAVE_FT_LIBRARY_SETLCDFILTER
++    FT_Library_SetLcdFilter (library, lcd_filter);
++#elif HAVE_DLFCN_H
++    static void (*pFT_Library_SetLcdFilter) (FT_Library, int);
++    static int dlsymed = 0;
++
++    if (!dlsymed)
++    {
++        pFT_Library_SetLcdFilter = dlsym(RTLD_DEFAULT, "FT_Library_SetLcdFilter");
++        dlsymed = 1;
++    }
++
++    if (pFT_Library_SetLcdFilter)
++    	(*pFT_Library_SetLcdFilter) (library, lcd_filter); 
++#endif
++}
++
+ /* Converts an outline FT_GlyphSlot into an image
+  *
+  * This could go through _render_glyph_bitmap as well, letting
+@@ -1350,15 +1372,11 @@
+ 	    break;
+ 	    }
+ 
+-#if HAVE_FT_LIBRARY_SETLCDFILTER
+-	FT_Library_SetLcdFilter (library, lcd_filter);
+-#endif
++	try_FT_Library_SetLcdFilter(library, lcd_filter);
+ 
+ 	fterror = FT_Render_Glyph (face->glyph, render_mode);
+ 
+-#if HAVE_FT_LIBRARY_SETLCDFILTER
+-	FT_Library_SetLcdFilter (library, FT_LCD_FILTER_NONE);
+-#endif
++	try_FT_Library_SetLcdFilter(library, FT_LCD_FILTER_NONE);
+ 
+ 	if (fterror != 0)
+ 		return _cairo_error (CAIRO_STATUS_NO_MEMORY);
