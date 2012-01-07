@@ -65,6 +65,7 @@
 
 #include <svx/svdograf.hxx>
 #include <svx/svdpage.hxx>
+#include <svx/svdocirc.hxx>
 
 #include <sfx2/docfile.hxx>
 
@@ -151,6 +152,7 @@ public:
     void testFunctionLists();
 
     void testGraphicsInGroup();
+    void testGraphicsOnSheetMove();
 
     void testPostIts();
 
@@ -186,6 +188,7 @@ public:
     CPPUNIT_TEST(testExternalRefFunctions);
     CPPUNIT_TEST(testDataArea);
     CPPUNIT_TEST(testGraphicsInGroup);
+    CPPUNIT_TEST(testGraphicsOnSheetMove);
     CPPUNIT_TEST(testPostIts);
     CPPUNIT_TEST(testStreamValid);
     CPPUNIT_TEST(testFunctionLists);
@@ -2447,32 +2450,106 @@ void Test::testGraphicsInGroup()
     SdrPage* pPage = pDrawLayer->GetPage(0);
     CPPUNIT_ASSERT_MESSAGE("must have a draw page", pPage != NULL);
 
-    //Add a square
-    Rectangle aOrigRect(2,2,100,100);
-    SdrRectObj *pObj = new SdrRectObj(aOrigRect);
+    {
+        //Add a square
+        Rectangle aOrigRect(2,2,100,100);
+        SdrRectObj *pObj = new SdrRectObj(aOrigRect);
+        pPage->InsertObject(pObj);
+        const Rectangle &rNewRect = pObj->GetLogicRect();
+        CPPUNIT_ASSERT_MESSAGE("must have equal position and size", aOrigRect == rNewRect);
+
+        ScDrawLayer::SetPageAnchored(*pObj);
+
+        //Use a range of rows guaranteed to include all of the square
+        m_pDoc->ShowRows(0, 100, 0, false);
+        CPPUNIT_ASSERT_MESSAGE("Should not change when page anchored", aOrigRect == rNewRect);
+        m_pDoc->ShowRows(0, 100, 0, true);
+        CPPUNIT_ASSERT_MESSAGE("Should not change when page anchored", aOrigRect == rNewRect);
+
+        ScDrawLayer::SetCellAnchoredFromPosition(*pObj, *m_pDoc, 0);
+        CPPUNIT_ASSERT_MESSAGE("That shouldn't change size or positioning", aOrigRect == rNewRect);
+
+        m_pDoc->ShowRows(0, 100, 0, false);
+        CPPUNIT_ASSERT_MESSAGE("Left and Right should be unchanged",
+            aOrigRect.nLeft == rNewRect.nLeft && aOrigRect.nRight == rNewRect.nRight);
+        CPPUNIT_ASSERT_MESSAGE("Height should be minimum allowed height",
+            (rNewRect.nBottom - rNewRect.nTop) <= 1);
+        m_pDoc->ShowRows(0, 100, 0, true);
+        CPPUNIT_ASSERT_MESSAGE("Should not change when page anchored", aOrigRect == rNewRect);
+    }
+
+    {
+        // Add a circle.
+        Rectangle aOrigRect = Rectangle(10,10,210,210); // 200 x 200
+        SdrCircObj* pObj = new SdrCircObj(OBJ_CIRC, aOrigRect);
+        pPage->InsertObject(pObj);
+        const Rectangle& rNewRect = pObj->GetLogicRect();
+        CPPUNIT_ASSERT_MESSAGE("Position and size of the circle shouldn't change when inserted into the page.",
+                               aOrigRect == rNewRect);
+
+        ScDrawLayer::SetCellAnchoredFromPosition(*pObj, *m_pDoc, 0);
+        CPPUNIT_ASSERT_MESSAGE("Size changed when cell anchored. Not good.",
+                               aOrigRect == rNewRect);
+
+        // Insert 2 rows at the top.  This should push the circle object down.
+        m_pDoc->InsertRow(0, 0, MAXCOL, 0, 0, 2);
+
+        // Make sure the size of the circle is still identical.
+        CPPUNIT_ASSERT_MESSAGE("Size of the circle has changed, but shouldn't!",
+                               aOrigRect.GetSize() == rNewRect.GetSize());
+
+        // Delete 2 rows at the top.  This should bring the circle object to its original position.
+        m_pDoc->DeleteRow(0, 0, MAXCOL, 0, 0, 2);
+        CPPUNIT_ASSERT_MESSAGE("Failed to move back to its original position.", aOrigRect == rNewRect);
+    }
+
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testGraphicsOnSheetMove()
+{
+    m_pDoc->InsertTab(0, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Tab1")));
+    m_pDoc->InsertTab(1, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Tab2")));
+    CPPUNIT_ASSERT_MESSAGE("There should be only 2 sheets to begin with", m_pDoc->GetTableCount() == 2);
+
+    m_pDoc->InitDrawLayer();
+    ScDrawLayer* pDrawLayer = m_pDoc->GetDrawLayer();
+    CPPUNIT_ASSERT_MESSAGE("No drawing layer.", pDrawLayer);
+    SdrPage* pPage = pDrawLayer->GetPage(0);
+    CPPUNIT_ASSERT_MESSAGE("No page instance for the 1st sheet.", pPage);
+
+    // Insert an object.
+    Rectangle aObjRect(2,2,100,100);
+    SdrRectObj* pObj = new SdrRectObj(aObjRect);
     pPage->InsertObject(pObj);
-    const Rectangle &rNewRect = pObj->GetLogicRect();
-    CPPUNIT_ASSERT_MESSAGE("must have equal position and size", aOrigRect == rNewRect);
-
-    ScDrawLayer::SetPageAnchored(*pObj);
-
-    //Use a range of rows guaranteed to include all of the square
-    m_pDoc->ShowRows(0, 100, 0, false);
-    CPPUNIT_ASSERT_MESSAGE("Should not change when page anchored", aOrigRect == rNewRect);
-    m_pDoc->ShowRows(0, 100, 0, true);
-    CPPUNIT_ASSERT_MESSAGE("Should not change when page anchored", aOrigRect == rNewRect);
-
     ScDrawLayer::SetCellAnchoredFromPosition(*pObj, *m_pDoc, 0);
-    CPPUNIT_ASSERT_MESSAGE("That shouldn't change size or positioning", aOrigRect == rNewRect);
 
-    m_pDoc->ShowRows(0, 100, 0, false);
-    CPPUNIT_ASSERT_MESSAGE("Left and Right should be unchanged",
-        aOrigRect.nLeft == rNewRect.nLeft && aOrigRect.nRight == rNewRect.nRight);
-    CPPUNIT_ASSERT_MESSAGE("Height should be minimum allowed height",
-        (rNewRect.nBottom - rNewRect.nTop) <= 1);
-    m_pDoc->ShowRows(0, 100, 0, true);
-    CPPUNIT_ASSERT_MESSAGE("Should not change when page anchored", aOrigRect == rNewRect);
+    CPPUNIT_ASSERT_MESSAGE("There should be one object on the 1st sheet.", pPage->GetObjCount() == 1);
 
+    pPage = pDrawLayer->GetPage(1);
+    CPPUNIT_ASSERT_MESSAGE("No page instance for the 2nd sheet.", pPage);
+    CPPUNIT_ASSERT_MESSAGE("2nd sheet shouldn't have any object.", pPage->GetObjCount() == 0);
+
+    // Insert a new sheet at left-end, and make sure the object has moved to
+    // the 2nd page.
+    m_pDoc->InsertTab(0, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NewTab")));
+    CPPUNIT_ASSERT_MESSAGE("There should be 3 sheets.", m_pDoc->GetTableCount() == 3);
+    pPage = pDrawLayer->GetPage(0);
+    CPPUNIT_ASSERT_MESSAGE("1st sheet should have no object.", pPage && pPage->GetObjCount() == 0);
+    pPage = pDrawLayer->GetPage(1);
+    CPPUNIT_ASSERT_MESSAGE("2nd sheet should have one object.", pPage && pPage->GetObjCount() == 1);
+    pPage = pDrawLayer->GetPage(2);
+    CPPUNIT_ASSERT_MESSAGE("3rd sheet should have no object.", pPage && pPage->GetObjCount() == 0);
+
+    // Now, delete the sheet that just got inserted. The object should be back
+    // on the 1st sheet.
+    m_pDoc->DeleteTab(0);
+    pPage = pDrawLayer->GetPage(0);
+    CPPUNIT_ASSERT_MESSAGE("1st sheet should have one object.", pPage && pPage->GetObjCount() == 1);
+    CPPUNIT_ASSERT_MESSAGE("Size and position of the object shouldn't change.",
+                           pObj->GetLogicRect() == aObjRect);
+
+    m_pDoc->DeleteTab(1);
     m_pDoc->DeleteTab(0);
 }
 
