@@ -48,6 +48,7 @@ class SbiScanner
 
     void scanAlphanumeric();
     void scanGoto();
+    bool readLine();
 protected:
     ::rtl::OUString aSym;
     String aError;

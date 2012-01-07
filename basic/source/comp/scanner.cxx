@@ -178,6 +178,40 @@ void SbiScanner::scanGoto()
     }
 }
 
+bool SbiScanner::readLine()
+{
+    if(nBufPos >= aBuf.getLength())
+        return false;
+
+    sal_Int32 n = nBufPos;
+    sal_Int32 nLen = aBuf.getLength();
+
+    while(n < nLen && aBuf[n] != '\r' && aBuf[n] != '\n')
+        ++n;
+
+    // Trim trailing whitespace
+    sal_Int32 nEnd = n;
+    while(nBufPos < nEnd && theBasicCharClass::get().isWhitespace(aBuf[nEnd - 1]))
+        --nEnd;
+
+    aLine = aBuf.copy(nBufPos, nEnd - nBufPos);
+
+    // Fast-forward past the line ending
+    if(n + 1 < nLen && aBuf[n] == '\r' && aBuf[n + 1] == '\n')
+        n += 2;
+    else if(n < nLen)
+        n++;
+
+    nBufPos = n;
+    pLine = aLine.getStr();
+
+    ++nLine;
+    nCol = nCol1 = nCol2 = 0;
+    nColLock = 0;
+
+    return true;
+}
+
 bool SbiScanner::NextSym()
 {
     // memorize for the EOLN-case
@@ -195,33 +229,12 @@ bool SbiScanner::NextSym()
     // read in line?
     if( !pLine )
     {
-        sal_Int32 n = nBufPos;
-        sal_Int32 nLen = aBuf.getLength();
-        if( nBufPos >= nLen )
+        if(!readLine())
             return false;
-        const sal_Unicode* p2 = aBuf.getStr();
-        p2 += n;
-        while( ( n < nLen ) && ( *p2 != '\n' ) && ( *p2 != '\r' ) )
-            p2++, n++;
-        // #163944# ignore trailing whitespace
-        sal_Int32 nCopyEndPos = n;
-        while( (nBufPos < nCopyEndPos) && theBasicCharClass::get().isWhitespace( aBuf[ nCopyEndPos - 1 ] ) )
-            --nCopyEndPos;
-        aLine = aBuf.copy( nBufPos, nCopyEndPos - nBufPos );
-        if( n < nLen )
-        {
-            if( *p2 == '\r' && *( p2+1 ) == '\n' )
-                n += 2;
-            else
-                n++;
-        }
-        nBufPos = n;
-        pLine = aLine.getStr();
-        nOldLine = ++nLine;
-        nCol = nCol1 = nCol2 = nOldCol1 = nOldCol2 = 0;
-        nColLock = 0;
-    }
 
+        nOldLine = nLine;
+        nOldCol1 = nOldCol2 = 0;
+    }
 
     while( theBasicCharClass::get().isWhitespace( *pLine ) )
         pLine++, nCol++, bSpaces = true;
