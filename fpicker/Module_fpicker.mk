@@ -50,6 +50,7 @@ $(eval $(call gb_Module_add_targets,fpicker,\
 		) \
 		$(if $(filter $(ENABLE_KDE4),TRUE), \
 			Library_fps_kde4 \
+			Package_kde4_moc \
 		) \
 	) \
 ))

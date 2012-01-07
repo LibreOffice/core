@@ -1,5 +1,4 @@
-# -*- Mode: makefile; tab-width: 4; indent-tabs-mode: t -*-
-#
+# -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
 # Version: MPL 1.1 / GPLv3+ / LGPLv3+
 #
 # The contents of this file are subject to the Mozilla Public License Version
@@ -13,7 +12,8 @@
 # License.
 #
 # Major Contributor(s):
-# Copyright (C) 2011 Matúš Kukan <matus.kukan@gmail.com> (initial developer)
+# Copyright (C) 2010 Red Hat, Inc., David Tardon <dtardon@redhat.com>
+#  (initial developer)
 #
 # All Rights Reserved.
 #
@@ -25,44 +25,11 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Library_Library,fps_kde4))
+KDE4FilePicker.moc.cxx :
+	$(MOC4) -o $@ $(SRCDIR)/fpicker/source/unx/kde4/KDE4FilePicker.hxx
 
-$(eval $(call gb_Library_add_package_headers,fps_kde4,\
-	fpicker_kde4_moc \
-))
+.DEFAULT_GOAL := all
+.PHONY : all
+all : KDE4FilePicker.moc.cxx
 
-$(eval $(call gb_Library_set_componentfile,fps_kde4,fpicker/source/unx/kde4/fps_kde4))
-
-$(eval $(call gb_Library_add_api,fps_kde4,\
-	offapi \
-	udkapi \
-))
-
-$(eval $(call gb_Library_add_defs,fps_kde4,\
-	$(KDE4_CFLAGS) \
-))
-
-$(eval $(call gb_Library_add_linked_libs,fps_kde4,\
-	cppu \
-	cppuhelper \
-	sal \
-	tl \
-	vcl \
-	$(gb_STDLIBS) \
-))
-
-$(eval $(call gb_Library_add_libs,fps_kde4,\
-	$(KDE4_LIBS) \
-	-lkio -lkfile \
-))
-
-$(eval $(call gb_Library_add_exception_objects,fps_kde4,\
-	fpicker/source/unx/kde4/KDE4FilePicker \
-	fpicker/source/unx/kde4/KDE4FPEntry \
-))
-
-$(eval $(call gb_Library_add_generated_cxxobjects,fps_kde4,\
-	CustomTarget/fpicker/source/unx/kde4/KDE4FilePicker.moc \
-))
-
-# vim: set noet sw=4 ts=4:
+# vim:set shiftwidth=4 tabstop=4 noexpandtab:
