@@ -407,6 +407,8 @@ void ScDrawLayer::ScRemovePage( SCTAB nTab )
     }
     else
         DeletePage( static_cast<sal_uInt16>(nTab) );                            // einfach weg damit
+
+    ResetTab(nTab, pDoc->GetTableCount()-1);
 }
 
 void ScDrawLayer::ScRenamePage( SCTAB nTab, const String& rNewName )
@@ -470,6 +472,8 @@ void ScDrawLayer::ScCopyPage( sal_uInt16 nOldPos, sal_uInt16 nNewPos, sal_Bool b
 
     if (bAlloc)
         InsertPage(pNewPage, nNewPos);
+
+    ResetTab(static_cast<SCTAB>(nNewPos), pDoc->GetTableCount()-1);
 }
 
 void ScDrawLayer::ResetTab( SCTAB nStart, SCTAB nEnd )
