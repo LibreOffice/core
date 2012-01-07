@@ -241,7 +241,7 @@ private:
     const rtl::OUString & getRequestURI() const;
     sal_Bool detectRedirectCycle( const rtl::OUString& rRedirectURL )
         throw ( DAVException );
-    sal_Bool handleException( DAVException & e, int errorCount )
+    sal_Bool handleException( const DAVException & e, int errorCount )
         throw ( DAVException );
     void initialize()
         throw ( DAVException );

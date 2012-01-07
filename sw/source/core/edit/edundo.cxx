@@ -136,7 +136,7 @@ bool SwEditShell::Undo(sal_uInt16 const nCount)
                 bRet = GetDoc()->GetIDocumentUndoRedo().Undo()
                     || bRet;
             }
-        } catch (::com::sun::star::uno::Exception & e) {
+        } catch (const ::com::sun::star::uno::Exception & e) {
             OSL_TRACE("SwEditShell::Undo(): exception caught:\n %s",
                 ::rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8)
                     .getStr());
@@ -187,7 +187,7 @@ bool SwEditShell::Redo(sal_uInt16 const nCount)
                 bRet = GetDoc()->GetIDocumentUndoRedo().Redo()
                     || bRet;
             }
-        } catch (::com::sun::star::uno::Exception & e) {
+        } catch (const ::com::sun::star::uno::Exception & e) {
             OSL_TRACE("SwEditShell::Redo(): exception caught:\n %s",
                 ::rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8)
                     .getStr());
@@ -217,7 +217,7 @@ bool SwEditShell::Repeat(sal_uInt16 const nCount)
         ::sw::RepeatContext context(*GetDoc(), *GetCrsr());
         bRet = GetDoc()->GetIDocumentUndoRedo().Repeat( context, nCount )
             || bRet;
-    } catch (::com::sun::star::uno::Exception & e) {
+    } catch (const ::com::sun::star::uno::Exception & e) {
         OSL_TRACE("SwEditShell::Repeat(): exception caught:\n %s",
             ::rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8)
                 .getStr());

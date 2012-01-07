@@ -946,7 +946,7 @@ throw (beans::PropertyVetoException, lang::IllegalArgumentException,
     {
         m_pImpl->SetPropertyValues_Impl( rPropertyNames, rValues );
     }
-    catch (beans::UnknownPropertyException &rException)
+    catch (const beans::UnknownPropertyException &rException)
     {
         // wrap the original (here not allowed) exception in
         // a WrappedTargetException that gets thrown instead.

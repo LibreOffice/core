@@ -1174,7 +1174,7 @@ void UcbContent::open( const rtl::OUString & rName, const UniString& rInput,
                                           nLevel + 1 ) );
                 }
             }
-            catch ( ucb::ResultSetException )
+            catch (const ucb::ResultSetException &)
             {
                 print( "ResultSetException caught!" );
             }
@@ -2503,7 +2503,7 @@ void MyApp::Main()
             return;
         }
     }
-    catch ( uno::Exception )
+    catch (const uno::Exception &)
     {
         OSL_FAIL( "Exception during creation of initial component context!" );
         return;

@@ -1087,7 +1087,7 @@ void generateSkeleton(ProgramOptions const & options,
             delete pofs;
             OSL_VERIFY(makeValidTypeFile(compFileName, tmpFileName, sal_False));
         }
-    } catch(CannotDumpException& e) {
+    } catch(const CannotDumpException& e) {
 
         std::cerr << "ERROR: " << e.m_message.getStr() << "\n";
         if ( !standardout ) {
@@ -1251,7 +1251,7 @@ void generateCalcAddin(ProgramOptions const & options,
             delete pofs;
             OSL_VERIFY(makeValidTypeFile(compFileName, tmpFileName, sal_False));
         }
-    } catch(CannotDumpException& e) {
+    } catch(const CannotDumpException& e) {
 
         std::cerr << "ERROR: " << e.m_message.getStr() << "\n";
         if ( !standardout ) {

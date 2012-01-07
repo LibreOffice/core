@@ -247,7 +247,7 @@ sal_Int32 ReadThroughComponent(
                              ERRCODE_BUTTON_OK | ERRCODE_MSG_ERROR );
         }
     }
-    catch( xml::sax::SAXException& r)
+    catch(const xml::sax::SAXException& r)
     {
         packages::zip::ZipIOException aBrokenPackage;
         if ( r.WrappedException >>= aBrokenPackage )
@@ -266,7 +266,7 @@ sal_Int32 ReadThroughComponent(
 
         return ERR_SWG_READ_ERROR;
     }
-    catch( packages::zip::ZipIOException& r)
+    catch(const packages::zip::ZipIOException& r)
     {
         (void)r;
 #if OSL_DEBUG_LEVEL > 0
@@ -278,7 +278,7 @@ sal_Int32 ReadThroughComponent(
 #endif
         return ERRCODE_IO_BROKENPACKAGE;
     }
-    catch( io::IOException& r)
+    catch(const io::IOException& r)
     {
         (void)r;
 #if OSL_DEBUG_LEVEL > 0
@@ -290,7 +290,7 @@ sal_Int32 ReadThroughComponent(
 #endif
         return ERR_SWG_READ_ERROR;
     }
-    catch( uno::Exception& r)
+    catch(const uno::Exception& r)
     {
         (void)r;
 #if OSL_DEBUG_LEVEL > 0
@@ -891,7 +891,7 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, con
                 pDocSh->GetMedium()->GetInteractionHandler() );
             xDMA->loadMetadataFromStorage(xStorage, xBaseURI, xHandler);
         }
-        catch (lang::WrappedTargetException & e)
+        catch (const lang::WrappedTargetException & e)
         {
             ucb::InteractiveAugmentedIOException iaioe;
             if (e.TargetException >>= iaioe)

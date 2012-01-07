@@ -239,7 +239,7 @@ sal_Int32 ExpandContentProviderImpl::compareContentIds(
         OUString uri2( expandUri( xId2 ) );
         return uri1.compareTo( uri2 );
     }
-    catch (ucb::IllegalIdentifierException & exc)
+    catch (const ucb::IllegalIdentifierException & exc)
     {
         (void) exc; // unused
         OSL_FAIL(

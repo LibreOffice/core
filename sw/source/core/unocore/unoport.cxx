@@ -483,7 +483,7 @@ void SwXTextPortion::setPropertyValues(
     {
         SetPropertyValues_Impl( rPropertyNames, rValues );
     }
-    catch (beans::UnknownPropertyException &rException)
+    catch (const beans::UnknownPropertyException &rException)
     {
         // wrap the original (here not allowed) exception in
         // a lang::WrappedTargetException that gets thrown instead.
@@ -569,7 +569,7 @@ uno::Sequence< beans::SetPropertyTolerantFailed > SAL_CALL SwXTextPortion::setPr
         catch (beans::UnknownPropertyException &)
         {
             // should not occur because property was searched for before
-            OSL_FAIL( "unexpected exception catched" );
+            OSL_FAIL( "unexpected exception caught" );
             pFailed[ nFailed++ ].Result = beans::TolerantPropertySetResultType::UNKNOWN_PROPERTY;
         }
         catch (lang::IllegalArgumentException &)
@@ -681,7 +681,7 @@ uno::Sequence< beans::GetDirectPropertyTolerantResult > SAL_CALL SwXTextPortion:
         catch (beans::UnknownPropertyException &)
         {
             // should not occur because property was searched for before
-            OSL_FAIL( "unexpected exception catched" );
+            OSL_FAIL( "unexpected exception caught" );
             aResult.Result = beans::TolerantPropertySetResultType::UNKNOWN_PROPERTY;
         }
         catch (lang::IllegalArgumentException &)

@@ -202,7 +202,7 @@ void DAVResourceAccess::OPTIONS(
                                      new DAVAuthListener_Impl( xEnv, m_aURL ),
                                      aHeaders, xEnv) );
         }
-        catch ( DAVException & e )
+        catch ( const DAVException & e )
         {
             errorCount++;
             bRetry = handleException( e, errorCount );
@@ -248,7 +248,7 @@ void DAVResourceAccess::PROPFIND(
                                       new DAVAuthListener_Impl( xEnv, m_aURL ),
                                       aHeaders, xEnv ) );
         }
-        catch ( DAVException & e )
+        catch ( const DAVException & e )
         {
             errorCount++;
             bRetry = handleException( e, errorCount );
@@ -290,7 +290,7 @@ void DAVResourceAccess::PROPFIND(
                                       new DAVAuthListener_Impl( xEnv, m_aURL ),
                                       aHeaders, xEnv ) ) ;
         }
-        catch ( DAVException & e )
+        catch ( const DAVException & e )
         {
             errorCount++;
             bRetry = handleException( e, errorCount );
@@ -330,7 +330,7 @@ void DAVResourceAccess::PROPPATCH(
                                        new DAVAuthListener_Impl( xEnv, m_aURL ),
                                        aHeaders, xEnv ) );
         }
-        catch ( DAVException & e )
+        catch ( const DAVException & e )
         {
             errorCount++;
             bRetry = handleException( e, errorCount );
@@ -371,7 +371,7 @@ void DAVResourceAccess::HEAD(
                                   new DAVAuthListener_Impl( xEnv, m_aURL ),
                                   aHeaders, xEnv ) );
         }
-        catch ( DAVException & e )
+        catch ( const DAVException & e )
         {
             errorCount++;
             bRetry = handleException( e, errorCount );
@@ -410,7 +410,7 @@ uno::Reference< io::XInputStream > DAVResourceAccess::GET(
                                                xEnv, m_aURL ),
                                            aHeaders, xEnv ) );
         }
-        catch ( DAVException & e )
+        catch ( const DAVException & e )
         {
             errorCount++;
             bRetry = handleException( e, errorCount );
@@ -451,7 +451,7 @@ void DAVResourceAccess::GET(
                                  new DAVAuthListener_Impl( xEnv, m_aURL ),
                                  aHeaders, xEnv ) );
         }
-        catch ( DAVException & e )
+        catch ( const DAVException & e )
         {
             errorCount++;
             bRetry = handleException( e, errorCount );
@@ -494,7 +494,7 @@ uno::Reference< io::XInputStream > DAVResourceAccess::GET(
                                                xEnv, m_aURL ),
                                            aHeaders, xEnv ) );
         }
-        catch ( DAVException & e )
+        catch ( const DAVException & e )
         {
             errorCount++;
             bRetry = handleException( e, errorCount );
@@ -539,7 +539,7 @@ void DAVResourceAccess::GET(
                                  new DAVAuthListener_Impl( xEnv, m_aURL ),
                                  aHeaders, xEnv ) );
         }
-        catch ( DAVException & e )
+        catch ( const DAVException & e )
         {
             errorCount++;
             bRetry = handleException( e, errorCount );
@@ -624,7 +624,7 @@ void DAVResourceAccess::PUT(
                                  new DAVAuthListener_Impl( xEnv, m_aURL ),
                                  aHeaders, xEnv ) );
         }
-        catch ( DAVException & e )
+        catch ( const DAVException & e )
         {
             errorCount++;
             bRetry = handleException( e, errorCount );
@@ -679,7 +679,7 @@ uno::Reference< io::XInputStream > DAVResourceAccess::POST(
                                                 xEnv, m_aURL ),
                                             aHeaders, xEnv ) );
         }
-        catch ( DAVException & e )
+        catch ( const DAVException & e )
         {
             errorCount++;
             bRetry = handleException( e, errorCount );
@@ -742,7 +742,7 @@ void DAVResourceAccess::POST(
                                   new DAVAuthListener_Impl( xEnv, m_aURL ),
                                   aHeaders, xEnv ) );
         }
-        catch ( DAVException & e )
+        catch ( const DAVException & e )
         {
             errorCount++;
             bRetry = handleException( e, errorCount );
@@ -786,7 +786,7 @@ void DAVResourceAccess::MKCOL(
                                    new DAVAuthListener_Impl( xEnv, m_aURL ),
                                    aHeaders, xEnv ) );
         }
-        catch ( DAVException & e )
+        catch ( const DAVException & e )
         {
             errorCount++;
             bRetry = handleException( e, errorCount );
@@ -828,7 +828,7 @@ void DAVResourceAccess::COPY(
                                   aHeaders, xEnv ),
                               bOverwrite );
         }
-        catch ( DAVException & e )
+        catch ( const DAVException & e )
         {
             errorCount++;
             bRetry = handleException( e, errorCount );
@@ -870,7 +870,7 @@ void DAVResourceAccess::MOVE(
                                   aHeaders, xEnv ),
                               bOverwrite );
         }
-        catch ( DAVException & e )
+        catch ( const DAVException & e )
         {
             errorCount++;
             bRetry = handleException( e, errorCount );
@@ -908,7 +908,7 @@ void DAVResourceAccess::DESTROY(
                                      new DAVAuthListener_Impl( xEnv, m_aURL ),
                                      aHeaders, xEnv ) );
         }
-        catch ( DAVException & e )
+        catch ( const DAVException & e )
         {
             errorCount++;
             bRetry = handleException( e, errorCount );
@@ -948,7 +948,7 @@ void DAVResourceAccess::LOCK(
                                   new DAVAuthListener_Impl( xEnv, m_aURL ),
                                   aHeaders, xEnv ) );
         }
-        catch ( DAVException & e )
+        catch ( const DAVException & e )
         {
             errorCount++;
             bRetry = handleException( e, errorCount );
@@ -991,7 +991,7 @@ sal_Int64 DAVResourceAccess::LOCK(
                                                     xEnv, m_aURL ),
                                             aHeaders, xEnv ) );
         }
-        catch ( DAVException & e )
+        catch ( const DAVException & e )
         {
             errorCount++;
             bRetry = handleException( e, errorCount );
@@ -1031,7 +1031,7 @@ void DAVResourceAccess::UNLOCK(
                                     new DAVAuthListener_Impl( xEnv, m_aURL ),
                                     aHeaders, xEnv ) );
         }
-        catch ( DAVException & e )
+        catch ( const DAVException & e )
         {
             errorCount++;
             bRetry = handleException( e, errorCount );
@@ -1182,7 +1182,7 @@ void DAVResourceAccess::resetUri()
 }
 
 //=========================================================================
-sal_Bool DAVResourceAccess::handleException( DAVException & e, int errorCount )
+sal_Bool DAVResourceAccess::handleException( const DAVException & e, int errorCount )
     throw ( DAVException )
 {
     switch ( e.getError() )

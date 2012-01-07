@@ -471,13 +471,13 @@ void SAL_CALL TreeEditListenerMultiplexer::nodeEditing( const Reference< XTreeNo
         {
             xListener->nodeEditing( Node );
         }
-        catch( DisposedException& e )
+        catch( const DisposedException& e )
         {
             OSL_ENSURE( e.Context.is(), "caught DisposedException with empty Context field" );
             if ( e.Context == xListener || !e.Context.is() )
                 aIt.remove();
         }
-        catch( RuntimeException& e )
+        catch( const RuntimeException& e )
         {
             (void)e;
             DISPLAY_EXCEPTION( TreeEditListenerMultiplexer, nodeEditing, e )
@@ -495,13 +495,13 @@ void SAL_CALL TreeEditListenerMultiplexer::nodeEdited( const Reference< XTreeNod
         {
             xListener->nodeEdited( Node, NewText );
         }
-        catch( DisposedException& e )
+        catch( const DisposedException& e )
         {
             OSL_ENSURE( e.Context.is(), "caught DisposedException with empty Context field" );
             if ( e.Context == xListener || !e.Context.is() )
                 aIt.remove();
         }
-        catch( RuntimeException& e )
+        catch( const RuntimeException& e )
         {
             (void)e;
             DISPLAY_EXCEPTION( TreeEditListenerMultiplexer, nodeEdited, e )

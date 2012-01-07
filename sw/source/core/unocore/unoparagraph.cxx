@@ -432,7 +432,7 @@ throw (beans::PropertyVetoException, lang::IllegalArgumentException,
     {
         m_pImpl->SetPropertyValues_Impl( rPropertyNames, rValues );
     }
-    catch (beans::UnknownPropertyException &rException)
+    catch (const beans::UnknownPropertyException &rException)
     {
         // wrap the original (here not allowed) exception in
         // a lang::WrappedTargetException that gets thrown instead.
@@ -605,7 +605,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
         catch (beans::UnknownPropertyException &)
         {
             // should not occur because property was searched for before
-            OSL_FAIL( "unexpected exception catched" );
+            OSL_FAIL( "unexpected exception caught" );
             pFailed[ nFailed++ ].Result =
                 beans::TolerantPropertySetResultType::UNKNOWN_PROPERTY;
         }

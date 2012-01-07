@@ -2153,7 +2153,7 @@ void SwXStyle::setPropertyValues(
     {
         SetPropertyValues_Impl( rPropertyNames, rValues );
     }
-    catch (beans::UnknownPropertyException &rException)
+    catch (const beans::UnknownPropertyException &rException)
     {
         // wrap the original (here not allowed) exception in
         // a lang::WrappedTargetException that gets thrown instead.
@@ -3181,7 +3181,7 @@ void SwXPageStyle::setPropertyValues(
     {
         SetPropertyValues_Impl( rPropertyNames, rValues );
     }
-    catch (beans::UnknownPropertyException &rException)
+    catch (const beans::UnknownPropertyException &rException)
     {
         // wrap the original (here not allowed) exception in
         // a lang::WrappedTargetException that gets thrown instead.

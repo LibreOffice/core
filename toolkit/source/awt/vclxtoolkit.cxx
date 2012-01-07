@@ -1224,7 +1224,7 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
             {
                 pChildWindow = new WorkWindow( &aParentData );
             }
-            catch ( ::com::sun::star::uno::RuntimeException & rEx )
+            catch ( const ::com::sun::star::uno::RuntimeException & rEx )
             {
                 // system child window could not be created
                 OSL_TRACE(
@@ -1638,7 +1638,7 @@ void VCLXToolkit::callTopWindowListeners(
                 {
                     (xListener.get()->*pFn)(aAwtEvent);
                 }
-                catch (::css::uno::RuntimeException & rEx)
+                catch (const ::css::uno::RuntimeException & rEx)
                 {
                     OSL_TRACE(
                         "VCLXToolkit::callTopWindowListeners: caught %s\n",
@@ -1686,7 +1686,7 @@ long VCLXToolkit::callKeyHandlers(::VclSimpleEvent const * pEvent,
                       : xHandler->keyReleased(aAwtEvent)))
                     return 1;
             }
-            catch (::css::uno::RuntimeException & rEx)
+            catch (const ::css::uno::RuntimeException & rEx)
             {
                 OSL_TRACE(
                     "VCLXToolkit::callKeyHandlers: caught %s\n",
@@ -1734,7 +1734,7 @@ void VCLXToolkit::callFocusListeners(::VclSimpleEvent const * pEvent,
                     bGained ? xListener->focusGained(aAwtEvent)
                         : xListener->focusLost(aAwtEvent);
                 }
-                catch (::css::uno::RuntimeException & rEx)
+                catch (const ::css::uno::RuntimeException & rEx)
                 {
                     OSL_TRACE(
                         "VCLXToolkit::callFocusListeners: caught %s\n",
