@@ -85,7 +85,10 @@ endif
 
 
 ifeq ($(ENABLE_GTK),TRUE)
-$(eval $(call gb_Executable_use_external,pluginapp.bin,gtk))
+$(eval $(call gb_Executable_use_externals,pluginapp.bin,\
+    gthread \
+    gtk \
+))
 
 # the orignal dmakefile said: don't ask, it's ugly
 ifeq ($(OS),SOLARIS)
