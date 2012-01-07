@@ -33,27 +33,39 @@ $(eval $(call gb_Module_add_targets,fpicker,\
 	AllLangResTarget_fps_office \
 	Library_fpicker \
 	Library_fps_office \
-	$(if $(filter $(GUIBASE),aqua), \
-		Library_fps_aqua \
-	) \
-	$(if $(filter $(OS),WNT), \
-		Library_fps_odma \
-		Library_fop \
-		Library_fps \
-		Package_xml \
-		WinResTarget_fps \
-	) \
-	$(if $(filter $(GUIBASE),unx), \
-		$(if $(filter $(ENABLE_KDE),TRUE), \
-			Executable_kdefilepicker \
-			Library_fps_kde \
-		) \
-		$(if $(filter $(ENABLE_KDE4),TRUE), \
-			Library_fps_kde4 \
-			Package_kde4_moc \
-		) \
-	) \
 ))
+
+ifeq ($(GUIBASE),aqua)
+$(eval $(call gb_Module_add_targets,fpicker,\
+	Library_fps_aqua \
+))
+endif
+
+ifeq ($(OS),WNT)
+$(eval $(call gb_Module_add_targets,fpicker,\
+	Library_fps_odma \
+	Library_fop \
+	Library_fps \
+	Package_xml \
+	WinResTarget_fps \
+))
+endif
+
+ifeq ($(GUIBASE),unx)
+ifeq ($(ENABLE_KDE),TRUE)
+$(eval $(call gb_Module_add_targets,fpicker,\
+	Executable_kdefilepicker \
+	Library_fps_kde \
+))
+endif
+
+ifeq ($(ENABLE_KDE4),TRUE)
+$(eval $(call gb_Module_add_targets,fpicker,\
+	Library_fps_kde4 \
+	Package_kde4_moc \
+))
+endif
+endif
 
 endif
 
