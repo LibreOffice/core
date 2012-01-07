@@ -68,52 +68,6 @@ using namespace drawinglayer::primitive2d;
 
 namespace
 {
-    static B2DPolygon lcl_CreatePolygon( B2DRectangle aBounds )
-    {
-        B2DPolygon aRetval;
-        const double nRadius = 1;
-        const double nKappa((M_SQRT2 - 1.0) * 4.0 / 3.0);
-
-        // Create the top right corner
-        {
-            B2DPoint aTMCorner( aBounds.getWidth(), 0.0 );
-            aRetval.append( aTMCorner );
-        }
-
-        // Create the bottom right corner
-        {
-            B2DPoint aBMCorner( aBounds.getWidth(), aBounds.getHeight() );
-            B2DVector aStartVect( 0.0, - nRadius );
-            B2DPoint aStart = aBMCorner + aStartVect;
-            B2DPoint aEnd = aBMCorner + B2DVector( - nRadius, 0.0 );
-            aRetval.append( aStart );
-            aRetval.appendBezierSegment(
-                    interpolate( aStart, aBMCorner, nKappa ),
-                    interpolate( aEnd, aBMCorner, nKappa ),
-                    aEnd );
-        }
-
-        // Create the bottom left corner
-        {
-            B2DPoint aBLCorner( aBounds.getMinX(), aBounds.getHeight() );
-            B2DPoint aStart( nRadius, aBounds.getHeight() );
-            B2DPoint aEnd( 0.0, aBounds.getHeight() - nRadius );
-            aRetval.append( aStart );
-            aRetval.appendBezierSegment(
-                    interpolate( aStart, aBLCorner, nKappa ),
-                    interpolate( aEnd, aBLCorner, nKappa ),
-                    aEnd );
-        }
-
-        // Create the top left corner
-        {
-            B2DPoint aTLCorner = aBounds.getMinimum();
-            aRetval.append( aTLCorner );
-        }
-
-        return aRetval;
-    }
-
     class SwBreakDashedLine : public SwDashedLine
     {
         private:
@@ -206,14 +160,12 @@ void SwPageBreakWin::Paint( const Rectangle& )
         aOtherColor = rSettings.GetDialogColor( ).getBColor();
     }
 
-    bool bShowOnRight = ShowOnRight( );
     bool bRtl = Application::GetSettings().GetLayoutRTL();
 
     Primitive2DSequence aSeq( 3 );
     B2DRectangle aBRect( double( aRect.Left() ), double( aRect.Top( ) ),
            double( aRect.Right() ), double( aRect.Bottom( ) ) );
-    bool bMirror = ( bShowOnRight && !bRtl ) || ( !bShowOnRight && bRtl );
-    B2DPolygon aPolygon = lcl_CreatePolygon( aBRect );
+    B2DPolygon aPolygon = createPolygonFromRect( aBRect, 3.0 / BUTTON_WIDTH, 3.0 / BUTTON_HEIGHT );
 
     // Create the polygon primitives
     aSeq[0] = Primitive2DReference( new PolyPolygonColorPrimitive2D(
@@ -224,7 +176,7 @@ void SwPageBreakWin::Paint( const Rectangle& )
     // Create the primitive for the image
     Image aImg( SW_RES( IMG_PAGE_BREAK ) );
     double nImgOfstX = 3.0;
-    if ( bMirror )
+    if ( bRtl )
         nImgOfstX = aRect.Right() - aImg.GetSizePixel().Width() - 3.0;
     aSeq[2] = Primitive2DReference( new DiscreteBitmapPrimitive2D(
             aImg.GetBitmapEx(), B2DPoint( nImgOfstX, 1.0 ) ) );
@@ -235,7 +187,7 @@ void SwPageBreakWin::Paint( const Rectangle& )
         double nTop = double( aRect.getHeight() ) / 2.0;
         double nBottom = nTop + 4.0;
         double nLeft = aRect.getWidth( ) - ARROW_WIDTH - 6.0;
-        if ( bMirror )
+        if ( bRtl )
             nLeft = ARROW_WIDTH - 2.0;
         double nRight = nLeft + 8.0;
 
@@ -373,24 +325,6 @@ void SwPageBreakWin::Activate( )
     MenuButton::Activate();
 }
 
-bool SwPageBreakWin::ShowOnRight( )
-{
-    bool bOnRight = false;
-
-    // Handle the book mode / columns view case
-    const SwViewOption* pViewOpt = GetEditWin()->GetView().GetWrtShell().GetViewOptions();
-    bool bBookMode = pViewOpt->IsViewLayoutBookMode();
-
-    if ( bBookMode )
-        bOnRight = GetPageFrame()->SidebarPosition( ) == sw::sidebarwindows::SIDEBAR_RIGHT;
-
-    // Handle the RTL case
-    if ( !bBookMode && Application::GetSettings().GetLayoutRTL() )
-        bOnRight = !bOnRight;
-
-    return bOnRight;
-}
-
 void SwPageBreakWin::UpdatePosition( const Point* pEvtPt )
 {
     if ( pEvtPt != NULL )
@@ -450,7 +384,7 @@ void SwPageBreakWin::UpdatePosition( const Point* pEvtPt )
     }
 
     // Set the button position
-    Point aBtnPos( nBtnLeft, nYLineOffset + 1 );
+    Point aBtnPos( nBtnLeft, nYLineOffset - BUTTON_HEIGHT / 2 );
     SetPosSizePixel( aBtnPos, aBtnSize );
 
     // Set the line position
