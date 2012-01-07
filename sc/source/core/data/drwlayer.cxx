@@ -421,6 +421,8 @@ void ScDrawLayer::ScRenamePage( SCTAB nTab, const String& rNewName )
 void ScDrawLayer::ScMovePage( sal_uInt16 nOldPos, sal_uInt16 nNewPos )
 {
     MovePage( nOldPos, nNewPos );
+    sal_uInt16 nMinPos = std::min(nOldPos, nNewPos);
+    ResetTab(nMinPos, pDoc->GetTableCount()-1);
 }
 
 void ScDrawLayer::ScCopyPage( sal_uInt16 nOldPos, sal_uInt16 nNewPos, sal_Bool bAlloc )
