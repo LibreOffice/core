@@ -638,11 +638,11 @@ PRIVATE_1.2 { # LibreOffice 3.5
 
 PRIVATE_textenc.1 { # LibreOffice 3.6
     global:
-        _ZN3sal6detail7textenc20convertCharToUnicodeEPKvPvPKcmPtmjPjPm;
-        _ZN3sal6detail7textenc20convertUnicodeToCharEPKvPvPKtmPcmjPjPm;
-        _ZN3sal6detail7textenc32handleUndefinedUnicodeToTextCharEPPKtS3_PPcPKcjPj;
-        _ZN3sal6detail7textenc37handleBadInputTextToUnicodeConversionEbbcjPPtS2_Pj;
-        _ZN3sal6detail7textenc37handleBadInputUnicodeToTextConversionEbjjPPcS2_PjPKcmPb;
+        _ZN3sal6detail7textenc20convertCharToUnicode*;
+        _ZN3sal6detail7textenc20convertUnicodeToChar*;
+        _ZN3sal6detail7textenc32handleUndefinedUnicodeToTextChar*;
+        _ZN3sal6detail7textenc37handleBadInputTextToUnicodeConversion*;
+        _ZN3sal6detail7textenc37handleBadInputUnicodeToTextConversion*;
 };
 
 # Unique libstdc++ symbols:
