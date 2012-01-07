@@ -100,9 +100,6 @@
 #include <map>
 #include <limits>
 
-#include <rtl/oustringostreaminserter.hxx>
-#include <iostream>
-
 using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;
 
@@ -1729,11 +1726,7 @@ void ScDocument::InitUndo( ScDocument* pSrcDoc, SCTAB nTab1, SCTAB nTab2,
 
         xPoolHelper = pSrcDoc->xPoolHelper;
         if (pSrcDoc->pShell->GetMedium())
-        {
             maFileURL = pSrcDoc->pShell->GetMedium()->GetURLObject().GetMainURL(INetURLObject::DECODE_TO_IURI);
-            std::cout << "SfxMedium: " << maFileURL << std::endl;
-            std::cout << "GetName: " << rtl::OUString(pSrcDoc->pShell->GetName()) << std::endl;
-        }
 
         rtl::OUString aString;
         if ( nTab2 >= static_cast<SCTAB>(maTabs.size()))
