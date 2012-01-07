@@ -136,7 +136,12 @@ SfxItemPresentation SvxPageItem::GetPresentation
                 rText += SVX_RESSTR(RID_SVXITEMS_PAGE_LAND_TRUE);
             else
                 rText += SVX_RESSTR(RID_SVXITEMS_PAGE_LAND_FALSE);
-            rText += GetUsageText( eUse );
+            String aUsageText = GetUsageText( eUse );
+            if (aUsageText.Len())
+            {
+                rText += cpDelim;
+                rText += aUsageText;
+            }
             return SFX_ITEM_PRESENTATION_NAMELESS;
         }
         case SFX_ITEM_PRESENTATION_COMPLETE:
@@ -154,7 +159,12 @@ SfxItemPresentation SvxPageItem::GetPresentation
                 rText += SVX_RESSTR(RID_SVXITEMS_PAGE_LAND_TRUE);
             else
                 rText += SVX_RESSTR(RID_SVXITEMS_PAGE_LAND_FALSE);
-            rText += GetUsageText( eUse );
+            String aUsageText = GetUsageText( eUse );
+            if (aUsageText.Len())
+            {
+                rText += cpDelim;
+                rText += aUsageText;
+            }
             return SFX_ITEM_PRESENTATION_COMPLETE;
         }
         default: ;//prevent warning
