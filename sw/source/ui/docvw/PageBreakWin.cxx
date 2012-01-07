@@ -110,6 +110,7 @@ SwPageBreakWin::SwPageBreakWin( SwEditWin* pEditWin, const SwPageFrm* pPageFrm )
     m_pLine( NULL ),
     m_bIsAppearing( false ),
     m_nFadeRate( 100 ),
+    m_nDelayAppearing( 0 ),
     m_bDestroyed( false ),
     m_pMousePt( NULL )
 {
@@ -424,6 +425,9 @@ void SwPageBreakWin::SetReadonly( bool bReadonly )
 void SwPageBreakWin::Fade( bool bFadeIn )
 {
     m_bIsAppearing = bFadeIn;
+    if ( bFadeIn )
+        m_nDelayAppearing = 0;
+
     if ( !m_bDestroyed && m_aFadeTimer.IsActive( ) )
         m_aFadeTimer.Stop();
     if ( !m_bDestroyed )
@@ -439,6 +443,14 @@ IMPL_LINK( SwPageBreakWin, HideHandler, void *, EMPTYARG )
 
 IMPL_LINK( SwPageBreakWin, FadeHandler, Timer *, EMPTYARG )
 {
+    const int TICKS_BEFORE_WE_APPEAR = 10;
+    if ( m_bIsAppearing && m_nDelayAppearing < TICKS_BEFORE_WE_APPEAR )
+    {
+        ++m_nDelayAppearing;
+        m_aFadeTimer.Start();
+        return 0;
+    }
+
     if ( m_bIsAppearing && m_nFadeRate > 0 )
         m_nFadeRate -= 25;
     else if ( !m_bIsAppearing && m_nFadeRate < 100 )
