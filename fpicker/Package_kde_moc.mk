@@ -1,5 +1,4 @@
-# -*- Mode: makefile; tab-width: 4; indent-tabs-mode: t -*-
-#
+# -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
 # Version: MPL 1.1 / GPLv3+ / LGPLv3+
 #
 # The contents of this file are subject to the Mozilla Public License Version
@@ -13,7 +12,8 @@
 # License.
 #
 # Major Contributor(s):
-# Copyright (C) 2011 Matúš Kukan <matus.kukan@gmail.com> (initial developer)
+# Copyright (C) 2010 Red Hat, Inc., David Tardon <dtardon@redhat.com>
+#  (initial developer)
 #
 # All Rights Reserved.
 #
@@ -25,35 +25,12 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Executable_Executable,kdefilepicker))
+$(eval $(call gb_Package_Package,fpicker_kde_moc,$(WORKDIR)/CustomTarget/fpicker/source/unx/kde))
 
-$(eval $(call gb_Executable_add_package_headers,kdefilepicker,\
-	fpicker_kde_moc \
+$(eval $(call gb_Package_add_customtarget,fpicker_kde_moc,fpicker/source/unx/kde))
+
+$(eval $(call gb_CustomTarget_add_dependencies,fpicker/source/unx/kde,\
+    fpicker/source/unx/kde/kdefilepicker.hxx \
 ))
 
-$(eval $(call gb_Executable_add_defs,kdefilepicker,\
-	$(KDE_CFLAGS) \
-))
-
-$(eval $(call gb_Executable_add_linked_libs,kdefilepicker,\
-	sal \
-	$(gb_STDLIBS) \
-))
-
-$(eval $(call gb_Executable_add_libs,kdefilepicker,\
-	$(KDE_LIBS) \
-	-lkio -lX11 \
-))
-
-$(eval $(call gb_Executable_add_exception_objects,kdefilepicker,\
-	fpicker/source/unx/kde/kdecommandthread \
-	fpicker/source/unx/kde/kdefilepicker \
-	fpicker/source/unx/kde/kdefpmain \
-	fpicker/source/unx/kde/kdemodalityfilter \
-))
-
-$(eval $(call gb_Executable_add_generated_cxxobjects,kdefilepicker,\
-	CustomTarget/fpicker/source/unx/kde/kdefilepicker.moc \
-))
-
-# vim: set noet sw=4 ts=4:
+# vim:set shiftwidth=4 softtabstop=4 expandtab:
