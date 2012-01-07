@@ -31,12 +31,6 @@
 
 #include <tools/resid.hxx>
 
-class SttResId : public ResId
-{
-    public:
-    SttResId( sal_uInt32 nId );
-};
-
 class BasResId : public ResId
 {
     public:
