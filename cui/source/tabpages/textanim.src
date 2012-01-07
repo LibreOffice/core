@@ -272,7 +272,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Spinsize = 50 ;
         StrictFormat = TRUE ;
         Unit = FUNIT_CUSTOM ;
-        CustomUnitText = " ms" ;
+        CustomUnitText [ en-US ] = " ms" ;
         Maximum = 30000 ;
         Last = 30000 ;
     };

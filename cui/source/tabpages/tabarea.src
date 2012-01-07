@@ -1309,7 +1309,7 @@ TabPage RID_SVXPAGE_COLOR
     {
         Pos = MAP_APPFONT ( 142 , 89 ) ;
         Size = MAP_APPFONT ( 15 , 8 ) ;
-        Text = "~C" ;
+        Text [ en-US ] = "~C" ;
     };
     MetricField MTR_FLD_1
     {
@@ -1329,7 +1329,7 @@ TabPage RID_SVXPAGE_COLOR
     {
         Pos = MAP_APPFONT ( 142 , 105  ) ;
         Size = MAP_APPFONT ( 15 , 8 ) ;
-        Text = "~M" ;
+        Text [ en-US ] = "~M" ;
     };
     MetricField MTR_FLD_2
     {
@@ -1349,7 +1349,7 @@ TabPage RID_SVXPAGE_COLOR
     {
         Pos = MAP_APPFONT ( 142 , 121 ) ;
         Size = MAP_APPFONT ( 15 , 8 ) ;
-        Text = "~Y" ;
+        Text [ en-US ] = "~Y" ;
     };
     MetricField MTR_FLD_3
     {
@@ -1369,7 +1369,7 @@ TabPage RID_SVXPAGE_COLOR
     {
         Pos = MAP_APPFONT ( 142 , 137 ) ;
         Size = MAP_APPFONT ( 15 , 8 ) ;
-        Text = "~K" ;
+        Text [ en-US ] = "~K" ;
     };
     MetricField MTR_FLD_4
     {
