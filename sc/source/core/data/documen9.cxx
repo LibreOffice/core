@@ -257,7 +257,7 @@ void ScDocument::DrawCopyPage( sal_uInt16 nOldPos, sal_uInt16 nNewPos )
 {
     // angelegt wird die Page schon im ScTable ctor
     pDrawLayer->ScCopyPage( nOldPos, nNewPos, false );
-    pDrawLayer->ResetTab(static_cast<SCTAB>(nNewPos), static_cast<SCTAB>(maTabs.size()));
+    pDrawLayer->ResetTab(static_cast<SCTAB>(nNewPos), static_cast<SCTAB>(maTabs.size()-1));
 }
 
 void ScDocument::DeleteObjectsInArea( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
