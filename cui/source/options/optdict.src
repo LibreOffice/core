@@ -122,8 +122,8 @@ ModalDialog RID_SFXDLG_EDITDICT
     {
         HelpID = "cui:ListBox:RID_SFXDLG_EDITDICT:LB_ALLDICTS";
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 82 , 9 ) ;
-        Size = MAP_APPFONT ( 121 , 62 ) ;
+        Pos = MAP_APPFONT ( 100 , 9 ) ;
+        Size = MAP_APPFONT ( 103 , 62 ) ;
         DropDown = TRUE ;
     };
     FixedText FT_DICTLANG
@@ -136,8 +136,8 @@ ModalDialog RID_SFXDLG_EDITDICT
     {
         HelpID = "cui:ListBox:RID_SFXDLG_EDITDICT:LB_DICTLANG";
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 82 , 25 ) ;
-        Size = MAP_APPFONT ( 121 , 66 ) ;
+        Pos = MAP_APPFONT ( 100 , 25 ) ;
+        Size = MAP_APPFONT ( 103 , 66 ) ;
         DropDown = TRUE ;
     };
 
