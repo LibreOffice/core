@@ -598,27 +598,27 @@ String RID_OUTSET
 };
 String RID_SVXITEMS_METRIC_MM
 {
-    Text = "mm" ;
+    Text [ en-US ] = "mm" ;
 };
 String RID_SVXITEMS_METRIC_CM
 {
-    Text = "cm" ;
+    Text [ en-US ] = "cm" ;
 };
 String RID_SVXITEMS_METRIC_INCH
 {
-    Text = "inch" ;
+    Text [ en-US ] = "inch" ;
 };
 String RID_SVXITEMS_METRIC_POINT
 {
-    Text = "pt" ;
+    Text [ en-US ] = "pt" ;
 };
 String RID_SVXITEMS_METRIC_TWIP
 {
-    Text = "twip" ;
+    Text [ en-US ] = "twip" ;
 };
 String RID_SVXITEMS_METRIC_PIXEL
 {
-    Text = "pixel" ;
+    Text [ en-US ] = "pixel" ;
 };
  // GetValueText von BoolItems
 String RID_SVXITEMS_SHADOWED_TRUE
