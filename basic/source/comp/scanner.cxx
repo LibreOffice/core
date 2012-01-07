@@ -162,18 +162,18 @@ void SbiScanner::scanAlphanumeric()
 
 void SbiScanner::scanGoto()
 {
-    sal_Int32 nTestCol = nCol;
-    while(nTestCol < aLine.getLength() && theBasicCharClass::get().isWhitespace(aLine[nTestCol]))
-        nTestCol++;
+    sal_Int32 n = nCol;
+    while(n < aLine.getLength() && theBasicCharClass::get().isWhitespace(aLine[n]))
+        ++n;
 
-    if(nTestCol + 1 < aLine.getLength())
+    if(n + 1 < aLine.getLength())
     {
-        ::rtl::OUString aTestSym = aLine.copy(nTestCol, 2);
-        if(aTestSym.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("to")))
+        ::rtl::OUString aTemp = aLine.copy(n, 2);
+        if(aTemp.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("to")))
         {
             aSym = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("goto"));
-            pLine += nTestCol + 2 - nCol;
-            nCol = nTestCol + 2;
+            pLine += n + 2 - nCol;
+            nCol = n + 2;
         }
     }
 }
