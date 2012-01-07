@@ -71,8 +71,6 @@ public:
     void Fade( bool bFadeIn );
 
 private:
-    bool ShowOnRight();
-
     /// Hide the button (used when the popup menu is closed by clicking outside)
     DECL_LINK( HideHandler, void * );
     DECL_LINK( FadeHandler, Timer * );
