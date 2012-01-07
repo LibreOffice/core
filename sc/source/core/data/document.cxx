@@ -95,6 +95,7 @@
 #include "externalrefmgr.hxx"
 #include "tabprotection.hxx"
 #include "clipparam.hxx"
+#include "stlalgorithm.hxx"
 
 #include <map>
 #include <limits>
@@ -651,17 +652,19 @@ bool ScDocument::DeleteTab( SCTAB nTab, ScDocument* pRefUndoDoc )
                 if ( pUnoBroadcaster )
                     pUnoBroadcaster->Broadcast( ScUpdateRefHint( URM_INSDEL, aRange, 0,0,-1 ) );
 
-                SCTAB i;
-                for (i=0; i< static_cast<SCTAB>(maTabs.size()); i++)
+                for (SCTAB i = 0, n = static_cast<SCTAB>(maTabs.size()); i < n; ++i)
                     if (maTabs[i])
-                        maTabs[i]->UpdateDeleteTab(nTab,false,
-                                    pRefUndoDoc ? pRefUndoDoc->maTabs[i] : 0);
-                maTabs.erase(maTabs.begin()+ nTab);
+                        maTabs[i]->UpdateDeleteTab(
+                            nTab, false, pRefUndoDoc ? pRefUndoDoc->maTabs[i] : 0);
+
+                TableContainer::iterator it = maTabs.begin() + nTab;
+                delete *it;
+                maTabs.erase(it);
                 // UpdateBroadcastAreas must be called between UpdateDeleteTab,
                 // which ends listening, and StartAllListeners, to not modify
                 // areas that are to be inserted by starting listeners.
                 UpdateBroadcastAreas( URM_INSDEL, aRange, 0,0,-1);
-                TableContainer::iterator it = maTabs.begin();
+                it = maTabs.begin();
                 for (; it != maTabs.end(); ++it)
                     if ( *it )
                         (*it)->UpdateCompile();
@@ -738,17 +741,20 @@ bool ScDocument::DeleteTabs( SCTAB nTab, SCTAB nSheets, ScDocument* pRefUndoDoc 
                 if ( pUnoBroadcaster )
                     pUnoBroadcaster->Broadcast( ScUpdateRefHint( URM_INSDEL, aRange, 0,0,-1*nSheets ) );
 
-                SCTAB i;
-                for (i=0; i< static_cast<SCTAB>(maTabs.size()); i++)
+                for (SCTAB i = 0, n = static_cast<SCTAB>(maTabs.size()); i < n; ++i)
                     if (maTabs[i])
-                        maTabs[i]->UpdateDeleteTab(nTab,false,
-                                    pRefUndoDoc ? pRefUndoDoc->maTabs[i] : 0,nSheets);
-                maTabs.erase(maTabs.begin()+ nTab, maTabs.begin() + nTab + nSheets);
+                        maTabs[i]->UpdateDeleteTab(
+                            nTab, false, pRefUndoDoc ? pRefUndoDoc->maTabs[i] : 0,nSheets);
+
+                TableContainer::iterator it = maTabs.begin() + nTab;
+                TableContainer::iterator itEnd = it + nSheets;
+                std::for_each(it, itEnd, ScDeleteObjectByPtr<ScTable>());
+                maTabs.erase(it, itEnd);
                 // UpdateBroadcastAreas must be called between UpdateDeleteTab,
                 // which ends listening, and StartAllListeners, to not modify
                 // areas that are to be inserted by starting listeners.
                 UpdateBroadcastAreas( URM_INSDEL, aRange, 0,0,-1*nSheets);
-                TableContainer::iterator it = maTabs.begin();
+                it = maTabs.begin();
                 for (; it != maTabs.end(); ++it)
                     if ( *it )
                         (*it)->UpdateCompile();
