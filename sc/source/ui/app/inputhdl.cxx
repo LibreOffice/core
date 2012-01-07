@@ -2115,7 +2115,7 @@ void ScInputHandler::DataChanged( sal_Bool bFromTopNotify )
     if (eMode==SC_INPUT_TYPE || eMode==SC_INPUT_TABLE)
     {
         String aText;
-        if ( pInputWin->IsMultiLineInput() )
+        if ( pInputWin && pInputWin->IsMultiLineInput() )
             aText = ScEditUtil::GetMultilineString(*pEngine);
         else
             aText = GetEditText(pEngine);
