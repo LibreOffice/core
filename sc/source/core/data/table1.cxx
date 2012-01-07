@@ -333,7 +333,10 @@ ScTable::~ScTable()
 
         ScDrawLayer* pDrawLayer = pDocument->GetDrawLayer();
         if (pDrawLayer)
+        {
             pDrawLayer->ScRemovePage( nTab );
+            pDrawLayer->ResetTab(nTab, pDocument->GetTableCount()-1);
+        }
     }
 
     delete[] pColWidth;
