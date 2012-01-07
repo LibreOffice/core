@@ -46,6 +46,7 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
     filter \
     forms \
     formula \
+    fpicker \
     framework \
     hwpfilter \
     idl \
