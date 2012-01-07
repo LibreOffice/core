@@ -169,7 +169,7 @@ void TransliterationWrapper::loadModuleImpl() const
         if ( xTrans.is() )
             xTrans->loadModule( (TransliterationModules)nType, aLocale );
     }
-    catch ( Exception& e )
+    catch ( const Exception& e )
     {
 #ifdef DBG_UTIL
         rtl::OStringBuffer aMsg("loadModuleImpl: Exception caught\n");
@@ -196,7 +196,7 @@ void TransliterationWrapper::loadModuleByImplName(
         if ( xTrans.is() )
             xTrans->loadModuleByImplName( rModuleName, aLocale );
     }
-    catch ( Exception& e )
+    catch ( const Exception& e )
     {
 #ifdef DBG_UTIL
         rtl::OStringBuffer aMsg("loadModuleByImplName: Exception caught\n");
@@ -222,7 +222,7 @@ sal_Bool TransliterationWrapper::equals(
         if ( xTrans.is() )
             return xTrans->equals( rStr1, nPos1, nCount1, nMatch1, rStr2, nPos2, nCount2, nMatch2 );
     }
-    catch ( Exception& e )
+    catch ( const Exception& e )
     {
 #ifdef DBG_UTIL
         rtl::OStringBuffer aMsg("equals: Exception caught\n");

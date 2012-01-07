@@ -62,9 +62,8 @@ NativeNumberWrapper::getNativeNumberString(
         if ( xNNS.is() )
             return xNNS->getNativeNumberString( rNumberString, rLocale, nNativeNumberMode );
     }
-    catch ( uno::Exception& e )
+    catch ( const uno::Exception& )
     {
-        (void)e;
         DBG_ERRORFILE( "getNativeNumberString: Exception caught!" );
     }
     return ::rtl::OUString();
@@ -81,9 +80,8 @@ NativeNumberWrapper::isValidNatNum(
         if ( xNNS.is() )
             return xNNS->isValidNatNum( rLocale, nNativeNumberMode );
     }
-    catch ( uno::Exception& e )
+    catch ( const uno::Exception& )
     {
-        (void)e;
         DBG_ERRORFILE( "isValidNatNum: Exception caught!" );
     }
     return sal_False;
@@ -100,9 +98,8 @@ NativeNumberWrapper::convertToXmlAttributes(
         if ( xNNS.is() )
             return xNNS->convertToXmlAttributes( rLocale, nNativeNumberMode );
     }
-    catch ( uno::Exception& e )
+    catch ( const uno::Exception& )
     {
-        (void)e;
         DBG_ERRORFILE( "convertToXmlAttributes: Exception caught!" );
     }
     return i18n::NativeNumberXmlAttributes();
@@ -118,9 +115,8 @@ NativeNumberWrapper::convertFromXmlAttributes(
         if ( xNNS.is() )
             return xNNS->convertFromXmlAttributes( rAttr );
     }
-    catch ( uno::Exception& e )
+    catch ( const uno::Exception& )
     {
-        (void)e;
         DBG_ERRORFILE( "convertFromXmlAttributes: Exception caught!" );
     }
     return 0;

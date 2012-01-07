@@ -220,7 +220,7 @@ namespace DOM
             // copy bytes to the provided buffer
             rtl_copyMemory(buffer, chunk.getConstArray(), nread);
             return nread;
-        } catch (com::sun::star::uno::Exception& ex) {
+        } catch (const com::sun::star::uno::Exception& ex) {
             (void) ex;
             OSL_FAIL(OUStringToOString(ex.Message, RTL_TEXTENCODING_UTF8).getStr());
             return -1;
@@ -240,7 +240,7 @@ namespace DOM
             if (pctx->freeOnClose)
                 delete pctx;
             return 0;
-        } catch (com::sun::star::uno::Exception& ex) {
+        } catch (const com::sun::star::uno::Exception& ex) {
             (void) ex;
             OSL_FAIL(OUStringToOString(ex.Message, RTL_TEXTENCODING_UTF8).getStr());
             return -1;

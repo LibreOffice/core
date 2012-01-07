@@ -70,9 +70,8 @@ NumberFormatCodeWrapper::getDefault( sal_Int16 formatType, sal_Int16 formatUsage
         if ( xNFC.is() )
             return xNFC->getDefault( formatType, formatUsage, aLocale );
     }
-    catch ( Exception& e )
+    catch ( const Exception& e )
     {
-        (void)e;
         DBG_ERRORFILE( "getDefault: Exception caught!" );
     }
     return ::com::sun::star::i18n::NumberFormatCode();
@@ -87,9 +86,8 @@ NumberFormatCodeWrapper::getFormatCode( sal_Int16 formatIndex ) const
         if ( xNFC.is() )
             return xNFC->getFormatCode( formatIndex, aLocale );
     }
-    catch ( Exception& e )
+    catch ( const Exception& e )
     {
-        (void)e;
         DBG_ERRORFILE( "getFormatCode: Exception caught!" );
     }
     return ::com::sun::star::i18n::NumberFormatCode();
@@ -104,9 +102,8 @@ NumberFormatCodeWrapper::getAllFormatCode( sal_Int16 formatUsage ) const
         if ( xNFC.is() )
             return xNFC->getAllFormatCode( formatUsage, aLocale );
     }
-    catch ( Exception& e )
+    catch ( const Exception& e )
     {
-        (void)e;
         DBG_ERRORFILE( "getAllFormatCode: Exception caught!" );
     }
     return ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::NumberFormatCode > (0);
@@ -121,9 +118,8 @@ NumberFormatCodeWrapper::getAllFormatCodes() const
         if ( xNFC.is() )
             return xNFC->getAllFormatCodes( aLocale );
     }
-    catch ( Exception& e )
+    catch ( const Exception& e )
     {
-        (void)e;
         DBG_ERRORFILE( "getAllFormatCodes: Exception caught!" );
     }
     return ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::NumberFormatCode > (0);

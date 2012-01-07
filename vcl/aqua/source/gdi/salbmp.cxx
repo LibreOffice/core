@@ -229,7 +229,7 @@ bool AquaSalBitmap::CreateContext()
                                32, nContextBytesPerRow, maPalette, maContextBuffer.get(),
                                mnBits, mnBytesPerRow, maPalette, maUserBuffer.get() );
         }
-        catch( std::bad_alloc )
+        catch( const std::bad_alloc& )
         {
             mxGraphicContext = 0;
         }

@@ -338,10 +338,10 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, /*argv*/)
         }
     }
 
-    } catch (CannotDumpException & e) {
+    } catch (const CannotDumpException & e) {
         std::cout.flush();
         std::cerr << "\nError: " << e.m_message << std::endl;
-    } catch(Exception& e) {
+    } catch(const Exception& e) {
         std::cout.flush();
         std::cerr
             << "\nError: "

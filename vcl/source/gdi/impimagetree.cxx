@@ -231,7 +231,7 @@ bool ImplImageTree::doLoadImage(
         found = find(paths, bitmap);
     } catch (css::uno::RuntimeException &) {
         throw;
-    } catch (css::uno::Exception & e) {
+    } catch (const css::uno::Exception & e) {
         OSL_TRACE(
             "ImplImageTree::loadImage exception \"%s\"",
             rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr());
@@ -368,7 +368,7 @@ bool ImplImageTree::find(
                     css::uno::UNO_QUERY_THROW);
             } catch (css::uno::RuntimeException &) {
                 throw;
-            } catch (css::uno::Exception & e) {
+            } catch (const css::uno::Exception & e) {
                 OSL_TRACE(
                     "ImplImageTree::find exception \"%s\"",
                     rtl::OUStringToOString(

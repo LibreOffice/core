@@ -324,9 +324,8 @@ namespace utl
             if (xNode.is())
                 return OConfigurationNode( xNode );
         }
-        catch(NoSuchElementException& e)
+        catch(const NoSuchElementException&)
         {
-            (void)e;
             #if OSL_DEBUG_LEVEL > 0
             rtl::OStringBuffer aBuf( 256 );
             aBuf.append("OConfigurationNode::openNode: there is no element named ");

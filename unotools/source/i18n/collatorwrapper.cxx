@@ -55,9 +55,8 @@ CollatorWrapper::compareString (const ::rtl::OUString& s1, const ::rtl::OUString
         if (mxInternationalCollator.is())
             return mxInternationalCollator->compareString (s1, s2);
     }
-    catch (uno::RuntimeException& rRuntimeException)
+    catch (const uno::RuntimeException&)
     {
-        (void)rRuntimeException;
         DBG_ERRORFILE ("CollatorWrapper: compareString failed");
     }
 
@@ -72,9 +71,8 @@ CollatorWrapper::listCollatorAlgorithms (const lang::Locale& rLocale) const
         if (mxInternationalCollator.is())
             return mxInternationalCollator->listCollatorAlgorithms (rLocale);
     }
-    catch (uno::RuntimeException& rRuntimeException)
+    catch (const uno::RuntimeException&)
     {
-        (void)rRuntimeException;
         DBG_ERRORFILE ("CollatorWrapper: listCollatorAlgorithms failed");
     }
 
@@ -89,9 +87,8 @@ CollatorWrapper::loadDefaultCollator (const lang::Locale& rLocale, sal_Int32 nOp
         if (mxInternationalCollator.is())
             return mxInternationalCollator->loadDefaultCollator (rLocale, nOptions);
     }
-    catch (uno::RuntimeException& rRuntimeException)
+    catch (const uno::RuntimeException&)
     {
-        (void)rRuntimeException;
         DBG_ERRORFILE ("CollatorWrapper: loadDefaultCollator failed");
     }
 
@@ -108,9 +105,8 @@ CollatorWrapper::loadCollatorAlgorithm (const ::rtl::OUString& rAlgorithm,
             return mxInternationalCollator->loadCollatorAlgorithm (
                                                         rAlgorithm, rLocale, nOptions);
     }
-    catch (uno::RuntimeException& rRuntimeException)
+    catch (const uno::RuntimeException&)
     {
-        (void)rRuntimeException;
         DBG_ERRORFILE ("CollatorWrapper: loadCollatorAlgorithm failed");
     }
 

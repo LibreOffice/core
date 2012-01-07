@@ -69,7 +69,7 @@ namespace DOM
             sal_Bool capture = sal_False;
             xTarget->addEventListener(aType,
                     Reference< XEventListener >(this), capture);
-        } catch (Exception &e){
+        } catch (const Exception &e){
             OString aMsg("Exception caught while registering NodeList as listener:\n");
             aMsg += OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US);
             OSL_FAIL(aMsg.getStr());

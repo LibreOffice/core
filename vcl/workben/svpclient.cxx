@@ -92,7 +92,7 @@ SAL_IMPLEMENT_MAIN()
         if( xFactory.is() )
             setProcessServiceFactory( xFactory );
     }
-    catch( com::sun::star::uno::Exception& rExc)
+    catch(const com::sun::star::uno::Exception&)
     {
     }
 

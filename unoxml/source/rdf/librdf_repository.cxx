@@ -867,7 +867,7 @@ throw (uno::RuntimeException)
         reinterpret_cast<const char *>(id)));
     try {
         return rdf::BlankNode::create(m_xContext, nodeID);
-    } catch (lang::IllegalArgumentException & iae) {
+    } catch (const lang::IllegalArgumentException & iae) {
         throw lang::WrappedTargetRuntimeException(
             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                 "librdf_Repository::createBlankNode: "
@@ -1495,7 +1495,7 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
         xXmlId.set( rdf::URI::create(m_xContext,
                 ::rtl::OUString::createFromAscii(s_nsOOo) + sXmlId),
             uno::UNO_QUERY_THROW);
-    } catch (lang::IllegalArgumentException & iae) {
+    } catch (const lang::IllegalArgumentException & iae) {
         throw lang::WrappedTargetRuntimeException(
             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                 "librdf_Repository::setStatementRDFa: "
@@ -1516,7 +1516,7 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
             xContent.set(rdf::Literal::create(m_xContext, content),
                 uno::UNO_QUERY_THROW);
         }
-    } catch (lang::IllegalArgumentException & iae) {
+    } catch (const lang::IllegalArgumentException & iae) {
         throw lang::WrappedTargetRuntimeException(
             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                 "librdf_Repository::setStatementRDFa: "
@@ -1556,7 +1556,7 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
                 + mdref.First + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("#"))
                 + mdref.Second),
             uno::UNO_QUERY_THROW);
-    } catch (lang::IllegalArgumentException & iae) {
+    } catch (const lang::IllegalArgumentException & iae) {
         throw lang::WrappedTargetRuntimeException(
             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                 "librdf_Repository::removeStatementRDFa: "
@@ -1587,7 +1587,7 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
         xXmlId.set( rdf::URI::create(m_xContext,
                 ::rtl::OUString::createFromAscii(s_nsOOo) + sXmlId),
             uno::UNO_QUERY_THROW);
-    } catch (lang::IllegalArgumentException & iae) {
+    } catch (const lang::IllegalArgumentException & iae) {
         throw lang::WrappedTargetRuntimeException(
             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                 "librdf_Repository::getStatementRDFa: "
@@ -2144,7 +2144,7 @@ librdf_TypeConverter::convertToXURI(librdf_uri* i_pURI) const
         RTL_TEXTENCODING_UTF8) );
     try {
         return rdf::URI::create(m_xContext, uriU);
-    } catch (lang::IllegalArgumentException & iae) {
+    } catch (const lang::IllegalArgumentException & iae) {
         throw lang::WrappedTargetRuntimeException(
             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                 "librdf_TypeConverter::convertToXURI: "
@@ -2187,7 +2187,7 @@ librdf_TypeConverter::convertToXResource(librdf_node* i_pNode) const
         try {
             return uno::Reference<rdf::XResource>(
                 rdf::BlankNode::create(m_xContext, labelU), uno::UNO_QUERY);
-        } catch (lang::IllegalArgumentException & iae) {
+        } catch (const lang::IllegalArgumentException & iae) {
             throw lang::WrappedTargetRuntimeException(
                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                     "librdf_TypeConverter::convertToXResource: "

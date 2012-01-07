@@ -292,7 +292,7 @@ void LocaleDataWrapper::invalidateData()
         if ( xLD.is() )
             return xLD->getReservedWord( getLocale() );
     }
-    catch ( Exception& e )
+    catch ( const Exception& e )
     {
 #ifdef DBG_UTIL
         rtl::OStringBuffer aMsg("getReservedWord: Exception caught\n");
@@ -318,7 +318,7 @@ void LocaleDataWrapper::invalidateData()
         if ( xLD.is() )
             rInstalledLocales = xLD->getAllInstalledLocaleNames();
     }
-    catch ( Exception& e )
+    catch ( const Exception& e )
     {
 #ifdef DBG_UTIL
         rtl::OStringBuffer aMsg("getAllInstalledLocaleNames: Exception caught\n");

@@ -860,7 +860,7 @@ void SAL_CALL Moderator::run()
         nIOErrorCode = r.Code;
         aResultType = INTERACTIVEIO;
     }
-    catch (const UnsupportedDataSinkException )
+    catch (const UnsupportedDataSinkException &)
     {
         aResultType = UNSUPPORTED;
     }

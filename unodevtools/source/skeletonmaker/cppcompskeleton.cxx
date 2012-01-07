@@ -333,7 +333,7 @@ void generateXAddInBodies(std::ostream& o, const OString & classname)
         "::rtl::OUString(),\n                                           "
         "sDISPLAYNAME);\n            if (sDisplayName.equals(aDisplayName))\n"
         "                return functions[i];\n        }\n    }\n"
-        "     catch ( css::uno::RuntimeException & e ) {\n        throw e;\n    }\n"
+        "     catch ( const css::uno::RuntimeException & e ) {\n        throw e;\n    }\n"
         "     catch ( css::uno::Exception & ) {\n    }\n    return ret;\n}\n\n";
 
     o << "::rtl::OUString SAL_CALL " << classname << "getDisplayFunctionName(const "
@@ -406,7 +406,7 @@ void generateXCompatibilityNamesBodies(std::ostream& o, const OString & classnam
         "                } while ( nIndex >= 0 );\n\n                "
         "seqLocalizedNames[i].Locale = aLocale;\n                "
         "seqLocalizedNames[i].Name = sCompatibilityName;\n            }"
-        "\n        }\n    }\n    catch ( css::uno::RuntimeException & e ) {\n        "
+        "\n        }\n    }\n    catch ( const css::uno::RuntimeException & e ) {\n        "
         "throw e;\n    }\n    catch ( css::uno::Exception & ) {\n    }\n\n"
         "    return seqLocalizedNames;\n}\n\n";
 }
@@ -580,7 +580,7 @@ void generateAddinConstructorAndHelper(std::ostream& o,
             "                buf.makeStringAndClear()), css::uno::UNO_QUERY);\n"
             "        xPropSet->getPropertyValue(\n            "
             "::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(propName))) >>= ret;\n    }\n"
-            "     catch ( css::uno::RuntimeException & e ) {\n        throw e;\n    }\n"
+            "     catch ( const css::uno::RuntimeException & e ) {\n        throw e;\n    }\n"
             "     catch ( css::uno::Exception & ) {\n    }\n    return ret;\n";
     }
     o <<"}\n\n";

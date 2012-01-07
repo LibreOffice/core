@@ -1038,7 +1038,7 @@ void GtkPrintDialog::ExportAsPDF(const rtl::OUString &rFileURL, GtkPrintSettings
                         xView->getSelection() >>= aSelection;
                 }
             }
-            catch (uno::RuntimeException)
+            catch (const uno::RuntimeException &)
             {
             }
             if (aSelection.hasValue())

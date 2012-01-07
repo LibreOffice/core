@@ -89,7 +89,7 @@ ItemHolder1::ItemHolder1()
             xCfg->addEventListener(static_cast< css::lang::XEventListener* >(this));
     }
 #ifdef DBG_UTIL
-    catch(css::uno::Exception& rEx)
+    catch(const css::uno::Exception& rEx)
     {
         static sal_Bool bMessage = sal_True;
         if(bMessage)
