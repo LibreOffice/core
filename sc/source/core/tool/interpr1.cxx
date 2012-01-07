@@ -1246,6 +1246,8 @@ void ScInterpreter::ScAnd()
                         }
                     }
                     break;
+                    case svExternalSingleRef:
+                    case svExternalDoubleRef:
                     case svMatrix:
                     {
                         ScMatrixRef pMat = GetMatrix();
@@ -1344,6 +1346,8 @@ void ScInterpreter::ScOr()
                         }
                     }
                     break;
+                    case svExternalSingleRef:
+                    case svExternalDoubleRef:
                     case svMatrix:
                     {
                         bHaveValue = true;
