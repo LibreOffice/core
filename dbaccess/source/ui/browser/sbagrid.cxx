@@ -38,7 +38,6 @@
 #define ITEMID_NUMBERINFO       SID_ATTR_NUMBERFORMAT_INFO
 
 
-#define _ZFORLIST_DECLARE_TABLE
 #include <svx/numinf.hxx>
 #include <svx/dbaexchange.hxx>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>

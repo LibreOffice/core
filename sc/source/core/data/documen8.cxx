@@ -28,7 +28,6 @@
 
 
 
-#define _ZFORLIST_DECLARE_TABLE
 #include "scitems.hxx"
 #include <editeng/eeitem.hxx>
 

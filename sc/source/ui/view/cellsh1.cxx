@@ -50,7 +50,6 @@
 #include "scitems.hxx"
 #include <sfx2/viewfrm.hxx>
 
-#define _ZFORLIST_DECLARE_TABLE
 #include <svl/stritem.hxx>
 #include <svl/whiter.hxx>
 #include <svl/zforlist.hxx>

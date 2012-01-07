@@ -30,8 +30,6 @@
 
 #include "scitems.hxx"
 
-#define _ZFORLIST_DECLARE_TABLE
-
 #define _PRINTFUN_CXX
 #define _INPUTHDL_CXX
 

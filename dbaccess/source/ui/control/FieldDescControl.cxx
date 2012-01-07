@@ -48,7 +48,6 @@
 #include <svx/svxids.hrc>
 #include <svx/algitem.hxx>
 #include <svl/itempool.hxx>
-#define _ZFORLIST_DECLARE_TABLE     // ohne das bekomme ich einen Compiler-Fehler in <svl/zforlist.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/rngitem.hxx>
 #include <svl/intitem.hxx>

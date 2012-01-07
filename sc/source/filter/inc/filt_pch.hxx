@@ -31,8 +31,6 @@
 #include "scitems.hxx"
 
 
-#define _ZFORLIST_DECLARE_TABLE
-
 #define SC_PROGRESS_CXX
 
 #include <tools/solar.h>

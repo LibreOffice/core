@@ -28,7 +28,6 @@
 
 
 
-#define _ZFORLIST_DECLARE_TABLE
 #include <hintids.hxx>
 #include <rtl/logfile.hxx>
 #include <svl/itemiter.hxx>

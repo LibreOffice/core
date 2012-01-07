@@ -49,9 +49,6 @@
 
 // header for class SvNumberformat
 #ifndef _ZFORMAT_HXX
-#ifndef _ZFORLIST_DECLARE_TABLE
-#define _ZFORLIST_DECLARE_TABLE
-#endif
 #include <svl/zformat.hxx>
 #endif
 

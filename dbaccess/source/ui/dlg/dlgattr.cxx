@@ -39,7 +39,6 @@
 #include <svx/dialogs.hrc>
 #include "dbu_dlg.hrc"
 #include <svl/itemset.hxx>
-#define _ZFORLIST_DECLARE_TABLE
 #include <svl/zforlist.hxx>
 #include <svx/svxids.hrc>
 #include <svx/flagsdef.hxx>

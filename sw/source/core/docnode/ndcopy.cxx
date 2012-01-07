@@ -29,7 +29,6 @@
 
 #include <editeng/brkitem.hxx>
 
-#define _ZFORLIST_DECLARE_TABLE
 #include <hintids.hxx>
 #include <fmtpdsc.hxx>
 #include <fmtanchr.hxx>

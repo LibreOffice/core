@@ -35,7 +35,6 @@
 #include <unotools/localedatawrapper.hxx>
 #include <i18npool/lang.h>
 #ifndef _ZFORMAT_HXX //autogen
-#define _ZFORLIST_DECLARE_TABLE
 #include <svl/zformat.hxx>
 #endif
 #include <svl/eitem.hxx>

@@ -97,8 +97,6 @@
 #include <svl/intitem.hxx>
 #include <svx/algitem.hxx>
 #include <svx/numinf.hxx>
-#define _ZFORLIST_DECLARE_TABLE
-#include <svx/numinf.hxx>
 #include <svl/zforlist.hxx>
 #include "dlgattr.hxx"
 #include <vcl/msgbox.hxx>

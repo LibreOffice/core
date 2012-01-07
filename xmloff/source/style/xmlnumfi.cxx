@@ -29,7 +29,6 @@
 
 #include <unotools/syslocale.hxx>
 
-#define _ZFORLIST_DECLARE_TABLE
 #include <svl/zforlist.hxx>
 
 #include <svl/zformat.hxx>

@@ -30,7 +30,6 @@
 #define _EXTENSIONS_PROPCTRLR_USERCONTROL_HXX_
 
 #include "commoncontrol.hxx"
-#define _ZFORLIST_DECLARE_TABLE
 #include <svtools/fmtfield.hxx>
 #include <svtools/fileurlbox.hxx>
 #include "standardcontrol.hxx"

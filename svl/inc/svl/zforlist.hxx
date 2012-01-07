@@ -214,14 +214,8 @@ enum NfEvalDateFormat
 };
 
 
-#define _ZFORLIST_DECLARE_TABLE
-#ifdef _ZFORLIST_DECLARE_TABLE
 DECLARE_TABLE (SvNumberFormatTable, SvNumberformat*)
 DECLARE_TABLE (SvNumberFormatterIndexTable, sal_uInt32*)
-#else
-typedef Table SvNumberFormatTable;
-typedef Table SvNumberFormatterIndexTable;
-#endif
 
 typedef ::std::map< sal_uInt32, sal_uInt32 > SvNumberFormatterMergeMap;
 

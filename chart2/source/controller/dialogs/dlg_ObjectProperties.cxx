@@ -27,9 +27,6 @@
  ************************************************************************/
 
 #ifndef _ZFORLIST_HXX
-#ifndef _ZFORLIST_DECLARE_TABLE
-#define _ZFORLIST_DECLARE_TABLE
-#endif
 #include <svl/zforlist.hxx>
 #endif
 

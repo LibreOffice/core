@@ -27,8 +27,6 @@
  ************************************************************************/
 
 
-#define _ZFORLIST_DECLARE_TABLE
-
 #include <comphelper/servicehelper.hxx>
 
 #include <svl/numuno.hxx>

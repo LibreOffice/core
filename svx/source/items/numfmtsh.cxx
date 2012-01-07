@@ -35,7 +35,6 @@
 #include <tools/debug.hxx>
 #include <i18npool/mslangid.hxx>
 
-#define _ZFORLIST_DECLARE_TABLE
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
 

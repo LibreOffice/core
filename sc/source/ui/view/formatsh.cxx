@@ -60,7 +60,6 @@
 #include <svl/whiter.hxx>
 #include <vcl/msgbox.hxx>
 
-#define _ZFORLIST_DECLARE_TABLE
 #include <svl/stritem.hxx>
 #include <svl/zformat.hxx>
 #include <svl/languageoptions.hxx>

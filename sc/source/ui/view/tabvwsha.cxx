@@ -31,7 +31,6 @@
 
 // INCLUDE ---------------------------------------------------------------
 
-#define _ZFORLIST_DECLARE_TABLE
 #include "scitems.hxx"
 #include <svl/stritem.hxx>
 #include <svl/whiter.hxx>

@@ -29,7 +29,6 @@
 #include <hintids.hxx>
 
 #ifndef _ZFORLIST_HXX
-#define _ZFORLIST_DECLARE_TABLE
 #include <svl/zforlist.hxx>
 #endif
 #include <svl/stritem.hxx>

@@ -31,7 +31,6 @@
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <hintids.hxx>
 
-#define _ZFORLIST_DECLARE_TABLE
 #include <editeng/brshitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/protitem.hxx>

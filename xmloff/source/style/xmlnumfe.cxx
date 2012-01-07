@@ -28,7 +28,6 @@
 
 
 #define _SVSTDARR_ULONGS
-#define _ZFORLIST_DECLARE_TABLE
 
 #include <svl/svstdarr.hxx>
 #include <svl/zforlist.hxx>
