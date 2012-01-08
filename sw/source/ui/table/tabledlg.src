@@ -748,8 +748,8 @@ TabPage TP_TABLE_TEXTFLOW
         Border = TRUE;
         StringList [ en-US ] =
         {
-             < "horizontal" ; 0; > ;
-             < "vertical" ; 2; > ;
+             < "Horizontal" ; 0; > ;
+             < "Vertical" ; 2; > ;
              < "Use superordinate object settings" ; 4; > ;
         };
     };
