@@ -233,7 +233,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
 
         case SID_COPY:
             pTableView->Copy();
-            break;
+            return;
 
         case SID_CUT:
             pTableView->Cut();
@@ -334,7 +334,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
                         pTopView->SetSelection(ESelection(0,0,nPar-1,nLen));
                 }
             }
-            break;
+            return;
 
         case SID_CHARMAP:
             {
