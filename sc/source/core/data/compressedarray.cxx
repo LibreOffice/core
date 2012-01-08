@@ -487,9 +487,5 @@ void ScCompressedArrayIterator<A,D>::Follow(
 template class ScCompressedArray< SCROW, sal_uInt16>;           // heights, base class
 template class ScCompressedArray< SCROW, sal_uInt8>;             // flags, base class
 template class ScBitMaskCompressedArray< SCROW, sal_uInt8>;      // flags
-template void ScCompressedArrayIterator< SCROW, sal_uInt16>::Follow(
-        const ScCompressedArrayIterator< SCROW, sal_uInt8>&);
-
-// === EOF ===================================================================
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
