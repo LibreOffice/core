@@ -2521,7 +2521,7 @@ void Test::testGraphicsOnSheetMove()
 
     // Insert an object.
     Rectangle aObjRect(2,2,100,100);
-    SdrRectObj* pObj = new SdrRectObj(aObjRect);
+    SdrObject* pObj = new SdrRectObj(aObjRect);
     pPage->InsertObject(pObj);
     ScDrawLayer::SetCellAnchoredFromPosition(*pObj, *m_pDoc, 0);
 
@@ -2566,6 +2566,17 @@ void Test::testGraphicsOnSheetMove()
     CPPUNIT_ASSERT_MESSAGE("2nd sheet should have one object.", pPage && pPage->GetObjCount() == 1);
     CPPUNIT_ASSERT_MESSAGE("Wrong sheet ID in cell anchor data!", pData->maStart.Tab() == 1 && pData->maEnd.Tab() == 1);
 
+    // Copy the 2nd sheet, which has one drawing object to the last position.
+    m_pDoc->CopyTab(1, 2);
+    pPage = pDrawLayer->GetPage(2);
+    CPPUNIT_ASSERT_MESSAGE("Copied sheet should have one object.", pPage && pPage->GetObjCount() == 1);
+    pObj = pPage->GetObj(0);
+    CPPUNIT_ASSERT_MESSAGE("Failed to get drawing object.", pObj);
+    pData = ScDrawLayer::GetObjData(pObj);
+    CPPUNIT_ASSERT_MESSAGE("Failed to get drawing object meta-data.", pData);
+    CPPUNIT_ASSERT_MESSAGE("Wrong sheet ID in cell anchor data!", pData->maStart.Tab() == 2 && pData->maEnd.Tab() == 2);
+
+    m_pDoc->DeleteTab(2);
     m_pDoc->DeleteTab(1);
     m_pDoc->DeleteTab(0);
 }
