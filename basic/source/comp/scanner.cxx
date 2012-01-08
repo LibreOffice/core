@@ -114,7 +114,7 @@ void SbiScanner::GenError( SbError code )
 // used by SbiTokenizer::MayBeLabel() to detect a label
 bool SbiScanner::DoesColonFollow()
 {
-    if( pLine && *pLine == ':' )
+    if(nCol < aLine.getLength() && aLine[nCol] == ':')
     {
         pLine++; nCol++;
         return true;
@@ -152,7 +152,7 @@ static SbxDataType GetSuffixType( sal_Unicode c )
 void SbiScanner::scanAlphanumeric()
 {
     sal_Int32 n = nCol;
-    while(theBasicCharClass::get().isAlphaNumeric(*pLine, bCompatible) || *pLine == '_')
+    while(nCol < aLine.getLength() && (theBasicCharClass::get().isAlphaNumeric(aLine[nCol], bCompatible) || aLine[nCol] == '_'))
     {
         pLine++;
         nCol++;
@@ -242,13 +242,13 @@ bool SbiScanner::NextSym()
     nCol1 = nCol;
 
     // only blank line?
-    if( !*pLine )
+    if(nCol >= aLine.getLength())
         goto eoln;
 
     if( bPrevLineExtentsComment )
         goto PrevLineCommentLbl;
 
-    if( *pLine == '#' )
+    if(nCol < aLine.getLength() && aLine[nCol] == '#')
     {
         pLine++;
         nCol++;
