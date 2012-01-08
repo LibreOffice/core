@@ -723,7 +723,7 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
                     if( *pValues >>= aPrinterName )
                     {
                         bOk = true;
-                        if( aPrinterName.getLength() && pDocSh->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
+                        if( !aPrinterName.isEmpty() && pDocSh->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
                         {
                             SfxPrinter *pTempPrinter = pDocSh->GetPrinter( sal_True );
                             if (pTempPrinter)

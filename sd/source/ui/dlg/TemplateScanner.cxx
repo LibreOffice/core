@@ -105,7 +105,7 @@ int Classify (const ::rtl::OUString&, const ::rtl::OUString& rsURL)
 {
     int nPriority (0);
 
-    if (rsURL.getLength() == 0)
+    if (rsURL.isEmpty())
         nPriority = 100;
     else if (rsURL.indexOf(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("presnt")))>=0)
     {

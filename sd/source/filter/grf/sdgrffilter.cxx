@@ -399,17 +399,17 @@ void SdGRFFilter::SaveGraphic( const ::com::sun::star::uno::Reference< ::com::su
         Reference< XPropertySet > xGraphicSet( xShapeSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "Graphic" ) ) ), UNO_QUERY_THROW );
         xShapeSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "GraphicURL" ) ) ) >>= sGraphicURL;
 
-        bool bIsLinked = (sGraphicURL.getLength() != 0) && (sGraphicURL.compareToAscii( RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.GraphicObject:") ) != 0);
+        bool bIsLinked = !sGraphicURL.isEmpty() && (sGraphicURL.compareToAscii( RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.GraphicObject:") ) != 0);
 
         if( !bIsLinked )
                xGraphicSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "MimeType" ) ) ) >>= aMimeType;
 
-        if( bIsLinked || aMimeType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "image/x-vclgraphic" ) ) || !aMimeType.getLength() )
+        if( bIsLinked || aMimeType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "image/x-vclgraphic" ) ) || aMimeType.isEmpty() )
         {
             // this failed, try to detect it from graphic stream and URL
             OUString aURL( sGraphicURL );
 
-            if( aURL.getLength() == 0 )
+            if( aURL.isEmpty() )
                 xShapeSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "GraphicStreamURL" ) ) ) >>= aURL;
 
             {
@@ -426,7 +426,7 @@ void SdGRFFilter::SaveGraphic( const ::com::sun::star::uno::Reference< ::com::su
             }
         }
 
-        if( aMimeType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "image/x-vclgraphic" ) ) || !aMimeType.getLength() )
+        if( aMimeType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "image/x-vclgraphic" ) ) || aMimeType.isEmpty() )
         {
             // this also failed, now set a mimetype that fits graphic best
 
@@ -491,7 +491,7 @@ void SdGRFFilter::SaveGraphic( const ::com::sun::star::uno::Reference< ::com::su
                 aDefaultFormatName = aExportFormatName;
         }
 
-        if( aDefaultFormatName.getLength() == 0 )
+        if( aDefaultFormatName.isEmpty() )
         {
             nCount = rGF.GetImportFormatCount();
             for( sal_uInt16 i = 0; i < nCount; i++ )
@@ -507,7 +507,7 @@ void SdGRFFilter::SaveGraphic( const ::com::sun::star::uno::Reference< ::com::su
             }
         }
 
-        if( aDefaultFormatName.getLength() == 0 )
+        if( aDefaultFormatName.isEmpty() )
             aDefaultFormatName = OUString( RTL_CONSTASCII_USTRINGPARAM( "PNG - Portable Network Graphic" ) );
 
         xFltMgr->setCurrentFilter( aDefaultFormatName );

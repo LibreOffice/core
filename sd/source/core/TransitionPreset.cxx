@@ -121,7 +121,7 @@ bool TransitionPreset::importTransitionsFile( TransitionPresetList& rList,
 
                 // name it
                 OUString aPresetId( pPreset->getPresetId() );
-                if( aPresetId.getLength() )
+                if( !aPresetId.isEmpty() )
                 {
                     UStringMap::const_iterator aIter( rTransitionNameMape.find( aPresetId ) );
                     if( aIter != rTransitionNameMape.end() )

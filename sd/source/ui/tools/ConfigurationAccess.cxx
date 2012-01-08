@@ -138,7 +138,7 @@ Any ConfigurationAccess::GetConfigurationNode (
     const css::uno::Reference<css::container::XHierarchicalNameAccess>& rxNode,
     const OUString& sPathToNode)
 {
-    if (sPathToNode.getLength() == 0)
+    if (sPathToNode.isEmpty())
         return Any(rxNode);
 
     try
@@ -180,7 +180,7 @@ void ConfigurationAccess::ForAll (
     {
         ::std::vector<Any> aValues(rArguments.size());
         Sequence<OUString> aKeys (rxContainer->getElementNames());
-        for (sal_Int32 nItemIndex=0; nItemIndex<aKeys.getLength(); ++nItemIndex)
+        for (sal_Int32 nItemIndex=0; nItemIndex < aKeys.getLength(); ++nItemIndex)
         {
             const OUString& rsKey (aKeys[nItemIndex]);
             Reference<container::XNameAccess> xSetItem (rxContainer->getByName(rsKey), UNO_QUERY);

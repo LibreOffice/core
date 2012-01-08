@@ -167,7 +167,7 @@ SdPublishingDesign::SdPublishingDesign()
 
     m_nResolution   = PUB_LOWRES_WIDTH;
     m_aAuthor       = aUserOptions.GetFirstName();
-    if( m_aAuthor.Len() && aUserOptions.GetLastName().getLength() )
+    if( m_aAuthor.Len() && !aUserOptions.GetLastName().isEmpty() )
         m_aAuthor      += sal_Unicode(' ');
     m_aAuthor      += (String)aUserOptions.GetLastName();
     m_aEMail        = aUserOptions.GetEmail();

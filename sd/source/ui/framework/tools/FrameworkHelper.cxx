@@ -905,7 +905,7 @@ OUString FrameworkHelper::ResourceIdToString (const Reference<XResourceId>& rxRe
         if (rxResourceId->hasAnchor())
         {
             Sequence<OUString> aAnchorURLs (rxResourceId->getAnchorURLs());
-            for (sal_Int32 nIndex=0; nIndex<aAnchorURLs.getLength(); ++nIndex)
+            for (sal_Int32 nIndex=0; nIndex < aAnchorURLs.getLength(); ++nIndex)
             {
                 sString += OUString(RTL_CONSTASCII_USTRINGPARAM(" | "));
                 sString += aAnchorURLs[nIndex];

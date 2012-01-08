@@ -148,7 +148,7 @@ OUString getShapeDescription( const Reference< XShape >& xShape, bool bWithText 
         if( xText.is() )
         {
             OUString aText( xText->getString() );
-            if( aText.getLength() )
+            if( !aText.isEmpty() )
             {
                 aDescription += OUString(RTL_CONSTASCII_USTRINGPARAM(": "));
 

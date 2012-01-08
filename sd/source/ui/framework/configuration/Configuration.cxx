@@ -158,7 +158,7 @@ void SAL_CALL Configuration::addResource (const Reference<XResourceId>& rxResour
 {
     ThrowIfDisposed();
 
-    if ( ! rxResourceId.is() || rxResourceId->getResourceURL().getLength()==0)
+    if ( ! rxResourceId.is() || rxResourceId->getResourceURL().isEmpty())
         throw ::com::sun::star::lang::IllegalArgumentException();
 
     if (mpResourceContainer->find(rxResourceId) == mpResourceContainer->end())
@@ -181,7 +181,7 @@ void SAL_CALL Configuration::removeResource (const Reference<XResourceId>& rxRes
 {
     ThrowIfDisposed();
 
-    if ( ! rxResourceId.is() || rxResourceId->getResourceURL().getLength()==0)
+    if ( ! rxResourceId.is() || rxResourceId->getResourceURL().isEmpty())
         throw ::com::sun::star::lang::IllegalArgumentException();
 
     ResourceContainer::iterator iResource (mpResourceContainer->find(rxResourceId));
@@ -209,7 +209,7 @@ Sequence<Reference<XResourceId> > SAL_CALL Configuration::getResources (
     ::osl::MutexGuard aGuard (maMutex);
     ThrowIfDisposed();
 
-    bool bFilterResources (rsResourceURLPrefix.getLength() > 0);
+    bool bFilterResources (!rsResourceURLPrefix.isEmpty());
 
     // Collect the matching resources in a vector.
     ::std::vector<Reference<XResourceId> > aResources;

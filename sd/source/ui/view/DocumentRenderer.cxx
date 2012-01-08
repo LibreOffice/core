@@ -222,7 +222,7 @@ namespace {
             if (nContent == 1) // range
             {
                 OUString sValue = mrProperties.getStringValue("PageRange");
-                return sValue.getLength() ? sValue : sFullRange;
+                return sValue.isEmpty() ? sFullRange : sValue;
             }
 
             if (nContent == 2 && // selection
@@ -261,7 +261,7 @@ namespace {
             const bool bDefaultValue = false) const
         {
             OUString sValue( mrProperties.getStringValue( pName ) );
-            if (sValue.getLength())
+            if (!sValue.isEmpty())
                 return sValue.equalsAscii(pValue);
             else
                 return bDefaultValue;

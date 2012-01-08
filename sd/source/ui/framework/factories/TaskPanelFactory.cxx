@@ -191,7 +191,7 @@ namespace
 
         Reference< XResourceId > xResourceId( i_rResourceId );
         ::rtl::OUString sResourceURL = xResourceId->getResourceURL();
-        while ( sResourceURL.getLength() > 0 )
+        while ( !sResourceURL.isEmpty() )
         {
             o_rResourceURLs.push_back( sResourceURL );
             xResourceId = xResourceId->getAnchor();

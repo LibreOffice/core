@@ -161,7 +161,7 @@ void SdStyleSheet::SetApiName( const OUString& rApiName )
 
 rtl::OUString SdStyleSheet::GetApiName() const
 {
-    if( msApiName.getLength() )
+    if( !msApiName.isEmpty() )
         return msApiName;
     else
         return GetName();
@@ -1011,7 +1011,7 @@ void SAL_CALL SdStyleSheet::setParentStyle( const OUString& rParentName  ) throw
     SolarMutexGuard aGuard;
     throwIfDisposed();
 
-    if( rParentName.getLength() )
+    if( !rParentName.isEmpty() )
     {
         const SfxStyles& rStyles = mxPool->GetStyles();
 

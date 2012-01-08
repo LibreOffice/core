@@ -814,7 +814,7 @@ sal_Bool DrawDocShell::GotoBookmark(const String& rBookmark)
                     default:
                         break;
                 }
-                if (sViewURL.getLength() > 0)
+                if (!sViewURL.isEmpty())
                 {
                     ::boost::shared_ptr<FrameworkHelper> pHelper (
                         FrameworkHelper::Instance(rBase));

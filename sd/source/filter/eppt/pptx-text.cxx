@@ -942,7 +942,7 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
                             aFontDesc.CharSet = eChrSet;
                          }
 
-                        if ( aFontDesc.Name.getLength() )
+                        if ( !aFontDesc.Name.isEmpty() )
                         {
                             nParaFlags |= 0x90; // wir geben den Font und den Charset vor
                         }

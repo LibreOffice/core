@@ -100,7 +100,7 @@ static void apply_table_style( SdrTableObj* pObj, SdrModel* pModel, const OUStri
             const OUString sFamilyName( RTL_CONSTASCII_USTRINGPARAM( "table" ) );
             Reference< XNameContainer > xTableFamily( xPool->getByName( sFamilyName ), UNO_QUERY_THROW );
             OUString aStdName( RTL_CONSTASCII_USTRINGPARAM("default") );
-            if( sTableStyle.getLength() )
+            if( !sTableStyle.isEmpty() )
                 aStdName = sTableStyle;
             Reference< XIndexAccess > xStyle( xTableFamily->getByName( aStdName ), UNO_QUERY_THROW );
             pObj->setTableStyle( xStyle );

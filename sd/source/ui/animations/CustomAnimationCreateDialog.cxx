@@ -548,7 +548,7 @@ CustomAnimationCreateDialog::CustomAnimationCreateDialog( Window* pParent, Custo
     setPosition();
 
     // select current preset if available
-    if( rsPresetId.getLength() != 0 )
+    if( !rsPresetId.isEmpty() )
     {
         for( sal_uInt16 i = ENTRANCE; i <= MOTIONPATH; i++ )
         {

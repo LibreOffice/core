@@ -696,7 +696,7 @@ void PowerPointExport::WriteAnimateValues( FSHelperPtr pFS, const Reference< XAn
     DBG(printf("animate value %d: %f\n", i, aKeyTimes[ i ]));
     if( aValues[ i ].hasValue() ) {
         pFS->startElementNS( XML_p, XML_tav,
-                 XML_fmla, sFormula.getLength() > 0 ? USS( sFormula ) : NULL,
+                 XML_fmla, sFormula.isEmpty() ? NULL : USS( sFormula ),
                  XML_tm, I32S( ( sal_Int32 )( aKeyTimes[ i ]*100000.0 ) ),
                  FSEND );
         pFS->startElementNS( XML_p, XML_val, FSEND );
@@ -731,7 +731,7 @@ void PowerPointExport::WriteAnimateTo( FSHelperPtr pFS, Any aValue, const OUStri
 
 void PowerPointExport::WriteAnimationAttributeName( FSHelperPtr pFS, const OUString& rAttributeName )
 {
-    if( ! rAttributeName.getLength() )
+    if( rAttributeName.isEmpty() )
     return;
 
     pFS->startElementNS( XML_p, XML_attrNameLst, FSEND );
@@ -1256,7 +1256,7 @@ static OUString lcl_GetInitials( OUString sName )
 {
     OUStringBuffer sRet;
 
-    if ( sName.getLength() > 0 ) {
+    if ( !sName.isEmpty() ) {
         sRet.append ( sName[0] );
         sal_Int32 nStart = 0, nOffset;
 

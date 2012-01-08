@@ -807,7 +807,7 @@ sal_Bool PPTWriter::ImplCreateDocument()
                 if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CustomShow" ) ) ) )
                 {
                     aCustomShow = ( *(::rtl::OUString*)mAny.getValue() );
-                    if ( aCustomShow.getLength() )
+                    if ( !aCustomShow.isEmpty() )
                     {
                         nFlags |= 8;
                     }
@@ -887,7 +887,7 @@ sal_Bool PPTWriter::ImplCreateDocument()
                             sal_uInt32 nCustomShowIndex = 0;
                             for( i = 0; i < nCount; i++ )        // Anzahl der Custom Shows
                             {
-                                if ( pUString[ i ].getLength() )
+                                if ( !pUString[ i ].isEmpty() )
                                 {
                                     mpPptEscherEx->OpenContainer( EPP_NamedShow, nCustomShowIndex++ );
 
@@ -1136,11 +1136,11 @@ void ImplExportComments( uno::Reference< drawing::XDrawPage > xPage, SvMemoryStr
                 rtl::OUString sText( xText->getString() );
                 rtl::OUString sInitials( getInitials( sAuthor ) );
                 util::DateTime aDateTime( xAnnotation->getDateTime() );
-                if ( sAuthor.getLength() )
+                if ( !sAuthor.isEmpty() )
                     PPTWriter::WriteCString( rBinaryTagData10Atom, sAuthor, 0 );
-                if ( sText.getLength() )
+                if ( !sText.isEmpty() )
                     PPTWriter::WriteCString( rBinaryTagData10Atom, sText, 1 );
-                if ( sInitials.getLength() )
+                if ( !sInitials.isEmpty() )
                     PPTWriter::WriteCString( rBinaryTagData10Atom, sInitials, 2 );
 
                 sal_Int16 nMilliSeconds = aDateTime.HundredthSeconds * 10;

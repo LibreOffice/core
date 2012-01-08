@@ -114,7 +114,7 @@ ResourceId::ResourceId (
       mpURL()
 {
     // Handle the special case of an empty resource URL.
-    if (rsResourceURL.getLength() == 0)
+    if (rsResourceURL.isEmpty())
         maResourceURLs.clear();
     ParseResourceURL();
 }

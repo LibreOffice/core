@@ -149,7 +149,7 @@ IMPL_LINK( SdFileDialog_Imp, PlayMusicHdl, void *, EMPTYARG )
     else
     {
         rtl::OUString aUrl( GetPath() );
-        if ( aUrl.getLength() )
+        if ( !aUrl.isEmpty() )
         {
             try
             {

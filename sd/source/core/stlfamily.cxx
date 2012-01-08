@@ -152,7 +152,7 @@ SdStyleSheet* SdStyleFamily::GetValidNewSheet( const Any& rElement ) throw(Illeg
 SdStyleSheet* SdStyleFamily::GetSheetByName( const OUString& rName ) throw(NoSuchElementException, WrappedTargetException )
 {
     SdStyleSheet* pRet = 0;
-    if( rName.getLength() )
+    if( !rName.isEmpty() )
     {
         if( mnFamily == SD_STYLE_FAMILY_MASTERPAGE )
         {
@@ -300,7 +300,7 @@ sal_Bool SAL_CALL SdStyleFamily::hasByName( const OUString& aName ) throw(Runtim
     SolarMutexGuard aGuard;
     throwIfDisposed();
 
-    if( aName.getLength() )
+    if( !aName.isEmpty() )
     {
         if( mnFamily == SD_STYLE_FAMILY_MASTERPAGE )
         {
@@ -434,7 +434,7 @@ void SAL_CALL SdStyleFamily::insertByName( const OUString& rName, const Any& rEl
     SolarMutexGuard aGuard;
     throwIfDisposed();
 
-    if(rName.getLength() == 0)
+    if(rName.isEmpty())
         throw IllegalArgumentException();
 
     SdStyleSheet* pStyle = GetValidNewSheet( rElement );

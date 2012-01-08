@@ -275,7 +275,7 @@ void FullScreenPane::ExtractArguments (
     while (nIndex >= 0)
     {
         const OUString aToken = aURL.Arguments.getToken(0, '&', nIndex);
-        if (aToken.getLength() > 0)
+        if (!aToken.isEmpty())
         {
             // Split at the first '='.
             const sal_Int32 nAssign = aToken.indexOf('=');

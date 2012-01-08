@@ -473,7 +473,7 @@ void AnnotationManagerImpl::ExecuteReplyToAnnotation( SfxRequest& rReq )
 
         String aStr(SdResId(STR_ANNOTATION_REPLY));
         OUString sAuthor( xAnnotation->getAuthor() );
-        if( sAuthor.getLength() == 0 )
+        if( sAuthor.isEmpty() )
             sAuthor = String( SdResId( STR_ANNOTATION_NOAUTHOR ) );
 
         aStr.SearchAndReplaceAscii("%1", sAuthor);

@@ -1270,7 +1270,7 @@ IMPL_LINK( SlideTransitionPane, LateInitCallback, Timer*, EMPTYARG )
     {
         TransitionPresetPtr pPreset = (*aIter++);
         const OUString aUIName( pPreset->getUIName() );
-         if( aUIName.getLength() )
+         if( !aUIName.isEmpty() )
         {
             maLB_SLIDE_TRANSITIONS.InsertEntry( aUIName );
             m_aPresetIndexes[ nIndex ] = (sal_uInt16)nUIIndex;

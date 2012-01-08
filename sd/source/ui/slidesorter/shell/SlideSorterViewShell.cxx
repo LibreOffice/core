@@ -236,7 +236,7 @@ SlideSorterViewShell* SlideSorterViewShell::GetSlideSorter (ViewShellBase& rBase
     {
         ::boost::shared_ptr<FrameworkHelper> pFrameworkHelper (FrameworkHelper::Instance(rBase));
         if (pFrameworkHelper->IsValid())
-            for (int i=0; pViewShell==NULL && aPaneURLs[i].getLength()>0; ++i)
+            for (int i=0; pViewShell==NULL && !aPaneURLs[i].isEmpty(); ++i)
             {
                 pViewShell = dynamic_cast<SlideSorterViewShell*>(
                     pFrameworkHelper->GetViewShell(aPaneURLs[i]).get());

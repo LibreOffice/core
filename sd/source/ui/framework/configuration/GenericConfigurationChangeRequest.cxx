@@ -46,7 +46,7 @@ GenericConfigurationChangeRequest::GenericConfigurationChangeRequest (
       mxResourceId(rxResourceId),
       meMode(eMode)
 {
-    if ( ! rxResourceId.is() || rxResourceId->getResourceURL().getLength()==0)
+    if ( ! rxResourceId.is() || rxResourceId->getResourceURL().isEmpty())
         throw ::com::sun::star::lang::IllegalArgumentException();
 }
 

@@ -411,7 +411,7 @@ sal_uInt32 PPTWriter::ImplInsertBookmarkURL( const String& rBookmarkURL, const s
     {
         rtl::OUString aRelUrl( INetURLObject::GetRelURL( maBaseURI, rBookmarkURL,
            INetURLObject::WAS_ENCODED, INetURLObject::DECODE_TO_IURI, RTL_TEXTENCODING_UTF8, INetURLObject::FSYS_DETECT ) );
-        if ( aRelUrl.getLength() )
+        if ( !aRelUrl.isEmpty() )
             sBookmarkURL = aRelUrl;
     }
     maHyperlink.Insert( new EPPTHyperlink( sBookmarkURL, nType ), LIST_APPEND );
@@ -2612,7 +2612,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                         }
                     }
 
-                    if ( aControlName.getLength() )
+                    if ( !aControlName.isEmpty() )
                         PPTWriter::WriteCString( *mpExEmbed, aControlName, 1 );
                     if ( aOleIdentifier.Len() )
                         PPTWriter::WriteCString( *mpExEmbed, aOleIdentifier, 2 );
@@ -2633,7 +2633,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                 aPropOpt.AddOpt( ESCHER_Prop_pictureId, mnExEmbed );
                 aPropOpt.AddOpt( ESCHER_Prop_pictureActive, 0x10000 );
 
-                if ( aControlName.getLength() )
+                if ( !aControlName.isEmpty() )
                 {
                     sal_uInt16 i, nBufSize;
                     nBufSize = ( aControlName.getLength() + 1 ) << 1;
@@ -3180,7 +3180,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                 if ( PropValue::GetPropertyValue( aAny, mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "MediaURL" ) ), sal_True ) )
                 {
                     rtl::OUString aMediaURL;
-                    if ( (aAny >>= aMediaURL ) &&  aMediaURL.getLength() )
+                    if ( (aAny >>= aMediaURL ) &&  !aMediaURL.isEmpty() )
                     {
                         // SJ: creating the Media RefObj
                         sal_uInt32 nRefId = ++mnExEmbed;

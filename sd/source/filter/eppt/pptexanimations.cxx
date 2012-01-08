@@ -674,7 +674,7 @@ void AnimationExporter::exportNode( SvStream& rStrm, Reference< XAnimationNode >
                     Any aAny( xAudio->getSource() );
                     rtl::OUString aURL;
 
-                    if ( ( aAny >>= aURL ) && ( aURL.getLength() ) )
+                    if ( ( aAny >>= aURL)  &&  !aURL.isEmpty()  )
                     {
                         sal_Int32 nU1 = 2;
                         sal_Int32 nTrigger = 3;
@@ -1530,7 +1530,7 @@ Any AnimationExporter::convertAnimateValue( const Any& rSourceValue, const rtl::
         }
     }
     Any aRet;
-    if ( aDest.getLength() )
+    if ( !aDest.isEmpty() )
         aRet <<= aDest;
     else
         aRet = rSourceValue;
@@ -1666,7 +1666,7 @@ void AnimationExporter::exportAnimateTarget( SvStream& rStrm, const Reference< X
             sal_uInt32 nTransformType = 0;
             if ( xAnimate.is() )
             {
-                if ( xAnimate->getAttributeName().getLength() )
+                if ( !xAnimate->getAttributeName().isEmpty() )
                     nBits |= 4;     // what is attributeName ?, maybe this is set if a DFF_msofbtAnimateAttributeNames is written
                 sal_Int16 nAdditiveMode = xAnimate->getAdditive();
                 if ( nAdditiveMode != AnimationAdditiveMode::BASE )
@@ -1691,7 +1691,7 @@ void AnimationExporter::exportAnimateTarget( SvStream& rStrm, const Reference< X
                 << nAccumulate
                 << nTransformType;
         }
-        if ( xAnimate->getAttributeName().getLength() || nForceAttributeNames )
+        if ( !xAnimate->getAttributeName().isEmpty() || nForceAttributeNames )
         {
             EscherExContainer aAnimateAttributeNames( rStrm, DFF_msofbtAnimateAttributeNames, 1 );
             rtl::OUString aAttributeName( xAnimate->getAttributeName() );
@@ -1841,7 +1841,7 @@ void AnimationExporter::exportAnimateKeyPoints( SvStream& rStrm, const Reference
                 {
                     aAny[ 0 ] = convertAnimateValue( aValues[ i ], xAnimate->getAttributeName() );
                 }
-                if ( !i && aFormula.getLength() )
+                if ( !i && !aFormula.isEmpty() )
                 {
                     ImplTranslateAttribute( aFormula, TRANSLATE_MEASURE );
                     aAny[ 1 ] <<= aFormula;
@@ -1955,7 +1955,7 @@ void AnimationExporter::exportAnimateMotion( SvStream& rStrm, const Reference< X
             OUString aStr;
             if ( xMotion->getPath() >>= aStr )
             {
-                if ( aStr.getLength() )
+                if ( !aStr.isEmpty() )
                     exportAnimPropertyString( rStrm, 1, aStr, TRANSLATE_NONE );
             }
             exportAnimateTarget( rStrm, xNode );

@@ -82,7 +82,7 @@ void ToolTip::SetPage (const model::SharedPageDescriptor& rpDescriptor)
             {
                 OSL_ASSERT(mpDescriptor->GetPage() != NULL);
             }
-            if (sHelpText.getLength() == 0)
+            if (sHelpText.isEmpty())
             {
                 sHelpText = String(SdResId(STR_PAGE));
                 sHelpText += String::CreateFromInt32(mpDescriptor->GetPageIndex()+1);
@@ -154,7 +154,7 @@ void ToolTip::DoShow (void)
     }
 
     SharedSdWindow pWindow (mrSlideSorter.GetContentWindow());
-    if (msCurrentHelpText.getLength()>0 && pWindow)
+    if (!msCurrentHelpText.isEmpty() && pWindow)
     {
         Rectangle aBox (
             mrSlideSorter.GetView().GetLayouter().GetPageObjectLayouter()->GetBoundingBox(

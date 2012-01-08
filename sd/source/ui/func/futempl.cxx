@@ -162,7 +162,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
 
                     OUString aUIName;
                     xInfo->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DisplayName")) ) >>= aUIName;
-                    if ( aUIName.getLength() )
+                    if ( !aUIName.isEmpty() )
                         rReq.AppendItem( SfxStringItem( nSId, aUIName ) );
                 }
                 catch( Exception& )

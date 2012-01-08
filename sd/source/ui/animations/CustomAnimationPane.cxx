@@ -763,7 +763,7 @@ void CustomAnimationPane::updateControls()
 
         OUString aTemp( maStrModify );
 
-        if( aUIName.getLength() )
+        if( !aUIName.isEmpty() )
         {
             aTemp += OUString( (sal_Unicode)' ' );
             aTemp += aUIName;
@@ -1603,7 +1603,7 @@ void CustomAnimationPane::changeSelection( STLPropertySet* pResultSet, STLProper
                 OUString aSoundURL;
                 aSoundSource >>= aSoundURL;
 
-                if( aSoundURL.getLength() )
+                if( !aSoundURL.isEmpty() )
                 {
                     if( !pEffect->getAudio().is() )
                     {
@@ -1811,7 +1811,7 @@ bool getTextSelection( const Any& rSelection, Reference< XShape >& xShape, std::
 
         while( xRange.is() )
         {
-            if( xRange.is() && xRange->getString().getLength() )
+            if( xRange.is() && !xRange->getString().isEmpty() )
                 rParaList.push_back( nPara );
 
             // break if end of selection is before or at end of current paragraph
@@ -1866,7 +1866,7 @@ void CustomAnimationPane::onChange( bool bCreate )
                 {
                     Reference< XText > xText;
                     aTarget >>= xText;
-                    if( !xText.is() || xText->getString().getLength() == 0 )
+                    if( !xText.is() || xText->getString().isEmpty() )
                         bHasText = false;
                 }
             }
@@ -1876,7 +1876,7 @@ void CustomAnimationPane::onChange( bool bCreate )
             aTargets.push_back( maViewSelection );
             Reference< XText > xText;
             maViewSelection >>= xText;
-            if( !xText.is() || xText->getString().getLength() == 0 )
+            if( !xText.is() || xText->getString().isEmpty() )
                 bHasText = false;
         }
         else if ( maViewSelection.getValueType() == ::getCppuType((const Reference< XTextCursor >*)0) )
@@ -1912,7 +1912,7 @@ void CustomAnimationPane::onChange( bool bCreate )
             if( !bHasText || !(*aIter)->hasText() )
                 bHasText = false;
 
-            if( sPresetId.getLength() == 0 )
+            if( sPresetId.isEmpty() )
             {
                 sPresetId = (*aIter)->getPresetId();
                 fDuration = (*aIter)->getDuration();

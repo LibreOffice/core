@@ -1269,7 +1269,7 @@ CustomAnimationEffectTabPage::CustomAnimationEffectTabPage( Window* pParent, con
                 // set ui name for property at fixed text
                 OUString aPropertyName( getPropertyName( nType ) );
 
-                if( aPropertyName.getLength() )
+                if( !aPropertyName.isEmpty() )
                 {
                     mpFTProperty1->Show();
                     mpLBProperty1->Show();
@@ -1444,7 +1444,7 @@ CustomAnimationEffectTabPage::CustomAnimationEffectTabPage( Window* pParent, con
             OUString aSoundURL;
             aValue >>= aSoundURL;
 
-            if( aSoundURL.getLength() )
+            if( !aSoundURL.isEmpty() )
             {
                 const String aTmp( aSoundURL );
 

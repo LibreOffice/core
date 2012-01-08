@@ -228,7 +228,7 @@ void TableDesignPane::ApplyStyle()
             sStyleName = xNames->getElementNames()[nIndex];
         }
 
-        if( sStyleName.getLength() == 0 )
+        if( sStyleName.isEmpty() )
             return;
 
         SdrView* pView = mrBase.GetDrawView();

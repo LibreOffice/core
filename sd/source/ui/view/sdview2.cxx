@@ -782,7 +782,7 @@ sal_Int8 View::ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHelper& rTar
                             SdAnimationInfo*    pInfo = mpDoc->GetAnimationInfo( pPickObj );
                             sal_Bool                bCreated = sal_False;
 
-                            if( aBookmark.getLength() )
+                            if( !aBookmark.isEmpty() )
                             {
                                 presentation::ClickAction eClickAction = presentation::ClickAction_DOCUMENT;
 

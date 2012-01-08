@@ -508,8 +508,8 @@ void ViewTabBar::AddTabBarButton (
     sal_uInt32 nIndex;
 
     if ( ! rAnchor.ResourceId.is()
-        || (rAnchor.ResourceId->getResourceURL().getLength() == 0
-            && rAnchor.ButtonLabel.getLength() == 0))
+        || (rAnchor.ResourceId->getResourceURL().isEmpty()
+            && rAnchor.ButtonLabel.isEmpty()))
     {
         nIndex = 0;
     }

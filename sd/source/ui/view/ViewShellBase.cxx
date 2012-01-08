@@ -360,7 +360,7 @@ void ViewShellBase::LateInit (const ::rtl::OUString& rsDefaultView)
         if (xConfigurationController.is())
         {
             OUString sView (rsDefaultView);
-            if (sView.getLength() == 0)
+            if (sView.isEmpty())
                 sView = GetInitialViewShellType();
 
             ::boost::shared_ptr<FrameworkHelper> pHelper (FrameworkHelper::Instance(*this));
@@ -824,7 +824,7 @@ void ViewShellBase::ReadUserDataSequence (
                         sViewURL = framework::FrameworkHelper::msHandoutViewURL;
                         break;
                 }
-                if (sViewURL.getLength() > 0)
+                if (!sViewURL.isEmpty())
                     framework::FrameworkHelper::Instance(*this)->RequestView(
                         sViewURL,
                         framework::FrameworkHelper::msCenterPaneURL);
@@ -1162,7 +1162,7 @@ void ViewShellBase::SetViewTabBar (const ::rtl::Reference<ViewTabBar>& rViewTabB
 {
     ::rtl::OUString aLabel;
 
-    if ( aCmdURL.getLength() > 0 ) try
+    if ( !aCmdURL.isEmpty() ) try
     {
         Reference< XMultiServiceFactory > xServiceManager( ::comphelper::getProcessServiceFactory(), UNO_QUERY_THROW );
 
@@ -1171,7 +1171,7 @@ void ViewShellBase::SetViewTabBar (const ::rtl::Reference<ViewTabBar>& rViewTabB
 
         ::rtl::OUString aModuleIdentifier( xModuleManager->identify( xIfac ) );
 
-        if( aModuleIdentifier.getLength() > 0 )
+        if( !aModuleIdentifier.isEmpty() )
         {
             Reference< XNameAccess > xNameAccess( xServiceManager->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.UICommandDescription" ) ) ), UNO_QUERY );
             if( xNameAccess.is() )

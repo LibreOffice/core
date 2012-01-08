@@ -711,7 +711,7 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
             if( aValue >>= aURL )
             {
                 GetPage()->SetSoundFile( aURL );
-                GetPage()->SetSound( aURL.getLength() != 0 ? sal_True : sal_False );
+                GetPage()->SetSound( !aURL.isEmpty() );
                 break;
             }
             else
@@ -1511,7 +1511,7 @@ OUString SdGenericDrawPage::getBookmarkURL() const
     if( SvxFmDrawPage::mpPage )
     {
         OUString aFileName( static_cast<SdPage*>(SvxFmDrawPage::mpPage)->GetFileName() );
-        if( aFileName.getLength() )
+        if( !aFileName.isEmpty() )
         {
             const OUString aBookmarkName( SdDrawPage::getPageApiNameFromUiName( static_cast<SdPage*>(SvxFmDrawPage::mpPage)->GetBookmarkName() ) );
             aRet.append( aFileName );
@@ -2143,7 +2143,7 @@ OUString getPageApiName( SdPage* pPage )
     {
         aPageName = pPage->GetRealName();
 
-        if( aPageName.getLength() == 0 )
+        if( aPageName.isEmpty() )
         {
             OUStringBuffer sBuffer;
             sBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM( sEmptyPageName ) );

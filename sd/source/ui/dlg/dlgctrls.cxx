@@ -65,7 +65,7 @@ void FadeEffectLB::Fill()
     {
         pPreset = (*aIter);
         const OUString aUIName( pPreset->getUIName() );
-        if( aUIName.getLength() )
+        if( !aUIName.isEmpty() )
         {
             InsertEntry( aUIName );
             mpImpl->maPresets.push_back( pPreset );

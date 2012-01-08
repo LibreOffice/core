@@ -117,7 +117,7 @@ void implImportLabels( const Reference< XMultiServiceFactory >& xConfigProvider,
                 {
                     OUString aUIName;
                     xNameAccess->getByName( aLabel ) >>= aUIName;
-                    if( aUIName.getLength() )
+                    if( !aUIName.isEmpty() )
                     {
                         rStringMap[ *p ] = aUIName;
                     }
@@ -191,7 +191,7 @@ Reference< XAnimationNode > CustomAnimationPreset::create( const rtl::OUString& 
     try
     {
         OUString strSubType( rstrSubType );
-        if( strSubType.getLength() == 0 )
+        if( strSubType.isEmpty() )
             strSubType = maDefaultSubTyp;
 
         CustomAnimationEffectPtr pEffect = maSubTypes[strSubType];

@@ -79,7 +79,7 @@ void ResourceFactoryManager::AddFactory (
 {
     if ( ! rxFactory.is())
         throw lang::IllegalArgumentException();
-    if (rsURL.getLength() == 0)
+    if (rsURL.isEmpty())
         throw lang::IllegalArgumentException();
 
     ::osl::MutexGuard aGuard (maMutex);
@@ -102,7 +102,7 @@ void ResourceFactoryManager::RemoveFactoryForURL (
     const OUString& rsURL)
     throw (RuntimeException)
 {
-    if (rsURL.getLength() == 0)
+    if (rsURL.isEmpty())
         throw lang::IllegalArgumentException();
 
     ::osl::MutexGuard aGuard (maMutex);

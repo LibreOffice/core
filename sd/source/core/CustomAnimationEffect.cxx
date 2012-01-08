@@ -610,7 +610,7 @@ bool CustomAnimationEffect::checkForText()
     else
     {
         maTarget >>= xText;
-        sal_Bool bHasText = xText.is() && xText->getString().getLength();
+        sal_Bool bHasText = xText.is() && !xText->getString().isEmpty();
         bChange |= bHasText != mbHasText;
         mbHasText = bHasText;
     }
@@ -2654,7 +2654,7 @@ void EffectSequenceHelper::createTextGroupParagraphEffects( CustomAnimationTextG
         for( nPara = 0; xEnumeration->hasMoreElements(); nPara++ )
         {
             Reference< XTextRange > xRange( xEnumeration->nextElement(), UNO_QUERY );
-            if( xRange.is() && xRange->getString().getLength() )
+            if( xRange.is() && !xRange->getString().isEmpty() )
             {
                 if( bTextReverse ) // sort them
                     aParaList.push_front( nPara );

@@ -1011,7 +1011,7 @@ sal_Bool PPTWriterBase::ContainsOtherShapeThanPlaceholders( sal_Bool bForOOMLX )
               mType == "presentation.Notes" ) ) {
             Reference< XSimpleText > rXText( mXShape, UNO_QUERY );
 
-            if( rXText.is() && rXText->getString().getLength() != 0 )
+            if( rXText.is() && !rXText->getString().isEmpty() )
             bOtherThanPlaceHolders = sal_True;
         } else
             bOtherThanPlaceHolders = sal_True;

@@ -1410,7 +1410,7 @@ void SAL_CALL SdUnoEventsAccess::replaceByName( const OUString& aName, const uno
                 {
                     pInfo->SetBookmark( aStrSoundURL );
                     if( eClickAction != presentation::ClickAction_SOUND )
-                        pInfo->mbSecondSoundOn = aStrSoundURL.getLength() != 0;
+                        pInfo->mbSecondSoundOn = !aStrSoundURL.isEmpty();
                     pInfo->mbSecondPlayFull = nFound & FOUND_PLAYFULL ? bPlayFull : sal_False;
 
                     bOk = sal_True;

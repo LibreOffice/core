@@ -838,7 +838,7 @@ void    AssistentDlgImpl::ScanDocmenu   (void)
 
                 aURL.SetSmartURL (sURL);
                 // The password is set only when it is not empty.
-                if (sPassword.getLength() > 0)
+                if (!sPassword.isEmpty())
                     aURL.SetPass (sPassword);
                 maOpenFilesList.push_back (new String (aURL.GetMainURL( INetURLObject::NO_DECODE )));
                 mpPage1OpenLB->InsertEntry (sTitle);
@@ -1749,7 +1749,7 @@ String AssistentDlgImpl::GetUiTextForCommand (const ::rtl::OUString& sCommandURL
     {
         do
         {
-            if (sCommandURL.getLength() ==  0)
+            if (sCommandURL.isEmpty())
                 break;
 
             // Retrieve popup menu labels
@@ -1810,7 +1810,7 @@ Image AssistentDlgImpl::GetUiIconForCommand (const ::rtl::OUString& sCommandURL)
     {
         do
         {
-            if (sCommandURL.getLength() ==  0)
+            if (sCommandURL.isEmpty())
                 break;
 
             // Retrieve popup menu labels

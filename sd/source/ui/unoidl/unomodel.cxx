@@ -1645,7 +1645,7 @@ void ImplPDFExportShapeInteraction( uno::Reference< drawing::XShape > xShape, Sd
                     {
                         rtl::OUString aBookmark;
                         xShapePropSet->getPropertyValue( sBookmark ) >>= aBookmark;
-                        if( aBookmark.getLength() )
+                        if( !aBookmark.isEmpty() )
                         {
                             switch( eCa )
                             {
@@ -2337,7 +2337,7 @@ uno::Any SAL_CALL SdDrawPagesAccess::getByName( const OUString& aName ) throw(co
     if( NULL == mpModel )
         throw lang::DisposedException();
 
-    if( aName.getLength() != 0 )
+    if( !aName.isEmpty() )
     {
         const sal_uInt16 nCount = mpModel->mpDoc->GetSdPageCount( PK_STANDARD );
         sal_uInt16 nPage;

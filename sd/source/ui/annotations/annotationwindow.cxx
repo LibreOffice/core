@@ -577,9 +577,9 @@ void AnnotationWindow::setAnnotation( const Reference< XAnnotation >& xAnnotatio
         OUString sMeta( xAnnotation->getAuthor() );
         OUString sDateTime( getAnnotationDateTimeString(xAnnotation) );
 
-        if( sDateTime.getLength() != 0 )
+        if( !sDateTime.isEmpty() )
         {
-            if( sMeta.getLength() != 0 )
+            if( !sMeta.isEmpty() )
                 sMeta += OUString( RTL_CONSTASCII_USTRINGPARAM( "\n" ) );
 
            sMeta += sDateTime;

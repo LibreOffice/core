@@ -220,7 +220,7 @@ Reference<rendering::XCanvas> SAL_CALL PresenterHelper::createCanvas (
             mxComponentContext->getServiceManager(), UNO_QUERY_THROW);
         return Reference<rendering::XCanvas>(
             xFactory->createInstanceWithArguments(
-                rsOptionalCanvasServiceName.getLength()>0
+                !rsOptionalCanvasServiceName.isEmpty()
                     ? rsOptionalCanvasServiceName
                     : OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.rendering.VCLCanvas")),
                 aArg),
@@ -265,7 +265,7 @@ Reference<rendering::XBitmap> SAL_CALL PresenterHelper::loadBitmap (
         cppcanvas::VCLFactory::getInstance().createCanvas(
             Reference<css::rendering::XBitmapCanvas>(rxCanvas,UNO_QUERY)));
 
-    if (pCanvas.get()!=NULL && rsURL.getLength()>0 && mpGraphicFilter.get()!=NULL)
+    if (pCanvas.get()!=NULL && !rsURL.isEmpty() && mpGraphicFilter.get()!=NULL)
     {
         Graphic aGraphic;
         OUString sFileName;

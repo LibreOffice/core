@@ -136,7 +136,7 @@ SfxPopupWindow* SdTbxControl::CreatePopupWindow()
         break;
     }
 
-    if ( aToolBarResStr.getLength() > 0 )
+    if ( !aToolBarResStr.isEmpty() )
         createAndPositionSubToolBar( aToolBarResStr );
 
     return( pWin );

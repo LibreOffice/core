@@ -707,7 +707,7 @@ bool AnimationImporter::convertAnimationNode( const Reference< XAnimationNode >&
             p++;
         }
 
-        DBG_ASSERT( p->mpMSName || (aAttributeName.getLength() == 0), "sd::AnimationImporter::convertAnimationNode(), unknown attribute!" );
+        DBG_ASSERT( p->mpMSName || aAttributeName.isEmpty(), "sd::AnimationImporter::convertAnimationNode(), unknown attribute!" );
 #ifdef DBG_ANIM_LOG
         if( p->mpMSName == 0 ) dump( "<error text=\"sd::AnimationImporter::convertAnimationNode(), unknown attribute!\"/>\n" );
 #endif
@@ -755,7 +755,7 @@ bool AnimationImporter::convertAnimationNode( const Reference< XAnimationNode >&
         }
 
         OUString aFormula( xAnimate->getFormula() );
-        if( aFormula.getLength() )
+        if( !aFormula.isEmpty() )
         {
             if( convertMeasure( aFormula ) )
                 xAnimate->setFormula( aFormula );
@@ -1308,9 +1308,9 @@ void AnimationImporter::fillNode( Reference< XAnimationNode >& xNode, const Anim
     {
         rtl::OUString aString;
         rSet.getProperty( DFF_ANIM_ID ) >>= aString;
-        if( aString.getLength() )
-        {
-        }
+        //if( !aString.isEmpty() )
+        //{
+        //}
     }
 
     // TODO: DFF_ANIM_EVENT_FILTER
@@ -1318,9 +1318,9 @@ void AnimationImporter::fillNode( Reference< XAnimationNode >& xNode, const Anim
     {
         rtl::OUString aString;
         rSet.getProperty( DFF_ANIM_EVENT_FILTER ) >>= aString;
-        if( aString.getLength() )
-        {
-        }
+        //if( !aString.isEmpty() )
+        //{
+        //}
     }
 
     // DFF_ANIM_TIMEFILTER
@@ -1331,7 +1331,7 @@ void AnimationImporter::fillNode( Reference< XAnimationNode >& xNode, const Anim
         {
             rtl::OUString aString;
             rSet.getProperty( DFF_ANIM_TIMEFILTER ) >>= aString;
-            if( aString.getLength() )
+            if( !aString.isEmpty() )
             {
                 sal_Int32 nElements = 1; // a non empty string has at least one value
 
@@ -2686,7 +2686,7 @@ void AnimationImporter::importAnimateKeyPoints( const Atom* pAtom, const Referen
                             {
                                 OUString aTest;
                                 aValue2 >>= aTest;
-                                bHasValue = aTest.getLength() != 0;
+                                bHasValue = !aTest.isEmpty();
                                 bCouldBeFormula = true;
                             }
                         }
@@ -2716,7 +2716,7 @@ void AnimationImporter::importAnimateKeyPoints( const Atom* pAtom, const Referen
         for( int i=0; i<nKeyTimes; ++i )
             dump( "%f;", aKeyTimes[i] );
 
-        if( aFormula.getLength() )
+        if( !aFormula.isEmpty() )
         {
             dump( "formula=\"%s", aFormula );
         }

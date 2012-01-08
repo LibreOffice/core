@@ -414,7 +414,7 @@ void ToolPanelViewShell_Impl::Setup()
 
     // initially activate a panel
     const InitialPanel aInitialPanel = impl_determineInitialPanel();
-    if ( aInitialPanel.sPanelResourceURL.getLength() )
+    if ( !aInitialPanel.sPanelResourceURL.isEmpty() )
     {
         if ( aInitialPanel.bActivateDirectly )
         {
@@ -813,13 +813,13 @@ void ToolPanelViewShell_Impl::ActivePanelChanged( const ::boost::optional< size_
     const ::rtl::OUString sNewPanelURL( impl_getPanelURL( i_rNewActive ) );
 
     const ::boost::shared_ptr< FrameworkHelper > pFrameworkHelper( FrameworkHelper::Instance( GetAntiImpl().GetViewShellBase() ) );
-    if ( sNewPanelURL.getLength() )
+    if ( !sNewPanelURL.isEmpty() )
     {
         // activate the resource belonging to the new panel. This will automatically de-activate the previously active
         // panel resource (since ResourceActivationMode_REPLACE is used)
         pFrameworkHelper->RequestTaskPanel( sNewPanelURL );
     }
-    else if ( sOldPanelURL.getLength() )
+    else if ( !sOldPanelURL.isEmpty() )
     {
         // there is no new active panel, or it is not one of our standard panels, i.e. it is not covered by the
         // resource framework. => Deactivate the old resource.

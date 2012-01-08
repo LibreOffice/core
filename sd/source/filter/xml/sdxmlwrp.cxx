@@ -643,7 +643,7 @@ sal_Bool SdXMLFilter::Import( ErrCode& nError )
         else
             aName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "dummyObjectName" ));
 
-        if( aName.getLength() )
+        if( !aName.isEmpty() )
         {
             const OUString sStreamRelPath(RTL_CONSTASCII_USTRINGPARAM("StreamRelPath"));
             xInfoSet->setPropertyValue( sStreamRelPath, Any( aName ) );
@@ -813,7 +813,7 @@ sal_Bool SdXMLFilter::Import( ErrCode& nError )
 
             if( (nRet == 0) )
             {
-                if( sBuildId.getLength() )
+                if( !sBuildId.isEmpty() )
                 {
                     sal_Int32 nIndex = sBuildId.indexOf('$');
                     if( nIndex != -1 )
@@ -966,7 +966,7 @@ sal_Bool SdXMLFilter::Export()
                     aName = pDocHierarchItem->GetValue();
             }
 
-            if( aName.getLength() )
+            if( !aName.isEmpty() )
             {
                 sPropName = OUString(RTL_CONSTASCII_USTRINGPARAM("StreamRelPath"));
                 xInfoSet->setPropertyValue( sPropName, makeAny( aName ) );

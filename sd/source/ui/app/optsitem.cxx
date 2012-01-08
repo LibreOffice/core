@@ -111,7 +111,7 @@ SdOptionsGeneric::SdOptionsGeneric( sal_uInt16 nConfigId, const OUString& rSubTr
     maSubTree   ( rSubTree ),
     mpCfgItem   ( NULL ),
     mnConfigId  ( nConfigId ),
-    mbInit      ( rSubTree.getLength() == 0 )
+    mbInit      ( rSubTree.isEmpty() )
 {
 }
 

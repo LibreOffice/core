@@ -785,7 +785,7 @@ MasterPageContainer::Token MasterPageContainer::Implementation::PutMasterPage (
     {
         // Insert a new MasterPageDescriptor.
         bool bIgnore (rpDescriptor->mpPageObjectProvider.get()==NULL
-            && rpDescriptor->msURL.getLength()==0);
+            && rpDescriptor->msURL.isEmpty());
 
         if ( ! bIgnore)
         {

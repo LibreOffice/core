@@ -131,19 +131,19 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
         bIndexChanged = true;
     }
 
-    if (msURL.getLength()==0 && rDescriptor.msURL.getLength()!=0)
+    if (msURL.isEmpty() && !rDescriptor.msURL.isEmpty())
     {
         msURL = rDescriptor.msURL;
         bDataChanged = true;
     }
 
-    if (msPageName.getLength()==0 && rDescriptor.msPageName.getLength()!=0)
+    if (msPageName.isEmpty() && !rDescriptor.msPageName.isEmpty())
     {
         msPageName = rDescriptor.msPageName;
         bDataChanged = true;
     }
 
-    if (msStyleName.getLength()==0 && rDescriptor.msStyleName.getLength()!=0)
+    if (msStyleName.isEmpty() && !rDescriptor.msStyleName.isEmpty())
     {
         msStyleName = rDescriptor.msStyleName;
         bDataChanged = true;
@@ -217,7 +217,7 @@ bool MasterPageDescriptor::UpdatePageObject (
         if (mpMasterPage != NULL)
         {
             // Update page name and style name.
-            if (msPageName.getLength() == 0)
+            if (msPageName.isEmpty())
                 msPageName = mpMasterPage->GetName();
             msStyleName = mpMasterPage->GetName();
 
@@ -289,7 +289,7 @@ MasterPageDescriptor::URLClassification MasterPageDescriptor::GetURLClassificati
 {
     if (meURLClassification == URLCLASS_UNDETERMINED)
     {
-        if (msURL.getLength() == 0)
+        if (msURL.isEmpty())
             meURLClassification = URLCLASS_UNKNOWN;
         else if (msURL.indexOf(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("presnt")))>=0)
         {
@@ -404,11 +404,11 @@ bool MasterPageDescriptor::AllComparator::operator() (const SharedMasterPageDesc
         return
             mpDescriptor->meOrigin == rDescriptor->meOrigin
             && (
-                (mpDescriptor->msURL.getLength()>0
+                (!mpDescriptor->msURL.isEmpty()
                     && mpDescriptor->msURL.equals(rDescriptor->msURL))
-                || (mpDescriptor->msPageName.getLength()>0
+                || (!mpDescriptor->msPageName.isEmpty()
                     && mpDescriptor->msPageName.equals(rDescriptor->msPageName))
-                || (mpDescriptor->msStyleName.getLength()>0
+                || (!mpDescriptor->msStyleName.isEmpty()
                     && mpDescriptor->msStyleName.equals(rDescriptor->msStyleName))
                 || (mpDescriptor->mpMasterPage!=NULL
                     && mpDescriptor->mpMasterPage==rDescriptor->mpMasterPage)

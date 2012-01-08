@@ -724,7 +724,7 @@ void FuInsertAVMedia::DoExecute( SfxRequest& rReq )
         if( pStringItem )
         {
             aURL = pStringItem->GetValue();
-            bAPI = aURL.getLength();
+            bAPI = !aURL.isEmpty();
         }
     }
 

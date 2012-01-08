@@ -463,7 +463,7 @@ void SdTPAction::OpenFileDialog()
             // choose macro dialog
             ::rtl::OUString aScriptURL = SfxApplication::ChooseScript();
 
-            if ( aScriptURL.getLength() != 0 )
+            if ( !aScriptURL.isEmpty() )
             {
                 SetEditText( aScriptURL );
             }

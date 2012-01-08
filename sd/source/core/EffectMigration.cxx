@@ -754,7 +754,7 @@ AnimationEffect EffectMigration::GetTextAnimationEffect( SvxShape* pShape )
 bool EffectMigration::ConvertPreset( const OUString& rPresetId, const OUString* pPresetSubType, AnimationEffect& rEffect )
 {
     rEffect = AnimationEffect_NONE;
-    if( rPresetId.getLength() )
+    if( !rPresetId.isEmpty() )
     {
         // first try a match for preset id and subtype
         deprecated_AnimationEffect_conversion_table_entry* p = deprecated_AnimationEffect_conversion_table;
@@ -1263,7 +1263,7 @@ void EffectMigration::UpdateSoundEffect( SvxShape* pShape, SdAnimationInfo* pInf
             CustomAnimationEffectPtr pEffect( (*aIter) );
             if( pEffect->getTargetShape() == xShape )
             {
-                if( aSoundFile.getLength() )
+                if( !aSoundFile.isEmpty() )
                 {
                     pEffect->createAudio( makeAny( aSoundFile ) );
                 }
@@ -1298,7 +1298,7 @@ OUString EffectMigration::GetSoundFile( SvxShape* pShape )
             EffectSequence::iterator aIter;
 
             for(    aIter = pMainSequence->getBegin();
-                    (aSoundFile.getLength() == 0) && (aIter != pMainSequence->getEnd());
+                    (aSoundFile.isEmpty()) && (aIter != pMainSequence->getEnd());
                     ++aIter )
             {
                 CustomAnimationEffectPtr pEffect( (*aIter) );
@@ -1317,7 +1317,7 @@ OUString EffectMigration::GetSoundFile( SvxShape* pShape )
 
 sal_Bool EffectMigration::GetSoundOn( SvxShape* pShape )
 {
-    return GetSoundFile( pShape ).getLength() != 0;
+    return !GetSoundFile( pShape ).isEmpty();
 }
 
 // --------------------------------------------------------------------
