@@ -45,12 +45,7 @@
 #define CALC_DEBUG_OUTPUT 0
 #define TEST_BUG_FILES 0
 
-#include "helper/csv_handler.hxx"
-#include "helper/debughelper.hxx"
-#include "orcus/csv_parser.hpp"
-#include <fstream>
-#include <string>
-#include <sstream>
+#include "helper/qahelper.hxx"
 
 #define ODS_FORMAT_TYPE 50331943
 #define XLS_FORMAT_TYPE 318767171
@@ -74,70 +69,6 @@ FileFormat aFileFormats[] = {
     { "xls" , "MS Excel 97", "calc_MS_EXCEL_97", XLS_FORMAT_TYPE },
     { "xlsx", "Calc MS Excel 2007 XML" , "MS Excel 2007 XML", XLSX_FORMAT_TYPE }
 };
-
-void loadFile(const rtl::OUString& aFileName, std::string& aContent)
-{
-    rtl::OString aOFileName = rtl::OUStringToOString(aFileName, RTL_TEXTENCODING_UTF8);
-    std::ifstream aFile(aOFileName.getStr());
-
-    rtl::OStringBuffer aErrorMsg("Could not open csv file: ");
-    aErrorMsg.append(aOFileName);
-    CPPUNIT_ASSERT_MESSAGE(aErrorMsg.getStr(), aFile);
-    std::ostringstream aOStream;
-    aOStream << aFile.rdbuf();
-    aFile.close();
-    aContent = aOStream.str();
-}
-
-void testFile(rtl::OUString& aFileName, ScDocument* pDoc, SCTAB nTab, StringType aStringFormat = StringValue)
-{
-    csv_handler aHandler(pDoc, nTab, aStringFormat);
-    orcus::csv_parser_config aConfig;
-    aConfig.delimiters.push_back(',');
-    aConfig.delimiters.push_back(';');
-    aConfig.text_qualifier = '"';
-
-
-    std::string aContent;
-    loadFile(aFileName, aContent);
-    orcus::csv_parser<csv_handler> parser ( &aContent[0], aContent.size() , aHandler, aConfig);
-    try
-    {
-        parser.parse();
-    }
-    catch (const orcus::csv_parse_error& e)
-    {
-        std::cout << "reading csv content file failed: " << e.what() << std::endl;
-        rtl::OStringBuffer aErrorMsg("csv parser error: ");
-        aErrorMsg.append(e.what());
-        CPPUNIT_ASSERT_MESSAGE(aErrorMsg.getStr(), false);
-    }
-}
-
-//need own handler because conditional formatting strings must be generated
-void testCondFile(rtl::OUString& aFileName, ScDocument* pDoc, SCTAB nTab)
-{
-    conditional_format_handler aHandler(pDoc, nTab);
-    orcus::csv_parser_config aConfig;
-    aConfig.delimiters.push_back(',');
-    aConfig.delimiters.push_back(';');
-    aConfig.text_qualifier = '"';
-    std::string aContent;
-    loadFile(aFileName, aContent);
-    orcus::csv_parser<conditional_format_handler> parser ( &aContent[0], aContent.size() , aHandler, aConfig);
-    try
-    {
-        parser.parse();
-    }
-    catch (const orcus::csv_parse_error& e)
-    {
-        std::cout << "reading csv content file failed: " << e.what() << std::endl;
-        rtl::OStringBuffer aErrorMsg("csv parser error: ");
-        aErrorMsg.append(e.what());
-        CPPUNIT_ASSERT_MESSAGE(aErrorMsg.getStr(), false);
-    }
-
-}
 
 }
 
@@ -303,6 +234,14 @@ void ScFiltersTest::testRangeName()
         CPPUNIT_ASSERT_MESSAGE("Failed to load named-ranges-globals.*", xDocSh.Is());
         ScDocument* pDoc = xDocSh->GetDocument();
         testRangeNameImpl(pDoc);
+
+        rtl::OUString aSheet2CSV(RTL_CONSTASCII_USTRINGPARAM("rangeExp_Sheet2."));
+        rtl::OUString aCSVPath;
+        createCSVPath( aSheet2CSV, aCSVPath );
+        // fdo#44587
+        if (i != XLSX)
+            testFile( aCSVPath, pDoc, 1);
+
         xDocSh->DoClose();
     }
 }

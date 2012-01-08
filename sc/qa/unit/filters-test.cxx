@@ -31,6 +31,7 @@
 #include <sal/config.h>
 #include <unotest/filters-test.hxx>
 #include <test/bootstrapfixture.hxx>
+#include <rtl/strbuf.hxx>
 #include <osl/file.hxx>
 
 #include <sfx2/app.hxx>
@@ -42,10 +43,7 @@
 #define CALC_DEBUG_OUTPUT 0
 #define TEST_BUG_FILES 0
 
-#include "helper/debughelper.hxx"
-#include <fstream>
-#include <string>
-#include <sstream>
+#include "helper/qahelper.hxx"
 
 #include "docsh.hxx"
 #include "postit.hxx"
@@ -93,6 +91,7 @@ public:
         const rtl::OUString &rUserData, const rtl::OUString& rTypeName, sal_uLong nFormatType=0);
 
     void createFileURL(const rtl::OUString& aFileBase, const rtl::OUString& aFileExtension, rtl::OUString& rFilePath);
+    void createCSVPath(const rtl::OUString& aFileBase, rtl::OUString& rFilePath);
 
     virtual void setUp();
     virtual void tearDown();
@@ -175,6 +174,14 @@ void ScFiltersTest::createFileURL(const rtl::OUString& aFileBase, const rtl::OUS
     aBuffer.append(m_aBaseString).append(aSep).append(aFileExtension);
     aBuffer.append(aSep).append(aFileBase).append(aFileExtension);
     rFilePath = aBuffer.makeStringAndClear();
+}
+
+void ScFiltersTest::createCSVPath(const rtl::OUString& aFileBase, rtl::OUString& rCSVPath)
+{
+    rtl::OUStringBuffer aBuffer(getSrcRootPath());
+    aBuffer.append(m_aBaseString).append(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/contentCSV/")));
+    aBuffer.append(aFileBase).append(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("csv")));
+    rCSVPath = aBuffer.makeStringAndClear();
 }
 
 void ScFiltersTest::testCVEs()
@@ -260,8 +267,6 @@ void testRangeNameImpl(ScDocument* pDoc)
     CPPUNIT_ASSERT_MESSAGE("range name Sheet1.Local1 should reference Sheet1.A3", aValue == 3);
     pRangeData = pDoc->GetRangeName(1)->findByUpperName(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LOCAL2")));
     CPPUNIT_ASSERT_MESSAGE("range name Sheet2.Local2 not found", pRangeData);
-    pDoc->GetValue(1,1,1,aValue);
-    CPPUNIT_ASSERT_MESSAGE("range name Sheet2.Local2 should reference Sheet2.A2", aValue == 7);
     //check for correct results for the remaining formulas
     pDoc->GetValue(1,1,0, aValue);
     CPPUNIT_ASSERT_MESSAGE("=global2 should be 2", aValue == 2);
@@ -269,8 +274,6 @@ void testRangeNameImpl(ScDocument* pDoc)
     CPPUNIT_ASSERT_MESSAGE("=local2 should be 4", aValue == 4);
     pDoc->GetValue(2,0,0, aValue);
     CPPUNIT_ASSERT_MESSAGE("=SUM(global3) should be 10", aValue == 10);
-    pDoc->GetValue(1,0,1,aValue);
-    CPPUNIT_ASSERT_MESSAGE("range name Sheet2.local1 should reference Sheet1.A5", aValue == 5);
 }
 
 }
@@ -293,6 +296,11 @@ void ScFiltersTest::testRangeName()
         CPPUNIT_ASSERT_MESSAGE("Failed to load named-ranges-globals.*", xDocSh.Is());
         ScDocument* pDoc = xDocSh->GetDocument();
         testRangeNameImpl(pDoc);
+
+        rtl::OUString aSheet2CSV(RTL_CONSTASCII_USTRINGPARAM("rangeExp_Sheet2."));
+        rtl::OUString aCSVPath;
+        createCSVPath( aSheet2CSV, aCSVPath );
+        testFile( aCSVPath, pDoc, 1);
         xDocSh->DoClose();
     }
 }
