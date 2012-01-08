@@ -38,5 +38,14 @@ $(eval $(call gb_Jar_add_jars,pocketword,\
 ))
 
 $(eval $(call gb_Jar_add_sourcefiles,pocketword,\
-	xmerge/source/pocketword/java/org/openoffice/xmerge/converter/xml/sxw/pocketword/* \
+    xmerge/source/pocketword/java/org/openoffice/xmerge/converter/xml/sxw/pocketword/ConverterCapabilitiesImpl \
+    xmerge/source/pocketword/java/org/openoffice/xmerge/converter/xml/sxw/pocketword/DocumentDescriptor \
+    xmerge/source/pocketword/java/org/openoffice/xmerge/converter/xml/sxw/pocketword/DocumentDeserializerImpl \
+    xmerge/source/pocketword/java/org/openoffice/xmerge/converter/xml/sxw/pocketword/DocumentMergerImpl \
+    xmerge/source/pocketword/java/org/openoffice/xmerge/converter/xml/sxw/pocketword/DocumentSerializerImpl \
+    xmerge/source/pocketword/java/org/openoffice/xmerge/converter/xml/sxw/pocketword/Paragraph \
+    xmerge/source/pocketword/java/org/openoffice/xmerge/converter/xml/sxw/pocketword/ParagraphTextSegment \
+    xmerge/source/pocketword/java/org/openoffice/xmerge/converter/xml/sxw/pocketword/PluginFactoryImpl \
+    xmerge/source/pocketword/java/org/openoffice/xmerge/converter/xml/sxw/pocketword/PocketWordConstants \
+    xmerge/source/pocketword/java/org/openoffice/xmerge/converter/xml/sxw/pocketword/PocketWordDocument \
 ))

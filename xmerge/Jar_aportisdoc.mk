@@ -38,5 +38,12 @@ $(eval $(call gb_Jar_add_jars,aportisdoc,\
 ))
 
 $(eval $(call gb_Jar_add_sourcefiles,aportisdoc,\
-	xmerge/source/aportisdoc/java/org/openoffice/xmerge/converter/xml/sxw/aportisdoc/* \
+    xmerge/source/aportisdoc/java/org/openoffice/xmerge/converter/xml/sxw/aportisdoc/ConverterCapabilitiesImpl \
+    xmerge/source/aportisdoc/java/org/openoffice/xmerge/converter/xml/sxw/aportisdoc/DocConstants \
+    xmerge/source/aportisdoc/java/org/openoffice/xmerge/converter/xml/sxw/aportisdoc/DocDecoder \
+    xmerge/source/aportisdoc/java/org/openoffice/xmerge/converter/xml/sxw/aportisdoc/DocEncoder \
+    xmerge/source/aportisdoc/java/org/openoffice/xmerge/converter/xml/sxw/aportisdoc/DocumentDeserializerImpl \
+    xmerge/source/aportisdoc/java/org/openoffice/xmerge/converter/xml/sxw/aportisdoc/DocumentMergerImpl \
+    xmerge/source/aportisdoc/java/org/openoffice/xmerge/converter/xml/sxw/aportisdoc/DocumentSerializerImpl \
+    xmerge/source/aportisdoc/java/org/openoffice/xmerge/converter/xml/sxw/aportisdoc/PluginFactoryImpl \
 ))
