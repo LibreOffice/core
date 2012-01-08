@@ -390,7 +390,8 @@ sal_Bool ScDrawLayer::ScAddPage( SCTAB nTab )
     if (bRecording)
         AddCalcUndo(new SdrUndoNewPage(*pPage));
 
-    return sal_True;        // inserted
+    ResetTab(nTab, pDoc->GetTableCount()-1);
+    return true;        // inserted
 }
 
 void ScDrawLayer::ScRemovePage( SCTAB nTab )
