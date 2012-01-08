@@ -120,8 +120,7 @@ void SwDoc::SetOutlineNumRule( const SwNumRule& rRule )
     // assure that the outline numbering rule is an automatic rule
     pOutlineRule->SetAutoRule( sal_True );
 
-    // teste ob die evt. gesetzen CharFormate in diesem Document
-    // definiert sind
+    // test whether the optional CharFormats are defined in this Document
     pOutlineRule->CheckCharFmts( this );
 
     // notify text nodes, which are registered at the outline style, about the
@@ -146,7 +145,7 @@ void SwDoc::SetOutlineNumRule( const SwNumRule& rRule )
     pOutlineRule->SetInvalidRule(sal_True);
     UpdateNumRule();
 
-    // gibt es Fussnoten && gilt Kapitelweises Nummerieren, dann updaten
+    // update if we have foot notes && chapter-wise numbering
     if( GetFtnIdxs().Count() && FTNNUM_CHAPTER == GetFtnInfo().eNum )
         GetFtnIdxs().UpdateAllFtn();
 
@@ -182,13 +181,13 @@ void SwDoc::PropagateOutlineRule()
     }
 }
 
-// Hoch-/Runterstufen
+// Increase/Decrease
 sal_Bool SwDoc::OutlineUpDown( const SwPaM& rPam, short nOffset )
 {
     if( !GetNodes().GetOutLineNds().Count() || !nOffset )
         return sal_False;
 
-    // den Bereich feststellen
+    // calculate the area
     const SwOutlineNodes& rOutlNds = GetNodes().GetOutLineNds();
     const SwNodePtr pSttNd = (SwNodePtr)&rPam.Start()->nNode.GetNode();
     const SwNodePtr pEndNd = (SwNodePtr)&rPam.End()->nNode.GetNode();
@@ -196,19 +195,19 @@ sal_Bool SwDoc::OutlineUpDown( const SwPaM& rPam, short nOffset )
 
     if( !rOutlNds.Seek_Entry( pSttNd, &nSttPos ) &&
         !nSttPos-- )
-        // wir stehen in keiner "Outline-Section"
+        // we're not in an "Outline section"
         return sal_False;
 
     if( rOutlNds.Seek_Entry( pEndNd, &nEndPos ) )
         ++nEndPos;
 
-    // jetzt haben wir unseren Bereich im OutlineNodes-Array
-    // dann prufe ersmal, ob nicht unterebenen aufgehoben werden
-    // (Stufung ueber die Grenzen)
+    // We now have the wanted area in the OutlineNodes array,
+    // so check now if we're not invalidating sublevels
+    // (stepping over the limits)
     sal_uInt16 n;
 
-    // so, dann koennen wir:
-    // 1. Vorlagen-Array anlegen
+    // Here we go:
+    // 1. Create the Template array:
     SwTxtFmtColl* aCollArr[ MAXLEVEL ];
     memset( aCollArr, 0, sizeof( SwTxtFmtColl* ) * MAXLEVEL );
 
@@ -282,13 +281,11 @@ sal_Bool SwDoc::OutlineUpDown( const SwPaM& rPam, short nOffset )
 
     /* --> #i13747#
 
-       Build a move table that states from which level an outline will
+        Build a move table that states from which level to which other level
+        an outline will be moved.
 
-  be moved to which other level. */
-
-    /* the move table
-
-       aMoveArr[n] = m: replace aCollArr[n] with aCollArr[m]
+        the move table:
+        aMoveArr[n] = m: replace aCollArr[n] with aCollArr[m]
     */
     int aMoveArr[MAXLEVEL];
     int nStep; // step size for searching in aCollArr: -1 or 1
@@ -380,7 +377,7 @@ sal_Bool SwDoc::OutlineUpDown( const SwPaM& rPam, short nOffset )
         GetIDocumentUndoRedo().AppendUndo(pUndoOLR);
     }
 
-    // 2. allen Nodes die neue Vorlage zuweisen
+    // 2. Apply the new Template to all Nodes
 
     n = nSttPos;
     while( n < nEndPos)
@@ -427,10 +424,10 @@ sal_Bool SwDoc::OutlineUpDown( const SwPaM& rPam, short nOffset )
     return sal_True;
 }
 
-// Hoch-/Runter - Verschieben !
+// Move up/down
 sal_Bool SwDoc::MoveOutlinePara( const SwPaM& rPam, short nOffset )
 {
-    // kein Verschiebung in den Sonderbereichen
+    // Do not move to special areas
     const SwPosition& rStt = *rPam.Start(),
                     & rEnd = &rStt == rPam.GetPoint() ? *rPam.GetMark()
                                                       : *rPam.GetPoint();
@@ -564,12 +561,12 @@ sal_Bool SwDoc::MoveOutlinePara( const SwPaM& rPam, short nOffset )
         return sal_False;
 
     OSL_ENSURE( aSttRg.GetIndex() > nNewPos || nNewPos >= aEndRg.GetIndex(),
-                "Position liegt im MoveBereich" );
+                "Position lies within MoveArea" );
 
-    // wurde ein Position in den Sonderbereichen errechnet, dann
-    // setze die Position auf den Dokumentanfang.
-    // Sollten da Bereiche oder Tabellen stehen, so werden sie nach
-    // hinten verschoben.
+    // If a Position was calculated for the special area, we set it
+    // to document start instead.
+    // Areas or Tables at the document start will be moved to the
+    // back.
     nNewPos = Max( nNewPos, GetNodes().GetEndOfExtras().GetIndex() + 2 );
 
     long nOffs = nNewPos - ( 0 < nOffset ? aEndRg.GetIndex() : aSttRg.GetIndex());
@@ -588,14 +585,14 @@ sal_uInt16 lcl_FindOutlineName( const SwNodes& rNds, const String& rName,
         String sTxt( pTxtNd->GetExpandTxt() );
         if( sTxt.Equals( rName ) )
         {
-            // "exact" gefunden, setze Pos auf den Node
+            // Found "exact", set Pos to the Node
             nSavePos = n;
             break;
         }
         else if( !bExact && USHRT_MAX == nSavePos &&
                     COMPARE_EQUAL == sTxt.CompareTo( rName, rName.Len()) )
         {
-            // dann vielleicht nur den den 1.Teil vom Text gefunden
+            // maybe we just found the text's first part
             nSavePos = n;
         }
     }
@@ -605,16 +602,16 @@ sal_uInt16 lcl_FindOutlineName( const SwNodes& rNds, const String& rName,
 
 sal_uInt16 lcl_FindOutlineNum( const SwNodes& rNds, String& rName )
 {
-    // Gueltig Nummern sind (immer nur Offsets!!!):
-    //  ([Nummer]+\.)+  (als regulaerer Ausdruck!)
-    //  (Nummer gefolgt von Punkt, zum 5 Wiederholungen)
-    //  also: "1.1.", "1.", "1.1.1."
+    // Valid numbers are (always just offsets!):
+    //  ([Number]+\.)+  (as a regular expression!)
+    //  (Number follwed by a period, with 5 repetitions)
+    //  i.e.: "1.1.", "1.", "1.1.1."
     xub_StrLen nPos = 0;
     String sNum = rName.GetToken( 0, '.', nPos );
     if( STRING_NOTFOUND == nPos )
-        return USHRT_MAX;           // ungueltige Nummer!!!
+        return USHRT_MAX;           // invalid number!
 
-    sal_uInt16 nLevelVal[ MAXLEVEL ];       // Nummern aller Levels
+    sal_uInt16 nLevelVal[ MAXLEVEL ];       // numbers of all levels
     memset( nLevelVal, 0, MAXLEVEL * sizeof( nLevelVal[0] ));
     sal_uInt8 nLevel = 0;
     String sName( rName );
@@ -629,9 +626,9 @@ sal_uInt16 lcl_FindOutlineNum( const SwNodes& rNds, String& rName )
                 nVal *= 10;  nVal += c - '0';
             }
             else if( nLevel )
-                break;                      // "fast" gueltige Nummer
+                break;                      // "almost" valid number
             else
-                return USHRT_MAX;           // ungueltige Nummer!!!
+                return USHRT_MAX;           // invalid number!
 
         if( MAXLEVEL > nLevel )
             nLevelVal[ nLevel++ ] = nVal;
@@ -643,18 +640,17 @@ sal_uInt16 lcl_FindOutlineNum( const SwNodes& rNds, String& rName )
         if(!comphelper::string::isdigitAsciiString(sNum))
             nPos = STRING_NOTFOUND;
     }
-    rName = sName;      // das ist der nachfolgende Text.
+    rName = sName;      // that's the follow-up text
 
-    // alle Levels gelesen, dann suche mal im Document nach dieser
-    // Gliederung:
+    // read all levels, so search the document for this outline
     const SwOutlineNodes& rOutlNds = rNds.GetOutLineNds();
-    // OS: ohne OutlineNodes lohnt die Suche nicht
-    // und man spart sich einen Absturz
+    // Without OutlineNodes searching doesn't pay off
+    // and we save a crash
     if(!rOutlNds.Count())
         return USHRT_MAX;
     SwTxtNode* pNd;
     nPos = 0;
-    //search in the existing outline nodes for the required outline num array
+    // search in the existing outline nodes for the required outline num array
     for( ; nPos < rOutlNds.Count(); ++nPos )
     {
         pNd = rOutlNds[ nPos ]->GetTxtNode();
@@ -669,7 +665,7 @@ sal_uInt16 lcl_FindOutlineNum( const SwNodes& rNds, String& rName )
             {
                 const SwNodeNum & rNdNum = *(pNd->GetNum());
                 SwNumberTree::tNumberVector aLevelVal = rNdNum.GetNumberVector();
-                //now compare with the one searched for
+                // now compare with the one searched for
                 bool bEqual = true;
                 for( sal_uInt8 n = 0; (n < nLevel) && bEqual; ++n )
                 {
@@ -696,23 +692,23 @@ sal_uInt16 lcl_FindOutlineNum( const SwNodes& rNds, String& rName )
     return nPos;
 }
 
-// zu diesem Gliederungspunkt
+// Ad this bullet point:
 
-// JP 13.06.96:
-// im Namen kann eine Nummer oder/und der Text stehen.
-// zuerst wird ueber die Nummer versucht den richtigen Eintrag zu finden.
-// Gibt es diesen, dann wird ueber den Text verglichen, od es der
-// gewuenschte ist. Ist das nicht der Fall, wird noch mal nur ueber den
-// Text gesucht. Wird dieser gefunden ist es der Eintrag. Ansonsten der,
-// der ueber die Nummer gefunden wurde.
-// Ist keine Nummer angegeben, dann nur den Text suchen.
+// A Name can contain a Number and/or the Text.
+//
+// First, we try to find the correct Entry via the Number.
+// If it exists, we compare the Text, to see if it's the right one.
+// If that's not the case, we search again via the Text. If it is
+// found, we got the right entry. Or else we use the one found by
+// searching for the Number.
+// If we don't have a Number, we search via the Text only.
 sal_Bool SwDoc::GotoOutline( SwPosition& rPos, const String& rName ) const
 {
     if( rName.Len() )
     {
         const SwOutlineNodes& rOutlNds = GetNodes().GetOutLineNds();
 
-        // 1. Schritt: ueber die Nummer:
+        // 1. step: via the Number:
         String sName( rName );
         sal_uInt16 nFndPos = ::lcl_FindOutlineNum( GetNodes(), sName );
         if( USHRT_MAX != nFndPos )
@@ -735,7 +731,7 @@ sal_Bool SwDoc::GotoOutline( SwPosition& rPos, const String& rName ) const
             if( !sExpandedText.Equals( sName ) )
             {
                 sal_uInt16 nTmp = ::lcl_FindOutlineName( GetNodes(), sName, sal_True );
-                if( USHRT_MAX != nTmp )             // ueber den Namen gefunden
+                if( USHRT_MAX != nTmp )             // found via the Name
                 {
                     nFndPos = nTmp;
                     pNd = rOutlNds[ nFndPos ]->GetTxtNode();
@@ -774,7 +770,7 @@ sal_Bool SwDoc::GotoOutline( SwPosition& rPos, const String& rName ) const
 void lcl_ChgNumRule( SwDoc& rDoc, const SwNumRule& rRule )
 {
     SwNumRule* pOld = rDoc.FindNumRulePtr( rRule.GetName() );
-    OSL_ENSURE( pOld, "ohne die alte NumRule geht gar nichts" );
+    OSL_ENSURE( pOld, "we cannot proceed without the old NumRule" );
 
     sal_uInt16 nChgFmtLevel = 0, nMask = 1;
     sal_uInt8 n;
@@ -793,7 +789,7 @@ void lcl_ChgNumRule( SwDoc& rDoc, const SwNumRule& rRule )
             nChgFmtLevel |= nMask;
     }
 
-    if( !nChgFmtLevel )         // es wurde nichts veraendert?
+    if( !nChgFmtLevel )         // Nothing has been changed?
     {
         const bool bInvalidateNumRule( pOld->IsContinusNum() != rRule.IsContinusNum() );
         pOld->CheckCharFmts( &rDoc );
@@ -1017,7 +1013,7 @@ void SwDoc::SetNodeNumStart( const SwPosition& rPos, sal_uInt16 nStt )
     }
 }
 
-// loeschen geht nur, wenn die Rule niemand benutzt!
+// We can only delete if the Rule is unused!
 sal_Bool SwDoc::DelNumRule( const String& rName, sal_Bool bBroadcast )
 {
     sal_uInt16 nPos = FindNumRule( rName );
@@ -1299,10 +1295,10 @@ sal_Bool SwDoc::NoNum( const SwPaM& rPam )
 {
 
     sal_Bool bRet = SplitNode( *rPam.GetPoint(), false );
-    // ist ueberhaupt Nummerierung im Spiel ?
+    // Do we actually use Numbering at all?
     if( bRet )
     {
-        // NoNum setzen und Upaten
+        // Set NoNum and Upate
         const SwNodeIndex& rIdx = rPam.GetPoint()->nNode;
         SwTxtNode* pNd = rIdx.GetNode().GetTxtNode();
         const SwNumRule* pRule = pNd->GetNumRule();
@@ -1313,7 +1309,7 @@ sal_Bool SwDoc::NoNum( const SwPaM& rPam )
             SetModified();
         }
         else
-            bRet = sal_False;   // keine Nummerierung , ?? oder immer sal_True ??
+            bRet = sal_False;   // no Numbering or just always sal_True?
     }
     return bRet;
 }
@@ -1376,7 +1372,7 @@ void SwDoc::DelNumRules( const SwPaM& rPam )
         }
     }
 
-    // dann noch alle Updaten
+    // Finally, update all
     UpdateNumRule();
 
     if( pOutlNd )
@@ -1389,7 +1385,7 @@ void SwDoc::InvalidateNumRules()
         (*pNumRuleTbl)[n]->SetInvalidRule(sal_True);
 }
 
-// zum naechsten/vorhergehenden Punkt auf gleicher Ebene
+// To the next/preceding Bullet at the same Level
 sal_Bool lcl_IsNumOk( sal_uInt8 nSrchNum, sal_uInt8& rLower, sal_uInt8& rUpper,
                     sal_Bool bOverUpper, sal_uInt8 nNumber )
 {
@@ -1423,7 +1419,7 @@ sal_Bool lcl_IsValidPrevNextNumNode( const SwNodeIndex& rIdx )
         bRet = SwTableBoxStartNode == ((SwStartNode&)rNd).GetStartNodeType();
         break;
 
-    case ND_SECTIONNODE:            // der ist erlaubt, also weiter
+    case ND_SECTIONNODE:            // that one's valid, so proceed
         bRet = sal_True;
         break;
     }
@@ -1443,8 +1439,7 @@ sal_Bool lcl_GotoNextPrevNum( SwPosition& rPos, sal_Bool bNext,
     SwNodeIndex aIdx( rPos.nNode );
     if( ! pNd->IsCountedInList() )
     {
-        // falls gerade mal NO_NUMLEVEL an ist, so such den vorherigen Node
-        // mit Nummerierung
+        // If NO_NUMLEVEL is switched on, we search the preceding Node with Numbering
         sal_Bool bError = sal_False;
         do {
             aIdx--;
@@ -1460,7 +1455,7 @@ sal_Bool lcl_GotoNextPrevNum( SwPosition& rPos, sal_Bool bNext,
                     nTmpNum = static_cast<sal_uInt8>(pNd->GetActualListLevel());
                     if( !( ! pNd->IsCountedInList() &&
                          (nTmpNum >= nSrchNum )) )
-                        break;      // gefunden
+                        break;      // found it!
                 }
                 else
                     bError = sal_True;
@@ -1514,7 +1509,7 @@ sal_Bool lcl_GotoNextPrevNum( SwPosition& rPos, sal_Bool bNext,
             aIdx--;
     }
 
-    if( !bRet && !bOverUpper && pLast )     // nicht ueber hoehere Nummmern, aber bis Ende
+    if( !bRet && !bOverUpper && pLast )     // do not iterate over higher numbers, but still to the end
     {
         if( bNext )
         {
@@ -1779,7 +1774,7 @@ sal_Bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, sal_Bool bIsOutl
     }
     else
     {
-        //Impossible to move to negative index
+        // Impossible to move to negative index
         if( sal_uLong(abs( nOffset )) > nStIdx)
             return sal_False;
 
@@ -1787,8 +1782,8 @@ sal_Bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, sal_Bool bIsOutl
         nStIdx += nOffset;
     }
     nInStIdx = nInEndIdx + 1;
-    // Folgende Absatzbloecke sollen vertauscht werden:
-    // [ nStIdx, nInEndIdx ] mit [ nInStIdx, nEndIdx ]
+    // The following paragraphs shall be swapped:
+    // Swap [ nStIdx, nInEndIdx ] with [ nInStIdx, nEndIdx ]
 
     if( nEndIdx >= GetNodes().GetEndOfContent().GetIndex() )
         return sal_False;
@@ -1825,8 +1820,7 @@ sal_Bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, sal_Bool bIsOutl
             return sal_False; // The "end" notes are in different sections
     }
 
-    // auf Redlining testen - darf die Selektion ueberhaupt verschoben
-    // werden?
+    // Test for Redlining - Can the Selection be moved at all, actually?
     if( !IsIgnoreRedline() )
     {
         sal_uInt16 nRedlPos = GetRedlinePos( pStt->nNode.GetNode(), nsRedlineType_t::REDLINE_DELETE );
@@ -1838,7 +1832,7 @@ sal_Bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, sal_Bool bIsOutl
             aEndPos.nContent = pCNd ? pCNd->Len() : 1;
             sal_Bool bCheckDel = sal_True;
 
-            // es existiert fuer den Bereich irgendein Redline-Delete-Object
+            // There is a some Redline Delete Object for the Area
             for( ; nRedlPos < GetRedlineTbl().Count(); ++nRedlPos )
             {
                 const SwRedline* pTmp = GetRedlineTbl()[ nRedlPos ];
@@ -1848,23 +1842,22 @@ sal_Bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, sal_Bool bIsOutl
                     switch( ComparePosition( *pRStt, *pREnd, aStPos, aEndPos ))
                     {
                     case POS_COLLIDE_START:
-                    case POS_BEHIND:            // Pos1 liegt hinter Pos2
+                    case POS_BEHIND:            // Pos1 comes after Pos2
                         nRedlPos = GetRedlineTbl().Count();
                         break;
 
                     case POS_COLLIDE_END:
-                    case POS_BEFORE:            // Pos1 liegt vor Pos2
+                    case POS_BEFORE:            // Pos1 comes before Pos2
                         break;
-                    case POS_INSIDE:            // Pos1 liegt vollstaendig in Pos2
-                        // ist erlaubt, aber checke dann alle nachfolgenden
-                        // auf Ueberlappungen
+                    case POS_INSIDE:            // Pos1 is completely inside Pos2
+                        // that's valid, but check all following for overlapping
                         bCheckDel = sal_False;
                         break;
 
-                    case POS_OUTSIDE:           // Pos2 liegt vollstaendig in Pos1
-                    case POS_EQUAL:             // Pos1 ist genauso gross wie Pos2
-                    case POS_OVERLAP_BEFORE:    // Pos1 ueberlappt Pos2 am Anfang
-                    case POS_OVERLAP_BEHIND:    // Pos1 ueberlappt Pos2 am Ende
+                    case POS_OUTSIDE:           // Pos2 is completely inside Pos1
+                    case POS_EQUAL:             // Pos1 is as big as Pos2
+                    case POS_OVERLAP_BEFORE:    // Pos1 overlaps Pos2 in the beginning
+                    case POS_OVERLAP_BEHIND:    // Pos1 overlaps Pos2 at the end
                         return sal_False;
                     }
                 }
@@ -1873,9 +1866,10 @@ sal_Bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, sal_Bool bIsOutl
     }
 
     {
-        // DataChanged vorm verschieben verschicken, dann bekommt
-        // man noch mit, welche Objecte sich im Bereich befinden.
-        // Danach koennen sie vor/hinter der Position befinden.
+        // Send DataChanged before moving. We then can detect
+        // which objects are still in the Area.
+        // After the move they could come before/after the
+        // Position.
         SwDataChanged aTmp( rPam, 0 );
     }
 
@@ -1885,8 +1879,7 @@ sal_Bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, sal_Bool bIsOutl
     SwRedline* pOwnRedl = 0;
     if( IsRedlineOn() )
     {
-        // wenn der Bereich komplett im eigenen Redline liegt, kann es
-        // verschoben werden!
+        // If the Area is completely in the own Redline, we can move it!
         sal_uInt16 nRedlPos = GetRedlinePos( pStt->nNode.GetNode(), nsRedlineType_t::REDLINE_INSERT );
         if( USHRT_MAX != nRedlPos )
         {
@@ -1894,7 +1887,7 @@ sal_Bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, sal_Bool bIsOutl
             const SwPosition *pRStt = pTmp->Start(), *pREnd = pTmp->End();
             SwRedline aTmpRedl( nsRedlineType_t::REDLINE_INSERT, rPam );
             const SwCntntNode* pCEndNd = pEnd->nNode.GetNode().GetCntntNode();
-            // liegt komplett im Bereich, und ist auch der eigene Redline?
+            // Is completely in the Area and is the own Redline too?
             if( aTmpRedl.IsOwnRedline( *pTmp ) &&
                 (pRStt->nNode < pStt->nNode ||
                 (pRStt->nNode == pStt->nNode && !pRStt->nContent.GetIndex()) ) &&
@@ -1908,14 +1901,14 @@ sal_Bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, sal_Bool bIsOutl
                 {
                     pTmp = GetRedlineTbl()[ nRedlPos+1 ];
                     if( *pTmp->Start() == *pREnd )
-                        // dann doch nicht!
+                        // then don't!
                         pOwnRedl = 0;
                 }
 
                 if( pOwnRedl &&
                     !( pRStt->nNode <= aIdx && aIdx <= pREnd->nNode ))
                 {
-                    // nicht in sich selbst, dann auch nicht moven
+                    // it's not in itself, so don't move it
                     pOwnRedl = 0;
                 }
             }
@@ -1925,7 +1918,7 @@ sal_Bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, sal_Bool bIsOutl
         {
             GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
 
-            // zuerst das Insert, dann das Loeschen
+            // First the Insert, then the Delete
             SwPosition aInsPos( aIdx );
             aInsPos.nContent.Assign( aIdx.GetNode().GetCntntNode(), 0 );
 
@@ -1965,14 +1958,14 @@ sal_Bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, sal_Bool bIsOutl
             CopyRange( aPam, aInsPos, false );
             if( bDelLastPara )
             {
-                // dann muss der letzte leere Node wieder entfernt werden
+                // We need to remove the last empty Node again
                 aIdx = aInsPos.nNode;
                 SwCntntNode* pCNd = GetNodes().GoPrevious( &aInsPos.nNode );
                 xub_StrLen nCLen = 0; if( pCNd ) nCLen = pCNd->Len();
                 aInsPos.nContent.Assign( pCNd, nCLen );
 
-                // alle die im zu loeschenden Node stehen, mussen auf den
-                // naechsten umgestezt werden
+                // All, that are in the to-be-deleted Node, need to be
+                // moved to the next Node
                 SwPosition* pPos;
                 for( sal_uInt16 n = 0; n < GetRedlineTbl().Count(); ++n )
                 {
@@ -2000,7 +1993,7 @@ sal_Bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, sal_Bool bIsOutl
             checkRedlining(eOld);
             if (GetIDocumentUndoRedo().DoesUndo())
             {
-                //JP 06.01.98: MUSS noch optimiert werden!!!
+                // Still NEEDS to be optimized (even after 14 years)
                 SetRedlineMode(
                    (RedlineMode_t)(nsRedlineMode_t::REDLINE_ON | nsRedlineMode_t::REDLINE_SHOW_INSERT | nsRedlineMode_t::REDLINE_SHOW_DELETE));
                 SwUndo *const pUndo(new SwUndoRedlineDelete(aPam, UNDO_DELETE));
@@ -2011,14 +2004,14 @@ sal_Bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, sal_Bool bIsOutl
 
             // prevent assertion from aPam's target being deleted
             // (Alternatively, one could just let aPam go out of scope, but
-            //  that requires touching a lot of code.)
+            // that requires touching a lot of code.)
             aPam.GetBound(sal_True).nContent.Assign( NULL, 0 );
             aPam.GetBound(sal_False).nContent.Assign( NULL, 0 );
 
             AppendRedline( pNewRedline, true );
 
-//JP 06.01.98: MUSS noch optimiert werden!!!
-SetRedlineMode( eOld );
+            // Still NEEDS to be optimized!
+            SetRedlineMode( eOld );
             GetIDocumentUndoRedo().EndUndo( UNDO_END, NULL );
             SetModified();
 
@@ -2055,8 +2048,9 @@ SetRedlineMode( eOld );
     {
         // i57907: Under circumstances (sections at the end of a chapter)
         // the rPam.Start() is not moved to the new position.
-        // But aIdx should be at the new end position and as long as the number of moved paragraphs
-        // is nMoved, I know, where the new position is.
+        // But aIdx should be at the new end position and as long as the
+        // number of moved paragraphs is nMoved, I know, where the new
+        // position is.
         pUndo->SetStartNode( aIdx.GetIndex() - nMoved );
         GetIDocumentUndoRedo().AppendUndo(pUndo);
     }
@@ -2266,7 +2260,7 @@ String SwDoc::GetUniqueNumRuleName( const String* pChkStr, sal_Bool bAutoNum ) c
             const String& rNm = pNumRule->GetName();
             if( rNm.Match( aName ) == nNmLen )
             {
-                // Nummer bestimmen und das Flag setzen
+                // Determine Number and set the Flag
                 nNum = (sal_uInt16)rNm.Copy( nNmLen ).ToInt32();
                 if( nNum-- && nNum < pNumRuleTbl->Count() )
                     pSetFlags[ nNum / 8 ] |= (0x01 << ( nNum & 0x07 ));
@@ -2277,12 +2271,12 @@ String SwDoc::GetUniqueNumRuleName( const String* pChkStr, sal_Bool bAutoNum ) c
 
     if( !pChkStr )
     {
-        // alle Nummern entsprechend geflag, also bestimme die richtige Nummer
+        // All Numbers have been flagged accordingly, so identify the right Number
         nNum = pNumRuleTbl->Count();
         for( n = 0; n < nFlagSize; ++n )
             if( 0xff != ( nTmp = pSetFlags[ n ] ))
             {
-                // also die Nummer bestimmen
+                // identify the Number
                 nNum = n * 8;
                 while( nTmp & 1 )
                     ++nNum, nTmp >>= 1;
