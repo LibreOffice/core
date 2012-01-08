@@ -80,15 +80,13 @@
 				<p id="MSOReg1" xml:lang="en-US">Registration of ${PRODUCTNAME} as default application for Microsoft Office formats can be forced or suppressed by using the following command line switches with the installer:</p>
 				<ul>
 					<li>
-						<p id="MSOReg2" xml:lang="en-US"><tt>/msoreg=1</tt> will force registration of ${PRODUCTNAME} as default application for Microsoft Office formats.</p>
+						<p id="MSOReg2" xml:lang="en-US"><tt>REGISTER_ALL_MSO_TYPES=1</tt> will force registration of ${PRODUCTNAME} as default application for Microsoft Office formats.</p>
 					</li>
 
 					<li>
-						<p id="MSOReg3" xml:lang="en-US"><tt>/msoreg=0</tt> will suppress registration of ${PRODUCTNAME} as default application for Microsoft Office formats.</p>
+						<p id="MSOReg3" xml:lang="en-US"><tt>REGISTER_NO_MSO_TYPES=1</tt> will suppress registration of ${PRODUCTNAME} as default application for Microsoft Office formats.</p>
 					</li>
 				</ul>
-				<p id="DLLA1" xml:lang="en-US">If you perform an administrative installation using setup /a, you need to make sure that the file msvc90.dll is installed on the system. This file is required for ${PRODUCTNAME} to start after an administrative installation. You can get the file from <a href="http://www.microsoft.com/downloads/details.aspx?familyid=9B2DA534-3E03-4391-8A4D-074B9F2BC1BF">http://www.microsoft.com/downloads/details.aspx?familyid=9B2DA534-3E03-4391-8A4D-074B9F2BC1BF</a></p>
-				<p class="note" id="AdminNeeded" xml:lang="en-US">Please be aware that administrator rights are needed for the installation process.</p>
 			</div>
 			<div class="LINUX" id="Linuxi2">
 			    <p id="s2we10" xml:lang="en-US">As a general rule, you are recommended to install ${PRODUCTNAME} via the installation methods recommended by your particular Linux distribution (such as the Ubuntu Software Center, in the case of Ubuntu Linux). This is because it is usually the simplest way to obtain an installation that is optimally integrated into your system. Indeed, ${PRODUCTNAME} may well be already installed by default when you originally install your Linux operating system.</p>
@@ -131,7 +129,7 @@
 			</div>
 			<p id="Precautions" xml:lang="en-US">Please make sure you have enough free memory in the temporary directory on your system, and please ensure that read, write and run access rights have been granted. Close all other programs before starting the installation process.</p>
 			<h3 id="sdfsdfgf42s" xml:lang="en-US">Installation of ${PRODUCTNAME} on Debian/Ubuntu-based Linux systems</h3>
-			<p id="debianinstall1" xml:lang="en-US">If you have a previous version of ${PRODUCTNAME} already installed, then you will need to de-install it before proceeding further. For instructions on how to do that, please read the section below entitled Deinstallation of a Previous Version of ${PRODUCTNAME}. For instructions on how to install a language pack (after having installed the US English version of ${PRODUCTNAME}), please read the section below entitled Installing a Language Pack.</p>
+			<p id="debianinstall1" xml:lang="en-US">If you have a previous version of ${PRODUCTNAME} already installed, then you will need to de-install it before proceeding further. For instructions on how to install a language pack (after having installed the US English version of ${PRODUCTNAME}), please read the section below entitled Installing a Language Pack.</p>
 			<p id="debianinstall2" xml:lang="en-US">When you unpack the downloaded archive, you will see that the contents have been decompressed into a sub-directory. Open a file manager window, and change directory to the one starting with "LibO_", followed by the version number and some platform information.</p>
 			<p id="debianinstall3" xml:lang="en-US">This directory contains a subdirectory called "DEBS". Change directory to the "DEBS" directory.</p>
 			<p id="debianinstall4" xml:lang="en-US">Right-click within the directory and choose "Open in Terminal". A terminal window will open. From the command line of the terminal window, enter the following command (you will be prompted to enter your root user's password before the command will execute):</p>
@@ -142,7 +140,7 @@
 			<p id="debianinstall9" xml:lang="en-US">sudo dpkg -i *.deb</p>
 			<p id="debianinstallA" xml:lang="en-US">The installation process is now completed, and you should have icons for all the ${PRODUCTNAME} applications in your desktop's Applications/Office menu.</p>
 			<h3 id="sdfsdfgf42t" xml:lang="en-US">Installation of ${PRODUCTNAME} on Fedora, Suse, Mandriva and other Linux systems using RPM packages</h3>
-			<p id="rpminstall1" xml:lang="en-US">If you have a previous version of ${PRODUCTNAME} already installed, then you will need to de-install it before proceeding further. For instructions on how to do that, please read the section below entitled De-installation of a Previous Version of ${PRODUCTNAME}. For instructions on how to install a language pack (after having installed the US English version of ${PRODUCTNAME}), please read the section below entitled Installing a Language Pack.</p>
+			<p id="rpminstall1" xml:lang="en-US">If you have a previous version of ${PRODUCTNAME} already installed, then you will need to de-install it before proceeding further. For instructions on how to install a language pack (after having installed the US English version of ${PRODUCTNAME}), please read the section below entitled Installing a Language Pack.</p>
 			<p id="rpminstall2" xml:lang="en-US">When you unpack the downloaded archive, you will see that the contents have been decompressed into a sub-directory. Open a file manager window, and change directory to the one starting with "LibO_", followed by the version number and some platform information.</p>
 			<p id="rpminstall3" xml:lang="en-US">This directory contains a subdirectory called "RPMS". Change directory to the "RPMS" directory.</p>
 			<p id="rpminstall4" xml:lang="en-US">Right-click within the directory and choose "Open in Terminal". A terminal window will open. From the command line of the terminal window, enter the following command (you will be prompted to enter your root user's password before the command will execute):</p>
