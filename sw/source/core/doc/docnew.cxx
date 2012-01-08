@@ -26,7 +26,7 @@
  *
  ************************************************************************/
 
-#define ROLBCK_HISTORY_ONLY     // Der Kampf gegen die CLOOK's
+#define ROLBCK_HISTORY_ONLY     // The fight against the CLOOK's
 #include <doc.hxx>
 #include <dcontact.hxx>
 #include <com/sun/star/document/PrinterIndependentLayout.hpp>
@@ -62,9 +62,9 @@
 #include <fmtfordr.hxx>
 #include <fmtpdsc.hxx>
 #include <pvprtdat.hxx>
-#include <rootfrm.hxx>  //Damit der RootDtor gerufen wird.
+#include <rootfrm.hxx>  // So that the RootDtor is being called
 #include <layouter.hxx>
-#include <pagedesc.hxx> //Damit die PageDescs zerstoert werden koennen.
+#include <pagedesc.hxx> // So that the PageDescs can be destroyed
 #include <ndtxt.hxx>
 #include <printdata.hxx>
 #include <docfld.hxx>
@@ -73,12 +73,12 @@
 #include <docstat.hxx>
 #include <charfmt.hxx>
 #include <frmfmt.hxx>
-#include <rolbck.hxx>           // Undo-Attr, SwHistory
-#include <poolfmt.hxx>          // fuer die Pool-Vorlage
+#include <rolbck.hxx>           // Undo attributes, SwHistory
+#include <poolfmt.hxx>          // for the Pool template
 #include <dbmgr.hxx>
 #include <docsh.hxx>
-#include <acorrect.hxx>         // fuer die autom. Aufnahme von Ausnahmen
-#include <visiturl.hxx>         // fuer die URL-Change Benachrichtigung
+#include <acorrect.hxx>         // for the automatic adding of exceptions
+#include <visiturl.hxx>         // for the URLChange message
 #include <docary.hxx>
 #include <lineinfo.hxx>
 #include <drawdoc.hxx>
@@ -99,7 +99,7 @@
 #include <UndoManager.hxx>
 #include <unochart.hxx>
 
-#include <cmdid.h>              // fuer den dflt - Printer in SetJob
+#include <cmdid.h>              // for the default printer in SetJob
 
 
 #include <com/sun/star/document/XDocumentInfoSupplier.hpp>
@@ -189,7 +189,7 @@ void StartGrammarChecking( SwDoc &rDoc )
 }
 
 /*
- * interne Funktionen
+ * internal functions
  */
 sal_Bool lcl_DelFmtIndizes( const SwFrmFmtPtr& rpFmt, void* )
 {
@@ -203,7 +203,7 @@ sal_Bool lcl_DelFmtIndizes( const SwFrmFmtPtr& rpFmt, void* )
 }
 
 /*
- * exportierte Methoden
+ * exported methods
  */
 SwDoc::SwDoc()
     : m_pNodes( new SwNodes(this) )
@@ -369,12 +369,12 @@ SwDoc::SwDoc()
     mpGrammarContact = ::createGrammarContact();
 
     /*
-     * Defaultformate und DefaultFormatsammlungen (FmtColl)
-     * werden an der Position 0 in das jeweilige Array eingetragen.
-     * Die Formate der FmtColls sind von den Defaultformaten
-     * abgeleitet und stehen auch in der Liste.
+     * DefaultFormats and DefaultFormatCollections (FmtColl)
+     * are inserted at position 0 at the respective array.
+     * The formats in the FmtColls are derived from the
+     * DefaultFormats and are also in the list.
      */
-    /* Formate */
+    /* Formats */
     pFrmFmtTbl->Insert(pDfltFrmFmt, 0 );
     pCharFmtTbl->Insert(pDfltCharFmt, 0 );
 
@@ -384,18 +384,18 @@ SwDoc::SwDoc()
     // GRF
     pGrfFmtCollTbl->Insert(pDfltGrfFmtColl, 0 );
 
-    // PageDesc, EmptyPageFmt und ColumnFmt anlegen
+    // Create PageDesc, EmptyPageFmt and ColumnFmt
     if ( !aPageDescs.Count() )
         GetPageDescFromPool( RES_POOLPAGE_STANDARD );
 
-        //Leere Seite Einstellen.
+    // Set to "Empty Page"
     pEmptyPageFmt->SetFmtAttr( SwFmtFrmSize( ATT_FIX_SIZE ) );
-        //BodyFmt fuer Spalten Einstellen.
+    // Set BodyFmt for "Column Setting" Spalten Einstellen. FIXME: WHAT?
     pColumnContFmt->SetFmtAttr( SwFmtFillOrder( ATT_LEFT_TO_RIGHT ) );
 
     _InitFieldTypes();
 
-    // lege (fuer die Filter) eine Default-OutlineNumRule an
+    // Create a default OutlineNumRule (for Filters)
     pOutlineRule = new SwNumRule( String::CreateFromAscii( SwNumRule::GetOutlineRuleName() ),
                                   // #i89178#
                                   numfunc::GetDefaultPositionAndSpaceMode(),
@@ -410,14 +410,14 @@ SwDoc::SwDoc()
     new SwTxtNode( SwNodeIndex( GetNodes().GetEndOfContent() ),
                     GetTxtCollFromPool( RES_POOLCOLL_STANDARD ));
 
-    // den eigenen IdleTimer setzen
+    // set the own IdleTimer
     aIdleTimer.SetTimeout( 600 );
     aIdleTimer.SetTimeoutHdl( LINK(this, SwDoc, DoIdleJobs) );
 
     aOLEModifiedTimer.SetTimeout( 1000 );
     aOLEModifiedTimer.SetTimeoutHdl( LINK( this, SwDoc, DoUpdateModifiedOLE ));
 
-    // DBMgr anlegen
+    // Create DBMgr
     pNewDBMgr = new SwNewDBMgr;
 
     // create TOXTypes
@@ -444,10 +444,9 @@ SwDoc::SwDoc()
 }
 
 /*
- * Besonderheiten: an der Position 0 des Arrays der Formate und
- * der GDI-Objekte befindet sich ein Member der Klasse SwDoc.
- * Dieser darf also keinesfalls durch delete geloescht
- * werden!!!!!!!!!!
+ * Speciality: a member of the class SwDoc is located at
+ * position 0 in the array of the Format and GDI objects.
+ * This MUST not be destroyed using 'delete' in any case!
  */
 SwDoc::~SwDoc()
 {
@@ -492,7 +491,7 @@ SwDoc::~SwDoc()
     delete pLayouter;
     pLayouter = 0L;
 
-    // Undo-Benachrichtigung vom Draw abschalten
+    // Deactivate Undo notification from the Draw
     if( pDrawModel )
     {
         DrawNotifyUndoHdl();
@@ -509,7 +508,7 @@ SwDoc::~SwDoc()
     delete pUpdtFlds;
     delete pACEWord;
 
-    // die BaseLinks freigeben.
+    // Release the BaseLinks
     {
         for( sal_uInt16 n = pLinkMgr->GetServers().Count(); n; )
             pLinkMgr->GetServers()[ --n ]->Closed();
@@ -518,8 +517,8 @@ SwDoc::~SwDoc()
             pLinkMgr->Remove( 0, pLinkMgr->GetLinks().Count() );
     }
 
-    // die KapitelNummern / Nummern muessen vor den Vorlage geloescht werden
-    // ansonsten wird noch staendig geupdatet !!!
+    // The ChapterNumbers/Numbers need to be deleted before the Templates
+    // or we update all the time!
     m_pNodes->pOutlineNds->Remove(sal_uInt16(0), m_pNodes->pOutlineNds->Count());
     SwNodes & rUndoNodes( GetUndoManager().GetUndoNodes() );
     rUndoNodes.pOutlineNds->Remove(sal_uInt16(0), rUndoNodes.pOutlineNds->Count());
@@ -529,8 +528,8 @@ SwDoc::~SwDoc()
     // indices could be registered in attributes
     m_pUndoManager->DelAllUndoObj();
 
-    // in den BookMarks sind Indizies auf den Content. Diese muessen vorm
-    // loesche der Nodes geloescht werden.
+    // The BookMarks contain indices to the Content. These must be deleted
+    // before deleting the Nodes.
     pMarkManager->clearAllMarks();
     DELETEZ( pMacroTable );
 
@@ -543,8 +542,8 @@ SwDoc::~SwDoc()
         delete pTmp;
     }
 
-//JP: alt - loeschen ohne Flag ist teuer; Modify wird verschickt!
-//  aTOXTypes.DeleteAndDestroy( 0, aTOXTypes.Count() );
+    // Old - deletion without a Flag is expensive, because we send a Modify
+    // aTOXTypes.DeleteAndDestroy( 0, aTOXTypes.Count() );
     {
         for( sal_uInt16 n = pTOXTypes->Count(); n; )
         {
@@ -555,78 +554,81 @@ SwDoc::~SwDoc()
     }
     delete pDefTOXBases;
 
-    //Im einen oder anderen FrmFormat koennen noch Indizes angemeldet sein,
-    //Diese muessen spaetestens jetzt zerstoert werden.
+    // Any of the FrmFormats can still have indices registered.
+    // These need to be destroyed now at the latest.
     pFrmFmtTbl->ForEach( &lcl_DelFmtIndizes, this );
     pSpzFrmFmtTbl->ForEach( &lcl_DelFmtIndizes, this );
     ((SwFrmFmts&)*pSectionFmtTbl).ForEach( &lcl_DelFmtIndizes, this );
 
-    //Die Formate, die hier hinter stehen sind von den DefaultFormaten
-    //abhaengig. Erst nach dem Loeschen der FmtIndizes weil der Inhalt von
-    //Kopf-/Fussbereichen geloescht wird. Wenn dort noch Indizes von Flys
-    //angemeldet sind gibts was an die Ohren.
+    // The Formats that come hereafter are depended on the
+    // DefaultFormats.
+    // FIXME: What?
+    // FIXME: Erst nach dem Loeschen der FmtIndizes weil der Inhalt von
+    // FIXME: Kopf-/Fussbereichen geloescht wird. Wenn dort noch Indizes von Flys
+    // FIXME: angemeldet sind gibts was an die Ohren.
     aPageDescs.DeleteAndDestroy( 0, aPageDescs.Count() );
 
-    // Inhaltssections loeschen
-    // nicht erst durch den SwNodes-DTOR, damit Formate
-    // keine Abhaengigen mehr haben.
+    // Delete content selections.
+    // Don't wait for the SwNodes dtor to destroy them; so that Formats
+    // do not have any dependencies anymore.
     m_pNodes->DelNodes( SwNodeIndex(*m_pNodes), m_pNodes->Count() );
     rUndoNodes.DelNodes( SwNodeIndex( rUndoNodes ), rUndoNodes.Count() );
 
-    // Formate loeschen, spaeter mal permanent machen.
+    // Delete Formats, make it permanent some time in the future
 
-    // Delete fuer Collections
-    // damit die Abhaengigen wech sind
+    // Delete for Collections
+    // So that we get rid of the dependencies
     pFtnInfo->ReleaseCollection();
     pEndNoteInfo->ReleaseCollection();
 
     OSL_ENSURE( pDfltTxtFmtColl == (*pTxtFmtCollTbl)[0],
-            "Default-Text-Collection muss immer am Anfang stehen" );
+            "Default-Text-Collection must always be at the start" );
 
-    // JP 27.01.98: opt.: ausgehend davon, das Standard als 2. im Array
-    //              steht, sollte das als letztes geloescht werden, damit
-    //              die ganze Umhaengerei der Formate vermieden wird!
+    // Optimization: Based on the fact that Standard is always 2nd in the
+    // array, we should delete it as the last. With this we avoid
+    // remangling the Formats all the time!
     if( 2 < pTxtFmtCollTbl->Count() )
         pTxtFmtCollTbl->DeleteAndDestroy( 2, pTxtFmtCollTbl->Count()-2 );
     pTxtFmtCollTbl->DeleteAndDestroy( 1, pTxtFmtCollTbl->Count()-1 );
     delete pTxtFmtCollTbl;
 
     OSL_ENSURE( pDfltGrfFmtColl == (*pGrfFmtCollTbl)[0],
-            "Default-Grf-Collection muss immer am Anfang stehen" );
+            "DefaultGrfCollection must always be at the start" );
 
     pGrfFmtCollTbl->DeleteAndDestroy( 1, pGrfFmtCollTbl->Count()-1 );
-// ergibt sich automatisch - kein _DEL Array!
-//  pGrfFmtCollTbl->Remove( 0, n );
+    // Is the result anyway - no _DEL array!
+    //  pGrfFmtCollTbl->Remove( 0, n );
     delete pGrfFmtCollTbl;
 
     /*
-     * Defaultformate und DefaultFormatsammlungen (FmtColl)
-     * sind an der Position 0 der jeweiligen Arrays eingetragen.
-     * Damit sie nicht vom DTOR der Array's zum 2.mal geloescht werden,
-     * nehme sie aus dem Array.
+     * DefaultFormats and DefaultFormatCollections (FmtColl)
+     * are at position 0 of their respective arrays.
+     * In order to not be deleted by the array's dtor, we remove them
+     * now.
      */
     pFrmFmtTbl->Remove( 0 );
     pCharFmtTbl->Remove( 0 );
 
-    // Delete fuer pPrt
+    // Delete for pPrt
     DELETEZ( pPrt );
     DELETEZ( pNewDBMgr );
 
-    // Alle Flys muessen vor dem Drawing Model zerstoert werden,
-    // da Flys noch DrawContacts enthalten koennen, wenn wegen
-    // eines Lesefehlers kein Layout aufgebaut wurde.
+    // All Flys need to be destroyed before the Drawing Model,
+    // because Flys can still contain DrawContacts, when no
+    // Layout could be constructed due to a read error.
     pSpzFrmFmtTbl->DeleteAndDestroy( 0, pSpzFrmFmtTbl->Count() );
 
-    //Erst jetzt das Model zerstoeren, die Zeichenobjekte - die ja auch
-    //im Undo herumlungern - wollen noch ihre Attribute beim Model entfernen.
-    //Ausserdem koennen vorher noch DrawContacts existieren.
+    // Only now destroy the Model, the drawing objects - which are also
+    // contained in the Undo - need to remove their attributes from the
+    // Model. Also, DrawContacts could exist before that.
     ReleaseDrawModel();
-    //JP 28.01.99: DrawModel vorm LinkManager zerstoeren, da am DrawModel
-    //          dieser immer gesetzt ist.
+    // Destroy DrawModel before the LinkManager, because it's always set
+    // in the DrawModel.
     DELETEZ( pLinkMgr );
 
-    //Tables vor dem loeschen der Defaults leeren, sonst GPF wegen Def-Abhaengigen.
-    //Die Arrays sollten (wegen includes) bei Gelegenheit auch zu Pointern werden.
+    // Clear the Tables before deleting them, or we crash due to
+    // FIXME: Def-Abhängigen
+    // We also convert the arrays (due to includes) to pointers.
     delete pFrmFmtTbl;
     delete pSpzFrmFmtTbl;
 
@@ -696,8 +698,8 @@ SfxPrinter& SwDoc::CreatePrinter_() const
     OSL_FAIL( "Printer will be created!" );
 #endif
 
-    // wir erzeugen einen default SfxPrinter.
-    // Das ItemSet wird vom Sfx geloescht!
+    // We create a default SfxPrinter.
+    // The ItemSet is deleted by Sfx!
     SfxItemSet *pSet = new SfxItemSet( ((SwDoc*)this)->GetAttrPool(),
                     FN_PARAM_ADDPRINTER, FN_PARAM_ADDPRINTER,
                     SID_HTML_MODE,  SID_HTML_MODE,
@@ -725,7 +727,7 @@ void SwDoc::SetDocShell( SwDocShell* pDSh )
         }
 
         pLinkMgr->SetPersist( pDocShell );
-        //JP 27.08.98: Bug 55570 - DocShell Pointer auch am DrawModel setzen
+        // Bug 55570 - Set the DocShell pointer also in the DrawModel
         if( pDrawModel )
         {
             ((SwDrawDocument*)pDrawModel)->SetObjectShell( pDocShell );
@@ -736,8 +738,7 @@ void SwDoc::SetDocShell( SwDocShell* pDSh )
     }
 }
 
-// Convenience-Methode, um uebermaessige Includes von docsh.hxx
-// zu vermeiden
+// Convenience method; to avoid excessive includes from docsh.hxx
 uno::Reference < embed::XStorage > SwDoc::GetDocStorage()
 {
     if( pDocShell )
@@ -757,14 +758,14 @@ void SwDoc::ClearDoc()
     GetIDocumentUndoRedo().DelAllUndoObj();
     ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
 
-    // Undo-Benachrichtigung vom Draw abschalten
+    // Deactivate Undo notification from the Draw
     if( pDrawModel )
     {
         DrawNotifyUndoHdl();
         ClrContourCache();
     }
 
-    // stehen noch FlyFrames rum, loesche auch diese
+    // if there are still FlyFrames dangling around, delete them too
     sal_uInt16 n;
     while ( 0 != (n = GetSpzFrmFmts()->Count()) )
         DelLayoutFmt((*pSpzFrmFmtTbl)[n-1]);
@@ -775,8 +776,8 @@ void SwDoc::ClearDoc()
 
     delete pACEWord;
 
-    // in den BookMarks sind Indizies auf den Content. Diese muessen vorm
-    // loesche der Nodes geloescht werden.
+    // The BookMarks contain indices to the Content. These must be deleted
+    // before deleting the Nodes.
     pMarkManager->clearAllMarks();
     InitTOXTypes();
 
@@ -785,7 +786,7 @@ void SwDoc::ClearDoc()
     SwPageDesc* pDummyPgDsc = aPageDescs[ nDummyPgDsc ];
 
     SwNodeIndex aSttIdx( *GetNodes().GetEndOfContent().StartOfSectionNode(), 1 );
-    // den ersten immer wieder neu anlegen (ohne Attribute/Vorlagen/...)
+    // create the first one over and over again (without Attribute/Templates etc.
     SwTxtNode* pFirstNd = GetNodes().MakeTxtNode( aSttIdx, pDfltTxtFmtColl );
 
     if( pCurrentView )  //swmod 071029//swmod 071225
@@ -815,18 +816,18 @@ void SwDoc::ClearDoc()
     // Counting of phantoms depends on <IsOldNumbering()>
     pOutlineRule->SetCountPhantoms( !get(IDocumentSettingAccess::OLD_NUMBERING) );
 
-    //remove the dummy pagedec from the array and delete all the old ones
+    // remove the dummy pagedec from the array and delete all the old ones
     aPageDescs.Remove( nDummyPgDsc );
     aPageDescs.DeleteAndDestroy( 0, aPageDescs.Count() );
 
-    // Delete fuer Collections
-    // damit die Abhaengigen wech sind
+    // Delete for Collections
+    // So that we get rid of the dependencies
     pFtnInfo->ReleaseCollection();
     pEndNoteInfo->ReleaseCollection();
 
-    // opt.: ausgehend davon, das Standard als 2. im Array
-    // steht, sollte das als letztes geloescht werden, damit
-    // die ganze Umhaengerei der Formate vermieden wird!
+    // Optimization: Based on the fact that Standard is always 2nd in the
+    // array, we should delete it as the last. With this we avoid
+    // remangling the Formats all the time!
     if( 2 < pTxtFmtCollTbl->Count() )
         pTxtFmtCollTbl->DeleteAndDestroy( 2, pTxtFmtCollTbl->Count()-2 );
     pTxtFmtCollTbl->DeleteAndDestroy( 1, pTxtFmtCollTbl->Count()-1 );
@@ -1053,7 +1054,7 @@ void SwDoc::InitTOXTypes()
 
 void SwDoc::ReplaceDefaults(const SwDoc& rSource)
 {
-    //copy property defaults
+    // copy property defaults
     const sal_uInt16 aRangeOfDefaults[] =
     {
         RES_FRMATR_BEGIN, RES_FRMATR_END-1,
@@ -1137,7 +1138,7 @@ SfxObjectShell* SwDoc::CreateCopy(bool bCallInitNew ) const
 
     pRet->ReplaceStyles(*this);
 
-    //copy content
+    // copy content
     pRet->Paste( *this );
 
     // remove the temporary shell if it is there as it was done before
@@ -1153,7 +1154,7 @@ SfxObjectShell* SwDoc::CreateCopy(bool bCallInitNew ) const
   -----------------------------------------------------------------------*/
 void SwDoc::Paste( const SwDoc& rSource )
 {
-//  this has to be empty const sal_uInt16 nStartPageNumber = GetPhyPageNum();
+    // this has to be empty const sal_uInt16 nStartPageNumber = GetPhyPageNum();
     // until the end of the NodesArray
     SwNodeIndex aSourceIdx( rSource.GetNodes().GetEndOfExtras(), 2 );
     SwPaM aCpyPam( aSourceIdx ); //DocStart
