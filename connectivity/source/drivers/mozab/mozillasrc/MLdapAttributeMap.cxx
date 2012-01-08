@@ -118,7 +118,7 @@ namespace connectivity { namespace mozab {
                     { "WebPage2",           "homeurl",                                      DEF_CARD_ACCESS( WebPage2 ) },
                     { "BirthYear",          "birthyear",                                    DEF_CARD_ACCESS( BirthYear ) },
                     { "BirthMonth",         "birthmonth",                                   DEF_CARD_ACCESS( BirthMonth ) },
-                    { "BirthYear",          "birthday",                                     DEF_CARD_ACCESS( BirthDay ) },
+                    { "BirthDay",          "birthday",                                     DEF_CARD_ACCESS( BirthDay ) },
                     { "Custom1",            "custom1",                                      DEF_CARD_ACCESS( Custom1 ) },
                     { "Custom2",            "custom2",                                      DEF_CARD_ACCESS( Custom2 ) },
                     { "Custom3",            "custom3",                                      DEF_CARD_ACCESS( Custom3 ) },
