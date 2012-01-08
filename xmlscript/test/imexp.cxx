@@ -88,7 +88,7 @@ Reference< XComponentContext > createInitialComponentContext(
         return defaultBootstrap_InitialComponentContext( unorc );
     }
 
-    catch( Exception& rExc )
+    catch( const Exception& rExc )
     {
         OString aStr( OUStringToOString( rExc.Message, RTL_TEXTENCODING_ASCII_US ) );
         OSL_FAIL( aStr.getStr() );
@@ -213,7 +213,7 @@ void MyApp::Main()
             exportToFile( aParam2.getStr(), xModel, xContext );
         }
     }
-    catch (xml::sax::SAXException & rExc)
+    catch (const xml::sax::SAXException & rExc)
     {
         OString aStr( OUStringToOString( rExc.Message, RTL_TEXTENCODING_ASCII_US ) );
         uno::Exception exc;
@@ -224,7 +224,7 @@ void MyApp::Main()
         }
         OSL_FAIL( aStr.getStr() );
     }
-    catch (uno::Exception & rExc)
+    catch (const uno::Exception & rExc)
     {
         OString aStr( OUStringToOString( rExc.Message, RTL_TEXTENCODING_ASCII_US ) );
         OSL_FAIL( aStr.getStr() );

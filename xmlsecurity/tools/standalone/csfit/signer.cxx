@@ -326,7 +326,7 @@ int SAL_CALL main( int argc, char **argv )
         OSL_ENSURE( xTemplate.is() ,
             "Signer - "
             "Cannot generate the xml signature" ) ;
-    } catch( Exception& e ) {
+    } catch( const Exception& e ) {
         fprintf( stderr , "Error Message: %s\n" , OUStringToOString( e.Message , RTL_TEXTENCODING_ASCII_US ).getStr() ) ;
         goto done ;
     }

@@ -714,7 +714,7 @@ void DomainMapperTableHandler::endTable()
                     m_xTableRange = xTable->getAnchor( );
             }
         }
-        catch ( lang::IllegalArgumentException &e )
+        catch ( const lang::IllegalArgumentException &e )
         {
 #ifdef DEBUG_DMAPPER_TABLE_HANDLER
             fprintf( stderr, "Conversion to table error: %s\n",
@@ -722,7 +722,7 @@ void DomainMapperTableHandler::endTable()
             dmapper_logger->chars("failed to import table!");
 #endif
         }
-        catch ( uno::Exception &e )
+        catch ( const uno::Exception &e )
         {
 #ifdef DEBUG_DMAPPER_TABLE_HANDLER
             fprintf( stderr, "Exception during table creation: %s\n",

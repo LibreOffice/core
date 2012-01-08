@@ -103,7 +103,7 @@ public:
                 sprintf(buf, "name%i", i++);
                 testAdd("myns", buf);
             }
-        } catch (std::logic_error &e)
+        } catch (const std::logic_error &)
         {
             // only way to exit this function
             flag=true;

@@ -420,25 +420,25 @@ sal_Bool XMLBasicExporterBase::filter( const Sequence< beans::PropertyValue >& /
                 m_xHandler->endDocument();
             }
         }
-        catch ( container::NoSuchElementException& e )
+        catch ( const container::NoSuchElementException& e )
         {
             OSL_TRACE( "XMLBasicExporterBase::filter: caught NoSuchElementException reason %s",
                 ::rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
             bReturn = sal_False;
         }
-        catch ( lang::IllegalArgumentException& e )
+        catch ( const lang::IllegalArgumentException& e )
         {
             OSL_TRACE( "XMLBasicExporterBase::filter: caught IllegalArgumentException reason %s",
                 ::rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
             bReturn = sal_False;
         }
-        catch ( lang::WrappedTargetException& e )
+        catch ( const lang::WrappedTargetException& e )
         {
             OSL_TRACE( "XMLBasicExporterBase::filter: caught WrappedTargetException reason %s",
                 ::rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
             bReturn = sal_False;
         }
-        catch ( xml::sax::SAXException& e )
+        catch ( const xml::sax::SAXException& e )
         {
             OSL_TRACE( "XMLBasicExporterBase::filter: caught SAXException reason %s",
                 ::rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).pData->buffer );

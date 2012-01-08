@@ -1364,9 +1364,8 @@ void AnimationsExporterImpl::exportAnimate( const Reference< XAnimate >& xAnimat
         SvXMLElementExport aElement( mrExport, XML_NAMESPACE_ANIMATION, eElementToken, sal_True, sal_True );
 
     }
-    catch( Exception& e )
+    catch( const Exception& )
     {
-        (void)e;
         OSL_FAIL( "xmloff::AnimationsExporterImpl::exportAnimate(), Exception cought!" );
     }
 }
@@ -1397,9 +1396,8 @@ void AnimationsExporterImpl::exportAudio( const Reference< XAudio >& xAudio )
         SvXMLElementExport aElement( mrExport, XML_NAMESPACE_ANIMATION, XML_AUDIO, sal_True, sal_True );
 
     }
-    catch( Exception& e )
+    catch( const Exception& )
     {
-        (void)e;
         OSL_FAIL( "xmloff::AnimationsExporterImpl::exportAudio(), exception caught!" );
     }
 }
@@ -1425,9 +1423,8 @@ void AnimationsExporterImpl::exportCommand( const Reference< XCommand >& xComman
         SvXMLElementExport aElement( mrExport, XML_NAMESPACE_ANIMATION, XML_COMMAND, sal_True, sal_True );
 
     }
-    catch( Exception& e )
+    catch( const Exception& )
     {
-        (void)e;
         OSL_FAIL( "xmloff::AnimationsExporterImpl::exportCommand(), exception caught!" );
     }
 }

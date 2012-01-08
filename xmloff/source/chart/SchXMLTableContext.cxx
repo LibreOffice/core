@@ -1127,9 +1127,8 @@ void SchXMLTableHelper::switchRangesFromOuterToInternalIfNecessary(
                 }
             }
         }
-        catch( uno::Exception & ex )
+        catch( const uno::Exception & )
         {
-            (void)ex; // avoid warning for pro build
         }
     }
 }

@@ -68,7 +68,7 @@ id AquaA11yFocusListener::getFocusedUIElement()
                 if( xContext.is() )
                     m_focusedObject = [ AquaA11yFactory wrapperForAccessibleContext: xContext ];
             }
-        } catch( RuntimeException )  {
+        } catch(const RuntimeException &)  {
             // intentionally do nothing ..
         }
     }
@@ -95,7 +95,7 @@ AquaA11yFocusListener::focusedObjectChanged(const Reference< XAccessible >& xAcc
                 NSAccessibilityPostNotification(m_focusedObject, NSAccessibilityFocusedUIElementChangedNotification);
             }
         }
-    } catch( RuntimeException ) {
+    } catch(const RuntimeException &) {
         // intentionally do nothing ..
     }
 }

@@ -459,7 +459,7 @@ void SchXMLSeries2Context::StartElement( const uno::Reference< xml::sax::XAttrib
         Reference< chart2::data::XDataSink > xSink( m_xSeries, uno::UNO_QUERY_THROW );
         xSink->setData( aSeq );
     }
-    catch( uno::Exception & ex )
+    catch( const uno::Exception & ex )
     {
         (void)ex; // avoid warning for pro build
         OSL_FAIL( ::rtl::OUStringToOString(
@@ -488,9 +488,8 @@ void SchXMLSeries2Context::StartElement( const uno::Reference< xml::sax::XAttrib
             }
         }
     }
-    catch( uno::Exception & ex )
+    catch( const uno::Exception & )
     {
-        (void)ex; // avoid warning for pro build
     }
 }
 
@@ -855,7 +854,7 @@ void SchXMLSeries2Context::setStylesToSeries( SeriesDefaultsAndStyles& rSeriesDe
                     }
                 }
             }
-            catch( uno::Exception & rEx )
+            catch( const uno::Exception & rEx )
             {
                 (void)rEx; // avoid warning for pro build
                 OSL_TRACE( "Exception caught during setting styles to series: %s",
@@ -939,7 +938,7 @@ void SchXMLSeries2Context::setStylesToStatisticsObjects( SeriesDefaultsAndStyles
                         xRegCurve->setEquationProperties( iStyle->m_xEquationProperties );
                 }
             }
-            catch( uno::Exception & rEx )
+            catch( const uno::Exception & rEx )
             {
                 (void)rEx; // avoid warning for pro build
                 OSL_TRACE( "Exception caught during setting styles to series: %s",
@@ -1015,9 +1014,8 @@ void SchXMLSeries2Context::setStylesToDataPoints( SeriesDefaultsAndStyles& rSeri
                     if( bSwitchOffLinesForScatter )
                         xPointProp->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Lines")),uno::makeAny(sal_False));
                 }
-                catch( uno::Exception & rEx )
+                catch( const uno::Exception & )
                 {
-                    (void)rEx; // avoid warning for pro build
                 }
 
                 if( !rCurrStyleName.equals( iStyle->msStyleName ) )
@@ -1038,7 +1036,7 @@ void SchXMLSeries2Context::setStylesToDataPoints( SeriesDefaultsAndStyles& rSeri
                         lcl_resetSymbolSizeForPointsIfNecessary( xPointProp, rImport, pPropStyleContext, pStylesCtxt );
                 }
             }
-            catch( uno::Exception & rEx )
+            catch( const uno::Exception & rEx )
             {
                 (void)rEx; // avoid warning for pro build
                 OSL_TRACE( "Exception caught during setting styles to data points: %s",

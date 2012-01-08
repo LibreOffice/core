@@ -911,9 +911,8 @@ void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
             }
         }
     }
-    catch( uno::Exception& rEx)
+    catch( const uno::Exception& )
     {
-        (void)rEx;
         OSL_FAIL( "Styles could not be imported completely");
     }
 }

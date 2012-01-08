@@ -461,7 +461,7 @@ void SchXMLImportHelper::DeleteDataSeries(
             }
         }
     }
-    catch( uno::Exception & ex )
+    catch( const uno::Exception & ex )
     {
         (void)ex; // avoid warning for pro build
         OSL_FAIL( OUStringToOString(
@@ -544,7 +544,7 @@ Reference< chart2::XDataSeries > SchXMLImportHelper::GetNewDataSeries(
             }
         }
     }
-    catch( uno::Exception & ex )
+    catch( const uno::Exception & ex )
     {
         (void)ex; // avoid warning for pro build
         OSL_FAIL( OUStringToOString(

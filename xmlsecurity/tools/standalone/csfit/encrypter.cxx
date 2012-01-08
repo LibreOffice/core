@@ -269,7 +269,7 @@ int SAL_CALL main( int argc, char **argv )
         OSL_ENSURE( xTemplate.is() ,
             "Encryptor - "
             "Cannot encrypt the xml document" ) ;
-    } catch( Exception& e ) {
+    } catch( const Exception& e ) {
         fprintf( stderr , "Error Message: %s\n" , OUStringToOString( e.Message , RTL_TEXTENCODING_ASCII_US ).getStr() ) ;
         goto done ;
     }

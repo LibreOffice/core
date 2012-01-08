@@ -718,7 +718,7 @@ void FormattedFieldElement::endElement()
             ctx.getControlModel()->setPropertyValue(
                 OUString( RTL_CONSTASCII_USTRINGPARAM("FormatKey") ), makeAny( nKey ) );
         }
-        catch (util::MalformedNumberFormatException & exc)
+        catch (const util::MalformedNumberFormatException & exc)
         {
             OSL_FAIL( "### util::MalformedNumberFormatException occurred!" );
             // rethrow

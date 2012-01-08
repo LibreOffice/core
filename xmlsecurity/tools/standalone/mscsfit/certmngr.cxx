@@ -135,7 +135,7 @@ int SAL_CALL main( int argc, char **argv )
             fprintf( stdout, "The certificate validities are %d\n", validity ) ;
 
         }
-    } catch( Exception& e ) {
+    } catch( const Exception& e ) {
         fprintf( stderr , "Error Message: %s\n" , OUStringToOString( e.Message , RTL_TEXTENCODING_ASCII_US ).getStr() ) ;
         goto done ;
     }

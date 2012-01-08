@@ -1020,9 +1020,8 @@ bool ImportContext::importImageURLProperty(
                     if ( aTmp.getLength() )
                         sURL = aTmp;
                 }
-                catch( uno::Exception& e )
+                catch( const uno::Exception& )
                 {
-                    (void)e;
                     return false;
                 }
 

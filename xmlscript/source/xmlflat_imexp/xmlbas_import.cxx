@@ -240,12 +240,12 @@ void BasicElementBase::processingInstruction( const ::rtl::OUString& /*rTarget*/
                         if ( xLib.is() )
                             xElement.set( new BasicElementBase( rLocalName, xAttributes, this, m_pImport ) );
                     }
-                    catch ( container::ElementExistException& e )
+                    catch ( const container::ElementExistException& e )
                     {
                         OSL_TRACE( "BasicLibrariesElement::startChildElement: caught ElementExceptionExist reason %s",
                             ::rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
                     }
-                    catch ( lang::IllegalArgumentException& e )
+                    catch ( const lang::IllegalArgumentException& e )
                     {
                         OSL_TRACE( "BasicLibrariesElement::startChildElement: caught IllegalArgumentException reason %s",
                             ::rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
@@ -286,7 +286,7 @@ void BasicElementBase::processingInstruction( const ::rtl::OUString& /*rTarget*/
                         if ( xLib.is() )
                             xElement.set( new BasicEmbeddedLibraryElement( rLocalName, xAttributes, this, m_pImport, m_xLibContainer, aName, bReadOnly ) );
                     }
-                    catch ( lang::IllegalArgumentException& e )
+                    catch ( const lang::IllegalArgumentException& e )
                     {
                         OSL_TRACE( "BasicLibrariesElement::startChildElement: caught IllegalArgumentException reason %s",
                             ::rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
@@ -331,7 +331,7 @@ void BasicElementBase::processingInstruction( const ::rtl::OUString& /*rTarget*/
             if ( m_xLibContainer.is() && m_xLibContainer->hasByName( m_aLibName ) )
                 m_xLibContainer->getByName( m_aLibName ) >>= m_xLib;
         }
-        catch ( lang::WrappedTargetException& e )
+        catch ( const lang::WrappedTargetException& e )
         {
             OSL_TRACE( "BasicEmbeddedLibraryElement CTOR: caught WrappedTargetException reason %s",
                 ::rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
@@ -486,17 +486,17 @@ void BasicElementBase::processingInstruction( const ::rtl::OUString& /*rTarget*/
                 m_xLib->insertByName( m_aName, aElement );
             }
         }
-        catch ( container::ElementExistException& e )
+        catch ( const container::ElementExistException& e )
         {
             OSL_TRACE( "BasicSourceCodeElement::endElement: caught ElementExceptionExist reason %s",
                 ::rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
         }
-        catch ( lang::IllegalArgumentException& e )
+        catch ( const lang::IllegalArgumentException& e )
         {
             OSL_TRACE( "BasicSourceCodeElement::endElement: caught IllegalArgumentException reason %s",
                 ::rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
         }
-        catch ( lang::WrappedTargetException& e )
+        catch ( const lang::WrappedTargetException& e )
         {
             OSL_TRACE( "BasicSourceCodeElement::endElement: caught WrappedTargetException reason %s",
                 ::rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).pData->buffer );

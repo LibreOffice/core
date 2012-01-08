@@ -3014,9 +3014,8 @@ void DomainMapper_Impl::CloseFieldCommand()
             //set the text field if there is any
             pContext->SetTextField( uno::Reference< text::XTextField >( xFieldInterface, uno::UNO_QUERY ) );
         }
-        catch( uno::Exception& rEx)
+        catch( const uno::Exception& )
         {
-            (void)rEx;
             OSL_FAIL( "Exception in CloseFieldCommand()" );
         }
         pContext->SetCommandCompleted();

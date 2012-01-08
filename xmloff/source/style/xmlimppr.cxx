@@ -508,7 +508,7 @@ sal_Bool SvXMLImportPropertyMapper::_FillPropertySet(
                 rPropSet->setPropertyValue( rPropName, rProp.maValue );
                 bSet = sal_True;
             }
-            catch ( IllegalArgumentException& e )
+            catch ( const IllegalArgumentException& e )
             {
                 // illegal value: check whether this property is
                 // allowed to throw this exception
@@ -521,7 +521,7 @@ sal_Bool SvXMLImportPropertyMapper::_FillPropertySet(
                         aSeq, e.Message, NULL );
                 }
             }
-            catch ( UnknownPropertyException& e )
+            catch ( const UnknownPropertyException& e )
             {
                 // unknown property: This is always an error!
                 Sequence<OUString> aSeq(1);
@@ -530,7 +530,7 @@ sal_Bool SvXMLImportPropertyMapper::_FillPropertySet(
                     XMLERROR_STYLE_PROP_UNKNOWN | XMLERROR_FLAG_ERROR,
                     aSeq, e.Message, NULL );
             }
-            catch ( PropertyVetoException& e )
+            catch ( const PropertyVetoException& e )
             {
                 // property veto: this shouldn't happen
                 Sequence<OUString> aSeq(1);
@@ -539,7 +539,7 @@ sal_Bool SvXMLImportPropertyMapper::_FillPropertySet(
                     XMLERROR_STYLE_PROP_OTHER | XMLERROR_FLAG_ERROR,
                     aSeq, e.Message, NULL );
             }
-            catch ( WrappedTargetException& e )
+            catch ( const WrappedTargetException& e )
             {
                 // wrapped target: this shouldn't happen either
                 Sequence<OUString> aSeq(1);

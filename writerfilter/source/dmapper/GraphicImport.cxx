@@ -910,7 +910,7 @@ void GraphicImport::lcl_attribute(Id nName, Value & val)
                                    uno::makeAny( aSize.Width ) );
                         }
                     }
-                    catch( const beans::UnknownPropertyException )
+                    catch( const beans::UnknownPropertyException & )
                     {
                         // It isn't a graphic image
                     }

@@ -191,7 +191,7 @@ mbInSection(false), mbInParagraphGroup(false), mbInCharacterGroup(false)
         mpDataStream = getSubStream(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM
                                     ("Data")));
     }
-    catch (ExceptionNotFound)
+    catch (const ExceptionNotFound &)
     {
     }
 
@@ -200,7 +200,7 @@ mbInSection(false), mbInParagraphGroup(false), mbInCharacterGroup(false)
         mpCompObjStream = getSubStream(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM
                                        ("\1CompObj")));
     }
-    catch (ExceptionNotFound)
+    catch (const ExceptionNotFound &)
     {
     }
 
@@ -635,13 +635,13 @@ void WW8DocumentImpl::parseBinTableCpAndFcs(WW8BinTable & rTable,
 
                     mCpAndFcs.insert(aCpAndFc);
                 }
-                catch (ExceptionNotFound &e)
+                catch (const ExceptionNotFound &e)
                 {
                     clog << e.getText() << endl;
                 }
             }
         }
-        catch (ExceptionNotFound &e)
+        catch (const ExceptionNotFound &e)
         {
             clog << e.getText() << endl;
         }
@@ -838,7 +838,7 @@ writerfilter::Reference<Properties>::Pointer_t WW8DocumentImpl::getProperties
 
                 pResult = pFKP->getProperties(rCpAndFc.getFc());
             }
-            catch (ExceptionOutOfBounds)
+            catch (const ExceptionOutOfBounds &)
             {
             }
         }
@@ -978,7 +978,7 @@ writerfilter::Reference<Table>::Pointer_t WW8DocumentImpl::getListTable() const
 
             pResult = writerfilter::Reference<Table>::Pointer_t(pList);
         }
-        catch (ExceptionOutOfBounds) {
+        catch (const ExceptionOutOfBounds &) {
         }
     }
 
@@ -1002,7 +1002,7 @@ writerfilter::Reference<Table>::Pointer_t WW8DocumentImpl::getLFOTable() const
 
             pResult = writerfilter::Reference<Table>::Pointer_t(pLFOs);
         }
-        catch (Exception &e)
+        catch (const Exception &e)
         {
             clog << e.getText() << endl;
         }
@@ -1619,7 +1619,7 @@ void WW8DocumentImpl::resolve(Stream & rStream)
             if (pStyleSheet.get() != NULL)
                 rStream.table(NS_rtf::LN_STYLESHEET, pStyleSheet);
         }
-        catch (Exception &e)
+        catch (const Exception &e)
         {
             clog << e.getText() << endl;
         }
@@ -2067,7 +2067,7 @@ BookmarkHelper::getBookmark(const CpAndFc & rCpAndFc)
         pResult = writerfilter::Reference<Properties>::Pointer_t
             (new Bookmark(getBKF(rCpAndFc), aName));
     }
-    catch (ExceptionNotFound &e)
+    catch (const ExceptionNotFound &e)
     {
         clog << e.getText() << endl;
     }
