@@ -38,13 +38,6 @@
 #include <algorithm>
 #include <vector>
 
-static basegfx::B2VectorOrientation flipOrientation(
-    basegfx::B2VectorOrientation eOrient)
-{
-    return eOrient == basegfx::ORIENTATION_POSITIVE ?
-        basegfx::ORIENTATION_NEGATIVE : basegfx::ORIENTATION_POSITIVE;
-}
-
 namespace basegfx
 {
     class ImplB2DPolyRange
@@ -66,12 +59,6 @@ namespace basegfx
             maBounds(),
             maRanges(),
             maOrient()
-        {}
-
-        explicit ImplB2DPolyRange( const B2DPolyRange::ElementType& rElem ) :
-            maBounds( boost::get<0>(rElem) ),
-            maRanges( 1, boost::get<0>(rElem) ),
-            maOrient( 1, boost::get<1>(rElem) )
         {}
 
         explicit ImplB2DPolyRange( const B2DRange& rRange, B2VectorOrientation eOrient ) :
@@ -96,53 +83,11 @@ namespace basegfx
                                      maOrient[nIndex]);
         }
 
-        void setElement(sal_uInt32 nIndex, const B2DPolyRange::ElementType& rElement )
-        {
-            maRanges[nIndex] = boost::get<0>(rElement);
-            maOrient[nIndex] = boost::get<1>(rElement);
-            updateBounds();
-        }
-
-        void setElement(sal_uInt32 nIndex, const B2DRange& rRange, B2VectorOrientation eOrient )
-        {
-            maRanges[nIndex] = rRange;
-            maOrient[nIndex] = eOrient;
-            updateBounds();
-        }
-
-        void insertElement(sal_uInt32 nIndex, const B2DPolyRange::ElementType& rElement, sal_uInt32 nCount)
-        {
-            maRanges.insert(maRanges.begin()+nIndex, nCount, boost::get<0>(rElement));
-            maOrient.insert(maOrient.begin()+nIndex, nCount, boost::get<1>(rElement));
-            maBounds.expand(boost::get<0>(rElement));
-        }
-
-        void insertElement(sal_uInt32 nIndex, const B2DRange& rRange, B2VectorOrientation eOrient, sal_uInt32 nCount)
-        {
-            maRanges.insert(maRanges.begin()+nIndex, nCount, rRange);
-            maOrient.insert(maOrient.begin()+nIndex, nCount, eOrient);
-            maBounds.expand(rRange);
-        }
-
-        void appendElement(const B2DPolyRange::ElementType& rElement, sal_uInt32 nCount)
-        {
-            maRanges.insert(maRanges.end(), nCount, boost::get<0>(rElement));
-            maOrient.insert(maOrient.end(), nCount, boost::get<1>(rElement));
-            maBounds.expand(boost::get<0>(rElement));
-        }
-
         void appendElement(const B2DRange& rRange, B2VectorOrientation eOrient, sal_uInt32 nCount)
         {
             maRanges.insert(maRanges.end(), nCount, rRange);
             maOrient.insert(maOrient.end(), nCount, eOrient);
             maBounds.expand(rRange);
-        }
-
-        void insertPolyRange(sal_uInt32 nIndex, const ImplB2DPolyRange& rPolyRange)
-        {
-            maRanges.insert(maRanges.begin()+nIndex, rPolyRange.maRanges.begin(), rPolyRange.maRanges.end());
-            maOrient.insert(maOrient.begin()+nIndex, rPolyRange.maOrient.begin(), rPolyRange.maOrient.end());
-            updateBounds();
         }
 
         void appendPolyRange(const ImplB2DPolyRange& rPolyRange)
@@ -156,13 +101,6 @@ namespace basegfx
             updateBounds();
         }
 
-        void remove(sal_uInt32 nIndex, sal_uInt32 nCount)
-        {
-            maRanges.erase(maRanges.begin()+nIndex,maRanges.begin()+nIndex+nCount);
-            maOrient.erase(maOrient.begin()+nIndex,maOrient.begin()+nIndex+nCount);
-            updateBounds();
-        }
-
         void clear()
         {
             std::vector<B2DRange> aTmpRanges;
@@ -172,37 +110,6 @@ namespace basegfx
             maOrient.swap(aTmpOrient);
 
             maBounds.reset();
-        }
-
-        void flip()
-        {
-            std::for_each(maOrient.begin(),
-                          maOrient.end(),
-                          boost::bind(
-                              &flipOrientation,
-                              _1));
-        }
-
-        B2DRange getBounds() const
-        {
-            return maBounds;
-        }
-
-        template< typename ValueType > bool isInside( const ValueType& rValue ) const
-        {
-            if( !maBounds.isInside( rValue ) )
-                return false;
-
-            // cannot use boost::bind here, since isInside is overloaded.
-            // It is currently not possible to resolve the overload
-            // by considering one of the other template arguments.
-            std::vector<B2DRange>::const_iterator       aCurr( maRanges.begin() );
-            const std::vector<B2DRange>::const_iterator aEnd ( maRanges.end() );
-            while( aCurr != aEnd )
-                if( aCurr->isInside( rValue ) )
-                    return true;
-
-            return false;
         }
 
         bool overlaps( const B2DRange& rRange ) const
@@ -223,38 +130,6 @@ namespace basegfx
             return tools::solveCrossovers(maRanges,maOrient);
         }
 
-        const B2DRange* begin() const
-        {
-            if(maRanges.empty())
-                return 0;
-            else
-                return &maRanges.front();
-        }
-
-        const B2DRange* end() const
-        {
-            if(maRanges.empty())
-                return 0;
-            else
-                return (&maRanges.back())+1;
-        }
-
-        B2DRange* begin()
-        {
-            if(maRanges.empty())
-                return 0;
-            else
-                return &maRanges.front();
-        }
-
-        B2DRange* end()
-        {
-            if(maRanges.empty())
-                return 0;
-            else
-                return (&maRanges.back())+1;
-        }
-
     private:
         B2DRange                         maBounds;
         std::vector<B2DRange>            maRanges;
@@ -268,14 +143,6 @@ namespace basegfx
     B2DPolyRange::~B2DPolyRange()
     {}
 
-    B2DPolyRange::B2DPolyRange( const ElementType& rElem ) :
-        mpImpl( ImplB2DPolyRange( rElem ) )
-    {}
-
-    B2DPolyRange::B2DPolyRange( const B2DRange& rRange, B2VectorOrientation eOrient ) :
-        mpImpl( ImplB2DPolyRange( rRange, eOrient ) )
-    {}
-
     B2DPolyRange::B2DPolyRange( const B2DPolyRange& rRange ) :
         mpImpl( rRange.mpImpl )
     {}
@@ -284,11 +151,6 @@ namespace basegfx
     {
         mpImpl = rRange.mpImpl;
         return *this;
-    }
-
-    void B2DPolyRange::makeUnique()
-    {
-        mpImpl.make_unique();
     }
 
     bool B2DPolyRange::operator==(const B2DPolyRange& rRange) const
@@ -314,39 +176,9 @@ namespace basegfx
         return mpImpl->getElement(nIndex);
     }
 
-    void B2DPolyRange::setElement(sal_uInt32 nIndex, const ElementType& rElement )
-    {
-        mpImpl->setElement(nIndex, rElement);
-    }
-
-    void B2DPolyRange::setElement(sal_uInt32 nIndex, const B2DRange& rRange, B2VectorOrientation eOrient )
-    {
-        mpImpl->setElement(nIndex, rRange, eOrient );
-    }
-
-    void B2DPolyRange::insertElement(sal_uInt32 nIndex, const ElementType& rElement, sal_uInt32 nCount)
-    {
-        mpImpl->insertElement(nIndex, rElement, nCount );
-    }
-
-    void B2DPolyRange::insertElement(sal_uInt32 nIndex, const B2DRange& rRange, B2VectorOrientation eOrient, sal_uInt32 nCount)
-    {
-        mpImpl->insertElement(nIndex, rRange, eOrient, nCount );
-    }
-
-    void B2DPolyRange::appendElement(const ElementType& rElement, sal_uInt32 nCount)
-    {
-        mpImpl->appendElement(rElement, nCount);
-    }
-
     void B2DPolyRange::appendElement(const B2DRange& rRange, B2VectorOrientation eOrient, sal_uInt32 nCount)
     {
         mpImpl->appendElement(rRange, eOrient, nCount );
-    }
-
-    void B2DPolyRange::insertPolyRange(sal_uInt32 nIndex, const B2DPolyRange& rRange)
-    {
-        mpImpl->insertPolyRange(nIndex, *rRange.mpImpl);
     }
 
     void B2DPolyRange::appendPolyRange(const B2DPolyRange& rRange)
@@ -354,34 +186,9 @@ namespace basegfx
         mpImpl->appendPolyRange(*rRange.mpImpl);
     }
 
-    void B2DPolyRange::remove(sal_uInt32 nIndex, sal_uInt32 nCount)
-    {
-        mpImpl->remove(nIndex, nCount);
-    }
-
     void B2DPolyRange::clear()
     {
         mpImpl->clear();
-    }
-
-    void B2DPolyRange::flip()
-    {
-        mpImpl->flip();
-    }
-
-    B2DRange B2DPolyRange::getBounds() const
-    {
-        return mpImpl->getBounds();
-    }
-
-    bool B2DPolyRange::isInside( const B2DTuple& rTuple ) const
-    {
-        return mpImpl->isInside(rTuple);
-    }
-
-    bool B2DPolyRange::isInside( const B2DRange& rRange ) const
-    {
-        return mpImpl->isInside(rRange);
     }
 
     bool B2DPolyRange::overlaps( const B2DRange& rRange ) const
@@ -393,29 +200,6 @@ namespace basegfx
     {
         return mpImpl->solveCrossovers();
     }
-
-    const B2DRange* B2DPolyRange::begin() const
-    {
-        return mpImpl->begin();
-    }
-
-    const B2DRange* B2DPolyRange::end() const
-    {
-        return mpImpl->end();
-    }
-
-    B2DRange* B2DPolyRange::begin()
-    {
-        return mpImpl->begin();
-    }
-
-    B2DRange* B2DPolyRange::end()
-    {
-        return mpImpl->end();
-    }
-
 } // end of namespace basegfx
-
-// eof
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

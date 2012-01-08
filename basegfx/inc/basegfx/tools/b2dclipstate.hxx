@@ -69,21 +69,12 @@ namespace basegfx
             B2DClipState();
             ~B2DClipState();
             B2DClipState( const B2DClipState& );
-            explicit B2DClipState( const B2DRange& );
-            explicit B2DClipState( const B2DPolygon& );
             explicit B2DClipState( const B2DPolyPolygon& );
             B2DClipState& operator=( const B2DClipState& );
 
-            /// unshare this poly-range with all internally shared instances
-            void makeUnique();
-
             /// Set clip to 'null' - nothing is visible
             void makeNull();
-            /// returns true when clip is 'null' - nothing is visible
-            bool isNull() const;
 
-            /// Set clip 'cleared' - everything is visible
-            void makeClear();
             /// returns true when clip is 'cleared' - everything is visible
             bool isCleared() const;
 
@@ -91,24 +82,16 @@ namespace basegfx
             bool operator!=(const B2DClipState&) const;
 
             void unionRange(const B2DRange& );
-            void unionPolygon(const B2DPolygon& );
             void unionPolyPolygon(const B2DPolyPolygon& );
-            void unionClipState(const B2DClipState& );
 
             void intersectRange(const B2DRange& );
-            void intersectPolygon(const B2DPolygon& );
             void intersectPolyPolygon(const B2DPolyPolygon& );
-            void intersectClipState(const B2DClipState& );
 
             void subtractRange(const B2DRange& );
-            void subtractPolygon(const B2DPolygon& );
             void subtractPolyPolygon(const B2DPolyPolygon& );
-            void subtractClipState(const B2DClipState& );
 
             void xorRange(const B2DRange& );
-            void xorPolygon(const B2DPolygon& );
             void xorPolyPolygon(const B2DPolyPolygon& );
-            void xorClipState(const B2DClipState& );
 
             B2DPolyPolygon getClipPoly() const;
         };

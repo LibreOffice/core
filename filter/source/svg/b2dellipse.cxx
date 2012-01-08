@@ -26,82 +26,11 @@
  */
 #include "b2dellipse.hxx"
 
-#include <osl/diagnose.h>
-
 #include <basegfx/point/b2dpoint.hxx>
-
 #include <basegfx/matrix/b2dhommatrix.hxx>
-
-#include <rtl/instance.hxx>
-
-#include <boost/scoped_ptr.hpp>
-#include <vector>
-#include <algorithm>
-
-class ImplB2DEllipse
-{
-     basegfx::B2DPoint maCenter;
-     basegfx::B2DTuple maRadius;
-
-public:
-    ImplB2DEllipse()
-    :   maCenter(0.0f, 0.0f),
-        maRadius(0.0f, 0.0f)
-    {}
-
-    ImplB2DEllipse(const ImplB2DEllipse& rToBeCopied)
-    :   maCenter(rToBeCopied.maCenter),
-        maRadius(rToBeCopied.maRadius)
-    {}
-
-    ImplB2DEllipse& operator=( const ImplB2DEllipse& rToBeCopied )
-    {
-        maCenter = rToBeCopied.maCenter;
-        maRadius = rToBeCopied.maRadius;
-
-        return *this;
-    }
-
-    bool isEqual(const ImplB2DEllipse& rCandidate) const
-    {
-        return (maCenter == rCandidate.maCenter)
-            && (maRadius == rCandidate.maRadius);
-    }
-
-    basegfx::B2DPoint getCenter() const
-    {
-        return maCenter;
-    }
-
-    void setCenter(const basegfx::B2DPoint& rCenter)
-    {
-        maCenter = rCenter;
-    }
-
-    basegfx::B2DTuple getRadius() const
-    {
-        return maRadius;
-    }
-
-    void setRadius(const basegfx::B2DTuple& rRadius)
-    {
-        maRadius = rRadius;
-    }
-
-
-    void transform(const basegfx::B2DHomMatrix& /* rMatrix */)
-    {
-    }
-};
-
-//////////////////////////////////////////////////////////////////////////////
 
 namespace basegfx
 {
-
-    B2DEllipse::B2DEllipse()
-    {}
-
     B2DEllipse::B2DEllipse(const basegfx::B2DPoint& rCenter, const basegfx::B2DTuple& rRadius)
     :   maCenter(rCenter), maRadius(rRadius)
     {
@@ -126,27 +55,10 @@ namespace basegfx
         return maCenter;
     }
 
-    void B2DEllipse::setB2DEllipseCenter(const basegfx::B2DPoint& rCenter)
-    {
-        maCenter = rCenter;
-    }
-
     basegfx::B2DTuple B2DEllipse::getB2DEllipseRadius() const
     {
         return maRadius;
     }
-
-    void B2DEllipse::setB2DEllipseRadius(const basegfx::B2DTuple& rRadius)
-    {
-        maRadius = rRadius;
-    }
-
-    void B2DEllipse::transform(const basegfx::B2DHomMatrix& /* rMatrix */)
-    {
-    }
 } // end of namespace basegfx
-
-//////////////////////////////////////////////////////////////////////////////
-// eof
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -348,14 +348,6 @@ namespace basegfx
     {
     }
 
-    B2DCubicBezier::B2DCubicBezier(const B2DPoint& rStart, const B2DPoint& rEnd)
-    :   maStartPoint(rStart),
-        maEndPoint(rEnd),
-        maControlPointA(rStart),
-        maControlPointB(rEnd)
-    {
-    }
-
     B2DCubicBezier::B2DCubicBezier(const B2DPoint& rStart, const B2DPoint& rControlPointA, const B2DPoint& rControlPointB, const B2DPoint& rEnd)
     :   maStartPoint(rStart),
         maEndPoint(rEnd),

@@ -37,10 +37,6 @@
 
 #include <basegfx/vector/b2enums.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
-// predeclarations
-class ImplB2DEllipse;
-
 namespace basegfx
 {
     class B2DPoint;
@@ -48,18 +44,15 @@ namespace basegfx
     class B2DHomMatrix;
 } // end of namespace basegfx
 
-//////////////////////////////////////////////////////////////////////////////
-
 namespace basegfx
 {
     class B2DEllipse
     {
     private:
-     basegfx::B2DPoint maCenter;
-     basegfx::B2DTuple maRadius;
+        const basegfx::B2DPoint maCenter;
+        const basegfx::B2DTuple maRadius;
 
     public:
-        B2DEllipse();
         B2DEllipse(const B2DEllipse& rEllipse);
         B2DEllipse(const basegfx::B2DPoint& rCenter, const basegfx::B2DTuple& rRadius);
         ~B2DEllipse();
@@ -73,17 +66,9 @@ namespace basegfx
 
         // Coordinate interface
         basegfx::B2DPoint getB2DEllipseCenter() const;
-        void setB2DEllipseCenter(const basegfx::B2DPoint& rCenter);
-
         basegfx::B2DTuple getB2DEllipseRadius() const;
-        void setB2DEllipseRadius(const basegfx::B2DTuple& rRadius);
-
-        // apply transformation given in matrix form to the Ellipse
-        void transform(const basegfx::B2DHomMatrix& rMatrix);
     };
 } // end of namespace basegfx
-
-//////////////////////////////////////////////////////////////////////////////
 
 #endif /* _BASEGFX_B2DELLIPSE_HXX */
 

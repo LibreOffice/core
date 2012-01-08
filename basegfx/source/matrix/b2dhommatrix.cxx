@@ -76,11 +76,6 @@ namespace basegfx
         return *this;
     }
 
-    void B2DHomMatrix::makeUnique()
-    {
-        mpImpl.make_unique();
-    }
-
     double B2DHomMatrix::get(sal_uInt16 nRow, sal_uInt16 nColumn) const
     {
         return mpImpl->get(nRow, nColumn);
@@ -140,32 +135,6 @@ namespace basegfx
 
         delete[] pIndex;
         return false;
-    }
-
-    bool B2DHomMatrix::isNormalized() const
-    {
-        return mpImpl->isNormalized();
-    }
-
-    void B2DHomMatrix::normalize()
-    {
-        if(!const_cast<const B2DHomMatrix*>(this)->mpImpl->isNormalized())
-            mpImpl->doNormalize();
-    }
-
-    double B2DHomMatrix::determinant() const
-    {
-        return mpImpl->doDeterminant();
-    }
-
-    double B2DHomMatrix::trace() const
-    {
-        return mpImpl->doTrace();
-    }
-
-    void B2DHomMatrix::transpose()
-    {
-        mpImpl->doTranspose();
     }
 
     B2DHomMatrix& B2DHomMatrix::operator+=(const B2DHomMatrix& rMat)
@@ -448,8 +417,5 @@ namespace basegfx
         return true;
     }
 } // end of namespace basegfx
-
-///////////////////////////////////////////////////////////////////////////////
-// eof
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

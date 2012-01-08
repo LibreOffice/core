@@ -56,9 +56,6 @@ namespace basegfx
          */
         B2DHomMatrix(double f_0x0, double f_0x1, double f_0x2, double f_1x0, double f_1x1, double f_1x2);
 
-        /// unshare this matrix with all internally shared instances
-        void makeUnique();
-
         double get(sal_uInt16 nRow, sal_uInt16 nColumn) const;
         void set(sal_uInt16 nRow, sal_uInt16 nColumn, double fValue);
 
@@ -78,15 +75,6 @@ namespace basegfx
         bool isInvertible() const;
         bool invert();
 
-        bool isNormalized() const;
-        void normalize();
-
-        double determinant() const;
-
-        double trace() const;
-
-        void transpose();
-
         void rotate(double fRadiant);
 
         void translate(double fX, double fY);
@@ -96,7 +84,6 @@ namespace basegfx
         // Shearing-Matrices
         void shearX(double fSx);
         void shearY(double fSy);
-
 
         B2DHomMatrix& operator+=(const B2DHomMatrix& rMat);
         B2DHomMatrix& operator-=(const B2DHomMatrix& rMat);

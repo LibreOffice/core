@@ -67,13 +67,8 @@ namespace basegfx
 
         /** Create a multi range with exactly one containing range
          */
-        explicit B2DPolyRange( const ElementType& rElement );
-        B2DPolyRange( const B2DRange& rRange, B2VectorOrientation eOrient );
         B2DPolyRange( const B2DPolyRange& );
         B2DPolyRange& operator=( const B2DPolyRange& );
-
-        /// unshare this poly-range with all internally shared instances
-        void makeUnique();
 
         bool operator==(const B2DPolyRange&) const;
         bool operator!=(const B2DPolyRange&) const;
@@ -82,43 +77,14 @@ namespace basegfx
         sal_uInt32 count() const;
 
         ElementType getElement(sal_uInt32 nIndex) const;
-        void        setElement(sal_uInt32 nIndex, const ElementType& rElement );
-        void        setElement(sal_uInt32 nIndex, const B2DRange& rRange, B2VectorOrientation eOrient );
 
         // insert/append a single range
-        void insertElement(sal_uInt32 nIndex, const ElementType& rElement, sal_uInt32 nCount = 1);
-        void insertElement(sal_uInt32 nIndex, const B2DRange& rRange, B2VectorOrientation eOrient, sal_uInt32 nCount = 1);
-        void appendElement(const ElementType& rElement, sal_uInt32 nCount = 1);
         void appendElement(const B2DRange& rRange, B2VectorOrientation eOrient, sal_uInt32 nCount = 1);
 
         // insert/append multiple ranges
-        void insertPolyRange(sal_uInt32 nIndex, const B2DPolyRange&);
         void appendPolyRange(const B2DPolyRange&);
 
-        void remove(sal_uInt32 nIndex, sal_uInt32 nCount = 1);
         void clear();
-
-        // flip range orientations - converts holes to solids, and vice versa
-        void flip();
-
-        /** Get overall range
-
-            @return
-            The union range of all contained ranges
-        */
-        B2DRange getBounds() const;
-
-        /** Test whether given tuple is inside one or more of the
-            included ranges. Does *not* use overall range, but checks
-            individually.
-         */
-        bool isInside( const B2DTuple& rTuple ) const;
-
-        /** Test whether given range is inside one or more of the
-            included ranges. Does *not* use overall range, but checks
-            individually.
-         */
-        bool isInside( const B2DRange& rRange ) const;
 
         /** Test whether given range overlaps one or more of the
             included ranges. Does *not* use overall range, but checks
@@ -129,12 +95,6 @@ namespace basegfx
         /** Request a poly-polygon with solved cross-overs
          */
         B2DPolyPolygon solveCrossovers() const;
-
-        // element iterators (same iterator validity conditions as for vector)
-        const B2DRange* begin() const;
-        const B2DRange* end() const;
-        B2DRange* begin();
-        B2DRange* end();
 
     private:
         o3tl::cow_wrapper< ImplB2DPolyRange > mpImpl;

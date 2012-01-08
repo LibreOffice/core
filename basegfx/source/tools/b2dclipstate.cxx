@@ -53,21 +53,6 @@ namespace tools
             mePendingOps(UNION)
         {}
 
-        explicit ImplB2DClipState( const B2DRange& rRange ) :
-            maPendingPolygons(),
-            maPendingRanges(),
-            maClipPoly(
-                tools::createPolygonFromRect(rRange)),
-            mePendingOps(UNION)
-        {}
-
-        explicit ImplB2DClipState( const B2DPolygon& rPoly ) :
-            maPendingPolygons(),
-            maPendingRanges(),
-            maClipPoly(rPoly),
-            mePendingOps(UNION)
-        {}
-
         explicit ImplB2DClipState( const B2DPolyPolygon& rPoly ) :
             maPendingPolygons(),
             maPendingRanges(),
@@ -80,14 +65,6 @@ namespace tools
             return !maClipPoly.count()
                 && !maPendingPolygons.count()
                 && !maPendingRanges.count();
-        }
-
-        void makeClear()
-        {
-            maPendingPolygons.clear();
-            maPendingRanges.clear();
-            maClipPoly.clear();
-            mePendingOps = UNION;
         }
 
         bool isNullClipPoly() const
@@ -183,28 +160,12 @@ namespace tools
             addRange(rRange,UNION);
         }
 
-        void unionPolygon(const B2DPolygon& rPoly)
-        {
-            if( isCleared() )
-                return;
-
-            addPolygon(rPoly,UNION);
-        }
-
         void unionPolyPolygon(const B2DPolyPolygon& rPolyPoly)
         {
             if( isCleared() )
                 return;
 
             addPolyPolygon(rPolyPoly,UNION);
-        }
-
-        void unionClipState(const ImplB2DClipState& rOther)
-        {
-            if( isCleared() )
-                return;
-
-            addClipState(rOther, UNION);
         }
 
         void intersectRange(const B2DRange& rRange)
@@ -215,28 +176,12 @@ namespace tools
             addRange(rRange,INTERSECT);
         }
 
-        void intersectPolygon(const B2DPolygon& rPoly)
-        {
-            if( isNull() )
-                return;
-
-            addPolygon(rPoly,INTERSECT);
-        }
-
         void intersectPolyPolygon(const B2DPolyPolygon& rPolyPoly)
         {
             if( isNull() )
                 return;
 
             addPolyPolygon(rPolyPoly,INTERSECT);
-        }
-
-        void intersectClipState(const ImplB2DClipState& rOther)
-        {
-            if( isNull() )
-                return;
-
-            addClipState(rOther, INTERSECT);
         }
 
         void subtractRange(const B2DRange& rRange )
@@ -247,14 +192,6 @@ namespace tools
             addRange(rRange,SUBTRACT);
         }
 
-        void subtractPolygon(const B2DPolygon& rPoly)
-        {
-            if( isNull() )
-                return;
-
-            addPolygon(rPoly,SUBTRACT);
-        }
-
         void subtractPolyPolygon(const B2DPolyPolygon& rPolyPoly)
         {
             if( isNull() )
@@ -263,32 +200,14 @@ namespace tools
             addPolyPolygon(rPolyPoly,SUBTRACT);
         }
 
-        void subtractClipState(const ImplB2DClipState& rOther)
-        {
-            if( isNull() )
-                return;
-
-            addClipState(rOther, SUBTRACT);
-        }
-
         void xorRange(const B2DRange& rRange)
         {
             addRange(rRange,XOR);
         }
 
-        void xorPolygon(const B2DPolygon& rPoly)
-        {
-            addPolygon(rPoly,XOR);
-        }
-
         void xorPolyPolygon(const B2DPolyPolygon& rPolyPoly)
         {
             addPolyPolygon(rPolyPoly,XOR);
-        }
-
-        void xorClipState(const ImplB2DClipState& rOther)
-        {
-            addClipState(rOther, XOR);
         }
 
         B2DPolyPolygon getClipPoly() const
@@ -511,14 +430,6 @@ namespace tools
         mpImpl(rOrig.mpImpl)
     {}
 
-    B2DClipState::B2DClipState( const B2DRange& rRange ) :
-        mpImpl( ImplB2DClipState(rRange) )
-    {}
-
-    B2DClipState::B2DClipState( const B2DPolygon& rPoly ) :
-        mpImpl( ImplB2DClipState(rPoly) )
-    {}
-
     B2DClipState::B2DClipState( const B2DPolyPolygon& rPolyPoly ) :
         mpImpl( ImplB2DClipState(rPolyPoly) )
     {}
@@ -529,24 +440,9 @@ namespace tools
         return *this;
     }
 
-    void B2DClipState::makeUnique()
-    {
-        mpImpl.make_unique();
-    }
-
     void B2DClipState::makeNull()
     {
         mpImpl->makeNull();
-    }
-
-    bool B2DClipState::isNull() const
-    {
-        return mpImpl->isNull();
-    }
-
-    void B2DClipState::makeClear()
-    {
-        mpImpl->makeClear();
     }
 
     bool B2DClipState::isCleared() const
@@ -572,19 +468,9 @@ namespace tools
         mpImpl->unionRange(rRange);
     }
 
-    void B2DClipState::unionPolygon(const B2DPolygon& rPoly)
-    {
-        mpImpl->unionPolygon(rPoly);
-    }
-
     void B2DClipState::unionPolyPolygon(const B2DPolyPolygon& rPolyPoly)
     {
         mpImpl->unionPolyPolygon(rPolyPoly);
-    }
-
-    void B2DClipState::unionClipState(const B2DClipState& rState)
-    {
-        mpImpl->unionClipState(*rState.mpImpl);
     }
 
     void B2DClipState::intersectRange(const B2DRange& rRange)
@@ -592,19 +478,9 @@ namespace tools
         mpImpl->intersectRange(rRange);
     }
 
-    void B2DClipState::intersectPolygon(const B2DPolygon& rPoly)
-    {
-        mpImpl->intersectPolygon(rPoly);
-    }
-
     void B2DClipState::intersectPolyPolygon(const B2DPolyPolygon& rPolyPoly)
     {
         mpImpl->intersectPolyPolygon(rPolyPoly);
-    }
-
-    void B2DClipState::intersectClipState(const B2DClipState& rState)
-    {
-        mpImpl->intersectClipState(*rState.mpImpl);
     }
 
     void B2DClipState::subtractRange(const B2DRange& rRange)
@@ -612,19 +488,9 @@ namespace tools
         mpImpl->subtractRange(rRange);
     }
 
-    void B2DClipState::subtractPolygon(const B2DPolygon& rPoly)
-    {
-        mpImpl->subtractPolygon(rPoly);
-    }
-
     void B2DClipState::subtractPolyPolygon(const B2DPolyPolygon& rPolyPoly)
     {
         mpImpl->subtractPolyPolygon(rPolyPoly);
-    }
-
-    void B2DClipState::subtractClipState(const B2DClipState& rState)
-    {
-        mpImpl->subtractClipState(*rState.mpImpl);
     }
 
     void B2DClipState::xorRange(const B2DRange& rRange)
@@ -632,19 +498,9 @@ namespace tools
         mpImpl->xorRange(rRange);
     }
 
-    void B2DClipState::xorPolygon(const B2DPolygon& rPoly)
-    {
-        mpImpl->xorPolygon(rPoly);
-    }
-
     void B2DClipState::xorPolyPolygon(const B2DPolyPolygon& rPolyPoly)
     {
         mpImpl->xorPolyPolygon(rPolyPoly);
-    }
-
-    void B2DClipState::xorClipState(const B2DClipState& rState)
-    {
-        mpImpl->xorClipState(*rState.mpImpl);
     }
 
     B2DPolyPolygon B2DClipState::getClipPoly() const
@@ -654,7 +510,5 @@ namespace tools
 
 } // end of namespace tools
 } // end of namespace basegfx
-
-// eof
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

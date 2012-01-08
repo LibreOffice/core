@@ -1037,38 +1037,9 @@ avmedia::priv::MediaWindowBaseImpl::setStopTime(double)
 basebmp::BitmapDevice::setDamageTracker(boost::shared_ptr<basebmp::IBitmapDeviceDamageTracker> const&)
 basebmp::debugDump(boost::shared_ptr<basebmp::BitmapDevice> const&, std::basic_ostream<char, std::char_traits<char> >&)
 basegfx::B1DRange::B1DRange(basegfx::B1IRange const&)
-basegfx::B2DCubicBezier::B2DCubicBezier(basegfx::B2DPoint const&, basegfx::B2DPoint const&)
-basegfx::B2DEllipse::B2DEllipse()
-basegfx::B2DEllipse::setB2DEllipseCenter(basegfx::B2DPoint const&)
-basegfx::B2DEllipse::setB2DEllipseRadius(basegfx::B2DTuple const&)
-basegfx::B2DEllipse::transform(basegfx::B2DHomMatrix const&)
-basegfx::B2DHomMatrix::determinant() const
-basegfx::B2DHomMatrix::isNormalized() const
-basegfx::B2DHomMatrix::makeUnique()
-basegfx::B2DHomMatrix::normalize()
-basegfx::B2DHomMatrix::trace() const
-basegfx::B2DHomMatrix::transpose()
 basegfx::B2DHomPoint::getB2DPoint() const
 basegfx::B2DHomPoint::setX(double)
 basegfx::B2DHomPoint::setY(double)
-basegfx::B2DPolyRange::B2DPolyRange(basegfx::B2DRange const&, basegfx::B2VectorOrientation)
-basegfx::B2DPolyRange::B2DPolyRange(boost::tuples::tuple<basegfx::B2DRange, basegfx::B2VectorOrientation, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type> const&)
-basegfx::B2DPolyRange::appendElement(boost::tuples::tuple<basegfx::B2DRange, basegfx::B2VectorOrientation, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type> const&, unsigned int)
-basegfx::B2DPolyRange::begin()
-basegfx::B2DPolyRange::begin() const
-basegfx::B2DPolyRange::end()
-basegfx::B2DPolyRange::end() const
-basegfx::B2DPolyRange::flip()
-basegfx::B2DPolyRange::getBounds() const
-basegfx::B2DPolyRange::insertElement(unsigned int, basegfx::B2DRange const&, basegfx::B2VectorOrientation, unsigned int)
-basegfx::B2DPolyRange::insertElement(unsigned int, boost::tuples::tuple<basegfx::B2DRange, basegfx::B2VectorOrientation, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type> const&, unsigned int)
-basegfx::B2DPolyRange::insertPolyRange(unsigned int, basegfx::B2DPolyRange const&)
-basegfx::B2DPolyRange::isInside(basegfx::B2DRange const&) const
-basegfx::B2DPolyRange::isInside(basegfx::B2DTuple const&) const
-basegfx::B2DPolyRange::makeUnique()
-basegfx::B2DPolyRange::remove(unsigned int, unsigned int)
-basegfx::B2DPolyRange::setElement(unsigned int, basegfx::B2DRange const&, basegfx::B2VectorOrientation)
-basegfx::B2DPolyRange::setElement(unsigned int, boost::tuples::tuple<basegfx::B2DRange, basegfx::B2VectorOrientation, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type> const&)
 basegfx::B2DPolygon::insert(unsigned int, basegfx::B2DPolygon const&, unsigned int, unsigned int)
 basegfx::B2DPolygon::isBezierSegment(unsigned int) const
 basegfx::B2DPolygon::resetControlPoints(unsigned int)
@@ -1110,19 +1081,6 @@ basegfx::maximum(basegfx::B2DHomPoint const&, basegfx::B2DHomPoint const&)
 basegfx::maximum(basegfx::B2ITuple const&, basegfx::B2ITuple const&)
 basegfx::minimum(basegfx::B2DHomPoint const&, basegfx::B2DHomPoint const&)
 basegfx::minimum(basegfx::B2ITuple const&, basegfx::B2ITuple const&)
-basegfx::tools::B2DClipState::B2DClipState(basegfx::B2DPolygon const&)
-basegfx::tools::B2DClipState::B2DClipState(basegfx::B2DRange const&)
-basegfx::tools::B2DClipState::intersectClipState(basegfx::tools::B2DClipState const&)
-basegfx::tools::B2DClipState::intersectPolygon(basegfx::B2DPolygon const&)
-basegfx::tools::B2DClipState::isNull() const
-basegfx::tools::B2DClipState::makeClear()
-basegfx::tools::B2DClipState::makeUnique()
-basegfx::tools::B2DClipState::subtractClipState(basegfx::tools::B2DClipState const&)
-basegfx::tools::B2DClipState::subtractPolygon(basegfx::B2DPolygon const&)
-basegfx::tools::B2DClipState::unionClipState(basegfx::tools::B2DClipState const&)
-basegfx::tools::B2DClipState::unionPolygon(basegfx::B2DPolygon const&)
-basegfx::tools::B2DClipState::xorClipState(basegfx::tools::B2DClipState const&)
-basegfx::tools::B2DClipState::xorPolygon(basegfx::B2DPolygon const&)
 basegfx::tools::addPointsAtCuts(basegfx::B2DPolyPolygon const&, basegfx::B2DPoint const&, basegfx::B2DPoint const&)
 basegfx::tools::addPointsAtCuts(basegfx::B2DPolyPolygon const&, basegfx::B2DPolyPolygon const&)
 basegfx::tools::addPointsAtCuts(basegfx::B2DPolyPolygon const&, bool)
