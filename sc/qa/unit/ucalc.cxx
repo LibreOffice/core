@@ -48,6 +48,7 @@
 #include "attrib.hxx"
 #include "dbdata.hxx"
 #include "reftokenhelper.hxx"
+#include "userdat.hxx"
 
 #include "docsh.hxx"
 #include "docfunc.hxx"
@@ -2526,6 +2527,10 @@ void Test::testGraphicsOnSheetMove()
 
     CPPUNIT_ASSERT_MESSAGE("There should be one object on the 1st sheet.", pPage->GetObjCount() == 1);
 
+    const ScDrawObjData* pData = ScDrawLayer::GetObjData(pObj);
+    CPPUNIT_ASSERT_MESSAGE("Object meta-data doesn't exist.", pData);
+    CPPUNIT_ASSERT_MESSAGE("Wrong sheet ID in cell anchor data!", pData->maStart.Tab() == 0 && pData->maEnd.Tab() == 0);
+
     pPage = pDrawLayer->GetPage(1);
     CPPUNIT_ASSERT_MESSAGE("No page instance for the 2nd sheet.", pPage);
     CPPUNIT_ASSERT_MESSAGE("2nd sheet shouldn't have any object.", pPage->GetObjCount() == 0);
@@ -2541,6 +2546,8 @@ void Test::testGraphicsOnSheetMove()
     pPage = pDrawLayer->GetPage(2);
     CPPUNIT_ASSERT_MESSAGE("3rd sheet should have no object.", pPage && pPage->GetObjCount() == 0);
 
+    CPPUNIT_ASSERT_MESSAGE("Wrong sheet ID in cell anchor data!", pData->maStart.Tab() == 1 && pData->maEnd.Tab() == 1);
+
     // Now, delete the sheet that just got inserted. The object should be back
     // on the 1st sheet.
     m_pDoc->DeleteTab(0);
@@ -2548,6 +2555,16 @@ void Test::testGraphicsOnSheetMove()
     CPPUNIT_ASSERT_MESSAGE("1st sheet should have one object.", pPage && pPage->GetObjCount() == 1);
     CPPUNIT_ASSERT_MESSAGE("Size and position of the object shouldn't change.",
                            pObj->GetLogicRect() == aObjRect);
+
+    CPPUNIT_ASSERT_MESSAGE("Wrong sheet ID in cell anchor data!", pData->maStart.Tab() == 0 && pData->maEnd.Tab() == 0);
+
+    // Move the 1st sheet to the last position.
+    m_pDoc->MoveTab(0, 1);
+    pPage = pDrawLayer->GetPage(0);
+    CPPUNIT_ASSERT_MESSAGE("1st sheet should have no object.", pPage && pPage->GetObjCount() == 0);
+    pPage = pDrawLayer->GetPage(1);
+    CPPUNIT_ASSERT_MESSAGE("2nd sheet should have one object.", pPage && pPage->GetObjCount() == 1);
+    CPPUNIT_ASSERT_MESSAGE("Wrong sheet ID in cell anchor data!", pData->maStart.Tab() == 1 && pData->maEnd.Tab() == 1);
 
     m_pDoc->DeleteTab(1);
     m_pDoc->DeleteTab(0);
