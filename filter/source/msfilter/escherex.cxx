@@ -4365,9 +4365,29 @@ SvStream* EscherExGlobal::ImplQueryPictureStream()
     return 0;
 }
 
-EscherEx::EscherEx( const EscherExGlobalRef& rxGlobal, SvStream& rOutStrm ) :
+/// Implementation of an empty stream that silently succeeds, but does nothing.
+///
+/// In fact, this is a hack.  The right solution is to abstract EscherEx to be
+/// able to work without SvStream; but at the moment it is better to live with
+/// this I guess.
+class SvNullStream : public SvStream
+{
+protected:
+    virtual sal_Size GetData( void* pData, sal_Size nSize ) { memset( pData, 0, nSize ); return nSize; }
+    virtual sal_Size PutData( const void*, sal_Size nSize ) { return nSize; }
+    virtual sal_Size SeekPos( sal_Size nPos ) { return nPos; }
+    virtual void SetSize( sal_Size ) {}
+    virtual void FlushData() {}
+
+public:
+    SvNullStream() : SvStream() {}
+    virtual ~SvNullStream() {}
+};
+
+EscherEx::EscherEx( const EscherExGlobalRef& rxGlobal, SvStream* pOutStrm ) :
     mxGlobal                ( rxGlobal ),
-    mpOutStrm               ( &rOutStrm ),
+    mpOutStrm               ( pOutStrm ),
+    mbOwnsStrm              ( false ),
 
     mnCurrentDg                         ( 0 ),
 
@@ -4377,12 +4397,19 @@ EscherEx::EscherEx( const EscherExGlobalRef& rxGlobal, SvStream& rOutStrm ) :
     mbEscherSpgr            ( sal_False ),
     mbEscherDg              ( sal_False )
 {
+    if (!mpOutStrm)
+    {
+        mpOutStrm = new SvNullStream();
+        mbOwnsStrm = true;
+    }
     mnStrmStartOfs = mpOutStrm->Tell();
     mpImplEscherExSdr.reset( new ImplEscherExSdr( *this ) );
 }
 
 EscherEx::~EscherEx()
 {
+    if (mbOwnsStrm)
+        delete mpOutStrm;
 }
 
 void EscherEx::Flush( SvStream* pPicStreamMergeBSE /* = NULL */ )

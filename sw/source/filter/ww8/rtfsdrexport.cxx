@@ -40,27 +40,8 @@ using rtl::OUString;
 using rtl::OUStringBuffer;
 using namespace sw::util;
 
-/// Implementation of an empty stream that silently succeeds, but does nothing.
-///
-/// In fact, this is a hack.  The right solution is to abstract EscherEx to be
-/// able to work without SvStream; but at the moment it is better to live with
-/// this I guess.
-class SvNullStream : public SvStream
-{
-protected:
-    virtual sal_Size GetData( void* pData, sal_Size nSize ) { memset( pData, 0, nSize ); return nSize; }
-    virtual sal_Size PutData( const void*, sal_Size nSize ) { return nSize; }
-    virtual sal_Size SeekPos( sal_Size nPos ) { return nPos; }
-    virtual void SetSize( sal_Size ) {}
-    virtual void FlushData() {}
-
-public:
-    SvNullStream() : SvStream() {}
-    virtual ~SvNullStream() {}
-};
-
 RtfSdrExport::RtfSdrExport( RtfExport &rExport )
-    : EscherEx( EscherExGlobalRef( new EscherExGlobal ), *( new SvNullStream )),
+    : EscherEx( EscherExGlobalRef( new EscherExGlobal ), 0 ),
       m_rExport( rExport ),
       m_rAttrOutput( (RtfAttributeOutput&)m_rExport.AttrOutput() ),
       m_nShapeType( ESCHER_ShpInst_Nil ),

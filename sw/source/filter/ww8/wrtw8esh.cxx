@@ -1306,7 +1306,7 @@ SvStream* SwEscherExGlobal::ImplQueryPictureStream()
 }
 
 SwBasicEscherEx::SwBasicEscherEx(SvStream* pStrm, WW8Export& rWW8Wrt)
-    : EscherEx( EscherExGlobalRef( new SwEscherExGlobal ), *pStrm), rWrt(rWW8Wrt), pEscherStrm(pStrm)
+    : EscherEx( EscherExGlobalRef( new SwEscherExGlobal ), pStrm), rWrt(rWW8Wrt), pEscherStrm(pStrm)
 {
     Init();
 }

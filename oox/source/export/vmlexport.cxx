@@ -45,27 +45,8 @@ using rtl::OUStringBuffer;
 using namespace sax_fastparser;
 using namespace oox::vml;
 
-/// Implementation of an empty stream that silently succeeds, but does nothing.
-///
-/// In fact, this is a hack.  The right solution is to abstract EscherEx to be
-/// able to work without SvStream; but at the moment it is better to live with
-/// this I guess.
-class SvNullStream : public SvStream
-{
-protected:
-    virtual sal_Size GetData( void* pData, sal_Size nSize ) { memset( pData, 0, nSize ); return nSize; }
-    virtual sal_Size PutData( const void*, sal_Size nSize ) { return nSize; }
-    virtual sal_Size SeekPos( sal_Size nPos ) { return nPos; }
-    virtual void SetSize( sal_Size ) {}
-    virtual void FlushData() {}
-
-public:
-    SvNullStream() : SvStream() {}
-    virtual ~SvNullStream() {}
-};
-
 VMLExport::VMLExport( ::sax_fastparser::FSHelperPtr pSerializer )
-    : EscherEx( EscherExGlobalRef(new EscherExGlobal(0)), *( new SvNullStream ) ),
+    : EscherEx( EscherExGlobalRef(new EscherExGlobal(0)), 0 ),
       m_pSerializer( pSerializer ),
       m_pShapeAttrList( NULL ),
       m_nShapeType( ESCHER_ShpInst_Nil ),

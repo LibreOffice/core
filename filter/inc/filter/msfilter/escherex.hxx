@@ -1560,6 +1560,7 @@ class MSFILTER_DLLPUBLIC EscherEx : public EscherPersistTable
         EscherExGlobalRef           mxGlobal;
         ImplEscherExSdrPtr          mpImplEscherExSdr;
         SvStream*                   mpOutStrm;
+        bool                        mbOwnsStrm;
         sal_uInt32                  mnStrmStartOfs;
         std::vector< sal_uInt32 >   mOffsets;
         std::vector< sal_uInt16 >   mRecTypes;
@@ -1578,7 +1579,7 @@ class MSFILTER_DLLPUBLIC EscherEx : public EscherPersistTable
         virtual sal_Bool DoSeek( sal_uInt32 nKey );
 
 public:
-    explicit            EscherEx( const EscherExGlobalRef& rxGlobal, SvStream& rOutStrm );
+    explicit            EscherEx( const EscherExGlobalRef& rxGlobal, SvStream* pOutStrm );
     virtual             ~EscherEx();
 
     /** Creates and returns a new shape identifier, updates the internal shape
