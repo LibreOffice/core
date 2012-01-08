@@ -794,6 +794,17 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, ScDrawObjData& rData, bool bNegati
                 if (bRecording)
                     AddCalcUndo( new SdrUndoGeoObj( *pObj ) );
                 rData.maLastRect = lcl_makeSafeRectangle(aNew);
+                if (pObj->IsPolyObj())
+                {
+                    // Polyline objects need special treatment.
+                    Size aSizeMove(aNew.Left()-aOld.Left(), aNew.Top()-aOld.Top());
+                    pObj->NbcMove(aSizeMove);
+
+                    double fXFrac = static_cast<double>(aNew.GetWidth()) / static_cast<double>(aOld.GetWidth());
+                    double fYFrac = static_cast<double>(aNew.GetHeight()) / static_cast<double>(aOld.GetHeight());
+                    pObj->NbcResize(aNew.TopLeft(), Fraction(fXFrac), Fraction(fYFrac));
+                }
+
                 pObj->SetLogicRect(rData.maLastRect);
             }
         }
