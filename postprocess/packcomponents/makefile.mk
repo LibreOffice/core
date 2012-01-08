@@ -303,7 +303,6 @@ my_components += \
     ado \
     smplmail \
     wininetbe1 \
-    component/accessibility/bridge/org/openoffice/accessibility/java_uno_accessbridge \
     component/dtrans/source/generic/dtrans \
     component/dtrans/util/dnd \
     component/dtrans/util/ftransl \
@@ -311,6 +310,10 @@ my_components += \
     component/fpicker/util/fop \
     component/fpicker/util/fps \
     component/vcl/vcl.windows
+.IF "$(SOLAR_JAVA)" == "TRUE"
+my_components += \
+    component/accessibility/bridge/org/openoffice/accessibility/java_uno_accessbridge
+.END
 .END
 
 .IF "$(OS)" != "MACOSX" && "$(OS)" != "WNT" && "$(OS)" != "IOS" && "$(OS)" != "ANDROID"
