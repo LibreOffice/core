@@ -643,9 +643,6 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, ScDrawObjData& rData, bool bNegati
     SCROW nRow2 = rData.maEnd.Row();
     SCTAB nTab2 = rData.maEnd.Tab();
 
-    // detective arrow
-    bool bArrow = pObj->IsPolyObj() && (pObj->GetPointCount() == 2);
-
     if (rData.meType == ScDrawObjData::ValidationCircle)
     {
         // Validation circle for detective.
@@ -675,7 +672,7 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, ScDrawObjData& rData, bool bNegati
             pObj->SetLogicRect(rData.maLastRect);
         }
     }
-    else if( bArrow )
+    else if (rData.meType == ScDrawObjData::DetectiveArrow)
     {
         rData.maLastRect = pObj->GetLogicRect();
         basegfx::B2DPolygon aCalcPoly;
