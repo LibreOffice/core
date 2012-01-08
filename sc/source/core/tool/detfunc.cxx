@@ -545,16 +545,17 @@ sal_Bool ScDetectiveFunc::InsertArrow( SCCOL nCol, SCROW nRow,
     pPage->InsertObject( pArrow );
     pModel->AddCalcUndo( new SdrUndoInsertObj( *pArrow ) );
 
-    ScDrawObjData* pData = ScDrawLayer::GetObjData( pArrow, sal_True );
+    ScDrawObjData* pData = ScDrawLayer::GetObjData(pArrow, true);
     if (bFromOtherTab)
         pData->maStart.SetInvalid();
     else
         pData->maStart.Set( nRefStartCol, nRefStartRow, nTab);
 
     pData->maEnd.Set( nCol, nRow, nTab);
+    pData->meType = ScDrawObjData::DetectiveArrow;
 
     Modified();
-    return sal_True;
+    return true;
 }
 
 sal_Bool ScDetectiveFunc::InsertToOtherTab( SCCOL nStartCol, SCROW nStartRow,

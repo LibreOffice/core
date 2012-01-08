@@ -59,7 +59,7 @@ public:
 class ScDrawObjData : public SdrObjUserData
 {
 public:
-    enum Type { CellNote, ValidationCircle, DrawingObject };
+    enum Type { CellNote, ValidationCircle, DetectiveArrow, DrawingObject };
 
     ScAddress           maStart;
     ScAddress           maEnd;
