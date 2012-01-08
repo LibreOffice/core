@@ -6609,6 +6609,9 @@ ScDBQueryParamBase* ScInterpreter::GetDBParams( bool& rMissingField )
                 SetError( errIllegalParameter );
         }
 
+        if (nGlobalError)
+            return NULL;
+
         SAL_WNODEPRECATED_DECLARATIONS_PUSH
         auto_ptr<ScDBRangeBase> pDBRef( PopDBDoubleRef() );
         SAL_WNODEPRECATED_DECLARATIONS_POP
