@@ -421,7 +421,8 @@ sal_Bool CommandLineArgs::InterpretCommandLineParameter( const ::rtl::OUString& 
     }
     else if (aArg.toChar() == '-')
     {
-        bDeprecated = true;
+        if ( aArg.getLength() > 2 ) // -h, -o, -n, -? are still valid
+            bDeprecated = true;
         oArg = ::rtl::OUString(aArg.getStr()+1, aArg.getLength()-1);
     }
     else
