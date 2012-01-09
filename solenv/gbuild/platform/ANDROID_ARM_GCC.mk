@@ -37,11 +37,6 @@ include $(GBUILDDIR)/platform/unxgcc.mk
 gb_STDLIBS := \
 	gnustl_shared
 
-gb_Library_PLAINLIBS_NONE := \
-	android \
-	gnustl_shared \
-	log \
-
 # No unit testing can be run
 gb_CppunitTest_CPPTESTPRECOMMAND := :
 
