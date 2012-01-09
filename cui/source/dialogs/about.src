@@ -48,7 +48,7 @@ ModalDialog RID_DEFAULTABOUT
     MultiLineEdit ABOUT_FTXT_COPYRIGHT
     {
         HelpID = "cui:MultiLineEdit:RID_DEFAULTABOUT:ABOUT_FTXT_COPYRIGHT";
-        Border = TRUE ;
+        Border = FALSE ;
         Pos = MAP_APPFONT ( 54 , 25 ) ;
         Size = MAP_APPFONT ( 168 , 51 ) ;
         IgnoreTab = TRUE ;
