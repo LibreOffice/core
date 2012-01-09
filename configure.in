@@ -1598,14 +1598,6 @@ AC_ARG_WITH(mozilla-build,
     MOZILLABUILD=$withval ,
 )
 
-AC_ARG_WITH(local-solver,
-    AS_HELP_STRING([--with-local-solver],
-        [If you have solver in a location other than ./solver, please supply the path here.])
-    [
-                          Usage:     --with-local-solver=<abs. path to solver>
-    ],
-,)
-
 AC_ARG_WITH(lang,
     AS_HELP_STRING([--with-lang],
         [Use this option to build LibreOffice with additional language support.
@@ -10394,16 +10386,6 @@ if test -z "$COMPATH"; then
     AC_MSG_ERROR([No compiler found.])
 fi
 AC_SUBST(COMPATH)
-
-AC_MSG_CHECKING([solver path])
-if test -z "$with_local_solver"; then
-    LOCAL_SOLVER="DEFAULT"
-    AC_MSG_RESULT([default])
-else
-    LOCAL_SOLVER=$with_local_solver
-    AC_MSG_RESULT([$with_local_solver])
-fi
-AC_SUBST(LOCAL_SOLVER)
 
 AC_SUBST(BUILD_TYPE)
 

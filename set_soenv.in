@@ -428,12 +428,8 @@ if ('@TARFILE_LOCATION@' eq "DEFAULT")
 #
 $SOLARENV             = PathFormat($SRC_ROOT.$SOLENV);
 # Location of the solver tree.
-if ('@LOCAL_SOLVER@' eq "DEFAULT")
-{  $SOLARVER          = $SRC_ROOT.$SOLVER;
-}
-else
-{  $SOLARVER          = PathFormat('@LOCAL_SOLVER@');
-}
+$SOLARVER             = $SRC_ROOT.$SOLVER;
+
 #Location of Solar version.
 $SOLARVERSION         = '$SOLARVER';
 
