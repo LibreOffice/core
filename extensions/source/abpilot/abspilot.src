@@ -120,7 +120,7 @@ TabPage RID_PAGE_SELECTABTYPE
     {
         HelpID = "extensions:RadioButton:RID_PAGE_SELECTABTYPE:RB_THUNDERBIRD";
         Size    = MAP_APPFONT ( WINDOW_SIZE_X - 30, 8 ) ;
-        Text [ en-US ] = "Thunderbird";
+        Text [ en-US ] = "Thunderbird/Icedove";
     };
     RadioButton RB_KAB
      {
