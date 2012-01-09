@@ -69,24 +69,27 @@ namespace
     }
 
     // -------------------------------------------------------------------
-    static const char* DefaultProductDir[3][3] =
+    const size_t NB_PRODUCTS = 3;
+    const size_t NB_CANDIDATES = 4;
+
+    static const char* DefaultProductDir[NB_PRODUCTS][NB_CANDIDATES] =
     {
     #if defined(XP_WIN)
-        { "Mozilla/SeaMonkey/", NULL, NULL },
-        { "Mozilla/Firefox/", NULL, NULL },
-        { "Thunderbird/", "Mozilla/Thunderbird/", NULL }
+        { "Mozilla/SeaMonkey/", NULL, NULL, NULL },
+        { "Mozilla/Firefox/", NULL, NULL, NULL },
+        { "Thunderbird/", "Mozilla/Thunderbird/", NULL, NULL }
     #elif(MACOSX)
-        { "../Mozilla/SeaMonkey/", NULL, NULL },
-        { "Firefox/", NULL, NULL },
-        { "../Thunderbird/", NULL, NULL }
+        { "../Mozilla/SeaMonkey/", NULL, NULL, NULL },
+        { "Firefox/", NULL, NULL, NULL },
+        { "../Thunderbird/", NULL, NULL, NULL }
     #else
-        { ".mozilla/seamonkey/", NULL, NULL },
-        { ".mozilla/firefox/", NULL, NULL },
-        { ".thunderbird/", ".mozilla-thunderbird/", ".mozilla/thunderbird/" }
+        { ".mozilla/seamonkey/", NULL, NULL, NULL },
+        { ".mozilla/firefox/", NULL, NULL, NULL },
+        { ".thunderbird/", ".mozilla-thunderbird/", ".mozilla/thunderbird/", ".icedove" }
     #endif
     };
 
-    static const char* ProductRootEnvironmentVariable[3] =
+    static const char* ProductRootEnvironmentVariable[NB_PRODUCTS] =
     {
         "MOZILLA_PROFILE_ROOT",
         "MOZILLA_FIREFOX_PROFILE_ROOT",
@@ -98,7 +101,7 @@ namespace
     {
         size_t productIndex = _product - 1;
 
-        static ::rtl::OUString s_productDirectories[3];
+        static ::rtl::OUString s_productDirectories[NB_PRODUCTS];
 
         if ( s_productDirectories[ productIndex ].isEmpty() )
         {
@@ -117,7 +120,7 @@ namespace
                 const char* pProfileRegistry = "profiles.ini";
 
                 // check all possible candidates
-                for ( size_t i=0; i<3; ++i )
+                for ( size_t i=0; i<NB_CANDIDATES; ++i )
                 {
                     if ( NULL == DefaultProductDir[ productIndex ][ i ] )
                         break;
