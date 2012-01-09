@@ -472,7 +472,7 @@ namespace slideshow
                                                               pArray + nLen,
                                                               NamedValueComparator( rSearchKey ) );
 
-            if( pFound == pArray + nLen )
+            if( pFound == rSequence.getConstArray() + nLen )
                 return false;
 
             return true;
