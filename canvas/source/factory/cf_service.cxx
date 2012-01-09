@@ -50,8 +50,6 @@
 #include <algorithm>
 
 #define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
-#define ARLEN(x) (sizeof (x) / sizeof *(x))
-
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
