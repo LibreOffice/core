@@ -603,7 +603,7 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
 
     SFX_ITEMSET_ARG( pSet, pBaseItem, SfxStringItem,
                      SID_BASEURL, sal_False);
-    String aBaseURL;
+    rtl::OUString aBaseURL;
     SFX_ITEMSET_ARG( pMedium->GetItemSet(), pSalvageItem, SfxStringItem, SID_DOC_SALVAGE, sal_False);
     if( pBaseItem )
         aBaseURL = pBaseItem->GetValue();
@@ -611,7 +611,7 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
     {
         if ( pSalvageItem )
         {
-            String aName( pMed->GetPhysicalName() );
+            rtl::OUString aName( pMed->GetPhysicalName() );
             ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aName, aBaseURL );
         }
         else

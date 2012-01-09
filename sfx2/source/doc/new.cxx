@@ -254,7 +254,7 @@ IMPL_LINK( SfxNewFileDialog_Impl, Update, void *, EMPTYARG )
         {
             // temp. fix until Templates are managed by UCB compatible service
             // does NOT work with locally cached components !
-            String aTemp;
+            rtl::OUString aTemp;
             utl::LocalFileHelper::ConvertPhysicalNameToURL( aFileName, aTemp );
             aFileName = aTemp;
         }

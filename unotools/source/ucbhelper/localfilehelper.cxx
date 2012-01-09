@@ -100,7 +100,7 @@ sal_Bool LocalFileHelper::ConvertURLToSystemPath( const String& rName, String& r
     return ( rReturn.Len() != 0 );
 }
 
-sal_Bool LocalFileHelper::ConvertPhysicalNameToURL( const String& rName, String& rReturn )
+bool LocalFileHelper::ConvertPhysicalNameToURL(const rtl::OUString& rName, rtl::OUString& rReturn)
 {
     rReturn = ::rtl::OUString();
     ::ucbhelper::ContentBroker* pBroker = ::ucbhelper::ContentBroker::get();
@@ -120,23 +120,15 @@ sal_Bool LocalFileHelper::ConvertPhysicalNameToURL( const String& rName, String&
             rtl::OUString aBase( ::ucbhelper::getLocalFileURL( xManager ) );
             rReturn = ::ucbhelper::getFileURLFromSystemPath( xManager, aBase, rName );
         }
-        catch ( ::com::sun::star::uno::RuntimeException& )
+        catch (const ::com::sun::star::uno::RuntimeException&)
         {
         }
     }
 
-    return ( rReturn.Len() != 0 );
+    return !rReturn.isEmpty();
 }
 
-bool LocalFileHelper::ConvertURLToPhysicalName( const rtl::OUString& rName, rtl::OUString& rReturn )
-{
-    String aReturn;
-    bool bReturn = ConvertURLToPhysicalName( rName, aReturn );
-    rReturn = rtl::OUString( aReturn );
-    return bReturn;
-}
-
-sal_Bool LocalFileHelper::ConvertURLToPhysicalName( const String& rName, String& rReturn )
+bool LocalFileHelper::ConvertURLToPhysicalName(const rtl::OUString& rName, rtl::OUString& rReturn)
 {
     rReturn = ::rtl::OUString();
     ::ucbhelper::ContentBroker* pBroker = ::ucbhelper::ContentBroker::get();
@@ -157,24 +149,24 @@ sal_Bool LocalFileHelper::ConvertURLToPhysicalName( const String& rName, String&
             if ( aObj.GetProtocol() == aLocal.GetProtocol() )
                 rReturn = ::ucbhelper::getSystemPathFromFileURL( xManager, rName );
         }
-        catch ( ::com::sun::star::uno::RuntimeException& )
+        catch (const ::com::sun::star::uno::RuntimeException&)
         {
         }
     }
 
-    return ( rReturn.Len() != 0 );
+    return !rReturn.isEmpty();
 }
 
-sal_Bool LocalFileHelper::IsLocalFile( const String& rName )
+sal_Bool LocalFileHelper::IsLocalFile(const rtl::OUString& rName)
 {
-    String aTmp;
-    return ConvertURLToPhysicalName( rName, aTmp );
+    rtl::OUString aTmp;
+    return ConvertURLToPhysicalName(rName, aTmp);
 }
 
-sal_Bool LocalFileHelper::IsFileContent( const String& rName )
+sal_Bool LocalFileHelper::IsFileContent(const rtl::OUString& rName)
 {
     String aTmp;
-    return ConvertURLToSystemPath( rName, aTmp );
+    return ConvertURLToSystemPath(rName, aTmp);
 }
 
 typedef ::std::vector< ::rtl::OUString* > StringList_Impl;

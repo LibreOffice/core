@@ -1523,7 +1523,7 @@ sal_Bool BrokenRecoveryDialog::isExecutionNeeded()
 IMPL_LINK( BrokenRecoveryDialog, OkButtonHdl, void*, EMPTYARG )
 {
     String sPhysicalPath = m_aSaveDirED.GetText().EraseLeadingChars().EraseTrailingChars();
-    String sURL;
+    rtl::OUString sURL;
     ::utl::LocalFileHelper::ConvertPhysicalNameToURL( sPhysicalPath, sURL );
     m_sSavePath = sURL;
     while (!m_sSavePath.getLength())

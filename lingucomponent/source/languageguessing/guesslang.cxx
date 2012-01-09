@@ -145,13 +145,13 @@ void LangGuess_Impl::EnsureInitialized()
         m_bInitialized = true;
 
         // set default fingerprint path to where those get installed
-        String aPhysPath;
-        String aURL( SvtPathOptions().GetFingerprintPath() );
+        rtl::OUString aPhysPath;
+        rtl::OUString aURL( SvtPathOptions().GetFingerprintPath() );
         utl::LocalFileHelper::ConvertURLToPhysicalName( aURL, aPhysPath );
 #ifdef WNT
-            aPhysPath += '\\';
+        aPhysPath = aPhysPath + rtl::OUString(static_cast<sal_Unicode>('\\'));
 #else
-            aPhysPath += '/';
+        aPhysPath = aPhysPath + rtl::OUString(static_cast<sal_Unicode>('/'));
 #endif
 
         SetFingerPrintsDB( aPhysPath );

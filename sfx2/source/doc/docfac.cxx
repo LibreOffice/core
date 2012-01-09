@@ -222,7 +222,7 @@ void SfxObjectFactory::SetSystemTemplate( const String& rServiceName, const Stri
 
     static ::rtl::OUString DEF_TPL_STR(RTL_CONSTASCII_USTRINGPARAM("/soffice."));
 
-    String      sURL;
+    rtl::OUString sURL;
     String      sPath;
     sal_Unicode aPathBuffer[nMaxPathSize];
     if ( SystemPath::GetUserTemplateLocation( aPathBuffer, nMaxPathSize ))

@@ -215,7 +215,7 @@ void GraphicObject::ImplAutoSwapIn()
                     {
                         if( HasLink() )
                         {
-                            String aURLStr;
+                            rtl::OUString aURLStr;
 
                             if( ::utl::LocalFileHelper::ConvertPhysicalNameToURL( GetLink(), aURLStr ) )
                             {

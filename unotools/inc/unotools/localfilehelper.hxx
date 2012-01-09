@@ -44,7 +44,7 @@ namespace utl
         If no UCP is available for the local file system, sal_False and an empty URL is returned.
         Returning sal_True and an empty URL means that the URL doesn't point to a local file.
         */
-        static sal_Bool ConvertPhysicalNameToURL( const String& rName, String& rReturn );
+        static bool ConvertPhysicalNameToURL(const rtl::OUString& rName, rtl::OUString& rReturn);
         static sal_Bool ConvertSystemPathToURL( const String& rName, const String& rBaseURL, String& rReturn );
 
         /**
@@ -53,12 +53,11 @@ namespace utl
         otherwise sal_True and a valid URL, because a file name can always be converted if a UCP for the local
         file system is present ( watch: this doesn't mean that this file really exists! )
         */
-        static sal_Bool ConvertURLToPhysicalName( const String& rName, String& rReturn );
-        static bool     ConvertURLToPhysicalName( const rtl::OUString& rName, rtl::OUString& rReturn );
+        static bool ConvertURLToPhysicalName( const rtl::OUString& rName, rtl::OUString& rReturn );
         static sal_Bool ConvertURLToSystemPath( const String& rName, String& rReturn );
 
-        static sal_Bool IsLocalFile( const String& rName );
-        static sal_Bool IsFileContent( const String& rName );
+        static sal_Bool IsLocalFile(const rtl::OUString& rName);
+        static sal_Bool IsFileContent(const rtl::OUString& rName);
 
         static          ::com::sun::star::uno::Sequence< ::rtl::OUString >
                                 GetFolderContents( const ::rtl::OUString& rFolder, sal_Bool bFolder );

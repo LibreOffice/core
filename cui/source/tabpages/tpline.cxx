@@ -1470,8 +1470,12 @@ IMPL_LINK( SvxLineTabPage, MenuCreateHdl_Impl, MenuButton *, pButton )
 
             // convert URL encodings to UI characters (eg %20 for spaces)
             String aPhysicalName;
-            if( ::utl::LocalFileHelper::ConvertURLToPhysicalName( *it, aPhysicalName ))
+            rtl::OUString sTmp;
+            if( ::utl::LocalFileHelper::ConvertURLToPhysicalName( *it, sTmp ))
+            {
+                aPhysicalName = sTmp;
                 pUIName = &aPhysicalName;
+            }
 
             SvxBrushItem* pBrushItem = new SvxBrushItem(*it, aEmptyStr, GPOS_AREA, SID_ATTR_BRUSH);
             pBrushItem->SetDoneLink(STATIC_LINK(this, SvxLineTabPage, GraphicArrivedHdl_Impl));

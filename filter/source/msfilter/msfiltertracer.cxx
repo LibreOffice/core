@@ -88,7 +88,7 @@ MSFilterTracer::MSFilterTracer( const ::rtl::OUString& rConfigPath, uno::Sequenc
                     aLogFile = INetURLObject( aPath );
                 else
                 {
-                    String aURLStr;
+                    rtl::OUString aURLStr;
                     if( ::utl::LocalFileHelper::ConvertPhysicalNameToURL( Application::GetAppFileName(), aURLStr ) )
                     {
                         aLogFile = INetURLObject(aURLStr);

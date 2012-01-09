@@ -371,7 +371,7 @@ sal_Bool SvFileObject::GetGraphic_Impl( Graphic& rGrf, SvStream* pStream )
         {
             DBG_WARNING3( "Graphic error [%d] - [%s] URL[%s]",
                             nRes,
-                            xMed->GetPhysicalName().GetBuffer(),
+                            xMed->GetPhysicalName().getStr(),
                             sFileNm.GetBuffer() );
         }
         else

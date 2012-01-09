@@ -4251,11 +4251,11 @@ void SwWW8ImplReader::ReadDocInfo()
                 aSttb.Print( stderr );
 #endif
                 String sPath = aSttb.getStringAtIndex( 0x1 );
-                String aURL;
+                rtl::OUString aURL;
                 // attempt to convert to url ( won't work for obvious reasons on  linux
                 if ( sPath.Len() )
                     ::utl::LocalFileHelper::ConvertPhysicalNameToURL( sPath, aURL );
-                if ( aURL.Len() )
+                if (!aURL.getLength())
                     xDocProps->setTemplateURL( aURL );
                 else
                     xDocProps->setTemplateURL( sPath );

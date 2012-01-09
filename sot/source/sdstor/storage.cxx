@@ -519,7 +519,7 @@ void SotStorage::CreateStorage( sal_Bool bForceUCBStorage, StreamMode nMode, Sto
         INetURLObject aObj( m_aName );
         if ( aObj.GetProtocol() == INET_PROT_NOT_VALID )
         {
-            String aURL;
+            rtl::OUString aURL;
             ::utl::LocalFileHelper::ConvertPhysicalNameToURL( m_aName, aURL );
             aObj.SetURL( aURL );
             m_aName = aObj.GetMainURL( INetURLObject::NO_DECODE );
@@ -738,7 +738,7 @@ sal_Bool SotStorage::IsStorageFile( const String & rFileName )
     INetURLObject aObj( aName );
     if ( aObj.GetProtocol() == INET_PROT_NOT_VALID )
     {
-        String aURL;
+        rtl::OUString aURL;
         ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aName, aURL );
         aObj.SetURL( aURL );
         aName = aObj.GetMainURL( INetURLObject::NO_DECODE );

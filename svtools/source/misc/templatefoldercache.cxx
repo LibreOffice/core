@@ -591,7 +591,7 @@ namespace svt
         aParser.SetURL( _rPath, INetURLObject::WAS_ENCODED );
         if ( INET_PROT_NOT_VALID == aParser.GetProtocol() )
         {
-            String sURL;
+            rtl::OUString sURL;
             LocalFileHelper::ConvertPhysicalNameToURL( _rPath, sURL );
             aParser.SetURL( sURL, INetURLObject::WAS_ENCODED );
         }

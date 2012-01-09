@@ -1263,7 +1263,7 @@ sal_Bool GalleryTheme::InsertTransferable( const uno::Reference< datatransfer::X
 
                 if( aURL.GetProtocol() == INET_PROT_NOT_VALID )
                 {
-                    String aLocalURL;
+                    rtl::OUString aLocalURL;
 
                     if( ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aFile, aLocalURL ) )
                         aURL = INetURLObject( aLocalURL );
@@ -1516,7 +1516,7 @@ SvStream& GalleryTheme::ReadData( SvStream& rIStm )
                 }
                 else
                 {
-                    String aLocalURL;
+                    rtl::OUString aLocalURL;
 
                     pObj->aURL = INetURLObject( aFileName );
 

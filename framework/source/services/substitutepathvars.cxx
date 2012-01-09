@@ -689,17 +689,17 @@ IMPL_LINK( SubstitutePathVariables, implts_ConfigurationNotify, SubstitutePathNo
 rtl::OUString SubstitutePathVariables::ConvertOSLtoUCBURL( const rtl::OUString& aOSLCompliantURL ) const
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "SubstitutePathVariables::ConvertOSLtoUCBURL" );
-    String                  aResult;
+    rtl::OUString aResult;
     rtl::OUString   aTemp;
 
     osl::FileBase::getSystemPathFromFileURL( aOSLCompliantURL, aTemp );
     utl::LocalFileHelper::ConvertPhysicalNameToURL( aTemp, aResult );
 
     // Not all OSL URL's can be mapped to UCB URL's!
-    if ( aResult.Len() == 0 )
+    if ( aResult.isEmpty() )
         return aOSLCompliantURL;
     else
-        return rtl::OUString( aResult );
+        return aResult;
 }
 
 rtl::OUString SubstitutePathVariables::GetWorkPath() const

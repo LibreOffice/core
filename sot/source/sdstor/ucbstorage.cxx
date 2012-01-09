@@ -3217,7 +3217,7 @@ sal_Bool UCBStorage::Equals( const BaseStorage& rStorage ) const
 
 sal_Bool UCBStorage::IsStorageFile( const String& rFileName )
 {
-    String aFileURL = rFileName;
+    rtl::OUString aFileURL = rFileName;
     INetURLObject aObj( aFileURL );
     if ( aObj.GetProtocol() == INET_PROT_NOT_VALID )
     {

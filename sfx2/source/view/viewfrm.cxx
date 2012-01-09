@@ -445,7 +445,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
 
             // doing
 
-            String aTemp;
+            rtl::OUString aTemp;
             utl::LocalFileHelper::ConvertPhysicalNameToURL( pMed->GetPhysicalName(), aTemp );
             INetURLObject aPhysObj( aTemp );
             SFX_ITEMSET_ARG( pSh->GetMedium()->GetItemSet(),

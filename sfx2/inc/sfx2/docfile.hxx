@@ -89,7 +89,7 @@ class SFX2_DLLPUBLIC SfxMedium : public SvRefBase
                         bTriedStorage;
     StreamMode          nStorOpenMode;
     INetURLObject*      pURLObj;
-    String              aName;
+    rtl::OUString       aName;
     SvGlobalName        aFilterClass;
     SvStream*           pInStream;
     SvStream*           pOutStream;
@@ -164,7 +164,7 @@ public:
     ::com::sun::star::util::DateTime GetInitFileDate( sal_Bool bIgnoreOldValue );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent > GetContent() const;
-    const String&       GetPhysicalName() const;
+    const rtl::OUString& GetPhysicalName() const;
     sal_Bool            IsRemote();
     sal_Bool            IsOpen() const; // { return aStorage.Is() || pInStream; }
     void                DownLoad( const Link& aLink = Link());
@@ -267,7 +267,7 @@ public:
     SAL_DLLPRIVATE sal_Bool IsPreview_Impl();
     SAL_DLLPRIVATE void ClearBackup_Impl();
     SAL_DLLPRIVATE void Done_Impl( ErrCode );
-    SAL_DLLPRIVATE void SetPhysicalName_Impl(const String& rName);
+    SAL_DLLPRIVATE void SetPhysicalName_Impl(const rtl::OUString& rName);
     SAL_DLLPRIVATE void CanDisposeStorage_Impl( sal_Bool bDisposeStorage );
     SAL_DLLPRIVATE sal_Bool WillDisposeStorageOnClose_Impl();
 

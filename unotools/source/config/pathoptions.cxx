@@ -255,7 +255,7 @@ const String& SvtPathOptions_Impl::GetPath( SvtPathOptions::Pathes ePath )
     try
     {
         OUString    aPathValue;
-        String      aResult;
+        OUString    aResult;
         sal_Int32   nHandle = m_aMapEnumToPropHandle[ (sal_Int32)ePath ];
 
         // Substitution is done by the service itself using the substition service
@@ -290,7 +290,7 @@ void SvtPathOptions_Impl::SetPath( SvtPathOptions::Pathes ePath, const String& r
 
     if ( ePath < SvtPathOptions::PATH_COUNT )
     {
-        String      aResult;
+        OUString    aResult;
         OUString    aNewValue;
         Any         a;
 
@@ -413,7 +413,7 @@ OUString SvtPathOptions_Impl::SubstVar( const OUString& rVar ) const
     if ( bConvertLocal )
     {
         // Convert the URL to a system path for special path variables
-        String aReturn;
+        rtl::OUString aReturn;
         utl::LocalFileHelper::ConvertURLToPhysicalName( aWorkText, aReturn );
         return aReturn;
     }
@@ -949,7 +949,7 @@ sal_Bool SvtPathOptions::SearchFile( String& rIniFile, Pathes ePath )
                 if ( aObj.HasError() )
                 {
                     bIsURL = sal_False;
-                    String aURL;
+                    rtl::OUString aURL;
                     if ( LocalFileHelper::ConvertPhysicalNameToURL( aPathToken, aURL ) )
                         aObj.SetURL( aURL );
                 }
@@ -978,8 +978,12 @@ sal_Bool SvtPathOptions::SearchFile( String& rIniFile, Pathes ePath )
                 if ( bRet )
                 {
                     if ( !bIsURL )
+                    {
+                        rtl::OUString sTmp(rIniFile);
                         ::utl::LocalFileHelper::ConvertURLToPhysicalName(
-                                            aObj.GetMainURL( INetURLObject::NO_DECODE ), rIniFile );
+                                            aObj.GetMainURL( INetURLObject::NO_DECODE ), sTmp );
+                        rIniFile = sTmp;
+                    }
                     else
                         rIniFile = aObj.GetMainURL( INetURLObject::NO_DECODE );
                     break;

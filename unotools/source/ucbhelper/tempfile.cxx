@@ -411,7 +411,7 @@ String TempFile::GetURL() const
 {
     if ( !pImp->aURL.Len() )
     {
-        String aTmp;
+        rtl::OUString aTmp;
         LocalFileHelper::ConvertPhysicalNameToURL( GetFileName(), aTmp );
         pImp->aURL = aTmp;
     }

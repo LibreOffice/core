@@ -99,9 +99,9 @@ namespace adabasui
         OKButton            m_PB_OK;
         CancelButton        m_PB_CANCEL;
 
-        String              m_SYSDEV_File;
-        String              m_TRANSDEV_File;
-        String              m_DATADEV_File;
+        rtl::OUString       m_SYSDEV_File;
+        rtl::OUString       m_TRANSDEV_File;
+        rtl::OUString       m_DATADEV_File;
         String              m_Backup_File;
         String              m_ConPwd;
         String              m_SysPwd;

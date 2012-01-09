@@ -394,7 +394,7 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
 
     if( aURL.GetProtocol() != INET_PROT_FILE )
     {
-        String aTmp;
+        rtl::OUString aTmp;
 
         if( ::utl::LocalFileHelper::ConvertPhysicalNameToURL( rFile, aTmp ) )
             aURL = INetURLObject(aTmp);

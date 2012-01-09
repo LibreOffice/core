@@ -277,7 +277,7 @@ DBG_NAME(OConnectionHelper)
                 if(osl_getEnvironment(sEnvVarName.pData,&pDbVar) == osl_Process_E_None && pDbVar)
                 {
                     sAdabasWorkDir = pDbVar;
-                    String sURL;
+                    rtl::OUString sURL;
                     utl::LocalFileHelper::ConvertPhysicalNameToURL(sAdabasWorkDir,sURL);
                     sAdabasWorkDir = sURL;
                     rtl_uString_release(pDbVar);
@@ -288,7 +288,7 @@ DBG_NAME(OConnectionHelper)
                 if(osl_getEnvironment(sEnvVarName.pData,&pDbVar) == osl_Process_E_None && pDbVar)
                 {
                     sAdabasConfigDir = pDbVar;
-                    String sURL;
+                    rtl::OUString sURL;
                     utl::LocalFileHelper::ConvertPhysicalNameToURL(sAdabasConfigDir,sURL);
                     sAdabasConfigDir = sURL;
                     rtl_uString_release(pDbVar);
@@ -299,7 +299,7 @@ DBG_NAME(OConnectionHelper)
                 if(osl_getEnvironment(sEnvVarName.pData,&pDbVar) == osl_Process_E_None && pDbVar)
                 {
                     sRootDir = pDbVar;
-                    String sURL;
+                    rtl::OUString sURL;
                     utl::LocalFileHelper::ConvertPhysicalNameToURL(sRootDir,sURL);
                     sRootDir = sURL;
                     rtl_uString_release(pDbVar);

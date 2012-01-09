@@ -393,7 +393,7 @@ void ODbaseIndex::createINFEntry()
     sCfgFile += m_pTable->getName();
     sCfgFile += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".inf"));
 
-    String sPhysicalPath;
+    rtl::OUString sPhysicalPath;
     LocalFileHelper::ConvertURLToPhysicalName(sCfgFile,sPhysicalPath);
 
     Config aInfFile(sPhysicalPath);
@@ -436,9 +436,9 @@ sal_Bool ODbaseIndex::DropImpl()
     sCfgFile += m_pTable->getName();
     sCfgFile += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".inf"));
 
-    String sPhysicalPath;
-    String sNDX(sCfgFile);
-    OSL_VERIFY_RES( LocalFileHelper::ConvertURLToPhysicalName(sNDX,sPhysicalPath),"Can not convert Config Filename into Physical Name!");
+    rtl::OUString sPhysicalPath;
+    OSL_VERIFY_RES( LocalFileHelper::ConvertURLToPhysicalName(sCfgFile, sPhysicalPath),
+        "Can not convert Config Filename into Physical Name!");
 
     Config aInfFile(sPhysicalPath);
     aInfFile.SetGroup(dBASE_III_GROUP);

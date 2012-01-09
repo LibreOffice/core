@@ -427,7 +427,7 @@ void LinkManager::ReconnectDdeLink(SfxObjectShell& rServer)
             // DDE connections between OOo apps are always named 'soffice'.
             continue;
 
-        String aTmp;
+        rtl::OUString aTmp;
         OUString aURL = aFile;
         if (utl::LocalFileHelper::ConvertPhysicalNameToURL(aFile, aTmp))
             aURL = aTmp;

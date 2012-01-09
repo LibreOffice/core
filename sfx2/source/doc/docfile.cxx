@@ -516,12 +516,12 @@ Reference < XContent > SfxMedium::GetContent() const
         else
         {
             // TODO: OSL_FAIL("SfxMedium::GetContent()\nCreate Content? This code exists as fallback only. Please clarify, why its used.");
-            String aURL;
-            if ( aName.Len() )
+            rtl::OUString aURL;
+            if ( !aName.isEmpty() )
                 ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aName, aURL );
             else if ( aLogicName.Len() )
                 aURL = GetURLObject().GetMainURL( INetURLObject::NO_DECODE );
-            if ( aURL.Len() )
+            if (!aURL.isEmpty() )
                 ::ucbhelper::Content::create( aURL, xEnv, pImp->aContent );
         }
     }
@@ -690,9 +690,9 @@ sal_Bool SfxMedium::CloseOutStream_Impl()
 }
 
 //------------------------------------------------------------------
-const String& SfxMedium::GetPhysicalName() const
+const rtl::OUString& SfxMedium::GetPhysicalName() const
 {
-    if ( !aName.Len() && aLogicName.Len() )
+    if ( aName.isEmpty() && aLogicName.Len() )
         (( SfxMedium*)this)->CreateFileStream();
 
     // return the name then
@@ -749,7 +749,7 @@ sal_Bool SfxMedium::IsStorage()
 
     if ( pImp->pTempFile )
     {
-        String aURL;
+        rtl::OUString aURL;
         if ( !::utl::LocalFileHelper::ConvertPhysicalNameToURL( aName, aURL ) )
         {
             OSL_FAIL("Physical name not convertable!");
@@ -1366,7 +1366,7 @@ uno::Reference < embed::XStorage > SfxMedium::GetStorage( sal_Bool bCreateTempIf
                     nStorOpenMode = SFX_STREAM_READONLY;
                     pImp->xStorage = comphelper::OStorageHelper::GetStorageFromURL( aTmpName, embed::ElementModes::READ );
                     pImp->bStorageBasedOnInStream = sal_False;
-                    String aTemp;
+                    rtl::OUString aTemp;
                     ::utl::LocalFileHelper::ConvertURLToPhysicalName( aTmpName, aTemp );
                     SetPhysicalName_Impl( aTemp );
 
@@ -1560,7 +1560,7 @@ sal_Bool SfxMedium::StorageCommit_Impl()
                                 // connect the medium to the temporary file of the storage
                                 pImp->aContent = ::ucbhelper::Content();
                                 aName = aBackupExc.TemporaryFileURL;
-                                OSL_ENSURE( aName.Len(), "The exception _must_ contain the temporary URL!\n" );
+                                OSL_ENSURE( !aName.isEmpty(), "The exception _must_ contain the temporary URL!\n" );
                             }
                         }
 
@@ -1779,7 +1779,7 @@ sal_Bool SfxMedium::TryDirectTransfer( const ::rtl::OUString& aURL, SfxItemSet& 
 void SfxMedium::Transfer_Impl()
 {
     // The transfer is required only in two cases: either if there is a temporary file or if there is a salvage item
-    String aNameURL;
+    rtl::OUString aNameURL;
     if ( pImp->pTempFile )
         aNameURL = pImp->pTempFile->GetURL();
     else if ( aLogicName.Len() && pImp->m_bSalvageMode )
@@ -1789,7 +1789,7 @@ void SfxMedium::Transfer_Impl()
             OSL_FAIL( "The medium name is not convertable!\n" );
     }
 
-    if ( aNameURL.Len() && ( !eError || (eError & ERRCODE_WARNING_MASK) ) )
+    if ( !aNameURL.isEmpty() && ( !eError || (eError & ERRCODE_WARNING_MASK) ) )
     {
         RTL_LOGFILE_CONTEXT( aLog, "sfx2 (mv76033) SfxMedium::Transfer_Impl, copying to target" );
 
@@ -2191,7 +2191,7 @@ void SfxMedium::GetLockingStream_Impl()
             aMedium[comphelper::MediaDescriptor::PROP_STREAM()] >>= pImp->m_xLockingStream;
             aMedium[comphelper::MediaDescriptor::PROP_INPUTSTREAM()] >>= xInputStream;
 
-            if ( !pImp->pTempFile && !aName.Len() )
+            if ( !pImp->pTempFile && aName.isEmpty() )
             {
                 // the medium is still based on the original file, it makes sence to initialize the streams
                 if ( pImp->m_xLockingStream.is() )
@@ -2235,8 +2235,8 @@ void SfxMedium::GetMedium_Impl()
         else
         {
             uno::Sequence < beans::PropertyValue > xProps;
-            String aFileName;
-            if ( aName.Len() )
+            rtl::OUString aFileName;
+            if (!aName.isEmpty())
             {
                 if ( !::utl::LocalFileHelper::ConvertPhysicalNameToURL( aName, aFileName ) )
                 {
@@ -2418,9 +2418,10 @@ void SfxMedium::Init_Impl()
 
             // try to convert the URL into a physical name - but never change a physical name
             // physical name may be set if the logical name is changed after construction
-            if ( !aName.Len() )
+            if ( aName.isEmpty() )
                 ::utl::LocalFileHelper::ConvertURLToPhysicalName( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ), aName );
-            else {
+            else
+            {
                 DBG_ASSERT( pSalvageItem, "Suspicious change of logical name!" );
             }
         }
@@ -2735,7 +2736,7 @@ const String& SfxMedium::GetOrigURL() const
 
 //----------------------------------------------------------------
 
-void SfxMedium::SetPhysicalName_Impl( const String& rNameP )
+void SfxMedium::SetPhysicalName_Impl( const rtl::OUString& rNameP )
 {
     if ( rNameP != aName )
     {
@@ -2745,7 +2746,7 @@ void SfxMedium::SetPhysicalName_Impl( const String& rNameP )
             pImp->pTempFile = NULL;
         }
 
-        if ( aName.Len() || rNameP.Len() )
+        if ( !aName.isEmpty() || !rNameP.isEmpty() )
             pImp->aContent = ::ucbhelper::Content();
 
         aName = rNameP;
@@ -2909,9 +2910,9 @@ SfxMedium::~SfxMedium()
 
     delete pSet;
 
-    if( pImp->bIsTemp && aName.Len() )
+    if( pImp->bIsTemp && !aName.isEmpty() )
     {
-        String aTemp;
+        rtl::OUString aTemp;
         if ( !::utl::LocalFileHelper::ConvertPhysicalNameToURL( aName, aTemp ))
         {
             OSL_FAIL("Physical name not convertable!");
@@ -3053,7 +3054,7 @@ const uno::Sequence < util::RevisionTag >& SfxMedium::GetVersionList( bool _bNoR
 {
     // if the medium has no name, then this medium should represent a new document and can have no version info
     if ( ( !_bNoReload || !pImp->m_bVersionsAlreadyLoaded ) && !pImp->aVersions.getLength() &&
-         ( aName.Len() || aLogicName.Len() ) && GetStorage().is() )
+         ( !aName.isEmpty() || aLogicName.Len() ) && GetStorage().is() )
     {
         uno::Reference < document::XDocumentRevisionListPersistence > xReader( comphelper::getProcessServiceFactory()->createInstance(
                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.DocumentRevisionListPersistence")) ), uno::UNO_QUERY );
@@ -3255,7 +3256,7 @@ void SfxMedium::CreateTempFile( sal_Bool bReplace )
     pImp->pTempFile->EnableKillingFile( sal_True );
     aName = pImp->pTempFile->GetFileName();
     ::rtl::OUString aTmpURL = pImp->pTempFile->GetURL();
-    if ( !aName.Len() || !aTmpURL.getLength() )
+    if ( aName.isEmpty() || aTmpURL.isEmpty() )
     {
         SetError( ERRCODE_IO_CANTWRITE, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
         return;
@@ -3352,7 +3353,7 @@ void SfxMedium::CreateTempFileNoCopy()
     pImp->pTempFile = new ::utl::TempFile();
     pImp->pTempFile->EnableKillingFile( sal_True );
     aName = pImp->pTempFile->GetFileName();
-    if ( !aName.Len() )
+    if ( aName.isEmpty() )
     {
         SetError( ERRCODE_IO_CANTWRITE, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
         return;

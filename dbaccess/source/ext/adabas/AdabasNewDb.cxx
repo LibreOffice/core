@@ -328,7 +328,7 @@ OAdabasNewDbDlg::OAdabasNewDbDlg( Window* pParent,
 
     }
 
-    if(m_SYSDEV_File.Len() < 41 && m_TRANSDEV_File.Len() < 41 && m_DATADEV_File.Len() < 41)
+    if(m_SYSDEV_File.getLength() < 41 && m_TRANSDEV_File.getLength() < 41 && m_DATADEV_File.getLength() < 41)
     {
         m_ET_SYSDEVSPACE.SetText(m_SYSDEV_File );
         m_ET_TRANSACTIONLOG.SetText(m_TRANSDEV_File);
@@ -418,7 +418,7 @@ IMPL_LINK( OAdabasNewDbDlg, ImplOKHdl, OKButton*, /*EMPTYARG*/ )
             return 0;
         }
     }
-    else if(m_SYSDEV_File.Len() > 40 || m_TRANSDEV_File.Len() > 40 || m_DATADEV_File.Len() > 40)
+    else if(m_SYSDEV_File.getLength() > 40 || m_TRANSDEV_File.getLength() > 40 || m_DATADEV_File.getLength() > 40)
     {
         InfoBox aInfo(this,ModuleRes(INFO_STR_MAX_FILE_LENGTH));
         String aMsg(aInfo.GetMessText());
@@ -433,22 +433,22 @@ IMPL_LINK( OAdabasNewDbDlg, ImplOKHdl, OKButton*, /*EMPTYARG*/ )
 
     {
         // we need url
-        String sTemp;
+        rtl::OUString sTemp;
         bOk = LocalFileHelper::ConvertPhysicalNameToURL(m_DATADEV_File,sTemp);
         m_DATADEV_File = sTemp;
-        sTemp = String();
+        sTemp = rtl::OUString();
         bOk = LocalFileHelper::ConvertPhysicalNameToURL(m_SYSDEV_File,sTemp);
         m_SYSDEV_File = sTemp;
-        sTemp = String();
+        sTemp = rtl::OUString();
         bOk = LocalFileHelper::ConvertPhysicalNameToURL(m_TRANSDEV_File,sTemp);
         m_TRANSDEV_File = sTemp;
     }
     String aErrorMessage = String(ModuleRes(STR_DEVSPACE_NO_FILE));
-    if(!m_SYSDEV_File.Len())
+    if(m_SYSDEV_File.isEmpty())
         aErrorMessage.SearchAndReplace(String::CreateFromAscii("$name$"),String::CreateFromAscii("SYSDEVSPACE"));
-    else if(!m_TRANSDEV_File.Len())
+    else if(m_TRANSDEV_File.isEmpty())
         aErrorMessage.SearchAndReplace(String::CreateFromAscii("$name$"),String::CreateFromAscii("TRANSACTIONLOG"));
-    else if(!m_DATADEV_File.Len())
+    else if(m_DATADEV_File.isEmpty())
         aErrorMessage.SearchAndReplace(String::CreateFromAscii("$name$"),String::CreateFromAscii("DATDEVSPACE"));
     else if(m_ET_SYSUSR.GetText() == m_ET_CONUSR.GetText())
         aErrorMessage = String(ModuleRes(STR_NO_SAME_USER));
@@ -479,11 +479,11 @@ IMPL_LINK( OAdabasNewDbDlg, ImplOKHdl, OKButton*, /*EMPTYARG*/ )
     aCreateArgs[nPos].Name      = PROPERTY_DATABASENAME;
     aCreateArgs[nPos++].Value  <<= ::rtl::OUString(m_ET_DATABASENAME.GetText().ToUpperAscii());
     aCreateArgs[nPos].Name      = PROPERTY_DATADEVSPACE;
-    aCreateArgs[nPos++].Value  <<= ::rtl::OUString(m_DATADEV_File);
+    aCreateArgs[nPos++].Value  <<= m_DATADEV_File;
     aCreateArgs[nPos].Name      = PROPERTY_SYSDEVSPACE;
-    aCreateArgs[nPos++].Value  <<= ::rtl::OUString(m_SYSDEV_File);
+    aCreateArgs[nPos++].Value  <<= m_SYSDEV_File;
     aCreateArgs[nPos].Name      = PROPERTY_TRANSACTION_LOG;
-    aCreateArgs[nPos++].Value  <<= ::rtl::OUString(m_TRANSDEV_File);
+    aCreateArgs[nPos++].Value  <<= m_TRANSDEV_File;
     aCreateArgs[nPos].Name      = PROPERTY_DATADEVSIZE;
     aCreateArgs[nPos++].Value  <<= sal_Int32(m_NF_DATADEVSPACE_SIZE.GetValue()*256);
     aCreateArgs[nPos].Name      = PROPERTY_LOGDEVSIZE;
@@ -587,7 +587,7 @@ IMPL_LINK( OAdabasNewDbDlg, ButtonClickHdl, Button *, pButton )
     else if(pButton == &m_PB_DATADEVSPACE)
         aPath = m_DATADEV_File;
 
-    String sUrl;
+    rtl::OUString sUrl;
     ::utl::LocalFileHelper::ConvertPhysicalNameToURL(aPath,sUrl);
     aFileDlg.SetDisplayDirectory(sUrl);
 
@@ -599,7 +599,7 @@ IMPL_LINK( OAdabasNewDbDlg, ButtonClickHdl, Button *, pButton )
         if(pButton == &m_PB_SYSDEVSPACE)
         {
             m_SYSDEV_File = aUrl.PathToFileName();
-            if(m_SYSDEV_File.Len() > 40)
+            if(m_SYSDEV_File.getLength() > 40)
             {
                 InfoBox aInfo(this,ModuleRes(INFO_STR_MAX_FILE_LENGTH));
                 String aMsg(aInfo.GetMessText());
@@ -613,7 +613,7 @@ IMPL_LINK( OAdabasNewDbDlg, ButtonClickHdl, Button *, pButton )
         else if(pButton == &m_PB_TRANSACTIONLOG)
         {
             m_TRANSDEV_File = aUrl.PathToFileName();
-            if(m_TRANSDEV_File.Len() > 40)
+            if(m_TRANSDEV_File.getLength() > 40)
             {
                 InfoBox aInfo(this,ModuleRes(INFO_STR_MAX_FILE_LENGTH));
                 String aMsg(aInfo.GetMessText());
@@ -627,7 +627,7 @@ IMPL_LINK( OAdabasNewDbDlg, ButtonClickHdl, Button *, pButton )
         else if(pButton == &m_PB_DATADEVSPACE)
         {
             m_DATADEV_File = aUrl.PathToFileName();
-            if(m_DATADEV_File.Len() > 40)
+            if(m_DATADEV_File.getLength() > 40)
             {
                 InfoBox aInfo(this,ModuleRes(INFO_STR_MAX_FILE_LENGTH));
                 String aMsg(aInfo.GetMessText());
@@ -731,8 +731,8 @@ sal_Bool OAdabasNewDbDlg::fillEnvironmentVariable(const ::rtl::OUString& _sVaria
     if(osl_getEnvironment(_sVariableName.pData,&pDbVar) == osl_Process_E_None && pDbVar)
     {
         _rsValue = pDbVar;
-        String sTemp;
-        LocalFileHelper::ConvertPhysicalNameToURL(_rsValue,sTemp);
+        rtl::OUString sTemp;
+        LocalFileHelper::ConvertPhysicalNameToURL(_rsValue, sTemp);
         _rsValue = sTemp;
         rtl_uString_release(pDbVar);
         pDbVar = NULL;

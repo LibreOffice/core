@@ -227,7 +227,7 @@ bool SdrTextObj::LoadText(const String& rFileName, const String& /*rFilterName*/
 
     if( aFileURL.GetProtocol() == INET_PROT_NOT_VALID )
     {
-        String aFileURLStr;
+        rtl::OUString aFileURLStr;
 
         if( ::utl::LocalFileHelper::ConvertPhysicalNameToURL( rFileName, aFileURLStr ) )
             aFileURL = INetURLObject( aFileURLStr );

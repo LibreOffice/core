@@ -356,7 +356,7 @@ void ODbaseIndexDialog::Init()
     aURL.SetSmartProtocol(INET_PROT_FILE);
     for(;pBegin != pEnd;++pBegin)
     {
-        String aName;
+        rtl::OUString aName;
         ::utl::LocalFileHelper::ConvertURLToPhysicalName(pBegin->getStr(),aName);
         aURL.SetSmartURL(aName);
         aExt = aURL.getExtension();

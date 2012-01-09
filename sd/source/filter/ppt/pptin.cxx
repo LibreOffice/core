@@ -1986,12 +1986,12 @@ String ImplSdPPTImport::ReadSound(sal_uInt32 nSoundRef) const
 
 String ImplSdPPTImport::ReadMedia( sal_uInt32 nMediaRef ) const
 {
-    String aRetVal;
+    rtl::OUString aRetVal;
     DffRecordHeader* pHd( const_cast<ImplSdPPTImport*>(this)->aDocRecManager.GetRecordHeader( PPT_PST_ExObjList, SEEK_FROM_BEGINNING ) );
     if ( pHd )
     {
         pHd->SeekToContent( rStCtrl );
-        while ( ( rStCtrl.Tell() < pHd->GetRecEndFilePos() ) && !aRetVal.Len() )
+        while ( ( rStCtrl.Tell() < pHd->GetRecEndFilePos() ) && aRetVal.isEmpty() )
         {
             DffRecordHeader aHdMovie;
             rStCtrl >> aHdMovie;

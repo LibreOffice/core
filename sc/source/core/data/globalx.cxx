@@ -70,7 +70,7 @@ void ScGlobal::InitAddIns()
             {
                 //  use LocalFileHelper to convert the path to a URL that always points
                 //  to the file on the server
-                String aUrl;
+                rtl::OUString aUrl;
                 if ( utl::LocalFileHelper::ConvertPhysicalNameToURL( aPath, aUrl ) )
                     aPath = aUrl;
 

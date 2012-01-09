@@ -393,7 +393,7 @@ IMPL_LINK( View, DropInsertFileHdl, Timer*, EMPTYARG )
 
         if( aURL.GetProtocol() == INET_PROT_NOT_VALID )
         {
-            String aURLStr;
+            rtl::OUString aURLStr;
             ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aCurrentDropFile, aURLStr );
             aURL = INetURLObject( aURLStr );
         }

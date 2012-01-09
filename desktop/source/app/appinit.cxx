@@ -415,7 +415,7 @@ void Desktop::CreateTemporaryDirectory()
         ::utl::UCBContentHelper::Kill( aOldTempURL );
     }
 
-    String aRet;
+    ::rtl::OUString aRet;
     ::rtl::OUString aTempPath( aTempBaseURL );
 
     // create new current temporary directory

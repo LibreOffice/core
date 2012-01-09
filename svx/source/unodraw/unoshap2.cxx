@@ -1554,7 +1554,7 @@ bool SvxGraphicObject::setPropertyValueImpl( const ::rtl::OUString& rName, const
 
                     if( aURLObj.GetProtocol() == INET_PROT_NOT_VALID )
                     {
-                        String aValidURL;
+                        rtl::OUString aValidURL;
 
                         if( ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aURL, aValidURL ) )
                             aURLObj = INetURLObject( aValidURL );

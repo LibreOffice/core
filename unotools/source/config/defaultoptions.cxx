@@ -199,7 +199,7 @@ void SvtDefaultOptions_Impl::Commit()
 
 String SvtDefaultOptions_Impl::GetDefaultPath( sal_uInt16 nId ) const
 {
-    String aRet;
+    rtl::OUString aRet;
     sal_uInt16 nIdx = 0;
 
     while ( PathMap_Impl[nIdx]._ePath <= SvtPathOptions::PATH_WORK )
@@ -213,7 +213,7 @@ String SvtDefaultOptions_Impl::GetDefaultPath( sal_uInt16 nId ) const
                  nId == SvtPathOptions::PATH_MODULE ||
                  nId == SvtPathOptions::PATH_PLUGIN )
             {
-                String aTmp;
+                rtl::OUString aTmp;
                 ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aRet, aTmp );
                 aRet = aTmp;
             }

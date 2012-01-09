@@ -54,7 +54,7 @@ static void convertStringListToUrls (
         {
             INetURLObject aCurrentURL;
 
-            String sURL;
+            rtl::OUString sURL;
             if ( ::utl::LocalFileHelper::ConvertPhysicalNameToURL( sCurrentToken, sURL ) )
                 aCurrentURL = INetURLObject( sURL );
             else

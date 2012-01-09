@@ -1422,19 +1422,19 @@ IMPL_LINK(  SvxEMailTabPage, FileDialogHdl_Impl, PushButton*, pButton )
         FileDialogHelper aHelper(
             com::sun::star::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
             0 );
-        String sPath = aMailerURLED.GetText();
-        if ( !sPath.Len() )
-            sPath.AppendAscii("/usr/bin");
+        rtl::OUString sPath = aMailerURLED.GetText();
+        if ( sPath.isEmpty() )
+            sPath = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/usr/bin"));
 
-        String sUrl;
-        ::utl::LocalFileHelper::ConvertPhysicalNameToURL(sPath,sUrl);
+        rtl::OUString sUrl;
+        ::utl::LocalFileHelper::ConvertPhysicalNameToURL(sPath, sUrl);
         aHelper.SetDisplayDirectory(sUrl);
         aHelper.AddFilter( m_sDefaultFilterName, String::CreateFromAscii("*"));
 
         if ( ERRCODE_NONE == aHelper.Execute() )
         {
             sUrl = aHelper.GetPath();
-            ::utl::LocalFileHelper::ConvertURLToPhysicalName(sUrl,sPath);
+            ::utl::LocalFileHelper::ConvertURLToPhysicalName(sUrl, sPath);
             aMailerURLED.SetText(sPath);
         }
     }

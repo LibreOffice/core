@@ -445,7 +445,7 @@ sal_Bool SfxApplication::GetOptions( SfxItemSet& rSet )
                     {
                         const String aName( SfxResId( CONFIG_PATH_START + nProp ) );
                         aNames.InsertValue( nProp, aName );
-                        String aValue;
+                        rtl::OUString aValue;
                         switch ( nProp )
                         {
                             case SvtPathOptions::PATH_ADDIN:        ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aPathCfg.GetAddinPath(), aValue ); break;
@@ -816,7 +816,7 @@ void SfxApplication::SetOptions(const SfxItemSet &rSet)
                 {
                     case SvtPathOptions::PATH_ADDIN:
                     {
-                        String aTmp;
+                        rtl::OUString aTmp;
                         if( ::utl::LocalFileHelper::ConvertURLToPhysicalName( sValue, aTmp ) )
                             aPathOptions.SetAddinPath( aTmp );
                         break;
@@ -832,7 +832,7 @@ void SfxApplication::SetOptions(const SfxItemSet &rSet)
                     case SvtPathOptions::PATH_FAVORITES:    aPathOptions.SetFavoritesPath( sValue );break;
                     case SvtPathOptions::PATH_FILTER:
                     {
-                        String aTmp;
+                        rtl::OUString aTmp;
                         if( ::utl::LocalFileHelper::ConvertURLToPhysicalName( sValue, aTmp ) )
                             aPathOptions.SetFilterPath( aTmp );
                         break;
@@ -841,7 +841,7 @@ void SfxApplication::SetOptions(const SfxItemSet &rSet)
                     case SvtPathOptions::PATH_GRAPHIC:      aPathOptions.SetGraphicPath( sValue );break;
                     case SvtPathOptions::PATH_HELP:
                     {
-                        String aTmp;
+                        rtl::OUString aTmp;
                         if( ::utl::LocalFileHelper::ConvertURLToPhysicalName( sValue, aTmp ) )
                             aPathOptions.SetHelpPath( aTmp );
                         break;
@@ -850,7 +850,7 @@ void SfxApplication::SetOptions(const SfxItemSet &rSet)
                     case SvtPathOptions::PATH_LINGUISTIC:   aPathOptions.SetLinguisticPath( sValue );break;
                     case SvtPathOptions::PATH_MODULE:
                     {
-                        String aTmp;
+                        rtl::OUString aTmp;
                         if( ::utl::LocalFileHelper::ConvertURLToPhysicalName( sValue, aTmp ) )
                             aPathOptions.SetModulePath( aTmp );
                         break;
@@ -859,7 +859,7 @@ void SfxApplication::SetOptions(const SfxItemSet &rSet)
                     case SvtPathOptions::PATH_PALETTE:      aPathOptions.SetPalettePath( sValue );break;
                     case SvtPathOptions::PATH_PLUGIN:
                     {
-                        String aTmp;
+                        rtl::OUString aTmp;
                         if( ::utl::LocalFileHelper::ConvertURLToPhysicalName( sValue, aTmp ) )
                             aPathOptions.SetPluginPath( aTmp );
                         break;
@@ -867,7 +867,7 @@ void SfxApplication::SetOptions(const SfxItemSet &rSet)
 
                     case SvtPathOptions::PATH_STORAGE:
                     {
-                        String aTmp;
+                        rtl::OUString aTmp;
                         if( ::utl::LocalFileHelper::ConvertURLToPhysicalName( sValue, aTmp ) )
                             aPathOptions.SetStoragePath( aTmp );
                         break;

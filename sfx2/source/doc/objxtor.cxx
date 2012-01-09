@@ -409,7 +409,7 @@ SfxObjectShell::~SfxObjectShell()
     // The removing of the temporary file must be done as the latest step in the document destruction
     if ( pImp->aTempName.Len() )
     {
-        String aTmp;
+        rtl::OUString aTmp;
         ::utl::LocalFileHelper::ConvertPhysicalNameToURL( pImp->aTempName, aTmp );
         ::utl::UCBContentHelper::Kill( aTmp );
     }

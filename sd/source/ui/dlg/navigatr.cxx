@@ -585,7 +585,7 @@ sal_Bool SdNavigatorWin::InsertFile(const String& rFileName)
 
     if( aURL.GetProtocol() == INET_PROT_NOT_VALID )
     {
-        String aURLStr;
+        rtl::OUString aURLStr;
         ::utl::LocalFileHelper::ConvertPhysicalNameToURL( rFileName, aURLStr );
         aURL = INetURLObject( aURLStr );
     }

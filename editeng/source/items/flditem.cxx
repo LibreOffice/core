@@ -766,7 +766,7 @@ XubString SvxExtFileField::GetFormatted() const
     if( INET_PROT_NOT_VALID == aURLObj.GetProtocol() )
     {
         // invalid? try to interpret string as system file name
-        String aURLStr;
+        rtl::OUString aURLStr;
 
         ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aFile, aURLStr );
 

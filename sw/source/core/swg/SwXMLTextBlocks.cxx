@@ -529,11 +529,11 @@ sal_Bool SwXMLTextBlocks::IsOnlyTextBlock( sal_uInt16 nIdx ) const
 
 sal_Bool SwXMLTextBlocks::IsFileUCBStorage( const String & rFileName)
 {
-    String aName( rFileName );
+    rtl::OUString aName( rFileName );
     INetURLObject aObj( aName );
     if ( aObj.GetProtocol() == INET_PROT_NOT_VALID )
     {
-        String aURL;
+        rtl::OUString aURL;
         ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aName, aURL );
         aObj.SetURL( aURL );
         aName = aObj.GetMainURL( INetURLObject::NO_DECODE );

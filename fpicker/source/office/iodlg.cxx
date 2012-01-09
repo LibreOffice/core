@@ -249,7 +249,7 @@ namespace
                     INetURLObject aURL( aNewFile );
                     if ( INET_PROT_NOT_VALID == aURL.GetProtocol() )
                     {
-                        String sURL;
+                        rtl::OUString sURL;
                         if ( ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aNewFile, sURL ) )
                             aURL = INetURLObject( sURL );
                     }
@@ -344,7 +344,7 @@ namespace
             {
                 INetURLObject aCurrentURL;
 
-                String sURL;
+                rtl::OUString sURL;
                 if ( ::utl::LocalFileHelper::ConvertPhysicalNameToURL( sCurrentToken, sURL ) )
                     aCurrentURL = INetURLObject( sURL );
                 else

@@ -260,7 +260,7 @@ IMPL_STATIC_LINK( SvtMatchContext_Impl, Select_Impl, void*, )
         String sCompletion( *(*pThis->pCompletions)[nPos] );
 
         // convert the file into an URL
-        String sURL( sCompletion );
+        rtl::OUString sURL( sCompletion );
         ::utl::LocalFileHelper::ConvertPhysicalNameToURL( sCompletion, sURL );
             // note: if this doesn't work, we're not interested in: we're checking the
             // untouched sCompletion then
@@ -273,7 +273,7 @@ IMPL_STATIC_LINK( SvtMatchContext_Impl, Select_Impl, void*, )
                 continue;
             }
         }
-        if (( sURL.Len() > 0 ) && ( sURL.GetChar(sURL.Len()-1) != '/' ))
+        if (( sURL.getLength() > 0 ) && ( sURL[sURL.getLength()-1] != '/' ))
         {
             String sUpperURL( sURL );
             sUpperURL.ToUpperAscii();

@@ -3270,7 +3270,7 @@ sal_uLong EasyFile::createFileName(  const String& rURL, String& rFileName )
 
         if( aURL.GetProtocol() == INET_PROT_NOT_VALID )
         {
-            String aURLStr;
+            rtl::OUString aURLStr;
             ::utl::LocalFileHelper::ConvertPhysicalNameToURL( rURL, aURLStr );
             aURL = INetURLObject( aURLStr );
         }

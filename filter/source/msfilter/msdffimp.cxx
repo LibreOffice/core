@@ -4370,7 +4370,7 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, cons
                 INetURLObject aAbsURL;
                 if ( !INetURLObject( maBaseURL ).GetNewAbsURL( rtl::OUStringToOString(aFileName, RTL_TEXTENCODING_UTF8), &aAbsURL ) )
                 {
-                    String aValidURL;
+                    rtl::OUString aValidURL;
                     if( ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aFileName, aValidURL ) )
                         aAbsURL = INetURLObject( aValidURL );
                 }
