@@ -1612,6 +1612,22 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         return 0;
     }
 
+    // Cell Text Flow
+    switch (nKeyword)
+    {
+        case RTF_CLTXLRTB:  nParam = 0; break;
+        case RTF_CLTXTBRL:  nParam = 1; break;
+        case RTF_CLTXBTLR:  nParam = 3; break;
+        case RTF_CLTXLRTBV: nParam = 4; break;
+        case RTF_CLTXTBRLV: nParam = 5; break;
+        default: break;
+    }
+    if (nParam >= 0)
+    {
+        RTFValue::Pointer_t pValue(new RTFValue(nParam));
+        m_aStates.top().aTableCellSprms->push_back(make_pair(NS_ooxml::LN_CT_TcPrBase_textDirection, pValue));
+    }
+
     // Trivial paragraph flags
     switch (nKeyword)
     {
