@@ -164,4 +164,4 @@ if (defined $ENV{NOCONFIGURE}) {
 # indent-tabs-mode: nil
 # End:
 
-# vim:set shiftwidth=4 softtabstop=4 expandtab: #
+# vim:set ft=perl shiftwidth=4 softtabstop=4 expandtab: #
