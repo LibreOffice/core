@@ -452,8 +452,8 @@ namespace dxcanvas
                     // TODO(F1): Closed/open polygons
 
                     // convert from RealPoint2D array to Gdiplus::PointF array
-                    ::std::transform( const_cast< uno::Sequence< geometry::RealPoint2D >& >(points[nCurrPoly]).getArray(),
-                                      const_cast< uno::Sequence< geometry::RealPoint2D >& >(points[nCurrPoly]).getArray()+nCurrSize,
+                    ::std::transform( points[nCurrPoly].getConstArray(),
+                                      points[nCurrPoly].getConstArray()+nCurrSize,
                                       aPoints.begin(),
                                       implGdiPlusPointFromRealPoint2D );
 
