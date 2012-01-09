@@ -446,10 +446,6 @@ sal_Bool CommandLineArgs::InterpretCommandLineParameter( const ::rtl::OUString& 
     {
         SetBoolParam_Impl( CMD_BOOLPARAM_NODEFAULT, sal_True );
     }
-    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "plugin" )) == sal_True )
-    {
-        SetBoolParam_Impl( CMD_BOOLPARAM_PLUGIN, sal_True );
-    }
     else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "server" )) == sal_True )
     {
         SetBoolParam_Impl( CMD_BOOLPARAM_SERVER, sal_True );

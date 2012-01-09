@@ -44,7 +44,6 @@ class CommandLineArgs
             CMD_BOOLPARAM_MINIMIZED = 0,
             CMD_BOOLPARAM_INVISIBLE,
             CMD_BOOLPARAM_NORESTORE,
-            CMD_BOOLPARAM_PLUGIN,
             CMD_BOOLPARAM_SERVER,
             CMD_BOOLPARAM_HEADLESS,
             CMD_BOOLPARAM_QUICKSTART,
