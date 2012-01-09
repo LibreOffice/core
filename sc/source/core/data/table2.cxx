@@ -2652,7 +2652,8 @@ void ScTable::ShowRows(SCROW nRow1, SCROW nRow2, bool bShow)
 bool ScTable::IsDataFiltered() const
 {
     bool bAnyQuery = false;
-    const ScDBData* pDBData = pDocument->GetFilterDBAtTable(nTab);
+    const ScDBCollection* pDBs = pDocument->GetDBCollection();
+    const ScDBData* pDBData = pDBs->GetFilterDBAtTable(nTab);
     if ( pDBData )
     {
         ScQueryParam aParam;

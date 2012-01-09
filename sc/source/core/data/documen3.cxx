@@ -311,14 +311,6 @@ ScDBData* ScDocument::GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nC
         return NULL;
 }
 
-const ScDBData* ScDocument::GetFilterDBAtTable(SCTAB nTab) const
-{
-    if (pDBCollection)
-        return pDBCollection->GetFilterDBAtTable(nTab);
-    else
-        return NULL;
-}
-
 ScDPCollection* ScDocument::GetDPCollection()
 {
     if (!pDPCollection)
