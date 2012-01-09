@@ -90,6 +90,7 @@ int file_image_pagein (file_image * image)
     file_image    w;
     long          s;
     size_t        k;
+    // force touching of each page despite the optimizer
     volatile char c = 0;
 
     if (image == 0)
@@ -116,8 +117,6 @@ int file_image_pagein (file_image * image)
     if (w.m_size > 0)
     {
         c ^= ((char*)(w.m_base))[0];
-        w.m_base  = (char*)(w.m_base) + w.m_size;
-        w.m_size -= w.m_size;
     }
 
     return (0);
