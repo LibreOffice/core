@@ -155,11 +155,6 @@ void SfxAlienWarningDialog::InitSize()
         (*pCurrent)->SetPosPixel( aNewPos );
     }
 
-    // new size of the dialog
-    aNewSize = GetSizePixel();
-    aNewSize.Height() -= nDelta;
-    SetSizePixel( aNewSize );
-
     // recalculate the size and position of the buttons
     m_aMoreInfoBtn.Hide();
     nTxtW = m_aKeepCurrentBtn.GetCtrlTextWidth( m_aKeepCurrentBtn.GetText() );
@@ -170,6 +165,17 @@ void SfxAlienWarningDialog::InitSize()
     Point aPos = m_aSaveODFBtn.GetPosPixel();
     aPos.X() = AW_COL_3 + nTxtW;
     m_aSaveODFBtn.SetPosPixel( aPos );
+    nTxtW = m_aSaveODFBtn.GetCtrlTextWidth( m_aSaveODFBtn.GetText() );
+    nTxtW += IMPL_EXTRA_BUTTON_WIDTH;
+    aNewSize = m_aSaveODFBtn.GetSizePixel();
+    aNewSize.Width() = nTxtW;
+    m_aSaveODFBtn.SetSizePixel( aNewSize );
+
+    // new size of the dialog
+    aNewSize = GetSizePixel();
+    aNewSize.Height() -= nDelta;
+    SetSizePixel( aNewSize );
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
