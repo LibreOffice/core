@@ -365,7 +365,7 @@ OUString PresenterTheme::GetStyleName (const ::rtl::OUString& rsResourceURL) con
 {
     OUString sStyleName;
     ::boost::shared_ptr<Theme> pTheme (mpTheme);
-    while (sStyleName.getLength()==0 && pTheme.get()!=NULL)
+    while (sStyleName.isEmpty() && pTheme.get()!=NULL)
     {
         sStyleName = pTheme->maStyleAssociations.GetStyleName(rsResourceURL);
         pTheme = pTheme->mpParentTheme;
@@ -468,7 +468,7 @@ SharedBitmapDescriptor PresenterTheme::GetBitmap (
 {
     if (mpTheme.get() != NULL)
     {
-        if (rsStyleName.getLength() == 0)
+        if (rsStyleName.isEmpty())
         {
             if (rsBitmapName == A2S("Background"))
             {
@@ -619,7 +619,7 @@ Reference<rendering::XCanvasFont> PresenterTheme::FontDescriptor::CreateFont (
 {
     rendering::FontRequest aFontRequest;
     aFontRequest.FontDescription.FamilyName = msFamilyName;
-    if (msFamilyName.getLength() == 0)
+    if (msFamilyName.isEmpty())
         aFontRequest.FontDescription.FamilyName = A2S("Tahoma");
     aFontRequest.FontDescription.StyleName = msStyleName;
     aFontRequest.CellSize = nCellSize;
@@ -700,7 +700,7 @@ void PresenterTheme::Theme::Read (
     OUString sParentThemeName;
     if ((PresenterConfigurationAccess::GetConfigurationNode(mxThemeRoot, A2S("ParentTheme"))
             >>= sParentThemeName)
-        && sParentThemeName.getLength()>0)
+        && !sParentThemeName.isEmpty())
     {
         mpParentTheme = rReadContext.ReadTheme(rConfiguration, sParentThemeName);
     }
@@ -710,7 +710,7 @@ void PresenterTheme::Theme::Read (
     OUString sBitmapSourceExtension;
     if ((PresenterConfigurationAccess::GetConfigurationNode(
         mxThemeRoot, A2S("BitmapSourceExtension")) >>= sBitmapSourceExtension)
-        && sBitmapSourceExtension.getLength()>0)
+        && !sBitmapSourceExtension.isEmpty())
     {
         rReadContext.SetBitmapSourceExtension(sBitmapSourceExtension);
     }
@@ -913,11 +913,11 @@ Any ReadContext::GetByName (
     ::boost::shared_ptr<PresenterTheme::Theme> pTheme;
 
     OUString sCurrentThemeName (rsThemeName);
-     if (sCurrentThemeName.getLength() == 0)
+     if (sCurrentThemeName.isEmpty())
      {
          // No theme name given.  Look up the CurrentTheme property.
          rConfiguration.GetConfigurationNode(A2S("Presenter/CurrentTheme")) >>= sCurrentThemeName;
-         if (sCurrentThemeName.getLength() == 0)
+         if (sCurrentThemeName.isEmpty())
          {
              // Still no name.  Use "DefaultTheme".
              sCurrentThemeName = A2S("DefaultTheme");
@@ -931,9 +931,9 @@ Any ReadContext::GetByName (
     {
         // Iterate over all themes and search the one with the given name.
         Sequence<OUString> aKeys (xThemes->getElementNames());
-        for (sal_Int32 nItemIndex=0; nItemIndex<aKeys.getLength(); ++nItemIndex)
+        for (sal_Int32 nItemIndex=0; nItemIndex < aKeys.getLength(); ++nItemIndex)
         {
-            const OUString& rsKey (aKeys[nItemIndex]);
+             const OUString& rsKey (aKeys[nItemIndex]);
             Reference<container::XHierarchicalNameAccess> xTheme (
                 xThemes->getByName(rsKey), UNO_QUERY);
             if (xTheme.is())

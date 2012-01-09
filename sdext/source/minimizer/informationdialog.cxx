@@ -246,7 +246,7 @@ OUString InformationDialog::ImpGetStandardImage( const OUString& sPrivateURL )
 void InformationDialog::InitDialog()
 {
     sal_Int32 nDialogHeight = DIALOG_HEIGHT;
-    if ( !maSaveAsURL.getLength() )
+    if ( maSaveAsURL.isEmpty() )
         nDialogHeight -= 22;
 
    // setting the dialog properties
@@ -298,7 +298,7 @@ void InformationDialog::InitDialog()
     }
 
     rtl::OUString aTitle;
-    if ( maSaveAsURL.getLength() )
+    if ( !maSaveAsURL.isEmpty() )
     {
         Reference< XURLTransformer > xURLTransformer( mxMSF->getServiceManager()->createInstanceWithContext(
                 OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ) ), mxMSF ), UNO_QUERY );
@@ -320,7 +320,7 @@ void InformationDialog::InitDialog()
     OUString aInfoString( getString( eInfoString ) );
     const OUString aOldSizePlaceholder( RTL_CONSTASCII_USTRINGPARAM( "%OLDFILESIZE" ) );
     const OUString aNewSizePlaceholder( RTL_CONSTASCII_USTRINGPARAM( "%NEWFILESIZE" ) );
-    const OUString aTitlePlaceholder( aTitle.getLength() ? OUString(RTL_CONSTASCII_USTRINGPARAM("%TITLE"  ))
+    const OUString aTitlePlaceholder( !aTitle.isEmpty() ? OUString(RTL_CONSTASCII_USTRINGPARAM("%TITLE"  ))
                                                          : OUString(RTL_CONSTASCII_USTRINGPARAM("'%TITLE'")) );
 
     sal_Int32 i = aInfoString.indexOf( aOldSizePlaceholder, 0 );
@@ -338,7 +338,7 @@ void InformationDialog::InitDialog()
     com::sun::star::uno::Reference< com::sun::star::awt::XItemListener > xItemListener;
     InsertImage( *this, rtl::OUString( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("aboutimage")) ), ImpGetStandardImage( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:standardimage/query")) ), 5, 5, 25, 25 );
     InsertFixedText( *this, rtl::OUString( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("fixedtext")) ), aInfoString, PAGE_POS_X, 6, PAGE_WIDTH, 24, sal_True, 0 );
-    if ( maSaveAsURL.getLength() )
+    if ( !maSaveAsURL.isEmpty() )
         InsertCheckBox(  *this, TKGet( TK_OpenNewDocument ), xItemListener, getString( STR_AUTOMATICALLY_OPEN ), PAGE_POS_X, 42, PAGE_WIDTH, 8, 1 );
     InsertButton( *this, rtl::OUString( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("button")) ), mxActionListener, DIALOG_WIDTH / 2 - 25, nDialogHeight - 20, 50, 14, 2, STR_OK );
 
@@ -380,7 +380,7 @@ sal_Bool InformationDialog::execute()
 {
     UnoDialog::execute();
 
-    if ( maSaveAsURL.getLength() )
+    if ( !maSaveAsURL.isEmpty() )
     {
         sal_Int16 nInt16 = 0;
         Any aAny( getControlProperty( TKGet( TK_OpenNewDocument ), TKGet( TK_State ) ) );

@@ -411,7 +411,7 @@ void PresenterController::UpdatePaneTitles (void)
         OUString sTemplate (IsAccessibilityActive()
             ? (*iPane)->msAccessibleTitleTemplate
             : (*iPane)->msTitleTemplate);
-        if (sTemplate.getLength() <= 0)
+        if (sTemplate.isEmpty())
             continue;
 
         OUStringBuffer sResult;

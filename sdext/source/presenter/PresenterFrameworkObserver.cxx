@@ -56,7 +56,7 @@ PresenterFrameworkObserver::PresenterFrameworkObserver (
 
     if (mxConfigurationController->hasPendingRequests())
     {
-        if (rsEventName.getLength() > 0)
+        if (!rsEventName.isEmpty())
         {
             mxConfigurationController->addConfigurationChangeListener(
                 this,

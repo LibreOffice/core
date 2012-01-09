@@ -289,7 +289,7 @@ css::geometry::RealRectangle2D PresenterCanvasHelper::GetTextBoundingBox (
     const ::rtl::OUString& rsText,
     const sal_Int8 nTextDirection)
 {
-    if (rxFont.is() && rsText.getLength() > 0)
+    if (rxFont.is() && !rsText.isEmpty())
     {
         rendering::StringContext aContext (rsText, 0, rsText.getLength());
         Reference<rendering::XTextLayout> xLayout (

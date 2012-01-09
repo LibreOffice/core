@@ -621,7 +621,7 @@ void Parser::readFont()
         {
         }
 
-        if( !aResult.familyName.getLength() )
+        if( aResult.familyName.isEmpty() )
         {
             // last fallback
             aResult.familyName  = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Arial" ) );
@@ -936,7 +936,7 @@ static bool checkEncryption( const rtl::OUString&                               
             if( o_rIsEncrypted )
             {
                 bool bAuthenticated = false;
-                if( io_rPwd.getLength() )
+                if( !io_rPwd.isEmpty() )
                 {
                     rtl::OString aIsoPwd = rtl::OUStringToOString( io_rPwd,
                                                                    RTL_TEXTENCODING_ISO_8859_1 );

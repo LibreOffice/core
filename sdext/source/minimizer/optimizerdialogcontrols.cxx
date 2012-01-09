@@ -513,7 +513,7 @@ void OptimizerDialog::UpdateControlStatesPage2()
         aResolutionText = aResolutionItemList[ 2 ];
     else if ( getString( STR_IMAGE_RESOLUTION_3 ).getToken( 0, ';', nI3 ).toInt32() == nImageResolution )
         aResolutionText = aResolutionItemList[ 3 ];
-    if ( !aResolutionText.getLength() )
+    if ( aResolutionText.isEmpty() )
         aResolutionText = OUString::valueOf( nImageResolution );
 
     setControlProperty( TKGet( TK_RadioButton0Pg1 ), TKGet( TK_State ), Any( (sal_Int16)( bJPEGCompression != sal_True ) ) );
@@ -681,7 +681,7 @@ void OptimizerDialog::UpdateControlStatesPage4()
             }
         }
     }
-    if ( aCustomShowName.getLength() )
+    if ( !aCustomShowName.isEmpty() )
     {
         std::vector< Reference< XDrawPage > > vNonUsedPageList;
         PageCollector::CollectNonCustomShowPages( mxController->getModel(), aCustomShowName, vNonUsedPageList );
@@ -689,7 +689,7 @@ void OptimizerDialog::UpdateControlStatesPage4()
     }
     if ( GetConfigProperty( TK_DeleteHiddenSlides, sal_False ) )
     {
-        if ( aCustomShowName.getLength() )
+        if ( !aCustomShowName.isEmpty() )
         {
             std::vector< Reference< XDrawPage > > vUsedPageList;
             PageCollector::CollectCustomShowPages( mxController->getModel(), aCustomShowName, vUsedPageList );
@@ -835,7 +835,7 @@ void OptimizerDialog::UpdateControlStatesPage4()
     }
     sal_Unicode nSeparator = '.';
     OUString aStr( getString( STR_FILESIZESEPARATOR ) );
-    if ( aStr.getLength() )
+    if ( !aStr.isEmpty() )
         nSeparator = aStr[ 0 ];
     setControlProperty( TKGet( TK_FixedText7Pg4 ), TKGet( TK_Label ), Any( ImpValueOfInMB( nCurrentFileSize, nSeparator ) ) );
     setControlProperty( TKGet( TK_FixedText8Pg4 ), TKGet( TK_Label ), Any( ImpValueOfInMB( nEstimatedFileSize, nSeparator ) ) );
@@ -917,7 +917,7 @@ void OptimizerDialog::InitPage4()
         if ( i == rList.size() )
             aSettingsName = aTemp;
     }
-    while( !aSettingsName.getLength() );
+    while( aSettingsName.isEmpty() );
 
     setControlProperty( TKGet( TK_ComboBox0Pg4 ), TKGet( TK_Text ), Any( aSettingsName ) );
     setControlProperty( TKGet( TK_RadioButton0Pg4 ), TKGet( TK_Enabled ), Any( !mbIsReadonly ) );

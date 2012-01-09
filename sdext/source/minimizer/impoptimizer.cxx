@@ -536,7 +536,7 @@ void ImpOptimizer::DispatchStatus()
 sal_Bool ImpOptimizer::Optimize()
 {
 
-    if ( maCustomShowName.getLength() )
+    if ( !maCustomShowName.isEmpty() )
         ImpExtractCustomShow( mxModel, maCustomShowName );
 
     if ( mbDeleteUnusedMasterPages )
@@ -662,7 +662,7 @@ sal_Bool ImpOptimizer::Optimize( const Sequence< PropertyValue >& rArguments )
         sal_Int64 nDestSize = 0;
 
         Reference< XFrame > xSelf;
-        if ( maSaveAsURL.getLength() )
+        if ( !maSaveAsURL.isEmpty() )
         {
 
             SetStatusValue( TK_Progress, Any( static_cast< sal_Int32 >( 10 ) ) );
@@ -676,7 +676,7 @@ sal_Bool ImpOptimizer::Optimize( const Sequence< PropertyValue >& rArguments )
                     nSourceSize = PPPOptimizer::GetFileSize( xStorable->getLocation() );
 
                 Sequence< PropertyValue > aArguments;
-                if ( maFilterName.getLength() )
+                if ( !maFilterName.isEmpty() )
                 {
                     int nLength = aArguments.getLength();
                     aArguments.realloc( nLength + 1 );
@@ -722,7 +722,7 @@ sal_Bool ImpOptimizer::Optimize( const Sequence< PropertyValue >& rArguments )
             }
         }
 
-        if ( maSaveAsURL.getLength() )
+        if ( !maSaveAsURL.isEmpty() )
         {
             if ( xStorable.is() )
             {
@@ -739,7 +739,7 @@ sal_Bool ImpOptimizer::Optimize( const Sequence< PropertyValue >& rArguments )
             DispatchStatus();
         }
 
-        if ( maSaveAsURL.getLength() )
+        if ( !maSaveAsURL.isEmpty() )
         {
             if ( mbOpenNewDocument && xSelf.is() )
             {

@@ -601,7 +601,7 @@ void LineDescriptor::AddPart (
 
 bool LineDescriptor::IsEmpty (void) const
 {
-    return msLine.getLength()==0;
+    return msLine.isEmpty();
 }
 
 

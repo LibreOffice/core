@@ -178,7 +178,7 @@ Reference<XResource> SAL_CALL PresenterPaneFactory::createResource (
         return NULL;
 
     const OUString sPaneURL (rxPaneId->getResourceURL());
-    if (sPaneURL.getLength() == 0)
+    if (sPaneURL.isEmpty())
         return NULL;
 
     if (mpResourceCache.get() != NULL)

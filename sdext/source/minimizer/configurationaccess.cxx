@@ -373,7 +373,7 @@ Reference< XInterface > ConfigurationAccess::GetConfigurationNode(
     Reference< XInterface > xNode;
     try
     {
-        if ( !sPathToNode.getLength() )
+        if ( sPathToNode.isEmpty() )
             xNode = xRoot;
         else
         {

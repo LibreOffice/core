@@ -74,7 +74,7 @@ void ImpAddEntity( std::vector< GraphicCollector::GraphicEntity >& rGraphicEntit
     const rtl::OUString aGraphicURL( rUser.maGraphicURL );
     const rtl::OUString sPackageURL( RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.GraphicObject:") );
 
-    if ( rGraphicSettings.mbEmbedLinkedGraphics || ( !aGraphicURL.getLength() || aGraphicURL.match( sPackageURL, 0 ) ) )
+    if ( rGraphicSettings.mbEmbedLinkedGraphics || (aGraphicURL.isEmpty() || aGraphicURL.match( sPackageURL, 0 ) ) )
     {
         std::vector< GraphicCollector::GraphicEntity >::iterator aIter( rGraphicEntities.begin() );
         while( aIter != rGraphicEntities.end() )

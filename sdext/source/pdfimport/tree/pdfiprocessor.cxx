@@ -742,7 +742,7 @@ void PDFIProcessor::intersectEoClip(const uno::Reference< rendering::XPolyPolygo
 void PDFIProcessor::hyperLink( const geometry::RealRectangle2D& rBounds,
                                const ::rtl::OUString&           rURI )
 {
-    if( rURI.getLength() )
+    if( !rURI.isEmpty() )
     {
         HyperlinkElement* pLink = m_pElFactory->createHyperlinkElement(
             &m_pCurPage->Hyperlinks,

@@ -1226,7 +1226,7 @@ static bool check_user_password( const OString& rPwd, PDFFileImplData* pData )
 bool PDFFile::setupDecryptionData( const OString& rPwd ) const
 {
     if( !impl_getData()->m_bIsEncrypted )
-        return rPwd.getLength() == 0;
+        return rPwd.isEmpty();
 
     // check if we can handle this encryption at all
     if( ! m_pData->m_bStandardHandler ||

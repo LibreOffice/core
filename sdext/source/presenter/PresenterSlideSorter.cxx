@@ -1833,7 +1833,7 @@ void PresenterSlideSorter::MouseOverManager::SetSlide (
             if (xSlideProperties.is())
                 xSlideProperties->getPropertyValue(A2S("LinkDisplayName")) >>= msText;
 
-            if (msText.getLength() == 0)
+            if (msText.isEmpty())
                 msText = A2S("Slide ") + OUString::valueOf(nSlideIndex + 1);
         }
     }
@@ -1884,7 +1884,7 @@ Reference<rendering::XBitmap> PresenterSlideSorter::MouseOverManager::CreateBitm
     PaintButtonBackground(xBitmapCanvas, aLabelSize);
 
     // Paint the text.
-    if (sText.getLength() > 0)
+    if (!sText.isEmpty())
     {
 
         const rendering::StringContext aContext (sText, 0, sText.getLength());

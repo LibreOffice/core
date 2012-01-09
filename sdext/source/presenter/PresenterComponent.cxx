@@ -62,7 +62,7 @@ static OUString gsBasePath;
     const Reference<XComponentContext>& rxComponentContext,
     const OUString& rsExtensionIdentifier)
 {
-    if (gsBasePath.getLength() == 0)
+    if (gsBasePath.isEmpty())
     {
         // Determine the base path of the bitmaps.
         Reference<deployment::XPackageInformationProvider> xInformationProvider (

@@ -185,7 +185,7 @@ Any PresenterConfigurationAccess::GetConfigurationNode (
     const css::uno::Reference<css::container::XHierarchicalNameAccess>& rxNode,
     const OUString& sPathToNode)
 {
-    if (sPathToNode.getLength() == 0)
+    if (sPathToNode.isEmpty())
         return Any(rxNode);
 
     try

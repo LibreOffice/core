@@ -1283,7 +1283,7 @@ bool Element::SetState (
         {
             do
             {
-                if (mpMode->msAction.getLength() <= 0)
+                if (mpMode->msAction.isEmpty())
                     break;
 
                 if (mpToolBar.get() == NULL)
@@ -1811,7 +1811,7 @@ void Text::Paint (
     (void)rOffset;
     OSL_ASSERT(rxCanvas.is());
 
-    if (msText.getLength() <= 0)
+    if (msText.isEmpty())
         return;
     if (mpFont.get() == NULL)
         return;
@@ -1854,7 +1854,7 @@ void Text::Paint (
 
 geometry::RealRectangle2D Text::GetBoundingBox (const Reference<rendering::XCanvas>& rxCanvas)
 {
-    if (mpFont.get() != NULL && msText.getLength() > 0)
+    if (mpFont.get() != NULL && !msText.isEmpty())
     {
         if ( ! mpFont->mxFont.is())
             mpFont->PrepareFont(rxCanvas);

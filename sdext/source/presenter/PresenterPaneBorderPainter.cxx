@@ -585,7 +585,7 @@ void PresenterPaneBorderPainter::Renderer::PaintTitle (
     if ( ! mxCanvas.is())
         return;
 
-    if (rsTitle.getLength() == 0)
+    if (rsTitle.isEmpty())
         return;
 
     Reference<rendering::XCanvasFont> xFont (rpStyle->GetFont(mxCanvas));
@@ -688,7 +688,7 @@ void PresenterPaneBorderPainter::Renderer::PaintTitle (
 
         // Get pane layout name for resource URL.
         const OUString sStyleName (mpTheme->GetStyleName(rsResourceURL));
-        if (sStyleName.getLength() > 0)
+        if (!sStyleName.isEmpty())
             sPaneStyleName = sStyleName;
 
         // Create a new pane style object and initialize it with bitmaps.

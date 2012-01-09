@@ -764,7 +764,7 @@ void PresenterScreen::ProcessLayout (
         rConfiguration.GetConfigurationNode(
             xLayoutNode,
             OUString(RTL_CONSTASCII_USTRINGPARAM("ParentLayout"))) >>= sParentLayout;
-        if (sParentLayout.getLength() > 0)
+        if (!sParentLayout.isEmpty())
         {
             // Prevent infinite recursion.
             if (rsLayoutName != sParentLayout)
@@ -898,7 +898,7 @@ void PresenterScreen::ProcessViewDescription (
         rValues[1] >>= aViewDescriptor.msTitle;
         rValues[2] >>= aViewDescriptor.msAccessibleTitle;
         rValues[3] >>= aViewDescriptor.mbIsOpaque;
-        if (aViewDescriptor.msAccessibleTitle.getLength()==0)
+        if (aViewDescriptor.msAccessibleTitle.isEmpty())
             aViewDescriptor.msAccessibleTitle = aViewDescriptor.msTitle;
         maViewDescriptors[sViewURL] = aViewDescriptor;
        }

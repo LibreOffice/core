@@ -539,7 +539,7 @@ void ActionListener::actionPerformed( const ActionEvent& rEvent )
                 if ( xStorable.is() && xStorable->hasLocation() )
                 {
                     rtl::OUString aLocation( xStorable->getLocation() );
-                    if ( aLocation.getLength() )
+                    if ( !aLocation.isEmpty() )
                     {
                         sal_Int32 nIndex = aLocation.lastIndexOf( '/', aLocation.getLength() - 1 );
                         if ( nIndex >= 0 )
@@ -565,7 +565,7 @@ void ActionListener::actionPerformed( const ActionEvent& rEvent )
                     mrOptimizerDialog.SetConfigProperty( TK_SaveAsURL, Any( aSaveAsURL ) );
                     mrOptimizerDialog.SetConfigProperty( TK_FilterName, Any( aFileOpenDialog.getFilterName() ) );
                 }
-                if ( !aSaveAsURL.getLength() )
+                if ( aSaveAsURL.isEmpty() )
                 {
                     // something goes wrong...
                     bSuccessfullyExecuted = sal_False;
@@ -585,7 +585,7 @@ void ActionListener::actionPerformed( const ActionEvent& rEvent )
                 OUString aSettingsName;
                 mrOptimizerDialog.getControlProperty( TKGet( TK_CheckBox1Pg4 ), TKGet( TK_State ) ) >>= nInt16;
                 mrOptimizerDialog.getControlProperty( TKGet( TK_ComboBox0Pg4 ), TKGet( TK_Text ) ) >>= aSettingsName;
-                if ( nInt16 && aSettingsName.getLength() )
+                if ( nInt16 && !aSettingsName.isEmpty() )
                 {
                     std::vector< OptimizerSettings >::iterator aIter( mrOptimizerDialog.GetOptimizerSettingsByName( aSettingsName ) );
                     std::vector< OptimizerSettings >& rSettings( mrOptimizerDialog.GetOptimizerSettings() );
@@ -636,7 +636,7 @@ void ActionListener::actionPerformed( const ActionEvent& rEvent )
         case TK_Button0Pg0 :    // delete configuration
         {
             OUString aSelectedItem( mrOptimizerDialog.GetSelectedString( TK_ListBox0Pg0 ) );
-            if ( aSelectedItem.getLength() )
+            if ( !aSelectedItem.isEmpty() )
             {
                 std::vector< OptimizerSettings >::iterator aIter( mrOptimizerDialog.GetOptimizerSettingsByName( aSelectedItem ) );
                 std::vector< OptimizerSettings >& rList( mrOptimizerDialog.GetOptimizerSettings() );
@@ -661,7 +661,7 @@ void ActionListener::disposing( const ::com::sun::star::lang::EventObject& /* So
 void ActionListenerListBox0Pg0::actionPerformed( const ActionEvent& rEvent )
     throw ( com::sun::star::uno::RuntimeException )
 {
-    if ( rEvent.ActionCommand.getLength() )
+    if ( !rEvent.ActionCommand.isEmpty() )
     {
         std::vector< OptimizerSettings >::iterator aIter( mrOptimizerDialog.GetOptimizerSettingsByName( rEvent.ActionCommand ) );
         std::vector< OptimizerSettings >& rList( mrOptimizerDialog.GetOptimizerSettings() );

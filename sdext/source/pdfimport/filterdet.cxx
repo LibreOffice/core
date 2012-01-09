@@ -395,7 +395,7 @@ rtl::OUString SAL_CALL PDFDetector::detect( uno::Sequence< beans::PropertyValue 
         // check for hybrid PDF
         oslFileHandle aFile = NULL;
         if( bSuccess &&
-            ( aURL.getLength() == 0 || aURL.compareToAscii( "file:", 5 ) != 0 )
+            ( aURL.isEmpty() || aURL.compareToAscii( "file:", 5 ) != 0 )
         )
         {
             sal_uInt64 nWritten = 0;
@@ -439,7 +439,7 @@ rtl::OUString SAL_CALL PDFDetector::detect( uno::Sequence< beans::PropertyValue 
         xEmbedStream = getAdditionalStream( aURL, aEmbedMimetype, aPwd, m_xContext, rFilterData, false );
         if( aFile )
             osl_removeFile( aURL.pData );
-        if( aEmbedMimetype.getLength() )
+        if( !aEmbedMimetype.isEmpty() )
         {
             if( aEmbedMimetype.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "application/vnd.oasis.opendocument.text" ) )
                 || aEmbedMimetype.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "application/vnd.oasis.opendocument.text-master" ) ) )
@@ -456,7 +456,7 @@ rtl::OUString SAL_CALL PDFDetector::detect( uno::Sequence< beans::PropertyValue 
 
     if( bSuccess )
     {
-        if( aOutFilterName.getLength() )
+        if( !aOutFilterName.isEmpty() )
         {
             if( nFilterNamePos == -1 )
             {
@@ -478,7 +478,7 @@ rtl::OUString SAL_CALL PDFDetector::detect( uno::Sequence< beans::PropertyValue 
                 rFilterData[nAttribs-1].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "EmbeddedSubstream" ) );
                 rFilterData[nAttribs-1].Value <<= xEmbedStream;
             }
-            if( aPwd.getLength() )
+            if( !aPwd.isEmpty() )
             {
                 if( nPwdPos == -1 )
                 {
@@ -686,7 +686,7 @@ uno::Reference< io::XStream > getAdditionalStream( const rtl::OUString&         
                             if( pPDFFile->isEncrypted() )
                             {
                                 bool bAuthenticated = false;
-                                if( io_rPwd.getLength() )
+                                if( !io_rPwd.isEmpty() )
                                 {
                                     rtl::OString aIsoPwd = rtl::OUStringToOString( io_rPwd,
                                                                                    RTL_TEXTENCODING_ISO_8859_1 );
