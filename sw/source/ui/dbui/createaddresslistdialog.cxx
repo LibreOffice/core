@@ -412,7 +412,7 @@ SwCreateAddressListDialog::SwCreateAddressListDialog(
             OUString sMiddle(sTempMiddle);
 
             String sLine;
-            sal_Bool bRead = pStream->ReadUniOrByteStringLine( sLine, RTL_TEXTENCODING_UTF8 );
+            sal_Bool bRead = pStream->ReadByteStringLine( sLine, RTL_TEXTENCODING_UTF8 );
 
             if(bRead)
             {
@@ -431,7 +431,7 @@ SwCreateAddressListDialog::SwCreateAddressListDialog(
                     }
                 }
             }
-            while(pStream->ReadUniOrByteStringLine( sLine, RTL_TEXTENCODING_UTF8 ))
+            while(pStream->ReadByteStringLine( sLine, RTL_TEXTENCODING_UTF8 ))
             {
                 ::std::vector<OUString> aNewData;
                 //analyze data line
