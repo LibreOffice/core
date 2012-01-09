@@ -27,6 +27,7 @@
  ************************************************************************/
 
 
+#include <set>
 #include <comphelper/string.hxx>
 #include <tools/table.hxx>
 #include <tools/debug.hxx>
@@ -44,15 +45,7 @@
 
 // =======================================================================
 
-inline sal_uLong ImplCreateKey( sal_uInt16 nPos )
-{
-    // Key = Pos+1, wegen Pos 0
-    return nPos+1;
-}
-
-// -----------------------------------------------------------------------
-
-static void lcl_GetSelectedEntries( Table& rSelectedPos, const XubString& rText, xub_Unicode cTokenSep, const ImplEntryList* pEntryList )
+static void lcl_GetSelectedEntries( ::std::set< sal_uInt16 >& rSelectedPos, const XubString& rText, xub_Unicode cTokenSep, const ImplEntryList* pEntryList )
 {
     for (xub_StrLen n = comphelper::string::getTokenCount(rText, cTokenSep); n;)
     {
@@ -60,7 +53,7 @@ static void lcl_GetSelectedEntries( Table& rSelectedPos, const XubString& rText,
         aToken = comphelper::string::strip(aToken, ' ');
         sal_uInt16 nPos = pEntryList->FindEntry( aToken );
         if ( nPos != LISTBOX_ENTRY_NOTFOUND )
-            rSelectedPos.Insert( ImplCreateKey( nPos ), (void*)sal_IntPtr(1L) );
+            rSelectedPos.insert( nPos );
     }
 }
 
@@ -417,13 +410,13 @@ IMPL_LINK( ComboBox, ImplSelectHdl, void*, EMPTYARG )
             }
 
             // Fehlende Eintraege anhaengen...
-            Table aSelInText;
+            ::std::set< sal_uInt16 > aSelInText;
             lcl_GetSelectedEntries( aSelInText, aText, mcMultiSep, mpImplLB->GetEntryList() );
             sal_uInt16 nSelectedEntries = mpImplLB->GetEntryList()->GetSelectEntryCount();
             for ( sal_uInt16 n = 0; n < nSelectedEntries; n++ )
             {
                 sal_uInt16 nP = mpImplLB->GetEntryList()->GetSelectEntryPos( n );
-                if ( !aSelInText.IsKeyValid( ImplCreateKey( nP ) ) )
+                if ( !aSelInText.count( nP ) )
                 {
                     if ( aText.Len() && (aText.GetChar( aText.Len()-1 ) != mcMultiSep) )
                         aText += mcMultiSep;
@@ -952,10 +945,10 @@ void ComboBox::ImplUpdateFloatSelection()
     }
     else
     {
-        Table aSelInText;
+        ::std::set< sal_uInt16 > aSelInText;
         lcl_GetSelectedEntries( aSelInText, mpSubEdit->GetText(), mcMultiSep, mpImplLB->GetEntryList() );
         for ( sal_uInt16 n = 0; n < mpImplLB->GetEntryList()->GetEntryCount(); n++ )
-            mpImplLB->SelectEntry( n, aSelInText.IsKeyValid( ImplCreateKey( n ) ) );
+            mpImplLB->SelectEntry( n, aSelInText.count( n ) );
     }
     mpImplLB->SetCallSelectionChangedHdl( sal_True );
 }
