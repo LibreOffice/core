@@ -79,11 +79,12 @@
 #include <svx/unoshape.hxx>
 
 #include <functional>
+#include <map>
 
-//.............................................................................
-namespace chart
-{
-//.............................................................................
+#include <boost/ptr_container/ptr_map.hpp>
+
+namespace chart {
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 using ::com::sun::star::uno::Reference;
@@ -1500,6 +1501,142 @@ void VDataSeriesGroup::getMinimumAndMaximiumX( double& rfMinimum, double& rfMaxi
         ::rtl::math::setNan(&rfMaximum);
 }
 
+namespace {
+
+/**
+ * Keep track of minimum and maximum Y values for one or more data series.
+ * When multiple data series exist, that indicates that the data series are
+ * stacked.
+ *
+ * <p>For each X value, we calculate separate Y value ranges for each data
+ * series in the first pass.  In the second pass, we calculate the minimum Y
+ * value by taking the absolute minimum value of all data series, whereas
+ * the maxium Y value is the sum of all the series maximum Y values.</p>
+ *
+ * <p>Once that's done for all X values, the final min / max Y values get
+ * calculated by taking the absolute min / max Y values across all the X
+ * values.</p>
+ */
+class PerXMinMaxCalculator
+{
+    typedef std::pair<double, double> MinMaxType;
+    typedef std::map<size_t, MinMaxType> SeriesMinMaxType;
+    typedef boost::ptr_map<double, SeriesMinMaxType> GroupMinMaxType;
+    typedef boost::unordered_map<double, MinMaxType> TotalStoreType;
+    GroupMinMaxType maSeriesGroup;
+    size_t mnCurSeries;
+
+public:
+    PerXMinMaxCalculator() : mnCurSeries(0) {}
+
+    void nextSeries() { ++mnCurSeries; }
+
+    void setValue(double fX, double fY)
+    {
+        SeriesMinMaxType* pStore = getByXValue(fX); // get storage for given X value.
+        if (!pStore)
+            // This shouldn't happen!
+            return;
+
+        SeriesMinMaxType::iterator it = pStore->lower_bound(mnCurSeries);
+        if (it != pStore->end() && !pStore->key_comp()(mnCurSeries, it->first))
+        {
+            MinMaxType& r = it->second;
+            // A min-max pair already exists for this series.  Update it.
+            if (fY < r.first)
+                r.first = fY;
+            if (r.second < fY)
+                r.second = fY;
+        }
+        else
+        {
+            // No existing pair. Insert a new one.
+            pStore->insert(
+                it, SeriesMinMaxType::value_type(
+                    mnCurSeries, MinMaxType(fY,fY)));
+        }
+    }
+
+    void getTotalRange(double& rfMin, double& rfMax) const
+    {
+        rtl::math::setNan(&rfMin);
+        rtl::math::setNan(&rfMax);
+
+        TotalStoreType aStore;
+        getTotalStore(aStore);
+
+        if (aStore.empty())
+            return;
+
+        TotalStoreType::const_iterator it = aStore.begin(), itEnd = aStore.end();
+        rfMin = it->second.first;
+        rfMax = it->second.second;
+        for (++it; it != itEnd; ++it)
+        {
+            if (rfMin > it->second.first)
+                rfMin = it->second.first;
+            if (rfMax < it->second.second)
+                rfMax = it->second.second;
+        }
+    }
+
+private:
+    /**
+     * Parse all data and reduce them into a set of global Y value ranges per
+     * X value.
+     */
+    void getTotalStore(TotalStoreType& rStore) const
+    {
+        TotalStoreType aStore;
+        GroupMinMaxType::const_iterator it = maSeriesGroup.begin(), itEnd = maSeriesGroup.end();
+        for (; it != itEnd; ++it)
+        {
+            double fX = it->first;
+
+            const SeriesMinMaxType& rSeries = *it->second;
+            SeriesMinMaxType::const_iterator itSeries = rSeries.begin(), itSeriesEnd = rSeries.end();
+            for (; itSeries != itSeriesEnd; ++itSeries)
+            {
+                double fYMin = itSeries->second.first, fYMax = itSeries->second.second;
+                TotalStoreType::iterator itr = aStore.find(fX);
+                if (itr == aStore.end())
+                    // New min-max pair for give X value.
+                    aStore.insert(
+                        TotalStoreType::value_type(fX, std::pair<double,double>(fYMin,fYMax)));
+                else
+                {
+                    MinMaxType& r = itr->second;
+                    if (fYMin < r.first)
+                        r.first = fYMin; // min y-value
+
+                    r.second += fYMax; // accumulative max y-value.
+                }
+            }
+        }
+        rStore.swap(aStore);
+    }
+
+    SeriesMinMaxType* getByXValue(double fX)
+    {
+        GroupMinMaxType::iterator it = maSeriesGroup.find(fX);
+        if (it == maSeriesGroup.end())
+        {
+            std::pair<GroupMinMaxType::iterator,bool> r =
+                maSeriesGroup.insert(fX, new SeriesMinMaxType);
+
+            if (!r.second)
+                // insertion failed.
+                return NULL;
+
+            it = r.first;
+        }
+
+        return it->second;
+    }
+};
+
+}
+
 void VDataSeriesGroup::getMinimumAndMaximiumYInContinuousXRange(
     double& rfMinY, double& rfMaxY, double fMinX, double fMaxX, sal_Int32 nAxisIndex ) const
 {
@@ -1510,58 +1647,37 @@ void VDataSeriesGroup::getMinimumAndMaximiumYInContinuousXRange(
         // No data series.  Bail out.
         return;
 
-    // Collect minimum y-value and accumulative maximum y-value for each
-    // x-value first, in case of stacked data series.
-    typedef boost::unordered_map<double, std::pair<double,double> > MinMaxPerXType;
-    MinMaxPerXType aStore;
-
-    std::vector<VDataSeries*>::const_iterator       aSeriesIter = m_aSeriesVector.begin();
-    const std::vector<VDataSeries*>::const_iterator aSeriesEnd  = m_aSeriesVector.end();
-    for( ; aSeriesIter != aSeriesEnd; ++aSeriesIter )
+    PerXMinMaxCalculator aRangeCalc;
+    std::vector<VDataSeries*>::const_iterator it = m_aSeriesVector.begin(), itEnd = m_aSeriesVector.end();
+    for (; it != itEnd; ++it)
     {
-        sal_Int32 nPointCount = (*aSeriesIter)->getTotalPointCount();
-        for(sal_Int32 nN=0;nN<nPointCount;nN++)
+        const VDataSeries* pSeries = *it;
+        if (!pSeries)
+            continue;
+
+        for (sal_Int32 i = 0, n = pSeries->getTotalPointCount(); i < n; ++i)
         {
-            if( nAxisIndex != (*aSeriesIter)->getAttachedAxisIndex() )
+            if (nAxisIndex != pSeries->getAttachedAxisIndex())
                 continue;
 
-            double fX = (*aSeriesIter)->getXValue( nN );
-            if( ::rtl::math::isNan(fX) )
-                continue;
-            if( fX < fMinX || fX > fMaxX )
-                continue;
-            double fY = (*aSeriesIter)->getYValue( nN );
-            if( ::rtl::math::isNan(fY) )
+            double fX = pSeries->getXValue(i);
+            if (rtl::math::isNan(fX))
                 continue;
 
-            MinMaxPerXType::iterator itr = aStore.find(fX);
-            if (itr == aStore.end())
-                aStore.insert(MinMaxPerXType::value_type(fX, std::pair<double,double>(fY, fY)));
-            else
-            {
-                std::pair<double,double>& r = itr->second;
-                if (fY < r.first)
-                    r.first = fY; // min y-value
+            if (fX < fMinX || fX > fMaxX)
+                // Outside specified X range.  Skip it.
+                continue;
 
-                r.second += fY; // accumulative max y-value.
-            }
+            double fY = pSeries->getYValue(i);
+            if (::rtl::math::isNan(fY))
+                continue;
+
+            aRangeCalc.setValue(fX, fY);
         }
+        aRangeCalc.nextSeries();
     }
 
-    if (aStore.empty())
-        // No data within the specified x range.
-        return;
-
-    MinMaxPerXType::const_iterator itr = aStore.begin(), itrEnd = aStore.end();
-    rfMinY = itr->second.first;
-    rfMaxY = itr->second.second;
-    for (++itr; itr != itrEnd; ++itr)
-    {
-        if (rfMinY > itr->second.first)
-            rfMinY = itr->second.first;
-        if (rfMaxY < itr->second.second)
-            rfMaxY = itr->second.second;
-    }
+    aRangeCalc.getTotalRange(rfMinY, rfMaxY);
 }
 
 void VDataSeriesGroup::calculateYMinAndMaxForCategory( sal_Int32 nCategoryIndex
