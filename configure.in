@@ -2944,6 +2944,7 @@ if test "$cross_compiling" = "yes"; then
         --disable-zenity \
         --with-num-cpus="$with_num_cpus" \
         --with-max-jobs="$with_max_jobs" \
+        --without-doxygen \
         $sub_conf_opts \
         2>&1 | sed -e 's/^/    /'
     test -f ./Env.Host.sh 2>/dev/null || exit
