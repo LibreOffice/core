@@ -29,14 +29,13 @@
 #include "sunversion.hxx"
 #include "diagnostics.h"
 
-using namespace rtl;
 using namespace std;
 
 #define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
 namespace jfw_plugin
 {
 
-Reference<VendorBase> SunInfo::createInstance()
+rtl::Reference<VendorBase> SunInfo::createInstance()
 {
     return new SunInfo;
 }
@@ -98,12 +97,12 @@ char const* const* SunInfo::getLibraryPaths(int* size)
 
 int SunInfo::compareVersions(const rtl::OUString& sSecond) const
 {
-    OUString sFirst = getVersion();
+    rtl::OUString sFirst = getVersion();
 
     SunVersion version1(sFirst);
     JFW_ENSURE(version1, OUSTR("[Java framework] sunjavaplugin"SAL_DLLEXTENSION
                                " does not know the version: ")
-               + sFirst + OUSTR(" as valid for a SUN JRE."));
+               + sFirst + OUSTR(" as valid for a SUN/Oracle JRE."));
     SunVersion version2(sSecond);
     if ( ! version2)
         throw MalformedVersionException();
