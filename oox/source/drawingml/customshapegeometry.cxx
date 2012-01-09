@@ -1015,6 +1015,12 @@ Path2DContext::~Path2DContext()
         aNewSegment.Count = 0;
         mrSegments.push_back( aNewSegment );
     }
+    if ( !mrPath2D.stroke )
+    {
+        aNewSegment.Command = EnhancedCustomShapeSegmentCommand::NOSTROKE;
+        aNewSegment.Count = 0;
+        mrSegments.push_back( aNewSegment );
+    }
     aNewSegment.Command = EnhancedCustomShapeSegmentCommand::ENDSUBPATH;
     aNewSegment.Count = 0;
     mrSegments.push_back( aNewSegment );
