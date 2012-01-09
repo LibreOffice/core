@@ -79,7 +79,7 @@ namespace slideshow
                 };
 
             static AnimateAttributeMap aMap( lcl_attributeMap,
-                                             sizeof(lcl_attributeMap)/sizeof(*lcl_attributeMap),
+                                             SAL_N_ELEMENTS(lcl_attributeMap),
                                              false );
 
             AttributeType eAttributeType = ATTRIBUTE_INVALID;

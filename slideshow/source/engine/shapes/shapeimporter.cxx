@@ -311,7 +311,7 @@ ShapeSharedPtr ShapeImporter::createShape(
                                       RTL_CONSTASCII_USTRINGPARAM(
                                           "com.sun.star.comp.sfx2.PluginObject" )),
                                   aPropertyValues,
-                                  sizeof(aPropertyValues)/sizeof(*aPropertyValues),
+                                  SAL_N_ELEMENTS(aPropertyValues),
                                   mrContext );
     }
     else if( shapeType.equalsAsciiL(
@@ -334,7 +334,7 @@ ShapeSharedPtr ShapeImporter::createShape(
                                       RTL_CONSTASCII_USTRINGPARAM(
                                           "com.sun.star.comp.sfx2.AppletObject" )),
                                   aPropertyValues,
-                                  sizeof(aPropertyValues)/sizeof(*aPropertyValues),
+                                  SAL_N_ELEMENTS(aPropertyValues),
                                   mrContext );
     }
     else if( shapeType.equalsAsciiL(

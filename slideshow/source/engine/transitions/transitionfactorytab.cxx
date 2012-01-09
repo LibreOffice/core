@@ -2120,9 +2120,8 @@ static const TransitionInfo lcl_transitionInfo[] =
 const TransitionInfo* TransitionFactory::getTransitionInfo(
     sal_Int16 nTransitionType, sal_Int16 nTransitionSubType )
 {
-    static const ::std::size_t lcl_tableSize(
-        sizeof(lcl_transitionInfo)/sizeof(TransitionInfo) );
-    static const TransitionInfo* pTableEnd = lcl_transitionInfo+lcl_tableSize;
+    static const TransitionInfo* pTableEnd = lcl_transitionInfo+
+        SAL_N_ELEMENTS(lcl_transitionInfo);
 
     const TransitionInfo* pRes = ::std::find_if(
         lcl_transitionInfo, pTableEnd,
@@ -2137,7 +2136,7 @@ const TransitionInfo* TransitionFactory::getTransitionInfo(
 const TransitionInfo* TransitionFactory::getRandomTransitionInfo()
 {
     return lcl_transitionInfo + getRandomOrdinal(
-        sizeof(lcl_transitionInfo) / sizeof(TransitionInfo)
+        SAL_N_ELEMENTS(lcl_transitionInfo)
         - 1 /* exclude random transition at end of table */ );
 }
 
