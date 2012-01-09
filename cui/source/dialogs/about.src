@@ -78,11 +78,11 @@ ModalDialog RID_DEFAULTABOUT
     };
     String ABOUT_STR_COPYRIGHT
     {
-        Text[ en-US ] = "LibreOffice is copyright © 2000, 2011 LibreOffice contributors and/or their affiliates. All rights reserved.";
+        Text[ en-US ] = "LibreOffice is copyright © 2000, 2012 LibreOffice contributors and/or their affiliates. All rights reserved.";
     };
     String ABOUT_STR_COPYRIGHT_DERIVED
     {
-        Text[ en-US ] = "%PRODUCTNAME is derived from LibreOffice. LibreOffice is copyright © 2000, 2011 LibreOffice contributors and/or their affiliates. All rights reserved.";
+        Text[ en-US ] = "%PRODUCTNAME is derived from LibreOffice. LibreOffice is copyright © 2000, 2012 LibreOffice contributors and/or their affiliates. All rights reserved.";
     };
     String ABOUT_STR_COPYRIGHT_ORACLE_DERIVED
     {
