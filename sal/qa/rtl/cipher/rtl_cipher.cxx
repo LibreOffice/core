@@ -43,26 +43,6 @@
 namespace rtl_cipher
 {
 
-rtl::OString createHex(sal_uInt8 *_pKeyBuffer, sal_uInt32 _nKeyLen)
-{
-    // Create hex-value string from the  value to keep the string size minimal
-    rtl::OStringBuffer aBuffer( _nKeyLen * 2 + 1 );
-    for ( sal_uInt32 i = 0; i < _nKeyLen; i++ )
-    {
-        sal_Int32 nValue = (sal_Int32)_pKeyBuffer[i];
-        if (nValue < 16)                         // maximul hex value for 1 byte
-        {
-            sal_Int32 nil = sal_Int32(0);
-            aBuffer.append( nil, 16 /* radix */ );
-        }
-        aBuffer.append( nValue, 16 /* radix */ );
-    }
-
-    return aBuffer.makeStringAndClear();
-}
-
-// -----------------------------------------------------------------------------
-
 class create : public CppUnit::TestFixture
 {
 public:

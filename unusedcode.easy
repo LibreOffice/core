@@ -1831,7 +1831,6 @@ pyuno::importToGlobal(_object*, _object*, _object*)
 rptui::OFieldExpressionControl::LinkStubAsynchActivate(void*, void*)
 rptui::OFieldExpressionControl::LinkStubAsynchDeactivate(void*, void*)
 rptui::OReportController::LinkStubOnInvalidateClipboard(void*, void*)
-rtl_cipher::createHex(unsigned char*, unsigned int)
 salhelper::ORealDynamicLoader::acquire()
 salhelper::ORealDynamicLoader::getApi() const
 salhelper::ORealDynamicLoader::newInstance(salhelper::ORealDynamicLoader**, rtl::OUString const&, rtl::OUString const&)
