@@ -113,10 +113,9 @@ void BaseContainerNode::appendChildNode( AnimationNodeSharedPtr const& pNode )
 bool BaseContainerNode::isChildNode( AnimationNodeSharedPtr const& pNode ) const
 {
     // find given notifier in child vector
-    VectorOfNodes::const_iterator const iBegin( maChildren.begin() );
     VectorOfNodes::const_iterator const iEnd( maChildren.end() );
     VectorOfNodes::const_iterator const iFind(
-        std::find( iBegin, iEnd, pNode ) );
+        std::find( maChildren.begin(), iEnd, pNode ) );
     return (iFind != iEnd);
 }
 

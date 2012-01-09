@@ -617,10 +617,10 @@ bool EventMultiplexerImpl::notifyMouseHandlers(
     // find corresponding view (to map mouse position into user
     // coordinate space)
     UnoViewVector::const_iterator       aIter;
-    const UnoViewVector::const_iterator aBegin( mrViewContainer.begin() );
     const UnoViewVector::const_iterator aEnd  ( mrViewContainer.end() );
     if( (aIter=::std::find_if(
-             aBegin, aEnd,
+             mrViewContainer.begin(),
+             aEnd,
              boost::bind( std::equal_to< uno::Reference<
                           presentation::XSlideShowView > >(),
                           boost::cref( xView ),

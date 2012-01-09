@@ -412,16 +412,11 @@ namespace canvas
         if( nNumSprites > 3 || nNumSprites < 1 )
             return false;
 
-        const SpriteConnectedRanges::ComponentListType::const_iterator aBegin(
-            rUpdateArea.maComponentList.begin() );
-        const SpriteConnectedRanges::ComponentListType::const_iterator aEnd(
-            rUpdateArea.maComponentList.end() );
-
         // now, calc the _true_ update area, by merging all sprite's
         // true update areas into one rectangle
-        ::basegfx::B2DRange aTrueArea( aBegin->second.getUpdateArea() );
-        ::std::for_each( aBegin,
-                         aEnd,
+        ::basegfx::B2DRange aTrueArea( rUpdateArea.maComponentList.begin()->second.getUpdateArea() );
+        ::std::for_each( rUpdateArea.maComponentList.begin(),
+                         rUpdateArea.maComponentList.end(),
                          ::boost::bind( (void (basegfx::B2DRange::*)(const basegfx::B2DRange&))(
                                             &basegfx::B2DRange::expand),
                                         aTrueArea,
@@ -429,9 +424,12 @@ namespace canvas
                                                        ::boost::bind( ::o3tl::select2nd<AreaComponent>(),
                                                                       _1 ) ) ) );
 
+        const SpriteConnectedRanges::ComponentListType::const_iterator aEnd(
+            rUpdateArea.maComponentList.end() );
+
         // and check whether _any_ of the sprites tells that its area
         // update will not be opaque.
-        return (::std::find_if( aBegin,
+        return (::std::find_if( rUpdateArea.maComponentList.begin(),
                                 aEnd,
                                 ::boost::bind( &SpriteRedrawManager::isAreaUpdateNotOpaque,
                                                this,
