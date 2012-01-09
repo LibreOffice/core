@@ -52,13 +52,15 @@ TARFILE_NAME=boost_1_44_0
 TARFILE_MD5=f02578f5218f217a9f20e9c30e119c6a
 PATCH_FILES=$(TARFILE_NAME).patch
 #https://svn.boost.org/trac/boost/ticket/3780
-PATCH_FILES+=aliasing.patch
+PATCH_FILES+=boost.3780.aliasing.patch
 #https://svn.boost.org/trac/boost/ticket/4713
 PATCH_FILES+=boost.4713.warnings.patch
 #https://svn.boost.org/trac/boost/ticket/5119
-PATCH_FILES+=unordered_map-doesnt-support-cp-ctor.patch
+PATCH_FILES+=boost.5119.unordered_map-cp-ctor.patch
 #http://gcc.gnu.org/bugzilla/show_bug.cgi?id=47679
 PATCH_FILES+=boost.gcc47679.patch
+#https://svn.boost.org/trac/boost/ticket/6369
+PATCH_FILES+=boost.6369.warnings.patch
 
 PATCH_FILES+=boost.windows.patch
 
