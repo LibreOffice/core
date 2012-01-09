@@ -150,7 +150,7 @@ OS_TARGET=WIN95
 
 #To build nss one has to call "make nss_build_all" in 
 #mozilla/security/nss
-NSS_BUILD_DIR=$(PACKAGE_DIR)/$(TARFILE_ROOTDIR)/mozilla/security/nss
+NSS_BUILD_DIR=$(ABS_PACKAGE_DIR)/$(TARFILE_ROOTDIR)/mozilla/security/nss
 BUILD_ACTION= PATH="$(moz_build)/msys/bin:$(moz_build)/moztools/bin:$(PATH)" && $(MOZILLABUILD)/msys/bin/bash -i \
     -c "cd $(NSS_BUILD_DIR) && make nss_build_all"
 
