@@ -234,8 +234,12 @@ bool SbiScanner::NextSym()
         nOldCol1 = nOldCol2 = 0;
     }
 
-    while(nCol < aLine.getLength() && theBasicCharClass::get().isWhitespace(aLine[nCol]))
-        ++pLine, ++nCol, bSpaces = true;
+    if(nCol < aLine.getLength() && theBasicCharClass::get().isWhitespace(aLine[nCol]))
+    {
+        bSpaces = true;
+        while(nCol < aLine.getLength() && theBasicCharClass::get().isWhitespace(aLine[nCol]))
+            ++pLine, ++nCol;
+    }
 
     nCol1 = nCol;
 
@@ -257,20 +261,24 @@ bool SbiScanner::NextSym()
     if(nCol < aLine.getLength() && (theBasicCharClass::get().isAlpha(aLine[nCol], bCompatible) || aLine[nCol] == '_'))
     {
         // if there's nothing behind '_' , it's the end of a line!
-        if( *pLine == '_' && !*(pLine+1) )
-        {   ++pLine;
-            goto eoln;  }
+        if(nCol + 1 == aLine.getLength() && aLine[nCol] == '_')
+        {
+            // Note that nCol is not incremented here...
+            ++pLine;
+            goto eoln;
+        }
+
         bSymbol = true;
 
         scanAlphanumeric();
 
         // Special handling for "go to"
-        if( bCompatible && *pLine && aSym.equalsIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM("go") ) )
+        if(nCol < aLine.getLength() && bCompatible && aSym.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("go")))
             scanGoto();
 
         // replace closing '_' by space when end of line is following
         // (wrong line continuation otherwise)
-        if( !*pLine && *(pLine-1) == '_' )
+        if(nCol == aLine.getLength() && aLine[nCol - 1] == '_' )
         {
             // We are going to modify a potentially shared string, so force
             // a copy, so that aSym is not modified by the following operation
@@ -280,17 +288,22 @@ bool SbiScanner::NextSym()
             // HACK: modifying a potentially shared string here!
             *((sal_Unicode*)(pLine-1)) = ' ';
         }
+
         // type recognition?
         // don't test the exclamation mark
         // if there's a symbol behind it
-        else if( *pLine != '!' || !theBasicCharClass::get().isAlpha( pLine[ 1 ], bCompatible ) )
+        else if((nCol >= aLine.getLength() || aLine[nCol] != '!') ||
+                (nCol + 1 >= aLine.getLength() || !theBasicCharClass::get().isAlpha(aLine[nCol + 1], bCompatible)))
         {
-            SbxDataType t = GetSuffixType( *pLine );
-            if( t != SbxVARIANT )
+            if(nCol < aLine.getLength())
             {
-                eScanType = t;
-                ++pLine;
-                ++nCol;
+                SbxDataType t = GetSuffixType( *pLine );
+                if( t != SbxVARIANT )
+                {
+                    eScanType = t;
+                    ++pLine;
+                    ++nCol;
+                }
             }
         }
     }
