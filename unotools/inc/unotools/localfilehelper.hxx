@@ -36,35 +36,33 @@
 
 namespace utl
 {
+    class UNOTOOLS_DLLPUBLIC LocalFileHelper
+    {
+    public:
+        /**
+        Converts a "physical" file name into a "UCB compatible" URL ( if possible ).
+        If no UCP is available for the local file system, sal_False and an empty URL is returned.
+        Returning sal_True and an empty URL means that the URL doesn't point to a local file.
+        */
+        static sal_Bool ConvertPhysicalNameToURL( const String& rName, String& rReturn );
+        static sal_Bool ConvertSystemPathToURL( const String& rName, const String& rBaseURL, String& rReturn );
 
-class UNOTOOLS_DLLPUBLIC LocalFileHelper
-{
-public:
-                    /**
-                    Converts a "physical" file name into a "UCB compatible" URL ( if possible ).
-                    If no UCP is available for the local file system, sal_False and an empty URL is returned.
-                    Returning sal_True and an empty URL means that the URL doesn't point to a local file.
-                    */
-    static sal_Bool ConvertPhysicalNameToURL( const String& rName, String& rReturn );
-    static sal_Bool ConvertSystemPathToURL( const String& rName, const String& rBaseURL, String& rReturn );
+        /**
+        Converts a "UCB compatible" URL into a "physical" file name.
+        If no UCP is available for the local file system, sal_False and an empty file name is returned,
+        otherwise sal_True and a valid URL, because a file name can always be converted if a UCP for the local
+        file system is present ( watch: this doesn't mean that this file really exists! )
+        */
+        static sal_Bool ConvertURLToPhysicalName( const String& rName, String& rReturn );
+        static bool     ConvertURLToPhysicalName( const rtl::OUString& rName, rtl::OUString& rReturn );
+        static sal_Bool ConvertURLToSystemPath( const String& rName, String& rReturn );
 
-                    /**
-                    Converts a "UCB compatible" URL into a "physical" file name.
-                    If no UCP is available for the local file system, sal_False and an empty file name is returned,
-                    otherwise sal_True and a valid URL, because a file name can always be converted if a UCP for the local
-                    file system is present ( watch: this doesn't mean that this file really exists! )
-                    */
-    static sal_Bool ConvertURLToPhysicalName( const String& rName, String& rReturn );
-    static bool     ConvertURLToPhysicalName( const rtl::OUString& rName, rtl::OUString& rReturn );
-    static sal_Bool ConvertURLToSystemPath( const String& rName, String& rReturn );
+        static sal_Bool IsLocalFile( const String& rName );
+        static sal_Bool IsFileContent( const String& rName );
 
-    static sal_Bool IsLocalFile( const String& rName );
-    static sal_Bool IsFileContent( const String& rName );
-
-    static          ::com::sun::star::uno::Sequence< ::rtl::OUString >
-                            GetFolderContents( const ::rtl::OUString& rFolder, sal_Bool bFolder );
-};
-
+        static          ::com::sun::star::uno::Sequence< ::rtl::OUString >
+                                GetFolderContents( const ::rtl::OUString& rFolder, sal_Bool bFolder );
+    };
 }
 
 #endif
