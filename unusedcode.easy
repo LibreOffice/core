@@ -374,7 +374,6 @@ SectReprArr::Insert(SectReprArr const*, unsigned short, unsigned short)
 SectReprArr::Remove(SectRepr* const&, unsigned short)
 SectReprArr::Remove(unsigned short, unsigned short)
 SecurityEnvironment_NssImpl::getImplementation(com::sun::star::uno::Reference<com::sun::star::uno::XInterface>)
-SelectionEngine::ActivateDragMode()
 SetOfByte::GetClearBit(unsigned short) const
 SetOfByte::GetClearCount() const
 SetOfByte::GetSetBit(unsigned short) const

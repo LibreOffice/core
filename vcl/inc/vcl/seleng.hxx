@@ -75,7 +75,6 @@ public:
 #define SELENG_IN_SEL       0x0002
 #define SELENG_IN_ADD       0x0004
 #define SELENG_ADD_ALW      0x0008
-#define SELENG_IN_DRG       0x0010
 #define SELENG_HAS_ANCH     0x0020
 #define SELENG_CMDEVT       0x0040
 #define SELENG_WAIT_UPEVT   0x0080
@@ -127,9 +126,6 @@ public:
     sal_Bool                IsAlwaysAdding() const;
 
     void                EnableDrag( sal_Bool bOn );
-    sal_Bool                IsDragEnabled() const;
-    void                ActivateDragMode();
-    sal_Bool                IsInDragMode() const;
 
     void                SetSelectionMode( SelectionMode eMode );
     SelectionMode       GetSelectionMode() const { return eSelMode; }
@@ -174,14 +170,6 @@ public:
                         }
 };
 
-inline sal_Bool SelectionEngine::IsDragEnabled() const
-{
-    if ( nFlags & SELENG_DRG_ENAB )
-        return sal_True;
-    else
-        return sal_False;
-}
-
 inline sal_Bool SelectionEngine::IsAddMode()  const
 {
     if ( nFlags & (SELENG_IN_ADD | SELENG_ADD_ALW) )
@@ -217,14 +205,6 @@ inline void SelectionEngine::AddAlways( sal_Bool bOn )
 inline sal_Bool SelectionEngine::IsAlwaysAdding() const
 {
     if ( nFlags & SELENG_ADD_ALW )
-        return sal_True;
-    else
-        return sal_False;
-}
-
-inline sal_Bool SelectionEngine::IsInDragMode() const
-{
-    if ( nFlags & SELENG_IN_DRG )
         return sal_True;
     else
         return sal_False;

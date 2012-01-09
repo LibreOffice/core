@@ -100,17 +100,6 @@ void SelectionEngine::SetSelectionMode( SelectionMode eMode )
 
 /*************************************************************************
 |*
-|*    SelectionEngine::ActivateDragMode()
-|*
-*************************************************************************/
-
-void SelectionEngine::ActivateDragMode()
-{
-    DBG_ERRORFILE( "SelectionEngine::ActivateDragMode not implemented" );
-}
-
-/*************************************************************************
-|*
 |*    SelectionEngine::CursorPosChanging()
 |*
 *************************************************************************/
