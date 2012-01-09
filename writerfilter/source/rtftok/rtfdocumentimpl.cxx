@@ -2744,6 +2744,7 @@ int RTFDocumentImpl::popState()
     bool bFaltEnd = false;
     RTFFrame aFrame;
     bool bPopFrame = false;
+    RTFParserState aState(m_aStates.top());
 
     if (m_aStates.top().nDestinationState == DESTINATION_FONTTABLE)
     {
@@ -3157,6 +3158,12 @@ int RTFDocumentImpl::popState()
             replayBuffer(m_aSuperBuffer);
         m_pCurrentBuffer = 0;
         m_bHasFootnote = false;
+    }
+    if (m_aStates.size())
+    {
+        m_aStates.top().nCells = aState.nCells;
+        m_aStates.top().aTableCellsSprms = aState.aTableCellsSprms;
+        m_aStates.top().aTableCellsAttributes = aState.aTableCellsAttributes;
     }
 
     return 0;
