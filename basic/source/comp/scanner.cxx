@@ -219,12 +219,10 @@ bool SbiScanner::NextSym()
     sal_Int32 nOldCol1 = nCol1;
     sal_Int32 nOldCol2 = nCol2;
     sal_Unicode buf[ BUF_SIZE ], *p = buf;
-    bHash = false;
 
     eScanType = SbxVARIANT;
     aSym = ::rtl::OUString();
-    bSymbol =
-    bNumber = bSpaces = false;
+    bHash = bSymbol = bNumber = bSpaces = false;
 
     // read in line?
     if( !pLine )
@@ -236,7 +234,7 @@ bool SbiScanner::NextSym()
         nOldCol1 = nOldCol2 = 0;
     }
 
-    while( theBasicCharClass::get().isWhitespace( *pLine ) )
+    while(nCol < aLine.getLength() && theBasicCharClass::get().isWhitespace(aLine[nCol]))
         ++pLine, ++nCol, bSpaces = true;
 
     nCol1 = nCol;
@@ -256,7 +254,7 @@ bool SbiScanner::NextSym()
     }
 
     // copy character if symbol
-    if( theBasicCharClass::get().isAlpha( *pLine, bCompatible ) || *pLine == '_' )
+    if(nCol < aLine.getLength() && (theBasicCharClass::get().isAlpha(aLine[nCol], bCompatible) || aLine[nCol] == '_'))
     {
         // if there's nothing behind '_' , it's the end of a line!
         if( *pLine == '_' && !*(pLine+1) )
