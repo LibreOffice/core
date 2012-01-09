@@ -416,8 +416,6 @@ public:
                 /// Read a line of Unicode if eSrcCharSet==RTL_TEXTENCODING_UNICODE,
                 /// otherwise read a line of Bytecode and convert from eSrcCharSet
     sal_Bool        ReadUniOrByteStringLine( String& rStr, rtl_TextEncoding eSrcCharSet );
-    sal_Bool        ReadUniOrByteStringLine( String& rStr )
-                    { return ReadUniOrByteStringLine( rStr, GetStreamCharSet() ); }
                 /// Write a sequence of Unicode characters
     sal_Bool        WriteUnicodeText( const String& rStr );
                 /// Write a sequence of Unicode characters if eDestCharSet==RTL_TEXTENCODING_UNICODE,

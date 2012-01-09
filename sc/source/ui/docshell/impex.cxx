@@ -788,7 +788,7 @@ sal_Bool ScImportExport::Text2Doc( SvStream& rStrm )
         rStrm.Seek( nOldPos );
         for( ;; )
         {
-            rStrm.ReadUniOrByteStringLine( aLine );
+            rStrm.ReadUniOrByteStringLine( aLine, rStrm.GetStreamCharSet() );
             if( rStrm.IsEof() )
                 break;
             SCCOL nCol = nStartCol;

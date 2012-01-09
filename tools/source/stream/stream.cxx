@@ -1041,7 +1041,7 @@ sal_Bool SvStream::ReadCsvLine( String& rStr, sal_Bool bEmbeddedLineBreak,
         const String& rFieldSeparators, sal_Unicode cFieldQuote,
         sal_Bool bAllowBackslashEscape)
 {
-    ReadUniOrByteStringLine( rStr);
+    ReadUniOrByteStringLine(rStr, GetStreamCharSet());
 
     if (bEmbeddedLineBreak)
     {
@@ -1096,7 +1096,7 @@ sal_Bool SvStream::ReadCsvLine( String& rStr, sal_Bool bEmbeddedLineBreak,
             {
                 nLastOffset = rStr.Len();
                 String aNext;
-                ReadUniOrByteStringLine( aNext);
+                ReadUniOrByteStringLine(aNext, GetStreamCharSet());
                 rStr += sal_Unicode(_LF);
                 rStr += aNext;
             }

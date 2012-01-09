@@ -452,7 +452,7 @@ bool DifParser::ReadNextLine( String& rStr )
 {
     if( aLookAheadLine.Len() == 0 )
     {
-        return rIn.ReadUniOrByteStringLine( rStr );
+        return rIn.ReadUniOrByteStringLine( rStr, rIn.GetStreamCharSet() );
     }
     else
     {
@@ -470,7 +470,7 @@ bool DifParser::LookAhead()
     bool bValidStructure = false;
 
     OSL_ENSURE( aLookAheadLine.Len() == 0, "*DifParser::LookAhead(): LookAhead called twice in a row" );
-    rIn.ReadUniOrByteStringLine( aLookAheadLine );
+    rIn.ReadUniOrByteStringLine( aLookAheadLine, rIn.GetStreamCharSet() );
 
     pAktBuffer = aLookAheadLine.GetBuffer();
 
