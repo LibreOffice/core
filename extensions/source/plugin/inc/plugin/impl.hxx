@@ -25,12 +25,14 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __PLUGIN_SOURCE_MGR_IMPL_HXX
-#define __PLUGIN_SOURCE_MGR_IMPL_HXX
+#ifndef PLUGIN_SOURCE_MGR_IMPL_HXX
+#define PLUGIN_SOURCE_MGR_IMPL_HXX
 
 #ifdef SOLARIS
 #include <limits>
 #endif
+
+#include <boost/shared_ptr.hpp>
 
 #include "cppuhelper/weak.hxx"
 
@@ -81,10 +83,17 @@
 #include "plugin/unx/sysplug.hxx"
 #endif
 
-#if ! defined (QUARTZ)
-// the QUARTZ implementation needs special instance data
-typedef int SysPlugData;
-#endif
+struct SysPlugData;
+
+::boost::shared_ptr<SysPlugData> CreateSysPlugData();
+
+extern "C" {
+
+void /*SAL_CALL NP_LOADDS*/  NPN_ForceRedraw_Impl(NPP instance);
+NPError /*SAL_CALL NP_LOADDS*/  NPN_SetValue_Impl( NPP instance,
+                                          NPPVariable variable,
+                                          void* value );
+} // extern "C"
 
 #include "plugin/plctrl.hxx"
 #include "plugin/model.hxx"
@@ -123,7 +132,7 @@ private:
     PluginComm*                 m_pPluginComm;
     NPP_t                       m_aInstance;
     NPWindow                    m_aNPWindow;
-    SysPlugData                 m_aSysPlugData;
+    ::boost::shared_ptr<SysPlugData> m_pSysPlugData;
     rtl_TextEncoding            m_aEncoding;
 
     const char**                m_pArgv;
@@ -146,6 +155,10 @@ private:
     ::rtl::OUString                     m_aURL;
 
     sal_Bool                        m_bIsDisposed;
+
+#ifdef QUARTZ
+    void SetSysPlugDataParentView(SystemEnvData* pEnvData);
+#endif
 
     void prependArg( const char* pName, const char* pValue ); // arguments will be strdup'ed
     void initArgs( const Sequence< rtl::OUString >& argn,
@@ -186,7 +199,7 @@ public:
     rtl_TextEncoding getTextEncoding() { return m_aEncoding; }
     NPP             getNPPInstance() { return &m_aInstance; }
     NPWindow*       getNPWindow() { return &m_aNPWindow; }
-    SysPlugData&    getSysPlugData() { return m_aSysPlugData; }
+    SysPlugData&    getSysPlugData() { return *m_pSysPlugData; }
 
     void            enterPluginCallback() { m_nCalledFromPlugin++; }
     void            leavePluginCallback() { m_nCalledFromPlugin--; }

@@ -63,6 +63,10 @@ void TRACEN( char const * s, long n );
 #define TRACEN(x,n)
 #endif
 
+::boost::shared_ptr<SysPlugData> CreateSysPlugData()
+{
+    return ::boost::shared_ptr<SysPlugData>();
+}
 
 //--------------------------------------------------------------------------------------------------
 PluginComm_Impl::PluginComm_Impl( const OUString& /*rMIME*/, const OUString& rName, HWND /*hWnd*/ )

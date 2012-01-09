@@ -25,8 +25,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __PLUGIN_INC_MACPLUG_HXX
-#define __PLUGIN_INC_MACPLUG_HXX
+#ifndef PLUGIN_INC_MACPLUG_HXX
+#define PLUGIN_INC_MACPLUG_HXX
 
 #include <unistd.h>
 
@@ -44,14 +44,17 @@
 #include "npsdk/npupp.h"
 
 #include "plugin/plcom.hxx"
-#include "premac.h"
-#include <Cocoa/Cocoa.h>
-#include "postmac.h"
 
 #include "vcl/sysdata.hxx"
 #include "vcl/threadex.hxx"
 #include "vcl/timer.hxx"
 #include "osl/module.h"
+
+#ifdef __OBJC__
+@class NSView;
+#else
+class NSView;
+#endif
 
 class XPlugin_Impl;
 
@@ -150,20 +153,6 @@ private:
     std::list< XPlugin_Impl* >      m_aNullEventClients;
 };
 
-struct SysPlugData
-{
-    MacPluginComm::NP_CGContext m_aCGContext;
-    NP_Port                     m_aNPPort;
-    NSView*                     m_pParentView;
-    NSView*                     m_pPlugView;
-    int                         m_nDrawingModel;
-    NSPoint                     m_aLastPlugViewOrigin;
-    bool                        m_bSetWindowOnDraw;
-};
-
-
-
 #endif
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

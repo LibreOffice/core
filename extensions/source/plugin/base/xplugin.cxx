@@ -119,6 +119,7 @@ XPlugin_Impl::XPlugin_Impl( const uno::Reference< com::sun::star::lang::XMultiSe
         PluginControl_Impl(),
         m_xSMgr( rSMgr ),
         m_pPluginComm( NULL ),
+        m_pSysPlugData( CreateSysPlugData() ),
         m_aEncoding( osl_getThreadTextEncoding() ),
         m_pArgv( NULL ),
         m_pArgn( NULL ),
@@ -131,7 +132,6 @@ XPlugin_Impl::XPlugin_Impl( const uno::Reference< com::sun::star::lang::XMultiSe
 {
     memset( &m_aInstance, 0, sizeof( m_aInstance ) );
     memset( &m_aNPWindow, 0, sizeof( m_aNPWindow ) );
-    memset( &m_aSysPlugData, 0, sizeof( m_aSysPlugData ) );
 
     m_xModel = new PluginModel();
     uno::Reference< com::sun::star::beans::XPropertySet >  xPS( m_xModel, UNO_QUERY );
@@ -566,7 +566,7 @@ void XPlugin_Impl::loadPlugin()
                  NULL );
 #ifdef QUARTZ
     // m_aNPWindow is set up in the MacPluginComm from the view
-    m_aSysPlugData.m_pParentView = pEnvData->pView;
+    SetSysPlugDataParentView(pEnvData);
 #elif defined( UNX )
     XSync( (Display*)pEnvData->pDisplay, False );
     m_aNPWindow.window      = (void*)pEnvData->aWindow;

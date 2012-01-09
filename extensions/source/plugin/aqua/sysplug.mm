@@ -30,6 +30,11 @@
 #include <sys/types.h>
 #include <signal.h>
 #include <sys/wait.h>
+
+#include "premac.h"
+#include <Cocoa/Cocoa.h>
+#include "postmac.h"
+
 #include <osl/thread.h>
 
 #include <plugin/impl.hxx>
@@ -50,6 +55,73 @@ void TRACEN( char const * s, long n );
 #define TRACE(x)
 #define TRACEN(x,n)
 #endif
+
+
+struct SysPlugData
+{
+    MacPluginComm::NP_CGContext m_aCGContext;
+    NP_Port                     m_aNPPort;
+    NSView*                     m_pParentView;
+    NSView*                     m_pPlugView;
+    int                         m_nDrawingModel;
+    NSPoint                     m_aLastPlugViewOrigin;
+    bool                        m_bSetWindowOnDraw;
+    SysPlugData()
+    {
+        memset( this, 0, sizeof(*this) );
+    }
+};
+
+::boost::shared_ptr<SysPlugData> CreateSysPlugData()
+{
+    return ::boost::shared_ptr<SysPlugData>(new SysPlugData);
+}
+
+void XPlugin_Impl::SetSysPlugDataParentView(SystemEnvData* pEnvData)
+{
+    m_pSysPlugData.m_pParentView = pEnvData->pView;
+}
+
+extern "C" {
+
+void /*SAL_CALL NP_LOADDS*/  NPN_ForceRedraw_Impl(NPP instance)
+{
+    TRACE( "NPN_ForceRedraw_Impl" );
+    XPlugin_Impl* pImpl = XPluginManager_Impl::getXPluginFromNPP( instance );
+    if( pImpl )
+    {
+        SysPlugData& rPlugData( pImpl->getSysPlugData() );
+        if( rPlugData.m_pPlugView )
+            [rPlugData.m_pPlugView setNeedsDisplay: YES];
+    }
+}
+
+NPError /*SAL_CALL NP_LOADDS*/  NPN_SetValue_Impl( NPP instance,
+                                          NPPVariable variable,
+                                          void* value )
+{
+    TRACE( "NPN_SetValue_Impl" );
+    switch( variable )
+    {
+        case (NPPVariable)1000: // NPNVpluginDrawingModel
+        {
+            // ugly, but that's the way we need to do it
+            int nDrawingModel = (int)value;
+
+            TRACEN( "drawing model: ", nDrawingModel );
+            XPlugin_Impl* pImpl =
+                XPluginManager_Impl::getXPluginFromNPP( instance );
+            if (pImpl)
+                pImpl->getSysPlugData().m_nDrawingModel = nDrawingModel;
+        }
+        break;
+        default:
+        break;
+    }
+    return NPERR_NO_ERROR;
+}
+
+} // extern "C"
 
 struct FakeEventRecord : public EventRecord
 {

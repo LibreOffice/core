@@ -600,28 +600,11 @@ NPError SAL_CALL NP_LOADDS  NPN_SetValue( NPP instance,
 {
     NPError nError = NPERR_NO_ERROR;
     TRACEN( "NPN_SetValue ", variable );
-    switch( variable )
-    {
     #ifdef QUARTZ
-    case (NPPVariable)1000: // NPNVpluginDrawingModel
-    {
-        int nDrawingModel = (int)value; // ugly, but that's the way we need to do it
-
-        TRACEN( "drawing model: ", nDrawingModel );
-
-        XPlugin_Impl* pImpl = XPluginManager_Impl::getXPluginFromNPP( instance );
-        if( pImpl )
-            pImpl->getSysPlugData().m_nDrawingModel = nDrawingModel;
-    }
-    break;
-    #endif
-    case NPPVpluginNameString: // make the windows compiler happy, it needs at least one case statement
-        break;
-    default:
-        break;
-    }
-    #ifndef QUARTZ
+    NPN_SetValue_Impl(instance, variable, value);
+    #else
     (void)instance;
+    (void)variable;
     (void)value;
     #endif
     return nError;
@@ -653,13 +636,7 @@ void SAL_CALL NP_LOADDS  NPN_ForceRedraw(NPP instance)
 {
     TRACE( "NPN_ForceRedraw" );
     #ifdef QUARTZ
-    XPlugin_Impl* pImpl = XPluginManager_Impl::getXPluginFromNPP( instance );
-    if( pImpl )
-    {
-        SysPlugData& rPlugData( pImpl->getSysPlugData() );
-        if( rPlugData.m_pPlugView )
-            [rPlugData.m_pPlugView setNeedsDisplay: YES];
-    }
+    NPN_ForceRedraw_Impl(instance);
     #else
     (void)instance;
     #endif

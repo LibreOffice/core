@@ -44,6 +44,12 @@
 
 #include <plugin/impl.hxx>
 
+
+::boost::shared_ptr<SysPlugData> CreateSysPlugData()
+{
+    return ::boost::shared_ptr<SysPlugData>();
+}
+
 int UnxPluginComm::nConnCounter = 0;
 
 UnxPluginComm::UnxPluginComm(
