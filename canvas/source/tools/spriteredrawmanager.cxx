@@ -271,18 +271,18 @@ namespace canvas
             ++aCurrRecord;
         }
 
-        VectorOfSprites::iterator aBegin( aUpdatableSprites.begin() );
-        VectorOfSprites::iterator aEnd  ( aUpdatableSprites.end() );
-        ::std::sort( aBegin,
-                     aEnd,
+        ::std::sort( aUpdatableSprites.begin(),
+                     aUpdatableSprites.end(),
                      aSpriteComparator );
 
-        aEnd = ::std::unique( aBegin, aEnd );
+        VectorOfSprites::iterator aEnd=
+            ::std::unique( aUpdatableSprites.begin(),
+                           aUpdatableSprites.end() );
 
         // for each unique sprite, check the change event vector,
         // calculate the update operation from that, and add the
         // result to the aUpdateArea.
-        ::std::for_each( aBegin,
+        ::std::for_each( aUpdatableSprites.begin(),
                          aEnd,
                          SpriteUpdater( rUpdateAreas,
                                         maChangeRecords) );
@@ -298,7 +298,8 @@ namespace canvas
         VectorOfSprites aUnchangedSprites;
         ::std::set_difference( aSortedSpriteVector.begin(),
                                aSortedSpriteVector.end(),
-                               aBegin, aEnd,
+                               aUpdatableSprites.begin(),
+                               aEnd,
                                ::std::back_insert_iterator< VectorOfSprites >(aUnchangedSprites) );
 
         // add each remaining unchanged sprite to connected ranges,
