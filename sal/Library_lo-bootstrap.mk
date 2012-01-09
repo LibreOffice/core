@@ -28,9 +28,9 @@
 $(eval $(call gb_Library_Library,lo-bootstrap))
 
 # We explicitly *don't* want gb_STDLIBS to be linked here
-$(eval $(call gb_Library_add_linked_libs,lo-bootstrap,\
-	log \
-	android \
+$(eval $(call gb_Library_add_libs,lo-bootstrap,\
+	-llog \
+	-landroid \
 ))
 
 $(eval $(call gb_Library_add_cobjects,lo-bootstrap,\
