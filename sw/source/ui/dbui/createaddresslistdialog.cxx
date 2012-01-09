@@ -609,8 +609,7 @@ IMPL_LINK(SwCreateAddressListDialog, OkHdl_Impl, PushButton*, EMPTYARG)
         }
         //remove tab and quote
         sLine = sLine.copy( 0, sLine.getLength() - 2 );
-        pStream->WriteUnicodeOrByteText( sLine, RTL_TEXTENCODING_UTF8 );
-        endl(*pStream);
+        pStream->WriteByteStringLine( sLine, RTL_TEXTENCODING_UTF8 );
 
         ::std::vector< ::std::vector< OUString > >::iterator aDataIter;
         for( aDataIter = m_pCSVData->aDBData.begin(); aDataIter != m_pCSVData->aDBData.end(); ++aDataIter)
@@ -624,8 +623,7 @@ IMPL_LINK(SwCreateAddressListDialog, OkHdl_Impl, PushButton*, EMPTYARG)
             }
             //remove tab and quote
             sLine = sLine.copy( 0, sLine.getLength() - 2 );
-            pStream->WriteUnicodeOrByteText( sLine, RTL_TEXTENCODING_UTF8 );
-            endl(*pStream);
+            pStream->WriteByteStringLine( sLine, RTL_TEXTENCODING_UTF8 );
         }
         aMedium.Commit();
         EndDialog(RET_OK);
