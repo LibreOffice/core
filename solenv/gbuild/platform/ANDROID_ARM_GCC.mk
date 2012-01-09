@@ -45,9 +45,10 @@ gb_Library_PLAINLIBS_NONE := \
 # No unit testing can be run
 gb_CppunitTest_CPPTESTPRECOMMAND := :
 
-# Re-define this shebang from unxgcc.mk, adding -shared and -llog
-# -landroid Just temporarily done this way, shm_get promised to do
-# this in some more elegant fashion.
+# Re-define this from unxgcc.mk with some small but important
+# changes. Just temporarily done this way, shm_get promised to
+# eventually enable this to be done this in some more elegant and less
+# redundant fashion.
 
 define gb_LinkTarget__command_dynamiclink
 $(call gb_Helper_abbreviate_dirs,\
