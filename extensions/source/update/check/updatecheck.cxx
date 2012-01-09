@@ -757,6 +757,12 @@ void SAL_CALL ShutdownThread::onTerminated()
 
 //------------------------------------------------------------------------------
 
+UpdateCheck::UpdateCheck():
+    m_eState(NOT_INITIALIZED), m_eUpdateState(UPDATESTATES_COUNT),
+    m_pThread(NULL)
+{};
+
+UpdateCheck::~UpdateCheck() {}
 
 void
 UpdateCheck::initialize(const uno::Sequence< beans::NamedValue >& rValues,
