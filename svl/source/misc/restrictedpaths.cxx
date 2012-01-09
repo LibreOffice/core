@@ -105,7 +105,7 @@ namespace svt
     #ifdef WNT
             // on windows, assume that the relevant file systems are case insensitive,
             // thus normalize the URL
-            m_sCheckURL = m_aSysLocale.GetCharClass().toLower( m_sCheckURL, 0, m_sCheckURL.Len() );
+            m_sCheckURL = m_aSysLocale.GetCharClass().lowercase( m_sCheckURL, 0, m_sCheckURL.Len() );
     #endif
         }
 
@@ -114,7 +114,7 @@ namespace svt
     #ifdef WNT
             // on windows, assume that the relevant file systems are case insensitive,
             // thus normalize the URL
-            String sApprovedURL( m_aSysLocale.GetCharClass().toLower( _rApprovedURL, 0, _rApprovedURL.Len() ) );
+            String sApprovedURL( m_aSysLocale.GetCharClass().lowercase( _rApprovedURL, 0, _rApprovedURL.Len() ) );
     #else
             String sApprovedURL( _rApprovedURL );
     #endif
