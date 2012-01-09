@@ -116,7 +116,7 @@ bool SbiScanner::DoesColonFollow()
 {
     if(nCol < aLine.getLength() && aLine[nCol] == ':')
     {
-        pLine++; nCol++;
+        ++pLine; ++nCol;
         return true;
     }
     else
@@ -154,8 +154,8 @@ void SbiScanner::scanAlphanumeric()
     sal_Int32 n = nCol;
     while(nCol < aLine.getLength() && (theBasicCharClass::get().isAlphaNumeric(aLine[nCol], bCompatible) || aLine[nCol] == '_'))
     {
-        pLine++;
-        nCol++;
+        ++pLine;
+        ++nCol;
     }
     aSym = aLine.copy(n, nCol - n);
 }
@@ -200,7 +200,7 @@ bool SbiScanner::readLine()
     if(n + 1 < nLen && aBuf[n] == '\r' && aBuf[n + 1] == '\n')
         n += 2;
     else if(n < nLen)
-        n++;
+        ++n;
 
     nBufPos = n;
     pLine = aLine.getStr();
@@ -237,7 +237,7 @@ bool SbiScanner::NextSym()
     }
 
     while( theBasicCharClass::get().isWhitespace( *pLine ) )
-        pLine++, nCol++, bSpaces = true;
+        ++pLine, ++nCol, bSpaces = true;
 
     nCol1 = nCol;
 
@@ -250,8 +250,8 @@ bool SbiScanner::NextSym()
 
     if(nCol < aLine.getLength() && aLine[nCol] == '#')
     {
-        pLine++;
-        nCol++;
+        ++pLine;
+        ++nCol;
         bHash = true;
     }
 
@@ -260,7 +260,7 @@ bool SbiScanner::NextSym()
     {
         // if there's nothing behind '_' , it's the end of a line!
         if( *pLine == '_' && !*(pLine+1) )
-        {   pLine++;
+        {   ++pLine;
             goto eoln;  }
         bSymbol = true;
 
@@ -291,8 +291,8 @@ bool SbiScanner::NextSym()
             if( t != SbxVARIANT )
             {
                 eScanType = t;
-                pLine++;
-                nCol++;
+                ++pLine;
+                ++nCol;
             }
         }
     }
@@ -313,7 +313,7 @@ bool SbiScanner::NextSym()
             if( (p-buf) == (BUF_SIZE-1) )
             {
                 bBufOverflow = true;
-                pLine++, nCol++;
+                ++pLine, ++nCol;
                 continue;
             }
             // point or exponent?
@@ -321,30 +321,30 @@ bool SbiScanner::NextSym()
             {
                 if( ++comma > 1 )
                 {
-                    pLine++; nCol++; continue;
+                    ++pLine; ++nCol; continue;
                 }
-                else *p++ = *pLine++, nCol++;
+                else *p++ = *pLine++, ++nCol;
             }
             else if( strchr( "DdEe", *pLine ) )
             {
                 if (++exp > 1)
                 {
-                    pLine++; nCol++; continue;
+                    ++pLine; ++nCol; continue;
                 }
-                *p++ = 'E'; pLine++; nCol++;
+                *p++ = 'E'; ++pLine; ++nCol;
 
                 if( *pLine == '+' )
-                    pLine++, nCol++;
+                    ++pLine, ++nCol;
                 else
                 if( *pLine == '-' )
-                    *p++ = *pLine++, nCol++;
+                    *p++ = *pLine++, ++nCol;
             }
             else
             {
-                *p++ = *pLine++, nCol++;
-                if( comma && !exp ) ncdig++;
+                *p++ = *pLine++, ++nCol;
+                if( comma && !exp ) ++ncdig;
             }
-            if (!exp) ndig++;
+            if (!exp) ++ndig;
         }
         *p = 0;
         aSym = p; bNumber = true;
@@ -373,21 +373,21 @@ bool SbiScanner::NextSym()
         if( t != SbxVARIANT )
         {
             eScanType = t;
-            pLine++;
-            nCol++;
+            ++pLine;
+            ++nCol;
         }
     }
 
     // Hex/octal number? Read in and convert:
     else if( *pLine == '&' )
     {
-        pLine++; nCol++;
+        ++pLine; ++nCol;
         sal_Unicode cmp1[] = { '0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F', 0 };
         sal_Unicode cmp2[] = { '0', '1', '2', '3', '4', '5', '6', '7', 0 };
         sal_Unicode *cmp = cmp1;
         sal_Unicode base = 16;
         sal_Unicode ndig = 8;
-        sal_Unicode xch  = *pLine++ & 0xFF; nCol++;
+        sal_Unicode xch  = *pLine++ & 0xFF; ++nCol;
         switch( toupper( xch ) )
         {
             case 'O':
@@ -396,7 +396,7 @@ bool SbiScanner::NextSym()
                 break;
             default :
                 // treated as an operator
-                pLine--; nCol--; nCol1 = nCol-1;
+                --pLine; --nCol; nCol1 = nCol-1;
                 aSym = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("&"));
                 return SYMBOL;
         }
@@ -408,7 +408,7 @@ bool SbiScanner::NextSym()
         {
             sal_Unicode ch = sal::static_int_cast< sal_Unicode >(
                 toupper( *pLine & 0xFF ) );
-            pLine++; nCol++;
+            ++pLine; ++nCol;
             // from 4.1.1996: buffer full, go on scanning empty
             if( (p-buf) == (BUF_SIZE-1) )
                 bBufOverflow = true;
@@ -422,7 +422,7 @@ bool SbiScanner::NextSym()
             }
         }
         *p = 0;
-        for( p = buf; *p; p++ )
+        for( p = buf; *p; ++p )
         {
             i = (*p & 0xFF) - '0';
             if( i > 9 ) i -= 7;
@@ -432,7 +432,7 @@ bool SbiScanner::NextSym()
                 GenError( SbERR_MATH_OVERFLOW ); break;
             }
         }
-        if( *pLine == '&' ) pLine++, nCol++;
+        if( *pLine == '&' ) ++pLine, ++nCol;
         nVal = (double) l;
         eScanType = ( l >= SbxMININT && l <= SbxMAXINT ) ? SbxINTEGER : SbxLONG;
         if( bBufOverflow )
