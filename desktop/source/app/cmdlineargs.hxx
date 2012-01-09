@@ -44,7 +44,6 @@ class CommandLineArgs
             CMD_BOOLPARAM_MINIMIZED = 0,
             CMD_BOOLPARAM_INVISIBLE,
             CMD_BOOLPARAM_NORESTORE,
-            CMD_BOOLPARAM_BEAN,
             CMD_BOOLPARAM_PLUGIN,
             CMD_BOOLPARAM_SERVER,
             CMD_BOOLPARAM_HEADLESS,
@@ -139,7 +138,6 @@ class CommandLineArgs
         sal_Bool                IsInvisible() const;
         sal_Bool                IsNoRestore() const;
         sal_Bool                IsNoDefault() const;
-        sal_Bool                IsBean() const;
         sal_Bool                IsServer() const;
         sal_Bool                IsHeadless() const;
         sal_Bool                IsQuickstart() const;

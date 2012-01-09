@@ -2660,7 +2660,7 @@ void Desktop::OpenClients()
     if ( xList->hasElements() || rArgs.IsServer() )
         return;
 
-    if ( rArgs.IsQuickstart() || rArgs.IsInvisible() || rArgs.IsBean() || Application::AnyInput( VCL_INPUT_APPEVENT ) )
+    if ( rArgs.IsQuickstart() || rArgs.IsInvisible() || Application::AnyInput( VCL_INPUT_APPEVENT ) )
         // soffice was started as tray icon ...
         return;
     {

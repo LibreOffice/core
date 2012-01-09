@@ -446,10 +446,6 @@ sal_Bool CommandLineArgs::InterpretCommandLineParameter( const ::rtl::OUString& 
     {
         SetBoolParam_Impl( CMD_BOOLPARAM_NODEFAULT, sal_True );
     }
-    else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "bean" )) == sal_True )
-    {
-        SetBoolParam_Impl( CMD_BOOLPARAM_BEAN, sal_True );
-    }
     else if ( oArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "plugin" )) == sal_True )
     {
         SetBoolParam_Impl( CMD_BOOLPARAM_PLUGIN, sal_True );
@@ -716,12 +712,6 @@ sal_Bool CommandLineArgs::IsNoDefault() const
 {
     osl::MutexGuard  aMutexGuard( m_aMutex );
     return m_aBoolParams[ CMD_BOOLPARAM_NODEFAULT ];
-}
-
-sal_Bool CommandLineArgs::IsBean() const
-{
-    osl::MutexGuard  aMutexGuard( m_aMutex );
-    return m_aBoolParams[ CMD_BOOLPARAM_BEAN ];
 }
 
 sal_Bool CommandLineArgs::IsServer() const
