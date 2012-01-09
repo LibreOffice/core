@@ -517,7 +517,7 @@ void DocxAttributeOutput::StartRun( const SwRedlineData* pRedlineData )
 void DocxAttributeOutput::EndRun()
 {
     // Write field starts
-    for ( std::vector<FieldInfos>::iterator pIt = m_Fields.begin(); pIt != m_Fields.end(); ++pIt )
+    for ( std::vector<FieldInfos>::iterator pIt = m_Fields.begin(); pIt != m_Fields.end(); )
     {
         // Add the fields starts for all but hyperlinks and TOCs
         if ( pIt->bOpen && pIt->pField )
@@ -528,10 +528,11 @@ void DocxAttributeOutput::EndRun()
             // Unknown fields sould be removed too
             if ( !pIt->bClose || ( pIt->eType == ww::eUNKNOWN ) )
             {
-                m_Fields.erase( pIt );
-                --pIt;
+                pIt = m_Fields.erase( pIt );
+                continue;
             }
         }
+        ++pIt;
     }
 
     // write the run properties + the text, already in the correct order
