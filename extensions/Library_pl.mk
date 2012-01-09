@@ -93,10 +93,8 @@ ifeq ($(GUI),UNX)
 
 ifeq ($(GUIBASE),aqua)
 
-$(eval $(call gb_Library_add_exception_objects,pl,\
-	extensions/source/plugin/aqua/macmgr \
-))
 $(eval $(call gb_Library_add_objcxxobjects,pl,\
+	extensions/source/plugin/aqua/macmgr \
 	extensions/source/plugin/aqua/sysplug \
 ))
 
