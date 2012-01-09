@@ -85,10 +85,10 @@ using namespace ::xmloff::token;
 using namespace ::rtl;
 using namespace ::utl;
 
-const int C_NONE                = 0x00;
-const int C_FULL_STOP           = 0x01;
-const int C_EXCLAMATION_MARK    = 0x02;
-const int C_QUESTION_MARK       = 0x04;
+static const int C_NONE             = 0x00;
+static const int C_FULL_STOP        = 0x01;
+static const int C_EXCLAMATION_MARK = 0x02;
+static const int C_QUESTION_MARK    = 0x04;
 
 static const sal_Char pImplWrdStt_ExcptLstStr[]    = "WordExceptList";
 static const sal_Char pImplCplStt_ExcptLstStr[]    = "SentenceExceptList";
@@ -108,36 +108,35 @@ static const sal_Char sImplWordChars[] = "-'";
 
 void EncryptBlockName_Imp( String& rName );
 
-
 // FileVersions Number for the Substitution-/Exception list separately
 #define WORDLIST_VERSION_358    1
 #define EXEPTLIST_VERSION_358   0
-
 
 _SV_IMPL_SORTAR_ALG( SvxAutocorrWordList, SvxAutocorrWordPtr )
 TYPEINIT0(SvxAutoCorrect)
 
 typedef SvxAutoCorrectLanguageLists* SvxAutoCorrectLanguageListsPtr;
 
-inline int IsWordDelim( const sal_Unicode c )
+static inline int IsWordDelim( const sal_Unicode c )
 {
     return ' ' == c || '\t' == c || 0x0a == c ||
             0xA0 == c || 0x2011 == c || 0x1 == c;
 }
 
-inline int IsLowerLetter( sal_Int32 nCharType )
+static inline int IsLowerLetter( sal_Int32 nCharType )
 {
     return CharClass::isLetterType( nCharType ) &&
             0 == ( ::com::sun::star::i18n::KCharacterType::UPPER & nCharType);
 }
-inline int IsUpperLetter( sal_Int32 nCharType )
+
+static inline int IsUpperLetter( sal_Int32 nCharType )
 {
     return CharClass::isLetterType( nCharType ) &&
             0 == ( ::com::sun::star::i18n::KCharacterType::LOWER & nCharType);
 }
 
-sal_Bool lcl_IsSymbolChar( CharClass& rCC, const String& rTxt,
-                           xub_StrLen nStt, xub_StrLen nEnd )
+static sal_Bool lcl_IsSymbolChar( CharClass& rCC, const String& rTxt,
+                                  xub_StrLen nStt, xub_StrLen nEnd )
 {
     for( ; nStt < nEnd; ++nStt )
     {
@@ -147,7 +146,6 @@ sal_Bool lcl_IsSymbolChar( CharClass& rCC, const String& rTxt,
     }
     return sal_False;
 }
-
 
 static sal_Bool lcl_IsInAsciiArr( const sal_Char* pArr, const sal_Unicode c )
 {
@@ -276,7 +274,7 @@ sal_Bool SvxAutocorrWordList::Seek_Entry( const SvxAutocorrWordPtr aE, sal_uInt1
     return sal_False;
 }
 
-void lcl_ClearTable(boost::ptr_map<LanguageType, SvxAutoCorrectLanguageLists>& rLangTable)
+static void lcl_ClearTable(boost::ptr_map<LanguageType, SvxAutoCorrectLanguageLists>& rLangTable)
 {
     rLangTable.clear();
 }
@@ -1690,7 +1688,7 @@ void EncryptBlockName_Imp( String& rName )
 }
 
 /* This code is copied from SwXMLTextBlocks::GeneratePackageName */
-void GeneratePackageName ( const String& rShort, String& rPackageName )
+static void GeneratePackageName ( const String& rShort, String& rPackageName )
 {
     rPackageName = rShort;
     xub_StrLen nPos = 0;
@@ -1704,7 +1702,7 @@ void GeneratePackageName ( const String& rShort, String& rPackageName )
     }
 }
 
-const SvxAutocorrWord* lcl_SearchWordsInList(
+static const SvxAutocorrWord* lcl_SearchWordsInList(
                 SvxAutoCorrectLanguageListsPtr pList, const String& rTxt,
                 xub_StrLen& rStt, xub_StrLen nEndPos, SvxAutoCorrDoc& )
 {
@@ -1845,7 +1843,7 @@ sal_Bool SvxAutoCorrect::FindInWrdSttExceptList( LanguageType eLang,
     return sal_False;
 }
 
-sal_Bool lcl_FindAbbreviation( const SvStringsISortDtor* pList, const String& sWord)
+static sal_Bool lcl_FindAbbreviation( const SvStringsISortDtor* pList, const String& sWord)
 {
     String sAbk( '~' );
     sal_uInt16 nPos;
