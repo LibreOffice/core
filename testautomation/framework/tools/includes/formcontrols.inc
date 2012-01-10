@@ -1,7 +1,8 @@
 'encoding UTF-8  Do not remove or change this line!
-'**************************************************************************
-' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'*************************************************************************
 '
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+' 
 ' Copyright 2000, 2010 Oracle and/or its affiliates.
 '
 ' OpenOffice.org - a multi-platform office productivity suite
@@ -23,7 +24,8 @@
 ' <http://www.openoffice.org/license.html>
 ' for a copy of the LGPLv3 License.
 '
-'/************************************************************************
+'*************************************************************************
+
 ' **
 ' ** owner : gregor.hartmann@oracle.com
 ' **
