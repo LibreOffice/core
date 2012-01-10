@@ -1001,6 +1001,7 @@ FltError ImportExcel8::Read( void )
                             rNumFmtBfr.CreateScFormats();
                             rXFBfr.CreateUserStyles();
                             rPTableMgr.ReadPivotCaches( maStrm );
+                            rNameMgr.ConvertAllTokens();
                             eAkt = EXC_STATE_BEFORE_SHEET;
                         }
                     break;

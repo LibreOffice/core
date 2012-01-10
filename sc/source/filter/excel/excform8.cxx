@@ -487,11 +487,11 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
                 const XclImpName* pName = GetNameManager().GetName( nUINT16 );
                 if (pName)
                 {
-                    if (pName->GetScRangeData())
-                        aStack << aPool.StoreName(nUINT16, pName->IsGlobal());
-                    else
-                        // used-defined macro name.
+                    if (pName->IsMacro())
+                        // user-defined macro name.
                         aStack << aPool.Store(ocMacro, pName->GetXclName());
+                    else
+                        aStack << aPool.StoreName(nUINT16, pName->IsGlobal());
                 }
             }
             break;

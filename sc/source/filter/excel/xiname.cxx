@@ -40,19 +40,26 @@
 // *** Implementation ***
 // ============================================================================
 
+XclImpName::TokenStrmData::TokenStrmData( XclImpStream& rStrm ) :
+    mrStrm(rStrm), mnStrmPos(0), mnStrmSize(0) {}
+
 XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nXclNameIdx ) :
     XclImpRoot( rStrm.GetRoot() ),
     mpScData( 0 ),
     mcBuiltIn( EXC_BUILTIN_UNKNOWN ),
     mnScTab( SCTAB_MAX ),
-    mbFunction( false ),
-    mbVBName( false )
+    meNameType( RT_NAME ),
+    mnXclTab( EXC_NAME_GLOBAL ),
+    mnNameIndex( nXclNameIdx ),
+    mbVBName( false ),
+    mbMacro( false ),
+    mpTokensData( NULL )
 {
     ExcelToSc& rFmlaConv = GetOldFmlaConverter();
 
     // 1) *** read data from stream *** ---------------------------------------
 
-    sal_uInt16 nFlags = 0, nFmlaSize = 0, nExtSheet = EXC_NAME_GLOBAL, nXclTab = EXC_NAME_GLOBAL;
+    sal_uInt16 nFlags = 0, nFmlaSize = 0, nExtSheet = EXC_NAME_GLOBAL;
     sal_uInt8 nNameLen = 0, nShortCut;
 
     switch( GetBiff() )
@@ -78,7 +85,7 @@ XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nXclNameIdx ) :
         case EXC_BIFF5:
         case EXC_BIFF8:
         {
-            rStrm >> nFlags >> nShortCut >> nNameLen >> nFmlaSize >> nExtSheet >> nXclTab;
+            rStrm >> nFlags >> nShortCut >> nNameLen >> nFmlaSize >> nExtSheet >> mnXclTab;
             rStrm.Ignore( 4 );
         }
         break;
@@ -94,8 +101,9 @@ XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nXclNameIdx ) :
     // 2) *** convert sheet index and name *** --------------------------------
 
     // functions and VBA
-    mbFunction = ::get_flag( nFlags, EXC_NAME_FUNC );
+    bool bFunction = ::get_flag( nFlags, EXC_NAME_FUNC );
     mbVBName = ::get_flag( nFlags, EXC_NAME_VB );
+    mbMacro = ::get_flag( nFlags, EXC_NAME_PROC );
 
     // get built-in name, or convert characters invalid in Calc
     bool bBuiltIn = ::get_flag( nFlags, EXC_NAME_BUILTIN );
@@ -131,11 +139,9 @@ XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nXclNameIdx ) :
     rtl::OUString aRealOrigName = maScName;
 
     // add index for local names
-    if( nXclTab != EXC_NAME_GLOBAL )
+    if( mnXclTab != EXC_NAME_GLOBAL )
     {
-        sal_uInt16 nUsedTab = (GetBiff() == EXC_BIFF8) ? nXclTab : nExtSheet;
-        // do not rename sheet-local names by default, this breaks VBA scripts
-//        maScName.Append( '_' ).Append( String::CreateFromInt32( nUsedTab ) );
+        sal_uInt16 nUsedTab = (GetBiff() == EXC_BIFF8) ? mnXclTab : nExtSheet;
         // TODO: may not work for BIFF5, handle skipped sheets (all BIFF)
         mnScTab = static_cast< SCTAB >( nUsedTab - 1 );
     }
@@ -144,7 +150,6 @@ XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nXclNameIdx ) :
 
     rFmlaConv.Reset();
     const ScTokenArray* pTokArr = 0; // pointer to token array, owned by rFmlaConv
-    RangeType nNameType = RT_NAME;
 
     if( ::get_flag( nFlags, EXC_NAME_BIG ) )
     {
@@ -153,7 +158,7 @@ XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nXclNameIdx ) :
     }
     else if( bBuiltIn )
     {
-        SCsTAB const nLocalTab = (nXclTab == EXC_NAME_GLOBAL) ? SCTAB_MAX : (nXclTab - 1);
+        SCsTAB const nLocalTab = (mnXclTab == EXC_NAME_GLOBAL) ? SCTAB_MAX : (mnXclTab - 1);
 
         // --- print ranges or title ranges ---
         rStrm.PushPosition();
@@ -161,11 +166,11 @@ XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nXclNameIdx ) :
         {
             case EXC_BUILTIN_PRINTAREA:
                 if( rFmlaConv.Convert( GetPrintAreaBuffer(), rStrm, nFmlaSize, nLocalTab, FT_RangeName ) == ConvOK )
-                    nNameType |= RT_PRINTAREA;
+                    meNameType |= RT_PRINTAREA;
             break;
             case EXC_BUILTIN_PRINTTITLES:
                 if( rFmlaConv.Convert( GetTitleAreaBuffer(), rStrm, nFmlaSize, nLocalTab, FT_RangeName ) == ConvOK )
-                    nNameType |= RT_COLHEADER | RT_ROWHEADER;
+                    meNameType |= RT_COLHEADER | RT_ROWHEADER;
             break;
         }
         rStrm.PopPosition();
@@ -188,7 +193,7 @@ XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nXclNameIdx ) :
                     break;
                     case EXC_BUILTIN_CRITERIA:
                         GetFilterManager().AddAdvancedRange( aRange );
-                        nNameType |= RT_CRITERIA;
+                        meNameType |= RT_CRITERIA;
                     break;
                     case EXC_BUILTIN_EXTRACT:
                         if( pTokArr->IsValidReference( aRange ) )
@@ -200,46 +205,75 @@ XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nXclNameIdx ) :
     }
     else if( nFmlaSize > 0 )
     {
-        // regular defined name
-        rFmlaConv.Convert( pTokArr, rStrm, nFmlaSize, true, FT_RangeName );
+        // Regular defined name.  We need to convert the tokens after all the
+        // names have been registered (for cross-referenced names).
+        mpTokensData.reset(new TokenStrmData(rStrm));
+        mpTokensData->mnStrmPos = rStrm.GetSvStreamPos();
+        rStrm.StorePosition(mpTokensData->maStrmPos);
+        mpTokensData->mnStrmSize = nFmlaSize;
     }
 
-    // 4) *** create a defined name in the Calc document *** ------------------
+    if (pTokArr && !bFunction && !mbVBName)
+        InsertName(pTokArr);
+}
 
-    // do not ignore hidden names (may be regular names created by VBA scripts)
-    if( pTokArr /*&& (bBuiltIn || !::get_flag( nFlags, EXC_NAME_HIDDEN ))*/ && !mbFunction && !mbVBName )
+bool XclImpName::IsMacro() const
+{
+    return mbMacro;
+}
+
+void XclImpName::ConvertTokens()
+{
+    if (!mpTokensData)
+        return;
+
+    ExcelToSc& rFmlaConv = GetOldFmlaConverter();
+    rFmlaConv.Reset();
+    const ScTokenArray* pArray = NULL;
+
+    XclImpStreamPos aOldPos;
+    XclImpStream& rStrm = mpTokensData->mrStrm;
+    rStrm.StorePosition(aOldPos);
+    rStrm.RestorePosition(mpTokensData->maStrmPos);
+    rFmlaConv.Convert(pArray, rStrm, mpTokensData->mnStrmSize, true, FT_RangeName);
+    rStrm.RestorePosition(aOldPos);
+
+    if (pArray)
+        InsertName(pArray);
+}
+
+void XclImpName::InsertName(const ScTokenArray* pArray)
+{
+    // create the Calc name data
+    ScRangeData* pData = new ScRangeData(GetDocPtr(), maScName, *pArray, ScAddress(), meNameType);
+    pData->GuessPosition();             // calculate base position for relative refs
+    pData->SetIndex( mnNameIndex );     // used as unique identifier in formulas
+    if (mnXclTab == EXC_NAME_GLOBAL)
     {
-        // create the Calc name data
-        ScRangeData* pData = new ScRangeData( GetDocPtr(), maScName, *pTokArr, ScAddress(), nNameType );
-        pData->GuessPosition();             // calculate base position for relative refs
-        pData->SetIndex( nXclNameIdx );     // used as unique identifier in formulas
-        if (nXclTab == EXC_NAME_GLOBAL)
+        if (!GetDoc().GetRangeName()->insert(pData))
+            pData = NULL;
+    }
+    else
+    {
+        ScRangeName* pLocalNames = GetDoc().GetRangeName(mnScTab);
+        if (pLocalNames)
         {
-            if (!GetDoc().GetRangeName()->insert(pData))
+            if (!pLocalNames->insert(pData))
                 pData = NULL;
         }
-        else
-        {
-            ScRangeName* pLocalNames = GetDoc().GetRangeName(mnScTab);
-            if (pLocalNames)
-            {
-                if (!pLocalNames->insert(pData))
-                    pData = NULL;
-            }
 
-            if (GetBiff() == EXC_BIFF8 && pData)
+        if (GetBiff() == EXC_BIFF8 && pData)
+        {
+            ScRange aRange;
+            // discard deleted ranges ( for the moment at least )
+            if ( pData->IsValidReference( aRange ) )
             {
-                ScRange aRange;
-                // discard deleted ranges ( for the moment at least )
-                if ( pData->IsValidReference( aRange ) )
-                {
-                    GetExtDocOptions().GetOrCreateTabSettings( nXclTab );
-                }
+                GetExtDocOptions().GetOrCreateTabSettings( mnXclTab );
             }
         }
-        if (pData)
-            mpScData = pData;               // cache for later use
     }
+    if (pData)
+        mpScData = pData;               // cache for later use
 }
 
 // ----------------------------------------------------------------------------
@@ -277,6 +311,13 @@ const XclImpName* XclImpNameManager::GetName( sal_uInt16 nXclNameIdx ) const
 {
     OSL_ENSURE( nXclNameIdx > 0, "XclImpNameManager::GetName - index must be >0" );
     return ( nXclNameIdx > maNameList.size() ) ? NULL : &(maNameList.at( nXclNameIdx - 1 ));
+}
+
+void XclImpNameManager::ConvertAllTokens()
+{
+    XclImpNameList::iterator it = maNameList.begin(), itEnd = maNameList.end();
+    for (; it != itEnd; ++it)
+        it->ConvertTokens();
 }
 
 // ============================================================================
