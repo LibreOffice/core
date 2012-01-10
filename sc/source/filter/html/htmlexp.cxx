@@ -736,11 +736,6 @@ void ScHTMLExport::WriteTables()
         // <TABLE ...>
         rtl::OStringBuffer aByteStrOut(OOO_STRING_SVTOOLS_HTML_table);
 
-        // FRAME=VOID, we do the styling of the cells in <TD>
-        aByteStrOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_frame).
-            append(RTL_CONSTASCII_STRINGPARAM("=\"")).
-            append(OOO_STRING_SVTOOLS_HTML_TF_void).append('"');
-
         bTabHasGraphics = bTabAlignedLeft = false;
         if ( bAll && pDrawLayer )
             PrepareGraphics( pDrawLayer, nTab, nStartCol, nStartRow,
@@ -769,11 +764,6 @@ void ScHTMLExport::WriteTables()
         aByteStrOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_cols).
             append(RTL_CONSTASCII_STRINGPARAM("=\"")).
             append(static_cast<sal_Int32>(nColCnt)).append('"');
-
-        // RULES=NONE, we do the styling of the cells in <TD>
-        aByteStrOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_rules).
-            append(RTL_CONSTASCII_STRINGPARAM("=\"")).
-            append(OOO_STRING_SVTOOLS_HTML_TR_none).append('"');
 
         // BORDER=0, we do the styling of the cells in <TD>
         aByteStrOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_border).
