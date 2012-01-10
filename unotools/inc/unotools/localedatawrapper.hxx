@@ -30,7 +30,7 @@
 #define _UNOTOOLS_LOCALEDATAWRAPPER_HXX
 
 #include <tools/string.hxx>
-#include <com/sun/star/i18n/XLocaleData3.hpp>
+#include <com/sun/star/i18n/XLocaleData4.hpp>
 #include <com/sun/star/i18n/LocaleItem.hpp>
 #include <com/sun/star/i18n/reservedWords.hpp>
 #include <unotools/readwritemutexguard.hxx>
@@ -67,7 +67,7 @@ class UNOTOOLS_DLLPUBLIC LocaleDataWrapper
     static  sal_uInt8                nLocaleDataChecking;    // 0:=dontknow, 1:=yes, 2:=no
 
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    xSMgr;
-    ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XLocaleData3 >            xLD;
+    ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XLocaleData4 >            xLD;
     ::com::sun::star::lang::Locale                                                      aLocale;
     ::boost::shared_ptr< ::com::sun::star::i18n::Calendar2 >                            xDefaultCalendar;
     ::com::sun::star::i18n::LocaleDataItem                                              aLocaleDataItem;
@@ -163,6 +163,7 @@ public:
     ::com::sun::star::i18n::ForbiddenCharacters getForbiddenCharacters() const;
     ::com::sun::star::uno::Sequence< ::rtl::OUString > getReservedWord() const;
     ::com::sun::star::uno::Sequence< ::com::sun::star::lang::Locale > getAllInstalledLocaleNames() const;
+    ::com::sun::star::uno::Sequence< ::rtl::OUString > getDateAcceptancePatterns() const;
 
     /// same as the wrapper implementation but static
     static ::com::sun::star::uno::Sequence< ::com::sun::star::lang::Locale > getInstalledLocaleNames();

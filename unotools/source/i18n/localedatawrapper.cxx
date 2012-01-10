@@ -82,7 +82,7 @@ LocaleDataWrapper::LocaleDataWrapper(
         bReservedWordValid( sal_False )
 {
     setLocale( rLocale );
-    xLD = Reference< XLocaleData3 > (
+    xLD = Reference< XLocaleData4 > (
         intl_createInstance( xSMgr, "com.sun.star.i18n.LocaleData",
                              "LocaleDataWrapper" ), uno::UNO_QUERY );
 }
@@ -1948,6 +1948,29 @@ void LocaleDataWrapper::evaluateLocaleDataChecking()
 #endif
     }
     return ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::Calendar2 >(0);
+}
+
+
+// --- XLocaleData4 ----------------------------------------------------------
+
+::com::sun::star::uno::Sequence< ::rtl::OUString > LocaleDataWrapper::getDateAcceptancePatterns() const
+{
+    try
+    {
+        if ( xLD.is() )
+            return xLD->getDateAcceptancePatterns( getLocale() );
+    }
+    catch ( Exception& e )
+    {
+#ifdef DBG_UTIL
+        rtl::OStringBuffer aMsg("getDateAcceptancePatterns: Exception caught\n");
+        aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
+        DBG_ERRORFILE(aMsg.getStr());
+#else
+        (void)e;
+#endif
+    }
+    return ::com::sun::star::uno::Sequence< ::rtl::OUString >(0);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
