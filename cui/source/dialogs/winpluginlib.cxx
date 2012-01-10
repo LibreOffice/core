@@ -38,7 +38,7 @@
 #include <stdio.h>
 
 #define SO_PATH_SIZE        4096
-#define MOZ_PLUGIN_DLL_NAME "npsopluginmi.dll"
+
 extern "C" {
 int lc_isInstalled(const  char* realFilePath)
 {
