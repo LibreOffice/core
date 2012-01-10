@@ -65,6 +65,21 @@ PrinterInfoManager::PrinterInfoManager( Type eType ) :
     // initSystemDefaultPaper();
 }
 
+PrinterInfoManager::~PrinterInfoManager()
+{
+
+}
+
+bool PrinterInfoManager::checkPrintersChanged( bool /* bWait */ )
+{
+    return false;
+}
+
+void PrinterInfoManager::initialize()
+{
+    // ???
+}
+
 void PrinterInfoManager::listPrinters( ::std::list< OUString >& rList ) const
 {
     rList.clear();
@@ -77,9 +92,74 @@ const PrinterInfo& PrinterInfoManager::getPrinterInfo( const OUString& /* rPrint
     return aEmptyInfo;
 }
 
+void PrinterInfoManager::changePrinterInfo( const OUString& /* rPrinter */, const PrinterInfo& /* rNewInfo */ )
+{
+
+}
+
+bool PrinterInfoManager::writePrinterConfig()
+{
+    return false;
+}
+
+bool PrinterInfoManager::addPrinter( const OUString& /* rPrinterName */, const OUString& /* rDriverName */ )
+{
+    return false;
+}
+
+bool PrinterInfoManager::removePrinter( const OUString& /* rPrinterName */, bool /* bCheckOnly */ )
+{
+    return false;
+}
+
+bool PrinterInfoManager::setDefaultPrinter( const OUString& /* rPrinterName */ )
+{
+    return false;
+}
+
+bool PrinterInfoManager::addOrRemovePossible() const
+{
+    return false;
+}
+
+void PrinterInfoManager::fillFontSubstitutions( PrinterInfo& /* rInfo */ ) const
+{
+
+}
+
+void PrinterInfoManager::getSystemPrintCommands( std::list< OUString >& /* rCommands */ )
+{
+
+}
+
+const std::list< PrinterInfoManager::SystemPrintQueue >& PrinterInfoManager::getSystemPrintQueues()
+{
+    return m_aSystemPrintQueues;
+}
+
 bool PrinterInfoManager::checkFeatureToken( const rtl::OUString& /* rPrinterName */, const char* /* pToken */ ) const
 {
     return false;
+}
+
+FILE* PrinterInfoManager::startSpool( const OUString& /* rPrintername */, bool /* bQuickCommand */ )
+{
+    return NULL;
+}
+
+int PrinterInfoManager::endSpool( const OUString& /*rPrintername*/, const OUString& /*rJobTitle*/, FILE* /* pFile */, const JobData& /*rDocumentJobData*/, bool /*bBanner*/ )
+{
+    return true;
+}
+
+void PrinterInfoManager::setupJobContextData( JobData& /* rData */ )
+{
+
+}
+
+void PrinterInfoManager::setDefaultPaper( PPDContext& /* rContext */ ) const
+{
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
