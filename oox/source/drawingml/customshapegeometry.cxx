@@ -1034,10 +1034,13 @@ Reference< XFastContextHandler > Path2DContext::createFastChildContext( sal_Int3
     {
         case A_TOKEN( close ) :
         {
-            EnhancedCustomShapeSegment aNewSegment;
-            aNewSegment.Command = EnhancedCustomShapeSegmentCommand::CLOSESUBPATH;
-            aNewSegment.Count = 0;
-            mrSegments.push_back( aNewSegment );
+            // ignore close after move to (ppt does seems to do the same, see accentCallout2 preset for example)
+            if ( mrSegments.empty() || ( mrSegments.back().Command != EnhancedCustomShapeSegmentCommand::MOVETO ) ) {
+                EnhancedCustomShapeSegment aNewSegment;
+                aNewSegment.Command = EnhancedCustomShapeSegmentCommand::CLOSESUBPATH;
+                aNewSegment.Count = 0;
+                mrSegments.push_back( aNewSegment );
+            }
         }
         break;
         case A_TOKEN( moveTo ) :
