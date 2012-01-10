@@ -725,9 +725,13 @@ namespace slideshow
             class FindNthElementFunctor
             {
             public:
-                FindNthElementFunctor( sal_Int32                                nNodeIndex,
-                                       DrawShapeSubsetting::IndexClassificator  eClass ) :
+                FindNthElementFunctor( sal_Int32                                                      nNodeIndex,
+                                       DrawShapeSubsetting::IndexClassificatorVector::const_iterator& rLastBegin,
+                                       DrawShapeSubsetting::IndexClassificatorVector::const_iterator& rLastEnd,
+                                       DrawShapeSubsetting::IndexClassificator                        eClass ) :
                     mnNodeIndex( nNodeIndex ),
+                    mrLastBegin( rLastBegin ),
+                    mrLastEnd( rLastEnd ),
                     meClass( eClass )
                 {
                 }
@@ -740,8 +744,8 @@ namespace slideshow
                     if( eCurrElemClassification == meClass &&
                         nCurrElemCount == mnNodeIndex )
                     {
-                        maLastBegin = rCurrElemBegin;
-                        maLastEnd = rCurrElemEnd;
+                        mrLastBegin = rCurrElemBegin;
+                        mrLastEnd = rCurrElemEnd;
 
                         return false; // abort iteration, we've
                                       // already found what we've been
@@ -751,20 +755,10 @@ namespace slideshow
                     return true; // keep on truckin'
                 }
 
-                DrawShapeSubsetting::IndexClassificatorVector::const_iterator getBeginElement() const
-                {
-                    return maLastBegin;
-                }
-
-                DrawShapeSubsetting::IndexClassificatorVector::const_iterator getEndElement() const
-                {
-                    return maLastEnd;
-                }
-
             private:
                 sal_Int32                                                       mnNodeIndex;
-                DrawShapeSubsetting::IndexClassificatorVector::const_iterator   maLastBegin;
-                DrawShapeSubsetting::IndexClassificatorVector::const_iterator   maLastEnd;
+                DrawShapeSubsetting::IndexClassificatorVector::const_iterator&  mrLastBegin;
+                DrawShapeSubsetting::IndexClassificatorVector::const_iterator&  mrLastEnd;
                 DrawShapeSubsetting::IndexClassificator                         meClass;
             };
 
@@ -789,17 +783,21 @@ namespace slideshow
             const IndexClassificator eRequestedClass(
                 mapDocTreeNode( eNodeType ) );
 
+            DrawShapeSubsetting::IndexClassificatorVector::const_iterator aLastBegin(rEnd);
+            DrawShapeSubsetting::IndexClassificatorVector::const_iterator aLastEnd(rEnd);
+
             // create a nth element functor for the requested class of
             // actions, and nNodeIndex as the target index
             FindNthElementFunctor aFunctor( nNodeIndex,
+                                            aLastBegin,
+                                            aLastEnd,
                                             eRequestedClass );
 
             // find given index in the given range
             iterateActionClassifications( aFunctor, rBegin, rEnd );
 
             return makeTreeNode( maActionClassVector.begin(),
-                                 aFunctor.getBeginElement(),
-                                 aFunctor.getEndElement(),
+                                 aLastBegin, aLastEnd,
                                  eNodeType );
         }
 
