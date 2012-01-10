@@ -76,10 +76,17 @@ $(eval $(call gb_Helper_register_executables,OOO,\
 
 else
 
+ifeq ($(OS_FOR_BUILD),WNT)
+$(eval $(call gb_Helper_register_executables,OOO,\
+	soffice_bin \
+	unopkg_bin \
+))
+else
 $(eval $(call gb_Helper_register_executables,OOO,\
 	soffice.bin \
 	unopkg.bin \
 ))
+endif
 
 ifeq ($(OS),MACOSX)
 
