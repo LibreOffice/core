@@ -242,7 +242,7 @@ void WrongList::TextInserted( sal_uInt16 nPos, sal_uInt16 nNew, sal_Bool bPosIsS
             nInvalidEnd = nPos+nNew;
     }
 
-    for (WrongList::iterator i = begin(); i < end(); ++i)
+    for (WrongList::iterator i = begin(); i != end(); ++i)
     {
         sal_Bool bRefIsValid = sal_True;
         if (i->nEnd >= nPos)
@@ -312,7 +312,7 @@ void WrongList::TextDeleted( sal_uInt16 nPos, sal_uInt16 nDeleted )
         }
     }
 
-    for (WrongList::reverse_iterator i = rbegin(); i < rend(); ++i)
+    for (WrongList::iterator i = begin(); i != end(); )
     {
         sal_Bool bDelWrong = sal_False;
         if (i->nEnd >= nPos)
@@ -345,7 +345,13 @@ void WrongList::TextDeleted( sal_uInt16 nPos, sal_uInt16 nDeleted )
         }
         DBG_ASSERT(i->nStart < i->nEnd, "TextInserted, WrongRange: Start >= End?!" );
         if ( bDelWrong )
-            erase(--(i.base()));
+        {
+            i = erase(i);
+        }
+        else
+        {
+            ++i;
+        }
     }
 
     DBG_ASSERT( !DbgIsBuggy(), "InsertWrong: WrongList broken!" );
@@ -357,7 +363,7 @@ sal_Bool WrongList::NextWrong( sal_uInt16& rnStart, sal_uInt16& rnEnd ) const
         rnStart get the start position, is possibly adjusted wrt. Wrong start
         rnEnd does not have to be initialized.
     */
-    for (WrongList::const_iterator i = begin(); i < end(); ++i)
+    for (WrongList::const_iterator i = begin(); i != end(); ++i)
     {
         if ( i->nEnd > rnStart )
         {
@@ -371,7 +377,7 @@ sal_Bool WrongList::NextWrong( sal_uInt16& rnStart, sal_uInt16& rnEnd ) const
 
 sal_Bool WrongList::HasWrong( sal_uInt16 nStart, sal_uInt16 nEnd ) const
 {
-    for (WrongList::const_iterator i = begin(); i < end(); ++i)
+    for (WrongList::const_iterator i = begin(); i != end(); ++i)
     {
         if (i->nStart == nStart && i->nEnd == nEnd)
             return sal_True;
@@ -383,7 +389,7 @@ sal_Bool WrongList::HasWrong( sal_uInt16 nStart, sal_uInt16 nEnd ) const
 
 sal_Bool WrongList::HasAnyWrong( sal_uInt16 nStart, sal_uInt16 nEnd ) const
 {
-    for (WrongList::const_iterator i = begin(); i < end(); ++i)
+    for (WrongList::const_iterator i = begin(); i != end(); ++i)
     {
         if (i->nEnd >= nStart && i->nStart < nEnd)
             return sal_True;
@@ -396,7 +402,7 @@ sal_Bool WrongList::HasAnyWrong( sal_uInt16 nStart, sal_uInt16 nEnd ) const
 void WrongList::ClearWrongs( sal_uInt16 nStart, sal_uInt16 nEnd,
             const ContentNode* pNode )
 {
-    for (WrongList::reverse_iterator i = rbegin(); i < rend(); ++i)
+    for (WrongList::iterator i = begin(); i != end(); )
     {
         if (i->nEnd > nStart && i->nStart < nEnd)
         {
@@ -407,10 +413,20 @@ void WrongList::ClearWrongs( sal_uInt16 nStart, sal_uInt16 nEnd,
                 while (i->nStart < pNode->Len() &&
                        (pNode->GetChar(i->nStart) == ' ' ||
                         pNode->IsFeature(i->nStart)))
+                {
                     ++(i->nStart);
+                }
+                ++i;
             }
             else
-                erase(--(i.base()));
+            {
+                i = erase(i);
+                // no increment here
+            }
+        }
+        else
+        {
+            ++i;
         }
     }
 
@@ -421,7 +437,7 @@ void WrongList::InsertWrong( sal_uInt16 nStart, sal_uInt16 nEnd,
             sal_Bool bClearRange )
 {
     WrongList::iterator nPos = end();
-    for (WrongList::iterator i = begin(); i < end(); ++i)
+    for (WrongList::iterator i = begin(); i != end(); ++i)
     {
         if (i->nStart >= nStart )
         {
@@ -440,7 +456,7 @@ void WrongList::InsertWrong( sal_uInt16 nStart, sal_uInt16 nEnd,
         }
     }
 
-    if(nPos < end())
+    if (nPos != end())
         insert(nPos, WrongRange(nStart, nEnd));
     else
         push_back(WrongRange(nStart, nEnd));
@@ -458,7 +474,7 @@ WrongList* WrongList::Clone() const
 {
     WrongList* pNew = new WrongList;
     pNew->reserve(size());
-    for (WrongList::const_iterator i = begin(); i < end(); ++i)
+    for (WrongList::const_iterator i = begin(); i != end(); ++i)
         pNew->push_back(*i);
     return pNew;
 }
@@ -475,9 +491,11 @@ bool WrongList::operator==(const WrongList& rCompare) const
     WrongList::const_iterator rCA = begin();
     WrongList::const_iterator rCB = rCompare.begin();
 
-    for(; rCA < end(); ++rCA)
+    for (; rCA != end(); ++rCA, ++rCB)
+    {
         if(rCA->nStart != rCB->nStart || rCA->nEnd != rCB->nEnd)
             return false;
+    }
 
     return true;
 }
@@ -487,9 +505,9 @@ sal_Bool WrongList::DbgIsBuggy() const
 {
     // Check if the ranges overlap.
     sal_Bool bError = sal_False;
-    for (WrongList::const_iterator i = begin(); !bError && (i < end()); ++i)
+    for (WrongList::const_iterator i = begin(); !bError && (i != end()); ++i)
     {
-        for (WrongList::const_iterator j = i + 1; !bError && (j < end()); ++j)
+        for (WrongList::const_iterator j = i + 1; !bError && (j != end()); ++j)
         {
             // 1) Start before, End after the second Start
             if (i->nStart <= j->nStart && i->nEnd >= j->nStart)
