@@ -26,8 +26,8 @@
  * in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
  * instead of those above.
  */
-#ifndef _NAVMGR_HXX
-#define _NAVMGR_HXX
+#ifndef SW_NAVMGR_HXX
+#define SW_NAVMGR_HXX
 
 #include "swtypes.hxx"
 #include "pam.hxx"
@@ -36,7 +36,7 @@
 class   SwWrtShell;
 struct  SwPosition;
 
-class SW_DLLPUBLIC SwNavigationMgr
+class SwNavigationMgr
 {
 private:
     /*
@@ -50,15 +50,15 @@ private:
      * (e.g. click a link, or double click an entry from the navigator).
      * Every use of the back/forward buttons results in moving the stack pointer within the navigation history
      */
-    std::vector<SwPosition> _entries;
-    std::vector<SwPosition>::size_type _nCurrent; /* Current position within the navigation history */
-    SwWrtShell* _pMyShell; /* The active shell within which the navigation occurs */
+    std::vector<SwPosition> m_entries;
+    std::vector<SwPosition>::size_type m_nCurrent; /* Current position within the navigation history */
+    SwWrtShell & m_rMyShell; /* The active shell within which the navigation occurs */
 
     void GotoSwPosition(const SwPosition &rPos);
 
 public:
     /* Constructor that initializes the shell to the current shell */
-    SwNavigationMgr( SwWrtShell* pShell );
+    SwNavigationMgr( SwWrtShell & rShell );
     /* Can we go back in the history ? */
     sal_Bool backEnabled() ;
     /* Can we go forward in the history ? */
