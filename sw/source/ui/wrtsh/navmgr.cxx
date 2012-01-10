@@ -33,6 +33,8 @@
 #include <sfx2/viewfrm.hxx>
 #include <cmdid.h>
 #include <view.hxx>
+#include <doc.hxx>
+#include <unocrsr.hxx>
 
 #include <com/sun/star/frame/XLayoutManager.hpp>
 
@@ -134,7 +136,7 @@ void SwNavigationMgr::goBack()  {
         }
         m_nCurrent--;
         /* Position cursor to appropriate navigation history entry */
-        GotoSwPosition(m_entries[m_nCurrent]);
+        GotoSwPosition(*m_entries[m_nCurrent]->GetPoint());
         /* Refresh the buttons */
         if (bForwardWasDisabled)
             m_rMyShell.GetView().GetViewFrame()->GetBindings().Invalidate(FN_NAVIGATION_FORWARD);
@@ -161,7 +163,7 @@ void SwNavigationMgr::goForward() {
          * We have to increment it to go to the next entry
          */
         m_nCurrent++;
-        GotoSwPosition(m_entries[m_nCurrent]);
+        GotoSwPosition(*m_entries[m_nCurrent]->GetPoint());
         /* Refresh the buttons */
         if (bBackWasDisabled)
             m_rMyShell.GetView().GetViewFrame()->GetBindings().Invalidate(FN_NAVIGATION_BACK);
@@ -188,30 +190,31 @@ bool SwNavigationMgr::addEntry(const SwPosition& rPos) {
         int curr = m_nCurrent; /* Index from which we'll twist the tail. */
         int n = (number_ofm_entries - curr) / 2; /* Number of entries that will swap places */
         for (int i = 0; i < n; i++) {
-            SwPosition temp = m_entries[curr + i];
-            m_entries[curr + i] = m_entries[number_ofm_entries -1 - i];
-            m_entries[number_ofm_entries -1 - i] = temp;
+            ::std::swap(m_entries[curr + i], m_entries[number_ofm_entries -1 - i]);
         }
 
-           if (m_entries.back() != rPos)
-           m_entries.push_back(rPos);
-
-
+        if (*m_entries.back()->GetPoint() != rPos)
+        {
+            SwUnoCrsr *const pCursor = m_rMyShell.GetDoc()->CreateUnoCrsr(rPos);
+            m_entries.push_back(::boost::shared_ptr<SwUnoCrsr>(pCursor));
+        }
         bRet = true;
     }
     else {
-        if ( (m_entries.size() > 0 && m_entries.back() != rPos) || (m_entries.size() == 0) ) {
-            m_entries.push_back(rPos);
+        if ( (m_entries.size() > 0 && *m_entries.back()->GetPoint() != rPos) || (m_entries.size() == 0) ) {
+            SwUnoCrsr *const pCursor = m_rMyShell.GetDoc()->CreateUnoCrsr(rPos);
+            m_entries.push_back(::boost::shared_ptr<SwUnoCrsr>(pCursor));
             bRet = true;
         }
-        if (m_entries.size() > 1 && m_entries.back() == rPos)
+        if (m_entries.size() > 1 && *m_entries.back()->GetPoint() == rPos)
             bRet = true;
-        if (m_entries.size() == 1 && m_entries.back() == rPos)
+        if (m_entries.size() == 1 && *m_entries.back()->GetPoint() == rPos)
             bRet = false;
     }
 #else
     m_entries.erase(m_entries.begin() + m_nCurrent, m_entries.end());
-    m_entries.push_back(rPos);
+    SwUnoCrsr *const pCursor = m_rMyShell.GetDoc()->CreateUnoCrsr(rPos);
+    m_entries.push_back(::boost::shared_ptr<SwUnoCrsr>(pCursor));
     bRet = true;
 #endif
     m_nCurrent = m_entries.size();

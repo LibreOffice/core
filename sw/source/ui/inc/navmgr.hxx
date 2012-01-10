@@ -29,29 +29,32 @@
 #ifndef SW_NAVMGR_HXX
 #define SW_NAVMGR_HXX
 
+#include <vector>
+
+#include <boost/shared_ptr.hpp>
+
 #include "swtypes.hxx"
-#include "pam.hxx"
-#include "swdllapi.h"
 
 class   SwWrtShell;
 struct  SwPosition;
+class SwUnoCrsr;
+
 
 class SwNavigationMgr
 {
 private:
     /*
      * List of entries in the navigation history
-     * Each entry is a SwPosition, which represents a position within the document
-     * SwPosition is given by a node index (SwNodeIndex) which usually represents the paragraph the position is in
-     * and an index (SwIndex), which represents the position inside this paragraph.
-     * You can find more on SwPositions at http://wiki.services.openoffice.org/wiki/Writer_Core_And_Layout
+     * Entries are SwUnoCrsr because thos gets corrected automatically
+     * when nodes are deleted.
      *
      * The navigation history behaves as a stack, to which items are added when we jump to a new position
      * (e.g. click a link, or double click an entry from the navigator).
      * Every use of the back/forward buttons results in moving the stack pointer within the navigation history
      */
-    std::vector<SwPosition> m_entries;
-    std::vector<SwPosition>::size_type m_nCurrent; /* Current position within the navigation history */
+    typedef ::std::vector< ::boost::shared_ptr<SwUnoCrsr> > Stack_t;
+    Stack_t m_entries;
+    Stack_t::size_type m_nCurrent; /* Current position within the navigation history */
     SwWrtShell & m_rMyShell; /* The active shell within which the navigation occurs */
 
     void GotoSwPosition(const SwPosition &rPos);
