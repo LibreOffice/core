@@ -873,7 +873,8 @@ sal_Bool SfxDocTplService_Impl::CreateNewUniqueFolderWithPrefix( const ::rtl::OU
     INetURLObject aDirPath( aPath );
 
     Content aParent;
-       if ( Content::create( aDirPath.GetMainURL( INetURLObject::NO_DECODE ), maCmdEnv, aParent ) )
+    uno::Reference< XCommandEnvironment > aQuietEnv;
+       if ( Content::create( aDirPath.GetMainURL( INetURLObject::NO_DECODE ), aQuietEnv, aParent ) )
        {
         for ( sal_Int32 nInd = 0; nInd < 32000; nInd++ )
         {
