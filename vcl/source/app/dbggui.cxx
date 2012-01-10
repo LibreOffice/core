@@ -176,9 +176,8 @@ static const sal_Char* pDbgHelpText[] =
 "dropdown list.\n"
 "\n",
 "Warnings\n",
-"DBG_WARNING() can be used to output warnings. DBG_WARNINGFILE() also outputs "
-"the file and the line number where the macro is located. DBG_WARNING1() to "
-"DBG_WARNING5() can be used to produce formatted output (printf format string). "
+"DBG_WARNING() can be used to output warnings. DBG_WARNING1() to "
+"DBG_WARNING3() can be used to produce formatted output (printf format string). "
 "In case you want to have conditional warnings DBG_ASSERTWARNING() can be "
 "used. The warning will be produced if the condition was not met. The first "
 "parameter is the condition and the second parameter is the message to be "

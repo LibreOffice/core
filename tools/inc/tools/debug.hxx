@@ -45,8 +45,8 @@
     Because the assertion macros (DBG_ASSERT, DBG_BF_ASSERT) have been used for
     true assertions as well as to log warnings, they map to SAL_WARN instead of
     standard assert.  The warning and error macros (DBG_ASSERTWARNING,
-    DBG_WARNING, DBG_WARNING1, ..., DBG_WARNING5, DBG_WARNINGFILE,
-    DBG_ERRORFILE) all map to SAL_INFO.
+    DBG_WARNING, DBG_WARNING1, ..., DBG_WARNING3, DBG_ERRORFILE) all map to
+    SAL_INFO.
 */
 
 // ------------
@@ -457,13 +457,6 @@ public:
     SAL_DETAIL_INFO_IF_FORMAT(true, "legacy.tools", aWarning, x1, x2)
 #define DBG_WARNING3( aWarning, x1, x2, x3 ) \
     SAL_DETAIL_INFO_IF_FORMAT(true, "legacy.tools", aWarning, x1, x2, x3)
-#define DBG_WARNING4( aWarning, x1, x2, x3, x4 ) \
-    SAL_DETAIL_INFO_IF_FORMAT(true, "legacy.tools", aWarning, x1, x2, x3, x4)
-#define DBG_WARNING5( aWarning, x1, x2, x3, x4, x5 ) \
-    SAL_DETAIL_INFO_IF_FORMAT( \
-        true, "legacy.tools", aWarning, x1, x2, x3, x4, x5)
-#define DBG_WARNINGFILE( aWarning ) SAL_DETAIL_INFO_IF_FORMAT( \
-    true, "legacy.tools", aWarning, __FILE__, __LINE__)
 
 #define DBG_ERRORFILE( aError ) \
     SAL_DETAIL_INFO_IF_FORMAT(true, "legacy.tools", aError, __FILE__, __LINE__)
@@ -535,9 +528,6 @@ typedef const sal_Char* (*DbgUsr)(const void* pThis );
 #define DBG_WARNING1( aWarning, x1 ) ((void)0)
 #define DBG_WARNING2( aWarning, x1, x2 ) ((void)0)
 #define DBG_WARNING3( aWarning, x1, x2, x3 ) ((void)0)
-#define DBG_WARNING4( aWarning, x1, x2, x3, x4 ) ((void)0)
-#define DBG_WARNING5( aWarning, x1, x2, x3, x4, x5 ) ((void)0)
-#define DBG_WARNINGFILE( aWarning ) ((void)0)
 #define DBG_ERRORFILE( aError ) ((void)0)
 
 #define DBG_TESTSOLARMUTEX() ((void)0)

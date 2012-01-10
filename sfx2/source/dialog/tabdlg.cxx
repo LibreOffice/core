@@ -834,7 +834,7 @@ void SfxTabDialog::RemoveTabPage( sal_uInt16 nId )
     }
     else
     {
-        DBG_WARNINGFILE( "TabPage-Id not known" );
+        SAL_INFO( "sfx2", "TabPage-Id not known" );
     }
 }
 
@@ -973,7 +973,7 @@ SfxItemSet* SfxTabDialog::CreateInputItemSet( sal_uInt16 )
 */
 
 {
-    DBG_WARNINGFILE( "CreateInputItemSet not implemented" );
+    SAL_INFO( "sfx2", "CreateInputItemSet not implemented" );
     return new SfxAllItemSet( SFX_APP()->GetPool() );
 }
 

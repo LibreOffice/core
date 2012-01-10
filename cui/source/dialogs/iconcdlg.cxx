@@ -945,7 +945,7 @@ void IconChoiceDialog::PageCreated( sal_uInt16 /*nId*/, IconChoicePage& /*rPage*
 
 SfxItemSet* IconChoiceDialog::CreateInputItemSet( sal_uInt16 )
 {
-    DBG_WARNINGFILE( "CreateInputItemSet nicht implementiert" );
+    SAL_INFO( "cui", "CreateInputItemSet not implemented" );
 
     return 0;
 }
