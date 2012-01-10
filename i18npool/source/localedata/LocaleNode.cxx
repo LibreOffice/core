@@ -31,6 +31,7 @@
 #include <string.h>
 #include <iostream>
 #include <set>
+#include <vector>
 
 #include <rtl/ustrbuf.hxx>
 #include <sal/macros.h>
@@ -380,6 +381,9 @@ void LCInfoNode::generateCode (const OFileWriter &of) const
     of.writeFunction("getLCInfo_", "0", "LCInfoArray");
 }
 
+
+OUString aDateSep;
+
 void LCCTYPENode::generateCode (const OFileWriter &of) const
 {
     const LocaleNode * sepNode = 0;
@@ -392,7 +396,7 @@ void LCCTYPENode::generateCode (const OFileWriter &of) const
     of.writeAsciiString("\n\n");
     of.writeParameter("LC_CTYPE_Unoid", str);;
 
-    OUString aDateSep =
+    aDateSep =
         writeParameterCheckLen( of, "DateSeparator", "dateSeparator", 1, 1);
     OUString aThoSep =
         writeParameterCheckLen( of, "ThousandSeparator", "thousandSeparator", 1, 1);
@@ -596,20 +600,20 @@ void LCCTYPENode::generateCode (const OFileWriter &of) const
 
 static OUString sTheCurrencyReplaceTo;
 static OUString sTheCompatibleCurrency;
+static OUString sTheDateEditFormat;
+static ::std::vector< OUString > theDateAcceptancePatterns;
 
 sal_Int16 LCFormatNode::mnSection = 0;
 sal_Int16 LCFormatNode::mnFormats = 0;
 
 void LCFormatNode::generateCode (const OFileWriter &of) const
 {
-    OUString str;
-    if (mnSection == 0)
-    {
-        sTheCurrencyReplaceTo = OUString();
-        sTheCompatibleCurrency = OUString();
-    }
-    else if (mnSection >= 2)
+    if (mnSection >= 2)
         incError("more than 2 LC_FORMAT sections");
+
+    theDateAcceptancePatterns.clear();
+
+    OUString str;
     OUString strFrom( getAttr().getValueByName("replaceFrom"));
     of.writeParameter("replaceFrom", strFrom, mnSection);
     str = getAttr().getValueByName("replaceTo");
@@ -631,8 +635,10 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
             sTheCompatibleCurrency = str.copy( 2, nHyphen - 2);
         }
     }
+
     ::rtl::OUString useLocale =   getAttr().getValueByName("ref");
-    if (!useLocale.isEmpty()) {
+    if (!useLocale.isEmpty())
+    {
         switch (mnSection)
         {
             case 0:
@@ -642,16 +648,28 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
                 of.writeRefFunction("getAllFormats1_", useLocale, "replaceTo1");
                 break;
         }
+        of.writeRefFunction("getDateAcceptancePatterns_", useLocale);
         return;
     }
+
     sal_Int16 formatCount = mnFormats;
     NameSet  aMsgIdSet;
     ValueSet aFormatIndexSet;
     NameSet  aDefaultsSet;
     bool bCtypeIsRef = false;
 
-    for (sal_Int16 i = 0; i< getNumberOfChildren() ; i++,formatCount++) {
+    for (sal_Int16 i = 0; i< getNumberOfChildren() ; i++, formatCount++)
+    {
         LocaleNode * currNode = getChildAt (i);
+        if (currNode->getName().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "DateAcceptancePattern")))
+        {
+            if (mnSection > 0)
+                incError( "DateAcceptancePattern only handled in LC_FORMAT, not LC_FORMAT_1");
+            else
+                theDateAcceptancePatterns.push_back( currNode->getValue());
+            --formatCount;
+            continue;   // for
+        }
         OUString aUsage;
         OUString aType;
         OUString aFormatIndex;
@@ -705,6 +723,9 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
             const LocaleNode* pCtype = 0;
             switch (formatindex)
             {
+                case cssi::NumberFormatIndex::DATE_SYS_DDMMYYYY :
+                    sTheDateEditFormat = n->getValue();
+                    break;
                 case cssi::NumberFormatIndex::NUMBER_1000DEC2 : // #,##0.00
                 case cssi::NumberFormatIndex::TIME_MMSS00 :     // MM:SS.00
                 case cssi::NumberFormatIndex::TIME_HH_MMSS00 :  // [HH]:MM:SS.00
@@ -962,6 +983,192 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
     }
 
     mnFormats = mnFormats + formatCount;
+
+    if (mnSection == 0)
+    {
+        // Extract and add date acceptance pattern for full date, so we provide
+        // at least one valid pattern, even if the number parser doesn't need
+        // that one.
+        /* XXX NOTE: only simple [...] modifier and "..." quotes detected and
+         * ignored, not nested, no fancy stuff. */
+        sal_Int32 nIndex = 0;
+        // aDateSep can be empty if LC_CTYPE was a ref=..., determine from
+        // FormatCode then.
+        sal_uInt32 cDateSep = (aDateSep.isEmpty() ? 0 : aDateSep.iterateCodePoints( &nIndex));
+        nIndex = 0;
+        OUStringBuffer aPatternBuf(5);
+        sal_uInt8 nDetected = 0;    // bits Y,M,D
+        bool bInModifier = false;
+        bool bQuoted = false;
+        while (nIndex < sTheDateEditFormat.getLength() && nDetected < 7)
+        {
+            sal_uInt32 cChar = sTheDateEditFormat.iterateCodePoints( &nIndex);
+            if (bInModifier)
+            {
+                if (cChar == ']')
+                    bInModifier = false;
+                continue;   // while
+            }
+            if (bQuoted)
+            {
+                if (cChar == '"')
+                    bQuoted = false;
+                continue;   // while
+            }
+            switch (cChar)
+            {
+                case 'Y':
+                case 'y':
+                    if (!(nDetected & 4))
+                    {
+                        aPatternBuf.append( 'Y');
+                        nDetected |= 4;
+                    }
+                    break;
+                case 'M':
+                case 'm':
+                    if (!(nDetected & 2))
+                    {
+                        aPatternBuf.append( 'M');
+                        nDetected |= 2;
+                    }
+                    break;
+                case 'D':
+                case 'd':
+                    if (!(nDetected & 1))
+                    {
+                        aPatternBuf.append( 'D');
+                        nDetected |= 1;
+                    }
+                    break;
+                case '[':
+                    bInModifier = true;
+                    break;
+                case '"':
+                    bQuoted = true;
+                    break;
+                case '\\':
+                    cChar = sTheDateEditFormat.iterateCodePoints( &nIndex);
+                    break;
+                case '-':
+                    // Assume a YYYY-MM-DD format or some such. There are
+                    // locales that use an ISO 8601 edit format regardless of
+                    // what the locale data and other formats say, for example
+                    // hu_HU.
+                    cDateSep = cChar;
+                    // fallthru
+                default:
+                    if (!cDateSep)
+                        cDateSep = cChar;
+                    if (cChar == cDateSep)
+                        aPatternBuf.append( OUString( &cDateSep, 1));
+                    break;
+                // The localized legacy:
+                case 'A':
+                    if (((nDetected & 7) == 3) || ((nDetected & 7) == 0))
+                    {
+                        // es DD/MM/AAAA
+                        // fr JJ.MM.AAAA
+                        // it GG/MM/AAAA
+                        // fr_CA AAAA-MM-JJ
+                        aPatternBuf.append( 'Y');
+                        nDetected |= 4;
+                    }
+                    break;
+                case 'J':
+                    if (((nDetected & 7) == 0) || ((nDetected & 7) == 6))
+                    {
+                        // fr JJ.MM.AAAA
+                        // fr_CA AAAA-MM-JJ
+                        aPatternBuf.append( 'D');
+                        nDetected |= 1;
+                    }
+                    else if ((nDetected & 7) == 3)
+                    {
+                        // nl DD-MM-JJJJ
+                        // de TT.MM.JJJJ
+                        aPatternBuf.append( 'Y');
+                        nDetected |= 4;
+                    }
+                    break;
+                case 'T':
+                    if ((nDetected & 7) == 0)
+                    {
+                        // de TT.MM.JJJJ
+                        aPatternBuf.append( 'D');
+                        nDetected |= 1;
+                    }
+                    break;
+                case 'G':
+                    if ((nDetected & 7) == 0)
+                    {
+                        // it GG/MM/AAAA
+                        aPatternBuf.append( 'D');
+                        nDetected |= 1;
+                    }
+                    break;
+                case 'P':
+                    if ((nDetected & 7) == 0)
+                    {
+                        // fi PP.KK.VVVV
+                        aPatternBuf.append( 'D');
+                        nDetected |= 1;
+                    }
+                    break;
+                case 'K':
+                    if ((nDetected & 7) == 1)
+                    {
+                        // fi PP.KK.VVVV
+                        aPatternBuf.append( 'M');
+                        nDetected |= 2;
+                    }
+                    break;
+                case 'V':
+                    if ((nDetected & 7) == 3)
+                    {
+                        // fi PP.KK.VVVV
+                        aPatternBuf.append( 'Y');
+                        nDetected |= 4;
+                    }
+                    break;
+            }
+        }
+        OUString aPattern( aPatternBuf.makeStringAndClear());
+        if (((nDetected & 7) != 7) || aPattern.getLength() < 5)
+        {
+            incErrorStr( "failed to extract full date acceptance pattern", aPattern);
+            fprintf( stderr, "       with DateSeparator '%s' from FormatCode '%s'\n",
+                    OSTR( OUString( cDateSep)), OSTR( sTheDateEditFormat));
+        }
+        else
+            fprintf( stderr, "Generated date acceptance pattern: '%s' from '%s'\n",
+                    OSTR( aPattern), OSTR( sTheDateEditFormat));
+        theDateAcceptancePatterns.push_back( aPattern);
+
+        sal_Int16 nbOfDateAcceptancePatterns = static_cast<sal_Int16>(theDateAcceptancePatterns.size());
+
+        for (sal_Int16 i = 0; i < nbOfDateAcceptancePatterns; ++i)
+        {
+            of.writeParameter("DateAcceptancePattern", theDateAcceptancePatterns[i], i);
+        }
+
+        of.writeAsciiString("static const sal_Int16 DateAcceptancePatternsCount = ");
+        of.writeInt( nbOfDateAcceptancePatterns);
+        of.writeAsciiString(";\n");
+
+        of.writeAsciiString("static const sal_Unicode* DateAcceptancePatternsArray[] = {\n");
+        for (sal_Int16 i = 0; i < nbOfDateAcceptancePatterns; ++i)
+        {
+            of.writeAsciiString("\t");
+            of.writeAsciiString("DateAcceptancePattern");
+            of.writeInt(i);
+            of.writeAsciiString(",\n");
+        }
+        of.writeAsciiString("};\n\n");
+
+        of.writeFunction("getDateAcceptancePatterns_", "DateAcceptancePatternsCount", "DateAcceptancePatternsArray");
+    }
+
     ++mnSection;
 }
 

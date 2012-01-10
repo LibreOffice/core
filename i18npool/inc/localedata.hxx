@@ -32,7 +32,7 @@
 
 #include <comphelper/processfactory.hxx>
 
-#include <com/sun/star/i18n/XLocaleData3.hpp>
+#include <com/sun/star/i18n/XLocaleData4.hpp>
 
 
 #include <cppuhelper/implbase2.hxx> // helper for implementations
@@ -74,7 +74,7 @@ inline sal_Bool operator ==(const com::sun::star::lang::Locale& l1, const com::s
 
 class LocaleData : public cppu::WeakImplHelper2
 <
-    com::sun::star::i18n::XLocaleData3,
+    com::sun::star::i18n::XLocaleData4,
     com::sun::star::lang::XServiceInfo
 >
 {
@@ -104,6 +104,9 @@ public:
     virtual com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getCollationOptions( const com::sun::star::lang::Locale& rLocale ) throw(com::sun::star::uno::RuntimeException);
     virtual com::sun::star::uno::Sequence< com::sun::star::uno::Sequence< beans::PropertyValue > > SAL_CALL getContinuousNumberingLevels( const com::sun::star::lang::Locale& rLocale ) throw(com::sun::star::uno::RuntimeException);
     virtual com::sun::star::uno::Sequence< com::sun::star::uno::Reference< container::XIndexAccess > > SAL_CALL getOutlineNumberingLevels( const com::sun::star::lang::Locale& rLocale ) throw(com::sun::star::uno::RuntimeException);
+
+    // XLocaleData4
+    virtual com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getDateAcceptancePatterns( const com::sun::star::lang::Locale& rLocale ) throw(com::sun::star::uno::RuntimeException);
 
     // following methods are used by indexentry service
     virtual com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getIndexAlgorithm( const com::sun::star::lang::Locale& rLocale ) throw(com::sun::star::uno::RuntimeException);

@@ -793,6 +793,33 @@ LocaleData::getAllFormats( const Locale& rLocale ) throw(RuntimeException)
     return seq;
 }
 
+
+Sequence< OUString > SAL_CALL
+LocaleData::getDateAcceptancePatterns( const Locale& rLocale ) throw(RuntimeException)
+{
+    sal_Unicode **patternsArray = NULL;
+
+    MyFunc_Type func = (MyFunc_Type) getFunctionSymbol( rLocale, "getDateAcceptancePatterns" );
+
+    if (func)
+    {
+        sal_Int16 patternsCount = 0;
+        patternsArray = func( patternsCount );
+        Sequence< OUString > seq( patternsCount );
+        for (sal_Int16 i = 0; i < patternsCount; ++i)
+        {
+            seq[i] = OUString( patternsArray[i] );
+        }
+        return seq;
+    }
+    else
+    {
+        Sequence< OUString > seq(0);
+        return seq;
+    }
+}
+
+
 #define COLLATOR_OFFSET_ALGO    0
 #define COLLATOR_OFFSET_DEFAULT 1
 #define COLLATOR_OFFSET_RULE    2
