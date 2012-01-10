@@ -104,7 +104,7 @@ $(eval $(call gb_Library_set_include,pl,\
 	-I$(FRAMEWORKSHOME)/Carbon.framework/Versions/Current/Frameworks/HIToolbox.framework/Versions/Current/Headers \
 ))
 
-endif # GUIBASE=aqua
+else # GUIBASE!=aqua
 
 ifeq ($(ENABLE_GTK),TRUE)
 $(eval $(call gb_Library_add_defs,pl,\
@@ -125,6 +125,8 @@ $(eval $(call gb_Library_add_exception_objects,pl,\
 $(eval $(call gb_Library_add_libs,pl,\
 	-lX11 \
 ))
+
+endif # GUIBASE=aqua
 
 endif # GUI=UNX
 

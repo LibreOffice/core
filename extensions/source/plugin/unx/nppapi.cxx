@@ -35,8 +35,10 @@
 
 #include <cstdarg>
 
-#include <plugin/impl.hxx>
 #include <vcl/svapp.hxx>
+
+#include <plugin/unx/plugcon.hxx>
+#include <plugin/impl.hxx>
 
 std::vector<PluginConnector*> PluginConnector::allConnectors;
 

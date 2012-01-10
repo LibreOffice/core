@@ -72,10 +72,6 @@
 #include <list>
 
 #ifdef WNT
-#include "plugin/win/sysplug.hxx"
-#endif
-
-#ifdef WNT
 #include <plugin/win/sysplug.hxx>
 #elif defined(QUARTZ)
 #include "plugin/aqua/sysplug.hxx"
@@ -157,7 +153,7 @@ private:
     sal_Bool                        m_bIsDisposed;
 
 #ifdef QUARTZ
-    void SetSysPlugDataParentView(SystemEnvData* pEnvData);
+    void SetSysPlugDataParentView(SystemEnvData const& rEnvData);
 #endif
 
     void prependArg( const char* pName, const char* pValue ); // arguments will be strdup'ed

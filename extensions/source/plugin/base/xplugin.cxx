@@ -566,7 +566,7 @@ void XPlugin_Impl::loadPlugin()
                  NULL );
 #ifdef QUARTZ
     // m_aNPWindow is set up in the MacPluginComm from the view
-    SetSysPlugDataParentView(pEnvData);
+    SetSysPlugDataParentView(*pEnvData);
 #elif defined( UNX )
     XSync( (Display*)pEnvData->pDisplay, False );
     m_aNPWindow.window      = (void*)pEnvData->aWindow;

@@ -77,9 +77,9 @@ struct SysPlugData
     return ::boost::shared_ptr<SysPlugData>(new SysPlugData);
 }
 
-void XPlugin_Impl::SetSysPlugDataParentView(SystemEnvData* pEnvData)
+void XPlugin_Impl::SetSysPlugDataParentView(SystemEnvData const& rEnvData)
 {
-    m_pSysPlugData.m_pParentView = pEnvData->pView;
+    m_pSysPlugData->m_pParentView = rEnvData.pView;
 }
 
 extern "C" {
