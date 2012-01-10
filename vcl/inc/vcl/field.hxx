@@ -142,8 +142,6 @@ public:
     void                    SetString( const XubString& rStr );
     XubString               GetString() const;
     sal_Bool                    IsStringModified() const { return !(GetString().Equals( maFieldString )); }
-
-    void                    SelectFixedFont();
 };
 
 // --------------------

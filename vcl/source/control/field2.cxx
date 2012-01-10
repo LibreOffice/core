@@ -903,21 +903,6 @@ void PatternFormatter::Reformat()
 
 // -----------------------------------------------------------------------
 
-void PatternFormatter::SelectFixedFont()
-{
-    if ( GetField() )
-    {
-        Font aFont = OutputDevice::GetDefaultFont( DEFAULTFONT_FIXED, Application::GetSettings().GetLanguage(), 0 );
-        Font aControlFont;
-        aControlFont.SetName( aFont.GetName() );
-        aControlFont.SetFamily( aFont.GetFamily() );
-        aControlFont.SetPitch( aFont.GetPitch() );
-        GetField()->SetControlFont( aControlFont );
-    }
-}
-
-// -----------------------------------------------------------------------
-
 PatternField::PatternField( Window* pParent, WinBits nWinStyle ) :
     SpinField( pParent, nWinStyle )
 {

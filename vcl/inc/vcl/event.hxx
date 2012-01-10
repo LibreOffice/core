@@ -66,12 +66,6 @@ public:
                     KeyEvent( xub_Unicode nChar, const KeyCode& rKeyCode,
                               sal_uInt16 nRepeat = 0 );
 
-                    /** inits this vcl KeyEvent with all settings from the given awt event **/
-                    KeyEvent( const ::com::sun::star::awt::KeyEvent& rEvent );
-
-    /** fills out the given awt KeyEvent with all settings from this vcl event **/
-    void InitKeyEvent( ::com::sun::star::awt::KeyEvent& rEvent ) const;
-
     xub_Unicode     GetCharCode() const     { return mnCharCode; }
     const KeyCode&  GetKeyCode() const      { return maKeyCode;  }
     sal_uInt16          GetRepeat() const       { return mnRepeat;   }

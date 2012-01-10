@@ -127,7 +127,6 @@ class TOOLS_DLLPUBLIC SvPersistBaseMemberList : public SuperSvPersistBaseMemberL
 {
 public:
     SvPersistBaseMemberList();
-    SvPersistBaseMemberList(sal_uInt16 nInitSz, sal_uInt16 nResize );
 
     void   WriteObjects( SvPersistStream &, sal_Bool bOnlyStreamedObj = sal_False ) const;
     TOOLS_DLLPUBLIC friend SvPersistStream& operator << (SvPersistStream &, const SvPersistBaseMemberList &);

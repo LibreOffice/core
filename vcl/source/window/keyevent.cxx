@@ -38,37 +38,6 @@ KeyEvent::KeyEvent (const KeyEvent& rKeyEvent) :
     mnCharCode(rKeyEvent.mnCharCode)
 {}
 
-/** inits this vcl KeyEvent with all settings from the given awt event **/
-KeyEvent::KeyEvent( const ::com::sun::star::awt::KeyEvent& rEvent )
-{
-    maKeyCode = KeyCode(
-        rEvent.KeyCode,
-        (rEvent.Modifiers & ::com::sun::star::awt::KeyModifier::SHIFT) != 0,
-        (rEvent.Modifiers & ::com::sun::star::awt::KeyModifier::MOD1) != 0,
-        (rEvent.Modifiers & ::com::sun::star::awt::KeyModifier::MOD2) != 0,
-                (rEvent.Modifiers & ::com::sun::star::awt::KeyModifier::MOD3) != 0);
-    mnRepeat = 0;
-    mnCharCode = rEvent.KeyChar;
-}
-
-/** fills out the given awt KeyEvent with all settings from this vcl event **/
-void KeyEvent::InitKeyEvent( ::com::sun::star::awt::KeyEvent& rEvent ) const
-{
-    rEvent.Modifiers = 0;
-    if( GetKeyCode().IsShift() )
-        rEvent.Modifiers |= ::com::sun::star::awt::KeyModifier::SHIFT;
-    if( GetKeyCode().IsMod1() )
-        rEvent.Modifiers |= ::com::sun::star::awt::KeyModifier::MOD1;
-    if( GetKeyCode().IsMod2() )
-        rEvent.Modifiers |= ::com::sun::star::awt::KeyModifier::MOD2;
-        if( GetKeyCode().IsMod3() )
-                rEvent.Modifiers |= ::com::sun::star::awt::KeyModifier::MOD3;
-
-    rEvent.KeyCode = GetKeyCode().GetCode();
-    rEvent.KeyChar = GetCharCode();
-    rEvent.KeyFunc = sal::static_int_cast< sal_Int16 >(GetKeyCode().GetFunction());
-}
-
 KeyEvent KeyEvent::LogicalTextDirectionality (TextDirectionality eMode) const
 {
     KeyEvent aClone(*this);

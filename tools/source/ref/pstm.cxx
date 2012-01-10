@@ -62,9 +62,6 @@ TYPEINIT0( SvRttiBase );
 /****************** SvPersistBaseMemberList ******************************/
 
 SvPersistBaseMemberList::SvPersistBaseMemberList(){}
-SvPersistBaseMemberList::SvPersistBaseMemberList(
-    sal_uInt16 nInitSz, sal_uInt16 nResize )
-    : SuperSvPersistBaseMemberList( nInitSz, nResize ){}
 
 #define PERSIST_LIST_VER        (sal_uInt8)0
 #define PERSIST_LIST_DBGUTIL    (sal_uInt8)0x80

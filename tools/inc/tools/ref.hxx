@@ -274,7 +274,6 @@ inline void CN##MemberList::Append( const CN##MemberList & rList )\
 /************************** S v M e m b e r L i s t **********************/
 #define PRV_SV_DECL_MEMBER_LIST(Class,EntryName)        \
        Class##MemberList() {}                           \
-inline Class##MemberList(sal_uInt16 nInitSz,sal_uInt16 nResize);\
 inline void Insert( EntryName p );                      \
 inline void Insert( EntryName p, sal_uIntPtr nIndex );        \
 inline void Append( EntryName p );                      \
@@ -295,9 +294,6 @@ inline EntryName Prev();\
 inline void      Append( const Class##MemberList & rList );
 
 #define PRV_SV_IMPL_MEMBER_LIST(ClassName,EntryName,BaseList)\
-inline ClassName##MemberList::ClassName##MemberList\
-                    (sal_uInt16 nInitSz,sal_uInt16 nResize)\
-            : BaseList( nInitSz, nResize ){}\
 inline void ClassName##MemberList::Insert( EntryName p )\
             {BaseList::Insert(p);}\
 inline void ClassName##MemberList::Insert( EntryName p, sal_uIntPtr nIdx )\
