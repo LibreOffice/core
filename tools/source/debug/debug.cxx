@@ -376,16 +376,6 @@ namespace
         };
         lcl_writeConfigString( _pFile, _pKeyName, names[ _nValue ] );
     }
-    void lcl_writeHexByte( FILETYPE _pFile, const sal_Char* _pKeyName, sal_uInt8 _nValue )
-    {
-        sal_Char buf[RTL_STR_MAX_VALUEOFINT32];
-        rtl_String* stringData = NULL;
-        rtl_string_newFromStr_WithLength( &stringData, buf, rtl_str_valueOfInt32( buf, _nValue, 16 ) );
-
-        lcl_writeConfigString( _pFile, _pKeyName, stringData->buffer );
-
-        rtl_string_release( stringData );
-    }
     bool lcl_isConfigSection( const sal_Char* _pLine, size_t _nLineLen )
     {
         if ( _nLineLen < 2 )
@@ -458,13 +448,6 @@ namespace
             else
                 *_out_pnAllFlags &= ~_nCheckFlag;
         }
-    }
-    void lcl_tryReadHexByte( const sal_Char* _pLine, size_t _nLineLen, const sal_Char* _pKeyName, sal_uInt8* _out_pnValue )
-    {
-        sal_Char aBuf[3];
-        size_t nValueLen = lcl_tryReadConfigString( _pLine, _nLineLen, _pKeyName, aBuf, sizeof( aBuf ) );
-        if ( nValueLen )
-            *_out_pnValue = (sal_uInt8)rtl_str_toInt32( aBuf, 16 );
     }
 }
 
