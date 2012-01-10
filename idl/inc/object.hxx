@@ -29,7 +29,6 @@
 #ifndef _OBJECT_HXX
 #define _OBJECT_HXX
 
-#define _SVSTDARR_ULONGS
 #include <types.hxx>
 #include <slot.hxx>
 #include <vector>

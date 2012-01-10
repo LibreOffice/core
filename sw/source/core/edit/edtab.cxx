@@ -26,12 +26,10 @@
  *
  ************************************************************************/
 
-
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <hintids.hxx>
 #include <hints.hxx>
 
-#define _SVSTDARR_ULONGS
 #include <svl/svstdarr.hxx>
 
 #include <vcl/svapp.hxx>

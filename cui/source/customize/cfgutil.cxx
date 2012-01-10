@@ -67,8 +67,6 @@
 #include <unotools/configmgr.hxx>
 #include "dialmgr.hxx"
 #include <svl/stritem.hxx>
-
-#define _SVSTDARR_STRINGSDTOR
 #include <svl/svstdarr.hxx>
 
 using namespace ::com::sun::star;

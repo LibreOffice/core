@@ -27,10 +27,8 @@
  ************************************************************************/
 #ifndef _LAYHELP_HXX
 #define _LAYHELP_HXX
-#ifndef _SVSTDARR_HXX
-#define _SVSTDARR_XUB_STRLEN
+
 #include <svl/svstdarr.hxx>
-#endif
 #include <swrect.hxx>
 #include <vector>
 

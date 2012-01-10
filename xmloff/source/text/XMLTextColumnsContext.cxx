@@ -39,7 +39,6 @@
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmltoken.hxx>
 #include "XMLTextColumnsContext.hxx"
-#define _SVSTDARR_USHORTS
 #include <svl/svstdarr.hxx>
 
 using ::rtl::OUString;

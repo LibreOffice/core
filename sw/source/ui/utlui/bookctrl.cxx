@@ -26,13 +26,9 @@
  *
  ************************************************************************/
 
-
 #include "hintids.hxx"
 
-#ifndef _SVSTDARR_HXX
-#define _SVSTDARR_USHORTS
 #include <svl/svstdarr.hxx>
-#endif
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
 #include <sfx2/dispatch.hxx>

@@ -26,14 +26,9 @@
  *
  ************************************************************************/
 
-
-
 #include <hintids.hxx>
 
-#ifndef _SVSTDARR_HXX
-#define _SVSTDARR_STRINGSDTOR
 #include <svl/svstdarr.hxx>
-#endif
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/linguistic2/XThesaurus.hpp>
 #include <com/sun/star/linguistic2/ProofreadingResult.hpp>

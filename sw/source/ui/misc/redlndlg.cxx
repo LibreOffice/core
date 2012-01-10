@@ -26,12 +26,6 @@
  *
  ************************************************************************/
 
-
-
-#define _SVSTDARR_STRINGSSORTDTOR
-#define _SVSTDARR_USHORTS
-
-
 #include <redline.hxx>
 #include <tools/datetime.hxx>
 #include <vcl/msgbox.hxx>

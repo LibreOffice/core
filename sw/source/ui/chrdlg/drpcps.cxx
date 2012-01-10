@@ -31,9 +31,6 @@
 #endif
 
 #include <hintids.hxx>
-#define _SVSTDARR_STRINGSDTOR
-#define _SVSTDARR_STRINGSISORTDTOR
-#define _SVSTDARR_XUB_STRLEN
 #include <svl/svstdarr.hxx>
 
 #include "cmdid.h"

@@ -28,9 +28,6 @@
 #ifndef _CUI_SRCHDLG_HXX
 #define _CUI_SRCHDLG_HXX
 
-// include ---------------------------------------------------------------
-
-
 #include <svtools/stdctrl.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/edit.hxx>
@@ -42,7 +39,6 @@
 #include <sfx2/childwin.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <svl/svarray.hxx>
-#define _SVSTDARR_STRINGSDTOR
 #include <svl/svstdarr.hxx>
 #include <svtools/svmedit.hxx>
 #include <svl/srchdefs.hxx>

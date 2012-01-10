@@ -26,11 +26,6 @@
  *
  ************************************************************************/
 
-
-
-
-#define _SVSTDARR_STRINGSDTOR
-#define _SVSTDARR_STRINGSISORTDTOR
 #include <svl/svstdarr.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/dialog.hxx>

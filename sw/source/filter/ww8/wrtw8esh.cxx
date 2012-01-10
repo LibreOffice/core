@@ -28,10 +28,8 @@
 
 #include <com/sun/star/embed/Aspects.hpp>
 
-
 #include <hintids.hxx>
 
-#define _SVSTDARR_USHORTS
 #include <svl/svstdarr.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <vcl/virdev.hxx>

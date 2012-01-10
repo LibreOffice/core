@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-
 #include "sfx2/sfxhelp.hxx"
 
 #include <set>
@@ -65,8 +64,6 @@
 #include <vcl/msgbox.hxx>
 #include <svtools/ehdl.hxx>
 #include <svtools/sfxecode.hxx>
-
-#define _SVSTDARR_STRINGSDTOR
 #include <svl/svstdarr.hxx>
 
 #include "newhelp.hxx"

@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-
 #include <sfx2/app.hxx>
 #include "sfx2/docinsert.hxx"
 #include <sfx2/docfile.hxx>
@@ -48,8 +47,6 @@
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
-
-#define _SVSTDARR_STRINGSDTOR
 #include <svl/svstdarr.hxx>
 
 using namespace ::com::sun::star;

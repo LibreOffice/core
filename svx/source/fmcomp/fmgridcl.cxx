@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-
 #include "svx/dbexch.hrc"
 #include "svx/fmgridif.hxx"
 #include "fmitems.hxx"
@@ -63,13 +62,7 @@
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
-
-#ifndef _SVSTDARR_STRINGSDTOR
-#define _SVSTDARR_STRINGSDTOR
-#define _SVSTDARR_ULONGS
 #include <svl/svstdarr.hxx>
-#endif
-
 #include <comphelper/extract.hxx>
 #include <comphelper/numbers.hxx>
 #include <comphelper/processfactory.hxx>

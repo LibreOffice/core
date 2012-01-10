@@ -26,12 +26,9 @@
  *
  ************************************************************************/
 
-
-
 #include <limits.h>
 #include <hintids.hxx>
 #include <comphelper/string.hxx>
-#define _SVSTDARR_STRINGSSORT
 #include <svl/svstdarr.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/brkitem.hxx>

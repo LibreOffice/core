@@ -27,11 +27,8 @@
  ************************************************************************/
 #ifndef _SCRIPTINFO_HXX
 #define _SCRIPTINFO_HXX
-#ifndef _SVSTDARR_HXX
-#define _SVSTDARR_USHORTS
-#define _SVSTDARR_XUB_STRLEN
+
 #include <svl/svstdarr.hxx>
-#endif
 #include <list>
 #include "swscanner.hxx"
 

@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <docary.hxx>
 #include <grfsh.hxx>
 #include <wrtsh.hxx>
@@ -37,7 +35,6 @@
 #include <swundo.hxx>
 #include <shells.hrc>
 #include <caption.hxx>
-#define _SVSTDARR_STRINGSSORTDTOR
 #include <svl/svstdarr.hxx>
 #include <svtools/filter.hxx>
 #include <svx/htmlmode.hxx>

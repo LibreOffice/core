@@ -29,10 +29,7 @@
 #include <hintids.hxx>
 #include <tools/stream.hxx>
 #include <comphelper/string.hxx>
-#ifndef _SVSTDARR_HXX
-#define _SVSTDARR_USHORTS
 #include <svl/svstdarr.hxx>
-#endif
 #include <editeng/fontitem.hxx>
 #include <pam.hxx>
 #include <doc.hxx>

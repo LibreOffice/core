@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include "scitems.hxx"
 #include <editeng/eeitem.hxx>
 
@@ -47,7 +45,6 @@
 #include <sfx2/viewsh.hxx>
 #include <svl/flagitem.hxx>
 #include <svl/intitem.hxx>
-#define _SVSTDARR_USHORTS
 #include <svl/svstdarr.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>

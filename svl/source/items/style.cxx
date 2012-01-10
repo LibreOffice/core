@@ -26,12 +26,7 @@
  *
  ************************************************************************/
 
-
 #include <com/sun/star/lang/XComponent.hpp>
-
-#define _SVSTDARR_STRINGSSORTDTOR
-#define _SVSTDARR_BYTESTRINGS
-#define _SVSTDARR_BYTESTRINGSSORTDTOR
 
 #include <tools/tenccvt.hxx>
 #include <comphelper/processfactory.hxx>

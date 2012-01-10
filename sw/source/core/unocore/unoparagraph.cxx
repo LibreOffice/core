@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-
 #include <unoparagraph.hxx>
 #include <cmdid.h>
 #include <unomid.h>
@@ -44,7 +43,6 @@
 #include <vcl/svapp.hxx>
 #include <docsh.hxx>
 
-#define _SVSTDARR_USHORTS
 #include <svl/svstdarr.hxx>
 
 #include <com/sun/star/beans/SetPropertyTolerantFailed.hpp>

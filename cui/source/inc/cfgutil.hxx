@@ -37,10 +37,7 @@
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/script/browse/XBrowseNode.hpp>
-
-#define _SVSTDARR_STRINGSDTOR
 #include <svl/svstdarr.hxx>
-
 #include <vcl/timer.hxx>
 #include <svtools/svtabbx.hxx>
 #include <svtools/svtreebx.hxx>

@@ -26,11 +26,6 @@
  *
  ************************************************************************/
 
-
-
-
-// INCLUDE ---------------------------------------------------------------
-
 #include "scitems.hxx"
 #include <comphelper/string.hxx>
 #include <editeng/eeitem.hxx>
@@ -56,9 +51,6 @@
 #include <sfx2/objsh.hxx>
 #include <svl/stritem.hxx>
 #include <svl/urihelper.hxx>
-#ifndef _SVSTDARR_STRINGSSORTDTOR
-#define _SVSTDARR_STRINGSSORTDTOR
-#endif
 #include <svl/svstdarr.hxx>
 #include <svl/zforlist.hxx>
 #include <svtools/htmlkywd.hxx>

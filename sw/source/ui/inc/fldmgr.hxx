@@ -27,10 +27,8 @@
  ************************************************************************/
 #ifndef _FLDMGR_HXX
 #define _FLDMGR_HXX
-#ifndef _SVSTDARR_HXX
-#define _SVSTDARR_STRINGSDTOR
+
 #include <svl/svstdarr.hxx>
-#endif
 #include <tools/string.hxx>
 #include "swdllapi.h"
 #include "swtypes.hxx"

@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-// include ---------------------------------------------------------------
 #include <sfx2/viewsh.hxx>      // SfxViewShell
 #include <sfx2/printer.hxx>     // Printer
 #include <vcl/metric.hxx>
@@ -40,10 +38,6 @@
 
 #include <com/sun/star/i18n/ScriptType.hdl>
 
-#ifndef _SVSTDARR_HXX
-#define _SVSTDARR_XUB_STRLEN
-#include <svl/svstdarr.hxx>
-#endif
 #include <vector>
 #include <svtools/colorcfg.hxx>
 #include <svtools/sampletext.hxx>
@@ -57,6 +51,7 @@
 #include <svl/itempool.hxx>
 #include <svl/stritem.hxx>                  // SfxStringItem
 #include <svl/languageoptions.hxx>
+#include <svl/svstdarr.hxx>
 
 #include <editeng/colritem.hxx>
 #include <editeng/fontitem.hxx>

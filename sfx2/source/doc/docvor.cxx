@@ -72,7 +72,6 @@
 #include <svtools/localresaccess.hxx>
 #include <svtools/addresstemplate.hxx>
 #include <comphelper/processfactory.hxx>
-#define _SVSTDARR_STRINGSDTOR
 #include <svl/svstdarr.hxx>
 
 static const char cDelim = ':';

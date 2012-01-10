@@ -26,11 +26,6 @@
  *
  ************************************************************************/
 
-
-
-
-//------------------------------------------------------------------------
-
 #include "excrecds.hxx"
 
 #include <map>
@@ -63,7 +58,6 @@
 #include <svl/zformat.hxx>
 #include <svtools/ctrltool.hxx>
 
-#define _SVSTDARR_USHORTS
 #include <svl/svstdarr.hxx>
 
 #include <string.h>

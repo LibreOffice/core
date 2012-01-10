@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-
-// includes *******************************************************************
-
 #include "iodlgimp.hxx"
 #include "svtools/headbar.hxx"
 #include <tools/debug.hxx>
@@ -50,10 +47,6 @@
 #include "unotools/useroptions.hxx"
 #include "rtl/instance.hxx"
 #include <svl/svl.hrc>
-
-#define _SVSTDARR_STRINGSSORTDTOR
-#define _SVSTDARR_STRINGSDTOR
-#define _SVSTDARR_USHORTS
 #include "svl/svstdarr.hxx"
 
 using namespace ::com::sun::star::uno;

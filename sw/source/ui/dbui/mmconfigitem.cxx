@@ -51,10 +51,7 @@
 #include <wrtsh.hxx>
 #include <dbui.hrc>
 #include <vector>
-
 #include <unomid.h>
-
-#define _SVSTDARR_STRINGSDTOR
 #include <svl/svstdarr.hxx>
 
 using namespace utl;

@@ -28,8 +28,6 @@
 #ifndef _SWCACHE_HXX
 #define _SWCACHE_HXX
 
-
-
 /*
  * Es werden Pointer auf Objekte verwaltet. Diese werden in einem einfachen
  * PtrArray verwaltet.
@@ -59,10 +57,7 @@
  */
 
 #include <vector>
-
-#ifndef _SVSTDARR_HXX
 #include <svl/svstdarr.hxx>
-#endif
 
 class SwCacheObj;
 

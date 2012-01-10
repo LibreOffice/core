@@ -107,8 +107,6 @@
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/docfac.hxx>
 #include <sfx2/event.hxx>
-
-#define _SVSTDARR_STRINGSDTOR
 #include <svl/svstdarr.hxx>
 
 using namespace ::com::sun::star;

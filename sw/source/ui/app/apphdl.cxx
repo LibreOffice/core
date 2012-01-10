@@ -26,13 +26,10 @@
  *
  ************************************************************************/
 
-
 #include <hintids.hxx>
 
 #include <osl/diagnose.h>
 #include <tools/link.hxx>
-
-#define _SVSTDARR_STRINGSDTOR
 #include <svl/svstdarr.hxx>
 #include <svl/urihelper.hxx>
 #include <unotools/undoopt.hxx>

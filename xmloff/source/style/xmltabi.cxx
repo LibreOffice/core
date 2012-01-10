@@ -36,19 +36,14 @@
 #include <xmloff/xmltoken.hxx>
 #include "xmloff/i18nmap.hxx"
 #include <xmloff/xmluconv.hxx>
-
-#include "xmltabi.hxx"
-
-#define _SVSTDARR_USHORTS
 #include <svl/svstdarr.hxx>
+#include "xmltabi.hxx"
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
 
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
-
-// ---
 
 enum SvXMLTokenMapAttrs
 {

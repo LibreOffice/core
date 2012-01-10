@@ -28,10 +28,6 @@
 #ifndef _SFX_APPUNO_HXX
 #define _SFX_APPUNO_HXX
 
-//____________________________________________________________________________________________________________________________________
-//  generated header
-//____________________________________________________________________________________________________________________________________
-
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -50,31 +46,17 @@
 #include <com/sun/star/frame/XDispatchInformationProvider.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
-//____________________________________________________________________________________________________________________________________
-//  fix uno header
-//____________________________________________________________________________________________________________________________________
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/implbase4.hxx>
 
-//____________________________________________________________________________________________________________________________________
-//  something else header
-//____________________________________________________________________________________________________________________________________
 #include <tools/errcode.hxx>
 #include <svl/svarray.hxx>
-#define _SVSTDARR_STRINGSDTOR
 #include <svl/svstdarr.hxx>
 #include <sfx2/sfxuno.hxx>
 
-//____________________________________________________________________________________________________________________________________
-//  forwards
-//____________________________________________________________________________________________________________________________________
-
-//____________________________________________________________________________________________________________________________________
-//  declarations
-//____________________________________________________________________________________________________________________________________
 class SfxObjectShell;
 class SfxMacroLoader  :     public ::com::sun::star::frame::XDispatchProvider,
                             public ::com::sun::star::frame::XNotifyingDispatch,

@@ -36,9 +36,7 @@
 #include <editeng/rsiditem.hxx>
 #include <editeng/tstpitem.hxx>
 #include <svl/urihelper.hxx>
-#ifndef _SVSTDARR_HXX
 #include <svl/svstdarr.hxx>
-#endif
 #include <svl/ctloptions.hxx>
 #include <swmodule.hxx>
 #include <txtfld.hxx>

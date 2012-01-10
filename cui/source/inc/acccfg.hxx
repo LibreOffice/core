@@ -52,15 +52,9 @@
 #include <svtools/svtreebx.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <sfx2/basedlgs.hxx>
-
-#define _SVSTDARR_STRINGSDTOR
 #include <svl/svstdarr.hxx>
-
 #include <sfx2/minarray.hxx>
-
 #include "cfgutil.hxx"
-
-// class SfxAcceleratorConfigListBox *************************************************
 
 #define css ::com::sun::star
 

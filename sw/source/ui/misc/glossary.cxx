@@ -31,7 +31,6 @@
 #undef SW_DLLIMPLEMENTATION
 #endif
 
-#define _SVSTDARR_STRINGSDTOR
 #include <hintids.hxx>
 
 #include <vcl/menu.hxx>

@@ -36,12 +36,6 @@
 
 #include "getstringresource.hxx"
 
-#ifndef _SVSTDARR_STRINGSSORT_DECL
-#define _SVSTDARR_STRINGSSORT
-#include <svl/svstdarr.hxx>
-#undef _SVSTDARR_STRINGSSORT
-#endif
-
 namespace
 {
 

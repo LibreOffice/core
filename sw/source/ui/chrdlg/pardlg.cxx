@@ -26,22 +26,15 @@
  *
  ************************************************************************/
 
-
 #ifdef SW_DLLIMPLEMENTATION
 #undef SW_DLLIMPLEMENTATION
 #endif
 
-
 #include "hintids.hxx"
 #include <svx/htmlmode.hxx>
 #include <svl/style.hxx>
-
 #include <svtools/htmlcfg.hxx>
-
-#ifndef _SVSTDARR_STRINGSSORTDTOR
-#define _SVSTDARR_STRINGSSORTDTOR
 #include <svl/svstdarr.hxx>
-#endif
 #include <svl/cjkoptions.hxx>
 #include "docsh.hxx"
 #include "wrtsh.hxx"

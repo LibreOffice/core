@@ -28,10 +28,8 @@
 #ifndef _SWBASESH_HXX
 #define _SWBASESH_HXX
 
-
 #include <shellid.hxx>
 
-#define _SVSTDARR_USHORTS
 #include <tools/link.hxx>
 #include <vcl/timer.hxx>
 #include <sfx2/module.hxx>

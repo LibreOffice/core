@@ -26,12 +26,9 @@
  *
  ************************************************************************/
 
-
 #include <SvXMLAutoCorrectExport.hxx>
 
 #include <com/sun/star/util/MeasureUnit.hpp>
-#define _SVSTDARR_STRINGSISORTDTOR
-#define _SVSTDARR_STRINGSDTOR
 #include <svl/svstdarr.hxx>
 #include <xmloff/xmltoken.hxx>
 

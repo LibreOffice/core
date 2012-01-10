@@ -28,8 +28,6 @@
 #ifndef _ACMPLWRD_HXX
 #define _ACMPLWRD_HXX
 
-
-#define _SVSTDARR_STRINGSISORTDTOR
 #include <svl/svstdarr.hxx>
 
 class SwDoc;

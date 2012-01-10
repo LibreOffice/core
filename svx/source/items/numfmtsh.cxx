@@ -26,12 +26,9 @@
  *
  ************************************************************************/
 
-
-// include ---------------------------------------------------------------
 #include <tools/color.hxx>
 
 #define _SVX_NUMFMTSH_CXX
-#define _SVSTDARR_STRINGSDTOR
 #include <tools/debug.hxx>
 #include <i18npool/mslangid.hxx>
 

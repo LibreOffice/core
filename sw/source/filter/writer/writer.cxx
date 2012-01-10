@@ -26,10 +26,8 @@
  *
  ************************************************************************/
 
-
 #include <hintids.hxx>
 
-#define _SVSTDARR_STRINGSSORTDTOR
 #include <svl/svstdarr.hxx>
 #include <tools/table.hxx>
 

@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/awt/Size.hpp>
@@ -63,9 +62,7 @@
 
 #include <xmloff/xmlnumi.hxx>
 
-#define _SVSTDARR_USHORTS
 #include <svl/svstdarr.hxx>
-
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;

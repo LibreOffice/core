@@ -28,15 +28,9 @@
 #ifndef _SHELLRES_HXX
 #define _SHELLRES_HXX
 
-
 #include <tools/string.hxx>
-
 #include <vcl/bitmap.hxx>
-
-#ifndef _SVSTDARR_HXX
-#define _SVSTDARR_STRINGSDTOR
 #include <svl/svstdarr.hxx>
-#endif
 
 struct SW_DLLPUBLIC ShellResource : public Resource
 {

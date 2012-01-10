@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-// include ---------------------------------------------------------------
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
 #include <sfx2/objsh.hxx>
@@ -34,7 +33,6 @@
 #include <unotools/localedatawrapper.hxx>
 #include <i18npool/lang.h>
 #include <svx/dialogs.hrc>
-#define _SVSTDARR_STRINGSDTOR
 #include <svl/svstdarr.hxx>
 #include <svtools/colorcfg.hxx>
 

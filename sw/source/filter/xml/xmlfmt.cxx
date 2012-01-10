@@ -26,14 +26,8 @@
  *
  ************************************************************************/
 
-
-
 #include <rtl/ustrbuf.hxx>
 
-#ifndef _SVSTDARR_STRINGSSORT_DECL
-#define _SVSTDARR_STRINGSSORT
-#include <svl/svstdarr.hxx>
-#endif
 #include <xmloff/nmspmap.hxx>
 #include <format.hxx>
 #include <fmtcol.hxx>

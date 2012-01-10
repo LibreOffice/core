@@ -26,11 +26,6 @@
  *
  ************************************************************************/
 
-
-
-#define _SVSTDARR_STRINGSDTOR
-#define _SVSTDARR_USHORTS
-#define _SVSTDARR_ULONGS
 #include <hintids.hxx>
 
 #include <svl/svstdarr.hxx>

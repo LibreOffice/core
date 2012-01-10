@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-
-#define _SVSTDARR_ULONGS
-
 #include <svl/svstdarr.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
@@ -52,7 +49,6 @@
 #include <xmloff/families.hxx>
 #include <xmloff/xmlnumfi.hxx>      // SvXMLNumFmtDefaults
 
-#define _SVSTDARR_USHORTS
 #include <svl/svstdarr.hxx>
 #include <svl/nfsymbol.hxx>
 #include <xmloff/xmltoken.hxx>

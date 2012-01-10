@@ -26,11 +26,7 @@
  *
  ************************************************************************/
 
-
-#ifndef _SVSTDARR_HXX
-#define _SVSTDARR_STRINGSDTOR
 #include <svl/svstdarr.hxx>
-#endif
 #include <vcl/msgbox.hxx>
 #include <svl/stritem.hxx>
 #include <sfx2/fcontnr.hxx>

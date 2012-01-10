@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-
-
-
 #include <stdlib.h>
 
 #include <stdio.h>
@@ -40,10 +37,6 @@
 #include <svl/urihelper.hxx>
 #include <sfx2/linkmgr.hxx>
 
-#ifndef _SVSTDARR_USHORTS_DECL
-#define _SVSTDARR_USHORTS
-#include <svl/svstdarr.hxx>
-#endif
 #include <editeng/lrspitem.hxx>
 #include <editeng/tstpitem.hxx>
 #include <fmtinfmt.hxx>

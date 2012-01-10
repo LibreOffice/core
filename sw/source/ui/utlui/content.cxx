@@ -26,11 +26,7 @@
  *
  ************************************************************************/
 
-
-#ifndef _SVSTDARR_HXX
-#define _SVSTDARR_STRINGSDTOR
 #include <svl/svstdarr.hxx>
-#endif
 #include <svl/urlbmk.hxx>
 #include <tools/urlobj.hxx>
 #include <sfx2/docfile.hxx>

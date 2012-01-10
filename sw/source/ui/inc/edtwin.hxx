@@ -37,7 +37,6 @@
 #include <svtools/transfer.hxx>
 #include <swevent.hxx>
 
-#define _SVSTDARR_STRINGSISORTDTOR
 #include <svl/svstdarr.hxx>
 
 class   SwWrtShell;

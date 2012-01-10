@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <tools/urlobj.hxx>
@@ -35,9 +33,6 @@
 #include <i18npool/mslangid.hxx>
 #include <vcl/svapp.hxx>
 #include <sot/storinfo.hxx>
-// for the Sort-String-Arrays from SVMEM.HXX
-#define _SVSTDARR_STRINGSISORTDTOR
-#define _SVSTDARR_STRINGSDTOR
 #include <svl/svstdarr.hxx>
 #include <svl/fstathelper.hxx>
 #include <svtools/helpopt.hxx>

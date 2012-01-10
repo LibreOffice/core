@@ -36,9 +36,7 @@
 #include <comphelper/string.hxx>
 #include <dialmgr.hxx>
 #include <svx/dialogs.hrc>
-#define _SVSTDARR_STRINGSDTOR
 #include <svl/svstdarr.hxx>
-
 #include <svtools/svmedit.hxx>
 #include "cfgutil.hxx"
 #include <sfx2/app.hxx>

@@ -26,24 +26,9 @@
  *
  ************************************************************************/
 
-
-#define _SVARRAY_CXX
-
-#define _SVSTDARR_sal_uInt16S
 #define _SVSTDARR_STRINGSDTOR
-#define _SVSTDARR_STRINGSSORT
 #define _SVSTDARR_STRINGSSORTDTOR
 #define _SVSTDARR_STRINGSISORT
-#define _SVSTDARR_STRINGSISORTDTOR
-
-#define _SVSTDARR_BYTESTRINGS
-#define _SVSTDARR_BYTESTRINGSDTOR
-#define _SVSTDARR_BYTESTRINGSSORT
-#define _SVSTDARR_BYTESTRINGSSORTDTOR
-#define _SVSTDARR_BYTESTRINGSISORT
-#define _SVSTDARR_BYTESTRINGSISORTDTOR
-
-#define _SVSTDARR_XUB_STRLEN
 
 #include <svl/svstdarr.hxx>
 #include <tools/debug.hxx>

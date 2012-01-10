@@ -33,8 +33,6 @@
 #include "swfont.hxx"
 #include "porlay.hxx"
 
-#define _SVSTDARR_XUB_STRLEN
-#define _SVSTDARR_USHORTS
 #include <svl/svstdarr.hxx>
 
 class OutputDevice;

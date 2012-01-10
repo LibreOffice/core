@@ -41,7 +41,6 @@
 #endif
 #include <tools/urlobj.hxx>
 #include <tools/debug.hxx>
-#define _SVSTDARR_STRINGSDTOR
 #include "svl/svstdarr.hxx"
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/ui/dialogs/FilePickerEvent.hpp>

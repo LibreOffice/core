@@ -56,8 +56,6 @@
 #include <svl/svarray.hxx>
 #include <svl/lstner.hxx>
 
-#define _SVSTDARR_ULONGS
-#define _SVSTDARR_USHORTS
 #include <svl/svstdarr.hxx>
 #include <sfx2/mnuitem.hxx>
 #include "svx/fmtools.hxx"

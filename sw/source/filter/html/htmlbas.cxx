@@ -26,11 +26,9 @@
  *
  ************************************************************************/
 
-
 #include <hintids.hxx>
 #include <rtl/strbuf.hxx>
 #include <sfx2/sfx.hrc>
-#define _SVSTDARR_STRINGSSORTDTOR
 #include <svl/svstdarr.hxx>
 #include <basic/sbx.hxx>
 #include <basic/basmgr.hxx>

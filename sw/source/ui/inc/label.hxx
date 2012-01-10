@@ -28,10 +28,7 @@
 #ifndef _LABEL_HXX
 #define _LABEL_HXX
 
-#ifndef _SVSTDARR_HXX
-#define _SVSTDARR_STRINGSDTOR
 #include <svl/svstdarr.hxx>
-#endif
 #include <sfx2/tabdlg.hxx>
 #include <com/sun/star/frame/XModel.hpp>
 #include <labelcfg.hxx>

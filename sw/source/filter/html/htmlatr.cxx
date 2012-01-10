@@ -26,18 +26,11 @@
  *
  ************************************************************************/
 
-
-
 #include <hintids.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
 #include <sfx2/sfx.hrc>
-#if !defined _SVSTDARR_XUB_STRLEN_DECL || !defined _SVSTDARR_USHORTS_DECL
-#define _SVSTDARR_XUB_STRLEN
-#define _SVSTDARR_USHORTS
-#include <svl/svstdarr.hxx>
-#endif
 #include <svtools/htmlout.hxx>
 #include <svtools/htmlkywd.hxx>
 #include <svtools/htmltokn.h>

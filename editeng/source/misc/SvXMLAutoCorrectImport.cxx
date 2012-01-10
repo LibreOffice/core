@@ -28,16 +28,12 @@
 
 #include <SvXMLAutoCorrectImport.hxx>
 #include <vcl/svapp.hxx>
-
-#define _SVSTDARR_STRINGSISORTDTOR
-#define _SVSTDARR_STRINGSDTOR
 #include <svl/svstdarr.hxx>
 #include <xmloff/xmltoken.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 using namespace ::rtl;
-
 
 static OUString sBlockList ( RTL_CONSTASCII_USTRINGPARAM ( "_block-list" ) );
 

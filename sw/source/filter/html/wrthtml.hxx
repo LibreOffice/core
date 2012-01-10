@@ -34,8 +34,6 @@
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/form/XForm.hpp>
 #include <vcl/field.hxx>
-#define _SVSTDARR_STRINGSDTOR
-#define _SVSTDARR_STRINGSSORTDTOR
 #include <svl/svstdarr.hxx>
 #include <i18npool/lang.h>
 #include <tools/stream.hxx>

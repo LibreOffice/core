@@ -53,7 +53,6 @@
 class SwList;
 
 #include <IDocumentExternalData.hxx>
-#define _SVSTDARR_STRINGSDTOR
 #include <svl/svstdarr.hxx>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/embed/XStorage.hpp>

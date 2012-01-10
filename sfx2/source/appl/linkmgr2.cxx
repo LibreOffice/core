@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-
 #include <sfx2/linkmgr.hxx>
 #include <com/sun/star/document/UpdateDocMode.hpp>
 #include <sfx2/objsh.hxx>
@@ -50,8 +49,6 @@
 #include "impldde.hxx"
 #include "app.hrc"
 #include "sfx2/sfxresid.hxx"
-
-#define _SVSTDARR_STRINGSDTOR
 #include <svl/svstdarr.hxx>
 
 #include <com/sun/star/lang/XComponent.hpp>

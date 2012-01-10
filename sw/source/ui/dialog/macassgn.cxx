@@ -26,15 +26,12 @@
  *
  ************************************************************************/
 
-
 #ifdef SW_DLLIMPLEMENTATION
 #undef SW_DLLIMPLEMENTATION
 #endif
 
-
 #include "hintids.hxx"
 
-#define _SVSTDARR_STRINGSDTOR
 #include <svl/svstdarr.hxx>
 #include <svx/htmlmode.hxx>
 #include <svx/svxids.hrc>

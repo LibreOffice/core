@@ -36,7 +36,6 @@
 #include <svtools/svtreebx.hxx>
 #include <tools/diagnose_ex.h>
 
-#define _SVSTDARR_ULONGS
 #include <svl/svstdarr.hxx>
 
 //........................................................................

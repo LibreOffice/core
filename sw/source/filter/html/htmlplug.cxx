@@ -32,7 +32,6 @@
 #include "hintids.hxx"
 #include <rtl/strbuf.hxx>
 #include <svl/urihelper.hxx>
-#define _SVSTDARR_ULONGS
 #include <svl/svstdarr.hxx>
 #include <vcl/svapp.hxx>
 #include <sfx2/frmhtml.hxx>

@@ -30,12 +30,6 @@
 #undef SW_DLLIMPLEMENTATION
 #endif
 
-
-
-#define _SVSTDARR_STRINGSSORTDTOR
-#define _SVSTDARR_USHORTS
-
-
 #include <redline.hxx>
 #include <vcl/msgbox.hxx>
 #include <svl/svstdarr.hxx>

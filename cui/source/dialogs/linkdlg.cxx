@@ -51,7 +51,6 @@
 
 #include <dialmgr.hxx>
 
-#define _SVSTDARR_USHORTS
 #include <svl/svstdarr.hxx>
 
 #define MAX_FILENAME    18

@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-
 #include <sot/clsids.hxx>
 #include <com/sun/star/embed/XEmbedObjectCreator.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
@@ -52,12 +51,10 @@
 #include "xmltexte.hxx"
 #include <SwAppletImpl.hxx>
 
-#define _SVSTDARR_ULONGS
 #include <svl/svstdarr.hxx>
 #include "svl/urihelper.hxx"
 #include <sfx2/frmdescr.hxx>
 #include <SwStyleNameMapper.hxx>
-
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;

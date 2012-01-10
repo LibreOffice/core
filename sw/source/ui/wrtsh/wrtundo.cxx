@@ -26,10 +26,6 @@
  *
  ************************************************************************/
 
-
-
-
-#define _SVSTDARR_STRINGSDTOR
 #include <tools/resid.hxx>
 #include <sfx2/app.hxx>
 #include <svl/slstitm.hxx>

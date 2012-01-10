@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-
 #include <com/sun/star/embed/VerbDescriptor.hpp>
 #include <com/sun/star/embed/VerbAttributes.hpp>
 #include <com/sun/star/container/XNamed.hpp>
@@ -57,7 +56,6 @@
 
 #include <sfx2/mnumgr.hxx>
 
-#define _SVSTDARR_USHORTS
 #include <svl/svstdarr.hxx>
 #include <svtools/menuoptions.hxx>
 

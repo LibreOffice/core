@@ -33,11 +33,6 @@
 
 #include <memory>
 
-#ifndef _SVSTDARR_HXX
-#define _SVSTDARR_USHORTS
-#define _SVSTDARR_ULONGS
-#include <svl/svstdarr.hxx>
-#endif
 #include <svl/itemset.hxx>
 
 #include <swtypes.hxx>

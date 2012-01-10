@@ -26,15 +26,12 @@
  *
  ************************************************************************/
 
-
 #include "OfficeFolderPicker.hxx"
 
 #include "iodlg.hxx"
 
 #include <list>
 #include <tools/urlobj.hxx>
-
-#define _SVSTDARR_STRINGSDTOR
 #include "svl/svstdarr.hxx"
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
 #include <com/sun/star/container/XSet.hpp>

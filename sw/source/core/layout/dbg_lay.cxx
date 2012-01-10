@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-
 #ifdef DBG_UTIL
 
 /*
@@ -106,11 +105,6 @@
 
 #include "dbg_lay.hxx"
 #include <tools/stream.hxx>
-
-#ifndef _SVSTDARR_HXX
-#define _SVSTDARR_USHORTS
-#include <svl/svstdarr.hxx>
-#endif
 
 #include <stdio.h>
 

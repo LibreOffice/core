@@ -26,16 +26,11 @@
  *
  ************************************************************************/
 
-
 #ifdef SW_DLLIMPLEMENTATION
 #undef SW_DLLIMPLEMENTATION
 #endif
 
-#ifndef _SVSTDARR_HXX
-#define _SVSTDARR_STRINGSDTOR
 #include <svl/svstdarr.hxx>
-#endif
-
 #include <optpage.hxx>
 #include <doc.hxx>
 #include <hintids.hxx>

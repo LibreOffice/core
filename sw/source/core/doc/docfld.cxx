@@ -26,16 +26,12 @@
  *
  ************************************************************************/
 
-
-
 #include <hintids.hxx>
 
 #include <string.h>
 #include <float.h>
 #include <tools/datetime.hxx>
-#ifndef _SVSTDARR_HXX
 #include <svl/svarray.hxx>
-#endif
 #include <vcl/svapp.hxx>
 #include <unotools/charclass.hxx>
 #include <unotools/transliterationwrapper.hxx>

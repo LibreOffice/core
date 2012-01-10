@@ -26,19 +26,11 @@
  *
  ************************************************************************/
 
-
 #include <com/sun/star/text/NotePrintMode.hpp>
-
 #include <cstdarg>
-
 #include <cmdid.h>
-
-#ifndef _SVSTDARR_HXX
-#define _SVSTDARR_STRINGSDTOR
 #include <svl/svstdarr.hxx>
-#endif
 #include <sfx2/request.hxx>
-
 #include <sfx2/progress.hxx>
 #include <sfx2/app.hxx>
 #include <vcl/msgbox.hxx>

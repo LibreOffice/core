@@ -33,7 +33,6 @@
 #include "swuiidxmrk.hxx"
 #include <hintids.hxx>
 #include <helpid.h>
-#define _SVSTDARR_STRINGSSORT
 #include <svl/svstdarr.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>

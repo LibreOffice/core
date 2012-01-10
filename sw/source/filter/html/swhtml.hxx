@@ -28,16 +28,7 @@
 #ifndef _SWHTML_HXX
 #define _SWHTML_HXX
 
-#if !defined(_SVSTDARR_XUB_STRLEN_DECL) || \
-    !defined(_SVSTDARR_USHORTS_DECL) || !defined(_SVSTDARR_STRINGSDTOR_DECL)
-#ifndef _SVSTDARR_XUB_STRLEN_DECL
-#define _SVSTDARR_XUB_STRLEN
-#endif
-#ifndef _SVSTDARR_STRINGSDTOR_DECL
-#define _SVSTDARR_STRINGSDTOR
-#endif
 #include <svl/svstdarr.hxx>
-#endif
 #include <sfx2/sfxhtml.hxx>
 #include <svl/macitem.hxx>
 #include <editeng/svxenum.hxx>

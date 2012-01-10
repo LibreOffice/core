@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-
 #include "SwRewriter.hxx"
 #include "chrdlg.hrc"
 #include "cmdid.h"
@@ -52,11 +51,7 @@
 #include "wrtsh.hxx"
 #include "wview.hxx"
 
-#ifndef _SVSTDARR_HXX
-#define _SVSTDARR_STRINGSDTOR
 #include <svl/svstdarr.hxx>
-#endif
-
 #include <comphelper/anytostring.hxx>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/exc_hlp.hxx>

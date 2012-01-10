@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-
 #include <svx/svxids.hrc>
 #include <map>
 #include <com/sun/star/text/XTextSection.hpp>
@@ -68,7 +67,6 @@
 #include <editeng/flstitem.hxx>
 #include <vcl/metric.hxx>
 #include <svtools/ctrltool.hxx>
-#define _SVSTDARR_USHORTS
 #include <svl/svstdarr.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/docfile.hxx>

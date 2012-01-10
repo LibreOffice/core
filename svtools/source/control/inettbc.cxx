@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-
 #ifdef UNX
 #include <pwd.h>
 #include <sys/types.h>
@@ -57,8 +56,6 @@
 #include <svl/itemset.hxx>
 #include "svl/urihelper.hxx"
 #include <unotools/pathoptions.hxx>
-
-#define _SVSTDARR_STRINGSDTOR
 #include <svl/svstdarr.hxx>
 #include <ucbhelper/commandenvironment.hxx>
 #include <ucbhelper/content.hxx>

@@ -26,18 +26,13 @@
  *
  ************************************************************************/
 
-
 #ifdef SW_DLLIMPLEMENTATION
 #undef SW_DLLIMPLEMENTATION
 #endif
 
-
 #include <hintids.hxx>
 
-#ifndef _SVSTDARR_STRINGSSORTDTOR
-#define _SVSTDARR_STRINGSSORTDTOR
 #include <svl/svstdarr.hxx>
-#endif
 #include <vcl/msgbox.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svx/hdft.hxx>

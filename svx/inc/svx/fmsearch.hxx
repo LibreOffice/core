@@ -30,16 +30,10 @@
 #define _FMSEARCH_HXX
 
 #include <com/sun/star/sdbc/XResultSet.hpp>
-
-#define _SVSTDARR_STRINGSDTOR
 #include <svl/svstdarr.hxx>
-
 #include <vcl/dialog.hxx>
-
 #include <vcl/button.hxx>
-
 #include <vcl/fixed.hxx>
-
 #include <vcl/edit.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/lstbox.hxx>

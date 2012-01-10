@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-
 #include <com/sun/star/table/TableSortField.hpp>
 
 #include <osl/endian.h>
@@ -107,7 +106,6 @@
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <fmtflcnt.hxx>
-#define _SVSTDARR_USHORTS
 #include <svl/svstdarr.hxx>
 #include <editeng/brshitem.hxx>
 #include <editeng/unolingu.hxx>

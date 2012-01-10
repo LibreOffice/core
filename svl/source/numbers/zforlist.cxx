@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-
 #include <tools/debug.hxx>
 #include <unotools/charclass.hxx>
 #include <i18npool/mslangid.hxx>
@@ -38,7 +37,6 @@
 #include <comphelper/processfactory.hxx>
 #include <unotools/misccfg.hxx>
 
-#define _SVSTDARR_USHORTS
 #include <svl/svstdarr.hxx>
 
 #define _ZFORLIST_CXX

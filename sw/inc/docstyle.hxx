@@ -30,10 +30,7 @@
 
 #include <rtl/ref.hxx>
 
-#ifndef _SVSTDARR_HXX
-#define _SVSTDARR_STRINGSDTOR
 #include <svl/svstdarr.hxx>
-#endif
 #include <svl/style.hxx>
 #include <svl/itemset.hxx>
 #include "swdllapi.h"

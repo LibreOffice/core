@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-// includes --------------------------------------------------------------
 #include <sal/macros.h>
 #include "iodlg.hxx"
 #include <tools/stream.hxx>
@@ -48,9 +46,6 @@
 #include "svtools/sfxecode.hxx"
 #include "svl/svarray.hxx"
 #include "svtools/svtabbx.hxx"
-
-#define _SVSTDARR_USHORTS
-#define _SVSTDARR_STRINGSDTOR
 #include "svl/svstdarr.hxx"
 #include <toolkit/helper/vclunohelper.hxx>
 #include <unotools/localfilehelper.hxx>

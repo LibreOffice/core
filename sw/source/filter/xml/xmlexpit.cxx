@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-
 #include "xmlexpit.hxx"
 
 #include <rtl/ustrbuf.hxx>
@@ -41,13 +40,6 @@
 #include <editeng/xmlcnitm.hxx>
 #include <xmloff/xmlexp.hxx>
 #include <editeng/memberids.hrc>
-
-#ifndef _SVSTDARR_USHORTS
-#define _SVSTDARR_USHORTS
-#include <svl/svstdarr.hxx>
-#endif
-
-
 #include "hintids.hxx"
 #include "unomid.h"
 #include <svx/unomid.hxx>

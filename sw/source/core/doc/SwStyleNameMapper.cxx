@@ -26,10 +26,7 @@
  *
  ************************************************************************/
 
-
-
 #include <SwStyleNameMapper.hxx>
-#define _SVSTDARR_STRINGSDTOR
 #include <svl/svstdarr.hxx>
 #include <tools/resmgr.hxx>
 #include <poolfmt.hxx>

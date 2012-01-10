@@ -30,7 +30,6 @@
 
 #include "macropg.hxx"
 #include <vcl/msgbox.hxx>
-#define _SVSTDARR_STRINGSDTOR
 #include <svl/svstdarr.hxx>
 #include <svtools/svmedit.hxx>
 #include <svl/eitem.hxx>

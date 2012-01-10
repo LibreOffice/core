@@ -89,8 +89,6 @@
 #include <svtools/svparser.hxx> // SvKeyValue
 #include <cppuhelper/weakref.hxx>
 #include <cppuhelper/implbase1.hxx>
-
-#define _SVSTDARR_STRINGSDTOR
 #include <svl/svstdarr.hxx>
 
 #include <unotools/streamwrap.hxx>

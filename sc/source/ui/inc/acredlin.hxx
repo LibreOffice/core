@@ -34,19 +34,12 @@
 #include <vcl/group.hxx>
 #include <svtools/headbar.hxx>
 #include <svtools/svtabbx.hxx>
-
-
 #include "rangenam.hxx"
 #include "anyrefdg.hxx"
 #include <vcl/lstbox.hxx>
-
 #include <svx/ctredlin.hxx>
 #include <svx/simptabl.hxx>
-
-#ifndef _SVARRAY_HXX
-#define _SVARRAY_HXX
 #include <svl/svarray.hxx>
-#endif
 #include "chgtrack.hxx"
 #include "chgviset.hxx"
 #include <vcl/timer.hxx>
