@@ -42,6 +42,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     configmgr \
     cppcanvas \
     cppu \
+    cppuhelper \
     cui \
     dbaccess \
     desktop \
