@@ -192,7 +192,7 @@ static void add_ugly_db_item( GtkMenuShell *pMenuShell, const char *pAsciiURL,
                 aEntry[m].Value >>= aDescription;
         }
 
-        if ( aURL.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(BASE_URL)) && aDescription.getLength() )
+        if ( aURL.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(BASE_URL)) && !aDescription.isEmpty() )
         {
             add_item (pMenuShell, pAsciiURL, &aDescription, nResId, pFnCallback);
             break;

@@ -788,7 +788,7 @@ REFERENCE< XDISPATCH > SAL_CALL SfxBaseController::queryDispatch(   const   UNOU
             if ( aURL.Protocol.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(".uno:")) )
             {
                 rtl::OUString aMasterCommand = SfxOfficeDispatch::GetMasterUnoCommand( aURL );
-                sal_Bool      bMasterCommand( aMasterCommand.getLength() > 0 );
+                sal_Bool      bMasterCommand( !aMasterCommand.isEmpty() );
 
                 pAct = m_pData->m_pViewShell->GetViewFrame() ;
                 SfxSlotPool& rSlotPool = SfxSlotPool::GetSlotPool( pAct );
@@ -893,15 +893,15 @@ REFERENCE< XDISPATCH > SAL_CALL SfxBaseController::queryDispatch(   const   UNOU
                     }
                 }
             }
-            else if( sTargetFrameName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("_self")) || sTargetFrameName.getLength()==0 )
+            else if( sTargetFrameName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("_self")) || sTargetFrameName.isEmpty() )
             {
                 // check for already loaded URL ... but with additional jumpmark!
                 REFERENCE< XMODEL > xModel = getModel();
-                if( xModel.is() && aURL.Mark.getLength() )
+                if( xModel.is() && !aURL.Mark.isEmpty() )
                 {
                     SfxSlotPool& rSlotPool = SfxSlotPool::GetSlotPool( pAct );
                     const SfxSlot* pSlot = rSlotPool.GetSlot( SID_JUMPTOMARK );
-                    if( aURL.Main.getLength() && aURL.Main == xModel->getURL() && pSlot )
+                    if( !aURL.Main.isEmpty() && aURL.Main == xModel->getURL() && pSlot )
                         return REFERENCE< XDISPATCH >( new SfxOfficeDispatch( pAct->GetBindings(), pAct->GetDispatcher(), pSlot, aURL) );
                 }
             }
@@ -1385,14 +1385,14 @@ void SfxBaseController::ConnectSfxFrame_Impl( const ConnectSfxFrame i_eConnect )
             // if there's a JumpMark given, then, well, jump to it
             ::comphelper::NamedValueCollection aViewArgs( getCreationArguments() );
             const ::rtl::OUString sJumpMark = aViewArgs.getOrDefault( "JumpMark", ::rtl::OUString() );
-            const bool bHasJumpMark = ( sJumpMark.getLength() > 0 );
+            const bool bHasJumpMark = !sJumpMark.isEmpty();
             OSL_ENSURE( ( !m_pData->m_pViewShell->GetObjectShell()->IsLoading() )
-                    ||  ( !sJumpMark.getLength() ),
+                    ||  ( sJumpMark.isEmpty() ),
                 "SfxBaseController::ConnectSfxFrame_Impl: so this code wasn't dead?" );
                 // Before CWS autorecovery, there was code which postponed jumping to the Mark to a later time
                 // (SfxObjectShell::PositionView_Impl), but it seems this branch was never used, since this method
                 // here is never called before the load process finished. At least not with a non-empty jump mark
-            if ( sJumpMark.getLength() )
+            if ( !sJumpMark.isEmpty() )
                 m_pData->m_pViewShell->JumpToMark( sJumpMark );
 
             // if no plugin mode and no jump mark was supplied, check whether the document itself can provide view data, and
@@ -1425,7 +1425,7 @@ void SfxBaseController::ConnectSfxFrame_Impl( const ConnectSfxFrame i_eConnect )
                     {
                         const ::comphelper::NamedValueCollection aViewData( xViewData->getByIndex(i) );
                         ::rtl::OUString sViewId( aViewData.getOrDefault( "ViewId", ::rtl::OUString() ) );
-                        if ( sViewId.getLength() == 0 )
+                        if ( sViewId.isEmpty() )
                             continue;
 
                         const SfxViewFactory* pViewFactory = rDocFactory.GetViewFactoryByViewName( sViewId );

@@ -210,7 +210,7 @@ PopupMenu* InsertThesaurusSubmenu_Impl( SfxBindings* pBindings, Menu* pSVMenu )
             Image aImage;
             String sThesImplName( aHelper.GetThesImplName( aLocale ) );
             ::rtl::OUString aSynonymsImageUrl( aCfg.GetSynonymsContextImage( sThesImplName ) );
-            if (sThesImplName.Len() > 0 && aSynonymsImageUrl.getLength() > 0)
+            if (sThesImplName.Len() > 0 && !aSynonymsImageUrl.isEmpty())
                 aImage = Image( lcl_GetImageFromPngUrl( aSynonymsImageUrl ) );
 
             for (sal_uInt16 i = 0; (size_t)i < nNumSynonyms; ++i)
@@ -224,7 +224,7 @@ PopupMenu* InsertThesaurusSubmenu_Impl( SfxBindings* pBindings, Menu* pSVMenu )
                 aCmd += aItemText;
                 pThesSubMenu->SetItemCommand( nId, aCmd );
 
-                if (aSynonymsImageUrl.getLength() > 0)
+                if (!aSynonymsImageUrl.isEmpty())
                     pThesSubMenu->SetItemImage( nId, aImage );
             }
         }

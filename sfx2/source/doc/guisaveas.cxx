@@ -410,11 +410,11 @@ const ::comphelper::SequenceAsHashMap& ModelData_Impl::GetDocProps()
 //-------------------------------------------------------------------------
 ::rtl::OUString ModelData_Impl::GetModuleName()
 {
-    if ( !m_aModuleName.getLength() )
+    if ( m_aModuleName.isEmpty() )
     {
         m_aModuleName = m_pOwner->GetModuleManager()->identify(
                                                 uno::Reference< uno::XInterface >( m_xModel, uno::UNO_QUERY ) );
-        if ( !m_aModuleName.getLength() )
+        if ( m_aModuleName.isEmpty() )
             throw uno::RuntimeException(); // TODO:
     }
     return m_aModuleName;
@@ -559,7 +559,7 @@ sal_Bool ModelData_Impl::ExecuteFilterDialog_Impl( const ::rtl::OUString& aFilte
                    {
                     ::rtl::OUString aServiceName;
                        aProps[nProperty].Value >>= aServiceName;
-                    if( aServiceName.getLength() )
+                    if( !aServiceName.isEmpty() )
                     {
                         uno::Reference< ui::dialogs::XExecutableDialog > xFilterDialog(
                                                     m_pOwner->GetServiceFactory()->createInstance( aServiceName ), uno::UNO_QUERY );
@@ -722,11 +722,11 @@ sal_Int8 ModelData_Impl::CheckFilter( const ::rtl::OUString& aFilterName )
 {
     ::comphelper::SequenceAsHashMap aFiltPropsHM;
     sal_Int32 nFiltFlags = 0;
-    if ( aFilterName.getLength() )
+    if ( !aFilterName.isEmpty() )
     {
         // get properties of filter
         uno::Sequence< beans::PropertyValue > aFilterProps;
-        if ( aFilterName.getLength() )
+        if ( !aFilterName.isEmpty() )
             m_pOwner->GetFilterConfiguration()->getByName( aFilterName ) >>= aFilterProps;
 
         aFiltPropsHM = ::comphelper::SequenceAsHashMap( aFilterProps );
@@ -792,7 +792,7 @@ sal_Bool ModelData_Impl::CheckFilterOptionsDialogExistence()
             ::rtl::OUString aUIServName = aPropsHM.getUnpackedValueOrDefault(
                                             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UIComponent")),
                                             ::rtl::OUString() );
-            if ( aUIServName.getLength() )
+            if ( !aUIServName.isEmpty() )
                 return sal_True;
         }
     }
@@ -855,7 +855,7 @@ sal_Bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
     sfx2::FileDialogHelper* pFileDlg = NULL;
 
     ::rtl::OUString aDocServiceName = GetDocServiceName();
-    DBG_ASSERT( aDocServiceName.getLength(), "No document service for this module set!" );
+    DBG_ASSERT( !aDocServiceName.isEmpty(), "No document service for this module set!" );
 
     sal_Int32 nMust = getMustFlags( nStoreMode );
     sal_Int32 nDont = getDontFlags( nStoreMode );
@@ -930,7 +930,7 @@ sal_Bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
                                                         aFilterNameString,
                                                         ::rtl::OUString() );
 
-        if ( aOldFilterName.getLength() )
+        if ( !aOldFilterName.isEmpty() )
             m_pOwner->GetFilterConfiguration()->getByName( aOldFilterName ) >>= aOldFilterProps;
 
         ::comphelper::SequenceAsHashMap aOldFiltPropsHM( aOldFilterProps );
@@ -957,10 +957,10 @@ sal_Bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
     }
 
     ::rtl::OUString aReccomendedDir = GetReccomendedDir( aSuggestedDir );
-    if ( aReccomendedDir.getLength() )
+    if ( !aReccomendedDir.isEmpty() )
         pFileDlg->SetDisplayDirectory( aReccomendedDir );
     ::rtl::OUString aReccomendedName = GetReccomendedName( aSuggestedName, aAdjustToType );
-    if ( aReccomendedName.getLength() )
+    if ( !aReccomendedName.isEmpty() )
         pFileDlg->SetFileName( aReccomendedName );
 
     uno::Reference < view::XSelectionSupplier > xSel( GetModel()->getCurrentController(), uno::UNO_QUERY );
@@ -1146,17 +1146,17 @@ sal_Bool ModelData_Impl::ShowDocumentInfoDialog()
 {
     ::rtl::OUString aReccomendedDir;
 
-    if ( ( aSuggestedDir.getLength() || GetStorable()->hasLocation() )
+    if ( ( !aSuggestedDir.isEmpty() || GetStorable()->hasLocation() )
       && !GetMediaDescr().getUnpackedValueOrDefault( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RepairPackage")),
                                                                       sal_False ) )
     {
         INetURLObject aLocation;
-        if ( aSuggestedDir.getLength() )
+        if ( !aSuggestedDir.isEmpty() )
             aLocation = INetURLObject( aSuggestedDir );
         else
         {
             ::rtl::OUString aOldURL = GetStorable()->getLocation();
-            if ( aOldURL.getLength() )
+            if ( !aOldURL.isEmpty() )
             {
                 INetURLObject aTmp( aOldURL );
                 if ( aTmp.removeSegment() )
@@ -1185,12 +1185,12 @@ sal_Bool ModelData_Impl::ShowDocumentInfoDialog()
     // the last used name might be provided by aSuggestedName from the old selection, or from the MediaDescriptor
     ::rtl::OUString aReccomendedName;
 
-    if ( aSuggestedName.getLength() )
+    if ( !aSuggestedName.isEmpty() )
         aReccomendedName = aSuggestedName;
     else
     {
         aReccomendedName = INetURLObject( GetStorable()->getLocation() ).GetName( INetURLObject::DECODE_WITH_CHARSET );
-        if ( !aReccomendedName.getLength() )
+        if ( aReccomendedName.isEmpty() )
         {
             try {
                 uno::Reference< frame::XTitle > xTitle( GetModel(), uno::UNO_QUERY_THROW );
@@ -1198,7 +1198,7 @@ sal_Bool ModelData_Impl::ShowDocumentInfoDialog()
             } catch( const uno::Exception& ) {}
         }
 
-        if ( aReccomendedName.getLength() && aTypeName.getLength() )
+        if ( !aReccomendedName.isEmpty() && !aTypeName.isEmpty() )
         {
             // adjust the extension to the type
             uno::Reference< container::XNameAccess > xTypeDetection = uno::Reference< container::XNameAccess >(
@@ -1473,15 +1473,15 @@ sal_Bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >&
 
         // The Dispatch supports parameter FolderName that overwrites SuggestedSaveAsDir
         ::rtl::OUString aSuggestedDir = aModelData.GetMediaDescr().getUnpackedValueOrDefault( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FolderName" ) ), ::rtl::OUString() );
-        if ( !aSuggestedDir.getLength() )
+        if ( aSuggestedDir.isEmpty() )
         {
             aSuggestedDir = aModelData.GetMediaDescr().getUnpackedValueOrDefault( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SuggestedSaveAsDir" ) ), ::rtl::OUString() );
-            if ( !aSuggestedDir.getLength() )
+            if ( aSuggestedDir.isEmpty() )
                 aSuggestedDir = aModelData.GetDocProps().getUnpackedValueOrDefault( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SuggestedSaveAsDir" ) ), ::rtl::OUString() );
         }
 
     aSuggestedName = aModelData.GetMediaDescr().getUnpackedValueOrDefault( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SuggestedSaveAsName" ) ), ::rtl::OUString() );
-        if ( !aSuggestedName.getLength() )
+        if ( aSuggestedName.isEmpty() )
             aSuggestedName = aModelData.GetDocProps().getUnpackedValueOrDefault( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SuggestedSaveAsName" ) ), ::rtl::OUString() );
 
         ::rtl::OUString sStandardDir;
@@ -1561,7 +1561,7 @@ sal_Bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >&
         else
             aModelData.GetMediaDescr()[aFilterNameString] <<= aFilterName;
 
-        DBG_ASSERT( aFilterName.getLength(), "Illegal filter!" );
+        DBG_ASSERT( !aFilterName.isEmpty(), "Illegal filter!" );
     }
     else
     {
@@ -1670,7 +1670,7 @@ sal_Bool SfxStoringHelper::CheckFilterOptionsAppearence(
                    ::rtl::OUString aServiceName = aPropsHM.getUnpackedValueOrDefault(
                                                     ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UIComponent")),
                                                     ::rtl::OUString() );
-                if( aServiceName.getLength() )
+                if( !aServiceName.isEmpty() )
                        bUseFilterOptions = sal_True;
             }
         }

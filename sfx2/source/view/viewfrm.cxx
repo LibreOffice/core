@@ -1987,7 +1987,7 @@ SfxViewShell* SfxViewFrame::LoadViewIntoFrame_Impl( const SfxObjectShell& i_rDoc
         aTransformLoadArgs.remove( "Hidden" );
 
     ::rtl::OUString sURL( RTL_CONSTASCII_USTRINGPARAM( "private:object" ) );
-    if ( !sURL.getLength() )
+    if ( sURL.isEmpty() )
         sURL = i_rDoc.GetFactory().GetFactoryURL();
 
     Reference< XComponentLoader > xLoader( i_rFrame, UNO_QUERY_THROW );
@@ -2119,7 +2119,7 @@ void SfxViewFrame::SaveCurrentViewData_Impl( const sal_uInt16 i_nNewViewId )
         {
             const ::comphelper::NamedValueCollection aCurViewData( xViewData->getByIndex(i) );
             ::rtl::OUString sViewId( aCurViewData.getOrDefault( "ViewId", ::rtl::OUString() ) );
-            if ( sViewId.getLength() == 0 )
+            if ( sViewId.isEmpty() )
                 continue;
 
             const SfxViewFactory* pViewFactory = rDocFactory.GetViewFactoryByViewName( sViewId );
@@ -2648,7 +2648,7 @@ void CutLines( ::rtl::OUString& rStr, sal_Int32 nStartLine, sal_Int32 nLines, sa
  */
 void SfxViewFrame::AddDispatchMacroToBasic_Impl( const ::rtl::OUString& sMacro )
 {
-    if ( !sMacro.getLength() )
+    if ( sMacro.isEmpty() )
         return;
 
     SfxApplication* pSfxApp = SFX_APP();
@@ -2770,7 +2770,7 @@ void SfxViewFrame::AddDispatchMacroToBasic_Impl( const ::rtl::OUString& sMacro )
         ::rtl::OUString sModule( aModuleName );
         if(xLib->hasByName(sModule))
         {
-            if ( aOUSource.getLength() )
+            if ( !aOUSource.isEmpty() )
             {
                 sRoutine.append( aOUSource );
             }

@@ -115,7 +115,7 @@ void SfxStatusListener::ReBind()
 // new UNO API
 void SAL_CALL SfxStatusListener::dispose() throw( ::com::sun::star::uno::RuntimeException )
 {
-    if ( m_xDispatch.is() && m_aCommand.Complete.getLength() > 0 )
+    if ( m_xDispatch.is() && !m_aCommand.Complete.isEmpty() )
     {
         try
         {

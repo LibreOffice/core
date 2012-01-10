@@ -103,7 +103,7 @@ void SAL_CALL OPackageStructureCreator::convertToPackage( const ::rtl::OUString&
                                                           sal_True );
                 SotStorageRef aStorage = new SotStorage( pUCBStorage );
 
-                if ( aTempURL.getLength() )
+                if ( !aTempURL.isEmpty() )
                 {
                     pTempStream = new SvFileStream( aTempURL, STREAM_STD_READWRITE );
                     SotStorageRef aTargetStorage = new SotStorage( sal_True, *pTempStream );
@@ -142,7 +142,7 @@ void SAL_CALL OPackageStructureCreator::convertToPackage( const ::rtl::OUString&
             if ( pTempStream )
                 delete pTempStream;
 
-            if ( aTempURL.getLength() )
+            if ( !aTempURL.isEmpty() )
                 ::utl::UCBContentHelper::Kill( aTempURL );
 
             throw;
@@ -152,7 +152,7 @@ void SAL_CALL OPackageStructureCreator::convertToPackage( const ::rtl::OUString&
             if ( pTempStream )
                 delete pTempStream;
 
-            if ( aTempURL.getLength() )
+            if ( !aTempURL.isEmpty() )
                 ::utl::UCBContentHelper::Kill( aTempURL );
 
             throw;
@@ -164,7 +164,7 @@ void SAL_CALL OPackageStructureCreator::convertToPackage( const ::rtl::OUString&
         if ( pTempStream )
             delete pTempStream;
 
-        if ( aTempURL.getLength() )
+        if ( !aTempURL.isEmpty() )
             ::utl::UCBContentHelper::Kill( aTempURL );
     }
 

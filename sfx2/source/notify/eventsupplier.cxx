@@ -101,7 +101,7 @@ void SAL_CALL SfxEvents_Impl::replaceByName( const OUSTRING & aName, const ANY &
             if  (   ( aNormalizedDescriptor.size() == 1 )
                 &&  ( aNormalizedDescriptor.has( PROP_EVENT_TYPE) == 0 )
                 &&  ( aNormalizedDescriptor.get( PROP_EVENT_TYPE ) >>= sType )
-                &&  ( sType.getLength() == 0 )
+                &&  ( sType.isEmpty() )
                 )
             {
                 // An empty event type means no binding. Therefore reset data
@@ -226,7 +226,7 @@ static void Execute( ANY& aEventData, const css::document::DocumentEvent& aTrigg
             nIndex += 1;
         }
 
-        if (aType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(STAR_BASIC)) && aScript.getLength())
+        if (aType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(STAR_BASIC)) && !aScript.isEmpty())
         {
             com::sun::star::uno::Any aAny;
             SfxMacroLoader::loadMacro( aScript, aAny, pDoc );
@@ -234,7 +234,7 @@ static void Execute( ANY& aEventData, const css::document::DocumentEvent& aTrigg
         else if (aType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Service")) ||
                   aType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Script")))
         {
-            if ( aScript.getLength() )
+            if ( !aScript.isEmpty() )
             {
                 SfxViewFrame* pView = pDoc ?
                     SfxViewFrame::GetFirst( pDoc ) :
@@ -284,7 +284,7 @@ static void Execute( ANY& aEventData, const css::document::DocumentEvent& aTrigg
                 }
             }
         }
-        else if ( aType.getLength() == 0 )
+        else if ( aType.isEmpty() )
         {
             // Empty type means no active binding for the event. Just ignore do nothing.
         }
@@ -408,7 +408,7 @@ SvxMacro* SfxEvents_Impl::ConvertToMacro( const ANY& rElement, SfxObjectShell* p
         ScriptType  eType( STARBASIC );
         if (aType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(STAR_BASIC)))
             eType = STARBASIC;
-        else if (aType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Script")) && aScriptURL.getLength())
+        else if (aType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Script")) && !aScriptURL.isEmpty())
             eType = EXTENDED_STYPE;
         else if (aType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(SVX_MACRO_LANGUAGE_JAVASCRIPT)))
             eType = JAVASCRIPT;
@@ -416,7 +416,7 @@ SvxMacro* SfxEvents_Impl::ConvertToMacro( const ANY& rElement, SfxObjectShell* p
             DBG_ERRORFILE( "ConvertToMacro: Unknown macro type" );
         }
 
-        if ( aMacroName.getLength() )
+        if ( !aMacroName.isEmpty() )
         {
             if (aLibrary.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("application")))
                 aLibrary = SFX_APP()->GetName();
@@ -453,16 +453,16 @@ void SfxEvents_Impl::NormalizeMacro( const ::comphelper::NamedValueCollection& i
     ::rtl::OUString aLibrary = i_eventDescriptor.getOrDefault( PROP_LIBRARY, ::rtl::OUString() );
     ::rtl::OUString aMacroName = i_eventDescriptor.getOrDefault( PROP_MACRO_NAME, ::rtl::OUString() );
 
-    if ( aType.getLength() )
+    if ( !aType.isEmpty() )
         o_normalizedDescriptor.put( PROP_EVENT_TYPE, aType );
-    if ( aScript.getLength() )
+    if ( !aScript.isEmpty() )
         o_normalizedDescriptor.put( PROP_SCRIPT, aScript );
 
     if (aType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(STAR_BASIC)))
     {
-        if ( aScript.getLength() )
+        if ( !aScript.isEmpty() )
         {
-            if ( !aMacroName.getLength() || !aLibrary.getLength() )
+            if ( aMacroName.isEmpty() || aLibrary.isEmpty() )
             {
                 sal_Int32 nHashPos = aScript.indexOf( '/', 8 );
                 sal_Int32 nArgsPos = aScript.indexOf( '(' );
@@ -483,7 +483,7 @@ void SfxEvents_Impl::NormalizeMacro( const ::comphelper::NamedValueCollection& i
                 }
             }
         }
-        else if ( aMacroName.getLength() )
+        else if ( !aMacroName.isEmpty() )
         {
             aScript = OUSTRING( RTL_CONSTASCII_USTRINGPARAM( MACRO_PRFIX ) );
             if ( aLibrary.compareTo( SFX_APP()->GetName() ) != 0 && !aLibrary.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("StarDesktop")) && !aLibrary.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("application")) )
@@ -499,7 +499,7 @@ void SfxEvents_Impl::NormalizeMacro( const ::comphelper::NamedValueCollection& i
 
         if (!aLibrary.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("document")))
         {
-            if ( !aLibrary.getLength() || (pDoc && ( String(aLibrary) == pDoc->GetTitle( SFX_TITLE_APINAME ) || String(aLibrary) == pDoc->GetTitle() )) )
+            if ( aLibrary.isEmpty() || (pDoc && ( String(aLibrary) == pDoc->GetTitle( SFX_TITLE_APINAME ) || String(aLibrary) == pDoc->GetTitle() )) )
                 aLibrary = String::CreateFromAscii("document");
             else
                 aLibrary = String::CreateFromAscii("application");

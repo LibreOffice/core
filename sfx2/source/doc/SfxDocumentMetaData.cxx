@@ -735,7 +735,7 @@ SfxDocumentMetaData::setMetaText(const char* i_name,
     css::uno::Reference<css::xml::dom::XNode> xNode = m_meta.find(name)->second;
 
     try {
-        if (i_rValue.getLength() == 0) {
+        if (i_rValue.isEmpty()) {
             if (xNode.is()) { // delete
                 m_xParent->removeChild(xNode);
                 xNode.clear();
@@ -1070,7 +1070,7 @@ void SAL_CALL SfxDocumentMetaData::updateUserDefinedAndAttributes()
 
     // update elements with attributes
     std::vector<std::pair<const char *, ::rtl::OUString> > attributes;
-    if (m_TemplateName.getLength() || m_TemplateURL.getLength()
+    if (!m_TemplateName.isEmpty() || !m_TemplateURL.isEmpty()
             || isValidDateTime(m_TemplateDate)) {
         attributes.push_back(std::make_pair(
                 static_cast<const char*>("xlink:type"),
@@ -1093,7 +1093,7 @@ void SAL_CALL SfxDocumentMetaData::updateUserDefinedAndAttributes()
     }
     attributes.clear();
 
-    if (m_AutoloadURL.getLength() || (0 != m_AutoloadSecs)) {
+    if (!m_AutoloadURL.isEmpty() || (0 != m_AutoloadSecs)) {
         attributes.push_back(std::make_pair(
                 static_cast<const char*>("xlink:href" ), m_AutoloadURL ));
         attributes.push_back(std::make_pair(
@@ -1105,7 +1105,7 @@ void SAL_CALL SfxDocumentMetaData::updateUserDefinedAndAttributes()
     }
     attributes.clear();
 
-    if (m_DefaultTarget.getLength()) {
+    if (!m_DefaultTarget.isEmpty()) {
         attributes.push_back(std::make_pair(
                 static_cast<const char*>("office:target-frame-name"),
                 m_DefaultTarget));
@@ -1574,7 +1574,7 @@ SfxDocumentMetaData::setLanguage(const css::lang::Locale & the_value)
         throw (css::uno::RuntimeException)
 {
     ::rtl::OUString text = the_value.Language;
-    if (the_value.Country.getLength() > 0) {
+    if (!the_value.Country.isEmpty()) {
         text += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-")).concat(the_value.Country);
     }
     setMetaTextAndNotify("dc:language", text);
@@ -1775,7 +1775,7 @@ SfxDocumentMetaData::getDocumentStatistics() throw (css::uno::RuntimeException)
     for (size_t i = 0; s_stdStats[i] != 0; ++i) {
         const char * aName = s_stdStatAttrs[i];
         ::rtl::OUString text = getMetaAttr("meta:document-statistic", aName);
-        if (text.getLength() == 0) continue;
+        if (text.isEmpty()) continue;
         css::beans::NamedValue stat;
         stat.Name = ::rtl::OUString::createFromAscii(s_stdStats[i]);
         sal_Int32 val;
@@ -2079,7 +2079,7 @@ SfxDocumentMetaData::loadFromMedium(const ::rtl::OUString & URL,
     css::uno::Reference<css::io::XInputStream> xIn;
     ::comphelper::MediaDescriptor md(Medium);
     // if we have an URL parameter, it replaces the one in the media descriptor
-    if (URL.getLength()) {
+    if (!URL.isEmpty()) {
         md[ ::comphelper::MediaDescriptor::PROP_URL() ] <<= URL;
     }
     if (sal_True == md.addInputStream()) {
@@ -2122,7 +2122,7 @@ SfxDocumentMetaData::storeToMedium(const ::rtl::OUString & URL,
            css::lang::WrappedTargetException, css::io::IOException)
 {
     ::comphelper::MediaDescriptor md(Medium);
-    if (URL.getLength()) {
+    if (!URL.isEmpty()) {
         md[ ::comphelper::MediaDescriptor::PROP_URL() ] <<= URL;
     }
     SfxMedium aMedium(md.getAsConstPropertyValueList());

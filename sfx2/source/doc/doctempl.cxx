@@ -739,7 +739,7 @@ sal_Bool SfxDocumentTemplates::CopyOrMove
         INetURLObject aSourceObj( pSource->GetTargetURL() );
 
         ::rtl::OUString aNewTargetURL = GetTemplateTargetURLFromComponent( pTargetRgn->GetTitle(), aTitle );
-        if ( !aNewTargetURL.getLength() )
+        if ( aNewTargetURL.isEmpty() )
             return sal_False;
 
         if ( bMove )
@@ -996,7 +996,7 @@ sal_Bool SfxDocumentTemplates::CopyFrom
                 }
             }
 
-            if( ! aTitle.getLength() )
+            if( aTitle.isEmpty() )
             {
                 INetURLObject aURL( aTemplURL );
                 aURL.CutExtension();
@@ -1549,7 +1549,7 @@ sal_Bool SfxDocumentTemplates::HasUserContents( sal_uInt16 nRegion, sal_uInt16 n
     if ( pRegion )
     {
         ::rtl::OUString aRegionTargetURL = pRegion->GetTargetURL();
-        if ( aRegionTargetURL.getLength() )
+        if ( !aRegionTargetURL.isEmpty() )
         {
             sal_uInt16 nLen = 0;
             sal_uInt16 nStartInd = 0;
@@ -1577,7 +1577,7 @@ sal_Bool SfxDocumentTemplates::HasUserContents( sal_uInt16 nRegion, sal_uInt16 n
                 if ( pEntryData )
                 {
                     ::rtl::OUString aEntryTargetURL = pEntryData->GetTargetURL();
-                    if ( aEntryTargetURL.getLength()
+                    if ( !aEntryTargetURL.isEmpty()
                       && ::utl::UCBContentHelper::IsSubPath( aRegionTargetURL, aEntryTargetURL ) )
                     {
                         bResult = sal_True;
@@ -1719,7 +1719,7 @@ sal_Bool DocTempl_EntryData_Impl::DeleteObjectShell()
 // -----------------------------------------------------------------------
 const OUString& DocTempl_EntryData_Impl::GetHierarchyURL()
 {
-    if ( !maOwnURL.getLength() )
+    if ( maOwnURL.isEmpty() )
     {
         INetURLObject aTemplateObj( GetParent()->GetHierarchyURL() );
 
@@ -1728,7 +1728,7 @@ const OUString& DocTempl_EntryData_Impl::GetHierarchyURL()
                      INetURLObject::ENCODE_ALL );
 
         maOwnURL = aTemplateObj.GetMainURL( INetURLObject::NO_DECODE );
-        DBG_ASSERT( maOwnURL.getLength(), "GetHierarchyURL(): Could not create URL!" );
+        DBG_ASSERT( !maOwnURL.isEmpty(), "GetHierarchyURL(): Could not create URL!" );
     }
 
     return maOwnURL;
@@ -1737,7 +1737,7 @@ const OUString& DocTempl_EntryData_Impl::GetHierarchyURL()
 // -----------------------------------------------------------------------
 const OUString& DocTempl_EntryData_Impl::GetTargetURL()
 {
-    if ( !maTargetURL.getLength() )
+    if ( maTargetURL.isEmpty() )
     {
         uno::Reference< XCommandEnvironment > aCmdEnv;
         Content aRegion;
@@ -1853,7 +1853,7 @@ size_t RegionData_Impl::GetCount() const
 // -----------------------------------------------------------------------
 const OUString& RegionData_Impl::GetHierarchyURL()
 {
-    if ( !maOwnURL.getLength() )
+    if ( maOwnURL.isEmpty() )
     {
         INetURLObject aRegionObj( GetParent()->GetRootURL() );
 
@@ -1862,7 +1862,7 @@ const OUString& RegionData_Impl::GetHierarchyURL()
                      INetURLObject::ENCODE_ALL );
 
         maOwnURL = aRegionObj.GetMainURL( INetURLObject::NO_DECODE );
-        DBG_ASSERT( maOwnURL.getLength(), "GetHierarchyURL(): Could not create URL!" );
+        DBG_ASSERT( !maOwnURL.isEmpty(), "GetHierarchyURL(): Could not create URL!" );
     }
 
     return maOwnURL;
@@ -1871,7 +1871,7 @@ const OUString& RegionData_Impl::GetHierarchyURL()
 // -----------------------------------------------------------------------
 const OUString& RegionData_Impl::GetTargetURL()
 {
-    if ( !maTargetURL.getLength() )
+    if ( maTargetURL.isEmpty() )
     {
         uno::Reference< XCommandEnvironment > aCmdEnv;
         Content aRegion;
@@ -2257,7 +2257,7 @@ sal_Bool SfxDocTemplate_Impl::GetTitleFromURL( const OUString& rURL,
         catch ( Exception& ) {}
     }
 
-    if ( ! aTitle.getLength() )
+    if ( aTitle.isEmpty() )
     {
         INetURLObject aURL( rURL );
         aURL.CutExtension();

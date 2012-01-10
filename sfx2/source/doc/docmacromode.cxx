@@ -241,7 +241,7 @@ namespace sfx2
                 if ( aURLReferer.removeSegment() )
                     aLocation = aURLReferer.GetMainURL( INetURLObject::NO_DECODE );
 
-                if ( aLocation.getLength() && xSignatures->isLocationTrusted( aLocation ) )
+                if ( !aLocation.isEmpty() && xSignatures->isLocationTrusted( aLocation ) )
                 {
                     return allowMacroExecution();
                 }

@@ -452,7 +452,7 @@ namespace sfx2
                 }
             }
 
-            if ( _rToBeExtended.getLength() )
+            if ( !_rToBeExtended.isEmpty() )
                 _rToBeExtended += getSeparatorString();
             _rToBeExtended += _rWC;
         }
@@ -574,7 +574,7 @@ namespace sfx2
 
         void operator() ( const FilterDescriptor& _rFilter )
         {
-            if ( _rFilter.Second.getLength() )
+            if ( !_rFilter.Second.isEmpty() )
                 rTarget.push_back( _rFilter );
         }
     };
@@ -917,7 +917,7 @@ namespace sfx2
             ::rtl::OUString                 sFilterName  = lFilterProps.getUnpackedValueOrDefault(
                                                              ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Name")),
                                                              ::rtl::OUString());
-            if (sFilterName.getLength())
+            if (!sFilterName.isEmpty())
                 m_lFilters.push_back(sFilterName);
         }
     }
@@ -942,7 +942,7 @@ namespace sfx2
         if (nIndex<0 || nIndex>=(sal_Int32)m_lFilters.size())
             return 0;
         const ::rtl::OUString& sFilterName = m_lFilters[nIndex];
-        if (!sFilterName.getLength())
+        if (sFilterName.isEmpty())
             return 0;
         return SfxFilter::GetFilterByName(String(sFilterName));
     }
@@ -971,7 +971,7 @@ namespace sfx2
         try
         {
             _rxFilterManager->appendFilter( sUIName, sExtension );
-            if ( !_rFirstNonEmpty.getLength() )
+            if ( _rFirstNonEmpty.isEmpty() )
                 _rFirstNonEmpty = sUIName;
         }
         catch( const IllegalArgumentException& )
@@ -997,7 +997,7 @@ namespace sfx2
             try
             {
                 _rxFilterManager->appendFilter( sUIName, sExtension );
-                if ( !_rFirstNonEmpty.getLength() )
+                if ( _rFirstNonEmpty.isEmpty() )
                     _rFirstNonEmpty = sUIName;
             }
             catch( const IllegalArgumentException& )
@@ -1152,7 +1152,7 @@ namespace sfx2
                                                           aImportantFilterGroup[n].aWildcard,
                                                           sal_False, _rFileDlgImpl );
                     _rxFilterManager->appendFilter( aUIName, aImportantFilterGroup[n].aWildcard  );
-                    if ( !_rFirstNonEmpty.getLength() )
+                    if ( _rFirstNonEmpty.isEmpty() )
                         _rFirstNonEmpty = sUIName;
 
                 }
@@ -1176,7 +1176,7 @@ namespace sfx2
                                                           aFilterGroup[n].aWildcard,
                                                           sal_False, _rFileDlgImpl );
                     _rxFilterManager->appendFilter( aUIName, aFilterGroup[n].aWildcard );
-                    if ( !_rFirstNonEmpty.getLength() )
+                    if ( _rFirstNonEmpty.isEmpty() )
                         _rFirstNonEmpty = sUIName;
 
                 }

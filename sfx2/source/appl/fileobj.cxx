@@ -411,7 +411,7 @@ String impl_getFilter( const String& _rURL )
             css::uno::Sequence< css::beans::PropertyValue > aDescrList =
                 aDescr.getAsConstPropertyValueList();
             ::rtl::OUString sType = xTypeDetection->queryTypeByDescriptor( aDescrList, sal_True );
-            if ( sType.getLength() )
+            if ( !sType.isEmpty() )
             {
                 css::uno::Reference< css::container::XNameAccess > xTypeCont( xTypeDetection,
                                                                               css::uno::UNO_QUERY );

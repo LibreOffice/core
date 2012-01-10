@@ -508,7 +508,7 @@ IMPL_STATIC_LINK( ShutdownIcon, DialogClosedHdl_Impl, FileDialogHelper*, EMPTYAR
 
                     // Retrieve the current filter
 
-                    if ( !aFilterName.getLength() )
+                    if ( aFilterName.isEmpty() )
                         xPickerControls->getValue( CommonFilePickerElementIds::LISTBOX_FILTER, ControlActions::GET_SELECTED_ITEM ) >>= aFilterName;
 
                 }
@@ -516,7 +516,7 @@ IMPL_STATIC_LINK( ShutdownIcon, DialogClosedHdl_Impl, FileDialogHelper*, EMPTYAR
 
                 // Convert UI filter name to internal filter name
 
-                if ( aFilterName.getLength() )
+                if ( !aFilterName.isEmpty() )
                 {
                     const SfxFilter* pFilter = SFX_APP()->GetFilterMatcher().GetFilter4UIName( aFilterName, 0, SFX_FILTER_NOTINFILEDLG );
 
@@ -524,7 +524,7 @@ IMPL_STATIC_LINK( ShutdownIcon, DialogClosedHdl_Impl, FileDialogHelper*, EMPTYAR
                     {
                         aFilterName = pFilter->GetFilterName();
 
-                        if ( aFilterName.getLength() )
+                        if ( !aFilterName.isEmpty() )
                         {
                             aArgs.realloc( ++nArgs );
                             aArgs[nArgs-1].Name  = OUString(RTL_CONSTASCII_USTRINGPARAM("FilterName"));
@@ -538,7 +538,7 @@ IMPL_STATIC_LINK( ShutdownIcon, DialogClosedHdl_Impl, FileDialogHelper*, EMPTYAR
                 else
                 {
                     OUString    aBaseDirURL = sFiles[0];
-                    if ( aBaseDirURL.getLength() > 0 && aBaseDirURL[aBaseDirURL.getLength()-1] != '/' )
+                    if ( !aBaseDirURL.isEmpty() && aBaseDirURL[aBaseDirURL.getLength()-1] != '/' )
                         aBaseDirURL += OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
 
                     int iFiles;

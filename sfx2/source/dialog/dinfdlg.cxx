@@ -244,7 +244,7 @@ SfxDocumentInfoItem::SfxDocumentInfoItem( const String& rFile,
     : SfxStringItem( SID_DOCINFO, rFile )
     , m_AutoloadDelay( i_xDocProps->getAutoloadSecs() )
     , m_AutoloadURL( i_xDocProps->getAutoloadURL() )
-    , m_isAutoloadEnabled( (m_AutoloadDelay > 0) || m_AutoloadURL.getLength() )
+    , m_isAutoloadEnabled( (m_AutoloadDelay > 0) || !m_AutoloadURL.isEmpty() )
     , m_DefaultTarget( i_xDocProps->getDefaultTarget() )
     , m_TemplateName( i_xDocProps->getTemplateName() )
     , m_Author( i_xDocProps->getAuthor() )
@@ -2435,7 +2435,7 @@ sal_Bool SfxCustomPropertiesPage::FillItemSet( SfxItemSet& rSet )
         sal_Int32 i = 0, nCount = aPropertySeq.getLength();
         for ( ; i < nCount; ++i )
         {
-            if ( aPropertySeq[i].Name.getLength() > 0 )
+            if ( !aPropertySeq[i].Name.isEmpty() )
                 pInfo->AddCustomProperty( aPropertySeq[i].Name, aPropertySeq[i].Value );
         }
     }

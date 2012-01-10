@@ -153,7 +153,7 @@ static sal_Bool checkURL( const char *pName, const char *pExt, rtl::OUString &rU
     rURL += rtl::OUString::createFromAscii( pExt );
     rtl::Bootstrap::expandMacros( rURL );
 
-    if (rURL.getLength() != 0)
+    if (!rURL.isEmpty())
         return DirectoryItem::get( rURL, aDirItem ) == DirectoryItem::E_None;
     else
         return sal_False;
@@ -940,7 +940,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
                         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RepositoryURL")),
                         ::rtl::OUString());
 
-                if ( xSystemShell.is() && sTemplRepoURL.getLength() > 0 )
+                if ( xSystemShell.is() && !sTemplRepoURL.isEmpty() )
                 {
                     ::rtl::OUStringBuffer aURLBuf( sTemplRepoURL );
                     aURLBuf.appendAscii(RTL_CONSTASCII_STRINGPARAM("?lang="));

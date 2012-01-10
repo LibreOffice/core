@@ -942,7 +942,7 @@ void SfxObjectShell::SetCurrentComponent( const Reference< XInterface >& _rxComp
         if ( _rxComponent.is() )
         {
             ::rtl::OString aVBAConstName = lclGetVBAGlobalConstName( _rxComponent );
-            if ( aVBAConstName.getLength() > 0 )
+            if ( !aVBAConstName.isEmpty() )
             {
                 pAppMgr->SetGlobalUNOConstant( aVBAConstName.getStr(), Any( _rxComponent ) );
                 s_aRegisteredVBAConstants[ _rxComponent.get() ] = aVBAConstName;
@@ -952,7 +952,7 @@ void SfxObjectShell::SetCurrentComponent( const Reference< XInterface >& _rxComp
         else if ( xOldCurrentComp.is() )
         {
             ::rtl::OString aVBAConstName = lclGetVBAGlobalConstName( xOldCurrentComp );
-            if ( aVBAConstName.getLength() > 0 )
+            if ( !aVBAConstName.isEmpty() )
             {
                 pAppMgr->SetGlobalUNOConstant( aVBAConstName.getStr(), Any( Reference< XInterface >() ) );
                 s_aRegisteredVBAConstants.erase( xOldCurrentComp.get() );

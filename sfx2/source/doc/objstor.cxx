@@ -282,8 +282,8 @@ sal_Bool SfxObjectShell::PutURLContentsToVersionStream_Impl(
 {
     ::rtl::OUString aTempURL = ::utl::TempFile().GetURL();
 
-    DBG_ASSERT( aTempURL.getLength(), "Can't create a temporary file!\n" );
-    if ( aTempURL.getLength() )
+    DBG_ASSERT( !aTempURL.isEmpty(), "Can't create a temporary file!\n" );
+    if ( !aTempURL.isEmpty() )
     {
         try
         {
@@ -337,7 +337,7 @@ void SfxObjectShell::SetupStorage( const uno::Reference< embed::XStorage >& xSto
             // is an SfxObjectShell and so we can't take this as an error
             datatransfer::DataFlavor aDataFlavor;
             SotExchange::GetFormatDataFlavor( nClipFormat, aDataFlavor );
-            if ( aDataFlavor.MimeType.getLength() )
+            if ( !aDataFlavor.MimeType.isEmpty() )
             {
                 try
                 {
@@ -424,7 +424,7 @@ sal_Bool SfxObjectShell::GeneralInit_Impl( const uno::Reference< embed::XStorage
             uno::Reference < beans::XPropertySet > xPropSet( xStorage, uno::UNO_QUERY_THROW );
             Any a = xPropSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "MediaType" ) ) );
             ::rtl::OUString aMediaType;
-            if ( !(a>>=aMediaType) || !aMediaType.getLength() )
+            if ( !(a>>=aMediaType) || aMediaType.isEmpty() )
             {
                 if ( bTypeMustBeSetAlready )
                 {
@@ -868,7 +868,7 @@ sal_uInt32 SfxObjectShell::HandleFilter( SfxMedium* pMedium, SfxObjectShell* pDo
                         {
                             ::rtl::OUString aServiceName;
                             aProps[nProperty].Value >>= aServiceName;
-                            if( aServiceName.getLength() )
+                            if( !aServiceName.isEmpty() )
                             {
                                 com::sun::star::uno::Reference< XInteractionHandler > rHandler = pMedium->GetInteractionHandler();
                                 if( rHandler.is() )
@@ -1148,7 +1148,7 @@ sal_Bool SfxObjectShell::SaveTo_Impl
 
             bNoPreserveForOasis = (
                                    (aODFVersion.equals( ODFVER_012_TEXT ) && nVersion == SvtSaveOptions::ODFVER_011) ||
-                                   (!aODFVersion.getLength() && nVersion >= SvtSaveOptions::ODFVER_012)
+                                   (aODFVersion.isEmpty() && nVersion >= SvtSaveOptions::ODFVER_012)
                                   );
         }
     }
@@ -1407,7 +1407,7 @@ sal_Bool SfxObjectShell::SaveTo_Impl
                 {
                     AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "pVersionItem != NULL" ) ) );
                     aTmpVersionURL = CreateTempCopyOfStorage_Impl( xMedStorage );
-                    bOk = ( aTmpVersionURL.getLength() > 0 );
+                    bOk =  !aTmpVersionURL.isEmpty();
                 }
             }
         }
@@ -1510,7 +1510,7 @@ sal_Bool SfxObjectShell::SaveTo_Impl
             }
         }
 
-        if ( aTmpVersionURL.getLength() )
+        if ( !aTmpVersionURL.isEmpty() )
             ::utl::UCBContentHelper::Kill( aTmpVersionURL );
     }
     else
@@ -1572,7 +1572,7 @@ sal_Bool SfxObjectShell::SaveTo_Impl
 
                 ::rtl::OUString aScriptSignName = xDDSigns->getScriptingContentSignatureDefaultStreamName();
 
-                if ( aScriptSignName.getLength() )
+                if ( !aScriptSignName.isEmpty() )
                 {
                     pMedium->Close();
 
@@ -1747,7 +1747,7 @@ sal_Bool SfxObjectShell::DisconnectStorage_Impl( SfxMedium& rSrcMedium, SfxMediu
         {
             uno::Reference< embed::XOptimizedStorage > xOptStorage( xStorage, uno::UNO_QUERY_THROW );
             ::rtl::OUString aBackupURL = rTargetMedium.GetBackup_Impl();
-            if ( !aBackupURL.getLength() )
+            if ( aBackupURL.isEmpty() )
             {
                 // the backup could not be created, try to disconnect the storage and close the source SfxMedium
                 // in this case the optimization is not possible, connect storage to a temporary file
@@ -1881,7 +1881,7 @@ sal_Bool SfxObjectShell::DoSaveObjectAs( SfxMedium& rMedium, sal_Bool bCommit )
         {
             Any a = xPropSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "MediaType" ) ) );
             ::rtl::OUString aMediaType;
-            if ( !(a>>=aMediaType) || !aMediaType.getLength() )
+            if ( !(a>>=aMediaType) || aMediaType.isEmpty() )
             {
                 OSL_FAIL( "The mediatype must be set already!\n" );
                 SetupStorage( xNewStor, SOFFICE_FILEFORMAT_CURRENT, sal_False );
@@ -2176,7 +2176,7 @@ sal_Bool SfxObjectShell::ImportFrom( SfxMedium& rMedium, bool bInsert )
     }
 
     uno::Reference< document::XFilter > xLoader;
-    if ( aFilterImplName.getLength() )
+    if ( !aFilterImplName.isEmpty() )
     {
         try{
         xLoader = uno::Reference< document::XFilter >
@@ -2271,7 +2271,7 @@ sal_Bool SfxObjectShell::ExportTo( SfxMedium& rMedium )
             }
         }
 
-        if ( aFilterImplName.getLength() )
+        if ( !aFilterImplName.isEmpty() )
         {
             try{
             xExporter = uno::Reference< document::XExporter >
@@ -2642,7 +2642,7 @@ sal_Bool SfxObjectShell::CommonSaveAs_Impl
             if ( pFilterOptItem )
                 pSet->Put( *pFilterOptItem );
 
-            if ( IsDocShared() && aTempFileURL.getLength() )
+            if ( IsDocShared() && !aTempFileURL.isEmpty() )
             {
                 // this is a shared document that has to be disconnected from the old location
                 FreeSharedFile( aTempFileURL );
@@ -2826,7 +2826,7 @@ sal_Bool SfxObjectShell::IsInformationLost()
 
     // if current filter can lead to information loss and it was used
     // for the latest store then the user should be asked to store in own format
-    if ( aFilterName.getLength() && aFilterName.equals( aPreusedFilterName ) )
+    if ( !aFilterName.isEmpty() && aFilterName.equals( aPreusedFilterName ) )
     {
         const SfxFilter *pFilt = GetMedium()->GetFilter();
         DBG_ASSERT( pFilt && aFilterName.equals( pFilt->GetName() ), "MediaDescriptor contains wrong filter!\n" );
@@ -3249,7 +3249,7 @@ sal_Bool StoragesOfUnknownMediaTypeAreCopied_Impl( const uno::Reference< embed::
 
                 // TODO/LATER: there should be a way to detect whether an object with such a MediaType can exist
                 //             probably it should be placed in the MimeType-ClassID table or in standalone table
-                if ( aMediaType.getLength()
+                if ( !aMediaType.isEmpty()
                   && aMediaType.compareToAscii( "application/vnd.sun.star.oleobject" ) != COMPARE_EQUAL )
                 {
                     ::com::sun::star::datatransfer::DataFlavor aDataFlavor;
@@ -3391,7 +3391,7 @@ sal_Bool SfxObjectShell::CopyStoragesOfUnknownMediaType( const uno::Reference< e
 
                 // TODO/LATER: there should be a way to detect whether an object with such a MediaType can exist
                 //             probably it should be placed in the MimeType-ClassID table or in standalone table
-                if ( aMediaType.getLength()
+                if ( !aMediaType.isEmpty()
                   && aMediaType.compareToAscii( "application/vnd.sun.star.oleobject" ) != COMPARE_EQUAL )
                 {
                     ::com::sun::star::datatransfer::DataFlavor aDataFlavor;

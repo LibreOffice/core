@@ -504,7 +504,7 @@ void SfxDocTplService_Impl::getDefaultLocale()
         if ( !mbLocaleSet )
         {
             rtl::OUString aLocale( utl::ConfigManager::getLocale() );
-            if ( aLocale.getLength() > 0 )
+            if ( !aLocale.isEmpty() )
             {
                 sal_Int32 nPos = aLocale.indexOf( sal_Unicode( '-' ) );
                 if ( nPos != -1 )
@@ -570,7 +570,7 @@ OUString SfxDocTplService_Impl::getLongName( const OUString& rShortName )
         }
     }
 
-    if ( !aRet.getLength() )
+    if ( aRet.isEmpty() )
         aRet = rShortName;
 
     return aRet;
@@ -721,10 +721,10 @@ sal_Bool SfxDocTplService_Impl::getTitleFromURL( const OUString& rURL, OUString&
         catch ( Exception& ) {}
     }
 
-    if ( ! aType.getLength() && mxType.is() )
+    if ( aType.isEmpty() && mxType.is() )
     {
         ::rtl::OUString aDocType = mxType->queryTypeByURL( rURL );
-        if ( aDocType.getLength() )
+        if ( !aDocType.isEmpty() )
             try
             {
                 uno::Reference< container::XNameAccess > xTypeDetection( mxType, uno::UNO_QUERY_THROW );
@@ -737,7 +737,7 @@ sal_Bool SfxDocTplService_Impl::getTitleFromURL( const OUString& rURL, OUString&
             {}
     }
 
-    if ( ! aTitle.getLength() )
+    if ( aTitle.isEmpty() )
     {
         INetURLObject aURL( rURL );
         aURL.CutExtension();
@@ -1613,7 +1613,7 @@ sal_Bool SfxDocTplService_Impl::removeGroup( const OUString& rGroupName )
         if ( getProperty( aGroup, aPropName, aValue ) )
             aValue >>= aGroupTargetURL;
 
-        if ( !aGroupTargetURL.getLength() )
+        if ( aGroupTargetURL.isEmpty() )
             return sal_False; // nothing is allowed to be removed
 
         if ( !maTemplateDirs.getLength() )
@@ -1727,7 +1727,7 @@ sal_Bool SfxDocTplService_Impl::renameGroup( const OUString& rOldName,
     if ( getProperty( aGroup, aPropName, aValue ) )
         aValue >>= aGroupTargetURL;
 
-    if ( !aGroupTargetURL.getLength() )
+    if ( aGroupTargetURL.isEmpty() )
         return sal_False;
 
     if ( !maTemplateDirs.getLength() )
@@ -1840,8 +1840,8 @@ sal_Bool SfxDocTplService_Impl::storeTemplate( const OUString& rGroupName,
         if ( getProperty( aTemplateToRemove, aTargetTemplPropName, aValue ) )
             aValue >>= aTemplateToRemoveTargetURL;
 
-        if ( !aGroupTargetURL.getLength() || !maTemplateDirs.getLength()
-          || (aTemplateToRemoveTargetURL.getLength() && !::utl::UCBContentHelper::IsSubPath( maTemplateDirs[ maTemplateDirs.getLength() - 1 ], aTemplateToRemoveTargetURL )) )
+        if ( aGroupTargetURL.isEmpty() || !maTemplateDirs.getLength()
+          || (!aTemplateToRemoveTargetURL.isEmpty() && !::utl::UCBContentHelper::IsSubPath( maTemplateDirs[ maTemplateDirs.getLength() - 1 ], aTemplateToRemoveTargetURL )) )
             return sal_False; // it is not allowed to remove the template
     }
 
@@ -1857,7 +1857,7 @@ sal_Bool SfxDocTplService_Impl::storeTemplate( const OUString& rGroupName,
                     ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.ModuleManager")) ),
             uno::UNO_QUERY_THROW );
         sDocServiceName = xModuleManager->identify( uno::Reference< uno::XInterface >( rStorable, uno::UNO_QUERY ) );
-        if ( !sDocServiceName.getLength() )
+        if ( sDocServiceName.isEmpty() )
             throw uno::RuntimeException();
 
         // get the actual filter name
@@ -1886,7 +1886,7 @@ sal_Bool SfxDocTplService_Impl::storeTemplate( const OUString& rGroupName,
             throw uno::RuntimeException();
 
         xApplConfig->getByName( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooSetupFactoryActualTemplateFilter" ) ) ) >>= aFilterName;
-        if ( !aFilterName.getLength() )
+        if ( aFilterName.isEmpty() )
             throw uno::RuntimeException();
 
         // find the related type name
@@ -1901,7 +1901,7 @@ sal_Bool SfxDocTplService_Impl::storeTemplate( const OUString& rGroupName,
             if ( aFilterData[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Type" ) ) )
                 aFilterData[nInd].Value >>= aTypeName;
 
-        if ( !aTypeName.getLength() )
+        if ( aTypeName.isEmpty() )
             throw uno::RuntimeException();
 
         // find the mediatype and extension
@@ -1921,24 +1921,24 @@ sal_Bool SfxDocTplService_Impl::storeTemplate( const OUString& rGroupName,
         ::rtl::OUString aMediaType = aTypeProps.getUnpackedValueOrDefault( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MediaType")), ::rtl::OUString() );
         ::rtl::OUString aExt = aAllExt[0];
 
-        if ( !aMediaType.getLength() || !aExt.getLength() )
+        if ( aMediaType.isEmpty() || aExt.isEmpty() )
             throw uno::RuntimeException();
 
         // construct destination url
-        if ( !aGroupTargetURL.getLength() )
+        if ( aGroupTargetURL.isEmpty() )
         {
             aGroupTargetURL = CreateNewGroupFsys( rGroupName, aGroup );
 
-            if ( !aGroupTargetURL.getLength() )
+            if ( aGroupTargetURL.isEmpty() )
                 throw uno::RuntimeException();
         }
 
         ::rtl::OUString aNewTemplateTargetURL = CreateNewUniqueFileWithPrefix( aGroupTargetURL, rTemplateName, aExt );
-        if ( !aNewTemplateTargetURL.getLength() )
+        if ( aNewTemplateTargetURL.isEmpty() )
         {
             aNewTemplateTargetURL = CreateNewUniqueFileWithPrefix( aGroupTargetURL, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "UserTemplate" ) ), aExt );
 
-            if ( !aNewTemplateTargetURL.getLength() )
+            if ( aNewTemplateTargetURL.isEmpty() )
                 throw uno::RuntimeException();
         }
 
@@ -1956,7 +1956,7 @@ sal_Bool SfxDocTplService_Impl::storeTemplate( const OUString& rGroupName,
             rStorable->store();
 
         // the storing was successful, now the old template with the same name can be removed if it existed
-        if ( aTemplateToRemoveTargetURL.getLength() )
+        if ( !aTemplateToRemoveTargetURL.isEmpty() )
         {
             removeContent( aTemplateToRemoveTargetURL );
 
@@ -2024,11 +2024,11 @@ sal_Bool SfxDocTplService_Impl::addTemplate( const OUString& rGroupName,
     if ( getProperty( aGroup, aPropName, aValue ) )
         aValue >>= aTargetURL;
 
-    if ( !aTargetURL.getLength() )
+    if ( aTargetURL.isEmpty() )
     {
         aTargetURL = CreateNewGroupFsys( rGroupName, aGroup );
 
-        if ( !aTargetURL.getLength() )
+        if ( aTargetURL.isEmpty() )
             return sal_False;
     }
 
@@ -2070,7 +2070,7 @@ sal_Bool SfxDocTplService_Impl::addTemplate( const OUString& rGroupName,
     ::rtl::OUString aNewTemplateTargetURL = CreateNewUniqueFileWithPrefix( aTargetURL, aPattern, aSourceObj.getExtension() );
     INetURLObject aNewTemplateTargetObj( aNewTemplateTargetURL );
     ::rtl::OUString aNewTemplateTargetName = aNewTemplateTargetObj.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
-    if ( !aNewTemplateTargetURL.getLength() || !aNewTemplateTargetName.getLength() )
+    if ( aNewTemplateTargetURL.isEmpty() || aNewTemplateTargetName.isEmpty() )
         return sal_False;
 
     // get access to source file
@@ -2175,7 +2175,7 @@ sal_Bool SfxDocTplService_Impl::removeTemplate( const OUString& rGroupName,
         aValue >>= aTargetURL;
 
     // delete the target template
-    if ( aTargetURL.getLength() )
+    if ( !aTargetURL.isEmpty() )
     {
         if ( !maTemplateDirs.getLength()
           || !::utl::UCBContentHelper::IsSubPath( maTemplateDirs[ maTemplateDirs.getLength() - 1 ], aTargetURL ) )
@@ -2491,7 +2491,7 @@ void SfxDocTplService_Impl::addHierGroup( GroupList_Impl& rList,
                 OUString aType( xRow->getString( 3 ) );
                 OUString aHierURL = xContentAccess->queryContentIdentifierString();
 
-                if ( !aType.getLength() )
+                if ( aType.isEmpty() )
                 {
                     OUString aTmpTitle;
 
@@ -2502,7 +2502,7 @@ void SfxDocTplService_Impl::addHierGroup( GroupList_Impl& rList,
                         continue;
                     }
 
-                    if ( aType.getLength() )
+                    if ( !aType.isEmpty() )
                         bUpdateType = sal_True;
                 }
 
@@ -2523,7 +2523,7 @@ void SfxDocTplService_Impl::addFsysGroup( GroupList_Impl& rList,
 {
     ::rtl::OUString aTitle;
 
-    if ( !rUITitle.getLength() )
+    if ( rUITitle.isEmpty() )
     {
         // reserved FS names that should not be used
         if ( rTitle.compareToAscii( "wizard" ) == 0 )
@@ -2536,7 +2536,7 @@ void SfxDocTplService_Impl::addFsysGroup( GroupList_Impl& rList,
     else
         aTitle = rUITitle;
 
-    if ( !aTitle.getLength() )
+    if ( aTitle.isEmpty() )
         return;
 
     GroupData_Impl* pGroup = NULL;
@@ -2813,7 +2813,7 @@ DocTemplates_EntryData_Impl* GroupData_Impl::addEntry( const OUString& rTitle,
         pData = new DocTemplates_EntryData_Impl( rTitle );
         pData->setTargetURL( rTargetURL );
         pData->setType( rType );
-        if ( rHierURL.getLength() )
+        if ( !rHierURL.isEmpty() )
         {
             pData->setHierarchyURL( rHierURL );
             pData->setHierarchy( sal_True );
@@ -2822,7 +2822,7 @@ DocTemplates_EntryData_Impl* GroupData_Impl::addEntry( const OUString& rTitle,
     }
     else
     {
-        if ( rHierURL.getLength() )
+        if ( !rHierURL.isEmpty() )
         {
             pData->setHierarchyURL( rHierURL );
             pData->setHierarchy( sal_True );
@@ -2928,7 +2928,7 @@ void SfxURLRelocator_Impl::implExpandURL( ::rtl::OUString& io_url )
 // -----------------------------------------------------------------------
 void SfxURLRelocator_Impl::makeRelocatableURL( rtl::OUString & rURL )
 {
-    if ( rURL.getLength() > 0 )
+    if ( !rURL.isEmpty() )
     {
         initOfficeInstDirs();
         implExpandURL( rURL );
@@ -2939,7 +2939,7 @@ void SfxURLRelocator_Impl::makeRelocatableURL( rtl::OUString & rURL )
 // -----------------------------------------------------------------------
 void SfxURLRelocator_Impl::makeAbsoluteURL( rtl::OUString & rURL )
 {
-    if ( rURL.getLength() > 0 )
+    if ( !rURL.isEmpty() )
     {
         initOfficeInstDirs();
         implExpandURL( rURL );

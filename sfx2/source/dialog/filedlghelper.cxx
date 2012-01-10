@@ -432,7 +432,7 @@ sal_Bool FileDialogHelper_Impl::CheckFilterOptionsCapability( const SfxFilter* _
                        if( aProps[nProperty].Name.equals( DEFINE_CONST_OUSTRING( "UIComponent") ) )
                        {
                            aProps[nProperty].Value >>= aServiceName;
-                        if( aServiceName.getLength() )
+                        if( !aServiceName.isEmpty() )
                             bResult = sal_True;
                     }
                 }
@@ -488,7 +488,7 @@ void FileDialogHelper_Impl::updateExportButton()
         OUString sOldLabel( xCtrlAccess->getLabel( CommonFilePickerElementIds::PUSHBUTTON_OK ) );
 
         // initialize button label; we need the label with the mnemonic char
-        if ( !maButtonLabel.getLength() || maButtonLabel.indexOf( MNEMONIC_CHAR ) == -1 )
+        if ( maButtonLabel.isEmpty() || maButtonLabel.indexOf( MNEMONIC_CHAR ) == -1 )
         {
             // cut the ellipses, if necessary
             sal_Int32 nIndex = sOldLabel.indexOf( sEllipses );
@@ -780,7 +780,7 @@ ErrCode FileDialogHelper_Impl::getGraphic( const OUString& rURL,
     // select graphic filter from dialog filter selection
     OUString aCurFilter( getFilter() );
 
-    sal_uInt16 nFilter = aCurFilter.getLength() && mpGraphicFilter->GetImportFormatCount()
+    sal_uInt16 nFilter = !aCurFilter.isEmpty() && mpGraphicFilter->GetImportFormatCount()
                     ? mpGraphicFilter->GetImportFormatNumber( aCurFilter )
                     : GRFILTER_FORMAT_DONTKNOW;
 
@@ -829,7 +829,7 @@ ErrCode FileDialogHelper_Impl::getGraphic( Graphic& rGraphic ) const
             aPath = aPathSeq[0];
         }
 
-        if ( aPath.getLength() )
+        if ( !aPath.isEmpty() )
             nRet = getGraphic( aPath, rGraphic );
         else
             nRet = ERRCODE_IO_GENERAL;
@@ -1270,7 +1270,7 @@ void FileDialogHelper_Impl::postExecute( sal_Int16 _nResult )
 // ------------------------------------------------------------------------
 void FileDialogHelper_Impl::implInitializeFileName( )
 {
-    if ( maFileName.getLength() )
+    if ( !maFileName.isEmpty() )
     {
         INetURLObject aObj( maPath );
         aObj.Append( maFileName );
@@ -1615,7 +1615,7 @@ OUString FileDialogHelper_Impl::getPath() const
     if ( mxFileDlg.is() )
         aPath = mxFileDlg->getDisplayDirectory();
 
-    if ( !aPath.getLength() )
+    if ( aPath.isEmpty() )
         aPath = maPath;
 
     return aPath;
@@ -1651,7 +1651,7 @@ void FileDialogHelper_Impl::getRealFilter( String& _rFilter ) const
 // ------------------------------------------------------------------------
 void FileDialogHelper_Impl::displayFolder( const ::rtl::OUString& _rPath )
 {
-    if ( ! _rPath.getLength() )
+    if ( _rPath.isEmpty() )
         // nothing to do
         return;
 
@@ -1693,7 +1693,7 @@ void FileDialogHelper_Impl::setFilter( const OUString& rFilter )
 
     maCurFilter = rFilter;
 
-    if ( rFilter.getLength() && mpMatcher )
+    if ( !rFilter.isEmpty() && mpMatcher )
     {
         const SfxFilter* pFilter = mpMatcher->GetFilter4FilterName(
                                         rFilter, m_nMustFlags, m_nDontFlags );
@@ -1703,7 +1703,7 @@ void FileDialogHelper_Impl::setFilter( const OUString& rFilter )
 
     uno::Reference< XFilterManager > xFltMgr( mxFileDlg, UNO_QUERY );
 
-    if ( maCurFilter.getLength() && xFltMgr.is() )
+    if ( !maCurFilter.isEmpty() && xFltMgr.is() )
     {
         try
         {
@@ -1788,7 +1788,7 @@ void FileDialogHelper_Impl::addFilters( const String& rFactory,
         ::sfx2::appendFiltersForSave( aIter, xFltMgr, sFirstFilter, *this, rFactory );
 
     // set our initial selected filter (if we do not already have one)
-    if ( !maSelectFilter.getLength() )
+    if ( maSelectFilter.isEmpty() )
         maSelectFilter = sFirstFilter;
 }
 
@@ -1805,7 +1805,7 @@ void FileDialogHelper_Impl::addFilter( const OUString& rFilterName,
     {
         xFltMgr->appendFilter( rFilterName, rExtension );
 
-        if ( !maSelectFilter.getLength() )
+        if ( maSelectFilter.isEmpty() )
             maSelectFilter = rFilterName;
     }
     catch( const IllegalArgumentException& )
@@ -1969,7 +1969,7 @@ void FileDialogHelper_Impl::saveConfig()
         if ( ! mbIsSaveDlg )
         {
             OUString aPath = getPath();
-            if ( aPath.getLength() &&
+            if ( !aPath.isEmpty() &&
                  utl::LocalFileHelper::IsLocalFile( aPath ) )
             {
                 aUserData.SetToken( 1, ' ', aPath );
@@ -2068,10 +2068,10 @@ void FileDialogHelper_Impl::loadConfig()
                     xDlg->setValue( ExtendedFilePickerElementIds::CHECKBOX_PREVIEW, 0, aValue );
                 }
 
-                if ( !maPath.getLength() )
+                if ( maPath.isEmpty() )
                     displayFolder( getInitPath( aUserData, 2 ) );
 
-                if ( ! maCurFilter.getLength() )
+                if ( maCurFilter.isEmpty() )
                 {
                     String aFilter = aUserData.GetToken( 3, ' ' );
                     aFilter = DecodeSpaces_Impl( aFilter );
@@ -2084,7 +2084,7 @@ void FileDialogHelper_Impl::loadConfig()
             catch( const IllegalArgumentException& ){}
         }
 
-        if ( !maPath.getLength() )
+        if ( maPath.isEmpty() )
             displayFolder( SvtPathOptions().GetGraphicPath() );
     }
     else
@@ -2103,7 +2103,7 @@ void FileDialogHelper_Impl::loadConfig()
         if ( ! aUserData.Len() )
             aUserData = DEFINE_CONST_UNICODE( STD_CONFIG_STR );
 
-        if ( ! maPath.getLength() )
+        if ( maPath.isEmpty() )
             displayFolder( getInitPath( aUserData, 1 ) );
 
         if ( mbHasAutoExt )
@@ -2128,7 +2128,7 @@ void FileDialogHelper_Impl::loadConfig()
             catch( const IllegalArgumentException& ){}
         }
 
-        if ( !maPath.getLength() )
+        if ( maPath.isEmpty() )
             displayFolder( SvtPathOptions().GetWorkPath() );
     }
 }
@@ -2137,7 +2137,7 @@ void FileDialogHelper_Impl::loadConfig()
 void FileDialogHelper_Impl::setDefaultValues()
 {
     // when no filter is set, we set the curentFilter to <all>
-    if ( !maCurFilter.getLength() && maSelectFilter.getLength() )
+    if ( maCurFilter.isEmpty() && !maSelectFilter.isEmpty() )
     {
         uno::Reference< XFilterManager > xFltMgr( mxFileDlg, UNO_QUERY );
         try
@@ -2149,7 +2149,7 @@ void FileDialogHelper_Impl::setDefaultValues()
     }
 
     // when no path is set, we use the standard 'work' folder
-    if ( ! maPath.getLength() )
+    if ( maPath.isEmpty() )
     {
         OUString aWorkFolder = SvtPathOptions().GetWorkPath();
         try
@@ -2277,7 +2277,7 @@ FileDialogHelper::FileDialogHelper(
     ::rtl::OUString aWildcard;
     if ( aExtName.indexOf( (sal_Unicode)'*' ) != 0 )
     {
-        if ( aExtName.getLength() && aExtName.indexOf( (sal_Unicode)'.' ) != 0 )
+        if ( !aExtName.isEmpty() && aExtName.indexOf( (sal_Unicode)'.' ) != 0 )
             aWildcard = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "*." ) );
         else
             aWildcard = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "*" ) );
@@ -2549,7 +2549,7 @@ void FileDialogHelper::SetDisplayDirectory( const String& _rPath )
     {
         INetURLObject aObjPathName( _rPath );
         ::rtl::OUString sFolder( aObjPathName.GetMainURL( INetURLObject::NO_DECODE ) );
-        if ( sFolder.getLength() == 0 )
+        if ( sFolder.isEmpty() )
         {
             // _rPath is not a valid path -> fallback to home directory
             osl::Security aSecurity;

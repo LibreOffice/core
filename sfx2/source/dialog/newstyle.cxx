@@ -65,7 +65,7 @@ IMPL_LINK( SfxNewStyleDlg, OKHdl, Control *, pControl )
 
 IMPL_LINK_INLINE_START( SfxNewStyleDlg, ModifyHdl, ComboBox *, pBox )
 {
-    aOKBtn.Enable( comphelper::string::remove(pBox->GetText(), ' ').getLength() > 0 );
+    aOKBtn.Enable( !comphelper::string::remove(pBox->GetText(), ' ').isEmpty() );
     return 0;
 }
 IMPL_LINK_INLINE_END( SfxNewStyleDlg, ModifyHdl, ComboBox *, pBox )

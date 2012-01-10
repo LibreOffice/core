@@ -76,7 +76,7 @@ void SAL_CALL HelpDispatch_Impl::dispatch(
         if ( 0 == ( *pBegin ).Name.compareToAscii( "HelpKeyword" ) )
         {
             rtl::OUString sHelpKeyword;
-            if ( ( ( *pBegin ).Value >>= sHelpKeyword ) && sHelpKeyword.getLength() > 0 )
+            if ( ( ( *pBegin ).Value >>= sHelpKeyword ) && !sHelpKeyword.isEmpty() )
             {
                 sKeyword = String( sHelpKeyword );
                 bHasKeyword = ( sKeyword.Len() > 0 );

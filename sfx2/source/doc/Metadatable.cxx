@@ -554,9 +554,9 @@ XmlIdRegistryDocument::XmlIdRegistry_Impl::LookupXmlId(
         m_XmlIdReverseMap.find(&i_rObject) );
     if (iter != m_XmlIdReverseMap.end())
     {
-        OSL_ENSURE(iter->second.first.getLength(),
+        OSL_ENSURE(!iter->second.first.isEmpty(),
             "null stream in m_XmlIdReverseMap");
-        OSL_ENSURE(iter->second.second.getLength(),
+        OSL_ENSURE(!iter->second.second.isEmpty(),
             "null id in m_XmlIdReverseMap");
         o_rStream = iter->second.first;
         o_rIdref  = iter->second.second;
@@ -706,7 +706,7 @@ XmlIdRegistryDocument::TryRegisterMetadatable(Metadatable & i_rObject,
         return (m_pImpl->LookupElement(old_path, old_idref) == &i_rObject);
     }
     XmlIdMap_t::iterator old_id( m_pImpl->m_XmlIdMap.end() );
-    if (old_idref.getLength())
+    if (!old_idref.isEmpty())
     {
         old_id = m_pImpl->m_XmlIdMap.find(old_idref);
         OSL_ENSURE(old_id != m_pImpl->m_XmlIdMap.end(), "old id not found");
@@ -743,7 +743,7 @@ XmlIdRegistryDocument::RegisterMetadatableAndCreateID(Metadatable & i_rObject)
     m_pImpl->LookupXmlId(i_rObject, old_path, old_idref);
 
     XmlIdMap_t::iterator old_id( m_pImpl->m_XmlIdMap.end() );
-    if (old_idref.getLength())
+    if (!old_idref.isEmpty())
     {
         old_id = m_pImpl->m_XmlIdMap.find(old_idref);
         OSL_ENSURE(old_id != m_pImpl->m_XmlIdMap.end(), "old id not found");
@@ -794,7 +794,7 @@ void XmlIdRegistryDocument::RemoveXmlIdForElement(const Metadatable& i_rObject)
         m_pImpl->m_XmlIdReverseMap.find(&i_rObject) );
     if (iter != m_pImpl->m_XmlIdReverseMap.end())
     {
-        OSL_ENSURE(iter->second.second.getLength(),
+        OSL_ENSURE(!iter->second.second.isEmpty(),
             "null id in m_XmlIdReverseMap");
         m_pImpl->m_XmlIdReverseMap.erase(iter);
     }
@@ -1028,9 +1028,9 @@ XmlIdRegistryClipboard::XmlIdRegistry_Impl::LookupXmlId(
         m_XmlIdReverseMap.find(&i_rObject) );
     if (iter != m_XmlIdReverseMap.end())
     {
-        OSL_ENSURE(iter->second.m_Stream.getLength(),
+        OSL_ENSURE(!iter->second.m_Stream.isEmpty(),
             "null stream in m_XmlIdReverseMap");
-        OSL_ENSURE(iter->second.m_XmlId.getLength(),
+        OSL_ENSURE(!iter->second.m_XmlId.isEmpty(),
             "null id in m_XmlIdReverseMap");
         o_rStream = iter->second.m_Stream;
         o_rIdref  = iter->second.m_XmlId;
@@ -1139,7 +1139,7 @@ XmlIdRegistryClipboard::TryRegisterMetadatable(Metadatable & i_rObject,
         return (m_pImpl->LookupElement(old_path, old_idref) == &i_rObject);
     }
     ClipboardXmlIdMap_t::iterator old_id( m_pImpl->m_XmlIdMap.end() );
-    if (old_idref.getLength())
+    if (!old_idref.isEmpty())
     {
         old_id = m_pImpl->m_XmlIdMap.find(old_idref);
         OSL_ENSURE(old_id != m_pImpl->m_XmlIdMap.end(), "old id not found");
@@ -1174,7 +1174,7 @@ XmlIdRegistryClipboard::RegisterMetadatableAndCreateID(Metadatable & i_rObject)
     ::rtl::OUString old_path;
     ::rtl::OUString old_idref;
     LookupXmlId(i_rObject, old_path, old_idref);
-    if (old_idref.getLength() &&
+    if (!old_idref.isEmpty() &&
         (m_pImpl->LookupElement(old_path, old_idref) == &i_rObject))
     {
         return;
@@ -1220,7 +1220,7 @@ void XmlIdRegistryClipboard::RemoveXmlIdForElement(const Metadatable& i_rObject)
         m_pImpl->m_XmlIdReverseMap.find(&i_rObject) );
     if (iter != m_pImpl->m_XmlIdReverseMap.end())
     {
-        OSL_ENSURE(iter->second.m_XmlId.getLength(),
+        OSL_ENSURE(!iter->second.m_XmlId.isEmpty(),
             "null id in m_XmlIdReverseMap");
         m_pImpl->m_XmlIdReverseMap.erase(iter);
     }
@@ -1327,14 +1327,14 @@ void
 Metadatable::SetMetadataReference(
     const ::com::sun::star::beans::StringPair & i_rReference)
 {
-    if (i_rReference.Second.getLength() == 0)
+    if (i_rReference.Second.isEmpty())
     {
         RemoveMetadataReference();
     }
     else
     {
         ::rtl::OUString streamName( i_rReference.First );
-        if (streamName.getLength() == 0)
+        if (streamName.isEmpty())
         {
             // handle empty stream name as auto-detect.
             // necessary for importing flat file format.
@@ -1415,7 +1415,7 @@ Metadatable::RegisterAsCopyOf(Metadatable const & i_rSource,
             {
                 beans::StringPair SourceRef(
                     i_rSource.m_pReg->GetXmlIdForElement(i_rSource) );
-                bool isLatent( SourceRef.Second.getLength() == 0 );
+                bool isLatent( SourceRef.Second.isEmpty() );
                 XmlIdRegistryDocument * pSourceRegDoc(
                     dynamic_cast<XmlIdRegistryDocument*>(i_rSource.m_pReg) );
                 OSL_ENSURE(pSourceRegDoc, "RegisterAsCopyOf: 2 clipboards?");
@@ -1584,7 +1584,7 @@ Metadatable::JoinMetadatable(Metadatable const & i_rOther,
 {
     SolarMutexGuard aGuard;
     beans::StringPair mdref( getMetadataReference() );
-    if (!mdref.Second.getLength())
+    if (mdref.Second.isEmpty())
     {
         ensureMetadataReference(); // N.B.: side effect!
         mdref = getMetadataReference();

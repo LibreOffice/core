@@ -156,7 +156,7 @@ void SfxFrameHTMLWriter::Out_DocInfo( SvStream& rStrm, const String& rBaseURL,
     {
         // Reload
         if( (i_xDocProps->getAutoloadSecs() != 0) ||
-            i_xDocProps->getAutoloadURL().getLength() )
+            !i_xDocProps->getAutoloadURL().isEmpty() )
         {
             String sContent = String::CreateFromInt32(
                                 i_xDocProps->getAutoloadSecs() );
@@ -268,7 +268,7 @@ void SfxFrameHTMLWriter::Out_FrameDescriptor(
         rtl::OStringBuffer sOut;
         ::rtl::OUString aStr;
         uno::Any aAny = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameURL")) );
-        if ( (aAny >>= aStr) && aStr.getLength() )
+        if ( (aAny >>= aStr) && !aStr.isEmpty() )
         {
             String aURL = INetURLObject( aStr ).GetMainURL( INetURLObject::DECODE_TO_IURI );
             if( aURL.Len() )
@@ -284,7 +284,7 @@ void SfxFrameHTMLWriter::Out_FrameDescriptor(
         }
 
         aAny = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameName")) );
-        if ( (aAny >>= aStr) && aStr.getLength() )
+        if ( (aAny >>= aStr) && !aStr.isEmpty() )
         {
             sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_name)
                 .append(RTL_CONSTASCII_STRINGPARAM("=\""));

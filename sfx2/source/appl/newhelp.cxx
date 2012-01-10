@@ -677,7 +677,7 @@ void IndexTabPage_Impl::InitializeIndex()
                 {
                     // abi: Do not copy, but use references
                     const ::rtl::OUString& aKeywordPair = aKeywordList[i];
-                    DBG_ASSERT( aKeywordPair.getLength() > 0, "invalid help index" );
+                    DBG_ASSERT( !aKeywordPair.isEmpty(), "invalid help index" );
                     const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aRefList = aKeywordRefList[i];
                     const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aAnchorList = aAnchorRefList[i];
                     const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aTitleList = aTitleRefList[i];
@@ -1491,7 +1491,7 @@ void BookmarksTabPage_Impl::AddBookmarks( const String& rTitle, const String& rU
     sHelpURL.append(sContent);
     String sURL = String(sHelpURL.makeStringAndClear());
     AppendConfigToken(sURL, bUseQuestionMark);
-    if (sAnchor.getLength())
+    if (!sAnchor.isEmpty())
         sURL += String(sAnchor);
     return ::rtl::OUString(sURL);
 }

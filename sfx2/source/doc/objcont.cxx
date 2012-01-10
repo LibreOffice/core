@@ -868,7 +868,7 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
     ::rtl::OUString aTemplURL( xDocProps->getTemplateURL() );
     String aFoundName;
 
-    if ( aTemplName.getLength() || (aTemplURL.getLength() && !IsReadOnly()) )
+    if ( !aTemplName.isEmpty() || (!aTemplURL.isEmpty() && !IsReadOnly()) )
     {
         // try to locate template, first using filename this must be done
         // because writer global document uses this "great" idea to manage
@@ -876,14 +876,14 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
         // an error if the template filename points not to a valid file
         SfxDocumentTemplates aTempl;
         aTempl.Construct();
-        if ( aTemplURL.getLength() )
+        if ( !aTemplURL.isEmpty() )
         {
             String aURL;
             if( ::utl::LocalFileHelper::ConvertSystemPathToURL( aTemplURL, GetMedium()->GetName(), aURL ) )
                 aFoundName = aURL;
         }
 
-        if( !aFoundName.Len() && aTemplName.getLength() )
+        if( !aFoundName.Len() && !aTemplName.isEmpty() )
             // if the template filename did not lead to success,
             // try to get a file name for the logical template name
             aTempl.GetFull( String(), aTemplName, aFoundName );

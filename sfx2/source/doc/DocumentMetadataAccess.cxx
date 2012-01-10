@@ -130,7 +130,7 @@ uno::Reference<rdf::XURI> createBaseURI(
     uno::Reference<embed::XStorage> const & i_xStorage,
     ::rtl::OUString const & i_rPkgURI, ::rtl::OUString const & i_rSubDocument)
 {
-    if (!i_xContext.is() || !i_xStorage.is() || !i_rPkgURI.getLength()) {
+    if (!i_xContext.is() || !i_xStorage.is() || i_rPkgURI.isEmpty()) {
         throw uno::RuntimeException();
     }
 
@@ -142,10 +142,10 @@ uno::Reference<rdf::XURI> createBaseURI(
     {
         // expand it here (makeAbsolute requires hierarchical URI)
         pkgURI = pkgURI.copy( RTL_CONSTASCII_LENGTH("vnd.sun.star.expand:") );
-        if (pkgURI.getLength() != 0) {
+        if (!pkgURI.isEmpty()) {
             pkgURI = ::rtl::Uri::decode(
                     pkgURI, rtl_UriDecodeStrict, RTL_TEXTENCODING_UTF8);
-            if (pkgURI.getLength() == 0) {
+            if (pkgURI.isEmpty()) {
                 throw uno::RuntimeException();
             }
             ::rtl::Bootstrap::expandMacros(pkgURI);
@@ -182,13 +182,13 @@ uno::Reference<rdf::XURI> createBaseURI(
         }
         buf.append(static_cast<sal_Unicode>('/'));
     }
-    if (i_rSubDocument.getLength())
+    if (!i_rSubDocument.isEmpty())
     {
         buf.append(i_rSubDocument);
         buf.append(static_cast<sal_Unicode>('/'));
     }
     const ::rtl::OUString Path(buf.makeStringAndClear());
-    if (Path.getLength())
+    if (!Path.isEmpty())
     {
         const uno::Reference< uri::XUriReference > xPathURI(
             xUriFactory->parse(Path), uno::UNO_SET_THROW );
@@ -237,13 +237,13 @@ getURI(uno::Reference< uno::XComponentContext > const & i_xContext)
 /** would storing the file to a XStorage succeed? */
 static bool isFileNameValid(const ::rtl::OUString & i_rFileName)
 {
-    if (i_rFileName.getLength() <= 0) return false;
+    if (i_rFileName.isEmpty()) return false;
     if (i_rFileName[0] == '/')        return false; // no absolute paths!
     sal_Int32 idx(0);
     do {
       const ::rtl::OUString segment(
         i_rFileName.getToken(0, static_cast<sal_Unicode> ('/'), idx) );
-      if (!segment.getLength()      ||  // no empty segments
+      if (segment.isEmpty()      ||  // no empty segments
           segment.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("."))  ||  // no . segments
           segment.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("..")) ||  // no .. segments
           !::comphelper::OStorageHelper::IsValidZipEntryFileName(
@@ -533,7 +533,7 @@ readStream(struct DocumentMetadataAccess_Impl & i_rImpl,
     ::rtl::OUString rest;
     try {
         if (!splitPath(i_rPath, dir, rest)) throw uno::RuntimeException();
-        if (dir.getLength() == 0) {
+        if (dir.isEmpty()) {
             if (i_xStorage->isStreamElement(i_rPath)) {
                 const uno::Reference<io::XStream> xStream(
                     i_xStorage->openStreamElement(i_rPath,
@@ -653,7 +653,7 @@ writeStream(struct DocumentMetadataAccess_Impl & i_rImpl,
     ::rtl::OUString rest;
     if (!splitPath(i_rPath, dir, rest)) throw uno::RuntimeException();
     try {
-        if (dir.getLength() == 0) {
+        if (dir.isEmpty()) {
             exportStream(i_rImpl, i_xStorage, i_xGraphName, i_rPath,
                 i_rBaseURI);
         } else {
@@ -807,7 +807,7 @@ DocumentMetadataAccess::DocumentMetadataAccess(
         ::rtl::OUString const & i_rURI)
     : m_pImpl(new DocumentMetadataAccess_Impl(i_xContext, i_rRegistrySupplier))
 {
-    OSL_ENSURE(i_rURI.getLength(), "DMA::DMA: no URI given!");
+    OSL_ENSURE(!i_rURI.isEmpty(), "DMA::DMA: no URI given!");
     OSL_ENSURE(i_rURI.endsWithAsciiL("/", 1), "DMA::DMA: URI without / given!");
     if (!i_rURI.endsWithAsciiL("/", 1)) throw uno::RuntimeException();
     m_pImpl->m_xBaseURI.set(rdf::URI::create(m_pImpl->m_xContext, i_rURI));
@@ -1111,7 +1111,7 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
             "DocumentMetadataAccess::loadMetadataFromStorage: "
             "base URI not absolute")), *this, 1);
     }
-    if (!baseURI.getLength() || !baseURI.endsWithAsciiL("/", 1)) {
+    if (baseURI.isEmpty() || !baseURI.endsWithAsciiL("/", 1)) {
         throw lang::IllegalArgumentException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
             "DocumentMetadataAccess::loadMetadataFromStorage: "
             "base URI does not end with slash")), *this, 1);
@@ -1293,7 +1293,7 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
     if (md.addInputStream()) {
         md[ ::comphelper::MediaDescriptor::PROP_INPUTSTREAM() ] >>= xIn;
     }
-    if (!xIn.is() && (URL.getLength() == 0)) {
+    if (!xIn.is() && URL.isEmpty()) {
         throw lang::IllegalArgumentException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
             "DocumentMetadataAccess::loadMetadataFromMedium: "
             "inalid medium: no URL, no input stream")), *this, 0);
@@ -1349,7 +1349,7 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
     ::comphelper::MediaDescriptor md(i_rMedium);
     ::rtl::OUString URL;
     md[ ::comphelper::MediaDescriptor::PROP_URL() ] >>= URL;
-    if (URL.getLength() == 0) {
+    if (URL.isEmpty()) {
         throw lang::IllegalArgumentException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
             "DocumentMetadataAccess::storeMetadataToMedium: "
             "invalid medium: no URL")), *this, 0);

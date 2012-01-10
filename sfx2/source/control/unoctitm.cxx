@@ -533,7 +533,7 @@ void SfxDispatchController_Impl::addParametersToArgs( const com::sun::star::util
             rtl::OUString aParamName = aToken.getToken( 0, '=', nParmIndex );
             rtl::OUString aValue     = (nParmIndex!=-1) ? aToken.getToken( 0, '=', nParmIndex ) : ::rtl::OUString();
 
-            if ( aParamName.getLength() > 0 )
+            if ( !aParamName.isEmpty() )
             {
                 nParmIndex = 0;
                 aToken = aParamName;
@@ -545,7 +545,7 @@ void SfxDispatchController_Impl::addParametersToArgs( const com::sun::star::util
             rArgs.realloc( nLen+1 );
             rArgs[nLen].Name = aParamName;
 
-            if ( aParamType.getLength() == 0 )
+            if ( aParamType.isEmpty() )
             {
                 // Default: LONG
                 rArgs[nLen].Value <<= aValue.toInt32();

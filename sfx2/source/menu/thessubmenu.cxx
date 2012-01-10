@@ -174,7 +174,7 @@ bool SfxThesSubMenuHelper::GetMeanings(
 {
     bool bHasMoreSynonyms = false;
     rSynonyms.clear();
-    if (IsSupportedLocale( rLocale ) && rWord.getLength() && nMaxSynonms > 0)
+    if (IsSupportedLocale( rLocale ) && !rWord.isEmpty() && nMaxSynonms > 0)
     {
         try
         {

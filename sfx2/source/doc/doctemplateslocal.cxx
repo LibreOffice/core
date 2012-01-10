@@ -187,11 +187,11 @@ void SAL_CALL DocTemplLocaleHelper::startElement( const ::rtl::OUString& aName, 
         m_aResultSeq.realloc( nNewEntryNum );
 
         ::rtl::OUString aNameValue = xAttribs->getValueByName( m_aNameAttr );
-        if ( !aNameValue.getLength() )
+        if ( aNameValue.isEmpty() )
             throw xml::sax::SAXException(); // TODO: the ID value must present
 
         ::rtl::OUString aUINameValue = xAttribs->getValueByName( m_aUINameAttr );
-        if ( !aUINameValue.getLength() )
+        if ( aUINameValue.isEmpty() )
             throw xml::sax::SAXException(); // TODO: the ID value must present
 
         m_aResultSeq[nNewEntryNum-1].First = aNameValue;

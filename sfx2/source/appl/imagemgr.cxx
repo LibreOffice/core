@@ -167,7 +167,7 @@ Image SAL_CALL GetImage(
 
     try
     {
-        if ( aCommandURL.getLength() > 0 )
+        if ( !aCommandURL.isEmpty() )
         {
             Reference< XImageManager > xModuleImageManager;
             rtl::OUString aModuleId = xModuleManager->identify( rFrame );

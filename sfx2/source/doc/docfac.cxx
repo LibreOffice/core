@@ -230,7 +230,7 @@ void SfxObjectFactory::SetSystemTemplate( const String& rServiceName, const Stri
     ::utl::LocalFileHelper::ConvertPhysicalNameToURL( sPath, sURL );
 
     ::rtl::OUString aUserTemplateURL( sURL );
-    if ( aUserTemplateURL.getLength() != 0)
+    if ( !aUserTemplateURL.isEmpty())
     {
         try
         {

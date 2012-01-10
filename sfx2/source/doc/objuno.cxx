@@ -1007,7 +1007,7 @@ void SAL_CALL  SfxDocumentInfoObject::setFastPropertyValue(sal_Int32 nHandle, co
         case MID_DOCINFO_AUTOLOADENABLED:
             aValue <<= static_cast<sal_Bool>
                         (   (_pImp->m_xDocProps->getAutoloadSecs() != 0)
-                        || _pImp->m_xDocProps->getAutoloadURL().getLength());
+                        || !_pImp->m_xDocProps->getAutoloadURL().isEmpty());
             break;
         case MID_DOCINFO_AUTOLOADURL:
             aValue <<= _pImp->m_xDocProps->getAutoloadURL();

@@ -160,7 +160,7 @@ sal_uInt32 SFX2_DLLPUBLIC LoadOlePropertySet(
         {
             ::rtl::OUString aPropName = xCustomSect->GetPropertyName( *aIt );
             uno::Any aPropValue = xCustomSect->GetAnyValue( *aIt );
-            if( (aPropName.getLength() > 0) && aPropValue.hasValue() ) {
+            if( !aPropName.isEmpty() && aPropValue.hasValue() ) {
                 try {
                     xUserDefined->addProperty( aPropName,
                         beans::PropertyAttribute::REMOVEABLE, aPropValue );

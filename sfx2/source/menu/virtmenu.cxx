@@ -135,7 +135,7 @@ static Image RetrieveAddOnImage( Reference< com::sun::star::frame::XFrame >& rFr
 {
     Image aImage;
 
-    if ( aImageId.getLength() > 0 )
+    if ( !aImageId.isEmpty() )
     {
         aImage = GetImage( rFrame, aImageId, bBigImage );
         if ( !!aImage )

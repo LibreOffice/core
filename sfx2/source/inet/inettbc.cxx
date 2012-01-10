@@ -246,7 +246,7 @@ void SfxURLToolBoxControl_Impl::StateChanged
                         continue;
 
                     ::rtl::OUString sURL;
-                    if (!(lProps[p].Value>>=sURL) || !sURL.getLength())
+                    if (!(lProps[p].Value>>=sURL) || sURL.isEmpty())
                         continue;
 
                     INetURLObject aURL    ( sURL );

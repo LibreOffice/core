@@ -411,7 +411,7 @@ void SfxMedium::AddLog( const ::rtl::OUString& aMessage )
 void SfxMedium::SetError( sal_uInt32 nError, const ::rtl::OUString& aLogMessage )
 {
     eError = nError;
-    if ( eError != ERRCODE_NONE && aLogMessage.getLength() )
+    if ( eError != ERRCODE_NONE && !aLogMessage.isEmpty() )
         AddLog( aLogMessage );
 }
 
@@ -547,7 +547,7 @@ Reference < XContent > SfxMedium::GetContent() const
         {
         }
 
-        if ( !aBaseURL.getLength() )
+        if ( aBaseURL.isEmpty() )
             aBaseURL = GetURLObject().GetMainURL( INetURLObject::NO_DECODE );
     }
 
@@ -797,15 +797,15 @@ void SfxMedium::StorageBackup_Impl()
     Reference< ::com::sun::star::ucb::XCommandEnvironment > xDummyEnv;
 
     sal_Bool bBasedOnOriginalFile = ( !pImp->pTempFile && !( aLogicName.Len() && pImp->m_bSalvageMode )
-        && GetURLObject().GetMainURL( INetURLObject::NO_DECODE ).getLength()
+        && !GetURLObject().GetMainURL( INetURLObject::NO_DECODE ).isEmpty()
         && ::utl::LocalFileHelper::IsLocalFile( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) )
         && ::utl::UCBContentHelper::IsDocument( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) ) );
 
-    if ( bBasedOnOriginalFile && !pImp->m_aBackupURL.getLength()
+    if ( bBasedOnOriginalFile && pImp->m_aBackupURL.isEmpty()
       && ::ucbhelper::Content::create( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ), xDummyEnv, aOriginalContent ) )
     {
         DoInternalBackup_Impl( aOriginalContent );
-        if( !pImp->m_aBackupURL.getLength() )
+        if( pImp->m_aBackupURL.isEmpty() )
             SetError( ERRCODE_SFX_CANTCREATEBACKUP, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
     }
 }
@@ -813,7 +813,7 @@ void SfxMedium::StorageBackup_Impl()
 //------------------------------------------------------------------
 ::rtl::OUString SfxMedium::GetBackup_Impl()
 {
-    if ( !pImp->m_aBackupURL.getLength() )
+    if ( pImp->m_aBackupURL.isEmpty() )
         StorageBackup_Impl();
 
     return pImp->m_aBackupURL;
@@ -897,12 +897,12 @@ sal_Int8 SfxMedium::ShowLockedDocumentDialog( const uno::Sequence< ::rtl::OUStri
         {
             if ( aData.getLength() > LOCKFILE_EDITTIME_ID )
             {
-                if ( aData[LOCKFILE_OOOUSERNAME_ID].getLength() )
+                if ( !aData[LOCKFILE_OOOUSERNAME_ID].isEmpty() )
                     aInfo = aData[LOCKFILE_OOOUSERNAME_ID];
                 else
                     aInfo = aData[LOCKFILE_SYSUSERNAME_ID];
 
-                if ( aInfo.getLength() && aData[LOCKFILE_EDITTIME_ID].getLength() )
+                if ( !aInfo.isEmpty() && !aData[LOCKFILE_EDITTIME_ID].isEmpty() )
                 {
                     aInfo += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( " ( " ) );
                     aInfo += aData[LOCKFILE_EDITTIME_ID];
@@ -1546,8 +1546,8 @@ sal_Bool SfxMedium::StorageCommit_Impl()
                     // since the temporary file is created always now, the scenario is close to be impossible
                     if ( !pImp->pTempFile )
                     {
-                        OSL_ENSURE( pImp->m_aBackupURL.getLength(), "No backup on storage commit!\n" );
-                        if ( pImp->m_aBackupURL.getLength()
+                        OSL_ENSURE( !pImp->m_aBackupURL.isEmpty(), "No backup on storage commit!\n" );
+                        if ( !pImp->m_aBackupURL.isEmpty()
                             && ::ucbhelper::Content::create( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ),
                                                         xDummyEnv,
                                                         aOriginalContent ) )
@@ -1638,10 +1638,10 @@ sal_Bool SfxMedium::TransactedTransferForFS_Impl( const INetURLObject& aSource,
             {
                 if( bOverWrite && ::utl::UCBContentHelper::IsDocument( aDest.GetMainURL( INetURLObject::NO_DECODE ) ) )
                 {
-                    if( ! pImp->m_aBackupURL.getLength() )
+                    if( pImp->m_aBackupURL.isEmpty() )
                         DoInternalBackup_Impl( aOriginalContent );
 
-                    if( pImp->m_aBackupURL.getLength() )
+                    if( !pImp->m_aBackupURL.isEmpty() )
                     {
                         Reference< XInputStream > aTempInput = aTempCont.openStream();
                         bTransactStarted = sal_True;
@@ -2019,7 +2019,7 @@ void SfxMedium::DoInternalBackup_Impl( const ::ucbhelper::Content& aOriginalCont
 {
     RTL_LOGFILE_CONTEXT( aLog, "sfx2 (mv76033) SfxMedium::DoInternalBackup_Impl( with destdir )" );
 
-    if ( pImp->m_aBackupURL.getLength() )
+    if ( !pImp->m_aBackupURL.isEmpty() )
         return; // the backup was done already
 
     ::utl::TempFile aTransactTemp( aPrefix, &aExtension, &aDestDir );
@@ -2047,14 +2047,14 @@ void SfxMedium::DoInternalBackup_Impl( const ::ucbhelper::Content& aOriginalCont
         {}
     }
 
-    if ( !pImp->m_aBackupURL.getLength() )
+    if ( pImp->m_aBackupURL.isEmpty() )
         aTransactTemp.EnableKillingFile( sal_True );
 }
 
 //------------------------------------------------------------------
 void SfxMedium::DoInternalBackup_Impl( const ::ucbhelper::Content& aOriginalContent )
 {
-    if ( pImp->m_aBackupURL.getLength() )
+    if ( !pImp->m_aBackupURL.isEmpty() )
         return; // the backup was done already
 
     ::rtl::OUString aFileName =  GetURLObject().getName( INetURLObject::LAST_SEGMENT,
@@ -2068,7 +2068,7 @@ void SfxMedium::DoInternalBackup_Impl( const ::ucbhelper::Content& aOriginalCont
 
     DoInternalBackup_Impl( aOriginalContent, aPrefix, aExtension, aBakDir );
 
-    if ( !pImp->m_aBackupURL.getLength() )
+    if ( pImp->m_aBackupURL.isEmpty() )
     {
         // the copiing to the backup catalog failed ( for example because
         // of using an encrypted partition as target catalog )
@@ -2150,7 +2150,7 @@ void SfxMedium::ClearBackup_Impl()
     {
         // currently a document is always stored in a new medium,
         // thus if a backup can not be removed the backup URL should not be cleaned
-        if ( pImp->m_aBackupURL.getLength() )
+        if ( !pImp->m_aBackupURL.isEmpty() )
         {
             if ( ::utl::UCBContentHelper::Kill( pImp->m_aBackupURL ) )
             {
@@ -2535,7 +2535,7 @@ sal_uInt32 SfxMedium::CreatePasswordToModifyHash( const ::rtl::OUString& aPasswd
 {
     sal_uInt32 nHash = 0;
 
-    if ( aPasswd.getLength() )
+    if ( !aPasswd.isEmpty() )
     {
         if ( bWriter )
         {
@@ -2850,7 +2850,7 @@ SfxMedium::SfxMedium( const ::com::sun::star::uno::Sequence< ::com::sun::star::b
             SFX_ITEMSET_ARG( pSet, pFileNameItem, SfxStringItem, SID_FILE_NAME, sal_False );
             if (!pFileNameItem) throw uno::RuntimeException();
             ::rtl::OUString aNewTempFileURL = SfxMedium::CreateTempCopyWithExt( pFileNameItem->GetValue() );
-            if ( aNewTempFileURL.getLength() )
+            if ( !aNewTempFileURL.isEmpty() )
             {
                 pSet->Put( SfxStringItem( SID_FILE_NAME, aNewTempFileURL ) );
                 pSet->ClearItem( SID_INPUTSTREAM );
@@ -3279,7 +3279,7 @@ void SfxMedium::CreateTempFile( sal_Bool bReplace )
                 ::rtl::OUString aFileName = aTmpURLObj.getName( INetURLObject::LAST_SEGMENT,
                                                                 true,
                                                                 INetURLObject::DECODE_WITH_CHARSET );
-                if ( aFileName.getLength() && aTmpURLObj.removeSegment() )
+                if ( !aFileName.isEmpty() && aTmpURLObj.removeSegment() )
                 {
                     ::ucbhelper::Content aTargetContent( aTmpURLObj.GetMainURL( INetURLObject::NO_DECODE ), xComEnv );
                     if ( aTargetContent.transferContent( pImp->aContent, ::ucbhelper::InsertOperation_COPY, aFileName, NameClash::OVERWRITE ) )
@@ -3424,7 +3424,7 @@ sal_Bool SfxMedium::SignContents_Impl( sal_Bool bScriptingContent, const ::rtl::
                         {
                             // remove the document signature if any
                             ::rtl::OUString aDocSigName = xSigner->getDocumentContentSignatureDefaultStreamName();
-                            if ( aDocSigName.getLength() && xMetaInf->hasByName( aDocSigName ) )
+                            if ( !aDocSigName.isEmpty() && xMetaInf->hasByName( aDocSigName ) )
                                 xMetaInf->removeElement( aDocSigName );
 
                             uno::Reference< embed::XTransactedObject > xTransact( xMetaInf, uno::UNO_QUERY_THROW );
@@ -3512,20 +3512,20 @@ sal_Bool SfxMedium::IsOpen() const
 {
     ::rtl::OUString aResult;
 
-    if ( aURL.getLength() )
+    if ( !aURL.isEmpty() )
     {
         sal_Int32 nPrefixLen = aURL.lastIndexOf( '.' );
         String aExt = ( nPrefixLen == -1 ) ? String() : String( aURL.copy( nPrefixLen ) );
 
         ::rtl::OUString aNewTempFileURL = ::utl::TempFile( String(), &aExt ).GetURL();
-        if ( aNewTempFileURL.getLength() )
+        if ( !aNewTempFileURL.isEmpty() )
         {
             INetURLObject aSource( aURL );
             INetURLObject aDest( aNewTempFileURL );
             ::rtl::OUString aFileName = aDest.getName( INetURLObject::LAST_SEGMENT,
                                                         true,
                                                         INetURLObject::DECODE_WITH_CHARSET );
-            if ( aFileName.getLength() && aDest.removeSegment() )
+            if ( !aFileName.isEmpty() && aDest.removeSegment() )
             {
                 try
                 {
@@ -3586,7 +3586,7 @@ sal_Bool SfxMedium::CallApproveHandler( const uno::Reference< task::XInteraction
     ::rtl::OUString aResult;
     ::rtl::OUString aOrigURL = aLogicName;
 
-    if ( aOrigURL.getLength() )
+    if ( !aOrigURL.isEmpty() )
     {
         sal_Int32 nPrefixLen = aOrigURL.lastIndexOf( '.' );
         String aExt = ( nPrefixLen == -1 ) ? String() : String( aOrigURL.copy( nPrefixLen ) );
@@ -3594,7 +3594,7 @@ sal_Bool SfxMedium::CallApproveHandler( const uno::Reference< task::XInteraction
 
         // TODO/LATER: In future the aLogicName should be set to shared folder URL
         //             and a temporary file should be created. Transport_Impl should be impossible then.
-        if ( aNewURL.getLength() )
+        if ( !aNewURL.isEmpty() )
         {
             uno::Reference< embed::XStorage > xStorage = GetStorage();
             uno::Reference< embed::XOptimizedStorage > xOptStorage( xStorage, uno::UNO_QUERY );
@@ -3632,7 +3632,7 @@ sal_Bool SfxMedium::CallApproveHandler( const uno::Reference< task::XInteraction
                     {}
                 }
 
-                if ( !aResult.getLength() )
+                if ( aResult.isEmpty() )
                 {
                     Close();
                     SetPhysicalName_Impl( String() );
@@ -3659,7 +3659,7 @@ sal_Bool SfxMedium::SwitchDocumentToFile( ::rtl::OUString aURL )
     sal_Bool bResult = sal_False;
     ::rtl::OUString aOrigURL = aLogicName;
 
-    if ( aURL.getLength() && aOrigURL.getLength() )
+    if ( !aURL.isEmpty() && !aOrigURL.isEmpty() )
     {
         uno::Reference< embed::XStorage > xStorage = GetStorage();
         uno::Reference< embed::XOptimizedStorage > xOptStorage( xStorage, uno::UNO_QUERY );

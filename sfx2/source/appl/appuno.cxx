@@ -686,7 +686,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                 else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sStandardDir)) )
                 {
                     ::rtl::OUString sVal;
-                    sal_Bool bOK = ((rProp.Value >>= sVal) && sVal.getLength());
+                    sal_Bool bOK = ((rProp.Value >>= sVal) && !sVal.isEmpty());
                     DBG_ASSERT( bOK, "invalid type or value for StandardDir" );
                     if (bOK)
                         rSet.Put( SfxStringItem( SID_STANDARD_DIR, sVal ) );
@@ -706,7 +706,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                 else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sFileName)) )
                 {
                     ::rtl::OUString sVal;
-                    sal_Bool bOK = ((rProp.Value >>= sVal) && sVal.getLength());
+                    sal_Bool bOK = ((rProp.Value >>= sVal) && !sVal.isEmpty());
                     DBG_ASSERT( bOK, "invalid type or value for FileName" );
                     if (bOK)
                         rSet.Put( SfxStringItem( SID_FILE_NAME, sVal ) );
@@ -732,13 +732,13 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                     ::rtl::OUString sVal;
                     sal_Bool bOK = (rProp.Value >>= sVal);
                     DBG_ASSERT( bOK, "invalid type for FrameName" );
-                    if (bOK && sVal.getLength())
+                    if (bOK && !sVal.isEmpty())
                         rSet.Put( SfxStringItem( SID_TARGETNAME, sVal ) );
                 }
                 else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sMediaType)) )
                 {
                     ::rtl::OUString sVal;
-                    sal_Bool bOK = ((rProp.Value >>= sVal) && sVal.getLength());
+                    sal_Bool bOK = ((rProp.Value >>= sVal) && !sVal.isEmpty());
                     DBG_ASSERT( bOK, "invalid type or value for MediaType" );
                     if (bOK)
                         rSet.Put( SfxStringItem( SID_CONTENTTYPE, sVal ) );
@@ -746,7 +746,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                 else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sTemplateName)) )
                 {
                     ::rtl::OUString sVal;
-                    sal_Bool bOK = ((rProp.Value >>= sVal) && sVal.getLength());
+                    sal_Bool bOK = ((rProp.Value >>= sVal) && !sVal.isEmpty());
                     DBG_ASSERT( bOK, "invalid type or value for TemplateName" );
                     if (bOK)
                         rSet.Put( SfxStringItem( SID_TEMPLATE_NAME, sVal ) );
@@ -754,7 +754,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                 else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sTemplateRegionName)) )
                 {
                     ::rtl::OUString sVal;
-                    sal_Bool bOK = ((rProp.Value >>= sVal) && sVal.getLength());
+                    sal_Bool bOK = ((rProp.Value >>= sVal) && !sVal.isEmpty());
                     DBG_ASSERT( bOK, "invalid type or value for TemplateRegionName" );
                     if (bOK)
                         rSet.Put( SfxStringItem( SID_TEMPLATE_REGIONNAME, sVal ) );
@@ -762,7 +762,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                 else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sJumpMark)) )
                 {
                     ::rtl::OUString sVal;
-                    sal_Bool bOK = ((rProp.Value >>= sVal) && sVal.getLength());
+                    sal_Bool bOK = ((rProp.Value >>= sVal) && !sVal.isEmpty());
                     DBG_ASSERT( bOK, "invalid type or value for JumpMark" );
                     if (bOK)
                         rSet.Put( SfxStringItem( SID_JUMPMARK, sVal ) );
@@ -770,7 +770,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                 else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sCharacterSet)) )
                 {
                     ::rtl::OUString sVal;
-                    sal_Bool bOK = ((rProp.Value >>= sVal) && sVal.getLength());
+                    sal_Bool bOK = ((rProp.Value >>= sVal) && !sVal.isEmpty());
                     DBG_ASSERT( bOK, "invalid type or value for CharacterSet" );
                     if (bOK)
                         rSet.Put( SfxStringItem( SID_CHARSET, sVal ) );
@@ -778,7 +778,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                 else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sFilterFlags)) )
                 {
                     ::rtl::OUString sVal;
-                    sal_Bool bOK = ((rProp.Value >>= sVal) && sVal.getLength());
+                    sal_Bool bOK = ((rProp.Value >>= sVal) && !sVal.isEmpty());
                     DBG_ASSERT( bOK, "invalid type or value for FilterFlags" );
                     if (bOK)
                         rSet.Put( SfxStringItem( SID_FILE_FILTEROPTIONS, sVal ) );
@@ -810,7 +810,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                 else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sDocumentTitle)) )
                 {
                     ::rtl::OUString sVal;
-                    sal_Bool bOK = ((rProp.Value >>= sVal) && sVal.getLength());
+                    sal_Bool bOK = ((rProp.Value >>= sVal) && !sVal.isEmpty());
                     DBG_ASSERT( bOK, "invalid type or value for DocumentTitle" );
                     if (bOK)
                         rSet.Put( SfxStringItem( SID_DOCINFO_TITLE, sVal ) );
@@ -827,7 +827,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                 else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sHierarchicalDocumentName)) )
                 {
                     ::rtl::OUString sVal;
-                    sal_Bool bOK = ((rProp.Value >>= sVal) && sVal.getLength());
+                    sal_Bool bOK = ((rProp.Value >>= sVal) && !sVal.isEmpty());
                     DBG_ASSERT( bOK, "invalid type or value for HierarchicalDocumentName" );
                     if (bOK)
                         rSet.Put( SfxStringItem( SID_DOC_HIERARCHICALNAME, sVal ) );
@@ -859,7 +859,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                 else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sSuggestedSaveAsDir)) )
                 {
                     ::rtl::OUString sVal;
-                    sal_Bool bOK = ((rProp.Value >>= sVal) && sVal.getLength());
+                    sal_Bool bOK = ((rProp.Value >>= sVal) && !sVal.isEmpty());
                     DBG_ASSERT( bOK, "invalid type or value for SuggestedSaveAsDir" );
                     if (bOK)
                         rSet.Put( SfxStringItem( SID_SUGGESTEDSAVEASDIR, sVal ) );
@@ -867,7 +867,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                 else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sSuggestedSaveAsName)) )
                 {
                     ::rtl::OUString sVal;
-                    sal_Bool bOK = ((rProp.Value >>= sVal) && sVal.getLength());
+                    sal_Bool bOK = ((rProp.Value >>= sVal) && !sVal.isEmpty());
                     DBG_ASSERT( bOK, "invalid type or value for SuggestedSaveAsName" );
                     if (bOK)
                         rSet.Put( SfxStringItem( SID_SUGGESTEDSAVEASNAME, sVal ) );

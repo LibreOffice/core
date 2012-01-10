@@ -224,7 +224,7 @@ void SfxObjectShell::FlushDocInfo()
     ::rtl::OUString url(xDocProps->getAutoloadURL());
     sal_Int32 delay(xDocProps->getAutoloadSecs());
     SetAutoLoad( INetURLObject(url), delay * 1000,
-                 (delay > 0) || url.getLength() );
+                 (delay > 0) || !url.isEmpty() );
 }
 
 //-------------------------------------------------------------------------
@@ -235,7 +235,7 @@ void SfxObjectShell::SetError( sal_uInt32 lErr, const ::rtl::OUString& aLogMessa
     {
         pImp->lErr=lErr;
 
-        if( lErr != ERRCODE_NONE && aLogMessage.getLength() )
+        if( lErr != ERRCODE_NONE && !aLogMessage.isEmpty() )
             AddLog( aLogMessage );
     }
 }
@@ -509,7 +509,7 @@ sal_Bool SfxObjectShell::SwitchToShared( sal_Bool bShared, sal_Bool bSave )
     {
         ::rtl::OUString aOrigURL = GetMedium()->GetURLObject().GetMainURL( INetURLObject::NO_DECODE );
 
-        if ( !aOrigURL.getLength() && bSave )
+        if ( aOrigURL.isEmpty() && bSave )
         {
             // this is a new document, let it be stored before switching to the shared mode;
             // the storing should be done without shared flag, since it is possible that the
@@ -627,7 +627,7 @@ void SfxObjectShell::FreeSharedFile( const ::rtl::OUString& aTempFileURL )
 {
     SetSharedXMLFlag( sal_False );
 
-    if ( IsDocShared() && aTempFileURL.getLength()
+    if ( IsDocShared() && !aTempFileURL.isEmpty()
       && !::utl::UCBContentHelper::EqualURLs( aTempFileURL, GetSharedFileURL() ) )
     {
         if ( pImp->m_bAllowShareControlFileClean )
@@ -674,7 +674,7 @@ sal_Bool SfxObjectShell::HasSharedXMLFlagSet() const
 
 sal_Bool SfxObjectShell::IsDocShared() const
 {
-    return ( pImp->m_aSharedFileURL.getLength() > 0 );
+    return ( !pImp->m_aSharedFileURL.isEmpty() );
 }
 
 //--------------------------------------------------------------------
@@ -1271,7 +1271,7 @@ void SfxObjectShell::FinishedLoading( sal_uInt16 nFlags )
         ::rtl::OUString url(xDocProps->getAutoloadURL());
         sal_Int32 delay(xDocProps->getAutoloadSecs());
         SetAutoLoad( INetURLObject(url), delay * 1000,
-                     (delay > 0) || url.getLength() );
+                     (delay > 0) || !url.isEmpty() );
         if( !bSetModifiedTRUE && IsEnableSetModified() )
             SetModified( sal_False );
         Invalidate( SID_SAVEASDOC );
@@ -1978,7 +1978,7 @@ sal_Bool SfxObjectShell_Impl::setCurrentMacroExecMode( sal_uInt16 nMacroMode )
     if ( pMedium )
     {
         sLocation = pMedium->GetName();
-        if ( !sLocation.getLength() )
+        if ( sLocation.isEmpty() )
         {
             // for documents made from a template: get the name of the template
             sLocation = rDocShell.getDocProperties()->getTemplateURL();
@@ -2165,7 +2165,7 @@ void SfxObjectShell::StoreLog()
 
         ::rtl::Bootstrap::expandMacros( aBuildID );
 
-        if ( aFileURL.getLength() )
+        if ( !aFileURL.isEmpty() )
         {
             aFileURL += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/user/temp/document_io_logring.txt" ) );
             try
@@ -2177,7 +2177,7 @@ void SfxObjectShell::StoreLog()
                 uno::Reference< io::XTruncate > xTruncate( xOutStream, uno::UNO_QUERY_THROW );
                 xTruncate->truncate();
 
-                if ( aBuildID.getLength() )
+                if ( !aBuildID.isEmpty() )
                     WriteStringInStream( xOutStream, aBuildID );
 
                 uno::Sequence< ::rtl::OUString > aLogSeq = pImp->m_xLogRing->getCollectedLog();

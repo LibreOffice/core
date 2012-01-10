@@ -306,8 +306,8 @@ struct IMPL_SfxBaseModel_DataContainer : public ::sfx2::IModifiableDocument
                 return 0;
             }
             uri = xContent->getIdentifier()->getContentIdentifier();
-            OSL_ENSURE(uri.getLength(), "GetDMA: empty uri?");
-            if (uri.getLength() && !uri.endsWithAsciiL("/", 1))
+            OSL_ENSURE(!uri.isEmpty(), "GetDMA: empty uri?");
+            if (!uri.isEmpty() && !uri.endsWithAsciiL("/", 1))
             {
                 uri = uri + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
             }
@@ -959,7 +959,7 @@ sal_Bool SAL_CALL SfxBaseModel::attachResource( const   ::rtl::OUString&        
     throw(::com::sun::star::uno::RuntimeException)
 {
     SfxModelGuard aGuard( *this, SfxModelGuard::E_INITIALIZING );
-    if ( rURL.getLength() == 0 && rArgs.getLength() == 1 && rArgs[0].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("SetEmbedded")) )
+    if ( rURL.isEmpty() && rArgs.getLength() == 1 && rArgs[0].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("SetEmbedded")) )
     {
         // allows to set a windowless document to EMBEDDED state
         // but _only_ before load() or initNew() methods
@@ -1088,7 +1088,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SfxBaseModel::getArgs() throw(::c
         seqArgsNew[ nNewLength - 1 ].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("WinExtent"));
         seqArgsNew[ nNewLength - 1 ].Value <<= aRectSeq;
 
-        if ( m_pData->m_aPreusedFilterName.getLength() )
+        if ( !m_pData->m_aPreusedFilterName.isEmpty() )
         {
             seqArgsNew.realloc( ++nNewLength );
             seqArgsNew[ nNewLength - 1 ].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PreusedFilterName"));
@@ -2704,11 +2704,11 @@ void SfxBaseModel::impl_store(  const   ::rtl::OUString&                   sURL 
                                 const   uno::Sequence< beans::PropertyValue >&  seqArguments    ,
                                         sal_Bool                    bSaveTo         )
 {
-    if( !sURL.getLength() )
+    if( sURL.isEmpty() )
         throw frame::IllegalArgumentIOException();
 
     sal_Bool bSaved = sal_False;
-    if ( !bSaveTo && m_pData->m_pObjectShell && sURL.getLength()
+    if ( !bSaveTo && m_pData->m_pObjectShell && !sURL.isEmpty()
       && sURL.compareToAscii( "private:stream", 14 ) != COMPARE_EQUAL
       && ::utl::UCBContentHelper::EqualURLs( getLocation(), sURL ) )
     {
@@ -2717,7 +2717,7 @@ void SfxBaseModel::impl_store(  const   ::rtl::OUString&                   sURL 
         ::comphelper::SequenceAsHashMap aArgHash( seqArguments );
         ::rtl::OUString aFilterString( RTL_CONSTASCII_USTRINGPARAM( "FilterName" ) );
         ::rtl::OUString aFilterName = aArgHash.getUnpackedValueOrDefault( aFilterString, ::rtl::OUString() );
-        if ( aFilterName.getLength() )
+        if ( !aFilterName.isEmpty() )
         {
             SfxMedium* pMedium = m_pData->m_pObjectShell->GetMedium();
             if ( pMedium )
@@ -2950,8 +2950,8 @@ void SfxBaseModel::postEvent_Impl( const ::rtl::OUString& aName, const uno::Refe
     if ( impl_isDisposed() )
         return;
 
-    DBG_ASSERT( aName.getLength(), "Empty event name!" );
-    if (!aName.getLength())
+    DBG_ASSERT( !aName.isEmpty(), "Empty event name!" );
+    if (aName.isEmpty())
         return;
 
     ::cppu::OInterfaceContainerHelper* pIC =
@@ -3240,7 +3240,7 @@ uno::Reference< script::provider::XScriptProvider > SAL_CALL SfxBaseModel::getSc
 
 rtl::OUString SfxBaseModel::getRuntimeUID() const
 {
-    OSL_ENSURE( m_pData->m_sRuntimeUID.getLength() > 0,
+    OSL_ENSURE( !m_pData->m_sRuntimeUID.isEmpty(),
                 "SfxBaseModel::getRuntimeUID - ID is empty!" );
     return m_pData->m_sRuntimeUID;
 }
@@ -3336,7 +3336,7 @@ uno::Reference< ui::XUIConfigurationManager > SAL_CALL SfxBaseModel::getUIConfig
                 rtl::OUString aMediaType;
                 uno::Reference< beans::XPropertySet > xPropSet( xConfigStorage, uno::UNO_QUERY );
                 Any a = xPropSet->getPropertyValue( aMediaTypeProp );
-                if ( !( a >>= aMediaType ) || ( aMediaType.getLength() == 0 ))
+                if ( !( a >>= aMediaType ) ||  aMediaType.isEmpty())
                 {
                     a <<= aUIConfigMediaType;
                     xPropSet->setPropertyValue( aMediaTypeProp, a );
@@ -3703,7 +3703,7 @@ bool SfxBaseModel::impl_getPrintHelper()
     throw (css::uno::RuntimeException)
 {
     SfxModelGuard aGuard( *this );
-    if (m_pData->m_sModuleIdentifier.getLength() > 0)
+    if (!m_pData->m_sModuleIdentifier.isEmpty())
         return m_pData->m_sModuleIdentifier;
     if (m_pData->m_pObjectShell)
         return m_pData->m_pObjectShell->GetFactory().GetDocumentServiceName();

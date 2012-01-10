@@ -291,7 +291,7 @@ namespace
     {
         rtl::OUString aName;
 
-        if (rName.getLength())
+        if (!rName.isEmpty())
             aName = SfxObjectShell::GetServiceNameFromFactory(rName);
 
         // find the impl-Data of any comparable FilterMatcher that was created
@@ -354,7 +354,7 @@ void SfxFilterMatcher_Impl::InitForIterating() const
         // global filter array has not been created yet
         SfxFilterContainer::ReadFilters_Impl();
 
-    if ( aName.getLength() )
+    if ( !aName.isEmpty() )
     {
         // matcher of factory: use only filters of that document type
         ((SfxFilterMatcher_Impl*)this)->pList = new SfxFilterList_Impl;
@@ -400,7 +400,7 @@ sal_uInt32  SfxFilterMatcher::GuessFilterIgnoringContent(
     }
 
     *ppFilter = NULL;
-    if ( sTypeName.getLength() )
+    if ( !sTypeName.isEmpty() )
     {
         // make sure filter list is initialized
         m_rImpl.InitForIterating();
@@ -446,7 +446,7 @@ sal_uInt32  SfxFilterMatcher::GuessFilterControlDefaultUI( SfxMedium& rMedium, c
             aDescriptor[::comphelper::MediaDescriptor::PROP_INPUTSTREAM()       ] <<= xInStream;
             aDescriptor[::comphelper::MediaDescriptor::PROP_INTERACTIONHANDLER()] <<= rMedium.GetInteractionHandler();
 
-            if ( m_rImpl.aName.getLength() )
+            if ( !m_rImpl.aName.isEmpty() )
                 aDescriptor[::comphelper::MediaDescriptor::PROP_DOCUMENTSERVICE()] <<= m_rImpl.aName;
 
             if ( pOldFilter )
@@ -462,7 +462,7 @@ sal_uInt32  SfxFilterMatcher::GuessFilterControlDefaultUI( SfxMedium& rMedium, c
         else
             sTypeName = xDetection->queryTypeByURL(sURL);
 
-        if (sTypeName.getLength())
+        if (!sTypeName.isEmpty())
         {
             // detect filter by given type
             // In case of this matcher is bound to a particular document type:
@@ -613,7 +613,7 @@ const SfxFilter* SfxFilterMatcher::GetFilterForProps( const com::sun::star::uno:
             ::rtl::OUString aValue;
 
             // try to get the preferred filter (works without loading all filters!)
-            if ( (aProps[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PreferredFilter"))] >>= aValue) && aValue.getLength() )
+            if ( (aProps[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PreferredFilter"))] >>= aValue) && !aValue.isEmpty() )
             {
                 const SfxFilter* pFilter = SfxFilter::GetFilterByName( aValue );
                 if ( !pFilter || (pFilter->GetFilterFlags() & nMust) != nMust || (pFilter->GetFilterFlags() & nDont ) )
@@ -621,7 +621,7 @@ const SfxFilter* SfxFilterMatcher::GetFilterForProps( const com::sun::star::uno:
                     // pFilter == 0: if preferred filter is a Writer filter, but Writer module is not installed
                     continue;
 
-                if ( m_rImpl.aName.getLength() )
+                if ( !m_rImpl.aName.isEmpty() )
                 {
                     // if this is not the global FilterMatcher: check if filter matches the document type
                     ::rtl::OUString aService;
@@ -893,7 +893,7 @@ const SfxFilter* SfxFilterMatcherIter::Next()
     sal_Int32               nItem   = 0                ;
     for( nItem=0; nItem<nCount; ++nItem )
     {
-        if( sPrefix.getLength() > 0 )
+        if( !sPrefix.isEmpty() )
         {
             sString.append( sPrefix );
         }
@@ -1027,11 +1027,11 @@ void SfxFilterContainer::ReadSingleFilter_Impl(
             }
         }
 
-        if ( !sServiceName.getLength() )
+        if ( sServiceName.isEmpty() )
             return;
 
         // old formats are found ... using HumanPresentableName!
-        if( sHumanName.getLength() )
+        if( !sHumanName.isEmpty() )
         {
             nClipboardId = SotExchange::RegisterFormatName( sHumanName );
 

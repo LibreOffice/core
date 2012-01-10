@@ -365,7 +365,7 @@ IMPL_LINK( SfxAppMenuControl_Impl, Activate, Menu *, pActMenu )
                         if ( pMenuAttributes )
                             aImageId = pMenuAttributes->aImageId; // Retrieve image id from menu attributes
 
-                        if ( aImageId.getLength() > 0 )
+                        if ( !aImageId.isEmpty() )
                         {
                             Reference< ::com::sun::star::frame::XFrame > xFrame;
                             Image aImage = GetImage( xFrame, aImageId, false );

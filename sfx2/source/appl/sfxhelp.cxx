@@ -125,7 +125,7 @@ static rtl::OUString HelpLocaleString()
         const rtl::OUString aEnglish( RTL_CONSTASCII_USTRINGPARAM( "en" ) );
         // detect installed locale
         aLocaleStr = utl::ConfigManager::getLocale();
-        bool bOk = aLocaleStr.getLength() != 0;
+        bool bOk = !aLocaleStr.isEmpty();
         if ( !bOk )
             aLocaleStr = aEnglish;
         else
@@ -165,7 +165,7 @@ static rtl::OUString HelpLocaleString()
 void AppendConfigToken( String& rURL, sal_Bool bQuestionMark, const rtl::OUString &rLang )
 {
     ::rtl::OUString aLocaleStr( rLang );
-    if ( !aLocaleStr.getLength() )
+    if ( aLocaleStr.isEmpty() )
         aLocaleStr = HelpLocaleString();
 
     // query part exists?
@@ -197,7 +197,7 @@ sal_Bool GetHelpAnchor_Impl( const String& _rURL, String& _rAnchor )
         if ( ( aCnt.getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AnchorName")) ) >>= sAnchor ) )
         {
 
-            if ( sAnchor.getLength() > 0 )
+            if ( !sAnchor.isEmpty() )
             {
                 _rAnchor = String( sAnchor );
                 bRet = sal_True;
@@ -276,7 +276,7 @@ SfxHelpOptions_Impl::SfxHelpOptions_Impl()
                             do
                             {
                                 rtl::OString aToken = aTmp.getToken( 0, ',', nIndex );
-                                if ( aToken.getLength() )
+                                if ( !aToken.isEmpty() )
                                     m_aIds.insert( aToken );
                             }
                             while ( nIndex >= 0 );
@@ -368,7 +368,7 @@ SfxHelp::SfxHelp() :
         ::rtl::OUString sHelpDebug;
         ::rtl::OUString sEnvVarName( RTL_CONSTASCII_USTRINGPARAM( "HELP_DEBUG" ) );
         osl_getEnvironment( sEnvVarName.pData, &sHelpDebug.pData );
-        bIsDebug = ( 0 != sHelpDebug.getLength() );
+        bIsDebug = !sHelpDebug.isEmpty();
     }
 
     pImp = new SfxHelp_Impl( bIsDebug );
@@ -464,7 +464,7 @@ String SfxHelp::GetHelpModuleName_Impl()
     rtl::OUString aFactoryShortName;
     rtl::OUString aModuleIdentifier = getCurrentModuleIdentifier_Impl();
 
-    if ( aModuleIdentifier.getLength() > 0 )
+    if ( !aModuleIdentifier.isEmpty() )
     {
         try
         {
@@ -491,7 +491,7 @@ String SfxHelp::GetHelpModuleName_Impl()
     }
 
     rtl::OUString sDefaultModule = getDefaultModule_Impl();
-    if ( aFactoryShortName.getLength() > 0 )
+    if ( !aFactoryShortName.isEmpty() )
     {
         // Map some module identifiers to their "real" help module string.
         if ( aFactoryShortName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("chart2")) )
@@ -645,7 +645,7 @@ XubString SfxHelp::GetHelpText( const String& aCommandURL, const Window* pWindow
         sHelpText += String( sModuleName );
         sHelpText += DEFINE_CONST_UNICODE(": ");
         sHelpText += aCommandURL;
-        if ( aNewHelpId.getLength() )
+        if ( !aNewHelpId.isEmpty() )
         {
             sHelpText += DEFINE_CONST_UNICODE(" - ");
             sHelpText += String(rtl::OStringToOUString(aNewHelpId, RTL_TEXTENCODING_UTF8));
@@ -662,7 +662,7 @@ static bool impl_hasHelpInstalled( const rtl::OUString &rLang = rtl::OUString() 
     AppendConfigToken( aHelpRootURL, sal_True, rLang );
     Sequence< ::rtl::OUString > aFactories = SfxContentHelper::GetResultSet( aHelpRootURL );
 
-    return ( aFactories.getLength() != 0 );
+    return ( aFactories.getLength() != 0   );
 }
 
 sal_Bool SfxHelp::SearchKeyword( const XubString& rKeyword )

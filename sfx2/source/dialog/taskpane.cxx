@@ -118,7 +118,7 @@ namespace sfx2
                     "org.openoffice.Office.UI."));
                 aPathComposer.append( sWindowStateRef );
                 aPathComposer.appendAscii(RTL_CONSTASCII_STRINGPARAM("/UIElements/States"));
-                if ( i_rResourceURL.getLength() )
+                if ( !i_rResourceURL.isEmpty() )
                 {
                     aPathComposer.append('/').append( i_rResourceURL );
                 }
@@ -167,7 +167,7 @@ namespace sfx2
         Image lcl_getPanelImage( const Reference< XFrame >& i_rDocFrame, const ::utl::OConfigurationNode& i_rPanelConfigNode )
         {
             const ::rtl::OUString sImageURL( ::comphelper::getString( i_rPanelConfigNode.getNodeValue( "ImageURL" ) ) );
-            if ( sImageURL.getLength() )
+            if ( !sImageURL.isEmpty() )
             {
                 try
                 {
@@ -632,10 +632,10 @@ namespace sfx2
                 sFirstVisiblePanelResource = *resource;
         }
 
-        if ( sFirstVisiblePanelResource.getLength() == 0 )
+        if ( sFirstVisiblePanelResource.isEmpty() )
             sFirstVisiblePanelResource = sFirstPanelResource;
 
-        if ( sFirstVisiblePanelResource.getLength() )
+        if ( !sFirstVisiblePanelResource.isEmpty() )
         {
             ::boost::optional< size_t > aPanelPos( GetPanelPos( sFirstVisiblePanelResource ) );
             OSL_ENSURE( !!aPanelPos, "ModuleTaskPane_Impl::impl_isToolPanelResource: just inserted it, and it's not there?!" );

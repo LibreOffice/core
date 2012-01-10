@@ -126,13 +126,13 @@ long SfxFrameWindow_Impl::Notify( NotifyEvent& rNEvt )
         // TODO/LATER: do we still need this code?
         Window* pWindow = rNEvt.GetWindow();
         rtl::OString sHelpId;
-        while ( !sHelpId.getLength() && pWindow )
+        while ( sHelpId.isEmpty() && pWindow )
         {
             sHelpId = pWindow->GetHelpId();
             pWindow = pWindow->GetParent();
         }
 
-        if ( sHelpId.getLength() )
+        if ( !sHelpId.isEmpty() )
             SfxHelp::OpenHelpAgent( pFrame, sHelpId );
 
         // if focus was on an external window, the clipboard content might have been changed

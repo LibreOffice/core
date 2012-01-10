@@ -119,7 +119,7 @@ static rtl::OUString GetLabelFromCommandURL( const rtl::OUString& rCommandURL, c
     {
         try
         {
-            if ( rCommandURL.getLength() > 0 )
+            if ( !rCommandURL.isEmpty() )
             {
                 uno::Sequence< beans::PropertyValue > aPropSeq;
                 uno::Any a( xUICommandLabels->getByName( rCommandURL ));
@@ -172,7 +172,7 @@ sal_Bool SfxRecordingFloatWrapper_Impl::QueryClose()
     // asking for recorded macro should be replaced if index access is available!
     sal_Bool bRet = sal_True;
     com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > xRecorder = pBindings->GetRecorder();
-    if ( xRecorder.is() && xRecorder->getRecordedMacro().getLength() )
+    if ( xRecorder.is() && !xRecorder->getRecordedMacro().isEmpty() )
     {
         QueryBox aBox( GetWindow(), WB_YES_NO | WB_DEF_NO , String( SfxResId( STR_MACRO_LOSS ) ) );
         aBox.SetText( String( SfxResId(STR_CANCEL_RECORDING) ) );

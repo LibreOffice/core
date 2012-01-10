@@ -247,7 +247,7 @@ void PropagateEvent_Impl( SfxObjectShell *pDoc, rtl::OUString aEventName, const 
     if ( xSupplier.is() )
     {
         uno::Reference < container::XNameReplace > xEvents = xSupplier->getEvents();
-        if ( aEventName.getLength() )
+        if ( !aEventName.isEmpty() )
         {
             uno::Any aEventData = CreateEventData_Impl( pMacro );
 

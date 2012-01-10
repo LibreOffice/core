@@ -149,7 +149,7 @@ svt::ToolboxController* SAL_CALL SfxToolBoxControllerFactory( const Reference< X
     aTargetURL.Complete = aCommandURL;
     Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer"))), UNO_QUERY );
     xTrans->parseStrict( aTargetURL );
-    if ( aTargetURL.Arguments.getLength() )
+    if ( !aTargetURL.Arguments.isEmpty() )
         return NULL;
 
     SfxObjectShell* pObjShell = NULL;
@@ -1731,7 +1731,7 @@ IMPL_LINK( SfxAppToolBoxControl_Impl, Activate, Menu *, pActMenu )
                         if ( pMenuAttributes )
                             aImageId = pMenuAttributes->aImageId; // Retrieve image id from menu attributes
 
-                        if ( aImageId.getLength() > 0 )
+                        if ( !aImageId.isEmpty() )
                         {
                             Reference< ::com::sun::star::frame::XFrame > xFrame;
                             Image aImage = GetImage( xFrame, aImageId, false );

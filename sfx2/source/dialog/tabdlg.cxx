@@ -1471,13 +1471,13 @@ long SfxTabDialog::Notify( NotifyEvent& rNEvt )
         {
             Window* pWindow = rNEvt.GetWindow();
             rtl::OString sHelpId;
-            while ( !sHelpId.getLength() && pWindow )
+            while ( sHelpId.isEmpty() && pWindow )
             {
                 sHelpId = pWindow->GetHelpId();
                 pWindow = pWindow->GetParent();
             }
 
-            if ( sHelpId.getLength() )
+            if ( !sHelpId.isEmpty() )
                 SfxHelp::OpenHelpAgent( &pViewFrame->GetFrame(), sHelpId );
         }
     }

@@ -587,14 +587,14 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
                                 if ( nId == SID_MAIL_SENDDOCASMS )
                 {
                     aDocType = impl_searchFormatTypeForApp(xFrame, E_MS_DOC);
-                    if (aDocType.getLength() > 0)
+                    if (!aDocType.isEmpty())
                         eResult = aModel.SaveAndSend( xFrame, aDocType );
                 }
                 else
                                 if ( nId == SID_MAIL_SENDDOCASOOO )
                 {
                     aDocType = impl_searchFormatTypeForApp(xFrame, E_OOO_DOC);
-                    if (aDocType.getLength() > 0)
+                    if (!aDocType.isEmpty())
                         eResult = aModel.SaveAndSend( xFrame, aDocType );
                 }
 
@@ -663,7 +663,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
                 INetURLObject aFileObj( aLocation );
 
                 bool bPrivateProtocol = ( aFileObj.GetProtocol() == INET_PROT_PRIV_SOFFICE );
-                bool bHasLocation = ( aLocation.getLength() > 0 ) && !bPrivateProtocol;
+                bool bHasLocation = !aLocation.isEmpty() && !bPrivateProtocol;
 
                 css::uno::Reference< css::container::XContainerQuery > xContainerQuery(
                     xSMGR->createInstance( rtl::OUString(
@@ -673,7 +673,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
                 // Retrieve filter from type
                 sal_Int32 nFilterFlags = FILTERFLAG_EXPORT;
                 aFilterName = impl_retrieveFilterNameFromTypeAndModule( xContainerQuery, aTypeName, aModule, nFilterFlags );
-                if ( aFilterName.getLength() == 0 )
+                if ( aFilterName.isEmpty() )
                 {
                     // Draw/Impress uses a different type. 2nd chance try to use alternative type name
                     aFilterName = impl_retrieveFilterNameFromTypeAndModule(
@@ -682,7 +682,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
 
                 // No filter found => error
                 // No type and no location => error
-                if (( aFilterName.getLength() == 0 ) || ( aTypeName.getLength() == 0 ))
+                if ( aFilterName.isEmpty() ||  aTypeName.isEmpty())
                 {
                     rReq.Done(sal_False);
                     return;
@@ -702,8 +702,8 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
                     aFileName = aFObj.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::NO_DECODE );
                 }
 
-                OSL_ASSERT( aFilterName.getLength() > 0 );
-                OSL_ASSERT( aFileName.getLength() > 0 );
+                OSL_ASSERT( !aFilterName.isEmpty() );
+                OSL_ASSERT( !aFileName.isEmpty() );
 
                 // Creates a temporary directory to store our predefined file into it.
                 ::utl::TempFile aTempDir( NULL, sal_True );
@@ -863,7 +863,7 @@ void SfxViewShell::GetState_Impl( SfxItemSet &rSet )
                                     aPrinterName = pPrinter->GetName();
                                 else
                                     aPrinterName = Printer::GetDefaultPrinterName();
-                                if ( aPrinterName.getLength() > 0 )
+                                if ( !aPrinterName.isEmpty() )
                                 {
                                     uno::Reference < frame::XFrame > xFrame( pFrame->GetFrame().GetFrameInterface() );
 

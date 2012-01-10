@@ -122,7 +122,7 @@ const SfxFilter* SfxFrameLoader_Impl::impl_detectFilterForURL( const ::rtl::OUSt
     ::rtl::OUString sFilter;
     try
     {
-        if ( !sURL.getLength() )
+        if ( sURL.isEmpty() )
             return 0;
 
         Reference< XTypeDetection > xDetect(
@@ -139,7 +139,7 @@ const SfxFilter* SfxFrameLoader_Impl::impl_detectFilterForURL( const ::rtl::OUSt
 
         Sequence< PropertyValue > aQueryArgs( aNewArgs.getPropertyValues() );
         ::rtl::OUString sType = xDetect->queryTypeByDescriptor( aQueryArgs, sal_True );
-        if ( sType.getLength() )
+        if ( !sType.isEmpty() )
         {
             const SfxFilter* pFilter = rMatcher.GetFilter4EA( sType );
             if ( pFilter )
@@ -157,7 +157,7 @@ const SfxFilter* SfxFrameLoader_Impl::impl_detectFilterForURL( const ::rtl::OUSt
     }
 
     const SfxFilter* pFilter = 0;
-    if (sFilter.getLength())
+    if (!sFilter.isEmpty())
         pFilter = rMatcher.GetFilter4FilterName(sFilter);
     return pFilter;
 }
@@ -184,7 +184,7 @@ const SfxFilter* SfxFrameLoader_Impl::impl_getFilterFromServiceName_nothrow( con
         {
             ::comphelper::NamedValueCollection aType( xEnum->nextElement() );
             ::rtl::OUString sFilterName = aType.getOrDefault( "Name", ::rtl::OUString() );
-            if ( !sFilterName.getLength() )
+            if ( sFilterName.isEmpty() )
                 continue;
 
             const SfxFilter* pFilter = rMatcher.GetFilter4FilterName( sFilterName );
@@ -276,22 +276,22 @@ void SfxFrameLoader_Impl::impl_determineFilter( ::comphelper::NamedValueCollecti
     const SfxFilter* pFilter = NULL;
 
     // get filter by its name directly ...
-    if ( sFilterName.getLength() )
+    if ( !sFilterName.isEmpty() )
         pFilter = rMatcher.GetFilter4FilterName( sFilterName );
 
     // or search the preferred filter for the detected type ...
-    if ( !pFilter && sTypeName.getLength() )
+    if ( !pFilter && !sTypeName.isEmpty() )
         pFilter = rMatcher.GetFilter4EA( sTypeName );
 
     // or use given document service for detection, too
-    if ( !pFilter && sServiceName.getLength() )
+    if ( !pFilter && !sServiceName.isEmpty() )
         pFilter = impl_getFilterFromServiceName_nothrow( sServiceName );
 
     // or use interaction to ask user for right filter.
-    if ( !pFilter && xInteraction.is() && sURL.getLength() )
+    if ( !pFilter && xInteraction.is() && !sURL.isEmpty() )
     {
         ::rtl::OUString sSelectedFilter = impl_askForFilter_nothrow( xInteraction, sURL );
-        if ( sSelectedFilter.getLength() )
+        if ( !sSelectedFilter.isEmpty() )
             pFilter = rMatcher.GetFilter4FilterName( sSelectedFilter );
     }
 
@@ -336,14 +336,14 @@ bool SfxFrameLoader_Impl::impl_determineTemplateDocument( ::comphelper::NamedVal
 
     // determine the full URL of the template to use, if any
     String sTemplateURL;
-    if ( sTemplateRegioName.getLength() && sTemplateName.getLength() )
+    if ( !sTemplateRegioName.isEmpty() && !sTemplateName.isEmpty() )
     {
         SfxDocumentTemplates aTmpFac;
         aTmpFac.GetFull( sTemplateRegioName, sTemplateName, sTemplateURL );
     }
     else
     {
-        if ( sServiceName.getLength() )
+        if ( !sServiceName.isEmpty() )
             sTemplateURL = SfxObjectFactory::GetStandardTemplate( sServiceName );
         else
             sTemplateURL = SfxObjectFactory::GetStandardTemplate( SfxObjectShell::GetServiceNameFromFactory( sURL ) );
@@ -384,7 +384,7 @@ sal_uInt16 SfxFrameLoader_Impl::impl_findSlotParam( const ::rtl::OUString& i_rFa
             sSlotParam = i_rFactoryURL.copy( nSlotPos + 5 );
     }
 
-    if ( sSlotParam.getLength() )
+    if ( !sSlotParam.isEmpty() )
         return sal_uInt16( sSlotParam.toInt32() );
 
     return 0;
@@ -473,7 +473,7 @@ sal_Int16 SfxFrameLoader_Impl::impl_determineEffectiveViewId_nothrow( const SfxO
 
             ::comphelper::NamedValueCollection aNamedViewData( aViewData );
             ::rtl::OUString sViewId = aNamedViewData.getOrDefault( "ViewId", ::rtl::OUString() );
-            if ( !sViewId.getLength() )
+            if ( sViewId.isEmpty() )
                 break;
 
             // somewhat weird convention here ... in the view data, the ViewId is a string, effectively describing

@@ -217,7 +217,7 @@ SfxMailModel::SaveResult SfxMailModel::ShowFilterOptionsDialog(
                 {
                     ::rtl::OUString aServiceName;
                     aProps[nProperty].Value >>= aServiceName;
-                    if( aServiceName.getLength() )
+                    if( !aServiceName.isEmpty() )
                     {
                         uno::Reference< ui::dialogs::XExecutableDialog > xFilterDialog(
                             xSMGR->createInstance( aServiceName ), uno::UNO_QUERY );
@@ -358,7 +358,7 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
     }
 
     // We need at least a valid module name and model reference
-    if (( aModule.getLength() > 0 ) && xModel.is() )
+    if ( !aModule.isEmpty()  && xModel.is() )
     {
         bool bModified( false );
         bool bHasLocation( false );
@@ -376,10 +376,10 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
 
             bool bPrivateProtocol = ( aFileObj.GetProtocol() == INET_PROT_PRIV_SOFFICE );
 
-            bHasLocation = ( aLocation.getLength() > 0 ) && !bPrivateProtocol;
+            bHasLocation =  !aLocation.isEmpty() && !bPrivateProtocol;
             OSL_ASSERT( !bPrivateProtocol );
         }
-        if ( rType.getLength() > 0 )
+        if ( !rType.isEmpty() )
             bStoreTo = true;
 
         if ( xStorable.is() )
@@ -451,7 +451,7 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
                                     ::rtl::OUString() );
                 }
 
-                if ( !bHasLocation || ( aFilterName.getLength() == 0 ))
+                if ( !bHasLocation ||  aFilterName.isEmpty())
                 {
                     // Retrieve the user defined default filter
                     css::uno::Reference< css::container::XNameAccess > xNameAccess( xModuleManager, css::uno::UNO_QUERY );
@@ -482,8 +482,8 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
 
             // No filter found => error
             // No type and no location => error
-            if (( aFilterName.getLength() == 0 ) ||
-                (( aTypeName.getLength() == 0 ) && !bHasLocation ))
+            if (( aFilterName.isEmpty() ) ||
+                ( aTypeName.isEmpty()  && !bHasLocation ))
                 return eRet;
 
             // Determine filen name and extension
@@ -519,7 +519,7 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
 
             // Use provided save file name. If empty determine file name
             aFileName = aSaveFileName;
-            if ( aFileName.getLength() == 0 )
+            if ( aFileName.isEmpty() )
             {
                 if ( !bHasLocation )
                 {
@@ -536,11 +536,11 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
             }
 
             // No file name => error
-            if ( aFileName.getLength() == 0 )
+            if ( aFileName.isEmpty() )
                 return eRet;
 
-            OSL_ASSERT( aFilterName.getLength() > 0 );
-            OSL_ASSERT( aFileName.getLength() > 0 );
+            OSL_ASSERT( !aFilterName.isEmpty() );
+            OSL_ASSERT( !aFileName.isEmpty() );
 
             // Creates a temporary directory to store a predefined file into it.
             // This makes it possible to store the file for "send document as e-mail"
@@ -564,7 +564,7 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
             rtl::OUString aPassword = aMediaDescrPropsHM.getUnpackedValueOrDefault(
                                             aPasswordPropName,
                                             ::rtl::OUString() );
-            if ( aPassword.getLength() > 0 )
+            if ( !aPassword.isEmpty() )
             {
                 aArgs.realloc( ++nNumArgs );
                 aArgs[nNumArgs-1].Name = aPasswordPropName;
@@ -794,7 +794,7 @@ SfxMailModel::SendMailResult SfxMailModel::AttachDocument(
     rtl::OUString sFileName;
 
     SaveResult eSaveResult = SaveDocumentAsFormat( sAttachmentTitle, xFrameOrModel, sDocumentType, sFileName );
-    if ( eSaveResult == SAVE_SUCCESSFULL && ( sFileName.getLength() > 0 ) )
+    if ( eSaveResult == SAVE_SUCCESSFULL &&  !sFileName.isEmpty() )
         maAttachedDocuments.push_back(sFileName);
     return eSaveResult == SAVE_SUCCESSFULL ? SEND_MAIL_OK : SEND_MAIL_ERROR;
 }
@@ -896,7 +896,7 @@ SfxMailModel::SendMailResult SfxMailModel::Send( const css::uno::Reference< css:
 
                     Sequence< OUString > aAttachmentSeq(&(maAttachedDocuments[0]),maAttachedDocuments.size());
 
-                    if ( xSimpleMailMessage->getSubject().getLength() == 0 ) {
+                    if ( xSimpleMailMessage->getSubject().isEmpty() ) {
                         OUString baseName( maAttachedDocuments[0].copy( maAttachedDocuments[0].lastIndexOf( '/' ) + 1 ) );
                         OUString subject( baseName );
                         if ( maAttachedDocuments.size() > 1 )

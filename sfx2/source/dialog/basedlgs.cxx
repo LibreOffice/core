@@ -237,7 +237,7 @@ void SfxModelessDialog::StateChanged( StateChangedType nStateChange )
 {
     if ( nStateChange == STATE_CHANGE_INITSHOW )
     {
-        if ( pImp->aWinState.getLength() )
+        if ( !pImp->aWinState.isEmpty() )
         {
             SetWindowState( pImp->aWinState );
         }
@@ -376,13 +376,13 @@ long SfxModelessDialog::Notify( NotifyEvent& rEvt )
         pImp->pMgr->Activate_Impl();
         Window* pWindow = rEvt.GetWindow();
         rtl::OString sHelpId;
-        while ( !sHelpId.getLength() && pWindow )
+        while ( sHelpId.isEmpty() && pWindow )
         {
             sHelpId = pWindow->GetHelpId();
             pWindow = pWindow->GetParent();
         }
 
-        if ( sHelpId.getLength() )
+        if ( !sHelpId.isEmpty() )
             SfxHelp::OpenHelpAgent( &pBindings->GetDispatcher_Impl()->GetFrame()->GetFrame(), sHelpId );
     }
     else if ( rEvt.GetType() == EVENT_LOSEFOCUS && !HasChildPathFocus() )
@@ -474,13 +474,13 @@ long SfxFloatingWindow::Notify( NotifyEvent& rEvt )
         pImp->pMgr->Activate_Impl();
         Window* pWindow = rEvt.GetWindow();
         rtl::OString sHelpId;
-        while ( !sHelpId.getLength() && pWindow )
+        while ( sHelpId.isEmpty() && pWindow )
         {
             sHelpId = pWindow->GetHelpId();
             pWindow = pWindow->GetParent();
         }
 
-        if ( sHelpId.getLength() )
+        if ( !sHelpId.isEmpty() )
             SfxHelp::OpenHelpAgent( &pBindings->GetDispatcher_Impl()->GetFrame()->GetFrame(), sHelpId );
     }
     else if ( rEvt.GetType() == EVENT_LOSEFOCUS )
@@ -634,7 +634,7 @@ void SfxFloatingWindow::StateChanged( StateChangedType nStateChange )
     if ( nStateChange == STATE_CHANGE_INITSHOW )
     {
         // FloatingWindows are not centered by default
-        if ( pImp->aWinState.getLength() )
+        if ( !pImp->aWinState.isEmpty() )
             SetWindowState( pImp->aWinState );
         pImp->bConstructed = sal_True;
     }

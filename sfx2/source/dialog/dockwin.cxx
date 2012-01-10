@@ -605,7 +605,7 @@ void SfxDockingWindow::ToggleFloatingMode()
     if (IsFloatingMode())
     {
         SetAlignment(SFX_ALIGN_NOALIGNMENT);
-        if ( pImp->aWinState.getLength() )
+        if ( !pImp->aWinState.isEmpty() )
             GetFloatingWindow()->SetWindowState( pImp->aWinState );
         else
             GetFloatingWindow()->SetOutputSizePixel( GetFloatingSize() );
@@ -901,7 +901,7 @@ SfxDockingWindow::SfxDockingWindow( SfxBindings *pBindinx, SfxChildWindow *pCW,
 */
 
 {
-    if ( GetHelpId().getLength() )
+    if ( !GetHelpId().isEmpty() )
     {
         SetUniqueId( GetHelpId() );
         SetHelpId("");
@@ -952,7 +952,7 @@ SfxDockingWindow::SfxDockingWindow( SfxBindings *pBindinx, SfxChildWindow *pCW,
 */
 
 {
-    if ( GetHelpId().getLength() )
+    if ( !GetHelpId().isEmpty() )
     {
         SetUniqueId( GetHelpId() );
         SetHelpId("");
@@ -1121,7 +1121,7 @@ void SfxDockingWindow::Initialize(SfxChildWinInfo *pInfo)
         SetFloatingMode( bFloatMode );
         if ( bFloatMode )
         {
-            if ( pImp->aWinState.getLength() )
+            if ( !pImp->aWinState.isEmpty() )
                 GetFloatingWindow()->SetWindowState( pImp->aWinState );
             else
                 GetFloatingWindow()->SetOutputSizePixel( GetFloatingSize() );
@@ -1200,7 +1200,7 @@ void SfxDockingWindow::Initialize_Impl()
     if ( pFloatWin )
     {
         // initialize floating window
-        if ( !pImp->aWinState.getLength() )
+        if ( pImp->aWinState.isEmpty() )
             // window state never set before, get if from defaults
             pImp->aWinState = pFloatWin->GetWindowState();
 
@@ -1831,13 +1831,13 @@ long SfxDockingWindow::Notify( NotifyEvent& rEvt )
 
         Window* pWindow = rEvt.GetWindow();
         rtl::OString sHelpId;
-        while ( !sHelpId.getLength() && pWindow )
+        while ( sHelpId.isEmpty() && pWindow )
         {
             sHelpId = pWindow->GetHelpId();
             pWindow = pWindow->GetParent();
         }
 
-        if ( sHelpId.getLength() )
+        if ( !sHelpId.isEmpty() )
             SfxHelp::OpenHelpAgent( &pBindings->GetDispatcher_Impl()->GetFrame()->GetFrame(), sHelpId );
 
         // In VCL Notify goes first to the window itself, also call the
