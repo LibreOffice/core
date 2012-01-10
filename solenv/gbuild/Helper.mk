@@ -116,6 +116,7 @@ endef
 define gb_Helper_collect_knownlibs
 gb_Library_KNOWNLIBS := $$(foreach group,$$(gb_Library_VALIDGROUPS),$$(gb_Library_$$(group)))
 gb_StaticLibrary_KNOWNLIBS := $$(foreach group,$$(gb_StaticLibrary_VALIDGROUPS),$$(gb_StaticLibrary_$$(group)))
+gb_Executable_KNOWN := $$(foreach group,$$(gb_Executable_VALIDGROUPS),$$(gb_Executable_$$(group)))
 
 endef
 
