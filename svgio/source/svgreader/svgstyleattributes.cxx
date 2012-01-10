@@ -210,11 +210,13 @@ namespace svgio
                             pNew = rDocument.findSvgStyleAttributesById(aId);
                         }
                     }
-                    else if(mrOwner.getId())
+
+                    if(!pNew && mrOwner.getId())
                     {
                         pNew = rDocument.findSvgStyleAttributesById(*mrOwner.getId());
                     }
-                    else if(rClassStr.getLength())
+
+                    if(!pNew && rClassStr.getLength())
                     {
                         pNew = rDocument.findSvgStyleAttributesById(rClassStr);
                     }
