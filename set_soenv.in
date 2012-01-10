@@ -66,7 +66,7 @@ my ( $USR, $ETC, $BIN, $LIB, $LIB64, $INC, $INCLUDE, $DEV, $OPT, $LOCAL, $SOLENV
 # Environment variables.
 my ( $oldPATH, $SRC_ROOT, $JAVA_HOME, $JDK, $JAVAFLAGS, $OOO_SHELL,
      $L10N_MODULE, $WITH_POOR_HELP_LOCALIZATIONS,
-     $UPD, $WORK_STAMP,
+     $UPD,
      $SOLARSRC, $SOLARVER, $SOLARVERSION, $WORKDIR, $OUTDIR, $SOLARENV, $SOLARDEFIMG,
      $DMAKEROOT, $CLASSPATH, $XCLASSPATH, $COMPATH,
      $MSPDB_PATH, $MIDL_PATH, $CSC_PATH, $SHOWINCLUDES_PREFIX,
@@ -263,8 +263,6 @@ $PERL_PATH            = dirname('@PERL@'); # Perl Path
 $XLIB                 = PathFormat('@XLIB@'); # X11 libraries
 $XINC                 = PathFormat('@XINC@'); # X11 includes
 
-# The project's workstamp.
-$WORK_STAMP            = "@SOURCEVERSION@";
 # Location of the source.
 $SOLARSRC             = '$SRC_ROOT';
 
@@ -784,7 +782,6 @@ if ("@WITH_VC_REDIST@" eq "TRUE") {
 ToFile( "WITH_VC_REDIST", "TRUE",  "e" );
 }
 ToFile( "PERL",              $PERL,              "e" );
-ToFile( "WORK_STAMP",        $WORK_STAMP,        "e" );
 ToFile( "SOLARVER",          $SOLARVER,          "e" );
 ToFile( "SOLARVERSION",      $SOLARVERSION,      "e" );
 ToFile( "WORKDIR",           $WORKDIR,           "e" );
