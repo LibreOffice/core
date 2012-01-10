@@ -32,17 +32,31 @@
 #include <boost/ptr_container/ptr_vector.hpp>
 #include "xlname.hxx"
 #include "xiroot.hxx"
+#include "xistream.hxx"
 
-//class ScDocument;
-//class ScTokenArray;
+#include "rangenam.hxx"
+
+#include <boost/noncopyable.hpp>
+#include <boost/scoped_ptr.hpp>
 
 // ============================================================================
 
 class ScRangeData;
+class ScTokenArray;
 
 /** Represents a defined name. It may be related to a single sheet or global. */
-class XclImpName : protected XclImpRoot
+class XclImpName : protected XclImpRoot, public boost::noncopyable
 {
+    struct TokenStrmData
+    {
+        XclImpStream& mrStrm;
+        XclImpStreamPos maStrmPos;
+        sal_Size mnStrmPos;
+        sal_Size mnStrmSize;
+
+        TokenStrmData( XclImpStream& rStrm );
+    };
+
 public:
     explicit            XclImpName( XclImpStream& rStrm, sal_uInt16 nXclNameIdx );
 
@@ -51,17 +65,25 @@ public:
     inline SCTAB        GetScTab() const { return mnScTab; }
     inline const ScRangeData* GetScRangeData() const { return mpScData; }
     inline bool         IsGlobal() const { return mnScTab == SCTAB_MAX; }
-    inline bool         IsFunction() const { return mbFunction; }
     inline bool         IsVBName() const { return mbVBName; }
+    bool IsMacro() const;
+    void ConvertTokens();
 
 private:
+    void InsertName(const ScTokenArray* pArray);
+
     String              maXclName;      /// Original name read from the file.
     String              maScName;       /// Name inserted into the Calc document.
     const ScRangeData*  mpScData;       /// Pointer to Calc defined name (no ownership).
     sal_Unicode         mcBuiltIn;      /// Excel built-in name index.
     SCTAB               mnScTab;        /// Calc sheet index of local names.
-    bool                mbFunction;     /// true = Name refers to a function (add-in or VBA).
-    bool                mbVBName;       /// true = Visual Basic procedure or function.
+    RangeType           meNameType;
+    sal_uInt16          mnXclTab;
+    sal_uInt16          mnNameIndex;
+    bool                mbVBName:1;     /// true = Visual Basic procedure or function.
+    bool                mbMacro:1;      /// Whether it's a user-defined macro.
+
+    boost::scoped_ptr<TokenStrmData> mpTokensData;   /// For later conversion of token array.
 };
 
 // ----------------------------------------------------------------------------
@@ -89,6 +111,8 @@ public:
         @param nXclNameIdx  The index of the internal defined name.
         @return  Pointer to the defined name or 0 on error. */
     const XclImpName*   GetName( sal_uInt16 nXclNameIdx ) const;
+
+    void ConvertAllTokens();
 
 private:
     typedef boost::ptr_vector< XclImpName > XclImpNameList;

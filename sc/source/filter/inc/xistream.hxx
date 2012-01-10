@@ -436,12 +436,12 @@ public:
     /** Returns the stream size. */
     inline sal_Size     GetSvStreamSize() const { return mnStreamSize; }
 
-private:
     /** Stores current stream position into rPos. */
     void                StorePosition( XclImpStreamPos& rPos );
     /** Restores stream position contained in rPos. */
     void                RestorePosition( const XclImpStreamPos& rPos );
 
+private:
     /** Seeks to next raw record header and reads record ID and size.
         @descr  This is a "raw" function, means that stream members are
         inconsistent after return. Does only change mnRawRecId, mnRawRecSize,
