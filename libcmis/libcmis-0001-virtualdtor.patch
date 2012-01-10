@@ -1,0 +1,22 @@
+--- misc/libcmis-0.1.0/src/libcmis/session-factory.cxx	2012-01-10 15:28:52.458706430 +0000
++++ misc/build/libcmis-0.1.0/src/libcmis/session-factory.cxx	2012-01-10 15:29:57.856419249 +0000
+@@ -60,4 +60,8 @@
+ 
+         return repos;
+     }
++
++    Session::~Session()
++    {
++    }
+ }
+--- misc/libcmis-0.1.0/src/libcmis/session.hxx	2012-01-10 15:28:52.458706430 +0000
++++ misc/build/libcmis-0.1.0/src/libcmis/session.hxx	2012-01-10 15:29:19.071996444 +0000
+@@ -44,6 +44,8 @@
+             /** Get a CMIS object from its ID.
+               */
+             virtual CmisObjectPtr getObject( std::string id ) = 0;
++
++            virtual ~Session();
+     };
+ }
+ 

@@ -46,6 +46,8 @@ TARFILE_MD5=7c2549f6b0a8bb604e6c4c729ffdcfe6
 ADDITIONAL_FILES=src$/libcmis$/makefile.mk
 
 PATCH_FILES=$(TARFILE_NAME).patch
+#https://sourceforge.net/p/libcmis/tickets/1/
+PATCH_FILES+=libcmis-0001-virtualdtor.patch
 
 BUILD_ACTION=dmake $(MFLAGS) $(CALLMACROS)
 BUILD_DIR=src$/libcmis
