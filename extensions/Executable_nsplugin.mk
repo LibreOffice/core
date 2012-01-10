@@ -56,12 +56,12 @@ $(eval $(call gb_Executable_add_linked_libs,nsplugin,\
 ))
 
 ifeq ($(GUI),WNT)
-$(eval $(call gb_Executable_add_ldflags,nsplugin,\
-	$(OUTDIR)/lib/pathutils-obj.obj \
-))
-
 $(eval $(call gb_Executable_add_exception_objects,nsplugin,\
 	extensions/source/nsplugin/source/nsp_windows \
+))
+
+$(eval $(call gb_Executable_add_linked_static_libs,nsplugin,\
+	ooopathutils \
 ))
 
 $(eval $(call gb_Executable_add_linked_libs,nsplugin,\

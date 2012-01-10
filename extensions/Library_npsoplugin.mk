@@ -59,8 +59,11 @@ endif # GUI=UNX
 ifeq ($(GUI),WNT)
 
 $(eval $(call gb_Library_add_ldflags,npsoplugin,\
-	$(OUTDIR)/lib/pathutils-obj.obj \
 	$(OUTDIR)/lib/npwin.obj \
+))
+
+$(eval $(call gb_Library_add_linked_static_libs,npsoplugin,\
+	ooopathutils \
 ))
 
 $(eval $(call gb_Library_add_linked_libs,npsoplugin,\
