@@ -345,7 +345,7 @@ $(MISC)$/build$/moztools.complete : $(MISC)$/build$/moztools.unpack
 zip:	\
     $(MISC)$/CREATETARBALL
 
-.IF "$(GUIBASE)"=="aqua"
+.IF "$(GUIBASE)"=="aqua" && "$(CREATE_UNIVERSAL_MAC_MOZ_ZIP)"!=""
 MOZ_ARCH=$(eq,$(CPU),I i386 ppc)
 MOZILLA_CONFIGURE_FLAGS+=$(eq,$(CPU),I --target=i386-apple-darwin8 --target=powerpc-apple-darwin8)
 
