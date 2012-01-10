@@ -43,6 +43,10 @@ $(call gb_Executable_get_target,%) :
 			$(foreach target,$(AUXTARGETS), && $(call gb_Deliver_deliver,$(dir $<)/$(notdir $(target)),$(target))))
 
 define gb_Executable_Executable
+ifeq (,$$(findstring $(1),$$(gb_Executable_KNOWN)))
+$$(eval $$(call gb_Output_info,Currently known executables: $(sort $(gb_Executable_KNOWN)),ALL))
+$$(eval $$(call gb_Output_error,Executable $(1) must be registered in Repository.mk))
+endif
 $(call gb_Executable__Executable_impl,$(1),Executable/$(1)$(gb_Executable_EXT))
 
 endef
