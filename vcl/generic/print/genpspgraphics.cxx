@@ -60,6 +60,8 @@
 #include <graphite_serverfont.hxx>
 #endif
 
+#include "comphelper/string.hxx"
+
 using namespace psp;
 
 using ::rtl::OUString;
@@ -1164,10 +1166,10 @@ ImplDevFontAttributes GenPspGraphics::Info2DevFontAttributes( const psp::FastPri
 #if OSL_DEBUG_LEVEL > 2
     if( bHasMapNames )
     {
-        ByteString aOrigName( aDFA.maName, osl_getThreadTextEncoding() );
-        ByteString aAliasNames( aDFA.maMapNames, osl_getThreadTextEncoding() );
+        rtl::OString aOrigName(rtl::OUStringToOString(aDFA.maName, osl_getThreadTextEncoding()));
+        rtl::OString aAliasNames(rtl::OUStringToOString(aDFA.maMapNames, osl_getThreadTextEncoding()));
         fprintf( stderr, "using alias names \"%s\" for font family \"%s\"\n",
-            aAliasNames.GetBuffer(), aOrigName.GetBuffer() );
+            aAliasNames.getStr(), aOrigName.getStr() );
     }
 #endif
 
@@ -1184,9 +1186,9 @@ void GenPspGraphics::AnnounceFonts( ImplDevFontList* pFontList, const psp::FastP
     {
         // asian type 1 fonts are not known
         psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
-        ByteString aFileName( rMgr.getFontFileSysPath( aInfo.m_nID ) );
-        int nPos = aFileName.SearchBackward( '_' );
-        if( nPos == STRING_NOTFOUND || aFileName.GetChar( nPos+1 ) == '.' )
+        OString aFileName( rMgr.getFontFileSysPath( aInfo.m_nID ) );
+        int nPos = aFileName.lastIndexOf( '_' );
+        if( nPos == -1 || aFileName[nPos+1] == '.' )
             nQuality += 5;
         else
         {
@@ -1219,7 +1221,7 @@ void GenPspGraphics::AnnounceFonts( ImplDevFontList* pFontList, const psp::FastP
             }
 
             if( pLangBoost )
-                if( aFileName.Copy( nPos+1, 3 ).EqualsIgnoreCaseAscii( pLangBoost ) )
+                if( aFileName.copy( nPos+1, 3 ).equalsIgnoreAsciiCase( pLangBoost ) )
                     nQuality += 10;
         }
     }

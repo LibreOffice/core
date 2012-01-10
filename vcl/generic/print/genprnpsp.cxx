@@ -83,7 +83,7 @@ extern "C"
 {
 typedef int(*setupFunction)(PrinterInfo&);
 static setupFunction pSetupFunction         = NULL;
-typedef int(*faxFunction)(String&);
+typedef int(*faxFunction)(OUString&);
 static faxFunction pFaxNrFunction           = NULL;
 }
 
@@ -170,7 +170,7 @@ static void copyJobDataToJobSetup( ImplJobSetup* pJobSetup, JobData& rData )
 
     pJobSetup->mnPaperBin = 0;
     if( rData.m_pParser )
-        pKey                    = rData.m_pParser->getKey( String( RTL_CONSTASCII_USTRINGPARAM( "InputSlot" ) ) );
+        pKey                    = rData.m_pParser->getKey( OUString( RTL_CONSTASCII_USTRINGPARAM( "InputSlot" ) ) );
     if( pKey )
         pValue                  = rData.m_aContext.getValue( pKey );
     if( pKey && pValue )
@@ -190,7 +190,7 @@ static void copyJobDataToJobSetup( ImplJobSetup* pJobSetup, JobData& rData )
 
     pJobSetup->meDuplexMode = DUPLEX_UNKNOWN;
     if( rData.m_pParser )
-        pKey = rData.m_pParser->getKey( String( RTL_CONSTASCII_USTRINGPARAM( "Duplex" ) ) );
+        pKey = rData.m_pParser->getKey( OUString( RTL_CONSTASCII_USTRINGPARAM( "Duplex" ) ) );
     if( pKey )
         pValue = rData.m_aContext.getValue( pKey );
     if( pKey && pValue )
@@ -231,7 +231,7 @@ static void copyJobDataToJobSetup( ImplJobSetup* pJobSetup, JobData& rData )
 
 // Needs a cleaner abstraction ...
 #if defined( UNX )
-static bool passFileToCommandLine( const String& rFilename, const String& rCommandLine, bool bRemoveFile = true )
+static bool passFileToCommandLine( const OUString& rFilename, const OUString& rCommandLine, bool bRemoveFile = true )
 {
     bool bSuccess = false;
 
@@ -315,19 +315,19 @@ static bool passFileToCommandLine( const String& rFilename, const String& rComma
 }
 #endif
 
-static bool sendAFax( const String& rFaxNumber, const String& rFileName, const String& rCommand )
+static bool sendAFax( const OUString& rFaxNumber, const OUString& rFileName, const OUString& rCommand )
 {
 #if defined( UNX )
     std::list< OUString > aFaxNumbers;
 
-    if( ! rFaxNumber.Len() )
+    if( rFaxNumber.isEmpty() )
     {
         getPaLib();
         if( pFaxNrFunction )
         {
-            String aNewNr;
+            OUString aNewNr;
             if( pFaxNrFunction( aNewNr ) )
-                aFaxNumbers.push_back( OUString( aNewNr ) );
+                aFaxNumbers.push_back( aNewNr );
         }
     }
     else
@@ -357,11 +357,10 @@ static bool sendAFax( const String& rFaxNumber, const String& rFileName, const S
     {
         while( aFaxNumbers.begin() != aFaxNumbers.end() && bSuccess )
         {
-            String aCmdLine( rCommand );
-            String aFaxNumber( aFaxNumbers.front() );
+            OUString aCmdLine( rCommand );
+            OUString aFaxNumber( aFaxNumbers.front() );
             aFaxNumbers.pop_front();
-            while( aCmdLine.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "(PHONE)" ) ), aFaxNumber ) != STRING_NOTFOUND )
-                ;
+            aCmdLine = comphelper::string::replace( aCmdLine, OUString( RTL_CONSTASCII_USTRINGPARAM( "(PHONE)" ) ), aFaxNumber );
 #if OSL_DEBUG_LEVEL > 1
             fprintf( stderr, "sending fax to \"%s\"\n", OUStringToOString( aFaxNumber, osl_getThreadTextEncoding() ).getStr() );
 #endif
@@ -381,12 +380,12 @@ static bool sendAFax( const String& rFaxNumber, const String& rFileName, const S
 #endif
 }
 
-static bool createPdf( const String& rToFile, const String& rFromFile, const String& rCommandLine )
+static bool createPdf( const OUString& rToFile, const OUString& rFromFile, const OUString& rCommandLine )
 {
 #if defined( UNX )
-    String aCommandLine( rCommandLine );
-    while( aCommandLine.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "(OUTFILE)" ) ), rToFile ) != STRING_NOTFOUND )
-        ;
+    OUString aCommandLine( rCommandLine );
+    aCommandLine = comphelper::string::replace( aCommandLine, OUString( RTL_CONSTASCII_USTRINGPARAM( "(OUTFILE)" ) ), rToFile );
+
     return passFileToCommandLine( rFromFile, aCommandLine );
 #else
     (void)rToFile; (void)rFromFile; (void)rCommandLine;
@@ -537,7 +536,7 @@ void PspSalInfoPrinter::InitPaperFormats( const ImplJobSetup* )
 
     if( m_aJobData.m_pParser )
     {
-        const PPDKey* pKey = m_aJobData.m_pParser->getKey( String( RTL_CONSTASCII_USTRINGPARAM( "PageSize" ) ) );
+        const PPDKey* pKey = m_aJobData.m_pParser->getKey( OUString( RTL_CONSTASCII_USTRINGPARAM( "PageSize" ) ) );
         if( pKey )
         {
             int nValues = pKey->countValues();
@@ -668,7 +667,7 @@ sal_Bool PspSalInfoPrinter::SetData(
         // merge papersize if necessary
         if( nSetDataFlags & SAL_JOBSET_PAPERSIZE )
         {
-            String aPaper;
+            OUString aPaper;
 
             if( pJobSetup->mePaperFormat == PAPER_USER )
                 aPaper = aData.m_pParser->matchPaper(
@@ -677,7 +676,7 @@ sal_Bool PspSalInfoPrinter::SetData(
             else
                 aPaper = rtl::OStringToOUString(PaperInfo::toPSName(pJobSetup->mePaperFormat), RTL_TEXTENCODING_ISO_8859_1);
 
-            pKey = aData.m_pParser->getKey( String( RTL_CONSTASCII_USTRINGPARAM( "PageSize" ) ) );
+            pKey = aData.m_pParser->getKey( OUString( RTL_CONSTASCII_USTRINGPARAM( "PageSize" ) ) );
             pValue = pKey ? pKey->getValueCaseInsensitive( aPaper ) : NULL;
 
             // some PPD files do not specify the standard paper names (e.g. C5 instead of EnvC5)
@@ -698,7 +697,7 @@ sal_Bool PspSalInfoPrinter::SetData(
         // merge paperbin if necessary
         if( nSetDataFlags & SAL_JOBSET_PAPERBIN )
         {
-            pKey = aData.m_pParser->getKey( String( RTL_CONSTASCII_USTRINGPARAM( "InputSlot" ) ) );
+            pKey = aData.m_pParser->getKey( OUString( RTL_CONSTASCII_USTRINGPARAM( "InputSlot" ) ) );
             if( pKey )
             {
                 int nPaperBin = pJobSetup->mnPaperBin;
@@ -722,22 +721,22 @@ sal_Bool PspSalInfoPrinter::SetData(
         // merge duplex if necessary
         if( nSetDataFlags & SAL_JOBSET_DUPLEXMODE )
         {
-            pKey = aData.m_pParser->getKey( String( RTL_CONSTASCII_USTRINGPARAM( "Duplex" ) ) );
+            pKey = aData.m_pParser->getKey( OUString( RTL_CONSTASCII_USTRINGPARAM( "Duplex" ) ) );
             if( pKey )
             {
                 pValue = NULL;
                 switch( pJobSetup->meDuplexMode )
                 {
                 case DUPLEX_OFF:
-                    pValue = pKey->getValue( String( RTL_CONSTASCII_USTRINGPARAM( "None" ) ) );
+                    pValue = pKey->getValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "None" ) ) );
                     if( pValue == NULL )
-                        pValue = pKey->getValue( String( RTL_CONSTASCII_USTRINGPARAM( "SimplexNoTumble" ) ) );
+                        pValue = pKey->getValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "SimplexNoTumble" ) ) );
                     break;
                 case DUPLEX_SHORTEDGE:
-                    pValue = pKey->getValue( String( RTL_CONSTASCII_USTRINGPARAM( "DuplexTumble" ) ) );
+                    pValue = pKey->getValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "DuplexTumble" ) ) );
                     break;
                 case DUPLEX_LONGEDGE:
-                    pValue = pKey->getValue( String( RTL_CONSTASCII_USTRINGPARAM( "DuplexNoTumble" ) ) );
+                    pValue = pKey->getValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "DuplexNoTumble" ) ) );
                     break;
                 case DUPLEX_UNKNOWN:
                 default:
