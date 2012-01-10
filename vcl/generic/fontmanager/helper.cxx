@@ -51,7 +51,7 @@ namespace psp {
 
 OUString getOfficePath( enum whichOfficePath ePath )
 {
-    static OUString aNetPath;
+    static OUString aInstallationRootPath;
     static OUString aUserPath;
     static OUString aConfigPath;
     static OUString aEmpty;
@@ -61,8 +61,8 @@ OUString getOfficePath( enum whichOfficePath ePath )
     {
         bOnce = true;
         OUString aIni;
-        Bootstrap::get( OUString( RTL_CONSTASCII_USTRINGPARAM( "BRAND_BASE_DIR" ) ), aNetPath );
-        aIni = aNetPath + OUString( RTL_CONSTASCII_USTRINGPARAM( "/program/" SAL_CONFIGFILE( "bootstrap" ) ) );
+        Bootstrap::get( OUString( RTL_CONSTASCII_USTRINGPARAM( "BRAND_BASE_DIR" ) ), aInstallationRootPath );
+        aIni = aInstallationRootPath + OUString( RTL_CONSTASCII_USTRINGPARAM( "/program/" SAL_CONFIGFILE( "bootstrap" ) ) );
         Bootstrap aBootstrap( aIni );
         aBootstrap.getFrom( OUString( RTL_CONSTASCII_USTRINGPARAM( "CustomDataUrl" ) ), aConfigPath );
         aBootstrap.getFrom( OUString( RTL_CONSTASCII_USTRINGPARAM( "UserInstallation" ) ), aUserPath );
@@ -74,11 +74,11 @@ OUString getOfficePath( enum whichOfficePath ePath )
             if( osl_getSystemPathFromFileURL( aConfigPath.pData, &aSysPath.pData ) == osl_File_E_None )
                 aConfigPath = aSysPath;
         }
-        if( ! aNetPath.compareToAscii( "file://", 7 ) )
+        if( ! aInstallationRootPath.compareToAscii( "file://", 7 ) )
         {
             OUString aSysPath;
-            if( osl_getSystemPathFromFileURL( aNetPath.pData, &aSysPath.pData ) == osl_File_E_None )
-                aNetPath = aSysPath;
+            if( osl_getSystemPathFromFileURL( aInstallationRootPath.pData, &aSysPath.pData ) == osl_File_E_None )
+                aInstallationRootPath = aSysPath;
         }
         if( ! aUserPath.compareToAscii( "file://", 7 ) )
         {
@@ -100,7 +100,7 @@ OUString getOfficePath( enum whichOfficePath ePath )
     switch( ePath )
     {
         case ConfigPath: return aConfigPath;
-        case NetPath: return aNetPath;
+        case InstallationRootPath: return aInstallationRootPath;
         case UserPath: return aUserPath;
     }
     return aEmpty;
@@ -128,7 +128,7 @@ void psp::getPrinterPathList( std::list< OUString >& rPathList, const char* pSub
     OUStringBuffer aPathBuffer( 256 );
 
     // append net path
-    aPathBuffer.append( getOfficePath( psp::NetPath ) );
+    aPathBuffer.append( getOfficePath( psp::InstallationRootPath ) );
     if( aPathBuffer.getLength() )
     {
         aPathBuffer.appendAscii( "/share/psprint" );
@@ -206,7 +206,7 @@ OUString psp::getFontPath()
         OUStringBuffer aPathBuffer( 512 );
 
         OUString aConfigPath( getOfficePath( psp::ConfigPath ) );
-        OUString aNetPath( getOfficePath( psp::NetPath ) );
+        OUString aInstallationRootPath( getOfficePath( psp::InstallationRootPath ) );
         OUString aUserPath( getOfficePath( psp::UserPath ) );
         if( aConfigPath.getLength() )
         {
@@ -227,11 +227,11 @@ OUString psp::getFontPath()
         }
         if( aConfigPath.getLength() == 0 )
         {
-            if( aNetPath.getLength() )
+            if( aInstallationRootPath.getLength() )
             {
-                aPathBuffer.append( aNetPath );
+                aPathBuffer.append( aInstallationRootPath );
                 aPathBuffer.appendAscii( "/share/fonts/truetype;");
-                aPathBuffer.append( aNetPath );
+                aPathBuffer.append( aInstallationRootPath );
                 aPathBuffer.appendAscii( "/share/fonts/type1;" );
             }
             if( aUserPath.getLength() )

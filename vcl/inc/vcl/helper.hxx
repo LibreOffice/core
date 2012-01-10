@@ -57,7 +57,7 @@ void VCL_DLLPUBLIC normPath( rtl::OString& rPath );
 // rOrgPath will be subject to normPath
 void VCL_DLLPUBLIC splitPath( rtl::OString& rOrgPath, rtl::OString& rDir, rtl::OString& rBase );
 
-enum whichOfficePath { NetPath, UserPath, ConfigPath };
+enum whichOfficePath { InstallationRootPath, UserPath, ConfigPath };
 // note: gcc 3.4.1 warns about visibility if we retunr a const rtl::OUString& here
 // seems to be a bug in gcc, now we return an object instead of a reference
 rtl::OUString VCL_DLLPUBLIC getOfficePath( enum whichOfficePath ePath );
