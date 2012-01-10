@@ -68,18 +68,6 @@ MOZILLA_CONFIGURE_FLAGS +=--disable-xft
 .EXPORT : CFLAGS LDFLAGS MOZ_ENABLE_COREXFONTS
 .ENDIF			# "$(SYSBASE)"!="" && "$(OS)" == "LINUX"
 
-.IF "$(SYSBASE)"!="" && "$(OS)" == "MACOSX"
-PKGCONFIG_ROOT!:=$(ENV_ROOT)$/macports-1.7.0
-PKG_CONFIG:=$(PKGCONFIG_ROOT)$/bin$/pkg-config
-PKG_CONFIG_PATH:=$(PKGCONFIG_ROOT)$/lib$/pkgconfig
-.EXPORT : PKG_CONFIG_PATH PKG_CONFIG
-# hmm... rather gcc specific switches...
-CFLAGS:=-isystem $(SYSBASE)/usr/include -B$(SYSBASE)/usr/lib -B$(SYSBASE)/usr/lib/system -L$(ENV_ROOT)/macports-1.7.0/lib -lmathCommon
-LDFLAGS:=-L$(SYSBASE)/lib -L$(SYSBASE)/usr/lib -L$(SYSBASE)/usr/lib/system
-XLDOPTS:= -B$(SYSBASE)/usr/lib -B$(SYSBASE)/usr/lib/system -lmathCommon
-.EXPORT : CFLAGS LDFLAGS XLDOPTS
-.ENDIF			# "$(SYSBASE)"!="" && "$(OS)" == "MACOSX"
-
 # ----- pkg-config end -------
 
 MOZILLA_VERSION=1.1.14
@@ -156,6 +144,10 @@ MOZILLA_CONFIGURE_FLAGS += \
                 --with-nss-prefix=$(OUTDIR) \
                 --with-nspr-prefix=$(OUTDIR)
 
+.IF "$(OS)"=="MACOSX"
+# help the linker to resolve @loader_path to the solver (needed at least for 10.4 / XCode 2.5)
+LDFLAGS+=$(foreach,name,$(echo nspr4 nss3 nssutil3 plc4 plds4) -Wl,-dylib_file,@loader_path/lib$(name).dylib:$(OUTDIR)/lib/lib$(name).dylib)
+.ENDIF
 .ENDIF
 
 #disable profilelocking to share profile with mozilla
@@ -166,11 +158,12 @@ MOZILLA_CONFIGURE_FLAGS += \
 .IF "$(GUI)"=="UNX"
 .IF "$(GUIBASE)"=="aqua"
 MOZILLA_CONFIGURE_FLAGS+= \
-    --with-macos-sdk=$(MACOSX_DEV_SDK) \
+    --with-macos-sdk=$(MACOSX_SDK_PATH) \
     --disable-glibtest \
     --enable-macos-target=$(MACOSX_DEPLOYMENT_TARGET) \
     --disable-libxul
 DEFAULT_MOZILLA_TOOLKIT=mac
+
 .ELSE
 #We do not need mozilla ui, but libIDL version are decided by default toolkit.
 #default-toolkit=xlib need libIDL < 0.68
@@ -284,7 +277,7 @@ LIBIDL_PREFIX:=$(MOZ_TOOLS)/vc71
 
 .IF "$(BUILD_MOZAB)"==""
 all:
-    @echo "Never Build Mozilla."
+	@echo "Never Build Mozilla."
 .ENDIF	
 
 .INCLUDE : set_ext.mk
@@ -352,12 +345,12 @@ $(MISC)$/build$/moztools.complete : $(MISC)$/build$/moztools.unpack
 zip:	\
     $(MISC)$/CREATETARBALL
 
-.IF "$(GUIBASE)"=="aqua" && "$(CREATE_UNIVERSAL_MAC_MOZ_ZIP)"!=""
+.IF "$(GUIBASE)"=="aqua"
 MOZ_ARCH=$(eq,$(CPU),I i386 ppc)
 MOZILLA_CONFIGURE_FLAGS+=$(eq,$(CPU),I --target=i386-apple-darwin8 --target=powerpc-apple-darwin8)
 
 force_clean :
-    @$(IFEXIST) $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE) $(THEN) echo 'ERROR: get rid of your outputdir first (or refactor the makefiles to allow incremental creation of prebuilt zips). Remember to copy already created zips to a safe place '; exit 1 $(FI)
+	@$(IFEXIST) $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE) $(THEN) echo 'ERROR: get rid of your outputdir first (or refactor the makefiles to allow incremental creation of prebuilt zips). Remember to copy already created zips to a safe place '; exit 1 $(FI)
 
 zip_intel .SEQUENTIAL: force_clean $(MISC)$/CREATETARBALL
 
