@@ -62,7 +62,24 @@ PrinterInfoManager::PrinterInfoManager( Type eType ) :
     m_aSystemDefaultPaper( RTL_CONSTASCII_USTRINGPARAM( "A4" ) ),
     m_bDisableCUPS( false )
 {
-    initSystemDefaultPaper();
+    // initSystemDefaultPaper();
+}
+
+void PrinterInfoManager::listPrinters( ::std::list< OUString >& rList ) const
+{
+    rList.clear();
+}
+
+const PrinterInfo& PrinterInfoManager::getPrinterInfo( const OUString& /* rPrinter */ ) const
+{
+    static PrinterInfo aEmptyInfo;
+
+    return aEmptyInfo;
+}
+
+bool PrinterInfoManager::checkFeatureToken( const rtl::OUString& /* rPrinterName */, const char* /* pToken */ ) const
+{
+    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
