@@ -357,10 +357,9 @@ static bool sendAFax( const OUString& rFaxNumber, const OUString& rFileName, con
     {
         while( aFaxNumbers.begin() != aFaxNumbers.end() && bSuccess )
         {
-            OUString aCmdLine( rCommand );
             OUString aFaxNumber( aFaxNumbers.front() );
             aFaxNumbers.pop_front();
-            aCmdLine = comphelper::string::replace( aCmdLine, OUString( RTL_CONSTASCII_USTRINGPARAM( "(PHONE)" ) ), aFaxNumber );
+            OUString aCmdLine = comphelper::string::replace( rCommand, OUString( RTL_CONSTASCII_USTRINGPARAM( "(PHONE)" ) ), aFaxNumber );
 #if OSL_DEBUG_LEVEL > 1
             fprintf( stderr, "sending fax to \"%s\"\n", OUStringToOString( aFaxNumber, osl_getThreadTextEncoding() ).getStr() );
 #endif
@@ -383,8 +382,7 @@ static bool sendAFax( const OUString& rFaxNumber, const OUString& rFileName, con
 static bool createPdf( const OUString& rToFile, const OUString& rFromFile, const OUString& rCommandLine )
 {
 #if defined( UNX )
-    OUString aCommandLine( rCommandLine );
-    aCommandLine = comphelper::string::replace( aCommandLine, OUString( RTL_CONSTASCII_USTRINGPARAM( "(OUTFILE)" ) ), rToFile );
+    OUString aCommandLine = comphelper::string::replace( rCommandLine, OUString( RTL_CONSTASCII_USTRINGPARAM( "(OUTFILE)" ) ), rToFile );
 
     return passFileToCommandLine( rFromFile, aCommandLine );
 #else
