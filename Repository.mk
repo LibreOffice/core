@@ -79,25 +79,25 @@ else
 ifeq ($(OS_FOR_BUILD),WNT)
 $(eval $(call gb_Helper_register_executables,OOO,\
 	soffice_bin \
-	unopkg_bin \
+    unopkg_bin \
 ))
 else
 $(eval $(call gb_Helper_register_executables,OOO,\
-	soffice.bin \
-	unopkg.bin \
+    soffice.bin \
+    unopkg.bin \
 ))
 endif
 
 ifeq ($(OS),MACOSX)
 
 $(eval $(call gb_Helper_register_executables,OOO,\
-	officeloader \
+    officeloader \
 ))
 
 else
 
 $(eval $(call gb_Helper_register_executables,OOO,\
-	oosplash \
+    oosplash \
 ))
 
 endif
@@ -107,10 +107,10 @@ endif
 ifneq ($(WITH_MOZILLA),NO)
 $(eval $(call gb_Helper_register_executables,OOO,\
        nsplugin \
-	pluginapp.bin \
+    pluginapp.bin \
 ))
 $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
-	pl \
+    pl \
 ))
 endif # WITH_MOZILLA
 
@@ -124,31 +124,31 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_NONE, \
 endif
 
 $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
-	PptImporter \
-	abp \
-	adabas \
-	adabasui \
-	acc \
-	agg \
-	analysis \
-	animcore \
-	basctl \
-	basebmp \
-	bib \
-	canvastools \
-	communi \
-	date \
-	evtatt \
-	forui \
-	odbc \
-	odbcbase \
-	officebean \
-	oox \
-	ooxml \
-	sdbc \
+    PptImporter \
+    abp \
+    adabas \
+    adabasui \
+    acc \
+    agg \
+    analysis \
+    animcore \
+    basctl \
+    basebmp \
+    bib \
+    canvastools \
+    communi \
+    date \
+    evtatt \
+    forui \
+    odbc \
+    odbcbase \
+    officebean \
+    oox \
+    ooxml \
+    sdbc \
     AppleRemote \
     avmedia \
-	avmediaQuickTime \
+    avmediaQuickTime \
     basegfx \
     chartcontroller \
     chartmodel \
@@ -160,7 +160,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     dba \
     dbaxml \
     dbmm \
-	dbp \
+    dbp \
     dbtools \
     dbu \
     deploymentmisc \
@@ -168,19 +168,19 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     doctok \
     drawinglayer \
     editeng \
-	egi \
-	eme \
-	epb \
-	epg \
-	epp \
-	eps \
-	ept \
-	era \
-	eti \
-	exp \
-	filterconfig \
-	filtertracer \
-	flash \
+    egi \
+    eme \
+    epb \
+    epg \
+    epp \
+    eps \
+    ept \
+    era \
+    eti \
+    exp \
+    filterconfig \
+    filtertracer \
+    flash \
     for \
     frm \
     fwe \
@@ -188,46 +188,46 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     fwk \
     fwl \
     fwm \
-	guesslang \
+    guesslang \
     helplinker \
     hwp \
-	hyphen \
+    hyphen \
     i18npaper \
     i18nregexp \
-	icd \
-	icg \
-	idx \
-	ime \
-	ipb \
-	ipd \
-	ips \
-	ipt \
-	ipx \
-	ira \
-	itg \
-	iti \
+    icd \
+    icg \
+    idx \
+    ime \
+    ipb \
+    ipd \
+    ips \
+    ipt \
+    ipx \
+    ira \
+    itg \
+    iti \
     lng \
-	lnth \
-	log \
+    lnth \
+    log \
     lwpft \
-	MacOSXSpell \
+    MacOSXSpell \
     merged \
     msfilter \
     msword \
-	msworks \
-	odfflatxml \
+    msworks \
+    odfflatxml \
     offacc \
-	pcr \
-	pdffilter \
-	placeware \
-	protocolhandler \
+    pcr \
+    pdffilter \
+    placeware \
+    protocolhandler \
     qstart_gtk \
-	res \
+    res \
     resourcemodel \
     rpt \
     rptui \
     rptxml \
-	rtftok \
+    rtftok \
     sax \
     sb \
     sc \
@@ -244,13 +244,13 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     simplecm \
     sm \
     smd \
-	solver \
+    solver \
     sot \
     spa \
-	spell \
+    spell \
     spl \
     sts \
-	svgfilter \
+    svgfilter \
     svl \
     svt \
     svx \
@@ -258,7 +258,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     sw \
     swd \
     swui \
-	t602filter \
+    t602filter \
     textconversiondlgs \
     tk \
     tl \
@@ -266,7 +266,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     unoxml \
     updatecheckui \
     utl \
-	uui \
+    uui \
     vbahelper \
     vcl \
     vclplug_gen \
@@ -275,19 +275,19 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     vclplug_kde \
     vclplug_kde4 \
     vclplug_svp \
-	cdrimport \
-	visioimport \
-	wpft \
-	wpgimport \
+    cdrimport \
+    visioimport \
+    wpft \
+    wpgimport \
     writerfilter \
     xcr \
-	xmlfa \
-	xmlfd \
-	xmx \
+    xmlfa \
+    xmlfd \
+    xmx \
     xo \
     xof \
-	xsltdlg \
-	xsltfilter \
+    xsltdlg \
+    xsltfilter \
 ))
 
 ifeq ($(filter MACOSX WNT,$(OS)),)
@@ -300,64 +300,64 @@ endif
 
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_URE, \
     sal_textenc \
-	xmlreader \
+    xmlreader \
 ))
 
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
-	affine_uno \
-	avmediagst \
-	avmediawin \
-	collator_data \
-	deployment \
-	deploymentgui \
-	dict_ja \
-	dict_zh \
-	fileacc \
-	index_data \
-	java_uno_accessbridge \
-	localedata_en \
-	localedata_es \
-	localedata_euro \
-	localedata_others \
-	log_uno \
-	mcnttype \
-	neon \
-	npsoplugin \
-	package2 \
+    affine_uno \
+    avmediagst \
+    avmediawin \
+    collator_data \
+    deployment \
+    deploymentgui \
+    dict_ja \
+    dict_zh \
+    fileacc \
+    index_data \
+    java_uno_accessbridge \
+    localedata_en \
+    localedata_es \
+    localedata_euro \
+    localedata_others \
+    log_uno \
+    mcnttype \
+    neon \
+    npsoplugin \
+    package2 \
     reg \
-	scriptframe \
+    scriptframe \
     sofficeapp \
     store \
-	test \
-	unotest \
-	textconv_dict \
+    test \
+    unotest \
+    textconv_dict \
     ucb \
     ucpfile \
     unopkgapp \
-	updchk \
-	unsafe_uno \
-	xmlsecurity \
-	xsec_fw \
-	xsec_xmlsec \
-	xstor \
-	$(if $(filter $(OS),ANDROID), \
-		lo-bootstrap \
-	) \
-	$(if $(filter $(OS),WNT), \
-		uwinapi \
-	) \
+    updchk \
+    unsafe_uno \
+    xmlsecurity \
+    xsec_fw \
+    xsec_xmlsec \
+    xstor \
+    $(if $(filter $(OS),ANDROID), \
+        lo-bootstrap \
+    ) \
+    $(if $(filter $(OS),WNT), \
+        uwinapi \
+    ) \
 ))
 
 ifeq ($(OS),WNT)
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
-	dnd \
-	dtrans \
-	fop \
-	fps \
-	ftransl \
-	so_activex \
-	so_activex_x64 \
-	sysdtrans \
+    dnd \
+    dtrans \
+    fop \
+    fps \
+    ftransl \
+    so_activex \
+    so_activex_x64 \
+    sysdtrans \
 ))
 endif
 
@@ -377,77 +377,77 @@ $(eval $(call gb_Helper_register_libraries,RTLIBS, \
 
 $(eval $(call gb_Helper_register_libraries,RTVERLIBS, \
     cppuhelper \
-	purpenvhelper \
+    purpenvhelper \
     salhelper \
 ))
 
 $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
-	basprov \
-	bootstrap \
-	cairocanvas \
-	canvasfactory \
-	configmgr \
-	directx5canvas \
-	directx9canvas \
-	dlgprov \
-	expwrap \
-	fastsax \
-	fpicker \
-	fps_office \
+    basprov \
+    bootstrap \
+    cairocanvas \
+    canvasfactory \
+    configmgr \
+    directx5canvas \
+    directx9canvas \
+    dlgprov \
+    expwrap \
+    fastsax \
+    fpicker \
+    fps_office \
     fsstorage \
-	gdipluscanvas \
+    gdipluscanvas \
     hatchwindowfactory \
-	i18npool \
-	i18nsearch \
+    i18npool \
+    i18nsearch \
     lomenubar \
     migrationoo2 \
     migrationoo3 \
     msforms \
-	mtfrenderer \
-	nullcanvas \
+    mtfrenderer \
+    nullcanvas \
     OGLTrans \
     passwordcontainer \
     reflection \
-	simplecanvas \
+    simplecanvas \
     slideshow \
     stocservices \
-	stringresource \
-	updatefeed \
-	vbaevents \
+    stringresource \
+    updatefeed \
+    vbaevents \
     vbaobj \
     vbaswobj \
-	vclcanvas \
+    vclcanvas \
     writerfilter_uno \
-	writerfilter_debug \
-	$(if $(filter $(GUIBASE),aqua), \
-		fps_aqua \
-	) \
-	$(if $(filter $(OS),WNT), \
-		fps_odma \
-	) \
-	$(if $(filter $(GUIBASE)$(ENABLE_KDE),unxTRUE), \
-		fps_kde \
-	) \
-	$(if $(filter $(GUIBASE)$(ENABLE_KDE4),unxTRUE), \
-		fps_kde4 \
-	) \
+    writerfilter_debug \
+    $(if $(filter $(GUIBASE),aqua), \
+        fps_aqua \
+    ) \
+    $(if $(filter $(OS),WNT), \
+        fps_odma \
+    ) \
+    $(if $(filter $(GUIBASE)$(ENABLE_KDE),unxTRUE), \
+        fps_kde \
+    ) \
+    $(if $(filter $(GUIBASE)$(ENABLE_KDE4),unxTRUE), \
+        fps_kde4 \
+    ) \
 ))
 
 ifeq ($(OS),WNT)
 $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
-	oleautobridge \
-	oleautobridge2 \
+    oleautobridge \
+    oleautobridge2 \
 ))
 endif
 
 ifeq ($(WITH_LDAP),YES)
 $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
-	ldapbe2 \
+    ldapbe2 \
 ))
 endif
 
 $(eval $(call gb_Helper_register_libraries,UNOLIBS_URE, \
-	binaryurp \
+    binaryurp \
 ))
 
 $(eval $(call gb_Helper_register_libraries,UNOVERLIBS, \
@@ -457,32 +457,32 @@ $(eval $(call gb_Helper_register_libraries,UNOVERLIBS, \
 ))
 
 $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
-	basegfx_s \
+    basegfx_s \
     dtobj \
     libeay32 \
     ssleay32 \
     ooopathutils \
-	sample \
+    sample \
     salcpprt \
-	ulingu \
-	vclmain \
-	writerperfect \
-	$(if $(filter $(OS),WNT), \
-		odma_lib \
-	) \
+    ulingu \
+    vclmain \
+    writerperfect \
+    $(if $(filter $(OS),WNT), \
+        odma_lib \
+    ) \
 ))
 
 ifeq ($(OS),WNT)
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
-	xmlsec1 \
-	xmlsec1-nss \
-	xmlsec1-mscrypto \
+    xmlsec1 \
+    xmlsec1-nss \
+    xmlsec1-mscrypto \
 ))
 else
 $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
-	xmlsec1 \
-	xmlsec1-nss \
-	xmlsec1-mscrypto \
+    xmlsec1 \
+    xmlsec1-nss \
+    xmlsec1-mscrypto \
 ))
 endif
 
