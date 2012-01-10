@@ -82,7 +82,7 @@ CC:=gcc $(EXTRA_CFLAGS)
 .ENDIF # "$(EXTRA_CFLAGS)"!=""
 .ENDIF # "$(OS)"=="MACOSX"
 
-.IF "$(debug) != ""
+.IF "$(debug)" != ""
 icu_CFLAGS+=-g $(ARCH_FLAGS)
 icu_CXXFLAGS+=-g $(ARCH_FLAGS)
 .ELSE
