@@ -513,15 +513,12 @@ IMPL_LINK( SwMultiTOXTabDialog, ShowPreviewHdl, CheckBox *, pBox )
             sTemplate += INET_PATH_TOKEN;
             sTemplate.AppendAscii( RTL_CONSTASCII_STRINGPARAM("idxexample") );
             String sTemplateWithoutExt( sTemplate );
-#ifndef MAC_WITHOUT_EXT
             sTemplate.AppendAscii( RTL_CONSTASCII_STRINGPARAM(".odt") );
-#endif
 
             SvtPathOptions aOpt;
             // 6.0 (extension .sxw)
             sal_Bool bExist = aOpt.SearchFile( sTemplate, SvtPathOptions::PATH_TEMPLATE );
 
-#ifndef MAC_WITHOUT_EXT
             if( !bExist )
             {
                 // 6.0 (extension .sxw)
@@ -536,7 +533,6 @@ IMPL_LINK( SwMultiTOXTabDialog, ShowPreviewHdl, CheckBox *, pBox )
                 sTemplate.AppendAscii( RTL_CONSTASCII_STRINGPARAM(".sdw") );
                 bExist = aOpt.SearchFile( sTemplate, SvtPathOptions::PATH_TEMPLATE );
             }
-#endif
 
             if(!bExist)
             {

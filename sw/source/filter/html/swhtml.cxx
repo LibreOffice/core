@@ -165,16 +165,13 @@ String HTMLReader::GetTemplateName() const
     sTemplate += INET_PATH_TOKEN;
     sTemplate.AppendAscii( TOOLS_CONSTASCII_STRINGPARAM("html") );
     String sTemplateWithoutExt( sTemplate );
-#ifndef MAC_WITHOUT_EXT
     // first search for OpenDocument Writer/Web template
     sTemplate.AppendAscii( TOOLS_CONSTASCII_STRINGPARAM(".oth") );
-#endif
 
     SvtPathOptions aPathOpt;
     // OpenDocument Writer/Web template (extension .oth)
     sal_Bool bSet = aPathOpt.SearchFile( sTemplate, SvtPathOptions::PATH_TEMPLATE );
 
-#ifndef MAC_WITHOUT_EXT
     if( !bSet )
     {
         // 6.0 (extension .stw)
@@ -184,7 +181,6 @@ String HTMLReader::GetTemplateName() const
         sTemplate.AppendAscii( TOOLS_CONSTASCII_STRINGPARAM(".stw") );
         bSet = aPathOpt.SearchFile( sTemplate, SvtPathOptions::PATH_TEMPLATE );
     }
-#endif
 
     if( !bSet )
     {
