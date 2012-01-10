@@ -2690,6 +2690,23 @@ bool ImpSvNumberInputScan::IsNumberFormat(
                     {
                         if (nAnzNums > 3)
                             res = false;
+                        else if (nAnzNums == 2)
+                        {                           // check locale dependent abbreviation
+                            /* FIXME: here go locale data acceptance patterns
+                             * instead */
+                            // Only one separator, 11/23 yes, 23/11 yes, 11/23/
+                            // no, 23/11/ no, 11-23 yes, 23-11 no?, 11-23- no,
+                            // 23-11- no, 23.11 no, 23.11. yes.
+                            sal_Unicode cDateSep = pFormatter->GetDateSep().GetChar(0);
+                            if (cDateSep == '.' && (nAnzStrings == 3 ||
+                                        (nNums[1]+1 < nAnzStrings &&
+                                         sStrArray[nNums[1]+1].GetChar(0) != cDateSep)))
+                                res = false;
+                            else if ((cDateSep == '/' || cDateSep == '-') &&
+                                    (nNums[1]+1 < nAnzStrings &&
+                                     sStrArray[nNums[1]+1].GetChar(0) == cDateSep))
+                                res = false;
+                        }
                     }
                     break;
 
