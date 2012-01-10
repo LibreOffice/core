@@ -931,7 +931,6 @@ void SfxToolBoxControl::StateChanged
     const SfxPoolItem*  pState
 )
 {
-    DBG_MEMTEST();
     DBG_ASSERT( pImpl->pBox != 0, "setting state to dangling ToolBox" );
 
     if ( GetId() >= SID_OBJECTMENU0 && GetId() <= SID_OBJECTMENU_LAST )

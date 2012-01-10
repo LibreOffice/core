@@ -463,7 +463,6 @@ void SfxDispatcher::Pop
 */
 
 {
-    DBG_MEMTEST();
     DBG_ASSERT( rShell.GetInterface(),
                 "pushing SfxShell without previous RegisterInterface()" );
 
@@ -547,7 +546,6 @@ IMPL_LINK_INLINE_START( SfxDispatcher, EventHdl_Impl, void *, pvoid )
 
 {
     (void)pvoid; // unused
-    DBG_MEMTEST();
 
     Flush();
     Update_Impl();
@@ -572,7 +570,6 @@ sal_Bool SfxDispatcher::CheckVirtualStack( const SfxShell& rShell, sal_Bool bDee
 */
 
 {
-    DBG_MEMTEST();
     SFX_STACK(SfxDispatcher::CheckVirtualStack);
 
     SfxShellStack_Impl aStack( pImp->aStack );
@@ -621,7 +618,6 @@ sal_uInt16 SfxDispatcher::GetShellLevel( const SfxShell& rShell )
 */
 
 {
-    DBG_MEMTEST();
     SFX_STACK(SfxDispatcher::GetShellLevel);
     Flush();
 
@@ -653,8 +649,6 @@ SfxShell *SfxDispatcher::GetShell(sal_uInt16 nIdx) const
 */
 
 {
-    DBG_MEMTEST();
-
     sal_uInt16 nShellCount = pImp->aStack.Count();
     if ( nIdx < nShellCount )
         return pImp->aStack.Top(nIdx);
@@ -695,7 +689,6 @@ SfxViewFrame* SfxDispatcher::GetFrame() const
 */
 
 {
-    DBG_MEMTEST();
     return pImp->pFrame;
 }
 
@@ -717,7 +710,6 @@ void SfxDispatcher::DoActivate_Impl( sal_Bool bMDI, SfxViewFrame* /* pOld */ )
 */
 
 {
-    DBG_MEMTEST();
     SFX_STACK(SfxDispatcher::DoActivate);
     if ( bMDI )
     {
@@ -798,7 +790,6 @@ void SfxDispatcher::DoDeactivate_Impl( sal_Bool bMDI, SfxViewFrame* pNew )
 */
 
 {
-    DBG_MEMTEST();
     SFX_STACK(SfxDispatcher::DoDeactivate);
 
     SfxApplication *pSfxApp = SFX_APP();
@@ -937,7 +928,6 @@ void SfxDispatcher::_Execute
 */
 
 {
-    DBG_MEMTEST();
     DBG_ASSERT( !pImp->bFlushing, "recursive call to dispatcher" );
     DBG_ASSERT( !pImp->aToDoStack.Count(), "unprepared InPlace _Execute" );
 
@@ -1248,7 +1238,6 @@ IMPL_LINK( SfxDispatcher, PostMsgHandler, SfxRequest*, pReq )
 */
 
 {
-    DBG_MEMTEST();
     DBG_ASSERT( !pImp->bFlushing, "recursive call to dispatcher" );
     SFX_STACK(SfxDispatcher::PostMsgHandler);
 
@@ -1600,7 +1589,6 @@ void SfxDispatcher::FlushImpl()
 
 {
     DBG_PROFSTART(SfxDispatcherFlush);
-    DBG_MEMTEST();
     SFX_STACK(SfxDispatcher::FlushImpl);
 
     OSL_TRACE("Flushing dispatcher!");
@@ -1789,7 +1777,6 @@ int
 
 SfxCompareSIDs_Impl( const void* pSmaller, const void* pBigger )
 {
-    DBG_MEMTEST();
     return ( (long) *((sal_uInt16*)pSmaller) ) - ( (long) *((sal_uInt16*)pBigger) );
 }
 

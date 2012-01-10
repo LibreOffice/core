@@ -106,7 +106,6 @@ void TryToHideDisabledEntries_Impl( Menu* pMenu )
 
 SfxMenuManager::~SfxMenuManager()
 {
-    DBG_MEMTEST();
     pBindings->ENTERREGISTRATIONS();
     delete pMenu;
     pBindings->LEAVEREGISTRATIONS();
@@ -116,7 +115,6 @@ SfxMenuManager::~SfxMenuManager()
 
 void SfxMenuManager::Construct( SfxVirtualMenu& rMenu )
 {
-    DBG_MEMTEST();
     pMenu = &rMenu;
 
     // set the handlers
@@ -254,8 +252,6 @@ PopupMenu* InsertThesaurusSubmenu_Impl( SfxBindings* pBindings, Menu* pSVMenu )
 // executes the function for the selected item
 IMPL_LINK( SfxMenuManager, Select, Menu *, pSelMenu )
 {
-    DBG_MEMTEST();
-
     sal_uInt16 nId = (sal_uInt16) pSelMenu->GetCurItemId();
     String aCommand = pSelMenu->GetItemCommand( nId );
     if ( !aCommand.Len() && pBindings )
@@ -298,7 +294,6 @@ void SfxPopupMenuManager::RemoveDisabledEntries()
 
 sal_uInt16 SfxPopupMenuManager::Execute( const Point& rPos, Window* pWindow )
 {
-    DBG_MEMTEST();
     sal_uInt16 nVal = ( (PopupMenu*) GetMenu()->GetSVMenu() )->Execute( pWindow, rPos );
     delete pStaticThesSubMenu;  pStaticThesSubMenu = NULL;
     return nVal;

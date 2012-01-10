@@ -209,7 +209,6 @@ SfxStateCache::SfxStateCache( sal_uInt16 nFuncId ):
     eLastState( 0 ),
     bItemVisible( sal_True )
 {
-    DBG_MEMTEST();
     DBG_CTOR(SfxStateCache, 0);
     bCtrlDirty = sal_True;
     bSlotDirty = sal_True;
@@ -221,7 +220,6 @@ SfxStateCache::SfxStateCache( sal_uInt16 nFuncId ):
 
 SfxStateCache::~SfxStateCache()
 {
-    DBG_MEMTEST();
     DBG_DTOR(SfxStateCache, 0);
     DBG_ASSERT( pController == 0 && pInternalController == 0, "there are still Controllers registered" );
     if ( !IsInvalidItem(pLastItem) )
@@ -255,7 +253,6 @@ void SfxStateCache::Invalidate( sal_Bool bWithMsg )
 
 const SfxSlotServer* SfxStateCache::GetSlotServer( SfxDispatcher &rDispat , const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider > & xProv )
 {
-    DBG_MEMTEST();
     DBG_CHKTHIS(SfxStateCache, 0);
 
     if ( bSlotDirty )
@@ -423,7 +420,6 @@ void SfxStateCache::SetState_Impl
 )
 {
     (void)bMaybeDirty; //unused
-    DBG_MEMTEST();
     DBG_CHKTHIS(SfxStateCache, 0);
 
     // If a hard update occurs between enter- and leave-registrations is a
@@ -484,7 +480,6 @@ void SfxStateCache::SetState_Impl
 
 void SfxStateCache::SetCachedState( sal_Bool bAlways )
 {
-    DBG_MEMTEST();
     DBG_CHKTHIS(SfxStateCache, 0);
     DBG_ASSERT(pController==NULL||pController->GetId()==nId, "Cache with wrong ControllerItem" );
     DBG_PROFSTART(SfxStateCacheSetState);
@@ -519,7 +514,6 @@ void SfxStateCache::SetCachedState( sal_Bool bAlways )
 
 void SfxStateCache::DeleteFloatingWindows()
 {
-    DBG_MEMTEST();
     DBG_CHKTHIS(SfxStateCache, 0);
 
     SfxControllerItem *pNextCtrl=0;

@@ -97,8 +97,6 @@ SfxSlotPool::~SfxSlotPool()
 
 void SfxSlotPool::RegisterInterface( SfxInterface& rInterface )
 {
-    DBG_MEMTEST();
-
     // add to the list of SfxObjectInterface instances
     if ( _pInterfaces == 0 )
         _pInterfaces = new SfxInterfaceArr_Impl;
@@ -150,7 +148,6 @@ TypeId SfxSlotPool::GetSlotType( sal_uInt16 nId ) const
 
 void SfxSlotPool::ReleaseInterface( SfxInterface& rInterface )
 {
-    DBG_MEMTEST();
     DBG_ASSERT( _pInterfaces, "releasing SfxInterface, but there are none" );
     // remove from the list of SfxInterface instances
     _pInterfaces->Remove(&rInterface);
@@ -162,7 +159,6 @@ void SfxSlotPool::ReleaseInterface( SfxInterface& rInterface )
 
 const SfxSlot* SfxSlotPool::GetSlot( sal_uInt16 nId )
 {
-    DBG_MEMTEST();
     DBG_ASSERT( _pInterfaces != 0, "no Interfaces registered" );
 
     // First, search their own interfaces
@@ -183,7 +179,6 @@ const SfxSlot* SfxSlotPool::GetSlot( sal_uInt16 nId )
 
 String SfxSlotPool::SeekGroup( sal_uInt16 nNo )
 {
-    DBG_MEMTEST();
     DBG_ASSERT( _pInterfaces != 0, "no Interfaces registered" );
 
     // if the group exists, use it
@@ -237,7 +232,6 @@ sal_uInt16 SfxSlotPool::GetGroupCount()
 
 const SfxSlot* SfxSlotPool::SeekSlot( sal_uInt16 nStartInterface )
 {
-    DBG_MEMTEST();
     DBG_ASSERT( _pInterfaces != 0, "no Interfaces registered" );
 
     // The numbering starts at the interfaces of the parent pool
@@ -281,7 +275,6 @@ const SfxSlot* SfxSlotPool::SeekSlot( sal_uInt16 nStartInterface )
 
 const SfxSlot* SfxSlotPool::NextSlot()
 {
-    DBG_MEMTEST();
     DBG_ASSERT( _pInterfaces != 0, "no Interfaces registered" );
 
     // The numbering starts at the interfaces of the parent pool

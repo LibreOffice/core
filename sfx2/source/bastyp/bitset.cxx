@@ -38,7 +38,6 @@
 
 BitSet BitSet::operator<<( sal_uInt16 nOffset ) const
 {
-    DBG_MEMTEST();
     // create a work-copy, return it if nothing to shift
     BitSet aSet(*this);
     if ( nOffset == 0 )
@@ -89,7 +88,6 @@ BitSet BitSet::operator<<( sal_uInt16 nOffset ) const
 
 BitSet BitSet::operator>>( sal_uInt16 ) const
 {
-    DBG_MEMTEST();
     return BitSet();
 }
 
@@ -99,12 +97,10 @@ BitSet BitSet::operator>>( sal_uInt16 ) const
 
 void BitSet::CopyFrom( const BitSet& rSet )
 {
-    DBG_MEMTEST();
     nCount = rSet.nCount;
     nBlocks = rSet.nBlocks;
     if ( rSet.nBlocks )
     {
-        DBG_MEMTEST();
         pBitmap = new sal_uIntPtr[nBlocks];
         memcpy( pBitmap, rSet.pBitmap, 4 * nBlocks );
     }
@@ -118,7 +114,6 @@ void BitSet::CopyFrom( const BitSet& rSet )
 
 BitSet::BitSet()
 {
-    DBG_MEMTEST();
     nCount = 0;
     nBlocks = 0;
     pBitmap = 0;
@@ -130,7 +125,6 @@ BitSet::BitSet()
 
 BitSet::BitSet( const BitSet& rOrig )
 {
-    DBG_MEMTEST();
     CopyFrom(rOrig);
 }
 
@@ -140,7 +134,6 @@ BitSet::BitSet( const BitSet& rOrig )
 
 BitSet::~BitSet()
 {
-    DBG_MEMTEST();
     delete [] pBitmap;
 }
 
@@ -150,7 +143,6 @@ BitSet::~BitSet()
 
 BitSet& BitSet::operator=( const BitSet& rOrig )
 {
-    DBG_MEMTEST();
     if ( this != &rOrig )
     {
         delete [] pBitmap;
@@ -165,7 +157,6 @@ BitSet& BitSet::operator=( const BitSet& rOrig )
 
 BitSet& BitSet::operator=( sal_uInt16 nBit )
 {
-    DBG_MEMTEST();
     delete [] pBitmap;
 
     nBlocks = nBit / 32;
@@ -186,7 +177,6 @@ BitSet& BitSet::operator=( sal_uInt16 nBit )
 
 BitSet& BitSet::operator-=(sal_uInt16 nBit)
 {
-    DBG_MEMTEST();
     sal_uInt16 nBlock = nBit / 32;
     sal_uIntPtr nBitVal = 1L << (nBit % 32);
 
@@ -208,7 +198,6 @@ BitSet& BitSet::operator-=(sal_uInt16 nBit)
 
 BitSet& BitSet::operator|=( const BitSet& rSet )
 {
-    DBG_MEMTEST();
     sal_uInt16 nMax = Min(nBlocks, rSet.nBlocks);
 
     // expand the bitmap
@@ -245,7 +234,6 @@ BitSet& BitSet::operator|=( const BitSet& rSet )
 
 BitSet& BitSet::operator|=( sal_uInt16 nBit )
 {
-    DBG_MEMTEST();
     sal_uInt16 nBlock = nBit / 32;
     sal_uIntPtr nBitVal = 1L << (nBit % 32);
 
@@ -278,7 +266,6 @@ BitSet& BitSet::operator|=( sal_uInt16 nBit )
 
 sal_Bool BitSet::Contains( sal_uInt16 nBit ) const
 {
-    DBG_MEMTEST();
     sal_uInt16 nBlock = nBit / 32;
     sal_uIntPtr nBitVal = 1L << (nBit % 32);
 
@@ -293,7 +280,6 @@ sal_Bool BitSet::Contains( sal_uInt16 nBit ) const
 
 sal_Bool BitSet::operator==( const BitSet& rSet ) const
 {
-    DBG_MEMTEST();
     if ( nBlocks != rSet.nBlocks )
         return sal_False;
 

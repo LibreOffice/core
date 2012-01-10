@@ -471,7 +471,6 @@ void SfxBindings::Update
     sal_uInt16      nId     // the bound and up-to-date Slot-Id
 )
 {
-    DBG_MEMTEST();
     DBG_ASSERT( pImp->pCaches != 0, "SfxBindings not initialized" );
 
     if ( pDispatcher )
@@ -534,7 +533,6 @@ void SfxBindings::Update
 
 void SfxBindings::Update()
 {
-    DBG_MEMTEST();
     DBG_ASSERT( pImp->pCaches != 0, "SfxBindings not initialized" );
 
     if ( pImp->pSubBindings )
@@ -652,7 +650,6 @@ SfxStateCache* SfxBindings::GetStateCache
                            or where it was inserted. */
 )
 {
-    DBG_MEMTEST();
     DBG_ASSERT( pImp->pCaches != 0, "SfxBindings not initialized" );
     // is the specified function bound?
     const sal_uInt16 nStart = ( pPos ? *pPos : 0 );
@@ -678,8 +675,6 @@ void SfxBindings::InvalidateAll
 {
     DBG_PROFSTART(SfxBindingsInvalidateAll);
     DBG_ASSERT( !pImp->bInUpdate, "SfxBindings::Invalidate while in update" );
-
-    DBG_MEMTEST();
 
     if ( pImp->pSubBindings )
         pImp->pSubBindings->InvalidateAll( bWithMsg );
@@ -720,7 +715,6 @@ void SfxBindings::Invalidate
 )
 {
     DBG_PROFSTART(SfxBindingsInvalidateAll);
-    DBG_MEMTEST();
 
     if ( pImp->bInUpdate )
     {
@@ -792,7 +786,6 @@ void SfxBindings::InvalidateShell
         return;
 
     DBG_PROFSTART(SfxBindingsInvalidateAll);
-    DBG_MEMTEST();
 
     // flush now already, it is done in GetShellLevel (rsh) anyway,
     // important so that is set correctly: pimp-> ball(Msg)Dirty
@@ -839,8 +832,6 @@ void SfxBindings::Invalidate
     sal_uInt16 nId              // Status value to be set
 )
 {
-    DBG_MEMTEST();
-
     if ( pImp->bInUpdate )
     {
         AddSlotToInvalidateSlotsMap_Impl( nId );
@@ -878,7 +869,6 @@ void SfxBindings::Invalidate
     sal_Bool    bWithMsg            // Get new SlotServer?
 )
 {
-    DBG_MEMTEST();
     DBG_ASSERT( !pImp->bInUpdate, "SfxBindings::Invalidate while in update" );
 
     if ( pImp->pSubBindings )
@@ -911,7 +901,6 @@ void SfxBindings::Invalidate
 
 sal_Bool SfxBindings::IsBound( sal_uInt16 nSlotId, sal_uInt16 nStartSearchAt )
 {
-    DBG_MEMTEST();
     DBG_ASSERT( pImp->pCaches != 0, "SfxBindings not initialized" );
     return GetStateCache(nSlotId, &nStartSearchAt ) != 0;
 }
@@ -920,7 +909,6 @@ sal_Bool SfxBindings::IsBound( sal_uInt16 nSlotId, sal_uInt16 nStartSearchAt )
 
 sal_uInt16 SfxBindings::GetSlotPos( sal_uInt16 nId, sal_uInt16 nStartSearchAt )
 {
-    DBG_MEMTEST();
     DBG_ASSERT( pImp->pCaches != 0, "SfxBindings not initialized" );
     DBG_PROFSTART(SfxBindingsMsgPos);
 
@@ -1006,7 +994,6 @@ void SfxBindings::Register( SfxControllerItem& rItem )
 
 void SfxBindings::Register_Impl( SfxControllerItem& rItem, sal_Bool bInternal )
 {
-    DBG_MEMTEST();
     DBG_ASSERT( nRegLevel > 0, "registration without EnterRegistrations" );
     DBG_ASSERT( !pImp->bInNextJob, "SfxBindings::Register while status-updating" );
 
@@ -1043,7 +1030,6 @@ void SfxBindings::Register_Impl( SfxControllerItem& rItem, sal_Bool bInternal )
 
 void SfxBindings::Release( SfxControllerItem& rItem )
 {
-    DBG_MEMTEST();
     DBG_ASSERT( pImp->pCaches != 0, "SfxBindings not initialized" );
     DBG_ASSERT( !pImp->bInNextJob, "SfxBindings::Release while status-updating" );
     ENTERREGISTRATIONS();
@@ -1090,7 +1076,6 @@ void SfxBindings::Release( SfxControllerItem& rItem )
 const SfxPoolItem* SfxBindings::ExecuteSynchron( sal_uInt16 nId, const SfxPoolItem** ppItems, sal_uInt16 nModi,
             const SfxPoolItem **ppInternalArgs )
 {
-    DBG_MEMTEST();
     DBG_ASSERT( pImp->pCaches != 0, "SfxBindings not initialized" );
 
     if( !nId || !pDispatcher )
@@ -1102,7 +1087,6 @@ const SfxPoolItem* SfxBindings::ExecuteSynchron( sal_uInt16 nId, const SfxPoolIt
 sal_Bool SfxBindings::Execute( sal_uInt16 nId, const SfxPoolItem** ppItems, sal_uInt16 nModi, SfxCallMode nCallMode,
                         const SfxPoolItem **ppInternalArgs )
 {
-    DBG_MEMTEST();
     DBG_ASSERT( pImp->pCaches != 0, "SfxBindings not initialized" );
 
     if( !nId || !pDispatcher )
@@ -1314,7 +1298,6 @@ void SfxBindings::Execute_Impl( SfxRequest& aReq, const SfxSlot* pSlot, SfxShell
 void SfxBindings::UpdateSlotServer_Impl()
 {
     DBG_PROFSTART(SfxBindingsUpdateServers);
-    DBG_MEMTEST();
     DBG_ASSERT( pImp->pCaches != 0, "SfxBindings not initialized" );
 
     // synchronize
@@ -1355,7 +1338,6 @@ SfxItemSet* SfxBindings::CreateSet_Impl
     SfxFoundCacheArr_Impl&  rFound      // out: List of Caches for Siblings
 )
 {
-    DBG_MEMTEST();
     DBG_ASSERT( pImp->pCaches != 0, "SfxBindings not initialized" );
 
     DBG_ASSERT( !pImp->bMsgDirty, "CreateSet_Impl with dirty MessageServer" );
@@ -1611,7 +1593,6 @@ IMPL_LINK( SfxBindings, NextJob_Impl, Timer *, pTimer )
 #endif
     const unsigned MAX_INPUT_DELAY = 200;
 
-    DBG_MEMTEST();
     DBG_ASSERT( pImp->pCaches != 0, "SfxBindings not initialized" );
 
     DBG_PROFSTART(SfxBindingsNextJob_Impl0);
@@ -1739,7 +1720,6 @@ IMPL_LINK( SfxBindings, NextJob_Impl, Timer *, pTimer )
 
 sal_uInt16 SfxBindings::EnterRegistrations(const char *pFile, int nLine)
 {
-    DBG_MEMTEST();
     SAL_INFO(
         "sfx2",
         std::setw(Min(nRegLevel, sal_uInt16(8))) << ' ' << "this = " << this
@@ -1782,7 +1762,6 @@ sal_uInt16 SfxBindings::EnterRegistrations(const char *pFile, int nLine)
 void SfxBindings::LeaveRegistrations( sal_uInt16 nLevel, const char *pFile, int nLine )
 {
     (void)nLevel; // unused variable
-    DBG_MEMTEST();
     DBG_ASSERT( nRegLevel, "Leave without Enter" );
     DBG_ASSERT( nLevel == USHRT_MAX || nLevel == nRegLevel, "wrong Leave" );
 
@@ -1853,7 +1832,6 @@ void SfxBindings::LeaveRegistrations( sal_uInt16 nLevel, const char *pFile, int 
 
 const SfxSlot* SfxBindings::GetSlot(sal_uInt16 nSlotId)
 {
-    DBG_MEMTEST();
     DBG_ASSERT( pImp->pCaches != 0, "SfxBindings not initialized" );
 
     // synchronizing

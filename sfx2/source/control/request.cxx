@@ -129,8 +129,6 @@ void SfxRequest_Impl::SetPool( SfxItemPool *pNewPool )
 
 SfxRequest::~SfxRequest()
 {
-    DBG_MEMTEST();
-
     // Leave out Done() marked requests with 'rem'
     if ( pImp->xRecorder.is() && !pImp->bDone && !pImp->bIgnored )
         pImp->Record( uno::Sequence < beans::PropertyValue >() );
@@ -153,8 +151,6 @@ SfxRequest::SfxRequest
     pArgs(rOrig.pArgs? new SfxAllItemSet(*rOrig.pArgs): 0),
     pImp( new SfxRequest_Impl(this) )
 {
-    DBG_MEMTEST();
-
     pImp->bAllowRecording = rOrig.pImp->bAllowRecording;
     pImp->bDone = sal_False;
     pImp->bIgnored = sal_False;
@@ -197,8 +193,6 @@ SfxRequest::SfxRequest
     pArgs(0),
     pImp( new SfxRequest_Impl(this) )
 {
-    DBG_MEMTEST();
-
     pImp->bDone = sal_False;
     pImp->bIgnored = sal_False;
     pImp->SetPool( &pViewFrame->GetPool() );
@@ -241,8 +235,6 @@ SfxRequest::SfxRequest
     pArgs(0),
     pImp( new SfxRequest_Impl(this) )
 {
-    DBG_MEMTEST();
-
     pImp->bDone = sal_False;
     pImp->bIgnored = sal_False;
     pImp->SetPool( &rPool );
@@ -264,8 +256,6 @@ SfxRequest::SfxRequest
     pArgs(new SfxAllItemSet(rPool)),
     pImp( new SfxRequest_Impl(this) )
 {
-    DBG_MEMTEST();
-
     pImp->bDone = sal_False;
     pImp->bIgnored = sal_False;
     pImp->SetPool( &rPool );
@@ -292,8 +282,6 @@ SfxRequest::SfxRequest
     pArgs(new SfxAllItemSet(rSfxArgs)),
     pImp( new SfxRequest_Impl(this) )
 {
-    DBG_MEMTEST();
-
     pImp->bDone = sal_False;
     pImp->bIgnored = sal_False;
     pImp->SetPool( rSfxArgs.GetPool() );
@@ -418,7 +406,6 @@ void SfxRequest::Record_Impl
 */
 
 {
-    DBG_MEMTEST();
     pImp->pShell = &rSh;
     pImp->pSlot = &rSlot;
     pImp->xRecorder = xRecorder;

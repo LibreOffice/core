@@ -54,7 +54,6 @@ int
 
 SfxCompareSlots_Impl( const void* pSmaller, const void* pBigger )
 {
-    DBG_MEMTEST();
     return ( (int) ((SfxSlot*)pSmaller)->GetSlotId() ) -
            ( (int) ((SfxSlot*)pBigger)->GetSlotId() );
 }
@@ -325,7 +324,6 @@ SfxInterface::~SfxInterface()
 
 const SfxSlot* SfxInterface::GetSlot( sal_uInt16 nFuncId ) const
 {
-    DBG_MEMTEST();
     DBG_CHKTHIS(SfxInterface, 0);
     DBG_ASSERT( this && pSlots && nCount, "" );
 
@@ -360,7 +358,6 @@ const SfxSlot* SfxInterface::GetSlot( const String& rCommand ) const
 
 const SfxSlot* SfxInterface::GetRealSlot( const SfxSlot *pSlot ) const
 {
-    DBG_MEMTEST();
     DBG_CHKTHIS(SfxInterface, 0);
     DBG_ASSERT( this && pSlots && nCount, "" );
 
@@ -379,7 +376,6 @@ const SfxSlot* SfxInterface::GetRealSlot( const SfxSlot *pSlot ) const
 
 const SfxSlot* SfxInterface::GetRealSlot( sal_uInt16 nSlotId ) const
 {
-    DBG_MEMTEST();
     DBG_CHKTHIS(SfxInterface, 0);
     DBG_ASSERT( this && pSlots && nCount, "" );
 

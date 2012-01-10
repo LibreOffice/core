@@ -137,87 +137,6 @@ static const sal_Char* pDbgHelpText[] =
 "DBG_XTOR is logged.\n",
 "\n",
 "\n",
-"Memory Test\n",
-"------------------------------------------\n",
-"\n",
-"--- Macros ---\n",
-"DBG_MEMTEST()\n",
-"Run the specified memory tests.\n",
-"\n",
-"DBG_MEMTEST_PTR( p )\n",
-"Runs the specified memory tests and validates the pointer that was "
-"passed if the pointer test is enabled.\n",
-"\n",
-"--- Options ---\n",
-"Initialize\n",
-"Allocated memory is initialized with 0x77 and free or freed memory "
-"is initialized with 0x33. This option has almost no impact on performance "
-"and should thus always be enabled during development. This will also "
-"make crashes more often reproducable.\n",
-"\n",
-"Overwrite\n",
-"This test check whether writes occur before or after the blocks. Before "
-"and after the block memory is initialized with 0x55. This option costs "
-"performance, but should be enabled once in a while to test for common "
-"memory overwrites (+-1 errors). This option should also be enabled if the "
-"program crashes in a new or delete operator.\n",
-"\n",
-"Free\n",
-"This checks whether writes occur in free memory. This option costs lots "
-" of performance and should thus only be used to test memory overwrites. "
-" This option should perhaps also be enabled when the program crashes "
-" in the new or delete operator.\n",
-"\n",
-"Pointer\n",
-"The pointer is tested with delete and DBG_MEMTEST_PTR() to see if it was "
-"created by new or SvMemAlloc(). When this option is enabled errors such as "
-"double deletes, deletes on stack objects or invalid pointers will be found. "
-"This option has an impact on performance and should therefor not be enabled "
-"all the time. However, testing should be done with this option enabled once "
-"in a while, because the memory manager does not always crash with delete and "
-"invalid pointers. This option should also be enabled if the program crashes "
-"in new or delete operators.\n",
-"\n",
-"Report\n",
-"At the end of the program a small statistic and memory that was not freed are "
-"output. Note: memory that is freed by global objects is also included in "
-"the leak list.\n",
-"\n",
-"Trace\n",
-"Allocating and freeing memory is logged.\n",
-"\n",
-"Leak report\n",
-"Produces under WNT at the end of the program a list of memory leaks with "
-"stack trace. Only blocks which were created inside Application::Execute() "
-"are included. When this option and Overwrite are both enabled a memory "
-"overwrite results in an attempt to output the stack where the block was "
-"created. The output is included in the log file after the error message.\n"
-"\n",
-"New/Delete\n",
-"Memory tests are performed on the entire memory with every new/delet. "
-"Warning: this option makes programs very slow and should only be enabled "
-"to track memory overwrites. Otherwise it is sufficient to enable "
-"seperate options because (if no leak is present) every detectable "
-"memory overwrite during run time should be found.\n",
-"\n",
-"Object Test\n",
-"Memory test are performed on the entire memory with every object test. "
-"Warning: this option makes programs very slow and should only be enabled "
-"to track memory overwrite. Otherwise it is sufficient to enable "
-"seperate options because (if no leak is present) every detectable "
-"memory overwrite during run time should be found.\n",
-"\n",
-"Windows 16-bit and debug tests\n",
-"Warning: when memory test are enabled (except for Initialize) memory with "
-"offset 0 is never (even not in case of >= 64KB) returned. If necessary the "
-"tests can be performed with 32-bit versions of the programs. To a certain "
-"extend it is sufficient to create 64KB - 64 bytes instead of 64KB because "
-"it will never come to a segment overflow.\n",
-"Memory and object test should only be enabled when only one SV application "
-"is running at one time. Otherwise uncontrolled errors may occur. In this "
-"case only the use of 32-bit programs can help."
-"\n",
-"\n",
 "\nOther tests and macros\n",
 "------------------------------------------\n",
 "\n",
@@ -541,17 +460,6 @@ private:
     CheckBox        maXtorTrace;
     GroupBox        maBox1;
 
-    CheckBox        maMemInit;
-    CheckBox        maMemOverwrite;
-    CheckBox        maMemOverwriteFree;
-    CheckBox        maMemPtr;
-    CheckBox        maMemReport;
-    CheckBox        maMemTrace;
-    CheckBox        maMemLeakReport;
-    CheckBox        maMemNewDel;
-    CheckBox        maMemXtor;
-    GroupBox        maBox2;
-
     CheckBox        maProf;
     CheckBox        maRes;
     CheckBox        maDialog;
@@ -754,16 +662,6 @@ DbgDialog::DbgDialog() :
     maXtorReport( this ),
     maXtorTrace( this ),
     maBox1( this ),
-    maMemInit( this ),
-    maMemOverwrite( this ),
-    maMemOverwriteFree( this ),
-    maMemPtr( this ),
-    maMemReport( this ),
-    maMemTrace( this ),
-    maMemLeakReport( this ),
-    maMemNewDel( this ),
-    maMemXtor( this ),
-    maBox2( this ),
     maProf( this ),
     maRes( this ),
     maDialog( this ),
@@ -846,94 +744,6 @@ DbgDialog::DbgDialog() :
     maBox1.SetText( XubString( RTL_CONSTASCII_USTRINGPARAM( "Object Tests" ) ) );
     maBox1.SetPosSizePixel( LogicToPixel( Point( 5, 5 ), aAppMap ),
                             LogicToPixel( Size( 330, 30 ), aAppMap ) );
-    }
-
-    {
-    maMemInit.Show();
-    maMemInit.SetText( XubString( RTL_CONSTASCII_USTRINGPARAM( "~Initialize" ) ) );
-    if ( pData->nTestFlags & DBG_TEST_MEM_INIT )
-        maMemInit.Check( sal_True );
-    maMemInit.SetPosSizePixel( LogicToPixel( Point( 10, 50 ), aAppMap ),
-                               aButtonSize );
-    }
-
-    {
-    maMemOverwrite.Show();
-    maMemOverwrite.SetText( XubString( RTL_CONSTASCII_USTRINGPARAM( "~Overwrite" )) );
-    if ( pData->nTestFlags & DBG_TEST_MEM_OVERWRITE )
-        maMemOverwrite.Check( sal_True );
-    maMemOverwrite.SetPosSizePixel( LogicToPixel( Point( 75, 50 ), aAppMap ),
-                                    aButtonSize );
-    }
-
-    {
-    maMemOverwriteFree.Show();
-    maMemOverwriteFree.SetText( XubString( RTL_CONSTASCII_USTRINGPARAM( "~Free" ) ) );
-    if ( pData->nTestFlags & DBG_TEST_MEM_OVERWRITEFREE )
-        maMemOverwriteFree.Check( sal_True );
-    maMemOverwriteFree.SetPosSizePixel( LogicToPixel( Point( 140, 50 ), aAppMap ),
-                                        aButtonSize );
-    }
-
-    {
-    maMemPtr.Show();
-    maMemPtr.SetText( XubString( RTL_CONSTASCII_USTRINGPARAM( "~Pointer" ) ) );
-    if ( pData->nTestFlags & DBG_TEST_MEM_POINTER )
-        maMemPtr.Check( sal_True );
-    maMemPtr.SetPosSizePixel( LogicToPixel( Point( 205, 50 ), aAppMap ),
-                              aButtonSize );
-    }
-
-    {
-    maMemReport.Show();
-    maMemReport.SetText( XubString( RTL_CONSTASCII_USTRINGPARAM( "~Report" ) ) );
-    if ( pData->nTestFlags & DBG_TEST_MEM_REPORT )
-        maMemReport.Check( sal_True );
-    maMemReport.SetPosSizePixel( LogicToPixel( Point( 270, 50 ), aAppMap ),
-                                 aButtonSize );
-    }
-
-    {
-    maMemTrace.Show();
-    maMemTrace.SetText( XubString( RTL_CONSTASCII_USTRINGPARAM( "~Trace" ) ) );
-    if ( pData->nTestFlags & DBG_TEST_MEM_TRACE )
-        maMemTrace.Check( sal_True );
-    maMemTrace.SetPosSizePixel( LogicToPixel( Point( 10, 65 ), aAppMap ),
-                                aButtonSize );
-    }
-
-    {
-    maMemLeakReport.Show();
-    maMemLeakReport.SetText( XubString( RTL_CONSTASCII_USTRINGPARAM( "~Leak-Report" ) ) );
-    if ( pData->nTestFlags & DBG_TEST_MEM_LEAKREPORT )
-        maMemLeakReport.Check( sal_True );
-    maMemLeakReport.SetPosSizePixel( LogicToPixel( Point( 75, 65 ), aAppMap ),
-                                     aButtonSize );
-    }
-
-    {
-    maMemNewDel.Show();
-    maMemNewDel.SetText( XubString( RTL_CONSTASCII_USTRINGPARAM( "~New/Delete" ) ) );
-    if ( pData->nTestFlags & DBG_TEST_MEM_NEWDEL )
-        maMemNewDel.Check( sal_True );
-    maMemNewDel.SetPosSizePixel( LogicToPixel( Point( 140, 65 ), aAppMap ),
-                                 aButtonSize );
-    }
-
-    {
-    maMemXtor.Show();
-    maMemXtor.SetText( XubString( RTL_CONSTASCII_USTRINGPARAM( "Ob~ject Test" ) ) );
-    if ( pData->nTestFlags & DBG_TEST_MEM_XTOR )
-        maMemXtor.Check( sal_True );
-    maMemXtor.SetPosSizePixel( LogicToPixel( Point( 205, 65 ), aAppMap ),
-                               aButtonSize );
-    }
-
-    {
-    maBox2.Show();
-    maBox2.SetText( XubString( RTL_CONSTASCII_USTRINGPARAM( "Memory Tests" ) ) );
-    maBox2.SetPosSizePixel( LogicToPixel( Point( 5, 40 ), aAppMap ),
-                            LogicToPixel( Size( 330, 40 ), aAppMap ) );
     }
 
     {
@@ -1222,33 +1032,6 @@ IMPL_LINK( DbgDialog, ClickHdl, Button*, pButton )
         if ( maXtorTrace.IsChecked() )
             aData.nTestFlags |= DBG_TEST_XTOR_TRACE;
 
-        if ( maMemInit.IsChecked() )
-            aData.nTestFlags |= DBG_TEST_MEM_INIT;
-
-        if ( maMemOverwrite.IsChecked() )
-            aData.nTestFlags |= DBG_TEST_MEM_OVERWRITE;
-
-        if ( maMemOverwriteFree.IsChecked() )
-            aData.nTestFlags |= DBG_TEST_MEM_OVERWRITEFREE;
-
-        if ( maMemPtr.IsChecked() )
-            aData.nTestFlags |= DBG_TEST_MEM_POINTER;
-
-        if ( maMemReport.IsChecked() )
-            aData.nTestFlags |= DBG_TEST_MEM_REPORT;
-
-        if ( maMemTrace.IsChecked() )
-            aData.nTestFlags |= DBG_TEST_MEM_TRACE;
-
-        if ( maMemLeakReport.IsChecked() )
-            aData.nTestFlags |= DBG_TEST_MEM_LEAKREPORT;
-
-        if ( maMemNewDel.IsChecked() )
-            aData.nTestFlags |= DBG_TEST_MEM_NEWDEL;
-
-        if ( maMemXtor.IsChecked() )
-            aData.nTestFlags |= DBG_TEST_MEM_XTOR;
-
         if ( maProf.IsChecked() )
             aData.nTestFlags |= DBG_TEST_PROFILING;
 
@@ -1271,7 +1054,7 @@ IMPL_LINK( DbgDialog, ClickHdl, Button*, pButton )
         DbgUpdateOslHook( &aData );
 
         DbgData* pData = DbgGetData();
-        #define IMMEDIATE_FLAGS (DBG_TEST_MEM_INIT | DBG_TEST_RESOURCE | DBG_TEST_DIALOG | DBG_TEST_BOLDAPPFONT)
+        #define IMMEDIATE_FLAGS (DBG_TEST_RESOURCE | DBG_TEST_DIALOG | DBG_TEST_BOLDAPPFONT)
         pData->nTestFlags &= ~IMMEDIATE_FLAGS;
         pData->nTestFlags |= aData.nTestFlags & IMMEDIATE_FLAGS;
         strncpy( pData->aInclClassFilter, aData.aInclClassFilter, sizeof( pData->aInclClassFilter ) );
@@ -1305,7 +1088,6 @@ IMPL_LINK( DbgDialog, ClickHdl, Button*, pButton )
     {
         DbgInfoDialog aInfoDialog( this );
         aDbgInfoBuf[0] = '\0';
-        DbgMemInfo( aDbgInfoBuf );
         DbgXtorInfo( aDbgInfoBuf );
         XubString aInfoText( aDbgInfoBuf, RTL_TEXTENCODING_UTF8 );
         aInfoDialog.SetText( XubString( RTL_CONSTASCII_USTRINGPARAM( "Debug InfoReport" ) ) );

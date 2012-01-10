@@ -36,7 +36,6 @@
 
 void SfxHintPoster::RegisterEvent()
 {
-    DBG_MEMTEST();
 }
 
 //--------------------------------------------------------------------
@@ -72,7 +71,6 @@ void SfxHintPoster::Post( SfxHint* pHintToPost )
 
 IMPL_LINK_INLINE_START( SfxHintPoster, DoEvent_Impl, SfxHint *, pPostedHint )
 {
-    DBG_MEMTEST();
     Event( pPostedHint );
     ReleaseRef();
     return 0;
@@ -90,7 +88,6 @@ void SfxHintPoster::Event( SfxHint* pPostedHint )
 
 void SfxHintPoster::SetEventHdl( const GenLink& rLink )
 {
-    DBG_MEMTEST();
     aLink = rLink;
 }
 

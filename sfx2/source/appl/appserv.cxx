@@ -182,7 +182,6 @@ static void showDocument( const char* pBaseName )
 
 void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
 {
-    DBG_MEMTEST();
     bool bDone = false;
     switch ( rReq.GetSlot() )
     {
@@ -616,8 +615,6 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
 
 void SfxApplication::MiscState_Impl(SfxItemSet &rSet)
 {
-    DBG_MEMTEST();
-
     LocaleDataWrapper aLocaleWrapper( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() );
     const sal_uInt16 *pRanges = rSet.GetRanges();
     DBG_ASSERT(pRanges && *pRanges, "Set without range");
@@ -886,7 +883,6 @@ static ::rtl::OUString getConfigurationStringValue(
 
 void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
 {
-    DBG_MEMTEST();
     switch ( rReq.GetSlot() )
     {
         case SID_OPTIONS_TREEDIALOG:

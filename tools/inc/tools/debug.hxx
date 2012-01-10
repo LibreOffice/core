@@ -70,18 +70,6 @@ typedef void (*DbgTestSolarMutexProc)();
 #define DBG_TEST_XTOR_REPORT        (0x00000008)
 #define DBG_TEST_XTOR_TRACE         (0x00000010)
 
-#define DBG_TEST_MEM                (0x00FFF000)
-#define DBG_TEST_MEM_INIT           (0x00001000)
-#define DBG_TEST_MEM_OVERWRITE      (0x00002000)
-#define DBG_TEST_MEM_OVERWRITEFREE  (0x00004000)
-#define DBG_TEST_MEM_POINTER        (0x00008000)
-#define DBG_TEST_MEM_REPORT         (0x00010000)
-#define DBG_TEST_MEM_TRACE          (0x00020000)
-#define DBG_TEST_MEM_NEWDEL         (0x00040000)
-#define DBG_TEST_MEM_XTOR           (0x00080000)
-#define DBG_TEST_MEM_SYSALLOC       (0x00100000)
-#define DBG_TEST_MEM_LEAKREPORT     (0x00200000)
-
 #define DBG_TEST_PROFILING          (0x01000000)
 #define DBG_TEST_RESOURCE           (0x02000000)
 #define DBG_TEST_DIALOG             (0x04000000)
@@ -113,9 +101,6 @@ struct DbgData
     sal_uIntPtr       nWarningOut;
     sal_uIntPtr       nErrorOut;
     sal_uIntPtr       bHookOSLAssert;
-    sal_uInt8        bMemInit;
-    sal_uInt8        bMemBound;
-    sal_uInt8        bMemFree;
     sal_Char    aDebugName[260];
     sal_Char    aInclFilter[512];
     sal_Char    aExclFilter[512];
@@ -140,9 +125,7 @@ struct DbgDataType
 #define DBG_FUNC_SETPRINTMSGBOX     6
 #define DBG_FUNC_SETPRINTWINDOW     7
 #define DBG_FUNC_SETPRINTTESTTOOL   8
-#define DBG_FUNC_MEMTEST            9
 #define DBG_FUNC_XTORINFO           10
-#define DBG_FUNC_MEMINFO            11
 #define DBG_FUNC_COREDUMP           12
 #define DBG_FUNC_ALLERROROUT        13
 #define DBG_FUNC_SETTESTSOLARMUTEX  14
@@ -317,11 +300,6 @@ inline void DbgXtorInfo( sal_Char* pBuf )
     DbgFunc( DBG_FUNC_XTORINFO, (void*)pBuf );
 }
 
-inline void DbgMemInfo( sal_Char* pBuf )
-{
-    DbgFunc( DBG_FUNC_MEMINFO, (void*)pBuf );
-}
-
 inline void DbgCoreDump()
 {
     DbgFunc( DBG_FUNC_COREDUMP );
@@ -364,11 +342,6 @@ TOOLS_DLLPUBLIC void DbgOutf( const sal_Char* pFStr, ... );
 TOOLS_DLLPUBLIC void ImpDbgOutfBuf( sal_Char* pBuf, const sal_Char* pFStr, ... );
 
 // --- Dbg-Test-Functions ---
-
-inline void DbgMemTest( void* p = NULL )
-{
-    DbgFunc( DBG_FUNC_MEMTEST, p );
-}
 
 #define DBG_PROF_START              1
 #define DBG_PROF_STOP               2
@@ -428,9 +401,6 @@ public:
 
 #define DBG_STARTAPPEXECUTE()               DbgStartStackTree()
 #define DBG_ENDAPPEXECUTE()                 DbgEndStackTree()
-
-#define DBG_MEMTEST()                       DbgMemTest()
-#define DBG_MEMTEST_PTR( p )                DbgMemTest( (void*)p )
 
 #define DBG_PROFSTART( aName )                      \
     DbgProf( DBG_PROF_START, DBG_FUNC( aName ) )
@@ -543,9 +513,6 @@ typedef const sal_Char* (*DbgUsr)(const void* pThis );
 
 #define DBG_STARTAPPEXECUTE() ((void)0)
 #define DBG_ENDAPPEXECUTE() ((void)0)
-
-#define DBG_MEMTEST() ((void)0)
-#define DBG_MEMTEST_PTR( p ) ((void)0)
 
 #define DBG_NAME( aName )
 #define DBG_NAMEEX( aName )

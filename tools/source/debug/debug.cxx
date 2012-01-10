@@ -146,7 +146,7 @@ struct DebugData
         ,pOldDebugMessageFunc( NULL )
         ,bOslIsHooked( false )
     {
-        aDbgData.nTestFlags = DBG_TEST_RESOURCE | DBG_TEST_MEM_INIT;
+        aDbgData.nTestFlags = DBG_TEST_RESOURCE;
         aDbgData.bOverwrite = sal_True;
         aDbgData.nTraceOut = DBG_OUT_NULL;
         aDbgData.nWarningOut = DBG_OUT_NULL;
@@ -155,9 +155,6 @@ struct DebugData
 #else
         aDbgData.nErrorOut = DBG_OUT_MSGBOX;
 #endif
-        aDbgData.bMemInit = 0x77;
-        aDbgData.bMemBound = 0x55;
-        aDbgData.bMemFree = 0x33;
         aDbgData.bHookOSLAssert = sal_True;
         aDbgData.aDebugName[0] = 0;
         aDbgData.aInclFilter[0] = 0;
@@ -233,15 +230,6 @@ void ImplDbgUnlock()
 }
 
 // =======================================================================
-
-#if defined WNT
-//#define SV_MEMMGR //
-#endif
-#ifdef SV_MEMMGR
-void DbgImpCheckMemory( void* p = NULL );
-void DbgImpCheckMemoryDeInit();
-void DbgImpMemoryInfo( sal_Char* pBuf );
-#endif
 
 #define FILE_LINEEND    "\n"
 
@@ -724,25 +712,6 @@ static DebugData* GetDebugData()
                     lcl_tryReadConfigBoolean( pLine, nLineLength, "oslhook", &aDebugData.aDbgData.bHookOSLAssert );
                 }
 
-                // elements of the [memory] section
-                if ( eCurrentSection == eMemory )
-                {
-                    lcl_tryReadConfigFlag( pLine, nLineLength, "initialize", &aDebugData.aDbgData.nTestFlags, DBG_TEST_MEM_INIT );
-                    lcl_tryReadConfigFlag( pLine, nLineLength, "overwrite", &aDebugData.aDbgData.nTestFlags, DBG_TEST_MEM_OVERWRITE );
-                    lcl_tryReadConfigFlag( pLine, nLineLength, "overwrite_free", &aDebugData.aDbgData.nTestFlags, DBG_TEST_MEM_OVERWRITEFREE );
-                    lcl_tryReadConfigFlag( pLine, nLineLength, "pointer", &aDebugData.aDbgData.nTestFlags, DBG_TEST_MEM_POINTER );
-                    lcl_tryReadConfigFlag( pLine, nLineLength, "report", &aDebugData.aDbgData.nTestFlags, DBG_TEST_MEM_REPORT );
-                    lcl_tryReadConfigFlag( pLine, nLineLength, "trace", &aDebugData.aDbgData.nTestFlags, DBG_TEST_MEM_TRACE );
-                    lcl_tryReadConfigFlag( pLine, nLineLength, "new_and_delete", &aDebugData.aDbgData.nTestFlags, DBG_TEST_MEM_NEWDEL );
-                    lcl_tryReadConfigFlag( pLine, nLineLength, "object_test", &aDebugData.aDbgData.nTestFlags, DBG_TEST_MEM_XTOR );
-                    lcl_tryReadConfigFlag( pLine, nLineLength, "sys_alloc", &aDebugData.aDbgData.nTestFlags, DBG_TEST_MEM_SYSALLOC );
-                    lcl_tryReadConfigFlag( pLine, nLineLength, "leak_report", &aDebugData.aDbgData.nTestFlags, DBG_TEST_MEM_LEAKREPORT );
-
-                    lcl_tryReadHexByte( pLine, nLineLength, "init_byte", &aDebugData.aDbgData.bMemInit );
-                    lcl_tryReadHexByte( pLine, nLineLength, "bound_byte", &aDebugData.aDbgData.bMemBound );
-                    lcl_tryReadHexByte( pLine, nLineLength, "free_byte", &aDebugData.aDbgData.bMemFree );
-                }
-
                 // elements of the [gui] section
                 if ( eCurrentSection == eGUI )
                 {
@@ -1018,7 +987,7 @@ static void DebugDeInit()
     // Variablen abstuerzen, da die Pointeranpassung dann nicht mehr richtig
     // funktioniert
     pData->aDbgData.nTraceOut   = nOldOut;
-    pData->aDbgData.nTestFlags &= (DBG_TEST_MEM | DBG_TEST_PROFILING);
+    pData->aDbgData.nTestFlags &= DBG_TEST_PROFILING;
     pData->aDbgPrintUserChannels.clear();
     pData->pDbgPrintTestTool    = NULL;
     pData->pDbgPrintWindow      = NULL;
@@ -1071,10 +1040,6 @@ static void DebugGlobalDeInit()
         delete pData->pProfList;
         pData->pProfList = NULL;
     }
-
-#ifdef SV_MEMMGR
-    DbgImpCheckMemoryDeInit();
-#endif
 
     // Profiling-Flags ausschalten
     pData->aDbgData.nTraceOut   = nOldOut;
@@ -1212,24 +1177,6 @@ void* DbgFunc( sal_uInt16 nAction, void* pParam )
                 lcl_writeConfigBoolean( pIniFile, "oslhook", pData->bHookOSLAssert );
 
                 lcl_lineFeed( pIniFile );
-                lcl_startSection( pIniFile, eMemory );
-                lcl_writeConfigFlag( pIniFile, "initialize", pData->nTestFlags, DBG_TEST_MEM_INIT );
-                lcl_writeConfigFlag( pIniFile, "overwrite", pData->nTestFlags, DBG_TEST_MEM_OVERWRITE );
-                lcl_writeConfigFlag( pIniFile, "overwrite_free", pData->nTestFlags, DBG_TEST_MEM_OVERWRITEFREE );
-                lcl_writeConfigFlag( pIniFile, "pointer", pData->nTestFlags, DBG_TEST_MEM_POINTER );
-                lcl_writeConfigFlag( pIniFile, "report", pData->nTestFlags, DBG_TEST_MEM_REPORT );
-                lcl_writeConfigFlag( pIniFile, "trace", pData->nTestFlags, DBG_TEST_MEM_TRACE );
-                lcl_writeConfigFlag( pIniFile, "new_and_delete", pData->nTestFlags, DBG_TEST_MEM_NEWDEL );
-                lcl_writeConfigFlag( pIniFile, "object_test", pData->nTestFlags, DBG_TEST_MEM_XTOR );
-                lcl_writeConfigFlag( pIniFile, "sys_alloc", pData->nTestFlags, DBG_TEST_MEM_SYSALLOC );
-                lcl_writeConfigFlag( pIniFile, "leak_report", pData->nTestFlags, DBG_TEST_MEM_LEAKREPORT );
-
-                lcl_lineFeed( pIniFile );
-                lcl_writeHexByte( pIniFile, "init_byte", pData->bMemInit );
-                lcl_writeHexByte( pIniFile, "bound_byte", pData->bMemBound );
-                lcl_writeHexByte( pIniFile, "free_byte", pData->bMemFree );
-
-                lcl_lineFeed( pIniFile );
                 lcl_startSection( pIniFile, eGUI );
                 lcl_writeConfigString( pIniFile, "debug_window_state", pData->aDbgWinState );
 
@@ -1252,20 +1199,8 @@ void* DbgFunc( sal_uInt16 nAction, void* pParam )
                 }
                 break;
 
-            case DBG_FUNC_MEMTEST:
-#ifdef SV_MEMMGR
-                DbgImpCheckMemory( pParam );
-#endif
-                break;
-
             case DBG_FUNC_XTORINFO:
                 DebugXTorInfo( (sal_Char*)pParam );
-                break;
-
-            case DBG_FUNC_MEMINFO:
-#ifdef SV_MEMMGR
-                DbgImpMemoryInfo( (sal_Char*)pParam );
-#endif
                 break;
 
             case DBG_FUNC_COREDUMP:
@@ -1417,12 +1352,6 @@ void DbgXtor( DbgDataType* pDbgData, sal_uInt16 nAction, const void* pThis,
               DbgUsr fDbgUsr )
 {
     DebugData* pData = ImplGetDebugData();
-
-    // Verbindung zu Debug-Memory-Manager testen
-#ifdef SV_MEMMGR
-    if ( pData->aDbgData.nTestFlags & DBG_TEST_MEM_XTOR )
-        DbgImpCheckMemory();
-#endif
 
     // Schnell-Test
     if ( !(pData->aDbgData.nTestFlags & DBG_TEST_XTOR) )

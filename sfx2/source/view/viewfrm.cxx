@@ -2831,7 +2831,6 @@ void SfxViewFrame::AddDispatchMacroToBasic_Impl( const ::rtl::OUString& sMacro )
 
 void SfxViewFrame::MiscExec_Impl( SfxRequest& rReq )
 {
-    DBG_MEMTEST();
     switch ( rReq.GetSlot() )
     {
         case SID_STOP_RECORDING :
@@ -3014,8 +3013,6 @@ void SfxViewFrame::MiscExec_Impl( SfxRequest& rReq )
 
 void SfxViewFrame::MiscState_Impl(SfxItemSet &rSet)
 {
-    DBG_MEMTEST();
-
     const sal_uInt16 *pRanges = rSet.GetRanges();
     DBG_ASSERT(pRanges && *pRanges, "Set without range");
     while ( *pRanges )

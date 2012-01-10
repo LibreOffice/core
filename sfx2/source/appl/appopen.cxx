@@ -530,8 +530,6 @@ sal_uIntPtr SfxApplication::LoadTemplate( SfxObjectShellLock& xDoc, const String
 
 void SfxApplication::NewDocDirectExec_Impl( SfxRequest& rReq )
 {
-    DBG_MEMTEST();
-
     SFX_REQUEST_ARG( rReq, pFactoryItem, SfxStringItem, SID_NEWDOCDIRECT, sal_False);
     String aFactName;
     if ( pFactoryItem )
@@ -565,8 +563,6 @@ void SfxApplication::NewDocDirectExec_Impl( SfxRequest& rReq )
 
 void SfxApplication::NewDocExec_Impl( SfxRequest& rReq )
 {
-    DBG_MEMTEST();
-
     // No Parameter from BASIC only Factory given?
     SFX_REQUEST_ARG(rReq, pTemplNameItem, SfxStringItem, SID_TEMPLATE_NAME, sal_False);
     SFX_REQUEST_ARG(rReq, pTemplFileNameItem, SfxStringItem, SID_FILE_NAME, sal_False);
@@ -696,8 +692,6 @@ bool lcl_isFilterNativelySupported(const SfxFilter& rFilter)
 
 void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
 {
-    DBG_MEMTEST();
-
     sal_uInt16 nSID = rReq.GetSlot();
     SFX_REQUEST_ARG( rReq, pFileNameItem, SfxStringItem, SID_FILE_NAME, sal_False );
     if ( pFileNameItem )

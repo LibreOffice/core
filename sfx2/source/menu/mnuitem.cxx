@@ -83,8 +83,6 @@ void SfxMenuControl::Bind(
     const String& rTitle,
     SfxBindings &rBindings )
 {
-    DBG_MEMTEST();
-
     aTitle = rTitle;
     pOwnMenu = pOwn;
     pSubMenu = 0;
@@ -108,7 +106,6 @@ void SfxMenuControl::Bind(
     const String& rTitle,
     SfxBindings &rBindings )
 {
-    DBG_MEMTEST();
     SetId( nSlotId );
     SetBindings(rBindings);
     pOwnMenu = pOwn;
@@ -125,7 +122,6 @@ SfxMenuControl::SfxMenuControl( sal_Bool bShowStrings )
     pSubMenu(0),
     b_ShowStrings(bShowStrings)
 {
-    DBG_MEMTEST();
 }
 
 //--------------------------------------------------------------------
@@ -136,7 +132,6 @@ SfxMenuControl::SfxMenuControl():
     pSubMenu(0),
     b_ShowStrings(sal_False)
 {
-    DBG_MEMTEST();
 }
 
 //--------------------------------------------------------------------
@@ -147,8 +142,6 @@ SfxMenuControl::SfxMenuControl(sal_uInt16 nSlotId, SfxBindings& rBindings):
     pSubMenu(0),
     b_ShowStrings(sal_False)
 {
-    DBG_MEMTEST();
-
     // This constructor should make it possible already during the design
     // to fall back to the bindings, but can as always be bound later.
     // The usefullness of this is for example if a StatusForwarder should
@@ -176,7 +169,6 @@ void SfxMenuControl::StateChanged
 )
 {
     (void)nSID;
-    DBG_MEMTEST();
     DBG_ASSERT( nSID == GetId(), "strange SID" );
     DBG_ASSERT( pOwnMenu != 0, "setting state to dangling SfxMenuControl" );
 

@@ -36,7 +36,6 @@ SfxPtrArr::SfxPtrArr( sal_uInt8 nInitSize, sal_uInt8 nGrowSize ):
     nGrow( nGrowSize ? nGrowSize : 1 ),
     nUnused( nInitSize )
 {
-    DBG_MEMTEST();
     sal_uInt16 nMSCBug = nInitSize;
 
     if ( nMSCBug > 0 )
@@ -49,7 +48,6 @@ SfxPtrArr::SfxPtrArr( sal_uInt8 nInitSize, sal_uInt8 nGrowSize ):
 
 SfxPtrArr::SfxPtrArr( const SfxPtrArr& rOrig )
 {
-    DBG_MEMTEST();
     nUsed = rOrig.nUsed;
     nGrow = rOrig.nGrow;
     nUnused = rOrig.nUnused;
@@ -67,7 +65,6 @@ SfxPtrArr::SfxPtrArr( const SfxPtrArr& rOrig )
 
 SfxPtrArr::~SfxPtrArr()
 {
-    DBG_MEMTEST();
     delete [] pData;
 }
 
@@ -75,7 +72,6 @@ SfxPtrArr::~SfxPtrArr()
 
 SfxPtrArr& SfxPtrArr::operator=( const SfxPtrArr& rOrig )
 {
-    DBG_MEMTEST();
 
     delete [] pData;
 
@@ -97,7 +93,6 @@ SfxPtrArr& SfxPtrArr::operator=( const SfxPtrArr& rOrig )
 
 void SfxPtrArr::Append( void* aElem )
 {
-    DBG_MEMTEST();
     DBG_ASSERT( sal::static_int_cast< unsigned >(nUsed+1) < ( USHRT_MAX / sizeof(void*) ), "array too large" );
     // Does the Array need to be copied?
     if ( nUnused == 0 )
@@ -124,7 +119,6 @@ void SfxPtrArr::Append( void* aElem )
 
 sal_uInt16 SfxPtrArr::Remove( sal_uInt16 nPos, sal_uInt16 nLen )
 {
-    DBG_MEMTEST();
     // Adjust nLen, thus to avoid deleting beyond the end
     nLen = Min( (sal_uInt16)(nUsed-nPos), nLen );
 
@@ -178,7 +172,6 @@ sal_uInt16 SfxPtrArr::Remove( sal_uInt16 nPos, sal_uInt16 nLen )
 
 sal_Bool SfxPtrArr::Remove( void* aElem )
 {
-    DBG_MEMTEST();
     // simple tasks ...
     if ( nUsed == 0 )
         return sal_False;
@@ -198,7 +191,6 @@ sal_Bool SfxPtrArr::Remove( void* aElem )
 
 sal_Bool SfxPtrArr::Contains( const void* rItem ) const
 {
-    DBG_MEMTEST();
     if ( !nUsed )
         return sal_False;
 
@@ -216,7 +208,6 @@ sal_Bool SfxPtrArr::Contains( const void* rItem ) const
 
 void SfxPtrArr::Insert( sal_uInt16 nPos, void* rElem )
 {
-    DBG_MEMTEST();
     DBG_ASSERT( sal::static_int_cast< unsigned >(nUsed+1) < ( USHRT_MAX / sizeof(void*) ), "array too large" );
     // Does the Array have to be copied?
     if ( nUnused == 0 )
