@@ -560,14 +560,9 @@ SfxNewFileDialog_Impl::SfxNewFileDialog_Impl(
     aTemplateLb.SetSelectHdl(LINK(this, SfxNewFileDialog_Impl, TemplateSelect));
     aTemplateLb.SetDoubleClickHdl(LINK(this, SfxNewFileDialog_Impl, DoubleClick));
 
-    aTemplateLb.SetStyle(aTemplateLb.GetStyle() | WB_SORT);
-    aRegionLb.SetStyle(aRegionLb.GetStyle() | WB_SORT);
-
     // update the template configuration if necessary
     {
         WaitObject aWaitCursor( pAntiImplP->GetParent() );
-        aTemplates.EnableRegionSorting();
-        aTemplates.EnableTemplateSorting();
         aTemplates.Update( sal_True /* be smart */ );
     }
     // fill the list boxes

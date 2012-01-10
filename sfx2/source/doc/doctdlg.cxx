@@ -73,8 +73,6 @@ SfxDocumentTemplateDlg::SfxDocumentTemplateDlg( Window * pParent, SfxDocumentTem
     aNameEd.SetModifyHdl(LINK(this, SfxDocumentTemplateDlg, NameModify));
     aOkBt.SetClickHdl(LINK(this, SfxDocumentTemplateDlg, OkHdl));
     aEditBt.SetClickHdl(LINK(this, SfxDocumentTemplateDlg, EditHdl));
-    aRegionLb.SetStyle(aRegionLb.GetStyle() | WB_SORT);
-    aTemplateLb.SetStyle(aTemplateLb.GetStyle() | WB_SORT);
     Init();
 }
 
@@ -108,9 +106,6 @@ void SfxDocumentTemplateDlg::Init()
 {
     if(!pTemplates->IsConstructed())
         pTemplates->Construct();
-
-    pTemplates->EnableRegionSorting();
-    pTemplates->EnableTemplateSorting();
 
     const sal_uInt16 nCount = pTemplates->GetRegionCount();
     for(sal_uInt16 i = 0; i < nCount; ++i)
