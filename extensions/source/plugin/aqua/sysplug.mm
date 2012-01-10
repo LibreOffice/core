@@ -173,6 +173,7 @@ struct FakeEventRecord : public EventRecord
 
 -(void)drawRect: (NSRect) i_aRect
 {
+    (void) i_aRect; // unused
     m_pCom->drawView( m_pImpl );
 }
 
@@ -189,6 +190,7 @@ struct FakeEventRecord : public EventRecord
 // NSResponder
 -(void)mouseMoved:   (NSEvent*)i_pEvent
 {
+    (void) i_pEvent; // unused
     FakeEventRecord aRec;
     aRec.what = osEvt + 18; // NPEventType_AdjustCursorEvent
     m_pCom->NPP_HandleEvent( m_pImpl->getNPPInstance(), &aRec );
@@ -196,6 +198,7 @@ struct FakeEventRecord : public EventRecord
 
 -(void)mouseDown:    (NSEvent*)i_pEvent;
 {
+    (void) i_pEvent; // unused
     FakeEventRecord aRec;
     aRec.what = mouseDown;
     m_pCom->NPP_HandleEvent( m_pImpl->getNPPInstance(), &aRec );
@@ -203,6 +206,7 @@ struct FakeEventRecord : public EventRecord
 
 -(void)mouseDragged: (NSEvent*)i_pEvent;
 {
+    (void) i_pEvent; // unused
     FakeEventRecord aRec;
     aRec.what = aRec.what = osEvt + 18; // NPEventType_AdjustCursorEvent
     m_pCom->NPP_HandleEvent( m_pImpl->getNPPInstance(), &aRec );
@@ -210,6 +214,7 @@ struct FakeEventRecord : public EventRecord
 
 -(void)mouseUp:      (NSEvent*)i_pEvent;
 {
+    (void) i_pEvent; // unused
     FakeEventRecord aRec;
     aRec.what = mouseUp;
     m_pCom->NPP_HandleEvent( m_pImpl->getNPPInstance(), &aRec );
@@ -217,6 +222,7 @@ struct FakeEventRecord : public EventRecord
 
 -(void)rightMouseDown:    (NSEvent*)i_pEvent;
 {
+    (void) i_pEvent; // unused
     FakeEventRecord aRec;
     aRec.what = mouseDown;
     m_pCom->NPP_HandleEvent( m_pImpl->getNPPInstance(), &aRec );
@@ -224,6 +230,7 @@ struct FakeEventRecord : public EventRecord
 
 -(void)rightMouseDragged: (NSEvent*)i_pEvent;
 {
+    (void) i_pEvent; // unused
     FakeEventRecord aRec;
     aRec.what = aRec.what = osEvt + 18; // NPEventType_AdjustCursorEvent
     m_pCom->NPP_HandleEvent( m_pImpl->getNPPInstance(), &aRec );
@@ -231,6 +238,7 @@ struct FakeEventRecord : public EventRecord
 
 -(void)rightMouseUp:      (NSEvent*)i_pEvent;
 {
+    (void) i_pEvent; // unused
     FakeEventRecord aRec;
     aRec.what = mouseUp;
     m_pCom->NPP_HandleEvent( m_pImpl->getNPPInstance(), &aRec );
@@ -238,6 +246,7 @@ struct FakeEventRecord : public EventRecord
 
 -(void)otherMouseDown:    (NSEvent*)i_pEvent;
 {
+    (void) i_pEvent; // unused
     FakeEventRecord aRec;
     aRec.what = mouseDown;
     m_pCom->NPP_HandleEvent( m_pImpl->getNPPInstance(), &aRec );
@@ -245,6 +254,7 @@ struct FakeEventRecord : public EventRecord
 
 -(void)otherMouseDragged: (NSEvent*)i_pEvent;
 {
+    (void) i_pEvent; // unused
     FakeEventRecord aRec;
     aRec.what = aRec.what = osEvt + 18; // NPEventType_AdjustCursorEvent
     m_pCom->NPP_HandleEvent( m_pImpl->getNPPInstance(), &aRec );
@@ -252,6 +262,7 @@ struct FakeEventRecord : public EventRecord
 
 -(void)otherMouseUp:      (NSEvent*)i_pEvent;
 {
+    (void) i_pEvent; // unused
     FakeEventRecord aRec;
     aRec.what = mouseUp;
     m_pCom->NPP_HandleEvent( m_pImpl->getNPPInstance(), &aRec );
@@ -259,6 +270,7 @@ struct FakeEventRecord : public EventRecord
 
 -(void)mouseEntered: (NSEvent*)i_pEvent;
 {
+    (void) i_pEvent; // unused
     FakeEventRecord aRec;
     aRec.what = aRec.what = osEvt + 18; // NPEventType_AdjustCursorEvent
     m_pCom->NPP_HandleEvent( m_pImpl->getNPPInstance(), &aRec );
@@ -266,6 +278,7 @@ struct FakeEventRecord : public EventRecord
 
 -(void)mouseExited:  (NSEvent*)i_pEvent;
 {
+    (void) i_pEvent; // unused
     FakeEventRecord aRec;
     aRec.what = aRec.what = osEvt + 18; // NPEventType_AdjustCursorEvent
     m_pCom->NPP_HandleEvent( m_pImpl->getNPPInstance(), &aRec );
@@ -280,6 +293,8 @@ MacPluginComm::MacPluginComm( const rtl::OUString& i_rMimetype, const rtl::OUStr
       m_hPlugLib( NULL ),
       m_pNullTimer( NULL )
 {
+    (void) i_rMimetype; // unused
+    (void) i_pParent; // unused
     // initialize plugin function table
     memset( &m_aNPPfuncs, 0, sizeof( m_aNPPfuncs ) );
 
