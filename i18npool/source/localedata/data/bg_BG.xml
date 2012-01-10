@@ -35,6 +35,10 @@
     <MeasurementSystem>metric</MeasurementSystem>
   </LC_CTYPE>
   <LC_FORMAT replaceFrom="[CURRENCY]" replaceTo="[$лв.-402]">
+    <DateAcceptancePattern>D.M.Y г.</DateAcceptancePattern>
+    <DateAcceptancePattern>D.M.Y г.</DateAcceptancePattern>
+    <DateAcceptancePattern>D.M.Y Г.</DateAcceptancePattern>
+    <DateAcceptancePattern>D.M.Y Г.</DateAcceptancePattern>
     <FormatElement msgid="FixedFormatskey1" default="true" type="medium" usage="FIXED_NUMBER" formatindex="0">
       <FormatCode>General</FormatCode>
     </FormatElement>
