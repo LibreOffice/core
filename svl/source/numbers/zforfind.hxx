@@ -78,6 +78,11 @@ public:
      */
     bool MayBeIso8601();
 
+    /** Whether input may be a dd-month-yy format, with month name, not
+        number.
+     */
+    bool MayBeMonthDate();
+
 private:
     SvNumberFormatter*  pFormatter;
     String* pUpperMonthText;                    // Array of month names, uppercase
@@ -136,13 +141,27 @@ private:
     sal_uInt16  nTimezonePos;                   // Index of timezone separator (+1)
 
     /** State of ISO 8601 detection.
+
         0:= don't know yet
         1:= no
         2:= yes, <=2 digits in year
         3:= yes,   3 digits in year
         4:= yes, >=4 digits in year
+
+        @see MayBeIso8601()
      */
     sal_uInt8    nMayBeIso8601;
+
+    /** State of dd-month-yy or yy-month-dd detection, with month name.
+
+        0:= don't know yet
+        1:= no
+        2:= yes, dd-month-yy
+        3:= yes, yy-month-dd
+
+        @see MayBeMonthDate()
+     */
+    sal_uInt8   nMayBeMonthDate;
 
 #ifdef _ZFORFIND_CXX        // methods private to implementation
     void Reset();                               // Reset all variables before start of analysis

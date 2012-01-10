@@ -145,6 +145,7 @@ void ImpSvNumberInputScan::Reset()
     nMatchedAllStrings = nMatchedVirgin;
     nMayBeIso8601 = 0;
     nTimezonePos = 0;
+    nMayBeMonthDate = 0;
 }
 
 
@@ -995,6 +996,44 @@ bool ImpSvNumberInputScan::MayBeIso8601()
 }
 
 //---------------------------------------------------------------------------
+
+bool ImpSvNumberInputScan::MayBeMonthDate()
+{
+    if (nMayBeMonthDate == 0)
+    {
+        nMayBeMonthDate = 1;
+        if (nAnzNums >= 2 && nNums[1] < nAnzStrings)
+        {
+            // "-Jan-"
+            const String& rM = sStrArray[nNums[0]+1];
+            if (rM.Len() >= 3 && rM.GetChar(0) == '-' && rM.GetChar( rM.Len()-1) == '-')
+            {
+                // Check year length assuming at least 3 digits (including
+                // leading zero). Two digit years 1..31 are out of luck here
+                // and may be taken as day of month.
+                bool bYear1 = (sStrArray[nNums[0]].Len() >= 3);
+                bool bYear2 = (sStrArray[nNums[1]].Len() >= 3);
+                sal_Int32 n;
+                bool bDay1 = (!bYear1 && (n = sStrArray[nNums[0]].ToInt32()) >= 1 && n <= 31);
+                bool bDay2 = (!bYear2 && (n = sStrArray[nNums[1]].ToInt32()) >= 1 && n <= 31);
+                if (bDay1 && !bDay2)
+                    nMayBeMonthDate = 2;        // dd-month-yy
+                else if (!bDay1 && bDay2)
+                    nMayBeMonthDate = 3;        // yy-month-dd
+                else if (bDay1 && bDay2)
+                {
+                    if (bYear1 && !bYear2)
+                        nMayBeMonthDate = 3;    // yy-month-dd
+                    else if (!bYear1 && bYear2)
+                        nMayBeMonthDate = 2;    // dd-month-yy
+                }
+            }
+        }
+    }
+    return nMayBeMonthDate > 1;
+}
+
+//---------------------------------------------------------------------------
 //      GetDateRef
 
 bool ImpSvNumberInputScan::GetDateRef( double& fDays, sal_uInt16& nCounter,
@@ -1283,10 +1322,11 @@ input for the following reasons:
                     }
                     break;
                     case 2:             // month in the middle (10 Jan 94)
+                    {
                         pCal->setValue( CalendarFieldIndex::MONTH, Abs(nMonth)-1 );
-                        switch (DateFmt)
+                        DateFormat eDF = (MayBeMonthDate() ? (nMayBeMonthDate == 2 ? DMY : YMD) : DateFmt);
+                        switch (eDF)
                         {
-                            case MDY:   // yes, "10-Jan-94" is valid
                             case DMY:
                                 pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(0) );
                                 pCal->setValue( CalendarFieldIndex::YEAR, ImplGetYear(1) );
@@ -1299,7 +1339,8 @@ input for the following reasons:
                                 res = false;
                                 break;
                         }
-                        break;
+                    }
+                    break;
                     default:            // else, e.g. month at the end (94 10 Jan)
                         res = false;
                         break;
@@ -1687,13 +1728,10 @@ bool ImpSvNumberInputScan::ScanMidString( const String& rString,
 
     const LocaleDataWrapper* pLoc = pFormatter->GetLocaleData();
     const String& rDate = pFormatter->GetDateSep();
-    const String& rTime = pLoc->getTimeSep();
-    sal_Unicode cTime = rTime.GetChar(0);
     SkipBlanks(rString, nPos);
-    if (                      SkipString(rDate, rString, nPos)  // 10., 10-, 10/
-        || ((cTime != '.') && SkipChar('.',   rString, nPos))   // TRICKY:
-        || ((cTime != '/') && SkipChar('/',   rString, nPos))   // short boolean
-        || ((cTime != '-') && SkipChar('-',   rString, nPos)) ) // evaluation!
+    if (SkipString( rDate, rString, nPos)               // 10.  10-  10/
+            || ((MayBeIso8601() || MayBeMonthDate())
+                && SkipChar( '-', rString, nPos)))
     {
         if (   eScannedType != NUMBERFORMAT_UNDEFINED   // already another type
             && eScannedType != NUMBERFORMAT_DATE)       // except date
@@ -1752,6 +1790,7 @@ bool ImpSvNumberInputScan::ScanMidString( const String& rString,
         SkipBlanks(rString, nPos);
     }
 
+    const String& rTime = pLoc->getTimeSep();
     if ( SkipString(rTime, rString, nPos) )         // time separator?
     {
         if (nDecPos)                                // already . => maybe error
@@ -1945,7 +1984,6 @@ bool ImpSvNumberInputScan::ScanEndString( const String& rString,
     }
 
     const LocaleDataWrapper* pLoc = pFormatter->GetLocaleData();
-    const String& rDate = pFormatter->GetDateSep();
     const String& rTime = pLoc->getTimeSep();
     if ( SkipString(rTime, rString, nPos) )         // 10:
     {
@@ -1968,11 +2006,10 @@ bool ImpSvNumberInputScan::ScanEndString( const String& rString,
             nTimePos = nAnzStrings;
     }
 
-    sal_Unicode cTime = rTime.GetChar(0);
-    if (                      SkipString(rDate, rString, nPos)  // 10., 10-, 10/
-        || ((cTime != '.') && SkipChar('.',   rString, nPos))   // TRICKY:
-        || ((cTime != '/') && SkipChar('/',   rString, nPos))   // short boolean
-        || ((cTime != '-') && SkipChar('-',   rString, nPos)) ) // evaluation!
+    const String& rDate = pFormatter->GetDateSep();
+    if (SkipString( rDate, rString, nPos)               // 10.  10-  10/
+            || ((MayBeIso8601() || MayBeMonthDate())
+                && SkipChar( '-', rString, nPos)))
     {
         if (eScannedType != NUMBERFORMAT_UNDEFINED &&
             eScannedType != NUMBERFORMAT_DATE)          // already another type
@@ -2535,8 +2572,6 @@ void ImpSvNumberInputScan::ChangeIntl()
 {
     sal_Unicode cDecSep = pFormatter->GetNumDecimalSep().GetChar(0);
     bDecSepInDateSeps = ( cDecSep == '-' ||
-                          cDecSep == '/' ||
-                          cDecSep == '.' ||
                           cDecSep == pFormatter->GetDateSep().GetChar(0) );
     bTextInitialized = false;
     aUpperCurrSymbol.Erase();
