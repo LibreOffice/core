@@ -533,7 +533,7 @@ void CustomShapeProperties::initializePresetsMap5()
         }
         {
             aPropSequence [1].Name = CREATE_OUSTRING ("Segments");
-            Sequence< EnhancedCustomShapeSegment > aSegmentSeq (14);
+            Sequence< EnhancedCustomShapeSegment > aSegmentSeq (13);
             {
                 EnhancedCustomShapeSegment aSegment;
                 aSegment.Command = 1;
@@ -572,51 +572,45 @@ void CustomShapeProperties::initializePresetsMap5()
             }
             {
                 EnhancedCustomShapeSegment aSegment;
-                aSegment.Command = 4;
-                aSegment.Count = 0;
+                aSegment.Command = 2;
+                aSegment.Count = 1;
                 aSegmentSeq [6] = aSegment;
             }
             {
                 EnhancedCustomShapeSegment aSegment;
-                aSegment.Command = 2;
-                aSegment.Count = 1;
+                aSegment.Command = 6;
+                aSegment.Count = 0;
                 aSegmentSeq [7] = aSegment;
             }
             {
                 EnhancedCustomShapeSegment aSegment;
-                aSegment.Command = 6;
+                aSegment.Command = 5;
                 aSegment.Count = 0;
                 aSegmentSeq [8] = aSegment;
             }
             {
                 EnhancedCustomShapeSegment aSegment;
-                aSegment.Command = 5;
-                aSegment.Count = 0;
-                aSegmentSeq [9] = aSegment;
-            }
-            {
-                EnhancedCustomShapeSegment aSegment;
                 aSegment.Command = 1;
                 aSegment.Count = 1;
-                aSegmentSeq [10] = aSegment;
+                aSegmentSeq [9] = aSegment;
             }
             {
                 EnhancedCustomShapeSegment aSegment;
                 aSegment.Command = 2;
                 aSegment.Count = 3;
-                aSegmentSeq [11] = aSegment;
+                aSegmentSeq [10] = aSegment;
             }
             {
                 EnhancedCustomShapeSegment aSegment;
                 aSegment.Command = 6;
                 aSegment.Count = 0;
-                aSegmentSeq [12] = aSegment;
+                aSegmentSeq [11] = aSegment;
             }
             {
                 EnhancedCustomShapeSegment aSegment;
                 aSegment.Command = 5;
                 aSegment.Count = 0;
-                aSegmentSeq [13] = aSegment;
+                aSegmentSeq [12] = aSegment;
             }
             aPropSequence [1].Value = makeAny (aSegmentSeq);
         }
@@ -13968,7 +13962,7 @@ void CustomShapeProperties::initializePresetsMap5()
         }
         {
             aPropSequence [1].Name = CREATE_OUSTRING ("Segments");
-            Sequence< EnhancedCustomShapeSegment > aSegmentSeq (14);
+            Sequence< EnhancedCustomShapeSegment > aSegmentSeq (13);
             {
                 EnhancedCustomShapeSegment aSegment;
                 aSegment.Command = 1;
@@ -14007,51 +14001,45 @@ void CustomShapeProperties::initializePresetsMap5()
             }
             {
                 EnhancedCustomShapeSegment aSegment;
-                aSegment.Command = 4;
-                aSegment.Count = 0;
+                aSegment.Command = 2;
+                aSegment.Count = 1;
                 aSegmentSeq [6] = aSegment;
             }
             {
                 EnhancedCustomShapeSegment aSegment;
-                aSegment.Command = 2;
-                aSegment.Count = 1;
+                aSegment.Command = 6;
+                aSegment.Count = 0;
                 aSegmentSeq [7] = aSegment;
             }
             {
                 EnhancedCustomShapeSegment aSegment;
-                aSegment.Command = 6;
+                aSegment.Command = 5;
                 aSegment.Count = 0;
                 aSegmentSeq [8] = aSegment;
             }
             {
                 EnhancedCustomShapeSegment aSegment;
-                aSegment.Command = 5;
-                aSegment.Count = 0;
-                aSegmentSeq [9] = aSegment;
-            }
-            {
-                EnhancedCustomShapeSegment aSegment;
                 aSegment.Command = 1;
                 aSegment.Count = 1;
-                aSegmentSeq [10] = aSegment;
+                aSegmentSeq [9] = aSegment;
             }
             {
                 EnhancedCustomShapeSegment aSegment;
                 aSegment.Command = 2;
                 aSegment.Count = 2;
-                aSegmentSeq [11] = aSegment;
+                aSegmentSeq [10] = aSegment;
             }
             {
                 EnhancedCustomShapeSegment aSegment;
                 aSegment.Command = 6;
                 aSegment.Count = 0;
-                aSegmentSeq [12] = aSegment;
+                aSegmentSeq [11] = aSegment;
             }
             {
                 EnhancedCustomShapeSegment aSegment;
                 aSegment.Command = 5;
                 aSegment.Count = 0;
-                aSegmentSeq [13] = aSegment;
+                aSegmentSeq [12] = aSegment;
             }
             aPropSequence [1].Value = makeAny (aSegmentSeq);
         }
@@ -18375,7 +18363,7 @@ void CustomShapeProperties::initializePresetsMap5()
         }
         {
             aPropSequence [1].Name = CREATE_OUSTRING ("Segments");
-            Sequence< EnhancedCustomShapeSegment > aSegmentSeq (13);
+            Sequence< EnhancedCustomShapeSegment > aSegmentSeq (12);
             {
                 EnhancedCustomShapeSegment aSegment;
                 aSegment.Command = 1;
@@ -18408,51 +18396,45 @@ void CustomShapeProperties::initializePresetsMap5()
             }
             {
                 EnhancedCustomShapeSegment aSegment;
-                aSegment.Command = 4;
-                aSegment.Count = 0;
+                aSegment.Command = 2;
+                aSegment.Count = 1;
                 aSegmentSeq [5] = aSegment;
             }
             {
                 EnhancedCustomShapeSegment aSegment;
-                aSegment.Command = 2;
-                aSegment.Count = 1;
+                aSegment.Command = 6;
+                aSegment.Count = 0;
                 aSegmentSeq [6] = aSegment;
             }
             {
                 EnhancedCustomShapeSegment aSegment;
-                aSegment.Command = 6;
+                aSegment.Command = 5;
                 aSegment.Count = 0;
                 aSegmentSeq [7] = aSegment;
             }
             {
                 EnhancedCustomShapeSegment aSegment;
-                aSegment.Command = 5;
-                aSegment.Count = 0;
-                aSegmentSeq [8] = aSegment;
-            }
-            {
-                EnhancedCustomShapeSegment aSegment;
                 aSegment.Command = 1;
                 aSegment.Count = 1;
-                aSegmentSeq [9] = aSegment;
+                aSegmentSeq [8] = aSegment;
             }
             {
                 EnhancedCustomShapeSegment aSegment;
                 aSegment.Command = 2;
                 aSegment.Count = 2;
-                aSegmentSeq [10] = aSegment;
+                aSegmentSeq [9] = aSegment;
             }
             {
                 EnhancedCustomShapeSegment aSegment;
                 aSegment.Command = 6;
                 aSegment.Count = 0;
-                aSegmentSeq [11] = aSegment;
+                aSegmentSeq [10] = aSegment;
             }
             {
                 EnhancedCustomShapeSegment aSegment;
                 aSegment.Command = 5;
                 aSegment.Count = 0;
-                aSegmentSeq [12] = aSegment;
+                aSegmentSeq [11] = aSegment;
             }
             aPropSequence [1].Value = makeAny (aSegmentSeq);
         }
