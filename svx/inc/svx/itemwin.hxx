@@ -86,8 +86,6 @@ class SvxColorBox : public ColorLB
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > mxFrame;
 
 #ifdef _SVX_ITEMWIN_CXX
-                    DECL_LINK( DelayHdl_Impl, Timer * );
-
     void            ReleaseFocus_Impl();
 #endif
 

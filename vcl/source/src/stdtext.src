@@ -34,11 +34,6 @@ String SV_STDTEXT_SERVICENOTAVAILABLE
     Text [ en-US ] = "The component (%s) could not be loaded.\nPlease start setup with the repair option.";
 };
 
-String SV_STDTEXT_DONTHINTAGAIN
-{
-    Text [ en-US ] = "Do not show this information again.";
-};
-
 String SV_STDTEXT_DONTASKAGAIN
 {
     Text [ en-US ] = "Do not show this question again.";

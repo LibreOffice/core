@@ -872,20 +872,6 @@ void SvtFrameWindow_Impl::ViewNonEmptyWin()
         ViewTextWin();
 }
 
-IMPL_STATIC_LINK_NOINSTANCE( SvtFrameWindow_Impl, ExecuteHdl_Impl, SvtExecuteInfo*, pExecuteInfo )
-{
-    try
-    {
-        pExecuteInfo->xDispatch->dispatch( pExecuteInfo->aTargetURL, Sequence < PropertyValue >() );
-    }
-    catch ( Exception& )
-    {
-    }
-
-    delete pExecuteInfo;
-    return 0;
-}
-
 void SvtFrameWindow_Impl::ShowDocInfo( const String& rURL )
 {
     try
@@ -1012,13 +998,6 @@ void SvtFrameWindow_Impl::OpenFile( const String& rURL, sal_Bool bPreview, sal_B
             }
             else
             {
-            /*
-                SvtExecuteInfo* pExecuteInfo = new SvtExecuteInfo;
-                pExecuteInfo->xDispatch = xDisp;
-                pExecuteInfo->aTargetURL = aURL;
-                Application::PostUserEvent(
-                    STATIC_LINK(0, SvtFrameWindow_Impl, ExecuteHdl_Impl), pExecuteInfo );
-            */
                 Sequence < PropertyValue > aArgs;
                 xDisp->dispatch( aURL, aArgs );
                 m_aOpenURL = rtl::OUString();

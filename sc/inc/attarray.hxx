@@ -156,8 +156,6 @@ public:
 
     bool    Search( SCROW nRow, SCSIZE& nIndex ) const;
 
-    bool    HasLines( SCROW nRow1, SCROW nRow2, Rectangle& rSizes,
-                        bool bLeft, bool bRight ) const;
     bool    HasAttrib( SCROW nRow1, SCROW nRow2, sal_uInt16 nMask ) const;
     bool    ExtendMerge( SCCOL nThisCol, SCROW nStartRow, SCROW nEndRow,
                                 SCCOL& rPaintCol, SCROW& rPaintRow,

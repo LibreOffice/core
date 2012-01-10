@@ -116,8 +116,6 @@ class SVX_DLLPUBLIC SvxDrawPage : public ::cppu::WeakAggImplHelper5< ::com::sun:
     // ein ein SvxShape aggregierenden Objekt anlegen.
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > _CreateShape( SdrObject *pObj ) const throw();
 
-    static SvxDrawPage* GetPageForSdrPage( SdrPage* pPage ) throw();
-
     UNO3_GETIMPLEMENTATION_DECL( SvxDrawPage )
 
     // SfxListener

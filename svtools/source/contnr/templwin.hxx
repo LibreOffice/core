@@ -219,8 +219,6 @@ private:
         ::com::sun::star::util::URL                                                aTargetURL;
     };
 
-    DECL_STATIC_LINK(       SvtFrameWindow_Impl, ExecuteHdl_Impl, SvtExecuteInfo* );
-
 public:
     SvtFrameWindow_Impl( Window* pParent );
     ~SvtFrameWindow_Impl();

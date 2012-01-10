@@ -100,7 +100,6 @@ public:
     void                SetImage( const Image& rImage ) { maImage = rImage; }
     const Image&        GetImage() const { return maImage; }
 
-    void                SetDefaultCheckBoxText();
     void                SetCheckBoxText( const XubString& rText ) { maCheckBoxText = rText;}
     const XubString&    GetCheckBoxText() const { return maCheckBoxText;}
     void                SetCheckBoxState( sal_Bool bCheck );

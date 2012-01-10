@@ -1378,17 +1378,6 @@ namespace basegfx
         }
     }
 
-    void B2DPolygon::resetControlPoints(sal_uInt32 nIndex)
-    {
-        OSL_ENSURE(nIndex < mpPolygon->count(), "B2DPolygon access outside range (!)");
-
-        if(mpPolygon->areControlPointsUsed() &&
-            (!mpPolygon->getPrevControlVector(nIndex).equalZero() || !mpPolygon->getNextControlVector(nIndex).equalZero()))
-        {
-            mpPolygon->resetControlVectors(nIndex);
-        }
-    }
-
     void B2DPolygon::resetControlPoints()
     {
         if(mpPolygon->areControlPointsUsed())
@@ -1448,35 +1437,6 @@ namespace basegfx
         else
         {
             return CONTINUITY_NONE;
-        }
-    }
-
-    bool B2DPolygon::isBezierSegment(sal_uInt32 nIndex) const
-    {
-        OSL_ENSURE(nIndex < mpPolygon->count(), "B2DPolygon access outside range (!)");
-
-        if(mpPolygon->areControlPointsUsed())
-        {
-            // Check if the edge exists
-            const bool bNextIndexValidWithoutClose(nIndex + 1 < mpPolygon->count());
-
-            if(bNextIndexValidWithoutClose || mpPolygon->isClosed())
-            {
-                const sal_uInt32 nNextIndex(bNextIndexValidWithoutClose ? nIndex + 1 : 0);
-                return (!mpPolygon->getPrevControlVector(nNextIndex).equalZero()
-                    || !mpPolygon->getNextControlVector(nIndex).equalZero());
-            }
-            else
-            {
-                // no valid edge -> no bezier segment, even when local next
-                // vector may be used
-                return false;
-            }
-        }
-        else
-        {
-            // no control points -> no bezier segment
-            return false;
         }
     }
 

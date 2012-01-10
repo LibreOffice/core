@@ -112,7 +112,6 @@ friend class SvxCharacterMap;
     DECL_LINK( CharHighlightHdl, Control* pControl );
     DECL_LINK( CharPreSelectHdl, Control* pControl );
     DECL_LINK( DeleteHdl, PushButton* pBtn );
-    DECL_LINK( AssignHdl, PushButton* pBtn );
 };
 
 class SvxCharacterMap : public SfxModalDialog

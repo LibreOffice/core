@@ -45,41 +45,11 @@ namespace basegfx
         mfY( rTup.getY() )
     {}
 
-    void B2DTuple::correctValues(const double fCompareValue)
-    {
-        if(0.0 == fCompareValue)
-        {
-            if(::basegfx::fTools::equalZero(mfX))
-            {
-                mfX = 0.0;
-            }
-
-            if(::basegfx::fTools::equalZero(mfY))
-            {
-                mfY = 0.0;
-            }
-        }
-        else
-        {
-            if(::basegfx::fTools::equal(mfX, fCompareValue))
-            {
-                mfX = fCompareValue;
-            }
-
-            if(::basegfx::fTools::equal(mfY, fCompareValue))
-            {
-                mfY = fCompareValue;
-            }
-        }
-    }
-
     B2ITuple fround(const B2DTuple& rTup)
     {
         return B2ITuple(fround(rTup.getX()), fround(rTup.getY()));
     }
 
 } // end of namespace basegfx
-
-// eof
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

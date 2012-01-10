@@ -138,7 +138,6 @@ class SVX_DLLPUBLIC SvxBmpMask : public SfxDockingWindow
                                          sal_uIntPtr* pTols );
 
     Bitmap              ImpMask( const Bitmap& rBitmap );
-    BitmapEx            ImpMask( const BitmapEx& rBitmapEx );
     GDIMetaFile         ImpMask( const GDIMetaFile& rMtf );
     Animation           ImpMask( const Animation& rAnimation );
     BitmapEx            ImpMaskTransparent( const BitmapEx& rBitmapEx,

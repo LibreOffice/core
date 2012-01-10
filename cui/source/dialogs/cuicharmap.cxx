@@ -559,24 +559,4 @@ IMPL_LINK( SvxCharMapData, DeleteHdl, PushButton *, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( SvxCharMapData, AssignHdl, PushButton *, EMPTYARG )
-{
-    SfxAllItemSet aSet( SfxObjectShell::Current()->GetPool() );
-    aSet.Put( SfxStringItem( SID_CHARMAP, String::CreateFromAscii("test") ) );
-    SfxModalDialog* pDlg = new SfxMacroAssignDlg( mpDialog, com::sun::star::uno::Reference < com::sun::star::frame::XFrame >(), aSet );
-    if ( pDlg && pDlg->Execute() == RET_OK )
-    {
-        const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();
-        const SfxPoolItem* pItem;
-        if( SFX_ITEM_SET == pOutSet->GetItemState( SID_CHARMAP, sal_False, &pItem ) )
-        {
-            // show assigned shortcut
-        }
-    }
-
-    delete pDlg;
-
-    return 0;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

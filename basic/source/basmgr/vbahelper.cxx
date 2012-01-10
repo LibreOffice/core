@@ -200,13 +200,6 @@ struct StaticCurrDirPool : public ::rtl::Static< CurrDirPool, StaticCurrDirPool 
 
 // ============================================================================
 
-uno::Reference< container::XEnumeration > createDocumentsEnumeration( const uno::Reference< frame::XModel >& rxModel )
-{
-    return new DocumentsEnumeration( rxModel );
-}
-
-// ============================================================================
-
 void lockControllersOfAllDocuments( const uno::Reference< frame::XModel >& rxModel, sal_Bool bLockControllers )
 {
     lclIterateDocuments( &lclLockControllers, rxModel, bLockControllers );

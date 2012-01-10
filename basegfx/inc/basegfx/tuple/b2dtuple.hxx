@@ -238,8 +238,6 @@ namespace basegfx
             return *this;
         }
 
-        BASEGFX_DLLPUBLIC void correctValues(const double fCompareValue = 0.0);
-
         BASEGFX_DLLPUBLIC static const B2DTuple& getEmptyTuple();
     };
 

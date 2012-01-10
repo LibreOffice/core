@@ -301,21 +301,6 @@ SvxColorBox::SvxColorBox(
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxColorBox, DelayHdl_Impl, Timer *, EMPTYARG )
-{
-    SfxObjectShell* pSh = SfxObjectShell::Current();
-
-    if ( pSh )
-    {
-        const SvxColorListItem* pItem = (const SvxColorListItem*)( pSh->GetItem( SID_COLOR_TABLE ) );
-        if ( pItem )
-            Fill( pItem->GetColorList() );
-    }
-    return 0;
-}
-
-// -----------------------------------------------------------------------
-
 SvxColorBox::~SvxColorBox()
 {
 }

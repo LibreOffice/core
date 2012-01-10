@@ -43,21 +43,6 @@ namespace vba {
 
 // ============================================================================
 
-/** Creates and returns an enumeration of all open documents of the same type
-    as the specified document.
-
-    First, the global module manager (com.sun.star.frame.ModuleManager) is
-    asked for the type of the passed model, and all open documents with the
-    same type will be stored in an enumeration object.
-
-    @param rxModel
-        A document model determining the type of the documents.
- */
-BASIC_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration > createDocumentsEnumeration(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rxModel );
-
-// ============================================================================
-
 /** Locks or unlocks the controllers of all documents that have the same type
     as the specified document.
 

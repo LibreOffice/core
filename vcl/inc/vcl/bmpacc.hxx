@@ -202,8 +202,6 @@ public:
     void                        FillRect( const Rectangle& rRect );
     void                        DrawRect( const Rectangle& rRect );
 
-    void                        FillPolygon( const Polygon& rPoly );
-
 private:
 
     BitmapColor*                mpLineColor;

@@ -126,13 +126,6 @@ void SvxDrawPage::release() throw()
     OWeakAggObject::release();
 }
 
-//----------------------------------------------------------------------
-
-SvxDrawPage* SvxDrawPage::GetPageForSdrPage( SdrPage* mpPage ) throw()
-{
-    return getImplementation( mpPage->getUnoPage() );
-}
-
 // XComponent
 void SvxDrawPage::disposing() throw()
 {

@@ -447,15 +447,6 @@ void MessBox::SetCheckBoxState( sal_Bool bCheck )
 
 // -----------------------------------------------------------------------
 
-void MessBox::SetDefaultCheckBoxText()
-{
-    ResMgr* pResMgr = ImplGetResMgr();
-    if( pResMgr )
-        maCheckBoxText = XubString( ResId( SV_STDTEXT_DONTHINTAGAIN, *pResMgr ) );
-}
-
-// -----------------------------------------------------------------------
-
 Size MessBox::GetOptimalSize(WindowSizeType eType) const
 {
     switch( eType ) {

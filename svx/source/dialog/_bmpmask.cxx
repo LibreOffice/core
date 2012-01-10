@@ -719,13 +719,6 @@ Bitmap SvxBmpMask::ImpMask( const Bitmap& rBitmap )
 
 //-------------------------------------------------------------------------
 
-BitmapEx SvxBmpMask::ImpMask( const BitmapEx& rBitmapEx )
-{
-    return BitmapEx( ImpMask( rBitmapEx.GetBitmap() ), rBitmapEx.GetMask() );
-}
-
-//-------------------------------------------------------------------------
-
 BitmapEx SvxBmpMask::ImpMaskTransparent( const BitmapEx& rBitmapEx, const Color& rColor, const long nTol )
 {
     EnterWait();

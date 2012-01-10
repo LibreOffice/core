@@ -101,7 +101,6 @@ namespace basegfx
         /// ControlPoint resets
         void resetPrevControlPoint(sal_uInt32 nIndex);
         void resetNextControlPoint(sal_uInt32 nIndex);
-        void resetControlPoints(sal_uInt32 nIndex);
         void resetControlPoints();
 
         /// Bezier segment append with control points. The current last polygon point is implicitly taken as start point.
@@ -112,22 +111,6 @@ namespace basegfx
         bool isPrevControlPointUsed(sal_uInt32 nIndex) const;
         bool isNextControlPointUsed(sal_uInt32 nIndex) const;
         B2VectorContinuity getContinuityInPoint(sal_uInt32 nIndex) const;
-
-        /** check edge for being a bezier segment
-
-            This test the existance of control vectors, but do not apply
-            testAndSolveTrivialBezier() to the bezier segment, so it is still useful
-            to do so.
-            Since it can use internal data representations, it is faster
-            than using getBezierSegment() and applying isBezier() on it.
-
-            @param nIndex
-            Index of the addressed edge's start point
-
-            @return
-            true if edge exists and at least one control vector is used
-        */
-        bool isBezierSegment(sal_uInt32 nIndex) const;
 
         /** bezier segment access
 

@@ -266,32 +266,4 @@ void BitmapWriteAccess::DrawRect( const Rectangle& rRect )
     }
 }
 
-// ------------------------------------------------------------------
-
-void BitmapWriteAccess::FillPolygon( const Polygon& rPoly )
-{
-    const sal_uInt16 nSize = rPoly.GetSize();
-
-    if( nSize && mpFillColor )
-    {
-        const BitmapColor&  rFillColor = *mpFillColor;
-        Region              aRegion( rPoly );
-        Rectangle           aRect;
-
-        aRegion.Intersect( Rectangle( Point(), Size( Width(), Height() ) ) );
-
-        if( !aRegion.IsEmpty() )
-        {
-            RegionHandle aRegHandle( aRegion.BeginEnumRects() );
-
-            while( aRegion.GetNextEnumRect( aRegHandle, aRect ) )
-                for( long nY = aRect.Top(), nEndY = aRect.Bottom(); nY <= nEndY; nY++ )
-                    for( long nX = aRect.Left(), nEndX = aRect.Right(); nX <= nEndX; nX++ )
-                        SetPixel( nY, nX, rFillColor );
-
-            aRegion.EndEnumRects( aRegHandle );
-        }
-    }
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
