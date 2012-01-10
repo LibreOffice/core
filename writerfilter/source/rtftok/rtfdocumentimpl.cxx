@@ -248,11 +248,13 @@ static util::DateTime lcl_getDateTime(std::stack<RTFParserState>& aStates)
 RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& xContext,
         uno::Reference<io::XInputStream> const& xInputStream,
         uno::Reference<lang::XComponent> const& xDstDoc,
-        uno::Reference<frame::XFrame>    const& xFrame)
+        uno::Reference<frame::XFrame>    const& xFrame,
+        uno::Reference<task::XStatusIndicator> const& xStatusIndicator)
     : m_xContext(xContext),
     m_xInputStream(xInputStream),
     m_xDstDoc(xDstDoc),
     m_xFrame(xFrame),
+    m_xStatusIndicator(xStatusIndicator),
     m_nGroup(0),
     m_aDefaultState(),
     m_bSkipUnknown(false),
@@ -303,7 +305,7 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
 
     m_pGraphicHelper.reset(new oox::GraphicHelper(m_xContext, xFrame, m_xStorage));
 
-    m_pTokenizer.reset(new RTFTokenizer(*this, m_pInStream.get()));
+    m_pTokenizer.reset(new RTFTokenizer(*this, m_pInStream.get(), m_xStatusIndicator));
     m_pSdrImport.reset(new RTFSdrImport(*this, m_xDstDoc));
 }
 
@@ -363,7 +365,7 @@ void RTFDocumentImpl::resolveSubstream(sal_uInt32 nPos, Id nId, OUString& rIgnor
 {
     sal_uInt32 nCurrent = Strm().Tell();
     // Seek to header position, parse, then seek back.
-    RTFDocumentImpl::Pointer_t pImpl(new RTFDocumentImpl(m_xContext, m_xInputStream, m_xDstDoc, m_xFrame));
+    RTFDocumentImpl::Pointer_t pImpl(new RTFDocumentImpl(m_xContext, m_xInputStream, m_xDstDoc, m_xFrame, m_xStatusIndicator));
     pImpl->setSubstream(true);
     pImpl->setIgnoreFirst(rIgnoreFirst);
     if (m_aAuthor.getLength())

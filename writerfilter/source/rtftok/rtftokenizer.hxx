@@ -38,7 +38,7 @@ namespace writerfilter {
         class RTFTokenizer
         {
             public:
-                RTFTokenizer(RTFDocumentImpl& rImport, SvStream* pInStream);
+                RTFTokenizer(RTFDocumentImpl& rImport, SvStream* pInStream, uno::Reference<task::XStatusIndicator> const& xStatusIndicator);
                 virtual ~RTFTokenizer();
 
                 int resolveParse();
@@ -50,6 +50,7 @@ namespace writerfilter {
 
                 RTFDocumentImpl& m_rImport;
                 SvStream* m_pInStream;
+                uno::Reference<task::XStatusIndicator> const& m_xStatusIndicator;
         };
     } // namespace rtftok
 } // namespace writerfilter

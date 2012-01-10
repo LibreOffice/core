@@ -35,6 +35,7 @@
 #include <dmapper/DomainMapper.hxx>
 #include <rtftok/RTFDocument.hxx>
 #include <com/sun/star/frame/XFrame.hpp>
+#include <com/sun/star/task/XStatusIndicator.hpp>
 
 using namespace ::rtl;
 using namespace ::cppu;
@@ -88,14 +89,19 @@ sal_Bool RtfFilter::filter( const uno::Sequence< beans::PropertyValue >& aDescri
         uno::Reference<frame::XFrame> xFrame = aMediaDesc.getUnpackedValueOrDefault(MediaDescriptor::PROP_FRAME(),
                 uno::Reference<frame::XFrame>());
 
+        uno::Reference<task::XStatusIndicator> xStatusIndicator = aMediaDesc.getUnpackedValueOrDefault(MediaDescriptor::PROP_STATUSINDICATOR(),
+                uno::Reference<task::XStatusIndicator>());
+
         writerfilter::Stream::Pointer_t pStream(
                 new writerfilter::dmapper::DomainMapper(m_xContext, xInputStream, m_xDstDoc, writerfilter::dmapper::DOCUMENT_RTF));
         writerfilter::rtftok::RTFDocument::Pointer_t const pDocument(
-                writerfilter::rtftok::RTFDocumentFactory::createDocument(m_xContext, xInputStream, m_xDstDoc, xFrame));
+                writerfilter::rtftok::RTFDocumentFactory::createDocument(m_xContext, xInputStream, m_xDstDoc, xFrame, xStatusIndicator));
         pDocument->resolve(*pStream);
 #ifdef DEBUG_IMPORT
         dmapperLogger->endDocument();
 #endif
+        if (xStatusIndicator.is())
+            xStatusIndicator->end();
         return sal_True;
     }
     catch (const uno::Exception& e)

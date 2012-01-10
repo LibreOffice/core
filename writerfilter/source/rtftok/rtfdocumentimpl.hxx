@@ -288,7 +288,8 @@ namespace writerfilter {
                 RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& xContext,
                                 uno::Reference<io::XInputStream> const& xInputStream,
                                 uno::Reference<lang::XComponent> const& xDstDoc,
-                                uno::Reference<frame::XFrame> const& xFrame);
+                                uno::Reference<frame::XFrame> const& xFrame,
+                                uno::Reference<task::XStatusIndicator> const& xStatusIndicator);
                 virtual ~RTFDocumentImpl();
                 virtual void resolve(Stream & rHandler);
                 virtual std::string getType() const;
@@ -351,6 +352,7 @@ namespace writerfilter {
                 uno::Reference<io::XInputStream> const& m_xInputStream;
                 uno::Reference<lang::XComponent> const& m_xDstDoc;
                 uno::Reference<frame::XFrame> const& m_xFrame;
+                uno::Reference<task::XStatusIndicator> const& m_xStatusIndicator;
                 uno::Reference<lang::XMultiServiceFactory> m_xModelFactory;
                 uno::Reference<document::XDocumentProperties> m_xDocumentProperties;
                 boost::shared_ptr<SvStream> m_pInStream;

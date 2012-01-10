@@ -26,6 +26,9 @@
  */
 
 #include <tools/stream.hxx>
+#include <tools/resmgr.hxx>
+#include <svx/dialogs.hrc>
+#include <vcl/svapp.hxx>
 
 #include <rtftokenizer.hxx>
 #include <rtfskipdestination.hxx>
@@ -39,9 +42,10 @@ using rtl::OUStringToOString;
 namespace writerfilter {
 namespace rtftok {
 
-RTFTokenizer::RTFTokenizer(RTFDocumentImpl& rImport, SvStream* pInStream)
+RTFTokenizer::RTFTokenizer(RTFDocumentImpl& rImport, SvStream* pInStream, uno::Reference<task::XStatusIndicator> const& xStatusIndicator)
     : m_rImport(rImport),
-    m_pInStream(pInStream)
+    m_pInStream(pInStream),
+    m_xStatusIndicator(xStatusIndicator)
 {
 }
 
@@ -61,10 +65,32 @@ int RTFTokenizer::resolveParse()
     int ret;
     // for hex chars
     int b = 0, count = 2;
+    sal_uInt32 nPercentSize;
+    sal_uInt32 nLastPos;
+
+    if (m_xStatusIndicator.is())
+    {
+        static ResMgr* pResMgr = ResMgr::CreateResMgr("svx", Application::GetSettings().GetUILocale());
+        OUString sDocLoad(ResId::toString(ResId(RID_SVXSTR_DOC_LOAD, *pResMgr)));
+
+        sal_uInt32 nCurrentPos = Strm().Tell();
+        Strm().Seek(STREAM_SEEK_TO_END);
+        sal_uInt32 nEndPos = Strm().Tell();
+        Strm().Seek(nCurrentPos);
+        m_xStatusIndicator->start(sDocLoad, nEndPos);
+        nPercentSize = nEndPos / 100;
+
+        m_xStatusIndicator->setValue(nLastPos = nCurrentPos);
+    }
 
     while ((Strm() >> ch, !Strm().IsEof()))
     {
         //SAL_INFO("writerfilter", OSL_THIS_FUNC << ": parsing character '" << ch << "'");
+
+        sal_uInt32 nCurrentPos = Strm().Tell();
+        if (m_xStatusIndicator.is() && nCurrentPos > (nLastPos + nPercentSize))
+            m_xStatusIndicator->setValue(nLastPos = nCurrentPos);
+
         if (m_rImport.getGroup() < 0)
             return ERROR_GROUP_UNDER;
         if (!m_rImport.isEmpty() && m_rImport.getState().nInternalState == INTERNAL_BIN)
