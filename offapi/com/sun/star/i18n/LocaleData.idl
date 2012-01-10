@@ -30,8 +30,7 @@
 #define __com_sun_star_i18n_LocaleData_idl__
 
 #include <com/sun/star/lang/XServiceInfo.idl>
-#include <com/sun/star/i18n/XLocaleData2.idl>
-#include <com/sun/star/i18n/XLocaleData3.idl>
+#include <com/sun/star/i18n/XLocaleData4.idl>
 
 //============================================================================
 
@@ -47,6 +46,7 @@ published service LocaleData
 
     [optional] interface com::sun::star::i18n::XLocaleData2;
     [optional] interface com::sun::star::i18n::XLocaleData3;
+    [optional] interface com::sun::star::i18n::XLocaleData4;
 };
 
 //============================================================================
