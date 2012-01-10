@@ -146,6 +146,8 @@ void ImpSvNumberInputScan::Reset()
     nMayBeIso8601 = 0;
     nTimezonePos = 0;
     nMayBeMonthDate = 0;
+    nAcceptedDatePattern = -2;
+    nDatePatternStart = 0;
 }
 
 
@@ -1034,6 +1036,227 @@ bool ImpSvNumberInputScan::MayBeMonthDate()
 }
 
 //---------------------------------------------------------------------------
+
+bool ImpSvNumberInputScan::IsAcceptedDatePattern( sal_uInt16 nStartPatternAt )
+{
+    if (nAcceptedDatePattern >= -1)
+        return (nAcceptedDatePattern >= 0);
+
+    if (!nAnzNums)
+        nAcceptedDatePattern = -1;
+    else if (!sDateAcceptancePatterns.getLength())
+    {
+        sDateAcceptancePatterns = pFormatter->GetLocaleData()->getDateAcceptancePatterns();
+        SAL_WARN_IF( !sDateAcceptancePatterns.getLength(), "nf.date", "ImpSvNumberInputScan::IsAcceptedDatePattern: no date acceptance patterns");
+        nAcceptedDatePattern = (sDateAcceptancePatterns.getLength() ? -2 : -1);
+    }
+
+    if (nAcceptedDatePattern == -1)
+        return false;
+
+    nDatePatternStart = nStartPatternAt;    // remember start particle
+
+    for (sal_Int32 nPattern=0; nPattern < sDateAcceptancePatterns.getLength(); ++nPattern)
+    {
+        sal_uInt16 nNext = nDatePatternStart;
+        bool bOk = true;
+        const rtl::OUString& rPat = sDateAcceptancePatterns[nPattern];
+        sal_Int32 nPat = 0;
+        for ( ; nPat < rPat.getLength() && bOk && nNext < nAnzStrings; ++nPat, ++nNext)
+        {
+            switch (rPat[nPat])
+            {
+                case 'Y':
+                case 'M':
+                case 'D':
+                    bOk = IsNum[nNext];
+                    break;
+                default:
+                    bOk = !IsNum[nNext];
+                    if (bOk)
+                    {
+                        const xub_StrLen nLen = sStrArray[nNext].Len();
+                        bOk = (rPat.indexOf( sStrArray[nNext], nPat) == nPat);
+                        if (bOk)
+                            nPat += nLen - 1;
+                        else if (nPat + nLen > rPat.getLength() && sStrArray[nNext].GetChar(nLen-1) == ' ')
+                        {
+                            // Trailing blanks in input.
+                            String aStr( sStrArray[nNext]);
+                            aStr.EraseTrailingChars(' ');
+                            // Expand again in case of pattern "M. D. " and
+                            // input "M. D.  ", maybe fetched far, but..
+                            aStr.Expand( rPat.getLength() - nPat, ' ');
+                            bOk = (rPat.indexOf( aStr, nPat) == nPat);
+                            if (bOk)
+                                nPat += aStr.Len() - 1;
+                        }
+                    }
+                    break;
+            }
+        }
+        if (bOk)
+        {
+            // Check for trailing characters mismatch.
+            if (nNext < nAnzStrings)
+            {
+                // Pattern end but not input end.
+                if (!IsNum[nNext])
+                {
+                    // Trailing (or separating if time follows) blanks are ok.
+                    xub_StrLen nPos = 0;
+                    SkipBlanks( sStrArray[nNext], nPos);
+                    if (nPos == sStrArray[nNext].Len())
+                    {
+                        nAcceptedDatePattern = nPattern;
+                        return true;
+                    }
+                }
+            }
+            else if (nPat == rPat.getLength())
+            {
+                // Input end and pattern end => match.
+                nAcceptedDatePattern = nPattern;
+                return true;
+            }
+            // else Input end but not pattern end, no match.
+        }
+    }
+    nAcceptedDatePattern = -1;
+    return false;
+}
+
+//---------------------------------------------------------------------------
+
+bool ImpSvNumberInputScan::SkipDatePatternSeparator( sal_uInt16 nParticle, xub_StrLen & rPos )
+{
+    // If not initialized yet start with first number, if any.
+    if (!IsAcceptedDatePattern( (nAnzNums ? nNums[0] : 0)))
+        return false;
+
+    if (nParticle < nDatePatternStart || nParticle >= nAnzStrings || IsNum[nParticle])
+        return false;
+
+    sal_uInt16 nNext = nDatePatternStart;
+    const rtl::OUString& rPat = sDateAcceptancePatterns[nAcceptedDatePattern];
+    for (sal_Int32 nPat = 0; nPat < rPat.getLength() && nNext < nAnzStrings; ++nPat, ++nNext)
+    {
+        switch (rPat[nPat])
+        {
+            case 'Y':
+            case 'M':
+            case 'D':
+                break;
+            default:
+                if (nNext == nParticle)
+                {
+                    const xub_StrLen nLen = sStrArray[nNext].Len();
+                    bool bOk = (rPat.indexOf( sStrArray[nNext], nPat) == nPat);
+                    if (!bOk && (nPat + nLen > rPat.getLength() && sStrArray[nNext].GetChar(nLen-1) == ' '))
+                    {
+                        // The same ugly trailing blanks check as in
+                        // IsAcceptedDatePattern().
+                        String aStr( sStrArray[nNext]);
+                        aStr.EraseTrailingChars(' ');
+                        aStr.Expand( rPat.getLength() - nPat, ' ');
+                        bOk = (rPat.indexOf( aStr, nPat) == nPat);
+                    }
+                    if (bOk)
+                    {
+                        rPos = nLen;    // yes, set, not add!
+                        return true;
+                    }
+                    else
+                        return false;
+                }
+                nPat += sStrArray[nNext].Len() - 1;
+                break;
+        }
+    }
+    return false;
+}
+
+//---------------------------------------------------------------------------
+
+sal_uInt32 ImpSvNumberInputScan::GetDatePatternOrder()
+{
+    // If not initialized yet start with first number, if any.
+    if (!IsAcceptedDatePattern( (nAnzNums ? nNums[0] : 0)))
+        return 0;
+
+    sal_uInt32 nOrder = 0;
+    const rtl::OUString& rPat = sDateAcceptancePatterns[nAcceptedDatePattern];
+    for (sal_Int32 nPat = 0; nPat < rPat.getLength() && !(nOrder & 0xff0000); ++nPat)
+    {
+        switch (rPat[nPat])
+        {
+            case 'Y':
+            case 'M':
+            case 'D':
+                nOrder = (nOrder << 8) | rPat[nPat];
+                break;
+        }
+    }
+    return nOrder;
+}
+
+//---------------------------------------------------------------------------
+
+DateFormat ImpSvNumberInputScan::GetDateOrder()
+{
+    sal_uInt32 nOrder = GetDatePatternOrder();
+    if (!nOrder)
+        return pFormatter->GetLocaleData()->getDateFormat();
+    switch ((nOrder & 0xff0000) >> 16)
+    {
+        case 'Y':
+            if ((((nOrder & 0xff00) >> 8) == 'M') && ((nOrder & 0xff) == 'D'))
+                return YMD;
+            break;
+        case 'M':
+            if ((((nOrder & 0xff00) >> 8) == 'D') && ((nOrder & 0xff) == 'Y'))
+                return MDY;
+            break;
+        case 'D':
+            if ((((nOrder & 0xff00) >> 8) == 'M') && ((nOrder & 0xff) == 'Y'))
+                return DMY;
+            break;
+        default:
+        case 0:
+            switch ((nOrder & 0xff00) >> 8)
+            {
+                case 'Y':
+                    switch ((nOrder & 0xff))
+                    {
+                        case 'M':
+                            return YMD;
+                    }
+                    break;
+                case 'M':
+                    switch ((nOrder & 0xff))
+                    {
+                        case 'Y':
+                            return DMY;
+                        case 'D':
+                            return MDY;
+                    }
+                    break;
+                case 'D':
+                    switch ((nOrder & 0xff))
+                    {
+                        case 'Y':
+                            return MDY;
+                        case 'M':
+                            return DMY;
+                    }
+                    break;
+            }
+    }
+    SAL_WARN( "nf.date", "ImpSvNumberInputScan::GetDateOrder: undefined, falling back to locale's default");
+    return pFormatter->GetLocaleData()->getDateFormat();
+}
+
+//---------------------------------------------------------------------------
 //      GetDateRef
 
 bool ImpSvNumberInputScan::GetDateRef( double& fDays, sal_uInt16& nCounter,
@@ -1077,7 +1300,7 @@ bool ImpSvNumberInputScan::GetDateRef( double& fDays, sal_uInt16& nCounter,
         {
             case NF_EVALDATEFORMAT_INTL :
                 bFormatTurn = false;
-                DateFmt = pLoc->getDateFormat();
+                DateFmt = GetDateOrder();
             break;
             case NF_EVALDATEFORMAT_FORMAT :
                 bFormatTurn = true;
@@ -1087,7 +1310,7 @@ bool ImpSvNumberInputScan::GetDateRef( double& fDays, sal_uInt16& nCounter,
                 if ( nTryOrder == 1 )
                 {
                     bFormatTurn = false;
-                    DateFmt = pLoc->getDateFormat();
+                    DateFmt = GetDateOrder();
                 }
                 else
                 {
@@ -1099,7 +1322,7 @@ bool ImpSvNumberInputScan::GetDateRef( double& fDays, sal_uInt16& nCounter,
                 if ( nTryOrder == 2 )
                 {
                     bFormatTurn = false;
-                    DateFmt = pLoc->getDateFormat();
+                    DateFmt = GetDateOrder();
                 }
                 else
                 {
@@ -1175,7 +1398,8 @@ input for the following reasons:
                         switch (DateFmt)
                         {
                             case MDY:
-                            case YMD: {
+                            case YMD:
+                            {
                                 sal_uInt16 nDay = ImplGetDay(0);
                                 sal_uInt16 nYear = ImplGetYear(0);
                                 if (nDay == 0 || nDay > 32) {
@@ -1221,8 +1445,11 @@ input for the following reasons:
                     case 0:             // not found
                     {
                         bool bHadExact;
-                        sal_uInt32 nExactDateOrder = (bFormatTurn ? pFormat->GetExactDateOrder() : 0);
-                        if ( 0xff < nExactDateOrder && nExactDateOrder <= 0xffff )
+                        sal_uInt32 nExactDateOrder = (bFormatTurn ?
+                                pFormat->GetExactDateOrder() :
+                                GetDatePatternOrder());
+                        bool bIsExact = (0xff < nExactDateOrder && nExactDateOrder <= 0xffff);
+                        if (bIsExact)
                         {   // formatted as date and exactly 2 parts
                             bHadExact = true;
                             switch ( (nExactDateOrder >> 8) & 0xff )
@@ -1253,10 +1480,14 @@ input for the following reasons:
                                 default:
                                     bHadExact = false;
                             }
+                            SAL_WARN_IF( !bHadExact, "nf.date", "ImpSvNumberInputScan::GetDateRef: error in exact date order");
                         }
                         else
                             bHadExact = false;
-                        if ( !bHadExact || !pCal->isValid() )
+                        // If input matched against a date acceptance pattern
+                        // do not attempt to mess around with guessing the
+                        // order, either it matches or it doesn't.
+                        if ((bFormatTurn || !bIsExact) && (!bHadExact || !pCal->isValid()))
                         {
                             if ( !bHadExact && nExactDateOrder )
                                 pCal->setGregorianDateTime( Date( Date::SYSTEM ) );   // reset today
@@ -1620,6 +1851,11 @@ bool ImpSvNumberInputScan::ScanStartString( const String& rString,
                         SkipBlanks(rString, nPos);
                     }
                 }
+                if (!nMonth)
+                {
+                    // Determine and remember following date pattern, if any.
+                    IsAcceptedDatePattern( 1);
+                }
             }
         }
     }
@@ -1673,7 +1909,8 @@ bool ImpSvNumberInputScan::ScanMidString( const String& rString,
             return MatchedReturn();
         else if (nDecPos == 2)                      // . dup: 12.4.
         {
-            if (bDecSepInDateSeps)                  // . also date separator
+            if (bDecSepInDateSeps                   // . also date separator
+                    || SkipDatePatternSeparator( nStringPos, nPos))
             {
                 if (    eScannedType != NUMBERFORMAT_UNDEFINED &&
                         eScannedType != NUMBERFORMAT_DATE &&
@@ -1727,10 +1964,15 @@ bool ImpSvNumberInputScan::ScanMidString( const String& rString,
     }
 
     const LocaleDataWrapper* pLoc = pFormatter->GetLocaleData();
-    const String& rDate = pFormatter->GetDateSep();
-    SkipBlanks(rString, nPos);
-    if (SkipString( rDate, rString, nPos)               // 10.  10-  10/
-            || ((MayBeIso8601() || MayBeMonthDate())
+    bool bDate = SkipDatePatternSeparator( nStringPos, nPos);   // 12/31  31.12.  12/31/1999  31.12.1999
+    if (!bDate)
+    {
+        const String& rDate = pFormatter->GetDateSep();
+        SkipBlanks(rString, nPos);
+        bDate = SkipString( rDate, rString, nPos);      // 10.  10-  10/
+    }
+    if (bDate
+            || ((MayBeIso8601() || MayBeMonthDate())    // 1999-12-31  31-Dec-1999
                 && SkipChar( '-', rString, nPos)))
     {
         if (   eScannedType != NUMBERFORMAT_UNDEFINED   // already another type
@@ -1915,7 +2157,8 @@ bool ImpSvNumberInputScan::ScanEndString( const String& rString,
             return MatchedReturn();
         else if (nDecPos == 2)                      // . dup: 12.4.
         {
-            if (bDecSepInDateSeps)                  // . also date sep
+            if (bDecSepInDateSeps                   // . also date separator
+                    || SkipDatePatternSeparator( nAnzStrings-1, nPos))
             {
                 if (    eScannedType != NUMBERFORMAT_UNDEFINED &&
                         eScannedType != NUMBERFORMAT_DATE &&
@@ -2006,8 +2249,13 @@ bool ImpSvNumberInputScan::ScanEndString( const String& rString,
             nTimePos = nAnzStrings;
     }
 
-    const String& rDate = pFormatter->GetDateSep();
-    if (SkipString( rDate, rString, nPos)               // 10.  10-  10/
+    bool bDate = SkipDatePatternSeparator( nAnzStrings-1, nPos);   // 12/31  31.12.  12/31/1999  31.12.1999
+    if (!bDate)
+    {
+        const String& rDate = pFormatter->GetDateSep();
+        bDate = SkipString( rDate, rString, nPos);      // 10.  10-  10/
+    }
+    if (bDate
             || ((MayBeIso8601() || MayBeMonthDate())
                 && SkipChar( '-', rString, nPos)))
     {
@@ -2575,6 +2823,8 @@ void ImpSvNumberInputScan::ChangeIntl()
                           cDecSep == pFormatter->GetDateSep().GetChar(0) );
     bTextInitialized = false;
     aUpperCurrSymbol.Erase();
+    if (sDateAcceptancePatterns.getLength())
+        sDateAcceptancePatterns = ::com::sun::star::uno::Sequence< ::rtl::OUString >();
 }
 
 
@@ -2690,23 +2940,9 @@ bool ImpSvNumberInputScan::IsNumberFormat(
                     {
                         if (nAnzNums > 3)
                             res = false;
-                        else if (nAnzNums == 2)
-                        {                           // check locale dependent abbreviation
-                            /* FIXME: here go locale data acceptance patterns
-                             * instead */
-                            // Only one separator, 11/23 yes, 23/11 yes, 11/23/
-                            // no, 23/11/ no, 11-23 yes, 23-11 no?, 11-23- no,
-                            // 23-11- no, 23.11 no, 23.11. yes.
-                            sal_Unicode cDateSep = pFormatter->GetDateSep().GetChar(0);
-                            if (cDateSep == '.' && (nAnzStrings == 3 ||
-                                        (nNums[1]+1 < nAnzStrings &&
-                                         sStrArray[nNums[1]+1].GetChar(0) != cDateSep)))
-                                res = false;
-                            else if ((cDateSep == '/' || cDateSep == '-') &&
-                                    (nNums[1]+1 < nAnzStrings &&
-                                     sStrArray[nNums[1]+1].GetChar(0) == cDateSep))
-                                res = false;
-                        }
+                        else
+                            res = IsAcceptedDatePattern( nNums[0]) ||
+                                MayBeIso8601() || nMatchedAllStrings;
                     }
                     break;
 
@@ -2749,6 +2985,9 @@ bool ImpSvNumberInputScan::IsNumberFormat(
                             if (nAnzNums > 6)
                                 res = false;
                         }
+                        if (res)
+                            res = IsAcceptedDatePattern( nNums[0]) ||
+                                MayBeIso8601() || nMatchedAllStrings;
                     }
                     break;
 

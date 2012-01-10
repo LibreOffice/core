@@ -30,6 +30,8 @@
 #define _ZFORFIND_HXX
 
 #include <tools/string.hxx>
+#include <com/sun/star/uno/Sequence.hxx>
+#include <rtl/ustring.hxx>
 
 class Date;
 class SvNumberformat;
@@ -162,6 +164,21 @@ private:
         @see MayBeMonthDate()
      */
     sal_uInt8   nMayBeMonthDate;
+
+    /** Input matched this locale dependent date acceptance pattern.
+        -2 if not checked yet, -1 if no match, >=0 matched pattern.
+
+        @see IsAcceptedDatePattern()
+     */
+    sal_Int32   nAcceptedDatePattern;
+    com::sun::star::uno::Sequence< rtl::OUString >  sDateAcceptancePatterns;
+
+    /** If input matched a date acceptance pattern that starts at input
+        particle sStrArray[nDatePatternStart].
+
+        @see IsAcceptedDatePattern()
+     */
+    sal_uInt16  nDatePatternStart;
 
 #ifdef _ZFORFIND_CXX        // methods private to implementation
     void Reset();                               // Reset all variables before start of analysis
@@ -318,6 +335,35 @@ private:
 
     // native number transliteration if necessary
     void TransformInput( String& rString );
+
+    /** Whether input matches locale dependent date acceptance pattern.
+
+        @param nStartPatternAt
+               The pattern matching starts at input particle
+               sStrArray[nStartPatternAt].
+
+        NOTE: once called the result is remembered, subsequent calls with
+        different parameters do not check for a match and do not lead to a
+        different result.
+     */
+    bool IsAcceptedDatePattern( sal_uInt16 nStartPatternAt );
+
+    /** Sets (not advances!) rPos to sStrArray[nParticle].Len() if string
+        matches separator in pattern at nParticle.
+
+        @returns TRUE if separator matched.
+     */
+    bool SkipDatePatternSeparator( sal_uInt16 nParticle, xub_StrLen & rPos );
+
+    /** Obtain order of accepted date pattern coded as, for example,
+        ('D'<<16)|('M'<<8)|'Y'
+    */
+    sal_uInt32 GetDatePatternOrder();
+
+    /** Obtain date format order, from accepted date pattern if available or
+        otherwise the locale's default order.
+     */
+    DateFormat GetDateOrder();
 
 #endif  // _ZFORFIND_CXX
 };
