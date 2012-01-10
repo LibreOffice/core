@@ -957,10 +957,14 @@ sal_uInt16 ImpSvNumberInputScan::ImplGetYear( sal_uInt16 nIndex )
 {
     sal_uInt16 nYear = 0;
 
-    if (sStrArray[nNums[nIndex]].Len() <= 4)
+    xub_StrLen nLen = sStrArray[nNums[nIndex]].Len();
+    if (nLen <= 4)
     {
         nYear = (sal_uInt16) sStrArray[nNums[nIndex]].ToInt32();
-        nYear = SvNumberFormatter::ExpandTwoDigitYear( nYear, nYear2000 );
+        // A year < 100 entered with at least 3 digits with leading 0 is taken
+        // as is without expansion.
+        if (nYear < 100 && nLen < 3)
+            nYear = SvNumberFormatter::ExpandTwoDigitYear( nYear, nYear2000 );
     }
 
     return nYear;
@@ -972,13 +976,22 @@ bool ImpSvNumberInputScan::MayBeIso8601()
 {
     if (nMayBeIso8601 == 0)
     {
-        if (nAnzNums >= 3 && nNums[0] < nAnzStrings &&
-                sStrArray[nNums[0]].ToInt32() > 31)
-            nMayBeIso8601 = 1;
-        else
-            nMayBeIso8601 = 2;
+        nMayBeIso8601 = 1;
+        xub_StrLen nLen = ((nAnzNums >= 1 && nNums[0] < nAnzStrings) ? sStrArray[nNums[0]].Len() : 0);
+        if (nLen)
+        {
+            sal_Int32 n;
+            if (nAnzNums >= 3 && nNums[2] < nAnzStrings &&
+                    sStrArray[nNums[0]+1] == '-' &&                         // separator year-month
+                    (n = sStrArray[nNums[1]].ToInt32()) >= 1 && n <= 12 &&  // month
+                    sStrArray[nNums[1]+1] == '-' &&                         // separator month-day
+                    (n = sStrArray[nNums[2]].ToInt32()) >= 1 && n <= 31)    // day
+                // Year (nNums[0]) value not checked, may be anything, but
+                // length (number of digits) is checked.
+                nMayBeIso8601 = (nLen >= 4 ? 4 : (nLen == 3 ? 3 : (nLen > 0 ? 2 : 0)));
+        }
     }
-    return nMayBeIso8601 == 1;
+    return nMayBeIso8601 > 1;
 }
 
 //---------------------------------------------------------------------------

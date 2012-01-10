@@ -3387,8 +3387,19 @@ bool SvNumberformat::ImpGetDateOutput(double fNumber,
             {
                 if ( bOtherCalendar )
                     SwitchToGregorianCalendar( aOrgCalendar, fOrgDateTime );
-                OutString += rCal.getDisplayString(
+                String aYear = rCal.getDisplayString(
                         CalendarDisplayCode::LONG_YEAR, nNatNum );
+                if (aYear.Len() < 4)
+                {
+                    // Ensure that year consists of at least 4 digits, so it
+                    // can be distinguished from 2 digits display and edited
+                    // without suddenly being hit by the 2-digit year magic.
+                    String aZero;
+                    aZero.Fill( 4 - aYear.Len(), sal_Unicode('0'));
+                    ImpTransliterate( aZero, NumFor[nIx].GetNatNum());
+                    aYear.Insert( aZero, 0);
+                }
+                OutString += aYear;
                 if ( bOtherCalendar )
                     SwitchToOtherCalendar( aOrgCalendar, fOrgDateTime );
             }
@@ -3710,8 +3721,19 @@ bool SvNumberformat::ImpGetDateTimeOutput(double fNumber,
             {
                 if ( bOtherCalendar )
                     SwitchToGregorianCalendar( aOrgCalendar, fOrgDateTime );
-                OutString += rCal.getDisplayString(
+                String aYear = rCal.getDisplayString(
                         CalendarDisplayCode::LONG_YEAR, nNatNum );
+                if (aYear.Len() < 4)
+                {
+                    // Ensure that year consists of at least 4 digits, so it
+                    // can be distinguished from 2 digits display and edited
+                    // without suddenly being hit by the 2-digit year magic.
+                    String aZero;
+                    aZero.Fill( 4 - aYear.Len(), sal_Unicode('0'));
+                    ImpTransliterate( aZero, NumFor[nIx].GetNatNum());
+                    aYear.Insert( aZero, 0);
+                }
+                OutString += aYear;
                 if ( bOtherCalendar )
                     SwitchToOtherCalendar( aOrgCalendar, fOrgDateTime );
             }

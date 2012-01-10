@@ -69,8 +69,13 @@ public:
     /// get threshold of two-digit year input
     sal_uInt16  GetYear2000() const { return nYear2000; }
 
-    // Whether input may be a ISO 8601 date format, yyyy-mm-dd...
-    // checks if at least 3 numbers and first number>31
+    /** Whether input may be an ISO 8601 date format, yyyy-mm-dd...
+
+        Checks if input has at least 3 numbers for yyyy-mm-dd and the separator
+        is '-', and 1<=mm<=12 and 1<=dd<=31.
+
+        @see nMayBeIso8601
+     */
     bool MayBeIso8601();
 
 private:
@@ -129,7 +134,15 @@ private:
                                                 // number <= nYear2000 => 20xx
                                                 // number >  nYear2000 => 19xx
     sal_uInt16  nTimezonePos;                   // Index of timezone separator (+1)
-    sal_uInt8    nMayBeIso8601;                 // 0:=dontknowyet, 1:=yes, 2:=no
+
+    /** State of ISO 8601 detection.
+        0:= don't know yet
+        1:= no
+        2:= yes, <=2 digits in year
+        3:= yes,   3 digits in year
+        4:= yes, >=4 digits in year
+     */
+    sal_uInt8    nMayBeIso8601;
 
 #ifdef _ZFORFIND_CXX        // methods private to implementation
     void Reset();                               // Reset all variables before start of analysis
