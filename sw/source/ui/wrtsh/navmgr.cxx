@@ -48,32 +48,32 @@ namespace css = ::com::sun::star;
  *  This method positions the cursor to the position rPos
  */
 void SwNavigationMgr::GotoSwPosition(const SwPosition &rPos) {
-    SwWrtShell& rSh = *_pMyShell;
     /* EnterStdMode() prevents the cursor to 'block' the current shell when it should move from the image back to the normal shell */
-    rSh.EnterStdMode();
-    rSh.StartAllAction();
+    m_rMyShell.EnterStdMode();
+    m_rMyShell.StartAllAction();
     /*
      *    cursor consists of two SwPositions: Point and Mark.
      *  Such a pair is called a PaM. SwPaM is derived from SwRing.
      *  The Ring contains the single regions of a multi-selection.
      */
-    SwPaM* pPaM = rSh.GetCrsr();
+    SwPaM* pPaM = m_rMyShell.GetCrsr();
 
     if(pPaM->HasMark())
         pPaM->DeleteMark();      // If there was a selection, get rid of it
     *pPaM->GetPoint() = rPos;    // Position Cursor
 
-    rSh.EndAllAction();
+    m_rMyShell.EndAllAction();
 }
 /*
  * Ctor for the SwNavigationMgr class
  * Sets the shell to the current shell
  * and the index of the current position to 0
  */
-
-SwNavigationMgr::SwNavigationMgr(SwWrtShell* pShell)
-    : _nCurrent(0), _pMyShell(pShell) {
+SwNavigationMgr::SwNavigationMgr(SwWrtShell & rShell)
+    : m_nCurrent(0), m_rMyShell(rShell)
+{
 }
+
 /*
  * This method is used by the navigation shell - defined in sw/source/ui/inc/navsh.hxx
  * and implemented in sw/source/ui/shells/navsh.cxx
@@ -81,17 +81,17 @@ SwNavigationMgr::SwNavigationMgr(SwWrtShell* pShell)
  * The back button should be enabled only if there are some entries in the navigation history
  */
 sal_Bool SwNavigationMgr::backEnabled() {
-    return (_nCurrent > 0);
+    return (m_nCurrent > 0);
 }
 /*
  * Similar to backEnabled() method.
  * The forward button should be enabled if we ever clicked back
  * Due to the implementation of the navigation class, this is when the
  * current position within the navigation history entries in not the last one
- * i.e. when the _nCurrent index is not at the end of the _entries vector
+ * i.e. when the m_nCurrent index is not at the end of the m_entries vector
  */
 sal_Bool SwNavigationMgr::forwardEnabled() {
-    return _nCurrent+1 < _entries.size();
+    return m_nCurrent+1 < m_entries.size();
 }
 
 
@@ -107,9 +107,8 @@ void SwNavigationMgr::goBack()  {
      * this check prevents segmentation faults and in this way the class is not relying on the UI
      */
     if (backEnabled()) {
-        SwWrtShell& rSh = *_pMyShell;
         /* Trying to get the current cursor */
-        SwPaM* pPaM = rSh.GetCrsr();
+        SwPaM* pPaM = m_rMyShell.GetCrsr();
         if (!pPaM) {
             return;
         }
@@ -130,17 +129,17 @@ void SwNavigationMgr::goBack()  {
              */
             /* The addEntry() method returns true iff we should decrement the index before navigating back */
             if (addEntry(*pPaM->GetPoint()) ) {
-                _nCurrent--;
+                m_nCurrent--;
             }
         }
-        _nCurrent--;
+        m_nCurrent--;
         /* Position cursor to appropriate navigation history entry */
-        GotoSwPosition(_entries[_nCurrent]);
+        GotoSwPosition(m_entries[m_nCurrent]);
         /* Refresh the buttons */
         if (bForwardWasDisabled)
-            _pMyShell->GetView().GetViewFrame()->GetBindings().Invalidate(FN_NAVIGATION_FORWARD);
+            m_rMyShell.GetView().GetViewFrame()->GetBindings().Invalidate(FN_NAVIGATION_FORWARD);
         if (!backEnabled())
-            _pMyShell->GetView().GetViewFrame()->GetBindings().Invalidate(FN_NAVIGATION_BACK);
+            m_rMyShell.GetView().GetViewFrame()->GetBindings().Invalidate(FN_NAVIGATION_BACK);
     }
 }
 /*
@@ -161,13 +160,13 @@ void SwNavigationMgr::goForward() {
          * The current index is positioned at the current entry in the navigation history
          * We have to increment it to go to the next entry
          */
-        _nCurrent++;
-        GotoSwPosition(_entries[_nCurrent]);
+        m_nCurrent++;
+        GotoSwPosition(m_entries[m_nCurrent]);
         /* Refresh the buttons */
         if (bBackWasDisabled)
-            _pMyShell->GetView().GetViewFrame()->GetBindings().Invalidate(FN_NAVIGATION_BACK);
+            m_rMyShell.GetView().GetViewFrame()->GetBindings().Invalidate(FN_NAVIGATION_BACK);
         if (!forwardEnabled())
-            _pMyShell->GetView().GetViewFrame()->GetBindings().Invalidate(FN_NAVIGATION_FORWARD);
+            m_rMyShell.GetView().GetViewFrame()->GetBindings().Invalidate(FN_NAVIGATION_FORWARD);
     }
 }
 /*
@@ -185,46 +184,47 @@ bool SwNavigationMgr::addEntry(const SwPosition& rPos) {
     /* If any forward history exists, twist the tail of the list from the current position to the end */
     if (bForwardWasEnabled) {
 
-        size_t number_of_entries = _entries.size(); /* To avoid calling _entries.size() multiple times */
-        int curr = _nCurrent; /* Index from which we'll twist the tail. */
-        int n = (number_of_entries - curr) / 2; /* Number of entries that will swap places */
+        size_t number_ofm_entries = m_entries.size(); /* To avoid calling m_entries.size() multiple times */
+        int curr = m_nCurrent; /* Index from which we'll twist the tail. */
+        int n = (number_ofm_entries - curr) / 2; /* Number of entries that will swap places */
         for (int i = 0; i < n; i++) {
-            SwPosition temp = _entries[curr + i];
-            _entries[curr + i] = _entries[number_of_entries -1 - i];
-            _entries[number_of_entries -1 - i] = temp;
+            SwPosition temp = m_entries[curr + i];
+            m_entries[curr + i] = m_entries[number_ofm_entries -1 - i];
+            m_entries[number_ofm_entries -1 - i] = temp;
         }
 
-           if (_entries.back() != rPos)
-           _entries.push_back(rPos);
+           if (m_entries.back() != rPos)
+           m_entries.push_back(rPos);
 
 
         bRet = true;
     }
     else {
-        if ( (_entries.size() > 0 && _entries.back() != rPos) || (_entries.size() == 0) ) {
-            _entries.push_back(rPos);
+        if ( (m_entries.size() > 0 && m_entries.back() != rPos) || (m_entries.size() == 0) ) {
+            m_entries.push_back(rPos);
             bRet = true;
         }
-        if (_entries.size() > 1 && _entries.back() == rPos)
+        if (m_entries.size() > 1 && m_entries.back() == rPos)
             bRet = true;
-        if (_entries.size() == 1 && _entries.back() == rPos)
+        if (m_entries.size() == 1 && m_entries.back() == rPos)
             bRet = false;
     }
 #else
-    _entries.erase(_entries.begin() + _nCurrent, _entries.end());
-    _entries.push_back(rPos);
+    m_entries.erase(m_entries.begin() + m_nCurrent, m_entries.end());
+    m_entries.push_back(rPos);
     bRet = true;
 #endif
-    _nCurrent = _entries.size();
+    m_nCurrent = m_entries.size();
 
     /* Refresh buttons */
     if (bBackWasDisabled)
-        _pMyShell->GetView().GetViewFrame()->GetBindings().Invalidate(FN_NAVIGATION_BACK);
+        m_rMyShell.GetView().GetViewFrame()->GetBindings().Invalidate(FN_NAVIGATION_BACK);
     if (bForwardWasEnabled)
-        _pMyShell->GetView().GetViewFrame()->GetBindings().Invalidate(FN_NAVIGATION_FORWARD);
+        m_rMyShell.GetView().GetViewFrame()->GetBindings().Invalidate(FN_NAVIGATION_FORWARD);
 
     /* show the Navigation toolbar */
-    css::uno::Reference< css::frame::XFrame > xFrame = _pMyShell->GetView().GetViewFrame()->GetFrame().GetFrameInterface();
+    css::uno::Reference< css::frame::XFrame > xFrame =
+        m_rMyShell.GetView().GetViewFrame()->GetFrame().GetFrameInterface();
     if (xFrame.is())
     {
         css::uno::Reference< css::beans::XPropertySet > xPropSet(xFrame, css::uno::UNO_QUERY);

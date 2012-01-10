@@ -126,7 +126,7 @@ using namespace com::sun::star;
         ePageMove(MV_NO),\
         pCrsrStack(0),  \
         rView(rShell),\
-        aNavigationMgr(this), \
+        aNavigationMgr(*this), \
         bDestOnStack(sal_False)
 
 #define BITFLD_INI_LIST \
