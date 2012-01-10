@@ -681,24 +681,26 @@ void SdStyleSheetPool::CopyLayoutSheets(const String& rLayoutName, SdStyleSheetP
     std::vector<SfxStyleSheetBase*> aOutlineSheets;
     CreateOutlineSheetList(rLayoutName,aOutlineSheets);
 
-    std::vector<SfxStyleSheetBase*>::iterator it = aOutlineSheets.begin();
-
-    SfxStyleSheetBase* pParent = *it;
-    ++it;
-
-    while (it != aOutlineSheets.end())
+    if( !aOutlineSheets.empty() )
     {
-        pSheet = *it;
-
-        if (!pSheet)
-            break;
-
-        if (pSheet->GetParent().Len() == 0)
-            pSheet->SetParent(pParent->GetName());
-
-        pParent = pSheet;
-
+        std::vector<SfxStyleSheetBase*>::iterator it = aOutlineSheets.begin();
+        SfxStyleSheetBase* pParent = *it;
         ++it;
+
+        while (it != aOutlineSheets.end())
+        {
+            pSheet = *it;
+
+            if (!pSheet)
+                break;
+
+            if (pSheet->GetParent().Len() == 0)
+                pSheet->SetParent(pParent->GetName());
+
+            pParent = pSheet;
+
+            ++it;
+        }
     }
 }
 
