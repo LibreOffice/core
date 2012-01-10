@@ -106,10 +106,19 @@ BUILD_ACTION=nmake
 BUILD_DIR=$(CONFIGURE_DIR)
 .ENDIF
 .ELSE
+
+.IF "$(debug)" != ""
+xml2_CFLAGS+=-g
+.ELSE
+xml2_CFLAGS+=-O
+.ENDIF
+
+xml2_CFLAGS+=$(ARCH_FLAGS)
+
 .IF "$(SYSBASE)"!=""
 xml2_CFLAGS+=-I$(SYSBASE)$/usr$/include 
 .IF "$(COMNAME)"=="sunpro5"
-xml2_CFLAGS+=$(ARCH_FLAGS) $(C_RESTRICTIONFLAGS)
+xml2_CFLAGS+=$(C_RESTRICTIONFLAGS)
 .ENDIF			# "$(COMNAME)"=="sunpro5"
 xml2_LDFLAGS+=-L$(SYSBASE)$/usr$/lib
 .ENDIF			# "$(SYSBASE)"!=""
@@ -121,7 +130,7 @@ CONFIGURE_FLAGS=--disable-shared
 .ELSE
 CONFIGURE_FLAGS=--disable-static
 .ENDIF
-CONFIGURE_FLAGS+=--enable-ipv6=no --without-python --without-zlib --with-sax1=yes ADDCFLAGS="$(xml2_CFLAGS) $(EXTRA_CFLAGS)" LDFLAGS="$(xml2_LDFLAGS) $(EXTRA_LINKFLAGS)"
+CONFIGURE_FLAGS+=--enable-ipv6=no --without-python --without-zlib --with-sax1=yes CFLAGS="$(xml2_CFLAGS) $(EXTRA_CFLAGS)" LDFLAGS="$(xml2_LDFLAGS) $(EXTRA_LINKFLAGS)"
 BUILD_ACTION=$(GNUMAKE)
 BUILD_FLAGS+= -j$(EXTMAXPROCESS)
 BUILD_DIR=$(CONFIGURE_DIR)
