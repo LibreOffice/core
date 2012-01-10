@@ -99,7 +99,7 @@ endif
 
 ifneq ($(WITH_MOZILLA),NO)
 $(eval $(call gb_Helper_register_executables,OOO,\
-	nspugin \
+       nsplugin \
 	pluginapp.bin \
 ))
 $(eval $(call gb_Helper_register_libraries,OOOLIBS, \

@@ -98,12 +98,6 @@ $(eval $(call gb_Library_add_objcxxobjects,pl,\
 	extensions/source/plugin/aqua/sysplug \
 ))
 
-$(eval $(call gb_Library_set_include,pl,\
-	$$(INCLUDE) \
-	-I$(FRAMEWORKSHOME)/ApplicationServices.framework/Version/Current/Frameworks/QD.framework/Headers \
-	-I$(FRAMEWORKSHOME)/Carbon.framework/Versions/Current/Frameworks/HIToolbox.framework/Versions/Current/Headers \
-))
-
 $(eval $(call gb_Library_use_externals,pl,\
     cocoa \
     carbon \

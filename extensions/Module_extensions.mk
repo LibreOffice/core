@@ -93,9 +93,13 @@ endif # GUI=WNT
 
 ifeq ($(GUI),UNX)
 
+ifneq ($(GUIBASE),aqua)
+
 $(eval $(call gb_Module_add_targets,extensions,\
 	Executable_pluginapp.bin \
 ))
+
+endif # GUIBASE!=aqua
 
 ifneq ($(ENABLE_GTK),)
 $(eval $(call gb_Module_add_targets,extensions,\
