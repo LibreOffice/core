@@ -104,6 +104,12 @@ $(eval $(call gb_Library_set_include,pl,\
 	-I$(FRAMEWORKSHOME)/Carbon.framework/Versions/Current/Frameworks/HIToolbox.framework/Versions/Current/Headers \
 ))
 
+$(eval $(call gb_Library_use_externals,pl,\
+    cocoa \
+    carbon \
+    corefoundation \
+))
+
 else # GUIBASE!=aqua
 
 ifeq ($(ENABLE_GTK),TRUE)
