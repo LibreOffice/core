@@ -132,7 +132,7 @@
      that otherwise inherit the format codes.
 
 -->
-<!ELEMENT LC_FORMAT (FormatElement*) >
+<!ELEMENT LC_FORMAT (DateAcceptancePattern*, FormatElement*) >
 <!-- All FormatElement elements must be given if the RefLocale mechanism is not used! -->
 <!ATTLIST LC_FORMAT %RefLocale;>
 <!ATTLIST LC_FORMAT %replaceFrom;>
@@ -143,6 +143,21 @@
      hyphen-minus separates the currency symbol from the hexagesimal MS-LCID,
      letters contained in the LCID have to be in upper case, leading zeros are
      to be omitted. LCIDs are defined in i18npool/inc/i18npool/lang.h
+-->
+
+<!ELEMENT DateAcceptancePattern (#PCDATA)>
+<!-- Pattern that defines an input sequence match to be accepted as
+     (abbreviated) date. For example, in en_US locale "M/D" accepts an input of
+     11/23 as CurrentYear-November-23 whereas 11/23/ would not be a date. In
+     de_DE locale "D.M." accepts an input of 23.11. as  CurrentYear-November-23
+     whereas 23.11 would not be a date.
+
+     For each locale one pattern that matches a full date is automatically
+     generated from FormatElement formatIndex="21" and does not need to be
+     defined, for example "M/D/Y" or "D.M.Y", so only if you want abbreviations
+     to be in effect add some patterns.
+
+     NOTE: use only single letter D,M,Y. Multiple patterns can be defined.
 -->
 
 <!ELEMENT LC_FORMAT_1 (FormatElement*) >
