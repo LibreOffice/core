@@ -33,6 +33,7 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
+#include <com/sun/star/task/XStatusIndicator.hpp>
 
 namespace writerfilter {
     namespace rtftok {
@@ -62,7 +63,8 @@ namespace writerfilter {
                             ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & xContext,
                             ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > const & xInputStream,
                             ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > const & xDstDoc,
-                            ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > const & xFrame);
+                            ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > const & xFrame,
+                            ::com::sun::star::uno::Reference< ::com::sun::star::task::XStatusIndicator > const & xStatusIndicator);
         };
     } // namespace rtftok
 } // namespace writerfilter
