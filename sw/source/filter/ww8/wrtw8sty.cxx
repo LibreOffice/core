@@ -1830,7 +1830,8 @@ void WW8_WrPlcSepx::WritePlcSed( WW8Export& rWrt ) const
 
 void WW8_WrPlcSepx::WritePlcHdd( WW8Export& rWrt ) const
 {
-    if( pTxtPos && pTxtPos->Count() )
+    // Don't write out the PlcfHdd if ccpHdd is 0: it's a validation failure case.
+    if( rWrt.pFib->ccpHdr != 0 && pTxtPos && pTxtPos->Count() )
     {
         rWrt.pFib->fcPlcfhdd = rWrt.pTableStrm->Tell();
         pTxtPos->Write( *rWrt.pTableStrm );             // Plc0
