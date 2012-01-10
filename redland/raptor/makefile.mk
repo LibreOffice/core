@@ -108,10 +108,15 @@ LDFLAGS:=-Wl,-rpath,'$$$$ORIGIN:$$$$ORIGIN/../ure-link/lib' -Wl,-noinhibit-exec
 LDFLAGS:=-Wl,-R'$$$$ORIGIN:$$$$ORIGIN/../ure-link/lib'
 .ENDIF                  # "$(OS)$(COM)"=="SOLARISC52"
 
-.IF "$(COM)"=="C52" && "$(CPU)"=="U"
-CFLAGS=-m64
-.EXPORT: CFLAGS
+.IF "$(debug)" != ""
+CFLAGS:=-g
+.ELSE
+CFLAGS:=-O
 .ENDIF
+.IF "$(COM)"=="C52" && "$(CPU)"=="U"
+CFLAGS+=-m64
+.ENDIF
+.EXPORT: CFLAGS
 
 # NB: SOLARDIR before SYSBASE, because linux SYSBASE contains obsolete libcrypto
 CPPFLAGS+:=-I$(SOLARINCDIR)$/external
