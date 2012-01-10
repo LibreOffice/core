@@ -86,27 +86,38 @@ namespace svgio
                 sal_Int32 nPos(0);
                 rtl::OUStringBuffer aTokenValue;
 
-                skip_char(aContent, sal_Unicode(' '), sal_Unicode('#'), nPos, nLen);
-                copyToLimiter(aContent, sal_Unicode('{'), nPos, aTokenValue, nLen);
-                const rtl::OUString aStyleName = aTokenValue.makeStringAndClear().trim();
-
-                if(aStyleName.getLength())
+                while(nPos < nLen)
                 {
-                    skip_char(aContent, sal_Unicode(' '), sal_Unicode('{'), nPos, nLen);
-                    copyToLimiter(aContent, sal_Unicode('}'), nPos, aTokenValue, nLen);
-                    const rtl::OUString aStyleContent = aTokenValue.makeStringAndClear().trim();
+                    const sal_Int32 nInitPos(nPos);
+                    skip_char(aContent, sal_Unicode(' '), sal_Unicode('#'), nPos, nLen);
+                    copyToLimiter(aContent, sal_Unicode('{'), nPos, aTokenValue, nLen);
+                    const rtl::OUString aStyleName = aTokenValue.makeStringAndClear().trim();
 
-                    if(aStyleContent.getLength())
+                    if(aStyleName.getLength() && nPos < nLen)
                     {
-                        // create new style
-                        SvgStyleAttributes* pNewStyle = new SvgStyleAttributes(*this);
-                        maSvgStyleAttributes.push_back(pNewStyle);
+                        skip_char(aContent, sal_Unicode(' '), sal_Unicode('{'), nPos, nLen);
+                        copyToLimiter(aContent, sal_Unicode('}'), nPos, aTokenValue, nLen);
+                        skip_char(aContent, sal_Unicode(' '), sal_Unicode('}'), nPos, nLen);
+                        const rtl::OUString aStyleContent = aTokenValue.makeStringAndClear().trim();
 
-                        // fill with content
-                        pNewStyle->readStyle(aStyleContent);
+                        if(aStyleContent.getLength())
+                        {
+                            // create new style
+                            SvgStyleAttributes* pNewStyle = new SvgStyleAttributes(*this);
+                            maSvgStyleAttributes.push_back(pNewStyle);
 
-                        // register new style at document
-                        const_cast< SvgDocument& >(getDocument()).addSvgStyleAttributesToMapper(aStyleName, *pNewStyle);
+                            // fill with content
+                            pNewStyle->readStyle(aStyleContent);
+
+                            // register new style at document
+                            const_cast< SvgDocument& >(getDocument()).addSvgStyleAttributesToMapper(aStyleName, *pNewStyle);
+                        }
+                    }
+
+                    if(nInitPos == nPos)
+                    {
+                        OSL_ENSURE(false, "Could not interpret on current position (!)");
+                        nPos++;
                     }
                 }
             }
