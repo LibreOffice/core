@@ -278,7 +278,7 @@ private:
             };
 
         static PropMapT aMap( lcl_propertyMap,
-                              sizeof(lcl_propertyMap)/sizeof(*lcl_propertyMap),
+                              SAL_N_ELEMENTS(lcl_propertyMap),
                               true );
 
         sal_Int16 aRes;

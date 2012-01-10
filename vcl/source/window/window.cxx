@@ -276,7 +276,7 @@ bool Window::ImplCheckUIFont( const Font& rFont )
         BUTTON_RETRY, BUTTON_HELP
     };
 
-    const int nTestButtonCount = sizeof(aTestButtons)/sizeof(*aTestButtons);
+    const int nTestButtonCount = SAL_N_ELEMENTS(aTestButtons);
     for( int n = 0; n < nTestButtonCount; ++n )
     {
         String aButtonStr = Button::GetStandardText( aTestButtons[n] );

@@ -220,13 +220,13 @@ struct BasicTest : public CppUnit::TestFixture
         mxErrHandler.set( new ErrorHandler() );
         mxDomBuilder.set( new CDocumentBuilder(Reference< XMultiServiceFactory >() ));
         mxValidInStream.set( new SequenceInputStream(ByteSequence((sal_Int8*)validTestFile,
-                                                                  sizeof(validTestFile)/sizeof(*validTestFile))) );
+                                                                  SAL_N_ELEMENTS(validTestFile))) );
         mxWarningInStream.set( new SequenceInputStream(ByteSequence((sal_Int8*)warningTestFile,
-                                                                    sizeof(warningTestFile)/sizeof(*warningTestFile))) );
+                                                                    SAL_N_ELEMENTS(warningTestFile))) );
         mxErrorInStream.set( new SequenceInputStream(ByteSequence((sal_Int8*)errorTestFile,
-                                                                  sizeof(errorTestFile)/sizeof(*errorTestFile))) );
+                                                                  SAL_N_ELEMENTS(errorTestFile))) );
         mxFatalInStream.set( new SequenceInputStream(ByteSequence((sal_Int8*)fatalTestFile,
-                                                                  sizeof(fatalTestFile)/sizeof(*fatalTestFile))) );
+                                                                  SAL_N_ELEMENTS(fatalTestFile))) );
         mxDomBuilder->setErrorHandler(mxErrHandler.get());
     }
 
@@ -331,7 +331,7 @@ struct SerializerTest : public CppUnit::TestFixture
                                   mxCtx->getServiceManager(),
                                   uno::UNO_QUERY )));
         mxInStream.set( new SequenceInputStream(ByteSequence((sal_Int8*)validTestFile,
-                                                             sizeof(validTestFile)/sizeof(*validTestFile))) );
+                                                             SAL_N_ELEMENTS(validTestFile))) );
         mxDomBuilder->setErrorHandler(mxErrHandler.get());
 
         mxHandler.set( new DocumentHandler() );

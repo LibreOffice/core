@@ -139,8 +139,8 @@ namespace {
             xPropSet->getPropertyValue(rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Label" ))) >>= aLabel;
             const char pFileName[] = "%FILENAME";
             aLabel = aLabel.replaceAt(
-                aLabel.indexOfAsciiL(pFileName,sizeof(pFileName)/sizeof(*pFileName)-1),
-                sizeof(pFileName)/sizeof(*pFileName)-1,
+                aLabel.indexOfAsciiL(pFileName,SAL_N_ELEMENTS(pFileName)-1),
+                SAL_N_ELEMENTS(pFileName)-1,
                 aFilename );
             xPropSet->setPropertyValue(rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Label" )),
                                        uno::makeAny(aLabel));

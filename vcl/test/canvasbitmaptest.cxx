@@ -877,7 +877,7 @@ void TestWindow::Paint( const Rectangle& )
         // Testing VclCanvasBitmap wrapper
         // ===============================
 
-        for( unsigned int i=0; i<sizeof(lcl_depths)/sizeof(*lcl_depths); ++i )
+        for( unsigned int i=0; i<SAL_N_ELEMENTS(lcl_depths); ++i )
         {
             const sal_Int8 nDepth( lcl_depths[i] );
             Bitmap aBitmap(Size(200,200),nDepth);

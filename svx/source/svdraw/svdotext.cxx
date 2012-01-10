@@ -1281,7 +1281,7 @@ void SdrTextObj::ImpAutoFitText( SdrOutliner& rOutliner, const Size& rTextSize, 
     // loop early-exits if we detect an already attained value
     sal_uInt16 nMinStretchX=0, nMinStretchY=0;
     sal_uInt16 aOldStretchXVals[]={0,0,0,0,0,0,0,0,0,0};
-    const size_t aStretchArySize=sizeof(aOldStretchXVals)/sizeof(*aOldStretchXVals);
+    const size_t aStretchArySize=SAL_N_ELEMENTS(aOldStretchXVals);
     for(unsigned int i=0; i<aStretchArySize; ++i)
     {
         const Size aCurrTextSize = rOutliner.CalcTextSizeNTP();

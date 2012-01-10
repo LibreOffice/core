@@ -101,7 +101,7 @@ bool IsDiacritic( sal_UCS4 nChar )
     };
 
     // TODO: almost anything is faster than an O(n) search
-    static const int nCount = sizeof(aRanges) / sizeof(*aRanges);
+    static const int nCount = SAL_N_ELEMENTS(aRanges);
     const DiaRange* pRange = &aRanges[0];
     for( int i = nCount; --i >= 0; ++pRange )
         if( (pRange->mnMin <= nChar) && (nChar < pRange->mnEnd) )

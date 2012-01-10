@@ -449,7 +449,7 @@ LanguageType MapCharToLanguage( sal_UCS4 uChar )
         }
 
         // change the marked entries to prefered language
-        static const int nCount = (sizeof(aLangFromCodeChart) / sizeof(*aLangFromCodeChart));
+        static const int nCount = SAL_N_ELEMENTS(aLangFromCodeChart);
         for( int i = 0; i < nCount; ++i )
         {
             if( aLangFromCodeChart[ i].mnLangID == LANGUAGE_DEFAULT_CJK )
@@ -459,7 +459,7 @@ LanguageType MapCharToLanguage( sal_UCS4 uChar )
 
     // binary search
     int nLow = 0;
-    int nHigh = (sizeof(aLangFromCodeChart) / sizeof(*aLangFromCodeChart)) - 1;
+    int nHigh = SAL_N_ELEMENTS(aLangFromCodeChart) - 1;
     while( nLow <= nHigh )
     {
         int nMiddle = (nHigh + nLow) / 2;

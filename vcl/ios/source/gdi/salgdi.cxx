@@ -1677,7 +1677,7 @@ sal_uInt16 IosSalGraphics::SetFont( FontSelectPattern* pReqFont, int /*nFallback
         &aVerticalCharacterType
     };
 
-    static const int nTagCount = sizeof(aTag) / sizeof(*aTag);
+    static const int nTagCount = SAL_N_ELEMENTS(aTag);
     OSStatus eStatus = ATSUSetAttributes( maATSUStyle, nTagCount,
                              aTag, aValueSize, aValue );
     // reset ATSUstyle if there was an error

@@ -172,7 +172,7 @@ void Ww1SingleSprmPJc::Start(
         SVX_ADJUST_RIGHT,
         SVX_ADJUST_BLOCK };
     sal_uInt8 nPara = SVBT8ToByte(pSprm);
-    nPara %=(sizeof(aAdj)/sizeof(*aAdj));
+    nPara %=SAL_N_ELEMENTS(aAdj);
     rOut << SvxAdjustItem(aAdj[nPara], RES_PARATR_ADJUST);
 }
 

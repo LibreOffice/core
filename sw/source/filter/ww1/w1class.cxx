@@ -160,7 +160,7 @@ sal_uInt16 Ww1Style::ReadName( sal_uInt8*&p, sal_uInt16& rnCountBytes, sal_uInt1
         size_t nSize(stc);
         if (!nSize)
             pStr = "W1 Normal";
-        else if (nSize - 222 >= sizeof(names) / sizeof(*names))
+        else if (nSize - 222 >= SAL_N_ELEMENTS(names))
             pStr = "?";
         else
             pStr = names[nSize-222];

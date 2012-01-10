@@ -420,7 +420,7 @@ void GetEnglishSearchFontName( String& rName )
     if( bNeedTranslation )
     {
         typedef boost::unordered_map<const String, const char*,FontNameHash> FontNameDictionary;
-        static FontNameDictionary aDictionary( sizeof(aImplLocalizedNamesList) / sizeof(*aImplLocalizedNamesList) );
+        static FontNameDictionary aDictionary( SAL_N_ELEMENTS(aImplLocalizedNamesList) );
         // the font name dictionary needs to be intialized once
         if( aDictionary.empty() )
         {

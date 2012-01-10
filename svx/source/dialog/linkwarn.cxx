@@ -114,7 +114,7 @@ void SvxLinkWarningDialog::InitSize()
         &m_aLinkGraphicBtn, &m_aEmbedGraphicBtn, &m_aOptionLine, &m_aWarningOnBox
     };
     Window** pCurrent = pWins;
-    for ( sal_uInt32 i = 0; i < sizeof(pWins) / sizeof(*pWins); ++i, ++pCurrent )
+    for ( sal_uInt32 i = 0; i < SAL_N_ELEMENTS(pWins); ++i, ++pCurrent )
     {
         Point aNewPos = (*pCurrent)->GetPosPixel();
         aNewPos.Y() -= nDelta;

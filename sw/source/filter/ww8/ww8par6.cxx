@@ -4931,7 +4931,7 @@ long SwWW8ImplReader::ImportExtSprm(WW8PLCFManResult* pRes)
     if( pRes->nSprmId < 280 )
     {
         sal_uInt8 nIdx = static_cast< sal_uInt8 >(pRes->nSprmId - eFTN);
-        if( nIdx < sizeof( aWwSprmTab ) / sizeof( *aWwSprmTab )
+        if( nIdx < SAL_N_ELEMENTS(aWwSprmTab)
             && aWwSprmTab[nIdx] )
             return (this->*aWwSprmTab[nIdx])(pRes);
         else
@@ -4955,7 +4955,7 @@ void SwWW8ImplReader::EndExtSprm(sal_uInt16 nSprmId)
     };
 
     sal_uInt8 nIdx = static_cast< sal_uInt8 >(nSprmId - eFTN);
-    if( nIdx < sizeof( aWwSprmTab ) / sizeof( *aWwSprmTab )
+    if( nIdx < SAL_N_ELEMENTS(aWwSprmTab)
         && aWwSprmTab[nIdx] )
         (this->*aWwSprmTab[nIdx])();
 }

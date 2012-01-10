@@ -1966,7 +1966,7 @@ sal_uInt16 AquaSalGraphics::SetFont( FontSelectPattern* pReqFont, int /*nFallbac
         &aVerticalCharacterType
     };
 
-    static const int nTagCount = sizeof(aTag) / sizeof(*aTag);
+    static const int nTagCount = SAL_N_ELEMENTS(aTag);
     OSStatus eStatus = ATSUSetAttributes( maATSUStyle, nTagCount,
                              aTag, aValueSize, aValue );
     // reset ATSUstyle if there was an error
