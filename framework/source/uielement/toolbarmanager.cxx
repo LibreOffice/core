@@ -1379,7 +1379,8 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
                     {
                         aCmdInfo.nId = nId;
                         aCmdInfo.nWidth = nWidth;
-                        m_aCommandMap.insert( CommandToInfoMap::value_type( aCommandURL, aCmdInfo ));
+                        const CommandToInfoMap::value_type aValue( aCommandURL, aCmdInfo );
+                        m_aCommandMap.insert( aValue );
                     }
                     else
                     {
