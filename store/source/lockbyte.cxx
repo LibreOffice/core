@@ -509,6 +509,7 @@ struct FileMapping
     static void unmapFile (oslFileHandle hFile, sal_uInt8 * pAddr, sal_uInt32 nSize)
     {
         (void) osl_unmapMappedFile (hFile, pAddr, nSize);
+        (void) osl_closeFile (hFile);
     }
 
     /** @see ResourceHolder<T>::destructor_type
@@ -922,6 +923,7 @@ FileLockBytes_createInstance (
             rxLockBytes = new MappedLockBytes (xMapping.get());
             if (!rxLockBytes.is())
                 return store_E_OutOfMemory;
+            (void) xFile.release();
             (void) xMapping.release();
         }
     }
