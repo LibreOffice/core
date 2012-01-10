@@ -240,6 +240,8 @@ void XclImpName::ConvertTokens()
 
     if (pArray)
         InsertName(pArray);
+
+    mpTokensData.reset();
 }
 
 void XclImpName::InsertName(const ScTokenArray* pArray)

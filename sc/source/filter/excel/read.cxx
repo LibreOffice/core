@@ -238,6 +238,7 @@ FltError ImportExcel::Read( void )
                     case 0x08:  Row25(); break;         // ROW          [ 2  5]
                     case 0x0A:                          // EOF          [ 2345]
                         rNumFmtBfr.CreateScFormats();
+                        rNameMgr.ConvertAllTokens();
                         Eof();
                         eAkt = Z_Ende;
                         break;
@@ -300,6 +301,7 @@ FltError ImportExcel::Read( void )
 
                     case 0x0A:                          // EOF          [ 2345]
                         rNumFmtBfr.CreateScFormats();
+                        rNameMgr.ConvertAllTokens();
                         Eof();
                         eAkt = Z_Ende;
                         break;
@@ -370,6 +372,7 @@ FltError ImportExcel::Read( void )
 
                     case 0x0A:                          // EOF          [ 2345]
                         rNumFmtBfr.CreateScFormats();
+                        rNameMgr.ConvertAllTokens();
                         Eof();
                         eAkt = Z_Ende;
                         break;
@@ -424,6 +427,7 @@ FltError ImportExcel::Read( void )
                 switch( nOpcode )
                 {
                     case 0x0A:                          // EOF          [ 2345]
+                        rNameMgr.ConvertAllTokens();
                         eAkt = Z_Ende;
                         break;
                     case 0x12:  DocProtect(); break;    // PROTECT      [    5]
@@ -487,6 +491,7 @@ FltError ImportExcel::Read( void )
                     case EXC_ID_RK:             ReadRk();               break;
 
                     case 0x0A:                          // EOF          [ 2345]
+                        rNameMgr.ConvertAllTokens();
                         Eof();
                         eAkt = Z_Biff4E;
                     break;
@@ -584,6 +589,7 @@ FltError ImportExcel::Read( void )
                     case 0x0A:                          // EOF          [ 2345]
                         rNumFmtBfr.CreateScFormats();
                         rXFBfr.CreateUserStyles();
+                        rNameMgr.ConvertAllTokens();
                         eAkt = Z_Biff5E;
                         break;
                     case 0x18:  rNameMgr.ReadName( maStrm );            break;
