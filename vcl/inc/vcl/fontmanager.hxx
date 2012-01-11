@@ -325,7 +325,6 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
     boost::unordered_multimap< sal_uInt8, sal_Unicode > m_aAdobecodeToUnicode;
 
     mutable FontCache*                                                        m_pFontCache;
-    bool m_bFontconfigSuccess;
 
     mutable std::vector< fontID >               m_aOverrideFonts;
 
@@ -361,12 +360,8 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
     /* try to initialize fonts from libfontconfig
 
     called from <code>initialize()</code>
-
-    @returns
-    true if at least one font was added by libfontconfig
-    false else (e.g. no libfontconfig found)
     */
-    bool initFontconfig();
+    void initFontconfig();
     int  countFontconfigFonts( boost::unordered_map<rtl::OString, int, rtl::OStringHash>& o_rVisitedPaths );
     /* deinitialize fontconfig
      */
@@ -649,7 +644,6 @@ public:
     ImplFontOptions* getFontOptions( const FastPrintFontInfo&, int nSize, void (*subcallback)(void*)) const;
 
     bool Substitute( FontSelectPattern &rPattern, rtl::OUString& rMissingCodes ) const;
-    bool hasFontconfig() const { return m_bFontconfigSuccess; }
 
     int FreeTypeCharIndex( void *pFace, sal_uInt32 aChar );
 };

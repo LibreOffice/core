@@ -281,13 +281,6 @@ ModalDialog RID_PADIALOG
         Text [ en-US ] = "Test ~Page";
     };
 
-    PushButton RID_PA_BTN_FONTS
-    {
-        HelpID = "padmin:PushButton:RID_PADIALOG:RID_PA_BTN_FONTS";
-        Pos = MAP_APPFONT( 80, 181 );
-        Size = MAP_APPFONT( 70, 12 );
-        Text [ en-US ] = "Fon~ts...";
-    };
     PushButton RID_PA_BTN_ADD
     {
         HelpID = "padmin:PushButton:RID_PADIALOG:RID_PA_BTN_ADD";

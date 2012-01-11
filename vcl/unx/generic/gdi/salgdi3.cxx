@@ -607,10 +607,9 @@ void X11SalGraphics::GetDevFontList( ImplDevFontList *pList )
     rGC.AnnounceFonts( pList );
 
     // register platform specific font substitutions if available
-    if( rMgr.hasFontconfig() )
-        SalGenericInstance::RegisterFontSubstitutors( pList );
+    SalGenericInstance::RegisterFontSubstitutors( pList );
 
-    ImplGetSVData()->maGDIData.mbNativeFontConfig = rMgr.hasFontconfig();
+    ImplGetSVData()->maGDIData.mbNativeFontConfig = true;
 }
 
 // ----------------------------------------------------------------------------

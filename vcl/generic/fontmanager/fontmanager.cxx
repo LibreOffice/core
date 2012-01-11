@@ -1195,12 +1195,11 @@ PrintFontManager& PrintFontManager::get()
  *  the PrintFontManager
  */
 
-PrintFontManager::PrintFontManager() :
-        m_nNextFontID( 1 ),
-        m_pAtoms( new MultiAtomProvider() ),
-        m_nNextDirAtom( 1 ),
-        m_pFontCache( NULL ),
-        m_bFontconfigSuccess( false )
+PrintFontManager::PrintFontManager()
+    : m_nNextFontID( 1 )
+    , m_pAtoms( new MultiAtomProvider() )
+    , m_nNextDirAtom( 1 )
+    , m_pFontCache( NULL )
 {
     for( unsigned int i = 0; i < SAL_N_ELEMENTS( aAdobeCodes ); i++ )
     {
@@ -2153,7 +2152,7 @@ void PrintFontManager::initialize()
 #endif
 
     // first try fontconfig
-    m_bFontconfigSuccess = initFontconfig();
+    initFontconfig();
 
     // part one - look for downloadable fonts
     rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
@@ -2177,7 +2176,7 @@ void PrintFontManager::initialize()
             // if registering an app-specific fontdir with fontconfig fails
             // and fontconfig-based substitutions are enabled
             // then trying to use these app-specific fonts doesn't make sense
-            if( m_bFontconfigSuccess && !addFontconfigDir( aToken ) )
+            if( !addFontconfigDir( aToken ) )
                 if( bAreFCSubstitutionsEnabled )
                     continue;
             m_aFontDirectories.push_back( aToken );
@@ -2188,15 +2187,8 @@ void PrintFontManager::initialize()
     // protect against duplicate paths
     boost::unordered_map< OString, int, OStringHash > visited_dirs;
 
-    // now that all global and local font dirs are known to fontconfig
-    // check that there are fonts actually managed by fontconfig
-    // also don't search directories that fontconfig already did
-    if( m_bFontconfigSuccess )
-        m_bFontconfigSuccess = (countFontconfigFonts( visited_dirs ) > 0);
-
-    // don't search through many directories fontconfig already told us about
-    if( ! m_bFontconfigSuccess )
-        ImplGetSVData()->mpDefInst->FillFontPathList( m_aFontDirectories );
+    // Don't search directories that fontconfig already did
+    countFontconfigFonts( visited_dirs );
 
     // fill XLFD aliases from fonts.alias files
     initFontsAlias();

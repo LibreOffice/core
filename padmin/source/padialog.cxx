@@ -99,7 +99,6 @@ PADialog::PADialog( Window* pParent, sal_Bool /*bAdmin*/ ) :
         m_aCUPSCB( this, PaResId( RID_PA_CB_CUPSUSAGE ) ),
         m_aSepButtonFL( this, PaResId( RID_PA_FL_SEPBUTTON ) ),
         m_aAddPB( this, PaResId( RID_PA_BTN_ADD ) ),
-        m_aFontsPB( this, PaResId( RID_PA_BTN_FONTS ) ),
         m_aCancelButton( this, PaResId( RID_PA_BTN_CANCEL ) ),
         m_aDefPrt( PaResId( RID_PA_STR_DEFPRT ) ),
         m_aRenameStr( PaResId( RID_PA_STR_RENAME ) ),
@@ -135,19 +134,9 @@ void PADialog::Init()
     m_aConfPB.SetClickHdl( LINK( this, PADialog, ClickBtnHdl ) );
     m_aRenamePB.SetClickHdl( LINK( this, PADialog, ClickBtnHdl ) );
     m_aTestPagePB.SetClickHdl( LINK( this, PADialog, ClickBtnHdl ) );
-    m_aFontsPB.SetClickHdl( LINK( this, PADialog, ClickBtnHdl ) );
     m_aAddPB.SetClickHdl( LINK( this, PADialog, ClickBtnHdl ) );
     m_aDevicesLB.setDelPressedLink( LINK( this, PADialog, DelPressedHdl ) );
     m_aCUPSCB.SetClickHdl( LINK( this, PADialog, ClickBtnHdl ) );
-
-    ::psp::PrintFontManager& rFontManager( ::psp::PrintFontManager::get() );
-    if( ! rFontManager.checkImportPossible() )
-        m_aFontsPB.Enable( sal_False );
-    if( rFontManager.hasFontconfig() )
-    {
-        m_aFontsPB.Enable( sal_False );
-        m_aFontsPB.Show( sal_False );
-    }
 
     // at this point no actual changes will be  written
     // but the write will have checked whether any writeable config exists
@@ -227,11 +216,6 @@ IMPL_LINK( PADialog, ClickBtnHdl, PushButton*, pButton )
         PrintTestPage();
     else if( pButton == &m_aAddPB )
         AddDevice();
-    else if( pButton == &m_aFontsPB )
-    {
-        FontNameDlg aDialog( this );
-        aDialog.Execute();
-    }
     else if( static_cast<Button*>(pButton) == &m_aCUPSCB )
     {
         m_rPIManager.setCUPSDisabled( m_aCUPSCB.IsChecked() );

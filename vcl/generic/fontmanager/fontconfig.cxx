@@ -104,7 +104,7 @@ namespace
 
 class FontCfgWrapper
 {
-    FcFontSet*      m_pOutlineSet;
+    FcFontSet* m_pOutlineSet;
 
     void addFontSet( FcSetName );
 
@@ -383,10 +383,9 @@ FcResult FontCfgWrapper::LocalizedElementFromPattern(FcPattern* pPattern, FcChar
 /*
  * PrintFontManager::initFontconfig
  */
-bool PrintFontManager::initFontconfig()
+void PrintFontManager::initFontconfig()
 {
     FontCfgWrapper::get();
-    return true;
 }
 
 namespace

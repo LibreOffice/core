@@ -33,11 +33,11 @@
 #define RID_PA_BTN_STD                      2
 #define RID_PA_BTN_DEL                      3
 #define RID_PA_LB_DEV                       4
-#define RID_PA_FL_PRINTERS                   5
+#define RID_PA_FL_PRINTERS                  5
 #define RID_PA_BTN_CONF                     6
 #define RID_PA_BTN_RENAME                   7
 #define RID_PA_TESTPAGE                     8
-#define RID_PA_BTN_FONTS                    9
+
 #define RID_PA_TXT_DRIVER                   10
 #define RID_PA_TXT_DRIVER_STRING            11
 #define RID_PA_TXT_LOCATION                 12

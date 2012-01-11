@@ -903,9 +903,8 @@ void GenPspGraphics::GetDevFontList( ImplDevFontList *pList )
         if (rMgr.getFontFastInfo (*it, aInfo))
             AnnounceFonts( pList, aInfo );
 
-   // register platform specific font substitutions if available
-   if( rMgr.hasFontconfig() )
-       SalGenericInstance::RegisterFontSubstitutors( pList );
+    // register platform specific font substitutions if available
+    SalGenericInstance::RegisterFontSubstitutors( pList );
 }
 
 void GenPspGraphics::GetDevFontSubstList( OutputDevice* pOutDev )

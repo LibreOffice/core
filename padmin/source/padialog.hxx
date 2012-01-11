@@ -68,7 +68,6 @@ namespace padmin {
 
         FixedLine                           m_aSepButtonFL;
         PushButton                          m_aAddPB;
-        PushButton                          m_aFontsPB;
         CancelButton                        m_aCancelButton;
 
         String                              m_aDefPrt;
