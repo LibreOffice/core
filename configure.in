@@ -4313,8 +4313,9 @@ if test "$_os" = "Linux" && test "$host_cpu" = "powerpc"; then
     # IBMs JDK needs this...
     JITC_PROCESSOR_TYPE=6
     export JITC_PROCESSOR_TYPE
+    JITC_PROCESSOR_TYPE_EXPORT="JITC_PROCESSOR_TYPE=$JITC_PROCESSOR_TYPE"
 fi
-AC_SUBST([JITC_PROCESSOR_TYPE])
+AC_SUBST([JITC_PROCESSOR_TYPE_EXPORT])
 
 if test $_os = "WINNT"; then
     WITH_VC_REDIST="TRUE"
