@@ -457,6 +457,7 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
     basegfx_s \
     dtobj \
     libeay32 \
+    nputils \
     ssleay32 \
     ooopathutils \
     sample \

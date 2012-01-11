@@ -1,3 +1,4 @@
+# -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,44 +26,15 @@
 #
 #*************************************************************************
 
-PRJ=..
+gb_PARTIALBUILD := T
+ifeq ($(strip $(SOLARENV)),)
+include $(dir $(realpath $(firstword $(MAKEFILE_LIST))))/../solenv/gbuild/source_and_rerun.mk
+else
 
-PRJNAME=np_sdk
-TARGET=npsdk
+gb_SourceEnvAndRecurse_STAGE=gbuild
+include $(SOLARENV)/gbuild/gbuild.mk
 
-EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
+$(eval $(call gb_Module_make_global_targets,$(shell ls $(dir $(realpath $(firstword $(MAKEFILE_LIST))))/Module*.mk)))
 
-# --- Settings -----------------------------------------------------
-
-.INCLUDE :	settings.mk
-.IF "$(OS)"!="IOS" && "$(OS)"!="ANDROID"
-.IF "$(L10N_framework)"==""
-JDKINCS=
-
-.IF "$(SYSTEM_MOZILLA_HEADERS)" = "YES"
-CFLAGS+= $(MOZILLA_HEADERS_CFLAGS)
-CXXFLAGS+= $(MOZILLA_HEADERS_CFLAGS)
-.ELSE
-CFLAGS+= -I..$/inc
-CXXFLAGS+= -I..$/inc
-.ENDIF
-
-# --- Files --------------------------------------------------------
-
-.IF "$(GUI)" == "WNT"
-MOZFILES = $(SLO)$/npwin.obj
-.ELSE
-MOZFILES = $(SLO)$/npunix.obj
-.ENDIF
-
-.IF "$(GUIBASE)" == "aqua"
-CDEFS+=-DNO_X11
-.ENDIF
-
-ALL: $(MOZFILES)
-
-# --- Targets ------------------------------------------------------
-.ENDIF 		# L10N_framework
-.ENDIF		# iOS or Android
-
-.INCLUDE :	target.mk
+endif
+# vim: set noet sw=4 ts=4:

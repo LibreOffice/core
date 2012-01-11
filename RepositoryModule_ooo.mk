@@ -67,6 +67,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     MathMLDTD \
     Mesa \
     nlpsolver \
+    np_sdk \
     o3tl \
     offapi \
     oovbaapi \
