@@ -44,7 +44,6 @@ public:
     static void FillItemSet( const ::com::sun::star::awt::FontDescriptor& rDesc, SfxItemSet& rSet );
     static void FillFromItemSet( const SfxItemSet& rSet, ::com::sun::star::awt::FontDescriptor& rDesc );
 
-    static com::sun::star::beans::PropertyState getPropertyState( const SfxItemSet& rSet );
     static void setPropertyToDefault( SfxItemSet& rSet );
     static ::com::sun::star::uno::Any getPropertyDefault( SfxItemPool* pPool );
 

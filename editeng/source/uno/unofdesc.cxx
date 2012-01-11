@@ -186,30 +186,6 @@ void SvxUnoFontDescriptor::FillFromItemSet( const SfxItemSet& rSet, awt::FontDes
     }
 }
 
-#define CheckState( state ) \
-    switch( state ) \
-    { \
-    case SFX_ITEM_DONTCARE: \
-    case SFX_ITEM_DISABLED: \
-        return beans::PropertyState_AMBIGUOUS_VALUE; \
-    case SFX_ITEM_READONLY: \
-    case SFX_ITEM_SET: \
-        return beans::PropertyState_DIRECT_VALUE; \
-    }
-
-beans::PropertyState SvxUnoFontDescriptor::getPropertyState( const SfxItemSet& rSet )
-{
-    CheckState(rSet.GetItemState( EE_CHAR_FONTINFO, sal_False ));
-    CheckState(rSet.GetItemState( EE_CHAR_FONTHEIGHT, sal_False ));
-    CheckState(rSet.GetItemState( EE_CHAR_ITALIC, sal_False ));
-    CheckState(rSet.GetItemState( EE_CHAR_UNDERLINE, sal_False ));
-    CheckState(rSet.GetItemState( EE_CHAR_WEIGHT, sal_False ));
-    CheckState(rSet.GetItemState( EE_CHAR_STRIKEOUT, sal_False ));
-    CheckState(rSet.GetItemState( EE_CHAR_WLM, sal_False ));
-
-    return beans::PropertyState_DEFAULT_VALUE;
-}
-
 void SvxUnoFontDescriptor::setPropertyToDefault( SfxItemSet& rSet )
 {
     rSet.InvalidateItem( EE_CHAR_FONTINFO );
