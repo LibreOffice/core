@@ -65,8 +65,8 @@ int RTFTokenizer::resolveParse()
     int ret;
     // for hex chars
     int b = 0, count = 2;
-    sal_uInt32 nPercentSize;
-    sal_uInt32 nLastPos;
+    sal_uInt32 nPercentSize = 0;
+    sal_uInt32 nLastPos = 0;
 
     if (m_xStatusIndicator.is())
     {
