@@ -1,0 +1,16 @@
+Modify the OpenSymbol.sfd and generate opens___.ttf from it with fontforge. The
+.sfd is the canonical source for the .ttf
+
+Every new version of the font should increase the font version. This is
+important so that when two versions of the font are installed, e.g.  one
+bundled inside the office installation, and one already installed on the system
+that the most recent font can be detected and favoured.
+
+Bumping the font version is easiest done manually by bumping the two places in
+the .sfd where the version is mentioned, e.g.
+
+-Version: 102.2
++Version: 102.3
+
+-LangName: 1033 "" "" "Regular" "OpenSymbol" "" "Version 102.2"
++LangName: 1033 "" "" "Regular" "OpenSymbol" "" "Version 102.3"
