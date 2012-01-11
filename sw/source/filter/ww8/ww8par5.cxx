@@ -965,7 +965,7 @@ long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
         0,
         0,
         0,
-        0,
+        &SwWW8ImplReader::Read_F_DocInfo,           // 64 - DOCVARIABLE
         0,
         0,
         &SwWW8ImplReader::Read_F_IncludePicture,    // 67
@@ -1759,6 +1759,9 @@ eF_ResT SwWW8ImplReader::Read_F_DocInfo( WW8FieldDesc* pF, String& rStr )
             nReg = DI_SUB_TIME;
             bDateTime = true;
             break;
+        case 64: // DOCVARIABLE
+            nSub = DI_CUSTOM;
+            break;
     }
 
     sal_uInt32 nFormat = 0;
@@ -1784,8 +1787,32 @@ eF_ResT SwWW8ImplReader::Read_F_DocInfo( WW8FieldDesc* pF, String& rStr )
         }
     }
 
+    String aData;
+    // Extract DOCVARIABLE varname
+    if ( 64 == pF->nId )
+    {
+        _ReadFieldParams aReadParam( rStr );
+        long nRet;
+        while( -1 != ( nRet = aReadParam.SkipToNextToken() ))
+        {
+            switch( nRet )
+            {
+                case -2:
+                    if( !aData.Len() )
+                        aData = aReadParam.GetResult();
+                    break;
+                case '*':
+                    //Skip over MERGEFORMAT
+                    aReadParam.SkipToNextToken();
+                    break;
+            }
+        }
+
+        aData = comphelper::string::remove(aData, '"');
+    }
+
     SwDocInfoField aFld( (SwDocInfoFieldType*)
-        rDoc.GetSysFldType( RES_DOCINFOFLD ), nSub|nReg, String(), nFormat );
+        rDoc.GetSysFldType( RES_DOCINFOFLD ), nSub|nReg, aData, nFormat );
     if (bDateTime)
         ForceFieldLanguage(aFld, nLang);
     rDoc.InsertPoolItem(*pPaM, SwFmtFld(aFld), 0);
