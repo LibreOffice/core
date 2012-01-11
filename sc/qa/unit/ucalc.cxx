@@ -1390,14 +1390,14 @@ void Test::testDataPilotLabels()
     DPFieldDef aFields[] = {
         { "Software", sheet::DataPilotFieldOrientation_ROW },
         { "Version",  sheet::DataPilotFieldOrientation_COLUMN },
-        { "'1.2.3",   sheet::DataPilotFieldOrientation_DATA }
+        { "1.2.3",    sheet::DataPilotFieldOrientation_DATA }
     };
 
     // Raw data
     const char* aData[][3] = {
-        { "LibreOffice", "'3.3.0", "30" },
-        { "LibreOffice", "'3.3.1", "20" },
-        { "LibreOffice", "'3.4.0", "45" },
+        { "LibreOffice", "3.3.0", "30" },
+        { "LibreOffice", "3.3.1", "20" },
+        { "LibreOffice", "3.4.0", "45" },
     };
 
     size_t nFieldCount = SAL_N_ELEMENTS(aFields);
