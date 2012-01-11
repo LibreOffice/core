@@ -560,7 +560,7 @@ void lclLinkLeftEnd(
     }
     else
     {
-        DBG_ERRORFILE( "lclLinkLeftEnd - called for invisible frame style" );
+        SAL_INFO( "svx", "lclLinkLeftEnd - called for invisible frame style" );
     }
 }
 

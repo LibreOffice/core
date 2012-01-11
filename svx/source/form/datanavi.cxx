@@ -473,7 +473,7 @@ namespace svxform
                     }
                     catch ( Exception& )
                     {
-                        DBG_ERRORFILE( "XFormsPage::DoToolBoxAction(): exception while adding submission" );
+                        SAL_INFO( "svx", "XFormsPage::DoToolBoxAction(): exception while adding submission" );
                     }
                 }
             }
@@ -509,7 +509,7 @@ namespace svxform
                         }
                         catch ( Exception& )
                         {
-                            DBG_ERRORFILE( "XFormsPage::DoToolBoxAction(): exception while create element" );
+                            SAL_INFO( "svx", "XFormsPage::DoToolBoxAction(): exception while create element" );
                         }
                     }
                     else
@@ -523,7 +523,7 @@ namespace svxform
                         }
                         catch ( Exception& )
                         {
-                            DBG_ERRORFILE( "XFormsPage::DoToolBoxAction(): exception while create attribute" );
+                            SAL_INFO( "svx", "XFormsPage::DoToolBoxAction(): exception while create attribute" );
                         }
                     }
 
@@ -535,13 +535,13 @@ namespace svxform
                     {
                         if ( e.Code == css::xml::dom::DOMExceptionType_DOMSTRING_SIZE_ERR )
                         {
-                            DBG_ERRORFILE( "XFormsPage::DoToolBoxAction(): domexception: size error" );
+                            SAL_INFO( "svx", "XFormsPage::DoToolBoxAction(): domexception: size error" );
                         }
-                        DBG_ERRORFILE( "XFormsPage::DoToolBoxAction(): domexception while append child" );
+                        SAL_INFO( "svx", "XFormsPage::DoToolBoxAction(): domexception while append child" );
                     }
                     catch ( Exception& )
                     {
-                        DBG_ERRORFILE( "XFormsPage::DoToolBoxAction(): exception while append child" );
+                        SAL_INFO( "svx", "XFormsPage::DoToolBoxAction(): exception while append child" );
                     }
 
                     try
@@ -555,7 +555,7 @@ namespace svxform
                     }
                     catch ( Exception& )
                     {
-                        DBG_ERRORFILE( "XFormsPage::DoToolboxAction(): exception caught" );
+                        SAL_INFO( "svx", "XFormsPage::DoToolboxAction(): exception caught" );
                     }
 
                     try
@@ -564,7 +564,7 @@ namespace svxform
                     }
                     catch ( Exception& )
                     {
-                        DBG_ERRORFILE( "XFormsPage::DoToolBoxAction(): exception while get binding for node" );
+                        SAL_INFO( "svx", "XFormsPage::DoToolBoxAction(): exception while get binding for node" );
                     }
                     pNode = new ItemNode( xNewNode );
                 }
@@ -581,7 +581,7 @@ namespace svxform
                     }
                     catch ( Exception& )
                     {
-                        DBG_ERRORFILE( "XFormsPage::DoToolBoxAction(): exception while adding binding" );
+                        SAL_INFO( "svx", "XFormsPage::DoToolBoxAction(): exception while adding binding" );
                     }
                 }
 
@@ -612,7 +612,7 @@ namespace svxform
                         }
                         catch ( Exception& )
                         {
-                            DBG_ERRORFILE( "XFormsPage::DoToolboxAction(): exception caught" );
+                            SAL_INFO( "svx", "XFormsPage::DoToolboxAction(): exception caught" );
                         }
                     }
                 }
@@ -633,7 +633,7 @@ namespace svxform
                         }
                         catch ( Exception& )
                         {
-                            DBG_ERRORFILE( "XFormsPage::DoToolboxAction(): exception caught" );
+                            SAL_INFO( "svx", "XFormsPage::DoToolboxAction(): exception caught" );
                         }
                     }
                     delete pNode;
@@ -676,7 +676,7 @@ namespace svxform
                         }
                         catch ( Exception& )
                         {
-                            DBG_ERRORFILE( "XFormsPage::DoToolboxAction(): exception caught" );
+                            SAL_INFO( "svx", "XFormsPage::DoToolboxAction(): exception caught" );
                         }
                     }
                     else if ( DGTBinding == m_eGroup )
@@ -699,7 +699,7 @@ namespace svxform
                             }
                             catch ( Exception& )
                             {
-                                DBG_ERRORFILE( "XFormsPage::DoToolboxAction(): exception caught" );
+                                SAL_INFO( "svx", "XFormsPage::DoToolboxAction(): exception caught" );
                             }
                         }
                         else
@@ -716,7 +716,7 @@ namespace svxform
                             }
                             catch ( Exception& )
                             {
-                                DBG_ERRORFILE( "XFormsPage::DoToolboxAction(): exception caught" );
+                                SAL_INFO( "svx", "XFormsPage::DoToolboxAction(): exception caught" );
                             }
                         }
 
@@ -1020,7 +1020,7 @@ namespace svxform
             }
             catch ( Exception& )
             {
-                DBG_ERRORFILE( "XFormsPage::AddEntry(Ref): exception caught" );
+                SAL_INFO( "svx", "XFormsPage::AddEntry(Ref): exception caught" );
             }
         }
         else // then Binding Page
@@ -1039,7 +1039,7 @@ namespace svxform
             }
             catch ( Exception& )
             {
-                DBG_ERRORFILE( "XFormsPage::AddEntry(Ref): exception caught" );
+                SAL_INFO( "svx", "XFormsPage::AddEntry(Ref): exception caught" );
             }
         }
 
@@ -1098,7 +1098,7 @@ namespace svxform
             }
             catch ( Exception& )
             {
-                DBG_ERRORFILE( "XFormsPage::EditEntry(): exception caught" );
+                SAL_INFO( "svx", "XFormsPage::EditEntry(): exception caught" );
             }
         }
     }
@@ -1148,7 +1148,7 @@ namespace svxform
                 }
                 catch ( Exception& )
                 {
-                    DBG_ERRORFILE( "XFormsPage::RemoveEntry(): exception caught" );
+                    SAL_INFO( "svx", "XFormsPage::RemoveEntry(): exception caught" );
                 }
             }
             else
@@ -1165,7 +1165,7 @@ namespace svxform
                 }
                 catch ( Exception& )
                 {
-                    DBG_ERRORFILE( "XFormsPage::RemoveEntry(): exception caught" );
+                    SAL_INFO( "svx", "XFormsPage::RemoveEntry(): exception caught" );
                 }
                 QueryBox aQBox( this, SVX_RES( nResId ) );
                 String sMessText = aQBox.GetMessText();
@@ -1183,7 +1183,7 @@ namespace svxform
                     }
                     catch ( Exception& )
                     {
-                        DBG_ERRORFILE( "XFormsPage::RemoveEntry(): exception caught" );
+                        SAL_INFO( "svx", "XFormsPage::RemoveEntry(): exception caught" );
                     }
                 }
             }
@@ -1263,7 +1263,7 @@ namespace svxform
                                         sRet = LoadInstance( xPropSeq, rImageList );
                                     else
                                     {
-                                        DBG_ERRORFILE( "XFormsPage::SetModel(): invalid instance" );
+                                        SAL_INFO( "svx", "XFormsPage::SetModel(): invalid instance" );
                                     }
                                     break;
                                 }
@@ -1278,7 +1278,7 @@ namespace svxform
                 }
                 catch( Exception& )
                 {
-                    DBG_ERRORFILE( "XFormsPage::SetModel(): exception caught" );
+                    SAL_INFO( "svx", "XFormsPage::SetModel(): exception caught" );
                 }
                 break;
             }
@@ -1310,7 +1310,7 @@ namespace svxform
                 }
                 catch( Exception& )
                 {
-                    DBG_ERRORFILE( "XFormsPage::SetModel(): exception caught" );
+                    SAL_INFO( "svx", "XFormsPage::SetModel(): exception caught" );
                 }
                 break;
             }
@@ -1357,7 +1357,7 @@ namespace svxform
                 }
                 catch( Exception& )
                 {
-                    DBG_ERRORFILE( "XFormsPage::SetModel(): exception caught" );
+                    SAL_INFO( "svx", "XFormsPage::SetModel(): exception caught" );
                 }
                 break;
             }
@@ -1412,7 +1412,7 @@ namespace svxform
                     }
                     catch ( Exception& )
                     {
-                        DBG_ERRORFILE( "XFormsPage::LoadInstance(): exception caught" );
+                        SAL_INFO( "svx", "XFormsPage::LoadInstance(): exception caught" );
                     }
                 }
             }
@@ -1468,7 +1468,7 @@ namespace svxform
                     }
                     catch ( Exception& )
                     {
-                       DBG_ERRORFILE( "XFormsPage::EnableMenuItems(): exception caught" );
+                       SAL_INFO( "svx", "XFormsPage::EnableMenuItems(): exception caught" );
                     }
                 }
             }
@@ -1510,7 +1510,7 @@ namespace svxform
                     }
                     catch ( Exception& )
                     {
-                       DBG_ERRORFILE( "XFormsPage::EnableMenuItems(): exception caught" );
+                       SAL_INFO( "svx", "XFormsPage::EnableMenuItems(): exception caught" );
                     }
                 }
             }
@@ -1662,7 +1662,7 @@ namespace svxform
         }
         catch ( Exception& )
         {
-            DBG_ERRORFILE( "DataNavigatorWindow::MenuSelectHdl(): exception caught" );
+            SAL_INFO( "svx", "DataNavigatorWindow::MenuSelectHdl(): exception caught" );
         }
         DBG_ASSERT( xUIHelper.is(), "DataNavigatorWindow::MenuSelectHdl(): no UIHelper" );
 
@@ -1714,7 +1714,7 @@ namespace svxform
                                 }
                                 catch ( Exception& )
                                 {
-                                    DBG_ERRORFILE( "DataNavigatorWindow::MenuSelectHdl(): exception caught" );
+                                    SAL_INFO( "svx", "DataNavigatorWindow::MenuSelectHdl(): exception caught" );
                                 }
                             }
                         }
@@ -1778,7 +1778,7 @@ namespace svxform
                             }
                             catch ( Exception& )
                             {
-                                DBG_ERRORFILE( "DataNavigatorWindow::MenuSelectHdl(): exception caught" );
+                                SAL_INFO( "svx", "DataNavigatorWindow::MenuSelectHdl(): exception caught" );
                             }
                         }
                     }
@@ -1798,7 +1798,7 @@ namespace svxform
                         }
                         catch ( Exception& )
                         {
-                            DBG_ERRORFILE( "DataNavigatorWindow::MenuSelectHdl(): exception caught" );
+                            SAL_INFO( "svx", "DataNavigatorWindow::MenuSelectHdl(): exception caught" );
                         }
                         m_aModelsBox.RemoveEntry( nSelectedPos );
                         if ( m_aModelsBox.GetEntryCount() <= nSelectedPos )
@@ -1811,7 +1811,7 @@ namespace svxform
                 }
                 default:
                 {
-                    DBG_ERRORFILE( "DataNavigatorWindow::MenuSelectHdl(): wrong menu item" );
+                    SAL_INFO( "svx", "DataNavigatorWindow::MenuSelectHdl(): wrong menu item" );
                 }
             }
         }
@@ -1835,7 +1835,7 @@ namespace svxform
                         }
                         catch ( Exception& )
                         {
-                            DBG_ERRORFILE( "DataNavigatorWindow::MenuSelectHdl(): exception caught" );
+                            SAL_INFO( "svx", "DataNavigatorWindow::MenuSelectHdl(): exception caught" );
                         }
                         ModelSelectHdl( NULL );
                         m_aTabCtrl.SetCurPageId( nInst );
@@ -1873,7 +1873,7 @@ namespace svxform
                             }
                             catch ( Exception& )
                             {
-                                DBG_ERRORFILE( "DataNavigatorWindow::MenuSelectHdl(): exception caught" );
+                                SAL_INFO( "svx", "DataNavigatorWindow::MenuSelectHdl(): exception caught" );
                             }
                             pPage->SetInstanceName(sNewName);
                             pPage->SetInstanceURL(sURL);
@@ -1925,7 +1925,7 @@ namespace svxform
                                 }
                                 catch ( Exception& )
                                 {
-                                    DBG_ERRORFILE( "DataNavigatorWindow::MenuSelectHdl(): exception caught" );
+                                    SAL_INFO( "svx", "DataNavigatorWindow::MenuSelectHdl(): exception caught" );
                                 }
                                 m_aTabCtrl.RemovePage( nId );
                                 m_aTabCtrl.SetCurPageId( TID_INSTANCE );
@@ -1945,13 +1945,13 @@ namespace svxform
                 }
                 default:
                 {
-                    DBG_ERRORFILE( "DataNavigatorWindow::MenuSelectHdl(): wrong menu item" );
+                    SAL_INFO( "svx", "DataNavigatorWindow::MenuSelectHdl(): wrong menu item" );
                 }
             }
         }
         else
         {
-            DBG_ERRORFILE( "DataNavigatorWindow::MenuSelectHdl(): wrong button" );
+            SAL_INFO( "svx", "DataNavigatorWindow::MenuSelectHdl(): wrong button" );
         }
 
         m_bIsNotifyDisabled = false;
@@ -1980,7 +1980,7 @@ namespace svxform
         }
         else
         {
-            DBG_ERRORFILE( "DataNavigatorWindow::MenuActivateHdl(): wrong button" );
+            SAL_INFO( "svx", "DataNavigatorWindow::MenuActivateHdl(): wrong button" );
         }
         return 0;
     }
@@ -2067,7 +2067,7 @@ namespace svxform
                 }
                 catch ( Exception& )
                 {
-                    DBG_ERRORFILE( "DataNavigatorWindow::LoadModels(): exception caught" );
+                    SAL_INFO( "svx", "DataNavigatorWindow::LoadModels(): exception caught" );
                 }
             }
         }
@@ -2099,7 +2099,7 @@ namespace svxform
             }
             catch( Exception& )
             {
-                DBG_ERRORFILE( "DataNavigatorWindow::LoadModels(): exception caught" );
+                SAL_INFO( "svx", "DataNavigatorWindow::LoadModels(): exception caught" );
             }
         }
 
@@ -2135,11 +2135,11 @@ namespace svxform
         }
         catch ( NoSuchElementException& )
         {
-            DBG_ERRORFILE( "DataNavigatorWindow::SetPageModel(): no such element" );
+            SAL_INFO( "svx", "DataNavigatorWindow::SetPageModel(): no such element" );
         }
         catch( Exception& )
         {
-            DBG_ERRORFILE( "DataNavigatorWindow::SetPageModel(): unexpected exception" );
+            SAL_INFO( "svx", "DataNavigatorWindow::SetPageModel(): unexpected exception" );
         }
     }
     // -----------------------------------------------------------------------
@@ -2171,7 +2171,7 @@ namespace svxform
                                     CreateInstancePage( xPropSeq );
                                 else
                                 {
-                                    DBG_ERRORFILE( "DataNavigator::InitPages(): invalid instance" );
+                                    SAL_INFO( "svx", "DataNavigator::InitPages(): invalid instance" );
                                 }
                             }
                             else
@@ -2184,11 +2184,11 @@ namespace svxform
         }
         catch ( NoSuchElementException& )
         {
-            DBG_ERRORFILE( "DataNavigatorWindow::SetPageModel(): no such element" );
+            SAL_INFO( "svx", "DataNavigatorWindow::SetPageModel(): no such element" );
         }
         catch( Exception& )
         {
-            DBG_ERRORFILE( "DataNavigatorWindow::SetPageModel(): unexpected exception" );
+            SAL_INFO( "svx", "DataNavigatorWindow::SetPageModel(): unexpected exception" );
         }
     }
     // -----------------------------------------------------------------------
@@ -2236,7 +2236,7 @@ namespace svxform
         sal_uInt16 nPageId = GetNewPageId();
         if ( sInstName.isEmpty() )
         {
-            DBG_ERRORFILE( "DataNavigatorWindow::CreateInstancePage(): instance without name" );
+            SAL_INFO( "svx", "DataNavigatorWindow::CreateInstancePage(): instance without name" );
             String sTemp = String::CreateFromAscii( "untitled" );
             sTemp += String::CreateFromInt32( nPageId );
             sInstName = sTemp;
@@ -2555,7 +2555,7 @@ namespace svxform
                 }
                 catch ( Exception& )
                 {
-                    DBG_ERRORFILE( "AddDataItemDialog::Dtor(): exception caught" );
+                    SAL_INFO( "svx", "AddDataItemDialog::Dtor(): exception caught" );
                 }
             }
         }
@@ -2676,7 +2676,7 @@ namespace svxform
         }
         catch ( Exception& )
         {
-            DBG_ERRORFILE( "copyPropSet(): exception caught" );
+            SAL_INFO( "svx", "copyPropSet(): exception caught" );
         }
     }
 
@@ -2715,7 +2715,7 @@ namespace svxform
             }
             catch ( Exception& )
             {
-                DBG_ERRORFILE( "AddDataDialog::OKHdl(): exception caught" );
+                SAL_INFO( "svx", "AddDataDialog::OKHdl(): exception caught" );
             }
         }
         else
@@ -2736,7 +2736,7 @@ namespace svxform
             }
             catch ( Exception& )
             {
-                DBG_ERRORFILE( "AddDataDialog::OKHdl(): exception caught" );
+                SAL_INFO( "svx", "AddDataDialog::OKHdl(): exception caught" );
             }
         }
         // then close the dialog
@@ -2822,7 +2822,7 @@ namespace svxform
                 }
                 catch( Exception& )
                 {
-                    DBG_ERRORFILE( "AddDataItemDialog::InitFromNode(): exception caught" );
+                    SAL_INFO( "svx", "AddDataItemDialog::InitFromNode(): exception caught" );
                 }
             }
             else if ( m_pItemNode->m_xPropSet.is() )
@@ -2840,7 +2840,7 @@ namespace svxform
                     }
                     catch ( Exception& )
                     {
-                        DBG_ERRORFILE( "AddDataItemDialog::InitFromNode(): exception caught" );
+                        SAL_INFO( "svx", "AddDataItemDialog::InitFromNode(): exception caught" );
                     }
                 }
                 rtl::OUString sTemp;
@@ -2862,7 +2862,7 @@ namespace svxform
                 }
                 catch( Exception& )
                 {
-                    DBG_ERRORFILE( "AddDataItemDialog::InitFromNode(): exception caught" );
+                    SAL_INFO( "svx", "AddDataItemDialog::InitFromNode(): exception caught" );
                 }
 
                 Size a3and1Sz = LogicToPixel( Size( 3, 1 ), MAP_APPFONT );
@@ -2897,7 +2897,7 @@ namespace svxform
                 }
                 catch ( Exception& )
                 {
-                    DBG_ERRORFILE( "AddDataItemDialog::InitFromNode(): exception caught" );
+                    SAL_INFO( "svx", "AddDataItemDialog::InitFromNode(): exception caught" );
                 }
             }
         }
@@ -2972,7 +2972,7 @@ namespace svxform
                 }
                 catch ( Exception& )
                 {
-                    DBG_ERRORFILE( "AddDataItemDialog::InitDataTypeBox(): exception caught" );
+                    SAL_INFO( "svx", "AddDataItemDialog::InitDataTypeBox(): exception caught" );
                 }
             }
         }
@@ -3063,7 +3063,7 @@ namespace svxform
             }
             catch ( Exception& )
             {
-                DBG_ERRORFILE( "AddConditionDialog::Ctor(): exception caught" );
+                SAL_INFO( "svx", "AddConditionDialog::Ctor(): exception caught" );
             }
         }
 
@@ -3086,7 +3086,7 @@ namespace svxform
         }
         catch ( Exception& )
         {
-            DBG_ERRORFILE( "AddDataItemDialog::EditHdl(): exception caught" );
+            SAL_INFO( "svx", "AddDataItemDialog::EditHdl(): exception caught" );
         }
         NamespaceItemDialog aDlg( this, xNameContnr );
         aDlg.Execute();
@@ -3096,7 +3096,7 @@ namespace svxform
         }
         catch ( Exception& )
         {
-            DBG_ERRORFILE( "AddDataItemDialog::EditHdl(): exception caught" );
+            SAL_INFO( "svx", "AddDataItemDialog::EditHdl(): exception caught" );
         }
         return 0;
     }
@@ -3112,7 +3112,7 @@ namespace svxform
         }
         catch( const Exception& )
         {
-            DBG_ERRORFILE( "AddConditionDialog, OKHdl: caught an exception!" );
+            SAL_INFO( "svx", "AddConditionDialog, OKHdl: caught an exception!" );
         }
 */
         EndDialog( RET_OK );
@@ -3139,7 +3139,7 @@ namespace svxform
             }
             catch ( Exception& )
             {
-                DBG_ERRORFILE( "AddConditionDialog::ResultHdl(): exception caught" );
+                SAL_INFO( "svx", "AddConditionDialog::ResultHdl(): exception caught" );
             }
         }
         m_aResultWin.SetText( sResult );
@@ -3249,7 +3249,7 @@ namespace svxform
         }
         else
         {
-            DBG_ERRORFILE( "NamespaceItemDialog::ClickHdl(): invalid button" );
+            SAL_INFO( "svx", "NamespaceItemDialog::ClickHdl(): invalid button" );
         }
 
         SelectHdl( &m_aNamespacesList );
@@ -3281,7 +3281,7 @@ namespace svxform
         }
         catch ( Exception& )
         {
-            DBG_ERRORFILE( "NamespaceItemDialog::OKHdl(): exception caught" );
+            SAL_INFO( "svx", "NamespaceItemDialog::OKHdl(): exception caught" );
         }
         // and close the dialog
         EndDialog( RET_OK );
@@ -3316,7 +3316,7 @@ namespace svxform
         }
         catch ( Exception& )
         {
-            DBG_ERRORFILE( "NamespaceItemDialog::LoadNamespaces(): exception caught" );
+            SAL_INFO( "svx", "NamespaceItemDialog::LoadNamespaces(): exception caught" );
         }
     }
 
@@ -3373,7 +3373,7 @@ namespace svxform
         }
         catch ( Exception& )
         {
-            DBG_ERRORFILE( "ManageNamespacesDialog::OKHdl(): exception caught" );
+            SAL_INFO( "svx", "ManageNamespacesDialog::OKHdl(): exception caught" );
         }
 
         // no error so close the dialog
@@ -3470,7 +3470,7 @@ namespace svxform
                 }
                 catch ( Exception& )
                 {
-                    DBG_ERRORFILE( "AddSubmissionDialog::OKHdl(): exception caught" );
+                    SAL_INFO( "svx", "AddSubmissionDialog::OKHdl(): exception caught" );
                 }
             }
         }
@@ -3496,7 +3496,7 @@ namespace svxform
             }
             catch ( Exception& )
             {
-                DBG_ERRORFILE( "AddSubmissionDialog::OKHdl(): exception caught" );
+                SAL_INFO( "svx", "AddSubmissionDialog::OKHdl(): exception caught" );
             }
         }
 
@@ -3550,7 +3550,7 @@ namespace svxform
             }
             catch ( Exception& )
             {
-                DBG_ERRORFILE( "AddSubmissionDialog::FillAllBoxes(): exception caught" );
+                SAL_INFO( "svx", "AddSubmissionDialog::FillAllBoxes(): exception caught" );
             }
         }
 
@@ -3610,7 +3610,7 @@ namespace svxform
             }
             catch ( Exception& )
             {
-                DBG_ERRORFILE( "AddSubmissionDialog::FillAllBoxes(): exception caught" );
+                SAL_INFO( "svx", "AddSubmissionDialog::FillAllBoxes(): exception caught" );
             }
         }
 

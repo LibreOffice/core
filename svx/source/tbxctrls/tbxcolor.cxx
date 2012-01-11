@@ -68,7 +68,7 @@ namespace svx
             }
             catch ( Exception& )
             {
-                DBG_ERRORFILE( "ToolboxAccess::Ctor(): exception" );
+                SAL_INFO( "svx", "ToolboxAccess::Ctor(): exception" );
             }
         }
     }

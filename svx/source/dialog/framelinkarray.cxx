@@ -310,7 +310,6 @@ MergedCellIterator& MergedCellIterator::operator++()
 
 // ============================================================================
 
-#define DBG_FRAME_ERROR( funcname, error )              DBG_ERRORFILE( "svx::frame::Array::" funcname " - " error )
 #define DBG_FRAME_CHECK( cond, funcname, error )        DBG_ASSERT( cond, "svx::frame::Array::" funcname " - " error )
 #define DBG_FRAME_CHECK_COL( col, funcname )            DBG_FRAME_CHECK( (col) < GetColCount(), funcname, "invalid column index" )
 #define DBG_FRAME_CHECK_ROW( row, funcname )            DBG_FRAME_CHECK( (row) < GetRowCount(), funcname, "invalid row index" )
@@ -1284,7 +1283,6 @@ void Array::DrawArray( OutputDevice& rDev, const Color* pForceColor ) const
 #undef DBG_FRAME_CHECK_ROW
 #undef DBG_FRAME_CHECK_COL
 #undef DBG_FRAME_CHECK
-#undef DBG_FRAME_ERROR
 
 // ============================================================================
 

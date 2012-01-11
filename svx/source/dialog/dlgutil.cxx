@@ -79,7 +79,7 @@ bool GetApplyCharUnit( const SfxItemSet& rSet )
             }
             else
             {
-                DBG_ERRORFILE( "GetApplyCharUnit(): no module found" );
+                SAL_INFO( "svx", "GetApplyCharUnit(): no module found" );
             }
         }
     }

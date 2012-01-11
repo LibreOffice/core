@@ -199,13 +199,7 @@ void SvxTextEncodingBox::InsertTextEncoding( const rtl_TextEncoding nEnc, sal_uI
     if ( rEntry.Len() )
         InsertTextEncoding( nEnc, rEntry, nPos );
     else
-    {
-#ifdef DBG_UTIL
-        rtl::OStringBuffer aMsg(RTL_CONSTASCII_STRINGPARAM("SvxTextEncodingBox::InsertTextEncoding: no resource string for text encoding: "));
-        aMsg.append(static_cast<sal_Int32>(nEnc));
-        DBG_ERRORFILE(aMsg.getStr());
-#endif
-    }
+        SAL_INFO( "svx", "SvxTextEncodingBox::InsertTextEncoding: no resource string for text encoding: " << static_cast<sal_Int32>( nEnc ) );
 }
 
 //------------------------------------------------------------------------

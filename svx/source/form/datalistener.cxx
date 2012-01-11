@@ -88,7 +88,7 @@ namespace svxform
     // lang::XEventListener
     void SAL_CALL DataListener::disposing( const EventObject& /*Source*/ ) throw (RuntimeException)
     {
-        DBG_ERRORFILE( "disposing" );
+        SAL_INFO( "svx", "disposing" );
     }
 
 //............................................................................
