@@ -807,7 +807,7 @@ public class JPEGComparator extends EnhancedComplexTestCase
 ////            "-DOC_COMPARATOR_REFERENCE_CREATOR_TYPE", "PDF",      /* default: "OOo" */
 ////            "-DOC_COMPARATOR_REFERENCE_CREATOR_TYPE", "msoffice", /* default: "OOo" */
 ////            "-OFFICE_VIEWABLE", "false",
-////            "-AppExecutionCommand", "\"C:/Programme/sun/staroffice 9/program/soffice.exe\"  -norestore -nocrashreport -accept=pipe,name=ll93751;urp;",
+////            "-AppExecutionCommand", "\"C:/Programme/sun/staroffice 9/program/soffice.exe\"  --norestore --nocrashreport --accept=pipe,name=ll93751;urp;",
 //            "-NoOffice"
 //        };
 //

@@ -94,7 +94,7 @@ CppDocumentLoaderExample : $(OUT_BIN)/DocumentLoader$(EXE_EXT)
 	@echo $(SQM)      $(SQM)the additional office types via the UNO environment variable -env:URE_MORE_TYPES=... 
 	@echo $(SQM)      $(SQM)Before you can run this example you have to start your office in listening mode.
 	@echo -
-	@echo $(SQM)  $(SQM)soffice "$(QM)-accept=socket,host=localhost,port=2083;urp;StarOffice.ServiceManager$(QM)"
+	@echo $(SQM)  $(SQM)soffice "$(QM)--accept=socket,host=localhost,port=2083;urp;StarOffice.ServiceManager$(QM)"
 	@echo --------------------------------------------------------------------------------
 
 %.run: $(OUT_BIN)/DocumentLoader$(EXE_EXT)

@@ -126,7 +126,7 @@ System.out.println("*** LocalOfficeImpl.refreshStorage: DONE");
      * Boot straps UNO.
      *
      * The office has to be started with following string:
-     * "-accept=socket,host=localhost,port=<PORT>;urp;StarOffice.ServiceManager"
+     * "--accept=socket,host=localhost,port=<PORT>;urp;StarOffice.ServiceManager"
      *
      * @param port is a communication port.
      */

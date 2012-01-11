@@ -96,7 +96,7 @@ ALLTAR : javatest
 # CT_APPEXECCOMMAND =
 # .ELSE
 # CT_APPEXECCOMMAND = -AppExecutionCommand \
-#             "$(OFFICE)$/soffice -accept=socket,host=localhost,port=8100;urp;"
+#             "$(OFFICE)$/soffice --accept=socket,host=localhost,port=8100;urp;"
 # .ENDIF
 # 
 # # test base is java complex

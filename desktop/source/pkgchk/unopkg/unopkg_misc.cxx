@@ -402,12 +402,12 @@ Reference<XComponentContext> connectToOffice(
     bool verbose )
 {
     Sequence<OUString> args( 3 );
-    args[ 0 ] = OUSTR("-nologo");
-    args[ 1 ] = OUSTR("-nodefault");
+    args[ 0 ] = OUSTR("--nologo");
+    args[ 1 ] = OUSTR("--nodefault");
 
     OUString pipeId( ::dp_misc::generateRandomPipeId() );
     ::rtl::OUStringBuffer buf;
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("-accept=pipe,name=") );
+    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("--accept=pipe,name=") );
     buf.append( pipeId );
     buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(";urp;") );
     args[ 2 ] = buf.makeStringAndClear();
@@ -418,7 +418,7 @@ Reference<XComponentContext> connectToOffice(
         dp_misc::writeConsole(
             OUSTR("Raising process: ") +
             appURL +
-            OUSTR("\nArguments: -nologo -nodefault ") +
+            OUSTR("\nArguments: --nologo --nodefault ") +
             args[2] +
             OUSTR("\n"));
     }
@@ -426,7 +426,7 @@ Reference<XComponentContext> connectToOffice(
     ::dp_misc::raiseProcess( appURL, args );
 
     if (verbose)
-        dp_misc::writeConsole("Ok.  Connecting...");
+        dp_misc::writeConsole("OK.  Connecting...");
 
     OSL_ASSERT( buf.getLength() == 0 );
     buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("uno:pipe,name=") );
@@ -438,7 +438,7 @@ Reference<XComponentContext> connectToOffice(
             buf.makeStringAndClear(), xLocalComponentContext ),
         UNO_QUERY_THROW );
     if (verbose)
-        dp_misc::writeConsole("Ok.\n");
+        dp_misc::writeConsole("OK.\n");
 
     return xRet;
 }

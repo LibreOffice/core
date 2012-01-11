@@ -73,12 +73,12 @@ cp %WS_PATH%/xmlsecurity/wntmsci8.pro/bin/testtool.exe ./.
 
 @echo off
 echo =============================================
-echo step - 8 start OpenOffice
+echo step - 8 start LibreOffice
 echo =============================================
 @echo on
 
 @echo off
-echo please start up OpenOffice with "-accept=socket,host=0,port=2002;urp;"
+echo please start up LibreOffice with "--accept=socket,host=0,port=2002;urp;"
 pause Press Enter when finished...
 @echo on
 
@@ -105,12 +105,12 @@ testtool %WS_PATH%/xmlsecurity/tools/cryptoken/jks/testToken.jks %WS_PATH%/xmlse
 
 @echo off
 echo =============================================
-echo step - 10 stop OpenOffice
+echo step - 10 stop LibreOffice
 echo =============================================
 @echo on
 
 @echo off
-echo please stop the OpenOffice application
+echo please stop the LibreOffice application
 pause Press Enter when finished...
 @echo on
 

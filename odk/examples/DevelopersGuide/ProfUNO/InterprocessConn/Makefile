@@ -70,7 +70,7 @@ $(EXAMPLE_NAME) : $(CLASSFILES)
 	@echo Note: For these examples you need a running office listening on port 2083.
 	@echo $(SQM)      $(SQM)Before you run these examples you have to start your office with
 	@echo -
-	@echo $(SQM)  $(SQM)soffice "$(QM)-accept=socket,host=localhost,port=2083;urp;StarOffice.ServiceManager$(QM)"
+	@echo $(SQM)  $(SQM)soffice "$(QM)--accept=socket,host=localhost,port=2083;urp;StarOffice.ServiceManager$(QM)"
 	@echo -----
 	@echo Please use one of the following commands to execute the examples!
 	@echo -

@@ -96,8 +96,8 @@ RegistryItem gid_Regitem_Clsid__D0484de6_Aaee_468a_991f_8d4b0737b57a__Localserve
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Math_Bin;
     Subkey = "CLSID\{D0484DE6-AAEE-468a-991F-8D4B0737B57A}\LocalServer32";
-    Value = "<progpath>\program\soffice.exe -nodefault -nologo";
-End
+    Value = "<progpath>\program\soffice.exe --nodefault --nologo";
+    End
 
 RegistryItem gid_Regitem_Clsid__D0484de6_Aaee_468a_991f_8d4b0737b57a__Miscstatus
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
@@ -215,7 +215,7 @@ RegistryItem gid_Regitem_Clsid__D2d59cd1_0a6a_4d36_Ae20_47817077d57c__Localserve
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Math_Bin;
     Subkey = "CLSID\{D2D59CD1-0A6A-4D36-AE20-47817077D57C}\LocalServer32";
-    Value = "<progpath>\program\soffice.exe -nodefault -nologo";
+    Value = "<progpath>\program\soffice.exe --nodefault --nologo";
 End
 
 RegistryItem gid_Regitem_Clsid__D2d59cd1_0a6a_4d36_Ae20_47817077d57c__Miscstatus

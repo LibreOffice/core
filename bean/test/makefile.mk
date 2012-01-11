@@ -45,7 +45,7 @@ MAXLINELENGTH = 100000
 OFFICE_CLASSPATH_TMP:=$(foreach,i,$(JARFILES) $(office)$/program$/classes$/$(i)$(PATH_SEPERATOR))
 OFFICE_CLASSPATH=$(OFFICE_CLASSPATH_TMP:t"")$(PATH_SEPERATOR)$(CLASSDIR)
 
-OOOBEAN_OPTIONS=-Dcom.sun.star.officebean.Options=-norestore 
+OOOBEAN_OPTIONS=-Dcom.sun.star.officebean.Options=--norestore
 
 
 .INCLUDE: target.mk

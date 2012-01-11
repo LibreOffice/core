@@ -311,7 +311,7 @@ public class OfficeProvider implements AppProvider
             else
             {
                 System.out.println("Could not connect an Office and cannot start one.\n".concat("please start an office with following parameter:\n").
-                        concat("\nsoffice -accept=").concat((String) param.get("ConnectionString")).concat(";urp;\n"));
+                        concat("\nsoffice --accept=").concat((String) param.get("ConnectionString")).concat(";urp;\n"));
                 if (bAppExecutionHasWarning)
                 {
                     System.out.println(errorMessage);
@@ -751,7 +751,7 @@ public class OfficeProvider implements AppProvider
         if (command.indexOf(sysBinDir) == -1)
         {
             command = sysBinDir + System.getProperty("file.separator") + "soffice" +
-                    " -norestore -accept=" + connectionString + ";urp;";
+                    " --norestore --accept=" + connectionString + ";urp;";
         }
 
         dbg("update AppExecutionCommand: " + command);

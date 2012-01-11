@@ -1294,7 +1294,7 @@ void restartOnMac(bool passArguments) {
         for (sal_uInt32 i = 0; i < n; ++i) {
             rtl::OUString arg;
             OSL_VERIFY(osl_getCommandArg(i, &arg.pData) == osl_Process_E_None);
-            if (arg.matchAsciiL(RTL_CONSTASCII_STRINGPARAM("-accept="))) {
+            if (arg.matchAsciiL(RTL_CONSTASCII_STRINGPARAM("--accept="))) {
                 wait = true;
             }
             rtl::OString arg8;
@@ -2459,7 +2459,7 @@ void Desktop::OpenClients()
         }
     }
 
-    // Disable AutoSave feature in case "-norestore" or a similare command line switch is set on the command line.
+    // Disable AutoSave feature in case "--norestore" or a similar command line switch is set on the command line.
     // The reason behind: AutoSave/EmergencySave/AutoRecovery share the same data.
     // But the require that all documents, which are saved as backup should exists inside
     // memory. May be this mechanism will be inconsistent if the configuration exists ...
@@ -2894,7 +2894,7 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
             // connection to the first office. We want to reuse the quickstart option for the first office.
             // NOTICE: The quickstart service must be initialized inside the "main thread", so we use the
             // application events to do this (they are executed inside main thread)!!!
-            // Don't start quickstart service if the user specified "-invisible" on the command line!
+            // Don't start quickstart service if the user specified "--invisible" on the command line!
             sal_Bool bQuickstart( sal_True );
             Sequence< Any > aSeq( 1 );
             aSeq[0] <<= bQuickstart;

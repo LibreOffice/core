@@ -240,8 +240,8 @@ if __name__ == '__main__':
                     "com.sun.star.bridge.UnoUrlResolver", localContext )
 
     # connect to the running office
-    # OOo has to be launched in listen mode as
-    # ./soffice "-accept=socket,host=localhost,port=2002;urp;"
+    # LibO has to be launched in listen mode as
+    # ./soffice "--accept=socket,host=localhost,port=2002;urp;"
     ctx = resolver.resolve( "uno:socket,host=localhost,port=2002;urp;StarOffice.ComponentContext" )
     myBox = MsgBox(ctx)
     myBox.addButton("Yes")

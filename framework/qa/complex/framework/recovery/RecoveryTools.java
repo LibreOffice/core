@@ -267,14 +267,14 @@ public class RecoveryTools {
 
     /**
      * The office must be started WITH restore and crashreporter functionality.
-     * Therefore the parmater '<CODE>-norestore</CODE>' and '<CODE>-nocrashreport</CODE>'
+     * Therefore the paramater '<CODE>--norestore</CODE>' and '<CODE>--nocrashreport</CODE>'
      * was removed from the <CODE>AppExecutionCommand</CODE> parameter
      */
     public void removeParametersFromAppExecutionCommand(){
 
         //remove some params to start office
         String office = (String) param.get("AppExecutionCommand");
-        String[] params = {"-norestore", "-nocrashreport"};
+        String[] params = {"--norestore", "--nocrashreport"};
 
         for (int i = 0; i < params.length; i++){
             int index = office.indexOf(params[i]);
@@ -292,8 +292,8 @@ public class RecoveryTools {
     /**
      * This function uses accessibility to handle modal dialogs like the
      * "Are you sure" dialog.
-     * It cklick the named button given in parameter <CODE>buttonName</CODE>
-     * @param buttonName the name of the button wich should be chlicked
+     * It clicks the named button given in parameter <CODE>buttonName</CODE>
+     * @param buttonName the name of the button wich should be clicked
      */
     public void handleModalDialog(XMultiServiceFactory xMSF, String buttonName)
                 throws com.sun.star.accessibility.IllegalAccessibleComponentStateException
@@ -315,7 +315,7 @@ public class RecoveryTools {
             log.println("click ' " + buttonName + "' button..");
             oUITools.clickButton(buttonName);
         } catch ( java.lang.Exception e){
-            throw new com.sun.star.accessibility.IllegalAccessibleComponentStateException("Could not klick '"+buttonName +"' at modal dialog: " + e.toString());
+            throw new com.sun.star.accessibility.IllegalAccessibleComponentStateException("Could not click '"+buttonName +"' at modal dialog: " + e.toString());
         }
         pause();
     }
