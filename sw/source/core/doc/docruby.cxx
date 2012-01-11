@@ -27,7 +27,7 @@
  ************************************************************************/
 
 
-#include <string.h>         // fuer strchr()
+#include <string.h>         // for strchr()
 
 #include <com/sun/star/i18n/UnicodeType.hdl>
 #include <com/sun/star/i18n/WordType.hdl>
@@ -38,12 +38,12 @@
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <docary.hxx>
-#include <mvsave.hxx>       // Strukturen zum Sichern beim Move/Delete
+#include <mvsave.hxx>       // structures for Saving by Move/Delete
 #include <ndtxt.hxx>
 #include <txatbase.hxx>
 #include <rubylist.hxx>
 #include <pam.hxx>
-#include <swundo.hxx>       // fuer die UndoIds
+#include <swundo.hxx>       // for the UndoIds
 #include <breakit.hxx>
 #include <crsskip.hxx>
 

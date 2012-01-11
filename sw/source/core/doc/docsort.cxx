@@ -70,12 +70,12 @@ LocaleDataWrapper*  SwSortElement::pLclData = 0;
 SV_IMPL_OP_PTRARR_SORT( SwSortElements, SwSortElementPtr );
 
 /*--------------------------------------------------------------------
-    Beschreibung: Ein Sortierelement fuers Sort konstruieren
+    Description: Construct a SortElement for the Sort
  --------------------------------------------------------------------*/
 void SwSortElement::Init( SwDoc* pD, const SwSortOptions& rOpt,
                             FlatFndBox* pFltBx )
 {
-    OSL_ENSURE( !pDoc && !pOptions && !pBox, "wer hat das Finit vergessen?" );
+    OSL_ENSURE( !pDoc && !pOptions && !pBox, "Who forgot to call Finit?" );
     pDoc = pD;
     pOptions = new SwSortOptions( rOpt );
     pBox = pFltBx;
@@ -128,7 +128,7 @@ double SwSortElement::StrToDouble( const String& rStr ) const
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: Operatoren zum Vergleichen
+    Description: Comparison operators
  --------------------------------------------------------------------*/
 sal_Bool SwSortElement::operator==(const SwSortElement& )
 {
@@ -136,13 +136,12 @@ sal_Bool SwSortElement::operator==(const SwSortElement& )
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: Kleiner-Operator fuers sortieren
+    Description: Less-than operator for sorting
  --------------------------------------------------------------------*/
 sal_Bool SwSortElement::operator<(const SwSortElement& rCmp)
 {
 
-    // der eigentliche Vergleich
-    //
+    // The actual comparison
     for(sal_uInt16 nKey = 0; nKey < pOptions->aKeys.Count(); ++nKey)
     {
         const SwSortElement *pOrig, *pCmp;
@@ -193,7 +192,7 @@ double SwSortElement::GetValue( sal_uInt16 nKey ) const
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: SortierElemente fuer Text
+    Description: SortingElement for Text
  --------------------------------------------------------------------*/
 SwSortTxtElement::SwSortTxtElement(const SwNodeIndex& rPos)
     : nOrg(rPos.GetIndex()), aPos(rPos)
@@ -205,7 +204,7 @@ SwSortTxtElement::~SwSortTxtElement()
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: Key ermitteln
+    Description: Get Key
  --------------------------------------------------------------------*/
 String SwSortTxtElement::GetKey(sal_uInt16 nId) const
 {
@@ -213,14 +212,14 @@ String SwSortTxtElement::GetKey(sal_uInt16 nId) const
     if( !pTxtNd )
         return aEmptyStr;
 
-    // fuer TextNodes
+    // for TextNodes
     const String& rStr = pTxtNd->GetTxt();
 
     sal_Unicode nDeli = pOptions->cDeli;
     sal_uInt16 nDCount = pOptions->aKeys[nId]->nColumnId, i = 1;
     xub_StrLen nStart = 0;
 
-    // Den Delimitter suchen
+    // Find the delimiter
     while( nStart != STRING_NOTFOUND && i < nDCount)
         if( STRING_NOTFOUND != ( nStart = rStr.Search( nDeli, nStart ) ) )
         {
@@ -228,13 +227,14 @@ String SwSortTxtElement::GetKey(sal_uInt16 nId) const
             i++;
         }
 
-    // naechsten Delimitter gefunden oder Ende des Strings und Kopieren
+    // Found next delimiter or end of String
+    // and copy
     xub_StrLen nEnd = rStr.Search( nDeli, nStart+1 );
     return rStr.Copy( nStart, nEnd-nStart );
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: Sortier-Elemente fuer Tabellen
+    Description: SortingElement for Tables
  --------------------------------------------------------------------*/
 SwSortBoxElement::SwSortBoxElement( sal_uInt16 nRC )
     : nRow( nRC )
@@ -246,7 +246,7 @@ SwSortBoxElement::~SwSortBoxElement()
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: Schluessel zu einer Zelle ermitteln
+    Description: Get Key for a cell
  --------------------------------------------------------------------*/
 String SwSortBoxElement::GetKey(sal_uInt16 nKey) const
 {
@@ -254,20 +254,20 @@ String SwSortBoxElement::GetKey(sal_uInt16 nKey) const
     sal_uInt16 nCol = pOptions->aKeys[nKey]->nColumnId-1;
 
     if( SRT_ROWS == pOptions->eDirection )
-        pFndBox = pBox->GetBox(nCol, nRow);         // Zeilen sortieren
+        pFndBox = pBox->GetBox(nCol, nRow);         // Sort rows
     else
-        pFndBox = pBox->GetBox(nRow, nCol);         // Spalten sortieren
+        pFndBox = pBox->GetBox(nRow, nCol);         // Sort columns
 
-    // Den Text rausfieseln
+    // Extract the Text
     String aRetStr;
     if( pFndBox )
-    {   // StartNode holen und ueberlesen
+    {   // Get StartNode and skip it
         const SwTableBox* pMyBox = pFndBox->GetBox();
-        OSL_ENSURE(pMyBox, "Keine atomare Box");
+        OSL_ENSURE(pMyBox, "No atomic Box");
 
         if( pMyBox->GetSttNd() )
         {
-            // ueber alle TextNodes der Box
+            // Iterate over all the Box's TextNodes
             const SwNode *pNd = 0, *pEndNd = pMyBox->GetSttNd()->EndOfSectionNode();
             for( sal_uLong nIdx = pMyBox->GetSttIdx() + 1; pNd != pEndNd; ++nIdx )
                 if( ( pNd = pDoc->GetNodes()[ nIdx ])->IsTxtNode() )
@@ -283,9 +283,10 @@ double SwSortBoxElement::GetValue( sal_uInt16 nKey ) const
     sal_uInt16 nCol = pOptions->aKeys[nKey]->nColumnId-1;
 
     if( SRT_ROWS == pOptions->eDirection )
-        pFndBox = pBox->GetBox(nCol, nRow);         // Zeilen sortieren
+        pFndBox = pBox->GetBox(nCol, nRow);         // Sort rows
     else
-        pFndBox = pBox->GetBox(nRow, nCol);         // Spalten sortieren
+        pFndBox = pBox->GetBox(nRow, nCol);         // Sort columns
+
 
     double nVal;
     if( pFndBox )
@@ -303,14 +304,14 @@ double SwSortBoxElement::GetValue( sal_uInt16 nKey ) const
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: Text sortieren im Document
+    Description: Sort Text in the Document
  --------------------------------------------------------------------*/
 sal_Bool SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
 {
-    // pruefen ob Rahmen im Text
+    // Check if Frame is in the Text
     const SwPosition *pStart = rPaM.Start(), *pEnd = rPaM.End();
-    // Index auf den Start der Selektion
 
+    // Set index to the Selection's start
     for ( sal_uInt16 n = 0; n < GetSpzFrmFmts()->Count(); ++n )
     {
         SwFrmFmt *const pFmt = static_cast<SwFrmFmt*>((*GetSpzFrmFmts())[n]);
@@ -322,12 +323,12 @@ sal_Bool SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
             return sal_False;
     }
 
-    // pruefe ob nur TextNodes in der Selection liegen
+    // Check if only TextNodes are within the Selection
     {
         sal_uLong nStart = pStart->nNode.GetIndex(),
                         nEnd = pEnd->nNode.GetIndex();
         while( nStart <= nEnd )
-            // Iterieren ueber einen selektierten Bereich
+            // Iterate over a selected Area
             if( !GetNodes()[ nStart++ ]->IsTxtNode() )
                 return sal_False;
     }
@@ -356,12 +357,12 @@ sal_Bool SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
                 pRedlUndo = new SwUndoRedlineSort( *pRedlPam,rOpt );
                 GetIDocumentUndoRedo().DoUndo(false);
             }
-            // erst den Bereich kopieren, dann
+            // First copy the area
             SwNodeIndex aEndIdx( pEnd->nNode, 1 );
             SwNodeRange aRg( pStart->nNode, aEndIdx );
             GetNodes()._Copy( aRg, aEndIdx );
 
-            // Bereich neu ist von pEnd->nNode+1 bis aEndIdx
+            // Area is new from pEnd->nNode+1 to aEndIdx
             DeleteRedline( *pRedlPam, true, USHRT_MAX );
 
             pRedlPam->GetMark()->nNode.Assign( pEnd->nNode.GetNode(), 1 );
@@ -394,15 +395,13 @@ sal_Bool SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
     SwSortElements aSortArr;
     while( aStart <= pEnd->nNode )
     {
-        // Iterieren ueber einen selektierten Bereich
+        // Iterate over a selected Area
         SwSortTxtElement* pSE = new SwSortTxtElement( aStart );
         aSortArr.Insert(pSE);
         aStart++;
     }
 
-    // Und jetzt der Akt: Verschieben von Nodes und immer schoen auf UNDO
-    // achten
-    //
+    // Now comes the tricky part: Move Nodes (and always keep Undo in mind)
     sal_uLong nBeg = pStart->nNode.GetIndex();
     SwNodeRange aRg( aStart, aStart );
 
@@ -421,15 +420,15 @@ sal_Bool SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
         aRg.aStart  = pBox->aPos.GetIndex();
         aRg.aEnd    = aRg.aStart.GetIndex() + 1;
 
-        // Nodes verschieben
+        // Move Nodes
         MoveNodeRange( aRg, aStart,
             IDocumentContentOperations::DOC_MOVEDEFAULT );
 
-        // Undo Verschiebungen einpflegen
+        // Insert Move in Undo
         if(pUndoSort)
             pUndoSort->Insert(pBox->nOrg, nBeg + n);
     }
-    // Alle Elemente aus dem SortArray loeschen
+    // Delete all elements from the SortArray
     aSortArr.DeleteAndDestroy(0, aSortArr.Count());
     SwSortElement::Finit();
 
@@ -488,18 +487,18 @@ sal_Bool SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: Tabelle sortieren im Document
+    Description: Sort Table in the Document
  --------------------------------------------------------------------*/
 sal_Bool SwDoc::SortTbl(const SwSelBoxes& rBoxes, const SwSortOptions& rOpt)
 {
-    // uebers SwDoc fuer Undo !!
-    OSL_ENSURE( !rBoxes.empty(), "keine gueltige Box-Liste" );
+    // Via SwDoc for Undo!
+    OSL_ENSURE( !rBoxes.empty(), "no valid Box list" );
     SwTableNode* pTblNd = const_cast<SwTableNode*>( rBoxes.begin()->second->GetSttNd()->FindTableNode() );
     if( !pTblNd )
         return sal_False;
 
-    // Auf gehts sortieren
-    // suche alle Boxen / Lines
+    // We begin sorting
+    // Find all Boxes/Lines
     _FndBox aFndBox( 0, 0 );
     {
         _FndPara aPara( rBoxes, &aFndBox );
@@ -515,13 +514,13 @@ sal_Bool SwDoc::SortTbl(const SwSelBoxes& rBoxes, const SwSortOptions& rOpt)
     sal_uInt16 nStart = 0;
     if( pTblNd->GetTable().GetRowsToRepeat() > 0 && rOpt.eDirection == SRT_ROWS )
     {
-        // Oberste seleketierte Zeile
+        // Uppermost selected Cell
         _FndLines& rLines = aFndBox.GetLines();
 
         while( nStart < rLines.Count() )
         {
-            // Verschachtelung durch Split Merge beachten,
-            // die oberste rausholen
+            // Respect Split Merge nesting,
+            // extract the upper most
             SwTableLine* pLine = rLines[nStart]->GetLine();
             while ( pLine->GetUpper() )
                 pLine = pLine->GetUpper()->GetUpper();
@@ -531,30 +530,30 @@ sal_Bool SwDoc::SortTbl(const SwSelBoxes& rBoxes, const SwSortOptions& rOpt)
             else
                 break;
         }
-        // Alle selektierten in der HeaderLine ?  -> kein Offset
+        // Are all selected in the HeaderLine?  -> no Offset
         if( nStart == rLines.Count() )
             nStart = 0;
     }
 
-    // umschalten auf relative Formeln
+    // Switch to relative Formulas
     SwTableFmlUpdate aMsgHnt( &pTblNd->GetTable() );
     aMsgHnt.eFlags = TBL_RELBOXNAME;
     UpdateTblFlds( &aMsgHnt );
 
-    // Tabelle als flache Array-Struktur
+    // Table as a flat array structure
     FlatFndBox aFlatBox(this, aFndBox);
 
     if(!aFlatBox.IsSymmetric())
         return sal_False;
 
-    // MIB 9.7.97: HTML-Layout loeschen
+    // Delete HTML layout
     pTblNd->GetTable().SetHTMLTableLayout( 0 );
 
     // #i37739# A simple 'MakeFrms' after the node sorting
     // does not work if the table is inside a frame and has no prev/next.
     SwNode2Layout aNode2Layout( *pTblNd );
 
-    // loesche die Frames der Tabelle
+    // Delete the Table's Frames
     pTblNd->DelFrms();
     // ? TL_CHART2: ?
 
@@ -568,16 +567,15 @@ sal_Bool SwDoc::SortTbl(const SwSelBoxes& rBoxes, const SwSortOptions& rOpt)
     }
     ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
 
-    // SchluesselElemente einsortieren
+    // Insert KeyElements
     sal_uInt16 nCount = (rOpt.eDirection == SRT_ROWS) ?
                     aFlatBox.GetRows() : aFlatBox.GetCols();
 
-    // SortList nach Schluessel sortieren
+    // Sort SortList by Key
     SwSortElement::Init( this, rOpt, &aFlatBox );
     SwSortElements aSortList;
 
-    // wenn die HeaderLine wiederholt wird und die
-    // Zeilen sortiert werden 1.Zeile nicht mitsortieren
+    // When sorting, do not include the first row if the HeaderLine is repeated
     sal_uInt16 i;
 
     for( i = nStart; i < nCount; ++i)
@@ -586,7 +584,7 @@ sal_Bool SwDoc::SortTbl(const SwSelBoxes& rBoxes, const SwSortOptions& rOpt)
         aSortList.Insert(pEle);
     }
 
-    // nach Sortierung verschieben
+    // Move after Sorting
     SwMovedBoxes aMovedList;
     for(i=0; i < aSortList.Count(); ++i)
     {
@@ -606,7 +604,7 @@ sal_Bool SwDoc::SortTbl(const SwSelBoxes& rBoxes, const SwSortOptions& rOpt)
     // TL_CHART2: need to inform chart of probably changed cell names
     UpdateCharts( pTblNd->GetTable().GetFrmFmt()->GetName() );
 
-    // Alle Elemente aus dem SortArray loeschen
+    // Delete all Elements in the SortArray
     aSortList.DeleteAndDestroy( 0, aSortList.Count() );
     SwSortElement::Finit();
 
@@ -615,16 +613,16 @@ sal_Bool SwDoc::SortTbl(const SwSelBoxes& rBoxes, const SwSortOptions& rOpt)
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: Zeilenweise verschieben
+    Description: Move a row
  --------------------------------------------------------------------*/
 void MoveRow(SwDoc* pDoc, const FlatFndBox& rBox, sal_uInt16 nS, sal_uInt16 nT,
              SwMovedBoxes& rMovedList, SwUndoSort* pUD)
 {
     for( sal_uInt16 i=0; i < rBox.GetCols(); ++i )
-    {   // Alte Zellen-Pos bestimmen und merken
+    {   // Get old cell position and remember it
         const _FndBox* pSource = rBox.GetBox(i, nS);
 
-        // neue Zellen-Pos
+        // new cell position
         const _FndBox* pTarget = rBox.GetBox(i, nT);
 
         const SwTableBox* pT = pTarget->GetBox();
@@ -632,7 +630,7 @@ void MoveRow(SwDoc* pDoc, const FlatFndBox& rBox, sal_uInt16 nS, sal_uInt16 nT,
 
         sal_Bool bMoved = rMovedList.GetPos(pT) != USHRT_MAX;
 
-        // und verschieben
+        // and move it
         MoveCell(pDoc, pS, pT, bMoved, pUD);
 
         rMovedList.Insert(pS, rMovedList.Count() );
@@ -661,23 +659,23 @@ void MoveRow(SwDoc* pDoc, const FlatFndBox& rBox, sal_uInt16 nS, sal_uInt16 nT,
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: Spaltenweise verschieben
+    Description: Move a column
  --------------------------------------------------------------------*/
 void MoveCol(SwDoc* pDoc, const FlatFndBox& rBox, sal_uInt16 nS, sal_uInt16 nT,
              SwMovedBoxes& rMovedList, SwUndoSort* pUD)
 {
     for(sal_uInt16 i=0; i < rBox.GetRows(); ++i)
-    {   // Alte Zellen-Pos bestimmen und merken
+    {   // Get old cell position and remember it
         const _FndBox* pSource = rBox.GetBox(nS, i);
 
-        // neue Zellen-Pos
+        // new cell position
         const _FndBox* pTarget = rBox.GetBox(nT, i);
 
-        // und verschieben
+        // and move it
         const SwTableBox* pT = pTarget->GetBox();
         const SwTableBox* pS = pSource->GetBox();
 
-        // und verschieben
+        // and move it
         sal_Bool bMoved = rMovedList.GetPos(pT) != USHRT_MAX;
         MoveCell(pDoc, pS, pT, bMoved, pUD);
 
@@ -707,12 +705,12 @@ void MoveCol(SwDoc* pDoc, const FlatFndBox& rBox, sal_uInt16 nS, sal_uInt16 nT,
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: Eine einzelne Zelle verschieben
+    Description: Move a single Cell
  --------------------------------------------------------------------*/
 void MoveCell(SwDoc* pDoc, const SwTableBox* pSource, const SwTableBox* pTar,
               sal_Bool bMovedBefore, SwUndoSort* pUD)
 {
-    OSL_ENSURE(pSource && pTar,"Fehlende Quelle oder Ziel");
+    OSL_ENSURE(pSource && pTar,"Source or target missing");
 
     if(pSource == pTar)
         return;
@@ -720,50 +718,49 @@ void MoveCell(SwDoc* pDoc, const SwTableBox* pSource, const SwTableBox* pTar,
     if(pUD)
         pUD->Insert( pSource->GetName(), pTar->GetName() );
 
-    // Pam Quelle auf den ersten ContentNode setzen
+    // Set Pam source to the first ContentNode
     SwNodeRange aRg( *pSource->GetSttNd(), 0, *pSource->GetSttNd() );
     SwNode* pNd = pDoc->GetNodes().GoNext( &aRg.aStart );
 
-    // wurde die Zelle (Source) nicht verschoben
-    // -> einen Leer-Node einfuegen und den Rest verschieben
-    // ansonsten steht der Mark auf dem ersten Content-Node
+    // If the Cell (Source) wasn't moved
+    // -> insert an empty Node and move the rest or the Mark
+    // points to the first ContentNode
     if( pNd->StartOfSectionNode() == pSource->GetSttNd() )
         pNd = pDoc->GetNodes().MakeTxtNode( aRg.aStart,
                 (SwTxtFmtColl*)pDoc->GetDfltTxtFmtColl() );
     aRg.aEnd = *pNd->EndOfSectionNode();
 
-    // Ist das Ziel leer(1 leerer Node vorhanden)
-    // -> diesen loeschen und move
-    // Ziel
+    // If the Target is empty (there is one empty Node)
+    // -> delete it and move the Target
     SwNodeIndex aTar( *pTar->GetSttNd() );
-    pNd = pDoc->GetNodes().GoNext( &aTar );     // naechsten ContentNode
+    pNd = pDoc->GetNodes().GoNext( &aTar );     // next ContentNode
     sal_uLong nCount = pNd->EndOfSectionIndex() - pNd->StartOfSectionIndex();
 
     sal_Bool bDelFirst = sal_False;
     if( nCount == 2 )
     {
-        OSL_ENSURE( pNd->GetCntntNode(), "Kein ContentNode");
+        OSL_ENSURE( pNd->GetCntntNode(), "No ContentNode");
         bDelFirst = !pNd->GetCntntNode()->Len() && bMovedBefore;
     }
 
     if(!bDelFirst)
-    {   // Es besteht schon Inhalt -> alter I n h a l t  Section Down
+    {   // We already have Content -> old Content Section Down
         SwNodeRange aRgTar( aTar.GetNode(), 0, *pNd->EndOfSectionNode() );
         pDoc->GetNodes().SectionDown( &aRgTar );
     }
 
-    // Einfuegen der Source
+    // Insert the Source
     SwNodeIndex aIns( *pTar->GetSttNd()->EndOfSectionNode() );
     pDoc->MoveNodeRange( aRg, aIns,
         IDocumentContentOperations::DOC_MOVEDEFAULT );
 
-    // Falls erster Node leer -> weg damit
+    // If first Node is empty -> delete it
     if(bDelFirst)
         pDoc->GetNodes().Delete( aTar, 1 );
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: Zweidimensionales Array aus FndBoxes generieren
+    Description: Generate two-dimensional array of FndBoxes
  --------------------------------------------------------------------*/
 FlatFndBox::FlatFndBox(SwDoc* pDocPtr, const _FndBox& rBox) :
     pDoc(pDocPtr),
@@ -772,14 +769,14 @@ FlatFndBox::FlatFndBox(SwDoc* pDocPtr, const _FndBox& rBox) :
     ppItemSets(0),
     nRow(0),
     nCol(0)
-{ // Ist das Array symmetrisch
+{ // If the array is symmetric
     if((bSym = CheckLineSymmetry(rBoxRef)) != 0)
     {
-        // Spalten/Reihen-Anzahl ermitteln
+        // Determine column/row count
         nCols = GetColCount(rBoxRef);
         nRows = GetRowCount(rBoxRef);
 
-        // lineares Array anlegen
+        // Create linear array
         pArr = new _FndBoxPtr[ nRows * nCols ];
         _FndBox** ppTmp = (_FndBox**)pArr;
         memset( ppTmp, 0, sizeof(_FndBoxPtr) * nRows * nCols );
@@ -799,20 +796,20 @@ FlatFndBox::~FlatFndBox()
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Alle Lines einer Box muessen gleichviel Boxen haben
+    Description: All Lines of a Box need to have as many Boxes
  --------------------------------------------------------------------*/
 sal_Bool FlatFndBox::CheckLineSymmetry(const _FndBox& rBox)
 {
     const _FndLines &rLines = rBox.GetLines();
     sal_uInt16 nBoxes(0);
 
-    // UeberLines iterieren
+    // Iterate over Lines
     for(sal_uInt16 i=0; i < rLines.Count(); ++i)
-    {   // Die Boxen einer Line
+    {   // A List's Box
         _FndLine* pLn = rLines[i];
         const _FndBoxes& rBoxes = pLn->GetBoxes();
 
-        // Anzahl der Boxen aller Lines ungleich -> keine Symmetrie
+        // Amount of Boxes of all Lines is uneven -> no symmetry
         if( i  && nBoxes != rBoxes.Count())
             return sal_False;
 
@@ -824,21 +821,21 @@ sal_Bool FlatFndBox::CheckLineSymmetry(const _FndBox& rBox)
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Box auf Symmetrie pruefen
-                    Alle Boxen einer Line muessen gleichviele Lines haben
+    Description: Check Box for symmetry
+                 All Boxes of a Line need to have as many Lines
  --------------------------------------------------------------------*/
 sal_Bool FlatFndBox::CheckBoxSymmetry(const _FndLine& rLn)
 {
     const _FndBoxes &rBoxes = rLn.GetBoxes();
     sal_uInt16 nLines(0);
 
-    // Ueber Boxes iterieren
+    // Iterate over Boxes
     for(sal_uInt16 i=0; i < rBoxes.Count(); ++i)
-    {   // Die Boxen einer Line
+    {   // The Boxes of a Line
         _FndBox* pBox = rBoxes[i];
         const _FndLines& rLines = pBox->GetLines();
 
-        // Anzahl der Boxen aller Lines ungleich -> keine Symmetrie
+        // Amount of Boxes of all Lines is uneven -> no symmetry
         if( i && nLines != rLines.Count() )
             return sal_False;
 
@@ -850,23 +847,23 @@ sal_Bool FlatFndBox::CheckBoxSymmetry(const _FndLine& rLn)
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: max Anzahl der Spalten (Boxes)
+    Description: Maximum count of Columns (Boxes)
  --------------------------------------------------------------------*/
 sal_uInt16 FlatFndBox::GetColCount(const _FndBox& rBox)
 {
     const _FndLines& rLines = rBox.GetLines();
-    // Ueber Lines iterieren
+    // Iterate over Lines
     if( !rLines.Count() )
         return 1;
 
     sal_uInt16 nSum = 0;
     for( sal_uInt16 i=0; i < rLines.Count(); ++i )
     {
-        // Die Boxen einer Line
+        // The Boxes of a Line
         sal_uInt16 nCount = 0;
         const _FndBoxes& rBoxes = rLines[i]->GetBoxes();
         for( sal_uInt16 j=0; j < rBoxes.Count(); ++j )
-                //  Rekursiv wirder ueber die Lines Iterieren
+            // Iterate recursively over the Lines
             nCount += rBoxes[j]->GetLines().Count()
                         ? GetColCount(*rBoxes[j]) : 1;
 
@@ -877,7 +874,7 @@ sal_uInt16 FlatFndBox::GetColCount(const _FndBox& rBox)
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: max Anzahl der Zeilen (Lines)
+    Description: Maximum count of Rows (Lines)
  --------------------------------------------------------------------*/
 sal_uInt16 FlatFndBox::GetRowCount(const _FndBox& rBox)
 {
@@ -887,12 +884,12 @@ sal_uInt16 FlatFndBox::GetRowCount(const _FndBox& rBox)
 
     sal_uInt16 nLines = 0;
     for(sal_uInt16 i=0; i < rLines.Count(); ++i)
-    {   // Die Boxen einer Line
+    {   // The Boxes of a Line
         const _FndBoxes& rBoxes = rLines[i]->GetBoxes();
         sal_uInt16 nLn = 1;
         for(sal_uInt16 j=0; j < rBoxes.Count(); ++j)
             if( rBoxes[j]->GetLines().Count() )
-                //  Rekursiv ueber die Lines Iterieren
+                // Iterate recursively over the Lines
                 nLn = Max(GetRowCount(*rBoxes[j]), nLn);
 
         nLines = nLines + nLn;
@@ -901,32 +898,32 @@ sal_uInt16 FlatFndBox::GetRowCount(const _FndBox& rBox)
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: lineares Array aus atomaren FndBoxes erzeugen
+    Description: Create a linear array of atmoic FndBoxes
  --------------------------------------------------------------------*/
 void FlatFndBox::FillFlat(const _FndBox& rBox, sal_Bool bLastBox)
 {
     sal_Bool bModRow = sal_False;
     const _FndLines& rLines = rBox.GetLines();
 
-    // Ueber Lines iterieren
+    // Iterate over Lines
     sal_uInt16 nOldRow = nRow;
     for( sal_uInt16 i=0; i < rLines.Count(); ++i )
     {
-        // Die Boxen einer Line
+        // The Boxes of a Line
         const _FndBoxes& rBoxes = rLines[i]->GetBoxes();
         sal_uInt16 nOldCol = nCol;
         for( sal_uInt16 j = 0; j < rBoxes.Count(); ++j )
         {
-            // Die Box pruefen ob es eine atomare Box ist
+            // Check the Box if it's an atomic one
             const _FndBox*   pBox   = rBoxes[ j ];
 
             if( !pBox->GetLines().Count() )
             {
-                // peichern
+                // save it
                 sal_uInt16 nOff = nRow * nCols + nCol;
                 *(pArr + nOff) = pBox;
 
-                // sicher die Formel/Format/Value Werte
+                // Save the Formula/Format/Value values
                 const SwFrmFmt* pFmt = pBox->GetBox()->GetFrmFmt();
                 if( SFX_ITEM_SET == pFmt->GetItemState( RES_BOXATR_FORMAT ) ||
                     SFX_ITEM_SET == pFmt->GetItemState( RES_BOXATR_FORMULA ) ||
@@ -948,7 +945,7 @@ void FlatFndBox::FillFlat(const _FndBox& rBox, sal_Bool bLastBox)
             }
             else
             {
-                // Rekursiv wieder ueber die Lines einer Box Iterieren
+                // Iterate recursively over the Lines of a Box
                 FillFlat( *pBox, ( j == rBoxes.Count()-1 ) );
             }
             nCol++;
@@ -962,20 +959,20 @@ void FlatFndBox::FillFlat(const _FndBox& rBox, sal_Bool bLastBox)
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: Zugriff auf eine bestimmte Zelle
+    Description: Access a specific Cell
  --------------------------------------------------------------------*/
 const _FndBox* FlatFndBox::GetBox(sal_uInt16 n_Col, sal_uInt16 n_Row) const
 {
     sal_uInt16 nOff = n_Row * nCols + n_Col;
     const _FndBox* pTmp = *(pArr + nOff);
 
-    OSL_ENSURE(n_Col < nCols && n_Row < nRows && pTmp, "unzulaessiger Array-Zugriff");
+    OSL_ENSURE(n_Col < nCols && n_Row < nRows && pTmp, "invalid array access");
     return pTmp;
 }
 
 const SfxItemSet* FlatFndBox::GetItemSet(sal_uInt16 n_Col, sal_uInt16 n_Row) const
 {
-    OSL_ENSURE( !ppItemSets || ( n_Col < nCols && n_Row < nRows), "unzulaessiger Array-Zugriff");
+    OSL_ENSURE( !ppItemSets || ( n_Col < nCols && n_Row < nRows), "invalid array access");
 
     return ppItemSets ? *(ppItemSets + (n_Row * nCols + n_Col )) : 0;
 }

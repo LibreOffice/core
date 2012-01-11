@@ -55,14 +55,14 @@ void SwURLStateChanged::Notify( SfxBroadcaster& , const SfxHint& rHint )
 {
     if( rHint.ISA( INetURLHistoryHint ) && pDoc->GetCurrentViewShell() )    //swmod 071108//swmod 071225
     {
-        // diese URL wurde veraendert:
+        // This URL has been changed:
         const INetURLObject* pIURL = ((INetURLHistoryHint&)rHint).GetObject();
         String sURL( pIURL->GetMainURL( INetURLObject::NO_DECODE ) ), sBkmk;
 
         SwEditShell* pESh = pDoc->GetEditShell();
 
         if( pDoc->GetDocShell() && pDoc->GetDocShell()->GetMedium() &&
-            // falls das unser Doc ist, kann es auch lokale Spruenge geben!
+            // If this is our Doc, we can also have local jumps!
             sURL == pDoc->GetDocShell()->GetMedium()->GetName() )
             (sBkmk = pIURL->GetMark()).Insert( INET_MARK_TOKEN, 0 );
 
@@ -101,8 +101,8 @@ void SwURLStateChanged::Notify( SfxBroadcaster& , const SfxHint& rHint )
     }
 }
 
-    // erfrage ob die URL besucht war. Uebers Doc, falls nur ein Bookmark
-    // angegeben ist. Dann muss der Doc. Name davor gesetzt werden!
+// Check if the URL has been visited before. Via the Doc, if only one Bookmark is set
+// We need to put the Doc's name before it!
 sal_Bool SwDoc::IsVisitedURL( const String& rURL ) const
 {
     sal_Bool bRet = sal_False;
@@ -118,8 +118,7 @@ sal_Bool SwDoc::IsVisitedURL( const String& rURL ) const
         else
             bRet = pHist->QueryUrl( rURL );
 
-        // dann  wollen wird auch ueber Statusaenderungen in der History
-        // informiert werden!
+        // We also want to be informed about status updates in the History
         if( !pURLStateChgd )
         {
             SwDoc* pD = (SwDoc*)this;
@@ -128,7 +127,5 @@ sal_Bool SwDoc::IsVisitedURL( const String& rURL ) const
     }
     return bRet;
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

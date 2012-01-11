@@ -33,7 +33,7 @@
 SV_IMPL_PTRARR(SwSortKeys, SwSortKey*)
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Sortier-Schluessel
+    Description: Sort Key
  --------------------------------------------------------------------*/
 SwSortKey::SwSortKey() :
     eSortOrder( SRT_ASCENDING ),
@@ -59,7 +59,7 @@ SwSortKey::SwSortKey(const SwSortKey& rOld) :
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: Sortieroptionen fuers Sortieren
+    Description: Sorting options for Sorting
  --------------------------------------------------------------------*/
 SwSortOptions::SwSortOptions()
     : eDirection( SRT_ROWS ),
