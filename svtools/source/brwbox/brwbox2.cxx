@@ -2001,11 +2001,13 @@ void BrowseBox::Dispatch( sal_uInt16 nId )
             {
                 sal_uInt16 nNewPos = GetColumnPos( GetCurColumnId() ) + 1;
                 sal_uInt16 nNewId = GetColumnId( nNewPos );
-                if (nNewId != 0)    // Am Zeilenende ?
+                if (nNewId != BROWSER_INVALIDID)    // At end of row ?
                     bDone = GoToColumnId( nNewId );
                 else
                 {
-                    sal_uInt16 nColId = ( GetColumnId(0) == 0 ) ? GetColumnId(1) : GetColumnId(0);
+                    sal_uInt16 nColId = GetColumnId(0);
+                    if ( nColId == BROWSER_INVALIDID || nColId == HandleColumnId )
+                        nColId = GetColumnId(1);
                     if ( GetRowCount() )
                         bDone = ( nCurRow < GetRowCount() - 1 ) && GoToRowColumnId( nCurRow + 1, nColId );
                     else if ( ColCount() )
