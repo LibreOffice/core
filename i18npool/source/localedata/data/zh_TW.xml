@@ -163,7 +163,7 @@
       <FormatCode>AM/PM HH:MM</FormatCode>
     </FormatElement>
     <FormatElement msgid="TimeFormatskey4" default="false" type="medium" usage="TIME"  formatindex="42">
-      <FormatCode> AM/PM HH:MM:SS</FormatCode>
+      <FormatCode>AM/PM HH:MM:SS</FormatCode>
     </FormatElement>
     <FormatElement msgid="TimeFormatskey5" default="false" type="medium" usage="TIME"  formatindex="43">
       <FormatCode>[HH]:MM:SS</FormatCode>

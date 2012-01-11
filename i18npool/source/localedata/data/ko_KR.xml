@@ -117,7 +117,7 @@
       <FormatCode>[~hanja]YY"年" M"月" D"日" NNNN</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey12" default="false" type="medium" usage="DATE" formatindex="29">
-      <FormatCode>[~hanja]YYYY"年" M"月" D"日" NNNN </FormatCode>
+      <FormatCode>[~hanja]YYYY"年" M"月" D"日" NNNN</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey13" default="false" type="medium" usage="DATE" formatindex="30">
       <FormatCode>YY-M-D NNNN</FormatCode>
@@ -181,7 +181,7 @@
       <FormatCode>YY/M/D NNNN</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey34" default="true" type="long" usage="DATE" formatindex="62">
-      <FormatCode>YYYY/M/D NNNN </FormatCode>
+      <FormatCode>YYYY/M/D NNNN</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey35" default="false" type="long" usage="DATE" formatindex="63">
       <FormatCode>YY/M</FormatCode>

@@ -78,7 +78,7 @@
       <FormatCode>[NatNum1][CURRENCY] #,##0.00;[RED]-[CURRENCY] #,##0.00</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey5" default="false" type="medium" usage="CURRENCY" formatindex="16">
-      <FormatCode>[NatNum1]CCC #,##0.00 </FormatCode>
+      <FormatCode>[NatNum1]CCC #,##0.00</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey6" default="false" type="medium" usage="CURRENCY" formatindex="17">
       <FormatCode>[NatNum1][CURRENCY] #,##0.--;[RED]-[CURRENCY] #,##0.--</FormatCode>
