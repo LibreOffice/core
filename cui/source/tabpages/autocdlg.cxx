@@ -1468,19 +1468,16 @@ IMPL_LINK(OfaAutocorrReplacePage, ModifyHdl, Edit*, pEdt)
 
 struct StringsArrays
 {
+    std::vector<rtl::OUString> aAbbrevStrings;
+    std::vector<rtl::OUString> aDoubleCapsStrings;
 
-    SvStringsDtor aAbbrevStrings;
-    SvStringsDtor aDoubleCapsStrings;
-
-    StringsArrays() :
-        aAbbrevStrings(5,5), aDoubleCapsStrings(5,5) {}
+    StringsArrays() { }
 };
-typedef StringsArrays* StringsArraysPtr;
 
-sal_Bool lcl_FindInArray(SvStringsDtor& rStrings, const String& rString)
+sal_Bool lcl_FindInArray(std::vector<rtl::OUString>& rStrings, const String& rString)
 {
-    for(sal_uInt16 i = 0; i < rStrings.Count(); i++)
-        if(rString == *rStrings.GetObject(i))
+    for(std::vector<rtl::OUString>::iterator i = rStrings.begin(); i != rStrings.end(); ++i)
+        if((*i).equals(rString))
             return sal_True;
     return sal_False;
 }
@@ -1590,12 +1587,12 @@ sal_Bool OfaAutocorrExceptPage::FillItemSet( SfxItemSet&  )
                     if( !lcl_FindInArray(pArrays->aDoubleCapsStrings, *pString))
                       pWrdList->DeleteAndDestroy( i );
                 }
-                nCount = pArrays->aDoubleCapsStrings.Count();
-                for( i = 0; i < nCount; ++i )
+
+                for(std::vector<rtl::OUString>::iterator it = pArrays->aDoubleCapsStrings.begin(); it != pArrays->aDoubleCapsStrings.end(); ++i)
                 {
-                    String* pEntry = new String( *pArrays->aDoubleCapsStrings.GetObject( i ) );
-                    if( !pWrdList->Insert( pEntry ))
-                        delete pEntry;
+                    String* s = new String(*it);
+                    if(!pWrdList->Insert(s))
+                        delete s;
                 }
                 pAutoCorrect->SaveWrdSttExceptList(eCurLang);
             }
@@ -1612,13 +1609,14 @@ sal_Bool OfaAutocorrExceptPage::FillItemSet( SfxItemSet&  )
                     if( !lcl_FindInArray(pArrays->aAbbrevStrings, *pString))
                         pCplList->DeleteAndDestroy( i );
                 }
-                nCount = pArrays->aAbbrevStrings.Count();
-                for( i = 0; i < nCount; ++i )
+
+                for(std::vector<rtl::OUString>::iterator it = pArrays->aAbbrevStrings.begin(); it != pArrays->aAbbrevStrings.end(); ++it)
                 {
-                    String* pEntry = new String( *pArrays->aAbbrevStrings.GetObject(i) );
-                    if( !pCplList->Insert( pEntry ))
-                        delete pEntry;
+                    String* s = new String(*it);
+                    if(!pCplList->Insert(s))
+                        delete s;
                 }
+
                 pAutoCorrect->SaveCplSttExceptList(eCurLang);
             }
         }
@@ -1702,14 +1700,12 @@ void OfaAutocorrExceptPage::RefillReplaceBoxes(sal_Bool bFromReset,
         lcl_ClearTable(aStringsTable);
     else
     {
-        StringsArraysPtr pArrays = 0;
+        StringsArrays* pArrays = NULL;
         if(aStringsTable.IsKeyValid(eOldLanguage))
         {
             pArrays = aStringsTable.Seek(sal_uLong(eOldLanguage));
-            pArrays->aAbbrevStrings.DeleteAndDestroy(
-                                    0, pArrays->aAbbrevStrings.Count());
-            pArrays->aDoubleCapsStrings.DeleteAndDestroy(
-                                    0, pArrays->aDoubleCapsStrings.Count());
+            pArrays->aAbbrevStrings.clear();
+            pArrays->aDoubleCapsStrings.clear();
         }
         else
         {
@@ -1719,16 +1715,10 @@ void OfaAutocorrExceptPage::RefillReplaceBoxes(sal_Bool bFromReset,
 
         sal_uInt16 i;
         for(i = 0; i < aAbbrevLB.GetEntryCount(); i++)
-        {
-            pArrays->aAbbrevStrings.Insert(
-                new String(aAbbrevLB.GetEntry(i)), i);
+            pArrays->aAbbrevStrings.push_back(rtl::OUString(aAbbrevLB.GetEntry(i)));
 
-        }
         for(i = 0; i < aDoubleCapsLB.GetEntryCount(); i++)
-        {
-            pArrays->aDoubleCapsStrings.Insert(
-                new String(aDoubleCapsLB.GetEntry(i)), i);
-        }
+            pArrays->aDoubleCapsStrings.push_back(rtl::OUString(aDoubleCapsLB.GetEntry(i)));
     }
     aDoubleCapsLB.Clear();
     aAbbrevLB.Clear();
@@ -1738,16 +1728,12 @@ void OfaAutocorrExceptPage::RefillReplaceBoxes(sal_Bool bFromReset,
 
     if(aStringsTable.IsKeyValid(eLang))
     {
-        StringsArraysPtr pArrays = aStringsTable.Seek(sal_uLong(eLang));
-        sal_uInt16 i;
-        for(i = 0; i < pArrays->aAbbrevStrings.Count(); i++ )
-        {
-            aAbbrevLB.InsertEntry(*pArrays->aAbbrevStrings.GetObject(i));
-        }
-        for( i = 0; i < pArrays->aDoubleCapsStrings.Count(); i++ )
-        {
-            aDoubleCapsLB.InsertEntry(*pArrays->aDoubleCapsStrings.GetObject(i));
-        }
+        StringsArrays* pArrays = aStringsTable.Seek(sal_uLong(eLang));
+        for(std::vector<rtl::OUString>::iterator i = pArrays->aAbbrevStrings.begin(); i != pArrays->aAbbrevStrings.end(); ++i)
+            aAbbrevLB.InsertEntry(*i);
+
+        for(std::vector<rtl::OUString>::iterator i = pArrays->aDoubleCapsStrings.begin(); i != pArrays->aDoubleCapsStrings.end(); ++i)
+            aDoubleCapsLB.InsertEntry(*i);
     }
     else
     {
