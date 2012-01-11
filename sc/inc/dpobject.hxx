@@ -259,12 +259,18 @@ public:
     class SheetCaches
     {
         friend class ScDPCollection;
-        typedef ::boost::ptr_map<ScRange, ScDPCache> CachesType;
+        typedef boost::ptr_map<size_t, ScDPCache> CachesType;
+        typedef std::vector<ScRange> RangeIndexType;
         CachesType maCaches;
+        RangeIndexType maRanges;
         ScDocument* mpDoc;
     public:
         SheetCaches(ScDocument* pDoc);
         const ScDPCache* getCache(const ScRange& rRange);
+
+        void updateReference(
+            UpdateRefMode eMode, const ScRange& r, SCsCOL nDx, SCsROW nDy, SCsTAB nDz);
+
     private:
         void removeCache(const ScRange& rRange);
     };
