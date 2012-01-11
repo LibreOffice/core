@@ -129,7 +129,8 @@
       <FormatCode>YY-M-D</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey16" default="false" type="medium" usage="DATE" formatindex="33">
-      <FormatCode>YY"년" M"월"</FormatCode>
+      <FormatCode>YYYY-MM-DD</FormatCode>
+      <DefaultName>ISO 8601</DefaultName>
     </FormatElement>
     <FormatElement msgid="DateFormatskey17" default="false" type="medium" usage="DATE" formatindex="34">
       <FormatCode>M"月" D"日"</FormatCode>

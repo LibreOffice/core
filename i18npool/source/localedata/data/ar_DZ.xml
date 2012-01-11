@@ -130,7 +130,7 @@
       <DefaultName>ISO 8601</DefaultName>
     </FormatElement>
     <FormatElement msgid="DateFormatskey20" default="false" type="medium" usage="DATE" formatindex="33">
-      <FormatCode>[NatNum1]YYYY/MM/DD</FormatCode>
+      <FormatCode>YYYY-MM-DD</FormatCode>
       <DefaultName>ISO 8601</DefaultName>
     </FormatElement>
     <FormatElement msgid="DateFormatskey3" default="false" type="medium" usage="DATE" formatindex="34">
@@ -180,6 +180,9 @@
     </FormatElement>
     <FormatElement msgid="DateTimeFormatskey4" default="false" type="medium" usage="DATE_TIME" formatindex="51">
       <FormatCode>[NatNum1]AM/PMHH:MM YYYY/MM/D</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey22" default="false" type="medium" usage="DATE" formatindex="52">
+      <FormatCode>[NatNum1]YYYY/MM/DD</FormatCode>
     </FormatElement>
   </LC_FORMAT>
   <LC_COLLATION ref="en_US" />
