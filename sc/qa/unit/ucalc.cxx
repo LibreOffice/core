@@ -62,11 +62,13 @@
 
 #include "formula/IFunctionDescription.hxx"
 
+#include <basegfx/polygon/b2dpolygon.hxx>
 #include <editeng/boxitem.hxx>
 
 #include <svx/svdograf.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdocirc.hxx>
+#include <svx/svdopath.hxx>
 
 #include <sfx2/docfile.hxx>
 
@@ -2502,6 +2504,35 @@ void Test::testGraphicsInGroup()
         // Delete 2 rows at the top.  This should bring the circle object to its original position.
         m_pDoc->DeleteRow(0, 0, MAXCOL, 0, 0, 2);
         CPPUNIT_ASSERT_MESSAGE("Failed to move back to its original position.", aOrigRect == rNewRect);
+    }
+
+    {
+        // Add a line.
+        basegfx::B2DPolygon aTempPoly;
+        Point aStartPos(10,300), aEndPos(110,200); // bottom-left to top-right.
+        Rectangle aOrigRect(10,200,110,300); // 100 x 100
+        aTempPoly.append(basegfx::B2DPoint(aStartPos.X(), aStartPos.Y()));
+        aTempPoly.append(basegfx::B2DPoint(aEndPos.X(), aEndPos.Y()));
+        SdrPathObj* pObj = new SdrPathObj(OBJ_LINE, basegfx::B2DPolyPolygon(aTempPoly));
+        pObj->NbcSetLogicRect(aOrigRect);
+        pPage->InsertObject(pObj);
+        const Rectangle& rNewRect = pObj->GetLogicRect();
+        CPPUNIT_ASSERT_MESSAGE("Size differ.", aOrigRect == rNewRect);
+
+        ScDrawLayer::SetCellAnchoredFromPosition(*pObj, *m_pDoc, 0);
+        CPPUNIT_ASSERT_MESSAGE("Size changed when cell-anchored. Not good.",
+                               aOrigRect == rNewRect);
+
+        // Insert 2 rows at the top and delete them immediately.
+        m_pDoc->InsertRow(0, 0, MAXCOL, 0, 0, 2);
+        m_pDoc->DeleteRow(0, 0, MAXCOL, 0, 0, 2);
+        CPPUNIT_ASSERT_MESSAGE("Size of a line object changed after row insertion and removal.",
+                               aOrigRect == rNewRect);
+
+        sal_Int32 n = pObj->GetPointCount();
+        CPPUNIT_ASSERT_MESSAGE("There should be exactly 2 points in a line object.", n == 2);
+        CPPUNIT_ASSERT_MESSAGE("Line shape has changed.",
+                               aStartPos == pObj->GetPoint(0) && aEndPos == pObj->GetPoint(1));
     }
 
     m_pDoc->DeleteTab(0);
