@@ -28,7 +28,6 @@
 
 #define _SVSTDARR_STRINGSDTOR
 #define _SVSTDARR_STRINGSSORTDTOR
-#define _SVSTDARR_STRINGSISORT
 
 #include <svl/svstdarr.hxx>
 #include <tools/debug.hxx>
@@ -42,53 +41,6 @@ sal_uInt16 SvPtrarr::GetPos( const VoidPtr& aElement ) const
 }
 
 SV_IMPL_PTRARR( SvStringsDtor, StringPtr )
-
-// ---------------- strings -------------------------------------
-
-// Array with different Seek method
-_SV_IMPL_SORTAR_ALG( SvStringsISort, StringPtr )
-void SvStringsISort::DeleteAndDestroy( sal_uInt16 nP, sal_uInt16 nL )
-{
-    if( nL )
-    {
-        DBG_ASSERT( nP < nA && nP + nL <= nA, "ERR_VAR_DEL" );
-        for( sal_uInt16 n=nP; n < nP + nL; n++ )
-            delete *((StringPtr*)pData+n);
-        SvPtrarr::Remove( nP, nL );
-    }
-}
-sal_Bool SvStringsISort::Seek_Entry( const StringPtr aE, sal_uInt16* pP ) const
-{
-    register sal_uInt16 nO  = SvStringsISort_SAR::Count(),
-            nM,
-            nU = 0;
-    if( nO > 0 )
-    {
-        nO--;
-        while( nU <= nO )
-        {
-            nM = nU + ( nO - nU ) / 2;
-            StringCompare eCmp = (*((StringPtr*)pData + nM))->
-                                        CompareIgnoreCaseToAscii( *(aE) );
-            if( COMPARE_EQUAL == eCmp )
-            {
-                if( pP ) *pP = nM;
-                return sal_True;
-            }
-            else if( COMPARE_LESS == eCmp )
-                nU = nM + 1;
-            else if( nM == 0 )
-            {
-                if( pP ) *pP = nU;
-                return sal_False;
-            }
-            else
-                nO = nM - 1;
-        }
-    }
-    if( pP ) *pP = nU;
-    return sal_False;
-}
 
 // ---------------- strings -------------------------------------
 
