@@ -27,130 +27,6 @@
 
 #include "padialog.hrc"
 
-ModalDialog RID_FONTIMPORT_DIALOG
-{
-    HelpID = "padmin:ModalDialog:RID_FONTIMPORT_DIALOG";
-    OutputSize = TRUE ;
-    SVLook = TRUE ;
-    Size = MAP_APPFONT ( 230 , 185 );
-    Moveable = TRUE ;
-    Closeable = TRUE ;
-
-    ListBox RID_FIMP_BOX_NEWFONTS
-    {
-        HelpID = "padmin:ListBox:RID_FONTIMPORT_DIALOG:RID_FIMP_BOX_NEWFONTS";
-        Border = TRUE;
-        Sort=TRUE;
-        AutoHScroll = TRUE;
-        Pos = MAP_APPFONT( 5, 5 );
-        Size = MAP_APPFONT( 155, 75 );
-    };
-    FixedText RID_FIMP_TXT_HELP
-    {
-        Pos = MAP_APPFONT( 5, 155 );
-        Size = MAP_APPFONT( 220, 24 );
-        WordBreak=TRUE;
-        Text [ en-US ] = "Please select the folder from which you want to import fonts. Add the selected fonts by clicking the OK button.";
-    };
-    FixedLine RID_FIMP_FL_FROM
-    {
-        Pos = MAP_APPFONT( 5, 85 );
-        Size = MAP_APPFONT( 160, 8 );
-        Text [ en-US ] = "Source directory";
-    };
-    Edit RID_FIMP_EDT_FROM
-    {
-        HelpID = "padmin:Edit:RID_FONTIMPORT_DIALOG:RID_FIMP_EDT_FROM";
-        Border = TRUE;
-        Pos = MAP_APPFONT( 10, 97 );
-        Size = MAP_APPFONT( 130, 12 );
-    };
-    PushButton RID_FIMP_BTN_FROM
-    {
-        HelpID = "padmin:PushButton:RID_FONTIMPORT_DIALOG:RID_FIMP_BTN_FROM";
-        Pos = MAP_APPFONT( 145, 97 );
-        Size = MAP_APPFONT( 15, 12 );
-        Text = "...";
-    };
-    CheckBox RID_FIMP_BOX_SUBDIRS
-    {
-        HelpID = "padmin:CheckBox:RID_FONTIMPORT_DIALOG:RID_FIMP_BOX_SUBDIRS";
-        Pos = MAP_APPFONT( 10, 115 );
-        Size = MAP_APPFONT( 145, 10 );
-        Text [ en-US ] = "Sea~rch Subdirectories";
-    };
-    FixedLine RID_FIMP_FL_TARGETOPTS
-    {
-        Pos = MAP_APPFONT( 5, 130 );
-        Size = MAP_APPFONT( 160, 8 );
-        Text [ en-US ] = "Target options";
-    };
-
-    CheckBox RID_FIMP_BOX_LINKONLY
-    {
-        HelpID = "padmin:CheckBox:RID_FONTIMPORT_DIALOG:RID_FIMP_BOX_LINKONLY";
-        Pos = MAP_APPFONT( 10, 140 );
-        Size = MAP_APPFONT( 145, 10 );
-        Text [ en-US ] = "Create ~soft links only";
-    };
-    OKButton RID_FIMP_BTN_OK
-    {
-        DefButton = TRUE;
-        Pos = MAP_APPFONT( 175, 10 );
-        Size = MAP_APPFONT( 50, 12 );
-    };
-    CancelButton RID_FIMP_BTN_CANCEL
-    {
-        Pos = MAP_APPFONT( 175, 27 );
-        Size = MAP_APPFONT( 50, 12 );
-    };
-    PushButton RID_FIMP_BTN_SELECTALL
-    {
-        HelpID = "padmin:PushButton:RID_FONTIMPORT_DIALOG:RID_FIMP_BTN_SELECTALL";
-        Pos = MAP_APPFONT( 175, 44 );
-        Size = MAP_APPFONT( 50, 12 );
-        Text [ en-US ] = "~Select All";
-    };
-    String RID_FIMP_STR_IMPORTOP
-    {
-        Text [ en-US ] = "Add fonts";
-    };
-    String RID_FIMP_STR_QUERYOVERWRITE
-    {
-        Text [ en-US ] = "Do you really want to overwrite this font file?\n   %s";
-    };
-    String RID_FIMP_STR_OVERWRITEALL
-    {
-        Text [ en-US ] = "All";
-    };
-    String RID_FIMP_STR_OVERWRITENONE
-    {
-        Text [ en-US ] = "None";
-    };
-
-    String RID_FIMP_STR_NOAFM
-    {
-        Text [ en-US ] = "A format file (with an .afm extension) has not been found for the font\n%s\ntherefore, the font cannot be installed. Format files can be created with ghostscript, for example, and have to be located in the same directory as the font files or its afm subdirectory.";
-    };
-    String RID_FIMP_STR_AFMCOPYFAILED
-    {
-        Text [ en-US ] = "The metric file for the font file\n   %s\ncould not be copied. The font will not be installed.";
-    };
-    String RID_FIMP_STR_FONTCOPYFAILED
-    {
-        Text [ en-US ] = "The font file\n   %s\ncould not be copied. The font will not be installed.";
-    };
-    String RID_FIMP_STR_NOWRITEABLEFONTSDIR
-    {
-        Text [ en-US ] = "A directory containing a writable fonts.dir file is not located in the Fontpath. Therefore, fonts cannot be installed.";
-    };
-    String RID_FIMP_STR_NUMBEROFFONTSIMPORTED
-    {
-        Text [ en-US ] = "%d new fonts were added.";
-    };
-    Text [ en-US ] = "Add Fonts";
-};
-
 ModalDialog RID_PADIALOG
 {
     HelpID = "padmin:ModalDialog:RID_PADIALOG";
@@ -394,73 +270,6 @@ String RID_TXT_TESTPAGE_TIME
 };
 
 
-ModalDialog RID_FONTNAMEDIALOG
-{
-    HelpID = "padmin:ModalDialog:RID_FONTNAMEDIALOG";
-    OutputSize = TRUE ;
-    SVLook = TRUE ;
-    Size = MAP_APPFONT ( 255 , 110 ) ;
-    Moveable = TRUE ;
-    Closeable = TRUE ;
-    OKButton RID_FNTNM_BTN_OK
-    {
-        DefButton = TRUE ;
-        Pos = MAP_APPFONT ( 196 , 6 ) ;
-        Size = MAP_APPFONT ( 50 , 12 ) ;
-        Text [ en-US ] = "Close";
-    };
-    PushButton RID_FNTNM_BTN_RENAME
-    {
-        HelpID = "padmin:PushButton:RID_FONTNAMEDIALOG:RID_FNTNM_BTN_RENAME";
-        Pos = MAP_APPFONT( 196, 31 );
-        Size = MAP_APPFONT( 50, 12 );
-        Text [ en-US ] = "Re~name...";
-    };
-    PushButton RID_FNTNM_BTN_REMOVE
-    {
-        HelpID = "padmin:PushButton:RID_FONTNAMEDIALOG:RID_FNTNM_BTN_REMOVE";
-        Pos = MAP_APPFONT ( 196 , 48 ) ;
-        Size = MAP_APPFONT ( 50 , 12 ) ;
-        Text [ en-US ] = "~Remove...";
-    };
-    PushButton RID_FNTNM_BTN_IMPORT
-    {
-        HelpID = "padmin:PushButton:RID_FONTNAMEDIALOG:RID_FNTNM_BTN_IMPORT";
-        Pos = MAP_APPFONT ( 196 , 65 ) ;
-        Size = MAP_APPFONT ( 50 , 12 ) ;
-        Text [ en-US ] = "~Add...";
-    };
-    ListBox RID_FNTNM_LB_FONTS
-    {
-        HelpID = "padmin:ListBox:RID_FONTNAMEDIALOG:RID_FNTNM_LB_FONTS";
-        Border = TRUE ;
-        Sort = TRUE ;
-        AutoHScroll = TRUE;
-        Pos = MAP_APPFONT ( 6 , 6 ) ;
-        Size = MAP_APPFONT ( 185 , 70 ) ;
-    };
-    FixedText RID_FNTNM_FIXED
-    {
-        Pos = MAP_APPFONT ( 6 , 81 ) ;
-        Size = MAP_APPFONT ( 175 , 24 ) ;
-        WordBreak = TRUE;
-        Text [ en-US ] = "Note: The fonts are only available to the applications.";
-    };
-    String RID_FNTNM_STR_RENAME
-    {
-        Text [ en-US ] = "~New name for %s";
-    };
-    String RID_FNTNM_STR_TTCRENAME
-    {
-        Text [ en-US ] = "~New name for %s (%d1 of %d2)";
-    };
-    String RID_FNTNM_STR_NOTRENAMABLE
-    {
-        Text [ en-US ] = "The font %s cannot be renamed due to missing write permission.";
-    };
-    Text [ en-US ] = "Fonts";
-};
-
 String RID_BXT_TESTPAGE
 {
     Text [ en-US ] = "Test page";
@@ -499,51 +308,6 @@ Bitmap RID_BMP_SMALL_PDF
 Bitmap RID_BMP_PRINTER
 {
     File = "source/printer_large.png";
-};
-
-String RID_AFMERROR_OK
-{
-    Text [ en-US ] = "No error";
-};
-
-String RID_AFMERROR_NO_FONT_NAME
-{
-    Text [ en-US ] = "The metric does not contain a 'FontName' entry.";
-};
-
-String RID_AFMERROR_NO_FULL_NAME
-{
-    Text [ en-US ] = "The metric does not contain a 'FullName' entry.";
-};
-
-String RID_AFMERROR_NO_FAMILY_NAME
-{
-    Text [ en-US ] = "The metric does not contain a 'FamilyName' entry.";
-};
-
-String RID_AFMERROR_MOVETO_FAILED
-{
-    Text [ en-US ] = "The converted metric could not be written.";
-};
-
-String RID_AFMERROR_STREAM_READ_FAILED
-{
-    Text [ en-US ] = "The metric could not be read.";
-};
-
-String RID_AFMERROR_STREAM_WRITE_FAILED
-{
-    Text [ en-US ] = "A temporary file could not be created.";
-};
-
-STRING RID_AFMERROR_NOT_A_METRIC
-{
-    Text [ en-US ] = "The file does not contain a metric.";
-};
-
-String RID_AFMERROR_BOX_TXT
-{
-    Text [ en-US ] = "The metric\n\n%s\n\ncould not be converted for the following reason:\n\n";
 };
 
 ModelessDialog RID_PROGRESS_DLG
@@ -585,12 +349,6 @@ ModelessDialog RID_PROGRESS_DLG
     };
     Text [ en-US ] = "Please wait";
 };
-
-String RID_OPERATION_CONVERTMETRIC
-{
-    Text [ en-US ] = "Font metrics conversion";
-};
-
 
 ModalDialog RID_PPDIMPORT_DLG
 {
@@ -681,11 +439,6 @@ String RID_QUERY_REMOVEDRIVER
 String RID_QUERY_REMOVEPRINTER
 {
     Text [ en-US ] = "Do you really want to remove this printer ?";
-};
-
-String RID_QUERY_REMOVEFONTFROMLIST
-{
-    Text [ en-US ] = "Do you really want to remove the selected fonts ?";
 };
 
 String RID_QUERY_DRIVERUSED
@@ -1110,95 +863,3 @@ TabPage RID_ADDP_PAGE_PDFDRIVER
         Text [ en-US ] = "A spec~ific driver, to adapt the format to another printer";
     };
 };
-
-String RID_TXT_FONT_ITALIC
-{
-    Text [ en-US ] = "Italic";
-};
-
-String RID_TXT_FONT_OBLIQUE
-{
-    Text [ en-US ] = "Oblique";
-};
-
-String RID_TXT_FONT_THIN
-{
-    Text [ en-US ] = "Thin";
-};
-
-String RID_TXT_FONT_ULTRALIGHT
-{
-    Text [ en-US ] = "Ultralight";
-};
-
-String RID_TXT_FONT_SEMILIGHT
-{
-    Text [ en-US ] = "Semilight";
-};
-
-String RID_TXT_FONT_LIGHT
-{
-    Text [ en-US ] = "Light";
-};
-
-String RID_TXT_FONT_SEMIBOLD
-{
-    Text [ en-US ] = "Semibold";
-};
-
-String RID_TXT_FONT_BOLD
-{
-    Text [ en-US ] = "Bold";
-};
-
-String RID_TXT_FONT_ULTRABOLD
-{
-    Text [ en-US ] = "Ultrabold";
-};
-
-String RID_TXT_FONT_ULTRACONDENSED
-{
-    Text [ en-US ] = "Ultracondensed";
-};
-
-String RID_TXT_FONT_EXTRACONDENSED
-{
-    Text [ en-US ] = "Extracondensed";
-};
-
-String RID_TXT_FONT_CONDENSED
-{
-    Text [ en-US ] = "Condensed";
-};
-
-String RID_TXT_FONT_SEMICONDENSED
-{
-    Text [ en-US ] = "Semicondensed";
-};
-
-String RID_TXT_FONT_SEMIEXPANDED
-{
-    Text [ en-US ] = "Semiexpanded";
-};
-
-String RID_TXT_FONT_EXPANDED
-{
-    Text [ en-US ] = "Expanded";
-};
-
-String RID_TXT_FONT_EXTRAEXPANDED
-{
-    Text [ en-US ] = "Extraexpanded";
-};
-
-String RID_TXT_FONT_ULTRAEXPANDED
-{
-    Text [ en-US ] = "Ultraexpanded";
-};
-
-String RID_TXT_FONT_REGULAR
-{
-    Text [ en-US ] = "Regular";
-};
-
-

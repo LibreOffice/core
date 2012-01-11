@@ -33,7 +33,6 @@
 #include <math.h>
 
 #include "padialog.hrc"
-#include "fontentry.hxx"
 #include "helper.hxx"
 #include "padialog.hxx"
 #include "adddlg.hxx"

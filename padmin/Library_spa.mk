@@ -54,7 +54,6 @@ $(eval $(call gb_Library_add_linked_libs,spa,\
 $(eval $(call gb_Library_add_exception_objects,spa,\
     padmin/source/adddlg \
     padmin/source/cmddlg \
-    padmin/source/fontentry \
     padmin/source/helper \
     padmin/source/newppdlg \
     padmin/source/padialog \

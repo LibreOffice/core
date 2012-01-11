@@ -1897,7 +1897,6 @@ utl::NodeValueAccessor::bind(com::sun::star::uno::Any*)
 utl::OConfigurationNode::appendNode(rtl::OUString const&, utl::OConfigurationNode const&) const
 utl::OConfigurationValueContainer::getServiceFactory() const
 utl::TransliterationWrapper::compareSubstring(String const&, int, int, String const&, int, int) const
-vcl::Clipboard_getSupportedServiceNames()
 vcl::I18nHelper::GetDate(Date const&) const
 vcl::I18nHelper::getLocale() const
 vcl::LabeledElement::setLabel(boost::shared_ptr<vcl::WindowArranger> const&)

@@ -607,11 +607,6 @@ public:
     // get properties of a not imported font file
     bool getImportableFontProperties( const rtl::OString& rFile, std::list< FastPrintFontInfo >& rFontProps );
 
-    // get fonts that come from the same font file
-    bool getFileDuplicates( fontID nFont, std::list< fontID >& rFonts ) const;
-    // remove font files
-    bool removeFonts( const std::list< fontID >& rFonts );
-
     bool isPrivateFontFile( fontID ) const;
 
     // returns false if there were not any
