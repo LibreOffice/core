@@ -149,7 +149,7 @@ public:
     void SetMirroredY( const sal_Bool bMirroredY );
 
     double GetObjectRotation() const;
-    double GetExtraTextRotation() const;
+    double GetExtraTextRotation( const bool bPreRotation = false ) const;
 
     TYPEINFO();
     SdrObjCustomShape();

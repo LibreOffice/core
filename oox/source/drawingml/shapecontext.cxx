@@ -119,6 +119,12 @@ Reference< XFastContextHandler > ShapeContext::createFastChildContext( sal_Int32
         xRet = new TextBodyContext( *this, *xTextBody );
         break;
     }
+    case XML_txXfrm:
+    {
+        AttributeList aAttribs( xAttribs );
+        mpShapePtr->getTextBody()->getTextProperties().moRotation = aAttribs.getInteger( XML_rot );
+        break;
+    }
     }
 
     if( !xRet.is() )

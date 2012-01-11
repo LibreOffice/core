@@ -218,6 +218,12 @@ Reference< XFastContextHandler > PPTShapeContext::createFastChildContext( sal_In
             xRet = new oox::drawingml::TextBodyContext( *this, *xTextBody );
             break;
         }
+        case PPT_TOKEN( txXfrm ):
+        {
+            AttributeList aAttribs( xAttribs );
+            mpShapePtr->getTextBody()->getTextProperties().moRotation = aAttribs.getInteger( XML_rot );
+            break;
+        }
     }
 
     if( !xRet.is() )

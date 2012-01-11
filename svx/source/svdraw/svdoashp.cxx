@@ -537,12 +537,13 @@ double SdrObjCustomShape::GetObjectRotation() const
     return fObjectRotation;
 }
 
-double SdrObjCustomShape::GetExtraTextRotation() const
+double SdrObjCustomShape::GetExtraTextRotation( const bool bPreRotation ) const
 {
     const com::sun::star::uno::Any* pAny;
     SdrCustomShapeGeometryItem& rGeometryItem = (SdrCustomShapeGeometryItem&)GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
     const rtl::OUString sTextRotateAngle( RTL_CONSTASCII_USTRINGPARAM ( "TextRotateAngle" ) );
-    pAny = rGeometryItem.GetPropertyValueByName( sTextRotateAngle );
+    const rtl::OUString sTextPreRotateAngle( RTL_CONSTASCII_USTRINGPARAM ( "TextPreRotateAngle" ) );
+    pAny = rGeometryItem.GetPropertyValueByName( bPreRotation ? sTextPreRotateAngle : sTextRotateAngle );
     double fExtraTextRotateAngle = 0.0;
     if ( pAny )
         *pAny >>= fExtraTextRotateAngle;

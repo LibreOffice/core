@@ -457,6 +457,7 @@ TextHorizontalAdjust
 TextLeftDistance
 TextLowerDistance
 TextOverlap
+TextPreRotateAngle
 TextRightDistance
 TextRotateAngle
 TextRotation

@@ -5334,6 +5334,7 @@ txOverObj
 txPr
 txSp
 txStyles
+txXfrm
 txbxContent
 txtBox
 ty
