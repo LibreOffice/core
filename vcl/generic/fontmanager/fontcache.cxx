@@ -48,7 +48,7 @@
 #endif
 
 #define FONTCACHEFILE "/user/psprint/pspfontcache"
-#define CACHE_MAGIC "PspFontCacheFile format 4"
+#define CACHE_MAGIC "LibreOffice PspFontCacheFile format 5"
 
 using namespace std;
 using namespace psp;
@@ -170,7 +170,7 @@ void FontCache::flush()
                 if( nEntrySize > 1 )
                     nSubEntry = static_cast<const PrintFontManager::TrueTypeFontFile*>(*it)->m_nCollectionEntry;
                 else
-                    nSubEntry = -1;
+                    nSubEntry = 0;
 
                 aLine.append(OUStringToOString(pAtoms->getString( ATOM_FAMILYNAME, (*it)->m_nFamilyName), RTL_TEXTENCODING_UTF8));
                 for( ::std::list< int >::const_iterator name_it = (*it)->m_aAliases.begin(); name_it != (*it)->m_aAliases.end(); ++name_it )

@@ -248,11 +248,11 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
 
     struct TrueTypeFontFile : public PrintFont
     {
-        int                     m_nDirectory;       // atom containing system dependent path
-        rtl::OString          m_aFontFile;        // relative to directory
-        rtl::OString          m_aXLFD;            // mainly for administration, contains the XLFD from fonts.dir
-        int                     m_nCollectionEntry; // -1 for regular fonts, 0 to ... for fonts stemming from collections
-        unsigned int           m_nTypeFlags;        // copyright bits and PS-OpenType flag
+        int           m_nDirectory;       // atom containing system dependent path
+        rtl::OString  m_aFontFile;        // relative to directory
+        rtl::OString  m_aXLFD;            // mainly for administration, contains the XLFD from fonts.dir
+        int           m_nCollectionEntry; // 0 for regular fonts, 0 to ... for fonts stemming from collections
+        unsigned int  m_nTypeFlags;       // copyright bits and PS-OpenType flag
 
         TrueTypeFontFile();
         virtual ~TrueTypeFontFile();

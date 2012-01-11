@@ -392,7 +392,7 @@ PrintFontManager::Type1FontFile::~Type1FontFile()
 PrintFontManager::TrueTypeFontFile::TrueTypeFontFile()
 :   PrintFont( fonttype::TrueType )
 ,   m_nDirectory( 0 )
-,   m_nCollectionEntry(-1)
+,   m_nCollectionEntry( 0 )
 ,   m_nTypeFlags( TYPEFLAG_INVALID )
 {}
 
@@ -432,7 +432,7 @@ bool PrintFontManager::TrueTypeFontFile::queryMetricPage( int nPage, MultiAtomPr
 
     TrueTypeFont* pTTFont = NULL;
 
-    if( OpenTTFontFile( aFile.GetBuffer(), m_nCollectionEntry < 0 ? 0 : m_nCollectionEntry, &pTTFont ) == SF_OK )
+    if( OpenTTFontFile( aFile.GetBuffer(), m_nCollectionEntry, &pTTFont ) == SF_OK )
     {
         if( ! m_pMetrics )
         {
@@ -1422,7 +1422,7 @@ bool PrintFontManager::analyzeFontFile( int nDirID, const OString& rFontFile, co
             TrueTypeFontFile* pFont     = new TrueTypeFontFile();
             pFont->m_nDirectory         = nDirID;
             pFont->m_aFontFile          = rFontFile;
-            pFont->m_nCollectionEntry   = -1;
+            pFont->m_nCollectionEntry   = 0;
 
             if( rXLFDs.size() )
                 getFontAttributesFromXLFD( pFont, rXLFDs );
@@ -1963,7 +1963,7 @@ bool PrintFontManager::analyzeTrueTypeFile( PrintFont* pFont ) const
     TrueTypeFont* pTTFont = NULL;
 
     TrueTypeFontFile* pTTFontFile = static_cast< TrueTypeFontFile* >(pFont);
-    if( OpenTTFontFile( aFile.GetBuffer(), pTTFontFile->m_nCollectionEntry < 0 ? 0 : pTTFontFile->m_nCollectionEntry, &pTTFont ) == SF_OK )
+    if( OpenTTFontFile( aFile.GetBuffer(), pTTFontFile->m_nCollectionEntry, &pTTFont ) == SF_OK )
     {
         TTGlobalFontInfo aInfo;
         GetTTGlobalFontInfo( pTTFont, & aInfo );
@@ -3076,7 +3076,7 @@ bool PrintFontManager::isFontDownloadingAllowed( fontID nFont ) const
             {
                 TrueTypeFont* pTTFont = NULL;
                 ByteString aFile = getFontFile( pFont );
-                if( OpenTTFontFile( aFile.GetBuffer(), pTTFontFile->m_nCollectionEntry < 0 ? 0 : pTTFontFile->m_nCollectionEntry, &pTTFont ) == SF_OK )
+                if( OpenTTFontFile( aFile.GetBuffer(), pTTFontFile->m_nCollectionEntry, &pTTFont ) == SF_OK )
                 {
                     // get type flags
                     TTGlobalFontInfo aInfo;
@@ -3511,7 +3511,7 @@ bool PrintFontManager::getAlternativeFamilyNames( fontID nFont, ::std::list< OUS
         TrueTypeFontFile* pTTFontFile = static_cast< TrueTypeFontFile* >(pFont);
         ByteString aFile( getFontFile( pFont ) );
         TrueTypeFont* pTTFont;
-        if( OpenTTFontFile( aFile.GetBuffer(), pTTFontFile->m_nCollectionEntry < 0 ? 0 : pTTFontFile->m_nCollectionEntry, &pTTFont ) == SF_OK )
+        if( OpenTTFontFile( aFile.GetBuffer(), pTTFontFile->m_nCollectionEntry, &pTTFont ) == SF_OK )
         {
             NameRecord* pNameRecords = NULL;
             int nNameRecords = GetTTNameRecords( pTTFont, &pNameRecords );
@@ -3602,7 +3602,7 @@ bool PrintFontManager::createFontSubset(
 
     TrueTypeFont* pTTFont = NULL; // TODO: rename to SfntFont
     TrueTypeFontFile* pTTFontFile = static_cast< TrueTypeFontFile* >(pFont);
-    if( OpenTTFontFile( aFromFile.GetBuffer(), pTTFontFile->m_nCollectionEntry < 0 ? 0 : pTTFontFile->m_nCollectionEntry, &pTTFont ) != SF_OK )
+    if( OpenTTFontFile( aFromFile.GetBuffer(), pTTFontFile->m_nCollectionEntry, &pTTFont ) != SF_OK )
         return false;
 
     // prepare system name for write access for subset file target
@@ -3696,7 +3696,7 @@ void PrintFontManager::getGlyphWidths( fontID nFont,
         TrueTypeFont* pTTFont = NULL;
         TrueTypeFontFile* pTTFontFile = static_cast< TrueTypeFontFile* >(pFont);
         ByteString aFromFile = getFontFile( pFont );
-        if( OpenTTFontFile( aFromFile.GetBuffer(), pTTFontFile->m_nCollectionEntry < 0 ? 0 : pTTFontFile->m_nCollectionEntry, &pTTFont ) != SF_OK )
+        if( OpenTTFontFile( aFromFile.GetBuffer(), pTTFontFile->m_nCollectionEntry, &pTTFont ) != SF_OK )
             return;
         int nGlyphs = GetTTGlyphCount( pTTFont );
         if( nGlyphs > 0 )
