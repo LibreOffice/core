@@ -56,7 +56,6 @@ $(eval $(call gb_Helper_register_executables,OOO, \
 ifeq ($(OS),WNT)
 
 $(eval $(call gb_Helper_register_executables,OOO,\
-    crashrep_com \
 	guiloader \
 	guistdio \
 	odbcconfig \
@@ -67,23 +66,27 @@ $(eval $(call gb_Helper_register_executables,OOO,\
 	sdraw \
 	simpress \
 	soffice \
-	soffice_bin \
 	smath \
 	sweb \
 	swriter \
 	unoinfo \
 	unopkg \
-    unopkg_bin \
-    unopkg_com \
 	unopkgio \
 ))
 
 else
 
+ifeq ($(OS_FOR_BUILD),WNT)
+$(eval $(call gb_Helper_register_executables,OOO,\
+	soffice_bin \
+    unopkg_bin \
+))
+else
 $(eval $(call gb_Helper_register_executables,OOO,\
     soffice.bin \
     unopkg.bin \
 ))
+endif
 
 ifeq ($(OS),MACOSX)
 
