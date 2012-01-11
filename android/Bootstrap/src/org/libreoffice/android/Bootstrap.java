@@ -120,7 +120,7 @@ public class Bootstrap extends NativeActivity
             if (indirectFile != null) {
                 try {
                     // Somewhat stupid but short way to read a file into a string
-                    cmdLine = new Scanner(new File(indirectFile), "UTF-8").useDelimiter("\\A").next();
+                    cmdLine = new Scanner(new File(indirectFile), "UTF-8").useDelimiter("\\A").next().trim();
                 }
                 catch (java.io.FileNotFoundException e) {
                     Log.i(TAG, String.format("Could not read %s: %s",indirectFile, e.toString()));
