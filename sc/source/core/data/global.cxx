@@ -299,6 +299,11 @@ void ScGlobal::ClearAutoFormat()
 
 ScAutoFormat* ScGlobal::GetAutoFormat()
 {
+    return pAutoFormat;
+}
+
+ScAutoFormat* ScGlobal::GetOrCreateAutoFormat()
+{
     if ( !pAutoFormat )
     {
         pAutoFormat = new ScAutoFormat;

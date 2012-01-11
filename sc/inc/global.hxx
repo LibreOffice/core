@@ -562,6 +562,7 @@ public:
     SC_DLLPUBLIC static const SvxSearchItem&    GetSearchItem();
     SC_DLLPUBLIC static void                    SetSearchItem( const SvxSearchItem& rNew );
     SC_DLLPUBLIC static ScAutoFormat*       GetAutoFormat();
+    SC_DLLPUBLIC static ScAutoFormat*       GetOrCreateAutoFormat();
     static void                 ClearAutoFormat(); //BugId 54209
     static FuncCollection*      GetFuncCollection();
     SC_DLLPUBLIC static ScUnoAddInCollection* GetAddInCollection();

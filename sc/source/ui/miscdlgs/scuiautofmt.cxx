@@ -194,7 +194,7 @@ IMPL_LINK( ScAutoFormatDlg, CloseHdl, PushButton *, pBtn )
     if ( pBtn == &aBtnOk || pBtn == &aBtnCancel )
     {
         if ( bCoreDataChanged )
-            ScGlobal::GetAutoFormat()->Save();
+            ScGlobal::GetOrCreateAutoFormat()->Save();
 
         EndDialog( (pBtn == &aBtnOk) ? RET_OK : RET_CANCEL );
     }
@@ -206,7 +206,7 @@ IMPL_LINK( ScAutoFormatDlg, CloseHdl, PushButton *, pBtn )
 IMPL_LINK_INLINE_START( ScAutoFormatDlg, DblClkHdl, void *, EMPTYARG )
 {
     if ( bCoreDataChanged )
-        ScGlobal::GetAutoFormat()->Save();
+        ScGlobal::GetOrCreateAutoFormat()->Save();
 
     EndDialog( RET_OK );
     return 0;

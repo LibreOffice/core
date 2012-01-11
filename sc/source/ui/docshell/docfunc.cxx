@@ -3693,9 +3693,9 @@ sal_Bool ScDocFunc::AutoFormat( const ScRange& rRange, const ScMarkData* pTabMar
             aMark.SelectTable( nTab, sal_True );
     }
 
-    ScAutoFormat* pAutoFormat = ScGlobal::GetAutoFormat();
+    ScAutoFormat* pAutoFormat = ScGlobal::GetOrCreateAutoFormat();
     ScEditableTester aTester( pDoc, nStartCol,nStartRow, nEndCol,nEndRow, aMark );
-    if ( pAutoFormat && nFormatNo < pAutoFormat->GetCount() && aTester.IsEditable() )
+    if ( nFormatNo < pAutoFormat->GetCount() && aTester.IsEditable() )
     {
         WaitObject aWait( rDocShell.GetActiveDialogParent() );
 

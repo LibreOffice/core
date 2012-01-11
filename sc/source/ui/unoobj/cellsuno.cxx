@@ -5500,10 +5500,10 @@ void SAL_CALL ScCellRangeObj::autoFormat( const rtl::OUString& aName )
                     throw(lang::IllegalArgumentException, uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    ScAutoFormat* pAutoFormat = ScGlobal::GetAutoFormat();
     ScDocShell* pDocSh = GetDocShell();
-    if ( pDocSh && pAutoFormat )
+    if ( pDocSh )
     {
+        ScAutoFormat* pAutoFormat = ScGlobal::GetOrCreateAutoFormat();
         String aNameString(aName);
         sal_uInt16 nCount = pAutoFormat->GetCount();
         sal_uInt16 nIndex;
