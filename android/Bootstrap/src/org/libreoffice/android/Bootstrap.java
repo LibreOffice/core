@@ -38,6 +38,7 @@ import android.util.Log;
 import fi.iki.tml.CommandLine;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.Scanner;
 
 // We override NativeActivity so that we can get at the intent of the
@@ -130,13 +131,27 @@ public class Bootstrap extends NativeActivity
             if (cmdLine == null)
                 cmdLine = "/data/data/org.libreoffice.android/lib/libqa_sal_types.so";
         }
-        // argv[0] will be replaced by android_main() in lo-bootstrap.c by the
-        // pathname of the mainLibrary.
-        cmdLine = "dummy-program-name " + cmdLine;
 
         Log.i(TAG, String.format("cmdLine=%s", cmdLine));
 
         String[] argv = CommandLine.split(cmdLine);
+
+        // Handle env var assignments in the command line. Actually
+        // not sure if this works, are environments per-thread in
+        // Android? This code runs in a different thread than that in
+        // which lo_main etc will run.
+        while (argv.length > 0 &&
+               argv[0].matches("[A-Z_]+=.*")) {
+            putenv(argv[0]);
+            argv = Arrays.copyOfRange(argv, 1, argv.length-1);
+        }
+
+        // argv[0] will be replaced by android_main() in lo-bootstrap.c by the
+        // pathname of the mainLibrary.
+        String[] newargv = new String[argv.length + 1];
+        newargv[0] = "dummy-program-name";
+        System.arraycopy(argv, 0, newargv, 1, argv.length);
+        argv = newargv;
 
         // Load the LO "program" here and look up lo_main
         int loLib = dlopen(mainLibrary);
