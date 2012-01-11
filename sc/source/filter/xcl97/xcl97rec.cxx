@@ -1001,7 +1001,9 @@ GetEditAs( XclObjAny& rObj )
 
 void XclObjAny::SaveXml( XclExpXmlStream& rStrm )
 {
-    if( !mxShape.is() )
+    // ignore group shapes at the moment, we don't process them correctly
+    // leading to ms2010 rejecting the content
+    if( !mxShape.is() || mxShape->getShapeType().equals( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.GroupShape") ) ) )
         return;
 
     sax_fastparser::FSHelperPtr pDrawing = rStrm.GetCurrentStream();
