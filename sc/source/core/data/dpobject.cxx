@@ -2459,27 +2459,108 @@ uno::Reference<sheet::XDimensionsSupplier> ScDPObject::CreateSource( const ScDPS
 
 ScDPCollection::SheetCaches::SheetCaches(ScDocument* pDoc) : mpDoc(pDoc) {}
 
+namespace {
+
+struct FindInvalidRange : public std::unary_function<ScRange, bool>
+{
+    bool operator() (const ScRange& r) const
+    {
+        return !r.IsValid();
+    }
+};
+
+}
+
 const ScDPCache* ScDPCollection::SheetCaches::getCache(const ScRange& rRange)
 {
-    CachesType::const_iterator itr = maCaches.find(rRange);
-    if (itr != maCaches.end())
-        // already cached.
-        return itr->second;
+    RangeIndexType::iterator it = std::find(maRanges.begin(), maRanges.end(), rRange);
+    if (it != maRanges.end())
+    {
+        // Already cached.
+        size_t nIndex = std::distance(maRanges.begin(), it);
+        CachesType::iterator itCache = maCaches.find(nIndex);
+        if (itCache == maCaches.end())
+            // cache pool and index pool out-of-sync !!!
+            return NULL;
 
+        return itCache->second;
+    }
+
+    // Not cached.  Create a new cache.
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     ::std::auto_ptr<ScDPCache> pCache(new ScDPCache(mpDoc));
     SAL_WNODEPRECATED_DECLARATIONS_POP
     pCache->InitFromDoc(mpDoc, rRange);
+
+    // Get the smallest available range index.
+    it = std::find_if(maRanges.begin(), maRanges.end(), FindInvalidRange());
+
+    size_t nIndex = maRanges.size();
+    if (it == maRanges.end())
+    {
+        // All range indices are valid.  Append a new index.
+        maRanges.push_back(rRange);
+    }
+    else
+    {
+        // Slot with invalid range.  Re-use this slot.
+        *it = rRange;
+        nIndex = std::distance(maRanges.begin(), it);
+    }
+
     const ScDPCache* p = pCache.get();
-    maCaches.insert(rRange, pCache);
+    maCaches.insert(nIndex, pCache);
     return p;
+}
+
+void ScDPCollection::SheetCaches::updateReference(
+    UpdateRefMode eMode, const ScRange& r, SCsCOL nDx, SCsROW nDy, SCsTAB nDz)
+{
+    if (maRanges.empty())
+        // No caches.
+        return;
+
+    RangeIndexType::iterator it = maRanges.begin(), itEnd = maRanges.end();
+    for (; it != itEnd; ++it)
+    {
+        const ScRange& rKeyRange = *it;
+        SCCOL nCol1 = rKeyRange.aStart.Col();
+        SCROW nRow1 = rKeyRange.aStart.Row();
+        SCTAB nTab1 = rKeyRange.aStart.Tab();
+        SCCOL nCol2 = rKeyRange.aEnd.Col();
+        SCROW nRow2 = rKeyRange.aEnd.Row();
+        SCTAB nTab2 = rKeyRange.aEnd.Tab();
+
+        ScRefUpdateRes eRes = ScRefUpdate::Update(
+            mpDoc, eMode,
+            r.aStart.Col(), r.aStart.Row(), r.aStart.Tab(),
+            r.aEnd.Col(), r.aEnd.Row(), r.aEnd.Tab(), nDx, nDy, nDz,
+            nCol1, nRow1, nTab1, nCol2, nRow2, nTab2);
+
+        if (eRes != UR_NOTHING)
+        {
+            // range updated.
+            ScRange aNew(nCol1, nRow1, nTab1, nCol2, nRow2, nTab2);
+            *it = aNew;
+        }
+    }
 }
 
 void ScDPCollection::SheetCaches::removeCache(const ScRange& rRange)
 {
-    CachesType::iterator itr = maCaches.find(rRange);
-    if (itr != maCaches.end())
-        maCaches.erase(itr);
+    RangeIndexType::iterator it = std::find(maRanges.begin(), maRanges.end(), rRange);
+    if (it == maRanges.end())
+        // Not cached.  Nothing to do.
+        return;
+
+    size_t nIndex = std::distance(maRanges.begin(), it);
+    CachesType::iterator itCache = maCaches.find(nIndex);
+    if (itCache == maCaches.end())
+        // Cache pool and index pool out-of-sync !!!
+        return;
+
+    it->SetInvalid(); // Make this slot available for future caches.
+    maCaches.erase(itCache);
 }
 
 ScDPCollection::NameCaches::NameCaches(ScDocument* pDoc) : mpDoc(pDoc) {}
@@ -2687,6 +2768,9 @@ void ScDPCollection::UpdateReference( UpdateRefMode eUpdateRefMode,
     TablesType::iterator itr = maTables.begin(), itrEnd = maTables.end();
     for (; itr != itrEnd; ++itr)
         itr->UpdateReference(eUpdateRefMode, r, nDx, nDy, nDz);
+
+    // Update the source ranges of the caches.
+    maSheetCaches.updateReference(eUpdateRefMode, r, nDx, nDy, nDz);
 }
 
 bool ScDPCollection::RefsEqual( const ScDPCollection& r ) const
