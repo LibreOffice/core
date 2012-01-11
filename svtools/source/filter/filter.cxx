@@ -678,8 +678,10 @@ static sal_Bool ImpPeekGraphicFormat( SvStream& rStream, String& rFormatExtensio
     //--------------------------- SVG ------------------------------------
     if( !bTest )
     {
-        if( ImplSearchEntry( sFirstBytes, (sal_uInt8*)"DOCTYPE", 256, 7 )
-            && ImplSearchEntry( sFirstBytes, (sal_uInt8*)"svg", 256, 3 ) )
+        if( ImplSearchEntry( sFirstBytes, (sal_uInt8*)"<?xml", 256, 5 ) // is it xml
+            && ImplSearchEntry( sFirstBytes, (sal_uInt8*)"version", 256, 7 ) // does it have a version (required for xml)
+            && ImplSearchEntry( sFirstBytes, (sal_uInt8*)"www.w3.org", 256, 10 ) // does it have to do with w3 (part of namespace definition)
+            && ImplSearchEntry( sFirstBytes, (sal_uInt8*)"<svg", 256, 4 ) ) // does it have svg nodes
         {
             rFormatExtension = UniString::CreateFromAscii( "SVG", 3 );
             return sal_True;
