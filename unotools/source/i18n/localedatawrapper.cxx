@@ -147,13 +147,7 @@ void LocaleDataWrapper::invalidateData()
     }
     catch (const Exception& e)
     {
-#ifdef DBG_UTIL
-        rtl::OStringBuffer aMsg( "getLanguageCountryInfo: Exception caught\n");
-        aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
-        DBG_ERRORFILE(aMsg.getStr());
-#else
-        (void)e;
-#endif
+        SAL_INFO( "unotools.i18n", "getLanguageCountryInfo: Exception caught " << e.Message );
     }
     return ::com::sun::star::i18n::LanguageCountryInfo();
 }
@@ -168,13 +162,7 @@ void LocaleDataWrapper::invalidateData()
     }
     catch (const Exception& e)
     {
-#ifdef DBG_UTIL
-        rtl::OStringBuffer aMsg("getLocaleItem: Exception caught\n");
-        aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
-        DBG_ERRORFILE(aMsg.getStr());
-#else
-        (void)e;
-#endif
+        SAL_INFO( "unotools.l18n", "getLocaleItem: Exception caught " << e.Message );
     }
     return ::com::sun::star::i18n::LocaleDataItem();
 }
@@ -189,13 +177,7 @@ void LocaleDataWrapper::invalidateData()
     }
     catch (const Exception& e)
     {
-#ifdef DBG_UTIL
-        rtl::OStringBuffer aMsg("getAllCurrencies: Exception caught\n");
-        aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
-        DBG_ERRORFILE(aMsg.getStr());
-#else
-        (void)e;
-#endif
+        SAL_INFO( "unotools.l18n", "getAllCurrencies: Exception caught " << e.Message );
     }
     return ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::Currency2 >(0);
 }
@@ -210,13 +192,7 @@ void LocaleDataWrapper::invalidateData()
     }
     catch (const Exception& e)
     {
-#ifdef DBG_UTIL
-        rtl::OStringBuffer aMsg("getAllFormats: Exception caught\n");
-        aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
-        DBG_ERRORFILE(aMsg.getStr());
-#else
-        (void)e;
-#endif
+        SAL_INFO( "unotools.l18n", "getAllFormats: Exception caught " << e.Message );
     }
     return ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::FormatElement >(0);
 }
@@ -231,13 +207,7 @@ void LocaleDataWrapper::invalidateData()
     }
     catch (const Exception& e)
     {
-#ifdef DBG_UTIL
-        rtl::OStringBuffer aMsg("getCollatorImplementations: Exception caught\n");
-        aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
-        DBG_ERRORFILE(aMsg.getStr());
-#else
-        (void)e;
-#endif
+        SAL_INFO( "unotools.l18n", "getCollatorImplementations: Exception caught " << e.Message );
     }
     return ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::Implementation >(0);
 }
@@ -252,13 +222,7 @@ void LocaleDataWrapper::invalidateData()
     }
     catch (const Exception& e)
     {
-#ifdef DBG_UTIL
-        rtl::OStringBuffer aMsg("getTransliterations: Exception caught\n");
-        aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
-        DBG_ERRORFILE(aMsg.getStr());
-#else
-        (void)e;
-#endif
+        SAL_INFO( "unotools.l18n", "getTransliterations: Exception caught " << e.Message );
     }
     return ::com::sun::star::uno::Sequence< ::rtl::OUString >(0);
 }
@@ -273,13 +237,7 @@ void LocaleDataWrapper::invalidateData()
     }
     catch (const Exception& e)
     {
-#ifdef DBG_UTIL
-        rtl::OStringBuffer aMsg("getForbiddenCharacters: Exception caught\n");
-        aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
-        DBG_ERRORFILE(aMsg.getStr());
-#else
-        (void)e;
-#endif
+        SAL_INFO( "unotools.l18n", "getForbiddenCharacters: Exception caught " << e.Message );
     }
     return ::com::sun::star::i18n::ForbiddenCharacters();
 }
@@ -294,13 +252,7 @@ void LocaleDataWrapper::invalidateData()
     }
     catch ( const Exception& e )
     {
-#ifdef DBG_UTIL
-        rtl::OStringBuffer aMsg("getReservedWord: Exception caught\n");
-        aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
-        DBG_ERRORFILE(aMsg.getStr());
-#else
-        (void)e;
-#endif
+        SAL_INFO( "unotools.l18n", "getReservedWord: Exception caught " << e.Message );
     }
     return ::com::sun::star::uno::Sequence< ::rtl::OUString >(0);
 }
@@ -320,13 +272,7 @@ void LocaleDataWrapper::invalidateData()
     }
     catch ( const Exception& e )
     {
-#ifdef DBG_UTIL
-        rtl::OStringBuffer aMsg("getAllInstalledLocaleNames: Exception caught\n");
-        aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
-        DBG_ERRORFILE(aMsg.getStr());
-#else
-        (void)e;
-#endif
+        SAL_INFO( "unotools.l18n", "getAllInstalledLocaleNames: Exception caught " << e.Message );
     }
     return rInstalledLocales;
 }
@@ -458,7 +404,7 @@ const String& LocaleDataWrapper::getOneLocaleItem( sal_Int16 nItem ) const
     ::utl::ReadWriteGuard aGuard( aMutex );
     if ( nItem >= LocaleItem::COUNT )
     {
-        DBG_ERRORFILE( "getOneLocaleItem: bounds" );
+        SAL_INFO( "unotools", "getOneLocaleItem: bounds" );
         return aLocaleItem[0];
     }
     if ( aLocaleItem[nItem].Len() == 0 )
@@ -531,7 +477,7 @@ void LocaleDataWrapper::getOneLocaleItemImpl( sal_Int16 nItem )
             aLocaleItem[nItem] = aLocaleDataItem.LongDateYearSeparator;
         break;
         default:
-            DBG_ERRORFILE( "getOneLocaleItemImpl: which one?" );
+            SAL_INFO( "unotools", "getOneLocaleItemImpl: which one?" );
     }
 }
 
@@ -554,7 +500,7 @@ const String& LocaleDataWrapper::getOneReservedWord( sal_Int16 nWord ) const
     ::utl::ReadWriteGuard aGuard( aMutex );
     if ( nWord < 0 || nWord >= reservedWords::COUNT )
     {
-        DBG_ERRORFILE( "getOneReservedWord: bounds" );
+        SAL_INFO( "unotools", "getOneReservedWord: bounds" );
         nWord = reservedWords::FALSE_WORD;
     }
     if ( aReservedWord[nWord].Len() == 0 )
@@ -1939,13 +1885,7 @@ void LocaleDataWrapper::evaluateLocaleDataChecking()
     }
     catch (const Exception& e)
     {
-#ifdef DBG_UTIL
-        rtl::OStringBuffer aMsg("getAllCalendars: Exception caught\n");
-        aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
-        DBG_ERRORFILE(aMsg.getStr());
-#else
-        (void)e;
-#endif
+        SAL_INFO( "unotools.l18n", "getAllCalendars: Exception caught " << e.Message );
     }
     return ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::Calendar2 >(0);
 }

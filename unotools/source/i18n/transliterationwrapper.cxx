@@ -75,7 +75,7 @@ String TransliterationWrapper::transliterate(
         }
         catch( Exception&  )
         {
-            DBG_ERRORFILE( "transliterate: Exception caught!" );
+            SAL_INFO( "unotools", "transliterate: Exception caught!" );
         }
     }
     return sRet;
@@ -99,7 +99,7 @@ String TransliterationWrapper::transliterate(
         }
         catch( Exception&  )
         {
-            DBG_ERRORFILE( "transliterate: Exception caught!" );
+            SAL_INFO( "unotools", "transliterate: Exception caught!" );
         }
     }
     return sRet;
@@ -171,13 +171,7 @@ void TransliterationWrapper::loadModuleImpl() const
     }
     catch ( const Exception& e )
     {
-#ifdef DBG_UTIL
-        rtl::OStringBuffer aMsg("loadModuleImpl: Exception caught\n");
-        aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
-        DBG_ERRORFILE(aMsg.getStr());
-#else
-        (void)e;
-#endif
+        SAL_INFO( "unotools.i18n", "loadModuleImpl: Exception caught " << e.Message );
     }
 
     bFirstCall = sal_False;
@@ -198,13 +192,7 @@ void TransliterationWrapper::loadModuleByImplName(
     }
     catch ( const Exception& e )
     {
-#ifdef DBG_UTIL
-        rtl::OStringBuffer aMsg("loadModuleByImplName: Exception caught\n");
-        aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
-        DBG_ERRORFILE(aMsg.getStr());
-#else
-        (void)e;
-#endif
+        SAL_INFO( "unotools.i18n", "loadModuleByImplName: Exception caught " << e.Message );
     }
 
     bFirstCall = sal_False;
@@ -224,13 +212,7 @@ sal_Bool TransliterationWrapper::equals(
     }
     catch ( const Exception& e )
     {
-#ifdef DBG_UTIL
-        rtl::OStringBuffer aMsg("equals: Exception caught\n");
-        aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
-        DBG_ERRORFILE(aMsg.getStr());
-#else
-        (void)e;
-#endif
+        SAL_INFO( "unotools.i18n", "equals: Exception caught " << e.Message );
     }
     return sal_False;
 }
@@ -249,13 +231,7 @@ sal_Int32 TransliterationWrapper::compareSubstring(
     }
     catch (const Exception& e)
     {
-#ifdef DBG_UTIL
-        rtl::OStringBuffer aMsg("compareSubstring: Exception caught\n");
-        aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
-        DBG_ERRORFILE(aMsg.getStr());
-#else
-        (void)e;
-#endif
+        SAL_INFO( "unotools.i18n", "compareSubstring: Exception caught " << e.Message );
     }
     return 0;
 }
@@ -272,13 +248,7 @@ sal_Int32 TransliterationWrapper::compareString( const String& rStr1, const Stri
     }
     catch (const Exception& e)
     {
-#ifdef DBG_UTIL
-        rtl::OStringBuffer aMsg("compareString: Exception caught\n");
-        aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
-        DBG_ERRORFILE(aMsg.getStr());
-#else
-        (void)e;
-#endif
+        SAL_INFO( "unotools.i18n", "compareString: Exception caught " << e.Message );
     }
     return 0;
 }

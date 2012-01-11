@@ -29,7 +29,6 @@
 #include <unotools/pathoptions.hxx>
 #include <unotools/configitem.hxx>
 #include <unotools/configmgr.hxx>
-#include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -872,7 +871,7 @@ sal_Bool SvtPathOptions::SearchFile( String& rIniFile, Pathes ePath )
     // check parameter: empty inifile name?
     if ( !rIniFile.Len() )
     {
-        DBG_ERRORFILE( "SvtPathOptions::SearchFile(): invalid parameter" );
+        SAL_INFO( "unotools.config", "SvtPathOptions::SearchFile(): invalid parameter" );
         return sal_False;
     }
 

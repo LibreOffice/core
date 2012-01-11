@@ -30,6 +30,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <rtl/oustringostreaminserter.hxx>
 #include <rtl/strbuf.hxx>
 
 // ugly but so is this namespacing evil.
@@ -47,20 +48,13 @@ inline css::uno::Reference<css::uno::XInterface>
     try
     {
         if (!xSMgr.is())
-	    xSMgr = ::comphelper::getProcessServiceFactory();
+            xSMgr = ::comphelper::getProcessServiceFactory();
         xRet = xSMgr->createInstance( rtl::OUString::createFromAscii( serviceName ) );
     }
     catch (const css::uno::Exception &e)
     {
-#ifdef DBG_UTIL
-        rtl::OStringBuffer aMsg( context );
-	aMsg.append(RTL_CONSTASCII_STRINGPARAM("ctor: Exception caught\n"));
-	aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
-	DBG_ERRORFILE(aMsg.getStr());
-#else
-	(void)e; (void)context;
-#endif
-	xRet = css::uno::Reference<css::uno::XInterface>();
+        SAL_INFO( "unotools.l18n", context << "ctor:Exception caught " << e.Message );
+        xRet = css::uno::Reference<css::uno::XInterface>();
     }
     return xRet;
 }

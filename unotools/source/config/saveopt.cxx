@@ -465,7 +465,7 @@ SvtSaveOptions_Impl::SvtSaveOptions_Impl()
                                 eODFDefaultVersion = SvtSaveOptions::ODFDefaultVersion( nTmp );
                         }
                         else {
-                            DBG_ERRORFILE( "SvtSaveOptions_Impl::SvtSaveOptions_Impl(): Wrong Type!" );
+                            SAL_INFO( "unotools.config", "SvtSaveOptions_Impl::SvtSaveOptions_Impl(): Wrong Type!" );
                         };
                         bROODFDefaultVersion = pROStates[nProp];
                         break;
@@ -545,7 +545,7 @@ SvtSaveOptions_Impl::SvtSaveOptions_Impl()
                                     break;
 
                                 default :
-                                    DBG_ERRORFILE( "invalid index to load a path" );
+                                    SAL_INFO( "unotools.config", "invalid index to load a path" );
                             }
                         }
                         else
@@ -739,7 +739,7 @@ void SvtSaveOptions_Impl::Commit()
                 break;
 
             default:
-                DBG_ERRORFILE( "invalid index to save a path" );
+                SAL_INFO( "unotools.config", "invalid index to save a path" );
         }
     }
 
@@ -821,7 +821,7 @@ void SvtLoadOptions_Impl::Commit()
 // -----------------------------------------------------------------------
 void SvtLoadOptions_Impl::Notify( const Sequence<rtl::OUString>& )
 {
-    DBG_ERRORFILE( "properties have been changed" );
+    SAL_INFO( "unotools.config", "properties have been changed" );
 }
 // -----------------------------------------------------------------------
 

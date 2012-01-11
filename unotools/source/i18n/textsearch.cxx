@@ -27,7 +27,6 @@
  ************************************************************************/
 
 #include <i18npool/mslangid.hxx>
-#include <tools/debug.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/util/SearchFlags.hdl>
 #include <com/sun/star/i18n/TransliterationModules.hpp>
@@ -133,7 +132,7 @@ Reference<XTextSearch> TextSearch::getXTextSearch( const SearchOptions& rPara )
     }
     catch ( Exception& )
     {
-        DBG_ERRORFILE( "TextSearch ctor: Exception caught!" );
+        SAL_INFO( "unotools", "TextSearch ctor: Exception caught!" );
     }
     return rCache.xTextSearch;
 }
@@ -253,7 +252,7 @@ int TextSearch::SearchFrwrd( const String & rStr, xub_StrLen* pStart,
     }
     catch ( Exception& )
     {
-        DBG_ERRORFILE( "SearchForward: Exception caught!" );
+        SAL_INFO( "unotools", "SearchForward: Exception caught!" );
     }
     return nRet;
 }
@@ -284,7 +283,7 @@ int TextSearch::SearchBkwrd( const String & rStr, xub_StrLen* pStart,
     }
     catch ( Exception& )
     {
-        DBG_ERRORFILE( "SearchBackward: Exception caught!" );
+        SAL_INFO( "unotools", "SearchBackward: Exception caught!" );
     }
     return nRet;
 }

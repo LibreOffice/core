@@ -31,9 +31,9 @@
 #include <unotools/useroptions_const.hxx>
 
 #include <unotools/configmgr.hxx>
-#include <tools/debug.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <tools/solar.h>
 #include <osl/mutex.hxx>
 #include <rtl/instance.hxx>
 #include <rtl/logfile.hxx>
@@ -901,7 +901,7 @@ sal_Bool SvtUserOptions_Impl::IsTokenReadonly( sal_uInt16 nToken ) const
                 break;
             }
         default:
-            DBG_ERRORFILE( "SvtUserOptions_Impl::IsTokenReadonly(): invalid token" );
+            SAL_INFO( "unotools.config", "SvtUserOptions_Impl::IsTokenReadonly(): invalid token" );
     }
 
     return bRet;
@@ -931,7 +931,7 @@ sal_Bool SvtUserOptions_Impl::IsTokenReadonly( sal_uInt16 nToken ) const
         case USER_OPT_FATHERSNAME:    pRet = GetFathersName();   break;
         case USER_OPT_APARTMENT:      pRet = GetApartment();     break;
         default:
-            DBG_ERRORFILE( "SvtUserOptions_Impl::GetToken(): invalid token" );
+            SAL_INFO( "unotools.config", "SvtUserOptions_Impl::GetToken(): invalid token" );
     }
     return pRet;
 }

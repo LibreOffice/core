@@ -64,7 +64,7 @@ NativeNumberWrapper::getNativeNumberString(
     }
     catch ( const uno::Exception& )
     {
-        DBG_ERRORFILE( "getNativeNumberString: Exception caught!" );
+        SAL_INFO( "unotools", "getNativeNumberString: Exception caught!" );
     }
     return ::rtl::OUString();
 }
@@ -82,7 +82,7 @@ NativeNumberWrapper::isValidNatNum(
     }
     catch ( const uno::Exception& )
     {
-        DBG_ERRORFILE( "isValidNatNum: Exception caught!" );
+        SAL_INFO( "unotools", "isValidNatNum: Exception caught!" );
     }
     return sal_False;
 }
@@ -100,7 +100,7 @@ NativeNumberWrapper::convertToXmlAttributes(
     }
     catch ( const uno::Exception& )
     {
-        DBG_ERRORFILE( "convertToXmlAttributes: Exception caught!" );
+        SAL_INFO( "unotools", "convertToXmlAttributes: Exception caught!" );
     }
     return i18n::NativeNumberXmlAttributes();
 }
@@ -117,7 +117,7 @@ NativeNumberWrapper::convertFromXmlAttributes(
     }
     catch ( const uno::Exception& )
     {
-        DBG_ERRORFILE( "convertFromXmlAttributes: Exception caught!" );
+        SAL_INFO( "unotools", "convertFromXmlAttributes: Exception caught!" );
     }
     return 0;
 }

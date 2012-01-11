@@ -57,7 +57,7 @@ CollatorWrapper::compareString (const ::rtl::OUString& s1, const ::rtl::OUString
     }
     catch (const uno::RuntimeException&)
     {
-        DBG_ERRORFILE ("CollatorWrapper: compareString failed");
+        SAL_INFO( "unotools","CollatorWrapper: compareString failed");
     }
 
     return 0;
@@ -73,7 +73,7 @@ CollatorWrapper::listCollatorAlgorithms (const lang::Locale& rLocale) const
     }
     catch (const uno::RuntimeException&)
     {
-        DBG_ERRORFILE ("CollatorWrapper: listCollatorAlgorithms failed");
+        SAL_INFO( "unotools","CollatorWrapper: listCollatorAlgorithms failed");
     }
 
     return uno::Sequence< ::rtl::OUString > ();
@@ -89,7 +89,7 @@ CollatorWrapper::loadDefaultCollator (const lang::Locale& rLocale, sal_Int32 nOp
     }
     catch (const uno::RuntimeException&)
     {
-        DBG_ERRORFILE ("CollatorWrapper: loadDefaultCollator failed");
+        SAL_INFO( "unotools","CollatorWrapper: loadDefaultCollator failed");
     }
 
     return 0;
@@ -107,7 +107,7 @@ CollatorWrapper::loadCollatorAlgorithm (const ::rtl::OUString& rAlgorithm,
     }
     catch (const uno::RuntimeException&)
     {
-        DBG_ERRORFILE ("CollatorWrapper: loadCollatorAlgorithm failed");
+        SAL_INFO( "unotools","CollatorWrapper: loadCollatorAlgorithm failed");
     }
 
     return 0;

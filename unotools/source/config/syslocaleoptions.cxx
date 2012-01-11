@@ -191,7 +191,7 @@ SvtSysLocaleOptions_Impl::SvtSysLocaleOptions_Impl()
                                     m_aLocaleString = aStr;
                                 else
                                 {
-                                    DBG_ERRORFILE( "Wrong property type!" );
+                                    SAL_INFO( "unotools.config", "Wrong property type!" );
                                 }
                                 m_bROLocale = pROStates[nProp];
                             }
@@ -203,7 +203,7 @@ SvtSysLocaleOptions_Impl::SvtSysLocaleOptions_Impl()
                                     m_aUILocaleString = aStr;
                                 else
                                 {
-                                    DBG_ERRORFILE( "Wrong property type!" );
+                                    SAL_INFO( "unotools.config", "Wrong property type!" );
                                 }
                                 m_bROUILocale = pROStates[nProp];
                             }
@@ -215,7 +215,7 @@ SvtSysLocaleOptions_Impl::SvtSysLocaleOptions_Impl()
                                     m_aCurrencyString = aStr;
                                 else
                                 {
-                                    DBG_ERRORFILE( "Wrong property type!" );
+                                    SAL_INFO( "unotools.config", "Wrong property type!" );
                                 }
                                 m_bROCurrency = pROStates[nProp];
                             }
@@ -227,13 +227,13 @@ SvtSysLocaleOptions_Impl::SvtSysLocaleOptions_Impl()
                                 m_bDecimalSeparator = bValue;
                             else
                             {
-                                DBG_ERRORFILE( "Wrong property type!" );
+                                SAL_INFO( "unotools.config", "Wrong property type!" );
                             }
                             m_bRODecimalSeparator = pROStates[nProp];
                         }
                         break;
                         default:
-                            DBG_ERRORFILE( "Wrong property type!" );
+                            SAL_INFO( "unotools.config", "Wrong property type!" );
                     }
                 }
             }
@@ -361,7 +361,7 @@ void SvtSysLocaleOptions_Impl::Commit()
                 }
             break;
             default:
-                DBG_ERRORFILE( "invalid index to save a path" );
+                SAL_INFO( "unotools.config", "invalid index to save a path" );
         }
     }
     aNames.realloc(nRealCount);

@@ -70,13 +70,7 @@ void CalendarWrapper::loadDefaultCalendar( const ::com::sun::star::lang::Locale&
     }
     catch (const Exception& e)
     {
-#ifdef DBG_UTIL
-        rtl::OStringBuffer aMsg("loadDefaultCalendar: Exception caught\n");
-        aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
-        DBG_ERRORFILE(aMsg.getStr());
-#else
-        (void)e;
-#endif
+        SAL_INFO( "unotools.l18n", "loadDefaultCalendar: Exception caught " << e.Message );
     }
 }
 
@@ -90,18 +84,8 @@ void CalendarWrapper::loadCalendar( const ::rtl::OUString& rUniqueID, const ::co
     }
     catch (const Exception& e)
     {
-#ifdef DBG_UTIL
-        rtl::OStringBuffer aMsg(RTL_CONSTASCII_STRINGPARAM("loadCalendar: Exception caught\nrequested: "));
-        aMsg.append(rtl::OUStringToOString(rUniqueID, RTL_TEXTENCODING_UTF8));
-        aMsg.append(RTL_CONSTASCII_STRINGPARAM("   Locale: "));
-        aMsg.append(rtl::OUStringToOString(rLocale.Language, RTL_TEXTENCODING_UTF8));
-        aMsg.append('_');
-        aMsg.append(rtl::OUStringToOString(rLocale.Country, RTL_TEXTENCODING_UTF8));
-        aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
-        DBG_ERRORFILE(aMsg.getStr());
-#else
-        (void)e;
-#endif
+        SAL_INFO( "unotools.l18n", "loadCalendar: Exception caught requested: "
+            << rUniqueID << "   Locale: " << rLocale.Language << "_" << rLocale.Country << " " << e.Message );
     }
 }
 
@@ -115,14 +99,9 @@ void CalendarWrapper::loadCalendar( const ::rtl::OUString& rUniqueID, const ::co
     }
     catch (const Exception& e)
     {
-#ifdef DBG_UTIL
-        rtl::OStringBuffer aMsg("getAllCalendars: Exception caught\n");
-        aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
-        DBG_ERRORFILE(aMsg.getStr());
-#else
-        (void)e;
-#endif
+        SAL_INFO( "unotools.l18n", "getAllCalendars: Exception caught " << e.Message );
     }
+
     return ::com::sun::star::uno::Sequence< ::rtl::OUString > (0);
 }
 
@@ -136,13 +115,7 @@ void CalendarWrapper::loadCalendar( const ::rtl::OUString& rUniqueID, const ::co
     }
     catch (const Exception& e)
     {
-#ifdef DBG_UTIL
-        rtl::OStringBuffer aMsg("getUniqueID: Exception caught\n");
-        aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
-        DBG_ERRORFILE(aMsg.getStr());
-#else
-        (void)e;
-#endif
+        SAL_INFO( "unotools.l18n", "getUniqueID: Exception caught " << e.Message );
     }
     return ::rtl::OUString();
 }
@@ -157,13 +130,7 @@ void CalendarWrapper::setDateTime( double nTimeInDays )
     }
     catch (const Exception& e)
     {
-#ifdef DBG_UTIL
-        rtl::OStringBuffer aMsg("setDateTime: Exception caught\n");
-        aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
-        DBG_ERRORFILE(aMsg.getStr());
-#else
-        (void)e;
-#endif
+        SAL_INFO( "unotools.l18n", "setDateTime: Exception caught " << e.Message );
     }
 }
 
@@ -177,13 +144,7 @@ double CalendarWrapper::getDateTime() const
     }
     catch (const Exception& e)
     {
-#ifdef DBG_UTIL
-        rtl::OStringBuffer aMsg("getDateTime: Exception caught\n");
-        aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
-        DBG_ERRORFILE(aMsg.getStr());
-#else
-        (void)e;
-#endif
+        SAL_INFO( "unotools.l18n", "getDateTime: Exception caught " << e.Message );
     }
     return 0.0;
 }
@@ -207,13 +168,7 @@ sal_Int32 CalendarWrapper::getCombinedOffsetInMillis(
     }
     catch (const Exception& e)
     {
-#ifdef DBG_UTIL
-        rtl::OStringBuffer aMsg("setLocalDateTime: Exception caught\n");
-        aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
-        DBG_ERRORFILE(aMsg.getStr());
-#else
-        (void)e;
-#endif
+        SAL_INFO( "unotools.l18n", "setLocalDateTime: Exception caught " << e.Message );
     }
     return nOffset;
 }
@@ -279,13 +234,7 @@ void CalendarWrapper::setLocalDateTime( double nTimeInDays )
     }
     catch (const Exception& e)
     {
-#ifdef DBG_UTIL
-        rtl::OStringBuffer aMsg("setLocalDateTime: Exception caught\n");
-        aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
-        DBG_ERRORFILE(aMsg.getStr());
-#else
-        (void)e;
-#endif
+        SAL_INFO( "unotools.l18n",  "setLocalDateTime: Exception caught " << e.Message );
     }
 }
 
@@ -305,13 +254,7 @@ double CalendarWrapper::getLocalDateTime() const
     }
     catch (const Exception& e)
     {
-#ifdef DBG_UTIL
-        rtl::OStringBuffer aMsg("getLocalDateTime: Exception caught\n");
-        aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
-        DBG_ERRORFILE(aMsg.getStr());
-#else
-        (void)e;
-#endif
+        SAL_INFO( "unotools.l18n",  "getLocalDateTime: Exception caught " << e.Message );
     }
     return 0.0;
 }
@@ -326,13 +269,7 @@ void CalendarWrapper::setValue( sal_Int16 nFieldIndex, sal_Int16 nValue )
     }
     catch (const Exception& e)
     {
-#ifdef DBG_UTIL
-        rtl::OStringBuffer aMsg("setValue: Exception caught\n");
-        aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
-        DBG_ERRORFILE(aMsg.getStr());
-#else
-        (void)e;
-#endif
+        SAL_INFO( "unotools.l18n",  "setValue: Exception caught " << e.Message );
     }
 }
 
@@ -346,13 +283,7 @@ sal_Bool CalendarWrapper::isValid() const
     }
     catch (const Exception& e)
     {
-#ifdef DBG_UTIL
-        rtl::OStringBuffer aMsg("isValid: Exception caught\n");
-        aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
-        DBG_ERRORFILE(aMsg.getStr());
-#else
-        (void)e;
-#endif
+        SAL_INFO( "unotools.l18n",  "isValue: Exception caught " << e.Message );
     }
     return sal_False;
 }
@@ -367,13 +298,7 @@ sal_Int16 CalendarWrapper::getValue( sal_Int16 nFieldIndex ) const
     }
     catch (const Exception& e)
     {
-#ifdef DBG_UTIL
-        rtl::OStringBuffer aMsg("getValue: Exception caught\n");
-        aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
-        DBG_ERRORFILE(aMsg.getStr());
-#else
-        (void)e;
-#endif
+        SAL_INFO( "unotools.l18n", "getValue: Exception caught " << e.Message );
     }
     return 0;
 }
@@ -388,13 +313,7 @@ void CalendarWrapper::addValue( sal_Int16 nFieldIndex, sal_Int32 nAmount )
     }
     catch (const Exception& e)
     {
-#ifdef DBG_UTIL
-        rtl::OStringBuffer aMsg("addValue: Exception caught\n");
-        aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
-        DBG_ERRORFILE(aMsg.getStr());
-#else
-        (void)e;
-#endif
+        SAL_INFO( "unotools.l18n", "addValue: Exception caught " << e.Message );
     }
 }
 
@@ -408,13 +327,7 @@ sal_Int16 CalendarWrapper::getFirstDayOfWeek() const
     }
     catch (const Exception& e)
     {
-#ifdef DBG_UTIL
-        rtl::OStringBuffer aMsg("getFirstDayOfWeek: Exception caught\n");
-        aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
-        DBG_ERRORFILE(aMsg.getStr());
-#else
-        (void)e;
-#endif
+        SAL_INFO( "unotools.l18n", "getFirstDayOfWeek: Exception caught " << e.Message );
     }
     return 0;
 }
@@ -429,13 +342,7 @@ void CalendarWrapper::setFirstDayOfWeek( sal_Int16 nDay )
     }
     catch (const Exception& e)
     {
-#ifdef DBG_UTIL
-        rtl::OStringBuffer aMsg("setFirstDayOfWeek: Exception caught\n");
-        aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
-        DBG_ERRORFILE(aMsg.getStr());
-#else
-        (void)e;
-#endif
+        SAL_INFO( "unotools.l18n", "setFirstDayOfWeek: Exception caught " << e.Message );
     }
 }
 
@@ -449,13 +356,7 @@ void CalendarWrapper::setMinimumNumberOfDaysForFirstWeek( sal_Int16 nDays )
     }
     catch (const Exception& e)
     {
-#ifdef DBG_UTIL
-        rtl::OStringBuffer aMsg("setMinimumNumberOfDaysForFirstWeek: Exception caught\n");
-        aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
-        DBG_ERRORFILE(aMsg.getStr());
-#else
-        (void)e;
-#endif
+        SAL_INFO( "unotools.l18n", "setMinimumNumberOfDaysForFirstWeek: Exception caught " << e.Message );
     }
 }
 
@@ -469,13 +370,7 @@ sal_Int16 CalendarWrapper::getNumberOfMonthsInYear() const
     }
     catch (const Exception& e)
     {
-#ifdef DBG_UTIL
-        rtl::OStringBuffer aMsg("getNumberOfMonthsInYear: Exception caught\n");
-        aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
-        DBG_ERRORFILE(aMsg.getStr());
-#else
-        (void)e;
-#endif
+        SAL_INFO( "unotools.l18n", "getNumberOfMonthsInYear: Exception caught " << e.Message );
     }
     return 0;
 }
@@ -490,13 +385,7 @@ sal_Int16 CalendarWrapper::getNumberOfDaysInWeek() const
     }
     catch (const Exception& e)
     {
-#ifdef DBG_UTIL
-        rtl::OStringBuffer aMsg("getNumberOfDaysInWeek: Exception caught\n");
-        aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
-        DBG_ERRORFILE(aMsg.getStr());
-#else
-        (void)e;
-#endif
+        SAL_INFO( "unotools.l18n", "getNumberOfDaysInWeek: Exception caught " << e.Message );
     }
     return 0;
 }
@@ -511,13 +400,7 @@ sal_Int16 CalendarWrapper::getNumberOfDaysInWeek() const
     }
     catch (const Exception& e)
     {
-#ifdef DBG_UTIL
-        rtl::OStringBuffer aMsg("getMonths: Exception caught\n");
-        aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
-        DBG_ERRORFILE(aMsg.getStr());
-#else
-        (void)e;
-#endif
+        SAL_INFO( "unotools.l18n", "getMonths: Exception caught " << e.Message );
     }
     return ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::CalendarItem2 > (0);
 }
@@ -532,13 +415,7 @@ sal_Int16 CalendarWrapper::getNumberOfDaysInWeek() const
     }
     catch (const Exception& e)
     {
-#ifdef DBG_UTIL
-        rtl::OStringBuffer aMsg("getDays: Exception caught\n");
-        aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
-        DBG_ERRORFILE(aMsg.getStr());
-#else
-        (void)e;
-#endif
+        SAL_INFO( "unotools.l18n", "getDays: Exception caught " << e.Message );
     }
     return ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::CalendarItem2 > (0);
 }
@@ -553,13 +430,7 @@ String CalendarWrapper::getDisplayName( sal_Int16 nCalendarDisplayIndex, sal_Int
     }
     catch (const Exception& e)
     {
-#ifdef DBG_UTIL
-        rtl::OStringBuffer aMsg("getDisplayName: Exception caught\n");
-        aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
-        DBG_ERRORFILE(aMsg.getStr());
-#else
-        (void)e;
-#endif
+        SAL_INFO( "unotools.l18n", "getDisplayName: Exception caught " << e.Message );
     }
     return String();
 }
@@ -576,13 +447,7 @@ String CalendarWrapper::getDisplayString( sal_Int32 nCalendarDisplayCode, sal_In
     }
     catch (const Exception& e)
     {
-#ifdef DBG_UTIL
-        rtl::OStringBuffer aMsg("getDisplayString: Exception caught\n");
-        aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
-        DBG_ERRORFILE(aMsg.getStr());
-#else
-        (void)e;
-#endif
+        SAL_INFO( "unotools.l18n", "getDisplayString: Exception caught " << e.Message );
     }
     return String();
 }
@@ -599,13 +464,7 @@ String CalendarWrapper::getDisplayString( sal_Int32 nCalendarDisplayCode, sal_In
     }
     catch (const Exception& e)
     {
-#ifdef DBG_UTIL
-        rtl::OStringBuffer aMsg( "getLoadedCalendar2: Exception caught\n" );
-        aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
-        DBG_ERRORFILE(aMsg.getStr());
-#else
-        (void)e;
-#endif
+        SAL_INFO( "unotools.l18n", "getLoadedCalendar2: Exception caught " << e.Message );
     }
     return ::com::sun::star::i18n::Calendar2();
 }
@@ -620,13 +479,7 @@ String CalendarWrapper::getDisplayString( sal_Int32 nCalendarDisplayCode, sal_In
     }
     catch (const Exception& e)
     {
-#ifdef DBG_UTIL
-        rtl::OStringBuffer aMsg("getGenitiveMonths: Exception caught\n");
-        aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
-        DBG_ERRORFILE(aMsg.getStr());
-#else
-        (void)e;
-#endif
+        SAL_INFO( "unotools.l18n", "getGenitiveMonths: Exception caught " << e.Message );
     }
     return ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::CalendarItem2 > (0);
 }
@@ -641,13 +494,7 @@ String CalendarWrapper::getDisplayString( sal_Int32 nCalendarDisplayCode, sal_In
     }
     catch (const Exception& e)
     {
-#ifdef DBG_UTIL
-        rtl::OStringBuffer aMsg("getPartitiveMonths: Exception caught\n");
-        aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
-        DBG_ERRORFILE(aMsg.getStr());
-#else
-        (void)e;
-#endif
+        SAL_INFO( "unotools.l18n", "getPartitiveMonths: Exception caught " << e.Message );
     }
     return ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::CalendarItem2 > (0);
 }

@@ -72,7 +72,7 @@ NumberFormatCodeWrapper::getDefault( sal_Int16 formatType, sal_Int16 formatUsage
     }
     catch ( const Exception& e )
     {
-        DBG_ERRORFILE( "getDefault: Exception caught!" );
+        SAL_INFO( "unotools", "getDefault: Exception caught!" );
     }
     return ::com::sun::star::i18n::NumberFormatCode();
 }
@@ -88,7 +88,7 @@ NumberFormatCodeWrapper::getFormatCode( sal_Int16 formatIndex ) const
     }
     catch ( const Exception& e )
     {
-        DBG_ERRORFILE( "getFormatCode: Exception caught!" );
+        SAL_INFO( "unotools", "getFormatCode: Exception caught!" );
     }
     return ::com::sun::star::i18n::NumberFormatCode();
 }
@@ -104,7 +104,7 @@ NumberFormatCodeWrapper::getAllFormatCode( sal_Int16 formatUsage ) const
     }
     catch ( const Exception& e )
     {
-        DBG_ERRORFILE( "getAllFormatCode: Exception caught!" );
+        SAL_INFO( "unotools", "getAllFormatCode: Exception caught!" );
     }
     return ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::NumberFormatCode > (0);
 }
@@ -120,7 +120,7 @@ NumberFormatCodeWrapper::getAllFormatCodes() const
     }
     catch ( const Exception& e )
     {
-        DBG_ERRORFILE( "getAllFormatCodes: Exception caught!" );
+        SAL_INFO( "unotools", "getAllFormatCodes: Exception caught!" );
     }
     return ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::NumberFormatCode > (0);
 }
