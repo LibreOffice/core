@@ -5,13 +5,13 @@ libreoffice \- LibreOffice office suite
 .SH SYNOPSIS
 .B libreoffice
 [\fB\-\-accept\=\fIaccept\-string\fR] [\fB\-\-base\fR] [\fB\-\-calc\fR]
-[\fB\-\-convert\-to\fR output_file_extension[:output_filter_name] [\-outdir output_dir] \fIfile\fR]...
+[\fB\-\-convert\-to\fR output_file_extension[:output_filter_name] [\-\-outdir output_dir] \fIfile\fR]...
 [\fB\-\-display \fIdisplay\fR] [\fB\-\-draw\fR] [\fB\-\-global\fR] [\fB\-\-headless\fR]
 [\fB\-\-help\fR|\fB\-h\fR|\fB\-?\fR] [\fB\-\-impress\fR] [\fB\-\-invisible\fR] [\fB\-\-infilter="<filter>"\fR]
-[\fB\-\-math\fR] [\fB\-\-minimized\fR] [\fB\-n \fIfile\fR]... [\fB\-nodefault\fR]
+[\fB\-\-math\fR] [\fB\-\-minimized\fR] [\fB\-n \fIfile\fR]... [\fB\-\-nodefault\fR]
 [\fB\-\-nolockcheck\fR] [\fB\-\-nologo\fR] [\fB\-\-norestore\fR]
 [\fB\-o \fIfile\fR]... [\fB\-p \fIfile\fR...]
-[\fB\-\-print\-to\-file [\-printer\-name printer_name] [\-outdir output_dir] file]...
+[\fB\-\-print\-to\-file [\-\-printer\-name printer_name] [\-\-outdir output_dir] file]...
 [\fB\-\-pt \fIprintername\fR \fIfile\fR...]
 [\fB\-\-show \fIImpress file\fR]... [\fB\-\-unaccept=\fIaccept\-string\fR]
 [\fB\-\-terminate_after_init\fR] [\fB\-\-view \fIfile\fR]... [\fB\-\-web\fR]
@@ -60,9 +60,9 @@ Starts the wizard for a new Base document.
 Starts with a new Calc document.
 
 .TP
-\fB\-\-convert\-to\fR output_file_extension[:output_filter_name] [\-outdir output_dir] \fIfile\fR...
+\fB\-\-convert\-to\fR output_file_extension[:output_filter_name] [\-\-outdir output_dir] \fIfile\fR...
 Batch converts files.
-If \fI-outdir\fR is not specified then the current working directory is used as the output directory
+If \fI\-\-outdir\fR is not specified then the current working directory is used as the output directory
 for the converted files.
 
 Examples:
@@ -71,7 +71,7 @@ Examples:
 
 Converts all .doc files to PDFs.
 
-\fB\-\-convert\-to\fR pdf:writer_pdf_Export \-outdir /home/user *.doc
+\fB\-\-convert\-to\fR pdf:writer_pdf_Export \-\-outdir /home/user *.doc
 
 Converts all .doc files to PDFs using the settings in the Writer PDF export dialog and saving them
 in /home/user.
@@ -117,7 +117,7 @@ LO can be controlled and documents and dialogs can be opened via the API.
 When started with this parameter, it can only be quit using the taskmanager (Windows)
 or the kill command (UNIX based systems).
 
-\-quickstart does not work with this parameter.
+\-\-quickstart does not work with this parameter.
 
 .TP
 \fB\-\-infilter="<filter>"\fR
@@ -138,10 +138,10 @@ Creates the a new document from the given templates.
 
 .TP
 \fB\-\-nodefault\fR
-Starts LO without creating an new document.
-The next time you start LO, the welcome screen is show.
+Starts LO without creating a new document.
+The next time you start LO, the welcome screen is shown.
 
-It's used together with \fB\-nologo\fR by quick starters. Note that \fB\-quickstart\fR
+It's used together with \fB\-\-nologo\fR by quick starters. Note that \fB\-\-quickstart\fR
 has no longer been supported since OpenOffice.org 2.0.0.
 
 .TP
@@ -155,7 +155,7 @@ Disables the splash screen at program start.
 .TP
 \fB\-\-norestore\fR
 Disables restart and file recovery after a system crash. It is possible that LO
-will try to restore a file it keeps crashing on, if that happens \fB\-norestore\fR
+will try to restore a file it keeps crashing on, if that happens \fB\-\-norestore\fR
 is the only way to start LO.
 
 .TP
@@ -176,10 +176,10 @@ does not appear.
 If the file name contains spaces, then it must be enclosed in quotation marks.
 
 .TP
-\fB\-\-print\-to\-file [\-printer\-name printer_name] [\-outdir output_dir] file...
+\fB\-\-print\-to\-file [\-\-printer\-name printer_name] [\-\-outdir output_dir] file...
 Batch print files to file.
-If \-printer\-name is not specified the default printer is used.
-If \-outdir is not specified then the current working directory is used as the output directory
+If \-\-printer\-name is not specified the default printer is used.
+If \-\-outdir is not specified then the current working directory is used as the output directory
 for the converted files.
 
 Examples:
@@ -188,7 +188,7 @@ Examples:
 
 Prints all .doc files to the current working directory using the default printer.
 
-\-\-print\-to\-file \-printer\-name nasty_lowres_printer \-outdir /home/user *.doc
+\-\-print\-to\-file \-\-printer\-name nasty_lowres_printer \-\-outdir /home/user *.doc
 
 Prints all .doc files to /home/user directory using the nasty_lowres_printer.
 
@@ -200,7 +200,7 @@ screen does not appear.
 If a file name contains spaces, then it must be enclosed in quotation marks.
 
 .TP
-\fB\-\-quickstart \fB\-quickstart=no
+\fB\-\-quickstart \fB\-\-quickstart=no
 Starts LO with it's quick starter.
 \fB\-\-quickstart disable the quick starter.
 
@@ -212,7 +212,7 @@ Opens the given Impress files, starts the presentation and quits after they have
 
 .TP
 \fB\-\-unaccept=\fIaccept\-string\fR
-Closes an acceptor that was created with \fB\-accept\fR option.
+Closes an acceptor that was created with \fB\-\-accept\fR option.
 
 Use \fB\-\-unaccept\fR=\fIall\fR to close all open acceptors.
 

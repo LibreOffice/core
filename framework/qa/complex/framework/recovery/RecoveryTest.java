@@ -168,9 +168,9 @@ public class RecoveryTest extends ComplexTestCase {
         msg +="\tPlease run your command with the following parameter:\n\n";
         msg +="\t-AppExecutionCommand=OFFICEBINARY CONNECTIONSTRING\n\n";
         msg +="Example Windows:\n";
-        msg +="-AppExecutionCommand=C:\\office\\soffice.exe -accept=socket,host=localhost,port=8101;urp;\n\n";
+        msg +="-AppExecutionCommand=C:\\office\\soffice.exe --accept=socket,host=localhost,port=8101;urp;\n\n";
         msg +="Example UNIX:\n";
-        msg +="-AppExecutionCommand=/office/soffice \"-accept=socket,host=localhost,port=8101;urp;\"\n\n";
+        msg +="-AppExecutionCommand=/office/soffice \"--accept=socket,host=localhost,port=8101;urp;\"\n\n";
         msg+="NOTE: on UNIX be shure to have the connection string inside quotation mark!\n";
 
         assure(msg, param.get("AppExecutionCommand") != null && ! param.get("AppExecutionCommand").equals(""));

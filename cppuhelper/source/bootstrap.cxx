@@ -567,17 +567,17 @@ Reference< XComponentContext > SAL_CALL bootstrap()
 
         // accept string
         OSL_ASSERT( buf.getLength() == 0 );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "-accept=pipe,name=" ) );
+        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "--accept=pipe,name=" ) );
         buf.append( sPipeName );
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( ";urp;" ) );
 
         // arguments
         OUString args [] = {
-            OUSTR( "-nologo" ),
-            OUSTR( "-nodefault" ),
-            OUSTR( "-norestore" ),
-            OUSTR( "-nocrashreport" ),
-            OUSTR( "-nolockcheck" ),
+            OUSTR( "--nologo" ),
+            OUSTR( "--nodefault" ),
+            OUSTR( "--norestore" ),
+            OUSTR( "--nocrashreport" ),
+            OUSTR( "--nolockcheck" ),
             buf.makeStringAndClear()
         };
         rtl_uString * ar_args [] = {

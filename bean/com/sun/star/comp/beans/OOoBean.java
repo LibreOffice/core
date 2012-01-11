@@ -800,12 +800,12 @@ public class OOoBean
         when at the same time the office writes a backup of the document. This bug
         also affects {@link #storeToByteArray storeToByteArray} and
         {@link #storeToStream storeToStream}. The workaround
-        is to start the office with the option -norestore, which disables the automatic
+        is to start the office with the option --norestore, which disables the automatic
         backup and recovery mechanism. OOoBean offers currently no supported way of providing
         startup options for OOo. But it is possible to set a Java property when starting
         Java, which is examined by OOoBean:
         <pre>
-            java -Dcom.sun.star.officebean.Options=-norestore  ...
+            java -Dcom.sun.star.officebean.Options=--norestore  ...
         </pre>
         It is planned to offer a way of specifying startup options in a future version.
         The property can be used until then. When using this property only one option

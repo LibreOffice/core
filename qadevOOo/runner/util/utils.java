@@ -816,14 +816,14 @@ public class utils {
                     boolean gotNoAccept = true;
                     while (commandTokens.hasMoreElements()) {
                         String officeParam = commandTokens.nextToken();
-                        if (officeParam.indexOf("-accept=") != -1) {
+                        if (officeParam.indexOf("--accept=") != -1) {
                             gotNoAccept = false;
                             errorMessage = validateConnectString(officeParam, true);
                         }
                     }
                     if (gotNoAccept) {
                         errorMessage = "Error: Your 'AppExecutionCommand' parameter does not " +
-                            "contain a '-accept' parameter for connecting the office.";
+                            "contain a '--accept' parameter for connecting the office.";
                     }
                 }
             }
@@ -841,7 +841,7 @@ public class utils {
     public static String validateConnectString(String connectString, boolean checkAppExecutionCommand) {
         String acceptPrefix = "";
         if (checkAppExecutionCommand) {
-            acceptPrefix = "-accept=";
+            acceptPrefix = "--accept=";
         }
 
         String errorMessage = "OK";
@@ -850,7 +850,7 @@ public class utils {
             if (connectString.indexOf(acceptPrefix + "socket,host=") == -1 ||
                 connectString.indexOf("port=") == -1) {
                 if (checkAppExecutionCommand) {
-                    errorMessage = "Error: The '-accept' parameter contains a syntax error: It should be like: '-accept=socket,host=localhost,port=8100;urp;";
+                    errorMessage = "Error: The '--accept' parameter contains a syntax error: It should be like: '--accept=socket,host=localhost,port=8100;urp;";
                 } else {
                     errorMessage = "Error: The 'ConnectionString' parameter contains a syntax error: It should be like: 'socket,host=localhost,port=8100'";
                 }
@@ -858,14 +858,14 @@ public class utils {
         } else if (connectString.indexOf("pipe") != -1) {
             if (connectString.indexOf(acceptPrefix + "pipe,name=") == -1) {
                 if (checkAppExecutionCommand) {
-                    errorMessage = "Error: The '-accept' parameter contains a syntax error: It should be like: '-accept=pipe,name=myuniquename;urp;'";
+                    errorMessage = "Error: The '--accept' parameter contains a syntax error: It should be like: '--accept=pipe,name=myuniquename;urp;'";
                 } else {
                     errorMessage = "Error: The 'ConnectionString' parameter contains a syntax error: It should be like: 'pipe,name=myuniquename'";
                 }
             }
         } else {
             if (checkAppExecutionCommand) {
-                errorMessage = "Warning: The '-accept' parameter contains an unknown connection method.";
+                errorMessage = "Warning: The '--accept' parameter contains an unknown connection method.";
             } else {
                 errorMessage = "Warning: The 'ConnectionString' parameter contains an unknown connection method.";
             }

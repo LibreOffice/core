@@ -131,12 +131,12 @@ static BOOL ReportCrash( LPEXCEPTION_POINTERS lpEP )
     for ( argi = 1; argi < __argc; argi++ )
     {
         if (
-            0 == stricmp( __argv[argi], "-nocrashreport" ) ||
+            0 == stricmp( __argv[argi], "--nocrashreport" ) ||
             0 == stricmp( __argv[argi], "/nocrashreport" )
             )
             return FALSE;
         else if (
-            0 == stricmp( __argv[argi], "-autocrashreport" ) ||
+            0 == stricmp( __argv[argi], "--autocrashreport" ) ||
             0 == stricmp( __argv[argi], "/autocrashreport" )
             )
             fAutoReport = TRUE;

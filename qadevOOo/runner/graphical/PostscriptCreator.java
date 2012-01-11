@@ -114,7 +114,7 @@ public class PostscriptCreator extends EnhancedComplexTestCase
 //////            "-DOC_COMPARATOR_REFERENCE_CREATOR_TYPE", "PDF",      /* default: "OOo" */
 //////            "-DOC_COMPARATOR_REFERENCE_CREATOR_TYPE", "msoffice", /* default: "OOo" */
 //////            "-OFFICE_VIEWABLE", "false",
-////            "-AppExecutionCommand", "\"C:/home/ll93751/staroffice9_DEV300_m25/Sun/StarOffice 9/program/soffice.exe\"  -norestore -nocrashreport -accept=pipe,name=ll93751;urp;",
+////            "-AppExecutionCommand", "\"C:/home/ll93751/staroffice9_DEV300_m25/Sun/StarOffice 9/program/soffice.exe\"  --norestore --nocrashreport --accept=pipe,name=ll93751;urp;",
 //////            "-NoOffice"
 //            "-DOC_COMPARATOR_PRINT_MAX_PAGE","9999",
 //            "-DOC_COMPARATOR_GFX_OUTPUT_DPI_RESOLUTION","180",
@@ -127,7 +127,7 @@ public class PostscriptCreator extends EnhancedComplexTestCase
 //            "-OFFICE_VIEWABLE","true",
 //            "-wntmsci.DOC_COMPARATOR_INPUT_PATH","\\\\so-gfxcmp-lin\\doc-pool\\LLA_test\\issue_79214.odb",
 //            "-wntmsci.DOC_COMPARATOR_OUTPUT_PATH","\\\\so-gfxcmp-lin\\gfxcmp-data\\wntmsci\\convwatch-output\\LLA_test\\DEV300_m11",
-//            "-wntmsci.AppExecutionCommand","\"C:\\gfxcmp\\programs\\staroffice8_DEV300_m11\\Sun\\StarOffice 9\\program\\soffice.exe\"  -norestore -nocrashreport -accept=pipe,name=ll93751;urp;",
+//            "-wntmsci.AppExecutionCommand","\"C:\\gfxcmp\\programs\\staroffice8_DEV300_m11\\Sun\\StarOffice 9\\program\\soffice.exe\"  --norestore --nocrashreport --accept=pipe,name=ll93751;urp;",
 //            "-wntmsci.AppKillCommand","\"C:\\bin\\pskill.exe soffice.bin;C:\\bin\\pskill.exe winword;C:\\bin\\pskill.exe excel\"",
 //
 //        };

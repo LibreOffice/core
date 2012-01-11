@@ -747,8 +747,8 @@ public class LocalOfficeConnection
             //examine if user specified command-line options in system properties.
             //We may offer later a more sophisticated way of providing options if
             //the need arises. Currently this is intended to ease the pain during
-            //development  with pre-release builds of OOo where one wants to start
-            //OOo with the -norestore options. The value of the property is simple
+            //development  with pre-release builds of LibO where one wants to start
+            //LibO with the --norestore options. The value of the property is simple
             //passed on to the Runtime.exec call.
             try {
                 sOption = System.getProperty("com.sun.star.officebean.Options");
@@ -768,13 +768,13 @@ public class LocalOfficeConnection
 
 //          cmdArray[0] = (new File(getProgramPath(), OFFICE_APP_NAME)).getPath();
             cmdArray[0] = (new File(unoPath, OFFICE_APP_NAME)).getPath();
-            cmdArray[1] = "-nologo";
-            cmdArray[2] = "-nodefault";
+            cmdArray[1] = "--nologo";
+            cmdArray[2] = "--nodefault";
             if ( mConnType.equals( "pipe" ) )
-                cmdArray[3] = "-accept=pipe,name=" + getIdentifier() + ";" +
+                cmdArray[3] = "--accept=pipe,name=" + getIdentifier() + ";" +
                           mProtocol + ";" + mInitialObject;
             else if ( mConnType.equals( "socket" ) )
-                cmdArray[3] = "-accept=socket,port=" + mPort + ";urp";
+                cmdArray[3] = "--accept=socket,port=" + mPort + ";urp";
             else
                 throw new java.io.IOException( "not connection specified" );
 

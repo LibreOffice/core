@@ -92,7 +92,7 @@ public class UnitConversion
     /**
      * The real test function
      * 1. try to get the XMultiServiceFactory of an already running office. Therefore make sure an (open|star)office is running with
-     *    parameters like -accept="socket,host=localhost,port=8100;urp;"
+     *    parameters like --accept="socket,host=localhost,port=8100;urp;"
      * 2. try to create an empty window
      * 3. try to convert the WindowPeer to an XWindow
      * 4. try to resize and move the window to an other position, so we get a well knowing position and size.

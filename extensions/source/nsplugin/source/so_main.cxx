@@ -314,16 +314,16 @@ Reference< lang::XMultiServiceFactory > SAL_CALL start_office(NSP_PIPE_FD read_f
 
         // accept string
         OSL_ASSERT( buf.getLength() == 0 );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "-accept=pipe,name=" ) );
+        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "--accept=pipe,name=" ) );
         buf.append( aPluginPipeName );    //user installation path as pipe name
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( ";urp;" ) );
         OUString sConnectStartString( buf.makeStringAndClear() );
 
         // arguments
         OUString args [] = {
-                OUSTR( "-nologo" ),
-                OUSTR( "-nodefault" ),
-                OUSTR( "-nolockcheck" ),
+                OUSTR( "--nologo" ),
+                OUSTR( "--nodefault" ),
+                OUSTR( "--nolockcheck" ),
                 sConnectStartString,
         };
 

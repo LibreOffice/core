@@ -14,7 +14,7 @@ import com.sun.star.uno.XInterface;
 import com.sun.star.uno.RuntimeException;
 
 
-/** @descr  This class establishes a connection to a StarOffice application.
+/** @descr  This class establishes a connection to a LibreOffice application.
  */
 public class OfficeConnection
 {
@@ -25,7 +25,7 @@ public class OfficeConnection
     }
 
     /** @descr Return the service manager that represents the connected
-                StarOffice application
+                LibreOffice application
     */
     public XMultiServiceFactory getServiceManager ()
     {
@@ -42,7 +42,7 @@ public class OfficeConnection
         return getServiceManager() != null;
     }
 
-    /** @descr  Connect to a already running StarOffice application.
+    /** @descr  Connect to an already running LibreOffice application.
     */
     private void connect ()
     {
@@ -54,10 +54,10 @@ public class OfficeConnection
         connect (hostname, mnDefaultPort);
     }
 
-    /** @descr  Connect to a already running StarOffice application that has
+    /** @descr  Connect to a already running LibreOffice application that has
                 been started with a command line argument like
-                "-accept=socket,host=localhost,port=5678;urp;"
-    */
+		"--accept=socket,host=localhost,port=5678;urp;"
+		*/
     private void connect (String hostname, int portnumber)
     {
         mbInitialized = true;
@@ -86,8 +86,8 @@ public class OfficeConnection
         catch (Exception e)
         {
             MessageArea.println ("Could not connect with " + sConnectString + " : " + e);
-            MessageArea.println ("Please start OpenOffice/StarOffice with "
-                + "\"-accept=socket,host=localhost,port=5678;urp;\"");
+            MessageArea.println ("Please start LibreOffice with "
+                + "\"--accept=socket,host=localhost,port=5678;urp;\"");
         }
     }
 

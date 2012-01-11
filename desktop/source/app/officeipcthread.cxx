@@ -747,7 +747,7 @@ void SAL_CALL OfficeIPCThread::run()
             cProcessed.reset();
             pRequest->pcProcessed = &cProcessed;
 
-            // Print requests are not dependent on the -invisible cmdline argument as they are
+            // Print requests are not dependent on the --invisible cmdline argument as they are
             // loaded with the "hidden" flag! So they are always checked.
             bDocRequestSent |= aCmdLineArgs->GetPrintList( pRequest->aPrintList );
             bDocRequestSent |= ( aCmdLineArgs->GetPrintToList( pRequest->aPrintToList ) &&
@@ -756,7 +756,7 @@ void SAL_CALL OfficeIPCThread::run()
             if ( !rCurrentCmdLineArgs.IsInvisible() )
             {
                 // Read cmdline args that can open/create documents. As they would open a window
-                // they are only allowed if the "-invisible" is currently not used!
+                // they are only allowed if the "--invisible" is currently not used!
                 bDocRequestSent |= aCmdLineArgs->GetOpenList( pRequest->aOpenList );
                 bDocRequestSent |= aCmdLineArgs->GetViewList( pRequest->aViewList );
                 bDocRequestSent |= aCmdLineArgs->GetStartList( pRequest->aStartList );

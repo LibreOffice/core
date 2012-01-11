@@ -249,12 +249,12 @@ public class Bootstrap {
             // create call with arguments
             String[] cmdArray = new String[7];
             cmdArray[0] = fOffice.getPath();
-            cmdArray[1] = "-nologo";
-            cmdArray[2] = "-nodefault";
-            cmdArray[3] = "-norestore";
-            cmdArray[4] = "-nocrashreport";
-            cmdArray[5] = "-nolockcheck";
-            cmdArray[6] = "-accept=pipe,name=" + sPipeName + ";urp;";
+            cmdArray[1] = "--nologo";
+            cmdArray[2] = "--nodefault";
+            cmdArray[3] = "--norestore";
+            cmdArray[4] = "--nocrashreport";
+            cmdArray[5] = "--nolockcheck";
+            cmdArray[6] = "--accept=pipe,name=" + sPipeName + ";urp;";
 
             // start office process
             Process p = Runtime.getRuntime().exec( cmdArray );

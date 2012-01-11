@@ -2,12 +2,12 @@ call env_win.bat
 
 @echo off
 echo =============================================
-echo step - 1 start OpenOffice
+echo step - 1 start LibreOffice
 echo =============================================
 @echo on
 
 @echo off
-echo please start up OpenOffice with "-accept=socket,host=0,port=2002;urp;"
+echo please start up LibreOffice with "--accept=socket,host=0,port=2002;urp;"
 pause Press Enter when finished...
 @echo on
 

@@ -588,13 +588,13 @@ public class LocalOfficeConnection
            // create call with arguments
             String[] cmdArray = new String[4];
             cmdArray[0] = (new File(getProgramPath(), OFFICE_APP_NAME)).getPath();
-            cmdArray[1] = "-nologo";
-            cmdArray[2] = "-nodefault";
+            cmdArray[1] = "--nologo";
+            cmdArray[2] = "--nodefault";
             if ( mConnType.equals( "pipe" ) )
-                cmdArray[3] = "-accept=pipe,name=" + getIdentifier() + ";" +
+                cmdArray[3] = "--accept=pipe,name=" + getIdentifier() + ";" +
                           mProtocol + ";" + mInitialObject;
             else if ( mConnType.equals( "socket" ) )
-                cmdArray[3] = "-accept=socket,port=" + mPort + ";urp";
+                cmdArray[3] = "--accept=socket,port=" + mPort + ";urp";
             else
                 throw new java.io.IOException( "not connection specified" );
 

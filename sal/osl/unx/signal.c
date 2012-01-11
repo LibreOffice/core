@@ -512,12 +512,12 @@ static int ReportCrash( int Signal )
     {
         if ( osl_Process_E_None == osl_getCommandArg( argi, &ustrCommandArg ) )
         {
-            if ( 0 == rtl_ustr_ascii_compare( rtl_uString_getStr( ustrCommandArg ), "-nocrashreport" ) )
+            if ( 0 == rtl_ustr_ascii_compare( rtl_uString_getStr( ustrCommandArg ), "--nocrashreport" ) )
             {
                 rtl_uString_release( ustrCommandArg );
                 return -1;
             }
-            else if ( 0 == rtl_ustr_ascii_compare( rtl_uString_getStr( ustrCommandArg ), "-autocrashreport" ) )
+            else if ( 0 == rtl_ustr_ascii_compare( rtl_uString_getStr( ustrCommandArg ), "--autocrashreport" ) )
             {
                 bAutoCrashReport = sal_True;
             }
