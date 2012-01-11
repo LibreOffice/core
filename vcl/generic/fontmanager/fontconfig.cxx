@@ -124,7 +124,7 @@ public:
     boost::unordered_map< rtl::OString, rtl::OString, rtl::OStringHash > m_aFontNameToLocalized;
     boost::unordered_map< rtl::OString, rtl::OString, rtl::OStringHash > m_aLocalizedToCanonical;
 private:
-    void cacheLocalizedFontNames(FcChar8 *origfontname, FcChar8 *bestfontname, const std::vector< lang_and_element > &lang_and_elements);
+    void cacheLocalizedFontNames(const FcChar8 *origfontname, const FcChar8 *bestfontname, const std::vector< lang_and_element > &lang_and_elements);
 };
 
 FontCfgWrapper::FontCfgWrapper()
@@ -296,6 +296,7 @@ namespace
 
         std::vector<lang_and_element>::const_iterator aEnd = elements.end();
         bool alreadyclosematch = false;
+        bool found_fallback_englishname = false;
         for( std::vector<lang_and_element>::const_iterator aIter = elements.begin(); aIter != aEnd; ++aIter )
         {
             const char *pLang = (const char*)aIter->first;
@@ -307,7 +308,8 @@ namespace
             }
             else if( alreadyclosematch )
             {
-                // override candidate only if there is a perfect match
+                // current candidate matches lang of lang-TERRITORY
+                // override candidate only if there is a full match
                 continue;
             }
             else if( rtl_str_compare( pLang, sLangMatch.getStr()) == 0)
@@ -316,10 +318,18 @@ namespace
                 candidate = aIter->second;
                 alreadyclosematch = true;
             }
+            else if( found_fallback_englishname )
+            {
+                // already found an english fallback, don't override candidate
+                // unless there is a better language match
+                continue;
+            }
             else if( rtl_str_compare( pLang, "en") == 0)
             {
-                // fallback to the english element name
+                // select a fallback candidate of the first english element
+                // name
                 candidate = aIter->second;
+                found_fallback_englishname = true;
             }
         }
         return candidate;
@@ -327,7 +337,8 @@ namespace
 }
 
 //Set up maps to quickly map between a fonts best UI name and all the rest of its names, and vice versa
-void FontCfgWrapper::cacheLocalizedFontNames(FcChar8 *origfontname, FcChar8 *bestfontname, const std::vector< lang_and_element > &lang_and_elements)
+void FontCfgWrapper::cacheLocalizedFontNames(const FcChar8 *origfontname, const FcChar8 *bestfontname,
+    const std::vector< lang_and_element > &lang_and_elements)
 {
     std::vector<lang_and_element>::const_iterator aEnd = lang_and_elements.end();
     for (std::vector<lang_and_element>::const_iterator aIter = lang_and_elements.begin(); aIter != aEnd; ++aIter)
