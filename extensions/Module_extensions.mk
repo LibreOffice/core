@@ -46,7 +46,6 @@ $(eval $(call gb_Module_add_targets,extensions,\
 	Library_updatecheckui \
 	Library_updatefeed \
 	Library_updchk \
-	Library_xmx \
 	Package_bib \
 	Package_pcr \
 ))

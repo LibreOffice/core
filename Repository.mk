@@ -280,7 +280,6 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     xcr \
     xmlfa \
     xmlfd \
-    xmx \
     xo \
     xof \
     xsltdlg \

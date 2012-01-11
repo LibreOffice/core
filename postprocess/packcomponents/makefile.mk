@@ -181,7 +181,6 @@ my_components += \
     component/extensions/source/update/check/updchk.uno \
     component/extensions/source/update/feed/updatefeed \
     component/extensions/source/update/ui/updchk \
-    component/extensions/source/xmlextract/xmx \
     component/fpicker/source/generic/fpicker \
     component/fpicker/source/office/fps_office \
     syssh \
