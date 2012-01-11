@@ -130,7 +130,7 @@ class EnhancedCustomShape2d : public SfxItemSet
 
         sal_Bool                    SetAdjustValueAsDouble( const double& rValue, const sal_Int32 nIndex );
         sal_Int32                   GetLuminanceChange( sal_uInt32 nIndex ) const;
-        Color                       GetColorData( const Color& rFillColor, sal_uInt32 nIndex ) const;
+        Color                       GetColorData( const Color& rFillColor, sal_uInt32 nIndex, double dBrightness ) const;
         void                        AdaptObjColor(SdrPathObj& rObj, const SfxItemSet& rCustomShapeSet,
                                                   sal_uInt32& nColorIndex, sal_uInt32 nColorCount);
         sal_Bool                    GetParameter( double& rParameterReturnValue,  const com::sun::star::drawing::EnhancedCustomShapeParameter&,
