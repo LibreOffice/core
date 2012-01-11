@@ -41,17 +41,17 @@ class CollatorRessourceData
 {
     friend class CollatorRessource;
     private: /* data */
-        String          ma_Name;
-        String          ma_Translation;
+        rtl::OUString ma_Name;
+        rtl::OUString ma_Translation;
     private: /* member functions */
         CollatorRessourceData () {}
     public:
-        CollatorRessourceData ( const String &r_Algorithm, const String &r_Translation)
+        CollatorRessourceData ( const rtl::OUString &r_Algorithm, const rtl::OUString &r_Translation)
                     : ma_Name (r_Algorithm), ma_Translation (r_Translation) {}
 
-        const String&   GetAlgorithm () const { return ma_Name; }
+        const rtl::OUString& GetAlgorithm () const { return ma_Name; }
 
-        const String&   GetTranslation () const { return ma_Translation; }
+        const rtl::OUString& GetTranslation () const { return ma_Translation; }
 
         ~CollatorRessourceData () {}
 
@@ -75,8 +75,8 @@ CollatorRessource::CollatorRessource()
 {
     mp_Data = new CollatorRessourceData[COLLATOR_RESSOURCE_COUNT];
 
-    #define ASCSTR(str) String(RTL_CONSTASCII_USTRINGPARAM(str))
-    #define RESSTR(rid) String(SvtResId(rid))
+    #define ASCSTR(str) rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(str))
+    #define RESSTR(rid) ResId::toString(SvtResId(rid))
 
 
     mp_Data[0] = CollatorRessourceData (ASCSTR("alphanumeric"), RESSTR(STR_SVT_COLLATE_ALPHANUMERIC));
@@ -98,20 +98,20 @@ CollatorRessource::~CollatorRessource()
     delete[] mp_Data;
 }
 
-const String&
-CollatorRessource::GetTranslation (const String &r_Algorithm)
+const rtl::OUString&
+CollatorRessource::GetTranslation(const rtl::OUString &r_Algorithm)
 {
-    xub_StrLen nIndex = r_Algorithm.Search('.');
-    String aLocaleFreeAlgorithm;
+    sal_Int32 nIndex = r_Algorithm.indexOf('.');
+    rtl::OUString aLocaleFreeAlgorithm;
 
-    if (nIndex == STRING_NOTFOUND)
+    if (nIndex == -1)
     {
         aLocaleFreeAlgorithm = r_Algorithm;
     }
     else
     {
         nIndex += 1;
-        aLocaleFreeAlgorithm = String(r_Algorithm, nIndex, r_Algorithm.Len() - nIndex);
+        aLocaleFreeAlgorithm = r_Algorithm.copy(nIndex, r_Algorithm.getLength() - nIndex);
     }
 
     for (sal_uInt32 i = 0; i < COLLATOR_RESSOURCE_COUNT; i++)
