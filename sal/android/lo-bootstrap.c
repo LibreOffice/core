@@ -71,6 +71,7 @@ struct engine {
 };
 
 static struct android_app *app;
+static const char *data_dir;
 static const char **library_locations;
 static void *apk_file;
 static int apk_file_size;
@@ -474,6 +475,8 @@ Java_org_libreoffice_android_Bootstrap_setup__Ljava_lang_String_2Ljava_lang_Stri
     library_locations = malloc((n+2) * sizeof(char *));
 
     dataDirPath = (*env)->GetStringUTFChars(env, dataDir, NULL);
+
+    data_dir = strdup(dataDirPath);
 
     lib_dir = malloc(strlen(dataDirPath) + 5);
     strcpy(lib_dir, dataDirPath);
@@ -1312,6 +1315,119 @@ patch_libgnustl_shared(void)
           &replacement_method_before_arm);
 }
 
+#define UNPACK_TREE "/assets/unpack"
+
+static int
+mkdir_p(const char *dirname)
+{
+    char *p = malloc(strlen(dirname) + 1);
+    const char *q = dirname + 1;
+    const char *slash;
+
+    do {
+        slash = strchr(q, '/');
+        if (slash == NULL)
+            slash = q + strlen(q);
+        memcpy(p, dirname, slash-dirname);
+        p[slash-dirname] = '\0';
+        if (mkdir(p, 0700) == -1 && errno != EEXIST) {
+            LOGE("mkdir_p: Could not create %s: %s", p, strerror(errno));
+            free(p);
+            return 0;
+        }
+        if (*slash)
+            q = slash + 1;
+    } while (*slash);
+
+    free(p);
+    return 1;
+}
+
+static void
+extract_files(const char *prefix)
+{
+    lo_apk_dir *tree = lo_apk_opendir(prefix);
+    struct dirent *dent;
+
+    if (tree == NULL)
+        return;
+
+    while ((dent = lo_apk_readdir(tree)) != NULL) {
+        if (strcmp(dent->d_name, ".") == 0 ||
+            strcmp(dent->d_name, "..") == 0)
+            continue;
+
+        if (dent->d_type == DT_DIR) {
+            char *subdir = malloc(strlen(prefix) + 1 + strlen(dent->d_name) + 1);
+            strcpy(subdir, prefix);
+            strcat(subdir, "/");
+            strcat(subdir, dent->d_name);
+            extract_files(subdir);
+            free(subdir);
+        } else {
+            char *filename;
+            char *newfilename;
+            const char *apkentry;
+            size_t size;
+            struct stat st;
+            FILE *f;
+
+            filename = malloc(strlen(prefix) + 1 + strlen(dent->d_name) + 1);
+            strcpy(filename, prefix);
+            strcat(filename, "/");
+            strcat(filename, dent->d_name);
+
+            apkentry = lo_apkentry(filename, &size);
+            if (apkentry == NULL) {
+                LOGE("extract_files: Could not find %s in .apk", newfilename);
+                free(filename);
+                continue;
+            }
+
+            newfilename = malloc(strlen(data_dir) + 1 + strlen(prefix) - sizeof(UNPACK_TREE) + 1 + strlen(dent->d_name) + 1);
+            strcpy(newfilename, data_dir);
+            strcat(newfilename, "/");
+            strcat(newfilename, prefix + sizeof(UNPACK_TREE));
+
+            if (!mkdir_p(newfilename)) {
+                free(filename);
+                free(newfilename);
+                continue;
+            }
+
+            strcat(newfilename, "/");
+            strcat(newfilename, dent->d_name);
+
+            if (stat(newfilename, &st) == 0 &&
+                st.st_size == size) {
+                free(filename);
+                free(newfilename);
+                continue;
+            }
+
+            f = fopen(newfilename, "w");
+            if (f == NULL) {
+                LOGE("extract_files: Could not open %s for writing: %s", newfilename, strerror(errno));
+                free(filename);
+                free(newfilename);
+                continue;
+            }
+
+            if (fwrite(apkentry, size, 1, f) != 1) {
+                LOGE("extract_files: Could not write %d bytes to %s: %s", size, newfilename, strerror(errno));
+            }
+
+            LOGI("extract_files: Copied %s to %s: %d bytes", filename, newfilename, size);
+
+            fclose(f);
+
+            free(filename);
+            free(newfilename);
+        }
+    }
+    lo_apk_closedir(tree);
+}
+
 __attribute__ ((visibility("default")))
 void
 Java_org_libreoffice_android_Bootstrap_patch_libgnustl_shared(JNIEnv* env,
@@ -1351,6 +1467,8 @@ android_main(struct android_app* state)
         sleep(sleep_time);
 
     patch_libgnustl_shared();
+
+    extract_files(UNPACK_TREE);
 
     lo_main(lo_main_argc, lo_main_argv);
 
