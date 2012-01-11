@@ -995,8 +995,10 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
         // aDateSep can be empty if LC_CTYPE was a ref=..., determine from
         // FormatCode then.
         sal_uInt32 cDateSep = (aDateSep.isEmpty() ? 0 : aDateSep.iterateCodePoints( &nIndex));
+        sal_uInt32 cDateSep2 = cDateSep;
         nIndex = 0;
         OUStringBuffer aPatternBuf(5);
+        OUStringBuffer aPatternBuf2(5);
         sal_uInt8 nDetected = 0;    // bits Y,M,D
         bool bInModifier = false;
         bool bQuoted = false;
@@ -1022,6 +1024,8 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
                     if (!(nDetected & 4))
                     {
                         aPatternBuf.append( 'Y');
+                        if (aPatternBuf2.getLength() > 0)
+                            aPatternBuf2.append( 'Y');
                         nDetected |= 4;
                     }
                     break;
@@ -1030,6 +1034,8 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
                     if (!(nDetected & 2))
                     {
                         aPatternBuf.append( 'M');
+                        if (aPatternBuf2.getLength() > 0)
+                            aPatternBuf2.append( 'M');
                         nDetected |= 2;
                     }
                     break;
@@ -1038,6 +1044,8 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
                     if (!(nDetected & 1))
                     {
                         aPatternBuf.append( 'D');
+                        if (aPatternBuf2.getLength() > 0)
+                            aPatternBuf2.append( 'D');
                         nDetected |= 1;
                     }
                     break;
@@ -1051,17 +1059,27 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
                     cChar = sTheDateEditFormat.iterateCodePoints( &nIndex);
                     break;
                 case '-':
-                    // Assume a YYYY-MM-DD format or some such. There are
-                    // locales that use an ISO 8601 edit format regardless of
-                    // what the locale data and other formats say, for example
-                    // hu_HU.
-                    cDateSep = cChar;
+                case '.':
+                case '/':
+                    // There are locales that use an ISO 8601 edit format
+                    // regardless of what the date separator or other formats
+                    // say, for example hu-HU. Generalize this for all cases
+                    // where the used separator differs and is one of the known
+                    // separators and generate a second pattern with the
+                    // format's separator at the current position.
+                    cDateSep2 = cChar;
                     // fallthru
                 default:
                     if (!cDateSep)
                         cDateSep = cChar;
-                    if (cChar == cDateSep)
-                        aPatternBuf.append( OUString( &cDateSep, 1));
+                    if (!cDateSep2)
+                        cDateSep2 = cChar;
+                    if (cDateSep != cDateSep2 && aPatternBuf2.getLength() == 0)
+                        aPatternBuf2 = aPatternBuf;
+                    if (cChar == cDateSep || cChar == cDateSep2)
+                        aPatternBuf.append( OUString( &cDateSep, 1));   // always the defined separator
+                    if (cChar == cDateSep2 && aPatternBuf2.getLength() > 0)
+                        aPatternBuf2.append( OUString( &cDateSep2, 1)); // always the format's separator
                     break;
                 // The localized legacy:
                 case 'A':
@@ -1072,6 +1090,8 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
                         // it GG/MM/AAAA
                         // fr_CA AAAA-MM-JJ
                         aPatternBuf.append( 'Y');
+                        if (aPatternBuf2.getLength() > 0)
+                            aPatternBuf2.append( 'Y');
                         nDetected |= 4;
                     }
                     break;
@@ -1081,6 +1101,8 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
                         // fr JJ.MM.AAAA
                         // fr_CA AAAA-MM-JJ
                         aPatternBuf.append( 'D');
+                        if (aPatternBuf2.getLength() > 0)
+                            aPatternBuf2.append( 'D');
                         nDetected |= 1;
                     }
                     else if ((nDetected & 7) == 3)
@@ -1088,6 +1110,8 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
                         // nl DD-MM-JJJJ
                         // de TT.MM.JJJJ
                         aPatternBuf.append( 'Y');
+                        if (aPatternBuf2.getLength() > 0)
+                            aPatternBuf2.append( 'Y');
                         nDetected |= 4;
                     }
                     break;
@@ -1096,6 +1120,8 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
                     {
                         // de TT.MM.JJJJ
                         aPatternBuf.append( 'D');
+                        if (aPatternBuf2.getLength() > 0)
+                            aPatternBuf2.append( 'D');
                         nDetected |= 1;
                     }
                     break;
@@ -1104,6 +1130,8 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
                     {
                         // it GG/MM/AAAA
                         aPatternBuf.append( 'D');
+                        if (aPatternBuf2.getLength() > 0)
+                            aPatternBuf2.append( 'D');
                         nDetected |= 1;
                     }
                     break;
@@ -1112,6 +1140,8 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
                     {
                         // fi PP.KK.VVVV
                         aPatternBuf.append( 'D');
+                        if (aPatternBuf2.getLength() > 0)
+                            aPatternBuf2.append( 'D');
                         nDetected |= 1;
                     }
                     break;
@@ -1120,6 +1150,8 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
                     {
                         // fi PP.KK.VVVV
                         aPatternBuf.append( 'M');
+                        if (aPatternBuf2.getLength() > 0)
+                            aPatternBuf2.append( 'M');
                         nDetected |= 2;
                     }
                     break;
@@ -1128,6 +1160,8 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
                     {
                         // fi PP.KK.VVVV
                         aPatternBuf.append( 'Y');
+                        if (aPatternBuf2.getLength() > 0)
+                            aPatternBuf2.append( 'Y');
                         nDetected |= 4;
                     }
                     break;
@@ -1141,9 +1175,27 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
                     OSTR( OUString( cDateSep)), OSTR( sTheDateEditFormat));
         }
         else
+        {
             fprintf( stderr, "Generated date acceptance pattern: '%s' from '%s'\n",
                     OSTR( aPattern), OSTR( sTheDateEditFormat));
-        theDateAcceptancePatterns.push_back( aPattern);
+            theDateAcceptancePatterns.push_back( aPattern);
+        }
+        if (aPatternBuf2.getLength() > 0)
+        {
+            OUString aPattern2( aPatternBuf2.makeStringAndClear());
+            if (aPattern2.getLength() < 5)
+            {
+                incErrorStr( "failed to extract  2nd date acceptance pattern", aPattern2);
+                fprintf( stderr, "       with DateSeparator '%s' from FormatCode '%s'\n",
+                        OSTR( OUString( cDateSep2)), OSTR( sTheDateEditFormat));
+            }
+            else
+            {
+                fprintf( stderr, "Generated  2nd acceptance pattern: '%s' from '%s'\n",
+                        OSTR( aPattern2), OSTR( sTheDateEditFormat));
+                theDateAcceptancePatterns.push_back( aPattern2);
+            }
+        }
 
         sal_Int16 nbOfDateAcceptancePatterns = static_cast<sal_Int16>(theDateAcceptancePatterns.size());
 
