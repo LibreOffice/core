@@ -37,7 +37,6 @@
 #include <com/sun/star/frame/XFrame.hpp>
 
 class _SfxMacroTabPage;
-class SvStringsDtor;
 class SvTabListBox;
 class Edit;
 class String;

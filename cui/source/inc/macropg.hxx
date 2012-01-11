@@ -58,7 +58,6 @@ struct EventDisplayName
 typedef ::std::vector< EventDisplayName >   EventDisplayNames;
 
 class _SvxMacroTabPage;
-class SvStringsDtor;
 class SvTabListBox;
 class Edit;
 class String;
