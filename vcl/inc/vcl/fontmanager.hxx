@@ -337,9 +337,18 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
     rtl::OUString convertTrueTypeName( void* pNameRecord ) const; // actually a NameRecord* formt font subsetting code
     void analyzeTrueTypeFamilyName( void* pTTFont, std::list< rtl::OUString >& rnames ) const; // actually a TrueTypeFont* from font subsetting code
     bool analyzeTrueTypeFile( PrintFont* pFont ) const;
-    // finds the FIRST id for this font file; there may be more
-    // for TrueType collections
-    fontID findFontFileID( int nDirID, const rtl::OString& rFile ) const;
+    // finds the font id for the nFaceIndex face in this font file
+    // There may be multiple font ids for TrueType collections
+    fontID findFontFileID( int nDirID, const rtl::OString& rFile, int nFaceIndex ) const;
+
+    // There may be multiple font ids for TrueType collections
+    std::vector<fontID> findFontFileIDs( int nDirID, const rtl::OString& rFile ) const;
+
+    bool knownFontFile( int nDirID, const rtl::OString& rFile ) const
+    {
+        return findFontFileID(nDirID, rFile, 0) != 0;
+    }
+
     fontID findFontBuiltinID( int nPSNameAtom ) const;
 
     FontFamily matchFamilyName( const rtl::OUString& rFamily ) const;
@@ -390,7 +399,8 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
 public:
     static PrintFontManager& get(); // one instance only
 
-    int addFontFile( const rtl::OString& rFileName );
+    // There may be multiple font ids for TrueType collections
+    std::vector<fontID> addFontFile( const rtl::OString& rFileName );
 
     void initialize();
 

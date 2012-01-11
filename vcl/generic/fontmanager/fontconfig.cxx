@@ -1019,12 +1019,16 @@ bool PrintFontManager::matchFont( FastPrintFontInfo& rInfo, const com::sun::star
             //extract the closest match
             FcChar8* file = NULL;
             FcResult eFileRes = FcPatternGetString(pSet->fonts[0], FC_FILE, 0, &file);
+            int nCollectionEntry = 0;
+            FcResult eIndexRes = FcPatternGetInteger(pSet->fonts[0], FC_INDEX, 0, &nCollectionEntry);
+            if (eIndexRes != FcResultMatch)
+                nCollectionEntry = 0;
             if( eFileRes == FcResultMatch )
             {
                 OString aDir, aBase, aOrgPath( (sal_Char*)file );
                 splitPath( aOrgPath, aDir, aBase );
                 int nDirID = getDirectoryAtom( aDir, true );
-                fontID aFont = findFontFileID( nDirID, aBase );
+                fontID aFont = findFontFileID( nDirID, aBase, nCollectionEntry );
                 if( aFont > 0 )
                     bSuccess = getFontFastInfo( aFont, rInfo );
             }

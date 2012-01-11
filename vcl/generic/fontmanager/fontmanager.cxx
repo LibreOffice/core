@@ -1253,7 +1253,7 @@ int PrintFontManager::getDirectoryAtom( const OString& rDirectory, bool bCreate 
 
 // -------------------------------------------------------------------------
 
-int PrintFontManager::addFontFile( const ::rtl::OString& rFileName )
+std::vector<fontID> PrintFontManager::addFontFile( const ::rtl::OString& rFileName )
 {
     rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
     INetURLObject aPath( OStringToOUString( rFileName, aEncoding ), INET_PROT_FILE, INetURLObject::ENCODE_ALL );
@@ -1261,8 +1261,8 @@ int PrintFontManager::addFontFile( const ::rtl::OString& rFileName )
     OString aDir( OUStringToOString( aPath.GetPath(), aEncoding ) );
 
     int nDirID = getDirectoryAtom( aDir, true );
-    fontID nFontId = findFontFileID( nDirID, aName );
-    if( !nFontId )
+    std::vector<fontID> aFontIds = findFontFileIDs( nDirID, aName );
+    if( aFontIds.empty() )
     {
         ::std::list< PrintFont* > aNewFonts;
         if( analyzeFontFile( nDirID, aName, ::std::list<OString>(), aNewFonts ) )
@@ -1270,13 +1270,15 @@ int PrintFontManager::addFontFile( const ::rtl::OString& rFileName )
             for( ::std::list< PrintFont* >::iterator it = aNewFonts.begin();
                  it != aNewFonts.end(); ++it )
             {
-                m_aFonts[ nFontId = m_nNextFontID++ ] = *it;
+                fontID nFontId = m_nNextFontID++;
+                m_aFonts[nFontId] = *it;
                 m_aFontFileToFontID[ aName ].insert( nFontId );
                 m_pFontCache->updateFontCacheEntry( *it, true );
+                aFontIds.push_back(nFontId);
             }
         }
     }
-    return nFontId;
+    return aFontIds;
 }
 
 enum fontFormat
@@ -1454,48 +1456,96 @@ fontID PrintFontManager::findFontBuiltinID( int nPSNameAtom ) const
 
 // -------------------------------------------------------------------------
 
-fontID PrintFontManager::findFontFileID( int nDirID, const OString& rFontFile ) const
+fontID PrintFontManager::findFontFileID( int nDirID, const OString& rFontFile, int nFaceIndex ) const
 {
     fontID nID = 0;
 
     ::boost::unordered_map< OString, ::std::set< fontID >, OStringHash >::const_iterator set_it = m_aFontFileToFontID.find( rFontFile );
-    if( set_it != m_aFontFileToFontID.end() )
+    if( set_it == m_aFontFileToFontID.end() )
+        return nID;
+
+    for( ::std::set< fontID >::const_iterator font_it = set_it->second.begin(); font_it != set_it->second.end() && ! nID; ++font_it )
     {
-        for( ::std::set< fontID >::const_iterator font_it = set_it->second.begin(); font_it != set_it->second.end() && ! nID; ++font_it )
+        ::boost::unordered_map< fontID, PrintFont* >::const_iterator it = m_aFonts.find( *font_it );
+        if( it == m_aFonts.end() )
+            continue;
+        switch( it->second->m_eType )
         {
-            ::boost::unordered_map< fontID, PrintFont* >::const_iterator it = m_aFonts.find( *font_it );
-            if( it != m_aFonts.end() )
+            case fonttype::Type1:
             {
-                switch( it->second->m_eType )
+                Type1FontFile* const pFont = static_cast< Type1FontFile* const >((*it).second);
+                if( pFont->m_nDirectory == nDirID &&
+                    pFont->m_aFontFile == rFontFile )
+                    nID = it->first;
+            }
+            break;
+            case fonttype::TrueType:
+            {
+                TrueTypeFontFile* const pFont = static_cast< TrueTypeFontFile* const >((*it).second);
+                if( pFont->m_nDirectory == nDirID &&
+                    pFont->m_aFontFile == rFontFile )
                 {
-                    case fonttype::Type1:
-                    {
-                        Type1FontFile* const pFont = static_cast< Type1FontFile* const >((*it).second);
-                        if( pFont->m_nDirectory == nDirID &&
-                            pFont->m_aFontFile == rFontFile )
-                            nID = it->first;
-                    }
-                    break;
-                    case fonttype::TrueType:
-                    {
-                        TrueTypeFontFile* const pFont = static_cast< TrueTypeFontFile* const >((*it).second);
-                        if( pFont->m_nDirectory == nDirID &&
-                            pFont->m_aFontFile == rFontFile )
-                            nID = it->first;
-                    }
-                    break;
-                    case fonttype::Builtin:
-                        if( static_cast<const BuiltinFont*>((*it).second)->m_nDirectory == nDirID &&
-                            static_cast<const BuiltinFont*>((*it).second)->m_aMetricFile == rFontFile )
-                            nID = it->first;
-                        break;
-                    default:
-                        break;
+                    fprintf(stderr, "candidate %d vs %d\n", pFont->m_nCollectionEntry, nFaceIndex);
+                    if (pFont->m_nCollectionEntry == nFaceIndex)
+                        nID = it->first;
                 }
             }
+            break;
+            case fonttype::Builtin:
+                if( static_cast<const BuiltinFont*>((*it).second)->m_nDirectory == nDirID &&
+                    static_cast<const BuiltinFont*>((*it).second)->m_aMetricFile == rFontFile )
+                    nID = it->first;
+                break;
+            default:
+                break;
         }
     }
+
     return nID;
+}
+
+std::vector<fontID> PrintFontManager::findFontFileIDs( int nDirID, const OString& rFontFile ) const
+{
+    std::vector<fontID> aIds;
+
+    ::boost::unordered_map< OString, ::std::set< fontID >, OStringHash >::const_iterator set_it = m_aFontFileToFontID.find( rFontFile );
+    if( set_it == m_aFontFileToFontID.end() )
+        return aIds;
+
+    for( ::std::set< fontID >::const_iterator font_it = set_it->second.begin(); font_it != set_it->second.end(); ++font_it )
+    {
+        ::boost::unordered_map< fontID, PrintFont* >::const_iterator it = m_aFonts.find( *font_it );
+        if( it == m_aFonts.end() )
+            continue;
+        switch( it->second->m_eType )
+        {
+            case fonttype::Type1:
+            {
+                Type1FontFile* const pFont = static_cast< Type1FontFile* const >((*it).second);
+                if( pFont->m_nDirectory == nDirID &&
+                    pFont->m_aFontFile == rFontFile )
+                    aIds.push_back(it->first);
+            }
+            break;
+            case fonttype::TrueType:
+            {
+                TrueTypeFontFile* const pFont = static_cast< TrueTypeFontFile* const >((*it).second);
+                if( pFont->m_nDirectory == nDirID &&
+                    pFont->m_aFontFile == rFontFile )
+                    aIds.push_back(it->first);
+            }
+            break;
+            case fonttype::Builtin:
+                if( static_cast<const BuiltinFont*>((*it).second)->m_nDirectory == nDirID &&
+                    static_cast<const BuiltinFont*>((*it).second)->m_aMetricFile == rFontFile )
+                    aIds.push_back(it->first);
+                break;
+            default:
+                break;
+        }
+    }
+
+    return aIds;
 }
 
 // -------------------------------------------------------------------------
@@ -2288,7 +2338,7 @@ void PrintFontManager::initialize()
                 if( ! stat( aFilePath.getStr(), &aStat )     &&
                     S_ISREG( aStat.st_mode ) )
                 {
-                    if( findFontFileID( nDirID, aFileName ) == 0 )
+                    if (!knownFontFile(nDirID, aFileName))
                     {
                         ::std::list<OString> aXLFDs;
                         ::boost::unordered_map< OString, ::std::list<OString>, OStringHash >::const_iterator it =
@@ -3313,7 +3363,7 @@ int PrintFontManager::importFonts( const ::std::list< OString >& rFiles, bool bL
                         ++current;
                 }
 
-                DBG_ASSERT( !findFontFileID( nDirID, aFileName ), "not all fonts removed for file" );
+                DBG_ASSERT( !knownFontFile( nDirID, aFileName ), "not all fonts removed for file" );
 
                 nSuccess++;
                 for( it = aNewFonts.begin(); it != aNewFonts.end(); ++it )
