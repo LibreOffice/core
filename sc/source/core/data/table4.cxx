@@ -1592,14 +1592,10 @@ void ScTable::Fill( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
 void ScTable::AutoFormatArea(SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
                                 const ScPatternAttr& rAttr, sal_uInt16 nFormatNo)
 {
-    ScAutoFormat* pAutoFormat = ScGlobal::GetAutoFormat();
-    if (pAutoFormat)
+    ScAutoFormatData* pData = (*ScGlobal::GetOrCreateAutoFormat())[nFormatNo];
+    if (pData)
     {
-        ScAutoFormatData* pData = (*pAutoFormat)[nFormatNo];
-        if (pData)
-        {
-            ApplyPatternArea(nStartCol, nStartRow, nEndCol, nEndRow, rAttr);
-        }
+        ApplyPatternArea(nStartCol, nStartRow, nEndCol, nEndRow, rAttr);
     }
 }
 
@@ -1608,140 +1604,136 @@ void ScTable::AutoFormat( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW
 {
     if (ValidColRow(nStartCol, nStartRow) && ValidColRow(nEndCol, nEndRow))
     {
-        ScAutoFormat* pAutoFormat = ScGlobal::GetAutoFormat();
-        if (pAutoFormat)
+        ScAutoFormatData* pData = (*ScGlobal::GetOrCreateAutoFormat())[nFormatNo];
+        if (pData)
         {
-            ScAutoFormatData* pData = (*pAutoFormat)[nFormatNo];
-            if (pData)
+            ScPatternAttr* pPatternAttrs[16];
+            for (sal_uInt8 i = 0; i < 16; ++i)
             {
-                ScPatternAttr* pPatternAttrs[16];
-                for (sal_uInt8 i = 0; i < 16; ++i)
-                {
-                    pPatternAttrs[i] = new ScPatternAttr(pDocument->GetPool());
-                    pData->FillToItemSet(i, pPatternAttrs[i]->GetItemSet(), *pDocument);
-                }
+                pPatternAttrs[i] = new ScPatternAttr(pDocument->GetPool());
+                pData->FillToItemSet(i, pPatternAttrs[i]->GetItemSet(), *pDocument);
+            }
 
-                SCCOL nCol = nStartCol;
-                SCROW nRow = nStartRow;
-                sal_uInt16 nIndex = 0;
-                // Linke obere Ecke
-                AutoFormatArea(nCol, nRow, nCol, nRow, *pPatternAttrs[nIndex], nFormatNo);
-                // Linke Spalte
-                if (pData->IsEqualData(4, 8))
-                    AutoFormatArea(nStartCol, nStartRow + 1, nStartCol, nEndRow - 1, *pPatternAttrs[4], nFormatNo);
-                else
-                {
-                    nIndex = 4;
-                    for (nRow = nStartRow + 1; nRow < nEndRow; nRow++)
-                    {
-                        AutoFormatArea(nCol, nRow, nCol, nRow, *pPatternAttrs[nIndex], nFormatNo);
-                        if (nIndex == 4)
-                            nIndex = 8;
-                        else
-                            nIndex = 4;
-                    }
-                }
-                // Linke untere Ecke
-                nRow = nEndRow;
-                nIndex = 12;
-                AutoFormatArea(nCol, nRow, nCol, nRow, *pPatternAttrs[nIndex], nFormatNo);
-                // Rechte obere Ecke
-                nCol = nEndCol;
-                nRow = nStartRow;
-                nIndex = 3;
-                AutoFormatArea(nCol, nRow, nCol, nRow, *pPatternAttrs[nIndex], nFormatNo);
-                // Rechte Spalte
-                if (pData->IsEqualData(7, 11))
-                    AutoFormatArea(nEndCol, nStartRow + 1, nEndCol, nEndRow - 1, *pPatternAttrs[7], nFormatNo);
-                else
-                {
-                    nIndex = 7;
-                    for (nRow = nStartRow + 1; nRow < nEndRow; nRow++)
-                    {
-                        AutoFormatArea(nCol, nRow, nCol, nRow, *pPatternAttrs[nIndex], nFormatNo);
-                        if (nIndex == 7)
-                            nIndex = 11;
-                        else
-                            nIndex = 7;
-                    }
-                }
-                // Rechte untere Ecke
-                nRow = nEndRow;
-                nIndex = 15;
-                AutoFormatArea(nCol, nRow, nCol, nRow, *pPatternAttrs[nIndex], nFormatNo);
-                nRow = nStartRow;
-                nIndex = 1;
-                for (nCol = nStartCol + 1; nCol < nEndCol; nCol++)
+            SCCOL nCol = nStartCol;
+            SCROW nRow = nStartRow;
+            sal_uInt16 nIndex = 0;
+            // Linke obere Ecke
+            AutoFormatArea(nCol, nRow, nCol, nRow, *pPatternAttrs[nIndex], nFormatNo);
+            // Linke Spalte
+            if (pData->IsEqualData(4, 8))
+                AutoFormatArea(nStartCol, nStartRow + 1, nStartCol, nEndRow - 1, *pPatternAttrs[4], nFormatNo);
+            else
+            {
+                nIndex = 4;
+                for (nRow = nStartRow + 1; nRow < nEndRow; nRow++)
                 {
                     AutoFormatArea(nCol, nRow, nCol, nRow, *pPatternAttrs[nIndex], nFormatNo);
-                    if (nIndex == 1)
-                        nIndex = 2;
+                    if (nIndex == 4)
+                        nIndex = 8;
                     else
-                        nIndex = 1;
+                        nIndex = 4;
                 }
-                // Untere Zeile
-                nRow = nEndRow;
-                nIndex = 13;
-                for (nCol = nStartCol + 1; nCol < nEndCol; nCol++)
+            }
+            // Linke untere Ecke
+            nRow = nEndRow;
+            nIndex = 12;
+            AutoFormatArea(nCol, nRow, nCol, nRow, *pPatternAttrs[nIndex], nFormatNo);
+            // Rechte obere Ecke
+            nCol = nEndCol;
+            nRow = nStartRow;
+            nIndex = 3;
+            AutoFormatArea(nCol, nRow, nCol, nRow, *pPatternAttrs[nIndex], nFormatNo);
+            // Rechte Spalte
+            if (pData->IsEqualData(7, 11))
+                AutoFormatArea(nEndCol, nStartRow + 1, nEndCol, nEndRow - 1, *pPatternAttrs[7], nFormatNo);
+            else
+            {
+                nIndex = 7;
+                for (nRow = nStartRow + 1; nRow < nEndRow; nRow++)
                 {
                     AutoFormatArea(nCol, nRow, nCol, nRow, *pPatternAttrs[nIndex], nFormatNo);
-                    if (nIndex == 13)
-                        nIndex = 14;
+                    if (nIndex == 7)
+                        nIndex = 11;
                     else
-                        nIndex = 13;
+                        nIndex = 7;
                 }
-                // Boddy
-                if ((pData->IsEqualData(5, 6)) && (pData->IsEqualData(9, 10)) && (pData->IsEqualData(5, 9)))
-                    AutoFormatArea(nStartCol + 1, nStartRow + 1, nEndCol-1, nEndRow - 1, *pPatternAttrs[5], nFormatNo);
+            }
+            // Rechte untere Ecke
+            nRow = nEndRow;
+            nIndex = 15;
+            AutoFormatArea(nCol, nRow, nCol, nRow, *pPatternAttrs[nIndex], nFormatNo);
+            nRow = nStartRow;
+            nIndex = 1;
+            for (nCol = nStartCol + 1; nCol < nEndCol; nCol++)
+            {
+                AutoFormatArea(nCol, nRow, nCol, nRow, *pPatternAttrs[nIndex], nFormatNo);
+                if (nIndex == 1)
+                    nIndex = 2;
+                else
+                    nIndex = 1;
+            }
+            // Untere Zeile
+            nRow = nEndRow;
+            nIndex = 13;
+            for (nCol = nStartCol + 1; nCol < nEndCol; nCol++)
+            {
+                AutoFormatArea(nCol, nRow, nCol, nRow, *pPatternAttrs[nIndex], nFormatNo);
+                if (nIndex == 13)
+                    nIndex = 14;
+                else
+                    nIndex = 13;
+            }
+            // Boddy
+            if ((pData->IsEqualData(5, 6)) && (pData->IsEqualData(9, 10)) && (pData->IsEqualData(5, 9)))
+                AutoFormatArea(nStartCol + 1, nStartRow + 1, nEndCol-1, nEndRow - 1, *pPatternAttrs[5], nFormatNo);
+            else
+            {
+                if ((pData->IsEqualData(5, 9)) && (pData->IsEqualData(6, 10)))
+                {
+                    nIndex = 5;
+                    for (nCol = nStartCol + 1; nCol < nEndCol; nCol++)
+                    {
+                        AutoFormatArea(nCol, nStartRow + 1, nCol, nEndRow - 1, *pPatternAttrs[nIndex], nFormatNo);
+                        if (nIndex == 5)
+                            nIndex = 6;
+                        else
+                            nIndex = 5;
+                    }
+                }
                 else
                 {
-                    if ((pData->IsEqualData(5, 9)) && (pData->IsEqualData(6, 10)))
+                    nIndex = 5;
+                    for (nCol = nStartCol + 1; nCol < nEndCol; nCol++)
                     {
-                        nIndex = 5;
-                        for (nCol = nStartCol + 1; nCol < nEndCol; nCol++)
+                        for (nRow = nStartRow + 1; nRow < nEndRow; nRow++)
                         {
-                            AutoFormatArea(nCol, nStartRow + 1, nCol, nEndRow - 1, *pPatternAttrs[nIndex], nFormatNo);
-                            if (nIndex == 5)
-                                nIndex = 6;
-                            else
-                                nIndex = 5;
-                        }
-                    }
-                    else
-                    {
-                        nIndex = 5;
-                        for (nCol = nStartCol + 1; nCol < nEndCol; nCol++)
-                        {
-                            for (nRow = nStartRow + 1; nRow < nEndRow; nRow++)
-                            {
-                                AutoFormatArea(nCol, nRow, nCol, nRow, *pPatternAttrs[nIndex], nFormatNo);
-                                if ((nIndex == 5) || (nIndex == 9))
-                                {
-                                    if (nIndex == 5)
-                                        nIndex = 9;
-                                    else
-                                        nIndex = 5;
-                                }
-                                else
-                                {
-                                    if (nIndex == 6)
-                                        nIndex = 10;
-                                    else
-                                        nIndex = 6;
-                                }
-                            } // for nRow
+                            AutoFormatArea(nCol, nRow, nCol, nRow, *pPatternAttrs[nIndex], nFormatNo);
                             if ((nIndex == 5) || (nIndex == 9))
-                                nIndex = 6;
+                            {
+                                if (nIndex == 5)
+                                    nIndex = 9;
+                                else
+                                    nIndex = 5;
+                            }
                             else
-                                nIndex = 5;
-                        } // for nCol
-                    } // if not equal Column
-                } // if not all equal
+                            {
+                                if (nIndex == 6)
+                                    nIndex = 10;
+                                else
+                                    nIndex = 6;
+                            }
+                        } // for nRow
+                        if ((nIndex == 5) || (nIndex == 9))
+                            nIndex = 6;
+                        else
+                            nIndex = 5;
+                    } // for nCol
+                } // if not equal Column
+            } // if not all equal
 
-                for (sal_uInt8 j = 0; j < 16; ++j)
-                    delete pPatternAttrs[j];
-            } // if AutoFormatData != NULL
-        } // if AutoFormat != NULL
+            for (sal_uInt8 j = 0; j < 16; ++j)
+                delete pPatternAttrs[j];
+        } // if AutoFormatData != NULL
     } // if ValidColRow
 }
 

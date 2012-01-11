@@ -816,7 +816,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     if ( pReqArgs )
                     {
                         const SfxStringItem& rNameItem = (const SfxStringItem&)pReqArgs->Get( SID_AUTOFORMAT );
-                        ScAutoFormat* pFormat = ScGlobal::GetAutoFormat();
+                        ScAutoFormat* pFormat = ScGlobal::GetOrCreateAutoFormat();
                         sal_uInt16 nIndex = pFormat->FindIndexPerName( rNameItem.GetValue() );
 
                         pTabViewShell->AutoFormat( nIndex );
@@ -831,7 +831,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                         OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-                        AbstractScAutoFormatDlg* pDlg = pFact->CreateScAutoFormatDlg( pDlgParent, ScGlobal::GetAutoFormat(), pNewEntry,GetViewData()->GetDocument(), RID_SCDLG_AUTOFORMAT );
+                        AbstractScAutoFormatDlg* pDlg = pFact->CreateScAutoFormatDlg( pDlgParent, ScGlobal::GetOrCreateAutoFormat(), pNewEntry,GetViewData()->GetDocument(), RID_SCDLG_AUTOFORMAT );
                         OSL_ENSURE(pDlg, "Dialog create fail!");
 
                         if ( pDlg->Execute() == RET_OK )
