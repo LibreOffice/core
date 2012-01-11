@@ -297,7 +297,7 @@ bool nsscrypto_initialize( const css::uno::Reference< css::lang::XMultiServiceFa
         deleteRootsModule();
 
 #if defined SYSTEM_MOZILLA
-        OUString rootModule(RTL_CONSTASCII_USTRINGPARAM("libnssckbi"SAL_DLLEXTENSION));
+        OUString rootModule(RTL_CONSTASCII_USTRINGPARAM("libnssckbi" SAL_DLLEXTENSION));
 #else
         OUString rootModule(RTL_CONSTASCII_USTRINGPARAM("${LO_LIB_DIR}/libnssckbi" SAL_DLLEXTENSION));
 #endif
