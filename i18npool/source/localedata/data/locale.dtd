@@ -236,8 +236,7 @@
         TODO: Future versions should make use of an edit="true" attribute
         instead of relying on this special requirement.
 
-        Formatindices 32 and 33 are always used for ISO 8601 YY-MM-DD
-        respectively YYYY-MM-DD format codes.
+        formatindex="33" must be ISO 8601 YYYY-MM-DD format code.
 
     Of usage="DATE_TIME":
         formatindex="47" is used to edit already existing combined date/time
