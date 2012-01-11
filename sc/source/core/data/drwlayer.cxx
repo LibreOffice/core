@@ -481,6 +481,15 @@ void ScDrawLayer::ScCopyPage( sal_uInt16 nOldPos, sal_uInt16 nNewPos, sal_Bool b
 
 void ScDrawLayer::ResetTab( SCTAB nStart, SCTAB nEnd )
 {
+    SCTAB nPageSize = static_cast<SCTAB>(GetPageCount());
+    if (nPageSize < 0)
+        // No drawing pages exist.
+        return;
+
+    if (nEnd >= nPageSize)
+        // Avoid iterating beyond the last existing page.
+        nEnd = nPageSize - 1;
+
     for (SCTAB i = nStart; i <= nEnd; ++i)
     {
         SdrPage* pPage = GetPage(static_cast<sal_uInt16>(i));
