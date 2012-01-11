@@ -167,10 +167,10 @@ Any SAL_CALL CmdMailMsg::getByName( const OUString& aName )
 {
     MutexGuard aGuard( m_aMutex );
 
-    if( 0 == aName.compareToAscii( "from" ) &&  m_aOriginator.getLength() )
+    if( 0 == aName.compareToAscii( "from" ) &&  !m_aOriginator.isEmpty() )
         return makeAny( m_aOriginator );
 
-    else if( 0 == aName.compareToAscii( "to" ) &&  m_aRecipient.getLength() )
+    else if( 0 == aName.compareToAscii( "to" ) &&  !m_aRecipient.isEmpty() )
         return makeAny( m_aRecipient );
 
     else if( 0 == aName.compareToAscii( "cc" ) &&  m_CcRecipients.getLength() )
@@ -179,7 +179,7 @@ Any SAL_CALL CmdMailMsg::getByName( const OUString& aName )
     else if( 0 == aName.compareToAscii( "bcc" ) &&  m_BccRecipients.getLength() )
         return makeAny( m_BccRecipients );
 
-    else if( 0 == aName.compareToAscii( "subject" ) &&  m_aSubject.getLength() )
+    else if( 0 == aName.compareToAscii( "subject" ) &&  !m_aSubject.isEmpty() )
         return makeAny( m_aSubject );
 
     else if( 0 == aName.compareToAscii( "attachment" ) &&  m_Attachments.getLength() )
@@ -199,10 +199,10 @@ Sequence< OUString > SAL_CALL CmdMailMsg::getElementNames(  )
     sal_Int32 nItems = 0;
     Sequence< OUString > aRet( 6 );
 
-    if( m_aOriginator.getLength() )
+    if( !m_aOriginator.isEmpty() )
         aRet[nItems++] = OUString(RTL_CONSTASCII_USTRINGPARAM("from"));
 
-    if( m_aRecipient.getLength() )
+    if( !m_aRecipient.isEmpty() )
         aRet[nItems++] = OUString(RTL_CONSTASCII_USTRINGPARAM("to"));
 
     if( m_CcRecipients.getLength() )
@@ -211,7 +211,7 @@ Sequence< OUString > SAL_CALL CmdMailMsg::getElementNames(  )
     if( m_BccRecipients.getLength() )
         aRet[nItems++] = OUString(RTL_CONSTASCII_USTRINGPARAM("bcc"));
 
-    if( m_aSubject.getLength() )
+    if( !m_aSubject.isEmpty() )
         aRet[nItems++] = OUString(RTL_CONSTASCII_USTRINGPARAM("subject"));
 
     if( m_Attachments.getLength() )
@@ -228,10 +228,10 @@ Sequence< OUString > SAL_CALL CmdMailMsg::getElementNames(  )
 {
     MutexGuard aGuard( m_aMutex );
 
-    if( 0 == aName.compareToAscii( "from" ) &&  m_aOriginator.getLength() )
+    if( 0 == aName.compareToAscii( "from" ) &&  !m_aOriginator.isEmpty() )
         return sal_True;
 
-    else if( 0 == aName.compareToAscii( "to" ) &&  m_aRecipient.getLength() )
+    else if( 0 == aName.compareToAscii( "to" ) &&  !m_aRecipient.isEmpty() )
         return sal_True;
 
     else if( 0 == aName.compareToAscii( "cc" ) &&  m_CcRecipients.getLength() )
@@ -240,7 +240,7 @@ Sequence< OUString > SAL_CALL CmdMailMsg::getElementNames(  )
     else if( 0 == aName.compareToAscii( "bcc" ) &&  m_BccRecipients.getLength() )
         return sal_True;
 
-    else if( 0 == aName.compareToAscii( "subject" ) &&  m_aSubject.getLength() )
+    else if( 0 == aName.compareToAscii( "subject" ) &&  !m_aSubject.isEmpty() )
         return sal_True;
 
     else if( 0 == aName.compareToAscii( "attachment" ) &&  m_Attachments.getLength() )

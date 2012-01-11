@@ -291,7 +291,7 @@ namespace slideshow
                             if ((xPropSet->getPropertyValue(
                                   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                                           "PrivateTempFileURL"))) >>= aURL)
-                                && aURL.getLength())
+                                && !aURL.isEmpty())
                             {
                                 implInitializeMediaPlayer( aURL );
                             }
@@ -394,7 +394,7 @@ namespace slideshow
             {
                 try
                 {
-                    if( rMediaURL.getLength() )
+                    if( !rMediaURL.isEmpty() )
                     {
                         mxPlayer.set( avmedia::MediaWindow::createPlayer( rMediaURL ),
                             uno::UNO_QUERY );

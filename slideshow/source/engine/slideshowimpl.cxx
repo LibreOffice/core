@@ -722,12 +722,12 @@ SoundPlayerSharedPtr SlideShowImpl::resetSlideTransitionSound( const uno::Any& r
         bStopSound = sal_False;
     rSound >>= url;
 
-    if( !bStopSound && (url.getLength() == 0) )
+    if( !bStopSound && url.isEmpty() )
         return SoundPlayerSharedPtr();
 
     stopSlideTransitionSound();
 
-    if (url.getLength() > 0)
+    if (!url.isEmpty())
     {
         try
         {

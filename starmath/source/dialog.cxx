@@ -1628,7 +1628,7 @@ void SmShowChar::Paint(const Rectangle &rRect)
     Control::Paint( rRect );
 
     OUString aText( GetText() );
-    if (aText.getLength() > 0)
+    if (!aText.isEmpty())
     {
 #if OSL_DEBUG_LEVEL > 1
         sal_Int32 nPos = 0;

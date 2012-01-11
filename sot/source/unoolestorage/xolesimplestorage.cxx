@@ -129,7 +129,7 @@ void OLESimpleStorage::UpdateOriginal_Impl()
 void OLESimpleStorage::InsertInputStreamToStorage_Impl( BaseStorage* pStorage, ::rtl::OUString aName, const uno::Reference< io::XInputStream >& xInputStream )
     throw ( uno::Exception )
 {
-    if ( !pStorage || !aName.getLength() || !xInputStream.is() )
+    if ( !pStorage || aName.isEmpty() || !xInputStream.is() )
         throw uno::RuntimeException();
 
     if ( pStorage->IsContained( aName ) )
@@ -174,7 +174,7 @@ void OLESimpleStorage::InsertInputStreamToStorage_Impl( BaseStorage* pStorage, :
 void OLESimpleStorage::InsertNameAccessToStorage_Impl( BaseStorage* pStorage, ::rtl::OUString aName, const uno::Reference< container::XNameAccess >& xNameAccess )
     throw ( uno::Exception )
 {
-    if ( !pStorage || !aName.getLength() || !xNameAccess.is() )
+    if ( !pStorage || aName.isEmpty() || !xNameAccess.is() )
         throw uno::RuntimeException();
 
     if ( pStorage->IsContained( aName ) )

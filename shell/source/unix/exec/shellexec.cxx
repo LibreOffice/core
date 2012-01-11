@@ -144,7 +144,7 @@ void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aPar
         OUString aURL(
             com::sun::star::uri::ExternalUriReferenceTranslator::create(
                 m_xContext)->translateToExternal(aCommand));
-        if ( aURL.getLength() == 0 && aCommand.getLength() != 0 )
+        if ( aURL.isEmpty() && !aCommand.isEmpty() )
         {
             throw RuntimeException(
                 (OUString(
@@ -207,7 +207,7 @@ void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aPar
         // Respect the desktop environment - if there is an executable named
         // <desktop-environement-is>-open-url, pass the url to this one instead
         // of the default "open-url" script.
-        if ( m_aDesktopEnvironment.getLength() > 0 )
+        if ( !m_aDesktopEnvironment.isEmpty() )
         {
             OString aDesktopEnvironment(m_aDesktopEnvironment.toAsciiLowerCase());
             OStringBuffer aCopy(aTmp);

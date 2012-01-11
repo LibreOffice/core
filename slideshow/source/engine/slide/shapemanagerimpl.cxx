@@ -148,7 +148,7 @@ bool ShapeManagerImpl::handleMouseReleased( awt::MouseEvent const& e )
     // first check for hyperlinks, because these have
     // highest prio:
     rtl::OUString const hyperlink( checkForHyperlink(aPosition) );
-    if( hyperlink.getLength() > 0 )
+    if( !hyperlink.isEmpty() )
     {
         mrMultiplexer.notifyHyperlinkClicked(hyperlink);
         return true; // event consumed
@@ -219,7 +219,7 @@ bool ShapeManagerImpl::handleMouseMoved( const awt::MouseEvent& e )
     const ::basegfx::B2DPoint aPosition( e.X, e.Y );
     sal_Int16                 nNewCursor(-1);
 
-    if( checkForHyperlink(aPosition).getLength() > 0 )
+    if( !checkForHyperlink(aPosition).isEmpty() )
     {
         nNewCursor = awt::SystemPointer::REFHAND;
     }

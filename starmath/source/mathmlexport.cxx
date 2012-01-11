@@ -201,7 +201,7 @@ sal_Bool SmXMLExportWrapper::Export(SfxMedium &rMedium)
                     aName = pDocHierarchItem->GetValue();
             }
 
-            if ( aName.getLength() )
+            if ( !aName.isEmpty() )
             {
                 sPropName = OUString(RTL_CONSTASCII_USTRINGPARAM("StreamRelPath"));
                 xInfoSet->setPropertyValue( sPropName, makeAny( aName ) );

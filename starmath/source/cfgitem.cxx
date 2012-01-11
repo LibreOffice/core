@@ -1027,7 +1027,7 @@ void SmMathConfig::LoadFormat()
             bool bUseDefaultFont = true;
             if (pVal->hasValue()  &&  (*pVal >>= aTmpStr))
             {
-                bUseDefaultFont = 0 == aTmpStr.getLength();
+                bUseDefaultFont = aTmpStr.isEmpty();
                 if (bUseDefaultFont)
                 {
                     aFnt = pFormat->GetFont( i );
@@ -1092,7 +1092,7 @@ void SmMathConfig::SaveFormat()
         {
             SmFontFormat aFntFmt( pFormat->GetFont( i ) );
             aFntFmtId = GetFontFormatList().GetFontFormatId( aFntFmt, true );
-            OSL_ENSURE( aFntFmtId.getLength(), "FontFormatId not found" );
+            OSL_ENSURE( !aFntFmtId.isEmpty(), "FontFormatId not found" );
         }
 
         *pValue++ <<= aFntFmtId;

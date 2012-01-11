@@ -80,7 +80,7 @@ bool importShapeGraphic(
 {
     rtl::OUString aURL;
     if( !getPropertyValue( aURL, xPropSet, OUSTR("GraphicURL")) ||
-        aURL.getLength() == 0 )
+        aURL.isEmpty() )
     {
         // no or empty property - cannot import shape graphic
         return false;

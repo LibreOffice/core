@@ -628,7 +628,7 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
                         OUString sPrinterName;
                         if (*pValues >>= sPrinterName )
                         {
-                            if ( sPrinterName.getLength() )
+                            if ( !sPrinterName.isEmpty() )
                             {
                                 SfxPrinter *pNewPrinter = new SfxPrinter ( pPrinter->GetOptions().Clone(), sPrinterName );
                                 if (pNewPrinter->IsKnown())

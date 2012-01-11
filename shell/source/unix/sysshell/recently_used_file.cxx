@@ -49,7 +49,7 @@ namespace /* private */ {
 
 inline void ensure_final_slash(/*inout*/ rtl::OUString& path)
 {
-    if ((path.getLength() > 0) &&
+    if (!path.isEmpty() &&
         (SLASH.pData->buffer[0] != path.pData->buffer[path.getLength() - 1]))
         path += SLASH;
 }

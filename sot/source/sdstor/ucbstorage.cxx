@@ -1840,7 +1840,7 @@ void UCBStorage_Impl::Init()
             try {
                 Any aAny = m_pContent->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MediaType")) );
                 rtl::OUString aTmp;
-                if ( ( aAny >>= aTmp ) && aTmp.getLength() )
+                if ( ( aAny >>= aTmp ) && !aTmp.isEmpty() )
                     m_aContentType = m_aOriginalContentType = aTmp;
             }
             catch( Exception& )
@@ -1977,7 +1977,7 @@ void UCBStorage_Impl::ReadContent()
                     Any aAny = aContent.getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MediaType")) );
                     if ( ( aAny >>= aMediaType ) && ( aMediaType.compareToAscii("application/vnd.sun.star.oleobject") == 0 ) )
                         pElement->m_bIsStorage = sal_True;
-                    else if ( !aMediaType.getLength() )
+                    else if ( aMediaType.isEmpty() )
                     {
                         // older files didn't have that special content type, so they must be detected
                         OpenStream( pElement, STREAM_STD_READ, m_bDirect );
@@ -2063,12 +2063,12 @@ sal_Int32 UCBStorage_Impl::GetObjectCount()
                 rtl::OUString aTmp;
                 if ( ( rAny.Value >>= aTmp ) && aTmp == rPath )
                     bFound = sal_True;
-                if ( aType.getLength() )
+                if ( !aType.isEmpty() )
                     break;
             }
             else if ( rAny.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("MediaType")) )
             {
-                if ( ( rAny.Value >>= aType ) && aType.getLength() && bFound )
+                if ( ( rAny.Value >>= aType ) && !aType.isEmpty() && bFound )
                     break;
             }
         }

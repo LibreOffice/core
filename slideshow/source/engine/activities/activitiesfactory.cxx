@@ -644,7 +644,7 @@ AnimationActivitySharedPtr createActivity(
 
     // is a formula given?
     const ::rtl::OUString& rFormulaString( xNode->getFormula() );
-    if( rFormulaString.getLength() )
+    if( !rFormulaString.isEmpty() )
     {
         // yep, parse and pass to ActivityParameters
         try

@@ -195,7 +195,7 @@ void SAL_CALL CmdMailSuppl::sendSimpleMailMessage( const Reference< XSimpleMailM
             // using the (undocumented) --mailclient switch
             xNameAccess->getByName( OUString(RTL_CONSTASCII_USTRINGPARAM("Program")) ) >>= aMailer;
 
-            if( aMailer.getLength() )
+            if( !aMailer.isEmpty() )
             {
                 // make sure we have a system path
                 FileBase::getSystemPathFromFileURL( aMailer, aMailer );
@@ -221,7 +221,7 @@ void SAL_CALL CmdMailSuppl::sendSimpleMailMessage( const Reference< XSimpleMailM
     }
 
     // Append originator if set in the message
-    if ( xSimpleMailMessage->getOriginator().getLength() > 0 )
+    if ( !xSimpleMailMessage->getOriginator().isEmpty() )
     {
         aBuffer.append("--from \"");
         aBuffer.append(OUStringToOString(xSimpleMailMessage->getOriginator(), osl_getThreadTextEncoding()));
@@ -229,7 +229,7 @@ void SAL_CALL CmdMailSuppl::sendSimpleMailMessage( const Reference< XSimpleMailM
     }
 
     // Append receipient if set in the message
-    if ( xSimpleMailMessage->getRecipient().getLength() > 0 )
+    if ( !xSimpleMailMessage->getRecipient().isEmpty() )
     {
         aBuffer.append("--to \"");
         aBuffer.append(OUStringToOString(xSimpleMailMessage->getRecipient(), osl_getThreadTextEncoding()));
@@ -257,7 +257,7 @@ void SAL_CALL CmdMailSuppl::sendSimpleMailMessage( const Reference< XSimpleMailM
     }
 
     // Append subject if set in the message
-    if ( xSimpleMailMessage->getSubject().getLength() > 0 )
+    if ( !xSimpleMailMessage->getSubject().isEmpty() )
     {
         aBuffer.append("--subject \"");
         aBuffer.append(OUStringToOString(xSimpleMailMessage->getSubject(), osl_getThreadTextEncoding()));

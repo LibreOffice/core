@@ -202,7 +202,7 @@ sal_uLong SmXMLImportWrapper::Import(SfxMedium &rMedium)
                     aName = pDocHierarchItem->GetValue();
             }
 
-            if ( aName.getLength() )
+            if ( !aName.isEmpty() )
             {
                 sPropName = OUString(RTL_CONSTASCII_USTRINGPARAM("StreamRelPath"));
                 xInfoSet->setPropertyValue( sPropName, makeAny( aName ) );
@@ -649,7 +649,7 @@ void SmXMLImportContext::Characters(const OUString &rChars)
     */
     //collapsing not done yet!
     const OUString &rChars2 = rChars.trim();
-    if (rChars2.getLength())
+    if (!rChars2.isEmpty())
         TCharacters(rChars2/*.collapse()*/);
 }
 
@@ -733,7 +733,7 @@ void SmXMLContext_Helper::RetrieveAttrs(const uno::Reference<
 
     if ((nOldIsBold!=nIsBold) || (nOldIsItalic!=nIsItalic) ||
         (nOldFontSize!=nFontSize) || (sOldFontFamily!=sFontFamily)
-        || sColor.getLength())
+        || !sColor.isEmpty())
         bFontNodeNeeded=sal_True;
     else
         bFontNodeNeeded=sal_False;
@@ -793,7 +793,7 @@ void SmXMLContext_Helper::ApplyAttrs()
             pFontNode->SetSubNodes(0,lcl_popOrZero(rNodeStack));
             rNodeStack.push(pFontNode);
         }
-        if (sFontFamily.getLength())
+        if (!sFontFamily.isEmpty())
         {
             if (sFontFamily.equalsIgnoreAsciiCase(GetXMLToken(XML_FIXED)))
                 aToken.eType = TFIXED;
@@ -812,7 +812,7 @@ void SmXMLContext_Helper::ApplyAttrs()
             pFontNode->SetSubNodes(0,lcl_popOrZero(rNodeStack));
             rNodeStack.push(pFontNode);
         }
-        if (sColor.getLength())
+        if (!sColor.isEmpty())
         {
             //Again we can only handle a small set of colours in
             //StarMath for now.
@@ -1337,8 +1337,8 @@ void SmXMLIdentifierContext_Impl::EndElement()
     }
 
     if ((-1!=aStyleHelper.nIsBold) || (0.0!=aStyleHelper.nFontSize) ||
-        (aStyleHelper.sFontFamily.getLength()) ||
-        aStyleHelper.sColor.getLength())
+        (!aStyleHelper.sFontFamily.isEmpty()) ||
+        !aStyleHelper.sColor.isEmpty())
         aStyleHelper.bFontNodeNeeded=sal_True;
     else
         aStyleHelper.bFontNodeNeeded=sal_False;

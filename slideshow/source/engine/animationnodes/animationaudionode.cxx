@@ -54,7 +54,7 @@ AnimationAudioNode::AnimationAudioNode(
 {
     mxAudioNode->getSource() >>= maSoundURL;
 
-    OSL_ENSURE( maSoundURL.getLength(),
+    OSL_ENSURE( !maSoundURL.isEmpty(),
                 "could not extract sound source URL/empty URL string" );
 
     ENSURE_OR_THROW( getContext().mxComponentContext.is(),
