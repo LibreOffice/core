@@ -745,6 +745,11 @@ void ScDPObject::UpdateReference( UpdateRefMode eUpdateRefMode,
 
     if ( pSheetDesc )
     {
+        const OUString& rRangeName = pSheetDesc->GetRangeName();
+        if (!rRangeName.isEmpty())
+            // Source range is a named range.  No need to update.
+            return;
+
         const ScRange& rSrcRange = pSheetDesc->GetSourceRange();
         nCol1 = rSrcRange.aStart.Col();
         nRow1 = rSrcRange.aStart.Row();
