@@ -280,7 +280,7 @@ TabPage RID_SCPAGE_FORMULA
     PushButton BTN_FORMULA_SEP_RESET
     {
         Pos = MAP_APPFONT ( 21, 113 );
-        Size = MAP_APPFONT ( 40, 14 );
+        Size = MAP_APPFONT ( 50, 14 );
         Text [ en-US ] = "Rese~t";
     };
 };
