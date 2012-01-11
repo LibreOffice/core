@@ -190,8 +190,8 @@ public:
     short               GetListPos4Entry(sal_uInt32 nIdx);
     short               GetListPos4Entry( const String& rFmtString );
 
-    void                GetCurrencySymbols( SvStringsDtor& rList, sal_uInt16* pPos );
-    void                GetCurrencySymbols( SvStringsDtor& rList, bool bFlag );
+    void                GetCurrencySymbols(std::vector<rtl::OUString>& rList, sal_uInt16* pPos );
+    void                GetCurrencySymbols(std::vector<rtl::OUString>& rList, bool bFlag );
 
     sal_uInt16          FindCurrencyTableEntry( const String& rFmtString, bool &bTestBanking );
     bool                IsInTable(sal_uInt16 nPos,bool bTmpBanking,const String &rFmtString);

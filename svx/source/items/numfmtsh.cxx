@@ -1500,14 +1500,13 @@ String SvxNumberFormatShell::GetStandardName() const
     return pFormatter->GetStandardName( eCurLanguage);
 }
 
-void SvxNumberFormatShell::GetCurrencySymbols( SvStringsDtor& rList, sal_uInt16* pPos )
+void SvxNumberFormatShell::GetCurrencySymbols(std::vector<rtl::OUString>& rList, sal_uInt16* pPos)
 {
-
     const NfCurrencyEntry* pTmpCurrencyEntry=SvNumberFormatter::MatchSystemCurrency();
 
     bool bFlag=(pTmpCurrencyEntry==NULL);
 
-    GetCurrencySymbols( rList, bFlag);
+    GetCurrencySymbols(rList, bFlag);
 
     if(pPos!=NULL)
     {
@@ -1540,7 +1539,7 @@ void SvxNumberFormatShell::GetCurrencySymbols( SvStringsDtor& rList, sal_uInt16*
 
 }
 
-void SvxNumberFormatShell::GetCurrencySymbols( SvStringsDtor& rList, bool bFlag )
+void SvxNumberFormatShell::GetCurrencySymbols(std::vector<rtl::OUString>& rList, bool bFlag)
 {
     aCurCurrencyList.clear();
 
@@ -1550,21 +1549,18 @@ void SvxNumberFormatShell::GetCurrencySymbols( SvStringsDtor& rList, bool bFlag 
     SvtLanguageTable* pLanguageTable=new SvtLanguageTable;
 
     sal_uInt16 nStart=1;
-    sal_uInt16 i,j;
 
     XubString aString( ApplyLreOrRleEmbedding( rCurrencyTable[0]->GetSymbol()));
     aString += sal_Unicode(' ');
     aString += ApplyLreOrRleEmbedding( pLanguageTable->GetString( rCurrencyTable[0]->GetLanguage()));
 
-    WSStringPtr pStr = new XubString(aString);
-    rList.Insert( pStr,rList.Count());
+    rList.push_back(aString);
     sal_uInt16 nAuto=(sal_uInt16)-1;
     aCurCurrencyList.push_back(nAuto);
 
     if(bFlag)
     {
-        pStr = new XubString(aString);
-        rList.Insert( pStr,rList.Count());
+        rList.push_back(aString);
         aCurCurrencyList.push_back(0);
         ++nStart;
     }
@@ -1574,7 +1570,7 @@ void SvxNumberFormatShell::GetCurrencySymbols( SvStringsDtor& rList, bool bFlag 
 
     const String aTwoSpace( RTL_CONSTASCII_USTRINGPARAM( "  "));
 
-    for(i=1;i<nCount;i++)
+    for(sal_uInt16 i = 1; i < nCount; ++i)
     {
         XubString aStr( ApplyLreOrRleEmbedding( rCurrencyTable[i]->GetBankSymbol()));
         aStr += aTwoSpace;
@@ -1582,40 +1578,36 @@ void SvxNumberFormatShell::GetCurrencySymbols( SvStringsDtor& rList, bool bFlag 
         aStr += aTwoSpace;
         aStr += ApplyLreOrRleEmbedding( pLanguageTable->GetString( rCurrencyTable[i]->GetLanguage()));
 
-        pStr = new XubString(aStr);
-        for(j=nStart;j<rList.Count();j++)
-        {
-            const StringPtr pTestStr=rList[j];
-            if (aCollator.compareString( *pStr, *pTestStr) < 0)
+        sal_uInt16 j = nStart;
+        for(; j < rList.size(); ++j)
+            if (aCollator.compareString(aStr, rList[j]) < 0)
                 break;  // insert before first greater than
-        }
-        rList.Insert( pStr,j);
-        aCurCurrencyList.insert(aCurCurrencyList.begin()+j, i);
+
+        rList.insert(rList.begin() + j, aStr);
+        aCurCurrencyList.insert(aCurCurrencyList.begin() + j, i);
     }
 
     // Append ISO codes to symbol list.
     // XXX If this is to be changed, various other places would had to be
     // adapted that assume this order!
-    sal_uInt16 nCont = rList.Count();
+    sal_uInt16 nCont = rList.size();
 
-    for(i=1;i<nCount;i++)
+    for(sal_uInt16 i = 1; i < nCount; ++i)
     {
         bool bInsert = true;
-        pStr = new XubString( ApplyLreOrRleEmbedding( rCurrencyTable[i]->GetBankSymbol()));
+        rtl::OUString aStr(ApplyLreOrRleEmbedding(rCurrencyTable[i]->GetBankSymbol()));
 
-        for (j = nCont; j < rList.Count() && bInsert; ++j)
+        sal_uInt16 j = nCont;
+        for(; j < rList.size() && bInsert; ++j)
         {
-            const StringPtr pTestStr=rList[j];
-
-            if(*pTestStr==*pStr)
+            if(rList[j] == aStr)
                 bInsert = false;
-            else
-                if (aCollator.compareString( *pStr, *pTestStr) < 0)
-                    break;  // insert before first greater than
+            else if (aCollator.compareString(aStr, rList[j]) < 0)
+                break;  // insert before first greater than
         }
         if(bInsert)
         {
-            rList.Insert( pStr,j);
+            rList.insert(rList.begin() + j, aStr);
             aCurCurrencyList.insert(aCurCurrencyList.begin()+j, i);
         }
     }

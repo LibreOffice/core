@@ -1730,15 +1730,14 @@ void SvxNumberFormatTabPage::SetOkHdl( const Link& rOkHandler )
 
 void SvxNumberFormatTabPage::FillCurrencyBox()
 {
-    SvStringsDtor   aList;
+    std::vector<rtl::OUString> aList;
+
     sal_uInt16  nSelPos=0;
+    pNumFmtShell->GetCurrencySymbols(aList, &nSelPos);
 
-    pNumFmtShell->GetCurrencySymbols( aList, &nSelPos);
+    for(std::vector<rtl::OUString>::iterator i = aList.begin() + 1;i != aList.end(); ++i)
+        aLbCurrency.InsertEntry(*i);
 
-    for(sal_uInt16 i=1;i<aList.Count();i++)
-    {
-        aLbCurrency.InsertEntry( *aList[i] );
-    }
     aLbCurrency.SelectEntryPos(nSelPos);
 }
 
