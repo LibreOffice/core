@@ -40,7 +40,7 @@
 #undef uint32
 
 #define XP_MAC
-#include "npsdk/npapi.h"
+#include "npapi.h"
 #include "npsdk/npupp.h"
 
 #include "plugin/plcom.hxx"

@@ -69,7 +69,7 @@
 #include "boost/scoped_array.hpp"
 #include "tools/pathutils.hxx"
 
-#include <npsdk/npapi.h>
+#include "npapi.h"
 #include "npshell.hxx"
 #include "so_env.hxx"
 #include "so_msg.hxx"

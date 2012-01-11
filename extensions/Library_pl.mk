@@ -32,10 +32,13 @@ $(eval $(call gb_Library_Library,pl))
 
 $(eval $(call gb_Library_set_componentfile,pl,extensions/source/plugin/pl))
 
+$(eval $(call gb_Library_add_external_headers,pl,np_sdk_inc))
+
+$(eval $(call gb_Library_use_external,pl,mozilla_headers))
+
 $(eval $(call gb_Library_set_include,pl,\
 	$$(INCLUDE) \
 	-I$(SRCDIR)/extensions/source/plugin/inc \
-	-I$(OUTDIR)/inc/mozilla/plugin \
 ))
 
 $(eval $(call gb_Library_add_api,pl,\
@@ -43,24 +46,10 @@ $(eval $(call gb_Library_add_api,pl,\
 	udkapi \
 ))
 
-ifneq ($(SOLAR_JAVA),)
-
-$(eval $(call gb_Library_set_include,pl,\
-	$$(INCLUDE) \
-	-I$(OUTDIR)/mozilla/java \
-	-I$(OUTDIR)/mozilla/nspr \
-))
-
+ifeq ($(SOLAR_JAVA),TRUE)
 $(eval $(call gb_Library_add_defs,pl,\
 	-DOJI \
 ))
-
-ifeq ($(GUIBASE),aqua)
-$(eval $(call gb_Library_set_include,pl,\
-	$$(INCLUDE) \
-	-I$(OUTDIR)/npsdk \
-))
-endif # GUIBASE=aqua
 
 endif # SOLAR_JAVA=YES
 

@@ -77,7 +77,7 @@ extern "C" {
 extern "C" {
 #include <npsdk/npupp.h>
 }
-#include <npsdk/npapi.h>
+#include "npapi.h"
 
 #if NP_VERSION_MINOR < 17
 // compatibility hack: compile with older NPN api header, but define

@@ -32,11 +32,11 @@ $(eval $(call gb_Library_Library,npsoplugin))
 
 $(eval $(call gb_Library_use_external,npsoplugin,mozilla_headers))
 
-ifeq ($(GUI),UNX)
-
-$(eval $(call gb_Library_add_ldflags,npsoplugin,\
-	$(OUTDIR)/lib/npunix.o \
+$(eval $(call gb_Library_add_linked_static_libs,npsoplugin,\
+	nputils \
 ))
+
+ifeq ($(GUI),UNX)
 
 $(eval $(call gb_Library_add_libs,npsoplugin,\
 	-ldl \
@@ -57,10 +57,6 @@ endif
 endif # GUI=UNX
 
 ifeq ($(GUI),WNT)
-
-$(eval $(call gb_Library_add_ldflags,npsoplugin,\
-	$(OUTDIR)/lib/npwin.obj \
-))
 
 $(eval $(call gb_Library_add_linked_static_libs,npsoplugin,\
 	ooopathutils \

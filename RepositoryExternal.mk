@@ -924,7 +924,6 @@ $(eval $(call gb_LinkTarget_set_include,$(1),\
 endef
 
 endif #SYSTEM_MOZILLA_HEADERS
-#TODO np_sdk $(eval $(call gb_LinkTarget_add_external_headers,$(1),np_sdk))
 
 
 # MacOSX-only frameworks ############################################

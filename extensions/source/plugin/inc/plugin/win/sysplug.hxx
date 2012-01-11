@@ -35,7 +35,7 @@
 #include <tchar.h>
 
 #pragma pack( push, 8 )
-#include <npsdk/npapi.h>
+#include "npapi.h"
 #include <npsdk/npupp.h>
 #pragma pack( pop )
 

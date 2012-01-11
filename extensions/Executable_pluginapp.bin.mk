@@ -30,6 +30,10 @@
 
 $(eval $(call gb_Executable_Executable,pluginapp.bin))
 
+$(eval $(call gb_Executable_add_external_headers,pluginapp.bin,np_sdk_inc))
+
+$(eval $(call gb_Executable_use_external,pluginapp.bin,mozilla_headers))
+
 $(eval $(call gb_Executable_set_include,pluginapp.bin,\
 	$$(INCLUDE) \
 	-I$(SRCDIR)/extensions/source/plugin/inc \
