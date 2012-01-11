@@ -1009,9 +1009,25 @@ Path2DContext::Path2DContext( ContextHandler& rParent, const Reference< XFastAtt
 Path2DContext::~Path2DContext()
 {
     EnhancedCustomShapeSegment aNewSegment;
-    if ( mrPath2D.fill == XML_none )
+    switch ( mrPath2D.fill )
     {
-        aNewSegment.Command = EnhancedCustomShapeSegmentCommand::NOFILL;
+        case XML_none:
+            aNewSegment.Command = EnhancedCustomShapeSegmentCommand::NOFILL;
+            break;
+        case XML_darken:
+            aNewSegment.Command = EnhancedCustomShapeSegmentCommand::DARKEN;
+            break;
+        case XML_darkenLess:
+            aNewSegment.Command = EnhancedCustomShapeSegmentCommand::DARKENLESS;
+            break;
+        case XML_lighten:
+            aNewSegment.Command = EnhancedCustomShapeSegmentCommand::LIGHTEN;
+            break;
+        case XML_lightenLess:
+            aNewSegment.Command = EnhancedCustomShapeSegmentCommand::LIGHTENLESS;
+            break;
+    }
+    if (mrPath2D.fill != XML_norm) {
         aNewSegment.Count = 0;
         mrSegments.push_back( aNewSegment );
     }
