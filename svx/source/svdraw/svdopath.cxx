@@ -1670,15 +1670,17 @@ TYPEINIT1(SdrPathObj,SdrTextObj);
 
 SdrPathObj::SdrPathObj(SdrObjKind eNewKind)
 :   meKind(eNewKind),
-    mpDAC(0L)
+    mpDAC(0L),
+    mdBrightness(1.0)
 {
     bClosedObj = IsClosed();
 }
 
-SdrPathObj::SdrPathObj(SdrObjKind eNewKind, const basegfx::B2DPolyPolygon& rPathPoly)
+SdrPathObj::SdrPathObj(SdrObjKind eNewKind, const basegfx::B2DPolyPolygon& rPathPoly, double dBrightness)
 :   maPathPolygon(rPathPoly),
     meKind(eNewKind),
-    mpDAC(0L)
+    mpDAC(0L),
+    mdBrightness(dBrightness)
 {
     bClosedObj = IsClosed();
     ImpForceKind();

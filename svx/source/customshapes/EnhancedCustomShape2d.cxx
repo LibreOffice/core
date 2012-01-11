@@ -1109,10 +1109,10 @@ sal_Int32 EnhancedCustomShape2d::GetLuminanceChange( sal_uInt32 nIndex ) const
     return ( nLumDat >> 28 ) * 10;
 }
 
-Color EnhancedCustomShape2d::GetColorData( const Color& rFillColor, sal_uInt32 nIndex ) const
+Color EnhancedCustomShape2d::GetColorData( const Color& rFillColor, sal_uInt32 nIndex, double dBrightness ) const
 {
     const sal_Int32 nLuminance = GetLuminanceChange(nIndex);
-    if( !nLuminance )
+    if( !nLuminance && dBrightness == 1.0 )
         return rFillColor;
 
     basegfx::BColor aHSVColor=
@@ -1120,24 +1120,26 @@ Color EnhancedCustomShape2d::GetColorData( const Color& rFillColor, sal_uInt32 n
             basegfx::BColor(rFillColor.GetRed()/255.0,
                             rFillColor.GetGreen()/255.0,
                             rFillColor.GetBlue()/255.0));
-    if( nLuminance > 0 )
-    {
-        aHSVColor.setGreen(
-            aHSVColor.getGreen() * (1.0-nLuminance/100.0));
-        aHSVColor.setBlue(
-            nLuminance/100.0 +
-            (1.0-nLuminance/100.0)*aHSVColor.getBlue());
-    }
-    else if( nLuminance < 0 )
-    {
-        aHSVColor.setBlue(
-            (1.0+nLuminance/100.0)*aHSVColor.getBlue());
+    if (nLuminance ) {
+        if( nLuminance > 0 )
+        {
+            aHSVColor.setGreen(
+                aHSVColor.getGreen() * (1.0-nLuminance/100.0));
+            aHSVColor.setBlue(
+                nLuminance/100.0 +
+                (1.0-nLuminance/100.0)*aHSVColor.getBlue());
+        }
+        else if( nLuminance < 0 )
+        {
+            aHSVColor.setBlue(
+                (1.0+nLuminance/100.0)*aHSVColor.getBlue());
+        }
     }
 
     aHSVColor = basegfx::tools::hsv2rgb(aHSVColor);
-    return Color( (sal_uInt8)static_cast< sal_Int32 >( basegfx::clamp(aHSVColor.getRed(),0.0,1.0) * 255.0 + 0.5 ),
-                  (sal_uInt8)static_cast< sal_Int32 >( basegfx::clamp(aHSVColor.getGreen(),0.0,1.0) * 255.0 + 0.5 ),
-                  (sal_uInt8)static_cast< sal_Int32 >( basegfx::clamp(aHSVColor.getBlue(),0.0,1.0) * 255.0 + 0.5 ) );
+    return Color( (sal_uInt8)static_cast< sal_Int32 >( basegfx::clamp(dBrightness*aHSVColor.getRed(),0.0,1.0) * 255.0 + 0.5 ),
+                  (sal_uInt8)static_cast< sal_Int32 >( basegfx::clamp(dBrightness*aHSVColor.getGreen(),0.0,1.0) * 255.0 + 0.5 ),
+                  (sal_uInt8)static_cast< sal_Int32 >( basegfx::clamp(dBrightness*aHSVColor.getBlue(),0.0,1.0) * 255.0 + 0.5 ) );
 }
 
 Rectangle EnhancedCustomShape2d::GetTextRect() const
@@ -1455,6 +1457,7 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
 {
     sal_Bool bNoFill = sal_False;
     sal_Bool bNoStroke = sal_False;
+    double dBrightness = 1.0;
 
     basegfx::B2DPolyPolygon aNewB2DPolyPolygon;
     basegfx::B2DPolygon aNewB2DPolygon;
@@ -1488,6 +1491,18 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
                 case NOSTROKE :
                     bNoStroke = sal_True;
                 break;
+                case DARKEN :
+                    dBrightness = 0.66666666;
+                    break;
+                case DARKENLESS :
+                    dBrightness = 0.83333333;
+                    break;
+                case LIGHTEN :
+                    dBrightness = 1.16666666;
+                    break;
+                case LIGHTENLESS :
+                    dBrightness = 1.33333333;
+                    break;
                 case MOVETO :
                 {
                     if(aNewB2DPolygon.count() > 1L)
@@ -1884,7 +1899,7 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
             {
                 basegfx::B2DPolyPolygon aClosedPolyPolygon(aNewB2DPolyPolygon);
                 aClosedPolyPolygon.setClosed(true);
-                SdrPathObj* pFill = new SdrPathObj(OBJ_POLY, aClosedPolyPolygon);
+                SdrPathObj* pFill = new SdrPathObj(OBJ_POLY, aClosedPolyPolygon, dBrightness);
                 SfxItemSet aTempSet(*this);
                 aTempSet.Put(SdrShadowItem(sal_False));
                 aTempSet.Put(XLineStyleItem(XLINE_NONE));
@@ -1900,7 +1915,7 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
                 // Thus, use a type that fits the polygon
                 SdrPathObj* pStroke = new SdrPathObj(
                     aNewB2DPolyPolygon.isClosed() ? OBJ_POLY : OBJ_PLIN,
-                    aNewB2DPolyPolygon);
+                    aNewB2DPolyPolygon, dBrightness);
                 SfxItemSet aTempSet(*this);
                 aTempSet.Put(SdrShadowItem(sal_False));
                 aTempSet.Put(XFillStyleItem(XFILL_NONE));
@@ -1919,13 +1934,13 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
                 // see comment above about OBJ_PLIN
                 pObj = new SdrPathObj(
                     aNewB2DPolyPolygon.isClosed() ? OBJ_POLY : OBJ_PLIN,
-                    aNewB2DPolyPolygon);
+                    aNewB2DPolyPolygon, dBrightness);
                 aTempSet.Put(XFillStyleItem(XFILL_NONE));
             }
             else
             {
                 aNewB2DPolyPolygon.setClosed(true);
-                pObj = new SdrPathObj(OBJ_POLY, aNewB2DPolyPolygon);
+                pObj = new SdrPathObj(OBJ_POLY, aNewB2DPolyPolygon, dBrightness);
             }
 
             if(bNoStroke)
@@ -2044,11 +2059,11 @@ void EnhancedCustomShape2d::AdaptObjColor(SdrPathObj& rObj, const SfxItemSet& rC
             case XFILL_SOLID:
             {
                 Color aFillColor;
-                if ( nColorCount )
+                if ( nColorCount || rObj.GetBrightness() != 1.0 )
                 {
                     aFillColor = GetColorData(
                         ((XFillColorItem&)rCustomShapeSet.Get( XATTR_FILLCOLOR )).GetColorValue(),
-                        std::min(nColorIndex, nColorCount-1) );
+                        std::min(nColorIndex, nColorCount-1), rObj.GetBrightness() );
                     rObj.SetMergedItem( XFillColorItem( String(), aFillColor ) );
                 }
                 break;
@@ -2056,16 +2071,16 @@ void EnhancedCustomShape2d::AdaptObjColor(SdrPathObj& rObj, const SfxItemSet& rC
             case XFILL_GRADIENT:
             {
                 XGradient aXGradient(((const XFillGradientItem&)rObj.GetMergedItem(XATTR_FILLGRADIENT)).GetGradientValue());
-                if ( nColorCount )
+                if ( nColorCount || rObj.GetBrightness() != 1.0 )
                 {
                     aXGradient.SetStartColor(
                         GetColorData(
                             aXGradient.GetStartColor(),
-                            std::min(nColorIndex, nColorCount-1) ));
+                            std::min(nColorIndex, nColorCount-1), rObj.GetBrightness() ));
                     aXGradient.SetEndColor(
                         GetColorData(
                             aXGradient.GetEndColor(),
-                            std::min(nColorIndex, nColorCount-1) ));
+                            std::min(nColorIndex, nColorCount-1), rObj.GetBrightness() ));
                 }
 
                 rObj.SetMergedItem( XFillGradientItem( String(), aXGradient ) );
@@ -2074,12 +2089,12 @@ void EnhancedCustomShape2d::AdaptObjColor(SdrPathObj& rObj, const SfxItemSet& rC
             case XFILL_HATCH:
             {
                 XHatch aXHatch(((const XFillHatchItem&)rObj.GetMergedItem(XATTR_FILLHATCH)).GetHatchValue());
-                if ( nColorCount )
+                if ( nColorCount || rObj.GetBrightness() != 1.0 )
                 {
                     aXHatch.SetColor(
                         GetColorData(
                             aXHatch.GetColor(),
-                            std::min(nColorIndex, nColorCount-1) ));
+                            std::min(nColorIndex, nColorCount-1), rObj.GetBrightness() ));
                 }
 
                 rObj.SetMergedItem( XFillHatchItem( String(), aXHatch ) );
@@ -2088,7 +2103,7 @@ void EnhancedCustomShape2d::AdaptObjColor(SdrPathObj& rObj, const SfxItemSet& rC
             case XFILL_BITMAP:
             {
                 Bitmap aBitmap(((const XFillBitmapItem&)rObj.GetMergedItem(XATTR_FILLBITMAP)).GetBitmapValue().GetBitmap());
-                if ( nColorCount )
+                if ( nColorCount || rObj.GetBrightness() != 1.0 )
                 {
                     aBitmap.Adjust(
                         static_cast< short > ( GetLuminanceChange(

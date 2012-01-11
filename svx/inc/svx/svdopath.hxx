@@ -75,6 +75,9 @@ protected:
     // for isolation of old Drag/Create code
     ImpPathForDragAndCreate*    mpDAC;
 
+    // brightness - used in EnhancedCustomShapes2d.cxx for DARKEN[LESS] and LIGHTEN[LESS] segments implementation
+    double mdBrightness;
+
 protected:
     // Hilfsfunktion fuer GET/SET/INS/etc. PNT
     void ImpSetClosed(sal_Bool bClose);
@@ -86,11 +89,12 @@ protected:
 public:
     static sal_Bool ImpFindPolyPnt(const basegfx::B2DPolyPolygon& rPoly, sal_uInt32 nAbsPnt, sal_uInt32& rPolyNum, sal_uInt32& rPointNum);
     virtual void SetRectsDirty(sal_Bool bNotMyself = sal_False);
+    double GetBrightness() { return mdBrightness; }
 
 public:
     TYPEINFO();
     SdrPathObj(SdrObjKind eNewKind);
-    SdrPathObj(SdrObjKind eNewKind, const basegfx::B2DPolyPolygon& rPathPoly);
+    SdrPathObj(SdrObjKind eNewKind, const basegfx::B2DPolyPolygon& rPathPoly, double dBrightness = 1.0);
     virtual ~SdrPathObj();
 
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const;
