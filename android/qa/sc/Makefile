@@ -125,23 +125,32 @@ copy-stuff:
 # Then the shared GNU C++ library
 	$(call COPY,$(NDK_HOME)/sources/cxx-stl/gnu-libstdc++/libs/armeabi-v7a/libgnustl_shared.so)
 #
-# Then other "assets". Let the directory structure under assets mimic
-# that under solver for now.
+# Then other "assets" that can be left in the .apk. Let the directory
+# structure under assets mimic that under solver or workdir for now.
 	mkdir -p assets/bin assets/lib assets/xml/ure
 	cp $(OUTDIR)/bin/udkapi.rdb assets/bin
 	cp $(OUTDIR)/bin/types.rdb assets/bin
 	cp $(OUTDIR)/xml/ure/services.rdb assets/xml/ure
+# For some reason the vnd.sun.star.expand:$LO_LIB_DIR doesn't seem to work, it expands to empty!?
+# So just hardcode the known APP_DATA_PATH for now...
 	for F in framework/util/fwk i18npool/util/i18npool sfx2/util/sfx unoxml/source/service/unoxml configmgr/source/configmgr; do \
 		mkdir -p assets/ComponentTarget/`dirname $$F`; \
-	        cp $(WORKDIR)/ComponentTarget/$$F.component assets/ComponentTarget/`dirname $$F`; \
+	        sed -e 's!uri="vnd.sun.star.expand:$$LO_LIB_DIR/!uri="$(APP_DATA_PATH)/lib/!' <$(WORKDIR)/ComponentTarget/$$F.component >assets/ComponentTarget/$$F.component; \
 	done
 	for F in ucb1 ucpfile1; do \
-		cp $(OUTDIR)/xml/$$F.component assets/xml; \
+		sed -e 's!uri="vnd.sun.star.expand:$$LO_LIB_DIR/!uri="$(APP_DATA_PATH)/lib/!' <$(OUTDIR)/xml/$$F.component > assets/xml/$$F.component; \
 	done
 	cp -R $(OUTDIR)/xml/registry assets/xml
 	for F in uno_services uno_types; do \
-		sed -e 's!uri="./!uri="$(APP_DATA_PATH)/lib/!g' <$(SRC_ROOT)/testtools/$(INPATH)/lib/$${F}.rdb >assets/lib/$${F}.rdb; \
+		sed -e 's!uri="./!uri="$(APP_DATA_PATH)/lib/!g' <$(SRC_ROOT)/testtools/$(INPATH)/lib/$$F.rdb >assets/lib/$$F.rdb; \
 	done
+# Then assets that are unpacked at run-time into the app's data directory.
+	mkdir -p assets/unpack/bin
+	for F in $(OUTDIR)/bin/*.res; do \
+		cp $$F assets/unpack/bin; \
+	done
+	mkdir -p assets/unpack/etc/fonts
+	cp fonts.conf assets/unpack/etc/fonts
 #
 # Then gdbserver and gdb.setup so that we can debug with ndk-gdb.
 #
@@ -162,9 +171,9 @@ uninstall:
 	adb uninstall $(APP_PACKAGE)
 
 run:
-	echo "$(APP_DATA_PATH)/lib/libtest_sc_ucalc.so --headless --protector libunoexceptionprotector.so unoexceptionprotector '-env:CONFIGURATION_LAYERS=xcsxcu:file:///assets/xml/registry' '-env:UNO_TYPES=file:///assets/bin/udkapi.rdb file:///assets/bin/types.rdb'  '-env:UNO_SERVICES=file:///assets/xml/ure/services.rdb  file:///assets/ComponentTarget/framework/util/fwk.component file:///assets/ComponentTarget/i18npool/util/i18npool.component file:///assets/ComponentTarget/sfx2/util/sfx.component file:///assets/ComponentTarget/unoxml/source/service/unoxml.component file:///assets/ComponentTarget/configmgr/source/configmgr.component file:///assets/xml/ucb1.component file:///assets/xml/ucpfile1.component' -env:URE_INTERNAL_LIB_DIR=file://$(APP_DATA_PATH)/lib -env:LO_LIB_DIR=file://$(APP_DATA_PATH)/lib" >cmdline
+	echo "STAR_RESOURCEPATH=$(APP_DATA_PATH)/bin FONTCONFIG_FILE=$(APP_DATA_PATH)/etc/fonts/fonts.conf $(APP_DATA_PATH)/lib/libtest_sc_ucalc.so --headless --protector libunoexceptionprotector.so unoexceptionprotector '-env:CONFIGURATION_LAYERS=xcsxcu:file:///assets/xml/registry' '-env:UNO_TYPES=file:///assets/bin/udkapi.rdb file:///assets/bin/types.rdb'  '-env:UNO_SERVICES=file:///assets/xml/ure/services.rdb  file:///assets/ComponentTarget/framework/util/fwk.component file:///assets/ComponentTarget/i18npool/util/i18npool.component file:///assets/ComponentTarget/sfx2/util/sfx.component file:///assets/ComponentTarget/unoxml/source/service/unoxml.component file:///assets/ComponentTarget/configmgr/source/configmgr.component file:///assets/xml/ucb1.component file:///assets/xml/ucpfile1.component' -env:URE_INTERNAL_LIB_DIR=file://$(APP_DATA_PATH)/lib -env:LO_LIB_DIR=file://$(APP_DATA_PATH)/lib" >cmdline
 	adb push cmdline $(APP_DATA_PATH)/cmdline
-	adb shell am start -n $(APP_PACKAGE)/$(BOOTSTRAP) -e lo-main-library libcppunittester -e lo-main-indirect-cmdline "$(APP_DATA_PATH)/cmdline" 
+	adb shell am start -n $(APP_PACKAGE)/$(BOOTSTRAP) -e lo-main-library libcppunittester -e lo-main-indirect-cmdline "$(APP_DATA_PATH)/cmdline"
 
 clean:
 	ant clean
