@@ -84,11 +84,11 @@ IMediaDet* FrameGrabber::implCreateMediaDet( const ::rtl::OUString& rURL ) const
 
     if( SUCCEEDED( CoCreateInstance( CLSID_MediaDet, NULL, CLSCTX_INPROC_SERVER, IID_IMediaDet, (void**) &pDet ) ) )
     {
-        String aLocalStr;
+        rtl::OUString aLocalStr;
 
-        if( ::utl::LocalFileHelper::ConvertURLToPhysicalName( rURL, aLocalStr ) && aLocalStr.Len() )
+        if( ::utl::LocalFileHelper::ConvertURLToPhysicalName( rURL, aLocalStr ) && !aLocalStr.isEmpty() )
         {
-            if( !SUCCEEDED( pDet->put_Filename( ::SysAllocString( reinterpret_cast<LPCOLESTR>(aLocalStr.GetBuffer()) ) ) ) )
+            if( !SUCCEEDED( pDet->put_Filename( ::SysAllocString( reinterpret_cast<LPCOLESTR>(aLocalStr.getStr()) ) ) ) )
             {
                 pDet->Release();
                 pDet = NULL;
