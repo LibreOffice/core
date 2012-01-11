@@ -117,7 +117,7 @@ void SalGenericInstance::RegisterFontSubstitutors( ImplDevFontList* pList )
 static FontSelectPattern GetFcSubstitute(const FontSelectPattern &rFontSelData, rtl::OUString& rMissingCodes )
 {
     FontSelectPattern aSubstituted(rFontSelData);
-    const psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
+    psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
     rMgr.Substitute(aSubstituted, rMissingCodes);
     return aSubstituted;
 }

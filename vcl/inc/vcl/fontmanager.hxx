@@ -648,7 +648,7 @@ public:
     bool matchFont( FastPrintFontInfo& rInfo, const com::sun::star::lang::Locale& rLocale );
     ImplFontOptions* getFontOptions( const FastPrintFontInfo&, int nSize, void (*subcallback)(void*)) const;
 
-    bool Substitute( FontSelectPattern &rPattern, rtl::OUString& rMissingCodes ) const;
+    bool Substitute( FontSelectPattern &rPattern, rtl::OUString& rMissingCodes );
 
     int FreeTypeCharIndex( void *pFace, sal_uInt32 aChar );
 };

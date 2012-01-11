@@ -1483,12 +1483,8 @@ fontID PrintFontManager::findFontFileID( int nDirID, const OString& rFontFile, i
             {
                 TrueTypeFontFile* const pFont = static_cast< TrueTypeFontFile* const >((*it).second);
                 if( pFont->m_nDirectory == nDirID &&
-                    pFont->m_aFontFile == rFontFile )
-                {
-                    fprintf(stderr, "candidate %d vs %d\n", pFont->m_nCollectionEntry, nFaceIndex);
-                    if (pFont->m_nCollectionEntry == nFaceIndex)
+                    pFont->m_aFontFile == rFontFile && pFont->m_nCollectionEntry == nFaceIndex )
                         nID = it->first;
-                }
             }
             break;
             case fonttype::Builtin:

@@ -746,7 +746,7 @@ static void addtopattern(FcPattern *pPattern,
     }
 }
 
-bool PrintFontManager::Substitute( FontSelectPattern &rPattern, rtl::OUString& rMissingCodes ) const
+bool PrintFontManager::Substitute( FontSelectPattern &rPattern, rtl::OUString& rMissingCodes )
 {
     bool bRet = false;
 
@@ -814,21 +814,48 @@ bool PrintFontManager::Substitute( FontSelectPattern &rPattern, rtl::OUString& r
         if( pSet->nfont > 0 )
         {
             //extract the closest match
-            FcChar8* family = NULL;
-            FcResult eFileRes = FcPatternGetString( pSet->fonts[0], FC_FAMILY, 0, &family );
-
-            // get the family name
+            FcChar8* file = NULL;
+            FcResult eFileRes = FcPatternGetString(pSet->fonts[0], FC_FILE, 0, &file);
+            int nCollectionEntry = 0;
+            FcResult eIndexRes = FcPatternGetInteger(pSet->fonts[0], FC_INDEX, 0, &nCollectionEntry);
+            if (eIndexRes != FcResultMatch)
+                nCollectionEntry = 0;
             if( eFileRes == FcResultMatch )
             {
-                bRet = true;
+                OString aDir, aBase, aOrgPath( (sal_Char*)file );
+                splitPath( aOrgPath, aDir, aBase );
+                int nDirID = getDirectoryAtom( aDir, true );
+                fontID aFont = findFontFileID( nDirID, aBase, nCollectionEntry );
+                if( aFont > 0 )
+                {
+                    FastPrintFontInfo aInfo;
+                    bRet = getFontFastInfo( aFont, aInfo );
+                    rPattern.maSearchName = aInfo.m_aFamilyName;
+                }
+            }
 
-                OString sFamily((sal_Char*)family);
-                boost::unordered_map< rtl::OString, rtl::OString, rtl::OStringHash >::const_iterator aI =
-                    rWrapper.m_aFontNameToLocalized.find(sFamily);
-                if (aI != rWrapper.m_aFontNameToLocalized.end())
-                    sFamily = aI->second;
-                rPattern.maSearchName = rtl::OStringToOUString( sFamily, RTL_TEXTENCODING_UTF8 );
+            SAL_WARN_IF(!bRet, "vcl", "no FC_FILE found, falling back to name search");
 
+            if (!bRet)
+            {
+                FcChar8* family = NULL;
+                FcResult eFamilyRes = FcPatternGetString( pSet->fonts[0], FC_FAMILY, 0, &family );
+
+                // get the family name
+                if( eFamilyRes == FcResultMatch )
+                {
+                    OString sFamily((sal_Char*)family);
+                    boost::unordered_map< rtl::OString, rtl::OString, rtl::OStringHash >::const_iterator aI =
+                        rWrapper.m_aFontNameToLocalized.find(sFamily);
+                    if (aI != rWrapper.m_aFontNameToLocalized.end())
+                        sFamily = aI->second;
+                    rPattern.maSearchName = rtl::OStringToOUString( sFamily, RTL_TEXTENCODING_UTF8 );
+                    bRet = true;
+                }
+            }
+
+            if (bRet)
+            {
                 int val = 0;
                 if (FcResultMatch == FcPatternGetInteger(pSet->fonts[0], FC_WEIGHT, 0, &val))
                     rPattern.meWeight = convertWeight(val);
