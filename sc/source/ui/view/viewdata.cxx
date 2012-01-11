@@ -322,6 +322,7 @@ ScViewData::ScViewData( ScDocShell* pDocSh, ScTabViewShell* pViewSh ) :
         bPagebreak  ( false ),
         bSelCtrlMouseClick( false )
 {
+    mpMarkData->SelectOneTable(0); // Sync with nTabNo.
 
     SetGridMode     ( sal_True );
     SetSyntaxMode   ( false );
@@ -368,6 +369,7 @@ ScViewData::ScViewData( ScDocShell* pDocSh, ScTabViewShell* pViewSh ) :
 
 ScViewData::ScViewData( const ScViewData& rViewData ) :
         maTabData( rViewData.maTabData ),
+        mpMarkData(new ScMarkData(*rViewData.mpMarkData)),
         pDocShell   ( rViewData.pDocShell ),
         pDoc        ( rViewData.pDoc ),
         pView       ( rViewData.pView ),
