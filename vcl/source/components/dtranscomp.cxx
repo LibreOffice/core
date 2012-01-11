@@ -276,15 +276,6 @@ Reference< XInterface > ClipboardFactory::createInstanceWithArguments( const Seq
     return xResult;
 }
 
-// ------------------------------------------------------------------------
-
-Sequence< OUString > SAL_CALL Clipboard_getSupportedServiceNames()
-{
-    Sequence< OUString > aRet(1);
-    aRet[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.clipboard.SystemClipboard"));
-    return aRet;
-}
-
 OUString SAL_CALL Clipboard_getImplementationName()
 {
     #if defined UNX

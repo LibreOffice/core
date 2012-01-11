@@ -58,7 +58,6 @@ extern Sequence< OUString > SAL_CALL StringMirror_getSupportedServiceNames();
 extern OUString SAL_CALL StringMirror_getImplementationName();
 extern Reference< XInterface > SAL_CALL StringMirror_createInstance( const Reference< XMultiServiceFactory > & );
 
-extern Sequence< OUString > SAL_CALL Clipboard_getSupportedServiceNames();
 extern OUString SAL_CALL Clipboard_getImplementationName();
 extern Reference< XSingleServiceFactory > SAL_CALL Clipboard_createFactory( const Reference< XMultiServiceFactory > & );
 
