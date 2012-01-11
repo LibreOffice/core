@@ -31,7 +31,6 @@
 #include <rtl/memory.h>
 #include <rtl/strbuf.hxx>
 #include <tools/cachestr.hxx>
-#include <tools/debug.hxx>
 #include <tools/inetmsg.hxx>
 #include <tools/inetstrm.hxx>
 
@@ -1672,7 +1671,7 @@ int INetMIMEMessageStream::PutMsgLine (const sal_Char *pData, sal_uIntPtr nSize)
                                     return status;
                             }
                             else {
-                                DBG_ERRORFILE( "Die Boundary nicht gefunden" );
+                                SAL_INFO( "tools", "Boundary not found." );
                             }
                             status = INetMessageIOStream::PutMsgLine(
                                 pOldPos, pChar - pOldPos + 1 );

@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include <tools/debug.hxx>
 #include <vcl/print.hxx>
 
 #include <svtools/svtdata.hxx>
@@ -366,7 +365,7 @@ short PrinterSetupDialog::Execute()
 {
     if ( !mpPrinter || mpPrinter->IsPrinting() || mpPrinter->IsJobActive() )
     {
-        DBG_ERRORFILE( "PrinterSetupDialog::Execute() - No Printer or printer is printing" );
+        SAL_INFO( "svtools", "PrinterSetupDialog::Execute() - No Printer or printer is printing" );
         return sal_False;
     }
 

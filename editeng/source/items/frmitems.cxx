@@ -3527,7 +3527,7 @@ bool SvxBrushItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         break;
 
         case MID_GRAPHIC:
-            DBG_ERRORFILE( "not implemented" );
+            SAL_INFO( "editeng", "not implemented" );
         break;
 
         case MID_GRAPHIC_TRANSPARENT:
@@ -3613,7 +3613,7 @@ bool SvxBrushItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         break;
 
         case MID_GRAPHIC:
-            DBG_ERRORFILE( "not implemented" );
+            SAL_INFO( "editeng", "not implemented" );
         break;
 
         case MID_GRAPHIC_TRANSPARENT:

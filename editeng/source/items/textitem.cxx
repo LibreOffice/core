@@ -2559,7 +2559,7 @@ SvxLanguageItem::SvxLanguageItem( const LanguageType eLang, const sal_uInt16 nId
 sal_uInt16 SvxLanguageItem::GetValueCount() const
 {
     // #i50205# got rid of class International
-    DBG_ERRORFILE("SvxLanguageItem::GetValueCount: supposed to return a count of what?");
+    SAL_INFO( "editeng", "SvxLanguageItem::GetValueCount: supposed to return a count of what?");
     // FIXME: previously returned LANGUAGE_COUNT from tools/intn.hxx which was wrong anyway.
     // Could be SvtLanguageTable::GetEntryCount() (all locales with resource string)?
     // Could be LocaleDataWrapper::getInstalledLanguageTypes() (all locales with locale data)?

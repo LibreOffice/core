@@ -259,9 +259,7 @@ IMPL_LINK( SvxJavaOptionsPage, AddHdl_Impl, PushButton *, EMPTYARG )
     }
     catch ( Exception& )
     {
-#ifdef DBG_UTIL
-        DBG_ERRORFILE( "SvxJavaOptionsPage::AddHdl_Impl(): caught exception" );
-#endif
+        SAL_INFO( "cui", "SvxJavaOptionsPage::AddHdl_Impl(): caught exception" );
     }
 
     return 0;
@@ -381,9 +379,7 @@ IMPL_LINK( SvxJavaOptionsPage, StartFolderPickerHdl, void*, EMPTYARG )
     }
     catch ( Exception& )
     {
-#ifdef DBG_UTIL
-        DBG_ERRORFILE( "SvxJavaOptionsPage::StartFolderPickerHdl(): caught exception" );
-#endif
+        SAL_INFO( "cui", "SvxJavaOptionsPage::StartFolderPickerHdl(): caught exception" );
     }
 
     return 0L;

@@ -322,7 +322,7 @@ void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttri
             }
             catch( const beans::UnknownPropertyException & )
             {
-                DBG_ERRORFILE( "Properties missing" );
+                SAL_INFO( "vcl", "Properties missing" );
             }
         }
     }

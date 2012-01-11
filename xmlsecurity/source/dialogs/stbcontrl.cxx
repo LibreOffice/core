@@ -80,7 +80,7 @@ void XmlSecStatusBarControl::StateChanged( sal_uInt16 nSID, SfxItemState eState,
     }
     else
     {
-        DBG_ERRORFILE( "+XmlSecStatusBarControl::StateChanged(): invalid item type" );
+        SAL_INFO( "xmlsecurity", "+XmlSecStatusBarControl::StateChanged(): invalid item type" );
         mpImpl->mbSigned = false;
     }
 

@@ -248,7 +248,7 @@ static rtl::OUString queryFile( Printer* pPrinter )
             }
             catch (const lang::IllegalArgumentException&)
             {
-                DBG_ERRORFILE( "caught IllegalArgumentException when registering filter\n" );
+                SAL_INFO( "vcl", "caught IllegalArgumentException when registering filter\n" );
             }
 
             if( xFilePicker->execute() == ui::dialogs::ExecutableDialogResults::OK )

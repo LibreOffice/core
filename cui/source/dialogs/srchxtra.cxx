@@ -186,12 +186,7 @@ SvxSearchAttributeDialog::SvxSearchAttributeDialog( Window* pParent,
             if ( RESARRAY_INDEX_NOTFOUND != nId )
                 pEntry = aAttrLB.SvTreeListBox::InsertEntry( aAttrNames.GetString(nId) );
             else
-            {
-                rtl::OStringBuffer sError(
-                    RTL_CONSTASCII_STRINGPARAM("no resource for slot id\nslot = "));
-                sError.append(static_cast<sal_Int32>(nSlot));
-                DBG_ERRORFILE(sError.getStr());
-            }
+                SAL_INFO( "cui", "no resource for slot id\nslot = " << static_cast<sal_Int32>(nSlot) );
 
             if ( pEntry )
             {

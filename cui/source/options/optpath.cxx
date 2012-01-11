@@ -483,7 +483,7 @@ void SvxPathTabPage::ChangeCurrentEntry( const String& _rFolder )
     SvLBoxEntry* pEntry = pPathBox->GetCurEntry();
     if ( !pEntry )
     {
-        DBG_ERRORFILE( "SvxPathTabPage::ChangeCurrentEntry(): no entry" );
+        SAL_INFO( "cui", "SvxPathTabPage::ChangeCurrentEntry(): no entry" );
         return;
     }
 
@@ -646,7 +646,7 @@ IMPL_LINK( SvxPathTabPage, PathHdl_Impl, PushButton *, EMPTYARG )
         }
         catch( Exception& )
         {
-            DBG_ERRORFILE( "SvxPathTabPage::PathHdl_Impl: exception from folder picker" );
+            SAL_INFO( "cui", "SvxPathTabPage::PathHdl_Impl: exception from folder picker" );
         }
     }
     return 0;

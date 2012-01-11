@@ -1675,7 +1675,7 @@ NfHackConversion SvNumberformat::Load( SvStream& rStream,
             }
             break;
             default:
-                DBG_ERRORFILE( "SvNumberformat::Load: unknown header bytes left nId" );
+                SAL_INFO( "svl", "SvNumberformat::Load: unknown header bytes left nId" );
                 bGoOn = false;  // stop reading unknown stream left over of newer versions
                 // Would be nice to have multiple read/write headers instead
                 // but old versions wouldn't know it, TLOT.
@@ -1727,7 +1727,7 @@ NfHackConversion SvNumberformat::Load( SvStream& rStream,
                     LANGUAGE_GERMAN, LANGUAGE_ENGLISH_US, true );
             break;
             default:
-                DBG_ERRORFILE( "SvNumberformat::Load: eHackConversion unknown" );
+                SAL_INFO( "svl", "SvNumberformat::Load: eHackConversion unknown" );
         }
     }
     return eHackConversion;

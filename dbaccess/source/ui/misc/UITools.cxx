@@ -1281,7 +1281,7 @@ namespace
             }
             else
             {
-                DBG_ERRORFILE( "Property 'AnchorName' is missing" );
+                SAL_INFO( "dbaccess", "Property 'AnchorName' is missing" );
             }
         }
         catch( Exception& )

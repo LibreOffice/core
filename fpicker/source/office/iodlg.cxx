@@ -2005,7 +2005,7 @@ void SvtFileDialog::EnableControl( Control* _pControl, sal_Bool _bEnable )
 {
     if ( !_pControl )
     {
-        DBG_ERRORFILE( "SvtFileDialog::EnableControl: invalid control!" );
+        SAL_INFO( "fpicker", "SvtFileDialog::EnableControl: invalid control!" );
         return;
     }
 
@@ -2871,7 +2871,7 @@ Control* SvtFileDialog::getControl( sal_Int16 _nControlId, sal_Bool _bLabelContr
             break;
 
         default:
-            DBG_ERRORFILE( "SvtFileDialog::getControl: invalid id!" );
+            SAL_INFO( "fpicker", "SvtFileDialog::getControl: invalid id!" );
     }
     return pReturn;
 }

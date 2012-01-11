@@ -1343,7 +1343,7 @@ IMPL_LINK( SvxParaAlignTabPage, TextDirectionHdl_Impl, ListBox*, EMPTYARG )
         case FRMDIR_ENVIRONMENT :       /* do nothing */ break;
         default:
         {
-            DBG_ERRORFILE( "SvxParaAlignTabPage::TextDirectionHdl_Impl(): other directions not supported" );
+            SAL_INFO( "cui", "SvxParaAlignTabPage::TextDirectionHdl_Impl(): other directions not supported" );
         }
     }
 

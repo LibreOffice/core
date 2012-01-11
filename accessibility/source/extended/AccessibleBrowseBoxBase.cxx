@@ -469,7 +469,7 @@ Rectangle AccessibleBrowseBoxBase::getBoundingBox()
     Rectangle aRect = implGetBoundingBox();
     if ( 0 == aRect.Left() && 0 == aRect.Top() && 0 == aRect.Right() && 0 == aRect.Bottom() )
     {
-        DBG_ERRORFILE( "shit" );
+        SAL_INFO( "accessibility", "rectangle doesn't exist" );
     }
     return aRect;
 }
@@ -483,7 +483,7 @@ Rectangle AccessibleBrowseBoxBase::getBoundingBoxOnScreen()
     Rectangle aRect = implGetBoundingBoxOnScreen();
     if ( 0 == aRect.Left() && 0 == aRect.Top() && 0 == aRect.Right() && 0 == aRect.Bottom() )
     {
-        DBG_ERRORFILE( "shit" );
+        SAL_INFO( "accessibility", "rectangle doesn't exist" );
     }
     return aRect;
 }

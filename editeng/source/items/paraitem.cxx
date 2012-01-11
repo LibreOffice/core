@@ -601,7 +601,7 @@ SfxItemPresentation SvxWidowsItem::GetPresentation
 
         default:
         {
-            DBG_ERRORFILE( "SvxWidowsItem::GetPresentation(): unknown SfxItemPresentation" );
+            SAL_INFO( "editeng", "SvxWidowsItem::GetPresentation(): unknown SfxItemPresentation" );
         }
     }
 
@@ -673,7 +673,7 @@ SfxItemPresentation SvxOrphansItem::GetPresentation
 
         default:
         {
-            DBG_ERRORFILE( "SvxOrphansItem::GetPresentation(): unknown SfxItemPresentation" );
+            SAL_INFO( "editeng", "SvxOrphansItem::GetPresentation(): unknown SfxItemPresentation" );
         }
     }
 

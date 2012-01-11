@@ -773,7 +773,7 @@ sal_Bool SvHeaderTabListBox::IsCellCheckBox( long _nRow, sal_uInt16 _nColumn, Tr
         }
         else
         {
-            DBG_ERRORFILE( "SvHeaderTabListBox::IsCellCheckBox(): column out of range" );
+            SAL_INFO( "svtools", "SvHeaderTabListBox::IsCellCheckBox(): column out of range" );
         }
     }
     return bRet;

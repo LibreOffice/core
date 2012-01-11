@@ -57,7 +57,7 @@ const XColorEntry & SvxChartColorTable::operator[]( size_t _nIndex ) const
 {
     if ( _nIndex >= m_aColorEntries.size() )
     {
-        DBG_ERRORFILE( "SvxChartColorTable::[] invalid index" );
+        SAL_INFO( "cui", "SvxChartColorTable::[] invalid index" );
         return m_aColorEntries[ 0 ];
     }
 
@@ -68,7 +68,7 @@ ColorData SvxChartColorTable::getColorData( size_t _nIndex ) const
 {
     if ( _nIndex >= m_aColorEntries.size() )
     {
-        DBG_ERRORFILE( "SvxChartColorTable::getColorData invalid index" );
+        SAL_INFO( "cui", "SvxChartColorTable::getColorData invalid index" );
         return COL_BLACK;
     }
 

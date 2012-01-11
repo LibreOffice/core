@@ -1637,7 +1637,7 @@ rtl::OUString getCurrentFactory_Impl( const Reference< XFrame >& _xFrame )
         }
         catch ( Exception& )
         {
-            DBG_ERRORFILE( "getActiveModule_Impl(): exception of XModuleManager::identify()" );
+            SAL_INFO( "cui", "getActiveModule_Impl(): exception of XModuleManager::identify()" );
         }
     }
 
@@ -2095,7 +2095,7 @@ rtl::OUString OfaTreeOptionsDialog::GetModuleIdentifier(
         }
         catch ( Exception& )
         {
-            DBG_ERRORFILE( "OfaTreeOptionsDialog::GetModuleIdentifier(): exception of XModuleManager::identify()" );
+            SAL_INFO( "cui", "OfaTreeOptionsDialog::GetModuleIdentifier(): exception of XModuleManager::identify()" );
         }
     }
     return sModule;
@@ -2474,11 +2474,11 @@ void ExtensionsTabPage::CreateDialogWithHandler()
     }
     catch ( ::com::sun::star::lang::IllegalArgumentException& )
     {
-        DBG_ERRORFILE( "ExtensionsTabPage::CreateDialogWithHandler(): illegal argument" );
+        SAL_INFO( "cui", "ExtensionsTabPage::CreateDialogWithHandler(): illegal argument" );
     }
     catch ( Exception& )
     {
-        DBG_ERRORFILE( "ExtensionsTabPage::CreateDialogWithHandler(): exception of XDialogProvider2::createDialogWithHandler()" );
+        SAL_INFO( "cui", "ExtensionsTabPage::CreateDialogWithHandler(): exception of XDialogProvider2::createDialogWithHandler()" );
     }
 }
 
@@ -2495,7 +2495,7 @@ sal_Bool ExtensionsTabPage::DispatchAction( const rtl::OUString& rAction )
         }
         catch ( Exception& )
         {
-            DBG_ERRORFILE( "ExtensionsTabPage::DispatchAction(): exception of XDialogEventHandler::callHandlerMethod()" );
+            SAL_INFO( "cui", "ExtensionsTabPage::DispatchAction(): exception of XDialogEventHandler::callHandlerMethod()" );
         }
     }
     return bRet;

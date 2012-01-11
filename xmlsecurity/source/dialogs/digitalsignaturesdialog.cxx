@@ -437,7 +437,7 @@ IMPL_LINK( DigitalSignaturesDialog, AddButtonHdl, Button*, EMPTYARG )
             uno::Reference< ::com::sun::star::security::XCertificate > xCert = aChooser.GetSelectedCertificate();
             if ( !xCert.is() )
             {
-                DBG_ERRORFILE( "no certificate selected" );
+                SAL_INFO( "xmloff", "no certificate selected" );
                 return -1;
             }
             rtl::OUString aCertSerial = xSerialNumberAdapter->toString( xCert->getSerialNumber() );

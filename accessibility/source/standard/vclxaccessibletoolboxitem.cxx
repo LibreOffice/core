@@ -116,7 +116,7 @@ VCLXAccessibleToolBoxItem::VCLXAccessibleToolBoxItem( ToolBox* _pToolBox, sal_In
 
         default:
         {
-            DBG_ERRORFILE( "unsupported toolbox itemtype" );
+            SAL_INFO( "accessibility", "unsupported toolbox itemtype" );
         }
     }
 }

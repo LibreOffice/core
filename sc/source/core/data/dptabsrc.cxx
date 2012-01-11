@@ -735,7 +735,7 @@ void ScDPSource::FilterCacheTableByPageDimensions()
 
     if (bPageFiltered)
     {
-        DBG_ERRORFILE("tried to apply page field filters several times");
+        SAL_INFO( "sc.core","tried to apply page field filters several times");
 
         pData->DisposeData();
         pData->CreateCacheTable();  // re-initialize the cache table

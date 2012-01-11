@@ -27,7 +27,6 @@
  ************************************************************************/
 
 
-#include <tools/debug.hxx>
 #include <tools/rc.h>
 
 #include <svdata.hxx>
@@ -345,7 +344,7 @@ void ButtonDialog::RemoveButton( sal_uInt16 nId )
     }
 
     if (it == maItemList.end())
-        DBG_ERRORFILE( "ButtonDialog::RemoveButton(): ButtonId invalid" );
+        SAL_INFO( "vcl", "ButtonDialog::RemoveButton(): ButtonId invalid" );
 }
 
 void ButtonDialog::Clear()

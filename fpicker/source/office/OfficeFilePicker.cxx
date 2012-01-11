@@ -40,7 +40,6 @@
 #include <algorithm>
 #endif
 #include <tools/urlobj.hxx>
-#include <tools/debug.hxx>
 #include "svl/svstdarr.hxx"
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/ui/dialogs/FilePickerEvent.hpp>
@@ -350,7 +349,7 @@ void SvtFilePicker::notify( sal_Int16 _nEventId, sal_Int16 _nControlId )
             m_xListener->dialogSizeChanged();
             break;
         default:
-            DBG_ERRORFILE( "SvtFilePicker::notify(): Unknown event id!" );
+            SAL_INFO( "fpicker", "SvtFilePicker::notify(): Unknown event id!" );
             break;
     }
 }

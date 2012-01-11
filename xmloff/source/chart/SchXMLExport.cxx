@@ -2009,7 +2009,7 @@ void SchXMLExportHelper_Impl::exportPlotArea(
                     }
                     catch( const beans::UnknownPropertyException & )
                     {
-                        DBG_ERRORFILE( "Properties missing" );
+                        SAL_INFO( "vcl", "Properties missing" );
                     }
                 }
             }

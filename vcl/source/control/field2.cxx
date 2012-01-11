@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-#include <tools/debug.hxx>
-
 #include <tools/rc.h>
 #include <vcl/svapp.hxx>
 #include <vcl/sound.hxx>
@@ -170,7 +168,7 @@ static int ImplIsPatternChar( xub_Unicode cChar, sal_Char cEditMask )
     }
     catch ( ::com::sun::star::uno::Exception& )
     {
-        DBG_ERRORFILE( "ImplIsPatternChar: Exception caught!" );
+        SAL_INFO( "vcl", "ImplIsPatternChar: Exception caught!" );
         return sal_False;
     }
 

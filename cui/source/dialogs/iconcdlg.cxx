@@ -875,7 +875,7 @@ const sal_uInt16* IconChoiceDialog::GetInputRanges( const SfxItemPool& rPool )
 {
     if ( pSet )
     {
-        DBG_ERRORFILE( "Set bereits vorhanden!" );
+        SAL_INFO( "cui", "Set does already exist!" );
         return pSet->GetRanges();
     }
 
@@ -1041,7 +1041,7 @@ void IconChoiceDialog::Start_Impl()
 
 const SfxItemSet* IconChoiceDialog::GetRefreshedSet()
 {
-    DBG_ERRORFILE( "GetRefreshedSet nicht implementiert" );
+    SAL_INFO( "cui", "GetRefreshedSet not implemented" );
     return 0;
 }
 

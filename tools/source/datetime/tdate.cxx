@@ -33,8 +33,8 @@
 #include <time.h>
 #endif
 
-#include <tools/debug.hxx>
 #include <tools/date.hxx>
+#include <sal/log.hxx>
 #ifdef  MACOSX
 extern "C" {
 struct tm *localtime_r(const time_t *timep, struct tm *buffer);
@@ -233,7 +233,7 @@ sal_uInt16 Date::GetWeekOfYear( DayOfWeek eStartDay,
 
     if (nMinimumNumberOfDaysInWeek < 1 || 7 < nMinimumNumberOfDaysInWeek)
     {
-        DBG_ERRORFILE("Date::GetWeekOfYear: invalid nMinimumNumberOfDaysInWeek");
+        SAL_INFO( "tools", "Date::GetWeekOfYear: invalid nMinimumNumberOfDaysInWeek" );
         nMinimumNumberOfDaysInWeek = 4;
     }
 

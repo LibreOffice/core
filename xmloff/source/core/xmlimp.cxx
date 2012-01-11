@@ -1388,7 +1388,7 @@ ProgressBarHelper*  SvXMLImport::GetProgressBarHelper()
                     if (aAny.getValueType() == getBooleanCppuType())
                         mpProgressBarHelper->SetRepeat(::cppu::any2bool(aAny));
                     else {
-                        DBG_ERRORFILE("why is it no boolean?");
+                        SAL_INFO( "xmloff","why is it no boolean?");
                     }
                 }
             }

@@ -268,7 +268,7 @@ IMPL_LINK( MacroSecurityTrustedSourcesTP, AddLocPBHdl, void*, EMPTYARG )
     }
     catch( uno::Exception& )
     {
-        DBG_ERRORFILE( "MacroSecurityTrustedSourcesTP::AddLocPBHdl(): exception from folder picker" );
+        SAL_INFO( "xmlsecurity", "MacroSecurityTrustedSourcesTP::AddLocPBHdl(): exception from folder picker" );
     }
 
     return 0;

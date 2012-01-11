@@ -2728,9 +2728,7 @@ void Ruler::SetUnit( FieldUnit eNewUnit )
                 mnUnitIndex = RULER_UNIT_LINE;
                 break;
             default:
-#ifdef DBG_UTIL
-                DBG_ERRORFILE( "Ruler::SetUnit() - Wrong Unit" );
-#endif
+                SAL_INFO( "svtools", "Ruler::SetUnit() - Wrong Unit" );
                 break;
         }
 

@@ -27,6 +27,7 @@
  ************************************************************************/
 
 
+#include <rtl/oustringostreaminserter.hxx>
 #include <rtl/strbuf.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/table.hxx>
@@ -214,17 +215,13 @@ void Calendar::ImplInit( WinBits nWinStyle )
             Application::GetAppLocaleDataWrapper().getLocale());
     if (maCalendarWrapper.getUniqueID() != aGregorian)
     {
-#ifdef DBG_UTIL
-        rtl::OStringBuffer aMsg( "Calendar::ImplInit: No ``gregorian'' calendar available for locale ``");
-        lang::Locale aLoc( Application::GetAppLocaleDataWrapper().getLocale());
-        aMsg.append(rtl::OUStringToOString(aLoc.Language,
-            RTL_TEXTENCODING_UTF8));
-        aMsg.append('-');
-        aMsg.append(rtl::OUStringToOString(aLoc.Country,
-            RTL_TEXTENCODING_UTF8));
-        aMsg.append("'' and other calendars aren't supported. Using en-US fallback.");
-        DBG_ERRORFILE(aMsg.getStr());
+#ifdef SAL_LOG_INFO
+        lang::Locale aLoc( Application::GetAppLocaleDataWrapper().getLocale() );
 #endif
+        SAL_INFO( "svtools", "Calendar::ImplInit: No ``gregorian'' calendar available for locale ``"
+            << aLoc.Language << "-" << aLoc.Country
+            << "'' and other calendars aren't supported. Using en-US fallback." );
+
         /* If we ever wanted to support other calendars than Gregorian a lot of
          * rewrite would be necessary to internally replace use of class Date
          * with proper class CalendarWrapper methods, get rid of fixed 12
@@ -330,7 +327,7 @@ DayOfWeek Calendar::ImplGetWeekStart() const
             eDay = SATURDAY;
             break;
         default:
-            DBG_ERRORFILE("Calendar::ImplGetWeekStart: broken i18n Gregorian calendar (getFirstDayOfWeek())");
+            SAL_INFO( "svtools", "Calendar::ImplGetWeekStart: broken i18n Gregorian calendar (getFirstDayOfWeek())");
             eDay = SUNDAY;
     }
     return eDay;

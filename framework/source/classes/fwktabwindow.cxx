@@ -76,7 +76,7 @@ void FwkTabControl::BroadcastEvent( sal_uLong nEvent )
         ImplCallEventListeners( nEvent, (void*)(sal_uIntPtr)GetCurPageId() );
     else
     {
-        DBG_ERRORFILE( "FwkTabControl::BroadcastEvent(): illegal event" );
+        SAL_INFO( "sfx2", "FwkTabControl::BroadcastEvent(): illegal event" );
     }
 }
 
@@ -135,11 +135,11 @@ void FwkTabPage::CreateDialog()
     }
     catch ( const lang::IllegalArgumentException& )
     {
-        DBG_ERRORFILE( "FwkTabPage::CreateDialog(): illegal argument" );
+        SAL_INFO( "sfx2", "FwkTabPage::CreateDialog(): illegal argument" );
     }
     catch ( const uno::Exception& )
     {
-        DBG_ERRORFILE( "FwkTabPage::CreateDialog(): exception of XDialogProvider2::createContainerWindow()" );
+        SAL_INFO( "sfx2", "FwkTabPage::CreateDialog(): exception of XDialogProvider2::createContainerWindow()" );
     }
 }
 

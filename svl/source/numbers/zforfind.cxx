@@ -892,7 +892,7 @@ void ImpSvNumberInputScan::GetTimeRef(
     else
     {
         nHour = 0;
-        DBG_ERRORFILE( "ImpSvNumberInputScan::GetTimeRef: bad number index");
+        SAL_INFO( "svl", "ImpSvNumberInputScan::GetTimeRef: bad number index");
     }
     if (nDecPos == 2 && nAnz == 2)                  // 45.5
         nMinute = 0;
@@ -3148,7 +3148,7 @@ bool ImpSvNumberInputScan::IsNumberFormat(
             break;
 
             default:
-                DBG_ERRORFILE( "Some number recognized but what's it?" );
+                SAL_INFO( "svl", "Some number recognized but what's it?" );
                 fOutNumber = 0.0;
                 break;
         }

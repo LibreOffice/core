@@ -47,7 +47,7 @@ ScLookupCache::QueryCriteria::QueryCriteria( const ScQueryEntry& rEntry ) :
             break;
         default:
             meOp = UNKNOWN;
-            DBG_ERRORFILE( "ScLookupCache::QueryCriteria not prepared for this ScQueryOp");
+            SAL_INFO( "sc.core", "ScLookupCache::QueryCriteria not prepared for this ScQueryOp");
     }
 
     const ScQueryEntry::Item& rItem = rEntry.GetQueryItem();

@@ -187,12 +187,12 @@ sal_Bool KillFile_Impl( const String& rURL )
     }
     catch( ::com::sun::star::ucb::CommandAbortedException& )
     {
-        DBG_ERRORFILE( "KillFile: CommandAbortedException" );
+        SAL_INFO( "cui", "KillFile: CommandAbortedException" );
         bRet = sal_False;
     }
     catch( ... )
     {
-        DBG_ERRORFILE( "KillFile: Any other exception" );
+        SAL_INFO( "cui", "KillFile: Any other exception" );
         bRet = sal_False;
     }
 

@@ -27,7 +27,6 @@
  ************************************************************************/
 
 #include <osl/mutex.hxx>
-#include <tools/debug.hxx>
 #include <tools/rcid.h>
 #include <tools/wintypes.hxx>
 #include <vcl/msgbox.hxx>
@@ -119,7 +118,7 @@ static sal_uInt16 aWndFunc(
 
         default:
         {
-            DBG_ERRORFILE( "no MessBox type");
+            SAL_INFO( "svtools", "no MessBox type");
             pBox = NULL;
             return ERRCODE_BUTTON_OK;
         }
@@ -144,7 +143,7 @@ static sal_uInt16 aWndFunc(
             nRet = ERRCODE_BUTTON_NO;
             break;
         default:
-            DBG_ERRORFILE( "Unknown MessBox return value" );
+            SAL_INFO( "svtools", "Unknown MessBox return value" );
             break;
     }
     delete pBox;
@@ -459,7 +458,7 @@ sal_Bool SfxErrorContext::GetString(sal_uLong nErrId, String &rStr)
         }
         else
         {
-            DBG_ERRORFILE( "ErrorContext cannot find the resource" );
+            SAL_INFO( "svtools", "ErrorContext cannot find the resource" );
             bRet = false;
         }
 

@@ -512,7 +512,7 @@ bool SvxSearchItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMembe
         }
 
         default:
-            DBG_ERRORFILE( "SvxSearchItem::QueryValue(): Unknown MemberId" );
+            SAL_INFO( "svl", "SvxSearchItem::QueryValue(): Unknown MemberId" );
             return false;
     }
 

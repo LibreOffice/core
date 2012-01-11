@@ -386,7 +386,7 @@ namespace svt
                         break;
 
                     case LISTBOX_FILTER:
-                        DBG_ERRORFILE( "Use the XFilterManager to access the filter listbox" );
+                        SAL_INFO( "fpicker", "Use the XFilterManager to access the filter listbox" );
                         break;
 
                     case LISTBOX_VERSION:
@@ -445,7 +445,7 @@ namespace svt
                         }
                         else
                         {
-                            DBG_ERRORFILE( "Use the XFilterManager to access the filter listbox" );
+                            SAL_INFO( "fpicker", "Use the XFilterManager to access the filter listbox" );
                         }
                         break;
 
@@ -464,7 +464,7 @@ namespace svt
                                 nPropertyId = PROPERTY_FLAG_LISTITEMS;
                                 break;
                             default:
-                                DBG_ERRORFILE( "OControlAccess::GetValue: invalid control action for the listbox!" );
+                                SAL_INFO( "fpicker", "OControlAccess::GetValue: invalid control action for the listbox!" );
                                 break;
                         }
                         break;
@@ -546,7 +546,7 @@ namespace svt
                 break;
 
             default:
-                DBG_ERRORFILE( "Wrong ControlAction for implDoListboxAction()" );
+                SAL_INFO( "fpicker", "Wrong ControlAction for implDoListboxAction()" );
         }
     }
 
