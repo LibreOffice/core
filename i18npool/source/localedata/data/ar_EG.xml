@@ -127,7 +127,6 @@
     </FormatElement>
     <FormatElement msgid="DateFormatskey19" default="false" type="medium" usage="DATE" formatindex="32">
       <FormatCode>[NatNum1]YY/MM/DD</FormatCode>
-      <DefaultName>ISO 8601</DefaultName>
     </FormatElement>
     <FormatElement msgid="DateFormatskey20" default="false" type="medium" usage="DATE" formatindex="33">
       <FormatCode>YYYY-MM-DD</FormatCode>
