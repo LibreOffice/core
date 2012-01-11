@@ -395,18 +395,6 @@ window, and you probably also want to have set the stdout and stderr
 of app processes to be redirected to logcat ("adb shell stop; adb
 shell setprop log.redirect-stdio true; adb shell start").
 
-Unfortunately you might notice that the command line passed to "adb
-shell am start" is too long (actually, not "command line" as such, but
-the length of the so-called "extra" arguments passed to the action, or
-something like that, see Android bug
-http://code.google.com/p/android/issues/detail?id=23351 , so you need
-to shorten it somehow... for instance by creating a symlink to
-/data/data/org.libreoffice.android.qa.sc in /system: "adb remount; adb
-shell ln -s /data/data/org.libreoffice.android.qa.sc /system/sc" and
-then use that shorter path /system/sc snippet in all places instead of
-the longer /data/data/org.libreoffice.android.qa.sc on the "adb shell
-am start" command line.
-
 To debug, do manually what "make run" would do, adding args "-e
 lo-main-delay 20" to the command line, and when the app has started,
 run ndk-gdb. Unfortunately the gdb in NDK r7 is broken, use the one in

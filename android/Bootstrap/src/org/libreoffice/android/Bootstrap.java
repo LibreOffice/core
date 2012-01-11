@@ -37,6 +37,9 @@ import android.util.Log;
 
 import fi.iki.tml.CommandLine;
 
+import java.io.File;
+import java.util.Scanner;
+
 // We override NativeActivity so that we can get at the intent of the
 // activity and its extra parameters, that we use to tell us what
 // actual LibreOffice "program" to run. I.e. something that on desktop
@@ -111,9 +114,22 @@ public class Bootstrap extends NativeActivity
         // Get "command line" to pass to the LO "program"
         String cmdLine = getIntent().getStringExtra("lo-main-cmdline");
 
-        if (cmdLine == null)
-            cmdLine = "/data/data/org.libreoffice.android/lib/libqa_sal_types.so";
+        if (cmdLine == null) {
+            String indirectFile = getIntent().getStringExtra("lo-main-indirect-cmdline");
 
+            if (indirectFile != null) {
+                try {
+                    // Somewhat stupid but short way to read a file into a string
+                    cmdLine = new Scanner(new File(indirectFile), "UTF-8").useDelimiter("\\A").next();
+                }
+                catch (java.io.FileNotFoundException e) {
+                    Log.i(TAG, String.format("Could not read %s: %s",indirectFile, e.toString()));
+                }
+            }
+
+            if (cmdLine == null)
+                cmdLine = "/data/data/org.libreoffice.android/lib/libqa_sal_types.so";
+        }
         // argv[0] will be replaced by android_main() in lo-bootstrap.c by the
         // pathname of the mainLibrary.
         cmdLine = "dummy-program-name " + cmdLine;
