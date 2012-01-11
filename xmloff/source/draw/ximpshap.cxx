@@ -3396,6 +3396,12 @@ rtl::OUString SdXMLFrameShapeContext::getGraphicURLFromImportContext(const SvXML
             if(xPropSet.is())
             {
                 xPropSet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("GraphicStreamURL"))) >>= aRetval;
+
+                if(!aRetval.getLength())
+                {
+                    // it maybe a link, try GraphicURL
+                    xPropSet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("GraphicURL"))) >>= aRetval;
+                }
             }
         }
         catch( uno::Exception& )
