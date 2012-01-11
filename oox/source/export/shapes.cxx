@@ -712,6 +712,9 @@ ShapeExport& ShapeExport::WriteCustomShape( Reference< XShape > xShape )
     Sequence< PropertyValue > aGeometrySeq;
     sal_Int32 nAdjustmentValuesIndex = -1;
 
+    sal_Bool bFlipH = false;
+    sal_Bool bFlipV = false;
+
     if( GETA( CustomShapeGeometry ) ) {
         DBG(printf("got custom shape geometry\n"));
         if( mAny >>= aGeometrySeq ) {
@@ -721,6 +724,11 @@ ShapeExport& ShapeExport::WriteCustomShape( Reference< XShape > xShape )
                 const PropertyValue& rProp = aGeometrySeq[ i ];
                 DBG(printf("geometry property: %s\n", USS( rProp.Name )));
 
+                if( rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "MirroredX" ) ))
+                    rProp.Value >>= bFlipH;
+
+                if( rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "MirroredY" ) ))
+                    rProp.Value >>= bFlipV;
                 if( rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "AdjustmentValues" ) ))
                     nAdjustmentValuesIndex = i;
                 else if( rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Handles" ) )) {
@@ -747,7 +755,7 @@ ShapeExport& ShapeExport::WriteCustomShape( Reference< XShape > xShape )
 
     // visual shape properties
     pFS->startElementNS( mnXmlNamespace, XML_spPr, FSEND );
-    WriteShapeTransformation( xShape, XML_a );
+    WriteShapeTransformation( xShape, XML_a, bFlipH, bFlipV );
     if( nAdjustmentValuesIndex != -1 )
     {
         sal_Int32 nAdjustmentsWhichNeedsToBeConverted = 0;
