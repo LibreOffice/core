@@ -960,7 +960,6 @@ OfaAutocorrReplacePage::OfaAutocorrReplacePage( Window* pParent,
     aDeleteReplacePB(this,CUI_RES(PB_DELETE_REPLACE )),
     sModify(CUI_RES(STR_MODIFY)),
     sNew(aNewReplacePB.GetText()),
-    pFormatText(0),
     eLang(eLastDialogLanguage),
     bHasSelectionText(sal_False),
     bFirstSelect(sal_True),
@@ -995,7 +994,6 @@ OfaAutocorrReplacePage::OfaAutocorrReplacePage( Window* pParent,
 
 OfaAutocorrReplacePage::~OfaAutocorrReplacePage()
 {
-    delete pFormatText;
     lcl_ClearTable(aDoubleStringTable);
     delete pCompareClass;
     delete pCharClass;
@@ -1187,12 +1185,7 @@ void OfaAutocorrReplacePage::RefillReplaceBox(sal_Bool bFromReset,
 
     aReplaceTLB.Clear();
     if(!bSWriter)
-    {
-        if(pFormatText)
-            pFormatText->DeleteAndDestroy(0, pFormatText->Count());
-        else
-            pFormatText = new SvStringsISortDtor();
-    }
+        aFormatText.clear();
 
     if(aDoubleStringTable.IsKeyValid(eLang))
     {
@@ -1213,9 +1206,7 @@ void OfaAutocorrReplacePage::RefillReplaceBox(sal_Bool bFromReset,
                     pEntry->SetUserData(pDouble->pUserData); // Das heisst: mit Formatinfo oder sogar mit Selektionstext
             }
             else
-            {
-                pFormatText->Insert(new String(pDouble->sShort));
-            }
+                aFormatText.insert(pDouble->sShort);
         }
     }
     else
@@ -1239,9 +1230,7 @@ void OfaAutocorrReplacePage::RefillReplaceBox(sal_Bool bFromReset,
                     pEntry->SetUserData(&aTextOnlyCB); // Das heisst: mit Formatinfo
             }
             else
-            {
-                pFormatText->Insert(new String(pWordPtr->GetShort()));
-            }
+                aFormatText.insert(pWordPtr->GetShort());
         }
         aNewReplacePB.Enable(sal_False);
         aDeleteReplacePB.Enable(sal_False);
@@ -1452,14 +1441,16 @@ IMPL_LINK(OfaAutocorrReplacePage, ModifyHdl, Edit*, pEdt)
                                 ( bHasSelectionText && bSWriter )) &&
                         ( !pFirstSel || rRepString !=
                                 aReplaceTLB.GetEntryText( pFirstSel, 1 ) );
-    if(bEnableNew && pFormatText)
+    if(bEnableNew)
     {
-        for(sal_uInt16 i = 0; i < pFormatText->Count(); i++)
-            if(*pFormatText->GetObject(i) == rShortTxt)
+        for(std::set<rtl::OUString>::iterator i = aFormatText.begin(); i != aFormatText.end(); ++i)
+        {
+            if((*i).equals(rShortTxt))
             {
                 bEnableNew = sal_False;
                 break;
             }
+        }
     }
     aNewReplacePB.Enable(bEnableNew);
 

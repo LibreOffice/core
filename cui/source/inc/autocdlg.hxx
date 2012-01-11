@@ -67,8 +67,6 @@ public:
 #include <svtools/svtabbx.hxx>
 #include <svx/simptabl.hxx>
 
-class SvStringsISortDtor;
-
 // class OfaACorrCheckListBox ------------------------------------------
 
 class OfaACorrCheckListBox : public SvxSimpleTable
@@ -240,7 +238,7 @@ private:
         String          sModify;
         String          sNew;
 
-        SvStringsISortDtor*     pFormatText;
+        std::set<rtl::OUString> aFormatText;
         DoubleStringTable       aDoubleStringTable;
         CollatorWrapper*        pCompareClass;
         CharClass*              pCharClass;
