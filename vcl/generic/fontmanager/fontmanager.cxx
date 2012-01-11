@@ -1253,7 +1253,7 @@ int PrintFontManager::getDirectoryAtom( const OString& rDirectory, bool bCreate 
 
 // -------------------------------------------------------------------------
 
-int PrintFontManager::addFontFile( const ::rtl::OString& rFileName, int /*nFaceNum*/ )
+int PrintFontManager::addFontFile( const ::rtl::OString& rFileName )
 {
     rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
     INetURLObject aPath( OStringToOUString( rFileName, aEncoding ), INET_PROT_FILE, INetURLObject::ENCODE_ALL );

@@ -390,7 +390,7 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
 public:
     static PrintFontManager& get(); // one instance only
 
-    int addFontFile( const rtl::OString& rFileName, int nFaceNum );
+    int addFontFile( const rtl::OString& rFileName );
 
     void initialize();
 

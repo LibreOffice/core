@@ -537,7 +537,7 @@ bool X11SalGraphics::AddTempDevFont( ImplDevFontList* pFontList,
     rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
     OString aOFileName( OUStringToOString( aUSystemPath, aEncoding ) );
     psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
-    int nFontId = rMgr.addFontFile( aOFileName, 0 );
+    int nFontId = rMgr.addFontFile( aOFileName );
     if( !nFontId )
         return false;
 
