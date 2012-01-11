@@ -110,6 +110,26 @@ constants EnhancedCustomShapeSegmentCommand
     /**
      */
     const short ARCANGLETO = 17;
+
+    /**
+       darken fill color
+     */
+    const short DARKEN = 18;
+
+    /**
+       darken fill color less
+     */
+    const short DARKENLESS = 19;
+
+    /**
+       lighten fill color
+     */
+    const short LIGHTEN = 20;
+
+    /**
+       lighten fill color less
+     */
+    const short LIGHTENLESS = 21;
 };
 
 //=============================================================================
