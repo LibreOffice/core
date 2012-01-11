@@ -537,40 +537,6 @@ sal_Int32 BufferNode::indexOfChild(const BufferNode* pChild) const
     return nIndex;
 }
 
-const BufferNode* BufferNode::childAt(sal_Int32 nIndex) const
-/****** BufferNode/childAt ***************************************************
- *
- *   NAME
- *  childAt -- retrieves the child BufferNode at specific possition.
- *
- *   SYNOPSIS
- *  child = childAt(nIndex);
- *
- *   FUNCTION
- *  see NAME
- *
- *   INPUTS
- *  nIndex - the index of the child BufferNode to be retrieved
- *
- *   RESULT
- *  child - the child BufferNode at index position, or NULL if the index
- *          is out of the range of children.
- *
- *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
- ******************************************************************************/
-{
-    BufferNode* rc = NULL;
-
-    if (nIndex < ((sal_Int32)m_vChildren.size()) && nIndex >= 0)
-    {
-        rc = (BufferNode*)m_vChildren[nIndex];
-    }
-
-    return (const BufferNode*)rc;
-}
-
 const BufferNode* BufferNode::getParent() const
 {
     return m_pParent;

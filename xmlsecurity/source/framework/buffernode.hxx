@@ -114,7 +114,6 @@ public:
     void addChild(const BufferNode* pChild);
     void removeChild(const BufferNode* pChild);
     sal_Int32 indexOfChild(const BufferNode* pChild) const;
-    const BufferNode* childAt(sal_Int32 nIndex) const;
     const BufferNode* getParent() const;
     void setParent(const BufferNode* pParent);
     const BufferNode* getNextSibling() const;

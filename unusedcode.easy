@@ -1,7 +1,6 @@
 AtomDocument::AtomDocument(AtomPubSession*, std::basic_string<char, std::char_traits<char>, std::allocator<char> >)
 AtomFolder::AtomFolder(AtomPubSession*, std::basic_string<char, std::char_traits<char>, std::allocator<char> >)
 AtomPubSession::getCollectionUrl(Collection::Type)
-BufferNode::childAt(int) const
 ByteString::Assign(char const*, unsigned short)
 ByteString::Assign(char)
 ByteString::ByteString(char const*, unsigned short)
