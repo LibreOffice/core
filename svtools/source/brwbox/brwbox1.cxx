@@ -307,9 +307,9 @@ void BrowseBox::InsertDataColumn( sal_uInt16 nItemId, const XubString& rText,
 
     if ( getDataWindow()->pHeaderBar )
     {
-        // Handlecolumn nicht in der Headerbar
+        // Handle column not in the header bar
         sal_uInt16 nHeaderPos = nPos;
-        if (nHeaderPos != HEADERBAR_APPEND && !GetColumnId(0))
+        if (nHeaderPos != HEADERBAR_APPEND && GetColumnId(0) == HandleColumnId )
             nHeaderPos--;
         getDataWindow()->pHeaderBar->InsertItem(
                 nItemId, rText, nWidth, nBits, nHeaderPos );
@@ -347,7 +347,7 @@ void BrowseBox::FreezeColumn( sal_uInt16 nItemId, sal_Bool bFreeze )
     DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 
     // never unfreeze the handle-column
-    if ( nItemId == 0 && !bFreeze )
+    if ( nItemId == HandleColumnId && !bFreeze )
         return;
 
     // get the position in the current array
@@ -424,12 +424,8 @@ void BrowseBox::FreezeColumn( sal_uInt16 nItemId, sal_Bool bFreeze )
 
 void BrowseBox::SetColumnPos( sal_uInt16 nColumnId, sal_uInt16 nPos )
 {
-    // never set pos of the handle-column
-    if ( nColumnId == 0 )
-        return;
-
-    // do not move handle column
-    if (nPos == 0 && !(*pCols)[ 0 ]->GetId())
+    // never set pos of the handle column
+    if ( nColumnId == HandleColumnId )
         return;
 
     // get the position in the current array
@@ -504,7 +500,7 @@ void BrowseBox::SetColumnPos( sal_uInt16 nColumnId, sal_uInt16 nPos )
         if ( getDataWindow()->pHeaderBar )
         {
             sal_uInt16 nNewPos = nPos;
-            if ( !GetColumnId(0) )
+            if ( GetColumnId(0) == HandleColumnId )
                 --nNewPos;
             getDataWindow()->pHeaderBar->MoveItem(nColumnId,nNewPos);
         }
@@ -550,7 +546,7 @@ void BrowseBox::SetColumnTitle( sal_uInt16 nItemId, const String& rTitle )
     DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 
     // never set title of the handle-column
-    if ( nItemId == 0 )
+    if ( nItemId == HandleColumnId )
         return;
 
     // get the position in the current array
@@ -2383,8 +2379,8 @@ void BrowseBox::SetMode( BrowserMode nMode )
     if ( pDataWin )
         pDataWin->Invalidate();
 
-    // kein Cursor auf Handle-Column
-    if ( nCurColId == 0 )
+    // no cursor on handle column
+    if ( nCurColId == HandleColumnId )
         nCurColId = GetColumnId( 1 );
 
     m_nCurrentMode = nMode;

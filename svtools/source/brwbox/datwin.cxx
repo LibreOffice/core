@@ -459,7 +459,7 @@ sal_Bool BrowserDataWin::ImplRowDividerHitTest( const BrowserMouseEvent& _rEvent
     if ( ! (  GetParent()->IsInteractiveRowHeightEnabled()
            && ( _rEvent.GetRow() >= 0 )
            && ( _rEvent.GetRow() < GetParent()->GetRowCount() )
-           && ( _rEvent.GetColumnId() == 0 )
+           && ( _rEvent.GetColumnId() == BrowseBox::HandleColumnId )
            )
        )
        return sal_False;

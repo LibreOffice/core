@@ -450,7 +450,7 @@ sal_uInt16 BrowseBox::GetCurrColumn() const
 // -----------------------------------------------------------------------------
 sal_Bool BrowseBox::HasRowHeader() const
 {
-    return ( GetColumnId( 0 ) == 0 ); // HandleColumn == RowHeader
+    return ( GetColumnId( 0 ) == HandleColumnId ); // HandleColumn == RowHeader
 }
 // -----------------------------------------------------------------------------
 sal_Bool BrowseBox::IsCellFocusable() const

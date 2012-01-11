@@ -97,7 +97,7 @@ void BrowserHeader::EndDrag()
             sal_uInt16 nOldPos = _pBrowseBox->GetColumnPos(nId),
                 nNewPos = GetItemPos( nId );
 
-            if (!_pBrowseBox->GetColumnId(0))   // Handle
+            if (_pBrowseBox->GetColumnId(0) == BrowseBox::HandleColumnId)
                 nNewPos++;
 
             if (nOldPos != nNewPos)

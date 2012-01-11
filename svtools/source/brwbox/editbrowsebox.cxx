@@ -72,8 +72,6 @@ namespace svt
     using  com::sun::star::accessibility::XAccessible;
     //==================================================================
 
-    #define HANDLE_ID   0
-
     //==================================================================
     //= EditBrowserHeader
     //==================================================================
@@ -270,7 +268,7 @@ namespace svt
     void EditBrowseBox::PaintField( OutputDevice& rDev, const Rectangle& rRect,
                                     sal_uInt16 nColumnId ) const
     {
-        if (nColumnId == HANDLE_ID)
+        if (nColumnId == HandleColumnId)
         {
              if (bPaintStatus)
                 PaintStatusCell(rDev, rRect);
@@ -506,7 +504,7 @@ namespace svt
             LINK( this, EditBrowseBox, CellModifiedHdl ).Call( NULL );
         }
 
-        if (0 == rEvt.GetColumnId())
+        if (rEvt.GetColumnId() == HandleColumnId)
         {   // it was the handle column. save the current cell content if necessary
             // (clicking on the handle column results in selecting the current row)
             if (IsEditing() && aController->IsModified())
@@ -877,7 +875,7 @@ namespace svt
         if (GetSelectColumnCount() || (aMouseEvent.Is() && aMouseEvent->GetRow() < 0))
             nInfo |= COLSELECT;
         if ((GetSelection() != NULL && GetSelectRowCount()) ||
-            (aMouseEvent.Is() && aMouseEvent->GetColumnId() == HANDLE_ID))
+            (aMouseEvent.Is() && aMouseEvent->GetColumnId() == HandleColumnId))
             nInfo |= ROWSELECT;
         if (!nInfo && nNewRow != nEditRow)
             nInfo |= ROWCHANGE;
@@ -1027,7 +1025,7 @@ namespace svt
             return;
         }
 
-        if (nEditRow >= 0 && nEditCol > HANDLE_ID)
+        if (nEditRow >= 0 && nEditCol > HandleColumnId)
         {
             aController = GetController(nRow, nCol);
             if (aController.Is())
@@ -1247,7 +1245,7 @@ namespace svt
     {
         // when double clicking on the column, the optimum size will be calculated
         sal_uInt16 nColId = rEvt.GetColumnId();
-        if (nColId != HANDLE_ID)
+        if (nColId != HandleColumnId)
             SetColumnWidth(nColId, GetAutoColumnWidth(nColId));
     }
 

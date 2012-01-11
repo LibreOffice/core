@@ -416,8 +416,8 @@ void BrowseBox::DrawCursor()
     else
         bReallyHide |= ( GetCursorHideCount() > 0 );
 
-    // keine Cursor auf Handle-Column
-    if ( nCurColId == 0 )
+    // no cursor on handle column
+    if ( nCurColId == HandleColumnId )
         nCurColId = GetColumnId(1);
 
     // Cursor-Rechteck berechnen
@@ -1682,8 +1682,8 @@ void BrowseBox::MouseButtonDown( const BrowserMouseEvent& rEvt )
             // DataRow?
             if ( rEvt.GetRow() >= 0 )
             {
-                // Zeilenselektion?
-                if ( rEvt.GetColumnId() == 0 || !bColumnCursor )
+                // line selection?
+                if ( rEvt.GetColumnId() == HandleColumnId || !bColumnCursor )
                 {
                     if ( bMultiSelection )
                     {
@@ -1757,7 +1757,7 @@ void BrowseBox::MouseButtonDown( const BrowserMouseEvent& rEvt )
             }
             else
             {
-                if ( bMultiSelection && rEvt.GetColumnId() == 0 )
+                if ( bMultiSelection && rEvt.GetColumnId() == HandleColumnId )
                 {
                     // toggle all-selection
                     if ( uRow.pSel->GetSelectCount() > ( GetRowCount() / 2 ) )
@@ -1990,7 +1990,7 @@ void BrowseBox::Dispatch( sal_uInt16 nId )
             if ( bColumnCursor )
             {
                 sal_uInt16 nNewId = GetColumnId(ColCount() -1);
-                bDone = (nNewId != 0) && GoToColumnId( nNewId );
+                bDone = nNewId != HandleColumnId && GoToColumnId( nNewId );
                 break;
             }
         case BROWSER_CURSORENDOFFILE:
@@ -2001,11 +2001,13 @@ void BrowseBox::Dispatch( sal_uInt16 nId )
             {
                 sal_uInt16 nNewPos = GetColumnPos( GetCurColumnId() ) + 1;
                 sal_uInt16 nNewId = GetColumnId( nNewPos );
-                if (nNewId != 0)    // Am Zeilenende ?
+                if (nNewId != BROWSER_INVALIDID)    // At end of row ?
                     bDone = GoToColumnId( nNewId );
                 else
                 {
-                    sal_uInt16 nColId = ( GetColumnId(0) == 0 ) ? GetColumnId(1) : GetColumnId(0);
+                    sal_uInt16 nColId = GetColumnId(0);
+                    if ( nColId == BROWSER_INVALIDID || nColId == HandleColumnId )
+                        nColId = GetColumnId(1);
                     if ( GetRowCount() )
                         bDone = ( nCurRow < GetRowCount() - 1 ) && GoToRowColumnId( nCurRow + 1, nColId );
                     else if ( ColCount() )
@@ -2019,7 +2021,7 @@ void BrowseBox::Dispatch( sal_uInt16 nId )
             if ( bColumnCursor )
             {
                 sal_uInt16 nNewId = GetColumnId(1);
-                bDone = (nNewId != 0) && GoToColumnId( nNewId );
+                bDone = (nNewId != HandleColumnId) && GoToColumnId( nNewId );
                 break;
             }
         case BROWSER_CURSORTOPOFFILE:
@@ -2030,7 +2032,7 @@ void BrowseBox::Dispatch( sal_uInt16 nId )
             {
                 sal_uInt16 nNewPos = GetColumnPos( GetCurColumnId() ) - 1;
                 sal_uInt16 nNewId = GetColumnId( nNewPos );
-                if (nNewId != 0)
+                if (nNewId != HandleColumnId)
                     bDone = GoToColumnId( nNewId );
                 else
                 {
