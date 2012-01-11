@@ -847,7 +847,7 @@ GlyphSet::PSUploadFont (osl::File& rOutFile, PrinterGfx &rGfx, bool bAllowType42
     TrueTypeFont *pTTFont;
     OString aTTFileName (rGfx.GetFontMgr().getFontFileSysPath(mnFontID));
     int nFace = rGfx.GetFontMgr().getFontFaceNumber(mnFontID);
-    sal_Int32 nSuccess = OpenTTFontFile(aTTFileName.getStr(), nFace < 0 ? 0 : nFace, &pTTFont);
+    sal_Int32 nSuccess = OpenTTFontFile(aTTFileName.getStr(), nFace, &pTTFont);
     if (nSuccess != SF_OK)
         return sal_False;
     FILE* pTmpFile = tmpfile();

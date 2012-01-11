@@ -551,8 +551,6 @@ bool X11SalGraphics::AddTempDevFont( ImplDevFontList* pFontList,
     aDFA.mnQuality += 5800;
 
     int nFaceNum = rMgr.getFontFaceNumber( aInfo.m_nID );
-    if( nFaceNum < 0 )
-        nFaceNum = 0;
 
     GlyphCache& rGC = X11GlyphCache::GetInstance();
     const rtl::OString& rFileName = rMgr.getFontFileSysPath( aInfo.m_nID );
@@ -587,8 +585,6 @@ void X11SalGraphics::GetDevFontList( ImplDevFontList *pList )
 
         // normalize face number to the GlyphCache
         int nFaceNum = rMgr.getFontFaceNumber( aInfo.m_nID );
-        if( nFaceNum < 0 )
-            nFaceNum = 0;
 
         // for fonts where extra kerning info can be provided on demand
         // an ExtraKernInfo object is supplied

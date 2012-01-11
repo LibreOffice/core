@@ -342,8 +342,6 @@ void SvpSalGraphics::GetDevFontList( ImplDevFontList* pDevFontList )
 
         // normalize face number to the GlyphCache
         int nFaceNum = rMgr.getFontFaceNumber( aInfo.m_nID );
-        if( nFaceNum < 0 )
-            nFaceNum = 0;
 
         // for fonts where extra kerning info can be provided on demand
         // an ExtraKernInfo object is supplied

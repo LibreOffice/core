@@ -2761,10 +2761,12 @@ bool PrintFontManager::getFontBoundingBox( fontID nFontID, int& xMin, int& yMin,
 
 int PrintFontManager::getFontFaceNumber( fontID nFontID ) const
 {
-    int nRet = -1;
+    int nRet = 0;
     PrintFont* pFont = getFont( nFontID );
     if( pFont && pFont->m_eType == fonttype::TrueType )
         nRet = static_cast< TrueTypeFontFile* >(pFont)->m_nCollectionEntry;
+    if (nRet < 0)
+        nRet = 0;
     return nRet;
 }
 
