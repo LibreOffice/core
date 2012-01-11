@@ -160,6 +160,14 @@ namespace sdr
                     // #i101684# get the text range unrotated and absolute to the object range
                     const basegfx::B2DRange aTextRange(getCorrectedTextBoundRect());
 
+                    // Rotation before scaling
+                    if(!basegfx::fTools::equalZero(GetCustomShapeObj().GetExtraTextRotation(true)))
+                    {
+                        basegfx::B2DVector aTranslation(0.5, 0.5);
+                        aTextBoxMatrix.translate( -aTranslation.getX(), -aTranslation.getY() );
+                        aTextBoxMatrix.rotate((360.0 - GetCustomShapeObj().GetExtraTextRotation(true)) * F_PI180);
+                        aTextBoxMatrix.translate( aTranslation.getX(), aTranslation.getY() );
+                    }
                     // give text object a size
                     aTextBoxMatrix.scale(aTextRange.getWidth(), aTextRange.getHeight());
 
