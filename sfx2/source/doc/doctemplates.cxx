@@ -489,7 +489,7 @@ void SfxDocTplService_Impl::init_Impl()
     }
     else
     {
-        DBG_ERRORFILE( "init_Impl(): Could not create root" );
+        SAL_INFO( "sfx2", "init_Impl(): Could not create root" );
     }
 
     mbIsInitialized = bIsInitialized;
@@ -839,11 +839,11 @@ sal_Bool SfxDocTplService_Impl::createFolder( const OUString& rNewFolderURL,
         }
         catch( RuntimeException& )
         {
-            DBG_ERRORFILE( "createFolder(): got runtime exception" );
+            SAL_INFO( "sfx2", "createFolder(): got runtime exception" );
         }
         catch( Exception& )
         {
-            DBG_ERRORFILE( "createFolder(): Could not create new folder" );
+            SAL_INFO( "sfx2", "createFolder(): Could not create new folder" );
         }
     }
     else if ( bCreateParent )
@@ -1042,8 +1042,8 @@ sal_Bool SfxDocTplService_Impl::setProperty( Content& rContent,
                     xProperties->addProperty( rPropName, PropertyAttribute::MAYBEVOID, rPropValue );
                 }
                 catch( PropertyExistException& ) {}
-                catch( IllegalTypeException& ) { DBG_ERRORFILE( "IllegalTypeException" ); }
-                catch( IllegalArgumentException& ) { DBG_ERRORFILE( "IllegalArgumentException" ); }
+                catch( IllegalTypeException& ) { SAL_INFO( "sfx2", "IllegalTypeException" ); }
+                catch( IllegalArgumentException& ) { SAL_INFO( "sfx2", "IllegalArgumentException" ); }
             }
         }
 
@@ -2466,7 +2466,7 @@ void SfxDocTplService_Impl::addHierGroup( GroupList_Impl& rList,
     }
     catch ( ContentCreationException& )
     {
-        DBG_ERRORFILE( "addHierGroup: ContentCreationException" );
+        SAL_INFO( "sfx2", "addHierGroup: ContentCreationException" );
     }
     catch ( Exception& ) {}
 
@@ -2499,7 +2499,7 @@ void SfxDocTplService_Impl::addHierGroup( GroupList_Impl& rList,
                     sal_Bool bDocHasTitle = sal_False;
                     if( !getTitleFromURL( aTargetDir, aTmpTitle, aType, bDocHasTitle ) )
                     {
-                        DBG_ERRORFILE( "addHierGroup(): template of alien format" );
+                        SAL_INFO( "sfx2", "addHierGroup(): template of alien format" );
                         continue;
                     }
 

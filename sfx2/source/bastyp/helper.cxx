@@ -44,6 +44,7 @@
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <unotools/localedatawrapper.hxx>
+#include <rtl/oustringostreaminserter.hxx>
 #include <rtl/strbuf.hxx>
 
 #include <tools/debug.hxx>
@@ -107,11 +108,11 @@ uno::Sequence < OUString > SfxContentHelper::GetResultSet( const String& rURL )
         }
         catch( const ucb::CommandAbortedException& )
         {
-            DBG_ERRORFILE( "createCursor: CommandAbortedException" );
+            SAL_INFO( "sfx2", "createCursor: CommandAbortedException" );
         }
         catch( const uno::Exception& )
         {
-            DBG_ERRORFILE( "createCursor: Any other exception" );
+            SAL_INFO( "sfx2", "createCursor: Any other exception" );
         }
 
         if ( xResultSet.is() )
@@ -137,25 +138,17 @@ uno::Sequence < OUString > SfxContentHelper::GetResultSet( const String& rURL )
             }
             catch( const ucb::CommandAbortedException& )
             {
-                DBG_ERRORFILE( "XContentAccess::next(): CommandAbortedException" );
+                SAL_INFO( "sfx2", "XContentAccess::next(): CommandAbortedException" );
             }
             catch( const uno::Exception& )
             {
-                DBG_ERRORFILE( "XContentAccess::next(): Any other exception" );
+                SAL_INFO( "sfx2", "XContentAccess::next(): Any other exception" );
             }
         }
     }
     catch( const uno::Exception& e )
     {
-        (void) e;
-        DBG_ERRORFILE(
-            rtl::OUStringToOString(
-                (rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM(
-                        "GetResultSet: Any other exception: ")) +
-                 e.Message),
-                RTL_TEXTENCODING_UTF8).
-            getStr());
+        SAL_INFO( "sfx2", "GetResultSet: Any other exception: " << e.Message );
     }
 
     if ( pList )
@@ -306,7 +299,7 @@ sal_Bool SfxContentHelper::IsHelpErrorDocument( const String& rURL )
                       uno::Reference< ucb::XCommandEnvironment > () );
         if ( !( aCnt.getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("IsErrorDocument")) ) >>= bRet ) )
         {
-            DBG_ERRORFILE( "Property 'IsErrorDocument' is missing" );
+            SAL_INFO( "sfx2", "Property 'IsErrorDocument' is missing" );
         }
     }
     catch( const uno::Exception& )
@@ -331,11 +324,11 @@ sal_uIntPtr SfxContentHelper::GetSize( const String& rContent )
     }
     catch( const ucb::CommandAbortedException& )
     {
-        DBG_ERRORFILE( "CommandAbortedException" );
+        SAL_INFO( "sfx2", "CommandAbortedException" );
     }
     catch( const uno::Exception& )
     {
-        DBG_ERRORFILE( "Any other exception" );
+        SAL_INFO( "sfx2", "Any other exception" );
     }
     nSize = (sal_uInt32)nTemp;
     return nSize;

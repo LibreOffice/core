@@ -99,6 +99,7 @@
 #include "filedlgimpl.hxx"
 #include <helpid.hrc>
 #include <sfxlocal.hrc>
+#include <rtl/oustringostreaminserter.hxx>
 #include <rtl/strbuf.hxx>
 
 //-----------------------------------------------------------------------------
@@ -273,7 +274,7 @@ OUString FileDialogHelper_Impl::handleHelpRequested( const FilePickerEvent& aEve
             break;
 
         default:
-            DBG_ERRORFILE( "invalid element id" );
+            SAL_INFO( "sfx2", "invalid element id" );
     }
 
     OUString aHelpText;
@@ -510,7 +511,7 @@ void FileDialogHelper_Impl::updateExportButton()
             }
             catch( const IllegalArgumentException& )
             {
-                DBG_ERRORFILE( "FileDialogHelper_Impl::updateExportButton: caught an exception!" );
+                SAL_INFO( "sfx2", "FileDialogHelper_Impl::updateExportButton: caught an exception!" );
             }
         }
     }
@@ -620,7 +621,7 @@ void FileDialogHelper_Impl::updatePreviewState( sal_Bool _bUpdatePreviewWindow )
             }
             catch( const Exception& )
             {
-                DBG_ERRORFILE( "FileDialogHelper_Impl::updatePreviewState: caught an exception!" );
+                SAL_INFO( "sfx2", "FileDialogHelper_Impl::updatePreviewState: caught an exception!" );
             }
         }
     }
@@ -1047,7 +1048,7 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
                 break;
 
             default:
-                DBG_ERRORFILE( "FileDialogHelper::ctor with unknown type" );
+                SAL_INFO( "sfx2", "FileDialogHelper::ctor with unknown type" );
                 break;
         }
 
@@ -1187,7 +1188,7 @@ void SAL_CALL PickerThread_Impl::run()
     catch( const RuntimeException& )
     {
         SetReturnValue( ExecutableDialogResults::CANCEL );
-        DBG_ERRORFILE( "RuntimeException caught" );
+        SAL_INFO( "sfx2", "RuntimeException caught" );
     }
 }
 
@@ -1331,7 +1332,7 @@ sal_Int16 FileDialogHelper_Impl::implDoExecute()
         }
         catch( const Exception& )
         {
-            DBG_ERRORFILE( "FileDialogHelper_Impl::implDoExecute: caught an exception!" );
+            SAL_INFO( "sfx2", "FileDialogHelper_Impl::implDoExecute: caught an exception!" );
         }
     }
 
@@ -1360,7 +1361,7 @@ void FileDialogHelper_Impl::implStartExecute()
         }
         catch( const Exception& )
         {
-            DBG_ERRORFILE( "FileDialogHelper_Impl::implDoExecute: caught an exception!" );
+            SAL_INFO( "sfx2", "FileDialogHelper_Impl::implDoExecute: caught an exception!" );
         }
     }
 }
@@ -1756,7 +1757,7 @@ void FileDialogHelper_Impl::addFilters( const String& rFactory,
     }
     catch( const uno::Exception& )
     {
-        DBG_ERRORFILE( "Could not get filters from the configuration!" );
+        SAL_INFO( "sfx2", "Could not get filters from the configuration!" );
     }
 
     TSortedFilterList         aIter   (xResult);
@@ -1796,11 +1797,7 @@ void FileDialogHelper_Impl::addFilter( const OUString& rFilterName,
     }
     catch( const IllegalArgumentException& )
     {
-#ifdef DBG_UTIL
-        rtl::OStringBuffer aMsg(RTL_CONSTASCII_STRINGPARAM("Could not append Filter"));
-        aMsg.append(rtl::OUStringToOString(rFilterName, RTL_TEXTENCODING_UTF8));
-        DBG_ERRORFILE( aMsg.getStr() );
-#endif
+        SAL_INFO( "sfx2", "Could not append Filter" << rFilterName );
     }
 }
 
@@ -1853,7 +1850,7 @@ void FileDialogHelper_Impl::addGraphicFilter()
     }
     catch( const IllegalArgumentException& )
     {
-        DBG_ERRORFILE( "Could not append Filter" );
+        SAL_INFO( "sfx2", "Could not append Filter" );
     }
 
     // Now add the filter
@@ -1882,7 +1879,7 @@ void FileDialogHelper_Impl::addGraphicFilter()
         }
         catch( const IllegalArgumentException& )
         {
-            DBG_ERRORFILE( "Could not append Filter" );
+            SAL_INFO( "sfx2", "Could not append Filter" );
         }
     }
 }

@@ -113,7 +113,7 @@ namespace
         }
         catch( const uno::Exception& )
         {
-            DBG_ERRORFILE( "Any other exception" );
+            SAL_INFO( "sfx2", "Any other exception" );
         }
 
         return bRet;

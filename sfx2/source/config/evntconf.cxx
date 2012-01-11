@@ -217,7 +217,7 @@ uno::Any CreateEventData_Impl( const SvxMacro *pMacro )
         }
         else
         {
-            DBG_ERRORFILE( "CreateEventData_Impl(): ScriptType not supported!");
+            SAL_INFO( "sfx2", "CreateEventData_Impl(): ScriptType not supported!");
         }
     }
     else
@@ -256,9 +256,9 @@ void PropagateEvent_Impl( SfxObjectShell *pDoc, rtl::OUString aEventName, const 
                 xEvents->replaceByName( aEventName, aEventData );
             }
             catch( const ::com::sun::star::lang::IllegalArgumentException& )
-            { DBG_ERRORFILE( "PropagateEvents_Impl: caught IllegalArgumentException" ); }
+            { SAL_INFO( "sfx2", "PropagateEvents_Impl: caught IllegalArgumentException" ); }
             catch( const ::com::sun::star::container::NoSuchElementException& )
-            { DBG_ERRORFILE( "PropagateEvents_Impl: caught NoSuchElementException" ); }
+            { SAL_INFO( "sfx2", "PropagateEvents_Impl: caught NoSuchElementException" ); }
         }
         else {
             DBG_WARNING( "PropagateEvents_Impl: Got unkown event" );

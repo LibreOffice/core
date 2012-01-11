@@ -451,13 +451,13 @@ void SfxDocumentInfoItem::UpdateDocumentInfo(
             }
             catch ( Exception& )
             {
-                DBG_ERRORFILE( "SfxDocumentInfoItem::updateDocumentInfo(): exception while adding custom properties" );
+                SAL_INFO( "sfx2", "SfxDocumentInfoItem::updateDocumentInfo(): exception while adding custom properties" );
             }
         }
     }
     catch ( Exception& )
     {
-        DBG_ERRORFILE( "SfxDocumentInfoItem::updateDocumentInfo(): exception while removing custom properties" );
+        SAL_INFO( "sfx2", "SfxDocumentInfoItem::updateDocumentInfo(): exception while removing custom properties" );
     }
 }
 
@@ -696,7 +696,7 @@ sal_Bool SfxDocumentDescPage::FillItemSet(SfxItemSet &rSet)
 
     if ( !pInfo )
     {
-        DBG_ERRORFILE( "SfxDocumentDescPage::FillItemSet(): no item found" );
+        SAL_INFO( "sfx2", "SfxDocumentDescPage::FillItemSet(): no item found" );
         return sal_False;
     }
 
@@ -1413,7 +1413,7 @@ sal_Bool SfxInternetPage::FillItemSet( SfxItemSet& rSet )
 
     if ( !pInfo )
     {
-        DBG_ERRORFILE( "SfxInternetPage::FillItemSet(): no item found" );
+        SAL_INFO( "sfx2", "SfxInternetPage::FillItemSet(): no item found" );
         return sal_False;
     }
 

@@ -614,7 +614,7 @@ IMPL_LINK( SvFileObject, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg )
     }
     else
     {
-        DBG_ERRORFILE( "SvFileObject::DialogClosedHdl(): wrong file type" );
+        SAL_INFO( "sfx2", "SvFileObject::DialogClosedHdl(): wrong file type" );
     }
 
     if ( aEndEditLink.IsSet() )

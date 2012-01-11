@@ -411,7 +411,7 @@ FieldUnit SfxModule::GetCurrentFieldUnit()
             eUnit = (FieldUnit)( (SfxUInt16Item*)pItem )->GetValue();
     }
     else
-        DBG_ERRORFILE( "GetModuleFieldUnit(): no module found" );
+        SAL_INFO( "sfx2", "GetModuleFieldUnit(): no module found" );
     return eUnit;
 }
 

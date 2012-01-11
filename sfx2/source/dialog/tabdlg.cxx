@@ -989,7 +989,7 @@ const SfxItemSet* SfxTabDialog::GetRefreshedSet()
 */
 
 {
-    DBG_ERRORFILE( "GetRefreshedSet not implemented" );
+    SAL_INFO ( "sfx2", "GetRefreshedSet not implemented" );
     return 0;
 }
 
@@ -1395,7 +1395,7 @@ const sal_uInt16* SfxTabDialog::GetInputRanges( const SfxItemPool& rPool )
 {
     if ( pSet )
     {
-        DBG_ERRORFILE( "Set already exists!" );
+        SAL_INFO( "sfx2", "Set already exists!" );
         return pSet->GetRanges();
     }
 

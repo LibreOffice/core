@@ -202,7 +202,7 @@ sal_Bool GetHelpAnchor_Impl( const String& _rURL, String& _rAnchor )
         }
         else
         {
-            DBG_ERRORFILE( "Property 'AnchorName' is missing" );
+            SAL_INFO( "sfx2", "Property 'AnchorName' is missing" );
         }
     }
     catch (const ::com::sun::star::uno::Exception&)
@@ -279,14 +279,14 @@ SfxHelpOptions_Impl::SfxHelpOptions_Impl()
                             while ( nIndex >= 0 );
                         }
                         else {
-                            DBG_ERRORFILE( "Wrong property type!" );
+                            SAL_INFO( "sfx2", "Wrong property type!" );
                         }
 
                         break;
                     }
 
                     default:
-                        DBG_ERRORFILE( "Wrong property!" );
+                        SAL_INFO( "sfx2", "Wrong property!" );
                         break;
                 }
             }
@@ -420,7 +420,7 @@ SfxHelp::~SfxHelp()
         sDefaultModule = DEFINE_CONST_UNICODE("sdatabase");
     else
     {
-        DBG_ERRORFILE( "getDefaultModule_Impl(): no module installed" );
+        SAL_INFO( "sfx2", "getDefaultModule_Impl(): no module installed" );
     }
     return sDefaultModule;
 }
@@ -448,7 +448,7 @@ SfxHelp::~SfxHelp()
         }
         catch (const Exception&)
         {
-            DBG_ERRORFILE( "SfxHelp::getCurrentModuleIdentifier_Impl(): exception of XModuleManager::identify()" );
+            SAL_INFO( "sfx2", "SfxHelp::getCurrentModuleIdentifier_Impl(): exception of XModuleManager::identify()" );
         }
     }
 
@@ -483,7 +483,7 @@ String SfxHelp::GetHelpModuleName_Impl()
         }
         catch (const Exception&)
         {
-            DBG_ERRORFILE( "SfxHelp::GetHelpModuleName_Impl(): exception of XNameAccess::getByName()" );
+            SAL_INFO( "sfx2", "SfxHelp::GetHelpModuleName_Impl(): exception of XNameAccess::getByName()" );
         }
     }
 
@@ -865,7 +865,7 @@ void SfxHelp::OpenHelpAgent( const rtl::OString& sHelpId )
             }
             catch (const Exception&)
             {
-                DBG_ERRORFILE( "OpenHelpAgent: caught an exception while executing the dispatch!" );
+                SAL_INFO( "sfx2", "OpenHelpAgent: caught an exception while executing the dispatch!" );
             }
     }
 }

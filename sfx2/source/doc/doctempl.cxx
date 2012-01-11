@@ -664,7 +664,7 @@ sal_Bool SfxDocumentTemplates::CopyOrMove
 
     if ( nSourceRegion == nTargetRegion )
     {
-        DBG_ERRORFILE( "Don't know, what to do!" );
+        SAL_INFO( "sfx2", "Don't know, what to do!" );
         return sal_False;
     }
 
@@ -1694,7 +1694,7 @@ const OUString& DocTempl_EntryData_Impl::GetTargetURL()
         }
         else
         {
-            DBG_ERRORFILE( "GetTargetURL(): Could not create hierarchy content!" );
+            SAL_INFO( "sfx2", "GetTargetURL(): Could not create hierarchy content!" );
         }
     }
 
@@ -1857,7 +1857,7 @@ const OUString& RegionData_Impl::GetTargetURL()
         }
         else
         {
-            DBG_ERRORFILE( "GetTargetURL(): Could not create hierarchy content!" );
+            SAL_INFO( "sfx2", "GetTargetURL(): Could not create hierarchy content!" );
         }
     }
 
@@ -2171,7 +2171,7 @@ void SfxDocTemplate_Impl::Rescan()
     }
     catch( const Exception& )
     {
-        DBG_ERRORFILE( "SfxDocTemplate_Impl::Rescan: caught an exception while doing the update!" );
+        SAL_INFO( "sfx2", "SfxDocTemplate_Impl::Rescan: caught an exception while doing the update!" );
     }
 }
 

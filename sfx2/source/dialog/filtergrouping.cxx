@@ -33,6 +33,7 @@
 #include <sfx2/docfac.hxx>
 #include "sfx2/sfxresid.hxx"
 #include <osl/thread.h>
+#include <rtl/oustringostreaminserter.hxx>
 #include <rtl/strbuf.hxx>
 #include <com/sun/star/ui/dialogs/XFilterGroupManager.hpp>
 #include <com/sun/star/beans/StringPair.hpp>
@@ -976,13 +977,7 @@ namespace sfx2
         }
         catch( const IllegalArgumentException& )
         {
-#ifdef DBG_UTIL
-            rtl::OStringBuffer aMsg(RTL_CONSTASCII_STRINGPARAM(
-                "Could not append DefaultFilter"));
-            aMsg.append(rtl::OUStringToOString(sUIName,
-                osl_getThreadTextEncoding()));
-            DBG_ERRORFILE(aMsg.getStr());
-#endif
+            SAL_INFO( "sfx2", "Could not append DefaultFilter" << sUIName );
         }
 
         for ( const SfxFilter* pFilter = _rFilterMatcher.First(); pFilter; pFilter = _rFilterMatcher.Next() )
@@ -1002,13 +997,7 @@ namespace sfx2
             }
             catch( const IllegalArgumentException& )
             {
-    #ifdef DBG_UTIL
-                rtl::OStringBuffer aMsg(RTL_CONSTASCII_STRINGPARAM(
-                    "Could not append Filter"));
-                aMsg.append(rtl::OUStringToOString(sUIName,
-                    osl_getThreadTextEncoding()));
-                DBG_ERRORFILE( aMsg.getStr() );
-    #endif
+                SAL_INFO( "sfx2", "Could not append Filter" << sUIName );
             }
         }
     }
@@ -1158,13 +1147,7 @@ namespace sfx2
                 }
                 catch( const IllegalArgumentException& )
                 {
-        #ifdef DBG_UTIL
-                    rtl::OStringBuffer aMsg(RTL_CONSTASCII_STRINGPARAM(
-                        "Could not append Filter"));
-                    aMsg.append(rtl::OUStringToOString(sUIName,
-                        osl_getThreadTextEncoding()));
-                    DBG_ERRORFILE( aMsg.getStr() );
-        #endif
+                    SAL_INFO( "sfx2", "Could not append Filter" << sUIName );
                 }
             }
 
@@ -1182,13 +1165,7 @@ namespace sfx2
                 }
                 catch( const IllegalArgumentException& )
                 {
-        #ifdef DBG_UTIL
-                    rtl::OStringBuffer aMsg(RTL_CONSTASCII_STRINGPARAM(
-                        "Could not append Filter"));
-                    aMsg.append(rtl::OUStringToOString(sUIName,
-                        osl_getThreadTextEncoding()));
-                    DBG_ERRORFILE( aMsg.getStr() );
-        #endif
+                    SAL_INFO( "sfx2", "Could not append Filter" << sUIName );
                 }
             }
         }
