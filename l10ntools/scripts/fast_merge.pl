@@ -89,11 +89,10 @@ while( hasLines() )
     }
     write_lines();
 }
-if( $#current+1 ne 0 )
+# write content of the last localize.sdf file
+if( $#buffer ge 0 )
 {
-    ( $path , $localize_file ) = make_paths();
-    add_to_buffer();
-    write_buffer( $path , $localize_file );
+    write_buffer( $last_path , $last_localize_file );
 }
 release_lock();
 exit( 0 );
@@ -248,15 +247,14 @@ sub make_paths
 
     return ( $path , $localizeFile );
 }
+
 sub write_lines
 {
     if( $first_run ){
-        add_to_buffer();
         my( $path , $localize_file ) = make_paths();
         $last_path = $path;
         $last_localize_file = $localize_file;
-        mkpath $path;
-        write_buffer( $path , $localize_file );
+        add_to_buffer();
         $first_run = '';
     }
     else
@@ -269,7 +267,6 @@ sub write_lines
         }
         else
         {
-            mkpath $path;
             write_buffer( $last_path , $last_localize_file );
             add_to_buffer();
             $last_path = $path;
@@ -277,6 +274,11 @@ sub write_lines
         }
     }
 }
+
+# Adds all lines that contain strings from one source file from every input file.
+# TODO: Would it not be better to add lines for all files from a directory (i.e., replace
+# "$afile eq $elem->file" by "$adir eq $elem->dir")? We could get rid of the delayed
+# writing then. But maybe there is a reason for doing it this way...
 sub add_to_buffer
 {
     my $plainline;
@@ -293,12 +295,15 @@ sub add_to_buffer
         } while ( !$elem->endoffile && $amodule eq $elem->module && $afile eq $elem->file );
     }
 }
+
+# Writes the buffer to currently selected localize.sdf file.
 sub write_buffer
 {
     my $path            = shift;
     my $localize_file   = shift;
     my $cnt             = $#buffer+1;
     print "Write to $path $cnt lines\n";
+    mkpath $path;
     open FILE , ">>$localize_file" or die "Can't open file '$localize_file'\n";
     foreach ( @buffer )
     {
