@@ -10422,11 +10422,8 @@ else
     echo > set_soenv.last
 fi
 
-AC_CONFIG_FILES([config_host.mk ooo.lst set_soenv bin/repo-list desktop/scripts/soffice.sh build_env])
+AC_CONFIG_FILES([config_host.mk ooo.lst set_soenv bin/repo-list build_env])
 AC_OUTPUT
-
-# make sure this is executable
-chmod +x desktop/scripts/soffice.sh
 
 # touch the config timestamp file set_soenv.stamp
 if test ! -f set_soenv.stamp; then

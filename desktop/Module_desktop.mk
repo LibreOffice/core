@@ -68,6 +68,11 @@ $(eval $(call gb_Module_add_targets,desktop,\
     Pagein_impress \
     Pagein_writer \
 ))
+ifneq ($(JITC_PROCESSOR_TYPE_EXPORT),)
+$(eval $(call gb_Module_add_targets,desktop,\
+    Package_soffice_sh \
+))
+endif
 endif
 
 ifeq ($(OS),WNT)
