@@ -55,14 +55,18 @@ $(eval $(call gb_Library_set_defs,vclplug_gtk,\
 ))
 $(eval $(call gb_Library_set_ldflags,vclplug_gtk,\
     $$(LDFLAGS) \
-    $(shell pkg-config --libs dbus-glib-1)\
+))
+$(eval $(call gb_Library_add_external_libs,vclplug_gtk,	\
+    $(shell pkg-config --libs dbus-glib-1)		\
 ))
 endif
 
-$(eval $(call gb_Library_set_ldflags,vclplug_gtk,\
-    $$(LDFLAGS) \
-    $$(GTK_LIBS) \
-    $$(GTHREAD_LIBS) \
+$(eval $(call gb_Library_set_ldflags,vclplug_gtk,	\
+    $$(LDFLAGS)						\
+    $(filter-out -l%,$(GTK_LIBS))			\
+))
+$(eval $(call gb_Library_add_external_libs,vclplug_gtk,	\
+    $(patsubst -l%,%, $(filter -l%, $(GTK_LIBS)))	\
 ))
 
 $(eval $(call gb_Library_add_linked_libs,vclplug_gtk,\
@@ -125,4 +129,5 @@ $(eval $(call gb_Library_add_linked_libs,vclplug_gtk,\
     pthread \
 ))
 endif
+
 # vim: set noet sw=4 ts=4:

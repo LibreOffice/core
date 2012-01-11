@@ -404,6 +404,7 @@ $(call gb_Helper_abbreviate_dirs_native,\
         @$${RESPONSEFILE} \
         --start-group $(foreach lib,$(LINKED_STATIC_LIBS),$(call gb_StaticLibrary_get_target,$(lib))) --end-group \
         --start-group $(patsubst %.dll,-l%,$(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_dllname,$(lib)))) --end-group \
+        --start-group $(patsubst %,-l%,$(EXTERNAL_LIBS)) --end-group \
         $(MINGW_CLIB_DIR)/crtend.o \
         -Map $(basename $(1)).map \
         -o $(1))

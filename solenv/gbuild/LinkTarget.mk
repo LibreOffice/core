@@ -248,7 +248,7 @@ $(call gb_Helper_abbreviate_dirs,\
         $(foreach object,$(3),$(call gb_CObject_get_dep_target,$(object))) \
         $(foreach object,$(4),$(call gb_CxxObject_get_dep_target,$(object))) \
         $(foreach object,$(5),$(call gb_ObjCxxObject_get_dep_target,$(object)))\
-         $(foreach object,$(6),$(call gb_GenCxxObject_get_dep_target,$(object)))\
+        $(foreach object,$(6),$(call gb_GenCxxObject_get_dep_target,$(object)))\
         ) && \
     cat $${RESPONSEFILE} /dev/null | xargs -n 200 cat > $(1)) && \
     rm -f $${RESPONSEFILE}
@@ -352,6 +352,7 @@ $(call gb_LinkTarget_get_target,$(1)) : INCLUDE_STL := $$(gb_LinkTarget_INCLUDE_
 $(call gb_LinkTarget_get_target,$(1)) : LDFLAGS := $$(gb_LinkTarget_LDFLAGS)
 $(call gb_LinkTarget_get_target,$(1)) : LINKED_LIBS := 
 $(call gb_LinkTarget_get_target,$(1)) : LINKED_STATIC_LIBS := 
+$(call gb_LinkTarget_get_target,$(1)) : EXTERNAL_LIBS := 
 $(call gb_LinkTarget_get_target,$(1)) : TARGETTYPE := 
 $(call gb_LinkTarget_get_headers_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : PCH_NAME :=
@@ -474,6 +475,40 @@ $(call gb_LinkTarget_get_external_headers_target,$(1)) : \
 $$(foreach lib,$(2),$$(call gb_StaticLibrary_get_headers_target,$$(lib)))
 
 endef
+
+#
+# Add external libs for linking.  External libaries are not built by any module.
+#
+# The list of libraries is used as is, ie it is not filtered with gb_Library_KNOWNLIBS.
+#
+# An error is signaled, when any of the library names does not look like
+# a base name, ie is prefixed by -l or lib or is folled by .lib or .so.
+# 
+# @param target
+# @param libraries
+#     A list of (base names of) libraries that will be added to the target
+#     local EXTERNAL_LIBS variable and eventually linked in when the
+#     target is made.
+#
+define gb_LinkTarget_add_external_libs
+
+# Make sure that all libraries are given as base names.
+ifneq (,$$(filter -l% lib% %.so %.lib, $(2)))
+$$(eval $$(call gb_Output_announce,ERROR: Please give only libary basenames to gb_LinkTarget_add_external_libs))
+$$(eval $$(call gb_Output_announce,ERROR:    (no prefixes -l% or lib%, no suffixes %.so or %.lib)))
+$$(eval $$(call gb_Output_announce,ERROR:    libraries given: $(2)))
+$$(eval $$(call gb_Output_announce,ERROR:    offending: $$(filter -l% lib% %.so %.lib, $(2))))
+$$(eval $$(call gb_Output_error,  ))
+endif
+
+$(call gb_LinkTarget_get_target,$(1)) : EXTERNAL_LIBS += $(2)
+
+$(call gb_LinkTarget_get_target,$(1)) : $$(foreach lib,$(2),$$(call gb_Library_get_target,$$(lib)))
+$(call gb_LinkTarget_get_external_headers_target,$(1)) : \
+$$(foreach lib,$(2),$$(call gb_Library_get_headers_target,$$(lib)))
+
+endef
+
 
 define gb_LinkTarget_add_cobject
 $(call gb_LinkTarget_get_target,$(1)) : COBJECTS += $(2)

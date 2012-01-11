@@ -149,8 +149,8 @@ $(eval $(call gb_Library_set_defs,vclplug_gen,\
 ifeq ($(XINERAMA_LINK),dynamic)
 $(eval $(call gb_Library_set_ldflags,vclplug_gen,\
     $$(LDFLAGS) \
-    -lXinerama \
 ))
+
 else
 $(eval $(call gb_Library_set_ldflags,vclplug_gen,\
     $$(LDFLAGS) \
@@ -197,6 +197,9 @@ $(eval $(call gb_Library_add_linked_libs,vclplug_gen,\
     dl \
     m \
     pthread \
+))
+$(eval $(call gb_Library_add_external_libs,vclplug_gen,	\
+    Xinerama Xrandr					\
 ))
 endif
 # vim: set noet sw=4 ts=4:
