@@ -46,10 +46,10 @@ extern "C" int main( int argc, char const * argv [] )
 #define SAL_DLLPREFIX ""
 #endif
     Module mod_starter(
-        OUSTR(SAL_DLLPREFIX"starter"SAL_DLLEXTENSION),
+        OUSTR(SAL_DLLPREFIX "starter" SAL_DLLEXTENSION),
         SAL_LOADMODULE_LAZY | SAL_LOADMODULE_GLOBAL );
     Module mod_thrower(
-        OUSTR(SAL_DLLPREFIX"thrower"SAL_DLLEXTENSION),
+        OUSTR(SAL_DLLPREFIX "thrower" SAL_DLLEXTENSION),
         SAL_LOADMODULE_LAZY | SAL_LOADMODULE_GLOBAL );
 
     typedef t_throws_exc (SAL_CALL * t_get_thrower)();
