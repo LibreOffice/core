@@ -30,15 +30,15 @@
 #include <svx/clipfmtitem.hxx>
 #include <com/sun/star/frame/status/ClipboardFormats.hpp>
 
-#include <vector>
+#include <boost/ptr_container/ptr_vector.hpp>
 
 struct SvxClipboardFmtItem_Impl
 {
-    SvStringsDtor aFmtNms;
+    boost::ptr_vector<boost::nullable<String>> aFmtNms;
     std::vector<sal_uIntPtr> aFmtIds;
     static String sEmptyStr;
 
-    SvxClipboardFmtItem_Impl() : aFmtNms( 8, 8 ) {}
+    SvxClipboardFmtItem_Impl() {}
     SvxClipboardFmtItem_Impl( const SvxClipboardFmtItem_Impl& );
 };
 
@@ -48,15 +48,9 @@ TYPEINIT1_FACTORY( SvxClipboardFmtItem, SfxPoolItem , new  SvxClipboardFmtItem(0
 
 SvxClipboardFmtItem_Impl::SvxClipboardFmtItem_Impl(
                             const SvxClipboardFmtItem_Impl& rCpy )
-    : aFmtIds(rCpy.aFmtIds)
+    : aFmtNms(rCpy.aFmtNms)
+    , aFmtIds(rCpy.aFmtIds)
 {
-    for( sal_uInt16 n = 0, nEnd = rCpy.aFmtNms.Count(); n < nEnd; ++n )
-    {
-        String* pStr = rCpy.aFmtNms[ n ];
-        if( pStr )
-            pStr = new String( *pStr );
-        aFmtNms.Insert( pStr, n );
-    }
 }
 
 SvxClipboardFmtItem::SvxClipboardFmtItem( sal_uInt16 nId )
@@ -101,7 +95,7 @@ bool SvxClipboardFmtItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_
         sal_uInt16 nCount = sal_uInt16( aClipFormats.Identifiers.getLength() );
 
         pImpl->aFmtIds.clear();
-        pImpl->aFmtNms.Remove( 0, pImpl->aFmtNms.Count() );
+        pImpl->aFmtNms.clear();
         for ( sal_uInt16 n=0; n < nCount; n++ )
             AddClipbrdFormat( sal_uIntPtr( aClipFormats.Identifiers[n] ), aClipFormats.Names[n], n );
 
@@ -113,24 +107,24 @@ bool SvxClipboardFmtItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_
 
 int SvxClipboardFmtItem::operator==( const SfxPoolItem& rComp ) const
 {
-    int nRet = 0;
     const SvxClipboardFmtItem& rCmp = (SvxClipboardFmtItem&)rComp;
-    if( rCmp.pImpl->aFmtNms.Count() == pImpl->aFmtNms.Count() )
+    if(rCmp.pImpl->aFmtNms.size() != pImpl->aFmtNms.size())
+        return 0;
+
+    int nRet = 1;
+    const String* pStr1, *pStr2;
+    for( sal_uInt16 n = 0, nEnd = rCmp.pImpl->aFmtNms.size(); n < nEnd; ++n )
     {
-        nRet = 1;
-        const String* pStr1, *pStr2;
-        for( sal_uInt16 n = 0, nEnd = rCmp.pImpl->aFmtNms.Count(); n < nEnd; ++n )
+        if( pImpl->aFmtIds[ n ] != rCmp.pImpl->aFmtIds[ n ] ||
+            ( (0 == ( pStr1 = &(pImpl->aFmtNms[n]) )) ^
+              (0 == ( pStr2 = &(rCmp.pImpl->aFmtNms[n]) ) )) ||
+            ( pStr1 && *pStr1 != *pStr2 ))
         {
-            if( pImpl->aFmtIds[ n ] != rCmp.pImpl->aFmtIds[ n ] ||
-                ( (0 == ( pStr1 = pImpl->aFmtNms[ n ] )) ^
-                  (0 == ( pStr2 = rCmp.pImpl->aFmtNms[ n ] ) )) ||
-                ( pStr1 && *pStr1 != *pStr2 ))
-            {
-                nRet = 0;
-                break;
-            }
+            nRet = 0;
+            break;
         }
     }
+
     return nRet;
 }
 
@@ -141,20 +135,20 @@ SfxPoolItem* SvxClipboardFmtItem::Clone( SfxItemPool * /*pPool*/ ) const
 
 void SvxClipboardFmtItem::AddClipbrdFormat( sal_uIntPtr nId, sal_uInt16 nPos )
 {
-    if( nPos > pImpl->aFmtNms.Count() )
-        nPos = pImpl->aFmtNms.Count();
-    String* pStr = 0;
-    pImpl->aFmtNms.Insert( pStr, nPos );
+    if( nPos > pImpl->aFmtNms.size() )
+        nPos = pImpl->aFmtNms.size();
+
+    pImpl->aFmtNms.insert(pImpl->aFmtNms.begin() + nPos, NULL);
     pImpl->aFmtIds.insert( pImpl->aFmtIds.begin()+nPos, nId );
 }
 
 void SvxClipboardFmtItem::AddClipbrdFormat( sal_uIntPtr nId, const String& rName,
                             sal_uInt16 nPos )
 {
-    if( nPos > pImpl->aFmtNms.Count() )
-        nPos = pImpl->aFmtNms.Count();
-    String* pStr = new String( rName );
-    pImpl->aFmtNms.Insert( pStr, nPos );
+    if( nPos > pImpl->aFmtNms.size() )
+        nPos = pImpl->aFmtNms.size();
+
+    pImpl->aFmtNms.insert(pImpl->aFmtNms.begin() + nPos, new String(rName));
     pImpl->aFmtIds.insert( pImpl->aFmtIds.begin()+nPos, nId );
 }
 
@@ -170,7 +164,7 @@ sal_uIntPtr SvxClipboardFmtItem::GetClipbrdFormatId( sal_uInt16 nPos ) const
 
 const String& SvxClipboardFmtItem::GetClipbrdFormatName( sal_uInt16 nPos ) const
 {
-    const String* pS = pImpl->aFmtNms[ nPos ];
+    const String* pS = &(pImpl->aFmtNms[nPos]);
     return pS ? *pS : SvxClipboardFmtItem_Impl::sEmptyStr;
 }
 
