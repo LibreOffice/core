@@ -1320,7 +1320,7 @@ void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(sal_uInt16 nFlags)
 
             SfxStyleSheetBase *pStyle = pStyleSheetPool->First();
             SvLBoxEntry* pEntry = aFmtLb.First();
-            SvStringsDtor aStrings;
+            std::vector<rtl::OUString> aStrings;
 
             comphelper::string::NaturalStringSorter aSorter(
                 ::comphelper::getProcessComponentContext(),
@@ -1329,21 +1329,19 @@ void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(sal_uInt16 nFlags)
             while( pStyle )
             {
                 //Bubblesort
-                sal_uInt16 nPos;
-                for( nPos = aStrings.Count() ; nPos &&
-                    aSorter.compare(*(aStrings[nPos-1]), pStyle->GetName()) > 0 ; nPos--)
+                size_t nPos;
+                for(nPos = aStrings.size(); nPos && aSorter.compare(aStrings[nPos-1], pStyle->GetName()) > 0; --nPos)
                 {};
-                aStrings.Insert( new String( pStyle->GetName() ), nPos );
+                aStrings.insert(aStrings.begin() + nPos, pStyle->GetName());
                 pStyle = pStyleSheetPool->Next();
             }
 
-
-            sal_uInt16 nCount = aStrings.Count();
-            sal_uInt16 nPos = 0;
-            while( nPos < nCount && pEntry &&
-                   *aStrings[ nPos ] == aFmtLb.GetEntryText( pEntry ) )
+            size_t nCount = aStrings.size();
+            size_t nPos = 0;
+            while(nPos < nCount && pEntry &&
+                  aStrings[nPos] == rtl::OUString(aFmtLb.GetEntryText(pEntry)))
             {
-                nPos++;
+                ++nPos;
                 pEntry = aFmtLb.Next( pEntry );
             }
 
@@ -1353,8 +1351,8 @@ void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(sal_uInt16 nFlags)
                 aFmtLb.SetUpdateMode(sal_False);
                 aFmtLb.Clear();
 
-                for(nPos = 0 ;  nPos < nCount ; ++nPos )
-                    aFmtLb.InsertEntry( *aStrings.GetObject( nPos ), 0, sal_False, nPos);
+                for(nPos = 0; nPos < nCount; ++nPos)
+                    aFmtLb.InsertEntry(aStrings[nPos], 0, sal_False, nPos);
 
                 aFmtLb.SetUpdateMode(true);
             }
