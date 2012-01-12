@@ -422,7 +422,7 @@ rtl::OUString pathToString(std::vector< rtl::OUString > const & path) {
         buf.append(sal_Unicode('/'));
         buf.append(*i);
     }
-    if (buf.isEmpty()) {
+    if (buf.getLength() == 0) {
         buf.append(sal_Unicode('/'));
     }
     return buf.makeStringAndClear();
