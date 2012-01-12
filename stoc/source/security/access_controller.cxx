@@ -501,7 +501,7 @@ AccessController::AccessController( Reference< XComponentContext > const & xComp
         {
             m_xComponentContext->getValueByName(
                 OUSTR("/services/" SERVICE_NAME "/single-user-id") ) >>= m_singleUserId;
-            if (! m_singleUserId.getLength())
+            if (m_singleUserId.isEmpty())
             {
                 throw RuntimeException(
                     OUSTR("expected a user id in component context entry "
@@ -560,7 +560,7 @@ void AccessController::initialize(
     }
     OUString userId;
     arguments[ 0 ] >>= userId;
-    if (! userId.getLength())
+    if ( userId.isEmpty() )
     {
         throw RuntimeException(
             OUSTR("expected a user-id as first argument!"), (OWeakObject *)this );
@@ -602,7 +602,7 @@ static void dumpPermissions(
     PermissionCollection const & collection, OUString const & userId = OUString() ) SAL_THROW( () )
 {
     OUStringBuffer buf( 48 );
-    if (userId.getLength())
+    if (!userId.isEmpty())
     {
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("> dumping permissions of user \"") );
         buf.append( userId );
@@ -662,7 +662,7 @@ void AccessController::checkAndClearPostPoned() SAL_THROW( (RuntimeException) )
             for ( size_t nPos = 0; nPos < vec.size(); ++nPos )
             {
                 pair< OUString, Any > const & p = vec[ nPos ];
-                OSL_ASSERT( !p.first.getLength() ); // default-user
+                OSL_ASSERT( p.first.isEmpty() ); // default-user
                 m_defaultPermissions.checkPermission( p.second );
             }
             break;
@@ -727,7 +727,7 @@ PermissionCollection AccessController::getEffectivePermissions(
         {
             xContext->getValueByName( OUSTR(USER_CREDS ".id") ) >>= userId;
         }
-        if (! userId.getLength())
+        if ( userId.isEmpty() )
         {
             throw SecurityException(
                 OUSTR("cannot determine current user in multi-user ac!"), (OWeakObject *)this );

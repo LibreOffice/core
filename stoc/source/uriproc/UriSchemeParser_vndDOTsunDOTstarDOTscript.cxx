@@ -176,7 +176,7 @@ namespace
 bool parseSchemeSpecificPart(rtl::OUString const & part) {
     sal_Int32 len = part.getLength();
     sal_Int32 i = 0;
-    if (parsePart(part, true, &i).getLength() == 0 || part[0] == '/') {
+    if (parsePart(part, true, &i).isEmpty() || part[0] == '/') {
         return false;
     }
     if (i == len) {
@@ -184,7 +184,7 @@ bool parseSchemeSpecificPart(rtl::OUString const & part) {
     }
     for (;;) {
         ++i; // skip '?' or '&'
-        if (parsePart(part, false, &i).getLength() == 0 || i == len
+        if (parsePart(part, false, &i).isEmpty() || i == len
             || part[i] != '=')
         {
             return false;
@@ -310,7 +310,7 @@ rtl::OUString UrlReference::getName() throw (css::uno::RuntimeException) {
 
 void SAL_CALL UrlReference::setName(rtl::OUString const & name) throw (css::uno::RuntimeException, css::lang::IllegalArgumentException)
 {
-    if (name.getLength() == 0)
+    if (name.isEmpty())
         throw css::lang::IllegalArgumentException(
             ::rtl::OUString(), *this, 1);
 
@@ -342,7 +342,7 @@ rtl::OUString UrlReference::getParameter(rtl::OUString const & key)
 void UrlReference::setParameter(rtl::OUString const & key, rtl::OUString const & value)
     throw (css::uno::RuntimeException, css::lang::IllegalArgumentException)
 {
-    if (key.getLength() == 0)
+    if (key.isEmpty())
         throw css::lang::IllegalArgumentException(
             ::rtl::OUString(), *this, 1);
 

@@ -244,7 +244,7 @@ OUString PolicyReader::assureQuotedToken()
     SAL_THROW( (RuntimeException) )
 {
     OUString token( getQuotedToken() );
-    if (! token.getLength())
+    if (token.isEmpty())
         error( OUSTR("unexpected end of file!") );
     return token;
 }
@@ -270,7 +270,7 @@ OUString PolicyReader::assureToken()
     SAL_THROW( (RuntimeException) )
 {
     OUString token( getToken() );
-    if (! token.getLength())
+    if ( token.isEmpty())
         error( OUSTR("unexpected end of file!") );
     return token;
 }
@@ -451,7 +451,7 @@ void FilePolicy::refresh()
     OUString fileName;
     m_xComponentContext->getValueByName(
         OUSTR("/implementations/" IMPL_NAME "/file-name") ) >>= fileName;
-    if (! fileName.getLength())
+    if ( fileName.isEmpty() )
     {
         throw RuntimeException(
             OUSTR("name of policy file unknown!"),
@@ -465,7 +465,7 @@ void FilePolicy::refresh()
     t_permissions userPermissions;
 
     OUString token( reader.getToken() );
-    while (token.getLength())
+    while (!token.isEmpty())
     {
         if (!token.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(s_grant)))
             reader.error( OUSTR("expected >grant< token!") );
@@ -518,7 +518,7 @@ void FilePolicy::refresh()
             reader.assureToken( ';' );
 
             // insert
-            if (userId.getLength())
+            if (!userId.isEmpty())
             {
                 Sequence< Any > perms( userPermissions[ userId ] );
                 sal_Int32 len = perms.getLength();

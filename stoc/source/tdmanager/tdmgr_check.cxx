@@ -109,7 +109,7 @@ OUString getPropertyFlagsAsString( sal_Int16 attributes )
 void typeError( OUString const & msg, OUString const & context )
 {
     OUStringBuffer buf;
-    if (context.getLength() > 0) {
+    if (!context.isEmpty()) {
         buf.append( static_cast<sal_Unicode>('[') );
         buf.append( context );
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("] ") );

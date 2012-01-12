@@ -1008,7 +1008,7 @@ Any ManagerImpl::getByHierarchicalName( const OUString & rName )
     Any aRet;
     if (_bCaching)
         aRet = _aElements.getValue( rName );
-    if (rName.getLength() && !aRet.hasValue())
+    if (!rName.isEmpty() && !aRet.hasValue())
     {
         sal_Int32 nIndex;
         if (rName[0] == '[') // test for sequence

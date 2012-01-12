@@ -354,7 +354,7 @@ Any ProxyRoot::queryAggregation( Type const & rType )
                 static_cast< OWeakObject * >(this), UNO_QUERY_THROW );
             OUString oid;
             (*cpp_env->getObjectIdentifier)( cpp_env, &oid.pData, xRoot.get() );
-            OSL_ASSERT( oid.getLength() > 0 );
+            OSL_ASSERT( !oid.isEmpty() );
 
             (*cpp_env->getRegisteredInterface)(
                 cpp_env, reinterpret_cast< void ** >( &xProxy ),

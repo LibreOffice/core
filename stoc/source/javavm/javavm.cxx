@@ -316,7 +316,7 @@ void getINetPropsFromConfig(stoc_javavm::JVM * pjvm,
     {
         // read ftp proxy name
         css::uno::Reference<css::registry::XRegistryKey> ftpProxy_name = xRegistryRootKey->openKey(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Settings/ooInetFTPProxyName")));
-        if(ftpProxy_name.is() && ftpProxy_name->getStringValue().getLength()) {
+        if(ftpProxy_name.is() && !ftpProxy_name->getStringValue().isEmpty()) {
             rtl::OUString ftpHost = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ftp.proxyHost="));
             ftpHost += ftpProxy_name->getStringValue();
 
@@ -333,7 +333,7 @@ void getINetPropsFromConfig(stoc_javavm::JVM * pjvm,
 
         // read http proxy name
         css::uno::Reference<css::registry::XRegistryKey> httpProxy_name = xRegistryRootKey->openKey(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Settings/ooInetHTTPProxyName")));
-        if(httpProxy_name.is() && httpProxy_name->getStringValue().getLength()) {
+        if(httpProxy_name.is() && !httpProxy_name->getStringValue().isEmpty()) {
             rtl::OUString httpHost = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("http.proxyHost="));
             httpHost += httpProxy_name->getStringValue();
 
@@ -350,7 +350,7 @@ void getINetPropsFromConfig(stoc_javavm::JVM * pjvm,
 
         // read https proxy name
         css::uno::Reference<css::registry::XRegistryKey> httpsProxy_name = xRegistryRootKey->openKey(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Settings/ooInetHTTPSProxyName")));
-        if(httpsProxy_name.is() && httpsProxy_name->getStringValue().getLength()) {
+        if(httpsProxy_name.is() && !httpsProxy_name->getStringValue().isEmpty()) {
             rtl::OUString httpsHost = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("https.proxyHost="));
             httpsHost += httpsProxy_name->getStringValue();
 
@@ -367,7 +367,7 @@ void getINetPropsFromConfig(stoc_javavm::JVM * pjvm,
 
         // read  nonProxyHosts
         css::uno::Reference<css::registry::XRegistryKey> nonProxies_name = xRegistryRootKey->openKey(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Settings/ooInetNoProxy")));
-        if(nonProxies_name.is() && nonProxies_name->getStringValue().getLength()) {
+        if(nonProxies_name.is() && !nonProxies_name->getStringValue().isEmpty()) {
             rtl::OUString httpNonProxyHosts = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("http.nonProxyHosts="));
             rtl::OUString ftpNonProxyHosts= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ftp.nonProxyHosts="));
             rtl::OUString value= nonProxies_name->getStringValue();
@@ -425,7 +425,7 @@ void getDefaultLocaleFromConfig(
 
     // read locale
     css::uno::Reference<css::registry::XRegistryKey> locale = xRegistryRootKey->openKey(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("L10N/ooLocale")));
-    if(locale.is() && locale->getStringValue().getLength()) {
+    if(locale.is() && !locale->getStringValue().isEmpty()) {
         rtl::OUString language;
         rtl::OUString country;
 
@@ -435,14 +435,14 @@ void getDefaultLocaleFromConfig(
             language = locale->getStringValue().copy(0, index);
             country = locale->getStringValue().copy(index + 1);
 
-            if(language.getLength()) {
+            if(!language.isEmpty()) {
                 rtl::OUString prop(RTL_CONSTASCII_USTRINGPARAM("user.language="));
                 prop += language;
 
                 pjvm->pushProp(prop);
             }
 
-            if(country.getLength()) {
+            if(!country.isEmpty()) {
                 rtl::OUString prop(RTL_CONSTASCII_USTRINGPARAM("user.country="));
                 prop += country;
 
@@ -1261,7 +1261,7 @@ void SAL_CALL JavaVirtualMachine::elementReplaced(
             // or if the port is set to 0
             aPropertyValue= aPropertyValue.trim();
             if(
-               aPropertyValue.getLength() == 0 ||
+               aPropertyValue.isEmpty() ||
                (
                 (
                  aPropertyName.equals( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ftp.proxyPort"))) ||
@@ -1286,7 +1286,7 @@ void SAL_CALL JavaVirtualMachine::elementReplaced(
 
                 // special calse for ftp.nonProxyHosts and http.nonProxyHosts. The office only
                 // has a value for two java properties
-                if (aPropertyName2.getLength() > 0)
+                if (!aPropertyName2.isEmpty())
                 {
                     jstring jsPropName2= pJNIEnv->NewString( aPropertyName2.getStr(), aPropertyName2.getLength());
                     if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("JNI:NewString")), 0);
@@ -1303,7 +1303,7 @@ void SAL_CALL JavaVirtualMachine::elementReplaced(
 
                 // special calse for ftp.nonProxyHosts and http.nonProxyHosts. The office only
                 // has a value for two java properties
-                if (aPropertyName2.getLength() > 0)
+                if (!aPropertyName2.isEmpty())
                 {
                     jstring jsPropName2= pJNIEnv->NewString( aPropertyName2.getStr(), aPropertyName2.getLength());
                     if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("JNI:NewString")), 0);

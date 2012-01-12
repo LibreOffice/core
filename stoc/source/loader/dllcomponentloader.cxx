@@ -212,7 +212,7 @@ Reference<XInterface> SAL_CALL DllComponentLoader::activate(
             if( xPrefixKey.is() && xPrefixKey->getValueType() == RegistryValueType_ASCII )
             {
                 aPrefix = xPrefixKey->getAsciiValue();
-                if( aPrefix.getLength() != 0 )
+                if( !aPrefix.isEmpty() )
                     aPrefix = aPrefix + OUSTR("_");
             }
         }

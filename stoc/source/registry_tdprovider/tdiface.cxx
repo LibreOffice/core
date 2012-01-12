@@ -130,7 +130,7 @@ sal_Int32 InterfaceMethodImpl::getPosition()
 Reference<XTypeDescription > InterfaceMethodImpl::getReturnType()
     throw(::com::sun::star::uno::RuntimeException)
 {
-    if (!_xReturnTD.is() && _aReturnType.getLength())
+    if (!_xReturnTD.is() && !_aReturnType.isEmpty())
     {
         try
         {
@@ -315,7 +315,7 @@ sal_Bool InterfaceAttributeImpl::isReadOnly()
 Reference<XTypeDescription > InterfaceAttributeImpl::getType()
     throw(::com::sun::star::uno::RuntimeException)
 {
-    if (!_xMemberTD.is() && _aMemberTypeName.getLength())
+    if (!_xMemberTD.is() && !_aMemberTypeName.isEmpty())
     {
         try
         {

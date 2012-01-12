@@ -276,7 +276,7 @@ OUString NestedKeyImpl::computeName(const OUString& name)
                 return m_defaultKey->getResolvedName(name);
         }
 
-        if ( resLocalName.getLength() > 0 && m_pRegistry->m_defaultReg->isValid() )
+        if ( !resLocalName.isEmpty() && m_pRegistry->m_defaultReg->isValid() )
         {
             Reference<XRegistryKey> localRoot(m_pRegistry->m_localReg->getRootKey());
             Reference<XRegistryKey> defaultRoot(m_pRegistry->m_defaultReg->getRootKey());
@@ -289,7 +289,7 @@ OUString NestedKeyImpl::computeName(const OUString& name)
             {
                 count--;
 
-                if (resLocalName.getLength() == 0 || resDefaultName.getLength() == 0)
+                if (resLocalName.isEmpty() || resDefaultName.isEmpty())
                     throw InvalidRegistryException();
 
                 resLocalName = localRoot->getResolvedName(resDefaultName);
@@ -683,7 +683,7 @@ Reference< XRegistryKey > SAL_CALL NestedKeyImpl::openKey( const OUString& aKeyN
 
     OUString resolvedName = computeName(aKeyName);
 
-    if ( resolvedName.getLength() == 0 )
+    if ( resolvedName.isEmpty() )
         throw InvalidRegistryException();
 
     Reference<XRegistryKey> localKey, defaultKey;
@@ -719,7 +719,7 @@ Reference< XRegistryKey > SAL_CALL NestedKeyImpl::createKey( const OUString& aKe
 
     OUString resolvedName = computeName(aKeyName);
 
-    if ( resolvedName.getLength() == 0 )
+    if ( resolvedName.isEmpty() )
         throw InvalidRegistryException();
 
     if ( m_localKey.is() && m_localKey->isValid() )
@@ -788,7 +788,7 @@ void SAL_CALL NestedKeyImpl::deleteKey( const OUString& rKeyName )
     {
         OUString resolvedName = computeName(rKeyName);
 
-        if ( resolvedName.getLength() == 0 )
+        if ( resolvedName.isEmpty() )
         {
             throw InvalidRegistryException();
         }
@@ -969,7 +969,7 @@ sal_Bool SAL_CALL NestedKeyImpl::createLink( const OUString& aLinkName, const OU
 
         resolvedName = computeName(linkName);
 
-        if ( resolvedName.getLength() == 0 )
+        if ( resolvedName.isEmpty() )
         {
             throw InvalidRegistryException();
         }
@@ -1023,7 +1023,7 @@ void SAL_CALL NestedKeyImpl::deleteLink( const OUString& rLinkName )
 
         resolvedName = computeName(linkName);
 
-        if ( resolvedName.getLength() == 0 )
+        if ( resolvedName.isEmpty() )
         {
             throw InvalidRegistryException();
         }
@@ -1067,7 +1067,7 @@ OUString SAL_CALL NestedKeyImpl::getLinkTarget( const OUString& rLinkName )
 
         resolvedName = computeName(linkName);
 
-        if ( resolvedName.getLength() == 0 )
+        if ( resolvedName.isEmpty() )
         {
             throw InvalidRegistryException();
         }
@@ -1112,7 +1112,7 @@ OUString SAL_CALL NestedKeyImpl::getResolvedName( const OUString& aKeyName )
 
     OUString resolvedName = computeName(aKeyName);
 
-    if ( resolvedName.getLength() == 0 )
+    if ( resolvedName.isEmpty() )
     {
         throw InvalidRegistryException();
     }

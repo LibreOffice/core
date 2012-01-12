@@ -52,11 +52,11 @@ UriReference::UriReference(
     m_hasQuery(bHasQuery),
     m_hasFragment(false)
 {
-    OSL_ASSERT(scheme.getLength() != 0 || bIsHierarchical);
+    OSL_ASSERT(!scheme.isEmpty() || bIsHierarchical);
     OSL_ASSERT(!bHasAuthority || bIsHierarchical);
-    OSL_ASSERT(authority.getLength() == 0 || bHasAuthority);
+    OSL_ASSERT(authority.isEmpty() || bHasAuthority);
     OSL_ASSERT(!bHasQuery || bIsHierarchical);
-    OSL_ASSERT(query.getLength() == 0 || bHasQuery);
+    OSL_ASSERT(query.isEmpty() || bHasQuery);
 }
 
 UriReference::~UriReference() {}
@@ -65,7 +65,7 @@ rtl::OUString UriReference::getUriReference() throw (css::uno::RuntimeException)
 {
     osl::MutexGuard g(m_mutex);
     rtl::OUStringBuffer buf;
-    if (m_scheme.getLength() != 0) {
+    if (!m_scheme.isEmpty()) {
         buf.append(m_scheme);
         buf.append(static_cast< sal_Unicode >(':'));
     }
@@ -78,7 +78,7 @@ rtl::OUString UriReference::getUriReference() throw (css::uno::RuntimeException)
 }
 
 sal_Bool UriReference::isAbsolute() throw (css::uno::RuntimeException) {
-    return m_scheme.getLength() != 0;
+    return !m_scheme.isEmpty();
 }
 
 rtl::OUString UriReference::getScheme() throw (css::uno::RuntimeException) {
@@ -117,13 +117,13 @@ rtl::OUString UriReference::getPath() throw (css::uno::RuntimeException) {
 sal_Bool UriReference::hasRelativePath() throw (css::uno::RuntimeException) {
     osl::MutexGuard g(m_mutex);
     return m_isHierarchical && !m_hasAuthority
-        && (m_path.getLength() == 0 || m_path[0] != '/');
+        && (m_path.isEmpty() || m_path[0] != '/');
 }
 
 sal_Int32 UriReference::getPathSegmentCount() throw (css::uno::RuntimeException)
 {
     osl::MutexGuard g(m_mutex);
-    if (!m_isHierarchical || m_path.getLength() == 0) {
+    if (!m_isHierarchical || m_path.isEmpty()) {
         return 0;
     } else {
         sal_Int32 n = m_path[0] == '/' ? 0 : 1;
@@ -142,7 +142,7 @@ rtl::OUString UriReference::getPathSegment(sal_Int32 index)
     throw (css::uno::RuntimeException)
 {
     osl::MutexGuard g(m_mutex);
-    if (m_isHierarchical && m_path.getLength() != 0 && index >= 0) {
+    if (m_isHierarchical && !m_path.isEmpty() && index >= 0) {
         for (sal_Int32 i = m_path[0] == '/' ? 1 : 0;; ++i) {
             if (index-- == 0) {
                 sal_Int32 j = m_path.indexOf('/', i);

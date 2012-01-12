@@ -62,11 +62,8 @@ namespace css = ::com::sun::star;
 bool parseSchemeSpecificPart(::rtl::OUString const & part) {
     // Liberally accepts both an empty opaque_part and an opaque_part that
     // starts with a non-escaped "/":
-    return part.getLength() == 0
-        || ((::rtl::Uri::decode(
-                 part, ::rtl_UriDecodeStrict, RTL_TEXTENCODING_UTF8).
-             getLength())
-            != 0);
+    return part.isEmpty()
+        || (!::rtl::Uri::decode(part, ::rtl_UriDecodeStrict, RTL_TEXTENCODING_UTF8).isEmpty());
 }
 
 class UrlReference:

@@ -225,10 +225,10 @@ private:
 css::uno::Reference< css::uri::XUriReference > parseGeneric(
     rtl::OUString const & scheme, rtl::OUString const & schemeSpecificPart)
 {
-    bool isAbsolute = scheme.getLength() != 0;
+    bool isAbsolute = !scheme.isEmpty();
     bool isHierarchical
         = !isAbsolute
-        || (schemeSpecificPart.getLength() > 0 && schemeSpecificPart[0] == '/');
+        || (!schemeSpecificPart.isEmpty() && schemeSpecificPart[0] == '/');
     bool hasAuthority = false;
     rtl::OUString authority;
     rtl::OUString path;
@@ -260,7 +260,7 @@ css::uno::Reference< css::uri::XUriReference > parseGeneric(
             query = schemeSpecificPart.copy(i + 1);
         }
     } else {
-        if (schemeSpecificPart.getLength() == 0) {
+        if (schemeSpecificPart.isEmpty()) {
             // The scheme-specific part of an opaque URI must not be empty:
             return 0;
         }
@@ -410,7 +410,7 @@ css::uno::Reference< css::uri::XUriReference > Factory::parse(
         schemeSpecificPart = uriReference.copy(0, fragment);
     }
     css::uno::Reference< css::uri::XUriSchemeParser > parser;
-    if (serviceName.getLength() != 0) {
+    if (!serviceName.isEmpty()) {
         css::uno::Reference< css::lang::XMultiComponentFactory > factory(
             m_context->getServiceManager());
         if (factory.is()) {
@@ -464,7 +464,7 @@ css::uno::Reference< css::uri::XUriReference > Factory::makeAbsolute(
     } else if (uriReference->isAbsolute()) {
         return clone(uriReference);
     } else if (!uriReference->hasAuthority()
-               && uriReference->getPath().getLength() == 0
+               && uriReference->getPath().isEmpty()
                && !uriReference->hasQuery()) {
         css::uno::Reference< css::uri::XUriReference > abs(
             clone(baseUriReference));
@@ -495,7 +495,7 @@ css::uno::Reference< css::uri::XUriReference > Factory::makeAbsolute(
             // sure the path component of the resulting URI reference is also
             // empty (and not "/").  RFC 2396 is unclear about this, and I chose
             // these rules for consistent results.
-            bool slash = baseUriReference->getPath().getLength() != 0;
+            bool slash = !baseUriReference->getPath().isEmpty();
             if (slash) {
                 abs.append(static_cast< sal_Unicode >('/'));
             }
@@ -505,7 +505,7 @@ css::uno::Reference< css::uri::XUriReference > Factory::makeAbsolute(
                 if (*i < -1) {
                     rtl::OUString segment(
                         baseUriReference->getPathSegment(-(*i + 2)));
-                    if (segment.getLength() != 0 || segments.size() > 1) {
+                    if (!segment.isEmpty() || segments.size() > 1) {
                         if (!slash) {
                             abs.append(static_cast< sal_Unicode >('/'));
                         }
@@ -515,7 +515,7 @@ css::uno::Reference< css::uri::XUriReference > Factory::makeAbsolute(
                     }
                 } else if (*i > 1) {
                     rtl::OUString segment(uriReference->getPathSegment(*i - 2));
-                    if (segment.getLength() != 0 || segments.size() > 1) {
+                    if (!segment.isEmpty() || segments.size() > 1) {
                         if (!slash) {
                             abs.append(static_cast< sal_Unicode >('/'));
                         }
@@ -625,7 +625,7 @@ css::uno::Reference< css::uri::XUriReference > Factory::makeRelative(
                 if (baseUriReference->getPath().getLength() > 1
                     || uriReference->getPath().getLength() > 1)
                 {
-                    if (uriReference->getPath().getLength() == 0) {
+                    if (uriReference->getPath().isEmpty()) {
                         rel.append(static_cast< sal_Unicode >('/'));
                     } else {
                         OSL_ASSERT(uriReference->getPath()[0] == '/');
@@ -648,11 +648,10 @@ css::uno::Reference< css::uri::XUriReference > Factory::makeRelative(
                     segments = true;
                 }
                 if (i < count2 - 1
-                    || (uriReference->getPathSegment(count2 - 1).getLength()
-                        != 0))
+                    || (!uriReference->getPathSegment(count2 - 1).isEmpty()))
                 {
                     if (!segments
-                        && (uriReference->getPathSegment(i).getLength() == 0
+                        && (uriReference->getPathSegment(i).isEmpty()
                             || (parseScheme(uriReference->getPathSegment(i))
                                 >= 0)))
                     {

@@ -247,7 +247,7 @@ void Parser::handleComponent() {
         if (nsId == xmlreader::XmlReader::NAMESPACE_NONE &&
             name.equals(RTL_CONSTASCII_STRINGPARAM("uri")))
         {
-            if (attrUri_.getLength() != 0) {
+            if (!attrUri_.isEmpty()) {
                 throw css::registry::InvalidRegistryException(
                     (reader_.getUrl() +
                      rtl::OUString(
@@ -256,7 +256,7 @@ void Parser::handleComponent() {
                     css::uno::Reference< css::uno::XInterface >());
             }
             attrUri_ = reader_.getAttributeValue(false).convertFromUtf8();
-            if (attrUri_.getLength() == 0) {
+            if (attrUri_.isEmpty()) {
                 throw css::registry::InvalidRegistryException(
                     (reader_.getUrl() +
                      rtl::OUString(
@@ -267,7 +267,7 @@ void Parser::handleComponent() {
         } else if (nsId == xmlreader::XmlReader::NAMESPACE_NONE &&
                    name.equals(RTL_CONSTASCII_STRINGPARAM("loader")))
         {
-            if (attrLoader_.getLength() != 0) {
+            if (!attrLoader_.isEmpty()) {
                 throw css::registry::InvalidRegistryException(
                     (reader_.getUrl() +
                      rtl::OUString(
@@ -277,7 +277,7 @@ void Parser::handleComponent() {
                     css::uno::Reference< css::uno::XInterface >());
             }
             attrLoader_ = reader_.getAttributeValue(false).convertFromUtf8();
-            if (attrLoader_.getLength() == 0) {
+            if (attrLoader_.isEmpty()) {
                 throw css::registry::InvalidRegistryException(
                     (reader_.getUrl() +
                      rtl::OUString(
@@ -288,7 +288,7 @@ void Parser::handleComponent() {
         } else if (nsId == xmlreader::XmlReader::NAMESPACE_NONE &&
                    name.equals(RTL_CONSTASCII_STRINGPARAM("prefix")))
         {
-            if (attrPrefix_.getLength() != 0) {
+            if (!attrPrefix_.isEmpty()) {
                 throw css::registry::InvalidRegistryException(
                     (reader_.getUrl() +
                      rtl::OUString(
@@ -298,7 +298,7 @@ void Parser::handleComponent() {
                     css::uno::Reference< css::uno::XInterface >());
             }
             attrPrefix_ = reader_.getAttributeValue(false).convertFromUtf8();
-            if (attrPrefix_.getLength() == 0) {
+            if (attrPrefix_.isEmpty()) {
                 throw css::registry::InvalidRegistryException(
                     (reader_.getUrl() +
                      rtl::OUString(
@@ -310,7 +310,7 @@ void Parser::handleComponent() {
           OSL_FAIL ("unexpected component attribute, expected 'uri' or 'loader' or 'prefix'");
         }
     }
-    if (attrUri_.getLength() == 0) {
+    if (attrUri_.isEmpty()) {
         throw css::registry::InvalidRegistryException(
             (reader_.getUrl() +
              rtl::OUString(
@@ -318,7 +318,7 @@ void Parser::handleComponent() {
                      ": <component> is missing \"uri\" attribute"))),
             css::uno::Reference< css::uno::XInterface >());
     }
-    if (attrLoader_.getLength() == 0) {
+    if (attrLoader_.isEmpty()) {
         throw css::registry::InvalidRegistryException(
             (reader_.getUrl() +
              rtl::OUString(
@@ -377,7 +377,7 @@ rtl::OUString Parser::getNameAttribute() {
         if (nsId == xmlreader::XmlReader::NAMESPACE_NONE &&
             name.equals(RTL_CONSTASCII_STRINGPARAM("name")))
         {
-            if (attrName.getLength() != 0) {
+            if (!attrName.isEmpty()) {
                 throw css::registry::InvalidRegistryException(
                     (reader_.getUrl() +
                      rtl::OUString(
@@ -386,7 +386,7 @@ rtl::OUString Parser::getNameAttribute() {
                     css::uno::Reference< css::uno::XInterface >());
             }
             attrName = reader_.getAttributeValue(false).convertFromUtf8();
-            if (attrName.getLength() == 0) {
+            if (attrName.isEmpty()) {
                 throw css::registry::InvalidRegistryException(
                     (reader_.getUrl() +
                      rtl::OUString(
@@ -403,7 +403,7 @@ rtl::OUString Parser::getNameAttribute() {
                 css::uno::Reference< css::uno::XInterface >());
         }
     }
-    if (attrName.getLength() == 0) {
+    if (attrName.isEmpty()) {
         throw css::registry::InvalidRegistryException(
             (reader_.getUrl() +
              rtl::OUString(
@@ -422,7 +422,7 @@ rtl::OUString pathToString(std::vector< rtl::OUString > const & path) {
         buf.append(sal_Unicode('/'));
         buf.append(*i);
     }
-    if (buf.getLength() == 0) {
+    if (buf.isEmpty()) {
         buf.append(sal_Unicode('/'));
     }
     return buf.makeStringAndClear();
@@ -969,7 +969,7 @@ bool Key::find(
     sal_Int32 i = 0;
     do {
         rtl::OUString seg(relative.getToken(0, '/', i));
-        if (seg.getLength() != 0) {
+        if (!seg.isEmpty()) {
             p.push_back(seg);
         }
     } while (i >= 0);

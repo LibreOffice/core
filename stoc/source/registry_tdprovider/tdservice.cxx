@@ -56,7 +56,7 @@ public:
     virtual ~Constructor() {}
 
     virtual sal_Bool SAL_CALL isDefaultConstructor() throw (RuntimeException)
-    { return m_desc.getName().getLength() == 0; }
+    { return m_desc.getName().isEmpty(); }
 
     virtual rtl::OUString SAL_CALL getName() throw (RuntimeException)
     { return m_desc.getName(); }
@@ -351,7 +351,7 @@ ServiceTypeDescriptionImpl::getConstructors() throw (RuntimeException) {
             if (reader.getMethodFlags(i) != RT_MODE_TWOWAY
                 || (!reader.getMethodReturnTypeName(i).equalsAsciiL(
                         RTL_CONSTASCII_STRINGPARAM("void")))
-                || (name.getLength() == 0
+                || (name.isEmpty()
                     && (ctorCount != 1 || reader.getMethodParameterCount(i) != 0
                         || reader.getMethodExceptionCount(i) != 0)))
             {

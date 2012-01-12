@@ -1486,7 +1486,7 @@ void OServiceManager::insert( const Any & Element )
     if( xInfo.is() )
     {
         OUString aImplName = xInfo->getImplementationName();
-        if( aImplName.getLength() )
+        if( !aImplName.isEmpty() )
             m_ImplementationNameMap[ aImplName ] = xEle;
 
         //put into the service map
@@ -1572,7 +1572,7 @@ void OServiceManager::remove( const Any & Element )
     if( xInfo.is() )
     {
         OUString aImplName = xInfo->getImplementationName();
-        if( aImplName.getLength() )
+        if( !aImplName.isEmpty() )
             m_ImplementationNameMap.erase( aImplName );
     }
 

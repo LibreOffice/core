@@ -54,7 +54,7 @@ OUString TypedefTypeDescriptionImpl::getName()
 Reference< XTypeDescription > TypedefTypeDescriptionImpl::getReferencedType()
     throw(::com::sun::star::uno::RuntimeException)
 {
-    if (!_xRefTD.is() && _aRefName.getLength())
+    if (!_xRefTD.is() && !_aRefName.isEmpty())
     {
         try
         {

@@ -61,7 +61,7 @@ OUString CompoundTypeDescriptionImpl::getName()
 Reference< XTypeDescription > CompoundTypeDescriptionImpl::getBaseType()
     throw(::com::sun::star::uno::RuntimeException)
 {
-    if (!_xBaseTD.is() && _aBaseType.getLength())
+    if (!_xBaseTD.is() && !_aBaseType.isEmpty())
     {
         try
         {

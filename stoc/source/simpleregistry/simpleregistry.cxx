@@ -1151,7 +1151,7 @@ void SimpleRegistry::open(
                     "): instance already open"))),
             static_cast< OWeakObject * >(this));
     }
-    RegError err = (rURL.getLength() == 0 && bCreate)
+    RegError err = (rURL.isEmpty() && bCreate)
         ? REG_REGISTRY_NOT_EXISTS
         : registry_.open(rURL, bReadOnly ? REG_READONLY : REG_READWRITE);
     if (err == REG_REGISTRY_NOT_EXISTS && bCreate) {

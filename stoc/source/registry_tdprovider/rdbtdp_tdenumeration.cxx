@@ -94,7 +94,7 @@ TypeDescriptionEnumerationImpl::createInstance(
             reflection::InvalidTypeNameException,
             uno::RuntimeException )
 {
-    if ( rModuleName.getLength() == 0 )
+    if ( rModuleName.isEmpty() )
     {
         // Enumeration for root requested.
         return rtl::Reference< TypeDescriptionEnumerationImpl >(

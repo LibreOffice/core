@@ -212,7 +212,7 @@ static void deleteAllLinkReferences(const Reference < XSimpleRegistry >& xReg,
 
                 aLinkParent = aLinkName.copy(0, sEnd);
 
-                while(aLinkParent.getLength())
+                while(!aLinkParent.isEmpty())
                 {
                     xLinkParent = xReg->getRootKey()->openKey(aLinkParent);
 
@@ -485,7 +485,7 @@ static void prepareUserLink(const Reference < XSimpleRegistry >& xDest,
     {
         OUString oldImplName(searchImplForLink(xRootKey, linkName, implName));
 
-        if (oldImplName.getLength())
+        if (!oldImplName.isEmpty())
         {
             createUniqueSubEntry(xDest->getRootKey()->createKey(
                 linkName + spool().colon_old ), oldImplName);
@@ -601,7 +601,7 @@ static void deleteUserLink(const Reference < XRegistryKey >& xRootKey,
                 }
 
                 OUString oldTarget = searchLinkTargetForImpl(xRootKey, linkName, oldImpl);
-                if (oldTarget.getLength())
+                if (!oldTarget.isEmpty())
                 {
                     xRootKey->createLink(linkName, oldTarget);
                 }
@@ -698,7 +698,7 @@ static void prepareUserKeys(const Reference < XSimpleRegistry >& xDest,
             }
 
             OUString path = keyName.copy(0, keyName.lastIndexOf('/'));
-            if( path.getLength() )
+            if( !path.isEmpty() )
             {
                 deletePathIfPossible(xRootKey, path);
             }
@@ -1437,7 +1437,7 @@ void ImplementationRegistration::initialize(
     if( aArgs.getConstArray()[1].getValueType().getTypeClass() == TypeClass_STRING ) {
         aArgs.getConstArray()[1] >>= loaderServiceName;
     }
-    if( ! loaderServiceName.getLength() ) {
+    if( loaderServiceName.isEmpty() ) {
         OUStringBuffer buf;
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(
             "ImplementationRegistration::initialize() invalid second parameter,"
@@ -1452,7 +1452,7 @@ void ImplementationRegistration::initialize(
     if( aArgs.getConstArray()[2].getValueType().getTypeClass() == TypeClass_STRING ) {
         aArgs.getConstArray()[2] >>= locationUrl;
     }
-    if( ! locationUrl.getLength() ) {
+    if( locationUrl.isEmpty() ) {
         OUStringBuffer buf;
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(
             "ImplementationRegistration::initialize() invalid third parameter,"
@@ -1514,7 +1514,7 @@ void ImplementationRegistration::prepareRegister(
     OUString implLoaderUrl(implementationLoaderUrl);
     OUString activatorName;
 
-    if (implementationLoaderUrl.getLength() > 0)
+    if (!implementationLoaderUrl.isEmpty())
     {
         OUString tmpActivator(implementationLoaderUrl);
         sal_Int32 nIndex = 0;
@@ -1669,7 +1669,7 @@ Sequence< OUString > ImplementationRegistration::getImplementations(
     OUString implLoaderUrl(implementationLoaderUrl);
     OUString activatorName;
 
-    if (implementationLoaderUrl.getLength() > 0)
+    if (!implementationLoaderUrl.isEmpty())
     {
         OUString tmpActivator(implementationLoaderUrl);
         sal_Int32 nIndex = 0;

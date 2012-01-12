@@ -466,7 +466,7 @@ OUString Invocation_Impl::getExactName( const OUString& rApproximateName )
     OUString aRet;
     if (_xENIntrospection.is())
         aRet = _xENIntrospection->getExactName( rApproximateName );
-    if (!aRet.getLength() && _xENNameAccess.is())
+    if (aRet.isEmpty() && _xENNameAccess.is())
         aRet = _xENNameAccess->getExactName( rApproximateName );
     return aRet;
 }
@@ -898,7 +898,7 @@ InvocationInfo SAL_CALL Invocation_Impl::getInfoForName( const OUString& aName, 
 
     if( bExact )
         aExactName = getExactName( aName );
-    if( aExactName.getLength() > 0 )
+    if( !aExactName.isEmpty() )
     {
         if( _xIntrospectionAccess->hasMethod( aExactName, MethodConcept::ALL ^ MethodConcept::DANGEROUS ) )
         {

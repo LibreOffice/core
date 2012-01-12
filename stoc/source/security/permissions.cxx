@@ -67,7 +67,7 @@ static inline sal_Int32 makeMask(
     do
     {
         OUString item( items.getToken( 0, ',', n ).trim() );
-        if (! item.getLength())
+        if ( item.isEmpty())
             continue;
         sal_Int32 nPos = 0;
         while (strings[ nPos ])
@@ -153,7 +153,7 @@ SocketPermission::SocketPermission(
     , m_upperPort( 65535 )
     , m_resolveErr( false )
     , m_resolvedHost( false )
-    , m_wildCardHost( perm.Host.getLength() && '*' == perm.Host.pData->buffer[ 0 ] )
+    , m_wildCardHost( !perm.Host.isEmpty() && '*' == perm.Host.pData->buffer[ 0 ] )
 {
     if (0xe0000000 & m_actions) // if any (except resolve) is given => resolve implied
         m_actions |= 0x10000000;

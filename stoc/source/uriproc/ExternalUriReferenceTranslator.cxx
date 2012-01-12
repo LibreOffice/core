@@ -146,7 +146,7 @@ rtl::OUString Translator::translateToInternal(
                         rtl_UriDecodeStrict, encoding),
                     rtl_UriCharClassPchar, rtl_UriEncodeStrict,
                     RTL_TEXTENCODING_UTF8));
-            if (seg.getLength() == 0) {
+            if (seg.isEmpty()) {
                 return rtl::OUString();
             }
             buf.append(seg);
@@ -193,7 +193,7 @@ rtl::OUString Translator::translateToExternal(
                         rtl_UriDecodeToIuri, RTL_TEXTENCODING_UTF8),
                     rtl_UriCharClassPchar, rtl_UriEncodeStrictKeepEscapes,
                     encoding));
-            if (seg.getLength() == 0) {
+            if (seg.isEmpty()) {
                 return rtl::OUString();
             }
             buf.append(seg);
