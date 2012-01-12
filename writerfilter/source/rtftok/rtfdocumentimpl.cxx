@@ -1348,9 +1348,11 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
             {
                 if (m_bNeedPap)
                 {
-                    // There were no runs in the cell, so we need to send paragraph properties here.
-                    RTFValue::Pointer_t pValue(new RTFValue(m_aStates.top().aParagraphAttributes, m_aStates.top().aParagraphSprms));
-                    m_aTableBuffer.push_back(make_pair(BUFFER_PROPS, pValue));
+                    // There were no runs in the cell, so we need to send paragraph and character properties here.
+                    RTFValue::Pointer_t pPValue(new RTFValue(m_aStates.top().aParagraphAttributes, m_aStates.top().aParagraphSprms));
+                    m_aTableBuffer.push_back(make_pair(BUFFER_PROPS, pPValue));
+                    RTFValue::Pointer_t pCValue(new RTFValue(m_aStates.top().aCharacterAttributes, m_aStates.top().aCharacterSprms));
+                    m_aTableBuffer.push_back(make_pair(BUFFER_PROPS, pCValue));
                 }
 
                 RTFValue::Pointer_t pValue;
@@ -1964,8 +1966,6 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         case RTF_LIN: nSprm = 0x845e; break;
         case RTF_RI: nSprm = NS_sprm::LN_PDxaRight; break;
         case RTF_RIN: nSprm = 0x845d; break;
-        case RTF_SB: nSprm = NS_sprm::LN_PDyaBefore; break;
-        case RTF_SA: nSprm = NS_sprm::LN_PDyaAfter; break;
         case RTF_ITAP: nSprm = NS_sprm::LN_PTableDepth; break;
         default: break;
     }
@@ -1983,6 +1983,8 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
     {
         case RTF_SBASEDON: nSprm = NS_rtf::LN_ISTDBASE; break;
         case RTF_SNEXT: nSprm = NS_rtf::LN_ISTDNEXT; break;
+        case RTF_SB: nSprm = NS_ooxml::LN_CT_Spacing_before; break;
+        case RTF_SA: nSprm = NS_ooxml::LN_CT_Spacing_after; break;
         default: break;
     }
     if (nSprm > 0)
@@ -2172,7 +2174,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             if (nParam > 0)
             {
                 // NS_sprm::LN_PDyaLine could be used, but that won't work with slmult
-                m_aStates.top().aParagraphAttributes->push_back(make_pair(nSprm, pIntValue));
+                m_aStates.top().aParagraphAttributes->push_back(make_pair(NS_ooxml::LN_CT_Spacing_line, pIntValue));
             }
             break;
         case RTF_SLMULT:
