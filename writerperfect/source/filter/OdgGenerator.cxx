@@ -950,10 +950,16 @@ void OdgGenerator::drawGraphicObject(const ::WPXPropertyList &propList, const ::
 {
     if (!propList["libwpg:mime-type"] && propList["libwpg:mime-type"]->getStr().len() <= 0)
         return;
+
+    mpImpl->_writeGraphicsStyle();
+
     TagOpenElement *pDrawFrameElement = new TagOpenElement("draw:frame");
 
 
     WPXString sValue;
+    sValue.sprintf("gr%i", mpImpl->miGraphicsStyleIndex-1);
+    pDrawFrameElement->addAttribute("draw:style-name", sValue);
+
     if (propList["svg:x"])
         pDrawFrameElement->addAttribute("svg:x", propList["svg:x"]->getStr());
     if (propList["svg:y"])
@@ -1280,6 +1286,8 @@ void OdgGeneratorPrivate::_writeGraphicsStyle()
         else
             pStyleGraphicsPropertiesElement->addAttribute("draw:marker-end-width", "0.118in");
     }
+    if (mxStyle["style:mirror"])
+        pStyleGraphicsPropertiesElement->addAttribute("style:mirror", mxStyle["style:mirror"]->getStr());
 
     mGraphicsAutomaticStyles.push_back(pStyleGraphicsPropertiesElement);
     mGraphicsAutomaticStyles.push_back(new TagCloseElement("style:graphic-properties"));
