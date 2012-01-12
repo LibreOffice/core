@@ -54,7 +54,6 @@
 //*****************************************************************************
 
 class SvTabListBox;
-class SvStringsDtor;
 class SvtFileView;
 struct ControlChain_Impl;
 class SvtFileDialogFilter_Impl;
@@ -214,7 +213,7 @@ public:
     const ::com::sun::star::uno::Sequence< ::rtl::OUString >& GetBlackList() const;
     void                        SetStandardDir( const String& rStdDir );
     const String&               GetStandardDir() const;
-    SvStringsDtor*              GetPathList() const;        // for MultiSelection
+    std::vector<rtl::OUString>  GetPathList() const;        // for MultiSelection
 
             void                AddFilter( const String& rFilter,
                                            const String& rType );

@@ -40,65 +40,39 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <unotools/pathoptions.hxx>
 
-// using ----------------------------------------------------------------
-
 using namespace     ::com::sun::star::container;
 using namespace     ::com::sun::star::lang;
 using namespace     ::com::sun::star::uno;
 using namespace     ::com::sun::star::beans;
 
-//------------------------------------------------------------------------------------
-// class SvtFolderPicker
-//------------------------------------------------------------------------------------
-
-//------------------------------------------------------------------------------------
 SvtFolderPicker::SvtFolderPicker( const Reference < XMultiServiceFactory >& _rxFactory )
     :OCommonPicker( _rxFactory )
 {
 }
 
-//------------------------------------------------------------------------------------
 SvtFolderPicker::~SvtFolderPicker()
 {
 }
 
-//------------------------------------------------------------------------------------
-// disambiguate XInterface
-//------------------------------------------------------------------------------------
 IMPLEMENT_FORWARD_XINTERFACE2( SvtFolderPicker, OCommonPicker, SvtFolderPicker_Base )
 
-//------------------------------------------------------------------------------------
-// disambiguate XTypeProvider
-//------------------------------------------------------------------------------------
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( SvtFolderPicker, OCommonPicker, SvtFolderPicker_Base )
 
-//------------------------------------------------------------------------------------
-// XExecutableDialog functions
-//------------------------------------------------------------------------------------
-
-//------------------------------------------------------------------------------------
 void SAL_CALL SvtFolderPicker::setTitle( const ::rtl::OUString& _rTitle ) throw (RuntimeException)
 {
     OCommonPicker::setTitle( _rTitle );
 }
 
-//------------------------------------------------------------------------------------
 sal_Int16 SAL_CALL SvtFolderPicker::execute(  ) throw (RuntimeException)
 {
     return OCommonPicker::execute();
 }
 
-//------------------------------------------------------------------------------------
-// XAsynchronousExecutableDialog functions
-//------------------------------------------------------------------------------------
-
-//------------------------------------------------------------------------------------
 void SAL_CALL SvtFolderPicker::setDialogTitle( const ::rtl::OUString& _rTitle) throw (RuntimeException)
 {
     setTitle( _rTitle );
 }
 
-//------------------------------------------------------------------------------------
 void SAL_CALL SvtFolderPicker::startExecuteModal( const Reference< ::com::sun::star::ui::dialogs::XDialogClosedListener >& xListener ) throw (RuntimeException)
 {
     m_xListener = xListener;
@@ -108,13 +82,11 @@ void SAL_CALL SvtFolderPicker::startExecuteModal( const Reference< ::com::sun::s
     getDialog()->StartExecuteModal( LINK( this, SvtFolderPicker, DialogClosedHdl ) );
 }
 
-//------------------------------------------------------------------------------------
 SvtFileDialog* SvtFolderPicker::implCreateDialog( Window* _pParent )
 {
     return new SvtFileDialog( _pParent, SFXWB_PATHDIALOG );
 }
 
-//------------------------------------------------------------------------------------
 sal_Int16 SvtFolderPicker::implExecutePicker( )
 {
     prepareExecute();
@@ -126,7 +98,6 @@ sal_Int16 SvtFolderPicker::implExecutePicker( )
     return nRet;
 }
 
-//------------------------------------------------------------------------------------
 void SvtFolderPicker::prepareExecute()
 {
     // set the default directory
@@ -140,7 +111,6 @@ void SvtFolderPicker::prepareExecute()
     }
 }
 
-//-----------------------------------------------------------------------------
 IMPL_LINK( SvtFolderPicker, DialogClosedHdl, Dialog*, pDlg )
 {
     if ( m_xListener.is() )
@@ -153,62 +123,43 @@ IMPL_LINK( SvtFolderPicker, DialogClosedHdl, Dialog*, pDlg )
     return 0;
   }
 
-//------------------------------------------------------------------------------------
-// XFolderPicker functions
-//------------------------------------------------------------------------------------
-
 void SAL_CALL SvtFolderPicker::setDisplayDirectory( const ::rtl::OUString& aDirectory )
     throw( IllegalArgumentException, RuntimeException )
 {
     m_aDisplayDirectory = aDirectory;
 }
 
-//------------------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL SvtFolderPicker::getDisplayDirectory() throw( RuntimeException )
 {
-    ::rtl::OUString aResult;
-
     if ( ! getDialog() )
         return m_aDisplayDirectory;
 
-    SvStringsDtor* pPathList = getDialog()->GetPathList();
+    std::vector<rtl::OUString> aPathList(getDialog()->GetPathList());
 
-    if ( pPathList->Count() )
-        aResult = ::rtl::OUString( *pPathList->GetObject( 0 ) );
+    if(!aPathList.empty())
+        return aPathList[0];
 
-    delete pPathList;
-
-    return aResult;
+    return rtl::OUString();
 }
 
-//------------------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL SvtFolderPicker::getDirectory() throw( RuntimeException )
 {
-    ::rtl::OUString aResult;
-
     if ( ! getDialog() )
         return m_aDisplayDirectory;
 
-    SvStringsDtor* pPathList = getDialog()->GetPathList();
+    std::vector<rtl::OUString> aPathList(getDialog()->GetPathList());
 
-    if ( pPathList->Count() )
-        aResult = ::rtl::OUString( *pPathList->GetObject( 0 ) );
+    if(!aPathList.empty())
+        return aPathList[0];
 
-    delete pPathList;
-
-    return aResult;
+    return rtl::OUString();
 }
 
-//------------------------------------------------------------------------------------
 void SAL_CALL SvtFolderPicker::setDescription( const ::rtl::OUString& aDescription )
     throw( RuntimeException )
 {
     m_aDescription = aDescription;
 }
-
-//------------------------------------------------------------------------------------
-// XServiceInfo
-//------------------------------------------------------------------------------------
 
 /* XServiceInfo */
 ::rtl::OUString SAL_CALL SvtFolderPicker::getImplementationName() throw( RuntimeException )

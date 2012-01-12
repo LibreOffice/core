@@ -2452,34 +2452,29 @@ void SvtFileDialog::InitSize()
 
 //*****************************************************************************
 
-SvStringsDtor* SvtFileDialog::GetPathList() const
+std::vector<rtl::OUString> SvtFileDialog::GetPathList() const
 {
-    SvStringsDtor*  pList = new SvStringsDtor;
+    std::vector<rtl::OUString> aList;
     sal_uLong           nCount = _pFileView->GetSelectionCount();
     SvLBoxEntry*    pEntry = nCount ? _pFileView->FirstSelected() : NULL;
 
     if ( ! pEntry )
     {
-        String* pURL;
-
         if ( _pImp->_pEdFileName->GetText().Len() && _bIsInExecute )
-            pURL = new String( _pImp->_pEdFileName->GetURL() );
+            aList.push_back(_pImp->_pEdFileName->GetURL());
         else
-            pURL = new String( _aPath );
-
-        pList->Insert( pURL, pList->Count() );
+            aList.push_back(_aPath);
     }
     else
     {
         while ( pEntry )
         {
-            String* pURL = new String( _pFileView->GetURL( pEntry ) );
-            pList->Insert( pURL, pList->Count() );
+            aList.push_back(_pFileView->GetURL(pEntry));
             pEntry = _pFileView->NextSelected( pEntry );
         }
     }
 
-    return pList;
+    return aList;
 }
 
 //*****************************************************************************

@@ -616,28 +616,27 @@ Sequence< rtl::OUString > SAL_CALL SvtFilePicker::getFiles() throw( RuntimeExcep
     // if there is more than one path we have to return the path to the
     // files first and then the list of the selected entries
 
-    SvStringsDtor* pPathList = getDialog()->GetPathList();
-    sal_uInt16 i, nCount = pPathList->Count();
-    sal_uInt16 nTotal = nCount > 1 ? nCount+1: nCount;
+    std::vector<rtl::OUString> aPathList(getDialog()->GetPathList());
+    size_t nCount = aPathList.size();
+    size_t nTotal = nCount > 1 ? nCount+1: nCount;
 
     Sequence< rtl::OUString > aPath( nTotal );
 
     if ( nCount == 1 )
-        aPath[0] = rtl::OUString( *pPathList->GetObject( 0 ) );
+        aPath[0] = rtl::OUString(aPathList[0]);
     else if ( nCount > 1 )
     {
-        INetURLObject aObj( *pPathList->GetObject( 0 ) );
+        INetURLObject aObj(aPathList[0]);
         aObj.removeSegment();
         aPath[0] = aObj.GetMainURL( INetURLObject::NO_DECODE );
 
-        for ( i = 0; i < nCount; /* i++ is done below */ )
+        for(size_t i = 0; i < aPathList.size(); ++i)
         {
-            aObj.SetURL( *pPathList->GetObject(i++) );
+            aObj.SetURL(aPathList[i]);
             aPath[i] = aObj.getName();
         }
     }
 
-    delete pPathList;
     return aPath;
 }
 
