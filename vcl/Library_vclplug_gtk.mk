@@ -55,9 +55,10 @@ $(eval $(call gb_Library_set_defs,vclplug_gtk,\
 ))
 $(eval $(call gb_Library_set_ldflags,vclplug_gtk,\
     $$(LDFLAGS) \
+    $(filter-out -l%,$(shell pkg-config --libs dbus-glib-1)) \
 ))
-$(eval $(call gb_Library_add_external_libs,vclplug_gtk,	\
-    $(shell pkg-config --libs dbus-glib-1)		\
+$(eval $(call gb_Library_add_external_libs,vclplug_gtk, \
+    $(patsubst -l%,%, $(filter -l%, $(shell pkg-config --libs dbus-glib-1))) \
 ))
 endif
 
