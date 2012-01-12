@@ -2790,6 +2790,30 @@ void ScDPCollection::UpdateReference( UpdateRefMode eUpdateRefMode,
     maSheetCaches.updateReference(eUpdateRefMode, r, nDx, nDy, nDz);
 }
 
+void ScDPCollection::CopyToTab( SCTAB nOld, SCTAB nNew )
+{
+    TablesType aAdded;
+    TablesType::const_iterator it = maTables.begin(), itEnd = maTables.end();
+    for (; it != itEnd; ++it)
+    {
+        const ScDPObject& rObj = *it;
+        ScRange aOutRange = rObj.GetOutRange();
+        if (aOutRange.aStart.Tab() != nOld)
+            continue;
+
+        ScAddress& s = aOutRange.aStart;
+        ScAddress& e = aOutRange.aEnd;
+        s.SetTab(nNew);
+        e.SetTab(nNew);
+        std::auto_ptr<ScDPObject> pNew(new ScDPObject(rObj));
+        pNew->SetOutRange(aOutRange);
+        pDoc->ApplyFlagsTab(s.Col(), s.Row(), e.Col(), e.Row(), s.Tab(), SC_MF_DP_TABLE);
+        aAdded.push_back(pNew);
+    }
+
+    maTables.transfer(maTables.end(), aAdded.begin(), aAdded.end(), aAdded);
+}
+
 bool ScDPCollection::RefsEqual( const ScDPCollection& r ) const
 {
     if (maTables.size() != r.maTables.size())

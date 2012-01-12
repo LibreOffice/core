@@ -341,7 +341,7 @@ public:
     void DeleteOnTab( SCTAB nTab );
     void UpdateReference( UpdateRefMode eUpdateRefMode,
                           const ScRange& r, SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
-
+    void CopyToTab( SCTAB nOld, SCTAB nNew );
     bool RefsEqual( const ScDPCollection& r ) const;
     void WriteRefsTo( ScDPCollection& r ) const;
 
