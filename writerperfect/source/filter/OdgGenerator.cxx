@@ -948,7 +948,7 @@ void OdgGenerator::drawPath(const WPXPropertyListVector &path)
 
 void OdgGenerator::drawGraphicObject(const ::WPXPropertyList &propList, const ::WPXBinaryData &binaryData)
 {
-    if (!propList["libwpg:mime-type"] && propList["libwpg:mime-type"]->getStr().len() <= 0)
+    if (!propList["libwpg:mime-type"] || propList["libwpg:mime-type"]->getStr().len() <= 0)
         return;
 
     mpImpl->_writeGraphicsStyle();
