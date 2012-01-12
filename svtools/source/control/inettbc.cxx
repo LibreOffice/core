@@ -68,8 +68,6 @@
 #include <vector>
 #include <algorithm>
 
-// -----------------------------------------------------------------------
-
 using namespace ::rtl;
 using namespace ::ucbhelper;
 using namespace ::utl;
@@ -81,34 +79,30 @@ using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::uno;
 
-// -----------------------------------------------------------------------
 class SvtURLBox_Impl
 {
 public:
-    SvStringsDtor*                  pURLs;
-    SvStringsDtor*                  pCompletions;
+    std::vector<rtl::OUString>      aURLs;
+    std::vector<rtl::OUString>      aCompletions;
     const IUrlFilter*               pUrlFilter;
     ::std::vector< WildCard >       m_aFilters;
 
     static sal_Bool TildeParsing( String& aText, String& aBaseUrl );
 
     inline SvtURLBox_Impl( )
-        :pURLs( NULL )
-        ,pCompletions( NULL )
-        ,pUrlFilter( NULL )
+        :pUrlFilter( NULL )
     {
         FilterMatch::createWildCardFilterList(String(),m_aFilters);
     }
 };
 
-// -----------------------------------------------------------------------
 class SvtMatchContext_Impl : public ::osl::Thread
 {
     static ::osl::Mutex*            pDirMutex;
 
-    SvStringsDtor                   aPickList;
-    SvStringsDtor*                  pCompletions;
-    SvStringsDtor*                  pURLs;
+    std::vector<rtl::OUString>      aPickList;
+    std::vector<rtl::OUString>      aCompletions;
+    std::vector<rtl::OUString>      aURLs;
     svtools::AsynchronLink          aLink;
     String                          aBaseURL;
     String                          aText;
@@ -124,7 +118,7 @@ class SvtMatchContext_Impl : public ::osl::Thread
     virtual void SAL_CALL           Cancel();
     void                            Insert( const String& rCompletion, const String& rURL, sal_Bool bForce = sal_False);
     void                            ReadFolder( const String& rURL, const String& rMatch, sal_Bool bSmart );
-    void                            FillPicklist( SvStringsDtor& rPickList );
+    void                            FillPicklist(std::vector<rtl::OUString>& rPickList);
 
 public:
     static ::osl::Mutex*           GetMutex();
@@ -144,7 +138,6 @@ public:
     return pDirMutex;
 }
 
-//-------------------------------------------------------------------------
 SvtMatchContext_Impl::SvtMatchContext_Impl(
     SvtURLBox* pBoxP, const String& rText )
     : aLink( STATIC_LINK( this, SvtMatchContext_Impl, Select_Impl ) )
@@ -155,9 +148,6 @@ SvtMatchContext_Impl::SvtMatchContext_Impl(
     , bOnlyDirectories( pBoxP->bOnlyDirectories )
     , bNoSelection( pBoxP->bNoSelection )
 {
-    pURLs = new SvStringsDtor;
-    pCompletions = new SvStringsDtor;
-
     aLink.CreateMutex();
 
     FillPicklist( aPickList );
@@ -165,16 +155,12 @@ SvtMatchContext_Impl::SvtMatchContext_Impl(
     create();
 }
 
-//-------------------------------------------------------------------------
 SvtMatchContext_Impl::~SvtMatchContext_Impl()
 {
     aLink.ClearPendingCall();
-    delete pURLs;
-    delete pCompletions;
 }
 
-//-------------------------------------------------------------------------
-void SvtMatchContext_Impl::FillPicklist( SvStringsDtor& rPickList )
+void SvtMatchContext_Impl::FillPicklist(std::vector<rtl::OUString>& rPickList)
 {
     // Einlesung der Historypickliste
     Sequence< Sequence< PropertyValue > > seqPicklist = SvtHistoryOptions().GetList( eHISTORY );
@@ -195,22 +181,19 @@ void SvtMatchContext_Impl::FillPicklist( SvStringsDtor& rPickList )
             {
                 seqPropertySet[nProperty].Value >>= sTitle;
                 aURL.SetURL( sTitle );
-                const StringPtr pStr = new String( aURL.GetMainURL( INetURLObject::DECODE_WITH_CHARSET ) );
-                rPickList.Insert( pStr, (sal_uInt16) nItem );
+                rPickList.insert(rPickList.begin() + nItem, aURL.GetMainURL(INetURLObject::DECODE_WITH_CHARSET));
                 break;
             }
         }
     }
 }
 
-//-------------------------------------------------------------------------
 void SAL_CALL SvtMatchContext_Impl::Cancel()
 {
     // Cancel button pressed
     terminate();
 }
 
-//-------------------------------------------------------------------------
 void SvtMatchContext_Impl::Stop()
 {
     bStop = sal_True;
@@ -219,7 +202,6 @@ void SvtMatchContext_Impl::Stop()
         terminate();
 }
 
-//-------------------------------------------------------------------------
 void SvtMatchContext_Impl::onTerminated( )
 {
     aLink.Call( this );
@@ -252,9 +234,9 @@ IMPL_STATIC_LINK( SvtMatchContext_Impl, Select_Impl, void*, )
     // insert all completed strings into the listbox
     pBox->Clear();
 
-    for( sal_uInt16 nPos = 0; nPos<pThis->pCompletions->Count(); nPos++ )
+    for(std::vector<rtl::OUString>::iterator i = pThis->aCompletions.begin(); i != pThis->aCompletions.end(); ++i)
     {
-        String sCompletion( *(*pThis->pCompletions)[nPos] );
+        String sCompletion(*i);
 
         // convert the file into an URL
         rtl::OUString sURL( sCompletion );
@@ -292,7 +274,7 @@ IMPL_STATIC_LINK( SvtMatchContext_Impl, Select_Impl, void*, )
         pBox->InsertEntry( sCompletion );
     }
 
-    if( !pThis->bNoSelection && pThis->pCompletions->Count() && !bValidCompletionsFiltered )
+    if( !pThis->bNoSelection && !pThis->aCompletions.empty() && !bValidCompletionsFiltered )
     {
         // select the first one
         String aTmp( pBox->GetEntry(0) );
@@ -301,12 +283,10 @@ IMPL_STATIC_LINK( SvtMatchContext_Impl, Select_Impl, void*, )
     }
 
     // transfer string lists to listbox and forget them
-    delete pBox->pImp->pURLs;
-    delete pBox->pImp->pCompletions;
-    pBox->pImp->pURLs = pThis->pURLs;
-    pBox->pImp->pCompletions = pThis->pCompletions;
-    pThis->pURLs = NULL;
-    pThis->pCompletions = NULL;
+    pBox->pImp->aURLs = pThis->aURLs;
+    pBox->pImp->aCompletions = pThis->aCompletions;
+    pThis->aURLs.clear();
+    pThis->aCompletions.clear();
 
     // force listbox to resize ( it may be open )
     pBox->Resize();
@@ -327,15 +307,12 @@ void SvtMatchContext_Impl::Insert( const String& rCompletion,
     if( !bForce )
     {
         // avoid doubles
-        for( sal_uInt16 nPos = pCompletions->Count(); nPos--; )
-            if( *(*pCompletions)[ nPos ] == rCompletion )
-                return;
+        if(find(aCompletions.begin(), aCompletions.end(), rtl::OUString(rCompletion)) != aCompletions.end())
+            return;
     }
 
-    const StringPtr pCompletion = new String( rCompletion );
-    pCompletions->Insert( pCompletion, pCompletions->Count() );
-    const StringPtr pURL = new String( rURL );
-    pURLs->Insert( pURL, pURLs->Count() );
+    aCompletions.push_back(rCompletion);
+    aURLs.push_back(rURL);
 }
 
 //-------------------------------------------------------------------------
@@ -598,8 +575,8 @@ void SvtMatchContext_Impl::run()
         return;
 
     // Reset match lists
-    pCompletions->Remove( 0, pCompletions->Count() );
-    pURLs->Remove( 0, pURLs->Count() );
+    aCompletions.clear();
+    aURLs.clear();
 
     // check for input
     sal_uInt16 nTextLen = aText.Len();
@@ -655,7 +632,6 @@ void SvtMatchContext_Impl::run()
         return;
 
     sal_Bool bFull = sal_False;
-    int nCount = aPickList.Count();
 
     INetURLObject aCurObj;
     String aEmpty, aCurString, aCurMainURL;
@@ -663,9 +639,9 @@ void SvtMatchContext_Impl::run()
     aObj.SetSmartProtocol( eSmartProt == INET_PROT_NOT_VALID ? INET_PROT_HTTP : eSmartProt );
     for( ;; )
     {
-        for( sal_uInt16 nPos = 0; schedule() && nPos < nCount; nPos++ )
+        for(std::vector<rtl::OUString>::iterator i = aPickList.begin(); schedule() && i != aPickList.end(); ++i)
         {
-            aCurObj.SetURL( *aPickList.GetObject( nPos ) );
+            aCurObj.SetURL(*i);
             aCurObj.SetSmartURL( aCurObj.GetURLNoPass());
             aCurMainURL = aCurObj.GetMainURL( INetURLObject::NO_DECODE );
 
@@ -761,9 +737,6 @@ void SvtMatchContext_Impl::run()
     return;
 }
 
-//-------------------------------------------------------------------------
-//-------------------------------------------------------------------------
-//-------------------------------------------------------------------------
 void SvtURLBox::TryAutoComplete( sal_Bool bForce )
 {
     if( Application::AnyInput( VCL_INPUT_KEYBOARD ) ) return;
@@ -839,7 +812,6 @@ SvtURLBox::SvtURLBox( Window* pParent, const ResId& _rResId, INetProtocol eSmart
     ImplInit();
 }
 
-//-------------------------------------------------------------------------
 void SvtURLBox::ImplInit()
 {
     pImp = new SvtURLBox_Impl();
@@ -854,7 +826,6 @@ void SvtURLBox::ImplInit()
     UpdatePicklistForSmartProtocol_Impl();
 }
 
-//-------------------------------------------------------------------------
 SvtURLBox::~SvtURLBox()
 {
     if( pCtx )
@@ -863,12 +834,9 @@ SvtURLBox::~SvtURLBox()
         pCtx = NULL;
     }
 
-    delete pImp->pURLs;
-    delete pImp->pCompletions;
     delete pImp;
 }
 
-//-------------------------------------------------------------------------
 void SvtURLBox::UpdatePickList( )
 {
     if( pCtx )
@@ -882,7 +850,6 @@ void SvtURLBox::UpdatePickList( )
         pCtx = new SvtMatchContext_Impl( this, sText );
 }
 
-//-------------------------------------------------------------------------
 void SvtURLBox::SetSmartProtocol( INetProtocol eProt )
 {
     if ( eSmartProtocol != eProt )
@@ -892,7 +859,6 @@ void SvtURLBox::SetSmartProtocol( INetProtocol eProt )
     }
 }
 
-//-------------------------------------------------------------------------
 void SvtURLBox::UpdatePicklistForSmartProtocol_Impl()
 {
     Clear();
@@ -1142,17 +1108,12 @@ String SvtURLBox::GetURL()
     String aText( GetText() );
     if ( MatchesPlaceHolder( aText ) )
         return aPlaceHolder;
+
     // try to get the right case preserving URL from the list of URLs
-    if ( pImp->pCompletions && pImp->pURLs )
+    for(std::vector<rtl::OUString>::iterator i = pImp->aCompletions.begin(), j = pImp->aURLs.begin(); i != pImp->aCompletions.end() && j != pImp->aURLs.end(); ++i, ++j)
     {
-        for( sal_uInt16 nPos=0; nPos<pImp->pCompletions->Count(); nPos++ )
-        {
-#ifdef DBG_UTIL
-            String aTmp( *(*pImp->pCompletions)[ nPos ] );
-#endif
-            if( *(*pImp->pCompletions)[ nPos ] == aText )
-                return *(*pImp->pURLs)[nPos];
-        }
+        if((*i).equals(aText))
+            return *j;
     }
 
 #ifdef WNT
@@ -1222,29 +1183,23 @@ String SvtURLBox::GetURL()
     return aObj.GetMainURL( INetURLObject::NO_DECODE );
 }
 
-//-------------------------------------------------------------------------
 void SvtURLBox::DisableHistory()
 {
     bHistoryDisabled = sal_True;
     UpdatePicklistForSmartProtocol_Impl();
 }
 
-//-------------------------------------------------------------------------
 void SvtURLBox::SetBaseURL( const String& rURL )
 {
     ::osl::MutexGuard aGuard( SvtMatchContext_Impl::GetMutex() );
 
     // Reset match lists
-    if ( pImp->pCompletions )
-        pImp->pCompletions->Remove( 0, pImp->pCompletions->Count() );
-
-    if ( pImp->pURLs )
-        pImp->pURLs->Remove( 0, pImp->pURLs->Count() );
+    pImp->aCompletions.clear();
+    pImp->aURLs.clear();
 
     aBaseURL = rURL;
 }
 
-//-------------------------------------------------------------------------
 /** Parse leading ~ for Unix systems,
     does nothing for Windows
  */
@@ -1341,13 +1296,11 @@ sal_Bool SvtURLBox_Impl::TildeParsing(
     return sal_True;
 }
 
-//-------------------------------------------------------------------------
 void SvtURLBox::SetUrlFilter( const IUrlFilter* _pFilter )
 {
     pImp->pUrlFilter = _pFilter;
 }
 
-// -----------------------------------------------------------------------------
 void SvtURLBox::SetFilter(const String& _sFilter)
 {
     pImp->m_aFilters.clear();
