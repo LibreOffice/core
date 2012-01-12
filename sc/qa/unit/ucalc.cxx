@@ -133,6 +133,12 @@ public:
      * Test for pivot table's filtering functionality by page fields.
      */
     void testDataPilotFilters();
+
+    /**
+     * Test for pivot table's named source range.
+     */
+    void testDataPilotNamedSource();
+
     void testSheetCopy();
     void testSheetMove();
     void testExternalRef();
@@ -185,6 +191,7 @@ public:
     CPPUNIT_TEST(testDataPilot);
     CPPUNIT_TEST(testDataPilotLabels);
     CPPUNIT_TEST(testDataPilotFilters);
+    CPPUNIT_TEST(testDataPilotNamedSource);
     CPPUNIT_TEST(testSheetCopy);
     CPPUNIT_TEST(testSheetMove);
     CPPUNIT_TEST(testExternalRef);
@@ -1152,17 +1159,12 @@ bool checkDPTableOutput(ScDocument* pDoc, const ScRange& aOutRange, const char* 
     return true;
 }
 
-ScDPObject* createDPFromRange(
-    ScDocument* pDoc, const ScRange& rRange, DPFieldDef aFields[], size_t nFieldCount,
+ScDPObject* createDPFromSourceDesc(
+    ScDocument* pDoc, const ScSheetSourceDesc& rDesc, DPFieldDef aFields[], size_t nFieldCount,
     bool bFilterButton)
 {
-    SCROW nRow1 = rRange.aStart.Row(), nRow2 = rRange.aEnd.Row();
-    SCCOL nCol1 = rRange.aStart.Col();
-
-    ScSheetSourceDesc aSheetDesc(pDoc);
-    aSheetDesc.SetSourceRange(rRange);
     ScDPObject* pDPObj = new ScDPObject(pDoc);
-    pDPObj->SetSheetDesc(aSheetDesc);
+    pDPObj->SetSheetDesc(rDesc);
     pDPObj->SetOutRange(ScAddress(0, 0, 1));
     ScPivotParam aParam;
     pDPObj->FillOldParam(aParam);
@@ -1182,16 +1184,16 @@ ScDPObject* createDPFromRange(
     aSaveData.SetDrillDown(true);
 
     // Check the sanity of the source range.
-    const ScRange& rSrcRange = aSheetDesc.GetSourceRange();
-    nCol1 = rSrcRange.aStart.Col();
-    nRow1 = rSrcRange.aStart.Row();
-    nRow2 = rSrcRange.aEnd.Row();
+    const ScRange& rSrcRange = rDesc.GetSourceRange();
+    SCCOL nCol1 = rSrcRange.aStart.Col();
+    SCROW nRow1 = rSrcRange.aStart.Row();
+    SCROW nRow2 = rSrcRange.aEnd.Row();
     CPPUNIT_ASSERT_MESSAGE("source range contains no data!", nRow2 - nRow1 > 1);
 
     // Set the dimension information.
     for (size_t i = 0; i < nFieldCount; ++i)
     {
-        OUString aDimName = pDoc->GetString(nCol1+i, nRow1, rRange.aStart.Tab());
+        OUString aDimName = pDoc->GetString(nCol1+i, nRow1, rSrcRange.aStart.Tab());
         ScDPSaveDimension* pDim = aSaveData.GetDimensionByName(aDimName);
         pDim->SetOrientation(static_cast<sal_uInt16>(aFields[i].eOrient));
         pDim->SetUsedHierarchy(0);
@@ -1245,6 +1247,15 @@ ScDPObject* createDPFromRange(
     pDPObj->InvalidateData();
 
     return pDPObj;
+}
+
+ScDPObject* createDPFromRange(
+    ScDocument* pDoc, const ScRange& rRange, DPFieldDef aFields[], size_t nFieldCount,
+    bool bFilterButton)
+{
+    ScSheetSourceDesc aSheetDesc(pDoc);
+    aSheetDesc.SetSourceRange(rRange);
+    return createDPFromSourceDesc(pDoc, aSheetDesc, aFields, nFieldCount, bFilterButton);
 }
 
 }
@@ -1569,6 +1580,102 @@ void Test::testDataPilotFilters()
     CPPUNIT_ASSERT_MESSAGE("There shouldn't be any data pilot table stored with the document.",
                            pDPs->GetCount() == 0);
 
+    m_pDoc->DeleteTab(1);
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testDataPilotNamedSource()
+{
+    m_pDoc->InsertTab(0, OUString(RTL_CONSTASCII_USTRINGPARAM("Data")));
+    m_pDoc->InsertTab(1, OUString(RTL_CONSTASCII_USTRINGPARAM("Table")));
+
+    // Dimension definition
+    DPFieldDef aFields[] = {
+        { "Name",  sheet::DataPilotFieldOrientation_ROW },
+        { "Group", sheet::DataPilotFieldOrientation_COLUMN },
+        { "Score", sheet::DataPilotFieldOrientation_DATA }
+    };
+
+    // Raw data
+    const char* aData[][3] = {
+        { "Andy",    "A", "30" },
+        { "Bruce",   "A", "20" },
+        { "Charlie", "B", "45" },
+        { "David",   "B", "12" },
+        { "Edward",  "C",  "8" },
+        { "Frank",   "C", "15" },
+    };
+
+    size_t nFieldCount = SAL_N_ELEMENTS(aFields);
+    size_t nDataCount = SAL_N_ELEMENTS(aData);
+
+    // Insert the raw data.
+    ScRange aSrcRange = insertDPSourceData(m_pDoc, aFields, nFieldCount, aData, nDataCount);
+    rtl::OUString aRangeStr;
+    aSrcRange.Format(aRangeStr, SCR_ABS_3D, m_pDoc);
+
+    // Name this range.
+    rtl::OUString aRangeName(RTL_CONSTASCII_USTRINGPARAM("MyData"));
+    ScRangeName* pNames = m_pDoc->GetRangeName();
+    CPPUNIT_ASSERT_MESSAGE("Failed to get global range name container.", pNames);
+    ScRangeData* pName = new ScRangeData(
+        m_pDoc, aRangeName, aRangeStr);
+    bool bSuccess = pNames->insert(pName);
+    CPPUNIT_ASSERT_MESSAGE("Failed to insert a new name.", bSuccess);
+
+    ScSheetSourceDesc aSheetDesc(m_pDoc);
+    aSheetDesc.SetRangeName(aRangeName);
+    ScDPObject* pDPObj = createDPFromSourceDesc(m_pDoc, aSheetDesc, aFields, nFieldCount, false);
+    CPPUNIT_ASSERT_MESSAGE("Failed to create a new pivot table object.", pDPObj);
+
+    ScDPCollection* pDPs = m_pDoc->GetDPCollection();
+    bSuccess = pDPs->InsertNewTable(pDPObj);
+    CPPUNIT_ASSERT_MESSAGE("failed to insert a new pivot table object into document.", bSuccess);
+    CPPUNIT_ASSERT_MESSAGE("there should be only one data pilot table.",
+                           pDPs->GetCount() == 1);
+    pDPObj->SetName(pDPs->CreateNewName());
+
+    bool bOverFlow = false;
+    ScRange aOutRange = pDPObj->GetNewOutputRange(bOverFlow);
+    CPPUNIT_ASSERT_MESSAGE("Table overflow!?", !bOverFlow);
+
+    pDPObj->Output(aOutRange.aStart);
+    aOutRange = pDPObj->GetOutRange();
+    {
+        // Expected output table content.  0 = empty cell
+        const char* aOutputCheck[][5] = {
+            { "Sum - Score", "Group", 0, 0, 0 },
+            { "Name", "A", "B", "C", "Total Result" },
+            { "Andy", "30", 0, 0, "30" },
+            { "Bruce", "20", 0, 0, "20" },
+            { "Charlie", 0, "45", 0, "45" },
+            { "David", 0, "12", 0, "12" },
+            { "Edward", 0, 0, "8", "8" },
+            { "Frank", 0, 0, "15", "15" },
+            { "Total Result", "50", "57", "23", "130" }
+        };
+
+        bSuccess = checkDPTableOutput<5>(m_pDoc, aOutRange, aOutputCheck, "DataPilot table output");
+        CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
+    }
+
+    // Move the table with pivot table to the left of the source data sheet.
+    m_pDoc->MoveTab(1, 0);
+    rtl::OUString aTabName;
+    m_pDoc->GetName(0, aTabName);
+    CPPUNIT_ASSERT_MESSAGE("Wrong sheet name.", aTabName.equalsAscii("Table"));
+    CPPUNIT_ASSERT_MESSAGE("Pivot table output is on the wrong sheet!",
+                           pDPObj->GetOutRange().aStart.Tab() == 0);
+    const ScSheetSourceDesc* pDesc = pDPObj->GetSheetDesc();
+    CPPUNIT_ASSERT_MESSAGE("Sheet source description doesn't exist.", pDesc);
+    CPPUNIT_ASSERT_MESSAGE("Named source range has been altered unexpectedly!",
+                           pDesc->GetRangeName().equals(aRangeName));
+
+    CPPUNIT_ASSERT_MESSAGE("Cache should exist.", pDPs->GetNameCaches().getCache(aRangeName) != NULL);
+    pDPs->FreeTable(pDPObj);
+    CPPUNIT_ASSERT_MESSAGE("There should be no more tables.", pDPs->GetCount() == 0);
+
+    pNames->clear();
     m_pDoc->DeleteTab(1);
     m_pDoc->DeleteTab(0);
 }
