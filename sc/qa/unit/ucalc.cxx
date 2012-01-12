@@ -1386,6 +1386,16 @@ void Test::testDataPilot()
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
+    CPPUNIT_ASSERT_MESSAGE("Cache should be here.", pDPs->GetSheetCaches().hasCache(aSrcRange));
+
+    // Swap the two sheets.
+    m_pDoc->MoveTab(1, 0);
+    CPPUNIT_ASSERT_MESSAGE("Cache should have moved.", !pDPs->GetSheetCaches().hasCache(aSrcRange));
+    aSrcRange.aStart.SetTab(1);
+    aSrcRange.aEnd.SetTab(1);
+    CPPUNIT_ASSERT_MESSAGE("Cache should be here.", pDPs->GetSheetCaches().hasCache(aSrcRange));
+
+
     pDPs->FreeTable(pDPObj2);
     CPPUNIT_ASSERT_MESSAGE("There shouldn't be any data pilot table stored with the document.",
                            pDPs->GetCount() == 0);
@@ -1671,7 +1681,7 @@ void Test::testDataPilotNamedSource()
     CPPUNIT_ASSERT_MESSAGE("Named source range has been altered unexpectedly!",
                            pDesc->GetRangeName().equals(aRangeName));
 
-    CPPUNIT_ASSERT_MESSAGE("Cache should exist.", pDPs->GetNameCaches().getCache(aRangeName) != NULL);
+    CPPUNIT_ASSERT_MESSAGE("Cache should exist.", pDPs->GetNameCaches().hasCache(aRangeName));
     pDPs->FreeTable(pDPObj);
     CPPUNIT_ASSERT_MESSAGE("There should be no more tables.", pDPs->GetCount() == 0);
 

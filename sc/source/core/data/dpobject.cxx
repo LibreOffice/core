@@ -2471,6 +2471,18 @@ struct FindInvalidRange : public std::unary_function<ScRange, bool>
 
 }
 
+bool ScDPCollection::SheetCaches::hasCache(const ScRange& rRange) const
+{
+    RangeIndexType::const_iterator it = std::find(maRanges.begin(), maRanges.end(), rRange);
+    if (it == maRanges.end())
+        return false;
+
+    // Already cached.
+    size_t nIndex = std::distance(maRanges.begin(), it);
+    CachesType::const_iterator itCache = maCaches.find(nIndex);
+    return itCache != maCaches.end();
+}
+
 const ScDPCache* ScDPCollection::SheetCaches::getCache(const ScRange& rRange)
 {
     RangeIndexType::iterator it = std::find(maRanges.begin(), maRanges.end(), rRange);
@@ -2565,10 +2577,9 @@ void ScDPCollection::SheetCaches::removeCache(const ScRange& rRange)
 
 ScDPCollection::NameCaches::NameCaches(ScDocument* pDoc) : mpDoc(pDoc) {}
 
-const ScDPCache* ScDPCollection::NameCaches::getCache(const OUString& rName) const
+bool ScDPCollection::NameCaches::hasCache(const OUString& rName) const
 {
-    CachesType::const_iterator itr = maCaches.find(rName);
-    return itr != maCaches.end() ? itr->second : NULL;
+    return maCaches.count(rName) != 0;
 }
 
 const ScDPCache* ScDPCollection::NameCaches::getCache(const OUString& rName, const ScRange& rRange)

@@ -266,6 +266,7 @@ public:
         ScDocument* mpDoc;
     public:
         SheetCaches(ScDocument* pDoc);
+        bool hasCache(const ScRange& rRange) const;
         const ScDPCache* getCache(const ScRange& rRange);
 
         void updateReference(
@@ -286,7 +287,7 @@ public:
         ScDocument* mpDoc;
     public:
         NameCaches(ScDocument* pDoc);
-        const ScDPCache* getCache(const rtl::OUString& rName) const;
+        bool hasCache(const rtl::OUString& rName) const;
         const ScDPCache* getCache(const ::rtl::OUString& rName, const ScRange& rRange);
     private:
         void removeCache(const ::rtl::OUString& rName);
