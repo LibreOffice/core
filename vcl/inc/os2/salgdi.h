@@ -1,38 +1,33 @@
-/*************************************************************************
+/**************************************************************
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- * OpenOffice.org - a multi-platform office productivity suite
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *************************************************************/
+
+
 
 #ifndef _SV_SALGDI_H
 #define _SV_SALGDI_H
 
-#include <vcl/sv.h>
-#include <vcl/sallayout.hxx>
-#include <vcl/salgdi.hxx>
-#include <vcl/outfont.hxx>
-#include <vcl/impfont.hxx>
+#include <sallayout.hxx>
+#include <salgdi.hxx>
+#include <outfont.hxx>
+#include <impfont.hxx>
 
 #include <hash_set>
 
@@ -54,7 +49,7 @@ class ImplOs2FontData : public ImplFontData
 public:
                             ImplOs2FontData( PFONTMETRICS,
                                 int nFontHeight,
-                                BYTE nPitchAndFamily  );
+                                PM_BYTE nPitchAndFamily  );
                             ~ImplOs2FontData();
 
     virtual ImplFontData*   Clone() const;
@@ -67,14 +62,22 @@ public:
 
     PFONTMETRICS            GetFontMetrics() const          { return pFontMetric; }
     USHORT                  GetCharSet() const          { return meOs2CharSet; }
-    BYTE                    GetPitchAndFamily() const   { return mnPitchAndFamily; }
+    PM_BYTE                    GetPitchAndFamily() const   { return mnPitchAndFamily; }
     bool                    IsGlyphApiDisabled() const  { return mbDisableGlyphApi; }
     bool                    SupportsKorean() const      { return mbHasKoreanRange; }
     bool                    SupportsCJK() const         { return mbHasCJKSupport; }
+    bool                    SupportsArabic() const      { return mbHasArabicSupport; }
     bool                    AliasSymbolsHigh() const    { return mbAliasSymbolsHigh; }
     bool                    AliasSymbolsLow() const     { return mbAliasSymbolsLow; }
 
-    const ImplFontCharMap*  GetImplFontCharMap() const;
+    const ImplFontCharMap*        GetImplFontCharMap() const;
+    const Ucs2SIntMap* GetEncodingVector() const { return mpEncodingVector; }
+    void SetEncodingVector( const Ucs2SIntMap* pNewVec ) const
+    {
+        if( mpEncodingVector )
+            delete mpEncodingVector;
+        mpEncodingVector = pNewVec;
+    }
 
 private:
     sal_IntPtr              mnId;
@@ -82,13 +85,15 @@ private:
     mutable bool                    mbHasKoreanRange;
     mutable bool                    mbHasCJKSupport;
 
-    mutable const ImplFontCharMap*  mpUnicodeMap;
+    mutable bool                    mbHasArabicSupport;
+    mutable ImplFontCharMap*        mpUnicodeMap;
+    mutable const Ucs2SIntMap*      mpEncodingVector;
 
     // TODO: get rid of the members below needed to work with the Win9x non-unicode API
-    BYTE*                   mpFontCharSets;     // all Charsets for the current font (used on W98 for kerning)
-    BYTE                    mnFontCharSetCount; // Number of Charsets of the current font; 0 - if not queried
+    PM_BYTE*                   mpFontCharSets;     // all Charsets for the current font (used on W98 for kerning)
+    PM_BYTE                    mnFontCharSetCount; // Number of Charsets of the current font; 0 - if not queried
     USHORT                  meOs2CharSet;
-    BYTE                    mnPitchAndFamily;
+    PM_BYTE                    mnPitchAndFamily;
     bool                    mbAliasSymbolsHigh;
     bool                    mbAliasSymbolsLow;
     PFONTMETRICS            pFontMetric;
@@ -128,19 +133,19 @@ public:
     PFONTMETRICS            mpFontMetrics;      // cached font list
     LONG                    mnOrientationX;     // X-Font orientation
     LONG                    mnOrientationY;     // Y-Font orientation
-    BOOL                    mbLine;             // draw lines
-    BOOL                    mbFill;             // fill areas
-    BOOL                    mbPrinter;          // is Printer
-    BOOL                    mbVirDev;           // is VirDev
-    BOOL                    mbWindow;           // is Window
-    BOOL                    mbScreen;           // is Screen compatible
+    sal_Bool                    mbLine;             // draw lines
+    sal_Bool                    mbFill;             // fill areas
+    sal_Bool                    mbPrinter;          // is Printer
+    sal_Bool                    mbVirDev;           // is VirDev
+    sal_Bool                    mbWindow;           // is Window
+    sal_Bool                    mbScreen;           // is Screen compatible
     bool                    mbXORMode;          // _every_ output with RasterOp XOR
     ULONG                   mhFonts[ MAX_FALLBACK ];        // Font + Fallbacks
     const ImplOs2FontData*          mpOs2FontData[ MAX_FALLBACK ];  // pointer to the most recent font face
     ImplOs2FontEntry*           mpOs2FontEntry[ MAX_FALLBACK ]; // pointer to the most recent font instance
     ULONG                   mhDefFont;          // DefaultFont
     float                   mfFontScale;            // allows metrics emulation of huge font sizes
-    BOOL                    mbFontKernInit;     // FALSE: FontKerns must be queried
+    sal_Bool                    mbFontKernInit;     // FALSE: FontKerns must be queried
     KERNINGPAIRS*               mpFontKernPairs;    // Kerning Pairs of the current Font
     ULONG                   mnFontKernPairCount;// Number of Kerning Pairs of the current Font
 
@@ -151,6 +156,7 @@ public:
     virtual ~Os2SalGraphics();
 
 protected:
+    virtual bool        setClipRegion( const Region& );
     // draw --> LineColor and FillColor and RasterOp and ClipRegion
     virtual void        drawPixel( long nX, long nY );
     virtual void        drawPixel( long nX, long nY, SalColor nSalColor );
@@ -161,9 +167,9 @@ protected:
     virtual void        drawPolyPolygon( ULONG nPoly, const ULONG* pPoints, PCONSTSALPOINT* pPtAry );
     virtual bool        drawPolyPolygon( const ::basegfx::B2DPolyPolygon&, double fTransparency );
     virtual bool        drawPolyLine( const ::basegfx::B2DPolygon&, double fTransparency, const ::basegfx::B2DVector& rLineWidth, basegfx::B2DLineJoin );
-    virtual sal_Bool    drawPolyLineBezier( ULONG nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry );
-    virtual sal_Bool    drawPolygonBezier( ULONG nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry );
-    virtual sal_Bool    drawPolyPolygonBezier( ULONG nPoly, const ULONG* pPoints, const SalPoint* const* pPtAry, const BYTE* const* pFlgAry );
+    virtual sal_Bool    drawPolyLineBezier( sal_uIntPtr nPoints, const SalPoint* pPtAry, const sal_uInt8* pFlgAry );
+    virtual sal_Bool    drawPolygonBezier( sal_uIntPtr nPoints, const SalPoint* pPtAry, const sal_uInt8* pFlgAry );
+    virtual sal_Bool    drawPolyPolygonBezier( sal_uInt32 nPoly, const sal_uInt32* pPoints, const SalPoint* const* pPtAry, const sal_uInt8* const* pFlgAry );
 
     // CopyArea --> No RasterOp, but ClipRegion
     virtual void        copyArea( long nDestX, long nDestY, long nSrcX, long nSrcY, long nSrcWidth,
@@ -190,19 +196,19 @@ protected:
     virtual void        invert( long nX, long nY, long nWidth, long nHeight, SalInvert nFlags);
     virtual void        invert( ULONG nPoints, const SalPoint* pPtAry, SalInvert nFlags );
 
-    virtual BOOL        drawEPS( long nX, long nY, long nWidth, long nHeight, void* pPtr, ULONG nSize );
+    virtual sal_Bool        drawEPS( long nX, long nY, long nWidth, long nHeight, void* pPtr, ULONG nSize );
 
 #if 0
     // native widget rendering methods that require mirroring
-    virtual BOOL        hitTestNativeControl( ControlType nType, ControlPart nPart, const Region& rControlRegion,
-                                              const Point& aPos, BOOL& rIsInside );
-    virtual BOOL        drawNativeControl( ControlType nType, ControlPart nPart, const Region& rControlRegion,
+    virtual sal_Bool        hitTestNativeControl( ControlType nType, ControlPart nPart, const Region& rControlRegion,
+                                              const Point& aPos, sal_Bool& rIsInside );
+    virtual sal_Bool        drawNativeControl( ControlType nType, ControlPart nPart, const Region& rControlRegion,
                                            ControlState nState, const ImplControlValue& aValue,
                                            rtl::OUString aCaption );
-    virtual BOOL        drawNativeControlText( ControlType nType, ControlPart nPart, const Region& rControlRegion,
+    virtual sal_Bool        drawNativeControlText( ControlType nType, ControlPart nPart, const Region& rControlRegion,
                                                ControlState nState, const ImplControlValue& aValue,
                                                rtl::OUString aCaption );
-    virtual BOOL        getNativeControlRegion( ControlType nType, ControlPart nPart, const Region& rControlRegion, ControlState nState,
+    virtual sal_Bool        getNativeControlRegion( ControlType nType, ControlPart nPart, const Region& rControlRegion, ControlState nState,
                                                 const ImplControlValue& aValue, rtl::OUString aCaption,
                                                 Region &rNativeBoundingRegion, Region &rNativeContentRegion );
 #endif
@@ -224,7 +230,6 @@ public:
 
     // set the clip region to empty
     virtual void            ResetClipRegion();
-    virtual bool            setClipRegion( const Region& );
 
     // set the line color to transparent (= don't draw lines)
     virtual void            SetLineColor();
@@ -246,12 +251,12 @@ public:
     // set the font
     virtual USHORT         SetFont( ImplFontSelectData*, int nFallbackLevel );
     // get the current font's etrics
-    virtual void            GetFontMetric( ImplFontMetricData* );
+    virtual void            GetFontMetric( ImplFontMetricData*, int nFallbackLevel );
     // get kernign pairs of the current font
     // return only PairCount if (pKernPairs == NULL)
     virtual ULONG           GetKernPairs( ULONG nPairs, ImplKernPairData* pKernPairs );
     // get the repertoire of the current font
-    virtual ImplFontCharMap* GetImplFontCharMap() const;
+    virtual const ImplFontCharMap* GetImplFontCharMap() const;
     // graphics must fill supplied font list
     virtual void            GetDevFontList( ImplDevFontList* );
     // graphics should call ImplAddDevFontSubstitute on supplied
@@ -270,7 +275,7 @@ public:
     //             rInfo: additional outgoing information
     // implementation note: encoding 0 with glyph id 0 should be added implicitly
     // as "undefined character"
-    virtual BOOL            CreateFontSubset( const rtl::OUString& rToFile,
+    virtual sal_Bool            CreateFontSubset( const rtl::OUString& rToFile,
                                               const ImplFontData* pFont,
                                               long* pGlyphIDs,
                                               sal_uInt8* pEncoding,
@@ -294,7 +299,7 @@ public:
     //             pWidths: the widths of all glyphs from char code 0 to 255
     //                      pWidths MUST support at least 256 members;
     //             rInfo: additional outgoing information
-    //             pDataLen: out parameter, contains the byte length of the returned buffer
+    //             pDataLen: out parameter, contains the PM_BYTE length of the returned buffer
     virtual const void* GetEmbedFontData( const ImplFontData*,
                                           const sal_Ucs* pUnicodes,
                                           sal_Int32* pWidths,
@@ -308,15 +313,15 @@ public:
                                             Int32Vector& rWidths,
                                             Ucs2UIntMap& rUnicodeEnc );
 
-    virtual BOOL                    GetGlyphBoundRect( long nIndex, Rectangle& );
-    virtual BOOL                    GetGlyphOutline( long nIndex, ::basegfx::B2DPolyPolygon& );
+    virtual sal_Bool                    GetGlyphBoundRect( long nIndex, Rectangle& );
+    virtual sal_Bool                    GetGlyphOutline( long nIndex, ::basegfx::B2DPolyPolygon& );
 
     virtual SalLayout*              GetTextLayout( ImplLayoutArgs&, int nFallbackLevel );
     virtual void                     DrawServerFontLayout( const ServerFontLayout& );
     virtual bool            supportsOperation( OutDevSupportType ) const;
 
     // Query the platform layer for control support
-    virtual BOOL IsNativeControlSupported( ControlType nType, ControlPart nPart );
+    virtual sal_Bool IsNativeControlSupported( ControlType nType, ControlPart nPart );
 
     virtual SystemGraphicsData GetGraphicsData() const;
     virtual SystemFontData     GetSysFontData( int nFallbacklevel ) const;
@@ -330,7 +335,7 @@ void ImplSalDeInitGraphics( Os2SalGraphics* mpData );
 // - Defines -
 // -----------
 
-#define RGBCOLOR(r,g,b)     ((ULONG)(((BYTE)(b)|((USHORT)(g)<<8))|(((ULONG)(BYTE)(r))<<16)))
+#define RGBCOLOR(r,g,b)     ((ULONG)(((PM_BYTE)(b)|((USHORT)(g)<<8))|(((ULONG)(PM_BYTE)(r))<<16)))
 #define TY( y )             (mnHeight-(y)-1)
 
 // offset for lcid field, used for fallback font selection

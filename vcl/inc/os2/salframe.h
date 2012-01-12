@@ -1,37 +1,31 @@
-/*************************************************************************
+/**************************************************************
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- * OpenOffice.org - a multi-platform office productivity suite
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *************************************************************/
+
+
 
 #ifndef _SV_SALFRAME_H
 #define _SV_SALFRAME_H
 
-#include <vcl/sv.h>
 #include <vcl/sysdata.hxx>
-#include <vcl/salframe.hxx>
-
+#include <salframe.hxx>
 
 #ifndef PM_BIDI_INCLUDED
 #include <pmbidi.h>
@@ -75,28 +69,28 @@ public:
     long                    mnWidth;                // Window-Witdth
     long                    mnHeight;               // Window-Height
     SWP                     maFullScreenRect;       // WindowRect befor FullScreenMode
-    BOOL                    mbGraphics;             // is Graphics used
-    BOOL                    mbAllwayOnTop;          // Allways on top modus
-    BOOL                    mbVisible;              // Visible Show/Hide-Status
-    BOOL                    mbMinHide;              // hide called from OS2
-    BOOL                    mbHandleIME;            // TRUE: Wir handeln die IME-Messages
-    BOOL                    mbConversionMode;       // TRUE: Wir befinden uns im Conversion-Modus
-    BOOL                    mbCandidateMode;        // TRUE: Wir befinden uns im Candidate-Modus
-    BOOL                    mbCaption;              // has window a caption
-    BOOL                    mbBorder;               // has window a border
-    BOOL                    mbFixBorder;            // has window a fixed border
-    BOOL                    mbSizeBorder;           // has window a sizeable border
-    BOOL                    mbNoIcon;               // is an window without an icon
-    BOOL                    mbFloatWin;             // is a FloatingWindow
-    BOOL                    mbFullScreen;           // TRUE: in full screen mode
-    BOOL                    mbPresentation;         // TRUE: Presentation Mode running
-    BOOL                    mbInShow;               // innerhalb eines Show-Aufrufs
-    BOOL                    mbRestoreMaximize;      // Restore-Maximize
-    BOOL                    mbInMoveMsg;            // Move-Message wird verarbeitet
-    BOOL                    mbInSizeMsg;            // Size-Message wird verarbeitet
-    BOOL                    mbFullScreenToolWin;    // WS_EX_TOOLWINDOW reset in FullScreenMode
-    BOOL                    mbDefPos;               // default-position
-    BOOL                    mbOverwriteState;       // TRUE: WindowState darf umgesetzt werden
+    sal_Bool                    mbGraphics;             // is Graphics used
+    sal_Bool                    mbAllwayOnTop;          // Allways on top modus
+    sal_Bool                    mbVisible;              // Visible Show/Hide-Status
+    sal_Bool                    mbMinHide;              // hide called from OS2
+    sal_Bool                    mbHandleIME;            // TRUE: Wir handeln die IME-Messages
+    sal_Bool                    mbConversionMode;       // TRUE: Wir befinden uns im Conversion-Modus
+    sal_Bool                    mbCandidateMode;        // TRUE: Wir befinden uns im Candidate-Modus
+    sal_Bool                    mbCaption;              // has window a caption
+    sal_Bool                    mbBorder;               // has window a border
+    sal_Bool                    mbFixBorder;            // has window a fixed border
+    sal_Bool                    mbSizeBorder;           // has window a sizeable border
+    sal_Bool                    mbNoIcon;               // is an window without an icon
+    sal_Bool                    mbFloatWin;             // is a FloatingWindow
+    sal_Bool                    mbFullScreen;           // TRUE: in full screen mode
+    sal_Bool                    mbPresentation;         // TRUE: Presentation Mode running
+    sal_Bool                    mbInShow;               // innerhalb eines Show-Aufrufs
+    sal_Bool                    mbRestoreMaximize;      // Restore-Maximize
+    sal_Bool                    mbInMoveMsg;            // Move-Message wird verarbeitet
+    sal_Bool                    mbInSizeMsg;            // Size-Message wird verarbeitet
+    sal_Bool                    mbFullScreenToolWin;    // WS_EX_TOOLWINDOW reset in FullScreenMode
+    sal_Bool                    mbDefPos;               // default-position
+    sal_Bool                    mbOverwriteState;       // TRUE: WindowState darf umgesetzt werden
 
     int                     mnMinWidth;             // min. client width in pixeln
     int                     mnMinHeight;            // min. client height in pixeln
@@ -104,7 +98,7 @@ public:
     int                     mnMaxHeight;            // max. client height in pixeln
     static ULONG            mnInputLang;            // current Input Language
     KHAND                   mnKeyboardHandle;       // current unicode keyboard
-    static BOOL             mbInReparent;           // TRUE: ignore focus lost and gain due to reparenting
+    static sal_Bool             mbInReparent;           // TRUE: ignore focus lost and gain due to reparenting
 
 private:
     Os2SalFrame*            mpParentFrame;          // parent frame pointer
@@ -115,14 +109,14 @@ public:
 
     virtual SalGraphics*        GetGraphics();
     virtual void                ReleaseGraphics( SalGraphics* pGraphics );
-    virtual BOOL                PostEvent( void* pData );
+    virtual sal_Bool                PostEvent( void* pData );
     virtual void                SetTitle( const XubString& rTitle );
     virtual void                SetIcon( USHORT nIcon );
     virtual void                                SetMenu( SalMenu* pSalMenu );
     virtual void                                DrawMenuBar();
     virtual void                SetExtendedFrameStyle( SalExtStyle nExtStyle );
-    virtual void                Show( BOOL bVisible, BOOL bNoActivate = FALSE );
-    virtual void                Enable( BOOL bEnable );
+    virtual void                Show( sal_Bool bVisible, sal_Bool bNoActivate = FALSE );
+    virtual void                Enable( sal_Bool bEnable );
     virtual void                SetMinClientSize( long nWidth, long nHeight );
     virtual void                SetMaxClientSize( long nWidth, long nHeight );
     virtual void                SetPosSize( long nX, long nY, long nWidth, long nHeight, USHORT nFlags );
@@ -131,13 +125,13 @@ public:
     virtual void                GetWorkArea( Rectangle& rRect );
     virtual SalFrame*           GetParent() const;
     virtual void                SetWindowState( const SalFrameState* pState );
-    virtual BOOL                GetWindowState( SalFrameState* pState );
-    virtual void                ShowFullScreen( BOOL bFullScreen, sal_Int32 nDisplay );
-    virtual void                StartPresentation( BOOL bStart );
-    virtual void                SetAlwaysOnTop( BOOL bOnTop );
+    virtual sal_Bool                GetWindowState( SalFrameState* pState );
+    virtual void                ShowFullScreen( sal_Bool bFullScreen, sal_Int32 nDisplay );
+    virtual void                StartPresentation( sal_Bool bStart );
+    virtual void                SetAlwaysOnTop( sal_Bool bOnTop );
     virtual void                ToTop( USHORT nFlags );
     virtual void                SetPointer( PointerStyle ePointerStyle );
-    virtual void                CaptureMouse( BOOL bMouse );
+    virtual void                CaptureMouse( sal_Bool bMouse );
     virtual void                SetPointerPos( long nX, long nY );
     virtual void                Flush();
     virtual void                Sync();
@@ -145,7 +139,7 @@ public:
     virtual void                EndExtTextInput( USHORT nFlags );
     virtual String              GetKeyName( USHORT nKeyCode );
     virtual String              GetSymbolKeyName( const XubString& rFontName, USHORT nKeyCode );
-    virtual BOOL                MapUnicodeToKeyCode( sal_Unicode aUnicode, LanguageType aLangType, KeyCode& rKeyCode );
+    virtual sal_Bool                MapUnicodeToKeyCode( sal_Unicode aUnicode, LanguageType aLangType, KeyCode& rKeyCode );
     virtual LanguageType        GetInputLanguage();
     virtual SalBitmap*          SnapShot();
     virtual void                UpdateSettings( AllSettings& rSettings );
