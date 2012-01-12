@@ -221,14 +221,13 @@ rtl::OString GetCommandLineToken(int nToken, const rtl::OString& rLine)
     return rtl::OString(pBuffer);
 }
 
-int GetCommandLineTokenCount( const String& rLine )
+int GetCommandLineTokenCount(const rtl::OUString& rLine)
 {
-    if( ! rLine.Len() )
+    if (rLine.isEmpty())
         return 0;
 
     int nTokenCount = 0;
-    const sal_Unicode *pRun = rLine.GetBuffer();
-
+    const sal_Unicode *pRun = rLine.getStr();
 
     while( *pRun )
     {

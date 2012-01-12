@@ -35,47 +35,47 @@
 
 #include <cstring>
 
-namespace psp {
-
-String VCL_DLLPUBLIC GetCommandLineToken( int, const String& );
-rtl::OString VCL_DLLPUBLIC GetCommandLineToken(int, const rtl::OString&);
-// gets one token of a unix command line style string
-// doublequote, singlequote and singleleftquote protect their respective
-// contents
-
-int VCL_DLLPUBLIC GetCommandLineTokenCount( const String& );
-int VCL_DLLPUBLIC GetCommandLineTokenCount(const rtl::OString&);
-// returns number of tokens (zero if empty or whitespace only)
-
-String VCL_DLLPUBLIC WhitespaceToSpace( const String&, sal_Bool bProtect = sal_True );
-rtl::OString VCL_DLLPUBLIC WhitespaceToSpace(const rtl::OString&, sal_Bool bProtect = sal_True);
-// returns a string with multiple adjacent occurrences of whitespace
-// converted to a single space. if bProtect is sal_True (nonzero), then
-// doublequote, singlequote and singleleftquote protect their respective
-// contents
-
-
-// parses the first double in the string; decimal is '.' only
-inline double VCL_DLLPUBLIC StringToDouble( const String& rStr )
+namespace psp
 {
-    return rtl::math::stringToDouble(rStr, sal_Unicode('.'), sal_Unicode(0));
-}
+    VCL_DLLPUBLIC String GetCommandLineToken( int, const String& );
+    VCL_DLLPUBLIC rtl::OString GetCommandLineToken(int, const rtl::OString&);
+    // gets one token of a unix command line style string
+    // doublequote, singlequote and singleleftquote protect their respective
+    // contents
 
-inline double VCL_DLLPUBLIC StringToDouble(const rtl::OString& rStr)
-{
-    return rtl::math::stringToDouble(rStr, '.', static_cast<sal_Char>(0));
-}
+    VCL_DLLPUBLIC int GetCommandLineTokenCount(const rtl::OUString&);
+    VCL_DLLPUBLIC int GetCommandLineTokenCount(const rtl::OString&);
+    // returns number of tokens (zero if empty or whitespace only)
 
-// fills a character buffer with the string representation of a double
-// the buffer has to be long enough (e.g. 128 bytes)
-// returns the string len
-inline int VCL_DLLPUBLIC getValueOfDouble( char* pBuffer, double f, int nPrecision = 0)
-{
-    rtl::OString aStr( rtl::math::doubleToString( f, rtl_math_StringFormat_G, nPrecision, '.', true ) );
-    int nLen = aStr.getLength();
-    std::strncpy( pBuffer, aStr.getStr(), nLen+1 ); // copy string including terminating zero
-    return nLen;
-}
+    VCL_DLLPUBLIC String WhitespaceToSpace( const String&, sal_Bool bProtect = sal_True );
+    VCL_DLLPUBLIC rtl::OString WhitespaceToSpace(const rtl::OString&, sal_Bool bProtect = sal_True);
+    // returns a string with multiple adjacent occurrences of whitespace
+    // converted to a single space. if bProtect is sal_True (nonzero), then
+    // doublequote, singlequote and singleleftquote protect their respective
+    // contents
+
+
+    // parses the first double in the string; decimal is '.' only
+    VCL_DLLPUBLIC inline double StringToDouble( const String& rStr )
+    {
+        return rtl::math::stringToDouble(rStr, sal_Unicode('.'), sal_Unicode(0));
+    }
+
+    VCL_DLLPUBLIC inline double StringToDouble(const rtl::OString& rStr)
+    {
+        return rtl::math::stringToDouble(rStr, '.', static_cast<sal_Char>(0));
+    }
+
+    // fills a character buffer with the string representation of a double
+    // the buffer has to be long enough (e.g. 128 bytes)
+    // returns the string len
+    VCL_DLLPUBLIC inline int getValueOfDouble( char* pBuffer, double f, int nPrecision = 0)
+    {
+        rtl::OString aStr( rtl::math::doubleToString( f, rtl_math_StringFormat_G, nPrecision, '.', true ) );
+        int nLen = aStr.getLength();
+        std::strncpy( pBuffer, aStr.getStr(), nLen+1 ); // copy string including terminating zero
+        return nLen;
+    }
 
 } // namespace
 
