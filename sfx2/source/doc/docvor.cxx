@@ -155,7 +155,7 @@ friend class SfxOrganizeListBox_Impl;
     SfxOrganizeMgr          aMgr;
     sfx2::FileDialogHelper* pFileDlg;
 
-    SvStringsDtor*          GetAllFactoryURLs_Impl() const;
+    std::vector<rtl::OUString> GetAllFactoryURLs_Impl() const;
     sal_Bool                GetServiceName_Impl( String& rFactoryURL, String& rFileURL ) const;
     long                    Dispatch_Impl( sal_uInt16 nId, Menu* _pMenu );
     String                  GetPath_Impl( sal_Bool bOpen, const String& rFileName );
@@ -1691,11 +1691,11 @@ sal_Bool SfxOrganizeDlg_Impl::DontDelete_Impl( SvLBoxEntry* pEntry )
     return sal_False;
 }
 
-SvStringsDtor* SfxOrganizeDlg_Impl::GetAllFactoryURLs_Impl( ) const
+std::vector<rtl::OUString> SfxOrganizeDlg_Impl::GetAllFactoryURLs_Impl( ) const
 {
     SvtModuleOptions aModOpt;
     const ::com::sun::star::uno::Sequence < ::rtl::OUString >& aServiceNames = aModOpt.GetAllServiceNames() ;
-    SvStringsDtor* pList = new SvStringsDtor;
+    std::vector<rtl::OUString> aList;
     sal_Int32 nCount = aServiceNames.getLength();
     for( sal_Int32 i=0; i<nCount; ++i )
     {
@@ -1703,12 +1703,11 @@ SvStringsDtor* SfxOrganizeDlg_Impl::GetAllFactoryURLs_Impl( ) const
         {
             SvtModuleOptions::EFactory eFac = SvtModuleOptions::E_WRITER;
             SvtModuleOptions::ClassifyFactoryByName( aServiceNames[i], eFac );
-            String* pURL = new String( aModOpt.GetFactoryEmptyDocumentURL( eFac ) );
-            pList->Insert( pURL, pList->Count() );
+            aList.push_back(aModOpt.GetFactoryEmptyDocumentURL(eFac));
         }
     }
 
-    return pList;
+    return aList;
 }
 
 sal_Bool SfxOrganizeDlg_Impl::GetServiceName_Impl( String& rName, String& rFileURL ) const
@@ -2068,20 +2067,17 @@ IMPL_LINK( SfxOrganizeDlg_Impl, MenuActivate_Impl, Menu *, pMenu )
     pMenu->EnableItem( ID_DEFAULT_TEMPLATE, bEnable );
 
     bEnable = sal_True;
-    SvStringsDtor* pList = GetAllFactoryURLs_Impl();
-    sal_uInt16 nCount = pList->Count();
-    if ( nCount > 0 )
+    std::vector<rtl::OUString> aList(GetAllFactoryURLs_Impl());
+    if (!aList.empty())
     {
         PopupMenu* pSubMenu = new PopupMenu;
         sal_uInt16 nItemId = ID_RESET_DEFAULT_TEMPLATE + 1;
-        for ( sal_uInt16 i = 0; i < nCount; ++i )
+        for(std::vector<rtl::OUString>::const_iterator i = aList.begin(); i != aList.end(); ++i)
         {
-            String aObjFacURL( *pList->GetObject(i) );
-            String aTitle = SvFileInformationManager::GetDescription(
-                INetURLObject(aObjFacURL) );
-            pSubMenu->InsertItem( nItemId, aTitle,
-                SvFileInformationManager::GetImage(INetURLObject(aObjFacURL), false) );
-            pSubMenu->SetItemCommand( nItemId++, aObjFacURL );
+            INetURLObject aObj(*i);
+            String aTitle = SvFileInformationManager::GetDescription(aObj);
+            pSubMenu->InsertItem(nItemId, aTitle, SvFileInformationManager::GetImage(aObj, false));
+            pSubMenu->SetItemCommand(nItemId++, *i);
             DBG_ASSERT( nItemId <= ID_RESET_DEFAULT_TEMPLATE_END, "menu item id overflow" );
         }
         pMenu->SetPopupMenu( ID_RESET_DEFAULT_TEMPLATE, pSubMenu );
@@ -2089,7 +2085,6 @@ IMPL_LINK( SfxOrganizeDlg_Impl, MenuActivate_Impl, Menu *, pMenu )
     else
         bEnable = sal_False;
 
-    delete pList;
     pMenu->EnableItem( ID_RESET_DEFAULT_TEMPLATE, bEnable );
 
     return 1;
