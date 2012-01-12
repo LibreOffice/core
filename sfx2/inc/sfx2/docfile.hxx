@@ -64,11 +64,6 @@ class SfxFrame;
 class Timer;
 class SfxItemSet;
 class DateTime;
-class SvStringsDtor;
-
-//____________________________________________________________________________________________________________________________________
-//  defines for namespaces
-//____________________________________________________________________________________________________________________________________
 
 #define OUSTRING                    ::rtl::OUString
 #define XMULTISERVICEFACTORY        ::com::sun::star::lang::XMultiServiceFactory
