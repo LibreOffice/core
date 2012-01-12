@@ -57,15 +57,7 @@ using namespace ::com::sun::star::uno;
 // implemented in 'sfx2/source/appl/appopen.cxx'
 extern sal_uInt32 CheckPasswd_Impl( SfxObjectShell* pDoc, SfxItemPool &rPool, SfxMedium* pFile );
 
-// =======================================================================
-
 namespace sfx2 {
-
-// =======================================================================
-
-// =======================================================================
-// DocumentInserter
-// =======================================================================
 
 DocumentInserter::DocumentInserter(
     const String& rFactory, bool const bEnableMultiSelection) :
@@ -77,8 +69,6 @@ DocumentInserter::DocumentInserter(
     , m_nError                  ( ERRCODE_NONE )
     , m_pFileDlg                ( NULL )
     , m_pItemSet                ( NULL )
-    , m_pURLList                ( NULL )
-
 {
 }
 
@@ -91,7 +81,6 @@ void DocumentInserter::StartExecuteModal( const Link& _rDialogClosedLink )
 {
     m_aDialogClosedLink = _rDialogClosedLink;
     m_nError = ERRCODE_NONE;
-    DELETEZ( m_pURLList );
     if ( !m_pFileDlg )
     {
         m_pFileDlg = new FileDialogHelper(
@@ -104,10 +93,10 @@ void DocumentInserter::StartExecuteModal( const Link& _rDialogClosedLink )
 SfxMedium* DocumentInserter::CreateMedium()
 {
     SfxMedium* pMedium = NULL;
-    if ( !m_nError && m_pItemSet && m_pURLList && m_pURLList->Count() > 0 )
+    if (!m_nError && m_pItemSet && !m_pURLList.empty())
     {
-        DBG_ASSERT( m_pURLList->Count() == 1, "DocumentInserter::CreateMedium(): invalid URL list count" );
-        String sURL = *( m_pURLList->GetObject(0) );
+        DBG_ASSERT( m_pURLList.size() == 1, "DocumentInserter::CreateMedium(): invalid URL list count" );
+        String sURL(m_pURLList[0]);
         pMedium = new SfxMedium(
                 sURL, SFX_STREAM_READONLY, sal_False,
                 SFX_APP()->GetFilterMatcher().GetFilter4FilterName( m_sFilter ), m_pItemSet );
@@ -137,15 +126,12 @@ SfxMedium* DocumentInserter::CreateMedium()
 SfxMediumList* DocumentInserter::CreateMediumList()
 {
     SfxMediumList* pMediumList = new SfxMediumList;
-    if ( !m_nError && m_pItemSet && m_pURLList && m_pURLList->Count() > 0 )
+    if (!m_nError && m_pItemSet && !m_pURLList.empty())
     {
-        sal_Int32 i = 0;
-        sal_Int32 nCount = m_pURLList->Count();
-        for ( ; i < nCount; ++i )
+        for(std::vector<rtl::OUString>::const_iterator i = m_pURLList.begin(); i != m_pURLList.end(); ++i)
         {
-            String sURL = *( m_pURLList->GetObject( static_cast< sal_uInt16 >(i) ) );
             SfxMedium* pMedium = new SfxMedium(
-                    sURL, SFX_STREAM_READONLY, sal_False,
+                    *i, SFX_STREAM_READONLY, sal_False,
                     SFX_APP()->GetFilterMatcher().GetFilter4FilterName( m_sFilter ), m_pItemSet );
 
             pMedium->UseInteractionHandler( sal_True );
@@ -168,21 +154,20 @@ SfxMediumList* DocumentInserter::CreateMediumList()
     return pMediumList;
 }
 
-void impl_FillURLList( sfx2::FileDialogHelper* _pFileDlg, SvStringsDtor*& _rpURLList )
+void impl_FillURLList( sfx2::FileDialogHelper* _pFileDlg, std::vector<rtl::OUString>& _rpURLList )
 {
     DBG_ASSERT( _pFileDlg, "DocumentInserter::fillURLList(): invalid file dialog" );
-    DBG_ASSERT( !_rpURLList, "DocumentInserter::fillURLList(): URLList already exists" );
+
     Sequence < ::rtl::OUString > aPathSeq = _pFileDlg->GetSelectedFiles();
 
     if ( aPathSeq.getLength() )
     {
-        _rpURLList = new SvStringsDtor;
+        _rpURLList.clear();
 
         for ( sal_uInt16 i = 0; i < aPathSeq.getLength(); ++i )
         {
             INetURLObject aPathObj( aPathSeq[i] );
-            String* pURL = new String( aPathObj.GetMainURL( INetURLObject::NO_DECODE ) );
-            _rpURLList->Insert( pURL, _rpURLList->Count() );
+            _rpURLList.push_back(aPathObj.GetMainURL(INetURLObject::NO_DECODE));
         }
     }
 }
@@ -295,10 +280,6 @@ IMPL_LINK( DocumentInserter, DialogClosedHdl, sfx2::FileDialogHelper*, EMPTYARG 
     return 0;
 }
 
-// =======================================================================
-
 } // namespace sfx2
-
-// =======================================================================
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

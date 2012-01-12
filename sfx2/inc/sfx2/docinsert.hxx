@@ -39,19 +39,10 @@
 namespace sfx2 { class FileDialogHelper; }
 class SfxMedium;
 class SfxItemSet;
-class SvStringsDtor;
 
 typedef ::std::vector< SfxMedium* > SfxMediumList;
 
-// ============================================================================
-
 namespace sfx2 {
-
-// ============================================================================
-
-// ============================================================================
-// DocumentInserter
-// ============================================================================
 
 class SFX2_DLLPUBLIC DocumentInserter
 {
@@ -65,7 +56,7 @@ private:
 
     sfx2::FileDialogHelper* m_pFileDlg;
     SfxItemSet*             m_pItemSet;
-    SvStringsDtor*          m_pURLList;
+    std::vector<rtl::OUString> m_pURLList;
 
     DECL_LINK(              DialogClosedHdl, sfx2::FileDialogHelper* );
 
@@ -82,11 +73,7 @@ public:
     inline String           GetFilter() const { return m_sFilter; }
 };
 
-// ============================================================================
-
 } // namespace sfx2
-
-// ============================================================================
 
 #endif // _SFX_DOCINSERT_HXX
 
