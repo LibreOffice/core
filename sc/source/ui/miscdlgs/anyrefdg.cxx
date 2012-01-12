@@ -42,11 +42,7 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 
-
-#define ANYREFDG_CXX
 #include "anyrefdg.hxx"
-#undef ANYREFDG_CXX
-
 #include "sc.hrc"
 #include "inputhdl.hxx"
 #include "scmod.hxx"
