@@ -1407,7 +1407,7 @@ void EnhancedCustomShape2d::SwapStartAndEndArrow( SdrObject* pObj ) //#108274
     pObj->SetMergedItem( aLineEndCenter );
 }
 
-basegfx::B2DPolygon CreateArc( const Rectangle& rRect, const Point& rStart, const Point& rEnd, const sal_Bool bClockwise )
+basegfx::B2DPolygon CreateArc( const Rectangle& rRect, const Point& rStart, const Point& rEnd, const sal_Bool bClockwise, sal_Bool bFullCircle = sal_False )
 {
     Rectangle aRect( rRect );
     Point aStart( rStart );
@@ -1430,7 +1430,7 @@ basegfx::B2DPolygon CreateArc( const Rectangle& rRect, const Point& rStart, cons
         }
     }
 
-    Polygon aTempPoly( aRect, aStart, aEnd, POLY_ARC );
+    Polygon aTempPoly( aRect, aStart, aEnd, POLY_ARC, bFullCircle );
     basegfx::B2DPolygon aRetval;
 
     if ( bClockwise )
@@ -1757,7 +1757,7 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
                             OSL_TRACE("ARCANGLETO rect: %d, %d   x   %d, %d   start: %d, %d end: %d, %d clockwise: %d",
                                       aRect.Left(), aRect.Top(), aRect.Right(), aRect.Bottom(),
                                       aStartPoint.X(), aStartPoint.Y(), aEndPoint.X(), aEndPoint.Y(), bClockwise);
-                            aNewB2DPolygon.append(CreateArc( aRect, bClockwise ? aEndPoint : aStartPoint, bClockwise ? aStartPoint : aEndPoint, bClockwise));
+                            aNewB2DPolygon.append(CreateArc( aRect, bClockwise ? aEndPoint : aStartPoint, bClockwise ? aStartPoint : aEndPoint, bClockwise, aStartPoint == aEndPoint && fSwingAngle > F_PI));
                         }
 
                         rSrcPt += 2;
