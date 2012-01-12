@@ -31,7 +31,7 @@
  	<property name="legacy-excludes" 
 --- misc/BeanShell/makefile.mk	Fri Mar 28 15:56:40 2008
 +++ misc/build/BeanShell/makefile.mk	Fri Mar 28 15:56:06 2008
-@@ -1 +1,35 @@
+@@ -1 +1,29 @@
 -dummy
 +#**************************************************************
 +#  
