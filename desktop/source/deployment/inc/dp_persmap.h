@@ -57,6 +57,7 @@ public:
 protected:
     bool open( void);
     bool readAll( void);
+    void add( ::rtl::OString const & key, ::rtl::OString const & value );
     void flush( void);
 };
 

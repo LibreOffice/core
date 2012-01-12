@@ -205,7 +205,7 @@ bool PersistentMap::readAll()
         const OString aKeyName = decodeString( (sal_Char*)aKeyLine.getConstArray(), aKeyLine.getLength());
         const OString aValName = decodeString( (sal_Char*)aValLine.getConstArray(), aValLine.getLength());
         // insert key-value pair into map
-        put( aKeyName, aValName);
+        add( aKeyName, aValName);
         // check end-of-file status
         sal_Bool bIsEOF = true;
         if( m_MapFile.isEndOfFile( &bIsEOF) != osl::File::E_None)
@@ -286,13 +286,19 @@ bool PersistentMap::get( OString * value, OString const & key ) const
 }
 
 //______________________________________________________________________________
-void PersistentMap::put( OString const & key, OString const & value )
+void PersistentMap::add( OString const & key, OString const & value )
 {
     if( m_bReadOnly)
         return;
     typedef std::pair<t_string2string_map::iterator,bool> InsertRC;
     InsertRC r = m_entries.insert( t_string2string_map::value_type(key,value));
     m_bIsDirty = r.second;
+}
+
+//______________________________________________________________________________
+void PersistentMap::put( OString const & key, OString const & value )
+{
+    add( key, value);
     // HACK: flush now as the extension manager does not seem
     //       to properly destruct this object in some situations
     if( m_bIsDirty)
