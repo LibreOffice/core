@@ -31,6 +31,7 @@
 #include <tools/stream.hxx>
 #include <vcl/timer.hxx>
 #include <comphelper/broadcasthelper.hxx>
+#include <vcl/lazydelete.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 // buffered VDev usage
@@ -191,7 +192,14 @@ namespace
 namespace drawinglayer
 {
     // static global VDev buffer for the VclProcessor2D's (VclMetafileProcessor2D and VclPixelProcessor2D)
-    static VDevBuffer aVDevBuffer;
+    VDevBuffer& getVDevBuffer()
+    {
+        // secure global instance with Vcl's safe desroyer of external (seen by
+        // library base) stuff, the remembered VDevs need to be deleted before
+        // Vcl's deinit
+        static vcl::DeleteOnDeinit< VDevBuffer > aVDevBuffer(new VDevBuffer());
+        return *aVDevBuffer.get();
+    }
 
     impBufferDevice::impBufferDevice(
         OutputDevice& rOutDev,
@@ -213,7 +221,7 @@ namespace drawinglayer
 
         if(isVisible())
         {
-            mpContent = aVDevBuffer.alloc(mrOutDev, maDestPixel.GetSize(), false, false);
+            mpContent = getVDevBuffer().alloc(mrOutDev, maDestPixel.GetSize(), false, false);
 
             // #i93485# assert when copying from window to VDev is used
             OSL_ENSURE(mrOutDev.GetOutDevType() != OUTDEV_WINDOW,
@@ -243,17 +251,17 @@ namespace drawinglayer
     {
         if(mpContent)
         {
-            aVDevBuffer.free(*mpContent);
+            getVDevBuffer().free(*mpContent);
         }
 
         if(mpMask)
         {
-            aVDevBuffer.free(*mpMask);
+            getVDevBuffer().free(*mpMask);
         }
 
         if(mpAlpha)
         {
-            aVDevBuffer.free(*mpAlpha);
+            getVDevBuffer().free(*mpAlpha);
         }
     }
 
@@ -328,7 +336,7 @@ namespace drawinglayer
         OSL_ENSURE(mpContent, "impBufferDevice: No content, check isVisible() before accessing (!)");
         if(!mpMask)
         {
-            mpMask = aVDevBuffer.alloc(mrOutDev, maDestPixel.GetSize(), true, true);
+            mpMask = getVDevBuffer().alloc(mrOutDev, maDestPixel.GetSize(), true, true);
             mpMask->SetMapMode(mpContent->GetMapMode());
 
             // do NOT copy AA flag for mask!
@@ -342,7 +350,7 @@ namespace drawinglayer
         OSL_ENSURE(mpContent, "impBufferDevice: No content, check isVisible() before accessing (!)");
         if(!mpAlpha)
         {
-            mpAlpha = aVDevBuffer.alloc(mrOutDev, maDestPixel.GetSize(), true, false);
+            mpAlpha = getVDevBuffer().alloc(mrOutDev, maDestPixel.GetSize(), true, false);
             mpAlpha->SetMapMode(mpContent->GetMapMode());
 
             // copy AA flag for new target; masking needs to be smooth
