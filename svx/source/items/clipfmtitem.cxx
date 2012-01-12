@@ -34,7 +34,7 @@
 
 struct SvxClipboardFmtItem_Impl
 {
-    boost::ptr_vector<boost::nullable<String>> aFmtNms;
+    boost::ptr_vector< boost::nullable<String> > aFmtNms;
     std::vector<sal_uIntPtr> aFmtIds;
     static String sEmptyStr;
 
