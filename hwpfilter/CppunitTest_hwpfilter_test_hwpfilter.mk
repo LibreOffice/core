@@ -78,7 +78,6 @@ $(eval $(call gb_CppunitTest_set_args,hwpfilter_test_hwpfilter,\
 # we need to explicitly depend on library hwp because it is not implied
 # by a link relation
 $(call gb_CppunitTest_get_target,hwpfilter_test_hwpfilter) : \
-    $(call gb_Library_get_target,localedata_en) \
 	$(call gb_Library_get_target,hwp)
 
 # vim: set noet sw=4 ts=4:
