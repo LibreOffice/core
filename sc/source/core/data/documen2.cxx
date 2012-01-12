@@ -975,7 +975,9 @@ sal_uLong ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
                         sal_False, pTab[nDestPos] );
             }
         }
+
         pTab[nDestPos]->SetTabNo(nDestPos);
+        pTab[nDestPos]->SetTabBgColor(pSrcDoc->pTab[nSrcPos]->GetTabBgColor());
 
         if ( !bResultsOnly )
         {
