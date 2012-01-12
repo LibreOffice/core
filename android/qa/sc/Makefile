@@ -167,7 +167,7 @@ build-ant: copy-stuff
 install: copy-stuff
 	unset JAVA_HOME && ant debug install
 	@echo
-	@echo 'Run it with something like what "make run" does (see Makefile)'
+	@echo 'Run it with "make run"'
 	@echo
 
 uninstall:
