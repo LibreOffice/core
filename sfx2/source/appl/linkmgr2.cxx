@@ -300,9 +300,6 @@ void LinkManager::UpdateAllLinks(
     sal_Bool bUpdateGrfLinks,
     Window* pParentWin )
 {
-    SvStringsDtor aApps, aTopics, aItems;
-    String sApp, sTopic, sItem;
-
     // First make a copy of the array in order to update links
     // links in ... no contact between them!
     SvPtrarr aTmpArr( 255, 50 );
