@@ -510,7 +510,7 @@ Polygon::Polygon( const Point& rCenter, long nRadX, long nRadY, sal_uInt16 nPoin
 // -----------------------------------------------------------------------
 
 Polygon::Polygon( const Rectangle& rBound,
-                  const Point& rStart, const Point& rEnd, PolyStyle eStyle )
+                  const Point& rStart, const Point& rEnd, PolyStyle eStyle, sal_Bool bFullCircle )
 {
     DBG_CTOR( Polygon, NULL );
 
@@ -546,6 +546,9 @@ Polygon::Polygon( const Rectangle& rBound,
 
         if( fDiff < 0. )
             fDiff += F_2PI;
+
+        if ( bFullCircle )
+            fDiff = F_2PI;
 
         // Punktanzahl proportional verkleinern ( fDiff / (2PI) );
         // ist eingentlich nur fuer einen Kreis richtig; wir

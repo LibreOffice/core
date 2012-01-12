@@ -140,7 +140,8 @@ public:
                                  sal_uInt16 nPoints = 0 );
                         Polygon( const Rectangle& rBound,
                                  const Point& rStart, const Point& rEnd,
-                                 PolyStyle ePolyStyle = POLY_ARC );
+                                 PolyStyle ePolyStyle = POLY_ARC,
+                                 sal_Bool bWholeCircle = sal_False );
                         Polygon( const Point& rBezPt1, const Point& rCtrlPt1,
                                  const Point& rBezPt2, const Point& rCtrlPt2,
                                  sal_uInt16 nPoints = 0 );
