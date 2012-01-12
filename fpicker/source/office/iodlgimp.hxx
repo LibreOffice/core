@@ -39,14 +39,9 @@
 
 #include <vector>
 
-//*****************************************************************************
-
 class Accelerator;
 class CheckBox;
 class SvtFileDialog;
-class SvStringsDtor;
-
-//*****************************************************************************
 
 #define FILEDIALOG_DEF_EXTSEP       ';'
 #define FILEDIALOG_DEF_WILDCARD     '*'
@@ -79,15 +74,7 @@ public:
     sal_Bool            isGroupSeparator() const    { return 0 == m_aType.Len(); }
 };
 
-//*****************************************************************************
-// SvtFileDialogFilterList_Impl
-//*****************************************************************************
-
 SV_DECL_PTRARR_DEL( SvtFileDialogFilterList_Impl, SvtFileDialogFilter_Impl*, 3, 3 )
-
-//*****************************************************************************
-// SvtFileDlgMode
-//*****************************************************************************
 
 enum SvtFileDlgMode
 {
@@ -95,19 +82,12 @@ enum SvtFileDlgMode
     FILEDLG_MODE_SAVE = 1
 };
 
-//*****************************************************************************
-// SvtFileDlgType
-//*****************************************************************************
-
 enum SvtFileDlgType
 {
     FILEDLG_TYPE_FILEDLG = 0,
     FILEDLG_TYPE_PATHDLG
 };
 
-//*****************************************************************************
-// SvtFileDialogURLSelector
-//*****************************************************************************
 class SvtFileDialogURLSelector : public MenuButton
 {
 private:
@@ -129,14 +109,10 @@ protected:
     virtual void        Activate();
 };
 
-//*****************************************************************************
-// SvtUpButton_Impl
-//*****************************************************************************
-
 class SvtUpButton_Impl : public SvtFileDialogURLSelector
 {
 private:
-    SvStringsDtor*      _pURLs;
+    std::vector<rtl::OUString> _aURLs;
 
 public:
     SvtUpButton_Impl( SvtFileDialog* pParent, const ResId& rResId );
@@ -147,10 +123,6 @@ protected:
     virtual void        Select();
     virtual void        Click();
 };
-
-//*****************************************************************************
-// SvtTravelButton_Impl
-//*****************************************************************************
 
 class SvtTravelButton_Impl : public SvtFileDialogURLSelector
 {
@@ -169,18 +141,11 @@ protected:
     virtual void        Click();
 };
 
-//*****************************************************************************
-// SvtFileDlgState
-//*****************************************************************************
-
 typedef sal_uInt8 SvtFileDlgState;
 
 #define FILEDLG_STATE_NONE        ((SvtFileDlgState)0x00)
 #define FILEDLG_STATE_REMOTE      ((SvtFileDlgState)0x01)
 
-//*****************************************************************************
-// SvtExpFileDlg_Impl
-//*****************************************************************************
 class SvtURLBox;
 class SvtExpFileDlg_Impl
 {

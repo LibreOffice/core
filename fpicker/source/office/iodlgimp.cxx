@@ -189,14 +189,12 @@ void SvtFileDialogURLSelector::Activate()
 //-----------------------------------------------------------------------------
 SvtUpButton_Impl::SvtUpButton_Impl( SvtFileDialog* pParent, const ResId& rResId )
     :SvtFileDialogURLSelector( pParent, rResId, IMG_FILEDLG_BTN_UP )
-    ,_pURLs                  ( NULL )
 {
 }
 
 //-----------------------------------------------------------------------------
 SvtUpButton_Impl::~SvtUpButton_Impl()
 {
-    delete _pURLs;
 }
 
 //-----------------------------------------------------------------------------
@@ -206,8 +204,7 @@ void SvtUpButton_Impl::FillURLMenu( PopupMenu* _pMenu )
 
     sal_uInt16 nItemId = 1;
 
-    delete _pURLs;
-    _pURLs = new SvStringsDtor;
+    _aURLs.clear();
 
     // determine parent levels
     INetURLObject aObject( pBox->GetViewURL() );
@@ -221,20 +218,20 @@ void SvtUpButton_Impl::FillURLMenu( PopupMenu* _pMenu )
     while ( nCount >= 1 )
     {
         aObject.removeSegment();
-        String* pParentURL = new String( aObject.GetMainURL( INetURLObject::NO_DECODE ) );
+        String aParentURL(aObject.GetMainURL(INetURLObject::NO_DECODE));
 
-        if ( GetDialogParent()->isUrlAllowed( *pParentURL ) )
+        if (GetDialogParent()->isUrlAllowed(aParentURL))
         {
             String aTitle;
             // 97148# --------------------------------
-            if ( !GetDialogParent()->ContentGetTitle( *pParentURL, aTitle ) || aTitle.Len() == 0 )
+            if (!GetDialogParent()->ContentGetTitle(aParentURL, aTitle) || aTitle.Len() == 0)
                 aTitle = aObject.getName();
 
             Image aImage = ( nCount > 1 ) // if nCount == 1 means workplace, which detects the wrong image
                 ? SvFileInformationManager::GetImage( aObject ) : aVolumeImage;
 
             _pMenu->InsertItem( nItemId++, aTitle, aImage );
-            _pURLs->Insert( pParentURL, _pURLs->Count() );
+            _aURLs.push_back(aParentURL);
 
             if ( nCount == 1 )
             {
@@ -255,10 +252,9 @@ void SvtUpButton_Impl::Select()
     if ( nId )
     {
         --nId;
-        DBG_ASSERT( nId <= _pURLs->Count(), "SvtUpButton_Impl:falscher Index" );
+        DBG_ASSERT( nId <= _aURLs.size(), "SvtUpButton_Impl:falscher Index" );
 
-        String aURL = *(_pURLs->GetObject( nId ));
-        GetDialogParent()->OpenURL_Impl( aURL );
+        GetDialogParent()->OpenURL_Impl(_aURLs[nId]);
     }
 }
 
