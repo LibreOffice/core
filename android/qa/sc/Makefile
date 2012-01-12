@@ -85,6 +85,8 @@ copy-stuff:
 		  jvmfwk \
 		  lnglo \
 		  localedata_en \
+		  localedata_es \
+		  localedata_euro \
 		  localedata_others \
 		  msfilterlo \
 		  reg \
@@ -92,6 +94,7 @@ copy-stuff:
 		  sblo \
 		  sfxlo \
 		  sotlo \
+		  stocservices.uno \
 		  store \
 		  svllo \
 		  svtlo \
