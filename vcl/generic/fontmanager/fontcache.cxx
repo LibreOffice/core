@@ -265,9 +265,9 @@ void FontCache::read()
     }
 
 
-    ByteString aLine;
+    OString aLine;
     aStream.ReadLine( aLine );
-    if( !aLine.Equals( CACHE_MAGIC ) )
+    if( !aLine.equals( rtl::OString(RTL_CONSTASCII_STRINGPARAM( CACHE_MAGIC )) ) )
     {
         #if OSL_DEBUG_LEVEL >1
         fprintf( stderr, "FontCache::read: cache file %s fails magic test\n", rtl::OUStringToOString(m_aCacheFile, osl_getThreadTextEncoding()).getStr() );
@@ -282,20 +282,20 @@ void FontCache::read()
     do
     {
         aStream.ReadLine( aLine );
-        if( aLine.CompareTo( "FontCacheDirectory:", 19 ) == COMPARE_EQUAL ||
-            aLine.CompareTo( "EmptyFontCacheDirectory:", 24 ) == COMPARE_EQUAL )
+        if( aLine.compareTo( RTL_CONSTASCII_STRINGPARAM( "FontCacheDirectory:" ) ) == 0 ||
+            aLine.compareTo( RTL_CONSTASCII_STRINGPARAM( "EmptyFontCacheDirectory:" ) ) == 0 )
         {
-            bool bEmpty = (aLine.CompareTo( "Empty", 5 ) == COMPARE_EQUAL);
+            bool bEmpty = (aLine.compareTo( RTL_CONSTASCII_STRINGPARAM ("Empty" ) ) == 0);
             xub_StrLen nSearchIndex = bEmpty ? 24 : 19;
 
             OString aDir;
             sal_Int64 nTimestamp = 0;
-            xub_StrLen nTEnd = aLine.Search( ':', nSearchIndex );
+            xub_StrLen nTEnd = aLine.indexOf( ':', nSearchIndex );
             if( nTEnd != STRING_NOTFOUND )
             {
-                rtl::OString aTimeStamp = aLine.Copy( nSearchIndex, nTEnd - nSearchIndex );
+                rtl::OString aTimeStamp = aLine.copy( nSearchIndex, nTEnd - nSearchIndex );
                 nTimestamp = aTimeStamp.toInt64();
-                aDir = aLine.Copy( nTEnd+1 );
+                aDir = aLine.copy( nTEnd+1 );
             }
             else
             {
@@ -327,12 +327,12 @@ void FontCache::read()
                 m_aCache[ nDir ].m_bUserOverrideOnly = bKeepOnlyUserOverridden;
             }
         }
-        else if( pDir && aLine.CompareTo( "File:", 5 ) == COMPARE_EQUAL )
+        else if( pDir && aLine.compareTo( RTL_CONSTASCII_STRINGPARAM( "File:" ) ) == 0 )
         {
-            OString aFile( aLine.Copy( 5 ) );
+            OString aFile( aLine.copy( 5 ) );
             aStream.ReadLine( aLine );
 
-            const char* pLine = aLine.GetBuffer();
+            const char* pLine = aLine.getStr();
 
             fonttype::type eType = (fonttype::type)atoi( pLine );
             if( eType != fonttype::TrueType     &&
@@ -350,8 +350,8 @@ void FontCache::read()
             for( int n = 0; n < nFonts; n++ )
             {
                 aStream.ReadLine( aLine );
-                pLine = aLine.GetBuffer();
-                int nLen = aLine.Len();
+                pLine = aLine.getStr();
+                int nLen = aLine.getLength();
 
                 PrintFontManager::PrintFont* pFont = NULL;
                 switch( eType )
@@ -386,8 +386,8 @@ void FontCache::read()
                     }
                 }
                 aStream.ReadLine( aLine );
-                pLine = aLine.GetBuffer();
-                nLen = aLine.Len();
+                pLine = aLine.getStr();
+                nLen = aLine.getLength();
 
                 // get up to 20 token positions
                 const int nMaxTokens = 20;
