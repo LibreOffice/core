@@ -139,7 +139,7 @@ public:
     sal_uInt16          InsertName( SCTAB nTab, sal_uInt16 nScNameIdx );
 
     /** Inserts a new built-in defined name. */
-    sal_uInt16          InsertBuiltInName( sal_Unicode cBuiltIn, XclTokenArrayRef xTokArr, SCTAB nScTab );
+    sal_uInt16          InsertBuiltInName( sal_Unicode cBuiltIn, XclTokenArrayRef xTokArr, SCTAB nScTab, const ScRangeList& aRangeList );
     sal_uInt16          InsertBuiltInName( sal_Unicode cBuiltIn, XclTokenArrayRef xTokArr, const ScRange& aRange );
     /** Inserts a new defined name. Sets another unused name, if rName already exists. */
     sal_uInt16          InsertUniqueName( const String& rName, XclTokenArrayRef xTokArr, SCTAB nScTab );
@@ -410,11 +410,14 @@ sal_uInt16 XclExpNameManagerImpl::InsertBuiltInName( sal_Unicode cBuiltIn, XclTo
     return Append( xName );
 }
 
-sal_uInt16 XclExpNameManagerImpl::InsertBuiltInName( sal_Unicode cBuiltIn, XclTokenArrayRef xTokArr, SCTAB nScTab )
+sal_uInt16 XclExpNameManagerImpl::InsertBuiltInName( sal_Unicode cBuiltIn, XclTokenArrayRef xTokArr, SCTAB nScTab, const ScRangeList& rRangeList )
 {
     XclExpNameRef xName( new XclExpName( GetRoot(), cBuiltIn ) );
     xName->SetTokenArray( xTokArr );
     xName->SetLocalTab( nScTab );
+    String sSymbol;
+    rRangeList.Format( sSymbol, SCR_ABS_3D, GetDocPtr(), ::formula::FormulaGrammar::CONV_XL_A1 );
+    xName->SetSymbol( sSymbol );
     return Append( xName );
 }
 
@@ -725,7 +728,7 @@ sal_uInt16 XclExpNameManager::InsertBuiltInName( sal_Unicode cBuiltIn, const ScR
     if( !rRangeList.empty() )
     {
         XclTokenArrayRef xTokArr = GetFormulaCompiler().CreateFormula( EXC_FMLATYPE_NAME, rRangeList );
-        nNameIdx = mxImpl->InsertBuiltInName( cBuiltIn, xTokArr, rRangeList.front()->aStart.Tab() );
+        nNameIdx = mxImpl->InsertBuiltInName( cBuiltIn, xTokArr, rRangeList.front()->aStart.Tab(), rRangeList );
     }
     return nNameIdx;
 }
