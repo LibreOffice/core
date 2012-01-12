@@ -1043,8 +1043,6 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
                             aAlignedGrfArea.Left(), aAlignedGrfArea.Top(),
                             aAlignedGrfArea.Right(), aAlignedGrfArea.Bottom());
                         const bool bCropped(aGrfAttr.IsCropped());
-                        const bool bMirrorHor(aGrfAttr.GetMirrorFlags() & BMP_MIRROR_HORZ);
-                        const bool bMirrorVer(aGrfAttr.GetMirrorFlags() & BMP_MIRROR_VERT);
 
                         bDone = paintUsingPrimitivesHelper(
                             *pOut,
