@@ -31,10 +31,8 @@
 #include "svx/svdglob.hxx"
 #include "svx/svditer.hxx"
 
-#if defined( UNX ) || defined( ICC )
 #include <stdlib.h>
-#endif
-#include "svx/globl3d.hxx"
+#include <svx/globl3d.hxx>
 #include <svx/svdpage.hxx>
 #include <svl/style.hxx>
 #include <svx/scene3d.hxx>
