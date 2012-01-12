@@ -76,36 +76,27 @@ endif # DISABLE_ATL
 
 endif # WNT
 
-ifneq ($(WITH_MOZILLA),NO)
-
+ifeq ($(ENABLE_NSPLUGIN),YES)
 $(eval $(call gb_Module_add_targets,extensions,\
-	Library_pl \
 	Executable_nsplugin \
-))
-
-ifeq ($(GUI),WNT)
-$(eval $(call gb_Module_add_targets,extensions,\
 	Library_npsoplugin \
 	WinResTarget_npsoplugin \
 ))
-endif # GUI=WNT
+
+endif
+
+ifeq ($(WITH_MOZILLA),YES)
+$(eval $(call gb_Module_add_targets,extensions,\
+	Library_pl \
+))
 
 ifeq ($(GUI),UNX)
-
 ifneq ($(GUIBASE),aqua)
-
 $(eval $(call gb_Module_add_targets,extensions,\
 	Executable_pluginapp.bin \
 ))
 
 endif # GUIBASE!=aqua
-
-ifneq ($(ENABLE_GTK),)
-$(eval $(call gb_Module_add_targets,extensions,\
-	Library_npsoplugin \
-))
-endif # ENABLE_GTK
-
 endif # GUI=UNX
 
 endif # WITH_MOZILLA=YES
