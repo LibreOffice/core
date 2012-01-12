@@ -414,24 +414,18 @@ void ScDPCacheTable::filterTable(const vector<Criterion>& rCriteria, Sequence< S
 
 SCROW ScDPCacheTable::getOrder(long nDim, SCROW nIndex) const
 {
-    return mpCache ? getCache()->GetOrder(nDim, nIndex) : 0;
+    return mpCache->GetOrder(nDim, nIndex);
 }
 
 void ScDPCacheTable::clear()
 {
     maFieldEntries.clear();
     maRowFlags.clear();
-    mpCache = NULL;
 }
 
 bool ScDPCacheTable::empty() const
 {
-    return mpCache == NULL || maFieldEntries.empty();
-}
-
-void ScDPCacheTable::setCache(const ScDPCache* p)
-{
-    mpCache = p;
+    return maFieldEntries.empty();
 }
 
 bool ScDPCacheTable::hasCache() const

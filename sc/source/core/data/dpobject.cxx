@@ -460,7 +460,12 @@ ScDPTableData* ScDPObject::GetTableData()
         if ( pImpDesc )
         {
             // database data
-            pData.reset(new ScDatabaseDPData(pDoc, *pImpDesc));
+            const ScDPCache* pCache = pImpDesc->CreateCache();
+            if (pCache)
+            {
+                pCache->AddReference(this);
+                pData.reset(new ScDatabaseDPData(pDoc, *pImpDesc, pCache));
+            }
         }
         else
         {
@@ -478,7 +483,10 @@ ScDPTableData* ScDPObject::GetTableData()
                 DisableGetPivotData aSwitch(*this, mbEnableGetPivotData);
                 const ScDPCache* pCache = pSheetDesc->CreateCache();
                 if (pCache)
+                {
+                    pCache->AddReference(this);
                     pData.reset(new ScSheetDPData(pDoc, *pSheetDesc, pCache));
+                }
             }
         }
 
@@ -572,6 +580,8 @@ void ScDPObject::ClearSource()
         }
     }
     xSource = NULL;
+    if (mpTableData)
+        mpTableData->GetCacheTable().getCache()->RemoveReference(this);
     mpTableData.reset();
 }
 
