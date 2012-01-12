@@ -28,8 +28,6 @@
 #ifndef _SVX_NUMFMTSH_HXX
 #define _SVX_NUMFMTSH_HXX
 
-// include ---------------------------------------------------------------
-
 #include <tools/string.hxx>
 #include <i18npool/lang.h>
 
@@ -39,14 +37,10 @@
 
 #include <vector>
 
-// forward ---------------------------------------------------------------
-
 class Color;
 class SvNumberFormatter;
 class SvNumberFormatTable;
-class SvStringsDtor;
 class NfCurrencyEntry;
-// enum ------------------------------------------------------------------
 
 enum SvxNumberValueType
 {
@@ -54,8 +48,6 @@ enum SvxNumberValueType
     SVX_VALUE_TYPE_NUMBER,
     SVX_VALUE_TYPE_STRING
 };
-
-// define ----------------------------------------------------------------
 
 // sort order of the category ListBox entries in the TabPage
 #define CAT_ALL             0
