@@ -1363,7 +1363,8 @@ void Test::testDataPilot()
 
     // This time clear the cache to refresh the data from the source range.
     CPPUNIT_ASSERT_MESSAGE("This datapilot should be based on sheet data.", pDPObj2->IsSheetData());
-    sal_uLong nErrId = pDPs->ClearCache(pDPObj2);
+    std::set<ScDPObject*> aRefs;
+    sal_uLong nErrId = pDPs->ReloadCache(pDPObj2, aRefs);
     CPPUNIT_ASSERT_MESSAGE("Cache removal failed.", nErrId == 0);
     pDPObj2->ClearSource();
     pDPObj2->Output(aOutRange.aStart);

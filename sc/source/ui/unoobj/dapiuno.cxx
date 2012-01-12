@@ -1276,8 +1276,14 @@ void SAL_CALL ScDataPilotTableObj::refresh() throw(RuntimeException)
     if (pDPObj)
     {
         ScDBDocFunc aFunc(*GetDocShell());
-        GetDocShell()->GetDocument()->GetDPCollection()->ClearCache(pDPObj);
-        aFunc.DataPilotUpdate( pDPObj, pDPObj, true, true );
+        std::set<ScDPObject*> aRefs;
+        GetDocShell()->GetDocument()->GetDPCollection()->ReloadCache(pDPObj, aRefs);
+        std::set<ScDPObject*>::iterator it = aRefs.begin(), itEnd = aRefs.end();
+        for (; it != itEnd; ++it)
+        {
+            ScDPObject* pObj = *it;
+            aFunc.DataPilotUpdate(pObj, pObj, true, true);
+        }
     }
 }
 

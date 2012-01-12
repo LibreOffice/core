@@ -995,6 +995,11 @@ void ScDPCache::RemoveReference(ScDPObject* pObj) const
     maRefObjects.erase(pObj);
 }
 
+const ScDPCache::ObjectSetType& ScDPCache::GetAllReferences() const
+{
+    return maRefObjects;
+}
+
 SCROW ScDPCache::GetIdByItemData(long nDim, const String& sItemData ) const
 {
     if ( nDim < mnColumnCount && nDim >=0 )

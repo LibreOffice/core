@@ -2568,6 +2568,31 @@ void ScDPCollection::SheetCaches::updateReference(
     }
 }
 
+void ScDPCollection::SheetCaches::updateCache(const ScRange& rRange, std::set<ScDPObject*>& rRefs)
+{
+    RangeIndexType::iterator it = std::find(maRanges.begin(), maRanges.end(), rRange);
+    if (it == maRanges.end())
+    {
+        // Not cached.  Nothing to do.
+        rRefs.clear();
+        return;
+    }
+
+    size_t nIndex = std::distance(maRanges.begin(), it);
+    CachesType::iterator itCache = maCaches.find(nIndex);
+    if (itCache == maCaches.end())
+    {
+        // Cache pool and index pool out-of-sync !!!
+        rRefs.clear();
+        return;
+    }
+
+    ScDPCache& rCache = *itCache->second;
+    rCache.InitFromDoc(mpDoc, rRange);
+    std::set<ScDPObject*> aRefs(rCache.GetAllReferences());
+    rRefs.swap(aRefs);
+}
+
 void ScDPCollection::SheetCaches::removeCache(const ScRange& rRange)
 {
     RangeIndexType::iterator it = std::find(maRanges.begin(), maRanges.end(), rRange);
@@ -2608,6 +2633,21 @@ const ScDPCache* ScDPCollection::NameCaches::getCache(const OUString& rName, con
     return p;
 }
 
+void ScDPCollection::NameCaches::updateCache(const OUString& rName, const ScRange& rRange, std::set<ScDPObject*>& rRefs)
+{
+    CachesType::iterator itr = maCaches.find(rName);
+    if (itr == maCaches.end())
+    {
+        rRefs.clear();
+        return;
+    }
+
+    ScDPCache& rCache = *itr->second;
+    rCache.InitFromDoc(mpDoc, rRange);
+    std::set<ScDPObject*> aRefs(rCache.GetAllReferences());
+    rRefs.swap(aRefs);
+}
+
 void ScDPCollection::NameCaches::removeCache(const OUString& rName)
 {
     CachesType::iterator itr = maCaches.find(rName);
@@ -2633,58 +2673,9 @@ const ScDPCache* ScDPCollection::DBCaches::getCache(sal_Int32 nSdbType, const OU
         // already cached.
         return itr->second;
 
-    uno::Reference<sdbc::XRowSet> xRowSet ;
-    try
-    {
-        xRowSet = uno::Reference<sdbc::XRowSet>(
-            comphelper::getProcessServiceFactory()->createInstance(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SC_SERVICE_ROWSET )) ),
-            uno::UNO_QUERY);
-        uno::Reference<beans::XPropertySet> xRowProp( xRowSet, uno::UNO_QUERY );
-        OSL_ENSURE( xRowProp.is(), "can't get RowSet" );
-        if ( xRowProp.is() )
-        {
-            //
-            //  set source parameters
-            //
-            uno::Any aAny;
-            aAny <<= rDBName;
-            xRowProp->setPropertyValue(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_DBPROP_DATASOURCENAME)), aAny );
-
-            aAny <<= rCommand;
-            xRowProp->setPropertyValue(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_DBPROP_COMMAND)), aAny );
-
-            aAny <<= nSdbType;
-            xRowProp->setPropertyValue(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_DBPROP_COMMANDTYPE)), aAny );
-
-            uno::Reference<sdb::XCompletedExecution> xExecute( xRowSet, uno::UNO_QUERY );
-            if ( xExecute.is() )
-            {
-                uno::Reference<task::XInteractionHandler> xHandler(
-                    comphelper::getProcessServiceFactory()->createInstance(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SC_SERVICE_INTHANDLER )) ),
-                    uno::UNO_QUERY);
-                xExecute->executeWithCompletion( xHandler );
-            }
-            else
-                xRowSet->execute();
-        }
-    }
-    catch ( const sdbc::SQLException& rError )
-    {
-        //! store error message
-        InfoBox aInfoBox( 0, String(rError.Message) );
-        aInfoBox.Execute();
+    uno::Reference<sdbc::XRowSet> xRowSet = createRowSet(nSdbType, rDBName, rCommand);
+    if (!xRowSet.is())
         return NULL;
-    }
-    catch ( uno::Exception& )
-    {
-        OSL_FAIL("Unexpected exception in database");
-        return NULL;
-    }
 
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     ::std::auto_ptr<ScDPCache> pCache(new ScDPCache(mpDoc));
@@ -2695,6 +2686,104 @@ const ScDPCache* ScDPCollection::DBCaches::getCache(sal_Int32 nSdbType, const OU
     const ScDPCache* p = pCache.get();
     maCaches.insert(aType, pCache);
     return p;
+}
+
+uno::Reference<sdbc::XRowSet> ScDPCollection::DBCaches::createRowSet(
+    sal_Int32 nSdbType, const ::rtl::OUString& rDBName, const ::rtl::OUString& rCommand)
+{
+    uno::Reference<sdbc::XRowSet> xRowSet;
+    try
+    {
+        xRowSet = uno::Reference<sdbc::XRowSet>(
+            comphelper::getProcessServiceFactory()->createInstance(
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_SERVICE_ROWSET))),
+            UNO_QUERY);
+
+        uno::Reference<beans::XPropertySet> xRowProp(xRowSet, UNO_QUERY);
+        OSL_ENSURE( xRowProp.is(), "can't get RowSet" );
+        if (!xRowProp.is())
+        {
+            xRowSet.set(NULL);
+            return xRowSet;
+        }
+
+        //
+        //  set source parameters
+        //
+        uno::Any aAny;
+        aAny <<= rDBName;
+        xRowProp->setPropertyValue(
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_DBPROP_DATASOURCENAME)), aAny );
+
+        aAny <<= rCommand;
+        xRowProp->setPropertyValue(
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_DBPROP_COMMAND)), aAny );
+
+        aAny <<= nSdbType;
+        xRowProp->setPropertyValue(
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_DBPROP_COMMANDTYPE)), aAny );
+
+        uno::Reference<sdb::XCompletedExecution> xExecute( xRowSet, uno::UNO_QUERY );
+        if ( xExecute.is() )
+        {
+            uno::Reference<task::XInteractionHandler> xHandler(
+                comphelper::getProcessServiceFactory()->createInstance(
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SC_SERVICE_INTHANDLER )) ),
+                uno::UNO_QUERY);
+            xExecute->executeWithCompletion( xHandler );
+        }
+        else
+            xRowSet->execute();
+
+        return xRowSet;
+    }
+    catch ( const sdbc::SQLException& rError )
+    {
+        //! store error message
+        InfoBox aInfoBox( 0, String(rError.Message) );
+        aInfoBox.Execute();
+    }
+    catch ( uno::Exception& )
+    {
+        OSL_FAIL("Unexpected exception in database");
+    }
+
+    xRowSet.set(NULL);
+    return xRowSet;
+}
+
+void ScDPCollection::DBCaches::updateCache(
+    sal_Int32 nSdbType, const OUString& rDBName, const OUString& rCommand, std::set<ScDPObject*>& rRefs)
+{
+    DBType aType(nSdbType, rDBName, rCommand);
+    CachesType::iterator it = maCaches.find(aType);
+    if (it == maCaches.end())
+    {
+        // not cached.
+        rRefs.clear();
+        return;
+    }
+
+    ScDPCache& rCache = *it->second;
+
+    uno::Reference<sdbc::XRowSet> xRowSet = createRowSet(nSdbType, rDBName, rCommand);
+    if (!xRowSet.is())
+    {
+        rRefs.clear();
+        return;
+    }
+
+    SvNumberFormatter aFormat(mpDoc->GetServiceManager(), ScGlobal::eLnge);
+    if (!rCache.InitFromDataBase(xRowSet, *aFormat.GetNullDate()))
+    {
+        // initialization failed.
+        rRefs.clear();
+        return;
+    }
+
+    comphelper::disposeComponent(xRowSet);
+    std::set<ScDPObject*> aRefs(rCache.GetAllReferences());
+    aRefs.swap(rRefs);
 }
 
 void ScDPCollection::DBCaches::removeCache(sal_Int32 nSdbType, const OUString& rDBName, const OUString& rCommand)
@@ -2745,7 +2834,7 @@ public:
 
 }
 
-sal_uLong ScDPCollection::ClearCache(ScDPObject* pDPObj)
+sal_uLong ScDPCollection::ReloadCache(ScDPObject* pDPObj, std::set<ScDPObject*>& rRefs)
 {
     if (pDPObj->IsSheetData())
     {
@@ -2762,13 +2851,13 @@ sal_uLong ScDPCollection::ClearCache(ScDPObject* pDPObj)
         {
             // cache by named range
             ScDPCollection::NameCaches& rCaches = GetNameCaches();
-            rCaches.removeCache(pDesc->GetRangeName());
+            rCaches.updateCache(pDesc->GetRangeName(), pDesc->GetSourceRange(), rRefs);
         }
         else
         {
             // cache by cell range
             ScDPCollection::SheetCaches& rCaches = GetSheetCaches();
-            rCaches.removeCache(pDesc->GetSourceRange());
+            rCaches.updateCache(pDesc->GetSourceRange(), rRefs);
         }
     }
     else if (pDPObj->IsImportData())
@@ -2779,7 +2868,8 @@ sal_uLong ScDPCollection::ClearCache(ScDPObject* pDPObj)
             return STR_ERR_DATAPILOTSOURCE;
 
         ScDPCollection::DBCaches& rCaches = GetDBCaches();
-        rCaches.removeCache(pDesc->GetCommandType(), pDesc->aDBName, pDesc->aObject);
+        rCaches.updateCache(
+            pDesc->GetCommandType(), pDesc->aDBName, pDesc->aObject, rRefs);
     }
     return 0;
 }

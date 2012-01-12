@@ -50,10 +50,10 @@ class SC_DLLPUBLIC ScDPCache
 {
 public:
     typedef ::boost::ptr_vector<ScDPItemData>           DataListType;
+    typedef std::set<ScDPObject*> ObjectSetType;
 private:
     typedef ::boost::ptr_vector<DataListType>           DataGridType;
     typedef ::boost::ptr_vector< ::std::vector<SCROW> > RowGridType;
-    typedef std::set<ScDPObject*> ObjectSetType;
 
     ScDocument* mpDoc;
     long mnColumnCount;
@@ -96,6 +96,7 @@ private:
 public:
     void AddReference(ScDPObject* pObj) const;
     void RemoveReference(ScDPObject* pObj) const;
+    const ObjectSetType& GetAllReferences() const;
 
     SCROW GetIdByItemData( long nDim, const String& sItemData ) const;
     SCROW GetIdByItemData( long nDim, const ScDPItemData& rData ) const;

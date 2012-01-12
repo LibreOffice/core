@@ -707,7 +707,8 @@ void ScDBFunc::RecalcPivotTable()
     {
         // Remove existing data cache for the data that this datapilot uses,
         // to force re-build data cache.
-        sal_uLong nErrId = pDPs->ClearCache(pDPObj);
+        std::set<ScDPObject*> aRefs;
+        sal_uLong nErrId = pDPs->ReloadCache(pDPObj, aRefs);
         if (nErrId)
         {
             ErrorMessage(nErrId);
@@ -715,7 +716,13 @@ void ScDBFunc::RecalcPivotTable()
         }
 
         ScDBDocFunc aFunc( *pDocSh );
-        aFunc.DataPilotUpdate( pDPObj, pDPObj, true, false );
+        std::set<ScDPObject*>::iterator it = aRefs.begin(), itEnd = aRefs.end();
+        for (; it != itEnd; ++it)
+        {
+            ScDPObject* pObj = *it;
+            aFunc.DataPilotUpdate(pObj, pObj, true, false);
+        }
+
         CursorPosChanged();     // shells may be switched
     }
     else
