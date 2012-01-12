@@ -37,6 +37,8 @@
 #include "pivot.hxx"
 #include <com/sun/star/sheet/XDimensionsSupplier.hpp>
 
+#include <set>
+
 #include <boost/ptr_container/ptr_list.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/ptr_container/ptr_map.hpp>
@@ -273,6 +275,7 @@ public:
             UpdateRefMode eMode, const ScRange& r, SCsCOL nDx, SCsROW nDy, SCsTAB nDz);
 
     private:
+        void updateCache(const ScRange& rRange, std::set<ScDPObject*>& rRefs);
         void removeCache(const ScRange& rRange);
     };
 
@@ -290,6 +293,7 @@ public:
         bool hasCache(const rtl::OUString& rName) const;
         const ScDPCache* getCache(const ::rtl::OUString& rName, const ScRange& rRange);
     private:
+        void updateCache(const rtl::OUString& rName, const ScRange& rRange, std::set<ScDPObject*>& rRefs);
         void removeCache(const ::rtl::OUString& rName);
     };
 
@@ -323,6 +327,11 @@ public:
         DBCaches(ScDocument* pDoc);
         const ScDPCache* getCache(sal_Int32 nSdbType, const ::rtl::OUString& rDBName, const ::rtl::OUString& rCommand);
     private:
+        com::sun::star::uno::Reference<com::sun::star::sdbc::XRowSet> createRowSet(
+            sal_Int32 nSdbType, const ::rtl::OUString& rDBName, const ::rtl::OUString& rCommand);
+
+        void updateCache(sal_Int32 nSdbType, const ::rtl::OUString& rDBName, const ::rtl::OUString& rCommand,
+                         std::set<ScDPObject*>& rRefs);
         void removeCache(sal_Int32 nSdbType, const ::rtl::OUString& rDBName, const ::rtl::OUString& rCommand);
     };
 
@@ -330,7 +339,7 @@ public:
     ScDPCollection(const ScDPCollection& r);
     ~ScDPCollection();
 
-    sal_uLong ClearCache(ScDPObject* pDPObj);
+    sal_uLong ReloadCache(ScDPObject* pDPObj, std::set<ScDPObject*>& rRefs);
 
     SC_DLLPUBLIC size_t GetCount() const;
     SC_DLLPUBLIC ScDPObject* operator[](size_t nIndex);
