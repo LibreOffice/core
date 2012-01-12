@@ -1479,7 +1479,7 @@ void BackendImpl::PackageImpl::scanBundle(
             continue;
 
         INetContentTypeParameter const * param = params.find(
-            ByteString("platform") );
+            rtl::OString(RTL_CONSTASCII_STRINGPARAM("platform")));
         if (param != 0 && !platform_fits( param->m_sValue ))
             continue;
         const OUString url( makeURL( packageRootURL, fullPath ) );
@@ -1490,7 +1490,7 @@ void BackendImpl::PackageImpl::scanBundle(
                 "vnd.sun.star.package-bundle-description"))
         {
             // check locale:
-            param = params.find( ByteString("locale") );
+            param = params.find(rtl::OString(RTL_CONSTASCII_STRINGPARAM("locale")));
             if (param == 0) {
                 if (descrFile.isEmpty())
                     descrFile = url;

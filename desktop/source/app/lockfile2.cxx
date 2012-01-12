@@ -42,10 +42,10 @@ bool Lockfile_execWarning( Lockfile * that )
     String aLockname = that->m_aLockname;
     Config aConfig(aLockname);
     aConfig.SetGroup( LOCKFILE_GROUP );
-    ByteString aHost  = aConfig.ReadKey( LOCKFILE_HOSTKEY );
-    ByteString aUser  = aConfig.ReadKey( LOCKFILE_USERKEY );
-    ByteString aStamp = aConfig.ReadKey( LOCKFILE_STAMPKEY );
-    ByteString aTime  = aConfig.ReadKey( LOCKFILE_TIMEKEY );
+    rtl::OString aHost  = aConfig.ReadKey( LOCKFILE_HOSTKEY );
+    rtl::OString aUser  = aConfig.ReadKey( LOCKFILE_USERKEY );
+    rtl::OString aStamp = aConfig.ReadKey( LOCKFILE_STAMPKEY );
+    rtl::OString aTime  = aConfig.ReadKey( LOCKFILE_TIMEKEY );
 
     // display warning and return response
     QueryBox aBox( NULL, DesktopResId( QBX_USERDATALOCKED ) );

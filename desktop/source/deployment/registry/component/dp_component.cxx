@@ -794,7 +794,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
                 // xxx todo: probe and evaluate component xml description
 
                 INetContentTypeParameter const * param = params.find(
-                    ByteString("platform") );
+                    rtl::OString(RTL_CONSTASCII_STRINGPARAM("platform")));
                 bool bPlatformFits(param == 0);
                 String aPlatform;
                 if (!bPlatformFits) // platform is specified, we have to check
@@ -805,7 +805,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
                 // If the package is being removed, do not care whether
                 // platform fits. We won't be using it anyway.
                 if (bPlatformFits || bRemoved) {
-                    param = params.find( ByteString("type") );
+                    param = params.find(rtl::OString(RTL_CONSTASCII_STRINGPARAM("type")));
                     if (param != 0)
                     {
                         String const & value = param->m_sValue;
@@ -839,7 +839,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
                          "vnd.sun.star.uno-components"))
             {
                 INetContentTypeParameter const * param = params.find(
-                    ByteString("platform") );
+                    rtl::OString(RTL_CONSTASCII_STRINGPARAM("platform")));
                 if (param == 0 || platform_fits( param->m_sValue )) {
                     return new BackendImpl::ComponentsPackageImpl(
                         this, url, name, m_xComponentsTypeInfo, bRemoved,
@@ -850,7 +850,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
                          "vnd.sun.star.uno-typelibrary"))
             {
                 INetContentTypeParameter const * param = params.find(
-                    ByteString("type") );
+                    rtl::OString(RTL_CONSTASCII_STRINGPARAM("type")));
                 if (param != 0) {
                     String const & value = param->m_sValue;
                     if (value.EqualsIgnoreCaseAscii("RDB"))

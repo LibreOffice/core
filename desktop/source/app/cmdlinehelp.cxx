@@ -156,7 +156,7 @@ namespace desktop
         sal_Int32 n = comphelper::string::getTokenCount(aHelpMessage_left, '\n');
         rtl::OString bsLeft(rtl::OUStringToOString(aHelpMessage_left,
             RTL_TEXTENCODING_ASCII_US));
-        ByteString bsRight(rtl::OUStringToOString(aHelpMessage_right,
+        rtl::OString bsRight(rtl::OUStringToOString(aHelpMessage_right,
             RTL_TEXTENCODING_ASCII_US));
         for ( sal_Int32 i = 0; i < n; ++i )
         {

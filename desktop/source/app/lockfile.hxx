@@ -42,17 +42,16 @@
  */
 
 #include "sal/types.h"
+#include "rtl/string.hxx"
 #include "rtl/ustring.hxx"
 
-class ByteString;
-
 #define LOCKFILE_SUFFIX   rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/.lock" ) )
-#define LOCKFILE_GROUP    ByteString( "Lockdata" )
-#define LOCKFILE_USERKEY  ByteString( "User" )
-#define LOCKFILE_HOSTKEY  ByteString( "Host" )
-#define LOCKFILE_STAMPKEY ByteString( "Stamp" )
-#define LOCKFILE_TIMEKEY  ByteString( "Time" )
-#define LOCKFILE_IPCKEY   ByteString( "IPCServer" )
+#define LOCKFILE_GROUP    rtl::OString(RTL_CONSTASCII_STRINGPARAM( "Lockdata" ) )
+#define LOCKFILE_USERKEY  rtl::OString(RTL_CONSTASCII_STRINGPARAM( "User" ) )
+#define LOCKFILE_HOSTKEY  rtl::OString(RTL_CONSTASCII_STRINGPARAM( "Host" ) )
+#define LOCKFILE_STAMPKEY rtl::OString(RTL_CONSTASCII_STRINGPARAM( "Stamp" ) )
+#define LOCKFILE_TIMEKEY  rtl::OString(RTL_CONSTASCII_STRINGPARAM( "Time" ) )
+#define LOCKFILE_IPCKEY   rtl::OString(RTL_CONSTASCII_STRINGPARAM( "IPCServer" ) )
 
 namespace desktop {
 
