@@ -2155,7 +2155,6 @@ SvxAutocorrWordList* SvxAutoCorrectLanguageLists::LoadAutocorrWordList()
     else
         pAutocorr_List = new SvxAutocorrWordList( 16, 16 );
 
-    SvStringsDtor aRemoveArr;
     try
     {
         uno::Reference < embed::XStorage > xStg = comphelper::OStorageHelper::GetStorageFromURL( sShareAutoCorrFile, embed::ElementModes::READ );
