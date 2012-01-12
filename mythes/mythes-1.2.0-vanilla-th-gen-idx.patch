@@ -1,6 +1,6 @@
---- misc/mythes-1.2.0.orig/th_gen_idx.pl
-+++ misc/build/mythes-1.2.0/th_gen_idx.pl
-@@ -1,11 +1,32 @@
+--- misc/mythes-1.2.0.orig/th_gen_idx.pl	2010-02-27 12:52:58.000000000 -0300
++++ misc/build/mythes-1.2.0/th_gen_idx.pl	2012-01-12 04:13:15.149371123 -0300
+@@ -1,11 +1,26 @@
 -#!/usr/bin/perl
 -
 -# perl program to take a thesaurus structured text data file 
@@ -9,7 +9,7 @@
 +eval 'exec perl -wS $0 ${1+"$@"}'
 +    if 0;
 +#**************************************************************
-+#  
++#
 +#  Licensed to the Apache Software Foundation (ASF) under one
 +#  or more contributor license agreements.  See the NOTICE file
 +#  distributed with this work for additional information
@@ -17,21 +17,23 @@
 +#  to you under the Apache License, Version 2.0 (the
 +#  "License"); you may not use this file except in compliance
 +#  with the License.  You may obtain a copy of the License at
-+#  
++#
 +#    http://www.apache.org/licenses/LICENSE-2.0
-+#  
+ #
+-# typcially invoked as follows:
+-# cat th_en_US_new.dat | ./th_gen_idx.pl > th_en_US_new.idx
 +#  Unless required by applicable law or agreed to in writing,
 +#  software distributed under the License is distributed on an
 +#  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
 +#  KIND, either express or implied.  See the License for the
 +#  specific language governing permissions and limitations
 +#  under the License.
-+#  
+ #
 +#**************************************************************
  
  sub by_entry {
      my ($aent, $aoff) = split('\|',$a);
-@@ -13,6 +34,27 @@ sub by_entry {
+@@ -13,6 +28,27 @@ sub by_entry {
      $aent cmp $bent;
  }
  
@@ -59,7 +61,7 @@
  # main routine
  my $ne = 0;       # number of entries in index
  my @tindex=();    # the index itself
-@@ -24,6 +66,10 @@ my $nm=0;         # number of meaning fo
+@@ -24,6 +60,10 @@ my $nm=0;         # number of meaning fo
  my $meaning="";   # current meaning and synonyms
  my $p;            # misc uses
  my $encoding;     # encoding used by text file
@@ -70,7 +72,7 @@
  
  # top line of thesaurus provides encoding
  $encoding=<STDIN>;
-@@ -51,9 +97,13 @@ while ($rec=<STDIN>){
+@@ -51,9 +91,13 @@ while ($rec=<STDIN>){
  # now we have all of the information
  # so sort it and then output the encoding, count and index data
  @tindex = sort by_entry @tindex;
