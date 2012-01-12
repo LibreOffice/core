@@ -678,13 +678,50 @@ static sal_Bool ImpPeekGraphicFormat( SvStream& rStream, String& rFormatExtensio
     //--------------------------- SVG ------------------------------------
     if( !bTest )
     {
+        // check for Xml
         if( ImplSearchEntry( sFirstBytes, (sal_uInt8*)"<?xml", 256, 5 ) // is it xml
-            && ImplSearchEntry( sFirstBytes, (sal_uInt8*)"version", 256, 7 ) // does it have a version (required for xml)
-            && ImplSearchEntry( sFirstBytes, (sal_uInt8*)"www.w3.org", 256, 10 ) // does it have to do with w3 (part of namespace definition)
-            && ImplSearchEntry( sFirstBytes, (sal_uInt8*)"<svg", 256, 4 ) ) // does it have svg nodes
+            && ImplSearchEntry( sFirstBytes, (sal_uInt8*)"version", 256, 7 )) // does it have a version (required for xml)
         {
-            rFormatExtension = UniString::CreateFromAscii( "SVG", 3 );
-            return sal_True;
+            bool bIsSvg(false);
+
+            // check for DOCTYPE svg combination
+            if( ImplSearchEntry( sFirstBytes, (sal_uInt8*)"DOCTYPE", 256, 7 ) // 'DOCTYPE' is there
+                && ImplSearchEntry( sFirstBytes, (sal_uInt8*)"svg", 256, 3 )) // 'svg' is there
+            {
+                bIsSvg = true;
+            }
+
+            // check for svg element in 1st 256 bytes
+            if(!bIsSvg && ImplSearchEntry( sFirstBytes, (sal_uInt8*)"<svg", 256, 4 )) // '<svg'
+            {
+                bIsSvg = true;
+            }
+
+            if(!bIsSvg)
+            {
+                // it's a xml, look for '<svg' in full file. Should not happen too
+                // often since the tests above will handle most cases, but can happen
+                // with Svg files containing big comment headers or Svg as the host
+                // language
+                const sal_uLong nSize((nStreamLen > 2048) ? 2048 : nStreamLen);
+                sal_uInt8* pBuf = new sal_uInt8[nSize];
+
+                rStream.Seek(nStreamPos);
+                rStream.Read(pBuf, nSize);
+
+                if(ImplSearchEntry(pBuf, (sal_uInt8*)"<svg", nSize, 4)) // '<svg'
+                {
+                    bIsSvg = true;
+                }
+
+                delete[] pBuf;
+            }
+
+            if(bIsSvg)
+            {
+                rFormatExtension = UniString::CreateFromAscii( "SVG", 3 );
+                return sal_True;
+            }
         }
     }
     else if( rFormatExtension.CompareToAscii( "SVG", 3 ) == COMPARE_EQUAL )
