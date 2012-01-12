@@ -34,7 +34,7 @@
  			;;
  		*)
 -			EXPAT_LIBS="-L$expat_lib -lexpat"
-+			EXPAT_LIBS="-L$expat_lib -lexpat_xmlparse -lexpat_xmltok"
++			EXPAT_LIBS="-L$expat_lib -lascii_expat_xmlparse -lexpat_xmltok"
  			;;
  		esac
  
