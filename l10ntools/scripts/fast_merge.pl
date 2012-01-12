@@ -309,6 +309,7 @@ sub write_buffer
     {
         print FILE $_."\n";
     }
+    close ( FILE );
     @buffer = ();
 }
 sub parse_options
