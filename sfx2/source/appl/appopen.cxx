@@ -715,7 +715,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
     if ( !pFileNameItem )
     {
         // get FileName from dialog
-        SvStringsDtor* pURLList = NULL;
+        std::vector<rtl::OUString> pURLList;
         String aFilter;
         SfxItemSet* pSet = NULL;
         String aPath;
@@ -757,7 +757,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
 
         if ( nErr == ERRCODE_ABORT )
         {
-            delete pURLList;
+            pURLList.clear();
             return;
         }
 
@@ -768,7 +768,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
         rReq.AppendItem( SfxStringItem( SID_REFERER, String::CreateFromAscii(SFX_REFERER_USER) ) );
         delete pSet;
 
-        if ( pURLList->Count() )
+        if(!pURLList.empty())
         {
             if ( nSID == SID_OPENTEMPLATE )
                 rReq.AppendItem( SfxBoolItem( SID_TEMPLATE, sal_False ) );
@@ -799,11 +799,10 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
             ::framework::PreventDuplicateInteraction::InteractionInfo aRule        (aInteraction, 1);
             pHandler->addInteractionRule(aRule);
 
-            for ( sal_uInt16 i = 0; i < pURLList->Count(); ++i )
+            for(std::vector<rtl::OUString>::const_iterator i = pURLList.begin(); i != pURLList.end(); ++i)
             {
-                String aURL = *(pURLList->GetObject(i));
                 rReq.RemoveItem( SID_FILE_NAME );
-                rReq.AppendItem( SfxStringItem( SID_FILE_NAME, aURL ) );
+                rReq.AppendItem( SfxStringItem( SID_FILE_NAME, *i ) );
 
                 // Run synchronous, so that not the next document is loaded
                 // when rescheduling
@@ -832,10 +831,10 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
                 }
             }
 
-            delete pURLList;
+            pURLList.clear();
             return;
         }
-        delete pURLList;
+        pURLList.clear();
     }
 
     sal_Bool bHyperlinkUsed = sal_False;

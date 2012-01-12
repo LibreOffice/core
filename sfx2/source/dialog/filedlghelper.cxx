@@ -1366,22 +1366,18 @@ void FileDialogHelper_Impl::implStartExecute()
 }
 
 // ------------------------------------------------------------------------
-void lcl_saveLastURLs(SvStringsDtor*&                                    rpURLList ,
+void lcl_saveLastURLs(std::vector<rtl::OUString>& rpURLList,
                       ::comphelper::SequenceAsVector< ::rtl::OUString >& lLastURLs )
 {
     lLastURLs.clear();
-    sal_uInt16 c = rpURLList->Count();
-    sal_uInt16 i = 0;
-    for (i=0; i<c; ++i)
-        lLastURLs.push_back(*(rpURLList->GetObject(i)));
+    for(std::vector<rtl::OUString>::iterator i = rpURLList.begin(); i != rpURLList.end(); ++i)
+        lLastURLs.push_back(*i);
 }
 
 // ------------------------------------------------------------------------
-void FileDialogHelper_Impl::implGetAndCacheFiles(const uno::Reference< XInterface >& xPicker  ,
-                                                       SvStringsDtor*&               rpURLList,
-                                                 const SfxFilter*                    pFilter  )
+void FileDialogHelper_Impl::implGetAndCacheFiles(const uno::Reference< XInterface >& xPicker, std::vector<rtl::OUString>& rpURLList, const SfxFilter* pFilter)
 {
-    rpURLList = NULL;
+    rpURLList.clear();
 
     rtl::OUString sExtension;
     if (pFilter)
@@ -1395,14 +1391,10 @@ void FileDialogHelper_Impl::implGetAndCacheFiles(const uno::Reference< XInterfac
     uno::Reference< XFilePicker2 > xPickNew(xPicker, UNO_QUERY);
     if (xPickNew.is())
     {
-                             rpURLList = new SvStringsDtor;
         Sequence< OUString > lFiles    = xPickNew->getSelectedFiles();
         ::sal_Int32          nFiles    = lFiles.getLength();
-        for (::sal_Int32 i = 0; i < nFiles; i++)
-        {
-            String* pURL = new String(lFiles[i]);
-            rpURLList->Insert( pURL, rpURLList->Count() );
-        }
+        for(sal_Int32 i = 0; i < nFiles; ++i)
+            rpURLList.push_back(lFiles[i]);
     }
 
     // b) the olde way ... non optional.
@@ -1413,15 +1405,10 @@ void FileDialogHelper_Impl::implGetAndCacheFiles(const uno::Reference< XInterfac
         ::sal_Int32          nFiles = lFiles.getLength();
         if ( nFiles == 1 )
         {
-                    rpURLList = new SvStringsDtor;
-            String* pURL      = new String(lFiles[0]);
-            rpURLList->Insert( pURL, 0 );
+            rpURLList.push_back(lFiles[0]);
         }
-        else
-        if ( nFiles > 1 )
+        else if ( nFiles > 1 )
         {
-            rpURLList = new SvStringsDtor;
-
             INetURLObject aPath( lFiles[0] );
             aPath.setFinalSlash();
 
@@ -1432,8 +1419,7 @@ void FileDialogHelper_Impl::implGetAndCacheFiles(const uno::Reference< XInterfac
                 else
                     aPath.setName( lFiles[i] );
 
-                String* pURL = new String(aPath.GetMainURL( INetURLObject::NO_DECODE ) );
-                rpURLList->Insert( pURL, rpURLList->Count() );
+                rpURLList.push_back(aPath.GetMainURL(INetURLObject::NO_DECODE));
             }
         }
     }
@@ -1442,7 +1428,7 @@ void FileDialogHelper_Impl::implGetAndCacheFiles(const uno::Reference< XInterfac
 }
 
 // ------------------------------------------------------------------------
-ErrCode FileDialogHelper_Impl::execute( SvStringsDtor*& rpURLList,
+ErrCode FileDialogHelper_Impl::execute( std::vector<rtl::OUString>& rpURLList,
                                         SfxItemSet *&   rpSet,
                                         String&         rFilter )
 {
@@ -1489,7 +1475,7 @@ ErrCode FileDialogHelper_Impl::execute( SvStringsDtor*& rpURLList,
             aSecOpt.IsOptionSet( SvtSecurityOptions::E_DOCWARN_RECOMMENDPASSWORD ) );
     }
 
-    rpURLList = NULL;
+    rpURLList.clear();
 
     if ( ! mxFileDlg.is() )
         return ERRCODE_ABORT;
@@ -1560,7 +1546,7 @@ ErrCode FileDialogHelper_Impl::execute( SvStringsDtor*& rpURLList,
 
         // fill the rpURLList
         implGetAndCacheFiles( mxFileDlg, rpURLList, pCurrentFilter );
-        if ( rpURLList == NULL || rpURLList->GetObject(0) == NULL )
+        if ( rpURLList.empty() )
             return ERRCODE_ABORT;
 
         // check, wether or not we have to display a password box
@@ -1573,7 +1559,7 @@ ErrCode FileDialogHelper_Impl::execute( SvStringsDtor*& rpURLList,
                 if ( ( aValue >>= bPassWord ) && bPassWord )
                 {
                     // ask for a password
-                    rtl::OUString aDocName(*(rpURLList->GetObject(0)));
+                    rtl::OUString aDocName(rpURLList[0]);
                     ErrCode errCode = RequestPassword(pCurrentFilter, aDocName, rpSet);
                     if (errCode != ERRCODE_NONE)
                         return errCode;
@@ -2326,7 +2312,7 @@ IMPL_LINK( FileDialogHelper, ExecuteSystemFilePicker, void*, EMPTYARG )
 
 // ------------------------------------------------------------------------
 // rDirPath has to be a directory
-ErrCode FileDialogHelper::Execute( SvStringsDtor*& rpURLList,
+ErrCode FileDialogHelper::Execute( std::vector<rtl::OUString>& rpURLList,
                                    SfxItemSet *&   rpSet,
                                    String&         rFilter,
                                    const String&   rDirPath )
@@ -2347,12 +2333,8 @@ ErrCode FileDialogHelper::Execute( SfxItemSet *&   rpSet,
                                    String&         rFilter )
 {
     ErrCode nRet;
-    SvStringsDtor* pURLList;
-
-    nRet = mpImp->execute( pURLList, rpSet, rFilter );
-
-    delete pURLList;
-
+    std::vector<rtl::OUString> rURLList;
+    nRet = mpImp->execute(rURLList, rpSet, rFilter);
     return nRet;
 }
 
@@ -2638,7 +2620,7 @@ void SAL_CALL FileDialogHelper::DialogClosed( const DialogClosedEvent& _rEvent )
 ErrCode FileOpenDialog_Impl( sal_Int16 nDialogType,
                              sal_Int64 nFlags,
                              const String& rFact,
-                             SvStringsDtor *& rpURLList,
+                             std::vector<rtl::OUString>& rpURLList,
                              String& rFilter,
                              SfxItemSet *& rpSet,
                              const String* pPath,

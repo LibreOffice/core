@@ -153,7 +153,7 @@ namespace sfx2
         void                    implInitializeFileName( );
 
         void                    implGetAndCacheFiles( const ::com::sun::star::uno::Reference< XInterface >& xPicker  ,
-                                                            SvStringsDtor*&               rpURLList,
+                                                      std::vector<rtl::OUString>&               rpURLList,
                                                       const SfxFilter*                    pFilter  );
 
         DECL_LINK( TimeOutHdl_Impl, Timer* );
@@ -193,7 +193,7 @@ namespace sfx2
                                 );
         virtual                 ~FileDialogHelper_Impl();
 
-        ErrCode                 execute( SvStringsDtor*& rpURLList,
+        ErrCode                 execute( std::vector<rtl::OUString>& rpURLList,
                                          SfxItemSet *&   rpSet,
                                          String&         rFilter );
         ErrCode                 execute();

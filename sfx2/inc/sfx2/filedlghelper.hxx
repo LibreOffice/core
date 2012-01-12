@@ -68,10 +68,7 @@ namespace com
 }
 
 class SfxItemSet;
-class SvStringsDtor;
 class Window;
-
-//-----------------------------------------------------------------------------
 
 // the SFXWB constants are for the nFlags parameter of the constructor
 #define SFXWB_INSERT            0x04000000L     // turn Open into Insert dialog
@@ -84,8 +81,6 @@ class Window;
 #define FILE_OPEN_SERVICE_NAME      "com.sun.star.ui.dialogs.FilePicker"
 #define FOLDER_PICKER_SERVICE_NAME  "com.sun.star.ui.dialogs.FolderPicker"
 #define FILE_OPEN_SERVICE_NAME_OOO   "com.sun.star.ui.dialogs.OfficeFilePicker"
-
-//-----------------------------------------------------------------------------
 
 namespace sfx2 {
 
@@ -245,7 +240,7 @@ public:
 
    DECL_LINK( ExecuteSystemFilePicker, void* );
 
-    ErrCode                  Execute( SvStringsDtor*& rpURLList,
+   ErrCode                  Execute( std::vector<rtl::OUString>& rpURLList,
                                       SfxItemSet *&   rpSet,
                                       String&         rFilter,
                                       const String&   rDirPath );
@@ -260,7 +255,7 @@ public:
 ErrCode FileOpenDialog_Impl( sal_Int16 nDialogType,
                              sal_Int64 nFlags,
                              const String& rFact,
-                             SvStringsDtor *& rpURLList,
+                             std::vector<rtl::OUString>& rpURLList,
                              String& rFilter,
                              SfxItemSet *& rpSet,
                              const String* pPath = NULL,
@@ -271,8 +266,6 @@ ErrCode FileOpenDialog_Impl( sal_Int16 nDialogType,
 
 ErrCode RequestPassword(const SfxFilter* pCurrentFilter, rtl::OUString& aURL, SfxItemSet* pSet);
 }
-
-//-----------------------------------------------------------------------------
 
 #endif
 

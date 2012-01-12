@@ -38,14 +38,10 @@
 #include <com/sun/star/frame/XFrame.hpp>
 
 class _SfxMacroTabPage;
-class SvStringsDtor;
 class SvTabListBox;
 class Edit;
 class String;
 class SfxObjectShell;
-
-typedef SvStringsDtor* (*FNGetRangeHdl)( _SfxMacroTabPage*, const String& rLanguage );
-typedef SvStringsDtor* (*FNGetMacrosOfRangeHdl)( _SfxMacroTabPage*, const String& rLanguage, const String& rRange );
 
 class SfxConfigGroupListBox_Impl;
 class SfxConfigFunctionListBox_Impl;
@@ -91,8 +87,6 @@ public:
     virtual void                ScriptChanged( const String& rLanguage );
 
     // zum setzen / abfragen der Links
-    void                        SetGetRangeLink( FNGetRangeHdl pFn );
-    FNGetRangeHdl               GetGetRangeLink() const;
     void                        SetGetMacrosOfRangeLink( FNGetMacrosOfRangeHdl pFn );
     FNGetMacrosOfRangeHdl       GetGetMacrosOfRangeLink() const;
 
