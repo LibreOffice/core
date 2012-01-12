@@ -934,6 +934,16 @@ void XcuParser::handleGroupNode(
         state_.push(State(true)); // ignored
         return;
     }
+    Node::Kind kind = child->kind();
+    if (kind != Node::KIND_GROUP && kind != Node::KIND_SET) {
+        throw css::uno::RuntimeException(
+            (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("bad <node> \"")) +
+             name +
+             rtl::OUString(
+                 RTL_CONSTASCII_USTRINGPARAM("\" of non group/set kind in ")) +
+             reader.getUrl()),
+            css::uno::Reference< css::uno::XInterface >());
+    }
     if (op != OPERATION_MODIFY && op != OPERATION_FUSE) {
         throw css::uno::RuntimeException(
             (rtl::OUString(
