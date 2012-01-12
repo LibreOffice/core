@@ -133,20 +133,23 @@ copy-stuff:
 	mkdir -p assets/bin assets/lib assets/xml/ure
 	cp $(OUTDIR)/bin/udkapi.rdb assets/bin
 	cp $(OUTDIR)/bin/types.rdb assets/bin
-	cp $(OUTDIR)/xml/ure/services.rdb assets/xml/ure
 # For some reason the vnd.sun.star.expand:$LO_LIB_DIR doesn't seem to work, it expands to empty!?
 # So just hardcode the known APP_DATA_PATH for now...
+# Ditto for URE_INTERNAL_LIB_DIR
+	for F in xml/ure/services; do \
+		sed -e 's!uri="vnd.sun.star.expand:$$URE_INTERNAL_LIB_DIR/!uri="$(APP_DATA_PATH)/lib/!g' <$(OUTDIR)/$$F.rdb >assets/$$F.rdb; \
+	done
 	for F in framework/util/fwk i18npool/util/i18npool sfx2/util/sfx unoxml/source/service/unoxml configmgr/source/configmgr; do \
 		mkdir -p assets/ComponentTarget/`dirname $$F`; \
-	        sed -e 's!uri="vnd.sun.star.expand:$$LO_LIB_DIR/!uri="$(APP_DATA_PATH)/lib/!' <$(WORKDIR)/ComponentTarget/$$F.component >assets/ComponentTarget/$$F.component; \
+	        sed -e 's!uri="vnd.sun.star.expand:$$LO_LIB_DIR/!uri="$(APP_DATA_PATH)/lib/!g' <$(WORKDIR)/ComponentTarget/$$F.component >assets/ComponentTarget/$$F.component; \
 	done
 	for F in ucb1 ucpfile1; do \
-		sed -e 's!uri="vnd.sun.star.expand:$$LO_LIB_DIR/!uri="$(APP_DATA_PATH)/lib/!' <$(OUTDIR)/xml/$$F.component > assets/xml/$$F.component; \
+		sed -e 's!uri="vnd.sun.star.expand:$$LO_LIB_DIR/!uri="$(APP_DATA_PATH)/lib/!g' <$(OUTDIR)/xml/$$F.component >assets/xml/$$F.component; \
 	done
-	cp -R $(OUTDIR)/xml/registry assets/xml
 	for F in uno_services uno_types; do \
 		sed -e 's!uri="./!uri="$(APP_DATA_PATH)/lib/!g' <$(SRC_ROOT)/testtools/$(INPATH)/lib/$$F.rdb >assets/lib/$$F.rdb; \
 	done
+	cp -R $(OUTDIR)/xml/registry assets/xml
 # Then assets that are unpacked at run-time into the app's data directory.
 	mkdir -p assets/unpack/bin
 	for F in $(OUTDIR)/bin/*.res; do \
