@@ -822,7 +822,8 @@ bool ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyM
     {
         if (nNewPos >= static_cast<SCTAB>(maTabs.size()))
         {
-            maTabs.push_back( new ScTable(this, static_cast<SCTAB>(maTabs.size()), aName) );
+            nNewPos = static_cast<SCTAB>(maTabs.size());
+            maTabs.push_back(new ScTable(this, nNewPos, aName));
         }
         else
         {
@@ -902,6 +903,9 @@ bool ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyM
 
         if (pDrawLayer)
             DrawCopyPage( static_cast<sal_uInt16>(nOldPos), static_cast<sal_uInt16>(nNewPos) );
+
+        if (pDPCollection)
+            pDPCollection->CopyToTab(nOldPos, nNewPos);
 
         maTabs[nNewPos]->SetPageStyle( maTabs[nOldPos]->GetPageStyle() );
         maTabs[nNewPos]->SetPendingRowHeights( maTabs[nOldPos]->IsPendingRowHeights() );
