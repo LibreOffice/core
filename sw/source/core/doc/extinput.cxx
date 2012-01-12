@@ -73,8 +73,8 @@ SwExtTextInput::~SwExtTextInput()
                 xub_StrLen n = nEndCnt; nEndCnt = nSttCnt; nSttCnt = n;
             }
 
-            // damit Undo / Redlining usw. richtig funktioniert,
-            // muss ueber die Doc-Schnittstellen gegangen werden !!!
+            // In order to get Undo/Redlining etc. working correctly,
+            // we need to go through the Doc interface
             if(eInputLanguage != LANGUAGE_DONTKNOW)
             {
                 // #i41974# Only set language attribute
@@ -162,8 +162,7 @@ void SwExtTextInput::SetInputData( const CommandExtTextInputData& rData )
             xub_StrLen nReplace = nEndCnt - nSttCnt;
             if( rNewStr.Len() < nReplace )
             {
-                // then we must insert from the saved original text
-                // some characters
+                // We have to insert some characters from the saved original text
                 nReplace = nReplace - rNewStr.Len();
                 aIdx += rNewStr.Len();
                 pTNd->ReplaceText( aIdx, nReplace,
@@ -235,7 +234,7 @@ void SwExtTextInput::SetOverwriteCursor( sal_Bool bFlag )
     }
 }
 
-// die Doc Schnittstellen:
+// The Doc interfaces
 
 SwExtTextInput* SwDoc::CreateExtTextInput( const SwPaM& rPam )
 {

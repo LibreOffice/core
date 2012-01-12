@@ -32,7 +32,7 @@
 #include <editeng/ulspitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/fhgtitem.hxx>
-#include <doc.hxx>          // fuer GetAttrPool
+#include <doc.hxx>          // for GetAttrPool
 #include <fmtcol.hxx>
 #include <fmtcolfunc.hxx>
 #include <hints.hxx>
@@ -148,7 +148,7 @@ void SwTxtFmtColl::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
     switch( pOld ? pOld->Which() : pNew ? pNew->Which() : 0 )
     {
     case RES_ATTRSET_CHG:
-        // nur neu berechnen, wenn nicht wir der "Versender" sind !!!
+        // Only recalculate if we're not the sender!
         pNewChgSet = (SwAttrSetChg*)pNew;
         pOldChgSet = (SwAttrSetChg*)pOld;
         pNewChgSet->GetChgSet()->GetItemState(
@@ -222,32 +222,32 @@ void SwTxtFmtColl::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 
     int bWeiter = sal_True;
 
-    // dann pruefe doch mal gegen die eigenen Attribute
+    // Check against the own attributes
     if( pNewLRSpace && SFX_ITEM_SET == GetItemState( RES_LR_SPACE, sal_False,
                                         (const SfxPoolItem**)&pOldLRSpace ))
     {
         int bChg = sal_False;
-        if( pOldLRSpace != pNewLRSpace )    // verhinder Rekursion (SetAttr!!)
+        if( pOldLRSpace != pNewLRSpace )    // Avoid recursion (SetAttr!)
         {
             SvxLRSpaceItem aNew( *pOldLRSpace );
-            // wir hatten eine relative Angabe -> neu berechnen
+            // We had a relative value -> recalculate
             if( 100 != aNew.GetPropLeft() )
             {
-                long nTmp = aNew.GetLeft();     // alten zum Vergleichen
+                long nTmp = aNew.GetLeft();     // keep so that we can compare
                 aNew.SetLeft( pNewLRSpace->GetLeft(), aNew.GetPropLeft() );
                 bChg |= nTmp != aNew.GetLeft();
             }
-            // wir hatten eine relative Angabe -> neu berechnen
+            // We had a relative value -> recalculate
             if( 100 != aNew.GetPropRight() )
             {
-                long nTmp = aNew.GetRight();        // alten zum Vergleichen
+                long nTmp = aNew.GetRight();    // keep so that we can compare
                 aNew.SetRight( pNewLRSpace->GetRight(), aNew.GetPropRight() );
                 bChg |= nTmp != aNew.GetRight();
             }
-            // wir hatten eine relative Angabe -> neu berechnen
+            // We had a relative value -> recalculate
             if( 100 != aNew.GetPropTxtFirstLineOfst() )
             {
-                short nTmp = aNew.GetTxtFirstLineOfst();        // alten zum Vergleichen
+                short nTmp = aNew.GetTxtFirstLineOfst();    // keep so that we can compare
                 aNew.SetTxtFirstLineOfst( pNewLRSpace->GetTxtFirstLineOfst(),
                                             aNew.GetPropTxtFirstLineOfst() );
                 bChg |= nTmp != aNew.GetTxtFirstLineOfst();
@@ -257,8 +257,8 @@ void SwTxtFmtColl::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
                 SetFmtAttr( aNew );
                 bWeiter = 0 != pOldChgSet || bNewParent;
             }
-            // bei uns absolut gesetzt -> nicht weiter propagieren, es sei
-            // denn es wird bei uns gesetzt!
+            // We set it to absolute -> do not propagate it further, unless
+            // we set it!
             else if( pNewChgSet )
                 bWeiter = pNewChgSet->GetTheChgdSet() == &GetAttrSet();
         }
@@ -266,21 +266,21 @@ void SwTxtFmtColl::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 
     if( pNewULSpace && SFX_ITEM_SET == GetItemState(
             RES_UL_SPACE, sal_False, (const SfxPoolItem**)&pOldULSpace ) &&
-        pOldULSpace != pNewULSpace )    // verhinder Rekursion (SetAttr!!)
+        pOldULSpace != pNewULSpace )    // Avoid recursion (SetAttr!)
     {
         SvxULSpaceItem aNew( *pOldULSpace );
         int bChg = sal_False;
-        // wir hatten eine relative Angabe -> neu berechnen
+        // We had a relative value -> recalculate
         if( 100 != aNew.GetPropUpper() )
         {
-            sal_uInt16 nTmp = aNew.GetUpper();      // alten zum Vergleichen
+            sal_uInt16 nTmp = aNew.GetUpper();      // keep so that we can compare
             aNew.SetUpper( pNewULSpace->GetUpper(), aNew.GetPropUpper() );
             bChg |= nTmp != aNew.GetUpper();
         }
-        // wir hatten eine relative Angabe -> neu berechnen
+        // We had a relative value -> recalculate
         if( 100 != aNew.GetPropLower() )
         {
-            sal_uInt16 nTmp = aNew.GetLower();      // alten zum Vergleichen
+            sal_uInt16 nTmp = aNew.GetLower();      // keep so that we can compare
             aNew.SetLower( pNewULSpace->GetLower(), aNew.GetPropLower() );
             bChg |= nTmp != aNew.GetLower();
         }
@@ -289,8 +289,8 @@ void SwTxtFmtColl::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
             SetFmtAttr( aNew );
             bWeiter = 0 != pOldChgSet || bNewParent;
         }
-        // bei uns absolut gesetzt -> nicht weiter propagieren, es sei
-        // denn es wird bei uns gesetzt!
+        // We set it to absolute -> do not propagate it further, unless
+        // we set it!
         else if( pNewChgSet )
             bWeiter = pNewChgSet->GetTheChgdSet() == &GetAttrSet();
     }
@@ -302,21 +302,21 @@ void SwTxtFmtColl::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
         SvxFontHeightItem *pFSize = aFontSizeArr[ nC ], *pOldFSize;
         if( pFSize && SFX_ITEM_SET == GetItemState(
             pFSize->Which(), sal_False, (const SfxPoolItem**)&pOldFSize ) &&
-            // verhinder Rekursion (SetAttr!!)
+            // Avoid recursion (SetAttr!)
             pFSize != pOldFSize )
         {
             if( 100 == pOldFSize->GetProp() &&
                 SFX_MAPUNIT_RELATIVE == pOldFSize->GetPropUnit() )
             {
-                // bei uns absolut gesetzt -> nicht weiter propagieren, es sei
-                // denn es wird bei uns gesetzt!
+                // We set it to absolute -> do not propagate it further, unless
+                // we set it!
                 if( pNewChgSet )
                     bWeiter = pNewChgSet->GetTheChgdSet() == &GetAttrSet();
             }
             else
             {
-                // wir hatten eine relative Angabe -> neu berechnen
-                sal_uInt32 nTmp = pOldFSize->GetHeight();       // alten zum Vergleichen
+                // We had a relative value -> recalculate
+                sal_uInt32 nTmp = pOldFSize->GetHeight();       // keep so that we can compare
                 SvxFontHeightItem aNew(240 , 100, pFSize->Which());
                 aNew.SetHeight( pFSize->GetHeight(), pOldFSize->GetProp(),
                                 pOldFSize->GetPropUnit() );
@@ -325,8 +325,8 @@ void SwTxtFmtColl::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
                     SetFmtAttr( aNew );
                     bWeiter = 0 != pOldChgSet || bNewParent;
                 }
-                // bei uns absolut gesetzt -> nicht weiter propagieren, es sei
-                // denn es wird bei uns gesetzt!
+                // We set it to absolute -> do not propagate it further, unless
+                // we set it!
                 else if( pNewChgSet )
                     bWeiter = pNewChgSet->GetTheChgdSet() == &GetAttrSet();
             }
@@ -532,7 +532,7 @@ int SwCollCondition::operator==( const SwCollCondition& rCmp ) const
     {
         if( USRFLD_EXPRESSION & nCondition )
         {
-            // in der SubCondition steht die Expression fuer das UserFeld
+            // The SubCondition contains the expression for the UserField
             const String* pTmp = aSubCondition.pFldExpression;
             if( !pTmp )
                 pTmp = rCmp.aSubCondition.pFldExpression;
@@ -593,7 +593,7 @@ void SwConditionTxtFmtColl::InsertCondition( const SwCollCondition& rCond )
             break;
         }
 
-    // nicht gefunden -> als einfuegen
+    // Not found -> so insert it
     SwCollCondition* pNew = new SwCollCondition( rCond );
     aCondColls.Insert( pNew, aCondColls.Count() );
 }
@@ -614,8 +614,7 @@ sal_Bool SwConditionTxtFmtColl::RemoveCondition( const SwCollCondition& rCond )
 
 void SwConditionTxtFmtColl::SetConditions( const SwFmtCollConditions& rCndClls )
 {
-    // Kopiere noch die Bedingungen
-    // aber erst die alten loeschen!
+    // Copy the Conditions, but first delete the old ones
     if( aCondColls.Count() )
         aCondColls.DeleteAndDestroy( 0, aCondColls.Count() );
     SwDoc& rDoc = *GetDoc();
