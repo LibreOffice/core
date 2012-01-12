@@ -77,10 +77,11 @@ const ScDPCache* ScImportSourceDesc::CreateCache() const
     return rCaches.getCache(nSdbType, aDBName, aObject);
 }
 
-ScDatabaseDPData::ScDatabaseDPData(ScDocument* pDoc, const ScImportSourceDesc& rImport) :
+ScDatabaseDPData::ScDatabaseDPData(
+    ScDocument* pDoc, const ScImportSourceDesc& rImport, const ScDPCache* pCache) :
     ScDPTableData(pDoc),
     mrImport(rImport),
-    aCacheTable(rImport.CreateCache())
+    aCacheTable(pCache)
 {
 }
 
@@ -139,12 +140,10 @@ void ScDatabaseDPData::CreateCacheTable()
 
     if (!aCacheTable.hasCache())
     {
-        const ScDPCache* pCache = mrImport.CreateCache();
-        if (!pCache)
-            // Cache creation failed.  Perhaps invalid database connection.
-            return;
-
-        aCacheTable.setCache(pCache);
+        fprintf(stdout, "ScDatabaseDPData::CreateCacheTable:   NOT GOOD!\n");
+        // This better not happen!!  Cache table should be created with a live
+        // data cache instance at all times.
+        return;
     }
 
     aCacheTable.fillTable();

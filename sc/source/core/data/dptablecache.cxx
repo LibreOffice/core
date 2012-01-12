@@ -985,6 +985,16 @@ SCCOL ScDPCache::GetDimensionIndex(String sName) const
     return -1;
 }
 
+void ScDPCache::AddReference(ScDPObject* pObj) const
+{
+    maRefObjects.insert(pObj);
+}
+
+void ScDPCache::RemoveReference(ScDPObject* pObj) const
+{
+    maRefObjects.erase(pObj);
+}
+
 SCROW ScDPCache::GetIdByItemData(long nDim, const String& sItemData ) const
 {
     if ( nDim < mnColumnCount && nDim >=0 )

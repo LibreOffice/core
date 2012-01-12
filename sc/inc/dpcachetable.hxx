@@ -175,7 +175,6 @@ public:
     SCROW getOrder(long nDim, SCROW nIndex) const;
     void clear();
     bool empty() const;
-    void setCache(const ScDPCache* p);
     bool hasCache() const;
 
 private:

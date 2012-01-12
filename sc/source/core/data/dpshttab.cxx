@@ -191,7 +191,12 @@ void ScSheetDPData::CreateCacheTable()
         return;
 
     if (!aCacheTable.hasCache())
-        aCacheTable.setCache(mrDesc.CreateCache());
+    {
+        fprintf(stdout, "ScSheetDPData::CreateCacheTable:   NOT GOOD!!!\n");
+        // This better not happen!!  The cache table should be created with a
+        // live data cache at all times.
+        return;
+    }
 
     aCacheTable.fillTable(aQuery, bIgnoreEmptyRows, bRepeatIfEmpty);
 }

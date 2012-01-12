@@ -53,9 +53,15 @@ public:
 private:
     typedef ::boost::ptr_vector<DataListType>           DataGridType;
     typedef ::boost::ptr_vector< ::std::vector<SCROW> > RowGridType;
+    typedef std::set<ScDPObject*> ObjectSetType;
 
     ScDocument* mpDoc;
     long mnColumnCount;
+
+    /**
+     * All pivot table objects that references this cache.
+     */
+    mutable ObjectSetType maRefObjects;
 
     /**
      * This container stores only the unique instances of item data in each
@@ -88,6 +94,9 @@ private:
     mutable ScDPItemDataPool    maAdditionalData;
 
 public:
+    void AddReference(ScDPObject* pObj) const;
+    void RemoveReference(ScDPObject* pObj) const;
+
     SCROW GetIdByItemData( long nDim, const String& sItemData ) const;
     SCROW GetIdByItemData( long nDim, const ScDPItemData& rData ) const;
 
