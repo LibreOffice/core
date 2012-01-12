@@ -65,7 +65,6 @@ class SfxFrameSetDescriptor;
 class Printer;
 class SfxPrinter;
 class SfxProgress;
-class SvStringsDtor;
 class SfxFrameItem;
 class Dialog;
 class Menu;
