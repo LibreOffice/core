@@ -79,7 +79,7 @@ sal_Bool ParseCommandLine( int argc, char* argv[])
     // parse command line
     for( int i = 1; i < argc; i++ )
     {
-        rtl::OString aArg(rtl::OString(argv[i]).toAsciiUpperCase());
+        rtl::OString aArg = rtl::OString(argv[i]).toAsciiUpperCase();
         if (aArg.equalsL(RTL_CONSTASCII_STRINGPARAM("-I")))
             nState = STATE_INPUT; // next tokens specifies source files
         else if (aArg.equalsL(RTL_CONSTASCII_STRINGPARAM("-O")))
