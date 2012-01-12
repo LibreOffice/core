@@ -219,8 +219,8 @@ private:
     String          aLayoutStr;
     String aCalcStr;
 
-    SvStringsDtor   aSearchStrings;
-    SvStringsDtor   aReplaceStrings;
+    std::vector<rtl::OUString> aSearchStrings;
+    std::vector<rtl::OUString> aReplaceStrings;
 
     SearchDlg_Impl*         pImpl;
     SearchAttrItemList*     pSearchList;

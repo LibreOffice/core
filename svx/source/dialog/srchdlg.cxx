@@ -139,9 +139,7 @@ struct SearchDlg_Impl
     ~SearchDlg_Impl() { delete[] pRanges; }
 };
 
-// -----------------------------------------------------------------------
-
-void ListToStrArr_Impl( sal_uInt16 nId, SvStringsDtor& rStrLst, ComboBox& rCBox )
+void ListToStrArr_Impl( sal_uInt16 nId, std::vector<rtl::OUString>& rStrLst, ComboBox& rCBox )
 {
     SfxStringListItem* pSrchItem =
         (SfxStringListItem*)SFX_APP()->GetItem( nId );
@@ -152,22 +150,19 @@ void ListToStrArr_Impl( sal_uInt16 nId, SvStringsDtor& rStrLst, ComboBox& rCBox 
 
         for ( sal_uInt16 i = 0; i < aLst.size(); ++i )
         {
-            String* pTmp = new String(aLst[i]);
-            rStrLst.Insert( pTmp, rStrLst.Count() );
-            rCBox.InsertEntry( *pTmp );
+            rStrLst.push_back(aLst[i]);
+            rCBox.InsertEntry(aLst[i]);
         }
     }
 }
 
-// -----------------------------------------------------------------------
-
-void StrArrToList_Impl( sal_uInt16 nId, const SvStringsDtor& rStrLst )
+void StrArrToList_Impl( sal_uInt16 nId, const std::vector<rtl::OUString>& rStrLst )
 {
-    DBG_ASSERT( rStrLst.Count(), "check in advance");
+    DBG_ASSERT( !rStrLst.empty(), "check in advance");
     std::vector<String> aLst;
 
-    for ( sal_uInt16 i = 0; i < rStrLst.Count(); ++i )
-        aLst.push_back( *rStrLst[ i ]);
+    for (std::vector<rtl::OUString>::const_iterator i = rStrLst.begin(); i != rStrLst.end(); ++i)
+        aLst.push_back(String(*i));
 
     SFX_APP()->PutItem( SfxStringListItem( nId, &aLst ) );
 }
@@ -586,10 +581,10 @@ void SvxSearchDialog::Construct_Impl()
 sal_Bool SvxSearchDialog::Close()
 {
     // remember strings speichern
-    if ( aSearchStrings.Count() )
+    if (!aSearchStrings.empty())
         StrArrToList_Impl( SID_SEARCHDLG_SEARCHSTRINGS, aSearchStrings );
 
-    if ( aReplaceStrings.Count() )
+    if (!aReplaceStrings.empty())
         StrArrToList_Impl( SID_SEARCHDLG_REPLACESTRINGS, aReplaceStrings );
 
     // save settings to configuration
@@ -1130,19 +1125,19 @@ void SvxSearchDialog::Init_Impl( int bSearchPattern )
 
         if ( pSearchItem->GetSearchString().Len() && bSetSearch )
             aSearchLB.SetText( pSearchItem->GetSearchString() );
-        else if ( aSearchStrings.Count() )
+        else if (!aSearchStrings.empty())
         {
             bool bAttributes =
                 ( ( pSearchList && pSearchList->Count() ) ||
                   ( pReplaceList && pReplaceList->Count() ) );
 
             if ( bSetSearch && !bAttributes )
-                aSearchLB.SetText( *aSearchStrings[ 0 ] );
+                aSearchLB.SetText(aSearchStrings[0]);
 
             String aReplaceTxt = pSearchItem->GetReplaceString();
 
-            if ( aReplaceStrings.Count() )
-                aReplaceTxt = *aReplaceStrings[ 0 ];
+            if (!aReplaceStrings.empty())
+                aReplaceTxt = aReplaceStrings[0];
 
             if ( bSetReplace && !bAttributes )
                 aReplaceLB.SetText( aReplaceTxt );
@@ -1737,31 +1732,26 @@ void SvxSearchDialog::Remember_Impl( const String &rStr,sal_Bool _bSearch )
     if ( !rStr.Len() )
         return;
 
-    SvStringsDtor* pArr = _bSearch ? &aSearchStrings : &aReplaceStrings;
+    std::vector<rtl::OUString>* pArr = _bSearch ? &aSearchStrings : &aReplaceStrings;
     ComboBox* pListBox = _bSearch ? &aSearchLB : &aReplaceLB;
 
     // ignore identical strings
-    for ( sal_uInt16 i = 0; i < pArr->Count(); ++i )
+    for (std::vector<rtl::OUString>::const_iterator i = pArr->begin(); i != pArr->end(); ++i)
     {
-        if ( COMPARE_EQUAL == (*pArr)[i]->CompareTo( rStr ) )
+        if ((*i).equals(rStr))
             return;
     }
 
     // delete oldest entry at maximum occupancy (ListBox and Array)
-    String* pInsStr;
-
-    if ( pArr->Count() >= REMEMBER_SIZE )
+    if(REMEMBER_SIZE < pArr->size())
     {
-        pInsStr = (*pArr)[REMEMBER_SIZE - 1];
         pListBox->RemoveEntry( sal_uInt16(REMEMBER_SIZE - 1) );
-        pArr->Remove( REMEMBER_SIZE - 1 );
-        *pInsStr = rStr;
+        (*pArr)[REMEMBER_SIZE - 1] = rStr;
+        pArr->erase(pArr->begin() + REMEMBER_SIZE - 1);
     }
-    else
-        pInsStr = new String( rStr );
 
-    pArr->Insert( pInsStr, 0 );
-    pListBox->InsertEntry( *pInsStr, 0 );
+    pArr->insert(pArr->begin(), rStr);
+    pListBox->InsertEntry(rStr, 0);
 }
 
 // -----------------------------------------------------------------------
