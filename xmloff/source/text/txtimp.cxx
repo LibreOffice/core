@@ -532,8 +532,8 @@ struct SAL_DLLPRIVATE XMLTextImportHelper::Impl
     ::std::auto_ptr<SvXMLTokenMap> m_pTextContourAttrTokenMap;
     ::std::auto_ptr<SvXMLTokenMap> m_pTextHyperlinkAttrTokenMap;
     ::std::auto_ptr<SvXMLTokenMap> m_pTextMasterPageElemTokenMap;
-    ::std::auto_ptr<SvStringsDtor> m_pPrevFrmNames;
-    ::std::auto_ptr<SvStringsDtor> m_pNextFrmNames;
+    ::std::auto_ptr< std::vector<rtl::OUString> > m_pPrevFrmNames;
+    ::std::auto_ptr< std::vector<rtl::OUString> > m_pNextFrmNames;
     ::std::auto_ptr<XMLTextListsHelper> m_pTextListsHelper;
     SAL_WNODEPRECATED_DECLARATIONS_POP
 
@@ -2737,34 +2737,25 @@ void XMLTextImportHelper::ConnectFrameChains(
         {
             if (!m_pImpl->m_pPrevFrmNames.get())
             {
-                m_pImpl->m_pPrevFrmNames.reset( new SvStringsDtor );
-                m_pImpl->m_pNextFrmNames.reset( new SvStringsDtor );
+                m_pImpl->m_pPrevFrmNames.reset( new std::vector<rtl::OUString> );
+                m_pImpl->m_pNextFrmNames.reset( new std::vector<rtl::OUString> );
             }
-            m_pImpl->m_pPrevFrmNames->Insert( new String( rFrmName ),
-                   m_pImpl->m_pPrevFrmNames->Count() );
-            m_pImpl->m_pNextFrmNames->Insert( new String( sNextFrmName ),
-                   m_pImpl->m_pNextFrmNames->Count() );
+            m_pImpl->m_pPrevFrmNames->push_back(rFrmName);
+            m_pImpl->m_pNextFrmNames->push_back(sNextFrmName);
         }
     }
-    if (m_pImpl->m_pPrevFrmNames.get() && m_pImpl->m_pPrevFrmNames->Count())
+    if (m_pImpl->m_pPrevFrmNames.get() && !m_pImpl->m_pPrevFrmNames->empty())
     {
-        sal_uInt16 nCount = m_pImpl->m_pPrevFrmNames->Count();
-        for( sal_uInt16 i=0; i<nCount; i++ )
+        for(std::vector<rtl::OUString>::iterator i = m_pImpl->m_pPrevFrmNames->begin(), j = m_pImpl->m_pNextFrmNames->begin(); i != m_pImpl->m_pPrevFrmNames->end() && j != m_pImpl->m_pNextFrmNames->end(); ++i, ++j)
         {
-            String *pNext = (*m_pImpl->m_pNextFrmNames)[i];
-            if( OUString(*pNext) == rFrmName )
+            if((*j).equals(rFrmName))
             {
                 // The previuous frame must exist, because it existing than
                 // inserting the entry
-                String *pPrev = (*m_pImpl->m_pPrevFrmNames)[i];
+                rFrmPropSet->setPropertyValue(s_ChainPrevName, makeAny(*i));
 
-                rFrmPropSet->setPropertyValue(s_ChainPrevName,
-                    makeAny(OUString( *pPrev )));
-
-                m_pImpl->m_pPrevFrmNames->Remove( i, 1 );
-                m_pImpl->m_pNextFrmNames->Remove( i, 1 );
-                delete pPrev;
-                delete pNext;
+                i = m_pImpl->m_pPrevFrmNames->erase(i);
+                j = m_pImpl->m_pNextFrmNames->erase(j);
 
                 // There cannot be more than one previous frames
                 break;
