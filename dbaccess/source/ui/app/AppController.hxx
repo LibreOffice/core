@@ -549,7 +549,7 @@ namespace dbaui
         virtual ::com::sun::star::uno::Any
                                 getCurrentSelection( Control& _rControl ) const;
 
-        DECL_LINK( OnInvalidateClipboard, void* );
+        void OnInvalidateClipboard();
         DECL_LINK( OnClipboardChanged, void* );
         DECL_LINK( OnAsyncDrop, void* );
         DECL_LINK( OnCreateWithPilot, void* );

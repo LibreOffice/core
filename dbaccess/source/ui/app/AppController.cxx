@@ -2315,16 +2315,16 @@ void OApplicationController::showPreviewFor(const ElementType _eType,const ::rtl
 //------------------------------------------------------------------------------
 IMPL_LINK( OApplicationController, OnClipboardChanged, void*, EMPTYARG )
 {
-    return OnInvalidateClipboard( NULL );
+    OnInvalidateClipboard();
+    return 0L;
 }
 //------------------------------------------------------------------------------
-IMPL_LINK(OApplicationController, OnInvalidateClipboard, void*, EMPTYARG)
+void OApplicationController::OnInvalidateClipboard()
 {
     InvalidateFeature(ID_BROWSER_CUT);
     InvalidateFeature(ID_BROWSER_COPY);
     InvalidateFeature(ID_BROWSER_PASTE);
     InvalidateFeature(SID_DB_APP_PASTE_SPECIAL);
-    return 0L;
 }
 // -----------------------------------------------------------------------------
 void OApplicationController::onCutEntry()

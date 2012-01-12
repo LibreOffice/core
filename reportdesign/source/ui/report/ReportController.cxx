@@ -2369,15 +2369,15 @@ void OReportController::groupChange( const uno::Reference< report::XGroup>& _xGr
 //------------------------------------------------------------------------------
 IMPL_LINK( OReportController, OnClipboardChanged, void*, EMPTYARG )
 {
-    return OnInvalidateClipboard( NULL );
+    OnInvalidateClipboard();
+    return 0;
 }
 //------------------------------------------------------------------------------
-IMPL_LINK(OReportController, OnInvalidateClipboard, void*, EMPTYARG)
+void OReportController::OnInvalidateClipboard()
 {
     InvalidateFeature(SID_CUT);
     InvalidateFeature(SID_COPY);
     InvalidateFeature(SID_PASTE);
-    return 0L;
 }
 // -----------------------------------------------------------------------------
 void OReportController::openPageDialog(const uno::Reference<report::XSection>& _xSection)

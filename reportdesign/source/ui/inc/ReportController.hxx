@@ -329,7 +329,7 @@ namespace rptui
             ,const ::com::sun::star::uno::Any& _aValue
             ,const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _aArgs);
 
-        DECL_LINK( OnInvalidateClipboard, void* );
+        void OnInvalidateClipboard();
         DECL_LINK( OnClipboardChanged, void* );
         DECL_LINK( OnExecuteReport, void* );
         DECL_LINK( OnOpenHelpAgent, void* );
