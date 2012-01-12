@@ -153,6 +153,9 @@ inline char const * unwrapStream(StreamIgnore const &) {
     Potentially not only useful within the log framework (where it is used
     automatically), but also when creating exception messages.
 
+    @attention For now, this functionality should only be used internally within
+    LibreOffice. It may change again in a future version.
+
     @since LibreOffice 3.5
 */
 #define SAL_WHERE SAL_DETAIL_WHERE
@@ -165,6 +168,9 @@ inline char const * unwrapStream(StreamIgnore const &) {
     message, as in:
 
       SAL_INFO("foo", "object: " << (hasName ? obj->name : SAL_STREAM(obj)));
+
+    @attention For now, this functionality should only be used internally within
+    LibreOffice. It may change again in a future version.
 
     @since LibreOffice 3.5
 */
@@ -250,6 +256,9 @@ inline char const * unwrapStream(StreamIgnore const &) {
     message, and a newline.  The precise format of the log output is subject to
     change.  The log output is printed to stderr without further text encoding
     conversion.
+
+    @attention For now, this functionality should only be used internally within
+    LibreOffice. It may change again in a future version.
 
     @since LibreOffice 3.5
 */
