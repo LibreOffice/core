@@ -101,9 +101,15 @@ endif
 
 endif
 
-ifneq ($(WITH_MOZILLA),NO)
+ifeq ($(ENABLE_NSPLUGIN),YES)
 $(eval $(call gb_Helper_register_executables,OOO,\
-       nsplugin \
+    nsplugin \
+))
+
+endif
+
+ifeq ($(WITH_MOZILLA),YES)
+$(eval $(call gb_Helper_register_executables,OOO,\
     pluginapp.bin \
 ))
 $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
