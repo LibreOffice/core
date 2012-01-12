@@ -909,9 +909,10 @@ ifeq ($(SYSTEM_MOZILLA_HEADERS),YES)
 
 define gb_LinkTarget__use_mozilla_headers
 $(eval $(call gb_LinkTarget_set_include,$(1),\
-	$(MOZILLA_HEADERS_CFLAGS)
+	$(MOZILLA_HEADERS_CFLAGS) \
 	$$(INCLUDE) \
 ))
+
 endef
 
 else #!SYSTEM_MOZILLA_HEADERS
@@ -921,6 +922,7 @@ $(eval $(call gb_LinkTarget_set_include,$(1),\
 	-I$(OUTDIR)/inc/npsdk \
 	$$(INCLUDE) \
 ))
+
 endef
 
 endif #SYSTEM_MOZILLA_HEADERS
