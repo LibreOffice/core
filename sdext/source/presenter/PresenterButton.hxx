@@ -99,12 +99,10 @@ public:
     virtual void SAL_CALL windowHidden (const css::lang::EventObject& rEvent)
         throw (css::uno::RuntimeException);
 
-
     // XPaintListener
 
     virtual void SAL_CALL windowPaint (const css::awt::PaintEvent& rEvent)
         throw (css::uno::RuntimeException);
-
 
     // XMouseListener
 
@@ -120,7 +118,6 @@ public:
     virtual void SAL_CALL mouseExited (const css::awt::MouseEvent& rEvent)
         throw(css::uno::RuntimeException);
 
-
     // XMouseMotionListener
 
     virtual void SAL_CALL mouseMoved (const css::awt::MouseEvent& rEvent)
@@ -128,7 +125,6 @@ public:
 
     virtual void SAL_CALL mouseDragged (const css::awt::MouseEvent& rEvent)
         throw (css::uno::RuntimeException);
-
 
     // lang::XEventListener
     virtual void SAL_CALL disposing (const css::lang::EventObject& rEvent)

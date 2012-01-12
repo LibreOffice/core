@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-
 #undef ENABLE_PANE_RESIZING
 //#define ENABLE_PANE_RESIZING
 
@@ -105,15 +104,9 @@ PresenterWindowManager::PresenterWindowManager (
     UpdateWindowList();
 }
 
-
-
-
 PresenterWindowManager::~PresenterWindowManager (void)
 {
 }
-
-
-
 
 void SAL_CALL PresenterWindowManager::disposing (void)
 {
@@ -140,9 +133,6 @@ void SAL_CALL PresenterWindowManager::disposing (void)
         }
     }
 }
-
-
-
 
 void PresenterWindowManager::SetParentPane (
     const Reference<drawing::framework::XPane>& rxPane)
@@ -180,9 +170,6 @@ void PresenterWindowManager::SetParentPane (
             xPeer->setBackground(util::Color(0xff000000));
     }
 }
-
-
-
 
 void PresenterWindowManager::SetTheme (const ::boost::shared_ptr<PresenterTheme>& rpTheme)
 {
@@ -241,17 +228,11 @@ void PresenterWindowManager::SetPanePosSizeAbsolute (
     }
 }
 
-
-
-
 void PresenterWindowManager::SetPaneBorderPainter (
     const ::rtl::Reference<PresenterPaneBorderPainter>& rPainter)
 {
     mpPaneBorderPainter = rPainter;
 }
-
-
-
 
 //----- XWindowListener -------------------------------------------------------
 
@@ -276,9 +257,6 @@ void SAL_CALL PresenterWindowManager::windowResized (const awt::WindowEvent& rEv
     }
 }
 
-
-
-
 void SAL_CALL PresenterWindowManager::windowMoved (const awt::WindowEvent& rEvent)
     throw (RuntimeException)
 {
@@ -293,26 +271,17 @@ void SAL_CALL PresenterWindowManager::windowMoved (const awt::WindowEvent& rEven
     }
 }
 
-
-
-
 void SAL_CALL PresenterWindowManager::windowShown (const lang::EventObject& rEvent)
     throw (RuntimeException)
 {
     (void)rEvent;
 }
 
-
-
-
 void SAL_CALL PresenterWindowManager::windowHidden (const lang::EventObject& rEvent)
     throw (RuntimeException)
 {
     (void)rEvent;
 }
-
-
-
 
 //----- XPaintListener --------------------------------------------------------
 
@@ -347,9 +316,6 @@ void SAL_CALL PresenterWindowManager::windowPaint (const awt::PaintEvent& rEvent
     }
 }
 
-
-
-
 //----- XMouseListener --------------------------------------------------------
 
 void SAL_CALL PresenterWindowManager::mousePressed (const css::awt::MouseEvent& rEvent)
@@ -358,9 +324,6 @@ void SAL_CALL PresenterWindowManager::mousePressed (const css::awt::MouseEvent& 
     (void)rEvent;
     mbIsMouseClickPending = true;
 }
-
-
-
 
 void SAL_CALL PresenterWindowManager::mouseReleased (const css::awt::MouseEvent& rEvent)
     throw(css::uno::RuntimeException)
@@ -376,9 +339,6 @@ void SAL_CALL PresenterWindowManager::mouseReleased (const css::awt::MouseEvent&
 #endif
 }
 
-
-
-
 void SAL_CALL PresenterWindowManager::mouseEntered (const css::awt::MouseEvent& rEvent)
     throw(css::uno::RuntimeException)
 {
@@ -386,18 +346,12 @@ void SAL_CALL PresenterWindowManager::mouseEntered (const css::awt::MouseEvent& 
     mbIsMouseClickPending = false;
 }
 
-
-
-
 void SAL_CALL PresenterWindowManager::mouseExited (const css::awt::MouseEvent& rEvent)
     throw(css::uno::RuntimeException)
 {
     (void)rEvent;
     mbIsMouseClickPending = false;
 }
-
-
-
 
 //----- XFocusListener --------------------------------------------------------
 
@@ -410,18 +364,12 @@ void SAL_CALL PresenterWindowManager::focusGained (const css::awt::FocusEvent& r
         rEvent.Source.get());
 }
 
-
-
-
 void SAL_CALL PresenterWindowManager::focusLost (const css::awt::FocusEvent& rEvent)
     throw (css::uno::RuntimeException)
 {
     ThrowIfDisposed();
     (void)rEvent;
 }
-
-
-
 
 //----- XEventListener --------------------------------------------------------
 
@@ -435,9 +383,6 @@ void SAL_CALL PresenterWindowManager::disposing (const lang::EventObject& rEvent
         Reference<awt::XWindow> xWindow (rEvent.Source, UNO_QUERY);
     }
 }
-
-
-
 
 //-----------------------------------------------------------------------------
 
@@ -497,9 +442,6 @@ bool PresenterWindowManager::PaintChildren (const awt::PaintEvent& rEvent) const
     return bChildInvalidated;
 }
 
-
-
-
 void PresenterWindowManager::SetLayoutMode (const LayoutMode eMode)
 {
     OSL_ASSERT(mpPresenterController.get() != NULL);
@@ -520,9 +462,6 @@ void PresenterWindowManager::SetLayoutMode (const LayoutMode eMode)
         NotifyLayoutModeChange();
     }
 }
-
-
-
 
 void PresenterWindowManager::SetSlideSorterState (bool bIsActive)
 {
@@ -590,9 +529,6 @@ void PresenterWindowManager::SetViewMode (const ViewMode eMode)
     StoreViewMode(eMode);
 }
 
-
-
-
 PresenterWindowManager::ViewMode PresenterWindowManager::GetViewMode (void) const
 {
     if (mbIsHelpViewActive)
@@ -604,9 +540,6 @@ PresenterWindowManager::ViewMode PresenterWindowManager::GetViewMode (void) cons
     else
         return VM_Standard;
 }
-
-
-
 
 void PresenterWindowManager::RestoreViewMode (void)
 {
@@ -632,9 +565,6 @@ void PresenterWindowManager::RestoreViewMode (void)
             break;
     }
 }
-
-
-
 
 void PresenterWindowManager::StoreViewMode (const ViewMode eViewMode)
 {
@@ -670,17 +600,11 @@ void PresenterWindowManager::StoreViewMode (const ViewMode eViewMode)
     }
 }
 
-
-
-
 void PresenterWindowManager::AddLayoutListener (
     const Reference<document::XEventListener>& rxListener)
 {
     maLayoutListeners.push_back(rxListener);
 }
-
-
-
 
 void PresenterWindowManager::RemoveLayoutListener (
     const Reference<document::XEventListener>& rxListener)
@@ -697,9 +621,6 @@ void PresenterWindowManager::RemoveLayoutListener (
         }
     }
 }
-
-
-
 
 void PresenterWindowManager::Layout (void)
 {
@@ -739,9 +660,6 @@ void PresenterWindowManager::Layout (void)
     }
 }
 
-
-
-
 void PresenterWindowManager::LayoutStandardMode (void)
 {
     awt::Rectangle aBox = mxParentWindow->getPosSize();
@@ -770,7 +688,6 @@ void PresenterWindowManager::LayoutStandardMode (void)
             aCurrentSlideOuterBox.Height);
     }
 
-
     // For the next slide view calculate the outer height from the outer
     // width.  This takes into acount the slide aspect ratio and thus has to
     // go over the inner pane size.
@@ -790,9 +707,6 @@ void PresenterWindowManager::LayoutStandardMode (void)
 
     LayoutToolBar();
 }
-
-
-
 
 void PresenterWindowManager::LayoutNotesMode (void)
 {
@@ -844,7 +758,6 @@ void PresenterWindowManager::LayoutNotesMode (void)
             aCurrentSlideOuterBox.Height);
     }
 
-
     // For the next slide view calculate the outer height from the outer
     // width.  This takes into acount the slide aspect ratio and thus has to
     // go over the inner pane size.
@@ -863,9 +776,6 @@ void PresenterWindowManager::LayoutNotesMode (void)
     }
 }
 
-
-
-
 void PresenterWindowManager::LayoutSlideSorterMode (void)
 {
     const geometry::RealRectangle2D aToolBarBox (LayoutToolBar());
@@ -879,9 +789,6 @@ void PresenterWindowManager::LayoutSlideSorterMode (void)
         aWindowBox.Width - 2*nGap,
         aToolBarBox.Y1 - 2*nGap);
 }
-
-
-
 
 void PresenterWindowManager::LayoutHelpMode (void)
 {
@@ -898,9 +805,6 @@ void PresenterWindowManager::LayoutHelpMode (void)
         nWidth,
         aToolBarBox.Y1 - 2*nGap);
 }
-
-
-
 
 geometry::RealRectangle2D PresenterWindowManager::LayoutToolBar (void)
 {
@@ -957,9 +861,6 @@ geometry::RealRectangle2D PresenterWindowManager::LayoutToolBar (void)
         nToolBarY + nToolBarHeight - 1);
 }
 
-
-
-
 awt::Size PresenterWindowManager::CalculatePaneSize (
     const double nOuterWidth,
     const OUString& rsPaneURL)
@@ -984,9 +885,6 @@ awt::Size PresenterWindowManager::CalculatePaneSize (
 
     return awt::Size(aOuterBox.Width, aOuterBox.Height);
 }
-
-
-
 
 void PresenterWindowManager::NotifyLayoutModeChange (void)
 {
@@ -1014,9 +912,6 @@ void PresenterWindowManager::NotifyLayoutModeChange (void)
         }
     }
 }
-
-
-
 
 void PresenterWindowManager::NotifyDisposing (void)
 {
@@ -1077,9 +972,6 @@ void PresenterWindowManager::UpdateWindowSize (const Reference<awt::XWindow>& rx
             mpPaneContainer->ToTop(pDescriptor);
     }
 }
-
-
-
 
 void PresenterWindowManager::PaintBackground (const awt::Rectangle& rUpdateBox)
 {
@@ -1150,9 +1042,6 @@ void PresenterWindowManager::PaintBackground (const awt::Rectangle& rUpdateBox)
     }
 }
 
-
-
-
 void PresenterWindowManager::ProvideBackgroundBitmap (void)
 {
     if ( ! mxScaledBackgroundBitmap.is())
@@ -1185,9 +1074,6 @@ void PresenterWindowManager::ProvideBackgroundBitmap (void)
         }
     }
 }
-
-
-
 
 Reference<rendering::XPolyPolygon2D> PresenterWindowManager::CreateClipPolyPolygon (void) const
 {
@@ -1226,9 +1112,6 @@ Reference<rendering::XPolyPolygon2D> PresenterWindowManager::CreateClipPolyPolyg
         xPolyPolygon->setFillRule(rendering::FillRule_EVEN_ODD);
     return xPolyPolygon;
 }
-
-
-
 
 void PresenterWindowManager::UpdateWindowList (void)
 {
@@ -1281,32 +1164,20 @@ void PresenterWindowManager::UpdateWindowList (void)
 #endif
 }
 
-
-
-
 void PresenterWindowManager::Invalidate (void)
 {
     mpPresenterController->GetPaintManager()->Invalidate(mxParentWindow);
 }
-
-
-
 
 Reference<awt::XWindow> PresenterWindowManager::GetParentWindow (void) const
 {
     return mxParentWindow;
 }
 
-
-
-
 Reference<rendering::XCanvas> PresenterWindowManager::GetParentCanvas (void) const
 {
     return mxParentCanvas;
 }
-
-
-
 
 void PresenterWindowManager::Update (void)
 {
@@ -1316,9 +1187,6 @@ void PresenterWindowManager::Update (void)
     UpdateWindowList();
     Invalidate();
 }
-
-
-
 
 void PresenterWindowManager::ThrowIfDisposed (void) const
     throw (::com::sun::star::lang::DisposedException)
@@ -1331,8 +1199,6 @@ void PresenterWindowManager::ThrowIfDisposed (void) const
             const_cast<uno::XWeak*>(static_cast<const uno::XWeak*>(this)));
     }
 }
-
-
 
 namespace {
 
@@ -1362,11 +1228,7 @@ private:
     Reference<rendering::XSpriteCanvas> mxCanvas;
 };
 
-
-
-
 } // end of anonymous namespace
-
 
 } } // end of namespace ::sdext::presenter
 

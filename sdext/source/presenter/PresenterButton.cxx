@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-
 #include "PresenterButton.hxx"
 #include "PresenterCanvasHelper.hxx"
 #include "PresenterController.hxx"
@@ -50,8 +49,6 @@ namespace sdext { namespace presenter {
 
 const static double gnHorizontalBorder (15);
 const static double gnVerticalBorder (5);
-
-
 
 ::rtl::Reference<PresenterButton> PresenterButton::Create (
     const css::uno::Reference<css::uno::XComponentContext>& rxComponentContext,
@@ -95,9 +92,6 @@ const static double gnVerticalBorder (5);
     else
         return NULL;
 }
-
-
-
 
 PresenterButton::PresenterButton (
     const css::uno::Reference<css::uno::XComponentContext>& rxComponentContext,
@@ -161,15 +155,9 @@ PresenterButton::PresenterButton (
     }
 }
 
-
-
-
 PresenterButton::~PresenterButton (void)
 {
 }
-
-
-
 
 void SAL_CALL PresenterButton::disposing (void)
 {
@@ -194,9 +182,6 @@ void SAL_CALL PresenterButton::disposing (void)
     }
 }
 
-
-
-
 void PresenterButton::SetCenter (const css::geometry::RealPoint2D& rLocation)
 {
     if (mxCanvas.is())
@@ -219,9 +204,6 @@ void PresenterButton::SetCenter (const css::geometry::RealPoint2D& rLocation)
         maCenter = rLocation;
     }
 }
-
-
-
 
 void PresenterButton::SetCanvas (
     const css::uno::Reference<css::rendering::XCanvas>& rxParentCanvas,
@@ -251,18 +233,12 @@ void PresenterButton::SetCanvas (
     }
 }
 
-
-
-
 css::geometry::IntegerSize2D PresenterButton::GetSize (void)
 {
     if (maButtonSize.Width < 0)
         CalculateButtonSize();
     return maButtonSize;
 }
-
-
-
 
 //----- XWindowListener -------------------------------------------------------
 
@@ -273,19 +249,12 @@ void SAL_CALL PresenterButton::windowResized (const css::awt::WindowEvent& rEven
     ThrowIfDisposed();
 }
 
-
-
-
-
 void SAL_CALL PresenterButton::windowMoved (const css::awt::WindowEvent& rEvent)
     throw (css::uno::RuntimeException)
 {
     (void)rEvent;
     ThrowIfDisposed();
 }
-
-
-
 
 void SAL_CALL PresenterButton::windowShown (const css::lang::EventObject& rEvent)
     throw (css::uno::RuntimeException)
@@ -294,18 +263,12 @@ void SAL_CALL PresenterButton::windowShown (const css::lang::EventObject& rEvent
     ThrowIfDisposed();
 }
 
-
-
-
 void SAL_CALL PresenterButton::windowHidden (const css::lang::EventObject& rEvent)
     throw (css::uno::RuntimeException)
 {
     (void)rEvent;
     ThrowIfDisposed();
 }
-
-
-
 
 //----- XPaintListener --------------------------------------------------------
 
@@ -340,9 +303,6 @@ void SAL_CALL PresenterButton::windowPaint (const css::awt::PaintEvent& rEvent)
     }
 }
 
-
-
-
 //----- XMouseListener --------------------------------------------------------
 
 void SAL_CALL PresenterButton::mousePressed (const css::awt::MouseEvent& rEvent)
@@ -353,9 +313,6 @@ void SAL_CALL PresenterButton::mousePressed (const css::awt::MouseEvent& rEvent)
 
     meState = PresenterBitmapDescriptor::ButtonDown;
 }
-
-
-
 
 void SAL_CALL PresenterButton::mouseReleased (const css::awt::MouseEvent& rEvent)
     throw(css::uno::RuntimeException)
@@ -373,9 +330,6 @@ void SAL_CALL PresenterButton::mouseReleased (const css::awt::MouseEvent& rEvent
     }
 }
 
-
-
-
 void SAL_CALL PresenterButton::mouseEntered (const css::awt::MouseEvent& rEvent)
     throw(css::uno::RuntimeException)
 {
@@ -384,9 +338,6 @@ void SAL_CALL PresenterButton::mouseEntered (const css::awt::MouseEvent& rEvent)
     meState = PresenterBitmapDescriptor::MouseOver;
     Invalidate();
 }
-
-
-
 
 void SAL_CALL PresenterButton::mouseExited (const css::awt::MouseEvent& rEvent)
     throw(css::uno::RuntimeException)
@@ -397,10 +348,6 @@ void SAL_CALL PresenterButton::mouseExited (const css::awt::MouseEvent& rEvent)
     Invalidate();
 }
 
-
-
-
-
 //----- XMouseMotionListener --------------------------------------------------
 
 void SAL_CALL PresenterButton::mouseMoved (const css::awt::MouseEvent& rEvent)
@@ -410,18 +357,12 @@ void SAL_CALL PresenterButton::mouseMoved (const css::awt::MouseEvent& rEvent)
     ThrowIfDisposed();
 }
 
-
-
-
 void SAL_CALL PresenterButton::mouseDragged (const css::awt::MouseEvent& rEvent)
     throw (css::uno::RuntimeException)
 {
     (void)rEvent;
     ThrowIfDisposed();
 }
-
-
-
 
 //----- lang::XEventListener --------------------------------------------------
 
@@ -431,9 +372,6 @@ void SAL_CALL PresenterButton::disposing (const css::lang::EventObject& rEvent)
     if (rEvent.Source == mxWindow)
         mxWindow = NULL;
 }
-
-
-
 
 //-----------------------------------------------------------------------------
 
@@ -450,9 +388,6 @@ css::geometry::IntegerSize2D PresenterButton::CalculateButtonSize (void)
         sal_Int32(0.5 + aTextSize.Width + 2*gnHorizontalBorder),
         sal_Int32(0.5 + aTextSize.Height + 2*gnVerticalBorder));
 }
-
-
-
 
 void PresenterButton::RenderButton (
     const Reference<rendering::XCanvas>& rxCanvas,
@@ -498,16 +433,10 @@ void PresenterButton::RenderButton (
         rendering::TextDirection::WEAK_LEFT_TO_RIGHT);
 }
 
-
-
-
 void PresenterButton::Invalidate (void)
 {
     mpPresenterController->GetPaintManager()->Invalidate(mxWindow);
 }
-
-
-
 
 Reference<rendering::XBitmap> PresenterButton::GetBitmap (
     const SharedBitmapDescriptor& mpIcon,
@@ -521,9 +450,6 @@ Reference<rendering::XBitmap> PresenterButton::GetBitmap (
         return NULL;
     }
 }
-
-
-
 
 void PresenterButton::SetupButtonBitmaps (void)
 {
@@ -569,9 +495,6 @@ void PresenterButton::SetupButtonBitmaps (void)
             pRightBitmap);
 }
 
-
-
-
 Reference<beans::XPropertySet> PresenterButton::GetConfigurationProperties (
     const css::uno::Reference<css::uno::XComponentContext>& rxComponentContext,
     const OUString& rsConfgurationName)
@@ -592,9 +515,6 @@ Reference<beans::XPropertySet> PresenterButton::GetConfigurationProperties (
         UNO_QUERY);
 }
 
-
-
-
 void PresenterButton::ThrowIfDisposed (void) const
     throw (::com::sun::star::lang::DisposedException)
 {
@@ -606,7 +526,6 @@ void PresenterButton::ThrowIfDisposed (void) const
             const_cast<uno::XWeak*>(static_cast<const uno::XWeak*>(this)));
     }
 }
-
 
 } } // end of namespace sdext::presenter
 

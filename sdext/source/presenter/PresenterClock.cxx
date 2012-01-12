@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-
 #include "PresenterClock.hxx"
 #include "PresenterComponent.hxx"
 #include "PresenterConfigurationAccess.hxx"
@@ -59,7 +58,6 @@ using ::rtl::OUString;
 
 namespace sdext { namespace presenter {
 
-
 /** Wrapper around a library timer.
 */
 class PresenterClock::Timer : public salhelper::Timer
@@ -77,9 +75,6 @@ private:
     ::rtl::Reference<PresenterClock> mpClock;
 };
 
-
-
-
 namespace {
     bool GetDateTime (oslDateTime& rDateTime);
 
@@ -92,9 +87,6 @@ namespace {
         geometry::RealPoint2D maScaledOffset;
     };
 }
-
-
-
 
 class PresenterClock::Painter
 {
@@ -110,9 +102,6 @@ public:
         const bool bShowSeconds) = 0;
     virtual void Resize (const awt::Size& rSize) = 0;
 };
-
-
-
 
 namespace {
     class AnalogDefaultPainter : public PresenterClock::Painter
@@ -162,7 +151,6 @@ namespace {
             const rendering::RenderState& rRenderState);
     };
 
-
     class AnalogBitmapPainter : public PresenterClock::Painter
     {
     public:
@@ -210,7 +198,6 @@ namespace {
         void ScaleBitmaps (void);
     };
 
-
     class DigitalDefaultPainter : public PresenterClock::Painter
     {
     public:
@@ -243,11 +230,7 @@ namespace {
             const bool bIsShowSeconds);
     };
 
-
 } // end of anonymous namespace
-
-
-
 
 //===== PresenterClock =================================================================
 
@@ -265,9 +248,6 @@ namespace {
     pClock->LateInit();
     return pClock;
 }
-
-
-
 
 PresenterClock::PresenterClock (
     const Reference<XComponentContext>& rxContext,
@@ -328,23 +308,14 @@ PresenterClock::PresenterClock (
     }
 }
 
-
-
-
 PresenterClock::~PresenterClock (void)
 {
 }
-
-
-
 
 void PresenterClock::LateInit (void)
 {
     mpTimer = new Timer(this);
 }
-
-
-
 
 void SAL_CALL PresenterClock::disposing (void)
 {
@@ -362,9 +333,6 @@ void SAL_CALL PresenterClock::disposing (void)
     mxCanvas = NULL;
     mxViewId = NULL;
 }
-
-
-
 
 void PresenterClock::UpdateTime (void)
 {
@@ -387,9 +355,6 @@ void PresenterClock::UpdateTime (void)
     }
 }
 
-
-
-
 //-----  lang::XEventListener -------------------------------------------------
 
 void SAL_CALL PresenterClock::disposing (const lang::EventObject& rEventObject)
@@ -403,9 +368,6 @@ void SAL_CALL PresenterClock::disposing (const lang::EventObject& rEventObject)
     }
 }
 
-
-
-
 //----- XPaintListener --------------------------------------------------------
 
 void SAL_CALL PresenterClock::windowPaint (const awt::PaintEvent& rEvent)
@@ -414,9 +376,6 @@ void SAL_CALL PresenterClock::windowPaint (const awt::PaintEvent& rEvent)
     ThrowIfDisposed();
     Paint(rEvent.UpdateRect);
 }
-
-
-
 
 //----- XWindowListener -------------------------------------------------------
 
@@ -427,18 +386,12 @@ void SAL_CALL PresenterClock::windowResized (const awt::WindowEvent& rEvent)
     mbIsResizePending = true;
 }
 
-
-
-
 void SAL_CALL PresenterClock::windowMoved (const awt::WindowEvent& rEvent)
     throw (RuntimeException)
 {
     (void)rEvent;
     mbIsResizePending = true;
 }
-
-
-
 
 void SAL_CALL PresenterClock::windowShown (const lang::EventObject& rEvent)
     throw (RuntimeException)
@@ -447,17 +400,11 @@ void SAL_CALL PresenterClock::windowShown (const lang::EventObject& rEvent)
     mbIsResizePending = true;
 }
 
-
-
-
 void SAL_CALL PresenterClock::windowHidden (const lang::EventObject& rEvent)
     throw (RuntimeException)
 {
     (void)rEvent;
 }
-
-
-
 
 //----- XMouseListener --------------------------------------------------------
 
@@ -470,17 +417,11 @@ void SAL_CALL PresenterClock::mousePressed (const css::awt::MouseEvent& rEvent)
     }
 }
 
-
-
-
 void SAL_CALL PresenterClock::mouseReleased (const css::awt::MouseEvent& rEvent)
     throw (css::uno::RuntimeException)
 {
     (void)rEvent;
 }
-
-
-
 
 void SAL_CALL PresenterClock::mouseEntered (const css::awt::MouseEvent& rEvent)
     throw (css::uno::RuntimeException)
@@ -488,17 +429,11 @@ void SAL_CALL PresenterClock::mouseEntered (const css::awt::MouseEvent& rEvent)
     (void)rEvent;
 }
 
-
-
-
 void SAL_CALL PresenterClock::mouseExited (const css::awt::MouseEvent& rEvent)
     throw (css::uno::RuntimeException)
 {
     (void)rEvent;
 }
-
-
-
 
 //----- XResourceId -----------------------------------------------------------
 
@@ -508,17 +443,11 @@ Reference<XResourceId> SAL_CALL PresenterClock::getResourceId (void)
     return mxViewId;
 }
 
-
-
-
 sal_Bool SAL_CALL PresenterClock::isAnchorOnly (void)
     throw (RuntimeException)
 {
     return false;
 }
-
-
-
 
 //-----------------------------------------------------------------------------
 
@@ -537,9 +466,6 @@ void PresenterClock::Resize (void)
         mbIsResizePending = false;
     }
 }
-
-
-
 
 void PresenterClock::Paint (const awt::Rectangle& rUpdateBox)
 {
@@ -594,9 +520,6 @@ void PresenterClock::Paint (const awt::Rectangle& rUpdateBox)
         xSpriteCanvas->updateScreen(sal_False);
 }
 
-
-
-
 void PresenterClock::Clear (const Reference<rendering::XPolyPolygon2D>& rxUpdatePolygon)
 {
     rendering::RenderState aRenderState = maRenderState;
@@ -612,9 +535,6 @@ void PresenterClock::Clear (const Reference<rendering::XPolyPolygon2D>& rxUpdate
             maViewState,
             aRenderState);
 }
-
-
-
 
 void PresenterClock::SetMode (const sal_Int32 nMode)
 {
@@ -651,9 +571,6 @@ void PresenterClock::SetMode (const sal_Int32 nMode)
     Resize();
 }
 
-
-
-
 void PresenterClock::ThrowIfDisposed (void)
     throw (::com::sun::star::lang::DisposedException)
 {
@@ -666,9 +583,6 @@ void PresenterClock::ThrowIfDisposed (void)
     }
 }
 
-
-
-
 //===== Timer =================================================================
 
 PresenterClock::Timer::Timer (const ::rtl::Reference<PresenterClock>& rpClock)
@@ -679,17 +593,11 @@ PresenterClock::Timer::Timer (const ::rtl::Reference<PresenterClock>& rpClock)
     start();
 }
 
-
-
-
 PresenterClock::Timer::~Timer (void)
 {
     if (mpClock.is())
         Stop();
 }
-
-
-
 
 void PresenterClock::Timer::Stop (void)
 {
@@ -698,16 +606,11 @@ void PresenterClock::Timer::Stop (void)
     release();
 }
 
-
-
-
 void SAL_CALL PresenterClock::Timer::onShot (void)
 {
     if (mpClock.get() != NULL)
         mpClock->UpdateTime();
 }
-
-
 
 namespace {
 
@@ -723,9 +626,6 @@ bool GetDateTime (oslDateTime& rDateTime)
                 return true;
     return false;
 }
-
-
-
 
 //===== AnalogDefaultPainter ==================================================
 
@@ -746,9 +646,6 @@ AnalogDefaultPainter::AnalogDefaultPainter (void)
       mxBitmap()
 {
 }
-
-
-
 
 void AnalogDefaultPainter::Paint (
     const Reference<rendering::XCanvas>& rxCanvas,
@@ -846,9 +743,6 @@ void AnalogDefaultPainter::Paint (
     rxCanvas->drawBitmap(mxBitmap,rViewState,aRenderState);
 }
 
-
-
-
 void AnalogDefaultPainter::PaintAngledLine (
     const double nAngle,
     const double nInnerRadius,
@@ -891,9 +785,6 @@ void AnalogDefaultPainter::PaintAngledLine (
         aStrokeAttributes);
 }
 
-
-
-
 void AnalogDefaultPainter::Resize (const awt::Size& rWindowSize)
 {
     maSize = rWindowSize;
@@ -901,9 +792,6 @@ void AnalogDefaultPainter::Resize (const awt::Size& rWindowSize)
     mnOuterRadius = ::std::min(rWindowSize.Width, rWindowSize.Height) / 2.0 - 2;
     mxBitmap = NULL;
 }
-
-
-
 
 //===== AnalogBitmapPainter ===================================================
 
@@ -921,9 +809,6 @@ AnalogBitmapPainter::AnalogBitmapPainter (
       maHourHand()
 {
 }
-
-
-
 
 void AnalogBitmapPainter::Paint (
     const Reference<rendering::XCanvas>& rxCanvas,
@@ -996,9 +881,6 @@ void AnalogBitmapPainter::Paint (
     }
 }
 
-
-
-
 void AnalogBitmapPainter::Resize (const awt::Size& rWindowSize)
 {
     maCenter = geometry::RealPoint2D(rWindowSize.Width/2.0, rWindowSize.Height/2.0);
@@ -1007,9 +889,6 @@ void AnalogBitmapPainter::Resize (const awt::Size& rWindowSize)
     maHourHand.mxScaledBitmap = NULL;
     maMinuteHand.mxScaledBitmap = NULL;
 }
-
-
-
 
 void AnalogBitmapPainter::PrepareBitmaps (const Reference<rendering::XCanvas>& rxCanvas)
 {
@@ -1044,9 +923,6 @@ void AnalogBitmapPainter::PrepareBitmaps (const Reference<rendering::XCanvas>& r
 
     ScaleBitmaps();
 }
-
-
-
 
 Reference<container::XNameAccess> AnalogBitmapPainter::GetTheme (
     PresenterConfigurationAccess& rConfiguration)
@@ -1084,9 +960,6 @@ Reference<container::XNameAccess> AnalogBitmapPainter::GetTheme (
     return xTheme;
 }
 
-
-
-
 bool AnalogBitmapPainter::ThemeNameComparator (
     const OUString& rsKey,
     const Reference<container::XNameAccess>& rxCandidate,
@@ -1103,10 +976,6 @@ bool AnalogBitmapPainter::ThemeNameComparator (
     }
     return false;
 }
-
-
-
-
 
 void AnalogBitmapPainter::LoadBitmaps (
     PresenterConfigurationAccess& rConfiguration,
@@ -1141,7 +1010,6 @@ void AnalogBitmapPainter::LoadBitmaps (
     if ( ! xBitmapLoader.is())
         return;
 
-
     // Iterate over all entries in the bitmap list and load the bitmaps.
     Reference<container::XNameAccess> xBitmaps (
         rxClockTheme->getByName(OUString(RTL_CONSTASCII_USTRINGPARAM("Bitmaps"))),
@@ -1160,9 +1028,6 @@ void AnalogBitmapPainter::LoadBitmaps (
             sLocation,
             xBitmapLoader));
 }
-
-
-
 
 void AnalogBitmapPainter::LoadBitmap (
     const OUString& rsKey,
@@ -1198,9 +1063,6 @@ void AnalogBitmapPainter::LoadBitmap (
     }
 }
 
-
-
-
 void AnalogBitmapPainter::ScaleBitmaps (void)
 {
     if (mbThemeLoadingFailed)
@@ -1229,9 +1091,6 @@ void AnalogBitmapPainter::ScaleBitmaps (void)
     }
 }
 
-
-
-
 //===== DigitalDefaultPainter =================================================
 
 DigitalDefaultPainter::DigitalDefaultPainter (
@@ -1246,15 +1105,9 @@ DigitalDefaultPainter::DigitalDefaultPainter (
 {
 }
 
-
-
-
 DigitalDefaultPainter::~DigitalDefaultPainter (void)
 {
 }
-
-
-
 
 void DigitalDefaultPainter::Paint (
     const Reference<rendering::XCanvas>& rxCanvas,
@@ -1326,7 +1179,6 @@ void DigitalDefaultPainter::Paint (
         return;
     geometry::RealRectangle2D aBox (xLayout->queryTextBounds());
 
-
     rendering::RenderState aRenderState(
         geometry::AffineMatrix2D(1,0,0, 0,1,0),
         NULL,
@@ -1347,9 +1199,6 @@ void DigitalDefaultPainter::Paint (
         rendering::TextDirection::WEAK_LEFT_TO_RIGHT);
 }
 
-
-
-
 void DigitalDefaultPainter::Resize (const awt::Size& rSize)
 {
     if (maWindowSize.Width != rSize.Width || maWindowSize.Height != rSize.Height)
@@ -1359,9 +1208,6 @@ void DigitalDefaultPainter::Resize (const awt::Size& rSize)
             mxFont = NULL;
     }
 }
-
-
-
 
 void DigitalDefaultPainter::CreateFont (
     const Reference<rendering::XCanvas>& rxCanvas,
@@ -1434,9 +1280,7 @@ void DigitalDefaultPainter::CreateFont (
     }
 }
 
-
 } // end of anonymous namespace
-
 
 } } // end of namespace ::sdext::presenter
 

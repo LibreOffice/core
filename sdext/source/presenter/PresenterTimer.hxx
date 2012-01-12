@@ -76,8 +76,6 @@ public:
     static void CancelTask (const sal_Int32 nTaskId);
 };
 
-
-
 typedef cppu::WeakComponentImplHelper1<
     css::awt::XCallback
     > PresenterClockTimerInterfaceBase;
@@ -125,10 +123,6 @@ private:
 
     void CheckCurrentTime (const TimeValue& rCurrentTime);
 };
-
-
-
-
 
 } } // end of namespace ::sdext::presenter
 

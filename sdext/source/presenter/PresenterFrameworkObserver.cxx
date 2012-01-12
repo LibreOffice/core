@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-
 #include "PresenterFrameworkObserver.hxx"
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <boost/bind.hpp>
@@ -74,15 +73,9 @@ PresenterFrameworkObserver::PresenterFrameworkObserver (
     }
 }
 
-
-
-
 PresenterFrameworkObserver::~PresenterFrameworkObserver (void)
 {
 }
-
-
-
 
 void PresenterFrameworkObserver::RunOnUpdateEnd (
     const css::uno::Reference<css::drawing::framework::XConfigurationController>&rxController,
@@ -119,9 +112,6 @@ void PresenterFrameworkObserver::Shutdown (void)
     }
 }
 
-
-
-
 void SAL_CALL PresenterFrameworkObserver::disposing (const lang::EventObject& rEvent)
     throw (RuntimeException)
 {
@@ -135,9 +125,6 @@ void SAL_CALL PresenterFrameworkObserver::disposing (const lang::EventObject& rE
             maAction(false);
     }
 }
-
-
-
 
 void SAL_CALL PresenterFrameworkObserver::notifyConfigurationChange (
     const ConfigurationChangeEvent& rEvent)

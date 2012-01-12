@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-
 #include "PresenterSlidePreview.hxx"
 #include "PresenterCanvasHelper.hxx"
 #include "PresenterGeometryHelper.hxx"
@@ -111,15 +110,9 @@ PresenterSlidePreview::PresenterSlidePreview (
     Resize();
 }
 
-
-
-
 PresenterSlidePreview::~PresenterSlidePreview (void)
 {
 }
-
-
-
 
 void SAL_CALL PresenterSlidePreview::disposing (void)
 {
@@ -136,9 +129,6 @@ void SAL_CALL PresenterSlidePreview::disposing (void)
         xComponent->dispose();
 }
 
-
-
-
 //----- XResourceId -----------------------------------------------------------
 
 Reference<XResourceId> SAL_CALL PresenterSlidePreview::getResourceId (void)
@@ -147,17 +137,11 @@ Reference<XResourceId> SAL_CALL PresenterSlidePreview::getResourceId (void)
     return mxViewId;
 }
 
-
-
-
 sal_Bool SAL_CALL PresenterSlidePreview::isAnchorOnly (void)
     throw (RuntimeException)
 {
     return false;
 }
-
-
-
 
 //----- XWindowListener -------------------------------------------------------
 
@@ -170,18 +154,11 @@ void SAL_CALL PresenterSlidePreview::windowResized (const awt::WindowEvent& rEve
     Resize();
 }
 
-
-
-
-
 void SAL_CALL PresenterSlidePreview::windowMoved (const awt::WindowEvent& rEvent)
     throw (RuntimeException)
 {
     (void)rEvent;
 }
-
-
-
 
 void SAL_CALL PresenterSlidePreview::windowShown (const lang::EventObject& rEvent)
     throw (RuntimeException)
@@ -192,17 +169,11 @@ void SAL_CALL PresenterSlidePreview::windowShown (const lang::EventObject& rEven
     Resize();
 }
 
-
-
-
 void SAL_CALL PresenterSlidePreview::windowHidden (const lang::EventObject& rEvent)
     throw (RuntimeException)
 {
     (void)rEvent;
 }
-
-
-
 
 //----- XPaintListener --------------------------------------------------------
 
@@ -220,9 +191,6 @@ void SAL_CALL PresenterSlidePreview::windowPaint (const awt::PaintEvent& rEvent)
             rEvent.UpdateRect.Height));
 }
 
-
-
-
 //----- lang::XEventListener --------------------------------------------------
 
 void SAL_CALL PresenterSlidePreview::disposing (const lang::EventObject& rEvent)
@@ -236,9 +204,6 @@ void SAL_CALL PresenterSlidePreview::disposing (const lang::EventObject& rEvent)
     }
 }
 
-
-
-
 //----- XDrawView -------------------------------------------------------------
 
 void SAL_CALL PresenterSlidePreview::setCurrentPage (const Reference<drawing::XDrawPage>& rxSlide)
@@ -249,18 +214,12 @@ void SAL_CALL PresenterSlidePreview::setCurrentPage (const Reference<drawing::XD
     SetSlide(rxSlide);
 }
 
-
-
-
 Reference<drawing::XDrawPage> SAL_CALL PresenterSlidePreview::getCurrentPage (void)
     throw (RuntimeException)
 {
     ThrowIfDisposed();
     return NULL;
 }
-
-
-
 
 //-----------------------------------------------------------------------------
 
@@ -290,9 +249,6 @@ void PresenterSlidePreview::SetSlide (const Reference<drawing::XDrawPage>& rxPag
     // parent, has to be invalidated.
     mpPresenterController->GetPaintManager()->Invalidate(mxWindow);
 }
-
-
-
 
 void PresenterSlidePreview::Paint (const awt::Rectangle& rBoundingBox)
 {
@@ -382,9 +338,6 @@ void PresenterSlidePreview::Paint (const awt::Rectangle& rBoundingBox)
         xSpriteCanvas->updateScreen(sal_False);
 }
 
-
-
-
 void PresenterSlidePreview::Resize (void)
 {
     if (mxPreviewRenderer.is() && mxPreview.is())
@@ -406,9 +359,6 @@ void PresenterSlidePreview::Resize (void)
     SetSlide(mxCurrentSlide);
 }
 
-
-
-
 void PresenterSlidePreview::ThrowIfDisposed (void)
     throw (::com::sun::star::lang::DisposedException)
 {
@@ -420,7 +370,6 @@ void PresenterSlidePreview::ThrowIfDisposed (void)
             static_cast<uno::XWeak*>(this));
     }
 }
-
 
 } } // end of namespace ::sd::presenter
 

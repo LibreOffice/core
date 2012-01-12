@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-
 #include "PresenterPaneFactory.hxx"
 #include "PresenterController.hxx"
 #include "PresenterPane.hxx"
@@ -66,8 +65,6 @@ const ::rtl::OUString PresenterPaneFactory::msHelpPaneURL(
 const ::rtl::OUString PresenterPaneFactory::msOverlayPaneURL(
     RTL_CONSTASCII_USTRINGPARAM("private:resource/pane/Presenter/Overlay"));
 
-
-
 //===== PresenterPaneFactory ==================================================
 
 Reference<drawing::framework::XResourceFactory> PresenterPaneFactory::Create (
@@ -82,9 +79,6 @@ Reference<drawing::framework::XResourceFactory> PresenterPaneFactory::Create (
         static_cast<XWeak*>(pFactory.get()), UNO_QUERY);
 }
 
-
-
-
 PresenterPaneFactory::PresenterPaneFactory (
     const Reference<uno::XComponentContext>& rxContext,
     const ::rtl::Reference<PresenterController>& rpPresenterController)
@@ -95,9 +89,6 @@ PresenterPaneFactory::PresenterPaneFactory (
       mpResourceCache()
 {
 }
-
-
-
 
 void PresenterPaneFactory::Register (const Reference<frame::XController>& rxController)
 {
@@ -130,15 +121,9 @@ void PresenterPaneFactory::Register (const Reference<frame::XController>& rxCont
     }
 }
 
-
-
-
 PresenterPaneFactory::~PresenterPaneFactory (void)
 {
 }
-
-
-
 
 void SAL_CALL PresenterPaneFactory::disposing (void)
     throw (RuntimeException)
@@ -162,9 +147,6 @@ void SAL_CALL PresenterPaneFactory::disposing (void)
         mpResourceCache.reset();
     }
 }
-
-
-
 
 //----- XPaneFactory ----------------------------------------------------------
 
@@ -209,9 +191,6 @@ Reference<XResource> SAL_CALL PresenterPaneFactory::createResource (
     return xResource;
 }
 
-
-
-
 void SAL_CALL PresenterPaneFactory::releaseResource (const Reference<XResource>& rxResource)
     throw (RuntimeException)
 {
@@ -246,9 +225,6 @@ void SAL_CALL PresenterPaneFactory::releaseResource (const Reference<XResource>&
         }
     }
 }
-
-
-
 
 //-----------------------------------------------------------------------------
 
@@ -286,9 +262,6 @@ Reference<XResource> PresenterPaneFactory::CreatePane (
 
     return NULL;
 }
-
-
-
 
 Reference<XResource> PresenterPaneFactory::CreatePane (
     const Reference<XResourceId>& rxPaneId,
@@ -358,9 +331,6 @@ Reference<XResource> PresenterPaneFactory::CreatePane (
     return Reference<XResource>(static_cast<XWeak*>(xPane.get()), UNO_QUERY_THROW);
 }
 
-
-
-
 void PresenterPaneFactory::ThrowIfDisposed (void) const
     throw (::com::sun::star::lang::DisposedException)
 {
@@ -372,7 +342,6 @@ void PresenterPaneFactory::ThrowIfDisposed (void) const
             const_cast<uno::XWeak*>(static_cast<const uno::XWeak*>(this)));
     }
 }
-
 
 } } // end of namespace sdext::presenter
 

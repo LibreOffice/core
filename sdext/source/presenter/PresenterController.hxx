@@ -84,7 +84,6 @@ namespace {
     > PresenterControllerInterfaceBase;
 }
 
-
 /** The controller of the presenter screen is responsible for telling the
     individual views which slides to show.  Additionally it provides access
     to frequently used values of the current theme.
@@ -156,20 +155,17 @@ public:
         const com::sun::star::drawing::framework::ConfigurationChangeEvent& rEvent)
         throw (com::sun::star::uno::RuntimeException);
 
-
     // XEventListener
 
     virtual void SAL_CALL disposing (
         const com::sun::star::lang::EventObject& rEvent)
         throw (com::sun::star::uno::RuntimeException);
 
-
     // XFrameActionListener
 
     virtual void SAL_CALL frameAction (
         const css::frame::FrameActionEvent& rEvent)
         throw (com::sun::star::uno::RuntimeException);
-
 
     // XKeyListener
 
@@ -178,14 +174,12 @@ public:
     virtual void SAL_CALL keyReleased (const css::awt::KeyEvent& rEvent)
         throw (css::uno::RuntimeException);
 
-
     // XFocusListener
 
     virtual void SAL_CALL focusGained (const css::awt::FocusEvent& rEvent)
         throw (css::uno::RuntimeException);
     virtual void SAL_CALL focusLost (const css::awt::FocusEvent& rEvent)
         throw (css::uno::RuntimeException);
-
 
     // XMouseListener
 
@@ -200,7 +194,6 @@ public:
 
     virtual void SAL_CALL mouseExited (const css::awt::MouseEvent& rEvent)
         throw (css::uno::RuntimeException);
-
 
     // XMouseMotionListener
 
@@ -263,7 +256,6 @@ private:
 
     void ThrowIfDisposed (void) const throw (::com::sun::star::lang::DisposedException);
 };
-
 
 } } // end of namespace ::sdext::presenter
 

@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-
 #include "PresenterAnimation.hxx"
 
 #include <osl/time.h>
@@ -42,9 +41,6 @@ sal_uInt64 GetCurrentTime (void)
         return 0;
 }
 
-
-
-
 PresenterAnimation::PresenterAnimation (
     const sal_uInt64 nStartDelay,
     const sal_uInt64 nTotalDuration,
@@ -57,39 +53,24 @@ PresenterAnimation::PresenterAnimation (
 {
 }
 
-
-
-
 PresenterAnimation::~PresenterAnimation (void)
 {
 }
-
-
-
 
 sal_uInt64 PresenterAnimation::GetStartTime (void)
 {
     return mnStartTime;
 }
 
-
-
-
 sal_uInt64 PresenterAnimation::GetEndTime (void)
 {
     return mnStartTime + mnTotalDuration;
 }
 
-
-
-
 sal_uInt64 PresenterAnimation::GetStepDuration (void)
 {
     return mnStepDuration;
 }
-
-
-
 
 void PresenterAnimation::AddEndCallback (const Callback& rCallback)
 {
@@ -97,8 +78,6 @@ void PresenterAnimation::AddEndCallback (const Callback& rCallback)
         mpEndCallbacks.reset(new ::std::vector<Callback>());
     mpEndCallbacks->push_back(rCallback);
 }
-
-
 
 void PresenterAnimation::RunStartCallbacks (void)
 {
@@ -110,9 +89,6 @@ void PresenterAnimation::RunStartCallbacks (void)
     }
 }
 
-
-
-
 void PresenterAnimation::RunEndCallbacks (void)
 {
     if (mpEndCallbacks.get() != NULL)
@@ -122,9 +98,6 @@ void PresenterAnimation::RunEndCallbacks (void)
             (*iCallback)();
     }
 }
-
-
-
 
 } } // end of namespace ::sdext::presenter
 

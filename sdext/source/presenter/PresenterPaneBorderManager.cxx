@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-
 // The body of this file is only used when PresenterWindowManager defines
 // the preprocessor symbol ENABLE_PANE_RESIZING, which by default is not the
 // case.
@@ -55,14 +54,10 @@ namespace sdext { namespace presenter {
 
 //===== Service ===============================================================
 
-
 OUString PresenterPaneBorderManager::getImplementationName_static (void)
 {
     return OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Draw.PresenterPaneBorderManager"));
 }
-
-
-
 
 Sequence<OUString> PresenterPaneBorderManager::getSupportedServiceNames_static (void)
 {
@@ -71,18 +66,12 @@ Sequence<OUString> PresenterPaneBorderManager::getSupportedServiceNames_static (
     return Sequence<rtl::OUString>(&sServiceName, 1);
 }
 
-
-
-
 Reference<XInterface> PresenterPaneBorderManager::Create (const Reference<uno::XComponentContext>& rxContext)
     SAL_THROW((css::uno::Exception))
 {
     return Reference<XInterface>(static_cast<XWeak*>(
         new PresenterPaneBorderManager(rxContext, NULL)));
 }
-
-
-
 
 //===== PresenterPaneBorderManager ============================================
 
@@ -118,15 +107,9 @@ PresenterPaneBorderManager::PresenterPaneBorderManager (
     }
 }
 
-
-
-
 PresenterPaneBorderManager::~PresenterPaneBorderManager (void)
 {
 }
-
-
-
 
 void PresenterPaneBorderManager::disposing (void)
 {
@@ -138,9 +121,6 @@ void PresenterPaneBorderManager::disposing (void)
     }
     maWindowList.clear();
 }
-
-
-
 
 namespace {
 const static sal_Int32 mnOutside = 0;
@@ -242,9 +222,6 @@ PresenterPaneBorderManager::BorderElement
     }
 }
 
-
-
-
 //----- XInitialization -------------------------------------------------------
 
 void SAL_CALL PresenterPaneBorderManager::initialize (const Sequence<Any>& rArguments)
@@ -285,9 +262,6 @@ void SAL_CALL PresenterPaneBorderManager::initialize (const Sequence<Any>& rArgu
     }
 }
 
-
-
-
 //----- XMouseListener --------------------------------------------------------
 
 void SAL_CALL PresenterPaneBorderManager::mousePressed (const css::awt::MouseEvent& rEvent)
@@ -318,9 +292,6 @@ void SAL_CALL PresenterPaneBorderManager::mousePressed (const css::awt::MouseEve
     }
 }
 
-
-
-
 void SAL_CALL PresenterPaneBorderManager::mouseReleased (const css::awt::MouseEvent& rEvent)
     throw (css::uno::RuntimeException)
 {
@@ -334,17 +305,11 @@ void SAL_CALL PresenterPaneBorderManager::mouseReleased (const css::awt::MouseEv
     mxInnerDragWindow = NULL;
 }
 
-
-
-
 void SAL_CALL PresenterPaneBorderManager::mouseEntered (const css::awt::MouseEvent& rEvent)
     throw (css::uno::RuntimeException)
 {
     (void)rEvent;
 }
-
-
-
 
 void SAL_CALL PresenterPaneBorderManager::mouseExited (const css::awt::MouseEvent& rEvent)
     throw (css::uno::RuntimeException)
@@ -358,9 +323,6 @@ void SAL_CALL PresenterPaneBorderManager::mouseExited (const css::awt::MouseEven
     mxOuterDragWindow = NULL;
     mxInnerDragWindow = NULL;
 }
-
-
-
 
 //----- XMouseMotionListener --------------------------------------------------
 
@@ -424,9 +386,6 @@ void SAL_CALL PresenterPaneBorderManager::mouseMoved (const css::awt::MouseEvent
         }
     }
 }
-
-
-
 
 void SAL_CALL PresenterPaneBorderManager::mouseDragged (const css::awt::MouseEvent& rEvent)
     throw (css::uno::RuntimeException)
@@ -520,9 +479,6 @@ void SAL_CALL PresenterPaneBorderManager::mouseDragged (const css::awt::MouseEve
     }
 }
 
-
-
-
 //----- lang::XEventListener --------------------------------------------------
 
 void SAL_CALL PresenterPaneBorderManager::disposing (const lang::EventObject& rEvent)
@@ -537,11 +493,7 @@ void SAL_CALL PresenterPaneBorderManager::disposing (const lang::EventObject& rE
         }
 }
 
-
-
-
 //-----------------------------------------------------------------------------
-
 
 void PresenterPaneBorderManager::CaptureMouse (const Reference<awt::XWindow>& rxWindow)
 {
@@ -549,17 +501,11 @@ void PresenterPaneBorderManager::CaptureMouse (const Reference<awt::XWindow>& rx
         mxPresenterHelper->captureMouse(rxWindow);
 }
 
-
-
-
 void PresenterPaneBorderManager::ReleaseMouse (const Reference<awt::XWindow>& rxWindow)
 {
     if (mxPresenterHelper.is())
         mxPresenterHelper->releaseMouse(rxWindow);
 }
-
-
-
 
 void PresenterPaneBorderManager::ThrowIfDisposed (void)
     throw (::com::sun::star::lang::DisposedException)
@@ -572,9 +518,6 @@ void PresenterPaneBorderManager::ThrowIfDisposed (void)
             static_cast<uno::XWeak*>(this));
     }
 }
-
-
-
 
 } } // end of namespace ::sd::presenter
 

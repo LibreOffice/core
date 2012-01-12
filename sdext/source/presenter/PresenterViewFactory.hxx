@@ -78,9 +78,6 @@ protected:
     CachablePresenterView (void);
 };
 
-
-
-
 /** Factory of the presenter screen specific views.  The supported set of
     views includes:
         a life view of the current slide,
@@ -120,7 +117,6 @@ public:
 
     virtual void SAL_CALL disposing (void)
         throw (css::uno::RuntimeException);
-
 
     // XResourceFactory
 

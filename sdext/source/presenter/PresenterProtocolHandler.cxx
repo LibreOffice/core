@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-
 #include "PresenterProtocolHandler.hxx"
 #include "PresenterConfigurationAccess.hxx"
 #include "PresenterController.hxx"
@@ -179,7 +178,6 @@ namespace {
 
 } // end of anonymous namespace
 
-
 namespace {
     typedef ::cppu::WeakComponentImplHelper2 <
         css::frame::XDispatch,
@@ -206,7 +204,6 @@ public:
         const OUString& rsURLPath,
         const ::rtl::Reference<PresenterController>& rpPresenterController);
 
-
     // XDispatch
     virtual void SAL_CALL dispatch(
         const css::util::URL& aURL,
@@ -223,12 +220,10 @@ public:
         const css::util::URL& rURL)
         throw(css::uno::RuntimeException);
 
-
     // document::XEventListener
 
     virtual void SAL_CALL notifyEvent (const css::document::EventObject& rEvent)
         throw(css::uno::RuntimeException);
-
 
     // lang::XEventListener
 
@@ -270,7 +265,6 @@ Reference<XInterface> PresenterProtocolHandler::Create (
 {
     return Reference<XInterface>(static_cast<XWeak*>(new PresenterProtocolHandler(rxContext)));
 }
-
 
 //===== PresenterProtocolHandler =========================================================
 
@@ -341,7 +335,6 @@ Sequence<Reference<frame::XDispatch> > SAL_CALL PresenterProtocolHandler::queryD
     ThrowIfDisposed();
     return Sequence<Reference<frame::XDispatch> >();
 }
-
 
 //-----------------------------------------------------------------------------
 
@@ -532,7 +525,6 @@ void SAL_CALL PresenterProtocolHandler::Dispatch::disposing (const css::lang::Ev
     (void)rEvent;
     mbIsListeningToWindowManager = false;
 }
-
 
 //===== GotoPreviousSlideCommand ==============================================
 
@@ -767,7 +759,6 @@ Any NotesFontSizeCommand::GetState (void) const
 {
     return Any();
 }
-
 
 } } // end of namespace ::sdext::presenter
 

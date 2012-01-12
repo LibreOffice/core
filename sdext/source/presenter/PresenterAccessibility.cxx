@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-
 #include "PresenterAccessibility.hxx"
 #include "PresenterTextView.hxx"
 #include "PresenterConfigurationAccess.hxx"
@@ -126,7 +125,6 @@ public:
         getAccessibleContext (void)
         throw (cssu::RuntimeException);
 
-
     //-----  XAccessibleContext  ----------------------------------------------
 
     virtual sal_Int32 SAL_CALL getAccessibleChildCount (void)
@@ -163,7 +161,6 @@ public:
         throw (cssu::RuntimeException,
             cssa::IllegalAccessibleComponentStateException);
 
-
     //-----  XAccessibleComponent  --------------------------------------------
 
     virtual sal_Bool SAL_CALL containsPoint (
@@ -196,7 +193,6 @@ public:
     virtual sal_Int32 SAL_CALL getBackground (void)
         throw (cssu::RuntimeException);
 
-
     //-----  XAccessibleEventBroadcaster --------------------------------------
 
     virtual void SAL_CALL addEventListener (
@@ -221,12 +217,10 @@ public:
     virtual void SAL_CALL windowHidden (const css::lang::EventObject& rEvent)
         throw (cssu::RuntimeException);
 
-
     //----- XEventListener ----------------------------------------------------
 
     virtual void SAL_CALL disposing (const css::lang::EventObject& rEvent)
         throw (cssu::RuntimeException);
-
 
 protected:
     ::rtl::OUString msName;
@@ -256,9 +250,6 @@ protected:
     enum ExceptionType { ET_Runtime, ET_Disposed, ET_IndexOutOfBounds };
     void ThrowException (const sal_Char* pMessage, const ExceptionType eExceptionType) const;
 };
-
-
-
 
 //===== AccessibleStateSet ====================================================
 
@@ -296,9 +287,6 @@ private:
     const sal_Int32 mnStateSet;
 };
 
-
-
-
 //===== AccessibleRelationSet =================================================
 
 namespace {
@@ -319,7 +307,6 @@ public:
         const sal_Int16 nRelationType,
         const Reference<XInterface>& rxObject);
 
-
     //----- XAccessibleRelationSet --------------------------------------------
 
     virtual sal_Int32 SAL_CALL getRelationCount (void)
@@ -338,9 +325,6 @@ private:
     ::std::vector<AccessibleRelation> maRelations;
 };
 
-
-
-
 //===== PresenterAccessibleParagraph ==========================================
 
 namespace {
@@ -349,9 +333,6 @@ typedef ::cppu::ImplInheritanceHelper1 <
     cssa::XAccessibleText
     > PresenterAccessibleParagraphInterfaceBase;
 }
-
-
-
 
 class PresenterAccessible::AccessibleParagraph
     : public PresenterAccessibleParagraphInterfaceBase
@@ -366,13 +347,11 @@ public:
 
     virtual ~AccessibleParagraph (void);
 
-
     //----- XAccessibleContext ------------------------------------------------
 
     virtual cssu::Reference<cssa::XAccessibleRelationSet> SAL_CALL
         getAccessibleRelationSet (void)
         throw (cssu::RuntimeException);
-
 
     //----- XAccessibleText ---------------------------------------------------
 
@@ -444,7 +423,6 @@ public:
     virtual ::sal_Bool SAL_CALL copyText (sal_Int32 nStartIndex, sal_Int32 nEndIndex)
         throw (css::lang::IndexOutOfBoundsException, cssu::RuntimeException);
 
-
 protected:
     virtual awt::Point GetRelativeLocation (void);
     virtual awt::Size GetSize (void);
@@ -455,9 +433,6 @@ private:
     SharedPresenterTextParagraph mpParagraph;
     const sal_Int32 mnParagraphIndex;
 };
-
-
-
 
 //===== AccessibleConsole =====================================================
 
@@ -485,9 +460,6 @@ public:
         return pObject;
     }
 };
-
-
-
 
 //===== AccessiblePreview =====================================================
 
@@ -523,9 +495,6 @@ public:
     }
 };
 
-
-
-
 //===== AccessibleNotes =======================================================
 
 class AccessibleNotes : public PresenterAccessible::AccessibleObject
@@ -535,7 +504,6 @@ public:
         const css::lang::Locale aLocale,
         const sal_Int16 nRole,
         const ::rtl::OUString& rsName);
-
 
     static rtl::Reference<PresenterAccessible::AccessibleObject> Create (
         const css::uno::Reference<css::uno::XComponentContext>& rxContext,
@@ -561,9 +529,6 @@ private:
     void HandleTextChange (void);
 };
 
-
-
-
 //===== AccessibleFocusManager ================================================
 
 /** A singleton class that makes sure that only one accessibility object in
@@ -585,9 +550,6 @@ private:
 
     AccessibleFocusManager (void);
 };
-
-
-
 
 //===== PresenterAccessible ===================================================
 
@@ -614,15 +576,9 @@ PresenterAccessible::PresenterAccessible (
         mxMainPane->setAccessible(this);
 }
 
-
-
-
 PresenterAccessible::~PresenterAccessible (void)
 {
 }
-
-
-
 
 PresenterPaneContainer::SharedPaneDescriptor PresenterAccessible::GetPreviewPane (void) const
 {
@@ -645,9 +601,6 @@ PresenterPaneContainer::SharedPaneDescriptor PresenterAccessible::GetPreviewPane
     }
     return pPreviewPane;
 }
-
-
-
 
 void PresenterAccessible::UpdateAccessibilityHierarchy (void)
 {
@@ -698,10 +651,6 @@ void PresenterAccessible::UpdateAccessibilityHierarchy (void)
             ? pNotesView->GetTextView()
             : ::boost::shared_ptr<PresenterTextView>());
 }
-
-
-
-
 
 void PresenterAccessible::UpdateAccessibilityHierarchy (
     const Reference<awt::XWindow>& rxPreviewContentWindow,
@@ -761,9 +710,6 @@ void PresenterAccessible::UpdateAccessibilityHierarchy (
     }
 }
 
-
-
-
 void PresenterAccessible::NotifyCurrentSlideChange (
     const sal_Int32 nCurrentSlideIndex,
     const sal_Int32 nSlideCount)
@@ -784,9 +730,6 @@ void PresenterAccessible::NotifyCurrentSlideChange (
     //AccessibleFocusManager::Instance()->FocusObject(mpAccessibleConsole);
     AccessibleFocusManager::Instance()->FocusObject(mpAccessiblePreview);
 }
-
-
-
 
 void SAL_CALL PresenterAccessible::disposing (void)
 {
@@ -810,9 +753,6 @@ void SAL_CALL PresenterAccessible::disposing (void)
     mpAccessibleNotes = NULL;
     mpAccessibleConsole = NULL;
 }
-
-
-
 
 //----- XAccessible -----------------------------------------------------------
 
@@ -838,10 +778,6 @@ Reference<XAccessibleContext> SAL_CALL PresenterAccessible::getAccessibleContext
     return mpAccessibleConsole->getAccessibleContext();
 }
 
-
-
-
-
 //----- XFocusListener ----------------------------------------------------
 
 void SAL_CALL PresenterAccessible::focusGained (const css::awt::FocusEvent& rEvent)
@@ -857,9 +793,6 @@ void SAL_CALL PresenterAccessible::focusGained (const css::awt::FocusEvent& rEve
     AccessibleFocusManager::Instance()->FocusObject(mpAccessibleConsole);
 }
 
-
-
-
 void SAL_CALL PresenterAccessible::focusLost (const css::awt::FocusEvent& rEvent)
     throw (cssu::RuntimeException)
 {
@@ -872,9 +805,6 @@ void SAL_CALL PresenterAccessible::focusLost (const css::awt::FocusEvent& rEvent
     AccessibleFocusManager::Instance()->FocusObject(NULL);
 }
 
-
-
-
 //----- XEventListener ----------------------------------------------------
 
 void SAL_CALL PresenterAccessible::disposing (const css::lang::EventObject& rEvent)
@@ -883,9 +813,6 @@ void SAL_CALL PresenterAccessible::disposing (const css::lang::EventObject& rEve
     if (rEvent.Source == mxMainWindow)
         mxMainWindow = NULL;
 }
-
-
-
 
 //----- XInitialize -----------------------------------------------------------
 
@@ -899,9 +826,6 @@ void SAL_CALL PresenterAccessible::initialize (const cssu::Sequence<cssu::Any>& 
             mpAccessibleConsole->SetAccessibleParent(mxAccessibleParent);
     }
 }
-
-
-
 
 //===== PresenterAccessible::AccessibleObject =========================================
 
@@ -923,23 +847,14 @@ PresenterAccessible::AccessibleObject::AccessibleObject (
 {
 }
 
-
-
-
 void PresenterAccessible::AccessibleObject::LateInitialization (void)
 {
     AccessibleFocusManager::Instance()->AddFocusableObject(this);
 }
 
-
-
-
 PresenterAccessible::AccessibleObject::~AccessibleObject (void)
 {
 }
-
-
-
 
 void PresenterAccessible::AccessibleObject::SetWindow (
     const Reference<awt::XWindow>& rxContentWindow,
@@ -966,26 +881,17 @@ void PresenterAccessible::AccessibleObject::SetWindow (
     }
 }
 
-
-
-
 void PresenterAccessible::AccessibleObject::SetAccessibleParent (
     const Reference<XAccessible>& rxAccessibleParent)
 {
     mxParentAccessible = rxAccessibleParent;
 }
 
-
-
-
 void SAL_CALL PresenterAccessible::AccessibleObject::disposing (void)
 {
     AccessibleFocusManager::Instance()->RemoveFocusableObject(this);
     SetWindow(NULL, NULL);
 }
-
-
-
 
 //----- XAccessible -------------------------------------------------------
 
@@ -997,9 +903,6 @@ Reference<XAccessibleContext> SAL_CALL
 
     return this;
 }
-
-
-
 
 //-----  XAccessibleContext  ----------------------------------------------
 
@@ -1013,9 +916,6 @@ sal_Int32 SAL_CALL PresenterAccessible::AccessibleObject::getAccessibleChildCoun
     return nChildCount;
 }
 
-
-
-
 Reference<XAccessible> SAL_CALL
     PresenterAccessible::AccessibleObject::getAccessibleChild (sal_Int32 nIndex)
     throw (lang::IndexOutOfBoundsException, RuntimeException)
@@ -1028,9 +928,6 @@ Reference<XAccessible> SAL_CALL
     return Reference<XAccessible>(maChildren[nIndex].get());
 }
 
-
-
-
 Reference<XAccessible> SAL_CALL
     PresenterAccessible::AccessibleObject::getAccessibleParent (void)
     throw (RuntimeException)
@@ -1039,9 +936,6 @@ Reference<XAccessible> SAL_CALL
 
     return mxParentAccessible;
 }
-
-
-
 
 sal_Int32 SAL_CALL
     PresenterAccessible::AccessibleObject::getAccessibleIndexInParent (void)
@@ -1065,9 +959,6 @@ sal_Int32 SAL_CALL
     return 0;
 }
 
-
-
-
 sal_Int16 SAL_CALL
     PresenterAccessible::AccessibleObject::getAccessibleRole (void)
     throw (RuntimeException)
@@ -1076,9 +967,6 @@ sal_Int16 SAL_CALL
 
     return mnRole;
 }
-
-
-
 
 OUString SAL_CALL
     PresenterAccessible::AccessibleObject::getAccessibleDescription (void)
@@ -1089,9 +977,6 @@ OUString SAL_CALL
     return msName;
 }
 
-
-
-
 OUString SAL_CALL
     PresenterAccessible::AccessibleObject::getAccessibleName (void)
     throw (cssu::RuntimeException)
@@ -1100,9 +985,6 @@ OUString SAL_CALL
 
     return msName;
 }
-
-
-
 
 Reference<XAccessibleRelationSet> SAL_CALL
     PresenterAccessible::AccessibleObject::getAccessibleRelationSet (void)
@@ -1113,9 +995,6 @@ Reference<XAccessibleRelationSet> SAL_CALL
     return NULL;
 }
 
-
-
-
 Reference<XAccessibleStateSet> SAL_CALL
     PresenterAccessible::AccessibleObject::getAccessibleStateSet (void)
     throw (RuntimeException)
@@ -1124,9 +1003,6 @@ Reference<XAccessibleStateSet> SAL_CALL
 
     return Reference<XAccessibleStateSet>(new AccessibleStateSet(mnStateSet));
 }
-
-
-
 
 lang::Locale SAL_CALL
     PresenterAccessible::AccessibleObject::getLocale (void)
@@ -1143,9 +1019,6 @@ lang::Locale SAL_CALL
     }
     return maLocale;
 }
-
-
-
 
 //-----  XAccessibleComponent  ------------------------------------------------
 
@@ -1167,9 +1040,6 @@ sal_Bool SAL_CALL PresenterAccessible::AccessibleObject::containsPoint (
         return false;
 }
 
-
-
-
 Reference<XAccessible> SAL_CALL
     PresenterAccessible::AccessibleObject::getAccessibleAtPoint (const awt::Point& rPoint)
     throw (RuntimeException)
@@ -1179,9 +1049,6 @@ Reference<XAccessible> SAL_CALL
 
     return Reference<XAccessible>();
 }
-
-
-
 
 awt::Rectangle SAL_CALL PresenterAccessible::AccessibleObject::getBounds (void)
     throw (RuntimeException)
@@ -1196,9 +1063,6 @@ awt::Rectangle SAL_CALL PresenterAccessible::AccessibleObject::getBounds (void)
     return awt::Rectangle (aLocation.X, aLocation.Y, aSize.Width, aSize.Height);
 }
 
-
-
-
 awt::Point SAL_CALL PresenterAccessible::AccessibleObject::getLocation (void)
     throw (RuntimeException)
 {
@@ -1208,9 +1072,6 @@ awt::Point SAL_CALL PresenterAccessible::AccessibleObject::getLocation (void)
 
     return aLocation;
 }
-
-
-
 
 awt::Point SAL_CALL PresenterAccessible::AccessibleObject::getLocationOnScreen (void)
     throw (RuntimeException)
@@ -1225,9 +1086,6 @@ awt::Point SAL_CALL PresenterAccessible::AccessibleObject::getLocationOnScreen (
         aRelativeLocation.Y + aParentLocationOnScreen.Y);
 }
 
-
-
-
 awt::Size SAL_CALL PresenterAccessible::AccessibleObject::getSize (void)
     throw (RuntimeException)
 {
@@ -1237,9 +1095,6 @@ awt::Size SAL_CALL PresenterAccessible::AccessibleObject::getSize (void)
 
     return aSize;
 }
-
-
-
 
 void SAL_CALL PresenterAccessible::AccessibleObject::grabFocus (void)
     throw (RuntimeException)
@@ -1251,9 +1106,6 @@ void SAL_CALL PresenterAccessible::AccessibleObject::grabFocus (void)
         mxContentWindow->setFocus();
 }
 
-
-
-
 sal_Int32 SAL_CALL PresenterAccessible::AccessibleObject::getForeground (void)
     throw (RuntimeException)
 {
@@ -1262,9 +1114,6 @@ sal_Int32 SAL_CALL PresenterAccessible::AccessibleObject::getForeground (void)
     return 0x00ffffff;
 }
 
-
-
-
 sal_Int32 SAL_CALL PresenterAccessible::AccessibleObject::getBackground (void)
     throw (RuntimeException)
 {
@@ -1272,9 +1121,6 @@ sal_Int32 SAL_CALL PresenterAccessible::AccessibleObject::getBackground (void)
 
     return 0x00000000;
 }
-
-
-
 
 //----- XAccessibleEventBroadcaster -------------------------------------------
 
@@ -1298,9 +1144,6 @@ void SAL_CALL PresenterAccessible::AccessibleObject::addEventListener (
     }
 }
 
-
-
-
 void SAL_CALL PresenterAccessible::AccessibleObject::removeEventListener (
     const Reference<XAccessibleEventListener>& rxListener)
     throw (RuntimeException)
@@ -1314,9 +1157,6 @@ void SAL_CALL PresenterAccessible::AccessibleObject::removeEventListener (
     }
 }
 
-
-
-
 //----- XWindowListener ---------------------------------------------------
 
 void SAL_CALL PresenterAccessible::AccessibleObject::windowResized (
@@ -1328,9 +1168,6 @@ void SAL_CALL PresenterAccessible::AccessibleObject::windowResized (
     FireAccessibleEvent(AccessibleEventId::BOUNDRECT_CHANGED, Any(), Any());
 }
 
-
-
-
 void SAL_CALL PresenterAccessible::AccessibleObject::windowMoved (
     const css::awt::WindowEvent& rEvent)
     throw (cssu::RuntimeException)
@@ -1340,9 +1177,6 @@ void SAL_CALL PresenterAccessible::AccessibleObject::windowMoved (
     FireAccessibleEvent(AccessibleEventId::BOUNDRECT_CHANGED, Any(), Any());
 }
 
-
-
-
 void SAL_CALL PresenterAccessible::AccessibleObject::windowShown (
     const css::lang::EventObject& rEvent)
     throw (cssu::RuntimeException)
@@ -1351,9 +1185,6 @@ void SAL_CALL PresenterAccessible::AccessibleObject::windowShown (
     UpdateStateSet();
 }
 
-
-
-
 void SAL_CALL PresenterAccessible::AccessibleObject::windowHidden (
     const css::lang::EventObject& rEvent)
     throw (cssu::RuntimeException)
@@ -1361,9 +1192,6 @@ void SAL_CALL PresenterAccessible::AccessibleObject::windowHidden (
     (void)rEvent;
     UpdateStateSet();
 }
-
-
-
 
 //----- XEventListener --------------------------------------------------------
 
@@ -1380,9 +1208,6 @@ void SAL_CALL PresenterAccessible::AccessibleObject::disposing (const css::lang:
         SetWindow(NULL, NULL);
     }
 }
-
-
-
 
 //----- private ---------------------------------------------------------------
 
@@ -1407,9 +1232,6 @@ bool PresenterAccessible::AccessibleObject::GetWindowState (const sal_Int16 nTyp
     }
 }
 
-
-
-
 void PresenterAccessible::AccessibleObject::UpdateStateSet (void)
 {
     UpdateState(AccessibleStateType::FOCUSABLE, true);
@@ -1423,9 +1245,6 @@ void PresenterAccessible::AccessibleObject::UpdateStateSet (void)
     UpdateState(AccessibleStateType::SHOWING, GetWindowState(AccessibleStateType::SHOWING));
     //    UpdateState(AccessibleStateType::ACTIVE, GetWindowState(AccessibleStateType::ACTIVE));
 }
-
-
-
 
 void PresenterAccessible::AccessibleObject::UpdateState(
     const sal_Int16 nState,
@@ -1447,9 +1266,6 @@ void PresenterAccessible::AccessibleObject::UpdateState(
     }
 }
 
-
-
-
 void PresenterAccessible::AccessibleObject::AddChild (
     const ::rtl::Reference<AccessibleObject>& rpChild)
 {
@@ -1458,9 +1274,6 @@ void PresenterAccessible::AccessibleObject::AddChild (
     FireAccessibleEvent(AccessibleEventId::INVALIDATE_ALL_CHILDREN, Any(), Any());
 }
 
-
-
-
 void PresenterAccessible::AccessibleObject::RemoveChild (
     const ::rtl::Reference<AccessibleObject>& rpChild)
 {
@@ -1468,9 +1281,6 @@ void PresenterAccessible::AccessibleObject::RemoveChild (
     maChildren.erase(::std::find(maChildren.begin(), maChildren.end(), rpChild));
     FireAccessibleEvent(AccessibleEventId::INVALIDATE_ALL_CHILDREN, Any(), Any());
 }
-
-
-
 
 void PresenterAccessible::AccessibleObject::SetIsFocused (const bool bIsFocused)
 {
@@ -1481,9 +1291,6 @@ void PresenterAccessible::AccessibleObject::SetIsFocused (const bool bIsFocused)
     }
 }
 
-
-
-
 void PresenterAccessible::AccessibleObject::SetAccessibleName (const ::rtl::OUString& rsName)
 {
     if (msName != rsName)
@@ -1493,9 +1300,6 @@ void PresenterAccessible::AccessibleObject::SetAccessibleName (const ::rtl::OUSt
         FireAccessibleEvent(AccessibleEventId::NAME_CHANGED, Any(sOldName), Any(msName));
     }
 }
-
-
-
 
 void PresenterAccessible::AccessibleObject::FireAccessibleEvent (
     const sal_Int16 nEventId,
@@ -1534,8 +1338,6 @@ void PresenterAccessible::AccessibleObject::FireAccessibleEvent (
     }
 }
 
-
-
 awt::Point PresenterAccessible::AccessibleObject::GetRelativeLocation (void)
 {
     awt::Point aLocation;
@@ -1554,9 +1356,6 @@ awt::Point PresenterAccessible::AccessibleObject::GetRelativeLocation (void)
     return aLocation;
 }
 
-
-
-
 awt::Size PresenterAccessible::AccessibleObject::GetSize (void)
 {
     if (mxContentWindow.is())
@@ -1567,9 +1366,6 @@ awt::Size PresenterAccessible::AccessibleObject::GetSize (void)
     else
         return awt::Size();
 }
-
-
-
 
 awt::Point PresenterAccessible::AccessibleObject::GetAbsoluteParentLocation (void)
 {
@@ -1583,16 +1379,10 @@ awt::Point PresenterAccessible::AccessibleObject::GetAbsoluteParentLocation (voi
         return awt::Point();
 }
 
-
-
-
 sal_Bool PresenterAccessible::AccessibleObject::IsDisposed (void) const
 {
     return (rBHelper.bDisposed || rBHelper.bInDispose);
 }
-
-
-
 
 void PresenterAccessible::AccessibleObject::ThrowIfDisposed (void) const
     throw (lang::DisposedException)
@@ -1600,9 +1390,6 @@ void PresenterAccessible::AccessibleObject::ThrowIfDisposed (void) const
     if (rBHelper.bDisposed || rBHelper.bInDispose)
         ThrowException("object has already been disposed", ET_Disposed);
 }
-
-
-
 
 void PresenterAccessible::AccessibleObject::ThrowException (
     const sal_Char* pMessage,
@@ -1623,10 +1410,6 @@ void PresenterAccessible::AccessibleObject::ThrowException (
     }
 }
 
-
-
-
-
 //===== AccessibleStateSet ====================================================
 
 AccessibleStateSet::AccessibleStateSet (const sal_Int32 nStateSet)
@@ -1635,15 +1418,9 @@ AccessibleStateSet::AccessibleStateSet (const sal_Int32 nStateSet)
 {
 }
 
-
-
-
 AccessibleStateSet::~AccessibleStateSet (void)
 {
 }
-
-
-
 
 sal_uInt32 AccessibleStateSet::GetStateMask (const sal_Int16 nState)
 {
@@ -1655,9 +1432,6 @@ sal_uInt32 AccessibleStateSet::GetStateMask (const sal_Int16 nState)
     return 1<<nState;
 }
 
-
-
-
 //----- XAccessibleStateSet ---------------------------------------------------
 
 sal_Bool SAL_CALL AccessibleStateSet::isEmpty (void)
@@ -1666,17 +1440,11 @@ sal_Bool SAL_CALL AccessibleStateSet::isEmpty (void)
     return mnStateSet==0;
 }
 
-
-
-
 sal_Bool SAL_CALL AccessibleStateSet::contains (sal_Int16 nState)
     throw (cssu::RuntimeException)
 {
     return (mnStateSet & GetStateMask(nState)) != 0;
 }
-
-
-
 
 sal_Bool SAL_CALL AccessibleStateSet::containsAll (const cssu::Sequence<sal_Int16>& rStateSet)
     throw (cssu::RuntimeException)
@@ -1689,9 +1457,6 @@ sal_Bool SAL_CALL AccessibleStateSet::containsAll (const cssu::Sequence<sal_Int1
     return sal_True;
 }
 
-
-
-
 cssu::Sequence<sal_Int16> SAL_CALL AccessibleStateSet::getStates (void)
     throw (cssu::RuntimeException)
 {
@@ -1703,9 +1468,6 @@ cssu::Sequence<sal_Int16> SAL_CALL AccessibleStateSet::getStates (void)
     return Sequence<sal_Int16>(&aStates.front(), aStates.size());
 }
 
-
-
-
 //===== AccessibleRelationSet =================================================
 
 AccessibleRelationSet::AccessibleRelationSet (void)
@@ -1714,15 +1476,9 @@ AccessibleRelationSet::AccessibleRelationSet (void)
 {
 }
 
-
-
-
 AccessibleRelationSet::~AccessibleRelationSet (void)
 {
 }
-
-
-
 
 void AccessibleRelationSet::AddRelation (
     const sal_Int16 nRelationType,
@@ -1734,9 +1490,6 @@ void AccessibleRelationSet::AddRelation (
     maRelations.back().TargetSet[0] = rxObject;
 }
 
-
-
-
 //----- XAccessibleRelationSet ------------------------------------------------
 
 sal_Int32 SAL_CALL AccessibleRelationSet::getRelationCount (void)
@@ -1744,9 +1497,6 @@ sal_Int32 SAL_CALL AccessibleRelationSet::getRelationCount (void)
 {
     return maRelations.size();
 }
-
-
-
 
 AccessibleRelation SAL_CALL AccessibleRelationSet::getRelation (sal_Int32 nIndex)
     throw (cssu::RuntimeException, css::lang::IndexOutOfBoundsException)
@@ -1756,9 +1506,6 @@ AccessibleRelation SAL_CALL AccessibleRelationSet::getRelation (sal_Int32 nIndex
     else
         return maRelations[nIndex];
 }
-
-
-
 
 sal_Bool SAL_CALL AccessibleRelationSet::containsRelation (sal_Int16 nRelationType)
     throw (cssu::RuntimeException)
@@ -1773,9 +1520,6 @@ sal_Bool SAL_CALL AccessibleRelationSet::containsRelation (sal_Int16 nRelationTy
     return sal_False;
 }
 
-
-
-
 AccessibleRelation SAL_CALL AccessibleRelationSet::getRelationByType (sal_Int16 nRelationType)
     throw (cssu::RuntimeException)
 {
@@ -1788,9 +1532,6 @@ AccessibleRelation SAL_CALL AccessibleRelationSet::getRelationByType (sal_Int16 
     }
     return AccessibleRelation();
 }
-
-
-
 
 //===== PresenterAccessible::AccessibleParagraph ==============================
 
@@ -1806,15 +1547,9 @@ PresenterAccessible::AccessibleParagraph::AccessibleParagraph (
 {
 }
 
-
-
-
 PresenterAccessible::AccessibleParagraph::~AccessibleParagraph (void)
 {
 }
-
-
-
 
 //----- XAccessibleContext ----------------------------------------------------
 
@@ -1846,11 +1581,6 @@ Reference<XAccessibleRelationSet> SAL_CALL
     return Reference<XAccessibleRelationSet>(pSet.get());
 }
 
-
-
-
-
-
 //----- XAccessibleText -------------------------------------------------------
 
 sal_Int32 SAL_CALL PresenterAccessible::AccessibleParagraph::getCaretPosition (void)
@@ -1865,9 +1595,6 @@ sal_Int32 SAL_CALL PresenterAccessible::AccessibleParagraph::getCaretPosition (v
     return nPosition;
 }
 
-
-
-
 sal_Bool SAL_CALL PresenterAccessible::AccessibleParagraph::setCaretPosition (sal_Int32 nIndex)
     throw (::com::sun::star::lang::IndexOutOfBoundsException, cssu::RuntimeException)
 {
@@ -1881,9 +1608,6 @@ sal_Bool SAL_CALL PresenterAccessible::AccessibleParagraph::setCaretPosition (sa
     else
         return sal_False;
 }
-
-
-
 
 sal_Unicode SAL_CALL PresenterAccessible::AccessibleParagraph::getCharacter (sal_Int32 nIndex)
     throw (::com::sun::star::lang::IndexOutOfBoundsException, cssu::RuntimeException)
@@ -1901,9 +1625,6 @@ sal_Unicode SAL_CALL PresenterAccessible::AccessibleParagraph::getCharacter (sal
         return sal_Unicode();
     }
 }
-
-
-
 
 Sequence<css::beans::PropertyValue> SAL_CALL
     PresenterAccessible::AccessibleParagraph::getCharacterAttributes (
@@ -1931,9 +1652,6 @@ Sequence<css::beans::PropertyValue> SAL_CALL
     (void)rRequestedAttributes;
     return Sequence<css::beans::PropertyValue>();
 }
-
-
-
 
 awt::Rectangle SAL_CALL PresenterAccessible::AccessibleParagraph::getCharacterBounds (
     sal_Int32 nIndex)
@@ -1963,9 +1681,6 @@ awt::Rectangle SAL_CALL PresenterAccessible::AccessibleParagraph::getCharacterBo
     return aCharacterBox;
 }
 
-
-
-
 sal_Int32 SAL_CALL PresenterAccessible::AccessibleParagraph::getCharacterCount (void)
     throw (cssu::RuntimeException)
 {
@@ -1977,9 +1692,6 @@ sal_Int32 SAL_CALL PresenterAccessible::AccessibleParagraph::getCharacterCount (
 
     return nCount;
 }
-
-
-
 
 sal_Int32 SAL_CALL PresenterAccessible::AccessibleParagraph::getIndexAtPoint (
     const css::awt::Point& rPoint)
@@ -1994,9 +1706,6 @@ sal_Int32 SAL_CALL PresenterAccessible::AccessibleParagraph::getIndexAtPoint (
     return nIndex;
 }
 
-
-
-
 ::rtl::OUString SAL_CALL PresenterAccessible::AccessibleParagraph::getSelectedText (void)
     throw (cssu::RuntimeException)
 {
@@ -2004,9 +1713,6 @@ sal_Int32 SAL_CALL PresenterAccessible::AccessibleParagraph::getIndexAtPoint (
 
     return getTextRange(getSelectionStart(), getSelectionEnd());
 }
-
-
-
 
 sal_Int32 SAL_CALL PresenterAccessible::AccessibleParagraph::getSelectionStart (void)
     throw (cssu::RuntimeException)
@@ -2016,9 +1722,6 @@ sal_Int32 SAL_CALL PresenterAccessible::AccessibleParagraph::getSelectionStart (
     return getCaretPosition();
 }
 
-
-
-
 sal_Int32 SAL_CALL PresenterAccessible::AccessibleParagraph::getSelectionEnd (void)
     throw (cssu::RuntimeException)
 {
@@ -2026,9 +1729,6 @@ sal_Int32 SAL_CALL PresenterAccessible::AccessibleParagraph::getSelectionEnd (vo
 
     return getCaretPosition();
 }
-
-
-
 
 sal_Bool SAL_CALL PresenterAccessible::AccessibleParagraph::setSelection (
     sal_Int32 nStartIndex,
@@ -2041,9 +1741,6 @@ sal_Bool SAL_CALL PresenterAccessible::AccessibleParagraph::setSelection (
     return setCaretPosition(nStartIndex);
 }
 
-
-
-
 ::rtl::OUString SAL_CALL PresenterAccessible::AccessibleParagraph::getText (void)
     throw (cssu::RuntimeException)
 {
@@ -2055,9 +1752,6 @@ sal_Bool SAL_CALL PresenterAccessible::AccessibleParagraph::setSelection (
 
     return sText;
 }
-
-
-
 
 ::rtl::OUString SAL_CALL PresenterAccessible::AccessibleParagraph::getTextRange (
     sal_Int32 nLocalStartIndex,
@@ -2077,9 +1771,6 @@ sal_Bool SAL_CALL PresenterAccessible::AccessibleParagraph::setSelection (
     return sText;
 }
 
-
-
-
 TextSegment SAL_CALL PresenterAccessible::AccessibleParagraph::getTextAtIndex (
     sal_Int32 nLocalCharacterIndex,
     sal_Int16 nTextType)
@@ -2095,9 +1786,6 @@ TextSegment SAL_CALL PresenterAccessible::AccessibleParagraph::getTextAtIndex (
 
     return aSegment;
 }
-
-
-
 
 TextSegment SAL_CALL PresenterAccessible::AccessibleParagraph::getTextBeforeIndex (
     sal_Int32 nLocalCharacterIndex,
@@ -2115,9 +1803,6 @@ TextSegment SAL_CALL PresenterAccessible::AccessibleParagraph::getTextBeforeInde
     return aSegment;
 }
 
-
-
-
 TextSegment SAL_CALL PresenterAccessible::AccessibleParagraph::getTextBehindIndex (
     sal_Int32 nLocalCharacterIndex,
     sal_Int16 nTextType)
@@ -2134,9 +1819,6 @@ TextSegment SAL_CALL PresenterAccessible::AccessibleParagraph::getTextBehindInde
     return aSegment;
 }
 
-
-
-
 sal_Bool SAL_CALL PresenterAccessible::AccessibleParagraph::copyText (
     sal_Int32 nStartIndex,
     sal_Int32 nEndIndex)
@@ -2151,9 +1833,6 @@ sal_Bool SAL_CALL PresenterAccessible::AccessibleParagraph::copyText (
     (void)nEndIndex;
     return sal_False;
 }
-
-
-
 
 //----- protected -------------------------------------------------------------
 
@@ -2170,9 +1849,6 @@ awt::Point PresenterAccessible::AccessibleParagraph::GetRelativeLocation (void)
     return aLocation;
 }
 
-
-
-
 awt::Size PresenterAccessible::AccessibleParagraph::GetSize (void)
 {
     if (mpParagraph)
@@ -2180,9 +1856,6 @@ awt::Size PresenterAccessible::AccessibleParagraph::GetSize (void)
     else
         return AccessibleObject::GetSize();
 }
-
-
-
 
 awt::Point PresenterAccessible::AccessibleParagraph::GetAbsoluteParentLocation (void)
 {
@@ -2202,9 +1875,6 @@ awt::Point PresenterAccessible::AccessibleParagraph::GetAbsoluteParentLocation (
     return awt::Point();
 }
 
-
-
-
 bool PresenterAccessible::AccessibleParagraph::GetWindowState (const sal_Int16 nType) const
 {
     switch (nType)
@@ -2220,11 +1890,6 @@ bool PresenterAccessible::AccessibleParagraph::GetWindowState (const sal_Int16 n
     }
 }
 
-
-
-
-
-
 //===== AccessibleNotes =======================================================
 
 AccessibleNotes::AccessibleNotes (
@@ -2235,9 +1900,6 @@ AccessibleNotes::AccessibleNotes (
       mpTextView()
 {
 }
-
-
-
 
 rtl::Reference<PresenterAccessible::AccessibleObject> AccessibleNotes::Create (
     const css::uno::Reference<css::uno::XComponentContext>& rxContext,
@@ -2268,9 +1930,6 @@ rtl::Reference<PresenterAccessible::AccessibleObject> AccessibleNotes::Create (
 
     return rtl::Reference<PresenterAccessible::AccessibleObject>(pObject.get());
 }
-
-
-
 
 void AccessibleNotes::SetTextView (
     const ::boost::shared_ptr<PresenterTextView>& rpTextView)
@@ -2334,9 +1993,6 @@ void AccessibleNotes::SetTextView (
     }
 }
 
-
-
-
 void AccessibleNotes::SetWindow (
     const cssu::Reference<css::awt::XWindow>& rxContentWindow,
     const cssu::Reference<css::awt::XWindow>& rxBorderWindow)
@@ -2354,9 +2010,6 @@ void AccessibleNotes::SetWindow (
         (*iChild)->SetWindow(rxContentWindow, rxBorderWindow);
     }
 }
-
-
-
 
 void AccessibleNotes::NotifyCaretChange (
     const sal_Int32 nOldParagraphIndex,
@@ -2399,16 +2052,10 @@ void AccessibleNotes::NotifyCaretChange (
     }
 }
 
-
-
-
 void AccessibleNotes::HandleTextChange (void)
 {
     SetTextView(mpTextView);
 }
-
-
-
 
 //===== AccessibleFocusManager ================================================
 
@@ -2423,16 +2070,10 @@ void AccessibleNotes::HandleTextChange (void)
     return mpInstance;
 }
 
-
-
-
 AccessibleFocusManager::AccessibleFocusManager (void)
     : maFocusableObjects()
 {
 }
-
-
-
 
 void AccessibleFocusManager::AddFocusableObject (
     const ::rtl::Reference<PresenterAccessible::AccessibleObject>& rpObject)
@@ -2442,9 +2083,6 @@ void AccessibleFocusManager::AddFocusableObject (
 
     maFocusableObjects.push_back(rpObject);
 }
-
-
-
 
 void AccessibleFocusManager::RemoveFocusableObject (
     const ::rtl::Reference<PresenterAccessible::AccessibleObject>& rpObject)
@@ -2459,9 +2097,6 @@ void AccessibleFocusManager::RemoveFocusableObject (
         OSL_ASSERT(iObject!=maFocusableObjects.end());
     }
 }
-
-
-
 
 void AccessibleFocusManager::FocusObject (
     const ::rtl::Reference<PresenterAccessible::AccessibleObject>& rpObject)

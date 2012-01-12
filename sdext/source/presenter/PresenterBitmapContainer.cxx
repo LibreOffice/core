@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-
 #include "PresenterBitmapContainer.hxx"
 #include "PresenterComponent.hxx"
 #include "PresenterConfigurationAccess.hxx"
@@ -45,7 +44,6 @@ using namespace ::std;
 using ::rtl::OUString;
 
 #define A2S(pString) (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(pString)))
-
 
 namespace sdext { namespace presenter {
 
@@ -94,10 +92,6 @@ PresenterBitmapContainer::PresenterBitmapContainer (
     LoadBitmaps(xBitmapList);
 }
 
-
-
-
-
 PresenterBitmapContainer::PresenterBitmapContainer (
     const css::uno::Reference<css::container::XNameAccess>& rxRootNode,
     const ::boost::shared_ptr<PresenterBitmapContainer>& rpParentContainer,
@@ -115,9 +109,6 @@ PresenterBitmapContainer::PresenterBitmapContainer (
 
     LoadBitmaps(rxRootNode);
 }
-
-
-
 
 void PresenterBitmapContainer::Initialize (
     const css::uno::Reference<css::uno::XComponentContext>& rxComponentContext)
@@ -138,16 +129,10 @@ void PresenterBitmapContainer::Initialize (
     }
 }
 
-
-
-
 PresenterBitmapContainer::~PresenterBitmapContainer (void)
 {
     maIconContainer.clear();
 }
-
-
-
 
 SharedBitmapDescriptor PresenterBitmapContainer::GetBitmap (
     const OUString& rsName) const
@@ -160,9 +145,6 @@ SharedBitmapDescriptor PresenterBitmapContainer::GetBitmap (
     else
         return SharedBitmapDescriptor();
 }
-
-
-
 
 void PresenterBitmapContainer::LoadBitmaps (
     const css::uno::Reference<css::container::XNameAccess>& rxBitmapList)
@@ -188,9 +170,6 @@ void PresenterBitmapContainer::LoadBitmaps (
         OSL_ASSERT(false);
     }
 }
-
-
-
 
 SharedBitmapDescriptor PresenterBitmapContainer::LoadBitmap (
     const css::uno::Reference<css::container::XHierarchicalNameAccess>& rxNode,
@@ -226,9 +205,6 @@ SharedBitmapDescriptor PresenterBitmapContainer::LoadBitmap (
     return pBitmap;
 }
 
-
-
-
 void PresenterBitmapContainer::ProcessBitmap (
     const OUString& rsKey,
     const Reference<beans::XPropertySet>& rxProperties)
@@ -244,9 +220,6 @@ void PresenterBitmapContainer::ProcessBitmap (
         mxCanvas,
         SharedBitmapDescriptor());
 }
-
-
-
 
 SharedBitmapDescriptor PresenterBitmapContainer::LoadBitmap (
     const Reference<beans::XPropertySet>& rxProperties,
@@ -312,7 +285,6 @@ SharedBitmapDescriptor PresenterBitmapContainer::LoadBitmap (
         catch (Exception&)
         {}
 
-
     PresenterConfigurationAccess::GetProperty(rxProperties, gsXOffsetProperty) >>= pBitmap->mnXOffset;
     PresenterConfigurationAccess::GetProperty(rxProperties, gsYOffsetProperty) >>= pBitmap->mnYOffset;
 
@@ -330,9 +302,6 @@ SharedBitmapDescriptor PresenterBitmapContainer::LoadBitmap (
     return pBitmap;
 }
 
-
-
-
 PresenterBitmapContainer::BitmapDescriptor::TexturingMode
     PresenterBitmapContainer::StringToTexturingMode (const OUString& rsTexturingMode)
 {
@@ -345,9 +314,6 @@ PresenterBitmapContainer::BitmapDescriptor::TexturingMode
     else
         return PresenterBitmapContainer::BitmapDescriptor::Once;
 }
-
-
-
 
 //===== PresenterBitmapContainer::BitmapSet ===================================
 
@@ -368,9 +334,6 @@ PresenterBitmapContainer::BitmapDescriptor::BitmapDescriptor (void)
       mxMaskBitmap()
 {
 }
-
-
-
 
 PresenterBitmapContainer::BitmapDescriptor::BitmapDescriptor (
     const ::boost::shared_ptr<PresenterBitmapContainer::BitmapDescriptor>& rpDefault)
@@ -408,15 +371,11 @@ PresenterBitmapContainer::BitmapDescriptor::BitmapDescriptor (
     }
 }
 
-
 css::uno::Reference<css::rendering::XBitmap>
     PresenterBitmapContainer::BitmapDescriptor::GetNormalBitmap (void) const
 {
     return mxNormalBitmap;
 }
-
-
-
 
 css::uno::Reference<css::rendering::XBitmap>
     PresenterBitmapContainer::BitmapDescriptor::GetBitmap (
@@ -452,9 +411,6 @@ css::uno::Reference<css::rendering::XBitmap>
     }
 }
 
-
-
-
 void PresenterBitmapContainer::BitmapDescriptor::SetBitmap (
     const Mode eMode,
     const css::uno::Reference<css::rendering::XBitmap>& rxBitmap)
@@ -489,9 +445,6 @@ void PresenterBitmapContainer::BitmapDescriptor::SetBitmap (
             break;
     }
 }
-
-
-
 
 } } // end of namespace ::sdext::presenter
 

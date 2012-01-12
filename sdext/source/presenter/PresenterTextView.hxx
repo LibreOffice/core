@@ -94,9 +94,6 @@ private:
 };
 typedef ::boost::shared_ptr<PresenterTextCaret> SharedPresenterTextCaret;
 
-
-
-
 //===== PresenterTextParagraph ================================================
 
 class PresenterTextParagraph
@@ -194,7 +191,6 @@ private:
         bool IsEmpty (void) const;
     };
 
-
     cssu::Reference<css::i18n::XBreakIterator> mxBreakIterator;
     cssu::Reference<css::i18n::XScriptTypeDetector> mxScriptTypeDetector;
     ::std::vector<Line> maLines;
@@ -226,9 +222,6 @@ private:
     bool IsTextReferencePointLeft (void) const;
 };
 typedef ::boost::shared_ptr<PresenterTextParagraph> SharedPresenterTextParagraph;
-
-
-
 
 /** A simple text view that paints text onto a given canvas.
 */

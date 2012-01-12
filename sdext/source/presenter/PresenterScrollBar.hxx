@@ -135,12 +135,10 @@ public:
     virtual void SAL_CALL windowHidden (const css::lang::EventObject& rEvent)
         throw (css::uno::RuntimeException);
 
-
     // XPaintListener
 
     virtual void SAL_CALL windowPaint (const css::awt::PaintEvent& rEvent)
         throw (css::uno::RuntimeException);
-
 
     // XMouseListener
 
@@ -156,7 +154,6 @@ public:
     virtual void SAL_CALL mouseExited (const css::awt::MouseEvent& rEvent)
         throw(css::uno::RuntimeException);
 
-
     // XMouseMotionListener
 
     virtual void SAL_CALL mouseMoved (const css::awt::MouseEvent& rEvent)
@@ -165,11 +162,9 @@ public:
     virtual void SAL_CALL mouseDragged (const css::awt::MouseEvent& rEvent)
         throw (css::uno::RuntimeException);
 
-
     // lang::XEventListener
     virtual void SAL_CALL disposing (const css::lang::EventObject& rEvent)
         throw (css::uno::RuntimeException);
-
 
     enum Area { Total, Pager, Thumb, PagerUp, PagerDown, PrevButton, NextButton, None,
                 __AreaCount__ = None };
@@ -258,9 +253,6 @@ private:
     Area GetArea (const double nX, const double nY) const;
 };
 
-
-
-
 /** A vertical scroll bar.
 */
 class PresenterVerticalScrollBar : public PresenterScrollBar
@@ -293,9 +285,6 @@ private:
     sal_Int32 mnScrollBarWidth;
 };
 
-
-
-
 /** A horizontal scroll bar.
 */
 class PresenterHorizontalScrollBar : public PresenterScrollBar
@@ -327,9 +316,6 @@ protected:
 private:
     sal_Int32 mnScrollBarHeight;
 };
-
-
-
 
 } } // end of namespace ::sdext::presenter
 

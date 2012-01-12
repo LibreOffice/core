@@ -50,7 +50,6 @@
 namespace css = ::com::sun::star;
 namespace cssu = ::com::sun::star::uno;
 
-
 namespace sdext { namespace presenter {
 
 class PresenterController;
@@ -64,7 +63,6 @@ namespace {
         css::awt::XPaintListener
     > PresenterPaneBaseInterfaceBase;
 }
-
 
 /** Base class of the panes used by the presenter screen.  Pane objects are
     stored in the PresenterPaneContainer.  Sizes and positions are
@@ -98,7 +96,6 @@ public:
     virtual void SAL_CALL initialize (const css::uno::Sequence<css::uno::Any>& rArguments)
         throw (css::uno::Exception, css::uno::RuntimeException);
 
-
     // XResourceId
 
     virtual css::uno::Reference<css::drawing::framework::XResourceId> SAL_CALL getResourceId (void)
@@ -106,7 +103,6 @@ public:
 
     virtual sal_Bool SAL_CALL isAnchorOnly (void)
         throw (com::sun::star::uno::RuntimeException);
-
 
     // XWindowListener
 
@@ -122,12 +118,10 @@ public:
     virtual void SAL_CALL windowHidden (const css::lang::EventObject& rEvent)
         throw (css::uno::RuntimeException);
 
-
     // lang::XEventListener
 
     virtual void SAL_CALL disposing (const css::lang::EventObject& rEvent)
         throw (css::uno::RuntimeException);
-
 
 protected:
     ::rtl::Reference<PresenterController> mpPresenterController;

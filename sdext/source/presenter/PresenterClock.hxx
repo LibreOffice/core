@@ -61,7 +61,6 @@ namespace {
 
 namespace sdext { namespace presenter {
 
-
 /** A clock that displays the current time.  This class is work in
     progress.  Future extensions may include
     other times like time since presentation started or remaining time.
@@ -90,19 +89,16 @@ public:
     */
     class Painter;
 
-
     // lang::XEventListener
 
     virtual void SAL_CALL
         disposing (const css::lang::EventObject& rEventObject)
         throw (css::uno::RuntimeException);
 
-
     // XPaintListener
 
     virtual void SAL_CALL windowPaint (const css::awt::PaintEvent& rEvent)
         throw (css::uno::RuntimeException);
-
 
     // XWindowListener
 
@@ -118,7 +114,6 @@ public:
     virtual void SAL_CALL windowHidden (const css::lang::EventObject& rEvent)
         throw (css::uno::RuntimeException);
 
-
     // XMouseListener
 
     virtual void SAL_CALL mousePressed (const css::awt::MouseEvent& rEvent)
@@ -132,7 +127,6 @@ public:
 
     virtual void SAL_CALL mouseExited (const css::awt::MouseEvent& rEvent)
         throw (css::uno::RuntimeException);
-
 
     // XResourceId
 

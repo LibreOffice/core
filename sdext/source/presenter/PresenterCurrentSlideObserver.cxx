@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-
 #include "PresenterCurrentSlideObserver.hxx"
 
 using namespace ::com::sun::star;

@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-
 #include "PresenterToolBar.hxx"
 
 #include "PresenterBitmapContainer.hxx"
@@ -125,7 +124,6 @@ namespace {
 
 }  // end of anonymous namespace
 
-
 class PresenterToolBar::Context
     : private ::boost::noncopyable
 {
@@ -134,9 +132,6 @@ public:
     Reference<drawing::XPresenterHelper> mxPresenterHelper;
     css::uno::Reference<css::rendering::XCanvas> mxCanvas;
 };
-
-
-
 
 //===== PresenterToolBar::Element =============================================
 
@@ -217,14 +212,10 @@ namespace {
 
 } // end of anonymous namespace
 
-
 class PresenterToolBar::ElementContainerPart
     : public ::std::vector<rtl::Reference<Element> >
 {
 };
-
-
-
 
 //===== Button ================================================================
 
@@ -264,9 +255,6 @@ namespace {
         PresenterBitmapDescriptor::Mode GetMode (void) const;
     };
 
-
-
-
 //===== Label =================================================================
 
     class Label : public Element
@@ -285,9 +273,7 @@ namespace {
             const Reference<rendering::XCanvas>& rxCanvas);
     };
 
-
 // Some specialized controls.
-
 
     class TimeFormatter
     {
@@ -388,8 +374,6 @@ namespace {
     };
 } // end of anonymous namespace
 
-
-
 //===== PresenterToolBar ======================================================
 
 PresenterToolBar::PresenterToolBar (
@@ -413,9 +397,6 @@ PresenterToolBar::PresenterToolBar (
       maMinimalSize()
 {
 }
-
-
-
 
 void PresenterToolBar::Initialize (
     const ::rtl::OUString& rsConfigurationPath)
@@ -450,15 +431,9 @@ void PresenterToolBar::Initialize (
     }
 }
 
-
-
-
 PresenterToolBar::~PresenterToolBar (void)
 {
 }
-
-
-
 
 void SAL_CALL PresenterToolBar::disposing (void)
 {
@@ -495,9 +470,6 @@ void SAL_CALL PresenterToolBar::disposing (void)
     mpCurrentContainerPart.reset();
     maElementContainer.clear();
 }
-
-
-
 
 void PresenterToolBar::InvalidateArea (
     const awt::Rectangle& rRepaintBox,
@@ -1189,9 +1161,6 @@ Element::~Element (void)
 {
 }
 
-
-
-
 void Element::SetModes (
     const SharedElementMode& rpNormalMode,
     const SharedElementMode& rpMouseOverMode,
@@ -1205,15 +1174,9 @@ void Element::SetModes (
     mpMode = rpNormalMode;
 }
 
-
-
-
 void Element::disposing (void)
 {
 }
-
-
-
 
 awt::Size Element::GetBoundingSize (
     const Reference<rendering::XCanvas>& rxCanvas)
@@ -1222,39 +1185,25 @@ awt::Size Element::GetBoundingSize (
     return maSize;
 }
 
-
-
-
 awt::Rectangle Element::GetBoundingBox (void) const
 {
     return awt::Rectangle(maLocation.X,maLocation.Y, maSize.Width, maSize.Height);
 }
-
-
-
 
 void Element::CurrentSlideHasChanged (void)
 {
     UpdateState();
 }
 
-
-
-
 void Element::SetLocation (const awt::Point& rLocation)
 {
     maLocation = rLocation;
 }
 
-
-
 void Element::SetSize (const geometry::RealSize2D& rSize)
 {
     maSize = awt::Size(sal_Int32(0.5+rSize.Width), sal_Int32(0.5+rSize.Height));
 }
-
-
-
 
 bool Element::SetState (
     const bool bIsOver,
@@ -1307,17 +1256,11 @@ bool Element::SetState (
     return bModified;
 }
 
-
-
-
 void Element::Invalidate (const bool bSynchronous)
 {
     OSL_ASSERT(mpToolBar.is());
     mpToolBar->InvalidateArea(GetBoundingBox(), bSynchronous);
 }
-
-
-
 
 bool Element::IsOutside (const awt::Rectangle& rBox)
 {
@@ -1333,23 +1276,15 @@ bool Element::IsOutside (const awt::Rectangle& rBox)
         return false;
 }
 
-
-
 bool Element::IsEnabled (void) const
 {
     return mbIsEnabled;
 }
 
-
-
-
 bool Element::IsFilling (void) const
 {
     return false;
 }
-
-
-
 
 void Element::UpdateState (void)
 {
@@ -1368,9 +1303,6 @@ void Element::UpdateState (void)
     }
 }
 
-
-
-
 //----- lang::XEventListener --------------------------------------------------
 
 void SAL_CALL Element::disposing (const css::lang::EventObject& rEvent)
@@ -1378,9 +1310,6 @@ void SAL_CALL Element::disposing (const css::lang::EventObject& rEvent)
 {
     (void)rEvent;
 }
-
-
-
 
 //----- document::XEventListener ----------------------------------------------
 
@@ -1390,9 +1319,6 @@ void SAL_CALL Element::notifyEvent (const css::document::EventObject& rEvent)
     (void)rEvent;
     UpdateState();
 }
-
-
-
 
 //----- frame::XStatusListener ------------------------------------------------
 
@@ -1414,9 +1340,6 @@ void SAL_CALL Element::statusChanged (const css::frame::FeatureStateEvent& rEven
 
 } // end of anonymous namespace
 
-
-
-
 //===== ElementMode ===========================================================
 
 namespace {
@@ -1427,9 +1350,6 @@ ElementMode::ElementMode (void)
       maText()
 {
 }
-
-
-
 
 void ElementMode::ReadElementMode (
     const Reference<beans::XPropertySet>& rxElementProperties,
@@ -1490,9 +1410,6 @@ void ElementMode::ReadElementMode (
 
 } // end of anonymous namespace
 
-
-
-
 //===== Button ================================================================
 
 namespace {
@@ -1505,9 +1422,6 @@ namespace {
     return ::rtl::Reference<Element>(pElement.get());
 }
 
-
-
-
 Button::Button (
     const ::rtl::Reference<PresenterToolBar>& rpToolBar)
     : Element(rpToolBar),
@@ -1518,24 +1432,15 @@ Button::Button (
     OSL_ASSERT(mpToolBar->GetPresenterController()->GetWindowManager().is());
 }
 
-
-
-
 Button::~Button (void)
 {
 }
-
-
-
 
 void Button::Initialize (void)
 {
     mpToolBar->GetPresenterController()->GetWindowManager()->AddLayoutListener(this);
     mbIsListenerRegistered = true;
 }
-
-
-
 
 void Button::disposing (void)
 {
@@ -1551,9 +1456,6 @@ void Button::disposing (void)
     }
     Element::disposing();
 }
-
-
-
 
 void Button::Paint (
     const Reference<rendering::XCanvas>& rxCanvas,
@@ -1582,9 +1484,6 @@ void Button::Paint (
     mpMode->maText.Paint(rxCanvas, rViewState, GetBoundingBox(), aOffset);
 }
 
-
-
-
 awt::Size Button::CreateBoundingSize (
     const Reference<rendering::XCanvas>& rxCanvas)
 {
@@ -1608,9 +1507,6 @@ awt::Size Button::CreateBoundingSize (
     else
         return awt::Size(nTextWidth,nTextHeight);
 }
-
-
-
 
 void Button::PaintIcon (
     const Reference<rendering::XCanvas>& rxCanvas,
@@ -1636,9 +1532,6 @@ void Button::PaintIcon (
     }
 }
 
-
-
-
 PresenterBitmapDescriptor::Mode Button::GetMode (void) const
 {
     if ( ! IsEnabled())
@@ -1650,9 +1543,6 @@ PresenterBitmapDescriptor::Mode Button::GetMode (void) const
     else
         return PresenterBitmapDescriptor::Normal;
 }
-
-
-
 
 //----- lang::XEventListener --------------------------------------------------
 
@@ -1666,9 +1556,6 @@ void SAL_CALL Button::disposing (const css::lang::EventObject& rEvent)
 
 } // end of anonymous namespace
 
-
-
-
 //===== PresenterToolBar::Label ===============================================
 
 namespace {
@@ -1677,9 +1564,6 @@ Label::Label (const ::rtl::Reference<PresenterToolBar>& rpToolBar)
     : Element(rpToolBar)
 {
 }
-
-
-
 
 awt::Size Label::CreateBoundingSize (
     const Reference<rendering::XCanvas>& rxCanvas)
@@ -1692,10 +1576,6 @@ awt::Size Label::CreateBoundingSize (
         sal::static_int_cast<sal_Int32>(0.5 + aTextBBox.X2 - aTextBBox.X1),
         sal::static_int_cast<sal_Int32>(0.5 + aTextBBox.Y2 - aTextBBox.Y1));
 }
-
-
-
-
 
 void Label::SetText (const OUString& rsText)
 {
@@ -1715,9 +1595,6 @@ void Label::SetText (const OUString& rsText)
         Invalidate(false);
 }
 
-
-
-
 void Label::Paint (
     const Reference<rendering::XCanvas>& rxCanvas,
     const rendering::ViewState& rViewState)
@@ -1729,9 +1606,6 @@ void Label::Paint (
     mpMode->maText.Paint(rxCanvas, rViewState, GetBoundingBox(), awt::Point(0,0));
 }
 
-
-
-
 bool Label::SetState (const bool bIsOver, const bool bIsPressed)
 {
     // For labels there is no mouse over effect.
@@ -1741,9 +1615,6 @@ bool Label::SetState (const bool bIsOver, const bool bIsPressed)
 }
 
 } // end of anonymous namespace
-
-
-
 
 //===== Text ==================================================================
 
@@ -1755,17 +1626,11 @@ Text::Text (void)
 {
 }
 
-
-
-
 Text::Text (const Text& rText)
     : msText(rText.msText),
       mpFont(rText.mpFont)
 {
 }
-
-
-
 
 Text::Text (
     const OUString& rsText,
@@ -1775,32 +1640,20 @@ Text::Text (
 {
 }
 
-
-
-
 void Text::SetText (const OUString& rsText)
 {
     msText = rsText;
 }
-
-
-
 
 OUString Text::GetText (void) const
 {
     return msText;
 }
 
-
-
-
 PresenterTheme::SharedFontDescriptor Text::GetFont (void) const
 {
     return mpFont;
 }
-
-
-
 
 void Text::Paint (
     const Reference<rendering::XCanvas>& rxCanvas,
@@ -1849,9 +1702,6 @@ void Text::Paint (
         rendering::TextDirection::WEAK_LEFT_TO_RIGHT);
 }
 
-
-
-
 geometry::RealRectangle2D Text::GetBoundingBox (const Reference<rendering::XCanvas>& rxCanvas)
 {
     if (mpFont.get() != NULL && !msText.isEmpty())
@@ -1872,9 +1722,6 @@ geometry::RealRectangle2D Text::GetBoundingBox (const Reference<rendering::XCanv
     return geometry::RealRectangle2D(0,0,0,0);
 }
 
-
-
-
 //===== TimeFormatter =========================================================
 
 TimeFormatter::TimeFormatter (void)
@@ -1883,9 +1730,6 @@ TimeFormatter::TimeFormatter (void)
       mbIsShowSeconds(true)
 {
 }
-
-
-
 
 OUString TimeFormatter::FormatTime (const oslDateTime& rTime)
 {
@@ -1930,9 +1774,6 @@ OUString TimeFormatter::FormatTime (const oslDateTime& rTime)
     return sText.makeStringAndClear();
 }
 
-
-
-
 //===== TimeLabel =============================================================
 
 TimeLabel::TimeLabel (const ::rtl::Reference<PresenterToolBar>& rpToolBar)
@@ -1941,26 +1782,17 @@ TimeLabel::TimeLabel (const ::rtl::Reference<PresenterToolBar>& rpToolBar)
 {
 }
 
-
-
-
 void SAL_CALL TimeLabel::disposing (void)
 {
     PresenterClockTimer::Instance(mpToolBar->GetComponentContext())->RemoveListener(mpListener);
     mpListener.reset();
 }
 
-
-
-
 void TimeLabel::ConnectToTimer (void)
 {
     mpListener.reset(new Listener(this));
     PresenterClockTimer::Instance(mpToolBar->GetComponentContext())->AddListener(mpListener);
 }
-
-
-
 
 //===== CurrentTimeLabel ======================================================
 
@@ -1972,15 +1804,9 @@ void TimeLabel::ConnectToTimer (void)
     return ::rtl::Reference<Element>(pElement.get());
 }
 
-
-
-
 CurrentTimeLabel::~CurrentTimeLabel (void)
 {
 }
-
-
-
 
 CurrentTimeLabel::CurrentTimeLabel (
     const ::rtl::Reference<PresenterToolBar>& rpToolBar)
@@ -1989,17 +1815,11 @@ CurrentTimeLabel::CurrentTimeLabel (
 {
 }
 
-
-
-
 void CurrentTimeLabel::TimeHasChanged (const oslDateTime& rCurrentTime)
 {
     SetText(maTimeFormatter.FormatTime(rCurrentTime));
     Invalidate(false);
 }
-
-
-
 
 void CurrentTimeLabel::SetModes (
     const SharedElementMode& rpNormalMode,
@@ -2011,9 +1831,6 @@ void CurrentTimeLabel::SetModes (
     SetText(maTimeFormatter.FormatTime(PresenterClockTimer::GetCurrentTime()));
 }
 
-
-
-
 //===== PresentationTimeLabel =================================================
 
 ::rtl::Reference<Element> PresentationTimeLabel::Create (
@@ -2024,15 +1841,9 @@ void CurrentTimeLabel::SetModes (
     return ::rtl::Reference<Element>(pElement.get());
 }
 
-
-
-
 PresentationTimeLabel::~PresentationTimeLabel (void)
 {
 }
-
-
-
 
 PresentationTimeLabel::PresentationTimeLabel (
     const ::rtl::Reference<PresenterToolBar>& rpToolBar)
@@ -2043,9 +1854,6 @@ PresentationTimeLabel::PresentationTimeLabel (
     maStartTimeValue.Seconds = 0;
     maStartTimeValue.Nanosec = 0;
 }
-
-
-
 
 void PresentationTimeLabel::TimeHasChanged (const oslDateTime& rCurrentTime)
 {
@@ -2076,8 +1884,6 @@ void PresentationTimeLabel::TimeHasChanged (const oslDateTime& rCurrentTime)
     }
 }
 
-
-
 void PresentationTimeLabel::SetModes (
     const SharedElementMode& rpNormalMode,
     const SharedElementMode& rpMouseOverMode,
@@ -2093,9 +1899,6 @@ void PresentationTimeLabel::SetModes (
     }
 }
 
-
-
-
 //===== VerticalSeparator =====================================================
 
 VerticalSeparator::VerticalSeparator (
@@ -2103,9 +1906,6 @@ VerticalSeparator::VerticalSeparator (
     : Element(rpToolBar)
 {
 }
-
-
-
 
 void VerticalSeparator::Paint (
     const Reference<rendering::XCanvas>& rxCanvas,
@@ -2138,9 +1938,6 @@ void VerticalSeparator::Paint (
         aRenderState);
 }
 
-
-
-
 awt::Size VerticalSeparator::CreateBoundingSize (
     const Reference<rendering::XCanvas>& rxCanvas)
 {
@@ -2148,16 +1945,10 @@ awt::Size VerticalSeparator::CreateBoundingSize (
     return awt::Size(1,20);
 }
 
-
-
-
 bool VerticalSeparator::IsFilling (void) const
 {
     return true;
 }
-
-
-
 
 //===== HorizontalSeparator ===================================================
 
@@ -2166,9 +1957,6 @@ HorizontalSeparator::HorizontalSeparator (
     : Element(rpToolBar)
 {
 }
-
-
-
 
 void HorizontalSeparator::Paint (
     const Reference<rendering::XCanvas>& rxCanvas,
@@ -2201,9 +1989,6 @@ void HorizontalSeparator::Paint (
         aRenderState);
 }
 
-
-
-
 awt::Size HorizontalSeparator::CreateBoundingSize (
     const Reference<rendering::XCanvas>& rxCanvas)
 {
@@ -2211,19 +1996,12 @@ awt::Size HorizontalSeparator::CreateBoundingSize (
     return awt::Size(20,1);
 }
 
-
-
-
 bool HorizontalSeparator::IsFilling (void) const
 {
     return true;
 }
 
-
-
-
 } // end of anonymous namespace
-
 
 } } // end of namespace ::sdext::presenter
 

@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-
 #include "PresenterPaneBase.hxx"
 #include "PresenterCanvasHelper.hxx"
 #include "PresenterController.hxx"
@@ -74,15 +73,9 @@ PresenterPaneBase::PresenterPaneBase (
         mxPresenterHelper = mpPresenterController->GetPresenterHelper();
 }
 
-
-
-
 PresenterPaneBase::~PresenterPaneBase (void)
 {
 }
-
-
-
 
 void PresenterPaneBase::disposing (void)
 {
@@ -123,9 +116,6 @@ void PresenterPaneBase::disposing (void)
     mxComponentContext = NULL;
 }
 
-
-
-
 void PresenterPaneBase::SetTitle (const OUString& rsTitle)
 {
     msTitle = rsTitle;
@@ -136,25 +126,16 @@ void PresenterPaneBase::SetTitle (const OUString& rsTitle)
     mpPresenterController->GetPaintManager()->Invalidate(mxBorderWindow);
 }
 
-
-
-
 ::rtl::OUString PresenterPaneBase::GetTitle (void) const
 {
     return msTitle;
 }
-
-
-
 
 Reference<drawing::framework::XPaneBorderPainter>
     PresenterPaneBase::GetPaneBorderPainter (void) const
 {
     return mxBorderPainter;
 }
-
-
-
 
 void PresenterPaneBase::SetCalloutAnchor (const css::awt::Point& rCalloutAnchor)
 {
@@ -185,16 +166,10 @@ void PresenterPaneBase::SetCalloutAnchor (const css::awt::Point& rCalloutAnchor)
     mpPresenterController->GetPaintManager()->Invalidate(mxBorderWindow);
 }
 
-
-
-
 awt::Point PresenterPaneBase::GetCalloutAnchor (void) const
 {
     return maCalloutAnchor;
 }
-
-
-
 
 //----- XInitialization -------------------------------------------------------
 
@@ -293,9 +268,6 @@ void SAL_CALL PresenterPaneBase::initialize (const Sequence<Any>& rArguments)
     }
 }
 
-
-
-
 //----- XResourceId -----------------------------------------------------------
 
 Reference<XResourceId> SAL_CALL PresenterPaneBase::getResourceId (void)
@@ -305,17 +277,11 @@ Reference<XResourceId> SAL_CALL PresenterPaneBase::getResourceId (void)
     return mxPaneId;
 }
 
-
-
-
 sal_Bool SAL_CALL PresenterPaneBase::isAnchorOnly (void)
     throw (RuntimeException)
 {
     return true;
 }
-
-
-
 
 //----- XWindowListener -------------------------------------------------------
 
@@ -326,19 +292,12 @@ void SAL_CALL PresenterPaneBase::windowResized (const awt::WindowEvent& rEvent)
     ThrowIfDisposed();
 }
 
-
-
-
-
 void SAL_CALL PresenterPaneBase::windowMoved (const awt::WindowEvent& rEvent)
     throw (RuntimeException)
 {
     (void)rEvent;
     ThrowIfDisposed();
 }
-
-
-
 
 void SAL_CALL PresenterPaneBase::windowShown (const lang::EventObject& rEvent)
     throw (RuntimeException)
@@ -347,18 +306,12 @@ void SAL_CALL PresenterPaneBase::windowShown (const lang::EventObject& rEvent)
     ThrowIfDisposed();
 }
 
-
-
-
 void SAL_CALL PresenterPaneBase::windowHidden (const lang::EventObject& rEvent)
     throw (RuntimeException)
 {
     (void)rEvent;
     ThrowIfDisposed();
 }
-
-
-
 
 //----- lang::XEventListener --------------------------------------------------
 
@@ -371,11 +324,7 @@ void SAL_CALL PresenterPaneBase::disposing (const lang::EventObject& rEvent)
     }
 }
 
-
-
-
 //-----------------------------------------------------------------------------
-
 
 void PresenterPaneBase::CreateWindows (
     const Reference<awt::XWindow>& rxParentWindow,
@@ -399,16 +348,10 @@ void PresenterPaneBase::CreateWindows (
     }
 }
 
-
-
-
 Reference<awt::XWindow> PresenterPaneBase::GetBorderWindow (void) const
 {
     return mxBorderWindow;
 }
-
-
-
 
 void PresenterPaneBase::ToTop (void)
 {
@@ -416,16 +359,10 @@ void PresenterPaneBase::ToTop (void)
         mxPresenterHelper->toTop(mxContentWindow);
 }
 
-
-
-
 void PresenterPaneBase::SetBackground (const SharedBitmapDescriptor& rpBackground)
 {
     mpViewBackground = rpBackground;
 }
-
-
-
 
 void PresenterPaneBase::PaintBorderBackground (
     const awt::Rectangle& rBorderBox,
@@ -454,9 +391,6 @@ void PresenterPaneBase::PaintBorderBackground (
         aInnerBox);
     */
 }
-
-
-
 
 void PresenterPaneBase::PaintBorder (const awt::Rectangle& rUpdateBox)
 {
@@ -487,9 +421,6 @@ void PresenterPaneBase::PaintBorder (const awt::Rectangle& rUpdateBox)
     }
 }
 
-
-
-
 void PresenterPaneBase::LayoutContextWindow (void)
 {
     OSL_ASSERT(mxPaneId.is());
@@ -511,9 +442,6 @@ void PresenterPaneBase::LayoutContextWindow (void)
     }
 }
 
-
-
-
 bool PresenterPaneBase::IsVisible (void) const
 {
     Reference<awt::XWindow2> xWindow2 (mxBorderPainter, UNO_QUERY);
@@ -522,9 +450,6 @@ bool PresenterPaneBase::IsVisible (void) const
 
     return false;
 }
-
-
-
 
 void PresenterPaneBase::ThrowIfDisposed (void)
     throw (::com::sun::star::lang::DisposedException)
@@ -537,9 +462,6 @@ void PresenterPaneBase::ThrowIfDisposed (void)
             static_cast<uno::XWeak*>(this));
     }
 }
-
-
-
 
 } } // end of namespace ::sd::presenter
 

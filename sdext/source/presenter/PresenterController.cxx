@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-
 #include "PresenterController.hxx"
 
 #include "PresenterAccessibility.hxx"
@@ -80,9 +79,7 @@ namespace {
     const sal_Int32 ConfigurationUpdateEndEventType = 2;
 }
 
-
 #define A2S(pString) (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(pString)))
-
 
 namespace sdext { namespace presenter {
 
@@ -97,9 +94,6 @@ PresenterController::InstanceContainer PresenterController::maInstances;
     else
         return ::rtl::Reference<PresenterController>();
 }
-
-
-
 
 PresenterController::PresenterController (
     const css::uno::WeakReference<css::lang::XEventListener> &rxScreen,
@@ -211,15 +205,9 @@ PresenterController::PresenterController (
     }
 }
 
-
-
-
 PresenterController::~PresenterController (void)
 {
 }
-
-
-
 
 void PresenterController::disposing (void)
 {
@@ -284,9 +272,6 @@ void PresenterController::disposing (void)
     }
 }
 
-
-
-
 void PresenterController::UpdateCurrentSlide (const sal_Int32 nOffset)
 {
     GetSlides(nOffset);
@@ -303,9 +288,6 @@ void PresenterController::UpdateCurrentSlide (const sal_Int32 nOffset)
         mpAccessibleObject->NotifyCurrentSlideChange(mnCurrentSlideIndex, nSlideCount);
     }
 }
-
-
-
 
 void PresenterController::GetSlides (const sal_Int32 nOffset)
 {
@@ -355,9 +337,6 @@ void PresenterController::GetSlides (const sal_Int32 nOffset)
     {
     }
 }
-
-
-
 
 void PresenterController::UpdatePaneTitles (void)
 {
@@ -455,9 +434,6 @@ void PresenterController::UpdatePaneTitles (void)
     }
 }
 
-
-
-
 void PresenterController::UpdateViews (void)
 {
     // Tell all views about the slides they should display.
@@ -470,9 +446,6 @@ void PresenterController::UpdateViews (void)
     }
 }
 
-
-
-
 SharedBitmapDescriptor
     PresenterController::GetViewBackground (const ::rtl::OUString& rsViewURL) const
 {
@@ -483,9 +456,6 @@ SharedBitmapDescriptor
     }
     return SharedBitmapDescriptor();
 }
-
-
-
 
 PresenterTheme::SharedFontDescriptor
     PresenterController::GetViewFont (const ::rtl::OUString& rsViewURL) const
@@ -498,24 +468,15 @@ PresenterTheme::SharedFontDescriptor
     return PresenterTheme::SharedFontDescriptor();
 }
 
-
-
-
 ::boost::shared_ptr<PresenterTheme> PresenterController::GetTheme (void) const
 {
     return mpTheme;
 }
 
-
-
-
 ::rtl::Reference<PresenterWindowManager> PresenterController::GetWindowManager (void) const
 {
     return mpWindowManager;
 }
-
-
-
 
 Reference<presentation::XSlideShowController>
     PresenterController::GetSlideShowController(void) const
@@ -523,55 +484,35 @@ Reference<presentation::XSlideShowController>
     return mxSlideShowController;
 }
 
-
-
-
 rtl::Reference<PresenterPaneContainer> PresenterController::GetPaneContainer (void) const
 {
     return mpPaneContainer;
 }
-
-
-
 
 ::rtl::Reference<PresenterPaneBorderPainter> PresenterController::GetPaneBorderPainter (void) const
 {
     return mpPaneBorderPainter;
 }
 
-
-
-
 ::boost::shared_ptr<PresenterAnimator> PresenterController::GetAnimator (void) const
 {
     return mpAnimator;
 }
-
-
-
 
 ::boost::shared_ptr<PresenterCanvasHelper> PresenterController::GetCanvasHelper (void) const
 {
     return mpCanvasHelper;
 }
 
-
-
-
 Reference<drawing::XPresenterHelper> PresenterController::GetPresenterHelper (void) const
 {
     return mxPresenterHelper;
 }
 
-
-
-
 ::boost::shared_ptr<PresenterPaintManager> PresenterController::GetPaintManager (void) const
 {
     return mpPaintManager;
 }
-
-
 
 void PresenterController::ShowView (const OUString& rsViewURL)
 {
@@ -592,9 +533,6 @@ void PresenterController::ShowView (const OUString& rsViewURL)
     }
 }
 
-
-
-
 void PresenterController::HideView (const OUString& rsViewURL)
 {
     PresenterPaneContainer::SharedPaneDescriptor pDescriptor (
@@ -608,9 +546,6 @@ void PresenterController::HideView (const OUString& rsViewURL)
                 pDescriptor->mxPaneId));
     }
 }
-
-
-
 
 void PresenterController::DispatchUnoCommand (const OUString& rsCommand) const
 {
@@ -628,9 +563,6 @@ void PresenterController::DispatchUnoCommand (const OUString& rsCommand) const
     xDispatch->dispatch(aURL, Sequence<beans::PropertyValue>());
 }
 
-
-
-
 Reference<css::frame::XDispatch> PresenterController::GetDispatch (const util::URL& rURL) const
 {
     if ( ! mxController.is())
@@ -646,9 +578,6 @@ Reference<css::frame::XDispatch> PresenterController::GetDispatch (const util::U
         frame::FrameSearchFlag::SELF);
 }
 
-
-
-
 util::URL PresenterController::CreateURLFromString (const ::rtl::OUString& rsURL) const
 {
     util::URL aURL;
@@ -662,25 +591,16 @@ util::URL PresenterController::CreateURLFromString (const ::rtl::OUString& rsURL
     return aURL;
 }
 
-
-
-
 Reference<drawing::framework::XConfigurationController>
     PresenterController::GetConfigurationController (void) const
 {
     return mxConfigurationController;
 }
 
-
-
-
 Reference<drawing::XDrawPage> PresenterController::GetCurrentSlide (void) const
 {
     return mxCurrentSlide;
 }
-
-
-
 
 void PresenterController::SetAccessibilityActiveState (const bool bIsActive)
 {
@@ -691,16 +611,10 @@ void PresenterController::SetAccessibilityActiveState (const bool bIsActive)
     }
 }
 
-
-
-
 bool PresenterController::IsAccessibilityActive (void) const
 {
     return mbIsAccessibilityActive;
 }
-
-
-
 
 void PresenterController::HandleMouseClick (const awt::MouseEvent& rEvent)
 {
@@ -725,9 +639,6 @@ void PresenterController::HandleMouseClick (const awt::MouseEvent& rEvent)
         }
     }
 }
-
-
-
 
 void PresenterController::RequestViews (
     const bool bIsSlideSorterActive,
@@ -768,9 +679,6 @@ void PresenterController::RequestViews (
             HideView(sViewURL);
     }
 }
-
-
-
 
 //----- XConfigurationChangeListener ------------------------------------------
 
@@ -855,9 +763,6 @@ void SAL_CALL PresenterController::notifyConfigurationChange (
     }
 }
 
-
-
-
 //----- XEventListener --------------------------------------------------------
 
 void SAL_CALL PresenterController::disposing (
@@ -874,9 +779,6 @@ void SAL_CALL PresenterController::disposing (
         mxMainWindow = NULL;
 }
 
-
-
-
 //----- XFrameActionListener --------------------------------------------------
 
 void SAL_CALL PresenterController::frameAction (
@@ -889,9 +791,6 @@ void SAL_CALL PresenterController::frameAction (
             mxSlideShowController->activate();
     }
 }
-
-
-
 
 //----- XKeyListener ----------------------------------------------------------
 
@@ -910,9 +809,6 @@ void SAL_CALL PresenterController::keyPressed (const awt::KeyEvent& rEvent)
             xKeyListener->keyPressed(rEvent);
     }
 }
-
-
-
 
 void SAL_CALL PresenterController::keyReleased (const awt::KeyEvent& rEvent)
     throw (RuntimeException)
@@ -1070,9 +966,6 @@ void SAL_CALL PresenterController::keyReleased (const awt::KeyEvent& rEvent)
     }
 }
 
-
-
-
 void PresenterController::HandleNumericKeyPress (
     const sal_Int32 nKey,
     const sal_Int32 nModifiers)
@@ -1113,9 +1006,6 @@ void PresenterController::HandleNumericKeyPress (
     }
 }
 
-
-
-
 //----- XFocusListener --------------------------------------------------------
 
 void SAL_CALL PresenterController::focusGained (const css::awt::FocusEvent& rEvent)
@@ -1124,17 +1014,11 @@ void SAL_CALL PresenterController::focusGained (const css::awt::FocusEvent& rEve
     (void)rEvent;
 }
 
-
-
-
 void SAL_CALL PresenterController::focusLost (const css::awt::FocusEvent& rEvent)
     throw (css::uno::RuntimeException)
 {
     (void)rEvent;
 }
-
-
-
 
 //----- XMouseListener --------------------------------------------------------
 
@@ -1146,17 +1030,11 @@ void SAL_CALL PresenterController::mousePressed (const css::awt::MouseEvent& rEv
         mxMainWindow->setFocus();
 }
 
-
-
-
 void SAL_CALL PresenterController::mouseReleased (const css::awt::MouseEvent& rEvent)
     throw (css::uno::RuntimeException)
 {
     (void)rEvent;
 }
-
-
-
 
 void SAL_CALL PresenterController::mouseEntered (const css::awt::MouseEvent& rEvent)
     throw (css::uno::RuntimeException)
@@ -1164,17 +1042,11 @@ void SAL_CALL PresenterController::mouseEntered (const css::awt::MouseEvent& rEv
     (void)rEvent;
 }
 
-
-
-
 void SAL_CALL PresenterController::mouseExited (const css::awt::MouseEvent& rEvent)
     throw (css::uno::RuntimeException)
 {
     (void)rEvent;
 }
-
-
-
 
 //----- XMouseMotionListener --------------------------------------------------
 
@@ -1184,17 +1056,11 @@ void SAL_CALL PresenterController::mouseMoved (const css::awt::MouseEvent& rEven
     (void)rEvent;
 }
 
-
-
-
 void SAL_CALL PresenterController::mouseDragged (const css::awt::MouseEvent& rEvent)
     throw (css::uno::RuntimeException)
 {
     (void)rEvent;
 }
-
-
-
 
 //-----------------------------------------------------------------------------
 
@@ -1241,18 +1107,12 @@ void PresenterController::InitializeMainPane (const Reference<XPane>& rxPane)
     UpdateCurrentSlide(0);
 }
 
-
-
-
 void PresenterController::LoadTheme (const Reference<XPane>& rxPane)
 {
     // Create (load) the current theme.
     if (rxPane.is())
         mpTheme.reset(new PresenterTheme(mxComponentContext, OUString(), rxPane->getCanvas()));
 }
-
-
-
 
 double PresenterController::GetSlideAspectRatio (void) const
 {
@@ -1287,9 +1147,6 @@ double PresenterController::GetSlideAspectRatio (void) const
     return nSlideAspectRatio;
 }
 
-
-
-
 void PresenterController::UpdatePendingSlideNumber (const sal_Int32 nPendingSlideNumber)
 {
     mnPendingSlideNumber = nPendingSlideNumber;
@@ -1318,9 +1175,6 @@ void PresenterController::UpdatePendingSlideNumber (const sal_Int32 nPendingSlid
             0));
 }
 
-
-
-
 void PresenterController::ThrowIfDisposed (void) const
     throw (::com::sun::star::lang::DisposedException)
 {
@@ -1345,7 +1199,6 @@ void PresenterController::SwitchMonitors (void)
 
     pScreen->SwitchMonitors();
 }
-
 
 } } // end of namespace ::sdext::presenter
 

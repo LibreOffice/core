@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-
 #include "PresenterAnimator.hxx"
 
 #include "PresenterTimer.hxx"
@@ -38,8 +37,6 @@
 
 namespace sdext { namespace presenter {
 
-
-
 //===== PresenterAnimator =====================================================
 
 PresenterAnimator::PresenterAnimator (void)
@@ -50,17 +47,10 @@ PresenterAnimator::PresenterAnimator (void)
 {
 }
 
-
-
-
 PresenterAnimator::~PresenterAnimator (void)
 {
     PresenterTimer::CancelTask(mnCurrentTaskId);
 }
-
-
-
-
 
 void PresenterAnimator::AddAnimation (const SharedPresenterAnimation& rpAnimation)
 {
@@ -69,9 +59,6 @@ void PresenterAnimator::AddAnimation (const SharedPresenterAnimation& rpAnimatio
     maFutureAnimations.insert(AnimationList::value_type(rpAnimation->GetStartTime(), rpAnimation));
     ScheduleNextRun();
 }
-
-
-
 
 void PresenterAnimator::Process (void)
 {
@@ -116,9 +103,6 @@ void PresenterAnimator::Process (void)
     ScheduleNextRun();
 }
 
-
-
-
 void PresenterAnimator::ActivateAnimations (const sal_uInt64 nCurrentTime)
 {
     while ( ! maFutureAnimations.empty()
@@ -130,9 +114,6 @@ void PresenterAnimator::ActivateAnimations (const sal_uInt64 nCurrentTime)
         pAnimation->RunStartCallbacks();
     }
 }
-
-
-
 
 void PresenterAnimator::ScheduleNextRun (void)
 {
@@ -151,9 +132,6 @@ void PresenterAnimator::ScheduleNextRun (void)
     if (nStartTime > 0)
         ScheduleNextRun(nStartTime);
 }
-
-
-
 
 void PresenterAnimator::ScheduleNextRun (const sal_uInt64 nStartTime)
 {

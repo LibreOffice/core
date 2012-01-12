@@ -85,11 +85,9 @@ public:
     void LateInit (void);
     virtual void SAL_CALL disposing (void);
 
-
     // CachablePresenterView
 
     virtual void ReleaseView (void);
-
 
     // XSlideShowView
 
@@ -153,11 +151,9 @@ public:
     virtual void SAL_CALL disposing (const css::lang::EventObject& rEvent)
         throw (css::uno::RuntimeException);
 
-
     // XPaintListener
     virtual void SAL_CALL windowPaint (const css::awt::PaintEvent& rEvent)
         throw (css::uno::RuntimeException);
-
 
     // XMouseListener
     virtual void SAL_CALL mousePressed (const css::awt::MouseEvent& rEvent)
@@ -172,7 +168,6 @@ public:
     virtual void SAL_CALL mouseExited (const css::awt::MouseEvent& rEvent)
         throw (css::uno::RuntimeException);
 
-
     // XMouseMotionListener
 
     virtual void SAL_CALL mouseDragged (const css::awt::MouseEvent& rEvent)
@@ -180,7 +175,6 @@ public:
 
     virtual void SAL_CALL mouseMoved (const css::awt::MouseEvent& rEvent)
         throw (css::uno::RuntimeException);
-
 
     // XWindowListener
 
@@ -196,7 +190,6 @@ public:
     virtual void SAL_CALL windowHidden (const css::lang::EventObject& rEvent)
         throw (css::uno::RuntimeException);
 
-
     // XView
 
     virtual css::uno::Reference<css::drawing::framework::XResourceId> SAL_CALL
@@ -206,7 +199,6 @@ public:
     virtual sal_Bool SAL_CALL isAnchorOnly (void)
         throw (com::sun::star::uno::RuntimeException);
 
-
     // XDrawView
 
     virtual void SAL_CALL setCurrentPage (
@@ -215,7 +207,6 @@ public:
 
     virtual css::uno::Reference<css::drawing::XDrawPage> SAL_CALL getCurrentPage (void)
         throw (css::uno::RuntimeException);
-
 
     // CachablePresenterView
 

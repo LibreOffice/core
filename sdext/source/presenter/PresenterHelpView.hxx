@@ -75,7 +75,6 @@ public:
         disposing (const css::lang::EventObject& rEventObject)
         throw (css::uno::RuntimeException);
 
-
     // XWindowListener
 
     virtual void SAL_CALL windowResized (const css::awt::WindowEvent& rEvent)
@@ -90,12 +89,10 @@ public:
     virtual void SAL_CALL windowHidden (const css::lang::EventObject& rEvent)
         throw (css::uno::RuntimeException);
 
-
     // XPaintListener
 
     virtual void SAL_CALL windowPaint (const css::awt::PaintEvent& rEvent)
         throw (css::uno::RuntimeException);
-
 
     // XResourceId
 

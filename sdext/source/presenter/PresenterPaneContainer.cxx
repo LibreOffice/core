@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-
 #include "PresenterPaneContainer.hxx"
 #include "PresenterPaneBase.hxx"
 #include <com/sun/star/awt/XGraphics.hpp>
@@ -59,15 +58,9 @@ PresenterPaneContainer::PresenterPaneContainer (
     }
 }
 
-
-
-
 PresenterPaneContainer::~PresenterPaneContainer (void)
 {
 }
-
-
-
 
 void PresenterPaneContainer::PreparePane (
     const Reference<XResourceId>& rxPaneId,
@@ -119,9 +112,6 @@ void PresenterPaneContainer::PreparePane (
     }
 }
 
-
-
-
 void SAL_CALL PresenterPaneContainer::disposing (void)
 {
     PaneList::iterator iPane (maPanes.begin());
@@ -130,9 +120,6 @@ void SAL_CALL PresenterPaneContainer::disposing (void)
         if ((*iPane)->mxPaneId.is())
             RemovePane((*iPane)->mxPaneId);
 }
-
-
-
 
 PresenterPaneContainer::SharedPaneDescriptor
     PresenterPaneContainer::StorePane (const rtl::Reference<PresenterPaneBase>& rxPane)
@@ -172,9 +159,6 @@ PresenterPaneContainer::SharedPaneDescriptor
     return pDescriptor;
 }
 
-
-
-
 PresenterPaneContainer::SharedPaneDescriptor
     PresenterPaneContainer::StoreBorderWindow(
         const Reference<XResourceId>& rxPaneId,
@@ -195,9 +179,6 @@ PresenterPaneContainer::SharedPaneDescriptor
     else
         return SharedPaneDescriptor();
 }
-
-
-
 
 PresenterPaneContainer::SharedPaneDescriptor
     PresenterPaneContainer::StoreView (
@@ -242,9 +223,6 @@ PresenterPaneContainer::SharedPaneDescriptor
     return pDescriptor;
 }
 
-
-
-
 PresenterPaneContainer::SharedPaneDescriptor
     PresenterPaneContainer::RemovePane (const Reference<XResourceId>& rxPaneId)
 {
@@ -261,10 +239,6 @@ PresenterPaneContainer::SharedPaneDescriptor
     }
     return pDescriptor;
 }
-
-
-
-
 
 PresenterPaneContainer::SharedPaneDescriptor
     PresenterPaneContainer::RemoveView (const Reference<XView>& rxView)
@@ -293,9 +267,6 @@ PresenterPaneContainer::SharedPaneDescriptor
     return pDescriptor;
 }
 
-
-
-
 PresenterPaneContainer::SharedPaneDescriptor PresenterPaneContainer::FindBorderWindow (
     const Reference<awt::XWindow>& rxBorderWindow)
 {
@@ -308,9 +279,6 @@ PresenterPaneContainer::SharedPaneDescriptor PresenterPaneContainer::FindBorderW
     }
     return SharedPaneDescriptor();
 }
-
-
-
 
 PresenterPaneContainer::SharedPaneDescriptor PresenterPaneContainer::FindContentWindow (
     const Reference<awt::XWindow>& rxContentWindow)
@@ -325,9 +293,6 @@ PresenterPaneContainer::SharedPaneDescriptor PresenterPaneContainer::FindContent
     return SharedPaneDescriptor();
 }
 
-
-
-
 PresenterPaneContainer::SharedPaneDescriptor PresenterPaneContainer::FindPaneURL (
     const OUString& rsPaneURL)
 {
@@ -340,9 +305,6 @@ PresenterPaneContainer::SharedPaneDescriptor PresenterPaneContainer::FindPaneURL
     }
     return SharedPaneDescriptor();
 }
-
-
-
 
 PresenterPaneContainer::SharedPaneDescriptor PresenterPaneContainer::FindPaneId (
     const Reference<XResourceId>& rxPaneId)
@@ -361,9 +323,6 @@ PresenterPaneContainer::SharedPaneDescriptor PresenterPaneContainer::FindPaneId 
     return SharedPaneDescriptor();
 }
 
-
-
-
 PresenterPaneContainer::SharedPaneDescriptor PresenterPaneContainer::FindViewURL (
     const OUString& rsViewURL)
 {
@@ -377,9 +336,6 @@ PresenterPaneContainer::SharedPaneDescriptor PresenterPaneContainer::FindViewURL
     return SharedPaneDescriptor();
 }
 
-
-
-
 ::rtl::OUString PresenterPaneContainer::GetPaneURLForViewURL (const ::rtl::OUString& rsViewURL)
 {
     SharedPaneDescriptor pDescriptor (FindViewURL(rsViewURL));
@@ -388,9 +344,6 @@ PresenterPaneContainer::SharedPaneDescriptor PresenterPaneContainer::FindViewURL
             return pDescriptor->mxPaneId->getResourceURL();
     return OUString();
 }
-
-
-
 
 void PresenterPaneContainer::ToTop (const SharedPaneDescriptor& rpDescriptor)
 {
@@ -414,9 +367,6 @@ void PresenterPaneContainer::ToTop (const SharedPaneDescriptor& rpDescriptor)
     }
 }
 
-
-
-
 //----- XEventListener --------------------------------------------------------
 
 void SAL_CALL PresenterPaneContainer::disposing (
@@ -430,9 +380,6 @@ void SAL_CALL PresenterPaneContainer::disposing (
         RemovePane(pDescriptor->mxPaneId);
     }
 }
-
-
-
 
 //===== PresenterPaneContainer::PaneDescriptor ================================
 

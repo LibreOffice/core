@@ -52,7 +52,6 @@ namespace css = ::com::sun::star;
 namespace cssu = ::com::sun::star::uno;
 namespace cssa = ::com::sun::star::accessibility;
 
-
 namespace sdext { namespace presenter {
 
 class PresenterController;
@@ -87,13 +86,11 @@ public:
 
     virtual void SAL_CALL disposing (void);
 
-
     //----- XAccessible -------------------------------------------------------
 
     virtual cssu::Reference<cssa::XAccessibleContext> SAL_CALL
         getAccessibleContext (void)
         throw (cssu::RuntimeException);
-
 
     //----- XFocusListener ----------------------------------------------------
 
@@ -103,18 +100,15 @@ public:
     virtual void SAL_CALL focusLost (const css::awt::FocusEvent& rEvent)
         throw (cssu::RuntimeException);
 
-
     //----- XEventListener ----------------------------------------------------
 
     virtual void SAL_CALL disposing (const css::lang::EventObject& rEvent)
         throw (cssu::RuntimeException);
 
-
     //----- XInitialization ---------------------------------------------------
 
     virtual void SAL_CALL initialize (const cssu::Sequence<cssu::Any>& rArguments)
         throw (cssu::RuntimeException);
-
 
     class AccessibleObject;
     class AccessibleParagraph;
@@ -143,9 +137,6 @@ private:
         const ::boost::shared_ptr<PresenterTextView>& rpNotesTextView);
     PresenterPaneContainer::SharedPaneDescriptor GetPreviewPane (void) const;
 };
-
-
-
 
 } } // end of namespace ::sd::presenter
 

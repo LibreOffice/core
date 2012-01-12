@@ -69,7 +69,6 @@ namespace {
     > PresenterWindowManagerInterfaceBase;
 }
 
-
 /** A simple manager of the positions of the panes of the presenter screen.
     Uses relative coordinates of the four sides of each pane.  Allows panes
     to be moved or resized with the mouse.
@@ -143,12 +142,10 @@ public:
     virtual void SAL_CALL windowHidden (const css::lang::EventObject& rEvent)
         throw (css::uno::RuntimeException);
 
-
     // XPaintListener
 
     virtual void SAL_CALL windowPaint (const css::awt::PaintEvent& rEvent)
         throw (css::uno::RuntimeException);
-
 
     // XMouseListener
 
@@ -164,7 +161,6 @@ public:
     virtual void SAL_CALL mouseExited (const css::awt::MouseEvent& rEvent)
         throw(css::uno::RuntimeException);
 
-
     // XFocusListener
 
     virtual void SAL_CALL focusGained (const css::awt::FocusEvent& rEvent)
@@ -172,7 +168,6 @@ public:
 
     virtual void SAL_CALL focusLost (const css::awt::FocusEvent& rEvent)
         throw (css::uno::RuntimeException);
-
 
     // XEventListener
 

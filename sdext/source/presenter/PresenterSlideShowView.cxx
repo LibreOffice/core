@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-
 #include "PresenterSlideShowView.hxx"
 
 #include "PresenterCanvasHelper.hxx"
@@ -100,8 +99,6 @@ PresenterSlideShowView::PresenterSlideShowView (
         mpBackground = mpPresenterController->GetViewBackground(mxViewId->getResourceURL());
     }
 }
-
-
 
 void PresenterSlideShowView::LateInit (void)
 {
@@ -197,15 +194,9 @@ void PresenterSlideShowView::LateInit (void)
         >>= msClickToExitPresentationTitle;
 }
 
-
-
-
 PresenterSlideShowView::~PresenterSlideShowView (void)
 {
 }
-
-
-
 
 void PresenterSlideShowView::disposing (void)
 {
@@ -279,9 +270,6 @@ void PresenterSlideShowView::disposing (void)
     mxCurrentSlide = NULL;
 }
 
-
-
-
 //----- XDrawView -------------------------------------------------------------
 
 void SAL_CALL PresenterSlideShowView::setCurrentPage (
@@ -327,17 +315,11 @@ void SAL_CALL PresenterSlideShowView::setCurrentPage (
     }
 }
 
-
-
-
 css::uno::Reference<css::drawing::XDrawPage> SAL_CALL PresenterSlideShowView::getCurrentPage (void)
     throw (css::uno::RuntimeException)
 {
     return mxCurrentSlide;
 }
-
-
-
 
 //----- CachablePresenterView -------------------------------------------------
 
@@ -350,9 +332,6 @@ void PresenterSlideShowView::ReleaseView (void)
     }
 }
 
-
-
-
 //----- XSlideShowView --------------------------------------------------------
 
 Reference<rendering::XSpriteCanvas> SAL_CALL PresenterSlideShowView::getCanvas (void)
@@ -362,9 +341,6 @@ Reference<rendering::XSpriteCanvas> SAL_CALL PresenterSlideShowView::getCanvas (
 
     return Reference<rendering::XSpriteCanvas>(mxViewCanvas, UNO_QUERY);
 }
-
-
-
 
 void SAL_CALL PresenterSlideShowView::clear (void)
     throw (RuntimeException)
@@ -394,9 +370,6 @@ void SAL_CALL PresenterSlideShowView::clear (void)
     }
 }
 
-
-
-
 geometry::AffineMatrix2D SAL_CALL PresenterSlideShowView::getTransformation (void)
     throw (RuntimeException)
 {
@@ -424,9 +397,6 @@ geometry::AffineMatrix2D SAL_CALL PresenterSlideShowView::getTransformation (voi
     }
 }
 
-
-
-
 void SAL_CALL PresenterSlideShowView::addTransformationChangedListener(
     const Reference<util::XModifyListener>& rxListener)
     throw (RuntimeException)
@@ -436,9 +406,6 @@ void SAL_CALL PresenterSlideShowView::addTransformationChangedListener(
         getCppuType((Reference<util::XModifyListener>*)NULL),
         rxListener);
 }
-
-
-
 
 void SAL_CALL PresenterSlideShowView::removeTransformationChangedListener(
     const Reference<util::XModifyListener>& rxListener)
@@ -450,9 +417,6 @@ void SAL_CALL PresenterSlideShowView::removeTransformationChangedListener(
         rxListener);
 }
 
-
-
-
 void SAL_CALL PresenterSlideShowView::addPaintListener(
     const Reference<awt::XPaintListener>& rxListener)
     throw (RuntimeException)
@@ -462,9 +426,6 @@ void SAL_CALL PresenterSlideShowView::addPaintListener(
         getCppuType((Reference<awt::XPaintListener>*)NULL),
         rxListener);
 }
-
-
-
 
 void SAL_CALL PresenterSlideShowView::removePaintListener(
     const Reference<awt::XPaintListener>& rxListener)
@@ -476,9 +437,6 @@ void SAL_CALL PresenterSlideShowView::removePaintListener(
         rxListener);
 }
 
-
-
-
 void SAL_CALL PresenterSlideShowView::addMouseListener(
     const Reference<awt::XMouseListener>& rxListener)
     throw (RuntimeException)
@@ -488,9 +446,6 @@ void SAL_CALL PresenterSlideShowView::addMouseListener(
         getCppuType((Reference<awt::XMouseListener>*)NULL),
         rxListener);
 }
-
-
-
 
 void SAL_CALL PresenterSlideShowView::removeMouseListener(
     const Reference<awt::XMouseListener>& rxListener)
@@ -502,9 +457,6 @@ void SAL_CALL PresenterSlideShowView::removeMouseListener(
         rxListener);
 }
 
-
-
-
 void SAL_CALL PresenterSlideShowView::addMouseMotionListener(
     const Reference<awt::XMouseMotionListener>& rxListener)
     throw (RuntimeException)
@@ -515,9 +467,6 @@ void SAL_CALL PresenterSlideShowView::addMouseMotionListener(
         rxListener);
 }
 
-
-
-
 void SAL_CALL PresenterSlideShowView::removeMouseMotionListener(
     const Reference<awt::XMouseMotionListener>& rxListener)
     throw (RuntimeException)
@@ -527,9 +476,6 @@ void SAL_CALL PresenterSlideShowView::removeMouseMotionListener(
         getCppuType((Reference<awt::XMouseMotionListener>*)NULL),
         rxListener);
 }
-
-
-
 
 void SAL_CALL PresenterSlideShowView::setMouseCursor(::sal_Int16 nPointerShape)
     throw (RuntimeException)
@@ -557,8 +503,6 @@ void SAL_CALL PresenterSlideShowView::setMouseCursor(::sal_Int16 nPointerShape)
     }
 }
 
-
-
 awt::Rectangle SAL_CALL PresenterSlideShowView::getCanvasArea(  ) throw (RuntimeException)
 {
     if( mxViewWindow.is() && mxTopPane.is() )
@@ -571,8 +515,6 @@ awt::Rectangle SAL_CALL PresenterSlideShowView::getCanvasArea(  ) throw (Runtime
     return aRectangle;
 }
 
-
-
 //----- lang::XEventListener --------------------------------------------------
 
 void SAL_CALL PresenterSlideShowView::disposing (const lang::EventObject& rEvent)
@@ -583,9 +525,6 @@ void SAL_CALL PresenterSlideShowView::disposing (const lang::EventObject& rEvent
     else if (rEvent.Source == mxSlideShow)
         mxSlideShow = NULL;
 }
-
-
-
 
 //----- XPaintListener --------------------------------------------------------
 
@@ -607,9 +546,6 @@ void SAL_CALL PresenterSlideShowView::windowPaint (const awt::PaintEvent& rEvent
     else
         PaintInnerWindow(rEvent);
 }
-
-
-
 
 //----- XMouseListener --------------------------------------------------------
 
@@ -633,9 +569,6 @@ void SAL_CALL PresenterSlideShowView::mousePressed (const awt::MouseEvent& rEven
             mpPresenterController->HandleMouseClick(rEvent);
 }
 
-
-
-
 void SAL_CALL PresenterSlideShowView::mouseReleased (const awt::MouseEvent& rEvent)
     throw (RuntimeException)
 {
@@ -648,9 +581,6 @@ void SAL_CALL PresenterSlideShowView::mouseReleased (const awt::MouseEvent& rEve
         pIterator->notifyEach(&awt::XMouseListener::mouseReleased, aEvent);
     }
 }
-
-
-
 
 void SAL_CALL PresenterSlideShowView::mouseEntered (const awt::MouseEvent& rEvent)
     throw (RuntimeException)
@@ -665,9 +595,6 @@ void SAL_CALL PresenterSlideShowView::mouseEntered (const awt::MouseEvent& rEven
     }
 }
 
-
-
-
 void SAL_CALL PresenterSlideShowView::mouseExited (const awt::MouseEvent& rEvent)
     throw (RuntimeException)
 {
@@ -680,9 +607,6 @@ void SAL_CALL PresenterSlideShowView::mouseExited (const awt::MouseEvent& rEvent
         pIterator->notifyEach(&awt::XMouseListener::mouseExited, aEvent);
     }
 }
-
-
-
 
 //----- XMouseMotionListener --------------------------------------------------
 
@@ -699,9 +623,6 @@ void SAL_CALL PresenterSlideShowView::mouseDragged (const awt::MouseEvent& rEven
     }
 }
 
-
-
-
 void SAL_CALL PresenterSlideShowView::mouseMoved (const awt::MouseEvent& rEvent)
     throw (RuntimeException)
 {
@@ -714,9 +635,6 @@ void SAL_CALL PresenterSlideShowView::mouseMoved (const awt::MouseEvent& rEvent)
         pIterator->notifyEach(&awt::XMouseMotionListener::mouseMoved, aEvent);
     }
 }
-
-
-
 
 //----- XWindowListener -------------------------------------------------------
 
@@ -731,10 +649,6 @@ void SAL_CALL PresenterSlideShowView::windowResized (const awt::WindowEvent& rEv
     Resize();
 }
 
-
-
-
-
 void SAL_CALL PresenterSlideShowView::windowMoved (const awt::WindowEvent& rEvent)
     throw (RuntimeException)
 {
@@ -743,9 +657,6 @@ void SAL_CALL PresenterSlideShowView::windowMoved (const awt::WindowEvent& rEven
         mbIsForcedPaintPending = true;
 }
 
-
-
-
 void SAL_CALL PresenterSlideShowView::windowShown (const lang::EventObject& rEvent)
     throw (RuntimeException)
 {
@@ -753,17 +664,11 @@ void SAL_CALL PresenterSlideShowView::windowShown (const lang::EventObject& rEve
     Resize();
 }
 
-
-
-
 void SAL_CALL PresenterSlideShowView::windowHidden (const lang::EventObject& rEvent)
     throw (RuntimeException)
 {
     (void)rEvent;
 }
-
-
-
 
 //----- XView -----------------------------------------------------------------
 
@@ -773,17 +678,11 @@ Reference<XResourceId> SAL_CALL PresenterSlideShowView::getResourceId (void)
     return mxViewId;
 }
 
-
-
-
 sal_Bool SAL_CALL PresenterSlideShowView::isAnchorOnly (void)
     throw (RuntimeException)
 {
     return false;
 }
-
-
-
 
 //----- CachablePresenterView -------------------------------------------------
 
@@ -796,9 +695,6 @@ void PresenterSlideShowView::ActivatePresenterView (void)
     }
 }
 
-
-
-
 void PresenterSlideShowView::DeactivatePresenterView (void)
 {
     if (mxSlideShow.is() && mbIsViewAdded)
@@ -807,9 +703,6 @@ void PresenterSlideShowView::DeactivatePresenterView (void)
         mbIsViewAdded = false;
     }
 }
-
-
-
 
 //-----------------------------------------------------------------------------
 
@@ -873,9 +766,6 @@ void PresenterSlideShowView::PaintOuterWindow (const awt::Rectangle& rRepaintBox
     }
 }
 
-
-
-
 void PresenterSlideShowView::PaintEndSlide (const awt::Rectangle& rRepaintBox)
 {
     if ( ! mxCanvas.is())
@@ -931,9 +821,6 @@ void PresenterSlideShowView::PaintEndSlide (const awt::Rectangle& rRepaintBox)
         mxSpriteCanvas->updateScreen(sal_True);
 }
 
-
-
-
 void PresenterSlideShowView::PaintInnerWindow (const awt::PaintEvent& rEvent)
 {
     // Forward window paint to listeners.
@@ -955,9 +842,6 @@ void PresenterSlideShowView::PaintInnerWindow (const awt::PaintEvent& rEvent)
     if (mxSpriteCanvas.is())
         mxSpriteCanvas->updateScreen(sal_True);
 }
-
-
-
 
 Reference<awt::XWindow> PresenterSlideShowView::CreateViewWindow (
     const Reference<awt::XWindow>& rxParentWindow) const
@@ -1001,9 +885,6 @@ Reference<awt::XWindow> PresenterSlideShowView::CreateViewWindow (
     return xViewWindow;
 }
 
-
-
-
 Reference<rendering::XCanvas> PresenterSlideShowView::CreateViewCanvas (
     const Reference<awt::XWindow>& rxViewWindow) const
 {
@@ -1015,9 +896,6 @@ Reference<rendering::XCanvas> PresenterSlideShowView::CreateViewCanvas (
         mxTopPane->getWindow(),
         rxViewWindow);
 }
-
-
-
 
 void PresenterSlideShowView::Resize (void)
 {
@@ -1075,9 +953,6 @@ void PresenterSlideShowView::Resize (void)
         mbIsForcedPaintPending = true;
 }
 
-
-
-
 void PresenterSlideShowView::ForceRepaint (void)
 {
     if (mxSlideShow.is() && mbIsViewAdded)
@@ -1086,9 +961,6 @@ void PresenterSlideShowView::ForceRepaint (void)
         mxSlideShow->addView(this);
     }
 }
-
-
-
 
 void PresenterSlideShowView::CreateBackgroundPolygons (void)
 {
@@ -1137,9 +1009,6 @@ void PresenterSlideShowView::CreateBackgroundPolygons (void)
     }
 }
 
-
-
-
 void PresenterSlideShowView::ThrowIfDisposed (void)
     throw (::com::sun::star::lang::DisposedException)
 {
@@ -1150,7 +1019,6 @@ void PresenterSlideShowView::ThrowIfDisposed (void)
             static_cast<uno::XWeak*>(this));
     }
 }
-
 
 } } // end of namespace ::sd::presenter
 

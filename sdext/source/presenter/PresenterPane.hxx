@@ -45,7 +45,6 @@
 
 namespace css = ::com::sun::star;
 
-
 namespace sdext { namespace presenter {
 
 /** Pane used by the presenter screen.  Pane objects are stored in the
@@ -68,7 +67,6 @@ public:
         const css::uno::Reference<css::uno::XComponentContext>& rxContext)
         SAL_THROW((css::uno::Exception));
 
-
     // XPane
 
     css::uno::Reference<css::awt::XWindow> SAL_CALL getWindow (void)
@@ -76,7 +74,6 @@ public:
 
     css::uno::Reference<css::rendering::XCanvas> SAL_CALL getCanvas (void)
         throw (css::uno::RuntimeException);
-
 
     // XWindowListener
 
@@ -92,12 +89,10 @@ public:
     virtual void SAL_CALL windowHidden (const css::lang::EventObject& rEvent)
         throw (css::uno::RuntimeException);
 
-
     // XPaintListener
 
     virtual void SAL_CALL windowPaint (const css::awt::PaintEvent& rEvent)
         throw (css::uno::RuntimeException);
-
 
 private:
     /** Store the bounding box so that when the window is resized or moved

@@ -45,7 +45,6 @@
 
 namespace css = ::com::sun::star;
 
-
 namespace sdext { namespace presenter {
 
 /** Manage a set of bitmap groups as they are used for buttons: three
@@ -156,7 +155,6 @@ private:
     static BitmapDescriptor::TexturingMode
         StringToTexturingMode (const ::rtl::OUString& rsTexturingMode);
 };
-
 
 typedef PresenterBitmapContainer::BitmapDescriptor PresenterBitmapDescriptor;
 typedef ::boost::shared_ptr<PresenterBitmapContainer::BitmapDescriptor> SharedBitmapDescriptor;

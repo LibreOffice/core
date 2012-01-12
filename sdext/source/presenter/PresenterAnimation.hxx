@@ -120,7 +120,6 @@ inline sal_uInt32 GetNanoSeconds (const sal_uInt64 nTime) { return sal_uInt32((n
 
 typedef ::boost::shared_ptr<PresenterAnimation> SharedPresenterAnimation;
 
-
 } } // end of namespace ::sdext::presenter
 
 #endif

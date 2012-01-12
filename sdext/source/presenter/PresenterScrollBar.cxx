@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-
 #include "PresenterScrollBar.hxx"
 #include "PresenterBitmapContainer.hxx"
 #include "PresenterCanvasHelper.hxx"
@@ -77,9 +76,6 @@ private:
     ::rtl::Reference<PresenterScrollBar> mpScrollBar;
     PresenterScrollBar::Area meMouseArea;
 };
-
-
-
 
 //===== PresenterScrollBar ====================================================
 
@@ -156,15 +152,9 @@ PresenterScrollBar::PresenterScrollBar (
     }
 }
 
-
-
-
 PresenterScrollBar::~PresenterScrollBar (void)
 {
 }
-
-
-
 
 void SAL_CALL PresenterScrollBar::disposing (void)
 {
@@ -186,17 +176,11 @@ void SAL_CALL PresenterScrollBar::disposing (void)
     mpBitmaps.reset();
 }
 
-
-
-
 void PresenterScrollBar::SetVisible (const bool bIsVisible)
 {
     if (mxWindow.is())
         mxWindow->setVisible(bIsVisible);
 }
-
-
-
 
 void PresenterScrollBar::SetPosSize (const css::geometry::RealRectangle2D& rBox)
 {
@@ -212,18 +196,12 @@ void PresenterScrollBar::SetPosSize (const css::geometry::RealRectangle2D& rBox)
     }
 }
 
-
-
-
 void PresenterScrollBar::SetThumbPosition (
     double nPosition,
     const bool bAsynchronousUpdate)
 {
     SetThumbPosition(nPosition, bAsynchronousUpdate, true, true);
 }
-
-
-
 
 void PresenterScrollBar::SetThumbPosition (
     double nPosition,
@@ -245,16 +223,10 @@ void PresenterScrollBar::SetThumbPosition (
     }
 }
 
-
-
-
 double PresenterScrollBar::GetThumbPosition (void) const
 {
     return mnThumbPosition;
 }
-
-
-
 
 void PresenterScrollBar::SetTotalSize (const double nTotalSize)
 {
@@ -265,9 +237,6 @@ void PresenterScrollBar::SetTotalSize (const double nTotalSize)
         Repaint(GetRectangle(Total), false);
     }
 }
-
-
-
 
 void PresenterScrollBar::SetThumbSize (const double nThumbSize)
 {
@@ -280,32 +249,20 @@ void PresenterScrollBar::SetThumbSize (const double nThumbSize)
     }
 }
 
-
-
-
 double PresenterScrollBar::GetThumbSize (void) const
 {
     return mnThumbSize;
 }
-
-
-
 
 void PresenterScrollBar::SetLineHeight (const double nLineHeight)
 {
     mnLineHeight = nLineHeight;
 }
 
-
-
-
 double PresenterScrollBar::GetLineHeight (void) const
 {
     return mnLineHeight;
 }
-
-
-
 
 void PresenterScrollBar::SetCanvas (const Reference<css::rendering::XCanvas>& rxCanvas)
 {
@@ -344,23 +301,15 @@ void PresenterScrollBar::SetCanvas (const Reference<css::rendering::XCanvas>& rx
     }
 }
 
-
-
-
 void PresenterScrollBar::SetBackground (const SharedBitmapDescriptor& rpBackgroundBitmap)
 {
     mpBackgroundBitmap = rpBackgroundBitmap;
 }
 
-
-
 void PresenterScrollBar::CheckValues (void)
 {
     mnThumbPosition = ValidateThumbPosition(mnThumbPosition);
 }
-
-
-
 
 double PresenterScrollBar::ValidateThumbPosition (double nPosition)
 {
@@ -370,9 +319,6 @@ double PresenterScrollBar::ValidateThumbPosition (double nPosition)
         nPosition = 0;
     return nPosition;
 }
-
-
-
 
 void PresenterScrollBar::Paint (
     const awt::Rectangle& rUpdateBox,
@@ -406,11 +352,6 @@ void PresenterScrollBar::Paint (
         xSpriteCanvas->updateScreen(sal_False);
 }
 
-
-
-
-
-
 //----- XWindowListener -------------------------------------------------------
 
 void SAL_CALL PresenterScrollBar::windowResized (const css::awt::WindowEvent& rEvent)
@@ -419,18 +360,11 @@ void SAL_CALL PresenterScrollBar::windowResized (const css::awt::WindowEvent& rE
     (void)rEvent;
 }
 
-
-
-
-
 void SAL_CALL PresenterScrollBar::windowMoved (const css::awt::WindowEvent& rEvent)
     throw (css::uno::RuntimeException)
 {
     (void)rEvent;
 }
-
-
-
 
 void SAL_CALL PresenterScrollBar::windowShown (const css::lang::EventObject& rEvent)
     throw (css::uno::RuntimeException)
@@ -438,17 +372,11 @@ void SAL_CALL PresenterScrollBar::windowShown (const css::lang::EventObject& rEv
     (void)rEvent;
 }
 
-
-
-
 void SAL_CALL PresenterScrollBar::windowHidden (const css::lang::EventObject& rEvent)
     throw (css::uno::RuntimeException)
 {
     (void)rEvent;
 }
-
-
-
 
 //----- XPaintListener --------------------------------------------------------
 
@@ -469,9 +397,6 @@ void SAL_CALL PresenterScrollBar::windowPaint (const css::awt::PaintEvent& rEven
     }
 }
 
-
-
-
 //----- XMouseListener --------------------------------------------------------
 
 void SAL_CALL PresenterScrollBar::mousePressed (const css::awt::MouseEvent& rEvent)
@@ -484,9 +409,6 @@ void SAL_CALL PresenterScrollBar::mousePressed (const css::awt::MouseEvent& rEve
     mpMousePressRepeater->Start(meButtonDownArea);
 }
 
-
-
-
 void SAL_CALL PresenterScrollBar::mouseReleased (const css::awt::MouseEvent& rEvent)
     throw(css::uno::RuntimeException)
 {
@@ -498,17 +420,11 @@ void SAL_CALL PresenterScrollBar::mouseReleased (const css::awt::MouseEvent& rEv
         mxPresenterHelper->releaseMouse(mxWindow);
 }
 
-
-
-
 void SAL_CALL PresenterScrollBar::mouseEntered (const css::awt::MouseEvent& rEvent)
     throw(css::uno::RuntimeException)
 {
     (void)rEvent;
 }
-
-
-
 
 void SAL_CALL PresenterScrollBar::mouseExited (const css::awt::MouseEvent& rEvent)
     throw(css::uno::RuntimeException)
@@ -525,10 +441,6 @@ void SAL_CALL PresenterScrollBar::mouseExited (const css::awt::MouseEvent& rEven
 
     mpMousePressRepeater->Stop();
 }
-
-
-
-
 
 //----- XMouseMotionListener --------------------------------------------------
 
@@ -547,9 +459,6 @@ void SAL_CALL PresenterScrollBar::mouseMoved (const css::awt::MouseEvent& rEvent
     }
     mpMousePressRepeater->SetMouseArea(eArea);
 }
-
-
-
 
 void SAL_CALL PresenterScrollBar::mouseDragged (const css::awt::MouseEvent& rEvent)
     throw (css::uno::RuntimeException)
@@ -570,9 +479,6 @@ void SAL_CALL PresenterScrollBar::mouseDragged (const css::awt::MouseEvent& rEve
     }
 }
 
-
-
-
 //----- lang::XEventListener --------------------------------------------------
 
 void SAL_CALL PresenterScrollBar::disposing (const css::lang::EventObject& rEvent)
@@ -582,9 +488,6 @@ void SAL_CALL PresenterScrollBar::disposing (const css::lang::EventObject& rEven
         mxWindow = NULL;
 }
 
-
-
-
 //-----------------------------------------------------------------------------
 
 geometry::RealRectangle2D PresenterScrollBar::GetRectangle (const Area eArea) const
@@ -593,9 +496,6 @@ geometry::RealRectangle2D PresenterScrollBar::GetRectangle (const Area eArea) co
 
     return maBox[eArea];
 }
-
-
-
 
 void PresenterScrollBar::Repaint (
     const geometry::RealRectangle2D aBox,
@@ -607,9 +507,6 @@ void PresenterScrollBar::Repaint (
             PresenterGeometryHelper::ConvertRectangle(aBox),
             bAsynchronousUpdate);
 }
-
-
-
 
 void PresenterScrollBar::PaintBackground(
     const css::awt::Rectangle& rUpdateBox)
@@ -625,9 +522,6 @@ void PresenterScrollBar::PaintBackground(
         aWindowBox,
         awt::Rectangle());
 }
-
-
-
 
 void PresenterScrollBar::PaintBitmap(
     const css::awt::Rectangle& rUpdateBox,
@@ -672,9 +566,6 @@ void PresenterScrollBar::PaintBitmap(
     }
 }
 
-
-
-
 void PresenterScrollBar::NotifyThumbPositionChange (void)
 {
     if ( ! mbIsNotificationActive)
@@ -692,9 +583,6 @@ void PresenterScrollBar::NotifyThumbPositionChange (void)
         mbIsNotificationActive = false;
     }
 }
-
-
-
 
 PresenterScrollBar::Area PresenterScrollBar::GetArea (const double nX, const double nY) const
 {
@@ -717,9 +605,6 @@ PresenterScrollBar::Area PresenterScrollBar::GetArea (const double nX, const dou
     return None;
 }
 
-
-
-
 void PresenterScrollBar::UpdateWidthOrHeight (
     sal_Int32& rSize,
     const SharedBitmapDescriptor& rpDescriptor)
@@ -737,9 +622,6 @@ void PresenterScrollBar::UpdateWidthOrHeight (
     }
 }
 
-
-
-
 css::uno::Reference<css::rendering::XBitmap> PresenterScrollBar::GetBitmap (
     const Area eArea,
     const SharedBitmapDescriptor& rpBitmaps) const
@@ -749,9 +631,6 @@ css::uno::Reference<css::rendering::XBitmap> PresenterScrollBar::GetBitmap (
     else
         return rpBitmaps->GetBitmap(GetBitmapMode(eArea));
 }
-
-
-
 
 PresenterBitmapContainer::BitmapDescriptor::Mode PresenterScrollBar::GetBitmapMode (
     const Area eArea) const
@@ -764,18 +643,12 @@ PresenterBitmapContainer::BitmapDescriptor::Mode PresenterScrollBar::GetBitmapMo
         return PresenterBitmapContainer::BitmapDescriptor::Normal;
 }
 
-
-
-
 bool PresenterScrollBar::IsDisabled (const Area eArea) const
 {
     OSL_ASSERT(eArea>=0 && eArea<__AreaCount__);
 
     return ! maEnabledState[eArea];
 }
-
-
-
 
 //===== PresenterVerticalScrollBar ============================================
 
@@ -789,15 +662,9 @@ PresenterVerticalScrollBar::PresenterVerticalScrollBar (
 {
 }
 
-
-
-
 PresenterVerticalScrollBar::~PresenterVerticalScrollBar (void)
 {
 }
-
-
-
 
 double PresenterVerticalScrollBar::GetDragDistance (const sal_Int32 nX, const sal_Int32 nY) const
 {
@@ -820,9 +687,6 @@ double PresenterVerticalScrollBar::GetDragDistance (const sal_Int32 nX, const sa
     }
 }
 
-
-
-
 void PresenterVerticalScrollBar::UpdateDragAnchor (const double nDragDistance)
 {
     const awt::Rectangle aWindowBox (mxWindow->getPosSize());
@@ -831,16 +695,10 @@ void PresenterVerticalScrollBar::UpdateDragAnchor (const double nDragDistance)
     maDragAnchor.Y += nDragDistance * nPagerHeight /  mnTotalSize;
 }
 
-
-
-
 sal_Int32 PresenterVerticalScrollBar::GetSize (void) const
 {
     return mnScrollBarWidth;
 }
-
-
-
 
 geometry::RealPoint2D PresenterVerticalScrollBar::GetPoint (
     const double nMajor, const double nMinor) const
@@ -848,26 +706,17 @@ geometry::RealPoint2D PresenterVerticalScrollBar::GetPoint (
     return geometry::RealPoint2D(nMinor, nMajor);
 }
 
-
-
-
 double PresenterVerticalScrollBar::GetMajor (const double nX, const double nY) const
 {
     (void)nX;
     return nY;
 }
 
-
-
-
 double PresenterVerticalScrollBar::GetMinor (const double nX, const double nY) const
 {
     (void)nY;
     return nX;
 }
-
-
-
 
 void PresenterVerticalScrollBar::UpdateBorders (void)
 {
@@ -935,9 +784,6 @@ void PresenterVerticalScrollBar::UpdateBorders (void)
         maBox[Pager]);
 }
 
-
-
-
 void PresenterVerticalScrollBar::UpdateBitmaps (void)
 {
     if (mpBitmaps.get() != NULL)
@@ -964,9 +810,6 @@ void PresenterVerticalScrollBar::UpdateBitmaps (void)
             mnScrollBarWidth = 20;
     }
 }
-
-
-
 
 void PresenterVerticalScrollBar::PaintComposite(
     const css::awt::Rectangle& rUpdateBox,
@@ -995,9 +838,6 @@ void PresenterVerticalScrollBar::PaintComposite(
         GetBitmap(eArea, rpEndBitmaps));
 }
 
-
-
-
 //===== PresenterHorizontalScrollBar ============================================
 
 PresenterHorizontalScrollBar::PresenterHorizontalScrollBar (
@@ -1010,15 +850,9 @@ PresenterHorizontalScrollBar::PresenterHorizontalScrollBar (
 {
 }
 
-
-
-
 PresenterHorizontalScrollBar::~PresenterHorizontalScrollBar (void)
 {
 }
-
-
-
 
 double PresenterHorizontalScrollBar::GetDragDistance (const sal_Int32 nX, const sal_Int32 nY) const
 {
@@ -1041,9 +875,6 @@ double PresenterHorizontalScrollBar::GetDragDistance (const sal_Int32 nX, const 
     }
 }
 
-
-
-
 void PresenterHorizontalScrollBar::UpdateDragAnchor (const double nDragDistance)
 {
     const awt::Rectangle aWindowBox (mxWindow->getPosSize());
@@ -1052,17 +883,10 @@ void PresenterHorizontalScrollBar::UpdateDragAnchor (const double nDragDistance)
     maDragAnchor.X += nDragDistance * nPagerWidth /  mnTotalSize;
 }
 
-
-
-
 sal_Int32 PresenterHorizontalScrollBar::GetSize (void) const
 {
     return mnScrollBarHeight;
 }
-
-
-
-
 
 geometry::RealPoint2D PresenterHorizontalScrollBar::GetPoint (
     const double nMajor, const double nMinor) const
@@ -1070,26 +894,17 @@ geometry::RealPoint2D PresenterHorizontalScrollBar::GetPoint (
     return geometry::RealPoint2D(nMajor, nMinor);
 }
 
-
-
-
 double PresenterHorizontalScrollBar::GetMajor (const double nX, const double nY) const
 {
     (void)nY;
     return nX;
 }
 
-
-
-
 double PresenterHorizontalScrollBar::GetMinor (const double nX, const double nY) const
 {
     (void)nX;
     return nY;
 }
-
-
-
 
 void PresenterHorizontalScrollBar::UpdateBorders (void)
 {
@@ -1158,9 +973,6 @@ void PresenterHorizontalScrollBar::UpdateBorders (void)
         maBox[Pager]);
 }
 
-
-
-
 void PresenterHorizontalScrollBar::UpdateBitmaps (void)
 {
     if (mpBitmaps.get() != NULL)
@@ -1188,8 +1000,6 @@ void PresenterHorizontalScrollBar::UpdateBitmaps (void)
     }
 }
 
-
-
 void PresenterHorizontalScrollBar::PaintComposite(
     const css::awt::Rectangle& rUpdateBox,
     const Area eArea,
@@ -1213,9 +1023,6 @@ void PresenterHorizontalScrollBar::PaintComposite(
         GetBitmap(eArea, rpEndBitmaps));
 }
 
-
-
-
 //===== PresenterScrollBar::MousePressRepeater ================================
 
 PresenterScrollBar::MousePressRepeater::MousePressRepeater (
@@ -1226,17 +1033,11 @@ PresenterScrollBar::MousePressRepeater::MousePressRepeater (
 {
 }
 
-
-
-
 void PresenterScrollBar::MousePressRepeater::Dispose (void)
 {
     Stop();
     mpScrollBar = NULL;
 }
-
-
-
 
 void PresenterScrollBar::MousePressRepeater::Start (const PresenterScrollBar::Area& reArea)
 {
@@ -1259,9 +1060,6 @@ void PresenterScrollBar::MousePressRepeater::Start (const PresenterScrollBar::Ar
     }
 }
 
-
-
-
 void PresenterScrollBar::MousePressRepeater::Stop (void)
 {
     if (mnMousePressRepeaterTaskId != PresenterTimer::NotAValidTaskId)
@@ -1271,9 +1069,6 @@ void PresenterScrollBar::MousePressRepeater::Stop (void)
         PresenterTimer::CancelTask(nTaskId);
     }
 }
-
-
-
 
 void PresenterScrollBar::MousePressRepeater::SetMouseArea(const PresenterScrollBar::Area& reArea)
 {
@@ -1285,9 +1080,6 @@ void PresenterScrollBar::MousePressRepeater::SetMouseArea(const PresenterScrollB
         }
     }
 }
-
-
-
 
 void PresenterScrollBar::MousePressRepeater::Callback (const TimeValue& rCurrentTime)
 {
@@ -1301,9 +1093,6 @@ void PresenterScrollBar::MousePressRepeater::Callback (const TimeValue& rCurrent
 
     Execute();
 }
-
-
-
 
 void PresenterScrollBar::MousePressRepeater::Execute (void)
 {
@@ -1330,8 +1119,6 @@ void PresenterScrollBar::MousePressRepeater::Execute (void)
             break;
     }
 }
-
-
 
 } } // end of namespace ::sdext::presenter
 

@@ -66,7 +66,6 @@ class PresenterButton;
 class PresenterScrollBar;
 class PresenterTextView;
 
-
 /** A drawing framework view of the notes of a slide.  At the moment this is
     a simple text view that does not show the original formatting of the
     notes text.
@@ -99,13 +98,11 @@ public:
 
     ::boost::shared_ptr<PresenterTextView> GetTextView (void) const;
 
-
     // lang::XEventListener
 
     virtual void SAL_CALL
         disposing (const css::lang::EventObject& rEventObject)
         throw (css::uno::RuntimeException);
-
 
     // XWindowListener
 
@@ -121,12 +118,10 @@ public:
     virtual void SAL_CALL windowHidden (const css::lang::EventObject& rEvent)
         throw (css::uno::RuntimeException);
 
-
     // XPaintListener
 
     virtual void SAL_CALL windowPaint (const css::awt::PaintEvent& rEvent)
         throw (css::uno::RuntimeException);
-
 
     // XResourceId
 
@@ -136,7 +131,6 @@ public:
     virtual sal_Bool SAL_CALL isAnchorOnly (void)
         throw (com::sun::star::uno::RuntimeException);
 
-
     // XDrawView
 
     virtual void SAL_CALL setCurrentPage (
@@ -145,7 +139,6 @@ public:
 
     virtual css::uno::Reference<css::drawing::XDrawPage> SAL_CALL getCurrentPage (void)
         throw (css::uno::RuntimeException);
-
 
     // XKeyListener
 

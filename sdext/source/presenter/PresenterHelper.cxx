@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-
 #include "PresenterHelper.hxx"
 
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
@@ -65,7 +64,6 @@ const OUString PresenterHelper::msDefaultPaneStyle (
 const OUString PresenterHelper::msDefaultViewStyle (
     RTL_CONSTASCII_USTRINGPARAM("DefaultViewStyle"));
 
-
 Reference<presentation::XSlideShowController> PresenterHelper::GetSlideShowController (
     const Reference<frame::XController>& rxController)
 {
@@ -85,9 +83,6 @@ Reference<presentation::XSlideShowController> PresenterHelper::GetSlideShowContr
 
     return xSlideShowController;
 }
-
-
-
 
 } } // end of namespace ::sdext::presenter
 

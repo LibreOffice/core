@@ -60,7 +60,6 @@ namespace {
     > PresenterSlidePreviewInterfaceBase;
 }
 
-
 /** Static preview of a slide.  Typically used for the preview of the next
     slide.
     This implementation shows a preview of the slide given to the
@@ -80,7 +79,6 @@ public:
         const ::rtl::Reference<PresenterController>& rpPresenterController);
     virtual ~PresenterSlidePreview (void);
     virtual void SAL_CALL disposing (void);
-
 
     // XResourceId
 
@@ -104,17 +102,14 @@ public:
     virtual void SAL_CALL windowHidden (const css::lang::EventObject& rEvent)
         throw (css::uno::RuntimeException);
 
-
     // XPaintListener
 
     virtual void SAL_CALL windowPaint (const css::awt::PaintEvent& rEvent)
         throw (css::uno::RuntimeException);
 
-
     // lang::XEventListener
     virtual void SAL_CALL disposing (const css::lang::EventObject& rEvent)
         throw (css::uno::RuntimeException);
-
 
     // XDrawView
 

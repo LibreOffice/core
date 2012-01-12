@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-
 #include "PresenterPane.hxx"
 #include "PresenterController.hxx"
 #include "PresenterPaintManager.hxx"
@@ -60,15 +59,9 @@ PresenterPane::PresenterPane (
         UNO_QUERY_THROW);
 }
 
-
-
-
 PresenterPane::~PresenterPane (void)
 {
 }
-
-
-
 
 //----- XPane -----------------------------------------------------------------
 
@@ -79,18 +72,12 @@ Reference<awt::XWindow> SAL_CALL PresenterPane::getWindow (void)
     return mxContentWindow;
 }
 
-
-
-
 Reference<rendering::XCanvas> SAL_CALL PresenterPane::getCanvas (void)
     throw (RuntimeException)
 {
     ThrowIfDisposed();
     return mxContentCanvas;
 }
-
-
-
 
 //----- XWindowListener -------------------------------------------------------
 
@@ -109,10 +96,6 @@ void SAL_CALL PresenterPane::windowResized (const awt::WindowEvent& rEvent)
     Invalidate(maBoundingBox);
 }
 
-
-
-
-
 void SAL_CALL PresenterPane::windowMoved (const awt::WindowEvent& rEvent)
     throw (RuntimeException)
 {
@@ -126,9 +109,6 @@ void SAL_CALL PresenterPane::windowMoved (const awt::WindowEvent& rEvent)
     UpdateBoundingBox();
     Invalidate(maBoundingBox);
 }
-
-
-
 
 void SAL_CALL PresenterPane::windowShown (const lang::EventObject& rEvent)
     throw (RuntimeException)
@@ -148,9 +128,6 @@ void SAL_CALL PresenterPane::windowShown (const lang::EventObject& rEvent)
     Invalidate(maBoundingBox);
 }
 
-
-
-
 void SAL_CALL PresenterPane::windowHidden (const lang::EventObject& rEvent)
     throw (RuntimeException)
 {
@@ -160,9 +137,6 @@ void SAL_CALL PresenterPane::windowHidden (const lang::EventObject& rEvent)
     if (mxContentWindow.is())
         mxContentWindow->setVisible(sal_False);
 }
-
-
-
 
 //----- XPaintListener --------------------------------------------------------
 
@@ -175,11 +149,7 @@ void SAL_CALL PresenterPane::windowPaint (const awt::PaintEvent& rEvent)
     PaintBorder(rEvent.UpdateRect);
 }
 
-
-
-
 //-----------------------------------------------------------------------------
-
 
 void PresenterPane::CreateCanvases (
     const Reference<awt::XWindow>& rxParentWindow,
@@ -208,18 +178,12 @@ void PresenterPane::CreateCanvases (
     PaintBorder(mxBorderWindow->getPosSize());
 }
 
-
-
-
 void PresenterPane::Invalidate (const css::awt::Rectangle& rRepaintBox)
 {
     // Invalidate the parent window to be able to invalidate an area outside
     // the current window area.
     mpPresenterController->GetPaintManager()->Invalidate(mxParentWindow, rRepaintBox);
 }
-
-
-
 
 void PresenterPane::UpdateBoundingBox (void)
 {
@@ -228,7 +192,6 @@ void PresenterPane::UpdateBoundingBox (void)
     else
         maBoundingBox = awt::Rectangle();
 }
-
 
 } } // end of namespace ::sd::presenter
 

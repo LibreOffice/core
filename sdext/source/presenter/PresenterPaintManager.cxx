@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-
 #include "PresenterPaintManager.hxx"
 
 #include "PresenterPaneContainer.hxx"
@@ -50,9 +49,6 @@ PresenterPaintManager::PresenterPaintManager (
 {
 }
 
-
-
-
 ::boost::function<void(const css::awt::Rectangle& rRepaintBox)>
     PresenterPaintManager::GetInvalidator (
         const css::uno::Reference<css::awt::XWindow>& rxWindow,
@@ -68,9 +64,6 @@ PresenterPaintManager::PresenterPaintManager (
         _1,
         bSynchronous);
 }
-
-
-
 
 void PresenterPaintManager::Invalidate (
     const css::uno::Reference<css::awt::XWindow>& rxWindow,
@@ -89,9 +82,6 @@ void PresenterPaintManager::Invalidate (
 
     Invalidate(rxWindow, nInvalidateMode);
 }
-
-
-
 
 void PresenterPaintManager::Invalidate (
     const css::uno::Reference<css::awt::XWindow>& rxWindow,
@@ -116,9 +106,6 @@ void PresenterPaintManager::Invalidate (
     }
 }
 
-
-
-
 void PresenterPaintManager::Invalidate (
     const css::uno::Reference<css::awt::XWindow>& rxWindow,
     const css::awt::Rectangle& rRepaintBox,
@@ -137,9 +124,6 @@ void PresenterPaintManager::Invalidate (
 
     Invalidate(rxWindow, rRepaintBox, nInvalidateMode);
 }
-
-
-
 
 void PresenterPaintManager::Invalidate (
     const css::uno::Reference<css::awt::XWindow>& rxWindow,

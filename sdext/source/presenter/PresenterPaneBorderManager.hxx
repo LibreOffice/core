@@ -55,7 +55,6 @@
 
 namespace css = ::com::sun::star;
 
-
 namespace sdext { namespace presenter {
 
 class PresenterController;
@@ -67,7 +66,6 @@ namespace {
         css::awt::XMouseMotionListener
     > PresenterPaneBorderManagerInterfaceBase;
 }
-
 
 /** Manage the interactive moving and resizing of panes.
 */
@@ -84,19 +82,16 @@ public:
 
     virtual void SAL_CALL disposing (void);
 
-
     static ::rtl::OUString getImplementationName_static (void);
     static css::uno::Sequence< ::rtl::OUString > getSupportedServiceNames_static (void);
     static css::uno::Reference<css::uno::XInterface> Create(
         const css::uno::Reference<css::uno::XComponentContext>& rxContext)
         SAL_THROW((css::uno::Exception));
 
-
     // XInitialization
 
     virtual void SAL_CALL initialize (const css::uno::Sequence<css::uno::Any>& rArguments)
         throw (css::uno::Exception, css::uno::RuntimeException);
-
 
     // XMouseListener
 
@@ -112,7 +107,6 @@ public:
     virtual void SAL_CALL mouseExited (const css::awt::MouseEvent& rEvent)
         throw (css::uno::RuntimeException);
 
-
     // XMouseMotionListener
 
     virtual void SAL_CALL mouseMoved (const css::awt::MouseEvent& rEvent)
@@ -121,11 +115,9 @@ public:
     virtual void SAL_CALL mouseDragged (const css::awt::MouseEvent& rEvent)
         throw (css::uno::RuntimeException);
 
-
     // lang::XEventListener
     virtual void SAL_CALL disposing (const css::lang::EventObject& rEvent)
         throw (css::uno::RuntimeException);
-
 
 private:
     enum BorderElement { Top, TopLeft, TopRight, Left, Right, BottomLeft, BottomRight, Bottom,

@@ -50,7 +50,6 @@ public:
         const ::rtl::OUString& rsExtensionIdentifier);
 };
 
-
 } }
 
 #endif

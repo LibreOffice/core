@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-
 #include "PresenterGeometryHelper.hxx"
 
 #include <math.h>
@@ -57,10 +56,7 @@ sal_Int32 Height (const sal_Int32 nTop, const sal_Int32 nBottom)
     return nBottom - nTop + 1;
 }
 
-
 } // end of anonymous namespace
-
-
 
 namespace sdext { namespace presenter {
 
@@ -69,24 +65,15 @@ sal_Int32 PresenterGeometryHelper::Floor (const double nValue)
     return sal::static_int_cast<sal_Int32>(floor(nValue));
 }
 
-
-
-
 sal_Int32 PresenterGeometryHelper::Ceil (const double nValue)
 {
     return sal::static_int_cast<sal_Int32>(ceil(nValue));
 }
 
-
-
-
 sal_Int32 PresenterGeometryHelper::Round (const double nValue)
 {
     return sal::static_int_cast<sal_Int32>(floor(0.5 + nValue));
 }
-
-
-
 
 awt::Rectangle PresenterGeometryHelper::ConvertRectangle (
     const geometry::RealRectangle2D& rBox)
@@ -98,9 +85,6 @@ awt::Rectangle PresenterGeometryHelper::ConvertRectangle (
     return awt::Rectangle (nLeft,nTop,nRight-nLeft,nBottom-nTop);
 }
 
-
-
-
 awt::Rectangle PresenterGeometryHelper::ConvertRectangleWithConstantSize (
     const geometry::RealRectangle2D& rBox)
 {
@@ -110,9 +94,6 @@ awt::Rectangle PresenterGeometryHelper::ConvertRectangleWithConstantSize (
         Round(rBox.X2 - rBox.X1),
         Round(rBox.Y2 - rBox.Y1));
 }
-
-
-
 
 geometry::RealRectangle2D PresenterGeometryHelper::ConvertRectangle (
     const css::awt::Rectangle& rBox)
@@ -124,9 +105,6 @@ geometry::RealRectangle2D PresenterGeometryHelper::ConvertRectangle (
         rBox.Y + rBox.Height);
 }
 
-
-
-
 awt::Rectangle PresenterGeometryHelper::TranslateRectangle (
     const css::awt::Rectangle& rBox,
     const sal_Int32 nXOffset,
@@ -134,9 +112,6 @@ awt::Rectangle PresenterGeometryHelper::TranslateRectangle (
 {
     return awt::Rectangle(rBox.X + nXOffset, rBox.Y + nYOffset, rBox.Width, rBox.Height);
 }
-
-
-
 
 awt::Rectangle PresenterGeometryHelper::Intersection (
     const css::awt::Rectangle& rBox1,
@@ -152,9 +127,6 @@ awt::Rectangle PresenterGeometryHelper::Intersection (
         return awt::Rectangle(nLeft,nTop, Width(nLeft,nRight), Height(nTop,nBottom));
 }
 
-
-
-
 geometry::RealRectangle2D PresenterGeometryHelper::Intersection (
     const geometry::RealRectangle2D& rBox1,
     const geometry::RealRectangle2D& rBox2)
@@ -169,9 +141,6 @@ geometry::RealRectangle2D PresenterGeometryHelper::Intersection (
         return geometry::RealRectangle2D(nLeft,nTop, nRight, nBottom);
 }
 
-
-
-
 bool PresenterGeometryHelper::IsInside (
     const css::geometry::RealRectangle2D& rBox,
     const css::geometry::RealPoint2D& rPoint)
@@ -182,9 +151,6 @@ bool PresenterGeometryHelper::IsInside (
         && rBox.Y2 >= rPoint.Y;
 }
 
-
-
-
 bool PresenterGeometryHelper::IsInside (
     const css::awt::Rectangle& rBox1,
     const css::awt::Rectangle& rBox2)
@@ -194,9 +160,6 @@ bool PresenterGeometryHelper::IsInside (
         && rBox1.X+rBox1.Width <= rBox2.X+rBox2.Width
         && rBox1.Y+rBox1.Height <= rBox2.Y+rBox2.Height;
 }
-
-
-
 
 awt::Rectangle PresenterGeometryHelper::Union (
     const css::awt::Rectangle& rBox1,
@@ -217,9 +180,6 @@ awt::Rectangle PresenterGeometryHelper::Union (
         return awt::Rectangle(nLeft,nTop, Width(nLeft,nRight), Height(nTop,nBottom));
 }
 
-
-
-
 geometry::RealRectangle2D PresenterGeometryHelper::Union (
     const geometry::RealRectangle2D& rBox1,
     const geometry::RealRectangle2D& rBox2)
@@ -234,9 +194,6 @@ geometry::RealRectangle2D PresenterGeometryHelper::Union (
         return geometry::RealRectangle2D(nLeft,nTop, nRight, nBottom);
 }
 
-
-
-
 bool PresenterGeometryHelper::AreRectanglesDisjoint (
     const css::awt::Rectangle& rBox1,
     const css::awt::Rectangle& rBox2)
@@ -246,9 +203,6 @@ bool PresenterGeometryHelper::AreRectanglesDisjoint (
         || rBox1.X >= rBox2.X+rBox2.Width
         || rBox1.Y >= rBox2.Y+rBox2.Height;
 }
-
-
-
 
 Reference<rendering::XPolyPolygon2D> PresenterGeometryHelper::CreatePolygon(
     const awt::Rectangle& rBox,
@@ -272,9 +226,6 @@ Reference<rendering::XPolyPolygon2D> PresenterGeometryHelper::CreatePolygon(
     return xRectangle;
 }
 
-
-
-
 Reference<rendering::XPolyPolygon2D> PresenterGeometryHelper::CreatePolygon(
     const geometry::RealRectangle2D& rBox,
     const Reference<rendering::XGraphicDevice>& rxDevice)
@@ -296,9 +247,6 @@ Reference<rendering::XPolyPolygon2D> PresenterGeometryHelper::CreatePolygon(
 
     return xRectangle;
 }
-
-
-
 
 Reference<rendering::XPolyPolygon2D> PresenterGeometryHelper::CreatePolygon(
     const ::std::vector<css::awt::Rectangle>& rBoxes,
@@ -328,7 +276,6 @@ Reference<rendering::XPolyPolygon2D> PresenterGeometryHelper::CreatePolygon(
 
     return xRectangle;
 }
-
 
 } }
 

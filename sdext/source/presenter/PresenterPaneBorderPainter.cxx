@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-
 #include "PresenterPaneBorderPainter.hxx"
 #include "PresenterCanvasHelper.hxx"
 #include "PresenterConfigurationAccess.hxx"
@@ -114,8 +113,6 @@ namespace {
     };
 }
 
-
-
 class  PresenterPaneBorderPainter::Renderer
 {
 public:
@@ -168,9 +165,6 @@ private:
         const SharedBitmapDescriptor& rpBackgroundBitmap);
 };
 
-
-
-
 // ===== PresenterPaneBorderPainter ===========================================
 
 PresenterPaneBorderPainter::PresenterPaneBorderPainter (
@@ -182,15 +176,9 @@ PresenterPaneBorderPainter::PresenterPaneBorderPainter (
 {
 }
 
-
-
-
 PresenterPaneBorderPainter::~PresenterPaneBorderPainter (void)
 {
 }
-
-
-
 
 //----- XPaneBorderPainter ----------------------------------------------------
 
@@ -207,9 +195,6 @@ awt::Rectangle SAL_CALL PresenterPaneBorderPainter::addBorder (
     return AddBorder(rsPaneBorderStyleName, rRectangle, eBorderType);
 }
 
-
-
-
 awt::Rectangle SAL_CALL PresenterPaneBorderPainter::removeBorder (
     const rtl::OUString& rsPaneBorderStyleName,
     const css::awt::Rectangle& rRectangle,
@@ -222,9 +207,6 @@ awt::Rectangle SAL_CALL PresenterPaneBorderPainter::removeBorder (
 
     return RemoveBorder(rsPaneBorderStyleName, rRectangle, eBorderType);
 }
-
-
-
 
 void SAL_CALL PresenterPaneBorderPainter::paintBorder (
     const rtl::OUString& rsPaneBorderStyleName,
@@ -260,9 +242,6 @@ void SAL_CALL PresenterPaneBorderPainter::paintBorder (
             rsPaneBorderStyleName);
     }
 }
-
-
-
 
 void SAL_CALL PresenterPaneBorderPainter::paintBorderWithCallout (
     const rtl::OUString& rsPaneBorderStyleName,
@@ -301,9 +280,6 @@ void SAL_CALL PresenterPaneBorderPainter::paintBorderWithCallout (
     }
 }
 
-
-
-
 awt::Point SAL_CALL PresenterPaneBorderPainter::getCalloutOffset (
     const rtl::OUString& rsPaneBorderStyleName)
     throw(css::uno::RuntimeException)
@@ -326,9 +302,6 @@ awt::Point SAL_CALL PresenterPaneBorderPainter::getCalloutOffset (
 
     return awt::Point(0,0);
 }
-
-
-
 
 //-----------------------------------------------------------------------------
 
@@ -365,9 +338,6 @@ bool PresenterPaneBorderPainter::ProvideTheme (const Reference<rendering::XCanva
     return bModified;
 }
 
-
-
-
 bool PresenterPaneBorderPainter::ProvideTheme (void)
 {
     if (mpTheme.get() == NULL)
@@ -383,18 +353,12 @@ bool PresenterPaneBorderPainter::ProvideTheme (void)
     }
 }
 
-
-
-
 void PresenterPaneBorderPainter::SetTheme (const ::boost::shared_ptr<PresenterTheme>& rpTheme)
 {
     mpTheme = rpTheme;
     if (mpRenderer.get() == NULL)
         mpRenderer.reset(new Renderer(mxContext, mpTheme));
 }
-
-
-
 
 awt::Rectangle PresenterPaneBorderPainter::AddBorder (
     const ::rtl::OUString& rsPaneURL,
@@ -410,9 +374,6 @@ awt::Rectangle PresenterPaneBorderPainter::AddBorder (
     return rInnerBox;
 }
 
-
-
-
 awt::Rectangle PresenterPaneBorderPainter::RemoveBorder (
     const ::rtl::OUString& rsPaneURL,
     const css::awt::Rectangle& rOuterBox,
@@ -427,9 +388,6 @@ awt::Rectangle PresenterPaneBorderPainter::RemoveBorder (
     return rOuterBox;
 }
 
-
-
-
 void PresenterPaneBorderPainter::ThrowIfDisposed (void) const
     throw (::com::sun::star::lang::DisposedException)
 {
@@ -442,11 +400,7 @@ void PresenterPaneBorderPainter::ThrowIfDisposed (void) const
     }
 }
 
-
-
-
 //===== PresenterPaneBorderPainter::Renderer =====================================
-
 
 PresenterPaneBorderPainter::Renderer::Renderer (
     const Reference<XComponentContext>& rxContext,
@@ -473,15 +427,9 @@ PresenterPaneBorderPainter::Renderer::Renderer (
     }
 }
 
-
-
-
 PresenterPaneBorderPainter::Renderer::~Renderer (void)
 {
 }
-
-
-
 
 void PresenterPaneBorderPainter::Renderer::SetCanvas (const Reference<rendering::XCanvas>& rxCanvas)
 {
@@ -490,9 +438,6 @@ void PresenterPaneBorderPainter::Renderer::SetCanvas (const Reference<rendering:
         mxCanvas = rxCanvas;
     }
 }
-
-
-
 
 void PresenterPaneBorderPainter::Renderer::PaintBorder (
     const OUString& rsTitle,
@@ -570,9 +515,6 @@ void PresenterPaneBorderPainter::Renderer::PaintBorder (
     if (xSpriteCanvas.is())
         xSpriteCanvas->updateScreen(sal_False);
 }
-
-
-
 
 void PresenterPaneBorderPainter::Renderer::PaintTitle (
     const OUString& rsTitle,
@@ -674,8 +616,6 @@ void PresenterPaneBorderPainter::Renderer::PaintTitle (
     }
 }
 
-
-
 ::boost::shared_ptr<RendererPaneStyle>
     PresenterPaneBorderPainter::Renderer::GetRendererPaneStyle (const OUString& rsResourceURL)
 {
@@ -703,18 +643,12 @@ void PresenterPaneBorderPainter::Renderer::PaintTitle (
         return ::boost::shared_ptr<RendererPaneStyle>();
 }
 
-
-
-
 void PresenterPaneBorderPainter::Renderer::SetCalloutAnchor (
     const awt::Point& rCalloutAnchor)
 {
     mbHasCallout = true;
     maCalloutAnchor = rCalloutAnchor;
 }
-
-
-
 
 void PresenterPaneBorderPainter::Renderer::PaintBitmap(
     const awt::Rectangle& rBox,
@@ -825,9 +759,6 @@ void PresenterPaneBorderPainter::Renderer::PaintBitmap(
             aRenderState);
 }
 
-
-
-
 void PresenterPaneBorderPainter::Renderer::SetupClipping (
     const awt::Rectangle& rUpdateBox,
     const awt::Rectangle& rOuterBox,
@@ -862,8 +793,6 @@ void PresenterPaneBorderPainter::Renderer::SetupClipping (
     maViewState.Clip = mxViewStateClip;
 }
 
-
-
 namespace {
 
 //===== BorderSize ============================================================
@@ -876,9 +805,6 @@ BorderSize::BorderSize (void)
 {
 }
 
-
-
-
 BorderSize::BorderSize (const BorderSize& rBorderSize)
     : mnLeft(rBorderSize.mnLeft),
       mnTop(rBorderSize.mnTop),
@@ -886,9 +812,6 @@ BorderSize::BorderSize (const BorderSize& rBorderSize)
       mnBottom(rBorderSize.mnBottom)
 {
 }
-
-
-
 
 BorderSize& BorderSize::operator= (const BorderSize& rBorderSize)
 {
@@ -901,9 +824,6 @@ BorderSize& BorderSize::operator= (const BorderSize& rBorderSize)
     }
     return *this;
 }
-
-
-
 
 //===== RendererPaneStyle  ============================================================
 
@@ -988,10 +908,6 @@ RendererPaneStyle::RendererPaneStyle (
     }
 }
 
-
-
-
-
 awt::Rectangle RendererPaneStyle::AddBorder (
     const awt::Rectangle& rBox,
     const drawing::framework::BorderType eBorderType) const
@@ -1017,9 +933,6 @@ awt::Rectangle RendererPaneStyle::AddBorder (
         rBox.Width + pBorderSize->mnLeft + pBorderSize->mnRight,
         rBox.Height + pBorderSize->mnTop + pBorderSize->mnBottom);
 }
-
-
-
 
 awt::Rectangle RendererPaneStyle::RemoveBorder (
     const awt::Rectangle& rBox,
@@ -1047,9 +960,6 @@ awt::Rectangle RendererPaneStyle::RemoveBorder (
         rBox.Height - pBorderSize->mnTop - pBorderSize->mnBottom);
 }
 
-
-
-
 const Reference<rendering::XCanvasFont> RendererPaneStyle::GetFont (
     const Reference<rendering::XCanvas>& rxCanvas) const
 {
@@ -1058,9 +968,6 @@ const Reference<rendering::XCanvasFont> RendererPaneStyle::GetFont (
     return mpFont->mxFont;
 }
 
-
-
-
 void RendererPaneStyle::UpdateBorderSizes (void)
 {
     maTotalBorderSize.mnLeft = maInnerBorderSize.mnLeft + maOuterBorderSize.mnLeft;
@@ -1068,9 +975,6 @@ void RendererPaneStyle::UpdateBorderSizes (void)
     maTotalBorderSize.mnRight = maInnerBorderSize.mnRight + maOuterBorderSize.mnRight;
     maTotalBorderSize.mnBottom = maInnerBorderSize.mnBottom + maOuterBorderSize.mnBottom;
 }
-
-
-
 
 SharedBitmapDescriptor RendererPaneStyle::GetBitmap(
     const ::boost::shared_ptr<PresenterTheme>& rpTheme,
@@ -1084,10 +988,7 @@ SharedBitmapDescriptor RendererPaneStyle::GetBitmap(
         return mpEmpty;
 }
 
-
-
 } // end of anonymous namespace
-
 
 } } // end of namespace ::sd::presenter
 

@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-
 #include "PresenterTextView.hxx"
 #include "PresenterCanvasHelper.hxx"
 #include "PresenterGeometryHelper.hxx"
@@ -69,7 +68,6 @@ namespace {
 }
 
 namespace sdext { namespace presenter {
-
 
 //===== PresenterTextView =====================================================
 
@@ -410,16 +408,10 @@ void PresenterTextView::Paint (
     }
 }
 
-
-
-
 SharedPresenterTextCaret PresenterTextView::GetCaret (void) const
 {
     return mpCaret;
 }
-
-
-
 
 awt::Rectangle PresenterTextView::GetCaretBounds (
     sal_Int32 nParagraphIndex,
@@ -433,18 +425,12 @@ awt::Rectangle PresenterTextView::GetCaretBounds (
         return awt::Rectangle(0,0,0,0);
 }
 
-
-
-
 //----- private ---------------------------------------------------------------
 
 void PresenterTextView::RequestFormat (void)
 {
     mbIsFormatPending = true;
 }
-
-
-
 
 void PresenterTextView::Format (void)
 {
@@ -465,16 +451,10 @@ void PresenterTextView::Format (void)
         maTextChangeBroadcaster();
 }
 
-
-
-
 sal_Int32 PresenterTextView::GetParagraphCount (void) const
 {
     return maParagraphs.size();
 }
-
-
-
 
 SharedPresenterTextParagraph PresenterTextView::GetParagraph (
     const sal_Int32 nParagraphIndex) const
@@ -486,9 +466,6 @@ SharedPresenterTextParagraph PresenterTextView::GetParagraph (
     else
         return maParagraphs[nParagraphIndex];
 }
-
-
-
 
 //===== PresenterTextParagraph ================================================
 
@@ -569,7 +546,6 @@ void PresenterTextParagraph::Paint (
     if ( ! IsTextReferencePointLeft())
         rRenderState.AffineTransform.m02 += rSize.Width;
 
-
 #ifdef SHOW_CHARACTER_BOXES
     for (sal_Int32 nIndex=0,nCount=maLines.size();
          nIndex<nCount;
@@ -606,9 +582,6 @@ void PresenterTextParagraph::Paint (
     if ( ! IsTextReferencePointLeft())
         rRenderState.AffineTransform.m02 -= rSize.Width;
 }
-
-
-
 
 void PresenterTextParagraph::Format (
     const double nY,
@@ -669,9 +642,6 @@ void PresenterTextParagraph::Format (
 
 }
 
-
-
-
 sal_Int32 PresenterTextParagraph::GetWordBoundary(
     const sal_Int32 nLocalCharacterIndex,
     const sal_Int32 nDistance)
@@ -712,9 +682,6 @@ sal_Int32 PresenterTextParagraph::GetWordBoundary(
         return maWordBoundaries[nIndex];
 }
 
-
-
-
 sal_Int32 PresenterTextParagraph::GetCaretPosition (void) const
 {
     if (mpCaret && mpCaret->GetParagraphIndex()==mnParagraphIndex)
@@ -723,26 +690,17 @@ sal_Int32 PresenterTextParagraph::GetCaretPosition (void) const
         return -1;
 }
 
-
-
-
 void PresenterTextParagraph::SetCaretPosition (const sal_Int32 nPosition) const
 {
     if (mpCaret && mpCaret->GetParagraphIndex()==mnParagraphIndex)
         return mpCaret->SetPosition(mnParagraphIndex, nPosition);
 }
 
-
-
-
 void PresenterTextParagraph::SetOrigin (const double nXOrigin, const double nYOrigin)
 {
     mnXOrigin = nXOrigin;
     mnYOrigin = nYOrigin;
 }
-
-
-
 
 awt::Point PresenterTextParagraph::GetRelativeLocation (void) const
 {
@@ -751,18 +709,12 @@ awt::Point PresenterTextParagraph::GetRelativeLocation (void) const
         sal_Int32(mnYOrigin + mnVerticalOffset));
 }
 
-
-
-
 awt::Size PresenterTextParagraph::GetSize (void)
 {
     return awt::Size(
         sal_Int32(mnWidth),
         sal_Int32(GetTotalTextHeight()));
 }
-
-
-
 
 void PresenterTextParagraph::AddWord (
     const double nWidth,
@@ -791,9 +743,6 @@ void PresenterTextParagraph::AddWord (
     }
     rCurrentLine.endPos = nWordBoundary;
 }
-
-
-
 
 void PresenterTextParagraph::AddLine (
     i18n::Boundary& rCurrentLine)
@@ -828,32 +777,20 @@ void PresenterTextParagraph::AddLine (
     rCurrentLine.startPos = rCurrentLine.endPos;
 }
 
-
-
-
 double PresenterTextParagraph::GetTotalTextHeight (void)
 {
     return maLines.size() * mnLineHeight;
 }
-
-
-
 
 void PresenterTextParagraph::SetCharacterOffset (const sal_Int32 nCharacterOffset)
 {
     mnCharacterOffset = nCharacterOffset;
 }
 
-
-
-
 sal_Int32 PresenterTextParagraph::GetCharacterCount (void) const
 {
     return msParagraphText.getLength();
 }
-
-
-
 
 sal_Unicode PresenterTextParagraph::GetCharacter (
     const sal_Int32 nGlobalCharacterIndex) const
@@ -869,16 +806,10 @@ sal_Unicode PresenterTextParagraph::GetCharacter (
     }
 }
 
-
-
-
 ::rtl::OUString PresenterTextParagraph::GetText (void) const
 {
     return msParagraphText;
 }
-
-
-
 
 TextSegment PresenterTextParagraph::GetTextSegment (
     const sal_Int32 nOffset,
@@ -945,9 +876,6 @@ TextSegment PresenterTextParagraph::GetTextSegment (
     return TextSegment(::rtl::OUString(), 0,0);
 }
 
-
-
-
 TextSegment PresenterTextParagraph::GetWordTextSegment (
     const sal_Int32 nOffset,
     const sal_Int32 nIndex) const
@@ -993,9 +921,6 @@ TextSegment PresenterTextParagraph::GetWordTextSegment (
     return CreateTextSegment(aWordBoundary.startPos, aWordBoundary.endPos);
 }
 
-
-
-
 TextSegment PresenterTextParagraph::CreateTextSegment (
     sal_Int32 nStartIndex,
     sal_Int32 nEndIndex) const
@@ -1011,9 +936,6 @@ TextSegment PresenterTextParagraph::CreateTextSegment (
             nStartIndex,
             nEndIndex);
 }
-
-
-
 
 awt::Rectangle PresenterTextParagraph::GetCharacterBounds (
     sal_Int32 nGlobalCharacterIndex,
@@ -1084,17 +1006,11 @@ awt::Rectangle PresenterTextParagraph::GetCharacterBounds (
     return awt::Rectangle(sal_Int32(nX+0.5), sal_Int32(nY+0.5), 0, 0);
 }
 
-
-
-
 sal_Int32 PresenterTextParagraph::GetIndexAtPoint (const awt::Point& rPoint) const
 {
     (void)rPoint;
     return -1;
 }
-
-
-
 
 sal_Int8 PresenterTextParagraph::GetTextDirection (void) const
 {
@@ -1144,16 +1060,10 @@ sal_Int8 PresenterTextParagraph::GetTextDirection (void) const
     return nTextDirection;
 }
 
-
-
-
 bool PresenterTextParagraph::IsTextReferencePointLeft (void) const
 {
     return mnWritingMode != text::WritingMode2::RL_TB;
 }
-
-
-
 
 void PresenterTextParagraph::SetupCellArray (
     const PresenterTheme::SharedFontDescriptor& rpFont)
@@ -1191,9 +1101,6 @@ void PresenterTextParagraph::SetupCellArray (
     }
 }
 
-
-
-
 //===== PresenterTextCaret ================================================----
 
 PresenterTextCaret::PresenterTextCaret (
@@ -1210,16 +1117,10 @@ PresenterTextCaret::PresenterTextCaret (
 {
 }
 
-
-
-
 PresenterTextCaret::~PresenterTextCaret (void)
 {
     HideCaret();
 }
-
-
-
 
 void PresenterTextCaret::ShowCaret (void)
 {
@@ -1232,9 +1133,6 @@ void PresenterTextCaret::ShowCaret (void)
     }
     mbIsCaretVisible = true;
 }
-
-
-
 
 void PresenterTextCaret::HideCaret (void)
 {
@@ -1249,24 +1147,15 @@ void PresenterTextCaret::HideCaret (void)
     mnCharacterIndex = -1;
 }
 
-
-
-
 sal_Int32 PresenterTextCaret::GetParagraphIndex (void) const
 {
     return mnParagraphIndex;
 }
 
-
-
-
 sal_Int32 PresenterTextCaret::GetCharacterIndex (void) const
 {
     return mnCharacterIndex;
 }
-
-
-
 
 void PresenterTextCaret::SetPosition (
     const sal_Int32 nParagraphIndex,
@@ -1301,16 +1190,10 @@ void PresenterTextCaret::SetPosition (
     }
 }
 
-
-
-
 bool PresenterTextCaret::IsVisible (void) const
 {
     return mbIsCaretVisible;
 }
-
-
-
 
 void PresenterTextCaret::SetCaretMotionBroadcaster (
     const ::boost::function<void(sal_Int32,sal_Int32,sal_Int32,sal_Int32)>& rBroadcaster)
@@ -1318,16 +1201,10 @@ void PresenterTextCaret::SetCaretMotionBroadcaster (
     maBroadcaster = rBroadcaster;
 }
 
-
-
-
 css::awt::Rectangle PresenterTextCaret::GetBounds (void) const
 {
     return maCaretBounds;
 }
-
-
-
 
 void PresenterTextCaret::InvertCaret (void)
 {
@@ -1335,12 +1212,6 @@ void PresenterTextCaret::InvertCaret (void)
     if (mnParagraphIndex >= 0)
         maInvalidator(maCaretBounds);
 }
-
-
-
-
-
-
 
 //===== PresenterTextParagraph::Cell ==========================================
 
@@ -1353,9 +1224,6 @@ PresenterTextParagraph::Cell::Cell (
       mnCellWidth(nCellWidth)
 {
 }
-
-
-
 
 //===== PresenterTextParagraph::Line ==========================================
 
@@ -1371,9 +1239,6 @@ PresenterTextParagraph::Line::Line (
 {
 }
 
-
-
-
 void PresenterTextParagraph::Line::ProvideCellBoxes (void)
 {
     if ( ! IsEmpty() && maCellBoxes.getLength()==0)
@@ -1386,9 +1251,6 @@ void PresenterTextParagraph::Line::ProvideCellBoxes (void)
         }
     }
 }
-
-
-
 
 void PresenterTextParagraph::Line::ProvideLayoutedLine (
     const ::rtl::OUString& rsParagraphText,
@@ -1409,16 +1271,10 @@ void PresenterTextParagraph::Line::ProvideLayoutedLine (
     }
 }
 
-
-
-
 bool PresenterTextParagraph::Line::IsEmpty (void) const
 {
     return mnLineStartCharacterIndex >= mnLineEndCharacterIndex;
 }
-
-
-
 
 } } // end of namespace ::sdext::presenter
 

@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-
 #include "PresenterHelpView.hxx"
 #include "PresenterButton.hxx"
 #include "PresenterCanvasHelper.hxx"
@@ -51,7 +50,6 @@ using ::rtl::OUString;
 using ::std::vector;
 
 #define A2S(pString) (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(pString)))
-
 
 namespace sdext { namespace presenter {
 
@@ -130,7 +128,6 @@ class PresenterHelpView::TextContainer : public vector<boost::shared_ptr<Block> 
 {
 };
 
-
 PresenterHelpView::PresenterHelpView (
     const Reference<uno::XComponentContext>& rxContext,
     const Reference<XResourceId>& rxViewId,
@@ -196,15 +193,9 @@ PresenterHelpView::PresenterHelpView (
     }
 }
 
-
-
-
 PresenterHelpView::~PresenterHelpView (void)
 {
 }
-
-
-
 
 void SAL_CALL PresenterHelpView::disposing (void)
 {
@@ -226,9 +217,6 @@ void SAL_CALL PresenterHelpView::disposing (void)
     }
 }
 
-
-
-
 //----- lang::XEventListener --------------------------------------------------
 
 void SAL_CALL PresenterHelpView::disposing (const lang::EventObject& rEventObject)
@@ -245,9 +233,6 @@ void SAL_CALL PresenterHelpView::disposing (const lang::EventObject& rEventObjec
     }
 }
 
-
-
-
 //----- XWindowListener -------------------------------------------------------
 
 void SAL_CALL PresenterHelpView::windowResized (const awt::WindowEvent& rEvent)
@@ -258,18 +243,12 @@ void SAL_CALL PresenterHelpView::windowResized (const awt::WindowEvent& rEvent)
     Resize();
 }
 
-
-
-
 void SAL_CALL PresenterHelpView::windowMoved (const awt::WindowEvent& rEvent)
     throw (uno::RuntimeException)
 {
     (void)rEvent;
     ThrowIfDisposed();
 }
-
-
-
 
 void SAL_CALL PresenterHelpView::windowShown (const lang::EventObject& rEvent)
     throw (uno::RuntimeException)
@@ -279,18 +258,12 @@ void SAL_CALL PresenterHelpView::windowShown (const lang::EventObject& rEvent)
     Resize();
 }
 
-
-
-
 void SAL_CALL PresenterHelpView::windowHidden (const lang::EventObject& rEvent)
     throw (uno::RuntimeException)
 {
     (void)rEvent;
     ThrowIfDisposed();
 }
-
-
-
 
 //----- XPaintListener --------------------------------------------------------
 
@@ -299,9 +272,6 @@ void SAL_CALL PresenterHelpView::windowPaint (const css::awt::PaintEvent& rEvent
 {
     Paint(rEvent.UpdateRect);
 }
-
-
-
 
 void PresenterHelpView::Paint (const awt::Rectangle& rUpdateBox)
 {
@@ -380,9 +350,6 @@ void PresenterHelpView::Paint (const awt::Rectangle& rUpdateBox)
         xSpriteCanvas->updateScreen(sal_False);
 }
 
-
-
-
 void PresenterHelpView::ReadHelpStrings (void)
 {
     mpTextContainer.reset(new TextContainer());
@@ -397,9 +364,6 @@ void PresenterHelpView::ReadHelpStrings (void)
         xStrings,
         ::boost::bind(&PresenterHelpView::ProcessString, this, _2));
 }
-
-
-
 
 void PresenterHelpView::ProcessString (
     const Reference<beans::XPropertySet>& rsProperties)
@@ -417,9 +381,6 @@ void PresenterHelpView::ProcessString (
         ::boost::shared_ptr<Block>(
             new Block(sLeftText, sRightText, mpFont->mxFont, mnMaximalWidth)));
 }
-
-
-
 
 void PresenterHelpView::CheckFontSize (void)
 {
@@ -491,9 +452,6 @@ void PresenterHelpView::CheckFontSize (void)
     }
 }
 
-
-
-
 //----- XResourceId -----------------------------------------------------------
 
 Reference<XResourceId> SAL_CALL PresenterHelpView::getResourceId (void)
@@ -503,17 +461,11 @@ Reference<XResourceId> SAL_CALL PresenterHelpView::getResourceId (void)
     return mxViewId;
 }
 
-
-
-
 sal_Bool SAL_CALL PresenterHelpView::isAnchorOnly (void)
     throw (RuntimeException)
 {
     return false;
 }
-
-
-
 
 //-----------------------------------------------------------------------------
 
@@ -532,9 +484,6 @@ void PresenterHelpView::ProvideCanvas (void)
             mpCloseButton->SetCanvas(mxCanvas, mxWindow);
     }
 }
-
-
-
 
 void PresenterHelpView::Resize (void)
 {
@@ -555,9 +504,6 @@ void PresenterHelpView::Resize (void)
     }
 }
 
-
-
-
 void PresenterHelpView::ThrowIfDisposed (void)
     throw (lang::DisposedException)
 {
@@ -570,9 +516,6 @@ void PresenterHelpView::ThrowIfDisposed (void)
     }
 }
 
-
-
-
 //===== LineDescritor =========================================================
 
 namespace {
@@ -584,9 +527,6 @@ LineDescriptor::LineDescriptor (void)
 {
 }
 
-
-
-
 void LineDescriptor::AddPart (
     const OUString& rsLine,
     const css::uno::Reference<css::rendering::XCanvasFont>& rxFont)
@@ -596,16 +536,10 @@ void LineDescriptor::AddPart (
     CalculateSize(rxFont);
 }
 
-
-
-
 bool LineDescriptor::IsEmpty (void) const
 {
     return msLine.isEmpty();
 }
-
-
-
 
 void LineDescriptor::CalculateSize (
     const css::uno::Reference<css::rendering::XCanvasFont>& rxFont)
@@ -622,9 +556,6 @@ void LineDescriptor::CalculateSize (
 
 } // end of anonymous namespace
 
-
-
-
 //===== LineDescriptorList ====================================================
 
 namespace {
@@ -637,9 +568,6 @@ LineDescriptorList::LineDescriptorList (
 {
     Update(rxFont, nMaximalWidth);
 }
-
-
-
 
 double LineDescriptorList::Paint(
     const Reference<rendering::XCanvas>& rxCanvas,
@@ -678,9 +606,6 @@ double LineDescriptorList::Paint(
     return nY - rBBox.Y1;
 }
 
-
-
-
 double LineDescriptorList::GetHeight (void) const
 {
     double nHeight (0);
@@ -692,9 +617,6 @@ double LineDescriptorList::GetHeight (void) const
     return nHeight;
 }
 
-
-
-
 void LineDescriptorList::Update (
     const css::uno::Reference<css::rendering::XCanvasFont>& rxFont,
     const sal_Int32 nMaximalWidth)
@@ -703,9 +625,6 @@ void LineDescriptorList::Update (
     SplitText(msText, aTextParts);
     FormatText(aTextParts, rxFont, nMaximalWidth);
 }
-
-
-
 
 void LineDescriptorList::SplitText (
     const OUString& rsText,
@@ -745,9 +664,6 @@ void LineDescriptorList::SplitText (
         rTextParts.push_back(rsText.copy(nStart, nLength-nStart));
 }
 
-
-
-
 void LineDescriptorList::FormatText (
     const vector<OUString>& rTextParts,
     const css::uno::Reference<css::rendering::XCanvasFont>& rxFont,
@@ -785,11 +701,7 @@ void LineDescriptorList::FormatText (
     }
 }
 
-
 } // end of anonymous namespace
-
-
-
 
 //===== Block =================================================================
 
@@ -805,8 +717,6 @@ Block::Block (
 {
 }
 
-
-
 void Block::Update (
     const css::uno::Reference<css::rendering::XCanvasFont>& rxFont,
     const sal_Int32 nMaximalWidth)
@@ -818,6 +728,5 @@ void Block::Update (
 } // end of anonymous namespace
 
 } } // end of namespace ::sdext::presenter
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

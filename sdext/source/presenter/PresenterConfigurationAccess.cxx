@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-
 #include "PresenterConfigurationAccess.hxx"
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -98,23 +97,14 @@ PresenterConfigurationAccess::PresenterConfigurationAccess (
     }
 }
 
-
-
-
 PresenterConfigurationAccess::~PresenterConfigurationAccess (void)
 {
 }
-
-
-
 
 bool PresenterConfigurationAccess::IsValid (void) const
 {
     return mxRoot.is();
 }
-
-
-
 
 Any PresenterConfigurationAccess::GetConfigurationNode (const OUString& sPathToNode)
 {
@@ -122,9 +112,6 @@ Any PresenterConfigurationAccess::GetConfigurationNode (const OUString& sPathToN
         Reference<container::XHierarchicalNameAccess>(mxRoot, UNO_QUERY),
         sPathToNode);
 }
-
-
-
 
 bool PresenterConfigurationAccess::GoToChild (const ::rtl::OUString& rsPathToNode)
 {
@@ -145,9 +132,6 @@ bool PresenterConfigurationAccess::GoToChild (const ::rtl::OUString& rsPathToNod
     return false;
 }
 
-
-
-
 bool PresenterConfigurationAccess::GoToChild (const Predicate& rPredicate)
 {
     if ( ! IsValid())
@@ -160,9 +144,6 @@ bool PresenterConfigurationAccess::GoToChild (const Predicate& rPredicate)
     mxRoot = NULL;
     return false;
 }
-
-
-
 
 bool PresenterConfigurationAccess::SetProperty (
     const ::rtl::OUString& rsPropertyName,
@@ -177,9 +158,6 @@ bool PresenterConfigurationAccess::SetProperty (
     else
         return false;
 }
-
-
-
 
 Any PresenterConfigurationAccess::GetConfigurationNode (
     const css::uno::Reference<css::container::XHierarchicalNameAccess>& rxNode,
@@ -205,9 +183,6 @@ Any PresenterConfigurationAccess::GetConfigurationNode (
     return Any();
 }
 
-
-
-
 Reference<beans::XPropertySet> PresenterConfigurationAccess::GetNodeProperties (
     const css::uno::Reference<css::container::XHierarchicalNameAccess>& rxNode,
     const ::rtl::OUString& rsPathToNode)
@@ -215,18 +190,12 @@ Reference<beans::XPropertySet> PresenterConfigurationAccess::GetNodeProperties (
     return Reference<beans::XPropertySet>(GetConfigurationNode(rxNode, rsPathToNode), UNO_QUERY);
 }
 
-
-
-
 void PresenterConfigurationAccess::CommitChanges (void)
 {
     Reference<util::XChangesBatch> xConfiguration (mxRoot, UNO_QUERY);
     if (xConfiguration.is())
         xConfiguration->commitChanges();
 }
-
-
-
 
 void PresenterConfigurationAccess::ForAll (
     const Reference<container::XNameAccess>& rxContainer,
@@ -264,9 +233,6 @@ void PresenterConfigurationAccess::ForAll (
     }
 }
 
-
-
-
 void PresenterConfigurationAccess::ForAll (
     const Reference<container::XNameAccess>& rxContainer,
     const PropertySetProcessor& rProcessor)
@@ -283,9 +249,6 @@ void PresenterConfigurationAccess::ForAll (
         }
     }
 }
-
-
-
 
 Any PresenterConfigurationAccess::Find (
     const Reference<container::XNameAccess>& rxContainer,
@@ -307,9 +270,6 @@ Any PresenterConfigurationAccess::Find (
     return Any();
 }
 
-
-
-
 bool PresenterConfigurationAccess::IsStringPropertyEqual (
     const ::rtl::OUString& rsValue,
     const ::rtl::OUString& rsPropertyName,
@@ -321,9 +281,6 @@ bool PresenterConfigurationAccess::IsStringPropertyEqual (
     else
         return false;
 }
-
-
-
 
 Any PresenterConfigurationAccess::GetProperty (
     const Reference<beans::XPropertySet>& rxProperties,
@@ -345,9 +302,6 @@ Any PresenterConfigurationAccess::GetProperty (
     }
     return Any();
 }
-
-
-
 
 } } // end of namespace sdext::tools
 

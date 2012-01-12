@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-
 #include "PresenterComponent.hxx"
 #include "cppuhelper/factory.hxx"
 #include "cppuhelper/implementationentry.hxx"
@@ -43,8 +42,6 @@ using namespace cppu;
 using namespace osl;
 using ::rtl::OUString;
 
-
-
 namespace sdext { namespace presenter {
 
 static OUString gsBasePath;
@@ -54,9 +51,6 @@ static OUString gsBasePath;
 {
     return GetBasePath(rxComponentContext, gsExtensionIdentifier);
 }
-
-
-
 
 ::rtl::OUString PresenterComponent::GetBasePath (
     const Reference<XComponentContext>& rxComponentContext,
@@ -86,8 +80,6 @@ static OUString gsBasePath;
     return gsBasePath;
 }
 
-
-
 rtl_StandardModuleCount g_moduleCount = MODULE_COUNT_INIT;
 
 static struct ImplementationEntry gServiceEntries[] =
@@ -106,9 +98,6 @@ static struct ImplementationEntry gServiceEntries[] =
     },
     { 0, 0, 0, 0, 0, 0 }
 };
-
-
-
 
 extern "C"
 {

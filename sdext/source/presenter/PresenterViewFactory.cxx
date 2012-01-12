@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-
 #include "PresenterViewFactory.hxx"
 #include "PresenterPaneContainer.hxx"
 #include "PresenterHelper.hxx"
@@ -70,8 +69,6 @@ const ::rtl::OUString PresenterViewFactory::msSlideSorterURL(
 const ::rtl::OUString PresenterViewFactory::msHelpViewURL(
     A2S("private:resource/view/Presenter/Help"));
 
-
-
 //===== SimpleView ============================================================
 
 namespace {
@@ -95,8 +92,6 @@ public:
 private:
     Reference<XResourceId> mxResourceId;
 };
-
-
 
 /** By default the PresenterSlidePreview shows the preview of the current
     slide.  This adapter class makes it display the preview of the next
@@ -156,9 +151,6 @@ public:
 
 } // end of anonymous namespace
 
-
-
-
 //===== PresenterViewFactory ==============================================
 
 PresenterViewFactory::PresenterViewFactory (
@@ -174,9 +166,6 @@ PresenterViewFactory::PresenterViewFactory (
 {
 }
 
-
-
-
 Reference<drawing::framework::XResourceFactory> PresenterViewFactory::Create (
     const Reference<uno::XComponentContext>& rxContext,
     const Reference<frame::XController>& rxController,
@@ -188,9 +177,6 @@ Reference<drawing::framework::XResourceFactory> PresenterViewFactory::Create (
     return Reference<drawing::framework::XResourceFactory>(
         static_cast<XWeak*>(pFactory.get()), UNO_QUERY);
 }
-
-
-
 
 void PresenterViewFactory::Register (const Reference<frame::XController>& rxController)
 {
@@ -224,15 +210,9 @@ void PresenterViewFactory::Register (const Reference<frame::XController>& rxCont
     }
 }
 
-
-
-
 PresenterViewFactory::~PresenterViewFactory (void)
 {
 }
-
-
-
 
 void SAL_CALL PresenterViewFactory::disposing (void)
     throw (RuntimeException)
@@ -262,9 +242,6 @@ void SAL_CALL PresenterViewFactory::disposing (void)
     }
 }
 
-
-
-
 //----- XViewFactory ----------------------------------------------------------
 
 Reference<XResource> SAL_CALL PresenterViewFactory::createResource (
@@ -293,9 +270,6 @@ Reference<XResource> SAL_CALL PresenterViewFactory::createResource (
 
     return xView;
 }
-
-
-
 
 void SAL_CALL PresenterViewFactory::releaseResource (const Reference<XResource>& rxView)
     throw (RuntimeException)
@@ -347,9 +321,6 @@ void SAL_CALL PresenterViewFactory::releaseResource (const Reference<XResource>&
     }
 }
 
-
-
-
 //-----------------------------------------------------------------------------
 
 Reference<XResource> PresenterViewFactory::GetViewFromCache(
@@ -387,9 +358,6 @@ Reference<XResource> PresenterViewFactory::GetViewFromCache(
     }
     return NULL;
 }
-
-
-
 
 Reference<XResource> PresenterViewFactory::CreateView(
     const Reference<XResourceId>& rxViewId,
@@ -439,9 +407,6 @@ Reference<XResource> PresenterViewFactory::CreateView(
     return Reference<XResource>(xView, UNO_QUERY);
 }
 
-
-
-
 Reference<XView> PresenterViewFactory::CreateSlideShowView(
     const Reference<XResourceId>& rxViewId) const
 {
@@ -470,9 +435,6 @@ Reference<XView> PresenterViewFactory::CreateSlideShowView(
 
     return xView;
 }
-
-
-
 
 Reference<XView> PresenterViewFactory::CreateSlidePreviewView(
     const Reference<XResourceId>& rxViewId,
@@ -503,9 +465,6 @@ Reference<XView> PresenterViewFactory::CreateSlidePreviewView(
     return xView;
 }
 
-
-
-
 Reference<XView> PresenterViewFactory::CreateToolBarView(
     const Reference<XResourceId>& rxViewId) const
 {
@@ -515,9 +474,6 @@ Reference<XView> PresenterViewFactory::CreateToolBarView(
         Reference<frame::XController>(mxControllerWeak),
         mpPresenterController);
 }
-
-
-
 
 Reference<XView> PresenterViewFactory::CreateNotesView(
     const Reference<XResourceId>& rxViewId,
@@ -548,9 +504,6 @@ Reference<XView> PresenterViewFactory::CreateNotesView(
 
     return xView;
 }
-
-
-
 
 Reference<XView> PresenterViewFactory::CreateSlideSorterView(
     const Reference<XResourceId>& rxViewId) const
@@ -585,9 +538,6 @@ Reference<XView> PresenterViewFactory::CreateSlideSorterView(
     return xView;
 }
 
-
-
-
 Reference<XView> PresenterViewFactory::CreateHelpView(
     const Reference<XResourceId>& rxViewId) const
 {
@@ -597,10 +547,6 @@ Reference<XView> PresenterViewFactory::CreateHelpView(
         Reference<frame::XController>(mxControllerWeak),
         mpPresenterController));
 }
-
-
-
-
 
 void PresenterViewFactory::ThrowIfDisposed (void) const
     throw (::com::sun::star::lang::DisposedException)
@@ -614,9 +560,6 @@ void PresenterViewFactory::ThrowIfDisposed (void) const
     }
 }
 
-
-
-
 //===== CachablePresenterView =================================================
 
 CachablePresenterView::CachablePresenterView (void)
@@ -624,30 +567,19 @@ CachablePresenterView::CachablePresenterView (void)
 {
 }
 
-
-
-
 void CachablePresenterView::ActivatePresenterView (void)
 {
     mbIsPresenterViewActive = true;
 }
-
-
-
 
 void CachablePresenterView::DeactivatePresenterView (void)
 {
     mbIsPresenterViewActive = false;
 }
 
-
-
-
 void CachablePresenterView::ReleaseView (void)
 {
 }
-
-
 
 } }
 

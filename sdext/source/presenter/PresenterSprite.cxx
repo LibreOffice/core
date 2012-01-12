@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-
 #include "PresenterSprite.hxx"
 
 #include <com/sun/star/lang/XComponent.hpp>
@@ -197,9 +196,6 @@ void PresenterSprite::DisposeSprite (void)
         mxSprite = NULL;
     }
 }
-
-
-
 
 } } //end of namespace sdext::presenter
 

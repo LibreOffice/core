@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-
 #include "PresenterUIPainter.hxx"
 
 #include "PresenterCanvasHelper.hxx"

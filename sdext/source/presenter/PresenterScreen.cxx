@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-
 #include "PresenterScreen.hxx"
 #include "PresenterConfigurationAccess.hxx"
 #include "PresenterController.hxx"
@@ -101,16 +100,12 @@ namespace {
     };
 }
 
-
 //----- Service ---------------------------------------------------------------
 
 OUString PresenterScreenJob::getImplementationName_static (void)
 {
     return A2S("com.sun.star.comp.Draw.framework.PresenterScreenJob");
 }
-
-
-
 
 Sequence<OUString> PresenterScreenJob::getSupportedServiceNames_static (void)
 {
@@ -119,17 +114,11 @@ Sequence<OUString> PresenterScreenJob::getSupportedServiceNames_static (void)
     return Sequence<rtl::OUString>(&sServiceName, 1);
 }
 
-
-
-
 Reference<XInterface> PresenterScreenJob::Create (const Reference<uno::XComponentContext>& rxContext)
     SAL_THROW((css::uno::Exception))
 {
     return Reference<XInterface>(static_cast<XWeak*>(new PresenterScreenJob(rxContext)));
 }
-
-
-
 
 //===== PresenterScreenJob ====================================================
 
@@ -139,23 +128,14 @@ PresenterScreenJob::PresenterScreenJob (const Reference<XComponentContext>& rxCo
 {
 }
 
-
-
-
 PresenterScreenJob::~PresenterScreenJob (void)
 {
 }
-
-
-
 
 void SAL_CALL PresenterScreenJob::disposing (void)
 {
     mxComponentContext = NULL;
 }
-
-
-
 
 //----- XJob -----------------------------------------------------------
 
@@ -202,9 +182,6 @@ Any SAL_CALL PresenterScreenJob::execute(
     return Any();
 }
 
-
-
-
 //===== PresenterScreenListener ===============================================
 
 namespace {
@@ -219,9 +196,6 @@ PresenterScreenListener::PresenterScreenListener (
 {
 }
 
-
-
-
 void PresenterScreenListener::Initialize (void)
 {
     Reference< document::XEventListener > xDocListener(
@@ -231,15 +205,9 @@ void PresenterScreenListener::Initialize (void)
         xDocBroadcaster->addEventListener(xDocListener);
 }
 
-
-
-
 PresenterScreenListener::~PresenterScreenListener (void)
 {
 }
-
-
-
 
 void SAL_CALL PresenterScreenListener::disposing (void)
 {
@@ -255,9 +223,6 @@ void SAL_CALL PresenterScreenListener::disposing (void)
         mpPresenterScreen = NULL;
     }
 }
-
-
-
 
 // document::XEventListener
 
@@ -280,9 +245,6 @@ void SAL_CALL PresenterScreenListener::notifyEvent( const css::document::EventOb
     }
 }
 
-
-
-
 // XEventListener
 
 void SAL_CALL PresenterScreenListener::disposing (const css::lang::EventObject& rEvent)
@@ -297,9 +259,6 @@ void SAL_CALL PresenterScreenListener::disposing (const css::lang::EventObject& 
     }
 }
 
-
-
-
 void PresenterScreenListener::ThrowIfDisposed (void) const throw (
     ::com::sun::star::lang::DisposedException)
 {
@@ -313,9 +272,6 @@ void PresenterScreenListener::ThrowIfDisposed (void) const throw (
 }
 
 } // end of anonymous namespace
-
-
-
 
 //===== PresenterScreen =======================================================
 
@@ -339,15 +295,9 @@ PresenterScreen::PresenterScreen (
 {
 }
 
-
-
-
 PresenterScreen::~PresenterScreen (void)
 {
 }
-
-
-
 
 void SAL_CALL PresenterScreen::disposing (void)
 {
@@ -368,9 +318,6 @@ void SAL_CALL PresenterScreen::disposing (void)
     mxModel = NULL;
 }
 
-
-
-
 //----- XEventListener --------------------------------------------------------
 
 void SAL_CALL PresenterScreen::disposing (const lang::EventObject& /*rEvent*/)
@@ -379,9 +326,6 @@ void SAL_CALL PresenterScreen::disposing (const lang::EventObject& /*rEvent*/)
     mxSlideShowControllerWeak = WeakReference<presentation::XSlideShowController>();
     RequestShutdownPresenterScreen();
 }
-
-
-
 
 //-----------------------------------------------------------------------------
 
@@ -583,7 +527,6 @@ sal_Int32 PresenterScreen::GetScreenNumber (
     return nScreenNumber;
 }
 
-
 sal_Int32 PresenterScreen::GetPresenterScreenFromScreen( sal_Int32 nPresentationScreen ) const
 {
     // Setup the resource id of the full screen background pane so that
@@ -609,7 +552,6 @@ sal_Int32 PresenterScreen::GetPresenterScreenFromScreen( sal_Int32 nPresentation
     return nPresenterScreenNumber;
 }
 
-
 Reference<drawing::framework::XResourceId> PresenterScreen::GetMainPaneId (
     const Reference<presentation::XPresentation2>& rxPresentation) const
 {
@@ -627,9 +569,6 @@ Reference<drawing::framework::XResourceId> PresenterScreen::GetMainPaneId (
             +A2S("?FullScreen=true&ScreenNumber=")
                 + OUString::valueOf(nPresenterScreenNumber));
 }
-
-
-
 
 void PresenterScreen::RequestShutdownPresenterScreen (void)
 {
@@ -657,9 +596,6 @@ void PresenterScreen::RequestShutdownPresenterScreen (void)
     }
 }
 
-
-
-
 void PresenterScreen::ShutdownPresenterScreen (void)
 {
     Reference<lang::XComponent> xViewFactoryComponent (mxViewFactory, UNO_QUERY);
@@ -680,9 +616,6 @@ void PresenterScreen::ShutdownPresenterScreen (void)
     mpPaneContainer = new PresenterPaneContainer(Reference<XComponentContext>(mxContextWeak));
 }
 
-
-
-
 void PresenterScreen::SetupPaneFactory (const Reference<XComponentContext>& rxContext)
 {
     try
@@ -699,9 +632,6 @@ void PresenterScreen::SetupPaneFactory (const Reference<XComponentContext>& rxCo
     }
 }
 
-
-
-
 void PresenterScreen::SetupViewFactory (const Reference<XComponentContext>& rxContext)
 {
     try
@@ -717,9 +647,6 @@ void PresenterScreen::SetupViewFactory (const Reference<XComponentContext>& rxCo
         OSL_ASSERT(false);
     }
 }
-
-
-
 
 void PresenterScreen::SetupConfiguration (
     const Reference<XComponentContext>& rxContext,
@@ -742,9 +669,6 @@ void PresenterScreen::SetupConfiguration (
     {
     }
 }
-
-
-
 
 void PresenterScreen::ProcessLayout (
     PresenterConfigurationAccess& rConfiguration,
@@ -800,9 +724,6 @@ void PresenterScreen::ProcessLayout (
     }
 }
 
-
-
-
 void PresenterScreen::ProcessViewDescriptions (
     PresenterConfigurationAccess& rConfiguration)
 {
@@ -828,9 +749,6 @@ void PresenterScreen::ProcessViewDescriptions (
         OSL_ASSERT(false);
     }
 }
-
-
-
 
 void PresenterScreen::ProcessComponent (
     const OUString& rsKey,
@@ -878,9 +796,6 @@ void PresenterScreen::ProcessComponent (
     }
 }
 
-
-
-
 void PresenterScreen::ProcessViewDescription (
     const OUString& rsKey,
     const ::std::vector<Any>& rValues)
@@ -907,9 +822,6 @@ void PresenterScreen::ProcessViewDescription (
         OSL_ASSERT(false);
     }
 }
-
-
-
 
 void PresenterScreen::SetupView(
     const Reference<XComponentContext>& rxContext,
@@ -947,9 +859,6 @@ void PresenterScreen::SetupView(
             nBottom);
     }
 }
-
-
-
 
 } } // end of namespace ::sdext::presenter
 

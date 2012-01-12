@@ -51,7 +51,6 @@
 
 namespace css = ::com::sun::star;
 
-
 namespace sdext { namespace presenter {
 
 /** Use a sprite to display the contents and the border of a pane.  Windows
@@ -89,7 +88,6 @@ public:
     virtual css::uno::Reference<css::rendering::XCanvas> SAL_CALL getCanvas (void)
         throw (css::uno::RuntimeException);
 
-
     // XWindowListener
 
     virtual void SAL_CALL windowResized (const css::awt::WindowEvent& rEvent)
@@ -104,12 +102,10 @@ public:
     virtual void SAL_CALL windowHidden (const css::lang::EventObject& rEvent)
         throw (css::uno::RuntimeException);
 
-
     // XPaintListener
 
     virtual void SAL_CALL windowPaint (const css::awt::PaintEvent& rEvent)
         throw (css::uno::RuntimeException);
-
 
 private:
     css::uno::Reference<css::awt::XWindow> mxParentWindow;

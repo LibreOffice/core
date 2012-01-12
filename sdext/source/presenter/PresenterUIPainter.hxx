@@ -39,7 +39,6 @@ namespace css = ::com::sun::star;
 
 namespace sdext { namespace presenter {
 
-
 /** Functions for painting UI elements.
 */
 class PresenterUIPainter

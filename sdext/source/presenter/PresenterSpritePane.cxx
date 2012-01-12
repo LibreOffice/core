@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-
 #include "PresenterSpritePane.hxx"
 #include "PresenterGeometryHelper.hxx"
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
@@ -58,15 +57,9 @@ PresenterSpritePane::PresenterSpritePane (const Reference<XComponentContext>& rx
         UNO_QUERY_THROW);
 }
 
-
-
-
 PresenterSpritePane::~PresenterSpritePane (void)
 {
 }
-
-
-
 
 void PresenterSpritePane::disposing (void)
 {
@@ -76,9 +69,6 @@ void PresenterSpritePane::disposing (void)
     PresenterPaneBase::disposing();
 }
 
-
-
-
 //----- XPane -----------------------------------------------------------------
 
 Reference<awt::XWindow> SAL_CALL PresenterSpritePane::getWindow (void)
@@ -87,9 +77,6 @@ Reference<awt::XWindow> SAL_CALL PresenterSpritePane::getWindow (void)
     ThrowIfDisposed();
     return mxContentWindow;
 }
-
-
-
 
 Reference<rendering::XCanvas> SAL_CALL PresenterSpritePane::getCanvas (void)
     throw (RuntimeException)
@@ -101,9 +88,6 @@ Reference<rendering::XCanvas> SAL_CALL PresenterSpritePane::getCanvas (void)
 
     return mxContentCanvas;
 }
-
-
-
 
 //----- XWindowListener -------------------------------------------------------
 
@@ -118,10 +102,6 @@ void SAL_CALL PresenterSpritePane::windowResized (const awt::WindowEvent& rEvent
     UpdateCanvases();
 }
 
-
-
-
-
 void SAL_CALL PresenterSpritePane::windowMoved (const awt::WindowEvent& rEvent)
     throw (RuntimeException)
 {
@@ -133,9 +113,6 @@ void SAL_CALL PresenterSpritePane::windowMoved (const awt::WindowEvent& rEvent)
     mpSprite->MoveTo(geometry::RealPoint2D(aBox.X, aBox.Y));
     mpSprite->Update();
 }
-
-
-
 
 void SAL_CALL PresenterSpritePane::windowShown (const lang::EventObject& rEvent)
     throw (RuntimeException)
@@ -153,9 +130,6 @@ void SAL_CALL PresenterSpritePane::windowShown (const lang::EventObject& rEvent)
     }
 }
 
-
-
-
 void SAL_CALL PresenterSpritePane::windowHidden (const lang::EventObject& rEvent)
     throw (RuntimeException)
 {
@@ -166,9 +140,6 @@ void SAL_CALL PresenterSpritePane::windowHidden (const lang::EventObject& rEvent
     if (mxContentWindow.is())
         mxContentWindow->setVisible(sal_False);
 }
-
-
-
 
 //----- XPaintListener --------------------------------------------------------
 
@@ -185,26 +156,16 @@ void SAL_CALL PresenterSpritePane::windowPaint (const awt::PaintEvent& rEvent)
     */
 }
 
-
-
-
 //-----------------------------------------------------------------------------
-
 
 ::boost::shared_ptr<PresenterSprite> PresenterSpritePane::GetSprite (void)
 {
     return mpSprite;
 }
 
-
-
-
 void PresenterSpritePane::ShowTransparentBorder (void)
 {
 }
-
-
-
 
 void PresenterSpritePane::UpdateCanvases (void)
 {
@@ -231,9 +192,6 @@ void PresenterSpritePane::UpdateCanvases (void)
     PaintBorder(awt::Rectangle(0,0,aWindowBox.Width,aWindowBox.Height));
 }
 
-
-
-
 void PresenterSpritePane::CreateCanvases (
     const css::uno::Reference<css::awt::XWindow>& rxParentWindow,
     const css::uno::Reference<css::rendering::XSpriteCanvas>& rxParentCanvas)
@@ -252,9 +210,6 @@ void PresenterSpritePane::CreateCanvases (
 
     UpdateCanvases();
 }
-
-
-
 
 } } // end of namespace ::sd::presenter
 

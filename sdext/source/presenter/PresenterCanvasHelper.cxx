@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-
 #include "PresenterCanvasHelper.hxx"
 
 #include "PresenterController.hxx"
@@ -136,9 +135,6 @@ void PresenterCanvasHelper::PaintRectangle (
     }
 }
 
-
-
-
 void PresenterCanvasHelper::PaintTiledBitmap (
     const css::uno::Reference<css::rendering::XBitmap>& rxTexture,
     const css::uno::Reference<css::rendering::XCanvas>& rxCanvas,
@@ -163,7 +159,6 @@ void PresenterCanvasHelper::PaintTiledBitmap (
     // Create a local render state at which the location of the bitmap is
     // set.
     rendering::RenderState aRenderState (rDefaultRenderState);
-
 
     // Tile the bitmap over the repaint box.
     const geometry::IntegerSize2D aBitmapSize (rxTexture->getSize());
@@ -192,9 +187,6 @@ void PresenterCanvasHelper::PaintTiledBitmap (
         }
 }
 
-
-
-
 void PresenterCanvasHelper::PaintBitmap (
     const css::uno::Reference<css::rendering::XBitmap>& rxBitmap,
     const awt::Point& rLocation,
@@ -217,7 +209,6 @@ void PresenterCanvasHelper::PaintBitmap (
     rendering::ViewState aViewState (rDefaultViewState);
     aViewState.Clip = PresenterGeometryHelper::CreatePolygon(rRepaintBox, rxCanvas->getDevice());
 
-
     // Setup the rendering state so that the bitmap is painted top left in
     // the polygon bounding box.
     rendering::RenderState aRenderState (rDefaultRenderState);
@@ -229,9 +220,6 @@ void PresenterCanvasHelper::PaintBitmap (
         aViewState,
         aRenderState);
 }
-
-
-
 
 void PresenterCanvasHelper::PaintColor (
     const css::util::Color nColor,
@@ -251,7 +239,6 @@ void PresenterCanvasHelper::PaintColor (
     rendering::ViewState aViewState (rDefaultViewState);
     aViewState.Clip = PresenterGeometryHelper::CreatePolygon(rRepaintBox, rxCanvas->getDevice());
 
-
     // Setup the rendering state to use the given color.
     rendering::RenderState aRenderState (rDefaultRenderState);
     SetDeviceColor(aRenderState, nColor);
@@ -261,9 +248,6 @@ void PresenterCanvasHelper::PaintColor (
         aViewState,
         aRenderState);
 }
-
-
-
 
 void PresenterCanvasHelper::SetDeviceColor(
     rendering::RenderState& rRenderState,
@@ -280,9 +264,6 @@ void PresenterCanvasHelper::SetDeviceColor(
         rRenderState.DeviceColor[3] = 1.0 - ((aColor >> 24) & 0x0ff) / 255.0;
     }
 }
-
-
-
 
 css::geometry::RealRectangle2D PresenterCanvasHelper::GetTextBoundingBox (
     const css::uno::Reference<css::rendering::XCanvasFont>& rxFont,
@@ -302,9 +283,6 @@ css::geometry::RealRectangle2D PresenterCanvasHelper::GetTextBoundingBox (
     }
 }
 
-
-
-
 css::geometry::RealSize2D PresenterCanvasHelper::GetTextSize (
     const css::uno::Reference<css::rendering::XCanvasFont>& rxFont,
     const ::rtl::OUString& rsText,
@@ -313,7 +291,6 @@ css::geometry::RealSize2D PresenterCanvasHelper::GetTextSize (
     const geometry::RealRectangle2D aTextBBox (GetTextBoundingBox(rxFont, rsText, nTextDirection));
     return css::geometry::RealSize2D(aTextBBox.X2 - aTextBBox.X1, aTextBBox.Y2 - aTextBBox.Y1);
 }
-
 
 } } // end of namespace sdext::presenter
 

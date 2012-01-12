@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-
 #include "PresenterNotesView.hxx"
 #include "PresenterButton.hxx"
 #include "PresenterCanvasHelper.hxx"
@@ -150,15 +149,9 @@ PresenterNotesView::PresenterNotesView (
     }
 }
 
-
-
-
 PresenterNotesView::~PresenterNotesView (void)
 {
 }
-
-
-
 
 void SAL_CALL PresenterNotesView::disposing (void)
 {
@@ -205,9 +198,6 @@ void SAL_CALL PresenterNotesView::disposing (void)
     mxViewId = NULL;
 }
 
-
-
-
 void PresenterNotesView::CreateToolBar (
     const css::uno::Reference<css::uno::XComponentContext>& rxContext,
     const ::rtl::Reference<PresenterController>& rpPresenterController)
@@ -244,9 +234,6 @@ void PresenterNotesView::CreateToolBar (
     mpToolBar->Initialize(
         A2S("PresenterScreenSettings/ToolBars/NotesToolBar"));
 }
-
-
-
 
 void PresenterNotesView::SetSlide (const Reference<drawing::XDrawPage>& rxNotesPage)
 {
@@ -309,9 +296,6 @@ void PresenterNotesView::SetSlide (const Reference<drawing::XDrawPage>& rxNotesP
     }
 }
 
-
-
-
 //-----  lang::XEventListener -------------------------------------------------
 
 void SAL_CALL PresenterNotesView::disposing (const lang::EventObject& rEventObject)
@@ -320,9 +304,6 @@ void SAL_CALL PresenterNotesView::disposing (const lang::EventObject& rEventObje
     if (rEventObject.Source == mxParentWindow)
         mxParentWindow = NULL;
 }
-
-
-
 
 //----- XWindowListener -------------------------------------------------------
 
@@ -333,17 +314,11 @@ void SAL_CALL PresenterNotesView::windowResized (const awt::WindowEvent& rEvent)
     Layout();
 }
 
-
-
-
 void SAL_CALL PresenterNotesView::windowMoved (const awt::WindowEvent& rEvent)
     throw (RuntimeException)
 {
     (void)rEvent;
 }
-
-
-
 
 void SAL_CALL PresenterNotesView::windowShown (const lang::EventObject& rEvent)
     throw (RuntimeException)
@@ -351,17 +326,11 @@ void SAL_CALL PresenterNotesView::windowShown (const lang::EventObject& rEvent)
     (void)rEvent;
 }
 
-
-
-
 void SAL_CALL PresenterNotesView::windowHidden (const lang::EventObject& rEvent)
     throw (RuntimeException)
 {
     (void)rEvent;
 }
-
-
-
 
 //----- XPaintListener --------------------------------------------------------
 
@@ -377,9 +346,6 @@ void SAL_CALL PresenterNotesView::windowPaint (const awt::PaintEvent& rEvent)
     Paint(rEvent.UpdateRect);
 }
 
-
-
-
 //----- XResourceId -----------------------------------------------------------
 
 Reference<XResourceId> SAL_CALL PresenterNotesView::getResourceId (void)
@@ -388,17 +354,11 @@ Reference<XResourceId> SAL_CALL PresenterNotesView::getResourceId (void)
     return mxViewId;
 }
 
-
-
-
 sal_Bool SAL_CALL PresenterNotesView::isAnchorOnly (void)
     throw (RuntimeException)
 {
     return false;
 }
-
-
-
 
 //----- XDrawView -------------------------------------------------------------
 
@@ -420,17 +380,11 @@ void SAL_CALL PresenterNotesView::setCurrentPage (const Reference<drawing::XDraw
     SetSlide(mxCurrentNotesPage);
 }
 
-
-
-
 Reference<drawing::XDrawPage> SAL_CALL PresenterNotesView::getCurrentPage (void)
     throw (RuntimeException)
 {
     return NULL;
 }
-
-
-
 
 //----- XKeyListener ----------------------------------------------------------
 
@@ -476,17 +430,11 @@ void SAL_CALL PresenterNotesView::keyPressed (const awt::KeyEvent& rEvent)
     }
 }
 
-
-
-
 void SAL_CALL PresenterNotesView::keyReleased (const awt::KeyEvent& rEvent)
     throw (RuntimeException)
 {
     (void)rEvent;
 }
-
-
-
 
 //-----------------------------------------------------------------------------
 
@@ -570,9 +518,6 @@ void PresenterNotesView::Layout (void)
     }
 }
 
-
-
-
 void PresenterNotesView::Paint (const awt::Rectangle& rUpdateBox)
 {
     if ( ! mxParentWindow.is())
@@ -596,9 +541,6 @@ void PresenterNotesView::Paint (const awt::Rectangle& rUpdateBox)
         PaintToolBar(rUpdateBox);
     }
 }
-
-
-
 
 void PresenterNotesView::PaintToolBar (const awt::Rectangle& rUpdateBox)
 {
@@ -635,9 +577,6 @@ void PresenterNotesView::PaintToolBar (const awt::Rectangle& rUpdateBox)
         aRenderState);
 }
 
-
-
-
 void PresenterNotesView::PaintText (const awt::Rectangle& rUpdateBox)
 {
     const awt::Rectangle aBox (PresenterGeometryHelper::Intersection(rUpdateBox,
@@ -671,18 +610,12 @@ void PresenterNotesView::PaintText (const awt::Rectangle& rUpdateBox)
         xSpriteCanvas->updateScreen(sal_False);
 }
 
-
-
-
 void PresenterNotesView::Invalidate (void)
 {
     mpPresenterController->GetPaintManager()->Invalidate(
         mxParentWindow,
         PresenterGeometryHelper::ConvertRectangle(maTextBoundingBox));
 }
-
-
-
 
 void PresenterNotesView::Scroll (const double rnDistance)
 {
@@ -698,9 +631,6 @@ void PresenterNotesView::Scroll (const double rnDistance)
     {}
 }
 
-
-
-
 void PresenterNotesView::SetTop (const double nTop)
 {
     try
@@ -714,9 +644,6 @@ void PresenterNotesView::SetTop (const double nTop)
     catch (beans::UnknownPropertyException&)
     {}
 }
-
-
-
 
 void PresenterNotesView::ChangeFontSize (const sal_Int32 nSizeChange)
 {
@@ -754,16 +681,10 @@ void PresenterNotesView::ChangeFontSize (const sal_Int32 nSizeChange)
     }
 }
 
-
-
-
 ::boost::shared_ptr<PresenterTextView> PresenterNotesView::GetTextView (void) const
 {
     return mpTextView;
 }
-
-
-
 
 void PresenterNotesView::UpdateScrollBar (void)
 {
@@ -786,9 +707,6 @@ void PresenterNotesView::UpdateScrollBar (void)
     }
 }
 
-
-
-
 void PresenterNotesView::ThrowIfDisposed (void)
     throw (::com::sun::star::lang::DisposedException)
 {
@@ -799,9 +717,6 @@ void PresenterNotesView::ThrowIfDisposed (void)
             static_cast<uno::XWeak*>(this));
     }
 }
-
-
-
 
 } } // end of namespace ::sdext::presenter
 

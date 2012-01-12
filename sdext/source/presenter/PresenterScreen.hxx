@@ -63,9 +63,6 @@ namespace {
         > PresenterScreenInterfaceBase;
 }
 
-
-
-
 /** The PresenterScreenJob service is instantiated every time a document is
     created or loaded.  In its execute() method it then filters out all
     non-Impress documents and creates and registers a new PresenterScreen
@@ -99,9 +96,6 @@ private:
 
     css::uno::Reference<css::uno::XComponentContext> mxComponentContext;
 };
-
-
-
 
 /** This is the bootstrap class of the presenter screen.  It is registered
     as drawing framework startup service.  That means that every drawing
@@ -169,7 +163,6 @@ private:
     };
     typedef ::std::map<rtl::OUString,ViewDescriptor> ViewDescriptorContainer;
     ViewDescriptorContainer maViewDescriptors;
-
 
     void ShutdownPresenterScreen (void);
 

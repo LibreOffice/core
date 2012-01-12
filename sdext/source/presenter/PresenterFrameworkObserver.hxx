@@ -40,7 +40,6 @@ namespace css = ::com::sun::star;
 
 namespace sdext { namespace presenter {
 
-
 typedef ::cppu::WeakComponentImplHelper1 <
     ::com::sun::star::drawing::framework::XConfigurationChangeListener
     > PresenterFrameworkObserverInterfaceBase;
@@ -98,7 +97,6 @@ private:
     */
     static bool True (void);
 };
-
 
 } }  // end of namespace ::sdext::presenter
 

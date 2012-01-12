@@ -180,7 +180,6 @@ public:
 
     void ToTop (const SharedPaneDescriptor& rpDescriptor);
 
-
     // XEventListener
 
     virtual void SAL_CALL disposing (

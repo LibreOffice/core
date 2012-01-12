@@ -43,7 +43,6 @@ namespace css = ::com::sun::star;
 
 namespace sdext { namespace presenter {
 
-
 namespace {
     typedef ::cppu::WeakComponentImplHelper2 <
         css::lang::XInitialization,
@@ -69,13 +68,11 @@ public:
         const css::uno::Reference<css::uno::XComponentContext>& rxContext)
         SAL_THROW((css::uno::Exception));
 
-
     // XInitialization
 
     virtual void SAL_CALL initialize(
         const css::uno::Sequence<css::uno::Any>& aArguments)
         throw (css::uno::Exception, css::uno::RuntimeException);
-
 
     // XDispatchProvider
 
@@ -90,7 +87,6 @@ public:
         queryDispatches(
             const css::uno::Sequence< css::frame::DispatchDescriptor>& rDescriptors)
         throw(css::uno::RuntimeException);
-
 
 private:
     class Dispatch;
