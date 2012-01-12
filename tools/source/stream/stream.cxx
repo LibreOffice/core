@@ -1037,7 +1037,7 @@ inline const sal_Unicode* lcl_UnicodeStrChr( const sal_Unicode* pStr,
     return 0;
 }
 
-sal_Bool SvStream::ReadCsvLine( String& rStr, sal_Bool bEmbeddedLineBreak,
+void SvStream::ReadCsvLine( String& rStr, sal_Bool bEmbeddedLineBreak,
         const String& rFieldSeparators, sal_Unicode cFieldQuote,
         sal_Bool bAllowBackslashEscape)
 {
@@ -1102,7 +1102,6 @@ sal_Bool SvStream::ReadCsvLine( String& rStr, sal_Bool bEmbeddedLineBreak,
             }
         }
     }
-    return nError == SVSTREAM_OK;
 }
 
 /*************************************************************************

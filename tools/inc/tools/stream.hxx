@@ -464,8 +464,7 @@ public:
                     field may also be escaped with a preceding backslash.
                     Normally, quotes are escaped by doubling them.
 
-                    @return
-                    sal_True if no stream error.
+                    check Stream::good() to detect IO problems during read
 
                     @ATTENTION
                     Note that the string returned may be truncated even inside
@@ -483,7 +482,7 @@ public:
                     characters will be spoiled, and a subsequent ReadCsvLine()
                     may start under false preconditions.
                   */
-    sal_Bool        ReadCsvLine( String& rStr, sal_Bool bEmbeddedLineBreak,
+    void            ReadCsvLine( String& rStr, sal_Bool bEmbeddedLineBreak,
                         const String& rFieldSeparators, sal_Unicode cFieldQuote,
                         sal_Bool bAllowBackslashEscape = sal_False);
 
