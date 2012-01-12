@@ -286,6 +286,7 @@ public:
         ScDocument* mpDoc;
     public:
         NameCaches(ScDocument* pDoc);
+        const ScDPCache* getCache(const rtl::OUString& rName) const;
         const ScDPCache* getCache(const ::rtl::OUString& rName, const ScRange& rRange);
     private:
         void removeCache(const ::rtl::OUString& rName);

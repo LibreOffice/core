@@ -2565,6 +2565,12 @@ void ScDPCollection::SheetCaches::removeCache(const ScRange& rRange)
 
 ScDPCollection::NameCaches::NameCaches(ScDocument* pDoc) : mpDoc(pDoc) {}
 
+const ScDPCache* ScDPCollection::NameCaches::getCache(const OUString& rName) const
+{
+    CachesType::const_iterator itr = maCaches.find(rName);
+    return itr != maCaches.end() ? itr->second : NULL;
+}
+
 const ScDPCache* ScDPCollection::NameCaches::getCache(const OUString& rName, const ScRange& rRange)
 {
     CachesType::const_iterator itr = maCaches.find(rName);
