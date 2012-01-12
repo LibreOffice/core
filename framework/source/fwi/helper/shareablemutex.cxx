@@ -72,11 +72,6 @@ void ShareableMutex::release()
         pMutexRef->m_oslMutex.release();
 }
 
-::osl::Mutex& ShareableMutex::getShareableOslMutex()
-{
-    return pMutexRef->m_oslMutex;
-}
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -47,7 +47,6 @@ class FWI_DLLPUBLIC ShareableMutex
 
         void acquire();
         void release();
-        ::osl::Mutex& getShareableOslMutex();
 
     private:
         struct MutexRef
