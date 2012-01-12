@@ -4,7 +4,7 @@
 #define SVTOOLS_INDEXENTRYRESSOURCE_HXX
 
 #include "svtools/svtdllapi.h"
-#include <tools/string.hxx>
+#include <rtl/ustring.hxx>
 
 class IndexEntryRessourceData;
 
@@ -16,7 +16,7 @@ class SVT_DLLPUBLIC IndexEntryRessource
     public:
         IndexEntryRessource ();
         ~IndexEntryRessource ();
-        const String& GetTranslation (const String& r_Algorithm);
+        const rtl::OUString& GetTranslation (const rtl::OUString& r_Algorithm);
 };
 
 #endif /* SVTOOLS_INDEXENTRYRESSOURCE_HXX */

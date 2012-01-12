@@ -50,24 +50,15 @@ SvxInsRowColDlg::SvxInsRowColDlg(Window* pParent, bool bCol, const rtl::OString&
     aBeforeBtn( this, CUI_RES( CB_POS_BEFORE ) ),
     aAfterBtn( this, CUI_RES( CB_POS_AFTER ) ),
     aPosFL( this, CUI_RES( FL_POS ) ),
-    aRow(CUI_RES(STR_ROW)),
-    aCol(CUI_RES(STR_COL)),
+    aRow(ResId::toString(CUI_RES(STR_ROW))),
+    aCol(ResId::toString(CUI_RES(STR_COL))),
     aOKBtn( this, CUI_RES( BT_OK ) ),
     aCancelBtn( this, CUI_RES( BT_CANCEL ) ),
     aHelpBtn( this, CUI_RES( BT_HELP ) ),
     bColumn( bCol )
 {
     FreeResource();
-    String aTmp;
-    if( bColumn )
-    {
-        aTmp += aCol;
-    }
-    else
-    {
-        aTmp += aRow;
-    }
-    SetText( aTmp );
+    SetText( bColumn ? aCol : aRow );
     SetHelpId( sHelpId );
 }
 
@@ -75,7 +66,5 @@ short SvxInsRowColDlg::Execute(void)
 {
     return ModalDialog::Execute();
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

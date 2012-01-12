@@ -28,14 +28,15 @@
 #ifndef _SVX_INSRC_HXX
 #define _SVX_INSRC_HXX
 
+#include <rtl/string.hxx>
+#include <rtl/ustring.hxx>
+
 #include <svx/stddlg.hxx>
 
 #include <vcl/fixed.hxx>
 #include <vcl/field.hxx>
 #include <vcl/group.hxx>
 #include <vcl/button.hxx>
-
-#include <tools/string.hxx>
 
 class SvxInsRowColDlg : public SvxAbstractInsRowColDlg, public ModalDialog
 {
@@ -47,8 +48,8 @@ class SvxInsRowColDlg : public SvxAbstractInsRowColDlg, public ModalDialog
     RadioButton     aAfterBtn;
     FixedLine        aPosFL;
 
-    String          aRow;
-    String          aCol;
+    rtl::OUString   aRow;
+    rtl::OUString   aCol;
 
     OKButton        aOKBtn;
     CancelButton    aCancelBtn;
