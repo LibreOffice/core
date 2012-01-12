@@ -100,7 +100,6 @@ private:
 
 public:
 
-    GlyphSet ();
     GlyphSet (sal_Int32 nFontID, sal_Bool bVertical);
     ~GlyphSet ();
 
@@ -113,8 +112,6 @@ public:
     GetGlyphSetEncodingName (rtl_TextEncoding nEnc,
                              const rtl::OString &rFontName);
     sal_Bool        IsVertical ();
-
-    sal_Bool        SetFont (sal_Int32 nFontID, sal_Bool bVertical);
 
     void            DrawText (PrinterGfx &rGfx, const Point& rPoint,
                               const sal_Unicode* pStr, sal_Int16 nLen,

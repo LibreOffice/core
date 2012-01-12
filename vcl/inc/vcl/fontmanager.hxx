@@ -425,8 +425,6 @@ public:
 
     // routines to get font info in small pieces
 
-    // get a specific fonts family name
-    const rtl::OUString& getFontFamily( fontID nFontID ) const;
     // get a specific fonts PSName name
     const rtl::OUString& getPSName( fontID nFontID ) const;
 
@@ -503,12 +501,6 @@ public:
     // info whether an array of glyphs has vertical substitutions
     void hasVerticalSubstitutions( fontID nFontID, const sal_Unicode* pCharacters,
         int nCharacters, bool* pHasSubst ) const;
-
-    // get the XLFD for a font that originated from the X fontpath
-    // note: this may not be the original line that was in the fonts.dir
-    // returns a string for every font, but only TrueType and Type1
-    // fonts originated from the X font path, so check for the font type
-    rtl::OUString getFontXLFD( fontID nFontID ) const;
 
     // get a specific fonts metrics
 
@@ -592,25 +584,6 @@ public:
         virtual void importFontFailed( const rtl::OUString& rFile, FailCondition ) = 0;
         virtual bool isCanceled() = 0;
     };
-
-    // checks wether font import would fail due to no writeable directory
-    bool checkImportPossible() const;
-    // expects system paths not UNC paths
-    // returns the number of fonts successfully imported
-    int importFonts( const std::list< rtl::OString >& rFiles, bool bLinkOnly = false, ImportFontCallback* pCallback = NULL );
-
-    // check wether changeFontProperties would fail due to not writable fonts.dir
-    bool checkChangeFontPropertiesPossible( fontID nFont ) const;
-    // change fonts.dir entry for font
-    bool changeFontProperties( fontID nFont, const rtl::OUString& rXLFD );
-
-    // get properties of a not imported font file
-    bool getImportableFontProperties( const rtl::OString& rFile, std::list< FastPrintFontInfo >& rFontProps );
-
-    bool isPrivateFontFile( fontID ) const;
-
-    // returns false if there were not any
-    bool getAlternativeFamilyNames( fontID nFont, std::list< rtl::OUString >& rNames ) const;
 
     /*  system dependendent font matching
 

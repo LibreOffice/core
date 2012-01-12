@@ -55,12 +55,6 @@ using ::rtl::OString;
 using ::rtl::OStringBuffer;
 using ::rtl::OUStringToOString;
 
-GlyphSet::GlyphSet ()
-        : mnFontID   (-1),
-          mbVertical (0),
-          mbUseFontEncoding (false)
-{}
-
 GlyphSet::GlyphSet (sal_Int32 nFontID, sal_Bool bVertical)
         : mnFontID (nFontID),
           mbVertical (bVertical)
@@ -94,25 +88,6 @@ sal_Bool
 GlyphSet::IsVertical ()
 {
     return mbVertical;
-}
-
-sal_Bool
-GlyphSet::SetFont (sal_Int32 nFontID, sal_Bool bVertical)
-{
-    if (mnFontID != -1)
-        return sal_False;
-
-    mnFontID   = nFontID;
-    mbVertical = bVertical;
-
-    PrintFontManager &rMgr = PrintFontManager::get();
-    meBaseType      = rMgr.getFontType (mnFontID);
-    maBaseName      = OUStringToOString (rMgr.getPSName(mnFontID),
-                                           RTL_TEXTENCODING_ASCII_US);
-    mnBaseEncoding  = rMgr.getFontEncoding(mnFontID);
-    mbUseFontEncoding   = rMgr.getUseOnlyFontEncoding(mnFontID);
-
-    return sal_True;
 }
 
 sal_Bool

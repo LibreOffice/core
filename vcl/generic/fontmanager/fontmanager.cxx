@@ -2275,9 +2275,7 @@ void PrintFontManager::initialize()
                     nBuiltinFonts++;
                 nCached++;
 #if OSL_DEBUG_LEVEL > 2
-                fprintf( stderr, "adding cached font %d: \"%s\" from %s\n", aFont,
-                         OUStringToOString( getFontFamily( aFont ), RTL_TEXTENCODING_MS_1252 ).getStr(),
-                         getFontFileSysPath( aFont ).getStr() );
+                fprintf( stderr, "adding cached font %d: %s\n", aFont, getFontFileSysPath( aFont ).getStr() );
 #endif
 #endif
             }
@@ -2355,8 +2353,7 @@ void PrintFontManager::initialize()
                                 m_pFontCache->updateFontCacheEntry( *font_it, false );
                                 nDirFonts++;
 #if OSL_DEBUG_LEVEL > 2
-                                fprintf( stderr, "adding font %d: \"%s\" from %s\n", aFont,
-                                         OUStringToOString( getFontFamily( aFont ), RTL_TEXTENCODING_MS_1252 ).getStr(),
+                                fprintf( stderr, "adding font %d: from %s\n", aFont,
                                          getFontFileSysPath( aFont ).getStr() );
 #endif
                             }
@@ -2407,8 +2404,7 @@ void PrintFontManager::initialize()
                     nBuiltinFonts++;
                 nCached++;
 #if OSL_DEBUG_LEVEL > 2
-                fprintf( stderr, "adding cached font %d: \"%s\" from %s\n", aFont,
-                         OUStringToOString( getFontFamily( aFont ), RTL_TEXTENCODING_MS_1252 ).getStr(),
+                fprintf( stderr, "adding cached font %d: from %s\n", aFont,
                          getFontFileSysPath( aFont ).getStr() );
 #endif
 #endif
@@ -2886,14 +2882,6 @@ FontFamily PrintFontManager::matchFamilyName( const ::rtl::OUString& rFamily ) c
 
 // -------------------------------------------------------------------------
 
-const ::rtl::OUString& PrintFontManager::getFontFamily( fontID nFontID ) const
-{
-    PrintFont* pFont = getFont( nFontID );
-    return m_pAtoms->getString( ATOM_FAMILYNAME, pFont ? pFont->m_nFamilyName : INVALID_ATOM );
-}
-
-// -------------------------------------------------------------------------
-
 OString PrintFontManager::getAfmFile( PrintFont* pFont ) const
 {
     OString aMetricPath;
@@ -3021,21 +3009,6 @@ void PrintFontManager::hasVerticalSubstitutions( fontID nFontID,
             pHasSubst[i] = it != pFont->m_pMetrics->m_bVerticalSubstitutions.end();
         }
     }
-}
-
-// -------------------------------------------------------------------------
-
-OUString PrintFontManager::getFontXLFD( fontID nFontID ) const
-{
-    PrintFont* pFont = getFont( nFontID );
-    OUString aRet;
-    if( pFont )
-    {
-        OString aXLFD( getXLFD( pFont ) );
-        rtl_TextEncoding aEncoding = getToken(aXLFD, 6, '-').indexOf( "utf8" ) != -1 ? RTL_TEXTENCODING_UTF8 : RTL_TEXTENCODING_ISO_8859_1;
-        aRet = OStringToOUString( aXLFD, aEncoding );
-    }
-    return aRet;
 }
 
 // -------------------------------------------------------------------------
@@ -3207,331 +3180,6 @@ static bool createWriteablePath( const ByteString& rPath )
         bSuccess = true;
 
     return bSuccess;
-}
-
-
-// -------------------------------------------------------------------------
-
-int PrintFontManager::importFonts( const ::std::list< OString >& rFiles, bool bLinkOnly, ImportFontCallback* pCallback )
-{
-    int nSuccess = 0;
-
-    // find a directory with write access
-    rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
-    bool bCanWrite = false;
-    int nDirID = 0;
-    INetURLObject aDir;
-    for( ::std::list< int >::const_iterator dir_it = m_aPrivateFontDirectories.begin();
-         ! bCanWrite && dir_it != m_aPrivateFontDirectories.end(); ++dir_it )
-    {
-        // check if we can create files in that directory
-        ByteString aDirPath = getDirectory( *dir_it );
-        if( createWriteablePath( aDirPath ) )
-        {
-            aDir = INetURLObject( OStringToOUString( aDirPath, aEncoding ), INET_PROT_FILE, INetURLObject::ENCODE_ALL );
-            nDirID = *dir_it;
-            bCanWrite = true;
-        }
-    }
-    if( bCanWrite )
-    {
-        for( ::std::list< OString >::const_iterator font_it = rFiles.begin();
-             font_it != rFiles.end(); ++font_it )
-        {
-            INetURLObject aFrom( OStringToOUString( *font_it, aEncoding ), INET_PROT_FILE, INetURLObject::ENCODE_ALL );
-            INetURLObject aTo( aDir );
-            aTo.Append( aFrom.GetName() );
-
-            if( pCallback )
-                pCallback->progress( aTo.PathToFileName() );
-
-            if( pCallback && pCallback->isCanceled() )
-                break;
-
-            if (!access( rtl::OUStringToOString(aTo.PathToFileName(), aEncoding).getStr(), F_OK))
-            {
-                if( ! ( pCallback ? pCallback->queryOverwriteFile( aTo.PathToFileName() ) : false ) )
-                    continue;
-            }
-            // look for afm if necessary
-            OUString aAfmCopied;
-            FileBase::RC nError;
-            if( aFrom.getExtension().equalsIgnoreAsciiCaseAscii( "pfa" ) ||
-                aFrom.getExtension().equalsIgnoreAsciiCaseAscii( "pfb" ) )
-            {
-                INetURLObject aFromAfm( aFrom );
-                aFromAfm.setExtension( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "afm" ) ) );
-                if (access(rtl::OUStringToOString(aFromAfm.PathToFileName(), aEncoding).getStr(), F_OK))
-                {
-                    aFromAfm.setExtension( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "AFM" ) ) );
-                    if (access(rtl::OUStringToOString(aFromAfm.PathToFileName(), aEncoding).getStr(), F_OK))
-                    {
-                        aFromAfm.removeSegment();
-                        aFromAfm.Append( String( RTL_CONSTASCII_USTRINGPARAM( "afm" ) ) );
-                        aFromAfm.Append( aTo.GetName() );
-                        aFromAfm.setExtension( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "afm" ) ) );
-                        if (access(rtl::OUStringToOString(aFromAfm.PathToFileName(), aEncoding).getStr(), F_OK))
-                        {
-                            aFromAfm.setExtension( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "AFM" ) ) );
-                            if (access(rtl::OUStringToOString(aFromAfm.PathToFileName(), aEncoding).getStr(), F_OK))
-                            {
-                                // give up
-                                if( pCallback )
-                                    pCallback->importFontFailed( aTo.PathToFileName(), ImportFontCallback::NoAfmMetric );
-                                continue;
-                            }
-                        }
-                    }
-                }
-                INetURLObject aToAfm( aTo );
-                aToAfm.setExtension( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "afm" ) ) );
-                OUString aFromPath, aToPath;
-                if( bLinkOnly )
-                {
-                    rtl::OString aLinkFromPath(rtl::OUStringToOString(aFromAfm.PathToFileName(),
-                        aEncoding));
-                    rtl::OString aLinkToPath(rtl::OUStringToOString(aToAfm.PathToFileName(),
-                        aEncoding));
-                    nError = (FileBase::RC)symlink(aLinkFromPath.getStr(), aLinkToPath.getStr());
-                }
-                else
-                    nError = File::copy( aFromAfm.GetMainURL(INetURLObject::DECODE_TO_IURI), aToAfm.GetMainURL(INetURLObject::DECODE_TO_IURI) );
-                if( nError )
-                {
-                    if( pCallback )
-                        pCallback->importFontFailed( aTo.PathToFileName(), ImportFontCallback::AfmCopyFailed );
-                    continue;
-                }
-                aAfmCopied = aToPath;
-            }
-            if( bLinkOnly )
-            {
-                rtl::OString aFromPath(rtl::OUStringToOString(aFrom.PathToFileName(), aEncoding));
-                rtl::OString aToPath(rtl::OUStringToOString(aTo.PathToFileName(), aEncoding));
-                nError = (FileBase::RC)symlink(aFromPath.getStr(), aToPath.getStr());
-            }
-            else
-                nError = File::copy( aFrom.GetMainURL(INetURLObject::DECODE_TO_IURI), aTo.GetMainURL(INetURLObject::DECODE_TO_IURI) );
-            // copy font file
-            if( nError )
-            {
-                if( aAfmCopied.getLength() )
-                    File::remove( aAfmCopied );
-                if( pCallback )
-                    pCallback->importFontFailed( aTo.PathToFileName(), ImportFontCallback::FontCopyFailed );
-                continue;
-            }
-
-            ::std::list< PrintFont* > aNewFonts;
-            ::std::list< PrintFont* >::iterator it;
-            if( analyzeFontFile( nDirID, OUStringToOString( aTo.GetName(), aEncoding ), ::std::list<OString>(), aNewFonts ) )
-            {
-                // remove all fonts for the same file
-                // discarding their font ids
-                ::boost::unordered_map< fontID, PrintFont* >::iterator current, next;
-                current = m_aFonts.begin();
-                OString aFileName( OUStringToOString( aTo.GetName(), aEncoding ) );
-                while( current != m_aFonts.end() )
-                {
-                    bool bRemove = false;
-                    switch( current->second->m_eType )
-                    {
-                        case fonttype::Type1:
-                            if( static_cast<Type1FontFile*>(current->second)->m_aFontFile == aFileName )
-                                bRemove = true;
-                            break;
-                        case fonttype::TrueType:
-                            if( static_cast<TrueTypeFontFile*>(current->second)->m_aFontFile == aFileName )
-                                bRemove = true;
-                            break;
-                        default: break;
-                    }
-                    if( bRemove )
-                    {
-                        next = current;
-                        ++next;
-                        m_aFontFileToFontID[ aFileName ].erase( current->first );
-                        delete current->second;
-                        m_aFonts.erase( current );
-                        current = next;
-                    }
-                    else
-                        ++current;
-                }
-
-                DBG_ASSERT( !knownFontFile( nDirID, aFileName ), "not all fonts removed for file" );
-
-                nSuccess++;
-                for( it = aNewFonts.begin(); it != aNewFonts.end(); ++it )
-                {
-                    m_aFontFileToFontID[ aFileName ].insert( m_nNextFontID );
-                    m_aFonts[ m_nNextFontID++ ] = *it;
-                    m_pFontCache->updateFontCacheEntry( *it, false );
-                }
-            }
-        }
-
-        m_pFontCache->updateDirTimestamp( nDirID );
-        m_pFontCache->flush();
-    }
-    else if( pCallback )
-        pCallback->importFontsFailed( ImportFontCallback::NoWritableDirectory );
-
-    return nSuccess;
-}
-
-// -------------------------------------------------------------------------
-
-bool PrintFontManager::checkImportPossible() const
-{
-    bool bSuccess = false;
-
-    // find a directory with write access
-    ByteString aDir;
-    for( std::list< int >::const_iterator dir_it = m_aPrivateFontDirectories.begin();
-         dir_it != m_aPrivateFontDirectories.end(); ++dir_it )
-    {
-        aDir = getDirectory( *dir_it );
-        if( createWriteablePath( aDir ) )
-        {
-            bSuccess = true;
-            break;
-        }
-    }
-
-#if OSL_DEBUG_LEVEL > 1
-    if( bSuccess )
-        fprintf( stderr, "found writable %s\n", aDir.GetBuffer() );
-#endif
-
-    return bSuccess;
-}
-
-// -------------------------------------------------------------------------
-
-bool PrintFontManager::checkChangeFontPropertiesPossible( fontID /*nFontID*/ ) const
-{
-    // since font properties are changed in the font cache file only nowadays
-    // they can always be changed
-    return true;
-}
-
-// -------------------------------------------------------------------------
-
-bool PrintFontManager::changeFontProperties( fontID nFontID, const ::rtl::OUString& rXLFD )
-{
-    ByteString aXLFD( OUStringToOString( rXLFD, RTL_TEXTENCODING_UTF8 ) );
-    ByteString aAddStyle = comphelper::string::getToken(aXLFD, '-', 6);
-    if( aAddStyle.Search( "utf8" ) == STRING_NOTFOUND )
-    {
-        aAddStyle.Append( aAddStyle.Len() ? ";utf8" : "utf8" );
-        aXLFD.SetToken( 6, ';', aAddStyle );
-    }
-    PrintFont* pFont = getFont( nFontID );
-    std::list< OString > aDummyList;
-    aDummyList.push_back( aXLFD );
-    getFontAttributesFromXLFD( pFont, aDummyList );
-    pFont->m_bUserOverride = true;
-    m_pFontCache->updateFontCacheEntry( pFont, true );
-
-    return true;
-}
-
-// -------------------------------------------------------------------------
-
-bool PrintFontManager::
-getImportableFontProperties(
-                            const OString& rFile,
-                            ::std::list< FastPrintFontInfo >& rFontProps
-                            )
-{
-    rFontProps.clear();
-    int nIndex = rFile.lastIndexOf( '/' );
-    OString aDir, aFile( rFile.copy( nIndex+1 ) );
-    if( nIndex != -1 )
-        aDir = rFile.copy( 0, nIndex );
-    int nDirID = getDirectoryAtom( aDir, true );
-    ::std::list< PrintFont* > aFonts;
-    bool bRet = analyzeFontFile( nDirID, aFile, ::std::list<OString>(), aFonts );
-    while( aFonts.begin() != aFonts.end() )
-    {
-        PrintFont* pFont = aFonts.front();
-        aFonts.pop_front();
-        FastPrintFontInfo aInfo;
-        fillPrintFontInfo( pFont, aInfo );
-        rFontProps.push_back( aInfo );
-        delete pFont;
-    }
-    return bRet;
-}
-
-// -------------------------------------------------------------------------
-
-bool PrintFontManager::isPrivateFontFile( fontID nFont ) const
-{
-    bool bRet = false;
-    int nDirID = -1;
-    PrintFont* pFont = getFont( nFont );
-    if( pFont )
-    {
-        switch( pFont->m_eType )
-        {
-            case fonttype::Type1: nDirID = static_cast< Type1FontFile* >(pFont)->m_nDirectory;break;
-            case fonttype::TrueType: nDirID = static_cast< TrueTypeFontFile* >(pFont)->m_nDirectory;break;
-            default: break;
-        }
-    }
-    if( nDirID != -1 )
-    {
-        for( ::std::list< int >::const_iterator it = m_aPrivateFontDirectories.begin(); it != m_aPrivateFontDirectories.end(); ++it )
-        {
-            if( nDirID == *it )
-            {
-                bRet = true;
-                break;
-            }
-        }
-    }
-    return bRet;
-}
-
-// -------------------------------------------------------------------------
-
-bool PrintFontManager::getAlternativeFamilyNames( fontID nFont, ::std::list< OUString >& rNames ) const
-{
-    rNames.clear();
-
-    PrintFont* pFont = getFont( nFont );
-    if( pFont && pFont->m_eType == fonttype::TrueType )
-    {
-        TrueTypeFontFile* pTTFontFile = static_cast< TrueTypeFontFile* >(pFont);
-        ByteString aFile( getFontFile( pFont ) );
-        TrueTypeFont* pTTFont;
-        if( OpenTTFontFile( aFile.GetBuffer(), pTTFontFile->m_nCollectionEntry, &pTTFont ) == SF_OK )
-        {
-            NameRecord* pNameRecords = NULL;
-            int nNameRecords = GetTTNameRecords( pTTFont, &pNameRecords );
-            for( int i = 0; i < nNameRecords; i++ )
-            {
-                if( pNameRecords[i].nameID != 1 ) // family name
-                    continue;
-
-                OUString aFamily( convertTrueTypeName( pNameRecords+i ) );
-                if( aFamily.getLength()
-                    &&
-                    m_pAtoms->getAtom( ATOM_FAMILYNAME, aFamily, sal_True ) != pFont->m_nFamilyName
-                    )
-                {
-                    rNames.push_back( aFamily );
-                }
-            }
-
-            if( nNameRecords )
-                DisposeNameRecords( pNameRecords, nNameRecords );
-            CloseTTFont( pTTFont );
-        }
-    }
-    return rNames.begin() != rNames.end();
 }
 
 // -------------------------------------------------------------------------
