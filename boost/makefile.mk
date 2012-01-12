@@ -61,6 +61,8 @@ PATCH_FILES+=boost.5119.unordered_map-cp-ctor.patch
 PATCH_FILES+=boost.gcc47679.patch
 #https://svn.boost.org/trac/boost/ticket/6369
 PATCH_FILES+=boost.6369.warnings.patch
+#https://svn.boost.org/trac/boost/ticket/6397
+PATCH_FILES+=boost.6397.warnings.patch
 
 PATCH_FILES+=boost.windows.patch
 
@@ -111,6 +113,8 @@ $(PACKAGE_DIR)$/$(NORMALIZE_FLAG_FILE) : $(PACKAGE_DIR)$/$(BUILD_FLAG_FILE)
     @$(GNUCOPY) -r $(PACKAGE_DIR)$/$(TARFILE_NAME)$/boost$/integer $(INCCOM)$/$(PRJNAME)
     @$(GNUCOPY) -r $(PACKAGE_DIR)$/$(TARFILE_NAME)$/boost$/iterator $(INCCOM)$/$(PRJNAME)
     @$(GNUCOPY) -r $(PACKAGE_DIR)$/$(TARFILE_NAME)$/boost$/mpl $(INCCOM)$/$(PRJNAME)
+    @$(GNUCOPY) -r $(PACKAGE_DIR)$/$(TARFILE_NAME)$/boost$/multi_array $(INCCOM)$/$(PRJNAME)
+    @$(GNUCOPY) -r $(PACKAGE_DIR)$/$(TARFILE_NAME)$/boost$/multi_index $(INCCOM)$/$(PRJNAME)
     @$(GNUCOPY) -r $(PACKAGE_DIR)$/$(TARFILE_NAME)$/boost$/numeric $(INCCOM)$/$(PRJNAME)
     @$(GNUCOPY) -r $(PACKAGE_DIR)$/$(TARFILE_NAME)$/boost$/optional $(INCCOM)$/$(PRJNAME)
     @$(GNUCOPY) -r $(PACKAGE_DIR)$/$(TARFILE_NAME)$/boost$/pending $(INCCOM)$/$(PRJNAME)
