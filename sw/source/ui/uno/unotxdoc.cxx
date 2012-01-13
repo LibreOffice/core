@@ -569,6 +569,7 @@ void SwXTextDocument::dispose(void) throw( RuntimeException )
 
 void SwXTextDocument::close( sal_Bool bDeliverOwnership ) throw( util::CloseVetoException, RuntimeException )
 {
+    SolarMutexGuard aGuard;
     if(IsValid() && m_pHiddenViewFrame)
         lcl_DisposeView( m_pHiddenViewFrame, pDocShell);
     SfxBaseModel::close(bDeliverOwnership);
@@ -3023,6 +3024,7 @@ void SAL_CALL SwXTextDocument::render(
 Reference<XNameContainer> SAL_CALL SwXTextDocument::getXForms()
     throw( RuntimeException )
 {
+    SolarMutexGuard aGuard;
     if ( !pDocShell )
         throw DisposedException( ::rtl::OUString(), static_cast< XTextDocument* >( this ) );
     SwDoc* pDoc = pDocShell->GetDoc();
@@ -3032,6 +3034,7 @@ Reference<XNameContainer> SAL_CALL SwXTextDocument::getXForms()
 uno::Reference< text::XFlatParagraphIterator > SAL_CALL SwXTextDocument::getFlatParagraphIterator(::sal_Int32 nTextMarkupType, sal_Bool bAutomatic)
     throw ( uno::RuntimeException )
 {
+    SolarMutexGuard aGuard;
     return new SwXFlatParagraphIterator( *pDocShell->GetDoc(), nTextMarkupType, bAutomatic );
 }
 
