@@ -101,13 +101,6 @@ endif
 
 endif
 
-ifeq ($(ENABLE_NSPLUGIN),YES)
-$(eval $(call gb_Helper_register_executables,OOO,\
-    nsplugin \
-))
-
-endif
-
 ifeq ($(WITH_MOZILLA),YES)
 $(eval $(call gb_Helper_register_executables,OOO,\
     pluginapp.bin \
@@ -115,6 +108,14 @@ $(eval $(call gb_Helper_register_executables,OOO,\
 $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     pl \
 ))
+ifeq ($(ENABLE_NSPLUGIN),YES)
+$(eval $(call gb_Helper_register_executables,OOO,\
+    nsplugin \
+))
+$(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
+    npsoplugin \
+))
+endif
 endif # WITH_MOZILLA
 
 
@@ -324,7 +325,6 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
     log_uno \
     mcnttype \
     neon \
-    npsoplugin \
     package2 \
     reg \
     scriptframe \

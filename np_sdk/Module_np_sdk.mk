@@ -27,6 +27,8 @@
 
 $(eval $(call gb_Module_Module,np_sdk))
 
+ifeq ($(WITH_MOZILLA),YES)
+
 $(eval $(call gb_Module_add_targets,np_sdk,\
 	Package_inc \
 ))
@@ -35,6 +37,7 @@ ifeq ($(ENABLE_NSPLUGIN),YES)
 $(eval $(call gb_Module_add_targets,np_sdk,\
 	StaticLibrary_nputils \
 ))
+endif
 
 endif
 
