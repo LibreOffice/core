@@ -151,6 +151,12 @@ if [ -n "$GDBTRACECHECK" ] ; then
     exec $GDBTRACECHECK "$sd_prog/soffice.bin" "$@"
 fi
 
+# valgrind --log-file=valgrind.log does not work well with --trace-children=yes
+if [ -n "$VALGRINDCHECK" -a -z "$VALGRIND" ] ; then
+    echo "redirecting the standard and the error output to valgrind.log"
+    exec &>valgrind.log
+fi
+
 # do not pass the request for command line help to oosplash
 if test "$#" -eq 1; then
     case "$1" in
