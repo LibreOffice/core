@@ -132,10 +132,7 @@ void SwScrollbar::AutoShow()
             if(ScrollBar::IsVisible())
                 ScrollBar::Show(sal_False);
         }
-        else if ( !ScrollBar::IsVisible() &&
-                  (!bHori || nVis) )        //Optimierung fuer Browser.
-                                            //Horizontaler Scrollbar per
-                                            //default aus.
+        else if ( !ScrollBar::IsVisible() )
         {
             ScrollBar::Show(sal_True);
         }
