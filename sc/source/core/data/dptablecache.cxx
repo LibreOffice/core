@@ -447,8 +447,11 @@ struct ClearObjectSource : std::unary_function<ScDPObject*, void>
 
 ScDPCache::~ScDPCache()
 {
-    // Make sure no live ScDPObject instances hold reference to this cache any more.
-    std::for_each(maRefObjects.begin(), maRefObjects.end(), ClearObjectSource());
+    // Make sure no live ScDPObject instances hold reference to this cache any
+    // more.  We need to use a copied set because the referencing objects will
+    // modify the original when clearing their source.
+    ObjectSetType aRefs(maRefObjects);
+    std::for_each(aRefs.begin(), aRefs.end(), ClearObjectSource());
 }
 
 bool ScDPCache::IsValid() const
