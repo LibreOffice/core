@@ -20,7 +20,7 @@
 #**************************************************************
 
 BEGIN { global_found = "false" }
-/[ \t]*#/ { sub( substr( $0, index($0, "#")),"" ) }
+/[ \t]*#/ { sub("#.*", "") }
 /[ \t]*local:/ { global_found = "false" }
 /[ \t]*}/ { global_found = "false" }
 /^[ \t]*$/ { next }
