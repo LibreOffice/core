@@ -1477,10 +1477,10 @@ IMPL_LINK(SwAuthMarkDlg, ChangeSourceHdl, RadioButton*, pButton)
                                     pSh->GetFldType(RES_AUTHORITY, aEmptyStr);
         if(pFType)
         {
-            SvStringsDtor aIds;
+            std::vector<String> aIds;
             pFType->GetAllEntryIdentifiers( aIds );
-            for(sal_uInt16 n = 0; n < aIds.Count(); n++)
-                aEntryLB.InsertEntry(*aIds.GetObject(n));
+            for(size_t n = 0; n < aIds.size(); ++n)
+                aEntryLB.InsertEntry(aIds[n]);
         }
         if(m_sCreatedEntry[AUTH_FIELD_IDENTIFIER].Len())
             aEntryLB.InsertEntry(m_sCreatedEntry[AUTH_FIELD_IDENTIFIER]);
@@ -1656,10 +1656,10 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(Window* pParent,
                                         rSh.GetFldType(RES_AUTHORITY, aEmptyStr);
             if(pFType)
             {
-                SvStringsDtor aIds;
+                std::vector<String> aIds;
                 pFType->GetAllEntryIdentifiers( aIds );
-                for(sal_uInt16 n = 0; n < aIds.Count(); n++)
-                    pIdentifierBox->InsertEntry(*aIds.GetObject(n));
+                for(size_t n = 0; n < aIds.size(); ++n)
+                    pIdentifierBox->InsertEntry(aIds[n]);
             }
             pIdentifierBox->SetText(pFields[aCurInfo.nToxField]);
             Size aTmp(aEditSize);

@@ -218,13 +218,12 @@ const SwAuthEntry*  SwAuthorityFieldType::GetEntryByHandle(long nHandle) const
 }
 
 void SwAuthorityFieldType::GetAllEntryIdentifiers(
-                SvStringsDtor& rToFill )const
+    std::vector<String>& rToFill )const
 {
     for(sal_uInt16 j = 0; j < m_pDataArr->Count(); j++)
     {
         SwAuthEntry* pTemp = m_pDataArr->GetObject(j);
-        rToFill.Insert( new String( pTemp->GetAuthorField(
-                    AUTH_FIELD_IDENTIFIER )), rToFill.Count() );
+        rToFill.push_back(pTemp->GetAuthorField(AUTH_FIELD_IDENTIFIER));
     }
 }
 

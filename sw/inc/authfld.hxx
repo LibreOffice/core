@@ -107,7 +107,7 @@ public:
 
     const SwAuthEntry*  GetEntryByHandle(long nHandle) const;
 
-    void                GetAllEntryIdentifiers( SvStringsDtor& rToFill )const;
+    void                GetAllEntryIdentifiers( std::vector<String>& rToFill )const;
     const SwAuthEntry*  GetEntryByIdentifier(const String& rIdentifier)const;
 
     bool                ChangeEntryContent(const SwAuthEntry* pNewEntry);
