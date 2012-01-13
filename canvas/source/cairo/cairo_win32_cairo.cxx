@@ -291,7 +291,6 @@ namespace cairo
         wchar_t unicode[2];
         WORD glyph_index;
         HDC hdc = NULL;
-        int i = 0;
 
         hdc = CreateCompatibleDC (NULL);
 
