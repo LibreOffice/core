@@ -1,171 +1,26 @@
 'encoding UTF-8  Do not remove or change this line!
 '*************************************************************************
 '
-' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-' 
-' Copyright 2000, 2010 Oracle and/or its affiliates.
-'
-' OpenOffice.org - a multi-platform office productivity suite
-'
-' This file is part of OpenOffice.org.
-'
-' OpenOffice.org is free software: you can redistribute it and/or modify
-' it under the terms of the GNU Lesser General Public License version 3
-' only, as published by the Free Software Foundation.
-'
-' OpenOffice.org is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU Lesser General Public License version 3 for more details
-' (a copy is included in the LICENSE file that accompanied this code).
-'
-' You should have received a copy of the GNU Lesser General Public License
-' version 3 along with OpenOffice.org.  If not, see
-' <http://www.openoffice.org/license.html>
-' for a copy of the LGPLv3 License.
+'  Licensed to the Apache Software Foundation (ASF) under one
+'  or more contributor license agreements.  See the NOTICE file
+'  distributed with this work for additional information
+'  regarding copyright ownership.  The ASF licenses this file
+'  to you under the Apache License, Version 2.0 (the
+'  "License"); you may not use this file except in compliance
+'  with the License.  You may obtain a copy of the License at
+'  
+'    http://www.apache.org/licenses/LICENSE-2.0
+'  
+'  Unless required by applicable law or agreed to in writing,
+'  software distributed under the License is distributed on an
+'  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+'  KIND, either express or implied.  See the License for the
+'  specific language governing permissions and limitations
+'  under the License.
 '
 '*************************************************************************
 
-'*
-'* owner : thorsten.bosbach@oracle.com
-'*
-'* short description : global-level-1-test -> insert all OLE-Objects out of OLE-dialog into all doc-types
-'*
-'\******************************************************************************
-
-testcase tOLEWriter
-    
-    Dim i% : Dim k%
-    Dim sText$
-    
-    gApplication = "WRITER"
-    
-    Call hNewDocument
-    
-    PrintLog "- Writer :   Chart without table"
-    hUseAsyncSlot( "InsertObjectChart" )
-
-    Kontext "DocumentChart"
-    if ( DocumentChart.Exists( 5 ) ) then
-        FormatChartType
-        Kontext "ChartType"
-        if ( ChartType.Exists( 5 ) ) then
-            ChartType.Cancel
-        else
-            warnlog "Chart Type dialog did bot occour."
-        end if        
-        Kontext "DocumentChart"
-        DocumentChart.TypeKeys "<ESCAPE>"
-        Kontext "DocumentWriter"
-        DocumentWriter.TypeKeys "<DELETE>"
-    else
-        warnlog "Chart has not been inserted."
-    end if    
-
-    PrintLog "- Writer :   Chart out of a table only with numbers"
-    hUseAsyncSlot( "InsertTableWriter" )
-    
-    Kontext "TabelleEinfuegenWriter"
-    if ( TabelleEinfuegenWriter.exists( 1 ) ) then
-        Spalten.SetText "3"
-        Zeilen.SetText "10"
-        TabelleEinfuegenWriter.OK
-        TabelleEinfuegenWriter.notExists( 2 )
-    else
-        warnlog( "Dialog <TabelleEinfuegenWriter> did not open" )
-    endif
-    
-    Kontext "DocumentWriter"
-    for i%=1 to 10
-        for k%=1 to 3
-            sText$ = (i%+k%)*k%
-            DocumentWriter.TypeKeys  sText$
-            DocumentWriter.TypeKeys "<Right>"
-        next k%
-        DocumentWriter.TypeKeys "<Down>"
-        DocumentWriter.TypeKeys "<Left>", 3
-    next i%
-    
-    hUseAsyncSlot( "InsertObjectChart" )
-    hStepThroughChartWizard()
-    
-    Kontext "DocumentChart"
-    DocumentChart.typeKeys "<ESCAPE>"
-    Kontext "DocumentWriter"
-    DocumentWriter.TypeKeys "<Delete>"
-    Sleep 1
-    DocumentWriter.TypeKeys "<Down>", 20
-    DocumentWriter.TypeKeys "<Return>", 2
-    
-    PrintLog "- Writer :   Chart out of a table only with chars"
-    hUseAsyncSlot( "InsertTableWriter" )
-    
-    Kontext "TabelleEinfuegenWriter"
-    if ( TabelleEinfuegenWriter.exists( 1 ) ) then
-        Spalten.SetText "3"
-        Zeilen.SetText "10"
-        TabelleEinfuegenWriter.OK
-        TabelleEinfuegenWriter.notExists( 2 )
-    else
-        warnlog( "Dialog <TabelleEinfuegenWriter> did not open" )
-    endif
-    
-    Kontext "DocumentWriter"
-    for i%=1 to 10
-        for k%=1 to 3
-            sText$ = (i%+k%)*k%
-            DocumentWriter.TypeKeys  "Hallo" + sText$
-            DocumentWriter.TypeKeys "<Right>"
-        next k%
-        DocumentWriter.TypeKeys "<Down>"
-        DocumentWriter.TypeKeys "<Left>", 3
-    next i%
-    
-    hUseAsyncSlot( "InsertObjectChart" )
-    hStepThroughChartWizard()
-        
-    Kontext "DocumentChart"
-    DocumentChart.typeKeys "<ESCAPE>"
-    Kontext "DocumentWriter"
-    DocumentWriter.TypeKeys "<Delete>"
-    Sleep 1
-    DocumentWriter.TypeKeys "<Down>", 20
-    DocumentWriter.TypeKeys "<Return>", 2
-    
-    PrintLog "- Writer :   Math"
-    
-    hUseAsyncSlot( "InsertObjectFormulaWriter" )
-    gMouseClick ( 1, 1)
-    
-    Kontext "DocumentWriter"
-    DocumentWriter.TypeKeys "<Delete>"
-    
-    PrintLog "- Writer :   floating frame"
-    hUseAsyncSlot( "InsertFloatingFrame" )
-    
-    printlog( "Properties dialog for floating frame should open" )    
-    Kontext "TabEigenschaften"
-    if ( TabEigenschaften.exists( 1 ) and TabEigenschaften.isVisible() ) then
-
-        printlog( "Name the floating frame, close the dialog" )
-        FrameName.SetText "Hallo"
-        Inhalt.SetText ConvertPath ( gTesttoolPath+"global\input\graf_inp\borabora.jpg" )
-        
-        TabEigenschaften.OK
-        TabEigenSchaften.notExists( 2 )
-        
-    endif
-    
-    printlog( "Close the writer document" )
-    Kontext "DocumentWriter"
-    DocumentWriter.TypeKeys "<Delete>"
-    Sleep 1
-    
-    hCloseDocument
-    
-endcase
-
-'*******************************************************************************
+*****
 
 testcase tOLECalc
 
