@@ -141,7 +141,7 @@ namespace svt { namespace table
             }
         }
 
-        if ( sHelpText.getLength() )
+        if ( !sHelpText.isEmpty() )
         {
             Rectangle const aControlScreenRect(
                 OutputToScreenPixel( Point( 0, 0 ) ),

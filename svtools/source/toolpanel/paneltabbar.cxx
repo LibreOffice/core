@@ -588,7 +588,7 @@ namespace svt
         const bool bUseImage = !!aImage && ( i_eItemContent != TABITEM_TEXT_ONLY );
 
         const ::rtl::OUString sItemText( i_pPanel->GetDisplayName() );
-        const bool bUseText = ( sItemText.getLength() != 0 ) && ( i_eItemContent != TABITEM_IMAGE_ONLY );
+        const bool bUseText = ( !sItemText.isEmpty() ) && ( i_eItemContent != TABITEM_IMAGE_ONLY );
 
         Size aItemContentSize;
         if ( bUseImage )
@@ -659,7 +659,7 @@ namespace svt
         }
 
         const ::rtl::OUString sItemText( i_pPanel->GetDisplayName() );
-        const bool bUseText = ( sItemText.getLength() != 0 ) && ( i_eItemContent != TABITEM_IMAGE_ONLY );
+        const bool bUseText = ( !sItemText.isEmpty() ) && ( i_eItemContent != TABITEM_IMAGE_ONLY );
 
         if ( bUseText )
         {

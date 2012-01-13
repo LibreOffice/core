@@ -241,7 +241,7 @@ static String GetImageExtensionByFactory_Impl( const String& rURL )
         ::rtl::OUString aInternalType = xTypeDetector->queryTypeByURL( rURL );
         ::com::sun::star::uno::Reference < ::com::sun::star::container::XNameAccess > xAccess( xTypeDetector, ::com::sun::star::uno::UNO_QUERY );
         ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue > aTypeProps;
-        if ( aInternalType.getLength() > 0 && xAccess->hasByName( aInternalType ) )
+        if ( !aInternalType.isEmpty() && xAccess->hasByName( aInternalType ) )
         {
             xAccess->getByName( aInternalType ) >>= aTypeProps;
             sal_Int32 nProps = aTypeProps.getLength();

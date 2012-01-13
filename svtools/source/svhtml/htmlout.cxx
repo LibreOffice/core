@@ -559,7 +559,7 @@ SvStream& HTMLOutFuncs::FlushToAscii( SvStream& rStream,
 {
     rtl::OString sOut = lcl_FlushToAscii( rContext );
 
-    if (sOut.getLength())
+    if (!sOut.isEmpty())
         rStream << sOut.getStr();
 
     return rStream;

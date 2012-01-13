@@ -326,7 +326,7 @@ ContextMenuHelper::executePopupMenu(
                 if ( nResult > 0 )
                 {
                     ::rtl::OUString aCommand = lcl_GetItemCommandRecursive( pMenu, nResult );
-                    if ( aCommand.getLength() > 0 )
+                    if ( !aCommand.isEmpty() )
                         dispatchCommand( xFrame, aCommand );
                 }
             }
@@ -548,7 +548,7 @@ ContextMenuHelper::getLabelFromCommandURL(
     {
         try
         {
-            if ( aCmdURL.getLength() > 0 )
+            if ( !aCmdURL.isEmpty() )
             {
                 rtl::OUString aStr;
                 uno::Sequence< beans::PropertyValue > aPropSeq;
@@ -614,7 +614,7 @@ ContextMenuHelper::completeMenuProperties(
                 if ( bShowMenuImages )
                 {
                     Image aImage;
-                    if ( aCmdURL.getLength() > 0 )
+                    if ( !aCmdURL.isEmpty() )
                         aImage = getImageFromCommandURL( aCmdURL );
                     pMenu->SetItemImage( nId, aImage );
                 }

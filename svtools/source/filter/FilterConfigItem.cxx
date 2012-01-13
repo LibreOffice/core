@@ -278,7 +278,7 @@ PropertyValue* FilterConfigItem::GetPropertyValue( Sequence< PropertyValue >& rP
 sal_Bool FilterConfigItem::WritePropertyValue( Sequence< PropertyValue >& rPropSeq, const PropertyValue& rPropValue )
 {
     sal_Bool bRet = sal_False;
-    if ( rPropValue.Name.getLength() )
+    if ( !rPropValue.Name.isEmpty() )
     {
         sal_Int32 i, nCount;
         for ( i = 0, nCount = rPropSeq.getLength(); i < nCount; i++ )

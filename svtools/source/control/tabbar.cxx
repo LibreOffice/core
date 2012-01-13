@@ -1548,7 +1548,7 @@ void TabBar::RequestHelp( const HelpEvent& rHEvt )
         else if ( rHEvt.GetMode() & HELPMODE_EXTENDED )
         {
             rtl::OUString aHelpId( rtl::OStringToOUString( GetHelpId( nItemId ), RTL_TEXTENCODING_UTF8 ) );
-            if ( aHelpId.getLength() )
+            if ( !aHelpId.isEmpty() )
             {
                 // Wenn eine Hilfe existiert, dann ausloesen
                 Help* pHelp = Application::GetHelp();
@@ -2487,7 +2487,7 @@ XubString TabBar::GetHelpText( sal_uInt16 nPageId ) const
     if ( nPos != PAGE_NOT_FOUND )
     {
         ImplTabBarItem* pItem = (*mpItemList)[ nPos ];
-        if ( !pItem->maHelpText.Len() && pItem->maHelpId.getLength() )
+        if ( !pItem->maHelpText.Len() && !pItem->maHelpId.isEmpty() )
         {
             Help* pHelp = Application::GetHelp();
             if ( pHelp )

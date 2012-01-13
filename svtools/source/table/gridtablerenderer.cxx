@@ -395,7 +395,7 @@ namespace svt { namespace table
 
         Any const rowHeading( m_pImpl->rModel.getRowHeading( m_pImpl->nCurrentRow ) );
         ::rtl::OUString const rowTitle( CellValueConversion::convertToString( rowHeading ) );
-        if ( rowTitle.getLength() )
+        if ( !rowTitle.isEmpty() )
         {
             ::Color const textColor = lcl_getEffectiveColor( m_pImpl->rModel.getHeaderTextColor(), _rStyle, &StyleSettings::GetFieldTextColor );
             _rDevice.SetTextColor( textColor );
@@ -586,7 +586,7 @@ namespace svt { namespace table
         }
 
         ::rtl::OUString const sText( CellValueConversion::convertToString( i_cellContent ) );
-        if ( sText.getLength() == 0 )
+        if ( sText.isEmpty() )
             return true;
 
         Rectangle const aTargetArea( lcl_getTextRenderingArea( lcl_getContentArea( *m_pImpl, i_targetArea ) ) );

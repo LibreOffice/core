@@ -197,7 +197,7 @@ sal_Bool AcceleratorExecute::execute(const css::awt::KeyEvent& aAWTKey)
     ::rtl::OUString sCommand = impl_ts_findCommand(aAWTKey);
 
     // No Command found? Do nothing! User isnt interested on any error handling .-)
-    if (!sCommand.getLength())
+    if (sCommand.isEmpty())
         return sal_False;
 
     // SAFE -> ----------------------------------
@@ -280,7 +280,7 @@ KeyCode AcceleratorExecute::st_AWTKey2VCLKey(const css::awt::KeyEvent& aAWTKey)
     {
         if (xDocCfg.is())
             sCommand = xDocCfg->getCommandByKeyEvent(aKey);
-        if (sCommand.getLength())
+        if (!sCommand.isEmpty())
             return sCommand;
     }
     catch(const css::container::NoSuchElementException&)
@@ -290,7 +290,7 @@ KeyCode AcceleratorExecute::st_AWTKey2VCLKey(const css::awt::KeyEvent& aAWTKey)
     {
         if (xModuleCfg.is())
             sCommand = xModuleCfg->getCommandByKeyEvent(aKey);
-        if (sCommand.getLength())
+        if (!sCommand.isEmpty())
             return sCommand;
     }
     catch(const css::container::NoSuchElementException&)
@@ -300,7 +300,7 @@ KeyCode AcceleratorExecute::st_AWTKey2VCLKey(const css::awt::KeyEvent& aAWTKey)
     {
         if (xGlobalCfg.is())
             sCommand = xGlobalCfg->getCommandByKeyEvent(aKey);
-        if (sCommand.getLength())
+        if (!sCommand.isEmpty())
             return sCommand;
     }
     catch(const css::container::NoSuchElementException&)

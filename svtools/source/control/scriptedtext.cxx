@@ -291,7 +291,7 @@ const Size& SvtScriptedTextHelper_Impl::GetTextSize() const
 
 void SvtScriptedTextHelper_Impl::DrawText( const Point& _rPos )
 {
-    if( !maText.getLength() || maPosVec.empty() )
+    if( maText.isEmpty() || maPosVec.empty() )
         return;
 
     DBG_ASSERT( maPosVec.size() - 1 == maScriptVec.size(), "SvtScriptedTextHelper_Impl::DrawText - invalid vectors" );

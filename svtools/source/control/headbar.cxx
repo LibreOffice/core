@@ -1117,7 +1117,7 @@ void HeaderBar::RequestHelp( const HelpEvent& rHEvt )
         else if ( rHEvt.GetMode() & HELPMODE_EXTENDED )
         {
             rtl::OUString aHelpId( rtl::OStringToOUString( GetHelpId( nItemId ), RTL_TEXTENCODING_UTF8 ) );
-            if ( aHelpId.getLength() )
+            if ( !aHelpId.isEmpty() )
             {
                 // Wenn eine Hilfe existiert, dann ausloesen
                 Help* pHelp = Application::GetHelp();
@@ -1441,7 +1441,7 @@ XubString HeaderBar::GetHelpText( sal_uInt16 nItemId ) const
     if ( nPos != HEADERBAR_ITEM_NOTFOUND )
     {
         ImplHeadItem* pItem = (*mpItemList)[ nPos ];
-        if ( !pItem->maHelpText.Len() && pItem->maHelpId.getLength() )
+        if ( !pItem->maHelpText.Len() && !pItem->maHelpId.isEmpty() )
         {
             Help* pHelp = Application::GetHelp();
             if ( pHelp )

@@ -193,14 +193,14 @@ sal_Bool SAL_CALL PopupWindowController::supportsService( const OUString& Servic
 void SAL_CALL PopupWindowController::initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
 {
     svt::ToolboxController::initialize( aArguments );
-    if( m_aCommandURL.getLength() )
+    if( !m_aCommandURL.isEmpty() )
         addStatusListener( m_aCommandURL );
 }
 
 // XComponent
 void SAL_CALL PopupWindowController::dispose() throw (RuntimeException)
 {
-    if( m_aCommandURL.getLength() )
+    if( !m_aCommandURL.isEmpty() )
         removeStatusListener( m_aCommandURL );
 
     svt::ToolboxController::dispose();

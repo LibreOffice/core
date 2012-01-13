@@ -2207,7 +2207,7 @@ IMPL_LINK( GraphicFilter, FilterCallback, ConvertData*, pData )
             nFormat = GetImportFormatNumberForShortName( rtl::OStringToOUString( aShortName, RTL_TEXTENCODING_UTF8) );
             nRet = ImportGraphic( pData->maGraphic, String(), pData->mrStm, nFormat ) == 0;
         }
-        else if( aShortName.getLength() )
+        else if( !aShortName.isEmpty() )
         {
             // Export
             nFormat = GetExportFormatNumberForShortName( rtl::OStringToOUString(aShortName, RTL_TEXTENCODING_UTF8) );

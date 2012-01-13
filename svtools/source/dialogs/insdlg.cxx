@@ -165,7 +165,7 @@ void SvObjectServerList::FillInsertObjects()
                         xEntry->getByName( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ObjectUIName" )) ) >>= aUIName;
                         xEntry->getByName( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ClassID" )) ) >>= aClassID;
 
-                        if ( aUIName.getLength() )
+                        if ( !aUIName.isEmpty() )
                         {
                             // replace %PRODUCTNAME
                             sal_Int32 nIndex = aUIName.indexOf( aStringProductName );

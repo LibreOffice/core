@@ -2990,7 +2990,7 @@ void TextEngine::SetLocale( const ::com::sun::star::lang::Locale& rLocale )
 
 ::com::sun::star::lang::Locale TextEngine::GetLocale()
 {
-    if ( !maLocale.Language.getLength() )
+    if ( maLocale.Language.isEmpty() )
     {
         maLocale = Application::GetSettings().GetUILocale();
     }

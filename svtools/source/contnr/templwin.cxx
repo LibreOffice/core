@@ -185,12 +185,12 @@ void ODocumentInfoPreview::fill(
     m_pEditWin->SetAutoScroll( sal_False );
 
     aStr = i_xDocProps->getTitle();
-    if (aStr.getLength()) {
+    if (!aStr.isEmpty()) {
         m_pEditWin->InsertEntry( m_pInfoTable->GetString( DI_TITLE ), aStr );
     }
 
     aStr = i_xDocProps->getAuthor();
-    if (aStr.getLength()) {
+    if (!aStr.isEmpty()) {
         m_pEditWin->InsertEntry( m_pInfoTable->GetString( DI_FROM ), aStr );
     }
 
@@ -199,7 +199,7 @@ void ODocumentInfoPreview::fill(
             i_xDocProps->getCreationDate());
 
     aStr = i_xDocProps->getModifiedBy();
-    if (aStr.getLength()) {
+    if (!aStr.isEmpty()) {
         m_pEditWin->InsertEntry( m_pInfoTable->GetString(DI_MODIFIEDBY), aStr );
     }
 
@@ -208,7 +208,7 @@ void ODocumentInfoPreview::fill(
             i_xDocProps->getModificationDate());
 
     aStr = i_xDocProps->getPrintedBy();
-    if (aStr.getLength()) {
+    if (!aStr.isEmpty()) {
         m_pEditWin->InsertEntry( m_pInfoTable->GetString( DI_PRINTBY ), aStr );
     }
 
@@ -217,18 +217,18 @@ void ODocumentInfoPreview::fill(
             i_xDocProps->getPrintDate());
 
     aStr = i_xDocProps->getSubject();
-    if (aStr.getLength()) {
+    if (!aStr.isEmpty()) {
         m_pEditWin->InsertEntry( m_pInfoTable->GetString( DI_THEME ), aStr );
     }
 
     aStr =
         ::comphelper::string::convertCommaSeparated(i_xDocProps->getKeywords());
-    if (aStr.getLength()) {
+    if (!aStr.isEmpty()) {
         m_pEditWin->InsertEntry( m_pInfoTable->GetString( DI_KEYWORDS ), aStr );
     }
 
     aStr = i_xDocProps->getDescription();
-    if (aStr.getLength()) {
+    if (!aStr.isEmpty()) {
         m_pEditWin->InsertEntry( m_pInfoTable->GetString( DI_DESCRIPTION ),
             aStr );
     }
@@ -252,7 +252,7 @@ void ODocumentInfoPreview::fill(
             aStr = SvFileInformationManager::GetDescription(
                         INetURLObject(i_rURL) );
         }
-        if (aStr.getLength()) {
+        if (!aStr.isEmpty()) {
             m_pEditWin->InsertEntry( m_pInfoTable->GetString( DI_MIMETYPE ),
                 aStr );
         }
@@ -274,7 +274,7 @@ void ODocumentInfoPreview::fill(
                 UNO_QUERY );
             uno::Any aNew;
             aNew = xConverter->convertToSimpleType( aAny, TypeClass_STRING );
-            if ((aNew >>= aStr) && aStr.getLength()) {
+            if ((aNew >>= aStr) && !aStr.isEmpty()) {
                 m_pEditWin->InsertEntry( name, aStr);
             }
         } catch (uno::Exception &) {
@@ -667,7 +667,7 @@ Sequence< ::rtl::OUString > SvtFileViewWindow_Impl::GetNewDocContents() const
             // folder == false
             aRow += '0';
             // image url?
-            if ( aImageURL.getLength() > 0 )
+            if ( !aImageURL.isEmpty() )
             {
                 aRow += '\t';
                 aRow += String( aImageURL );
@@ -1567,7 +1567,7 @@ void SvtTemplateWindow::ReadViewSettings()
     pIconWin->SetCursorPos( nSelectedGroup );
 
     // open the last folder or the selected group
-    if ( sLastFolder.getLength() > 0 )
+    if ( !sLastFolder.isEmpty() )
         pFileWin->OpenFolder( sLastFolder );
     else
         IconClickHdl_Impl( NULL );
@@ -1731,10 +1731,10 @@ sal_Bool SvtDocumentTemplateDialog::CanEnableEditBtn() const
     sal_Bool bEnable = sal_False;
 
     ::rtl::OUString aFolderURL = pImpl->pWin->GetFolderURL();
-    if ( pImpl->pWin->IsFileSelected() && aFolderURL.getLength() )
+    if ( pImpl->pWin->IsFileSelected() && !aFolderURL.isEmpty() )
     {
         ::rtl::OUString aFileTargetURL = pImpl->pWin->GetSelectedFile();
-        bEnable = aFileTargetURL.getLength() > 0;
+        bEnable = !aFileTargetURL.isEmpty();
     }
 
     return bEnable;
@@ -1886,7 +1886,7 @@ IMPL_LINK ( SvtDocumentTemplateDialog, UpdateHdl_Impl, Timer*, _pEventSource )
 IMPL_LINK ( SvtDocumentTemplateDialog, OpenLinkHdl_Impl, svt::FixedHyperlink*, EMPTYARG )
 {
     ::rtl::OUString sURL( aMoreTemplatesLink.GetURL() );
-    if ( sURL.getLength() > 0 )
+    if ( !sURL.isEmpty() )
     {
         localizeWebserviceURI(sURL);
         try

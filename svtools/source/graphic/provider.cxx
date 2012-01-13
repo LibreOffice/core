@@ -298,7 +298,7 @@ uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadResource( const :
             const ::rtl::OUString   aResourceType( rResourceURL.getToken( 0, '/', nIndex ) );
             const ResId             aResId( rResourceURL.getToken( 0, '/', nIndex ).toInt32(), *pResMgr );
 
-            if( aResourceType.getLength() )
+            if( !aResourceType.isEmpty() )
             {
                 BitmapEx aBmpEx;
 
@@ -395,7 +395,7 @@ uno::Reference< beans::XPropertySet > SAL_CALL GraphicProvider::queryGraphicDesc
         pDescriptor->init( xIStm, aURL );
         xRet = pDescriptor;
     }
-    else if( aURL.getLength() )
+    else if( !aURL.isEmpty() )
     {
         uno::Reference< ::graphic::XGraphic > xGraphic( implLoadMemory( aURL ) );
         if( !xGraphic.is() )

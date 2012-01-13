@@ -252,7 +252,7 @@ IMPL_STATIC_LINK( SvtMatchContext_Impl, Select_Impl, void*, )
                 continue;
             }
         }
-        if (( sURL.getLength() > 0 ) && ( sURL[sURL.getLength()-1] != '/' ))
+        if ( !sURL.isEmpty() && ( sURL[sURL.getLength()-1] != '/' ))
         {
             String sUpperURL( sURL );
             sUpperURL.ToUpperAscii();
@@ -884,7 +884,7 @@ void SvtURLBox::UpdatePicklistForSmartProtocol_Impl()
                     seqPropertySet[nProperty].Value >>= sURL;
                     aCurObj.SetURL( sURL );
 
-                    if ( sURL.getLength() && ( eSmartProtocol != INET_PROT_NOT_VALID ) )
+                    if ( !sURL.isEmpty() && ( eSmartProtocol != INET_PROT_NOT_VALID ) )
                     {
                         if( aCurObj.GetProtocol() != eSmartProtocol )
                             break;
@@ -1143,7 +1143,7 @@ String SvtURLBox::GetURL()
         String aName = ParseSmart( aText, aBaseURL, SvtPathOptions().GetWorkPath() );
         aObj.SetURL( aName );
         ::rtl::OUString aURL( aObj.GetMainURL( INetURLObject::NO_DECODE ) );
-        if ( !aURL.getLength() )
+        if ( aURL.isEmpty() )
             // aText itself is invalid, and even together with aBaseURL, it could not
             // made valid -> no chance
             return aText;

@@ -265,7 +265,7 @@ namespace svt
 
                             OUString aContentURL = xContentAccess->queryContentIdentifierString();
                             OUString aTargetURL = xRow->getString( ROW_TARGET_URL );
-                            sal_Bool bHasTargetURL = !xRow->wasNull() && aTargetURL.getLength() > 0;
+                            sal_Bool bHasTargetURL = !xRow->wasNull() && !aTargetURL.isEmpty();
 
                             OUString sRealURL = bHasTargetURL ? aTargetURL : aContentURL;
 
@@ -432,7 +432,7 @@ namespace svt
             Any aAny = xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" )) );
 
             OUString sTitle;
-            if ( ( aAny >>= sTitle ) && sTitle.getLength() > 0 )
+            if ( ( aAny >>= sTitle ) && !sTitle.isEmpty() )
             {
                 _rRet = sTitle;
                 bRet = sal_True;

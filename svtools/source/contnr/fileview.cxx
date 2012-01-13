@@ -151,7 +151,7 @@ void FilterMatch::createWildCardFilterList(const String& _rFilterList,::std::vec
         do
         {
             sToken = _rFilterList.GetToken( 0, ';', nIndex );
-            if ( sToken.getLength() )
+            if ( !sToken.isEmpty() )
             {
                 _rFilters.push_back( WildCard( sToken.toAsciiUpperCase() ) );
             }
@@ -1048,7 +1048,7 @@ sal_Bool ViewTabListBox_Impl::EditedEntry( SvLBoxEntry* pEntry,
     if ( pData )
         aURL = OUString( pData->maURL );
 
-    if ( ! aURL.getLength() )
+    if ( aURL.isEmpty() )
         return bRet;
 
     try
@@ -1965,7 +1965,7 @@ void SvtFileView_Impl::FilterFolderContent_Impl( const OUString &rFilter )
     }
 
     if ( !bHideTransFile &&
-        ( !rFilter.getLength() || ( rFilter.compareToAscii( ALL_FILES_FILTER ) == COMPARE_EQUAL ) ) )
+        ( rFilter.isEmpty() || ( rFilter.compareToAscii( ALL_FILES_FILTER ) == COMPARE_EQUAL ) ) )
         // when replacing names, there is always something to filter (no view of ".nametranslation.table")
         return;
 
@@ -2290,7 +2290,7 @@ void SvtFileView_Impl::CreateVector_Impl( const Sequence < OUString > &rList )
             OUString aSize = aValue.getToken( 0, '\t', nIndex );
             aDisplayText += aSize;
 
-            if ( aSize.getLength() )
+            if ( !aSize.isEmpty() )
                 pEntry->maSize = aSize.toInt64();
         }
         aDisplayText += aTab;
@@ -2301,7 +2301,7 @@ void SvtFileView_Impl::CreateVector_Impl( const Sequence < OUString > &rList )
             OUString aDate = aValue.getToken( 0, '\t', nIndex );
             aDisplayText += aDate;
 
-            if ( aDate.getLength() )
+            if ( !aDate.isEmpty() )
             {
                 DBG_ERRORFILE( "Don't know, how to convert date" );
                 ;// convert date string to date
@@ -2316,7 +2316,7 @@ void SvtFileView_Impl::CreateVector_Impl( const Sequence < OUString > &rList )
         if ( nIndex >= 0 )
         {
             OUString aBool = aValue.getToken( 0, '\t', nIndex );
-            if ( aBool.getLength() )
+            if ( !aBool.isEmpty() )
                 pEntry->mbIsFolder = aBool.toBoolean();
         }
         // get the image url
@@ -2331,7 +2331,7 @@ void SvtFileView_Impl::CreateVector_Impl( const Sequence < OUString > &rList )
         // detect the image
         if( aValue != rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(aSeparatorStr) ) )
         {
-            INetURLObject aObj( pEntry->maImageURL.getLength() ? pEntry->maImageURL : pEntry->maTargetURL );
+            INetURLObject aObj( !pEntry->maImageURL.isEmpty() ? pEntry->maImageURL : pEntry->maTargetURL );
             pEntry->maImage = SvFileInformationManager::GetImage( aObj, sal_False );
         }
         maContent.push_back( pEntry );

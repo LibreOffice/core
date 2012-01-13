@@ -252,7 +252,7 @@ throw ( Exception, RuntimeException )
         {
         }
 
-        if ( m_aCommandURL.getLength() )
+        if ( !m_aCommandURL.isEmpty() )
             m_aListenerMap.insert( URLToDispatchMap::value_type( m_aCommandURL, Reference< XDispatch >() ));
     }
 }
@@ -373,7 +373,7 @@ throw (::com::sun::star::uno::RuntimeException)
         if ( m_bInitialized &&
              m_xFrame.is() &&
              m_xServiceManager.is() &&
-             m_aCommandURL.getLength() )
+             !m_aCommandURL.isEmpty() )
         {
 
             aCommandURL = m_aCommandURL;

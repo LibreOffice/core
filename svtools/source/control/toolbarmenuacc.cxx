@@ -249,7 +249,7 @@ OUString SAL_CALL ToolbarMenuAcc::getAccessibleName() throw (RuntimeException)
     if( mpParent )
         aRet = mpParent->mrMenu.GetAccessibleName();
 
-    if( !aRet.getLength() )
+    if( aRet.isEmpty() )
     {
         Window* pLabel = mpParent->mrMenu.GetAccessibleRelationLabeledBy();
         if( pLabel && pLabel != &mpParent->mrMenu )

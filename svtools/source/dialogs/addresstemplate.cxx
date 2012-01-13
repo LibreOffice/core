@@ -233,7 +233,7 @@ public:
     {
         ConstMapString2StringIterator aPos = m_aAliases.find( _rLogicalName );
         return  ( m_aAliases.end() != aPos )
-            &&  ( aPos->second.getLength() );
+            &&  ( !aPos->second.isEmpty() );
     }
 
     // -------------------------------------------------------------------
@@ -413,7 +413,7 @@ void AssignmentPersistentData::Commit()
     // -------------------------------------------------------------------
     void AssignmentPersistentData::setFieldAssignment(const ::rtl::OUString& _rLogicalName, const ::rtl::OUString& _rAssignment)
     {
-        if (!_rAssignment.getLength())
+        if (_rAssignment.isEmpty())
         {
             if (hasFieldAssignment(_rLogicalName))
                 // the assignment exists but it should be reset

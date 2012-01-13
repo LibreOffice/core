@@ -305,7 +305,7 @@ void ExtendedColorConfig_Impl::Load(const rtl::OUString& rScheme)
     // load color settings
     rtl::OUString sScheme(rScheme);
 
-    if(!sScheme.getLength())
+    if(sScheme.isEmpty())
     {
         //detect current scheme name
         uno::Sequence < ::rtl::OUString > aCurrent(1);
@@ -325,7 +325,7 @@ void ExtendedColorConfig_Impl::Load(const rtl::OUString& rScheme)
         FillComponentColors(aComponentNames,aDisplayNameMap);
     }
 
-    if ( !m_sLoadedScheme.getLength() )
+    if ( m_sLoadedScheme.isEmpty() )
         m_sLoadedScheme = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("default"));
 
     if ( !sScheme.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("default")) )
@@ -338,7 +338,7 @@ void ExtendedColorConfig_Impl::Load(const rtl::OUString& rScheme)
             FillComponentColors(aComponentNames,aDisplayNameMap);
         }
     }
-    if ( !bFound && sScheme.getLength() )
+    if ( !bFound && !sScheme.isEmpty() )
     {
         AddScheme(sScheme);
         CommitCurrentSchemeName();
@@ -427,7 +427,7 @@ void    ExtendedColorConfig_Impl::Notify( const uno::Sequence<OUString>& /*rProp
 
 void ExtendedColorConfig_Impl::Commit()
 {
-    if ( !m_sLoadedScheme.getLength() )
+    if ( m_sLoadedScheme.isEmpty() )
         return;
     const ::rtl::OUString sColorEntries(RTL_CONSTASCII_USTRINGPARAM("Entries"));
     const ::rtl::OUString sColor(RTL_CONSTASCII_USTRINGPARAM("/Color"));

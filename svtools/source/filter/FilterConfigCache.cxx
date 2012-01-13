@@ -211,7 +211,7 @@ void FilterConfigCache::ImplInit()
             xFilterSet->getPropertyValue(SREALFILTERNAME) >>= aEntry.sFilterType;
             Sequence< OUString > lFlags;
             xFilterSet->getPropertyValue(SFLAGS) >>= lFlags;
-            if (lFlags.getLength()!=1 || !lFlags[0].getLength())
+            if (lFlags.getLength()!=1 || lFlags[0].isEmpty())
                 continue;
             if (lFlags[0].equalsIgnoreAsciiCaseAscii("import"))
                 aEntry.nFlags = 1;

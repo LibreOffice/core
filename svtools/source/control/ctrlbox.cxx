@@ -1057,7 +1057,7 @@ void FontNameBox::SaveMRUEntries( const String& aFontMRUEntriesFile, xub_Unicode
     rtl::OString aEntries(rtl::OUStringToOString(GetMRUEntries(cSep),
         RTL_TEXTENCODING_UTF8));
 
-    if (!aEntries.getLength() || !aFontMRUEntriesFile.Len())
+    if (aEntries.isEmpty() || !aFontMRUEntriesFile.Len())
         return;
 
     SvFileStream aStream;
@@ -1427,7 +1427,7 @@ void FontNameBox::UserDraw( const UserDrawEvent& rUDEvt )
         if (bSymbolFont || (!bUsingCorrectFont && sSampleText.isEmpty()))
             sSampleText = makeShortRepresentativeSymbolTextForSelectedFont(*rUDEvt.GetDevice());
 
-        if (sSampleText.getLength())
+        if (!sSampleText.isEmpty())
         {
             const Size &rItemSize = rUDEvt.GetDevice()->GetOutputSize();
             //leave a little border at the edge
@@ -1445,7 +1445,7 @@ void FontNameBox::UserDraw( const UserDrawEvent& rUDEvt )
                 }
 
                 //center the text on the line
-                if (sSampleText.getLength() && nWidth)
+                if (!sSampleText.isEmpty() && nWidth)
                 {
                     nTextHeight = aTextRect.GetHeight();
                     nDesiredGap = (nH-nTextHeight)/2;

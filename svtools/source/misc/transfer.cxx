@@ -151,7 +151,7 @@ static ::rtl::OUString ImplGetParameterString( const TransferableObjectDescripto
     const ::rtl::OUString   aClassName( rObjDesc.maClassName.GetHexName() );
     ::rtl::OUString         aParams;
 
-    if( aClassName.getLength() )
+    if( !aClassName.isEmpty() )
     {
         aParams += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ";classname=\"" ));
         aParams += aClassName;
@@ -774,7 +774,7 @@ sal_Bool TransferableHelper::SetString( const ::rtl::OUString& rString, const Da
 {
     DataFlavor aFileFlavor;
 
-    if( rString.getLength() &&
+    if( !rString.isEmpty() &&
         SotExchange::GetFormatDataFlavor( FORMAT_FILE, aFileFlavor ) &&
         TransferableDataHelper::IsEqual( aFileFlavor, rFlavor ) )
     {
@@ -1387,7 +1387,7 @@ void TransferableDataHelper::FillDataFlavorExVector( const Sequence< DataFlavor 
 
             try
             {
-                if( xMimeFact.is() && rFlavor.MimeType.getLength() )
+                if( xMimeFact.is() && !rFlavor.MimeType.isEmpty() )
                     xMimeType = xMimeFact->createMimeContentType( rFlavor.MimeType );
             }
             catch( const ::com::sun::star::uno::Exception& )
@@ -2107,7 +2107,7 @@ sal_Bool TransferableDataHelper::GetFileList(
                     rtl::OString aDiskString;
 
                     while( xStm->ReadLine( aDiskString ) )
-                        if( aDiskString.getLength() && aDiskString[0] != '#' )
+                        if( !aDiskString.isEmpty() && aDiskString[0] != '#' )
                             rFileList.AppendFile( rtl::OStringToOUString(aDiskString, RTL_TEXTENCODING_UTF8) );
 
                     bRet = sal_True;

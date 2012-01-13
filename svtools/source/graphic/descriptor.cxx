@@ -401,7 +401,7 @@ void GraphicDescriptor::_getPropertyValues( const comphelper::PropertyMapEntry**
                             aMimeType = ::rtl::OUString::createFromAscii( pMimeType );
                     }
 
-                    if( !aMimeType.getLength() && ( mpGraphic->GetType() != GRAPHIC_NONE ) )
+                    if( aMimeType.isEmpty() && ( mpGraphic->GetType() != GRAPHIC_NONE ) )
                         aMimeType = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( MIMETYPE_VCLGRAPHIC ));
                 }
                 else

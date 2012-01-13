@@ -376,7 +376,7 @@ void SAL_CALL PopupMenuControllerBase::initialize( const Sequence< Any >& aArgum
             }
         }
 
-        if ( xFrame.is() && aCommandURL.getLength() )
+        if ( xFrame.is() && !aCommandURL.isEmpty() )
         {
             m_xFrame        = xFrame;
             m_aCommandURL   = aCommandURL;

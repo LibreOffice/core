@@ -262,7 +262,7 @@ UnoTreeListEntry* TreeControlPeer::createEntry( const Reference< XTreeNode >& xN
 
         UnoTreeListItem * pUnoItem = new UnoTreeListItem( pEntry );
 
-        if( xNode->getNodeGraphicURL().getLength() )
+        if( !xNode->getNodeGraphicURL().isEmpty() )
         {
             pUnoItem->SetGraphicURL( xNode->getNodeGraphicURL() );
             Image aNodeImage;
@@ -275,10 +275,10 @@ UnoTreeListEntry* TreeControlPeer::createEntry( const Reference< XTreeNode >& xN
 
         mpTreeImpl->insert( pEntry, pParent, nPos );
 
-        if( msDefaultExpandedGraphicURL.getLength() )
+        if( !msDefaultExpandedGraphicURL.isEmpty() )
             mpTreeImpl->SetExpandedEntryBmp( pEntry, maDefaultExpandedImage );
 
-        if( msDefaultCollapsedGraphicURL.getLength() )
+        if( !msDefaultCollapsedGraphicURL.isEmpty() )
             mpTreeImpl->SetCollapsedEntryBmp( pEntry, maDefaultCollapsedImage );
 
         updateEntry( pEntry );
@@ -729,7 +729,7 @@ void SAL_CALL TreeControlPeer::setDefaultExpandedGraphicURL( const ::rtl::OUStri
     SolarMutexGuard aGuard;
     if( msDefaultExpandedGraphicURL != sDefaultExpandedGraphicURL )
     {
-        if( sDefaultExpandedGraphicURL.getLength() )
+        if( !sDefaultExpandedGraphicURL.isEmpty() )
             loadImage( sDefaultExpandedGraphicURL, maDefaultExpandedImage );
         else
             maDefaultExpandedImage = Image();
@@ -742,7 +742,7 @@ void SAL_CALL TreeControlPeer::setDefaultExpandedGraphicURL( const ::rtl::OUStri
             ImplContextGraphicItem* pContextGraphicItem = dynamic_cast< ImplContextGraphicItem* >( pEntry->GetItem( 0 ) );
             if( pContextGraphicItem )
             {
-                if( pContextGraphicItem->msExpandedGraphicURL.getLength() == 0 )
+                if( pContextGraphicItem->msExpandedGraphicURL.isEmpty() )
                     rTree.SetExpandedEntryBmp( pEntry, maDefaultExpandedImage );
             }
             pEntry = rTree.Next( pEntry );
@@ -767,7 +767,7 @@ void SAL_CALL TreeControlPeer::setDefaultCollapsedGraphicURL( const ::rtl::OUStr
     SolarMutexGuard aGuard;
     if( msDefaultCollapsedGraphicURL != sDefaultCollapsedGraphicURL )
     {
-        if( sDefaultCollapsedGraphicURL.getLength() )
+        if( !sDefaultCollapsedGraphicURL.isEmpty() )
             loadImage( sDefaultCollapsedGraphicURL, maDefaultCollapsedImage );
         else
             maDefaultCollapsedImage = Image();
@@ -780,7 +780,7 @@ void SAL_CALL TreeControlPeer::setDefaultCollapsedGraphicURL( const ::rtl::OUStr
             ImplContextGraphicItem* pContextGraphicItem = dynamic_cast< ImplContextGraphicItem* >( pEntry->GetItem( 0 ) );
             if( pContextGraphicItem )
             {
-                if( pContextGraphicItem->msCollapsedGraphicURL.getLength() == 0 )
+                if( pContextGraphicItem->msCollapsedGraphicURL.isEmpty() )
                     rTree.SetCollapsedEntryBmp( pEntry, maDefaultCollapsedImage );
             }
             pEntry = rTree.Next( pEntry );

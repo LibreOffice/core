@@ -59,7 +59,7 @@ GObjectImpl::GObjectImpl( uno::Sequence< uno::Any > const & args, uno::Reference
     if ( args.getLength() == 1 )
     {
         rtl::OUString sId;
-        if ( !( args[ 0 ] >>= sId ) || sId.getLength() == 0 )
+        if ( !( args[ 0 ] >>= sId ) || sId.isEmpty() )
             throw lang::IllegalArgumentException();
         rtl::OString bsId(rtl::OUStringToOString(sId, RTL_TEXTENCODING_UTF8));
         mpGObject.reset( new GraphicObject( bsId ) );

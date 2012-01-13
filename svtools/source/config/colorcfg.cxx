@@ -220,7 +220,7 @@ ColorConfig_Impl::~ColorConfig_Impl()
 void ColorConfig_Impl::Load(const rtl::OUString& rScheme)
 {
     rtl::OUString sScheme(rScheme);
-    if(!sScheme.getLength())
+    if(sScheme.isEmpty())
     {
         //detect current scheme name
         uno::Sequence < ::rtl::OUString > aCurrent(1);
