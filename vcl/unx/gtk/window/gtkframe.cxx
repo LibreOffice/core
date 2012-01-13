@@ -4160,10 +4160,12 @@ gboolean GtkSalFrame::IMHandler::signalIMDeleteSurrounding( GtkIMContext*, gint 
     return sal_False;
 }
 
+#if GTK_CHECK_VERSION(3,0,0)
 Size GtkSalDisplay::GetScreenSize( int nScreen )
 {
     Rectangle aRect = m_pSys->GetDisplayScreenPosSizePixel( nScreen );
     return Size( aRect.GetWidth(), aRect.GetHeight() );
 }
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

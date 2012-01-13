@@ -154,10 +154,12 @@ public:
     GdkCursor *getCursor( PointerStyle ePointerStyle );
     virtual int CaptureMouse( SalFrame* pFrame );
 
+#if GTK_CHECK_VERSION(3,0,0)
     bool IsXinerama() { return !m_pSys->IsMultiDisplay(); }
     int  GetDefaultScreenNumber() { return m_pSys->GetDefaultDisplayNumber(); }
     int  GetScreenCount() { return m_pSys->GetDisplayScreenCount(); }
     Size GetScreenSize( int screen );
+#endif
     virtual void initScreen( int nScreen ) const;
 
     GdkFilterReturn filterGdkEvent( GdkXEvent* sys_event,
