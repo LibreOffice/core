@@ -552,15 +552,13 @@ IMPL_LINK( SwLabFmtPage, SaveHdl, PushButton *, EMPTYARG )
     {
         bModified = sal_False;
         const Sequence<OUString>& rMan = GetParent()->GetLabelsConfig().GetManufacturers();
-        SvStringsDtor& rMakes = GetParent()->Makes();
-        if(rMakes.Count() < (sal_uInt16)rMan.getLength())
+        std::vector<rtl::OUString>& rMakes(GetParent()->Makes());
+        if(rMakes.size() < (sal_uInt16)rMan.getLength())
         {
-            rMakes.DeleteAndDestroy(0, rMakes.Count());
+            rMakes.clear();
             const OUString* pMan = rMan.getConstArray();
             for(sal_Int32 nMan = 0; nMan < rMan.getLength(); nMan++)
-            {
-                rMakes.Insert( new String(pMan[nMan]), rMakes.Count() );
-            }
+                rMakes.push_back(pMan[nMan]);
         }
         aMakeFI.SetText(aItem.aMake);
         aTypeFI.SetText(aItem.aType);

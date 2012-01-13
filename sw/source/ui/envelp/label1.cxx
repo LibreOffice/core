@@ -108,10 +108,7 @@ SwLabDlg::SwLabDlg(Window* pParent, const SfxItemSet& rSet,
     SfxTabDialog( pParent, SW_RES(DLG_LAB), &rSet, sal_False ),
     pNewDBMgr(pDBMgr),
     pPrtPage(0),
-
     aTypeIds( 50, 10 ),
-    aMakes  (  5,  0 ),
-
     pRecs   ( new SwLabRecs() ),
     sBusinessCardDlg(SW_RES(ST_BUSINESSCARDDLG)),
     sFormat(SW_RES(ST_FIRSTPAGE_LAB)),
@@ -171,13 +168,13 @@ SwLabDlg::SwLabDlg(Window* pParent, const SfxItemSet& rSet,
     const rtl::OUString* pMan = rMan.getConstArray();
     for(sal_Int32 nMan = 0; nMan < rMan.getLength(); nMan++)
     {
-        aMakes.Insert( new String(pMan[nMan]), aMakes.Count() );
+        aMakes.push_back(pMan[nMan]);
         if ( pMan[nMan] == aItem.aLstMake )
             nLstGroup = (sal_uInt16) nMan;
     }
 
-    if ( aMakes.Count() )
-        _ReplaceGroup( *aMakes[nLstGroup] );
+    if ( !aMakes.empty() )
+        _ReplaceGroup( aMakes[nLstGroup] );
 
     if (pExampleSet)
         pExampleSet->Put(aItem);
@@ -284,15 +281,15 @@ SwLabPage::SwLabPage(Window* pParent, const SfxItemSet& rSet) :
 
     InitDatabaseBox();
 
-    sal_uInt16 nLstGroup = 0;
+    size_t nLstGroup = 0;
 
-    const sal_uInt16 nCount = (sal_uInt16)GetParent()->Makes().Count();
-    for (sal_uInt16 i = 0; i < nCount; ++i)
+    const sal_uInt16 nCount = (sal_uInt16)GetParent()->Makes().size();
+    for(size_t i = 0; i < nCount; ++i)
     {
-        String &rStr = *GetParent()->Makes()[i];
+        rtl::OUString& rStr = GetParent()->Makes()[i];
         aMakeBox.InsertEntry( rStr );
 
-        if ( rStr == String(aItem.aLstMake) )
+        if ( rStr == aItem.aLstMake)
             nLstGroup = i;
     }
 
@@ -578,14 +575,11 @@ void SwLabPage::Reset(const SfxItemSet& rSet)
     aAddrBox    .Check      ( aItem.bAddr );
     aWritingEdit.SetText    ( aWriting.ConvertLineEnd() );
 
-    const sal_uInt16 nCount = (sal_uInt16)GetParent()->Makes().Count();
-    for (sal_uInt16 i = 0; i < nCount; ++i)
+    for(std::vector<rtl::OUString>::const_iterator i = GetParent()->Makes().begin(); i != GetParent()->Makes().end(); ++i)
     {
-        String &rStr = *GetParent()->Makes()[i];
-        if(aMakeBox.GetEntryPos(String(rStr)) == LISTBOX_ENTRY_NOTFOUND)
-            aMakeBox.InsertEntry( rStr );
+        if(aMakeBox.GetEntryPos(String(*i)) == LISTBOX_ENTRY_NOTFOUND)
+            aMakeBox.InsertEntry(*i);
     }
-
 
     aMakeBox    .SelectEntry( aItem.aMake );
     //save the current type
