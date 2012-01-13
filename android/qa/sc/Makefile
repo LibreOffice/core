@@ -55,16 +55,11 @@ copy-stuff:
 # Libs and UNO components that the tests need.
 #
 	for F in $(strip \
-		  avmedialo \
 		  basebmplo \
 		  basegfxlo \
 		  bootstrap.uno \
-		  canvastoolslo \
 		  comphelpgcc3 \
 		  configmgr.uno \
-		  cppcanvaslo \
-		  drawinglayerlo \
-		  editenglo \
 		  fontconfig \
 		  forlo \
 		  foruilo \
@@ -83,11 +78,11 @@ copy-stuff:
 		  icuuclo \
 		  jvmaccessgcc3 \
 		  jvmfwk \
-		  lnglo \
 		  localedata_en \
 		  localedata_es \
 		  localedata_euro \
 		  localedata_others \
+		  mergedlo \
 		  msfilterlo \
 		  reg \
 		  saxlo \
@@ -98,8 +93,6 @@ copy-stuff:
 		  store \
 		  svllo \
 		  svtlo \
-		  svxcorelo \
-		  svxlo \
 		  test \
 		  tklo \
 		  tllo \
@@ -120,7 +113,6 @@ copy-stuff:
 		  xcrlo \
 		  xml2 \
 		  xmlreader \
-		  xolo \
 		  ); do \
 	    $(call COPY,$(OUTDIR)/lib/lib$${F}.so); \
 	done
