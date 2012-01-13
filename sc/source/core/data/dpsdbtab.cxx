@@ -140,7 +140,7 @@ void ScDatabaseDPData::CreateCacheTable()
 
     if (!aCacheTable.hasCache())
     {
-        fprintf(stdout, "ScDatabaseDPData::CreateCacheTable:   NOT GOOD!\n");
+        OSL_FAIL("ScDatabaseDPData::CreateCacheTable:   NOT GOOD!");
         // This better not happen!!  Cache table should be created with a live
         // data cache instance at all times.
         return;

@@ -192,7 +192,7 @@ void ScSheetDPData::CreateCacheTable()
 
     if (!aCacheTable.hasCache())
     {
-        fprintf(stdout, "ScSheetDPData::CreateCacheTable:   NOT GOOD!!!\n");
+        OSL_FAIL("ScSheetDPData::CreateCacheTable:   NOT GOOD!!!");
         // This better not happen!!  The cache table should be created with a
         // live data cache at all times.
         return;
