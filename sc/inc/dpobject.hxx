@@ -253,6 +253,7 @@ public:
 
 class ScDPCollection
 {
+    friend class ScDPCache;
 public:
 
     /**
@@ -277,6 +278,7 @@ public:
     private:
         void updateCache(const ScRange& rRange, std::set<ScDPObject*>& rRefs);
         void removeCache(const ScRange& rRange);
+        bool remove(const ScDPCache* p);
     };
 
     /**
@@ -295,6 +297,7 @@ public:
     private:
         void updateCache(const rtl::OUString& rName, const ScRange& rRange, std::set<ScDPObject*>& rRefs);
         void removeCache(const ::rtl::OUString& rName);
+        bool remove(const ScDPCache* p);
     };
 
     /**
@@ -333,6 +336,7 @@ public:
         void updateCache(sal_Int32 nSdbType, const ::rtl::OUString& rDBName, const ::rtl::OUString& rCommand,
                          std::set<ScDPObject*>& rRefs);
         void removeCache(sal_Int32 nSdbType, const ::rtl::OUString& rDBName, const ::rtl::OUString& rCommand);
+        bool remove(const ScDPCache* p);
     };
 
     ScDPCollection(ScDocument* pDocument);
@@ -373,6 +377,10 @@ public:
     SheetCaches& GetSheetCaches();
     NameCaches& GetNameCaches();
     DBCaches& GetDBCaches();
+
+private:
+    /** Only to be called from ScDPCache::RemoveReference(). */
+    void RemoveCache(const ScDPCache* pCache);
 
 private:
     typedef ::boost::ptr_vector<ScDPObject> TablesType;

@@ -774,11 +774,8 @@ void ScDPObject::UpdateReference( UpdateRefMode eUpdateRefMode,
                 nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
         if ( eRes != UR_NOTHING )
         {
-            ScSheetSourceDesc aNewDesc(pDoc);
-            aNewDesc.SetSourceRange(ScRange(nCol1, nRow1, nTab1, nCol2, nRow2, nTab2));
-
-            SCsCOL nDiffX = nCol1 - (SCsCOL) pSheetDesc->GetSourceRange().aStart.Col();
-            SCsROW nDiffY = nRow1 - (SCsROW) pSheetDesc->GetSourceRange().aStart.Row();
+            SCsCOL nDiffX = nCol1 - pSheetDesc->GetSourceRange().aStart.Col();
+            SCsROW nDiffY = nRow1 - pSheetDesc->GetSourceRange().aStart.Row();
 
             ScQueryParam aParam = pSheetDesc->GetQueryParam();
             aParam.nCol1 = sal::static_int_cast<SCCOL>( aParam.nCol1 + nDiffX );
@@ -790,8 +787,8 @@ void ScDPObject::UpdateReference( UpdateRefMode eUpdateRefMode,
                 if (aParam.GetEntry(i).bDoQuery)
                     aParam.GetEntry(i).nField += nDiffX;
 
-            aNewDesc.SetQueryParam(aParam);
-            SetSheetDesc( aNewDesc );       // allocates new pSheetDesc
+            pSheetDesc->SetQueryParam(aParam);
+            pSheetDesc->SetSourceRange(ScRange(nCol1, nRow1, nTab1, nCol2, nRow2, nTab2));
         }
     }
 }
@@ -2610,6 +2607,22 @@ void ScDPCollection::SheetCaches::removeCache(const ScRange& rRange)
     maCaches.erase(itCache);
 }
 
+bool ScDPCollection::SheetCaches::remove(const ScDPCache* p)
+{
+    CachesType::iterator it = maCaches.begin(), itEnd = maCaches.end();
+    for (; it != itEnd; ++it)
+    {
+        if (it->second == p)
+        {
+            size_t idx = it->first;
+            maCaches.erase(it);
+            maRanges[idx].SetInvalid();
+            return true;
+        }
+    }
+    return false;
+}
+
 ScDPCollection::NameCaches::NameCaches(ScDocument* pDoc) : mpDoc(pDoc) {}
 
 bool ScDPCollection::NameCaches::hasCache(const OUString& rName) const
@@ -2653,6 +2666,20 @@ void ScDPCollection::NameCaches::removeCache(const OUString& rName)
     CachesType::iterator itr = maCaches.find(rName);
     if (itr != maCaches.end())
         maCaches.erase(itr);
+}
+
+bool ScDPCollection::NameCaches::remove(const ScDPCache* p)
+{
+    CachesType::iterator it = maCaches.begin(), itEnd = maCaches.end();
+    for (; it != itEnd; ++it)
+    {
+        if (it->second == p)
+        {
+            maCaches.erase(it);
+            return true;
+        }
+    }
+    return false;
 }
 
 ScDPCollection::DBType::DBType(sal_Int32 nSdbType, const OUString& rDBName, const OUString& rCommand) :
@@ -2792,6 +2819,20 @@ void ScDPCollection::DBCaches::removeCache(sal_Int32 nSdbType, const OUString& r
     CachesType::iterator itr = maCaches.find(aType);
     if (itr != maCaches.end())
         maCaches.erase(itr);
+}
+
+bool ScDPCollection::DBCaches::remove(const ScDPCache* p)
+{
+    CachesType::iterator it = maCaches.begin(), itEnd = maCaches.end();
+    for (; it != itEnd; ++it)
+    {
+        if (it->second == p)
+        {
+            maCaches.erase(it);
+            return true;
+        }
+    }
+    return false;
 }
 
 ScDPCollection::ScDPCollection(ScDocument* pDocument) :
@@ -3078,6 +3119,21 @@ ScDPCollection::NameCaches& ScDPCollection::GetNameCaches()
 ScDPCollection::DBCaches& ScDPCollection::GetDBCaches()
 {
     return maDBCaches;
+}
+
+void ScDPCollection::RemoveCache(const ScDPCache* pCache)
+{
+    if (maSheetCaches.remove(pCache))
+        // sheet cache removed.
+        return;
+
+    if (maNameCaches.remove(pCache))
+        // named range cache removed.
+        return;
+
+    if (maDBCaches.remove(pCache))
+        // database cache removed.
+        return;
 }
 
 bool operator<(const ScDPCollection::DBType& left, const ScDPCollection::DBType& right)
