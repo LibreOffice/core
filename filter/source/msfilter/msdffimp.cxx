@@ -3745,7 +3745,7 @@ rtl::OUString SvxMSDffManager::ReadDffString(SvStream& rSt, DffRecordHeader aStr
     {
         bool bUniCode=aStrHd.nRecType==DFF_PST_TextCharsAtom;
         sal_uLong nBytes = aStrHd.nRecLen;
-        MSDFFReadZString( rSt, aRet, nBytes, bUniCode );
+        aRet = MSDFFReadZString( rSt, nBytes, bUniCode );
         if( !bUniCode )
         {
             for ( xub_StrLen n = 0; n < nBytes; n++ )
@@ -4005,36 +4005,34 @@ bool SvxMSDffManager::ReadObjText(SvStream& rSt, SdrObject* pObj)
 }
 
 //static
-void SvxMSDffManager::MSDFFReadZString( SvStream& rIn, String& rStr,
-                                    sal_uLong nRecLen, bool bUniCode )
+rtl::OUString SvxMSDffManager::MSDFFReadZString(SvStream& rIn,
+    sal_uLong nRecLen, bool bUniCode)
 {
     sal_uInt16 nLen = (sal_uInt16)nRecLen;
-    if( nLen )
+    if (!nLen)
+        return rtl::OUString();
+
+    String sBuf;
+
+    if( bUniCode )
     {
-        String sBuf;
+        nLen >>= 1;
 
-        if( bUniCode )
-        {
-            nLen >>= 1;
-
-            sal_Unicode* pBuf = sBuf.AllocBuffer(nLen);
-            rIn.Read( (sal_Char*)pBuf, nLen << 1 );
+        sal_Unicode* pBuf = sBuf.AllocBuffer(nLen);
+        rIn.Read( (sal_Char*)pBuf, nLen << 1 );
 #ifdef OSL_BIGENDIAN
-            for( sal_uInt16 n = 0; n < nLen; ++n, ++pBuf )
-                *pBuf = SWAPSHORT( *pBuf );
+        for( sal_uInt16 n = 0; n < nLen; ++n, ++pBuf )
+            *pBuf = SWAPSHORT( *pBuf );
 #endif // ifdef OSL_BIGENDIAN
-        }
-        else
-        {
-            boost::scoped_array<sal_Char> xBuffer(new sal_Char[nLen]);
-            nLen = rIn.Read(xBuffer.get(), nLen);
-            sBuf = rtl::OUString(xBuffer.get(), nLen, RTL_TEXTENCODING_MS_1252);
-        }
-
-        rStr = sBuf.EraseTrailingChars( 0 );
     }
     else
-        rStr.Erase();
+    {
+        boost::scoped_array<sal_Char> xBuffer(new sal_Char[nLen]);
+        nLen = rIn.Read(xBuffer.get(), nLen);
+        sBuf = rtl::OUString(xBuffer.get(), nLen, RTL_TEXTENCODING_MS_1252);
+    }
+
+    return sBuf.EraseTrailingChars( 0 );
 }
 
 SdrObject* SvxMSDffManager::ImportFontWork( SvStream& rStCt, SfxItemSet& rSet, Rectangle& rBoundRect ) const
@@ -4046,9 +4044,9 @@ SdrObject* SvxMSDffManager::ImportFontWork( SvStream& rStCt, SfxItemSet& rSet, R
 
     ((SvxMSDffManager*)this)->mnFix16Angle = 0; // we don't want to use this property in future
     if ( SeekToContent( DFF_Prop_gtextUNICODE, rStCt ) )
-        MSDFFReadZString( rStCt, aObjectText, GetPropertyValue( DFF_Prop_gtextUNICODE ), sal_True );
+        aObjectText = MSDFFReadZString( rStCt, GetPropertyValue( DFF_Prop_gtextUNICODE ), sal_True );
     if ( SeekToContent( DFF_Prop_gtextFont, rStCt ) )
-        MSDFFReadZString( rStCt, aFontName, GetPropertyValue( DFF_Prop_gtextFont ), sal_True );
+        aFontName = MSDFFReadZString( rStCt, GetPropertyValue( DFF_Prop_gtextFont ), sal_True );
     if ( GetPropertyValue( DFF_Prop_gtextFStrikethrough, 0 ) & 0x2000 )
     {
         // Text ist senkrecht formatiert, Box Kippen
@@ -4193,7 +4191,7 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, cons
     {
         Graphic aGraf;  // be sure this graphic is deleted before swapping out
         if( SeekToContent( DFF_Prop_pibName, rSt ) )
-            MSDFFReadZString( rSt, aFileName, GetPropertyValue( DFF_Prop_pibName ), sal_True );
+            aFileName = MSDFFReadZString( rSt, GetPropertyValue( DFF_Prop_pibName ), sal_True );
 
         //   UND, ODER folgendes:
         if( !( eFlags & mso_blipflagDoNotSave ) ) // Grafik embedded
@@ -4717,7 +4715,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                             SvxFontItem aLatin(EE_CHAR_FONTINFO), aAsian(EE_CHAR_FONTINFO_CJK), aComplex(EE_CHAR_FONTINFO_CTL);
                             GetDefaultFonts( aLatin, aAsian, aComplex );
 
-                            MSDFFReadZString( rSt, aFontName, GetPropertyValue( DFF_Prop_gtextFont ), sal_True );
+                            aFontName = MSDFFReadZString( rSt, GetPropertyValue( DFF_Prop_gtextFont ), sal_True );
                             aSet.Put( SvxFontItem( aLatin.GetFamily(), aFontName, aLatin.GetStyleName(),
                                         PITCH_DONTKNOW, RTL_TEXTENCODING_DONTKNOW, EE_CHAR_FONTINFO ));
                             aSet.Put( SvxFontItem( aLatin.GetFamily(), aFontName, aLatin.GetStyleName(),
@@ -4740,7 +4738,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
 
                         if ( SeekToContent( DFF_Prop_gtextUNICODE, rSt ) )
                         {
-                            MSDFFReadZString( rSt, aObjectText, GetPropertyValue( DFF_Prop_gtextUNICODE ), sal_True );
+                            aObjectText = MSDFFReadZString( rSt, GetPropertyValue( DFF_Prop_gtextUNICODE ), sal_True );
                             ReadObjText( aObjectText, pRet );
                         }
 

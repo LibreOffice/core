@@ -188,7 +188,7 @@ SvStream& operator>>( SvStream& rIn, PptCurrentUserAtom& rAtom )
             >> rAtom.nMajorVersion
             >> rAtom.nMinorVersion
             >> nPad;
-        SvxMSDffManager::MSDFFReadZString( rIn, rAtom.aCurrentUser, nUserNameLen, sal_True );
+        rAtom.aCurrentUser = SvxMSDffManager::MSDFFReadZString( rIn, nUserNameLen, sal_True );
     }
     aHd.SeekToEndOfRecord( rIn );
     return rIn;
@@ -562,7 +562,7 @@ sal_Bool SdrEscherImport::ReadString( String& rStr ) const
             || aStrHd.nRecType == PPT_PST_CString);
         bRet=sal_True;
         sal_uLong nBytes = aStrHd.nRecLen;
-        MSDFFReadZString( rStCtrl, rStr, nBytes, bUniCode );
+        rStr = MSDFFReadZString( rStCtrl, nBytes, bUniCode );
         aStrHd.SeekToEndOfRecord( rStCtrl );
     }
     else
@@ -2675,8 +2675,8 @@ void ImportComment10( SvxMSDffManager& rMan, SvStream& rStCtrl, SdrPage* pPage, 
         {
             case PPT_PST_CString :
             {
-                String aString;
-                SvxMSDffManager::MSDFFReadZString( rStCtrl, aString, aCommentHd.nRecLen, sal_True );
+                rtl::OUString aString = SvxMSDffManager::MSDFFReadZString( rStCtrl,
+                    aCommentHd.nRecLen, sal_True );
                 switch ( aCommentHd.nRecInstance )
                 {
                     case 0 : sAuthor = aString;     break;
@@ -3149,7 +3149,10 @@ void SdrEscherImport::ImportHeaderFooterContainer( DffRecordHeader& rHd, HeaderF
             case PPT_PST_CString :
             {
                 if ( aHd.nRecInstance < 4 )
-                    MSDFFReadZString( rStCtrl, rE.pPlaceholder[ aHd.nRecInstance ], aHd.nRecLen, sal_True );
+                {
+                    rE.pPlaceholder[ aHd.nRecInstance ] = MSDFFReadZString( rStCtrl,
+                        aHd.nRecLen, sal_True );
+                }
             }
             break;
         }

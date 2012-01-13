@@ -451,8 +451,7 @@ rtl::OUString ElementConfig::dump_uint( SvStream& rStream, sal_Size& nLength )
 
 rtl::OUString ElementConfig::dump_unistring( SvStream& rStream, sal_Size& nLength )
 {
-    String aString;
-    SvxMSDffManager::MSDFFReadZString( rStream, aString, nLength, sal_True );
+    String aString = SvxMSDffManager::MSDFFReadZString( rStream, nLength, sal_True );
     nLength = 0;
     return aString;
 }

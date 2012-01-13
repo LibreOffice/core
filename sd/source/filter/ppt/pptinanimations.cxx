@@ -2830,9 +2830,7 @@ bool AnimationImporter::importAttributeValue( const Atom* pAtom, Any& rAny )
                 {
                     if ( ( nRecLen & 1 ) && ( nRecLen > 1 ) )
                     {
-                        String aString;
-                        mpPPTImport->MSDFFReadZString( mrStCtrl, aString, nRecLen - 1, sal_True );
-                        rtl::OUString aOUString( aString );
+                        rtl::OUString aOUString = mpPPTImport->MSDFFReadZString( mrStCtrl, nRecLen - 1, sal_True );
                         rAny <<= aOUString;
 
                         bOk = true;
