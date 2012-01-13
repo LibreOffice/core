@@ -129,27 +129,27 @@ void SwChangeDBDlg::FillDBPopup()
     String sTableName(rDBData.sCommand);
     aAvailDBTLB.Select(sDBName, sTableName, aEmptyStr);
 
-    SvStringsDtor aAllDBNames(5, 5);
+    std::vector<String> aAllDBNames;
 
     Sequence< ::rtl::OUString > aDBNames = xDBContext->getElementNames();
     const ::rtl::OUString* pDBNames = aDBNames.getConstArray();
     sal_Int32 nDBCount = aDBNames.getLength();
     for(sal_Int32 i = 0; i < nDBCount; i++)
     {
-        aAllDBNames.Insert(new String(pDBNames[i]), aAllDBNames.Count());
+        aAllDBNames.push_back(pDBNames[i]);
     }
 
-    SvStringsDtor aDBNameList(5, 1);
+    std::vector<String> aDBNameList;
     pSh->GetAllUsedDB( aDBNameList, &aAllDBNames );
 
-    sal_uInt16 nCount = aDBNameList.Count();
+    size_t nCount = aDBNameList.size();
     aUsedDBTLB.Clear();
     SvLBoxEntry *pFirst = 0;
     SvLBoxEntry *pLast = 0;
 
-    for (sal_uInt16 k = 0; k < nCount; k++)
+    for(size_t k = 0; k < nCount; k++)
     {
-        sDBName = *aDBNameList.GetObject(k);
+        sDBName = aDBNameList[k];
         sDBName = sDBName.GetToken(0);
         pLast = Insert(sDBName);
         if (!pFirst)
@@ -218,7 +218,8 @@ void SwChangeDBDlg::Apply()
 
 void SwChangeDBDlg::UpdateFlds()
 {
-    SvStringsDtor aDBNames( (sal_uInt8)aUsedDBTLB.GetSelectionCount(), 1 );
+    std::vector<String> aDBNames;
+    aDBNames.reserve(aUsedDBTLB.GetSelectionCount());
     SvLBoxEntry* pEntry = aUsedDBTLB.FirstSelected();
 
     while( pEntry )
@@ -232,7 +233,7 @@ void SwChangeDBDlg::UpdateFlds()
             *pTmp += DB_DELIM;
             int nCommandType = (int)(sal_uLong)pEntry->GetUserData();
             *pTmp += String::CreateFromInt32(nCommandType);
-            aDBNames.Insert(pTmp, aDBNames.Count() );
+            aDBNames.push_back(*pTmp);
         }
         pEntry = aUsedDBTLB.NextSelected(pEntry);
     }

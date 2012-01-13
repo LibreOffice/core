@@ -417,8 +417,8 @@ sal_Bool SwNewDBMgr::MergeNew(const SwMergeDescriptor& rMergeDesc )
     if (IsInitDBFields())
     {
         // with database fields without DB-Name, use DB-Name from Doc
-        SvStringsDtor aDBNames(1, 1);
-        aDBNames.Insert( new String(), 0);
+        std::vector<String> aDBNames;
+        aDBNames.push_back(String());
         SwDBData aInsertData = rMergeDesc.rSh.GetDBData();
         String sDBName = aInsertData.sDataSource;
         sDBName += DB_DELIM;

@@ -1665,11 +1665,11 @@ String lcl_DBDataToString(const SwDBData& rData)
     return sRet;
 }
 
-void SwDoc::GetAllUsedDB( SvStringsDtor& rDBNameList,
-                            const SvStringsDtor* pAllDBNames )
+void SwDoc::GetAllUsedDB( std::vector<String>& rDBNameList,
+                          const std::vector<String>* pAllDBNames )
 {
-    SvStringsDtor aUsedDBNames;
-    SvStringsDtor aAllDBNames;
+    std::vector<String> aUsedDBNames;
+    std::vector<String> aAllDBNames;
 
     if( !pAllDBNames )
     {
@@ -1687,7 +1687,7 @@ void SwDoc::GetAllUsedDB( SvStringsDtor& rDBNameList,
             String aCond( pSect->GetCondition() );
             AddUsedDBToList( rDBNameList, FindUsedDBs( *pAllDBNames,
                                                 aCond, aUsedDBNames ) );
-            aUsedDBNames.DeleteAndDestroy( 0, aUsedDBNames.Count() );
+            aUsedDBNames.clear();
         }
     }
 
@@ -1727,7 +1727,7 @@ void SwDoc::GetAllUsedDB( SvStringsDtor& rDBNameList,
             case RES_HIDDENPARAFLD:
                 AddUsedDBToList(rDBNameList, FindUsedDBs( *pAllDBNames,
                                             pFld->GetPar1(), aUsedDBNames ));
-                aUsedDBNames.DeleteAndDestroy( 0, aUsedDBNames.Count() );
+                aUsedDBNames.clear();
                 break;
 
             case RES_SETEXPFLD:
@@ -1735,13 +1735,13 @@ void SwDoc::GetAllUsedDB( SvStringsDtor& rDBNameList,
             case RES_TABLEFLD:
                 AddUsedDBToList(rDBNameList, FindUsedDBs( *pAllDBNames,
                                         pFld->GetFormula(), aUsedDBNames ));
-                aUsedDBNames.DeleteAndDestroy( 0, aUsedDBNames.Count() );
+                aUsedDBNames.clear();
                 break;
         }
     }
 }
 
-void SwDoc::GetAllDBNames( SvStringsDtor& rAllDBNames )
+void SwDoc::GetAllDBNames( std::vector<String>& rAllDBNames )
 {
     SwNewDBMgr* pMgr = GetNewDBMgr();
 
@@ -1752,13 +1752,13 @@ void SwDoc::GetAllDBNames( SvStringsDtor& rAllDBNames )
         String* pStr = new String( pParam->sDataSource );
         (*pStr) += DB_DELIM;
         (*pStr) += (String)pParam->sCommand;
-        rAllDBNames.Insert( pStr, rAllDBNames.Count() );
+        rAllDBNames.push_back(*pStr);
     }
 }
 
-SvStringsDtor& SwDoc::FindUsedDBs( const SvStringsDtor& rAllDBNames,
+std::vector<String>& SwDoc::FindUsedDBs( const std::vector<String>& rAllDBNames,
                                     const String& rFormel,
-                                    SvStringsDtor& rUsedDBNames )
+                                   std::vector<String>& rUsedDBNames )
 {
     const CharClass& rCC = GetAppCharClass();
     String  sFormel( rFormel);
@@ -1767,49 +1767,48 @@ SvStringsDtor& SwDoc::FindUsedDBs( const SvStringsDtor& rAllDBNames,
 #endif
 
     xub_StrLen nPos;
-    for (sal_uInt16 i = 0; i < rAllDBNames.Count(); ++i )
+    for (sal_uInt16 i = 0; i < rAllDBNames.size(); ++i )
     {
-        const String* pStr = rAllDBNames.GetObject(i);
+        String pStr(rAllDBNames[i]);
 
-        if( STRING_NOTFOUND != (nPos = sFormel.Search( *pStr )) &&
-            sFormel.GetChar( nPos + pStr->Len() ) == '.' &&
+        if( STRING_NOTFOUND != (nPos = sFormel.Search( pStr )) &&
+            sFormel.GetChar( nPos + pStr.Len() ) == '.' &&
             (!nPos || !rCC.isLetterNumeric( sFormel, nPos - 1 )))
         {
             // Look up table name
             xub_StrLen nEndPos;
-            nPos += pStr->Len() + 1;
+            nPos += pStr.Len() + 1;
             if( STRING_NOTFOUND != (nEndPos = sFormel.Search('.', nPos)) )
             {
-                String* pDBNm = new String( *pStr );
-                pDBNm->Append( DB_DELIM );
-                pDBNm->Append( sFormel.Copy( nPos, nEndPos - nPos ));
-                rUsedDBNames.Insert( pDBNm, rUsedDBNames.Count() );
+                pStr.Append( DB_DELIM );
+                pStr.Append( sFormel.Copy( nPos, nEndPos - nPos ));
+                rUsedDBNames.push_back(pStr);
             }
         }
     }
     return rUsedDBNames;
 }
 
-void SwDoc::AddUsedDBToList( SvStringsDtor& rDBNameList,
-                             const SvStringsDtor& rUsedDBNames )
+void SwDoc::AddUsedDBToList( std::vector<String>& rDBNameList,
+                             const std::vector<String>& rUsedDBNames )
 {
-    for (sal_uInt16 i = 0; i < rUsedDBNames.Count(); i++)
-        AddUsedDBToList( rDBNameList, *rUsedDBNames.GetObject(i) );
+    for (sal_uInt16 i = 0; i < rUsedDBNames.size(); ++i)
+        AddUsedDBToList( rDBNameList, rUsedDBNames[i] );
 }
 
-void SwDoc::AddUsedDBToList( SvStringsDtor& rDBNameList, const String& rDBName)
+void SwDoc::AddUsedDBToList( std::vector<String>& rDBNameList, const String& rDBName)
 {
     if( !rDBName.Len() )
         return;
 
 #ifdef UNX
-    for( sal_uInt16 i = 0; i < rDBNameList.Count(); ++i )
-        if( rDBName == rDBNameList.GetObject(i)->GetToken(0) )
+    for( sal_uInt16 i = 0; i < rDBNameList.size(); ++i )
+        if( rDBName == rDBNameList[i].GetToken(0) )
             return;
 #else
     const ::utl::TransliterationWrapper& rSCmp = GetAppCmpStrIgnore();
-    for( sal_uInt16 i = 0; i < rDBNameList.Count(); ++i )
-        if( rSCmp.isEqual( rDBName, rDBNameList.GetObject(i)->GetToken(0) ) )
+    for( sal_uInt16 i = 0; i < rDBNameList.size(); ++i )
+        if( rSCmp.isEqual( rDBName, rDBNameList[i].GetToken(0) ) )
             return;
 #endif
 
@@ -1818,11 +1817,10 @@ void SwDoc::AddUsedDBToList( SvStringsDtor& rDBNameList, const String& rDBName)
     aData.sCommand = rDBName.GetToken(1, DB_DELIM);
     aData.nCommandType = -1;
     GetNewDBMgr()->CreateDSData(aData);
-    String* pNew = new String( rDBName );
-    rDBNameList.Insert( pNew, rDBNameList.Count() );
+    rDBNameList.push_back(rDBName);
 }
 
-void SwDoc::ChangeDBFields( const SvStringsDtor& rOldNames,
+void SwDoc::ChangeDBFields( const std::vector<String>& rOldNames,
                             const String& rNewName )
 {
     SwDBData aNewDBData;
@@ -1924,7 +1922,7 @@ void SwDoc::ChangeDBFields( const SvStringsDtor& rOldNames,
     SetModified();
 }
 
-void SwDoc::ReplaceUsedDBs( const SvStringsDtor& rUsedDBNames,
+void SwDoc::ReplaceUsedDBs( const std::vector<String>& rUsedDBNames,
                             const String& rNewName, String& rFormel )
 {
     const CharClass& rCC = GetAppCharClass();
@@ -1935,10 +1933,9 @@ void SwDoc::ReplaceUsedDBs( const SvStringsDtor& rUsedDBNames,
     sNewName = sNewName.GetToken(0, DB_DELIM);
     String sUpperNewNm( sNewName );
 
-
-    for( sal_uInt16 i = 0; i < rUsedDBNames.Count(); ++i )
+    for( sal_uInt16 i = 0; i < rUsedDBNames.size(); ++i )
     {
-        String  sDBName( *rUsedDBNames.GetObject( i ) );
+        String  sDBName( rUsedDBNames[i] );
 
         sDBName.SearchAndReplace( DB_DELIM, '.');
         //cut off command type
@@ -1965,16 +1962,16 @@ void SwDoc::ReplaceUsedDBs( const SvStringsDtor& rUsedDBNames,
     }
 }
 
-sal_Bool SwDoc::IsNameInArray( const SvStringsDtor& rArr, const String& rName )
+sal_Bool SwDoc::IsNameInArray( const std::vector<String>& rArr, const String& rName )
 {
 #ifdef UNX
-    for( sal_uInt16 i = 0; i < rArr.Count(); ++i )
-        if( rName == *rArr[ i ] )
+    for( sal_uInt16 i = 0; i < rArr.size(); ++i )
+        if( rName == rArr[ i ] )
             return sal_True;
 #else
     const ::utl::TransliterationWrapper& rSCmp = GetAppCmpStrIgnore();
-    for( sal_uInt16 i = 0; i < rArr.Count(); ++i )
-        if( rSCmp.isEqual( rName, *rArr[ i] ))
+    for( sal_uInt16 i = 0; i < rArr.size(); ++i )
+        if( rSCmp.isEqual( rName, rArr[ i] ))
             return sal_True;
 #endif
     return sal_False;

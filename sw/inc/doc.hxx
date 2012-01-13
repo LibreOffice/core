@@ -652,16 +652,16 @@ private:
 
     // Database fields:
     void UpdateDBNumFlds( SwDBNameInfField& rDBFld, SwCalc& rCalc );
-    void AddUsedDBToList( SvStringsDtor& rDBNameList,
-                          const SvStringsDtor& rUsedDBNames );
-    void AddUsedDBToList( SvStringsDtor& rDBNameList, const String& rDBName );
-    sal_Bool IsNameInArray( const SvStringsDtor& rOldNames, const String& rName );
-    void GetAllDBNames( SvStringsDtor& rAllDBNames );
-    void ReplaceUsedDBs( const SvStringsDtor& rUsedDBNames,
+    void AddUsedDBToList( std::vector<String>& rDBNameList,
+                          const std::vector<String>& rUsedDBNames );
+    void AddUsedDBToList( std::vector<String>& rDBNameList, const String& rDBName );
+    sal_Bool IsNameInArray( const std::vector<String>& rOldNames, const String& rName );
+    void GetAllDBNames( std::vector<String>& rAllDBNames );
+    void ReplaceUsedDBs( const std::vector<String>& rUsedDBNames,
                         const String& rNewName, String& rFormel );
-    SvStringsDtor& FindUsedDBs( const SvStringsDtor& rAllDBNames,
+    std::vector<String>& FindUsedDBs( const std::vector<String>& rAllDBNames,
                                 const String& rFormel,
-                                SvStringsDtor& rUsedDBNames );
+                                std::vector<String>& rUsedDBNames );
 
     void InitDrawModel();
     void ReleaseDrawModel();
@@ -1129,13 +1129,13 @@ public:
     */
     void SetNewDBMgr( SwNewDBMgr* pNewMgr )     { pNewDBMgr = pNewMgr; }
     SwNewDBMgr* GetNewDBMgr() const             { return pNewDBMgr; }
-    void ChangeDBFields( const SvStringsDtor& rOldNames,
+    void ChangeDBFields( const std::vector<String>& rOldNames,
                         const String& rNewName );
     void SetInitDBFields(sal_Bool b);
 
     // Find out which databases are used by fields.
-    void GetAllUsedDB( SvStringsDtor& rDBNameList,
-                       const SvStringsDtor* pAllDBNames = 0 );
+    void GetAllUsedDB( std::vector<String>& rDBNameList,
+                       const std::vector<String>* pAllDBNames = 0 );
 
     void ChgDBData( const SwDBData& rNewData );
     SwDBData GetDBData();

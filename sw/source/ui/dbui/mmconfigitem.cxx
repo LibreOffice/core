@@ -1704,10 +1704,10 @@ void SwMailMergeConfigItem::SetSourceView(SwView* pView)
 
     if(pView)
     {
-        SvStringsDtor aDBNameList(5, 1);
-        SvStringsDtor aAllDBNames(5, 5);
+        std::vector<String> aDBNameList;
+        std::vector<String> aAllDBNames;
         pView->GetWrtShell().GetAllUsedDB( aDBNameList, &aAllDBNames );
-        if(aDBNameList.Count())
+        if(!aDBNameList.empty())
         {
             // if fields are available there is usually no need of an addressblock and greeting
             if(!m_pImpl->bUserSettingWereOverwritten)

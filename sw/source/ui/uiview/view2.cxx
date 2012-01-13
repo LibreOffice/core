@@ -2269,12 +2269,12 @@ void SwView::GenerateFormLetter(sal_Bool bUseCurrentDocument)
         SwDBData aData;
         SwWrtShell &rSh = GetWrtShell();
 
-        SvStringsDtor aDBNameList(5, 1);
-        SvStringsDtor aAllDBNames(5, 5);
+        std::vector<String> aDBNameList;
+        std::vector<String> aAllDBNames;
         rSh.GetAllUsedDB( aDBNameList, &aAllDBNames );
-        if ( aDBNameList.Count( ) )
+        if(!aDBNameList.empty())
         {
-            String sDBName = *aDBNameList[0];
+            String sDBName(aDBNameList[0]);
             aData.sDataSource = sDBName.GetToken(0, DB_DELIM);
             aData.sCommand = sDBName.GetToken(1, DB_DELIM);
             aData.nCommandType = sDBName.GetToken(2, DB_DELIM ).ToInt32();

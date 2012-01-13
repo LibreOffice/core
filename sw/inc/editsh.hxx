@@ -346,10 +346,10 @@ public:
     SwDBData GetDBData() const;
     const SwDBData& GetDBDesc() const;
     void ChgDBData(const SwDBData& SwDBData);
-    void ChangeDBFields( const SvStringsDtor& rOldNames,
+    void ChangeDBFields( const std::vector<String>& rOldNames,
                          const String& rNewName );
-    void GetAllUsedDB( SvStringsDtor& rDBNameList,
-                        SvStringsDtor* pAllDBNames = 0 );
+    void GetAllUsedDB( std::vector<String>& rDBNameList,
+                       std::vector<String>* pAllDBNames = 0 );
 
     sal_Bool IsAnyDatabaseFieldInDoc()const;
 

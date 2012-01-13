@@ -432,13 +432,13 @@ void SwEditShell::ChgDBData(const SwDBData& rNewData)
     GetDoc()->ChgDBData(rNewData);
 }
 
-void SwEditShell::GetAllUsedDB( SvStringsDtor& rDBNameList,
-                                SvStringsDtor* pAllDBNames )
+void SwEditShell::GetAllUsedDB( std::vector<String>& rDBNameList,
+                                std::vector<String>* pAllDBNames )
 {
     GetDoc()->GetAllUsedDB( rDBNameList, pAllDBNames );
 }
 
-void SwEditShell::ChangeDBFields( const SvStringsDtor& rOldNames,
+void SwEditShell::ChangeDBFields( const std::vector<String>& rOldNames,
                                     const String& rNewName )
 {
     GetDoc()->ChangeDBFields( rOldNames, rNewName );

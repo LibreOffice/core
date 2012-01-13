@@ -368,12 +368,12 @@ void SwMailMergeWizardExecutor::ExecuteMailMergeWizard( const SfxItemSet * pArgs
             }
             else
             {
-                SvStringsDtor aDBNameList(5, 1);
-                SvStringsDtor aAllDBNames(5, 5);
+                std::vector<String> aDBNameList;
+                std::vector<String> aAllDBNames;
                 m_pView->GetWrtShell().GetAllUsedDB( aDBNameList, &aAllDBNames );
-                if(aDBNameList.Count())
+                if(!aDBNameList.empty())
                 {
-                    String sDBName = *aDBNameList[0];
+                    String sDBName(aDBNameList[0]);
                     SwDBData aDBData;
                     aDBData.sDataSource = sDBName.GetToken(0, DB_DELIM);
                     aDBData.sCommand = sDBName.GetToken(1, DB_DELIM);
@@ -711,10 +711,9 @@ void SwModule::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                         // Are database fields contained?
                         // Get all used databases for the first time
                         SwDoc *pDoc = pDocSh->GetDoc();
-                        SvStringsDtor aDBNameList;
+                        std::vector<String> aDBNameList;
                         pDoc->GetAllUsedDB( aDBNameList );
-                        sal_uInt16 nCount = aDBNameList.Count();
-                        if (nCount)
+                        if(!aDBNameList.empty())
                         {   // Open database beamer
                             ShowDBObj(pWrtSh->GetView(), pDoc->GetDBData());
                         }
