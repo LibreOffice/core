@@ -865,54 +865,38 @@ void ScRefHandler::ToggleCollapsed( formula::RefEdit* pEdit, formula::RefButton*
     m_aHelper.ToggleCollapsed( pEdit, pButton );
 }
 
-#if defined( _MSC_VER )
-#define INTRODUCE_TEMPLATE
-#else
-#define INTRODUCE_TEMPLATE  template <>
-#endif
-
-#define IMPL_TWINDOW_PRENOTIFY( TWindow,bBindRef )  \
-INTRODUCE_TEMPLATE long ScRefHdlrImplBase<TWindow,bBindRef>::PreNotify( NotifyEvent& rNEvt )\
-{\
-    if( bBindRef || m_bInRefMode )\
-    {\
-        sal_uInt16 nSwitch=rNEvt.GetType();\
-        if(nSwitch==EVENT_GETFOCUS)\
-        {\
-            pActiveWin=rNEvt.GetWindow();\
-        }\
-    }\
-    return TWindow::PreNotify(rNEvt);\
+void ScRefHandler::preNotify(const NotifyEvent& rNEvt, const bool bBindRef)
+{
+    if( bBindRef || m_bInRefMode )
+    {
+        sal_uInt16 nSwitch=rNEvt.GetType();
+        if(nSwitch==EVENT_GETFOCUS)
+        {
+            pActiveWin=rNEvt.GetWindow();
+        }
+    }
 }
 
-#define IMPL_TWINDOW_STATECHANGED( TWindow,bBindRef )   \
-INTRODUCE_TEMPLATE void ScRefHdlrImplBase<TWindow,bBindRef>::StateChanged( StateChangedType nStateChange )\
-{\
-    TWindow::StateChanged( nStateChange );\
-\
-    if( !bBindRef && !m_bInRefMode ) return;\
-    \
-    if(nStateChange == STATE_CHANGE_VISIBLE)\
-    {\
-        if(m_rWindow.IsVisible())\
-        {\
-            m_aHelper.enableInput( false );\
-            m_aHelper.EnableSpreadsheets();\
-            m_aHelper.SetDispatcherLock( sal_True );\
-            aTimer.Start();\
-        }\
-        else\
-        {\
-            m_aHelper.enableInput( sal_True );\
-            m_aHelper.SetDispatcherLock( false );           /*//! here and in DoClose ?*/\
-        }\
-    }\
-}
+void ScRefHandler::stateChanged(const StateChangedType nStateChange, const bool bBindRef)
+{
+    if( !bBindRef && !m_bInRefMode ) return;
 
-IMPL_TWINDOW_PRENOTIFY( SfxModelessDialog, true )
-IMPL_TWINDOW_PRENOTIFY( SfxTabDialog, false )
-IMPL_TWINDOW_STATECHANGED( SfxModelessDialog, true )
-IMPL_TWINDOW_STATECHANGED( SfxTabDialog, false )
+    if(nStateChange == STATE_CHANGE_VISIBLE)
+    {
+        if(m_rWindow.IsVisible())
+        {
+            m_aHelper.enableInput( false );
+            m_aHelper.EnableSpreadsheets();
+            m_aHelper.SetDispatcherLock( sal_True );
+            aTimer.Start();
+        }
+        else
+        {
+            m_aHelper.enableInput( sal_True );
+            m_aHelper.SetDispatcherLock( false );           /*//! here and in DoClose ?*/
+        }
+    }
+}
 
 IMPL_LINK( ScRefHandler, UpdateFocusHdl, Timer*, EMPTYARG )
 {

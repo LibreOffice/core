@@ -121,7 +121,6 @@ class SC_DLLPUBLIC ScRefHandler : //public SfxModelessDialog,
 public:
     operator Window *(){ return &m_rWindow; }
     Window  * operator ->() { return static_cast<Window *>(*this); }
-    template<class,bool> friend class ScRefHdlrImplBase;
     friend class        formula::RefButton;
     friend class        formula::RefEdit;
 
@@ -151,6 +150,9 @@ protected:
     void                ShowFormulaReference( const XubString& rStr );
 
     bool                ParseWithNames( ScRangeList& rRanges, const String& rStr, ScDocument* pDoc );
+
+    void preNotify(const NotifyEvent& rEvent, const bool bBindRef);
+    void stateChanged(const StateChangedType nStateChange, const bool bBindRef);
 
 public:
                         ScRefHandler( Window &rWindow, SfxBindings* pB/*, SfxChildWindow* pCW,
@@ -222,6 +224,20 @@ ScRefHdlrImplBase<TWindow,bBindRef>::ScRefHdlrImplBase( TParentWindow* pParent, 
 template<class TWindow, bool bBindRef >
 ScRefHdlrImplBase<TWindow,bBindRef>::~ScRefHdlrImplBase(){}
 
+template<class TWindow, bool bBindRef>
+long ScRefHdlrImplBase<TWindow, bBindRef>::PreNotify( NotifyEvent& rNEvt )
+{
+    ScRefHandler::preNotify( rNEvt, bBindRef );
+    return TWindow::PreNotify( rNEvt );
+}
+
+template<class TWindow, bool bBindRef>
+void ScRefHdlrImplBase<TWindow, bBindRef>::StateChanged( StateChangedType nStateChange )
+{
+    TWindow::StateChanged( nStateChange );
+    ScRefHandler::stateChanged( nStateChange, bBindRef );
+}
+
 //============================================================================
 template<class TDerived, class TBase, bool bBindRef = true>
 struct ScRefHdlrImpl: ScRefHdlrImplBase<TBase, bBindRef >
@@ -256,11 +272,6 @@ inline  bool ScRefHandler::CanInputDone( sal_Bool bForced )
 {
     return m_aHelper.CanInputDone( bForced );
 }
-
-template <> SC_DLLPUBLIC void ScRefHdlrImplBase<SfxModelessDialog,true>::StateChanged( StateChangedType nStateChange );
-template <> SC_DLLPUBLIC long ScRefHdlrImplBase<SfxModelessDialog,true>::PreNotify( NotifyEvent& rNEvt );
-template <> SC_DLLPUBLIC void ScRefHdlrImplBase<SfxTabDialog,false>::StateChanged( StateChangedType nStateChange );
-template <> SC_DLLPUBLIC long ScRefHdlrImplBase<SfxTabDialog,false>::PreNotify( NotifyEvent& rNEvt );
 
 #endif // SC_ANYREFDG_HXX
 
