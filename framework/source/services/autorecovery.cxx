@@ -2794,9 +2794,9 @@ void AutoRecovery::implts_generateNewTempURL(const ::rtl::OUString&             
 
     // TODO: Must we strip some illegal signes - if we use the title?
 
-    String sName     (sUniqueName.makeStringAndClear());
-    String sExtension(rInfo.Extension                 );
-    String sPath     (sBackupPath                     );
+    rtl::OUString sName(sUniqueName.makeStringAndClear());
+    String sExtension(rInfo.Extension);
+    String sPath(sBackupPath);
     ::utl::TempFile aTempFile(sName, &sExtension, &sPath);
 
     rInfo.NewTempURL = aTempFile.GetURL();
@@ -3483,16 +3483,16 @@ sal_Bool AutoRecovery::impl_enoughDiscSpace(sal_Int32 nRequiredSpace)
 //-----------------------------------------------
 void AutoRecovery::impl_showFullDiscError()
 {
-    static String PLACEHOLDER_PATH = String::CreateFromAscii("%PATH");
+    rtl::OUString PLACEHOLDER_PATH(RTL_CONSTASCII_USTRINGPARAM("%PATH"));
 
-    String sBtn(FwkResId(STR_FULL_DISC_RETRY_BUTTON));
-    String sMsg(FwkResId(STR_FULL_DISC_MSG         ));
+    rtl::OUString sBtn(ResId::toString(FwkResId(STR_FULL_DISC_RETRY_BUTTON)));
+    String sMsg(ResId::toString(FwkResId(STR_FULL_DISC_MSG)));
 
-    String sBackupURL(SvtPathOptions().GetBackupPath());
+    rtl::OUString sBackupURL(SvtPathOptions().GetBackupPath());
     INetURLObject aConverter(sBackupURL);
     sal_Unicode aDelimiter;
-    String sBackupPath = aConverter.getFSysPath(INetURLObject::FSYS_DETECT, &aDelimiter);
-    if (sBackupPath.Len()<1)
+    rtl::OUString sBackupPath = aConverter.getFSysPath(INetURLObject::FSYS_DETECT, &aDelimiter);
+    if (sBackupPath.getLength() < 1)
         sBackupPath = sBackupURL;
     sMsg.SearchAndReplace(PLACEHOLDER_PATH, sBackupPath);
 
