@@ -91,8 +91,6 @@ public:
     bool scanAdditionalFiles( const rtl::OString& rDir );
 
     void flush();
-
-    void updateDirTimestamp( int nDirID );
 };
 
 } // namespace psp

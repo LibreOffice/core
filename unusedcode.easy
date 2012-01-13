@@ -257,6 +257,10 @@ ScDPCache::GetAdditionalItemID(String const&) const
 ScDPCache::GetDimNumType(short) const
 ScDPCache::GetSortedItemData(short, int) const
 ScDPCache::IsEmptyMember(int, unsigned short) const
+ScDPCollection::DBCaches::removeCache(int, rtl::OUString const&, rtl::OUString const&)
+ScDPCollection::DBCaches::size() const
+ScDPCollection::NameCaches::removeCache(rtl::OUString const&)
+ScDPCollection::SheetCaches::removeCache(ScRange const&)
 ScDPFieldControlBase::GetParentDlg() const
 ScDPFieldControlBase::ModifySelectionOffset(long)
 ScDPFieldControlBase::SetSelectedField(unsigned long)
@@ -1748,7 +1752,6 @@ pdfi::PDFIProcessor::sortDocument(bool)
 pdfi::PDFIRawAdaptor::odfConvert(rtl::OUString const&, com::sun::star::uno::Reference<com::sun::star::io::XOutputStream> const&, com::sun::star::uno::Reference<com::sun::star::task::XStatusIndicator> const&)
 pdfparse::PDFReader::read(char const*, unsigned int)
 psp::GetCommandLineTokenCount(rtl::OString const&)
-psp::PrintFontManager::getXLFD(psp::PrintFontManager::PrintFont*) const
 psp::PrinterGfx::DrawBitmap(Rectangle const&, Rectangle const&, psp::PrinterBmp const&, psp::PrinterBmp const&)
 psp::PrinterGfx::DrawMask(Rectangle const&, Rectangle const&, psp::PrinterBmp const&, psp::PrinterColor&)
 psp::PrinterGfx::GetGlyphBoundRect(unsigned short, Rectangle&)

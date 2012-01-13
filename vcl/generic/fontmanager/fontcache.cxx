@@ -502,20 +502,6 @@ void FontCache::read()
 }
 
 /*
- *  FontCache::updateDirTimestamp
- */
-void FontCache::updateDirTimestamp( int nDirID )
-{
-    PrintFontManager& rManager( PrintFontManager::get() );
-    const OString& rDir = rManager.getDirectory( nDirID );
-
-    struct stat aStat;
-    if( ! stat( rDir.getStr(), &aStat ) )
-        m_aCache[ nDirID ].m_nTimestamp = (sal_Int64)aStat.st_mtime;
-}
-
-
-/*
  *  FontCache::copyPrintFont
  */
 void FontCache::copyPrintFont( const PrintFontManager::PrintFont* pFrom, PrintFontManager::PrintFont* pTo ) const
