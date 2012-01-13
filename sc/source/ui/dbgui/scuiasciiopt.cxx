@@ -476,7 +476,7 @@ bool ScImportAsciiDlg::GetLine( sal_uLong nLine, String &rText )
                 bRet = false;
                 break;
             }
-            mpDatStream->ReadCsvLine( rText, !bFixed, maFieldSeparators,
+            ReadCsvLine(*mpDatStream, rText, !bFixed, maFieldSeparators,
                     mcTextSep);
             mnStreamPos = mpDatStream->Tell();
             mpRowPosArray[++mnRowPosCount] = mnStreamPos;
@@ -494,7 +494,7 @@ bool ScImportAsciiDlg::GetLine( sal_uLong nLine, String &rText )
     else
     {
         Seek( mpRowPosArray[nLine]);
-        mpDatStream->ReadCsvLine( rText, !bFixed, maFieldSeparators, mcTextSep);
+        ReadCsvLine(*mpDatStream, rText, !bFixed, maFieldSeparators, mcTextSep);
         mnStreamPos = mpDatStream->Tell();
     }
 

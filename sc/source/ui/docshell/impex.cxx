@@ -1180,7 +1180,7 @@ sal_Bool ScImportExport::ExtText2Doc( SvStream& rStrm )
 
     while(--nSkipLines>0)
     {
-        rStrm.ReadCsvLine( aLine, !bFixed, rSeps, cStr); // content is ignored
+        ReadCsvLine(rStrm, aLine, !bFixed, rSeps, cStr); // content is ignored
         if ( rStrm.IsEof() )
             break;
     }
@@ -1203,7 +1203,7 @@ sal_Bool ScImportExport::ExtText2Doc( SvStream& rStrm )
     {
         for( ;; )
         {
-            rStrm.ReadCsvLine( aLine, !bFixed, rSeps, cStr);
+            ReadCsvLine(rStrm, aLine, !bFixed, rSeps, cStr);
             if ( rStrm.IsEof() )
                 break;
 
@@ -2107,6 +2107,87 @@ ScFormatFilterPlugin &ScFormatFilter::Get()
         plugin = new ScFormatFilterMissing();
 
     return *plugin;
+}
+
+// Precondition: pStr is guaranteed to be non-NULL and points to a 0-terminated
+// array.
+inline const sal_Unicode* lcl_UnicodeStrChr( const sal_Unicode* pStr,
+        sal_Unicode c )
+{
+    while (*pStr)
+    {
+        if (*pStr == c)
+            return pStr;
+        ++pStr;
+    }
+    return 0;
+}
+
+void ReadCsvLine(SvStream &rStream, String& rStr, sal_Bool bEmbeddedLineBreak,
+        const String& rFieldSeparators, sal_Unicode cFieldQuote,
+        sal_Bool bAllowBackslashEscape)
+{
+    rStream.ReadUniOrByteStringLine(rStr, rStream.GetStreamCharSet());
+
+    if (bEmbeddedLineBreak)
+    {
+        const sal_Unicode* pSeps = rFieldSeparators.GetBuffer();
+
+        // See if the separator(s) include tab.
+        bool bTabSep = lcl_UnicodeStrChr(pSeps, '\t') != NULL;
+
+        xub_StrLen nLastOffset = 0;
+        xub_StrLen nQuotes = 0;
+        while (!rStream.IsEof() && rStr.Len() < STRING_MAXLEN)
+        {
+            bool bBackslashEscaped = false;
+            const sal_Unicode *p, *pStart;
+            p = pStart = rStr.GetBuffer();
+            p += nLastOffset;
+            while (*p)
+            {
+                if (nQuotes)
+                {
+                    if (bTabSep && *p == '\t' && (nQuotes % 2) != 0)
+                    {
+                        // When tab-delimited, tab char ends quoted sequence
+                        // even if we haven't reached the end quote.  Doing
+                        // this helps keep mal-formed rows from damaging
+                        // other, well-formed rows.
+                        nQuotes = 0;
+                        break;
+                    }
+
+                    if (*p == cFieldQuote && !bBackslashEscaped)
+                        ++nQuotes;
+                    else if (bAllowBackslashEscape)
+                    {
+                        if (*p == '\\')
+                            bBackslashEscaped = !bBackslashEscaped;
+                        else
+                            bBackslashEscaped = false;
+                    }
+                }
+                else if (*p == cFieldQuote && (p == pStart ||
+                            lcl_UnicodeStrChr( pSeps, p[-1])))
+                    nQuotes = 1;
+                // A quote character inside a field content does not start
+                // a quote.
+                ++p;
+            }
+
+            if (nQuotes % 2 == 0)
+                break;
+            else
+            {
+                nLastOffset = rStr.Len();
+                String aNext;
+                rStream.ReadUniOrByteStringLine(aNext, rStream.GetStreamCharSet());
+                rStr += sal_Unicode(_LF);
+                rStr += aNext;
+            }
+        }
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -189,6 +189,59 @@ public:
     }
 };
 
+/** Read a CSV (comma separated values) data line using
+    ReadUniOrByteStringLine().
+
+    @param bEmbeddedLineBreak
+    If sal_True and a line-break occurs inside a field of data,
+    a line feed LF '\n' and the next line are appended. Repeats
+    until a line-break is not in a field. A field is determined
+    by delimiting rFieldSeparators and optionally surrounded by
+    a pair of cFieldQuote characters. For a line-break to be
+    within a field, the field content MUST be surrounded by
+    cFieldQuote characters, and the opening cFieldQuote MUST be
+    at the very start of a line or follow right behind a field
+    separator with no extra characters in between. Anything,
+    including field separators and escaped quotes (by doubling
+    them, or preceding them with a backslash if
+    bAllowBackslashEscape==sal_True) may appear in a quoted
+    field.
+
+    If bEmbeddedLineBreak==sal_False, nothing is parsed and the
+    string returned is simply one ReadUniOrByteStringLine().
+
+    @param rFieldSeparators
+    A list of characters that each may act as a field separator.
+
+    @param cFieldQuote
+    The quote character used.
+
+    @param bAllowBackslashEscape
+    If sal_True, an embedded quote character inside a quoted
+    field may also be escaped with a preceding backslash.
+    Normally, quotes are escaped by doubling them.
+
+    check Stream::good() to detect IO problems during read
+
+    @ATTENTION
+    Note that the string returned may be truncated even inside
+    a quoted field if STRING_MAXLEN was reached. There
+    currently is no way to exactly determine the conditions,
+    whether this was at a line end, or whether open quotes
+    would have closed the field before the line end, as even a
+    ReadUniOrByteStringLine() may return prematurely but the
+    stream was positioned ahead until the real end of line.
+    Additionally, due to character encoding conversions, string
+    length and bytes read don't necessarily match, and
+    resyncing to a previous position matching the string's
+    length isn't always possible. As a result, a logical line
+    with embedded line breaks and more than STRING_MAXLEN
+    characters will be spoiled, and a subsequent ReadCsvLine()
+    may start under false preconditions.
+  */
+SC_DLLPUBLIC void ReadCsvLine(SvStream &rStream, String& rStr, sal_Bool bEmbeddedLineBreak,
+        const String& rFieldSeparators, sal_Unicode cFieldQuote,
+        sal_Bool bAllowBackslashEscape = sal_False);
 
 #endif
 
