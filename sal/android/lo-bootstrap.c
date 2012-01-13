@@ -1035,7 +1035,7 @@ lo_apk_readdir(lo_apk_dir *dirp)
     static struct dirent result;
 
     if (dirp->cur == NULL) {
-        LOGI("lo_apk_readdir(%p) = NULL", dirp);
+        /* LOGI("lo_apk_readdir(%p) = NULL", dirp); */
         return NULL;
     }
 
@@ -1053,7 +1053,7 @@ lo_apk_readdir(lo_apk_dir *dirp)
 
     dirp->cur = dirp->cur->hh.next;
 
-    LOGI("lo_apk_readdir(%p) = %s:%s", dirp, result.d_type == DT_DIR ? "DIR" : "REG", result.d_name);
+    /* LOGI("lo_apk_readdir(%p) = %s:%s", dirp, result.d_type == DT_DIR ? "DIR" : "REG", result.d_name); */
 
     return &result;
 }
@@ -1064,7 +1064,7 @@ lo_apk_closedir(lo_apk_dir *dirp)
 {
     free(dirp);
 
-    LOGI("lo_apk_closedir(%p)", dirp);
+    /* LOGI("lo_apk_closedir(%p)", dirp); */
 
     return 0;
 }
@@ -1091,7 +1091,8 @@ new_stat(const char *path,
     /* Leave timestamps at zero for now? */
     statp->st_ino = fake_ino;
 
-    LOGI("lo_apk_lstat(%s) = { st_mode=%o, st_size=%lld, st_ino=%lld }", path, statp->st_mode, statp->st_size, statp->st_ino);
+    (void) path;
+    /* LOGI("lo_apk_lstat(%s) = { st_mode=%o, st_size=%lld, st_ino=%lld }", path, statp->st_mode, statp->st_size, statp->st_ino); */
 
     return 0;
 }
