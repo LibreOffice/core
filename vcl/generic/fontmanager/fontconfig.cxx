@@ -773,7 +773,7 @@ bool PrintFontManager::Substitute( FontSelectPattern &rPattern, rtl::OUString& r
     FcPatternAddString(pPattern, FC_FAMILY, pTargetNameUtf8);
 
     const rtl::OString aLangAttrib = MsLangId::convertLanguageToIsoByteString(rPattern.meLanguage);
-    if( aLangAttrib.getLength() )
+    if( !aLangAttrib.isEmpty() )
     {
         const FcChar8* pLangAttribUtf8;
         if (aLangAttrib.equalsIgnoreAsciiCase(OString(RTL_CONSTASCII_STRINGPARAM("pa-in"))))
@@ -784,7 +784,7 @@ bool PrintFontManager::Substitute( FontSelectPattern &rPattern, rtl::OUString& r
     }
 
     // Add required Unicode characters, if any
-    if ( rMissingCodes.getLength() )
+    if ( !rMissingCodes.isEmpty() )
     {
        FcCharSet *unicodes = FcCharSetCreate();
        for( sal_Int32 nStrIndex = 0; nStrIndex < rMissingCodes.getLength(); )
@@ -889,7 +889,7 @@ bool PrintFontManager::Substitute( FontSelectPattern &rPattern, rtl::OUString& r
             }
 
             // update rMissingCodes by removing resolved unicodes
-            if( rMissingCodes.getLength() > 0 )
+            if( !rMissingCodes.isEmpty() )
             {
                 sal_uInt32* pRemainingCodes = (sal_uInt32*)alloca( rMissingCodes.getLength() * sizeof(sal_uInt32) );
                 int nRemainingLen = 0;
@@ -954,7 +954,7 @@ ImplFontOptions* PrintFontManager::getFontOptions(
     boost::unordered_map< rtl::OString, rtl::OString, rtl::OStringHash >::const_iterator aI = rWrapper.m_aLocalizedToCanonical.find(sFamily);
     if (aI != rWrapper.m_aLocalizedToCanonical.end())
         sFamily = aI->second;
-    if( sFamily.getLength() )
+    if( !sFamily.isEmpty() )
         FcPatternAddString(pPattern, FC_FAMILY, (FcChar8*)sFamily.getStr());
 
     addtopattern(pPattern, rInfo.m_eItalic, rInfo.m_eWeight, rInfo.m_eWidth, rInfo.m_ePitch);
@@ -1021,22 +1021,22 @@ bool PrintFontManager::matchFont( FastPrintFontInfo& rInfo, const com::sun::star
 
     OString aLangAttrib;
     // populate pattern with font characteristics
-    if( rLocale.Language.getLength() )
+    if( !rLocale.Language.isEmpty() )
     {
         OUStringBuffer aLang(6);
         aLang.append( rLocale.Language );
-        if( rLocale.Country.getLength() )
+        if( !rLocale.Country.isEmpty() )
         {
             aLang.append( sal_Unicode('-') );
             aLang.append( rLocale.Country );
         }
         aLangAttrib = OUStringToOString( aLang.makeStringAndClear(), RTL_TEXTENCODING_UTF8 );
     }
-    if( aLangAttrib.getLength() )
+    if( !aLangAttrib.isEmpty() )
         FcPatternAddString(pPattern, FC_LANG, (FcChar8*)aLangAttrib.getStr());
 
     OString aFamily = OUStringToOString( rInfo.m_aFamilyName, RTL_TEXTENCODING_UTF8 );
-    if( aFamily.getLength() )
+    if( !aFamily.isEmpty() )
         FcPatternAddString(pPattern, FC_FAMILY, (FcChar8*)aFamily.getStr());
 
     addtopattern(pPattern, rInfo.m_eItalic, rInfo.m_eWeight, rInfo.m_eWidth, rInfo.m_ePitch);

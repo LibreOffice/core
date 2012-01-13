@@ -176,7 +176,7 @@ void FontCache::flush()
                 for( ::std::list< int >::const_iterator name_it = (*it)->m_aAliases.begin(); name_it != (*it)->m_aAliases.end(); ++name_it )
                 {
                     const OUString& rAdd( pAtoms->getString( ATOM_FAMILYNAME, *name_it ) );
-                    if( rAdd.getLength() )
+                    if( !rAdd.isEmpty() )
                     {
                         aLine.append(';');
                         aLine.append(OUStringToOString(rAdd, RTL_TEXTENCODING_UTF8));
@@ -233,7 +233,7 @@ void FontCache::flush()
                         break;
                     default: break;
                 }
-                if( (*it)->m_aStyleName.getLength() )
+                if( !(*it)->m_aStyleName.isEmpty() )
                 {
                     aLine.append(';');
                     aLine.append(OUStringToOString((*it)->m_aStyleName, RTL_TEXTENCODING_UTF8));

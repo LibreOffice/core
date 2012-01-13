@@ -157,7 +157,7 @@ void psp::getPrinterPathList( std::list< OUString >& rPathList, const char* pSub
     do
     {
         OString aDir( aPath.getToken( 0, ':', nIndex ) );
-        if( ! aDir.getLength() )
+        if( aDir.isEmpty() )
             continue;
 
         if( pSubDir )
@@ -201,14 +201,14 @@ OUString psp::getFontPath()
 {
     static OUString aPath;
 
-    if( ! aPath.getLength() )
+    if (aPath.isEmpty())
     {
         OUStringBuffer aPathBuffer( 512 );
 
         OUString aConfigPath( getOfficePath( psp::ConfigPath ) );
         OUString aInstallationRootPath( getOfficePath( psp::InstallationRootPath ) );
         OUString aUserPath( getOfficePath( psp::UserPath ) );
-        if( aConfigPath.getLength() )
+        if( !aConfigPath.isEmpty() )
         {
             // #i53530# Path from CustomDataUrl will completely
             // replace net and user paths if the path exists
@@ -225,16 +225,16 @@ OUString psp::getFontPath()
                 aPathBuffer.appendAscii("/share/fonts");
             }
         }
-        if( aConfigPath.getLength() == 0 )
+        if( aConfigPath.isEmpty() )
         {
-            if( aInstallationRootPath.getLength() )
+            if( !aInstallationRootPath.isEmpty() )
             {
                 aPathBuffer.append( aInstallationRootPath );
                 aPathBuffer.appendAscii( "/share/fonts/truetype;");
                 aPathBuffer.append( aInstallationRootPath );
                 aPathBuffer.appendAscii( "/share/fonts/type1;" );
             }
-            if( aUserPath.getLength() )
+            if( !aUserPath.isEmpty() )
             {
                 aPathBuffer.append( aUserPath );
                 aPathBuffer.appendAscii( "/user/fonts" );

@@ -613,7 +613,7 @@ bool PrintFontManager::PrintFont::readAfmMetrics( const OString& rFileName, Mult
     if( ! m_nFamilyName )
     {
         aFamily = OStringToOUString( pInfo->gfi->familyName, RTL_TEXTENCODING_ISO_8859_1 );
-        if( ! aFamily.getLength() )
+        if( aFamily.isEmpty() )
         {
             aFamily = OStringToOUString( pInfo->gfi->fontName, RTL_TEXTENCODING_ISO_8859_1 );
             sal_Int32 nIndex  = 0;
@@ -627,7 +627,7 @@ bool PrintFontManager::PrintFont::readAfmMetrics( const OString& rFileName, Mult
 
     // style name: if fullname begins with family name
     // interpret the rest of fullname as style
-    if( ! m_aStyleName.getLength() && pInfo->gfi->fullName && *pInfo->gfi->fullName )
+    if( m_aStyleName.isEmpty() && pInfo->gfi->fullName && *pInfo->gfi->fullName )
     {
         OUString aFullName( OStringToOUString( pInfo->gfi->fullName, RTL_TEXTENCODING_ISO_8859_1 ) );
         if( aFullName.indexOf( aFamily ) == 0 )
@@ -1494,7 +1494,7 @@ void PrintFontManager::analyzeTrueTypeFamilyName( void* pTTFont, ::std::list< OU
         }
         DisposeNameRecords( pNameRecords, nNameRecords );
     }
-    if( aFamily.getLength() )
+    if( !aFamily.isEmpty() )
     {
         rNames.push_front( aFamily );
         for( ::std::set< OUString >::const_iterator it = aSet.begin(); it != aSet.end(); ++it )
@@ -1545,7 +1545,7 @@ bool PrintFontManager::analyzeTrueTypeFile( PrintFont* pFont ) const
         }
         for( ::std::list< OUString >::iterator it = aNames.begin(); it != aNames.end(); ++it )
         {
-            if( it->getLength() )
+            if( !it->isEmpty() )
             {
                 int nAlias = m_pAtoms->getAtom( ATOM_FAMILYNAME, *it, sal_True );
                 if( nAlias != pFont->m_nFamilyName )
@@ -1720,7 +1720,7 @@ void PrintFontManager::initialize()
 
     // search for the fonts in SAL_PRIVATE_FONTPATH first; those are
     // the fonts installed with the office
-    if( rSalPrivatePath.getLength() )
+    if( !rSalPrivatePath.isEmpty() )
     {
         OString aPath = rtl::OUStringToOString( rSalPrivatePath, aEncoding );
         const bool bAreFCSubstitutionsEnabled = AreFCSubstitutionsEnabled();
@@ -1729,7 +1729,7 @@ void PrintFontManager::initialize()
         {
             OString aToken = aPath.getToken( 0, ';', nIndex );
             normPath( aToken );
-            if (!aToken.getLength())
+            if ( aToken.isEmpty() )
             {
                 continue;
             }
