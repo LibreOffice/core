@@ -1125,6 +1125,7 @@ ScRange insertDPSourceData(ScDocument* pDoc, DPFieldDef aFields[], size_t nField
 template<size_t _Size>
 bool checkDPTableOutput(ScDocument* pDoc, const ScRange& aOutRange, const char* aOutputCheck[][_Size], const char* pCaption)
 {
+    bool bResult = true;
     const ScAddress& s = aOutRange.aStart;
     const ScAddress& e = aOutRange.aEnd;
     SheetPrinter printer(e.Row() - s.Row() + 1, e.Col() - s.Col() + 1);
@@ -1145,18 +1146,18 @@ bool checkDPTableOutput(ScDocument* pDoc, const ScRange& aOutRange, const char* 
                 if (!bEqual)
                 {
                     cerr << "Expected: " << aCheckVal << "  Actual: " << aVal << endl;
-                    return false;
+                    bResult = false;
                 }
             }
             else if (!aVal.isEmpty())
             {
                 cerr << "Empty cell expected" << endl;
-                return false;
+                bResult = false;
             }
         }
     }
     printer.print(pCaption);
-    return true;
+    return bResult;
 }
 
 ScDPObject* createDPFromSourceDesc(
@@ -1334,10 +1335,9 @@ void Test::testDataPilot()
     printRange(m_pDoc, ScRange(nCol1, nRow1, 0, nCol2, nRow2, 0), "Data sheet content (modified)");
 
     // Now, create a copy of the datapilot object for the updated table, but
-    // don't clear the cache which should force the copy to use the old data
+    // don't reload the cache which should force the copy to use the old data
     // from the cache.
     ScDPObject* pDPObj2 = new ScDPObject(*pDPObj);
-    pDPs->FreeTable(pDPObj);
     pDPs->InsertNewTable(pDPObj2);
 
     aOutRange = pDPObj2->GetOutRange();
@@ -1360,6 +1360,10 @@ void Test::testDataPilot()
         bSuccess = checkDPTableOutput<5>(m_pDoc, aOutRange, aOutputCheck, "DataPilot table output (from old cache)");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
+
+    // Free the first datapilot object after the 2nd one gets reloaded, to
+    // prevent the data cache from being deleted before the reload.
+    pDPs->FreeTable(pDPObj);
 
     // This time clear the cache to refresh the data from the source range.
     CPPUNIT_ASSERT_MESSAGE("This datapilot should be based on sheet data.", pDPObj2->IsSheetData());
@@ -1395,7 +1399,6 @@ void Test::testDataPilot()
     aSrcRange.aStart.SetTab(1);
     aSrcRange.aEnd.SetTab(1);
     CPPUNIT_ASSERT_MESSAGE("Cache should be here.", pDPs->GetSheetCaches().hasCache(aSrcRange));
-
 
     pDPs->FreeTable(pDPObj2);
     CPPUNIT_ASSERT_MESSAGE("There shouldn't be any data pilot table stored with the document.",

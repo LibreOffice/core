@@ -37,6 +37,7 @@
 #include "queryparam.hxx"
 #include "dpglobal.hxx"
 #include "dptabdat.hxx"
+#include "dpobject.hxx"
 
 #include "docoptio.hxx"
 #include <unotools/textsearch.hxx>
@@ -993,6 +994,8 @@ void ScDPCache::AddReference(ScDPObject* pObj) const
 void ScDPCache::RemoveReference(ScDPObject* pObj) const
 {
     maRefObjects.erase(pObj);
+    if (maRefObjects.empty())
+        mpDoc->GetDPCollection()->RemoveCache(this);
 }
 
 const ScDPCache::ObjectSetType& ScDPCache::GetAllReferences() const
