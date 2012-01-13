@@ -144,7 +144,7 @@ namespace framework
 
         void loadImage( const ResId& i_rId, PushButton& i_rButton );
 
-        void layoutButton( const char* i_pURL, int nColumn, const std::set<rtl::OUString>& i_rURLS,
+        void layoutButton( const char* i_pURL, int nColumn, int i_nExtraWidth, const std::set<rtl::OUString>& i_rURLS,
                            SvtModuleOptions& i_rOpt, SvtModuleOptions::EModule i_eMod,
                            PushButton& i_rBtn,
                            MnemonicGenerator& i_rMnemonicGen,

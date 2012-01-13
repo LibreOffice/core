@@ -572,33 +572,33 @@ void BackingWindow::initControls()
     }
 
     // layout the buttons
-    layoutButton( WRITER_URL, 0, aFileNewAppsAvailable,
+    layoutButton( WRITER_URL, 0, 0, aFileNewAppsAvailable,
                   aModuleOptions, SvtModuleOptions::E_SWRITER,
                   maWriterButton, aMnemns );
-    layoutButton( DRAW_URL, 1, aFileNewAppsAvailable,
+    layoutButton( DRAW_URL, 1, 0, aFileNewAppsAvailable,
                   aModuleOptions, SvtModuleOptions::E_SDRAW,
                   maDrawButton, aMnemns );
     nYPos += maButtonImageSize.Height() + 10;
-    layoutButton( CALC_URL, 0, aFileNewAppsAvailable,
+    layoutButton( CALC_URL, 0, 0, aFileNewAppsAvailable,
                   aModuleOptions, SvtModuleOptions::E_SCALC,
                   maCalcButton, aMnemns );
-    layoutButton( BASE_URL, 1, aFileNewAppsAvailable,
+    layoutButton( BASE_URL, 1, 0, aFileNewAppsAvailable,
                   aModuleOptions, SvtModuleOptions::E_SDATABASE,
                   maDBButton, aMnemns );
     nYPos += maButtonImageSize.Height() + 10;
-    layoutButton( IMPRESS_WIZARD_URL, 0, aFileNewAppsAvailable,
+    layoutButton( IMPRESS_WIZARD_URL, 0, 0, aFileNewAppsAvailable,
                   aModuleOptions, SvtModuleOptions::E_SIMPRESS,
                   maImpressButton, aMnemns );
-    layoutButton( MATH_URL, 1, aFileNewAppsAvailable,
+    layoutButton( MATH_URL, 1, 0, aFileNewAppsAvailable,
                   aModuleOptions, SvtModuleOptions::E_SMATH,
                   maMathButton, aMnemns );
 
     nYPos += 3*maButtonImageSize.Height() / 2;
 
-    layoutButton( NULL, 0, aFileNewAppsAvailable,
+    layoutButton( NULL, 0, 18, aFileNewAppsAvailable,
                   aModuleOptions, SvtModuleOptions::E_SWRITER,
                   maOpenButton, aMnemns, maOpenString );
-    layoutButton( NULL, 1, aFileNewAppsAvailable,
+    layoutButton( NULL, 1, 0, aFileNewAppsAvailable,
                   aModuleOptions, SvtModuleOptions::E_SWRITER,
                   maTemplateButton, aMnemns, maTemplateString );
     nYPos += 10;
@@ -664,7 +664,7 @@ void BackingWindow::loadImage( const ResId& i_rId, PushButton& i_rButton )
 }
 
 void BackingWindow::layoutButton(
-                          const char* i_pURL, int nColumn,
+                          const char* i_pURL, int nColumn, int i_nExtraWidth,
                           const std::set<rtl::OUString>& i_rURLS,
                           SvtModuleOptions& i_rOpt, SvtModuleOptions::EModule i_eMod,
                           PushButton& i_rBtn,
@@ -690,7 +690,7 @@ void BackingWindow::layoutButton(
 
     long nTextWidth = i_rBtn.GetTextWidth( i_rBtn.GetText() );
 
-    nTextWidth += maButtonImageSize.Width() + 8; // add some fuzz to be on the safe side
+    nTextWidth += maButtonImageSize.Width() + 8 + i_nExtraWidth; // add some fuzz to be on the safe side
     if( nColumn >= 0 && nColumn < static_cast<int>(SAL_N_ELEMENTS(mnColumnWidth)) )
     {
         if( nTextWidth > mnColumnWidth[nColumn] )
