@@ -129,7 +129,7 @@ gb_COMPILEROPTFLAGS := $(gb_COMPILERDEFAULTOPTFLAGS)
 endif
 gb_COMPILERNOOPTFLAGS := -O0
 
-gb_LinkTarget_INCLUDE := $(filter-out %/stl, $(subst -I. , ,$(SOLARINC)))
+gb_LinkTarget_INCLUDE := $(filter-out %/stl, $(subst -I. , ,$(SOLARINC))) -I$(SYSBASE)/usr/include
 gb_LinkTarget_INCLUDE_STL := $(filter %/stl, $(subst -I. , ,$(SOLARINC)))
 
 
