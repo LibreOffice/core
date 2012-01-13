@@ -206,7 +206,7 @@ DataFlavor SAL_CALL CDataFormatTranslator::getDataFlavorFromSystemDataType( cons
 
     if ( aSysDataType.getValueType( ) == CPPUTYPE_SALINT32 )
     {
-        sal_Int32 clipformat;
+        sal_Int32 clipformat = CF_INVALID;
         aSysDataType >>= clipformat;
         if ( CF_INVALID != clipformat )
             findDataFlavorForStandardFormatId( clipformat, aFlavor );
