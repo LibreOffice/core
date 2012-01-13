@@ -31,13 +31,13 @@ $(eval $(call gb_Library_Library,passwordcontainer))
 $(eval $(call gb_Library_set_componentfile,passwordcontainer,svl/source/passwordcontainer/passwordcontainer))
 
 $(eval $(call gb_Library_set_include,passwordcontainer,\
-    $$(SOLARINC) \
     -I$(WORKDIR)/inc/svl \
     -I$(WORKDIR)/inc/ \
     -I$(realpath $(SRCDIR)/svl/inc) \
     -I$(realpath $(SRCDIR)/svl/inc/svl) \
     -I$(realpath $(SRCDIR)/svl/source/inc) \
     -I$(OUTDIR)/inc \
+    $$(INCLUDE) \
 ))
 
 $(eval $(call gb_Library_add_api,passwordcontainer,\

@@ -33,8 +33,8 @@ $(eval $(call gb_Library_add_package_headers,svl,svl_inc))
 $(eval $(call gb_Library_set_componentfile,svl,svl/util/svl))
 
 $(eval $(call gb_Library_set_include,svl,\
-    $$(SOLARINC) \
     -I$(realpath $(SRCDIR)/svl/source/inc) \
+    $$(INCLUDE) \
 ))
 
 $(eval $(call gb_Library_add_api,svl,\

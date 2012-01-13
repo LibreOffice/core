@@ -33,8 +33,8 @@ $(eval $(call gb_Library_set_componentfile,xo,xmloff/util/xo))
 $(eval $(call gb_Library_add_package_headers,xo,xmloff_inc))
 
 $(eval $(call gb_Library_set_include,xo,\
-    $$(SOLARINC) \
     -I$(realpath $(SRCDIR)/xmloff/inc) \
+    $$(INCLUDE) \
 ))
 
 $(eval $(call gb_Library_add_defs,xo,\

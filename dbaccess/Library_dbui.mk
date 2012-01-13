@@ -35,7 +35,7 @@ $(eval $(call gb_Library_set_include,dbui,\
 	-I$(SRCDIR)/dbaccess/source/ui/inc \
 	-I$(SRCDIR)/dbaccess/source/ui/dlg \
 	-I$(SRCDIR)/dbaccess/source/inc \
-	$$(SOLARINC) \
+	$$(INCLUDE) \
 ))
 
 $(eval $(call gb_Library_add_api,dbui,\
