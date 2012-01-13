@@ -43,7 +43,11 @@ namespace
     class VDevBuffer : public Timer, protected comphelper::OBaseMutex
     {
     private:
-        aBuffers            maBuffers;
+        // available buffers
+        aBuffers            maFreeBuffers;
+
+        // allocated/used buffers (remembered to allow deleteing them in destructor)
+        aBuffers            maUsedBuffers;
 
     public:
         VDevBuffer();
@@ -58,7 +62,8 @@ namespace
 
     VDevBuffer::VDevBuffer()
     :   Timer(),
-        maBuffers()
+        maFreeBuffers(),
+        maUsedBuffers()
     {
         SetTimeout(10L * 1000L); // ten seconds
     }
@@ -68,10 +73,16 @@ namespace
         ::osl::MutexGuard aGuard(m_aMutex);
         Stop();
 
-        while(!maBuffers.empty())
+        while(!maFreeBuffers.empty())
         {
-            delete *(maBuffers.end() - 1);
-            maBuffers.pop_back();
+            delete *(maFreeBuffers.end() - 1);
+            maFreeBuffers.pop_back();
+        }
+
+        while(!maUsedBuffers.empty())
+        {
+            delete *(maUsedBuffers.end() - 1);
+            maUsedBuffers.pop_back();
         }
     }
 
@@ -80,19 +91,19 @@ namespace
         ::osl::MutexGuard aGuard(m_aMutex);
         VirtualDevice* pRetval = 0;
 
-        if(!maBuffers.empty())
+        if(!maFreeBuffers.empty())
         {
             bool bOkay(false);
-            aBuffers::iterator aFound(maBuffers.end());
+            aBuffers::iterator aFound(maFreeBuffers.end());
 
-            for(aBuffers::iterator a(maBuffers.begin()); a != maBuffers.end(); a++)
+            for(aBuffers::iterator a(maFreeBuffers.begin()); a != maFreeBuffers.end(); a++)
             {
                 OSL_ENSURE(*a, "Empty pointer in VDevBuffer (!)");
 
                 if((bMono && 1 == (*a)->GetBitCount()) || (!bMono && (*a)->GetBitCount() > 1))
                 {
                     // candidate is valid due to bit depth
-                    if(aFound != maBuffers.end())
+                    if(aFound != maFreeBuffers.end())
                     {
                         // already found
                         if(bOkay)
@@ -133,10 +144,10 @@ namespace
                 }
             }
 
-            if(aFound != maBuffers.end())
+            if(aFound != maFreeBuffers.end())
             {
                 pRetval = *aFound;
-                maBuffers.erase(aFound);
+                maFreeBuffers.erase(aFound);
 
                 if(bOkay)
                 {
@@ -164,13 +175,20 @@ namespace
             pRetval->SetMapMode();
         }
 
+        // remember allocated buffer
+        maUsedBuffers.push_back(pRetval);
+
         return pRetval;
     }
 
     void VDevBuffer::free(VirtualDevice& rDevice)
     {
         ::osl::MutexGuard aGuard(m_aMutex);
-        maBuffers.push_back(&rDevice);
+        const aBuffers::iterator aUsedFound(::std::find(maUsedBuffers.begin(), maUsedBuffers.end(), &rDevice));
+        OSL_ENSURE(aUsedFound != maUsedBuffers.end(), "OOps, non-registered buffer freed (!)");
+
+        maUsedBuffers.erase(aUsedFound);
+        maFreeBuffers.push_back(&rDevice);
         Start();
     }
 
@@ -178,10 +196,10 @@ namespace
     {
         ::osl::MutexGuard aGuard(m_aMutex);
 
-        while(!maBuffers.empty())
+        while(!maFreeBuffers.empty())
         {
-            delete *(maBuffers.end() - 1);
-            maBuffers.pop_back();
+            delete *(maFreeBuffers.end() - 1);
+            maFreeBuffers.pop_back();
         }
     }
 }
