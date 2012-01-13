@@ -304,10 +304,6 @@ protected:
 
     srv_vendor_t    meServerVendor;
     SalWM           eWindowManager_;
-    sal_Bool            bLocal_;            // Server==Client? Init
-    // in SalDisplay::IsLocal()
-    sal_Bool            mbLocalIsValid;     // bLocal_ is valid ?
-    // until x bytes
 
     XLIB_Cursor     aPointerCache_[POINTER_COUNT];
 
@@ -373,8 +369,6 @@ public:
 
     XLIB_Cursor     GetPointer( int ePointerStyle );
     virtual int CaptureMouse( SalFrame *pCapture );
-
-    sal_Bool            IsLocal();
 
     void            Remove( XEvent   *pEvent );
 
