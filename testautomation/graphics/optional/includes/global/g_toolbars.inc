@@ -1,167 +1,26 @@
 'encoding UTF-8  Do not remove or change this line!
 '*************************************************************************
 '
-' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-' 
-' Copyright 2000, 2010 Oracle and/or its affiliates.
-'
-' OpenOffice.org - a multi-platform office productivity suite
-'
-' This file is part of OpenOffice.org.
-'
-' OpenOffice.org is free software: you can redistribute it and/or modify
-' it under the terms of the GNU Lesser General Public License version 3
-' only, as published by the Free Software Foundation.
-'
-' OpenOffice.org is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU Lesser General Public License version 3 for more details
-' (a copy is included in the LICENSE file that accompanied this code).
-'
-' You should have received a copy of the GNU Lesser General Public License
-' version 3 along with OpenOffice.org.  If not, see
-' <http://www.openoffice.org/license.html>
-' for a copy of the LGPLv3 License.
+'  Licensed to the Apache Software Foundation (ASF) under one
+'  or more contributor license agreements.  See the NOTICE file
+'  distributed with this work for additional information
+'  regarding copyright ownership.  The ASF licenses this file
+'  to you under the Apache License, Version 2.0 (the
+'  "License"); you may not use this file except in compliance
+'  with the License.  You may obtain a copy of the License at
+'  
+'    http://www.apache.org/licenses/LICENSE-2.0
+'  
+'  Unless required by applicable law or agreed to in writing,
+'  software distributed under the License is distributed on an
+'  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+'  KIND, either express or implied.  See the License for the
+'  specific language governing permissions and limitations
+'  under the License.
 '
 '*************************************************************************
 
-'*
-'* Owner : wolfram.garten@oracle.com
-'*
-'* short description :
-'*
-'*********************************************************************
-' #1 Toolboxen_Rechtecke
-' #1 Toolboxen_Kreise
-' #1 Toolboxen_3dObjekte
-' #1 Toolboxen_Linien
-' #1 Toolboxen_Kurven
-'\********************************************************************
-
-
-testcase Toolboxen_Rechtecke
-    Printlog "- Toolbox rectangles"
-    Dim i
-
-
-    Printlog "- 1.: Create rectangles, apply shadow and move them around"
-
-    for i = 1 to 4
-        select case i
-        case 1 : Printlog "- Create Rectangle Filled"
-            sleep 1
-        case 2 : Printlog "- Create Rectangle Round-Filled"
-            WL_SD_RechteckRundVoll
-            sleep 1
-        case 3 : Printlog "- Create Quadrat Filled"
-            WL_SD_QuadratVoll
-            sleep 1
-        case 4 : Printlog "Create Quadrat Round-Filled"
-            WL_SD_QuadratRundVoll
-            sleep 1
-        end select
-
-        Kontext "DocumentImpress"
-        sleep 2
-        Kontext
-        Kontext "TabSchatten"
-        sleep 1
-        Kontext "DocumentImpress"
-
-
-        gMouseClick 30,30
-        gMouseMove 30,30,90,90
-
-        gMouseClick 90,90
-        gMouseMove 90,90,30,30
-
-        gMouseClick 30,30
-        gMouseMove 30,30,90,90
-
-        gMouseClick 90,90
-        gMouseMove 90,90,30,30
-
-        sleep 2
-    next i
-endcase
-
-'**********************************************************************
-testcase Toolboxen_Kreise
-    Printlog "- Toolbox Circles"
-
-    Dim i
-
-
-
-    Printlog "- Create circles and ellipses"
-    for i = 1 to 7
-    case 1 : WL_SD_Ellipsen
-        sleep 1
-        Kontext "DocumentImpress"
-        gMouseMove 20,20,60,60
-    case 2 : WL_SD_EllipseVoll
-        sleep 1
-        Kontext "DocumentImpress"
-        gMouseMove 20,20,60,60
-    case 3 : WL_SD_EllipsensegmentVoll
-        sleep 1
-        kontext "DocumentImpress"
-        gMouseMove 20,20,40,40
-        gMouseClick 20,30
-        gMouseClick 20,28
-    case 4 : WL_SD_EllipsenabschnittVoll
-        sleep 1
-        kontext "DocumentImpress"
-        gMouseMove 20,20,40,40
-        gMouseClick 20,30
-        gMouseClick 20,28
-    case 5 : WL_SD_KreisVoll
-        sleep 1
-        kontext "DocumentImpress"
-        gMouseMove 20,20,40,40
-    case 6 : WL_SD_KreissegmentVoll
-        sleep 1
-        kontext "DocumentImpress"
-        gMouseMove 20,20,40,40
-        gMouseClick 20,30
-        gMouseClick 20,28
-    case 7 : WL_SD_KreisabschnittVoll
-        sleep 1
-        kontext "DocumentImpress"
-        gMouseMove 20,20,40,40
-        gMouseClick 20,30
-        gMouseClick 20,28
-    end select
-
-    FormatArea
-    Kontext
-    Kontext "TabSchatten"
-    Anzeigen.Click
-    TabSchatten.OK
-    sleep 1
-    Kontext "DocumentImpress"
-    gMouseClick 30,30
-
-    gMouseClick 90,90
-    gMouseMove 90,90,30,30
-
-    gMouseClick 30,30
-    gMouseMove 30,30,90,90
-
-    gMouseClick 90,90
-    gMouseMove 90,90,30,30
-
-    gMouseClick 30,30
-    gMouseMove 30,30,90,90
-
-    gMouseClick 90,90
-    gMouseMove 90,90,30,30
-
-    sleep 2
-next i
-endcase
-'***********************************************************************************
+*********
 testcase Toolboxen_3dObjekte
     Printlog "- Toolbox 3D objects"
     Dim i
