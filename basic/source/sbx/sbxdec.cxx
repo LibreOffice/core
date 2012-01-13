@@ -696,10 +696,12 @@ start:
             }
             break;
         case SbxBYREF | SbxCURRENCY:
+            {
             double d;
             if( !pDec->getDouble( d ) )
                 SbxBase::SetError( SbxERR_OVERFLOW );
             *p->pnInt64 = ImpDoubleToCurrency( d );
+            }
             break;
         case SbxBYREF | SbxSALINT64:
             {
@@ -708,8 +710,8 @@ start:
                 SbxBase::SetError( SbxERR_OVERFLOW );
             else
                 *p->pnInt64 = ImpDoubleToSalInt64( d );
-            break;
             }
+            break;
         case SbxBYREF | SbxSALUINT64:
             {
             double d;
@@ -717,8 +719,8 @@ start:
                 SbxBase::SetError( SbxERR_OVERFLOW );
             else
                 *p->puInt64 = ImpDoubleToSalUInt64( d );
-            break;
             }
+            break;
         case SbxBYREF | SbxSINGLE:
             if( !pDec->getSingle( *p->pSingle ) )
             {
