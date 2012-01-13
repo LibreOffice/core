@@ -433,8 +433,22 @@ ScDPCache::ScDPCache(ScDocument* pDoc) :
 {
 }
 
+namespace {
+
+struct ClearObjectSource : std::unary_function<ScDPObject*, void>
+{
+    void operator() (ScDPObject* p) const
+    {
+        p->ClearSource();
+    }
+};
+
+}
+
 ScDPCache::~ScDPCache()
 {
+    // Make sure no live ScDPObject instances hold reference to this cache any more.
+    std::for_each(maRefObjects.begin(), maRefObjects.end(), ClearObjectSource());
 }
 
 bool ScDPCache::IsValid() const
