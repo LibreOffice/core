@@ -93,6 +93,8 @@ private:
 
     mutable ScDPItemDataPool    maAdditionalData;
 
+    bool mbDisposing;
+
 public:
     void AddReference(ScDPObject* pObj) const;
     void RemoveReference(ScDPObject* pObj) const;

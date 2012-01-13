@@ -429,7 +429,8 @@ bool ScDPCache::operator== ( const ScDPCache& r ) const
 
 ScDPCache::ScDPCache(ScDocument* pDoc) :
     mpDoc( pDoc ),
-    mnColumnCount ( 0 )
+    mnColumnCount ( 0 ),
+    mbDisposing(false)
 {
 }
 
@@ -448,10 +449,9 @@ struct ClearObjectSource : std::unary_function<ScDPObject*, void>
 ScDPCache::~ScDPCache()
 {
     // Make sure no live ScDPObject instances hold reference to this cache any
-    // more.  We need to use a copied set because the referencing objects will
-    // modify the original when clearing their source.
-    ObjectSetType aRefs(maRefObjects);
-    std::for_each(aRefs.begin(), aRefs.end(), ClearObjectSource());
+    // more.
+    mbDisposing = true;
+    std::for_each(maRefObjects.begin(), maRefObjects.end(), ClearObjectSource());
 }
 
 bool ScDPCache::IsValid() const
@@ -1010,6 +1010,10 @@ void ScDPCache::AddReference(ScDPObject* pObj) const
 
 void ScDPCache::RemoveReference(ScDPObject* pObj) const
 {
+    if (mbDisposing)
+        // Object being deleted.
+        return;
+
     maRefObjects.erase(pObj);
     if (maRefObjects.empty())
         mpDoc->GetDPCollection()->RemoveCache(this);
