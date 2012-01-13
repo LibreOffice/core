@@ -41,7 +41,6 @@
 #include <com/sun/star/linguistic2/XLanguageGuessing.hpp>
 #include <editeng/svxenum.hxx>
 
-class SvStringsDtor;
 class Color;
 class SfxItemSet;
 class SfxRequest;
@@ -107,7 +106,7 @@ class SW_DLLPUBLIC SwModule: public SfxModule, public SfxListener, public utl::C
     SwView*             pView;
 
     // List of all Redline-authors.
-    SvStringsDtor*      pAuthorNames;
+    std::vector<String>*      pAuthorNames;
 
     // DictionaryList listener to trigger spellchecking or hyphenation
     ::com::sun::star::uno::Reference<

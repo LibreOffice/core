@@ -434,23 +434,23 @@ void SwModule::SetRedlineAuthor(const String &rAuthor)
 
 const String& SwModule::GetRedlineAuthor(sal_uInt16 nPos)
 {
-    OSL_ENSURE(nPos<pAuthorNames->Count(), "author not found!"); //#i45342# RTF doc with no author table caused reader to crash
-    while (!(nPos<pAuthorNames->Count()))
+    OSL_ENSURE(nPos < pAuthorNames->size(), "author not found!"); //#i45342# RTF doc with no author table caused reader to crash
+    while(!(nPos < pAuthorNames->size()))
     {
         InsertRedlineAuthor(String(RTL_CONSTASCII_USTRINGPARAM("nn")));
     };
-    return *pAuthorNames->GetObject(nPos);
+    return (*pAuthorNames)[nPos];
 }
 
 sal_uInt16 SwModule::InsertRedlineAuthor(const String& rAuthor)
 {
     sal_uInt16 nPos = 0;
 
-    while (nPos < pAuthorNames->Count() && *pAuthorNames->GetObject(nPos) != rAuthor)
-        nPos++;
+    while(nPos < pAuthorNames->size() && (*pAuthorNames)[nPos] != rAuthor)
+        ++nPos;
 
-    if (nPos == pAuthorNames->Count())
-        pAuthorNames->Insert(new String(rAuthor), nPos);
+    if (nPos == pAuthorNames->size())
+        pAuthorNames->push_back(rAuthor);
 
     return nPos;
 }

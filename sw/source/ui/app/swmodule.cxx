@@ -200,7 +200,7 @@ SwModule::SwModule( SfxObjectFactory* pWebFact,
 
     pStdFontConfig = new SwStdFontConfig;
 
-    pAuthorNames = new SvStringsDtor(5, 1);    // All Redlining-Authors
+    pAuthorNames = new std::vector<String>;    // All Redlining-Authors
 
     // replace SvxAutocorrect with SwAutocorrect
     SvxAutoCorrCfg& rACfg = SvxAutoCorrCfg::Get();
