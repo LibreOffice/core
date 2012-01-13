@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <unotools/localedatawrapper.hxx>
 #include <viewsh.hxx>
 #include <initui.hxx>
@@ -86,10 +84,10 @@ void SetCurrGlosGroup(String* pStr)
     pCurrGlosGroup = pStr;
 }
 
-SvStringsDtor* pDBNameList = 0;
+std::vector<String>* pDBNameList = 0;
 
-SvStringsDtor*  pAuthFieldNameList = 0;
-SvStringsDtor*  pAuthFieldTypeList = 0;
+std::vector<String>*  pAuthFieldNameList = 0;
+std::vector<String>*  pAuthFieldTypeList = 0;
 
 /*--------------------------------------------------------------------
     Beschreibung:   UI beenden
@@ -128,7 +126,7 @@ void _InitUI()
 {
     // ShellResource gibt der CORE die Moeglichkeit mit Resourcen zu arbeiten
     ViewShell::SetShellRes( new ShellResource );
-    pDBNameList = new SvStringsDtor( 5, 5 );
+    pDBNameList = new std::vector<String>;
     SwEditWin::_InitStaticData();
 }
 
@@ -277,29 +275,24 @@ const String&   SwAuthorityFieldType::GetAuthFieldName(ToxAuthorityField eType)
 {
     if(!pAuthFieldNameList)
     {
-        pAuthFieldNameList = new SvStringsDtor(AUTH_FIELD_END, 1);
-        for(sal_uInt16 i = 0; i < AUTH_FIELD_END; i++)
-        {
-            String*  pTmp = new String(SW_RES(STR_AUTH_FIELD_START + i));
-            pAuthFieldNameList->Insert(pTmp, pAuthFieldNameList->Count());
-        }
+        pAuthFieldNameList = new std::vector<String>;
+        pAuthFieldNameList->reserve(AUTH_FIELD_END);
+        for(sal_uInt16 i = 0; i < AUTH_FIELD_END; ++i)
+            pAuthFieldNameList->push_back(String(SW_RES(STR_AUTH_FIELD_START + i)));
     }
-    return *pAuthFieldNameList->GetObject( static_cast< sal_uInt16 >(eType) );
+    return (*pAuthFieldNameList)[static_cast< sal_uInt16 >(eType)];
 }
 
 const String&   SwAuthorityFieldType::GetAuthTypeName(ToxAuthorityType eType)
 {
     if(!pAuthFieldTypeList)
     {
-        pAuthFieldTypeList = new SvStringsDtor(AUTH_TYPE_END, 1);
-        for(sal_uInt16 i = 0; i < AUTH_TYPE_END; i++)
-            pAuthFieldTypeList->Insert(
-                new String(SW_RES(STR_AUTH_TYPE_START + i)),
-                                    pAuthFieldTypeList->Count());
+        pAuthFieldTypeList = new std::vector<String>;
+        pAuthFieldTypeList->reserve(AUTH_TYPE_END);
+        for(sal_uInt16 i = 0; i < AUTH_TYPE_END; ++i)
+            pAuthFieldTypeList->push_back(String(SW_RES(STR_AUTH_TYPE_START + i)));
     }
-    return *pAuthFieldTypeList->GetObject( static_cast< sal_uInt16 >(eType) );
+    return (*pAuthFieldTypeList)[static_cast< sal_uInt16 >(eType)];
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

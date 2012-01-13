@@ -31,12 +31,13 @@
 #include "tools/solar.h"
 #include "swdllapi.h"
 
+#include <vector>
+
 /*
  * Forward Declarations
  */
 class String;
 class SwThesaurus;
-class SvStringsDtor;
 
 /*
  * Extern Definitions
@@ -57,10 +58,10 @@ SW_DLLPUBLIC String* GetOldDrwCat();
 SW_DLLPUBLIC String* GetCurrGlosGroup();
 SW_DLLPUBLIC void SetCurrGlosGroup(String* pStr);
 
-extern SvStringsDtor*   pDBNameList;
+extern std::vector<String>*   pDBNameList;
 
-extern SvStringsDtor*   pAuthFieldNameList;
-extern SvStringsDtor*   pAuthFieldTypeList;
+extern std::vector<String>*   pAuthFieldNameList;
+extern std::vector<String>*   pAuthFieldTypeList;
 
 // provides textblock management
 class SwGlossaries;
