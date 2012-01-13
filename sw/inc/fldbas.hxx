@@ -33,11 +33,10 @@
 #include "swdllapi.h"
 #include <calbck.hxx>
 #include <com/sun/star/uno/Any.hxx>
+#include <vector>
 
 class SwDoc;
-class SvStringsDtor;
 class SvNumberFormatter;
-
 
 enum RES_FIELDS
 {
@@ -242,7 +241,7 @@ class SW_DLLPUBLIC SwFieldType : public SwModify
     sal_uInt16 nWhich;
 
     friend void _FinitUI();     // In order to delete pointer!
-    static  SvStringsDtor*  pFldNames;
+    static  std::vector<String>* pFldNames;
 
     static void _GetFldName();  // Sets up FldNames; fldmgr.cxx!
 

@@ -1653,12 +1653,13 @@ void SwFieldType::_GetFldName()
     };
 
     // insert infos for fields
-    SwFieldType::pFldNames = new SvStringsDtor( (sal_uInt8)coFldCnt, 2 );
+    SwFieldType::pFldNames = new std::vector<String>;
+    SwFieldType::pFldNames->reserve(coFldCnt);
     for( sal_uInt16 nIdx = 0; nIdx < coFldCnt; ++nIdx )
     {
-        String* pTmp = new SW_RESSTR( coFldNms[ nIdx ] );
-        pTmp->Assign( MnemonicGenerator::EraseAllMnemonicChars( *pTmp ) );
-        SwFieldType::pFldNames->Insert(pTmp, nIdx );
+        String aTmp(SW_RESSTR( coFldNms[ nIdx ] ));
+        aTmp.Assign( MnemonicGenerator::EraseAllMnemonicChars( aTmp ) );
+        SwFieldType::pFldNames->push_back(aTmp);
     }
 }
 

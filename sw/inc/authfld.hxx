@@ -31,6 +31,7 @@
 #include "swdllapi.h"
 #include <fldbas.hxx>
 #include <toxe.hxx>
+#include <svl/svstdarr.hxx>
 #include <vector>
 
 class SwAuthDataArr;

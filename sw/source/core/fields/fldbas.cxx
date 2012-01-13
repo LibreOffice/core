@@ -79,8 +79,7 @@ sal_uInt16 lcl_GetLanguageOfFormat( sal_uInt16 nLng, sal_uLong nFmt,
  --------------------------------------------------------------------*/
 // Array der Feldname
 
-SvStringsDtor* SwFieldType::pFldNames = 0;
-
+std::vector<String>* SwFieldType::pFldNames = 0;
 
     sal_uInt16 aTypeTab[] = {
     /* RES_DBFLD            */      TYP_DBFLD,
@@ -133,12 +132,11 @@ const String& SwFieldType::GetTypeStr(sal_uInt16 nTypeId)
     if( !pFldNames )
         _GetFldName();
 
-    if( nTypeId < SwFieldType::pFldNames->Count() )
-        return *SwFieldType::pFldNames->GetObject( nTypeId );
+    if( nTypeId < SwFieldType::pFldNames->size() )
+        return (*SwFieldType::pFldNames)[nTypeId];
     else
         return aEmptyStr;
 }
-
 
 /*---------------------------------------------------
  Jedes Feld referenziert einen Feldtypen, der fuer
