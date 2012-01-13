@@ -236,7 +236,6 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
         int                 m_nDirectory;       // atom containing system dependent path
         rtl::OString      m_aFontFile;        // relative to directory
         rtl::OString      m_aMetricFile;      // dito
-        rtl::OString      m_aXLFD;            // mainly for administration, contains the XLFD from fonts.dir
 
         /* note: m_aFontFile and Metric file are not atoms
            because they should be fairly unique */
@@ -250,7 +249,6 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
     {
         int           m_nDirectory;       // atom containing system dependent path
         rtl::OString  m_aFontFile;        // relative to directory
-        rtl::OString  m_aXLFD;            // mainly for administration, contains the XLFD from fonts.dir
         int           m_nCollectionEntry; // 0 for regular fonts, 0 to ... for fonts stemming from collections
         unsigned int  m_nTypeFlags;       // copyright bits and PS-OpenType flag
 
@@ -269,34 +267,6 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
         virtual bool queryMetricPage( int nPage, utl::MultiAtomProvider* pProvider );
     };
 
-    struct XLFDEntry
-    {
-        static const int MaskFoundry    = 1;
-        static const int MaskFamily     = 2;
-        static const int MaskAddStyle   = 4;
-        static const int MaskItalic     = 8;
-        static const int MaskWeight     = 16;
-        static const int MaskWidth      = 32;
-        static const int MaskPitch      = 64;
-        static const int MaskEncoding   = 128;
-
-        int                 nMask; // contains a bit set for every valid member
-
-        rtl::OString        aFoundry;
-        rtl::OString        aFamily;
-        rtl::OString        aAddStyle;
-        FontItalic          eItalic;
-        FontWeight          eWeight;
-        FontWidth           eWidth;
-        FontPitch           ePitch;
-        rtl_TextEncoding    aEncoding;
-
-        XLFDEntry() { nMask = 0; }
-
-        bool operator<(const XLFDEntry& rRight) const;
-        bool operator==(const XLFDEntry& rRight) const;
-    };
-
     static rtl::OString s_aEmptyOString;
 
     fontID                                      m_nNextFontID;
@@ -305,8 +275,6 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
     std::list< rtl::OUString >              m_aPrinterDrivers;
     std::list< rtl::OString >               m_aFontDirectories;
     std::list< int >                            m_aPrivateFontDirectories;
-    std::map< struct XLFDEntry, std::list< struct XLFDEntry > >
-    m_aXLFD_Aliases;
     utl::MultiAtomProvider*                   m_pAtoms;
     // for speeding up findFontFileID
     boost::unordered_map< rtl::OString, std::set< fontID >, rtl::OStringHash >
@@ -331,9 +299,7 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
     rtl::OString getAfmFile( PrintFont* pFont ) const;
     rtl::OString getFontFile( PrintFont* pFont ) const;
 
-    void getFontAttributesFromXLFD( PrintFont* pFont, const std::list< rtl::OString >& rXLFDs ) const;
-
-    bool analyzeFontFile( int nDirID, const rtl::OString& rFileName, const std::list< rtl::OString >& rXLFDs, std::list< PrintFont* >& rNewFonts, const char *pFormat=NULL ) const;
+    bool analyzeFontFile( int nDirID, const rtl::OString& rFileName, std::list< PrintFont* >& rNewFonts, const char *pFormat=NULL ) const;
     rtl::OUString convertTrueTypeName( void* pNameRecord ) const; // actually a NameRecord* formt font subsetting code
     void analyzeTrueTypeFamilyName( void* pTTFont, std::list< rtl::OUString >& rnames ) const; // actually a TrueTypeFont* from font subsetting code
     bool analyzeTrueTypeFile( PrintFont* pFont ) const;
@@ -386,10 +352,6 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
     false else (e.g. no libfontconfig found)
     */
     bool addFontconfigDir(const rtl::OString& rDirectory);
-
-    static bool parseXLFD( const rtl::OString& rXLFD, XLFDEntry& rEntry );
-    void parseXLFD_appendAliases( const std::list< rtl::OString >& rXLFDs, std::list< XLFDEntry >& rEntries ) const;
-    void initFontsAlias();
 
     bool readOverrideMetrics();
 

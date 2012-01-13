@@ -547,10 +547,9 @@ int PrintFontManager::countFontconfigFonts( boost::unordered_map<rtl::OString, i
 #endif
                 // not known, analyze font file to get attributes
                 // not described by fontconfig (e.g. alias names, PSName)
-                std::list< OString > aDummy;
                 if (eFormatRes != FcResultMatch)
                     format = NULL;
-                analyzeFontFile( nDirID, aBase, aDummy, aFonts, (const char*)format );
+                analyzeFontFile( nDirID, aBase, aFonts, (const char*)format );
 #if OSL_DEBUG_LEVEL > 1
                 if( aFonts.empty() )
                     fprintf( stderr, "Warning: file \"%s\" is unusable to psprint\n", aOrgPath.getStr() );

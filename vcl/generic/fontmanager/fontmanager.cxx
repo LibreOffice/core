@@ -133,18 +133,6 @@ inline sal_uInt32 getUInt32BE( const sal_uInt8*& pBuffer )
     return nRet;
 }
 
-static FontItalic parseItalic( const ByteString& rItalic )
-{
-    FontItalic eItalic = ITALIC_DONTKNOW;
-    if( rItalic.EqualsIgnoreCaseAscii( "i" ) )
-        eItalic = ITALIC_NORMAL;
-    else if( rItalic.EqualsIgnoreCaseAscii( "o" ) )
-        eItalic = ITALIC_OBLIQUE;
-    else
-        eItalic = ITALIC_NONE;
-    return eItalic;
-}
-
 // -------------------------------------------------------------------------
 
 static FontWeight parseWeight( const ByteString& rWeight )
@@ -182,169 +170,6 @@ static FontWeight parseWeight( const ByteString& rWeight )
     else
         eWeight = WEIGHT_NORMAL;
     return eWeight;
-}
-
-// -------------------------------------------------------------------------
-
-static FontWidth parseWidth( const ByteString& rWidth )
-{
-    FontWidth eWidth = WIDTH_DONTKNOW;
-    if( rWidth.Equals( "bold" ) ||
-        rWidth.Equals( "semiexpanded" ) )
-        eWidth = WIDTH_SEMI_EXPANDED;
-    else if( rWidth.Equals( "condensed" ) ||
-             rWidth.Equals( "narrow" ) )
-        eWidth = WIDTH_CONDENSED;
-    else if( rWidth.Equals( "double wide" ) ||
-             rWidth.Equals( "extraexpanded" ) ||
-             rWidth.Equals( "ultraexpanded" ) )
-        eWidth = WIDTH_ULTRA_EXPANDED;
-    else if( rWidth.Equals( "expanded" ) ||
-             rWidth.Equals( "wide" ) )
-        eWidth = WIDTH_EXPANDED;
-    else if( rWidth.Equals( "extracondensed" ) )
-        eWidth = WIDTH_EXTRA_CONDENSED;
-    else if( rWidth.Equals( "semicondensed" ) )
-        eWidth = WIDTH_SEMI_CONDENSED;
-    else if( rWidth.Equals( "ultracondensed" ) )
-        eWidth = WIDTH_ULTRA_CONDENSED;
-    else
-        eWidth = WIDTH_NORMAL;
-
-    return eWidth;
-}
-
-// -------------------------------------------------------------------------
-bool PrintFontManager::XLFDEntry::operator<(const PrintFontManager::XLFDEntry& rRight) const
-{
-    sal_Int32 nCmp = 0;
-    if( (nMask & MaskFamily) && (rRight.nMask & MaskFamily) )
-    {
-        nCmp =  rtl_str_compareIgnoreAsciiCase_WithLength( aFamily.pData->buffer,
-                                                           aFamily.pData->length,
-                                                           rRight.aFamily.pData->buffer,
-                                                           rRight.aFamily.pData->length );
-        if( nCmp != 0 )
-            return nCmp < 0;
-    }
-
-    if( (nMask & MaskFoundry) && (rRight.nMask & MaskFoundry) )
-    {
-        nCmp =  rtl_str_compareIgnoreAsciiCase_WithLength( aFoundry.pData->buffer,
-                                                           aFoundry.pData->length,
-                                                           rRight.aFoundry.pData->buffer,
-                                                           rRight.aFoundry.pData->length );
-        if( nCmp != 0 )
-            return nCmp < 0;
-    }
-
-    if( (nMask & MaskItalic) && (rRight.nMask & MaskItalic) )
-    {
-        if( eItalic != rRight.eItalic )
-            return (int)eItalic < (int)rRight.eItalic;
-    }
-
-    if( (nMask & MaskWeight) && (rRight.nMask & MaskWeight) )
-    {
-        if( eWeight != rRight.eWeight )
-            return (int)eWeight < (int)rRight.eWeight;
-    }
-
-    if( (nMask & MaskWidth) && (rRight.nMask & MaskWidth) )
-    {
-        if( eWidth != rRight.eWidth )
-            return (int)eWidth < (int)rRight.eWidth;
-    }
-
-    if( (nMask & MaskPitch) && (rRight.nMask & MaskPitch) )
-    {
-        if( ePitch != rRight.ePitch )
-            return (int)ePitch < (int)rRight.ePitch;
-    }
-
-    if( (nMask & MaskAddStyle) && (rRight.nMask & MaskAddStyle) )
-    {
-        nCmp =  rtl_str_compareIgnoreAsciiCase_WithLength( aAddStyle.pData->buffer,
-                                                           aAddStyle.pData->length,
-                                                           rRight.aAddStyle.pData->buffer,
-                                                           rRight.aAddStyle.pData->length );
-        if( nCmp != 0 )
-            return nCmp < 0;
-    }
-
-    if( (nMask & MaskEncoding) && (rRight.nMask & MaskEncoding) )
-    {
-        if( aEncoding != rRight.aEncoding )
-            return aEncoding < rRight.aEncoding;
-    }
-
-    return false;
-}
-
-bool PrintFontManager::XLFDEntry::operator==(const PrintFontManager::XLFDEntry& rRight) const
-{
-    sal_Int32 nCmp = 0;
-    if( (nMask & MaskFamily) && (rRight.nMask & MaskFamily) )
-    {
-        nCmp =  rtl_str_compareIgnoreAsciiCase_WithLength( aFamily.pData->buffer,
-                                                           aFamily.pData->length,
-                                                           rRight.aFamily.pData->buffer,
-                                                           rRight.aFamily.pData->length );
-        if( nCmp != 0 )
-            return false;
-    }
-
-    if( (nMask & MaskFoundry) && (rRight.nMask & MaskFoundry) )
-    {
-        nCmp =  rtl_str_compareIgnoreAsciiCase_WithLength( aFoundry.pData->buffer,
-                                                           aFoundry.pData->length,
-                                                           rRight.aFoundry.pData->buffer,
-                                                           rRight.aFoundry.pData->length );
-        if( nCmp != 0 )
-            return false;
-    }
-
-    if( (nMask & MaskItalic) && (rRight.nMask & MaskItalic) )
-    {
-        if( eItalic != rRight.eItalic )
-            return false;
-    }
-
-    if( (nMask & MaskWeight) && (rRight.nMask & MaskWeight) )
-    {
-        if( eWeight != rRight.eWeight )
-            return false;
-    }
-
-    if( (nMask & MaskWidth) && (rRight.nMask & MaskWidth) )
-    {
-        if( eWidth != rRight.eWidth )
-            return false;
-    }
-
-    if( (nMask & MaskPitch) && (rRight.nMask & MaskPitch) )
-    {
-        if( ePitch != rRight.ePitch )
-            return false;
-    }
-
-    if( (nMask & MaskAddStyle) && (rRight.nMask & MaskAddStyle) )
-    {
-        nCmp =  rtl_str_compareIgnoreAsciiCase_WithLength( aAddStyle.pData->buffer,
-                                                           aAddStyle.pData->length,
-                                                           rRight.aAddStyle.pData->buffer,
-                                                           rRight.aAddStyle.pData->length );
-        if( nCmp != 0 )
-            return false;
-    }
-
-    if( (nMask & MaskEncoding) && (rRight.nMask & MaskEncoding) )
-    {
-        if( aEncoding != rRight.aEncoding )
-            return false;
-    }
-
-    return true;
 }
 
 /*
@@ -1265,7 +1090,7 @@ std::vector<fontID> PrintFontManager::addFontFile( const ::rtl::OString& rFileNa
     if( aFontIds.empty() )
     {
         ::std::list< PrintFont* > aNewFonts;
-        if( analyzeFontFile( nDirID, aName, ::std::list<OString>(), aNewFonts ) )
+        if( analyzeFontFile( nDirID, aName, aNewFonts ) )
         {
             for( ::std::list< PrintFont* >::iterator it = aNewFonts.begin();
                  it != aNewFonts.end(); ++it )
@@ -1286,7 +1111,7 @@ enum fontFormat
     UNKNOWN, TRUETYPE, CFF, TYPE1, AFM
 };
 
-bool PrintFontManager::analyzeFontFile( int nDirID, const OString& rFontFile, const ::std::list<OString>& rXLFDs, ::std::list< PrintFontManager::PrintFont* >& rNewFonts, const char *pFormat ) const
+bool PrintFontManager::analyzeFontFile( int nDirID, const OString& rFontFile, ::std::list< PrintFontManager::PrintFont* >& rNewFonts, const char *pFormat ) const
 {
     rNewFonts.clear();
 
@@ -1368,8 +1193,6 @@ bool PrintFontManager::analyzeFontFile( int nDirID, const OString& rFontFile, co
                     delete pFont;
                     pFont = NULL;
                 }
-                if( pFont && rXLFDs.size() )
-                    getFontAttributesFromXLFD( pFont, rXLFDs );
                 if( pFont )
                     rNewFonts.push_back( pFont );
                 break;
@@ -1406,8 +1229,6 @@ bool PrintFontManager::analyzeFontFile( int nDirID, const OString& rFontFile, co
                 pFont->m_nDirectory         = nDirID;
                 pFont->m_aFontFile          = rFontFile;
                 pFont->m_nCollectionEntry   = i;
-                if( nLength == 1 )
-                    getFontAttributesFromXLFD( pFont, rXLFDs );
                 if( ! analyzeTrueTypeFile( pFont ) )
                 {
                     delete pFont;
@@ -1424,8 +1245,6 @@ bool PrintFontManager::analyzeFontFile( int nDirID, const OString& rFontFile, co
             pFont->m_aFontFile          = rFontFile;
             pFont->m_nCollectionEntry   = 0;
 
-            if( rXLFDs.size() )
-                getFontAttributesFromXLFD( pFont, rXLFDs );
             // need to read the font anyway to get aliases inside the font file
             if( ! analyzeTrueTypeFile( pFont ) )
             {
@@ -1542,194 +1361,6 @@ std::vector<fontID> PrintFontManager::findFontFileIDs( int nDirID, const OString
     }
 
     return aIds;
-}
-
-// -------------------------------------------------------------------------
-
-bool PrintFontManager::parseXLFD( const OString& rXLFD, XLFDEntry& rEntry )
-{
-    sal_Int32 nIndex = 0;
-    OString aFoundry        = WhitespaceToSpace( rXLFD.getToken( 1, '-', nIndex ) );
-    if( nIndex < 0 ) return false;
-    OString aFamilyXLFD     = WhitespaceToSpace( rXLFD.getToken( 0, '-', nIndex ) );
-    if( nIndex < 0 ) return false;
-    OString aWeight         = rXLFD.getToken( 0, '-', nIndex ).toAsciiLowerCase();
-    if( nIndex < 0 ) return false;
-    OString aSlant          = rXLFD.getToken( 0, '-', nIndex ).toAsciiLowerCase();
-    if( nIndex < 0 ) return false;
-    OString aWidth          = rXLFD.getToken( 0, '-', nIndex ).toAsciiLowerCase();
-    if( nIndex < 0 ) return false;
-    OString aAddStyle       = rXLFD.getToken( 0, '-', nIndex ).toAsciiLowerCase();
-    if( nIndex < 0 ) return false;
-    OString aPitch          = rXLFD.getToken( 4, '-', nIndex ).toAsciiLowerCase();
-    if( nIndex < 0 ) return false;
-    OString aRegEnc         = WhitespaceToSpace( rXLFD.getToken( 1, '-', nIndex ).toAsciiLowerCase() );
-    if( nIndex < 0 ) return false;
-    OString aEnc            = WhitespaceToSpace( rXLFD.getToken( 0, '-', nIndex ).toAsciiLowerCase() );
-
-    // capitalize words
-    sal_Int32 nFamIndex = 0;
-    OStringBuffer aFamilyName;
-    while( nFamIndex >= 0 )
-    {
-        OString aToken = aFamilyXLFD.getToken( 0, ' ', nFamIndex );
-        sal_Char aFirst = aToken.toChar();
-        if( aFirst >= 'a' && aFirst <= 'z' )
-            aFirst = aFirst - 'a' + 'A';
-        OStringBuffer aNewToken( aToken.getLength() );
-        aNewToken.append( aToken );
-        aNewToken[0] = aFirst;
-        if( aFamilyName.getLength() > 0 )
-            aFamilyName.append( ' ' );
-        aFamilyName.append( aNewToken.makeStringAndClear() );
-    }
-
-    rEntry.aFoundry     = aFoundry;
-    rEntry.aFamily      = aFamilyName.makeStringAndClear();
-    rEntry.aAddStyle    = aAddStyle;
-    // evaluate weight
-    rEntry.eWeight = parseWeight( aWeight );
-    // evaluate slant
-    rEntry.eItalic = parseItalic( aSlant );
-    // evaluate width
-    rEntry.eWidth = parseWidth( aWidth );
-
-    // evaluate pitch
-    if( aPitch.toChar() == 'c' || aPitch.toChar() == 'm' )
-        rEntry.ePitch = PITCH_FIXED;
-    else
-        rEntry.ePitch = PITCH_VARIABLE;
-
-    OString aToken = aEnc.toAsciiLowerCase();
-    // get encoding
-    if( aAddStyle.indexOf( "symbol" ) != -1 )
-        rEntry.aEncoding = RTL_TEXTENCODING_SYMBOL;
-    else
-    {
-        if( aToken.equals( "symbol" ) )
-            rEntry.aEncoding = RTL_TEXTENCODING_SYMBOL;
-        else
-        {
-            OStringBuffer aCharset( aRegEnc.getLength() + aEnc.getLength() + 1 );
-            aCharset.append( aRegEnc );
-            aCharset.append( '-' );
-            aCharset.append( aEnc );
-            rEntry.aEncoding = rtl_getTextEncodingFromUnixCharset( aCharset.getStr() );
-        }
-    }
-
-    // set correct mask flags
-    rEntry.nMask = 0;
-    if( rEntry.aFoundry != "*" )        rEntry.nMask |= XLFDEntry::MaskFoundry;
-    if( rEntry.aFamily != "*" )         rEntry.nMask |= XLFDEntry::MaskFamily;
-    if( rEntry.aAddStyle != "*" )       rEntry.nMask |= XLFDEntry::MaskAddStyle;
-    if( aWeight != "*" )                rEntry.nMask |= XLFDEntry::MaskWeight;
-    if( aSlant != "*" )                 rEntry.nMask |= XLFDEntry::MaskItalic;
-    if( aWidth != "*" )                 rEntry.nMask |= XLFDEntry::MaskWidth;
-    if( aPitch != "*" )                 rEntry.nMask |= XLFDEntry::MaskPitch;
-    if( aRegEnc != "*" && aEnc != "*" ) rEntry.nMask |= XLFDEntry::MaskEncoding;
-
-    return true;
-}
-
-// -------------------------------------------------------------------------
-
-void PrintFontManager::parseXLFD_appendAliases( const std::list< OString >& rXLFDs, std::list< XLFDEntry >& rEntries ) const
-{
-    for( std::list< OString >::const_iterator it = rXLFDs.begin(); it != rXLFDs.end(); ++it )
-    {
-        XLFDEntry aEntry;
-        if( ! parseXLFD(*it, aEntry) )
-            continue;
-        rEntries.push_back( aEntry );
-        std::map< XLFDEntry, std::list< XLFDEntry > >::const_iterator alias_it =
-            m_aXLFD_Aliases.find( aEntry );
-        if( alias_it != m_aXLFD_Aliases.end() )
-        {
-            rEntries.insert( rEntries.end(), alias_it->second.begin(), alias_it->second.end() );
-        }
-    }
-}
-
-// -------------------------------------------------------------------------
-
-void PrintFontManager::getFontAttributesFromXLFD( PrintFont* pFont, const std::list< OString >& rXLFDs ) const
-{
-    bool bFamilyName = false;
-
-    std::list< XLFDEntry > aXLFDs;
-
-    parseXLFD_appendAliases( rXLFDs, aXLFDs );
-
-    for( std::list< XLFDEntry >::const_iterator it = aXLFDs.begin();
-         it != aXLFDs.end(); ++it )
-    {
-        // set family name or alias
-        int nFam =
-            m_pAtoms->getAtom( ATOM_FAMILYNAME,
-                               OStringToOUString( it->aFamily, it->aAddStyle.indexOf( "utf8" ) != -1 ? RTL_TEXTENCODING_UTF8 : RTL_TEXTENCODING_ISO_8859_1 ),
-                               sal_True );
-        if( ! bFamilyName )
-        {
-            bFamilyName = true;
-            pFont->m_nFamilyName = nFam;
-            switch( pFont->m_eType )
-            {
-                case fonttype::Type1:
-                    static_cast<Type1FontFile*>(pFont)->m_aXLFD = rXLFDs.front();
-                    break;
-                case fonttype::TrueType:
-                    static_cast<TrueTypeFontFile*>(pFont)->m_aXLFD = rXLFDs.front();
-                    break;
-                default:
-                    break;
-            }
-        }
-        else
-        {
-            // make sure that aliases are unique
-            if( nFam != pFont->m_nFamilyName )
-            {
-                std::list< int >::const_iterator al_it;
-                for( al_it = pFont->m_aAliases.begin(); al_it != pFont->m_aAliases.end() && *al_it != nFam; ++al_it )
-                    ;
-                if( al_it == pFont->m_aAliases.end() )
-                    pFont->m_aAliases.push_back( nFam );
-
-            }
-            // for the rest of the attributes there can only be one value;
-            // we'll trust the first one
-            continue;
-        }
-
-        // fill in weight
-        pFont->m_eWeight    = it->eWeight;
-        // fill in slant
-        pFont->m_eItalic    = it->eItalic;
-        // fill in width
-        pFont->m_eWidth     = it->eWidth;
-        // fill in pitch
-        pFont->m_ePitch     = it->ePitch;
-        // fill in encoding
-        pFont->m_aEncoding  = it->aEncoding;
-    }
-
-    // handle iso8859-1 as ms1252 to fill the "gap" starting at 0x80
-    if( pFont->m_aEncoding == RTL_TEXTENCODING_ISO_8859_1 )
-        pFont->m_aEncoding = RTL_TEXTENCODING_MS_1252;
-    if( rXLFDs.begin() != rXLFDs.end() )
-    {
-        switch( pFont->m_eType )
-        {
-            case fonttype::Type1:
-                static_cast<Type1FontFile*>(pFont)->m_aXLFD = rXLFDs.front();
-                break;
-            case fonttype::TrueType:
-                static_cast<TrueTypeFontFile*>(pFont)->m_aXLFD = rXLFDs.front();
-                break;
-            default: break;
-        }
-    }
 }
 
 // -------------------------------------------------------------------------
@@ -2027,47 +1658,6 @@ bool PrintFontManager::analyzeTrueTypeFile( PrintFont* pFont ) const
     return bSuccess;
 }
 
-// -------------------------------------------------------------------------
-
-void PrintFontManager::initFontsAlias()
-{
-    m_aXLFD_Aliases.clear();
-    rtl_TextEncoding aEnc = osl_getThreadTextEncoding();
-    for( std::list< OString >::const_iterator dir_it = m_aFontDirectories.begin();
-         dir_it != m_aFontDirectories.end(); ++dir_it )
-    {
-        OStringBuffer aDirName(512);
-        aDirName.append( *dir_it );
-        aDirName.append( "/fonts.alias" );
-        SvFileStream aStream( OStringToOUString( aDirName.makeStringAndClear(), aEnc ), STREAM_READ );
-        if( ! aStream.IsOpen() )
-            continue;
-
-        do
-        {
-            ByteString aLine;
-            aStream.ReadLine( aLine );
-
-            // get the alias and the pattern it gets translated to
-            ByteString aAlias   = GetCommandLineToken( 0, aLine );
-            ByteString aMap     = GetCommandLineToken( 1, aLine );
-
-            // remove eventual quotes
-            aAlias = comphelper::string::stripStart(aAlias, '"');
-            aAlias = comphelper::string::stripEnd(aAlias, '"');
-            aMap = comphelper::string::stripStart(aMap, '"');
-            aMap = comphelper::string::stripEnd(aMap, '"');
-
-            XLFDEntry aAliasEntry, aMapEntry;
-            parseXLFD( aAlias, aAliasEntry );
-            parseXLFD( aMap, aMapEntry );
-
-            if( aAliasEntry.nMask && aMapEntry.nMask )
-                m_aXLFD_Aliases[ aMapEntry ].push_back( aAliasEntry );
-        } while( ! aStream.IsEof() );
-    }
-}
-
 static bool AreFCSubstitutionsEnabled()
 {
     return (SalGenericInstance::FetchFontSubstitutionFlags() & 3) == 0;
@@ -2160,9 +1750,6 @@ void PrintFontManager::initialize()
     // Don't search directories that fontconfig already did
     countFontconfigFonts( visited_dirs );
 
-    // fill XLFD aliases from fonts.alias files
-    initFontsAlias();
-
     // search for font files in each path
     std::list< OString >::iterator dir_it;
     for( dir_it = m_aFontDirectories.begin(); dir_it != m_aFontDirectories.end(); ++dir_it )
@@ -2207,89 +1794,6 @@ void PrintFontManager::initialize()
                 continue;
         }
 
-        DIR* pDIR = opendir( aPath.getStr() );
-        struct dirent* pEntry = (struct dirent*)aDirEntBuffer;
-        if( pDIR )
-        {
-            // read fonts.dir if possible
-            ::boost::unordered_map< OString, ::std::list<OString>, OStringHash > aFontsDir;
-            int nDirID = getDirectoryAtom( aPath, true );
-            // #i38367# no fonts.dir in our own directories anymore
-            std::list< int >::const_iterator priv_dir;
-            for( priv_dir = m_aPrivateFontDirectories.begin();
-                 priv_dir != m_aPrivateFontDirectories.end() && *priv_dir != nDirID;
-                 ++priv_dir )
-                 ;
-
-            if( priv_dir == m_aPrivateFontDirectories.end() )
-            {
-                ByteString aGccDummy( aPath );
-                String aFontsDirPath( aGccDummy, aEncoding );
-                aFontsDirPath.AppendAscii( "/fonts.dir" );
-                SvFileStream aStream( aFontsDirPath, STREAM_READ );
-                if( aStream.IsOpen() )
-                {
-                    ByteString aLine;
-                    while( ! aStream.IsEof() )
-                    {
-                        aStream.ReadLine( aLine );
-                        ByteString aFileName( GetCommandLineToken( 0, aLine ) );
-                        ByteString aXLFD( aLine.Copy( aFileName.Len() ) );
-                        if( aFileName.Len() && aXLFD.Len() )
-                            aFontsDir[ aFileName ].push_back(aXLFD);
-                    }
-                }
-            }
-
-            int nDirFonts = 0;
-            while( ! readdir_r( pDIR, (struct dirent*)aDirEntBuffer, &pEntry ) && pEntry )
-            {
-                OString aFileName( pEntry->d_name );
-                // ignore .afm files here
-                if( aFileName.getLength() > 3 &&
-                    aFileName.lastIndexOf( ".afm" ) == aFileName.getLength()-4 )
-                    continue;
-
-                struct stat aStat;
-                rtl::OStringBuffer aFilePath(aPath);
-                aFilePath.append('/').append(aFileName);
-                if( ! stat( aFilePath.getStr(), &aStat )     &&
-                    S_ISREG( aStat.st_mode ) )
-                {
-                    if (!knownFontFile(nDirID, aFileName))
-                    {
-                        ::std::list<OString> aXLFDs;
-                        ::boost::unordered_map< OString, ::std::list<OString>, OStringHash >::const_iterator it =
-                              aFontsDir.find( aFileName );
-                        if( it != aFontsDir.end() )
-                            aXLFDs = (*it).second;
-
-                        // fill in font attributes from XLFD rather
-                        // than reading every file
-                        ::std::list< PrintFont* > aNewFonts;
-                        if( analyzeFontFile( nDirID, aFileName, aXLFDs, aNewFonts ) )
-                        {
-                            for( ::std::list< PrintFont* >::iterator font_it = aNewFonts.begin(); font_it != aNewFonts.end(); ++font_it )
-                            {
-                                fontID aFont = m_nNextFontID++;
-                                m_aFonts[ aFont ] = *font_it;
-                                m_aFontFileToFontID[ aFileName ].insert( aFont );
-                                m_pFontCache->updateFontCacheEntry( *font_it, false );
-                                nDirFonts++;
-#if OSL_DEBUG_LEVEL > 2
-                                fprintf( stderr, "adding font %d: from %s\n", aFont,
-                                         getFontFileSysPath( aFont ).getStr() );
-#endif
-                            }
-                        }
-                    }
-                }
-            }
-            closedir( pDIR );
-            m_pFontCache->updateDirTimestamp( nDirID );
-            if( ! nDirFonts )
-                m_pFontCache->markEmptyDir( nDirID );
-        }
     }
 
 #if OSL_DEBUG_LEVEL > 1
@@ -2300,7 +1804,6 @@ void PrintFontManager::initialize()
     std::list< OUString > aMetricDirs;
     psp::getPrinterPathList( aMetricDirs, PRINTER_METRICDIR );
 
-    std::list< OString > aEmptyFontsDir;
     for( std::list< OUString >::const_iterator met_dir_it = aMetricDirs.begin(); met_dir_it != aMetricDirs.end(); ++met_dir_it )
     {
         OString aDir = OUStringToOString( *met_dir_it, aEncoding );
@@ -2358,7 +1861,7 @@ void PrintFontManager::initialize()
                     {
                         ::std::list< PrintFont* > aNewFonts;
 
-                        analyzeFontFile( nDirID, aFileName, aEmptyFontsDir, aNewFonts );
+                        analyzeFontFile( nDirID, aFileName, aNewFonts );
                         for( ::std::list< PrintFont* >::iterator it = aNewFonts.begin(); it != aNewFonts.end(); ++it )
                         {
                             if( findFontBuiltinID( (*it)->m_nPSName ) == 0 )
