@@ -139,9 +139,9 @@ void SwFldDokInfPage::Reset(const SfxItemSet& )
         nSelEntryData = static_cast< sal_uInt16 >(sVal.ToInt32());
     }
 
-    SvStringsDtor aLst;
+    std::vector<String> aLst;
     GetFldMgr().GetSubTypes(nTypeId, aLst);
-    for (sal_uInt16 i = 0; i < aLst.Count(); ++i)
+    for(size_t i = 0; i < aLst.size(); ++i)
     {
         if (!IsFldEdit() || nSubType == i)
         {
@@ -175,7 +175,7 @@ void SwFldDokInfPage::Reset(const SfxItemSet& )
             {
                 if (!(IsFldDlgHtmlMode() && (i == DI_EDIT || i == DI_THEMA || i == DI_PRINT)))
                 {
-                    pEntry = aTypeTLB.InsertEntry(*aLst[i]);
+                    pEntry = aTypeTLB.InsertEntry(aLst[i]);
                     pEntry->SetUserData(reinterpret_cast<void*>(i));
                 }
             }

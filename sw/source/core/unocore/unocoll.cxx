@@ -1948,12 +1948,12 @@ uno::Sequence< OUString > SwXReferenceMarks::getElementNames(void) throw( uno::R
     uno::Sequence<OUString> aRet;
     if(IsValid())
     {
-        SvStringsDtor aStrings;
+        std::vector<String> aStrings;
         sal_uInt16 nCount = GetDoc()->GetRefMarks( &aStrings );
         aRet.realloc(nCount);
         OUString* pNames = aRet.getArray();
         for(sal_uInt16 i = 0; i < nCount; i++)
-            pNames[i] = *aStrings.GetObject(i);
+            pNames[i] = aStrings[i];
     }
     else
         throw uno::RuntimeException();

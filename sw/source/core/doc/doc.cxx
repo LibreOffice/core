@@ -1822,7 +1822,7 @@ const SwFmtRefMark* SwDoc::GetRefMark( sal_uInt16 nIndex ) const
 // Return the names of all set references in the Doc
 //JP 24.06.96: If the array pointer is 0, then just return whether a RefMark is set in the Doc
 // OS 25.06.96: From now on we always return the reference count
-sal_uInt16 SwDoc::GetRefMarks( SvStringsDtor* pNames ) const
+sal_uInt16 SwDoc::GetRefMarks( std::vector<String>* pNames ) const
 {
     const SfxPoolItem* pItem;
     const SwTxtRefMark* pTxtRef;
@@ -1836,8 +1836,8 @@ sal_uInt16 SwDoc::GetRefMarks( SvStringsDtor* pNames ) const
         {
             if( pNames )
             {
-                String* pTmp = new String( ((SwFmtRefMark*)pItem)->GetRefName() );
-                pNames->Insert( pTmp, nCount );
+                String pTmp(((SwFmtRefMark*)pItem)->GetRefName());
+                pNames->insert(pNames->begin() + nCount, pTmp);
             }
             nCount ++;
         }

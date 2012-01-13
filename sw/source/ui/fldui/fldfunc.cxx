@@ -500,13 +500,13 @@ void SwFldFuncPage::UpdateSubType()
     aSelectionLB.SetUpdateMode(sal_False);
     aSelectionLB.Clear();
 
-    SvStringsDtor aLst;
+    std::vector<String> aLst;
     GetFldMgr().GetSubTypes(nTypeId, aLst);
-    sal_uInt16 nCount = aLst.Count();
+    size_t nCount = aLst.size();
 
-    for (sal_uInt16 i = 0; i < nCount; ++i)
+    for(size_t i = 0; i < nCount; ++i)
     {
-        sal_uInt16 nPos = aSelectionLB.InsertEntry(*aLst[i]);
+        size_t nPos = aSelectionLB.InsertEntry(aLst[i]);
         aSelectionLB.SetEntryData(nPos, reinterpret_cast<void*>(i));
     }
 

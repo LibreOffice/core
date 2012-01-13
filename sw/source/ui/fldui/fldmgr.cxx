@@ -498,7 +498,7 @@ sal_uInt16 SwFldMgr::GetPos(sal_uInt16 nTypeId)
     Description: localise subtypes of a field
  --------------------------------------------------------------------*/
 
-sal_Bool SwFldMgr::GetSubTypes(sal_uInt16 nTypeId, SvStringsDtor& rToFill)
+sal_Bool SwFldMgr::GetSubTypes(sal_uInt16 nTypeId, std::vector<String>& rToFill)
 {
     sal_Bool bRet = sal_False;
     SwWrtShell *pSh = pWrtShell ? pWrtShell : lcl_GetShell();
@@ -521,8 +521,8 @@ sal_Bool SwFldMgr::GetSubTypes(sal_uInt16 nTypeId, SvStringsDtor& rToFill)
                 break;
             }
             case TYP_INPUTFLD:
-            {   String* pNew = new SW_RESSTR(aSwFlds[nPos].nSubTypeStart);
-                rToFill.Insert(pNew, rToFill.Count());
+            {
+                rToFill.push_back(String(SW_RESSTR(aSwFlds[nPos].nSubTypeStart)));
                 // move on at generic types
             }
             case TYP_DDEFLD:
@@ -557,8 +557,7 @@ sal_Bool SwFldMgr::GetSubTypes(sal_uInt16 nTypeId, SvStringsDtor& rToFill)
                           (nWhich == RES_SETEXPFLD &&
                           !(((SwSetExpFieldType*)pFldType)->GetType() & nsSwGetSetExpType::GSE_SEQ))) ) )
                     {
-                        String* pNew = new String(pFldType->GetName());
-                        rToFill.Insert(pNew, rToFill.Count());
+                        rToFill.push_back(pFldType->GetName());
                     }
                 }
                 break;
@@ -582,18 +581,18 @@ sal_Bool SwFldMgr::GetSubTypes(sal_uInt16 nTypeId, SvStringsDtor& rToFill)
 
                     for(sal_uInt16 i = 0; i < nCount; ++i)
                     {
-                        String* pNew;
+                        String pNew;
                         if (nTypeId == TYP_DOCINFOFLD)
                         {
                             if ( i == DI_CUSTOM )
-                                pNew = new String( String(SW_RES( STR_CUSTOM )) );
+                                pNew = String(SW_RES( STR_CUSTOM ));
                             else
-                                pNew = new String(*ViewShell::GetShellRes()->aDocInfoLst[i]);
+                                pNew = *ViewShell::GetShellRes()->aDocInfoLst[i];
                         }
                         else
-                            pNew = new SW_RESSTR(aSwFlds[nPos].nSubTypeStart + i);
+                            pNew = SW_RESSTR(aSwFlds[nPos].nSubTypeStart + i);
 
-                        rToFill.Insert(pNew, rToFill.Count());
+                        rToFill.push_back(pNew);
                     }
                 }
             }

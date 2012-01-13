@@ -602,18 +602,18 @@ void SwFldVarPage::UpdateSubType()
     aSelectionLB.SetUpdateMode(sal_False);
     aSelectionLB.Clear();
 
-    SvStringsDtor aList;
+    std::vector<String> aList;
     GetFldMgr().GetSubTypes(nTypeId, aList);
-    sal_uInt16 nCount = aList.Count();
-    sal_uInt16 nPos;
+    size_t nCount = aList.size();
+    size_t nPos;
 
-    for (sal_uInt16 i = 0; i < nCount; ++i)
+    for(size_t i = 0; i < nCount; ++i)
     {
         if (nTypeId != TYP_INPUTFLD || i)
         {
             if (!IsFldEdit())
             {
-                nPos = aSelectionLB.InsertEntry(*aList[i]);
+                nPos = aSelectionLB.InsertEntry(aList[i]);
                 aSelectionLB.SetEntryData(nPos, reinterpret_cast<void*>(i));
             }
             else
@@ -623,7 +623,7 @@ void SwFldVarPage::UpdateSubType()
                 switch (nTypeId)
                 {
                     case TYP_INPUTFLD:
-                        if (*aList[i] == GetCurField()->GetPar1())
+                        if (aList[i] == GetCurField()->GetPar1())
                             bInsert = sal_True;
                         break;
 
@@ -632,13 +632,13 @@ void SwFldVarPage::UpdateSubType()
                         break;
 
                     case TYP_GETFLD:
-                        if (*aList[i] == ((SwFormulaField*)GetCurField())->GetFormula())
+                        if (aList[i] == ((SwFormulaField*)GetCurField())->GetFormula())
                             bInsert = sal_True;
                         break;
 
                     case TYP_SETFLD:
                     case TYP_USERFLD:
-                        if (*aList[i] == GetCurField()->GetTyp()->GetName())
+                        if (aList[i] == GetCurField()->GetTyp()->GetName())
                         {
                             bInsert = sal_True;
                             if (GetCurField()->GetSubType() & nsSwExtendedSubType::SUB_INVISIBLE)
@@ -649,21 +649,21 @@ void SwFldVarPage::UpdateSubType()
                     case TYP_SETREFPAGEFLD:
                         if ((((SwRefPageSetField*)GetCurField())->IsOn() && i) ||
                             (!((SwRefPageSetField*)GetCurField())->IsOn() && !i))
-                            sOldSel = *aList[i];
+                            sOldSel = aList[i];
 
                         // allow all entries for selection:
-                        nPos = aSelectionLB.InsertEntry(*aList[i]);
+                        nPos = aSelectionLB.InsertEntry(aList[i]);
                         aSelectionLB.SetEntryData(nPos, reinterpret_cast<void*>(i));
                         break;
 
                     default:
-                        if (*aList[i] == GetCurField()->GetPar1())
+                        if (aList[i] == GetCurField()->GetPar1())
                             bInsert = sal_True;
                         break;
                 }
                 if (bInsert)
                 {
-                    nPos = aSelectionLB.InsertEntry(*aList[i]);
+                    nPos = aSelectionLB.InsertEntry(aList[i]);
                     aSelectionLB.SetEntryData(nPos, reinterpret_cast<void*>(i));
                     if (nTypeId != TYP_FORMELFLD)
                         break;

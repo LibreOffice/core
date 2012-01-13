@@ -1704,7 +1704,7 @@ public:
 
     // Return names of all references that are set in document.
     // If array pointer is 0 return only whether a RefMark is set in document.
-    sal_uInt16 GetRefMarks( SvStringsDtor* = 0 ) const;
+    sal_uInt16 GetRefMarks( std::vector<String>* = 0 ) const;
 
     // Insert label. If a FlyFormat is created, return it.
     SwFlyFrmFmt* InsertLabel( const SwLabelType eType, const String &rTxt, const String& rSeparator,

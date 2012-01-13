@@ -34,6 +34,7 @@
 #include "swtypes.hxx"
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Any.h>
+#include <vector>
 
 namespace com{namespace sun{namespace star{
     namespace container{
@@ -201,7 +202,7 @@ public:
     static sal_uInt16   GetPos(sal_uInt16 nTypeId);
 
     // subtypes to a type
-    sal_Bool            GetSubTypes(sal_uInt16 nId, SvStringsDtor& rToFill);
+    sal_Bool            GetSubTypes(sal_uInt16 nId, std::vector<String>& rToFill);
 
     // format to a type
     sal_uInt16          GetFormatCount(sal_uInt16 nTypeId, sal_Bool bIsText, sal_Bool bHtmlMode = sal_False) const;

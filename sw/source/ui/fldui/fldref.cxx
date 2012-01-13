@@ -629,10 +629,10 @@ void SwFldRefPage::UpdateSubType()
     }
     else
     {
-        SvStringsDtor aLst;
+        std::vector<String> aLst;
         GetFldMgr().GetSubTypes(nTypeId, aLst);
-        for (sal_uInt16 i = 0; i < aLst.Count(); ++i)
-            aSelectionLB.InsertEntry(*aLst[i]);
+        for(size_t i = 0; i < aLst.size(); ++i)
+            aSelectionLB.InsertEntry(aLst[i]);
 
         if (IsFldEdit())
             sOldSel = pRefFld->GetSetRefName();

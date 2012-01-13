@@ -658,14 +658,13 @@ void    SwContentType::FillMemberList(sal_Bool* pbLevelOrVisibiblityChanged)
         break;
         case CONTENT_TYPE_REFERENCE:
         {
-            SvStringsDtor aRefMarks;
+            std::vector<String> aRefMarks;
             nMemberCount = pWrtShell->GetRefMarks( &aRefMarks );
 
-            for(sal_uInt16 i=0; i<nMemberCount; i++)
+            for(std::vector<String>::const_iterator i = aRefMarks.begin(); i != aRefMarks.end(); ++i)
             {
                 //Referenzen nach Alphabet sortiert
-                SwContent* pCnt = new SwContent(
-                            this, *aRefMarks.GetObject(i), 0);
+                SwContent* pCnt = new SwContent(this, *i, 0);
                 pMember->Insert(pCnt);
             }
         }

@@ -215,22 +215,22 @@ IMPL_LINK( SwFldDokPage, TypeHdl, ListBox *, EMPTYARG )
 
         if (nTypeId != USHRT_MAX)
         {
-            SvStringsDtor aLst;
+            std::vector<String> aLst;
             GetFldMgr().GetSubTypes(nTypeId, aLst);
 
             if (nTypeId != TYP_AUTHORFLD)
-                nCount = aLst.Count();
+                nCount = aLst.size();
             else
                 nCount = GetFldMgr().GetFormatCount(nTypeId, sal_False, IsFldDlgHtmlMode());
 
-            sal_uInt16 nPos;
+            size_t nPos;
 
-            for (sal_uInt16 i = 0; i < nCount; ++i)
+            for(size_t i = 0; i < nCount; ++i)
             {
                 if (!IsFldEdit())
                 {
                     if (nTypeId != TYP_AUTHORFLD)
-                        nPos = aSelectionLB.InsertEntry(*aLst[i]);
+                        nPos = aSelectionLB.InsertEntry(aLst[i]);
                     else
                         nPos = aSelectionLB.InsertEntry(GetFldMgr().GetFormatStr(nTypeId, i));
 
@@ -244,7 +244,7 @@ IMPL_LINK( SwFldDokPage, TypeHdl, ListBox *, EMPTYARG )
                     {
                         case TYP_DATEFLD:
                         case TYP_TIMEFLD:
-                            nPos = aSelectionLB.InsertEntry(*aLst[i]);
+                            nPos = aSelectionLB.InsertEntry(aLst[i]);
                             aSelectionLB.SetEntryData(nPos, reinterpret_cast<void*>(i));
                             if (((SwDateTimeField*)GetCurField())->IsFixed() && !i)
                                 aSelectionLB.SelectEntryPos(nPos);
@@ -254,7 +254,7 @@ IMPL_LINK( SwFldDokPage, TypeHdl, ListBox *, EMPTYARG )
 
                         case TYP_EXTUSERFLD:
                         case TYP_DOCSTATFLD:
-                            nPos = aSelectionLB.InsertEntry(*aLst[i]);
+                            nPos = aSelectionLB.InsertEntry(aLst[i]);
                             aSelectionLB.SetEntryData(nPos, reinterpret_cast<void*>(i));
                             if (GetCurField()->GetSubType() == i)
                                 aSelectionLB.SelectEntryPos(nPos);
@@ -270,13 +270,13 @@ IMPL_LINK( SwFldDokPage, TypeHdl, ListBox *, EMPTYARG )
                         }
 
                         default:
-                            if (*aLst[i] == GetCurField()->GetPar1())
+                            if (aLst[i] == GetCurField()->GetPar1())
                                 bInsert = sal_True;
                             break;
                     }
                     if (bInsert)
                     {
-                        nPos = aSelectionLB.InsertEntry(*aLst[i]);
+                        nPos = aSelectionLB.InsertEntry(aLst[i]);
                         aSelectionLB.SetEntryData(nPos, reinterpret_cast<void*>(i));
                         break;
                     }
