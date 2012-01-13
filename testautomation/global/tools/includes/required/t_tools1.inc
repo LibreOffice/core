@@ -1,84 +1,26 @@
 'encoding UTF-8  Do not remove or change this line!
 '*************************************************************************
 '
-' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-' 
-' Copyright 2000, 2010 Oracle and/or its affiliates.
-'
-' OpenOffice.org - a multi-platform office productivity suite
-'
-' This file is part of OpenOffice.org.
-'
-' OpenOffice.org is free software: you can redistribute it and/or modify
-' it under the terms of the GNU Lesser General Public License version 3
-' only, as published by the Free Software Foundation.
-'
-' OpenOffice.org is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU Lesser General Public License version 3 for more details
-' (a copy is included in the LICENSE file that accompanied this code).
-'
-' You should have received a copy of the GNU Lesser General Public License
-' version 3 along with OpenOffice.org.  If not, see
-' <http://www.openoffice.org/license.html>
-' for a copy of the LGPLv3 License.
+'  Licensed to the Apache Software Foundation (ASF) under one
+'  or more contributor license agreements.  See the NOTICE file
+'  distributed with this work for additional information
+'  regarding copyright ownership.  The ASF licenses this file
+'  to you under the Apache License, Version 2.0 (the
+'  "License"); you may not use this file except in compliance
+'  with the License.  You may obtain a copy of the License at
+'  
+'    http://www.apache.org/licenses/LICENSE-2.0
+'  
+'  Unless required by applicable law or agreed to in writing,
+'  software distributed under the License is distributed on an
+'  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+'  KIND, either express or implied.  See the License for the
+'  specific language governing permissions and limitations
+'  under the License.
 '
 '*************************************************************************
-******
-'*
-'* owner : gregor.hartmann@oracle.com
-'*
-'* short description : Tools (1)
-'*
-'\******************************************************************************
 
-private SLEEP_TIME_REQUESTED as integer
-private SLEEP_CALLS_SUM as integer
-private SLEEP_TIME_USED as integer
-
-function GetClipboardText as string
-
-    '/// Returns the correct clipboard text (also if there is a 'RETURN' at it's end.
-    Dim i% : Dim CBText$
-    Dim Zwischen$
-
-    wait 500
-    GetClipboardText = ""
-    CBText$ = GetClipboard
- 
-    if CBText$ = "" then
-        GetClipboardText = ""
-        exit function
-    end if
- 
-    if asc ( Right( CBText$, 1 )) = 10 then
-        Zwischen$ = Mid( CBText$, 1, len(CBText$)-1 )
-        if Zwischen$ <> "" then
-            if asc ( Right( Zwischen$, 1 )) = 13 then
-                GetClipboardText = Mid( Zwischen$, 1, len(Zwischen$)-1 )
-            else
-                GetClipboardText = Zwischen$
-            end if
-        else
-            GetClipboardText = Zwischen$
-        end if
-    else
-        if asc ( Right( CBText$, 1 )) = 13 then
-            Zwischen$ = Mid( CBText$, 1, len(CBText$)-1 )
-            if asc ( Right( Zwischen$, 1 )) = 10 then
-                GetClipboardText = Mid( Zwischen$, 1, len(Zwischen$)-1 )
-            else
-                GetClipboardText = Zwischen$
-            end if
-        else
-            GetClipboardText = CBText$
-        end if
-    end if
-    
-end function
-
-'*******************************************************************************
+*****
 
 function hDoubleClickInList ( window, Selektion as String, optional bFocus as boolean ) as Boolean
 

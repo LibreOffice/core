@@ -1,98 +1,26 @@
 'encoding UTF-8  Do not remove or change this line!
 '*************************************************************************
 '
-' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-' 
-' Copyright 2000, 2010 Oracle and/or its affiliates.
-'
-' OpenOffice.org - a multi-platform office productivity suite
-'
-' This file is part of OpenOffice.org.
-'
-' OpenOffice.org is free software: you can redistribute it and/or modify
-' it under the terms of the GNU Lesser General Public License version 3
-' only, as published by the Free Software Foundation.
-'
-' OpenOffice.org is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU Lesser General Public License version 3 for more details
-' (a copy is included in the LICENSE file that accompanied this code).
-'
-' You should have received a copy of the GNU Lesser General Public License
-' version 3 along with OpenOffice.org.  If not, see
-' <http://www.openoffice.org/license.html>
-' for a copy of the LGPLv3 License.
+'  Licensed to the Apache Software Foundation (ASF) under one
+'  or more contributor license agreements.  See the NOTICE file
+'  distributed with this work for additional information
+'  regarding copyright ownership.  The ASF licenses this file
+'  to you under the Apache License, Version 2.0 (the
+'  "License"); you may not use this file except in compliance
+'  with the License.  You may obtain a copy of the License at
+'  
+'    http://www.apache.org/licenses/LICENSE-2.0
+'  
+'  Unless required by applicable law or agreed to in writing,
+'  software distributed under the License is distributed on an
+'  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+'  KIND, either express or implied.  See the License for the
+'  specific language governing permissions and limitations
+'  under the License.
 '
 '*************************************************************************
 
-' **
-' ** owner : gregor.hartmann@oracle.com
-' **
-' ** short description : tools for the property-browser test
-' **
-'\******************************************************************************
-
-function hShowMacroControls() as boolean
-
-    '///<h3>Tear off the ToolsCollectionBar from the MacroBar</h3>
-    '///<i>Starting point: Basic dialog editor is open and has the focus</i>
-    '///<ul>
-    const CFN = "hShowMacroControls::"
-
-    const MAX_WAIT = 5
-    const SHORT_WAIT = 1
-
-    const VERTICALLY_CENTERED = 50
-    const HORIZONTALLY_CENTERED = 50
-    
-    if ( GVERBOSE ) then printlog( CFN & "Enter" )
-
-    '///+<li>Test whether the ToolsCollectionBar is already open. If yes, exit directly</li>
-    kontext "ToolsCollectionBar"
-    if ( ToolsCollectionBar.exists( SHORT_WAIT ) ) then
-        printlog( CFN & "ToolsCollectionBar is already open." )
-        hShowMacroControls() = true
-        exit function
-    endif
-    
-    '///+<li>Verify that the Dialog Bar is available</li>
-    Kontext "DialogBar"
-    if ( DialogBar.exists( MAX_WAIT ) ) then
-
-        '///+<li>Verify that the controls-button is enabled</li>
-        try        
-            '///+<li>Click on the controls-button to open the ToolsCollectionBar</li>
-            controls.click()
-            
-            '///+<li>Tear off the ToolsCollectionBar from the DialogBar</li>
-            controls.tearOff()
-            
-            '///+<li>Verify that the ToolsCollectionBar is visible and can be accessed</li>
-            kontext "ToolsCollectionBar"
-            if ( ToolsCollectionBar.exists( MAX_WAIT ) ) then
-            
-                '///+<li>Move it to the upper left corner at pos 50/50</li>
-                ToolsCollectionBar.Move ( HORIZONTALLY_CENTERED , VERTICALLY_CENTERED )
-                printlog( CFN & "ToolsCollectionBar is open and has been placed" )
-                hShowMacroControls() = true
-            else
-                printlog( CFN & "ToolsCollectionBar is not available. Aborting." )
-                hShowMacroControls() = false
-            endif
-        catch
-            printlog( CFN & "The Controls-Button is not enabled. Aborting." )
-            hShowMacroControls() = false
-        endcatch	
-    else
-        printlog( CFN & "The Dialog Bar is not available. Aborting." )
-        hShowMacroControls() = false
-    endif
-    '///</ul>    
-        
-end function
-
-'*******************************************************************************
+*****
 
 function hGetBasicWorkFile( cMajorID as string ) as string
 
