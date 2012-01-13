@@ -404,21 +404,29 @@ oslProcessError SAL_CALL osl_getEnvironment(rtl_uString *ustrVar, rtl_uString **
 
 oslProcessError SAL_CALL osl_setEnvironment(rtl_uString *ustrVar, rtl_uString *ustrValue)
 {
+    // set Windows environment variable
     LPCWSTR lpName = reinterpret_cast<LPCWSTR>(ustrVar->buffer);
     LPCWSTR lpValue = reinterpret_cast<LPCWSTR>(ustrValue->buffer);
-    if (SetEnvironmentVariableW(lpName, lpValue))
-        return osl_Process_E_None;
-    return osl_Process_E_Unknown;
+    if( !SetEnvironmentVariableW( lpName, lpValue))
+        return osl_Process_E_Unknown;
+
+    // also set the variable in the crt environment
+    _wputenv_s( lpName, lpValue);
+    return osl_Process_E_None;
 }
 
 oslProcessError SAL_CALL osl_clearEnvironment(rtl_uString *ustrVar)
 {
-    //If the second parameter is NULL, the variable is deleted from the current
-    //process's environment.
+    // delete the variable from the current process environment
+    // by setting SetEnvironmentVariable's second parameter to NULL
     LPCWSTR lpName = reinterpret_cast<LPCWSTR>(ustrVar->buffer);
-    if (SetEnvironmentVariableW(lpName, NULL))
-        return osl_Process_E_None;
-    return osl_Process_E_Unknown;
+    if( !SetEnvironmentVariableW( lpName, NULL))
+        return osl_Process_E_Unknown;
+
+    // also remove the variable from the crt environment
+    wchar_t aEmptyName = 0;
+    _wputenv_s( lpName, &aEmptyName);
+    return osl_Process_E_None;
 }
 
 /***************************************************************************
