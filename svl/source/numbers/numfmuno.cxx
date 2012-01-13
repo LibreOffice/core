@@ -115,7 +115,7 @@ const SfxItemPropertyMapEntry* lcl_GetNumberSettingsPropertyMap()
 LanguageType lcl_GetLanguage( const lang::Locale& rLocale )
 {
     //  empty language -> LANGUAGE_SYSTEM
-    if ( rLocale.Language.getLength() == 0 )
+    if ( rLocale.Language.isEmpty() )
         return LANGUAGE_SYSTEM;
 
     LanguageType eRet = MsLangId::convertLocaleToLanguage( rLocale );

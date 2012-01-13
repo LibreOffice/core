@@ -90,7 +90,7 @@ sal_Bool isLocalFile_Impl( ::rtl::OUString aURL )
     {
     }
 
-    return ( aSystemPath.getLength() != 0 );
+    return ( !aSystemPath.isEmpty() );
 }
 
 
@@ -117,7 +117,7 @@ struct FSStorage_Impl
     , m_pTypeCollection( NULL )
     , m_xFactory( xFactory )
     {
-        OSL_ENSURE( m_aURL.getLength(), "The URL must not be empty" );
+        OSL_ENSURE( !m_aURL.isEmpty(), "The URL must not be empty" );
     }
 
     FSStorage_Impl( const ::ucbhelper::Content& aContent, sal_Int32 nMode, uno::Reference< lang::XMultiServiceFactory > xFactory )
@@ -128,7 +128,7 @@ struct FSStorage_Impl
     , m_pTypeCollection( NULL )
     , m_xFactory( xFactory )
     {
-        OSL_ENSURE( m_aURL.getLength(), "The URL must not be empty" );
+        OSL_ENSURE( !m_aURL.isEmpty(), "The URL must not be empty" );
     }
 
     ~FSStorage_Impl();
@@ -1061,7 +1061,7 @@ uno::Any SAL_CALL FSStorage::getByName( const ::rtl::OUString& aName )
     if ( !GetContent() )
         throw io::IOException(); // TODO: error handling
 
-    if ( !aName.getLength() )
+    if ( aName.isEmpty() )
         throw lang::IllegalArgumentException();
 
     INetURLObject aURL( m_pImpl->m_aURL );
@@ -1186,7 +1186,7 @@ sal_Bool SAL_CALL FSStorage::hasByName( const ::rtl::OUString& aName )
         if ( !GetContent() )
             throw io::IOException(); // TODO: error handling
 
-        if ( !aName.getLength() )
+        if ( aName.isEmpty() )
             throw lang::IllegalArgumentException();
     }
     catch( uno::RuntimeException& )

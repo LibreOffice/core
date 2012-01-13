@@ -86,7 +86,7 @@ void ShareControlFile::OpenStream()
 {
     // if it is called outside of constructor the mutex must be locked already
 
-    if ( !m_xStream.is() && m_aURL.getLength() )
+    if ( !m_xStream.is() && !m_aURL.isEmpty() )
     {
         uno::Reference< ucb::XCommandEnvironment > xDummyEnv;
         ::ucbhelper::Content aContent = ::ucbhelper::Content( m_aURL, xDummyEnv );

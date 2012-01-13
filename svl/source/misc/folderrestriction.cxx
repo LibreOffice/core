@@ -81,7 +81,7 @@ static bool getEnvironmentValue( const sal_Char* _pAsciiEnvName, ::rtl::OUString
     _rValue = ::rtl::OUString();
     ::rtl::OUString sEnvName = ::rtl::OUString::createFromAscii( _pAsciiEnvName );
     osl_getEnvironment( sEnvName.pData, &_rValue.pData );
-    return _rValue.getLength() != 0;
+    return !_rValue.isEmpty();
 }
 
 //-----------------------------------------------------------------------------

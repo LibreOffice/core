@@ -223,7 +223,7 @@ bool CntContentTypeItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uIn
     {
         // SetValue with an empty string resets the item; so call that
         // function when PutValue is called with an empty string
-        if (aValue.getLength() == 0)
+        if (aValue.isEmpty())
             SetValue(aValue);
         else
             SetValue(

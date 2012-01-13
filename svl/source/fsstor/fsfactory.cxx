@@ -78,7 +78,7 @@ uno::Reference< uno::XInterface > SAL_CALL FSStorageFactory::createInstance()
 
     aTempURL = ::utl::TempFile( NULL, sal_True ).GetURL();
 
-    if ( !aTempURL.getLength() )
+    if ( aTempURL.isEmpty() )
         throw uno::RuntimeException(); // TODO: can not create tempfile
 
     ::ucbhelper::Content aResultContent(
@@ -131,7 +131,7 @@ uno::Reference< uno::XInterface > SAL_CALL FSStorageFactory::createInstanceWithA
 
     if ( aArguments[0] >>= aURL )
     {
-        if ( !aURL.getLength() )
+        if ( aURL.isEmpty() )
         {
             OSL_FAIL( "Empty URL is provided!\n" );
             throw uno::Exception(); // TODO: illegal argument

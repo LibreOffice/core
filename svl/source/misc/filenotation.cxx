@@ -67,10 +67,10 @@ namespace svt
 
         m_sSystem = _rSystemPath;
         if  (  ( osl_File_E_None != osl_getFileURLFromSystemPath( m_sSystem.pData, &m_sFileURL.pData ) )
-            && ( 0 == m_sFileURL.getLength() )
+            && ( m_sFileURL.isEmpty() )
             )
         {
-            if ( _rSystemPath.getLength() )
+            if ( !_rSystemPath.isEmpty() )
             {
                 INetURLObject aSmartParser;
                 aSmartParser.SetSmartProtocol( INET_PROT_FILE );

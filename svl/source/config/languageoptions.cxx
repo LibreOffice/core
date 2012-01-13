@@ -208,7 +208,7 @@ void    SvtSystemLanguageOptions::Notify( const com::sun::star::uno::Sequence< r
 
 LanguageType SvtSystemLanguageOptions::GetWin16SystemLanguage()
 {
-    if( m_sWin16SystemLocale.getLength() == 0 )
+    if( m_sWin16SystemLocale.isEmpty() )
         return LANGUAGE_NONE;
     return MsLangId::convertIsoStringToLanguage( m_sWin16SystemLocale );
 }

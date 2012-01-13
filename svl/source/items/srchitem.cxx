@@ -503,7 +503,7 @@ bool SvxSearchItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMembe
         case MID_SEARCH_LOCALE:
         {
             sal_Int16 nLocale;
-            if (aSearchOpt.Locale.Language.getLength() || aSearchOpt.Locale.Country.getLength() )
+            if (!aSearchOpt.Locale.Language.isEmpty() || !aSearchOpt.Locale.Country.isEmpty() )
                 nLocale = MsLangId::convertLocaleToLanguage( aSearchOpt.Locale );
             else
                 nLocale = LANGUAGE_NONE;

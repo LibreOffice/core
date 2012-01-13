@@ -201,7 +201,7 @@ uno::Sequence< ::rtl::OUString > LockFileCommon::ParseEntry( const uno::Sequence
 {
     SvtUserOptions aUserOpt;
     ::rtl::OUString aName = aUserOpt.GetFirstName();
-    if ( aName.getLength() )
+    if ( !aName.isEmpty() )
         aName += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( " " ) );
     aName += aUserOpt.GetLastName();
 

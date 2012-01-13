@@ -138,7 +138,7 @@ namespace
     bool findURL( StringSet const & rContainer, rtl::OUString const & aURL, rtl::OUString & aResult )
     {
         // TODO: This code is actually copied from svl/source/passwordcontainer.cxx
-        if( !rContainer.empty() && aURL.getLength() )
+        if( !rContainer.empty() && !aURL.isEmpty() )
         {
             ::rtl::OUString aUrl( aURL );
 
@@ -167,7 +167,7 @@ namespace
                     }
                 }
             }
-            while( removeLastSegment( aUrl ) && aUrl.getLength() );
+            while( removeLastSegment( aUrl ) && !aUrl.isEmpty() );
         }
         aResult = rtl::OUString();
         return false;

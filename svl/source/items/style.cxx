@@ -220,7 +220,7 @@ sal_Bool SfxStyleSheetBase::SetName( const XubString& rName )
 
 rtl::OUString SfxStyleSheetBase::GetDisplayName() const
 {
-    if( maDisplayName.getLength() == 0 )
+    if( maDisplayName.isEmpty() )
     {
         return aName;
     }

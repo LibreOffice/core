@@ -1913,7 +1913,7 @@ SvNumberformat* SvNumberFormatter::ImpInsertFormat(
     }
     if ( rCode.Default )
         pFormat->SetStandard();
-    if ( rCode.DefaultName.getLength() )
+    if ( !rCode.DefaultName.isEmpty() )
         pFormat->SetComment( rCode.DefaultName );
     return pFormat;
 }
