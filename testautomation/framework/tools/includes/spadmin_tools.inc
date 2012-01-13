@@ -1,6 +1,6 @@
 'encoding UTF-8  Do not remove or change this line!
-'*************************************************************************
-'
+'**************************************************************
+'  
 '  Licensed to the Apache Software Foundation (ASF) under one
 '  or more contributor license agreements.  See the NOTICE file
 '  distributed with this work for additional information
@@ -17,10 +17,65 @@
 '  KIND, either express or implied.  See the License for the
 '  specific language governing permissions and limitations
 '  under the License.
-'
-'*************************************************************************
+'  
+'**************************************************************
+'*
+'* short description : helper functions for SPAdmin
+'*
+'\******************************************************************************
 
-*****
+function hGetPrinterPosition( cName as string, bWarn as boolean ) as integer
+
+    '///<h3>Find a printer queue in the SpAdmin list</h3>
+    ' IN:
+    ' cName = Name of the queue to look for
+    ' bWarn = if TRUE we warn if the queue does not exist
+
+    const CFN = "hGetPrinterPosition::"
+    
+    if ( cName = "" ) then
+        warnlog( CFN & "Invalid Parameter passed to function: Empty String" )
+        hGetPrinterPosition() = -1
+        exit function
+    endif
+  
+    dim iCurrentQueue as integer
+    dim bFound as boolean
+    dim iPrinterCount as integer
+        iPrintercount = LBPrinters.getItemCount()
+
+    Kontext "SpAdmin"
+    bFound = false   
+                
+    for iCurrentQueue = 1 to iPrinterCount
+   
+        wait( 200 )
+      
+        LBPrinters.select( iCurrentQueue )
+        if ( LBPrinters.getseltext() = cName ) then
+            bFound = true
+            exit for
+        endif
+         
+    next iCurrentQueue
+   
+    ' warn if queue was not found and we requested a warning
+    if ( not bFound and bWarn ) then
+        iCurrentQueue = 0
+        printlog( CFN & "The specified printer queue could not be found" )
+    endif
+   
+    ' print a message that the printer queue exists
+    if ( bFound ) then
+        printlog( CFN & "Printer Queue was found at pos " & iCurrentQueue )
+    endif
+   
+    Kontext "SpAdmin"
+    hGetPrinterPosition() = iCurrentQueue
+                   
+end function      
+
+'*******************************************************************************
 
 function hDelPrinter( cPrinterName as string ) as integer
 

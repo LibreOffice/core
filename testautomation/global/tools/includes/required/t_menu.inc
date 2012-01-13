@@ -1,6 +1,6 @@
 'encoding UTF-8  Do not remove or change this line!
-'*************************************************************************
-'
+'**************************************************************
+'  
 '  Licensed to the Apache Software Foundation (ASF) under one
 '  or more contributor license agreements.  See the NOTICE file
 '  distributed with this work for additional information
@@ -17,10 +17,33 @@
 '  KIND, either express or implied.  See the License for the
 '  specific language governing permissions and limitations
 '  under the License.
-'
-'*************************************************************************
+'  
+'**************************************************************
+'*
+'* short description : wrappers for accessing menues (context-, bar-, button- menues)
+'*
+'\******************************************************************************
 
-*****
+function hMenuItemGetCount as Integer
+
+    '/// OUTPUT: number of entries in the activated menu (without seperators) ///'
+    '///+ menu left open ///'
+    dim iCurrentMenuItem as integer
+    dim iValidMenuItems as integer
+
+    sleep( 2 )
+
+    iValidMenuItems = 0
+    for iCurrentMenuItem = 1 to MenuGetItemCount
+        if ( NOT MenuIsSeperator ( iCurrentMenuItem ) ) then
+            iValidMenuItems = iValidMenuItems + 1
+        endif
+    next iCurrentMenuItem
+    hMenuItemGetCount = iValidMenuItems
+
+end function
+
+'*******************************************************************************
 
 function hMenuSelectNr ( EintragsNr as Integer ) as String
 

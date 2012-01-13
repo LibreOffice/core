@@ -1,6 +1,6 @@
 'encoding UTF-8  Do not remove or change this line!
-'*************************************************************************
-'
+'**************************************************************
+'  
 '  Licensed to the Apache Software Foundation (ASF) under one
 '  or more contributor license agreements.  See the NOTICE file
 '  distributed with this work for additional information
@@ -17,10 +17,65 @@
 '  KIND, either express or implied.  See the License for the
 '  specific language governing permissions and limitations
 '  under the License.
-'
-'*************************************************************************
+'  
+'**************************************************************
+'*
+'* short description : misc functions to handle documents
+'*
+'\******************************************************************************
 
-*****
+function hUseImpressAutopilot( bEnable as boolean ) as boolean
+
+    '///<h3>Enable/disable the Impress Autopilot in Tools/Options</h3>
+    '///<i>Starting point: Any plain document</i>
+    '///<ul>
+    const CFN = "global::tools::includes::optional::t_docfuncs.inc::hUseImpressAutopilot::"
+    
+    if ( GVERBOSE ) then printlog( CFN & "Enter" )
+
+    '///+<li>Create a new IMPRESS document</li>
+    gApplication = "IMPRESS"
+    hCreateDocument()
+
+    '///+<li>Open Tools/Options, go to Presentataion/General page</li>
+    ToolsOptions
+    hToolsOptions( gApplication , "General" )
+
+    '///+<li>Check or uncheck to start with autopilot</li>
+    Kontext "TabSonstigesDraw"
+    if ( mitAutopilotStarten.exists( 2 ) ) then
+
+        if ( bEnable ) then
+            mitAutopilotStarten.check()
+            if ( GVERBOSE ) then printlog( CFN & "Enable Impress Autopilot" )
+        else
+            mitAutopilotStarten.uncheck()
+            if ( GVERBOSE ) then printlog( CFN & "Disable Impress Autopilot" )
+        endif
+
+        '///+<li>Return Status of Checkbox (checked=TRUE)</li>
+        hUseImpressAutopilot() = mitAutopilotStarten.isChecked()
+
+    else
+
+        warnlog( CFN & "Cannot find Autopilot Checkbox" )
+
+    endif
+
+    '///+<li>Close Tools/Options</li>
+    Kontext "OptionenDlg"
+    hCloseDialog( OptionenDlg, "ok" )
+    
+    '///+<li>Close IMPRESS document</li>
+    hDestroyDocument()
+
+    '///+<li>Returncode is undefined</li>
+    if ( GVERBOSE ) then printlog( CFN & "Exit" )
+    '///</ul>
+    
+end function
+
+'*******************************************************************************
 
 function hNumericDocType( doctype as integer ) as string
 

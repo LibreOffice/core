@@ -1,6 +1,6 @@
 'encoding UTF-8  Do not remove or change this line!
-'*************************************************************************
-'
+'**************************************************************
+'  
 '  Licensed to the Apache Software Foundation (ASF) under one
 '  or more contributor license agreements.  See the NOTICE file
 '  distributed with this work for additional information
@@ -17,10 +17,56 @@
 '  KIND, either express or implied.  See the License for the
 '  specific language governing permissions and limitations
 '  under the License.
-'
-'*************************************************************************
+'  
+'**************************************************************
+'*
+'* short description: Save & Load testing of Layout -templates.
+'*
+'\**************************************************************************************
 
-**************************
+testcase tSaveLoadLayoutEmpty
+    Dim NewFileDir as String
+    NewFileDir = ConvertPath (gOfficePath + "user\work\LayoutTest\")
+
+    printlog "Create New folder in the Work-directory"
+    printlog "    Will try to create the directory: " + NewFileDir
+    app.mkdir NewFileDir
+
+    printlog "Create a new document, add an empty Layout, Save the document in all available Formats, and open the saved files."
+
+    printlog "Make new Presentation"
+    gApplication = "IMPRESS"
+    Call hNewDocument
+
+    printlog "Choose and Insert an empty Layout."
+    printlog "   Choose and Insert an empty Layout."
+    FormatModifyPage
+    sleep (1)
+    kontext "Tasks"
+    LayoutsPreview.TypeKeys "<HOME>"
+    kontext "Pagelayout_UndoDeleteWarning"
+    if Pagelayout_UndoDeleteWarning.exists then
+        Pagelayout_UndoDeleteWarning.ok
+    end if
+    kontext "Tasks"
+    printlog "Press Enter to use the layout on the current slide"
+    LayoutsPreview.TypeKeys "<RETURN>"
+    sleep (5)
+
+    printlog "Save the document in different formats..."
+    printlog "Close the file."
+    printlog "Load the different files."
+    call fSaveLoadAllFormats (NewFileDir)   'Runs the Function below. 
+
+    printlog "Delete the different files."
+    printlog "   Will try to delete the directory: " + NewFileDir
+    app.rmDir NewFileDir
+
+    printlog "tSaveLoadLayoutEmpty ended."
+    printlog "End the test"
+endcase 'tSaveLoadLayoutEmpty
+
+'****************************************************************************************************
 
 testcase tSaveLoadLayoutText
     printlog "Testing layout with text."

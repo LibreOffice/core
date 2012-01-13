@@ -1,6 +1,6 @@
 'encoding UTF-8  Do not remove or change this line!
-'*************************************************************************
-'
+'**************************************************************
+'  
 '  Licensed to the Apache Software Foundation (ASF) under one
 '  or more contributor license agreements.  See the NOTICE file
 '  distributed with this work for additional information
@@ -17,10 +17,42 @@
 '  KIND, either express or implied.  See the License for the
 '  specific language governing permissions and limitations
 '  under the License.
-'
-'*************************************************************************
+'  
+'**************************************************************
+'*
+'* short description : Smoke test (load/save/clipboard)
+'*
+'\***********************************************************************
 
-*****
+sub topten
+
+    ' we need the binary filters (.sxw etc.) for this test but beginning with
+    ' OOo 3.3 these are optional
+    if ( hCheckForBinfilters() ) then
+        gApplication = "WRITER"
+        call Top_ten_test
+
+        gApplication = "CALC"
+        call Top_ten_test
+
+        gApplication = "IMPRESS"
+        call Top_ten_test
+
+        gApplication = "DRAW"
+        call Top_ten_test
+
+        gApplication = "MATH"
+        call Top_ten_test
+
+        gApplication = "HTML"
+        call Top_ten_test
+
+        gApplication = "MASTERDOCUMENT"
+        call Top_ten_test
+    endif
+end sub
+
+'*******************************************************************************
 
 testcase Top_ten_test
 

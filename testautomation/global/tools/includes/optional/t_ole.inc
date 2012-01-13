@@ -1,6 +1,6 @@
 'encoding UTF-8  Do not remove or change this line!
-'*************************************************************************
-'
+'**************************************************************
+'  
 '  Licensed to the Apache Software Foundation (ASF) under one
 '  or more contributor license agreements.  See the NOTICE file
 '  distributed with this work for additional information
@@ -17,10 +17,42 @@
 '  KIND, either express or implied.  See the License for the
 '  specific language governing permissions and limitations
 '  under the License.
-'
-'*************************************************************************
+'  
+'**************************************************************
+'*
+'*  short description : Tools for OLE objects
+'*
+'\******************************************************************************
 
-*****
+function hGetOfficeVersion() as string
+
+    ' The "Insert OLE object" dialog lists the OLE Objects with application name
+    ' and version number. THe version numbers are tracked in the officeinfo.txt
+    ' file which must be adjusted each time we change to a new major version.
+
+    const CFN = "global::tools::includes::optional::t_ole.inc::hGetOfficeVersion(): "
+    const DATAFILE = "global/input/officeinfo.txt"
+    const MAX_LINES_IN_DATAFILE = 20
+
+    dim cPath as string
+    dim aItemList( MAX_LINES_IN_DATAFILE ) as string
+    
+    ' Path to info file
+    cPath = convertpath( gTesttoolPath & DATAFILE )
+    if ( GVERBOSE ) then printlog( CFN & "Reading: " & cPath )
+    
+    ' Read the file, store the list of known office versions
+    hGetDatafileSection( cPath, aItemList(), "", "", "" )
+    
+    ' Search for the version number matching the product name, store value in global variable
+    gOfficeVersion = hGetValueForKeyAsString( aItemList(), gProductName )
+    
+    ' Return content of the global variable as well
+    hGetOfficeVersion() = gOfficeVersion
+    
+end function
+
+'*******************************************************************************
 
 function hGetOleObjectName( cApplication as string ) as string
 

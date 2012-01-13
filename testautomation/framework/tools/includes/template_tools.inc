@@ -1,6 +1,6 @@
 'encoding UTF-8  Do not remove or change this line!
-'*************************************************************************
-'
+'**************************************************************
+'  
 '  Licensed to the Apache Software Foundation (ASF) under one
 '  or more contributor license agreements.  See the NOTICE file
 '  distributed with this work for additional information
@@ -17,10 +17,108 @@
 '  KIND, either express or implied.  See the License for the
 '  specific language governing permissions and limitations
 '  under the License.
-'
-'*************************************************************************
+'  
+'**************************************************************
+'*
+'*  short description : Helper functions to ease usage of templates
+'*
+'\******************************************************************************
 
-*****
+function hFindTemplate( sTemplateName as string ) as integer
+
+    '///<H3>Find a template by name in FileNewFromTemplate</H3>
+    '///<i>Starting point: Templates and Documents dialog</i><br>
+    '///<u>Input</u>:
+    '///<ol>
+    '///+<li> Name of the template to search for (string)</li>
+    '///</ol>
+    '///<u>Returns</u>:
+    '///<ol>
+    '///+<li> Index of the Template in the containing folder (integer)</li>
+    '///<ul>
+    '///+<li>1 ... n : Index of the template (Position in folder)</li>
+    '///+<li>0 : No template found by given name</li>
+    '///</ul>
+    '///</ol>
+    '///<u>Description</u>:
+    '///<ul>
+    const CFN = "hFindTemplate::"
+    
+    dim brc as boolean
+        brc = false
+    dim irc as integer
+        irc = 0
+        
+    dim iObjectFolder as integer
+    dim iObjectFolders as integer
+    
+    dim iItemCount as integer
+    dim iCurrentItem as integer
+    dim cCurrentItem as string
+    
+    '///+<li>select the templates from the category list</li>
+    hSelectCategory( "TEMPLATES" )
+    
+    '///+<li>run through every item in the list to find the template.</li>
+    ' NOTE: If the name of the template is not unique, the function will find
+    '       the first occurrence
+    ' NOTE: As we do not know the name of "My Templates" (it is localized) we 
+    '       need to search all folders.. 
+    iObjectFolders = FileList.getItemCount()
+
+    '///<ul>
+    for iObjectFolder = 1 to iObjectFolders
+    
+        '///+<li>Select the (next) folder</li>
+        hSelectFileFolder( iObjectFolder , true )
+
+        '///+<li>Retrieve the number of items within the folder</li>
+        iItemCount = FileList.getItemCount()
+        
+        '///+<li>For each item in the folder do:</li>
+        '///<ul>
+        for iCurrentItem = 1 to iItemCount
+        
+            '///+<li>Select the (next) item</li>
+            FileList.select( iCurrentItem )
+
+            '///+<li>Get the name of the item</li>
+            cCurrentItem = FileList.getSelText()
+        
+            '///+<li>If this is the item we are searching for, exit</li>
+            if ( cCurrentItem = sTemplateName ) then
+                irc = iCurrentItem : if ( irc = 0 ) then irc = 1 ' strange hack
+                brc = true
+                exit for
+            endif
+            
+        next iCurrentItem
+        '///</ul>
+        
+        '///+<li>Exit the outer loop</li>
+        if ( brc ) then
+            exit for
+        endif
+        
+        '///+<li>Click &quot;Up one level&quot;</li>
+        UpOneLevel.click()
+        
+    next iObjectFolder
+    '///</ul>
+    
+    if ( brc ) then
+        printlog( CFN & "Template found: " & cCurrentItem )
+    else
+        printlog( CFN & "Template could not be found." )
+    endif
+    
+    '///+<li>Return the index of the requested template</li>
+    hFindTemplate() = irc
+    '///</ul>
+    
+end function
+
+'*******************************************************************************
 
 function hSelectCategory( cCategory as string ) as boolean
 

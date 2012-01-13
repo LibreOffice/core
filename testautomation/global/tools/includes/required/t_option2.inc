@@ -1,6 +1,6 @@
 'encoding UTF-8  Do not remove or change this line!
-'*************************************************************************
-'
+'**************************************************************
+'  
 '  Licensed to the Apache Software Foundation (ASF) under one
 '  or more contributor license agreements.  See the NOTICE file
 '  distributed with this work for additional information
@@ -17,10 +17,270 @@
 '  KIND, either express or implied.  See the License for the
 '  specific language governing permissions and limitations
 '  under the License.
-'
-'*************************************************************************
+'  
+'**************************************************************
+'*
+'* short description : Tools library for options testcases
+'*
+'\***********************************************************************
 
-*****
+function OptionTabPageZaehler ( SollAnzahl as Integer, optional Ausnahme as Boolean )
+    'parameter Ausnahme is depracted
+    Dim IstAnzahl
+    Kontext "ExtrasOptionenDlg"
+    IstAnzahl = Optionsliste.GetItemCount - iSectionNumber
+    if Ausnahme = FALSE then
+        if IstAnzahl <> SollAnzahl then WarnLog "Number of tabpages old :  " + SollAnzahl + "   new :  " + IstAnzahl
+    end if
+    OptionTabPageZaehler = IstAnzahl
+end function
+
+'-------------------------------------------------------------------------
+
+sub ToPosInOptionlist ( Sprung as Integer )
+    Dim i as Integer
+    Kontext "OptionenDlg"
+    Optionsliste.TypeKeys "<HOME>"
+    for i = 1 to 12
+        Optionsliste.TypeKeys "-<DOWN>"
+    next i
+    Optionsliste.Select Sprung
+    Optionsliste.TypeKeys "+"
+end sub
+
+'-------------------------------------------------------------------------
+
+sub DialogeFuerTypenKontrollieren
+    ' Complete test for path-options, for all entries the file-dialog or the path-dialog will be opened
+    Dim i as Integer
+    Dim iCount as Integer
+    Dim iErrorCount as integer
+    dim iExitCounter as integer : iExitCounter = 0
+    Kontext "TabPfade"
+    Typ.TypeKeys "<Down><Down><Home>"
+    iCount = 0
+    iErrorCount = 0
+    for i=1 to Typ.GetItemCount
+        if i<>1 then Typ.TypeKeys "<Down>"
+        printlog "      "+typ.getText
+        if ( bAsianLan <> TRUE ) then
+            try
+                Bearbeiten.Click
+                
+                do while( iExitCounter <= 10 )
+                
+                    kontext "Active"
+                    if ( active.exists() ) then
+                        iErrorCount = iErrorCount + 1
+                        if (iErrorCount > 1) then
+                            Warnlog active.getText
+                        endif
+                        qaErrorlog "#i69014# gallery path doesn't exist: '" + active.getText + "'"
+                        printlog active.getText
+                        active.ok
+                    endif
+                    
+                    Kontext "OeffnenDlg"
+                    if OeffnenDlg.Exists() then
+                        if ( Dateityp.IsVisible ) then 
+                            Warnlog "The normal FileOpen-Dialog is visible with the Filetype-Listbox => BUG!"
+                        endif
+                        OeffnenDlg.Cancel
+                        exit do
+                    endif
+                    
+                    Kontext "PfadeAuswaehlen"
+                    if ( PfadeAuswaehlen.exists() ) then
+                        PfadeAuswaehlen.Cancel
+                        exit do
+                    endif
+                    
+                    iExitCounter = iExitCounter + 1
+                loop
+                Kontext "TabPfade"
+            catch
+                Warnlog "Error on entry " & i & "!"
+                Exceptlog
+            endcatch
+        else
+            try
+                if ( Bearbeiten.IsEnabled ) then
+                    Bearbeiten.Click
+                    
+                    do while( iExitCounter <= 10 ) 
+                    
+                        kontext "Active"
+                        if active.exists () then
+                            iErrorCount = iErrorCount + 1
+                            if (iErrorCount > 1) then
+                                Warnlog active.getText
+                            endif
+                            qaErrorlog "WorkAround for #109107# has to come up only once @'Add-Ins'! else BUG!"
+                            active.ok
+                        endif
+                        
+                        Kontext "OeffnenDlg"
+                        if OeffnenDlg.Exists() then
+                            if ( Dateityp.IsVisible ) then 
+                                Warnlog "The normal FileOpen-Dialog is visible with the Filetype-Listbox => BUG!"
+                            endif
+                            OeffnenDlg.Cancel
+                            exit do
+                        endif
+                        
+                        Kontext "PfadeAuswaehlen"
+                        if ( PfadeAuswaehlen.exists() ) then
+                            PfadeAuswaehlen.Cancel
+                            exit do
+                        end if
+
+                        iExitCounter = iExitCounter + 1
+                    loop
+                    Kontext "TabPfade"
+                else
+                    iCount = iCount + 1
+                end if
+            catch
+                Warnlog "Error on entry " & i & "!"
+                Exceptlog
+            endcatch
+        end if
+    next i
+    if iCount > 3 then Warnlog "There are more than 3 entries are disabled!"
+
+end sub
+
+'-------------------------------------------------------------------------
+
+function hSetMacroSecurity( iLevel as integer ) as integer
+
+    '///<h3>Set macro security level via GUI</h3>
+    '///<i>Set the macro security by accessing the Tools/Options->
+    '///+ OpenOffice.org/Security::Macro... Tabpage</i><br><br>
+
+    '///<u>Parameter(s):</u><br>
+    '///<ol>
+
+    '///+<li>Desired macro security level (Integer). Following symbolic names are defined:</li>
+    '///<ul>
+    '///+<li>GC_MACRO_SECURITY_LEVEL_LOW (0) for low security</li>
+    '///+<li>GC_MACRO_SECURITY_LEVEL_MEDIUM (1) for medium security</li>
+    '///+<li>GC_MACRO_SECURITY_LEVEL_HIGH (2) for high security</li>
+    '///+<li>GC_MACRO_SECURITY_LEVEL_VERYHIGH (3) for very high security</li>
+    '///</ul>
+
+    '///</ol>
+
+
+    '///<u>Returns:</u><br>
+    '///<ol>
+    '///+<li>Previous security level (Integer)</li>
+    '///<ul>
+    '///+<li>GC_MACRO_SECURITY_LEVEL_LOW (0) for low security</li>
+    '///+<li>GC_MACRO_SECURITY_LEVEL_MEDIUM (1) for medium security</li>
+    '///+<li>GC_MACRO_SECURITY_LEVEL_HIGH (2) for high security</li>
+    '///+<li>GC_MACRO_SECURITY_LEVEL_VERYHIGH (3) for very high security</li>
+    '///+<li>-1 on error</li>
+    '///</ul>
+    '///</ol>
+
+
+
+    '///Switch between macro security levels in Tools/Options
+    '///<ul>
+    const CFN = "hSetMacroSecurity::"
+    const RETVAL_FAILURE = -1
+    const DEFAULT_WAIT_TIME = 2
+
+    dim iOldSecurityLevel as integer
+
+    dim caLevel( 3 ) as string
+    caLevel( 0 ) = "low"
+    caLevel( 1 ) = "medium"
+    caLevel( 2 ) = "high"
+    caLevel( 3 ) = "very high"
+
+    if ( ( iLevel < GC_MACRO_SECURITY_LEVEL_LOW ) or ( iLevel > GC_MACRO_SECURITY_LEVEL_VERYHIGH ) ) then
+        warnlog( CFN & "Invalid index (0...3) passed to function: " & ilevel )
+        hSetMacroSecurity() = RETVAL_FAILURE
+        exit function
+    end if
+
+    '///+<li>Open Tools/Options -> OpenOffice.org/Security</li>
+    ToolsOptions
+    hToolsOptions( "Staroffice" , "Security" )
+
+    '///+<li>Click on the macro security button</li>
+    Kontext "TabSecurity"
+    if ( MacroSecurity.exists( DEFAULT_WAIT_TIME ) ) then
+        MacroSecurity.click()
+
+        '///+<li>Ensure we are on the Security Level page</li>
+        kontext "Active"
+        if ( Active.exists( DEFAULT_WAIT_TIME ) ) then
+
+            Kontext
+            active.setpage TabSecurityLevel
+
+            '///+<li>Get the current setting (=returnvalue)</li>
+            Kontext "TabSecurityLevel"
+            if ( TabSecurityLevel.exists( 2 ) ) then
+                if ( veryhigh.isChecked() ) then
+                    iOldSecurityLevel = GC_MACRO_SECURITY_LEVEL_VERYHIGH
+                elseif( high.isChecked() ) then
+                    iOldSecurityLevel = GC_MACRO_SECURITY_LEVEL_HIGH
+                elseif( medium.isChecked() ) then
+                    iOldSecurityLevel = GC_MACRO_SECURITY_LEVEL_MEDIUM
+                elseif( low.isChecked() ) then
+                    iOldSecurityLevel = GC_MACRO_SECURITY_LEVEL_LOW
+                end if
+            else
+                printlog( CFN & "Security Tabpage not available. Aborting." )
+                kontext "OptionenDlg"
+                if ( OptionenDlg.exists( DEFAULT_WAIT_TIME ) ) then
+                    OptionenDlg.cancel()
+                else
+                    warnlog( CFN & "Unrecoverable error, status unknown." )
+                endif
+                hSetMacroSecurity() = RETVAL_FAILURE
+                exit function
+            endif
+
+            '///+<li>Set the new security level</li>
+            select case iLevel
+            case GC_MACRO_SECURITY_LEVEL_LOW      : low.check()
+            case GC_MACRO_SECURITY_LEVEL_MEDIUM   : medium.check()
+            case GC_MACRO_SECURITY_LEVEL_HIGH     : high.check()
+            case GC_MACRO_SECURITY_LEVEL_VERYHIGH : veryhigh.check()
+            end select
+
+            printlog( CFN & "Setting macro security level to " & caLevel( iLevel ) )
+
+        else
+            printlog( CFN & "Macro Security Dialog did not open. Aborting." )
+            kontext "OptionenDlg"
+            if ( OptionenDlg.exists( DEFAULT_WAIT_TIME ) ) then
+                OptionenDlg.cancel()
+            else
+                warnlog( CFN & "Unrecoverable error, status unknown." )
+            endif
+            hSetMacroSecurity() = RETVAL_FAILURE
+            exit function
+        endif
+
+        '///+<li>Close Tools/Options</li>
+        TabSecurityLevel.ok()
+    else
+        warnlog( CFN & "The Macro Security Button is not available" )
+        iOldSecurityLevel = RETVAL_FAILURE
+    end if
+    Kontext "OptionenDLG"
+    OptionenDLG.OK()
+    '///</ul>
+    hSetMacroSecurity() = iOldSecurityLevel
+end function
+
+'*******************************************************************************
 
 function hGetMacroSecurityAPI() as integer
 

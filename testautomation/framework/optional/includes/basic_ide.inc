@@ -1,6 +1,6 @@
 'encoding UTF-8  Do not remove or change this line!
-'*************************************************************************
-'
+'**************************************************************
+'  
 '  Licensed to the Apache Software Foundation (ASF) under one
 '  or more contributor license agreements.  See the NOTICE file
 '  distributed with this work for additional information
@@ -17,10 +17,129 @@
 '  KIND, either express or implied.  See the License for the
 '  specific language governing permissions and limitations
 '  under the License.
-'
-'*************************************************************************
+'  
+'**************************************************************
+'*
+'* short description : Macro Dialogs opened from Basic-IDE
+'*
+'\******************************************************************************
 
-*****
+testcase tBasic_IDE_Toolbar_Module
+
+    printlog( "BASIC toolbars for modules" )
+
+    const DIALOG_DELAY = 2
+    const RC_FAILURE = -1
+
+    dim cTargetFile as string
+        cTargetFile = convertpath( gOfficepath & "user\work\global_test.bas" )
+
+    dim cSourceFile as string
+        cSourceFile = gTesttoolpath & "framework\optional\input\resetregistration.txt"
+        cSourceFile = convertpath( cSourceFile )
+
+    printlog "open a new writer-doc"
+    gApplication = "WRITER"
+    hCreateDocument()
+
+    if ( hInitBasicIDE( "tBasic_IDE_Toolbar_Module" ) ) then
+
+        kontext "macrobar"
+        printlog "- compile"
+        hClickButton( Compile )
+
+        printlog "- Run Basic"
+        hClickButton( BasicRun )
+
+        printlog "- Step Procedure"
+        hClickButton( ProcedureStep )
+
+        printlog "- Stop Basic"
+        hClickButton( BasicStop )
+
+        printlog "- Single Step"
+        hClickButton( SingleStep )
+
+        printlog "- Step Back"
+        hClickButton( StepBack )
+
+        printlog "- Breakpoint => activate"
+        hClickButton( Breakpoint )
+
+
+        printlog "- Breakpoint => deactivate"
+        hClickButton( Breakpoint )
+
+        printlog "- Add Watch => deactivate"
+        hClickButton( AddWatch )
+
+        printlog "- Find Paranthese"
+
+        kontext "macrobar"
+        hClickButton( FindParanthese )
+
+        try
+            Controls.TearOff()
+            warnlog "Controls are active in a module window => bug!"
+        catch
+            printlog( "Controls are not active->OK" )
+        endcatch
+        if ( WaitSlot <> WSFinished ) then
+            warnlog( "Slot not finished within 1 second" )
+        endif
+
+        kontext "MacroBar"
+        printlog( "- Insert Source Text (" & cSourceFile & ")" )
+        if ( hClickButton( InsertSourceText ) <> RC_FAILURE ) then
+
+            kontext "oeffnendlg"
+            if ( OeffnenDlg.exists( DIALOG_DELAY ) ) then
+                Dateiname.SetText( cSourceFile )
+                Oeffnen.click()
+                WaitSlot( 5000 )
+            else
+                warnlog( "File Open dialog did not open" )
+            endif
+
+            ' possible 'could not read from file' error-message -> this is a bug
+            kontext "Active"
+            if ( Active.exists( DIALOG_DELAY ) ) then
+                warnlog( "Unexpected active: " & active.gettext() )
+                active.ok()
+            endif
+        else
+            warnlog( "<File Open> dialog is not open, <Insert Source Text> button failed" )
+        endif
+
+        kontext "macrobar"
+        printlog "- Save Source Text "
+        if ( hClickButton( SaveSourceText ) <> RC_FAILURE ) then
+
+            kontext "speicherndlg"
+            if ( SpeichernDlg.exists( DIALOG_DELAY ) ) then
+                Dateiname.SetText( cTargetFile )
+                Speichern.click()
+            else
+                warnlog( "File Save dialog is missing" )
+            endif
+
+            kontext "active"
+            if ( Active.Exists( DIALOG_DELAY ) ) then
+                printlog( "Closing Messagebox with <Yes>")
+                Active.Yes()
+            endif
+        else
+            warnlog( "<File Save> dialog did not open, slot <SaveSourceText> did not work" )
+        endif
+
+        hFileCloseAll()
+    else
+        warnlog( "Unable to init BASIC IDE" )
+    endif
+
+endcase
+
+'*******************************************************************************
 
 testcase tBasic_IDE_Toolbar_Dialogs
 

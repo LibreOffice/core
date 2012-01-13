@@ -1,6 +1,6 @@
 'encoding UTF-8  Do not remove or change this line!
-'*************************************************************************
-'
+'**************************************************************
+'  
 '  Licensed to the Apache Software Foundation (ASF) under one
 '  or more contributor license agreements.  See the NOTICE file
 '  distributed with this work for additional information
@@ -17,10 +17,77 @@
 '  KIND, either express or implied.  See the License for the
 '  specific language governing permissions and limitations
 '  under the License.
-'
-'*************************************************************************
+'  
+'**************************************************************
+' **
+' ** short description : Helper functions for Macro tests
+' **
+'\******************************************************************************
 
-*****
+function hInsertMacroFromFile( cMacroId as string, optional cSource as string ) as integer
+
+    '///<h3>Paste a macro (taken from a file) to the basic IDE</h3>
+    '///<i>uses: framework/tools/input/macros.txt</i><br>
+    '///<i>Starting point: Basic IDE</i><br>
+    '///<u>Note</u>: Overwrites any existing macros in the current module<br>
+    '///<u>Input</u>:
+    '///<ol>
+    '///+<li>Name (ID) of the macro to be inserted (string)</li>
+    '///<ul>
+    '///+<li>Allowed is any string that corresponds to a section in the source file</li>
+    '///</ul>
+    '///</ol>
+    '///<u>Returns</u>:
+    '///<ol>
+    '///+<li>Number of lines inserted (integer)</li>
+    '///<ul>
+    '///+<li>0: Error, no lines inserted</li>
+    '///+<li>&gt; 0: Number of lines</li>
+    '///</ul>
+    '///</ol>
+    '///<u>Description</u>:
+    '///<ul>
+    
+    const CFN = "hInsertMacroFromFile::"
+    const RETVAL_FAILURE = 0
+    const MAX_LINES_IN_MACRO_FILE = 10000
+    
+    '///+<li>Find the path to the source file</li>
+    dim cFile as string
+    dim aInstructionList( MAX_LINES_IN_MACRO_FILE ) as string
+    dim iInstructionCount as integer
+    dim iCurrentInstruction as integer
+
+    if ( IsMissing( cSource ) ) then cFile = gTesttoolPath & "global/input/macros.txt"
+
+    '///+<li>retrieve the macro from the file with ID as section</li>
+    iInstructionCount = hGetDataFileSection( cFile, aInstructionList(), cMacroId, "", "" )
+                        
+    '///+<li>Delete all content from the BASIC IDE edit window</li>
+    '///+<li>Insert the code into the IDE line by line</li>
+    kontext "BasicIDE"
+    if ( EditWindow.exists() ) then
+        if ( hDeleteMacro() ) then
+            for iCurrentInstruction = 1 to iInstructionCount
+                EditWindow.TypeKeys( "<HOME>" )
+                EditWindow.TypeKeys( aInstructionList( iCurrentInstruction ) )
+                EditWindow.TypeKeys( "<RETURN>" )
+            next iCurrentInstruction
+            printlog( CFN & "Inserted macro: " & cMacroId )
+            hInsertMacroFromFile() = iInstructionCount
+        else
+            printlog( CFN & "IDE is not empty, will not insert macro" )
+            hInsertMacroFromFile() = RETVAL_FAILURE
+        endif
+    else
+        printlog( CFN & "Editwindow is not visible" )
+        hInsertMacroFromFile() = RETVAL_FAILURE
+    endif
+    '///</ul>
+        
+end function
+
+'*******************************************************************************
 
 function hMacroOrganizerRunMacro( cMacroName as string ) as integer
 

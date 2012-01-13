@@ -1,6 +1,6 @@
 'encoding UTF-8  Do not remove or change this line!
-'*************************************************************************
-'
+'**************************************************************
+'  
 '  Licensed to the Apache Software Foundation (ASF) under one
 '  or more contributor license agreements.  See the NOTICE file
 '  distributed with this work for additional information
@@ -17,10 +17,58 @@
 '  KIND, either express or implied.  See the License for the
 '  specific language governing permissions and limitations
 '  under the License.
-'
-'*************************************************************************
+'  
+'**************************************************************
+' **
+' ** short description : check macro-dialogs / BASIC-IDE ( 1. part )
+' **
+'\******************************************************************************
 
-*****
+
+testcase tMakro_In_All_Apps
+
+    printlog( "Attach a macro to all application types" )
+    
+    dim iApp as Integer
+    
+    const CMACRO = "AppMakro"
+    const DIALOG_TIMEOUT = 2
+
+    for iApp = 1 to 7
+
+        printlog( hNumericDoctype( iApp ) )
+
+        printlog( "Open a new document" )
+        hCreateDocument()
+        
+        if ( hInitBasicIde( CMACRO ) ) then
+            printlog "Close the BASIC-IDE"
+            hCloseBasicIde()
+
+            printlog( "Close the navigator (Master-doc)" )
+            kontext "Navigator"
+            hCloseDialog( Navigator, "close,optional" )
+
+            printlog( "Close the document" )
+            hUseAsyncSlot( "FileClose" )
+
+            printlog( "Close the messagebox (document changed)" )
+            kontext "messagebox"
+            if ( MessageBox.Exists( DIALOG_TIMEOUT ) ) then
+                printlog( "MessageBox: " & MessageBox.getText() )
+                hCloseDialog( Messagebox, "no" )
+            else
+                warnlog( "No warning for changed document" )
+            end if
+        else
+            warnlog( "Could not open the BASIC Macro Organizer, aborting" )
+        endif
+
+    next iApp
+    
+endcase
+
+'*******************************************************************************
 
 testcase tMakro_Dialog
 

@@ -1,6 +1,6 @@
 'encoding UTF-8  Do not remove or change this line!
-'*************************************************************************
-'
+'**************************************************************
+'  
 '  Licensed to the Apache Software Foundation (ASF) under one
 '  or more contributor license agreements.  See the NOTICE file
 '  distributed with this work for additional information
@@ -17,10 +17,59 @@
 '  KIND, either express or implied.  See the License for the
 '  specific language governing permissions and limitations
 '  under the License.
-'
-'*************************************************************************
+'  
+'**************************************************************
+'*
+'* short description : Tools (1)
+'*
+'\******************************************************************************
 
-*****
+private SLEEP_TIME_REQUESTED as integer
+private SLEEP_CALLS_SUM as integer
+private SLEEP_TIME_USED as integer
+
+function GetClipboardText as string
+
+    '/// Returns the correct clipboard text (also if there is a 'RETURN' at it's end.
+    Dim i% : Dim CBText$
+    Dim Zwischen$
+
+    wait 500
+    GetClipboardText = ""
+    CBText$ = GetClipboard
+ 
+    if CBText$ = "" then
+        GetClipboardText = ""
+        exit function
+    end if
+ 
+    if asc ( Right( CBText$, 1 )) = 10 then
+        Zwischen$ = Mid( CBText$, 1, len(CBText$)-1 )
+        if Zwischen$ <> "" then
+            if asc ( Right( Zwischen$, 1 )) = 13 then
+                GetClipboardText = Mid( Zwischen$, 1, len(Zwischen$)-1 )
+            else
+                GetClipboardText = Zwischen$
+            end if
+        else
+            GetClipboardText = Zwischen$
+        end if
+    else
+        if asc ( Right( CBText$, 1 )) = 13 then
+            Zwischen$ = Mid( CBText$, 1, len(CBText$)-1 )
+            if asc ( Right( Zwischen$, 1 )) = 10 then
+                GetClipboardText = Mid( Zwischen$, 1, len(Zwischen$)-1 )
+            else
+                GetClipboardText = Zwischen$
+            end if
+        else
+            GetClipboardText = CBText$
+        end if
+    end if
+    
+end function
+
+'*******************************************************************************
 
 function hDoubleClickInList ( window, Selektion as String, optional bFocus as boolean ) as Boolean
 

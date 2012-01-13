@@ -1,6 +1,6 @@
 'encoding UTF-8  Do not remove or change this line!
-'*************************************************************************
-'
+'**************************************************************
+'  
 '  Licensed to the Apache Software Foundation (ASF) under one
 '  or more contributor license agreements.  See the NOTICE file
 '  distributed with this work for additional information
@@ -17,10 +17,71 @@
 '  KIND, either express or implied.  See the License for the
 '  specific language governing permissions and limitations
 '  under the License.
-'
-'*************************************************************************
+'  
+'**************************************************************
+'*
+'* short description : Helpers for accessing treelists
+'*
+'\******************************************************************************
 
-*****
+function hGetNodeCount( oControl as object ) as integer
+    
+    '///<h3>Retrieve the number of visible (open) nodes from a treelist</h3>
+    '///<u>Input</u>:
+    '///<ol>
+    '///+<li>Treelist control object (Object)</li>
+    '///<ul>
+    '///+<li>Object must exist in current context</li>
+    '///</ul>
+    '///</ol>
+    '///<u>Returns</u>:
+    '///<ol>
+    '///+<li>Number of items in treelist</li>
+    '///<ul>
+    '///+<li>0 on any error</li>
+    '///+<li>&gt; 0 Number of items</li>
+    '///</ul>
+    '///</ol>
+    '///<u>Description</u>:
+    '///<ul>
+    
+    
+    const CFN = "hGetNodeCount::"
+    const RETVAL_FAILURE = 0
+    dim iCount as integer
+    
+    '///+<li>Verify that the control exists</li>
+    if ( oControl.exists( 5 ) ) then
+    
+        '///+<li>Verify that the control is enabled</li>
+        if ( oControl.isEnabled() ) then
+
+            if ( GVERBOSE ) then printlog( CFN & "Regular access, control available and enabled" )
+            
+            '///+<li>get the number of items from the control</li>
+            iCount = oControl.getItemCount()
+        else
+            printlog( CFN & "Failure: Control claims to be disabled." )
+            iCount = RETVAL_FAILURE
+        endif
+    else
+        try
+            printlog( CFN & "Forcing access to non existing control" )
+            iCount = oControl.getItemCount()
+        catch
+            printlog( CFN & "Failure: Control not available." )
+            iCount = RETVAL_FAILURE
+        endcatch
+    endif
+
+    if ( GVERBOSE ) then printlog( CFN & "Exit with nodecount = " & iCount )
+
+    hGetNodeCount = iCount
+    '///</ul>
+    
+end function
+
+'*******************************************************************************
 
 function hSelectTopNode( oControl as object ) as boolean
     

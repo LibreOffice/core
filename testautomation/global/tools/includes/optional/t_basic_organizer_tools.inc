@@ -1,6 +1,6 @@
 'encoding UTF-8  Do not remove or change this line!
-'*************************************************************************
-'
+'**************************************************************
+'  
 '  Licensed to the Apache Software Foundation (ASF) under one
 '  or more contributor license agreements.  See the NOTICE file
 '  distributed with this work for additional information
@@ -17,10 +17,49 @@
 '  KIND, either express or implied.  See the License for the
 '  specific language governing permissions and limitations
 '  under the License.
-'
-'*************************************************************************
+'  
+'**************************************************************
+' **
+' ** short description : tools for tools/macro test
+' **
+'\******************************************************************************
 
-*****
+function hSelectTheLastModule( bEditEnabled as Boolean ) as string
+
+    '///<h3>Select the last (editable) module in the macro seletor treelist</li>
+
+    use "global\tools\includes\optional\t_treelist_tools.inc"
+    
+    const CFN = "hSelectTheLastModule()::"
+    
+    dim bCloseDialog as boolean : bCloseDialog = FALSE
+    dim iNodeCount as integer
+    dim iCurrentNode as integer
+
+    hSelectTheLastModule() = ""
+    
+    kontext "Makro"
+    if ( not Makro.exists() ) then ToolsMacro_uno : bCloseDialog = TRUE
+    
+    kontext "Makro"
+    iNodeCount = hSelectTheLastNode( MakroAus )
+    
+    if ( bEditEnabled ) then
+        for iCurrentNode = iNodeCount to 1 step -1
+            if ( Bearbeiten.isEnabled() ) then
+                printlog( CFN & "Editable module found at pos: " & iCurrentNode )
+                exit for
+            endif
+        next iCurrentNode
+    else
+        printlog( CFN & "Module selected at pos: " & iNodeCount )
+    endif
+    
+    if ( iCurrentNode > 1 ) then hSelectTheLastModule = MakroAus.getSelText()
+    
+end function
+
+'*******************************************************************************
 
 function hCreateModuleForDoc( optional cName as string ) as boolean
 

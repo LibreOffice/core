@@ -1,6 +1,6 @@
 'encoding UTF-8  Do not remove or change this line!
-'*************************************************************************
-'
+'**************************************************************
+'  
 '  Licensed to the Apache Software Foundation (ASF) under one
 '  or more contributor license agreements.  See the NOTICE file
 '  distributed with this work for additional information
@@ -17,10 +17,45 @@
 '  KIND, either express or implied.  See the License for the
 '  specific language governing permissions and limitations
 '  under the License.
-'
-'*************************************************************************
+'  
+'**************************************************************
+'*
+'* short description : Tools->Options: OpenOffice.org Security
+'*
+'\******************************************************************************
 
-*****
+testcase tOOoSecurity
+    dim _file as string
+    
+    if ( getDocumentCount() < 1 ) then call hNewDocument()
+    _file = gTesttoolPath & "framework\optional\input\options\ooo_security_defaults.ref"
+    checkSecurityPage( _file )
+
+    if ( getDocumentCount() < 1 ) then call hNewDocument()
+    _file = gTesttoolPath & "framework\optional\input\options\ooo_security_changed.ref"
+    changeSecurityPage( _file )
+    
+    if ( getDocumentCount() < 1 ) then call hNewDocument()
+    checkSecurityPage( _file )
+    
+    if ( getDocumentCount() < 1 ) then call hNewDocument()
+    _file = gTesttoolPath & "framework\optional\input\options\ooo_security_defaults.ref"
+    changeSecurityPage( _file )
+    
+    if ( getDocumentCount() < 1 ) then call hNewDocument()
+    checkSecurityPage( _file )
+    
+    kontext "ExtrasOptionenDlg"
+    if ( ExtrasOptionenDlg.exists() ) then
+        ExtrasOptionenDlg.ok()
+    else
+        warnlog( "options dialog not available" 
+    endif
+    if ( getDocumentCount() > 0 ) then call hCloseDocument()
+
+endcase
+
+'*******************************************************************************
 
 sub checkSecurityPage( _file as string )
     _file = convertpath( _file )

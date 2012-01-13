@@ -1,6 +1,6 @@
 'encoding UTF-8  Do not remove or change this line!
-'*************************************************************************
-'
+'**************************************************************
+'  
 '  Licensed to the Apache Software Foundation (ASF) under one
 '  or more contributor license agreements.  See the NOTICE file
 '  distributed with this work for additional information
@@ -17,10 +17,63 @@
 '  KIND, either express or implied.  See the License for the
 '  specific language governing permissions and limitations
 '  under the License.
-'
-'*************************************************************************
+'  
+'**************************************************************
+'*
+'*  short description : Test modulenames on the tabbar
+'*
+'\******************************************************************************
 
-*****
+testcase tBasicIdeModuleNames
+
+    printlog( "Modulenames in BASIC IDE" )
+
+    const CMODULE_VALID1 = "tValidName"
+    const CMODULE_VALID2 = "tValidToo"
+    const TEST_MACRO = "TTMacro1"
+
+    const RC_SUCCESS = 0
+    const RC_FAILURE = 1
+    const ERR_NO_LINES_INSERTED = 0
+
+    dim iCurrentName as integer
+    dim cTabName as string
+
+    gApplication = "WRITER"
+    hCreateDocument()
+
+    hInitBasicIde( CMODULE_VALID1 )
+    if ( hInsertMacroFromFile( TEST_MACRO ) > ERR_NO_LINES_INSERTED ) then
+   
+        cTabName = hGetTabNameFromOrganizer()
+
+        Randomize
+        iCurrentName = Int( 24 * RND ) + 1 ' Range from 1 to 24
+
+        printlog( "Trying with invalid modulename" )
+        cTabName = hCreateInvalidModuleName( iCurrentName )
+        hRenameTab( cTabName )
+        if ( hHandleInvalidNameWarning( cTabname ) ) then
+            printlog( "Warning for invalid modulename displayed" )
+        else
+            warnlog( "Warning for invalid modulename is missing" )
+        endif
+
+        printlog( "Trying with valid modulename" )
+        hRenameTab( CMODULE_VALID2 )
+        if ( hHandleInvalidNameWarning( CMODULE_VALID2 ) ) then
+            warnlog( "Failed to set valid modulename" )
+        endif
+
+    else
+        warnlog( "Failed to insert macro" )
+    endif
+    
+    hFileCloseAll()
+
+endcase
+
+'*******************************************************************************
 
 testcase tInvalidModuleNames
 

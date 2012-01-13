@@ -1,6 +1,6 @@
 'encoding UTF-8  Do not remove or change this line!
-'*************************************************************************
-'
+'**************************************************************
+'  
 '  Licensed to the Apache Software Foundation (ASF) under one
 '  or more contributor license agreements.  See the NOTICE file
 '  distributed with this work for additional information
@@ -17,10 +17,82 @@
 '  KIND, either express or implied.  See the License for the
 '  specific language governing permissions and limitations
 '  under the License.
-'
-'*************************************************************************
+'  
+'**************************************************************
+'*
+'*  short description : Tools to ease working with private environment
+'*
+'\******************************************************************************
 
-*****
+function hGetPrivateHttpServer( _proxy as string, _port as string ) as boolean
+
+
+    '///<h3>Retrieve the name and port for a private http server</h3><br>
+
+    '///<u>Function parameters:</u><br>
+    '///<ol>
+
+    '///+<li>Fully qualified server name incl. domain (string)</li>
+    '///<ul>
+    '///+<li>The string comes without a protocol part (no http://)</li>
+    '///</ul>
+
+    '///+<li>Server port (string)</li>
+    '///<ul>
+    '///+<li>Please remember limits for integer data type</li>
+    '///</ul>
+
+    '///</ol>
+
+
+    '///<u>Returns:</u><br>
+
+    '///<ol>
+    '///+<li>Error condition (boolean)</li>
+    '///<ul>
+    '///+<li>&quot;TRUE&quot;: Data was retrieved successfully</li>
+    '///+<li>&quot;FALSE&quot;: Any error </li>
+    '///</ul>
+    '///</ol>
+    
+    use "global\tools\includes\optional\t_key_tools.inc"
+
+    const CFN = "hGetPrivateHttpServer::"
+    dim cFile as string
+    dim cDataSet( 100 ) as string
+    dim iErr as integer
+
+    '///<u>Description:</u>
+    '///<ul>
+    '///+<li>Get the source file</li>
+    cFile = hGetPrivateInputFile( false )
+    printlog( CFN & "Using input file: " & cFile )
+    
+    '///+<li>Retrieve the information from the datafile</li>
+    iErr = hGetDataFileSection( cFile, cDataSet(), "http_proxy", "", "" )
+    if ( iErr = 0 ) then
+        hGetPrivateHttpServer() = false
+        exit function
+    endif
+    
+    '///+<li>Extract the proxy name</li>
+    _proxy = hGetValueForKeyAsString( cDataSet(), "name" )
+    
+    '///+<li>Append the domain</li>
+    _proxy = _proxy & hGetValueForKeyAsString( cDataSet(), "domain" )
+    
+    '///+<li>Get the port</li>
+    _port = hGetValueForKeyAsString( cDataSet() , "port" )
+    
+    '///+<li>Print a log</li>
+    printlog( CFN & _proxy & ":" & _port )
+    '///</ul>
+
+    hGetPrivateHttpServer() = true
+
+end function
+
+'*******************************************************************************
 
 function hGetPrivateFtpServer( _proxy as string, _port as string ) as boolean
 

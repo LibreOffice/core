@@ -1,6 +1,6 @@
 'encoding UTF-8  Do not remove or change this line!
-'*************************************************************************
-'
+'**************************************************************
+'  
 '  Licensed to the Apache Software Foundation (ASF) under one
 '  or more contributor license agreements.  See the NOTICE file
 '  distributed with this work for additional information
@@ -17,10 +17,86 @@
 '  KIND, either express or implied.  See the License for the
 '  specific language governing permissions and limitations
 '  under the License.
-'
-'*************************************************************************
+'  
+'**************************************************************
+'*
+'* short description : check the internal file dialog ( 1. part )
+'*
+'\***************************************************************************
 
-*****
+sub CheckDirectoryName( dirname as string )
+    
+    ' Try to create a folder twice and make sure a warning comes up that the
+    ' folder already exists
+    
+    dim i as integer
+    dim FULLPATH as string
+    FULLPATH = gOfficePath + "user\work\" + dirname + "\"
+    
+    printlog( " - Create the folder and verify it's existence" )
+    
+    try
+        
+        for i=1 to 2
+            
+            printlog( " - creating folder for the " + i + ". time" )
+            
+            Kontext "OeffnenDlg"
+            printlog( " - press 'new folder' button" )
+            NeuerOrdner.Click()
+            
+            Kontext "NeuerOrdner"
+            if ( NeuerOrdner.exists( 2 ) ) then
+                printlog( " - name the folder" )
+                OrdnerName.SetText( dirname )
+                printlog( " - press OK")
+                NeuerOrdner.OK()
+            else
+                warnlog( "New Folder dialog not displayed" )
+            endif
+            
+            ' Take care of the File Exists Dialog
+            printlog( " - check for 'File Exists'-Dialog" )
+            Kontext "Active"
+            If Active.Exists() then
+                Active.OK()
+                
+                'if the file exists during first run of the test: just go on
+                if i =  1 then
+                    warnlog( "File exists. Did you clean the output-dir?" )
+                end if
+                
+                'if the active exists, we will return to the 'new folder' dialog
+                'it must be closed as well
+                Kontext "NeuerOrdner"
+                NeuerOrdner.Cancel()
+            else
+                'this should only be displayed on second run
+                if i = 2 then
+                    warnlog( "No message that the folder '" + dirname + "' exists!" )
+                end if
+            end if
+            
+        next i
+        
+        printlog( " - verify the existence of the new directory" )
+        if App.Dir ( ConvertPath ( FULLPATH ), 16 ) = "" then
+            Warnlog( "The directory'" + dirname + "' wasn't created!" )
+        else
+            printlog( " - delete it")
+            App.RmDir ( ConvertPath ( FULLPATH ) )
+        end if
+        
+        
+    catch
+        
+        warnlog( "Could not create the directory. Bugid: #108256# or #106510# ?" )
+        
+    endcatch
+    
+end sub
+
+'*******************************************************************************
 
 sub CreateInvalidDirectory( dirname as string )
     

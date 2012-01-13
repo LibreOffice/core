@@ -1,6 +1,6 @@
 'encoding UTF-8  Do not remove or change this line!
-'*************************************************************************
-'
+'**************************************************************
+'  
 '  Licensed to the Apache Software Foundation (ASF) under one
 '  or more contributor license agreements.  See the NOTICE file
 '  distributed with this work for additional information
@@ -17,10 +17,22 @@
 '  KIND, either express or implied.  See the License for the
 '  specific language governing permissions and limitations
 '  under the License.
-'
-'*************************************************************************
+'  
+'**************************************************************
+'*
+'* short description : global-level-1-test -> insert all OLE-Objects out of OLE-dialog into all doc-types
+'*
+'\******************************************************************************
 
-*****
+sub hReopenDoc
+    'Only for bughandling if closing an OLE object fails
+    Warnlog "Cannot release Chart Object -> #107005#?"
+    hCloseDocument()
+    'if Active.Exists ( 1 ) then Active.TypeKeys "<RIGHT><ENTER>"
+    hNewDocument()
+end sub
+
+'*******************************************************************************
 
 sub hOleSelektieren ( xStart%, yStart%, xEnde%, yEnde% )
     WL_TB_ZF_Auswahl

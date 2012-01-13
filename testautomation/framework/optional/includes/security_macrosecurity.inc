@@ -1,6 +1,6 @@
 'encoding UTF-8  Do not remove or change this line!
-'*************************************************************************
-'
+'**************************************************************
+'  
 '  Licensed to the Apache Software Foundation (ASF) under one
 '  or more contributor license agreements.  See the NOTICE file
 '  distributed with this work for additional information
@@ -17,10 +17,29 @@
 '  KIND, either express or implied.  See the License for the
 '  specific language governing permissions and limitations
 '  under the License.
-'
-'*************************************************************************
+'  
+'**************************************************************
+'*
+'*  short description : Macros with all security-levels
+'*
+'\******************************************************************************
 
-*****
+sub tMacroSecurityLevelsControlModule
+
+    dim iApplication as integer
+
+    for iApplication = 1 to 6
+
+        printlog( "" )
+        printlog( hNumericDocType( iApplication ) )
+        call tMacroSecurityLevels( "current" )
+        call tMacroSecurityLevels( "645" )
+
+    next iApplication
+
+end sub
+
+'*******************************************************************************
 
 testcase tMacroSecurityLevels( cFileFormat )
 

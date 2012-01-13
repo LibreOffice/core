@@ -1,6 +1,6 @@
 'encoding UTF-8  Do not remove or change this line!
-'*************************************************************************
-'
+'**************************************************************
+'  
 '  Licensed to the Apache Software Foundation (ASF) under one
 '  or more contributor license agreements.  See the NOTICE file
 '  distributed with this work for additional information
@@ -17,10 +17,54 @@
 '  KIND, either express or implied.  See the License for the
 '  specific language governing permissions and limitations
 '  under the License.
-'
-'*************************************************************************
+'  
+'**************************************************************
+'*
+'* short description : global update/resource test
+'*
+'\******************************************************************************
 
-*****
+testcase tHelp_DialogTest
+
+    printlog( "Resource test for the Help Browser" )
+
+    dim brc as boolean
+
+    brc = hOpenHelp()
+    if ( not brc ) then
+        warnlog( "Help not open, aborting test" )
+        kontext "Active"
+        if ( Active.exists( 2 ) ) then
+        	printlog( "Msgbox: " & Active.getText() )
+        	Active.ok()
+        endif
+        goto endsub
+    endif
+
+    hSelectHelpTab( "content" )
+    hSelectHelpTab( "index" )
+    hSelectHelpTab( "find" )
+    hSelectHelpTab( "bookmarks" )
+    
+
+    brc = hSelectHelpTab( "content" )
+    call DialogTest( ContentPage )
+
+    brc = hSelectHelpTab( "index" )
+    call DialogTest( IndexPage )
+
+    brc = hSelectHelpTab( "find" )
+    call DialogTest( FindPage )
+
+    brc = hSelectHelpTab( "bookmarks" )
+    call DialogTest( BookmarksPage )
+
+    Kontext "StarOfficeHelp"
+    hCloseHelp()
+
+endcase
+
+'*******************************************************************************
 
 testcase tHelp_ToolBar
 

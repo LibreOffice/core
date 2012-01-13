@@ -1,6 +1,6 @@
 'encoding UTF-8  Do not remove or change this line!
-'*************************************************************************
-'
+'**************************************************************
+'  
 '  Licensed to the Apache Software Foundation (ASF) under one
 '  or more contributor license agreements.  See the NOTICE file
 '  distributed with this work for additional information
@@ -17,10 +17,61 @@
 '  KIND, either express or implied.  See the License for the
 '  specific language governing permissions and limitations
 '  under the License.
-'
-'*************************************************************************
+'  
+'**************************************************************
+'*
+'* short description : tools for options tests
+'*
+'\******************************************************************************
 
-*****
+sub GetPathList ( ls1 () as String, ls2 () as String, ls3 () as String )
+
+    Dim lsInterim ( 50 ) as String
+    Dim i as Integer
+    Dim sList as String
+    Dim bNewCreate as Boolean
+    '///routine to get the correct comparison list for path-options
+    '///+ if the list does not exist => CreatePathList
+    '///+ you can find the lists for all languages in separate files
+    '///+[TesttoolPath]\framework\options\input\paths_[LanguageCode].txt
+    ls1 (0) = 0 : ls2 (0) = 0 :  ls3 (0) = 0
+    sList = gTesttoolPath + "framework\optional\input\options\paths_" + iSprache + ".txt"
+    sList = convertpath( sList )
+
+    if App.Dir ( sList ) = "" then
+        bNewCreate = TRUE
+        CreatePathList
+    else
+        bNewCreate = FALSE
+    end if
+
+    if bAsianLan = TRUE then
+
+        select case iSystemSprache
+        case 01, 33, 34, 39, 46, 49
+            ListRead ( lsInterim (), sList, "utf8" )
+        case else
+
+            if bNewCreate = FALSE then
+                CreatePathList
+            endif
+
+            ListRead ( lsInterim (), sList, "utf8" )
+        end select
+
+    else
+        ListRead ( lsInterim (), sList , "utf8" )
+    end if
+
+    for i = 1 to ListCount ( lsInterim () )
+        ListAppend ( ls1 (), Left ( lsInterim (i), Instr ( lsInterim (i), ";" ) - 1 ) )
+        ListAppend ( ls2 (), Mid ( lsInterim (i), Len ( lsInterim (i) ) - 2, 1 ) )
+        ListAppend ( ls3 (), Right  ( lsInterim (i), 1 ) )
+    next i
+
+end sub
+
+'*******************************************************************************
 
 sub CreatePathList
 

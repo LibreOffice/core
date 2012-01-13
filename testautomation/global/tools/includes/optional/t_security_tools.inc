@@ -1,6 +1,6 @@
 'encoding UTF-8  Do not remove or change this line!
-'*************************************************************************
-'
+'**************************************************************
+'  
 '  Licensed to the Apache Software Foundation (ASF) under one
 '  or more contributor license agreements.  See the NOTICE file
 '  distributed with this work for additional information
@@ -17,10 +17,95 @@
 '  KIND, either express or implied.  See the License for the
 '  specific language governing permissions and limitations
 '  under the License.
-'
-'*************************************************************************
+'  
+'**************************************************************
+'*
+'*  short description : Tools to ease testing of security related funtionality
+'*
+'\******************************************************************************
 
-****
+function hSetPasswordRecommendation( bEnable as boolean ) as boolean
+
+    '///<h3>Toggle Tools/Options/OOo/Security: Password recommendation</h3>
+    '///<u>Input</u>:
+    '///<ol>
+    '///+<li>Mode (boolean)</li>
+    '///<ul>
+    '///+<li>TRUE: Switch password recommendation on</li>
+    '///+<li>FALSE: Switch password recommendation off</li>
+    '///</ul>
+    '///</ol>
+
+    '///<u>Returns</u>:
+    '///<ol>
+    '///+<li>Prior state (boolean)</li>
+    '///<ul>
+    '///+<li>TRUE: Password recommendation was on</li>
+    '///+<li>FALSE: Password recommendation was off</li>
+    '///</ul>
+    '///</ol>
+    
+    '///<u>Description</u>:
+    '///<ul>
+
+    const CFN = "hSetPasswordRecommendation::"
+
+    '///+<li>Open Tools/Options</li>
+    ToolsOptions
+    
+    kontext "OptionenDlg"
+    if ( OptionenDlg.exists( 2 ) ) then
+
+        '///+<li>Go to the security page</li>
+        hToolsOptions( "STAROFFICE" , "SECURITY" )
+
+        '///+<li>Click on the &quot;Options...&quot; button</li>
+        kontext "TabSecurity"
+        if ( hClickButton( Options ) ) then
+        
+            kontext "TabSecurityOptionsAndWarnings"
+            if ( TabSecurityOptionsAndWarnings.exists( 1 ) ) then
+
+                '///+<li>Retrieve the current setting for passwor recommendation</li>
+                if ( RecommendPasswordProtectionOnSaving.isChecked() ) then
+                    hSetPasswordRecommendation() = true
+                else
+                    hSetPasswordRecommendation() = false
+                endif
+
+                '///+<li>Set the requested state</li>
+                if ( bEnable ) then
+                    printlog( CFN & "Enabled password recommendation" )
+                    RecommendPasswordProtectionOnSaving.check()
+                else
+                    printlog( CFN & "Disabled password recommendation" )
+                    RecommendPasswordProtectionOnSaving.uncheck()
+                endif
+
+                hCloseDialog( TabSecurityOptionsAndWarnings, "ok" )
+
+            else
+                warnlog( "Failed to open security options page" )
+                hSetPasswordRecommendation() = false
+            endif
+            
+        else
+            warnlog( CFN & "Unable to click options button" )
+            hSetPasswordRecommendation() = false
+        endif
+
+        '///+<li>Close Tools/Options</li>
+        Kontext "ToolsOptionsDlg"
+        hCloseDialog( ToolsOptionsDlg, "ok" )
+    
+    else
+        warnlog( "Failed to open Tools/Options" )
+    endif
+    '///</ul>
+
+end function
+
+'******************************************************************************
 
 function hOpenDigitalSignaturesDialog() as boolean
 

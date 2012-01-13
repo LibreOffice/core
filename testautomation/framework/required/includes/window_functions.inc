@@ -1,6 +1,6 @@
 'encoding UTF-8  Do not remove or change this line!
-'*************************************************************************
-'
+'**************************************************************
+'  
 '  Licensed to the Apache Software Foundation (ASF) under one
 '  or more contributor license agreements.  See the NOTICE file
 '  distributed with this work for additional information
@@ -17,10 +17,121 @@
 '  KIND, either express or implied.  See the License for the
 '  specific language governing permissions and limitations
 '  under the License.
-'
-'*************************************************************************
+'  
+'**************************************************************
+'*
+'*  short description : Window/Titlebar functionality
+'*
+'\******************************************************************************
 
-*****
+testcase tWindowFunctions
+
+    printlog( "Update test for window functions" )
+
+    printlog( "Create initial document" )
+    gApplication = "WRITER"
+    hInitSingleDoc()
+    hInitWriteDocIdentifier( "F_updt_windowfuncs.bas" )
+
+    printlog( "New document" )
+    hNewDocument()
+    if ( getDocumentCount <> 2 ) then
+        warnlog( "Two open documents were expected, found " & getDocumentCount )
+    endif
+
+    kontext "DocumentWriter"
+    printlog( "Close document" )
+    DocumentWriter.close()
+
+    if ( getDocumentCount <> 1 ) then
+        warnlog( "One open document was expected, found " & getDocumentCount )
+    endif
+
+    printlog( "New document" )
+    hNewDocument()
+    if ( getDocumentCount <> 2) then
+        warnlog( "Two open documents were expected, found " & getDocumentCount )
+    endif
+
+    printlog( "Enter some text into the second writer document" )
+    kontext "DocumentWriter"
+    DocumentWriter.TypeKeys( "test" )
+    DocumentWriter.close()
+
+    kontext "active"
+    if ( Active.exists() ) then
+        printlog( "Close messagebox with Cancel (leaves the document open)" )
+        Active.Cancel()
+    else
+        warnlog( "No warning that data will be lost on close of this document" )
+    endif
+
+    kontext "DocumentWriter"
+    if ( getDocumentCount = 2 ) then
+        printlog( "Two documents open. Good." )
+    else
+        warnlog( "Incorrect document count. Expected two, found " & getDocumentCount )
+    endif
+
+    kontext "DocumentWriter"
+    printlog( "Close the document" )
+    FileClose()
+
+    kontext "Active"
+    if ( Active.exists() ) then
+        printlog( "Do not save the document" )
+        Active.No()
+    else
+        warnlog( "Warning: No data loss warning" )
+    endif
+
+    kontext "DocumentWriter"
+    if ( getDocumentCount = 1 ) then
+        printlog( "One document open. Good." )
+    else
+        warnlog( "Incorrect document count. Expected one, found " & getDocumentCount )
+    endif
+
+    Kontext "DocumentWriter"
+    printlog( "Minimize window" )
+    DocumentWriter.Minimize()
+    Wait( 2000 )
+
+    kontext "DocumentWriter"
+    if ( DocumentWriter.IsMin() ) then
+        printlog( "Window is minimized" )
+    else
+        warnlog( "Window not minimized" )
+    endif
+
+    kontext "DocumentWriter"
+    printlog( "Restore window" )
+    DocumentWriter.Restore()
+    Wait( 2000 )
+
+    if ( DocumentWriter.IsRestore() ) then
+        printlog( "Window is Restored" )
+    else
+        warnlog( " * Window not Restored" )
+    endif
+
+    kontext "DocumentWriter"
+    printlog( "Maximize window" )
+    DocumentWriter.Maximize()
+    Wait( 2000 )
+
+    kontext "DocumentWriter"
+    if ( DocumentWriter.IsMax() ) then
+        printlog( "Window is maximized" )
+    else
+        warnlog( " * Window not maximized" )
+    endif
+
+    hDestroyDocument()
+
+endcase
+
+'*******************************************************************************
 
 sub sAllWindowTitle
 

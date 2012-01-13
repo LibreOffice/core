@@ -1,6 +1,6 @@
 'encoding UTF-8  Do not remove or change this line!
-'*************************************************************************
-'
+'**************************************************************
+'  
 '  Licensed to the Apache Software Foundation (ASF) under one
 '  or more contributor license agreements.  See the NOTICE file
 '  distributed with this work for additional information
@@ -17,10 +17,42 @@
 '  KIND, either express or implied.  See the License for the
 '  specific language governing permissions and limitations
 '  under the License.
-'
-'*************************************************************************
+'  
+'**************************************************************
+'*
+'*  short description : Tools for working with the property browser for formcontrols
+'*
+'\******************************************************************************
 
-*****
+function hOpenPropertyBrowser() as boolean
+
+    '///<h3>Open the BASIC property browser</h3>
+
+    const CFN = "framework::tools::includes::pbrowser_tools.inc::hOpenPropertyBrowser(): "
+
+    kontext "ControlPropertiesTabControl"
+    if ( ControlPropertiesTabControl.exists() ) then
+        printlog( "Property Browser is already open, no action taken" )
+        hOpenPropertyBrowser() = true
+    else
+        if ( hUseAsyncSlot( "ContextProperties" ) <> -1 ) then
+            kontext "ControlPropertiesTabControl"
+            if ( ControlPropertiesTabControl.exists( 2 ) ) then
+                ControlPropertiesTabControl.setPage( TabGeneralControl )
+                hOpenPropertyBrowser() = true
+            else
+                warnlog( CFN & "Dialog <ControlPropertiesTabControl> is not available" )
+                hOpenPropertyBrowser() = false
+            endif
+        else
+            warnlog( CFN & "Could not execute <ContextProperties> slot" )
+            hOpenPropertyBrowser() = false
+        endif
+    endif
+
+end function
+
+'*******************************************************************************
 
 function hClosePropertyBrowser() as boolean
 

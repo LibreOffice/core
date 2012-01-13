@@ -1,6 +1,6 @@
 'encoding UTF-8  Do not remove or change this line!
-'*************************************************************************
-'
+'**************************************************************
+'  
 '  Licensed to the Apache Software Foundation (ASF) under one
 '  or more contributor license agreements.  See the NOTICE file
 '  distributed with this work for additional information
@@ -17,10 +17,77 @@
 '  KIND, either express or implied.  See the License for the
 '  specific language governing permissions and limitations
 '  under the License.
-'
-'*************************************************************************
+'  
+'**************************************************************
+'*
+'* short description : Tools->Options: OpenOffice.org Java
+'*
+'\******************************************************************************
 
-*****
+testcase tOOoJava
+    dim bJavaState as boolean
+
+    ToolsOptions
+    hToolsOptions( "StarOffice", "Java" )
+
+    printlog( "Verify that Java is enabled and configured" )
+    if ( usejava.isChecked() = false ) then
+        warnlog( "Java should be enabled by default, checking and restarting" )
+        bJavaState = hChangeJavaState( true )
+        if ( bJavaState = false ) then
+            warnlog( "Java is still not enabled, aborting test." )
+            kontext "OptionenDlg"
+            OptionenDlg.cancel()
+            goto endsub
+        endif
+    else
+        printlog( "   Java is enabled. Good." )
+    endif
+    
+    ' Needs a delay, it might take some time until the listbox gets populated
+    sleep( 3 )
+    
+    ' There should be a java-runtime installed. If not -> leave test
+    printlog( "Make sure at least one Java runtime is installed" )
+    if ( javalist.getitemcount() = 0 ) then
+        warnlog( "No java listed in listbox, the test will stop" )
+        kontext "OptionenDlg"
+        OptionenDlg.cancel()
+        goto endsub
+    else
+        printlog( "   Java is installed, good." )
+    endif
+    
+    printlog( "Quickly test that all controls are active" )
+    if ( add.isEnabled() ) then
+        printlog( "   'Add...' is enabled" )
+    else
+        warnlog( "The 'Add...' button is disabled" )
+    endif
+    
+    if ( parameters.isEnabled() ) then
+        printlog( "   'Parameters...' is enabled" )
+    else
+        warnlog( "The 'Parameters...' button is disabled" )
+    endif
+
+    if ( classpath.isEnabled() ) then
+        printlog( "   'Class Path...' is enabled" )
+    else
+        warnlog( "The 'Class Path...' button is disabled" )
+    endif
+    
+    if ( JavaList.isEnabled() ) then
+        printlog( "   'JavaList' is enabled" )
+    else
+        warnlog( "The 'JavaList' button is disabled" )
+    endif
+    
+    kontext "OptionenDlg"
+    OptionenDlg.ok
+endcase
+
+'*******************************************************************************
 
 function hChangeJavaState( bEnable as boolean ) as boolean
     ' this little fella switches Java support on and off including a restart of

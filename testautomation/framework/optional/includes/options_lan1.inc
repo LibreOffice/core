@@ -1,6 +1,6 @@
 'encoding UTF-8  Do not remove or change this line!
-'*************************************************************************
-'
+'**************************************************************
+'  
 '  Licensed to the Apache Software Foundation (ASF) under one
 '  or more contributor license agreements.  See the NOTICE file
 '  distributed with this work for additional information
@@ -17,10 +17,36 @@
 '  KIND, either express or implied.  See the License for the
 '  specific language governing permissions and limitations
 '  under the License.
-'
-'*************************************************************************
+'  
+'**************************************************************
+'*
+'* short description : general option test (test for language-group)
+'*
+'\******************************************************************************
 
-*****
+sub opt_lan1
+  Dim bOld as Boolean
+
+   bOld = ActiveDeactivateAsianSupport ( FALSE )
+
+   Call tLanguageSettingsLanguages
+   Call tLanguageSettingsWritingAids
+
+   printlog "++ activate the asian support in StarOffice ++"
+   ActiveDeactivateAsianSupport ( TRUE )
+   Call tLanguageSettingsJapaneseFind
+   Call tLanguageSettingsAsianLayout
+
+   printlog "++ reset asian support in StarOffice to default ++"
+   if bOld = TRUE then
+      ActiveDeactivateAsianSupport ( TRUE )
+   else
+      ActiveDeactivateAsianSupport ( FALSE )
+   end if
+
+end sub
+
+'*******************************************************************************
 
 testcase tLanguageSettingsLanguages
 

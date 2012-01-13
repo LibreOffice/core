@@ -1,6 +1,6 @@
 'encoding UTF-8  Do not remove or change this line!
-'*************************************************************************
-'
+'**************************************************************
+'  
 '  Licensed to the Apache Software Foundation (ASF) under one
 '  or more contributor license agreements.  See the NOTICE file
 '  distributed with this work for additional information
@@ -17,10 +17,62 @@
 '  KIND, either express or implied.  See the License for the
 '  specific language governing permissions and limitations
 '  under the License.
-'
-'*************************************************************************
+'  
+'**************************************************************
+'*
+'* short description :
+'*
+'\******************************************************************************
 
-*****
+testcase tDraw_As_OLE_Object()
+    
+    call ClosePresentationfloat()
+    call hInsertOLEObject( true, gOLEDraw, "DRAW" )
+    'call hInsertOLEObject( false, gOLEDraw, "DRAW" )
+    
+endcase
+
+testcase tCalc_as_OLE_Object()
+    
+    call ClosePresentationfloat()
+    call hInsertOLEObject( true, gOLECalc, "CALC" )
+    'call hInsertOLEObject( false, gOLECalc, "CALC" )
+    
+endcase
+
+testcase tImpress_As_OLE_Object()
+    
+    call ClosePresentationfloat()
+    call hInsertOLEObject( true, gOLEImpress, "IMPRESS" )
+    'call hInsertOLEObject( false, gOLEImpress, "IMPRESS" )
+    
+endcase
+
+testcase tWriter_As_OLE_Object()
+    
+    call ClosePresentationfloat()
+    call hInsertOLEObject( true, gOLEWriter, "WRITER" )
+    'call hInsertOLEObject( false, gOLEWriter, "WRITER" )
+    
+endcase
+
+testcase tMath_As_OLE_Object()
+    
+    call ClosePresentationfloat()
+    call hInsertOLEObject( true, gOLEMath, "MATH" )
+    'call hInsertOLEObject( false, gOLEMath, "MATH" )
+    
+endcase
+
+testcase tChart_As_OLE_Object()
+    
+    call ClosePresentationfloat()
+    call hInsertOLEObject( true, gOLEChart, "CHART" )
+    'call hInsertOLEObject( false, gOLEChart, "CHART" )
+    
+endcase
+
+'*******************************************************************************
 
 function hInsertOLEObject( bRemoveFocus as boolean, cOLEObject as string, cOleType as string ) as beoolean
     

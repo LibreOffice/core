@@ -1,6 +1,6 @@
 'encoding UTF-8  Do not remove or change this line!
-'*************************************************************************
-'
+'**************************************************************
+'  
 '  Licensed to the Apache Software Foundation (ASF) under one
 '  or more contributor license agreements.  See the NOTICE file
 '  distributed with this work for additional information
@@ -17,10 +17,51 @@
 '  KIND, either express or implied.  See the License for the
 '  specific language governing permissions and limitations
 '  under the License.
-'
-'*************************************************************************
+'  
+'**************************************************************
+'*
+'* short description : Replacements for routines in t_lists.inc adds some
+'*
+'\******************************************************************************
 
-*****
+function hListDelete( aList() as string, iItemToDelete as integer ) as boolean
+
+    '///<h3>Delete one item from a list specified by index</h3>
+    '///<i>Prerequisite: Array compatible with those from t_lists.inc</i><br>
+    '///<i>About listfunctions: All listfunctions rely on a special type of
+    '///+ array. This can be string arrays and - in some cases - numeric
+    '///+ arrays. What makes the arrays unique is that the first item which
+    '///+ has the index 0 contains the number of items in the list to be used,
+    '///+ anything that is stored beyond this number is ignored. This has three 
+    '///+ consequences: 1) all listfunctions that alter an array must update
+    '///+ the index stored in array(0) and 2) it is possible that the index
+    '///+ point beyond ubound of the array which will most likely cause a
+    '///+ runtime error. 3) Means that arrays may only have an upper boundary
+    '///+ declared, all loops must start with index array(1) and must end with
+    '///+ index array(val( array(0))</i><br>    
+
+    const CFN = "hListDelete::"
+    const INDEX_CORRECTION = 1
+    dim iCurrentItem as integer ' Increment-Variable
+    
+    if ( GVERBOSE ) then 
+        printlog( CFN & "Removing: " & aList( iItemToDelete ) & " at pos " & iItemToDelete )
+    endif
+    
+    ' Move all items down by one in the list beginning with the item after
+    ' iItemToDelete
+    for iCurrentItem = ( iItemToDelete + INDEX_CORRECTION ) to ListCount( aList() )
+        aList( iCurrentItem - INDEX_CORRECTION ) = aList( iCurrentItem )
+    next iCurrentItem
+    
+    ' Delete the last entry, it is no longer used and it is duplicate to the item
+    ' at iListSizeOld-1 (iListSizeNew)
+    aList( iCurrentItem ) = ""
+    aList( 0 ) = iCurrentItem - INDEX_CORRECTION
+    
+end function
+
+'*******************************************************************************
 
 function hListAppend( sNewString as string, aTargetList() as string ) as integer
 

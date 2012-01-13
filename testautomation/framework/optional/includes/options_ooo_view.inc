@@ -1,6 +1,6 @@
 'encoding UTF-8  Do not remove or change this line!
-'*************************************************************************
-'
+'**************************************************************
+'  
 '  Licensed to the Apache Software Foundation (ASF) under one
 '  or more contributor license agreements.  See the NOTICE file
 '  distributed with this work for additional information
@@ -17,10 +17,40 @@
 '  KIND, either express or implied.  See the License for the
 '  specific language governing permissions and limitations
 '  under the License.
-'
-'*************************************************************************
+'  
+'**************************************************************
+'*
+'* short description : Tools->Options: OpenOffice.org View
+'*
+'\******************************************************************************
 
-*****
+testcase tOOoView
+
+
+    dim sFile as string
+
+    printlog "Check if the defaults are correct"
+    sFile = gTesttoolPath + "framework\optional\input\options\ooo_view_defaults.ref"
+    call checkPage( sFile , false )
+
+    printlog "Change all settings to something different to the default"
+    sFile = gTesttoolPath + "framework\optional\input\options\ooo_view_changed.ref"
+    call changePage( sFile , true, 1 )
+
+    printlog "Verify that all changes persist after a restart"
+    sFile = gTesttoolPath + "framework\optional\input\options\ooo_view_changed.ref"
+    call checkPage( sFile , true, 1 )
+
+    printlog "Re-apply the defaults to all controls and restart the application"
+    sFile = gTesttoolPath + "framework\optional\input\options\ooo_view_defaults.ref"
+    call changePage( sFile , false )
+
+    printlog "Verify that all settings have indeed been reset to defaults"
+    call checkPage( sFile , false )
+
+endcase
+
+'*******************************************************************************
 
 sub checkPage( sFile as string , bDisabled as boolean, optional iMiddleMouseButtonControl as integer)
     dim iMiddleMouseButton as integer

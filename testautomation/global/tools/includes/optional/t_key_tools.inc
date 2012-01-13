@@ -1,6 +1,6 @@
 'encoding UTF-8  Do not remove or change this line!
-'*************************************************************************
-'
+'**************************************************************
+'  
 '  Licensed to the Apache Software Foundation (ASF) under one
 '  or more contributor license agreements.  See the NOTICE file
 '  distributed with this work for additional information
@@ -17,10 +17,12 @@
 '  KIND, either express or implied.  See the License for the
 '  specific language governing permissions and limitations
 '  under the License.
-'
-'*************************************************************************
-
-*****
+'  
+'**************************************************************
+'*
+'* short description : tools for evaluation of key=value datalists
+'*
+'*******************************************************************************
 ' **
 ' #1 hGetDataPairAsString     ' retrieve key=value from a list
 ' #1 hGetValueForPairAsString ' retrieve value from a key=value as string

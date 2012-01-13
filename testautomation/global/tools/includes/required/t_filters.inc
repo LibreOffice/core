@@ -1,6 +1,6 @@
 'encoding UTF-8  Do not remove or change this line!
-'*************************************************************************
-'
+'**************************************************************
+'  
 '  Licensed to the Apache Software Foundation (ASF) under one
 '  or more contributor license agreements.  See the NOTICE file
 '  distributed with this work for additional information
@@ -17,10 +17,30 @@
 '  KIND, either express or implied.  See the License for the
 '  specific language governing permissions and limitations
 '  under the License.
-'
-'*************************************************************************
+'  
+'**************************************************************
+'*
+'*  short description : Retrieve and set filternames and suffixes
+'*
+'\******************************************************************************
 
-*****
+private const LENGTH_OF_FILTERFILE = 100
+private const FILE_DATA_SIZE = 300
+
+function hCheckForBinfilters() as boolean
+
+    try
+        hGetSuffix( "569" )
+        hCheckForBinfilters() = true
+    catch
+        warnlog( "Optional legacy filters package is not installed" )
+        printlog( "Please restart the setup to install the missing filters" )
+        hCheckForBinfilters() = false
+    endcatch
+
+end function
+
+'*******************************************************************************
 
 function hGetSuffix( optional cBuildId as string ) as string
 

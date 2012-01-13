@@ -1,6 +1,6 @@
 'encoding UTF-8  Do not remove or change this line!
-'*************************************************************************
-'
+'**************************************************************
+'  
 '  Licensed to the Apache Software Foundation (ASF) under one
 '  or more contributor license agreements.  See the NOTICE file
 '  distributed with this work for additional information
@@ -17,10 +17,180 @@
 '  KIND, either express or implied.  See the License for the
 '  specific language governing permissions and limitations
 '  under the License.
-'
-'*************************************************************************
+'  
+'**************************************************************
+'*
+'*  short description : Update test for the mailmerge wizard
+'*
+'\******************************************************************************
 
-*****
+private CSV_DATABASE as string
+
+testcase tUpdtWizardMailMerge
+
+    printlog( "Resource test for the mailmerge wizard" )
+
+    dim brc as boolean
+    dim irc as integer
+    
+    qaerrorlog( "#i54524# - MM-Wizard modifies datasource -> CVS merge conflict" )
+    
+    CSV_DATABASE = hGetWorkPath() & "myDatabase"
+    hDeleteFile( CSV_DATABASE )
+    hRemoveDatabaseConnections()
+
+    
+    hInitSingleDoc()
+    
+    printlog( "Open the Mailmerge-Wizard" )
+    ToolsMailMergeWizard
+    
+    Kontext "MailMergeWizard"
+    brc = hUpdtMMWpage1()
+    if ( not brc ) then
+        warnlog( "MailMergeWizard is not visible, aborting test" )
+        goto endsub
+    endif
+    
+    Kontext "MailMergeWizard"
+    hClickButton( NextButton )
+    hUpdtMMWPage2()
+    
+    Kontext "MailMergeWizard"
+    hClickButton( NextButton )
+    hUpdtMMWpage3()
+    
+    Kontext "MailMergeWizard"
+    hClickButton( NextButton )
+    hUpdtMMWPage4()
+    
+    Kontext "MailMergeWizard"
+    hClickButton( NextButton )
+    hUpdtMMWPage5()
+
+    Kontext "MailMergeWizard"
+    hClickButton( NextButton )
+    hUpdtMMWPage6()
+    
+    Kontext "MailMergeWizard"
+    hClickButton( NextButton )
+    hUpdtMMWPage7()
+    
+    Kontext "MailMergeWizard"
+    hClickNextButton()
+    hUpdtMMWPage8()
+    
+    printlog( "close the wizard" )
+    Kontext "MailMergeWizard"
+    hCloseDialog( MailMergeWizard, "cancel" )
+
+    hRemoveDatabaseConnections()
+    hCloseDocument()
+    hCloseDocument()
+    
+
+endcase
+
+'**********************************************************************
+
+function hUpdtMMWpage1() as boolean
+
+    
+
+    const CFN = "hUpdtMMWpage1::"
+    
+    Kontext "TabMailMergeSourceDocument"
+    if ( not TabMailMergeSourceDocument.exists() ) then
+        warnlog( CFN & "Page 1 could not be accessed" )
+        hUpdtMMWPage1() = false
+        exit function
+    endif
+
+    Kontext "TabMailMergeSourceDocument"
+    if ( BrowseDocument.exists( 1 ) ) then
+        if ( BrowseDocument.isEnabled ) then
+            BrowseDocument.click()
+            
+            Kontext "OeffnenDlg"
+            if ( OeffnenDlg.exists( 1 ) ) then
+                printlog( CFN & "BrowseDocument::File Open Dialog" )
+                call dialogtest( OeffnenDlg )
+                OeffnenDlg.cancel()
+            else
+                warnlog( CFN & "BrowseDocument::FileOpen not open" )
+            endif
+        else
+            warnlog( CFN & "BrowseDocument::Button is disabled" )
+       endif
+    else
+        warnlog( CFN & "BrowseDocument::Button does not exist" )
+    endif
+    
+    Kontext "TabMailMergeSourceDocument"
+    if ( BrowseTemplate.exists( 2 ) ) then
+        if ( BrowseTemplate.isEnabled ) then
+            BrowseTemplate.click()
+            
+            Kontext "Neu"
+            if ( Neu.exists( 1 ) ) then
+                printlog( CFN & "BrowseTemplate::New Dialog" )
+                call dialogtest( Neu )
+                Neu.cancel()
+            else
+                warnlog( CFN & "BrowseTemplate::FileOpen not open" )
+            endif
+        else
+            warnlog( CFN & "BrowseTemplate::Button is disabled" )
+        endif
+    else
+        warnlog( CFN & "BrowseTemplate::Button does not exist" )
+    endif
+        
+    kontext "TabMailMergeSourceDocument"
+    if ( CreateANewDocument.exists( 2 ) ) then
+        if ( CreateANewDocument.isEnabled ) then
+            printlog( CFN & "Check Create new Document" )
+            CreateANewDocument.check()
+        else
+            warnlog( CFN & "CheckBbox is disabled" )
+        endif
+    else
+        warnlog( CFN & "CheckBox does not exist" )
+    endif
+
+    hUpdtMMWPage1() = true
+
+end function
+
+'**********************************************************************
+
+function hUpdtMMWpage2()
+
+
+    const CFN = "hUpdtMMWpage2::"
+
+    Kontext "TabMailMergeDocumentType"
+    if ( not TabMailMergeDocumentType.exists( 2 ) ) then
+        warnlog( CFN & "Page 2 could not be accessed" )
+        exit function
+    endif
+    
+    call dialogtest( TabMailMergeDocumentType )
+    
+    printlog( CFN & "Select to create a letter" )
+    if ( Letter.exists() ) then
+        if ( Letter.isEnabled() ) then
+            Letter.check()
+        else
+            warnlog( CFN & "Cannot check Letter-Checkbox" )
+        endif
+    else
+        warnlog( CFN & "Letter Checkbox does not exist" )
+    endif
+    
+end function   
+
+'*******************************************************************************
 
 function hUpdtMMWpage3()
 

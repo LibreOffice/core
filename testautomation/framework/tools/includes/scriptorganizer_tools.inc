@@ -1,6 +1,6 @@
 'encoding UTF-8  Do not remove or change this line!
-'*************************************************************************
-'
+'**************************************************************
+'  
 '  Licensed to the Apache Software Foundation (ASF) under one
 '  or more contributor license agreements.  See the NOTICE file
 '  distributed with this work for additional information
@@ -17,10 +17,71 @@
 '  KIND, either express or implied.  See the License for the
 '  specific language governing permissions and limitations
 '  under the License.
-'
-'*************************************************************************
+'  
+'**************************************************************
+'*
+'*  short description : Test scripting-organizers / document-attached scripts
+'*
+'\******************************************************************************
 
-*****
+function hCreateScriptingObject( cName as string ) as boolean
+
+    '///<h3>Create a new scripting object for the current module</h3>
+    '///<i>Starting point: Script organizer is open, module selected</i><br>
+    '///<u>Input</u>:
+    '///<ol>
+    '///+<li>Name of the module (string)</li>
+    '///<ul>
+    '///+<li>Any name the organizer can accept</li>
+    '///</ul>
+    '///</ol>
+    '///<u>Returns</u>:
+    '///<ol>
+    '///+<li>Errorcondition</li>
+    '///<ul>
+    '///+<li>TRUE on success</li>
+    '///+<li>FALSE on failure or invalid user input</li>
+    '///</ul>
+    '///</ol>
+    '///<u>Description</u>:
+    '///<ul>
+    
+
+    const CFN = "hNewScriptingObject::"
+
+    '///+<li>Verify that the &quot;Create...&quot; button is enabled</li>
+    if ( PBCreate.isEnabled() ) then
+             
+        '///+<li>Click &quot;Create...&quot; to open the naming dialog</li> 
+        hClickButton( PBCreate )
+        
+        '///+<li>Name the new script</li>
+        Kontext "ScriptNameDlg"
+        if ( ScriptNameDlg.exists( 2 ) ) then        
+            
+            EFObjectName.setText( cName )
+            ScriptNameDlg.OK()  
+            hCreateScriptingObject() = true
+            
+        endif
+
+    else
+        printlog( CFN & "Button is disabled" )
+        hCreateScriptingObject() = false
+    endif
+    
+    '///+<li>Verify that we are back on the script organizer</li>
+    kontext "ScriptOrganizer"
+    if ( not ScriptOrganizer.exists( 2 ) ) then
+        warnlog( CFN & "Could not return to ScriptOrganizer" )
+        hCreateScriptingObject() = false
+    endif    
+    
+   '///</ul>
+
+end function
+
+'*******************************************************************************
 
 function hRenameScriptingObject( cName as string ) as boolean
 

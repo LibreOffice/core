@@ -1,6 +1,6 @@
 'encoding UTF-8  Do not remove or change this line!
-'*************************************************************************
-'
+'**************************************************************
+'  
 '  Licensed to the Apache Software Foundation (ASF) under one
 '  or more contributor license agreements.  See the NOTICE file
 '  distributed with this work for additional information
@@ -17,10 +17,157 @@
 '  KIND, either express or implied.  See the License for the
 '  specific language governing permissions and limitations
 '  under the License.
-'
-'*************************************************************************
+'  
+'**************************************************************
+'*
+'* short description : First test of basic functionality
+'*
+'\******************************************************************************
 
-*****
+testcase tAllNew
+
+    printlog( "Open all available document types" )
+    
+    Dim lsList (20) as string
+    
+    if ( gUseSysDlg ) then
+        warnlog("Only check, if the documents will be opened; no " & _
+        "check for the defaultfilter (system file-dialog)!")
+    end if
+    
+    printlog ""
+    try
+        gApplication = "WRITER"
+        printlog "  - " & gApplication
+        
+        hNewDocument()
+        
+        Kontext "DocumentWriter"
+        DocumentWriter.TypeKeys "This is a Writer-document!"
+        if gUseSysDlg = FALSE then
+            if fDocumentCheck (gWriterFilter) = FALSE then
+                warnlog("The filter name (saving) is not correct! " & _
+                "Please check if a Writer document will be opened!")
+            end if
+        end if
+        hCloseDocument()
+    catch
+        Exceptlog
+        ResetApplication
+    endcatch
+    
+    try
+        gApplication = "CALC"
+        printlog "  - " & gApplication
+        
+        hNewDocument
+        Kontext "DocumentCalc"
+        DocumentCalc.TypeKeys "This is a Calc-document!"
+        
+        if gUseSysDlg = FALSE then
+            if fDocumentCheck (gCalcFilter) = FALSE then
+                warnlog("The filter name (saving) is not correct! " & _
+                "Please check if a Calc document will be opened!")
+            end if
+        end if
+        hCloseDocument
+    catch
+        Exceptlog
+        ResetApplication
+    endcatch
+    
+    try
+        gApplication = "IMPRESS"
+        printlog "  - " & gApplication
+        
+        hNewDocument()
+        sleep(3)
+        InsertDuplicateSlide
+        sleep(2)
+        if gUseSysDlg = FALSE then
+            if fDocumentCheck (gImpressFilter) = FALSE then
+                warnlog("The filter name (saving) is not correct! " & _
+                "Please check if an Impress document will be opened!")
+            end if
+        end if
+        hCloseDocument()
+    catch
+        Exceptlog
+        ResetApplication
+    endcatch
+    
+    try
+        gApplication = "DRAW"
+        printlog "  - " & gApplication
+        hNewDocument()
+        InsertSlide
+        if gUseSysDlg = FALSE then
+            if fDocumentCheck (gDrawFilter) = FALSE then
+                warnlog("The filter name (saving) is not correct! Please check if a Draw document will be opened!")
+            end if
+        end if
+        hCloseDocument()
+    catch
+        Exceptlog
+        ResetApplication
+    endcatch
+    try
+        gApplication = "HTML"
+        printlog "  - " & gApplication
+        hNewDocument()
+        Kontext "DocumentWriter"
+        DocumentWriter.TypeKeys "This is a HTML-Document!"
+        if gUseSysDlg = FALSE then
+            if (fDocumentCheck (gHTMLFilter) = FALSE) then
+                warnlog("The filter name (saving) is not correct! Please check if a HTML document will be opened! -> #i30867")
+            end if
+        end if
+        hCloseDocument()
+    catch
+        Exceptlog
+        ResetApplication
+    endcatch
+    
+    try
+        gApplication = "MATH"
+        printlog "  - " & gApplication
+        hNewDocument()
+        Call SchreibenInMathDok("a over b")
+        if gUseSysDlg = FALSE then
+            if fDocumentCheck (gMathFilter) = FALSE then
+                warnlog("The filter name (saving) is not correct! Please check if a Math document will be opened!")
+            end if
+        end if
+        hCloseDocument
+    catch
+        Exceptlog
+        ResetApplication
+    endcatch
+    
+    
+    try
+        gApplication = "MASTERDOCUMENT"
+        printlog "  - " & gApplication
+        hNewDocument()
+        Kontext "DocumentWriter"
+        DocumentWriter.TypeKeys "This is a master document!"
+        if gUseSysDlg = FALSE then
+            if fDocumentCheck (gMasterDocFilter) = FALSE then
+                warnlog("The filter name (saving) is not correct! Please check if a Master document will be opened!")
+            end if
+        end if
+        Kontext "Navigator"
+        if Navigator.Exists(5) then
+            Navigator.Close
+        end if
+        hCloseDocument()
+    catch
+        Exceptlog
+        ResetApplication
+    endcatch
+endcase
+
+'*******************************************************************************
 
 testcase tJava
 

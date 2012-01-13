@@ -1,6 +1,6 @@
 'encoding UTF-8  Do not remove or change this line!
-'*************************************************************************
-'
+'**************************************************************
+'  
 '  Licensed to the Apache Software Foundation (ASF) under one
 '  or more contributor license agreements.  See the NOTICE file
 '  distributed with this work for additional information
@@ -17,10 +17,104 @@
 '  KIND, either express or implied.  See the License for the
 '  specific language governing permissions and limitations
 '  under the License.
-'
-'*************************************************************************
+'  
+'**************************************************************
+'*
+'* short description : updatetest for the printer configuration
+'*
+'\******************************************************************************
 
-*****
+testcase t_updt_spadmin
+
+    printlog( "Resource test for SPAdmin (Printer administration tool) for Unix(like) OS" )
+
+    if ( gtSysName = "eComStation" ) then
+        printlog( "No SpAdmin for eComStation" )
+        goto endsub
+    endif
+    
+    if ( lcase(gPlatform) = "osx") then
+        printlog( "No SPAdmin on MacOS X" )
+        goto endsub
+    endif
+    
+    if ( gPlatGroup = "w95" ) then
+        printlog( "No SPAdmin on Windows" )
+        goto endsub
+    endif
+
+    const CPRINTER = "tt-testprinter"
+    dim irc as integer
+    dim brc as boolean
+   
+    hShutdownOffice()
+   
+    brc = hOpenSpAdmin()
+    if ( brc ) then
+    
+        brc = hWaitForSpAdmin()
+        if ( not brc ) then
+            warnlog( "SpAdmin is not open, the test cannot continue" )
+            goto endsub
+        endif        
+   
+        irc = hDelPrinter( CPRINTER )
+        select case irc
+        case 0 : printlog( "Maybe printer was left over by prior run?" )
+        case 3 : printlog( "OK, printer does not exist" )
+        end select
+      
+        brc = hWaitForSpAdmin()
+        if ( not brc ) then
+            warnlog( "SpAdmin is not open, the test cannot continue" )
+            goto endsub
+        endif
+        
+        call TestNewPrinter( CPRINTER )
+      
+        ' wait for the spadmin to open, on failure we end the test
+        brc = hWaitForSpAdmin()
+        if ( not brc ) then
+            warnlog( "SpAdmin is not open, the test cannot continue" )
+            goto endsub
+        endif
+        
+        call TestProperties( CPRINTER )        
+      
+        ' wait for the spadmin to open, on failure we end the test
+        brc = hWaitForSpAdmin()
+        if ( not brc ) then
+            warnlog( "SpAdmin is not open, the test cannot continue" )
+            goto endsub
+        endif
+        
+        call TestRename( CPRINTER )
+        
+        ' wait for the spadmin to open, on failure we end the test
+        brc = hWaitForSpAdmin()
+        if ( not brc ) then
+            warnlog( "SpAdmin is not open, the test cannot continue" )
+            goto endsub
+        endif
+        
+        ' wait for the spadmin to open, on failure we end the test
+        brc = hWaitForSpAdmin()
+        if ( not brc ) then
+            warnlog( "SpAdmin is not open, the test cannot continue" )
+            goto endsub
+        endif        
+         
+        
+        irc = hDelPrinter( CPRINTER )
+        if ( irc <> 0 ) then
+            warnlog( "We created a Fax printer but it could not be deleted" )
+        endif
+        
+    endif
+   
+endcase
+
+'*******************************************************************************
 
 sub TestNewPrinter( cPrinter as string )
 

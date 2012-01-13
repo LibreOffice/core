@@ -1,6 +1,6 @@
 'encoding UTF-8  Do not remove or change this line!
-'*************************************************************************
-'
+'**************************************************************
+'  
 '  Licensed to the Apache Software Foundation (ASF) under one
 '  or more contributor license agreements.  See the NOTICE file
 '  distributed with this work for additional information
@@ -17,10 +17,40 @@
 '  KIND, either express or implied.  See the License for the
 '  specific language governing permissions and limitations
 '  under the License.
-'
-'*************************************************************************
+'  
+'**************************************************************
+'*
+'* short description : Tools for CJK feature test in Writer
+'*
+'\***********************************************************************
 
-****'
+function CheckAsianLanguageSupport( sSupport as String )  as String
+
+    ToolsOptions
+    Call hToolsOptions("LANGUAGESETTINGS","LANGUAGES")
+
+    if ( aktivieren.exists() ) then
+        if ( aktivieren.isEnabled() ) then
+            if ( lcase( sSupport ) = "on" ) then
+                printlog( "Enabling Asian Language Support" )
+                Aktivieren.Check
+            else
+                printlog( "Disabling Asian Language Support" )
+                Aktivieren.uncheck()
+            endif
+        else
+            warnlog( "Activate Asian Language Support checkbox is disabled" )
+        endif
+    else
+        warnlog( "Activate Asian Language Support checkbox is missing" )
+    endif
+    
+    Kontext "ExtrasOptionenDlg"
+    ExtrasOptionenDlg.OK()
+    
+end function
+
+'******************************************************************************'
 
 function fStartupNavigator(navigatorItem as String , subItemNum as Integer)
     Dim j as Integer

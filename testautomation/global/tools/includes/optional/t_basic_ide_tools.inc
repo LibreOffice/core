@@ -1,6 +1,6 @@
 'encoding UTF-8  Do not remove or change this line!
-'*************************************************************************
-'
+'**************************************************************
+'  
 '  Licensed to the Apache Software Foundation (ASF) under one
 '  or more contributor license agreements.  See the NOTICE file
 '  distributed with this work for additional information
@@ -17,10 +17,73 @@
 '  KIND, either express or implied.  See the License for the
 '  specific language governing permissions and limitations
 '  under the License.
-'
-'*************************************************************************
+'  
+'**************************************************************
+' **
+' ** short description : tools for the property-browser test
+' **
+'\******************************************************************************
 
-*****
+function hShowMacroControls() as boolean
+
+    '///<h3>Tear off the ToolsCollectionBar from the MacroBar</h3>
+    '///<i>Starting point: Basic dialog editor is open and has the focus</i>
+    '///<ul>
+    const CFN = "hShowMacroControls::"
+
+    const MAX_WAIT = 5
+    const SHORT_WAIT = 1
+
+    const VERTICALLY_CENTERED = 50
+    const HORIZONTALLY_CENTERED = 50
+    
+    if ( GVERBOSE ) then printlog( CFN & "Enter" )
+
+    '///+<li>Test whether the ToolsCollectionBar is already open. If yes, exit directly</li>
+    kontext "ToolsCollectionBar"
+    if ( ToolsCollectionBar.exists( SHORT_WAIT ) ) then
+        printlog( CFN & "ToolsCollectionBar is already open." )
+        hShowMacroControls() = true
+        exit function
+    endif
+    
+    '///+<li>Verify that the Dialog Bar is available</li>
+    Kontext "DialogBar"
+    if ( DialogBar.exists( MAX_WAIT ) ) then
+
+        '///+<li>Verify that the controls-button is enabled</li>
+        try        
+            '///+<li>Click on the controls-button to open the ToolsCollectionBar</li>
+            controls.click()
+            
+            '///+<li>Tear off the ToolsCollectionBar from the DialogBar</li>
+            controls.tearOff()
+            
+            '///+<li>Verify that the ToolsCollectionBar is visible and can be accessed</li>
+            kontext "ToolsCollectionBar"
+            if ( ToolsCollectionBar.exists( MAX_WAIT ) ) then
+            
+                '///+<li>Move it to the upper left corner at pos 50/50</li>
+                ToolsCollectionBar.Move ( HORIZONTALLY_CENTERED , VERTICALLY_CENTERED )
+                printlog( CFN & "ToolsCollectionBar is open and has been placed" )
+                hShowMacroControls() = true
+            else
+                printlog( CFN & "ToolsCollectionBar is not available. Aborting." )
+                hShowMacroControls() = false
+            endif
+        catch
+            printlog( CFN & "The Controls-Button is not enabled. Aborting." )
+            hShowMacroControls() = false
+        endcatch	
+    else
+        printlog( CFN & "The Dialog Bar is not available. Aborting." )
+        hShowMacroControls() = false
+    endif
+    '///</ul>    
+        
+end function
+
+'*******************************************************************************
 
 function hGetBasicWorkFile( cMajorID as string ) as string
 

@@ -1,6 +1,6 @@
 'encoding UTF-8  Do not remove or change this line!
-'*************************************************************************
-'
+'**************************************************************
+'  
 '  Licensed to the Apache Software Foundation (ASF) under one
 '  or more contributor license agreements.  See the NOTICE file
 '  distributed with this work for additional information
@@ -17,10 +17,101 @@
 '  KIND, either express or implied.  See the License for the
 '  specific language governing permissions and limitations
 '  under the License.
-'
-'*************************************************************************
+'  
+'**************************************************************
+'*
+'*  short description : helper functions for the wizards
+'*
+'\******************************************************************************
 
-*****
+function hWaitForWizard() as integer
+
+    const CFN = "hWaitForWizard::"
+    const MAXTRIES = 10 
+    
+    '///<h3>Wait for any wizard to open</h3>
+    '///<i>Uses: framework/tools/input/menuentries.txt</i><br>
+    '///<i>NOTE: Not all wizards are known to this function yet.</i><br>
+    '///<u>Input</u>:
+    '///<ol>
+    '///+<li>Nothing</li>
+    '///</ol>
+    '///<u>Returns</u>:
+    '///<ol>
+    '///+<li>Unique ID of the open wizard</li>
+    '///<ul>
+    '///+<li>0: In case of any error</li>
+    '///+<li>1-n: The unique ID of the currently open wizard (integer)</li>
+    '///+</ul>
+    '///</ol>
+    '///<u>Description</u>:
+    '///<ul>        
+    
+    dim iOpen as integer
+    dim iWait as integer
+
+    '///+<li>Determine the open wizard by trying wizard.exists()</li>
+    for iWait = 1 to MAXTRIES
+     
+        iOpen = 0
+    
+        kontext "AutopilotLetter"
+        if ( AutopilotLetter.exists() ) then
+            printlog( CFN & "Autopilot Letter is open" )
+            iOpen = hGetWizardParams( "LETTER" , "ID" )
+            exit for
+	    endif
+
+        kontext "AutopilotFax"
+        if ( AutopilotFax.exists() ) then
+            printlog( CFN & "Autopilot Fax is open" )
+            iOpen = hGetWizardParams( "FAX" , "ID" )
+            exit for
+        endif 
+        
+        kontext "AutopilotAgenda"
+        if ( AutopilotAgenda.exists() ) then
+            printlog( CFN & "Autopilot Agenda is open" )
+            iOpen = hGetWizardParams( "AGENDA" , "ID" )
+            exit for
+        endif  
+        
+        Kontext "MailMergeWizard"
+        if ( MailMergeWizard.exists() ) then
+            printlog( CFN & "Mailmerge Wizard is open" )
+            iOpen = hGetWizardParams( "MAILMERGE" , "ID" )
+            exit for
+        endif
+        
+        Kontext "AutopilotPraesentation1"
+        if ( AutopilotPraesentation1.exists() ) then
+            printlog( CFN & "Presentation Wizard is open" )
+            iOpen = hGetWizardParams( "IMPRESS" , "ID" )
+            exit for
+        endif        
+        
+        Kontext "AutoPilotEuroKonverter"
+        if ( AutoPilotEuroKonverter.exists() ) then
+            printlog( CFN & "Euro Converter is open" )
+            iOpen = hGetWizardParams( "EUROCONV" , "ID" )
+            exit for
+        endif
+        
+        Kontext "DocumentConverter"
+        if ( DocumentConverter.exists( 1 ) ) then
+            printlog( CFN & "Document Converter is open" )
+            iOpen = hGetWizardParams( "DOCCONV" , "ID" )
+            exit for
+        endif
+
+    next iWait
+    
+    hWaitForWizard() = iOpen
+    '///</ul>
+    
+end function    
+
+'*******************************************************************************
 
 function hSetTemplateSavePath( cFile as string ) as integer
 

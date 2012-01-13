@@ -1,6 +1,6 @@
 'encoding UTF-8  Do not remove or change this line!
-'*************************************************************************
-'
+'**************************************************************
+'  
 '  Licensed to the Apache Software Foundation (ASF) under one
 '  or more contributor license agreements.  See the NOTICE file
 '  distributed with this work for additional information
@@ -17,10 +17,67 @@
 '  KIND, either express or implied.  See the License for the
 '  specific language governing permissions and limitations
 '  under the License.
-'
-'*************************************************************************
+'  
+'**************************************************************
+'*
+'* short description : global update test (Standardbar)
+'*
+'\***************************************************************************
 
-*****
+function hAccessStandardBar() as boolean
+
+    '///<h3>Verify that the Standard Bar exists</h3>
+    '///<i>This function works for all gApplications</i><br>
+    '///<u>Input</u>:
+    '///<ol>
+    '///+<li>Nothing</li>
+    '///</ol>
+    '///<u>Returns</u>:
+    '///<ol>
+    '///+<li>Errorcondition (boolean)</li>
+    '///<ul>
+    '///+<li>TRUE if StandardBar exists</li>
+    '///+<li>FALSE if standardBar does not exist</li>
+    '///</ul>
+    '///</ol>
+    '///<u>Description</u>:
+    '///<ul>
+    const CFN = "hAccessStandardBar::"
+    dim brc as boolean
+    
+    printlog( CFN & "Enter" )
+
+    '///+<li>Open a new document</li>
+    hCreateDocument()
+
+    '///+<li>Try to access the standardbar (query .exists())</li>
+    kontext "StandardBar"
+    if ( StandardBar.exists() ) then
+        if ( standardbar.isVisible() ) then
+            printlog( CFN & "StandardBar is visible. Good." )
+            brc = true
+        else
+            warnlog( "The StandardBar is not visible in " & gApplication )
+            brc = false
+        endif
+    else
+        warnlog( "The StandardBar does not exist in " & gApplication )
+        brc = false
+    endif
+
+    '///+<li>Close the navigator</li>
+    kontext "Navigator"
+    hCloseDialog( Navigator, "close,optional" )
+    
+    '///+<li>Close the document</li>
+    hDestroyDocument()
+    hAccessStandardBar() = brc
+    printlog( CFN & "Exit" )
+    '///</ul>
+    
+end function
+
+'*******************************************************************************
 
 function hResetStandardBar() as boolean
 
