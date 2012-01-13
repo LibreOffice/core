@@ -588,7 +588,7 @@ public:
     bool SeekToRec( SvStream& rSt, sal_uInt16 nRecId, sal_uLong nMaxFilePos, DffRecordHeader* pRecHd = NULL, sal_uLong nSkipCount = 0 ) const;
     bool SeekToRec2( sal_uInt16 nRecId1, sal_uInt16 nRecId2, sal_uLong nMaxFilePos, DffRecordHeader* pRecHd = NULL, sal_uLong nSkipCount = 0 ) const;
 
-    static rtl::OUString MSDFFReadZString( SvStream& rIn, sal_uLong nMaxLen, bool bUniCode = sal_False );
+    static rtl::OUString MSDFFReadZString(SvStream& rIn, sal_uInt32 nMaxLen, bool bUniCode = sal_False);
 
     static bool ReadCommonRecordHeader(DffRecordHeader& rRec, SvStream& rIn)
         SAL_WARN_UNUSED_RESULT;

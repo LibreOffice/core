@@ -3744,7 +3744,7 @@ rtl::OUString SvxMSDffManager::ReadDffString(SvStream& rSt, DffRecordHeader aStr
     else if ( aStrHd.nRecType == DFF_PST_TextBytesAtom || aStrHd.nRecType == DFF_PST_TextCharsAtom )
     {
         bool bUniCode=aStrHd.nRecType==DFF_PST_TextCharsAtom;
-        sal_uLong nBytes = aStrHd.nRecLen;
+        sal_uInt32 nBytes = aStrHd.nRecLen;
         aRet = MSDFFReadZString( rSt, nBytes, bUniCode );
         if( !bUniCode )
         {
@@ -4006,31 +4006,17 @@ bool SvxMSDffManager::ReadObjText(SvStream& rSt, SdrObject* pObj)
 
 //static
 rtl::OUString SvxMSDffManager::MSDFFReadZString(SvStream& rIn,
-    sal_uLong nRecLen, bool bUniCode)
+    sal_uInt32 nLen, bool bUniCode)
 {
-    sal_uInt16 nLen = (sal_uInt16)nRecLen;
     if (!nLen)
         return rtl::OUString();
 
     String sBuf;
 
     if( bUniCode )
-    {
-        nLen >>= 1;
-
-        sal_Unicode* pBuf = sBuf.AllocBuffer(nLen);
-        rIn.Read( (sal_Char*)pBuf, nLen << 1 );
-#ifdef OSL_BIGENDIAN
-        for( sal_uInt16 n = 0; n < nLen; ++n, ++pBuf )
-            *pBuf = SWAPSHORT( *pBuf );
-#endif // ifdef OSL_BIGENDIAN
-    }
+        sBuf = read_LEuInt16s_ToOUString(rIn, nLen/2);
     else
-    {
-        boost::scoped_array<sal_Char> xBuffer(new sal_Char[nLen]);
-        nLen = rIn.Read(xBuffer.get(), nLen);
-        sBuf = rtl::OUString(xBuffer.get(), nLen, RTL_TEXTENCODING_MS_1252);
-    }
+        sBuf = read_uInt8s_ToOUString(rIn, nLen, RTL_TEXTENCODING_MS_1252);
 
     return sBuf.EraseTrailingChars( 0 );
 }

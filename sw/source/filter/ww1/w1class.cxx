@@ -84,10 +84,9 @@ String Ww1PlainText::GetText( sal_uLong ulOffset, sal_uLong nLen ) const
     sal_Size nPos = ulFilePos+ulOffset;
 
     bool bSeekOk = rFib.GetStream().Seek(nPos) == nPos;
-    rtl::OString a8BitStr = bSeekOk ?
-        read_uInt8s_ToOString(rFib.GetStream(), nLen) :
-        rtl::OString();
-    return rtl::OStringToOUString(a8BitStr, RTL_TEXTENCODING_MS_1252);
+    return bSeekOk ?
+        read_uInt8s_ToOUString(rFib.GetStream(), nLen, RTL_TEXTENCODING_MS_1252) :
+        rtl::OUString();
 }
 
 ///////////////////////////////////////////////////////////////// Style

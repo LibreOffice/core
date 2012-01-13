@@ -541,13 +541,22 @@ TOOLS_DLLPUBLIC SvStream& endlu( SvStream& rStr );
 /// call endlu() if eStreamCharSet==RTL_TEXTECODING_UNICODE otherwise endl()
 TOOLS_DLLPUBLIC SvStream& endlub( SvStream& rStr );
 
-//Attempt to read nLen 8bit units to an OString, returned rtl::OString's length
-//is number of units successfully read
-TOOLS_DLLPUBLIC rtl::OString read_uInt8s_ToOString(SvStream& rStrm, sal_Size nLen);
+//Attempt to read nUnits 8bit units to an OString, returned rtl::OString's
+//length is number of units successfully read
+TOOLS_DLLPUBLIC rtl::OString read_uInt8s_ToOString(SvStream& rStrm,
+    sal_Size nUnits);
 
-//Attempt to read nLen little endian 16bit units to an OUString, returned
+//Attempt to read nUnits 8bit units to an OUString
+TOOLS_DLLPUBLIC inline rtl::OUString read_uInt8s_ToOUString(SvStream& rStrm,
+    sal_Size nUnits, rtl_TextEncoding eEnc)
+{
+    return rtl::OStringToOUString(read_uInt8s_ToOString(rStrm, nUnits), eEnc);
+}
+
+//Attempt to read nUnits little endian 16bit units to an OUString, returned
 //rtl::OUString's length is number of units successfully read
-TOOLS_DLLPUBLIC rtl::OUString read_LEuInt16s_ToOUString(SvStream& rStrm, sal_Size nLen);
+TOOLS_DLLPUBLIC rtl::OUString read_LEuInt16s_ToOUString(SvStream& rStrm,
+    sal_Size nUnits);
 
 //Attempt to read 8bit units to an OString until a zero terminator is
 //encountered, returned rtl::OString's length is number of units *definitely*
@@ -563,16 +572,18 @@ TOOLS_DLLPUBLIC rtl::OUString read_zeroTerminated_uInt8s_ToOUString(SvStream& rS
 //Attempt to read a pascal-style length (of type prefix) prefixed sequence of
 //8bit units to an OString, returned rtl::OString's length is number of units
 //successfully read.
-template<typename prefix> rtl::OString read_lenPrefixed_uInt8s_ToOString(SvStream& rStrm)
+template<typename prefix>
+rtl::OString read_lenPrefixed_uInt8s_ToOString(SvStream& rStrm)
 {
-    prefix nLen = 0;
-    rStrm >> nLen;
-    return read_uInt8s_ToOString(rStrm, nLen);
+    prefix nUnits = 0;
+    rStrm >> nUnits;
+    return read_uInt8s_ToOString(rStrm, nUnits);
 }
 
 //Attempt to read a pascal-style length (of type prefix) prefixed sequence of
 //8bit units to an OUString
-template<typename prefix> rtl::OUString read_lenPrefixed_uInt8s_ToOUString(SvStream& rStrm,
+template<typename prefix>
+rtl::OUString read_lenPrefixed_uInt8s_ToOUString(SvStream& rStrm,
     rtl_TextEncoding eEnc)
 {
     return rtl::OStringToOUString(read_lenPrefixed_uInt8s_ToOString<prefix>(rStrm), eEnc);
@@ -589,12 +600,12 @@ template<typename prefix> sal_Size write_lenPrefixed_uInt8s_FromOString(SvStream
         "string too long for prefix count to fit in output type");
 
     sal_Size nWritten = 0;
-    prefix nLen = std::min<sal_Size>(rStr.getLength(), std::numeric_limits<prefix>::max());
-    rStrm << nLen;
+    prefix nUnits = std::min<sal_Size>(rStr.getLength(), std::numeric_limits<prefix>::max());
+    rStrm << nUnits;
     if (rStrm.good())
     {
         nWritten += sizeof(prefix);
-        nWritten += rStrm.Write(rStr.getStr(), nLen);
+        nWritten += rStrm.Write(rStr.getStr(), nUnits);
     }
     return nWritten;
 }

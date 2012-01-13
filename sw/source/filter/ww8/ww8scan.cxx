@@ -1963,10 +1963,7 @@ xub_StrLen WW8ScannerBase::WW8ReadString( SvStream& rStrm, String& rStr,
         if( bIsUnicode )
             rStr.Append(String(read_LEuInt16s_ToOUString(rStrm, nLen)));
         else
-        {
-            rtl::OString aByteStr = read_uInt8s_ToOString(rStrm, nLen);
-            rStr.Append(String(rtl::OStringToOUString(aByteStr, eEnc)));
-        }
+            rStr.Append(String(read_uInt8s_ToOUString(rStrm, nLen, eEnc)));
         nTotalRead  += nLen;
         nAktStartCp += nLen;
         if ( nTotalRead != rStr.Len() )
