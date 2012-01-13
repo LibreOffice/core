@@ -202,6 +202,31 @@ sal_Bool IsOOoLockFileUsed()
     return bOOoLockFileUsed;
 }
 
+bool IsLockingUsed()
+{
+    bool bLocking = true;
+    try
+    {
+
+        uno::Reference< uno::XInterface > xCommonConfig = ::comphelper::ConfigurationHelper::openConfig(
+                            ::comphelper::getProcessServiceFactory(),
+                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.Common" ) ),
+                            ::comphelper::ConfigurationHelper::E_STANDARD );
+        if ( !xCommonConfig.is() )
+            throw uno::RuntimeException();
+
+        ::comphelper::ConfigurationHelper::readRelativeKey(
+                xCommonConfig,
+                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Misc/" ) ),
+                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "UseLocking" ) ) ) >>= bLocking;
+    }
+    catch( const uno::Exception& )
+    {
+    }
+
+    return bLocking;
+}
+
 } // anonymous namespace
 //==========================================================
 
@@ -995,6 +1020,11 @@ sal_Bool SfxMedium::LockOrigFileOnDemand( sal_Bool bLoading, sal_Bool bNoUI )
     // otherwise the document should be opened readonly
     // if user cancel the loading the ERROR_ABORT is set
     sal_Bool bResult = sal_False;
+
+    if (!IsLockingUsed())
+    {
+        return sal_True;
+    }
 
     if ( !GetURLObject().HasError() ) try
     {

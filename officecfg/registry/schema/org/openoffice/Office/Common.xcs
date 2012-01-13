@@ -6269,6 +6269,13 @@
         </info>
         <value>true</value>
       </prop>
+      <prop oor:name="UseLocking" oor:type="xs:boolean">
+        <info>
+          <desc>Allows to specify whether locking should be used at all.
+          Use this setting only for debugging purpose.</desc>
+        </info>
+        <value>true</value>
+      </prop>
       <prop oor:name="ShowLinkWarningDialog" oor:type="xs:boolean">
         <info>
           <author>THB</author>
