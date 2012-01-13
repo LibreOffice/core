@@ -106,7 +106,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Pos = MAP_APPFONT ( 6 , 200 ) ;
         Size = MAP_APPFONT ( 182 , 16 ) ;
         WordBreak = TRUE ;
-        Text [ en-US ] = "Drag the fields from the right into the desired position." ;
+        Text [ en-US ] = "Drag the fields into the desired position." ;
     };
     FixedLine FL_LAYOUT
     {
