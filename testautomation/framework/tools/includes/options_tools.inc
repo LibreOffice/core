@@ -1,86 +1,26 @@
 'encoding UTF-8  Do not remove or change this line!
 '*************************************************************************
 '
-' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-' 
-' Copyright 2000, 2010 Oracle and/or its affiliates.
-'
-' OpenOffice.org - a multi-platform office productivity suite
-'
-' This file is part of OpenOffice.org.
-'
-' OpenOffice.org is free software: you can redistribute it and/or modify
-' it under the terms of the GNU Lesser General Public License version 3
-' only, as published by the Free Software Foundation.
-'
-' OpenOffice.org is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU Lesser General Public License version 3 for more details
-' (a copy is included in the LICENSE file that accompanied this code).
-'
-' You should have received a copy of the GNU Lesser General Public License
-' version 3 along with OpenOffice.org.  If not, see
-' <http://www.openoffice.org/license.html>
-' for a copy of the LGPLv3 License.
+'  Licensed to the Apache Software Foundation (ASF) under one
+'  or more contributor license agreements.  See the NOTICE file
+'  distributed with this work for additional information
+'  regarding copyright ownership.  The ASF licenses this file
+'  to you under the Apache License, Version 2.0 (the
+'  "License"); you may not use this file except in compliance
+'  with the License.  You may obtain a copy of the License at
+'  
+'    http://www.apache.org/licenses/LICENSE-2.0
+'  
+'  Unless required by applicable law or agreed to in writing,
+'  software distributed under the License is distributed on an
+'  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+'  KIND, either express or implied.  See the License for the
+'  specific language governing permissions and limitations
+'  under the License.
 '
 '*************************************************************************
-******
-'*
-'* owner : thorsten.bosbach@oracle.com
-'*
-'* short description : tools for options tests
-'*
-'\******************************************************************************
 
-sub GetPathList ( ls1 () as String, ls2 () as String, ls3 () as String )
-
-    Dim lsInterim ( 50 ) as String
-    Dim i as Integer
-    Dim sList as String
-    Dim bNewCreate as Boolean
-    '///routine to get the correct comparison list for path-options
-    '///+ if the list does not exist => CreatePathList
-    '///+ you can find the lists for all languages in separate files
-    '///+[TesttoolPath]\framework\options\input\paths_[LanguageCode].txt
-    ls1 (0) = 0 : ls2 (0) = 0 :  ls3 (0) = 0
-    sList = gTesttoolPath + "framework\optional\input\options\paths_" + iSprache + ".txt"
-    sList = convertpath( sList )
-
-    if App.Dir ( sList ) = "" then
-        bNewCreate = TRUE
-        CreatePathList
-    else
-        bNewCreate = FALSE
-    end if
-
-    if bAsianLan = TRUE then
-
-        select case iSystemSprache
-        case 01, 33, 34, 39, 46, 49
-            ListRead ( lsInterim (), sList, "utf8" )
-        case else
-
-            if bNewCreate = FALSE then
-                CreatePathList
-            endif
-
-            ListRead ( lsInterim (), sList, "utf8" )
-        end select
-
-    else
-        ListRead ( lsInterim (), sList , "utf8" )
-    end if
-
-    for i = 1 to ListCount ( lsInterim () )
-        ListAppend ( ls1 (), Left ( lsInterim (i), Instr ( lsInterim (i), ";" ) - 1 ) )
-        ListAppend ( ls2 (), Mid ( lsInterim (i), Len ( lsInterim (i) ) - 2, 1 ) )
-        ListAppend ( ls3 (), Right  ( lsInterim (i), 1 ) )
-    next i
-
-end sub
-
-'*******************************************************************************
+*****
 
 sub CreatePathList
 

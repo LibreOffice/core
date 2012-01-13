@@ -1,205 +1,26 @@
 'encoding UTF-8  Do not remove or change this line!
 '*************************************************************************
 '
-' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-' 
-' Copyright 2000, 2010 Oracle and/or its affiliates.
-'
-' OpenOffice.org - a multi-platform office productivity suite
-'
-' This file is part of OpenOffice.org.
-'
-' OpenOffice.org is free software: you can redistribute it and/or modify
-' it under the terms of the GNU Lesser General Public License version 3
-' only, as published by the Free Software Foundation.
-'
-' OpenOffice.org is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU Lesser General Public License version 3 for more details
-' (a copy is included in the LICENSE file that accompanied this code).
-'
-' You should have received a copy of the GNU Lesser General Public License
-' version 3 along with OpenOffice.org.  If not, see
-' <http://www.openoffice.org/license.html>
-' for a copy of the LGPLv3 License.
+'  Licensed to the Apache Software Foundation (ASF) under one
+'  or more contributor license agreements.  See the NOTICE file
+'  distributed with this work for additional information
+'  regarding copyright ownership.  The ASF licenses this file
+'  to you under the Apache License, Version 2.0 (the
+'  "License"); you may not use this file except in compliance
+'  with the License.  You may obtain a copy of the License at
+'  
+'    http://www.apache.org/licenses/LICENSE-2.0
+'  
+'  Unless required by applicable law or agreed to in writing,
+'  software distributed under the License is distributed on an
+'  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+'  KIND, either express or implied.  See the License for the
+'  specific language governing permissions and limitations
+'  under the License.
 '
 '*************************************************************************
 
-'*
-'*  owner : gregor.hartmann@oracle.com
-'*
-'*  short description : Update test for the mailmerge wizard
-'*
-'\******************************************************************************
-
-private CSV_DATABASE as string
-
-testcase tUpdtWizardMailMerge
-
-    printlog( "Resource test for the mailmerge wizard" )
-
-    dim brc as boolean
-    dim irc as integer
-    
-    qaerrorlog( "#i54524# - MM-Wizard modifies datasource -> CVS merge conflict" )
-    
-    CSV_DATABASE = hGetWorkPath() & "myDatabase"
-    hDeleteFile( CSV_DATABASE )
-    hRemoveDatabaseConnections()
-
-    
-    hInitSingleDoc()
-    
-    printlog( "Open the Mailmerge-Wizard" )
-    ToolsMailMergeWizard
-    
-    Kontext "MailMergeWizard"
-    brc = hUpdtMMWpage1()
-    if ( not brc ) then
-        warnlog( "MailMergeWizard is not visible, aborting test" )
-        goto endsub
-    endif
-    
-    Kontext "MailMergeWizard"
-    hClickButton( NextButton )
-    hUpdtMMWPage2()
-    
-    Kontext "MailMergeWizard"
-    hClickButton( NextButton )
-    hUpdtMMWpage3()
-    
-    Kontext "MailMergeWizard"
-    hClickButton( NextButton )
-    hUpdtMMWPage4()
-    
-    Kontext "MailMergeWizard"
-    hClickButton( NextButton )
-    hUpdtMMWPage5()
-
-    Kontext "MailMergeWizard"
-    hClickButton( NextButton )
-    hUpdtMMWPage6()
-    
-    Kontext "MailMergeWizard"
-    hClickButton( NextButton )
-    hUpdtMMWPage7()
-    
-    Kontext "MailMergeWizard"
-    hClickNextButton()
-    hUpdtMMWPage8()
-    
-    printlog( "close the wizard" )
-    Kontext "MailMergeWizard"
-    hCloseDialog( MailMergeWizard, "cancel" )
-
-    hRemoveDatabaseConnections()
-    hCloseDocument()
-    hCloseDocument()
-    
-
-endcase
-
-'**********************************************************************
-
-function hUpdtMMWpage1() as boolean
-
-    
-
-    const CFN = "hUpdtMMWpage1::"
-    
-    Kontext "TabMailMergeSourceDocument"
-    if ( not TabMailMergeSourceDocument.exists() ) then
-        warnlog( CFN & "Page 1 could not be accessed" )
-        hUpdtMMWPage1() = false
-        exit function
-    endif
-
-    Kontext "TabMailMergeSourceDocument"
-    if ( BrowseDocument.exists( 1 ) ) then
-        if ( BrowseDocument.isEnabled ) then
-            BrowseDocument.click()
-            
-            Kontext "OeffnenDlg"
-            if ( OeffnenDlg.exists( 1 ) ) then
-                printlog( CFN & "BrowseDocument::File Open Dialog" )
-                call dialogtest( OeffnenDlg )
-                OeffnenDlg.cancel()
-            else
-                warnlog( CFN & "BrowseDocument::FileOpen not open" )
-            endif
-        else
-            warnlog( CFN & "BrowseDocument::Button is disabled" )
-       endif
-    else
-        warnlog( CFN & "BrowseDocument::Button does not exist" )
-    endif
-    
-    Kontext "TabMailMergeSourceDocument"
-    if ( BrowseTemplate.exists( 2 ) ) then
-        if ( BrowseTemplate.isEnabled ) then
-            BrowseTemplate.click()
-            
-            Kontext "Neu"
-            if ( Neu.exists( 1 ) ) then
-                printlog( CFN & "BrowseTemplate::New Dialog" )
-                call dialogtest( Neu )
-                Neu.cancel()
-            else
-                warnlog( CFN & "BrowseTemplate::FileOpen not open" )
-            endif
-        else
-            warnlog( CFN & "BrowseTemplate::Button is disabled" )
-        endif
-    else
-        warnlog( CFN & "BrowseTemplate::Button does not exist" )
-    endif
-        
-    kontext "TabMailMergeSourceDocument"
-    if ( CreateANewDocument.exists( 2 ) ) then
-        if ( CreateANewDocument.isEnabled ) then
-            printlog( CFN & "Check Create new Document" )
-            CreateANewDocument.check()
-        else
-            warnlog( CFN & "CheckBbox is disabled" )
-        endif
-    else
-        warnlog( CFN & "CheckBox does not exist" )
-    endif
-
-    hUpdtMMWPage1() = true
-
-end function
-
-'**********************************************************************
-
-function hUpdtMMWpage2()
-
-
-    const CFN = "hUpdtMMWpage2::"
-
-    Kontext "TabMailMergeDocumentType"
-    if ( not TabMailMergeDocumentType.exists( 2 ) ) then
-        warnlog( CFN & "Page 2 could not be accessed" )
-        exit function
-    endif
-    
-    call dialogtest( TabMailMergeDocumentType )
-    
-    printlog( CFN & "Select to create a letter" )
-    if ( Letter.exists() ) then
-        if ( Letter.isEnabled() ) then
-            Letter.check()
-        else
-            warnlog( CFN & "Cannot check Letter-Checkbox" )
-        endif
-    else
-        warnlog( CFN & "Letter Checkbox does not exist" )
-    endif
-    
-end function   
-
-'*******************************************************************************
+*****
 
 function hUpdtMMWpage3()
 

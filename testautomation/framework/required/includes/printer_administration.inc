@@ -1,129 +1,26 @@
 'encoding UTF-8  Do not remove or change this line!
 '*************************************************************************
 '
-' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-' 
-' Copyright 2000, 2010 Oracle and/or its affiliates.
-'
-' OpenOffice.org - a multi-platform office productivity suite
-'
-' This file is part of OpenOffice.org.
-'
-' OpenOffice.org is free software: you can redistribute it and/or modify
-' it under the terms of the GNU Lesser General Public License version 3
-' only, as published by the Free Software Foundation.
-'
-' OpenOffice.org is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU Lesser General Public License version 3 for more details
-' (a copy is included in the LICENSE file that accompanied this code).
-'
-' You should have received a copy of the GNU Lesser General Public License
-' version 3 along with OpenOffice.org.  If not, see
-' <http://www.openoffice.org/license.html>
-' for a copy of the LGPLv3 License.
+'  Licensed to the Apache Software Foundation (ASF) under one
+'  or more contributor license agreements.  See the NOTICE file
+'  distributed with this work for additional information
+'  regarding copyright ownership.  The ASF licenses this file
+'  to you under the Apache License, Version 2.0 (the
+'  "License"); you may not use this file except in compliance
+'  with the License.  You may obtain a copy of the License at
+'  
+'    http://www.apache.org/licenses/LICENSE-2.0
+'  
+'  Unless required by applicable law or agreed to in writing,
+'  software distributed under the License is distributed on an
+'  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+'  KIND, either express or implied.  See the License for the
+'  specific language governing permissions and limitations
+'  under the License.
 '
 '*************************************************************************
 
-'*
-'* owner : gregor.hartmann@oracle.com
-'*
-'* short description : updatetest for the printer configuration
-'*
-'\******************************************************************************
-
-testcase t_updt_spadmin
-
-    printlog( "Resource test for SPAdmin (Printer administration tool) for Unix(like) OS" )
-
-    if ( gtSysName = "eComStation" ) then
-        printlog( "No SpAdmin for eComStation" )
-        goto endsub
-    endif
-    
-    if ( lcase(gPlatform) = "osx") then
-        printlog( "No SPAdmin on MacOS X" )
-        goto endsub
-    endif
-    
-    if ( gPlatGroup = "w95" ) then
-        printlog( "No SPAdmin on Windows" )
-        goto endsub
-    endif
-
-    const CPRINTER = "tt-testprinter"
-    dim irc as integer
-    dim brc as boolean
-   
-    hShutdownOffice()
-   
-    brc = hOpenSpAdmin()
-    if ( brc ) then
-    
-        brc = hWaitForSpAdmin()
-        if ( not brc ) then
-            warnlog( "SpAdmin is not open, the test cannot continue" )
-            goto endsub
-        endif        
-   
-        irc = hDelPrinter( CPRINTER )
-        select case irc
-        case 0 : printlog( "Maybe printer was left over by prior run?" )
-        case 3 : printlog( "OK, printer does not exist" )
-        end select
-      
-        brc = hWaitForSpAdmin()
-        if ( not brc ) then
-            warnlog( "SpAdmin is not open, the test cannot continue" )
-            goto endsub
-        endif
-        
-        call TestNewPrinter( CPRINTER )
-      
-        ' wait for the spadmin to open, on failure we end the test
-        brc = hWaitForSpAdmin()
-        if ( not brc ) then
-            warnlog( "SpAdmin is not open, the test cannot continue" )
-            goto endsub
-        endif
-        
-        call TestProperties( CPRINTER )        
-      
-        ' wait for the spadmin to open, on failure we end the test
-        brc = hWaitForSpAdmin()
-        if ( not brc ) then
-            warnlog( "SpAdmin is not open, the test cannot continue" )
-            goto endsub
-        endif
-        
-        call TestRename( CPRINTER )
-        
-        ' wait for the spadmin to open, on failure we end the test
-        brc = hWaitForSpAdmin()
-        if ( not brc ) then
-            warnlog( "SpAdmin is not open, the test cannot continue" )
-            goto endsub
-        endif
-        
-        ' wait for the spadmin to open, on failure we end the test
-        brc = hWaitForSpAdmin()
-        if ( not brc ) then
-            warnlog( "SpAdmin is not open, the test cannot continue" )
-            goto endsub
-        endif        
-         
-        
-        irc = hDelPrinter( CPRINTER )
-        if ( irc <> 0 ) then
-            warnlog( "We created a Fax printer but it could not be deleted" )
-        endif
-        
-    endif
-   
-endcase
-
-'*******************************************************************************
+*****
 
 sub TestNewPrinter( cPrinter as string )
 

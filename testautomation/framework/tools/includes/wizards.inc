@@ -1,126 +1,26 @@
 'encoding UTF-8  Do not remove or change this line!
 '*************************************************************************
 '
-' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-' 
-' Copyright 2000, 2010 Oracle and/or its affiliates.
-'
-' OpenOffice.org - a multi-platform office productivity suite
-'
-' This file is part of OpenOffice.org.
-'
-' OpenOffice.org is free software: you can redistribute it and/or modify
-' it under the terms of the GNU Lesser General Public License version 3
-' only, as published by the Free Software Foundation.
-'
-' OpenOffice.org is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU Lesser General Public License version 3 for more details
-' (a copy is included in the LICENSE file that accompanied this code).
-'
-' You should have received a copy of the GNU Lesser General Public License
-' version 3 along with OpenOffice.org.  If not, see
-' <http://www.openoffice.org/license.html>
-' for a copy of the LGPLv3 License.
+'  Licensed to the Apache Software Foundation (ASF) under one
+'  or more contributor license agreements.  See the NOTICE file
+'  distributed with this work for additional information
+'  regarding copyright ownership.  The ASF licenses this file
+'  to you under the Apache License, Version 2.0 (the
+'  "License"); you may not use this file except in compliance
+'  with the License.  You may obtain a copy of the License at
+'  
+'    http://www.apache.org/licenses/LICENSE-2.0
+'  
+'  Unless required by applicable law or agreed to in writing,
+'  software distributed under the License is distributed on an
+'  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+'  KIND, either express or implied.  See the License for the
+'  specific language governing permissions and limitations
+'  under the License.
 '
 '*************************************************************************
-******
-'*
-'*  owner : gregor.hartmann@oracle.com
-'*
-'*  short description : helper functions for the wizards
-'*
-'\******************************************************************************
 
-function hWaitForWizard() as integer
-
-    const CFN = "hWaitForWizard::"
-    const MAXTRIES = 10 
-    
-    '///<h3>Wait for any wizard to open</h3>
-    '///<i>Uses: framework/tools/input/menuentries.txt</i><br>
-    '///<i>NOTE: Not all wizards are known to this function yet.</i><br>
-    '///<u>Input</u>:
-    '///<ol>
-    '///+<li>Nothing</li>
-    '///</ol>
-    '///<u>Returns</u>:
-    '///<ol>
-    '///+<li>Unique ID of the open wizard</li>
-    '///<ul>
-    '///+<li>0: In case of any error</li>
-    '///+<li>1-n: The unique ID of the currently open wizard (integer)</li>
-    '///+</ul>
-    '///</ol>
-    '///<u>Description</u>:
-    '///<ul>        
-    
-    dim iOpen as integer
-    dim iWait as integer
-
-    '///+<li>Determine the open wizard by trying wizard.exists()</li>
-    for iWait = 1 to MAXTRIES
-     
-        iOpen = 0
-    
-        kontext "AutopilotLetter"
-        if ( AutopilotLetter.exists() ) then
-            printlog( CFN & "Autopilot Letter is open" )
-            iOpen = hGetWizardParams( "LETTER" , "ID" )
-            exit for
-	    endif
-
-        kontext "AutopilotFax"
-        if ( AutopilotFax.exists() ) then
-            printlog( CFN & "Autopilot Fax is open" )
-            iOpen = hGetWizardParams( "FAX" , "ID" )
-            exit for
-        endif 
-        
-        kontext "AutopilotAgenda"
-        if ( AutopilotAgenda.exists() ) then
-            printlog( CFN & "Autopilot Agenda is open" )
-            iOpen = hGetWizardParams( "AGENDA" , "ID" )
-            exit for
-        endif  
-        
-        Kontext "MailMergeWizard"
-        if ( MailMergeWizard.exists() ) then
-            printlog( CFN & "Mailmerge Wizard is open" )
-            iOpen = hGetWizardParams( "MAILMERGE" , "ID" )
-            exit for
-        endif
-        
-        Kontext "AutopilotPraesentation1"
-        if ( AutopilotPraesentation1.exists() ) then
-            printlog( CFN & "Presentation Wizard is open" )
-            iOpen = hGetWizardParams( "IMPRESS" , "ID" )
-            exit for
-        endif        
-        
-        Kontext "AutoPilotEuroKonverter"
-        if ( AutoPilotEuroKonverter.exists() ) then
-            printlog( CFN & "Euro Converter is open" )
-            iOpen = hGetWizardParams( "EUROCONV" , "ID" )
-            exit for
-        endif
-        
-        Kontext "DocumentConverter"
-        if ( DocumentConverter.exists( 1 ) ) then
-            printlog( CFN & "Document Converter is open" )
-            iOpen = hGetWizardParams( "DOCCONV" , "ID" )
-            exit for
-        endif
-
-    next iWait
-    
-    hWaitForWizard() = iOpen
-    '///</ul>
-    
-end function    
-
-'*******************************************************************************
+*****
 
 function hSetTemplateSavePath( cFile as string ) as integer
 

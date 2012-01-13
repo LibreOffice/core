@@ -1,107 +1,26 @@
 'encoding UTF-8  Do not remove or change this line!
 '*************************************************************************
 '
-' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-' 
-' Copyright 2000, 2010 Oracle and/or its affiliates.
-'
-' OpenOffice.org - a multi-platform office productivity suite
-'
-' This file is part of OpenOffice.org.
-'
-' OpenOffice.org is free software: you can redistribute it and/or modify
-' it under the terms of the GNU Lesser General Public License version 3
-' only, as published by the Free Software Foundation.
-'
-' OpenOffice.org is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU Lesser General Public License version 3 for more details
-' (a copy is included in the LICENSE file that accompanied this code).
-'
-' You should have received a copy of the GNU Lesser General Public License
-' version 3 along with OpenOffice.org.  If not, see
-' <http://www.openoffice.org/license.html>
-' for a copy of the LGPLv3 License.
+'  Licensed to the Apache Software Foundation (ASF) under one
+'  or more contributor license agreements.  See the NOTICE file
+'  distributed with this work for additional information
+'  regarding copyright ownership.  The ASF licenses this file
+'  to you under the Apache License, Version 2.0 (the
+'  "License"); you may not use this file except in compliance
+'  with the License.  You may obtain a copy of the License at
+'  
+'    http://www.apache.org/licenses/LICENSE-2.0
+'  
+'  Unless required by applicable law or agreed to in writing,
+'  software distributed under the License is distributed on an
+'  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+'  KIND, either express or implied.  See the License for the
+'  specific language governing permissions and limitations
+'  under the License.
 '
 '*************************************************************************
-******
-'*
-'*  owner : gregor.hartmann@oracle.com
-'*
-'*  short description : Tools to ease working with private environment
-'*
-'\******************************************************************************
 
-function hGetPrivateHttpServer( _proxy as string, _port as string ) as boolean
-
-
-    '///<h3>Retrieve the name and port for a private http server</h3><br>
-
-    '///<u>Function parameters:</u><br>
-    '///<ol>
-
-    '///+<li>Fully qualified server name incl. domain (string)</li>
-    '///<ul>
-    '///+<li>The string comes without a protocol part (no http://)</li>
-    '///</ul>
-
-    '///+<li>Server port (string)</li>
-    '///<ul>
-    '///+<li>Please remember limits for integer data type</li>
-    '///</ul>
-
-    '///</ol>
-
-
-    '///<u>Returns:</u><br>
-
-    '///<ol>
-    '///+<li>Error condition (boolean)</li>
-    '///<ul>
-    '///+<li>&quot;TRUE&quot;: Data was retrieved successfully</li>
-    '///+<li>&quot;FALSE&quot;: Any error </li>
-    '///</ul>
-    '///</ol>
-    
-    use "global\tools\includes\optional\t_key_tools.inc"
-
-    const CFN = "hGetPrivateHttpServer::"
-    dim cFile as string
-    dim cDataSet( 100 ) as string
-    dim iErr as integer
-
-    '///<u>Description:</u>
-    '///<ul>
-    '///+<li>Get the source file</li>
-    cFile = hGetPrivateInputFile( false )
-    printlog( CFN & "Using input file: " & cFile )
-    
-    '///+<li>Retrieve the information from the datafile</li>
-    iErr = hGetDataFileSection( cFile, cDataSet(), "http_proxy", "", "" )
-    if ( iErr = 0 ) then
-        hGetPrivateHttpServer() = false
-        exit function
-    endif
-    
-    '///+<li>Extract the proxy name</li>
-    _proxy = hGetValueForKeyAsString( cDataSet(), "name" )
-    
-    '///+<li>Append the domain</li>
-    _proxy = _proxy & hGetValueForKeyAsString( cDataSet(), "domain" )
-    
-    '///+<li>Get the port</li>
-    _port = hGetValueForKeyAsString( cDataSet() , "port" )
-    
-    '///+<li>Print a log</li>
-    printlog( CFN & _proxy & ":" & _port )
-    '///</ul>
-
-    hGetPrivateHttpServer() = true
-
-end function
-
-'*******************************************************************************
+*****
 
 function hGetPrivateFtpServer( _proxy as string, _port as string ) as boolean
 

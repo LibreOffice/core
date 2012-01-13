@@ -1,146 +1,26 @@
 'encoding UTF-8  Do not remove or change this line!
 '*************************************************************************
 '
-' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-' 
-' Copyright 2000, 2010 Oracle and/or its affiliates.
-'
-' OpenOffice.org - a multi-platform office productivity suite
-'
-' This file is part of OpenOffice.org.
-'
-' OpenOffice.org is free software: you can redistribute it and/or modify
-' it under the terms of the GNU Lesser General Public License version 3
-' only, as published by the Free Software Foundation.
-'
-' OpenOffice.org is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU Lesser General Public License version 3 for more details
-' (a copy is included in the LICENSE file that accompanied this code).
-'
-' You should have received a copy of the GNU Lesser General Public License
-' version 3 along with OpenOffice.org.  If not, see
-' <http://www.openoffice.org/license.html>
-' for a copy of the LGPLv3 License.
+'  Licensed to the Apache Software Foundation (ASF) under one
+'  or more contributor license agreements.  See the NOTICE file
+'  distributed with this work for additional information
+'  regarding copyright ownership.  The ASF licenses this file
+'  to you under the Apache License, Version 2.0 (the
+'  "License"); you may not use this file except in compliance
+'  with the License.  You may obtain a copy of the License at
+'  
+'    http://www.apache.org/licenses/LICENSE-2.0
+'  
+'  Unless required by applicable law or agreed to in writing,
+'  software distributed under the License is distributed on an
+'  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+'  KIND, either express or implied.  See the License for the
+'  specific language governing permissions and limitations
+'  under the License.
 '
 '*************************************************************************
 
-'*
-'*  owner : gregor.hartmann@oracle.com
-'*
-'*  short description : Window/Titlebar functionality
-'*
-'\******************************************************************************
-
-testcase tWindowFunctions
-
-    printlog( "Update test for window functions" )
-
-    printlog( "Create initial document" )
-    gApplication = "WRITER"
-    hInitSingleDoc()
-    hInitWriteDocIdentifier( "F_updt_windowfuncs.bas" )
-
-    printlog( "New document" )
-    hNewDocument()
-    if ( getDocumentCount <> 2 ) then
-        warnlog( "Two open documents were expected, found " & getDocumentCount )
-    endif
-
-    kontext "DocumentWriter"
-    printlog( "Close document" )
-    DocumentWriter.close()
-
-    if ( getDocumentCount <> 1 ) then
-        warnlog( "One open document was expected, found " & getDocumentCount )
-    endif
-
-    printlog( "New document" )
-    hNewDocument()
-    if ( getDocumentCount <> 2) then
-        warnlog( "Two open documents were expected, found " & getDocumentCount )
-    endif
-
-    printlog( "Enter some text into the second writer document" )
-    kontext "DocumentWriter"
-    DocumentWriter.TypeKeys( "test" )
-    DocumentWriter.close()
-
-    kontext "active"
-    if ( Active.exists() ) then
-        printlog( "Close messagebox with Cancel (leaves the document open)" )
-        Active.Cancel()
-    else
-        warnlog( "No warning that data will be lost on close of this document" )
-    endif
-
-    kontext "DocumentWriter"
-    if ( getDocumentCount = 2 ) then
-        printlog( "Two documents open. Good." )
-    else
-        warnlog( "Incorrect document count. Expected two, found " & getDocumentCount )
-    endif
-
-    kontext "DocumentWriter"
-    printlog( "Close the document" )
-    FileClose()
-
-    kontext "Active"
-    if ( Active.exists() ) then
-        printlog( "Do not save the document" )
-        Active.No()
-    else
-        warnlog( "Warning: No data loss warning" )
-    endif
-
-    kontext "DocumentWriter"
-    if ( getDocumentCount = 1 ) then
-        printlog( "One document open. Good." )
-    else
-        warnlog( "Incorrect document count. Expected one, found " & getDocumentCount )
-    endif
-
-    Kontext "DocumentWriter"
-    printlog( "Minimize window" )
-    DocumentWriter.Minimize()
-    Wait( 2000 )
-
-    kontext "DocumentWriter"
-    if ( DocumentWriter.IsMin() ) then
-        printlog( "Window is minimized" )
-    else
-        warnlog( "Window not minimized" )
-    endif
-
-    kontext "DocumentWriter"
-    printlog( "Restore window" )
-    DocumentWriter.Restore()
-    Wait( 2000 )
-
-    if ( DocumentWriter.IsRestore() ) then
-        printlog( "Window is Restored" )
-    else
-        warnlog( " * Window not Restored" )
-    endif
-
-    kontext "DocumentWriter"
-    printlog( "Maximize window" )
-    DocumentWriter.Maximize()
-    Wait( 2000 )
-
-    kontext "DocumentWriter"
-    if ( DocumentWriter.IsMax() ) then
-        printlog( "Window is maximized" )
-    else
-        warnlog( " * Window not maximized" )
-    endif
-
-    hDestroyDocument()
-
-endcase
-
-'*******************************************************************************
+*****
 
 sub sAllWindowTitle
 

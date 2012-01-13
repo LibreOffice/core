@@ -1,138 +1,26 @@
 'encoding UTF-8  Do not remove or change this line!
 '*************************************************************************
 '
-' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-' 
-' Copyright 2000, 2010 Oracle and/or its affiliates.
-'
-' OpenOffice.org - a multi-platform office productivity suite
-'
-' This file is part of OpenOffice.org.
-'
-' OpenOffice.org is free software: you can redistribute it and/or modify
-' it under the terms of the GNU Lesser General Public License version 3
-' only, as published by the Free Software Foundation.
-'
-' OpenOffice.org is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU Lesser General Public License version 3 for more details
-' (a copy is included in the LICENSE file that accompanied this code).
-'
-' You should have received a copy of the GNU Lesser General Public License
-' version 3 along with OpenOffice.org.  If not, see
-' <http://www.openoffice.org/license.html>
-' for a copy of the LGPLv3 License.
+'  Licensed to the Apache Software Foundation (ASF) under one
+'  or more contributor license agreements.  See the NOTICE file
+'  distributed with this work for additional information
+'  regarding copyright ownership.  The ASF licenses this file
+'  to you under the Apache License, Version 2.0 (the
+'  "License"); you may not use this file except in compliance
+'  with the License.  You may obtain a copy of the License at
+'  
+'    http://www.apache.org/licenses/LICENSE-2.0
+'  
+'  Unless required by applicable law or agreed to in writing,
+'  software distributed under the License is distributed on an
+'  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+'  KIND, either express or implied.  See the License for the
+'  specific language governing permissions and limitations
+'  under the License.
 '
 '*************************************************************************
 
-'*
-'* owner : gregor.hartmann@oracle.com
-'*
-'* short description : check the internal file dialog ( extended tests )
-'*
-'\******************************************************************************
-
-function hSaveLoadDelSuccess( cFile as string ) as integer
-
-    '///<h3>Successfully save, close, load, close and delete a file</h3>
-    '///<i>Uses</i>: framework\tools\t_stringtools.inc<br><br>
-    '///<u>Input</u>:
-    '///<ol>
-    '///+<li>Filename incl. extension (string)</li>
-    '///</ol>
-    '///<u>Returns</u>:
-    '///<ol>
-    '///+<li>Errorcode (integer)</li>
-    '///<ul>
-    '///+<li>0  = all ok</li>
-    '///+<li>1  = Saving failed</li>
-    '///+<li>2  = Closing the file failed</li> 
-    '///+<li>3  = Reloading failed</li>
-    '///+<li>4  = Closing the file failed</li>
-    '///+<li>5  = Deleting failed</li>
-    '///+<li>-1 = Post operation error</li>
-    '///</ul>
-    '///</ol>
-    '///<u>Description</u>:
-    '///<ul>
-    
-    dim brc as boolean
-    dim cFileExt as string : cFileExt = cFile & hGetSuffix( "current" )
-    
-    const CFN = "hSaveLoadDelSuccess::"
-    
-    printlog( "" )
-    printlog( CFN & "Enter with option: " & cFile & "/" & cFileExt )
-    
-    '///+<li>Close the navigator if it exists</li>
-    kontext "Navigator"
-    hCloseDialog( Navigator, "close,optional" )
-
-    '///+<li>Save the current file, overwriting existing</li>
-    brc = hSaveFileExpectSuccess( cFile , TRUE ) ' save and overwrite
-    if ( brc ) then
-
-        '///+<li>Close the file</li>
-        brc = hDestroyDocument()
-        if ( brc ) then
-        
-            '///+<li>Reload the file</li>
-            brc = hLoadFileExpectSuccess( cFileExt )
-            if ( brc ) then
-            
-                '///+<li>Close the document</li>
-                brc = hDestroyDocument()
-                if ( brc ) then
-                
-                    '///+<li>Delete the file via FileOpen</li>
-                    brc = hDeleteFileViaFileOpen( cFileExt )
-                    if ( brc ) then
-                        printlog( CFN & "Save, close, load, close, delete ok" )
-                        hSaveLoadDelSuccess() = 0
-                    else
-                        warnlog( CFN & "Failed to delete file" )
-                        hSaveLoadDelSuccess() = 5
-                    endif
-                
-                else
-                    warnlog( CFN & "Failed to close file" ) 
-                    hSaveLoadDelSuccess() = 4
-                endif
-            
-            else
-                warnlog( CFN & "Failed to load file" )
-                hSaveLoadDelSuccess() = 3
-            endif
-        
-        
-        else
-            warnlog( CFN & "Closing file failed" )
-            hSaveLoadDelSuccess() = 2
-        endif
-    
-    else
-        warnlog( CFN & "Saving failed" )
-        hSaveLoadDelSuccess() = 1
-    endif
-    
-    '///+<li>Close possible Messagebox (#i33946#)</li>
-    kontext "active"
-    if ( active.exists( 1 ) ) then
-        printlog( CFN & "Unexpected message: " & active.getText() )
-        qaerrorlog( "#i33946# - message when deleting last document in folder" )
-        active.ok()
-        hSaveLoadDelSuccess() = 6
-    endif
-    
-    '///+<li>Close document</li>
-    brc = hDestroyDocument()
-
-    '///</ul>
-
-end function
-
-'*******************************************************************************
+*****
 
 function hLoadFileExpectSuccess( fpath as string ) as boolean
 

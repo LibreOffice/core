@@ -1,88 +1,26 @@
 'encoding UTF-8  Do not remove or change this line!
 '*************************************************************************
 '
-' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-' 
-' Copyright 2000, 2010 Oracle and/or its affiliates.
-'
-' OpenOffice.org - a multi-platform office productivity suite
-'
-' This file is part of OpenOffice.org.
-'
-' OpenOffice.org is free software: you can redistribute it and/or modify
-' it under the terms of the GNU Lesser General Public License version 3
-' only, as published by the Free Software Foundation.
-'
-' OpenOffice.org is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU Lesser General Public License version 3 for more details
-' (a copy is included in the LICENSE file that accompanied this code).
-'
-' You should have received a copy of the GNU Lesser General Public License
-' version 3 along with OpenOffice.org.  If not, see
-' <http://www.openoffice.org/license.html>
-' for a copy of the LGPLv3 License.
+'  Licensed to the Apache Software Foundation (ASF) under one
+'  or more contributor license agreements.  See the NOTICE file
+'  distributed with this work for additional information
+'  regarding copyright ownership.  The ASF licenses this file
+'  to you under the Apache License, Version 2.0 (the
+'  "License"); you may not use this file except in compliance
+'  with the License.  You may obtain a copy of the License at
+'  
+'    http://www.apache.org/licenses/LICENSE-2.0
+'  
+'  Unless required by applicable law or agreed to in writing,
+'  software distributed under the License is distributed on an
+'  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+'  KIND, either express or implied.  See the License for the
+'  specific language governing permissions and limitations
+'  under the License.
 '
 '*************************************************************************
 
-'*
-'*  owner : gregor.hartmann@oracle.com
-'*
-'*  short description : Test modulenames on the tabbar
-'*
-'\******************************************************************************
-
-testcase tBasicIdeModuleNames
-
-    printlog( "Modulenames in BASIC IDE" )
-
-    const CMODULE_VALID1 = "tValidName"
-    const CMODULE_VALID2 = "tValidToo"
-    const TEST_MACRO = "TTMacro1"
-
-    const RC_SUCCESS = 0
-    const RC_FAILURE = 1
-    const ERR_NO_LINES_INSERTED = 0
-
-    dim iCurrentName as integer
-    dim cTabName as string
-
-    gApplication = "WRITER"
-    hCreateDocument()
-
-    hInitBasicIde( CMODULE_VALID1 )
-    if ( hInsertMacroFromFile( TEST_MACRO ) > ERR_NO_LINES_INSERTED ) then
-   
-        cTabName = hGetTabNameFromOrganizer()
-
-        Randomize
-        iCurrentName = Int( 24 * RND ) + 1 ' Range from 1 to 24
-
-        printlog( "Trying with invalid modulename" )
-        cTabName = hCreateInvalidModuleName( iCurrentName )
-        hRenameTab( cTabName )
-        if ( hHandleInvalidNameWarning( cTabname ) ) then
-            printlog( "Warning for invalid modulename displayed" )
-        else
-            warnlog( "Warning for invalid modulename is missing" )
-        endif
-
-        printlog( "Trying with valid modulename" )
-        hRenameTab( CMODULE_VALID2 )
-        if ( hHandleInvalidNameWarning( CMODULE_VALID2 ) ) then
-            warnlog( "Failed to set valid modulename" )
-        endif
-
-    else
-        warnlog( "Failed to insert macro" )
-    endif
-    
-    hFileCloseAll()
-
-endcase
-
-'*******************************************************************************
+*****
 
 testcase tInvalidModuleNames
 

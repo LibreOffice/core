@@ -1,111 +1,26 @@
 'encoding UTF-8  Do not remove or change this line!
 '*************************************************************************
 '
-' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-' 
-' Copyright 2000, 2010 Oracle and/or its affiliates.
-'
-' OpenOffice.org - a multi-platform office productivity suite
-'
-' This file is part of OpenOffice.org.
-'
-' OpenOffice.org is free software: you can redistribute it and/or modify
-' it under the terms of the GNU Lesser General Public License version 3
-' only, as published by the Free Software Foundation.
-'
-' OpenOffice.org is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU Lesser General Public License version 3 for more details
-' (a copy is included in the LICENSE file that accompanied this code).
-'
-' You should have received a copy of the GNU Lesser General Public License
-' version 3 along with OpenOffice.org.  If not, see
-' <http://www.openoffice.org/license.html>
-' for a copy of the LGPLv3 License.
+'  Licensed to the Apache Software Foundation (ASF) under one
+'  or more contributor license agreements.  See the NOTICE file
+'  distributed with this work for additional information
+'  regarding copyright ownership.  The ASF licenses this file
+'  to you under the Apache License, Version 2.0 (the
+'  "License"); you may not use this file except in compliance
+'  with the License.  You may obtain a copy of the License at
+'  
+'    http://www.apache.org/licenses/LICENSE-2.0
+'  
+'  Unless required by applicable law or agreed to in writing,
+'  software distributed under the License is distributed on an
+'  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+'  KIND, either express or implied.  See the License for the
+'  specific language governing permissions and limitations
+'  under the License.
 '
 '*************************************************************************
 
-'*
-'* owner : gregor.hartmann@oracle.com
-'*
-'* short description : check the internal file dialog ( 1. part )
-'*
-'\***************************************************************************
-
-sub CheckDirectoryName( dirname as string )
-    
-    ' Try to create a folder twice and make sure a warning comes up that the
-    ' folder already exists
-    
-    dim i as integer
-    dim FULLPATH as string
-    FULLPATH = gOfficePath + "user\work\" + dirname + "\"
-    
-    printlog( " - Create the folder and verify it's existence" )
-    
-    try
-        
-        for i=1 to 2
-            
-            printlog( " - creating folder for the " + i + ". time" )
-            
-            Kontext "OeffnenDlg"
-            printlog( " - press 'new folder' button" )
-            NeuerOrdner.Click()
-            
-            Kontext "NeuerOrdner"
-            if ( NeuerOrdner.exists( 2 ) ) then
-                printlog( " - name the folder" )
-                OrdnerName.SetText( dirname )
-                printlog( " - press OK")
-                NeuerOrdner.OK()
-            else
-                warnlog( "New Folder dialog not displayed" )
-            endif
-            
-            ' Take care of the File Exists Dialog
-            printlog( " - check for 'File Exists'-Dialog" )
-            Kontext "Active"
-            If Active.Exists() then
-                Active.OK()
-                
-                'if the file exists during first run of the test: just go on
-                if i =  1 then
-                    warnlog( "File exists. Did you clean the output-dir?" )
-                end if
-                
-                'if the active exists, we will return to the 'new folder' dialog
-                'it must be closed as well
-                Kontext "NeuerOrdner"
-                NeuerOrdner.Cancel()
-            else
-                'this should only be displayed on second run
-                if i = 2 then
-                    warnlog( "No message that the folder '" + dirname + "' exists!" )
-                end if
-            end if
-            
-        next i
-        
-        printlog( " - verify the existence of the new directory" )
-        if App.Dir ( ConvertPath ( FULLPATH ), 16 ) = "" then
-            Warnlog( "The directory'" + dirname + "' wasn't created!" )
-        else
-            printlog( " - delete it")
-            App.RmDir ( ConvertPath ( FULLPATH ) )
-        end if
-        
-        
-    catch
-        
-        warnlog( "Could not create the directory. Bugid: #108256# or #106510# ?" )
-        
-    endcatch
-    
-end sub
-
-'*******************************************************************************
+*****
 
 sub CreateInvalidDirectory( dirname as string )
     
