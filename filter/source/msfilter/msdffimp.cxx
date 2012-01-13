@@ -3736,23 +3736,22 @@ Color SvxMSDffManager::MSO_CLR_ToColor( sal_uInt32 nColorCode, sal_uInt16 nConte
     return aColor;
 }
 
-bool SvxMSDffManager::ReadDffString(SvStream& rSt, String& rTxt, DffRecordHeader aStrHd)
+rtl::OUString SvxMSDffManager::ReadDffString(SvStream& rSt, DffRecordHeader aStrHd)
 {
-    bool bRet=sal_False;
+    String aRet;
     if( aStrHd.nRecType == 0x0 && !ReadCommonRecordHeader(aStrHd, rSt) )
         rSt.Seek( aStrHd.nFilePos );
     else if ( aStrHd.nRecType == DFF_PST_TextBytesAtom || aStrHd.nRecType == DFF_PST_TextCharsAtom )
     {
         bool bUniCode=aStrHd.nRecType==DFF_PST_TextCharsAtom;
-        bRet=sal_True;
         sal_uLong nBytes = aStrHd.nRecLen;
-        MSDFFReadZString( rSt, rTxt, nBytes, bUniCode );
+        MSDFFReadZString( rSt, aRet, nBytes, bUniCode );
         if( !bUniCode )
         {
             for ( xub_StrLen n = 0; n < nBytes; n++ )
             {
-                if( rTxt.GetChar( n ) == 0x0B )
-                    rTxt.SetChar( n, ' ' );     // Weicher Umbruch
+                if( aRet.GetChar( n ) == 0x0B )
+                    aRet.SetChar( n, ' ' );     // Weicher Umbruch
                 // TODO: Zeilenumbruch im Absatz via Outliner setzen.
             }
         }
@@ -3760,7 +3759,7 @@ bool SvxMSDffManager::ReadDffString(SvStream& rSt, String& rTxt, DffRecordHeader
     }
     else
         aStrHd.SeekToBegOfRecord( rSt );
-    return bRet;
+    return aRet;
 }
 
 // sj: I just want to set a string for a text object that may contain multiple
@@ -3881,7 +3880,7 @@ bool SvxMSDffManager::ReadObjText(SvStream& rSt, SdrObject* pObj)
                         //case TextSpecInfoAtom
                         case DFF_PST_TextBytesAtom:
                         case DFF_PST_TextCharsAtom:
-                            ReadDffString(rSt, aText, aHd);
+                            aText = ReadDffString(rSt, aHd);
                             break;
                         case DFF_PST_TextRulerAtom               :
                         {

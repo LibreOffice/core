@@ -639,7 +639,7 @@ public:
     static sal_Bool     MakeContentStream( SotStorage * pStor, const GDIMetaFile & );
     static sal_Bool     ConvertToOle2( SvStream& rStm, sal_uInt32 nLen, const GDIMetaFile*,
                                 const SotStorageRef & rDest );
-    static bool ReadDffString(SvStream& rSt, String& rTxt, DffRecordHeader aStrHd = DffRecordHeader());
+    static rtl::OUString ReadDffString(SvStream& rSt, DffRecordHeader aStrHd = DffRecordHeader());
     static bool ReadObjText(SvStream& rSt, SdrObject* pObj);
 
     void SetModel(SdrModel* pModel, long nApplicationScale);
