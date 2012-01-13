@@ -79,8 +79,7 @@
 
 #include "sc.hrc"
 #include "scabstdlg.hxx"
-//  fuer Rad-Maus
-#define SC_DELTA_ZOOM   10
+//  for mouse wheel
 #define MINZOOM_SLIDER 10
 #define MAXZOOM_SLIDER 400
 
@@ -449,9 +448,9 @@ sal_Bool ScPreviewShell::ScrollCommand( const CommandEvent& rCEvt )
         long nOld = pPreview->GetZoom();
         long nNew = nOld;
         if ( pData->GetDelta() < 0 )
-            nNew = Max( (long) MINZOOM, (long)( nOld - SC_DELTA_ZOOM ) );
+            nNew = Max( (long) MINZOOM, (long)round( nOld / ZOOM_FACTOR ));
         else
-            nNew = Min( (long) MAXZOOM, (long)( nOld + SC_DELTA_ZOOM ) );
+            nNew = Min( (long) MAXZOOM, (long)round( nOld * ZOOM_FACTOR ));
 
         if ( nNew != nOld )
         {

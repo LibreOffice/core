@@ -8,4 +8,7 @@
 
 #endif
 
+// zoom factor for Calc, Writer, Draw and Impress
+#define ZOOM_FACTOR    1.2
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

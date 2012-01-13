@@ -52,6 +52,8 @@
 
 #include <IDocumentSettingAccess.hxx>
 
+#include <svx/zoom_def.hxx>
+
 //Das SetVisArea der DocShell darf nicht vom InnerResizePixel gerufen werden.
 //Unsere Einstellungen muessen aber stattfinden.
 #ifndef WB_RIGHT_ALIGNED
@@ -1309,9 +1311,9 @@ sal_Bool SwView::HandleWheelCommands( const CommandEvent& rCEvt )
     {
         sal_uInt16 nFact = pWrtShell->GetViewOptions()->GetZoom();
         if( 0L > pWData->GetDelta() )
-            nFact = static_cast< sal_uInt16 >(Max( 20, nFact - 10 ));
+            nFact = static_cast< sal_uInt16 >(Max( 20, (int)round( nFact / ZOOM_FACTOR )));
         else
-            nFact = static_cast< sal_uInt16 >(Min( 600, nFact + 10 ));
+            nFact = static_cast< sal_uInt16 >(Min( 600, (int)round( nFact * ZOOM_FACTOR )));
 
         SetZoom( SVX_ZOOM_PERCENT, nFact );
         bOk = sal_True;

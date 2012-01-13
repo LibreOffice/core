@@ -82,6 +82,8 @@
 #include <sfx2/request.hxx>
 #include "SpellDialogChildWindow.hxx"
 
+#include <svx/zoom_def.hxx>
+
 #include "Window.hxx"
 #include "fupoor.hxx"
 
@@ -124,8 +126,6 @@ private:
 
 
 namespace sd {
-
-static const int DELTA_ZOOM = 10;
 
 sal_Bool ViewShell::IsPageFlipMode(void) const
 {
@@ -718,9 +718,9 @@ bool ViewShell::HandleScrollCommand(const CommandEvent& rCEvt, ::sd::Window* pWi
                         long        nNewZoom;
 
                         if( pData->GetDelta() < 0L )
-                            nNewZoom = Max( (long) pWin->GetMinZoom(), (long)(nOldZoom - DELTA_ZOOM) );
+                            nNewZoom = Max( (long) pWin->GetMinZoom(), (long)round( nOldZoom / ZOOM_FACTOR ));
                         else
-                            nNewZoom = Min( (long) pWin->GetMaxZoom(), (long)(nOldZoom + DELTA_ZOOM) );
+                            nNewZoom = Min( (long) pWin->GetMaxZoom(), (long)round( nOldZoom * ZOOM_FACTOR ));
 
                         SetZoom( nNewZoom );
                         Invalidate( SID_ATTR_ZOOM );

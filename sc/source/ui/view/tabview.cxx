@@ -149,14 +149,13 @@
 #include <string>
 #include <algorithm>
 
+#include <svx/zoom_def.hxx>
+
 #define SPLIT_MARGIN    30
 #define SC_ICONSIZE     36
 
 #define SC_SCROLLBAR_MIN    30
 #define SC_TABBAR_MIN       6
-
-//  fuer Rad-Maus
-#define SC_DELTA_ZOOM   10
 
 using namespace ::com::sun::star;
 
@@ -1060,9 +1059,9 @@ bool ScTabView::ScrollCommand( const CommandEvent& rCEvt, ScSplitPos ePos )
             long nOld = (long)(( rOldY.GetNumerator() * 100 ) / rOldY.GetDenominator());
             long nNew = nOld;
             if ( pData->GetDelta() < 0 )
-                nNew = Max( (long) MINZOOM, (long)( nOld - SC_DELTA_ZOOM ) );
+                nNew = Max( (long) MINZOOM, (long)round( nOld / ZOOM_FACTOR ));
             else
-                nNew = Min( (long) MAXZOOM, (long)( nOld + SC_DELTA_ZOOM ) );
+                nNew = Min( (long) MAXZOOM, (long)round( nOld * ZOOM_FACTOR ));
 
             if ( nNew != nOld )
             {
