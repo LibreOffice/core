@@ -267,7 +267,7 @@ void FontCache::read()
 
     OString aLine;
     aStream.ReadLine( aLine );
-    if( !aLine.equals( rtl::OString(RTL_CONSTASCII_STRINGPARAM( CACHE_MAGIC )) ) )
+    if (!aLine.equalsL(RTL_CONSTASCII_STRINGPARAM(CACHE_MAGIC)))
     {
         #if OSL_DEBUG_LEVEL >1
         fprintf( stderr, "FontCache::read: cache file %s fails magic test\n", rtl::OUStringToOString(m_aCacheFile, osl_getThreadTextEncoding()).getStr() );
@@ -277,7 +277,6 @@ void FontCache::read()
 
     int nDir = 0;
     FontDirMap* pDir = NULL;
-    xub_StrLen nIndex;
     bool bKeepOnlyUserOverridden = false;
     do
     {
@@ -286,12 +285,12 @@ void FontCache::read()
             aLine.compareTo( RTL_CONSTASCII_STRINGPARAM( "EmptyFontCacheDirectory:" ) ) == 0 )
         {
             bool bEmpty = (aLine.compareTo( RTL_CONSTASCII_STRINGPARAM ("Empty" ) ) == 0);
-            xub_StrLen nSearchIndex = bEmpty ? 24 : 19;
+            sal_Int32 nSearchIndex = bEmpty ? 24 : 19;
 
             OString aDir;
             sal_Int64 nTimestamp = 0;
-            xub_StrLen nTEnd = aLine.indexOf( ':', nSearchIndex );
-            if( nTEnd != STRING_NOTFOUND )
+            sal_Int32 nTEnd = aLine.indexOf( ':', nSearchIndex );
+            if( nTEnd != -1 )
             {
                 rtl::OString aTimeStamp = aLine.copy( nSearchIndex, nTEnd - nSearchIndex );
                 nTimestamp = aTimeStamp.toInt64();
@@ -368,6 +367,8 @@ void FontCache::read()
                     default: break;
                 }
 
+                sal_Int32 nIndex;
+
                 for( nIndex = 0; nIndex < nLen && pLine[nIndex] != ';'; nIndex++ )
                     ;
 
@@ -376,7 +377,7 @@ void FontCache::read()
                                                         sal_True );
                 while( nIndex < nLen )
                 {
-                    xub_StrLen nLastIndex = nIndex+1;
+                    sal_Int32 nLastIndex = nIndex+1;
                     for( nIndex = nLastIndex ; nIndex < nLen && pLine[nIndex] != ';'; nIndex++ )
                         ;
                     if( nIndex - nLastIndex )
