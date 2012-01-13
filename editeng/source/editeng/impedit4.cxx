@@ -270,7 +270,7 @@ sal_uInt32 ImpEditEngine::WriteText( SvStream& rOutput, EditSelection aSel )
                 nEndPos = aSel.Max().GetIndex();
         }
         XubString aTmpStr = aEditDoc.GetParaAsString( pNode, nStartPos, nEndPos );
-        rOutput.WriteByteStringLine( aTmpStr );
+        rOutput.WriteByteStringLine( aTmpStr, rOutput.GetStreamCharSet() );
     }
 
     return rOutput.GetError();
