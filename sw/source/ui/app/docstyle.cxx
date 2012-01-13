@@ -314,7 +314,7 @@ const SwNumRule* lcl_FindNumRule(   SwDoc&  rDoc,
 sal_uInt16 lcl_FindName( const SwPoolFmtList& rLst, SfxStyleFamily eFam,
                         const String& rName )
 {
-    if( rLst.Count() )
+    if(!rLst.empty())
     {
         String sSrch( ' ' );
         switch( eFam )
@@ -327,8 +327,8 @@ sal_uInt16 lcl_FindName( const SwPoolFmtList& rLst, SfxStyleFamily eFam,
         default:; //prevent warning
         }
         sSrch += rName;
-        for( sal_uInt16 i=0; i < rLst.Count(); ++i )
-            if( *rLst[i] == sSrch )
+        for(size_t i = 0; i < rLst.size(); ++i)
+            if(rLst[i] == sSrch)
                 return i;
     }
     return USHRT_MAX;
@@ -361,17 +361,12 @@ sal_Bool FindPhyStyle( SwDoc& rDoc, const String& rName, SfxStyleFamily eFam )
 
 void SwPoolFmtList::Append( char cChar, const String& rStr )
 {
-    String* pStr = new String( cChar );
-    *pStr += rStr;
-    for ( sal_uInt16 i=0; i < Count(); ++i )
-    {
-        if( *operator[](i) == *pStr )
-        {
-            delete pStr;
+    String aStr(cChar);
+    aStr += rStr;
+    for(std::vector<String>::const_iterator i = begin(); i != end(); ++i)
+        if(*i == aStr)
             return;
-        }
-    }
-    Insert( pStr, Count() );
+    push_back(aStr);
 }
 
 /*--------------------------------------------------------------------
@@ -381,7 +376,7 @@ void SwPoolFmtList::Append( char cChar, const String& rStr )
 
 void SwPoolFmtList::Erase()
 {
-    DeleteAndDestroy( 0, Count() );
+    clear();
 }
 
 /*--------------------------------------------------------------------
@@ -2401,7 +2396,7 @@ sal_uInt16  SwStyleSheetIterator::Count()
     // let the list fill correctly!!
     if( !bFirstCalled )
         First();
-    return aLst.Count();
+    return aLst.size();
 }
 
 SfxStyleSheetBase*  SwStyleSheetIterator::operator[]( sal_uInt16 nIdx )
@@ -2409,7 +2404,7 @@ SfxStyleSheetBase*  SwStyleSheetIterator::operator[]( sal_uInt16 nIdx )
     // found
     if( !bFirstCalled )
         First();
-    mxStyleSheet->PresetNameAndFamily( *aLst[ nIdx ] );
+    mxStyleSheet->PresetNameAndFamily( aLst[ nIdx ] );
     mxStyleSheet->SetPhysical( sal_False );
     mxStyleSheet->FillStyleSheet( SwDocStyleSheet::FillOnlyName );
 
@@ -2740,7 +2735,7 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
                             bIsSearchUsed, nsSwGetPoolIdFromName::GET_POOLID_NUMRULE, cNUMRULE);
     }
 
-    if(aLst.Count() > 0)
+    if(!aLst.empty())
     {
         nLastPos = USHRT_MAX;
         return Next();
@@ -2750,10 +2745,10 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
 
 SfxStyleSheetBase*  SwStyleSheetIterator::Next()
 {
-    nLastPos++;
-    if(aLst.Count() > 0 && nLastPos < aLst.Count())
+    ++nLastPos;
+    if(!aLst.empty() && nLastPos < aLst.size())
     {
-        mxIterSheet->PresetNameAndFamily(*aLst[nLastPos]);
+        mxIterSheet->PresetNameAndFamily(aLst[nLastPos]);
         mxIterSheet->SetPhysical( sal_False );
         mxIterSheet->SetMask( nMask );
         if(mxIterSheet->pSet)
@@ -2776,7 +2771,7 @@ SfxStyleSheetBase*  SwStyleSheetIterator::Find( const UniString& rName )
     if( USHRT_MAX != nLastPos )
     {
         // found
-        mxStyleSheet->PresetNameAndFamily(*aLst[nLastPos]);
+        mxStyleSheet->PresetNameAndFamily(aLst[nLastPos]);
         // new name is set, so determine its Data
         mxStyleSheet->FillStyleSheet( SwDocStyleSheet::FillOnlyName );
         if( !mxStyleSheet->IsPhysical() )
@@ -2835,8 +2830,8 @@ void  SwStyleSheetIterator::Notify( SfxBroadcaster&, const SfxHint& rHint )
         {
             sal_uInt16 nTmpPos = lcl_FindName( aLst, pStyle->GetFamily(),
                                            pStyle->GetName() );
-            if( nTmpPos < aLst.Count() )
-                aLst.DeleteAndDestroy( nTmpPos );
+            if( nTmpPos < aLst.size() )
+                aLst.erase(aLst.begin() + nTmpPos);
         }
     }
 }

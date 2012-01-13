@@ -46,14 +46,13 @@ class SwNumRule;
 /*--------------------------------------------------------------------
     Local helper class.
  --------------------------------------------------------------------*/
-class SwPoolFmtList : public SvStringsDtor
+class SwPoolFmtList : public std::vector<String>
 {
 public:
     SwPoolFmtList() {}
     void Append( char cChar, const String& rStr );
     void Erase();
 };
-
 
 /*--------------------------------------------------------------------
     Temporary StyleSheet.
