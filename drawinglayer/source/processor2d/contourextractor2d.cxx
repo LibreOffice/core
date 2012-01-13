@@ -46,9 +46,12 @@ namespace drawinglayer
 {
     namespace processor2d
     {
-        ContourExtractor2D::ContourExtractor2D(const geometry::ViewInformation2D& rViewInformation)
+        ContourExtractor2D::ContourExtractor2D(
+            const geometry::ViewInformation2D& rViewInformation,
+            bool bExtractFillOnly)
         :   BaseProcessor2D(rViewInformation),
-            maExtractedContour()
+            maExtractedContour(),
+            mbExtractFillOnly(bExtractFillOnly)
         {
         }
 
@@ -62,19 +65,22 @@ namespace drawinglayer
             {
                 case PRIMITIVE2D_ID_POLYGONHAIRLINEPRIMITIVE2D :
                 {
-                    // extract hairline in world coordinates
-                    const primitive2d::PolygonHairlinePrimitive2D& rPolygonCandidate(static_cast< const primitive2d::PolygonHairlinePrimitive2D& >(rCandidate));
-                    basegfx::B2DPolygon aLocalPolygon(rPolygonCandidate.getB2DPolygon());
-                    aLocalPolygon.transform(getViewInformation2D().getObjectTransformation());
-
-                    if(aLocalPolygon.isClosed())
+                    if(!mbExtractFillOnly)
                     {
-                        // line polygons need to be represented as open polygons to differentiate them
-                        // from filled polygons
-                        basegfx::tools::openWithGeometryChange(aLocalPolygon);
-                    }
+                        // extract hairline in world coordinates
+                        const primitive2d::PolygonHairlinePrimitive2D& rPolygonCandidate(static_cast< const primitive2d::PolygonHairlinePrimitive2D& >(rCandidate));
+                        basegfx::B2DPolygon aLocalPolygon(rPolygonCandidate.getB2DPolygon());
+                        aLocalPolygon.transform(getViewInformation2D().getObjectTransformation());
 
-                    maExtractedContour.push_back(basegfx::B2DPolyPolygon(aLocalPolygon));
+                        if(aLocalPolygon.isClosed())
+                        {
+                            // line polygons need to be represented as open polygons to differentiate them
+                            // from filled polygons
+                            basegfx::tools::openWithGeometryChange(aLocalPolygon);
+                        }
+
+                        maExtractedContour.push_back(basegfx::B2DPolyPolygon(aLocalPolygon));
+                    }
                     break;
                 }
                 case PRIMITIVE2D_ID_POLYPOLYGONCOLORPRIMITIVE2D :

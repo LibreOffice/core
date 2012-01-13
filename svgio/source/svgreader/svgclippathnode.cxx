@@ -24,9 +24,11 @@
 
 #include <svgio/svgreader/svgclippathnode.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
-#include <drawinglayer/primitive2d/transparenceprimitive2d.hxx>
+#include <drawinglayer/primitive2d/maskprimitive2d.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
+#include <drawinglayer/processor2d/contourextractor2d.hxx>
+#include <basegfx/polygon/b2dpolypolygoncutter.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -133,39 +135,58 @@ namespace svgio
         {
             if(rContent.hasElements())
             {
+                const drawinglayer::geometry::ViewInformation2D aViewInformation2D;
                 drawinglayer::primitive2d::Primitive2DSequence aClipTarget;
+                basegfx::B2DPolyPolygon aClipPolyPolygon;
 
                 // get clipPath definition as primitives
                 decomposeSvgNode(aClipTarget, true);
 
                 if(aClipTarget.hasElements())
                 {
+                    // extract filled plygons as base for a mask PolyPolygon
+                    drawinglayer::processor2d::ContourExtractor2D aExtractor(aViewInformation2D, true);
+
+                    aExtractor.process(aClipTarget);
+
+                    const basegfx::B2DPolyPolygonVector& rResult(aExtractor.getExtractedContour());
+                    const sal_uInt32 nSize(rResult.size());
+
+                    if(nSize > 1)
+                    {
+                        // merge to single clipPolyPolygon
+                        aClipPolyPolygon = basegfx::tools::mergeToSinglePolyPolygon(rResult);
+                    }
+                    else
+                    {
+                        aClipPolyPolygon = rResult[0];
+                    }
+                }
+
+                if(aClipPolyPolygon.count())
+                {
                     if(objectBoundingBox == getClipPathUnits())
                     {
-                        // clip is object-relative, embed in content transformation
+                        // clip is object-relative, transform using content transformation
                         const basegfx::B2DRange aContentRange(
                             drawinglayer::primitive2d::getB2DRangeFromPrimitive2DSequence(
                                 rContent,
-                                drawinglayer::geometry::ViewInformation2D()));
+                                aViewInformation2D));
 
-                        const drawinglayer::primitive2d::Primitive2DReference xTransform(
-                            new drawinglayer::primitive2d::TransformPrimitive2D(
-                                basegfx::tools::createScaleTranslateB2DHomMatrix(
-                                    aContentRange.getRange(),
-                                    aContentRange.getMinimum()),
-                                aClipTarget));
-
-                        aClipTarget = drawinglayer::primitive2d::Primitive2DSequence(&xTransform, 1);
+                        aClipPolyPolygon.transform(
+                            basegfx::tools::createScaleTranslateB2DHomMatrix(
+                                aContentRange.getRange(),
+                                aContentRange.getMinimum()));
                     }
 
-                    // redefine target. Use TransparencePrimitive2D with created clip
+                    // redefine target. Use MaskPrimitive2D with created clip
                     // geometry. Using the automatically set mbIsClipPathContent at
                     // SvgStyleAttributes the clip definition is without fill, stroke,
-                    // and strokeWidth and forced to black, thus being 100% opaque
+                    // and strokeWidth and forced to black
                     const drawinglayer::primitive2d::Primitive2DReference xEmbedTransparence(
-                        new drawinglayer::primitive2d::TransparencePrimitive2D(
-                            rContent,
-                            aClipTarget));
+                        new drawinglayer::primitive2d::MaskPrimitive2D(
+                            aClipPolyPolygon,
+                            rContent));
 
                     rContent = drawinglayer::primitive2d::Primitive2DSequence(&xEmbedTransparence, 1);
                 }

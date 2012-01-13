@@ -1200,8 +1200,8 @@ basegfx::B2DPolyPolygon SdrObject::TakeContour() const
             // use neutral ViewInformation
             const drawinglayer::geometry::ViewInformation2D aViewInformation2D;
 
-            // create extractor, process and get result
-            drawinglayer::processor2d::ContourExtractor2D aExtractor(aViewInformation2D);
+            // create extractor, process and get result (with hairlines as opened polygons)
+            drawinglayer::processor2d::ContourExtractor2D aExtractor(aViewInformation2D, false);
             aExtractor.process(xSequence);
             const basegfx::B2DPolyPolygonVector& rResult(aExtractor.getExtractedContour());
             const sal_uInt32 nSize(rResult.size());
