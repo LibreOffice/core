@@ -44,7 +44,6 @@ class SfxMedium;
 class SfxViewFrame;
 class SdrObject;
 class SvxMacroTableDtor;
-class SvStringsDtor;
 class SwDoc;
 class SwPaM;
 class ViewShell;
@@ -800,8 +799,8 @@ private:
                         SfxItemSet& rCSS1ItemSet,
                         SvxCSS1PropertyInfo& rCSS1PropInfo,
                         const SvxMacroTableDtor& rMacroTbl,
-                        const SvStringsDtor& rUnoMacroTbl,
-                        const SvStringsDtor& rUnoMacroParamTbl,
+                        const std::vector<String>& rUnoMacroTbl,
+                        const std::vector<String>& rUnoMacroParamTbl,
                         sal_Bool bSetPropSet = sal_True,
                         sal_Bool bHidden = sal_False );
     void SetControlSize( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rShape, const Size& rTextSz,

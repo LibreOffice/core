@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <hintids.hxx>
 #include <comphelper/string.hxx>
 #include <vcl/svapp.hxx>
@@ -205,8 +203,8 @@ class SwHTMLForm_Impl
     uno::Reference< drawing::XShape >               xShape;
 
     String                      sText;
-    SvStringsDtor               aStringList;
-    SvStringsDtor               aValueList;
+    std::vector<String>         aStringList;
+    std::vector<String>         aValueList;
     std::vector<sal_uInt16>     aSelectedList;
 
 public:
@@ -256,16 +254,16 @@ public:
     String& GetText() { return sText; }
     void EraseText() { sText = aEmptyStr; }
 
-    SvStringsDtor& GetStringList() { return aStringList; }
+    std::vector<String>& GetStringList() { return aStringList; }
     void EraseStringList()
     {
-        aStringList.DeleteAndDestroy( 0, aStringList.Count() );
+        aStringList.clear();
     }
 
-    SvStringsDtor& GetValueList() { return aValueList; }
+    std::vector<String>& GetValueList() { return aValueList; }
     void EraseValueList()
     {
-        aValueList.DeleteAndDestroy( 0, aValueList.Count() );
+        aValueList.clear();
     }
 
     std::vector<sal_uInt16>& GetSelectedList() { return aSelectedList; }
@@ -818,8 +816,8 @@ void SwHTMLParser::SetControlSize( const uno::Reference< drawing::XShape >& rSha
 static void lcl_html_setEvents(
         const uno::Reference< script::XEventAttacherManager > & rEvtMn,
         sal_uInt32 nPos, const SvxMacroTableDtor& rMacroTbl,
-        const SvStringsDtor& rUnoMacroTbl,
-        const SvStringsDtor& rUnoMacroParamTbl,
+        const std::vector<String>& rUnoMacroTbl,
+        const std::vector<String>& rUnoMacroParamTbl,
         const String& rType )
 {
     // Erstmal muss die Anzahl der Events ermittelt werden ...
@@ -834,9 +832,9 @@ static void lcl_html_setEvents(
         if( pMacro && aEventListenerTable[i] )
             nEvents++;
     }
-    for( i=0; i< rUnoMacroTbl.Count(); i++ )
+    for( i=0; i< rUnoMacroTbl.size(); i++ )
     {
-        const String& rStr = *rUnoMacroTbl[i];
+        const String& rStr(rUnoMacroTbl[i]);
         xub_StrLen nIndex = 0;
         if( !rStr.GetToken( 0, '-', nIndex ).Len() || STRING_NOTFOUND == nIndex )
             continue;
@@ -867,9 +865,9 @@ static void lcl_html_setEvents(
         }
     }
 
-    for( i=0; i< rUnoMacroTbl.Count(); i++ )
+    for( i=0; i< rUnoMacroTbl.size(); ++i )
     {
-        const String& rStr = *rUnoMacroTbl[i];
+        const String& rStr = rUnoMacroTbl[i];
         xub_StrLen nIndex = 0;
         String sListener( rStr.GetToken( 0, '-', nIndex ) );
         if( !sListener.Len() || STRING_NOTFOUND == nIndex )
@@ -890,16 +888,16 @@ static void lcl_html_setEvents(
         rDesc.ScriptCode = sCode;
         rDesc.AddListenerParam = OUString();
 
-        if( rUnoMacroParamTbl.Count() )
+        if(!rUnoMacroParamTbl.empty())
         {
             String sSearch( sListener );
             sSearch += '-';
             sSearch += sMethod;
             sSearch += '-';
             xub_StrLen nLen = sSearch.Len();
-            for( sal_uInt16 j=0; j < rUnoMacroParamTbl.Count(); j++ )
+            for(size_t j = 0; j < rUnoMacroParamTbl.size(); ++j)
             {
-                const String& rParam = *rUnoMacroParamTbl[j];
+                const String& rParam = rUnoMacroParamTbl[j];
                 if( rParam.CompareTo( sSearch, nLen ) == COMPARE_EQUAL &&
                     rParam.Len() > nLen )
                 {
@@ -913,25 +911,24 @@ static void lcl_html_setEvents(
 }
 
 static void lcl_html_getEvents( const String& rOption, const String& rValue,
-                                SvStringsDtor& rUnoMacroTbl,
-                                SvStringsDtor& rUnoMacroParamTbl )
+                                std::vector<String>& rUnoMacroTbl,
+                                std::vector<String>& rUnoMacroParamTbl )
 {
     if( rOption.CompareIgnoreCaseToAscii( OOO_STRING_SVTOOLS_HTML_O_sdevent,
                             sizeof(OOO_STRING_SVTOOLS_HTML_O_sdevent)-1 ) == COMPARE_EQUAL )
     {
-        String *pEvent = new String( rOption.Copy(sizeof(OOO_STRING_SVTOOLS_HTML_O_sdevent)-1) );
-        *pEvent += '-';
-        *pEvent += rValue;
-        rUnoMacroTbl.Insert( pEvent, rUnoMacroTbl.Count() );
+        String aEvent(rOption.Copy(sizeof(OOO_STRING_SVTOOLS_HTML_O_sdevent)-1));
+        aEvent += '-';
+        aEvent += rValue;
+        rUnoMacroTbl.push_back(aEvent);
     }
     else if( rOption.CompareIgnoreCaseToAscii( OOO_STRING_SVTOOLS_HTML_O_sdaddparam,
                             sizeof(OOO_STRING_SVTOOLS_HTML_O_sdaddparam)-1 ) == COMPARE_EQUAL )
     {
-        String *pParam =
-                    new String( rOption.Copy( sizeof(OOO_STRING_SVTOOLS_HTML_O_sdaddparam)-1 ) );
-        *pParam += '-';
-        *pParam += rValue;
-        rUnoMacroParamTbl.Insert( pParam, rUnoMacroParamTbl.Count() );
+        String aParam(rOption.Copy( sizeof(OOO_STRING_SVTOOLS_HTML_O_sdaddparam)-1 ) );
+        aParam += '-';
+        aParam += rValue;
+        rUnoMacroParamTbl.push_back(aParam);
     }
 }
 
@@ -940,8 +937,8 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
         const uno::Reference< beans::XPropertySet > & rFCompPropSet,
         const Size& rSize, sal_Int16 eVertOri, sal_Int16 eHoriOri,
         SfxItemSet& rCSS1ItemSet, SvxCSS1PropertyInfo& rCSS1PropInfo,
-        const SvxMacroTableDtor& rMacroTbl, const SvStringsDtor& rUnoMacroTbl,
-        const SvStringsDtor& rUnoMacroParamTbl, sal_Bool bSetFCompPropSet,
+        const SvxMacroTableDtor& rMacroTbl, const std::vector<String>& rUnoMacroTbl,
+        const std::vector<String>& rUnoMacroParamTbl, sal_Bool bSetFCompPropSet,
         sal_Bool bHidden )
 {
     uno::Reference< drawing::XShape >  xShape;
@@ -1296,7 +1293,7 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
     // auch schon Fokus-Events verschickt. Damit die nicht evtl. schon
     // vorhendene JavaSCript-Eents rufen, werden die Events nachtraeglich
     // gesetzt.
-    if( rMacroTbl.Count() || rUnoMacroTbl.Count() )
+    if( rMacroTbl.Count() || !rUnoMacroTbl.empty() )
     {
         lcl_html_setEvents( pFormImpl->GetControlEventManager(),
                             rFormComps->getCount() - 1,
@@ -1334,8 +1331,8 @@ void SwHTMLParser::NewForm( sal_Bool bAppend )
     sal_uInt16 nEncType = FormSubmitEncoding_URL;
     sal_uInt16 nMethod = FormSubmitMethod_GET;
     SvxMacroTableDtor aMacroTbl;
-    SvStringsDtor aUnoMacroTbl;
-    SvStringsDtor aUnoMacroParamTbl;
+    std::vector<String> aUnoMacroTbl;
+    std::vector<String> aUnoMacroParamTbl;
     SvKeyValueIterator *pHeaderAttrs = pFormImpl->GetHeaderAttrs();
     ScriptType eDfltScriptType = GetScriptType( pHeaderAttrs );
     const String& rDfltScriptType = GetScriptTypeString( pHeaderAttrs );
@@ -1496,8 +1493,8 @@ void SwHTMLParser::InsertInput()
     String sImgSrc, aId, aClass, aStyle, sText;
     String sName;
     SvxMacroTableDtor aMacroTbl;
-    SvStringsDtor aUnoMacroTbl;
-    SvStringsDtor aUnoMacroParamTbl;
+    std::vector<String> aUnoMacroTbl;
+    std::vector<String> aUnoMacroParamTbl;
     sal_uInt16 nSize = 0;
     sal_Int16 nMaxLen = 0;
     sal_Int16 nChecked = STATE_NOCHECK;
@@ -1996,8 +1993,8 @@ void SwHTMLParser::NewTextArea()
     String sName;
     sal_Int32 nTabIndex = TABINDEX_MAX + 1;
     SvxMacroTableDtor aMacroTbl;
-    SvStringsDtor aUnoMacroTbl;
-    SvStringsDtor aUnoMacroParamTbl;
+    std::vector<String> aUnoMacroTbl;
+    std::vector<String> aUnoMacroParamTbl;
     sal_uInt16 nRows = 0, nCols = 0;
     sal_uInt16 nWrap = HTML_WM_OFF;
     sal_Bool bDisabled = sal_False;
@@ -2286,8 +2283,8 @@ void SwHTMLParser::NewSelect()
     String sName;
     sal_Int32 nTabIndex = TABINDEX_MAX + 1;
     SvxMacroTableDtor aMacroTbl;
-    SvStringsDtor aUnoMacroTbl;
-    SvStringsDtor aUnoMacroParamTbl;
+    std::vector<String> aUnoMacroTbl;
+    std::vector<String> aUnoMacroParamTbl;
     sal_Bool bMultiple = sal_False;
     sal_Bool bDisabled = sal_False;
     nSelectEntryCnt = 1;
@@ -2510,22 +2507,21 @@ void SwHTMLParser::EndSelect()
     // die Groesse anpassen
     Size aNewSz( MINFLY, MINFLY );
 
-    sal_uInt16 nEntryCnt = pFormImpl->GetStringList().Count();
-    if( nEntryCnt )
+    size_t nEntryCnt = pFormImpl->GetStringList().size();
+    if(!pFormImpl->GetStringList().empty())
     {
         Sequence<OUString> aList( (sal_Int32)nEntryCnt );
         Sequence<OUString> aValueList( (sal_Int32)nEntryCnt );
         OUString *pStrings = aList.getArray();
         OUString *pValues = aValueList.getArray();
-        sal_uInt16 i;
 
-        for( i = 0; i < nEntryCnt; i++ )
+        for(size_t i = 0; i < nEntryCnt; ++i)
         {
-            rtl::OUString sText( *pFormImpl->GetStringList()[i] );
+            rtl::OUString sText(pFormImpl->GetStringList()[i]);
             sText = comphelper::string::stripEnd(sText, ' ');
             pStrings[i] = sText;
 
-            sText = *pFormImpl->GetValueList()[i];
+            sText = pFormImpl->GetValueList()[i];
             pValues[i] = sText;
         }
 
@@ -2553,7 +2549,7 @@ void SwHTMLParser::EndSelect()
         }
         Sequence<sal_Int16> aSelList( (sal_Int32)nSelCnt );
         sal_Int16 *pSels = aSelList.getArray();
-        for( i=0; i<nSelCnt; i++ )
+        for(size_t i = 0; i < nSelCnt; ++i)
         {
             pSels[i] = (sal_Int16)pFormImpl->GetSelectedList()[i];
         }
@@ -2619,9 +2615,9 @@ void SwHTMLParser::InsertSelectOption()
         }
     }
 
-    sal_uInt16 nEntryCnt = pFormImpl->GetStringList().Count();
-    pFormImpl->GetStringList().Insert( new String( aEmptyStr ), nEntryCnt );
-    pFormImpl->GetValueList().Insert( new String( aValue ), nEntryCnt );
+    sal_uInt16 nEntryCnt = pFormImpl->GetStringList().size();
+    pFormImpl->GetStringList().push_back(aEmptyStr);
+    pFormImpl->GetValueList().push_back(aValue);
     if( bLBEntrySelected )
     {
         pFormImpl->GetSelectedList().push_back( nEntryCnt );
@@ -2634,10 +2630,9 @@ void SwHTMLParser::InsertSelectText()
     OSL_ENSURE( pFormImpl && pFormImpl->GetFCompPropSet().is(),
             "kein Select-Control" );
 
-    sal_uInt16 nEntryCnt = pFormImpl->GetStringList().Count();
-    if( nEntryCnt )
+    if(!pFormImpl->GetStringList().empty())
     {
-        String& rText = *pFormImpl->GetStringList()[nEntryCnt-1];
+        String& rText = pFormImpl->GetStringList().back();
 
         if( aToken.Len() && ' '==aToken.GetChar( 0 ) )
         {
