@@ -359,7 +359,6 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
         it = m_aFonts.find( nID );
         return it == m_aFonts.end() ? NULL : it->second;
     }
-    rtl::OString getXLFD( PrintFont* pFont ) const;
     void fillPrintFontInfo( PrintFont* pFont, FastPrintFontInfo& rInfo ) const;
     void fillPrintFontInfo( PrintFont* pFont, PrintFontInfo& rInfo ) const;
 
