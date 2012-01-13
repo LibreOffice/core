@@ -601,7 +601,7 @@ void DffPropertyReader::ReadPropSet( SvStream& rIn, void* pClientData ) const
 
 #ifdef DBG_CUSTOMSHAPE
 
-    String aURLStr;
+    rtl::OUString aURLStr;
 
     if( ::utl::LocalFileHelper::ConvertPhysicalNameToURL( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("d:\\ashape.dbg")), aURLStr ) )
     {
@@ -1091,19 +1091,19 @@ void SvxMSDffManager::SolveSolver( const SvxMSDffSolverContainer& rSolver )
                             {
                                 if ( nN )
                                 {
-                                    String aPropName( RTL_CONSTASCII_USTRINGPARAM( "EndShape" ) );
+                                    rtl::OUString aPropName( RTL_CONSTASCII_USTRINGPARAM( "EndShape" ) );
                                     aAny <<= aXShape;
                                     SetPropValue( aAny, xPropSet, aPropName, sal_True );
-                                    aPropName  = String( RTL_CONSTASCII_USTRINGPARAM( "EndGluePointIndex" ) );
+                                    aPropName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "EndGluePointIndex" ) );
                                     aAny <<= nId;
                                     SetPropValue( aAny, xPropSet, aPropName, sal_True );
                                 }
                                 else
                                 {
-                                    String aPropName( RTL_CONSTASCII_USTRINGPARAM( "StartShape" ) );
+                                    rtl::OUString aPropName( RTL_CONSTASCII_USTRINGPARAM( "StartShape" ) );
                                     aAny <<= aXShape;
                                     SetPropValue( aAny, xPropSet, aPropName, sal_True );
-                                    aPropName = String( RTL_CONSTASCII_USTRINGPARAM( "StartGluePointIndex" ) );
+                                    aPropName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "StartGluePointIndex" ) );
                                     aAny <<= nId;
                                     SetPropValue( aAny, xPropSet, aPropName, sal_True );
                                 }
@@ -1126,7 +1126,7 @@ void SvxMSDffManager::SolveSolver( const SvxMSDffSolverContainer& rSolver )
 static basegfx::B2DPolygon GetLineArrow( const sal_Int32 nLineWidth, const MSO_LineEnd eLineEnd,
     const MSO_LineEndWidth eLineWidth, const MSO_LineEndLength eLineLenght,
     sal_Int32& rnArrowWidth, sal_Bool& rbArrowCenter,
-    String& rsArrowName, sal_Bool bScaleArrow )
+    rtl::OUString& rsArrowName, sal_Bool bScaleArrow )
 {
     basegfx::B2DPolygon aRetval;
     double      fLineWidth = nLineWidth < 70 ? 70.0 : nLineWidth;
@@ -1154,6 +1154,7 @@ static basegfx::B2DPolygon GetLineArrow( const sal_Int32 nLineWidth, const MSO_L
     }
 
     rbArrowCenter = sal_False;
+    rtl::OUStringBuffer aArrowName;
     switch ( eLineEnd )
     {
         case mso_lineArrowEnd :
@@ -1164,7 +1165,7 @@ static basegfx::B2DPolygon GetLineArrow( const sal_Int32 nLineWidth, const MSO_L
             aTriangle.append(basegfx::B2DPoint( 0.0, fLenghtMul * fLineWidth ));
             aTriangle.setClosed(true);
             aRetval = aTriangle;
-            rsArrowName = String( RTL_CONSTASCII_STRINGPARAM( "msArrowEnd " ), RTL_TEXTENCODING_UTF8 );
+            aArrowName.appendAscii(RTL_CONSTASCII_STRINGPARAM("msArrowEnd "));
         }
         break;
 
@@ -1193,7 +1194,7 @@ static basegfx::B2DPolygon GetLineArrow( const sal_Int32 nLineWidth, const MSO_L
             aTriangle.append(basegfx::B2DPoint( 0.0, fLenghtMul * fLineWidth * 0.91 ));
             aTriangle.setClosed(true);
             aRetval = aTriangle;
-            rsArrowName = String( RTL_CONSTASCII_STRINGPARAM( "msArrowOpenEnd " ), RTL_TEXTENCODING_UTF8 );
+            aArrowName.appendAscii(RTL_CONSTASCII_STRINGPARAM("msArrowOpenEnd "));
         }
         break;
         case mso_lineArrowStealthEnd :
@@ -1205,7 +1206,7 @@ static basegfx::B2DPolygon GetLineArrow( const sal_Int32 nLineWidth, const MSO_L
             aTriangle.append(basegfx::B2DPoint( 0.0, fLenghtMul * fLineWidth ));
             aTriangle.setClosed(true);
             aRetval = aTriangle;
-            rsArrowName = String( RTL_CONSTASCII_STRINGPARAM( "msArrowStealthEnd " ), RTL_TEXTENCODING_UTF8 );
+            aArrowName.appendAscii(RTL_CONSTASCII_STRINGPARAM("msArrowStealthEnd "));
         }
         break;
         case mso_lineArrowDiamondEnd :
@@ -1218,7 +1219,7 @@ static basegfx::B2DPolygon GetLineArrow( const sal_Int32 nLineWidth, const MSO_L
             aTriangle.setClosed(true);
             aRetval = aTriangle;
             rbArrowCenter = sal_True;
-            rsArrowName = String( RTL_CONSTASCII_STRINGPARAM( "msArrowDiamondEnd " ), RTL_TEXTENCODING_UTF8 );
+            aArrowName.appendAscii(RTL_CONSTASCII_STRINGPARAM("msArrowDiamondEnd "));
         }
         break;
         case mso_lineArrowOvalEnd :
@@ -1227,12 +1228,13 @@ static basegfx::B2DPolygon GetLineArrow( const sal_Int32 nLineWidth, const MSO_L
                                 (sal_Int32)( fWidthMul * fLineWidth * 0.50 ),
                                     (sal_Int32)( fLenghtMul * fLineWidth * 0.50 ), 0, 3600 ).getB2DPolygon();
             rbArrowCenter = sal_True;
-            rsArrowName = String( RTL_CONSTASCII_STRINGPARAM( "msArrowOvalEnd " ), RTL_TEXTENCODING_UTF8 );
+            aArrowName.appendAscii(RTL_CONSTASCII_STRINGPARAM("msArrowOvalEnd "));
         }
         break;
         default: break;
     }
-    rsArrowName.Append( String::CreateFromInt32( nLineNumber ) );
+    aArrowName.append(nLineNumber);
+    rsArrowName = aArrowName.makeStringAndClear();
     rnArrowWidth = (sal_Int32)( fLineWidth * fWidthMul );
 
     return aRetval;
@@ -1315,10 +1317,10 @@ void DffPropertyReader::ApplyLineAttributes( SfxItemSet& rSet, const MSO_SPT eSh
                 break;
             }
 
-            rSet.Put( XLineDashItem( String(), XDash( eDash, nDots, nDotLen, nDashes, nDashLen, nDistance ) ) );
+            rSet.Put( XLineDashItem( rtl::OUString(), XDash( eDash, nDots, nDotLen, nDashes, nDashLen, nDistance ) ) );
             rSet.Put( XLineStyleItem( XLINE_DASH ) );
         }
-        rSet.Put( XLineColorItem( String(), rManager.MSO_CLR_ToColor( GetPropertyValue( DFF_Prop_lineColor ), DFF_Prop_lineColor ) ) );
+        rSet.Put( XLineColorItem( rtl::OUString(), rManager.MSO_CLR_ToColor( GetPropertyValue( DFF_Prop_lineColor ), DFF_Prop_lineColor ) ) );
         if ( IsProperty( DFF_Prop_lineOpacity ) )
         {
             double nTrans = GetPropertyValue(DFF_Prop_lineOpacity, 0x10000);
@@ -1356,7 +1358,7 @@ void DffPropertyReader::ApplyLineAttributes( SfxItemSet& rSet, const MSO_SPT eSh
 
                 sal_Int32   nArrowWidth;
                 sal_Bool    bArrowCenter;
-                String      aArrowName;
+                rtl::OUString aArrowName;
                 basegfx::B2DPolygon aPoly(GetLineArrow( nLineWidth, eLineEnd, eWidth, eLenght, nArrowWidth, bArrowCenter, aArrowName, bScaleArrows ));
 
                 rSet.Put( XLineStartWidthItem( nArrowWidth ) );
@@ -1374,7 +1376,7 @@ void DffPropertyReader::ApplyLineAttributes( SfxItemSet& rSet, const MSO_SPT eSh
 
                 sal_Int32   nArrowWidth;
                 sal_Bool    bArrowCenter;
-                String      aArrowName;
+                rtl::OUString aArrowName;
                 basegfx::B2DPolygon aPoly(GetLineArrow( nLineWidth, eLineEnd, eWidth, eLenght, nArrowWidth, bArrowCenter, aArrowName, bScaleArrows ));
 
                 rSet.Put( XLineEndWidthItem( nArrowWidth ) );
@@ -1395,7 +1397,7 @@ void DffPropertyReader::ApplyLineAttributes( SfxItemSet& rSet, const MSO_SPT eSh
                     {
                         XDash aNew( rOldDash );
                         aNew.SetDashStyle( eNewStyle );
-                        rSet.Put( XLineDashItem( XubString(), aNew ) );
+                        rSet.Put( XLineDashItem( rtl::OUString(), aNew ) );
                     }
                 }
             }
@@ -1591,7 +1593,7 @@ void ApplyRectangularGradientAsBitmap( const SvxMSDffManager& rManager, SvStream
 
             XOBitmap aXBmp( aBitmap, XBITMAP_STRETCH );
             rSet.Put( XFillBmpTileItem( sal_False ) );
-            rSet.Put( XFillBitmapItem( String(), aXBmp ) );
+            rSet.Put( XFillBitmapItem( rtl::OUString(), aXBmp ) );
         }
     }
 }
@@ -1711,7 +1713,7 @@ void DffPropertyReader::ApplyFillAttributes( SvStream& rIn, SfxItemSet& rSet, co
             XGradient aGrad( aCol2, aCol1, eGrad, nAngle, nFocusX, nFocusY );
             aGrad.SetStartIntens( 100 );
             aGrad.SetEndIntens( 100 );
-            rSet.Put( XFillGradientItem( String(), aGrad ) );
+            rSet.Put( XFillGradientItem( rtl::OUString(), aGrad ) );
         }
         else if ( eXFill == XFILL_BITMAP )
         {
@@ -1748,13 +1750,13 @@ void DffPropertyReader::ApplyFillAttributes( SvStream& rIn, SfxItemSet& rSet, co
                            aXOBitmap.SetBackgroundColor( aCol2 );
                            aXOBitmap.Array2Bitmap();
                         }
-                        rSet.Put( XFillBitmapItem( String(), aXOBitmap ) );
+                        rSet.Put( XFillBitmapItem( rtl::OUString(), aXOBitmap ) );
                     }
                     else if ( eMSO_FillType == mso_fillTexture )
                     {
                         XOBitmap aXBmp( aBmp, XBITMAP_STRETCH );
                         rSet.Put( XFillBmpTileItem( sal_True ) );
-                        rSet.Put( XFillBitmapItem( String(), aXBmp ) );
+                        rSet.Put( XFillBitmapItem( rtl::OUString(), aXBmp ) );
                         rSet.Put( XFillBmpSizeXItem( GetPropertyValue( DFF_Prop_fillWidth, 0 ) / 360 ) );
                         rSet.Put( XFillBmpSizeYItem( GetPropertyValue( DFF_Prop_fillHeight, 0 ) / 360 ) );
                         rSet.Put( XFillBmpSizeLogItem( sal_True ) );
@@ -1762,7 +1764,7 @@ void DffPropertyReader::ApplyFillAttributes( SvStream& rIn, SfxItemSet& rSet, co
                     else
                     {
                         XOBitmap aXBmp( aBmp, XBITMAP_STRETCH );
-                        rSet.Put( XFillBitmapItem( String(), aXBmp ) );
+                        rSet.Put( XFillBitmapItem( rtl::OUString(), aXBmp ) );
                         rSet.Put( XFillBmpTileItem( sal_False ) );
                     }
                 }
@@ -2943,7 +2945,7 @@ void DffPropertyReader::ApplyAttributes( SvStream& rIn, SfxItemSet& rSet, const 
             break;
 
             case DFF_Prop_fillColor :
-                rSet.Put( XFillColorItem( String(), rManager.MSO_CLR_ToColor( nContent, DFF_Prop_fillColor ) ) );
+                rSet.Put( XFillColorItem( rtl::OUString(), rManager.MSO_CLR_ToColor( nContent, DFF_Prop_fillColor ) ) );
             break;
 
             // ShadowStyle
@@ -2963,7 +2965,7 @@ void DffPropertyReader::ApplyAttributes( SvStream& rIn, SfxItemSet& rSet, const 
             }
             break;
             case DFF_Prop_shadowColor :
-                rSet.Put( SdrShadowColorItem( String(), rManager.MSO_CLR_ToColor( nContent, DFF_Prop_shadowColor ) ) );
+                rSet.Put( SdrShadowColorItem( rtl::OUString(), rManager.MSO_CLR_ToColor( nContent, DFF_Prop_shadowColor ) ) );
             break;
             case DFF_Prop_shadowOpacity :
                 rSet.Put( SdrShadowTransparenceItem( (sal_uInt16)( ( 0x10000 - nContent ) / 655 ) ) );
@@ -5660,7 +5662,7 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
             SfxItemState eState = aSet.GetItemState( XATTR_FILLCOLOR,
                                                      sal_False, &pPoolItem );
             if( SFX_ITEM_DEFAULT == eState )
-                aSet.Put( XFillColorItem( String(),
+                aSet.Put( XFillColorItem( rtl::OUString(),
                           Color( mnDefaultColor ) ) );
             pObj->SetMergedItemSet(aSet);
         }
@@ -6732,7 +6734,7 @@ sal_Bool SvxMSDffManager::GetBLIPDirect( SvStream& rBLIPStream, Graphic& rData, 
             case 0x7a8 : aFileName.Append( String( RTL_CONSTASCII_USTRINGPARAM( ".bmp" ) ) ); break;
         }
 
-        String aURLStr;
+        rtl::OUString aURLStr;
         if( ::utl::LocalFileHelper::ConvertPhysicalNameToURL( Application::GetAppFileName(), aURLStr ) )
         {
             INetURLObject aURL( aURLStr );
