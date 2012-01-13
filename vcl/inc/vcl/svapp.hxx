@@ -274,26 +274,29 @@ public:
     static String               GetAppName();
     static bool                 LoadBrandBitmap (const char* pName, BitmapEx &rBitmap);
 
+    // default name of the application for message dialogs and printing
     static void                 SetDisplayName( const UniString& rDisplayName );
     static UniString            GetDisplayName();
 
+
     static unsigned int         GetScreenCount();
+    static Rectangle            GetScreenPosSizePixel( unsigned int nScreen );
+
     // IsMultiDisplay returns:
     //        true:  different screens are separate and windows cannot be moved
     //               between them (e.g. Xserver with multiple screens)
     //        false: screens form up one large display area
     //               windows can be moved between single screens
     //               (e.g. Xserver with Xinerama, Windows)
-    static bool                 IsMultiDisplay();
-    static Rectangle            GetScreenPosSizePixel( unsigned int nScreen );
-    static Rectangle            GetWorkAreaPosSizePixel( unsigned int nScreen );
-    static rtl::OUString        GetScreenName( unsigned int nScreen );
-    static unsigned int         GetDefaultDisplayNumber();
+    SAL_DLLPRIVATE static bool          IsMultiDisplay();
     // if IsMultiDisplay() == false the return value will be
     // nearest screen of the target rectangle
     // in case of IsMultiDisplay() == true the return value
     // will always be GetDefaultDisplayNumber()
-    static unsigned int         GetBestScreen( const Rectangle& );
+    SAL_DLLPRIVATE static unsigned int  GetBestScreen( const Rectangle& );
+    SAL_DLLPRIVATE static Rectangle     GetWorkAreaPosSizePixel( unsigned int nScreen );
+    SAL_DLLPRIVATE static unsigned int  GetDefaultDisplayNumber();
+    SAL_DLLPRIVATE static rtl::OUString GetScreenName( unsigned int nScreen );
 
     static const LocaleDataWrapper& GetAppLocaleDataWrapper();
 
