@@ -271,6 +271,7 @@ public:
         SheetCaches(ScDocument* pDoc);
         bool hasCache(const ScRange& rRange) const;
         const ScDPCache* getCache(const ScRange& rRange);
+        size_t size() const;
 
         void updateReference(
             UpdateRefMode eMode, const ScRange& r, SCsCOL nDx, SCsROW nDy, SCsTAB nDz);
@@ -294,6 +295,7 @@ public:
         NameCaches(ScDocument* pDoc);
         bool hasCache(const rtl::OUString& rName) const;
         const ScDPCache* getCache(const ::rtl::OUString& rName, const ScRange& rRange);
+        size_t size() const;
     private:
         void updateCache(const rtl::OUString& rName, const ScRange& rRange, std::set<ScDPObject*>& rRefs);
         void removeCache(const ::rtl::OUString& rName);
@@ -329,6 +331,8 @@ public:
     public:
         DBCaches(ScDocument* pDoc);
         const ScDPCache* getCache(sal_Int32 nSdbType, const ::rtl::OUString& rDBName, const ::rtl::OUString& rCommand);
+        size_t size() const;
+
     private:
         com::sun::star::uno::Reference<com::sun::star::sdbc::XRowSet> createRowSet(
             sal_Int32 nSdbType, const ::rtl::OUString& rDBName, const ::rtl::OUString& rCommand);

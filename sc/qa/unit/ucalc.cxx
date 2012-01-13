@@ -1323,6 +1323,7 @@ void Test::testDataPilot()
         bSuccess = checkDPTableOutput<5>(m_pDoc, aOutRange, aOutputCheck, "DataPilot table output");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
+    CPPUNIT_ASSERT_MESSAGE("There should be only one data cache.", pDPs->GetSheetCaches().size() == 1);
 
     // Update the cell values.
     double aData2[] = { 100, 200, 300, 400, 500, 600 };
@@ -1361,15 +1362,22 @@ void Test::testDataPilot()
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
+    CPPUNIT_ASSERT_MESSAGE("There should be only one data cache.", pDPs->GetSheetCaches().size() == 1);
+
     // Free the first datapilot object after the 2nd one gets reloaded, to
     // prevent the data cache from being deleted before the reload.
     pDPs->FreeTable(pDPObj);
+
+    CPPUNIT_ASSERT_MESSAGE("There should be only one data cache.", pDPs->GetSheetCaches().size() == 1);
 
     // This time clear the cache to refresh the data from the source range.
     CPPUNIT_ASSERT_MESSAGE("This datapilot should be based on sheet data.", pDPObj2->IsSheetData());
     std::set<ScDPObject*> aRefs;
     sal_uLong nErrId = pDPs->ReloadCache(pDPObj2, aRefs);
-    CPPUNIT_ASSERT_MESSAGE("Cache removal failed.", nErrId == 0);
+    CPPUNIT_ASSERT_MESSAGE("Cache reload failed.", nErrId == 0);
+    CPPUNIT_ASSERT_MESSAGE("Reloading a cache shouldn't remove any cache.",
+                           pDPs->GetSheetCaches().size() == 1);
+
     pDPObj2->ClearSource();
     pDPObj2->Output(aOutRange.aStart);
 
@@ -1395,6 +1403,8 @@ void Test::testDataPilot()
 
     // Swap the two sheets.
     m_pDoc->MoveTab(1, 0);
+    CPPUNIT_ASSERT_MESSAGE("Swapping the sheets shouldn't remove the cache.",
+                           pDPs->GetSheetCaches().size() == 1);
     CPPUNIT_ASSERT_MESSAGE("Cache should have moved.", !pDPs->GetSheetCaches().hasCache(aSrcRange));
     aSrcRange.aStart.SetTab(1);
     aSrcRange.aEnd.SetTab(1);
@@ -1403,6 +1413,9 @@ void Test::testDataPilot()
     pDPs->FreeTable(pDPObj2);
     CPPUNIT_ASSERT_MESSAGE("There shouldn't be any data pilot table stored with the document.",
                            pDPs->GetCount() == 0);
+
+    CPPUNIT_ASSERT_MESSAGE("There shouldn't be any more data cache.",
+                           pDPs->GetSheetCaches().size() == 0);
 
     m_pDoc->DeleteTab(1);
     m_pDoc->DeleteTab(0);
@@ -1673,6 +1686,9 @@ void Test::testDataPilotNamedSource()
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
+    CPPUNIT_ASSERT_MESSAGE("There should be one named range data cache.",
+                           pDPs->GetNameCaches().size() == 1 && pDPs->GetSheetCaches().size() == 0);
+
     // Move the table with pivot table to the left of the source data sheet.
     m_pDoc->MoveTab(1, 0);
     rtl::OUString aTabName;
@@ -1680,14 +1696,21 @@ void Test::testDataPilotNamedSource()
     CPPUNIT_ASSERT_MESSAGE("Wrong sheet name.", aTabName.equalsAscii("Table"));
     CPPUNIT_ASSERT_MESSAGE("Pivot table output is on the wrong sheet!",
                            pDPObj->GetOutRange().aStart.Tab() == 0);
+
+    CPPUNIT_ASSERT_MESSAGE("Moving the pivot table to another sheet shouldn't have changed the cache state.",
+                           pDPs->GetNameCaches().size() == 1 && pDPs->GetSheetCaches().size() == 0);
+
     const ScSheetSourceDesc* pDesc = pDPObj->GetSheetDesc();
     CPPUNIT_ASSERT_MESSAGE("Sheet source description doesn't exist.", pDesc);
     CPPUNIT_ASSERT_MESSAGE("Named source range has been altered unexpectedly!",
                            pDesc->GetRangeName().equals(aRangeName));
 
     CPPUNIT_ASSERT_MESSAGE("Cache should exist.", pDPs->GetNameCaches().hasCache(aRangeName));
+
     pDPs->FreeTable(pDPObj);
     CPPUNIT_ASSERT_MESSAGE("There should be no more tables.", pDPs->GetCount() == 0);
+    CPPUNIT_ASSERT_MESSAGE("There shouldn't be any more cache stored.",
+                           pDPs->GetNameCaches().size() == 0);
 
     pNames->clear();
     m_pDoc->DeleteTab(1);

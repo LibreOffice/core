@@ -2499,8 +2499,10 @@ const ScDPCache* ScDPCollection::SheetCaches::getCache(const ScRange& rRange)
         size_t nIndex = std::distance(maRanges.begin(), it);
         CachesType::iterator itCache = maCaches.find(nIndex);
         if (itCache == maCaches.end())
-            // cache pool and index pool out-of-sync !!!
+        {
+            OSL_FAIL("Cache pool and index pool out-of-sync !!!");
             return NULL;
+        }
 
         return itCache->second;
     }
@@ -2530,6 +2532,11 @@ const ScDPCache* ScDPCollection::SheetCaches::getCache(const ScRange& rRange)
     const ScDPCache* p = pCache.get();
     maCaches.insert(nIndex, pCache);
     return p;
+}
+
+size_t ScDPCollection::SheetCaches::size() const
+{
+    return maCaches.size();
 }
 
 void ScDPCollection::SheetCaches::updateReference(
@@ -2579,7 +2586,7 @@ void ScDPCollection::SheetCaches::updateCache(const ScRange& rRange, std::set<Sc
     CachesType::iterator itCache = maCaches.find(nIndex);
     if (itCache == maCaches.end())
     {
-        // Cache pool and index pool out-of-sync !!!
+        OSL_FAIL("Cache pool and index pool out-of-sync !!!");
         rRefs.clear();
         return;
     }
@@ -2600,8 +2607,10 @@ void ScDPCollection::SheetCaches::removeCache(const ScRange& rRange)
     size_t nIndex = std::distance(maRanges.begin(), it);
     CachesType::iterator itCache = maCaches.find(nIndex);
     if (itCache == maCaches.end())
-        // Cache pool and index pool out-of-sync !!!
+    {
+        OSL_FAIL("Cache pool and index pool out-of-sync !!!");
         return;
+    }
 
     it->SetInvalid(); // Make this slot available for future caches.
     maCaches.erase(itCache);
@@ -2644,6 +2653,11 @@ const ScDPCache* ScDPCollection::NameCaches::getCache(const OUString& rName, con
     const ScDPCache* p = pCache.get();
     maCaches.insert(rName, pCache);
     return p;
+}
+
+size_t ScDPCollection::NameCaches::size() const
+{
+    return maCaches.size();
 }
 
 void ScDPCollection::NameCaches::updateCache(const OUString& rName, const ScRange& rRange, std::set<ScDPObject*>& rRefs)
@@ -2713,6 +2727,11 @@ const ScDPCache* ScDPCollection::DBCaches::getCache(sal_Int32 nSdbType, const OU
     const ScDPCache* p = pCache.get();
     maCaches.insert(aType, pCache);
     return p;
+}
+
+size_t ScDPCollection::DBCaches::size() const
+{
+    return maCaches.size();
 }
 
 uno::Reference<sdbc::XRowSet> ScDPCollection::DBCaches::createRowSet(
