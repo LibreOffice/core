@@ -179,10 +179,7 @@ ShellResource::ShellResource()
     aHyperlinkClick.SearchAndReplaceAllAscii( "%s", aModStr );
 
     for(sal_uInt16 i = 0; i < nCount; ++i)
-    {
-        String* pNew = new SW_RESSTR(FLD_DOCINFO_BEGIN + i);
-        aDocInfoLst.Insert(pNew, aDocInfoLst.Count());
-    }
+        aDocInfoLst.push_back(String(SW_RESSTR(FLD_DOCINFO_BEGIN + i)));
 
     FreeResource();
 }

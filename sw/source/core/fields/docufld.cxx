@@ -1167,8 +1167,8 @@ String SwDocInfoField::GetFieldName() const
             break;
 
         default:
-            aStr += *ViewShell::GetShellRes()
-                        ->aDocInfoLst[ nSub - DI_SUBTYPE_BEGIN ];
+            aStr += ViewShell::GetShellRes()
+                     ->aDocInfoLst[ nSub - DI_SUBTYPE_BEGIN ];
             break;
     }
     if (IsFixed())

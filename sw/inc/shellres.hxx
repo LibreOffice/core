@@ -74,10 +74,10 @@ struct SW_DLLPUBLIC ShellResource : public Resource
 
     String          aHyperlinkClick;
 
-    SvStringsDtor   aDocInfoLst;
+    std::vector<String> aDocInfoLst;
 
     // The autoFormat-Redline comments.
-    inline const SvStringsDtor& GetAutoFmtNameLst() const;
+    inline const std::vector<String>& GetAutoFmtNameLst() const;
 
     enum PageNameMode
     {
@@ -95,19 +95,18 @@ struct SW_DLLPUBLIC ShellResource : public Resource
 
 private:
     void _GetAutoFmtNameLst() const;
-    SvStringsDtor   *pAutoFmtNameLst;
+    std::vector<String> *pAutoFmtNameLst;
     String          sPageDescFirstName;
     String          sPageDescFollowName;
     String          sPageDescName;
 };
 
-inline const SvStringsDtor& ShellResource::GetAutoFmtNameLst() const
+inline const std::vector<String>& ShellResource::GetAutoFmtNameLst() const
 {
     if( !pAutoFmtNameLst )
         _GetAutoFmtNameLst();
     return *pAutoFmtNameLst;
 }
-
 
 #endif //_SHELLRES_HXX
 
