@@ -41,7 +41,6 @@
 #include <svtools/ctrlbox.hxx>
 #include <svx/fntctrl.hxx>
 #include <fontcfg.hxx>
-class SvStringsDtor;
 class SfxPrinter;
 class SwWrtShell;
 class FontList;
@@ -148,7 +147,7 @@ public:
 
     virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
     virtual void        Reset( const SfxItemSet& rSet );
-    void                SetFax( const SvStringsDtor& );
+    void                SetFax( const std::vector<String>& );
     void                SelectFax( const String& );
     void                SetPreview(sal_Bool bPrev);
     virtual void        PageCreated (SfxAllItemSet aSet);

@@ -504,11 +504,11 @@ IMPL_LINK_INLINE_START( SwAddPrinterTabPage, AutoClickHdl, CheckBox *, EMPTYARG 
 }
 IMPL_LINK_INLINE_END( SwAddPrinterTabPage, AutoClickHdl, CheckBox *, EMPTYARG )
 
-void  SwAddPrinterTabPage::SetFax( const SvStringsDtor& rFaxLst )
+void  SwAddPrinterTabPage::SetFax( const std::vector<String>& rFaxLst )
 {
     aFaxLB.InsertEntry(sNone);
-    for ( sal_uInt16 i = 0; i < rFaxLst.Count(); ++i )
-        aFaxLB.InsertEntry( *rFaxLst.GetObject(i) );
+    for(size_t i = 0; i < rFaxLst.size(); ++i)
+        aFaxLB.InsertEntry(rFaxLst[0]);
     aFaxLB.SelectEntryPos(0);
 }
 
@@ -530,14 +530,10 @@ void SwAddPrinterTabPage::PageCreated (SfxAllItemSet aSet)
     }
     if (pListItem && pListItem->GetValue())
     {
-        SvStringsDtor aFaxList;
+        std::vector<String> aFaxList;
         const std::vector<rtl::OUString>& rPrinters = Printer::GetPrinterQueues();
         for (unsigned int i = 0; i < rPrinters.size(); ++i)
-        {
-            String* pString = new String( rPrinters[i] );
-            String* &rpString = pString;
-            aFaxList.Insert(rpString, 0);
-        }
+            aFaxList.insert(aFaxList.begin(), rPrinters[i]);
         SetFax( aFaxList );
     }
 }
