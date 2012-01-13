@@ -83,7 +83,21 @@ struct ProviderRequest
     void* getProvider() const { return xRet.get(); }
 };
 
-//---------------------------------------------------------------------------------------
+extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL
+component_getImplementationEnvironment(
+    char const ** ppEnvTypeName, uno_Environment **)
+{
+    // Recent Java 6 VMs make calls to JNI Attach/DetachCurrentThread (which
+    // this code does extensively) very expensive.  A follow-up JVM fix reduced
+    // the overhead significantly again for all threads but the main thread.  So
+    // a quick hack to improve performance of this component again is to confine
+    // it in the affine apartment (where all code will run on a single,
+    // dedicated thread that is guaranteed no to be the main thread).  However,
+    // a better fix would still be to redesign the code so that it does not call
+    // Attach/DetachCurrentThread so frequently:
+    *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME ":affine";
+}
+
 extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory(
                     const sal_Char* pImplementationName,
                     void* pServiceManager,

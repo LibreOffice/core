@@ -78,8 +78,6 @@ SLOFILES=\
         $(SLO)$/tools.obj                           \
         $(SLO)$/ContextClassLoader.obj
 
-SHL1VERSIONMAP=$(SOLARENV)/src/component.map
-
 # --- Library -----------------------------------
 
 SHL1TARGET=	$(JDBC_TARGET)$(DLLPOSTFIX)
