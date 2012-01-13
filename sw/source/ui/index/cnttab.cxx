@@ -356,6 +356,9 @@ SwMultiTOXTabDialog::~SwMultiTOXTabDialog()
 {
     SW_MOD()->GetModuleConfig()->SetShowIndexPreview(aShowExampleCB.IsChecked());
 
+    // fdo#38515 Avoid setting focus on deleted controls in the destructors
+    EnableInput( sal_False );
+
     for(sal_uInt16 i = 0; i < nTypeCount; i++)
     {
         delete pFormArr[i];
