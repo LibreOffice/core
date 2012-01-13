@@ -30,6 +30,7 @@ AVAILABLE TARGETS
        all              build product and run unit tests (default goal)
        build            build product
        unitcheck        run unit tests
+       slowcheck        run slow unit tests
        subsequentcheck  run system tests (requires full installation)
        check            run unit tests and if in toplevel subsequentcheck
        clean            remove all generated files

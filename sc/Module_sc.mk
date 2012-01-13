@@ -42,8 +42,11 @@ $(eval $(call gb_Module_add_targets,sc,\
 endif
 
 $(eval $(call gb_Module_add_check_targets,sc,\
-    CppunitTest_sc_ucalc \
     CppunitTest_sc_filters_test \
+))
+
+$(eval $(call gb_Module_add_slowcheck_targets, sc,\
+    CppunitTest_sc_ucalc \
 ))
 
 $(eval $(call gb_Module_add_subsequentcheck_targets,sc,\

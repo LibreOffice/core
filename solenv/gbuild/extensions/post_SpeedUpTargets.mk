@@ -45,6 +45,7 @@ endif
 ifneq ($(strip $(gb_SpeedUpTargets_WRAPPEDBUILD)),)
 gb_Module_add_target=
 gb_Module_add_check_target=
+gb_Module_add_slowcheck_target=
 gb_Module_add_subsequentcheck_target=
 gb_Module_add_moduledir=
 gb_FULLDEPS=

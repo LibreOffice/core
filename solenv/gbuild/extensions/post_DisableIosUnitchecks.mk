@@ -28,6 +28,7 @@
 # disable check target on IOS
 ifeq ($(OS),IOS)
 gb_Module_add_check_target=
+gb_Module_add_slowcheck_target=
 endif
 
 
