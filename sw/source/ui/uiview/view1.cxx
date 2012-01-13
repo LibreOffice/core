@@ -53,6 +53,10 @@ extern int bDocSzUpdated;
 
 void SwView::Activate(sal_Bool bMDIActivate)
 {
+    // fdo#40438 Update the layout to make sure everything is correct before showing the content
+    pWrtShell->StartAction();
+    pWrtShell->EndAction( sal_True );
+
     // aktuelle View anmelden an der DocShell
     // die View bleibt solange an der DocShell
     // aktiv bis Sie zerstoert wird oder durch Activate eine
