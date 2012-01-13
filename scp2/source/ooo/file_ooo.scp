@@ -110,7 +110,7 @@ End
 
 #ifndef WITHOUT_MOZILLA
 
-#if !defined(UNX) || defined(ENABLE_GTK)
+#ifdef ENABLE_NSPLUGIN
 File gid_File_Exe_Nsplugin
         BIN_FILE_BODY;
         Styles          = (PACKED);
