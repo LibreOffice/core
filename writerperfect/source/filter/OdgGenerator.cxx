@@ -948,13 +948,13 @@ void OdgGenerator::drawPath(const WPXPropertyListVector &path)
 
 void OdgGenerator::drawGraphicObject(const ::WPXPropertyList &propList, const ::WPXBinaryData &binaryData)
 {
-    WPXPropertyList framePropList(propList);
-
-    if (!framePropList["libwpg:mime-type"] || framePropList["libwpg:mime-type"]->getStr().len() <= 0)
+    if (!propList["libwpg:mime-type"] || propList["libwpg:mime-type"]->getStr().len() <= 0)
+        return;
+    if (!propList["svg:x"] || !propList["svg:y"] || !propList["svg:width"] || !propList["svg:height"])
         return;
 
-    bool flipX(framePropList["draw:mirror-horizontal"] && framePropList["draw:mirror-horizontal"]->getInt());
-    bool flipY(framePropList["draw:mirror-vertical"] && framePropList["draw:mirror-vertical"]->getInt());
+    bool flipX(propList["draw:mirror-horizontal"] && propList["draw:mirror-horizontal"]->getInt());
+    bool flipY(propList["draw:mirror-vertical"] && propList["draw:mirror-vertical"]->getInt());
     if ((flipX && !flipY) || (!flipX && flipY))
         mpImpl->mxStyle.insert("style:mirror", "horizontal");
     else
@@ -962,21 +962,34 @@ void OdgGenerator::drawGraphicObject(const ::WPXPropertyList &propList, const ::
 
     mpImpl->_writeGraphicsStyle();
 
+    double x = propList["svg:x"]->getDouble();
+    double y = propList["svg:y"]->getDouble();
+    double height = propList["svg:height"]->getDouble();
+    double width = propList["svg:width"]->getDouble();
+
     if (flipY)
     {
-        double x = framePropList["svg:x"]->getDouble();
-        double y = framePropList["svg:y"]->getDouble();
-        double height = framePropList["svg:height"]->getDouble();
-        double width = framePropList["svg:width"]->getDouble();
         x += width;
         y += height;
         width *= -1.0;
         height *= -1.0;
-        framePropList.insert("svg:x", x);
-        framePropList.insert("svg:y", y);
-        framePropList.insert("svg:height", height);
-        framePropList.insert("svg:width", width);
     }
+
+    double angle(propList["libwpg:rotate"] ? - M_PI * propList["libwpg:rotate"]->getDouble() / 180.0 : 0.0);
+    if (angle != 0.0)
+    {
+        double deltax((width*cos(angle)+height*sin(angle)-width)/2.0);
+        double deltay((-width*sin(angle)+height*cos(angle)-height)/2.0);
+        x -= deltax;
+        y -= deltay;
+    }
+
+    WPXPropertyList framePropList;
+
+    framePropList.insert("svg:x", x);
+    framePropList.insert("svg:y", y);
+    framePropList.insert("svg:height", height);
+    framePropList.insert("svg:width", width);
 
     TagOpenElement *pDrawFrameElement = new TagOpenElement("draw:frame");
 
@@ -984,17 +997,26 @@ void OdgGenerator::drawGraphicObject(const ::WPXPropertyList &propList, const ::
     sValue.sprintf("gr%i", mpImpl->miGraphicsStyleIndex-1);
     pDrawFrameElement->addAttribute("draw:style-name", sValue);
 
-    if (framePropList["svg:x"])
+    pDrawFrameElement->addAttribute("svg:height", framePropList["svg:height"]->getStr());
+    pDrawFrameElement->addAttribute("svg:width", framePropList["svg:width"]->getStr());
+
+    if (angle != 0.0)
+    {
+        framePropList.insert("libwpg:rotate", angle, WPX_GENERIC);
+        sValue.sprintf("rotate (%s) translate(%s, %s)",
+                       framePropList["libwpg:rotate"]->getStr().cstr(),
+                       framePropList["svg:x"]->getStr().cstr(),
+                       framePropList["svg:y"]->getStr().cstr());
+        pDrawFrameElement->addAttribute("draw:transform", sValue);
+    }
+    else
+    {
         pDrawFrameElement->addAttribute("svg:x", framePropList["svg:x"]->getStr());
-    if (framePropList["svg:y"])
         pDrawFrameElement->addAttribute("svg:y", framePropList["svg:y"]->getStr());
-    if (framePropList["svg:height"])
-        pDrawFrameElement->addAttribute("svg:height", framePropList["svg:height"]->getStr());
-    if (framePropList["svg:width"])
-        pDrawFrameElement->addAttribute("svg:width", framePropList["svg:width"]->getStr());
+    }
     mpImpl->mBodyElements.push_back(pDrawFrameElement);
 
-    if (framePropList["libwpg:mime-type"]->getStr() == "object/ole")
+    if (propList["libwpg:mime-type"]->getStr() == "object/ole")
         mpImpl->mBodyElements.push_back(new TagOpenElement("draw:object-ole"));
     else
         mpImpl->mBodyElements.push_back(new TagOpenElement("draw:image"));
@@ -1006,7 +1028,7 @@ void OdgGenerator::drawGraphicObject(const ::WPXPropertyList &propList, const ::
 
     mpImpl->mBodyElements.push_back(new TagCloseElement("office:binary-data"));
 
-    if (framePropList["libwpg:mime-type"]->getStr() == "object/ole")
+    if (propList["libwpg:mime-type"]->getStr() == "object/ole")
         mpImpl->mBodyElements.push_back(new TagCloseElement("draw:object-ole"));
     else
         mpImpl->mBodyElements.push_back(new TagCloseElement("draw:image"));
