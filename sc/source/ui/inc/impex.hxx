@@ -239,7 +239,7 @@ public:
     characters will be spoiled, and a subsequent ReadCsvLine()
     may start under false preconditions.
   */
-SC_DLLPUBLIC void ReadCsvLine(SvStream &rStream, String& rStr, sal_Bool bEmbeddedLineBreak,
+SC_DLLPUBLIC String ReadCsvLine(SvStream &rStream, sal_Bool bEmbeddedLineBreak,
         const String& rFieldSeparators, sal_Unicode cFieldQuote,
         sal_Bool bAllowBackslashEscape = sal_False);
 

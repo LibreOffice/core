@@ -1180,7 +1180,7 @@ sal_Bool ScImportExport::ExtText2Doc( SvStream& rStrm )
 
     while(--nSkipLines>0)
     {
-        ReadCsvLine(rStrm, aLine, !bFixed, rSeps, cStr); // content is ignored
+        aLine = ReadCsvLine(rStrm, !bFixed, rSeps, cStr); // content is ignored
         if ( rStrm.IsEof() )
             break;
     }
@@ -1203,7 +1203,7 @@ sal_Bool ScImportExport::ExtText2Doc( SvStream& rStrm )
     {
         for( ;; )
         {
-            ReadCsvLine(rStrm, aLine, !bFixed, rSeps, cStr);
+            aLine = ReadCsvLine(rStrm, !bFixed, rSeps, cStr);
             if ( rStrm.IsEof() )
                 break;
 
@@ -2123,11 +2123,12 @@ inline const sal_Unicode* lcl_UnicodeStrChr( const sal_Unicode* pStr,
     return 0;
 }
 
-void ReadCsvLine(SvStream &rStream, String& rStr, sal_Bool bEmbeddedLineBreak,
+String ReadCsvLine(SvStream &rStream, sal_Bool bEmbeddedLineBreak,
         const String& rFieldSeparators, sal_Unicode cFieldQuote,
         sal_Bool bAllowBackslashEscape)
 {
-    rStream.ReadUniOrByteStringLine(rStr, rStream.GetStreamCharSet());
+    String aStr;
+    rStream.ReadUniOrByteStringLine(aStr, rStream.GetStreamCharSet());
 
     if (bEmbeddedLineBreak)
     {
@@ -2138,11 +2139,11 @@ void ReadCsvLine(SvStream &rStream, String& rStr, sal_Bool bEmbeddedLineBreak,
 
         xub_StrLen nLastOffset = 0;
         xub_StrLen nQuotes = 0;
-        while (!rStream.IsEof() && rStr.Len() < STRING_MAXLEN)
+        while (!rStream.IsEof() && aStr.Len() < STRING_MAXLEN)
         {
             bool bBackslashEscaped = false;
             const sal_Unicode *p, *pStart;
-            p = pStart = rStr.GetBuffer();
+            p = pStart = aStr.GetBuffer();
             p += nLastOffset;
             while (*p)
             {
@@ -2180,14 +2181,15 @@ void ReadCsvLine(SvStream &rStream, String& rStr, sal_Bool bEmbeddedLineBreak,
                 break;
             else
             {
-                nLastOffset = rStr.Len();
+                nLastOffset = aStr.Len();
                 String aNext;
                 rStream.ReadUniOrByteStringLine(aNext, rStream.GetStreamCharSet());
-                rStr += sal_Unicode(_LF);
-                rStr += aNext;
+                aStr += sal_Unicode(_LF);
+                aStr += aNext;
             }
         }
     }
+    return aStr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
