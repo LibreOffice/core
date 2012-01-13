@@ -384,7 +384,6 @@ public:
     sal_Bool        WriteLines( const ByteString& rStr );
 
     sal_Bool        ReadByteStringLine( String& rStr, rtl_TextEncoding eSrcCharSet );
-    sal_Bool        ReadByteStringLine( String& rStr ) { return ReadByteStringLine( rStr, GetStreamCharSet()); }
     sal_Bool        WriteByteStringLine( const String& rStr, rtl_TextEncoding eDestCharSet );
     sal_Bool        WriteByteStringLine( const String& rStr ) { return WriteByteStringLine( rStr, GetStreamCharSet()); }
 
