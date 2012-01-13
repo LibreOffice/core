@@ -229,7 +229,7 @@ SAL_DLLPUBLIC sal_Bool SAL_CALL osl_isEqualSocketAddr(
     oslSocketAddr Addr1, oslSocketAddr Addr2);
 
 /** Uses the systems name-service interface to find an address for strHostname.
-    @param strHostname [in] The name for which you search for an address.
+    @param[in] strHostname The name for which you search for an address.
     @return The desired address if one could be found, otherwise 0.
     Don't forget to destroy the address if you don't need it any longer.
 */
@@ -241,8 +241,8 @@ SAL_DLLPUBLIC oslSocketAddr SAL_CALL osl_resolveHostname(
     in dotted decimal notation as first argument.
     @see    osl_sendToSocket()
     @see    oslSocketAddr
-    @param  strDottedAddr [in] dotted decimal internet address, may be 0.
-    @param  Port          [in] port number in host byte order.
+    @param[in]  strDottedAddr dotted decimal internet address, may be 0.
+    @param[in]  Port port number in host byte order.
     @return 0 if address could not be created.
 */
 SAL_DLLPUBLIC oslSocketAddr SAL_CALL osl_createInetBroadcastAddr (
@@ -292,7 +292,7 @@ SAL_DLLPUBLIC sal_Int32 SAL_CALL osl_getInetPortOfSocketAddr(
 
 
 /** Sets the Port of Addr.
-    @param Port [in] is expected in host byte-order.
+    @param[in] Port is expected in host byte-order.
     @return <code>sal_False</code> if Addr is not an inet-addr.
 */
 SAL_DLLPUBLIC sal_Bool SAL_CALL osl_setInetPortOfSocketAddr(
@@ -337,8 +337,8 @@ typedef struct oslHostAddrImpl * oslHostAddr;
 
 
 /** Create an oslHostAddr from given hostname and socket address.
-    @param strHostname [in] The hostname to be stored.
-    @param Addr [in] The socket address to be stored.
+    @param[in] strHostname The hostname to be stored.
+    @param[in] Addr The socket address to be stored.
     @return The created address or 0 upon failure.
 */
 SAL_DLLPUBLIC oslHostAddr SAL_CALL osl_createHostAddr(
@@ -349,7 +349,7 @@ SAL_DLLPUBLIC oslHostAddr SAL_CALL osl_createHostAddr(
     Successful name resolution should result in the fully qualified
     domain name (FQDN) and it's address as hostname and socket address
     members of the resulting oslHostAddr.
-    @param strHostname [in] The hostname to be resolved.
+    @param[in] strHostname The hostname to be resolved.
     @return The resulting address or 0 upon failure.
 */
 SAL_DLLPUBLIC oslHostAddr SAL_CALL osl_createHostAddrByName(rtl_uString *strHostname);
@@ -359,7 +359,7 @@ SAL_DLLPUBLIC oslHostAddr SAL_CALL osl_createHostAddrByName(rtl_uString *strHost
     Successful name resolution should result in the fully qualified
     domain name (FQDN) and it's address as hostname and socket address
     members of the resulting oslHostAddr.
-    @param Addr [in] The socket address to be reverse resolved.
+    @param[in] Addr The socket address to be reverse resolved.
     @return The resulting address or 0 upon failure.
 */
 SAL_DLLPUBLIC oslHostAddr SAL_CALL osl_createHostAddrByAddr(const oslSocketAddr Addr);
@@ -447,8 +447,8 @@ SAL_DLLPUBLIC oslSocketAddr SAL_CALL osl_getLocalAddrOfSocket(oslSocket Socket);
 SAL_DLLPUBLIC oslSocketAddr SAL_CALL osl_getPeerAddrOfSocket(oslSocket Socket);
 
 /** Binds the given address to the socket.
-    @param Socket [in]
-    @param Address [in]
+    @param[in] Socket
+    @param[in] Addr
     @return <code>sal_False</code> if the bind failed, <code> sal_True</code> if successful.
     @see osl_getLastSocketError()
 */
@@ -458,8 +458,8 @@ SAL_DLLPUBLIC sal_Bool SAL_CALL osl_bindAddrToSocket(
 
 /** Connects the socket to the given address.
 
-    @param Socket [in] a bound socket.
-    @param Addr [in] the peer address.
+    @param[in] Socket a bound socket.
+    @param[in] Addr the peer address.
     @param pTimeout Timeout value or NULL for blocking.
 
     @return <code>osl_Socket_Ok</code> on successful connection,
@@ -475,7 +475,7 @@ SAL_DLLPUBLIC oslSocketResult SAL_CALL osl_connectSocketTo(
 
 /** Prepares the socket to act as an acceptor of incoming connections.
     You should call "listen" before you use "accept".
-    @param MaxPendingConnections [in] denotes the length of the queue of
+    @param[in] MaxPendingConnections denotes the length of the queue of
     pending connections for this socket. If MaxPendingConnections is
     -1, the systems default value will be used (Usually 5).
     @return <code>sal_False</code> if the listen failed.
@@ -487,7 +487,7 @@ SAL_DLLPUBLIC sal_Bool SAL_CALL osl_listenOnSocket(
 
 /** Waits for an ingoing connection on the socket.
     This call blocks if there is no incoming connection present.
-    @param pAddr [in] if pAddr is != 0, the peers address is returned.
+    @param[in] pAddr if pAddr is != 0, the peers address is returned.
     @return 0 if the accept-call failed, otherwise you get a socket
     representing the new connection.
 */
@@ -499,12 +499,12 @@ SAL_DLLPUBLIC oslSocket SAL_CALL osl_acceptConnectionOnSocket
     if no error occurs. Note that incomplete recvs due to
     packet boundaries may occur.
 
-    @param Socket [in] A connected socket to be used to listen on.
-    @param pBuffer [out] Points to a buffer that will be filled with the received
+    @param[in] Socket A connected socket to be used to listen on.
+    @param[out] pBuffer Points to a buffer that will be filled with the received
     data.
-    @param BytesToRead [in] The number of bytes to read. pBuffer must have at least
+    @param[in] BytesToRead The number of bytes to read. pBuffer must have at least
     this size.
-    @param Flag [in] Modifier for the call. Valid values are:
+    @param[in] Flag Modifier for the call. Valid values are:
     <ul>
     <li><code>osl_Socket_MsgNormal</code>
     <li><code>osl_Socket_MsgOOB</code>
@@ -524,15 +524,15 @@ SAL_DLLPUBLIC sal_Int32 SAL_CALL osl_receiveSocket(
 /** Tries to receives BufferSize data from the (usually unconnected)
     (datagram-)socket, if no error occurs.
 
-    @param Socket [in] A bound socket to be used to listen for a datagram.
-    @param pSenderAddr [out] An pointer to a created oslSocketAddr handle
+    @param[in] Socket A bound socket to be used to listen for a datagram.
+    @param[out] SenderAddr A pointer to a created oslSocketAddr handle
     or to a null handle. After the call, it will contain the constructed
     oslSocketAddr of the datagrams sender. If pSenderAddr itself is 0,
     it is ignored.
-    @param pBuffer [out] Points to a buffer that will be filled with the received
+    @param[out] pBuffer Points to a buffer that will be filled with the received
     datagram.
-    @param BufferSize [in] The size of pBuffer.
-    @param Flag [in] Modifier for the call. Valid values are:
+    @param[in] BufferSize The size of pBuffer.
+    @param[in] Flag Modifier for the call. Valid values are:
     <ul>
     <li><code>osl_Socket_MsgNormal</code>
     <li><code>osl_Socket_MsgOOB</code>
@@ -545,7 +545,7 @@ SAL_DLLPUBLIC sal_Int32 SAL_CALL osl_receiveSocket(
 */
 SAL_DLLPUBLIC sal_Int32 SAL_CALL osl_receiveFromSocket(
                               oslSocket Socket,
-                               oslSocketAddr SenderAddr,
+                              oslSocketAddr SenderAddr,
                               void* pBuffer,
                               sal_uInt32 BufferSize,
                               oslSocketMsgFlag Flag);
@@ -553,11 +553,11 @@ SAL_DLLPUBLIC sal_Int32 SAL_CALL osl_receiveFromSocket(
 /** Tries to send BytesToSend data from the connected socket,
     if no error occurs.
 
-    @param Socket [in] A connected socket.
-    @param pBuffer [in] Points to a buffer that contains the send-data.
-    @param BytesToSend [in] The number of bytes to send. pBuffer must have at least
+    @param[in] Socket A connected socket.
+    @param[in] pBuffer Points to a buffer that contains the send-data.
+    @param[in] BytesToSend The number of bytes to send. pBuffer must have at least
     this size.
-    @param Flag [in] Modifier for the call. Valid values are:
+    @param[in] Flag Modifier for the call. Valid values are:
     <ul>
     <li><code>osl_Socket_MsgNormal</code>
     <li><code>osl_Socket_MsgOOB</code>
@@ -579,14 +579,14 @@ SAL_DLLPUBLIC sal_Int32 SAL_CALL osl_sendSocket(
     Since there is only sent one packet, the function sends the data always complete
     even with incomplete packet boundaries.
 
-    @param Socket [in] A bound or unbound socket. Socket will be bound
+    @param[in] Socket A bound or unbound socket. Socket will be bound
     after a successful call.
 
-    @param ReceiverAddr [in] An initialized oslSocketAddress that contains
+    @param[in] ReceiverAddr An initialized oslSocketAddress that contains
     the destination address for this send.
 
-    @param pBuffer [in] Points to a buffer that contains the send-data.
-    @param BytesToSend [in] The number of bytes to send. pBuffer must have at least
+    @param[in] pBuffer Points to a buffer that contains the send-data.
+    @param[in] BytesToSend The number of bytes to send. pBuffer must have at least
     this size.
     @param Flag [in] Modifier for the call. Valid values are:
     <ul>
@@ -736,7 +736,7 @@ SAL_DLLPUBLIC sal_Bool SAL_CALL osl_shutdownSocket(oslSocket Socket,
     @param pBuffer Pointer to a buffer large enough to take the desired
     attribute-value.
 
-    @param BufferSize contains the length of the Buffer.
+    @param BufferLen contains the length of the Buffer.
 
     @return -1 if an error occurred or else the size of the data copied into
     pBuffer.
@@ -764,7 +764,7 @@ SAL_DLLPUBLIC sal_Int32 SAL_CALL osl_getSocketOption( oslSocket Socket,
 
     @param pBuffer Pointer to a Buffer which contains the attribute-value.
 
-    @param BufferSize contains the length of the Buffer.
+    @param BufferLen contains the length of the Buffer.
 
     @return True if the option could be changed.
 */
@@ -772,7 +772,7 @@ SAL_DLLPUBLIC sal_Bool SAL_CALL osl_setSocketOption( oslSocket Socket,
                             oslSocketOptionLevel    Level,
                             oslSocketOption         Option,
                             void*                   pBuffer,
-                            sal_uInt32                  BufferLen);
+                            sal_uInt32              BufferLen);
 
 /** Enables/disables non-blocking-mode of the socket.
     @param Socket Change mode for this socket.
@@ -868,8 +868,8 @@ SAL_DLLPUBLIC sal_Bool SAL_CALL osl_isInSocketSet(oslSocketSet Set, oslSocket So
     it is just skipped.
     @param OutOfBandSet Checks the sockets in this set
     for out-of-band events. If the set is 0, it is just skipped.
-    @param msTimeout Number of milliseconds to wait for events. If
-    msTimeout is -1, the call will block until an event or an error
+    @param pTimeout Address of the number of milliseconds to wait for events. If
+    *pTimeout is -1, the call will block until an event or an error
     occurs.
     @return -1 on errors, otherwise the number of sockets with
     pending events. In case of timeout, the number might be 0.
@@ -887,7 +887,7 @@ SAL_DLLPUBLIC void SAL_CALL osl_closeSocket(oslSocket Socket);
 /** Retrieves n bytes from the stream and copies them into pBuffer.
     The function avoids incomplete reads due to packet boundaries.
     @param pBuffer receives the read data.
-    @param n the number of bytes to read. pBuffer must be large enough
+    @param nSize the number of bytes to read. pBuffer must be large enough
     to hold the n bytes!
     @return the number of read bytes. The number will only be smaller than
     n if an exceptional condition (e.g. connection closed) occurs.
@@ -898,9 +898,9 @@ SAL_DLLPUBLIC sal_Int32 SAL_CALL osl_readSocket( oslSocket Socket, void *pBuffer
 /** Writes n bytes from pBuffer to the stream. The method avoids
     incomplete writes due to packet boundaries.
     @param pBuffer contains the data to be written.
-    @param n the number of bytes to write.
+    @param nSize the number of bytes to write.
     @return the number of written bytes. The number will only be smaller than
-    n if an exceptional condition (e.g. connection closed) occurs.
+    nSize if an exceptional condition (e.g. connection closed) occurs.
 */
 SAL_DLLPUBLIC sal_Int32 SAL_CALL osl_writeSocket( oslSocket Socket, const void *pBuffer, sal_Int32 nSize );
 

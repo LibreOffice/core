@@ -61,7 +61,7 @@ SAL_DLLPUBLIC oslSecurity SAL_CALL osl_getCurrentSecurity(void);
 /** Deprecated API
     Create a security handle for the denoted user.
     Try to log in the user on the local system.
-    @param[in] strzUserName denotes the name of the user to logg in.
+    @param[in] strUserName denotes the name of the user to logg in.
     @param[in] strPasswd the password for this user.
     @param[out] pSecurity returns the security handle if user could be logged in.
     @return osl_Security_E_None if user could be logged in, otherwise an error-code.

@@ -111,8 +111,8 @@ SAL_DLLPUBLIC sal_Bool SAL_CALL osl_getSystemTime(
 
 
 /** Get the GMT from a TimeValue and fill a struct oslDateTime
-    @param pTimeVal[in] TimeValue
-    @param pDateTime[out] On success it receives a struct oslDateTime
+    @param[in] pTimeVal TimeValue
+    @param[out] pDateTime On success it receives a struct oslDateTime
 
     @return sal_False if any error occurs else sal_True.
 */
@@ -121,8 +121,8 @@ SAL_DLLPUBLIC sal_Bool SAL_CALL osl_getDateTimeFromTimeValue(
 
 
 /** Get the GMT from a oslDateTime and fill a TimeValue
-    @param pDateTime[in] oslDateTime
-    @param pTimeVal[out] On success it receives a TimeValue
+    @param[in] pDateTime oslDateTime
+    @param[out] pTimeVal On success it receives a TimeValue
 
     @return sal_False if any error occurs else sal_True.
 */
@@ -131,8 +131,8 @@ SAL_DLLPUBLIC sal_Bool SAL_CALL osl_getTimeValueFromDateTime(
 
 
 /** Convert GMT to local time
-    @param pSystemTimeVal[in] system time to convert
-    @param pLocalTimeVal[out] On success it receives the local time
+    @param[in] pSystemTimeVal system time to convert
+    @param[out] pLocalTimeVal On success it receives the local time
 
     @return sal_False if any error occurs else sal_True.
 */
@@ -141,8 +141,8 @@ SAL_DLLPUBLIC sal_Bool SAL_CALL osl_getLocalTimeFromSystemTime(
 
 
 /** Convert local time to GMT
-    @param pLocalTimeVal[in] local time to convert
-    @param pSystemTimeVal[out] On success it receives the system time
+    @param[in] pLocalTimeVal local time to convert
+    @param[out] pSystemTimeVal On success it receives the system time
 
     @return sal_False if any error occurs else sal_True.
 */
