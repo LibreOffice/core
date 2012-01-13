@@ -72,7 +72,6 @@ $(eval $(call gb_Library_add_exception_objects,sofficeapp,\
     desktop/source/app/app \
     desktop/source/app/appfirststart \
     desktop/source/app/appinit \
-    desktop/source/app/appsys \
     desktop/source/app/check_ext_deps \
     desktop/source/app/cmdlineargs \
     desktop/source/app/cmdlinehelp \
