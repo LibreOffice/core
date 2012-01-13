@@ -65,7 +65,6 @@ class SwDDEFieldType;
 class SwNewDBMgr;
 
 struct SwDocStat;
-class SvStringsDtor;
 class SwAutoCompleteWord;
 
 class SwFmtRefMark;
