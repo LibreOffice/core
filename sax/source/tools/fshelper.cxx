@@ -150,11 +150,6 @@ FastSerializerHelper* FastSerializerHelper::write(sal_Int64 value)
     return write(::rtl::OUString::valueOf(value));
 }
 
-FastSerializerHelper* FastSerializerHelper::write(float value)
-{
-    return write(::rtl::OUString::valueOf(value));
-}
-
 FastSerializerHelper* FastSerializerHelper::write(double value)
 {
     return write(::rtl::OUString::valueOf(value));
