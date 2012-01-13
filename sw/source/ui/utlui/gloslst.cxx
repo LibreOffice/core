@@ -320,7 +320,7 @@ void SwGlossaryList::Update()
     {
         for( size_t nPath = 0; nPath < pPathArr->size(); nPath++ )
         {
-            SvStringsDtor aFoundGroupNames;
+            std::vector<String> aFoundGroupNames;
             std::vector<String*> aFiles;
             SvPtrarr aDateTimeArr( 16, 16 );
 
@@ -333,8 +333,7 @@ void SwGlossaryList::Update()
 
                 String sName( pTitle->Copy( 0, pTitle->Len() - sExt.Len() ));
 
-                aFoundGroupNames.Insert( new String(sName),
-                                            aFoundGroupNames.Count());
+                aFoundGroupNames.push_back(sName);
                 sName += GLOS_DELIM;
                 sName += String::CreateFromInt32( static_cast<sal_uInt16>(nPath) );
                 AutoTextGroup* pFound = FindGroup( sName );
@@ -371,10 +370,9 @@ void SwGlossaryList::Update()
                 {
                     sal_Bool bFound = sal_False;
                     String sCompareGroup = pGroup->sName.GetToken(0, GLOS_DELIM);
-                    for( sal_uInt16 j = 0; j < aFoundGroupNames.Count() && !bFound; ++j)
-                    {
-                        bFound = sCompareGroup == *aFoundGroupNames[j];
-                    }
+                    for(std::vector<String>::const_iterator j = aFoundGroupNames.begin(); j != aFoundGroupNames.end() && !bFound; ++j)
+                        bFound = (sCompareGroup == *j);
+
                     if(!bFound)
                     {
                         aGroupArr.Remove(i - 1);
