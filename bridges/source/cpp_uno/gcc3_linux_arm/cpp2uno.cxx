@@ -46,6 +46,9 @@
 
 #include <dlfcn.h>
 
+#ifdef ANDROID
+#include <unistd.h>
+#endif
 
 using namespace ::osl;
 using namespace ::rtl;
@@ -551,10 +554,14 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
 void bridges::cpp_uno::shared::VtableFactory::flushCode(
     unsigned char const *beg, unsigned char const *end)
 {
+#ifndef ANDROID
    static void (*clear_cache)(unsigned char const*, unsigned char const*)
        = (void (*)(unsigned char const*, unsigned char const*))
            dlsym(RTLD_DEFAULT, "__clear_cache");
    (*clear_cache)(beg, end);
+#else
+   cacheflush((long) beg, (long) end, 0);
+#endif
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
