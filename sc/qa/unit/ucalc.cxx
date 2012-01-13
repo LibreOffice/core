@@ -724,7 +724,6 @@ void testFuncCELL(ScDocument* pDoc)
         for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
         {
             rtl::OUString aVal = pDoc->GetString(0, i, 0);
-            cout << "CELL: " << aVal << endl;
             CPPUNIT_ASSERT_MESSAGE("Unexpected result for CELL", aVal.equalsAscii(aChecks[i].pRes));
         }
     }
