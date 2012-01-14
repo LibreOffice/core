@@ -1428,7 +1428,7 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( SeriesPlotterContainer& 
     //use first coosys only so far; todo: calculate for more than one coosys if we have more in future
     //todo: this is just a workaround at the moment for pie and donut labels
     bool bIsPieOrDonut = lcl_IsPieOrDonut(xDiagram);
-    if( !bIsPieOrDonut && rVCooSysList.size() > 0 )
+    if( !bIsPieOrDonut && (!rVCooSysList.empty()) )
     {
         VCoordinateSystem* pVCooSys = rVCooSysList[0];
         pVCooSys->createMaximumAxesLabels();
