@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include <tools/shl.hxx>
 #include <tools/stream.hxx>
 
@@ -41,7 +39,6 @@
 
 // AppData-Structure for SBX:
 
-SV_IMPL_PTRARR(SbxParams,SbxParamInfo*);
 SV_IMPL_PTRARR(SbxFacs,SbxFactory*);
 
 TYPEINIT0(SbxBase)
@@ -367,21 +364,20 @@ SbxInfo::~SbxInfo()
 void SbxInfo::AddParam
         ( const XubString& rName, SbxDataType eType, sal_uInt16 nFlags )
 {
-    const SbxParamInfo* p = new SbxParamInfo( rName, eType, nFlags );
-    aParams.Insert( p, aParams.Count() );
+    aParams.push_back(new SbxParamInfo(rName, eType, nFlags));
 }
 
 const SbxParamInfo* SbxInfo::GetParam( sal_uInt16 n ) const
 {
-    if( n < 1 || n > aParams.Count() )
+    if( n < 1 || n > aParams.size() )
         return NULL;
     else
-        return aParams.GetObject( n-1 );
+        return &(aParams[n - 1]);
 }
 
 sal_Bool SbxInfo::LoadData( SvStream& rStrm, sal_uInt16 nVer )
 {
-    aParams.Remove( 0, aParams.Count() );
+    aParams.clear();
     sal_uInt16 nParam;
     aComment = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(rStrm,
         RTL_TEXTENCODING_ASCII_US);
@@ -399,8 +395,8 @@ sal_Bool SbxInfo::LoadData( SvStream& rStrm, sal_uInt16 nVer )
         if( nVer > 1 )
             rStrm >> nUserData;
         AddParam( aName, (SbxDataType) nType, nFlags );
-        SbxParamInfo* p = aParams.GetObject( aParams.Count() - 1 );
-        p->nUserData = nUserData;
+        SbxParamInfo& p(aParams.back());
+        p.nUserData = nUserData;
     }
     return sal_True;
 }
@@ -411,15 +407,14 @@ sal_Bool SbxInfo::StoreData( SvStream& rStrm ) const
         RTL_TEXTENCODING_ASCII_US );
     write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rStrm, aHelpFile,
         RTL_TEXTENCODING_ASCII_US);
-    rStrm << nHelpId << aParams.Count();
-    for( sal_uInt16 i = 0; i < aParams.Count(); i++ )
+    rStrm << nHelpId << static_cast<sal_uInt16>(aParams.size());
+    for(SbxParams::const_iterator i = aParams.begin(); i != aParams.end(); ++i)
     {
-        SbxParamInfo* p = aParams.GetObject( i );
-        write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rStrm, p->aName,
+        write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rStrm, i->aName,
             RTL_TEXTENCODING_ASCII_US);
-        rStrm << (sal_uInt16) p->eType
-              << (sal_uInt16) p->nFlags
-              << (sal_uInt32) p->nUserData;
+        rStrm << (sal_uInt16) i->eType
+              << (sal_uInt16) i->nFlags
+              << (sal_uInt32) i->nUserData;
     }
     return sal_True;
 }

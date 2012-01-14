@@ -236,7 +236,7 @@ const XubString& SbxVariable::GetName( SbxNameType t ) const
     ((SbxVariable*)this)->GetInfo();
     // Append nothing, if it is a simple property (no empty brackets)
     if( !pInfo
-     || ( !pInfo->aParams.Count() && GetClass() == SbxCLASS_PROPERTY ) )
+     || ( pInfo->aParams.empty() && GetClass() == SbxCLASS_PROPERTY ) )
         return maName;
     xub_Unicode cType = ' ';
     XubString aTmp( maName );
@@ -250,17 +250,16 @@ const XubString& SbxVariable::GetName( SbxNameType t ) const
             aTmp += cType;
     }
     aTmp += '(';
-    for( sal_uInt16 i = 0; i < pInfo->aParams.Count(); i++ )
+    for(SbxParams::const_iterator i = pInfo->aParams.begin(); i != pInfo->aParams.end(); ++i)
     {
-        const SbxParamInfo* q = pInfo->aParams.GetObject( i );
-        int nt = q->eType & 0x0FFF;
-        if( i )
+        int nt = i->eType & 0x0FFF;
+        if( i != pInfo->aParams.begin() )
             aTmp += ',';
-        if( q->nFlags & SBX_OPTIONAL )
+        if( i->nFlags & SBX_OPTIONAL )
             aTmp += String( SbxRes( STRING_OPTIONAL ) );
-        if( q->eType & SbxBYREF )
+        if( i->eType & SbxBYREF )
             aTmp += String( SbxRes( STRING_BYREF ) );
-        aTmp += q->aName;
+        aTmp += i->aName;
         cType = ' ';
         // short type? Then fetch it, posible this is 0.
         if( t == SbxNAME_SHORT_TYPES )
@@ -271,12 +270,12 @@ const XubString& SbxVariable::GetName( SbxNameType t ) const
         if( cType != ' ' )
         {
             aTmp += cType;
-            if( q->eType & SbxARRAY )
+            if( i->eType & SbxARRAY )
                 aTmp.AppendAscii( "()" );
         }
         else
         {
-            if( q->eType & SbxARRAY )
+            if( i->eType & SbxARRAY )
                 aTmp.AppendAscii( "()" );
             // long type?
             if( t != SbxNAME_SHORT )

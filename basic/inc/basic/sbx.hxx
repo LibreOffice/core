@@ -41,6 +41,8 @@
 #include <basic/sbxmeth.hxx>
 #include "basicdllapi.h"
 
+#include <boost/ptr_container/ptr_vector.hpp>
+
 class String;
 class UniString;
 class SvStream;
@@ -55,8 +57,6 @@ class SbxFactory;
 
 class SfxBroadcaster;
 class SvDispatch;
-
-
 
 #ifndef __SBX_SBXPARAMINFO
 #define __SBX_SBXPARAMINFO
@@ -74,7 +74,7 @@ struct SbxParamInfo
     ~SbxParamInfo() {}
 };
 
-SV_DECL_PTRARR_DEL(SbxParams,SbxParamInfo*,4,4)
+typedef boost::ptr_vector<SbxParamInfo> SbxParams;
 
 #endif
 
