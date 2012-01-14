@@ -101,7 +101,7 @@ STD_FONT_FILE( gid_File_Fnt_LiberationMono_BoldItalic, LiberationMono-BoldItalic
 #ifndef WITHOUT_FONTS 
 STD_FONT_FILE( gid_File_Fnt_LiberationSans_Regular, LiberationSans-Regular.ttf, Liberation Sans Regular) 
 STD_FONT_FILE( gid_File_Fnt_LiberationSans_Italic, LiberationSans-Italic.ttf, Liberation Sans Italic) 
-STD_FONT_FILE( gid_File_Fnt_LiberationSans_Bold, LiberationSans-Bold.ttf, Liberation Serif Bold) 
+STD_FONT_FILE( gid_File_Fnt_LiberationSans_Bold, LiberationSans-Bold.ttf, Liberation Sans Bold) 
 STD_FONT_FILE( gid_File_Fnt_LiberationSans_BoldItalic, LiberationSans-BoldItalic.ttf, Liberation Sans Bold Italic) 
 #endif
 
