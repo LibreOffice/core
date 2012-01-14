@@ -2039,8 +2039,6 @@ void Outliner::SetLevelDependendStyleSheet( sal_uInt16 nPara )
     pEditEngine->SetParaAttribs( nPara, aOldAttrs );
 }
 
-SV_IMPL_PTRARR( NotifyList, EENotifyPtr );
-
 void Outliner::ImplBlockInsertionCallbacks( sal_Bool b )
 {
     if ( b )
@@ -2054,13 +2052,12 @@ void Outliner::ImplBlockInsertionCallbacks( sal_Bool b )
         if ( !bBlockInsCallback )
         {
             // Call blocked notify events...
-            while ( pEditEngine->aNotifyCache.Count() )
+            while(!pEditEngine->aNotifyCache.empty())
             {
-                EENotify* pNotify = pEditEngine->aNotifyCache[0];
+                EENotify aNotify(pEditEngine->aNotifyCache.front());
                 // Remove from list before calling, maybe we enter LeaveBlockNotifications while calling the handler...
-                pEditEngine->aNotifyCache.Remove( 0 );
-                pEditEngine->aOutlinerNotifyHdl.Call( pNotify );
-                delete pNotify;
+                pEditEngine->aNotifyCache.erase(pEditEngine->aNotifyCache.begin());
+                pEditEngine->aOutlinerNotifyHdl.Call( &aNotify );
             }
         }
     }
@@ -2069,14 +2066,9 @@ void Outliner::ImplBlockInsertionCallbacks( sal_Bool b )
 IMPL_LINK( Outliner, EditEngineNotifyHdl, EENotify*, pNotify )
 {
     if ( !bBlockInsCallback )
-    {
         pEditEngine->aOutlinerNotifyHdl.Call( pNotify );
-    }
     else
-    {
-        EENotify* pNewNotify = new EENotify( *pNotify );
-        pEditEngine->aNotifyCache.Insert( pNewNotify, pEditEngine->aNotifyCache.Count() );
-    }
+        pEditEngine->aNotifyCache.push_back(*pNotify);
 
     return 0;
 }

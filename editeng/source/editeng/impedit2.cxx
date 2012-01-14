@@ -4383,14 +4383,9 @@ sal_Bool ImpEditEngine::DoVisualCursorTraveling( const ContentNode* )
 void ImpEditEngine::CallNotify( EENotify& rNotify )
 {
     if ( !nBlockNotifications )
-    {
         GetNotifyHdl().Call( &rNotify );
-    }
     else
-    {
-        EENotify* pNewNotify = new EENotify( rNotify );
-        aNotifyCache.Insert( pNewNotify, aNotifyCache.Count() );
-    }
+        aNotifyCache.push_back(rNotify);
 }
 
 void ImpEditEngine::EnterBlockNotifications()
@@ -4416,13 +4411,12 @@ void ImpEditEngine::LeaveBlockNotifications()
     if ( !nBlockNotifications )
     {
         // Call blocked notify events...
-        while ( aNotifyCache.Count() )
+        while(!aNotifyCache.empty())
         {
-            EENotify* pNotify = aNotifyCache[0];
+            EENotify aNotify(aNotifyCache[0]);
             // Remove from list before calling, maybe we enter LeaveBlockNotifications while calling the handler...
-            aNotifyCache.Remove( 0 );
-            GetNotifyHdl().Call( pNotify );
-            delete pNotify;
+            aNotifyCache.erase(aNotifyCache.begin());
+            GetNotifyHdl().Call( &aNotify );
         }
 
         EENotify aNotify( EE_NOTIFY_BLOCKNOTIFICATION_END );

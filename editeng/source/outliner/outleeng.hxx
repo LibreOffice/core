@@ -31,8 +31,7 @@
 #include <editeng/outliner.hxx>
 #include <editeng/editeng.hxx>
 
-typedef EENotify* EENotifyPtr;
-SV_DECL_PTRARR_DEL( NotifyList, EENotifyPtr, 1, 1 )
+typedef std::vector<EENotify> NotifyList;
 
 class OutlinerEditEng : public EditEngine
 {

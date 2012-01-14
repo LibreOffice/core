@@ -78,10 +78,6 @@ DBG_NAMEEX( EditEngine )
 
 #define LINE_SEP    0x0A
 
-typedef EENotify* EENotifyPtr;
-SV_DECL_PTRARR_DEL( NotifyList, EENotifyPtr, 1, 1 )    // IMPL is in outliner.cxx, move to EE later and share declaration, or use BlockNotifications from EE directly
-
-
 class EditView;
 class EditEngine;
 class SvxFontTable;
@@ -440,7 +436,7 @@ private:
 
     ImplIMEInfos*       mpIMEInfos;
 
-    NotifyList          aNotifyCache;
+    std::vector<EENotify> aNotifyCache;
 
     XubString           aWordDelimiters;
     XubString           aGroupChars;
