@@ -32,7 +32,6 @@
 *   (die defines setzen sich aus "_SVSTDARR_" und dem Namen des Array
 *    ohne "Sv" zusammen)
 *
-*   PtrArr:     SvStringsDtor
 *   SortArr:    SvStringsSort, SvStringsSortDtor,
 *               SvStringsISort, SvStringsISortDtor,
 ***********************************************************************/
@@ -44,11 +43,6 @@
 #include <tools/string.hxx>
 
 typedef String* StringPtr;
-
-#ifndef _SVSTDARR_STRINGSDTOR_DECL
-SV_DECL_PTRARR_DEL_VISIBILITY( SvStringsDtor, StringPtr, 1, 1, SVL_DLLPUBLIC )
-#define _SVSTDARR_STRINGSDTOR_DECL
-#endif
 
 #ifndef _SVSTDARR_STRINGSISORTDTOR_DECL
 SV_DECL_PTRARR_SORT_DEL_VISIBILITY( SvStringsISortDtor, StringPtr, 1, 1, SVL_DLLPUBLIC )

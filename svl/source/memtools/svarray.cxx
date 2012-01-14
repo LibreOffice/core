@@ -40,8 +40,6 @@ sal_uInt16 SvPtrarr::GetPos( const VoidPtr& aElement ) const
     return ( n >= nA ? USHRT_MAX : n );
 }
 
-SV_IMPL_PTRARR( SvStringsDtor, StringPtr )
-
 // ---------------- strings -------------------------------------
 
 // Array with different Seek method
