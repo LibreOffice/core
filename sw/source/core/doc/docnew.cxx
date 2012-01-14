@@ -390,7 +390,7 @@ SwDoc::SwDoc()
 
     // Set to "Empty Page"
     pEmptyPageFmt->SetFmtAttr( SwFmtFrmSize( ATT_FIX_SIZE ) );
-    // Set BodyFmt for "Column Setting" Spalten Einstellen. FIXME: WHAT?
+    // Set BodyFmt for columns
     pColumnContFmt->SetFmtAttr( SwFmtFillOrder( ATT_LEFT_TO_RIGHT ) );
 
     _InitFieldTypes();
@@ -560,12 +560,12 @@ SwDoc::~SwDoc()
     pSpzFrmFmtTbl->ForEach( &lcl_DelFmtIndizes, this );
     ((SwFrmFmts&)*pSectionFmtTbl).ForEach( &lcl_DelFmtIndizes, this );
 
-    // The Formats that come hereafter are depended on the
-    // DefaultFormats.
-    // FIXME: What?
-    // FIXME: Erst nach dem Loeschen der FmtIndizes weil der Inhalt von
-    // FIXME: Kopf-/Fussbereichen geloescht wird. Wenn dort noch Indizes von Flys
-    // FIXME: angemeldet sind gibts was an die Ohren.
+    // The formattings that come hereafter depend on the default formattings.
+    // [Destroy] these only after destroying the FmtIndices, because the content
+    // of headers/footers has to be deleted as well. If in the headers/footers
+    // there are still Flys registered at that point, we have a problem.
+    // (This comment might have been translated incorrectly. Blame the bad
+    // German original)
     aPageDescs.DeleteAndDestroy( 0, aPageDescs.Count() );
 
     // Delete content selections.
@@ -627,7 +627,7 @@ SwDoc::~SwDoc()
     DELETEZ( pLinkMgr );
 
     // Clear the Tables before deleting them, or we crash due to
-    // FIXME: Def-Abhängigen
+    // definition dependencies.
     // We also convert the arrays (due to includes) to pointers.
     delete pFrmFmtTbl;
     delete pSpzFrmFmtTbl;
@@ -727,7 +727,6 @@ void SwDoc::SetDocShell( SwDocShell* pDSh )
         }
 
         pLinkMgr->SetPersist( pDocShell );
-        // Bug 55570 - Set the DocShell pointer also in the DrawModel
         if( pDrawModel )
         {
             ((SwDrawDocument*)pDrawModel)->SetObjectShell( pDocShell );
