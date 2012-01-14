@@ -629,11 +629,9 @@ void SvStream::ResetError()
 
 sal_Bool SvStream::ReadByteStringLine( String& rStr, rtl_TextEncoding eSrcCharSet )
 {
-    sal_Bool bRet;
-    ByteString aStr;
-
-    bRet = ReadLine(aStr);
-    rStr = UniString( aStr, eSrcCharSet );
+    rtl::OString aStr;
+    sal_Bool bRet = ReadLine(aStr);
+    rStr = rtl::OStringToOUString(aStr, eSrcCharSet);
     return bRet;
 }
 
