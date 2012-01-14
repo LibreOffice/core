@@ -252,7 +252,7 @@ sal_Int32 compileFile(const OString * pathname)
     idlc()->setRealFileName(tmpFile);
 
     OStringBuffer cppArgs(512);
-    cppArgs.append("-DIDL -Xi -Xc -+ -I.");
+    cppArgs.append("-DIDL -Xi -Xc -+");
     Options* pOptions = idlc()->getOptions();
 
     OString filePath;
