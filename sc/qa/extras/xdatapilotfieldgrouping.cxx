@@ -34,15 +34,22 @@
 #include <com/sun/star/sheet/XDataPilotDescriptor.hpp>
 #include <com/sun/star/sheet/XDataPilotFieldGrouping.hpp>
 #include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
+#include <com/sun/star/util/XCloseable.hpp>
 
 #include <rtl/oustringostreaminserter.hxx>
 
 namespace ScDataPilotFieldObj {
 
+#define NUMBER_OF_TESTS  1
+
 class ScXDataPilotFieldGrouping : public UnoApiTest
 {
+public:
     void testCreateNameGroup();
     void testCreateDateGroup();
+
+    virtual void setUp();
+    virtual void tearDown();
 
     CPPUNIT_TEST_SUITE(ScXDataPilotFieldGrouping);
     CPPUNIT_TEST(testCreateNameGroup);
@@ -51,7 +58,14 @@ class ScXDataPilotFieldGrouping : public UnoApiTest
     CPPUNIT_TEST_SUITE_END();
 
     uno::Reference< sheet::XDataPilotFieldGrouping > init();
+
+private:
+    static int nTest;
+    static uno::Reference< lang::XComponent > xComponent;
 };
+
+int ScXDataPilotFieldGrouping::nTest = 0;
+uno::Reference< lang::XComponent > ScXDataPilotFieldGrouping::xComponent;
 
 void ScXDataPilotFieldGrouping::testCreateNameGroup()
 {
@@ -79,7 +93,6 @@ uno::Reference< sheet::XDataPilotFieldGrouping> ScXDataPilotFieldGrouping::init(
     const rtl::OUString aFileBase(RTL_CONSTASCII_USTRINGPARAM("scdatapilotfieldobj.ods"));
     createFileURL(aFileBase, aFileURL);
     std::cout << rtl::OUStringToOString(aFileURL, RTL_TEXTENCODING_UTF8).getStr() << std::endl;
-    static uno::Reference< lang::XComponent > xComponent;
     if( !xComponent.is())
         xComponent = loadFromDesktop(aFileURL);
     uno::Reference< sheet::XSpreadsheetDocument> xDoc (xComponent, UNO_QUERY_THROW);
@@ -104,6 +117,29 @@ uno::Reference< sheet::XDataPilotFieldGrouping> ScXDataPilotFieldGrouping::init(
     uno::Reference< sheet::XDataPilotFieldGrouping > xReturnValue( xIA->getByIndex(0), UNO_QUERY_THROW);
     CPPUNIT_ASSERT(xReturnValue.is());
     return xReturnValue;
+}
+
+void ScXDataPilotFieldGrouping::setUp()
+{
+    nTest += 1;
+    UnoApiTest::setUp();
+}
+
+void ScXDataPilotFieldGrouping::tearDown()
+{
+    if (nTest == NUMBER_OF_TESTS)
+    {
+        uno::Reference< util::XCloseable > xCloseable(xComponent, UNO_QUERY_THROW);
+        xCloseable->close( false );
+    }
+
+    UnoApiTest::tearDown();
+
+    if (nTest == NUMBER_OF_TESTS)
+    {
+        mxDesktop->terminate();
+        uno::Reference< lang::XComponent>(m_xContext, UNO_QUERY_THROW)->dispose();
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScXDataPilotFieldGrouping);
