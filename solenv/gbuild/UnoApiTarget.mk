@@ -59,6 +59,9 @@ $(call gb_UnoApiOutTarget_get_target,$(1)) : $(call gb_UnoApiTarget_get_target,$
 $(call gb_UnoApiOutTarget_get_clean_target,$(1)) : $(call gb_UnoApiTarget_get_clean_target,$(1))
 gb_UnoApiTarget_HPPFILES_$(1) :=
 gb_UnoApiTarget_IDLFILES_$(1) :=
+ifeq ($(gb_FULLDEPS),$(true))
+-include $(call gb_UnoApiTarget_get_dep_target,$(1))
+endif
 
 endef
 
@@ -66,6 +69,13 @@ define gb_UnoApiTarget__add_idlfile
 $(call gb_UnoApiPartTarget_get_target,$(2)/idl.done) : \
 	$(call gb_UnoApiPartTarget_get_target,$(2)/$(3).urd)
 gb_UnoApiTarget_IDLFILES_$(1) += $(2)/$(3).idl
+
+ifeq ($(gb_FULLDEPS),$(true))
+$(call gb_UnoApiTarget_get_dep_target,$(1)) : \
+       $(call gb_UnoApiPartTarget_get_dep_target,$(2)/$(3))
+$(call gb_UnoApiPartTarget_get_dep_target,$(2)/$(3)) : \
+	$(call gb_UnoApiPartTarget_get_target,$(2)/idl.done)
+endif
 
 endef
 
@@ -169,8 +179,10 @@ $(call gb_UnoApiOutTarget_get_clean_target,%) :
 $(call gb_UnoApiTarget_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),UNO,1)
 	-$(call gb_Helper_abbreviate_dirs,\
-		rm -f $(call gb_UnoApiTarget_get_target,$*)) 
+		rm -f $(call gb_UnoApiTarget_get_target,$*))
 	-rm -rf $(call gb_UnoApiTarget_get_header_target,$*)\
+			$(call gb_UnoApiTarget_get_dep_target,$*) \
+			$(basename $(call gb_UnoApiPartTarget_get_dep_target,$*)) \
 			$(call gb_UnoApiPartTarget_get_target,$*)
 
 # The .urd files are actually created by the gb_UnoApiPartTarget__command,
@@ -181,8 +193,11 @@ $(call gb_UnoApiTarget_get_clean_target,%) :
 # rule plus the dependency from the .done target to the .urd file plus the
 # sort/patsubst call in gb_UnoApiPartTarget__command cause command to be
 # invoked with the .idl file corresponding to the .urd in that case.
+# Yes, this command removes the target.  This is because it works.  The
+# command "true" does not work.  Apparently make considers a file that does
+# not exist as newer than the target.  Which is weird.  But there you go.
 $(call gb_UnoApiPartTarget_get_target,%.urd) :
-	@true
+	@rm -f $@
 
 $(call gb_UnoApiPartTarget_get_target,%.done) :
 	$(call gb_UnoApiPartTarget__command,$@,$*,$?)
@@ -193,6 +208,7 @@ define gb_UnoApiPartTarget__command
 	mkdir -p $(call gb_UnoApiPartTarget_get_target,$(dir $(2))) && \
 	RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),500,\
 		$(call gb_Helper_convert_native,$(INCLUDE) $(DEFS) \
+		-M $(basename $(call gb_UnoApiPartTarget_get_dep_target,$(dir $(2)))) \
 		-O $(call gb_UnoApiPartTarget_get_target,$(dir $(2))) -verbose -C \
 		$(sort $(patsubst $(call gb_UnoApiPartTarget_get_target,%.urd),$(SRCDIR)/%.idl,$(3))))) && \
 	$(gb_UnoApiTarget_IDLCCOMMAND) @$${RESPONSEFILE} > /dev/null && \
@@ -222,9 +238,30 @@ $(call gb_Helper_abbreviate_dirs_native,\
 
 endef
 
+# cat the deps of all IDLs in one file, then we need only open that one file
+define gb_UnoApiTarget__command_dep
+$(call gb_Output_announce,IDL:$(2),$(true),DEP,1)
+$(call gb_Helper_abbreviate_dirs,\
+	mkdir -p $(dir $(1)) && \
+	RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),200,\
+		$(foreach idl,$(patsubst %.idl,%,$(3)),$(call gb_UnoApiPartTarget_get_dep_target,$(idl)))) && \
+	$(SOLARENV)/bin/concat-deps $${RESPONSEFILE} > $(1)) && \
+	rm -f $${RESPONSEFILE}
+
+endef
+
+ifeq ($(gb_FULLDEPS),$(true))
+$(call gb_UnoApiPartTarget_get_dep_target,%) :
+	$(if $(realpath $@),touch $@,\
+	  $(call gb_Object__command_dep,$@,$(call gb_UnoApiPartTarget_get_target,$*.urd)))
+
+$(call gb_UnoApiTarget_get_dep_target,%) : $(call gb_UnoApiTarget_get_target,%)
+	$(call gb_UnoApiTarget__command_dep,$@,$*,$(gb_UnoApiTarget_IDLFILES_$*))
+
+endif
+
 # TODO:
 # - get idlc switch "-P" (generate .urd into package dir)
-# - generate dependencies for included idls
 # - empty $? in headertarget?
 
 $(call gb_UnoApiTarget_get_target,%):

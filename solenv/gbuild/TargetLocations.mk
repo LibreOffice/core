@@ -205,6 +205,7 @@ $(eval $(call gb_Helper_make_dep_targets,\
 	SrsPartTarget \
 	SrsTarget \
 	UnoApiTarget \
+	UnoApiPartTarget \
 ))
 
 # other getters
