@@ -888,9 +888,6 @@ if ("@ENABLE_WERROR@" eq "FALSE") {
 ToFile( "EXTERNAL_WARNINGS_NOT_ERRORS", "TRUE",  "e" );
 }
 ToFile( "PROEXT",            $PROEXT,            "e" );
-if ($platform =~ m/linux/ && $platform =~ m/powerpc/) {
-ToFile( "JITC_PROCESSOR_TYPE","6",                 "e" );
-}
 ToFile( "nodep",             "@nodep@",          "e" );
 ToFile( "TARFILE_LOCATION",  $TARFILE_LOCATION,  "e" );
 

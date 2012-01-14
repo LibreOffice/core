@@ -26,7 +26,11 @@
 # instead of those above.
 
 soffice.sh : $(SRCDIR)/desktop/scripts/soffice.sh
-	sed -e "s/^#@JITC_PROCESSOR_TYPE_EXPORT@/$(JITC_PROCESSOR_TYPE_EXPORT)/" $< > $@
+ifneq ($(JITC_PROCESSOR_TYPE),)
+	sed -e "s/^#@JITC_PROCESSOR_TYPE_EXPORT@/export JITC_PROCESSOR_TYPE=$(JITC_PROCESSOR_TYPE)/" $< > $@
+else
+	cp $< $@
+endif
 
 .DEFAULT_GOAL := all
 .PHONY : all

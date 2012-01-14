@@ -46,14 +46,6 @@ $(eval $(call gb_Package_add_file,desktop_scripts,bin/swriter,swriter.sh))
 $(eval $(call gb_Package_add_file,desktop_scripts,bin/unoinfo,unoinfo.sh))
 $(eval $(call gb_Package_add_file,desktop_scripts,bin/unopkg,unopkg.sh))
 
-ifneq ($(OS),MACOSX)
-ifeq ($(JITC_PROCESSOR_TYPE_EXPORT),)
-
-$(eval $(call gb_Package_add_file,desktop_scripts,bin/soffice,soffice.sh))
-
-endif
-endif
-
 endif
 
 # vim: set ts=4 sw=4 et:
