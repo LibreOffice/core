@@ -963,14 +963,11 @@ sNm.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "_Head" ));
 
     // sortierte Liste aller Verzeichnismarken und Verzeichnisbereiche
     void* p = 0;
-    String* pStr = 0;
     sal_uInt16 nCnt = 0, nFormMax = GetTOXForm().GetFormMax();
-    SvStringsDtor aStrArr( (sal_uInt8)nFormMax );
     SvPtrarr aCollArr( (sal_uInt8)nFormMax );
     for( ; nCnt < nFormMax; ++nCnt )
     {
         aCollArr.Insert( p, nCnt );
-        aStrArr.Insert( pStr, nCnt );
     }
 
     SwNodeIndex aInsPos( *pFirstEmptyNd, 1 );
@@ -1015,7 +1012,7 @@ sNm.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "_Head" ));
         }
         // pass node index of table-of-content section and default page description
         // to method <GenerateText(..)>.
-        GenerateText( nCnt, nRange, aStrArr, pSectNd->GetIndex(), pDefaultPageDesc );
+        GenerateText( nCnt, nRange, pSectNd->GetIndex(), pDefaultPageDesc );
         nCnt += nRange - 1;
     }
 
@@ -1592,7 +1589,6 @@ String lcl_GetNumString( const SwTOXSortTabBase& rBase, sal_Bool bUsePrefix, sal
 // which page description is used, no appropriate one is found.
 void SwTOXBaseSection::GenerateText( sal_uInt16 nArrayIdx,
                                      sal_uInt16 nCount,
-                                     SvStringsDtor& ,
                                      const sal_uInt32   _nTOXSectNdIdx,
                                      const SwPageDesc*  _pDefaultPageDesc )
 {

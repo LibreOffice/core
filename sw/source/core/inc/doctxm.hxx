@@ -28,14 +28,12 @@
 #ifndef _DOCTXM_HXX
 #define _DOCTXM_HXX
 
-
 #include <svl/svarray.hxx>
 #include <tools/gen.hxx>
 #include <tox.hxx>
 #include <section.hxx>
 
 class  SwTOXInternational;
-class  SvStringsDtor;
 class  SvPtrarr;
 class  SwPageDesc;
 class  SwTxtNode;
@@ -76,7 +74,6 @@ class SwTOXBaseSection : public SwTOXBase, public SwSection
     // add parameter <_TOXSectNdIdx> and <_pDefaultPageDesc>
     void GenerateText( sal_uInt16 nArrayIdx,
                        sal_uInt16 nCount,
-                       SvStringsDtor&,
                        const sal_uInt32   _nTOXSectNdIdx,
                        const SwPageDesc*  _pDefaultPageDesc );
 
