@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-
-
-#define _STD_VAR_ARRAYS
 #include <hintids.hxx>
 
 #include <svx/svxids.hrc>
