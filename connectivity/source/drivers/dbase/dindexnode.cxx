@@ -34,6 +34,7 @@
 #include "diagnose_ex.h"
 
 #include <algorithm>
+#include <boost/scoped_array.hpp>
 
 
 using namespace connectivity;
@@ -683,8 +684,6 @@ void ONDXNode::Read(SvStream &rStream, ODbaseIndex& rIndex)
     rStream >> aChild;
 }
 
-char aData[128];
-
 //------------------------------------------------------------------
 void ONDXNode::Write(SvStream &rStream, const ONDXPage& rPage) const
 {
@@ -696,24 +695,32 @@ void ONDXNode::Write(SvStream &rStream, const ONDXPage& rPage) const
 
     if (rIndex.getHeader().db_keytype) // double
     {
+        if (sizeof(double) != rIndex.getHeader().db_keylen)
+        {
+            OSL_TRACE("this key length cannot possibly be right?");
+        }
         if (aKey.getValue().isNull())
         {
-            memset(aData,0,rIndex.getHeader().db_keylen);
-            rStream.Write((sal_uInt8*)aData,rIndex.getHeader().db_keylen);
+            sal_uInt8 buf[sizeof(double)];
+            memset(&buf[0], 0, sizeof(double));
+            rStream.Write(&buf[0], sizeof(double));
         }
         else
             rStream << (double) aKey.getValue();
     }
     else
     {
-        memset(aData,0x20,rIndex.getHeader().db_keylen);
+        sal_uInt16 const nLen(rIndex.getHeader().db_keylen);
+        ::boost::scoped_array<sal_uInt8> pBuf(new sal_uInt8[nLen]);
+        memset(&pBuf[0], 0x20, nLen);
         if (!aKey.getValue().isNull())
         {
             ::rtl::OUString sValue = aKey.getValue();
             rtl::OString aText(rtl::OUStringToOString(sValue, rIndex.m_pTable->getConnection()->getTextEncoding()));
-            strncpy(aData, aText.getStr(), std::min<size_t>(rIndex.getHeader().db_keylen, aText.getLength()));
+            strncpy(reinterpret_cast<char *>(&pBuf[0]), aText.getStr(),
+                std::min<size_t>(nLen, aText.getLength()));
         }
-        rStream.Write((sal_uInt8*)aData,rIndex.getHeader().db_keylen);
+        rStream.Write(&pBuf[0], nLen);
     }
     rStream << aChild;
 }
