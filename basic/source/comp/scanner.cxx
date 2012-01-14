@@ -317,7 +317,7 @@ bool SbiScanner::NextSym()
         short ncdig = 0;
         eScanType = SbxDOUBLE;
         bool bBufOverflow = false;
-        while( strchr( "0123456789.DEde", *pLine ) && *pLine )
+        while(nCol < aLine.getLength() && strchr("0123456789.DEde", aLine[nCol]))
         {
             // from 4.1.1996: buffer full? -> go on scanning empty
             if( (p-buf) == (BUF_SIZE-1) )
@@ -327,31 +327,40 @@ bool SbiScanner::NextSym()
                 continue;
             }
             // point or exponent?
-            if( *pLine == '.' )
+            if(aLine[nCol] == '.')
             {
                 if( ++comma > 1 )
                 {
                     ++pLine; ++nCol; continue;
                 }
-                else *p++ = *pLine++, ++nCol;
+                else
+                {
+                    *p = '.';
+                    ++p, ++pLine, ++nCol;
+                }
             }
-            else if( strchr( "DdEe", *pLine ) )
+            else if(strchr("DdEe", aLine[nCol]))
             {
                 if (++exp > 1)
                 {
                     ++pLine; ++nCol; continue;
                 }
-                *p++ = 'E'; ++pLine; ++nCol;
 
-                if( *pLine == '+' )
+                *p = 'E';
+                ++p, ++pLine, ++nCol;
+
+                if(aLine[nCol] == '+')
                     ++pLine, ++nCol;
-                else
-                if( *pLine == '-' )
-                    *p++ = *pLine++, ++nCol;
+                else if(aLine[nCol] == '-')
+                {
+                    *p = '-';
+                    ++p, ++pLine, ++nCol;
+                }
             }
             else
             {
-                *p++ = *pLine++, ++nCol;
+                *p = aLine[nCol];
+                ++p, ++pLine, ++nCol;
                 if( comma && !exp ) ++ncdig;
             }
             if (!exp) ++ndig;
@@ -379,7 +388,7 @@ bool SbiScanner::NextSym()
             GenError( SbERR_MATH_OVERFLOW );
 
         // type recognition?
-        SbxDataType t = GetSuffixType( *pLine );
+        SbxDataType t(GetSuffixType(aLine[nCol]));
         if( t != SbxVARIANT )
         {
             eScanType = t;
