@@ -72,7 +72,7 @@ Rectangle IosSalSystem::GetDisplayScreenPosSizePixel( unsigned int nScreen )
     return aRet;
 }
 
-Rectangle IosSalSystem::GetDisplayWorkAreaPosSizePixel( unsigned int nScreen )
+Rectangle IosSalSystem::GetDisplayScreenWorkAreaPosSizePixel( unsigned int nScreen )
 {
     NSArray* pScreens = [UIScreen screens];
     Rectangle aRet;
@@ -91,7 +91,7 @@ Rectangle IosSalSystem::GetDisplayWorkAreaPosSizePixel( unsigned int nScreen )
     return aRet;
 }
 
-rtl::OUString IosSalSystem::GetScreenName( unsigned int nScreen )
+rtl::OUString IosSalSystem::GetDisplayScreenName( unsigned int nScreen )
 {
    NSArray* pScreens = [UIScreen screens];
    OUString aRet;

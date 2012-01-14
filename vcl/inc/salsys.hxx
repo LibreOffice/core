@@ -57,11 +57,9 @@ const int SALSYSTEM_SHOWNATIVEMSGBOX_BTN_YES    = 6;
 const int SALSYSTEM_SHOWNATIVEMSGBOX_BTN_NO     = 7;
 
 
-
 // -------------
 // - SalSystem -
 // -------------
-
 class VCL_PLUGIN_PUBLIC SalSystem
 {
 public:
@@ -88,7 +86,7 @@ public:
 
         @returns the default screen number
     */
-    virtual unsigned int GetDefaultDisplayNumber() { return 0; }
+    virtual unsigned int GetDisplayDefaultScreen() { return 0; }
     /*  Gets relative position and size of the screens attached to the display
 
         @param nScreen
@@ -106,7 +104,7 @@ public:
 
         @returns position and size relative to the scree
     */
-    virtual Rectangle GetDisplayWorkAreaPosSizePixel( unsigned int nScreen ) = 0;
+    virtual Rectangle GetDisplayScreenWorkAreaPosSizePixel( unsigned int nScreen ) = 0;
     /* Gets the name of a screen
 
        @param nScreen
@@ -114,7 +112,7 @@ public:
 
        @returns the name of the screen
     */
-    virtual rtl::OUString GetScreenName( unsigned int nScreen ) = 0;
+    virtual rtl::OUString GetDisplayScreenName( unsigned int nScreen ) = 0;
 
     /*  Shows a native message box with the specified title, message and button
         combination.

@@ -67,7 +67,7 @@ bool X11SalSystem::IsUnifiedDisplay()
     return pSalDisp->IsXinerama() ? true : (nScreenCount == 1);
 }
 
-unsigned int X11SalSystem::GetDefaultDisplayNumber()
+unsigned int X11SalSystem::GetDisplayDefaultScreen()
 {
     SalDisplay* pSalDisp = GetGenericData()->GetSalDisplay();
     return pSalDisp->GetDefaultScreenNumber();
@@ -92,13 +92,13 @@ Rectangle X11SalSystem::GetDisplayScreenPosSizePixel( unsigned int nScreen )
     return aRet;
 }
 
-Rectangle X11SalSystem::GetDisplayWorkAreaPosSizePixel( unsigned int nScreen )
+Rectangle X11SalSystem::GetDisplayScreenWorkAreaPosSizePixel( unsigned int nScreen )
 {
     // FIXME: workareas
     return GetDisplayScreenPosSizePixel( nScreen );
 }
 
-rtl::OUString X11SalSystem::GetScreenName( unsigned int nScreen )
+rtl::OUString X11SalSystem::GetDisplayScreenName( unsigned int nScreen )
 {
     rtl::OUString aScreenName;
     SalDisplay* pSalDisp = GetGenericData()->GetSalDisplay();

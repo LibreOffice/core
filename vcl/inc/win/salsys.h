@@ -69,10 +69,10 @@ public:
     virtual ~WinSalSystem();
 
     virtual unsigned int GetDisplayScreenCount();
-    virtual unsigned int GetDefaultDisplayNumber();
+    virtual unsigned int GetDisplayDefaultScreen();
     virtual Rectangle GetDisplayScreenPosSizePixel( unsigned int nScreen );
-    virtual Rectangle GetDisplayWorkAreaPosSizePixel( unsigned int nScreen );
-    virtual rtl::OUString GetScreenName( unsigned int nScreen );
+    virtual Rectangle GetDisplayScreenWorkAreaPosSizePixel( unsigned int nScreen );
+    virtual rtl::OUString GetDisplayScreenName( unsigned int nScreen );
     virtual int ShowNativeMessageBox( const rtl::OUString& rTitle,
                                       const rtl::OUString& rMessage,
                                       int nButtonCombination,
