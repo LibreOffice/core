@@ -233,37 +233,38 @@ SwGlossaryList* GetGlossaryList()
 
 struct ImpAutoFmtNameListLoader : public Resource
 {
-    ImpAutoFmtNameListLoader( SvStringsDtor& rLst );
+    ImpAutoFmtNameListLoader( std::vector<String>& rLst );
 };
 
 void ShellResource::_GetAutoFmtNameLst() const
 {
-    SvStringsDtor** ppLst = (SvStringsDtor**)&pAutoFmtNameLst;
-    *ppLst = new SvStringsDtor( STR_AUTOFMTREDL_END );
-    ImpAutoFmtNameListLoader aTmp( **ppLst );
+    std::vector<String>* pLst(pAutoFmtNameLst);
+    pLst = new std::vector<String>;
+    pLst->reserve(STR_AUTOFMTREDL_END);
+    ImpAutoFmtNameListLoader aTmp( *pLst );
 }
 
-ImpAutoFmtNameListLoader::ImpAutoFmtNameListLoader( SvStringsDtor& rLst )
+ImpAutoFmtNameListLoader::ImpAutoFmtNameListLoader( std::vector<String>& rLst )
     : Resource( ResId(RID_SHELLRES_AUTOFMTSTRS, *pSwResMgr) )
 {
     for( sal_uInt16 n = 0; n < STR_AUTOFMTREDL_END; ++n )
     {
-        String* p = new String( ResId( n + 1, *pSwResMgr) );
+        String p(ResId(n + 1, *pSwResMgr));
         if(STR_AUTOFMTREDL_TYPO == n)
         {
 #ifdef WNT
             //fuer Windows Sonderbehandlung, da MS hier ein paar Zeichen im Dialogfont vergessen hat
-            p->SearchAndReplace(C2S("%1"), C2S(",,"));
-            p->SearchAndReplace(C2S("%2"), C2S("''"));
+            p.SearchAndReplace(C2S("%1"), C2S(",,"));
+            p.SearchAndReplace(C2S("%2"), C2S("''"));
 #else
             const SvtSysLocale aSysLocale;
             const LocaleDataWrapper& rLclD = aSysLocale.GetLocaleData();
             //unter richtigen Betriebssystemen funktioniert es auch so
-            p->SearchAndReplace(C2S("%1"), rLclD.getDoubleQuotationMarkStart());
-            p->SearchAndReplace(C2S("%2"), rLclD.getDoubleQuotationMarkEnd());
+            p.SearchAndReplace(C2S("%1"), rLclD.getDoubleQuotationMarkStart());
+            p.SearchAndReplace(C2S("%2"), rLclD.getDoubleQuotationMarkEnd());
 #endif
         }
-        rLst.Insert( p, n );
+        rLst.insert(rLst.begin() + n, p);
     }
     FreeResource();
 }
