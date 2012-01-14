@@ -193,11 +193,10 @@ $(call gb_UnoApiTarget_get_clean_target,%) :
 # rule plus the dependency from the .done target to the .urd file plus the
 # sort/patsubst call in gb_UnoApiPartTarget__command cause command to be
 # invoked with the .idl file corresponding to the .urd in that case.
-# Yes, this command removes the target.  This is because it works.  The
-# command "true" does not work.  Apparently make considers a file that does
-# not exist as newer than the target.  Which is weird.  But there you go.
+# Touch the .urd file, so it is newer than the .done file, causing that to
+# be rebuilt and overwriting the .urd file again.
 $(call gb_UnoApiPartTarget_get_target,%.urd) :
-	@rm -f $@
+	mkdir -p $(dir $@) && touch $@
 
 $(call gb_UnoApiPartTarget_get_target,%.done) :
 	$(call gb_UnoApiPartTarget__command,$@,$*,$?)
