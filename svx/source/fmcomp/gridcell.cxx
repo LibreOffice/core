@@ -3128,7 +3128,7 @@ void DbFilterField::Update()
                 aStatement.AssignAscii("SELECT DISTINCT ");
 
                 aStatement += String(quoteName(aQuote, aName));
-                if (aFieldName.getLength() && aName != aFieldName)
+                if (!aFieldName.isEmpty() && aName != aFieldName)
                 {
                     aStatement.AppendAscii(" AS ");
                     aStatement += quoteName(aQuote, aFieldName).getStr();

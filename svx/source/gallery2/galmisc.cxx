@@ -284,7 +284,7 @@ sal_Bool FileExists( const INetURLObject& rURL )
             OUString    aTitle;
 
             aCnt.getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("Title")) ) >>= aTitle;
-            bRet = ( aTitle.getLength() > 0 );
+            bRet = ( !aTitle.isEmpty() );
         }
         catch( const ucb::ContentCreationException& )
         {

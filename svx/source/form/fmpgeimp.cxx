@@ -491,7 +491,7 @@ Reference< ::com::sun::star::form::XForm >  FmFormPageImpl::findPlaceInFormCompo
     // Wenn Datenbank und CursorSource gesetzt sind, dann wird
     // die Form anhand dieser Kriterien gesucht, ansonsten nur aktuelle
     // und die StandardForm
-    if (rDatabase.is() && rCursorSource.getLength())
+    if (rDatabase.is() && !rCursorSource.isEmpty())
     {
         validateCurForm();
 
@@ -529,7 +529,7 @@ Reference< ::com::sun::star::form::XForm >  FmFormPageImpl::findPlaceInFormCompo
             try { xFormProps->setPropertyValue(FM_PROP_COMMANDTYPE, makeAny(sal_Int32(CommandType::TABLE))); }
             catch(Exception&) { }
 
-            if (rDBTitle.getLength())
+            if (!rDBTitle.isEmpty())
                 xFormProps->setPropertyValue(FM_PROP_DATASOURCE,makeAny(rDBTitle));
             else
             {
@@ -595,7 +595,7 @@ Reference< XForm >  FmFormPageImpl::findFormForDataSource(
         xFormProps->getPropertyValue(FM_PROP_DATASOURCE) >>= sFormDataSourceName;
         // if there's no DataSourceName set at the form, check whether we can deduce one from its
         // ActiveConnection
-        if (0 == sFormDataSourceName.getLength())
+        if (sFormDataSourceName.isEmpty())
         {
             Reference< XConnection > xFormConnection;
             xFormProps->getPropertyValue( FM_PROP_ACTIVE_CONNECTION ) >>= xFormConnection;
@@ -628,11 +628,11 @@ Reference< XForm >  FmFormPageImpl::findFormForDataSource(
         // jetzt noch ueberpruefen ob CursorSource und Type uebereinstimmen
         ::rtl::OUString aCursorSource = ::comphelper::getString(xFormProps->getPropertyValue(FM_PROP_COMMAND));
         sal_Int32 nType = ::comphelper::getINT32(xFormProps->getPropertyValue(FM_PROP_COMMANDTYPE));
-        if (!aCursorSource.getLength() || ((nType == nCommandType) && (aCursorSource == _rCursorSource))) // found the form
+        if (aCursorSource.isEmpty() || ((nType == nCommandType) && (aCursorSource == _rCursorSource))) // found the form
         {
             xResultForm = rForm;
             // Ist noch keine Datenquelle gesetzt, wird dieses hier nachgeholt
-            if (!aCursorSource.getLength())
+            if (aCursorSource.isEmpty())
             {
                 xFormProps->setPropertyValue(FM_PROP_COMMAND, makeAny(_rCursorSource));
                 xFormProps->setPropertyValue(FM_PROP_COMMANDTYPE, makeAny((sal_Int32)nCommandType));
@@ -675,7 +675,7 @@ Reference< XForm >  FmFormPageImpl::findFormForDataSource(
         sName = ::comphelper::getString( xSet->getPropertyValue( FM_PROP_NAME ) );
         Reference< ::com::sun::star::container::XNameAccess >  xNameAcc(xControls, UNO_QUERY);
 
-        if (!sName.getLength() || xNameAcc->hasByName(sName))
+        if (sName.isEmpty() || xNameAcc->hasByName(sName))
         {
             // setzen eines default Namens ueber die ClassId
             sal_Int16 nClassId( FormComponentType::CONTROL );
@@ -685,7 +685,7 @@ Reference< XForm >  FmFormPageImpl::findFormForDataSource(
                 Reference< XNameAccess >( xControls, UNO_QUERY ), xSet );
 
             // bei Radiobuttons, die einen Namen haben, diesen nicht ueberschreiben!
-            if (!sName.getLength() || nClassId != ::com::sun::star::form::FormComponentType::RADIOBUTTON)
+            if (sName.isEmpty() || nClassId != ::com::sun::star::form::FormComponentType::RADIOBUTTON)
             {
                 xSet->setPropertyValue(FM_PROP_NAME, makeAny(sDefaultName));
             }

@@ -185,7 +185,7 @@ static MSO_SPT ImpGetCustomShapeType( const SdrObjCustomShape& rCustoShape )
     MSO_SPT eRetValue = mso_sptNil;
 
     rtl::OUString aEngine( ( (SdrCustomShapeEngineItem&)rCustoShape.GetMergedItem( SDRATTR_CUSTOMSHAPE_ENGINE ) ).GetValue() );
-    if ( !aEngine.getLength() || aEngine.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.drawing.EnhancedCustomShapeEngine" ) ) )
+    if ( aEngine.isEmpty() || aEngine.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.drawing.EnhancedCustomShapeEngine" ) ) )
     {
         rtl::OUString sShapeType;
         const rtl::OUString sType( RTL_CONSTASCII_USTRINGPARAM ( "Type" ) );
@@ -850,7 +850,7 @@ void SdrObjCustomShape::MergeDefaultAttributes( const rtl::OUString* pType )
     rtl::OUString sShapeType;
     const rtl::OUString sType( RTL_CONSTASCII_USTRINGPARAM ( "Type" ) );
     SdrCustomShapeGeometryItem aGeometryItem( (SdrCustomShapeGeometryItem&)GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
-    if ( pType && pType->getLength() )
+    if ( pType && !pType->isEmpty() )
     {
         sal_Int32 nType = pType->toInt32();
         if ( nType )

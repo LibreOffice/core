@@ -237,7 +237,7 @@ IMPL_LINK(FmFormObjFactory, MakeObject, SdrObjFactory*, pObjFactory)
         }
 
         // create the actual object
-        if ( sServiceSpecifier.getLength() )
+        if ( !sServiceSpecifier.isEmpty() )
             pObjFactory->pNewObj = new FmFormObj( sServiceSpecifier, pObjFactory->nIdentifier );
         else
             pObjFactory->pNewObj = new FmFormObj( pObjFactory->nIdentifier );

@@ -243,7 +243,7 @@ bool XPropertyList::Load()
 
         aURL.Append( aName );
 
-        if( !aURL.getExtension().getLength() )
+        if( aURL.getExtension().isEmpty() )
             aURL.setExtension( GetDefaultExt() );
 
         return SvxXMLXTableImport::load( aURL.GetMainURL( INetURLObject::NO_DECODE ),
@@ -275,7 +275,7 @@ bool XPropertyList::Save()
 
     aURL.Append( aName );
 
-    if( !aURL.getExtension().getLength() )
+    if( aURL.getExtension().isEmpty() )
         aURL.setExtension( GetDefaultExt() );
 
     return SvxXMLXTableExportComponent::save( aURL.GetMainURL( INetURLObject::NO_DECODE ),

@@ -85,7 +85,7 @@ namespace svx
 
 
         implConstruct(
-            sDataSource.getLength() ? sDataSource : sDatabaseLocation,
+            sDataSource.isEmpty() ? sDatabaseLocation : sDataSource,
             sConnectionResource, nCommandType, sCommand, sFieldName );
 
         if ( m_nFormatFlags & CTF_COLUMN_DESCRIPTOR )
@@ -212,7 +212,7 @@ namespace svx
         if ((m_nFormatFlags & CTF_COLUMN_DESCRIPTOR) == CTF_COLUMN_DESCRIPTOR)
         {
             m_aDescriptor.setDataSource(_rDatasource);
-            if ( _rConnectionResource.getLength() )
+            if ( !_rConnectionResource.isEmpty() )
                 m_aDescriptor[daConnectionResource] <<= _rConnectionResource;
 
             m_aDescriptor[daCommand]        <<= _rCommand;
@@ -309,11 +309,11 @@ namespace svx
         if (extractColumnDescriptor(_rData, sDatasource, sDatabaseLocation,sConnectionResource,nCommandType, sCommand, sFieldName))
         {
             // and build an own descriptor
-            if ( sDatasource.getLength() )
+            if ( !sDatasource.isEmpty() )
                 aDescriptor[daDataSource]   <<= sDatasource;
-            if ( sDatabaseLocation.getLength() )
+            if ( !sDatabaseLocation.isEmpty() )
                 aDescriptor[daDatabaseLocation] <<= sDatabaseLocation;
-            if ( sConnectionResource.getLength() )
+            if ( !sConnectionResource.isEmpty() )
                 aDescriptor[daConnectionResource]   <<= sConnectionResource;
 
             aDescriptor[daCommand]      <<= sCommand;
@@ -596,7 +596,7 @@ namespace svx
     {
         m_aDescriptor.setDataSource(_rDatasource);
         // build the descriptor (the property sequence)
-        if ( _rConnectionResource.getLength() )
+        if ( !_rConnectionResource.isEmpty() )
             m_aDescriptor[daConnectionResource] <<= _rConnectionResource;
         if ( _rxConnection.is() )
             m_aDescriptor[daConnection]     <<= _rxConnection;

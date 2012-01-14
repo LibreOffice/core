@@ -405,7 +405,7 @@ sal_Bool SAL_CALL SvxUnoMarkerTable::hasByName( const OUString& aName )
 {
     SolarMutexGuard aGuard;
 
-    if( aName.getLength() == 0 )
+    if( aName.isEmpty() )
         return sal_False;
 
     String aSearchName;

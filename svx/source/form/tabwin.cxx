@@ -116,7 +116,7 @@ void lcl_addToList( SvTreeListBox& _rListBox, const uno::Reference< container::X
         ::rtl::OUString sLabel;
         if ( xColumn->getPropertySetInfo()->hasPropertyByName(FM_PROP_LABEL) )
             xColumn->getPropertyValue(FM_PROP_LABEL) >>= sLabel;
-        if ( sLabel.getLength() )
+        if ( !sLabel.isEmpty() )
             _rListBox.InsertEntry( sLabel,NULL,sal_False,LIST_APPEND,new ColumnInfo(*pEntries,sLabel) );
         else
             _rListBox.InsertEntry( *pEntries,NULL,sal_False,LIST_APPEND,new ColumnInfo(*pEntries,sLabel) );
@@ -375,7 +375,7 @@ void FmFieldWin::UpdateContent(const ::com::sun::star::uno::Reference< ::com::su
 
         // get the fields of the object
 
-        if ( m_aConnection.is() && m_aObjectName.getLength() )
+        if ( m_aConnection.is() && !m_aObjectName.isEmpty() )
         {
             Reference< XComponent > xKeepFieldsAlive;
             Reference< XNameAccess > xColumns = getFieldsByCommandDescriptor( m_aConnection, m_nObjectType, m_aObjectName,xKeepFieldsAlive );

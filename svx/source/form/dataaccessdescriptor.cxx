@@ -408,7 +408,7 @@ namespace svx
     //--------------------------------------------------------------------
     void ODataAccessDescriptor::setDataSource(const ::rtl::OUString& _sDataSourceNameOrLocation)
     {
-        if ( _sDataSourceNameOrLocation.getLength() )
+        if ( !_sDataSourceNameOrLocation.isEmpty() )
         {
             INetURLObject aURL(_sDataSourceNameOrLocation);
             (*this)[ (( aURL.GetProtocol() == INET_PROT_FILE ) ? daDatabaseLocation : daDataSource)] <<= _sDataSourceNameOrLocation;

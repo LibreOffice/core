@@ -591,13 +591,13 @@ sal_Bool SvXMLGraphicHelper::ImplWriteGraphic( const ::rtl::OUString& rPictureSt
             uno::Reference < beans::XPropertySet > xProps( aStream.xStream, uno::UNO_QUERY );
 
             // set stream properties (MediaType/Compression)
-            if( aMimeType.getLength() )
+            if( !aMimeType.isEmpty() )
             {
                 aAny <<= aMimeType;
                 xProps->setPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "MediaType" ) ), aAny );
             }
 
-            const sal_Bool bCompressed = ( ( 0 == aMimeType.getLength() ) || ( aMimeType == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("image/tiff")) ) );
+            const sal_Bool bCompressed =  aMimeType.isEmpty() || ( aMimeType == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("image/tiff")) ) ;
             aAny <<= bCompressed;
             xProps->setPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "Compressed" ) ), aAny );
 
@@ -765,7 +765,7 @@ void SvXMLGraphicHelper::ImplInsertGraphicURL( const ::rtl::OUString& rURLStr, s
                 rtl::OUString aURLEntry;
                 const String sPictures( RTL_CONSTASCII_USTRINGPARAM( "Pictures/" ) );
 
-                if ( rRequestedFileName.getLength() )
+                if ( !rRequestedFileName.isEmpty() )
                 {
                     aURLEntry = sPictures;
                     aURLEntry += rRequestedFileName;
@@ -874,7 +874,7 @@ void SvXMLGraphicHelper::Destroy( SvXMLGraphicHelper* pSvXMLGraphicHelper )
         nUser++;
         aUserData = rURL.copy( nUser, rURL.getLength() - nUser );
     }
-    if ( aUserData.getLength() )
+    if ( !aUserData.isEmpty() )
     {
         sal_Int32 nIndex2 = 0;
         do
@@ -963,7 +963,7 @@ Reference< XOutputStream > SAL_CALL SvXMLGraphicHelper::createOutputStream()
                 const ::rtl::OUString aId(::rtl::OStringToOUString(
                     rGrfObj.GetUniqueID(), RTL_TEXTENCODING_ASCII_US));
 
-                if( aId.getLength() )
+                if( !aId.isEmpty() )
                 {
                     aRet = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( XML_GRAPHICOBJECT_URL_BASE ));
                     aRet += aId;

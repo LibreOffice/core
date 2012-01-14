@@ -170,7 +170,7 @@ namespace svxform
     //------------------------------------------------------------------------------
     Dialog* OAddConditionDialog::createDialog(Window* _pParent)
     {
-        if ( !m_xBinding.is() || !m_sFacetName.getLength() )
+        if ( !m_xBinding.is() || m_sFacetName.isEmpty() )
             throw RuntimeException( ::rtl::OUString(), *this );
 
         return new AddConditionDialog( _pParent, m_sFacetName, m_xBinding );

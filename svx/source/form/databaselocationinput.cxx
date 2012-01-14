@@ -135,7 +135,7 @@ namespace svx
     bool DatabaseLocationInputController_Impl::prepareCommit()
     {
         ::rtl::OUString sURL( impl_getCurrentURL() );
-        if ( !sURL.getLength() )
+        if ( sURL.isEmpty() )
             return false;
 
         // check if the name exists

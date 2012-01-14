@@ -205,9 +205,9 @@ void FmGridHeader::RequestHelp( const HelpEvent& rHEvt )
                 Reference< ::com::sun::star::beans::XPropertySet >  xColumn(xColumns->getByIndex(nPos),UNO_QUERY);
                 ::rtl::OUString aHelpText;
                 xColumn->getPropertyValue(FM_PROP_HELPTEXT) >>= aHelpText;
-                if ( !aHelpText.getLength() )
+                if ( aHelpText.isEmpty() )
                     xColumn->getPropertyValue(FM_PROP_DESCRIPTION) >>= aHelpText;
-                if ( aHelpText.getLength() )
+                if ( !aHelpText.isEmpty() )
                 {
                     if ( rHEvt.GetMode() & HELPMODE_BALLOON )
                         Help::ShowBalloon( this, aItemRect.Center(), aItemRect, aHelpText );
@@ -275,10 +275,10 @@ sal_Int8 FmGridHeader::ExecuteDrop( const ExecuteDropEvent& _rEvt )
     if (aColumn.has(daColumnObject))aColumn[daColumnObject] >>= xField;
     if (aColumn.has(daConnection))  aColumn[daConnection]   >>= xConnection;
 
-    if  (   !sFieldName.getLength()
-        ||  !sCommand.getLength()
-        ||  (   !sDatasouce.getLength()
-            &&  !sDatabaseLocation.getLength()
+    if  (   sFieldName.isEmpty()
+        ||  sCommand.isEmpty()
+        ||  (   sDatasouce.isEmpty()
+            &&  sDatabaseLocation.isEmpty()
             &&  !xConnection.is()
             )
         )
@@ -294,7 +294,7 @@ sal_Int8 FmGridHeader::ExecuteDrop( const ExecuteDropEvent& _rEvt )
         {   // the transferable did not contain the connection -> build an own one
             try
             {
-                ::rtl::OUString sSignificantSource( sDatasouce.getLength() ? sDatasouce : sDatabaseLocation );
+                ::rtl::OUString sSignificantSource( sDatasouce.isEmpty() ? sDatabaseLocation : sDatasouce );
                 xConnection = OStaticDataAccessTools().getConnection_withFeedback(sSignificantSource, ::rtl::OUString(),::rtl::OUString(),static_cast<FmGridControl*>(GetParent())->getServiceManager());
             }
             catch(NoSuchElementException&)
@@ -396,7 +396,7 @@ IMPL_LINK( FmGridHeader, OnAsyncExecuteDrop, void*, /*NOTINTERESTEDIN*/ )
     Reference< XConnection >    xConnection;
 
     ::rtl::OUString sDatasouce = m_pImpl->aDropData.getDataSource();
-    if ( !sDatasouce.getLength() && m_pImpl->aDropData.has(daConnectionResource) )
+    if ( sDatasouce.isEmpty() && m_pImpl->aDropData.has(daConnectionResource) )
         m_pImpl->aDropData[daConnectionResource]    >>= sURL;
     m_pImpl->aDropData[daCommand]       >>= sCommand;
     m_pImpl->aDropData[daCommandType]   >>= nCommandType;
@@ -526,7 +526,7 @@ IMPL_LINK( FmGridHeader, OnAsyncExecuteDrop, void*, /*NOTINTERESTEDIN*/ )
 
                 sFieldService = FieldServiceFromId(nPreferedType);
                 Reference< XPropertySet >  xThisRoundCol;
-                if ( sFieldService.getLength() )
+                if ( !sFieldService.isEmpty() )
                     xThisRoundCol = xFactory->createColumn(sFieldService);
                 if (nColCount)
                     xSecondCol = xThisRoundCol;
@@ -605,15 +605,15 @@ IMPL_LINK( FmGridHeader, OnAsyncExecuteDrop, void*, /*NOTINTERESTEDIN*/ )
         Reference< XPropertySet >  xForm(xFormCp->getParent(), UNO_QUERY);
         if (xForm.is())
         {
-            if (!::comphelper::getString(xForm->getPropertyValue(FM_PROP_DATASOURCE)).getLength())
+            if (::comphelper::getString(xForm->getPropertyValue(FM_PROP_DATASOURCE)).isEmpty())
             {
-                if ( sDatasouce.getLength() )
+                if ( !sDatasouce.isEmpty() )
                     xForm->setPropertyValue(FM_PROP_DATASOURCE, makeAny(sDatasouce));
                 else
                     xForm->setPropertyValue(FM_PROP_URL, makeAny(sURL));
             }
 
-            if (!::comphelper::getString(xForm->getPropertyValue(FM_PROP_COMMAND)).getLength())
+            if (::comphelper::getString(xForm->getPropertyValue(FM_PROP_COMMAND)).isEmpty())
             {
                 xForm->setPropertyValue(FM_PROP_COMMAND, makeAny(sCommand));
                 Any aCommandType;
@@ -924,7 +924,7 @@ void FmGridHeader::PostExecuteColumnContextMenu(sal_uInt16 nColId, const PopupMe
             break;
     }
 
-    if ( aFieldType.getLength() )
+    if ( !aFieldType.isEmpty() )
     {
         try
         {
@@ -1965,7 +1965,7 @@ namespace
                 if ( xProp.is() )
                 {
                     xProp->getPropertyValue(FM_PROP_HELPTEXT) >>= sRetText;
-                    if ( !sRetText.getLength() )
+                    if ( sRetText.isEmpty() )
                         xProp->getPropertyValue(FM_PROP_DESCRIPTION) >>= sRetText;
                 }
             }
@@ -1976,7 +1976,7 @@ namespace
                 GetModelColumnPos(
                     sal::static_int_cast< sal_uInt16 >(_nPosition)),
                 FM_PROP_HELPTEXT);
-            if ( !sRetText.getLength() )
+            if ( sRetText.isEmpty() )
                 sRetText = getColumnPropertyFromPeer(
                             GetPeer(),
                             GetModelColumnPos(

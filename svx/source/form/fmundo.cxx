@@ -618,7 +618,7 @@ void SAL_CALL FmXUndoEnvironment::propertyChange(const PropertyChangeEvent& evt)
                 try
                 {
                     Any aCurrentControlSource = xSet->getPropertyValue(FM_PROP_CONTROLSOURCE);
-                    aNewEntry.bHasEmptyControlSource = !aCurrentControlSource.hasValue() || (::comphelper::getString(aCurrentControlSource).getLength() == 0);
+                    aNewEntry.bHasEmptyControlSource = !aCurrentControlSource.hasValue() || ::comphelper::getString(aCurrentControlSource).isEmpty();
                 }
                 catch(const Exception&)
                 {
@@ -632,7 +632,7 @@ void SAL_CALL FmXUndoEnvironment::propertyChange(const PropertyChangeEvent& evt)
         {   // is it the DataField property ?
             if (evt.PropertyName.equals(FM_PROP_CONTROLSOURCE))
             {
-                aSetPos->second.bHasEmptyControlSource = !evt.NewValue.hasValue() || (::comphelper::getString(evt.NewValue).getLength() == 0);
+                aSetPos->second.bHasEmptyControlSource = !evt.NewValue.hasValue() || ::comphelper::getString(evt.NewValue).isEmpty();
             }
         }
 
@@ -741,7 +741,7 @@ void SAL_CALL FmXUndoEnvironment::propertyChange(const PropertyChangeEvent& evt)
             Reference< XPropertySet >  xSet(evt.Source, UNO_QUERY);
             PropertySetInfoCache* pCache = static_cast<PropertySetInfoCache*>(m_pPropertySetCache);
             PropertySetInfo& rSetInfo = (*pCache)[xSet];
-            rSetInfo.bHasEmptyControlSource = !evt.NewValue.hasValue() || (::comphelper::getString(evt.NewValue).getLength() == 0);
+            rSetInfo.bHasEmptyControlSource = !evt.NewValue.hasValue() || ::comphelper::getString(evt.NewValue).isEmpty();
         }
     }
 }

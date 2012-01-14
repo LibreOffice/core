@@ -759,7 +759,7 @@ namespace svx
                         sError += "\n  UNO name: ";
 
                         ::rtl::OUString sUnoSlotName = lcl_getUnoSlotName( *SFX_APP(), nSlotForItemSet );
-                        if ( sUnoSlotName.getLength() )
+                        if ( !sUnoSlotName.isEmpty() )
                             sError += ::rtl::OString( sUnoSlotName.getStr(), sUnoSlotName.getLength(), RTL_TEXTENCODING_ASCII_US );
                         else
                             sError += "unknown (no SfxSlot)";

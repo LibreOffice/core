@@ -160,7 +160,7 @@ void SetFontWorkShapeTypeState( SdrView* pSdrView, SfxItemSet& rSet )
                 rtl::OUString aType;
                 if ( *pAny >>= aType )
                 {
-                    if ( aFontWorkShapeType.getLength() )
+                    if ( !aFontWorkShapeType.isEmpty() )
                     {
                         if ( !aFontWorkShapeType.equals( aType ) )  // different FontWorkShapeTypes selected ?
                         {
@@ -477,7 +477,7 @@ void FontworkBar::execute( SdrView* pSdrView, SfxRequest& rReq, SfxBindings& rBi
                 const SfxStringItem& rItm = (const SfxStringItem&)pArgs->Get( rReq.GetSlot() );
                 aCustomShape = rItm.GetValue();
             }
-            if ( aCustomShape.getLength() )
+            if ( !aCustomShape.isEmpty() )
             {
                 const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
                 sal_uInt32 nCount = rMarkList.GetMarkCount(), i;

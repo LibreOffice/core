@@ -1320,7 +1320,7 @@ void SdrOle2Obj::SetModel(SdrModel* pNewModel)
                 mpImpl->aPersistName = aTmp;
                 xObjRef.AssignToContainer( &pDestPers->getEmbeddedObjectContainer(), aTmp );
             }
-            DBG_ASSERT( aTmp.getLength(), "Copying embedded object failed!" );
+            DBG_ASSERT( !aTmp.isEmpty(), "Copying embedded object failed!" );
         }
         catch( ::com::sun::star::uno::Exception& )
         {

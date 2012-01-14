@@ -456,7 +456,7 @@ void FmFilterAdapter::predicateExpressionChanged( const FilterEvent& _Event ) th
     FmFilterItem* pFilterItem = pFilter->Find( _Event.FilterComponent );
     if ( pFilterItem )
     {
-        if ( _Event.PredicateExpression.getLength())
+        if ( !_Event.PredicateExpression.isEmpty())
         {
             pFilterItem->SetText( _Event.PredicateExpression );
             // UI benachrichtigen
@@ -663,7 +663,7 @@ void FmFilterModel::Update(const Reference< XIndexAccess > & xControllers, FmPar
                         ++pDisjunctiveTerm
                     )
                 {
-                    if ( pDisjunctiveTerm->getLength() == 0 )
+                    if ( pDisjunctiveTerm->isEmpty() )
                         // no condition for this particular component in this particular conjunction term
                         continue;
 

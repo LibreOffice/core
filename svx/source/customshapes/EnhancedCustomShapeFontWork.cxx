@@ -231,7 +231,7 @@ void GetTextAreaOutline( const FWData& rFWData, const SdrObject* pCustomShape, F
     while( aParagraphIter != aParagraphIEnd )
     {
         const rtl::OUString& rText = aParagraphIter->aString;
-        if ( rText.getLength() )
+        if ( !rText.isEmpty() )
         {
             // generating vcl/font
             sal_uInt16 nScriptType = i18n::ScriptType::LATIN;

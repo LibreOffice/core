@@ -2173,7 +2173,7 @@ void FmXFormShell::startListening()
             // a "has command value"? Finally, the command value only means that it was
             // intended to be loaded, not that it actually *is* loaded
             ::rtl::OUString aSource = ::comphelper::getString(xActiveFormSet->getPropertyValue(FM_PROP_COMMAND));
-            if (aSource.getLength())
+            if (!aSource.isEmpty())
             {
                 m_bDatabaseBar = sal_True;
 
@@ -2467,7 +2467,7 @@ IMPL_LINK(FmXFormShell, OnSearchContextRequest, FmSearchContext*, pfmscContextIn
         while ( xSearchable.is() )
         {
             sControlSource = iter.getCurrentValue();
-            if ( sControlSource.getLength() == 0 )
+            if ( sControlSource.isEmpty() )
             {
                 // the current element has no ControlSource, so it is a GridControl (that
                 // is the only thing that still permits the SearchableControlIteratore)
@@ -2527,7 +2527,7 @@ IMPL_LINK(FmXFormShell, OnSearchContextRequest, FmSearchContext*, pfmscContextIn
             }
             else
             {
-                if (sControlSource.getLength() && xValidFormFields->hasByName(sControlSource))
+                if (!sControlSource.isEmpty() && xValidFormFields->hasByName(sControlSource))
                 {
                     // now I need the Control to SdrObject
                     if (!xControl.is())
@@ -2987,7 +2987,7 @@ void FmXFormShell::impl_collectFormSearchContexts_nothrow( const Reference< XInt
 
             // the name of the current form
             ::rtl::OUStringBuffer sCompleteCurrentName( sCurrentFormName );
-            if ( _rCurrentLevelPrefix.getLength() )
+            if ( !_rCurrentLevelPrefix.isEmpty() )
             {
                 sCompleteCurrentName.appendAscii( " (" );
                 sCompleteCurrentName.append     ( _rCurrentLevelPrefix );
@@ -2996,7 +2996,7 @@ void FmXFormShell::impl_collectFormSearchContexts_nothrow( const Reference< XInt
 
             // the prefix for the next level
             aNextLevelPrefix = _rCurrentLevelPrefix;
-            if ( _rCurrentLevelPrefix.getLength() )
+            if ( !_rCurrentLevelPrefix.isEmpty() )
                 aNextLevelPrefix.append( (sal_Unicode)'/' );
             aNextLevelPrefix.append( sCurrentFormName );
 
@@ -3892,11 +3892,11 @@ namespace
 
             ::rtl::OUString sPropertyValue;
             OSL_VERIFY( xSet->getPropertyValue( FM_PROP_DATASOURCE ) >>= sPropertyValue );
-            if ( sPropertyValue.getLength() )
+            if ( !sPropertyValue.isEmpty() )
                 return sal_True;
 
             OSL_VERIFY( xSet->getPropertyValue( FM_PROP_URL ) >>= sPropertyValue );
-            if ( sPropertyValue.getLength() )
+            if ( !sPropertyValue.isEmpty() )
                 return sal_True;
         }
         catch(const Exception&)

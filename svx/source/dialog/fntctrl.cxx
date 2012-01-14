@@ -959,7 +959,7 @@ void SvxFontPrevWindow::SetFromItemSet( const SfxItemSet &rSet,
     {
         const SfxStringItem& rItem = ( SfxStringItem& ) rSet.Get( nWhich );
         ::rtl::OUString aString = rItem.GetValue();
-        if( aString.getLength() != 0 )
+        if( !aString.isEmpty() )
             SetPreviewText( aString );
         else
             SetFontNameAsPreviewText();
@@ -1196,7 +1196,7 @@ void SvxFontPrevWindow::Init( const SfxItemSet& rSet )
     {
         const SfxStringItem& rItem = ( SfxStringItem& ) rSet.Get( nWhich );
         ::rtl::OUString aString = rItem.GetValue();
-        if( aString.getLength() != 0 )
+        if( !aString.isEmpty() )
             SetPreviewText( aString );
         else
             SetFontNameAsPreviewText();

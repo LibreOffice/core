@@ -993,7 +993,7 @@ void SAL_CALL FormController::setPredicateExpression( ::sal_Int32 _Component, ::
     xText->setText( _PredicateExpression );
 
     FmFilterRow& rFilterRow = m_aFilterRows[ _Term ];
-    if ( _PredicateExpression.getLength() )
+    if ( !_PredicateExpression.isEmpty() )
         rFilterRow[ xText ] = _PredicateExpression;
     else
         rFilterRow.erase( xText );
@@ -1535,7 +1535,7 @@ void SAL_CALL FormController::textChanged(const TextEvent& e) throw( RuntimeExce
     FmFilterRow& rRow = m_aFilterRows[ m_nCurrentFilterPosition ];
 
     // do we have a new filter
-    if (aText.getLength())
+    if (!aText.isEmpty())
         rRow[xText] = aText;
     else
     {
@@ -2240,7 +2240,7 @@ void FormController::setControlLock(const Reference< XControl > & xControl)
     // b.) wenn das zugehoerige Feld gespeert ist
     Reference< XBoundControl >  xBound(xControl, UNO_QUERY);
     if (xBound.is() && (( (bLocked && bLocked != xBound->getLock()) ||
-                         !bLocked)))    // beim entlocken immer einzelne Felder ueberprüfen
+                         !bLocked)))    // beim entlocken immer einzelne Felder ueberprï¿½fen
     {
         // gibt es eine Datenquelle
         Reference< XPropertySet >  xSet(xControl->getModel(), UNO_QUERY);
@@ -2953,7 +2953,7 @@ void SAL_CALL FormController::elementRemoved(const ContainerEvent& evt) throw( R
     if (xModel.is() && m_xModelAsIndex == xModel->getParent())
     {
         removeControl(xControl);
-        // TabOrder nicht neu berechnen, da das intern schon funktionieren muß!
+        // TabOrder nicht neu berechnen, da das intern schon funktionieren muï¿½!
     }
     // are we in filtermode and a XModeSelector has inserted an element
     else if (m_bFiltering && Reference< XModeSelector > (evt.Source, UNO_QUERY).is())
@@ -3792,7 +3792,7 @@ sal_Bool SAL_CALL FormController::approveRowChange(const RowChangeEvent& _rEvent
                 continue;
 
             // TODO: in case of binary fields, this "getString" below is extremely expensive
-            if ( rColInfo.xColumn->getString().getLength() || !rColInfo.xColumn->wasNull() )
+            if ( !rColInfo.xColumn->getString().isEmpty() || !rColInfo.xColumn->wasNull() )
                 continue;
 
             String sMessage( SVX_RES( RID_ERR_FIELDREQUIRED ) );

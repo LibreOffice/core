@@ -150,7 +150,7 @@ SvXMLImportContext *SvxXMLTableImportContext::CreateChildContext( sal_uInt16 nPr
                     IsXMLToken( aLocalName, XML_HREF ) )
                 {
                     const OUString rValue = xAttrList->getValueByIndex( i );
-                    if( rValue.getLength() && '#' == rValue[0] )
+                    if( !rValue.isEmpty() && '#' == rValue[0] )
                         pAttrList->SetValueByIndex( i, rValue.copy( 1 ) );
                 }
                 else if( XML_NAMESPACE_DRAW == nPrefix_ &&
@@ -203,7 +203,7 @@ SvXMLImportContext *SvxXMLTableImportContext::CreateChildContext( sal_uInt16 nPr
                 break;
             }
 
-            if( aName.getLength() && aAny.hasValue() )
+            if( !aName.isEmpty() && aAny.hasValue() )
             {
                 if( mxTable->hasByName( aName ) )
                 {

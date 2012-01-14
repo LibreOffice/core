@@ -239,7 +239,7 @@ sal_Int32 getElementPos(const Reference< ::com::sun::star::container::XIndexAcce
         if (xLabelSet.is() && ::comphelper::hasProperty(FM_PROP_LABEL, xLabelSet))
         {
             Any aLabel( xLabelSet->getPropertyValue(FM_PROP_LABEL) );
-            if ((aLabel.getValueTypeClass() == TypeClass_STRING) && ::comphelper::getString(aLabel).getLength())
+            if ((aLabel.getValueTypeClass() == TypeClass_STRING) && !::comphelper::getString(aLabel).isEmpty())
                 return ::comphelper::getString(aLabel);
         }
     }

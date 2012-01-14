@@ -196,7 +196,7 @@ sal_Bool RecoveryCore::existsNonRecoveredEntries()
 //===============================================
 sal_Bool RecoveryCore::isBrokenTempEntry(const TURLInfo& rInfo)
 {
-    if (!rInfo.TempURL.getLength())
+    if (rInfo.TempURL.isEmpty())
         return sal_False;
 
     // Note: If the original files was recovery ... but a temp file
@@ -213,7 +213,7 @@ sal_Bool RecoveryCore::isBrokenTempEntry(const TURLInfo& rInfo)
 //===============================================
 void RecoveryCore::saveBrokenTempEntries(const ::rtl::OUString& sPath)
 {
-    if (!sPath.getLength())
+    if (sPath.isEmpty())
         return;
 
     if (!m_xRealCore.is())
@@ -251,7 +251,7 @@ void RecoveryCore::saveBrokenTempEntries(const ::rtl::OUString& sPath)
 //===============================================
 void RecoveryCore::saveAllTempEntries(const ::rtl::OUString& sPath)
 {
-    if (!sPath.getLength())
+    if (sPath.isEmpty())
         return;
 
     if (!m_xRealCore.is())
@@ -278,7 +278,7 @@ void RecoveryCore::saveAllTempEntries(const ::rtl::OUString& sPath)
          ++pIt                 )
     {
         const TURLInfo& rInfo = *pIt;
-        if (!rInfo.TempURL.getLength())
+        if (rInfo.TempURL.isEmpty())
             continue;
 
         lCopyArgs[2].Value <<= rInfo.ID;
@@ -1487,7 +1487,7 @@ void BrokenRecoveryDialog::impl_refresh()
         {
             // "Cancel" before recovery ->
             // search for any temp files!
-            if (!rInfo.TempURL.getLength())
+            if (rInfo.TempURL.isEmpty())
                 continue;
         }
         else
@@ -1526,7 +1526,7 @@ IMPL_LINK( BrokenRecoveryDialog, OkButtonHdl, void*, EMPTYARG )
     rtl::OUString sURL;
     ::utl::LocalFileHelper::ConvertPhysicalNameToURL( sPhysicalPath, sURL );
     m_sSavePath = sURL;
-    while (!m_sSavePath.getLength())
+    while (m_sSavePath.isEmpty())
         impl_askForSavePath();
 
     EndDialog(DLG_RET_OK);

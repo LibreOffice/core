@@ -440,7 +440,7 @@ SdrObject* FmFormView::CreateFieldControl(const UniString& rFieldDesc) const
     sal_uInt16 nObjectType          = (sal_uInt16)rFieldDesc.GetToken(2,sal_Unicode(11)).ToInt32();
     ::rtl::OUString sFieldName      = rFieldDesc.GetToken(3,sal_Unicode(11));
 
-    if (!sFieldName.getLength() || !sObjectName.getLength() || !sDataSource.getLength())
+    if (sFieldName.isEmpty() || sObjectName.isEmpty() || sDataSource.isEmpty())
         return NULL;
 
     ODataAccessDescriptor aColumnDescriptor;

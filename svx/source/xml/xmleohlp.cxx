@@ -275,7 +275,7 @@ sal_Bool SvXMLEmbeddedObjectHelper::ImplGetStorageNames(
     if( pOasisFormat )
         *pOasisFormat = sal_True; // the default value
 
-    if( !rURLStr.getLength() )
+    if( rURLStr.isEmpty() )
         return sal_False;
 
     // get rid of arguments
@@ -375,7 +375,7 @@ uno::Reference < embed::XStorage > SvXMLEmbeddedObjectHelper::ImplGetContainerSt
         ( rStorageName != maCurContainerStorageName ) )
     {
         if( mxContainerStorage.is() &&
-            maCurContainerStorageName.getLength() > 0 &&
+            !maCurContainerStorageName.isEmpty() &&
             EMBEDDEDOBJECTHELPER_MODE_WRITE == meCreateMode )
         {
             uno::Reference < embed::XTransactedObject > xTrans( mxContainerStorage, uno::UNO_QUERY );
@@ -383,7 +383,7 @@ uno::Reference < embed::XStorage > SvXMLEmbeddedObjectHelper::ImplGetContainerSt
                 xTrans->commit();
         }
 
-        if( rStorageName.getLength() > 0 && mxRootStorage.is() )
+        if( !rStorageName.isEmpty() && mxRootStorage.is() )
         {
             sal_Int32 nMode = EMBEDDEDOBJECTHELPER_MODE_WRITE == meCreateMode
                                     ? ::embed::ElementModes::READWRITE
@@ -533,7 +533,7 @@ sal_Bool SvXMLEmbeddedObjectHelper::ImplReadObject(
     {
         // Objects are written using ::comphelper::IEmbeddedHelper::SaveAs
         sRetURL = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("./") );
-        if( aContainerStorageName.getLength() )
+        if( !aContainerStorageName.isEmpty() )
         {
             sRetURL += aContainerStorageName;
             sRetURL += ::rtl::OUString( '/' );
@@ -789,7 +789,7 @@ sal_Bool SAL_CALL SvXMLEmbeddedObjectHelper::hasByName( const ::rtl::OUString& r
             return sal_False;
 
         comphelper::EmbeddedObjectContainer& rContainer = mpDocPersist->getEmbeddedObjectContainer();
-        return aObjectStorageName.getLength() > 0 &&
+        return !aObjectStorageName.isEmpty() &&
                rContainer.HasEmbeddedObject( aObjectStorageName );
     }
 }

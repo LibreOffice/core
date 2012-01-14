@@ -172,7 +172,7 @@ void SvxFontSizeBox_Impl::UpdateFont( const ::com::sun::star::awt::FontDescripto
     ::std::auto_ptr<FontList> aHold( new FontList( this ));
     _pFontList = aHold.get();
 
-    if ( rCurrentFont.Name.getLength() > 0 )
+    if ( !rCurrentFont.Name.isEmpty() )
     {
         FontInfo _aFontInfo;
         _aFontInfo.SetName( rCurrentFont.Name );

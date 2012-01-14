@@ -586,7 +586,7 @@ sal_Bool SvxIMapDlg::DoSave()
         }
         else
         {
-            if( !aURL.getExtension().getLength() )
+            if( aURL.getExtension().isEmpty() )
                 aURL.setExtension( aExt );
 
             SvStream* pOStm = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_WRITE | STREAM_TRUNC );

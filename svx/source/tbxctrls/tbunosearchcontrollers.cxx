@@ -71,7 +71,7 @@ void impl_executeSearch( const css::uno::Reference< css::lang::XMultiServiceFact
         if ( xDispatchProvider.is() )
         {
             css::uno::Reference< css::frame::XDispatch > xDispatch = xDispatchProvider->queryDispatch( aURL, ::rtl::OUString(), 0 );
-            if ( xDispatch.is() && aURL.Complete.getLength() > 0 )
+            if ( xDispatch.is() && !aURL.Complete.isEmpty() )
                 xDispatch->dispatch( aURL, lArgs );
         }
     }

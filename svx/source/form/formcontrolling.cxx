@@ -525,7 +525,7 @@ namespace svx
             bool bInsertOnlyForm( false );
             OSL_VERIFY( xCursorProperties->getPropertyValue( FM_PROP_INSERTONLY ) >>= bInsertOnlyForm );
 
-            bCanDo = bEscapeProcessing && ( sActiveCommand.getLength() > 0 ) && !bInsertOnlyForm;
+            bCanDo = bEscapeProcessing && !sActiveCommand.isEmpty() && !bInsertOnlyForm;
         }
         catch( const Exception& )
         {

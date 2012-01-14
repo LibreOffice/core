@@ -736,7 +736,7 @@ IMPL_LINK(FmXFormView, OnActivate, void*, /*EMPTYTAG*/)
                 ENSURE_OR_CONTINUE( xFormSet.is(), "FmXFormView::OnActivate: a form which does not have properties?" );
 
                 const ::rtl::OUString aSource = ::comphelper::getString( xFormSet->getPropertyValue( FM_PROP_COMMAND ) );
-                if ( aSource.getLength() )
+                if ( !aSource.isEmpty() )
                 {
                     FmXFormShell* pShImpl =  m_pView->GetFormShell()->GetImpl();
                     if ( pShImpl )
@@ -1145,9 +1145,9 @@ SdrObject* FmXFormView::implCreateFieldControl( const ::svx::ODataAccessDescript
         xConnection.reset( xExternalConnection, SharedConnection::NoTakeOwnership );
     }
 
-    if  (   !sCommand.getLength()
-        ||  !sFieldName.getLength()
-        ||  (   !sDataSource.getLength()
+    if  (   sCommand.isEmpty()
+        ||  sFieldName.isEmpty()
+        ||  (   sDataSource.isEmpty()
             &&  !xConnection.is()
             )
         )
@@ -1159,7 +1159,7 @@ SdrObject* FmXFormView::implCreateFieldControl( const ::svx::ODataAccessDescript
     SQLErrorEvent aError;
     try
     {
-        if ( xConnection.is() && !xDataSource.is() && !sDataSource.getLength() )
+        if ( xConnection.is() && !xDataSource.is() && sDataSource.isEmpty() )
         {
             Reference< XChild > xChild( xConnection, UNO_QUERY );
             if ( xChild.is() )
@@ -1575,7 +1575,7 @@ bool FmXFormView::createControlLabelPair( const ::comphelper::ComponentContext& 
             ::rtl::OUString sLabel;
             if ( _rxField.is() && _rxField->getPropertySetInfo()->hasPropertyByName(FM_PROP_LABEL) )
                 _rxField->getPropertyValue(FM_PROP_LABEL) >>= sLabel;
-            if ( !sLabel.getLength() )
+            if ( sLabel.isEmpty() )
                 sLabel = sFieldName;
 
             xLabelModel->setPropertyValue( FM_PROP_LABEL, makeAny( sLabel + _rFieldPostfix ) );

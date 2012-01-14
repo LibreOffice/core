@@ -79,7 +79,7 @@ GalleryThemeEntry::GalleryThemeEntry( const INetURLObject& rBaseURL, const Strin
     if( nId && bThemeNameFromResource )
         aName = String( GAL_RESID( RID_GALLERYSTR_THEME_START + (sal_uInt16) nId ) );
 
-    if( !aName.getLength() )
+    if( aName.isEmpty() )
         aName = rName;
 }
 
@@ -345,7 +345,7 @@ void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, sal_Bool& rbDirIsR
                             {
                             }
 
-                            if( aTitle.getLength() )
+                            if( !aTitle.isEmpty() )
                             {
                                 try
                                 {
@@ -371,7 +371,7 @@ void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, sal_Bool& rbDirIsR
                                     {
                                     }
 
-                                    if( aTitle.getLength() )
+                                    if( !aTitle.isEmpty() )
                                     {
                                         try
                                         {
@@ -399,7 +399,7 @@ void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, sal_Bool& rbDirIsR
                                     {
                                     }
 
-                                    if( aTitle.getLength() )
+                                    if( !aTitle.isEmpty() )
                                     {
                                         try
                                         {
@@ -537,7 +537,7 @@ GalleryThemeEntry* Gallery::ImplGetThemeEntry( const rtl::OUString& rThemeName )
 {
     GalleryThemeEntry* pFound = NULL;
 
-    if( rThemeName.getLength() )
+    if( !rThemeName.isEmpty() )
     {
         for ( size_t i = 0, n = aThemeList.size(); i < n && !pFound; ++i )
             if( rThemeName == aThemeList[ i ]->GetThemeName() )

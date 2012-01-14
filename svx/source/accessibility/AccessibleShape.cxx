@@ -1179,20 +1179,20 @@ void AccessibleShape::UpdateNameAndDescription (void)
 
         // Get the accessible name.
         sString = GetOptionalProperty(xSet, OUString(RTL_CONSTASCII_USTRINGPARAM("Title")));
-        if (sString.getLength() > 0)
+        if (!sString.isEmpty())
         {
             SetAccessibleName(sString, AccessibleContextBase::FromShape);
         }
         else
         {
             sString = GetOptionalProperty(xSet, OUString(RTL_CONSTASCII_USTRINGPARAM("Name")));
-            if (sString.getLength() > 0)
+            if (!sString.isEmpty())
                 SetAccessibleName(sString, AccessibleContextBase::FromShape);
         }
 
         // Get the accessible description.
         sString = GetOptionalProperty(xSet, OUString(RTL_CONSTASCII_USTRINGPARAM("Description")));
-        if (sString.getLength() > 0)
+        if (!sString.isEmpty())
             SetAccessibleDescription(sString, AccessibleContextBase::FromShape);
     }
     catch (uno::RuntimeException&)

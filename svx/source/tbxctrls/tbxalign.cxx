@@ -113,7 +113,7 @@ void SAL_CALL SvxTbxCtlAlign::functionSelected( const ::rtl::OUString& aCommand 
     SolarMutexGuard aGuard;
     if ( !m_bDisposed )
     {
-        if ( aCommand.getLength() > 0 )
+        if ( !aCommand.isEmpty() )
         {
             ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > xFrame( getFrameInterface());
             Image aImage = GetImage( xFrame, aCommand, hasBigImages() );
@@ -128,7 +128,7 @@ void SAL_CALL SvxTbxCtlAlign::updateImage() throw (::com::sun::star::uno::Runtim
     // We should update the button image of our parent (toolbar). Use the stored
     // command to set the correct current image.
     SolarMutexGuard aGuard;
-    if ( m_aCommand.getLength() > 0 )
+    if ( !m_aCommand.isEmpty() )
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > xFrame( getFrameInterface());
         Image aImage = GetImage( xFrame, m_aCommand, hasBigImages() );

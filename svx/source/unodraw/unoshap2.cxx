@@ -722,7 +722,7 @@ namespace
             }
             ++i;
         }
-        return rInternalName.getLength() > 0;
+        return !rInternalName.isEmpty();
     }
 
     struct EnumConversionMap
@@ -1677,7 +1677,7 @@ bool SvxGraphicObject::getPropertyValueImpl( const ::rtl::OUString& rName, const
     case OWN_ATTR_GRAFSTREAMURL:
     {
         const OUString  aStreamURL( ( (SdrGrafObj*) mpObj.get() )->GetGrafStreamURL() );
-        if( aStreamURL.getLength() )
+        if( !aStreamURL.isEmpty() )
             rValue <<= aStreamURL;
         break;
     }

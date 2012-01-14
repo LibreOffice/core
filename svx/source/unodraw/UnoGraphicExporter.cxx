@@ -993,7 +993,7 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
     ExportSettings aSettings( mpDoc );
     ParseSettings( aDescriptor, aSettings );
 
-    const sal_uInt16    nFilter = aSettings.maMediaType.getLength()
+    const sal_uInt16    nFilter = !aSettings.maMediaType.isEmpty()
                             ? rFilter.GetExportFormatNumberForMediaType( aSettings.maMediaType )
                             : rFilter.GetExportFormatNumberForShortName( aSettings.maFilterName );
     sal_Bool            bVectorType = !rFilter.IsExportPixelFormat( nFilter );
@@ -1229,7 +1229,7 @@ Sequence< OUString > SAL_CALL GraphicExporter::getSupportedMimeTypeNames(  ) thr
     for( nFilter = 0; nFilter < nCount; nFilter++ )
     {
         OUString aMimeType( rFilter.GetExportFormatMediaType( nFilter ) );
-        if( aMimeType.getLength() )
+        if( !aMimeType.isEmpty() )
         {
             *pStr++ = aMimeType;
             nFound++;

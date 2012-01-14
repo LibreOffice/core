@@ -329,7 +329,7 @@ FmPropBrw::~FmPropBrw()
             OSL_VERIFY( m_xBrowserController->getViewData() >>= sCurrentPage );
         }
 
-        if ( !sCurrentPage.getLength() )
+        if ( sCurrentPage.isEmpty() )
             sCurrentPage = m_sLastActivePage;
     }
     catch( const Exception& )
@@ -692,7 +692,7 @@ void FmPropBrw::StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPool
 
                 // and additionally, we want to show the page which was active during
                 // our previous incarnation
-                if ( m_sLastActivePage.getLength() )
+                if ( !m_sLastActivePage.isEmpty() )
                 {
                     try
                     {

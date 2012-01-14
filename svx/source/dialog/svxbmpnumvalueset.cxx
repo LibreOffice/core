@@ -339,7 +339,7 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
                     }
 
                     aLeft.Y() -= (pDev->GetTextHeight()/2);
-                    if(sPrefixes[i].getLength() &&
+                    if(!sPrefixes[i].isEmpty() &&
                         !sPrefixes[i].equalsAsciiL(" ", 1) &&
                         sPrefixes[i].getStr()[0] != 0)
                     {
@@ -373,7 +373,7 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
                                     aLeft,
                                     aRuleFont,
                                     aFont);
-                    if(sSuffixes[i].getLength()&&
+                    if(!sSuffixes[i].isEmpty()&&
                         !sSuffixes[i].equalsAsciiL(" ", 1) &&
                         sSuffixes[i].getStr()[0] != 0)
                     {

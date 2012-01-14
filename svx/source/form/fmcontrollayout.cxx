@@ -172,7 +172,7 @@ namespace svxform
                     OSL_VERIFY( xStyle->getPropertyValue( sCharLocalePropertyName ) >>= aDocumentCharLocale );
                 }
                 // fall back to CharLocale property at the style
-                if ( !aDocumentCharLocale.Language.getLength() )
+                if ( aDocumentCharLocale.Language.isEmpty() )
                 {
                     sCharLocalePropertyName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CharLocale" ) );
                     if ( xStylePSI->hasPropertyByName( sCharLocalePropertyName ) )
@@ -181,7 +181,7 @@ namespace svxform
                     }
                 }
                 // fall back to the system locale
-                if ( !aDocumentCharLocale.Language.getLength() )
+                if ( aDocumentCharLocale.Language.isEmpty() )
                 {
                     aDocumentCharLocale = rSysLocaleData.getLocale();
                 }

@@ -1560,7 +1560,7 @@ struct SvxStyleToolBoxControl::Impl
                         xParaStyles->getByName( rtl::OUString::createFromAscii( aWriterStyles[nStyle] )) >>= xStyle;
                         ::rtl::OUString sName;
                         xStyle->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DisplayName"))) >>= sName;
-                        if( sName.getLength() )
+                        if( !sName.isEmpty() )
                             aDefaultStyles.push_back(sName);
                     }
                     catch( const uno::Exception& )
@@ -1593,7 +1593,7 @@ struct SvxStyleToolBoxControl::Impl
                             Reference< beans::XPropertySet > xStyle( xCellStyles->getByName( sStyleName), UNO_QUERY_THROW );
                             ::rtl::OUString sName;
                             xStyle->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DisplayName"))) >>= sName;
-                            if( sName.getLength() )
+                            if( !sName.isEmpty() )
                                 aDefaultStyles.push_back(sName);
                         }
                     }

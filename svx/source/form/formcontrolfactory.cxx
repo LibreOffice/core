@@ -223,7 +223,7 @@ namespace svxform
                 xForm->getPropertyValue( FM_PROP_DATASOURCE ) >>= sDataSourceName;
 
                 Reference< XPropertySet > xDsProperties;
-                if ( sDataSourceName.getLength() )
+                if ( !sDataSourceName.isEmpty() )
                     xDsProperties = xDsProperties.query( OStaticDataAccessTools().getDataSource( sDataSourceName, _rContext.getLegacyServiceFactory() ) );
                 if ( xDsProperties.is() )
                     xDsProperties->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Info" ) ) ) >>= aInfo;
@@ -476,7 +476,7 @@ namespace svxform
             {
                 ::rtl::OUString sExistingLabel;
                 OSL_VERIFY( _rxControlModel->getPropertyValue( FM_PROP_LABEL ) >>= sExistingLabel );
-                if ( !sExistingLabel.getLength() )
+                if ( sExistingLabel.isEmpty() )
                 {
                     ::rtl::OUString sInitialLabel;
                     OSL_VERIFY( _rxControlModel->getPropertyValue( FM_PROP_NAME ) >>= sInitialLabel );

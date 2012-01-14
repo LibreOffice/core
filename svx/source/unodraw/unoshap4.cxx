@@ -422,7 +422,7 @@ bool SvxOle2Shape::getPropertyValueImpl( const ::rtl::OUString& rName, const Sfx
         if( pOle )
         {
             aPersistName = pOle->GetPersistName();
-            if( aPersistName.getLength() )
+            if( !aPersistName.isEmpty() )
             {
                 ::comphelper::IEmbeddedHelper *pPersist = mpObj->GetModel()->GetPersist();
                 if( (NULL == pPersist) || !pPersist->getEmbeddedObjectContainer().HasEmbeddedObject( pOle->GetPersistName() ) )
@@ -612,7 +612,7 @@ const SvGlobalName SvxOle2Shape::GetClassName_Impl(rtl::OUString& rHexCLSID)
             }
         }
 
-        if (!rHexCLSID.getLength())
+        if (rHexCLSID.isEmpty())
         {
             uno::Reference < embed::XEmbeddedObject > xObj( pOle2Obj->GetObjRef() );
             if ( xObj.is() )

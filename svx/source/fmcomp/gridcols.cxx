@@ -37,7 +37,7 @@ using namespace ::com::sun::star::uno;
 const ::comphelper::StringSequence& getColumnTypes()
 {
     static ::comphelper::StringSequence aColumnTypes(10);
-    if (!aColumnTypes.getConstArray()[0].getLength())
+    if (aColumnTypes.getConstArray()[0].isEmpty())
     {
         ::rtl::OUString* pNames = aColumnTypes.getArray();
         pNames[TYPE_CHECKBOX] = FM_COL_CHECKBOX;

@@ -372,7 +372,7 @@ void SAL_CALL AccessibleControlShape::grabFocus(void)  throw (RuntimeException)
         {
             // check if we can obtain the "Desc" property from the model
             ::rtl::OUString sDesc( getControlModelStringProperty( lcl_getDescPropertyName() ) );
-            if ( !sDesc.getLength() )
+            if ( sDesc.isEmpty() )
             {   // no -> use the default
                 aDG.Initialize (STR_ObjNameSingulUno);
                 aDG.AddProperty (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ControlBackground")),
@@ -648,7 +648,7 @@ Reference< XAccessibleRelationSet > SAL_CALL AccessibleControlShape::getAccessib
     const ::rtl::OUString& rAccNameProperty = lcl_getPreferredAccNameProperty( m_xModelPropsMeta );
 
     ::rtl::OUString sName( getControlModelStringProperty( rAccNameProperty ) );
-    if ( !sName.getLength() )
+    if ( sName.isEmpty() )
     {   // no -> use the default
         sName = AccessibleShape::CreateAccessibleName();
     }

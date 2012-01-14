@@ -356,10 +356,10 @@ void SvxRubyDialog::Activate()
                             if(xNamed.is())
                             {
                                 sCoreName = xNamed->getName();
-                                if(!sName.getLength())
+                                if(sName.isEmpty())
                                     sName = sCoreName;
                             }
-                            if(sName.getLength())
+                            if(!sName.isEmpty())
                             {
                                 sal_uInt16 nPos = aCharStyleLB.InsertEntry(sName);
                                 aCharStyleLB.SetEntryData( nPos, new OUString(sCoreName) );
@@ -502,9 +502,9 @@ void SvxRubyDialog::Update()
         aAdjustLB.SetNoSelection();
     if(nPosition > -1)
         aPositionLB.SelectEntryPos(nPosition ? 1 : 0);
-    if(!nLen || (bCharStyleEqual && !sCharStyleName.getLength()))
+    if(!nLen || (bCharStyleEqual && sCharStyleName.isEmpty()))
         sCharStyleName = C2U(cRubies);
-    if(sCharStyleName.getLength())
+    if(!sCharStyleName.isEmpty())
     {
         for(sal_uInt16 i = 0; i < aCharStyleLB.GetEntryCount(); i++)
         {

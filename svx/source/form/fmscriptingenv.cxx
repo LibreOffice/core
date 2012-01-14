@@ -476,7 +476,7 @@ namespace svxform
                 sScriptCode = sScriptCode.copy( nPrefixLen + 1 );
             }
 
-            if ( !sMacroLocation.getLength() )
+            if ( sMacroLocation.isEmpty() )
             {
                 // legacy format: use the app-wide Basic, if it has a respective method, otherwise fall back to the doc's Basic
                 if ( SFX_APP()->GetBasicManager()->HasMacro( sScriptCode ) )

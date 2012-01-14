@@ -124,7 +124,7 @@ void SvxTbxCtlCustomShapes::StateChanged( sal_uInt16 nSID, SfxItemState eState,
 
 SfxPopupWindowType SvxTbxCtlCustomShapes::GetPopupWindowType() const
 {
-    return( m_aCommand.getLength() == 0 ? SFX_POPUPWINDOW_ONCLICK : SFX_POPUPWINDOW_ONTIMEOUT);
+    return( m_aCommand.isEmpty() ? SFX_POPUPWINDOW_ONCLICK : SFX_POPUPWINDOW_ONTIMEOUT);
 }
 
 /*************************************************************************
@@ -145,7 +145,7 @@ SfxPopupWindow* SvxTbxCtlCustomShapes::CreatePopupWindow()
 
 void SvxTbxCtlCustomShapes::Select( sal_Bool /*bMod1*/ )
 {
-     if ( m_aCommand.getLength() > 0 )
+     if ( !m_aCommand.isEmpty() )
     {
         com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > aParamSeq( 0 );
         Dispatch( m_aCommand, aParamSeq );
@@ -175,7 +175,7 @@ void SAL_CALL SvxTbxCtlCustomShapes::functionSelected( const ::rtl::OUString& rC
     SolarMutexGuard aGuard;
     if ( !m_bDisposed )
     {
-        if ( m_aCommand.getLength() > 0 )
+        if ( !m_aCommand.isEmpty() )
         {
             ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > xFrame( getFrameInterface());
             Image aImage = GetImage( xFrame, m_aCommand, hasBigImages() );
@@ -190,7 +190,7 @@ void SAL_CALL SvxTbxCtlCustomShapes::updateImage(  ) throw (::com::sun::star::un
     // We should update the button image of our parent (toolbar).
     // Use the stored command to set the correct current image.
     SolarMutexGuard aGuard;
-    if ( m_aCommand.getLength() > 0 )
+    if ( !m_aCommand.isEmpty() )
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > xFrame( getFrameInterface());
         Image aImage = GetImage( xFrame, m_aCommand, hasBigImages() );

@@ -405,7 +405,7 @@ namespace svxform
                     }
 
                     ::rtl::OUString sName = m_xUIHelper->getNodeDisplayName( xChild, bShowDetails );
-                    if ( sName.getLength() > 0 )
+                    if ( !sName.isEmpty() )
                     {
                         ItemNode* pNode = new ItemNode( xChild );
                         SvLBoxEntry* pEntry = m_aItemList.InsertEntry(
@@ -1405,7 +1405,7 @@ namespace svxform
                     #endif
                         ::rtl::OUString sNodeName =
                             m_xUIHelper->getNodeDisplayName( xRoot, m_pNaviWin->IsShowDetails() );
-                        if ( sNodeName.getLength() == 0 )
+                        if ( sNodeName.isEmpty() )
                             sNodeName = xRoot->getNodeName();
                         if ( xRoot->hasChildNodes() )
                             AddChildren( NULL, _rImgLst, xRoot );
@@ -2234,7 +2234,7 @@ namespace svxform
         }
 
         sal_uInt16 nPageId = GetNewPageId();
-        if ( sInstName.getLength() == 0 )
+        if ( sInstName.isEmpty() )
         {
             DBG_ERRORFILE( "DataNavigatorWindow::CreateInstancePage(): instance without name" );
             String sTemp = String::CreateFromAscii( "untitled" );
@@ -2591,9 +2591,9 @@ namespace svxform
                 sPropName = PN_CALCULATE_EXPR;
             bool bIsChecked = ( pBox->IsChecked() != sal_False );
             m_xTempBinding->getPropertyValue( sPropName ) >>= sTemp;
-            if ( bIsChecked && sTemp.getLength() == 0 )
+            if ( bIsChecked && sTemp.isEmpty() )
                 sTemp = TRUE_VALUE;
-            else if ( !bIsChecked && sTemp.getLength() > 0 )
+            else if ( !bIsChecked && !sTemp.isEmpty() )
                 sTemp = ::rtl::OUString();
             m_xTempBinding->setPropertyValue( sPropName, makeAny( sTemp ) );
         }
@@ -2625,7 +2625,7 @@ namespace svxform
         else
         {
             m_xTempBinding->getPropertyValue( sPropName ) >>= sTemp;
-            if ( sTemp.getLength() == 0 )
+            if ( sTemp.isEmpty() )
                 sTemp = TRUE_VALUE;
             sCondition = sTemp;
         }
@@ -2688,7 +2688,7 @@ namespace svxform
         ::rtl::OUString sNewName( m_aNameED.GetText() );
 
         if ( ( !bIsHandleBinding && !bIsHandleText && !m_xUIHelper->isValidXMLName( sNewName ) ) ||
-             ( bIsHandleBinding && sNewName.getLength() == 0 ) )
+             ( bIsHandleBinding && sNewName.isEmpty() ) )
         {
             // Error and don't close the dialog
             ErrorBox aErrBox( this, SVX_RES( RID_ERR_INVALID_XMLNAME ) );
@@ -2880,19 +2880,19 @@ namespace svxform
                 try
                 {
                     if ( ( m_xTempBinding->getPropertyValue( PN_REQUIRED_EXPR ) >>= sTemp )
-                        && sTemp.getLength() > 0 )
+                        && !sTemp.isEmpty() )
                         m_aRequiredCB.Check( sal_True );
                     if ( ( m_xTempBinding->getPropertyValue( PN_RELEVANT_EXPR ) >>= sTemp )
-                        && sTemp.getLength() > 0 )
+                        && !sTemp.isEmpty() )
                         m_aRelevantCB.Check( sal_True );
                     if ( ( m_xTempBinding->getPropertyValue( PN_CONSTRAINT_EXPR ) >>= sTemp )
-                        && sTemp.getLength() > 0 )
+                        && !sTemp.isEmpty() )
                         m_aConstraintCB.Check( sal_True );
                     if ( ( m_xTempBinding->getPropertyValue( PN_READONLY_EXPR ) >>= sTemp )
-                        && sTemp.getLength() > 0 )
+                        && !sTemp.isEmpty() )
                         m_aReadonlyCB.Check( sal_True );
                     if ( ( m_xTempBinding->getPropertyValue( PN_CALCULATE_EXPR ) >>= sTemp )
-                        && sTemp.getLength() > 0 )
+                        && !sTemp.isEmpty() )
                         m_aCalculateCB.Check( sal_True );
                 }
                 catch ( Exception& )
@@ -3041,13 +3041,13 @@ namespace svxform
         m_aResultTimer.SetTimeout( 500 );
         m_aResultTimer.SetTimeoutHdl( LINK( this, AddConditionDialog, ResultHdl ) );
 
-        if ( m_sPropertyName.getLength() > 0 )
+        if ( !m_sPropertyName.isEmpty() )
         {
             try
             {
                 rtl::OUString sTemp;
                 if ( ( m_xBinding->getPropertyValue( m_sPropertyName ) >>= sTemp )
-                    && sTemp.getLength() > 0 )
+                    && !sTemp.isEmpty() )
                 {
                     m_aConditionED.SetText( sTemp );
                 }
@@ -3446,7 +3446,7 @@ namespace svxform
     IMPL_LINK( AddSubmissionDialog, OKHdl, OKButton *, EMPTYARG )
     {
         rtl::OUString sName(m_aNameED.GetText());
-        if(!sName.getLength()) {
+        if(sName.isEmpty()) {
 
             ErrorBox aErrorBox(this,SVX_RES(RID_ERR_EMPTY_SUBMISSIONNAME));
             aErrorBox.SetText( Application::GetDisplayName() );
@@ -3601,7 +3601,7 @@ namespace svxform
 
                 m_xSubmission->getPropertyValue( PN_SUBMISSION_REPLACE ) >>= sTemp;
                 sTemp = lcl_ReplaceString::get().toUI( sTemp );
-                if ( sTemp.getLength() == 0 )
+                if ( sTemp.isEmpty() )
                     sTemp = m_aReplaceLB.GetEntry(0); // first entry == "none"
                 nPos = m_aReplaceLB.GetEntryPos( String( sTemp ) );
                 if ( LISTBOX_ENTRY_NOTFOUND == nPos )
