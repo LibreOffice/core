@@ -352,6 +352,8 @@ OString Options::prepareHelp()
     help += "                  documentation.\n";
     help += "    -cid        = check if identifiers fulfill the UNO naming\n";
     help += "                  requirements.\n";
+    help += "    -quiet      = no output.\n";
+    help += "    -verbose    = verbose output.\n";
     help += "    -w          = display warning messages.\n";
     help += "    -we         = treat warnings as errors.\n";
     help += "    -h|-?       = print this help message and exit.\n\n";
