@@ -308,8 +308,8 @@ bool SbiScanner::NextSym()
     }
 
     // read in and convert if number
-    else if( theBasicCharClass::get().isDigit( *pLine & 0xFF )
-             || ( *pLine == '.' && theBasicCharClass::get().isDigit( *(pLine+1) & 0xFF ) ) )
+    else if((nCol < aLine.getLength() && theBasicCharClass::get().isDigit(aLine[nCol] & 0xFF)) ||
+            (nCol + 1 < aLine.getLength() && aLine[nCol] == '.' && theBasicCharClass::get().isDigit(aLine[nCol + 1] & 0xFF)))
     {
         short exp = 0;
         short comma = 0;
