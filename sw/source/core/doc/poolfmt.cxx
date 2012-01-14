@@ -2125,21 +2125,20 @@ sal_uInt16 SwDoc::SetDocPattern( const String& rPatternName )
 {
     OSL_ENSURE( rPatternName.Len(), "no Document Template name" );
 
-    sal_uInt16 nNewPos = aPatternNms.Count();
-    for( sal_uInt16 n = 0; n < aPatternNms.Count(); ++n )
-        if( !aPatternNms[n] )
+    size_t nNewPos = aPatternNms.size();
+    for(size_t n = 0; n < aPatternNms.size(); ++n)
+        if( boost::is_null(aPatternNms.begin() + n) )
         {
-            if( nNewPos == aPatternNms.Count() )
+            if( nNewPos == aPatternNms.size() )
                 nNewPos = n;
         }
-        else if( rPatternName == *aPatternNms[n] )
+        else if( rPatternName == aPatternNms[n] )
             return n;
 
-    if( nNewPos < aPatternNms.Count() )
-        aPatternNms.Remove( nNewPos );      // Free space again
+    if( nNewPos < aPatternNms.size() )
+        aPatternNms.erase(aPatternNms.begin() + nNewPos);   // Free space again
 
-    String* pNewNm = new String( rPatternName );
-    aPatternNms.Insert( pNewNm, nNewPos );
+    aPatternNms.insert(aPatternNms.begin() + nNewPos, new String(rPatternName));
     SetModified();
     return nNewPos;
 }

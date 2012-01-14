@@ -88,6 +88,7 @@ class SwList;
 #include <memory>
 
 #include <boost/scoped_ptr.hpp>
+#include <boost/ptr_container/ptr_vector.hpp>
 
 namespace editeng { class SvxBorderLine; }
 
@@ -288,7 +289,7 @@ class SW_DLLPUBLIC SwDoc :
     SwDBData    aDBData;                // database descriptor
     ::com::sun::star::uno::Sequence <sal_Int8 > aRedlinePasswd;
     String      sTOIAutoMarkURL;        // ::com::sun::star::util::URL of table of index AutoMark file
-    SvStringsDtor aPatternNms;          // Array for names of document-templates
+    boost::ptr_vector< boost::nullable<String> > aPatternNms;          // Array for names of document-templates
     com::sun::star::uno::Reference<com::sun::star::container::XNameContainer>
         xXForms;                        // container with XForms models
     mutable com::sun::star::uno::Reference< com::sun::star::linguistic2::XProofreadingIterator > m_xGCIterator;
@@ -1300,7 +1301,14 @@ public:
     sal_uInt16 SetDocPattern( const String& rPatternName );
 
     // Return name of document template. Can be 0!
-    String* GetDocPattern( sal_uInt16 nPos ) const { return aPatternNms[nPos]; }
+    const String* GetDocPattern( sal_uInt16 nPos ) const
+    {
+        if(nPos >= aPatternNms.size())
+            return NULL;
+        if(boost::is_null(aPatternNms.begin() + nPos))
+            return NULL;
+        return &(aPatternNms[nPos]);
+    }
 
     // Delete all unreferenced field types.
     void GCFieldTypes();    // impl. in docfld.cxx
