@@ -46,7 +46,7 @@ SV_DECL_PTRARR( SwHTMLTxtFtns, SwTxtFtnPtr, 1, 1 )
 struct SwHTMLFootEndNote_Impl
 {
     SwHTMLTxtFtns aTxtFtns;
-    SvStringsDtor aNames;
+    std::vector<String> aNames;
 
     String sName;
     String sContent;            // Infos fuer die letzte Fussnote
@@ -229,8 +229,7 @@ void SwHTMLParser::FinishFootEndNote()
         pFootEndNoteImpl->aTxtFtns.Insert( pTxtFtn,
                                            pFootEndNoteImpl->aTxtFtns.Count() );
 
-        pFootEndNoteImpl->aNames.Insert( new String(pFootEndNoteImpl->sName),
-                                         pFootEndNoteImpl->aNames.Count() );
+        pFootEndNoteImpl->aNames.push_back(pFootEndNoteImpl->sName);
     }
     pFootEndNoteImpl->sName = aEmptyStr;
     pFootEndNoteImpl->sContent = aEmptyStr;
@@ -256,18 +255,17 @@ SwNodeIndex *SwHTMLParser::GetFootEndNoteSection( const String& rName )
     if( pFootEndNoteImpl )
     {
         String aName( rName );
-        // TODO: ToUpperAscii
         aName.ToUpperAscii();
 
-        sal_uInt16 nCount = pFootEndNoteImpl->aNames.Count();
-        for( sal_uInt16 i=0; i<nCount; i++ )
+        size_t nCount = pFootEndNoteImpl->aNames.size();
+        for(size_t i = 0; i < nCount; ++i)
         {
-            if( *pFootEndNoteImpl->aNames[i] == aName )
+            if(pFootEndNoteImpl->aNames[i] == aName)
             {
                 pStartNodeIdx = pFootEndNoteImpl->aTxtFtns[i]->GetStartNode();
-                pFootEndNoteImpl->aNames.DeleteAndDestroy( i, 1 );
+                pFootEndNoteImpl->aNames.erase(pFootEndNoteImpl->aNames.begin() + i);
                 pFootEndNoteImpl->aTxtFtns.Remove( i, 1 );
-                if( !pFootEndNoteImpl->aNames.Count() )
+                if(pFootEndNoteImpl->aNames.empty())
                 {
                     delete pFootEndNoteImpl;
                     pFootEndNoteImpl = 0;
