@@ -70,7 +70,7 @@ Rectangle AquaSalSystem::GetDisplayScreenPosSizePixel( unsigned int nScreen )
     return aRet;
 }
 
-Rectangle AquaSalSystem::GetDisplayWorkAreaPosSizePixel( unsigned int nScreen )
+Rectangle AquaSalSystem::GetDisplayScreenWorkAreaPosSizePixel( unsigned int nScreen )
 {
     NSArray* pScreens = [NSScreen screens];
     Rectangle aRet;
@@ -89,7 +89,7 @@ Rectangle AquaSalSystem::GetDisplayWorkAreaPosSizePixel( unsigned int nScreen )
     return aRet;
 }
 
-rtl::OUString AquaSalSystem::GetScreenName( unsigned int nScreen )
+rtl::OUString AquaSalSystem::GetDisplayScreenName( unsigned int nScreen )
 {
    NSArray* pScreens = [NSScreen screens];
    OUString aRet;

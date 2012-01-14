@@ -55,7 +55,7 @@ namespace vcl
 class DisplayInfo : public ::cppu::WeakAggImplHelper3< XPropertySet, XPropertySetInfo, XServiceInfo >
 {
 public:
-    DisplayInfo( sal_uInt32 nDisplay );
+    DisplayInfo( sal_uInt32 nDisplayScreen );
 
     // XPropertySet
     virtual Reference< XPropertySetInfo > SAL_CALL getPropertySetInfo() throw (RuntimeException);
@@ -77,7 +77,7 @@ public:
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (RuntimeException);
 
 private:
-    sal_uInt32 mnDisplay;
+    sal_uInt32 mnDisplayScreen;
 };
 
 static const char* pScreenAreaName = "ScreenArea";
@@ -86,8 +86,8 @@ static const char* pScreenName = "ScreenName";
 
 // --------------------------------------------------------------------
 
-DisplayInfo::DisplayInfo( sal_uInt32 nDisplay )
-: mnDisplay( nDisplay )
+DisplayInfo::DisplayInfo( sal_uInt32 nDisplayScreen )
+: mnDisplayScreen( nDisplayScreen )
 {
 }
 
@@ -107,15 +107,15 @@ Any SAL_CALL DisplayInfo::getPropertyValue( const OUString& PropertyName ) throw
     Rectangle aRect;
     if( PropertyName.equalsAscii( pScreenAreaName ) )
     {
-        aRect = Application::GetScreenPosSizePixel( mnDisplay );
+        aRect = Application::GetScreenPosSizePixel( mnDisplayScreen );
     }
     else if( PropertyName.equalsAscii( pWorkAreaName ) )
     {
-        aRect = Application::GetWorkAreaPosSizePixel( mnDisplay );
+        aRect = Application::GetWorkAreaPosSizePixel( mnDisplayScreen );
     }
     else if( PropertyName.equalsAscii( pScreenName ) )
     {
-        return Any( Application::GetScreenName( mnDisplay ) );
+        return Any( Application::GetDisplayScreenName( mnDisplayScreen ) );
     }
     else
         throw UnknownPropertyException();
@@ -252,7 +252,7 @@ Any SAL_CALL DisplayAccess::getPropertyValue( const OUString& PropertyName ) thr
     }
     else if( PropertyName.equalsAscii( pDefaultDisplayName ) )
     {
-        aRet <<= sal_Int32( Application::GetDefaultDisplayNumber() );
+        aRet <<= sal_Int32( Application::GetDisplayDefaultScreen() );
     }
     else
         throw UnknownPropertyException();

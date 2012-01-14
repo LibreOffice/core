@@ -292,11 +292,11 @@ public:
     // if IsUnifiedDisplay() == true the return value will be
     // nearest screen of the target rectangle
     // in case of IsUnifiedDisplay() == false the return value
-    // will always be GetDefaultDisplayNumber()
+    // will always be GetDisplayDefaultScreen()
     SAL_DLLPRIVATE static unsigned int  GetBestScreen( const Rectangle& );
     SAL_DLLPRIVATE static Rectangle     GetWorkAreaPosSizePixel( unsigned int nScreen );
-    SAL_DLLPRIVATE static unsigned int  GetDefaultDisplayNumber();
-    SAL_DLLPRIVATE static rtl::OUString GetScreenName( unsigned int nScreen );
+    SAL_DLLPRIVATE static unsigned int  GetDisplayDefaultScreen();
+    SAL_DLLPRIVATE static rtl::OUString GetDisplayScreenName( unsigned int nScreen );
 
     static const LocaleDataWrapper& GetAppLocaleDataWrapper();
 

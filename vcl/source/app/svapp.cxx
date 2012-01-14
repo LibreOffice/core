@@ -1252,10 +1252,10 @@ unsigned int Application::GetScreenCount()
     return pSys ? pSys->GetDisplayScreenCount() : 0;
 }
 
-rtl::OUString Application::GetScreenName( unsigned int nScreen )
+rtl::OUString Application::GetDisplayScreenName( unsigned int nScreen )
 {
     SalSystem* pSys = ImplGetSalSystem();
-    return pSys ? pSys->GetScreenName( nScreen ) : rtl::OUString();
+    return pSys ? pSys->GetDisplayScreenName( nScreen ) : rtl::OUString();
 }
 
 bool Application::IsUnifiedDisplay()
@@ -1264,10 +1264,10 @@ bool Application::IsUnifiedDisplay()
     return pSys ? pSys->IsUnifiedDisplay() : true;
 }
 
-unsigned int Application::GetDefaultDisplayNumber()
+unsigned int Application::GetDisplayDefaultScreen()
 {
     SalSystem* pSys = ImplGetSalSystem();
-    return pSys ? pSys->GetDefaultDisplayNumber() : 0;
+    return pSys ? pSys->GetDisplayDefaultScreen() : 0;
 }
 
 Rectangle Application::GetScreenPosSizePixel( unsigned int nScreen )
@@ -1279,7 +1279,7 @@ Rectangle Application::GetScreenPosSizePixel( unsigned int nScreen )
 Rectangle Application::GetWorkAreaPosSizePixel( unsigned int nScreen )
 {
     SalSystem* pSys = ImplGetSalSystem();
-    return pSys ? pSys->GetDisplayWorkAreaPosSizePixel( nScreen ) : Rectangle();
+    return pSys ? pSys->GetDisplayScreenWorkAreaPosSizePixel( nScreen ) : Rectangle();
 }
 
 namespace {
@@ -1296,7 +1296,7 @@ unsigned long calcDistSquare( const Point& i_rPoint, const Rectangle& i_rRect )
 unsigned int Application::GetBestScreen( const Rectangle& i_rRect )
 {
     if( !IsUnifiedDisplay() )
-        return GetDefaultDisplayNumber();
+        return GetDisplayDefaultScreen();
 
     const unsigned int nScreens = GetScreenCount();
     unsigned int nBestMatchScreen = 0;

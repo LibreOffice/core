@@ -78,12 +78,12 @@ Rectangle SvpSalSystem::GetDisplayScreenPosSizePixel( unsigned int nScreen )
     return aRect;
 }
 
-Rectangle SvpSalSystem::GetDisplayWorkAreaPosSizePixel( unsigned int nScreen )
+Rectangle SvpSalSystem::GetDisplayScreenWorkAreaPosSizePixel( unsigned int nScreen )
 {
     return GetDisplayScreenPosSizePixel( nScreen );
 }
 
-rtl::OUString SvpSalSystem::GetScreenName( unsigned int nScreen )
+rtl::OUString SvpSalSystem::GetDisplayScreenName( unsigned int nScreen )
 {
    rtl::OUStringBuffer aBuf( 32 );
    aBuf.appendAscii( "VirtualScreen " );

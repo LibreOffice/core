@@ -241,10 +241,10 @@ public:
     /**
     Returns the screen number the window is on
 
-    The screen number is counted the same way that
+    The Display Screen number is counted the same way that
     <code>Application::GetScreenPosSizePixel</code>,
     <code>Application::GetWorkAreaPosSizePixel</code>,
-    <code>Application::GetScreenName</code>
+    <code>Application::GetDisplayScreenName</code>
     and of course <code>SystemWindow::SetScreenNumber</code>
     are counted in.
 
@@ -263,10 +263,10 @@ public:
     Move the Window to a new screen. The same rules for
     positioning apply as in <code>SystemWindow::GetScreenNumber</code>
 
-    The screen number is counted the same way that
+    The Display Screen number is counted the same way that
     <code>Application::GetScreenPosSizePixel</code>,
     <code>Application::GetWorkAreaPosSizePixel</code>,
-    <code>Application::GetScreenName</code>
+    <code>Application::GetDisplayScreenName</code>
     and of course <code>SystemWindow::GetScreenNumber</code>
     are counted in.
 

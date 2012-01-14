@@ -45,10 +45,10 @@ public:
     // overload pure virtual methods
     virtual unsigned int GetDisplayScreenCount();
     virtual bool         IsUnifiedDisplay();
-    virtual unsigned int GetDefaultDisplayNumber();
-    virtual Rectangle GetDisplayScreenPosSizePixel( unsigned int nScreen );
-    virtual Rectangle GetDisplayWorkAreaPosSizePixel( unsigned int nScreen );
-    virtual rtl::OUString GetScreenName( unsigned int nScreen );
+    virtual unsigned int GetDisplayDefaultScreen();
+    virtual Rectangle    GetDisplayScreenPosSizePixel( unsigned int nScreen );
+    virtual Rectangle    GetDisplayScreenWorkAreaPosSizePixel( unsigned int nScreen );
+    virtual rtl::OUString GetDisplayScreenName( unsigned int nScreen );
     virtual int ShowNativeDialog( const rtl::OUString& rTitle,
                                   const rtl::OUString& rMessage,
                                   const std::list< rtl::OUString >& rButtons,

@@ -153,7 +153,7 @@ static int _get_primary_monitor (GdkScreen *pScreen)
 }
 } // end anonymous namespace
 
-unsigned int GtkSalSystem::GetDefaultDisplayNumber()
+unsigned int GtkSalSystem::GetDisplayDefaultScreen()
 {
     GdkScreen *pDefault = gdk_display_get_default_screen (mpDisplay);
     int idx = getScreenIdxFromPtr (mpDisplay, pDefault);
@@ -172,7 +172,7 @@ Rectangle GtkSalSystem::GetDisplayScreenPosSizePixel (unsigned int nScreen)
     return Rectangle (aRect.x, aRect.y, aRect.width, aRect.height);
 }
 
-Rectangle GtkSalSystem::GetDisplayWorkAreaPosSizePixel (unsigned int nScreen)
+Rectangle GtkSalSystem::GetDisplayScreenWorkAreaPosSizePixel (unsigned int nScreen)
 {
     // FIXME: in theory we need extra code here to collect
     // the work area, ignoring fixed panels etc. on the screen.
@@ -180,7 +180,7 @@ Rectangle GtkSalSystem::GetDisplayWorkAreaPosSizePixel (unsigned int nScreen)
     return GetDisplayScreenPosSizePixel( nScreen );
 }
 
-rtl::OUString GtkSalSystem::GetScreenName(unsigned int nScreen)
+rtl::OUString GtkSalSystem::GetDisplayScreenName(unsigned int nScreen)
 {
     gchar *pStr;
     gint nMonitor;

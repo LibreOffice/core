@@ -155,7 +155,7 @@ public:
     virtual int CaptureMouse( SalFrame* pFrame );
 
 #if GTK_CHECK_VERSION(3,0,0)
-    int  GetDefaultScreenNumber() { return m_pSys->GetDefaultDisplayNumber(); }
+    int  GetDefaultScreenNumber() { return m_pSys->GetDisplayDefaultScreen(); }
     int  GetScreenCount() { return m_pSys->GetDisplayScreenCount(); }
     Size GetScreenSize( int screen );
 #endif

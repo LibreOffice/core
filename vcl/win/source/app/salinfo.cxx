@@ -184,7 +184,7 @@ bool WinSalSystem::IsMultiDisplay()
     return false;
 }
 
-unsigned int WinSalSystem::GetDefaultDisplayNumber()
+unsigned int WinSalSystem::GetDisplayDefaultScreen()
 {
     initMonitors();
     return m_nPrimary;
@@ -196,13 +196,13 @@ Rectangle WinSalSystem::GetDisplayScreenPosSizePixel( unsigned int nScreen )
     return (nScreen < m_aMonitors.size()) ? m_aMonitors[nScreen].m_aArea : Rectangle();
 }
 
-Rectangle WinSalSystem::GetDisplayWorkAreaPosSizePixel( unsigned int nScreen )
+Rectangle WinSalSystem::GetDisplayScreenWorkAreaPosSizePixel( unsigned int nScreen )
 {
     initMonitors();
     return (nScreen < m_aMonitors.size()) ? m_aMonitors[nScreen].m_aWorkArea : Rectangle();
 }
 
-rtl::OUString WinSalSystem::GetScreenName( unsigned int nScreen )
+rtl::OUString WinSalSystem::GetDisplayScreenName( unsigned int nScreen )
 {
     initMonitors();
     return (nScreen < m_aMonitors.size()) ? m_aMonitors[nScreen].m_aName : rtl::OUString();
