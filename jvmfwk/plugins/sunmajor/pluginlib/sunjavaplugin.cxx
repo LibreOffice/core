@@ -294,33 +294,31 @@ javaPluginError jfw_plugin_getAllJavaInfos(
             }
         }
 
-        if (arExcludeList > 0)
+        bool bExclude = false;
+        for (int j = 0; j < nLenList; j++)
         {
-            bool bExclude = false;
-            for (int j = 0; j < nLenList; j++)
+            rtl::OUString sExVer(arExcludeList[j]);
+            try
             {
-                rtl::OUString sExVer(arExcludeList[j]);
-                try
+                if (cur->compareVersions(sExVer) == 0)
                 {
-                    if (cur->compareVersions(sExVer) == 0)
-                    {
-                        bExclude = true;
-                        break;
-                    }
-                }
-                catch (MalformedVersionException&)
-                {
-                    //The excluded version was not recognized as valid for this vendor.
-                    JFW_ENSURE(
-                        0,OUSTR("[Java framework]sunjavaplugin does not know version: ")
-                        + sExVer + OUSTR(" for vendor: ") + cur->getVendor()
-                        + OUSTR(" .Check excluded versions.") );
-                    return JFW_PLUGIN_E_WRONG_VERSION_FORMAT;
+                    bExclude = true;
+                    break;
                 }
             }
-            if (bExclude == true)
-                continue;
+            catch (MalformedVersionException&)
+            {
+                //The excluded version was not recognized as valid for this vendor.
+                JFW_ENSURE(
+                    0,OUSTR("[Java framework]sunjavaplugin does not know version: ")
+                    + sExVer + OUSTR(" for vendor: ") + cur->getVendor()
+                    + OUSTR(" .Check excluded versions.") );
+                return JFW_PLUGIN_E_WRONG_VERSION_FORMAT;
+            }
         }
+        if (bExclude == true)
+            continue;
+
         vecVerifiedInfos.push_back(*i);
     }
     //Now vecVerifiedInfos contains all those JREs which meet the version requirements
@@ -424,28 +422,25 @@ javaPluginError jfw_plugin_getJavaInfoByPath(
             return JFW_PLUGIN_E_FAILED_VERSION;
     }
 
-    if (arExcludeList > 0)
+    for (int i = 0; i < nLenList; i++)
     {
-        for (int i = 0; i < nLenList; i++)
+        rtl::OUString sExVer(arExcludeList[i]);
+        int nRes = 0;
+        try
         {
-            rtl::OUString sExVer(arExcludeList[i]);
-            int nRes = 0;
-            try
-            {
-                nRes = aVendorInfo->compareVersions(sExVer);
-            }
-            catch (MalformedVersionException&)
-            {
-                //The excluded version was not recognized as valid for this vendor.
-                JFW_ENSURE(
-                    0,OUSTR("[Java framework]sunjavaplugin does not know version: ")
-                    + sExVer + OUSTR(" for vendor: ") + aVendorInfo->getVendor()
-                    + OUSTR(" .Check excluded versions.") );
-                return JFW_PLUGIN_E_WRONG_VERSION_FORMAT;
-            }
-            if (nRes == 0)
-                return JFW_PLUGIN_E_FAILED_VERSION;
+            nRes = aVendorInfo->compareVersions(sExVer);
         }
+        catch (MalformedVersionException&)
+        {
+            //The excluded version was not recognized as valid for this vendor.
+            JFW_ENSURE(
+                0,OUSTR("[Java framework]sunjavaplugin does not know version: ")
+                + sExVer + OUSTR(" for vendor: ") + aVendorInfo->getVendor()
+                + OUSTR(" .Check excluded versions.") );
+            return JFW_PLUGIN_E_WRONG_VERSION_FORMAT;
+        }
+        if (nRes == 0)
+            return JFW_PLUGIN_E_FAILED_VERSION;
     }
     *ppInfo = createJavaInfo(aVendorInfo);
 
