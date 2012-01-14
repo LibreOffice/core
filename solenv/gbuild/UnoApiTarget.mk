@@ -76,8 +76,10 @@ endef
 
 # for interfaces, exceptions, structs, enums, constant groups
 define gb_UnoApiTarget_add_idlfile
-$(call gb_UnoApiTarget_get_target,$(1)) : $(call gb_UnoApiPartTarget_get_target,$(2)/$(3).urd)
-$(call gb_UnoApiPartTarget_get_target,$(2)/$(3).urd) : $(call gb_UnoApiPartTarget_get_target,$(2)/idl.done)
+$(call gb_UnoApiTarget_get_target,$(1)) : \
+	$(call gb_UnoApiPartTarget_get_target,$(2)/idl.done)
+$(call gb_UnoApiPartTarget_get_target,$(2)/idl.done) : \
+	$(call gb_UnoApiPartTarget_get_target,$(2)/$(3).urd)
 gb_UnoApiTarget_HPPFILES_$(1) += $(2)/$(3).hdl
 gb_UnoApiTarget_HPPFILES_$(1) += $(2)/$(3).hpp
 gb_UnoApiTarget_IDLFILES_$(1) += $(2)/$(3).idl
@@ -97,8 +99,10 @@ endef
 
 # for old-style services and modules
 define gb_UnoApiTarget_add_idlfile_noheader
-$(call gb_UnoApiTarget_get_target,$(1)) : $(call gb_UnoApiPartTarget_get_target,$(2)/$(3).urd)
-$(call gb_UnoApiPartTarget_get_target,$(2)/$(3).urd) : $(call gb_UnoApiPartTarget_get_target,$(2)/idl_noheader.done)
+$(call gb_UnoApiTarget_get_target,$(1)) : \
+	$(call gb_UnoApiPartTarget_get_target,$(2)/idl_noheader.done)
+$(call gb_UnoApiPartTarget_get_target,$(2)/idl_noheader.done) : \
+	$(call gb_UnoApiPartTarget_get_target,$(2)/$(3).urd)
 gb_UnoApiTarget_IDLFILES_$(1) += $(2)/$(3).idl
 
 endef
@@ -113,8 +117,10 @@ endef
 
 # for new-style services
 define gb_UnoApiTarget_add_idlfile_nohdl
-$(call gb_UnoApiTarget_get_target,$(1)) : $(call gb_UnoApiPartTarget_get_target,$(2)/$(3).urd)
-$(call gb_UnoApiPartTarget_get_target,$(2)/$(3).urd) : $(call gb_UnoApiPartTarget_get_target,$(2)/idl_nohdl.done)
+$(call gb_UnoApiTarget_get_target,$(1)) : \
+	$(call gb_UnoApiPartTarget_get_target,$(2)/idl_nohdl.done)
+$(call gb_UnoApiPartTarget_get_target,$(2)/idl_nohdl.done) : \
+	$(call gb_UnoApiPartTarget_get_target,$(2)/$(3).urd)
 gb_UnoApiTarget_HPPFILES_$(1) += $(2)/$(3).hpp
 gb_UnoApiTarget_IDLFILES_$(1) += $(2)/$(3).idl
 
@@ -170,11 +176,23 @@ $(call gb_UnoApiTarget_get_clean_target,%) :
 	-rm -rf $(call gb_UnoApiTarget_get_header_target,$*)\
 			$(call gb_UnoApiPartTarget_get_target,$*)
 
+# The .urd files are actually created by the gb_UnoApiPartTarget__command,
+# invoked for the per-directory .done files.
+# The reason why .urd files are tracked is so new files that are added are
+# picked up and cause a rebuild, even if older than the .done file (also, as a
+# convenience for users who delete them from the workdir by hand; this dummy
+# rule plus the dependency from the .done target to the .urd file plus the
+# sort/patsubst call in gb_UnoApiPartTarget__command cause command to be
+# invoked with the .idl file corresponding to the .urd in that case.
+$(call gb_UnoApiPartTarget_get_target,%.urd) :
+	@true
+
 define gb_UnoApiPartTarget__command
 	$$(call gb_Output_announce,$(2),$(true),IDL,2)
 	mkdir -p $(call gb_UnoApiPartTarget_get_target,$(2)) && \
 	RESPONSEFILE=$$(call var2file,$$(shell $(gb_MKTEMP)),500,\
-		$$(call gb_Helper_convert_native,$$(INCLUDE) $$(DEFS) -O $(call gb_UnoApiPartTarget_get_target,$(2)) -verbose -C $$?)) && \
+		$$(call gb_Helper_convert_native,$$(INCLUDE) $$(DEFS) -O $(call gb_UnoApiPartTarget_get_target,$(2)) -verbose -C \
+		$$(sort $$(patsubst $$(call gb_UnoApiPartTarget_get_target,%.urd),$(SRCDIR)/%.idl,$$?)))) && \
 	$(gb_UnoApiTarget_IDLCCOMMAND) @$$$${RESPONSEFILE} > /dev/null && \
 	rm -f $$$${RESPONSEFILE} && \
 	touch $$@
