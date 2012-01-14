@@ -62,9 +62,14 @@ gb_UnoApiTarget_IDLFILES_$(1) :=
 
 endef
 
-define gb_UnoApiTarget_add_idlfiles
-$(foreach idl,$(3),$(call gb_UnoApiTarget_add_idlfile,$(1),$(2),$(idl)))
+define gb_UnoApiTarget__add_idlfile
+$(call gb_UnoApiPartTarget_get_target,$(2)/idl.done) : \
+	$(call gb_UnoApiPartTarget_get_target,$(2)/$(3).urd)
+gb_UnoApiTarget_IDLFILES_$(1) += $(2)/$(3).idl
 
+endef
+
+define gb_UnoApiTarget__add_idlfiles
 $(call gb_UnoApiTarget_get_target,$(1)) : \
 	$(call gb_UnoApiPartTarget_get_target,$(2)/idl.done)
 $(call gb_UnoApiPartTarget_get_target,$(2)/idl.done) : \
@@ -72,57 +77,51 @@ $(call gb_UnoApiPartTarget_get_target,$(2)/idl.done) : \
 
 endef
 
+define gb_UnoApiTarget_add_idlfiles
+$(foreach idl,$(3),$(call gb_UnoApiTarget_add_idlfile,$(1),$(2),$(idl)))
+$(call gb_UnoApiTarget__add_idlfiles,$(1),$(2),$(3))
+
+endef
+
 # for interfaces, exceptions, structs, enums, constant groups
 define gb_UnoApiTarget_add_idlfile
-$(call gb_UnoApiPartTarget_get_target,$(2)/idl.done) : \
-	$(call gb_UnoApiPartTarget_get_target,$(2)/$(3).urd)
 gb_UnoApiTarget_HPPFILES_$(1) += $(2)/$(3).hdl $(2)/$(3).hpp
-gb_UnoApiTarget_IDLFILES_$(1) += $(2)/$(3).idl
 
 $(call gb_UnoApiTarget_get_header_target,$(2)/$(3).hpp) :| \
 	$(call gb_UnoApiTarget_get_target,$(1))
 $(call gb_UnoApiTarget_get_header_target,$(2)/$(3).hdl) :| \
 	$(call gb_UnoApiTarget_get_target,$(1))
 
+$(call gb_UnoApiTarget__add_idlfile,$(1),$(2),$(3))
+
 endef
 
 define gb_UnoApiTarget_add_idlfiles_noheader
 $(foreach idl,$(3),$(call gb_UnoApiTarget_add_idlfile_noheader,$(1),$(2),$(idl)))
-
-$(call gb_UnoApiTarget_get_target,$(1)) : \
-	$(call gb_UnoApiPartTarget_get_target,$(2)/idl_noheader.done)
-$(call gb_UnoApiPartTarget_get_target,$(2)/idl_noheader.done) : \
-	$(foreach idl,$(3),$(SRCDIR)/$(2)/$(idl).idl)
+$(call gb_UnoApiTarget__add_idlfiles,$(1),$(2),$(3))
 
 endef
 
 # for old-style services and modules
 define gb_UnoApiTarget_add_idlfile_noheader
-$(call gb_UnoApiPartTarget_get_target,$(2)/idl_noheader.done) : \
-	$(call gb_UnoApiPartTarget_get_target,$(2)/$(3).urd)
-gb_UnoApiTarget_IDLFILES_$(1) += $(2)/$(3).idl
+$(call gb_UnoApiTarget__add_idlfile,$(1),$(2),$(3))
 
 endef
 
 define gb_UnoApiTarget_add_idlfiles_nohdl
 $(foreach idl,$(3),$(call gb_UnoApiTarget_add_idlfile_nohdl,$(1),$(2),$(idl)))
-
-$(call gb_UnoApiTarget_get_target,$(1)) : \
-	$(call gb_UnoApiPartTarget_get_target,$(2)/idl_nohdl.done)
-$(call gb_UnoApiPartTarget_get_target,$(2)/idl_nohdl.done) : \
-	$(foreach idl,$(3),$(SRCDIR)/$(2)/$(idl).idl)
+$(call gb_UnoApiTarget__add_idlfiles,$(1),$(2),$(3))
 
 endef
 
 # for new-style services
 define gb_UnoApiTarget_add_idlfile_nohdl
-$(call gb_UnoApiPartTarget_get_target,$(2)/idl_nohdl.done) : \
-	$(call gb_UnoApiPartTarget_get_target,$(2)/$(3).urd)
 gb_UnoApiTarget_HPPFILES_$(1) += $(2)/$(3).hpp
-gb_UnoApiTarget_IDLFILES_$(1) += $(2)/$(3).idl
 
 $(call gb_UnoApiTarget_get_header_target,$(2)/$(3).hpp) :| \
 	$(call gb_UnoApiTarget_get_target,$(1))
+
+$(call gb_UnoApiTarget__add_idlfile,$(1),$(2),$(3))
 
 endef
 
