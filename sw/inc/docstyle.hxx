@@ -34,6 +34,7 @@
 #include <svl/style.hxx>
 #include <svl/itemset.hxx>
 #include "swdllapi.h"
+#include <boost/ptr_container/ptr_vector.hpp>
 
 class SwDoc;
 class SwDocStyleSheetPool;
@@ -162,7 +163,7 @@ class SwStyleSheetIterator : public SfxStyleSheetIterator, public SfxListener
     sal_uInt16              nLastPos;
     sal_Bool                bFirstCalled;
 
-    void                AppendStyleList(const SvStringsDtor& rLst,
+    void                AppendStyleList(const boost::ptr_vector<String>& rLst,
                                         sal_Bool    bUsed,
                                         sal_uInt16  nSection,
                                         char    cType);

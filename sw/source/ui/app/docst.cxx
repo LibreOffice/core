@@ -143,7 +143,7 @@ void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
                     if(pFmt)
                         aName = pFmt->GetName();
                     else
-                        aName = *SwStyleNameMapper::GetTextUINameArray()[
+                        aName = SwStyleNameMapper::GetTextUINameArray()[
                             RES_POOLCOLL_STANDARD - RES_POOLCOLL_TEXT_BEGIN ];
                     rSet.Put(SfxTemplateItem(nWhich, aName));
                 }

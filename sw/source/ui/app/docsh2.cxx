@@ -389,7 +389,7 @@ sal_Bool SwDocShell::Insert( SfxObjectShell &rSource,
               const_cast<const SwDoc *>(pDoc)->GetPageDesc(0).GetName() ==
               rOldName ) ||
               ( SFX_STYLE_FAMILY_CHAR == eOldFamily &&
-                rOldName == *SwStyleNameMapper::GetTextUINameArray()[ RES_POOLCOLL_STANDARD -
+                rOldName == SwStyleNameMapper::GetTextUINameArray()[ RES_POOLCOLL_STANDARD -
                                                 RES_POOLCOLL_TEXT_BEGIN ] ))
             return sal_False;
 
@@ -579,7 +579,7 @@ sal_Bool SwDocShell::Remove(sal_uInt16 nIdx1,       // see Insert
               const_cast<const SwDoc *>(pDoc)->GetPageDesc(0).GetName()
               == aName ) ||
               ( SFX_STYLE_FAMILY_CHAR == eFamily &&
-                aName == *SwStyleNameMapper::GetTextUINameArray()[ RES_POOLCOLL_STANDARD -
+                aName == SwStyleNameMapper::GetTextUINameArray()[ RES_POOLCOLL_STANDARD -
                                                 RES_POOLCOLL_TEXT_BEGIN ] ))
             return sal_False;
 

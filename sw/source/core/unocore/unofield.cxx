@@ -531,7 +531,7 @@ void SwXFieldMaster::setPropertyValue( const OUString& rPropertyName,
         sal_Bool bSetValue = sal_True;
         if( rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_SUB_TYPE)))
         {
-            const SvStringsDtor& rExtraArr = SwStyleNameMapper::GetExtraUINameArray();
+            const boost::ptr_vector<String>& rExtraArr(SwStyleNameMapper::GetExtraUINameArray());
             String sTypeName = pType->GetName();
             static sal_uInt16 nIds[] =
             {
@@ -543,7 +543,7 @@ void SwXFieldMaster::setPropertyValue( const OUString& rPropertyName,
             };
             for(const sal_uInt16 * pIds = nIds; *pIds; ++pIds)
             {
-                if(sTypeName == *rExtraArr[ *pIds ] )
+                if(sTypeName == rExtraArr[ *pIds ] )
                 {
                     bSetValue = sal_False;
                     break;

@@ -127,7 +127,7 @@ SwCharFmt* lcl_FindCharFmt( SwDoc& rDoc,
     if( rName.Len() )
     {
         pFmt = rDoc.FindCharFmtByName( rName );
-        if( !pFmt && rName == *SwStyleNameMapper::GetTextUINameArray()[ RES_POOLCOLL_STANDARD -
+        if( !pFmt && rName == SwStyleNameMapper::GetTextUINameArray()[ RES_POOLCOLL_STANDARD -
                                                 RES_POOLCOLL_TEXT_BEGIN ] )
         {
             // Standard-Character template
@@ -1542,7 +1542,7 @@ sal_Bool SwDocStyleSheet::FillStyleSheet( FillStyleType eFType )
         pFmt = pCharFmt;
         if( !bCreate && !pFmt )
         {
-            if( aName == *SwStyleNameMapper::GetTextUINameArray()[ RES_POOLCOLL_STANDARD -
+            if( aName == SwStyleNameMapper::GetTextUINameArray()[ RES_POOLCOLL_STANDARD -
                                             RES_POOLCOLL_TEXT_BEGIN ] )
                 nPoolId = 0;
             else
@@ -2461,7 +2461,7 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
             }
 
             aLst.Append( cCHAR, pFmt == rDoc.GetDfltCharFmt()
-                        ? (const String&) *SwStyleNameMapper::GetTextUINameArray()[ RES_POOLCOLL_STANDARD -
+                        ? SwStyleNameMapper::GetTextUINameArray()[ RES_POOLCOLL_STANDARD -
                                                 RES_POOLCOLL_TEXT_BEGIN ]
                         : pFmt->GetName() );
         }
@@ -2475,13 +2475,13 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
                                 bIsSearchUsed, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, cCHAR);
             else
             {
-                aLst.Append( cCHAR, *SwStyleNameMapper::GetChrFmtUINameArray()[
+                aLst.Append( cCHAR, SwStyleNameMapper::GetChrFmtUINameArray()[
                         RES_POOLCHR_INET_NORMAL - RES_POOLCHR_BEGIN ] );
-                aLst.Append( cCHAR, *SwStyleNameMapper::GetChrFmtUINameArray()[
+                aLst.Append( cCHAR, SwStyleNameMapper::GetChrFmtUINameArray()[
                         RES_POOLCHR_INET_VISIT - RES_POOLCHR_BEGIN ] );
-                aLst.Append( cCHAR, *SwStyleNameMapper::GetChrFmtUINameArray()[
+                aLst.Append( cCHAR, SwStyleNameMapper::GetChrFmtUINameArray()[
                         RES_POOLCHR_ENDNOTE - RES_POOLCHR_BEGIN ] );
-                aLst.Append( cCHAR, *SwStyleNameMapper::GetChrFmtUINameArray()[
+                aLst.Append( cCHAR, SwStyleNameMapper::GetChrFmtUINameArray()[
                         RES_POOLCHR_FOOTNOTE - RES_POOLCHR_BEGIN ] );
             }
             AppendStyleList(SwStyleNameMapper::GetHTMLChrFmtUINameArray(),
@@ -2602,7 +2602,7 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
         {
             if( !bIsSearchUsed ||
                 rDoc.IsPoolTxtCollUsed( RES_POOLCOLL_TEXT ))
-                aLst.Append( cPARA, *SwStyleNameMapper::GetTextUINameArray()[
+                aLst.Append( cPARA, SwStyleNameMapper::GetTextUINameArray()[
                         RES_POOLCOLL_TEXT - RES_POOLCOLL_TEXT_BEGIN ] );
         }
         if ( bAll ||
@@ -2782,17 +2782,17 @@ SfxStyleSheetBase*  SwStyleSheetIterator::Find( const UniString& rName )
     return 0;
 }
 
-void SwStyleSheetIterator::AppendStyleList(const SvStringsDtor& rList,
+void SwStyleSheetIterator::AppendStyleList(const boost::ptr_vector<String>& rList,
                                             sal_Bool    bTestUsed,
                                             sal_uInt16 nSection, char cType )
 {
     if( bTestUsed )
     {
         SwDoc& rDoc = ((SwDocStyleSheetPool*)pBasePool)->GetDoc();
-        for ( sal_uInt16 i=0; i < rList.Count(); ++i )
+        for ( sal_uInt16 i=0; i < rList.size(); ++i )
         {
             sal_Bool bUsed = sal_False;
-            sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName(*rList[i], (SwGetPoolIdFromName)nSection);
+            sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName(rList[i], (SwGetPoolIdFromName)nSection);
             switch ( nSection )
             {
                 case nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL:
@@ -2810,12 +2810,12 @@ void SwStyleSheetIterator::AppendStyleList(const SvStringsDtor& rList,
                     OSL_ENSURE( !this, "unknown PoolFmt-Id" );
             }
             if ( bUsed )
-                aLst.Append( cType, *rList[i] );
+                aLst.Append( cType, rList[i] );
         }
     }
     else
-        for ( sal_uInt16 i=0; i < rList.Count(); ++i )
-            aLst.Append( cType, *rList[i] );
+        for ( sal_uInt16 i=0; i < rList.size(); ++i )
+            aLst.Append( cType, rList[i] );
 }
 
 void  SwStyleSheetIterator::Notify( SfxBroadcaster&, const SfxHint& rHint )

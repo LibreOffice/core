@@ -37,7 +37,7 @@
 
 extern ResMgr* pSwResMgr;
 // Initialise UI names to 0
-SvStringsDtor   *SwStyleNameMapper::pTextUINameArray = 0,
+boost::ptr_vector<String> *SwStyleNameMapper::pTextUINameArray = 0,
                 *SwStyleNameMapper::pListsUINameArray = 0,
                 *SwStyleNameMapper::pExtraUINameArray = 0,
                 *SwStyleNameMapper::pRegisterUINameArray = 0,
@@ -350,7 +350,7 @@ void SwStyleNameMapper::CheckSuffixAndDelete ( String & rString )
 const NameToIdHash & SwStyleNameMapper::getHashTable ( SwGetPoolIdFromName eFlags, sal_Bool bProgName )
 {
     NameToIdHash *pHash = 0;
-    const SvStringsDtor *pStrings;
+    const boost::ptr_vector<String> *pStrings;
 
     switch ( eFlags )
     {
@@ -370,22 +370,22 @@ const NameToIdHash & SwStyleNameMapper::getHashTable ( SwGetPoolIdFromName eFlag
                                            RES_POOLCOLL_HTML_END - RES_POOLCOLL_HTML_BEGIN );
                 pStrings = bProgName ? &GetTextProgNameArray() : &GetTextUINameArray();
                 for ( nIndex = 0, nId = RES_POOLCOLL_TEXT_BEGIN ; nId < RES_POOLCOLL_TEXT_END ; nId++,nIndex++ )
-                    (*pHash)[(*pStrings)[nIndex]] = nId;
+                    (*pHash)[&((*pStrings)[nIndex])] = nId;
                 pStrings = bProgName ? &GetListsProgNameArray() : &GetListsUINameArray();
                 for ( nIndex = 0, nId = RES_POOLCOLL_LISTS_BEGIN ; nId < RES_POOLCOLL_LISTS_END ; nId++,nIndex++ )
-                    (*pHash)[(*pStrings)[nIndex]] = nId;
+                    (*pHash)[&((*pStrings)[nIndex])] = nId;
                 pStrings = bProgName ? &GetExtraProgNameArray() : &GetExtraUINameArray();
                 for ( nIndex = 0, nId = RES_POOLCOLL_EXTRA_BEGIN ; nId < RES_POOLCOLL_EXTRA_END ; nId++,nIndex++ )
-                    (*pHash)[(*pStrings)[nIndex]] = nId;
+                    (*pHash)[&((*pStrings)[nIndex])] = nId;
                 pStrings = bProgName ? &GetRegisterProgNameArray() : &GetRegisterUINameArray();
                 for ( nIndex = 0, nId = RES_POOLCOLL_REGISTER_BEGIN ; nId < RES_POOLCOLL_REGISTER_END ; nId++,nIndex++ )
-                    (*pHash)[(*pStrings)[nIndex]] = nId;
+                    (*pHash)[&((*pStrings)[nIndex])] = nId;
                 pStrings = bProgName ? &GetDocProgNameArray() : &GetDocUINameArray();
                 for ( nIndex = 0, nId = RES_POOLCOLL_DOC_BEGIN ; nId < RES_POOLCOLL_DOC_END ; nId++,nIndex++ )
-                    (*pHash)[(*pStrings)[nIndex]] = nId;
+                    (*pHash)[&((*pStrings)[nIndex])] = nId;
                 pStrings = bProgName ? &GetHTMLProgNameArray() : &GetHTMLUINameArray();
                 for ( nIndex = 0, nId = RES_POOLCOLL_HTML_BEGIN ; nId < RES_POOLCOLL_HTML_END ; nId++,nIndex++ )
-                    (*pHash)[(*pStrings)[nIndex]] = nId;
+                    (*pHash)[&((*pStrings)[nIndex])] = nId;
 
                 if ( bProgName )
                     pParaProgMap = pHash;
@@ -406,10 +406,10 @@ const NameToIdHash & SwStyleNameMapper::getHashTable ( SwGetPoolIdFromName eFlag
                                            RES_POOLCHR_HTML_END - RES_POOLCHR_HTML_BEGIN );
                 pStrings = bProgName ? &GetChrFmtProgNameArray() : &GetChrFmtUINameArray();
                 for ( nIndex = 0, nId = RES_POOLCHR_NORMAL_BEGIN ; nId < RES_POOLCHR_NORMAL_END ; nId++,nIndex++ )
-                    (*pHash)[(*pStrings)[nIndex]] = nId;
+                    (*pHash)[&((*pStrings)[nIndex])] = nId;
                 pStrings = bProgName ? &GetHTMLChrFmtProgNameArray() : &GetHTMLChrFmtUINameArray();
                 for ( nIndex = 0, nId = RES_POOLCHR_HTML_BEGIN ; nId < RES_POOLCHR_HTML_END ; nId++,nIndex++ )
-                    (*pHash)[(*pStrings)[nIndex]] = nId;
+                    (*pHash)[&((*pStrings)[nIndex])] = nId;
                 if (bProgName )
                     pCharProgMap = pHash;
                 else
@@ -425,7 +425,7 @@ const NameToIdHash & SwStyleNameMapper::getHashTable ( SwGetPoolIdFromName eFlag
                 pHash = new NameToIdHash ( RES_POOLFRM_END - RES_POOLFRM_BEGIN );
                 pStrings = bProgName ? &GetFrmFmtProgNameArray() : &GetFrmFmtUINameArray();
                 for ( sal_uInt16 nIndex=0,nId = RES_POOLFRM_BEGIN ; nId < RES_POOLFRM_END ; nId++,nIndex++ )
-                    (*pHash)[(*pStrings)[nIndex]] = nId;
+                    (*pHash)[&((*pStrings)[nIndex])] = nId;
                 if ( bProgName )
                     pFrameProgMap = pHash;
                 else
@@ -441,7 +441,7 @@ const NameToIdHash & SwStyleNameMapper::getHashTable ( SwGetPoolIdFromName eFlag
                 pHash = new NameToIdHash ( RES_POOLPAGE_END - RES_POOLPAGE_BEGIN );
                 pStrings = bProgName ? &GetPageDescProgNameArray() : &GetPageDescUINameArray();
                 for ( sal_uInt16 nIndex=0,nId = RES_POOLPAGE_BEGIN ; nId < RES_POOLPAGE_END ; nId++,nIndex++ )
-                    (*pHash)[(*pStrings)[nIndex]] = nId;
+                    (*pHash)[&((*pStrings)[nIndex])] = nId;
                 if ( bProgName )
                     pPageProgMap = pHash;
                 else
@@ -457,7 +457,9 @@ const NameToIdHash & SwStyleNameMapper::getHashTable ( SwGetPoolIdFromName eFlag
                 pHash = new NameToIdHash ( RES_POOLNUMRULE_END - RES_POOLNUMRULE_BEGIN );
                 pStrings = bProgName ? &GetNumRuleProgNameArray() : &GetNumRuleUINameArray();
                 for ( sal_uInt16 nIndex=0,nId = RES_POOLNUMRULE_BEGIN ; nId < RES_POOLNUMRULE_END ; nId++,nIndex++ )
-                    (*pHash)[(*pStrings)[nIndex]] = nId;
+                {
+                    (*pHash)[&((*pStrings)[nIndex])] = nId;
+                }
                 if ( bProgName )
                     pNumRuleProgMap = pHash;
                 else
@@ -681,7 +683,7 @@ void SwStyleNameMapper::FillUIName ( const String& rName, String& rFillName, SwG
 const String& SwStyleNameMapper::getNameFromId( sal_uInt16 nId, const String& rFillName, sal_Bool bProgName )
 {
     sal_uInt16 nStt = 0;
-    const SvStringsDtor* pStrArr = 0;
+    const boost::ptr_vector<String>* pStrArr = 0;
 
     switch( (USER_FMT | COLL_GET_RANGE_BITS | POOLGRP_NOCOLLID) & nId )
     {
@@ -761,12 +763,12 @@ const String& SwStyleNameMapper::getNameFromId( sal_uInt16 nId, const String& rF
         }
         break;
     }
-    return pStrArr ? *(pStrArr->operator[] ( nId - nStt ) ) : rFillName;
+    return pStrArr ? (pStrArr->operator[] ( nId - nStt ) ) : rFillName;
 }
 void SwStyleNameMapper::fillNameFromId( sal_uInt16 nId, String& rFillName, sal_Bool bProgName )
 {
     sal_uInt16 nStt = 0;
-    const SvStringsDtor* pStrArr = 0;
+    const boost::ptr_vector<String>* pStrArr = 0;
 
     switch( (USER_FMT | COLL_GET_RANGE_BITS | POOLGRP_NOCOLLID) & nId )
     {
@@ -847,7 +849,7 @@ void SwStyleNameMapper::fillNameFromId( sal_uInt16 nId, String& rFillName, sal_B
         break;
     }
     if (pStrArr)
-        rFillName = *(pStrArr->operator[] ( nId - nStt ) );
+        rFillName = (pStrArr->operator[] ( nId - nStt ) );
 }
 // Get the UI Name from the pool ID
 void SwStyleNameMapper::FillUIName ( sal_uInt16 nId, String& rFillName )
@@ -885,23 +887,23 @@ sal_uInt16 SwStyleNameMapper::GetPoolIdFromProgName( const String& rName, SwGetP
     return aIter != rHashMap.end() ? (*aIter).second : USHRT_MAX;
 }
 
-SvStringsDtor* SwStyleNameMapper::NewUINameArray( SvStringsDtor*& pNameArray, sal_uInt16 nStt, sal_uInt16 nEnd )
+boost::ptr_vector<String>* SwStyleNameMapper::NewUINameArray( boost::ptr_vector<String>*& pNameArray, sal_uInt16 nStt, sal_uInt16 nEnd )
 {
     if( !pNameArray )
     {
-        pNameArray = new SvStringsDtor( static_cast < sal_Int8 > (nEnd - nStt), 1 );
+        pNameArray = new boost::ptr_vector<String>;
+        pNameArray->reserve(nEnd - nStt);
         while( nStt < nEnd )
         {
             const ResId rRId( nStt, *pSwResMgr );
-            String* pStr = new String( rRId );
-            pNameArray->Insert( pStr, pNameArray->Count() );
+            pNameArray->push_back(new String(rRId));
             ++nStt;
         }
     }
     return pNameArray;
 }
 
-const SvStringsDtor& SwStyleNameMapper::GetTextUINameArray()
+const boost::ptr_vector<String>& SwStyleNameMapper::GetTextUINameArray()
 {
     return pTextUINameArray ? *pTextUINameArray :
            *NewUINameArray( pTextUINameArray, RC_POOLCOLL_TEXT_BEGIN,
@@ -909,7 +911,7 @@ const SvStringsDtor& SwStyleNameMapper::GetTextUINameArray()
                     (RES_POOLCOLL_TEXT_END - RES_POOLCOLL_TEXT_BEGIN )) );
 }
 
-const SvStringsDtor& SwStyleNameMapper::GetListsUINameArray()
+const boost::ptr_vector<String>& SwStyleNameMapper::GetListsUINameArray()
 {
     return pListsUINameArray ? *pListsUINameArray :
            *NewUINameArray( pListsUINameArray, RC_POOLCOLL_LISTS_BEGIN,
@@ -917,7 +919,7 @@ const SvStringsDtor& SwStyleNameMapper::GetListsUINameArray()
                     (RES_POOLCOLL_LISTS_END - RES_POOLCOLL_LISTS_BEGIN )) );
 }
 
-const SvStringsDtor& SwStyleNameMapper::GetExtraUINameArray()
+const boost::ptr_vector<String>& SwStyleNameMapper::GetExtraUINameArray()
 {
     return pExtraUINameArray ? *pExtraUINameArray :
            *NewUINameArray( pExtraUINameArray, RC_POOLCOLL_EXTRA_BEGIN,
@@ -925,7 +927,7 @@ const SvStringsDtor& SwStyleNameMapper::GetExtraUINameArray()
                     (RES_POOLCOLL_EXTRA_END - RES_POOLCOLL_EXTRA_BEGIN )) );
 }
 
-const SvStringsDtor& SwStyleNameMapper::GetRegisterUINameArray()
+const boost::ptr_vector<String>& SwStyleNameMapper::GetRegisterUINameArray()
 {
     return pRegisterUINameArray ? *pRegisterUINameArray :
            *NewUINameArray( pRegisterUINameArray, RC_POOLCOLL_REGISTER_BEGIN,
@@ -933,7 +935,7 @@ const SvStringsDtor& SwStyleNameMapper::GetRegisterUINameArray()
                 (RES_POOLCOLL_REGISTER_END - RES_POOLCOLL_REGISTER_BEGIN )) );
 }
 
-const SvStringsDtor& SwStyleNameMapper::GetDocUINameArray()
+const boost::ptr_vector<String>& SwStyleNameMapper::GetDocUINameArray()
 {
     return pDocUINameArray ? *pDocUINameArray :
            *NewUINameArray( pDocUINameArray, RC_POOLCOLL_DOC_BEGIN,
@@ -941,7 +943,7 @@ const SvStringsDtor& SwStyleNameMapper::GetDocUINameArray()
                         (RES_POOLCOLL_DOC_END - RES_POOLCOLL_DOC_BEGIN )) );
 }
 
-const SvStringsDtor& SwStyleNameMapper::GetHTMLUINameArray()
+const boost::ptr_vector<String>& SwStyleNameMapper::GetHTMLUINameArray()
 {
     return pHTMLUINameArray ? *pHTMLUINameArray :
            *NewUINameArray( pHTMLUINameArray, RC_POOLCOLL_HTML_BEGIN,
@@ -949,7 +951,7 @@ const SvStringsDtor& SwStyleNameMapper::GetHTMLUINameArray()
                         (RES_POOLCOLL_HTML_END - RES_POOLCOLL_HTML_BEGIN )) );
 }
 
-const SvStringsDtor& SwStyleNameMapper::GetFrmFmtUINameArray()
+const boost::ptr_vector<String>& SwStyleNameMapper::GetFrmFmtUINameArray()
 {
     return pFrmFmtUINameArray ? *pFrmFmtUINameArray :
            *NewUINameArray( pFrmFmtUINameArray, RC_POOLFRMFMT_BEGIN,
@@ -957,7 +959,7 @@ const SvStringsDtor& SwStyleNameMapper::GetFrmFmtUINameArray()
                         (RES_POOLFRM_END - RES_POOLFRM_BEGIN )) );
 }
 
-const SvStringsDtor& SwStyleNameMapper::GetChrFmtUINameArray()
+const boost::ptr_vector<String>& SwStyleNameMapper::GetChrFmtUINameArray()
 {
     return pChrFmtUINameArray ? *pChrFmtUINameArray :
            *NewUINameArray( pChrFmtUINameArray, RC_POOLCHRFMT_BEGIN,
@@ -965,7 +967,7 @@ const SvStringsDtor& SwStyleNameMapper::GetChrFmtUINameArray()
                     (RES_POOLCHR_NORMAL_END - RES_POOLCHR_NORMAL_BEGIN )) );
 }
 
-const SvStringsDtor& SwStyleNameMapper::GetHTMLChrFmtUINameArray()
+const boost::ptr_vector<String>& SwStyleNameMapper::GetHTMLChrFmtUINameArray()
 {
     return pHTMLChrFmtUINameArray ? *pHTMLChrFmtUINameArray :
            *NewUINameArray( pHTMLChrFmtUINameArray, RC_POOLCHRFMT_HTML_BEGIN,
@@ -973,7 +975,7 @@ const SvStringsDtor& SwStyleNameMapper::GetHTMLChrFmtUINameArray()
                     (RES_POOLCHR_HTML_END - RES_POOLCHR_HTML_BEGIN )) );
 }
 
-const SvStringsDtor& SwStyleNameMapper::GetPageDescUINameArray()
+const boost::ptr_vector<String>& SwStyleNameMapper::GetPageDescUINameArray()
 {
     return pPageDescUINameArray ? *pPageDescUINameArray :
            *NewUINameArray( pPageDescUINameArray, RC_POOLPAGEDESC_BEGIN,
@@ -981,7 +983,7 @@ const SvStringsDtor& SwStyleNameMapper::GetPageDescUINameArray()
                     (RES_POOLPAGE_END - RES_POOLPAGE_BEGIN )) );
 }
 
-const SvStringsDtor& SwStyleNameMapper::GetNumRuleUINameArray()
+const boost::ptr_vector<String>& SwStyleNameMapper::GetNumRuleUINameArray()
 {
     return pNumRuleUINameArray ? *pNumRuleUINameArray :
            *NewUINameArray( pNumRuleUINameArray, RC_POOLNUMRULE_BEGIN,
@@ -989,92 +991,92 @@ const SvStringsDtor& SwStyleNameMapper::GetNumRuleUINameArray()
                     (RES_POOLNUMRULE_END - RES_POOLNUMRULE_BEGIN )) );
 }
 
-SvStringsDtor* SwStyleNameMapper::NewProgNameArray( SvStringsDtor*& pProgNameArray, const SwTableEntry *pTable, sal_uInt8 nCount )
+boost::ptr_vector<String>* SwStyleNameMapper::NewProgNameArray( boost::ptr_vector<String>*& pProgNameArray, const SwTableEntry *pTable, sal_uInt8 nCount )
 {
     if( !pProgNameArray )
     {
-        pProgNameArray = new SvStringsDtor( nCount, 1 );
+        pProgNameArray = new boost::ptr_vector<String>;
+        pProgNameArray->reserve(nCount);
         while (pTable->nLength)
         {
-            String* pStr = new String( pTable->pChar, pTable->nLength, RTL_TEXTENCODING_ASCII_US );
-            pProgNameArray->Insert( pStr, pProgNameArray->Count() );
+            pProgNameArray->push_back(new String( pTable->pChar, pTable->nLength, RTL_TEXTENCODING_ASCII_US ));
             pTable++;
         }
     }
     return pProgNameArray;
 }
 
-const SvStringsDtor& SwStyleNameMapper::GetTextProgNameArray()
+const boost::ptr_vector<String>& SwStyleNameMapper::GetTextProgNameArray()
 {
     return pTextProgNameArray ? *pTextProgNameArray :
            *NewProgNameArray( pTextProgNameArray, TextProgNameTable,
             sizeof ( TextProgNameTable ) / sizeof ( SwTableEntry ) );
 }
 
-const SvStringsDtor& SwStyleNameMapper::GetListsProgNameArray()
+const boost::ptr_vector<String>& SwStyleNameMapper::GetListsProgNameArray()
 {
     return pListsProgNameArray ? *pListsProgNameArray :
            *NewProgNameArray( pListsProgNameArray, ListsProgNameTable,
             sizeof ( ListsProgNameTable ) / sizeof ( SwTableEntry ) );
 }
 
-const SvStringsDtor& SwStyleNameMapper::GetExtraProgNameArray()
+const boost::ptr_vector<String>& SwStyleNameMapper::GetExtraProgNameArray()
 {
     return pExtraProgNameArray ? *pExtraProgNameArray :
            *NewProgNameArray( pExtraProgNameArray, ExtraProgNameTable,
             sizeof ( ExtraProgNameTable ) / sizeof ( SwTableEntry ) );
 }
 
-const SvStringsDtor& SwStyleNameMapper::GetRegisterProgNameArray()
+const boost::ptr_vector<String>& SwStyleNameMapper::GetRegisterProgNameArray()
 {
     return pRegisterProgNameArray ? *pRegisterProgNameArray :
            *NewProgNameArray( pRegisterProgNameArray, RegisterProgNameTable,
             sizeof ( RegisterProgNameTable ) / sizeof ( SwTableEntry ) );
 }
 
-const SvStringsDtor& SwStyleNameMapper::GetDocProgNameArray()
+const boost::ptr_vector<String>& SwStyleNameMapper::GetDocProgNameArray()
 {
     return pDocProgNameArray ? *pDocProgNameArray :
            *NewProgNameArray( pDocProgNameArray, DocProgNameTable,
             sizeof ( DocProgNameTable ) / sizeof ( SwTableEntry ) );
 }
 
-const SvStringsDtor& SwStyleNameMapper::GetHTMLProgNameArray()
+const boost::ptr_vector<String>& SwStyleNameMapper::GetHTMLProgNameArray()
 {
     return pHTMLProgNameArray ? *pHTMLProgNameArray :
            *NewProgNameArray( pHTMLProgNameArray, HTMLProgNameTable,
             sizeof ( HTMLProgNameTable ) / sizeof ( SwTableEntry ) );
 }
 
-const SvStringsDtor& SwStyleNameMapper::GetFrmFmtProgNameArray()
+const boost::ptr_vector<String>& SwStyleNameMapper::GetFrmFmtProgNameArray()
 {
     return pFrmFmtProgNameArray ? *pFrmFmtProgNameArray :
            *NewProgNameArray( pFrmFmtProgNameArray, FrmFmtProgNameTable,
             sizeof ( FrmFmtProgNameTable ) / sizeof ( SwTableEntry ) );
 }
 
-const SvStringsDtor& SwStyleNameMapper::GetChrFmtProgNameArray()
+const boost::ptr_vector<String>& SwStyleNameMapper::GetChrFmtProgNameArray()
 {
     return pChrFmtProgNameArray ? *pChrFmtProgNameArray :
            *NewProgNameArray( pChrFmtProgNameArray, ChrFmtProgNameTable,
             sizeof ( ChrFmtProgNameTable ) / sizeof ( SwTableEntry ) );
 }
 
-const SvStringsDtor& SwStyleNameMapper::GetHTMLChrFmtProgNameArray()
+const boost::ptr_vector<String>& SwStyleNameMapper::GetHTMLChrFmtProgNameArray()
 {
     return pHTMLChrFmtProgNameArray ? *pHTMLChrFmtProgNameArray :
            *NewProgNameArray( pHTMLChrFmtProgNameArray, HTMLChrFmtProgNameTable,
             sizeof ( HTMLChrFmtProgNameTable ) / sizeof ( SwTableEntry ) );
 }
 
-const SvStringsDtor& SwStyleNameMapper::GetPageDescProgNameArray()
+const boost::ptr_vector<String>& SwStyleNameMapper::GetPageDescProgNameArray()
 {
     return pPageDescProgNameArray ? *pPageDescProgNameArray :
            *NewProgNameArray( pPageDescProgNameArray, PageDescProgNameTable,
             sizeof ( PageDescProgNameTable ) / sizeof ( SwTableEntry ) );
 }
 
-const SvStringsDtor& SwStyleNameMapper::GetNumRuleProgNameArray()
+const boost::ptr_vector<String>& SwStyleNameMapper::GetNumRuleProgNameArray()
 {
     return pNumRuleProgNameArray ? *pNumRuleProgNameArray :
            *NewProgNameArray( pNumRuleProgNameArray, NumRuleProgNameTable,
@@ -1086,7 +1088,7 @@ const String SwStyleNameMapper::GetSpecialExtraProgName( const String& rExtraUIN
 {
     String aRes = rExtraUIName;
     sal_Bool bChgName = sal_False;
-    const SvStringsDtor& rExtraArr = GetExtraUINameArray();
+    const boost::ptr_vector<String>& rExtraArr(GetExtraUINameArray());
     static sal_uInt16 nIds[] =
     {
         RES_POOLCOLL_LABEL_DRAWING - RES_POOLCOLL_EXTRA_BEGIN,
@@ -1098,14 +1100,14 @@ const String SwStyleNameMapper::GetSpecialExtraProgName( const String& rExtraUIN
     const sal_uInt16 * pIds;
     for ( pIds = nIds; *pIds; ++pIds)
     {
-        if (aRes == *rExtraArr[ *pIds ])
+        if (aRes == rExtraArr[ *pIds ])
         {
             bChgName = sal_True;
             break;
         }
     }
     if (bChgName)
-        aRes = *GetExtraProgNameArray()[*pIds];
+        aRes = GetExtraProgNameArray()[*pIds];
     return aRes;
 }
 
@@ -1113,7 +1115,7 @@ const String SwStyleNameMapper::GetSpecialExtraUIName( const String& rExtraProgN
 {
     String aRes = rExtraProgName;
     sal_Bool bChgName = sal_False;
-    const SvStringsDtor& rExtraArr = GetExtraProgNameArray();
+    const boost::ptr_vector<String>& rExtraArr(GetExtraProgNameArray());
     static sal_uInt16 nIds[] =
     {
         RES_POOLCOLL_LABEL_DRAWING - RES_POOLCOLL_EXTRA_BEGIN,
@@ -1126,14 +1128,14 @@ const String SwStyleNameMapper::GetSpecialExtraUIName( const String& rExtraProgN
 
     for ( pIds = nIds; *pIds; ++pIds)
     {
-        if (aRes == *rExtraArr[ *pIds ])
+        if (aRes == rExtraArr[ *pIds ])
         {
             bChgName = sal_True;
             break;
         }
     }
     if (bChgName)
-        aRes = *GetExtraUINameArray()[*pIds];
+        aRes = GetExtraUINameArray()[*pIds];
     return aRes;
 }
 
