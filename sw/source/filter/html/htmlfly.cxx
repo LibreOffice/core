@@ -885,11 +885,11 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
         do
         {
             bFound = sal_False;
-            for( sal_uInt16 i=0; i<rHTMLWrt.aImgMapNames.Count(); i++ )
+            for(size_t i = 0; i < rHTMLWrt.aImgMapNames.size(); ++i)
             {
                 // TODO: Unicode: Comparison is case insensitive for ASCII
                 // characters only now!
-                if( aIMapName.EqualsIgnoreCaseAscii(*rHTMLWrt.aImgMapNames[i]) )
+                if( aIMapName.EqualsIgnoreCaseAscii(rHTMLWrt.aImgMapNames[i]) )
                 {
                     bFound = sal_True;
                     break;
@@ -944,8 +944,7 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
             }
         }
 
-        rHTMLWrt.aImgMapNames.Insert( new String(aIMapName),
-                                          rHTMLWrt.aImgMapNames.Count() );
+        rHTMLWrt.aImgMapNames.push_back(aIMapName);
 
         rtl::OString aIndMap, aIndArea;
         const sal_Char *pLF = 0, *pIndArea = 0, *pIndMap = 0;

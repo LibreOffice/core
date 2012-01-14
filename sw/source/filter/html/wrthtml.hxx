@@ -224,7 +224,7 @@ public:
     static const sal_Char sNewLine[];   // \015\012
 #endif
 
-    SvStringsDtor aImgMapNames;     // geschriebene Image Maps
+    std::vector<String> aImgMapNames;     // geschriebene Image Maps
     std::set<String> aImplicitMarks;// implizite Stprungmarken
     std::set<String> aNumRuleNames;// Names of exported num rules
     std::set<String> aScriptParaStyles;// script dependent para styles

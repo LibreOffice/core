@@ -392,8 +392,8 @@ sal_uLong SwHTMLWriter::WriteStream()
     if( aTxtCollInfos.Count() )
         aTxtCollInfos.DeleteAndDestroy( sal_uInt16(0), aTxtCollInfos.Count() );
 
-    if( aImgMapNames.Count() )
-        aImgMapNames.DeleteAndDestroy( sal_uInt16(0), aImgMapNames.Count() );
+    if(!aImgMapNames.empty())
+        aImgMapNames.clear();
 
     aImplicitMarks.clear();
 
