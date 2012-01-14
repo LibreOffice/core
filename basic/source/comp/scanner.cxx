@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-
 #include "basiccharclass.hxx"
 #include "sbcomp.hxx"
 
@@ -297,7 +296,7 @@ bool SbiScanner::NextSym()
         {
             if(nCol < aLine.getLength())
             {
-                SbxDataType t = GetSuffixType( *pLine );
+                SbxDataType t(GetSuffixType(aLine[nCol]));
                 if( t != SbxVARIANT )
                 {
                     eScanType = t;
