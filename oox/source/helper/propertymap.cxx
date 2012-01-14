@@ -355,9 +355,9 @@ static void lclDumpAnyValue( Any value)
         } else if( value >>= aMatrix ) {
             fprintf (stderr,"Matrix\n%f %f %f\n%f %f %f\n%f %f %f\n", aMatrix.Line1.Column1, aMatrix.Line1.Column2, aMatrix.Line1.Column3, aMatrix.Line2.Column1, aMatrix.Line2.Column2, aMatrix.Line2.Column3, aMatrix.Line3.Column1, aMatrix.Line3.Column2, aMatrix.Line3.Column3);
         } else if( value >>= intValue )
-            fprintf (stderr,"%"SAL_PRIdINT32"            (hex: %"SAL_PRIxUINT32")\n", intValue, intValue);
+            fprintf (stderr,"%" SAL_PRIdINT32 "            (hex: %" SAL_PRIxUINT32 ")\n", intValue, intValue);
         else if( value >>= uintValue )
-            fprintf (stderr,"%"SAL_PRIdINT32"            (hex: %"SAL_PRIxUINT32")\n", uintValue, uintValue);
+            fprintf (stderr,"%" SAL_PRIdINT32 "            (hex: %" SAL_PRIxUINT32 ")\n", uintValue, uintValue);
         else if( value >>= int16Value )
             fprintf (stderr,"%d            (hex: %x)\n", int16Value, int16Value);
         else if( value >>= uint16Value )
@@ -502,7 +502,7 @@ static const char* lclDumpAnyValueCode( Any value, int level = 0)
             return "Any (str)";
     } else if( value >>= strArray ) {
             printLevel (level);
-            fprintf (stderr,"Sequence< OUString > aStringSequence (%"SAL_PRIdINT32");\n", strArray.getLength());
+            fprintf (stderr,"Sequence< OUString > aStringSequence (%" SAL_PRIdINT32 ");\n", strArray.getLength());
             for( int i=0; i<strArray.getLength(); i++ ) {
                 printLevel (level);
                 fprintf (stderr,"aStringSequence[%d] = CREATE_OUSTRING (\"%s\");\n", i, USS( strArray[i] ) );
@@ -510,7 +510,7 @@ static const char* lclDumpAnyValueCode( Any value, int level = 0)
             return "aStringSequence";
         } else if( value >>= propArray ) {
             printLevel (level);
-            fprintf (stderr,"Sequence< PropertyValue > aPropSequence (%"SAL_PRIdINT32");\n", propArray.getLength());
+            fprintf (stderr,"Sequence< PropertyValue > aPropSequence (%" SAL_PRIdINT32 ");\n", propArray.getLength());
             for( int i=0; i<propArray.getLength(); i++ ) {
                 printLevel (level);
                 fprintf (stderr, "{\n");
@@ -525,7 +525,7 @@ static const char* lclDumpAnyValueCode( Any value, int level = 0)
             return "aPropSequence";
         } else if( value >>= propArrayArray ) {
             printLevel (level);
-            fprintf (stderr,"Sequence< Sequence < PropertyValue > > aPropSequenceSequence (%"SAL_PRIdINT32");\n", propArrayArray.getLength());
+            fprintf (stderr,"Sequence< Sequence < PropertyValue > > aPropSequenceSequence (%" SAL_PRIdINT32 ");\n", propArrayArray.getLength());
             for( int i=0; i<propArrayArray.getLength(); i++ ) {
                 printLevel (level);
                 fprintf (stderr, "{\n");
@@ -544,7 +544,7 @@ static const char* lclDumpAnyValueCode( Any value, int level = 0)
             }
         } else if( value >>= adjArray ) {
             printLevel (level);
-            fprintf (stderr,"Sequence< EnhancedCustomShapeAdjustmentValue > aAdjSequence (%"SAL_PRIdINT32");\n", adjArray.getLength());
+            fprintf (stderr,"Sequence< EnhancedCustomShapeAdjustmentValue > aAdjSequence (%" SAL_PRIdINT32 ");\n", adjArray.getLength());
             for( int i=0; i<adjArray.getLength(); i++ ) {
                 printLevel (level);
                 fprintf (stderr, "{\n");
@@ -557,7 +557,7 @@ static const char* lclDumpAnyValueCode( Any value, int level = 0)
             return "aAdjSequence";
         } else if( value >>= segArray ) {
             printLevel (level);
-            fprintf (stderr, "Sequence< EnhancedCustomShapeSegment > aSegmentSeq (%"SAL_PRIdINT32");\n", segArray.getLength());
+            fprintf (stderr, "Sequence< EnhancedCustomShapeSegment > aSegmentSeq (%" SAL_PRIdINT32 ");\n", segArray.getLength());
             for( int i=0; i<segArray.getLength(); i++ ) {
                 printLevel (level);
                 fprintf (stderr, "{\n");
@@ -570,7 +570,7 @@ static const char* lclDumpAnyValueCode( Any value, int level = 0)
             return "aSegmentSeq";
         } else if( value >>= segTextFrame ) {
             printLevel (level);
-            fprintf (stderr, "Sequence< EnhancedCustomShapeTextFrame > aTextFrameSeq (%"SAL_PRIdINT32");\n", segTextFrame.getLength());
+            fprintf (stderr, "Sequence< EnhancedCustomShapeTextFrame > aTextFrameSeq (%" SAL_PRIdINT32 ");\n", segTextFrame.getLength());
             for( int i=0; i<segTextFrame.getLength(); i++ ) {
                 printLevel (level);
                 fprintf (stderr, "{\n");
@@ -583,7 +583,7 @@ static const char* lclDumpAnyValueCode( Any value, int level = 0)
             return "aTextFrameSeq";
         } else if( value >>= ppArray ) {
             printLevel (level);
-            fprintf (stderr, "Sequence< EnhancedCustomShapeParameterPair > aParameterPairSeq (%"SAL_PRIdINT32");\n", ppArray.getLength());
+            fprintf (stderr, "Sequence< EnhancedCustomShapeParameterPair > aParameterPairSeq (%" SAL_PRIdINT32 ");\n", ppArray.getLength());
             for( int i=0; i<ppArray.getLength(); i++ ) {
                 printLevel (level);
                 fprintf (stderr, "{\n");
@@ -725,9 +725,9 @@ static const char* lclDumpAnyValueCode( Any value, int level = 0)
             fprintf (stderr,"Any aAny ((sal_Int32) %ld);\n", longValue);
             return "aAny";
         } else if( value >>= intValue )
-            fprintf (stderr,"%"SAL_PRIdINT32"            (hex: %"SAL_PRIxUINT32")\n", intValue, intValue);
+            fprintf (stderr,"%" SAL_PRIdINT32 "            (hex: %" SAL_PRIxUINT32 ")\n", intValue, intValue);
         else if( value >>= uintValue )
-            fprintf (stderr,"%"SAL_PRIdINT32"            (hex: %"SAL_PRIxUINT32")\n", uintValue, uintValue);
+            fprintf (stderr,"%" SAL_PRIdINT32 "            (hex: %" SAL_PRIxUINT32 ")\n", uintValue, uintValue);
         else if( value >>= int16Value )
             fprintf (stderr,"%d            (hex: %x)\n", int16Value, int16Value);
         else if( value >>= uint16Value )
@@ -799,13 +799,13 @@ static const char* lclDumpAnyValueCode( Any value, int level = 0)
             printLevel (level);
             fprintf (stderr, "awt::Rectangle aRectangle;\n");
             printLevel (level);
-            fprintf (stderr, "aRectangle.X = %"SAL_PRIdINT32";\n", rect.X);
+            fprintf (stderr, "aRectangle.X = %" SAL_PRIdINT32 ";\n", rect.X);
             printLevel (level);
-            fprintf (stderr, "aRectangle.Y = %"SAL_PRIdINT32";\n", rect.Y);
+            fprintf (stderr, "aRectangle.Y = %" SAL_PRIdINT32 ";\n", rect.Y);
             printLevel (level);
-            fprintf (stderr, "aRectangle.Width = %"SAL_PRIdINT32";\n", rect.Width);
+            fprintf (stderr, "aRectangle.Width = %" SAL_PRIdINT32 ";\n", rect.Width);
             printLevel (level);
-            fprintf (stderr, "aRectangle.Height = %"SAL_PRIdINT32";\n", rect.Height);
+            fprintf (stderr, "aRectangle.Height = %" SAL_PRIdINT32 ";\n", rect.Height);
             return "aRectangle";
     } else if( value.isExtractableTo(::getCppuType((const sal_Int32*)0))) {
         fprintf (stderr,"is extractable to int32\n");
