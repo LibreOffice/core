@@ -39,6 +39,7 @@ namespace
     void testExclamation();
     void testNumbers();
     void testDataType();
+    void testHexOctal();
 
     // Adds code needed to register the test suite
     CPPUNIT_TEST_SUITE(ScannerTest);
@@ -53,6 +54,7 @@ namespace
     CPPUNIT_TEST(testExclamation);
     CPPUNIT_TEST(testNumbers);
     CPPUNIT_TEST(testDataType);
+    CPPUNIT_TEST(testHexOctal);
 
     // End of test suite definition
     CPPUNIT_TEST_SUITE_END();
@@ -731,6 +733,100 @@ namespace
     CPPUNIT_ASSERT(symbols.size() == 2);
     CPPUNIT_ASSERT(symbols[0].type == SbxVARIANT);
     CPPUNIT_ASSERT(symbols[1].text == cr);
+  }
+
+  void ScannerTest::testHexOctal()
+  {
+    const rtl::OUString source1(RTL_CONSTASCII_USTRINGPARAM("&HA"));
+    const rtl::OUString source2(RTL_CONSTASCII_USTRINGPARAM("&HASDF"));
+    const rtl::OUString source3(RTL_CONSTASCII_USTRINGPARAM("&H10"));
+    const rtl::OUString source4(RTL_CONSTASCII_USTRINGPARAM("&&H&1H1&H1"));
+    const rtl::OUString source5(RTL_CONSTASCII_USTRINGPARAM("&O&O12"));
+    const rtl::OUString source6(RTL_CONSTASCII_USTRINGPARAM("&O10"));
+    const rtl::OUString source7(RTL_CONSTASCII_USTRINGPARAM("&HO"));
+    const rtl::OUString source8(RTL_CONSTASCII_USTRINGPARAM("&O123000000000000000000000"));
+    const rtl::OUString source9(RTL_CONSTASCII_USTRINGPARAM("&H1.23"));
+
+    std::vector<Symbol> symbols;
+
+    symbols = getSymbols(source1);
+    CPPUNIT_ASSERT(symbols.size() == 2);
+    CPPUNIT_ASSERT(symbols[0].number == 10);
+    CPPUNIT_ASSERT(symbols[0].text == rtl::OUString());
+    CPPUNIT_ASSERT(symbols[0].type == SbxINTEGER);
+    CPPUNIT_ASSERT(symbols[1].text == cr);
+
+    symbols = getSymbols(source2);
+    CPPUNIT_ASSERT(symbols.size() == 2);
+    CPPUNIT_ASSERT(symbols[0].number == 2783);
+    CPPUNIT_ASSERT(symbols[0].text == rtl::OUString());
+    CPPUNIT_ASSERT(symbols[0].type = SbxINTEGER);
+    CPPUNIT_ASSERT(symbols[1].text == cr);
+
+    symbols = getSymbols(source3);
+    CPPUNIT_ASSERT(symbols.size() == 2);
+    CPPUNIT_ASSERT(symbols[0].number == 16);
+    CPPUNIT_ASSERT(symbols[0].text == rtl::OUString());
+    CPPUNIT_ASSERT(symbols[0].type = SbxINTEGER);
+    CPPUNIT_ASSERT(symbols[1].text == cr);
+
+    symbols = getSymbols(source4);
+    CPPUNIT_ASSERT(symbols.size() == 6);
+    CPPUNIT_ASSERT(symbols[0].number == 0);
+    CPPUNIT_ASSERT(symbols[0].text == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("&")));
+    CPPUNIT_ASSERT(symbols[0].type == SbxVARIANT);
+    CPPUNIT_ASSERT(symbols[1].number == 0);
+    CPPUNIT_ASSERT(symbols[1].text == rtl::OUString());
+    CPPUNIT_ASSERT(symbols[1].type == SbxINTEGER);
+    CPPUNIT_ASSERT(symbols[2].number == 1);
+    CPPUNIT_ASSERT(symbols[2].text == rtl::OUString());
+    CPPUNIT_ASSERT(symbols[2].type == SbxINTEGER);
+    CPPUNIT_ASSERT(symbols[3].number == 1);
+    CPPUNIT_ASSERT(symbols[3].text == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("H1")));
+    CPPUNIT_ASSERT(symbols[3].type == SbxLONG);
+    CPPUNIT_ASSERT(symbols[4].number == 1);
+    CPPUNIT_ASSERT(symbols[4].text == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("H1")));
+    CPPUNIT_ASSERT(symbols[4].type == SbxVARIANT);
+    CPPUNIT_ASSERT(symbols[5].text == cr);
+
+    symbols = getSymbols(source5);
+    CPPUNIT_ASSERT(symbols.size() == 3);
+    CPPUNIT_ASSERT(symbols[0].number == 0);
+    CPPUNIT_ASSERT(symbols[0].text == rtl::OUString());
+    CPPUNIT_ASSERT(symbols[0].type == SbxINTEGER);
+    CPPUNIT_ASSERT(symbols[1].number == 0);
+    CPPUNIT_ASSERT(symbols[1].text == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("O12")));
+    CPPUNIT_ASSERT(symbols[1].type == SbxVARIANT);
+    CPPUNIT_ASSERT(symbols[2].text == cr);
+
+    symbols = getSymbols(source6);
+    CPPUNIT_ASSERT(symbols.size() == 2);
+    CPPUNIT_ASSERT(symbols[0].number == 8);
+    CPPUNIT_ASSERT(symbols[0].text == rtl::OUString());
+    CPPUNIT_ASSERT(symbols[0].type == SbxINTEGER);
+    CPPUNIT_ASSERT(symbols[1].text == cr);
+
+    symbols = getSymbols(source7);
+    CPPUNIT_ASSERT(symbols.size() == 2);
+    CPPUNIT_ASSERT(symbols[0].number == 0);
+    CPPUNIT_ASSERT(symbols[0].text == rtl::OUString());
+    CPPUNIT_ASSERT(symbols[1].text == cr);
+
+    symbols = getSymbols(source8);
+    CPPUNIT_ASSERT(symbols.size() == 2);
+    CPPUNIT_ASSERT(symbols[0].number == -1744830464);
+    CPPUNIT_ASSERT(symbols[0].text == rtl::OUString());
+    CPPUNIT_ASSERT(symbols[1].text == cr);
+
+    symbols = getSymbols(source9);
+    CPPUNIT_ASSERT(symbols.size() == 3);
+    CPPUNIT_ASSERT(symbols[0].text == rtl::OUString());
+    CPPUNIT_ASSERT(symbols[0].number == 1);
+    CPPUNIT_ASSERT(symbols[0].type == SbxINTEGER);
+    CPPUNIT_ASSERT(symbols[1].number == .23);
+    CPPUNIT_ASSERT(symbols[1].text == rtl::OUString());
+    CPPUNIT_ASSERT(symbols[1].type == SbxDOUBLE);
+    CPPUNIT_ASSERT(symbols[2].text == cr);
   }
 
   // Put the test suite in the registry
