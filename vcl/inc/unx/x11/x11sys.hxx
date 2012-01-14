@@ -44,7 +44,7 @@ public:
 
     // overload pure virtual methods
     virtual unsigned int GetDisplayScreenCount();
-    virtual bool IsMultiDisplay();
+    virtual bool         IsUnifiedDisplay();
     virtual unsigned int GetDefaultDisplayNumber();
     virtual Rectangle GetDisplayScreenPosSizePixel( unsigned int nScreen );
     virtual Rectangle GetDisplayWorkAreaPosSizePixel( unsigned int nScreen );

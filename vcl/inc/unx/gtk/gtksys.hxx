@@ -41,7 +41,7 @@ public:
     virtual ~GtkSalSystem();
     static   GtkSalSystem *GetSingleton();
 
-    virtual bool          IsMultiDisplay();
+    virtual bool          IsUnifiedDisplay();
     virtual unsigned int  GetDisplayScreenCount();
     virtual unsigned int  GetDefaultDisplayNumber();
     virtual rtl::OUString GetScreenName                  (unsigned int nScreen);

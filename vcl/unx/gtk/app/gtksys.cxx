@@ -104,9 +104,9 @@ unsigned int GtkSalSystem::GetDisplayScreenCount()
     return G_MAXINT - nMonitor;
 }
 
-bool GtkSalSystem::IsMultiDisplay()
+bool GtkSalSystem::IsUnifiedDisplay()
 {
-    return gdk_display_get_n_screens (mpDisplay) > 1;
+    return gdk_display_get_n_screens (mpDisplay) == 1;
 }
 
 namespace {

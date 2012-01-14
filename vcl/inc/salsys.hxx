@@ -75,20 +75,20 @@ public:
         @returns the number of active screens
     */
     virtual unsigned int GetDisplayScreenCount() = 0;
-    /*  Queries whether multiple screens are truly separate
+    /*  Queries whether multiple screens are part of one bigger display
 
-        @returns true if screens are distinct and windows cannot
-                  be moved between them or span multiple of them
-                 false if screens form up one big display
+        @returns true if screens form one bug display
+                 false if screens are distinct and windows cannot
+                 be moved between, or span multiple screens
     */
-    virtual bool IsMultiDisplay() = 0;
+    virtual bool IsUnifiedDisplay() { return true; }
     /*  Queries the default screen number. The default screen is the
         screen on which windows will appear if no special positioning
         is made.
 
         @returns the default screen number
     */
-    virtual unsigned int GetDefaultDisplayNumber() = 0;
+    virtual unsigned int GetDefaultDisplayNumber() { return 0; }
     /*  Gets relative position and size of the screens attached to the display
 
         @param nScreen
