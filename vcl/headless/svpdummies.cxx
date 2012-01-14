@@ -70,16 +70,6 @@ unsigned int SvpSalSystem::GetDisplayScreenCount()
     return 1;
 }
 
-unsigned int SvpSalSystem::GetDefaultDisplayNumber()
-{
-    return 0;
-}
-
-bool SvpSalSystem::IsMultiDisplay()
-{
-    return false;
-}
-
 Rectangle SvpSalSystem::GetDisplayScreenPosSizePixel( unsigned int nScreen )
 {
     Rectangle aRect;

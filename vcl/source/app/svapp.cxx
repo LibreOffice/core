@@ -1258,10 +1258,10 @@ rtl::OUString Application::GetScreenName( unsigned int nScreen )
     return pSys ? pSys->GetScreenName( nScreen ) : rtl::OUString();
 }
 
-bool Application::IsMultiDisplay()
+bool Application::IsUnifiedDisplay()
 {
     SalSystem* pSys = ImplGetSalSystem();
-    return pSys ? pSys->IsMultiDisplay() : false;
+    return pSys ? pSys->IsUnifiedDisplay() : true;
 }
 
 unsigned int Application::GetDefaultDisplayNumber()
@@ -1295,7 +1295,7 @@ unsigned long calcDistSquare( const Point& i_rPoint, const Rectangle& i_rRect )
 
 unsigned int Application::GetBestScreen( const Rectangle& i_rRect )
 {
-    if( IsMultiDisplay() )
+    if( !IsUnifiedDisplay() )
         return GetDefaultDisplayNumber();
 
     const unsigned int nScreens = GetScreenCount();

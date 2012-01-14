@@ -199,13 +199,13 @@ void SdStartPresentationDlg::InitMonitorSettings()
         }
         else
         {
-            sal_Bool bMultiscreen = false;
+            sal_Bool bUnifiedDisplay = false;
             sal_Int32 nPrimaryIndex = 0;
             Reference< XPropertySet > xMonProps( xMultiMon, UNO_QUERY );
             if( xMonProps.is() ) try
             {
-                const OUString sPropName1( RTL_CONSTASCII_USTRINGPARAM( "MultiDisplay" ) );
-                xMonProps->getPropertyValue( sPropName1 ) >>= bMultiscreen;
+                const OUString sPropName1( RTL_CONSTASCII_USTRINGPARAM( "IsUnifiedDisplay" ) );
+                xMonProps->getPropertyValue( sPropName1 ) >>= bUnifiedDisplay;
                 const OUString sPropName2( RTL_CONSTASCII_USTRINGPARAM( "DefaultDisplay" ) );
                 xMonProps->getPropertyValue( sPropName2 ) >>= nPrimaryIndex;
             }
@@ -222,7 +222,7 @@ void SdStartPresentationDlg::InitMonitorSettings()
                 maLBMonitor.InsertEntry( aName );
             }
 
-            if( !bMultiscreen )
+            if( bUnifiedDisplay )
                 maLBMonitor.InsertEntry( msAllMonitors );
 
             sal_Int32 nSelected = ( ( const SfxInt32Item& ) rOutAttrs.Get( ATTR_PRESENT_DISPLAY ) ).GetValue();

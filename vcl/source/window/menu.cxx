@@ -3726,7 +3726,7 @@ sal_uInt16 PopupMenu::ImplExecute( Window* pW, const Rectangle& rRect, sal_uLong
     Size aSz = ImplCalcSize( pWin );
 
     long nMaxHeight = pWin->GetDesktopRectPixel().GetHeight();
-    if( Application::GetScreenCount() > 1 && ! Application::IsMultiDisplay() )
+    if( Application::GetScreenCount() > 1 && Application::IsUnifiedDisplay() )
     {
         Window* pDeskW = pWindow->GetWindow( WINDOW_REALPARENT );
         if( ! pDeskW )

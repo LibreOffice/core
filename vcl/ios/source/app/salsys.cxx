@@ -51,16 +51,6 @@ unsigned int IosSalSystem::GetDisplayScreenCount()
     return pScreens ? [pScreens count] : 1;
 }
 
-bool IosSalSystem::IsMultiDisplay()
-{
-    return false;
-}
-
-unsigned int IosSalSystem::GetDefaultDisplayNumber()
-{
-    return 0;
-}
-
 Rectangle IosSalSystem::GetDisplayScreenPosSizePixel( unsigned int nScreen )
 {
     NSArray* pScreens = [UIScreen screens];

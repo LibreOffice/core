@@ -60,11 +60,11 @@ unsigned int X11SalSystem::GetDisplayScreenCount()
     return pSalDisp->IsXinerama() ? pSalDisp->GetXineramaScreens().size() : pSalDisp->GetScreenCount();
 }
 
-bool X11SalSystem::IsMultiDisplay()
+bool X11SalSystem::IsUnifiedDisplay()
 {
     SalDisplay* pSalDisp = GetGenericData()->GetSalDisplay();
     unsigned int nScreenCount = pSalDisp->GetScreenCount();
-    return pSalDisp->IsXinerama() ? false : (nScreenCount > 1);
+    return pSalDisp->IsXinerama() ? true : (nScreenCount == 1);
 }
 
 unsigned int X11SalSystem::GetDefaultDisplayNumber()

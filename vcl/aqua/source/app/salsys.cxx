@@ -51,16 +51,6 @@ unsigned int AquaSalSystem::GetDisplayScreenCount()
     return pScreens ? [pScreens count] : 1;
 }
 
-bool AquaSalSystem::IsMultiDisplay()
-{
-    return false;
-}
-
-unsigned int AquaSalSystem::GetDefaultDisplayNumber()
-{
-    return 0;
-}
-
 Rectangle AquaSalSystem::GetDisplayScreenPosSizePixel( unsigned int nScreen )
 {
     NSArray* pScreens = [NSScreen screens];

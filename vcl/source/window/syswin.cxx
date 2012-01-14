@@ -614,10 +614,8 @@ static rtl::OString ImplWindowStateToStr(const WindowStateData& rData)
 void SystemWindow::ImplMoveToScreen( long& io_rX, long& io_rY, long i_nWidth, long i_nHeight, Window* i_pConfigureWin )
 {
     Rectangle aScreenRect;
-    if( Application::IsMultiDisplay() )
-    {
+    if( !Application::IsUnifiedDisplay() )
         aScreenRect = Application::GetScreenPosSizePixel( GetScreenNumber() );
-    }
     else
     {
         aScreenRect = Application::GetScreenPosSizePixel( 0 );

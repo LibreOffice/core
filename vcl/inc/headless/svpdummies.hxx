@@ -81,8 +81,6 @@ class SvpSalSystem : public SalSystem
     virtual ~SvpSalSystem();
     // get info about the display
     virtual unsigned int GetDisplayScreenCount();
-    virtual bool IsMultiDisplay();
-    virtual unsigned int GetDefaultDisplayNumber();
     virtual Rectangle GetDisplayScreenPosSizePixel( unsigned int nScreen );
     virtual Rectangle GetDisplayWorkAreaPosSizePixel( unsigned int nScreen );
     virtual rtl::OUString GetScreenName( unsigned int nScreen );

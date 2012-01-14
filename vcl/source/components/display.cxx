@@ -58,7 +58,7 @@ public:
     DisplayInfo( sal_uInt32 nDisplay );
 
     // XPropertySet
-    virtual Reference< XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw (RuntimeException);
+    virtual Reference< XPropertySetInfo > SAL_CALL getPropertySetInfo() throw (RuntimeException);
     virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const Any& aValue ) throw (UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException);
     virtual Any SAL_CALL getPropertyValue( const OUString& PropertyName ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException);
     virtual void SAL_CALL addPropertyChangeListener( const OUString& aPropertyName, const Reference< XPropertyChangeListener >& xListener ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException);
@@ -67,14 +67,14 @@ public:
     virtual void SAL_CALL removeVetoableChangeListener( const OUString& PropertyName, const Reference< XVetoableChangeListener >& aListener ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException);
 
     // XPropertySetInfo
-    virtual Sequence< Property > SAL_CALL getProperties(  ) throw (RuntimeException);
+    virtual Sequence< Property > SAL_CALL getProperties() throw (RuntimeException);
     virtual Property SAL_CALL getPropertyByName( const OUString& aName ) throw (UnknownPropertyException, RuntimeException);
     virtual ::sal_Bool SAL_CALL hasPropertyByName( const OUString& Name ) throw (RuntimeException);
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) throw (RuntimeException);
+    virtual OUString SAL_CALL getImplementationName() throw (RuntimeException);
     virtual ::sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (RuntimeException);
-    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (RuntimeException);
+    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (RuntimeException);
 
 private:
     sal_uInt32 mnDisplay;
@@ -92,7 +92,7 @@ DisplayInfo::DisplayInfo( sal_uInt32 nDisplay )
 }
 
 // XPropertySet
-Reference< XPropertySetInfo > SAL_CALL DisplayInfo::getPropertySetInfo(  ) throw (RuntimeException)
+Reference< XPropertySetInfo > SAL_CALL DisplayInfo::getPropertySetInfo() throw (RuntimeException)
 {
     return this;
 }
@@ -129,7 +129,7 @@ void SAL_CALL DisplayInfo::addVetoableChangeListener( const OUString&, const Ref
 void SAL_CALL DisplayInfo::removeVetoableChangeListener( const OUString&, const Reference< XVetoableChangeListener >& ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException) {}
 
 // XPropertySetInfo
-Sequence< Property > SAL_CALL DisplayInfo::getProperties(  ) throw (RuntimeException)
+Sequence< Property > SAL_CALL DisplayInfo::getProperties() throw (RuntimeException)
 {
     Sequence< Property > aProps(2);
     aProps[0] = getPropertyByName( OUString::createFromAscii( pScreenAreaName ) );
@@ -152,7 +152,7 @@ Property SAL_CALL DisplayInfo::getPropertyByName( const OUString& aName ) throw 
 }
 
 // XServiceInfo
-OUString SAL_CALL DisplayInfo::getImplementationName(  ) throw (RuntimeException)
+OUString SAL_CALL DisplayInfo::getImplementationName() throw (RuntimeException)
 {
     return OUString(RTL_CONSTASCII_USTRINGPARAM("vcl::DisplayInfo"));
 }
@@ -168,7 +168,7 @@ OUString SAL_CALL DisplayInfo::getImplementationName(  ) throw (RuntimeException
     return sal_False;
 }
 
-Sequence< OUString > SAL_CALL DisplayInfo::getSupportedServiceNames(  ) throw (RuntimeException)
+Sequence< OUString > SAL_CALL DisplayInfo::getSupportedServiceNames() throw (RuntimeException)
 {
     OUString aServiceName(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.DisplayInfo"));
     return Sequence< OUString >(&aServiceName, 1);
@@ -182,7 +182,7 @@ public:
     DisplayAccess ();
 
     // XPropertySet
-    virtual Reference< XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw (RuntimeException);
+    virtual Reference< XPropertySetInfo > SAL_CALL getPropertySetInfo() throw (RuntimeException);
     virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const Any& aValue ) throw (UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException);
     virtual Any SAL_CALL getPropertyValue( const OUString& PropertyName ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException);
     virtual void SAL_CALL addPropertyChangeListener( const OUString& aPropertyName, const Reference< XPropertyChangeListener >& xListener ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException);
@@ -191,7 +191,7 @@ public:
     virtual void SAL_CALL removeVetoableChangeListener( const OUString& PropertyName, const Reference< XVetoableChangeListener >& aListener ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException);
 
     // XPropertySetInfo
-    virtual Sequence< Property > SAL_CALL getProperties(  ) throw (RuntimeException);
+    virtual Sequence< Property > SAL_CALL getProperties() throw (RuntimeException);
     virtual Property SAL_CALL getPropertyByName( const OUString& aName ) throw (UnknownPropertyException, RuntimeException);
     virtual ::sal_Bool SAL_CALL hasPropertyByName( const OUString& Name ) throw (RuntimeException);
 
@@ -200,13 +200,13 @@ public:
     virtual Any SAL_CALL getByIndex( ::sal_Int32 Index ) throw (IndexOutOfBoundsException, WrappedTargetException, RuntimeException);
 
     // XElementAccess
-    virtual Type SAL_CALL getElementType(  ) throw (RuntimeException);
-    virtual ::sal_Bool SAL_CALL hasElements(  ) throw (RuntimeException);
+    virtual Type SAL_CALL getElementType() throw (RuntimeException);
+    virtual ::sal_Bool SAL_CALL hasElements() throw (RuntimeException);
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) throw (RuntimeException);
+    virtual OUString SAL_CALL getImplementationName() throw (RuntimeException);
     virtual ::sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (RuntimeException);
-    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (RuntimeException);
+    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (RuntimeException);
 };
 
 Sequence< OUString > DisplayAccess_getSupportedServiceNames()
@@ -229,11 +229,11 @@ DisplayAccess::DisplayAccess()
 {
 }
 
-static const char* pMultiDisplayName = "MultiDisplay";
+static const char* pUnifiedDisplayName = "IsUnifiedDisplay";
 static const char* pDefaultDisplayName = "DefaultDisplay";
 
 // XPropertySet
-Reference< XPropertySetInfo > SAL_CALL DisplayAccess::getPropertySetInfo(  ) throw (RuntimeException)
+Reference< XPropertySetInfo > SAL_CALL DisplayAccess::getPropertySetInfo() throw (RuntimeException)
 {
     return this;
 }
@@ -246,9 +246,9 @@ void SAL_CALL DisplayAccess::setPropertyValue( const OUString& /*aPropertyName* 
 Any SAL_CALL DisplayAccess::getPropertyValue( const OUString& PropertyName ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
     Any aRet;
-    if( PropertyName.equalsAscii( pMultiDisplayName ) )
+    if( PropertyName.equalsAscii( pUnifiedDisplayName ) )
     {
-        aRet <<= sal_Bool( Application::IsMultiDisplay() );
+        aRet <<= sal_Bool( Application::IsUnifiedDisplay() );
     }
     else if( PropertyName.equalsAscii( pDefaultDisplayName ) )
     {
@@ -266,17 +266,17 @@ void SAL_CALL DisplayAccess::addVetoableChangeListener( const OUString&, const R
 void SAL_CALL DisplayAccess::removeVetoableChangeListener( const OUString&, const Reference< XVetoableChangeListener >& ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException) {}
 
 // XPropertySetInfo
-Sequence< Property > SAL_CALL DisplayAccess::getProperties(  ) throw (RuntimeException)
+Sequence< Property > SAL_CALL DisplayAccess::getProperties() throw (RuntimeException)
 {
     Sequence< Property > aProps(2);
-    aProps[0] = getPropertyByName( OUString::createFromAscii( pMultiDisplayName ) );
+    aProps[0] = getPropertyByName( OUString::createFromAscii( pUnifiedDisplayName ) );
     aProps[1] = getPropertyByName( OUString::createFromAscii( pDefaultDisplayName ) );
     return aProps;
 }
 
 Property SAL_CALL DisplayAccess::getPropertyByName( const OUString& aName ) throw (UnknownPropertyException, RuntimeException)
 {
-    if( aName.equalsAscii( pMultiDisplayName ) )
+    if( aName.equalsAscii( pUnifiedDisplayName ) )
         return Property( aName, 0, ::getCppuType( (sal_Bool const *)0 ), PropertyAttribute::READONLY );
 
     if( aName.equalsAscii( pDefaultDisplayName ) )
@@ -286,7 +286,7 @@ Property SAL_CALL DisplayAccess::getPropertyByName( const OUString& aName ) thro
 
 ::sal_Bool SAL_CALL DisplayAccess::hasPropertyByName( const OUString& Name ) throw (RuntimeException)
 {
-    return Name.equalsAscii( pMultiDisplayName ) ||
+    return Name.equalsAscii( pUnifiedDisplayName ) ||
            Name.equalsAscii( pDefaultDisplayName );
 }
 
@@ -305,7 +305,7 @@ Any SAL_CALL DisplayAccess::getByIndex( ::sal_Int32 Index ) throw (IndexOutOfBou
 }
 
 // XElementAccess
-Type SAL_CALL DisplayAccess::getElementType(  ) throw (RuntimeException)
+Type SAL_CALL DisplayAccess::getElementType() throw (RuntimeException)
 {
     return XPropertySet::static_type();
 }
@@ -316,7 +316,7 @@ Type SAL_CALL DisplayAccess::getElementType(  ) throw (RuntimeException)
 }
 
 // XServiceInfo
-OUString SAL_CALL DisplayAccess::getImplementationName(  ) throw (RuntimeException)
+OUString SAL_CALL DisplayAccess::getImplementationName() throw (RuntimeException)
 {
     return DisplayAccess_getImplementationName();
 }
@@ -332,7 +332,7 @@ OUString SAL_CALL DisplayAccess::getImplementationName(  ) throw (RuntimeExcepti
     return sal_False;
 }
 
-Sequence< OUString > SAL_CALL DisplayAccess::getSupportedServiceNames(  ) throw (RuntimeException)
+Sequence< OUString > SAL_CALL DisplayAccess::getSupportedServiceNames() throw (RuntimeException)
 {
     return DisplayAccess_getSupportedServiceNames();
 }

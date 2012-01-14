@@ -282,16 +282,16 @@ public:
     static unsigned int         GetScreenCount();
     static Rectangle            GetScreenPosSizePixel( unsigned int nScreen );
 
-    // IsMultiDisplay returns:
-    //        true:  different screens are separate and windows cannot be moved
-    //               between them (e.g. Xserver with multiple screens)
-    //        false: screens form up one large display area
+    // IsUnifiedDisplay returns:
+    //        true:  screens form up one large display area
     //               windows can be moved between single screens
     //               (e.g. Xserver with Xinerama, Windows)
-    SAL_DLLPRIVATE static bool          IsMultiDisplay();
-    // if IsMultiDisplay() == false the return value will be
+    //        false: different screens are separate and windows cannot be moved
+    //               between them (e.g. Xserver with multiple screens)
+    SAL_DLLPRIVATE static bool          IsUnifiedDisplay();
+    // if IsUnifiedDisplay() == true the return value will be
     // nearest screen of the target rectangle
-    // in case of IsMultiDisplay() == true the return value
+    // in case of IsUnifiedDisplay() == false the return value
     // will always be GetDefaultDisplayNumber()
     SAL_DLLPRIVATE static unsigned int  GetBestScreen( const Rectangle& );
     SAL_DLLPRIVATE static Rectangle     GetWorkAreaPosSizePixel( unsigned int nScreen );
