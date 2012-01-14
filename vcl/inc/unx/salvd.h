@@ -31,6 +31,7 @@
 
 // -=-= #includes -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 #include <unx/salstd.hxx>
+#include <unx/saltype.h>
 #include <salvd.hxx>
 
 // -=-= forwards -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -45,40 +46,40 @@ class X11SalVirtualDevice : public SalVirtualDevice
 
 
     Pixmap          hDrawable_;
-    int             m_nScreen;
+    SalX11Screen    m_nXScreen;
 
     int             nDX_;
     int             nDY_;
-    sal_uInt16          nDepth_;
-    sal_Bool            bGraphics_;         // is Graphics used
-    sal_Bool            bExternPixmap_;
+    sal_uInt16      nDepth_;
+    sal_Bool        bGraphics_;         // is Graphics used
+    sal_Bool        bExternPixmap_;
 
 public:
     X11SalVirtualDevice();
     virtual ~X11SalVirtualDevice();
 
     sal_Bool            Init( SalDisplay *pDisplay,
-                          long nDX, long nDY,
-                          sal_uInt16 nBitCount,
-                          int nScreen,
-                          Pixmap hDrawable = None,
-                          XRenderPictFormat* pXRenderFormat = NULL );
+                              long nDX, long nDY,
+                              sal_uInt16 nBitCount,
+                              SalX11Screen nXScreen,
+                              Pixmap hDrawable = None,
+                              XRenderPictFormat* pXRenderFormat = NULL );
     inline  void            InitGraphics( X11SalVirtualDevice *pVD );
 
     inline  Display        *GetXDisplay() const;
     inline  SalDisplay     *GetDisplay() const;
-    inline  sal_Bool            IsDisplay() const;
+    inline  sal_Bool        IsDisplay() const;
     inline  Pixmap          GetDrawable() const { return hDrawable_; }
-    inline  sal_uInt16          GetDepth() const { return nDepth_; }
+    inline  sal_uInt16      GetDepth() const { return nDepth_; }
     int                     GetWidth() const { return nDX_; }
     int                     GetHeight() const { return nDY_; }
-    int                     GetScreenNumber() const { return m_nScreen; }
+    SalX11Screen            GetXScreenNumber() const { return m_nXScreen; }
 
     virtual SalGraphics*    GetGraphics();
     virtual void            ReleaseGraphics( SalGraphics* pGraphics );
 
                             // Set new size, without saving the old contents
-    virtual sal_Bool            SetSize( long nNewDX, long nNewDY );
+    virtual sal_Bool        SetSize( long nNewDX, long nNewDY );
     virtual void            GetSize( long& rWidth, long& rHeight );
 };
 

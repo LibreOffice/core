@@ -365,6 +365,7 @@ sal_Bool SalDisplay::BestVisual( Display     *pDisplay,
 SalDisplay::SalDisplay( Display *display ) :
         mpInputMethod( NULL ),
         pDisp_( display ),
+        m_nXDefaultScreen( 0 ),
         m_pWMAdaptor( NULL ),
         m_bUseRandRWrapper( true ),
         m_nLastUserEventTime( CurrentTime )
@@ -378,7 +379,7 @@ SalDisplay::SalDisplay( Display *display ) :
     DBG_ASSERT( ! pData->GetDisplay(), "Second SalDisplay created !!!\n" );
     pData->SetDisplay( this );
 
-    m_nDefaultScreen = DefaultScreen( pDisp_ );
+    m_nXDefaultScreen = SalX11Screen( DefaultScreen( pDisp_ ) );
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -521,61 +522,62 @@ void SalX11Display::PostUserEvent()
         pXLib_->PostUserEvent();
 }
 
-void SalDisplay::initScreen( int nScreen ) const
+SalDisplay::ScreenData *
+SalDisplay::initScreen( SalX11Screen nXScreen ) const
 {
-    if( nScreen < 0 || nScreen >= static_cast<int>(m_aScreens.size()) )
-        nScreen = m_nDefaultScreen;
-    ScreenData& rSD = const_cast<ScreenData&>(m_aScreens[nScreen]);
-    if( rSD.m_bInit )
-        return;
-    rSD.m_bInit = true;
+    if( nXScreen.getXScreen() >= static_cast<int>(m_aScreens.size()) )
+        nXScreen = m_nXDefaultScreen;
+    ScreenData* pSD = const_cast<ScreenData *>(&m_aScreens[nXScreen.getXScreen()]);
+    if( pSD->m_bInit )
+        return NULL;
+    pSD->m_bInit = true;
 
     XVisualInfo aVI;
     Colormap    aColMap;
 
-    if( SalDisplay::BestVisual( pDisp_, nScreen, aVI ) ) // DefaultVisual
-        aColMap = DefaultColormap( pDisp_, nScreen );
+    if( SalDisplay::BestVisual( pDisp_, nXScreen.getXScreen(), aVI ) ) // DefaultVisual
+        aColMap = DefaultColormap( pDisp_, nXScreen.getXScreen() );
     else
         aColMap = XCreateColormap( pDisp_,
-                                   RootWindow( pDisp_, nScreen ),
+                                   RootWindow( pDisp_, nXScreen.getXScreen() ),
                                    aVI.visual,
                                    AllocNone );
 
-    Screen* pScreen = ScreenOfDisplay( pDisp_, nScreen );
+    Screen* pScreen = ScreenOfDisplay( pDisp_, nXScreen.getXScreen() );
 
-    rSD.m_aSize = Size( WidthOfScreen( pScreen ), HeightOfScreen( pScreen ) );
-    rSD.m_aRoot = RootWindow( pDisp_, nScreen );
-    rSD.m_aVisual = SalVisual( &aVI );
-    rSD.m_aColormap = SalColormap( this, aColMap, nScreen );
+    pSD->m_aSize = Size( WidthOfScreen( pScreen ), HeightOfScreen( pScreen ) );
+    pSD->m_aRoot = RootWindow( pDisp_, nXScreen.getXScreen() );
+    pSD->m_aVisual = SalVisual( &aVI );
+    pSD->m_aColormap = SalColormap( this, aColMap, nXScreen );
 
     // we're interested in configure notification of root windows
-    InitRandR( rSD.m_aRoot );
+    InitRandR( pSD->m_aRoot );
 
     // - - - - - - - - - - Reference Window/Default Drawable - -
     XSetWindowAttributes aXWAttributes;
     aXWAttributes.border_pixel      = 0;
     aXWAttributes.background_pixel  = 0;
     aXWAttributes.colormap          = aColMap;
-    rSD.m_aRefWindow     = XCreateWindow( pDisp_,
-                                          rSD.m_aRoot,
+    pSD->m_aRefWindow     = XCreateWindow( pDisp_,
+                                          pSD->m_aRoot,
                                           0,0, 16,16, 0,
-                                          rSD.m_aVisual.GetDepth(),
+                                          pSD->m_aVisual.GetDepth(),
                                           InputOutput,
-                                          rSD.m_aVisual.GetVisual(),
+                                          pSD->m_aVisual.GetVisual(),
                                           CWBorderPixel|CWBackPixel|CWColormap,
                                           &aXWAttributes );
 
     // set client leader (session id gets set when session is started)
-    if( rSD.m_aRefWindow )
+    if( pSD->m_aRefWindow )
     {
         // client leader must have WM_CLIENT_LEADER pointing to itself
         XChangeProperty( pDisp_,
-                         rSD.m_aRefWindow,
+                         pSD->m_aRefWindow,
                          XInternAtom( pDisp_, "WM_CLIENT_LEADER", False ),
                          XA_WINDOW,
                          32,
                          PropModeReplace,
-                         (unsigned char*)&rSD.m_aRefWindow,
+                         (unsigned char*)&pSD->m_aRefWindow,
                          1
                          );
 
@@ -583,73 +585,74 @@ void SalDisplay::initScreen( int nScreen ) const
         const char* argv[2];
         argv[0] = "/bin/sh";
         argv[1] = aExec.getStr();
-        XSetCommand( pDisp_, rSD.m_aRefWindow, const_cast<char**>(argv), 2 );
-        XSelectInput( pDisp_, rSD.m_aRefWindow, PropertyChangeMask );
+        XSetCommand( pDisp_, pSD->m_aRefWindow, const_cast<char**>(argv), 2 );
+        XSelectInput( pDisp_, pSD->m_aRefWindow, PropertyChangeMask );
 
         // - - - - - - - - - - GCs - - - - - - - - - - - - - - - - -
         XGCValues values;
         values.graphics_exposures   = False;
         values.fill_style           = FillOpaqueStippled;
-        values.background           = (1<<rSD.m_aVisual.GetDepth())-1;
+        values.background           = (1<<pSD->m_aVisual.GetDepth())-1;
         values.foreground           = 0;
 
-        rSD.m_aCopyGC       = XCreateGC( pDisp_,
-                                         rSD.m_aRefWindow,
+        pSD->m_aCopyGC       = XCreateGC( pDisp_,
+                                         pSD->m_aRefWindow,
                                          GCGraphicsExposures
                                          | GCForeground
                                          | GCBackground,
                                          &values );
-        rSD.m_aAndInvertedGC= XCreateGC( pDisp_,
-                                         rSD.m_aRefWindow,
+        pSD->m_aAndInvertedGC= XCreateGC( pDisp_,
+                                         pSD->m_aRefWindow,
                                          GCGraphicsExposures
                                          | GCForeground
                                          | GCBackground,
                                          &values );
-        rSD.m_aAndGC        = XCreateGC( pDisp_,
-                                         rSD.m_aRefWindow,
+        pSD->m_aAndGC        = XCreateGC( pDisp_,
+                                         pSD->m_aRefWindow,
                                          GCGraphicsExposures
                                          | GCForeground
                                          | GCBackground,
                                          &values );
-        rSD.m_aOrGC         = XCreateGC( pDisp_,
-                                         rSD.m_aRefWindow,
+        pSD->m_aOrGC         = XCreateGC( pDisp_,
+                                         pSD->m_aRefWindow,
                                          GCGraphicsExposures
                                          | GCForeground
                                          | GCBackground,
                                          &values    );
-        rSD.m_aStippleGC    = XCreateGC( pDisp_,
-                                         rSD.m_aRefWindow,
+        pSD->m_aStippleGC    = XCreateGC( pDisp_,
+                                         pSD->m_aRefWindow,
                                          GCGraphicsExposures
                                          | GCFillStyle
                                          | GCForeground
                                          | GCBackground,
                                          &values );
 
-        XSetFunction( pDisp_, rSD.m_aAndInvertedGC,  GXandInverted );
-        XSetFunction( pDisp_, rSD.m_aAndGC,          GXand );
+        XSetFunction( pDisp_, pSD->m_aAndInvertedGC,  GXandInverted );
+        XSetFunction( pDisp_, pSD->m_aAndGC,          GXand );
         // PowerPC Solaris 2.5 (XSun 3500) Bug: GXor = GXnop
-        XSetFunction( pDisp_, rSD.m_aOrGC,           GXxor );
+        XSetFunction( pDisp_, pSD->m_aOrGC,           GXxor );
 
-        if( 1 == rSD.m_aVisual.GetDepth() )
+        if( 1 == pSD->m_aVisual.GetDepth() )
         {
-            XSetFunction( pDisp_, rSD.m_aCopyGC, GXcopyInverted );
-            rSD.m_aMonoGC = rSD.m_aCopyGC;
+            XSetFunction( pDisp_, pSD->m_aCopyGC, GXcopyInverted );
+            pSD->m_aMonoGC = pSD->m_aCopyGC;
         }
         else
         {
-            Pixmap hPixmap = XCreatePixmap( pDisp_, rSD.m_aRefWindow, 1, 1, 1 );
-            rSD.m_aMonoGC = XCreateGC( pDisp_,
+            Pixmap hPixmap = XCreatePixmap( pDisp_, pSD->m_aRefWindow, 1, 1, 1 );
+            pSD->m_aMonoGC = XCreateGC( pDisp_,
                                        hPixmap,
                                        GCGraphicsExposures,
                                        &values );
             XFreePixmap( pDisp_, hPixmap );
         }
-        rSD.m_hInvert50 = XCreateBitmapFromData( pDisp_,
-                                                 rSD.m_aRefWindow,
+        pSD->m_hInvert50 = XCreateBitmapFromData( pDisp_,
+                                                 pSD->m_aRefWindow,
                                                  reinterpret_cast<const char*>(invert50_bits),
                                                  invert50_width,
                                                  invert50_height );
     }
+    return pSD;
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -685,8 +688,10 @@ void SalDisplay::Init()
     if( mbExactResolution == false )
     {
         aResolution_     =
-            Pair( DPI( WidthOfScreen( DefaultScreenOfDisplay( pDisp_ ) ), DisplayWidthMM ( pDisp_, m_nDefaultScreen ) ),
-                  DPI( HeightOfScreen( DefaultScreenOfDisplay( pDisp_ ) ), DisplayHeightMM( pDisp_, m_nDefaultScreen ) ) );
+            Pair( DPI( WidthOfScreen( DefaultScreenOfDisplay( pDisp_ ) ),
+                       DisplayWidthMM ( pDisp_, m_nXDefaultScreen.getXScreen() ) ),
+                  DPI( HeightOfScreen( DefaultScreenOfDisplay( pDisp_ ) ),
+                       DisplayHeightMM( pDisp_, m_nXDefaultScreen.getXScreen() ) ) );
     }
 
     nMaxRequestSize_    = XExtendedMaxRequestSize( pDisp_ ) * 4;
@@ -1893,7 +1898,7 @@ XLIB_Cursor SalDisplay::GetPointer( int ePointerStyle )
     if( None == aCur )
     {
         XColor      aBlack, aWhite, aDummy;
-        Colormap    hColormap = GetColormap(m_nDefaultScreen).GetXColormap();
+        Colormap    hColormap = GetColormap(m_nXDefaultScreen).GetXColormap();
 
         XAllocNamedColor( pDisp_, hColormap, "black", &aBlack, &aDummy );
         XAllocNamedColor( pDisp_, hColormap, "white", &aWhite, &aDummy );
@@ -2269,7 +2274,8 @@ void SalDisplay::PrintInfo() const
         fprintf( stderr, "\tProtocol          \t%d.%d\n",
                  ProtocolVersion(pDisp_), ProtocolRevision(pDisp_) );
         fprintf( stderr, "\tScreen (count,def)\t%d (%d,%d)\n",
-                 m_nDefaultScreen, ScreenCount(pDisp_), DefaultScreen(pDisp_) );
+                 m_nXDefaultScreen.getXScreen(),
+                 ScreenCount(pDisp_), DefaultScreen(pDisp_) );
         fprintf( stderr, "\tshift ctrl alt    \t%s (0x%X) %s (0x%X) %s (0x%X)\n",
                  KeyStr( nShiftKeySym_ ), sal::static_int_cast< unsigned int >(nShiftKeySym_),
                  KeyStr( nCtrlKeySym_ ),  sal::static_int_cast< unsigned int >(nCtrlKeySym_),
@@ -2286,17 +2292,21 @@ void SalDisplay::PrintInfo() const
     fprintf( stderr, "Screen\n" );
     fprintf( stderr, "\tResolution/Size   \t%ld*%ld %ld*%ld %.1lf\"\n",
              aResolution_.A(), aResolution_.B(),
-             m_aScreens[m_nDefaultScreen].m_aSize.Width(), m_aScreens[m_nDefaultScreen].m_aSize.Height(),
-             Hypothenuse( DisplayWidthMM ( pDisp_, m_nDefaultScreen ),
-                          DisplayHeightMM( pDisp_, m_nDefaultScreen ) ) / 25.4 );
+             m_aScreens[m_nXDefaultScreen.getXScreen()].m_aSize.Width(),
+             m_aScreens[m_nXDefaultScreen.getXScreen()].m_aSize.Height(),
+             Hypothenuse( DisplayWidthMM ( pDisp_, m_nXDefaultScreen.getXScreen() ),
+                          DisplayHeightMM( pDisp_, m_nXDefaultScreen.getXScreen() ) ) / 25.4 );
     fprintf( stderr, "\tBlack&White       \t%lu %lu\n",
-             GetColormap(m_nDefaultScreen).GetBlackPixel(), GetColormap(m_nDefaultScreen).GetWhitePixel() );
+             GetColormap(m_nXDefaultScreen).GetBlackPixel(),
+             GetColormap(m_nXDefaultScreen).GetWhitePixel() );
     fprintf( stderr, "\tRGB               \t0x%lx 0x%lx 0x%lx\n",
-             GetVisual(m_nDefaultScreen).red_mask, GetVisual(m_nDefaultScreen).green_mask, GetVisual(m_nDefaultScreen).blue_mask );
+             GetVisual(m_nXDefaultScreen).red_mask,
+             GetVisual(m_nXDefaultScreen).green_mask,
+             GetVisual(m_nXDefaultScreen).blue_mask );
     fprintf( stderr, "\tVisual            \t%d-bit %s ID=0x%x\n",
-             GetVisual(m_nDefaultScreen).GetDepth(),
-             VisualClassName[ GetVisual(m_nDefaultScreen).GetClass() ],
-             sal::static_int_cast< unsigned int >(GetVisual(m_nDefaultScreen).GetVisualId()) );
+             GetVisual(m_nXDefaultScreen).GetDepth(),
+             VisualClassName[ GetVisual(m_nXDefaultScreen).GetClass() ],
+             sal::static_int_cast< unsigned int >(GetVisual(m_nXDefaultScreen).GetVisualId()) );
 }
 
 void SalDisplay::addXineramaScreenUnique( int i, long i_nX, long i_nY, long i_nWidth, long i_nHeight )
@@ -2393,7 +2403,7 @@ extern "C"
     {
         SalDisplay* pSalDisplay = reinterpret_cast<SalDisplay*>(i_pArg);
         if( i_pEvent->type == PropertyNotify &&
-            i_pEvent->xproperty.window == pSalDisplay->GetDrawable( pSalDisplay->GetDefaultScreenNumber() ) &&
+            i_pEvent->xproperty.window == pSalDisplay->GetDrawable( pSalDisplay->GetDefaultXScreen() ) &&
             i_pEvent->xproperty.atom == pSalDisplay->getWMAdaptor()->getAtom( WMAdaptor::SAL_GETTIMEEVENT )
             )
         return True;
@@ -2410,7 +2420,7 @@ XLIB_Time SalDisplay::GetLastUserEventTime( bool i_bAlwaysReget ) const
         unsigned char c = 0;
         XEvent aEvent;
         Atom nAtom = getWMAdaptor()->getAtom( WMAdaptor::SAL_GETTIMEEVENT );
-        XChangeProperty( GetDisplay(), GetDrawable( GetDefaultScreenNumber() ),
+        XChangeProperty( GetDisplay(), GetDrawable( GetDefaultXScreen() ),
                          nAtom, nAtom, 8, PropModeReplace, &c, 1 );
         XFlush( GetDisplay() );
 
@@ -2593,12 +2603,13 @@ Pixel SalVisual::GetTCPixel( SalColor nSalColor ) const
 
 // -=-= SalColormap -=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-SalColormap::SalColormap( const SalDisplay *pDisplay, Colormap hColormap, int nScreen )
+SalColormap::SalColormap( const SalDisplay *pDisplay, Colormap hColormap,
+                          SalX11Screen nXScreen )
     : m_pDisplay( pDisplay ),
       m_hColormap( hColormap ),
-      m_nScreen( nScreen )
+      m_nXScreen( nXScreen )
 {
-    m_aVisual = m_pDisplay->GetVisual( m_nScreen );
+    m_aVisual = m_pDisplay->GetVisual( m_nXScreen );
 
     XColor aColor;
 
@@ -2664,10 +2675,8 @@ SalColormap::SalColormap()
       m_nWhitePixel( 1 ),
       m_nBlackPixel( 0 ),
       m_nUsed( 2 ),
-      m_nScreen( 0 )
+      m_nXScreen( m_pDisplay != NULL ? m_pDisplay->GetDefaultXScreen() : SalX11Screen( 0 ) )
 {
-    if( m_pDisplay )
-        m_nScreen = m_pDisplay->GetDefaultScreenNumber();
     m_aPalette = std::vector<SalColor>(m_nUsed);
 
     m_aPalette[m_nBlackPixel] = SALCOLOR_BLACK;
@@ -2681,9 +2690,9 @@ SalColormap::SalColormap( sal_uInt16 nDepth )
       m_nWhitePixel( (1 << nDepth) - 1 ),
       m_nBlackPixel( 0x00000000 ),
       m_nUsed( 1 << nDepth ),
-      m_nScreen( GetGenericData()->GetSalDisplay()->GetDefaultScreenNumber() )
+      m_nXScreen( GetGenericData()->GetSalDisplay()->GetDefaultXScreen() )
 {
-    const SalVisual *pVisual  = &m_pDisplay->GetVisual( m_nScreen );
+    const SalVisual *pVisual = &m_pDisplay->GetVisual( m_nXScreen );
 
     if( pVisual->GetClass() == TrueColor && pVisual->GetDepth() == nDepth )
         m_aVisual = *pVisual;
@@ -2692,7 +2701,7 @@ SalColormap::SalColormap( sal_uInt16 nDepth )
         XVisualInfo aVI;
 
         if( !XMatchVisualInfo( m_pDisplay->GetDisplay(),
-                               m_pDisplay->GetDefaultScreenNumber(),
+                               m_pDisplay->GetDefaultXScreen().getXScreen(),
                                nDepth,
                                TrueColor,
                                &aVI ) )

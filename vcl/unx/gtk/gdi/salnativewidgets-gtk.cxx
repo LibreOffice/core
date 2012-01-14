@@ -60,7 +60,8 @@ GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
       m_aClipRegion( REGION_NULL )
 {
     Init( pFrame, GDK_WINDOW_XID( widget_get_window( pWindow ) ),
-          gdk_x11_screen_get_screen_number( gtk_widget_get_screen( pWindow ) ) );
+          SalX11Screen( gdk_x11_screen_get_screen_number(
+                                gtk_widget_get_screen( pWindow ) ) ) );
 }
 
 GtkSalGraphics::~GtkSalGraphics()
@@ -159,7 +160,14 @@ struct NWFWidgetData
 // easily and quickly reset each to a default state before using
 // them
 static boost::unordered_map<long, guint>    gWidgetDefaultFlags;
-static std::vector<NWFWidgetData>   gWidgetData;
+class WidgetDataVector : public std::vector<NWFWidgetData>
+{
+public:
+    WidgetDataVector(size_t nElems = 0) : std::vector<NWFWidgetData>( nElems ) {}
+    NWFWidgetData &operator [](size_t i) { return at(i); }
+    NWFWidgetData &operator [](const SalX11Screen &s) { return at(s.getXScreen()); }
+};
+static WidgetDataVector gWidgetData;
 
 static const GtkBorder aDefDefBorder        = { 1, 1, 1, 1 };
 
@@ -169,27 +177,27 @@ static const GtkBorder aDefDefBorder        = { 1, 1, 1, 1 };
 #define MIN_SPIN_ARROW_WIDTH                6
 
 
-static void NWEnsureGTKRadio            ( int nScreen );
-static void NWEnsureGTKButton            ( int nScreen );
-static void NWEnsureGTKCheck            ( int nScreen );
-static void NWEnsureGTKScrollbars        ( int nScreen );
-static void NWEnsureGTKArrow            ( int nScreen );
-static void NWEnsureGTKEditBox            ( int nScreen );
-static void NWEnsureGTKSpinButton        ( int nScreen );
-static void NWEnsureGTKNotebook            ( int nScreen );
-static void NWEnsureGTKOptionMenu        ( int nScreen );
-static void NWEnsureGTKCombo            ( int nScreen );
-static void NWEnsureGTKScrolledWindow    ( int nScreen );
-static void NWEnsureGTKToolbar            ( int nScreen );
-static void NWEnsureGTKMenubar          ( int nScreen );
-static void NWEnsureGTKMenu             ( int nScreen );
-static void NWEnsureGTKTooltip          ( int nScreen );
-static void NWEnsureGTKProgressBar      ( int nScreen );
-static void NWEnsureGTKTreeView         ( int nScreen );
-static void NWEnsureGTKSlider           ( int nScreen );
+static void NWEnsureGTKRadio             ( SalX11Screen nScreen );
+static void NWEnsureGTKButton            ( SalX11Screen nScreen );
+static void NWEnsureGTKCheck             ( SalX11Screen nScreen );
+static void NWEnsureGTKScrollbars        ( SalX11Screen nScreen );
+static void NWEnsureGTKArrow             ( SalX11Screen nScreen );
+static void NWEnsureGTKEditBox           ( SalX11Screen nScreen );
+static void NWEnsureGTKSpinButton        ( SalX11Screen nScreen );
+static void NWEnsureGTKNotebook          ( SalX11Screen nScreen );
+static void NWEnsureGTKOptionMenu        ( SalX11Screen nScreen );
+static void NWEnsureGTKCombo             ( SalX11Screen nScreen );
+static void NWEnsureGTKScrolledWindow    ( SalX11Screen nScreen );
+static void NWEnsureGTKToolbar           ( SalX11Screen nScreen );
+static void NWEnsureGTKMenubar           ( SalX11Screen nScreen );
+static void NWEnsureGTKMenu              ( SalX11Screen nScreen );
+static void NWEnsureGTKTooltip           ( SalX11Screen nScreen );
+static void NWEnsureGTKProgressBar       ( SalX11Screen nScreen );
+static void NWEnsureGTKTreeView          ( SalX11Screen nScreen );
+static void NWEnsureGTKSlider            ( SalX11Screen nScreen );
 
 static void NWConvertVCLStateToGTKState( ControlState nVCLState, GtkStateType* nGTKState, GtkShadowType* nGTKShadow );
-static void NWAddWidgetToCacheWindow( GtkWidget* widget, int nScreen );
+static void NWAddWidgetToCacheWindow( GtkWidget* widget, SalX11Screen nScreen );
 static void NWSetWidgetState( GtkWidget* widget, ControlState nState, GtkStateType nGtkState );
 
 static void NWCalcArrowRect( const Rectangle& rButton, Rectangle& rArrow );
@@ -200,37 +208,37 @@ static void NWCalcArrowRect( const Rectangle& rButton, Rectangle& rArrow );
  */
 
 //---
-static Rectangle NWGetButtonArea( int nScreen, ControlType nType, ControlPart nPart, Rectangle aAreaRect, ControlState nState,
+static Rectangle NWGetButtonArea( SalX11Screen nScreen, ControlType nType, ControlPart nPart, Rectangle aAreaRect, ControlState nState,
                                 const ImplControlValue& aValue, const OUString& rCaption );
 
 //---
-static Rectangle NWGetEditBoxPixmapRect( int nScreen, ControlType nType, ControlPart nPart, Rectangle aAreaRect, ControlState nState,
+static Rectangle NWGetEditBoxPixmapRect( SalX11Screen nScreen, ControlType nType, ControlPart nPart, Rectangle aAreaRect, ControlState nState,
                             const ImplControlValue& aValue, const OUString& rCaption );
 
-static void NWPaintOneEditBox( int nScreen, GdkDrawable * gdkDrawable, GdkRectangle *gdkRect,
+static void NWPaintOneEditBox( SalX11Screen nScreen, GdkDrawable * gdkDrawable, GdkRectangle *gdkRect,
                                ControlType nType, ControlPart nPart, Rectangle aEditBoxRect,
                                ControlState nState, const ImplControlValue& aValue,
                                const OUString& rCaption );
 
 //---
-static Rectangle NWGetSpinButtonRect( int nScreen, ControlType nType, ControlPart nPart, Rectangle aAreaRect, ControlState nState,
+static Rectangle NWGetSpinButtonRect( SalX11Screen nScreen, ControlType nType, ControlPart nPart, Rectangle aAreaRect, ControlState nState,
                             const ImplControlValue& aValue, const OUString& rCaption );
 
-static void NWPaintOneSpinButton( int nScreen, GdkPixmap * pixmap, ControlType nType, ControlPart nPart, Rectangle aAreaRect,
+static void NWPaintOneSpinButton( SalX11Screen nScreen, GdkPixmap * pixmap, ControlType nType, ControlPart nPart, Rectangle aAreaRect,
                             ControlState nState, const ImplControlValue& aValue,
                             const OUString& rCaption );
 //---
-static Rectangle NWGetComboBoxButtonRect( int nScreen, ControlType nType, ControlPart nPart, Rectangle aAreaRect, ControlState nState,
+static Rectangle NWGetComboBoxButtonRect( SalX11Screen nScreen, ControlType nType, ControlPart nPart, Rectangle aAreaRect, ControlState nState,
                             const ImplControlValue& aValue, const OUString& rCaption );
 
 //---
-static Rectangle NWGetListBoxButtonRect( int nScreen, ControlType nType, ControlPart nPart, Rectangle aAreaRect, ControlState nState,
+static Rectangle NWGetListBoxButtonRect( SalX11Screen nScreen, ControlType nType, ControlPart nPart, Rectangle aAreaRect, ControlState nState,
                             const ImplControlValue& aValue, const OUString& rCaption );
 
-static Rectangle NWGetListBoxIndicatorRect( int nScreen, ControlType nType, ControlPart nPart, Rectangle aAreaRect, ControlState nState,
+static Rectangle NWGetListBoxIndicatorRect( SalX11Screen nScreen, ControlType nType, ControlPart nPart, Rectangle aAreaRect, ControlState nState,
                             const ImplControlValue& aValue, const OUString& rCaption );
 
-static Rectangle NWGetToolbarRect( int nScreen,
+static Rectangle NWGetToolbarRect( SalX11Screen nScreen,
                                    ControlType nType,
                                    ControlPart nPart,
                                    Rectangle aAreaRect,
@@ -239,7 +247,7 @@ static Rectangle NWGetToolbarRect( int nScreen,
                                    const OUString& rCaption );
 //---
 
-static Rectangle NWGetScrollButtonRect(    int nScreen, ControlPart nPart, Rectangle aAreaRect );
+static Rectangle NWGetScrollButtonRect(    SalX11Screen nScreen, ControlPart nPart, Rectangle aAreaRect );
 //---
 
 /*********************************************************
@@ -272,7 +280,7 @@ class NWPixmapCache
     int m_screen;
     NWPixmapCacheData* pData;
 public:
-    NWPixmapCache( int nScreen );
+    NWPixmapCache( SalX11Screen nScreen );
     ~NWPixmapCache();
 
     void SetSize( int n)
@@ -309,11 +317,11 @@ void NWPixmapCacheData::SetPixmap( GdkPixmap* pPixmap )
 }
 
 
-NWPixmapCache::NWPixmapCache( int nScreen )
+NWPixmapCache::NWPixmapCache( SalX11Screen nScreen )
 {
     m_idx = 0;
     m_size = 0;
-    m_screen = nScreen;
+    m_screen = nScreen.getXScreen();
     pData = NULL;
     if( gWidgetData[m_screen].gNWPixmapCacheList )
         gWidgetData[m_screen].gNWPixmapCacheList->AddCache(this);
@@ -421,13 +429,13 @@ void GtkData::initNWF( void )
     // omit GetNativeControl while painting (see brdwin.cxx)
     pSVData->maNWFData.mbCanDrawWidgetAnySize = true;
 
-    int nScreens = GetGenericData()->GetSalDisplay()->GetScreenCount();
-    gWidgetData = std::vector<NWFWidgetData>( nScreens );
+    int nScreens = GetGtkSalData()->GetGtkDisplay()->GetXScreenCount();
+    gWidgetData = WidgetDataVector( nScreens );
     for( int i = 0; i < nScreens; i++ )
         gWidgetData[i].gNWPixmapCacheList = new NWPixmapCacheList;
 
     // small extra border around menu items
-    NWEnsureGTKMenu( 0 );
+    NWEnsureGTKMenu( SalX11Screen( 0 ) );
     gint horizontal_padding = 1;
     gtk_widget_style_get( gWidgetData[0].gMenuItemMenuWidget,
             "horizontal_padding", &horizontal_padding,
@@ -437,7 +445,7 @@ void GtkData::initNWF( void )
     if( SalGetDesktopEnvironment().equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("KDE")) )
     {
         // #i97196# ensure a widget exists and the style engine was loaded
-        NWEnsureGTKButton( 0 );
+        NWEnsureGTKButton( SalX11Screen( 0 ) );
         if( g_type_from_name( "QtEngineStyle" ) )
         {
             // KDE 3.3 invented a bug in the qt<->gtk theme engine
@@ -632,7 +640,7 @@ sal_Bool GtkSalGraphics::hitTestNativeControl( ControlType        nType,
            ( nPart == PART_BUTTON_LEFT ) ||
            ( nPart == PART_BUTTON_RIGHT ) ) )
     {
-        NWEnsureGTKScrollbars( m_nScreen );
+        NWEnsureGTKScrollbars( m_nXScreen );
 
         // Grab some button style attributes
         gboolean has_forward;
@@ -640,10 +648,12 @@ sal_Bool GtkSalGraphics::hitTestNativeControl( ControlType        nType,
         gboolean has_backward;
         gboolean has_backward2;
 
-        gtk_widget_style_get( gWidgetData[m_nScreen].gScrollHorizWidget, "has-forward-stepper", &has_forward,
-                                        "has-secondary-forward-stepper", &has_forward2,
-                                        "has-backward-stepper", &has_backward,
-                                           "has-secondary-backward-stepper", &has_backward2, (char *)NULL );
+        gtk_widget_style_get( gWidgetData[m_nXScreen].gScrollHorizWidget,
+                              "has-forward-stepper", &has_forward,
+                              "has-secondary-forward-stepper", &has_forward2,
+                              "has-backward-stepper", &has_backward,
+                              "has-secondary-backward-stepper", &has_backward2,
+                              (char *)NULL );
         Rectangle aForward;
         Rectangle aBackward;
 
@@ -659,8 +669,8 @@ sal_Bool GtkSalGraphics::hitTestNativeControl( ControlType        nType,
         else if ( nPart == PART_BUTTON_RIGHT )
             nCounterPart = PART_BUTTON_LEFT;
 
-        aBackward = NWGetScrollButtonRect( m_nScreen, nPart, rControlRegion );
-        aForward = NWGetScrollButtonRect( m_nScreen, nCounterPart, rControlRegion );
+        aBackward = NWGetScrollButtonRect( m_nXScreen, nPart, rControlRegion );
+        aForward = NWGetScrollButtonRect( m_nXScreen, nCounterPart, rControlRegion );
 
         if ( has_backward && has_forward2 )
         {
@@ -945,7 +955,7 @@ sal_Bool GtkSalGraphics::getNativeControlRegion(  ControlType nType,
         && (rControlRegion.GetWidth() > 16)
     && (rControlRegion.GetHeight() > 16) )
     {
-        rNativeBoundingRegion = NWGetButtonArea( m_nScreen, nType, nPart, rControlRegion,
+        rNativeBoundingRegion = NWGetButtonArea( m_nXScreen, nType, nPart, rControlRegion,
         nState, aValue, rCaption );
         rNativeContentRegion = rControlRegion;
 
@@ -953,7 +963,7 @@ sal_Bool GtkSalGraphics::getNativeControlRegion(  ControlType nType,
     }
     if ( (nType==CTRL_COMBOBOX) && ((nPart==PART_BUTTON_DOWN) || (nPart==PART_SUB_EDIT)) )
     {
-        rNativeBoundingRegion = NWGetComboBoxButtonRect( m_nScreen, nType, nPart, rControlRegion, nState,
+        rNativeBoundingRegion = NWGetComboBoxButtonRect( m_nXScreen, nType, nPart, rControlRegion, nState,
         aValue, rCaption );
         rNativeContentRegion = rNativeBoundingRegion;
 
@@ -962,7 +972,7 @@ sal_Bool GtkSalGraphics::getNativeControlRegion(  ControlType nType,
     if ( (nType==CTRL_SPINBOX) && ((nPart==PART_BUTTON_UP) || (nPart==PART_BUTTON_DOWN) || (nPart==PART_SUB_EDIT)) )
     {
 
-        rNativeBoundingRegion = NWGetSpinButtonRect( m_nScreen, nType, nPart, rControlRegion, nState,
+        rNativeBoundingRegion = NWGetSpinButtonRect( m_nXScreen, nType, nPart, rControlRegion, nState,
         aValue, rCaption );
         rNativeContentRegion = rNativeBoundingRegion;
 
@@ -970,7 +980,7 @@ sal_Bool GtkSalGraphics::getNativeControlRegion(  ControlType nType,
     }
     if ( (nType==CTRL_LISTBOX) && ((nPart==PART_BUTTON_DOWN) || (nPart==PART_SUB_EDIT)) )
     {
-        rNativeBoundingRegion = NWGetListBoxButtonRect( m_nScreen, nType, nPart, rControlRegion, nState,
+        rNativeBoundingRegion = NWGetListBoxButtonRect( m_nXScreen, nType, nPart, rControlRegion, nState,
         aValue, rCaption );
         rNativeContentRegion = rNativeBoundingRegion;
 
@@ -984,14 +994,14 @@ sal_Bool GtkSalGraphics::getNativeControlRegion(  ControlType nType,
         (nPart==PART_BUTTON)
         ))
     {
-        rNativeBoundingRegion = NWGetToolbarRect( m_nScreen, nType, nPart, rControlRegion, nState, aValue, rCaption );
+        rNativeBoundingRegion = NWGetToolbarRect( m_nXScreen, nType, nPart, rControlRegion, nState, aValue, rCaption );
         rNativeContentRegion = rNativeBoundingRegion;
         returnVal = sal_True;
     }
     if ( (nType==CTRL_SCROLLBAR) && ((nPart==PART_BUTTON_LEFT) || (nPart==PART_BUTTON_RIGHT) ||
         (nPart==PART_BUTTON_UP) || (nPart==PART_BUTTON_DOWN)  ) )
     {
-        rNativeBoundingRegion = NWGetScrollButtonRect( m_nScreen, nPart, rControlRegion );
+        rNativeBoundingRegion = NWGetScrollButtonRect( m_nXScreen, nPart, rControlRegion );
         rNativeContentRegion = rNativeBoundingRegion;
 
         //See fdo#33523, possibly makes sense to do this test for all return values
@@ -1003,9 +1013,9 @@ sal_Bool GtkSalGraphics::getNativeControlRegion(  ControlType nType,
     }
     if( (nType == CTRL_MENUBAR) && (nPart == PART_ENTIRE_CONTROL) )
     {
-        NWEnsureGTKMenubar( m_nScreen );
+        NWEnsureGTKMenubar( m_nXScreen );
         GtkRequisition aReq;
-        gtk_widget_size_request( gWidgetData[m_nScreen].gMenubarWidget, &aReq );
+        gtk_widget_size_request( gWidgetData[m_nXScreen].gMenubarWidget, &aReq );
         Rectangle aMenuBarRect = rControlRegion;
         aMenuBarRect = Rectangle( aMenuBarRect.TopLeft(),
                                   Size( aMenuBarRect.GetWidth(), aReq.height+1 ) );
@@ -1018,11 +1028,11 @@ sal_Bool GtkSalGraphics::getNativeControlRegion(  ControlType nType,
         if( (nPart == PART_MENU_ITEM_CHECK_MARK) ||
             (nPart == PART_MENU_ITEM_RADIO_MARK) )
         {
-            NWEnsureGTKMenu( m_nScreen );
+            NWEnsureGTKMenu( m_nXScreen );
 
             gint indicator_size = 0;
             GtkWidget* pWidget = (nPart == PART_MENU_ITEM_CHECK_MARK) ?
-                                 gWidgetData[m_nScreen].gMenuItemCheckMenuWidget : gWidgetData[m_nScreen].gMenuItemRadioMenuWidget;
+                gWidgetData[m_nXScreen].gMenuItemCheckMenuWidget : gWidgetData[m_nXScreen].gMenuItemRadioMenuWidget;
             gtk_widget_style_get( pWidget,
                                   "indicator_size", &indicator_size,
                                   (char *)NULL );
@@ -1035,7 +1045,7 @@ sal_Bool GtkSalGraphics::getNativeControlRegion(  ControlType nType,
         }
         else if( nPart == PART_MENU_SUBMENU_ARROW )
         {
-            GtkWidget* widget = gWidgetData[m_nScreen].gMenuItemMenuWidget;
+            GtkWidget* widget = gWidgetData[m_nXScreen].gMenuItemMenuWidget;
             GtkWidget* child;
             PangoContext *context;
             PangoFontMetrics *metrics;
@@ -1072,9 +1082,9 @@ sal_Bool GtkSalGraphics::getNativeControlRegion(  ControlType nType,
     }
     if( (nType == CTRL_RADIOBUTTON || nType == CTRL_CHECKBOX) )
     {
-        NWEnsureGTKRadio( m_nScreen );
-        NWEnsureGTKCheck( m_nScreen );
-        GtkWidget* widget = (nType == CTRL_RADIOBUTTON) ? gWidgetData[m_nScreen].gRadioWidget : gWidgetData[m_nScreen].gCheckWidget;
+        NWEnsureGTKRadio( m_nXScreen );
+        NWEnsureGTKCheck( m_nXScreen );
+        GtkWidget* widget = (nType == CTRL_RADIOBUTTON) ? gWidgetData[m_nXScreen].gRadioWidget : gWidgetData[m_nXScreen].gCheckWidget;
         gint indicator_size, indicator_spacing;
         gtk_widget_style_get( widget,
                               "indicator_size", &indicator_size,
@@ -1090,8 +1100,8 @@ sal_Bool GtkSalGraphics::getNativeControlRegion(  ControlType nType,
     }
     if( (nType == CTRL_EDITBOX || nType == CTRL_SPINBOX) && nPart == PART_ENTIRE_CONTROL )
     {
-        NWEnsureGTKEditBox( m_nScreen );
-        GtkWidget* widget = gWidgetData[m_nScreen].gEditBoxWidget;
+        NWEnsureGTKEditBox( m_nXScreen );
+        GtkWidget* widget = gWidgetData[m_nXScreen].gEditBoxWidget;
         GtkRequisition aReq;
         gtk_widget_size_request( widget, &aReq );
         Rectangle aEditRect = rControlRegion;
@@ -1104,8 +1114,8 @@ sal_Bool GtkSalGraphics::getNativeControlRegion(  ControlType nType,
     }
     if( (nType == CTRL_SLIDER) && (nPart == PART_THUMB_HORZ || nPart == PART_THUMB_VERT) )
     {
-        NWEnsureGTKSlider( m_nScreen );
-        GtkWidget* widget = (nPart == PART_THUMB_HORZ) ? gWidgetData[m_nScreen].gHScale : gWidgetData[m_nScreen].gVScale;
+        NWEnsureGTKSlider( m_nXScreen );
+        GtkWidget* widget = (nPart == PART_THUMB_HORZ) ? gWidgetData[m_nXScreen].gHScale : gWidgetData[m_nXScreen].gVScale;
         gint slider_length = 10;
         gint slider_width = 10;
         gtk_widget_style_get( widget,
@@ -1154,10 +1164,10 @@ sal_Bool GtkSalGraphics::NWPaintGTKButtonReal(
     GtkBorder*        pBorder;
     GdkRectangle    clipRect;
 
-    NWEnsureGTKButton( m_nScreen );
-    NWEnsureGTKToolbar( m_nScreen );
+    NWEnsureGTKButton( m_nXScreen );
+    NWEnsureGTKToolbar( m_nXScreen );
     NWConvertVCLStateToGTKState( nState, &stateType, &shadowType );
-    NWSetWidgetState( gWidgetData[m_nScreen].gBtnWidget, nState, stateType );
+    NWSetWidgetState( gWidgetData[m_nXScreen].gBtnWidget, nState, stateType );
 
     x = rControlRectangle.Left();
     y = rControlRectangle.Top();
@@ -1167,7 +1177,7 @@ sal_Bool GtkSalGraphics::NWPaintGTKButtonReal(
     gint internal_padding = 0;
     if(GTK_IS_TOOL_ITEM(button))
     {
-        gtk_widget_style_get (GTK_WIDGET (gWidgetData[m_nScreen].gToolbarWidget),
+        gtk_widget_style_get (GTK_WIDGET (gWidgetData[m_nXScreen].gToolbarWidget),
                 "internal-padding", &internal_padding,
                 NULL);
         x += internal_padding/2;
@@ -1176,11 +1186,11 @@ sal_Bool GtkSalGraphics::NWPaintGTKButtonReal(
     }
 
     // Grab some button style attributes
-    gtk_widget_style_get( gWidgetData[m_nScreen].gBtnWidget,    "focus-line-width",    &focusWidth,
+    gtk_widget_style_get( gWidgetData[m_nXScreen].gBtnWidget,    "focus-line-width",    &focusWidth,
                                 "focus-padding",     &focusPad,
                                  "interior_focus",    &interiorFocus,
                                 (char *)NULL );
-    gtk_widget_style_get( gWidgetData[m_nScreen].gBtnWidget,
+    gtk_widget_style_get( gWidgetData[m_nXScreen].gBtnWidget,
                                 "default_border",    &pBorder,
                                 (char *)NULL );
 
@@ -1220,10 +1230,10 @@ sal_Bool GtkSalGraphics::NWPaintGTKButtonReal(
         clipRect.height = it->GetHeight();
 
         // Buttons must paint opaque since some themes have alpha-channel enabled buttons
-        if(button == gWidgetData[m_nScreen].gToolbarButtonWidget)
+        if(button == gWidgetData[m_nXScreen].gToolbarButtonWidget)
         {
-            gtk_paint_box( gWidgetData[m_nScreen].gToolbarWidget->style, gdkDrawable, GTK_STATE_NORMAL, GTK_SHADOW_NONE,
-                                &clipRect, gWidgetData[m_nScreen].gToolbarWidget, "toolbar", x, y, w, h );
+            gtk_paint_box( gWidgetData[m_nXScreen].gToolbarWidget->style, gdkDrawable, GTK_STATE_NORMAL, GTK_SHADOW_NONE,
+                                &clipRect, gWidgetData[m_nXScreen].gToolbarWidget, "toolbar", x, y, w, h );
         }
         else
         {
@@ -1239,8 +1249,8 @@ sal_Bool GtkSalGraphics::NWPaintGTKButtonReal(
         /* don't draw "button", because it can be a tool_button, and
          * it causes some weird things, so, the default button is
          * just fine */
-        gtk_paint_box( gWidgetData[m_nScreen].gBtnWidget->style, gdkDrawable, stateType, shadowType,
-                       &clipRect, gWidgetData[m_nScreen].gBtnWidget, "button", xi, yi, wi, hi );
+        gtk_paint_box( gWidgetData[m_nXScreen].gBtnWidget->style, gdkDrawable, stateType, shadowType,
+                       &clipRect, gWidgetData[m_nXScreen].gBtnWidget, "button", xi, yi, wi, hi );
     }
 
     return( sal_True );
@@ -1255,7 +1265,7 @@ sal_Bool GtkSalGraphics::NWPaintGTKButton(
             const OUString& string)
 {
         return NWPaintGTKButtonReal(
-            gWidgetData[m_nScreen].gBtnWidget,
+            gWidgetData[m_nXScreen].gBtnWidget,
             gdkDrawable,
             type, part,
             rControlRectangle,
@@ -1264,7 +1274,7 @@ sal_Bool GtkSalGraphics::NWPaintGTKButton(
             string );
 }
 
-static Rectangle NWGetButtonArea( int nScreen,
+static Rectangle NWGetButtonArea( SalX11Screen nScreen,
                                   ControlType, ControlPart, Rectangle aAreaRect, ControlState nState,
                                   const ImplControlValue&, const OUString& )
 {
@@ -1331,20 +1341,20 @@ sal_Bool GtkSalGraphics::NWPaintGTKRadio( GdkDrawable* gdkDrawable,
     gint            x, y;
     GdkRectangle    clipRect;
 
-    NWEnsureGTKButton( m_nScreen );
-    NWEnsureGTKRadio( m_nScreen );
+    NWEnsureGTKButton( m_nXScreen );
+    NWEnsureGTKRadio( m_nXScreen );
     NWConvertVCLStateToGTKState( nState, &stateType, &shadowType );
 
     gint indicator_size;
-    gtk_widget_style_get( gWidgetData[m_nScreen].gRadioWidget, "indicator_size", &indicator_size, (char *)NULL);
+    gtk_widget_style_get( gWidgetData[m_nXScreen].gRadioWidget, "indicator_size", &indicator_size, (char *)NULL);
 
     x = rControlRectangle.Left() + (rControlRectangle.GetWidth()-indicator_size)/2;
     y = rControlRectangle.Top() + (rControlRectangle.GetHeight()-indicator_size)/2;
 
     // Set the shadow based on if checked or not so we get a freakin checkmark.
     shadowType = isChecked ? GTK_SHADOW_IN : GTK_SHADOW_OUT;
-    NWSetWidgetState( gWidgetData[m_nScreen].gRadioWidget, nState, stateType );
-    NWSetWidgetState( gWidgetData[m_nScreen].gRadioWidgetSibling, nState, stateType );
+    NWSetWidgetState( gWidgetData[m_nXScreen].gRadioWidget, nState, stateType );
+    NWSetWidgetState( gWidgetData[m_nXScreen].gRadioWidgetSibling, nState, stateType );
 
     // GTK enforces radio groups, so that if we don't have 2 buttons in the group,
     // the single button will always be active.  So we have to have 2 buttons.
@@ -1355,8 +1365,8 @@ sal_Bool GtkSalGraphics::NWPaintGTKRadio( GdkDrawable* gdkDrawable,
     // intermediate states between active/inactive. Let's hope that
     // GtkToggleButtone stays binary compatible.
     if (!isChecked)
-        GTK_TOGGLE_BUTTON(gWidgetData[m_nScreen].gRadioWidgetSibling)->active = sal_True;
-    GTK_TOGGLE_BUTTON(gWidgetData[m_nScreen].gRadioWidget)->active = isChecked;
+        GTK_TOGGLE_BUTTON(gWidgetData[m_nXScreen].gRadioWidgetSibling)->active = sal_True;
+    GTK_TOGGLE_BUTTON(gWidgetData[m_nXScreen].gRadioWidget)->active = isChecked;
 
     for( clipList::const_iterator it = rClipList.begin(); it != rClipList.end(); ++it )
     {
@@ -1365,8 +1375,8 @@ sal_Bool GtkSalGraphics::NWPaintGTKRadio( GdkDrawable* gdkDrawable,
         clipRect.width = it->GetWidth();
         clipRect.height = it->GetHeight();
 
-        gtk_paint_option( gWidgetData[m_nScreen].gRadioWidget->style, gdkDrawable, stateType, shadowType,
-                          &clipRect, gWidgetData[m_nScreen].gRadioWidget, "radiobutton",
+        gtk_paint_option( gWidgetData[m_nXScreen].gRadioWidget->style, gdkDrawable, stateType, shadowType,
+                          &clipRect, gWidgetData[m_nXScreen].gRadioWidget, "radiobutton",
                           x, y, indicator_size, indicator_size );
     }
 
@@ -1390,20 +1400,20 @@ sal_Bool GtkSalGraphics::NWPaintGTKCheck( GdkDrawable* gdkDrawable,
     GdkRectangle    clipRect;
     gint            x,y;
 
-    NWEnsureGTKButton( m_nScreen );
-    NWEnsureGTKCheck( m_nScreen );
+    NWEnsureGTKButton( m_nXScreen );
+    NWEnsureGTKCheck( m_nXScreen );
     NWConvertVCLStateToGTKState( nState, &stateType, &shadowType );
 
     gint indicator_size;
-    gtk_widget_style_get( gWidgetData[m_nScreen].gCheckWidget, "indicator_size", &indicator_size, (char *)NULL);
+    gtk_widget_style_get( gWidgetData[m_nXScreen].gCheckWidget, "indicator_size", &indicator_size, (char *)NULL);
 
     x = rControlRectangle.Left() + (rControlRectangle.GetWidth()-indicator_size)/2;
     y = rControlRectangle.Top() + (rControlRectangle.GetHeight()-indicator_size)/2;
 
     // Set the shadow based on if checked or not so we get a checkmark.
     shadowType = isChecked ? GTK_SHADOW_IN : isInconsistent ? GTK_SHADOW_ETCHED_IN : GTK_SHADOW_OUT;
-    NWSetWidgetState( gWidgetData[m_nScreen].gCheckWidget, nState, stateType );
-    GTK_TOGGLE_BUTTON(gWidgetData[m_nScreen].gCheckWidget)->active = isChecked;
+    NWSetWidgetState( gWidgetData[m_nXScreen].gCheckWidget, nState, stateType );
+    GTK_TOGGLE_BUTTON(gWidgetData[m_nXScreen].gCheckWidget)->active = isChecked;
 
     for( clipList::const_iterator it = rClipList.begin(); it != rClipList.end(); ++it )
     {
@@ -1412,8 +1422,8 @@ sal_Bool GtkSalGraphics::NWPaintGTKCheck( GdkDrawable* gdkDrawable,
         clipRect.width = it->GetWidth();
         clipRect.height = it->GetHeight();
 
-        gtk_paint_check( gWidgetData[m_nScreen].gCheckWidget->style, gdkDrawable, stateType, shadowType,
-                         &clipRect, gWidgetData[m_nScreen].gCheckWidget, "checkbutton",
+        gtk_paint_check( gWidgetData[m_nXScreen].gCheckWidget->style, gdkDrawable, stateType, shadowType,
+                         &clipRect, gWidgetData[m_nXScreen].gCheckWidget, "checkbutton",
                          x, y, indicator_size, indicator_size );
     }
 
@@ -1477,9 +1487,9 @@ sal_Bool GtkSalGraphics::NWPaintGTKScrollbar( ControlType, ControlPart nPart,
     button12BoundRect.Move( -rControlRectangle.Left(), -rControlRectangle.Top() );
     button21BoundRect.Move( -rControlRectangle.Left(), -rControlRectangle.Top() );
 
-    NWEnsureGTKButton( m_nScreen );
-    NWEnsureGTKScrollbars( m_nScreen );
-    NWEnsureGTKArrow( m_nScreen );
+    NWEnsureGTKButton( m_nXScreen );
+    NWEnsureGTKScrollbars( m_nXScreen );
+    NWEnsureGTKArrow( m_nXScreen );
 
     // Find the overall bounding rect of the control
     pixmapRect = rControlRectangle;
@@ -1491,7 +1501,7 @@ sal_Bool GtkSalGraphics::NWPaintGTKScrollbar( ControlType, ControlPart nPart,
         return( sal_True );
 
     // Grab some button style attributes
-    gtk_widget_style_get( gWidgetData[m_nScreen].gScrollHorizWidget,
+    gtk_widget_style_get( gWidgetData[m_nXScreen].gScrollHorizWidget,
                                       "slider_width", &slider_width,
                                       "stepper_size", &stepper_size,
                                       "trough_border", &trough_border,
@@ -1502,7 +1512,7 @@ sal_Bool GtkSalGraphics::NWPaintGTKScrollbar( ControlType, ControlPart nPart,
     gboolean has_backward;
     gboolean has_backward2;
 
-    gtk_widget_style_get( gWidgetData[m_nScreen].gScrollHorizWidget, "has-forward-stepper", &has_forward,
+    gtk_widget_style_get( gWidgetData[m_nXScreen].gScrollHorizWidget, "has-forward-stepper", &has_forward,
                                       "has-secondary-forward-stepper", &has_forward2,
                                       "has-backward-stepper", &has_backward,
                                          "has-secondary-backward-stepper", &has_backward2, (char *)NULL );
@@ -1520,7 +1530,7 @@ sal_Bool GtkSalGraphics::NWPaintGTKScrollbar( ControlType, ControlPart nPart,
         scrollbarRect.Move( 0, vShim );
         scrollbarRect.SetSize( Size( scrollbarRect.GetWidth(), sliderHeight ) );
 
-        scrollbarWidget = GTK_SCROLLBAR( gWidgetData[m_nScreen].gScrollHorizWidget );
+        scrollbarWidget = GTK_SCROLLBAR( gWidgetData[m_nXScreen].gScrollHorizWidget );
         scrollbarOrientation = GTK_ORIENTATION_HORIZONTAL;
         scrollbarTag = scrollbarTagH;
         button1Type = GTK_ARROW_LEFT;
@@ -1565,7 +1575,7 @@ sal_Bool GtkSalGraphics::NWPaintGTKScrollbar( ControlType, ControlPart nPart,
         scrollbarRect.Move( hShim, 0 );
         scrollbarRect.SetSize( Size( sliderWidth, scrollbarRect.GetHeight() ) );
 
-        scrollbarWidget = GTK_SCROLLBAR( gWidgetData[m_nScreen].gScrollVertWidget );
+        scrollbarWidget = GTK_SCROLLBAR( gWidgetData[m_nXScreen].gScrollVertWidget );
         scrollbarOrientation = GTK_ORIENTATION_VERTICAL;
         scrollbarTag = scrollbarTagV;
         button1Type = GTK_ARROW_UP;
@@ -1636,7 +1646,7 @@ sal_Bool GtkSalGraphics::NWPaintGTKScrollbar( ControlType, ControlPart nPart,
 
     NWConvertVCLStateToGTKState( nState, &stateType, &shadowType );
     NWSetWidgetState( GTK_WIDGET(scrollbarWidget), nState, stateType );
-    NWSetWidgetState( gWidgetData[m_nScreen].gBtnWidget, nState, stateType );
+    NWSetWidgetState( gWidgetData[m_nXScreen].gBtnWidget, nState, stateType );
     style = GTK_WIDGET( scrollbarWidget )->style;
 
     gtk_style_apply_default_background( m_pWindow->style, gdkDrawable, TRUE,
@@ -1746,7 +1756,7 @@ sal_Bool GtkSalGraphics::NWPaintGTKScrollbar( ControlType, ControlPart nPart,
 
 //---
 
-static Rectangle NWGetScrollButtonRect(    int nScreen, ControlPart nPart, Rectangle aAreaRect )
+static Rectangle NWGetScrollButtonRect(    SalX11Screen nScreen, ControlPart nPart, Rectangle aAreaRect )
 {
     gint slider_width;
     gint stepper_size;
@@ -1842,7 +1852,7 @@ sal_Bool GtkSalGraphics::NWPaintGTKEditBox( GdkDrawable* gdkDrawable,
 
     // Find the overall bounding rect of the buttons's drawing area,
     // plus its actual draw rect excluding adornment
-    pixmapRect = NWGetEditBoxPixmapRect( m_nScreen, nType, nPart, rControlRectangle,
+    pixmapRect = NWGetEditBoxPixmapRect( m_nXScreen, nType, nPart, rControlRectangle,
                                          nState, aValue, rCaption );
     for( clipList::const_iterator it = rClipList.begin(); it != rClipList.end(); ++it )
     {
@@ -1851,7 +1861,7 @@ sal_Bool GtkSalGraphics::NWPaintGTKEditBox( GdkDrawable* gdkDrawable,
         clipRect.width = it->GetWidth();
         clipRect.height = it->GetHeight();
 
-        NWPaintOneEditBox( m_nScreen, gdkDrawable, &clipRect, nType, nPart, pixmapRect, nState, aValue, rCaption );
+        NWPaintOneEditBox( m_nXScreen, gdkDrawable, &clipRect, nType, nPart, pixmapRect, nState, aValue, rCaption );
     }
 
     return( sal_True );
@@ -1862,7 +1872,7 @@ sal_Bool GtkSalGraphics::NWPaintGTKEditBox( GdkDrawable* gdkDrawable,
  * the bounding rectangle of the edit box including
  * any focus requirements.
  */
-static Rectangle NWGetEditBoxPixmapRect(int nScreen,
+static Rectangle NWGetEditBoxPixmapRect(SalX11Screen nScreen,
                                         ControlType,
                                         ControlPart,
                                         Rectangle aAreaRect,
@@ -1896,7 +1906,7 @@ static Rectangle NWGetEditBoxPixmapRect(int nScreen,
  * All coordinates should be local to the Pixmap, NOT
  * screen/window coordinates.
  */
-static void NWPaintOneEditBox(    int nScreen,
+static void NWPaintOneEditBox(    SalX11Screen nScreen,
                                 GdkDrawable * gdkDrawable,
                                 GdkRectangle *    gdkRect,
                                 ControlType            nType,
@@ -1985,9 +1995,9 @@ sal_Bool GtkSalGraphics::NWPaintGTKSpinBox( ControlType nType, ControlPart nPart
     ControlPart        downBtnPart = PART_BUTTON_DOWN;
     ControlState        downBtnState = CTRL_STATE_ENABLED;
 
-    NWEnsureGTKButton( m_nScreen );
-    NWEnsureGTKSpinButton( m_nScreen );
-    NWEnsureGTKArrow( m_nScreen );
+    NWEnsureGTKButton( m_nXScreen );
+    NWEnsureGTKSpinButton( m_nXScreen );
+    NWEnsureGTKArrow( m_nXScreen );
 
     NWConvertVCLStateToGTKState( nState, &stateType, &shadowType );
 
@@ -2019,8 +2029,8 @@ sal_Bool GtkSalGraphics::NWPaintGTKSpinBox( ControlType nType, ControlPart nPart
     if ( !pixmap )
         return( sal_False );
 
-    upBtnRect = NWGetSpinButtonRect( m_nScreen, nType, upBtnPart, pixmapRect, upBtnState, aValue, rCaption );
-    downBtnRect = NWGetSpinButtonRect( m_nScreen, nType, downBtnPart, pixmapRect, downBtnState, aValue, rCaption );
+    upBtnRect = NWGetSpinButtonRect( m_nXScreen, nType, upBtnPart, pixmapRect, upBtnState, aValue, rCaption );
+    downBtnRect = NWGetSpinButtonRect( m_nXScreen, nType, downBtnPart, pixmapRect, downBtnState, aValue, rCaption );
 
     if ( (nType==CTRL_SPINBOX) && (nPart!=PART_ALL_BUTTONS) )
     {
@@ -2033,25 +2043,25 @@ sal_Bool GtkSalGraphics::NWPaintGTKSpinBox( ControlType nType, ControlPart nPart
             aEditBoxRect.setX( 0 );
         aEditBoxRect.setY( 0 );
 
-        NWPaintOneEditBox( m_nScreen, pixmap, NULL, nType, nPart, aEditBoxRect, nState, aValue, rCaption );
+        NWPaintOneEditBox( m_nXScreen, pixmap, NULL, nType, nPart, aEditBoxRect, nState, aValue, rCaption );
     }
 
-    NWSetWidgetState( gWidgetData[m_nScreen].gSpinButtonWidget, nState, stateType );
-    gtk_widget_style_get( gWidgetData[m_nScreen].gSpinButtonWidget, "shadow_type", &shadowType, (char *)NULL );
+    NWSetWidgetState( gWidgetData[m_nXScreen].gSpinButtonWidget, nState, stateType );
+    gtk_widget_style_get( gWidgetData[m_nXScreen].gSpinButtonWidget, "shadow_type", &shadowType, (char *)NULL );
 
     if ( shadowType != GTK_SHADOW_NONE )
     {
         Rectangle        shadowRect( upBtnRect );
 
         shadowRect.Union( downBtnRect );
-        gtk_paint_box( gWidgetData[m_nScreen].gSpinButtonWidget->style, pixmap, GTK_STATE_NORMAL, shadowType, NULL,
-            gWidgetData[m_nScreen].gSpinButtonWidget, "spinbutton",
+        gtk_paint_box( gWidgetData[m_nXScreen].gSpinButtonWidget->style, pixmap, GTK_STATE_NORMAL, shadowType, NULL,
+            gWidgetData[m_nXScreen].gSpinButtonWidget, "spinbutton",
             (shadowRect.Left() - pixmapRect.Left()), (shadowRect.Top() - pixmapRect.Top()),
             shadowRect.GetWidth(), shadowRect.GetHeight() );
     }
 
-    NWPaintOneSpinButton( m_nScreen, pixmap, nType, upBtnPart, pixmapRect, upBtnState, aValue, rCaption );
-    NWPaintOneSpinButton( m_nScreen, pixmap, nType, downBtnPart, pixmapRect, downBtnState, aValue, rCaption );
+    NWPaintOneSpinButton( m_nXScreen, pixmap, nType, upBtnPart, pixmapRect, upBtnState, aValue, rCaption );
+    NWPaintOneSpinButton( m_nXScreen, pixmap, nType, downBtnPart, pixmapRect, downBtnState, aValue, rCaption );
 
     if( !NWRenderPixmapToScreen(pixmap, pixmapRect) )
     {
@@ -2065,7 +2075,7 @@ sal_Bool GtkSalGraphics::NWPaintGTKSpinBox( ControlType nType, ControlPart nPart
 
 //---
 
-static Rectangle NWGetSpinButtonRect( int nScreen,
+static Rectangle NWGetSpinButtonRect( SalX11Screen nScreen,
                                       ControlType,
                                       ControlPart            nPart,
                                       Rectangle             aAreaRect,
@@ -2115,7 +2125,7 @@ static Rectangle NWGetSpinButtonRect( int nScreen,
 
 //---
 
-static void NWPaintOneSpinButton( int nScreen,
+static void NWPaintOneSpinButton( SalX11Screen nScreen,
                                   GdkPixmap*            pixmap,
                                   ControlType            nType,
                                   ControlPart            nPart,
@@ -2175,9 +2185,9 @@ sal_Bool GtkSalGraphics::NWPaintGTKComboBox( GdkDrawable* gdkDrawable,
     gint            x,y;
     GdkRectangle    clipRect;
 
-    NWEnsureGTKButton( m_nScreen );
-    NWEnsureGTKArrow( m_nScreen );
-    NWEnsureGTKCombo( m_nScreen );
+    NWEnsureGTKButton( m_nXScreen );
+    NWEnsureGTKArrow( m_nXScreen );
+    NWEnsureGTKCombo( m_nXScreen );
     NWConvertVCLStateToGTKState( nState, &stateType, &shadowType );
 
     // Find the overall bounding rect of the buttons's drawing area,
@@ -2186,11 +2196,11 @@ sal_Bool GtkSalGraphics::NWPaintGTKComboBox( GdkDrawable* gdkDrawable,
     x = rControlRectangle.Left();
     y = rControlRectangle.Top();
 
-    NWSetWidgetState( gWidgetData[m_nScreen].gBtnWidget, nState, stateType );
-    NWSetWidgetState( gWidgetData[m_nScreen].gComboWidget, nState, stateType );
-    NWSetWidgetState( gWidgetData[m_nScreen].gArrowWidget, nState, stateType );
+    NWSetWidgetState( gWidgetData[m_nXScreen].gBtnWidget, nState, stateType );
+    NWSetWidgetState( gWidgetData[m_nXScreen].gComboWidget, nState, stateType );
+    NWSetWidgetState( gWidgetData[m_nXScreen].gArrowWidget, nState, stateType );
 
-    buttonRect = NWGetComboBoxButtonRect( m_nScreen, nType, PART_BUTTON_DOWN, pixmapRect, nState, aValue, rCaption );
+    buttonRect = NWGetComboBoxButtonRect( m_nXScreen, nType, PART_BUTTON_DOWN, pixmapRect, nState, aValue, rCaption );
     if( nPart == PART_BUTTON_DOWN )
         buttonRect.Left() += 1;
 
@@ -2213,7 +2223,7 @@ sal_Bool GtkSalGraphics::NWPaintGTKComboBox( GdkDrawable* gdkDrawable,
         clipRect.height = it->GetHeight();
 
         if( nPart == PART_ENTIRE_CONTROL )
-            NWPaintOneEditBox( m_nScreen, gdkDrawable, &clipRect, nType, nPart, aEditBoxRect,
+            NWPaintOneEditBox( m_nXScreen, gdkDrawable, &clipRect, nType, nPart, aEditBoxRect,
                                nState, aValue, rCaption );
 
         // Buttons must paint opaque since some themes have alpha-channel enabled buttons
@@ -2222,14 +2232,14 @@ sal_Bool GtkSalGraphics::NWPaintGTKComboBox( GdkDrawable* gdkDrawable,
                             x+(buttonRect.Left() - pixmapRect.Left()),
                             y+(buttonRect.Top() - pixmapRect.Top()),
                             buttonRect.GetWidth(), buttonRect.GetHeight() );
-        gtk_paint_box( GTK_COMBO(gWidgetData[m_nScreen].gComboWidget)->button->style, gdkDrawable, stateType, shadowType,
-                       &clipRect, GTK_COMBO(gWidgetData[m_nScreen].gComboWidget)->button, "button",
+        gtk_paint_box( GTK_COMBO(gWidgetData[m_nXScreen].gComboWidget)->button->style, gdkDrawable, stateType, shadowType,
+                       &clipRect, GTK_COMBO(gWidgetData[m_nXScreen].gComboWidget)->button, "button",
                        x+(buttonRect.Left() - pixmapRect.Left()),
                        y+(buttonRect.Top() - pixmapRect.Top()),
                        buttonRect.GetWidth(), buttonRect.GetHeight() );
 
-        gtk_paint_arrow( gWidgetData[m_nScreen].gArrowWidget->style, gdkDrawable, stateType, shadowType,
-                         &clipRect, gWidgetData[m_nScreen].gArrowWidget, "arrow", GTK_ARROW_DOWN, sal_True,
+        gtk_paint_arrow( gWidgetData[m_nXScreen].gArrowWidget->style, gdkDrawable, stateType, shadowType,
+                         &clipRect, gWidgetData[m_nXScreen].gArrowWidget, "arrow", GTK_ARROW_DOWN, sal_True,
                          x+(arrowRect.Left() - pixmapRect.Left()), y+(arrowRect.Top() - pixmapRect.Top()),
                          arrowRect.GetWidth(), arrowRect.GetHeight() );
     }
@@ -2239,7 +2249,7 @@ sal_Bool GtkSalGraphics::NWPaintGTKComboBox( GdkDrawable* gdkDrawable,
 
 //----
 
-static Rectangle NWGetComboBoxButtonRect( int nScreen,
+static Rectangle NWGetComboBoxButtonRect( SalX11Screen nScreen,
                                           ControlType,
                                           ControlPart nPart,
                                           Rectangle                aAreaRect,
@@ -2312,13 +2322,13 @@ sal_Bool GtkSalGraphics::NWPaintGTKTabItem( ControlType nType, ControlPart,
     Rectangle        tabRect;
     GtkStateType    stateType;
     GtkShadowType    shadowType;
-    if( ! gWidgetData[ m_nScreen ].gCacheTabItems )
+    if( ! gWidgetData[ m_nXScreen ].gCacheTabItems )
     {
-        gWidgetData[ m_nScreen ].gCacheTabItems = new NWPixmapCache( m_nScreen );
-        gWidgetData[ m_nScreen ].gCacheTabPages = new NWPixmapCache( m_nScreen );
+        gWidgetData[ m_nXScreen ].gCacheTabItems = new NWPixmapCache( m_nXScreen );
+        gWidgetData[ m_nXScreen ].gCacheTabPages = new NWPixmapCache( m_nXScreen );
     }
-    NWPixmapCache& aCacheItems = *gWidgetData[ m_nScreen ].gCacheTabItems;
-    NWPixmapCache& aCachePage = *gWidgetData[ m_nScreen ].gCacheTabPages;
+    NWPixmapCache& aCacheItems = *gWidgetData[ m_nXScreen ].gCacheTabItems;
+    NWPixmapCache& aCachePage = *gWidgetData[ m_nXScreen ].gCacheTabPages;
 
     if( !aCacheItems.GetSize() )
         aCacheItems.SetSize( 20 );
@@ -2330,8 +2340,8 @@ sal_Bool GtkSalGraphics::NWPaintGTKTabItem( ControlType nType, ControlPart,
         return( false );
     }
 
-    NWEnsureGTKButton( m_nScreen );
-    NWEnsureGTKNotebook( m_nScreen );
+    NWEnsureGTKButton( m_nXScreen );
+    NWEnsureGTKNotebook( m_nXScreen );
     NWConvertVCLStateToGTKState( nState, &stateType, &shadowType );
 
     // Find the overall bounding rect of the buttons's drawing area,
@@ -2380,7 +2390,7 @@ sal_Bool GtkSalGraphics::NWPaintGTKTabItem( ControlType nType, ControlPart,
     }
 
     pixmap = gdk_pixmap_new( NULL, pixmapRect.GetWidth(), pixmapRect.GetHeight(),
-                             GetGenericData()->GetSalDisplay()->GetVisual( m_nScreen ).GetDepth() );
+                             GetGenericData()->GetSalDisplay()->GetVisual( m_nXScreen ).GetDepth() );
     GdkRectangle paintRect;
     paintRect.x = paintRect.y = 0;
     paintRect.width = pixmapRect.GetWidth();
@@ -2389,7 +2399,7 @@ sal_Bool GtkSalGraphics::NWPaintGTKTabItem( ControlType nType, ControlPart,
     gtk_paint_flat_box( m_pWindow->style, pixmap, GTK_STATE_NORMAL,
                         GTK_SHADOW_NONE, &paintRect, m_pWindow, "base", 0, 0, -1, -1);
 
-    NWSetWidgetState( gWidgetData[m_nScreen].gNotebookWidget, nState, stateType );
+    NWSetWidgetState( gWidgetData[m_nXScreen].gNotebookWidget, nState, stateType );
 
     switch( nType )
     {
@@ -2398,14 +2408,14 @@ sal_Bool GtkSalGraphics::NWPaintGTKTabItem( ControlType nType, ControlPart,
 
         case CTRL_FIXEDBORDER:
         case CTRL_TAB_PANE:
-            gtk_paint_box_gap( gWidgetData[m_nScreen].gNotebookWidget->style, pixmap, GTK_STATE_NORMAL, GTK_SHADOW_OUT, NULL, gWidgetData[m_nScreen].gNotebookWidget,
+            gtk_paint_box_gap( gWidgetData[m_nXScreen].gNotebookWidget->style, pixmap, GTK_STATE_NORMAL, GTK_SHADOW_OUT, NULL, gWidgetData[m_nXScreen].gNotebookWidget,
                 (char *)"notebook", 0, 0, pixmapRect.GetWidth(), pixmapRect.GetHeight(), GTK_POS_TOP, 0, 0 );
             break;
 
         case CTRL_TAB_ITEM:
             stateType = ( nState & CTRL_STATE_SELECTED ) ? GTK_STATE_NORMAL : GTK_STATE_ACTIVE;
 
-            gtk_paint_extension( gWidgetData[m_nScreen].gNotebookWidget->style, pixmap, stateType, GTK_SHADOW_OUT, NULL, gWidgetData[m_nScreen].gNotebookWidget,
+            gtk_paint_extension( gWidgetData[m_nXScreen].gNotebookWidget->style, pixmap, stateType, GTK_SHADOW_OUT, NULL, gWidgetData[m_nXScreen].gNotebookWidget,
                 (char *)"tab", (tabRect.Left() - pixmapRect.Left()), (tabRect.Top() - pixmapRect.Top()),
                 tabRect.GetWidth(), tabRect.GetHeight(), GTK_POS_BOTTOM );
 
@@ -2456,9 +2466,9 @@ sal_Bool GtkSalGraphics::NWPaintGTKListBox( GdkDrawable* gdkDrawable,
     gint            x,y;
     GdkRectangle    clipRect;
 
-    NWEnsureGTKButton( m_nScreen );
-    NWEnsureGTKOptionMenu( m_nScreen );
-    NWEnsureGTKScrolledWindow( m_nScreen );
+    NWEnsureGTKButton( m_nXScreen );
+    NWEnsureGTKOptionMenu( m_nXScreen );
+    NWEnsureGTKScrolledWindow( m_nXScreen );
     NWConvertVCLStateToGTKState( nState, &stateType, &shadowType );
 
     // Find the overall bounding rect of the buttons's drawing area,
@@ -2478,13 +2488,13 @@ sal_Bool GtkSalGraphics::NWPaintGTKListBox( GdkDrawable* gdkDrawable,
     y = pixmapRect.Top();
 
     // set up references to correct drawable and cliprect
-    NWSetWidgetState( gWidgetData[m_nScreen].gBtnWidget, nState, stateType );
-    NWSetWidgetState( gWidgetData[m_nScreen].gOptionMenuWidget, nState, stateType );
-    NWSetWidgetState( gWidgetData[m_nScreen].gScrolledWindowWidget, nState, stateType );
+    NWSetWidgetState( gWidgetData[m_nXScreen].gBtnWidget, nState, stateType );
+    NWSetWidgetState( gWidgetData[m_nXScreen].gOptionMenuWidget, nState, stateType );
+    NWSetWidgetState( gWidgetData[m_nXScreen].gScrolledWindowWidget, nState, stateType );
 
     if ( nPart != PART_WINDOW )
     {
-        gtk_widget_style_get( gWidgetData[m_nScreen].gOptionMenuWidget,
+        gtk_widget_style_get( gWidgetData[m_nXScreen].gOptionMenuWidget,
             "interior_focus",    &bInteriorFocus,
             "focus_line_width",    &nFocusLineWidth,
             "focus_padding",    &nFocusPadding,
@@ -2504,15 +2514,15 @@ sal_Bool GtkSalGraphics::NWPaintGTKListBox( GdkDrawable* gdkDrawable,
             gtk_paint_flat_box( m_pWindow->style, gdkDrawable, GTK_STATE_NORMAL, GTK_SHADOW_NONE,
                                 &clipRect, m_pWindow, "base", x, y,
                                 pixmapRect.GetWidth(), pixmapRect.GetHeight() );
-            gtk_paint_box( gWidgetData[m_nScreen].gOptionMenuWidget->style, gdkDrawable, stateType, shadowType, &clipRect,
-                           gWidgetData[m_nScreen].gOptionMenuWidget, "optionmenu",
+            gtk_paint_box( gWidgetData[m_nXScreen].gOptionMenuWidget->style, gdkDrawable, stateType, shadowType, &clipRect,
+                           gWidgetData[m_nXScreen].gOptionMenuWidget, "optionmenu",
                            x+(widgetRect.Left() - pixmapRect.Left()),
                            y+(widgetRect.Top() - pixmapRect.Top()),
                            widgetRect.GetWidth(), widgetRect.GetHeight() );
-            aIndicatorRect = NWGetListBoxIndicatorRect( m_nScreen, nType, nPart, widgetRect, nState,
+            aIndicatorRect = NWGetListBoxIndicatorRect( m_nXScreen, nType, nPart, widgetRect, nState,
                                                         aValue, rCaption );
-            gtk_paint_tab( gWidgetData[m_nScreen].gOptionMenuWidget->style, gdkDrawable, stateType, shadowType, &clipRect,
-                           gWidgetData[m_nScreen].gOptionMenuWidget, "optionmenutab",
+            gtk_paint_tab( gWidgetData[m_nXScreen].gOptionMenuWidget->style, gdkDrawable, stateType, shadowType, &clipRect,
+                           gWidgetData[m_nXScreen].gOptionMenuWidget, "optionmenutab",
                            x+(aIndicatorRect.Left() - pixmapRect.Left()),
                            y+(aIndicatorRect.Top() - pixmapRect.Top()),
                            aIndicatorRect.GetWidth(), aIndicatorRect.GetHeight() );
@@ -2521,8 +2531,8 @@ sal_Bool GtkSalGraphics::NWPaintGTKListBox( GdkDrawable* gdkDrawable,
         {
             shadowType = GTK_SHADOW_IN;
 
-            gtk_paint_shadow( gWidgetData[m_nScreen].gScrolledWindowWidget->style, gdkDrawable, GTK_STATE_NORMAL, shadowType,
-                &clipRect, gWidgetData[m_nScreen].gScrolledWindowWidget, "scrolled_window",
+            gtk_paint_shadow( gWidgetData[m_nXScreen].gScrolledWindowWidget->style, gdkDrawable, GTK_STATE_NORMAL, shadowType,
+                &clipRect, gWidgetData[m_nXScreen].gScrolledWindowWidget, "scrolled_window",
                 x+(widgetRect.Left() - pixmapRect.Left()), y+(widgetRect.Top() - pixmapRect.Top()),
                 widgetRect.GetWidth(), widgetRect.GetHeight() );
         }
@@ -2544,10 +2554,10 @@ sal_Bool GtkSalGraphics::NWPaintGTKToolbar(
     gint            x, y, w, h;
     gint            g_x=0, g_y=0, g_w=10, g_h=10;
     bool            bPaintButton = true;
-    GtkWidget*      pButtonWidget = gWidgetData[m_nScreen].gToolbarButtonWidget;
+    GtkWidget*      pButtonWidget = gWidgetData[m_nXScreen].gToolbarButtonWidget;
     GdkRectangle    clipRect;
 
-    NWEnsureGTKToolbar( m_nScreen );
+    NWEnsureGTKToolbar( m_nXScreen );
     if( nPart == PART_BUTTON ) // toolbar buttons cannot focus in gtk
         nState &= ~CTRL_STATE_FOCUSED;
     NWConvertVCLStateToGTKState( nState, &stateType, &shadowType );
@@ -2560,27 +2570,27 @@ sal_Bool GtkSalGraphics::NWPaintGTKToolbar(
     // handle toolbar
     if( nPart == PART_DRAW_BACKGROUND_HORZ || nPart == PART_DRAW_BACKGROUND_VERT )
     {
-        NWSetWidgetState( gWidgetData[m_nScreen].gToolbarWidget, nState, stateType );
+        NWSetWidgetState( gWidgetData[m_nXScreen].gToolbarWidget, nState, stateType );
 
-        GTK_WIDGET_UNSET_FLAGS( gWidgetData[m_nScreen].gToolbarWidget, GTK_SENSITIVE );
+        GTK_WIDGET_UNSET_FLAGS( gWidgetData[m_nXScreen].gToolbarWidget, GTK_SENSITIVE );
         if ( nState & CTRL_STATE_ENABLED )
-            GTK_WIDGET_SET_FLAGS( gWidgetData[m_nScreen].gToolbarWidget, GTK_SENSITIVE );
+            GTK_WIDGET_SET_FLAGS( gWidgetData[m_nXScreen].gToolbarWidget, GTK_SENSITIVE );
 
         if( nPart == PART_DRAW_BACKGROUND_HORZ )
-            gtk_toolbar_set_orientation( GTK_TOOLBAR(gWidgetData[m_nScreen].gToolbarWidget), GTK_ORIENTATION_HORIZONTAL );
+            gtk_toolbar_set_orientation( GTK_TOOLBAR(gWidgetData[m_nXScreen].gToolbarWidget), GTK_ORIENTATION_HORIZONTAL );
         else
-            gtk_toolbar_set_orientation( GTK_TOOLBAR(gWidgetData[m_nScreen].gToolbarWidget), GTK_ORIENTATION_VERTICAL );
+            gtk_toolbar_set_orientation( GTK_TOOLBAR(gWidgetData[m_nXScreen].gToolbarWidget), GTK_ORIENTATION_VERTICAL );
     }
     // handle grip
     else if( nPart == PART_THUMB_HORZ || nPart == PART_THUMB_VERT )
     {
-        NWSetWidgetState( gWidgetData[m_nScreen].gHandleBoxWidget, nState, stateType );
+        NWSetWidgetState( gWidgetData[m_nXScreen].gHandleBoxWidget, nState, stateType );
 
-        GTK_WIDGET_UNSET_FLAGS( gWidgetData[m_nScreen].gHandleBoxWidget, GTK_SENSITIVE );
+        GTK_WIDGET_UNSET_FLAGS( gWidgetData[m_nXScreen].gHandleBoxWidget, GTK_SENSITIVE );
         if ( nState & CTRL_STATE_ENABLED )
-            GTK_WIDGET_SET_FLAGS( gWidgetData[m_nScreen].gHandleBoxWidget, GTK_SENSITIVE );
+            GTK_WIDGET_SET_FLAGS( gWidgetData[m_nXScreen].gHandleBoxWidget, GTK_SENSITIVE );
 
-        gtk_handle_box_set_shadow_type( GTK_HANDLE_BOX(gWidgetData[m_nScreen].gHandleBoxWidget), shadowType );
+        gtk_handle_box_set_shadow_type( GTK_HANDLE_BOX(gWidgetData[m_nXScreen].gHandleBoxWidget), shadowType );
 
         // evaluate grip rect
         if( aValue.getType() == CTRL_TOOLBAR )
@@ -2624,32 +2634,32 @@ sal_Bool GtkSalGraphics::NWPaintGTKToolbar(
             // draw toolbar
             if( nPart == PART_DRAW_BACKGROUND_HORZ || nPart == PART_DRAW_BACKGROUND_VERT )
             {
-                gtk_paint_flat_box( gWidgetData[m_nScreen].gToolbarWidget->style,
+                gtk_paint_flat_box( gWidgetData[m_nXScreen].gToolbarWidget->style,
                                     gdkDrawable,
                                     (GtkStateType)GTK_STATE_NORMAL,
                                     GTK_SHADOW_NONE,
                                     &clipRect,
-                                    gWidgetData[m_nScreen].gToolbarWidget,
+                                    gWidgetData[m_nXScreen].gToolbarWidget,
                                     "base",
                                     x, y, w, h );
-                gtk_paint_box( gWidgetData[m_nScreen].gToolbarWidget->style,
+                gtk_paint_box( gWidgetData[m_nXScreen].gToolbarWidget->style,
                                gdkDrawable,
                                stateType,
                                shadowType,
                                &clipRect,
-                               gWidgetData[m_nScreen].gToolbarWidget,
+                               gWidgetData[m_nXScreen].gToolbarWidget,
                                "toolbar",
                                x, y, w, h );
             }
             // draw grip
             else if( nPart == PART_THUMB_HORZ || nPart == PART_THUMB_VERT )
             {
-                gtk_paint_handle( gWidgetData[m_nScreen].gHandleBoxWidget->style,
+                gtk_paint_handle( gWidgetData[m_nXScreen].gHandleBoxWidget->style,
                                   gdkDrawable,
                                   GTK_STATE_NORMAL,
                                   GTK_SHADOW_OUT,
                                   &clipRect,
-                                  gWidgetData[m_nScreen].gHandleBoxWidget,
+                                  gWidgetData[m_nXScreen].gHandleBoxWidget,
                                   "handlebox",
                                   g_x, g_y, g_w, g_h,
                                   nPart == PART_THUMB_HORZ ?
@@ -2661,23 +2671,23 @@ sal_Bool GtkSalGraphics::NWPaintGTKToolbar(
             {
                 gint separator_height, separator_width, wide_separators;
 
-                gtk_widget_style_get (gWidgetData[m_nScreen].gVSeparator,
+                gtk_widget_style_get (gWidgetData[m_nXScreen].gVSeparator,
                                       "wide-separators",  &wide_separators,
                                       "separator-width",  &separator_width,
                                       "separator-height", &separator_height,
                                       NULL);
                 if (wide_separators)
-                    gtk_paint_box (gWidgetData[m_nScreen].gVSeparator->style, gdkDrawable,
+                    gtk_paint_box (gWidgetData[m_nXScreen].gVSeparator->style, gdkDrawable,
                                GTK_STATE_NORMAL, GTK_SHADOW_ETCHED_OUT,
-                               &clipRect, gWidgetData[m_nScreen].gVSeparator, "vseparator",
+                               &clipRect, gWidgetData[m_nXScreen].gVSeparator, "vseparator",
                                x + (w - separator_width) / 2,
                                y + 7,
                                separator_width,
                                h - 14);
                 else
-                    gtk_paint_vline (gWidgetData[m_nScreen].gVSeparator->style, gdkDrawable,
+                    gtk_paint_vline (gWidgetData[m_nXScreen].gVSeparator->style, gdkDrawable,
                                  GTK_STATE_NORMAL,
-                                 &clipRect, gWidgetData[m_nScreen].gVSeparator, "vseparator",
+                                 &clipRect, gWidgetData[m_nXScreen].gVSeparator, "vseparator",
                                  y + 7,
                                  y + h - 7,
                                  x + w/2 - 1);
@@ -2704,7 +2714,7 @@ sal_Bool GtkSalGraphics::NWPaintGTKMenubar(
     gint            x, y, w, h;
     GdkRectangle    clipRect;
 
-    NWEnsureGTKMenubar( m_nScreen );
+    NWEnsureGTKMenubar( m_nXScreen );
     NWConvertVCLStateToGTKState( nState, &stateType, &shadowType );
 
     x = rControlRectangle.Left();
@@ -2716,7 +2726,7 @@ sal_Bool GtkSalGraphics::NWPaintGTKMenubar(
     {
         if( nState & (CTRL_STATE_SELECTED|CTRL_STATE_ROLLOVER) )
         {
-            gtk_widget_style_get( gWidgetData[m_nScreen].gMenuItemMenubarWidget,
+            gtk_widget_style_get( gWidgetData[m_nXScreen].gMenuItemMenubarWidget,
                                   "selected_shadow_type", &selected_shadow_type,
                                   (char *)NULL);
         }
@@ -2732,14 +2742,14 @@ sal_Bool GtkSalGraphics::NWPaintGTKMenubar(
         // handle Menubar
         if( nPart == PART_ENTIRE_CONTROL )
         {
-            NWSetWidgetState( gWidgetData[m_nScreen].gMenubarWidget, nState, stateType );
+            NWSetWidgetState( gWidgetData[m_nXScreen].gMenubarWidget, nState, stateType );
 
-            GTK_WIDGET_UNSET_FLAGS( gWidgetData[m_nScreen].gMenubarWidget, GTK_SENSITIVE );
+            GTK_WIDGET_UNSET_FLAGS( gWidgetData[m_nXScreen].gMenubarWidget, GTK_SENSITIVE );
             if ( nState & CTRL_STATE_ENABLED )
-                GTK_WIDGET_SET_FLAGS( gWidgetData[m_nScreen].gMenubarWidget, GTK_SENSITIVE );
+                GTK_WIDGET_SET_FLAGS( gWidgetData[m_nXScreen].gMenubarWidget, GTK_SENSITIVE );
 
             // for translucent menubar styles paint background first
-            gtk_paint_flat_box( gWidgetData[m_nScreen].gMenubarWidget->style,
+            gtk_paint_flat_box( gWidgetData[m_nXScreen].gMenubarWidget->style,
                                 gdkDrawable,
                                 GTK_STATE_NORMAL,
                                 GTK_SHADOW_NONE,
@@ -2747,12 +2757,12 @@ sal_Bool GtkSalGraphics::NWPaintGTKMenubar(
                                 GTK_WIDGET(m_pWindow),
                                 "base",
                                 x, y, w, h );
-            gtk_paint_box( gWidgetData[m_nScreen].gMenubarWidget->style,
+            gtk_paint_box( gWidgetData[m_nXScreen].gMenubarWidget->style,
                            gdkDrawable,
                            stateType,
                            shadowType,
                            &clipRect,
-                           gWidgetData[m_nScreen].gMenubarWidget,
+                           gWidgetData[m_nXScreen].gMenubarWidget,
                            "menubar",
                            x, y, w, h );
         }
@@ -2761,12 +2771,12 @@ sal_Bool GtkSalGraphics::NWPaintGTKMenubar(
         {
             if( nState & (CTRL_STATE_SELECTED|CTRL_STATE_ROLLOVER) )
             {
-                gtk_paint_box( gWidgetData[m_nScreen].gMenuItemMenubarWidget->style,
+                gtk_paint_box( gWidgetData[m_nXScreen].gMenuItemMenubarWidget->style,
                                gdkDrawable,
                                GTK_STATE_PRELIGHT,
                                selected_shadow_type,
                                &clipRect,
-                               gWidgetData[m_nScreen].gMenuItemMenubarWidget,
+                               gWidgetData[m_nXScreen].gMenuItemMenubarWidget,
                                "menuitem",
                                x, y, w, h);
             }
@@ -2796,7 +2806,7 @@ sal_Bool GtkSalGraphics::NWPaintGTKPopupMenu(
     gint            x, y, w, h;
     GdkRectangle    clipRect;
 
-    NWEnsureGTKMenu( m_nScreen );
+    NWEnsureGTKMenu( m_nXScreen );
     NWConvertVCLStateToGTKState( nState, &stateType, &shadowType );
 
     x = rControlRectangle.Left();
@@ -2807,16 +2817,16 @@ sal_Bool GtkSalGraphics::NWPaintGTKPopupMenu(
     if( nPart == PART_MENU_ITEM &&
         ( nState & (CTRL_STATE_SELECTED|CTRL_STATE_ROLLOVER) ) )
     {
-        gtk_widget_style_get( gWidgetData[m_nScreen].gMenuItemMenuWidget,
+        gtk_widget_style_get( gWidgetData[m_nXScreen].gMenuItemMenuWidget,
                               "selected_shadow_type", &selected_shadow_type,
                               (char *)NULL);
     }
 
-    NWSetWidgetState( gWidgetData[m_nScreen].gMenuWidget, nState, stateType );
+    NWSetWidgetState( gWidgetData[m_nXScreen].gMenuWidget, nState, stateType );
 
-    GTK_WIDGET_UNSET_FLAGS( gWidgetData[m_nScreen].gMenuWidget, GTK_SENSITIVE );
+    GTK_WIDGET_UNSET_FLAGS( gWidgetData[m_nXScreen].gMenuWidget, GTK_SENSITIVE );
     if ( nState & CTRL_STATE_ENABLED )
-        GTK_WIDGET_SET_FLAGS( gWidgetData[m_nScreen].gMenuWidget, GTK_SENSITIVE );
+        GTK_WIDGET_SET_FLAGS( gWidgetData[m_nXScreen].gMenuWidget, GTK_SENSITIVE );
 
     for( clipList::const_iterator it = rClipList.begin(); it != rClipList.end(); ++it )
     {
@@ -2828,7 +2838,7 @@ sal_Bool GtkSalGraphics::NWPaintGTKPopupMenu(
         if( nPart == PART_ENTIRE_CONTROL )
         {
             // for translucent menubar styles paint background first
-            gtk_paint_flat_box( gWidgetData[m_nScreen].gMenuWidget->style,
+            gtk_paint_flat_box( gWidgetData[m_nXScreen].gMenuWidget->style,
                                 gdkDrawable,
                                 GTK_STATE_NORMAL,
                                 GTK_SHADOW_NONE,
@@ -2836,12 +2846,12 @@ sal_Bool GtkSalGraphics::NWPaintGTKPopupMenu(
                                 GTK_WIDGET(m_pWindow),
                                 "base",
                                 x, y, w, h );
-            gtk_paint_box( gWidgetData[m_nScreen].gMenuWidget->style,
+            gtk_paint_box( gWidgetData[m_nXScreen].gMenuWidget->style,
                            gdkDrawable,
                            GTK_STATE_NORMAL,
                            GTK_SHADOW_OUT,
                            &clipRect,
-                           gWidgetData[m_nScreen].gMenuWidget,
+                           gWidgetData[m_nXScreen].gMenuWidget,
                            "menu",
                            x, y, w, h );
         }
@@ -2850,12 +2860,12 @@ sal_Bool GtkSalGraphics::NWPaintGTKPopupMenu(
             if( nState & (CTRL_STATE_SELECTED|CTRL_STATE_ROLLOVER) )
             {
                 if( nState & CTRL_STATE_ENABLED )
-                gtk_paint_box( gWidgetData[m_nScreen].gMenuItemMenuWidget->style,
+                gtk_paint_box( gWidgetData[m_nXScreen].gMenuItemMenuWidget->style,
                                gdkDrawable,
                                GTK_STATE_PRELIGHT,
                                selected_shadow_type,
                                &clipRect,
-                               gWidgetData[m_nScreen].gMenuItemMenuWidget,
+                               gWidgetData[m_nXScreen].gMenuItemMenuWidget,
                                "menuitem",
                                x, y, w, h);
             }
@@ -2863,8 +2873,8 @@ sal_Bool GtkSalGraphics::NWPaintGTKPopupMenu(
         else if( nPart == PART_MENU_ITEM_CHECK_MARK || nPart == PART_MENU_ITEM_RADIO_MARK )
         {
             GtkWidget* pWidget = (nPart == PART_MENU_ITEM_CHECK_MARK) ?
-                                 gWidgetData[m_nScreen].gMenuItemCheckMenuWidget :
-                                 gWidgetData[m_nScreen].gMenuItemRadioMenuWidget;
+                                 gWidgetData[m_nXScreen].gMenuItemCheckMenuWidget :
+                                 gWidgetData[m_nXScreen].gMenuItemRadioMenuWidget;
 
             GtkStateType nStateType = GTK_STATE_NORMAL;
             GtkShadowType nShadowType;
@@ -2886,7 +2896,7 @@ sal_Bool GtkSalGraphics::NWPaintGTKPopupMenu(
                                  nStateType,
                                  nShadowType,
                                  &clipRect,
-                                 gWidgetData[m_nScreen].gMenuItemMenuWidget,
+                                 gWidgetData[m_nXScreen].gMenuItemMenuWidget,
                                  "check",
                                  x, y, w, h );
             }
@@ -2897,18 +2907,18 @@ sal_Bool GtkSalGraphics::NWPaintGTKPopupMenu(
                                   nStateType,
                                   nShadowType,
                                   &clipRect,
-                                  gWidgetData[m_nScreen].gMenuItemMenuWidget,
+                                  gWidgetData[m_nXScreen].gMenuItemMenuWidget,
                                   "option",
                                   x, y, w, h );
             }
         }
         else if( nPart == PART_MENU_SEPARATOR )
         {
-            gtk_paint_hline( gWidgetData[m_nScreen].gMenuItemSeparatorMenuWidget->style,
+            gtk_paint_hline( gWidgetData[m_nXScreen].gMenuItemSeparatorMenuWidget->style,
                              gdkDrawable,
                              GTK_STATE_NORMAL,
                              &clipRect,
-                             gWidgetData[m_nScreen].gMenuItemSeparatorMenuWidget,
+                             gWidgetData[m_nXScreen].gMenuItemSeparatorMenuWidget,
                              "menuitem",
                              x, x + w, y + h / 2);
         }
@@ -2920,7 +2930,7 @@ sal_Bool GtkSalGraphics::NWPaintGTKPopupMenu(
             if ( nState & CTRL_STATE_SELECTED )
                 nStateType = GTK_STATE_PRELIGHT;
 
-            NWSetWidgetState( gWidgetData[m_nScreen].gMenuItemMenuWidget,
+            NWSetWidgetState( gWidgetData[m_nXScreen].gMenuItemMenuWidget,
                               nState, nStateType );
 
             if ( nState & CTRL_STATE_PRESSED )
@@ -2934,12 +2944,12 @@ sal_Bool GtkSalGraphics::NWPaintGTKPopupMenu(
             else
                 eArrow = GTK_ARROW_RIGHT;
 
-            gtk_paint_arrow( gWidgetData[m_nScreen].gMenuItemMenuWidget->style,
+            gtk_paint_arrow( gWidgetData[m_nXScreen].gMenuItemMenuWidget->style,
                              gdkDrawable,
                              nStateType,
                              nShadowType,
                              &clipRect,
-                             gWidgetData[m_nScreen].gMenuItemMenuWidget,
+                             gWidgetData[m_nXScreen].gMenuItemMenuWidget,
                              "menuitem",
                              eArrow, TRUE,
                              x, y, w, h);
@@ -2957,7 +2967,7 @@ sal_Bool GtkSalGraphics::NWPaintGTKTooltip(
             ControlState, const ImplControlValue&,
             const OUString& )
 {
-    NWEnsureGTKTooltip( m_nScreen );
+    NWEnsureGTKTooltip( m_nXScreen );
 
     gint            x, y, w, h;
     GdkRectangle    clipRect;
@@ -2974,12 +2984,12 @@ sal_Bool GtkSalGraphics::NWPaintGTKTooltip(
         clipRect.width = it->GetWidth();
         clipRect.height = it->GetHeight();
 
-        gtk_paint_flat_box( gWidgetData[m_nScreen].gTooltipPopup->style,
+        gtk_paint_flat_box( gWidgetData[m_nXScreen].gTooltipPopup->style,
                             gdkDrawable,
                             GTK_STATE_NORMAL,
                             GTK_SHADOW_OUT,
                             &clipRect,
-                            gWidgetData[m_nScreen].gTooltipPopup,
+                            gWidgetData[m_nXScreen].gTooltipPopup,
                             "tooltip",
                             x, y, w, h );
     }
@@ -2995,7 +3005,7 @@ sal_Bool GtkSalGraphics::NWPaintGTKListNode(
             ControlState nState, const ImplControlValue& rValue,
             const OUString& )
 {
-    NWEnsureGTKTreeView( m_nScreen );
+    NWEnsureGTKTreeView( m_nXScreen );
 
     Rectangle aRect( rControlRectangle );
     aRect.Left() -= 2;
@@ -3026,11 +3036,11 @@ sal_Bool GtkSalGraphics::NWPaintGTKListNode(
         return sal_False;
 
     GdkDrawable* const &pixDrawable = GDK_DRAWABLE( pixmap );
-    gtk_paint_expander( gWidgetData[m_nScreen].gTreeView->style,
+    gtk_paint_expander( gWidgetData[m_nXScreen].gTreeView->style,
                         pixDrawable,
                         stateType,
                         NULL,
-                        gWidgetData[m_nScreen].gTreeView,
+                        gWidgetData[m_nXScreen].gTreeView,
                         "treeview",
                         w/2, h/2,
                         eStyle );
@@ -3049,7 +3059,7 @@ sal_Bool GtkSalGraphics::NWPaintGTKProgress(
             ControlState, const ImplControlValue& rValue,
             const OUString& )
 {
-    NWEnsureGTKProgressBar( m_nScreen );
+    NWEnsureGTKProgressBar( m_nXScreen );
 
     gint            w, h;
     w = rControlRectangle.GetWidth();
@@ -3064,12 +3074,12 @@ sal_Bool GtkSalGraphics::NWPaintGTKProgress(
     GdkDrawable* const &pixDrawable = GDK_DRAWABLE( pixmap );
 
     // paint background
-    gtk_paint_flat_box( gWidgetData[m_nScreen].gProgressBar->style,
+    gtk_paint_flat_box( gWidgetData[m_nXScreen].gProgressBar->style,
                         pixDrawable,
                         GTK_STATE_NORMAL,
                         GTK_SHADOW_NONE,
                         NULL,
-                        gWidgetData[m_nScreen].gProgressBar,
+                        gWidgetData[m_nXScreen].gProgressBar,
                         "trough",
                         0, 0, w, h );
     if( nProgressWidth > 0 )
@@ -3077,22 +3087,22 @@ sal_Bool GtkSalGraphics::NWPaintGTKProgress(
         // paint progress
         if( Application::GetSettings().GetLayoutRTL() )
         {
-            gtk_paint_box( gWidgetData[m_nScreen].gProgressBar->style,
+            gtk_paint_box( gWidgetData[m_nXScreen].gProgressBar->style,
                            pixDrawable,
                            GTK_STATE_PRELIGHT, GTK_SHADOW_OUT,
                            NULL,
-                           gWidgetData[m_nScreen].gProgressBar,
+                           gWidgetData[m_nXScreen].gProgressBar,
                            "bar",
                            w-nProgressWidth, 0, nProgressWidth, h
                            );
         }
         else
         {
-            gtk_paint_box( gWidgetData[m_nScreen].gProgressBar->style,
+            gtk_paint_box( gWidgetData[m_nXScreen].gProgressBar->style,
                            pixDrawable,
                            GTK_STATE_PRELIGHT, GTK_SHADOW_OUT,
                            NULL,
-                           gWidgetData[m_nScreen].gProgressBar,
+                           gWidgetData[m_nXScreen].gProgressBar,
                            "bar",
                            0, 0, nProgressWidth, h
                            );
@@ -3114,7 +3124,7 @@ sal_Bool GtkSalGraphics::NWPaintGTKSlider(
             const OUString& )
 {
     OSL_ASSERT( rValue.getType() == CTRL_SLIDER );
-    NWEnsureGTKSlider( m_nScreen );
+    NWEnsureGTKSlider( m_nXScreen );
 
     gint            w, h;
     w = rControlRectangle.GetWidth();
@@ -3128,8 +3138,8 @@ sal_Bool GtkSalGraphics::NWPaintGTKSlider(
 
     GdkDrawable* const &pixDrawable = GDK_DRAWABLE( pixmap );
     GtkWidget* pWidget = (nPart == PART_TRACK_HORZ_AREA)
-                         ? GTK_WIDGET(gWidgetData[m_nScreen].gHScale)
-                         : GTK_WIDGET(gWidgetData[m_nScreen].gVScale);
+                         ? GTK_WIDGET(gWidgetData[m_nXScreen].gHScale)
+                         : GTK_WIDGET(gWidgetData[m_nXScreen].gVScale);
     const gchar* pDetail = (nPart == PART_TRACK_HORZ_AREA) ? "hscale" : "vscale";
     GtkOrientation eOri = (nPart == PART_TRACK_HORZ_AREA) ? GTK_ORIENTATION_HORIZONTAL : GTK_ORIENTATION_VERTICAL;
     GtkStateType eState = (nState & CTRL_STATE_ENABLED) ? GTK_STATE_ACTIVE : GTK_STATE_INSENSITIVE;
@@ -3197,7 +3207,7 @@ sal_Bool GtkSalGraphics::NWPaintGTKSlider(
 
 //----
 
-static Rectangle NWGetListBoxButtonRect( int nScreen,
+static Rectangle NWGetListBoxButtonRect( SalX11Screen nScreen,
                                          ControlType,
                                          ControlPart    nPart,
                                          Rectangle      aAreaRect,
@@ -3262,7 +3272,7 @@ static Rectangle NWGetListBoxButtonRect( int nScreen,
 
 //----
 
-static Rectangle NWGetListBoxIndicatorRect( int nScreen,
+static Rectangle NWGetListBoxIndicatorRect( SalX11Screen nScreen,
                                             ControlType,
                                             ControlPart,
                                             Rectangle                aAreaRect,
@@ -3312,7 +3322,7 @@ static Rectangle NWGetListBoxIndicatorRect( int nScreen,
     return( aIndicatorRect );
 }
 
-static Rectangle NWGetToolbarRect(  int nScreen,
+static Rectangle NWGetToolbarRect(  SalX11Screen nScreen,
                                     ControlType,
                                     ControlPart                nPart,
                                     Rectangle                aAreaRect,
@@ -3399,11 +3409,11 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     StyleSettings aStyleSet = rSettings.GetStyleSettings();
 
     // get the widgets in place
-    NWEnsureGTKMenu( m_nScreen );
-    NWEnsureGTKMenubar( m_nScreen );
-    NWEnsureGTKScrollbars( m_nScreen );
-    NWEnsureGTKEditBox( m_nScreen );
-    NWEnsureGTKTooltip( m_nScreen );
+    NWEnsureGTKMenu( m_nXScreen );
+    NWEnsureGTKMenubar( m_nXScreen );
+    NWEnsureGTKScrollbars( m_nXScreen );
+    NWEnsureGTKEditBox( m_nXScreen );
+    NWEnsureGTKTooltip( m_nXScreen );
 
 #if OSL_DEBUG_LEVEL > 2
     printStyleColors( pStyle );
@@ -3421,7 +3431,7 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     aStyleSet.SetFieldTextColor( aTextColor );
 
     // Tooltip colors
-    GtkStyle* pTooltipStyle = gtk_widget_get_style( gWidgetData[m_nScreen].gTooltipPopup );
+    GtkStyle* pTooltipStyle = gtk_widget_get_style( gWidgetData[m_nXScreen].gTooltipPopup );
     aTextColor = getColor( pTooltipStyle->fg[ GTK_STATE_NORMAL ] );
     aStyleSet.SetHelpTextColor( aTextColor );
 
@@ -3475,10 +3485,10 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     aStyleSet.SetSkipDisabledInMenus( sal_True );
     aStyleSet.SetAcceleratorsInContextMenus( sal_False );
     // menu colors
-    GtkStyle* pMenuStyle = gtk_widget_get_style( gWidgetData[m_nScreen].gMenuWidget );
-    GtkStyle* pMenuItemStyle = gtk_rc_get_style( gWidgetData[m_nScreen].gMenuItemMenuWidget );
-    GtkStyle* pMenubarStyle = gtk_rc_get_style( gWidgetData[m_nScreen].gMenubarWidget );
-    GtkStyle* pMenuTextStyle = gtk_rc_get_style( gtk_bin_get_child( GTK_BIN(gWidgetData[m_nScreen].gMenuItemMenuWidget) ) );
+    GtkStyle* pMenuStyle = gtk_widget_get_style( gWidgetData[m_nXScreen].gMenuWidget );
+    GtkStyle* pMenuItemStyle = gtk_rc_get_style( gWidgetData[m_nXScreen].gMenuItemMenuWidget );
+    GtkStyle* pMenubarStyle = gtk_rc_get_style( gWidgetData[m_nXScreen].gMenubarWidget );
+    GtkStyle* pMenuTextStyle = gtk_rc_get_style( gtk_bin_get_child( GTK_BIN(gWidgetData[m_nXScreen].gMenuItemMenuWidget) ) );
 
     aBackColor = getColor( pMenubarStyle->bg[GTK_STATE_NORMAL] );
     aStyleSet.SetMenuBarColor( aBackColor );
@@ -3655,7 +3665,7 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     gint min_slider_length = 21;
 
     // Grab some button style attributes
-    gtk_widget_style_get( gWidgetData[m_nScreen].gScrollHorizWidget,
+    gtk_widget_style_get( gWidgetData[m_nXScreen].gScrollHorizWidget,
                           "slider-width", &slider_width,
                           "trough-border", &trough_border,
                           "min-slider-length", &min_slider_length,
@@ -3739,12 +3749,12 @@ GdkPixmap* GtkSalGraphics::NWGetPixmapFromScreen( Rectangle srcRect )
 
     // Copy the background of the screen into a composite pixmap
     CopyScreenArea( GetXDisplay(),
-              GetDrawable(), GetScreenNumber(), GetVisual().GetDepth(),
-              gdk_x11_drawable_get_xid(pPixmap),
-              gdk_screen_get_number( gdk_drawable_get_screen( GDK_DRAWABLE(pPixmap) ) ),
-              gdk_drawable_get_depth( GDK_DRAWABLE( pPixmap ) ),
-              gdk_x11_gc_get_xgc(pPixmapGC),
-              srcRect.Left(), srcRect.Top(), srcRect.GetWidth(), srcRect.GetHeight(), 0, 0 );
+                    GetDrawable(), GetScreenNumber(), GetVisual().GetDepth(),
+                    gdk_x11_drawable_get_xid(pPixmap),
+                    SalX11Screen( gdk_screen_get_number( gdk_drawable_get_screen( GDK_DRAWABLE(pPixmap) ) ) ),
+                    gdk_drawable_get_depth( GDK_DRAWABLE( pPixmap ) ),
+                    gdk_x11_gc_get_xgc(pPixmapGC),
+                    srcRect.Left(), srcRect.Top(), srcRect.GetWidth(), srcRect.GetHeight(), 0, 0 );
 
     g_object_unref( pPixmapGC );
     return( pPixmap );
@@ -3772,12 +3782,12 @@ sal_Bool GtkSalGraphics::NWRenderPixmapToScreen( GdkPixmap* pPixmap, Rectangle d
 
     // Copy the background of the screen into a composite pixmap
     CopyScreenArea( GetXDisplay(),
-              GDK_DRAWABLE_XID(pPixmap),
-              gdk_screen_get_number( gdk_drawable_get_screen( GDK_DRAWABLE(pPixmap) ) ),
-              gdk_drawable_get_depth( GDK_DRAWABLE(pPixmap) ),
-              GetDrawable(), m_nScreen, GetVisual().GetDepth(),
-              aFontGC,
-              0, 0, dstRect.GetWidth(), dstRect.GetHeight(), dstRect.Left(), dstRect.Top() );
+                    GDK_DRAWABLE_XID(pPixmap),
+                    SalX11Screen( gdk_screen_get_number( gdk_drawable_get_screen( GDK_DRAWABLE(pPixmap) ) ) ),
+                    gdk_drawable_get_depth( GDK_DRAWABLE(pPixmap) ),
+                    GetDrawable(), m_nXScreen, GetVisual().GetDepth(),
+                    aFontGC,
+                    0, 0, dstRect.GetWidth(), dstRect.GetHeight(), dstRect.Left(), dstRect.Top() );
 
     return( sal_True );
 }
@@ -3838,7 +3848,7 @@ static void NWSetWidgetState( GtkWidget* widget, ControlState nState, GtkStateTy
 
 //-------------------------------------
 
-static void NWAddWidgetToCacheWindow( GtkWidget* widget, int nScreen )
+static void NWAddWidgetToCacheWindow( GtkWidget* widget, SalX11Screen nScreen )
 {
     NWFWidgetData& rData = gWidgetData[nScreen];
     if ( !rData.gCacheWindow || !rData.gDumbContainer )
@@ -3846,7 +3856,8 @@ static void NWAddWidgetToCacheWindow( GtkWidget* widget, int nScreen )
         if ( !rData.gCacheWindow )
         {
             rData.gCacheWindow = gtk_window_new( GTK_WINDOW_TOPLEVEL );
-            GdkScreen* pScreen = gdk_display_get_screen( gdk_display_get_default(), nScreen );
+            GdkScreen* pScreen = gdk_display_get_screen( gdk_display_get_default(),
+                                                         nScreen.getXScreen() );
             if( pScreen )
                 gtk_window_set_screen( GTK_WINDOW(rData.gCacheWindow), pScreen );
         }
@@ -3867,7 +3878,7 @@ static void NWAddWidgetToCacheWindow( GtkWidget* widget, int nScreen )
 
 //-------------------------------------
 
-static void NWEnsureGTKButton( int nScreen )
+static void NWEnsureGTKButton( SalX11Screen nScreen )
 {
     if ( !gWidgetData[nScreen].gBtnWidget )
     {
@@ -3878,7 +3889,7 @@ static void NWEnsureGTKButton( int nScreen )
 
 //-------------------------------------
 
-static void NWEnsureGTKRadio( int nScreen )
+static void NWEnsureGTKRadio( SalX11Screen nScreen )
 {
     if ( !gWidgetData[nScreen].gRadioWidget || !gWidgetData[nScreen].gRadioWidgetSibling )
     {
@@ -3891,7 +3902,7 @@ static void NWEnsureGTKRadio( int nScreen )
 
 //-------------------------------------
 
-static void NWEnsureGTKCheck( int nScreen )
+static void NWEnsureGTKCheck( SalX11Screen nScreen )
 {
     if ( !gWidgetData[nScreen].gCheckWidget )
     {
@@ -3902,7 +3913,7 @@ static void NWEnsureGTKCheck( int nScreen )
 
 //-------------------------------------
 
-static void NWEnsureGTKScrollbars( int nScreen )
+static void NWEnsureGTKScrollbars( SalX11Screen nScreen )
 {
     if ( !gWidgetData[nScreen].gScrollHorizWidget )
     {
@@ -3919,7 +3930,7 @@ static void NWEnsureGTKScrollbars( int nScreen )
 
 //-------------------------------------
 
-static void NWEnsureGTKArrow( int nScreen )
+static void NWEnsureGTKArrow( SalX11Screen nScreen )
 {
     if ( !gWidgetData[nScreen].gArrowWidget || !gWidgetData[nScreen].gDropdownWidget )
     {
@@ -3934,7 +3945,7 @@ static void NWEnsureGTKArrow( int nScreen )
 
 //-------------------------------------
 
-static void NWEnsureGTKEditBox( int nScreen )
+static void NWEnsureGTKEditBox( SalX11Screen nScreen )
 {
     if ( !gWidgetData[nScreen].gEditBoxWidget )
     {
@@ -3945,7 +3956,7 @@ static void NWEnsureGTKEditBox( int nScreen )
 
 //-------------------------------------
 
-static void NWEnsureGTKSpinButton( int nScreen )
+static void NWEnsureGTKSpinButton( SalX11Screen nScreen )
 {
     if ( !gWidgetData[nScreen].gSpinButtonWidget )
     {
@@ -3962,7 +3973,7 @@ static void NWEnsureGTKSpinButton( int nScreen )
 
 //-------------------------------------
 
-static void NWEnsureGTKNotebook( int nScreen )
+static void NWEnsureGTKNotebook( SalX11Screen nScreen )
 {
     if ( !gWidgetData[nScreen].gNotebookWidget )
     {
@@ -3973,7 +3984,7 @@ static void NWEnsureGTKNotebook( int nScreen )
 
 //-------------------------------------
 
-static void NWEnsureGTKOptionMenu( int nScreen )
+static void NWEnsureGTKOptionMenu( SalX11Screen nScreen )
 {
     if ( !gWidgetData[nScreen].gOptionMenuWidget )
     {
@@ -3984,7 +3995,7 @@ static void NWEnsureGTKOptionMenu( int nScreen )
 
 //-------------------------------------
 
-static void NWEnsureGTKCombo( int nScreen )
+static void NWEnsureGTKCombo( SalX11Screen nScreen )
 {
     if ( !gWidgetData[nScreen].gComboWidget )
     {
@@ -4004,7 +4015,7 @@ static void NWEnsureGTKCombo( int nScreen )
 
 //-------------------------------------
 
-static void NWEnsureGTKScrolledWindow( int nScreen )
+static void NWEnsureGTKScrolledWindow( SalX11Screen nScreen )
 {
     if ( !gWidgetData[nScreen].gScrolledWindowWidget )
     {
@@ -4018,7 +4029,7 @@ static void NWEnsureGTKScrolledWindow( int nScreen )
 
 //-------------------------------------
 
-static void NWEnsureGTKToolbar( int nScreen )
+static void NWEnsureGTKToolbar( SalX11Screen nScreen )
 {
     if( !gWidgetData[nScreen].gToolbarWidget )
     {
@@ -4049,7 +4060,7 @@ static void NWEnsureGTKToolbar( int nScreen )
 
 //-------------------------------------
 
-static void NWEnsureGTKMenubar( int nScreen )
+static void NWEnsureGTKMenubar( SalX11Screen nScreen )
 {
     if( !gWidgetData[nScreen].gMenubarWidget )
     {
@@ -4068,7 +4079,7 @@ static void NWEnsureGTKMenubar( int nScreen )
     }
 }
 
-static void NWEnsureGTKMenu( int nScreen )
+static void NWEnsureGTKMenu( SalX11Screen nScreen )
 {
     if( !gWidgetData[nScreen].gMenuWidget )
     {
@@ -4113,12 +4124,13 @@ static void NWEnsureGTKMenu( int nScreen )
     }
 }
 
-static void NWEnsureGTKTooltip( int nScreen )
+static void NWEnsureGTKTooltip( SalX11Screen nScreen )
 {
     if( !gWidgetData[nScreen].gTooltipPopup )
     {
         gWidgetData[nScreen].gTooltipPopup = gtk_window_new (GTK_WINDOW_POPUP);
-        GdkScreen* pScreen = gdk_display_get_screen( gdk_display_get_default(), nScreen );
+        GdkScreen* pScreen = gdk_display_get_screen( gdk_display_get_default(),
+                                                     nScreen.getXScreen() );
         if( pScreen )
             gtk_window_set_screen( GTK_WINDOW(gWidgetData[nScreen].gTooltipPopup), pScreen );
         gtk_widget_set_name( gWidgetData[nScreen].gTooltipPopup, "gtk-tooltips");
@@ -4127,7 +4139,7 @@ static void NWEnsureGTKTooltip( int nScreen )
     }
 }
 
-static void NWEnsureGTKProgressBar( int nScreen )
+static void NWEnsureGTKProgressBar( SalX11Screen nScreen )
 {
     if( !gWidgetData[nScreen].gProgressBar )
     {
@@ -4136,7 +4148,7 @@ static void NWEnsureGTKProgressBar( int nScreen )
     }
 }
 
-static void NWEnsureGTKTreeView( int nScreen )
+static void NWEnsureGTKTreeView( SalX11Screen nScreen )
 {
     if( !gWidgetData[nScreen].gTreeView )
     {
@@ -4145,7 +4157,7 @@ static void NWEnsureGTKTreeView( int nScreen )
     }
 }
 
-static void NWEnsureGTKSlider( int nScreen )
+static void NWEnsureGTKSlider( SalX11Screen nScreen )
 {
     if( !gWidgetData[nScreen].gHScale )
     {

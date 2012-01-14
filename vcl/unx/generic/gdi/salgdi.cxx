@@ -96,6 +96,7 @@ inline SalPolyLine::~SalPolyLine()
 // -=-= X11SalGraphics =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 X11SalGraphics::X11SalGraphics()
+    : m_nXScreen( 0 )
 {
     m_pFrame            = NULL;
     m_pVDev             = NULL;
@@ -189,18 +190,18 @@ void X11SalGraphics::freeResources()
     bPenGC_ = bFontGC_ = bBrushGC_ = bMonoGC_ = bCopyGC_ = bInvertGC_ = bInvert50GC_ = bStippleGC_ = bTrackingGC_ = false;
 }
 
-void X11SalGraphics::SetDrawable( Drawable aDrawable, int nScreen )
+void X11SalGraphics::SetDrawable( Drawable aDrawable, SalX11Screen nXScreen )
 {
     // shortcut if nothing changed
     if( hDrawable_ == aDrawable )
         return;
 
     // free screen specific resources if needed
-    if( nScreen != m_nScreen )
+    if( nXScreen != m_nXScreen )
     {
         freeResources();
-        m_pColormap = &GetGenericData()->GetSalDisplay()->GetColormap( nScreen );
-        m_nScreen = nScreen;
+        m_pColormap = &GetGenericData()->GetSalDisplay()->GetColormap( nXScreen );
+        m_nXScreen = nXScreen;
     }
 
     hDrawable_ = aDrawable;
@@ -219,22 +220,22 @@ void X11SalGraphics::SetDrawable( Drawable aDrawable, int nScreen )
     }
 }
 
-void X11SalGraphics::Init( SalFrame *pFrame, Drawable aTarget, int nScreen )
+void X11SalGraphics::Init( SalFrame *pFrame, Drawable aTarget,
+                           SalX11Screen nXScreen )
 {
+    m_pColormap = &GetGenericData()->GetSalDisplay()->GetColormap(nXScreen);
+    m_nXScreen  = nXScreen;
+    SetDrawable( aTarget, nXScreen );
 
-    m_pColormap     = &GetGenericData()->GetSalDisplay()->GetColormap(nScreen);
-    m_nScreen = nScreen;
-    SetDrawable( aTarget, nScreen );
-
-    bWindow_        = sal_True;
-    m_pFrame        = pFrame;
-    m_pVDev         = NULL;
+    bWindow_    = sal_True;
+    m_pFrame    = pFrame;
+    m_pVDev     = NULL;
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void X11SalGraphics::DeInit()
 {
-    SetDrawable( None, m_nScreen );
+    SetDrawable( None, m_nXScreen );
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -477,7 +478,7 @@ BOOL X11SalGraphics::GetDitherPixmap( SalColor nSalColor )
     // put the ximage to the pixmap
     XPutImage( GetXDisplay(),
                hBrush_,
-               GetDisplay()->GetCopyGC( m_nScreen ),
+               GetDisplay()->GetCopyGC( m_nXScreen ),
                pImage,
                0, 0,                        // Source
                0, 0,                        // Destination
@@ -1041,7 +1042,7 @@ SystemGraphicsData X11SalGraphics::GetGraphicsData() const
     aRes.pDisplay  = GetXDisplay();
     aRes.hDrawable = hDrawable_;
     aRes.pVisual   = GetVisual().visual;
-    aRes.nScreen   = m_nScreen;
+    aRes.nScreen   = m_nXScreen.getXScreen();
     aRes.nDepth    = GetBitCount();
     aRes.aColormap = GetColormap().GetXColormap();
     aRes.pXRenderFormat = m_pXRenderFormat;
@@ -1135,7 +1136,7 @@ bool X11SalGraphics::drawFilledTrapezoids( const ::basegfx::B2DTrapezoid* pB2DTr
     // get xrender Picture for polygon foreground
     // TODO: cache it like the target picture which uses GetXRenderPicture()
     XRenderPeer& rRenderPeer = XRenderPeer::GetInstance();
-    SalDisplay::RenderEntry& rEntry = GetDisplay()->GetRenderEntries( m_nScreen )[ 32 ];
+    SalDisplay::RenderEntry& rEntry = GetDisplay()->GetRenderEntries( m_nXScreen )[ 32 ];
     if( !rEntry.m_aPicture )
     {
         Display* pXDisplay = GetXDisplay();

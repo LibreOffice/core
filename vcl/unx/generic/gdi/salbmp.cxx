@@ -203,7 +203,7 @@ BitmapBuffer* X11SalBitmap::ImplCreateDIB(
 
 BitmapBuffer* X11SalBitmap::ImplCreateDIB(
     Drawable aDrawable,
-    int nScreen,
+    SalX11Screen nScreen,
     long nDrawableDepth,
     long nX,
     long nY,
@@ -378,7 +378,7 @@ BitmapBuffer* X11SalBitmap::ImplCreateDIB(
 
 XImage* X11SalBitmap::ImplCreateXImage(
     SalDisplay *pSalDisp,
-    int nScreen,
+    SalX11Screen nScreen,
     long nDepth,
     const SalTwoRect& rTwoRect
 ) const
@@ -549,7 +549,7 @@ XImage* X11SalBitmap::ImplCreateXImage(
 // -----------------------------------------------------------------------------
 bool X11SalBitmap::ImplCreateFromDrawable(
     Drawable aDrawable,
-    int nScreen,
+    SalX11Screen nScreen,
     long nDrawableDepth,
     long nX,
     long nY,
@@ -628,10 +628,10 @@ bool X11SalBitmap::SnapShot (Display* pDisplay, XLIB_Window hWindow)
                 {
                     XImage* pImage = XGetImage( pDisplay, aAttribute.root,
                                                 x, y, width, height, AllPlanes, ZPixmap );
-                    bool bSnapShot = ImplCreateFromXImage( pDisplay,
-                                                           aAttribute.root,
-                                                           XScreenNumberOfScreen( aAttribute.screen ),
-                                                           pImage );
+                    bool bSnapShot = ImplCreateFromXImage(
+                                        pDisplay, aAttribute.root,
+                                        SalX11Screen (XScreenNumberOfScreen( aAttribute.screen ) ),
+                                        pImage );
                     XDestroyImage (pImage);
 
                     return bSnapShot;
@@ -646,7 +646,7 @@ bool X11SalBitmap::SnapShot (Display* pDisplay, XLIB_Window hWindow)
 bool X11SalBitmap::ImplCreateFromXImage (
     Display* pDisplay,
     XLIB_Window hWindow,
-    int nScreen,
+    SalX11Screen nScreen,
     XImage* pImage
 ) {
     Destroy();
@@ -661,12 +661,12 @@ bool X11SalBitmap::ImplCreateFromXImage (
 
 ImplSalDDB* X11SalBitmap::ImplGetDDB(
     Drawable          aDrawable,
-    int               nScreen,
+    SalX11Screen      nXScreen,
     long              nDrawableDepth,
     const SalTwoRect& rTwoRect
 ) const
 {
-    if( !mpDDB || !mpDDB->ImplMatches( nScreen, nDrawableDepth, rTwoRect ) )
+    if( !mpDDB || !mpDDB->ImplMatches( nXScreen, nDrawableDepth, rTwoRect ) )
     {
         if( mpDDB )
         {
@@ -739,12 +739,12 @@ ImplSalDDB* X11SalBitmap::ImplGetDDB(
             }
         }
 
-        XImage* pImage = ImplCreateXImage( GetGenericData()->GetSalDisplay(), nScreen,
+        XImage* pImage = ImplCreateXImage( GetGenericData()->GetSalDisplay(), nXScreen,
                                            nDrawableDepth, aTwoRect );
 
         if( pImage )
         {
-            const_cast<X11SalBitmap*>(this)->mpDDB = new ImplSalDDB( pImage, aDrawable, nScreen, aTwoRect );
+            const_cast<X11SalBitmap*>(this)->mpDDB = new ImplSalDDB( pImage, aDrawable, nXScreen, aTwoRect );
             delete[] pImage->data, pImage->data = NULL;
             XDestroyImage( pImage );
 
@@ -760,13 +760,13 @@ ImplSalDDB* X11SalBitmap::ImplGetDDB(
 
 void X11SalBitmap::ImplDraw(
     Drawable           aDrawable,
-    int                nScreen,
+    SalX11Screen       nXScreen,
     long               nDrawableDepth,
     const SalTwoRect&  rTwoRect,
     const GC&          rGC
 ) const
 {
-    ImplGetDDB( aDrawable, nScreen, nDrawableDepth, rTwoRect );
+    ImplGetDDB( aDrawable, nXScreen, nDrawableDepth, rTwoRect );
     if( mpDDB )
         mpDDB->ImplDraw( aDrawable, nDrawableDepth, rTwoRect, rGC );
 }
@@ -853,7 +853,8 @@ bool X11SalBitmap::Create(
                 mbGrey = bMask;
                 bool bSuccess = ImplCreateFromDrawable(
                                     pixmapHandle,
-                                    0,
+                                    // FIXME: this seems multi-screen broken to me
+                                    SalX11Screen( 0 ),
                                     depth,
                                     0,
                                     0,
@@ -975,11 +976,12 @@ bool X11SalBitmap::GetSystemData( BitmapSystemData& rData )
 // - ImplSalDDB -
 // --------------
 
-ImplSalDDB::ImplSalDDB( XImage* pImage, Drawable aDrawable, int nScreen, const SalTwoRect& rTwoRect )
+ImplSalDDB::ImplSalDDB( XImage* pImage, Drawable aDrawable,
+                        SalX11Screen nXScreen, const SalTwoRect& rTwoRect )
     : maPixmap    ( 0 )
     , maTwoRect   ( rTwoRect )
     , mnDepth     ( pImage->depth )
-    , mnScreen    ( nScreen )
+    , mnXScreen   ( nXScreen )
 {
     SalDisplay* pSalDisp = GetGenericData()->GetSalDisplay();
     Display*    pXDisp = pSalDisp->GetDisplay();
@@ -1007,8 +1009,8 @@ ImplSalDDB::ImplSalDDB( XImage* pImage, Drawable aDrawable, int nScreen, const S
 // -----------------------------------------------------------------------------------------
 // create from XImage
 
-ImplSalDDB::ImplSalDDB (Display* pDisplay, XLIB_Window hWindow, int nScreen, XImage* pImage)
-    : mnScreen( nScreen )
+ImplSalDDB::ImplSalDDB (Display* pDisplay, XLIB_Window hWindow, SalX11Screen nXScreen, XImage* pImage)
+    : mnXScreen( nXScreen )
 {
     maPixmap = XCreatePixmap (pDisplay, hWindow, pImage->width, pImage->height, pImage->depth);
     if (maPixmap != 0)
@@ -1047,14 +1049,14 @@ ImplSalDDB::ImplSalDDB (Display* pDisplay, XLIB_Window hWindow, int nScreen, XIm
 
 ImplSalDDB::ImplSalDDB(
     Drawable aDrawable,
-    int nScreen,
+    SalX11Screen nXScreen,
     long nDrawableDepth,
     long nX,
     long nY,
     long nWidth,
     long nHeight
 )   : mnDepth( nDrawableDepth )
-    , mnScreen( nScreen )
+    , mnXScreen( nXScreen )
 {
     SalDisplay* pSalDisp = GetGenericData()->GetSalDisplay();
     Display*    pXDisp = pSalDisp->GetDisplay();
@@ -1094,11 +1096,11 @@ ImplSalDDB::~ImplSalDDB()
 
 // -----------------------------------------------------------------------------
 
-bool ImplSalDDB::ImplMatches( int nScreen, long nDepth, const SalTwoRect& rTwoRect ) const
+bool ImplSalDDB::ImplMatches( SalX11Screen nXScreen, long nDepth, const SalTwoRect& rTwoRect ) const
 {
     bool bRet = false;
 
-    if( ( maPixmap != 0 ) && ( ( mnDepth == nDepth ) || ( 1 == mnDepth ) ) && nScreen == mnScreen)
+    if( ( maPixmap != 0 ) && ( ( mnDepth == nDepth ) || ( 1 == mnDepth ) ) && nXScreen == mnXScreen)
     {
         if (  rTwoRect.mnSrcX       == maTwoRect.mnSrcX
            && rTwoRect.mnSrcY       == maTwoRect.mnSrcY

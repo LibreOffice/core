@@ -212,7 +212,7 @@ Point XIMStatusWindow::updatePosition()
         XLIB_Window aChild;
         XTranslateCoordinates( (Display*)pParentEnvData->pDisplay,
                                (XLIB_Window)pParentEnvData->aShellWindow,
-                               GetGenericData()->GetSalDisplay()->GetRootWindow( GetGenericData()->GetSalDisplay()->GetDefaultScreenNumber() ),
+                               GetGenericData()->GetSalDisplay()->GetRootWindow( GetGenericData()->GetSalDisplay()->GetDefaultXScreen() ),
                                0, 0,
                                &x, &y,
                                &aChild );

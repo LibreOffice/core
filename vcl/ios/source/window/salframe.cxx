@@ -1003,7 +1003,7 @@ void IosSalFrame::UpdateFrameGeometry()
         maScreenRect = [pScreen frame];
         NSArray* pScreens = [NSScreen screens];
         if( pScreens )
-            maGeometry.nScreenNumber = [pScreens indexOfObject: pScreen];
+            maGeometry.nDisplayScreenNumber = [pScreens indexOfObject: pScreen];
     }
 
     CGRect aFrameRect = [mpWindow frame];

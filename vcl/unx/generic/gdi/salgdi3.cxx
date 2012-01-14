@@ -326,8 +326,10 @@ void X11SalGraphics::DrawServerFontLayout( const ServerFontLayout& rLayout )
 
     if (pVisualFormat)
     {
-        surface = cairo_xlib_surface_create_with_xrender_format (pDisplay, hDrawable_,
-            ScreenOfDisplay(pDisplay, m_nScreen), pVisualFormat, SAL_MAX_INT16, SAL_MAX_INT16);
+        surface = cairo_xlib_surface_create_with_xrender_format (
+                        pDisplay, hDrawable_,
+                        ScreenOfDisplay(pDisplay, m_nXScreen.getXScreen()),
+                        pVisualFormat, SAL_MAX_INT16, SAL_MAX_INT16);
     }
     else
     {

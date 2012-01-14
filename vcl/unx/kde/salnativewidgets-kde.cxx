@@ -237,7 +237,8 @@ class WidgetPainter
     */
         sal_Bool drawStyledWidget( QWidget *pWidget,
                 ControlState nState, const ImplControlValue& aValue,
-                Display *dpy, XLIB_Window drawable, int nScreen, int nDepth, GC gc,
+                Display *dpy, XLIB_Window drawable, SalX11Screen nXScreen,
+                int nDepth, GC gc,
                 ControlPart nPart = PART_ENTIRE_CONTROL );
 
     /** 'Get' method for push button.
@@ -429,8 +430,8 @@ WidgetPainter::~WidgetPainter( void )
 
 sal_Bool WidgetPainter::drawStyledWidget( QWidget *pWidget,
     ControlState nState, const ImplControlValue& aValue,
-        Display *dpy, XLIB_Window drawable, int nScreen, int nDepth, GC gc,
-        ControlPart nPart )
+    Display *dpy, XLIB_Window drawable, SalX11Screen nXScreen,
+    int nDepth, GC gc, ControlPart nPart )
 {
     if ( !pWidget )
     return sal_False;
@@ -478,12 +479,13 @@ sal_Bool WidgetPainter::drawStyledWidget( QWidget *pWidget,
     // Bitblt from the screen, because the radio buttons are usually not
     // rectangular, and there could be a bitmap under them
     GC aTmpGC = XCreateGC( dpy, qPixmap.handle(), 0, NULL );
-    X11SalGraphics::CopyScreenArea( dpy,
-                              drawable, nScreen, nDepth,
-                              qPixmap.handle(), qPixmap.x11Screen(), qPixmap.x11Depth(),
-                              aTmpGC,
-                              qWidgetPos.x(), qWidgetPos.y(), qRect.width(), qRect.height(),
-                              0, 0 );
+    X11SalGraphics::CopyScreenArea(
+        dpy,
+        drawable, nXScreen, nDepth,
+        qPixmap.handle(), SalX11Screen( qPixmap.x11Screen() ), qPixmap.x11Depth(),
+        aTmpGC,
+        qWidgetPos.x(), qWidgetPos.y(), qRect.width(), qRect.height(),
+        0, 0 );
     XFreeGC( dpy, aTmpGC );
 
     kapp->style().drawControl( QStyle::CE_RadioButton,
@@ -779,12 +781,12 @@ sal_Bool WidgetPainter::drawStyledWidget( QWidget *pWidget,
     return sal_False;
 
     // Bitblt it to the screen
-    X11SalGraphics::CopyScreenArea( dpy,
-                              qPixmap.handle(), qPixmap.x11Screen(), qPixmap.x11Depth(),
-                              drawable, nScreen, nDepth,
-                              gc,
-                              0, 0, qRect.width(), qRect.height(),
-                              qWidgetPos.x(), qWidgetPos.y() );
+    X11SalGraphics::CopyScreenArea(
+        dpy, qPixmap.handle(), SalX11Screen( qPixmap.x11Screen() ), qPixmap.x11Depth(),
+        drawable, nXScreen, nDepth,
+        gc,
+        0, 0, qRect.width(), qRect.height(),
+        qWidgetPos.x(), qWidgetPos.y() );
 
     // Restore widget's position
     pWidget->move( qWidgetPos );

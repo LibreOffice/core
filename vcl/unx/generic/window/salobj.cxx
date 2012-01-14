@@ -81,10 +81,10 @@ X11SalObject* X11SalObject::CreateObject( SalFrame* pParent, SystemWindowData* p
     // find out on which screen that window is
     XWindowAttributes aParentAttr;
     XGetWindowAttributes( pDisp, aObjectParent, &aParentAttr );
-    int nScreen = XScreenNumberOfScreen( aParentAttr.screen );
+    SalX11Screen nXScreen( XScreenNumberOfScreen( aParentAttr.screen ) );
     Visual* pVisual = (pWindowData && pWindowData->pVisual) ?
                       (Visual*)pWindowData->pVisual :
-                      pSalDisp->GetVisual( nScreen ).GetVisual();
+                      pSalDisp->GetVisual( nXScreen ).GetVisual();
     // get visual info
     VisualID aVisID = XVisualIDFromVisual( pVisual );
     XVisualInfo aTemplate;
@@ -111,25 +111,25 @@ X11SalObject* X11SalObject::CreateObject( SalFrame* pParent, SystemWindowData* p
                              aObjectParent,
                              0, 0,
                              1, 1, 0,
-                             pSalDisp->GetColormap( nScreen ).GetBlackPixel(),
-                             pSalDisp->GetColormap( nScreen ).GetWhitePixel()
+                             pSalDisp->GetColormap( nXScreen ).GetBlackPixel(),
+                             pSalDisp->GetColormap( nXScreen ).GetWhitePixel()
                              );
-    if( aVisID == pSalDisp->GetVisual( nScreen ).GetVisualId() )
+    if( aVisID == pSalDisp->GetVisual( nXScreen ).GetVisualId() )
     {
         pObject->maSecondary =
             XCreateSimpleWindow( pDisp,
                                  pObject->maPrimary,
                                  0, 0,
                                  1, 1, 0,
-                                 pSalDisp->GetColormap( nScreen ).GetBlackPixel(),
-                                 pSalDisp->GetColormap( nScreen ).GetWhitePixel()
+                                 pSalDisp->GetColormap( nXScreen ).GetBlackPixel(),
+                                 pSalDisp->GetColormap( nXScreen ).GetWhitePixel()
                                  );
     }
     else
     {
         #if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, "visual id of vcl %x, of visual %x\n",
-                 static_cast<unsigned int> (pSalDisp->GetVisual( nScreen ).GetVisualId()),
+                 static_cast<unsigned int> (pSalDisp->GetVisual( nXScreen ).GetVisualId()),
                  static_cast<unsigned int> (aVisID) );
         #endif
         GetGenericData()->ErrorTrapPush();
@@ -137,13 +137,13 @@ X11SalObject* X11SalObject::CreateObject( SalFrame* pParent, SystemWindowData* p
         // create colormap for visual - there might not be one
         pObject->maColormap = aAttribs.colormap = XCreateColormap(
             pDisp,
-            pSalDisp->GetRootWindow( nScreen ),
+            pSalDisp->GetRootWindow( nXScreen ),
             pVisual,
             AllocNone );
 
         pObject->maSecondary =
             XCreateWindow( pDisp,
-                           pSalDisp->GetRootWindow( nScreen ),
+                           pSalDisp->GetRootWindow( nXScreen ),
                            0, 0,
                            1, 1, 0,
                            nDepth, InputOutput,
@@ -170,8 +170,8 @@ X11SalObject* X11SalObject::CreateObject( SalFrame* pParent, SystemWindowData* p
     pObjData->pWidget       = NULL;
     pObjData->pVisual       = pVisual;
     pObjData->nDepth        = nDepth;
-    pObjData->aColormap     = aVisID == pSalDisp->GetVisual( nScreen ).GetVisualId() ?
-                              pSalDisp->GetColormap( nScreen ).GetXColormap() : None;
+    pObjData->aColormap     = aVisID == pSalDisp->GetVisual( nXScreen ).GetVisualId() ?
+                              pSalDisp->GetColormap( nXScreen ).GetXColormap() : None;
     pObjData->pAppContext   = NULL;
 
     XSync(pDisp, False);

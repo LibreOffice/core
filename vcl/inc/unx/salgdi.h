@@ -105,7 +105,7 @@ protected:
     const SalColormap*      m_pColormap;
     SalColormap    *m_pDeleteColormap;
     Drawable        hDrawable_;     // use
-    int             m_nScreen;
+    SalX11Screen    m_nXScreen;
     mutable XRenderPictFormat* m_pXRenderFormat;
     XID             m_aXRenderPicture;
     CairoFontsCache m_aCairoFontsCache;
@@ -220,7 +220,7 @@ public:
                             X11SalGraphics();
     virtual             ~X11SalGraphics();
 
-            void            Init( SalFrame *pFrame, Drawable aDrawable, int nScreen );
+            void            Init( SalFrame *pFrame, Drawable aDrawable, SalX11Screen nXScreen );
             void            Init( X11SalVirtualDevice *pVirtualDevice, SalColormap* pColormap = NULL, bool bDeleteColormap = false );
             void            Init( class ImplSalPrinterData *pPrinter );
             void            DeInit();
@@ -229,7 +229,7 @@ public:
     inline  Display*            GetXDisplay() const;
     inline  const SalVisual&    GetVisual() const;
     inline  Drawable        GetDrawable() const { return hDrawable_; }
-    void                    SetDrawable( Drawable d, int nScreen );
+    void                    SetDrawable( Drawable d, SalX11Screen nXScreen );
     XID                     GetXRenderPicture();
     XRenderPictFormat*      GetXRenderFormat() const;
     inline  void            SetXRenderFormat( XRenderPictFormat* pXRenderFormat ) { m_pXRenderFormat = pXRenderFormat; }
@@ -237,7 +237,7 @@ public:
     using SalGraphics::GetPixel;
     inline  Pixel           GetPixel( SalColor nSalColor ) const;
 
-    int                     GetScreenNumber() const { return m_nScreen; }
+    SalX11Screen            GetScreenNumber() const { return m_nXScreen; }
 
     // overload all pure virtual methods
     virtual void            GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY );
@@ -368,8 +368,8 @@ public:
     // do XCopyArea or XGet/PutImage depending on screen numbers
     // signature is like XCopyArea with screen numbers added
     static void CopyScreenArea( Display* pDisplay,
-                                Drawable aSrc, int nScreenSrc, int nSrcDepth,
-                                Drawable aDest, int nScreenDest, int nDestDepth,
+                                Drawable aSrc, SalX11Screen nXScreenSrc, int nSrcDepth,
+                                Drawable aDest, SalX11Screen nXScreenDest, int nDestDepth,
                                 GC aDestGC,
                                 int src_x, int src_y,
                                 unsigned int w, unsigned int h,

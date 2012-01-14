@@ -43,8 +43,9 @@
 #include <impbmp.hxx>
 
 
-sal_Bool SelectAppIconPixmap( SalDisplay *pDisplay, int nScreen,sal_uInt16 nIcon, sal_uInt16 iconSize,
-                          Pixmap& icon_pixmap, Pixmap& icon_mask)
+sal_Bool SelectAppIconPixmap( SalDisplay *pDisplay, SalX11Screen nXScreen,
+                              sal_uInt16 nIcon, sal_uInt16 iconSize,
+                              Pixmap& icon_pixmap, Pixmap& icon_mask)
 {
     if( ! ImplGetResMgr() )
         return sal_False;
@@ -74,23 +75,26 @@ sal_Bool SelectAppIconPixmap( SalDisplay *pDisplay, int nScreen,sal_uInt16 nIcon
         (aIcon.ImplGetBitmapImpBitmap()->ImplGetSalBitmap());
 
     icon_pixmap = XCreatePixmap( pDisplay->GetDisplay(),
-                                 pDisplay->GetRootWindow( nScreen ),
+                                 pDisplay->GetRootWindow( nXScreen ),
                                  iconSize, iconSize,
-                                 DefaultDepth( pDisplay->GetDisplay(), nScreen )
+                                 DefaultDepth( pDisplay->GetDisplay(),
+                                               nXScreen.getXScreen() )
                                  );
 
     pBitmap->ImplDraw( icon_pixmap,
-                       nScreen,
-                       DefaultDepth( pDisplay->GetDisplay(), nScreen ),
+                       nXScreen,
+                       DefaultDepth( pDisplay->GetDisplay(),
+                                     nXScreen.getXScreen() ),
                        aRect,
-                       DefaultGC(pDisplay->GetDisplay(), nScreen ) );
+                       DefaultGC( pDisplay->GetDisplay(),
+                                  nXScreen.getXScreen() ) );
 
     icon_mask = None;
 
     if( TRANSPARENT_BITMAP == aIcon.GetTransparentType() )
     {
         icon_mask = XCreatePixmap( pDisplay->GetDisplay(),
-                                   pDisplay->GetRootWindow( pDisplay->GetDefaultScreenNumber() ),
+                                   pDisplay->GetRootWindow( pDisplay->GetDefaultXScreen() ),
                                    iconSize, iconSize, 1);
 
         XGCValues aValues;
@@ -106,7 +110,7 @@ sal_Bool SelectAppIconPixmap( SalDisplay *pDisplay, int nScreen,sal_uInt16 nIcon
         X11SalBitmap *pMask = static_cast < X11SalBitmap * >
             (aMask.ImplGetImpBitmap()->ImplGetSalBitmap());
 
-        pMask->ImplDraw(icon_mask, nScreen, 1, aRect, aMonoGC);
+        pMask->ImplDraw(icon_mask, nXScreen, 1, aRect, aMonoGC);
         XFreeGC( pDisplay->GetDisplay(), aMonoGC );
     }
 

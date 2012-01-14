@@ -42,6 +42,7 @@
 
 #include <salframe.hxx>
 #include <vcl/sysdata.hxx>
+#include <unx/saltype.h>
 
 #include "tools/link.hxx"
 
@@ -176,7 +177,7 @@ class GtkSalFrame : public SalFrame
     };
     friend struct IMHandler;
 
-    int                             m_nScreen;
+    SalX11Screen                    m_nXScreen;
     GtkWidget*                      m_pWindow;
     int                             m_nDuringRender;
     GdkWindow*                      m_pForeignParent;
@@ -184,7 +185,7 @@ class GtkSalFrame : public SalFrame
     GdkWindow*                      m_pForeignTopLevel;
     GdkNativeWindow                 m_aForeignTopLevelWindow;
     Pixmap                          m_hBackgroundPixmap;
-    sal_uLong                     m_nStyle;
+    sal_uLong                       m_nStyle;
     SalExtStyle                     m_nExtStyle;
     GtkFixed*                       m_pFixedContainer;
     GtkSalFrame*                    m_pParent;
@@ -192,7 +193,7 @@ class GtkSalFrame : public SalFrame
     GdkWindowState                  m_nState;
     SystemEnvData                   m_aSystemData;
     GraphicsHolder                  m_aGraphics[ nMaxGraphics ];
-    sal_uInt16                          m_nKeyModifiers;
+    sal_uInt16                      m_nKeyModifiers;
     GdkCursor                      *m_pCurrentCursor;
     GdkVisibilityState              m_nVisibility;
     PointerStyle                    m_ePointerStyle;
@@ -205,7 +206,7 @@ class GtkSalFrame : public SalFrame
     bool                            m_bSendModChangeOnRelease;
     bool                            m_bWindowIsGtkPlug;
     bool                            m_bSetFocusOnMap;
-    rtl::OUString                          m_aTitle;
+    rtl::OUString                   m_aTitle;
     rtl::OUString                   m_sWMClass;
 
     IMHandler*                      m_pIMHandler;
@@ -287,7 +288,7 @@ class GtkSalFrame : public SalFrame
     Size calcDefaultSize();
 
     void setMinMaxSize();
-    void createNewWindow( XLIB_Window aParent, bool bXEmbed, int nScreen );
+    void createNewWindow( XLIB_Window aParent, bool bXEmbed, SalX11Screen nXScreen );
     void askForXEmbedFocus( sal_Int32 nTimecode );
 
     void AllocateFrame();
@@ -320,7 +321,8 @@ public:
     GdkVisibilityState getVisibilityState() const
     { return m_nVisibility; }
     Pixmap getBackgroundPixmap() const { return m_hBackgroundPixmap; }
-    int getScreenNumber() const { return m_nScreen; }
+    SalX11Screen getXScreenNumber() const { return m_nXScreen; }
+    int          GetDisplayScreen() const { return maGeometry.nDisplayScreenNumber; }
     void updateScreenNumber();
 
     // only for gtk3 ...

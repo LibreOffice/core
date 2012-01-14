@@ -57,20 +57,21 @@ X11SalSystem::~X11SalSystem()
 unsigned int X11SalSystem::GetDisplayScreenCount()
 {
     SalDisplay* pSalDisp = GetGenericData()->GetSalDisplay();
-    return pSalDisp->IsXinerama() ? pSalDisp->GetXineramaScreens().size() : pSalDisp->GetScreenCount();
+    return pSalDisp->IsXinerama() ? pSalDisp->GetXineramaScreens().size() :
+           pSalDisp->GetXScreenCount();
 }
 
 bool X11SalSystem::IsUnifiedDisplay()
 {
     SalDisplay* pSalDisp = GetGenericData()->GetSalDisplay();
-    unsigned int nScreenCount = pSalDisp->GetScreenCount();
+    unsigned int nScreenCount = pSalDisp->GetXScreenCount();
     return pSalDisp->IsXinerama() ? true : (nScreenCount == 1);
 }
 
 unsigned int X11SalSystem::GetDisplayDefaultScreen()
 {
     SalDisplay* pSalDisp = GetGenericData()->GetSalDisplay();
-    return pSalDisp->GetDefaultScreenNumber();
+    return pSalDisp->GetDefaultXScreen().getXScreen();
 }
 
 Rectangle X11SalSystem::GetDisplayScreenPosSizePixel( unsigned int nScreen )
@@ -85,7 +86,8 @@ Rectangle X11SalSystem::GetDisplayScreenPosSizePixel( unsigned int nScreen )
     }
     else
     {
-        const SalDisplay::ScreenData& rScreen = pSalDisp->getDataForScreen( nScreen );
+        const SalDisplay::ScreenData& rScreen =
+            pSalDisp->getDataForScreen( SalX11Screen( nScreen ) );
         aRet = Rectangle( Point( 0, 0 ), rScreen.m_aSize );
     }
 
@@ -116,7 +118,7 @@ rtl::OUString X11SalSystem::GetDisplayScreenName( unsigned int nScreen )
     }
     else
     {
-        if( nScreen >= static_cast<unsigned int>(pSalDisp->GetScreenCount()) )
+        if( nScreen >= static_cast<unsigned int>(pSalDisp->GetXScreenCount()) )
             nScreen = 0;
         rtl::OUStringBuffer aBuf( 256 );
         aBuf.append( rtl::OStringToOUString( rtl::OString( DisplayString( pSalDisp->GetDisplay() ) ), osl_getThreadTextEncoding() ) );

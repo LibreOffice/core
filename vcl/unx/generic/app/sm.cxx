@@ -486,10 +486,10 @@ void SessionManagerClient::open()
         ICEConnectionObserver::unlock();
 
         SalDisplay* pDisp = GetGenericData()->GetSalDisplay();
-        if( pDisp->GetDrawable(pDisp->GetDefaultScreenNumber()) && !m_aClientID.isEmpty() )
+        if( pDisp->GetDrawable(pDisp->GetDefaultXScreen()) && !m_aClientID.isEmpty() )
         {
             XChangeProperty( pDisp->GetDisplay(),
-                             pDisp->GetDrawable( pDisp->GetDefaultScreenNumber() ),
+                             pDisp->GetDrawable( pDisp->GetDefaultXScreen() ),
                              XInternAtom( pDisp->GetDisplay(), "SM_CLIENT_ID", False ),
                              XA_STRING,
                              8,

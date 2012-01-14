@@ -56,6 +56,34 @@ GtkSalSystem::~GtkSalSystem()
 {
 }
 
+int
+GtkSalSystem::GetDisplayXScreenCount()
+{
+    return gdk_display_get_n_screens (mpDisplay);
+}
+
+// Including gdkx.h kills us with the Window / XWindow conflict
+extern "C" {
+    GType gdk_x11_display_get_type (void);
+    int   gdk_x11_screen_get_screen_number (GdkScreen *screen);
+}
+
+SalX11Screen
+GtkSalSystem::getXScreenFromDisplayScreen(unsigned int nScreen)
+{
+    gint nMonitor;
+    GdkScreen *pScreen = NULL;
+
+    pScreen = getScreenMonitorFromIdx (mpDisplay, nScreen, nMonitor);
+    if (!pScreen)
+        return SalX11Screen (0);
+#if GTK_CHECK_VERSION(3,0,0)
+    if (!G_TYPE_CHECK_INSTANCE_TYPE (mpDisplay, gdk_x11_display_get_type ()))
+        return SalX11Screen (0);
+#endif
+    return SalX11Screen (gdk_x11_screen_get_screen_number (pScreen));
+}
+
 GdkScreen *
 GtkSalSystem::getScreenMonitorFromIdx (GdkDisplay *pDisplay, int nIdx, gint &nMonitor)
 {

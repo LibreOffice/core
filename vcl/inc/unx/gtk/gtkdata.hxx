@@ -154,12 +154,16 @@ public:
     GdkCursor *getCursor( PointerStyle ePointerStyle );
     virtual int CaptureMouse( SalFrame* pFrame );
 
+    int          GetDefaultScreen() { return m_pSys->GetDisplayDefaultScreen(); }
+    SalX11Screen GetDefaultXScreen() { return m_pSys->GetDisplayDefaultXScreen(); }
+    Size         GetScreenSize( int nDisplayScreen );
+    int          GetXScreenCount() { return m_pSys->GetDisplayXScreenCount(); }
 #if GTK_CHECK_VERSION(3,0,0)
-    int  GetDefaultScreenNumber() { return m_pSys->GetDisplayDefaultScreen(); }
-    int  GetScreenCount() { return m_pSys->GetDisplayScreenCount(); }
-    Size GetScreenSize( int screen );
+//    int          GetScreenCount() { return m_pSys->GetDisplayScreenCount(); }
 #endif
-    virtual void initScreen( int nScreen ) const;
+#if !GTK_CHECK_VERSION(3,0,0)
+    virtual ScreenData *initScreen( SalX11Screen nXScreen ) const;
+#endif
 
     GdkFilterReturn filterGdkEvent( GdkXEvent* sys_event,
                                     GdkEvent* event );
