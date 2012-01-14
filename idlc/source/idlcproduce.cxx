@@ -132,7 +132,8 @@ void removeIfExists(const OString& pathname)
     unlink(pathname.getStr());
 }
 
-sal_Int32 SAL_CALL produceFile(const OString& regFileName)
+sal_Int32 SAL_CALL
+produceFile(const OString& regFileName, sPair_t const*const pDepFile)
 {
     Options* pOptions = idlc()->getOptions();
 
@@ -143,6 +144,20 @@ sal_Int32 SAL_CALL produceFile(const OString& regFileName)
         fprintf(stderr, "%s: could not create path of registry file '%s'.\n",
                 pOptions->getProgramName().getStr(), regFileName.getStr());
         return 1;
+    }
+
+    OString depTmpName;
+    if (pDepFile)
+    {
+        depTmpName = pDepFile->first.replaceAt(
+                        regFileName.getLength() -3, 3, "_idlc_");
+        if ( !checkOutputPath(depTmpName) )
+        {
+            fprintf(stderr, "%s: could not create path of dep file '%s'.\n",
+                pOptions->getProgramName().getStr(), pDepFile->first.getStr());
+            return 1;
+        }
+        removeIfExists(depTmpName);
     }
 
     removeIfExists(regTmpName);
@@ -192,6 +207,18 @@ sal_Int32 SAL_CALL produceFile(const OString& regFileName)
         return 1;
     }
 
+    if (pDepFile && !idlc()->dumpDeps(depTmpName, pDepFile->second))
+    {
+        fprintf(stderr, "%s: could not write dep file '%s'\n",
+                pOptions->getProgramName().getStr(), pDepFile->first.getStr());
+        removeIfExists(depTmpName);
+        removeIfExists(pDepFile->first);
+        removeIfExists(regTmpName);
+        removeIfExists(regFileName);
+        cleanPath();
+        return 1;
+    }
+
     removeIfExists(regFileName);
 
     if ( File::move(OStringToOUString(regTmpName, osl_getThreadTextEncoding()),
@@ -204,6 +231,23 @@ sal_Int32 SAL_CALL produceFile(const OString& regFileName)
         return 1;
     }
     removeIfExists(regTmpName);
+
+    if (pDepFile)
+    {
+        removeIfExists(pDepFile->first);
+        if ( File::move(OStringToOUString(depTmpName, osl_getThreadTextEncoding()),
+                        OStringToOUString(pDepFile->first, osl_getThreadTextEncoding())) != FileBase::E_None ) {
+            fprintf(stderr, "%s: cannot rename dep file '%s' to '%s'\n",
+                    idlc()->getOptions()->getProgramName().getStr(),
+                    depTmpName.getStr(), pDepFile->first.getStr());
+            removeIfExists(depTmpName);
+            removeIfExists(pDepFile->first);
+            removeIfExists(regFileName);
+            cleanPath();
+            return 1;
+        }
+        removeIfExists(depTmpName);
+    }
 
     return 0;
 }

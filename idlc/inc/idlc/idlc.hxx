@@ -54,6 +54,9 @@ public:
 
     void init();
 
+    bool dumpDeps(::rtl::OString const& rDepFile,
+                  ::rtl::OString const& rTarget);
+
     Options* getOptions()
         { return m_pOptions; }
     AstStack* scopes()
@@ -65,7 +68,7 @@ public:
     const ::rtl::OString& getFileName()
         { return m_fileName; }
     void setFileName(const ::rtl::OString& fileName)
-        { m_fileName = fileName; }
+        { m_fileName = fileName; addInclude(fileName); }
     const ::rtl::OString& getMainFileName()
         { return m_mainFileName; }
     void setMainFileName(const ::rtl::OString& mainFileName)
@@ -118,7 +121,7 @@ public:
     void setParseState(ParseState parseState)
         { m_parseState = parseState; }
 
-    void insertInclude(const ::rtl::OString& inc)
+    void addInclude(const ::rtl::OString& inc)
         { m_includes.insert(inc); }
     StringSet* getIncludes()
         { return &m_includes; }
@@ -149,9 +152,12 @@ private:
     StringSet           m_includes;
 };
 
+
+typedef ::std::pair< ::rtl::OString const&, ::rtl::OString const& > sPair_t;
 sal_Int32 compileFile(const ::rtl::OString * pathname);
     // a null pathname means stdin
-sal_Int32 produceFile(const ::rtl::OString& filenameBase);
+sal_Int32 produceFile(const ::rtl::OString& filenameBase,
+        sPair_t const*const pDepFile);
     // filenameBase is filename without ".idl"
 void removeIfExists(const ::rtl::OString& pathname);
 

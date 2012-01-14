@@ -44,7 +44,9 @@
 #include "idlc/asttype.hxx"
 #include "idlc/asttypedef.hxx"
 
-#include "osl/diagnose.h"
+#include <osl/diagnose.h>
+#include <osl/file.hxx>
+#include <osl/thread.h>
 
 using namespace ::rtl;
 
@@ -284,6 +286,59 @@ sal_Bool Idlc::isDocValid()
     if ( m_bGenerateDoc )
         return m_bIsDocValid;
     return sal_False;;
+}
+
+static void lcl_writeString(::osl::File & rFile, ::osl::FileBase::RC & o_rRC,
+        ::rtl::OString const& rString)
+{
+    sal_uInt64 nWritten(0);
+    if (::osl::FileBase::E_None == o_rRC) {
+        o_rRC = rFile.write(rString.getStr(), rString.getLength(), nWritten);
+        if (static_cast<sal_uInt64>(rString.getLength()) != nWritten) {
+            o_rRC = ::osl::FileBase::E_INVAL; //?
+        }
+    }
+}
+
+struct WriteDep
+{
+    ::osl::File& m_rFile;
+    ::osl::FileBase::RC & m_rRC;
+    explicit WriteDep(::osl::File & rFile, ::osl::FileBase::RC & rRC)
+        : m_rFile(rFile), m_rRC(rRC) { }
+    void operator() (::rtl::OString const& rEntry)
+    {
+        lcl_writeString(m_rFile, m_rRC, " \\\n ");
+        lcl_writeString(m_rFile, m_rRC, rEntry);
+    }
+};
+
+bool
+Idlc::dumpDeps(::rtl::OString const& rDepFile, ::rtl::OString const& rTarget)
+{
+    ::osl::File depFile(
+            ::rtl::OStringToOUString(rDepFile, osl_getThreadTextEncoding()));
+    ::osl::FileBase::RC rc =
+        depFile.open(osl_File_OpenFlag_Write | osl_File_OpenFlag_Create);
+    if (::osl::FileBase::E_None != rc) {
+        return false;
+    }
+    lcl_writeString(depFile, rc, rTarget);
+    if (::osl::FileBase::E_None != rc) {
+        return false;
+    }
+    lcl_writeString(depFile, rc, " :");
+    if (::osl::FileBase::E_None != rc) {
+        return false;
+    }
+    m_includes.erase(getRealFileName()); // eeek, that is a temp file...
+    ::std::for_each(m_includes.begin(), m_includes.end(),
+            WriteDep(depFile, rc));
+    if (::osl::FileBase::E_None != rc) {
+        return false;
+    }
+    rc = depFile.close();
+    return ::osl::FileBase::E_None == rc;
 }
 
 static Idlc* pStaticIdlc = NULL;

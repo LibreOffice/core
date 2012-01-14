@@ -215,7 +215,7 @@ static void	idlParsePragma(sal_Char* pPragma)
 	sal_Char* offset = begin;
 	while (*offset != ',') offset++;
 	//::rtl::OString include = pragma.copy(index + 8, offset - begin);
-	idlc()->insertInclude(pragma.copy(index + 8, (sal_Int32)(offset - begin)));
+	//unused// idlc()->insertInclude(pragma.copy(index + 8, (sal_Int32)(offset - begin)));
 }	
 
 static void parseLineAndFile(sal_Char* pBuf)

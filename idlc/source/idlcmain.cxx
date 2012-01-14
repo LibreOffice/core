@@ -86,7 +86,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         if (nErrors > 0) {
             removeIfExists(outputUrl);
         } else {
-            nErrors = produceFile(outputUrl);
+            nErrors = produceFile(outputUrl, 0);
         }
         idlc()->reset();
     }
@@ -115,26 +115,43 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
                     (*i).getStr());
 
         // prepare output file name
-        OString outputFileUrl;
+        OString const strippedFileName(
+                sysFileName.copy(sysFileName.lastIndexOf(SEPARATOR) + 1));
+        OString outputFile;
         if ( options.isValid("-O") )
         {
-            OString strippedFileName(sysFileName.copy(sysFileName.lastIndexOf(SEPARATOR) + 1));
-            outputFileUrl = convertToFileUrl(options.getOption("-O"));
-            sal_Char c = outputFileUrl.getStr()[outputFileUrl.getLength()-1];
+            outputFile = (options.getOption("-O"));
+            if ('/' != outputFile.getStr()[outputFile.getLength()-1]) {
+                outputFile += OString::valueOf('/');
+            }
+            outputFile += strippedFileName.replaceAt(
+                    strippedFileName.getLength() -3 , 3, "urd");
+        } else {
+            outputFile =
+                sysFileName.replaceAt(sysFileName.getLength() -3 , 3, "urd");
+        }
+        OString const outputFileUrl = convertToFileUrl(outputFile);
 
-            if ( c != '/' )
-                outputFileUrl += OString::valueOf('/');
-
-            outputFileUrl += strippedFileName.replaceAt(strippedFileName.getLength() -3 , 3, "urd");
-        } else
-        {
-            outputFileUrl = convertToFileUrl(sysFileName.replaceAt(sysFileName.getLength() -3 , 3, "urd"));
+        ::rtl::OString depFileUrl;
+        if (options.isValid("-M")) {
+            depFileUrl = convertToFileUrl(options.getOption("-M"));
+            if ('/' != depFileUrl.getStr()[depFileUrl.getLength()-1]) {
+                depFileUrl += OString::valueOf('/');
+            }
+            depFileUrl += strippedFileName.replaceAt(
+                    strippedFileName.getLength() -3 , 3, "d");
         }
 
-        if ( nErrors )
+        if ( nErrors ) {
+            if (options.isValid("-M")) {
+                removeIfExists(depFileUrl);
+            }
             removeIfExists(outputFileUrl);
-        else
-            nErrors = produceFile(outputFileUrl);
+        } else {
+            sPair_t const pair(depFileUrl, outputFile);
+            nErrors = produceFile(outputFileUrl,
+                        (options.isValid("-M")) ? &pair : 0);
+        }
 
         idlc()->reset();
     }

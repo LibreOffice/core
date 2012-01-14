@@ -76,6 +76,7 @@ bool Options::checkArgument (std::vector< std::string > & rArgs, char const * ar
         switch (arg[1])
         {
         case 'O':
+        case 'M':
         case 'I':
         case 'D':
           {
@@ -214,6 +215,16 @@ bool Options::initOptions(std::vector< std::string > & rArgs) throw(IllegalArgum
         m_options["-O"] = param;
         break;
       }
+    case 'M':
+      {
+        if (!((++first != last) && ((*first)[0] != '-')))
+        {
+          return badOption("invalid", option);
+        }
+        OString param((*first).c_str(), (*first).size());
+        m_options["-M"] = param;
+        break;
+      }
     case 'I':
       {
         if (!((++first != last) && ((*first)[0] != '-')))
@@ -344,6 +355,9 @@ OString Options::prepareHelp()
     help += "                  The generated output is a registry file with\n";
     help += "                  the same name as the idl input file (or 'stdin'\n";
     help += "                  for -stdin).\n";
+    help += "    -M<path>    = path specifies the output directory for deps.\n";
+    help += "                  Generate GNU make dependency files with the\n";
+    help += "                  same name as the idl input file.\n";
     help += "    -I<path>    = path specifies a directory where include\n";
     help += "                  files will be searched by the preprocessor.\n";
     help += "                  Multiple directories can be combined with ';'.\n";
