@@ -46,16 +46,12 @@ $(call gb_Package_get_target,$(1)_inc) : $(call gb_UnoApiTarget_get_target,$(1))
 
 endef
 
-# TODO: make multi repo safe
 define gb_UnoApiTarget_autopackage_idl
 $$(eval $$(call gb_Package_Package,$(1)_idl,$(SRCDIR)))
 $(foreach onefile,$(gb_UnoApiTarget_IDLFILES_$(1)), \
 	$$(eval $$(call gb_Package_add_file,$(1)_idl,$(patsubst $(1)/%,idl/%,$(onefile)),$(onefile))))
 
 endef
-
-$(call gb_UnoApiTarget_get_header_target,$(1))/% : $(call gb_UnoApiTarget_get_target,$(1))
-	mkdir -p $$(dir $$@)
 
 define gb_UnoApiTarget_UnoApiTarget
 $$(eval $$(call gb_Module_register_target,$(call gb_UnoApiOutTarget_get_target,$(1)),$(call gb_UnoApiOutTarget_get_clean_target,$(1))))
@@ -69,38 +65,39 @@ endef
 define gb_UnoApiTarget_add_idlfiles
 $(foreach idl,$(3),$(call gb_UnoApiTarget_add_idlfile,$(1),$(2),$(idl)))
 
-$(call gb_UnoApiPartTarget_get_target,$(2)/idl.done) : $(foreach idl,$(3),$(SRCDIR)/$(2)/$(idl).idl)
-	$(gb_UnoApiPartTarget__command)
+$(call gb_UnoApiTarget_get_target,$(1)) : \
+	$(call gb_UnoApiPartTarget_get_target,$(2)/idl.done)
+$(call gb_UnoApiPartTarget_get_target,$(2)/idl.done) : \
+	$(foreach idl,$(3),$(SRCDIR)/$(2)/$(idl).idl)
 
 endef
 
 # for interfaces, exceptions, structs, enums, constant groups
 define gb_UnoApiTarget_add_idlfile
-$(call gb_UnoApiTarget_get_target,$(1)) : \
-	$(call gb_UnoApiPartTarget_get_target,$(2)/idl.done)
 $(call gb_UnoApiPartTarget_get_target,$(2)/idl.done) : \
 	$(call gb_UnoApiPartTarget_get_target,$(2)/$(3).urd)
-gb_UnoApiTarget_HPPFILES_$(1) += $(2)/$(3).hdl
-gb_UnoApiTarget_HPPFILES_$(1) += $(2)/$(3).hpp
+gb_UnoApiTarget_HPPFILES_$(1) += $(2)/$(3).hdl $(2)/$(3).hpp
 gb_UnoApiTarget_IDLFILES_$(1) += $(2)/$(3).idl
 
-$(call gb_UnoApiTarget_get_header_target,)$(2)/$(3).hpp :| $(call gb_UnoApiTarget_get_target,$(1))
-$(call gb_UnoApiTarget_get_header_target,)$(2)/$(3).hdl :| $(call gb_UnoApiTarget_get_target,$(1))
+$(call gb_UnoApiTarget_get_header_target,$(2)/$(3).hpp) :| \
+	$(call gb_UnoApiTarget_get_target,$(1))
+$(call gb_UnoApiTarget_get_header_target,$(2)/$(3).hdl) :| \
+	$(call gb_UnoApiTarget_get_target,$(1))
 
 endef
 
 define gb_UnoApiTarget_add_idlfiles_noheader
 $(foreach idl,$(3),$(call gb_UnoApiTarget_add_idlfile_noheader,$(1),$(2),$(idl)))
 
-$(call gb_UnoApiPartTarget_get_target,$(2)/idl_noheader.done) : $(foreach idl,$(3),$(SRCDIR)/$(2)/$(idl).idl)
-	$(gb_UnoApiPartTarget__command)
+$(call gb_UnoApiTarget_get_target,$(1)) : \
+	$(call gb_UnoApiPartTarget_get_target,$(2)/idl_noheader.done)
+$(call gb_UnoApiPartTarget_get_target,$(2)/idl_noheader.done) : \
+	$(foreach idl,$(3),$(SRCDIR)/$(2)/$(idl).idl)
 
 endef
 
 # for old-style services and modules
 define gb_UnoApiTarget_add_idlfile_noheader
-$(call gb_UnoApiTarget_get_target,$(1)) : \
-	$(call gb_UnoApiPartTarget_get_target,$(2)/idl_noheader.done)
 $(call gb_UnoApiPartTarget_get_target,$(2)/idl_noheader.done) : \
 	$(call gb_UnoApiPartTarget_get_target,$(2)/$(3).urd)
 gb_UnoApiTarget_IDLFILES_$(1) += $(2)/$(3).idl
@@ -110,21 +107,22 @@ endef
 define gb_UnoApiTarget_add_idlfiles_nohdl
 $(foreach idl,$(3),$(call gb_UnoApiTarget_add_idlfile_nohdl,$(1),$(2),$(idl)))
 
-$(call gb_UnoApiPartTarget_get_target,$(2)/idl_nohdl.done) : $(foreach idl,$(3),$(SRCDIR)/$(2)/$(idl).idl)
-	$(gb_UnoApiPartTarget__command)
+$(call gb_UnoApiTarget_get_target,$(1)) : \
+	$(call gb_UnoApiPartTarget_get_target,$(2)/idl_nohdl.done)
+$(call gb_UnoApiPartTarget_get_target,$(2)/idl_nohdl.done) : \
+	$(foreach idl,$(3),$(SRCDIR)/$(2)/$(idl).idl)
 
 endef
 
 # for new-style services
 define gb_UnoApiTarget_add_idlfile_nohdl
-$(call gb_UnoApiTarget_get_target,$(1)) : \
-	$(call gb_UnoApiPartTarget_get_target,$(2)/idl_nohdl.done)
 $(call gb_UnoApiPartTarget_get_target,$(2)/idl_nohdl.done) : \
 	$(call gb_UnoApiPartTarget_get_target,$(2)/$(3).urd)
 gb_UnoApiTarget_HPPFILES_$(1) += $(2)/$(3).hpp
 gb_UnoApiTarget_IDLFILES_$(1) += $(2)/$(3).idl
 
-$(call gb_UnoApiTarget_get_header_target,)$(2)/$(3).hpp :| $(call gb_UnoApiTarget_get_target,$(1))
+$(call gb_UnoApiTarget_get_header_target,$(2)/$(3).hpp) :| \
+	$(call gb_UnoApiTarget_get_target,$(1))
 
 endef
 
@@ -166,7 +164,7 @@ endef
 $(call gb_UnoApiOutTarget_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),UNO,1)
 	-$(call gb_Helper_abbreviate_dirs,\
-		rm -f $(call gb_UnoApiOutTarget_get_target,$*)) 
+		rm -f $(call gb_UnoApiOutTarget_get_target,$*))
 
 .PHONY : $(call gb_UnoApiTarget_get_clean_target,%)
 $(call gb_UnoApiTarget_get_clean_target,%) :
@@ -187,15 +185,20 @@ $(call gb_UnoApiTarget_get_clean_target,%) :
 $(call gb_UnoApiPartTarget_get_target,%.urd) :
 	@true
 
+$(call gb_UnoApiPartTarget_get_target,%.done) :
+	$(call gb_UnoApiPartTarget__command,$@,$*,$?)
+
+
 define gb_UnoApiPartTarget__command
-	$$(call gb_Output_announce,$(2),$(true),IDL,2)
-	mkdir -p $(call gb_UnoApiPartTarget_get_target,$(2)) && \
-	RESPONSEFILE=$$(call var2file,$$(shell $(gb_MKTEMP)),500,\
-		$$(call gb_Helper_convert_native,$$(INCLUDE) $$(DEFS) -O $(call gb_UnoApiPartTarget_get_target,$(2)) -verbose -C \
-		$$(sort $$(patsubst $$(call gb_UnoApiPartTarget_get_target,%.urd),$(SRCDIR)/%.idl,$$?)))) && \
-	$(gb_UnoApiTarget_IDLCCOMMAND) @$$$${RESPONSEFILE} > /dev/null && \
-	rm -f $$$${RESPONSEFILE} && \
-	touch $$@
+	$(call gb_Output_announce,$(2),$(true),IDL,2)
+	mkdir -p $(call gb_UnoApiPartTarget_get_target,$(dir $(2))) && \
+	RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),500,\
+		$(call gb_Helper_convert_native,$(INCLUDE) $(DEFS) \
+		-O $(call gb_UnoApiPartTarget_get_target,$(dir $(2))) -verbose -C \
+		$(sort $(patsubst $(call gb_UnoApiPartTarget_get_target,%.urd),$(SRCDIR)/%.idl,$(3))))) && \
+	$(gb_UnoApiTarget_IDLCCOMMAND) @$${RESPONSEFILE} > /dev/null && \
+	rm -f $${RESPONSEFILE} && \
+	touch $(1)
 
 endef
 
@@ -212,7 +215,7 @@ $(call gb_Helper_abbreviate_dirs_native,\
 	mkdir -p $(dir $(1)) && \
 	mkdir -p  $(gb_Helper_MISC) && \
 	RESPONSEFILE=`$(gb_MKTEMP)` && \
-	echo " -Gc -L -BUCR -O$(call gb_UnoApiTarget_get_header_target,$*) $(7) \
+	echo " -Gc -L -BUCR -O$(call gb_UnoApiTarget_get_header_target,$(2)) $(3) \
 		$(1) \
 		" > $${RESPONSEFILE} && \
 	$(gb_UnoApiTarget_CPPUMAKERCOMMAND) @$${RESPONSEFILE} && \
@@ -225,7 +228,6 @@ endef
 # - generate dependencies for included idls
 # - empty $? in headertarget?
 
-# TODO: reenable the check
 $(call gb_UnoApiTarget_get_target,%):
 	$(call gb_Output_announce,$*,$(true),RDB,3)
 	$(if $(gb_UnoApiTarget_IDLFILES_$*),$(call gb_UnoApiTarget__command,$@,$*,$<,UCR,$(addprefix $(call gb_UnoApiPartTarget_get_target,),$(patsubst %.idl,%.urd,$(gb_UnoApiTarget_IDLFILES_$*)))))
@@ -235,6 +237,6 @@ $(call gb_UnoApiTarget_get_target,%):
 	    $(gb_UnoApiTarget_REGCOMPARECOMMAND) -f -t -r1 $(call gb_Helper_convert_native,$(UNOAPI_REFERENCE)) -r2 $(call gb_Helper_convert_native,$@))
 	$(if $(gb_UnoApiTarget_IDLFILES_$*), \
 		$(call gb_Output_announce,$*,$(true),HPP,4) \
-		$(call gb_UnoApiHeaderTarget__command,$@,$*,$<,$?,$(INCLUDE),$(DEFS),$(UNOAPI_DEPS)))
+		$(call gb_UnoApiHeaderTarget__command,$@,$*,$(UNOAPI_DEPS)))
 
 # vim: set noet sw=4 ts=4:
