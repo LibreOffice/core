@@ -153,7 +153,7 @@ private:
 };
 
 
-typedef ::std::pair< ::rtl::OString const&, ::rtl::OString const& > sPair_t;
+typedef ::std::pair< ::rtl::OString, ::rtl::OString > sPair_t;
 sal_Int32 compileFile(const ::rtl::OString * pathname);
     // a null pathname means stdin
 sal_Int32 produceFile(const ::rtl::OString& filenameBase,
