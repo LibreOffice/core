@@ -129,18 +129,7 @@ gb_COMPILEROPTFLAGS := $(gb_COMPILERDEFAULTOPTFLAGS)
 endif
 gb_COMPILERNOOPTFLAGS := -O0
 
-
-# At least with gcc 4.6.2 the situation was that if /usr/include was missing
-# from the -I... includes, header files were pulled from /usr/include/ instead
-# of solver/$INPATH/inc/external/
-# One should not add /usr/include, but ... have this as workaround now.
-# However, MacOSX would bail out with lots of deprecated methods as
-# /usr/include is not what's used on Mac.
-ifeq ($(OS_FOR_BUILD),MACOSX)
 gb_LinkTarget_INCLUDE := $(filter-out %/stl, $(subst -I. , ,$(SOLARINC)))
-else
-gb_LinkTarget_INCLUDE := $(filter-out %/stl, $(subst -I. , ,$(SOLARINC))) -I$(SYSBASE)/usr/include
-endif
 gb_LinkTarget_INCLUDE_STL := $(filter %/stl, $(subst -I. , ,$(SOLARINC)))
 
 
