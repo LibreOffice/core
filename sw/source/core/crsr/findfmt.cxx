@@ -59,7 +59,7 @@ sal_Bool SwPaM::Find( const SwFmt& rFmt, SwMoveFn fnMove,
     while( !bFound &&
             0 != ( pNode = ::GetNode( *pPam, bFirst, fnMove, bInReadOnly )))
     {
-        if( 0 != ( bFound = pNode->GetFmtColl() == &rFmt ))
+        if( 0 != ( bFound = (pNode->GetFmtColl() == &rFmt) ))
         {
             // wurde die FormatCollection gefunden, dann handelt es sich auf
             // jedenfall um einen SwCntntNode !!

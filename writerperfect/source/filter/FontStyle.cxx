@@ -61,7 +61,7 @@ void FontStyleManager::writeFontsDeclaration(OdfDocumentHandler *pHandler) const
 {
     TagOpenElement("office:font-face-decls").write(pHandler);
     std::map<WPXString, shared_ptr<FontStyle>, ltstr>::const_iterator iter;
-    for (iter = mStyleHash.begin(); iter != mStyleHash.end(); iter++)
+    for (iter = mStyleHash.begin(); iter != mStyleHash.end(); ++iter)
     {
         (iter->second)->write(pHandler);
     }

@@ -3008,7 +3008,7 @@ sal_Bool SwCntntFrm::MoveFtnCntFwd( sal_Bool bMakePage, SwFtnBossFrm *pOldBoss )
         sal_Bool bSameBoss = sal_True;
         SwFtnBossFrm * const pNewBoss = pNewUpper->FindFtnBossFrm();
         //Wechseln wir die Spalte/Seite?
-        if ( sal_False == ( bSameBoss = pNewBoss == pOldBoss ) )
+        if ( sal_False == ( bSameBoss = (pNewBoss == pOldBoss) ) )
         {
             bSamePage = pOldBoss->FindPageFrm() == pNewBoss->FindPageFrm(); // Seitenwechsel?
             pNewUpper->Calc();

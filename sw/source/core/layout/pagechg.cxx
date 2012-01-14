@@ -246,7 +246,7 @@ SwPageFrm::SwPageFrm( SwFrmFmt *pFmt, SwFrm* pSib, SwPageDesc *pPgDsc ) :
     //Body-Bereich erzeugen und einsetzen, aber nur wenn ich nicht gerade
     //eine Leerseite bin.
     SwDoc *pDoc = pFmt->GetDoc();
-    if ( sal_False == (bEmptyPage = pFmt == pDoc->GetEmptyPageFmt()) )
+    if ( sal_False == (bEmptyPage = (pFmt == pDoc->GetEmptyPageFmt())) )
     {
         bEmptyPage = sal_False;
         Calc();                             //Damit die PrtArea stimmt.
