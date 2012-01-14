@@ -1538,16 +1538,16 @@ void SwXMLTableContext::InsertColumn( sal_Int32 nWidth2, sal_Bool bRelWidth2,
     {
         if( !pColumnDefaultCellStyleNames )
         {
-            pColumnDefaultCellStyleNames = new SvStringsDtor;
+            pColumnDefaultCellStyleNames = new std::vector<String>;
             sal_uLong nCount = aColumnWidths.size() - 1;
             while( nCount-- )
-                pColumnDefaultCellStyleNames->Insert( new String,
-                    pColumnDefaultCellStyleNames->Count() );
+                pColumnDefaultCellStyleNames->push_back(String());
         }
 
-        pColumnDefaultCellStyleNames->Insert(
-            pDfltCellStyleName ? new String( *pDfltCellStyleName ) : new String,
-            pColumnDefaultCellStyleNames->Count() );
+        if(pDfltCellStyleName)
+            pColumnDefaultCellStyleNames->push_back(*pDfltCellStyleName);
+        else
+            pColumnDefaultCellStyleNames->push_back(String());
     }
 }
 
@@ -1567,11 +1567,10 @@ sal_Int32 SwXMLTableContext::GetColumnWidth( sal_uInt32 nCol,
 
 OUString SwXMLTableContext::GetColumnDefaultCellStyleName( sal_uInt32 nCol ) const
 {
-    OUString sRet;
-    if( pColumnDefaultCellStyleNames )
-        sRet =  *(*pColumnDefaultCellStyleNames)[(sal_uInt16)nCol];
+    if( pColumnDefaultCellStyleNames && nCol < pColumnDefaultCellStyleNames->size())
+        return (*pColumnDefaultCellStyleNames)[static_cast<size_t>(nCol)];
 
-    return sRet;
+    return OUString();
 }
 
 void SwXMLTableContext::InsertCell( const OUString& rStyleName,
