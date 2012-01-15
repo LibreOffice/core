@@ -3089,7 +3089,9 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
 
             // Match <group>:
             if (INetMIME::isAlpha(*pPos))
+            {
                 for (sal_Unicode const * p = pPos + 1;; ++p)
+                {
                     if (p == pEnd || *p == nQueryDelimiter
                         || *p == nFragmentDelimiter)
                     {
@@ -3100,7 +3102,11 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
                     }
                     else if (!INetMIME::isAlphanumeric(*p) && *p != '+'
                              && *p != '-' && *p != '.' && *p != '_')
+                    {
                         break;
+                    }
+                }
+            }
 
             // Match <article>:
             for (;;)
