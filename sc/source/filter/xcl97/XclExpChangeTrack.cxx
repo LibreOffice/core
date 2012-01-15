@@ -1551,7 +1551,7 @@ ScChangeTrack* XclExpChangeTrack::CreateTempChangeTrack()
     OSL_ENSURE( nOrigCount == pTempDoc->GetTableCount(),
         "XclExpChangeTrack::CreateTempChangeTrack - table count mismatch" );
     if( nOrigCount != pTempDoc->GetTableCount() )
-        return false;
+        return NULL;
 
     return pOrigChangeTrack->Clone(pTempDoc);
 }
