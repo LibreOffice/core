@@ -28,6 +28,8 @@
 #ifndef ACCESSIBILITY_HELPER_COMBOLISTBOXHELPER_HXX
 #define ACCESSIBILITY_HELPER_COMBOLISTBOXHELPER_HXX
 
+#include <com/sun/star/uno/Reference.hxx>
+
 #include <tools/string.hxx>
 #include <tools/wintypes.hxx>
 
@@ -35,12 +37,16 @@ namespace com { namespace sun { namespace star { namespace datatransfer { namesp
     class XClipboard;
 } } } } }
 
+class Point;
+class Rectangle;
 class Window;
 namespace accessibility
 {
-    class SAL_NO_VTABLE IComboListBoxHelper
+    class IComboListBoxHelper
     {
     public:
+        virtual ~IComboListBoxHelper() = 0;
+
         virtual String          GetEntry( sal_uInt16 nPos ) const = 0;
         virtual Rectangle       GetDropDownPosSizePixel( ) const = 0;
         virtual Rectangle       GetBoundingRectangle( sal_uInt16 nItem ) const = 0;
@@ -69,3 +75,4 @@ namespace accessibility
 #endif // ACCESSIBILITY_HELPER_COMBOLISTBOXHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+

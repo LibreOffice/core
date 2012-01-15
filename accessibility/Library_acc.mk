@@ -89,6 +89,7 @@ $(eval $(call gb_Library_add_exception_objects,acc,\
     accessibility/source/helper/acc_factory \
     accessibility/source/helper/accresmgr \
     accessibility/source/helper/characterattributeshelper \
+    accessibility/source/helper/IComboListBoxHelper \
     accessibility/source/standard/accessiblemenubasecomponent \
     accessibility/source/standard/accessiblemenucomponent \
     accessibility/source/standard/accessiblemenuitemcomponent \
