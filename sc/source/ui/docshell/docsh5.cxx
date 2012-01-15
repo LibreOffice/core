@@ -65,6 +65,7 @@
 #include "sc.hrc"
 #include "waitoff.hxx"
 #include "sizedev.hxx"
+#include "clipparam.hxx"
 #include <basic/sbstar.hxx>
 #include <basic/basmgr.hxx>
 
@@ -849,6 +850,12 @@ sal_uLong ScDocShell::TransferTab( ScDocShell& rSrcDocShell, SCTAB nSrcPos,
                                 sal_Bool bNotifyAndPaint )
 {
     ScDocument* pSrcDoc = rSrcDocShell.GetDocument();
+
+    // set the transfered area to the copyparam to make adjusting formulas possible
+    ScClipParam aParam;
+    ScRange aRange(0, 0, nSrcPos, MAXCOL, MAXROW, nSrcPos);
+    aParam.maRanges.Append(aRange);
+    pSrcDoc->SetClipParam(aParam);
 
     sal_uLong nErrVal =  aDocument.TransferTab( pSrcDoc, nSrcPos, nDestPos,
                     bInsertNew );       // no insert
