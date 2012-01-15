@@ -164,8 +164,7 @@ sal_uIntPtr SvxClipboardFmtItem::GetClipbrdFormatId( sal_uInt16 nPos ) const
 
 const String& SvxClipboardFmtItem::GetClipbrdFormatName( sal_uInt16 nPos ) const
 {
-    const String* pS = &(pImpl->aFmtNms[nPos]);
-    return pS ? *pS : SvxClipboardFmtItem_Impl::sEmptyStr;
+    return pImpl->aFmtNms.is_null(nPos) ? SvxClipboardFmtItem_Impl::sEmptyStr : pImpl->aFmtNms[nPos];
 }
 
 
