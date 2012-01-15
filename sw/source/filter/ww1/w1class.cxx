@@ -476,6 +476,10 @@ sal_uInt16 Ww1SingleSprm::Size(sal_uInt8* /*pSprm*/)
     return nCountBytes;
 }
 
+Ww1SingleSprm::~Ww1SingleSprm()
+{
+}
+
 sal_uInt16 Ww1SingleSprmTab::Size(sal_uInt8* pSprm) // Doc 24/25, Fastsave-Sprm
 {
     OSL_ENSURE(nCountBytes==0, "Ww1SingleSprmTab");
