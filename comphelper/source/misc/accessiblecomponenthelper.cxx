@@ -83,7 +83,6 @@ namespace comphelper
     Point SAL_CALL OCommonAccessibleComponent::getLocationOnScreen(  ) throw (RuntimeException)
     {
         OExternalLockGuard aGuard( this );
-        Rectangle aBounds( implGetBounds() );
 
         Point aScreenLoc( 0, 0 );
 
