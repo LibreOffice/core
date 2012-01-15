@@ -385,6 +385,7 @@ public:
 #endif
         {
         }
+    virtual ~Ww1SingleSprm();
 };
 
 class Ww1SingleSprmByteSized : public Ww1SingleSprm {
