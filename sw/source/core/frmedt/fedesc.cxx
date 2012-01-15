@@ -61,13 +61,13 @@ sal_uInt16 SwFEShell::GetPageDescCnt() const
 void SwFEShell::ChgCurPageDesc( const SwPageDesc& rDesc )
 {
 #if OSL_DEBUG_LEVEL > 0
-    //Die SS veraendert keinen PageDesc, sondern setzt nur das Attribut.
-    //Der Pagedesc muss im Dokument vorhanden sein!
+    // SS does not change PageDesc, but only sets the attibute.
+    // The Pagedesc should be available in the document
     sal_Bool bFound = sal_False;
     for ( sal_uInt16 nTst = 0; nTst < GetPageDescCnt(); ++nTst )
         if ( &rDesc == &GetPageDesc( nTst ) )
             bFound = sal_True;
-    OSL_ENSURE( bFound, "ChgCurPageDesc mit ungueltigem Descriptor." );
+    OSL_ENSURE( bFound, "ChgCurPageDesc with invalid descriptor." );
 #endif
 
     StartAllAction();
@@ -76,7 +76,7 @@ void SwFEShell::ChgCurPageDesc( const SwPageDesc& rDesc )
     const SwFrm *pFlow = 0;
     sal_uInt16 nPageNmOffset = 0;
 
-    OSL_ENSURE( !GetCrsr()->HasMark(), "ChgCurPageDesc nur ohne Selektion!");
+    OSL_ENSURE( !GetCrsr()->HasMark(), "ChgCurPageDesc only without selection!");
 
     SET_CURR_SHELL( this );
     while ( pPage )
@@ -108,7 +108,7 @@ void SwFEShell::ChgCurPageDesc( const SwPageDesc& rDesc )
         }
     }
 
-    // Seitennummer mitnehmen
+    // use pagenumber
     SwFmtPageDesc aNew( &rDesc );
     aNew.SetNumOffset( nPageNmOffset );
 
@@ -165,7 +165,7 @@ SwPageDesc* SwFEShell::FindPageDescByName( const String& rName,
         if( USHRT_MAX != nPoolId &&
             0 != (pDesc = GetDoc()->GetPageDescFromPool( nPoolId ))
             && pPos )
-                // werden immer hinten angehaengt
+                // appended always
             *pPos = GetDoc()->GetPageDescCnt() - 1 ;
     }
     return pDesc;

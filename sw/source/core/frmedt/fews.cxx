@@ -66,7 +66,7 @@ TYPEINIT1(SwFEShell,SwEditShell)
 
 /***********************************************************************
 #*  Class      :  SwFEShell
-#*  Methode    :  EndAllActionAndCall()
+#*  Method     :  EndAllActionAndCall()
 #***********************************************************************/
 
 void SwFEShell::EndAllActionAndCall()
@@ -86,8 +86,8 @@ void SwFEShell::EndAllActionAndCall()
 
 /***********************************************************************
 #*  Class       :  SwFEShell
-#*  Methode     :  GetCntntPos
-#*  Beschreibung:  Ermitteln des Cntnt's der dem Punkt am naechsten liegt
+#*  Method      :  GetCntntPos
+#*  Description :  Determine the Cntnt's nearest to the point
 #***********************************************************************/
 
 Point SwFEShell::GetCntntPos( const Point& rPoint, sal_Bool bNext ) const
@@ -154,7 +154,7 @@ const SwRect& SwFEShell::GetAnyCurRect( CurRectType eType, const Point* pPt,
                                     else {
                                         OSL_FAIL( "Missing Table" );
                                     }
-                                    /* KEIN BREAK */
+                                    /* no break */
         case RECT_SECTION_PRT:
         case RECT_SECTION:          if( pFrm->IsInSct() )
                                         pFrm = pFrm->FindSctFrm();
@@ -196,20 +196,20 @@ sal_Bool SwFEShell::GetPageNumber( long nYPos, sal_Bool bAtCrsrPos, sal_uInt16& 
 {
     const SwFrm *pPage;
 
-    if ( bAtCrsrPos )                   //Seite vom Crsr besorgen
+    if ( bAtCrsrPos )                   // get page of Crsr
     {
         pPage = GetCurrFrm( sal_False );
         if ( pPage )
             pPage = pPage->FindPageFrm();
     }
-    else if ( nYPos > -1 )              //Seite ueber die Positon ermitteln
+    else if ( nYPos > -1 )              // determine page via the position
     {
         pPage = GetLayout()->Lower();
         while( pPage &&  (pPage->Frm().Bottom() < nYPos ||
                             nYPos < pPage->Frm().Top() ) )
             pPage = pPage->GetNext();
     }
-    else                                //Die erste sichtbare Seite
+    else                                // first visible page
     {
         pPage = Imp()->GetFirstVisPage();
         if ( pPage && ((SwPageFrm*)pPage)->IsEmptyPage() )
@@ -274,7 +274,7 @@ sal_uInt16 SwFEShell::GetFrmType( const Point *pPt, sal_Bool bStopAtFly ) const
                                         nReturn |= ( nReturn & FRMTYPE_TABLE ) ?
                                             FRMTYPE_COLSECTOUTTAB : FRMTYPE_COLSECT;
                                 }
-                                else // nur Seiten und Rahmenspalten
+                                else // only pages and frame columns
                                     nReturn |= FRMTYPE_COLUMN;
                                 break;
             case FRM_PAGE:      nReturn |= FRMTYPE_PAGE;
@@ -283,7 +283,7 @@ sal_uInt16 SwFEShell::GetFrmType( const Point *pPt, sal_Bool bStopAtFly ) const
                                 break;
             case FRM_HEADER:    nReturn |= FRMTYPE_HEADER;      break;
             case FRM_FOOTER:    nReturn |= FRMTYPE_FOOTER;      break;
-            case FRM_BODY:      if( pFrm->GetUpper()->IsPageFrm() ) // nicht bei ColumnFrms
+            case FRM_BODY:      if( pFrm->GetUpper()->IsPageFrm() ) // not for ColumnFrms
                                     nReturn |= FRMTYPE_BODY;
                                 break;
             case FRM_FTN:       nReturn |= FRMTYPE_FOOTNOTE;    break;
@@ -294,7 +294,7 @@ sal_uInt16 SwFEShell::GetFrmType( const Point *pPt, sal_Bool bStopAtFly ) const
                                 else
                                 {
                                     OSL_ENSURE( ((SwFlyFrm*)pFrm)->IsFlyInCntFrm(),
-                                            "Neuer Rahmentyp?" );
+                                            "New frametype?" );
                                     nReturn |= FRMTYPE_FLY_INCNT;
                                 }
                                 nReturn |= FRMTYPE_FLY_ANY;
@@ -380,7 +380,7 @@ void lcl_SetAPageOffset( sal_uInt16 nOffset, SwPageFrm* pPage, SwFEShell* pThis 
 {
     pThis->StartAllAction();
     OSL_ENSURE( pPage->FindFirstBodyCntnt(),
-            "SwFEShell _SetAPageOffset() ohne CntntFrm" );
+            "SwFEShell _SetAPageOffset() without CntntFrm" );
 
     SwFmtPageDesc aDesc( pPage->GetPageDesc() );
     aDesc.SetNumOffset( nOffset );
@@ -457,8 +457,8 @@ void SwFEShell::InsertLabel( const SwLabelType eType, const String &rTxt, const 
                              const String& rCharacterStyle,
                              const sal_Bool bCpyBrd )
 {
-    //NodeIndex der CrsrPosition besorgen, den Rest kann das Dokument
-    //selbst erledigen.
+    // get CrsrPosition of NodeIndex, remaining stuff can
+    // be done by the document self
     SwCntntFrm *pCnt = LTYPE_DRAW==eType ? 0 : GetCurrFrm( sal_False );
     if( LTYPE_DRAW==eType || pCnt )
     {
@@ -472,7 +472,7 @@ void SwFEShell::InsertLabel( const SwLabelType eType, const String &rTxt, const 
         case LTYPE_FLY:
             if( pCnt->IsInFly() )
             {
-                //Bei Flys den Index auf den StartNode herunterreichen.
+                // pass down index to the startnode for flys
                 nIdx = pCnt->FindFlyFrm()->
                             GetFmt()->GetCntnt().GetCntntIdx()->GetIndex();
             }
@@ -480,7 +480,7 @@ void SwFEShell::InsertLabel( const SwLabelType eType, const String &rTxt, const 
         case LTYPE_TABLE:
             if( pCnt->IsInTab() )
             {
-                //Bei Tabellen den Index auf den TblNode herunterreichen.
+                // pass down index to the TblNode for tables
                 const SwTable& rTbl = *pCnt->FindTabFrm()->GetTable();
                 nIdx = rTbl.GetTabSortBoxes()[ 0 ]
                             ->GetSttNd()->FindTableNode()->GetIndex();
@@ -524,7 +524,7 @@ void SwFEShell::InsertLabel( const SwLabelType eType, const String &rTxt, const 
             }
             break;
         default:
-            OSL_ENSURE( !this, "Crsr weder in Tabelle noch in Fly." );
+            OSL_ENSURE( !this, "Crsr both not in table nor in fly." );
         }
 
         if( nIdx )
@@ -543,7 +543,7 @@ void SwFEShell::InsertLabel( const SwLabelType eType, const String &rTxt, const 
 
 /***********************************************************************
 #*  Class       :  SwFEShell
-#*  Methoden    :  Sort
+#*  Method      :  Sort
 #***********************************************************************/
 
 sal_Bool SwFEShell::Sort(const SwSortOptions& rOpt)
@@ -556,18 +556,18 @@ sal_Bool SwFEShell::Sort(const SwSortOptions& rOpt)
     StartAllAction();
     if(IsTableMode())
     {
-        // Tabelle sortieren
-        // pruefe ob vom aktuellen Crsr der SPoint/Mark in einer Tabelle stehen
+        // Sort table
+        // check if SPoint/Mark of current Crsr are in one table
         SwFrm *pFrm = GetCurrFrm( sal_False );
-        OSL_ENSURE( pFrm->FindTabFrm(), "Crsr nicht in Tabelle." );
+        OSL_ENSURE( pFrm->FindTabFrm(), "Crsr not in table." );
 
-        // lasse ueber das Layout die Boxen suchen
+        // search boxes via the layout
         SwSelBoxes  aBoxes;
         GetTblSel(*this, aBoxes);
 
-        // die Crsr muessen noch aus dem Loesch Bereich entfernt
-        // werden. Setze sie immer hinter/auf die Tabelle; ueber die
-        // Dokument-Position werden sie dann immer an die alte Position gesetzt.
+        // The Crsr should be removed from the deletion area.
+        // Always put them behind/on the table; via the
+        // document position they will always be set to the old position
         while( !pFrm->IsCellFrm() )
             pFrm = pFrm->GetUpper();
         {
@@ -575,12 +575,12 @@ sal_Bool SwFEShell::Sort(const SwSortOptions& rOpt)
             ParkCursorInTab();
         }
 
-        // Sorting am Dokument aufrufen
+        // call sorting on document
         bRet = pDoc->SortTbl(aBoxes, rOpt);
     }
     else
     {
-        // Text sortieren und nichts anderes
+        // Sort text nothing else
         FOREACHPAM_START(this)
 
             SwPaM* pPam = PCURCRSR;
@@ -592,10 +592,10 @@ sal_Bool SwFEShell::Sort(const SwSortOptions& rOpt)
             sal_uLong nOffset = pEnd->nNode.GetIndex() - pStart->nNode.GetIndex();
             xub_StrLen nCntStt  = pStart->nContent.GetIndex();
 
-            // Das Sortieren
+            // Sorting
             bRet = pDoc->SortText(*pPam, rOpt);
 
-            // Selektion wieder setzen
+            // put selection again
             pPam->DeleteMark();
             pPam->GetPoint()->nNode.Assign( aPrevIdx.GetNode(), +1 );
             SwCntntNode* pCNd = pPam->GetCntntNode();
@@ -639,7 +639,7 @@ sal_uInt16 SwFEShell::_GetCurColNum( const SwFrm *pFrm,
 
             if( pPara )
             {
-                // dann suche mal das Format, was diese Spaltigkeit bestimmt
+                // now search the format, determining the columness
                 pFrm = pCurFrm->GetUpper();
                 while( pFrm )
                 {
@@ -667,7 +667,7 @@ sal_uInt16 SwFEShell::_GetCurColNum( const SwFrm *pFrm,
 
 sal_uInt16 SwFEShell::GetCurColNum( SwGetCurColNumPara* pPara ) const
 {
-    OSL_ENSURE( GetCurrFrm(), "Crsr geparkt?" );
+    OSL_ENSURE( GetCurrFrm(), "Crsr parked?" );
     return _GetCurColNum( GetCurrFrm(), pPara );
 }
 
@@ -675,7 +675,7 @@ sal_uInt16 SwFEShell::GetCurOutColNum( SwGetCurColNumPara* pPara ) const
 {
     sal_uInt16 nRet = 0;
     SwFrm* pFrm = GetCurrFrm();
-    OSL_ENSURE( pFrm, "Crsr geparkt?" );
+    OSL_ENSURE( pFrm, "Crsr parked?" );
     if( pFrm )
     {
         pFrm = pFrm->IsInTab() ? (SwFrm*)pFrm->FindTabFrm()
@@ -795,7 +795,7 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
             {
                 case text::RelOrientation::PRINT_AREA:
                 case text::RelOrientation::PAGE_PRINT_AREA: aPos.X() += pFrm->Prt().Width();
-                // kein break
+                // no break
                 case text::RelOrientation::PAGE_RIGHT:
                 case text::RelOrientation::FRAME_RIGHT: aPos.X() += pFrm->Prt().Left(); break;
                 default: aPos.X() += pFrm->Frm().Width();
@@ -807,7 +807,7 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
             {
                 case text::RelOrientation::PRINT_AREA:
                 case text::RelOrientation::PAGE_PRINT_AREA: aPos.X() += pFrm->Prt().Width();
-                // kein break!
+                // no break!
                 case text::RelOrientation::PAGE_LEFT:
                 case text::RelOrientation::FRAME_LEFT: aPos.X() += pFrm->Prt().Left() -
                                                pFrm->Frm().Width(); break;
@@ -820,7 +820,7 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
             {
                 case text::RelOrientation::PAGE_RIGHT:
                 case text::RelOrientation::FRAME_RIGHT:   aPos.X() += pFrm->Prt().Width();
-                // kein break!
+                // no break!
                 case text::RelOrientation::PRINT_AREA:
                 case text::RelOrientation::PAGE_PRINT_AREA: aPos.X() += pFrm->Prt().Left(); break;
                 default:break;
@@ -1083,7 +1083,7 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
                     (_orRect.*fnRect->fnSetBottom)( nBottom );
                 }
             }
-            // bei zeichengebundenen lieber nur 90% der Hoehe ausnutzen
+            // only use 90% of height for character bound
             {
                 if( bVert || bVertL2R )
                     _orRect.Width( (_orRect.Width()*9)/10 );

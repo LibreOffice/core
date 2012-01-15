@@ -64,7 +64,7 @@ SwFlyFrm *SwFEShell::FindFlyFrm( const uno::Reference < embed::XEmbeddedObject >
 
     if ( !pFly )
     {
-        //Kein Fly oder der falsche selektiert. Ergo muessen wir leider suchen.
+        // No or wrong fly selected: we have to search.
         sal_Bool bExist = sal_False;
         SwStartNode *pStNd;
         sal_uLong nSttIdx = GetNodes().GetEndOfAutotext().StartOfSectionIndex() + 1,
@@ -120,7 +120,7 @@ void SwFEShell::MakeObjVisible( const uno::Reference < embed::XEmbeddedObject >&
     }
 }
 
-sal_Bool SwFEShell::FinishOLEObj()                      // Server wird beendet
+sal_Bool SwFEShell::FinishOLEObj()                      // Server is terminated
 {
     SfxInPlaceClient* pIPClient = GetSfxViewShell()->GetIPClient();
     if ( !pIPClient )

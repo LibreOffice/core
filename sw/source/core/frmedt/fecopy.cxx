@@ -88,8 +88,9 @@ using namespace ::com::sun::star;
 
 /*************************************************************************
 |*
-|*  SwFEShell::Copy()   Copy fuer das Interne Clipboard.
+|*  SwFEShell::Copy()   copy for the internal clipboard.
 |*      Kopiert alle Selektionen in das Clipboard.
+|*      Copies all selections to the clipboard.
 |*
 |*************************************************************************/
 
@@ -99,7 +100,7 @@ sal_Bool SwFEShell::Copy( SwDoc* pClpDoc, const String* pNewClpTxt )
 
     pClpDoc->GetIDocumentUndoRedo().DoUndo(false); // always false!
 
-    // steht noch Inhalt im ClpDocument, dann muss dieser geloescht werden
+    // delete content if ClpDocument contains content
     SwNodeIndex aSttIdx( pClpDoc->GetNodes().GetEndOfExtras(), 2 );
     SwTxtNode* pTxtNd = aSttIdx.GetNode().GetTxtNode();
     if( !pTxtNd || pTxtNd->GetTxt().Len() ||
@@ -112,17 +113,17 @@ sal_Bool SwFEShell::Copy( SwDoc* pClpDoc, const String* pNewClpTxt )
         aSttIdx--;
     }
 
-    // stehen noch FlyFrames rum, loesche auch diese
+    // also delete surrounding FlyFrames if any
     for( sal_uInt16 n = 0; n < pClpDoc->GetSpzFrmFmts()->Count(); ++n )
     {
         SwFlyFrmFmt* pFly = (SwFlyFrmFmt*)(*pClpDoc->GetSpzFrmFmts())[n];
         pClpDoc->DelLayoutFmt( pFly );
     }
-    pClpDoc->GCFieldTypes();        // loesche die FieldTypes
+    pClpDoc->GCFieldTypes();        // delete the FieldTypes
 
-    // wurde ein String uebergeben, so kopiere diesen in das Clipboard-
-    // Dokument. Somit kann auch der Calculator das interne Clipboard
-    // benutzen.
+    // if a string was passed, copy it to the clipboard-
+    // document. Then also the Calculator can use the internal
+    // clipboard
     if( pNewClpTxt )
     {
         pTxtNd->InsertText( *pNewClpTxt, SwIndex( pTxtNd ) );
@@ -133,10 +134,10 @@ sal_Bool SwFEShell::Copy( SwDoc* pClpDoc, const String* pNewClpTxt )
     pClpDoc->SetRedlineMode_intern( nsRedlineMode_t::REDLINE_DELETE_REDLINES );
     sal_Bool bRet;
 
-    // soll ein FlyFrame kopiert werden ?
+    // do we want to copy a FlyFrame?
     if( IsFrmSelected() )
     {
-        // hole das FlyFormat
+        // get the FlyFormat
         SwFlyFrm* pFly = FindFlyFrm();
         SwFrmFmt* pFlyFmt = pFly->GetFmt();
         SwFmtAnchor aAnchor( pFlyFmt->GetAnchor() );
@@ -155,13 +156,13 @@ sal_Bool SwFEShell::Copy( SwDoc* pClpDoc, const String* pNewClpTxt )
         }
         pFlyFmt = pClpDoc->CopyLayoutFmt( *pFlyFmt, aAnchor, true, true );
 
-        // sorge dafuer das das "RootFmt" als erstes im SpzArray-steht
-        // (Es wurden ggf. Flys in Flys kopiert.
+       // assure the "RootFmt" is the first element in Spz-Array
+        // (if necessary Flys were copied in Flys)
         SwSpzFrmFmts& rSpzFrmFmts = *(SwSpzFrmFmts*)pClpDoc->GetSpzFrmFmts();
         if( rSpzFrmFmts[ 0 ] != pFlyFmt )
         {
             sal_uInt16 nPos = rSpzFrmFmts.GetPos( pFlyFmt );
-            OSL_ENSURE( nPos != USHRT_MAX, "Fly steht nicht im Spz-Array" );
+            OSL_ENSURE( nPos != USHRT_MAX, "Fly not contained in Spz-Array" );
 
             rSpzFrmFmts.Remove( nPos );
             rSpzFrmFmts.Insert( pFlyFmt, 0 );
@@ -169,11 +170,10 @@ sal_Bool SwFEShell::Copy( SwDoc* pClpDoc, const String* pNewClpTxt )
 
         if ( FLY_AS_CHAR == aAnchor.GetAnchorId() )
         {
-            // JP 13.02.99 Bug 61863: wenn eine Rahmenselektion ins Clipboard
-            //              gestellt wird, so muss beim Pasten auch wieder
-            //              eine solche vorgefunden werden. Also muss im Node
-            //              das kopierte TextAttribut wieder entfernt werden,
-            //              sonst wird es als TextSelektion erkannt
+            // JP 13.02.99  Bug 61863: if a frameselection is passed to the
+            //              clipboard, it should be found at pasting. Therefore
+            //              the copied TextAttribut should be removed in the node
+            //              otherwise it will be recognised as TextSelektion
             const SwIndex& rIdx = pFlyFmt->GetAnchor().GetCntntAnchor()->nContent;
             SwTxtFlyCnt *const pTxtFly = static_cast<SwTxtFlyCnt *>(
                 pTxtNd->GetTxtAttrForCharAt(
@@ -228,7 +228,7 @@ sal_Bool SwFEShell::Copy( SwDoc* pClpDoc, const String* pNewClpTxt )
         bRet = sal_True;
     }
     else
-        bRet = _CopySelToDoc( pClpDoc, 0 );     // kopiere die Selectionen
+        bRet = _CopySelToDoc( pClpDoc, 0 );     // copy the selections
 
     pClpDoc->SetRedlineMode_intern((RedlineMode_t)0 );
     pClpDoc->UnlockExpFlds();
@@ -293,12 +293,12 @@ sal_Bool SwFEShell::CopyDrawSel( SwFEShell* pDestShell, const Point& rSttPt,
 {
     sal_Bool bRet = sal_True;
 
-    //Die Liste muss kopiert werden, weil unten die neuen Objekte
-    //selektiert werden.
+    // The list should be copied, while new objects below
+    // were selected
     const SdrMarkList aMrkList( Imp()->GetDrawView()->GetMarkedObjectList() );
     sal_uLong nMarkCount = aMrkList.GetMarkCount();
     if( !pDestShell->Imp()->GetDrawView() )
-        // sollte mal eine erzeugt werden
+        // should be generated
         pDestShell->MakeDrawView();
     else if( bSelectInsert )
         pDestShell->Imp()->GetDrawView()->UnmarkAll();
@@ -322,8 +322,8 @@ sal_Bool SwFEShell::CopyDrawSel( SwFEShell* pDestShell, const Point& rSttPt,
 
         if( pDestDrwView->IsGroupEntered() )
         {
-            // in die Gruppe einfuegen, wenns aus einer betretenen Gruppe
-            // kommt oder das Object nicht zeichengebunden ist
+            // insert into the group, when it belongs to an entered group
+            // or when the object is not coupled to a character
             if( pSrcDrwView->IsGroupEntered() ||
                 (FLY_AS_CHAR != rAnchor.GetAnchorId()) )
 
@@ -348,8 +348,8 @@ sal_Bool SwFEShell::CopyDrawSel( SwFEShell* pDestShell, const Point& rSttPt,
             {
                 if ( this == pDestShell )
                 {
-                    //gleiche Shell? Dann erfrage die Position an der
-                    //uebergebenen DokumentPosition
+                    // same shell? Then request the position
+                    // from the passed DocumentPosition
                     SwPosition aPos( *GetCrsr()->GetPoint() );
                     Point aPt( rInsPt );
                     aPt -= rSttPt - pObj->GetSnapRect().TopLeft();
@@ -398,7 +398,7 @@ sal_Bool SwFEShell::CopyDrawSel( SwFEShell* pDestShell, const Point& rSttPt,
                 else
                     pFmt = pDestDoc->CopyLayoutFmt( *pFmt, aAnchor, true, true );
 
-                //Kann 0 sein, weil Draws in Kopf-/Fusszeilen nicht erlaubt sind.
+                // Can be 0, as Draws are not allowed in Headers/Footers
                 if ( pFmt )
                 {
                     SdrObject* pNew = pFmt->FindSdrObject();
@@ -459,29 +459,28 @@ sal_Bool SwFEShell::Copy( SwFEShell* pDestShell, const Point& rSttPt,
 {
     sal_Bool bRet = sal_False;
 
-    OSL_ENSURE( pDestShell, "Copy ohne DestShell." );
+    OSL_ENSURE( pDestShell, "Copy without DestShell." );
     OSL_ENSURE( this == pDestShell || !pDestShell->IsObjSelected(),
-            "Dest-Shell darf nie im Obj-Modus sein" );
+            "Dest-Shell cannot be in Obj-Mode" );
 
     SET_CURR_SHELL( pDestShell );
 
     pDestShell->StartAllAction();
     pDestShell->GetDoc()->LockExpFlds();
 
-    // Referenzen sollen verschoben werden.
+    // Shift references
     sal_Bool bCopyIsMove = pDoc->IsCopyIsMove();
     if( bIsMove )
-        // am Doc ein Flag setzen, damit in den TextNodes
+        // set a flag in Doc, therefore in TextNodes
         pDoc->SetCopyIsMove( sal_True );
 
     RedlineMode_t eOldRedlMode = pDestShell->GetDoc()->GetRedlineMode();
     pDestShell->GetDoc()->SetRedlineMode_intern( (RedlineMode_t)(eOldRedlMode | nsRedlineMode_t::REDLINE_DELETE_REDLINES));
 
-    // sind Tabellen-Formeln im Bereich, dann muss erst die Tabelle
-    // angezeigt werden, damit die Tabellen-Formel den neuen Wert errechnen
-    // kann (bei Bereichen wird sich ueber das Layout die einzelnen Boxen
-    // besorgt)
-    SwFieldType* pTblFldTyp = pDestShell->GetDoc()->GetSysFldType( RES_TABLEFLD );
+    // Are there table formulas in the area, then display the table first
+    // such that the table formula can calculate a new value first
+    // (individual boxes in the area are retrieved via the layout)
+     SwFieldType* pTblFldTyp = pDestShell->GetDoc()->GetSysFldType( RES_TABLEFLD );
 
     if( IsFrmSelected() )
     {
@@ -498,8 +497,8 @@ sal_Bool SwFEShell::Copy( SwFEShell* pDestShell, const Point& rSttPt,
         {
             if ( this == pDestShell )
             {
-                // gleiche Shell? Dann erfrage die Position an der
-                // uebergebenen DokumentPosition
+                // same shell? Then request the position
+                // from the passed DocumentPosition
                 SwPosition aPos( *GetCrsr()->GetPoint() );
                 Point aPt( rInsPt );
                 aPt -= rSttPt - pFly->Frm().Pos();
@@ -509,7 +508,8 @@ sal_Bool SwFEShell::Copy( SwFEShell* pDestShell, const Point& rSttPt,
                 if( (pNd = &aPos.nNode.GetNode())->IsNoTxtNode() )
                     bRet = sal_False;
                 else
-                {   //Nicht in sich selbst kopieren
+                {
+                    // do not copy in itself
                     const SwNodeIndex *pTmp = pFlyFmt->GetCntnt().GetCntntIdx();
                     if ( aPos.nNode > *pTmp && aPos.nNode <
                         pTmp->GetNode().EndOfSectionIndex() )
@@ -541,7 +541,7 @@ sal_Bool SwFEShell::Copy( SwFEShell* pDestShell, const Point& rSttPt,
                 aNewAnch = pPg->Frm().Pos();
         }
         else {
-            OSL_ENSURE( !this, "was fuer ein Anchor ist es denn?" );
+            OSL_ENSURE( !this, "what anchor is it?" );
         }
 
         if( bRet )
@@ -563,14 +563,13 @@ sal_Bool SwFEShell::Copy( SwFEShell* pDestShell, const Point& rSttPt,
             if( bIsMove )
                 GetDoc()->DelLayoutFmt( pOldFmt );
 
-            // nur selektieren wenn es in der gleichen Shell verschoben/
-            //  kopiert wird
+            // only select if it can be shifted/copied in the same shell
             if( bSelectInsert )
             {
                 SwFlyFrm* pFlyFrm = ((SwFlyFrmFmt*)pFlyFmt)->GetFrm( &aPt, sal_False );
                 if( pFlyFrm )
                 {
-                    //JP 12.05.98: sollte das nicht im SelectFlyFrm stehen???
+                    //JP 12.05.98: should this be in SelectFlyFrm???
                     pDestShell->Imp()->GetDrawView()->UnmarkAll();
                     pDestShell->SelectFlyFrm( *pFlyFrm, sal_True );
                 }
@@ -584,11 +583,11 @@ sal_Bool SwFEShell::Copy( SwFEShell* pDestShell, const Point& rSttPt,
         bRet = CopyDrawSel( pDestShell, rSttPt, rInsPt, bIsMove, bSelectInsert );
     else if( IsTableMode() )
     {
-        // kopiere Teile aus einer Tabelle: lege eine Tabelle mit der Breite
-        // von der Originalen an und kopiere die selectierten Boxen.
-        // Die Groessen werden prozentual korrigiert.
+        // Copy parts from a table: create a table with the same
+        // width as the original and copy the selected boxes.
+        // Sizes will be corrected by percentage.
 
-        // lasse ueber das Layout die Boxen suchen
+        // find boxes via the layout
         const SwTableNode* pTblNd;
         SwSelBoxes aBoxes;
         GetTblSel( *this, aBoxes );
@@ -598,8 +597,8 @@ sal_Bool SwFEShell::Copy( SwFEShell* pDestShell, const Point& rSttPt,
             SwPosition* pDstPos = 0;
             if( this == pDestShell )
             {
-                // gleiche Shell? Dann erzeuge einen Crsr an der
-                // uebergebenen DokumentPosition
+                // same shell? Then create new Crsr at the
+                // DocumentPosition passed
                 pDstPos = new SwPosition( *GetCrsr()->GetPoint() );
                 Point aPt( rInsPt );
                 GetLayout()->GetCrsrOfst( pDstPos, aPt );
@@ -626,12 +625,12 @@ sal_Bool SwFEShell::Copy( SwFEShell* pDestShell, const Point& rSttPt,
                 if( this != pDestShell )
                     *pDestShell->GetCrsr()->GetPoint() = *pDstPos;
 
-                // wieder alle geparkten Crsr erzeugen?
+                // create all parked Crsr?
                 if( GetDoc() == pDestShell->GetDoc() )
                     GetCrsr();
 
-                // JP 16.04.99: Bug 64908 - InsPos setzen, damit der geparkte
-                //              Cursor auf die EinfuegePos. positioniert wird
+                // JP 16.04.99: Bug 64908 - Set InsPos, to assure the parked
+                //              Cursor is positioned at the insert position
                 if( this == pDestShell )
                     GetCrsrDocPos() = rInsPt;
             }
@@ -643,8 +642,8 @@ sal_Bool SwFEShell::Copy( SwFEShell* pDestShell, const Point& rSttPt,
         bRet = sal_True;
         if( this == pDestShell )
         {
-            // gleiche Shell? Dann erfrage die Position an der
-            // uebergebenen DokumentPosition
+            // same shell? then request the postion
+            // at the passed document position
             SwPosition aPos( *GetCrsr()->GetPoint() );
             Point aPt( rInsPt );
             GetLayout()->GetCrsrOfst( &aPos, aPt );
@@ -660,11 +659,11 @@ sal_Bool SwFEShell::Copy( SwFEShell* pDestShell, const Point& rSttPt,
     pDestShell->GetDoc()->SetRedlineMode_intern( eOldRedlMode );
     pDoc->SetCopyIsMove( bCopyIsMove );
 
-    // wurden neue Tabellenformeln eingefuegt ?
+    // have new table formules been inserted?
     if( pTblFldTyp->GetDepends() )
     {
-        // alte Actions beenden; die Tabellen-Frames werden angelegt und
-        // eine SSelection kann erzeugt werden
+        // finish old actions: the table frames are created and
+        // a selection can be made
         sal_uInt16 nActCnt;
         for( nActCnt = 0; pDestShell->ActionPend(); ++nActCnt )
             pDestShell->EndAllAction();
@@ -681,8 +680,8 @@ sal_Bool SwFEShell::Copy( SwFEShell* pDestShell, const Point& rSttPt,
 
 /*************************************************************************
 |*
-|*  SwFEShell::Paste()  Paste fuer das Interne Clipboard.
-|*      Kopiert den Inhalt vom Clipboard in das Dokument.
+|*  SwFEShell::Paste()  Paste for  the interal clipboard.
+|*      Copy the content of the clipboard in the document
 |*
 |*************************************************************************/
 
@@ -695,17 +694,16 @@ namespace {
 sal_Bool SwFEShell::Paste( SwDoc* pClpDoc, sal_Bool bIncludingPageFrames )
 {
     SET_CURR_SHELL( this );
-    OSL_ENSURE( pClpDoc, "kein Clipboard-Dokument"  );
+    OSL_ENSURE( pClpDoc, "no clipboard document"  );
     const sal_uInt16 nStartPageNumber = GetPhyPageNum();
-    // dann bis zum Ende vom Nodes Array
+    // then till end of the nodes array
     SwNodeIndex aIdx( pClpDoc->GetNodes().GetEndOfExtras(), 2 );
     SwPaM aCpyPam( aIdx ); //DocStart
 
-    // sind Tabellen-Formeln im Bereich, dann muss erst die Tabelle
-    // angezeigt werden, damit die Tabellen-Formel den neuen Wert errechnen
-    // kann (bei Bereichen wird sich ueber das Layout die einzelnen Boxen
-    // besorgt)
-    SwFieldType* pTblFldTyp = GetDoc()->GetSysFldType( RES_TABLEFLD );
+    // Are there table formulas in the area, then display the table first
+    // such that the table formula can calculate a new value first
+    // (individual boxes in the area are retrieved via the layout)
+     SwFieldType* pTblFldTyp = GetDoc()->GetSysFldType( RES_TABLEFLD );
 
     SwTableNode *pDestNd, *pSrcNd = aCpyPam.GetNode()->GetTableNode();
     if( !pSrcNd )                               // TabellenNode ?
@@ -846,10 +844,10 @@ sal_Bool SwFEShell::Paste( SwDoc* pClpDoc, sal_Bool bIncludingPageFrames )
             sal_Bool bParkTblCrsr = sal_False;
             const SwStartNode* pSttNd =  PCURCRSR->GetNode()->FindTableBoxStartNode();
 
-            // TABLE IN TABLE: Tabelle in Tabelle kopieren
-            // lasse ueber das Layout die Boxen suchen
+            // TABLE IN TABLE: copy table in table
+            // search boxes via the layout
             SwSelBoxes aBoxes;
-            if( IsTableMode() )     // Tabellen-Selecktion ??
+            if( IsTableMode() )     // table selection?
             {
                 GetTblSel( *this, aBoxes );
                 ParkTblCrsr();
@@ -859,7 +857,7 @@ sal_Bool SwFEShell::Paste( SwDoc* pClpDoc, sal_Bool bIncludingPageFrames )
                      ( !pSrcNd->GetTable().IsTblComplex() ||
                        pDestNd->GetTable().IsNewModel() ) )
             {
-                // dann die Tabelle "relativ" kopieren
+                // make relative table copy
                 SwTableBox* pBox = pDestNd->GetTable().GetTblBox(
                                         pSttNd->GetIndex() );
                 OSL_ENSURE( pBox, "Box steht nicht in dieser Tabelle" );
@@ -869,8 +867,8 @@ sal_Bool SwFEShell::Paste( SwDoc* pClpDoc, sal_Bool bIncludingPageFrames )
             SwNodeIndex aNdIdx( *pDestNd->EndOfSectionNode());
             if( !bParkTblCrsr )
             {
-                // erstmal aus der gesamten Tabelle raus
-// ????? was ist mit Tabelle alleine im Rahmen ???????
+                // exit first the complete table
+                // ???? what about only table in a frame ?????
                 SwCntntNode* pCNd = GetDoc()->GetNodes().GoNext( &aNdIdx );
                 SwPosition aPos( aNdIdx, SwIndex( pCNd, 0 ));
                 // #i59539: Don't remove all redline
@@ -885,7 +883,7 @@ sal_Bool SwFEShell::Paste( SwDoc* pClpDoc, sal_Bool bIncludingPageFrames )
                 GetCrsr();
             else
             {
-                // und wieder in die Box zurueck
+                // return to the box
                 aNdIdx = *pSttNd;
                 SwCntntNode* pCNd = GetDoc()->GetNodes().GoNext( &aNdIdx );
                 SwPosition aPos( aNdIdx, SwIndex( pCNd, 0 ));
@@ -897,12 +895,12 @@ sal_Bool SwFEShell::Paste( SwDoc* pClpDoc, sal_Bool bIncludingPageFrames )
                 ::PaMCorrAbs(tmpPam, aPos);
             }
 
-            break;      // aus der "while"-Schleife heraus
+            break;      // exit the "while-loop"
         }
         else if( *aCpyPam.GetPoint() == *aCpyPam.GetMark() &&
                  pClpDoc->GetSpzFrmFmts()->Count() )
         {
-            // so langsam sollte mal eine DrawView erzeugt werden
+            // draw a DrawView this slow
             if( !Imp()->GetDrawView() )
                 MakeDrawView();
 
@@ -996,8 +994,8 @@ sal_Bool SwFEShell::Paste( SwDoc* pClpDoc, sal_Bool bIncludingPageFrames )
                                                         GetFrm( &aPt, sal_False );
                             if( pFlyFrm )
                                 SelectFlyFrm( *pFlyFrm, sal_True );
-                            // immer nur den ersten Fly-Frame nehmen; die anderen
-                            // wurden ueber Fly in Fly ins ClipBoard kopiert !
+                            // always pick the first FlyFrame only; the others
+                            // were via Fly in Fly copied to the clipboard
                             break;
                         }
                         else
@@ -1039,12 +1037,12 @@ sal_Bool SwFEShell::Paste( SwDoc* pClpDoc, sal_Bool bIncludingPageFrames )
                                 pBoxNd->GetIndex() &&
                 aCpyPam.GetPoint()->nNode != aCpyPam.GetMark()->nNode )
             {
-                // es wird mehr als 1 Node in die akt. Box kopiert. Dann
-                // muessen die BoxAttribute aber entfernt werden.
+                // Copy more as 1 node in the current box. But
+                // then the BoxAttribute should be removed
                 GetDoc()->ClearBoxNumAttrs( rInsPos.nNode );
             }
 
-            //find out if the clipboard document starts with a table
+            // find out if the clipboard document starts with a table
             bool bStartWithTable = 0 != aCpyPam.Start()->nNode.GetNode().FindTableNode();
             SwPosition aInsertPosition( rInsPos );
 
@@ -1118,11 +1116,11 @@ sal_Bool SwFEShell::Paste( SwDoc* pClpDoc, sal_Bool bIncludingPageFrames )
 
     GetDoc()->GetIDocumentUndoRedo().EndUndo( UNDO_INSGLOSSARY, NULL );
 
-    // wurden neue Tabellenformeln eingefuegt ?
+    // have new table formulas been inserted?
     if( pTblFldTyp->GetDepends() )
     {
-        // alte Actions beenden; die Tabellen-Frames werden angelegt und
-        // eine Selection kann erzeugt werden
+        // finish old action: table-frames have been created
+        // a selection can be made now
         sal_uInt16 nActCnt;
         for( nActCnt = 0; ActionPend(); ++nActCnt )
             EndAllAction();
@@ -1195,7 +1193,7 @@ sal_Bool SwFEShell::PastePages( SwFEShell& rToFill, sal_uInt16 nStartPage, sal_u
         rToFill.GetDoc()->DelFullPara(aPara);
     }
     // now the page bound objects
-    //additionally copy page bound frames
+    // additionally copy page bound frames
     if( GetDoc()->GetSpzFrmFmts()->Count() )
     {
         // create a draw view if necessary
@@ -1234,7 +1232,7 @@ sal_Bool SwFEShell::GetDrawObjGraphic( sal_uLong nFmt, Graphic& rGrf ) const
         if( rMrkList.GetMarkCount() == 1 &&
             rMrkList.GetMark( 0 )->GetMarkedSdrObj()->ISA(SwVirtFlyDrawObj) )
         {
-            // Rahmen selektiert
+            // select frame
             if( CNT_GRF == GetCntType() )
             {
                 const Graphic* pGrf( GetGraphic() );
@@ -1277,9 +1275,9 @@ sal_Bool SwFEShell::GetDrawObjGraphic( sal_uLong nFmt, Graphic& rGrf ) const
                     }
                     else
                     {
-                        //fix(23806): Nicht die Originalgroesse, sondern die
-                        //aktuelle. Anderfalls kann es passieren, dass z.B. bei
-                        //Vektorgrafiken mal eben zig MB angefordert werden.
+                        // fix(23806): not the origial size, but the current one.
+                        // Otherwise it could occur the for vectorgraphics
+                        // many MB's are requested
                         const Size aSz( FindFlyFrm()->Prt().SSize() );
                         VirtualDevice aVirtDev( *GetWin() );
 
@@ -1367,7 +1365,7 @@ void SwFEShell::Paste( SvStream& rStrm, sal_uInt16 nAction, const Point* pPt )
     Point aPos( pPt ? *pPt : GetCharRect().Pos() );
     SdrView *pView = Imp()->GetDrawView();
 
-    //Drop auf bestehendes Objekt: Objekt ersetzen oder neu Attributieren.
+    // drop on the existing object: replace object or apply new attributes
     if( pModel->GetPageCount() > 0 &&
         1 == pModel->GetPage(0)->GetObjCount() &&
         1 == pView->GetMarkedObjectList().GetMarkCount() )
@@ -1398,8 +1396,8 @@ void SwFEShell::Paste( SvStream& rStrm, sal_uInt16 nAction, const Point* pPt )
 
                     if( pAnchor->FindFooterOrHeader() )
                     {
-                        // wenn TextRahmen in der Kopf/Fusszeile steht, dann
-                        // nicht ersetzen, sondern nur einfuegen
+                        // if there is a textframe in the header/footer:
+                        // do not replace but insert
                         nAction = SW_PASTESDR_INSERT;
                         break;
                     }
@@ -1427,7 +1425,7 @@ void SwFEShell::Paste( SvStream& rStrm, sal_uInt16 nAction, const Point* pPt )
 
                 if( pOldObj->ISA(SwVirtFlyDrawObj) )
                 {
-                    // Attribute sichern und dam SdrObject setzen
+                    // store attributes, then set SdrObject
                     SfxItemSet aFrmSet( pDoc->GetAttrPool(),
                                             RES_SURROUND, RES_ANCHOR );
                     aFrmSet.Set( pFmt->GetAttrSet() );

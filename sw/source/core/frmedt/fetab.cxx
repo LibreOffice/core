@@ -74,7 +74,7 @@
 using namespace ::com::sun::star;
 
 
-//siehe auch swtable.cxx
+// also see swtable.cxx
 #define COLFUZZY 20L
 
 inline sal_Bool IsSame( long nA, long nB ) { return  Abs(nA-nB) <= COLFUZZY; }
@@ -198,11 +198,11 @@ void SwFEShell::ParkCursorInTab()
 
 /***********************************************************************
 #*  Class      :  SwFEShell
-#*  Methoden   :  InsertRow(), InsertCol
+#*  Methods    :  InsertRow(), InsertCol
 #***********************************************************************/
 sal_Bool SwFEShell::InsertRow( sal_uInt16 nCnt, sal_Bool bBehind )
 {
-    // pruefe ob vom aktuellen Crsr der Point/Mark in einer Tabelle stehen
+    // check if Spoint/Mark of current cursor are in a table
     SwFrm *pFrm = GetCurrFrm();
     if( !pFrm || !pFrm->IsInTab() )
         return sal_False;
@@ -217,7 +217,7 @@ sal_Bool SwFEShell::InsertRow( sal_uInt16 nCnt, sal_Bool bBehind )
     SET_CURR_SHELL( this );
     StartAllAction();
 
-    // lasse ueber das Layout die Boxen suchen
+    // search boxes via the layout
     SwSelBoxes aBoxes;
     GetTblSel( *this, aBoxes, nsSwTblSearchType::TBLSEARCH_ROW );
 
@@ -233,7 +233,7 @@ sal_Bool SwFEShell::InsertRow( sal_uInt16 nCnt, sal_Bool bBehind )
 
 sal_Bool SwFEShell::InsertCol( sal_uInt16 nCnt, sal_Bool bBehind )
 {
-    // pruefe ob vom aktuellen Crsr der Point/Mark in einer Tabelle stehen
+    // check if Spoint/Mark of current cursor are in a table
     SwFrm *pFrm = GetCurrFrm();
     if( !pFrm || !pFrm->IsInTab() )
         return sal_False;
@@ -255,7 +255,7 @@ sal_Bool SwFEShell::InsertCol( sal_uInt16 nCnt, sal_Bool bBehind )
     }
 
     StartAllAction();
-    // lasse ueber das Layout die Boxen suchen
+    // search boxes via the layout
     SwSelBoxes aBoxes;
     GetTblSel( *this, aBoxes, nsSwTblSearchType::TBLSEARCH_COL );
 
@@ -295,7 +295,7 @@ sal_Bool SwFEShell::IsLastCellInRow() const
 
 sal_Bool SwFEShell::DeleteCol()
 {
-    // pruefe ob vom aktuellen Crsr der SPoint/Mark in einer Tabelle stehen
+    // check if Spoint/Mark of current cursor are in a table
     SwFrm *pFrm = GetCurrFrm();
     if( !pFrm || !pFrm->IsInTab() )
         return sal_False;
@@ -310,7 +310,7 @@ sal_Bool SwFEShell::DeleteCol()
     SET_CURR_SHELL( this );
     StartAllAction();
 
-    // lasse ueber das Layout die Boxen suchen
+    // search boxes via the layout
     sal_Bool bRet;
     SwSelBoxes aBoxes;
     GetTblSel( *this, aBoxes, nsSwTblSearchType::TBLSEARCH_COL );
@@ -318,15 +318,15 @@ sal_Bool SwFEShell::DeleteCol()
     {
         TblWait( aBoxes.size(), pFrm, *GetDoc()->GetDocShell() );
 
-        // die Crsr muessen noch aus dem Loesch Bereich entfernt
-        // werden. Setze sie immer hinter/auf die Tabelle; ueber die
-        // Dokument-Position werden sie dann immer an die alte Position gesetzt.
+        // remove crsr from the deletion area.
+        // Put them behind/on the table; via the
+        // document position they will be put to the old position
         while( !pFrm->IsCellFrm() )
             pFrm = pFrm->GetUpper();
 
         ParkCursorInTab();
 
-        // dann loesche doch die Spalten
+        // then delete the column
         StartUndo(UNDO_COL_DELETE);
         bRet = GetDoc()->DeleteRowCol( aBoxes, true );
         EndUndo(UNDO_COL_DELETE);
@@ -341,7 +341,7 @@ sal_Bool SwFEShell::DeleteCol()
 
 sal_Bool SwFEShell::DeleteRow()
 {
-    // pruefe ob vom aktuellen Crsr der SPoint/Mark in einer Tabelle stehen
+    // check if Spoint/Mark of current cursor are in a table
     SwFrm *pFrm = GetCurrFrm();
     if( !pFrm || !pFrm->IsInTab() )
         return sal_False;
@@ -356,7 +356,7 @@ sal_Bool SwFEShell::DeleteRow()
     SET_CURR_SHELL( this );
     StartAllAction();
 
-    // lasse ueber das Layout die Boxen suchen
+    // search for boxes via the layout
     sal_Bool bRet;
     SwSelBoxes aBoxes;
     GetTblSel( *this, aBoxes, nsSwTblSearchType::TBLSEARCH_ROW );
@@ -365,15 +365,15 @@ sal_Bool SwFEShell::DeleteRow()
     {
         TblWait( aBoxes.size(), pFrm, *GetDoc()->GetDocShell() );
 
-        // die Crsr aus dem Loeschbereich entfernen.
-        // Der Cursor steht danach:
-        //  - es folgt noch eine Zeile, in dieser
-        //  - vorher steht noch eine Zeile, in dieser
-        //  - sonst immer dahinter
+        // Delete crsr from the deletion area.
+        // Then the cursor is:
+        //  - there is one line next to this
+        //  - there is one line previous to this
+        //  - otherwise always next
         {
             SwTableNode* pTblNd = ((SwCntntFrm*)pFrm)->GetNode()->FindTableNode();
 
-            // suche alle Boxen / Lines
+            // search all boxes / lines
             _FndBox aFndBox( 0, 0 );
             {
                 _FndPara aPara( aBoxes, &aFndBox );
@@ -394,7 +394,7 @@ sal_Bool SwFEShell::DeleteRow()
             {
                 _FndBox* pTmp = pFndBox->GetLines()[0]->GetBoxes()[0];
                 if( pTmp->GetBox()->GetSttNd() )
-                    break;      // das ist sonst zu weit
+                    break;      // otherwise too far
                 pFndBox = pTmp;
             }
 
@@ -414,7 +414,7 @@ sal_Bool SwFEShell::DeleteRow()
                     pNextBox->GetFrmFmt()->GetProtect().IsCntntProtected() )
                 pNextBox = pNextBox->FindNextBox( pTblNd->GetTable(), pNextBox );
 
-            if( !pNextBox )         // keine nachfolgende? dann die vorhergehende
+            if( !pNextBox )         // no next? then the previous
             {
                 pDelLine = pFndBox->GetLines()[ 0 ]->GetLine();
                 pDelBox = pDelLine->GetTabBoxes()[ 0 ];
@@ -428,9 +428,9 @@ sal_Bool SwFEShell::DeleteRow()
             }
 
             sal_uLong nIdx;
-            if( pNextBox )      // dann den Cursor hier hinein
+            if( pNextBox )      // put cursor here
                 nIdx = pNextBox->GetSttIdx() + 1;
-            else                // ansonsten hinter die Tabelle
+            else                // otherwise behind the table
                 nIdx = pTblNd->EndOfSectionIndex() + 1;
 
             SwNodeIndex aIdx( GetDoc()->GetNodes(), nIdx );
@@ -443,12 +443,12 @@ sal_Bool SwFEShell::DeleteRow()
                 SwPaM* pPam = GetCrsr();
                 pPam->GetPoint()->nNode = aIdx;
                 pPam->GetPoint()->nContent.Assign( pCNd, 0 );
-                pPam->SetMark();            // beide wollen etwas davon haben
+                pPam->SetMark();            // both want something
                 pPam->DeleteMark();
             }
         }
 
-        // dann loesche doch die Zeilen
+        // now delete the lines
         StartUndo(UNDO_ROW_DELETE);
         bRet = GetDoc()->DeleteRowCol( aBoxes );
         EndUndo(UNDO_ROW_DELETE);
@@ -462,12 +462,12 @@ sal_Bool SwFEShell::DeleteRow()
 
 /***********************************************************************
 #*  Class      :  SwFEShell
-#*  Methoden   :  MergeTab(), SplitTab()
+#*  Methods    :  MergeTab(), SplitTab()
 #***********************************************************************/
 
 sal_uInt16 SwFEShell::MergeTab()
 {
-    // pruefe ob vom aktuellen Crsr der SPoint/Mark in einer Tabelle stehen
+    // check if Spoint/Mark of current cursor are in a table
     sal_uInt16 nRet = TBLMERGE_NOSELECTION;
     if( IsTableMode() )
     {
@@ -498,7 +498,7 @@ sal_uInt16 SwFEShell::MergeTab()
 
 sal_Bool SwFEShell::SplitTab( sal_Bool bVert, sal_uInt16 nCnt, sal_Bool bSameHeight )
 {
-    // pruefe ob vom aktuellen Crsr der SPoint/Mark in einer Tabelle stehen
+    // check if Spoint/Mark of current cursor are in a table
     SwFrm *pFrm = GetCurrFrm();
     if( !pFrm || !pFrm->IsInTab() )
         return sal_False;
@@ -519,7 +519,7 @@ sal_Bool SwFEShell::SplitTab( sal_Bool bVert, sal_uInt16 nCnt, sal_Bool bSameHei
         return sal_False;
     }
     StartAllAction();
-    // lasse ueber das Layout die Boxen suchen
+    // search boxes via the layout
     sal_Bool bRet;
     SwSelBoxes aBoxes;
     GetTblSel( *this, aBoxes );
@@ -527,7 +527,7 @@ sal_Bool SwFEShell::SplitTab( sal_Bool bVert, sal_uInt16 nCnt, sal_Bool bSameHei
     {
         TblWait( nCnt, pFrm, *GetDoc()->GetDocShell(), aBoxes.size() );
 
-        // dann loesche doch die Spalten
+        // now delete the columns
         bRet = GetDoc()->SplitTbl( aBoxes, bVert, nCnt, bSameHeight );
 
         DELETEZ( pLastCols );
@@ -542,14 +542,14 @@ sal_Bool SwFEShell::SplitTab( sal_Bool bVert, sal_uInt16 nCnt, sal_Bool bSameHei
 
 /***********************************************************************
 #*  Class      :  SwFEShell
-#*  Methoden   :  _GetTabCols
+#*  Methods    :  _GetTabCols
 #***********************************************************************/
 void SwFEShell::_GetTabCols( SwTabCols &rToFill, const SwFrm *pBox ) const
 {
     const SwTabFrm *pTab = pBox->FindTabFrm();
     if ( pLastCols )
     {
-        //Paar Kleinigkeiten muessen wir schon noch sicherstellen
+        // assure few small things
         sal_Bool bDel = sal_True;
         if ( pColumnCacheLastTable == pTab->GetTable() )
         {
@@ -564,8 +564,8 @@ void SwFEShell::_GetTabCols( SwTabCols &rToFill, const SwFrm *pBox ) const
 
             if ( pColumnCacheLastTabFrm != pTab )
             {
-                //Wenn der TabFrm gewechselt hat, brauchen wir bei gleicher
-                //Breite nur ein wenig shiften.
+                // if TabFrm was changed, we only shift a little bit
+                // as the width is the same
                 SWRECTFNX( pColumnCacheLastTabFrm )
                 if( (pColumnCacheLastTabFrm->Frm().*fnRectX->fnGetWidth)() ==
                     (pTab->Frm().*fnRect->fnGetWidth)() )
@@ -620,14 +620,14 @@ void SwFEShell::_GetTabCols( SwTabCols &rToFill, const SwFrm *pBox ) const
 
 /***********************************************************************
 #*  Class      :  SwFEShell
-#*  Methoden   :  _GetTabRows
+#*  Methods    :  _GetTabRows
 #***********************************************************************/
 void SwFEShell::_GetTabRows( SwTabCols &rToFill, const SwFrm *pBox ) const
 {
     const SwTabFrm *pTab = pBox->FindTabFrm();
     if ( pLastRows )
     {
-        //Paar Kleinigkeiten muessen wir schon noch sicherstellen
+        // assure few things
         sal_Bool bDel = sal_True;
         if ( pRowCacheLastTable == pTab->GetTable() )
         {
@@ -672,7 +672,7 @@ void SwFEShell::_GetTabRows( SwTabCols &rToFill, const SwFrm *pBox ) const
 
 /***********************************************************************
 #*  Class      :  SwFEShell
-#*  Methoden   :  SetTabCols(), GetTabCols()
+#*  Methods    :  SetTabCols(), GetTabCols()
 #***********************************************************************/
 void SwFEShell::SetTabCols( const SwTabCols &rNew, sal_Bool bCurRowOnly )
 {
@@ -753,7 +753,7 @@ void SwFEShell::SetMouseTabRows( const SwTabCols &rNew, sal_Bool bCurColOnly, co
 
 /***********************************************************************
  *  Class      :  SwFEShell
- *  Methoden   :  SetRowSplit(), GetRowSplit()
+ *  Methods    :  SetRowSplit(), GetRowSplit()
  ***********************************************************************/
 
 void SwFEShell::SetRowSplit( const SwFmtRowSplit& rNew )
@@ -771,9 +771,9 @@ void SwFEShell::GetRowSplit( SwFmtRowSplit*& rpSz ) const
 
 
 /***********************************************************************
-#*  Class      :  SwFEShell
-#*  Methoden   :  SetRowHeight(), GetRowHeight()
-#***********************************************************************/
+ *  Class      :  SwFEShell
+ *  Methods    :  SetRowHeight(), GetRowHeight()
+ ***********************************************************************/
 
 void SwFEShell::SetRowHeight( const SwFmtFrmSize &rNew )
 {
@@ -823,7 +823,7 @@ sal_Bool SwFEShell::GetRowBackground( SvxBrushItem &rToFill ) const
 
 /***********************************************************************
 #*  Class      :  SwFEShell
-#*  Methoden   :  SetTabBorders(), GetTabBorders()
+#*  Methods    :  SetTabBorders(), GetTabBorders()
 #***********************************************************************/
 
 void SwFEShell::SetTabBorders( const SfxItemSet& rSet )
@@ -852,7 +852,7 @@ void SwFEShell::GetTabBorders( SfxItemSet& rSet ) const
 
 /***********************************************************************
 #*  Class      :  SwFEShell
-#*  Methoden   :  SetBoxBackground(), GetBoxBackground()
+#*  Methods    :  SetBoxBackground(), GetBoxBackground()
 #***********************************************************************/
 void SwFEShell::SetBoxBackground( const SvxBrushItem &rNew )
 {
@@ -869,7 +869,7 @@ sal_Bool SwFEShell::GetBoxBackground( SvxBrushItem &rToFill ) const
 
 /***********************************************************************
 #*  Class      :  SwFEShell
-#*  Methoden   :  SetBoxDirection(), GetBoxDirection()
+#*  Methods    :  SetBoxDirection(), GetBoxDirection()
 #***********************************************************************/
 void SwFEShell::SetBoxDirection( const SvxFrameDirectionItem& rNew )
 {
@@ -886,7 +886,7 @@ sal_Bool SwFEShell::GetBoxDirection( SvxFrameDirectionItem&  rToFill ) const
 
 /***********************************************************************
 #*  Class      :  SwFEShell
-#*  Methoden   :  SetBoxAlign, SetBoxAlign
+#*  Methods    :  SetBoxAlign, SetBoxAlign
 #***********************************************************************/
 void SwFEShell::SetBoxAlign( sal_uInt16 nAlign )
 {
@@ -903,7 +903,7 @@ sal_uInt16 SwFEShell::GetBoxAlign() const
 
 /***********************************************************************
 #*  Class      :  SwFEShell
-#*  Methoden   :  SetTabBackground(), GetTabBackground()
+#*  Methods    :  SetTabBackground(), GetTabBackground()
 #***********************************************************************/
 void SwFEShell::SetTabBackground( const SvxBrushItem &rNew )
 {
@@ -914,7 +914,7 @@ void SwFEShell::SetTabBackground( const SvxBrushItem &rNew )
     SET_CURR_SHELL( this );
     StartAllAction();
     GetDoc()->SetAttr( rNew, *pFrm->ImplFindTabFrm()->GetFmt() );
-    EndAllAction(); //Kein Call, denn es veraendert sich nichts!
+    EndAllAction(); // no call, nothing changes!
     GetDoc()->SetModified();
 }
 
@@ -928,11 +928,11 @@ void SwFEShell::GetTabBackground( SvxBrushItem &rToFill ) const
 
 /***********************************************************************
 #*  Class      :  SwFEShell
-#*  Methoden   :  HasWholeTabSelection()
+#*  Methods    :  HasWholeTabSelection()
 #***********************************************************************/
 sal_Bool SwFEShell::HasWholeTabSelection() const
 {
-    //Ist die ganze Tabelle Selektiert?
+    // whole table selected?
     if ( IsTableMode() )
     {
         SwSelBoxes aBoxes;
@@ -953,7 +953,7 @@ sal_Bool SwFEShell::HasBoxSelection() const
 {
     if(!IsCrsrInTbl())
         return sal_False;
-    //Ist die ganze Tabelle Selektiert?
+    // whole table selected?
     if( IsTableMode() )
         return sal_True;
     SwPaM* pPam = GetCrsr();
@@ -976,7 +976,7 @@ sal_Bool SwFEShell::HasBoxSelection() const
             if( !pCNd )
             {
                 pCNd = GetDoc()->GetNodes().GoPrevious( &aIdx );
-                OSL_ENSURE( pCNd, "kein ContentNode in der Box ??" );
+                OSL_ENSURE( pCNd, "no ContentNode in box ??" );
             }
             if( pPam->GetMark()->nContent == pCNd->Len() )
             {
@@ -992,7 +992,7 @@ sal_Bool SwFEShell::HasBoxSelection() const
 
 /***********************************************************************
 #*  Class      :  SwFEShell
-#*  Methoden   :  ProtectCells(), UnProtectCells()
+#*  Methods    :  ProtectCells(), UnProtectCells()
 #***********************************************************************/
 void SwFEShell::ProtectCells()
 {
@@ -1013,7 +1013,7 @@ void SwFEShell::ProtectCells()
     EndAllActionAndCall();
 }
 
-// die Tabellenselektion aufheben
+// cancel table selection
 void SwFEShell::UnProtectCells()
 {
     SET_CURR_SHELL( this );
@@ -1085,7 +1085,7 @@ sal_Bool SwFEShell::CanUnProtectCells() const
 
 /***********************************************************************
 #*  Class      :  SwFEShell
-#*  Methoden   :  GetRowsToRepeat(), SetRowsToRepeat()
+#*  Methods    :  GetRowsToRepeat(), SetRowsToRepeat()
 #***********************************************************************/
 sal_uInt16 SwFEShell::GetRowsToRepeat() const
 {
@@ -1109,6 +1109,7 @@ void SwFEShell::SetRowsToRepeat( sal_uInt16 nSet )
         EndAllActionAndCall();
     }
 }
+
 /*-------------------------------------------------------------------------
     returns the number of rows consecutively selected from top
   -----------------------------------------------------------------------*/
@@ -1213,8 +1214,8 @@ void SwFEShell::AdjustCellWidth( sal_Bool bBalance )
     SET_CURR_SHELL( this );
     StartAllAction();
 
-    //WarteCrsr immer einschalten, weil sich im vorraus nicht so recht
-    //ermitteln laesst wieviel Inhalt betroffen ist.
+    // switch on wait-cursor, as we do not know how
+    // much content is affected
     TblWait aWait( USHRT_MAX, 0, *GetDoc()->GetDocShell() );
 
     GetDoc()->AdjustCellWidth( *getShellCrsr( false ), bBalance );
@@ -1223,8 +1224,7 @@ void SwFEShell::AdjustCellWidth( sal_Bool bBalance )
 
 sal_Bool SwFEShell::IsAdjustCellWidthAllowed( sal_Bool bBalance ) const
 {
-    //Es muss mindestens eine Zelle mit Inhalt in der Selektion enthalten
-    //sein.
+    // at least one line with content should be contained in the selection
 
     SwFrm *pFrm = GetCurrFrm();
     if( !pFrm || !pFrm->IsInTab() )
@@ -1267,7 +1267,7 @@ sal_Bool SwFEShell::IsAdjustCellWidthAllowed( sal_Bool bBalance ) const
     return sal_False;
 }
 
-    // AutoFormat fuer die Tabelle/TabellenSelection
+    // AutoFormat for the table/tables selections
 sal_Bool SwFEShell::SetTableAutoFmt( const SwTableAutoFmt& rNew )
 {
     SwTableNode *pTblNd = (SwTableNode*)IsCrsrInTbl();
@@ -1276,10 +1276,10 @@ sal_Bool SwFEShell::SetTableAutoFmt( const SwTableAutoFmt& rNew )
 
     SwSelBoxes aBoxes;
 
-    if ( !IsTableMode() )       // falls Crsr noch nicht akt. sind
+    if ( !IsTableMode() )       // if cursors are not current
         GetCrsr();
 
-    // gesamte Tabelle oder nur auf die akt. Selektion
+    // whole table or only current selection
     if( IsTableMode() )
         ::GetTblSelCrs( *this, aBoxes );
     else
@@ -1314,10 +1314,10 @@ sal_Bool SwFEShell::GetTableAutoFmt( SwTableAutoFmt& rGet )
 
     SwSelBoxes aBoxes;
 
-    if ( !IsTableMode() )       // falls Crsr noch nicht akt. sind
+    if ( !IsTableMode() )       // if cursor are not current
         GetCrsr();
 
-    // gesamte Tabelle oder nur auf die akt. Selektion
+    // whole table or only current selection
     if( IsTableMode() )
         ::GetTblSelCrs( *this, aBoxes );
     else
@@ -1338,7 +1338,7 @@ sal_Bool SwFEShell::GetTableAutoFmt( SwTableAutoFmt& rGet )
 #***********************************************************************/
 sal_Bool SwFEShell::DeleteTblSel()
 {
-    // pruefe ob vom aktuellen Crsr der SPoint/Mark in einer Tabelle stehen
+    // check if SPoint/Mark of current cursor are in a table
     SwFrm *pFrm = GetCurrFrm();
     if( !pFrm || !pFrm->IsInTab() )
         return sal_False;
@@ -1353,7 +1353,7 @@ sal_Bool SwFEShell::DeleteTblSel()
     SET_CURR_SHELL( this );
     StartAllAction();
 
-    // lasse ueber das Layout die Boxen suchen
+   // search boxes via the layout
     sal_Bool bRet;
     SwSelBoxes aBoxes;
     GetTblSelCrs( *this, aBoxes );
@@ -1361,9 +1361,9 @@ sal_Bool SwFEShell::DeleteTblSel()
     {
         TblWait( aBoxes.size(), pFrm, *GetDoc()->GetDocShell() );
 
-        // die Crsr muessen noch aus dem Loesch Bereich entfernt
-        // werden. Setze sie immer hinter/auf die Tabelle; ueber die
-        // Dokument-Position werden sie dann immer an die alte Position gesetzt.
+        // cursor should be removed from deletion area.
+        // Put them behind/on the table; via the document
+        // position they'll be set to the old position
         while( !pFrm->IsCellFrm() )
             pFrm = pFrm->GetUpper();
         ParkCrsr( SwNodeIndex( *((SwCellFrm*)pFrm)->GetTabBox()->GetSttNd() ));
@@ -1390,20 +1390,20 @@ sal_uInt16 SwFEShell::GetCurTabColNum() const
     sal_uInt16 nRet = 0;
 
     SwFrm *pFrm = GetCurrFrm();
-    OSL_ENSURE( pFrm, "Crsr geparkt?" );
+    OSL_ENSURE( pFrm, "Crsr parked?" );
 
-    // pruefe ob vom aktuellen Crsr der SPoint/Mark in einer Tabelle stehen
+    // check if SPoint/Mark of current cursor are in a table
     if( pFrm && pFrm->IsInTab() )
     {
-        do {            // JP 26.09.95: warum mit dem CntntFrame und nicht mit
-                        //              dem CellFrame vergleichen????
+        do {            // JP 26.09.95: why compare with CntntFrame
+                        //              and not with CellFrame ????
             pFrm = pFrm->GetUpper();
         } while ( !pFrm->IsCellFrm() );
         SWRECTFN( pFrm )
 
         const SwPageFrm* pPage = pFrm->FindPageFrm();
 
-        //TabCols besorgen, den nur ueber diese erreichen wir die Position.
+        // get TabCols, as only via these we get to the position
         SwTabCols aTabCols;
         GetTabCols( aTabCols );
 
@@ -1687,12 +1687,12 @@ const SwFrm* SwFEShell::GetBox( const Point &rPt, bool* pbRow, bool* pbCol ) con
     const SwCellFrm *pFrm = 0;
     if ( pPage )
     {
-        //Per GetCrsrOfst oder GetCntntPos koennen wir hier die Box leider
-        //nicht suchen. Das wuerde zu einem Performance-Zusammenbruch bei
-        //Dokumenten mit vielen Absaetzen/Tabellen auf einer Seite fuehren
+        // We cannot search the box by GetCrsrOfst or GetCntntPos.
+        // This would lead to a performance collapse for documents
+        // with a lot of paragraphs/tables on one page
         //(BrowseMode!)
 
-        //Erst die Flys checken.
+        // check flys first
         if ( pPage->GetSortedObjs() )
         {
             for ( sal_uInt16 i = 0; !pFrm && i < pPage->GetSortedObjs()->Count(); ++i )
@@ -2149,7 +2149,7 @@ sal_uInt16 SwFEShell::GetCurMouseTabColNum( const Point &rPt ) const
     {
         const long nX = pFrm->Frm().Left();
 
-        //TabCols besorgen, den nur ueber diese erreichen wir die Position.
+        // get TabCols, only via these we get the position
         SwTabCols aTabCols;
         GetMouseTabCols( aTabCols, rPt );
 
@@ -2255,8 +2255,8 @@ sal_Bool SwFEShell::SetColRowWidthHeight( sal_uInt16 eType, sal_uInt16 nDiff )
 
     SwTabFrm *pTab = pFrm->ImplFindTabFrm();
 
-    // sollte die Tabelle noch auf relativen Werten (USHRT_MAX) stehen
-    // dann muss es jetzt auf absolute umgerechnet werden.
+    // if the table is in relative values (USHRT_MAX)
+    // then it should be recalculated to absolute values now
     const SwFmtFrmSize& rTblFrmSz = pTab->GetFmt()->GetFrmSize();
     SWRECTFN( pTab )
     long nPrtWidth = (pTab->Prt().*fnRect->fnGetWidth)();
@@ -2351,7 +2351,7 @@ sal_Bool lcl_IsFormulaSelBoxes( const SwTable& rTbl, const SwTblBoxFormula& rFml
         sal_uInt16 i;
         for( i = 0; i < rCells.Count(); ++i )
             if( rCells[ i ]->GetTabBox() == pBox )
-                break;      // gefunden
+                break;      // found
 
         if( i == rCells.Count() )
             return sal_False;
@@ -2360,7 +2360,7 @@ sal_Bool lcl_IsFormulaSelBoxes( const SwTable& rTbl, const SwTblBoxFormula& rFml
     return sal_True;
 }
 
-    // erfrage die Formel fuer die Autosumme
+    // ask formula for auto-sum
 sal_Bool SwFEShell::GetAutoSum( String& rFml ) const
 {
     SwFrm *pFrm = GetCurrFrm();
@@ -2384,18 +2384,18 @@ sal_Bool SwFEShell::GetAutoSum( String& rFml ) const
             if( !nW )
             {
                 if( USHRT_MAX == nBoxW )
-                    continue;       // leere am Anfang ueberspringen
+                    continue;       // skip space at beginning
 
                 rFml += '(';
                 nInsPos = rFml.Len();
 
-                // Formeln nur wenn diese Boxen enthalten
+                // formula only if box is contained
                 if( RES_BOXATR_FORMULA == nBoxW &&
                     !::lcl_IsFormulaSelBoxes( *pTab->GetTable(), pCFrm->
                     GetTabBox()->GetFrmFmt()->GetTblBoxFormula(), aCells))
                 {
                     nW = RES_BOXATR_VALUE;
-                    // alle vorhierigen Leere wieder mit aufnehmen !
+                    // restore previous spaces!
                     for( sal_uInt16 i = aCells.Count(); n+1 < i; )
                     {
                         String sTmp( String::CreateFromAscii(
@@ -2410,7 +2410,7 @@ sal_Bool SwFEShell::GetAutoSum( String& rFml ) const
             }
             else if( RES_BOXATR_VALUE == nW )
             {
-                // values werden gesucht, Value/Formel/Text gefunden -> aufn.
+                // search for values, Value/Formula/Text found -> include
                 if( RES_BOXATR_FORMULA == nBoxW &&
                     ::lcl_IsFormulaSelBoxes( *pTab->GetTable(), pCFrm->
                         GetTabBox()->GetFrmFmt()->GetTblBoxFormula(), aCells ))
@@ -2422,18 +2422,18 @@ sal_Bool SwFEShell::GetAutoSum( String& rFml ) const
             }
             else if( RES_BOXATR_FORMULA == nW )
             {
-                // bei Formeln nur weiter suchen, wenn die akt. Formel auf
-                // alle Boxen verweist, die sich in der Selektion befinden
+                // only continue search when the current formula points to
+                // all boxes contained in the selection
                 if( RES_BOXATR_FORMULA == nBoxW )
                 {
                     if( !::lcl_IsFormulaSelBoxes( *pTab->GetTable(), pCFrm->
                         GetTabBox()->GetFrmFmt()->GetTblBoxFormula(), aCells ))
                     {
-                        // dann noch mal von vorne und nur die Values!
+                        // redo only for values!
 
                         nW = RES_BOXATR_VALUE;
                         rFml.Erase( nInsPos );
-                        // alle vorhierigen Leere wieder mit aufnehmen !
+                        // restore previous spaces!
                         for( sal_uInt16 i = aCells.Count(); n+1 < i; )
                         {
                             String sTmp( String::CreateFromAscii(
@@ -2449,11 +2449,11 @@ sal_Bool SwFEShell::GetAutoSum( String& rFml ) const
                 else if( USHRT_MAX == nBoxW )
                     break;
                 else
-                    continue;       // diese Boxen ignorieren
+                    continue;       // ignore this box
             }
             else
-                // alles andere beendet die Schleife
-// evt. Texte noch zu lassen??
+                // all other stuff terminates the loop
+                // possibly allow texts??
                 break;
 
             String sTmp( '<' );
