@@ -49,6 +49,10 @@ using com::sun::star::lang::IllegalArgumentException;
 using com::sun::star::beans::Property;
 using com::sun::star::beans::XPropertySetInfo;
 
+PropertyAccessorBase::~PropertyAccessorBase()
+{
+}
+
 oslInterlockedCount SAL_CALL PropertyAccessorBase::acquire()
 {
     return ++m_refCount;

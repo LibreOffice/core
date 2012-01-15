@@ -60,6 +60,7 @@ private:
 
 protected:
     PropertyAccessorBase() : m_refCount( 0 ) { }
+    virtual ~PropertyAccessorBase();
 
 public:
     virtual oslInterlockedCount SAL_CALL acquire();
