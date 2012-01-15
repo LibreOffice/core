@@ -32,6 +32,7 @@ $(eval $(call gb_CppunitTest_CppunitTest,sc_datapilotdescriptorbase))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,sc_datapilotdescriptorbase, \
     sc/qa/extras/xdatapilotdescriptor \
+    sc/qa/extras/xdatapilottable \
 ))
 
 $(eval $(call gb_CppunitTest_add_linked_libs,sc_datapilotdescriptorbase, \
