@@ -391,7 +391,9 @@ void parseUriRef(rtl_uString const * pUriRef, Components * pComponents)
     sal_Unicode const * pPos = pBegin;
 
     if (pPos != pEnd && isAlpha(*pPos))
+    {
         for (sal_Unicode const * p = pPos + 1; p != pEnd; ++p)
+        {
             if (*p == ':')
             {
                 pComponents->aScheme.pBegin = pBegin;
@@ -401,7 +403,11 @@ void parseUriRef(rtl_uString const * pUriRef, Components * pComponents)
             }
             else if (!isAlpha(*p) && !isDigit(*p) && *p != '+' && *p != '-'
                      && *p != '.')
+            {
                 break;
+            }
+        }
+    }
 
     if (pEnd - pPos >= 2 && pPos[0] == '/' && pPos[1] == '/')
     {

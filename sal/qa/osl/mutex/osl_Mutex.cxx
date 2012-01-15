@@ -266,7 +266,7 @@ protected:
     {
         // block here if the mutex has been acquired
         Mutex* pGlobalMutex;
-        pGlobalMutex = pGlobalMutex->getGlobalMutex( );
+        pGlobalMutex = Mutex::getGlobalMutex( );
         pGlobalMutex->acquire( );
         printf("# Global Mutex acquired. \n" );
         pGlobalMutex->release( );
@@ -522,7 +522,7 @@ namespace osl_Mutex
         void getGlobalMutex_001()
         {
             Mutex* pGlobalMutex;
-            pGlobalMutex = pGlobalMutex->getGlobalMutex();
+            pGlobalMutex = Mutex::getGlobalMutex();
             pGlobalMutex->acquire();
 
             GlobalMutexThread myThread;
@@ -545,11 +545,11 @@ namespace osl_Mutex
             sal_Bool bRes;
 
             Mutex *pGlobalMutex;
-            pGlobalMutex = pGlobalMutex->getGlobalMutex( );
+            pGlobalMutex = Mutex::getGlobalMutex( );
             pGlobalMutex->acquire( );
             {
                 Mutex *pGlobalMutex1;
-                pGlobalMutex1 = pGlobalMutex1->getGlobalMutex( );
+                pGlobalMutex1 = Mutex::getGlobalMutex( );
                 bRes = pGlobalMutex1->release( );
             }
 
