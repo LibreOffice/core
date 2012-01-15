@@ -80,30 +80,33 @@ public:
 
     virtual sal_Bool    Close();
 
-    /** The default value of nDisplay = -1 means "don't care" and
-        allows to backends to use any screen [** or display? terminology!]
-        they like (most probably the current one).
+    /** The default value of nDisplayScreen = -1 means "don't care" and
+        allows to backends to use any screen they like (most probably
+        the current one).
 
         NOTE: The default value cannot be 0, because 0 is a legitimate
-        screen number.
+        Display Screen number.
      */
-    void            ShowFullScreenMode( sal_Bool bFullScreenMode = sal_True, sal_Int32 nDisplay = -1 );
+    void            ShowFullScreenMode( sal_Bool bFullScreenMode = sal_True,
+                                        sal_Int32 nDisplayScreen = -1 );
     void            EndFullScreenMode() { ShowFullScreenMode( sal_False ); }
-    sal_Bool            IsFullScreenMode() const { return mbFullScreenMode; }
+    sal_Bool        IsFullScreenMode() const { return mbFullScreenMode; }
 
-    void            StartPresentationMode( sal_Bool bPresentation = sal_True, sal_uInt16 nFlags = 0, sal_Int32 nDisplay = 0 );
+    void            StartPresentationMode( sal_Bool   bPresentation = sal_True,
+                                           sal_uInt16 nFlags = 0,
+                                           sal_Int32  nDisplayScreen = 0 );
     void            EndPresentationMode() {  StartPresentationMode( sal_False ); }
-    sal_Bool            IsPresentationMode() const { return mbPresentationMode; }
+    sal_Bool        IsPresentationMode() const { return mbPresentationMode; }
 
-    sal_Bool            IsMinimized() const;
+    sal_Bool        IsMinimized() const;
 
-    sal_Bool            SetPluginParent( SystemParentData* pParent );
+    sal_Bool        SetPluginParent( SystemParentData* pParent );
 
     void            Minimize();
     void            Restore();
 
     void            Maximize( sal_Bool bMaximize = sal_True );
-    sal_Bool            IsMaximized() const;
+    sal_Bool        IsMaximized() const;
 };
 
 #endif // _SV_WRKWIN_HXX

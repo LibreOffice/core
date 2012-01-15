@@ -178,15 +178,15 @@ WorkWindow::~WorkWindow()
 
 // -----------------------------------------------------------------------
 
-void WorkWindow::ShowFullScreenMode( sal_Bool bFullScreenMode, sal_Int32 nDisplay )
+void WorkWindow::ShowFullScreenMode( sal_Bool bFullScreenMode, sal_Int32 nDisplayScreen )
 {
     if ( !mbFullScreenMode == !bFullScreenMode )
         return;
 
-    if( (nDisplay < 0)
-    || (nDisplay >= static_cast<sal_Int32>(Application::GetScreenCount()) ) )
+    if( (nDisplayScreen < 0)
+    || (nDisplayScreen >= static_cast<sal_Int32>(Application::GetScreenCount()) ) )
     {
-        nDisplay = GetScreenNumber();
+        nDisplayScreen = GetScreenNumber();
     }
 
     mbFullScreenMode = bFullScreenMode != 0;
@@ -205,13 +205,13 @@ void WorkWindow::ShowFullScreenMode( sal_Bool bFullScreenMode, sal_Int32 nDispla
         }
 
         mpWindowImpl->mpFrameWindow->mpWindowImpl->mbWaitSystemResize = sal_True;
-        ImplGetFrame()->ShowFullScreen( bFullScreenMode, nDisplay );
+        ImplGetFrame()->ShowFullScreen( bFullScreenMode, nDisplayScreen );
     }
 }
 
 // -----------------------------------------------------------------------
 
-void WorkWindow::StartPresentationMode( sal_Bool bPresentation, sal_uInt16 nFlags, sal_Int32 nDisplay )
+void WorkWindow::StartPresentationMode( sal_Bool bPresentation, sal_uInt16 nFlags, sal_Int32 nDisplayScreen )
 {
     if ( !bPresentation == !mbPresentationMode )
         return;
@@ -224,7 +224,7 @@ void WorkWindow::StartPresentationMode( sal_Bool bPresentation, sal_uInt16 nFlag
         mnPresentationFlags     = nFlags;
 
         if ( !(mnPresentationFlags & PRESENTATION_NOFULLSCREEN) )
-            ShowFullScreenMode( sal_True, nDisplay );
+            ShowFullScreenMode( sal_True, nDisplayScreen );
         if ( !mbSysChild )
         {
             if ( mnPresentationFlags & PRESENTATION_HIDEALLAPPS )
@@ -246,7 +246,7 @@ void WorkWindow::StartPresentationMode( sal_Bool bPresentation, sal_uInt16 nFlag
             if ( mnPresentationFlags & PRESENTATION_HIDEALLAPPS )
                 mpWindowImpl->mpFrame->SetAlwaysOnTop( sal_False );
         }
-        ShowFullScreenMode( mbPresentationFull, nDisplay );
+        ShowFullScreenMode( mbPresentationFull, nDisplayScreen );
 
         mbPresentationMode      = sal_False;
         mbPresentationVisible   = sal_False;
