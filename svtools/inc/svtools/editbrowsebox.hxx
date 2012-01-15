@@ -132,9 +132,11 @@ namespace svt
     //==================================================================
     //= IEditImplementation
     //==================================================================
-    class IEditImplementation
+    class SVT_DLLPUBLIC IEditImplementation
     {
     public:
+        virtual ~IEditImplementation() = 0;
+
         virtual Control&            GetControl() = 0;
 
         virtual String              GetText( LineEnd aSeparator ) const = 0;

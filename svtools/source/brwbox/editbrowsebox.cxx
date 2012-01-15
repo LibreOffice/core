@@ -72,6 +72,10 @@ namespace svt
     using  com::sun::star::accessibility::XAccessible;
     //==================================================================
 
+    IEditImplementation::~IEditImplementation()
+    {
+    }
+
     //==================================================================
     //= EditBrowserHeader
     //==================================================================
