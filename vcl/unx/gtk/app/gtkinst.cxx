@@ -29,6 +29,7 @@
 
 #include <string.h>
 #include <osl/module.h>
+#define GLIB_DISABLE_DEPRECATION_WARNINGS
 #include <unx/gtk/gtkdata.hxx>
 #include <unx/gtk/gtkinst.hxx>
 #include <unx/salobj.h>
