@@ -50,7 +50,9 @@
 #include <svtools/wallitem.hxx>
 #include <svl/cntwall.hxx>
 
-// -----------------------------------------------------------------------
+SfxBrushItemLink::~SfxBrushItemLink()
+{
+}
 
 //static
 void SfxBrushItemLink::Set( SfxBrushItemLink* pLink )
