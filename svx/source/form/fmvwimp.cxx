@@ -733,7 +733,11 @@ IMPL_LINK(FmXFormView, OnActivate, void*, /*EMPTYTAG*/)
                     continue;
 
                 Reference< XPropertySet > xFormSet( xForm, UNO_QUERY );
-                ENSURE_OR_CONTINUE( xFormSet.is(), "FmXFormView::OnActivate: a form which does not have properties?" );
+                if ( !xFormSet.is() )
+                {
+                    SAL_WARN( "svx.form", "FmXFormView::OnActivate: a form which does not have properties?" );
+                    continue;
+                }
 
                 const ::rtl::OUString aSource = ::comphelper::getString( xFormSet->getPropertyValue( FM_PROP_COMMAND ) );
                 if ( !aSource.isEmpty() )
@@ -908,7 +912,12 @@ Reference< XFormController > FmXFormView::getFormController( const Reference< XF
         )
     {
         const PFormViewPageWindowAdapter pAdapter( *pos );
-        ENSURE_OR_CONTINUE( pAdapter.get(), "FmXFormView::getFormController: invalid page window adapter!" );
+        if ( !pAdapter.get() )
+        {
+            SAL_WARN( "svx.form", "FmXFormView::getFormController: invalid page window adapter!" );
+            continue;
+        }
+
         if ( pAdapter->getWindow() != &_rDevice )
             // wrong device
             continue;

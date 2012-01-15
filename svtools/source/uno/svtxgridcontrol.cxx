@@ -781,7 +781,11 @@ void SVTXGridControl::impl_updateColumnsFromModel_nothrow()
                 ++colRef
             )
         {
-            ENSURE_OR_CONTINUE( colRef->is(), "illegal column!" );
+            if ( !colRef->is() )
+            {
+                SAL_WARN( "svtools.uno", "illegal column!" );
+                continue;
+            }
 
             m_pTableModel->appendColumn( *colRef );
         }

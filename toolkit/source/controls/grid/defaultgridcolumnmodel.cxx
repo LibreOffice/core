@@ -178,7 +178,12 @@ namespace toolkit
             )
         {
             GridColumn* pColumnImpl = GridColumn::getImplementation( *updatePos );
-            ENSURE_OR_CONTINUE( pColumnImpl, "DefaultGridColumnModel::removeColumn: invalid column implementation!" );
+            if ( !pColumnImpl )
+            {
+                SAL_WARN( "toolkit.controls", "DefaultGridColumnModel::removeColumn: invalid column implementation!" );
+                continue;
+            }
+
             pColumnImpl->setIndex( columnIndex );
         }
 

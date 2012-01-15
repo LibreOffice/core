@@ -163,7 +163,11 @@ namespace ucb { namespace ucp { namespace ext
                         ++pExtInfo
                     )
                 {
-                    ENSURE_OR_CONTINUE( pExtInfo->getLength() > 0, "illegal extension info" );
+                    if ( pExtInfo->getLength() <= 0 )
+                    {
+                        SAL_WARN( "ucb.ucp", "illegal extension info" );
+                        continue;
+                    }
 
                     const ::rtl::OUString& rLocalId = (*pExtInfo)[0];
                     ResultListEntry aEntry;

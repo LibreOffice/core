@@ -323,7 +323,12 @@ namespace svt { namespace table
             )
         {
             UnoGridColumnFacade* pColumn = dynamic_cast< UnoGridColumnFacade* >( col->get() );
-            ENSURE_OR_CONTINUE( pColumn != NULL, "UnoControlTableModel::removeAllColumns: illegal column implementation!" );
+            if ( !pColumn )
+            {
+                SAL_WARN( "svtools.uno", "UnoControlTableModel::removeAllColumns: illegal column implementation!" );
+                continue;
+            }
+
             pColumn->dispose();
         }
         m_pImpl->aColumns.clear();

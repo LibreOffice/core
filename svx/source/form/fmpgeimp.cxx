@@ -216,15 +216,23 @@ void FmFormPageImpl::initFrom( FmFormPageImpl& i_foreignImpl )
                 continue;
 
             Reference< XControlModel > xForeignModel( pForeignObj->GetUnoControlModel() );
-            ENSURE_OR_CONTINUE( xForeignModel.is(), "FmFormPageImpl::FmFormPageImpl: control shape without control!" );
+            if ( !xForeignModel.is() )
+            {
                 // if this fires, the SdrObject does not have a UNO Control Model. This is pathological, but well ...
                 // So the cloned SdrObject will also not have a UNO Control Model.
+                SAL_WARN( "svx.form", "FmFormPageImpl::FmFormPageImpl: control shape without control!" );
+                continue;
+            }
 
             MapControlModels::const_iterator assignment = aModelAssignment.find( xForeignModel );
-            ENSURE_OR_CONTINUE( assignment != aModelAssignment.end(), "FmFormPageImpl::FmFormPageImpl: no clone found for this model!" );
+            if ( assignment == aModelAssignment.end() )
+            {
                 // if this fires, the source SdrObject has a model, but it is not part of the model hierarchy in
                 // i_foreignImpl.getForms().
                 // Pathological, too ...
+                SAL_WARN( "svx.form", "FmFormPageImpl::FmFormPageImpl: no clone found for this model!" );
+                continue;
+            }
 
             pOwnObj->SetUnoControlModel( assignment->second );
         }

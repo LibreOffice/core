@@ -245,7 +245,12 @@ namespace xmloff { namespace metadata
             {
                 const PropertyGroup propGroup = group->second;
                 const IndexedPropertyGroups::const_iterator groupPos = rPropertyGroups.find( propGroup );
-                ENSURE_OR_CONTINUE( groupPos != rPropertyGroups.end(), "getPropertyGroupList: inconsistency!" );
+                if( groupPos == rPropertyGroups.end() )
+                {
+                    SAL_WARN( "xmloff.forms", "getPropertyGroupList: inconsistency!" );
+                    continue;
+                }
+
                 o_propertyGroups.push_back( groupPos->second );
             }
         }

@@ -671,7 +671,12 @@ namespace sfx2
         {
             const ::svt::PToolPanel pPanel( m_aPanelDeck.GetPanel( i ) );
             const CustomToolPanel* pCustomPanel = dynamic_cast< const CustomToolPanel* >( pPanel.get() );
-            ENSURE_OR_CONTINUE( pCustomPanel != NULL, "ModuleTaskPane_Impl::GetPanelPos: illegal panel implementation!" );
+            if ( !pCustomPanel )
+            {
+                SAL_WARN( "sfx2.dialog", "ModuleTaskPane_Impl::GetPanelPos: illegal panel implementation!" );
+                continue;
+            }
+
             if ( pCustomPanel->GetResourceURL() == i_rResourceURL )
             {
                 aPanelPos = i;

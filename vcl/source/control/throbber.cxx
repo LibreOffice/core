@@ -190,7 +190,12 @@ void Throbber::initImages()
                     ++check
                 )
             {
-                ENSURE_OR_CONTINUE( !check->empty(), "Throbber::initImages: illegal image!" );
+                if ( check->empty() )
+                {
+                    SAL_WARN( "vcl.control", "Throbber::initImages: illegal image!" );
+                    continue;
+                }
+
                 const Size aImageSize = (*check)[0].GetSizePixel();
 
                 if  (   ( aImageSize.Width() > aWindowSizePixel.Width() )
