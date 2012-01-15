@@ -176,6 +176,7 @@ class SceneObject
 {
 public:
     SceneObject();
+    virtual ~SceneObject();
 
     virtual void prepare() {};
     virtual void display(double nTime, double SlideWidth, double SlideHeight, double DispWidth, double DispHeight);

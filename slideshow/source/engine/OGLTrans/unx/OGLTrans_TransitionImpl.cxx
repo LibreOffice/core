@@ -272,6 +272,10 @@ SceneObject::SceneObject()
 {
 }
 
+SceneObject::~SceneObject()
+{
+}
+
 Iris::Iris()
     : SceneObject ()
 {
