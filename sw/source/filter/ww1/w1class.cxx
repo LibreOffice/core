@@ -589,15 +589,15 @@ sal_Bool Ww1Sprm::ReCalc()
 
 void Ww1Sprm::DeinitTab()
 {
-    for (size_t i=0; i < sizeof(aTab)/sizeof(*aTab); ++i)
+    for (size_t i=0; i < SAL_N_ELEMENTS(aTab); ++i)
         delete aTab[i];
-    memset(aTab, 0, sizeof(aTab)/sizeof(*aTab));
+    memset(aTab, 0, SAL_N_ELEMENTS(aTab));
     delete pSingleSprm;
 }
 
 void Ww1Sprm::InitTab()
 {
-    memset(aTab, 0, sizeof(aTab)/sizeof(*aTab));
+    memset(aTab, 0, SAL_N_ELEMENTS(aTab));
     pSingleSprm = new Ww1SingleSprm( 0, DUMPNAME(pUnknown));
 
     aTab[  2] = new Ww1SingleSprmByte(DUMPNAME("sprmPStc")); //   2 pap.istd (style code)
