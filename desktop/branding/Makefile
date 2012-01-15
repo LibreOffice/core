@@ -28,11 +28,11 @@
 SRCDIR := $(realpath $(dir $(firstword $(MAKEFILE_LIST)))/../..)
 
 ifeq ($(strip $(ABOUT_BITMAP)),)
-ABOUT_BITMAP := $(SRCDIR)/default_images/brand/about.png
+ABOUT_BITMAP := $(SRCDIR)/icon-themes/galaxy/brand/about.png
 endif
 
 ifeq ($(strip $(INTRO_BITMAP)),)
-INTRO_BITMAP := $(SRCDIR)/default_images/brand/intro.png
+INTRO_BITMAP := $(SRCDIR)/icon-themes/galaxy/brand/intro.png
 endif
 
 $(WORKDIR)/CustomTarget/desktop/branding/about.png : $(ABOUT_BITMAP)

@@ -25,7 +25,7 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Zip_Zip,shell,$(SRCDIR)/default_images/brand/shell))
+$(eval $(call gb_Zip_Zip,shell,$(SRCDIR)/icon-themes/galaxy/brand/shell))
 
 $(eval $(call gb_Zip_add_files,shell,\
     backing_left.png \

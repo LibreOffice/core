@@ -66,5 +66,5 @@ To Do:
 
 To find obsolete files:
 
-	for file in `cat ../../missing`; do foo=`md5sum default_images/$file | cut -f 1 -d ' '`; if test "z$foo" = "z36d1d1d46cdd975db0539b82ffe5ac42"; then echo "$file"; fi; done > ../../obsolete
+	for file in `cat ../../missing`; do foo=`md5sum icon-themes/galaxy/$file | cut -f 1 -d ' '`; if test "z$foo" = "z36d1d1d46cdd975db0539b82ffe5ac42"; then echo "$file"; fi; done > ../../obsolete
 

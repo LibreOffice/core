@@ -33,7 +33,7 @@
 #define CTL_DATA 1
 
 // images for toolbox image list
-//the numbers correspond to the icon names: default_images\chart2\res\dataeditor_icon_xy
+//the numbers correspond to the icon names: icon-themes\(name of theme)\res\dataeditor_icon_xy
 #define TBI_DATA_INSERT_ROW 1
 #define TBI_DATA_INSERT_COL 2
 #define TBI_DATA_DELETE_ROW 3

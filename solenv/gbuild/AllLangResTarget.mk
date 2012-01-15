@@ -311,7 +311,7 @@ endef
 
 gb_ResTarget_RSCTARGET := $(gb_SrsPartTarget_RSCTARGET)
 gb_ResTarget_RSCCOMMAND := $(gb_SrsPartTarget_RSCCOMMAND)
-gb_ResTarget_DEFIMAGESLOCATION := $(realpath $(SRCDIR)/default_images)/
+gb_ResTarget_DEFIMAGESLOCATION := $(realpath $(SRCDIR)/icon-themes/galaxy)/
 
 $(call gb_ResTarget_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),RES,2)

@@ -134,8 +134,8 @@ String SCSTR_QHELP_COLLAPSE_FORMULA
 };
 
 // Don't use this image list for normal toolbar images. We have now our commandimagelist
-// folder in default_images. This list is now only used for special toolboxes that are
-// used in floating windows.
+// folder in icon-themes/(name of theme)/cmd. This list is now only used for special
+//toolboxes that are used in floating windows.
 
 #define DEFAULT_IDLIST \
     IdList = {                                          \

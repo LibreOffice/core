@@ -74,10 +74,10 @@ namespace gb
     {
         public:
             AllLangResTarget(String name);
-            /// Sets the location where resources are to be found. reslocation is a path relative to the default_images directory.
+            /// Sets the location where resources are to be found. reslocation is a path relative to the icon-themes/galaxy directory.
             /// Resources will be found in reslocation itself and in the subdirectories res/ and imglst/ of it and again in subdirectories
             /// of those named as the language of the processed resource. In addition, resources are found in the res/ directory directly
-            /// below default_images and the subdirectory of it named as the language of the processed resource.
+            /// below icon-themes/galaxy and the subdirectory of it named as the language of the processed resource.
             void set_reslocation(Path reslocation);
         private:
             /// Sets the languages for which to create resources.

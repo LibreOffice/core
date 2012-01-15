@@ -30,7 +30,7 @@
 
 $(eval $(call gb_AllLangResTarget_AllLangResTarget,RES))
 
-# declaration of images folder (e.g. default_images/MODULE/res)
+# declaration of images folder (e.g. icon-themes/(name of theme)/MODULE/res)
 $(eval $(call gb_AllLangResTarget_set_reslocation,RES,MODULE))
 
 # declaration of a resource intermediate file (srs)
