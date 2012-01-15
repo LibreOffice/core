@@ -39,6 +39,7 @@
 #include <com/sun/star/sheet/XNamedRange.hpp>
 #include <com/sun/star/table/XCell.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
+#include <com/sun/star/util/XCloseable.hpp>
 
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>
@@ -53,8 +54,15 @@
 
 namespace ScSpreadsheetObj {
 
+#define NUMBER_OF_TESTS 1
+
 class ScXSpreadsheets2 : public UnoApiTest
 {
+public:
+
+    virtual void setUp();
+    virtual void tearDown();
+
     uno::Reference< sheet::XSpreadsheetDocument> getDoc(const rtl::OUString);
     uno::Reference< sheet::XNamedRanges> getNamedRanges(uno::Reference< sheet::XSpreadsheetDocument >);
 
@@ -65,8 +73,14 @@ class ScXSpreadsheets2 : public UnoApiTest
     // disable test, test fails, might be the ongoing copy refs work
     CPPUNIT_TEST(testImportSheet);
     CPPUNIT_TEST_SUITE_END();
+
+private:
+    static int nTest;
+    static uno::Reference< lang::XComponent > xComponent;
 };
 
+int ScXSpreadsheets2::nTest = 0;
+uno::Reference< lang::XComponent > ScXSpreadsheets2::xComponent;
 
 void ScXSpreadsheets2::testImportSheet()
 {
@@ -178,7 +192,7 @@ void ScXSpreadsheets2::testImportSheet()
     uno::Any aRedefinedInSheetNr = xDestNamedRangesNameAccess->getByName(aRedefinedInSheetNamedRangeString);
     uno::Reference< sheet::XNamedRange > xDestRedefinedInSheetNamedRange(aRedefinedInSheetNr, UNO_QUERY_THROW);
     rtl::OUString aRedefinedInSheetNrDestContent = xDestRedefinedInSheetNamedRange->getContent();
-    rtl::OUString aRedefinedInSheetExpectedContent(RTL_CONSTASCII_USTRINGPARAM("$Sheet1.$B$2"));
+    rtl::OUString aRedefinedInSheetExpectedContent(RTL_CONSTASCII_USTRINGPARAM("$SheetToCopy.$A$10"));
     std::cout << "testImportSheet : initial2 content " << aRedefinedInSheetNrDestContent << std::endl;
     CPPUNIT_ASSERT_MESSAGE("Wrong address for Redefined InSheet named range", aRedefinedInSheetNrDestContent.equals(aRedefinedInSheetExpectedContent));
 
@@ -231,8 +245,11 @@ uno::Reference< sheet::XSpreadsheetDocument> ScXSpreadsheets2::getDoc(const rtl:
 {
     rtl::OUString aFileURL;
     createFileURL(aFileBase, aFileURL);
-    uno::Reference< lang::XComponent > xComponent;
-    xComponent = loadFromDesktop(aFileURL);
+
+    if (!xComponent.is())
+        xComponent = loadFromDesktop(aFileURL);
+
+    CPPUNIT_ASSERT(xComponent.is());
 
     uno::Reference< sheet::XSpreadsheetDocument > xDoc(xComponent, UNO_QUERY_THROW);
     CPPUNIT_ASSERT(xDoc.is());
@@ -247,6 +264,30 @@ uno::Reference< sheet::XNamedRanges> ScXSpreadsheets2::getNamedRanges(uno::Refer
     CPPUNIT_ASSERT(xNamedRanges.is());
 
     return xNamedRanges;
+}
+
+void ScXSpreadsheets2::setUp()
+{
+    nTest += 1;
+    UnoApiTest::setUp();
+}
+
+void ScXSpreadsheets2::tearDown()
+{
+    //closing the document fails ATM
+    if (nTest == NUMBER_OF_TESTS)
+    {
+        //uno::Reference< util::XCloseable > xCloseable(xComponent, UNO_QUERY_THROW);
+        //xCloseable->close( false );
+    }
+
+    UnoApiTest::tearDown();
+
+    if (nTest == NUMBER_OF_TESTS)
+    {
+        //mxDesktop->terminate();
+        //uno::Reference< lang::XComponent>(m_xContext, UNO_QUERY_THROW)->dispose();
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScXSpreadsheets2);
