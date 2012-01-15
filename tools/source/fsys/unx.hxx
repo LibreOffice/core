@@ -35,9 +35,7 @@
 #include <sys/param.h>
 #include <dirent.h>
 #include <unistd.h>
-/* #include <sysent.h> */
 
-#define FSYS_UNIX TRUE
 #define DRIVE_EXISTS(c) ( TRUE )
 
 #define _mkdir(p)       mkdir(p, 0777)

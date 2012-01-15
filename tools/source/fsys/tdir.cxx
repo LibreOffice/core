@@ -39,8 +39,6 @@
 
 DBG_NAME( Dir )
 
-#define APPEND (sal_uInt16) 65535
-
 /*************************************************************************
 |*
 |*    Dir::InsertPointReached()

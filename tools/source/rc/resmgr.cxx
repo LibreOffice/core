@@ -57,14 +57,10 @@
 #include <set>
 
 #ifdef UNX
-#define SEARCH_PATH_DELIMITER_CHAR_STRING ":"
 #define SEARCH_PATH_DELIMITER ':'
 #else
-#define SEARCH_PATH_DELIMITER_CHAR_STRING ";"
 #define SEARCH_PATH_DELIMITER ';'
 #endif
-
-#define SEARCH_PATH_DELIMITER_STRING ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SEARCH_PATH_DELIMITER_CHAR_STRING ) )
 
 using ::rtl::OUString;
 using ::rtl::OString;

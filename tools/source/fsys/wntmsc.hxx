@@ -45,8 +45,6 @@
 
 //--------------------------------------------------------------------
 
-#define FSYS_UNIX sal_False
-
 #define DOS_DIRECT      _A_SUBDIR
 #define DOS_VOLUMEID    0x08
 #ifndef S_IFBLK

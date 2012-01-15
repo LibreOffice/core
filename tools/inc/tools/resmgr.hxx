@@ -37,8 +37,6 @@
 #define CREATEVERSIONRESMGR_NAME( Name )   #Name
 #define CREATEVERSIONRESMGR( Name )        ResMgr::CreateResMgr( CREATEVERSIONRESMGR_NAME( Name ) )
 
-#define LOCALE_MAX_FALLBACK 6
-
 #include <vector>
 
 class SvStream;

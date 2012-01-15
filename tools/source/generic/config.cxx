@@ -45,8 +45,6 @@
 #include <osl/security.h>
 #include <rtl/strbuf.hxx>
 
-#define MAXBUFLEN   1024        // Fuer Buffer bei VOS-Funktionen
-
 // -----------------
 // - ImplConfigData -
 // -----------------
