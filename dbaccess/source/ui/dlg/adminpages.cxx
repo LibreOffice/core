@@ -68,6 +68,9 @@ namespace dbaui
     using namespace ::dbtools;
     using namespace ::svt;
 
+    ISaveValueWrapper::~ISaveValueWrapper()
+    {
+    }
 
     //=========================================================================
     //= OGenericAdministrationPage

@@ -47,6 +47,7 @@ namespace dbaui
     class SAL_NO_VTABLE ISaveValueWrapper
     {
     public:
+        virtual ~ISaveValueWrapper() = 0;
         virtual bool SaveValue() = 0;
         virtual bool Disable() = 0;
     };
