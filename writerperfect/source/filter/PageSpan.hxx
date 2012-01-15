@@ -41,8 +41,6 @@ public:
     void writePageLayout(const int iNum, OdfDocumentHandler *pHandler) const;
     void writeMasterPages(const int iStartingNum, const int iPageLayoutNum, const bool bLastPageSpan, OdfDocumentHandler *pHandler) const;
     int getSpan() const;
-    double getMarginLeft() const;
-    double getMarginRight() const;
 
     void setHeaderContent(std::vector<DocumentElement *> * pHeaderContent);
     void setFooterContent(std::vector<DocumentElement *> * pFooterContent);

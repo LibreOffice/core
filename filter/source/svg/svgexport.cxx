@@ -382,20 +382,6 @@ sal_Bool SVGExport::IsUseNativeTextDecoration() const
 
 // -----------------------------------------------------------------------------
 
-::rtl::OUString SVGExport::GetGlyphPlacement() const
-{
-    ::rtl::OUString aRet;
-
-    if( mrFilterData.getLength() > 3 )
-        mrFilterData[ 3 ].Value >>= aRet;
-    else
-        aRet = B2UCONST( "abs" );
-
-    return aRet;
-}
-
-// -----------------------------------------------------------------------------
-
 sal_Bool SVGExport::IsUseOpacity() const
 {
     sal_Bool bRet = !IsUseTinyProfile();
@@ -408,43 +394,9 @@ sal_Bool SVGExport::IsUseOpacity() const
 
 // -----------------------------------------------------------------------------
 
-sal_Bool SVGExport::IsUseGradient() const
-{
-    sal_Bool bRet = !IsUseTinyProfile();
-
-    if( !bRet && ( mrFilterData.getLength() > 5 ) )
-        mrFilterData[ 5 ].Value >>= bRet;
-
-    return bRet;
-}
-
-// -----------------------------------------------------------------------------
-
-void SVGExport::pushClip( const ::basegfx::B2DPolyPolygon& rPolyPoly )
-{
-    maClipList.push_front( ::basegfx::tools::correctOrientations( rPolyPoly ) );
-}
-
-// -----------------------------------------------------------------------------
-
-void SVGExport::popClip()
-{
-    if( !maClipList.empty() )
-        maClipList.pop_front();
-}
-
-// -----------------------------------------------------------------------------
-
-sal_Bool SVGExport::hasClip() const
-{
-    return( !maClipList.empty() );
-}
-
-// -----------------------------------------------------------------------------
-
 const ::basegfx::B2DPolyPolygon* SVGExport::getCurClip() const
 {
-    return( maClipList.empty() ? NULL : &( *maClipList.begin() ) );
+    return NULL;
 }
 
 // ------------------------

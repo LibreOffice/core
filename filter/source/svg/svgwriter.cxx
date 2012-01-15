@@ -640,14 +640,6 @@ void SVGActionWriter::ImplWritePolyPolygon( const PolyPolygon& rPolyPoly, sal_Bo
     else
         aPolyPoly = rPolyPoly;
 
-    if( mrExport.hasClip() )
-    {
-        const ::basegfx::B2DPolyPolygon aB2DPolyPoly( ::basegfx::tools::correctOrientations( aPolyPoly.getB2DPolyPolygon() ) );
-
-        aPolyPoly = PolyPolygon( ::basegfx::tools::clipPolyPolygonOnPolyPolygon(
-                        *mrExport.getCurClip(), aB2DPolyPoly, sal_False, sal_False ) );
-    }
-
     // add path data attribute
     mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrD, GetPathString( aPolyPoly, bLineOnly ) );
 

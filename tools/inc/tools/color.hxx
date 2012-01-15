@@ -156,7 +156,6 @@ public:
     void                IncreaseLuminance( sal_uInt8 cLumInc );
     void                DecreaseLuminance( sal_uInt8 cLumDec );
 
-    void                IncreaseContrast( sal_uInt8 cContInc );
     void                DecreaseContrast( sal_uInt8 cContDec );
 
     void                Invert();

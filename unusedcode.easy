@@ -55,7 +55,6 @@ CharPosArray::Insert(CharPosArray const*, unsigned short, unsigned short, unsign
 CharPosArray::Replace(int const&, unsigned short)
 CharPosArray::Replace(int const*, unsigned short, unsigned short)
 CharPosArray::_ForEach(unsigned short, unsigned short, unsigned char (*)(int const&, void*), void*)
-Color::IncreaseContrast(unsigned char)
 CurrencyField::ImplLoadRes(ResId const&)
 CustomToolBarImportHelper::showToolbar(rtl::OUString const&)
 DdeGetPutItem::DdeGetPutItem(DdeItem const&)
@@ -166,8 +165,6 @@ Octree::AddColor(BitmapColor const&)
 Octree::Octree(unsigned long)
 OutputDevice::LogicToPixel(PolyPolygon const&, MapMode const&) const
 OutputDevice::PixelToLogic(PolyPolygon const&, MapMode const&) const
-PageSpan::getMarginLeft() const
-PageSpan::getMarginRight() const
 ParagraphObj::ParagraphObj(ParagraphObj&)
 ParagraphStyleManager::get(WPXString const&) const
 PathDialog::SetPath(Edit const&)
@@ -179,10 +176,6 @@ PropBrwMgr::GetChildWindowId()
 ProposalList::Remove(rtl::OUString const&)
 PushButton::GetSymbolAlign() const
 ResData::Dump()
-SVGExport::GetGlyphPlacement() const
-SVGExport::IsUseGradient() const
-SVGExport::popClip()
-SVGExport::pushClip(basegfx::B2DPolyPolygon const&)
 SalGraphics::DrawBitmap(SalTwoRect const*, SalBitmap const&, unsigned int, OutputDevice const*)
 SalGraphics::DrawNativeControlText(unsigned int, unsigned int, Rectangle const&, unsigned int, ImplControlValue const&, rtl::OUString const&, OutputDevice const*)
 SalGraphics::drawAlphaBitmap(SalTwoRect const&, SalBitmap const&, SalBitmap const&)

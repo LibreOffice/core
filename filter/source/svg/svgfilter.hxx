@@ -141,13 +141,8 @@ public:
     sal_Bool IsUseTinyProfile() const;
     sal_Bool IsEmbedFonts() const;
     sal_Bool IsUseNativeTextDecoration() const;
-    ::rtl::OUString GetGlyphPlacement() const;
     sal_Bool IsUseOpacity() const;
-    sal_Bool IsUseGradient() const;
 
-    void  pushClip( const ::basegfx::B2DPolyPolygon& rPolyPoly );
-    void  popClip();
-    sal_Bool  hasClip() const;
     const ::basegfx::B2DPolyPolygon* getCurClip() const;
 
 protected:
@@ -161,7 +156,6 @@ protected:
 private:
 
     const Sequence< PropertyValue >&    mrFilterData;
-    B2DPolyPolygonList                  maClipList;
 
     SVGExport();
 };

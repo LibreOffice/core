@@ -91,22 +91,6 @@ int PageSpan::getSpan() const
     return 0; // should never happen
 }
 
-double PageSpan::getMarginLeft() const
-{
-    if (mxPropList["fo:margin-left"])
-        return mxPropList["fo:margin-left"]->getDouble();
-
-    return 0.0;
-}
-
-double PageSpan::getMarginRight() const
-{
-    if (mxPropList["fo:margin-right"])
-        return mxPropList["fo:margin-right"]->getDouble();
-
-    return 0.0;
-}
-
 void PageSpan::setHeaderContent(std::vector<DocumentElement *> * pHeaderContent)
 {
     if (mpHeaderContent)

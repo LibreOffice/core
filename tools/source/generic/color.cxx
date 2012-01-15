@@ -102,21 +102,6 @@ void Color::DecreaseLuminance( sal_uInt8 cLumDec )
 
 // -----------------------------------------------------------------------
 
-void Color::IncreaseContrast( sal_uInt8 cContInc )
-{
-    if( cContInc)
-    {
-        const double fM = 128.0 / ( 128.0 - 0.4985 * cContInc );
-        const double fOff = 128.0 - fM * 128.0;
-
-        SetRed( (sal_uInt8) SAL_BOUND( _FRound( COLORDATA_RED( mnColor ) * fM + fOff ), 0L, 255L ) );
-        SetGreen( (sal_uInt8) SAL_BOUND( _FRound( COLORDATA_GREEN( mnColor ) * fM + fOff ), 0L, 255L ) );
-        SetBlue( (sal_uInt8) SAL_BOUND( _FRound( COLORDATA_BLUE( mnColor ) * fM + fOff ), 0L, 255L ) );
-    }
-}
-
-// -----------------------------------------------------------------------
-
 void Color::DecreaseContrast( sal_uInt8 cContDec )
 {
     if( cContDec )
