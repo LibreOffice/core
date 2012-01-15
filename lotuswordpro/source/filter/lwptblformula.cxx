@@ -71,6 +71,10 @@
 #include <rtl/ustrbuf.hxx>
 #include <boost/scoped_array.hpp>
 
+LwpFormulaArg::~LwpFormulaArg()
+{
+}
+
 //////////////////////////////////////////////////////////////////
  LwpFormulaInfo::LwpFormulaInfo(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
     : LwpCellList(objHdr, pStrm)
