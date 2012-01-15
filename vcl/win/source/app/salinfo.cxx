@@ -180,11 +180,6 @@ unsigned int WinSalSystem::GetDisplayScreenCount()
     return m_aMonitors.size();
 }
 
-bool WinSalSystem::IsMultiDisplay()
-{
-    return false;
-}
-
 unsigned int WinSalSystem::GetDisplayDefaultScreen()
 {
     initMonitors();
