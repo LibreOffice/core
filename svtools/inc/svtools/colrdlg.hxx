@@ -49,6 +49,7 @@ class SVT_DLLPUBLIC SvColorDialog
 {
 public:
     SvColorDialog( ::Window* pParent );
+    virtual ~SvColorDialog();
 
     void            SetColor( const Color& rColor );
     const Color&    GetColor() const;

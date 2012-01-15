@@ -54,7 +54,9 @@ SvColorDialog::SvColorDialog( Window* pWindow )
 {
 }
 
-// -----------------------------------------------------------------------
+SvColorDialog::~SvColorDialog()
+{
+}
 
 void SvColorDialog::SetColor( const Color& rColor )
 {
