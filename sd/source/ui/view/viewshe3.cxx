@@ -220,8 +220,7 @@ SdPage* ViewShell::CreateOrDuplicatePage (
     // When the given page is NULL then use the first page of the document.
     SdPage* pTemplatePage = pPage;
     if (pTemplatePage == NULL)
-        if (pDocument->GetSdPage(0, ePageKind) > 0)
-            pTemplatePage = pDocument->GetSdPage(0, ePageKind);
+        pTemplatePage = pDocument->GetSdPage(0, ePageKind);
     if (pTemplatePage != NULL && pTemplatePage->TRG_HasMasterPage())
         aVisibleLayers = pTemplatePage->TRG_GetMasterPageVisibleLayers();
     else
