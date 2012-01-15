@@ -216,7 +216,7 @@ GstBusSyncReply Player::processSyncMessage( GstMessage *message )
                         GEnumValue *pValue = g_enum_get_value( G_PARAM_SPEC_ENUM( g_object_class_find_property( G_OBJECT_GET_CLASS( pInfo ), "type" ) )->enum_class,
                                                                nType );
 
-                        if( !g_strcasecmp( pValue->value_nick, "video" ) ) {
+                        if( !g_ascii_strcasecmp( pValue->value_nick, "video" ) ) {
                             GstStructure *pStructure;
                             GstPad *pPad;
 
