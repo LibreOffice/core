@@ -105,7 +105,7 @@ protected:
     Link                                m_aNewMessageHdl;
 public:
     Mediator( int nSocket );
-    ~Mediator();
+    virtual ~Mediator();
 
     // mark mediator as invalid. No more messages will be processed,
     // SendMessage, WaitForMessage, TransactMessage will return immediatly
