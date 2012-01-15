@@ -47,6 +47,10 @@ $(subst $(SRCDIR)/,$$S/,O=$(OUTDIR)) && \
 $(subst $(SRCDIR)/,$$S/,$(subst $(OUTDIR)/,$$O/,W=$(WORKDIR) && $(subst $(WORKDIR)/,$$W/,$(1)))))
 endef
 
+define gb_Helper_abbreviate_dirs_native
+$(call gb_Helper_convert_native,$(call gb_Helper_abbreviate_dirs,$(1)))
+endef
+
 define gb_Helper_make_clean_target
 gb_$(1)_get_clean_target = $(WORKDIR)/Clean/$(1)/$$(1)
 

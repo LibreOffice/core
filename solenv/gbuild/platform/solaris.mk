@@ -139,8 +139,6 @@ gb_COMPILERNOOPTFLAGS :=
 
 # Helper class
 
-gb_Helper_abbreviate_dirs_native = $(gb_Helper_abbreviate_dirs)
-
 gb_Helper_set_ld_path := LD_LIBRARY_PATH=$(OUTDIR_FOR_BUILD)/lib
 
 # $(1): list of directory pathnames to append at the end of the ld path
@@ -382,7 +380,7 @@ endef
 # Sun cc/CC support -xM1/-xMF flags, but unfortunately refuse input files that
 # do not have the right suffix, so use makedepend here...
 define gb_SrsPartTarget__command_dep
-$(call gb_Helper_abbreviate_dirs_native,\
+$(call gb_Helper_abbreviate_dirs,\
 	$(OUTDIR)/bin/makedepend$(gb_Executable_EXT) \
 		$(INCLUDE) \
 		$(DEFS) \
