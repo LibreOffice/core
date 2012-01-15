@@ -155,7 +155,7 @@ protected:
     sal_uLong   FillBuffer( char*&, const char*, sal_uLong, va_list );
 public:
     PluginConnector( int nSocket );
-    ~PluginConnector();
+    virtual ~PluginConnector();
 
     virtual MediatorMessage* WaitForAnswer( sal_uLong nMessageID );
     MediatorMessage*    Transact( const char*, sal_uLong, ... );
