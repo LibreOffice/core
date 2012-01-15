@@ -225,15 +225,12 @@ define gb_UnoApiTarget__command
 endef
 
 define gb_UnoApiHeaderTarget__command
-$(call gb_Helper_abbreviate_dirs_native,\
 	mkdir -p $(dir $(1)) && \
-	mkdir -p  $(gb_Helper_MISC) && \
-	RESPONSEFILE=`$(gb_MKTEMP)` && \
-	echo " -Gc -L -BUCR -O$(call gb_UnoApiTarget_get_header_target,$(2)) $(3) \
-		$(1) \
-		" > $${RESPONSEFILE} && \
+	RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),100,\
+		$(call gb_Helper_convert_native,-Gc -L -BUCR \
+		-O$(call gb_UnoApiTarget_get_header_target,$(2)) $(3) $(1))) && \
 	$(gb_UnoApiTarget_CPPUMAKERCOMMAND) @$${RESPONSEFILE} && \
-	rm -f $${RESPONSEFILE})
+	rm -f $${RESPONSEFILE}
 
 endef
 
