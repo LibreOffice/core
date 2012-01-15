@@ -105,7 +105,7 @@ const OUString OfficePipeId::operator () ()
     }
 
     rtlDigest digest = rtl_digest_create( rtl_Digest_AlgorithmMD5 );
-    if (digest <= 0) {
+    if (!digest) {
         throw RuntimeException(
             OUSTR("cannot get digest rtl_Digest_AlgorithmMD5!"), 0 );
     }
