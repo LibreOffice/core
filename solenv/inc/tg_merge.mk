@@ -34,11 +34,6 @@ MKFILENAME:=tg_merge.mk
 $(foreach,i,$(ULFFILES) $(COMMONMISC)/$(TARGET)/$i) : $$(@:f) $(LOCALIZESDF)
 .ENDIF
 
-# *.xrb merge
-.IF "$(XMLPROPERTIES)"!=""
-$(foreach,i,$(XMLPROPERTIES) $(COMMONMISC)/$(TARGET)/$i) : $$(@:f) $(LOCALIZESDF)
-.ENDIF
-
 # *.xrm merge
 .IF "$(READMEFILES)"!=""
 $(foreach,i,$(READMEFILES) $(COMMONMISC)/$(TARGET)/$(i:b).xrm) : $$(@:f) $(LOCALIZESDF)

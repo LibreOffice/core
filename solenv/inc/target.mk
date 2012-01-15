@@ -928,10 +928,6 @@ SDI4TARGET=$(MISC)/$(SDI4NAME).don
 SDI5TARGET=$(MISC)/$(SDI5NAME).don
 .ENDIF
 
-.IF "$(XMLPROPERTIES)"!=""
-XMLPROPERTIESN:=$(foreach,i,$(XMLPROPERTIES) $(MISC)/$(TARGET)_$(i:s/.xrb/.done/))
-.ENDIF			# "$(XMLPROPERTIES)"!=""
-
 .IF "$(UNIXTEXT)"!=""
 .IF "$(GUI)"=="UNX"
 CONVERTUNIXTEXT:=$(UNIXTEXT)
@@ -988,7 +984,6 @@ ALLTAR:	\
         $(ZIPALL) \
         $(SDITARGET)	$(SDI1TARGET)	$(SDI2TARGET)		\
         $(SDI3TARGET)	$(SDI4TARGET)	$(SDI5TARGET)		\
-        $(XMLPROPERTIESN) \
         $(RCTARGET) \
         $(SCP_PRODUCT_TYPE) \
         $(ALLPARFILES) \
@@ -1066,7 +1061,6 @@ ALLTAR: \
         $(NOLIBOBJTARGET) \
         $(NOLIBSLOTARGET) \
         $(OTHERTARRGET) \
-        $(XMLPROPERTIESN) \
         $(ALL_JAVA_TARGETS) \
         $(OBJTARGET)	$(SLOTARGET)	$(SMRSLOTARGET)		\
         $($(SECOND_BUILD)SLOTARGET) \
@@ -1443,20 +1437,6 @@ $(LOCALIZE_ME_DEST) .PHONY : $(LOCALIZE_ME) $(LOCALIZESDF)
 
 .ENDIF			# "$(WITH_LANG)"==""
 .ENDIF          # "$(LOCALIZE_ME_DEST)"!=""
-
-.IF "$(XMLPROPERTIES)"!=""
-.IF "$(L10N_framework)"!=""
-XML_ISO_CODE*=-ISO99 $(L10N_framework)
-.ENDIF
-.IF "$(WITH_LANG)"!=""
-$(MISC)/$(TARGET)_%.done : $(COMMONMISC)/$(TARGET)/%.xrb
-.ELSE			# "$(WITH_LANG)"!=""
-$(MISC)/$(TARGET)_%.done : %.xrb
-.ENDIF			# "$(WITH_LANG)"!=""
-    @@-$(RM) $(MISC)/$(<:b).interm$(TARGET)
-    native2ascii -encoding UTF8 $< $(MISC)/$(<:b).interm$(TARGET) && $(XMLEX) -i $(MISC)/$(<:b).interm$(TARGET) -o $(CLASSDIR) $(XML_ISO_CODE) -g -d $@
-    @@$(RM)  $(MISC)/$(<:b).interm$(TARGET)
-.ENDIF			# "$(XMLPROPERTIES)"!=""
 
 .IF "$(SDI1TARGET)$(SDI2TARGET)$(SDI3TARGET)$(SDI4TARGET)$(SDI5TARGET)$(SDI6TARGET)$(SDI7TARGET)$(SDI8TARGET)$(SDI9TARGET)"!=""
 .INCLUDE : _tg_sdi.mk
