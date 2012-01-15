@@ -213,6 +213,33 @@ endef
 endif # SYSTEM_HUNSPELL
 
 
+ifeq ($(SYSTEM_LIBCMIS),YES)
+
+define gb_LinkTarget__use_cmis
+$(call gb_LinkTarget_set_include,$(1),\
+	$(LIBCMIS_CFLAGS) \
+	$$(INCLUDE) \
+)
+$(call gb_LinkTarget_add_libs,$(1),$(LIBCMIS_LIBS))
+
+endef
+
+else # !SYSTEM_LIBCMIS
+
+$(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
+	cmislib \
+))
+
+define gb_LinkTarget__use_cmis
+$(call gb_LinkTarget_add_linked_static_libs,$(1),\
+	cmislib \
+)
+
+endef
+
+endif # SYSTEM_LIBCMIS
+
+
 ifeq ($(SYSTEM_LIBEXTTEXTCAT),YES)
 
 define gb_LinkTarget__use_libexttextcat
@@ -307,6 +334,47 @@ $(call gb_LinkTarget_add_linked_libs,$(1),\
 endef
 
 endif # SYSTEM_LIBXSLT
+
+
+ifeq ($(SYSTEM_NEON),YES)
+
+define gb_LinkTarget__use_neon
+ifeq ($(NEON_VERSION),)
+NEON_VERSION=0295
+endif
+
+$(call gb_LinkTarget_add_defs,$(1),\
+	-DNEON_VERSION=0x$(NEON_VERSION) \
+)
+
+$(call gb_LinkTarget_set_include,$(1),\
+	$(NEON_CFLAGS) \
+	$$(INCLUDE) \
+)
+
+$(call gb_LinkTarget_add_libs,$(1),$(NEON_LIBS))
+
+endef
+
+else # !SYSTEM_NEON
+
+$(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
+	neon \
+))
+
+define gb_LinkTarget__use_neon
+$(call gb_LinkTarget_set_include,$(1),\
+	-I$(OUTDIR)/inc/external/neon \
+	$$(INCLUDE) \
+)
+
+$(call gb_LinkTarget_add_linked_libs,$(1),\
+	neon \
+)
+
+endef
+
+endif # SYSTEM_NEON
 
 
 ifeq ($(SYSTEM_REDLAND),YES)
@@ -567,9 +635,9 @@ $(call gb_LinkTarget_add_linked_static_libs,$(1),\
 	ssl \
 )
 ifeq ($(OS),SOLARIS)
-$(call gb_LinkTarget_add_libs,$(1),\
-	-lnsl \
-	-lsocket \
+$(call gb_LinkTarget_add_linked_libs,$(1),\
+	nsl \
+	socket \
 )
 endif
 endif
@@ -737,6 +805,16 @@ endef
 endif # SYSTEM_LPSOLVE
 
 
+define gb_LinkTarget__use_gio
+$(call gb_LinkTarget_set_include,$(1),\
+	$(GIO_CFLAGS) \
+	$$(INCLUDE) \
+)
+
+$(call gb_LinkTarget_add_libs,$(1),$(GIO_LIBS))
+
+endef
+
 define gb_LinkTarget__use_gtk
 $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
@@ -774,7 +852,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 	$(DBUS_CFLAGS) \
 )
 
-$(call gb_Library_add_defs,$(1),\
+$(call gb_LinkTarget_add_defs,$(1),\
     -DENABLE_DBUS \
 )
 
