@@ -52,6 +52,7 @@ class String;
 class SfxBrushItemLink
 {
 public:
+    virtual ~SfxBrushItemLink() = 0;
     virtual Graphic GetGraphic( const String& rLink, const String& rFilter) = 0;
     virtual CreateSvxBrushTabPage GetBackgroundTabpageCreateFunc() = 0;
     virtual GetSvxBrushTabPageRanges GetBackgroundTabpageRanges() = 0;
