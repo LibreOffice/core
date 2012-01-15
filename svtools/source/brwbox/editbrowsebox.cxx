@@ -74,6 +74,10 @@ namespace svt
 
     #define HANDLE_ID   0
 
+    IEditImplementation::~IEditImplementation()
+    {
+    }
+
     //==================================================================
     //= EditBrowserHeader
     //==================================================================
