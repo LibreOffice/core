@@ -7762,6 +7762,8 @@ if test "$_os" != "WINNT" -a "$_os" != "Darwin" -a "$enable_gconf" = "yes"; then
 else
     AC_MSG_RESULT([no])
 fi
+AC_SUBST(GCONF_LIBS)
+AC_SUBST(GCONF_CFLAGS)
 AC_SUBST(ENABLE_GCONF)
 
 dnl ===================================================================
@@ -7777,6 +7779,8 @@ if test "$_os" != "WINNT" -a "$_os" != "Darwin" -a "$enable_gnome_vfs" = "yes" -
 else
     AC_MSG_RESULT([no])
 fi
+AC_SUBST(GNOMEVFS_LIBS)
+AC_SUBST(GNOMEVFS_CFLAGS)
 AC_SUBST(ENABLE_GNOMEVFS)
 
 dnl ===================================================================
@@ -7830,6 +7834,8 @@ if test  "$test_gtk" = "yes"; then
     fi
 fi
 AC_SUBST(ENABLE_GIO)
+AC_SUBST(GIO_CFLAGS)
+AC_SUBST(GIO_LIBS)
 AC_SUBST(ENABLE_DBUS)
 AC_SUBST(ENABLE_SYSTRAY_GTK)
 AC_SUBST(GTK_CFLAGS)
