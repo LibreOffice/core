@@ -32,7 +32,9 @@
 #include <vcl/seleng.hxx>
 #include <tools/debug.hxx>
 
-
+FunctionSet::~FunctionSet()
+{
+}
 
 
 inline sal_Bool SelectionEngine::ShouldDeselect( sal_Bool bModifierKey1 ) const

@@ -51,6 +51,8 @@ enum SelectionMode { NO_SELECTION, SINGLE_SELECTION, RANGE_SELECTION, MULTIPLE_S
 class VCL_DLLPUBLIC FunctionSet
 {
 public:
+    virtual ~FunctionSet() = 0;
+
     virtual void    BeginDrag() = 0;
 
     virtual void    CreateAnchor() = 0;  // Anker-Pos := Cursor-Pos
