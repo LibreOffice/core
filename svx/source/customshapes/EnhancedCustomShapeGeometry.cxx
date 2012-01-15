@@ -2103,9 +2103,9 @@ static const SvxMSDffTextRectangles mso_sptCircularArrowTextRect[] =    // todo
 static const SvxMSDffHandle mso_sptCircularArrowHandle[] =
 {
     {   MSDFF_HANDLE_FLAGS_POLAR | MSDFF_HANDLE_FLAGS_RADIUS_RANGE,
-        10800, 0x100, 10800, 10800, 10800, 10800, 0xff4c0000, 0x00b40000 },
+        10800, 0x100, 10800, 10800, 10800, 10800, -0x7f4c0000, 0x00b40000 },
     {   MSDFF_HANDLE_FLAGS_POLAR | MSDFF_HANDLE_FLAGS_RADIUS_RANGE,
-        0x102, 0x101, 10800, 10800, 0, 10800, 0xff4c0000, 0x00b40000 }
+        0x102, 0x101, 10800, 10800, 0, 10800, -0x7f4c0000, 0x00b40000 }
 };
 static const mso_CustomShape msoCircularArrow =
 {
