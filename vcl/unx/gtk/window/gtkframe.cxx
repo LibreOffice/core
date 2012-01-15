@@ -1880,7 +1880,7 @@ void GtkSalFrame::SetScreen( unsigned int nNewScreen, int eType, Rectangle *pSiz
     if( eType == SET_FULLSCREEN )
     {
         maGeometry.nX = aNewMonitor.x;
-        maGeometry.nY = aNewMonitor.x;
+        maGeometry.nY = aNewMonitor.y;
         maGeometry.nWidth = aNewMonitor.width;
         maGeometry.nHeight = aNewMonitor.height;
         m_nStyle |= SAL_FRAME_STYLE_PARTIAL_FULLSCREEN;
