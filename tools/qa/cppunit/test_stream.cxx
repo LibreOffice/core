@@ -130,6 +130,25 @@ namespace
         CPPUNIT_ASSERT(tools_a == 'f');
 
         //failbit is rather subtle wrt e.g seeks
+
+        char buffer[1024];
+
+        iss.clear();
+        iss.seekg(0);
+        CPPUNIT_ASSERT(iss.good());
+        iss.read(buffer, sizeof(buffer));
+        CPPUNIT_ASSERT(iss.gcount() == 3);
+        CPPUNIT_ASSERT(!iss.good());
+        CPPUNIT_ASSERT(!iss.bad());
+        CPPUNIT_ASSERT(iss.eof());
+
+        aMemStream.Seek(0);
+        CPPUNIT_ASSERT(aMemStream.good());
+        sal_Size nRet = aMemStream.Read(buffer, sizeof(buffer));
+        CPPUNIT_ASSERT(nRet == 3);
+        CPPUNIT_ASSERT(!aMemStream.good());
+        CPPUNIT_ASSERT(!aMemStream.bad());
+        CPPUNIT_ASSERT(aMemStream.eof());
     }
 
     void Test::test_fastostring()
@@ -247,14 +266,14 @@ namespace
         CPPUNIT_ASSERT(bRet);
         //This is the weird current behavior where an embedded null is read but
         //discarded
-        CPPUNIT_ASSERT(aFoo.equalsL(RTL_CONSTASCII_STRINGPARAM("foobar")));
+        CPPUNIT_ASSERT(aFoo.equalsL(RTL_CONSTASCII_STRINGPARAM("foobar"))); //<--diff A
         CPPUNIT_ASSERT(aMemStream.good());
 
         std::string sStr(RTL_CONSTASCII_STRINGPARAM(foo));
         std::istringstream iss(sStr, std::istringstream::in);
         std::getline(iss, sStr, '\n');
         //embedded null read as expected
-        CPPUNIT_ASSERT(sStr.size() == 7 && sStr[3] == 0);
+        CPPUNIT_ASSERT(sStr.size() == 7 && sStr[3] == 0);                   //<--diff A
         CPPUNIT_ASSERT(iss.good());
 
         bRet = aMemStream.ReadLine(aFoo);
@@ -275,7 +294,18 @@ namespace
         CPPUNIT_ASSERT(sStr.empty());
         CPPUNIT_ASSERT(iss.eof() && !iss.bad());
 
-        }
+        char bar[] = "foo";
+        SvMemoryStream aMemStreamB(RTL_CONSTASCII_STRINGPARAM(bar), STREAM_READ);
+        bRet = aMemStreamB.ReadLine(aFoo);
+        CPPUNIT_ASSERT(bRet);
+        CPPUNIT_ASSERT(aFoo.equalsL(RTL_CONSTASCII_STRINGPARAM("foo")));
+        CPPUNIT_ASSERT(!aMemStreamB.eof()); //<-- diff B
+
+        std::istringstream issB(bar, std::istringstream::in);
+        std::getline(issB, sStr, '\n');
+        CPPUNIT_ASSERT(sStr == "foo");
+        CPPUNIT_ASSERT(issB.eof());         //<-- diff B
+    }
 
     CPPUNIT_TEST_SUITE_REGISTRATION(Test);
 }
