@@ -42,8 +42,8 @@ $(eval $(call desktop_Pagein_add_libs,common,\
     fwi \
     fwl \
     package2 \
-    ucpfile \
-    ucb \
+    ucpfile1 \
+    ucb1 \
     configmgr \
     vclplug_gen \
     $(if $(findstring TRUE,$(ENABLE_GTK)),vclplug_gtk) \
@@ -88,7 +88,7 @@ $(eval $(call desktop_Pagein_add_objects,common,\
 $(eval $(call desktop_Pagein_add_libs,common,\
     deployment \
     deploymentmisc \
-    ucb \
+    ucb1 \
     xstor \
     package2 \
     filterconfig \

@@ -310,6 +310,7 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
     affine_uno \
     avmediagst \
     avmediawin \
+    cached1 \
     collator_data \
     deployment \
     deploymentgui \
@@ -324,20 +325,24 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
     localedata_others \
     log_uno \
     mcnttype \
-    neon \
     package2 \
     reg \
     scriptframe \
     sofficeapp \
+    srtrs1 \
     store \
     test \
-    unotest \
     textconv_dict \
-    ucb \
-    ucpfile \
+    ucb1 \
+    ucpdav1 \
+    ucpfile1 \
+    ucpftp1 \
+    ucphier1 \
+    ucppkg1 \
     unopkgapp \
-    updchk \
+    unotest \
     unsafe_uno \
+    updchk \
     xmlsecurity \
     xsec_fw \
     xsec_xmlsec \
@@ -346,6 +351,7 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
         lo-bootstrap \
     ) \
     $(if $(filter $(OS),WNT), \
+        ucpodma1 \
         uwinapi \
     ) \
 ))
@@ -414,6 +420,12 @@ $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
     slideshow \
     stocservices \
     stringresource \
+    ucpcmis1 \
+    ucpexpand1 \
+    ucpext \
+    ucpgio1 \
+    ucpgvfs1 \
+    ucptdoc1 \
     updatefeed \
     vbaevents \
     vbaobj \

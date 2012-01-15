@@ -1,4 +1,5 @@
 # -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
+#
 # Version: MPL 1.1 / GPLv3+ / LGPLv3+
 #
 # The contents of this file are subject to the Mozilla Public License Version
@@ -11,12 +12,10 @@
 # for the specific language governing rights and limitations under the
 # License.
 #
-# The Initial Developer of the Original Code is
-#       Bjoern Michaelsen, Canonical Ltd. <bjoern.michaelsen@canonical.com>
-# Portions created by the Initial Developer are Copyright (C) 2010 the
-# Initial Developer. All Rights Reserved.
-#
 # Major Contributor(s):
+# Copyright (C) 2012 Matúš Kukan <matus.kukan@gmail.com> (initial developer)
+#
+# All Rights Reserved.
 #
 # For minor contributions see the git repository.
 #
@@ -26,52 +25,38 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Module_Module,ucb))
+$(eval $(call gb_Library_Library,ucpgvfs1))
 
-$(eval $(call gb_Module_add_targets,ucb,\
-	Library_cached1 \
-	Library_srtrs1 \
-	Library_ucb1 \
-	Library_ucpcmis1 \
-	Library_ucpexpand1 \
-	Library_ucpext \
-	Library_ucpfile1 \
-	Library_ucpftp1 \
-	Library_ucphier1 \
-	Library_ucppkg1 \
-	Library_ucptdoc1 \
-	Package_xml \
+$(eval $(call gb_Library_set_componentfile,ucpgvfs1,ucb/source/ucp/gvfs/ucpgvfs))
+
+$(eval $(call gb_Library_set_include,ucpgvfs1,\
+	$(GNOMEVFS_CFLAGS) \
+	$$(INCLUDE) \
 ))
 
-ifeq ($(OS),WNT)
-$(eval $(call gb_Module_add_targets,ucb,\
-	Library_ucpodma1 \
-	Package_odma_inc \
-	StaticLibrary_odma_lib \
+$(eval $(call gb_Library_add_api,ucpgvfs1,\
+	offapi \
+	udkapi \
 ))
-endif
 
-ifneq ($(DISABLE_NEON),TRUE)
-$(eval $(call gb_Module_add_targets,ucb,\
-	Library_ucpdav1 \
+$(eval $(call gb_Library_add_libs,ucpgvfs1,\
+	$(GNOMEVFS_LIBS) \
 ))
-endif
 
-ifeq ($(ENABLE_GIO),TRUE)
-$(eval $(call gb_Module_add_targets,ucb,\
-	Library_ucpgio1 \
+$(eval $(call gb_Library_add_linked_libs,ucpgvfs1,\
+	cppu \
+	cppuhelper \
+	sal \
+	salhelper \
+	ucbhelper \
+	$(gb_STDLIBS) \
 ))
-endif
 
-ifeq ($(ENABLE_GNOMEVFS),TRUE)
-$(eval $(call gb_Module_add_targets,ucb,\
-	Library_ucpgvfs1 \
-))
-endif
-
-$(eval $(call gb_Module_add_subsequentcheck_targets,ucb,\
-	JunitTest_ucb_complex \
-	JunitTest_ucb_unoapi \
+$(eval $(call gb_Library_add_exception_objects,ucpgvfs1,\
+	ucb/source/ucp/gvfs/gvfs_content \
+	ucb/source/ucp/gvfs/gvfs_directory \
+	ucb/source/ucp/gvfs/gvfs_provider \
+	ucb/source/ucp/gvfs/gvfs_stream \
 ))
 
 # vim: set noet sw=4 ts=4:

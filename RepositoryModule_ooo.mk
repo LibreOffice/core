@@ -98,6 +98,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     twain \
     toolkit \
     tools \
+    ucb \
     ucbhelper \
     udkapi \
     unixODBC \
@@ -126,10 +127,5 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
 ))
   endif
 endif
-
-# these have only migrated subsequentcheck for now
-$(eval $(call gb_Module_add_moduledirs,ooo,\
-    ucb \
-))
 
 # vim: set noet ts=4 sw=4:

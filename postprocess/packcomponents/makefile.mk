@@ -32,7 +32,6 @@ TARGET = packcomponents
 .INCLUDE: settings.mk
 
 my_components = \
-    cached1 \
     calc \
     component/animations/source/animcore/animcore \
     component/avmedia/util/avmedia \
@@ -126,6 +125,17 @@ my_components = \
     component/sw/util/swd \
     component/sw/util/vbaswobj \
     component/toolkit/util/tk \
+    component/ucb/source/sorter/srtrs1 \
+    component/ucb/source/core/ucb1 \
+    component/ucb/source/cacher/cached1 \
+    component/ucb/source/ucp/cmis/ucpcmis1 \
+    component/ucb/source/ucp/expand/ucpexpand1 \
+    component/ucb/source/ucp/ext/ucpext \
+    component/ucb/source/ucp/file/ucpfile1 \
+    component/ucb/source/ucp/ftp/ucpftp1 \
+    component/ucb/source/ucp/hierarchy/ucphier1 \
+    component/ucb/source/ucp/package/ucppkg1 \
+    component/ucb/source/ucp/tdoc/ucptdoc1 \
     component/UnoControls/util/ctl \
     component/unotools/util/utl \
     component/unoxml/source/rdf/unordf \
@@ -152,16 +162,6 @@ my_components = \
     mysql \
     odbc \
     sdbc2 \
-    srtrs1 \
-    ucb1 \
-    ucpexpand1 \
-    ucpext \
-    ucpfile1 \
-    ucpftp1 \
-    ucphier1 \
-    ucppkg1 \
-    ucptdoc1 \
-	ucpcmis1 \
 
 .IF "$(BUILD_TYPE)" != "$(BUILD_TYPE:s/DESKTOP//)"
 my_components += \
@@ -202,7 +202,7 @@ my_components += emboleobj
 .END
 
 .IF "$(DISABLE_NEON)" != "TRUE"
-my_components += ucpdav1
+my_components += component/ucb/source/ucp/webdav/ucpdav1
 .END
 
 .IF "$(ENABLE_CAIRO_CANVAS)" == "TRUE"
@@ -214,11 +214,11 @@ my_components += gconfbe1
 .END
 
 .IF "$(ENABLE_GIO)" != ""
-my_components += ucpgio
+my_components += component/ucb/source/ucp/gio/ucpgio
 .END
 
 .IF "$(ENABLE_GNOMEVFS)" != ""
-my_components += ucpgvfs
+my_components += component/ucb/source/ucp/gvfs/ucpgvfs
 .END
 
 .IF "$(ENABLE_KAB)" != ""
