@@ -398,7 +398,7 @@ bool SbiScanner::NextSym()
     }
 
     // Hex/octal number? Read in and convert:
-    else if( *pLine == '&' )
+    else if(nCol < aLine.getLength() && aLine[nCol] == '&')
     {
         ++pLine; ++nCol;
         sal_Unicode cmp1[] = { '0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F', 0 };
@@ -406,7 +406,8 @@ bool SbiScanner::NextSym()
         sal_Unicode *cmp = cmp1;
         sal_Unicode base = 16;
         sal_Unicode ndig = 8;
-        sal_Unicode xch  = *pLine++ & 0xFF; ++nCol;
+        sal_Unicode xch  = aLine[nCol] & 0xFF;
+        ++pLine; ++nCol;
         switch( toupper( xch ) )
         {
             case 'O':
@@ -423,10 +424,10 @@ bool SbiScanner::NextSym()
         long l = 0;
         int i;
         bool bBufOverflow = false;
-        while( theBasicCharClass::get().isAlphaNumeric( *pLine & 0xFF, bCompatible ) )
+        while(nCol < aLine.getLength() &&  theBasicCharClass::get().isAlphaNumeric(aLine[nCol] & 0xFF, bCompatible))
         {
             sal_Unicode ch = sal::static_int_cast< sal_Unicode >(
-                toupper( *pLine & 0xFF ) );
+                toupper(aLine[nCol] & 0xFF));
             ++pLine; ++nCol;
             // from 4.1.1996: buffer full, go on scanning empty
             if( (p-buf) == (BUF_SIZE-1) )
@@ -451,7 +452,7 @@ bool SbiScanner::NextSym()
                 GenError( SbERR_MATH_OVERFLOW ); break;
             }
         }
-        if( *pLine == '&' ) ++pLine, ++nCol;
+        if(nCol < aLine.getLength() && aLine[nCol] == '&') ++pLine, ++nCol;
         nVal = (double) l;
         eScanType = ( l >= SbxMININT && l <= SbxMAXINT ) ? SbxINTEGER : SbxLONG;
         if( bBufOverflow )
