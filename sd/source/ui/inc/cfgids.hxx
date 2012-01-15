@@ -33,22 +33,12 @@
 
 // Item-Ids fuer Config-Items
 #define SDCFG_IMPRESS           (SFX_ITEMTYPE_SD_BEGIN + 1)
-#define SDCFG_SPELL             (SFX_ITEMTYPE_SD_BEGIN + 2)
 #define SDCFG_DRAW              (SFX_ITEMTYPE_SD_BEGIN + 3)
 
 // Acceleratoren, Menus, ...
-#define RID_DRAW_DEFAULTACCEL       (SFX_ITEMTYPE_SD_BEGIN + 5)
-#define RID_DRAW_DEFAULTMENU        (SFX_ITEMTYPE_SD_BEGIN + 6)
-#define RID_DRAW_PORTALMENU         (SFX_ITEMTYPE_SD_BEGIN + 35)
 #define RID_DRAW_STATUSBAR          (SFX_ITEMTYPE_SD_BEGIN + 7)
-// Acceleratoren, Menus, ... (fuers Draw (Graphic))
-#define RID_GRAPHIC_DEFAULTACCEL    (SFX_ITEMTYPE_SD_BEGIN + 8)
-#define RID_GRAPHIC_DEFAULTMENU     (SFX_ITEMTYPE_SD_BEGIN + 9)
-#define RID_GRAPHIC_PORTALMENU      (SFX_ITEMTYPE_SD_BEGIN + 36)
-//#define RID_GRAPHIC_STATUSBAR     (SFX_ITEMTYPE_SD_BEGIN + 30)
 
 // Toolbars
-#define RID_DRAW_DEFAULTTOOLBOX     (SFX_ITEMTYPE_SD_BEGIN + 10)
 #define RID_DRAW_TOOLBOX            (SFX_ITEMTYPE_SD_BEGIN + 11)
 #define RID_SLIDE_TOOLBOX           (SFX_ITEMTYPE_SD_BEGIN + 12)
 #define RID_DRAW_OBJ_TOOLBOX        (SFX_ITEMTYPE_SD_BEGIN + 13)

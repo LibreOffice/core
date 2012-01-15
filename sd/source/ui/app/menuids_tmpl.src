@@ -780,15 +780,6 @@
         Text [ en-US ] = "Description..." ; \
     };
 
- // Dia-Funktionen
-#define MN_REHEARSE_TIMINGS \
-    MenuItem\
-    {\
-        Identifier = SID_REHEARSE_TIMINGS ; \
-        HelpId = CMD_SID_REHEARSE_TIMINGS ; \
-        Text [ en-US ] = "~Rehearse Timings" ; \
-    };
-
 #define MN_EFFECT \
     MenuItem\
     {\
@@ -1128,26 +1119,6 @@
         Text [ en-US ] = "24 Bit ~True Colors" ; \
     };
 
-#define MN_COLORRESOLUTION \
-    MenuItem\
-    {\
-        Identifier = DUMMY + 4 ; \
-        Command = ".uno:ColorResMenu" ; \
-        SubMenu = Menu\
-        {\
-            ItemList = \
-            {\
-                MN_CONVERT_TO_1BIT_THRESHOLD\
-                MN_CONVERT_TO_1BIT_MATRIX\
-                MN_CONVERT_TO_4BIT_GRAYS\
-                MN_CONVERT_TO_4BIT_COLORS\
-                MN_CONVERT_TO_8BIT_GRAYS\
-                MN_CONVERT_TO_8BIT_COLORS\
-                MN_CONVERT_TO_24BIT\
-            };\
-        };\
-        Text [ en-US ] = "~Color Resolution" ; \
-    };
 
 #define MNSUB_CONVERT \
     MenuItem\
@@ -1218,67 +1189,5 @@
         Identifier = SID_STYLE_EDIT ; \
         HelpId = CMD_SID_STYLE_EDIT ; \
         Text [ en-US ] = "Edit Style..." ; \
-    };
-
-#define MN_EDIT_HYPERLINK \
-    MenuItem\
-    {\
-        Identifier = SID_EDIT_HYPERLINK ; \
-        HelpId = CMD_SID_EDIT_HYPERLINK ; \
-        Text [ en-US ] = "H~yperlink..." ; \
-    };
-
-#define MN_POINT_EDITMODE \
-    MenuItem\
-    {\
-        Identifier = SID_BEZIER_EDIT ; \
-        HelpId = CMD_SID_BEZIER_EDIT ; \
-        Text [ en-US ] = "Poi~nts";\
-    };
-
-#define MN_GLUE_EDITMODE \
-    MenuItem\
-    {\
-        Identifier = SID_GLUE_EDITMODE ; \
-        HelpId = CMD_SID_GLUE_EDITMODE ; \
-        Text [ en-US ] = "~Glue Points";\
-    };
-
-#define MN_LAYER_EDITMODE \
-    MenuItem\
-    {\
-        Identifier = DUMMY + 7 ; \
-        Command = ".uno:LayerMenu" ; \
-        Text [ en-US ] =  "La~yer"; \
-        SubMenu = Menu \
-        {\
-            ItemList = \
-            {\
-                MenuItem \
-                {\
-                    Identifier = SID_INSERTLAYER ; \
-                    HelpId = CMD_SID_INSERTLAYER ; \
-                    Text [ en-US ] = "~Insert";\
-                };\
-                MenuItem \
-                {\
-                    Identifier = SID_MODIFYLAYER ; \
-                    HelpId = CMD_SID_MODIFYLAYER ; \
-                    Text [ en-US ] = "~Modify";\
-                };\
-                MenuItem \
-                {\
-                    Identifier = SID_DELETE_LAYER ; \
-                    HelpId = CMD_SID_DELETE_LAYER ; \
-                    Text [ en-US ] = "Delete";\
-                };\
-                MenuItem \
-                {\
-                    Identifier = SID_RENAMELAYER ; \
-                    HelpId = CMD_SID_RENAMELAYER ; \
-                    Text [ en-US ] = "~Rename";\
-                }; \
-            };\
-        };\
     };
 

@@ -96,12 +96,8 @@ $(eval $(call gb_SrsTarget_add_files,sd/res,\
 ))
 
 $(eval $(call gb_SrsTarget_add_templates,sd/res,\
-    sd/source/ui/app/menuids2_tmpl.src \
     sd/source/ui/app/menuids3_tmpl.src \
-    sd/source/ui/app/menuids4_tmpl.src \
     sd/source/ui/app/menuids_tmpl.src \
-    sd/source/ui/app/menuportal_tmpl.src \
-    sd/source/ui/app/menu_tmpl.src \
     sd/source/ui/app/popup2_tmpl.src \
     sd/source/ui/app/tbxids_tmpl.src \
     sd/source/ui/app/toolbox2_tmpl.src \
