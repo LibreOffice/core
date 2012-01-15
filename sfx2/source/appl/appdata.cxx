@@ -73,8 +73,14 @@ private:
 public:
     SfxBasicManagerCreationListener( SfxAppData_Impl& _rAppData ) :m_rAppData( _rAppData ) { }
 
+    virtual ~SfxBasicManagerCreationListener();
+
     virtual void onBasicManagerCreated( const Reference< XModel >& _rxForDocument, BasicManager& _rBasicManager );
 };
+
+SfxBasicManagerCreationListener::~SfxBasicManagerCreationListener()
+{
+}
 
 void SfxBasicManagerCreationListener::onBasicManagerCreated( const Reference< XModel >& _rxForDocument, BasicManager& _rBasicManager )
 {
