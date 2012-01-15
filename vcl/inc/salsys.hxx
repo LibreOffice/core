@@ -75,7 +75,7 @@ public:
     virtual unsigned int GetDisplayScreenCount() = 0;
     /*  Queries whether multiple screens are part of one bigger display
 
-        @returns true if screens form one bug display
+        @returns true if screens form one big display
                  false if screens are distinct and windows cannot
                  be moved between, or span multiple screens
     */
