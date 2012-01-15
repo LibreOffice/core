@@ -42,6 +42,7 @@ SLOFILES=   \
             $(SLO)$/acc_factory.obj                 \
             $(SLO)$/accresmgr.obj                   \
             $(SLO)$/characterattributeshelper.obj   \
+            $(SLO)$/IComboListBoxHelper.obj   \
 
 SRS1NAME=$(TARGET)
 SRC1FILES=\
