@@ -109,6 +109,7 @@ class LwpTableLayout;
 class LwpFormulaArg
 {
 public:
+    virtual ~LwpFormulaArg() = 0;
     virtual rtl::OUString ToString(LwpTableLayout* pCellsMap)=0;
     virtual String ToArgString(LwpTableLayout* pCellsMap){ return ToString(pCellsMap);}
 };
