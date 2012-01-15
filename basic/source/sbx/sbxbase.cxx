@@ -346,6 +346,10 @@ sal_Bool SbxBase::StoreCompleted()
 
 //////////////////////////////// SbxFactory ////////////////////////////////
 
+SbxFactory::~SbxFactory()
+{
+}
+
 SbxBase* SbxFactory::Create( sal_uInt16, sal_uInt32 )
 {
     return NULL;
